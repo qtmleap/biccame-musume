@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { groupBy, sortBy } from 'lodash-es'
 import { Cake, ChevronLeft, ChevronRight, Store } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -14,6 +14,7 @@ import {
   DrawerTitle
 } from '@/components/ui/drawer'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { cn } from '@/lib/utils'
 import { type Character, CharactersSchema } from '@/schemas/character.dto'
 
 export const Route = createFileRoute('/calendar/')({
@@ -255,9 +256,12 @@ function RouteComponent() {
             variant='ghost'
             onClick={() => setSelectedMonth(month)}
             size='sm'
-            className={`rounded-full px-4 transition-all ${
-              selectedMonth === month ? 'bg-primary text-primary-foreground shadow-lg' : 'hover:bg-muted'
-            }`}
+            className={cn(
+              'rounded-full px-4 transition-all',
+              selectedMonth === month
+                ? 'bg-muted font-semibold text-foreground'
+                : 'hover:bg-muted/50 text-muted-foreground'
+            )}
           >
             {month}月
           </Button>
@@ -286,9 +290,10 @@ function RouteComponent() {
                     return (
                       <div
                         key={`${event.character.key}-${event.type}`}
-                        className={`flex items-center gap-3 p-2 rounded-lg ${
+                        className={cn(
+                          'flex items-center gap-3 p-2 rounded-lg',
                           isCharacter ? 'bg-pink-500/10' : 'bg-blue-500/10'
-                        }`}
+                        )}
                       >
                         {/* キャラクター画像 */}
                         <Avatar className='w-10 h-10 shrink-0 border border-border'>
@@ -305,11 +310,12 @@ function RouteComponent() {
                         {/* バッジ */}
                         <Badge
                           variant='secondary'
-                          className={`shrink-0 text-xs flex items-center gap-1 ${
+                          className={cn(
+                            'shrink-0 text-xs flex items-center gap-1',
                             isCharacter
                               ? 'bg-pink-500/20 text-pink-700 dark:text-pink-300'
                               : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
-                          }`}
+                          )}
                         >
                           {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
                           {event.years}
@@ -325,15 +331,18 @@ function RouteComponent() {
         </div>
       ) : (
         /* デスクトップ: カレンダー表示 */
-        <div className='overflow-hidden rounded-xl border border-border/30 bg-background/60 backdrop-blur-sm'>
+        <div className='p-2'>
           {/* 曜日ヘッダー */}
-          <div className='grid grid-cols-7 bg-muted/60'>
+          <div className='grid grid-cols-7 mb-1'>
             {weekDays.map((day, index) => (
               <div
                 key={day}
-                className={`text-center font-medium py-2 text-xs ${
-                  index === 0 ? 'text-rose-500' : index === 6 ? 'text-sky-500' : 'text-muted-foreground'
-                }`}
+                className={cn(
+                  'text-center font-medium py-1 text-xs',
+                  index === 0 && 'text-rose-500',
+                  index === 6 && 'text-sky-500',
+                  index !== 0 && index !== 6 && 'text-muted-foreground'
+                )}
               >
                 {day}
               </div>
@@ -341,7 +350,7 @@ function RouteComponent() {
           </div>
 
           {/* カレンダーグリッド */}
-          <div className='grid grid-cols-7'>
+          <div className='grid grid-cols-7 gap-1'>
             {calendarDays.map((day, index) => {
               const dayEvents = day ? getEventsForDay(events, day) : []
               const isToday =
@@ -355,27 +364,25 @@ function RouteComponent() {
                 <div
                   key={`day-${selectedYear}-${selectedMonth}-${day ?? `empty-${index}`}`}
                   onClick={() => day !== null && handleDayClick(day, dayEvents)}
-                  className={`min-h-20 p-1.5 transition-all outline-1 -outline-offset-[0.5px] outline-border ${
-                    day === null
-                      ? 'bg-muted/5'
-                      : isToday
-                        ? 'bg-primary/15'
-                        : 'hover:bg-muted/30'
-                  } ${hasEvents ? 'cursor-pointer' : ''}`}
+                  className={cn(
+                    'min-h-20 p-1.5 rounded-lg transition-all',
+                    day === null && 'bg-transparent',
+                    day !== null && isToday && 'bg-primary/10',
+                    day !== null && !isToday && 'bg-card hover:bg-muted/50',
+                    hasEvents && 'cursor-pointer'
+                  )}
                 >
                   {day !== null && (
                     <div className='h-full flex flex-col'>
                       {/* 日付 */}
                       <span
-                        className={`text-sm font-semibold ${
-                          isToday
-                            ? 'text-primary'
-                            : dayOfWeek === 0
-                              ? 'text-rose-500'
-                              : dayOfWeek === 6
-                                ? 'text-sky-500'
-                                : 'text-foreground'
-                        }`}
+                        className={cn(
+                          'text-sm font-semibold',
+                          isToday && 'text-primary',
+                          !isToday && dayOfWeek === 0 && 'text-rose-500',
+                          !isToday && dayOfWeek === 6 && 'text-sky-500',
+                          !isToday && dayOfWeek !== 0 && dayOfWeek !== 6 && 'text-foreground'
+                        )}
                       >
                         {day}
                       </span>
@@ -385,11 +392,10 @@ function RouteComponent() {
                           {dayEvents.map((event) => (
                             <Avatar
                               key={`${event.character.key}-${event.type}`}
-                              className={`w-8 h-8 ring-2 ${
-                                event.type === 'character'
-                                  ? 'ring-pink-400/50'
-                                  : 'ring-blue-400/50'
-                              }`}
+                              className={cn(
+                                'w-8 h-8 ring-2',
+                                event.type === 'character' ? 'ring-pink-400/50' : 'ring-blue-400/50'
+                              )}
                             >
                               <AvatarImage
                                 src={event.character.profile_image_url}
@@ -413,7 +419,7 @@ function RouteComponent() {
 
       {/* Drawer: 日付詳細表示 */}
       <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} direction='right'>
-        <DrawerContent>
+        <DrawerContent className='w-80 sm:max-w-80!'>
           <DrawerHeader>
             <DrawerTitle>
               {selectedYear}年{selectedMonth}月{selectedDay}日
@@ -424,11 +430,16 @@ function RouteComponent() {
               getEventsForDay(events, selectedDay).map((event) => {
                 const isCharacter = event.type === 'character'
                 return (
-                  <div
+                  <Link
                     key={`drawer-${event.character.key}-${event.type}`}
-                    className={`flex items-center gap-3 p-3 rounded-lg ${
-                      isCharacter ? 'bg-pink-500/10' : 'bg-blue-500/10'
-                    }`}
+                    to='/characters/$id'
+                    params={{ id: event.character.key }}
+                    className={cn(
+                      'flex items-center gap-3 p-3 rounded-lg transition-colors',
+                      isCharacter
+                        ? 'bg-pink-500/10 hover:bg-pink-500/20'
+                        : 'bg-blue-500/10 hover:bg-blue-500/20'
+                    )}
                   >
                     <Avatar className='w-12 h-12 border border-border'>
                       <AvatarImage
@@ -442,18 +453,19 @@ function RouteComponent() {
                       <p className='text-sm text-muted-foreground truncate'>{event.character.store_name}</p>
                       <Badge
                         variant='secondary'
-                        className={`mt-1 text-xs flex items-center gap-1 w-fit ${
+                        className={cn(
+                          'mt-1 text-xs flex items-center gap-1 w-fit',
                           isCharacter
                             ? 'bg-pink-500/20 text-pink-700 dark:text-pink-300'
                             : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
-                        }`}
+                        )}
                       >
                         {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
                         {event.years}
                         {isCharacter ? '歳' : '周年'}
                       </Badge>
                     </div>
-                  </div>
+                  </Link>
                 )
               })}
           </div>
