@@ -2,11 +2,12 @@ import { createFileRoute } from '@tanstack/react-router'
 import { AdvancedMarker, APIProvider, Map as GoogleMap, Pin } from '@vis.gl/react-google-maps'
 import { List } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { CharacterListCard } from '@/components/character-list-card'
+import { SelectedStoreInfo } from '@/components/selected-store-info'
 import { StoreListItem } from '@/components/store-list-item'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { cn } from '@/lib/utils'
 import { type Character, CharactersSchema } from '@/schemas/character.dto'
 
 /**
@@ -139,44 +140,8 @@ const RouteComponent = () => {
 
         {/* 右側: 選択された店舗情報 */}
         {selectedCharacter && (
-          <div className='absolute top-4 right-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-4 max-w-sm max-h-[calc(100vh-2rem)] overflow-y-auto z-10'>
-            <div className='flex items-start justify-between mb-3'>
-              <h2 className='text-lg font-semibold text-gray-800 dark:text-gray-100'>選択中の店舗</h2>
-              <button
-                type='button'
-                onClick={() => setSelectedCharacter(null)}
-                className='text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-xl leading-none'
-              >
-                ✕
-              </button>
-            </div>
-            <CharacterListCard character={selectedCharacter} />
-            <div className='mt-4 space-y-2 text-sm'>
-              {selectedCharacter.address && (
-                <div>
-                  <span className='font-semibold text-gray-700 dark:text-gray-300'>住所:</span>
-                  <p className='text-gray-600 dark:text-gray-400 mt-1'>{selectedCharacter.address}</p>
-                </div>
-              )}
-              {selectedCharacter.zipcode && (
-                <div>
-                  <span className='font-semibold text-gray-700 dark:text-gray-300'>郵便番号:</span>
-                  <p className='text-gray-600 dark:text-gray-400 mt-1'>〒{selectedCharacter.zipcode}</p>
-                </div>
-              )}
-              {selectedCharacter.store_link && (
-                <div>
-                  <a
-                    href={selectedCharacter.store_link}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline'
-                  >
-                    店舗詳細を見る
-                  </a>
-                </div>
-              )}
-            </div>
+          <div className='absolute top-4 right-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-3 max-w-md z-10'>
+            <SelectedStoreInfo character={selectedCharacter} />
           </div>
         )}
 
@@ -196,11 +161,11 @@ const RouteComponent = () => {
                 </div>
               </button>
             </DialogTrigger>
-            <DialogContent className='max-w-4xl! max-h-[80vh]'>
+            <DialogContent className='max-w-3xl!'>
               <DialogHeader>
                 <DialogTitle>店舗一覧</DialogTitle>
               </DialogHeader>
-              <div className='overflow-y-auto max-h-[60vh] p-4'>
+              <div className='overflow-y-auto max-h-[60vh] p-4 custom-scrollbar'>
                 <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
                   {charactersWithAddress.map((character) => (
                     <button
@@ -232,17 +197,20 @@ const RouteComponent = () => {
               </button>
             </DrawerTrigger>
             <DrawerContent>
-              <DrawerHeader>
-                <DrawerTitle>店舗一覧</DrawerTitle>
+              <DrawerHeader className='py-2 px-4'>
+                <DrawerTitle className='text-sm font-medium'>店舗一覧 ({charactersWithAddress.length}件)</DrawerTitle>
               </DrawerHeader>
-              <div className='overflow-y-auto max-h-[60vh] p-4'>
-                <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
-                  {charactersWithAddress.map((character) => (
+              <div className='overflow-y-auto max-h-[60vh] custom-scrollbar'>
+                <div className='divide-y divide-gray-200 dark:divide-gray-700'>
+                  {charactersWithAddress.map((character, index) => (
                     <button
                       key={character.key}
                       type='button'
                       onClick={() => handleCharacterSelect(character)}
-                      className='cursor-pointer w-full text-left rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                      className={cn(
+                        'cursor-pointer w-full text-left px-4 py-2 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700',
+                        index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-gray-900'
+                      )}
                     >
                       <StoreListItem character={character} />
                     </button>

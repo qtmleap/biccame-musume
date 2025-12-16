@@ -19,6 +19,7 @@ Regarding source code editing:
 - Write log messages in English
 - Write source code comments in Japanese
 - Do not use `var` or `let`; use `const` whenever possible
+- Do not use `Date`, use `dayjs` for date and time processing
 - Avoid using `any` type whenever possible
 - Use `async/await` for asynchronous processing
 - Use `src/utils/client.ts` defined with `Zodios` for API communication

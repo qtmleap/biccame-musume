@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@plugin "@tailwindcss/typography";
+@plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -122,5 +126,47 @@
     background: linear-gradient(to bottom, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
     background-attachment: fixed;
     min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  /* カスタムスクロールバー */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgb(209 213 219);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(156 163 175);
+  }
+
+  /* ダークモード対応 */
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgb(75 85 99);
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(107 114 128);
+  }
+
+  /* Firefox用のスクロールバースタイル */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(209 213 219) transparent;
+  }
+
+  .dark .custom-scrollbar {
+    scrollbar-color: rgb(75 85 99) transparent;
   }
 }
