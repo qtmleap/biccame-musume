@@ -29,18 +29,21 @@ type CalendarEvent = {
 }
 
 /**
- * 年齢/周年を計算する
+ * 年齢/周年を計算する（対象年を指定）
  */
-const calculateYears = (birthday: string): number => {
-  const today = new Date()
+const calculateYears = (birthday: string, targetYear: number): number => {
   const birthDate = new Date(birthday)
-  return today.getFullYear() - birthDate.getFullYear()
+  return targetYear - birthDate.getFullYear()
 }
 
 /**
  * 指定月のイベントをフィルタリングする
  */
-const filterMonthEvents = (characters: Character[], targetMonth: number): CalendarEvent[] => {
+const filterMonthEvents = (
+  characters: Character[],
+  targetMonth: number,
+  targetYear: number
+): CalendarEvent[] => {
   const events: CalendarEvent[] = []
 
   characters.forEach((character) => {
@@ -52,7 +55,7 @@ const filterMonthEvents = (characters: Character[], targetMonth: number): Calend
           date: character.character_birthday,
           character,
           type: 'character',
-          years: calculateYears(character.character_birthday)
+          years: calculateYears(character.character_birthday, targetYear)
         })
       }
     }
@@ -65,7 +68,7 @@ const filterMonthEvents = (characters: Character[], targetMonth: number): Calend
           date: character.store_birthday,
           character,
           type: 'store',
-          years: calculateYears(character.store_birthday)
+          years: calculateYears(character.store_birthday, targetYear)
         })
       }
     }
@@ -178,10 +181,10 @@ function RouteComponent() {
 
   useEffect(() => {
     if (allCharacters.length > 0) {
-      const monthEvents = filterMonthEvents(allCharacters, selectedMonth)
+      const monthEvents = filterMonthEvents(allCharacters, selectedMonth, selectedYear)
       setEvents(monthEvents)
     }
-  }, [selectedMonth, allCharacters])
+  }, [selectedMonth, selectedYear, allCharacters])
 
   const today = new Date()
   const currentMonthName = `${selectedYear}年${selectedMonth}月`
@@ -227,7 +230,16 @@ function RouteComponent() {
         <Button variant='ghost' size='icon' onClick={handlePrevMonth} className='rounded-full'>
           <ChevronLeft className='h-5 w-5' />
         </Button>
-        <h1 className='text-2xl md:text-4xl font-bold tracking-tight text-center'>{currentMonthName}</h1>
+        <button
+          type='button'
+          onClick={() => {
+            setSelectedYear(today.getFullYear())
+            setSelectedMonth(today.getMonth() + 1)
+          }}
+          className='text-2xl md:text-4xl font-bold tracking-tight text-center tabular-nums hover:text-primary transition-colors'
+        >
+          {currentMonthName}
+        </button>
         <Button variant='ghost' size='icon' onClick={handleNextMonth} className='rounded-full'>
           <ChevronRight className='h-5 w-5' />
         </Button>
@@ -279,7 +291,7 @@ function RouteComponent() {
                 {/* 日付部分（カレンダー風） */}
                 <div className='flex flex-col items-center justify-start pt-1 w-10 shrink-0'>
                   <span className='text-[10px] text-muted-foreground uppercase'>{group.dayOfWeek}</span>
-                  <span className='text-xl font-bold'>{group.day}</span>
+                  <span className='text-xl font-bold tabular-nums'>{group.day}</span>
                 </div>
 
                 {/* イベント一覧 */}
@@ -377,7 +389,7 @@ function RouteComponent() {
                       {/* 日付 */}
                       <span
                         className={cn(
-                          'text-sm font-semibold',
+                          'text-sm font-semibold tabular-nums',
                           isToday && 'text-primary',
                           !isToday && dayOfWeek === 0 && 'text-rose-500',
                           !isToday && dayOfWeek === 6 && 'text-sky-500',
