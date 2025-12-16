@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Search } from 'lucide-react'
-import type { ChangeEvent } from 'react'
-import { useEffect, useState } from 'react'
+import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
+import { ArrowUpDown } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { sortTypeAtom } from '@/atoms/sortAtom'
 import { CharacterListCard } from '@/components/character-list-card'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { type Character, CharactersSchema } from '@/schemas/character.dto'
 
 /**
@@ -11,7 +13,7 @@ import { type Character, CharactersSchema } from '@/schemas/character.dto'
  */
 const RouteComponent = () => {
   const [characters, setCharacters] = useState<Character[]>([])
-  const [searchQuery, setSearchQuery] = useState('')
+  const [sortType, setSortType] = useAtom(sortTypeAtom)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -41,16 +43,78 @@ const RouteComponent = () => {
     fetchCharacters()
   }, [])
 
-  const filteredCharacters = characters.filter((character) => {
-    const query = searchQuery.toLowerCase()
-    return (
-      character.character_name.toLowerCase().includes(query) ||
-      character.store_name.toLowerCase().includes(query) ||
-      character.description.toLowerCase().includes(query) ||
-      character.address?.toLowerCase().includes(query) ||
-      false
-    )
-  })
+  /**
+   * 日付文字列を解析してdayjsオブジェクトに変換
+   * YYYY-MM-DD形式またはMM/DD形式に対応
+   */
+  const parseDate = (dateStr: string | undefined): dayjs.Dayjs | null => {
+    if (!dateStr) return null
+    const parsed = dayjs(dateStr)
+    if (!parsed.isValid()) return null
+    return parsed
+  }
+
+  /**
+   * 誕生日が近い順にソートするための日数計算
+   */
+  const getDaysUntilBirthday = (dateStr: string | undefined): number => {
+    const birthday = parseDate(dateStr)
+    if (!birthday) return Number.MAX_SAFE_INTEGER
+
+    const now = dayjs()
+    const thisYear = now.year()
+
+    // 今年の誕生日を計算
+    let nextBirthday = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
+
+    // 今年の誕生日が過ぎていたら来年の誕生日を使う
+    if (nextBirthday.isBefore(now, 'day') || nextBirthday.isSame(now, 'day')) {
+      nextBirthday = nextBirthday.add(1, 'year')
+    }
+
+    return nextBirthday.diff(now, 'day')
+  }
+
+  /**
+   * ソート処理
+   */
+  const sortedCharacters = useMemo(() => {
+    return [...characters].sort((a, b) => {
+      if (sortType === 'character_birthday') {
+        const dateA = parseDate(a.character_birthday)
+        const dateB = parseDate(b.character_birthday)
+        if (!dateA && !dateB) return 0
+        if (!dateA) return 1
+        if (!dateB) return -1
+        return dateA.valueOf() - dateB.valueOf()
+      }
+
+      if (sortType === 'store_birthday') {
+        const dateA = parseDate(a.store_birthday)
+        const dateB = parseDate(b.store_birthday)
+        if (!dateA && !dateB) return 0
+        if (!dateA) return 1
+        if (!dateB) return -1
+        return dateA.valueOf() - dateB.valueOf()
+      }
+
+      if (sortType === 'upcoming_birthday') {
+        const daysA = Math.min(
+          getDaysUntilBirthday(a.character_birthday),
+          getDaysUntilBirthday(a.store_birthday)
+        )
+        const daysB = Math.min(
+          getDaysUntilBirthday(b.character_birthday),
+          getDaysUntilBirthday(b.store_birthday)
+        )
+        return daysA - daysB
+      }
+
+      return 0
+    })
+  }, [characters, sortType])
+
+  const filteredCharacters = sortedCharacters
 
   if (loading) {
     return (
@@ -85,20 +149,48 @@ const RouteComponent = () => {
           <p className='text-sm text-gray-500 mt-1'>全{characters.length}キャラクター</p>
         </header>
 
-        <div className='max-w-md mx-auto mb-8'>
-          <div className='relative'>
-            <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground' />
-            <Input
-              type='text'
-              placeholder='キャラクター名、店舗名、説明文で検索...'
-              value={searchQuery}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-              className='pl-10'
-            />
+        <div className='max-w-2xl mx-auto mb-8'>
+          <div className='bg-white/80 rounded-lg p-4 shadow-sm'>
+            <div className='flex items-center gap-2 mb-3'>
+              <ArrowUpDown className='h-4 w-4 text-gray-600' />
+              <span className='text-sm font-medium text-gray-700'>並び替え</span>
+            </div>
+            <div className='grid grid-cols-1 sm:grid-cols-3 gap-2'>
+              <Button
+                variant='outline'
+                onClick={() => setSortType('character_birthday')}
+                className={`w-full ${
+                  sortType === 'character_birthday'
+                    ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600 dark:bg-blue-500 dark:text-white dark:border-blue-500 dark:hover:bg-blue-600'
+                    : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 dark:bg-gray-200/90 dark:text-gray-800 dark:border-gray-300 dark:hover:bg-gray-200'
+                }`}
+              >
+                キャラ誕生日順
+              </Button>
+              <Button
+                variant='outline'
+                onClick={() => setSortType('store_birthday')}
+                className={`w-full ${
+                  sortType === 'store_birthday'
+                    ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600 dark:bg-blue-500 dark:text-white dark:border-blue-500 dark:hover:bg-blue-600'
+                    : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 dark:bg-gray-200/90 dark:text-gray-800 dark:border-gray-300 dark:hover:bg-gray-200'
+                }`}
+              >
+                店舗誕生日順
+              </Button>
+              <Button
+                variant='outline'
+                onClick={() => setSortType('upcoming_birthday')}
+                className={`w-full ${
+                  sortType === 'upcoming_birthday'
+                    ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600 dark:bg-blue-500 dark:text-white dark:border-blue-500 dark:hover:bg-blue-600'
+                    : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 dark:bg-gray-200/90 dark:text-gray-800 dark:border-gray-300 dark:hover:bg-gray-200'
+                }`}
+              >
+                誕生日が近い順
+              </Button>
+            </div>
           </div>
-          {searchQuery && (
-            <p className='text-sm text-muted-foreground mt-2 text-center'>{filteredCharacters.length}件の結果</p>
-          )}
         </div>
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
@@ -106,12 +198,6 @@ const RouteComponent = () => {
             <CharacterListCard key={character.key} character={character} />
           ))}
         </div>
-
-        {filteredCharacters.length === 0 && searchQuery && (
-          <div className='text-center py-12'>
-            <p className='text-muted-foreground'>検索条件に一致するキャラクターが見つかりませんでした</p>
-          </div>
-        )}
       </div>
     </div>
   )

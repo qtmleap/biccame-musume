@@ -7,7 +7,6 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 export const Route = createRootRoute({
   component: () => (
     <div className='min-h-screen flex flex-col'>
-      {/* <ScrollRestoration /> */}
       {/* <Header className='' /> */}
       <main className='flex-1'>
         <Outlet />
