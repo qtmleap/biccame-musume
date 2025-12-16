@@ -23,24 +23,24 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
 
   return (
     <Link to='/characters/$id' params={{ id: character.key }} className='block h-full'>
-      <div className='h-full rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer p-4'>
+      <div className='h-full rounded-lg border border-pink-200/40 bg-white/80 shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer p-4 hover:bg-white/90 hover:border-pink-400/60'>
         <div className='flex items-center gap-3'>
-          <Avatar className='h-16 w-16 border-2 border-primary'>
+          <Avatar className='h-16 w-16 border-2 border-pink-400'>
             <AvatarImage
               src={character.image_urls?.[1] || character.image_urls?.[0]}
               alt={character.character_name}
             />
-            <AvatarFallback>{character.character_name[0]}</AvatarFallback>
+            <AvatarFallback className='bg-pink-100 text-pink-700'>{character.character_name[0]}</AvatarFallback>
           </Avatar>
           <div className='flex-1 min-w-0'>
-            <h3 className='text-lg font-semibold mb-1 truncate'>{character.character_name}</h3>
-            <div className='flex items-center gap-1 text-sm text-muted-foreground mb-2'>
+            <h3 className='text-lg font-semibold mb-1 truncate text-gray-800'>{character.character_name}</h3>
+            <div className='flex items-center gap-1 text-sm text-gray-600 mb-2'>
               <Store className='h-3 w-3' />
               <span className='truncate'>{character.store_name}</span>
             </div>
             <div className='flex items-center gap-2'>
               {character.address && (
-                <Badge variant='secondary' className='text-xs'>
+                <Badge variant='secondary' className='text-xs bg-blue-100 text-blue-700 border-blue-200'>
                   {character.address.split(/都|道|府|県/)[0]}
                   {character.address.match(/都|道|府|県/)?.[0]}
                 </Badge>
@@ -49,7 +49,7 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
                 <Button
                   size='sm'
                   variant='outline'
-                  className='h-6 px-2 text-xs'
+                  className='h-6 px-2 text-xs border-blue-300 text-blue-700 hover:bg-blue-50'
                   onClick={handleTwitterClick}
                 >
                   <Twitter className='h-3 w-3 mr-1' />
@@ -58,7 +58,7 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
               )}
             </div>
           </div>
-          <ChevronRight className='h-5 w-5 text-muted-foreground shrink-0' />
+          <ChevronRight className='h-5 w-5 text-gray-400 shrink-0' />
         </div>
       </div>
     </Link>

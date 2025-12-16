@@ -75,14 +75,14 @@ const RouteComponent = () => {
   }
 
   return (
-    <div className='min-h-screen bg-linear-to-b from-background to-muted/20'>
+    <div className='min-h-screen'>
       <div className='container mx-auto px-4 py-8'>
-        <header className='mb-8 text-center'>
-          <h1 className='text-4xl font-bold mb-2 bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent'>
+        <header className='mb-8 text-center bg-white/80 rounded-lg p-6 shadow-sm'>
+          <h1 className='text-4xl font-bold mb-2 text-[#e50012]'>
             ビッカメ娘
           </h1>
-          <p className='text-muted-foreground'>ビックカメラの店舗擬人化キャラクター一覧</p>
-          <p className='text-sm text-muted-foreground mt-1'>全{characters.length}キャラクター</p>
+          <p className='text-gray-600'>ビックカメラの店舗擬人化キャラクター一覧</p>
+          <p className='text-sm text-gray-500 mt-1'>全{characters.length}キャラクター</p>
         </header>
 
         <div className='max-w-md mx-auto mb-8'>

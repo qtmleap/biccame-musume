@@ -118,5 +118,9 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* 参考サイトのスタイル: 背景色とグラデーション */
+    background: linear-gradient(to bottom, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
 }
