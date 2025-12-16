@@ -72,11 +72,11 @@ const RouteComponent = () => {
   }
 
   return (
-    <div className='min-h-screen bg-linear-to-b from-background to-muted/20'>
+    <div className='min-h-screen'>
       <div className='container mx-auto px-4 py-8'>
         <div className='mb-6'>
           <Link to='/'>
-            <Button variant='ghost' size='sm'>
+            <Button variant='ghost' size='sm' className='bg-white/80 hover:bg-white/90'>
               <ArrowLeft className='h-4 w-4 mr-2' />
               一覧に戻る
             </Button>
