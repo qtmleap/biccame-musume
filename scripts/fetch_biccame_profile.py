@@ -6,7 +6,6 @@
 import urllib.request
 import json
 import yaml
-from datetime import datetime
 from bs4 import BeautifulSoup
 import re
 
@@ -24,10 +23,14 @@ def parse_character_info(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
     characters = []
 
-    # キャラクター名が定義されている要素を探す
+    # キャラクター名が定義されている要素を探す（セクションタイトルは除外）
     profile_name_divs = soup.find_all('div', class_='profile_name')
 
     for name_div in profile_name_divs:
+        # align="center"のdivはセクションタイトルなので除外
+        if name_div.get('align') == 'center':
+            continue
+
         character = {}
 
         # キャラクター名を取得
@@ -70,6 +73,14 @@ def parse_character_info(html_content):
                 twitter_link = grandparent.find('a', href=lambda x: x and 'twitter.com' in x)
                 if twitter_link:
                     character['twitter_url'] = twitter_link['href']
+
+                # 一覧ページのプロフィール画像を取得
+                profile_img = grandparent.find('img', src=lambda x: x and '/profile/' in x and x.endswith('.png'))
+                if profile_img:
+                    img_url = profile_img['src']
+                    if img_url.startswith('/'):
+                        img_url = f"https://biccame.jp{img_url}"
+                    character['profile_image_url'] = img_url
 
         if character.get('character_name'):
             characters.append(character)
@@ -138,9 +149,9 @@ def fetch_detail_page(url):
             else:
                 detail_info['store_link'] = f"http://www.biccamera.co.jp{href}" if href.startswith('/') else href
 
-        # 画像URLを配列で取得（/profile/images/配下の画像）
+        # 画像URLを配列で取得（/profile/配下の画像全て）
         image_urls = []
-        images = soup.find_all('img', src=lambda x: x and '/profile/images/' in x)
+        images = soup.find_all('img', src=lambda x: x and '/profile/' in x and x.endswith('.png'))
         for img in images:
             img_url = img['src']
             if img_url.startswith('/'):
@@ -179,23 +190,20 @@ def main():
                 detail_info = fetch_detail_page(char['detail_url'])
                 char.update(detail_info)
 
-        # タイムスタンプ
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-
-        # JSONとして保存（絶対パスを使用）
-        json_file = f'biccame_characters_{timestamp}.json'
+        # JSONとして保存
+        json_file = 'biccame_characters.json'
         with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(characters, f, ensure_ascii=False, indent=2)
         print(f'Saved to {json_file}')
 
         # YAMLとして保存
-        yaml_file = f'biccame_characters_{timestamp}.yaml'
+        yaml_file = 'biccame_characters.yaml'
         with open(yaml_file, 'w', encoding='utf-8') as f:
             yaml.dump(characters, f, allow_unicode=True, default_flow_style=False)
         print(f'Saved to {yaml_file}')
 
         # HTMLも保存
-        html_file = f'biccame_profile_{timestamp}.html'
+        html_file = 'biccame_profile.html'
         with open(html_file, 'w', encoding='utf-8') as f:
             f.write(html_content)
         print(f'Saved HTML to {html_file}')

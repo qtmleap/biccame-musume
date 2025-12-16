@@ -13,6 +13,8 @@ type CharacterListCardProps = {
  * ビッカメ娘一覧表示用コンパクトカードコンポーネント
  */
 export const CharacterListCard = ({ character }: CharacterListCardProps) => {
+  const isGraduated = !character.twitter_url
+
   const handleTwitterClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -23,14 +25,22 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
 
   return (
     <Link to='/characters/$id' params={{ id: character.key }} className='block h-full'>
-      <div className='h-full rounded-lg border border-pink-200/40 bg-white/80 shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer p-4 hover:bg-white/90 hover:border-pink-400/60'>
+      <div
+        className={`h-full rounded-lg border shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer p-4 ${
+          isGraduated
+            ? 'border-gray-300 bg-gray-200/90 hover:bg-gray-200 hover:border-gray-400'
+            : 'border-pink-200/40 bg-white/80 hover:bg-white/90 hover:border-pink-400/60'
+        }`}
+      >
         <div className='flex items-center gap-3'>
-          <Avatar className='h-16 w-16 border-2 border-pink-400'>
+          <Avatar className={`h-16 w-16 border-2 ${isGraduated ? 'border-gray-400' : 'border-pink-400'}`}>
             <AvatarImage
               src={character.image_urls?.[1] || character.image_urls?.[0]}
               alt={character.character_name}
             />
-            <AvatarFallback className='bg-pink-100 text-pink-700'>{character.character_name[0]}</AvatarFallback>
+            <AvatarFallback className={isGraduated ? 'bg-gray-200 text-gray-600' : 'bg-pink-100 text-pink-700'}>
+              {character.character_name[0]}
+            </AvatarFallback>
           </Avatar>
           <div className='flex-1 min-w-0'>
             <h3 className='text-lg font-semibold mb-1 truncate text-gray-800'>{character.character_name}</h3>
@@ -38,23 +48,28 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
               <Store className='h-3 w-3' />
               <span className='truncate'>{character.store_name}</span>
             </div>
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-2 min-h-6'>
               {character.address && (
                 <Badge variant='secondary' className='text-xs bg-blue-100 text-blue-700 border-blue-200'>
                   {character.address.split(/都|道|府|県/)[0]}
                   {character.address.match(/都|道|府|県/)?.[0]}
                 </Badge>
               )}
-              {character.twitter_url && (
-                <Button
-                  size='sm'
-                  variant='outline'
-                  className='h-6 px-2 text-xs border-blue-300 text-blue-700 hover:bg-blue-50'
-                  onClick={handleTwitterClick}
-                >
-                  <Twitter className='h-3 w-3 mr-1' />
-                  フォロー
-                </Button>
+              {isGraduated ? (
+                <Badge variant='secondary' className='text-xs bg-gray-200 text-gray-600 border-gray-300'>
+                  卒業
+                </Badge>
+              ) : (
+                character.twitter_url && (
+                  <Button
+                    size='sm'
+                    className='h-6 px-2 text-xs bg-blue-500 text-white hover:bg-blue-600 border-0'
+                    onClick={handleTwitterClick}
+                  >
+                    <Twitter className='h-3 w-3 mr-1' />
+                    フォロー
+                  </Button>
+                )
               )}
             </div>
           </div>
