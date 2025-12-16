@@ -9,7 +9,6 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 
 dayjs.extend(utc)
@@ -80,10 +79,8 @@ if (!rootElement.innerHTML) {
           }
         }}
       >
-        <ThemeProvider>
-          <RouterProvider router={router} />
-          <Toaster />
-        </ThemeProvider>
+        <RouterProvider router={router} />
+        <Toaster />
       </PersistQueryClientProvider>
     </StrictMode>
   )
