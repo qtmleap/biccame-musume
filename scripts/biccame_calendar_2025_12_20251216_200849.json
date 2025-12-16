@@ -1,0 +1,49 @@
+[
+  {
+    "date": "2025-12-01",
+    "key": "kawasaki",
+    "event_text": "川崎たん擬人化9周年",
+    "event_type": "character_birthday",
+    "years": 9,
+    "image_url": "https://biccame.jp/profile/assets_c/2016/12/kawasaki5-thumb-18xauto-618.png"
+  },
+  {
+    "date": "2025-12-01",
+    "key": "shibuhachi",
+    "event_text": "しぶハチたん店舗誕生36周年",
+    "event_type": "other",
+    "image_url": "https://biccame.jp/profile/assets_c/2019/07/shibuhachi5-thumb-18xauto-875.png"
+  },
+  {
+    "date": "2025-12-12",
+    "key": "chiba",
+    "event_text": "千葉たん擬人化1周年",
+    "event_type": "character_birthday",
+    "years": 1,
+    "image_url": "https://biccame.jp/profile/assets_c/2024/12/chiba5-thumb-18xauto-1168.png"
+  },
+  {
+    "date": "2025-12-13",
+    "key": "tenjin",
+    "event_text": "天神1号たん擬人化5周年",
+    "event_type": "character_birthday",
+    "years": 5,
+    "image_url": "https://biccame.jp/profile/assets_c/2020/12/tenjin1_5-thumb-18xauto-1020.png"
+  },
+  {
+    "date": "2025-12-15",
+    "key": "ohmiya",
+    "event_text": "大宮たん擬人化10周年",
+    "event_type": "character_birthday",
+    "years": 10,
+    "image_url": "https://biccame.jp/profile/assets_c/2016/11/ohmiya5-thumb-18xauto-617.png"
+  },
+  {
+    "date": "2025-12-18",
+    "key": "kagoshima",
+    "event_text": "鹿児島たん擬人化8周年",
+    "event_type": "character_birthday",
+    "years": 8,
+    "image_url": "https://biccame.jp/profile/assets_c/2017/12/kagoshima5-thumb-18xauto-763.png"
+  }
+]
