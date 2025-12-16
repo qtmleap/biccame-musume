@@ -1,0 +1,575 @@
+- address: 茨城県水戸市宮町1-7-31
+  character_name: ビッカメ娘
+  description: ビックカメラ水戸駅店の擬人化キャラクター。わら納豆のようなツインテールが特徴（実は納豆として食べられるらしい...。）水戸市の花・梅の花の小物が好き。戦車のような靴を履いている。少しおっとりしているが、水戸を盛り上げようと色々なPR活動をしている。
+  detail_url: https://biccame.jp/profile/mito.html
+  image_urls:
+  - https://biccame.jp/profile/images/mito_img.png
+  - https://biccame.jp/profile/images/mito_img_sd.png
+  - https://biccame.jp/profile/images/mito4.png
+  - https://biccame.jp/profile/images/mito5.png
+  store_link: http://www.biccamera.com
+  store_name: 水戸駅店
+  twitter_url: https://twitter.com/biccameramito
+  zipcode: 310-0015
+- address: 茨城県水戸市宮町1-7-31
+  character_name: 水戸たん
+  description: ビックカメラ水戸駅店の擬人化キャラクター。わら納豆のようなツインテールが特徴（実は納豆として食べられるらしい...。）水戸市の花・梅の花の小物が好き。戦車のような靴を履いている。少しおっとりしているが、水戸を盛り上げようと色々なPR活動をしている。
+  detail_url: https://biccame.jp/profile/mito.html
+  image_urls:
+  - https://biccame.jp/profile/images/mito_img.png
+  - https://biccame.jp/profile/images/mito_img_sd.png
+  - https://biccame.jp/profile/images/mito4.png
+  - https://biccame.jp/profile/images/mito5.png
+  store_name: 水戸駅店
+  twitter_url: https://twitter.com/biccameramito
+  zipcode: 310-0015
+- address: 千葉県柏市柏1-1-20
+  character_name: 柏たん
+  description: ビックカメラ柏店の擬人化キャラクター。メガネと柏餅のような頭が特徴。大好物はもちろんモチモチの柏餅！制服のリボンは柏市の木・柏の葉っぱと、市の花・シバザクラがモチーフになっている。
+  detail_url: https://biccame.jp/profile/kashiwa.html
+  image_urls:
+  - https://biccame.jp/profile/images/kasiwa_img.png
+  - https://biccame.jp/profile/images/kasiwa_img_sd.png
+  - https://biccame.jp/profile/images/kashiwa4.png
+  - https://biccame.jp/profile/images/kashiwa5.png
+  store_name: 柏店
+  twitter_url: https://twitter.com/bic_kashiwa
+  zipcode: 277-0005
+- address: 東京都八王子市旭町1-17
+  character_name: 八王子たん
+  description: ビックカメラJR八王子駅店の擬人化キャラクター。王子という名前から王冠の髪飾りをしている。制服のリボンは八王子の銀杏がモチーフになっている。
+  detail_url: https://biccame.jp/profile/hachioji.html
+  image_urls:
+  - https://biccame.jp/profile/images/hachi_img.png
+  - https://biccame.jp/profile/images/hachi_img_sd.png
+  - https://biccame.jp/profile/images/hachoji4.png
+  - https://biccame.jp/profile/images/hachioji5.png
+  store_name: JR八王子駅店
+  twitter_url: https://twitter.com/bichachioji
+  zipcode: 192-0083
+- address: 千葉県船橋市本町1-3-1
+  character_name: ふなたん/船橋たん
+  description: ビックカメラ船橋駅FACE店の擬人化キャラクター。いつも髪が跳ねている元気いっぱいの子。ビッカメ娘の中で特にハッピを愛している。制服のリボンと髪飾りに船橋市の花のひまわりをあしらっている。
+  detail_url: https://biccame.jp/profile/funabashi.html
+  image_urls:
+  - https://biccame.jp/profile/images/huna_img.png
+  - https://biccame.jp/profile/images/huna_img_sd.png
+  - https://biccame.jp/profile/images/funabashi4.png
+  - https://biccame.jp/profile/images/funabashi5.png
+  store_name: 船橋駅FACE店
+  twitter_url: https://twitter.com/bic_funabashi
+  zipcode: 273-0005
+- address: 東京都新宿区新宿3-29-1
+  character_name: しんじゅくたん
+  description: ビックカメラ新宿東口店の擬人化キャラクター。オッドアイと、他の娘と少し違うデザインの制服が特徴。「～ですわ」とお嬢様口調。新宿の花・ツツジを髪飾りにしている。
+  detail_url: https://biccame.jp/profile/bicqlo.html
+  image_urls:
+  - https://biccame.jp/profile/images/biccro_img.png
+  - https://biccame.jp/profile/images/biccro_img_sd.png
+  - https://biccame.jp/profile/images/bicqlo4.png
+  - https://biccame.jp/profile/images/bicqlo5.png
+  store_name: 新宿東口店
+  twitter_url: https://twitter.com/bic_shinjuku3ch
+  zipcode: 160-0022
+- address: 静岡県浜松市中央区砂山町322-1
+  character_name: はまたん/浜松たん
+  description: ビックカメラ浜松店の擬人化キャラクター。のんびりとした性格。うなぎパイが好き。制服のリボンは浜松市の木・松がモチーフ、ヘアピンは市の花・ミカンがモチーフになっている。
+  detail_url: https://biccame.jp/profile/hamamatsu.html
+  image_urls:
+  - https://biccame.jp/profile/images/hama_img.png
+  - https://biccame.jp/profile/images/hama_img_sd.png
+  - https://biccame.jp/profile/images/hamamatsu4.png
+  - https://biccame.jp/profile/images/hamamatsu5.png
+  store_name: 浜松店
+  twitter_url: https://twitter.com/bic_hamamatsu
+  zipcode: 430-0926
+- address: 神奈川県相模原市南区相模大野3-8-1
+  character_name: さがみたん
+  description: ビックカメラ相模大野駅店の擬人化キャラクター。他の娘より年下。いつも壁からﾁﾗｯしている。ちょっとさみしがり屋な性格。制服のリボンと髪飾りは、相模原市の花のアジサイがモチーフになっている。
+  detail_url: https://biccame.jp/profile/sagami.html
+  image_urls:
+  - https://biccame.jp/profile/images/sagami_img.png
+  - https://biccame.jp/profile/images/sagami_img_sd.png
+  - https://biccame.jp/profile/images/sagami4.png
+  - https://biccame.jp/profile/images/sagami5.png
+  store_name: 相模大野駅店
+  twitter_url: https://twitter.com/bic_sagamioono
+  zipcode: 252-0303
+- address: 東京都豊島区東池袋1-41-5
+  character_name: 本店たん
+  description: ビックカメラ池袋本店の擬人化キャラクター。他の子とは少し違うオーラを放っている。頭のフクロウの方が本体かも知れないという噂も...？袴のような制服が特徴的。
+  detail_url: https://biccame.jp/profile/honten.html
+  image_urls:
+  - https://biccame.jp/profile/images/honten_img.png
+  - https://biccame.jp/profile/images/honten_img_sd.png
+  - https://biccame.jp/profile/images/honten4.png
+  - https://biccame.jp/profile/images/honten5.png
+  store_name: 池袋本店
+  twitter_url: https://twitter.com/bicikebukuro
+  zipcode: 170-0013
+- address: 東京都豊島区西池袋1-16-3
+  character_name: プロスタたん
+  description: ビックフォトスタジオ東京写真館の擬人化キャラクター。写真を撮ることとコスプレをするのが好き。法被は腰に巻いている。フィルム風のカチューシャは妹とお揃い。
+  detail_url: https://biccame.jp/profile/prosta.html
+  image_urls:
+  - https://biccame.jp/profile/images/pro_img.png
+  - https://biccame.jp/profile/images/pro_img_sd.png
+  - https://biccame.jp/profile/images/prosta4.png
+  - https://biccame.jp/profile/images/shasinkan5.png
+  store_name: ビックフォトスタジオ 東京写真館
+  twitter_url: https://twitter.com/bic_shasinkan
+  zipcode: 171-0021
+- address: 埼玉県さいたま市大宮区桜木町1-8-4
+  character_name: 大宮たん
+  description: ビックカメラ大宮西口そごう店の擬人化キャラクター。明るい性格でサッカーが大好き。地元のチームカラーのアイテムをよく集めている。
+  detail_url: https://biccame.jp/profile/ohmiya.html
+  image_urls:
+  - https://biccame.jp/profile/images/omiya_img.png
+  - https://biccame.jp/profile/images/omiya_img_sd.png
+  - https://biccame.jp/profile/images/ohmiya4.png
+  - https://biccame.jp/profile/images/ohmiya5.png
+  store_name: 大宮西口そごう店
+  twitter_url: https://twitter.com/bic_ohmiya
+  zipcode: 330-0854
+- address: 神奈川県藤沢市藤沢559
+  character_name: 藤沢たん
+  description: ビックカメラ藤沢店の擬人化キャラクター。ロックでクールなお姉さん。「～だぜ」という口調で話す。イカの触手のような髪は動くという噂も...。ピンクのエクステと藤の花が特徴。
+  detail_url: https://biccame.jp/profile/fujisawa.html
+  image_urls:
+  - https://biccame.jp/profile/images/huji_img.png
+  - https://biccame.jp/profile/images/huji_img_sd.png
+  - https://biccame.jp/profile/images/fujisawa4.png
+  - https://biccame.jp/profile/images/fujisawa5.png
+  store_name: 藤沢店
+  twitter_url: https://twitter.com/bic_fujisawa
+  zipcode: 251-0052
+- character_name: フォトたん
+  description: ビックカメラBIC PHOTOの擬人化キャラクター。プロスタたんの妹。お姉ちゃんが撮った写真をプリントしてアルバムにまとめるのが好き。
+  detail_url: https://biccame.jp/profile/photo.html
+  image_urls:
+  - https://biccame.jp/profile/images/photo_img.png
+  - https://biccame.jp/profile/images/photo32.png
+  - https://biccame.jp/profile/images/photo4.png
+  - https://biccame.jp/profile/images/photo5.png
+  store_name: BIC PHOTO ビックフォト
+- address: 愛知県名古屋市中村区椿町6-9
+  character_name: なごやたん/名古屋たん
+  description: ビックカメラ名古屋駅西店の擬人化キャラクター。頭のしゃちほこと、エビフライのようなツインテールが特徴。ギャルっぽい性格。制服のリボンは市の花・ユリがモチーフ。
+  detail_url: https://biccame.jp/profile/nagoya.html
+  image_urls:
+  - https://biccame.jp/profile/images/nagoya2.png
+  - https://biccame.jp/profile/images/nagoya32.png
+  - https://biccame.jp/profile/images/nagoya4.png
+  - https://biccame.jp/profile/images/nagoya5.png
+  store_name: 名古屋駅西店
+  twitter_url: https://twitter.com/bic_nagoya
+  zipcode: 453-0015
+- address: 東京都千代田区有楽町1-11-1
+  character_name: 有楽町たん
+  description: ビックカメラ有楽町店の擬人化キャラクター。ビッカメ娘の中でひときわ神々しい存在。少し天然。区の鳥・白鳥のような羽と、着物もようなハッピ、本店たんとお揃いの制服が特徴。
+  detail_url: https://biccame.jp/profile/yuurakuchou.html
+  image_urls:
+  - https://biccame.jp/profile/images/yuurakuchou.png
+  - https://biccame.jp/profile/images/yuurakuchou21.png
+  - https://biccame.jp/profile/images/yuurakucho4.png
+  - https://biccame.jp/profile/images/yuurakuchou5.png
+  store_name: 有楽町店
+  twitter_url: https://twitter.com/bic_yuurakuchou
+  zipcode: 100-0006
+- address: 東京都新宿区西新宿1-5-1
+  character_name: 新宿西口たん
+  description: ビックカメラ新宿西口店の擬人化キャラクター。東口にあるビックロたんと対になるような髪をして、性格も活発的な子。新宿の花・ツツジをアクセサリーにしている。
+  detail_url: https://biccame.jp/profile/shinjyuku.html
+  image_urls:
+  - https://biccame.jp/profile/images/shinjuku2.png
+  - https://biccame.jp/profile/images/shinjuku4.png
+  - https://biccame.jp/profile/images/shinjyuku4.png
+  - https://biccame.jp/profile/images/shinjyuku5.png
+  store_name: 新宿西口店
+  twitter_url: https://twitter.com/bic_shinjyuku
+  zipcode: 160-0023
+- character_name: カメ館たん/カメラ館たん
+  description: ビックカメラ池袋東口カメラ館の擬人化キャラクター。同じ池袋の本店たんがお姉ちゃん。リボンとくせっ毛がお揃い。カメラをいつも首からさげている。
+  detail_url: https://biccame.jp/profile/camera.html
+  image_urls:
+  - https://biccame.jp/profile/images/camera2.png
+  - https://biccame.jp/profile/images/camera4.png
+  - https://biccame.jp/profile/images/camera5.png
+  store_name: 池袋東口カメラ館
+- address: 東京都豊島区東池袋1-6-7
+  character_name: パソ館たん/パソコン館たん
+  description: ビックカメラ本店パソコン館の擬人化キャラクター。同じ池袋の本店たんがお姉ちゃん。リボンとくせっ毛がお揃い。ビルに似たスマホをいつも首からさげている。
+  detail_url: https://biccame.jp/profile/pkan.html
+  image_urls:
+  - https://biccame.jp/profile/images/pkan2.png
+  - https://biccame.jp/profile/images/pkan4.png
+  - https://biccame.jp/profile/images/pkan5.png
+  store_name: 池袋本店パソコン館
+  twitter_url: https://twitter.com/bicpkanhonten
+  zipcode: 170-0013
+- address: 北海道札幌市中央区北4条西2-1
+  character_name: さっぽろたん/札幌たん
+  description: ビックカメラ札幌店の擬人化キャラクター。雪の結晶のピンが宝物。マフラーとブーツが特徴的。みんなから雪の妖精と呼ばれたりしている。
+  detail_url: https://biccame.jp/profile/sapporo.html
+  image_urls:
+  - https://biccame.jp/profile/images/sapporo3.png
+  - https://biccame.jp/profile/images/sapporo4.png
+  - https://biccame.jp/profile/images/sapporo5.png
+  store_name: 札幌店
+  twitter_url: https://twitter.com/bic_sapporo
+  zipcode: 060-8619
+- address: 広島県広島市南区松原町5-1
+  character_name: 広島たん
+  description: ビックカメラ広島駅前店の擬人化キャラクター。もみじと扇子が特徴。「～じゃ」など広島弁がたまに出る。ミステリアスな発言をすることがある。
+  detail_url: https://biccame.jp/profile/hiroshima.html
+  image_urls:
+  - https://biccame.jp/profile/images/hiroshima3.png
+  - https://biccame.jp/profile/images/hiroshima4.png
+  - https://biccame.jp/profile/images/hiroshima5.png
+  store_name: 広島駅前店
+  twitter_url: https://twitter.com/bic_hiroshima
+  zipcode: 732-0822
+- character_name: せいせきたん/聖蹟たん
+  description: ビックカメラ聖蹟桜ヶ丘駅店の擬人化キャラクター。後ろ髪にある大きな桜の花が特徴。ツイートに桜の花を咲かせるのが得意。
+  detail_url: https://biccame.jp/profile/seiseki.html
+  image_urls:
+  - https://biccame.jp/profile/images/seiseki3.png
+  - https://biccame.jp/profile/images/seiseki4.png
+  - https://biccame.jp/profile/images/seiseki5.png
+  store_name: 聖蹟桜ヶ丘駅店
+- address: 大阪府大阪市阿倍野区阿倍野筋１－６－１
+  character_name: あべのたん
+  description: ビックカメラあべのキューズモール店の擬人化キャラクター。たこ焼きの髪飾り・タコのぬいぐるみ(？)が特徴。青い腕輪はお店のロゴから。
+  detail_url: https://biccame.jp/profile/abeno.html
+  image_urls:
+  - https://biccame.jp/profile/images/abeno3.png
+  - https://biccame.jp/profile/images/abeno4.png
+  - https://biccame.jp/profile/images/abeno5.png
+  store_name: あべの キューズモール店
+  twitter_url: https://twitter.com/bic_abeno
+  zipcode: 545-0052
+- address: 岡山県岡山市北区駅前町1-1-1
+  character_name: 岡山たん
+  description: ビックカメラ岡山駅前店の擬人化キャラクター。ポニーテールが桃の形になっている。どこからともなくきびだんごを出す。胸の花はキク。
+  detail_url: https://biccame.jp/profile/okayama.html
+  image_urls:
+  - https://biccame.jp/profile/images/okayama4.png
+  - https://biccame.jp/profile/images/okayama5.png
+  store_name: 岡山駅前店
+  twitter_url: https://twitter.com/Bic_Okayamaten
+  zipcode: 700-0023
+- address: 東京都立川市曙町2-12-2
+  character_name: 立川たん
+  description: ビックカメラ立川店の擬人化キャラクター。少しでも背を大きく見せるため大きな帽子を被っている。謎の横髪は立川の名産・ウドをイメージ。胸の花はコブシ。萌え袖が特徴。
+  detail_url: https://biccame.jp/profile/tachikawa.html
+  image_urls:
+  - https://biccame.jp/profile/images/tachikawa2.png
+  - https://biccame.jp/profile/images/tachikawa3.png
+  - https://biccame.jp/profile/images/tachikawa4.png
+  - https://biccame.jp/profile/images/tachikawa5.png
+  store_name: 立川店
+  twitter_url: https://twitter.com/bic_tachikawa
+  zipcode: 190-0012
+- address: 神奈川県川崎市幸区堀川町72-１
+  character_name: 川崎たん
+  description: ビックカメララゾーナ川崎店の擬人化キャラクター。リボンのようなツインテールと、川崎市の木・ツバキの下にある「川」の文字の様な短冊が特徴。
+  detail_url: https://biccame.jp/profile/kawasaki.html
+  image_urls:
+  - https://biccame.jp/profile/images/kawasaki2.png
+  - https://biccame.jp/profile/images/kawasaki3.png
+  - https://biccame.jp/profile/images/kawasaki4.png
+  - https://biccame.jp/profile/images/kawasaki5.png
+  store_name: ラゾーナ川崎店
+  twitter_url: https://twitter.com/Bic_kawasaki
+  zipcode: 212-0013
+- character_name: 京都たん
+  description: ビックカメラJR京都駅店の擬人化キャラクター。京都の花・ツバキと目元の紅が特徴。神楽鈴を持っている。たまに京都弁が出ることがある。
+  detail_url: https://biccame.jp/profile/kyoto.html
+  image_urls:
+  - https://biccame.jp/profile/images/kyoto2.png
+  - https://biccame.jp/profile/images/kyoto3.png
+  - https://biccame.jp/profile/images/kyoto4.png
+  - https://biccame.jp/profile/images/kyoto5.png
+  store_name: JR京都駅店
+- address: 大阪府大阪市中央区千日前2-10-1
+  character_name: なんばたん
+  description: ビックカメラなんば店の擬人化キャラクター。ヒョウ柄のリボンと、あべのたんとお揃いのたこ焼きの髪飾りが特徴。あべのたんのお姉ちゃん的存在。胸の花はパンジー。
+  detail_url: https://biccame.jp/profile/nanba.html
+  image_urls:
+  - https://biccame.jp/profile/images/nanba2.png
+  - https://biccame.jp/profile/images/nanba3.png
+  - https://biccame.jp/profile/images/nanba4.png
+  - https://biccame.jp/profile/images/nanba5.png
+  store_name: なんば店
+  twitter_url: https://twitter.com/biccamera_nanba
+  zipcode: 542-0074
+- address: 愛知県名古屋市中村区名駅一丁目1番3号
+  character_name: なごやげーとたん
+  description: ビックカメラ名古屋JRゲートタワー店の擬人化キャラクター。頭のしゃちほこと、名古屋巻きのような髪型が特徴。制服のリボンは、名古屋たんとは色違いで市の花・ユリがモチーフ。
+  detail_url: https://biccame.jp/profile/nagoyagate.html
+  image_urls:
+  - https://biccame.jp/profile/images/nagoyagate2.png
+  - https://biccame.jp/profile/images/nagoyagate3.png
+  - https://biccame.jp/profile/images/nagoyagate4.png
+  - https://biccame.jp/profile/images/nagoyagate5.png
+  store_name: 名古屋 JRゲートタワー店
+  twitter_url: https://twitter.com/bic_nagoyagate
+  zipcode: 450-0002
+- address: 東京都豊島区西池袋1-16-3
+  character_name: 池西たん/池袋西口たん
+  description: ビックカメラ池袋西口店の擬人化キャラクター。本店たんの妹であり、カメ館パソ館のお姉ちゃんでもある。四姉妹でピンクのリボンをお揃いにしている。
+  detail_url: https://biccame.jp/profile/ikenishi.html
+  image_urls:
+  - https://biccame.jp/profile/images/ikenishi2.png
+  - https://biccame.jp/profile/images/ikenishi3.png
+  - https://biccame.jp/profile/images/ikenishi4.png
+  - https://biccame.jp/profile/images/ikenishi5.png
+  store_name: 池袋西口店
+  twitter_url: https://twitter.com/bicikenishi
+  zipcode: 171-0021
+- address: 東京都千代田区外神田4-1-1
+  character_name: アキバたん/秋葉原たん
+  description: ビックカメラAKIBAの擬人化キャラクター。千代田区の花・桜がモチーフの大きなリボンと、猫耳のようなヘッドドレスが特徴。
+  detail_url: https://biccame.jp/profile/akiba.html
+  image_urls:
+  - https://biccame.jp/profile/images/akiba2.png
+  - https://biccame.jp/profile/images/akiba3.png
+  - https://biccame.jp/profile/images/akiba4.png
+  - https://biccame.jp/profile/images/akiba5.png
+  store_name: AKIBA
+  twitter_url: https://twitter.com/bic_akiba
+  zipcode: 101-0021
+- address: 東京都調布市小島町2-48-6
+  character_name: 調布たん
+  description: ビックカメラ京王調布店の擬人化キャラクター。調布市の花・サルスベリが胸の花のモチーフ。映画が好きで、ビデオカメラをよく持っている。髪はカチンコを意識しているとか...。
+  detail_url: https://biccame.jp/profile/chofu.html
+  image_urls:
+  - https://biccame.jp/profile/images/chofu2.png
+  - https://biccame.jp/profile/images/chofu3.png
+  - https://biccame.jp/profile/images/chofu4.png
+  - https://biccame.jp/profile/images/chofu5.png
+  store_name: 京王調布店
+  twitter_url: https://twitter.com/bic_keiochofu
+  zipcode: 182-0026
+- address: 福岡県福岡市中央区天神2-4-5
+  character_name: 天神2号たん
+  description: ビックカメラ天神2号館の擬人化。頭に飾っているのは福岡市の冬の花・サザンカ。梅の花も好き。
+  detail_url: https://biccame.jp/profile/tenjin2.html
+  image_urls:
+  - https://biccame.jp/profile/images/tenjin2go2.png
+  - https://biccame.jp/profile/images/tenjin2go3.png
+  - https://biccame.jp/profile/images/tenjin2go4.png
+  - https://biccame.jp/profile/images/tenjin2go5.png
+  store_name: 天神2号館
+  twitter_url: https://twitter.com/biccameratenjin
+  zipcode: 810-0001
+- character_name: ふなとーたん
+  description: ビックカメラ船橋東武店の擬人化キャラクター。制服のリボンのひまわりはふなたんとお揃い。風車のヘアピンをしている。アンデルセンの本が好き。
+  detail_url: https://biccame.jp/profile/funato.html
+  image_urls:
+  - https://biccame.jp/profile/images/funato2.png
+  - https://biccame.jp/profile/images/funato3.png
+  - https://biccame.jp/profile/images/funato4.png
+  - https://biccame.jp/profile/images/funato0.png
+  store_name: 船橋東武店
+- address: 鹿児島県鹿児島市中央町1-1
+  character_name: 鹿児島たん
+  description: ビックカメラ鹿児島中央駅店の擬人化キャラクター。法被の裏地は宇宙のような柄。大好物はさつまいも。胸の花はキョウチクトウ。髪の色は県の鳥・ルリカケスのような色。
+  detail_url: https://biccame.jp/profile/kagoshima.html
+  image_urls:
+  - https://biccame.jp/profile/images/kagoshima2.png
+  - https://biccame.jp/profile/images/kagoshima3.png
+  - https://biccame.jp/profile/images/kagoshima4.png
+  - https://biccame.jp/profile/images/kagoshima5.png
+  store_name: 鹿児島中央駅店
+  twitter_url: https://twitter.com/bic_kagoshima
+  zipcode: 890-0053
+- address: 新潟県新潟市中央区花園1-1-21
+  character_name: にいがたたん/新潟たん
+  description: ビックカメラ新潟店の擬人化キャラクター。胸のモチーフは県の花・チューリップと、県の鳥・トキ。お米が大好きで、おにぎりのような形のヘアピンをしている。
+  detail_url: https://biccame.jp/profile/niigata.html
+  image_urls:
+  - https://biccame.jp/profile/images/niigata2.png
+  - https://biccame.jp/profile/images/niigata3.png
+  - https://biccame.jp/profile/images/niigata4.png
+  - https://biccame.jp/profile/images/niigata5.png
+  store_name: 新潟店
+  twitter_url: https://twitter.com/niigata_bic
+  zipcode: 950-0086
+- address: 東京都港区赤坂3-1-6
+  character_name: みっけたん/赤坂たん
+  description: ビックカメラ赤坂見附駅店の擬人化キャラクター。港区の花・バラと、バラに見えるようなお団子の髪型、「3」のようなアホ毛、「坂」のヘアピンが特徴。国際社会にPRできるように、いつもお上品を心掛けている。
+  detail_url: https://biccame.jp/profile/akasaka.html
+  image_urls:
+  - https://biccame.jp/profile/images/akasaka2.png
+  - https://biccame.jp/profile/images/akasaka3.png
+  - https://biccame.jp/profile/images/akasaka4.png
+  - https://biccame.jp/profile/images/akasaka5.png
+  store_name: 赤坂見附駅店
+  twitter_url: https://twitter.com/bicakasaka
+  zipcode: 107-0052
+- character_name: 町田たん
+  description: ビックカメラ町田店の擬人化キャラクター。町田市の花・サルビアと、市の鳥・カワセミのような色の髪が特徴。前髪につけているクロスしたヘアピンと、横で結んだ髪で「町」という字になるようにしている。渋谷とアキバに遊びに行くのが好き。
+  detail_url: https://biccame.jp/profile/machida.html
+  image_urls:
+  - https://biccame.jp/profile/images/machida2.png
+  - https://biccame.jp/profile/images/machida3.png
+  - https://biccame.jp/profile/images/machida4.png
+  - https://biccame.jp/profile/images/machida5.png
+  store_name: 町田店
+- address: 東京都渋谷区道玄坂2-5-9
+  character_name: しぶハチたん
+  description: ビックカメラ渋谷ハチ公口店の擬人化キャラクター。渋谷区の花・ハナショウブをモチーフにしたリボンと、犬の耳のような髪型が特徴。犬が大好き。
+  detail_url: https://biccame.jp/profile/shibuhachi.html
+  image_urls:
+  - https://biccame.jp/profile/images/shibuhachi2.png
+  - https://biccame.jp/profile/images/shibuhachi3.png
+  - https://biccame.jp/profile/images/shibuhachi4.png
+  - https://biccame.jp/profile/images/shibuhachi5.png
+  store_name: 渋谷ハチ公口店
+  twitter_url: https://twitter.com/bicshibuhachi00
+  zipcode: 150-0043
+- address: 東京都渋谷区渋谷1-24-12
+  character_name: しぶとーたん
+  description: ビックカメラ渋谷東口店の擬人化キャラクター。渋谷区の花・ハナショウブをモチーフにした髪飾りが特徴。大人っぽい雰囲気が漂っている。実はお絵かきが得意。
+  detail_url: https://biccame.jp/profile/shibuto.html
+  image_urls:
+  - https://biccame.jp/profile/images/shibuto2.png
+  - https://biccame.jp/profile/images/shibuto3.png
+  - https://biccame.jp/profile/images/shibuto4.png
+  - https://biccame.jp/profile/images/shibuto5.png
+  store_name: 渋谷東口店
+  twitter_url: https://twitter.com/bic_shibuya
+  zipcode: 150-0002
+- address: 神奈川県横浜市港北区新横浜2-100-45
+  character_name: 新横たん
+  description: ビックカメラ新横浜店の擬人化キャラクター。横浜市の花・バラと、マリンカラーな帽子とリボンが特徴。スポーツ観戦が好き。
+  detail_url: https://biccame.jp/profile/shinyoko.html
+  image_urls:
+  - https://biccame.jp/profile/images/shinyoko2.png
+  - https://biccame.jp/profile/images/shinyoko3.png
+  - https://biccame.jp/profile/images/shinyoko4.png
+  - https://biccame.jp/profile/images/shinyoko5.png
+  store_name: 新横浜店
+  twitter_url: https://twitter.com/bic_shinyoko
+  zipcode: 222-0033
+- address: 東京都新宿区新宿3-26-10
+  character_name: 新東たん
+  description: ビックカメラ新宿東口駅店の擬人化キャラクター。白手袋やニーソックスは、同じく新宿にいるビックロたん・新西たんとおそろい。おっとり優しそうなお姉さん。新宿の花・ツツジをアクセサリーにしている。
+  detail_url: https://biccame.jp/profile/shintou.html
+  image_urls:
+  - https://biccame.jp/profile/images/shintou2.png
+  - https://biccame.jp/profile/images/shintou3.png
+  - https://biccame.jp/profile/images/shintou4.png
+  - https://biccame.jp/profile/images/shintou5.png
+  store_name: 新宿東口駅前店
+  twitter_url: https://twitter.com/Bic_shintoueki
+  zipcode: 160-0022
+- character_name: たまプラたん
+  description: ビックカメライトーヨーカドーたまプラーザ店の擬人化キャラクター。青葉が輝くような鮮やかな緑色の髪をポニーテールにしている。ヤマザクラをイメージしたアクセサリーを付けている。大人っぽい雰囲気が漂っている。
+  detail_url: https://biccame.jp/profile/tamapla.html
+  image_urls:
+  - https://biccame.jp/profile/images/tamapla2.png
+  - https://biccame.jp/profile/images/tamapla3.png
+  - https://biccame.jp/profile/images/tamapla4.png
+  - https://biccame.jp/profile/images/tamapla5.png
+  store_name: イトーヨーカドー たまプラーザ店
+- address: 福岡県福岡市中央区今泉1-25-1
+  character_name: 天神1号たん
+  description: ビックカメラ天神1号館の擬人化。頭に飾っているのは福岡市の夏の花・フヨウ。梅の花も好き。
+  detail_url: https://biccame.jp/profile/tenjin.html
+  image_urls:
+  - https://biccame.jp/profile/images/tenjin1_2.png
+  - https://biccame.jp/profile/images/tenjin1_3.png
+  - https://biccame.jp/profile/images/tenjin1_4.png
+  - https://biccame.jp/profile/images/tenjin1_5.png
+  store_name: 天神1号館
+  twitter_url: https://twitter.com/bic_tenjin
+  zipcode: 810-0021
+- address: 埼玉県所沢市日吉町12-1　西武所沢S.C. 6階
+  character_name: 所沢たん/所沢たん
+  description: ビックカメラ所沢駅の擬人化キャラクター。CAさんに憧れており、帽子やスカーフにこだわっている。胸の花は、所沢市の花・茶の花。髪の毛と法被の裏地は空をイメージしている。
+  detail_url: https://biccame.jp/profile/tokorozawa.html
+  image_urls:
+  - https://biccame.jp/profile/images/tokorozawa2.png
+  - https://biccame.jp/profile/images/tokorozawa3.png
+  - https://biccame.jp/profile/images/tokorozawa4.png
+  - https://biccame.jp/profile/images/tokorozawa5.png
+  store_name: 所沢駅店
+  twitter_url: https://twitter.com/bic_toko
+  zipcode: 359-1123
+- address: 大阪府八尾市光町2-3 アリオ八尾 2F
+  character_name: 八尾たん/八尾たん
+  description: ビックカメラアリオ八尾店の擬人化キャラクター。髪は八本に分かれている。アーミーなブーツを履いている。胸のリボンは大きなイチョウの葉。
+  detail_url: https://biccame.jp/profile/yao.html
+  image_urls:
+  - https://biccame.jp/profile/images/yao2.png
+  - https://biccame.jp/profile/images/yao3.png
+  - https://biccame.jp/profile/images/yao4.png
+  - https://biccame.jp/profile/images/yao5.png
+  store_name: アリオ八尾店
+  twitter_url: https://twitter.com/bic_yao
+  zipcode: 581-0803
+- address: 大阪府高槻市白梅町4-1 高槻阪急3階
+  character_name: たかつきたん/高槻たん
+  description: ビックカメラ高槻阪急スクエア店の擬人化キャラクター。古風なサイドポニーと勾玉の髪飾りが特徴。関西のビッカメ娘メンバーや、はにわたんとは特に仲良し。胸のモチーフはウノハナ。
+  detail_url: https://biccame.jp/profile/takatsuki.html
+  image_urls:
+  - https://biccame.jp/profile/images/takatsuki2.png
+  - https://biccame.jp/profile/images/takatsuki3.png
+  - https://biccame.jp/profile/images/takatsuki4.png
+  - https://biccame.jp/profile/images/takatsuki5.png
+  store_name: 高槻阪急スクエア店
+  twitter_url: https://twitter.com/bic_takatsuki
+  zipcode: 569-1196
+- address: 千葉県千葉市中央区富士見2-1-1
+  character_name: 千葉たん/千葉たん
+  description: ビックカメラ千葉駅前店の擬人化キャラクター。エネルギッシュレッドの大きなリボンが特徴。アニメのツンデレキャラに憧れている。相棒のカモメちゃんとは仲良し。胸のモチーフは月と星。
+  detail_url: https://biccame.jp/profile/chiba.html
+  image_urls:
+  - https://biccame.jp/profile/images/chiba2.png
+  - https://biccame.jp/profile/images/chiba3.png
+  - https://biccame.jp/profile/images/chiba4.png
+  - https://biccame.jp/profile/images/chiba5.png
+  store_name: 千葉駅前店
+  twitter_url: https://twitter.com/bic_chiba
+  zipcode: 260-0015
+- address: 茨城県水戸市宮町1-7-31
+  character_name: ビッカメ娘の関係者
+  description: ビックカメラ水戸駅店の擬人化キャラクター。わら納豆のようなツインテールが特徴（実は納豆として食べられるらしい...。）水戸市の花・梅の花の小物が好き。戦車のような靴を履いている。少しおっとりしているが、水戸を盛り上げようと色々なPR活動をしている。
+  detail_url: https://biccame.jp/profile/mito.html
+  image_urls:
+  - https://biccame.jp/profile/images/mito_img.png
+  - https://biccame.jp/profile/images/mito_img_sd.png
+  - https://biccame.jp/profile/images/mito4.png
+  - https://biccame.jp/profile/images/mito5.png
+  store_link: http://www.biccamera.com
+  store_name: 水戸駅店
+  twitter_url: https://twitter.com/biccameramito
+  zipcode: 310-0015
+- character_name: ビックカメラ
+  description: 「ビックカメラ」は専門店の集合体！都市型×駅前×大型のお店で便利！ 知識豊富な販売員が親切丁寧にご案内します。カメラ、パソコン、テレビ、家電など、何でも揃う「ビックカメラ」！⇒ビックカメラ
+  detail_url: https://biccame.jp/profile/biccamera.html
+  store_link: http://www.biccamera.com
+  store_name: ビッカメ娘の舞台
+  twitter_url: https://twitter.com/biccameraE
+- character_name: ナイセン
+  description: ビッカメ娘の企画や公式イラストを担当。スマホで03発着信・ナイセンができる「ナイセンクラウド」を運営。主に法人向けの電話サービスではあるが、イラストや動画でアピールしている。⇒ナイセンクラウド⇒なぜナイセンがビッカメ娘を描くのか？ビッカメ娘誕生ストーリーはこちら
+  detail_url: https://biccame.jp/profile/naisen.html
+  store_name: ビッカメ娘 企画 公式イラスト
+  twitter_url: https://twitter.com/itallinc
+- character_name: ビックシムたん
+  description: BICSIMの擬人化キャラクター。先輩の「シムウマ」を尊敬していて、スマホにキーホルダーを付けたり、ウマ耳を真似している。もっともっと人と人とが繋がれるように「BIC
+    SIM」 を知ってもらい、使ってもらう！のがモットー。
+  detail_url: https://biccame.jp/profile/bicsim.html
+  image_urls:
+  - https://biccame.jp/profile/images/bicsim2.png
+  - https://biccame.jp/profile/images/bicsim3.png
+  store_name: ビッカメ娘のお友達？ BIC SIM 擬人化キャラ
+  twitter_url: https://twitter.com/bicsim_official
+- character_name: お偉いたん
+  description: ビックカメラのお偉いたんです。あくまでもビッカメ娘達の行動を影から見守る少し恥ずかしがりやなお偉いたんです。
+  detail_url: https://biccame.jp/profile/oeraitan.html
+  image_urls:
+  - https://biccame.jp/profile/images/oeraitan3.png
+  store_name: ビッカメ娘を見守る お偉いたん

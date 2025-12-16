@@ -21,7 +21,10 @@
       "moby": false,
       "dockerDashComposeVersion": "v2"
     },
-    "ghcr.io/dhoeric/features/act:1": {}
+    "ghcr.io/dhoeric/features/act:1": {},
+    "ghcr.io/va-h/devcontainers-features/uv:1": {
+      "version": "latest"
+    }
   },
   "postAttachCommand": "/bin/sh .devcontainer/postAttachCommand.sh",
   "postCreateCommand": "/bin/sh .devcontainer/postCreateCommand.sh",

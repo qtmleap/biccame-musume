@@ -12,10 +12,12 @@
     "declaration": true, // 型定義ファイルを生成する
     "declarationMap": true, // 型定義ファイルのマップを生成する
     "sourceMap": true, // ソースマップを生成する
+    "jsx": "react-jsx", // JSXを変換する
+    "lib": ["ES2020", "DOM", "DOM.Iterable"], // 使用するライブラリ
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts"], // コンパイルするファイルを指定
+  "include": ["src/**/*.ts", "src/**/*.tsx"], // コンパイルするファイルを指定
   "exclude": ["node_modules", ".devcontainer", "src/tests"] // 除外するディレクトリ
 }
