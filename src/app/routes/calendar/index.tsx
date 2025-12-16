@@ -5,6 +5,14 @@ import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle
+} from '@/components/ui/drawer'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { type Character, CharactersSchema } from '@/schemas/character.dto'
 
@@ -133,7 +141,20 @@ function RouteComponent() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1)
   const [allCharacters, setAllCharacters] = useState<Character[]>([])
+  const [selectedDay, setSelectedDay] = useState<number | null>(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
+
+  /**
+   * 日付クリック時にDrawerを開く
+   */
+  const handleDayClick = (day: number, dayEvents: CalendarEvent[]) => {
+    if (dayEvents.length > 0) {
+      setSelectedDay(day)
+      setDrawerOpen(true)
+    }
+  }
+
   useEffect(() => {
     const loadCharacters = async () => {
       try {
@@ -304,13 +325,13 @@ function RouteComponent() {
         </div>
       ) : (
         /* デスクトップ: カレンダー表示 */
-        <div className='overflow-hidden rounded-xl border border-border/50'>
+        <div className='overflow-hidden rounded-xl border border-border/30 bg-background/60 backdrop-blur-sm'>
           {/* 曜日ヘッダー */}
-          <div className='grid grid-cols-7 bg-muted/50 backdrop-blur'>
+          <div className='grid grid-cols-7 bg-muted/60'>
             {weekDays.map((day, index) => (
               <div
                 key={day}
-                className={`text-center font-semibold py-4 text-sm tracking-wide ${
+                className={`text-center font-medium py-2 text-xs ${
                   index === 0 ? 'text-rose-500' : index === 6 ? 'text-sky-500' : 'text-muted-foreground'
                 }`}
               >
@@ -328,80 +349,60 @@ function RouteComponent() {
                 selectedMonth === today.getMonth() + 1 &&
                 selectedYear === today.getFullYear()
               const dayOfWeek = index % 7
-              const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
+              const hasEvents = dayEvents.length > 0
 
               return (
                 <div
                   key={`day-${selectedYear}-${selectedMonth}-${day ?? `empty-${index}`}`}
-                  className={`min-h-32 border-t border-r p-2 transition-all ${
+                  onClick={() => day !== null && handleDayClick(day, dayEvents)}
+                  className={`min-h-20 p-1.5 transition-all outline-1 -outline-offset-[0.5px] outline-border ${
                     day === null
-                      ? 'bg-muted/20'
+                      ? 'bg-muted/5'
                       : isToday
-                        ? 'bg-primary/5 ring-2 ring-primary ring-inset'
-                        : isWeekend
-                          ? 'bg-muted/10 hover:bg-muted/30'
-                          : 'hover:bg-muted/20'
-                  } ${index % 7 === 0 ? 'border-l' : ''}`}
+                        ? 'bg-primary/15'
+                        : 'hover:bg-muted/30'
+                  } ${hasEvents ? 'cursor-pointer' : ''}`}
                 >
                   {day !== null && (
-                    <>
-                      <div
-                        className={`text-sm font-bold mb-2 flex items-center justify-center w-7 h-7 rounded-full ${
+                    <div className='h-full flex flex-col'>
+                      {/* 日付 */}
+                      <span
+                        className={`text-sm font-semibold ${
                           isToday
-                            ? 'bg-primary text-primary-foreground'
+                            ? 'text-primary'
                             : dayOfWeek === 0
                               ? 'text-rose-500'
                               : dayOfWeek === 6
                                 ? 'text-sky-500'
-                                : ''
+                                : 'text-foreground'
                         }`}
                       >
                         {day}
-                      </div>
-                      <div className='space-y-1.5'>
-                        {dayEvents.map((event) => (
-                          <div
-                            key={`${event.character.key}-${event.type}`}
-                            className={`group relative text-xs p-1.5 rounded-lg cursor-pointer transition-all hover:scale-[1.02] ${
-                              event.type === 'character'
-                                ? 'bg-linear-to-r from-pink-500/20 to-rose-500/20 hover:from-pink-500/30 hover:to-rose-500/30 border border-pink-500/20'
-                                : 'bg-linear-to-r from-blue-500/20 to-cyan-500/20 hover:from-blue-500/30 hover:to-cyan-500/30 border border-blue-500/20'
-                            }`}
-                          >
-                            <div className='flex items-center gap-1.5'>
-                              <Avatar className='w-5 h-5 border border-border'>
-                                <AvatarImage
-                                  src={event.character.profile_image_url}
-                                  alt={event.character.character_name}
-                                />
-                                <AvatarFallback className='text-[8px]'>
-                                  {event.character.character_name.slice(0, 1)}
-                                </AvatarFallback>
-                              </Avatar>
-                              <span className='truncate font-semibold'>{event.character.character_name}</span>
-                            </div>
-                            <div className='flex items-center gap-1 mt-0.5'>
-                              <Badge
-                                variant='secondary'
-                                className={`text-[10px] px-1.5 py-0 flex items-center gap-0.5 ${
-                                  event.type === 'character'
-                                    ? 'bg-pink-500/20 text-pink-700 dark:text-pink-300'
-                                    : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
-                                }`}
-                              >
-                                {event.type === 'character' ? (
-                                  <Cake className='w-2.5 h-2.5' />
-                                ) : (
-                                  <Store className='w-2.5 h-2.5' />
-                                )}
-                                {event.years}
-                                {event.type === 'character' ? '歳' : '周年'}
-                              </Badge>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
+                      </span>
+                      {/* アイコン */}
+                      {hasEvents && (
+                        <div className='flex-1 flex flex-wrap items-center justify-center gap-1 py-1'>
+                          {dayEvents.map((event) => (
+                            <Avatar
+                              key={`${event.character.key}-${event.type}`}
+                              className={`w-8 h-8 ring-2 ${
+                                event.type === 'character'
+                                  ? 'ring-pink-400/50'
+                                  : 'ring-blue-400/50'
+                              }`}
+                            >
+                              <AvatarImage
+                                src={event.character.profile_image_url}
+                                alt={event.character.character_name}
+                              />
+                              <AvatarFallback className='text-[10px] bg-muted'>
+                                {event.character.character_name.slice(0, 1)}
+                              </AvatarFallback>
+                            </Avatar>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
               )
@@ -409,6 +410,60 @@ function RouteComponent() {
           </div>
         </div>
       )}
+
+      {/* Drawer: 日付詳細表示 */}
+      <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} direction='right'>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>
+              {selectedYear}年{selectedMonth}月{selectedDay}日
+            </DrawerTitle>
+          </DrawerHeader>
+          <div className='px-4 pb-4 space-y-3 overflow-y-auto'>
+            {selectedDay &&
+              getEventsForDay(events, selectedDay).map((event) => {
+                const isCharacter = event.type === 'character'
+                return (
+                  <div
+                    key={`drawer-${event.character.key}-${event.type}`}
+                    className={`flex items-center gap-3 p-3 rounded-lg ${
+                      isCharacter ? 'bg-pink-500/10' : 'bg-blue-500/10'
+                    }`}
+                  >
+                    <Avatar className='w-12 h-12 border border-border'>
+                      <AvatarImage
+                        src={event.character.profile_image_url}
+                        alt={event.character.character_name}
+                      />
+                      <AvatarFallback>{event.character.character_name.slice(0, 1)}</AvatarFallback>
+                    </Avatar>
+                    <div className='flex-1 min-w-0'>
+                      <p className='font-medium truncate'>{event.character.character_name}</p>
+                      <p className='text-sm text-muted-foreground truncate'>{event.character.store_name}</p>
+                      <Badge
+                        variant='secondary'
+                        className={`mt-1 text-xs flex items-center gap-1 w-fit ${
+                          isCharacter
+                            ? 'bg-pink-500/20 text-pink-700 dark:text-pink-300'
+                            : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
+                        }`}
+                      >
+                        {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
+                        {event.years}
+                        {isCharacter ? '歳' : '周年'}
+                      </Badge>
+                    </div>
+                  </div>
+                )
+              })}
+          </div>
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button variant='outline'>閉じる</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
 
       {/* 凡例 */}
       <div className='flex flex-wrap justify-center gap-4 text-sm text-muted-foreground'>
