@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as _notFoundRouteImport } from './routes/__not-found'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LocationIndexRouteImport } from './routes/location/index'
 import { Route as CharactersIdRouteImport } from './routes/characters/$id'
 
 const _notFoundRoute = _notFoundRouteImport.update({
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LocationIndexRoute = LocationIndexRouteImport.update({
+  id: '/location/',
+  path: '/location/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CharactersIdRoute = CharactersIdRouteImport.update({
   id: '/characters/$id',
   path: '/characters/$id',
@@ -31,29 +37,33 @@ const CharactersIdRoute = CharactersIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/characters/$id': typeof CharactersIdRoute
+  '/location': typeof LocationIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/characters/$id': typeof CharactersIdRoute
+  '/location': typeof LocationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/__not-found': typeof _notFoundRoute
   '/characters/$id': typeof CharactersIdRoute
+  '/location/': typeof LocationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/characters/$id'
+  fullPaths: '/' | '/characters/$id' | '/location'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/characters/$id'
-  id: '__root__' | '/' | '/__not-found' | '/characters/$id'
+  to: '/' | '/characters/$id' | '/location'
+  id: '__root__' | '/' | '/__not-found' | '/characters/$id' | '/location/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   _notFoundRoute: typeof _notFoundRoute
   CharactersIdRoute: typeof CharactersIdRoute
+  LocationIndexRoute: typeof LocationIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -72,6 +82,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/location/': {
+      id: '/location/'
+      path: '/location'
+      fullPath: '/location'
+      preLoaderRoute: typeof LocationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/characters/$id': {
       id: '/characters/$id'
       path: '/characters/$id'
@@ -86,6 +103,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   _notFoundRoute: _notFoundRoute,
   CharactersIdRoute: CharactersIdRoute,
+  LocationIndexRoute: LocationIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

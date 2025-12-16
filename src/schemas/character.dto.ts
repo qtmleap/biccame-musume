@@ -15,7 +15,9 @@ export const CharacterSchema = z.object({
   store_birthday: z.string().optional(),
   store_link: z.string().url().optional(),
   image_urls: z.array(z.string().url()).optional(),
-  character_birthday: z.string().optional()
+  character_birthday: z.string().optional(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional()
 })
 
 export type Character = z.infer<typeof CharacterSchema>
