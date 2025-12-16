@@ -1,0 +1,65 @@
+{
+  "name": "React + TypeScript + Cloudflare Workers",
+  "dockerComposeFile": ["compose.yaml"],
+  "service": "app",
+  "workspaceFolder": "/home/vscode/app",
+  "shutdownAction": "stopCompose",
+  "remoteUser": "vscode",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "2.52.0"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/shyim/devcontainers-features/bun:0": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "24.11.0"
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": false,
+      "dockerDashComposeVersion": "v2"
+    },
+    "ghcr.io/dhoeric/features/act:1": {}
+  },
+  "postAttachCommand": "/bin/sh .devcontainer/postAttachCommand.sh",
+  "postCreateCommand": "/bin/sh .devcontainer/postCreateCommand.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "Lokalise.i18n-ally",
+        "PKief.material-icon-theme",
+        "antfu.file-nesting",
+        "bierner.github-markdown-preview",
+        "bierner.markdown-mermaid",
+        "bierner.markdown-preview-github-styles",
+        "biomejs.biome",
+        "bradlc.vscode-tailwindcss",
+        "eamodio.gitlens",
+        "redhat.vscode-yaml",
+        "spmeesseman.vscode-taskexplorer",
+        "tamasfe.even-better-toml",
+        "vsls-contrib.gitdoc"
+      ],
+      "settings": {
+        "betterTypeScriptErrors.prettify": true,
+        "debug.internalConsoleOptions": "neverOpen",
+        "diffEditor.diffAlgorithm": "advanced",
+        "diffEditor.experimental.showMoves": true,
+        "diffEditor.renderSideBySide": false,
+        "editor.formatOnPaste": true,
+        "editor.guides.bracketPairs": "active",
+        "editor.codeActionsOnSave": {
+          "quickfix.biome": "explicit",
+          "source.organizeImports.biome": "explicit"
+        },
+        "editor.formatOnSave": true,
+        "scm.defaultViewMode": "tree"
+      }
+    }
+  }
+}
