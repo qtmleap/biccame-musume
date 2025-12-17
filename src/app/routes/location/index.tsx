@@ -2,8 +2,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { AdvancedMarker, APIProvider, Map as GoogleMap, Pin } from '@vis.gl/react-google-maps'
 import { useState } from 'react'
 import { z } from 'zod'
-import { SelectedStoreInfo } from '@/components/selected-store-info'
 import { StoreList } from '@/components/location/store-list'
+import { SelectedStoreInfo } from '@/components/selected-store-info'
 import { useCharacters } from '@/hooks/useCharacters'
 import type { Character } from '@/schemas/character.dto'
 
@@ -92,7 +92,7 @@ const RouteComponent = () => {
         </GoogleMap>
 
         {selectedCharacter && (
-          <div className='absolute top-4 right-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-3 max-w-md z-10'>
+          <div className='absolute bg-white dark:bg-gray-900 rounded-lg shadow-lg p-3 max-w-md z-10 safe-top safe-right'>
             <SelectedStoreInfo character={selectedCharacter} />
           </div>
         )}
