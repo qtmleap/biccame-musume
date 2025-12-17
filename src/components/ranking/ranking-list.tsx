@@ -13,6 +13,18 @@ type RankingListProps = {
 }
 
 /**
+ * リボン装飾コンポーネント（サンリオ風）
+ * シンプルな長方形+ボーダー
+ */
+const RibbonBadge = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className='inline-flex items-center justify-center bg-[#0068B7] border-2 border-[#004080] px-4 py-0.5 min-w-24'>
+      {children}
+    </div>
+  )
+}
+
+/**
  * 順位を計算（同数の場合は同じ順位）
  */
 const calculateRank = (characters: CharacterWithVotes[], index: number): number => {
@@ -33,14 +45,13 @@ const calculateRank = (characters: CharacterWithVotes[], index: number): number 
  */
 const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes; rank: number; index: number }) => {
   const getRankStyle = (rank: number) => {
-    if (rank === 1) return { badge: 'bg-yellow-400', text: 'text-yellow-600', size: 'h-40 w-40' }
-    if (rank === 2) return { badge: 'bg-gray-400', text: 'text-gray-500', size: 'h-36 w-36' }
-    if (rank === 3) return { badge: 'bg-amber-600', text: 'text-amber-600', size: 'h-36 w-36' }
-    return { badge: 'bg-gray-300', text: 'text-gray-500', size: 'h-28 w-28' }
+    if (rank === 1) return { badge: 'bg-yellow-400 text-yellow-900' }
+    if (rank === 2) return { badge: 'bg-gray-400 text-gray-900' }
+    if (rank === 3) return { badge: 'bg-amber-600 text-white' }
+    return { badge: 'bg-blue-500 text-white' }
   }
 
   const style = getRankStyle(rank)
-  const isTop3 = rank <= 3
 
   return (
     <motion.div
@@ -48,39 +59,49 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
     >
-      <Link to='/characters/$id' params={{ id: character.key }} className='group block'>
-        <div className='flex flex-col items-center text-center'>
-          {/* 画像（白色透過） - 背景色をページに合わせてmix-blend-modeを有効化 */}
-          <div className='relative bg-pink-50'>
-            <img
-              src={getCharacterImageUrl(character)}
-              alt={character.character_name}
-              className={`${style.size} object-contain`}
-              style={{ mixBlendMode: 'multiply' }}
-            />
-          </div>
+      <div className='flex flex-col'>
+        {/* 順位（左寄せ） */}
+        <div className={`${style.badge} px-3 py-0.5 rounded-full font-bold text-sm mb-1 self-start`}>{rank}位</div>
 
-          {/* ランクバッジ */}
-          <div
-            className={`${style.badge} text-white px-3 py-0.5 rounded-full font-bold mb-1 ${isTop3 ? 'text-base' : 'text-sm'}`}
-          >
-            {rank}位
-          </div>
+        {/* キャラクター名（中央揃え、ポップなフォント、縁取り） */}
+        <h3
+          className='text-gray-900 truncate max-w-full text-lg text-center mb-2'
+          style={{
+            fontFamily: '"Zen Maru Gothic", sans-serif',
+            fontWeight: 900,
+            WebkitTextStroke: '1px white',
+            paintOrder: 'stroke fill'
+          }}
+        >
+          {character.character_name}
+        </h3>
 
-          {/* キャラクター名 */}
-          <h3
-            className={`font-bold text-gray-900 group-hover:text-[#e50012] transition-colors truncate max-w-full ${isTop3 ? 'text-base' : 'text-sm'}`}
-          >
-            {character.character_name}
-          </h3>
-
-          {/* 票数 */}
-          <p className={`${style.text} font-semibold tabular-nums ${isTop3 ? 'text-base' : 'text-sm'}`}>
-            {character.voteCount.toLocaleString()}
-            <span className='text-xs ml-0.5'>票</span>
-          </p>
+        {/* 画像（白色透過） */}
+        <div className='relative bg-pink-50 h-40 w-full flex items-center justify-center'>
+          <img
+            src={getCharacterImageUrl(character)}
+            alt={character.character_name}
+            className='h-full w-auto max-w-full object-contain'
+            style={{ mixBlendMode: 'multiply' }}
+          />
         </div>
-      </Link>
+
+        {/* 票数（リボン装飾） */}
+        <div className='mt-3 flex justify-center'>
+          <RibbonBadge>
+            <p
+              className='text-white tabular-nums text-base text-center whitespace-nowrap'
+              style={{
+                fontFamily: '"Zen Maru Gothic", sans-serif',
+                fontWeight: 700
+              }}
+            >
+              {character.voteCount.toLocaleString()}
+              <span className='text-xs ml-0.5'>票</span>
+            </p>
+          </RibbonBadge>
+        </div>
+      </div>
     </motion.div>
   )
 }
@@ -91,8 +112,6 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
 export const RankingList = ({ characters, limit = 10 }: RankingListProps) => {
   // 0票のキャラクターを除外
   const votedCharacters = characters.filter((char) => char.voteCount > 0)
-  const top3 = votedCharacters.slice(0, 3)
-  const restCharacters = votedCharacters.slice(3, limit)
   const totalCount = votedCharacters.length
 
   return (
@@ -129,26 +148,13 @@ export const RankingList = ({ characters, limit = 10 }: RankingListProps) => {
         </motion.div>
       ) : (
         <>
-          {/* TOP3（1列） */}
-          {top3.length > 0 && (
-            <div className='grid grid-cols-1 gap-4'>
-              {top3.map((character, index) => {
-                const rank = calculateRank(votedCharacters, index)
-                return <RankingCard key={character.key} character={character} rank={rank} index={index} />
-              })}
-            </div>
-          )}
-
-          {/* 4位以降（2列） */}
-          {restCharacters.length > 0 && (
-            <div className='grid grid-cols-2 gap-4'>
-              {restCharacters.map((character, index) => {
-                const actualIndex = index + 3
-                const rank = calculateRank(votedCharacters, actualIndex)
-                return <RankingCard key={character.key} character={character} rank={rank} index={actualIndex} />
-              })}
-            </div>
-          )}
+          {/* ランキング（モバイル2列、タブレット3列、デスクトップ4列） */}
+          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+            {votedCharacters.slice(0, limit).map((character, index) => {
+              const rank = calculateRank(votedCharacters, index)
+              return <RankingCard key={character.key} character={character} rank={rank} index={index} />
+            })}
+          </div>
 
           {/* 総合順位リンク */}
           {totalCount > limit && (
