@@ -8,18 +8,20 @@ import { cn } from '@/lib/utils'
 
 type CharacterVoteButtonProps = {
   characterId: string
+  characterName?: string
   variant?: 'default' | 'compact'
 }
 
 /**
  * キャラクター投票ボタン
  */
-export const CharacterVoteButton = ({ characterId, variant = 'default' }: CharacterVoteButtonProps) => {
-  const { vote, isVoting, isSuccess, error, nextVoteDate } = useVote(characterId)
+export const CharacterVoteButton = ({ characterId, characterName, variant = 'default' }: CharacterVoteButtonProps) => {
+  const { vote, isVoting, isSuccess, error, nextVoteDate, voteResponse } = useVote(characterId)
 
   useEffect(() => {
     if (isSuccess && nextVoteDate) {
-      toast.success('投票ありがとうございます！', {
+      const message = voteResponse?.message || '投票ありがとうございます！'
+      toast.success(message, {
         description: `次回投票: ${dayjs(nextVoteDate).format('M月D日 0:00')}`,
         classNames: {
           toast: 'text-gray-900',
@@ -29,19 +31,27 @@ export const CharacterVoteButton = ({ characterId, variant = 'default' }: Charac
         icon: <CircleCheckIcon className='size-6 stroke-2' />
       })
     }
-  }, [isSuccess, nextVoteDate])
+  }, [isSuccess, nextVoteDate, voteResponse])
 
   useEffect(() => {
     if (error) {
+      // エラーレスポンスからメッセージを取得
+      let errorMessage = error.message
+
+      // キャラクター名がある場合、「本日は既に投票済みです」をカスタマイズ
+      if (characterName && errorMessage.includes('本日は既に投票済みです')) {
+        errorMessage = `本日は${characterName}には既に投票済みです`
+      }
+
       toast.error('投票できませんでした', {
-        description: error.message,
+        description: errorMessage,
         classNames: {
           toast: 'text-gray-900',
           description: 'text-gray-900!'
         }
       })
     }
-  }, [error])
+  }, [error, characterName])
 
   const handleVote = () => {
     if (isSuccess || isVoting) return
@@ -61,7 +71,7 @@ export const CharacterVoteButton = ({ characterId, variant = 'default' }: Charac
         onClick={handleVote}
         disabled={isSuccess || isVoting}
         className={cn(
-          'rounded-full text-xs w-full',
+          'rounded-full text-xs w-full font-semibold',
           isSuccess
             ? 'bg-gray-200 text-gray-600 cursor-not-allowed hover:bg-gray-200'
             : 'bg-[#e50012] text-white hover:bg-[#c40010]'
@@ -77,7 +87,7 @@ export const CharacterVoteButton = ({ characterId, variant = 'default' }: Charac
       onClick={handleVote}
       disabled={isSuccess || isVoting}
       className={cn(
-        'w-full',
+        'w-full font-semibold',
         isSuccess ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-[#e50012] hover:bg-[#c40010] text-white'
       )}
     >
