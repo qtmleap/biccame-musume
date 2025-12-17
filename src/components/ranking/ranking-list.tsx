@@ -148,8 +148,8 @@ export const RankingList = ({ characters, limit = 10 }: RankingListProps) => {
         </motion.div>
       ) : (
         <>
-          {/* ランキング（モバイル2列、タブレット3列、デスクトップ4列） */}
-          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+          {/* ランキング（モバイル2列、タブレット3列、デスクトップ4列、ワイド5列、超ワイド6列） */}
+          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4'>
             {votedCharacters.slice(0, limit).map((character, index) => {
               const rank = calculateRank(votedCharacters, index)
               return <RankingCard key={character.key} character={character} rank={rank} index={index} />
@@ -162,11 +162,11 @@ export const RankingList = ({ characters, limit = 10 }: RankingListProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1 }}
-              className='text-center'
+              className='text-center pt-2'
             >
               <Link
                 to='/characters'
-                className='inline-block text-sm text-[#e50012] hover:text-[#c40010] font-medium transition-colors'
+                className='inline-block px-6 py-2 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-base font-bold shadow-md hover:shadow-lg'
               >
                 総合順位を見る
               </Link>
