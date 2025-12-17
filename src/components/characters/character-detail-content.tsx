@@ -2,6 +2,7 @@ import { Link, useRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { ArrowLeft, ExternalLink, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
+import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import type { Character } from '@/schemas/character.dto'
@@ -68,18 +69,20 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                 <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 truncate'>{character.character_name}</h1>
                 <p className='text-lg text-pink-600 font-medium truncate'>{character.store_name}</p>
               </div>
-              {character.twitter_url && (
-                <a
-                  href={`https://twitter.com/intent/follow?screen_name=${character.twitter_url.split('/').pop()}`}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='shrink-0'
-                >
-                  <Button size='sm' className='bg-pink-600 hover:bg-pink-700 text-white rounded-full text-xs'>
-                    フォローする
-                  </Button>
-                </a>
-              )}
+              <div className='shrink-0 flex flex-col gap-2'>
+                {character.twitter_url && (
+                  <a
+                    href={`https://twitter.com/intent/follow?screen_name=${character.twitter_url.split('/').pop()}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <Button size='sm' className='bg-pink-600 hover:bg-pink-700 text-white rounded-full text-xs w-full'>
+                      フォローする
+                    </Button>
+                  </a>
+                )}
+                <CharacterVoteButton characterId={character.key} variant='compact' />
+              </div>
             </div>
             <p className='text-sm text-gray-500 mt-1'>
               {character.address?.split(/都|道|府|県/)[0]}
