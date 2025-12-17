@@ -8,48 +8,48 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as _notFoundRouteImport } from './routes/__not-found'
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AboutIndexRouteImport } from './routes/about/index'
-import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
-import { Route as CharactersIdRouteImport } from './routes/characters/$id'
-import { Route as CharactersIndexRouteImport } from './routes/characters/index'
+import { Route as _notFoundRouteImport } from './routes/__not-found'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LocationIndexRouteImport } from './routes/location/index'
+import { Route as CharactersIndexRouteImport } from './routes/characters/index'
+import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
+import { Route as AboutIndexRouteImport } from './routes/about/index'
+import { Route as CharactersIdRouteImport } from './routes/characters/$id'
 
 const _notFoundRoute = _notFoundRouteImport.update({
   id: '/__not-found',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const LocationIndexRoute = LocationIndexRouteImport.update({
   id: '/location/',
   path: '/location/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CharactersIndexRoute = CharactersIndexRouteImport.update({
   id: '/characters/',
   path: '/characters/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarIndexRoute = CalendarIndexRouteImport.update({
   id: '/calendar/',
   path: '/calendar/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AboutIndexRoute = AboutIndexRouteImport.update({
   id: '/about/',
   path: '/about/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CharactersIdRoute = CharactersIdRouteImport.update({
   id: '/characters/$id',
   path: '/characters/$id',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -80,10 +80,30 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/characters/$id' | '/about' | '/calendar' | '/characters' | '/location'
+  fullPaths:
+    | '/'
+    | '/characters/$id'
+    | '/about'
+    | '/calendar'
+    | '/characters'
+    | '/location'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/characters/$id' | '/about' | '/calendar' | '/characters' | '/location'
-  id: '__root__' | '/' | '/__not-found' | '/characters/$id' | '/about/' | '/calendar/' | '/characters/' | '/location/'
+  to:
+    | '/'
+    | '/characters/$id'
+    | '/about'
+    | '/calendar'
+    | '/characters'
+    | '/location'
+  id:
+    | '__root__'
+    | '/'
+    | '/__not-found'
+    | '/characters/$id'
+    | '/about/'
+    | '/calendar/'
+    | '/characters/'
+    | '/location/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -157,6 +177,8 @@ const rootRouteChildren: RootRouteChildren = {
   AboutIndexRoute: AboutIndexRoute,
   CalendarIndexRoute: CalendarIndexRoute,
   CharactersIndexRoute: CharactersIndexRoute,
-  LocationIndexRoute: LocationIndexRoute
+  LocationIndexRoute: LocationIndexRoute,
 }
-export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>()
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
