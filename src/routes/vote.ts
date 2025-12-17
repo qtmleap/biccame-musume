@@ -107,7 +107,11 @@ voteRoutes.post('/', async (c) => {
     const countKey = generateCountKey(characterId)
     const currentVoteCount = await c.env.VOTES.get(countKey)
     const newCount = (currentVoteCount ? Number.parseInt(currentVoteCount, 10) : 0) + 1
-    await c.env.VOTES.put(countKey, String(newCount))
+
+    // 値とメタデータの両方に件数を保存
+    await c.env.VOTES.put(countKey, String(newCount), {
+      metadata: { count: newCount }
+    })
 
     return c.json({
       success: true,
@@ -130,7 +134,26 @@ voteRoutes.post('/', async (c) => {
  * GET /api/votes
  */
 voteRoutes.get('/', async (c) => {
-  // KVから全てのカウントを取得するのは効率が悪いので、
-  // 必要に応じて実装を検討
-  return c.json({ message: 'Not implemented yet' }, 501)
+  try {
+    const counts: Record<string, number> = {}
+    let cursor: string | undefined
+
+    // KVから全てのcount:*キーをメタデータ付きで取得
+    do {
+      const list = await c.env.VOTES.list<{ count: number }>({ prefix: 'count:', cursor })
+
+      // メタデータから件数を取得
+      for (const key of list.keys) {
+        const characterId = key.name.replace('count:', '')
+        counts[characterId] = key.metadata?.count || 0
+      }
+
+      cursor = list.list_complete ? undefined : list.cursor
+    } while (cursor)
+
+    return c.json(counts)
+  } catch (error) {
+    console.error('Get all votes error:', error)
+    return c.json({}, 500)
+  }
 })

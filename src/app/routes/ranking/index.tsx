@@ -19,12 +19,6 @@ const RankingContent = () => {
   return (
     <div className='min-h-screen bg-linear-to-b from-pink-50 to-white'>
       <div className='container mx-auto px-4 py-6 max-w-3xl'>
-        {/* ヘッダー */}
-        <div className='mb-6'>
-          <h1 className='text-3xl font-bold text-gray-900 mb-2'>応援ランキング</h1>
-          <p className='text-gray-600'>ビッカメ娘の人気投票ランキング</p>
-        </div>
-
         {/* ランキングリスト */}
         <RankingList characters={ranking} />
       </div>

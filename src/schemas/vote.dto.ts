@@ -30,3 +30,10 @@ export const VoteCountSchema = z.object({
 })
 
 export type VoteCount = z.infer<typeof VoteCountSchema>
+
+/**
+ * 全投票カウントスキーマ
+ */
+export const AllVoteCountsSchema = z.record(z.string(), z.number())
+
+export type AllVoteCounts = z.infer<typeof AllVoteCountsSchema>
