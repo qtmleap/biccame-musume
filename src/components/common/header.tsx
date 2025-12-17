@@ -69,13 +69,13 @@ export const Header = ({ className }: HeaderProps) => {
           </Link>
 
           {/* デスクトップナビゲーション */}
-          <nav className='hidden md:flex items-center gap-1'>
+          <nav className='hidden md:flex items-center gap-6'>
             {navLinks.map((link) => {
               return (
                 <Link
                   key={link.to}
                   to={link.to}
-                  className='flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors text-muted-foreground hover:text-foreground hover:bg-muted'
+                  className='text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
                 >
                   {link.label}
                 </Link>
