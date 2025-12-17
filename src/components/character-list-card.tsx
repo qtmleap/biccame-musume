@@ -54,10 +54,9 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
                 <span className='truncate'>{character.store_name}</span>
               </div>
               <div className='flex items-center gap-2 min-h-6'>
-                {character.address && (
+                {character.prefecture && (
                   <Badge variant='secondary' className='text-xs bg-blue-100 text-blue-700 border-blue-200'>
-                    {character.address.split(/都|道|府|県/)[0]}
-                    {character.address.match(/都|道|府|県/)?.[0]}
+                    {character.prefecture}
                   </Badge>
                 )}
                 {character.character_birthday && (
