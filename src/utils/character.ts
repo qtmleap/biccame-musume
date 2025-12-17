@@ -30,12 +30,37 @@ export const getDaysUntilBirthday = (dateStr: string | undefined): number => {
 }
 
 /**
+ * Fisher-Yatesアルゴリズムを使用した配列のシャッフル
+ */
+const shuffleArray = <T>(array: T[]): T[] => {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
+
+/**
+ * キャラクターを娘と娘以外に分類
+ */
+export const categorizeCharacters = (characters: Character[]) => {
+  const musume = characters.filter((c) => c.is_biccame_musume !== false)
+  const others = characters.filter((c) => c.is_biccame_musume === false)
+  return { musume, others }
+}
+
+/**
  * キャラクターをソートする
  */
 export const sortCharacters = (
   characters: Character[],
-  sortType: 'character_birthday' | 'store_birthday' | 'upcoming_birthday'
+  sortType: 'character_birthday' | 'store_birthday' | 'upcoming_birthday' | 'random'
 ): Character[] => {
+  if (sortType === 'random') {
+    return shuffleArray(characters)
+  }
+
   return [...characters].sort((a, b) => {
     if (sortType === 'character_birthday') {
       const dateA = parseDate(a.character_birthday)
