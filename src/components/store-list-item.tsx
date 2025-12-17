@@ -1,4 +1,5 @@
 import type { Character } from '@/schemas/character.dto'
+import { getCharacterImageUrl } from '@/lib/utils'
 
 type StoreListItemProps = {
   character: Character
@@ -8,13 +9,15 @@ type StoreListItemProps = {
  * 店舗一覧用のコンパクトな表示コンポーネント
  */
 export const StoreListItem = ({ character }: StoreListItemProps) => {
-  const imageUrl = character.image_urls && character.image_urls.length > 0 ? character.image_urls[0] : null
+  const imageUrl = getCharacterImageUrl(character)
 
   return (
-    <div className='flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors'>
+    <div className='flex items-center gap-3 p-2'>
       {/* アバター画像 */}
       {imageUrl ? (
-        <img src={imageUrl} alt={character.character_name} className='w-12 h-12 rounded-full object-cover shrink-0' />
+        <div className='w-12 h-12 rounded-full overflow-hidden shrink-0'>
+          <img src={imageUrl} alt={character.character_name} className='w-full h-full object-cover object-[center_40%] scale-150' />
+        </div>
       ) : (
         <div className='w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0 flex items-center justify-center'>
           <span className='text-xs text-gray-500 dark:text-gray-400'>📍</span>
