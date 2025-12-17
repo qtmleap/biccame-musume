@@ -1,6 +1,7 @@
-import { Link, useLocation } from '@tanstack/react-router'
-import { Calendar, MapPin, Menu, Users, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import { Calendar, MapPin, Menu, Trophy, Users, X } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -10,7 +11,8 @@ import { cn } from '@/lib/utils'
 const navLinks = [
   { to: '/characters', label: 'キャラクター', icon: Users },
   { to: '/calendar', label: 'カレンダー', icon: Calendar },
-  { to: '/location', label: 'マップ', icon: MapPin }
+  { to: '/location', label: 'マップ', icon: MapPin },
+  { to: '/ranking', label: '総選挙', icon: Trophy }
 ] as const
 
 type HeaderProps = {
@@ -18,47 +20,24 @@ type HeaderProps = {
 }
 
 /**
- * 共通ヘッダーコンポーネント（モバイル・デスクトップ両対応）
+ * 共通ヘッダーコンポーネント(モバイル・デスクトップ両対応)
  */
 export const Header = ({ className }: HeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const location = useLocation()
 
   /**
-   * メニューを開く
+   * メニュートグル
    */
-  const openMenu = () => {
-    setMobileMenuOpen(true)
-    requestAnimationFrame(() => setIsAnimating(true))
+  const toggleMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen)
   }
 
   /**
    * メニューを閉じる
    */
   const closeMenu = () => {
-    setIsAnimating(false)
-    setTimeout(() => setMobileMenuOpen(false), 200)
+    setMobileMenuOpen(false)
   }
-
-  /**
-   * メニュートグル
-   */
-  const toggleMenu = () => {
-    if (mobileMenuOpen) {
-      closeMenu()
-    } else {
-      openMenu()
-    }
-  }
-
-  // ルート変更時にメニューを閉じる
-  // biome-ignore lint/correctness/useExhaustiveDependencies: reason
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      closeMenu()
-    }
-  }, [location.pathname])
 
   return (
     <header
@@ -102,70 +81,89 @@ export const Header = ({ className }: HeaderProps) => {
             aria-label={mobileMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
           >
             <div className='relative w-6 h-6 flex items-center justify-center'>
-              <Menu
-                className={cn(
-                  'absolute transition-all duration-200',
-                  mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
-                )}
-              />
-              <X
-                className={cn(
-                  'absolute transition-all duration-200',
-                  mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
-                )}
-              />
+              <motion.div
+                initial={false}
+                animate={{
+                  opacity: mobileMenuOpen ? 0 : 1,
+                  rotate: mobileMenuOpen ? 90 : 0,
+                  scale: mobileMenuOpen ? 0.5 : 1
+                }}
+                transition={{ duration: 0.2 }}
+                className='absolute'
+              >
+                <Menu />
+              </motion.div>
+              <motion.div
+                initial={false}
+                animate={{
+                  opacity: mobileMenuOpen ? 1 : 0,
+                  rotate: mobileMenuOpen ? 0 : -90,
+                  scale: mobileMenuOpen ? 1 : 0.5
+                }}
+                transition={{ duration: 0.2 }}
+                className='absolute'
+              >
+                <X />
+              </motion.div>
             </div>
           </Button>
         </div>
       </div>
 
-      {/* モバイルナビゲーション（オーバーレイ） */}
-      {mobileMenuOpen && (
-        <>
-          {/* 背景オーバーレイ */}
-          <button
-            type='button'
-            className={cn(
-              'fixed inset-0 bg-background/80 backdrop-blur-sm md:hidden transition-opacity duration-200',
-              isAnimating ? 'opacity-100' : 'opacity-0'
-            )}
-            onClick={closeMenu}
-            style={{ top: '3rem' }}
-            aria-label='メニューを閉じる'
-          />
+      {/* モバイルナビゲーション(オーバーレイ) */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            {/* 背景オーバーレイ */}
+            <motion.button
+              type='button'
+              className='fixed inset-0 bg-background/80 backdrop-blur-sm md:hidden'
+              onClick={closeMenu}
+              style={{ top: '3rem' }}
+              aria-label='メニューを閉じる'
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            />
 
-          {/* メニュー本体 */}
-          <nav
-            className={cn(
-              'absolute left-0 right-0 md:hidden bg-background border-b border-border shadow-lg transition-all duration-200 ease-out',
-              isAnimating ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'
-            )}
-          >
-            <div className='container mx-auto px-4 py-4'>
-              <div className='flex flex-col gap-1'>
-                {navLinks.map((link, index) => {
-                  const Icon = link.icon
-                  return (
-                    <Link
-                      key={link.to}
-                      to={link.to}
-                      onClick={closeMenu}
-                      className={cn(
-                        'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted',
-                        isAnimating ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'
-                      )}
-                      style={{ transitionDelay: isAnimating ? `${index * 50}ms` : '0ms' }}
-                    >
-                      <Icon className='w-6 h-6' />
-                      {link.label}
-                    </Link>
-                  )
-                })}
+            {/* メニュー本体 */}
+            <motion.nav
+              className='absolute left-0 right-0 md:hidden bg-background border-b border-border shadow-lg'
+              initial={{ y: -16, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -16, opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+              <div className='container mx-auto px-4 py-4'>
+                <div className='flex flex-col gap-1'>
+                  {navLinks.map((link, index) => {
+                    const Icon = link.icon
+                    return (
+                      <motion.div
+                        key={link.to}
+                        initial={{ x: -16, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: -16, opacity: 0 }}
+                        transition={{ duration: 0.2, delay: index * 0.05, ease: 'easeOut' }}
+                      >
+                        <Link
+                          to={link.to}
+                          onClick={closeMenu}
+                          className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
+                        >
+                          <Icon className='w-6 h-6' />
+                          {link.label}
+                        </Link>
+                      </motion.div>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
-          </nav>
-        </>
-      )}
+            </motion.nav>
+          </>
+        )}
+      </AnimatePresence>
     </header>
   )
 }
