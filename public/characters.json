@@ -19,7 +19,8 @@
     ],
     "latitude": 36.3701475,
     "longitude": 140.4768006,
-    "character_birthday": "2015-04-27"
+    "character_birthday": "2015-04-27",
+    "is_biccame_musume": true
   },
   {
     "character_name": "柏たん",
@@ -41,7 +42,8 @@
     ],
     "latitude": 35.86192090000001,
     "longitude": 139.9717759,
-    "character_birthday": "2015-05-14"
+    "character_birthday": "2015-05-14",
+    "is_biccame_musume": true
   },
   {
     "character_name": "八王子たん",
@@ -63,7 +65,8 @@
     ],
     "latitude": 35.6546041,
     "longitude": 139.3389057,
-    "character_birthday": "2015-05-14"
+    "character_birthday": "2015-05-14",
+    "is_biccame_musume": true
   },
   {
     "character_name": "ふなたん/船橋たん",
@@ -85,7 +88,8 @@
     ],
     "latitude": 35.7007252,
     "longitude": 139.9854889,
-    "character_birthday": "2015-05-18"
+    "character_birthday": "2015-05-18",
+    "is_biccame_musume": true
   },
   {
     "character_name": "しんじゅくたん",
@@ -107,7 +111,8 @@
     ],
     "latitude": 35.6913489,
     "longitude": 139.7030056,
-    "character_birthday": "2015-05-18"
+    "character_birthday": "2015-05-18",
+    "is_biccame_musume": true
   },
   {
     "character_name": "はまたん/浜松たん",
@@ -129,7 +134,8 @@
     ],
     "latitude": 34.7034222,
     "longitude": 137.7338944,
-    "character_birthday": "2015-05-23"
+    "character_birthday": "2015-05-23",
+    "is_biccame_musume": true
   },
   {
     "character_name": "さがみたん",
@@ -151,7 +157,8 @@
     ],
     "latitude": 35.5320744,
     "longitude": 139.4380265,
-    "character_birthday": "2015-08-04"
+    "character_birthday": "2015-08-04",
+    "is_biccame_musume": true
   },
   {
     "character_name": "本店たん",
@@ -173,7 +180,8 @@
     ],
     "latitude": 35.7317044,
     "longitude": 139.7128781,
-    "character_birthday": "2015-10-21"
+    "character_birthday": "2015-10-21",
+    "is_biccame_musume": true
   },
   {
     "character_name": "プロスタたん",
@@ -193,7 +201,8 @@
     ],
     "latitude": 35.7308323,
     "longitude": 139.7089542,
-    "character_birthday": "2015-11-11"
+    "character_birthday": "2015-11-11",
+    "is_biccame_musume": true
   },
   {
     "character_name": "大宮たん",
@@ -215,7 +224,8 @@
     ],
     "latitude": 35.904428,
     "longitude": 139.620904,
-    "character_birthday": "2015-12-15"
+    "character_birthday": "2015-12-15",
+    "is_biccame_musume": true
   },
   {
     "character_name": "藤沢たん",
@@ -237,7 +247,8 @@
     ],
     "latitude": 35.3398725,
     "longitude": 139.4886041,
-    "character_birthday": "2016-02-12"
+    "character_birthday": "2016-02-12",
+    "is_biccame_musume": true
   },
   {
     "character_name": "フォトたん",
@@ -252,7 +263,8 @@
       "https://biccame.jp/profile/images/photo4.png",
       "https://biccame.jp/profile/images/photo5.png"
     ],
-    "character_birthday": "2016-03-17"
+    "character_birthday": "2016-03-17",
+    "is_biccame_musume": true
   },
   {
     "character_name": "なごやたん/名古屋たん",
@@ -274,7 +286,8 @@
     ],
     "latitude": 35.1707468,
     "longitude": 136.8805731,
-    "character_birthday": "2016-04-26"
+    "character_birthday": "2016-04-26",
+    "is_biccame_musume": true
   },
   {
     "character_name": "有楽町たん",
@@ -296,7 +309,8 @@
     ],
     "latitude": 35.6755004,
     "longitude": 139.7632464,
-    "character_birthday": "2016-05-11"
+    "character_birthday": "2016-05-11",
+    "is_biccame_musume": true
   },
   {
     "character_name": "新宿西口たん",
@@ -318,7 +332,8 @@
     ],
     "latitude": 35.6922686,
     "longitude": 139.6992291,
-    "character_birthday": "2016-05-23"
+    "character_birthday": "2016-05-23",
+    "is_biccame_musume": true
   },
   {
     "character_name": "カメ館たん/カメラ館たん",
@@ -333,7 +348,8 @@
       "https://biccame.jp/profile/images/camera4.png",
       "https://biccame.jp/profile/images/camera5.png"
     ],
-    "character_birthday": "2016-06-29"
+    "character_birthday": "2016-06-29",
+    "is_biccame_musume": true
   },
   {
     "character_name": "パソ館たん/パソコン館たん",
@@ -355,7 +371,8 @@
     ],
     "latitude": 35.731563,
     "longitude": 139.7135962,
-    "character_birthday": "2016-06-29"
+    "character_birthday": "2016-06-29",
+    "is_biccame_musume": true
   },
   {
     "character_name": "さっぽろたん/札幌たん",
@@ -377,7 +394,8 @@
     ],
     "latitude": 43.0661886,
     "longitude": 141.3539156,
-    "character_birthday": "2016-08-10"
+    "character_birthday": "2016-08-10",
+    "is_biccame_musume": true
   },
   {
     "character_name": "広島たん",
@@ -399,7 +417,8 @@
     ],
     "latitude": 34.3957984,
     "longitude": 132.475143,
-    "character_birthday": "2016-08-24"
+    "character_birthday": "2016-08-24",
+    "is_biccame_musume": true
   },
   {
     "character_name": "せいせきたん/聖蹟たん",
@@ -414,7 +433,8 @@
       "https://biccame.jp/profile/images/seiseki4.png",
       "https://biccame.jp/profile/images/seiseki5.png"
     ],
-    "character_birthday": "2016-08-31"
+    "character_birthday": "2016-08-31",
+    "is_biccame_musume": true
   },
   {
     "character_name": "あべのたん",
@@ -436,7 +456,8 @@
     ],
     "latitude": 34.6434395,
     "longitude": 135.5116608,
-    "character_birthday": "2016-09-07"
+    "character_birthday": "2016-09-07",
+    "is_biccame_musume": true
   },
   {
     "character_name": "岡山たん",
@@ -458,7 +479,8 @@
     ],
     "latitude": 34.6659315,
     "longitude": 133.9198144,
-    "character_birthday": "2016-10-05"
+    "character_birthday": "2016-10-05",
+    "is_biccame_musume": true
   },
   {
     "character_name": "立川たん",
@@ -480,7 +502,8 @@
     ],
     "latitude": 35.69921780000001,
     "longitude": 139.4149141,
-    "character_birthday": "2016-10-25"
+    "character_birthday": "2016-10-25",
+    "is_biccame_musume": true
   },
   {
     "character_name": "川崎たん",
@@ -502,7 +525,8 @@
     ],
     "latitude": 35.5329594,
     "longitude": 139.6959237,
-    "character_birthday": "2016-12-01"
+    "character_birthday": "2016-12-01",
+    "is_biccame_musume": true
   },
   {
     "character_name": "京都たん",
@@ -517,7 +541,8 @@
       "https://biccame.jp/profile/images/kyoto4.png",
       "https://biccame.jp/profile/images/kyoto5.png"
     ],
-    "character_birthday": "2017-01-10"
+    "character_birthday": "2017-01-10",
+    "is_biccame_musume": true
   },
   {
     "character_name": "なんばたん",
@@ -539,7 +564,8 @@
     ],
     "latitude": 34.6666466,
     "longitude": 135.5025872,
-    "character_birthday": "2017-02-21"
+    "character_birthday": "2017-02-21",
+    "is_biccame_musume": true
   },
   {
     "character_name": "なごやげーとたん",
@@ -561,7 +587,8 @@
     ],
     "latitude": 35.1722393,
     "longitude": 136.8823772,
-    "character_birthday": "2017-03-30"
+    "character_birthday": "2017-03-30",
+    "is_biccame_musume": true
   },
   {
     "character_name": "池西たん/池袋西口たん",
@@ -583,7 +610,8 @@
     ],
     "latitude": 35.7308323,
     "longitude": 139.7089542,
-    "character_birthday": "2017-05-09"
+    "character_birthday": "2017-05-09",
+    "is_biccame_musume": true
   },
   {
     "character_name": "アキバたん/秋葉原たん",
@@ -605,7 +633,8 @@
     ],
     "latitude": 35.6998312,
     "longitude": 139.7717534,
-    "character_birthday": "2017-06-05"
+    "character_birthday": "2017-06-05",
+    "is_biccame_musume": true
   },
   {
     "character_name": "調布たん",
@@ -627,7 +656,8 @@
     ],
     "latitude": 35.6521138,
     "longitude": 139.5432018,
-    "character_birthday": "2017-09-27"
+    "character_birthday": "2017-09-27",
+    "is_biccame_musume": true
   },
   {
     "character_name": "天神2号たん",
@@ -649,7 +679,8 @@
     ],
     "latitude": 33.587464,
     "longitude": 130.3982772,
-    "character_birthday": "2017-10-25"
+    "character_birthday": "2017-10-25",
+    "is_biccame_musume": true
   },
   {
     "character_name": "ふなとーたん",
@@ -664,7 +695,8 @@
       "https://biccame.jp/profile/images/funato4.png",
       "https://biccame.jp/profile/images/funato0.png"
     ],
-    "character_birthday": "2017-11-15"
+    "character_birthday": "2017-11-15",
+    "is_biccame_musume": true
   },
   {
     "character_name": "鹿児島たん",
@@ -686,7 +718,8 @@
     ],
     "latitude": 31.5828,
     "longitude": 130.5421136,
-    "character_birthday": "2017-12-18"
+    "character_birthday": "2017-12-18",
+    "is_biccame_musume": true
   },
   {
     "character_name": "にいがたたん/新潟たん",
@@ -708,7 +741,8 @@
     ],
     "latitude": 37.9115222,
     "longitude": 139.0627439,
-    "character_birthday": "2018-02-01"
+    "character_birthday": "2018-02-01",
+    "is_biccame_musume": true
   },
   {
     "character_name": "みっけたん/赤坂たん",
@@ -730,7 +764,8 @@
     ],
     "latitude": 35.6770825,
     "longitude": 139.7367614,
-    "character_birthday": "2019-01-23"
+    "character_birthday": "2019-01-23",
+    "is_biccame_musume": true
   },
   {
     "character_name": "町田たん",
@@ -745,7 +780,8 @@
       "https://biccame.jp/profile/images/machida4.png",
       "https://biccame.jp/profile/images/machida5.png"
     ],
-    "character_birthday": "2019-03-01"
+    "character_birthday": "2019-03-01",
+    "is_biccame_musume": true
   },
   {
     "character_name": "しぶハチたん",
@@ -767,7 +803,8 @@
     ],
     "latitude": 35.6593119,
     "longitude": 139.6995221,
-    "character_birthday": "2019-07-07"
+    "character_birthday": "2019-07-07",
+    "is_biccame_musume": true
   },
   {
     "character_name": "しぶとーたん",
@@ -789,7 +826,8 @@
     ],
     "latitude": 35.6598999,
     "longitude": 139.7020679,
-    "character_birthday": "2019-07-07"
+    "character_birthday": "2019-07-07",
+    "is_biccame_musume": true
   },
   {
     "character_name": "新横たん",
@@ -811,7 +849,8 @@
     ],
     "latitude": 35.5086887,
     "longitude": 139.6133356,
-    "character_birthday": "2020-01-23"
+    "character_birthday": "2020-01-23",
+    "is_biccame_musume": true
   },
   {
     "character_name": "新東たん",
@@ -833,7 +872,8 @@
     ],
     "latitude": 35.6920018,
     "longitude": 139.7018347,
-    "character_birthday": "2020-10-19"
+    "character_birthday": "2020-10-19",
+    "is_biccame_musume": true
   },
   {
     "character_name": "たまプラたん",
@@ -848,7 +888,8 @@
       "https://biccame.jp/profile/images/tamapla4.png",
       "https://biccame.jp/profile/images/tamapla5.png"
     ],
-    "character_birthday": "2020-11-26"
+    "character_birthday": "2020-11-26",
+    "is_biccame_musume": true
   },
   {
     "character_name": "天神1号たん",
@@ -870,7 +911,8 @@
     ],
     "latitude": 33.5870834,
     "longitude": 130.4010139,
-    "character_birthday": "2020-12-13"
+    "character_birthday": "2020-12-13",
+    "is_biccame_musume": true
   },
   {
     "character_name": "所沢たん/所沢たん",
@@ -892,7 +934,8 @@
     ],
     "latitude": 35.7858745,
     "longitude": 139.4722607,
-    "character_birthday": "2021-11-08"
+    "character_birthday": "2021-11-08",
+    "is_biccame_musume": true
   },
   {
     "character_name": "八尾たん/八尾たん",
@@ -914,7 +957,8 @@
     ],
     "latitude": 34.6324874,
     "longitude": 135.6057956,
-    "character_birthday": "2022-11-14"
+    "character_birthday": "2022-11-14",
+    "is_biccame_musume": true
   },
   {
     "character_name": "たかつきたん/高槻たん",
@@ -936,7 +980,8 @@
     ],
     "latitude": 34.853417,
     "longitude": 135.6182789,
-    "character_birthday": "2023-10-06"
+    "character_birthday": "2023-10-06",
+    "is_biccame_musume": true
   },
   {
     "character_name": "千葉たん/千葉たん",
@@ -958,7 +1003,8 @@
     ],
     "latitude": 35.6118305,
     "longitude": 140.1155614,
-    "character_birthday": "2024-12-12"
+    "character_birthday": "2024-12-12",
+    "is_biccame_musume": true
   },
   {
     "character_name": "ビックカメラ",
@@ -971,7 +1017,8 @@
     "image_urls": [
       "https://biccame.jp/profile/biccamera.png",
       "https://biccame.jp/profile/biccamera3.png"
-    ]
+    ],
+    "is_biccame_musume": false
   },
   {
     "character_name": "ナイセン",
@@ -984,7 +1031,8 @@
     "image_urls": [
       "https://biccame.jp/profile/itallinc.png",
       "https://biccame.jp/profile/itallinc3.png"
-    ]
+    ],
+    "is_biccame_musume": false
   },
   {
     "character_name": "ビックシムたん",
@@ -998,7 +1046,8 @@
       "https://biccame.jp/profile/images/bicsim2.png",
       "https://biccame.jp/profile/images/bicsim3.png"
     ],
-    "character_birthday": "2018-06-13"
+    "character_birthday": "2018-06-13",
+    "is_biccame_musume": false
   },
   {
     "character_name": "お偉いたん",
@@ -1010,6 +1059,7 @@
     "image_urls": [
       "https://biccame.jp/profile/oeraitan.png",
       "https://biccame.jp/profile/images/oeraitan3.png"
-    ]
+    ],
+    "is_biccame_musume": false
   }
 ]

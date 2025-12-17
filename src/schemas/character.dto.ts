@@ -18,7 +18,8 @@ export const CharacterSchema = z.object({
   image_urls: z.array(z.string().url()).optional(),
   character_birthday: z.string().optional(),
   latitude: z.number().optional(),
-  longitude: z.number().optional()
+  longitude: z.number().optional(),
+  is_biccame_musume: z.boolean().optional().default(true)
 })
 
 export type Character = z.infer<typeof CharacterSchema>

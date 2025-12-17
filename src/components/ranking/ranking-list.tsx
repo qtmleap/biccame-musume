@@ -9,7 +9,6 @@ type CharacterWithVotes = Character & {
 
 type RankingListProps = {
   characters: CharacterWithVotes[]
-  limit?: number
 }
 
 /**
@@ -109,10 +108,9 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
 /**
  * 投票ランキングリスト
  */
-export const RankingList = ({ characters, limit = 10 }: RankingListProps) => {
-  // 0票のキャラクターを除外
-  const votedCharacters = characters.filter((char) => char.voteCount > 0)
-  const totalCount = votedCharacters.length
+export const RankingList = ({ characters }: RankingListProps) => {
+  // ビッカメ娘かつ0票より多いキャラクターのみ表示
+  const votedCharacters = characters.filter((char) => char.is_biccame_musume && char.voteCount > 0)
 
   return (
     <div className='space-y-6'>
@@ -148,30 +146,13 @@ export const RankingList = ({ characters, limit = 10 }: RankingListProps) => {
         </motion.div>
       ) : (
         <>
-          {/* ランキング（モバイル2列、タブレット3列、デスクトップ4列、ワイド5列、超ワイド6列） */}
+          {/* ランキング(モバイル2列、タブレット3列、デスクトップ4列、ワイド5列、超ワイド6列) */}
           <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4'>
-            {votedCharacters.slice(0, limit).map((character, index) => {
+            {votedCharacters.map((character, index) => {
               const rank = calculateRank(votedCharacters, index)
               return <RankingCard key={character.key} character={character} rank={rank} index={index} />
             })}
           </div>
-
-          {/* 総合順位リンク */}
-          {totalCount > limit && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-              className='text-center pt-2'
-            >
-              <Link
-                to='/characters'
-                className='inline-block px-6 py-2 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-base font-bold shadow-md hover:shadow-lg'
-              >
-                総合順位を見る
-              </Link>
-            </motion.div>
-          )}
         </>
       )}
     </div>
