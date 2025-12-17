@@ -6,7 +6,12 @@
     "jsx": "react-jsx",
     "module": "ESNext",
     "lib": ["ES2022", "DOM", "DOM.Iterable", "WebWorker"],
-    "types": ["vite/client", "@cloudflare/workers-types", "@types/bun"],
+    "types": [
+      "vite/client",
+      "@cloudflare/workers-types",
+      "@types/bun",
+      "@types/google.maps"
+    ],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
