@@ -17,8 +17,8 @@ const RankingContent = () => {
   const { data: ranking } = useVoteRanking(characters)
 
   return (
-    <div className='min-h-screen bg-pink-50'>
-      <div className='container mx-auto px-4 py-6 max-w-3xl'>
+    <div className='min-h-screen'>
+      <div className='container mx-auto px-4 py-6 max-w-7xl'>
         {/* ランキングリスト */}
         <RankingList characters={ranking} />
       </div>
