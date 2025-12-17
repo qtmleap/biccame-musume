@@ -1,21 +1,17 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import dayjs from 'dayjs'
 import { groupBy, sortBy } from 'lodash-es'
 import { Cake, ChevronLeft, ChevronRight, Store } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
+import { Suspense, useMemo, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle
-} from '@/components/ui/drawer'
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { useCharacters } from '@/hooks/useCharacters'
 import { cn } from '@/lib/utils'
-import { type Character, CharactersSchema } from '@/schemas/character.dto'
+import type { Character } from '@/schemas/character.dto'
 
 export const Route = createFileRoute('/calendar/')({
   component: RouteComponent
@@ -39,11 +35,7 @@ const calculateYears = (birthday: string, targetYear: number): number => {
 /**
  * 指定月のイベントをフィルタリングする
  */
-const filterMonthEvents = (
-  characters: Character[],
-  targetMonth: number,
-  targetYear: number
-): CalendarEvent[] => {
+const filterMonthEvents = (characters: Character[], targetMonth: number, targetYear: number): CalendarEvent[] => {
   const events: CalendarEvent[] = []
 
   characters.forEach((character) => {
@@ -139,15 +131,37 @@ const groupEventsByDay = (events: CalendarEvent[]): GroupedEvents[] => {
   )
 }
 
-function RouteComponent() {
-  const [events, setEvents] = useState<CalendarEvent[]>([])
-  const [loading, setLoading] = useState(true)
+/**
+ * ローディングフォールバック
+ */
+const LoadingFallback = () => (
+  <div className='mx-auto p-4 md:p-8 max-w-6xl'>
+    <div className='flex items-center justify-center py-8'>
+      <div className='text-center'>
+        <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4' />
+        <p className='text-muted-foreground'>読み込み中...</p>
+      </div>
+    </div>
+  </div>
+)
+
+/**
+ * カレンダーコンテンツ
+ */
+const CalendarContent = () => {
+  const { data: allCharacters } = useCharacters()
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1)
-  const [allCharacters, setAllCharacters] = useState<Character[]>([])
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
+
+  /**
+   * 現在の月のイベントを計算
+   */
+  const events = useMemo(() => {
+    return filterMonthEvents(allCharacters, selectedMonth, selectedYear)
+  }, [allCharacters, selectedMonth, selectedYear])
 
   /**
    * 日付クリック時にDrawerを開く
@@ -158,33 +172,6 @@ function RouteComponent() {
       setDrawerOpen(true)
     }
   }
-
-  useEffect(() => {
-    const loadCharacters = async () => {
-      try {
-        const response = await fetch('/characters.json')
-        const data = await response.json()
-        const parseResult = CharactersSchema.safeParse(data)
-
-        if (parseResult.success) {
-          setAllCharacters(parseResult.data)
-        }
-      } catch (error) {
-        console.error('Failed to load characters:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadCharacters()
-  }, [])
-
-  useEffect(() => {
-    if (allCharacters.length > 0) {
-      const monthEvents = filterMonthEvents(allCharacters, selectedMonth, selectedYear)
-      setEvents(monthEvents)
-    }
-  }, [selectedMonth, selectedYear, allCharacters])
 
   const today = new Date()
   const currentMonthName = `${selectedYear}年${selectedMonth}月`
@@ -215,18 +202,15 @@ function RouteComponent() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className='container mx-auto p-4'>
-        <p>読み込み中...</p>
-      </div>
-    )
-  }
-
   return (
-    <div className='container mx-auto p-4 md:p-8 space-y-6 md:space-y-8'>
+    <div className='mx-auto p-4 md:p-8 space-y-6 md:space-y-8 max-w-6xl'>
       {/* ヘッダー部分 */}
-      <div className='flex items-center justify-between'>
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className='flex items-center justify-between'
+      >
         <Button variant='ghost' size='icon' onClick={handlePrevMonth} className='rounded-full'>
           <ChevronLeft className='h-5 w-5' />
         </Button>
@@ -243,7 +227,7 @@ function RouteComponent() {
         <Button variant='ghost' size='icon' onClick={handleNextMonth} className='rounded-full'>
           <ChevronRight className='h-5 w-5' />
         </Button>
-      </div>
+      </motion.div>
 
       {/* ページネーションドット（モバイル） */}
       <div className='flex justify-center gap-1.5 md:hidden'>
@@ -261,7 +245,7 @@ function RouteComponent() {
       </div>
 
       {/* 月選択タブ（デスクトップ） */}
-      <div className='hidden md:flex gap-1 overflow-x-auto pb-2 scrollbar-hide'>
+      <div className='hidden md:flex gap-1 overflow-x-auto pb-2 justify-center'>
         {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
           <Button
             key={month}
@@ -269,7 +253,7 @@ function RouteComponent() {
             onClick={() => setSelectedMonth(month)}
             size='sm'
             className={cn(
-              'rounded-full px-4 transition-all',
+              'shrink-0 rounded-full px-4 transition-all',
               selectedMonth === month
                 ? 'bg-muted font-semibold text-foreground'
                 : 'hover:bg-muted/50 text-muted-foreground'
@@ -284,149 +268,203 @@ function RouteComponent() {
       {isMobile ? (
         <div className='space-y-2'>
           {events.length === 0 ? (
-            <div className='py-8 text-center text-muted-foreground'>今月のイベントはありません</div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className='py-8 text-center text-muted-foreground'
+            >
+              今月のイベントはありません
+            </motion.div>
           ) : (
-            groupEventsByDay(events).map((group) => (
-              <div key={`day-${group.day}`} className='flex gap-3 py-2 border-b border-border/50 last:border-b-0'>
-                {/* 日付部分（カレンダー風） */}
-                <div className='flex flex-col items-center justify-start pt-1 w-10 shrink-0'>
-                  <span className='text-[10px] text-muted-foreground uppercase'>{group.dayOfWeek}</span>
-                  <span className='text-xl font-bold tabular-nums'>{group.day}</span>
-                </div>
-
-                {/* イベント一覧 */}
-                <div className='flex-1 space-y-1.5 min-w-0'>
-                  {group.events.map((event) => {
-                    const isCharacter = event.type === 'character'
-
-                    return (
-                      <div
-                        key={`${event.character.key}-${event.type}`}
-                        className={cn(
-                          'flex items-center gap-3 p-2 rounded-lg',
-                          isCharacter ? 'bg-pink-500/10' : 'bg-blue-500/10'
-                        )}
-                      >
-                        {/* キャラクター画像 */}
-                        <Avatar className='w-10 h-10 shrink-0 border border-border'>
-                          <AvatarImage src={event.character.profile_image_url} alt={event.character.character_name} />
-                          <AvatarFallback>{event.character.character_name.slice(0, 1)}</AvatarFallback>
-                        </Avatar>
-
-                        {/* 情報 */}
-                        <div className='flex-1 min-w-0'>
-                          <p className='text-sm font-medium truncate'>{event.character.character_name}</p>
-                          <p className='text-xs text-muted-foreground truncate'>{event.character.store_name}</p>
-                        </div>
-
-                        {/* バッジ */}
-                        <Badge
-                          variant='secondary'
-                          className={cn(
-                            'shrink-0 text-xs flex items-center gap-1',
-                            isCharacter
-                              ? 'bg-pink-500/20 text-pink-700 dark:text-pink-300'
-                              : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
-                          )}
-                        >
-                          {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
-                          {event.years}
-                          {isCharacter ? '歳' : '周年'}
-                        </Badge>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      ) : (
-        /* デスクトップ: カレンダー表示 */
-        <div className='p-2'>
-          {/* 曜日ヘッダー */}
-          <div className='grid grid-cols-7 mb-1'>
-            {weekDays.map((day, index) => (
-              <div
-                key={day}
-                className={cn(
-                  'text-center font-medium py-1 text-xs',
-                  index === 0 && 'text-rose-500',
-                  index === 6 && 'text-sky-500',
-                  index !== 0 && index !== 6 && 'text-muted-foreground'
-                )}
+            <AnimatePresence mode='wait'>
+              <motion.div
+                key={`${selectedYear}-${selectedMonth}`}
+                initial={{ opacity: 0, x: 15 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -15 }}
+                transition={{ duration: 0.2 }}
               >
-                {day}
-              </div>
-            ))}
-          </div>
+                {groupEventsByDay(events).map((group, groupIndex) => (
+                  <motion.div
+                    key={`day-${group.day}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                      duration: 0.15,
+                      delay: groupIndex * 0.05,
+                      ease: 'easeOut'
+                    }}
+                    className='flex gap-3 py-2 border-b border-border/50 last:border-b-0'
+                  >
+                    {/* 日付部分（カレンダー風） */}
+                    <div className='flex flex-col items-center justify-start pt-1 w-10 shrink-0'>
+                      <span className='text-[10px] text-muted-foreground uppercase'>{group.dayOfWeek}</span>
+                      <span className='text-xl font-bold tabular-nums'>{group.day}</span>
+                    </div>
 
-          {/* カレンダーグリッド */}
-          <div className='grid grid-cols-7 gap-1'>
-            {calendarDays.map((day, index) => {
-              const dayEvents = day ? getEventsForDay(events, day) : []
-              const isToday =
-                day === today.getDate() &&
-                selectedMonth === today.getMonth() + 1 &&
-                selectedYear === today.getFullYear()
-              const dayOfWeek = index % 7
-              const hasEvents = dayEvents.length > 0
+                    {/* イベント一覧 */}
+                    <div className='flex-1 space-y-1.5 min-w-0'>
+                      {group.events.map((event) => {
+                        const isCharacter = event.type === 'character'
 
-              return (
-                <div
-                  key={`day-${selectedYear}-${selectedMonth}-${day ?? `empty-${index}`}`}
-                  onClick={() => day !== null && handleDayClick(day, dayEvents)}
-                  className={cn(
-                    'min-h-20 p-1.5 rounded-lg transition-all',
-                    day === null && 'bg-transparent',
-                    day !== null && isToday && 'bg-primary/10',
-                    day !== null && !isToday && 'bg-card hover:bg-muted/50',
-                    hasEvents && 'cursor-pointer'
-                  )}
-                >
-                  {day !== null && (
-                    <div className='h-full flex flex-col'>
-                      {/* 日付 */}
-                      <span
-                        className={cn(
-                          'text-sm font-semibold tabular-nums',
-                          isToday && 'text-primary',
-                          !isToday && dayOfWeek === 0 && 'text-rose-500',
-                          !isToday && dayOfWeek === 6 && 'text-sky-500',
-                          !isToday && dayOfWeek !== 0 && dayOfWeek !== 6 && 'text-foreground'
-                        )}
-                      >
-                        {day}
-                      </span>
-                      {/* アイコン */}
-                      {hasEvents && (
-                        <div className='flex-1 flex flex-wrap items-center justify-center gap-1 py-1'>
-                          {dayEvents.map((event) => (
-                            <Avatar
-                              key={`${event.character.key}-${event.type}`}
-                              className={cn(
-                                'w-8 h-8 ring-2',
-                                event.type === 'character' ? 'ring-pink-400/50' : 'ring-blue-400/50'
-                              )}
-                            >
+                        return (
+                          <motion.div
+                            key={`${event.character.key}-${event.type}`}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className={cn(
+                              'flex items-center gap-3 p-2 rounded-lg',
+                              isCharacter ? 'bg-pink-500/10' : 'bg-blue-500/10'
+                            )}
+                          >
+                            {/* キャラクター画像 */}
+                            <Avatar className='w-10 h-10 shrink-0 border border-border'>
                               <AvatarImage
                                 src={event.character.profile_image_url}
                                 alt={event.character.character_name}
                               />
-                              <AvatarFallback className='text-[10px] bg-muted'>
-                                {event.character.character_name.slice(0, 1)}
-                              </AvatarFallback>
+                              <AvatarFallback>{event.character.character_name.slice(0, 1)}</AvatarFallback>
                             </Avatar>
-                          ))}
-                        </div>
-                      )}
+
+                            {/* 情報 */}
+                            <div className='flex-1 min-w-0'>
+                              <p className='text-sm font-medium truncate'>{event.character.character_name}</p>
+                              <p className='text-xs text-muted-foreground truncate'>{event.character.store_name}</p>
+                            </div>
+
+                            {/* バッジ */}
+                            <Badge
+                              variant='secondary'
+                              className={cn(
+                                'shrink-0 text-xs flex items-center gap-1',
+                                isCharacter
+                                  ? 'bg-pink-500/20 text-pink-700 dark:text-pink-300'
+                                  : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
+                              )}
+                            >
+                              {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
+                              {event.years}
+                              {isCharacter ? '歳' : '周年'}
+                            </Badge>
+                          </motion.div>
+                        )
+                      })}
                     </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          )}
         </div>
+      ) : (
+        /* デスクトップ: カレンダー表示 */
+        <AnimatePresence mode='wait'>
+          <motion.div
+            key={`${selectedYear}-${selectedMonth}`}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.15 }}
+            className='p-2'
+          >
+            {/* 曜日ヘッダー */}
+            <div className='grid grid-cols-7 mb-1'>
+              {weekDays.map((day, index) => (
+                <div
+                  key={day}
+                  className={cn(
+                    'text-center font-medium py-1 text-xs',
+                    index === 0 && 'text-rose-500',
+                    index === 6 && 'text-sky-500',
+                    index !== 0 && index !== 6 && 'text-muted-foreground'
+                  )}
+                >
+                  {day}
+                </div>
+              ))}
+            </div>
+
+            {/* カレンダーグリッド */}
+            <div className='grid grid-cols-7 gap-1'>
+              {calendarDays.map((day, index) => {
+                const dayEvents = day ? getEventsForDay(events, day) : []
+                const date = day ? dayjs(`${selectedYear}-${selectedMonth}-${day}`) : null
+                const isToday = date?.isSame(dayjs(), 'day') ?? false
+                const isSunday = date?.day() === 0
+                const isSaturday = date?.day() === 6
+                const hasEvents = dayEvents.length > 0
+                // イベントのある日は早めに、ない日はランダムに遅く表示
+                const baseDelay = hasEvents ? Math.random() * 0.1 : 0.15 + Math.random() * 0.3
+                const animationDelay = baseDelay
+
+                return (
+                  <motion.button
+                    type='button'
+                    key={`day-${selectedYear}-${selectedMonth}-${day ?? `empty-${index}`}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                      duration: 0.15,
+                      delay: animationDelay,
+                      ease: 'easeOut'
+                    }}
+                    whileHover={hasEvents ? { scale: 1.05 } : undefined}
+                    whileTap={hasEvents ? { scale: 0.95 } : undefined}
+                    onClick={() => day !== null && handleDayClick(day, dayEvents)}
+                    className={cn(
+                      'min-h-20 p-1.5 rounded-lg transition-all text-left',
+                      day === null && 'bg-transparent cursor-default',
+                      day !== null && isToday && 'bg-primary/10',
+                      day !== null && !isToday && 'bg-card/50 hover:bg-muted/50',
+                      hasEvents && 'cursor-pointer'
+                    )}
+                    disabled={!hasEvents}
+                  >
+                    {day !== null && (
+                      <div className='h-full flex flex-col'>
+                        {/* 日付 */}
+                        <span
+                          className={cn(
+                            'text-sm font-semibold tabular-nums',
+                            isToday && 'text-primary',
+                            !isToday && isSunday && 'text-rose-500',
+                            !isToday && isSaturday && 'text-sky-500',
+                            !isToday && !isSunday && !isSaturday && 'text-foreground'
+                          )}
+                        >
+                          {day}
+                        </span>
+                        {/* アイコン */}
+                        {hasEvents && (
+                          <div className='flex-1 flex flex-wrap items-center justify-center gap-1 py-1'>
+                            {dayEvents.map((event) => (
+                              <Avatar
+                                key={`${event.character.key}-${event.type}`}
+                                className={cn(
+                                  'w-8 h-8 ring-2',
+                                  event.type === 'character' ? 'ring-pink-400/50' : 'ring-blue-400/50'
+                                )}
+                              >
+                                <AvatarImage
+                                  src={event.character.profile_image_url}
+                                  alt={event.character.character_name}
+                                />
+                                <AvatarFallback className='text-[10px] bg-muted'>
+                                  {event.character.character_name.slice(0, 1)}
+                                </AvatarFallback>
+                              </Avatar>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </motion.button>
+                )
+              })}
+            </div>
+          </motion.div>
+        </AnimatePresence>
       )}
 
       {/* Drawer: 日付詳細表示 */}
@@ -439,45 +477,50 @@ function RouteComponent() {
           </DrawerHeader>
           <div className='px-4 pb-4 space-y-3 overflow-y-auto'>
             {selectedDay &&
-              getEventsForDay(events, selectedDay).map((event) => {
+              getEventsForDay(events, selectedDay).map((event, eventIndex) => {
                 const isCharacter = event.type === 'character'
                 return (
-                  <Link
+                  <motion.div
                     key={`drawer-${event.character.key}-${event.type}`}
-                    to='/characters/$id'
-                    params={{ id: event.character.key }}
-                    className={cn(
-                      'flex items-center gap-3 p-3 rounded-lg transition-colors',
-                      isCharacter
-                        ? 'bg-pink-500/10 hover:bg-pink-500/20'
-                        : 'bg-blue-500/10 hover:bg-blue-500/20'
-                    )}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                      duration: 0.15,
+                      delay: eventIndex * 0.05,
+                      ease: 'easeOut'
+                    }}
                   >
-                    <Avatar className='w-12 h-12 border border-border'>
-                      <AvatarImage
-                        src={event.character.profile_image_url}
-                        alt={event.character.character_name}
-                      />
-                      <AvatarFallback>{event.character.character_name.slice(0, 1)}</AvatarFallback>
-                    </Avatar>
-                    <div className='flex-1 min-w-0'>
-                      <p className='font-medium truncate'>{event.character.character_name}</p>
-                      <p className='text-sm text-muted-foreground truncate'>{event.character.store_name}</p>
-                      <Badge
-                        variant='secondary'
-                        className={cn(
-                          'mt-1 text-xs flex items-center gap-1 w-fit',
-                          isCharacter
-                            ? 'bg-pink-500/20 text-pink-700 dark:text-pink-300'
-                            : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
-                        )}
-                      >
-                        {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
-                        {event.years}
-                        {isCharacter ? '歳' : '周年'}
-                      </Badge>
-                    </div>
-                  </Link>
+                    <Link
+                      to='/characters/$id'
+                      params={{ id: event.character.key }}
+                      className={cn(
+                        'flex items-center gap-3 p-3 rounded-lg transition-colors',
+                        isCharacter ? 'bg-pink-500/10 hover:bg-pink-500/20' : 'bg-blue-500/10 hover:bg-blue-500/20'
+                      )}
+                    >
+                      <Avatar className='w-12 h-12 border border-border'>
+                        <AvatarImage src={event.character.profile_image_url} alt={event.character.character_name} />
+                        <AvatarFallback>{event.character.character_name.slice(0, 1)}</AvatarFallback>
+                      </Avatar>
+                      <div className='flex-1 min-w-0'>
+                        <p className='font-medium truncate'>{event.character.character_name}</p>
+                        <p className='text-sm text-muted-foreground truncate'>{event.character.store_name}</p>
+                        <Badge
+                          variant='secondary'
+                          className={cn(
+                            'mt-1 text-xs flex items-center gap-1 w-fit',
+                            isCharacter
+                              ? 'bg-pink-500/20 text-pink-700 dark:text-pink-300'
+                              : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
+                          )}
+                        >
+                          {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
+                          {event.years}
+                          {isCharacter ? '歳' : '周年'}
+                        </Badge>
+                      </div>
+                    </Link>
+                  </motion.div>
                 )
               })}
           </div>
@@ -501,5 +544,16 @@ function RouteComponent() {
         </div>
       </div>
     </div>
+  )
+}
+
+/**
+ * ルートコンポーネント
+ */
+function RouteComponent() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <CalendarContent />
+    </Suspense>
   )
 }
