@@ -48,59 +48,49 @@ const RouteComponent = () => {
   // セーフエリアの値を取得して表示
   useEffect(() => {
     const updateSafeAreaValues = () => {
-      // 複数の方法でセーフエリアを取得
+      // ダミー要素を作成してセーフエリアを測定
       const testDiv = document.createElement('div')
-      testDiv.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 1px;
-        height: 1px;
-        padding-top: env(safe-area-inset-top, 0px);
-        padding-bottom: env(safe-area-inset-bottom, 0px);
-        padding-left: env(safe-area-inset-left, 0px);
-        padding-right: env(safe-area-inset-right, 0px);
-        pointer-events: none;
-        visibility: hidden;
-      `
+      testDiv.style.position = 'fixed'
+      testDiv.style.top = '0'
+      testDiv.style.left = '0'
+      testDiv.style.width = '100vw'
+      testDiv.style.height = '100vh'
+      testDiv.style.padding =
+        'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)'
+      testDiv.style.boxSizing = 'border-box'
+      testDiv.style.pointerEvents = 'none'
+      testDiv.style.visibility = 'hidden'
       document.body.appendChild(testDiv)
 
       const computed = getComputedStyle(testDiv)
-      const top = computed.paddingTop
-      const bottom = computed.paddingBottom
-      const left = computed.paddingLeft
-      const right = computed.paddingRight
+      const paddingTop = computed.paddingTop
+      const paddingBottom = computed.paddingBottom
+      const paddingLeft = computed.paddingLeft
+      const paddingRight = computed.paddingRight
 
       document.body.removeChild(testDiv)
 
-      // CSS変数として設定
-      document.documentElement.style.setProperty('--safe-area-inset-top', top)
-      document.documentElement.style.setProperty('--safe-area-inset-bottom', bottom)
-      document.documentElement.style.setProperty('--safe-area-inset-left', left)
-      document.documentElement.style.setProperty('--safe-area-inset-right', right)
+      // CSS変数に値を設定
+      document.documentElement.style.setProperty('--safe-area-inset-top', paddingTop)
+      document.documentElement.style.setProperty('--safe-area-inset-bottom', paddingBottom)
+      document.documentElement.style.setProperty('--safe-area-inset-left', paddingLeft)
+      document.documentElement.style.setProperty('--safe-area-inset-right', paddingRight)
 
-      // デバッグ情報
+      // デバッグ表示を更新
       const topEl = document.getElementById('safe-top-value')
       const bottomEl = document.getElementById('safe-bottom-value')
       const leftEl = document.getElementById('safe-left-value')
       const rightEl = document.getElementById('safe-right-value')
 
-      if (topEl) topEl.textContent = `${top} (vh:${window.innerHeight})`
-      if (bottomEl) bottomEl.textContent = `${bottom} (screen:${window.screen.height})`
-      if (leftEl) leftEl.textContent = left
-      if (rightEl) rightEl.textContent = right
-
-      // コンソールにも出力
-      console.log('Safe Area Insets:', { top, bottom, left, right })
-      console.log('Window:', { innerHeight: window.innerHeight, outerHeight: window.outerHeight })
-      console.log('Screen:', { height: window.screen.height, availHeight: window.screen.availHeight })
+      if (topEl) topEl.textContent = paddingTop
+      if (bottomEl) bottomEl.textContent = paddingBottom
+      if (leftEl) leftEl.textContent = paddingLeft
+      if (rightEl) rightEl.textContent = paddingRight
     }
 
-    // 初回実行を少し遅延させる
-    setTimeout(updateSafeAreaValues, 100)
-    setTimeout(updateSafeAreaValues, 500)
-    setTimeout(updateSafeAreaValues, 1000)
+    updateSafeAreaValues()
 
+    // リサイズ時や向き変更時にも再計算
     window.addEventListener('resize', updateSafeAreaValues)
     window.addEventListener('orientationchange', updateSafeAreaValues)
 
@@ -122,7 +112,7 @@ const RouteComponent = () => {
 
   if (!apiKey) {
     return (
-      <div className='flex items-center justify-center'>
+      <div className='min-h-screen flex items-center justify-center'>
         <div className='text-center'>
           <p className='text-destructive mb-2'>Google Maps APIキーが設定されていません</p>
           <p className='text-sm text-muted-foreground'>.envファイルにVITE_GOOGLE_MAPS_API_KEYを設定してください</p>
@@ -133,7 +123,7 @@ const RouteComponent = () => {
 
   return (
     <APIProvider apiKey={apiKey}>
-      <div className='relative w-full h-[calc(100vh-3rem)] md:h-[calc(100vh-3.5rem)] overflow-hidden'>
+      <div className='relative w-full overflow-hidden'>
         <GoogleMap
           key={mapKey}
           defaultCenter={selectedCharacter ? getPosition(selectedCharacter) : { lat: 35.6812, lng: 139.7671 }}
@@ -170,19 +160,19 @@ const RouteComponent = () => {
         />
 
         {/* デバッグ用: セーフエリアの値を表示 */}
-        <div className='absolute top-20 left-4 bg-black/80 text-white p-2 rounded text-xs z-50 font-mono'>
-          <div>
-            top: <span id='safe-top-value'>-</span>
-          </div>
-          <div>
-            bottom: <span id='safe-bottom-value'>-</span>
-          </div>
-          <div>
-            left: <span id='safe-left-value'>-</span>
-          </div>
-          <div>
-            right: <span id='safe-right-value'>-</span>
-          </div>
+      </div>
+      <div className='absolute top-20 left-4 bg-black/80 text-white p-2 rounded text-xs z-50 font-mono'>
+        <div>
+          top: <span id='safe-top-value'>-</span>
+        </div>
+        <div>
+          bottom: <span id='safe-bottom-value'>-</span>
+        </div>
+        <div>
+          left: <span id='safe-left-value'>-</span>
+        </div>
+        <div>
+          right: <span id='safe-right-value'>-</span>
         </div>
       </div>
     </APIProvider>
