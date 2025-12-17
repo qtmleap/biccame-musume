@@ -17,17 +17,27 @@ const isDevelopment = () => {
  * 開発環境用のダミー投票データを生成（合計約10万票）
  */
 const generateDummyVoteCounts = (characters: Character[]): Record<string, number> => {
+  // ビッカメ娘のみを対象にする
+  const biccameMusumeCharacters = characters.filter((char) => char.is_biccame_musume)
+  
   const totalTargetVotes = 100000
   const dummyCounts: Record<string, number> = {}
 
+  // シード値を使った疑似ランダム（リロードしても同じ結果になる）
+  const seededRandom = (seed: number) => {
+    const x = Math.sin(seed) * 10000
+    return x - Math.floor(x)
+  }
+
   // 上位キャラクターに多く票が集まるようにする（指数的減少）
-  const weights = characters.map((_, index) => 0.85 ** index)
+  const weights = biccameMusumeCharacters.map((_, index) => 0.85 ** index)
   const totalWeight = weights.reduce((sum, w) => sum + w, 0)
 
-  for (const [index, character] of characters.entries()) {
-    // 重みに基づいて票を配分し、ランダム性を加える
+  for (const [index, character] of biccameMusumeCharacters.entries()) {
+    // 重みに基づいて票を配分し、キャラクターkeyベースの疑似ランダム性を加える
     const baseVotes = Math.floor((weights[index] / totalWeight) * totalTargetVotes)
-    const randomFactor = 0.8 + Math.random() * 0.4 // 0.8〜1.2の範囲
+    const seed = character.key.charCodeAt(0) + character.key.length * 100
+    const randomFactor = 0.8 + seededRandom(seed) * 0.4 // 0.8〜1.2の範囲
     dummyCounts[character.key] = Math.floor(baseVotes * randomFactor)
   }
 
