@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Card } from '@/components/ui/card'
+import { getCharacterImageUrl } from '@/lib/utils'
 import type { Character } from '@/schemas/character.dto'
 
 type CharacterWithVotes = Character & {
@@ -10,6 +9,7 @@ type CharacterWithVotes = Character & {
 
 type RankingListProps = {
   characters: CharacterWithVotes[]
+  limit?: number
 }
 
 /**
@@ -17,83 +17,157 @@ type RankingListProps = {
  */
 const calculateRank = (characters: CharacterWithVotes[], index: number): number => {
   if (index === 0) return 1
-  
+
   const currentVoteCount = characters[index].voteCount
   const previousVoteCount = characters[index - 1].voteCount
-  
+
   if (currentVoteCount === previousVoteCount) {
     return calculateRank(characters, index - 1)
   }
-  
+
   return index + 1
+}
+
+/**
+ * ランキングカード（共通コンポーネント）
+ */
+const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes; rank: number; index: number }) => {
+  const getRankStyle = (rank: number) => {
+    if (rank === 1) return { badge: 'bg-yellow-400', text: 'text-yellow-600', size: 'h-40 w-40' }
+    if (rank === 2) return { badge: 'bg-gray-400', text: 'text-gray-500', size: 'h-36 w-36' }
+    if (rank === 3) return { badge: 'bg-amber-600', text: 'text-amber-600', size: 'h-36 w-36' }
+    return { badge: 'bg-gray-300', text: 'text-gray-500', size: 'h-28 w-28' }
+  }
+
+  const style = getRankStyle(rank)
+  const isTop3 = rank <= 3
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.05 }}
+    >
+      <Link to='/characters/$id' params={{ id: character.key }} className='group block'>
+        <div className='flex flex-col items-center text-center'>
+          {/* 画像（白色透過） - 背景色をページに合わせてmix-blend-modeを有効化 */}
+          <div className='relative bg-pink-50'>
+            <img
+              src={getCharacterImageUrl(character)}
+              alt={character.character_name}
+              className={`${style.size} object-contain`}
+              style={{ mixBlendMode: 'multiply' }}
+            />
+          </div>
+
+          {/* ランクバッジ */}
+          <div
+            className={`${style.badge} text-white px-3 py-0.5 rounded-full font-bold mb-1 ${isTop3 ? 'text-base' : 'text-sm'}`}
+          >
+            {rank}位
+          </div>
+
+          {/* キャラクター名 */}
+          <h3
+            className={`font-bold text-gray-900 group-hover:text-[#e50012] transition-colors truncate max-w-full ${isTop3 ? 'text-base' : 'text-sm'}`}
+          >
+            {character.character_name}
+          </h3>
+
+          {/* 票数 */}
+          <p className={`${style.text} font-semibold tabular-nums ${isTop3 ? 'text-base' : 'text-sm'}`}>
+            {character.voteCount.toLocaleString()}
+            <span className='text-xs ml-0.5'>票</span>
+          </p>
+        </div>
+      </Link>
+    </motion.div>
+  )
 }
 
 /**
  * 投票ランキングリスト
  */
-export const RankingList = ({ characters }: RankingListProps) => {
-  const getRankColor = (rank: number) => {
-    if (rank === 1) return 'text-yellow-600'
-    if (rank === 2) return 'text-gray-400'
-    if (rank === 3) return 'text-amber-700'
-    return 'text-gray-600'
-  }
-
-  const getRankBg = (rank: number) => {
-    if (rank === 1) return 'bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-300'
-    if (rank === 2) return 'bg-gradient-to-br from-gray-50 to-gray-100 border-gray-300'
-    if (rank === 3) return 'bg-gradient-to-br from-amber-50 to-amber-100 border-amber-300'
-    return 'bg-white border-gray-200'
-  }
+export const RankingList = ({ characters, limit = 10 }: RankingListProps) => {
+  // 0票のキャラクターを除外
+  const votedCharacters = characters.filter((char) => char.voteCount > 0)
+  const top3 = votedCharacters.slice(0, 3)
+  const restCharacters = votedCharacters.slice(3, limit)
+  const totalCount = votedCharacters.length
 
   return (
-    <div className='space-y-2'>
-      {characters.map((character, index) => {
-        const rank = calculateRank(characters, index)
-
-        return (
-          <motion.div
-            key={character.key}
-            initial={{ opacity: 0, y: 20 }}
+    <div className='space-y-6'>
+      {votedCharacters.length === 0 ? (
+        <motion.div
+          className='text-center py-16'
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <motion.p
+            className='text-gray-500 text-lg mb-6'
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <Link to='/characters/$id' params={{ id: character.key }}>
-              <Card className={`p-3 hover:shadow-lg transition-all border-2 ${getRankBg(rank)}`}>
-                <div className='flex items-center gap-3'>
-                  {/* ランク */}
-                  <div className={`text-2xl font-bold ${getRankColor(rank)} w-8 text-center shrink-0`}>{rank}</div>
-
-                  {/* アバター */}
-                  <Avatar className='h-12 w-12 shrink-0 border-2 border-white shadow-md'>
-                    <AvatarImage
-                      src={character.image_urls?.[1] || character.image_urls?.[0]}
-                      alt={character.character_name}
-                      className='object-cover'
-                    />
-                    <AvatarFallback className='bg-pink-100 text-pink-700 text-sm'>
-                      {character.character_name[0]}
-                    </AvatarFallback>
-                  </Avatar>
-
-                  {/* キャラクター情報 */}
-                  <div className='flex-1 min-w-0'>
-                    <h3 className='font-bold text-base text-gray-900 truncate'>{character.character_name}</h3>
-                  </div>
-
-                  {/* 投票数 */}
-                  <div className='text-right shrink-0 min-w-15'>
-                    <div className='text-lg font-bold text-[#e50012] truncate tabular-nums'>
-                      {character.voteCount.toLocaleString()}
-                    </div>
-                    <div className='text-xs text-gray-500'>票</div>
-                  </div>
-                </div>
-              </Card>
+            現在投票受付中です
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.4, type: 'spring', stiffness: 200 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link
+              to='/characters'
+              className='inline-block px-6 py-3 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
+            >
+              キャラクター一覧を見る
             </Link>
           </motion.div>
-        )
-      })}
+        </motion.div>
+      ) : (
+        <>
+          {/* TOP3（1列） */}
+          {top3.length > 0 && (
+            <div className='grid grid-cols-1 gap-4'>
+              {top3.map((character, index) => {
+                const rank = calculateRank(votedCharacters, index)
+                return <RankingCard key={character.key} character={character} rank={rank} index={index} />
+              })}
+            </div>
+          )}
+
+          {/* 4位以降（2列） */}
+          {restCharacters.length > 0 && (
+            <div className='grid grid-cols-2 gap-4'>
+              {restCharacters.map((character, index) => {
+                const actualIndex = index + 3
+                const rank = calculateRank(votedCharacters, actualIndex)
+                return <RankingCard key={character.key} character={character} rank={rank} index={actualIndex} />
+              })}
+            </div>
+          )}
+
+          {/* 総合順位リンク */}
+          {totalCount > limit && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+              className='text-center'
+            >
+              <Link
+                to='/characters'
+                className='inline-block text-sm text-[#e50012] hover:text-[#c40010] font-medium transition-colors'
+              >
+                総合順位を見る
+              </Link>
+            </motion.div>
+          )}
+        </>
+      )}
     </div>
   )
 }
