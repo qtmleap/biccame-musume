@@ -1,202 +1,91 @@
-import { createFileRoute } from '@tanstack/react-router'
-import dayjs from 'dayjs'
-import { useAtom } from 'jotai'
-import { ArrowUpDown } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
-import { sortTypeAtom } from '@/atoms/sortAtom'
-import { CharacterListCard } from '@/components/character-list-card'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { Calendar, Map, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { type Character, CharactersSchema } from '@/schemas/character.dto'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 /**
- * ビッカメ娘一覧ページ
+ * トップページ - ビッカメ娘非公式ファンサイト
  */
 const RouteComponent = () => {
-  const [characters, setCharacters] = useState<Character[]>([])
-  const [sortType, setSortType] = useAtom(sortTypeAtom)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchCharacters = async () => {
-      try {
-        const response = await fetch('/characters.json')
-        if (!response.ok) {
-          throw new Error('Failed to fetch characters')
-        }
-        const data = await response.json()
-        const result = CharactersSchema.safeParse(data)
-
-        if (!result.success) {
-          console.error('Validation error:', result.error)
-          throw new Error('Invalid characters data format')
-        }
-
-        setCharacters(result.data)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error occurred')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchCharacters()
-  }, [])
-
-  /**
-   * 日付文字列を解析してdayjsオブジェクトに変換
-   * YYYY-MM-DD形式またはMM/DD形式に対応
-   */
-  const parseDate = (dateStr: string | undefined): dayjs.Dayjs | null => {
-    if (!dateStr) return null
-    const parsed = dayjs(dateStr)
-    if (!parsed.isValid()) return null
-    return parsed
-  }
-
-  /**
-   * 誕生日が近い順にソートするための日数計算
-   */
-  const getDaysUntilBirthday = (dateStr: string | undefined): number => {
-    const birthday = parseDate(dateStr)
-    if (!birthday) return Number.MAX_SAFE_INTEGER
-
-    const now = dayjs()
-    const thisYear = now.year()
-
-    // 今年の誕生日を計算
-    let nextBirthday = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
-
-    // 今年の誕生日が過ぎていたら来年の誕生日を使う
-    if (nextBirthday.isBefore(now, 'day') || nextBirthday.isSame(now, 'day')) {
-      nextBirthday = nextBirthday.add(1, 'year')
-    }
-
-    return nextBirthday.diff(now, 'day')
-  }
-
-  /**
-   * ソート処理
-   */
-  const sortedCharacters = useMemo(() => {
-    return [...characters].sort((a, b) => {
-      if (sortType === 'character_birthday') {
-        const dateA = parseDate(a.character_birthday)
-        const dateB = parseDate(b.character_birthday)
-        if (!dateA && !dateB) return 0
-        if (!dateA) return 1
-        if (!dateB) return -1
-        return dateA.valueOf() - dateB.valueOf()
-      }
-
-      if (sortType === 'store_birthday') {
-        const dateA = parseDate(a.store_birthday)
-        const dateB = parseDate(b.store_birthday)
-        if (!dateA && !dateB) return 0
-        if (!dateA) return 1
-        if (!dateB) return -1
-        return dateA.valueOf() - dateB.valueOf()
-      }
-
-      if (sortType === 'upcoming_birthday') {
-        const daysA = Math.min(
-          getDaysUntilBirthday(a.character_birthday),
-          getDaysUntilBirthday(a.store_birthday)
-        )
-        const daysB = Math.min(
-          getDaysUntilBirthday(b.character_birthday),
-          getDaysUntilBirthday(b.store_birthday)
-        )
-        return daysA - daysB
-      }
-
-      return 0
-    })
-  }, [characters, sortType])
-
-  const filteredCharacters = sortedCharacters
-
-  if (loading) {
-    return (
-      <div className='min-h-screen flex items-center justify-center'>
-        <div className='text-center'>
-          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4'></div>
-          <p className='text-muted-foreground'>読み込み中...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className='min-h-screen flex items-center justify-center'>
-        <div className='text-center'>
-          <p className='text-destructive mb-2'>エラーが発生しました</p>
-          <p className='text-sm text-muted-foreground'>{error}</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className='min-h-screen'>
-      <div className='container mx-auto px-4 py-8'>
-        <header className='mb-8 text-center bg-white/80 rounded-lg p-6 shadow-sm'>
-          <h1 className='text-4xl font-bold mb-2 text-[#e50012]'>
+    <div className='min-h-screen bg-gradient-to-b from-blue-50 to-white'>
+      <div className='container mx-auto px-4 py-12 md:py-16 lg:py-20'>
+        {/* ヘッダー */}
+        <header className='text-center mb-12 md:mb-16 lg:mb-20'>
+          <h1 className='text-5xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 text-[#e50012]'>
             ビッカメ娘
           </h1>
-          <p className='text-gray-600'>ビックカメラの店舗擬人化キャラクター一覧</p>
-          <p className='text-sm text-gray-500 mt-1'>全{characters.length}キャラクター</p>
+          <p className='text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-700 mb-3 md:mb-4'>
+            非公式ファンサイト
+          </p>
+          <p className='text-gray-600 text-base md:text-lg lg:text-xl max-w-3xl mx-auto px-4'>
+            ビックカメラの店舗擬人化キャラクター「ビッカメ娘」を応援する非公式ファンサイトです
+          </p>
         </header>
 
-        <div className='max-w-2xl mx-auto mb-8'>
-          <div className='bg-white/80 rounded-lg p-4 shadow-sm'>
-            <div className='flex items-center gap-2 mb-3'>
-              <ArrowUpDown className='h-4 w-4 text-gray-600' />
-              <span className='text-sm font-medium text-gray-700'>並び替え</span>
-            </div>
-            <div className='grid grid-cols-1 sm:grid-cols-3 gap-2'>
-              <Button
-                variant='outline'
-                onClick={() => setSortType('character_birthday')}
-                className={`w-full ${
-                  sortType === 'character_birthday'
-                    ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600 dark:bg-blue-500 dark:text-white dark:border-blue-500 dark:hover:bg-blue-600'
-                    : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 dark:bg-gray-200/90 dark:text-gray-800 dark:border-gray-300 dark:hover:bg-gray-200'
-                }`}
-              >
-                キャラ誕生日順
-              </Button>
-              <Button
-                variant='outline'
-                onClick={() => setSortType('store_birthday')}
-                className={`w-full ${
-                  sortType === 'store_birthday'
-                    ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600 dark:bg-blue-500 dark:text-white dark:border-blue-500 dark:hover:bg-blue-600'
-                    : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 dark:bg-gray-200/90 dark:text-gray-800 dark:border-gray-300 dark:hover:bg-gray-200'
-                }`}
-              >
-                店舗誕生日順
-              </Button>
-              <Button
-                variant='outline'
-                onClick={() => setSortType('upcoming_birthday')}
-                className={`w-full ${
-                  sortType === 'upcoming_birthday'
-                    ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600 dark:bg-blue-500 dark:text-white dark:border-blue-500 dark:hover:bg-blue-600'
-                    : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 dark:bg-gray-200/90 dark:text-gray-800 dark:border-gray-300 dark:hover:bg-gray-200'
-                }`}
-              >
-                誕生日が近い順
-              </Button>
-            </div>
-          </div>
-        </div>
+        {/* メインコンテンツ */}
+        <div className='max-w-5xl mx-auto'>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8'>
+            {/* キャラクター一覧 */}
+            <Card className='hover:shadow-xl transition-all hover:-translate-y-1'>
+              <CardHeader>
+                <div className='flex flex-col items-center text-center gap-3'>
+                  <Users className='h-12 w-12 md:h-14 md:w-14 text-[#e50012]' />
+                  <CardTitle className='text-xl md:text-2xl'>キャラクター一覧</CardTitle>
+                </div>
+                <CardDescription className='text-sm md:text-base text-center'>
+                  全国のビックカメラ店舗を擬人化したキャラクターを紹介
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link to='/characters'>
+                  <Button className='w-full bg-[#e50012] hover:bg-[#cc0010] text-white text-base md:text-lg py-5 md:py-6'>
+                    一覧を見る
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
-          {filteredCharacters.map((character) => (
-            <CharacterListCard key={character.key} character={character} />
-          ))}
+            {/* カレンダー */}
+            <Card className='hover:shadow-xl transition-all hover:-translate-y-1'>
+              <CardHeader>
+                <div className='flex flex-col items-center text-center gap-3'>
+                  <Calendar className='h-12 w-12 md:h-14 md:w-14 text-[#e50012]' />
+                  <CardTitle className='text-xl md:text-2xl'>誕生日カレンダー</CardTitle>
+                </div>
+                <CardDescription className='text-sm md:text-base text-center'>
+                  キャラクターと店舗の誕生日をカレンダーで確認
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link to='/calendar'>
+                  <Button className='w-full bg-[#e50012] hover:bg-[#cc0010] text-white text-base md:text-lg py-5 md:py-6'>
+                    カレンダーを見る
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* ロケーション */}
+            <Card className='hover:shadow-xl transition-all hover:-translate-y-1'>
+              <CardHeader>
+                <div className='flex flex-col items-center text-center gap-3'>
+                  <Map className='h-12 w-12 md:h-14 md:w-14 text-[#e50012]' />
+                  <CardTitle className='text-xl md:text-2xl'>店舗マップ</CardTitle>
+                </div>
+                <CardDescription className='text-sm md:text-base text-center'>
+                  地図上で店舗の場所を確認
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link to='/location'>
+                  <Button className='w-full bg-[#e50012] hover:bg-[#cc0010] text-white text-base md:text-lg py-5 md:py-6'>
+                    マップを見る
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
