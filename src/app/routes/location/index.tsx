@@ -1,15 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { AdvancedMarker, APIProvider, Map as GoogleMap, Pin } from '@vis.gl/react-google-maps'
 import { List } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { z } from 'zod'
 import { SelectedStoreInfo } from '@/components/selected-store-info'
 import { StoreListItem } from '@/components/store-list-item'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { useCharacters } from '@/hooks/useCharacters'
 import { cn } from '@/lib/utils'
-import { type Character, CharactersSchema } from '@/schemas/character.dto'
+import { type Character } from '@/schemas/character.dto'
 
 /**
  * 検索パラメータのスキーマ
@@ -37,48 +38,19 @@ const getPosition = (character: Character): google.maps.LatLngLiteral => {
  */
 const RouteComponent = () => {
   const { id: initialCharacterId } = Route.useSearch()
-  const [characters, setCharacters] = useState<Character[]>([])
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { data: characters } = useCharacters()
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(() => {
+    // URLパラメータで指定されたキャラクターを初期選択
+    if (initialCharacterId) {
+      const targetCharacter = characters.find((c) => c.key === initialCharacterId)
+      return targetCharacter || null
+    }
+    return null
+  })
   const [mapKey, setMapKey] = useState<number>(0)
   const [isStoreListOpen, setIsStoreListOpen] = useState(false)
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-
-  useEffect(() => {
-    const fetchCharacters = async () => {
-      try {
-        const response = await fetch('/characters.json')
-        if (!response.ok) {
-          throw new Error('Failed to fetch characters')
-        }
-        const data = await response.json()
-        const result = CharactersSchema.safeParse(data)
-
-        if (!result.success) {
-          console.error('Validation error:', result.error)
-          throw new Error('Invalid characters data format')
-        }
-
-        setCharacters(result.data)
-
-        // URLパラメータで指定されたキャラクターを初期選択
-        if (initialCharacterId) {
-          const targetCharacter = result.data.find((c) => c.key === initialCharacterId)
-          if (targetCharacter) {
-            setSelectedCharacter(targetCharacter)
-          }
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error occurred')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchCharacters()
-  }, [initialCharacterId])
 
   // 住所があるキャラクターのみフィルタリング
   const charactersWithAddress = characters.filter((char) => char.address && char.address.length > 0)
@@ -93,28 +65,6 @@ const RouteComponent = () => {
     setSelectedCharacter(character)
     setMapKey((prev) => prev + 1)
     setIsStoreListOpen(false) // Drawer/Dialogを閉じる
-  }
-
-  if (loading) {
-    return (
-      <div className='min-h-screen flex items-center justify-center'>
-        <div className='text-center'>
-          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4'></div>
-          <p className='text-muted-foreground'>読み込み中...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className='min-h-screen flex items-center justify-center'>
-        <div className='text-center'>
-          <p className='text-destructive mb-2'>エラーが発生しました</p>
-          <p className='text-sm text-muted-foreground'>{error}</p>
-        </div>
-      </div>
-    )
   }
 
   if (!apiKey) {
