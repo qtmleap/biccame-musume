@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { Calendar, ExternalLink, MapPin, Store, Twitter } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -14,12 +15,7 @@ type CharacterCardProps = {
  */
 export const CharacterCard = ({ character }: CharacterCardProps) => {
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return new Intl.DateTimeFormat('ja-JP', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }).format(date)
+    return dayjs(dateString).format('YYYY年M月D日')
   }
 
   return (

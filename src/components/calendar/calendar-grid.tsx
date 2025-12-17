@@ -22,10 +22,9 @@ type CalendarGridProps = {
  * 指定月のカレンダー日付配列を生成する
  */
 const generateCalendarDays = (year: number, month: number): (number | null)[] => {
-  const firstDay = new Date(year, month - 1, 1)
-  const lastDay = new Date(year, month, 0)
-  const firstDayOfWeek = firstDay.getDay()
-  const daysInMonth = lastDay.getDate()
+  const firstDay = dayjs(`${year}-${month}-01`)
+  const daysInMonth = firstDay.daysInMonth()
+  const firstDayOfWeek = firstDay.day()
 
   const days: (number | null)[] = []
 
@@ -45,8 +44,7 @@ const generateCalendarDays = (year: number, month: number): (number | null)[] =>
  */
 const getEventsForDay = (events: CalendarEvent[], day: number): CalendarEvent[] => {
   return events.filter((event) => {
-    const eventDate = new Date(event.date)
-    return eventDate.getDate() === day
+    return dayjs(event.date).date() === day
   })
 }
 
