@@ -5,10 +5,11 @@
     "detail_url": "https://biccame.jp/profile/mito.html",
     "key": "mito",
     "description": "ビックカメラ水戸駅店の擬人化キャラクター。わら納豆のようなツインテールが特徴（実は納豆として食べられるらしい...。）水戸市の花・梅の花の小物が好き。戦車のような靴を履いている。少しおっとりしているが、水戸を盛り上げようと色々なPR活動をしている。",
-    "twitter_url": "https://twitter.com/biccameramito",
     "profile_image_url": "https://biccame.jp/profile/images/mito1.png",
+    "twitter_url": "https://twitter.com/biccameramito",
     "zipcode": "310-0015",
     "address": "茨城県水戸市宮町1-7-31",
+    "prefecture": "茨城県",
     "store_birthday": "2011-06-23",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop115.jsp",
     "image_urls": [
@@ -17,9 +18,9 @@
       "https://biccame.jp/profile/images/mito4.png",
       "https://biccame.jp/profile/images/mito5.png"
     ],
+    "character_birthday": "2015-04-27",
     "latitude": 36.3701475,
     "longitude": 140.4768006,
-    "character_birthday": "2015-04-27",
     "is_biccame_musume": true
   },
   {
@@ -28,10 +29,11 @@
     "detail_url": "https://biccame.jp/profile/kashiwa.html",
     "key": "kashiwa",
     "description": "ビックカメラ柏店の擬人化キャラクター。メガネと柏餅のような頭が特徴。大好物はもちろんモチモチの柏餅！制服のリボンは柏市の木・柏の葉っぱと、市の花・シバザクラがモチーフになっている。",
-    "twitter_url": "https://twitter.com/bic_kashiwa",
     "profile_image_url": "https://biccame.jp/profile/images/kashiwa1.png",
+    "twitter_url": "https://twitter.com/bic_kashiwa",
     "zipcode": "277-0005",
     "address": "千葉県柏市柏1-1-20",
+    "prefecture": "千葉県",
     "store_birthday": "2005-03-10",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-035.html",
     "image_urls": [
@@ -40,9 +42,9 @@
       "https://biccame.jp/profile/images/kashiwa4.png",
       "https://biccame.jp/profile/images/kashiwa5.png"
     ],
+    "character_birthday": "2015-05-14",
     "latitude": 35.86192090000001,
     "longitude": 139.9717759,
-    "character_birthday": "2015-05-14",
     "is_biccame_musume": true
   },
   {
@@ -51,10 +53,11 @@
     "detail_url": "https://biccame.jp/profile/hachioji.html",
     "key": "hachioji",
     "description": "ビックカメラJR八王子駅店の擬人化キャラクター。王子という名前から王冠の髪飾りをしている。制服のリボンは八王子の銀杏がモチーフになっている。",
-    "twitter_url": "https://twitter.com/bichachioji",
     "profile_image_url": "https://biccame.jp/profile/images/hachioji1.png",
+    "twitter_url": "https://twitter.com/bichachioji",
     "zipcode": "192-0083",
     "address": "東京都八王子市旭町1-17",
+    "prefecture": "東京都",
     "store_birthday": "2010-11-11",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-114.html",
     "image_urls": [
@@ -63,9 +66,9 @@
       "https://biccame.jp/profile/images/hachoji4.png",
       "https://biccame.jp/profile/images/hachioji5.png"
     ],
+    "character_birthday": "2015-05-14",
     "latitude": 35.6546041,
     "longitude": 139.3389057,
-    "character_birthday": "2015-05-14",
     "is_biccame_musume": true
   },
   {
@@ -74,10 +77,11 @@
     "detail_url": "https://biccame.jp/profile/funabashi.html",
     "key": "funabashi",
     "description": "ビックカメラ船橋駅FACE店の擬人化キャラクター。いつも髪が跳ねている元気いっぱいの子。ビッカメ娘の中で特にハッピを愛している。制服のリボンと髪飾りに船橋市の花のひまわりをあしらっている。",
-    "twitter_url": "https://twitter.com/bic_funabashi",
     "profile_image_url": "https://biccame.jp/profile/images/funabashi1.png",
+    "twitter_url": "https://twitter.com/bic_funabashi",
     "zipcode": "273-0005",
     "address": "千葉県船橋市本町1-3-1",
+    "prefecture": "千葉県",
     "store_birthday": "2010-02-21",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-109.html",
     "image_urls": [
@@ -86,9 +90,9 @@
       "https://biccame.jp/profile/images/funabashi4.png",
       "https://biccame.jp/profile/images/funabashi5.png"
     ],
+    "character_birthday": "2015-05-18",
     "latitude": 35.7007252,
     "longitude": 139.9854889,
-    "character_birthday": "2015-05-18",
     "is_biccame_musume": true
   },
   {
@@ -97,10 +101,11 @@
     "detail_url": "https://biccame.jp/profile/bicqlo.html",
     "key": "bicqlo",
     "description": "ビックカメラ新宿東口店の擬人化キャラクター。オッドアイと、他の娘と少し違うデザインの制服が特徴。「～ですわ」とお嬢様口調。新宿の花・ツツジを髪飾りにしている。",
-    "twitter_url": "https://twitter.com/bic_shinjuku3ch",
     "profile_image_url": "https://biccame.jp/profile/images/bicqlo1.png",
+    "twitter_url": "https://twitter.com/bic_shinjuku3ch",
     "zipcode": "160-0022",
     "address": "東京都新宿区新宿3-29-1",
+    "prefecture": "東京都",
     "store_birthday": "2012-09-27",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-116.html",
     "image_urls": [
@@ -109,9 +114,9 @@
       "https://biccame.jp/profile/images/bicqlo4.png",
       "https://biccame.jp/profile/images/bicqlo5.png"
     ],
+    "character_birthday": "2015-05-18",
     "latitude": 35.6913489,
     "longitude": 139.7030056,
-    "character_birthday": "2015-05-18",
     "is_biccame_musume": true
   },
   {
@@ -120,10 +125,11 @@
     "detail_url": "https://biccame.jp/profile/hamamatsu.html",
     "key": "hamamatsu",
     "description": "ビックカメラ浜松店の擬人化キャラクター。のんびりとした性格。うなぎパイが好き。制服のリボンは浜松市の木・松がモチーフ、ヘアピンは市の花・ミカンがモチーフになっている。",
-    "twitter_url": "https://twitter.com/bic_hamamatsu",
     "profile_image_url": "https://biccame.jp/profile/images/hama1.png",
+    "twitter_url": "https://twitter.com/bic_hamamatsu",
     "zipcode": "430-0926",
     "address": "静岡県浜松市中央区砂山町322-1",
+    "prefecture": "静岡県",
     "store_birthday": "2008-11-20",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-105.html",
     "image_urls": [
@@ -132,9 +138,9 @@
       "https://biccame.jp/profile/images/hamamatsu4.png",
       "https://biccame.jp/profile/images/hamamatsu5.png"
     ],
+    "character_birthday": "2015-05-23",
     "latitude": 34.7034222,
     "longitude": 137.7338944,
-    "character_birthday": "2015-05-23",
     "is_biccame_musume": true
   },
   {
@@ -143,10 +149,11 @@
     "detail_url": "https://biccame.jp/profile/sagami.html",
     "key": "sagami",
     "description": "ビックカメラ相模大野駅店の擬人化キャラクター。他の娘より年下。いつも壁からﾁﾗｯしている。ちょっとさみしがり屋な性格。制服のリボンと髪飾りは、相模原市の花のアジサイがモチーフになっている。",
-    "twitter_url": "https://twitter.com/bic_sagamioono",
     "profile_image_url": "https://biccame.jp/profile/images/sagami1.png",
+    "twitter_url": "https://twitter.com/bic_sagamioono",
     "zipcode": "252-0303",
     "address": "神奈川県相模原市南区相模大野3-8-1",
+    "prefecture": "神奈川県",
     "store_birthday": "2010-03-04",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-108.html",
     "image_urls": [
@@ -155,9 +162,9 @@
       "https://biccame.jp/profile/images/sagami4.png",
       "https://biccame.jp/profile/images/sagami5.png"
     ],
+    "character_birthday": "2015-08-04",
     "latitude": 35.5320744,
     "longitude": 139.4380265,
-    "character_birthday": "2015-08-04",
     "is_biccame_musume": true
   },
   {
@@ -166,10 +173,11 @@
     "detail_url": "https://biccame.jp/profile/honten.html",
     "key": "honten",
     "description": "ビックカメラ池袋本店の擬人化キャラクター。他の子とは少し違うオーラを放っている。頭のフクロウの方が本体かも知れないという噂も...？袴のような制服が特徴的。",
-    "twitter_url": "https://twitter.com/bicikebukuro",
     "profile_image_url": "https://biccame.jp/profile/images/honten1.png",
+    "twitter_url": "https://twitter.com/bicikebukuro",
     "zipcode": "170-0013",
     "address": "東京都豊島区東池袋1-41-5",
+    "prefecture": "東京都",
     "store_birthday": "1992-09-24",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-007.html",
     "image_urls": [
@@ -178,9 +186,9 @@
       "https://biccame.jp/profile/images/honten4.png",
       "https://biccame.jp/profile/images/honten5.png"
     ],
+    "character_birthday": "2015-10-21",
     "latitude": 35.7317044,
     "longitude": 139.7128781,
-    "character_birthday": "2015-10-21",
     "is_biccame_musume": true
   },
   {
@@ -189,19 +197,20 @@
     "detail_url": "https://biccame.jp/profile/prosta.html",
     "key": "prosta",
     "description": "ビックフォトスタジオ東京写真館の擬人化キャラクター。写真を撮ることとコスプレをするのが好き。法被は腰に巻いている。フィルム風のカチューシャは妹とお揃い。",
-    "twitter_url": "https://twitter.com/bic_shasinkan",
     "profile_image_url": "https://biccame.jp/profile/images/prosta1.png",
+    "twitter_url": "https://twitter.com/bic_shasinkan",
     "zipcode": "171-0021",
     "address": "東京都豊島区西池袋1-16-3",
+    "prefecture": "東京都",
     "image_urls": [
       "https://biccame.jp/profile/images/pro_img.png",
       "https://biccame.jp/profile/images/pro_img_sd.png",
       "https://biccame.jp/profile/images/prosta4.png",
       "https://biccame.jp/profile/images/shasinkan5.png"
     ],
+    "character_birthday": "2015-11-11",
     "latitude": 35.7308323,
     "longitude": 139.7089542,
-    "character_birthday": "2015-11-11",
     "is_biccame_musume": true
   },
   {
@@ -210,10 +219,11 @@
     "detail_url": "https://biccame.jp/profile/ohmiya.html",
     "key": "ohmiya",
     "description": "ビックカメラ大宮西口そごう店の擬人化キャラクター。明るい性格でサッカーが大好き。地元のチームカラーのアイテムをよく集めている。",
-    "twitter_url": "https://twitter.com/bic_ohmiya",
     "profile_image_url": "https://biccame.jp/profile/images/ohmiya1.png",
+    "twitter_url": "https://twitter.com/bic_ohmiya",
     "zipcode": "330-0854",
     "address": "埼玉県さいたま市大宮区桜木町1-8-4",
+    "prefecture": "埼玉県",
     "store_birthday": "2003-11-21",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-034.html",
     "image_urls": [
@@ -222,9 +232,9 @@
       "https://biccame.jp/profile/images/ohmiya4.png",
       "https://biccame.jp/profile/images/ohmiya5.png"
     ],
+    "character_birthday": "2015-12-15",
     "latitude": 35.904428,
     "longitude": 139.620904,
-    "character_birthday": "2015-12-15",
     "is_biccame_musume": true
   },
   {
@@ -233,10 +243,11 @@
     "detail_url": "https://biccame.jp/profile/fujisawa.html",
     "key": "fujisawa",
     "description": "ビックカメラ藤沢店の擬人化キャラクター。ロックでクールなお姉さん。「～だぜ」という口調で話す。イカの触手のような髪は動くという噂も...。ピンクのエクステと藤の花が特徴。",
-    "twitter_url": "https://twitter.com/bic_fujisawa",
     "profile_image_url": "https://biccame.jp/profile/images/fujisawa1.png",
+    "twitter_url": "https://twitter.com/bic_fujisawa",
     "zipcode": "251-0052",
     "address": "神奈川県藤沢市藤沢559",
+    "prefecture": "神奈川県",
     "store_birthday": "2006-08-04",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-037.html",
     "image_urls": [
@@ -245,9 +256,9 @@
       "https://biccame.jp/profile/images/fujisawa4.png",
       "https://biccame.jp/profile/images/fujisawa5.png"
     ],
+    "character_birthday": "2016-02-12",
     "latitude": 35.3398725,
     "longitude": 139.4886041,
-    "character_birthday": "2016-02-12",
     "is_biccame_musume": true
   },
   {
@@ -272,10 +283,11 @@
     "detail_url": "https://biccame.jp/profile/nagoya.html",
     "key": "nagoya",
     "description": "ビックカメラ名古屋駅西店の擬人化キャラクター。頭のしゃちほこと、エビフライのようなツインテールが特徴。ギャルっぽい性格。制服のリボンは市の花・ユリがモチーフ。",
-    "twitter_url": "https://twitter.com/bic_nagoya",
     "profile_image_url": "https://biccame.jp/profile/images/nagoya_1.png",
+    "twitter_url": "https://twitter.com/bic_nagoya",
     "zipcode": "453-0015",
     "address": "愛知県名古屋市中村区椿町6-9",
+    "prefecture": "愛知県",
     "store_birthday": "2003-11-07",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-033.html",
     "image_urls": [
@@ -284,9 +296,9 @@
       "https://biccame.jp/profile/images/nagoya4.png",
       "https://biccame.jp/profile/images/nagoya5.png"
     ],
+    "character_birthday": "2016-04-26",
     "latitude": 35.1707468,
     "longitude": 136.8805731,
-    "character_birthday": "2016-04-26",
     "is_biccame_musume": true
   },
   {
@@ -295,10 +307,11 @@
     "detail_url": "https://biccame.jp/profile/yuurakuchou.html",
     "key": "yuurakuchou",
     "description": "ビックカメラ有楽町店の擬人化キャラクター。ビッカメ娘の中でひときわ神々しい存在。少し天然。区の鳥・白鳥のような羽と、着物もようなハッピ、本店たんとお揃いの制服が特徴。",
-    "twitter_url": "https://twitter.com/bic_yuurakuchou",
     "profile_image_url": "https://biccame.jp/profile/images/yuurakuchou1%20.png",
+    "twitter_url": "https://twitter.com/bic_yuurakuchou",
     "zipcode": "100-0006",
     "address": "東京都千代田区有楽町1-11-1",
+    "prefecture": "東京都",
     "store_birthday": "2001-06-14",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-014.html",
     "image_urls": [
@@ -307,9 +320,9 @@
       "https://biccame.jp/profile/images/yuurakucho4.png",
       "https://biccame.jp/profile/images/yuurakuchou5.png"
     ],
+    "character_birthday": "2016-05-11",
     "latitude": 35.6755004,
     "longitude": 139.7632464,
-    "character_birthday": "2016-05-11",
     "is_biccame_musume": true
   },
   {
@@ -318,10 +331,11 @@
     "detail_url": "https://biccame.jp/profile/shinjyuku.html",
     "key": "shinjyuku",
     "description": "ビックカメラ新宿西口店の擬人化キャラクター。東口にあるビックロたんと対になるような髪をして、性格も活発的な子。新宿の花・ツツジをアクセサリーにしている。",
-    "twitter_url": "https://twitter.com/bic_shinjyuku",
     "profile_image_url": "https://biccame.jp/profile/images/shinjuku.png",
+    "twitter_url": "https://twitter.com/bic_shinjyuku",
     "zipcode": "160-0023",
     "address": "東京都新宿区西新宿1-5-1",
+    "prefecture": "東京都",
     "store_birthday": "2002-05-23",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-016.html",
     "image_urls": [
@@ -330,9 +344,9 @@
       "https://biccame.jp/profile/images/shinjyuku4.png",
       "https://biccame.jp/profile/images/shinjyuku5.png"
     ],
+    "character_birthday": "2016-05-23",
     "latitude": 35.6922686,
     "longitude": 139.6992291,
-    "character_birthday": "2016-05-23",
     "is_biccame_musume": true
   },
   {
@@ -357,10 +371,11 @@
     "detail_url": "https://biccame.jp/profile/pkan.html",
     "key": "pkan",
     "description": "ビックカメラ本店パソコン館の擬人化キャラクター。同じ池袋の本店たんがお姉ちゃん。リボンとくせっ毛がお揃い。ビルに似たスマホをいつも首からさげている。",
-    "twitter_url": "https://twitter.com/bicpkanhonten",
     "profile_image_url": "https://biccame.jp/profile/images/pkan1.png",
+    "twitter_url": "https://twitter.com/bicpkanhonten",
     "zipcode": "170-0013",
     "address": "東京都豊島区東池袋1-6-7",
+    "prefecture": "東京都",
     "store_birthday": "1997-11-27",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-021.html",
     "image_urls": [
@@ -369,9 +384,9 @@
       "https://biccame.jp/profile/images/pkan4.png",
       "https://biccame.jp/profile/images/pkan5.png"
     ],
+    "character_birthday": "2016-06-29",
     "latitude": 35.731563,
     "longitude": 139.7135962,
-    "character_birthday": "2016-06-29",
     "is_biccame_musume": true
   },
   {
@@ -380,10 +395,11 @@
     "detail_url": "https://biccame.jp/profile/sapporo.html",
     "key": "sapporo",
     "description": "ビックカメラ札幌店の擬人化キャラクター。雪の結晶のピンが宝物。マフラーとブーツが特徴的。みんなから雪の妖精と呼ばれたりしている。",
-    "twitter_url": "https://twitter.com/bic_sapporo",
     "profile_image_url": "https://biccame.jp/profile/sapporo1.png",
+    "twitter_url": "https://twitter.com/bic_sapporo",
     "zipcode": "060-8619",
     "address": "北海道札幌市中央区北4条西2-1",
+    "prefecture": "北海道",
     "store_birthday": "2001-07-26",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop132.jsp",
     "image_urls": [
@@ -392,9 +408,9 @@
       "https://biccame.jp/profile/images/sapporo4.png",
       "https://biccame.jp/profile/images/sapporo5.png"
     ],
+    "character_birthday": "2016-08-10",
     "latitude": 43.0661886,
     "longitude": 141.3539156,
-    "character_birthday": "2016-08-10",
     "is_biccame_musume": true
   },
   {
@@ -403,10 +419,11 @@
     "detail_url": "https://biccame.jp/profile/hiroshima.html",
     "key": "hiroshima",
     "description": "ビックカメラ広島駅前店の擬人化キャラクター。もみじと扇子が特徴。「～じゃ」など広島弁がたまに出る。ミステリアスな発言をすることがある。",
-    "twitter_url": "https://twitter.com/bic_hiroshima",
     "profile_image_url": "https://biccame.jp/profile/hiroshima2.png",
+    "twitter_url": "https://twitter.com/bic_hiroshima",
     "zipcode": "732-0822",
     "address": "広島県広島市南区松原町5-1",
+    "prefecture": "広島県",
     "store_birthday": "2016-09-14",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-119.html",
     "image_urls": [
@@ -415,9 +432,9 @@
       "https://biccame.jp/profile/images/hiroshima4.png",
       "https://biccame.jp/profile/images/hiroshima5.png"
     ],
+    "character_birthday": "2016-08-24",
     "latitude": 34.3957984,
     "longitude": 132.475143,
-    "character_birthday": "2016-08-24",
     "is_biccame_musume": true
   },
   {
@@ -442,10 +459,11 @@
     "detail_url": "https://biccame.jp/profile/abeno.html",
     "key": "abeno",
     "description": "ビックカメラあべのキューズモール店の擬人化キャラクター。たこ焼きの髪飾り・タコのぬいぐるみ(？)が特徴。青い腕輪はお店のロゴから。",
-    "twitter_url": "https://twitter.com/bic_abeno",
     "profile_image_url": "https://biccame.jp/profile/abeno1.png",
+    "twitter_url": "https://twitter.com/bic_abeno",
     "zipcode": "545-0052",
     "address": "大阪府大阪市阿倍野区阿倍野筋1-6-1",
+    "prefecture": "大阪府",
     "store_birthday": "2016-05-19",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-118.html",
     "image_urls": [
@@ -454,9 +472,9 @@
       "https://biccame.jp/profile/images/abeno4.png",
       "https://biccame.jp/profile/images/abeno5.png"
     ],
+    "character_birthday": "2016-09-07",
     "latitude": 34.6434395,
     "longitude": 135.5116608,
-    "character_birthday": "2016-09-07",
     "is_biccame_musume": true
   },
   {
@@ -465,10 +483,11 @@
     "detail_url": "https://biccame.jp/profile/okayama.html",
     "key": "okayama",
     "description": "ビックカメラ岡山駅前店の擬人化キャラクター。ポニーテールが桃の形になっている。どこからともなくきびだんごを出す。胸の花はキク。",
-    "twitter_url": "https://twitter.com/Bic_Okayamaten",
     "profile_image_url": "https://biccame.jp/profile/okayama1.png",
+    "twitter_url": "https://twitter.com/Bic_Okayamaten",
     "zipcode": "700-0023",
     "address": "岡山県岡山市北区駅前町1-1-1",
+    "prefecture": "岡山県",
     "store_birthday": "2007-11-20",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-102.html",
     "image_urls": [
@@ -477,9 +496,9 @@
       "https://biccame.jp/profile/images/okayama4.png",
       "https://biccame.jp/profile/images/okayama5.png"
     ],
+    "character_birthday": "2016-10-05",
     "latitude": 34.6659315,
     "longitude": 133.9198144,
-    "character_birthday": "2016-10-05",
     "is_biccame_musume": true
   },
   {
@@ -488,10 +507,11 @@
     "detail_url": "https://biccame.jp/profile/tachikawa.html",
     "key": "tachikawa",
     "description": "ビックカメラ立川店の擬人化キャラクター。少しでも背を大きく見せるため大きな帽子を被っている。謎の横髪は立川の名産・ウドをイメージ。胸の花はコブシ。萌え袖が特徴。",
-    "twitter_url": "https://twitter.com/bic_tachikawa",
     "profile_image_url": "https://biccame.jp/profile/images/tachikawa1.png",
+    "twitter_url": "https://twitter.com/bic_tachikawa",
     "zipcode": "190-0012",
     "address": "東京都立川市曙町2-12-2",
+    "prefecture": "東京都",
     "store_birthday": "2001-01-26",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-012.html",
     "image_urls": [
@@ -500,9 +520,9 @@
       "https://biccame.jp/profile/images/tachikawa4.png",
       "https://biccame.jp/profile/images/tachikawa5.png"
     ],
+    "character_birthday": "2016-10-25",
     "latitude": 35.69921780000001,
     "longitude": 139.4149141,
-    "character_birthday": "2016-10-25",
     "is_biccame_musume": true
   },
   {
@@ -511,10 +531,11 @@
     "detail_url": "https://biccame.jp/profile/kawasaki.html",
     "key": "kawasaki",
     "description": "ビックカメララゾーナ川崎店の擬人化キャラクター。リボンのようなツインテールと、川崎市の木・ツバキの下にある「川」の文字の様な短冊が特徴。",
-    "twitter_url": "https://twitter.com/Bic_kawasaki",
     "profile_image_url": "https://biccame.jp/profile/images/kawasaki1.png",
+    "twitter_url": "https://twitter.com/Bic_kawasaki",
     "zipcode": "212-0013",
     "address": "神奈川県川崎市幸区堀川町72-1",
+    "prefecture": "神奈川県",
     "store_birthday": "2006-09-28",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-038.html",
     "image_urls": [
@@ -523,9 +544,9 @@
       "https://biccame.jp/profile/images/kawasaki4.png",
       "https://biccame.jp/profile/images/kawasaki5.png"
     ],
+    "character_birthday": "2016-12-01",
     "latitude": 35.5329594,
     "longitude": 139.6959237,
-    "character_birthday": "2016-12-01",
     "is_biccame_musume": true
   },
   {
@@ -550,10 +571,11 @@
     "detail_url": "https://biccame.jp/profile/nanba.html",
     "key": "nanba",
     "description": "ビックカメラなんば店の擬人化キャラクター。ヒョウ柄のリボンと、あべのたんとお揃いのたこ焼きの髪飾りが特徴。あべのたんのお姉ちゃん的存在。胸の花はパンジー。",
-    "twitter_url": "https://twitter.com/biccamera_nanba",
     "profile_image_url": "https://biccame.jp/profile/images/nanba1.png",
+    "twitter_url": "https://twitter.com/biccamera_nanba",
     "zipcode": "542-0074",
     "address": "大阪府大阪市中央区千日前2-10-1",
+    "prefecture": "大阪府",
     "store_birthday": "2001-05-10",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-013.html",
     "image_urls": [
@@ -562,9 +584,9 @@
       "https://biccame.jp/profile/images/nanba4.png",
       "https://biccame.jp/profile/images/nanba5.png"
     ],
+    "character_birthday": "2017-02-21",
     "latitude": 34.6666466,
     "longitude": 135.5025872,
-    "character_birthday": "2017-02-21",
     "is_biccame_musume": true
   },
   {
@@ -573,10 +595,11 @@
     "detail_url": "https://biccame.jp/profile/nagoyagate.html",
     "key": "nagoyagate",
     "description": "ビックカメラ名古屋JRゲートタワー店の擬人化キャラクター。頭のしゃちほこと、名古屋巻きのような髪型が特徴。制服のリボンは、名古屋たんとは色違いで市の花・ユリがモチーフ。",
-    "twitter_url": "https://twitter.com/bic_nagoyagate",
     "profile_image_url": "https://biccame.jp/profile/images/nagoyagate1.png",
+    "twitter_url": "https://twitter.com/bic_nagoyagate",
     "zipcode": "450-0002",
     "address": "愛知県名古屋市中村区名駅一丁目1番3号",
+    "prefecture": "愛知県",
     "store_birthday": "2017-04-07",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop120.jsp",
     "image_urls": [
@@ -585,9 +608,9 @@
       "https://biccame.jp/profile/images/nagoyagate4.png",
       "https://biccame.jp/profile/images/nagoyagate5.png"
     ],
+    "character_birthday": "2017-03-30",
     "latitude": 35.1722393,
     "longitude": 136.8823772,
-    "character_birthday": "2017-03-30",
     "is_biccame_musume": true
   },
   {
@@ -596,10 +619,11 @@
     "detail_url": "https://biccame.jp/profile/ikenishi.html",
     "key": "ikenishi",
     "description": "ビックカメラ池袋西口店の擬人化キャラクター。本店たんの妹であり、カメ館パソ館のお姉ちゃんでもある。四姉妹でピンクのリボンをお揃いにしている。",
-    "twitter_url": "https://twitter.com/bicikenishi",
     "profile_image_url": "https://biccame.jp/profile/images/ikenishi1.png",
+    "twitter_url": "https://twitter.com/bicikenishi",
     "zipcode": "171-0021",
     "address": "東京都豊島区西池袋1-16-3",
+    "prefecture": "東京都",
     "store_birthday": "2002-09-19",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-017.html",
     "image_urls": [
@@ -608,9 +632,9 @@
       "https://biccame.jp/profile/images/ikenishi4.png",
       "https://biccame.jp/profile/images/ikenishi5.png"
     ],
+    "character_birthday": "2017-05-09",
     "latitude": 35.7308323,
     "longitude": 139.7089542,
-    "character_birthday": "2017-05-09",
     "is_biccame_musume": true
   },
   {
@@ -619,10 +643,11 @@
     "detail_url": "https://biccame.jp/profile/akiba.html",
     "key": "akiba",
     "description": "ビックカメラAKIBAの擬人化キャラクター。千代田区の花・桜がモチーフの大きなリボンと、猫耳のようなヘッドドレスが特徴。",
-    "twitter_url": "https://twitter.com/bic_akiba",
     "profile_image_url": "https://biccame.jp/profile/images/akiba1.png",
+    "twitter_url": "https://twitter.com/bic_akiba",
     "zipcode": "101-0021",
     "address": "東京都千代田区外神田4-1-1",
+    "prefecture": "東京都",
     "store_birthday": "2017-06-22",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-121.html",
     "image_urls": [
@@ -631,9 +656,9 @@
       "https://biccame.jp/profile/images/akiba4.png",
       "https://biccame.jp/profile/images/akiba5.png"
     ],
+    "character_birthday": "2017-06-05",
     "latitude": 35.6998312,
     "longitude": 139.7717534,
-    "character_birthday": "2017-06-05",
     "is_biccame_musume": true
   },
   {
@@ -642,10 +667,11 @@
     "detail_url": "https://biccame.jp/profile/chofu.html",
     "key": "chofu",
     "description": "ビックカメラ京王調布店の擬人化キャラクター。調布市の花・サルスベリが胸の花のモチーフ。映画が好きで、ビデオカメラをよく持っている。髪はカチンコを意識しているとか...。",
-    "twitter_url": "https://twitter.com/bic_keiochofu",
     "profile_image_url": "https://biccame.jp/profile/images/chofu1.png",
+    "twitter_url": "https://twitter.com/bic_keiochofu",
     "zipcode": "182-0026",
     "address": "東京都調布市小島町2-48-6",
+    "prefecture": "東京都",
     "store_birthday": "2017-09-29",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-122.html",
     "image_urls": [
@@ -654,9 +680,9 @@
       "https://biccame.jp/profile/images/chofu4.png",
       "https://biccame.jp/profile/images/chofu5.png"
     ],
+    "character_birthday": "2017-09-27",
     "latitude": 35.6521138,
     "longitude": 139.5432018,
-    "character_birthday": "2017-09-27",
     "is_biccame_musume": true
   },
   {
@@ -665,10 +691,11 @@
     "detail_url": "https://biccame.jp/profile/tenjin2.html",
     "key": "tenjin2",
     "description": "ビックカメラ天神2号館の擬人化。頭に飾っているのは福岡市の冬の花・サザンカ。梅の花も好き。",
-    "twitter_url": "https://twitter.com/biccameratenjin",
     "profile_image_url": "https://biccame.jp/profile/images/tenjin2go1.png",
+    "twitter_url": "https://twitter.com/biccameratenjin",
     "zipcode": "810-0001",
     "address": "福岡県福岡市中央区天神2-4-5",
+    "prefecture": "福岡県",
     "store_birthday": "2003-03-27",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-018.html",
     "image_urls": [
@@ -677,9 +704,9 @@
       "https://biccame.jp/profile/images/tenjin2go4.png",
       "https://biccame.jp/profile/images/tenjin2go5.png"
     ],
+    "character_birthday": "2017-10-25",
     "latitude": 33.587464,
     "longitude": 130.3982772,
-    "character_birthday": "2017-10-25",
     "is_biccame_musume": true
   },
   {
@@ -704,10 +731,11 @@
     "detail_url": "https://biccame.jp/profile/kagoshima.html",
     "key": "kagoshima",
     "description": "ビックカメラ鹿児島中央駅店の擬人化キャラクター。法被の裏地は宇宙のような柄。大好物はさつまいも。胸の花はキョウチクトウ。髪の色は県の鳥・ルリカケスのような色。",
-    "twitter_url": "https://twitter.com/bic_kagoshima",
     "profile_image_url": "https://biccame.jp/profile/images/kagoshima1.png",
+    "twitter_url": "https://twitter.com/bic_kagoshima",
     "zipcode": "890-0053",
     "address": "鹿児島県鹿児島市中央町1-1",
+    "prefecture": "鹿児島県",
     "store_birthday": "2010-02-18",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-107.html",
     "image_urls": [
@@ -716,9 +744,9 @@
       "https://biccame.jp/profile/images/kagoshima4.png",
       "https://biccame.jp/profile/images/kagoshima5.png"
     ],
+    "character_birthday": "2017-12-18",
     "latitude": 31.5828,
     "longitude": 130.5421136,
-    "character_birthday": "2017-12-18",
     "is_biccame_musume": true
   },
   {
@@ -727,10 +755,11 @@
     "detail_url": "https://biccame.jp/profile/niigata.html",
     "key": "niigata",
     "description": "ビックカメラ新潟店の擬人化キャラクター。胸のモチーフは県の花・チューリップと、県の鳥・トキ。お米が大好きで、おにぎりのような形のヘアピンをしている。",
-    "twitter_url": "https://twitter.com/niigata_bic",
     "profile_image_url": "https://biccame.jp/profile/images/niigata1.png",
+    "twitter_url": "https://twitter.com/niigata_bic",
     "zipcode": "950-0086",
     "address": "新潟県新潟市中央区花園1-1-21",
+    "prefecture": "新潟県",
     "store_birthday": "2009-02-20",
     "store_link": "http://www.biccamera.co.jp/shoplist/shop-106.html",
     "image_urls": [
@@ -739,9 +768,9 @@
       "https://biccame.jp/profile/images/niigata4.png",
       "https://biccame.jp/profile/images/niigata5.png"
     ],
+    "character_birthday": "2018-02-01",
     "latitude": 37.9115222,
     "longitude": 139.0627439,
-    "character_birthday": "2018-02-01",
     "is_biccame_musume": true
   },
   {
@@ -750,10 +779,11 @@
     "detail_url": "https://biccame.jp/profile/akasaka.html",
     "key": "akasaka",
     "description": "ビックカメラ赤坂見附駅店の擬人化キャラクター。港区の花・バラと、バラに見えるようなお団子の髪型、「3」のようなアホ毛、「坂」のヘアピンが特徴。国際社会にPRできるように、いつもお上品を心掛けている。",
-    "twitter_url": "https://twitter.com/bicakasaka",
     "profile_image_url": "https://biccame.jp/profile/images/akasaka1.png",
+    "twitter_url": "https://twitter.com/bicakasaka",
     "zipcode": "107-0052",
     "address": "東京都港区赤坂3-1-6",
+    "prefecture": "東京都",
     "store_birthday": "2013-06-07",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop117.jsp",
     "image_urls": [
@@ -762,9 +792,9 @@
       "https://biccame.jp/profile/images/akasaka4.png",
       "https://biccame.jp/profile/images/akasaka5.png"
     ],
+    "character_birthday": "2019-01-23",
     "latitude": 35.6770825,
     "longitude": 139.7367614,
-    "character_birthday": "2019-01-23",
     "is_biccame_musume": true
   },
   {
@@ -789,10 +819,11 @@
     "detail_url": "https://biccame.jp/profile/shibuhachi.html",
     "key": "shibuhachi",
     "description": "ビックカメラ渋谷ハチ公口店の擬人化キャラクター。渋谷区の花・ハナショウブをモチーフにしたリボンと、犬の耳のような髪型が特徴。犬が大好き。",
-    "twitter_url": "https://twitter.com/bicshibuhachi00",
     "profile_image_url": "https://biccame.jp/profile/images/shibuhachi1.png",
+    "twitter_url": "https://twitter.com/bicshibuhachi00",
     "zipcode": "150-0043",
     "address": "東京都渋谷区道玄坂2-5-9",
+    "prefecture": "東京都",
     "store_birthday": "1989-12-01",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop004.jsp",
     "image_urls": [
@@ -801,9 +832,9 @@
       "https://biccame.jp/profile/images/shibuhachi4.png",
       "https://biccame.jp/profile/images/shibuhachi5.png"
     ],
+    "character_birthday": "2019-07-07",
     "latitude": 35.6593119,
     "longitude": 139.6995221,
-    "character_birthday": "2019-07-07",
     "is_biccame_musume": true
   },
   {
@@ -812,10 +843,11 @@
     "detail_url": "https://biccame.jp/profile/shibuto.html",
     "key": "shibuto",
     "description": "ビックカメラ渋谷東口店の擬人化キャラクター。渋谷区の花・ハナショウブをモチーフにした髪飾りが特徴。大人っぽい雰囲気が漂っている。実はお絵かきが得意。",
-    "twitter_url": "https://twitter.com/bic_shibuya",
     "profile_image_url": "https://biccame.jp/profile/images/shibuto1.png",
+    "twitter_url": "https://twitter.com/bic_shibuya",
     "zipcode": "150-0002",
     "address": "東京都渋谷区渋谷1-24-12",
+    "prefecture": "東京都",
     "store_birthday": "1993-02-20",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop008.jsp",
     "image_urls": [
@@ -824,9 +856,9 @@
       "https://biccame.jp/profile/images/shibuto4.png",
       "https://biccame.jp/profile/images/shibuto5.png"
     ],
+    "character_birthday": "2019-07-07",
     "latitude": 35.6598999,
     "longitude": 139.7020679,
-    "character_birthday": "2019-07-07",
     "is_biccame_musume": true
   },
   {
@@ -835,10 +867,11 @@
     "detail_url": "https://biccame.jp/profile/shinyoko.html",
     "key": "shinyoko",
     "description": "ビックカメラ新横浜店の擬人化キャラクター。横浜市の花・バラと、マリンカラーな帽子とリボンが特徴。スポーツ観戦が好き。",
-    "twitter_url": "https://twitter.com/bic_shinyoko",
     "profile_image_url": "https://biccame.jp/profile/images/shinyoko1.png",
+    "twitter_url": "https://twitter.com/bic_shinyoko",
     "zipcode": "222-0033",
     "address": "神奈川県横浜市港北区新横浜2-100-45",
+    "prefecture": "神奈川県",
     "store_birthday": "2008-03-26",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop104.jsp",
     "image_urls": [
@@ -847,9 +880,9 @@
       "https://biccame.jp/profile/images/shinyoko4.png",
       "https://biccame.jp/profile/images/shinyoko5.png"
     ],
+    "character_birthday": "2020-01-23",
     "latitude": 35.5086887,
     "longitude": 139.6133356,
-    "character_birthday": "2020-01-23",
     "is_biccame_musume": true
   },
   {
@@ -858,10 +891,11 @@
     "detail_url": "https://biccame.jp/profile/shintou.html",
     "key": "shintou",
     "description": "ビックカメラ新宿東口駅店の擬人化キャラクター。白手袋やニーソックスは、同じく新宿にいるビックロたん・新西たんとおそろい。おっとり優しそうなお姉さん。新宿の花・ツツジをアクセサリーにしている。",
-    "twitter_url": "https://twitter.com/Bic_shintoueki",
     "profile_image_url": "https://biccame.jp/profile/images/shintou1.png",
+    "twitter_url": "https://twitter.com/Bic_shintoueki",
     "zipcode": "160-0022",
     "address": "東京都新宿区新宿3-26-10",
+    "prefecture": "東京都",
     "store_birthday": "2010-03-03",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop111.jsp",
     "image_urls": [
@@ -870,9 +904,9 @@
       "https://biccame.jp/profile/images/shintou4.png",
       "https://biccame.jp/profile/images/shintou5.png"
     ],
+    "character_birthday": "2020-10-19",
     "latitude": 35.6920018,
     "longitude": 139.7018347,
-    "character_birthday": "2020-10-19",
     "is_biccame_musume": true
   },
   {
@@ -897,10 +931,11 @@
     "detail_url": "https://biccame.jp/profile/tenjin.html",
     "key": "tenjin",
     "description": "ビックカメラ天神1号館の擬人化。頭に飾っているのは福岡市の夏の花・フヨウ。梅の花も好き。",
-    "twitter_url": "https://twitter.com/bic_tenjin",
     "profile_image_url": "https://biccame.jp/profile/images/tenjin1_1.png",
+    "twitter_url": "https://twitter.com/bic_tenjin",
     "zipcode": "810-0021",
     "address": "福岡県福岡市中央区今泉1-25-1",
+    "prefecture": "福岡県",
     "store_birthday": "1999-04-24",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop026.jsp",
     "image_urls": [
@@ -909,21 +944,22 @@
       "https://biccame.jp/profile/images/tenjin1_4.png",
       "https://biccame.jp/profile/images/tenjin1_5.png"
     ],
+    "character_birthday": "2020-12-13",
     "latitude": 33.5870834,
     "longitude": 130.4010139,
-    "character_birthday": "2020-12-13",
     "is_biccame_musume": true
   },
   {
-    "character_name": "所沢たん/所沢たん",
+    "character_name": "所沢たん",
     "store_name": "所沢駅店",
     "detail_url": "https://biccame.jp/profile/tokorozawa.html",
     "key": "tokorozawa",
     "description": "ビックカメラ所沢駅の擬人化キャラクター。CAさんに憧れており、帽子やスカーフにこだわっている。胸の花は、所沢市の花・茶の花。髪の毛と法被の裏地は空をイメージしている。",
-    "twitter_url": "https://twitter.com/bic_toko",
     "profile_image_url": "https://biccame.jp/profile/images/tokorozawa1.png",
+    "twitter_url": "https://twitter.com/bic_toko",
     "zipcode": "359-1123",
     "address": "埼玉県所沢市日吉町12-1 西武所沢S.C. 6階",
+    "prefecture": "埼玉県",
     "store_birthday": "2019-11-08",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop127.jsp",
     "image_urls": [
@@ -932,21 +968,22 @@
       "https://biccame.jp/profile/images/tokorozawa4.png",
       "https://biccame.jp/profile/images/tokorozawa5.png"
     ],
+    "character_birthday": "2021-11-08",
     "latitude": 35.7858745,
     "longitude": 139.4722607,
-    "character_birthday": "2021-11-08",
     "is_biccame_musume": true
   },
   {
-    "character_name": "八尾たん/八尾たん",
+    "character_name": "八尾たん",
     "store_name": "アリオ八尾店",
     "detail_url": "https://biccame.jp/profile/yao.html",
     "key": "yao",
     "description": "ビックカメラアリオ八尾店の擬人化キャラクター。髪は八本に分かれている。アーミーなブーツを履いている。胸のリボンは大きなイチョウの葉。",
-    "twitter_url": "https://twitter.com/bic_yao",
     "profile_image_url": "https://biccame.jp/profile/images/yao1.png",
+    "twitter_url": "https://twitter.com/bic_yao",
     "zipcode": "581-0803",
     "address": "大阪府八尾市光町2-3 アリオ八尾 2F",
+    "prefecture": "大阪府",
     "store_birthday": "2019-07-01",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop125.jsp",
     "image_urls": [
@@ -955,9 +992,9 @@
       "https://biccame.jp/profile/images/yao4.png",
       "https://biccame.jp/profile/images/yao5.png"
     ],
+    "character_birthday": "2022-11-14",
     "latitude": 34.6324874,
     "longitude": 135.6057956,
-    "character_birthday": "2022-11-14",
     "is_biccame_musume": true
   },
   {
@@ -966,10 +1003,11 @@
     "detail_url": "https://biccame.jp/profile/takatsuki.html",
     "key": "takatsuki",
     "description": "ビックカメラ高槻阪急スクエア店の擬人化キャラクター。古風なサイドポニーと勾玉の髪飾りが特徴。関西のビッカメ娘メンバーや、はにわたんとは特に仲良し。胸のモチーフはウノハナ。",
-    "twitter_url": "https://twitter.com/bic_takatsuki",
     "profile_image_url": "https://biccame.jp/profile/images/takatsuki1.png",
+    "twitter_url": "https://twitter.com/bic_takatsuki",
     "zipcode": "569-1196",
     "address": "大阪府高槻市白梅町4-1 高槻阪急3階",
+    "prefecture": "大阪府",
     "store_birthday": "2022-06-10",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop131.jsp",
     "image_urls": [
@@ -978,21 +1016,22 @@
       "https://biccame.jp/profile/images/takatsuki4.png",
       "https://biccame.jp/profile/images/takatsuki5.png"
     ],
+    "character_birthday": "2023-10-06",
     "latitude": 34.853417,
     "longitude": 135.6182789,
-    "character_birthday": "2023-10-06",
     "is_biccame_musume": true
   },
   {
-    "character_name": "千葉たん/千葉たん",
+    "character_name": "千葉たん",
     "store_name": "千葉駅前店",
     "detail_url": "https://biccame.jp/profile/chiba.html",
     "key": "chiba",
     "description": "ビックカメラ千葉駅前店の擬人化キャラクター。エネルギッシュレッドの大きなリボンが特徴。アニメのツンデレキャラに憧れている。相棒のカモメちゃんとは仲良し。胸のモチーフは月と星。",
-    "twitter_url": "https://twitter.com/bic_chiba",
     "profile_image_url": "https://biccame.jp/profile/images/chiba1.png",
+    "twitter_url": "https://twitter.com/bic_chiba",
     "zipcode": "260-0015",
     "address": "千葉県千葉市中央区富士見2-1-1",
+    "prefecture": "千葉県",
     "store_birthday": "2022-11-01",
     "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop130.jsp",
     "image_urls": [
@@ -1001,9 +1040,9 @@
       "https://biccame.jp/profile/images/chiba4.png",
       "https://biccame.jp/profile/images/chiba5.png"
     ],
+    "character_birthday": "2024-12-12",
     "latitude": 35.6118305,
     "longitude": 140.1155614,
-    "character_birthday": "2024-12-12",
     "is_biccame_musume": true
   },
   {
@@ -1012,8 +1051,8 @@
     "detail_url": "https://biccame.jp/profile/biccamera.html",
     "key": "biccamera",
     "description": "「ビックカメラ」は専門店の集合体！都市型×駅前×大型のお店で便利！ 知識豊富な販売員が親切丁寧にご案内します。カメラ、パソコン、テレビ、家電など、何でも揃う「ビックカメラ」！⇒ビックカメラ",
-    "twitter_url": "https://twitter.com/biccameraE",
     "profile_image_url": "https://biccame.jp/profile/images/biccamera1.png",
+    "twitter_url": "https://twitter.com/biccameraE",
     "image_urls": [
       "https://biccame.jp/profile/biccamera.png",
       "https://biccame.jp/profile/biccamera3.png"
@@ -1026,8 +1065,8 @@
     "detail_url": "https://biccame.jp/profile/naisen.html",
     "key": "naisen",
     "description": "ビッカメ娘の企画や公式イラストを担当。スマホで03発着信・ナイセンができる「ナイセンクラウド」を運営。主に法人向けの電話サービスではあるが、イラストや動画でアピールしている。⇒ナイセンクラウド⇒なぜナイセンがビッカメ娘を描くのか？ビッカメ娘誕生ストーリーはこちら",
-    "twitter_url": "https://twitter.com/itallinc",
     "profile_image_url": "https://biccame.jp/profile/images/itallinc1.png",
+    "twitter_url": "https://twitter.com/itallinc",
     "image_urls": [
       "https://biccame.jp/profile/itallinc.png",
       "https://biccame.jp/profile/itallinc3.png"
@@ -1040,8 +1079,8 @@
     "detail_url": "https://biccame.jp/profile/bicsim.html",
     "key": "bicsim",
     "description": "BICSIMの擬人化キャラクター。先輩の「シムウマ」を尊敬していて、スマホにキーホルダーを付けたり、ウマ耳を真似している。もっともっと人と人とが繋がれるように「BIC SIM」 を知ってもらい、使ってもらう！のがモットー。",
-    "twitter_url": "https://twitter.com/bicsim_official",
     "profile_image_url": "https://biccame.jp/profile/images/bicsim1.png",
+    "twitter_url": "https://twitter.com/bicsim_official",
     "image_urls": [
       "https://biccame.jp/profile/images/bicsim2.png",
       "https://biccame.jp/profile/images/bicsim3.png"
