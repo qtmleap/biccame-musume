@@ -1,13 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { VoteCount, VoteResponse } from '@/schemas/vote.dto'
+import type { VoteResponse } from '@/schemas/vote.dto'
+import { voteClient } from '@/utils/client'
 
 /**
  * 投票カウントを取得
  */
 const fetchVoteCount = async (characterId: string): Promise<number> => {
-  const response = await fetch(`/api/votes/${characterId}`)
-  if (!response.ok) throw new Error('Failed to fetch vote count')
-  const data: VoteCount = await response.json()
+  const data = await voteClient.getVoteCount({ params: { characterId } })
   return data.count
 }
 
@@ -15,19 +14,7 @@ const fetchVoteCount = async (characterId: string): Promise<number> => {
  * 投票を送信
  */
 const submitVote = async (characterId: string): Promise<VoteResponse> => {
-  const response = await fetch('/api/votes', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ characterId })
-  })
-
-  const data: VoteResponse = await response.json()
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Failed to vote')
-  }
-
-  return data
+  return await voteClient.submitVote({ characterId })
 }
 
 /**
