@@ -22,11 +22,11 @@ const StoreListDesktopDialog = ({ characters, isOpen, onOpenChange, onCharacterS
       <DialogTrigger asChild>
         <button
           type='button'
-          className='absolute bottom-4 left-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg px-6 py-3 z-10 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+          className='absolute bottom-4 left-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
         >
           <div className='flex items-center gap-2'>
-            <List className='w-5 h-5' />
-            <span className='font-semibold text-gray-800 dark:text-gray-100'>店舗一覧 ({characters.length})</span>
+            <List className='w-4 h-4' />
+            <span className='font-medium text-sm text-gray-800 dark:text-gray-100'>店舗一覧</span>
           </div>
         </button>
       </DialogTrigger>
@@ -62,17 +62,17 @@ const StoreListMobileDrawer = ({ characters, isOpen, onOpenChange, onCharacterSe
       <DrawerTrigger asChild>
         <button
           type='button'
-          className='absolute bottom-4 left-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg px-6 py-3 z-10 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+          className='absolute bottom-4 left-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
         >
           <div className='flex items-center gap-2'>
-            <List className='w-5 h-5' />
-            <span className='font-semibold text-gray-800 dark:text-gray-100'>店舗一覧 ({characters.length})</span>
+            <List className='w-4 h-4' />
+            <span className='font-medium text-sm text-gray-800 dark:text-gray-100'>店舗一覧</span>
           </div>
         </button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className='py-2 px-4'>
-          <DrawerTitle className='text-sm font-medium'>店舗一覧 ({characters.length}件)</DrawerTitle>
+          <DrawerTitle className='text-sm font-medium'>店舗一覧</DrawerTitle>
         </DrawerHeader>
         <div className='overflow-y-auto max-h-[60vh] custom-scrollbar'>
           <div className='divide-y divide-gray-200 dark:divide-gray-700'>
