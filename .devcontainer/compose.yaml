@@ -6,6 +6,8 @@ services:
     volumes:
       - node_modules:/home/vscode/app/node_modules
       - ../:/home/vscode/app:cached
+    environment:
+      CLOUDFLARE_ENV: dev
     tty: true
     stdin_open: true
 
