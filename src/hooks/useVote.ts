@@ -51,6 +51,7 @@ export const useVote = (characterId: string) => {
     isVoting: voteMutation.isPending,
     isSuccess: voteMutation.isSuccess,
     error: voteMutation.error as Error | null,
+    voteResponse: voteMutation.data,
     nextVoteDate: voteMutation.data?.nextVoteDate
   }
 }

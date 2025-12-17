@@ -76,12 +76,19 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                     target='_blank'
                     rel='noopener noreferrer'
                   >
-                    <Button size='sm' className='bg-pink-600 hover:bg-pink-700 text-white rounded-full text-xs w-full'>
+                    <Button
+                      size='sm'
+                      className='bg-pink-600 hover:bg-pink-700 text-white rounded-full text-xs w-full font-semibold'
+                    >
                       フォローする
                     </Button>
                   </a>
                 )}
-                <CharacterVoteButton characterId={character.key} variant='compact' />
+                <CharacterVoteButton
+                  characterId={character.key}
+                  characterName={character.character_name}
+                  variant='compact'
+                />
               </div>
             </div>
             <p className='text-sm text-gray-500 mt-1'>
