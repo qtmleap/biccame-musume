@@ -19,7 +19,7 @@ const isDevelopment = () => {
 const generateDummyVoteCounts = (characters: Character[]): Record<string, number> => {
   // ビッカメ娘のみを対象にする
   const biccameMusumeCharacters = characters.filter((char) => char.is_biccame_musume)
-  
+
   const totalTargetVotes = 100000
   const dummyCounts: Record<string, number> = {}
 
