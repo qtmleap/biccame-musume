@@ -49,7 +49,7 @@ const groupEventsByDay = (events: CalendarEvent[], year: number, month: number):
 }
 
 /**
- * カレンダーイベントリスト表示（モバイル用）
+ * カレンダーイベントリスト表示(モバイル用)
  */
 export const CalendarEventList = ({ year, month, events }: CalendarEventListProps) => {
   return (
@@ -84,14 +84,14 @@ export const CalendarEventList = ({ year, month, events }: CalendarEventListProp
                 }}
                 className='flex gap-3 py-2 border-b border-border/50 last:border-b-0'
               >
-                {/* 日付部分（カレンダー風） */}
+                {/* 日付部分(カレンダー風) */}
                 <div className='flex flex-col items-center justify-start pt-1 w-10 shrink-0'>
                   <span className='text-[10px] text-muted-foreground uppercase'>{group.dayOfWeek}</span>
                   <span className='text-xl font-bold tabular-nums'>{group.day}</span>
                 </div>
 
-                {/* イベント一覧 */}
-                <div className='flex-1 flex flex-col gap-1.5 min-w-0'>
+                {/* イベント一覧(グリッドレイアウト) */}
+                <div className='flex-1 grid grid-cols-1 sm:grid-cols-2 gap-1.5 min-w-0'>
                   {group.events.map((event) => {
                     const isCharacter = event.type === 'character'
 
