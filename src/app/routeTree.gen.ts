@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as _notFoundRouteImport } from './routes/__not-found'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LocationIndexRouteImport } from './routes/location/index'
+import { Route as CharactersIndexRouteImport } from './routes/characters/index'
 import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
 import { Route as CharactersIdRouteImport } from './routes/characters/$id'
 
@@ -29,6 +30,11 @@ const LocationIndexRoute = LocationIndexRouteImport.update({
   path: '/location/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CharactersIndexRoute = CharactersIndexRouteImport.update({
+  id: '/characters/',
+  path: '/characters/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CalendarIndexRoute = CalendarIndexRouteImport.update({
   id: '/calendar/',
   path: '/calendar/',
@@ -44,12 +50,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/characters/$id': typeof CharactersIdRoute
   '/calendar': typeof CalendarIndexRoute
+  '/characters': typeof CharactersIndexRoute
   '/location': typeof LocationIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/characters/$id': typeof CharactersIdRoute
   '/calendar': typeof CalendarIndexRoute
+  '/characters': typeof CharactersIndexRoute
   '/location': typeof LocationIndexRoute
 }
 export interface FileRoutesById {
@@ -58,19 +66,21 @@ export interface FileRoutesById {
   '/__not-found': typeof _notFoundRoute
   '/characters/$id': typeof CharactersIdRoute
   '/calendar/': typeof CalendarIndexRoute
+  '/characters/': typeof CharactersIndexRoute
   '/location/': typeof LocationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/characters/$id' | '/calendar' | '/location'
+  fullPaths: '/' | '/characters/$id' | '/calendar' | '/characters' | '/location'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/characters/$id' | '/calendar' | '/location'
+  to: '/' | '/characters/$id' | '/calendar' | '/characters' | '/location'
   id:
     | '__root__'
     | '/'
     | '/__not-found'
     | '/characters/$id'
     | '/calendar/'
+    | '/characters/'
     | '/location/'
   fileRoutesById: FileRoutesById
 }
@@ -79,6 +89,7 @@ export interface RootRouteChildren {
   _notFoundRoute: typeof _notFoundRoute
   CharactersIdRoute: typeof CharactersIdRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
+  CharactersIndexRoute: typeof CharactersIndexRoute
   LocationIndexRoute: typeof LocationIndexRoute
 }
 
@@ -105,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/characters/': {
+      id: '/characters/'
+      path: '/characters'
+      fullPath: '/characters'
+      preLoaderRoute: typeof CharactersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/calendar/': {
       id: '/calendar/'
       path: '/calendar'
@@ -127,6 +145,7 @@ const rootRouteChildren: RootRouteChildren = {
   _notFoundRoute: _notFoundRoute,
   CharactersIdRoute: CharactersIdRoute,
   CalendarIndexRoute: CalendarIndexRoute,
+  CharactersIndexRoute: CharactersIndexRoute,
   LocationIndexRoute: LocationIndexRoute,
 }
 export const routeTree = rootRouteImport
