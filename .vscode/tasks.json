@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Run Integration Workflow with act",
+      "label": "Run Integration Workflow",
       "type": "shell",
       "command": "act",
       "args": ["push", "-W", ".github/workflows/integration.yaml"],
@@ -17,49 +17,15 @@
       }
     },
     {
-      "label": "Run Integration Workflow (commitlint job)",
-      "type": "shell",
-      "command": "act",
-      "args": [
-        "push",
-        "-W",
-        ".github/workflows/integration.yaml",
-        "-j",
-        "commitlint"
-      ],
-      "problemMatcher": [],
-      "group": "test",
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Run Integration Workflow (check job)",
-      "type": "shell",
-      "command": "act",
-      "args": [
-        "push",
-        "-W",
-        ".github/workflows/integration.yaml",
-        "-j",
-        "check"
-      ],
-      "problemMatcher": [],
-      "group": "test",
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Run Deployment Workflow with act",
+      "label": "Run Deployment Workflow",
       "type": "shell",
       "command": "act",
       "args": [
         "pull_request",
         "-W",
         ".github/workflows/deployment.yaml",
+        "--secret-file",
+        ".secrets",
         "-e",
         ".github/pull_request.closed.master.json"
       ],
