@@ -53,6 +53,7 @@ export const Header = ({ className }: HeaderProps) => {
   }
 
   // ルート変更時にメニューを閉じる
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reason
   useEffect(() => {
     if (mobileMenuOpen) {
       closeMenu()
@@ -60,11 +61,19 @@ export const Header = ({ className }: HeaderProps) => {
   }, [location.pathname])
 
   return (
-    <header className={cn('sticky top-0 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border', className)}>
+    <header
+      className={cn(
+        'sticky top-0 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
+        className
+      )}
+    >
       <div className='container mx-auto px-4'>
         <div className='flex items-center justify-between h-12 md:h-14'>
           {/* ロゴ */}
-          <Link to='/' className='flex items-center font-bold text-lg md:text-xl tracking-tight hover:text-primary transition-colors'>
+          <Link
+            to='/'
+            className='flex items-center font-bold text-lg md:text-xl tracking-tight hover:text-primary transition-colors'
+          >
             ビッカメ娘
           </Link>
 
@@ -92,14 +101,18 @@ export const Header = ({ className }: HeaderProps) => {
             aria-label={mobileMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
           >
             <div className='relative w-6 h-6 flex items-center justify-center'>
-              <Menu className={cn(
-                'absolute transition-all duration-200',
-                mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
-              )} />
-              <X className={cn(
-                'absolute transition-all duration-200',
-                mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
-              )} />
+              <Menu
+                className={cn(
+                  'absolute transition-all duration-200',
+                  mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
+                )}
+              />
+              <X
+                className={cn(
+                  'absolute transition-all duration-200',
+                  mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
+                )}
+              />
             </div>
           </Button>
         </div>
@@ -109,13 +122,15 @@ export const Header = ({ className }: HeaderProps) => {
       {mobileMenuOpen && (
         <>
           {/* 背景オーバーレイ */}
-          <div
+          <button
+            type='button'
             className={cn(
               'fixed inset-0 bg-background/80 backdrop-blur-sm md:hidden transition-opacity duration-200',
               isAnimating ? 'opacity-100' : 'opacity-0'
             )}
             onClick={closeMenu}
             style={{ top: '3rem' }}
+            aria-label='メニューを閉じる'
           />
 
           {/* メニュー本体 */}
@@ -136,9 +151,7 @@ export const Header = ({ className }: HeaderProps) => {
                       onClick={closeMenu}
                       className={cn(
                         'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted',
-                        isAnimating
-                          ? 'translate-x-0 opacity-100'
-                          : '-translate-x-4 opacity-0'
+                        isAnimating ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'
                       )}
                       style={{ transitionDelay: isAnimating ? `${index * 50}ms` : '0ms' }}
                     >

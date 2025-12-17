@@ -10,7 +10,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from 
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { useCharacters } from '@/hooks/useCharacters'
 import { cn } from '@/lib/utils'
-import { type Character } from '@/schemas/character.dto'
+import type { Character } from '@/schemas/character.dto'
 
 /**
  * 検索パラメータのスキーマ

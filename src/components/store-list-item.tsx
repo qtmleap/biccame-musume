@@ -1,7 +1,7 @@
-import type { Character } from '@/schemas/character.dto'
-import { getCharacterImageUrl } from '@/lib/utils'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { MapPin } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { getCharacterImageUrl } from '@/lib/utils'
+import type { Character } from '@/schemas/character.dto'
 
 type StoreListItemProps = {
   character: Character
