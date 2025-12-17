@@ -1,6 +1,8 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import Header from '@/components/common/header'
+import { Footer } from '@/components/common/footer'
+
 /**
  * NOTE: Next.jsでいうところのsrc/app/layout.tsx
  */
@@ -11,7 +13,7 @@ export const Route = createRootRoute({
       <main className='flex-1'>
         <Outlet />
       </main>
-      {/* <Footer /> */}
+      <Footer />
       <TanStackRouterDevtools position='bottom-right' />
     </div>
   )
