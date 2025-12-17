@@ -20,18 +20,27 @@ export const getNextJSTDate = (): string => {
 }
 
 /**
+ * JSTの現在の年を取得
+ */
+export const getJSTYear = (): string => {
+  return dayjs().tz('Asia/Tokyo').format('YYYY')
+}
+
+/**
  * IPアドレスから投票キーを生成
- * 形式: vote:{characterId}:{ip}:{jstDate}
+ * 形式: vote:{year}:{characterId}:{ip}:{jstDate}
  */
 export const generateVoteKey = (characterId: string, ip: string): string => {
+  const year = getJSTYear()
   const jstDate = getJSTDate()
-  return `vote:${characterId}:${ip}:${jstDate}`
+  return `vote:${year}:${characterId}:${ip}:${jstDate}`
 }
 
 /**
  * カウントキーを生成
- * 形式: count:{characterId}
+ * 形式: count:{year}:{characterId}
  */
 export const generateCountKey = (characterId: string): string => {
-  return `count:${characterId}`
+  const year = getJSTYear()
+  return `count:${year}:${characterId}`
 }
