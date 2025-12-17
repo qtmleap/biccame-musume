@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Cake, Calendar, Sticker, Store } from 'lucide-react'
 import { motion } from 'motion/react'
-import { Suspense, useMemo } from 'react'
+import { Suspense, useEffect, useMemo } from 'react'
 import { useCharacters } from '@/hooks/useCharacters'
 import type { Character } from '@/schemas/character.dto'
 
@@ -50,6 +50,21 @@ const LoadingFallback = () => (
  */
 const HomeContent = () => {
   const { data: characters } = useCharacters()
+
+  /**
+   * Xウィジェットスクリプトを読み込む
+   */
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://platform.twitter.com/widgets.js'
+    script.charset = 'utf-8'
+    script.async = true
+    document.body.appendChild(script)
+
+    return () => {
+      document.body.removeChild(script)
+    }
+  }, [])
 
   /**
    * 直近のイベントを計算
@@ -102,7 +117,7 @@ const HomeContent = () => {
   return (
     <div>
       {/* ヘッダー */}
-      <header className='bg-linear-to-r from-[#e50012] to-[#ff3333] py-10 md:py-12'>
+      <header className='bg-linear-to-r from-[#e50012] to-[#ff3333] py-10 md:py-12 relative'>
         <div className='container mx-auto px-4 text-center'>
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
@@ -126,6 +141,23 @@ const HomeContent = () => {
             ビッカメ娘のイベント追跡と店舗巡り支援サイト
           </motion.p>
         </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.5, ease: 'easeOut' }}
+          className='absolute top-4 right-4'
+        >
+          <a
+            href='https://twitter.com/share?ref_src=twsrc%5Etfw'
+            className='twitter-share-button'
+            data-show-count='false'
+            data-lang='ja'
+            data-hashtags='ビッカメ娘'
+            data-text='ビッカメ娘応援プロジェクト'
+          >
+            Tweet
+          </a>
+        </motion.div>
       </header>
 
       {/* 直近のイベント */}
