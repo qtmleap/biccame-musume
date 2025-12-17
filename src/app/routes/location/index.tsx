@@ -113,7 +113,7 @@ const RouteComponent = () => {
 
   return (
     <APIProvider apiKey={apiKey}>
-      <div className='relative w-full h-screen overflow-hidden'>
+      <div className='relative w-full h-[calc(100vh-3rem)] md:h-[calc(100vh-3.5rem)] overflow-hidden'>
         {/* フルスクリーン地図 */}
         <GoogleMap
           key={mapKey}

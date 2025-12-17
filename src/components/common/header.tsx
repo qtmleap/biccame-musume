@@ -52,16 +52,6 @@ export const Header = ({ className }: HeaderProps) => {
     }
   }
 
-  /**
-   * 現在のパスがアクティブかどうかを判定
-   */
-  const isActive = (path: string): boolean => {
-    if (path === '/') {
-      return location.pathname === '/'
-    }
-    return location.pathname.startsWith(path)
-  }
-
   // ルート変更時にメニューを閉じる
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -72,28 +62,21 @@ export const Header = ({ className }: HeaderProps) => {
   return (
     <header className={cn('sticky top-0 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border', className)}>
       <div className='container mx-auto px-4'>
-        <div className='flex items-center justify-between h-14 md:h-16'>
+        <div className='flex items-center justify-between h-12 md:h-14'>
           {/* ロゴ */}
-          <Link to='/' className='font-bold text-lg md:text-xl tracking-tight hover:text-primary transition-colors'>
+          <Link to='/' className='flex items-center font-bold text-lg md:text-xl tracking-tight hover:text-primary transition-colors'>
             ビッカメ娘
           </Link>
 
           {/* デスクトップナビゲーション */}
           <nav className='hidden md:flex items-center gap-1'>
             {navLinks.map((link) => {
-              const Icon = link.icon
               return (
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={cn(
-                    'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-                    isActive(link.to)
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                  )}
+                  className='flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors text-muted-foreground hover:text-foreground hover:bg-muted'
                 >
-                  <Icon className='w-5 h-5' />
                   {link.label}
                 </Link>
               )
@@ -104,17 +87,17 @@ export const Header = ({ className }: HeaderProps) => {
           <Button
             variant='ghost'
             size='icon'
-            className='md:hidden'
+            className='md:hidden h-12 w-12 flex items-center justify-center'
             onClick={toggleMenu}
             aria-label={mobileMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
           >
-            <div className='relative w-5 h-5'>
+            <div className='relative w-6 h-6 flex items-center justify-center'>
               <Menu className={cn(
-                'w-5 h-5 absolute inset-0 transition-all duration-200',
+                'absolute transition-all duration-200',
                 mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
               )} />
               <X className={cn(
-                'w-5 h-5 absolute inset-0 transition-all duration-200',
+                'absolute transition-all duration-200',
                 mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
               )} />
             </div>
@@ -132,7 +115,7 @@ export const Header = ({ className }: HeaderProps) => {
               isAnimating ? 'opacity-100' : 'opacity-0'
             )}
             onClick={closeMenu}
-            style={{ top: '3.5rem' }}
+            style={{ top: '3rem' }}
           />
 
           {/* メニュー本体 */}
@@ -152,10 +135,7 @@ export const Header = ({ className }: HeaderProps) => {
                       to={link.to}
                       onClick={closeMenu}
                       className={cn(
-                        'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200',
-                        isActive(link.to)
-                          ? 'bg-primary/10 text-primary'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-muted',
+                        'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted',
                         isAnimating
                           ? 'translate-x-0 opacity-100'
                           : '-translate-x-4 opacity-0'
