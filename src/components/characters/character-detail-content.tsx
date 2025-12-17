@@ -84,11 +84,13 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                     </Button>
                   </a>
                 )}
-                <CharacterVoteButton
-                  characterId={character.key}
-                  characterName={character.character_name}
-                  variant='compact'
-                />
+                {character.is_biccame_musume && (
+                  <CharacterVoteButton
+                    characterId={character.key}
+                    characterName={character.character_name}
+                    variant='compact'
+                  />
+                )}
               </div>
             </div>
             <p className='text-sm text-gray-500 mt-1'>
