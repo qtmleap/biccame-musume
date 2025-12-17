@@ -1,23 +1,29 @@
 {
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["src/components/ui/**/*.tsx"],
   "compilerOptions": {
-    "target": "ES2020", // 出力するJavaScriptのバージョン
-    "module": "ESNext", // ESモジュール形式
-    "moduleResolution": "node", // モジュール解決の戦略
-    "declarationDir": "./dist", // 型定義ファイルの出力先ディレクトリ
-    "outDir": "./dist", // 出力先ディレクトリ
-    "strict": true, // 厳格な型チェックを有効にする
-    "esModuleInterop": true, // CommonJSモジュールとの互換性を提供する
-    "skipLibCheck": true, // 型定義ファイルの型チェックをスキップする
-    "forceConsistentCasingInFileNames": true, // ファイル名の大文字小文字の一貫性を保つ
-    "declaration": true, // 型定義ファイルを生成する
-    "declarationMap": true, // 型定義ファイルのマップを生成する
-    "sourceMap": true, // ソースマップを生成する
-    "jsx": "react-jsx", // JSXを変換する
-    "lib": ["ES2020", "DOM", "DOM.Iterable"], // 使用するライブラリ
+    "target": "ES2022",
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable", "WebWorker"],
+    "types": ["vite/client", "@cloudflare/workers-types", "@types/bun"],
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+
+    /* Linting */
+    "skipLibCheck": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
     "paths": {
       "@/*": ["./src/*"]
     }
-  },
-  "include": ["src/**/*.ts", "src/**/*.tsx"], // コンパイルするファイルを指定
-  "exclude": ["node_modules", ".devcontainer", "src/tests"] // 除外するディレクトリ
+  }
 }
