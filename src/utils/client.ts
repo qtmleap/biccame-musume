@@ -1,4 +1,5 @@
 import { makeApi, Zodios } from '@zodios/core'
+import { z } from 'zod'
 import { CharactersSchema } from '@/schemas/character.dto'
 import { AllVoteCountsSchema, VoteCountSchema, VoteRequestSchema, VoteResponseSchema } from '@/schemas/vote.dto'
 
@@ -24,7 +25,14 @@ const voteApi = makeApi([
     path: '/api/votes',
     alias: 'getAllVoteCounts',
     description: '全キャラクターの投票数を取得',
-    response: AllVoteCountsSchema
+    response: AllVoteCountsSchema,
+    parameters: [
+      {
+        name: 'year',
+        type: 'Query',
+        schema: z.string().optional()
+      }
+    ]
   },
   {
     method: 'get',

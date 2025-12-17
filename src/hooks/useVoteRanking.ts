@@ -37,9 +37,24 @@ const generateDummyVoteCounts = (characters: Character[]): Record<string, number
 /**
  * 全キャラクターの投票数を取得
  */
-const fetchVoteRanking = async (characters: Character[]): Promise<CharacterWithVotes[]> => {
+const fetchVoteRanking = async (characters: Character[], year: number): Promise<CharacterWithVotes[]> => {
   // 開発環境ではダミーデータを使用
-  const allVoteCounts = isDevelopment() ? generateDummyVoteCounts(characters) : await voteClient.getAllVoteCounts()
+  let allVoteCounts: Record<string, number>
+
+  if (isDevelopment()) {
+    allVoteCounts = generateDummyVoteCounts(characters)
+  } else {
+    // Zodiosを使ってAPIリクエスト
+    const rawData = await voteClient.getAllVoteCounts({ queries: { year: year.toString() } })
+
+    // "年:キー"形式のデータを"キー"形式に変換
+    allVoteCounts = {}
+    for (const [key, count] of Object.entries(rawData)) {
+      // "2025:kyoto" -> "kyoto"
+      const characterKey = key.includes(':') ? key.split(':')[1] : key
+      allVoteCounts[characterKey] = count
+    }
+  }
 
   // キャラクターと投票数をマージ
   const voteCounts = characters.map((character) => ({
@@ -53,10 +68,12 @@ const fetchVoteRanking = async (characters: Character[]): Promise<CharacterWithV
 /**
  * 投票ランキング取得用のカスタムフック
  */
-export const useVoteRanking = (characters: Character[]) => {
+export const useVoteRanking = (characters: Character[], year?: number) => {
+  const targetYear = year || new Date().getFullYear()
+
   return useSuspenseQuery({
-    queryKey: ['voteRanking', characters.length],
-    queryFn: () => fetchVoteRanking(characters),
+    queryKey: ['voteRanking', characters.length, targetYear],
+    queryFn: () => fetchVoteRanking(characters, targetYear),
     staleTime: 1000 * 30, // 30秒間キャッシュ
     refetchInterval: 1000 * 60 // 1分ごとに再取得
   })
