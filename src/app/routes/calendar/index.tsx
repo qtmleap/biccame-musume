@@ -304,50 +304,55 @@ const CalendarContent = () => {
                     </div>
 
                     {/* イベント一覧 */}
-                    <div className='flex-1 space-y-1.5 min-w-0'>
+                    <div className='flex-1 flex flex-col gap-1.5 min-w-0'>
                       {group.events.map((event) => {
                         const isCharacter = event.type === 'character'
 
                         return (
-                          <motion.div
+                          <Link
                             key={`${event.character.key}-${event.type}`}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className={cn(
-                              'flex items-center gap-3 p-2 rounded-lg',
-                              isCharacter ? 'bg-pink-500/10' : 'bg-blue-500/10'
-                            )}
+                            to='/characters/$id'
+                            params={{ id: event.character.key }}
                           >
-                            {/* キャラクター画像 */}
-                            <Avatar className='w-10 h-10 shrink-0 border border-border'>
-                              <AvatarImage
-                                src={event.character.profile_image_url}
-                                alt={event.character.character_name}
-                              />
-                              <AvatarFallback>{event.character.character_name.slice(0, 1)}</AvatarFallback>
-                            </Avatar>
-
-                            {/* 情報 */}
-                            <div className='flex-1 min-w-0'>
-                              <p className='text-sm font-medium truncate'>{event.character.character_name}</p>
-                              <p className='text-xs text-muted-foreground truncate'>{event.character.store_name}</p>
-                            </div>
-
-                            {/* バッジ */}
-                            <Badge
-                              variant='secondary'
+                            <motion.div
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
                               className={cn(
-                                'shrink-0 text-xs flex items-center gap-1',
-                                isCharacter
-                                  ? 'bg-pink-500/20 text-pink-700 dark:text-pink-300'
-                                  : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
+                                'flex items-center gap-3 p-2 rounded-lg',
+                                isCharacter ? 'bg-pink-500/10' : 'bg-blue-500/10'
                               )}
                             >
-                              {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
-                              {event.years}
-                              {isCharacter ? '歳' : '周年'}
-                            </Badge>
-                          </motion.div>
+                              {/* キャラクター画像 */}
+                              <Avatar className='w-10 h-10 shrink-0 border border-border'>
+                                <AvatarImage
+                                  src={event.character.profile_image_url}
+                                  alt={event.character.character_name}
+                                />
+                                <AvatarFallback>{event.character.character_name.slice(0, 1)}</AvatarFallback>
+                              </Avatar>
+
+                              {/* 情報 */}
+                              <div className='flex-1 min-w-0'>
+                                <p className='text-sm font-medium truncate'>{event.character.character_name}</p>
+                                <p className='text-xs text-muted-foreground truncate'>{event.character.store_name}</p>
+                              </div>
+
+                              {/* バッジ */}
+                              <Badge
+                                variant='secondary'
+                                className={cn(
+                                  'shrink-0 text-xs flex items-center gap-1',
+                                  isCharacter
+                                    ? 'bg-pink-500/20 text-pink-700 dark:text-pink-300'
+                                    : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
+                                )}
+                              >
+                                {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
+                                {event.years}
+                                {isCharacter ? '歳' : '周年'}
+                              </Badge>
+                            </motion.div>
+                          </Link>
                         )
                       })}
                     </div>
