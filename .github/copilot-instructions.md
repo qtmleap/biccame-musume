@@ -21,6 +21,8 @@ Regarding source code editing:
 - Do not use emoji in source
 - Do not use `var` or `let`; use `const` whenever possible
 - Do not use `Date`, use `dayjs` for date and time processing
+- Do not use `svg` directly; use `lucide-react` or `@shadcn/ui/icons` for icons
+- Use `cn` util for conditional `className` handling
 - Avoid using `any` type whenever possible
 - Use `async/await` for asynchronous processing
 - Use `src/utils/client.ts` defined with `Zodios` for API communication
