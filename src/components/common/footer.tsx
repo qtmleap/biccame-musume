@@ -31,9 +31,7 @@ export const Footer = () => {
             公式X
           </a>
         </div>
-        <p className='text-gray-400'>
-          © {dayjs().year()} QuantumLeap
-        </p>
+        <p className='text-gray-400'>© {dayjs().year()} QuantumLeap</p>
       </div>
     </footer>
   )

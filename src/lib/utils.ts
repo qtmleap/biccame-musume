@@ -1,5 +1,5 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 import type { Character } from '@/schemas/character.dto'
 
 export const cn = (...inputs: ClassValue[]) => {
