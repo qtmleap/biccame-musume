@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { ArrowLeft } from 'lucide-react'
 import { motion } from 'motion/react'
@@ -31,6 +31,7 @@ const LoadingFallback = () => (
  */
 const CharacterDetailContent = ({ id }: { id: string }) => {
   const { data: characters } = useCharacters()
+  const router = useRouter()
 
   const character = useMemo(() => {
     return characters.find((c) => c.key === id)
@@ -57,12 +58,15 @@ const CharacterDetailContent = ({ id }: { id: string }) => {
       <div className='container mx-auto px-4 py-6 max-w-3xl'>
         {/* 戻るボタン */}
         <div className='mb-4'>
-          <Link to='/characters'>
-            <Button variant='ghost' size='sm' className='text-pink-600 hover:text-pink-700 -ml-2'>
-              <ArrowLeft className='h-4 w-4 mr-1' />
-              戻る
-            </Button>
-          </Link>
+          <Button
+            variant='ghost'
+            size='sm'
+            className='text-pink-600 hover:text-pink-700 -ml-2'
+            onClick={() => router.history.back()}
+          >
+            <ArrowLeft className='h-4 w-4 mr-1' />
+            戻る
+          </Button>
         </div>
 
         {/* ヒーローセクション */}
