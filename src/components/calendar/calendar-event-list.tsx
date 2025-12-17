@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import dayjs from 'dayjs'
 import { groupBy, sortBy } from 'lodash-es'
 import { Cake, Store } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
@@ -29,16 +30,20 @@ type CalendarEventListProps = {
 /**
  * イベントを日付ごとにグループ化する
  */
-const groupEventsByDay = (events: CalendarEvent[]): GroupedEvents[] => {
+const groupEventsByDay = (events: CalendarEvent[], year: number, month: number): GroupedEvents[] => {
   const weekDayNames = ['日', '月', '火', '水', '木', '金', '土']
-  const grouped = groupBy(events, (event) => new Date(event.date).getDate())
+  const grouped = groupBy(events, (event) => dayjs(event.date).date())
 
   return sortBy(
-    Object.entries(grouped).map(([day, evts]) => ({
-      day: Number(day),
-      dayOfWeek: weekDayNames[new Date(evts[0].date).getDay()],
-      events: evts
-    })),
+    Object.entries(grouped).map(([day, evts]) => {
+      // 表示している年月の日付で曜日を計算する
+      const displayDate = dayjs(`${year}-${month}-${day}`)
+      return {
+        day: Number(day),
+        dayOfWeek: weekDayNames[displayDate.day()],
+        events: evts
+      }
+    }),
     'day'
   )
 }
@@ -67,7 +72,7 @@ export const CalendarEventList = ({ year, month, events }: CalendarEventListProp
             exit={{ opacity: 0, x: -15 }}
             transition={{ duration: 0.2 }}
           >
-            {groupEventsByDay(events).map((group, groupIndex) => (
+            {groupEventsByDay(events, year, month).map((group, groupIndex) => (
               <motion.div
                 key={`day-${group.day}`}
                 initial={{ opacity: 0 }}

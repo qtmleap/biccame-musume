@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import dayjs from 'dayjs'
 import { Suspense, useMemo, useState } from 'react'
 import { CalendarHeader, CalendarMonthDots, CalendarMonthTabs } from '@/components/calendar/calendar-controls'
 import { CalendarEventDrawerContent } from '@/components/calendar/calendar-event-drawer-content'
@@ -15,8 +16,9 @@ import { type CalendarEvent, filterMonthEvents } from '@/utils/calendar'
  */
 const CalendarContent = () => {
   const { data: allCharacters } = useCharacters()
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1)
+  const today = dayjs()
+  const [selectedYear, setSelectedYear] = useState(today.year())
+  const [selectedMonth, setSelectedMonth] = useState(today.month() + 1)
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -51,12 +53,12 @@ const CalendarContent = () => {
   }
 
   const handleCurrentMonth = () => {
-    const today = new Date()
-    setSelectedYear(today.getFullYear())
-    setSelectedMonth(today.getMonth() + 1)
+    const now = dayjs()
+    setSelectedYear(now.year())
+    setSelectedMonth(now.month() + 1)
   }
 
-  const selectedDayEvents = selectedDay ? events.filter((event) => new Date(event.date).getDate() === selectedDay) : []
+  const selectedDayEvents = selectedDay ? events.filter((event) => dayjs(event.date).date() === selectedDay) : []
 
   return (
     <div className='mx-auto p-4 md:p-8 space-y-6 md:space-y-8 max-w-6xl'>
