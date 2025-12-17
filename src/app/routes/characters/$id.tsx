@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ExternalLink, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense, useMemo } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -97,48 +97,54 @@ const CharacterDetailContent = ({ id }: { id: string }) => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2, ease: 'easeOut' }}
-            className='flex flex-col justify-end min-w-0'
+            className='flex flex-col justify-end min-w-0 flex-1'
           >
-            <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 truncate'>{character.character_name}</h1>
-            <p className='text-lg text-pink-600 font-medium truncate'>{character.store_name}</p>
+            <div className='flex items-start justify-between gap-2'>
+              <div className='min-w-0 flex-1'>
+                <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 truncate'>{character.character_name}</h1>
+                <p className='text-lg text-pink-600 font-medium truncate'>{character.store_name}</p>
+              </div>
+              {character.twitter_url && (
+                <a
+                  href={`https://twitter.com/intent/follow?screen_name=${character.twitter_url.split('/').pop()}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='shrink-0'
+                >
+                  <Button size='sm' className='bg-pink-600 hover:bg-pink-700 text-white rounded-full text-xs'>
+                    フォローする
+                  </Button>
+                </a>
+              )}
+            </div>
             <p className='text-sm text-gray-500 mt-1'>
               {character.address?.split(/都|道|府|県/)[0]}
               {character.address?.match(/都|道|府|県/)?.[0]}
               {character.character_birthday && ` · ${dayjs(character.character_birthday).format('M月D日')}生まれ`}
             </p>
+            {/* リンク */}
+            <div className='flex gap-3 mt-2 text-xs'>
+              <a
+                href={character.detail_url}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-gray-400 hover:text-pink-600 hover:underline flex items-center gap-1 transition-colors'
+              >
+                詳細を見る
+                <ExternalLink className='h-3 w-3' />
+              </a>
+              {character.latitude && character.longitude && (
+                <Link
+                  to='/location'
+                  search={{ id: character.key }}
+                  className='text-gray-400 hover:text-pink-600 hover:underline flex items-center gap-1 transition-colors'
+                >
+                  地図で見る
+                  <MapPin className='h-3 w-3' />
+                </Link>
+              )}
+            </div>
           </motion.div>
-        </motion.div>
-
-        {/* アクションボタン */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.3, ease: 'easeOut' }}
-          className='flex justify-center gap-2 mb-8'
-        >
-          {character.twitter_url && (
-            <a
-              href={`https://twitter.com/intent/follow?screen_name=${character.twitter_url.split('/').pop()}`}
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <Button size='sm' className='bg-pink-600 hover:bg-pink-700 text-white'>
-                フォローする
-              </Button>
-            </a>
-          )}
-          <a href={character.detail_url} target='_blank' rel='noopener noreferrer'>
-            <Button size='sm' variant='outline'>
-              公式ページ
-            </Button>
-          </a>
-          {character.latitude && character.longitude && (
-            <Link to='/location' search={{ id: character.key }}>
-              <Button size='sm' variant='outline'>
-                マップ
-              </Button>
-            </Link>
-          )}
         </motion.div>
 
         {/* 説明文 */}
