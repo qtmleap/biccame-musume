@@ -1,7 +1,9 @@
 import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
 import { CircleCheckIcon } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { toast } from 'sonner'
+import { lastVoteTimesAtom } from '@/atoms/voteAtom'
 import { Button } from '@/components/ui/button'
 import { useVote } from '@/hooks/useVote'
 import { cn } from '@/lib/utils'
@@ -17,12 +19,35 @@ type CharacterVoteButtonProps = {
  */
 export const CharacterVoteButton = ({ characterId, characterName, variant = 'default' }: CharacterVoteButtonProps) => {
   const { vote, isVoting, isSuccess, error, nextVoteDate, voteResponse } = useVote(characterId)
+  const [lastVoteTimes, setLastVoteTimes] = useAtom(lastVoteTimesAtom)
+
+  // 今日既に投票済みかチェック
+  const hasVotedToday = useMemo(() => {
+    const lastVoteTime = lastVoteTimes[characterId]
+    if (!lastVoteTime) return false
+
+    const lastVote = dayjs(lastVoteTime)
+    const now = dayjs()
+    // 最後の投票から翌日（次の日の0時）になっているかチェック
+    const nextDay = lastVote.add(1, 'day').startOf('day')
+    return now.isBefore(nextDay)
+  }, [lastVoteTimes, characterId])
+
+  // 投票成功時に最後の投票時間を記録
+  useEffect(() => {
+    if (isSuccess) {
+      setLastVoteTimes((prev) => ({
+        ...prev,
+        [characterId]: new Date().toISOString()
+      }))
+    }
+  }, [isSuccess, characterId, setLastVoteTimes])
 
   useEffect(() => {
     if (isSuccess && nextVoteDate) {
-      const message = voteResponse?.message || '投票ありがとうございます！'
+      const message = voteResponse?.message || '応援ありがとうございます！'
       toast.success(message, {
-        description: `次回投票: ${dayjs(nextVoteDate).format('M月D日 0:00')}`,
+        description: `次回応援: ${dayjs(nextVoteDate).format('M月D日 0:00')}`,
         classNames: {
           toast: 'text-gray-900',
           description: 'text-gray-900! font-semibold!',
@@ -40,10 +65,10 @@ export const CharacterVoteButton = ({ characterId, characterName, variant = 'def
 
       // キャラクター名がある場合、「本日は既に投票済みです」をカスタマイズ
       if (characterName && errorMessage.includes('本日は既に投票済みです')) {
-        errorMessage = `本日は${characterName}には既に投票済みです`
+        errorMessage = `本日は${characterName}には既に応援済みです`
       }
 
-      toast.error('投票できませんでした', {
+      toast.error('応援できませんでした', {
         description: errorMessage,
         classNames: {
           toast: 'text-gray-900',
@@ -54,13 +79,13 @@ export const CharacterVoteButton = ({ characterId, characterName, variant = 'def
   }, [error, characterName])
 
   const handleVote = () => {
-    if (isSuccess || isVoting) return
+    if (hasVotedToday || isVoting) return
     vote()
   }
 
   const getButtonText = () => {
-    if (isSuccess) return '投票済み'
-    if (isVoting) return '投票中...'
+    if (hasVotedToday) return '応援済み'
+    if (isVoting) return '応援中...'
     return '応援する'
   }
 
@@ -69,10 +94,10 @@ export const CharacterVoteButton = ({ characterId, characterName, variant = 'def
       <Button
         size='sm'
         onClick={handleVote}
-        disabled={isSuccess || isVoting}
+        disabled={hasVotedToday || isVoting}
         className={cn(
-          'rounded-full text-xs w-full font-semibold',
-          isSuccess
+          'rounded-full text-xs font-semibold h-7 px-4',
+          hasVotedToday
             ? 'bg-gray-200 text-gray-600 cursor-not-allowed hover:bg-gray-200'
             : 'bg-[#e50012] text-white hover:bg-[#c40010]'
         )}
@@ -85,10 +110,10 @@ export const CharacterVoteButton = ({ characterId, characterName, variant = 'def
   return (
     <Button
       onClick={handleVote}
-      disabled={isSuccess || isVoting}
+      disabled={hasVotedToday || isVoting}
       className={cn(
         'w-full font-semibold',
-        isSuccess ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-[#e50012] hover:bg-[#c40010] text-white'
+        hasVotedToday ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-[#e50012] hover:bg-[#c40010] text-white'
       )}
     >
       {getButtonText()}
