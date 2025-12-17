@@ -51,6 +51,24 @@
         "reveal": "always",
         "panel": "new"
       }
+    },
+    {
+      "label": "Run Deployment Workflow with act",
+      "type": "shell",
+      "command": "act",
+      "args": [
+        "pull_request",
+        "-W",
+        ".github/workflows/deployment.yaml",
+        "-e",
+        ".github/pull_request.closed.master.json"
+      ],
+      "problemMatcher": [],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
     }
   ]
 }

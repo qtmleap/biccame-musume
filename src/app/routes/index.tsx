@@ -1,73 +1,156 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowRight, Calendar, MapPin, Users } from 'lucide-react'
+import dayjs from 'dayjs'
+import { Cake, Calendar, Store } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { type Character, CharactersSchema } from '@/schemas/character.dto'
+
+type UpcomingEvent = {
+  character: Character
+  type: 'character' | 'store'
+  date: dayjs.Dayjs
+  daysUntil: number
+}
 
 /**
  * トップページ
  */
 const RouteComponent = () => {
-  const features = [
-    {
-      icon: Calendar,
-      title: '誕生日カレンダー',
-      description: 'キャラクター・店舗の誕生日やイベントを見逃さない',
-      link: '/calendar',
-      color: 'from-blue-500 to-cyan-500'
-    },
-    {
-      icon: MapPin,
-      title: '店舗マップ',
-      description: '全国のビックカメラを効率よく巡る',
-      link: '/location',
-      color: 'from-emerald-500 to-teal-500'
-    },
-    {
-      icon: Users,
-      title: 'キャラクター一覧',
-      description: 'ビッカメ娘のプロフィールを確認',
-      link: '/characters',
-      color: 'from-pink-500 to-rose-500'
+  const [upcomingEvents, setUpcomingEvents] = useState<UpcomingEvent[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchCharacters = async () => {
+      try {
+        const response = await fetch('/characters.json')
+        if (!response.ok) return
+        const data = await response.json()
+        const result = CharactersSchema.safeParse(data)
+        if (!result.success) return
+
+        const now = dayjs()
+        const events: UpcomingEvent[] = []
+
+        for (const character of result.data) {
+          if (character.character_birthday) {
+            const birthday = dayjs(character.character_birthday)
+            if (birthday.isValid()) {
+              const thisYear = now.year()
+              let nextBirthday = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
+              if (nextBirthday.isBefore(now, 'day')) {
+                nextBirthday = nextBirthday.add(1, 'year')
+              }
+              const daysUntil = nextBirthday.diff(now, 'day')
+              events.push({ character, type: 'character', date: nextBirthday, daysUntil })
+            }
+          }
+
+          if (character.store_birthday) {
+            const birthday = dayjs(character.store_birthday)
+            if (birthday.isValid()) {
+              const thisYear = now.year()
+              let nextBirthday = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
+              if (nextBirthday.isBefore(now, 'day')) {
+                nextBirthday = nextBirthday.add(1, 'year')
+              }
+              const daysUntil = nextBirthday.diff(now, 'day')
+              events.push({ character, type: 'store', date: nextBirthday, daysUntil })
+            }
+          }
+        }
+
+        events.sort((a, b) => a.daysUntil - b.daysUntil)
+        setUpcomingEvents(events.slice(0, 5))
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+
+    fetchCharacters()
+  }, [])
+
+  /**
+   * 日数に応じたラベルを返す
+   */
+  const getDaysLabel = (days: number) => {
+    if (days === 0) return '今日'
+    if (days === 1) return '明日'
+    return `${days}日後`
+  }
 
   return (
-    <div className='min-h-screen bg-gray-50'>
-      <div className='container mx-auto px-4 py-8 md:py-12'>
-        {/* ヘッダー */}
-        <header className='text-center mb-8'>
-          <h1 className='text-2xl md:text-3xl font-bold text-gray-800 mb-2'>
-            イベントを逃さない。全国を回りやすく。
+    <div>
+      {/* ヘッダー */}
+      <header className='bg-linear-to-r from-[#e50012] to-[#ff3333] py-10 md:py-12'>
+        <div className='container mx-auto px-4 text-center'>
+          <h1 className='text-xl md:text-2xl font-bold text-white mb-2 whitespace-nowrap'>
+            <span className='hidden md:inline'>イベントを逃さない。全国を回りやすく。</span>
+            <span className='md:hidden'>
+              イベントを逃さない。
+              <br />
+              全国を回りやすく。
+            </span>
           </h1>
-          <p className='text-gray-600 text-sm md:text-base'>
-            ビッカメ娘のイベント追跡と店舗巡り支援ツール
-          </p>
-        </header>
-
-        {/* メインコンテンツ */}
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto'>
-          {features.map((feature) => (
-            <Link key={feature.title} to={feature.link}>
-              <div className='group bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 cursor-pointer h-full border border-gray-100'>
-                <div className={`inline-flex p-2.5 rounded-lg bg-gradient-to-br ${feature.color} mb-3`}>
-                  <feature.icon className='h-5 w-5 text-white' />
-                </div>
-
-                <h2 className='text-base font-bold text-gray-800 mb-1.5 group-hover:text-[#e50012] transition-colors'>
-                  {feature.title}
-                </h2>
-
-                <p className='text-gray-500 text-sm mb-2'>
-                  {feature.description}
-                </p>
-
-                <div className='flex items-center text-[#e50012] font-medium text-xs'>
-                  <span>開く</span>
-                  <ArrowRight className='h-3 w-3 ml-0.5 group-hover:translate-x-0.5 transition-transform' />
-                </div>
-              </div>
-            </Link>
-          ))}
+          <p className='text-white/80 text-xs md:text-sm'>ビッカメ娘のイベント追跡と店舗巡り支援サイト</p>
         </div>
-      </div>
+      </header>
+
+      {/* 直近のイベント */}
+      <section className='py-6 md:py-8'>
+        <div className='container mx-auto px-4'>
+          <div className='max-w-2xl mx-auto'>
+            <div className='flex items-center gap-2 mb-4'>
+              <Calendar className='h-5 w-5 text-[#e50012]' />
+              <h2 className='text-base font-bold text-gray-800'>直近のイベント</h2>
+            </div>
+
+            {loading ? (
+              <div className='text-center py-4 text-gray-500 text-sm'>読み込み中...</div>
+            ) : upcomingEvents.length === 0 ? (
+              <div className='text-center py-4 text-gray-500 text-sm'>イベントがありません</div>
+            ) : (
+              <div className='flex flex-col gap-2'>
+                {upcomingEvents.map((event, index) => (
+                  <Link
+                    key={`${event.character.key}-${event.type}-${index}`}
+                    to='/characters/$id'
+                    params={{ id: event.character.key }}
+                  >
+                    <div className='flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer'>
+                      <div
+                        className={`p-2 rounded-lg ${event.type === 'character' ? 'bg-pink-100 text-pink-600' : 'bg-blue-100 text-blue-600'}`}
+                      >
+                        {event.type === 'character' ? <Cake className='h-4 w-4' /> : <Store className='h-4 w-4' />}
+                      </div>
+
+                      <div className='flex-1 min-w-0'>
+                        <p className='text-sm font-medium text-gray-800 truncate'>
+                          {event.character.character_name}
+                          <span className='text-gray-400 font-normal ml-1'>
+                            {event.type === 'character' ? 'の誕生日' : '(店舗誕生日)'}
+                          </span>
+                        </p>
+                        <p className='text-xs text-gray-500'>{event.date.format('M月D日')}</p>
+                      </div>
+
+                      <div
+                        className={`text-xs font-bold px-2 py-1 rounded ${
+                          event.daysUntil === 0
+                            ? 'bg-[#e50012] text-white'
+                            : event.daysUntil <= 7
+                              ? 'bg-orange-100 text-orange-600'
+                              : 'bg-gray-100 text-gray-600'
+                        }`}
+                      >
+                        {getDaysLabel(event.daysUntil)}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
@@ -75,4 +158,3 @@ const RouteComponent = () => {
 export const Route = createFileRoute('/')({
   component: RouteComponent
 })
-
