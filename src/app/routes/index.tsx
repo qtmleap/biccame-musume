@@ -117,8 +117,8 @@ const HomeContent = () => {
   return (
     <div>
       {/* ヘッダー */}
-      <header className='bg-linear-to-r from-[#e50012] to-[#ff3333] py-10 md:py-12 relative'>
-        <div className='container mx-auto px-4 text-center'>
+      <header className='bg-linear-to-r from-[#e50012] to-[#ff3333] py-10 md:py-12'>
+        <div className='container mx-auto px-4 text-center max-w-4xl'>
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -141,23 +141,6 @@ const HomeContent = () => {
             ビッカメ娘のイベント追跡と店舗巡り支援サイト
           </motion.p>
         </div>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5, ease: 'easeOut' }}
-          className='absolute top-4 right-4'
-        >
-          <a
-            href='https://twitter.com/share?ref_src=twsrc%5Etfw'
-            className='twitter-share-button'
-            data-show-count='false'
-            data-lang='ja'
-            data-hashtags='ビッカメ娘'
-            data-text='ビッカメ娘応援プロジェクト'
-          >
-            Tweet
-          </a>
-        </motion.div>
       </header>
 
       {/* 直近のイベント */}
@@ -226,11 +209,11 @@ const HomeContent = () => {
       </section>
 
       {/* LINEスタンプ宣伝 */}
-      <section className='py-6 md:py-8 bg-linear-to-br from-green-50 to-emerald-50'>
+      <section className='py-6 md:py-8 bg-linear-to-br from-blue-50 to-indigo-50'>
         <div className='container mx-auto px-4'>
           <div className='max-w-2xl mx-auto'>
             <div className='flex items-center gap-2 mb-4'>
-              <Sticker className='h-5 w-5 text-green-600' />
+              <Sticker className='h-5 w-5 text-blue-600' />
               <h2 className='text-base font-bold text-gray-800'>LINEスタンプ</h2>
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
@@ -290,6 +273,32 @@ const HomeContent = () => {
                 </div>
               </motion.a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Xポストボタン */}
+      <section className='py-6 bg-gray-50'>
+        <div className='container mx-auto px-4'>
+          <div className='max-w-2xl mx-auto text-center'>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className='flex flex-col items-center gap-2'
+            >
+              <p className='text-sm text-gray-600'>このサイトをシェア</p>
+              <a
+                href='https://twitter.com/share?ref_src=twsrc%5Etfw'
+                className='twitter-share-button'
+                data-show-count='false'
+                data-lang='ja'
+                data-hashtags='ビッカメ娘'
+                data-text='ビッカメ娘応援プロジェクト'
+              >
+                Tweet
+              </a>
+            </motion.div>
           </div>
         </div>
       </section>
