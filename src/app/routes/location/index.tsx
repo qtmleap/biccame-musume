@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { AdvancedMarker, APIProvider, Map as GoogleMap, Pin } from '@vis.gl/react-google-maps'
 import { List } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { z } from 'zod'
 import { SelectedStoreInfo } from '@/components/selected-store-info'
 import { StoreListItem } from '@/components/store-list-item'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -9,6 +10,13 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from 
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { cn } from '@/lib/utils'
 import { type Character, CharactersSchema } from '@/schemas/character.dto'
+
+/**
+ * 検索パラメータのスキーマ
+ */
+const SearchParamsSchema = z.object({
+  id: z.string().optional()
+})
 
 /**
  * キャラクターから座標を取得する関数
@@ -28,6 +36,7 @@ const getPosition = (character: Character): google.maps.LatLngLiteral => {
  * 店舗位置マップページ
  */
 const RouteComponent = () => {
+  const { id: initialCharacterId } = Route.useSearch()
   const [characters, setCharacters] = useState<Character[]>([])
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null)
   const [loading, setLoading] = useState(true)
@@ -53,6 +62,14 @@ const RouteComponent = () => {
         }
 
         setCharacters(result.data)
+
+        // URLパラメータで指定されたキャラクターを初期選択
+        if (initialCharacterId) {
+          const targetCharacter = result.data.find((c) => c.key === initialCharacterId)
+          if (targetCharacter) {
+            setSelectedCharacter(targetCharacter)
+          }
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error occurred')
       } finally {
@@ -61,7 +78,7 @@ const RouteComponent = () => {
     }
 
     fetchCharacters()
-  }, [])
+  }, [initialCharacterId])
 
   // 住所があるキャラクターのみフィルタリング
   const charactersWithAddress = characters.filter((char) => char.address && char.address.length > 0)
@@ -226,5 +243,6 @@ const RouteComponent = () => {
 }
 
 export const Route = createFileRoute('/location/')({
-  component: RouteComponent
+  component: RouteComponent,
+  validateSearch: SearchParamsSchema
 })

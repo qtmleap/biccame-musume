@@ -2,75 +2,62 @@ import { createFileRoute } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { ArrowUpDown } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { LayoutGroup } from 'motion/react'
+import { Suspense, useCallback, useMemo } from 'react'
 import { sortTypeAtom } from '@/atoms/sortAtom'
 import { CharacterListCard } from '@/components/character-list-card'
 import { Button } from '@/components/ui/button'
-import { type Character, CharactersSchema } from '@/schemas/character.dto'
+import { useCharacters } from '@/hooks/useCharacters'
 
-const RouteComponent = () => {
-  const [characters, setCharacters] = useState<Character[]>([])
+/**
+ * ローディングフォールバック
+ */
+const LoadingFallback = () => (
+  <div className='min-h-screen flex items-center justify-center'>
+    <div className='text-center'>
+      <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4' />
+      <p className='text-muted-foreground'>読み込み中...</p>
+    </div>
+  </div>
+)
+
+/**
+ * キャラクター一覧コンテンツ
+ */
+const CharactersContent = () => {
+  const { data: characters } = useCharacters()
   const [sortType, setSortType] = useAtom(sortTypeAtom)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchCharacters = async () => {
-      try {
-        const response = await fetch('/characters.json')
-        if (!response.ok) {
-          throw new Error('Failed to fetch characters')
-        }
-        const data = await response.json()
-        const result = CharactersSchema.safeParse(data)
-
-        if (!result.success) {
-          console.error('Validation error:', result.error)
-          throw new Error('Invalid characters data format')
-        }
-
-        setCharacters(result.data)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error occurred')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchCharacters()
-  }, [])
 
   /**
    * 日付文字列を解析してdayjsオブジェクトに変換
-   * YYYY-MM-DD形式またはMM/DD形式に対応
    */
-  const parseDate = (dateStr: string | undefined): dayjs.Dayjs | null => {
+  const parseDate = useCallback((dateStr: string | undefined): dayjs.Dayjs | null => {
     if (!dateStr) return null
     const parsed = dayjs(dateStr)
     if (!parsed.isValid()) return null
     return parsed
-  }
+  }, [])
 
   /**
    * 誕生日が近い順にソートするための日数計算
    */
-  const getDaysUntilBirthday = (dateStr: string | undefined): number => {
-    const birthday = parseDate(dateStr)
-    if (!birthday) return Number.MAX_SAFE_INTEGER
+  const getDaysUntilBirthday = useCallback(
+    (dateStr: string | undefined): number => {
+      const birthday = parseDate(dateStr)
+      if (!birthday) return Number.MAX_SAFE_INTEGER
 
-    const now = dayjs()
-    const thisYear = now.year()
+      const now = dayjs()
+      const thisYear = now.year()
+      let nextBirthday = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
 
-    // 今年の誕生日を計算
-    let nextBirthday = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
+      if (nextBirthday.isBefore(now, 'day') || nextBirthday.isSame(now, 'day')) {
+        nextBirthday = nextBirthday.add(1, 'year')
+      }
 
-    // 今年の誕生日が過ぎていたら来年の誕生日を使う
-    if (nextBirthday.isBefore(now, 'day') || nextBirthday.isSame(now, 'day')) {
-      nextBirthday = nextBirthday.add(1, 'year')
-    }
-
-    return nextBirthday.diff(now, 'day')
-  }
+      return nextBirthday.diff(now, 'day')
+    },
+    [parseDate]
+  )
 
   /**
    * ソート処理
@@ -96,44 +83,14 @@ const RouteComponent = () => {
       }
 
       if (sortType === 'upcoming_birthday') {
-        const daysA = Math.min(
-          getDaysUntilBirthday(a.character_birthday),
-          getDaysUntilBirthday(a.store_birthday)
-        )
-        const daysB = Math.min(
-          getDaysUntilBirthday(b.character_birthday),
-          getDaysUntilBirthday(b.store_birthday)
-        )
+        const daysA = getDaysUntilBirthday(a.character_birthday)
+        const daysB = getDaysUntilBirthday(b.character_birthday)
         return daysA - daysB
       }
 
       return 0
     })
-  }, [characters, sortType])
-
-  const filteredCharacters = sortedCharacters
-
-  if (loading) {
-    return (
-      <div className='min-h-screen flex items-center justify-center'>
-        <div className='text-center'>
-          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4'></div>
-          <p className='text-muted-foreground'>読み込み中...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className='min-h-screen flex items-center justify-center'>
-        <div className='text-center'>
-          <p className='text-destructive mb-2'>エラーが発生しました</p>
-          <p className='text-sm text-muted-foreground'>{error}</p>
-        </div>
-      </div>
-    )
-  }
+  }, [characters, sortType, parseDate, getDaysUntilBirthday])
 
   return (
     <div className='min-h-screen'>
@@ -182,16 +139,27 @@ const RouteComponent = () => {
           </div>
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
-          {filteredCharacters.map((character) => (
-            <CharacterListCard key={character.key} character={character} />
-          ))}
-        </div>
+        <LayoutGroup>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
+            {sortedCharacters.map((character) => (
+              <CharacterListCard key={character.key} character={character} />
+            ))}
+          </div>
+        </LayoutGroup>
       </div>
     </div>
   )
 }
 
+/**
+ * ルートコンポーネント
+ */
+const RouteComponent = () => (
+  <Suspense fallback={<LoadingFallback />}>
+    <CharactersContent />
+  </Suspense>
+)
+
 export const Route = createFileRoute('/characters/')({
-  component: RouteComponent,
+  component: RouteComponent
 })
