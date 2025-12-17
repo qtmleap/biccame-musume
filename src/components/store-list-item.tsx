@@ -1,5 +1,7 @@
 import type { Character } from '@/schemas/character.dto'
 import { getCharacterImageUrl } from '@/lib/utils'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { MapPin } from 'lucide-react'
 
 type StoreListItemProps = {
   character: Character
@@ -14,15 +16,16 @@ export const StoreListItem = ({ character }: StoreListItemProps) => {
   return (
     <div className='flex items-center gap-3 p-2'>
       {/* アバター画像 */}
-      {imageUrl ? (
-        <div className='w-12 h-12 rounded-full overflow-hidden shrink-0'>
-          <img src={imageUrl} alt={character.character_name} className='w-full h-full object-cover object-[center_40%] scale-150' />
-        </div>
-      ) : (
-        <div className='w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0 flex items-center justify-center'>
-          <span className='text-xs text-gray-500 dark:text-gray-400'>📍</span>
-        </div>
-      )}
+      <Avatar className='w-12 h-12'>
+        <AvatarImage
+          src={imageUrl}
+          alt={character.character_name}
+          className='object-cover mix-blend-multiply dark:mix-blend-screen'
+        />
+        <AvatarFallback className='bg-gray-200 dark:bg-gray-700'>
+          <MapPin className='w-4 h-4 text-gray-500 dark:text-gray-400' />
+        </AvatarFallback>
+      </Avatar>
 
       {/* 店舗情報 */}
       <div className='flex-1 min-w-0'>
