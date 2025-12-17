@@ -1,7 +1,7 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import Header from '@/components/common/header'
 import { Footer } from '@/components/common/footer'
+import Header from '@/components/common/header'
 
 /**
  * NOTE: Next.jsでいうところのsrc/app/layout.tsx
