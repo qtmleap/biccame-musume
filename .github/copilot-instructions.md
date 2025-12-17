@@ -15,21 +15,25 @@ Regarding source code editing:
 - Conform to ESLint standard rules
 - Name variables and functions in camelCase
 - Keep variable and function names concise
-- Use Zod for type definitions
 - Write log messages in English
 - Write source code comments in Japanese
+- Place components for each service in `src/components/**/*.tsx`
+- When changing Shadcn component styles, use `className`
+- Use `cn` util for conditional `className` handling
+- Use `async/await` for asynchronous processing
+- Use `src/utils/client.ts` defined with `Zodios` for API communication
+- Use Zod for type definitions
+
+Do not use the following:
 - Do not use emoji in source
 - Do not use `var` or `let`; use `const` whenever possible
 - Do not use `Date`, use `dayjs` for date and time processing
 - Do not use `svg` directly; use `lucide-react` or `@shadcn/ui/icons` for icons
-- Use `cn` util for conditional `className` handling
-- Avoid using `any` type whenever possible
-- Use `async/await` for asynchronous processing
-- Use `src/utils/client.ts` defined with `Zodios` for API communication
-- Place components for each service in `src/components/**/*.tsx`
-- However, do not edit `src/components/ui/**.tsx` as these are Shadcn
-common components
-- When changing Shadcn component styles, use `className`
+- Do not use `fetch` directly; use `Zodios` client defined in `src/utils/client.ts`
+- Do not use `any` type whenever possible
+
+Do not change the following:
+- `index.css` and `src/components/ui/**.tsx`
 
 Regarding React components:
 - Use function components
