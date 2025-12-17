@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { useCharacters } from '@/hooks/useCharacters'
-import { cn } from '@/lib/utils'
+import { cn, getCharacterImageUrl } from '@/lib/utils'
 import type { Character } from '@/schemas/character.dto'
 
 export const Route = createFileRoute('/calendar/')({
@@ -323,10 +323,11 @@ const CalendarContent = () => {
                               )}
                             >
                               {/* キャラクター画像 */}
-                              <Avatar className='w-10 h-10 shrink-0 border border-border'>
+                              <Avatar className='w-10 h-10 shrink-0 border border-border overflow-hidden'>
                                 <AvatarImage
-                                  src={event.character.profile_image_url}
+                                  src={getCharacterImageUrl(event.character)}
                                   alt={event.character.character_name}
+                                  className='object-cover object-top scale-150 translate-y-2'
                                 />
                                 <AvatarFallback>{event.character.character_name.slice(0, 1)}</AvatarFallback>
                               </Avatar>
@@ -447,13 +448,14 @@ const CalendarContent = () => {
                               <Avatar
                                 key={`${event.character.key}-${event.type}`}
                                 className={cn(
-                                  'w-8 h-8 ring-2',
+                                  'w-8 h-8 ring-2 overflow-hidden',
                                   event.type === 'character' ? 'ring-pink-400/50' : 'ring-blue-400/50'
                                 )}
                               >
                                 <AvatarImage
-                                  src={event.character.profile_image_url}
+                                  src={getCharacterImageUrl(event.character)}
                                   alt={event.character.character_name}
+                                  className='object-cover object-top scale-150 translate-y-2'
                                 />
                                 <AvatarFallback className='text-[10px] bg-muted'>
                                   {event.character.character_name.slice(0, 1)}
@@ -503,8 +505,12 @@ const CalendarContent = () => {
                         isCharacter ? 'bg-pink-500/10 hover:bg-pink-500/20' : 'bg-blue-500/10 hover:bg-blue-500/20'
                       )}
                     >
-                      <Avatar className='w-12 h-12 border border-border'>
-                        <AvatarImage src={event.character.profile_image_url} alt={event.character.character_name} />
+                      <Avatar className='w-12 h-12 border border-border overflow-hidden'>
+                        <AvatarImage
+                          src={getCharacterImageUrl(event.character)}
+                          alt={event.character.character_name}
+                          className='object-cover object-top scale-150 translate-y-2'
+                        />
                         <AvatarFallback>{event.character.character_name.slice(0, 1)}</AvatarFallback>
                       </Avatar>
                       <div className='flex-1 min-w-0'>
