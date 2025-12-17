@@ -22,7 +22,7 @@ const StoreListDesktopDialog = ({ characters, isOpen, onOpenChange, onCharacterS
       <DialogTrigger asChild>
         <button
           type='button'
-          className='absolute bg-white dark:bg-gray-900 rounded-lg shadow-lg px-6 py-3 z-10 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors safe-bottom safe-left'
+          className='absolute bottom-4 left-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg px-6 py-3 z-10 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
         >
           <div className='flex items-center gap-2'>
             <List className='w-5 h-5' />
@@ -62,7 +62,7 @@ const StoreListMobileDrawer = ({ characters, isOpen, onOpenChange, onCharacterSe
       <DrawerTrigger asChild>
         <button
           type='button'
-          className='absolute bg-white dark:bg-gray-900 rounded-lg shadow-lg px-6 py-3 z-10 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors safe-bottom safe-left'
+          className='absolute bottom-4 left-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg px-6 py-3 z-10 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
         >
           <div className='flex items-center gap-2'>
             <List className='w-5 h-5' />
