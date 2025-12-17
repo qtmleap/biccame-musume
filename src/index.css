@@ -166,20 +166,11 @@
     scrollbar-color: rgb(75 85 99) transparent;
   }
 
-  /* セーフエリア対応 */
-  .safe-top {
-    top: env(safe-area-inset-top, 0);
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0);
   }
 
-  .safe-bottom {
-    bottom: env(safe-area-inset-bottom, 0);
-  }
-
-  .safe-left {
-    left: env(safe-area-inset-left, 0);
-  }
-
-  .safe-right {
-    right: env(safe-area-inset-right, 0);
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0);
   }
 }

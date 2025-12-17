@@ -101,6 +101,7 @@ const RouteComponent = () => {
   }, [])
 
   const handleMarkerClick = (character: Character) => {
+    console.log('Marker clicked:', character.character_name)
     setSelectedCharacter(character)
   }
 
@@ -123,7 +124,7 @@ const RouteComponent = () => {
 
   return (
     <APIProvider apiKey={apiKey}>
-      <div className='relative w-full overflow-hidden'>
+      <div className='relative w-full h-[calc(100dvh-3rem)] md:h-[calc(100dvh-3.5rem)] overflow-hidden'>
         <GoogleMap
           key={mapKey}
           defaultCenter={selectedCharacter ? getPosition(selectedCharacter) : { lat: 35.6812, lng: 139.7671 }}
@@ -147,7 +148,7 @@ const RouteComponent = () => {
         </GoogleMap>
 
         {selectedCharacter && (
-          <div className='absolute bg-white dark:bg-gray-900 rounded-lg shadow-lg p-3 max-w-md z-10 safe-top safe-right'>
+          <div className='absolute top-4 right-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-3 max-w-md z-10'>
             <SelectedStoreInfo character={selectedCharacter} />
           </div>
         )}
@@ -160,19 +161,19 @@ const RouteComponent = () => {
         />
 
         {/* デバッグ用: セーフエリアの値を表示 */}
-      </div>
-      <div className='absolute top-20 left-4 bg-black/80 text-white p-2 rounded text-xs z-50 font-mono'>
-        <div>
-          top: <span id='safe-top-value'>-</span>
-        </div>
-        <div>
-          bottom: <span id='safe-bottom-value'>-</span>
-        </div>
-        <div>
-          left: <span id='safe-left-value'>-</span>
-        </div>
-        <div>
-          right: <span id='safe-right-value'>-</span>
+        <div className='absolute top-20 left-4 bg-black/80 text-white p-2 rounded text-xs z-50 font-mono'>
+          <div>
+            top: <span id='safe-top-value'>-</span>
+          </div>
+          <div>
+            bottom: <span id='safe-bottom-value'>-</span>
+          </div>
+          <div>
+            left: <span id='safe-left-value'>-</span>
+          </div>
+          <div>
+            right: <span id='safe-right-value'>-</span>
+          </div>
         </div>
       </div>
     </APIProvider>
