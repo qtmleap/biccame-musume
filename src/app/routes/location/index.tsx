@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { AdvancedMarker, APIProvider, Map as GoogleMap, Pin } from '@vis.gl/react-google-maps'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { StoreList } from '@/components/location/store-list'
 import { SelectedStoreInfo } from '@/components/selected-store-info'
@@ -45,6 +45,71 @@ const RouteComponent = () => {
 
   const charactersWithAddress = characters.filter((char) => char.address && char.address.length > 0)
 
+  // セーフエリアの値を取得して表示
+  useEffect(() => {
+    const updateSafeAreaValues = () => {
+      // 複数の方法でセーフエリアを取得
+      const testDiv = document.createElement('div')
+      testDiv.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 1px;
+        height: 1px;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        padding-left: env(safe-area-inset-left, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
+        pointer-events: none;
+        visibility: hidden;
+      `
+      document.body.appendChild(testDiv)
+
+      const computed = getComputedStyle(testDiv)
+      const top = computed.paddingTop
+      const bottom = computed.paddingBottom
+      const left = computed.paddingLeft
+      const right = computed.paddingRight
+
+      document.body.removeChild(testDiv)
+
+      // CSS変数として設定
+      document.documentElement.style.setProperty('--safe-area-inset-top', top)
+      document.documentElement.style.setProperty('--safe-area-inset-bottom', bottom)
+      document.documentElement.style.setProperty('--safe-area-inset-left', left)
+      document.documentElement.style.setProperty('--safe-area-inset-right', right)
+
+      // デバッグ情報
+      const topEl = document.getElementById('safe-top-value')
+      const bottomEl = document.getElementById('safe-bottom-value')
+      const leftEl = document.getElementById('safe-left-value')
+      const rightEl = document.getElementById('safe-right-value')
+
+      if (topEl) topEl.textContent = `${top} (vh:${window.innerHeight})`
+      if (bottomEl) bottomEl.textContent = `${bottom} (screen:${window.screen.height})`
+      if (leftEl) leftEl.textContent = left
+      if (rightEl) rightEl.textContent = right
+
+      // コンソールにも出力
+      console.log('Safe Area Insets:', { top, bottom, left, right })
+      console.log('Window:', { innerHeight: window.innerHeight, outerHeight: window.outerHeight })
+      console.log('Screen:', { height: window.screen.height, availHeight: window.screen.availHeight })
+    }
+
+    // 初回実行を少し遅延させる
+    setTimeout(updateSafeAreaValues, 100)
+    setTimeout(updateSafeAreaValues, 500)
+    setTimeout(updateSafeAreaValues, 1000)
+
+    window.addEventListener('resize', updateSafeAreaValues)
+    window.addEventListener('orientationchange', updateSafeAreaValues)
+
+    return () => {
+      window.removeEventListener('resize', updateSafeAreaValues)
+      window.removeEventListener('orientationchange', updateSafeAreaValues)
+    }
+  }, [])
+
   const handleMarkerClick = (character: Character) => {
     setSelectedCharacter(character)
   }
@@ -57,7 +122,7 @@ const RouteComponent = () => {
 
   if (!apiKey) {
     return (
-      <div className='min-h-screen flex items-center justify-center'>
+      <div className='flex items-center justify-center'>
         <div className='text-center'>
           <p className='text-destructive mb-2'>Google Maps APIキーが設定されていません</p>
           <p className='text-sm text-muted-foreground'>.envファイルにVITE_GOOGLE_MAPS_API_KEYを設定してください</p>
@@ -103,6 +168,22 @@ const RouteComponent = () => {
           onOpenChange={setIsStoreListOpen}
           onCharacterSelect={handleCharacterSelect}
         />
+
+        {/* デバッグ用: セーフエリアの値を表示 */}
+        <div className='absolute top-20 left-4 bg-black/80 text-white p-2 rounded text-xs z-50 font-mono'>
+          <div>
+            top: <span id='safe-top-value'>-</span>
+          </div>
+          <div>
+            bottom: <span id='safe-bottom-value'>-</span>
+          </div>
+          <div>
+            left: <span id='safe-left-value'>-</span>
+          </div>
+          <div>
+            right: <span id='safe-right-value'>-</span>
+          </div>
+        </div>
       </div>
     </APIProvider>
   )
