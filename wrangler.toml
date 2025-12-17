@@ -21,7 +21,15 @@ directory = "dist"
 not_found_handling = "single-page-application"
 binding = "ASSETS"
 
+[[env.prod.kv_namespaces]]
+binding = "VOTES"
+id = "04dd77043cc240b2b8bbbd7f0adfd67d"
+
 [env.dev.assets]
 directory = "dist"
 not_found_handling = "single-page-application"
 binding = "ASSETS"
+
+[[env.dev.kv_namespaces]]
+binding = "VOTES"
+id = "97c756ffdc3e4e2596946a57092d9b2d"

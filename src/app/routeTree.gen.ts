@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as _notFoundRouteImport } from './routes/__not-found'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RankingIndexRouteImport } from './routes/ranking/index'
 import { Route as LocationIndexRouteImport } from './routes/location/index'
 import { Route as CharactersIndexRouteImport } from './routes/characters/index'
 import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
@@ -24,6 +25,11 @@ const _notFoundRoute = _notFoundRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RankingIndexRoute = RankingIndexRouteImport.update({
+  id: '/ranking/',
+  path: '/ranking/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LocationIndexRoute = LocationIndexRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/calendar': typeof CalendarIndexRoute
   '/characters': typeof CharactersIndexRoute
   '/location': typeof LocationIndexRoute
+  '/ranking': typeof RankingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/calendar': typeof CalendarIndexRoute
   '/characters': typeof CharactersIndexRoute
   '/location': typeof LocationIndexRoute
+  '/ranking': typeof RankingIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/calendar/': typeof CalendarIndexRoute
   '/characters/': typeof CharactersIndexRoute
   '/location/': typeof LocationIndexRoute
+  '/ranking/': typeof RankingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/characters'
     | '/location'
+    | '/ranking'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/characters'
     | '/location'
+    | '/ranking'
   id:
     | '__root__'
     | '/'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '/calendar/'
     | '/characters/'
     | '/location/'
+    | '/ranking/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -114,6 +126,7 @@ export interface RootRouteChildren {
   CalendarIndexRoute: typeof CalendarIndexRoute
   CharactersIndexRoute: typeof CharactersIndexRoute
   LocationIndexRoute: typeof LocationIndexRoute
+  RankingIndexRoute: typeof RankingIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -130,6 +143,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ranking/': {
+      id: '/ranking/'
+      path: '/ranking'
+      fullPath: '/ranking'
+      preLoaderRoute: typeof RankingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/location/': {
@@ -178,6 +198,7 @@ const rootRouteChildren: RootRouteChildren = {
   CalendarIndexRoute: CalendarIndexRoute,
   CharactersIndexRoute: CharactersIndexRoute,
   LocationIndexRoute: LocationIndexRoute,
+  RankingIndexRoute: RankingIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

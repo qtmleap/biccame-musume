@@ -18,13 +18,15 @@ Regarding source code editing:
 - Use Zod for type definitions
 - Write log messages in English
 - Write source code comments in Japanese
+- Do not use emoji in source
 - Do not use `var` or `let`; use `const` whenever possible
 - Do not use `Date`, use `dayjs` for date and time processing
 - Avoid using `any` type whenever possible
 - Use `async/await` for asynchronous processing
 - Use `src/utils/client.ts` defined with `Zodios` for API communication
 - Place components for each service in `src/components/**/*.tsx`
-- However, do not edit `src/components/ui/**.tsx` as these are Shadcn common components
+- However, do not edit `src/components/ui/**.tsx` as these are Shadcn
+common components
 - When changing Shadcn component styles, use `className`
 
 Regarding React components:
