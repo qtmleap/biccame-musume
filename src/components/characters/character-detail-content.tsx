@@ -94,8 +94,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
               </div>
             </div>
             <p className='text-sm text-gray-500 mt-1'>
-              {character.address?.split(/都|道|府|県/)[0]}
-              {character.address?.match(/都|道|府|県/)?.[0]}
+              {character.prefecture}
               {character.character_birthday && ` · ${dayjs(character.character_birthday).format('M月D日')}生まれ`}
             </p>
             {/* リンク */}

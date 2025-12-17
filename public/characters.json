@@ -268,6 +268,7 @@
     "key": "photo",
     "description": "ビックカメラBIC PHOTOの擬人化キャラクター。プロスタたんの妹。お姉ちゃんが撮った写真をプリントしてアルバムにまとめるのが好き。",
     "profile_image_url": "https://biccame.jp/profile/images/photo1.png",
+    "prefecture": "東京都",
     "image_urls": [
       "https://biccame.jp/profile/images/photo_img.png",
       "https://biccame.jp/profile/images/photo32.png",
@@ -356,6 +357,7 @@
     "key": "camera",
     "description": "ビックカメラ池袋東口カメラ館の擬人化キャラクター。同じ池袋の本店たんがお姉ちゃん。リボンとくせっ毛がお揃い。カメラをいつも首からさげている。",
     "profile_image_url": "https://biccame.jp/profile/images/camera1.png",
+    "prefecture": "東京都",
     "image_urls": [
       "https://biccame.jp/profile/images/camera2.png",
       "https://biccame.jp/profile/4864f8622ad3133a980acfeba567137323f7a6be.png",
@@ -444,6 +446,7 @@
     "key": "seiseki",
     "description": "ビックカメラ聖蹟桜ヶ丘駅店の擬人化キャラクター。後ろ髪にある大きな桜の花が特徴。ツイートに桜の花を咲かせるのが得意。",
     "profile_image_url": "https://biccame.jp/profile/seiseki1.png",
+    "prefecture": "東京都",
     "image_urls": [
       "https://biccame.jp/profile/seiseki2.png",
       "https://biccame.jp/profile/images/seiseki3.png",
@@ -556,6 +559,7 @@
     "key": "kyoto",
     "description": "ビックカメラJR京都駅店の擬人化キャラクター。京都の花・ツバキと目元の紅が特徴。神楽鈴を持っている。たまに京都弁が出ることがある。",
     "profile_image_url": "https://biccame.jp/profile/images/kyoto1.png",
+    "prefecture": "京都府",
     "image_urls": [
       "https://biccame.jp/profile/images/kyoto2.png",
       "https://biccame.jp/profile/images/kyoto3.png",
@@ -716,6 +720,7 @@
     "key": "funato",
     "description": "ビックカメラ船橋東武店の擬人化キャラクター。制服のリボンのひまわりはふなたんとお揃い。風車のヘアピンをしている。アンデルセンの本が好き。",
     "profile_image_url": "https://biccame.jp/profile/images/funato1.png",
+    "prefecture": "千葉県",
     "image_urls": [
       "https://biccame.jp/profile/images/funato2.png",
       "https://biccame.jp/profile/images/funato3.png",
@@ -804,6 +809,7 @@
     "key": "machida",
     "description": "ビックカメラ町田店の擬人化キャラクター。町田市の花・サルビアと、市の鳥・カワセミのような色の髪が特徴。前髪につけているクロスしたヘアピンと、横で結んだ髪で「町」という字になるようにしている。渋谷とアキバに遊びに行くのが好き。",
     "profile_image_url": "https://biccame.jp/profile/images/machida1.png",
+    "prefecture": "東京都",
     "image_urls": [
       "https://biccame.jp/profile/images/machida2.png",
       "https://biccame.jp/profile/images/machida3.png",
@@ -916,6 +922,7 @@
     "key": "tamapla",
     "description": "ビックカメライトーヨーカドーたまプラーザ店の擬人化キャラクター。青葉が輝くような鮮やかな緑色の髪をポニーテールにしている。ヤマザクラをイメージしたアクセサリーを付けている。大人っぽい雰囲気が漂っている。",
     "profile_image_url": "https://biccame.jp/profile/images/tamapla1.png",
+    "prefecture": "神奈川県",
     "image_urls": [
       "https://biccame.jp/profile/images/tamapla2.png",
       "https://biccame.jp/profile/images/tamapla3.png",
