@@ -49,12 +49,12 @@ voteRoutes.post('/', async (c) => {
     // 環境判定（開発環境かどうか）
     const isDevelopment = c.req.header('Host')?.includes('localhost') || c.req.header('Host')?.includes('127.0.0.1')
 
-    // Rate Limiting: 開発環境以外では同一IPから1分間に5回まで
+    // Rate Limiting: 開発環境以外では同一IPから1200秒間に60回まで
     if (!isDevelopment) {
       const identifier = `ratelimit:${ip}`
       const { success } = await c.env.VOTES.get(identifier).then((val) => {
         const count = val ? Number.parseInt(val, 10) : 0
-        if (count >= 5) {
+        if (count >= 60) {
           return { success: false }
         }
         return { success: true }
@@ -70,10 +70,10 @@ voteRoutes.post('/', async (c) => {
         )
       }
 
-      // Rate Limitカウンタを更新（1分間有効）
+      // Rate Limitカウンタを更新（1200秒間有効）
       const currentCount = await c.env.VOTES.get(identifier)
       await c.env.VOTES.put(identifier, String((currentCount ? Number.parseInt(currentCount, 10) : 0) + 1), {
-        expirationTtl: 60
+        expirationTtl: 1200
       })
     }
 
