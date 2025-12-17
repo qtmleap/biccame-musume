@@ -5,6 +5,7 @@ import { motion } from 'motion/react'
 import { Suspense, useEffect, useMemo } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useCharacters } from '@/hooks/useCharacters'
+import { getCharacterImageUrl } from '@/lib/utils'
 import type { Character } from '@/schemas/character.dto'
 
 type UpcomingEvent = {
@@ -178,12 +179,12 @@ const HomeContent = () => {
                           {event.type === 'character' ? <Cake className='h-4 w-4' /> : <Store className='h-4 w-4' />}
                         </div>
 
-                        {event.character.profile_image_url && (
-                          <Avatar className='w-8 h-8'>
+                        {getCharacterImageUrl(event.character) && (
+                          <Avatar className='w-8 h-8 overflow-hidden'>
                             <AvatarImage
-                              src={event.character.profile_image_url}
+                              src={getCharacterImageUrl(event.character)}
                               alt={event.character.character_name}
-                              className='object-cover object-top'
+                              className='object-cover object-top scale-150 translate-y-2'
                             />
                             <AvatarFallback>{event.character.character_name.charAt(0)}</AvatarFallback>
                           </Avatar>
