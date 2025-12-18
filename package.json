@@ -1,8 +1,8 @@
 {
-  "name": "typescript",
+  "name": "biccame-musume",
   "version": "0.0.1",
   "type": "module",
-  "description": "TypeScript + Bun Exampmle",
+  "description": "ビックカメラの店舗擬人化キャラクター「ビッカメ娘」を応援する非公式ファンサイト",
   "author": "@QuantumLeap",
   "private": true,
   "license": "MIT",
