@@ -76,7 +76,7 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
         </h3>
 
         {/* 画像（白色透過） */}
-        <div className='relative bg-pink-50 h-40 w-full flex items-center justify-center'>
+        <div className='relative bg-pink-50 h-28 w-full flex items-center justify-center'>
           <img
             src={getCharacterImageUrl(character)}
             alt={character.character_name}
@@ -122,10 +122,18 @@ export const RankingList = ({ characters }: RankingListProps) => {
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <motion.p
-            className='text-gray-500 text-lg mb-6'
+            className='text-gray-700 text-lg mb-4 font-bold'
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            各ビッカメ娘に1日1回投票できます
+          </motion.p>
+          <motion.p
+            className='text-gray-500 text-base mb-6'
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
             現在投票受付中です
           </motion.p>
