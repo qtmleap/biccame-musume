@@ -20,15 +20,16 @@ const submitVote = async (characterId: string): Promise<VoteResponse> => {
 /**
  * 投票機能のカスタムフック
  */
-export const useVote = (characterId: string) => {
+export const useVote = (characterId: string, options?: { enableVoteCount?: boolean }) => {
   const queryClient = useQueryClient()
+  const enableVoteCount = options?.enableVoteCount ?? true
 
   // 投票カウント取得
   const { data: voteCount = 0, isLoading } = useQuery({
     queryKey: ['voteCount', characterId],
     queryFn: () => fetchVoteCount(characterId),
     staleTime: 30000, // 30秒間キャッシュ
-    refetchInterval: 60000 // 1分ごとに再取得
+    enabled: enableVoteCount
   })
 
   // 投票実行
