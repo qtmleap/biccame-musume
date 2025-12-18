@@ -7,6 +7,7 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react-swc'
 import { defineConfig } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import sitemap from 'vite-plugin-sitemap'
 
 const version = JSON.parse(readFileSync('./package.json', 'utf-8')).version
 const hash = execSync('git rev-parse --short HEAD').toString().trim()
@@ -48,7 +49,21 @@ export default defineConfig(({ mode }) => {
       cloudflare({
         configPath: './wrangler.toml'
       }),
-      tailwindcss()
+      tailwindcss(),
+      sitemap({
+        hostname: 'https://biccame-musume.com',
+        dynamicRoutes: [
+          '/',
+          '/about',
+          '/calendar',
+          '/characters',
+          '/contact',
+          '/location',
+          '/ranking'
+        ],
+        changefreq: 'weekly',
+        outDir: 'dist'
+      })
     ],
     build: {
       rollupOptions: {
@@ -64,7 +79,8 @@ export default defineConfig(({ mode }) => {
               '@radix-ui/react-avatar',
               '@radix-ui/react-alert-dialog'
             ],
-            utils: ['axios', 'dayjs']
+            utils: ['axios', 'dayjs'],
+            react: ['react', 'react-dom', 'react-router-dom'],
           }
         }
       },
