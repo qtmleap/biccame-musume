@@ -2,7 +2,6 @@ import { Hono } from 'hono'
 import { voteRoutes } from './routes/vote'
 
 type Bindings = {
-  ASSETS: Fetcher
   VOTES: KVNamespace
 }
 
@@ -16,6 +15,8 @@ app.use('*', async (_c, next) => {
   await next()
 })
 
-app.get('*', (c) => c.env.ASSETS.fetch(c.req.raw))
+app.use('*', async (_c, next) => {
+  await next()
+})
 
 export default app
