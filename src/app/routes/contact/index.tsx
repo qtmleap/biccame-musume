@@ -61,13 +61,13 @@ const RouteComponent = () => {
                   <h3 className='font-bold text-gray-800 mb-2'>X（旧Twitter）</h3>
                   <p className='text-sm mb-3'>カジュアルなご意見やご感想は、Xでお気軽にお寄せください。</p>
                   <a
-                    href='https://x.com/qtmleap'
+                    href='https://x.com/ultemica'
                     target='_blank'
                     rel='noopener noreferrer'
                     className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-medium text-sm'
                   >
                     <ExternalLink className='h-3.5 w-3.5' />
-                    @qtmleap をフォロー
+                    @ultemica をフォロー
                   </a>
                 </div>
               </div>
