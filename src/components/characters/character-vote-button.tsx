@@ -10,13 +10,18 @@ import { cn } from '@/lib/utils'
 
 type CharacterVoteButtonProps = {
   characterId: string
+  characterName?: string
   variant?: 'default' | 'compact'
 }
 
 /**
  * キャラクター投票ボタン
  */
-export const CharacterVoteButton = ({ characterId, variant = 'default' }: CharacterVoteButtonProps) => {
+export const CharacterVoteButton = ({
+  characterId,
+  characterName: _characterName,
+  variant = 'default'
+}: CharacterVoteButtonProps) => {
   const { vote, isVoting, isSuccess, error, voteResponse } = useVote(characterId)
   const [lastVoteTimes, setLastVoteTimes] = useAtom(lastVoteTimesAtom)
 
