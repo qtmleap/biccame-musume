@@ -2,19 +2,19 @@ name = "biccame-musume"
 compatibility_date = "2025-07-12"
 compatibility_flags = ["nodejs_compat_v2"]
 main = "src/index.ts"
-routes = [{ pattern = "biccame-musume.qleap.jp", custom_domain = true }]
+routes = [{ pattern = "biccame-musume.com", custom_domain = true }]
 
 [env.prod]
 name = "biccame-musume-prod"
 workers_dev = false
 preview_urls = false
-routes = [{ pattern = "biccame-musume.qleap.jp", custom_domain = true }]
+routes = [{ pattern = "biccame-musume.com", custom_domain = true }]
 
 [env.dev]
 name = "biccame-musume-dev"
 workers_dev = true
 preview_urls = true
-routes = [{ pattern = "biccame-musume-dev.qleap.jp", custom_domain = true }]
+routes = [{ pattern = "biccame-musume-dev.com", custom_domain = true }]
 
 [env.prod.assets]
 directory = "dist"
