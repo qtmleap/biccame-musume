@@ -62,14 +62,12 @@ export default defineConfig(({ mode }) => {
           '/ranking'
         ],
         changefreq: 'weekly',
-        outDir: 'dist'
       })
     ],
     build: {
       rollupOptions: {
         output: {
           manualChunks: {
-            'react-vendor': ['react', 'react-dom'],
             router: ['@tanstack/react-router'],
             query: ['@tanstack/react-query'],
             ui: [
@@ -80,7 +78,7 @@ export default defineConfig(({ mode }) => {
               '@radix-ui/react-alert-dialog'
             ],
             utils: ['axios', 'dayjs'],
-            react: ['react', 'react-dom', 'react-router-dom'],
+            react: ['react', 'react-dom'],
           }
         }
       },
