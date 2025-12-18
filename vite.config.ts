@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { mkdirSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { cloudflare } from '@cloudflare/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
@@ -24,6 +24,12 @@ export default defineConfig(({ mode }) => {
         name: 'build-info',
         buildStart() {
           console.log(`Building app version: ${version} (git hash: ${hash}) in ${mode} mode`)
+        }
+      },
+      {
+        name: 'ensure-client-dir',
+        buildStart() {
+          mkdirSync('dist/client', { recursive: true })
         }
       },
       nodePolyfills({
@@ -62,6 +68,7 @@ export default defineConfig(({ mode }) => {
           '/ranking'
         ],
         changefreq: 'weekly',
+        outDir: 'dist/client',
       })
     ],
     build: {
