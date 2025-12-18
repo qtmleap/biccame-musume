@@ -20,7 +20,7 @@
 ### お問い合わせ
 
 - 不具合報告・機能要望: [GitHub Issues](https://github.com/qtmleap/vite-hono-workers/issues)
-- ご意見・ご感想: [X @qtmleap](https://x.com/qtmleap)
+- ご意見・ご感想: [X @ultemica](https://x.com/ultemica)
 
 ### 公式サイト
 
