@@ -10,15 +10,14 @@ import { cn } from '@/lib/utils'
 
 type CharacterVoteButtonProps = {
   characterId: string
-  characterName?: string
   variant?: 'default' | 'compact'
 }
 
 /**
  * キャラクター投票ボタン
  */
-export const CharacterVoteButton = ({ characterId, characterName, variant = 'default' }: CharacterVoteButtonProps) => {
-  const { vote, isVoting, isSuccess, error, nextVoteDate, voteResponse } = useVote(characterId)
+export const CharacterVoteButton = ({ characterId, variant = 'default' }: CharacterVoteButtonProps) => {
+  const { vote, isVoting, isSuccess, error, voteResponse } = useVote(characterId)
   const [lastVoteTimes, setLastVoteTimes] = useAtom(lastVoteTimesAtom)
 
   // 今日既に投票済みかチェック
@@ -44,39 +43,31 @@ export const CharacterVoteButton = ({ characterId, characterName, variant = 'def
   }, [isSuccess, characterId, setLastVoteTimes])
 
   useEffect(() => {
-    if (isSuccess && nextVoteDate) {
-      const message = voteResponse?.message || '応援ありがとうございます！'
-      toast.success(message, {
-        description: `次回応援: ${dayjs(nextVoteDate).format('M月D日 0:00')}`,
+    if (isSuccess && voteResponse?.message) {
+      toast.success(voteResponse.message, {
         classNames: {
           toast: 'text-gray-900',
           description: 'text-gray-900! font-semibold!',
           icon: 'text-green-600'
         },
-        icon: <CircleCheckIcon className='size-6 stroke-2' />
+        icon: <CircleCheckIcon />
       })
     }
-  }, [isSuccess, nextVoteDate, voteResponse])
+  }, [isSuccess, voteResponse])
 
   useEffect(() => {
     if (error) {
       // エラーレスポンスからメッセージを取得
-      let errorMessage = error.message
+      const errorMessage = error.message
 
-      // キャラクター名がある場合、「本日は既に投票済みです」をカスタマイズ
-      if (characterName && errorMessage.includes('本日は既に投票済みです')) {
-        errorMessage = `本日は${characterName}には既に応援済みです`
-      }
-
-      toast.error('応援できませんでした', {
-        description: errorMessage,
+      toast.error(errorMessage, {
         classNames: {
           toast: 'text-gray-900',
           description: 'text-gray-900!'
         }
       })
     }
-  }, [error, characterName])
+  }, [error])
 
   const handleVote = () => {
     if (hasVotedToday || isVoting) return

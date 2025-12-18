@@ -73,7 +73,6 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
             <div className='grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 sm:mt-0'>
               {sortOptions.map((option) => {
                 const isSelected = sortType === option.value
-                const isRandom = option.value === 'random'
 
                 return (
                   <Button
@@ -81,11 +80,10 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
                     variant='outline'
                     size='sm'
                     onClick={() => handleSortChange(option.value)}
-                    {...(isSelected && !isRandom ? { disabled: true } : {})}
                     className={cn(
                       'w-full text-xs',
                       isSelected
-                        ? 'bg-green-500 text-white border-green-500 hover:bg-green-600 hover:text-white dark:bg-green-500 dark:text-white dark:border-green-500 dark:hover:bg-green-600'
+                        ? 'bg-green-500/50 text-white border-green-500/50 hover:bg-green-500/60 hover:text-white dark:bg-green-500/50 dark:text-white dark:border-green-500/50 dark:hover:bg-green-500/60'
                         : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-200/90 dark:text-gray-800 dark:border-gray-300 dark:hover:bg-gray-200 dark:hover:text-gray-800'
                     )}
                   >

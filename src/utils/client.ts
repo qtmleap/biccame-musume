@@ -4,22 +4,16 @@ import { CharactersSchema } from '@/schemas/character.dto'
 import { AllVoteCountsSchema, VoteCountSchema, VoteRequestSchema, VoteResponseSchema } from '@/schemas/vote.dto'
 
 /**
- * キャラクターAPI定義
+ * API定義
  */
-const characterApi = makeApi([
+const api = makeApi([
   {
     method: 'get',
     path: '/characters.json',
     alias: 'getCharacters',
     description: 'ビッカメ娘キャラクター一覧を取得',
     response: CharactersSchema
-  }
-])
-
-/**
- * 投票API定義
- */
-const voteApi = makeApi([
+  },
   {
     method: 'get',
     path: '/api/votes',
@@ -60,5 +54,4 @@ const voteApi = makeApi([
 /**
  * Zodiosクライアント
  */
-export const client = new Zodios('/', characterApi)
-export const voteClient = new Zodios('/', voteApi)
+export const client = new Zodios('/', api)

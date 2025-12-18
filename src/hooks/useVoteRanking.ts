@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import type { Character } from '@/schemas/character.dto'
-import { voteClient } from '@/utils/client'
+import { client } from '@/utils/client'
 
 type CharacterWithVotes = Character & {
   voteCount: number
@@ -55,7 +55,7 @@ const fetchVoteRanking = async (characters: Character[], year: number): Promise<
     allVoteCounts = generateDummyVoteCounts(characters)
   } else {
     // Zodiosを使ってAPIリクエスト
-    const rawData = await voteClient.getAllVoteCounts({ queries: { year: year.toString() } })
+    const rawData = await client.getAllVoteCounts({ queries: { year: year.toString() } })
 
     // "年:キー"形式のデータを"キー"形式に変換
     allVoteCounts = {}

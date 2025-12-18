@@ -14,9 +14,9 @@ export type VoteRequest = z.infer<typeof VoteRequestSchema>
  */
 export const VoteResponseSchema = z.object({
   success: z.boolean(),
-  message: z.string().optional(),
-  count: z.number().optional(),
-  nextVoteDate: z.string().optional() // JST の次の日付
+  message: z.string().nonempty(),
+  count: z.number().min(0),
+  nextVoteDate: z.coerce.date() // JST の次の日付
 })
 
 export type VoteResponse = z.infer<typeof VoteResponseSchema>
