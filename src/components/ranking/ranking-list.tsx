@@ -66,7 +66,7 @@ const VoteInfo = ({ showSubMessage = false, compact = false }: VoteInfoProps) =>
       >
         <Link
           to='/characters'
-          className='inline-block px-6 py-3 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
+          className='inline-block px-4 py-2 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
         >
           ビッカメ娘一覧を見る
         </Link>
