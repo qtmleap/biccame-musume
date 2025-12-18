@@ -20,6 +20,7 @@ routes = [{ pattern = "biccame-musume-dev.com", custom_domain = true }]
 directory = "dist"
 not_found_handling = "single-page-application"
 binding = "ASSETS"
+# run_worker_first = ["/sitemap.xml", "/robots.txt"]
 
 [[env.prod.kv_namespaces]]
 binding = "VOTES"
@@ -29,6 +30,7 @@ id = "04dd77043cc240b2b8bbbd7f0adfd67d"
 directory = "dist"
 not_found_handling = "single-page-application"
 binding = "ASSETS"
+# run_worker_first = ["/sitemap.xml", "/robots.txt"]
 
 [[env.dev.kv_namespaces]]
 binding = "VOTES"
