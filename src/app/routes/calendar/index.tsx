@@ -61,7 +61,7 @@ const CalendarContent = () => {
   const selectedDayEvents = selectedDay ? events.filter((event) => dayjs(event.date).date() === selectedDay) : []
 
   return (
-    <div className='min-h-dvh bg-pink-50 mx-auto p-4 md:p-8 space-y-6 md:space-y-8 max-w-6xl'>
+    <div className='mx-auto p-4 md:p-8 space-y-6 md:space-y-8 max-w-6xl'>
       <CalendarHeader
         year={selectedYear}
         month={selectedMonth}
