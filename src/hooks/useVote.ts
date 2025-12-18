@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { VoteResponse } from '@/schemas/vote.dto'
-import { voteClient } from '@/utils/client'
+import { client } from '@/utils/client'
 
 /**
  * 投票カウントを取得
  */
 const fetchVoteCount = async (characterId: string): Promise<number> => {
-  const data = await voteClient.getVoteCount({ params: { characterId } })
+  const data = await client.getVoteCount({ params: { characterId } })
   return data.count
 }
 
@@ -14,7 +14,7 @@ const fetchVoteCount = async (characterId: string): Promise<number> => {
  * 投票を送信
  */
 const submitVote = async (characterId: string): Promise<VoteResponse> => {
-  return await voteClient.submitVote({ characterId })
+  return await client.submitVote({ characterId })
 }
 
 /**
