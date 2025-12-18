@@ -70,7 +70,7 @@ if (!rootElement.innerHTML) {
         client={client}
         persistOptions={{
           persister: persister,
-          maxAge: 1000 * 60 * 60 * 24, // 24時間キャッシュを保持
+          maxAge: 1000 * 60, // 1分間キャッシュ
           dehydrateOptions: {
             shouldDehydrateQuery: (query) => {
               // 成功したクエリのみをキャッシュ対象にする
