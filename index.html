@@ -46,6 +46,46 @@
   <!-- Robots -->
   <meta name="robots" content="index, follow" />
   <meta name="googlebot" content="index, follow" />
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://biccame-musume.com/#website",
+          "url": "https://biccame-musume.com/",
+          "name": "ビッカメ娘 非公式ファンサイト",
+          "description": "ビックカメラの店舗擬人化キャラクター「ビッカメ娘」の非公式ファンサイト。キャラクター情報、誕生日カレンダー、店舗マップなど。",
+          "inLanguage": "ja",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://biccame-musume.com/characters?search={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://biccame-musume.com/#organization",
+          "name": "ビッカメ娘応援プロジェクト",
+          "url": "https://biccame-musume.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://biccame-musume.com/og_image.webp",
+            "width": 1200,
+            "height": 630
+          },
+          "sameAs": [
+            "https://x.com/search?q=%23ビッカメ娘"
+          ]
+        }
+      ]
+    }
+  </script>
 </head>
 
 <body>
