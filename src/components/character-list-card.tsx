@@ -61,11 +61,6 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
                       {dayjs(character.character_birthday).format('M月D日')}
                     </Badge>
                   )}
-                  {isGraduated && (
-                    <Badge variant='secondary' className='text-xs bg-gray-200 text-gray-600 border-gray-300'>
-                      卒業
-                    </Badge>
-                  )}
                 </div>
               </div>
             </div>
@@ -83,21 +78,16 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
             variant='outline'
             asChild={!isGraduated}
             disabled={isGraduated}
-            className='rounded-full px-3 h-7 min-w-17.5'
+            className='rounded-full px-4 h-7 text-xs font-semibold'
             onClick={(e) => {
               e.stopPropagation()
               if (isGraduated) return
             }}
           >
             {isGraduated ? (
-              <span className='text-xs font-semibold'>フォロー</span>
+              <span>フォロー</span>
             ) : (
-              <a
-                href={character.twitter_url}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='text-xs font-semibold'
-              >
+              <a href={character.twitter_url} target='_blank' rel='noopener noreferrer'>
                 フォロー
               </a>
             )}

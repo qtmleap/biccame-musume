@@ -71,18 +71,18 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
               </div>
               <div className='shrink-0 flex flex-col gap-2'>
                 {character.twitter_url && (
-                  <a
-                    href={`https://twitter.com/intent/follow?screen_name=${character.twitter_url.split('/').pop()}`}
-                    target='_blank'
-                    rel='noopener noreferrer'
+                  <Button
+                    asChild
+                    className='rounded-full text-xs font-semibold h-7 px-4 bg-pink-600 text-white hover:bg-pink-700'
                   >
-                    <Button
-                      size='sm'
-                      className='bg-pink-600 hover:bg-pink-700 text-white rounded-full text-xs w-full font-semibold'
+                    <a
+                      href={`https://twitter.com/intent/follow?screen_name=${character.twitter_url.split('/').pop()}`}
+                      target='_blank'
+                      rel='noopener noreferrer'
                     >
                       フォローする
-                    </Button>
-                  </a>
+                    </a>
+                  </Button>
                 )}
                 {character.is_biccame_musume && (
                   <CharacterVoteButton
