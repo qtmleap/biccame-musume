@@ -24,6 +24,58 @@ const RibbonBadge = ({ children }: { children: React.ReactNode }) => {
 }
 
 /**
+ * 投票案内コンポーネント
+ */
+type VoteInfoProps = {
+  showSubMessage?: boolean
+  compact?: boolean
+}
+
+const VoteInfo = ({ showSubMessage = false, compact = false }: VoteInfoProps) => {
+  return (
+    <motion.div
+      className={compact ? 'text-center py-6' : 'text-center py-16'}
+      initial={{ opacity: 0, y: compact ? 20 : 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: compact ? 0.5 : 0.6, ease: 'easeOut' }}
+    >
+      <motion.p
+        className={compact ? 'text-gray-700 text-base mb-4 font-bold' : 'text-gray-700 text-lg mb-4 font-bold'}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: compact ? 0.1 : 0.2 }}
+      >
+        各ビッカメ娘を1日に1回応援できます
+      </motion.p>
+      {showSubMessage && (
+        <motion.p
+          className='text-gray-500 text-base mb-6'
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          現在投票受付中です
+        </motion.p>
+      )}
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: compact ? 0.4 : 0.5, delay: compact ? 0.2 : 0.4, type: 'spring', stiffness: 200 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <Link
+          to='/characters'
+          className='inline-block px-6 py-3 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
+        >
+          キャラクター一覧を見る
+        </Link>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+/**
  * 順位を計算（同数の場合は同じ順位）
  */
 const calculateRank = (characters: CharacterWithVotes[], index: number): number => {
@@ -115,75 +167,11 @@ export const RankingList = ({ characters }: RankingListProps) => {
   return (
     <div className='space-y-6'>
       {votedCharacters.length === 0 ? (
-        <motion.div
-          className='text-center py-16'
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-        >
-          <motion.p
-            className='text-gray-700 text-lg mb-4 font-bold'
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            各ビッカメ娘に1日1回投票できます
-          </motion.p>
-          <motion.p
-            className='text-gray-500 text-base mb-6'
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            現在投票受付中です
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.4, type: 'spring', stiffness: 200 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link
-              to='/characters'
-              className='inline-block px-6 py-3 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
-            >
-              キャラクター一覧を見る
-            </Link>
-          </motion.div>
-        </motion.div>
+        <VoteInfo showSubMessage={true} compact={false} />
       ) : (
         <>
           {/* 投票案内とキャラクター一覧へのリンク */}
-          <motion.div
-            className='text-center py-6'
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <motion.p
-              className='text-gray-700 text-base mb-4 font-bold'
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              各ビッカメ娘を1日に1回だけ応援できます
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.2, type: 'spring', stiffness: 200 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Link
-                to='/characters'
-                className='inline-block px-6 py-3 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
-              >
-                キャラクター一覧を見る
-              </Link>
-            </motion.div>
-          </motion.div>
+          <VoteInfo showSubMessage={false} compact={true} />
 
           {/* ランキング(モバイル2列、タブレット3列、デスクトップ4列、ワイド5列、超ワイド6列) */}
           <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4'>
