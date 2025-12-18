@@ -1,63 +1,43 @@
-Please strictly adhere to the following:
-- Always respond in Japanese
-- Do not use emojis
-- Always show code in code blocks
-- Add appropriate comments to function definitions, resource definitions, module definitions, etc.
-- When writing explanations, prioritize bullet points for organization as needed
-- Assume the reader is a working-level engineer; technical terms are acceptable but avoid verbose explanations
-- Do not provide unnecessary supplementary explanations or speculation that the user did not request
-- Keep responses concise and avoid making them unnecessarily long
-- You may provide sample code or tables if necessary, but avoid excessively long examples
-- Actively use comparison tables when they are effective
+## 基本方針
+- 日本語で回答、絵文字は使用しない
+- コードはコードブロックで表示
+- 実務レベルエンジニア向けの簡潔な説明(箇条書き・比較表を活用)
+- 不要な補足や推測は避ける
 
-Regarding source code editing:
-- Define functions using `const` rather than `function`
-- Conform to ESLint standard rules
-- Name variables and functions in camelCase
-- Keep variable and function names concise
-- Write log messages in English
-- Write source code comments in Japanese
-- Place components for each service in `src/components/**/*.tsx`
-- When changing Shadcn component styles, use `className`
-- Use `cn` util for conditional `className` handling
-- Use `async/await` for asynchronous processing
-- Use `src/utils/client.ts` defined with `Zodios` for API communication
-- Use Zod for type definitions
+## コーディング規約
+### 命名・スタイル
+- 関数は`const`で定義、変数・関数名はcamelCase、コンポーネント名はPascalCase
+- 変数は`const`優先(`var`/`let`は使わない)
+- ログメッセージは英語、コメントは日本語
+- ESLint/Biome標準ルールに準拠
 
-Do not use the following:
-- Do not use emoji in source
-- Do not use `var` or `let`; use `const` whenever possible
-- Do not use `Date`, use `dayjs` for date and time processing
-- Do not use `svg` directly; use `lucide-react` or `@shadcn/ui/icons` for icons
-- Do not use `fetch` directly; use `Zodios` client defined in `src/utils/client.ts`
-- Do not use `any` type whenever possible
+### TypeScript/React
+- 関数コンポーネント使用、propsは`type`で定義
+- `any`型を避け、Zodで型定義・バリデーション(`safeParse`使用)
+- Zodスキーマ定義はPascalCase、配置先は`src/schemas/**.dto.ts`
+- 新しいページは`src/app/routes/**/index.tsx`に記述し、長くなる場合にはコンポーネントを分割して`src/components/**/*.tsx`に配置する
+- 配列の内容を表示する場合には`List`, `ListItem`のコンポーネントを作成
 
-Do not change the following:
-- `index.css` and `src/components/ui/**.tsx`
+### ライブラリ使用方針
+**使用するもの:**
+- API通信: `src/utils/client.ts`のZodiosクライアント
+- 非同期処理: `async/await`
+- スタイル: Tailwind CSS v4、条件付きclassNameは`cn`ユーティリティを利用する
+- 状態管理: Tanstack Query/RouterとJotaiの組み合わせ
+- 日時処理: `dayjs`
+- アイコン: `lucide-react`または`@shadcn/ui/icons`
+- ローディング/エラー: `Suspense`と`ErrorBoundary`
+- ユーティリティ: `lodash-es`
 
-Regarding React components:
-- Use function components
-- Name components in PascalCase
-- Define props using `type`
+**使用しないもの:**
+- `Date`(dayjsを使用)、`fetch`(Zodiosクライアントを使用)、直接の`svg`、`while`ループ
 
-Regarding data validation:
-- Use Zod for type definitions and validation
-- Use `safeParse` instead of `parse`
-- Name Zod schema definitions in PascalCase
-- Place schema definitions in `src/schemas/**.dto.ts`
+### ディレクトリ構成
+- コンポーネント: `src/components/**/*.tsx`
+- テストコード: `__tests__/**/*.test.ts`(bun:test使用)
 
-Regarding testing:
-- Add test code to `__tests__/**/*.test.ts` when validation is required
-- Use `bun:test` instead of `node:test` for tests
+### 変更禁止
+- `index.css`、`src/components/ui/**.tsx`、Shadcnコンポーネントスタイルは`className`で調整
 
-This repository uses the following tech stack:
-- Bun
-- TypeScript
-- React
-- Zod/Zodios
-- Tailwind CSS
-- Tanstack Query/Router
-- Biome
-- IntLayer
-- Vite
-- Shadcn UI
+## 技術スタック
+Bun, TypeScript, React, Zod/Zodios, Tailwind CSS v4, Tanstack Query/Router, Biome, IntLayer, Vite, Shadcn UI, Cloudflare Workers, Commitlint, GitHub Actions + Act
