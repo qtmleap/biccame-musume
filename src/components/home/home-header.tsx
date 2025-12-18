@@ -13,11 +13,11 @@ export const HomeHeader = () => {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className='text-xl md:text-2xl font-bold text-white mb-2 whitespace-nowrap'
         >
-          <span className='hidden md:inline'>イベントを逃さない。全国を回りやすく。</span>
+          <span className='hidden md:inline'>ビッカメ娘をもっと身近に、もっと楽しく</span>
           <span className='md:hidden'>
-            イベントを逃さない。
+            ビッカメ娘を
             <br />
-            全国を回りやすく。
+            もっと身近に、もっと楽しく
           </span>
         </motion.h1>
         <motion.p
@@ -26,7 +26,7 @@ export const HomeHeader = () => {
           transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
           className='text-white/80 text-xs md:text-sm'
         >
-          ビッカメ娘のイベント追跡と店舗巡り支援サイト
+          推し活を全力サポート - イベント追跡から店舗巡りまで
         </motion.p>
       </div>
     </header>
