@@ -154,6 +154,37 @@ export const RankingList = ({ characters }: RankingListProps) => {
         </motion.div>
       ) : (
         <>
+          {/* 投票案内とキャラクター一覧へのリンク */}
+          <motion.div
+            className='text-center py-6'
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.p
+              className='text-gray-700 text-base mb-4 font-bold'
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              各ビッカメ娘を1日に1回だけ応援できます
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.2, type: 'spring', stiffness: 200 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link
+                to='/characters'
+                className='inline-block px-6 py-3 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
+              >
+                キャラクター一覧を見る
+              </Link>
+            </motion.div>
+          </motion.div>
+
           {/* ランキング(モバイル2列、タブレット3列、デスクトップ4列、ワイド5列、超ワイド6列) */}
           <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4'>
             {votedCharacters.map((character, index) => {
