@@ -38,10 +38,10 @@ declare module '@tanstack/react-router' {
 const client = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 10, // 10分間はデータを新鮮とみなす
+      staleTime: 1000 * 60 * 5, // 5分間はデータを新鮮とみなす
       gcTime: 1000 * 60 * 60 * 24, // 24時間キャッシュを保持
       refetchInterval: false,
-      refetchOnMount: false, // falseに戻す
+      refetchOnMount: false,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
       retry: 0,
@@ -53,7 +53,7 @@ const client = new QueryClient({
 
 const persister = createAsyncStoragePersister({
   storage: window.localStorage,
-  throttleTime: 1000, // 1秒間隔で保存（より頻繁に）
+  throttleTime: 3000, // 3秒間隔で保存(LocalStorage書き込み負荷を軽減)
   key: 'REACT_QUERY_OFFLINE_CACHE',
   serialize: JSON.stringify,
   deserialize: JSON.parse
@@ -70,7 +70,7 @@ if (!rootElement.innerHTML) {
         client={client}
         persistOptions={{
           persister: persister,
-          maxAge: 1000 * 60, // 1分間キャッシュ
+          maxAge: 1000 * 60 * 60 * 24 * 7, // 7日間LocalStorageに保持
           dehydrateOptions: {
             shouldDehydrateQuery: (query) => {
               // 成功したクエリのみをキャッシュ対象にする
