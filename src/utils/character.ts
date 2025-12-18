@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { prefectureToRegion, type RegionType } from '@/atoms/filterAtom'
 import type { Character } from '@/schemas/character.dto'
 
 /**
@@ -9,6 +10,27 @@ export const parseDate = (dateStr: string | undefined): dayjs.Dayjs | null => {
   const parsed = dayjs(dateStr)
   if (!parsed.isValid()) return null
   return parsed
+}
+
+/**
+ * 誕生日が近い順にソートするための日数計算（絶対値）
+ * 今日を基準に、今年と来年の誕生日のうち、より近い方の日数を返す
+ */
+export const getDaysFromBirthday = (dateStr: string | undefined): number => {
+  const birthday = parseDate(dateStr)
+  if (!birthday) return Number.MAX_SAFE_INTEGER
+
+  const now = dayjs()
+  const thisYear = now.year()
+  const birthdayThisYear = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
+  const birthdayNextYear = birthdayThisYear.add(1, 'year')
+
+  // 今年の誕生日と来年の誕生日、両方との差の絶対値を計算
+  const diffThisYear = Math.abs(birthdayThisYear.diff(now, 'day'))
+  const diffNextYear = Math.abs(birthdayNextYear.diff(now, 'day'))
+
+  // より近い方を返す
+  return Math.min(diffThisYear, diffNextYear)
 }
 
 /**
@@ -51,6 +73,19 @@ export const categorizeCharacters = (characters: Character[]) => {
 }
 
 /**
+ * キャラクターを地域でフィルタリング
+ */
+export const filterCharactersByRegion = (characters: Character[], region: RegionType): Character[] => {
+  if (region === 'all') return characters
+
+  return characters.filter((character) => {
+    if (!character.prefecture) return false
+    const characterRegion = prefectureToRegion[character.prefecture]
+    return characterRegion === region
+  })
+}
+
+/**
  * キャラクターをソートする
  */
 export const sortCharacters = (
@@ -81,8 +116,8 @@ export const sortCharacters = (
     }
 
     if (sortType === 'upcoming_birthday') {
-      const daysA = getDaysUntilBirthday(a.character_birthday)
-      const daysB = getDaysUntilBirthday(b.character_birthday)
+      const daysA = getDaysFromBirthday(a.character_birthday)
+      const daysB = getDaysFromBirthday(b.character_birthday)
       return daysA - daysB
     }
 
