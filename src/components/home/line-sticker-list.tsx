@@ -28,7 +28,7 @@ export const LineStickerList = () => {
             <Sticker className='h-5 w-5 text-[#00B900]' />
             <h2 className='text-base font-bold text-gray-800'>LINEスタンプ</h2>
           </div>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+          <div className='grid grid-cols-2 gap-2'>
             {stickers.map((sticker) => (
               <LineStickerListItem
                 key={sticker.url}
