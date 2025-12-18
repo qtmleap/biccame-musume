@@ -68,7 +68,7 @@ const VoteInfo = ({ showSubMessage = false, compact = false }: VoteInfoProps) =>
           to='/characters'
           className='inline-block px-6 py-3 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
         >
-          キャラクター一覧を見る
+          ビッカメ娘一覧を見る
         </Link>
       </motion.div>
     </motion.div>

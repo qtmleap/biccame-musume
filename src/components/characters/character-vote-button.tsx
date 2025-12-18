@@ -12,6 +12,7 @@ type CharacterVoteButtonProps = {
   characterId: string
   characterName?: string
   variant?: 'default' | 'compact'
+  enableVoteCount?: boolean
 }
 
 /**
@@ -20,9 +21,10 @@ type CharacterVoteButtonProps = {
 export const CharacterVoteButton = ({
   characterId,
   characterName: _characterName,
-  variant = 'default'
+  variant = 'default',
+  enableVoteCount = true
 }: CharacterVoteButtonProps) => {
-  const { vote, isVoting, isSuccess, error, voteResponse } = useVote(characterId)
+  const { vote, isVoting, isSuccess, error, voteResponse } = useVote(characterId, { enableVoteCount })
   const [lastVoteTimes, setLastVoteTimes] = useAtom(lastVoteTimesAtom)
 
   // 今日既に投票済みかチェック
