@@ -31,11 +31,38 @@ export const Footer = () => {
             公式X
           </a>
           <span className='text-gray-400'>|</span>
+          <a
+            href='https://biccame.jp/guideline/'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-gray-600 hover:text-[#e50012] transition-colors'
+          >
+            ガイドライン
+          </a>
+          <span className='text-gray-400'>|</span>
           <Link to='/contact' className='text-gray-600 hover:text-[#e50012] transition-colors'>
             お問い合わせ
           </Link>
         </div>
-        <p className='text-gray-400'>© {dayjs().year()} QuantumLeap</p>
+        <div className='space-y-1'>
+          <p className='text-gray-500'>
+            本サイトに掲載されているビッカメ娘の画像等は、株式会社ビックカメラに帰属します。
+            <br className='hidden sm:inline' />
+            画像の再利用は禁止されています。
+          </p>
+          <p className='text-gray-500'>
+            ©{' '}
+            <a
+              href='https://www.biccamera.co.jp/'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='hover:text-[#e50012] transition-colors'
+            >
+              itall
+            </a>{' '}
+            / © {dayjs().year()} QuantumLeap
+          </p>
+        </div>
       </div>
     </footer>
   )

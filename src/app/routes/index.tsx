@@ -4,7 +4,6 @@ import { LoadingFallback } from '@/components/common/loading-fallback'
 import { UpcomingEventList } from '@/components/events/upcoming-event-list'
 import { HomeHeader } from '@/components/home/home-header'
 import { LineStickerList } from '@/components/home/line-sticker-list'
-import { XShareSection } from '@/components/home/x-share-section'
 import { useCharacters } from '@/hooks/useCharacters'
 
 /**
@@ -18,7 +17,6 @@ const HomeContent = () => {
       <HomeHeader />
       <UpcomingEventList characters={characters} />
       <LineStickerList />
-      <XShareSection />
     </div>
   )
 }
