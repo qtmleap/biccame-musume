@@ -30,6 +30,10 @@ export const Footer = () => {
           >
             公式X
           </a>
+          <span className='text-gray-400'>|</span>
+          <Link to='/contact' className='text-gray-600 hover:text-[#e50012] transition-colors'>
+            お問い合わせ
+          </Link>
         </div>
         <p className='text-gray-400'>© {dayjs().year()} QuantumLeap</p>
       </div>
