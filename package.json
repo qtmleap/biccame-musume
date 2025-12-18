@@ -80,6 +80,8 @@
     "vite-intlayer": "^7.4.0",
     "vite-plugin-node-polyfills": "^0.24.0",
     "vite-plugin-pwa": "^1.2.0",
+    "vite-plugin-sitemap": "^0.8.2",
+    "vite-plugin-tanstack-router-sitemap": "^1.1.0",
     "wrangler": "^4.55.0"
   }
 }
