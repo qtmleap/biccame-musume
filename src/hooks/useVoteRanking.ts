@@ -85,6 +85,8 @@ export const useVoteRanking = (characters: Character[], year?: number) => {
     queryKey: ['voteRanking', characters.length, targetYear],
     queryFn: () => fetchVoteRanking(characters, targetYear),
     staleTime: 1000 * 30, // 30秒間キャッシュ
-    refetchInterval: 1000 * 60 // 1分ごとに再取得
+    refetchInterval: 1000 * 60, // 1分ごとに再取得
+    refetchOnMount: true,
+    refetchOnWindowFocus: true
   })
 }
