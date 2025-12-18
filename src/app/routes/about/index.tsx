@@ -38,9 +38,8 @@ const RouteComponent = () => {
                   className='text-[#e50012] hover:underline inline-flex items-center gap-1'
                 >
                   キャラクター使用のガイドライン
-                  <ExternalLink className='h-3 w-3' />
                 </a>
-                に基づき、非営利のファン活動として運営しています。
+                に基づき、非営利のファン活動として運営しています。広告等を利用した収入を得ることは一切ありません。
               </p>
             </div>
           </section>
@@ -52,7 +51,10 @@ const RouteComponent = () => {
             </h2>
             <div className='space-y-3 text-gray-700'>
               <p>本サイトで表示されるキャラクター画像は、公式サイトから参照しています。</p>
-              <p>画像の複製や再配布は行っておらず、公式サーバーから直接配信されています。</p>
+              <p>
+                画像の複製や再配布は行っておらず、CDN(Content Delivery
+                Network)を経由して配信することで、公式サーバーへの負荷がかからないよう配慮しています。
+              </p>
             </div>
           </section>
 
