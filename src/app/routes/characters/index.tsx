@@ -32,20 +32,18 @@ const CharactersContent = () => {
   }, [characters, sortType, regionFilter, randomCounter])
 
   return (
-    <div className='min-h-dvh bg-pink-50'>
-      <div className='container mx-auto px-4 py-8'>
-        <div className='max-w-6xl mx-auto mb-8 grid grid-cols-1 lg:grid-cols-2 gap-4'>
-          <RegionFilterControl />
-          <CharacterSortControl onRandomize={() => setRandomCounter((prev) => prev + 1)} />
-        </div>
-        <CharacterList characters={sortedMusume} title='ビッカメ娘' showTitle />
-        {sortedOthers.length > 0 && (
-          <>
-            <div className='my-8 border-t-2 border-gray-300 dark:border-gray-600' />
-            <CharacterList characters={sortedOthers} title='ビッカメ娘の関係者' showTitle />
-          </>
-        )}
+    <div className='container mx-auto px-4 py-8'>
+      <div className='max-w-6xl mx-auto mb-8 grid grid-cols-1 lg:grid-cols-2 gap-4'>
+        <RegionFilterControl />
+        <CharacterSortControl onRandomize={() => setRandomCounter((prev) => prev + 1)} />
       </div>
+      <CharacterList characters={sortedMusume} title='ビッカメ娘' showTitle />
+      {sortedOthers.length > 0 && (
+        <>
+          <div className='my-8 border-t-2 border-gray-300 dark:border-gray-600' />
+          <CharacterList characters={sortedOthers} title='ビッカメ娘の関係者' showTitle />
+        </>
+      )}
     </div>
   )
 }

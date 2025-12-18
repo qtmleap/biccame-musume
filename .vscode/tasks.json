@@ -19,16 +19,7 @@
     {
       "label": "Run Deployment Workflow",
       "type": "shell",
-      "command": "act",
-      "args": [
-        "pull_request",
-        "-W",
-        ".github/workflows/deployment.yaml",
-        "--secret-file",
-        ".secrets",
-        "-e",
-        ".github/pull_request.closed.master.json"
-      ],
+      "command": "${workspaceFolder}/.vscode/scripts/deploy.sh",
       "problemMatcher": [],
       "group": "build",
       "presentation": {
