@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
  * ナビゲーションリンクの定義
  */
 const navLinks = [
-  { to: '/characters', label: 'キャラクター', icon: Users },
+  { to: '/characters', label: 'ビッカメ娘一覧', icon: Users },
   { to: '/calendar', label: 'カレンダー', icon: Calendar },
   { to: '/location', label: 'マップ', icon: MapPin },
   { to: '/ranking', label: '総選挙', icon: Trophy }
