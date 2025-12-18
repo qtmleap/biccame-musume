@@ -44,23 +44,31 @@ export const Footer = () => {
             お問い合わせ
           </Link>
         </div>
-        <div className='space-y-1'>
+        <div className='space-y-2'>
           <p className='text-gray-500'>
             本サイトに掲載されているビッカメ娘の画像等は、株式会社ビックカメラに帰属します。
             <br className='hidden sm:inline' />
             画像の再利用は禁止されています。
           </p>
           <p className='text-gray-500'>
-            ©{' '}
+            © {dayjs().year()}{' '}
             <a
-              href='https://www.biccamera.co.jp/'
+              href='https://www.itall.co.jp/'
               target='_blank'
               rel='noopener noreferrer'
               className='hover:text-[#e50012] transition-colors'
             >
               itall
-            </a>{' '}
-            / © {dayjs().year()} QuantumLeap
+            </a>
+            {' / '}
+            <a
+              href='https://qleap.jp/'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='hover:text-[#e50012] transition-colors'
+            >
+              QuantumLeap
+            </a>
           </p>
         </div>
       </div>
