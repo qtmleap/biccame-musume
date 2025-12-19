@@ -1,6 +1,7 @@
 'use client'
 
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import { hydrate, QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 // dayjs設定
@@ -19,7 +20,6 @@ dayjs.tz.setDefault('Asia/Tokyo')
 import { routeTree } from './routeTree.gen'
 
 import '../index.css'
-import { QueryClient } from '@tanstack/react-query'
 
 // ルーターインスタンスを作成（ページ遷移時にスクロール位置をトップにリセット）
 const router = createRouter({
@@ -51,6 +51,17 @@ const client = new QueryClient({
   }
 })
 
+// プリレンダリング時に埋め込まれたデータをハイドレート
+const dehydratedStateEl = document.getElementById('__REACT_QUERY_STATE__')
+if (dehydratedStateEl?.textContent) {
+  try {
+    const dehydratedState = JSON.parse(dehydratedStateEl.textContent)
+    hydrate(client, dehydratedState)
+  } catch (e) {
+    console.error('Failed to hydrate React Query state:', e)
+  }
+}
+
 const persister = createAsyncStoragePersister({
   storage: window.localStorage,
   throttleTime: 3000, // 3秒間隔で保存(LocalStorage書き込み負荷を軽減)
@@ -59,29 +70,33 @@ const persister = createAsyncStoragePersister({
   deserialize: JSON.parse
 })
 
-// Render the app
 // biome-ignore lint/style/noNonNullAssertion: reason
 const rootElement = document.getElementById('root')!
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement)
-  root.render(
-    <StrictMode>
-      <PersistQueryClientProvider
-        client={client}
-        persistOptions={{
-          persister: persister,
-          maxAge: 1000 * 60 * 60 * 24 * 7, // 7日間LocalStorageに保持
-          dehydrateOptions: {
-            shouldDehydrateQuery: (query) => {
-              // 成功したクエリのみをキャッシュ対象にする
-              return query.state.status === 'success'
-            }
+
+const App = () => (
+  <StrictMode>
+    <PersistQueryClientProvider
+      client={client}
+      persistOptions={{
+        persister: persister,
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7日間LocalStorageに保持
+        dehydrateOptions: {
+          shouldDehydrateQuery: (query) => {
+            // 成功したクエリのみをキャッシュ対象にする
+            return query.state.status === 'success'
           }
-        }}
-      >
-        <RouterProvider router={router} />
-        <Toaster />
-      </PersistQueryClientProvider>
-    </StrictMode>
-  )
+        }
+      }}
+    >
+      <RouterProvider router={router} />
+      <Toaster />
+    </PersistQueryClientProvider>
+  </StrictMode>
+)
+
+// プリレンダリング済みのHTMLがある場合はhydrate、なければcreateRoot
+if (rootElement.innerHTML.trim()) {
+  ReactDOM.hydrateRoot(rootElement, <App />)
+} else {
+  ReactDOM.createRoot(rootElement).render(<App />)
 }

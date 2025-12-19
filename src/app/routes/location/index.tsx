@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { AdvancedMarker, APIProvider, Map as GoogleMap, Pin } from '@vis.gl/react-google-maps'
-import { useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { z } from 'zod'
+import { LoadingFallback } from '@/components/common/loading-fallback'
 import { StoreList } from '@/components/location/store-list'
 import { SelectedStoreInfo } from '@/components/selected-store-info'
 import { useCharacters } from '@/hooks/useCharacters'
@@ -27,21 +28,24 @@ const getPosition = (character: Character): google.maps.LatLngLiteral => {
 }
 
 /**
- * 店舗位置マップページ
+ * 店舗位置マップコンテンツ
  */
-const RouteComponent = () => {
-  const { id: initialCharacterId } = Route.useSearch()
+const LocationContent = ({ initialCharacterId }: { initialCharacterId?: string }) => {
   const { data: characters } = useCharacters()
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(() => {
-    if (initialCharacterId) {
-      const targetCharacter = characters.find((c) => c.key === initialCharacterId)
-      return targetCharacter || null
-    }
-    return null
-  })
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null)
   const [mapKey, setMapKey] = useState<number>(0)
   const [isStoreListOpen, setIsStoreListOpen] = useState(false)
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+
+  // 初期キャラクターの設定
+  useEffect(() => {
+    if (initialCharacterId && !selectedCharacter) {
+      const targetCharacter = characters.find((c) => c.key === initialCharacterId)
+      if (targetCharacter) {
+        setSelectedCharacter(targetCharacter)
+      }
+    }
+  }, [initialCharacterId, characters, selectedCharacter])
 
   const charactersWithAddress = characters.filter((char) => char.address && char.address.length > 0)
 
@@ -105,6 +109,18 @@ const RouteComponent = () => {
         />
       </div>
     </APIProvider>
+  )
+}
+
+/**
+ * ルートコンポーネント
+ */
+const RouteComponent = () => {
+  const { id } = Route.useSearch()
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <LocationContent initialCharacterId={id} />
+    </Suspense>
   )
 }
 

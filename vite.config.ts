@@ -8,6 +8,7 @@ import react from '@vitejs/plugin-react-swc'
 import { defineConfig } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import sitemap from 'vite-plugin-sitemap'
+// import { vitePrerenderPlugin } from 'vite-prerender-plugin'
 
 const version = JSON.parse(readFileSync('./package.json', 'utf-8')).version
 const hash = execSync('git rev-parse --short HEAD').toString().trim()
