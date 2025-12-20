@@ -17,7 +17,7 @@ const RouteComponent = () => {
               ご注意ください
             </h2>
             <div className='space-y-3 text-gray-700'>
-              <p>このサイトは非公式ファンサイトです。</p>
+              <p>このサイトはファンメイドのファンサイトです。</p>
               <p>
                 ビックカメラ公式やビッカメ娘に関する公式のお問い合わせは、
                 <a
@@ -121,7 +121,7 @@ const RouteComponent = () => {
               <div>
                 <h3 className='font-bold text-gray-800 mb-2'>Q. このサイトはビックカメラ公式ですか？</h3>
                 <p className='text-sm'>
-                  A. いいえ、非公式のファンサイトです。ビックカメラおよび関連企業とは一切関係ありません。
+                  A. いいえ、ファンメイドのファンサイトです。ビックカメラおよび関連企業とは一切関係ありません。
                 </p>
               </div>
             </div>

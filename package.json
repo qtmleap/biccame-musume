@@ -2,7 +2,7 @@
   "name": "biccame-musume",
   "version": "0.0.1",
   "type": "module",
-  "description": "ビックカメラの店舗擬人化キャラクター「ビッカメ娘」を応援する非公式ファンサイト",
+  "description": "ビックカメラの店舗擬人化キャラクター「ビッカメ娘」を応援するファンサイト",
   "author": "@QuantumLeap",
   "private": true,
   "license": "MIT",
