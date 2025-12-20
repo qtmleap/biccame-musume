@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar } from 'lucide-react'
 import { motion } from 'motion/react'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Character } from '@/schemas/character.dto'
 import { UpcomingEventListItem } from './upcoming-event-list-item'
 
@@ -21,11 +21,28 @@ type UpcomingEventListProps = {
  * 直近のイベント一覧コンポーネント
  */
 export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
+  // 日付が変わったときに再計算するためのトリガー
+  const [today, setToday] = useState(() => dayjs().startOf('day').valueOf())
+
+  useEffect(() => {
+    // 次の0時までの残り時間を計算
+    const now = dayjs()
+    const nextMidnight = now.add(1, 'day').startOf('day')
+    const msUntilMidnight = nextMidnight.diff(now)
+
+    // 0時になったら更新
+    const timer = setTimeout(() => {
+      setToday(dayjs().startOf('day').valueOf())
+    }, msUntilMidnight)
+
+    return () => clearTimeout(timer)
+  })
+
   /**
    * 直近のイベントを計算
    */
   const upcomingEvents = useMemo(() => {
-    const now = dayjs()
+    const now = dayjs(today)
     const events: UpcomingEvent[] = []
 
     for (const character of characters) {
@@ -58,7 +75,7 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
 
     events.sort((a, b) => a.daysUntil - b.daysUntil)
     return events.slice(0, 5)
-  }, [characters])
+  }, [characters, today])
 
   return (
     <section className='py-6 md:py-8'>
