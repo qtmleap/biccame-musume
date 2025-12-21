@@ -1,7 +1,10 @@
-import { Link, useRouter } from '@tanstack/react-router'
+'use client'
+
 import dayjs from 'dayjs'
 import { ArrowLeft, ExternalLink, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -27,7 +30,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
             variant='ghost'
             size='sm'
             className='text-pink-600 hover:text-pink-700 -ml-2'
-            onClick={() => router.history.back()}
+            onClick={() => router.back()}
           >
             <ArrowLeft className='h-4 w-4 mr-1' />
             戻る
@@ -110,8 +113,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
               </a>
               {character.latitude && character.longitude && (
                 <Link
-                  to='/location'
-                  search={{ id: character.key }}
+                  href={`/location?id=${character.key}`}
                   className='text-gray-400 hover:text-pink-600 hover:underline flex items-center gap-1 transition-colors'
                 >
                   地図で見る

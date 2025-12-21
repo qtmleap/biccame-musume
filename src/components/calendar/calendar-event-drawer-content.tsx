@@ -1,6 +1,6 @@
-import { Link } from '@tanstack/react-router'
 import { Cake, Store } from 'lucide-react'
 import { motion } from 'motion/react'
+import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -43,8 +43,7 @@ export const CalendarEventDrawerContent = ({ events }: CalendarEventDrawerConten
               }}
             >
               <Link
-                to='/characters/$id'
-                params={{ id: event.character.key }}
+                href={`/characters/${event.character.key}`}
                 className={cn(
                   'flex items-center gap-3 p-3 rounded-lg transition-colors',
                   isCharacter ? 'bg-pink-500/10 hover:bg-pink-500/20' : 'bg-blue-500/10 hover:bg-blue-500/20'

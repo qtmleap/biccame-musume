@@ -1,8 +1,8 @@
-import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { groupBy, sortBy } from 'lodash-es'
 import { Cake, Store } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
+import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { cn, getCharacterImageUrl } from '@/lib/utils'
@@ -96,11 +96,7 @@ export const CalendarEventList = ({ year, month, events }: CalendarEventListProp
                     const isCharacter = event.type === 'character'
 
                     return (
-                      <Link
-                        key={`${event.character.key}-${event.type}`}
-                        to='/characters/$id'
-                        params={{ id: event.character.key }}
-                      >
+                      <Link key={`${event.character.key}-${event.type}`} href={`/characters/${event.character.key}`}>
                         <motion.div
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}

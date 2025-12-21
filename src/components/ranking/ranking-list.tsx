@@ -1,5 +1,5 @@
-import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import Link from 'next/link'
 import { getCharacterImageUrl } from '@/lib/utils'
 import type { Character } from '@/schemas/character.dto'
 
@@ -65,7 +65,7 @@ const VoteInfo = ({ showSubMessage = false, compact = false }: VoteInfoProps) =>
         whileTap={{ scale: 0.95 }}
       >
         <Link
-          to='/characters'
+          href='/characters'
           className='inline-block px-4 py-2 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
         >
           ビッカメ娘一覧を見る

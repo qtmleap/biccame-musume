@@ -1,10 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { ExternalLink } from 'lucide-react'
 
 /**
  * サイトについて・権利情報ページ
  */
-const RouteComponent = () => {
+const AboutPage = () => {
   return (
     <div className='min-h-screen bg-linear-to-b from-blue-50 to-white'>
       <div className='container mx-auto px-4 py-12'>
@@ -99,12 +98,39 @@ const RouteComponent = () => {
             <h2 className='text-xl md:text-2xl font-bold mb-4 text-gray-800 border-b-2 border-[#e50012] pb-2'>
               免責事項
             </h2>
-            <div className='space-y-3 text-gray-700 text-sm'>
+            <div className='space-y-3 text-gray-700'>
               <p>
-                本サイトの情報は、公式サイトから取得したデータに基づいていますが、情報の正確性や最新性を保証するものではありません。
+                本サイトの情報は正確性を心がけていますが、情報の誤りや更新の遅れにより生じた損害について責任を負いかねます。
               </p>
-              <p>本サイトの利用により生じたいかなる損害についても、運営者は責任を負いかねます。</p>
-              <p>最新の正確な情報は、必ず公式サイトをご確認ください。</p>
+              <p>最新の情報については、公式サイトをご確認ください。</p>
+            </div>
+          </section>
+
+          {/* お問い合わせ */}
+          <section>
+            <h2 className='text-xl md:text-2xl font-bold mb-4 text-gray-800 border-b-2 border-[#e50012] pb-2'>
+              お問い合わせ
+            </h2>
+            <div className='space-y-3 text-gray-700'>
+              <p>不具合報告や機能要望は、以下のリンクからお願いします：</p>
+              <a
+                href='https://github.com/qtmleap/biccame-musume/issues'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-[#e50012] hover:underline inline-flex items-center gap-2 text-lg'
+              >
+                <ExternalLink className='h-5 w-5' />
+                GitHub Issues
+              </a>
+              <p className='mt-4'>ご意見・ご感想は、以下のアカウントまでお寄せください：</p>
+              <a
+                href='https://x.com/ultemica'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-[#e50012] hover:underline inline-flex items-center gap-2 text-lg'
+              >
+                <ExternalLink className='h-5 w-5' />X @ultemica
+              </a>
             </div>
           </section>
         </div>
@@ -113,6 +139,4 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/about/')({
-  component: RouteComponent
-})
+export default AboutPage

@@ -1,7 +1,7 @@
-import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar } from 'lucide-react'
 import { motion } from 'motion/react'
+import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import type { Character } from '@/schemas/character.dto'
 import { UpcomingEventListItem } from './upcoming-event-list-item'
@@ -108,7 +108,7 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
               className='mt-4 text-right'
             >
               <Link
-                to='/calendar'
+                href='/calendar'
                 className='text-sm text-gray-700 hover:text-gray-900 font-semibold hover:underline transition-colors'
               >
                 今後のイベント一覧

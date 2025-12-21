@@ -1,6 +1,8 @@
-import { Link } from '@tanstack/react-router'
+'use client'
+
 import { Calendar, MapPin, Menu, Trophy, Users, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
+import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -51,7 +53,7 @@ export const Header = ({ className }: HeaderProps) => {
         <div className='flex items-center justify-between h-12 md:h-14'>
           {/* ロゴ */}
           <Link
-            to='/'
+            href='/'
             className='flex items-center font-bold text-lg md:text-xl tracking-tight hover:text-primary transition-colors'
           >
             ビッカメ娘
@@ -63,7 +65,7 @@ export const Header = ({ className }: HeaderProps) => {
               return (
                 <Link
                   key={link.to}
-                  to={link.to}
+                  href={link.to}
                   className='text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
                 >
                   {link.label}
@@ -148,7 +150,7 @@ export const Header = ({ className }: HeaderProps) => {
                         transition={{ duration: 0.2, delay: index * 0.05, ease: 'easeOut' }}
                       >
                         <Link
-                          to={link.to}
+                          href={link.to}
                           onClick={closeMenu}
                           className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
                         >

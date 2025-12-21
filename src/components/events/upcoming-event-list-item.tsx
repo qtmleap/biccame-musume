@@ -1,7 +1,7 @@
-import { Link } from '@tanstack/react-router'
 import type dayjs from 'dayjs'
 import { Cake, Store } from 'lucide-react'
 import { motion } from 'motion/react'
+import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getCharacterImageUrl } from '@/lib/utils'
 import type { Character } from '@/schemas/character.dto'
@@ -43,7 +43,7 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
-      <Link to='/characters/$id' params={{ id: event.character.key }}>
+      <Link href={`/characters/${event.character.key}`}>
         <div className='flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer'>
           <div
             className={`p-2 rounded-lg ${event.type === 'character' ? 'bg-pink-100 text-pink-600' : 'bg-blue-100 text-blue-600'}`}

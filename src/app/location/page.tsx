@@ -1,18 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router'
+'use client'
+
 import { AdvancedMarker, APIProvider, Map as GoogleMap, Pin } from '@vis.gl/react-google-maps'
 import { useState } from 'react'
-import { z } from 'zod'
 import { StoreList } from '@/components/location/store-list'
 import { SelectedStoreInfo } from '@/components/selected-store-info'
 import { useCharacters } from '@/hooks/useCharacters'
 import type { Character } from '@/schemas/character.dto'
-
-/**
- * 検索パラメータのスキーマ
- */
-const SearchParamsSchema = z.object({
-  id: z.string().optional()
-})
 
 /**
  * キャラクターから座標を取得する関数
@@ -29,19 +22,12 @@ const getPosition = (character: Character): google.maps.LatLngLiteral => {
 /**
  * 店舗位置マップページ
  */
-const RouteComponent = () => {
-  const { id: initialCharacterId } = Route.useSearch()
+const LocationPage = () => {
   const { data: characters } = useCharacters()
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(() => {
-    if (initialCharacterId) {
-      const targetCharacter = characters.find((c) => c.key === initialCharacterId)
-      return targetCharacter || null
-    }
-    return null
-  })
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null)
   const [mapKey, setMapKey] = useState<number>(0)
   const [isStoreListOpen, setIsStoreListOpen] = useState(false)
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 
   const charactersWithAddress = characters.filter((char) => char.address && char.address.length > 0)
 
@@ -60,7 +46,9 @@ const RouteComponent = () => {
       <div className='min-h-screen flex items-center justify-center'>
         <div className='text-center'>
           <p className='text-destructive mb-2'>Google Maps APIキーが設定されていません</p>
-          <p className='text-sm text-muted-foreground'>.envファイルにVITE_GOOGLE_MAPS_API_KEYを設定してください</p>
+          <p className='text-sm text-muted-foreground'>
+            .env.localファイルにNEXT_PUBLIC_GOOGLE_MAPS_API_KEYを設定してください
+          </p>
         </div>
       </div>
     )
@@ -99,16 +87,13 @@ const RouteComponent = () => {
 
         <StoreList
           characters={charactersWithAddress}
+          onCharacterSelect={handleCharacterSelect}
           isOpen={isStoreListOpen}
           onOpenChange={setIsStoreListOpen}
-          onCharacterSelect={handleCharacterSelect}
         />
       </div>
     </APIProvider>
   )
 }
 
-export const Route = createFileRoute('/location/')({
-  component: RouteComponent,
-  validateSearch: SearchParamsSchema
-})
+export default LocationPage

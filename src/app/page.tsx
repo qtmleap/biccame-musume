@@ -1,4 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
+'use client'
+
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { UpcomingEventList } from '@/components/events/upcoming-event-list'
@@ -22,14 +23,14 @@ const HomeContent = () => {
 }
 
 /**
- * ルートコンポーネント
+ * ホームページコンポーネント
  */
-const RouteComponent = () => (
-  <Suspense fallback={<LoadingFallback />}>
-    <HomeContent />
-  </Suspense>
-)
+const HomePage = () => {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <HomeContent />
+    </Suspense>
+  )
+}
 
-export const Route = createFileRoute('/')({
-  component: RouteComponent
-})
+export default HomePage

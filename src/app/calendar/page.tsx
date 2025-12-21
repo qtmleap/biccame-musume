@@ -1,4 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
+'use client'
+
 import dayjs from 'dayjs'
 import { Suspense, useMemo, useState } from 'react'
 import { CalendarHeader, CalendarMonthDots, CalendarMonthTabs } from '@/components/calendar/calendar-controls'
@@ -98,11 +99,11 @@ const CalendarContent = () => {
       <div className='flex flex-wrap justify-center gap-4 text-sm text-muted-foreground'>
         <div className='flex items-center gap-2'>
           <div className='w-4 h-4 rounded bg-linear-to-r from-pink-500/30 to-rose-500/30 border border-pink-500/30' />
-          <span>キャラクター誕生日</span>
+          <span>誕生日</span>
         </div>
         <div className='flex items-center gap-2'>
           <div className='w-4 h-4 rounded bg-linear-to-r from-blue-500/30 to-cyan-500/30 border border-blue-500/30' />
-          <span>店舗記念日</span>
+          <span>記念日</span>
         </div>
       </div>
     </div>
@@ -110,14 +111,12 @@ const CalendarContent = () => {
 }
 
 /**
- * ルートコンポーネント
+ * カレンダーページ
  */
-const RouteComponent = () => (
+const CalendarPage = () => (
   <Suspense fallback={<LoadingFallback />}>
     <CalendarContent />
   </Suspense>
 )
 
-export const Route = createFileRoute('/calendar/')({
-  component: RouteComponent
-})
+export default CalendarPage

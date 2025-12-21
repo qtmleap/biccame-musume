@@ -10,6 +10,10 @@ type CharacterWithVotes = Character & {
  * 開発環境かどうかを判定
  */
 const isDevelopment = () => {
+  // ビルド時やサーバーサイドではwindowが存在しない
+  if (typeof window === 'undefined') {
+    return process.env.NODE_ENV === 'development'
+  }
   return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
 }
 

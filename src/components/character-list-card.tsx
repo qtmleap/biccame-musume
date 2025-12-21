@@ -1,6 +1,6 @@
-import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { motion } from 'motion/react'
+import Link from 'next/link'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -30,7 +30,7 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
       className='h-full'
     >
       <div className='h-full flex flex-col'>
-        <Link to='/characters/$id' params={{ id: character.key }} className='block flex-1'>
+        <Link href={`/characters/${character.key}`} className='block flex-1'>
           <div
             className={`h-full rounded-lg border shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer p-4 ${
               isGraduated

@@ -1,4 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
+'use client'
+
 import { useAtomValue } from 'jotai'
 import { Suspense, useMemo, useState } from 'react'
 import { regionFilterAtom } from '@/atoms/filterAtom'
@@ -20,10 +21,8 @@ const CharactersContent = () => {
   const [randomCounter, setRandomCounter] = useState(0)
 
   const { sortedMusume, sortedOthers } = useMemo(() => {
-    // 地域フィルタリングを適用
     const filteredCharacters = filterCharactersByRegion(characters, regionFilter)
     const { musume, others } = categorizeCharacters(filteredCharacters)
-    // randomCounterが変わるたびに再計算されるようにする
     void randomCounter
     return {
       sortedMusume: sortCharacters(musume, sortType),
@@ -49,14 +48,12 @@ const CharactersContent = () => {
 }
 
 /**
- * ルートコンポーネント
+ * キャラクター一覧ページ
  */
-const RouteComponent = () => (
+const CharactersPage = () => (
   <Suspense fallback={<LoadingFallback />}>
     <CharactersContent />
   </Suspense>
 )
 
-export const Route = createFileRoute('/characters/')({
-  component: RouteComponent
-})
+export default CharactersPage

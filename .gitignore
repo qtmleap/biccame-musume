@@ -218,6 +218,10 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/node,macos,windows,linux
 
+# Next.js
+.next/
+out/
+
 # Cloudflare/Wrangler
 .dev.vars
 !.dev.vars.example

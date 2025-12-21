@@ -1,10 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { ExternalLink } from 'lucide-react'
 
 /**
  * お問い合わせページ
  */
-const RouteComponent = () => {
+const ContactPage = () => {
   return (
     <div className='min-h-screen bg-linear-to-b from-blue-50 to-white'>
       <div className='container mx-auto px-4 py-12'>
@@ -47,7 +46,7 @@ const RouteComponent = () => {
                   <h3 className='font-bold text-gray-800 mb-2'>GitHub Issues（推奨）</h3>
                   <p className='text-sm mb-3'>技術的な不具合報告や機能要望は、GitHubのIssuesでお願いします。</p>
                   <a
-                    href='https://github.com/qtmleap/vite-hono-workers/issues'
+                    href='https://github.com/qtmleap/biccame-musume/issues'
                     target='_blank'
                     rel='noopener noreferrer'
                     className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium text-sm'
@@ -96,32 +95,12 @@ const RouteComponent = () => {
             <div className='space-y-4 text-gray-700'>
               <div>
                 <h3 className='font-bold text-gray-800 mb-2'>Q. 投票は何回できますか？</h3>
-                <p className='text-sm'>
-                  A.
-                  各ビッカメ娘に1日1回投票できます。全員に投票するも良し、毎日推しに投票するも良し、自由に応援してください。
-                </p>
+                <p className='text-sm'>A. 1日1回、お好きなキャラクターに投票できます。</p>
               </div>
-
               <div>
-                <h3 className='font-bold text-gray-800 mb-2'>Q. キャラクター情報が古い・間違っています</h3>
+                <h3 className='font-bold text-gray-800 mb-2'>Q. データの更新頻度は？</h3>
                 <p className='text-sm'>
-                  A. 申し訳ございません。上記のGitHub
-                  IssuesまたはXでご報告いただけますと幸いです。確認のうえ修正いたします。
-                </p>
-              </div>
-
-              <div>
-                <h3 className='font-bold text-gray-800 mb-2'>Q. 新しいビッカメ娘が追加されていません</h3>
-                <p className='text-sm'>
-                  A.
-                  公式サイトの更新を定期的にチェックしておりますが、反映が遅れる場合があります。お気づきの点がございましたらご連絡ください。
-                </p>
-              </div>
-
-              <div>
-                <h3 className='font-bold text-gray-800 mb-2'>Q. このサイトはビックカメラ公式ですか？</h3>
-                <p className='text-sm'>
-                  A. いいえ、ファンメイドのファンサイトです。ビックカメラおよび関連企業とは一切関係ありません。
+                  A. キャラクター情報は不定期で更新しています。最新情報は公式サイトをご確認ください。
                 </p>
               </div>
             </div>
@@ -132,6 +111,4 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/contact/')({
-  component: RouteComponent
-})
+export default ContactPage

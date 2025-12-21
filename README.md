@@ -39,19 +39,18 @@
 - [Bun](https://github.com/oven-sh/bun) - 高速なJavaScriptランタイム
 - [TypeScript](https://www.typescriptlang.org/) - 型安全なJavaScript
 - [React](https://react.dev/) - UIライブラリ
-- [Vite](https://vitejs.dev/) - 高速なビルドツール
+- [Next.js](https://nextjs.org/) - Reactフレームワーク
 
 #### フロントエンド
 
 - [Tanstack Query](https://tanstack.com/query) - データフェッチング・状態管理
-- [Tanstack Router](https://tanstack.com/router) - 型安全なルーティング
 - [Tailwind CSS](https://tailwindcss.com/) - ユーティリティファーストCSS
 - [Shadcn UI](https://ui.shadcn.com/) - 再利用可能なUIコンポーネント
-- [IntLayer](https://intlayer.org/) - 国際化対応
+- [Jotai](https://jotai.org/) - 状態管理
 
 #### バックエンド・API
 
-- [Cloudflare Workers](https://workers.cloudflare.com/) - エッジコンピューティング
+- [Cloudflare Pages](https://pages.cloudflare.com/) - ホスティング
 - [Zodios](https://www.zodios.org/) - 型安全なAPIクライアント
 - [Zod](https://zod.dev/) - スキーマバリデーション
 
@@ -76,13 +75,34 @@
 #### セットアップ
 
 ```zsh
-git clone https://github.com/qtmleap/vite-hono-workers.git
-cd vite-hono-workers
+git clone https://github.com/qtmleap/biccame-musume.git
+cd biccame-musume
 ```
 
 VS Codeでプロジェクトを開き、`Cmd/Ctrl + Shift + P`でコマンドパレットを開いて`Dev Containers: Reopen in Container`を実行します。
 
+コンテナが起動したら、依存関係をインストールします：
+
+```zsh
+bun install
+```
+
+環境変数を設定します：
+
+```zsh
+cp .env.example .env.local
+# .env.localを編集してGoogle Maps APIキーを設定
+```
+
 ### 開発
+
+#### 開発サーバー起動
+
+```zsh
+bun dev
+```
+
+ブラウザで`http://localhost:3000`にアクセスします。
 
 #### データ生成
 
