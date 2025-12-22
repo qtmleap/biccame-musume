@@ -1,7 +1,7 @@
 import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
 import { CharactersSchema } from '@/schemas/character.dto'
-import { AllVoteCountsSchema, VoteCountSchema, VoteRequestSchema, VoteResponseSchema } from '@/schemas/vote.dto'
+import { AllVoteCountsSchema, VoteCountSchema, VoteRequestSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
 
 /**
  * API定義
@@ -47,7 +47,7 @@ const api = makeApi([
         schema: VoteRequestSchema
       }
     ],
-    response: VoteResponseSchema
+    response: VoteSuccessResponseSchema
   }
 ])
 
