@@ -1,24 +1,120 @@
-import { Hono } from 'hono'
-import { cors } from 'hono/cors'
-import { z } from 'zod'
-import { VoteRequestSchema } from '../schemas/vote.dto'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import {
+  AllVoteCountsSchema,
+  VoteCountSchema,
+  VoteErrorResponseSchema,
+  VoteRequestSchema,
+  VoteSuccessResponseSchema
+} from '../schemas/vote.dto'
 import { generateCountKey, generateVoteKey, getNextJSTDate } from '../utils/vote'
 
 type Bindings = {
   VOTES: KVNamespace
 }
 
-export const voteRoutes = new Hono<{ Bindings: Bindings }>()
+export const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
-// CORS設定
-voteRoutes.use('*', cors())
+// ルート定義
+const getVoteCountRoute = createRoute({
+  method: 'get',
+  path: '/:characterId',
+  request: {
+    params: z.object({
+      characterId: z.string().openapi({ example: 'biccame-001' })
+    })
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: VoteCountSchema
+        }
+      },
+      description: '投票カウント取得成功'
+    }
+  },
+  tags: ['votes']
+})
+
+const postVoteRoute = createRoute({
+  method: 'post',
+  path: '/',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: VoteRequestSchema
+        }
+      }
+    }
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: VoteSuccessResponseSchema
+        }
+      },
+      description: '投票成功'
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: VoteErrorResponseSchema
+        }
+      },
+      description: 'バリデーションエラーまたは投票済み'
+    },
+    429: {
+      content: {
+        'application/json': {
+          schema: VoteErrorResponseSchema
+        }
+      },
+      description: 'レート制限エラー'
+    },
+    500: {
+      content: {
+        'application/json': {
+          schema: VoteErrorResponseSchema
+        }
+      },
+      description: 'サーバーエラー'
+    }
+  },
+  tags: ['votes']
+})
+
+const getAllVoteCountsRoute = createRoute({
+  method: 'get',
+  path: '/',
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: AllVoteCountsSchema
+        }
+      },
+      description: '全キャラクターの投票カウント取得成功'
+    },
+    500: {
+      content: {
+        'application/json': {
+          schema: z.object({})
+        }
+      },
+      description: 'サーバーエラー'
+    }
+  },
+  tags: ['votes']
+})
 
 /**
  * 投票カウント取得
  * GET /api/votes/:characterId
  */
-voteRoutes.get('/:characterId', async (c) => {
-  const characterId = c.req.param('characterId')
+routes.openapi(getVoteCountRoute, async (c) => {
+  const { characterId } = c.req.valid('param')
   const countKey = generateCountKey(characterId)
 
   const count = await c.env.VOTES.get(countKey)
@@ -33,11 +129,10 @@ voteRoutes.get('/:characterId', async (c) => {
  * 投票実行
  * POST /api/votes
  */
-voteRoutes.post('/', async (c) => {
+routes.openapi(postVoteRoute, async (c) => {
   try {
     // リクエストボディのバリデーション
-    const body = await c.req.json()
-    const { characterId } = VoteRequestSchema.parse(body)
+    const { characterId } = c.req.valid('json')
 
     // IPアドレス取得
     const ip = c.req.header('CF-Connecting-IP') || c.req.header('X-Real-IP') || 'unknown'
@@ -133,7 +228,7 @@ voteRoutes.post('/', async (c) => {
  * 全キャラクターの投票カウント取得
  * GET /api/votes
  */
-voteRoutes.get('/', async (c) => {
+routes.openapi(getAllVoteCountsRoute, async (c) => {
   try {
     const counts: Record<string, number> = {}
     let cursor: string | undefined
