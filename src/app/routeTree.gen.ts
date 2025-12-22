@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as _notFoundRouteImport } from './routes/__not-found'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RankingIndexRouteImport } from './routes/ranking/index'
 import { Route as LocationIndexRouteImport } from './routes/location/index'
@@ -19,10 +18,6 @@ import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as CharactersIdRouteImport } from './routes/characters/$id'
 
-const _notFoundRoute = _notFoundRouteImport.update({
-  id: '/__not-found',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -87,7 +82,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/__not-found': typeof _notFoundRoute
   '/characters/$id': typeof CharactersIdRoute
   '/about/': typeof AboutIndexRoute
   '/calendar/': typeof CalendarIndexRoute
@@ -120,7 +114,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/__not-found'
     | '/characters/$id'
     | '/about/'
     | '/calendar/'
@@ -132,7 +125,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  _notFoundRoute: typeof _notFoundRoute
   CharactersIdRoute: typeof CharactersIdRoute
   AboutIndexRoute: typeof AboutIndexRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
@@ -144,13 +136,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/__not-found': {
-      id: '/__not-found'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof _notFoundRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -212,7 +197,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  _notFoundRoute: _notFoundRoute,
   CharactersIdRoute: CharactersIdRoute,
   AboutIndexRoute: AboutIndexRoute,
   CalendarIndexRoute: CalendarIndexRoute,
