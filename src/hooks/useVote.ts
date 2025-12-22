@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { VoteResponse } from '@/schemas/vote.dto'
+import type { VoteSuccessResponse } from '@/schemas/vote.dto'
 import { client } from '@/utils/client'
 
 /**
@@ -13,7 +13,7 @@ const fetchVoteCount = async (characterId: string): Promise<number> => {
 /**
  * 投票を送信
  */
-const submitVote = async (characterId: string): Promise<VoteResponse> => {
+const submitVote = async (characterId: string): Promise<VoteSuccessResponse> => {
   return await client.submitVote({ characterId })
 }
 
@@ -35,13 +35,9 @@ export const useVote = (characterId: string, options?: { enableVoteCount?: boole
   // 投票実行
   const voteMutation = useMutation({
     mutationFn: () => submitVote(characterId),
-    onSuccess: (data) => {
-      // カウントを更新
-      if (data.count !== undefined) {
-        queryClient.setQueryData(['voteCount', characterId], data.count)
-      } else {
-        queryClient.invalidateQueries({ queryKey: ['voteCount', characterId] })
-      }
+    onSuccess: () => {
+      // 投票後はカウントを再取得
+      queryClient.invalidateQueries({ queryKey: ['voteCount', characterId] })
     }
   })
 
