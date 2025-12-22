@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { voteRoutes } from './api/vote'
+import votes from './api/vote'
 
 type Bindings = {
   VOTES: KVNamespace
@@ -8,7 +8,7 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 
 // 投票APIルート
-app.route('/api/votes', voteRoutes)
+app.route('/api/votes', votes)
 
 // 静的ファイル配信
 app.use('*', async (_c, next) => {
