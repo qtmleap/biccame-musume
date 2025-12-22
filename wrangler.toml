@@ -45,3 +45,13 @@ persist = true
 name = "RATE_LIMITER"
 namespace_id = "1001"
 simple = { limit = 50, period = 60 }
+
+[[env.dev.ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 50, period = 60 }
+
+[[env.prod.ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 50, period = 60 }
