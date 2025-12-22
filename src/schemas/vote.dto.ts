@@ -37,7 +37,6 @@ export type VoteCount = z.infer<typeof VoteCountSchema>
 export const VoteSuccessResponseSchema = z.object({
   success: z.boolean().openapi({ example: true }),
   message: z.string().openapi({ example: '投票ありがとうございます！' }),
-  count: z.number().openapi({ example: 43 }),
   nextVoteDate: z.string().openapi({ example: '2025-12-23' })
 })
 

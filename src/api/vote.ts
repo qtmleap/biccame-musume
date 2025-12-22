@@ -1,4 +1,10 @@
+import { type RateLimitBinding, type RateLimitKeyFunc, rateLimit } from '@elithrar/workers-hono-rate-limit'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
+import type { Context, Next } from 'hono'
+import { HTTPException } from 'hono/http-exception'
 import {
   AllVoteCountsSchema,
   VoteCountSchema,
@@ -8,12 +14,27 @@ import {
 } from '../schemas/vote.dto'
 import { generateCountKey, generateVoteKey, getNextJSTDate } from '../utils/vote'
 
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
 type Bindings = {
   VOTES: KVNamespace
+  RATE_LIMITER: RateLimitBinding
 }
 
-export const routes = new OpenAPIHono<{ Bindings: Bindings }>()
+const getKey: RateLimitKeyFunc = (c: Context): string => {
+  // Rate limit on each API token by returning it as the key for our
+  // middleware to use.
+  return c.req.header('Authorization') || ''
+}
 
+const rateLimiter = async (c: Context, next: Next) => {
+  return await rateLimit(c.env.RATE_LIMITER, getKey)(c, next)
+}
+
+const routes = new OpenAPIHono<{ Bindings: Bindings }>()
+
+routes.use('*', rateLimiter)
 // ルート定義
 const getVoteCountRoute = createRoute({
   method: 'get',
@@ -110,6 +131,59 @@ const getAllVoteCountsRoute = createRoute({
 })
 
 /**
+ * IPアドレスを取得
+ */
+const getClientIp = (c: Context): string => {
+  return c.req.header('CF-Connecting-IP') || c.req.header('X-Real-IP') || 'unknown'
+}
+
+/**
+ * 開発環境かどうかを判定
+ */
+const isDevelopmentEnvironment = (c: Context): boolean => {
+  const host = c.req.header('Host')
+  return host?.includes('localhost') || host?.includes('127.0.0.1') || false
+}
+
+/**
+ * 投票の重複チェック
+ */
+const checkDuplicateVote = async (votesKV: KVNamespace, characterId: string, ip: string): Promise<boolean> => {
+  const voteKey = generateVoteKey(characterId, ip)
+  const existingVote = await votesKV.get(voteKey)
+  return existingVote !== null
+}
+
+/**
+ * 投票を記録（JST0時までの秒数をTTLに設定）
+ */
+const recordVote = async (votesKV: KVNamespace, characterId: string, ip: string): Promise<void> => {
+  const jstNow = dayjs().tz('Asia/Tokyo')
+  const jstMidnight = jstNow.endOf('day')
+  const ttl = jstMidnight.diff(jstNow, 'second')
+
+  const voteKey = generateVoteKey(characterId, ip)
+  await votesKV.put(voteKey, dayjs().toISOString(), { expirationTtl: ttl })
+}
+
+/**
+ * カウント更新処理
+ */
+const updateVoteCount = async (votesKV: KVNamespace, characterId: string): Promise<void> => {
+  try {
+    const countKey = generateCountKey(characterId)
+    const currentVoteCount = await votesKV.get(countKey)
+    const newCount = (currentVoteCount ? Number.parseInt(currentVoteCount, 10) : 0) + 1
+
+    await votesKV.put(countKey, String(newCount), {
+      metadata: { count: newCount }
+    })
+  } catch (error) {
+    console.error('Vote count update error:', error)
+  }
+}
+
+/**
  * 投票カウント取得
  * GET /api/votes/:characterId
  */
@@ -131,53 +205,19 @@ routes.openapi(getVoteCountRoute, async (c) => {
  */
 routes.openapi(postVoteRoute, async (c) => {
   try {
-    // リクエストボディのバリデーション
     const { characterId } = c.req.valid('json')
-
-    // IPアドレス取得
-    const ip = c.req.header('CF-Connecting-IP') || c.req.header('X-Real-IP') || 'unknown'
+    const ip = getClientIp(c)
 
     if (ip === 'unknown') {
-      return c.json({ success: false, message: 'IP address not found' }, 400)
+      throw new HTTPException(400, { message: 'IP address not found' })
     }
 
-    // 環境判定（開発環境かどうか）
-    const isDevelopment = c.req.header('Host')?.includes('localhost') || c.req.header('Host')?.includes('127.0.0.1')
+    const isDevelopment = isDevelopmentEnvironment(c)
 
-    // Rate Limiting: 開発環境以外では同一IPから1200秒間に60回まで
     if (!isDevelopment) {
-      const identifier = `ratelimit:${ip}`
-      const { success } = await c.env.VOTES.get(identifier).then((val) => {
-        const count = val ? Number.parseInt(val, 10) : 0
-        if (count >= 60) {
-          return { success: false }
-        }
-        return { success: true }
-      })
+      const hasDuplicateVote = await checkDuplicateVote(c.env.VOTES, characterId, ip)
 
-      if (!success) {
-        return c.json(
-          {
-            success: false,
-            message: '投票が多すぎます。しばらく待ってから再度お試しください。'
-          },
-          429
-        )
-      }
-
-      // Rate Limitカウンタを更新（1200秒間有効）
-      const currentCount = await c.env.VOTES.get(identifier)
-      await c.env.VOTES.put(identifier, String((currentCount ? Number.parseInt(currentCount, 10) : 0) + 1), {
-        expirationTtl: 1200
-      })
-    }
-
-    // 開発環境以外では今日の投票チェック（JSTベース）
-    if (!isDevelopment) {
-      const voteKey = generateVoteKey(characterId, ip)
-      const existingVote = await c.env.VOTES.get(voteKey)
-
-      if (existingVote) {
+      if (hasDuplicateVote) {
         return c.json(
           {
             success: false,
@@ -188,39 +228,26 @@ routes.openapi(postVoteRoute, async (c) => {
         )
       }
 
-      // 投票を記録（JST0時までの秒数をTTLに設定）
-      const now = new Date()
-      const jstNow = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }))
-      const jstMidnight = new Date(jstNow)
-      jstMidnight.setHours(24, 0, 0, 0)
-      const ttl = Math.floor((jstMidnight.getTime() - jstNow.getTime()) / 1000)
-
-      await c.env.VOTES.put(voteKey, new Date().toISOString(), { expirationTtl: ttl })
+      await recordVote(c.env.VOTES, characterId, ip)
     }
 
-    // カウントを増加
-    const countKey = generateCountKey(characterId)
-    const currentVoteCount = await c.env.VOTES.get(countKey)
-    const newCount = (currentVoteCount ? Number.parseInt(currentVoteCount, 10) : 0) + 1
-
-    // 値とメタデータの両方に件数を保存
-    await c.env.VOTES.put(countKey, String(newCount), {
-      metadata: { count: newCount }
-    })
+    c.executionCtx.waitUntil(updateVoteCount(c.env.VOTES, characterId))
 
     return c.json({
       success: true,
       message: '投票ありがとうございます！',
-      count: newCount,
       nextVoteDate: getNextJSTDate()
     })
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return c.json({ success: false, message: 'Invalid request' }, 400)
+      throw new HTTPException(400, { message: 'Invalid request' })
+    }
+    if (error instanceof HTTPException) {
+      throw error
     }
 
     console.error('Vote error:', error)
-    return c.json({ success: false, message: 'Internal server error' }, 500)
+    throw new HTTPException(500, { message: 'Internal server error' })
   }
 })
 
@@ -230,25 +257,20 @@ routes.openapi(postVoteRoute, async (c) => {
  */
 routes.openapi(getAllVoteCountsRoute, async (c) => {
   try {
-    const counts: Record<string, number> = {}
-    let cursor: string | undefined
+    const currentYear = dayjs().year()
+    const prefix = `count:${currentYear}`
 
-    // KVから全てのcount:*キーをメタデータ付きで取得
-    do {
-      const list = await c.env.VOTES.list<{ count: number }>({ prefix: 'count:', cursor })
+    // KVから全ての今年の投票カウントキーをメタデータ付きで一括取得
+    const list = await c.env.VOTES.list<{ count: number }>({ prefix })
 
-      // メタデータから件数を取得
-      for (const key of list.keys) {
-        const characterId = key.name.replace('count:', '')
-        counts[characterId] = key.metadata?.count || 0
-      }
-
-      cursor = list.list_complete ? undefined : list.cursor
-    } while (cursor)
+    // メタデータから件数を取得してオブジェクトを作成
+    const counts = Object.fromEntries(list.keys.map((key) => [key.name.replace(prefix, ''), key.metadata?.count || 0]))
 
     return c.json(counts)
   } catch (error) {
     console.error('Get all votes error:', error)
-    return c.json({}, 500)
+    throw new HTTPException(500, { message: 'Failed to get vote counts' })
   }
 })
+
+export default routes
