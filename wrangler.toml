@@ -33,3 +33,15 @@ binding = "ASSETS"
 [[env.dev.kv_namespaces]]
 binding = "VOTES"
 id = "97c756ffdc3e4e2596946a57092d9b2d"
+
+[observability]
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
+
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 50, period = 60 }
