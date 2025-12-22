@@ -11,6 +11,17 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { Toaster } from '@/components/ui/sonner'
 
+// フォントのインポート
+import '@fontsource/noto-sans-jp/400.css'
+import '@fontsource/noto-sans-jp/500.css'
+import '@fontsource/noto-sans-jp/700.css'
+import '@fontsource/zen-maru-gothic/400.css'
+import '@fontsource/zen-maru-gothic/500.css'
+import '@fontsource/zen-maru-gothic/700.css'
+import '@fontsource/m-plus-1-code/400.css'
+import '@fontsource/m-plus-1-code/500.css'
+import '@fontsource/m-plus-1-code/700.css'
+
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.tz.setDefault('Asia/Tokyo')
