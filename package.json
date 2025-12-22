@@ -10,7 +10,7 @@
     "dev": "vite --host",
     "build": "tsc -b && vite build --mode ${CLOUDFLARE_ENV}",
     "prebuild": "rimraf dist",
-    "deploy": "wrangler deploy --keep-vars"
+    "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV}"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.19.0",
