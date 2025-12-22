@@ -1,4 +1,14 @@
 import { ExternalLink } from 'lucide-react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'サイトについて',
+  description: 'ビッカメ娘ファンサイトについて。著作権情報、画像の取り扱い、免責事項などをご確認いただけます。',
+  openGraph: {
+    title: 'サイトについて | ビッカメ娘 -ビックカメラ店舗擬人化プロジェクト-',
+    description: 'ビッカメ娘ファンサイトについて。著作権情報、画像の取り扱い、免責事項などをご確認いただけます。'
+  }
+}
 
 /**
  * サイトについて・権利情報ページ

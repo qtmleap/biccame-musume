@@ -1,4 +1,14 @@
 import { ExternalLink } from 'lucide-react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'お問い合わせ',
+  description: 'ビッカメ娘ファンサイトへのお問い合わせ。不具合報告、機能要望、ご意見・ご感想はこちらから。',
+  openGraph: {
+    title: 'お問い合わせ | ビッカメ娘 -ビックカメラ店舗擬人化プロジェクト-',
+    description: 'ビッカメ娘ファンサイトへのお問い合わせ。不具合報告、機能要望、ご意見・ご感想はこちらから。'
+  }
+}
 
 /**
  * お問い合わせページ

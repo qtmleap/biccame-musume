@@ -236,3 +236,5 @@ out/
 # Act
 .secrets
 !.secrets.example
+.vercel
+.env*.local

@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import type { Character } from '@/schemas/character.dto'
 import { client } from '@/utils/client'
 
@@ -83,7 +84,7 @@ const fetchVoteRanking = async (characters: Character[], year: number): Promise<
  * 投票ランキング取得用のカスタムフック
  */
 export const useVoteRanking = (characters: Character[], year?: number) => {
-  const targetYear = year || new Date().getFullYear()
+  const targetYear = year || dayjs().year()
 
   return useSuspenseQuery({
     queryKey: ['voteRanking', characters.length, targetYear],
