@@ -13,6 +13,29 @@ export const parseDate = (dateStr: string | undefined): dayjs.Dayjs | null => {
 }
 
 /**
+ * 今日が誕生日かどうかを判定
+ */
+export const isBirthdayToday = (dateStr: string | undefined): boolean => {
+  const birthday = parseDate(dateStr)
+  if (!birthday) return false
+
+  const now = dayjs()
+  return birthday.month() === now.month() && birthday.date() === now.date()
+}
+
+/**
+ * 今日が誕生日のキャラクターを取得
+ * 開発環境では常にkyotoの誕生日として判定
+ */
+export const getBirthdayCharacters = (characters: Character[]): Character[] => {
+  if (import.meta.env.DEV) {
+    const kyoto = characters.find((character) => character.key === 'kyoto')
+    return kyoto ? [kyoto] : []
+  }
+  return characters.filter((character) => isBirthdayToday(character.character_birthday))
+}
+
+/**
  * 誕生日が近い順にソートするための日数計算（絶対値）
  * 今日を基準に、今年と来年の誕生日のうち、より近い方の日数を返す
  */
