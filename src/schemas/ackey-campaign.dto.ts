@@ -3,7 +3,7 @@ import { z } from 'zod'
 /**
  * アクキー配布条件の種類
  */
-export const AckeyCampaignConditionTypeSchema = z.enum(['purchase', 'first_come', 'lottery'])
+export const AckeyCampaignConditionTypeSchema = z.enum(['purchase', 'first_come', 'lottery', 'everyone'])
 
 export type AckeyCampaignConditionType = z.infer<typeof AckeyCampaignConditionTypeSchema>
 
