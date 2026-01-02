@@ -1,9 +1,7 @@
 import dayjs, { type Dayjs } from 'dayjs'
 import { ExternalLink } from 'lucide-react'
-import { useEffect, useMemo, useRef } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { useCharacters } from '@/hooks/useCharacters'
 import type { AckeyCampaign } from '@/schemas/ackey-campaign.dto'
 
 /**
@@ -42,20 +40,6 @@ type EventGanttChartProps = {
  * カスタムガントチャートコンポーネント
  */
 export const EventGanttChart = ({ events }: EventGanttChartProps) => {
-  const { data: characters } = useCharacters()
-
-  // 店舗名からキャラクターを取得するマップ
-  const storeCharacterMap = useMemo(() => {
-    const map = new Map<string, { name: string; image?: string }>()
-    for (const char of characters) {
-      map.set(char.store_name, {
-        name: char.character_name,
-        image: char.profile_image_url
-      })
-    }
-    return map
-  }, [characters])
-
   // 表示する日付範囲を計算（今日から30日後まで）
   const { dates, chartStartDate } = useMemo(() => {
     const today = dayjs().startOf('day')
@@ -99,62 +83,60 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   // スクロールコンテナのref
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
+  // スクロール位置を保持
+  const [scrollLeft, setScrollLeft] = useState(0)
+  const [isScrolling, setIsScrolling] = useState(false)
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // スクロールイベントハンドラ
+  const handleScroll = useCallback(() => {
+    if (scrollContainerRef.current) {
+      setScrollLeft(scrollContainerRef.current.scrollLeft)
+      setIsScrolling(true)
+
+      // 既存のタイマーをクリア
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current)
+      }
+
+      // 150ms後にスクロール終了とみなす
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsScrolling(false)
+      }, 150)
+    }
+  }, [])
+
   // 初期表示時に今日の日付が左端に来るようにスクロール
   useEffect(() => {
     if (scrollContainerRef.current) {
       // 今日の位置までスクロール（w-8 = 32px）
       scrollContainerRef.current.scrollLeft = todayOffset * 32
+      setScrollLeft(todayOffset * 32)
     }
   }, [todayOffset])
 
+  /**
+   * バー内のラベルオフセットを計算
+   * スクロール位置に応じてラベルが常に見える位置に表示される
+   */
+  const getLabelOffset = useCallback(
+    (startOffset: number, duration: number) => {
+      const barLeft = startOffset * 32
+      const barRight = barLeft + duration * 32
+      // スクロール位置がバーの範囲内にある場合、ラベルをスクロール位置に追従させる
+      if (scrollLeft > barLeft && scrollLeft < barRight - 100) {
+        return scrollLeft - barLeft
+      }
+      return 0
+    },
+    [scrollLeft]
+  )
+
   return (
     <TooltipProvider>
-      <div className='flex'>
-        {/* 左側固定カラム: イベント名 */}
-        <div className='shrink-0 border-r z-10'>
-          {/* ヘッダー（空白） */}
-          <div className='h-5 border-b' />
-          <div className='h-6 border-b' />
-
-          {/* イベント名リスト */}
-          {eventBars.map(({ event }) => {
-            // 店舗のキャラクターを取得（最初の店舗のみ表示）
-            const storeChar = event.stores?.[0] ? storeCharacterMap.get(event.stores[0]) : null
-
-            return (
-              <Tooltip key={event.id}>
-                <TooltipTrigger asChild>
-                  <div className='flex h-10 items-center gap-1.5 px-2 border-b cursor-default max-w-48'>
-                    <Avatar className='size-6 shrink-0'>
-                      {storeChar ? (
-                        <>
-                          <AvatarImage src={storeChar.image} alt={storeChar.name} />
-                          <AvatarFallback className='text-xs'>{storeChar.name.charAt(0)}</AvatarFallback>
-                        </>
-                      ) : (
-                        <AvatarFallback className='text-xs bg-gray-100' />
-                      )}
-                    </Avatar>
-                    <span className='text-xs truncate'>{event.name}</span>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent side='right' className='max-w-xs'>
-                  <p className='font-medium'>{event.name}</p>
-                  {event.stores && event.stores.length > 0 && (
-                    <p className='text-xs text-gray-500'>{event.stores.join(', ')}</p>
-                  )}
-                  <p className='text-xs text-gray-500'>
-                    {dayjs(event.startDate).format('M/D')}
-                    {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜'}
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            )
-          })}
-        </div>
-
-        {/* 右側スクロールエリア: ガントチャート */}
-        <div ref={scrollContainerRef} className='overflow-x-auto flex-1'>
+      <div>
+        {/* スクロールエリア: ガントチャート */}
+        <div ref={scrollContainerRef} className='overflow-x-auto' onScroll={handleScroll}>
           <div className='min-w-max'>
             {/* ヘッダー: 月表示 */}
             <div className='flex h-5'>
@@ -200,46 +182,73 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
           </div>
 
           {/* イベント行 */}
-          {eventBars.map(({ event, startOffset, duration, isOngoing }) => (
-            <div key={event.id} className='relative flex h-10'>
-              {/* 背景グリッド */}
-              {dates.map((date) => {
-                const isToday = date.isSame(today, 'day')
-                return (
-                  <div
-                    key={date.format('YYYY-MM-DD')}
-                    className={`w-8 shrink-0 border-b ${isToday ? 'bg-rose-50' : ''}`}
-                  />
-                )
-              })}
+          {eventBars.map(({ event, startOffset, duration, isOngoing }) => {
+            const labelOffset = getLabelOffset(startOffset, duration)
 
-              {/* バー */}
-              {duration > 0 && (
-                  <div
-                    className='absolute top-1 bottom-1 flex items-center'
-                    style={{
-                      left: `${startOffset * 32}px`,
-                      width: `${duration * 32 - 4}px`
-                    }}
-                  >
-                    {event.referenceUrls?.[0]?.url ? (
-                      <a
-                        href={event.referenceUrls[0].url}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className={`h-full w-full rounded ${getCategoryColor(event.category)} hover:opacity-80 transition-opacity flex items-center justify-center`}
-                      >
-                        <ExternalLink className='size-3 text-white' />
-                      </a>
-                    ) : (
+            return (
+              <div key={event.id} className='relative flex h-10'>
+                {/* 背景グリッド */}
+                {dates.map((date) => {
+                  const isToday = date.isSame(today, 'day')
+                  return (
+                    <div
+                      key={date.format('YYYY-MM-DD')}
+                      className={`w-8 shrink-0 border-b ${isToday ? 'bg-rose-50' : ''}`}
+                    />
+                  )
+                })}
+
+                {/* バー */}
+                {duration > 0 && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       <div
-                        className={`h-full w-full rounded ${getCategoryColor(event.category)} ${isOngoing ? 'opacity-70' : ''}`}
-                      />
-                    )}
-                  </div>
-              )}
-            </div>
-          ))}
+                        className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category)} ${isOngoing ? 'opacity-70' : ''}`}
+                        style={{
+                          left: `${startOffset * 32}px`,
+                          width: `${duration * 32 - 4}px`
+                        }}
+                      >
+                        {/* ラベル（スクロール停止時に表示） */}
+                        <div
+                          className={`absolute inset-y-0 flex items-center gap-1.5 px-2 transition-all duration-150 ${isScrolling ? 'opacity-0' : 'opacity-100'}`}
+                          style={{ transform: `translateX(${labelOffset}px)` }}
+                        >
+                          <span className='text-xs text-white font-medium truncate'>{event.name}</span>
+                          {event.stores?.[0] && (
+                            <span className='text-xs text-white/70 shrink-0'>({event.stores[0]})</span>
+                          )}
+                          {event.referenceUrls?.[0]?.url && (
+                            <ExternalLink className='size-3 text-white/70 shrink-0' />
+                          )}
+                        </div>
+
+                        {/* クリック領域 */}
+                        {event.referenceUrls?.[0]?.url && (
+                          <a
+                            href={event.referenceUrls[0].url}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='absolute inset-0 hover:bg-white/10 transition-colors'
+                          />
+                        )}
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side='top' className='max-w-xs'>
+                      <p className='font-medium'>{event.name}</p>
+                      {event.stores && event.stores.length > 0 && (
+                        <p className='text-xs text-gray-500'>{event.stores.join(', ')}</p>
+                      )}
+                      <p className='text-xs text-gray-500'>
+                        {dayjs(event.startDate).format('M/D')}
+                        {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜'}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
+            )
+          })}
 
           {/* イベントがない場合 */}
           {eventBars.length === 0 && (
