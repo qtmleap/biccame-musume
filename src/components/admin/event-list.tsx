@@ -49,6 +49,50 @@ const ConditionIcon = ({ type }: { type: AckeyCampaignCondition['type'] }) => {
 }
 
 /**
+ * イベントのステータスを取得
+ */
+const getEventStatus = (campaign: AckeyCampaign): 'upcoming' | 'ongoing' | 'ended' => {
+  if (campaign.isEnded) return 'ended'
+
+  const now = dayjs()
+  const startDate = dayjs(campaign.startDate)
+  const endDate = campaign.endDate ? dayjs(campaign.endDate) : null
+
+  // 開始前
+  if (now.isBefore(startDate)) return 'upcoming'
+
+  // 終了日が設定されている場合、終了日を過ぎていたら終了
+  if (endDate && now.isAfter(endDate)) return 'ended'
+
+  // 開始日以降で、終了日未設定または終了日前なら開催中
+  return 'ongoing'
+}
+
+/**
+ * ステータスに応じたBadgeを返す
+ */
+const StatusBadge = ({ campaign }: { campaign: AckeyCampaign }) => {
+  const status = getEventStatus(campaign)
+
+  switch (status) {
+    case 'upcoming':
+      return (
+        <Badge variant='outline' className='border-blue-600 bg-blue-50 text-blue-700'>
+          開催前
+        </Badge>
+      )
+    case 'ongoing':
+      return (
+        <Badge variant='outline' className='border-green-600 bg-green-50 text-green-700'>
+          開催中
+        </Badge>
+      )
+    case 'ended':
+      return <Badge variant='secondary'>終了</Badge>
+  }
+}
+
+/**
  * キャンペーンカードコンポーネント
  */
 const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelete: (id: string) => void }) => {
@@ -82,12 +126,7 @@ const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelet
             )}
           </div>
         </div>
-        <Badge
-          variant={campaign.isEnded ? 'secondary' : 'outline'}
-          className={campaign.isEnded ? '' : 'border-green-600 bg-green-50 text-green-700'}
-        >
-          {campaign.isEnded ? '終了' : '開催中'}
-        </Badge>
+        <StatusBadge campaign={campaign} />
       </div>
 
       {/* 配布条件 */}
@@ -194,9 +233,9 @@ export const EventList = () => {
 
   return (
     <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AckeyCampaign['category'])}>
-      <TabsList className='mb-4 w-full'>
+      <TabsList className='mb-4 w-full bg-gray-200'>
         {(['limited_card', 'ackey', 'other'] as const).map((category) => (
-          <TabsTrigger key={category} value={category} className='flex-1'>
+          <TabsTrigger key={category} value={category} className='flex-1 data-[state=active]:bg-white'>
             {CATEGORY_LABELS[category]}
             <span className='ml-1.5 text-xs text-muted-foreground'>({categoryCounts[category]})</span>
           </TabsTrigger>
