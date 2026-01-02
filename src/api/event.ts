@@ -3,8 +3,10 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import {
+  type AckeyCampaign,
   AckeyCampaignSchema,
   CreateAckeyCampaignRequestSchema,
+  type ReferenceUrl,
   UpdateAckeyCampaignRequestSchema
 } from '../schemas/ackey-campaign.dto'
 
@@ -154,7 +156,7 @@ routes.openapi(checkDuplicateUrlRoute, async (c) => {
   // URLが一致するイベントを検索（自分自身は除外）
   const matchingEvent = events.find((event) => {
     if (excludeId && event.id === excludeId) return false
-    return event.referenceUrls?.some((ref) => ref.url === url)
+    return event.referenceUrls?.some((ref: ReferenceUrl) => ref.url === url)
   })
 
   return c.json({
