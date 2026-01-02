@@ -15,6 +15,9 @@ const EditEventContent = () => {
   const { data: events = [] } = useEvents()
   const event = events.find((e) => e.id === id)
 
+  console.log('EditEventContent - event:', event)
+  console.log('EditEventContent - event.category:', event?.category)
+
   const handleSuccess = () => {
     navigate({ to: '/admin/events' })
   }

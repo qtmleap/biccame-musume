@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { Calendar, Coins, Users, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect } from 'react'
-import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import { useFieldArray, useForm, useWatch, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -63,18 +63,31 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
     formState: { errors, isSubmitting }
   } = useForm<EventFormValues>({
     resolver: zodResolver(EventFormSchema),
-    defaultValues: {
-      category: undefined,
-      name: '',
-      referenceUrl: '',
-      stores: [],
-      limitedQuantity: undefined,
-      startDate: '',
-      endDate: '',
-      conditions: [],
-      isActive: true,
-      isEnded: false
-    }
+    defaultValues: event
+      ? {
+          category: event.category,
+          name: event.name,
+          referenceUrl: event.referenceUrl,
+          stores: event.stores || [],
+          limitedQuantity: event.limitedQuantity,
+          startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
+          endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : '',
+          conditions: event.conditions,
+          isActive: event.isActive,
+          isEnded: event.isEnded ?? false
+        }
+      : {
+          category: undefined,
+          name: '',
+          referenceUrl: '',
+          stores: [],
+          limitedQuantity: undefined,
+          startDate: '',
+          endDate: '',
+          conditions: [],
+          isActive: true,
+          isEnded: false
+        }
   })
 
   const { fields, append, remove, update } = useFieldArray({
@@ -84,11 +97,12 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
 
   const stores = watch('stores') || []
   const conditions = useWatch({ control, name: 'conditions' })
-  const category = useWatch({ control, name: 'category' })
 
   // 編集モードの場合、初期値をセット
   useEffect(() => {
     if (event) {
+      console.log('EventForm useEffect - event:', event)
+      console.log('EventForm useEffect - event.category:', event.category)
       reset({
         category: event.category,
         name: event.name,
@@ -249,18 +263,27 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
             <label htmlFor='category' className='mb-1 block text-sm font-medium'>
               イベント種別
             </label>
-            <Select key={`category-${event?.id ?? 'new'}`} value={category ?? ''} onValueChange={(value) => setValue('category', value as EventFormValues['category'])}>
-              <SelectTrigger className='w-full'>
-                <SelectValue placeholder='種別を選択' />
-              </SelectTrigger>
-              <SelectContent>
-                {EventCategorySchema.options.map((cat) => (
-                  <SelectItem key={cat} value={cat}>
-                    {EVENT_CATEGORY_LABELS[cat]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Controller
+              name='category'
+              control={control}
+              render={({ field }) => {
+                console.log('Controller field.value:', field.value)
+                return (
+                  <Select value={field.value ?? ''} onValueChange={field.onChange}>
+                    <SelectTrigger className='w-full'>
+                      <SelectValue placeholder='種別を選択' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {EventCategorySchema.options.map((cat) => (
+                        <SelectItem key={cat} value={cat}>
+                          {EVENT_CATEGORY_LABELS[cat]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )
+              }}
+            />
             {errors.category && <p className='mt-1 text-xs text-destructive'>{errors.category.message}</p>}
           </div>
 
@@ -360,17 +383,17 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
 
           {/* 条件リスト */}
           <div className='space-y-1.5'>
-            <AnimatePresence mode='popLayout'>
+            <AnimatePresence initial={false}>
               {fields.map((field, index) => (
                 <motion.div
                   key={field.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.15 }}
-                  className='flex items-center gap-2 rounded-lg bg-muted/50 p-2'
+                  className='overflow-hidden'
                 >
+                  <div className='flex items-center gap-2 rounded-lg bg-muted/50 p-2'>
                   <div className='flex-1'>
                     {field.type === 'purchase' && (
                     <div className='flex items-center gap-2'>
@@ -419,10 +442,11 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
                       <span className='text-sm text-muted-foreground'>全員配布</span>
                     </div>
                   )}
+                    </div>
+                    <Button type='button' size='icon' variant='ghost' onClick={() => remove(index)} className='shrink-0'>
+                      <X className='size-4' />
+                    </Button>
                   </div>
-                  <Button type='button' size='icon' variant='ghost' onClick={() => remove(index)} className='shrink-0'>
-                    <X className='size-4' />
-                  </Button>
                 </motion.div>
               ))}
             </AnimatePresence>
