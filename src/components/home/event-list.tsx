@@ -176,10 +176,10 @@ export const EventList = () => {
             className='mt-4 text-right'
           >
             <Link
-              to='/admin/events'
+              to='/events'
               className='text-sm text-gray-700 hover:text-gray-900 font-semibold hover:underline transition-colors'
             >
-              イベント登録
+              イベント一覧
             </Link>
           </motion.div>
         </div>

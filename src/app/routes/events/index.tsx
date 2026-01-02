@@ -1,8 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Gantt, type Task, ViewMode } from 'gantt-task-react'
 import 'gantt-task-react/dist/index.css'
-import { Gift } from 'lucide-react'
+import { Gift, Settings } from 'lucide-react'
 import { Suspense, useMemo, useState } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -189,12 +189,21 @@ const EventsContent = () => {
   return (
     <div className='mx-auto p-4 md:p-8 space-y-4 max-w-6xl'>
       {/* ヘッダー */}
-      <div>
-        <div className='flex items-center gap-2 mb-2'>
-          <Gift className='size-5 text-[#e50012]' />
-          <h1 className='text-xl font-bold text-gray-800'>イベント一覧</h1>
+      <div className='flex items-center justify-between'>
+        <div>
+          <div className='flex items-center gap-2 mb-2'>
+            <Gift className='size-5 text-[#e50012]' />
+            <h1 className='text-xl font-bold text-gray-800'>イベント一覧</h1>
+          </div>
+          <p className='text-sm text-gray-600'>開催中・開催予定のイベント</p>
         </div>
-        <p className='text-sm text-gray-600'>開催中・開催予定のイベント</p>
+        <Link
+          to='/admin/events'
+          className='flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors'
+        >
+          <Settings className='size-4' />
+          <span>管理</span>
+        </Link>
       </div>
 
       {/* カテゴリフィルター */}
