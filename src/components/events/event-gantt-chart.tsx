@@ -110,6 +110,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   const [scrollLeft, setScrollLeft] = useState(0)
   const [isScrolling, setIsScrolling] = useState(false)
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isInitialMountRef = useRef(true)
 
   // ドラッグスクロール用のstate
   const [isDragging, setIsDragging] = useState(false)
@@ -120,6 +121,10 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   const handleScroll = useCallback(() => {
     if (scrollContainerRef.current) {
       setScrollLeft(scrollContainerRef.current.scrollLeft)
+      
+      // 初回マウント時はスクロールアニメーションをスキップ
+      if (isInitialMountRef.current) return
+      
       setIsScrolling(true)
 
       // 既存のタイマーをクリア
@@ -140,6 +145,10 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       // 今日の位置までスクロール（w-8 = 32px）
       scrollContainerRef.current.scrollLeft = todayOffset * 32
       setScrollLeft(todayOffset * 32)
+      // 初回スクロール後にフラグをクリア
+      requestAnimationFrame(() => {
+        isInitialMountRef.current = false
+      })
     }
   }, [todayOffset])
 
