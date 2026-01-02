@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
+import { orderBy } from 'lodash-es'
 import { Calendar, CreditCard, Gift, KeyRound, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
@@ -46,9 +47,9 @@ const getDaysLabel = (days: number, isStarted: boolean) => {
 export const EventList = () => {
   const { data: events = [], isLoading } = useEvents()
 
-  // 開催中および開催一週間前のイベントをフィルタリング
-  const upcomingEvents = events
-    .filter((event) => {
+  // 開催中および開催一週間前のイベントをフィルタリングし、開始日時・カテゴリ・店舗順でソート
+  const upcomingEvents = orderBy(
+    events.filter((event) => {
       if (event.isEnded) return false
 
       const now = dayjs()
@@ -67,8 +68,14 @@ export const EventList = () => {
       }
 
       return false
-    })
-    .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
+    }),
+    [
+      (e) => dayjs(e.startDate).valueOf(),
+      (e) => e.category,
+      (e) => e.stores?.[0] || ''
+    ],
+    ['asc', 'asc', 'asc']
+  )
 
   if (isLoading || upcomingEvents.length === 0) {
     return null
