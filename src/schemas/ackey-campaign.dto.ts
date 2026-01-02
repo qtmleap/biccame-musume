@@ -37,6 +37,32 @@ export const AckeyCampaignConditionSchema = z.object({
 export type AckeyCampaignCondition = z.infer<typeof AckeyCampaignConditionSchema>
 
 /**
+ * 参考URLの種類
+ */
+export const ReferenceUrlTypeSchema = z.enum(['announce', 'start', 'end'])
+
+export type ReferenceUrlType = z.infer<typeof ReferenceUrlTypeSchema>
+
+/**
+ * 参考URLの種類の表示名
+ */
+export const REFERENCE_URL_TYPE_LABELS: Record<ReferenceUrlType, string> = {
+  announce: '告知',
+  start: '開始',
+  end: '終了'
+}
+
+/**
+ * 参考URL
+ */
+export const ReferenceUrlSchema = z.object({
+  type: ReferenceUrlTypeSchema,
+  url: z.string().url('有効なURLを入力してください')
+})
+
+export type ReferenceUrl = z.infer<typeof ReferenceUrlSchema>
+
+/**
  * アクキー配布キャンペーン
  */
 export const AckeyCampaignSchema = z.object({
@@ -45,8 +71,8 @@ export const AckeyCampaignSchema = z.object({
   category: EventCategorySchema,
   // キャンペーン名
   name: z.string().min(1, 'キャンペーン名は必須です'),
-  // 参考URL（必須）
-  referenceUrl: z.string().url('有効なURLを入力してください').min(1, '参考URLは必須です'),
+  // 参考URL（任意、複数可）
+  referenceUrls: z.array(ReferenceUrlSchema).optional(),
   // 開催店舗（任意、複数可）
   stores: z.array(z.string()).optional(),
   // 限定数（任意）
