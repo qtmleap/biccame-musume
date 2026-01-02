@@ -132,26 +132,35 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
     [scrollLeft]
   )
 
+  // 現在表示されている月を計算
+  const currentVisibleMonth = useMemo(() => {
+    const dayIndex = Math.floor(scrollLeft / 32)
+    if (dayIndex >= 0 && dayIndex < dates.length) {
+      return dates[dayIndex].format('M月')
+    }
+    return dates[0]?.format('M月') ?? ''
+  }, [scrollLeft, dates])
+
   return (
     <TooltipProvider>
-      <div>
+      <div className='relative'>
+        {/* 固定月表示 */}
+        <div className='absolute top-0 left-0 z-10 h-5 px-1 flex items-center text-xs font-medium text-gray-700 pointer-events-none'>
+          {currentVisibleMonth}
+        </div>
+
         {/* スクロールエリア: ガントチャート */}
         <div ref={scrollContainerRef} className='overflow-x-auto' onScroll={handleScroll}>
           <div className='min-w-max'>
-            {/* ヘッダー: 月表示 */}
+            {/* ヘッダー: 月表示（背景用） */}
             <div className='flex h-5'>
-              {dates.map((date, index) => {
-                const isFirstOfMonth = date.date() === 1 || index === 0
+              {dates.map((date) => {
                 const isToday = date.isSame(today, 'day')
                 return (
                   <div
                     key={date.format('YYYY-MM-DD')}
-                    className={`w-8 shrink-0 border-b text-center text-xs ${isToday ? 'bg-rose-50' : ''}`}
-                  >
-                    {isFirstOfMonth && (
-                      <div className='font-medium text-gray-700'>{date.format('M月')}</div>
-                    )}
-                  </div>
+                    className={`w-8 shrink-0 border-b ${isToday ? 'bg-rose-50' : ''}`}
+                  />
                 )
               })}
             </div>
