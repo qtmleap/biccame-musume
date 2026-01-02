@@ -389,7 +389,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
           {errors.conditions && <p className='mb-2 text-xs text-destructive'>{errors.conditions.message}</p>}
 
           {/* 条件リスト */}
-          <div className='grid grid-cols-1 gap-px overflow-hidden rounded-lg border bg-border sm:grid-cols-2'>
+          <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-x-4'>
             <AnimatePresence initial={false}>
               {fields.map((field, index) => (
                 <motion.div
@@ -398,9 +398,9 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className='bg-background'
+                  className={index % 2 === 0 && fields.length > 1 ? 'sm:border-r sm:pr-4' : ''}
                 >
-                  <div className='flex items-center gap-2 p-2'>
+                  <div className='flex items-center gap-2'>
                   <div className='flex-1'>
                     {field.type === 'purchase' && (
                     <div className='flex items-center gap-2'>
