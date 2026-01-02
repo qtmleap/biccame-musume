@@ -1,6 +1,22 @@
 import { z } from 'zod'
 
 /**
+ * イベント種別（カテゴリ）
+ */
+export const EventCategorySchema = z.enum(['limited_card', 'ackey', 'other'])
+
+export type EventCategory = z.infer<typeof EventCategorySchema>
+
+/**
+ * イベント種別の表示名
+ */
+export const EVENT_CATEGORY_LABELS: Record<EventCategory, string> = {
+  limited_card: '限定名刺',
+  ackey: 'アクキー',
+  other: 'その他'
+}
+
+/**
  * アクキー配布条件の種類
  */
 export const AckeyCampaignConditionTypeSchema = z.enum(['purchase', 'first_come', 'lottery', 'everyone'])
@@ -25,6 +41,8 @@ export type AckeyCampaignCondition = z.infer<typeof AckeyCampaignConditionSchema
  */
 export const AckeyCampaignSchema = z.object({
   id: z.string(),
+  // イベント種別
+  category: EventCategorySchema,
   // キャンペーン名
   name: z.string().min(1, 'キャンペーン名は必須です'),
   // 参考URL（必須）
