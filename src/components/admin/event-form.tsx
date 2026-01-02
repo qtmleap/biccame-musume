@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import { AlertTriangle, Calendar, Coins, Users, X } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
 import { useCallback, useEffect, useState } from 'react'
 import { useFieldArray, useForm, useWatch, Controller } from 'react-hook-form'
 import { z } from 'zod'
@@ -417,14 +416,9 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
 
           {/* 条件リスト */}
           <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-x-4'>
-            <AnimatePresence initial={false}>
               {fields.map((field, index) => (
-                <motion.div
+                <div
                   key={field.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.15 }}
                   className={index % 2 === 0 && fields.length > 1 ? 'sm:border-r sm:pr-4' : ''}
                 >
                   <div className='flex items-center gap-2'>
@@ -479,9 +473,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
                       <X className='size-4' />
                     </Button>
                   </div>
-                </motion.div>
+                </div>
               ))}
-            </AnimatePresence>
           </div>
         </div>
 
@@ -504,15 +497,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
             ))}
           </div>
           <div className='space-y-1.5'>
-            <AnimatePresence mode='popLayout'>
               {referenceUrlFields.map((field, index) => (
-                <motion.div
-                  key={field.id}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
+                <div key={field.id}>
                   <div className='flex items-center gap-2'>
                     <span className='shrink-0 text-sm font-medium w-10'>{REFERENCE_URL_TYPE_LABELS[field.type]}</span>
                     <Input
@@ -549,9 +535,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
                       </div>
                     </div>
                   )}
-                </motion.div>
+                </div>
               ))}
-            </AnimatePresence>
           </div>
         </div>
 
