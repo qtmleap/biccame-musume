@@ -5,17 +5,26 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import type { AckeyCampaign } from '@/schemas/ackey-campaign.dto'
 
 /**
+ * スクロールバーを非表示にするスタイル（Chrome/Safari用）
+ */
+const hideScrollbarStyle = `
+  .gantt-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+`
+
+/**
  * カテゴリに応じた色を返す
  */
 const getCategoryColor = (category: AckeyCampaign['category']) => {
   switch (category) {
     case 'limited_card':
-      return 'bg-purple-500'
+      return 'bg-purple-700'
     case 'ackey':
-      return 'bg-amber-500'
+      return 'bg-amber-600'
     case 'other':
     default:
-      return 'bg-pink-500'
+      return 'bg-pink-600'
   }
 }
 
@@ -105,6 +114,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   // ドラッグスクロール用のstate
   const [isDragging, setIsDragging] = useState(false)
   const dragStartRef = useRef({ x: 0, scrollLeft: 0 })
+  const hasDraggedRef = useRef(false)
 
   // スクロールイベントハンドラ
   const handleScroll = useCallback(() => {
@@ -137,6 +147,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (!scrollContainerRef.current) return
     setIsDragging(true)
+    hasDraggedRef.current = false
     dragStartRef.current = {
       x: e.clientX,
       scrollLeft: scrollContainerRef.current.scrollLeft
@@ -149,6 +160,10 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       if (!isDragging || !scrollContainerRef.current) return
       e.preventDefault()
       const dx = e.clientX - dragStartRef.current.x
+      // 5px以上動いたらドラッグとみなす
+      if (Math.abs(dx) > 5) {
+        hasDraggedRef.current = true
+      }
       scrollContainerRef.current.scrollLeft = dragStartRef.current.scrollLeft - dx
     },
     [isDragging]
@@ -192,6 +207,8 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
 
   return (
     <TooltipProvider>
+      {/* Chrome/Safari用スクロールバー非表示スタイル */}
+      <style>{hideScrollbarStyle}</style>
       <div className='relative'>
         {/* 固定月表示 */}
         <div className='absolute top-0 left-0 z-10 h-5 px-1 flex items-center text-xs font-medium text-gray-700 pointer-events-none'>
@@ -201,7 +218,11 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         {/* スクロールエリア: ガントチャート */}
         <div
           ref={scrollContainerRef}
-          className={`overflow-x-auto scrollbar-none ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+          className={`gantt-scroll-container overflow-x-auto ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+          style={{
+            scrollbarWidth: 'none', // Firefox
+            msOverflowStyle: 'none' // IE/Edge
+          }}
           onScroll={handleScroll}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -277,7 +298,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                       >
                         {/* ラベル（スクロール停止時に表示） */}
                         <div
-                          className={`absolute inset-y-0 flex items-center gap-1.5 px-2 transition-all duration-150 ${isScrolling ? 'opacity-0' : 'opacity-100'}`}
+                          className={`absolute inset-y-0 flex items-center gap-1.5 px-2 transition-opacity duration-150 ${isScrolling ? 'opacity-0' : 'opacity-100'}`}
                           style={{ transform: `translateX(${labelOffset}px)` }}
                         >
                           <span className='text-xs text-white font-medium truncate'>{event.name}</span>
@@ -296,6 +317,13 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                             target='_blank'
                             rel='noopener noreferrer'
                             className='absolute inset-0 hover:bg-white/10 transition-colors'
+                            onClick={(e) => {
+                              // ドラッグしていた場合はリンクを無効化
+                              if (hasDraggedRef.current) {
+                                e.preventDefault()
+                              }
+                            }}
+                            draggable={false}
                           />
                         )}
                       </div>
