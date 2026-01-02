@@ -184,12 +184,8 @@ export const BirthdayFullscreenOverlay = ({ characters }: BirthdayFullscreenOver
             >
               Happy Birthday!
             </motion.h2>
-            <p className='mt-2 text-xl text-white drop-shadow-md md:text-2xl'>
-              {currentCharacter.character_name}
-            </p>
-            <p className='mt-1 text-sm text-white/80 drop-shadow-md'>
-              {currentCharacter.store_name}
-            </p>
+            <p className='mt-2 text-xl text-white drop-shadow-md md:text-2xl'>{currentCharacter.character_name}</p>
+            <p className='mt-1 text-sm text-white/80 drop-shadow-md'>{currentCharacter.store_name}</p>
 
             {/* 詳細リンク */}
             <Link
@@ -206,9 +202,7 @@ export const BirthdayFullscreenOverlay = ({ characters }: BirthdayFullscreenOver
 
             {/* 閉じるヒント */}
             <p className='mt-6 text-xs text-white/60'>
-              {characters.length > 1
-                ? `タップして次へ (${currentIndex + 1}/${characters.length})`
-                : 'タップして閉じる'}
+              {characters.length > 1 ? `タップして次へ (${currentIndex + 1}/${characters.length})` : 'タップして閉じる'}
             </p>
           </motion.div>
         </motion.div>

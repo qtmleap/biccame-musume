@@ -25,6 +25,10 @@ binding = "ASSETS"
 binding = "VOTES"
 id = "04dd77043cc240b2b8bbbd7f0adfd67d"
 
+[[env.prod.kv_namespaces]]
+binding = "BICCAME_MUSUME_EVENTS"
+id = "ef49185c58d04a0790e7c68394d78089"
+
 [env.dev.assets]
 directory = "dist"
 not_found_handling = "single-page-application"
@@ -33,6 +37,10 @@ binding = "ASSETS"
 [[env.dev.kv_namespaces]]
 binding = "VOTES"
 id = "97c756ffdc3e4e2596946a57092d9b2d"
+
+[[env.dev.kv_namespaces]]
+binding = "BICCAME_MUSUME_EVENTS"
+id = "6f3b7b710eb646a0aef7ab524609bb67"
 
 [observability]
 [observability.logs]
