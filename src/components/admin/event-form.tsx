@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
-import { Calendar, Coins, Users, X } from 'lucide-react'
+import { AlertTriangle, Calendar, Coins, Users, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useFieldArray, useForm, useWatch, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { Badge } from '@/components/ui/badge'
@@ -11,7 +11,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/useCharacters'
-import { useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
+import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
 import { type AckeyCampaign, AckeyCampaignConditionTypeSchema, EventCategorySchema, EVENT_CATEGORY_LABELS, ReferenceUrlTypeSchema, REFERENCE_URL_TYPE_LABELS } from '@/schemas/ackey-campaign.dto'
 
 /**
@@ -51,6 +51,9 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
   const createEvent = useCreateEvent()
   const updateEvent = useUpdateEvent()
   const { data: characters } = useCharacters()
+
+  // URL重複チェック結果を保持
+  const [duplicateWarnings, setDuplicateWarnings] = useState<Record<number, AckeyCampaign | null>>({})
 
   // 住所がある店舗のみフィルタリングしてユニークリストを取得
   const storeNames = Array.from(
@@ -105,6 +108,30 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
   const stores = watch('stores') || []
   const conditions = useWatch({ control, name: 'conditions' })
   const referenceUrls = useWatch({ control, name: 'referenceUrls' }) || []
+
+  /**
+   * URLの重複チェック
+   */
+  const checkUrlDuplicate = useCallback(
+    async (index: number, url: string) => {
+      if (!url || !url.startsWith('http')) {
+        setDuplicateWarnings((prev) => ({ ...prev, [index]: null }))
+        return
+      }
+
+      try {
+        const result = await checkDuplicateUrl(url, event?.id)
+        setDuplicateWarnings((prev) => ({
+          ...prev,
+          [index]: result.exists ? (result.event ?? null) : null
+        }))
+      } catch {
+        // エラー時は警告を消す
+        setDuplicateWarnings((prev) => ({ ...prev, [index]: null }))
+      }
+    },
+    [event?.id]
+  )
 
   // 編集モードの場合、初期値をセット
   useEffect(() => {
@@ -492,12 +519,36 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
                       type='url'
                       placeholder='https://twitter.com/...'
                       {...register(`referenceUrls.${index}.url`)}
+                      onBlur={(e) => checkUrlDuplicate(index, e.target.value)}
                       className='flex-1'
                     />
-                    <Button type='button' size='icon' variant='ghost' onClick={() => removeReferenceUrl(index)} className='shrink-0'>
+                    <Button
+                      type='button'
+                      size='icon'
+                      variant='ghost'
+                      onClick={() => {
+                        removeReferenceUrl(index)
+                        setDuplicateWarnings((prev) => {
+                          const next = { ...prev }
+                          delete next[index]
+                          return next
+                        })
+                      }}
+                      className='shrink-0'
+                    >
                       <X className='size-4' />
                     </Button>
                   </div>
+                  {/* 重複警告 */}
+                  {duplicateWarnings[index] && (
+                    <div className='mt-1 ml-12 flex items-start gap-1.5 text-xs text-amber-600 bg-amber-50 rounded px-2 py-1.5'>
+                      <AlertTriangle className='size-3.5 shrink-0 mt-0.5' />
+                      <div>
+                        <span className='font-medium'>同じURLが設定されているイベントがあります:</span>
+                        <span className='ml-1'>{duplicateWarnings[index]?.name}</span>
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </AnimatePresence>
