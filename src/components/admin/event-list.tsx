@@ -192,9 +192,11 @@ export const EventList = () => {
   const { isAuthenticated } = useCloudflareAccess()
   const [activeTab, setActiveTab] = useState<AckeyCampaign['category']>('limited_card')
 
-  // カテゴリ別にフィルタリング
+  // カテゴリ別にフィルタリングし、開始時間順でソート
   const filteredCampaigns = useMemo(() => {
-    return campaigns.filter((campaign) => campaign.category === activeTab)
+    return campaigns
+      .filter((campaign) => campaign.category === activeTab)
+      .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
   }, [campaigns, activeTab])
 
   // 各カテゴリのイベント数

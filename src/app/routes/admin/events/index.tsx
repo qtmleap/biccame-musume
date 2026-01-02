@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Plus } from 'lucide-react'
 import { Suspense } from 'react'
 import { EventList } from '@/components/admin/event-list'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -23,8 +22,8 @@ const EventsContent = () => {
           </div>
           {isAuthenticated && (
             <Link to='/admin/events/new'>
-              <Button size='icon' className='size-12 shrink-0 rounded-full bg-red-500 hover:bg-red-600 md:size-14'>
-                <Plus className='size-6 md:size-7' />
+              <Button className='bg-red-500 hover:bg-red-600'>
+                新規作成
               </Button>
             </Link>
           )}
