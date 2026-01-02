@@ -28,6 +28,13 @@ const getDaysLabel = (days: number) => {
 }
 
 /**
+ * 名前がスラッシュで区切られている場合、最初の部分のみ返す
+ */
+const getDisplayName = (name: string) => {
+  return name.split('/')[0].trim()
+}
+
+/**
  * 直近のイベントリストアイテム
  */
 export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemProps) => {
@@ -64,10 +71,8 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
 
           <div className='flex-1 min-w-0'>
             <p className='text-sm font-medium text-gray-800 truncate'>
-              {event.character.character_name}
-              <span className='text-gray-400 font-normal ml-1'>
-                {event.type === 'character' ? 'の誕生日' : '(店舗誕生日)'}
-              </span>
+              {getDisplayName(event.character.character_name)}
+              <span className='text-gray-400 font-normal ml-1'>の誕生日</span>
             </p>
             <p className='text-xs text-gray-500'>{event.date.format('M月D日')}</p>
           </div>
