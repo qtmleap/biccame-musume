@@ -1,0 +1,446 @@
+{
+    "events": [
+        {
+            "id": "df6e178e-aebc-42e4-a8c2-80aaf961c7a0",
+            "category": "other",
+            "name": "新春絵馬",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/biccamera_nanba/status/2004043810733719584"
+                }
+            ],
+            "stores": [
+                "なんば店"
+            ],
+            "limitedQuantity": 100,
+            "startDate": "2025-12-31T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "purchase",
+                    "purchaseAmount": 3000
+                },
+                {
+                    "type": "first_come",
+                    "quantity": 100
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T01:19:13.869Z",
+            "updatedAt": "2026-01-02T07:24:54.751Z"
+        },
+        {
+            "id": "a83260e6-9822-44b4-afed-c6fe1fd4d930",
+            "category": "ackey",
+            "name": "京都たんアクリルキーホルダ― ",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/biccamera_nanba/status/2004043998965690726"
+                }
+            ],
+            "stores": [
+                "なんば店"
+            ],
+            "limitedQuantity": 80,
+            "startDate": "2026-01-09T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "purchase",
+                    "purchaseAmount": 3000
+                },
+                {
+                    "type": "first_come",
+                    "quantity": 80
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T01:20:07.611Z",
+            "updatedAt": "2026-01-02T07:22:38.525Z"
+        },
+        {
+            "id": "f85d92de-6510-41ec-978d-59e7955456d2",
+            "category": "other",
+            "name": "絵馬風マグネットシート",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/Bic_kawasaki/status/2006192334044815707"
+                }
+            ],
+            "stores": [
+                "ラゾーナ川崎店"
+            ],
+            "limitedQuantity": 100,
+            "startDate": "2025-12-31T15:00:00.000Z",
+            "endDate": "2026-01-06T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "purchase",
+                    "purchaseAmount": 2026
+                },
+                {
+                    "type": "first_come",
+                    "quantity": 100
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T01:28:17.123Z",
+            "updatedAt": "2026-01-02T07:25:22.503Z"
+        },
+        {
+            "id": "4b467ce8-6f06-410d-abab-2f3c60b0644a",
+            "category": "other",
+            "name": "トレーディングカード",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/bic_takatsuki/status/2004419316373246079"
+                }
+            ],
+            "stores": [
+                "高槻阪急スクエア店"
+            ],
+            "limitedQuantity": 100,
+            "startDate": "2026-01-02T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "purchase",
+                    "purchaseAmount": 2026
+                },
+                {
+                    "type": "first_come",
+                    "quantity": 100
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T01:30:11.768Z",
+            "updatedAt": "2026-01-02T07:23:48.225Z"
+        },
+        {
+            "id": "51d61e58-50eb-405e-ace2-d8fad5672dd0",
+            "category": "limited_card",
+            "name": "1月カレンダー名刺",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/bic_yuurakuchou/status/2005550626063925362"
+                }
+            ],
+            "stores": [
+                "有楽町店"
+            ],
+            "limitedQuantity": 1,
+            "startDate": "2025-12-31T15:00:00.000Z",
+            "endDate": "2026-01-30T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "everyone"
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T01:33:57.778Z",
+            "updatedAt": "2026-01-02T07:23:26.905Z"
+        },
+        {
+            "id": "d6f312a4-1d5d-45c1-9ee0-7d162b5f740d",
+            "category": "ackey",
+            "name": "擬人化8周年記念アクキー",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/bic_kagoshima/status/2001476515679412346"
+                }
+            ],
+            "stores": [
+                "鹿児島中央駅店"
+            ],
+            "limitedQuantity": 100,
+            "startDate": "2025-12-17T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "purchase",
+                    "purchaseAmount": 3000
+                },
+                {
+                    "type": "first_come",
+                    "quantity": 100
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T01:37:12.756Z",
+            "updatedAt": "2026-01-02T01:37:12.756Z"
+        },
+        {
+            "id": "7b594ee3-bc08-4126-83a0-d2452fe2979f",
+            "category": "other",
+            "name": "年賀状",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/bic_funabashi/status/2005495050357350717"
+                }
+            ],
+            "stores": [
+                "船橋駅FACE店"
+            ],
+            "limitedQuantity": 1,
+            "startDate": "2025-12-31T15:00:00.000Z",
+            "endDate": "2026-01-30T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "purchase",
+                    "purchaseAmount": 1000
+                },
+                {
+                    "type": "everyone"
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T01:38:42.286Z",
+            "updatedAt": "2026-01-02T15:02:47.653Z"
+        },
+        {
+            "id": "ed5bd78e-7146-492d-9596-730c40782dda",
+            "category": "ackey",
+            "name": "お正月アクキー",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/bicikenishi/status/2005849710360219756"
+                }
+            ],
+            "stores": [
+                "池袋西口店"
+            ],
+            "limitedQuantity": 50,
+            "startDate": "2026-01-02T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "purchase",
+                    "purchaseAmount": 2500
+                },
+                {
+                    "type": "first_come",
+                    "quantity": 50
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T01:40:10.569Z",
+            "updatedAt": "2026-01-02T07:22:19.273Z"
+        },
+        {
+            "id": "5eed6c2d-f4ca-4aad-809d-303ac2d49737",
+            "category": "limited_card",
+            "name": "新年名刺",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/bic_kashiwa/status/2001125205843042697"
+                }
+            ],
+            "stores": [
+                "柏店"
+            ],
+            "startDate": "2025-12-31T15:00:00.000Z",
+            "endDate": "2026-01-30T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "everyone"
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T07:12:35.993Z",
+            "updatedAt": "2026-01-02T07:23:07.630Z"
+        },
+        {
+            "id": "3d373073-e3bc-45a2-8bca-90f2ea9c8f2b",
+            "category": "limited_card",
+            "name": "限定名刺",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/bic_ohmiya/status/2004827975276171553"
+                }
+            ],
+            "stores": [
+                "大宮西口そごう店"
+            ],
+            "startDate": "2025-12-31T15:00:00.000Z",
+            "endDate": "2026-01-30T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "everyone"
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T07:18:03.924Z",
+            "updatedAt": "2026-01-02T07:18:03.924Z"
+        },
+        {
+            "id": "ddee6f2e-8955-450f-99cc-88e0775260e0",
+            "category": "limited_card",
+            "name": "限定名刺",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/bic_shinjyuku/status/1991675428918997429"
+                }
+            ],
+            "stores": [
+                "新宿西口店"
+            ],
+            "startDate": "2025-11-20T15:00:00.000Z",
+            "endDate": "2026-04-29T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "everyone"
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T07:20:11.547Z",
+            "updatedAt": "2026-01-02T07:20:11.547Z"
+        },
+        {
+            "id": "a5803581-3ee0-45cc-9270-cd534ff50b10",
+            "category": "limited_card",
+            "name": "新年イベント名刺",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/bic_takatsuki/status/2004388693835239927"
+                }
+            ],
+            "stores": [
+                "高槻阪急スクエア店"
+            ],
+            "startDate": "2026-01-02T15:00:00.000Z",
+            "endDate": "2026-01-30T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "everyone"
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T07:24:35.898Z",
+            "updatedAt": "2026-01-02T07:24:35.898Z"
+        },
+        {
+            "id": "36a8aaa2-9463-442c-9bf7-6936387cdbc7",
+            "category": "other",
+            "name": "千社札風ステッカー",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/Bic_kawasaki/status/2003707213169459543"
+                }
+            ],
+            "stores": [
+                "ラゾーナ川崎店"
+            ],
+            "limitedQuantity": 200,
+            "startDate": "2025-12-31T15:00:00.000Z",
+            "endDate": "2026-01-06T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "purchase",
+                    "purchaseAmount": 1000
+                },
+                {
+                    "type": "first_come",
+                    "quantity": 200
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T07:26:34.525Z",
+            "updatedAt": "2026-01-02T15:03:28.468Z"
+        },
+        {
+            "id": "653d99cf-b06f-4c5e-8c34-39aaa78adc99",
+            "category": "limited_card",
+            "name": "新年名刺",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/bic_abeno/status/2004796904996307339/photo/1"
+                }
+            ],
+            "stores": [
+                "あべの キューズモール店"
+            ],
+            "startDate": "2025-12-31T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "everyone"
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T14:45:14.813Z",
+            "updatedAt": "2026-01-02T14:46:38.188Z"
+        },
+        {
+            "id": "8d074b12-a426-4aaa-a619-fdd7471f37e1",
+            "category": "limited_card",
+            "name": "新年名刺",
+            "stores": [
+                "アリオ八尾店"
+            ],
+            "startDate": "2025-12-31T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "everyone"
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T14:51:29.488Z",
+            "updatedAt": "2026-01-02T14:51:29.488Z"
+        },
+        {
+            "id": "57587c46-90fb-4b89-8751-1430642364e8",
+            "category": "limited_card",
+            "name": "新年名刺",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/Bic_Okayamaten/status/2006534411043614888"
+                }
+            ],
+            "stores": [
+                "岡山駅前店"
+            ],
+            "startDate": "2025-12-31T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "everyone"
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T14:54:22.306Z",
+            "updatedAt": "2026-01-02T14:54:22.306Z"
+        },
+        {
+            "id": "3a8005dd-5a4a-4264-a576-a3abfd0e390c",
+            "category": "limited_card",
+            "name": "正月名刺",
+            "referenceUrls": [
+                {
+                    "type": "announce",
+                    "url": "https://x.com/bic_sagamioono/status/2006996197614199115"
+                }
+            ],
+            "stores": [
+                "相模大野駅店"
+            ],
+            "startDate": "2025-12-31T15:00:00.000Z",
+            "endDate": "2026-01-30T15:00:00.000Z",
+            "conditions": [
+                {
+                    "type": "everyone"
+                }
+            ],
+            "isEnded": false,
+            "createdAt": "2026-01-02T15:08:34.129Z",
+            "updatedAt": "2026-01-02T15:08:34.129Z"
+        }
+    ]
+}
