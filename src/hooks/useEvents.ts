@@ -108,3 +108,23 @@ export const useUpdateEvent = () => {
     }
   })
 }
+
+/**
+ * URLの重複をチェックする関数
+ */
+export const checkDuplicateUrl = async (
+  url: string,
+  excludeId?: string
+): Promise<{ exists: boolean; event?: AckeyCampaign }> => {
+  const params = new URLSearchParams({ url })
+  if (excludeId) {
+    params.append('excludeId', excludeId)
+  }
+
+  const response = await fetch(`${API_BASE}/check-url?${params.toString()}`)
+  if (!response.ok) {
+    throw new Error('Failed to check duplicate URL')
+  }
+
+  return response.json()
+}
