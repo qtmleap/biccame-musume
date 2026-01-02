@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Calendar, Gift, MapPin, Menu, Trophy, Users, X } from 'lucide-react'
+import { Cake, Gift, MapPin, Menu, Trophy, Users, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 const navLinks = [
   { to: '/characters', label: 'ビッカメ娘一覧', icon: Users },
   { to: '/events', label: 'イベント一覧', icon: Gift },
-  { to: '/calendar', label: 'カレンダー', icon: Calendar },
+  { to: '/calendar', label: '誕生日一覧', icon: Cake },
   { to: '/location', label: 'マップ', icon: MapPin },
   { to: '/ranking', label: '総選挙', icon: Trophy }
 ] as const
