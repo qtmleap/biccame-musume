@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
+import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import type { AckeyCampaign, AckeyCampaignCondition } from '@/schemas/ackey-campaign.dto'
 import { REFERENCE_URL_TYPE_LABELS } from '@/schemas/ackey-campaign.dto'
 
@@ -95,7 +96,15 @@ const StatusBadge = ({ campaign }: { campaign: AckeyCampaign }) => {
 /**
  * キャンペーンカードコンポーネント
  */
-const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelete: (id: string) => void }) => {
+const CampaignCard = ({
+  campaign,
+  onDelete,
+  isAuthenticated
+}: {
+  campaign: AckeyCampaign
+  onDelete: (id: string) => void
+  isAuthenticated: boolean
+}) => {
   return (
     <div className='border-b py-3 last:border-b-0'>
       <div className='mb-2 flex items-start justify-between gap-3'>
@@ -155,18 +164,20 @@ const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelet
             <div />
           )}
         </div>
-        <div className='flex items-center gap-2'>
-          <Link to='/admin/events/$id/edit' params={{ id: campaign.id }}>
-            <Button size='sm' variant='outline' className='h-7 text-xs'>
-              <Pencil className='mr-1 size-3' />
-              編集
+        {isAuthenticated && (
+          <div className='flex items-center gap-2'>
+            <Link to='/admin/events/$id/edit' params={{ id: campaign.id }}>
+              <Button size='sm' variant='outline' className='h-7 text-xs'>
+                <Pencil className='mr-1 size-3' />
+                編集
+              </Button>
+            </Link>
+            <Button size='sm' variant='outline' onClick={() => onDelete(campaign.id)} className='h-7 text-xs text-destructive hover:bg-destructive/10'>
+              <Trash2 className='mr-1 size-3' />
+              削除
             </Button>
-          </Link>
-          <Button size='sm' variant='outline' onClick={() => onDelete(campaign.id)} className='h-7 text-xs text-destructive hover:bg-destructive/10'>
-            <Trash2 className='mr-1 size-3' />
-            削除
-          </Button>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -178,6 +189,7 @@ const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelet
 export const EventList = () => {
   const { data: campaigns = [], isLoading, error } = useEvents()
   const deleteEvent = useDeleteEvent()
+  const { isAuthenticated } = useCloudflareAccess()
   const [activeTab, setActiveTab] = useState<AckeyCampaign['category']>('limited_card')
 
   // カテゴリ別にフィルタリング
@@ -251,7 +263,7 @@ export const EventList = () => {
           ) : (
             <div className='space-y-2.5'>
               {filteredCampaigns.map((campaign) => (
-                <CampaignCard key={campaign.id} campaign={campaign} onDelete={handleDelete} />
+                <CampaignCard key={campaign.id} campaign={campaign} onDelete={handleDelete} isAuthenticated={isAuthenticated} />
               ))}
             </div>
           )}
