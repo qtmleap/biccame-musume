@@ -1,10 +1,14 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { Gift, Settings } from 'lucide-react'
+import { useAtomValue } from 'jotai'
+import { Filter, Gift, Settings } from 'lucide-react'
 import { Suspense, useMemo, useState } from 'react'
+import { prefectureToRegion, regionFilterAtom } from '@/atoms/filterAtom'
+import { RegionFilterControl } from '@/components/characters/region-filter-control'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useCharacters } from '@/hooks/useCharacters'
 import { useEvents } from '@/hooks/useEvents'
 import type { AckeyCampaign } from '@/schemas/ackey-campaign.dto'
 
@@ -31,9 +35,22 @@ const CATEGORY_CHECKBOX_COLORS: Record<AckeyCampaign['category'], string> = {
  */
 const EventsContent = () => {
   const { data: events = [], isLoading } = useEvents()
+  const { data: characters } = useCharacters()
   const [categoryFilter, setCategoryFilter] = useState<Set<AckeyCampaign['category']>>(
     new Set(['ackey', 'limited_card', 'other'])
   )
+  const regionFilter = useAtomValue(regionFilterAtom)
+
+  // 店舗名から都道府県を取得するマップ
+  const storePrefectureMap = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const char of characters) {
+      if (char.prefecture) {
+        map.set(char.store_name, char.prefecture)
+      }
+    }
+    return map
+  }, [characters])
 
   /**
    * カテゴリフィルターのトグル
@@ -58,6 +75,20 @@ const EventsContent = () => {
         if (event.isEnded) return false
         // カテゴリフィルター
         if (!categoryFilter.has(event.category)) return false
+
+        // 地域フィルター
+        if (regionFilter !== 'all') {
+          // 店舗がない場合は表示しない
+          if (!event.stores || event.stores.length === 0) return false
+          // いずれかの店舗が選択された地域に属するかチェック
+          const hasMatchingStore = event.stores.some((storeName) => {
+            const prefecture = storePrefectureMap.get(storeName)
+            if (!prefecture) return false
+            return prefectureToRegion[prefecture] === regionFilter
+          })
+          if (!hasMatchingStore) return false
+        }
+
         const startDate = dayjs(event.startDate)
         const endDate = event.endDate ? dayjs(event.endDate) : null
         // 開催中: 開始日が現在以前で、終了日がないか終了日が現在以降
@@ -67,7 +98,7 @@ const EventsContent = () => {
         return isOngoing || isUpcoming
       })
       .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
-  }, [events, categoryFilter])
+  }, [events, categoryFilter, regionFilter, storePrefectureMap])
 
   if (isLoading) {
     return <LoadingFallback />
@@ -94,18 +125,27 @@ const EventsContent = () => {
       </div>
 
       {/* カテゴリフィルター */}
-      <div className='flex flex-wrap gap-4 text-sm'>
-        {(['ackey', 'limited_card', 'other'] as const).map((category) => (
-          <label key={category} className='flex items-center gap-2 cursor-pointer'>
-            <Checkbox
-              checked={categoryFilter.has(category)}
-              onCheckedChange={() => toggleCategory(category)}
-              className={CATEGORY_CHECKBOX_COLORS[category]}
-            />
-            <span>{CATEGORY_LABELS[category]}</span>
-          </label>
-        ))}
+      <div className='w-full'>
+        <div className='flex items-center gap-2 mb-3'>
+          <Filter className='h-4 w-4 text-gray-600' />
+          <span className='text-sm font-medium text-gray-700'>種別で絞り込み</span>
+        </div>
+        <div className='flex flex-wrap gap-4 text-sm'>
+          {(['ackey', 'limited_card', 'other'] as const).map((category) => (
+            <label key={category} className='flex items-center gap-2 cursor-pointer'>
+              <Checkbox
+                checked={categoryFilter.has(category)}
+                onCheckedChange={() => toggleCategory(category)}
+                className={CATEGORY_CHECKBOX_COLORS[category]}
+              />
+              <span>{CATEGORY_LABELS[category]}</span>
+            </label>
+          ))}
+        </div>
       </div>
+
+      {/* 地域フィルター */}
+      <RegionFilterControl />
 
       {/* ガントチャート */}
       {activeEvents.length > 0 ? (

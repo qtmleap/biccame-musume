@@ -1,7 +1,9 @@
 import dayjs, { type Dayjs } from 'dayjs'
 import { ExternalLink } from 'lucide-react'
 import { useEffect, useMemo, useRef } from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { useCharacters } from '@/hooks/useCharacters'
 import type { AckeyCampaign } from '@/schemas/ackey-campaign.dto'
 
 /**
@@ -40,6 +42,20 @@ type EventGanttChartProps = {
  * カスタムガントチャートコンポーネント
  */
 export const EventGanttChart = ({ events }: EventGanttChartProps) => {
+  const { data: characters } = useCharacters()
+
+  // 店舗名からキャラクターを取得するマップ
+  const storeCharacterMap = useMemo(() => {
+    const map = new Map<string, { name: string; image?: string }>()
+    for (const char of characters) {
+      map.set(char.store_name, {
+        name: char.character_name,
+        image: char.profile_image_url
+      })
+    }
+    return map
+  }, [characters])
+
   // 表示する日付範囲を計算（今日から30日後まで）
   const { dates, chartStartDate } = useMemo(() => {
     const today = dayjs().startOf('day')
@@ -93,28 +109,73 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
 
   return (
     <TooltipProvider>
-      <div ref={scrollContainerRef} className='overflow-x-auto'>
-        <div className='min-w-max'>
-          {/* ヘッダー: 月表示 */}
-          <div className='flex'>
-            {dates.map((date, index) => {
-              const isFirstOfMonth = date.date() === 1 || index === 0
-              const isToday = date.isSame(today, 'day')
-              return (
-                <div
-                  key={date.format('YYYY-MM-DD')}
-                  className={`w-8 shrink-0 border-b text-center text-xs ${isToday ? 'bg-rose-50' : ''}`}
-                >
-                  {isFirstOfMonth && (
-                    <div className='font-medium text-gray-700'>{date.format('M月')}</div>
+      <div className='flex'>
+        {/* 左側固定カラム: イベント名 */}
+        <div className='shrink-0 border-r z-10'>
+          {/* ヘッダー（空白） */}
+          <div className='h-5 border-b' />
+          <div className='h-6 border-b' />
+
+          {/* イベント名リスト */}
+          {eventBars.map(({ event }) => {
+            // 店舗のキャラクターを取得（最初の店舗のみ表示）
+            const storeChar = event.stores?.[0] ? storeCharacterMap.get(event.stores[0]) : null
+
+            return (
+              <Tooltip key={event.id}>
+                <TooltipTrigger asChild>
+                  <div className='flex h-10 items-center gap-1.5 px-2 border-b cursor-default max-w-48'>
+                    <Avatar className='size-6 shrink-0'>
+                      {storeChar ? (
+                        <>
+                          <AvatarImage src={storeChar.image} alt={storeChar.name} />
+                          <AvatarFallback className='text-xs'>{storeChar.name.charAt(0)}</AvatarFallback>
+                        </>
+                      ) : (
+                        <AvatarFallback className='text-xs bg-gray-100' />
+                      )}
+                    </Avatar>
+                    <span className='text-xs truncate'>{event.name}</span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side='right' className='max-w-xs'>
+                  <p className='font-medium'>{event.name}</p>
+                  {event.stores && event.stores.length > 0 && (
+                    <p className='text-xs text-gray-500'>{event.stores.join(', ')}</p>
                   )}
-                </div>
-              )
-            })}
-          </div>
+                  <p className='text-xs text-gray-500'>
+                    {dayjs(event.startDate).format('M/D')}
+                    {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜'}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            )
+          })}
+        </div>
+
+        {/* 右側スクロールエリア: ガントチャート */}
+        <div ref={scrollContainerRef} className='overflow-x-auto flex-1'>
+          <div className='min-w-max'>
+            {/* ヘッダー: 月表示 */}
+            <div className='flex h-5'>
+              {dates.map((date, index) => {
+                const isFirstOfMonth = date.date() === 1 || index === 0
+                const isToday = date.isSame(today, 'day')
+                return (
+                  <div
+                    key={date.format('YYYY-MM-DD')}
+                    className={`w-8 shrink-0 border-b text-center text-xs ${isToday ? 'bg-rose-50' : ''}`}
+                  >
+                    {isFirstOfMonth && (
+                      <div className='font-medium text-gray-700'>{date.format('M月')}</div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
 
           {/* ヘッダー: 日付表示 */}
-          <div className='flex'>
+          <div className='flex h-6'>
             {dates.map((date) => {
               const isToday = date.isSame(today, 'day')
               const isSunday = date.day() === 0
@@ -122,7 +183,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
               return (
                 <div
                   key={date.format('YYYY-MM-DD')}
-                  className={`w-8 shrink-0 border-b py-1 text-center text-xs ${
+                  className={`w-8 shrink-0 border-b flex items-center justify-center text-xs ${
                     isToday
                       ? 'bg-rose-50 font-bold text-rose-600'
                       : isSunday
@@ -152,44 +213,30 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                 )
               })}
 
-              {/* バー（イベント名を含む） */}
+              {/* バー */}
               {duration > 0 && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div
-                      className='absolute top-1 bottom-1 flex items-center'
-                      style={{
-                        left: `${startOffset * 32}px`,
-                        width: `${duration * 32 - 4}px`
-                      }}
-                    >
-                      {event.referenceUrls?.[0]?.url ? (
-                        <a
-                          href={event.referenceUrls[0].url}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className={`h-full w-full rounded ${getCategoryColor(event.category)} hover:opacity-80 transition-opacity flex items-center gap-1 px-2 overflow-hidden`}
-                        >
-                          <span className='text-xs text-white truncate font-medium'>{event.name}</span>
-                          <ExternalLink className='size-3 text-white shrink-0' />
-                        </a>
-                      ) : (
-                        <div
-                          className={`h-full w-full rounded ${getCategoryColor(event.category)} ${isOngoing ? 'opacity-70' : ''} flex items-center px-2 overflow-hidden`}
-                        >
-                          <span className='text-xs text-white truncate font-medium'>{event.name}</span>
-                        </div>
-                      )}
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent side='top' className='max-w-xs'>
-                    <p className='font-medium'>{event.name}</p>
-                    <p className='text-xs text-gray-500'>
-                      {dayjs(event.startDate).format('M/D')}
-                      {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜'}
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
+                  <div
+                    className='absolute top-1 bottom-1 flex items-center'
+                    style={{
+                      left: `${startOffset * 32}px`,
+                      width: `${duration * 32 - 4}px`
+                    }}
+                  >
+                    {event.referenceUrls?.[0]?.url ? (
+                      <a
+                        href={event.referenceUrls[0].url}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className={`h-full w-full rounded ${getCategoryColor(event.category)} hover:opacity-80 transition-opacity flex items-center justify-center`}
+                      >
+                        <ExternalLink className='size-3 text-white' />
+                      </a>
+                    ) : (
+                      <div
+                        className={`h-full w-full rounded ${getCategoryColor(event.category)} ${isOngoing ? 'opacity-70' : ''}`}
+                      />
+                    )}
+                  </div>
               )}
             </div>
           ))}
@@ -200,6 +247,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
               表示するイベントがありません
             </div>
           )}
+          </div>
         </div>
       </div>
     </TooltipProvider>
