@@ -102,6 +102,10 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   const [isScrolling, setIsScrolling] = useState(false)
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  // ドラッグスクロール用のstate
+  const [isDragging, setIsDragging] = useState(false)
+  const dragStartRef = useRef({ x: 0, scrollLeft: 0 })
+
   // スクロールイベントハンドラ
   const handleScroll = useCallback(() => {
     if (scrollContainerRef.current) {
@@ -128,6 +132,37 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       setScrollLeft(todayOffset * 32)
     }
   }, [todayOffset])
+
+  // ドラッグ開始
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    if (!scrollContainerRef.current) return
+    setIsDragging(true)
+    dragStartRef.current = {
+      x: e.clientX,
+      scrollLeft: scrollContainerRef.current.scrollLeft
+    }
+  }, [])
+
+  // ドラッグ中
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!isDragging || !scrollContainerRef.current) return
+      e.preventDefault()
+      const dx = e.clientX - dragStartRef.current.x
+      scrollContainerRef.current.scrollLeft = dragStartRef.current.scrollLeft - dx
+    },
+    [isDragging]
+  )
+
+  // ドラッグ終了
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false)
+  }, [])
+
+  // マウスがコンテナ外に出た場合もドラッグ終了
+  const handleMouseLeave = useCallback(() => {
+    setIsDragging(false)
+  }, [])
 
   /**
    * バー内のラベルオフセットを計算
@@ -164,7 +199,15 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         </div>
 
         {/* スクロールエリア: ガントチャート */}
-        <div ref={scrollContainerRef} className='overflow-x-auto' onScroll={handleScroll}>
+        <div
+          ref={scrollContainerRef}
+          className={`overflow-x-auto scrollbar-none ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+          onScroll={handleScroll}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+        >
           <div className='min-w-max'>
             {/* ヘッダー: 月表示（背景用） */}
             <div className='flex h-5'>
