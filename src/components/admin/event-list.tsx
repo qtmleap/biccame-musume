@@ -7,20 +7,6 @@ import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
 import type { AckeyCampaign, AckeyCampaignCondition } from '@/schemas/ackey-campaign.dto'
 
 /**
- * 条件タイプのラベルを取得
- */
-const _getConditionTypeLabel = (type: AckeyCampaignCondition['type']): string => {
-  switch (type) {
-    case 'purchase':
-      return '購入金額'
-    case 'first_come':
-      return '先着'
-    case 'lottery':
-      return '抽選'
-  }
-}
-
-/**
  * 条件の詳細テキストを取得
  */
 const getConditionDetail = (condition: AckeyCampaignCondition): string => {
@@ -31,6 +17,8 @@ const getConditionDetail = (condition: AckeyCampaignCondition): string => {
       return `先着${condition.quantity}名`
     case 'lottery':
       return `抽選${condition.quantity}名`
+    case 'everyone':
+      return '全員配布'
   }
 }
 
@@ -43,6 +31,7 @@ const ConditionIcon = ({ type }: { type: AckeyCampaignCondition['type'] }) => {
       return null
     case 'first_come':
     case 'lottery':
+    case 'everyone':
       return <Users className='size-4' />
   }
 }
