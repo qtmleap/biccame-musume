@@ -15,8 +15,12 @@ import { Route as LocationIndexRouteImport } from './routes/location/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as CharactersIndexRouteImport } from './routes/characters/index'
 import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as CharactersIdRouteImport } from './routes/characters/$id'
+import { Route as AdminEventsIndexRouteImport } from './routes/admin/events/index'
+import { Route as AdminEventsNewIndexRouteImport } from './routes/admin/events/new/index'
+import { Route as AdminEventsIdEditIndexRouteImport } from './routes/admin/events/$id/edit/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -48,6 +52,11 @@ const CalendarIndexRoute = CalendarIndexRouteImport.update({
   path: '/calendar/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutIndexRoute = AboutIndexRouteImport.update({
   id: '/about/',
   path: '/about/',
@@ -58,37 +67,64 @@ const CharactersIdRoute = CharactersIdRouteImport.update({
   path: '/characters/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
+  id: '/admin/events/',
+  path: '/admin/events/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminEventsNewIndexRoute = AdminEventsNewIndexRouteImport.update({
+  id: '/admin/events/new/',
+  path: '/admin/events/new/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminEventsIdEditIndexRoute = AdminEventsIdEditIndexRouteImport.update({
+  id: '/admin/events/$id/edit/',
+  path: '/admin/events/$id/edit/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/characters/$id': typeof CharactersIdRoute
   '/about': typeof AboutIndexRoute
+  '/admin': typeof AdminIndexRoute
   '/calendar': typeof CalendarIndexRoute
   '/characters': typeof CharactersIndexRoute
   '/contact': typeof ContactIndexRoute
   '/location': typeof LocationIndexRoute
   '/ranking': typeof RankingIndexRoute
+  '/admin/events': typeof AdminEventsIndexRoute
+  '/admin/events/new': typeof AdminEventsNewIndexRoute
+  '/admin/events/$id/edit': typeof AdminEventsIdEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/characters/$id': typeof CharactersIdRoute
   '/about': typeof AboutIndexRoute
+  '/admin': typeof AdminIndexRoute
   '/calendar': typeof CalendarIndexRoute
   '/characters': typeof CharactersIndexRoute
   '/contact': typeof ContactIndexRoute
   '/location': typeof LocationIndexRoute
   '/ranking': typeof RankingIndexRoute
+  '/admin/events': typeof AdminEventsIndexRoute
+  '/admin/events/new': typeof AdminEventsNewIndexRoute
+  '/admin/events/$id/edit': typeof AdminEventsIdEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/characters/$id': typeof CharactersIdRoute
   '/about/': typeof AboutIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/calendar/': typeof CalendarIndexRoute
   '/characters/': typeof CharactersIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/location/': typeof LocationIndexRoute
   '/ranking/': typeof RankingIndexRoute
+  '/admin/events/': typeof AdminEventsIndexRoute
+  '/admin/events/new/': typeof AdminEventsNewIndexRoute
+  '/admin/events/$id/edit/': typeof AdminEventsIdEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -96,42 +132,58 @@ export interface FileRouteTypes {
     | '/'
     | '/characters/$id'
     | '/about'
+    | '/admin'
     | '/calendar'
     | '/characters'
     | '/contact'
     | '/location'
     | '/ranking'
+    | '/admin/events'
+    | '/admin/events/new'
+    | '/admin/events/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/characters/$id'
     | '/about'
+    | '/admin'
     | '/calendar'
     | '/characters'
     | '/contact'
     | '/location'
     | '/ranking'
+    | '/admin/events'
+    | '/admin/events/new'
+    | '/admin/events/$id/edit'
   id:
     | '__root__'
     | '/'
     | '/characters/$id'
     | '/about/'
+    | '/admin/'
     | '/calendar/'
     | '/characters/'
     | '/contact/'
     | '/location/'
     | '/ranking/'
+    | '/admin/events/'
+    | '/admin/events/new/'
+    | '/admin/events/$id/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CharactersIdRoute: typeof CharactersIdRoute
   AboutIndexRoute: typeof AboutIndexRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
   CharactersIndexRoute: typeof CharactersIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
   LocationIndexRoute: typeof LocationIndexRoute
   RankingIndexRoute: typeof RankingIndexRoute
+  AdminEventsIndexRoute: typeof AdminEventsIndexRoute
+  AdminEventsNewIndexRoute: typeof AdminEventsNewIndexRoute
+  AdminEventsIdEditIndexRoute: typeof AdminEventsIdEditIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -178,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalendarIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about/': {
       id: '/about/'
       path: '/about'
@@ -192,6 +251,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CharactersIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/events/': {
+      id: '/admin/events/'
+      path: '/admin/events'
+      fullPath: '/admin/events'
+      preLoaderRoute: typeof AdminEventsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/events/new/': {
+      id: '/admin/events/new/'
+      path: '/admin/events/new'
+      fullPath: '/admin/events/new'
+      preLoaderRoute: typeof AdminEventsNewIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/events/$id/edit/': {
+      id: '/admin/events/$id/edit/'
+      path: '/admin/events/$id/edit'
+      fullPath: '/admin/events/$id/edit'
+      preLoaderRoute: typeof AdminEventsIdEditIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -199,11 +279,15 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CharactersIdRoute: CharactersIdRoute,
   AboutIndexRoute: AboutIndexRoute,
+  AdminIndexRoute: AdminIndexRoute,
   CalendarIndexRoute: CalendarIndexRoute,
   CharactersIndexRoute: CharactersIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
   LocationIndexRoute: LocationIndexRoute,
   RankingIndexRoute: RankingIndexRoute,
+  AdminEventsIndexRoute: AdminEventsIndexRoute,
+  AdminEventsNewIndexRoute: AdminEventsNewIndexRoute,
+  AdminEventsIdEditIndexRoute: AdminEventsIdEditIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

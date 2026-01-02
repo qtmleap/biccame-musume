@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { motion } from 'motion/react'
 import { Cake } from 'lucide-react'
+import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import type { Character } from '@/schemas/character.dto'
