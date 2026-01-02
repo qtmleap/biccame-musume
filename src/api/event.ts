@@ -119,6 +119,50 @@ routes.openapi(createEventRoute, async (c) => {
   return c.json(newEvent, 201)
 })
 
+// URL重複チェック（/:id より前に定義する必要がある）
+const checkDuplicateUrlRoute = createRoute({
+  method: 'get',
+  path: '/check-url',
+  request: {
+    query: z.object({
+      url: z.string(),
+      excludeId: z.string().optional()
+    })
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            exists: z.boolean(),
+            event: AckeyCampaignSchema.optional()
+          })
+        }
+      },
+      description: 'URL重複チェック結果'
+    }
+  },
+  tags: ['events']
+})
+
+routes.openapi(checkDuplicateUrlRoute, async (c) => {
+  const { url, excludeId } = c.req.valid('query')
+
+  const eventsData = await c.env.BICCAME_MUSUME_EVENTS.get('events:list')
+  const events: AckeyCampaign[] = eventsData ? JSON.parse(eventsData) : []
+
+  // URLが一致するイベントを検索（自分自身は除外）
+  const matchingEvent = events.find((event) => {
+    if (excludeId && event.id === excludeId) return false
+    return event.referenceUrls?.some((ref) => ref.url === url)
+  })
+
+  return c.json({
+    exists: !!matchingEvent,
+    event: matchingEvent
+  })
+})
+
 // イベント取得
 const getEventRoute = createRoute({
   method: 'get',
