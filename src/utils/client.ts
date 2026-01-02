@@ -2,6 +2,26 @@ import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
 import { CharactersSchema } from '@/schemas/character.dto'
 import { AllVoteCountsSchema, VoteCountSchema, VoteRequestSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
+import {
+  AckeyCampaignSchema,
+  CreateAckeyCampaignRequestSchema,
+  UpdateAckeyCampaignRequestSchema
+} from '@/schemas/ackey-campaign.dto'
+
+/**
+ * イベント一覧レスポンス
+ */
+const EventsResponseSchema = z.object({
+  events: z.array(AckeyCampaignSchema)
+})
+
+/**
+ * URL重複チェックレスポンス
+ */
+const CheckDuplicateUrlResponseSchema = z.object({
+  exists: z.boolean(),
+  event: AckeyCampaignSchema.optional()
+})
 
 /**
  * API定義
@@ -48,6 +68,68 @@ const api = makeApi([
       }
     ],
     response: VoteSuccessResponseSchema
+  },
+  // イベント関連API
+  {
+    method: 'get',
+    path: '/api/events',
+    alias: 'getEvents',
+    description: 'イベント一覧を取得',
+    response: EventsResponseSchema
+  },
+  {
+    method: 'post',
+    path: '/api/events',
+    alias: 'createEvent',
+    description: 'イベントを作成',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: CreateAckeyCampaignRequestSchema
+      }
+    ],
+    response: AckeyCampaignSchema
+  },
+  {
+    method: 'put',
+    path: '/api/events/:eventId',
+    alias: 'updateEvent',
+    description: 'イベントを更新',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: UpdateAckeyCampaignRequestSchema
+      }
+    ],
+    response: AckeyCampaignSchema
+  },
+  {
+    method: 'delete',
+    path: '/api/events/:eventId',
+    alias: 'deleteEvent',
+    description: 'イベントを削除',
+    response: z.object({ success: z.boolean() })
+  },
+  {
+    method: 'get',
+    path: '/api/events/check-url',
+    alias: 'checkDuplicateUrl',
+    description: 'URLの重複をチェック',
+    parameters: [
+      {
+        name: 'url',
+        type: 'Query',
+        schema: z.string()
+      },
+      {
+        name: 'excludeId',
+        type: 'Query',
+        schema: z.string().optional()
+      }
+    ],
+    response: CheckDuplicateUrlResponseSchema
   }
 ])
 
