@@ -41,19 +41,6 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
           events.push({ character, type: 'character', date: nextBirthday, daysUntil })
         }
       }
-
-      if (character.store_birthday) {
-        const birthday = dayjs(character.store_birthday)
-        if (birthday.isValid()) {
-          const thisYear = now.year()
-          let nextBirthday = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
-          if (nextBirthday.isBefore(now, 'day')) {
-            nextBirthday = nextBirthday.add(1, 'year')
-          }
-          const daysUntil = nextBirthday.diff(now, 'day')
-          events.push({ character, type: 'store', date: nextBirthday, daysUntil })
-        }
-      }
     }
 
     events.sort((a, b) => a.daysUntil - b.daysUntil)
@@ -66,11 +53,11 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
         <div className='max-w-2xl mx-auto'>
           <div className='flex items-center gap-2 mb-4'>
             <Calendar className='h-5 w-5 text-[#e50012]' />
-            <h2 className='text-base font-bold text-gray-800'>直近のイベント</h2>
+            <h2 className='text-base font-bold text-gray-800'>直近の誕生日</h2>
           </div>
 
           {upcomingEvents.length === 0 ? (
-            <div className='text-center py-4 text-gray-500 text-sm'>イベントがありません</div>
+            <div className='text-center py-4 text-gray-500 text-sm'>誕生日がありません</div>
           ) : (
             <div className='flex flex-col gap-2'>
               {upcomingEvents.map((event, index) => (
@@ -94,7 +81,7 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
                 to='/calendar'
                 className='text-sm text-gray-700 hover:text-gray-900 font-semibold hover:underline transition-colors'
               >
-                今後のイベント一覧
+                今後の誕生日一覧
               </Link>
             </motion.div>
           )}
