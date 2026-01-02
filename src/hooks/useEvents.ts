@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { AckeyCampaign, CreateAckeyCampaignRequest } from '@/schemas/ackey-campaign.dto'
-
-const API_BASE = '/api/events'
+import type { AckeyCampaign, CreateAckeyCampaignRequest, UpdateAckeyCampaignRequest } from '@/schemas/ackey-campaign.dto'
+import { client } from '@/utils/client'
 
 /**
  * イベント一覧を取得するフック
@@ -11,12 +10,7 @@ export const useEvents = () => {
     queryKey: ['events'],
     queryFn: async (): Promise<AckeyCampaign[]> => {
       console.log('Fetching events from API...')
-      const response = await fetch(API_BASE)
-      console.log('Response status:', response.status)
-      if (!response.ok) {
-        throw new Error('Failed to fetch events')
-      }
-      const data = (await response.json()) as { events: AckeyCampaign[] }
+      const data = await client.getEvents()
       console.log('Events data:', data.events)
       return data.events
     },
@@ -33,20 +27,7 @@ export const useCreateEvent = () => {
 
   return useMutation({
     mutationFn: async (event: CreateAckeyCampaignRequest): Promise<AckeyCampaign> => {
-      const response = await fetch(API_BASE, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(event)
-      })
-
-      if (!response.ok) {
-        const error = (await response.json()) as { error?: string }
-        throw new Error(error.error || 'Failed to create event')
-      }
-
-      return response.json()
+      return client.createEvent(event)
     },
     onSuccess: () => {
       // イベント一覧を再取得
@@ -63,14 +44,7 @@ export const useDeleteEvent = () => {
 
   return useMutation({
     mutationFn: async (eventId: string): Promise<void> => {
-      const response = await fetch(`${API_BASE}/${eventId}`, {
-        method: 'DELETE'
-      })
-
-      if (!response.ok) {
-        const error = (await response.json()) as { error?: string }
-        throw new Error(error.error || 'Failed to delete event')
-      }
+      await client.deleteEvent(undefined, { params: { eventId } })
     },
     onSuccess: () => {
       // イベント一覧を再取得
@@ -86,21 +60,8 @@ export const useUpdateEvent = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: Partial<AckeyCampaign> }): Promise<AckeyCampaign> => {
-      const response = await fetch(`${API_BASE}/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-
-      if (!response.ok) {
-        const error = (await response.json()) as { error?: string }
-        throw new Error(error.error || 'Failed to update event')
-      }
-
-      return response.json()
+    mutationFn: async ({ id, data }: { id: string; data: UpdateAckeyCampaignRequest }): Promise<AckeyCampaign> => {
+      return client.updateEvent(data, { params: { eventId: id } })
     },
     onSuccess: () => {
       // イベント一覧を再取得
@@ -116,15 +77,5 @@ export const checkDuplicateUrl = async (
   url: string,
   excludeId?: string
 ): Promise<{ exists: boolean; event?: AckeyCampaign }> => {
-  const params = new URLSearchParams({ url })
-  if (excludeId) {
-    params.append('excludeId', excludeId)
-  }
-
-  const response = await fetch(`${API_BASE}/check-url?${params.toString()}`)
-  if (!response.ok) {
-    throw new Error('Failed to check duplicate URL')
-  }
-
-  return response.json()
+  return client.checkDuplicateUrl({ queries: { url, excludeId } })
 }
