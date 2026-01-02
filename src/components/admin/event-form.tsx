@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/useCharacters'
 import { useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
-import { type AckeyCampaign, AckeyCampaignConditionTypeSchema, EventCategorySchema, EVENT_CATEGORY_LABELS } from '@/schemas/ackey-campaign.dto'
+import { type AckeyCampaign, AckeyCampaignConditionTypeSchema, EventCategorySchema, EVENT_CATEGORY_LABELS, ReferenceUrlTypeSchema, REFERENCE_URL_TYPE_LABELS } from '@/schemas/ackey-campaign.dto'
 
 /**
  * フォームのスキーマ定義
@@ -20,7 +20,12 @@ import { type AckeyCampaign, AckeyCampaignConditionTypeSchema, EventCategorySche
 const EventFormSchema = z.object({
   category: EventCategorySchema,
   name: z.string().min(1, 'イベント名は必須です'),
-  referenceUrl: z.string().url('有効なURLを入力してください').min(1, '参考URLは必須です'),
+  referenceUrls: z.array(
+    z.object({
+      type: ReferenceUrlTypeSchema,
+      url: z.string().url('有効なURLを入力してください')
+    })
+  ).optional(),
   stores: z.array(z.string()).optional(),
   limitedQuantity: z.number().min(1).optional(),
   startDate: z.string().min(1, '開始日は必須です'),
@@ -66,7 +71,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
       ? {
           category: event.category,
           name: event.name,
-          referenceUrl: event.referenceUrl,
+          referenceUrls: event.referenceUrls || [],
           stores: event.stores || [],
           limitedQuantity: event.limitedQuantity,
           startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
@@ -77,7 +82,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
       : {
           category: undefined,
           name: '',
-          referenceUrl: '',
+          referenceUrls: [],
           stores: [],
           limitedQuantity: undefined,
           startDate: '',
@@ -92,8 +97,14 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
     name: 'conditions'
   })
 
+  const { fields: referenceUrlFields, append: appendReferenceUrl, remove: removeReferenceUrl } = useFieldArray({
+    control,
+    name: 'referenceUrls'
+  })
+
   const stores = watch('stores') || []
   const conditions = useWatch({ control, name: 'conditions' })
+  const referenceUrls = useWatch({ control, name: 'referenceUrls' }) || []
 
   // 編集モードの場合、初期値をセット
   useEffect(() => {
@@ -103,7 +114,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
       reset({
         category: event.category,
         name: event.name,
-        referenceUrl: event.referenceUrl,
+        referenceUrls: event.referenceUrls || [],
         stores: event.stores || [],
         limitedQuantity: event.limitedQuantity,
         startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
@@ -185,7 +196,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
     reset({
       category: undefined,
       name: '',
-      referenceUrl: '',
+      referenceUrls: [],
       stores: [],
       limitedQuantity: undefined,
       startDate: '',
@@ -203,7 +214,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
       ...data,
       startDate: dayjs(data.startDate).toISOString(),
       endDate: data.endDate ? dayjs(data.endDate).toISOString() : undefined,
-      stores: data.stores && data.stores.length > 0 ? data.stores : undefined
+      stores: data.stores && data.stores.length > 0 ? data.stores : undefined,
+      referenceUrls: data.referenceUrls && data.referenceUrls.length > 0 ? data.referenceUrls : undefined
     }
 
     if (event) {
@@ -448,17 +460,48 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
 
         {/* 参考URL */}
         <div>
-          <label htmlFor='reference-url' className='mb-1 block text-sm font-medium'>
-            参考URL
-          </label>
-          <Input
-            id='reference-url'
-            type='url'
-            placeholder='https://twitter.com/...'
-            {...register('referenceUrl')}
-            className='w-full'
-          />
-          {errors.referenceUrl && <p className='mt-1 text-xs text-destructive'>{errors.referenceUrl.message}</p>}
+          <div className='mb-1.5 block text-sm font-medium'>参考URL（任意）</div>
+          <div className='mb-2 flex flex-wrap gap-2'>
+            {ReferenceUrlTypeSchema.options.map((type) => (
+              <Button
+                key={type}
+                type='button'
+                size='sm'
+                variant='outline'
+                onClick={() => appendReferenceUrl({ type, url: '' })}
+                disabled={referenceUrls.some((r) => r.type === type)}
+                className={referenceUrls.some((r) => r.type === type) ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''}
+              >
+                {REFERENCE_URL_TYPE_LABELS[type]}
+              </Button>
+            ))}
+          </div>
+          <div className='space-y-1.5'>
+            <AnimatePresence mode='popLayout'>
+              {referenceUrlFields.map((field, index) => (
+                <motion.div
+                  key={field.id}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className='flex items-center gap-2'>
+                    <span className='shrink-0 text-sm font-medium w-10'>{REFERENCE_URL_TYPE_LABELS[field.type]}</span>
+                    <Input
+                      type='url'
+                      placeholder='https://twitter.com/...'
+                      {...register(`referenceUrls.${index}.url`)}
+                      className='flex-1'
+                    />
+                    <Button type='button' size='icon' variant='ghost' onClick={() => removeReferenceUrl(index)} className='shrink-0'>
+                      <X className='size-4' />
+                    </Button>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
         </div>
 
         {/* ステータスフラグ */}

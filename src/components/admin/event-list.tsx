@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
 import type { AckeyCampaign, AckeyCampaignCondition } from '@/schemas/ackey-campaign.dto'
+import { REFERENCE_URL_TYPE_LABELS } from '@/schemas/ackey-campaign.dto'
 
 /**
  * 条件の詳細テキストを取得
@@ -90,16 +91,20 @@ const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelet
 
       {/* アクション */}
       <div className='flex items-center justify-between'>
-        {campaign.referenceUrl ? (
-          <a href={campaign.referenceUrl} target='_blank' rel='noopener noreferrer'>
-            <Button size='sm' variant='outline' className='h-7 text-xs'>
-              <ExternalLink className='mr-1 size-3' />
-              参考URL
-            </Button>
-          </a>
-        ) : (
-          <div />
-        )}
+        <div className='flex items-center gap-1'>
+          {campaign.referenceUrls && campaign.referenceUrls.length > 0 ? (
+            campaign.referenceUrls.map((ref) => (
+              <a key={ref.type} href={ref.url} target='_blank' rel='noopener noreferrer'>
+                <Button size='sm' variant='outline' className='h-7 text-xs'>
+                  <ExternalLink className='mr-1 size-3' />
+                  {REFERENCE_URL_TYPE_LABELS[ref.type]}
+                </Button>
+              </a>
+            ))
+          ) : (
+            <div />
+          )}
+        </div>
         <div className='flex items-center gap-2'>
           <Link to='/admin/events/$id/edit' params={{ id: campaign.id }}>
             <Button size='sm' variant='outline' className='h-7 text-xs'>
