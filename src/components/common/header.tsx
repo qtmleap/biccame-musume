@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Calendar, MapPin, Menu, Trophy, Users, X } from 'lucide-react'
+import { Calendar, Gift, MapPin, Menu, Trophy, Users, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
  */
 const navLinks = [
   { to: '/characters', label: 'ビッカメ娘一覧', icon: Users },
+  { to: '/events', label: 'イベント一覧', icon: Gift },
   { to: '/calendar', label: 'カレンダー', icon: Calendar },
   { to: '/location', label: 'マップ', icon: MapPin },
   { to: '/ranking', label: '総選挙', icon: Trophy }
@@ -135,7 +136,7 @@ export const Header = ({ className }: HeaderProps) => {
               exit={{ y: -16, opacity: 0 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
             >
-              <div className='container mx-auto px-4 py-4'>
+              <div className='mx-auto px-4 py-4'>
                 <div className='flex flex-col gap-1'>
                   {navLinks.map((link, index) => {
                     const Icon = link.icon
