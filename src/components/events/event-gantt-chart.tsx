@@ -1,7 +1,6 @@
-import { Link } from '@tanstack/react-router'
 import dayjs, { type Dayjs } from 'dayjs'
 import { ExternalLink } from 'lucide-react'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import type { AckeyCampaign } from '@/schemas/ackey-campaign.dto'
 
@@ -81,120 +80,117 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   const today = dayjs().startOf('day')
   const todayOffset = today.diff(chartStartDate, 'day')
 
+  // スクロールコンテナのref
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  // 初期表示時に今日の日付が左端に来るようにスクロール
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      // 今日の位置までスクロール（w-8 = 32px）
+      scrollContainerRef.current.scrollLeft = todayOffset * 32
+    }
+  }, [todayOffset])
+
   return (
     <TooltipProvider>
-      <div className='overflow-x-auto'>
+      <div ref={scrollContainerRef} className='overflow-x-auto'>
         <div className='min-w-max'>
           {/* ヘッダー: 月表示 */}
           <div className='flex'>
-            <div className='w-48 shrink-0 border-b border-r px-3 py-2 text-sm font-medium'>
-              イベント名
-            </div>
-            <div className='flex'>
-              {dates.map((date, index) => {
-                const isFirstOfMonth = date.date() === 1 || index === 0
-                const isToday = date.isSame(today, 'day')
-                return (
-                  <div
-                    key={date.format('YYYY-MM-DD')}
-                    className={`w-8 shrink-0 border-b text-center text-xs ${isToday ? 'bg-rose-50' : ''}`}
-                  >
-                    {isFirstOfMonth && (
-                      <div className='font-medium text-gray-700'>{date.format('M月')}</div>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
+            {dates.map((date, index) => {
+              const isFirstOfMonth = date.date() === 1 || index === 0
+              const isToday = date.isSame(today, 'day')
+              return (
+                <div
+                  key={date.format('YYYY-MM-DD')}
+                  className={`w-8 shrink-0 border-b text-center text-xs ${isToday ? 'bg-rose-50' : ''}`}
+                >
+                  {isFirstOfMonth && (
+                    <div className='font-medium text-gray-700'>{date.format('M月')}</div>
+                  )}
+                </div>
+              )
+            })}
           </div>
 
           {/* ヘッダー: 日付表示 */}
           <div className='flex'>
-            <div className='w-48 shrink-0 border-b border-r' />
-            <div className='flex'>
-              {dates.map((date) => {
-                const isToday = date.isSame(today, 'day')
-                const isSunday = date.day() === 0
-                const isSaturday = date.day() === 6
-                return (
-                  <div
-                    key={date.format('YYYY-MM-DD')}
-                    className={`w-8 shrink-0 border-b py-1 text-center text-xs ${
-                      isToday
-                        ? 'bg-rose-50 font-bold text-rose-600'
-                        : isSunday
-                          ? 'text-rose-500'
-                          : isSaturday
-                            ? 'text-blue-500'
-                            : 'text-gray-600'
-                    }`}
-                  >
-                    {date.format('D')}
-                  </div>
-                )
-              })}
-            </div>
+            {dates.map((date) => {
+              const isToday = date.isSame(today, 'day')
+              const isSunday = date.day() === 0
+              const isSaturday = date.day() === 6
+              return (
+                <div
+                  key={date.format('YYYY-MM-DD')}
+                  className={`w-8 shrink-0 border-b py-1 text-center text-xs ${
+                    isToday
+                      ? 'bg-rose-50 font-bold text-rose-600'
+                      : isSunday
+                        ? 'text-rose-500'
+                        : isSaturday
+                          ? 'text-blue-500'
+                          : 'text-gray-600'
+                  }`}
+                >
+                  {date.format('D')}
+                </div>
+              )
+            })}
           </div>
 
           {/* イベント行 */}
           {eventBars.map(({ event, startOffset, duration, isOngoing }) => (
-            <div key={event.id} className='flex'>
-              {/* イベント名 */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className='w-48 shrink-0 border-b border-r px-3 py-2 text-sm truncate cursor-default'>
-                    {event.name}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent side='right' className='max-w-xs'>
-                  <p className='font-medium'>{event.name}</p>
-                  <p className='text-xs text-gray-500'>
-                    {dayjs(event.startDate).format('M/D')}
-                    {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜'}
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-
-              {/* ガントバー */}
-              <div className='relative flex flex-1'>
-                {dates.map((date) => {
-                  const isToday = date.isSame(today, 'day')
-                  return (
-                    <div
-                      key={date.format('YYYY-MM-DD')}
-                      className={`w-8 shrink-0 border-b ${isToday ? 'bg-rose-50' : ''}`}
-                    />
-                  )
-                })}
-
-                {/* バー */}
-                {duration > 0 && (
+            <div key={event.id} className='relative flex h-10'>
+              {/* 背景グリッド */}
+              {dates.map((date) => {
+                const isToday = date.isSame(today, 'day')
+                return (
                   <div
-                    className='absolute top-1 bottom-1 flex items-center'
-                    style={{
-                      left: `${startOffset * 32}px`,
-                      width: `${duration * 32 - 4}px`
-                    }}
-                  >
-                    {event.referenceUrls?.[0]?.url ? (
-                      <a
-                        href={event.referenceUrls[0].url}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className={`h-full w-full rounded ${getCategoryColor(event.category)} hover:opacity-80 transition-opacity flex items-center justify-center gap-1 ${duration >= 3 ? 'px-2' : ''}`}
-                      >
-                        {duration >= 3 && (
-                          <ExternalLink className='size-3 text-white' />
-                        )}
-                      </a>
-                    ) : (
-                      <div
-                        className={`h-full w-full rounded ${getCategoryColor(event.category)} ${isOngoing ? 'opacity-70' : ''}`}
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
+                    key={date.format('YYYY-MM-DD')}
+                    className={`w-8 shrink-0 border-b ${isToday ? 'bg-rose-50' : ''}`}
+                  />
+                )
+              })}
+
+              {/* バー（イベント名を含む） */}
+              {duration > 0 && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div
+                      className='absolute top-1 bottom-1 flex items-center'
+                      style={{
+                        left: `${startOffset * 32}px`,
+                        width: `${duration * 32 - 4}px`
+                      }}
+                    >
+                      {event.referenceUrls?.[0]?.url ? (
+                        <a
+                          href={event.referenceUrls[0].url}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className={`h-full w-full rounded ${getCategoryColor(event.category)} hover:opacity-80 transition-opacity flex items-center gap-1 px-2 overflow-hidden`}
+                        >
+                          <span className='text-xs text-white truncate font-medium'>{event.name}</span>
+                          <ExternalLink className='size-3 text-white shrink-0' />
+                        </a>
+                      ) : (
+                        <div
+                          className={`h-full w-full rounded ${getCategoryColor(event.category)} ${isOngoing ? 'opacity-70' : ''} flex items-center px-2 overflow-hidden`}
+                        >
+                          <span className='text-xs text-white truncate font-medium'>{event.name}</span>
+                        </div>
+                      )}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side='top' className='max-w-xs'>
+                    <p className='font-medium'>{event.name}</p>
+                    <p className='text-xs text-gray-500'>
+                      {dayjs(event.startDate).format('M/D')}
+                      {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜'}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </div>
           ))}
 
