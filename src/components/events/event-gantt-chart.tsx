@@ -121,10 +121,10 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   const handleScroll = useCallback(() => {
     if (scrollContainerRef.current) {
       setScrollLeft(scrollContainerRef.current.scrollLeft)
-      
+
       // 初回マウント時はスクロールアニメーションをスキップ
       if (isInitialMountRef.current) return
-      
+
       setIsScrolling(true)
 
       // 既存のタイマーをクリア
