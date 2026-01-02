@@ -1,9 +1,34 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { Calendar, Package, Store } from 'lucide-react'
+import { Calendar, CreditCard, Gift, KeyRound, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { useEvents } from '@/hooks/useEvents'
+import type { EventCategory } from '@/schemas/ackey-campaign.dto'
+
+/**
+ * カテゴリに応じたアイコンとスタイルを返す
+ */
+const getCategoryStyle = (category: EventCategory | undefined) => {
+  switch (category) {
+    case 'limited_card':
+      return {
+        icon: <CreditCard className='size-4' />,
+        className: 'bg-purple-100 text-purple-600'
+      }
+    case 'ackey':
+      return {
+        icon: <KeyRound className='size-4' />,
+        className: 'bg-amber-100 text-amber-600'
+      }
+    case 'other':
+    default:
+      return {
+        icon: <Gift className='size-4' />,
+        className: 'bg-pink-100 text-pink-600'
+      }
+  }
+}
 
 /**
  * 日数に応じたラベルを返す
@@ -84,6 +109,9 @@ export const EventList = () => {
                     rel='noopener noreferrer'
                     className='flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer'
                   >
+                    <div className={`shrink-0 p-2 rounded-lg ${getCategoryStyle(event.category).className}`}>
+                      {getCategoryStyle(event.category).icon}
+                    </div>
                     <div className='flex-1 min-w-0'>
                       <p className='text-sm font-medium text-gray-800 truncate'>{event.name}</p>
                       <div className='flex flex-wrap items-center gap-2 text-xs text-gray-500'>
