@@ -1,11 +1,22 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar, ExternalLink, Package, Pencil, Store, Trash2, Users } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
 import type { AckeyCampaign, AckeyCampaignCondition } from '@/schemas/ackey-campaign.dto'
 import { REFERENCE_URL_TYPE_LABELS } from '@/schemas/ackey-campaign.dto'
+
+/**
+ * カテゴリラベル
+ */
+const CATEGORY_LABELS: Record<AckeyCampaign['category'], string> = {
+  limited_card: '限定名刺',
+  ackey: 'アクキー',
+  other: 'その他'
+}
 
 /**
  * 条件の詳細テキストを取得
@@ -128,6 +139,21 @@ const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelet
 export const EventList = () => {
   const { data: campaigns = [], isLoading, error } = useEvents()
   const deleteEvent = useDeleteEvent()
+  const [activeTab, setActiveTab] = useState<AckeyCampaign['category']>('limited_card')
+
+  // カテゴリ別にフィルタリング
+  const filteredCampaigns = useMemo(() => {
+    return campaigns.filter((campaign) => campaign.category === activeTab)
+  }, [campaigns, activeTab])
+
+  // 各カテゴリのイベント数
+  const categoryCounts = useMemo(() => {
+    return {
+      limited_card: campaigns.filter((c) => c.category === 'limited_card').length,
+      ackey: campaigns.filter((c) => c.category === 'ackey').length,
+      other: campaigns.filter((c) => c.category === 'other').length
+    }
+  }, [campaigns])
 
   /**
    * キャンペーンを削除
@@ -167,10 +193,31 @@ export const EventList = () => {
   }
 
   return (
-    <div className='space-y-2.5'>
-      {campaigns.map((campaign) => (
-        <CampaignCard key={campaign.id} campaign={campaign} onDelete={handleDelete} />
+    <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AckeyCampaign['category'])}>
+      <TabsList className='mb-4 w-full'>
+        {(['limited_card', 'ackey', 'other'] as const).map((category) => (
+          <TabsTrigger key={category} value={category} className='flex-1'>
+            {CATEGORY_LABELS[category]}
+            <span className='ml-1.5 text-xs text-muted-foreground'>({categoryCounts[category]})</span>
+          </TabsTrigger>
+        ))}
+      </TabsList>
+
+      {(['limited_card', 'ackey', 'other'] as const).map((category) => (
+        <TabsContent key={category} value={category}>
+          {filteredCampaigns.length === 0 ? (
+            <div className='rounded-lg border p-6 text-center'>
+              <p className='text-sm text-muted-foreground'>{CATEGORY_LABELS[category]}のイベントはありません</p>
+            </div>
+          ) : (
+            <div className='space-y-2.5'>
+              {filteredCampaigns.map((campaign) => (
+                <CampaignCard key={campaign.id} campaign={campaign} onDelete={handleDelete} />
+              ))}
+            </div>
+          )}
+        </TabsContent>
       ))}
-    </div>
+    </Tabs>
   )
 }
