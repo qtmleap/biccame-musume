@@ -1,12 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { Gantt, type Task, ViewMode } from 'gantt-task-react'
-import 'gantt-task-react/dist/index.css'
 import { Gift, Settings } from 'lucide-react'
 import { Suspense, useMemo, useState } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
+import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useEvents } from '@/hooks/useEvents'
 import type { AckeyCampaign } from '@/schemas/ackey-campaign.dto'
 
@@ -26,101 +24,6 @@ const CATEGORY_CHECKBOX_COLORS: Record<AckeyCampaign['category'], string> = {
   ackey: 'border-amber-500 data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500',
   limited_card: 'border-purple-500 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500',
   other: 'border-pink-500 data-[state=checked]:bg-pink-500 data-[state=checked]:border-pink-500'
-}
-
-/**
- * タスクリストのヘッダー（名前のみ）
- */
-const TaskListHeader = ({ headerHeight, rowWidth }: { headerHeight: number; rowWidth: string }) => {
-  return (
-    <div
-      className='flex items-end border-b border-r px-3 pb-2 font-medium text-sm'
-      style={{ height: headerHeight, width: rowWidth }}
-    >
-      イベント名
-    </div>
-  )
-}
-
-/**
- * タスクリストのテーブル（名前のみ）
- */
-const TaskListTable: React.FC<{
-  tasks: Task[]
-  rowHeight: number
-  rowWidth: string
-  onExpanderClick: (task: Task) => void
-}> = ({ tasks, rowHeight, rowWidth }) => {
-  return (
-    <TooltipProvider>
-      <div className='text-sm'>
-        {tasks.map((task) => (
-          <Tooltip key={task.id}>
-            <TooltipTrigger asChild>
-              <div
-                className='flex items-center border-b border-r px-3 truncate cursor-default'
-                style={{ height: rowHeight, width: rowWidth }}
-              >
-                {task.name}
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side='right' className='max-w-xs'>
-              <p>{task.name}</p>
-            </TooltipContent>
-          </Tooltip>
-        ))}
-      </div>
-    </TooltipProvider>
-  )
-}
-
-/**
- * カテゴリに応じた色を返す
- */
-const getCategoryColor = (category: AckeyCampaign['category']) => {
-  switch (category) {
-    case 'limited_card':
-      return { backgroundColor: '#a855f7', backgroundSelectedColor: '#9333ea' }
-    case 'ackey':
-      return { backgroundColor: '#f59e0b', backgroundSelectedColor: '#d97706' }
-    case 'other':
-    default:
-      return { backgroundColor: '#ec4899', backgroundSelectedColor: '#db2777' }
-  }
-}
-
-/**
- * イベントをGanttタスクに変換
- */
-const eventToTask = (event: AckeyCampaign): Task => {
-  const start = dayjs(event.startDate)
-  const startDate = start.toDate()
-  // 終了日がない場合は、月末か開始日から14日後のどちらか長い方
-  let endDate: Date
-  if (event.endDate) {
-    endDate = dayjs(event.endDate).toDate()
-  } else {
-    const endOfMonth = start.endOf('month')
-    const plus14Days = start.add(14, 'day')
-    endDate = endOfMonth.isAfter(plus14Days) ? endOfMonth.toDate() : plus14Days.toDate()
-  }
-  const colors = getCategoryColor(event.category)
-
-  return {
-    id: event.id,
-    name: event.name,
-    start: startDate,
-    end: endDate,
-    progress: 100,
-    type: 'task',
-    isDisabled: true,
-    styles: {
-      backgroundColor: colors.backgroundColor,
-      backgroundSelectedColor: colors.backgroundSelectedColor,
-      progressColor: colors.backgroundColor,
-      progressSelectedColor: colors.backgroundSelectedColor
-    }
-  }
 }
 
 /**
@@ -166,22 +69,6 @@ const EventsContent = () => {
       .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
   }, [events, categoryFilter])
 
-  // Ganttタスクに変換
-  const tasks: Task[] = useMemo(() => {
-    if (activeEvents.length === 0) return []
-    return activeEvents.map((event) => eventToTask(event))
-  }, [activeEvents])
-
-  /**
-   * タスククリック時のハンドラ
-   */
-  const handleTaskClick = (task: Task) => {
-    const event = activeEvents.find((e) => e.id === task.id)
-    if (event?.referenceUrls?.[0]?.url) {
-      window.open(event.referenceUrls[0].url, '_blank')
-    }
-  }
-
   if (isLoading) {
     return <LoadingFallback />
   }
@@ -221,21 +108,8 @@ const EventsContent = () => {
       </div>
 
       {/* ガントチャート */}
-      {tasks.length > 0 ? (
-          <Gantt
-            tasks={tasks}
-            viewMode={ViewMode.Day}
-            onClick={handleTaskClick}
-            listCellWidth='200px'
-            columnWidth={65}
-            headerHeight={50}
-            rowHeight={50}
-            barCornerRadius={4}
-            todayColor='rgba(229, 0, 18, 0.1)'
-            locale='ja-JP'
-            TaskListHeader={TaskListHeader}
-            TaskListTable={TaskListTable}
-          />
+      {activeEvents.length > 0 ? (
+        <EventGanttChart events={activeEvents} />
       ) : (
         <div className='text-center py-12 text-gray-500'>
           <Gift className='size-12 mx-auto mb-4 opacity-30' />
