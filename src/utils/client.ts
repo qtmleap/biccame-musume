@@ -135,5 +135,7 @@ const api = makeApi([
 
 /**
  * Zodiosクライアント
+ * validateResponse: false でレスポンスのバリデーションを無効化
+ * （既存データとスキーマの不一致による本番エラーを回避）
  */
-export const client = new Zodios('/', api)
+export const client = new Zodios('/', api, { validate: false })
