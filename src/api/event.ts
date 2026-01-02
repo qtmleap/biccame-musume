@@ -9,6 +9,7 @@ import {
   type ReferenceUrl,
   UpdateAckeyCampaignRequestSchema
 } from '../schemas/ackey-campaign.dto'
+import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
 
 type Bindings = {
   BICCAME_MUSUME_EVENTS: KVNamespace
@@ -57,6 +58,7 @@ routes.openapi(listEventsRoute, async (c) => {
 const createEventRoute = createRoute({
   method: 'post',
   path: '/',
+  middleware: [cloudflareAccessMiddleware],
   request: {
     body: {
       content: {
@@ -215,6 +217,7 @@ routes.openapi(getEventRoute, async (c) => {
 const updateEventRoute = createRoute({
   method: 'put',
   path: '/:id',
+  middleware: [cloudflareAccessMiddleware],
   request: {
     params: z.object({
       id: z.string()
@@ -281,6 +284,7 @@ routes.openapi(updateEventRoute, async (c) => {
 const deleteEventRoute = createRoute({
   method: 'delete',
   path: '/:id',
+  middleware: [cloudflareAccessMiddleware],
   request: {
     params: z.object({
       id: z.string()
