@@ -51,9 +51,23 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
     }
   }, [])
 
-  // イベントのバー位置を計算
+  // カテゴリの優先順位
+  const categoryOrder: Record<AckeyCampaign['category'], number> = {
+    limited_card: 0,
+    ackey: 1,
+    other: 2
+  }
+
+  // イベントのバー位置を計算（開始日→カテゴリ順でソート）
   const eventBars = useMemo(() => {
-    return events.map((event) => {
+    // まずイベントをソート: 開始日 → カテゴリ順
+    const sortedEvents = [...events].sort((a, b) => {
+      const startDiff = dayjs(a.startDate).diff(dayjs(b.startDate))
+      if (startDiff !== 0) return startDiff
+      return categoryOrder[a.category] - categoryOrder[b.category]
+    })
+
+    return sortedEvents.map((event) => {
       const eventStart = dayjs(event.startDate).startOf('day')
       // 終了日がない場合は月末か開始日から14日後のどちらか長い方
       let eventEnd: Dayjs
