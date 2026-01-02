@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
+import { orderBy } from 'lodash-es'
 import { Calendar, ExternalLink, Package, Pencil, Store, Trash2, Users } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
@@ -192,11 +193,18 @@ export const EventList = () => {
   const { isAuthenticated } = useCloudflareAccess()
   const [activeTab, setActiveTab] = useState<AckeyCampaign['category']>('limited_card')
 
-  // カテゴリ別にフィルタリングし、開始時間順でソート
+  // カテゴリ別にフィルタリングし、開始日時・カテゴリ・店舗順でソート
   const filteredCampaigns = useMemo(() => {
-    return campaigns
-      .filter((campaign) => campaign.category === activeTab)
-      .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
+    const filtered = campaigns.filter((campaign) => campaign.category === activeTab)
+    return orderBy(
+      filtered,
+      [
+        (c) => dayjs(c.startDate).valueOf(),
+        (c) => c.category,
+        (c) => c.stores?.[0] || ''
+      ],
+      ['asc', 'asc', 'asc']
+    )
   }, [campaigns, activeTab])
 
   // 各カテゴリのイベント数
