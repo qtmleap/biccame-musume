@@ -6,6 +6,16 @@ import { Badge } from '@/components/ui/badge'
 import { useEvents } from '@/hooks/useEvents'
 
 /**
+ * 日数に応じたラベルを返す
+ */
+const getDaysLabel = (days: number, isStarted: boolean) => {
+  if (isStarted) return '開催中'
+  if (days === 0) return '今日'
+  if (days === 1) return '明日'
+  return `${days}日後`
+}
+
+/**
  * トップページ用のイベント一覧
  * 開催中および開催一週間前のイベントを表示
  */
@@ -71,73 +81,58 @@ export const EventList = () => {
                     href={event.referenceUrl}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='block bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer'
+                    className='flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer'
                   >
-                    <div className='flex items-start gap-3'>
-                      <div
-                        className={`p-2 rounded-lg ${isStarted ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}`}
-                      >
-                        <Calendar className='h-4 w-4' />
-                      </div>
+                    <div
+                      className={`p-2 rounded-lg ${isStarted ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}`}
+                    >
+                      <Calendar className='h-4 w-4' />
+                    </div>
 
-                      <div className='flex-1 min-w-0'>
-                        <p className='text-sm font-medium text-gray-800 mb-1'>{event.name}</p>
-
-                        {(event.stores || event.limitedQuantity) && (
-                          <div className='flex flex-wrap items-center gap-2 mb-1 text-xs text-gray-500'>
-                            {event.stores && event.stores.length > 0 && (
-                              <span className='flex items-center gap-1'>
-                                <Store className='size-3' />
-                                {event.stores.length === 1 ? event.stores[0] : `${event.stores.length}店舗`}
-                              </span>
-                            )}
-                            {event.limitedQuantity && (
-                              <span className='flex items-center gap-1'>
-                                <Package className='size-3' />
-                                限定{event.limitedQuantity}個
-                              </span>
-                            )}
-                          </div>
+                    <div className='flex-1 min-w-0'>
+                      <p className='text-sm font-medium text-gray-800 truncate'>{event.name}</p>
+                      <div className='flex flex-wrap items-center gap-2 text-xs text-gray-500'>
+                        <span>{startDate.format('M月D日')}</span>
+                        {event.stores && event.stores.length > 0 && (
+                          <span className='flex items-center gap-1'>
+                            <Store className='size-3' />
+                            {event.stores.length === 1 ? event.stores[0] : `${event.stores.length}店舗`}
+                          </span>
                         )}
-
-                        <p className='text-xs text-gray-500'>
-                          {startDate.format('M月D日 HH:mm')}
-                          {event.endDate && ` 〜 ${dayjs(event.endDate).format('M月D日 HH:mm')}`}
-                        </p>
-
-                        {event.conditions.length > 0 && (
-                          <div className='mt-2 flex flex-wrap gap-1'>
-                            {event.conditions.map((condition, idx) => (
-                              <Badge key={idx} variant='secondary' className='text-xs'>
-                                {condition.type === 'purchase' &&
-                                  `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
-                                {condition.type === 'first_come' && `先着${condition.quantity}名`}
-                                {condition.type === 'lottery' && `抽選${condition.qu                                {condition.type === 'everyone' && '全員配布'}
-                              </Badge>
-                            ))}
-                          </div>
+                        {event.limitedQuantity && (
+                          <span className='flex items-center gap-1'>
+                            <Package className='size-3' />
+                            限定{event.limitedQuantity}個
+                          </span>
                         )}
                       </div>
+                      {event.conditions.length > 0 && (
+                        <div className='mt-1 flex flex-wrap gap-1'>
+                          {event.conditions.map((condition) => (
+                            <Badge key={`${event.id}-${condition.type}`} variant='secondary' className='text-xs'>
+                              {condition.type === 'purchase' &&
+                                `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
+                              {condition.type === 'first_come' && `先着${condition.quantity}名`}
+                              {condition.type === 'lottery' && `抽選${condition.quantity}名`}
+                              {condition.type === 'everyone' && '全員配布'}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
 
-                      <div
-                        className={`text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
-                          isStarted
-                            ? 'bg-[#e50012] text-white'
-                            : daysUntil === 0
-                              ? 'bg-[#e50012] text-white'
-                              : daysUntil <= 7
-                                ? 'bg-orange-100 text-orange-600'
-                                : 'bg-gray-100 text-gray-600'
-                        }`}
-                      >
-                        {isStarted
-                          ? '開催中'
+                    <div
+                      className={`text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
+                        isStarted
+                          ? 'bg-[#e50012] text-white'
                           : daysUntil === 0
-                            ? '今日'
-                            : daysUntil === 1
-                              ? '明日'
-                              : `${daysUntil}日後`}
-                      </div>
+                            ? 'bg-[#e50012] text-white'
+                            : daysUntil <= 7
+                              ? 'bg-orange-100 text-orange-600'
+                              : 'bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      {getDaysLabel(daysUntil, isStarted)}
                     </div>
                   </a>
                 </motion.div>

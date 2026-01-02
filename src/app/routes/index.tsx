@@ -8,6 +8,7 @@ import { BirthdayDialog } from '@/components/home/birthday-dialog'
 import { BirthdayFloatingCard } from '@/components/home/birthday-floating-card'
 import { BirthdayFullscreenOverlay } from '@/components/home/birthday-fullscreen-overlay'
 import { BirthdayHeroSection } from '@/components/home/birthday-hero-section'
+import { EventList } from '@/components/home/event-list'
 import { HomeHeader } from '@/components/home/home-header'
 import { LineStickerList } from '@/components/home/line-sticker-list'
 import { useCharacters } from '@/hooks/useCharacters'
@@ -104,6 +105,7 @@ const HomeContent = () => {
       {/* ヒーローセクションはコンテンツ内に表示 */}
       {displayType === 'hero' && <BirthdayHeroSection characters={birthdayCharacters} />}
       <UpcomingEventList characters={characters} />
+      <EventList />
       <LineStickerList />
       {/* 他のパターンはオーバーレイ表示 */}
       {displayType !== 'hero' && <BirthdayDisplay type={displayType} characters={birthdayCharacters} />}
