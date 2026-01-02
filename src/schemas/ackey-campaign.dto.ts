@@ -57,8 +57,6 @@ export const AckeyCampaignSchema = z.object({
   endDate: z.string().datetime().optional(),
   // 配布条件
   conditions: z.array(AckeyCampaignConditionSchema).min(1, '最低1つの条件を設定してください'),
-  // アクティブかどうか
-  isActive: z.boolean().default(true),
   // 終了済みかどうか
   isEnded: z.boolean().default(false),
   // 作成日時
