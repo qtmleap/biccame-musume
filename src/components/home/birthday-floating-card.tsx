@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
+import { Cake, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { Cake, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { Character } from '@/schemas/character.dto'
 
@@ -80,10 +80,7 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
             </motion.button>
           ) : (
             // 展開状態
-            <motion.div
-              className='w-72 overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800'
-              layout
-            >
+            <motion.div className='w-72 overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800' layout>
               {/* ヘッダー */}
               <div className='flex items-center justify-between bg-linear-to-r from-pink-500 to-purple-500 p-3'>
                 <div className='flex items-center gap-2'>
@@ -131,9 +128,7 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
                       >
                         Happy Birthday!
                       </motion.p>
-                      <p className='font-medium text-gray-800 dark:text-gray-200'>
-                        {currentCharacter.character_name}
-                      </p>
+                      <p className='font-medium text-gray-800 dark:text-gray-200'>{currentCharacter.character_name}</p>
                       <p className='text-xs text-gray-500 dark:text-gray-400'>{currentCharacter.store_name}</p>
                     </div>
                   </motion.div>
