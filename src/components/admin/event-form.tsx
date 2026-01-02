@@ -11,12 +11,13 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/useCharacters'
 import { useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
-import { type AckeyCampaign, AckeyCampaignConditionTypeSchema } from '@/schemas/ackey-campaign.dto'
+import { type AckeyCampaign, AckeyCampaignConditionTypeSchema, EventCategorySchema, EVENT_CATEGORY_LABELS } from '@/schemas/ackey-campaign.dto'
 
 /**
  * フォームのスキーマ定義
  */
 const EventFormSchema = z.object({
+  category: EventCategorySchema,
   name: z.string().min(1, 'イベント名は必須です'),
   referenceUrl: z.string().url('有効なURLを入力してください').min(1, '参考URLは必須です'),
   stores: z.array(z.string()).optional(),
@@ -61,6 +62,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
   } = useForm<EventFormValues>({
     resolver: zodResolver(EventFormSchema),
     defaultValues: {
+      category: undefined,
       name: '',
       referenceUrl: '',
       stores: [],
@@ -84,6 +86,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
   useEffect(() => {
     if (event) {
       reset({
+        category: event.category,
         name: event.name,
         referenceUrl: event.referenceUrl,
         stores: event.stores || [],
@@ -165,6 +168,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
    */
   const handleReset = () => {
     reset({
+      category: undefined,
       name: '',
       referenceUrl: '',
       stores: [],
@@ -199,6 +203,70 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-3'>
+        {/* イベント種別・開催店舗 */}
+        <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+          <div>
+            <label htmlFor='category' className='mb-1 block text-sm font-medium'>
+              イベント種別
+            </label>
+            <Select value={watch('category')} onValueChange={(value) => setValue('category', value as EventFormValues['category'])}>
+              <SelectTrigger className='w-full'>
+                <SelectValue placeholder='種別を選択' />
+              </SelectTrigger>
+              <SelectContent>
+                {EventCategorySchema.options.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {EVENT_CATEGORY_LABELS[category]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.category && <p className='mt-1 text-xs text-destructive'>{errors.category.message}</p>}
+          </div>
+
+          <div>
+            <label htmlFor='store' className='mb-1 block text-sm font-medium'>
+              開催店舗（任意）
+            </label>
+            <Select value='' onValueChange={handleAddStore}>
+              <SelectTrigger className='w-full'>
+                <SelectValue placeholder={stores.length > 0 ? `${stores.length}店舗選択中` : '店舗を選択'} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='_all'>全店舗を選択</SelectItem>
+                {storeNames.map((storeName) => (
+                  <SelectItem key={storeName} value={storeName} disabled={stores.includes(storeName)}>
+                    {storeName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* 選択された店舗のバッジ */}
+        {stores.length > 0 && (
+          <div className='flex flex-wrap gap-1.5'>
+            {stores.length === storeNames.length ? (
+              <Badge className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
+                <span className='text-xs font-semibold'>全店舗</span>
+                <button type='button' onClick={() => setValue('stores', [])} className='ml-0.5 rounded-sm hover:bg-rose-200'>
+                  <X className='size-3' />
+                </button>
+              </Badge>
+            ) : (
+              stores.map((storeName) => (
+                <Badge key={storeName} className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
+                  <span className='text-xs font-semibold'>{storeName}</span>
+                  <button type='button' onClick={() => handleRemoveStore(storeName)} className='ml-0.5 rounded-sm hover:bg-rose-200'>
+                    <X className='size-3' />
+                  </button>
+                </Badge>
+              ))
+            )}
+          </div>
+        )}
+
         {/* イベント名 */}
         <div>
           <label htmlFor='event-name' className='mb-1 block text-sm font-medium'>
@@ -214,40 +282,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
           {errors.name && <p className='mt-1 text-xs text-destructive'>{errors.name.message}</p>}
         </div>
 
-        {/* 開催店舗 */}
-        <div>
-          <label htmlFor='store' className='mb-1 block text-sm font-medium'>
-            開催店舗（任意、複数可）
-          </label>
-          <Select value='' onValueChange={handleAddStore}>
-            <SelectTrigger>
-              <SelectValue placeholder={stores.length > 0 ? `${stores.length}店舗選択中` : '店舗を選択'} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='_all'>全店舗を選択</SelectItem>
-              {storeNames.map((storeName) => (
-                <SelectItem key={storeName} value={storeName} disabled={stores.includes(storeName)}>
-                  {storeName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {stores.length > 0 && (
-            <div className='mt-2 flex flex-wrap gap-1.5'>
-              {stores.map((storeName) => (
-                <Badge key={storeName} className='gap-1 pr-1 bg-[#e50012] text-white hover:bg-[#c5000f]'>
-                  <span className='text-xs font-semibold'>{storeName}</span>
-                  <button type='button' onClick={() => handleRemoveStore(storeName)} className='ml-0.5 rounded-sm hover:bg-[#c5000f]'>
-                    <X className='size-3' />
-                  </button>
-                </Badge>
-              ))}
-            </div>
-          )}
-        </div>
-
         {/* 日付設定 */}
-        <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
+        <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
           <div>
             <label htmlFor='start-date' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
               <Calendar className='size-4' />
