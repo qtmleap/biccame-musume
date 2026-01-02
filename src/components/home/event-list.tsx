@@ -104,7 +104,7 @@ export const EventList = () => {
                   whileTap={{ scale: 0.98 }}
                 >
                   <a
-                    href={event.referenceUrl}
+                    href={event.referenceUrls?.[0]?.url || '#'}
                     target='_blank'
                     rel='noopener noreferrer'
                     className='flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer'
