@@ -16,14 +16,7 @@ import { getBirthdayCharacters } from '@/utils/character'
 /**
  * 誕生日表示パターンの種類
  */
-type BirthdayDisplayType =
-  | 'dialog'
-  | 'fullscreen'
-  | 'banner'
-  | 'hero'
-  | 'floating'
-  | 'background'
-  | 'none'
+type BirthdayDisplayType = 'dialog' | 'fullscreen' | 'banner' | 'hero' | 'floating' | 'background' | 'none'
 
 /**
  * 誕生日表示コンポーネントの切り替え（開発環境用）
@@ -57,9 +50,7 @@ const BirthdayDisplaySwitcher = ({
             type='button'
             onClick={() => onChange(option.value)}
             className={`rounded px-3 py-1 text-left text-xs transition-colors ${
-              current === option.value
-                ? 'bg-pink-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              current === option.value ? 'bg-pink-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
             {option.label}
@@ -93,7 +84,6 @@ const BirthdayDisplay = ({
       return <BirthdayFloatingCard characters={characters} />
     case 'background':
       return <BirthdayBackground characters={characters} />
-    case 'none':
     default:
       return null
   }

@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
+import { X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { X } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { Character } from '@/schemas/character.dto'
 
