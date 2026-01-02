@@ -14,9 +14,9 @@ const getConditionDetail = (condition: AckeyCampaignCondition): string => {
     case 'purchase':
       return `${condition.purchaseAmount?.toLocaleString()}円以上購入`
     case 'first_come':
-      return `先着${condition.quantity}名`
+      return '先着'
     case 'lottery':
-      return `抽選${condition.quantity}名`
+      return '抽選'
     case 'everyone':
       return '全員配布'
   }
@@ -62,7 +62,7 @@ const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelet
                 {campaign.stores.length === 1 ? campaign.stores[0] : `${campaign.stores.length}店舗`}
               </span>
             )}
-            {campaign.limitedQuantity && (
+            {campaign.limitedQuantity && !campaign.conditions.some((c) => c.type === 'everyone') && (
               <span className='flex items-center gap-1'>
                 <Package className='size-3' />
                 限定{campaign.limitedQuantity}個
@@ -71,17 +71,17 @@ const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelet
           </div>
         </div>
         <Badge
-          variant={campaign.isActive ? 'outline' : 'secondary'}
-          className={campaign.isActive ? 'border-green-600 bg-green-50 text-green-700' : ''}
+          variant={campaign.isEnded ? 'secondary' : 'outline'}
+          className={campaign.isEnded ? '' : 'border-green-600 bg-green-50 text-green-700'}
         >
-          {campaign.isActive ? '開催中' : '終了'}
+          {campaign.isEnded ? '終了' : '開催中'}
         </Badge>
       </div>
 
       {/* 配布条件 */}
       <div className='mb-3 flex flex-wrap gap-2'>
         {campaign.conditions.map((condition, index) => (
-          <Badge key={`${campaign.id}-${index}`} variant='outline' className='gap-1.5 px-3 py-1'>
+          <Badge key={`${campaign.id}-${index}`} variant='outline' className='gap-1.5 border-gray-300 px-3 py-1'>
             <ConditionIcon type={condition.type} />
             <span>{getConditionDetail(condition)}</span>
           </Badge>
@@ -92,8 +92,8 @@ const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelet
       <div className='flex items-center justify-between'>
         {campaign.referenceUrl ? (
           <a href={campaign.referenceUrl} target='_blank' rel='noopener noreferrer'>
-            <Button size='sm' variant='outline' className='h-8'>
-              <ExternalLink className='mr-1 size-3.5' />
+            <Button size='sm' variant='outline' className='h-7 text-xs'>
+              <ExternalLink className='mr-1 size-3' />
               参考URL
             </Button>
           </a>
@@ -102,13 +102,13 @@ const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelet
         )}
         <div className='flex items-center gap-2'>
           <Link to='/admin/events/$id/edit' params={{ id: campaign.id }}>
-            <Button size='sm' variant='outline' className='h-8'>
-              <Pencil className='mr-1 size-3.5' />
+            <Button size='sm' variant='outline' className='h-7 text-xs'>
+              <Pencil className='mr-1 size-3' />
               編集
             </Button>
           </Link>
-          <Button size='sm' variant='outline' onClick={() => onDelete(campaign.id)} className='h-8 text-destructive hover:bg-destructive/10'>
-            <Trash2 className='mr-1 size-3.5' />
+          <Button size='sm' variant='outline' onClick={() => onDelete(campaign.id)} className='h-7 text-xs text-destructive hover:bg-destructive/10'>
+            <Trash2 className='mr-1 size-3' />
             削除
           </Button>
         </div>

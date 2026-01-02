@@ -99,7 +99,7 @@ const HomeContent = () => {
   const [displayType, setDisplayType] = useState<BirthdayDisplayType>('dialog')
 
   return (
-    <div>
+    <div className='flex flex-col gap-3'>
       <BirthdayDisplaySwitcher current={displayType} onChange={setDisplayType} />
       <HomeHeader />
       {/* ヒーローセクションはコンテンツ内に表示 */}
