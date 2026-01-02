@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { Calendar, Package, Pencil, Store, Trash2, Users } from 'lucide-react'
+import { Calendar, ExternalLink, Package, Pencil, Store, Trash2, Users } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
@@ -41,34 +41,32 @@ const ConditionIcon = ({ type }: { type: AckeyCampaignCondition['type'] }) => {
  */
 const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelete: (id: string) => void }) => {
   return (
-    <div className='rounded-lg border p-3'>
+    <div className='border-b py-3 last:border-b-0'>
       <div className='mb-2 flex items-start justify-between gap-3'>
         <div className='flex-1'>
           <h3 className='text-sm font-semibold text-gray-900'>{campaign.name}</h3>
-          {(campaign.stores || campaign.limitedQuantity) && (
-            <div className='mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground'>
-              {campaign.stores && campaign.stores.length > 0 && (
-                <span className='flex items-center gap-1'>
-                  <Store className='size-3' />
-                  {campaign.stores.length === 1 ? campaign.stores[0] : `${campaign.stores.length}店舗`}
-                </span>
+          <div className='mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground'>
+            <span className='flex items-center gap-1'>
+              <Calendar className='size-3' />
+              <span>{dayjs(campaign.startDate).format('YYYY/MM/DD')}</span>
+              {campaign.endDate && (
+                <>
+                  <span>〜</span>
+                  <span>{dayjs(campaign.endDate).format('YYYY/MM/DD')}</span>
+                </>
               )}
-              {campaign.limitedQuantity && (
-                <span className='flex items-center gap-1'>
-                  <Package className='size-3' />
-                  限定{campaign.limitedQuantity}個
-                </span>
-              )}
-            </div>
-          )}
-          <div className='mt-1 flex items-center gap-1.5 text-xs text-muted-foreground'>
-            <Calendar className='size-3' />
-            <span>{dayjs(campaign.startDate).format('YYYY/MM/DD HH:mm')}</span>
-            {campaign.endDate && (
-              <>
-                <span>〜</span>
-                <span>{dayjs(campaign.endDate).format('YYYY/MM/DD HH:mm')}</span>
-              </>
+            </span>
+            {campaign.stores && campaign.stores.length > 0 && (
+              <span className='flex items-center gap-1'>
+                <Store className='size-3' />
+                {campaign.stores.length === 1 ? campaign.stores[0] : `${campaign.stores.length}店舗`}
+              </span>
+            )}
+            {campaign.limitedQuantity && (
+              <span className='flex items-center gap-1'>
+                <Package className='size-3' />
+                限定{campaign.limitedQuantity}個
+              </span>
             )}
           </div>
         </div>
@@ -93,25 +91,23 @@ const CampaignCard = ({ campaign, onDelete }: { campaign: AckeyCampaign; onDelet
       {/* アクション */}
       <div className='flex items-center justify-between'>
         {campaign.referenceUrl ? (
-          <a
-            href={campaign.referenceUrl}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='text-sm text-blue-600 hover:underline'
-          >
-            参考URL
+          <a href={campaign.referenceUrl} target='_blank' rel='noopener noreferrer'>
+            <Button size='sm' variant='outline' className='h-8'>
+              <ExternalLink className='mr-1 size-3.5' />
+              参考URL
+            </Button>
           </a>
         ) : (
           <div />
         )}
         <div className='flex items-center gap-2'>
           <Link to='/admin/events/$id/edit' params={{ id: campaign.id }}>
-            <Button size='sm' variant='ghost' className='h-8'>
+            <Button size='sm' variant='outline' className='h-8'>
               <Pencil className='mr-1 size-3.5' />
               編集
             </Button>
           </Link>
-          <Button size='sm' variant='ghost' onClick={() => onDelete(campaign.id)} className='h-8 text-destructive'>
+          <Button size='sm' variant='outline' onClick={() => onDelete(campaign.id)} className='h-8 text-destructive hover:bg-destructive/10'>
             <Trash2 className='mr-1 size-3.5' />
             削除
           </Button>

@@ -10,7 +10,6 @@ import { useEvents } from '@/hooks/useEvents'
  */
 const getDaysLabel = (days: number, isStarted: boolean) => {
   if (isStarted) return '開催中'
-  if (days === 0) return '今日'
   if (days === 1) return '明日'
   return `${days}日後`
 }
