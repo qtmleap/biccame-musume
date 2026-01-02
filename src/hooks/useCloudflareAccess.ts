@@ -15,6 +15,7 @@ type AccessState = {
 /**
  * Cloudflare Accessの認証状態を確認するフック
  * CF_Authorizationクッキーの存在をチェックする
+ * 開発環境では常に認証済みとして扱う
  */
 export const useCloudflareAccess = (): AccessState => {
   const [state, setState] = useState<AccessState>({
@@ -26,6 +27,20 @@ export const useCloudflareAccess = (): AccessState => {
 
   useEffect(() => {
     const checkAccess = () => {
+      // 開発環境では常に認証済みとして扱う
+      if (import.meta.env.DEV) {
+        setState({
+          isLoading: false,
+          isAuthenticated: true,
+          user: {
+            email: 'dev@localhost',
+            isAuthenticated: true
+          },
+          error: null
+        })
+        return
+      }
+
       try {
         // CF_Authorization クッキーが存在するか確認
         const cookies = document.cookie.split(';')
