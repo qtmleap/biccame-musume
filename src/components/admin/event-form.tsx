@@ -7,6 +7,7 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/useCharacters'
@@ -33,7 +34,8 @@ const EventFormSchema = z.object({
       })
     )
     .min(1, '最低1つの条件を設定してください'),
-  isActive: z.boolean()
+  isActive: z.boolean(),
+  isEnded: z.boolean()
 })
 
 type EventFormValues = z.infer<typeof EventFormSchema>
@@ -70,7 +72,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
       startDate: '',
       endDate: '',
       conditions: [],
-      isActive: true
+      isActive: true,
+      isEnded: false
     }
   })
 
@@ -81,6 +84,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
 
   const stores = watch('stores') || []
   const conditions = useWatch({ control, name: 'conditions' })
+  const category = useWatch({ control, name: 'category' })
 
   // 編集モードの場合、初期値をセット
   useEffect(() => {
@@ -94,7 +98,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
         startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
         endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : '',
         conditions: event.conditions,
-        isActive: event.isActive
+        isActive: event.isActive,
+        isEnded: event.isEnded ?? false
       })
     }
   }, [event, reset])
@@ -176,7 +181,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
       startDate: '',
       endDate: '',
       conditions: [],
-      isActive: true
+      isActive: true,
+      isEnded: false
     })
   }
 
@@ -203,20 +209,54 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-3'>
+        {/* イベント名 */}
+        <div>
+          <label htmlFor='event-name' className='mb-1 block text-sm font-medium'>
+            イベント名
+          </label>
+          <Input
+            id='event-name'
+            type='text'
+            placeholder='例: 新春アクキープレゼント'
+            {...register('name')}
+            className='w-full'
+          />
+          {errors.name && <p className='mt-1 text-xs text-destructive'>{errors.name.message}</p>}
+        </div>
+
+        {/* 日付設定 */}
+        <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+          <div>
+            <label htmlFor='start-date' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
+              <Calendar className='size-4' />
+              開始日
+            </label>
+            <Input id='start-date' type='date' {...register('startDate')} className='w-full' />
+            {errors.startDate && <p className='mt-1 text-xs text-destructive'>{errors.startDate.message}</p>}
+          </div>
+          <div>
+            <label htmlFor='end-date' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
+              <Calendar className='size-4' />
+              終了日（任意）
+            </label>
+            <Input id='end-date' type='date' {...register('endDate')} className='w-full' />
+          </div>
+        </div>
+
         {/* イベント種別・開催店舗 */}
         <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
           <div>
             <label htmlFor='category' className='mb-1 block text-sm font-medium'>
               イベント種別
             </label>
-            <Select value={watch('category')} onValueChange={(value) => setValue('category', value as EventFormValues['category'])}>
+            <Select key={`category-${event?.id ?? 'new'}`} value={category ?? ''} onValueChange={(value) => setValue('category', value as EventFormValues['category'])}>
               <SelectTrigger className='w-full'>
                 <SelectValue placeholder='種別を選択' />
               </SelectTrigger>
               <SelectContent>
-                {EventCategorySchema.options.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {EVENT_CATEGORY_LABELS[category]}
+                {EventCategorySchema.options.map((cat) => (
+                  <SelectItem key={cat} value={cat}>
+                    {EVENT_CATEGORY_LABELS[cat]}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -266,40 +306,6 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
             )}
           </div>
         )}
-
-        {/* イベント名 */}
-        <div>
-          <label htmlFor='event-name' className='mb-1 block text-sm font-medium'>
-            イベント名
-          </label>
-          <Input
-            id='event-name'
-            type='text'
-            placeholder='例: 新春アクキープレゼント'
-            {...register('name')}
-            className='w-full'
-          />
-          {errors.name && <p className='mt-1 text-xs text-destructive'>{errors.name.message}</p>}
-        </div>
-
-        {/* 日付設定 */}
-        <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-          <div>
-            <label htmlFor='start-date' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
-              <Calendar className='size-4' />
-              開始日
-            </label>
-            <Input id='start-date' type='date' {...register('startDate')} className='w-full' />
-            {errors.startDate && <p className='mt-1 text-xs text-destructive'>{errors.startDate.message}</p>}
-          </div>
-          <div>
-            <label htmlFor='end-date' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
-              <Calendar className='size-4' />
-              終了日（任意）
-            </label>
-            <Input id='end-date' type='date' {...register('endDate')} className='w-full' />
-          </div>
-        </div>
 
         {/* 配布条件 */}
         <div>
@@ -372,7 +378,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
                       <Input
                         type='number'
                         min='0'
-                        step='100'
+                        step='1'
                         {...register(`conditions.${index}.purchaseAmount`, { valueAsNumber: true })}
                         className='w-full'
                       />
@@ -436,6 +442,30 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
             className='w-full'
           />
           {errors.referenceUrl && <p className='mt-1 text-xs text-destructive'>{errors.referenceUrl.message}</p>}
+        </div>
+
+        {/* ステータスフラグ */}
+        <div className='flex flex-wrap gap-4'>
+          <div className='flex items-center gap-2'>
+            <Checkbox
+              id='is-active'
+              checked={watch('isActive')}
+              onCheckedChange={(checked) => setValue('isActive', checked === true)}
+            />
+            <label htmlFor='is-active' className='text-sm font-medium'>
+              開催中
+            </label>
+          </div>
+          <div className='flex items-center gap-2'>
+            <Checkbox
+              id='is-ended'
+              checked={watch('isEnded')}
+              onCheckedChange={(checked) => setValue('isEnded', checked === true)}
+            />
+            <label htmlFor='is-ended' className='text-sm font-medium'>
+              終了済み
+            </label>
+          </div>
         </div>
 
         {/* ボタン */}
