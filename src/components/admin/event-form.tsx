@@ -34,7 +34,6 @@ const EventFormSchema = z.object({
       })
     )
     .min(1, '最低1つの条件を設定してください'),
-  isActive: z.boolean(),
   isEnded: z.boolean()
 })
 
@@ -73,7 +72,6 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
           startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
           endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : '',
           conditions: event.conditions,
-          isActive: event.isActive,
           isEnded: event.isEnded ?? false
         }
       : {
@@ -85,7 +83,6 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
           startDate: '',
           endDate: '',
           conditions: [],
-          isActive: true,
           isEnded: false
         }
   })
@@ -112,7 +109,6 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
         startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
         endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : '',
         conditions: event.conditions,
-        isActive: event.isActive,
         isEnded: event.isEnded ?? false
       })
     }
@@ -195,7 +191,6 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
       startDate: '',
       endDate: '',
       conditions: [],
-      isActive: true,
       isEnded: false
     })
   }
@@ -333,14 +328,14 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
         {/* 配布条件 */}
         <div>
           <div className='mb-1.5 block text-sm font-medium'>配布条件</div>
-          <div className='mb-2 flex flex-wrap gap-2'>
+          <div className='mb-2 grid grid-cols-2 gap-2 sm:grid-cols-4'>
             <Button
               type='button'
               size='sm'
               variant='outline'
               onClick={() => handleAddCondition('purchase')}
-              disabled={hasConditionType('purchase')}
-              className='flex-1 sm:flex-none'
+              disabled={false}
+              className={hasConditionType('purchase') ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''}
             >
               <Coins className='mr-1.5 size-4' />
               購入金額
@@ -350,8 +345,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
               size='sm'
               variant='outline'
               onClick={() => handleAddCondition('first_come')}
-              disabled={hasDistributionCondition()}
-              className='flex-1 sm:flex-none'
+              disabled={hasDistributionCondition() && !hasConditionType('first_come')}
+              className={hasConditionType('first_come') ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''}
             >
               <Users className='mr-1.5 size-4' />
               先着
@@ -361,8 +356,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
               size='sm'
               variant='outline'
               onClick={() => handleAddCondition('lottery')}
-              disabled={hasDistributionCondition()}
-              className='flex-1 sm:flex-none'
+              disabled={hasDistributionCondition() && !hasConditionType('lottery')}
+              className={hasConditionType('lottery') ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''}
             >
               <Users className='mr-1.5 size-4' />
               抽選
@@ -372,8 +367,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
               size='sm'
               variant='outline'
               onClick={() => handleAddCondition('everyone')}
-              disabled={hasDistributionCondition()}
-              className='flex-1 sm:flex-none'
+              disabled={hasDistributionCondition() && !hasConditionType('everyone')}
+              className={hasConditionType('everyone') ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''}
             >
               <Users className='mr-1.5 size-4' />
               全員配布
@@ -382,18 +377,18 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
           {errors.conditions && <p className='mb-2 text-xs text-destructive'>{errors.conditions.message}</p>}
 
           {/* 条件リスト */}
-          <div className='space-y-1.5'>
+          <div className='grid grid-cols-1 gap-px overflow-hidden rounded-lg border bg-border sm:grid-cols-2'>
             <AnimatePresence initial={false}>
               {fields.map((field, index) => (
                 <motion.div
                   key={field.id}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className='overflow-hidden'
+                  className='bg-background'
                 >
-                  <div className='flex items-center gap-2 rounded-lg bg-muted/50 p-2'>
+                  <div className='flex items-center gap-2 p-2'>
                   <div className='flex-1'>
                     {field.type === 'purchase' && (
                     <div className='flex items-center gap-2'>
@@ -405,13 +400,12 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
                         {...register(`conditions.${index}.purchaseAmount`, { valueAsNumber: true })}
                         className='w-full'
                       />
-                      <span className='shrink-0 text-sm text-muted-foreground'>円以上購入</span>
+                      <span className='shrink-0 text-sm text-muted-foreground'>円以上</span>
                     </div>
                   )}
                   {field.type === 'first_come' && (
                     <div className='flex items-center gap-2'>
                       <Users className='size-4 shrink-0 text-muted-foreground' />
-                      <span className='shrink-0 text-sm text-muted-foreground'>先着</span>
                       <Input
                         type='number'
                         min='1'
@@ -425,7 +419,6 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
                   {field.type === 'lottery' && (
                     <div className='flex items-center gap-2'>
                       <Users className='size-4 shrink-0 text-muted-foreground' />
-                      <span className='shrink-0 text-sm text-muted-foreground'>抽選</span>
                       <Input
                         type='number'
                         min='1'
@@ -469,27 +462,16 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
         </div>
 
         {/* ステータスフラグ */}
-        <div className='flex flex-wrap gap-4'>
-          <div className='flex items-center gap-2'>
-            <Checkbox
-              id='is-active'
-              checked={watch('isActive')}
-              onCheckedChange={(checked) => setValue('isActive', checked === true)}
-            />
-            <label htmlFor='is-active' className='text-sm font-medium'>
-              開催中
-            </label>
-          </div>
-          <div className='flex items-center gap-2'>
-            <Checkbox
-              id='is-ended'
-              checked={watch('isEnded')}
-              onCheckedChange={(checked) => setValue('isEnded', checked === true)}
-            />
-            <label htmlFor='is-ended' className='text-sm font-medium'>
-              終了済み
-            </label>
-          </div>
+        <div className='flex items-center gap-2'>
+          <Checkbox
+            id='is-ended'
+            checked={watch('isEnded')}
+            onCheckedChange={(checked) => setValue('isEnded', checked === true)}
+            className='border-rose-400 data-[state=checked]:bg-rose-500 data-[state=checked]:border-rose-500'
+          />
+          <label htmlFor='is-ended' className='text-sm font-medium'>
+            終了済み
+          </label>
         </div>
 
         {/* ボタン */}

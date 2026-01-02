@@ -49,7 +49,7 @@ export const EventList = () => {
   // 開催中および開催一週間前のイベントをフィルタリング
   const upcomingEvents = events
     .filter((event) => {
-      if (!event.isActive) return false
+      if (event.isEnded) return false
 
       const now = dayjs()
       const startDate = dayjs(event.startDate)
@@ -75,7 +75,7 @@ export const EventList = () => {
   }
 
   return (
-    <section className='py-6 md:py-8'>
+    <section>
       <div className='container mx-auto px-4'>
         <div className='max-w-2xl mx-auto'>
           <div className='flex items-center gap-2 mb-4'>
@@ -126,7 +126,7 @@ export const EventList = () => {
                             {event.stores.length === 1 ? event.stores[0] : `${event.stores.length}店舗`}
                           </span>
                         )}
-                        {event.limitedQuantity && (
+                        {event.limitedQuantity && !event.conditions.some((c) => c.type === 'everyone') && (
                           <span className='flex items-center gap-1'>
                             <Package className='size-3' />
                             限定{event.limitedQuantity}個
