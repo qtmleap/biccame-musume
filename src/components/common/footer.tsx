@@ -14,24 +14,6 @@ export const Footer = () => {
           </Link>
           <span className='text-gray-400'>|</span>
           <a
-            href='https://biccame.jp/'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='text-gray-600 hover:text-[#e50012] transition-colors'
-          >
-            公式サイト
-          </a>
-          <span className='text-gray-400'>|</span>
-          <a
-            href='https://x.com/biccameraE'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='text-gray-600 hover:text-[#e50012] transition-colors'
-          >
-            公式X
-          </a>
-          <span className='text-gray-400'>|</span>
-          <a
             href='https://biccame.jp/guideline/'
             target='_blank'
             rel='noopener noreferrer'

@@ -48,7 +48,7 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
   }, [characters])
 
   return (
-    <section className='py-6 md:py-8'>
+    <section>
       <div className='container mx-auto px-4'>
         <div className='max-w-2xl mx-auto'>
           <div className='flex items-center gap-2 mb-4'>
