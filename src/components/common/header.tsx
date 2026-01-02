@@ -47,7 +47,7 @@ export const Header = ({ className }: HeaderProps) => {
         className
       )}
     >
-      <div className='container mx-auto px-4'>
+      <div className='mx-auto px-4 md:px-8 max-w-6xl'>
         <div className='flex items-center justify-between h-12 md:h-14'>
           {/* ロゴ */}
           <Link
