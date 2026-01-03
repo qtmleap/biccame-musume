@@ -2,16 +2,22 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import { AlertTriangle, Calendar, Coins, Users, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { useFieldArray, useForm, useWatch, Controller } from 'react-hook-form'
+import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/useCharacters'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
-import { type AckeyCampaign, AckeyCampaignConditionTypeSchema, EventCategorySchema, EVENT_CATEGORY_LABELS, ReferenceUrlTypeSchema, REFERENCE_URL_TYPE_LABELS } from '@/schemas/ackey-campaign.dto'
+import {
+  type AckeyCampaign,
+  AckeyCampaignConditionTypeSchema,
+  EVENT_CATEGORY_LABELS,
+  EventCategorySchema,
+  REFERENCE_URL_TYPE_LABELS,
+  ReferenceUrlTypeSchema
+} from '@/schemas/ackey-campaign.dto'
 
 /**
  * フォームのスキーマ定義
@@ -19,16 +25,19 @@ import { type AckeyCampaign, AckeyCampaignConditionTypeSchema, EventCategorySche
 const EventFormSchema = z.object({
   category: EventCategorySchema,
   name: z.string().min(1, 'イベント名は必須です'),
-  referenceUrls: z.array(
-    z.object({
-      type: ReferenceUrlTypeSchema,
-      url: z.string().url('有効なURLを入力してください')
-    })
-  ).optional(),
+  referenceUrls: z
+    .array(
+      z.object({
+        type: ReferenceUrlTypeSchema,
+        url: z.string().url('有効なURLを入力してください')
+      })
+    )
+    .optional(),
   stores: z.array(z.string()).optional(),
   limitedQuantity: z.number().min(1).optional(),
   startDate: z.string().min(1, '開始日は必須です'),
-  endDate: z.string().optional(),
+  endDate: z.string().nullable().optional(),
+  actualEndDate: z.string().nullable().optional(),
   conditions: z
     .array(
       z.object({
@@ -37,8 +46,7 @@ const EventFormSchema = z.object({
         quantity: z.number().min(1).optional()
       })
     )
-    .min(1, '最低1つの条件を設定してください'),
-  isEnded: z.boolean()
+    .min(1, '最低1つの条件を設定してください')
 })
 
 type EventFormValues = z.infer<typeof EventFormSchema>
@@ -77,9 +85,9 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
           stores: event.stores || [],
           limitedQuantity: event.limitedQuantity,
           startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
-          endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : '',
-          conditions: event.conditions,
-          isEnded: event.isEnded ?? false
+          endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : null,
+          actualEndDate: event.actualEndDate ? dayjs(event.actualEndDate).format('YYYY-MM-DD') : null,
+          conditions: event.conditions
         }
       : {
           category: undefined,
@@ -88,9 +96,9 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
           stores: [],
           limitedQuantity: undefined,
           startDate: '',
-          endDate: '',
-          conditions: [],
-          isEnded: false
+          endDate: null,
+          actualEndDate: null,
+          conditions: []
         }
   })
 
@@ -99,7 +107,11 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
     name: 'conditions'
   })
 
-  const { fields: referenceUrlFields, append: appendReferenceUrl, remove: removeReferenceUrl } = useFieldArray({
+  const {
+    fields: referenceUrlFields,
+    append: appendReferenceUrl,
+    remove: removeReferenceUrl
+  } = useFieldArray({
     control,
     name: 'referenceUrls'
   })
@@ -144,9 +156,9 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
         stores: event.stores || [],
         limitedQuantity: event.limitedQuantity,
         startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
-        endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : '',
-        conditions: event.conditions,
-        isEnded: event.isEnded ?? false
+        endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : null,
+        actualEndDate: event.actualEndDate ? dayjs(event.actualEndDate).format('YYYY-MM-DD') : null,
+        conditions: event.conditions
       })
     }
   }, [event, reset])
@@ -226,9 +238,9 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
       stores: [],
       limitedQuantity: undefined,
       startDate: '',
-      endDate: '',
-      conditions: [],
-      isEnded: false
+      endDate: null,
+      actualEndDate: null,
+      conditions: []
     })
   }
 
@@ -236,12 +248,41 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
    * キャンペーンを保存
    */
   const onSubmit = async (data: EventFormValues) => {
-    const payload = {
-      ...data,
+    console.log('Form data:', data)
+    console.log('endDate value:', data.endDate, 'type:', typeof data.endDate)
+
+    const payload: any = {
+      category: data.category,
+      name: data.name,
       startDate: dayjs(data.startDate).toISOString(),
-      endDate: data.endDate ? dayjs(data.endDate).toISOString() : undefined,
-      stores: data.stores && data.stores.length > 0 ? data.stores : undefined,
-      referenceUrls: data.referenceUrls && data.referenceUrls.length > 0 ? data.referenceUrls : undefined
+      conditions: data.conditions
+    }
+
+    // 終了日が空文字やundefined、nullでない場合のみ設定
+    if (data.endDate && data.endDate.trim() !== '') {
+      payload.endDate = dayjs(data.endDate).toISOString()
+    }
+
+    // 実際の終了日が空文字やundefined、nullでない場合のみ設定
+    if (data.actualEndDate && data.actualEndDate.trim() !== '') {
+      payload.actualEndDate = dayjs(data.actualEndDate).toISOString()
+    }
+
+    console.log('Payload:', payload)
+
+    // 店舗が設定されている場合のみ追加
+    if (data.stores && data.stores.length > 0) {
+      payload.stores = data.stores
+    }
+
+    // 参照URLが設定されている場合のみ追加
+    if (data.referenceUrls && data.referenceUrls.length > 0) {
+      payload.referenceUrls = data.referenceUrls
+    }
+
+    // 限定数量が設定されている場合のみ追加
+    if (data.limitedQuantity) {
+      payload.limitedQuantity = data.limitedQuantity
     }
 
     if (event) {
@@ -286,8 +327,53 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
               <Calendar className='size-4' />
               終了日（任意）
             </label>
-            <Input id='end-date' type='date' {...register('endDate')} className='w-full' />
+            <div className='flex gap-2'>
+              <Input id='end-date' type='date' {...register('endDate')} className='flex-1' />
+              <Button
+                type='button'
+                variant='outline'
+                size='icon'
+                onClick={() => {
+                  setValue('endDate', undefined, { shouldDirty: true, shouldValidate: true })
+                  // 直接input要素の値もクリア
+                  const endDateInput = document.getElementById('end-date') as HTMLInputElement
+                  if (endDateInput) {
+                    endDateInput.value = ''
+                  }
+                }}
+                title='終了日をクリア'
+              >
+                <X className='size-4' />
+              </Button>
+            </div>
           </div>
+        </div>
+
+        {/* 実際の終了日 */}
+        <div>
+          <label htmlFor='actual-end-date' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
+            <Calendar className='size-4' />
+            実際の終了日（配布終了時に設定）
+          </label>
+          <div className='flex gap-2'>
+            <Input id='actual-end-date' type='date' {...register('actualEndDate')} className='flex-1' />
+            <Button
+              type='button'
+              variant='outline'
+              size='icon'
+              onClick={() => {
+                setValue('actualEndDate', undefined, { shouldDirty: true, shouldValidate: true })
+                const actualEndDateInput = document.getElementById('actual-end-date') as HTMLInputElement
+                if (actualEndDateInput) {
+                  actualEndDateInput.value = ''
+                }
+              }}
+              title='実際の終了日をクリア'
+            >
+              <X className='size-4' />
+            </Button>
+          </div>
+          <p className='mt-1 text-xs text-gray-500'>配布が終了した場合に設定すると、自動的に「終了」として扱われます</p>
         </div>
 
         {/* イベント種別・開催店舗 */}
@@ -346,7 +432,11 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
             {stores.length === storeNames.length ? (
               <Badge className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
                 <span className='text-xs font-semibold'>全店舗</span>
-                <button type='button' onClick={() => setValue('stores', [])} className='ml-0.5 rounded-sm hover:bg-rose-200'>
+                <button
+                  type='button'
+                  onClick={() => setValue('stores', [])}
+                  className='ml-0.5 rounded-sm hover:bg-rose-200'
+                >
                   <X className='size-3' />
                 </button>
               </Badge>
@@ -354,7 +444,11 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
               stores.map((storeName) => (
                 <Badge key={storeName} className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
                   <span className='text-xs font-semibold'>{storeName}</span>
-                  <button type='button' onClick={() => handleRemoveStore(storeName)} className='ml-0.5 rounded-sm hover:bg-rose-200'>
+                  <button
+                    type='button'
+                    onClick={() => handleRemoveStore(storeName)}
+                    className='ml-0.5 rounded-sm hover:bg-rose-200'
+                  >
                     <X className='size-3' />
                   </button>
                 </Badge>
@@ -373,7 +467,11 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
               variant='outline'
               onClick={() => handleAddCondition('purchase')}
               disabled={false}
-              className={hasConditionType('purchase') ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''}
+              className={
+                hasConditionType('purchase')
+                  ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800'
+                  : ''
+              }
             >
               <Coins className='mr-1.5 size-4' />
               購入金額
@@ -384,7 +482,11 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
               variant='outline'
               onClick={() => handleAddCondition('first_come')}
               disabled={hasDistributionCondition() && !hasConditionType('first_come')}
-              className={hasConditionType('first_come') ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''}
+              className={
+                hasConditionType('first_come')
+                  ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800'
+                  : ''
+              }
             >
               <Users className='mr-1.5 size-4' />
               先着
@@ -395,7 +497,11 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
               variant='outline'
               onClick={() => handleAddCondition('lottery')}
               disabled={hasDistributionCondition() && !hasConditionType('lottery')}
-              className={hasConditionType('lottery') ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''}
+              className={
+                hasConditionType('lottery')
+                  ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800'
+                  : ''
+              }
             >
               <Users className='mr-1.5 size-4' />
               抽選
@@ -406,7 +512,11 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
               variant='outline'
               onClick={() => handleAddCondition('everyone')}
               disabled={hasDistributionCondition() && !hasConditionType('everyone')}
-              className={hasConditionType('everyone') ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''}
+              className={
+                hasConditionType('everyone')
+                  ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800'
+                  : ''
+              }
             >
               <Users className='mr-1.5 size-4' />
               全員配布
@@ -416,65 +526,62 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
 
           {/* 条件リスト */}
           <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-x-4'>
-              {fields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className={index % 2 === 0 && fields.length > 1 ? 'sm:border-r sm:pr-4' : ''}
-                >
-                  <div className='flex items-center gap-2'>
+            {fields.map((field, index) => (
+              <div key={field.id} className={index % 2 === 0 && fields.length > 1 ? 'sm:border-r sm:pr-4' : ''}>
+                <div className='flex items-center gap-2'>
                   <div className='flex-1'>
                     {field.type === 'purchase' && (
-                    <div className='flex items-center gap-2'>
-                      <Coins className='size-4 shrink-0 text-muted-foreground' />
-                      <Input
-                        type='number'
-                        min='0'
-                        step='1'
-                        {...register(`conditions.${index}.purchaseAmount`, { valueAsNumber: true })}
-                        className='w-full'
-                      />
-                      <span className='shrink-0 text-sm text-muted-foreground'>円以上</span>
-                    </div>
-                  )}
-                  {field.type === 'first_come' && (
-                    <div className='flex items-center gap-2'>
-                      <Users className='size-4 shrink-0 text-muted-foreground' />
-                      <Input
-                        type='number'
-                        min='1'
-                        defaultValue={field.quantity || 1}
-                        onChange={(e) => handleUpdateQuantity(index, Number.parseInt(e.target.value, 10))}
-                        className='w-full'
-                      />
-                      <span className='shrink-0 text-sm text-muted-foreground'>名</span>
-                    </div>
-                  )}
-                  {field.type === 'lottery' && (
-                    <div className='flex items-center gap-2'>
-                      <Users className='size-4 shrink-0 text-muted-foreground' />
-                      <Input
-                        type='number'
-                        min='1'
-                        defaultValue={field.quantity || 1}
-                        onChange={(e) => handleUpdateQuantity(index, Number.parseInt(e.target.value, 10))}
-                        className='w-full'
-                      />
-                      <span className='shrink-0 text-sm text-muted-foreground'>名</span>
-                    </div>
-                  )}
-                  {field.type === 'everyone' && (
-                    <div className='flex items-center gap-2'>
-                      <Users className='size-4 shrink-0 text-muted-foreground' />
-                      <span className='text-sm text-muted-foreground'>全員配布</span>
-                    </div>
-                  )}
-                    </div>
-                    <Button type='button' size='icon' variant='ghost' onClick={() => remove(index)} className='shrink-0'>
-                      <X className='size-4' />
-                    </Button>
+                      <div className='flex items-center gap-2'>
+                        <Coins className='size-4 shrink-0 text-muted-foreground' />
+                        <Input
+                          type='number'
+                          min='0'
+                          step='1'
+                          {...register(`conditions.${index}.purchaseAmount`, { valueAsNumber: true })}
+                          className='w-full'
+                        />
+                        <span className='shrink-0 text-sm text-muted-foreground'>円以上</span>
+                      </div>
+                    )}
+                    {field.type === 'first_come' && (
+                      <div className='flex items-center gap-2'>
+                        <Users className='size-4 shrink-0 text-muted-foreground' />
+                        <Input
+                          type='number'
+                          min='1'
+                          defaultValue={field.quantity || 1}
+                          onChange={(e) => handleUpdateQuantity(index, Number.parseInt(e.target.value, 10))}
+                          className='w-full'
+                        />
+                        <span className='shrink-0 text-sm text-muted-foreground'>名</span>
+                      </div>
+                    )}
+                    {field.type === 'lottery' && (
+                      <div className='flex items-center gap-2'>
+                        <Users className='size-4 shrink-0 text-muted-foreground' />
+                        <Input
+                          type='number'
+                          min='1'
+                          defaultValue={field.quantity || 1}
+                          onChange={(e) => handleUpdateQuantity(index, Number.parseInt(e.target.value, 10))}
+                          className='w-full'
+                        />
+                        <span className='shrink-0 text-sm text-muted-foreground'>名</span>
+                      </div>
+                    )}
+                    {field.type === 'everyone' && (
+                      <div className='flex items-center gap-2'>
+                        <Users className='size-4 shrink-0 text-muted-foreground' />
+                        <span className='text-sm text-muted-foreground'>全員配布</span>
+                      </div>
+                    )}
                   </div>
+                  <Button type='button' size='icon' variant='ghost' onClick={() => remove(index)} className='shrink-0'>
+                    <X className='size-4' />
+                  </Button>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
 
@@ -490,67 +597,58 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
                 variant='outline'
                 onClick={() => appendReferenceUrl({ type, url: '' })}
                 disabled={referenceUrls.some((r) => r.type === type)}
-                className={referenceUrls.some((r) => r.type === type) ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''}
+                className={
+                  referenceUrls.some((r) => r.type === type)
+                    ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800'
+                    : ''
+                }
               >
                 {REFERENCE_URL_TYPE_LABELS[type]}
               </Button>
             ))}
           </div>
           <div className='space-y-1.5'>
-              {referenceUrlFields.map((field, index) => (
-                <div key={field.id}>
-                  <div className='flex items-center gap-2'>
-                    <span className='shrink-0 text-sm font-medium w-10'>{REFERENCE_URL_TYPE_LABELS[field.type]}</span>
-                    <Input
-                      type='url'
-                      placeholder='https://twitter.com/...'
-                      {...register(`referenceUrls.${index}.url`)}
-                      onBlur={(e) => checkUrlDuplicate(index, e.target.value)}
-                      className='flex-1'
-                    />
-                    <Button
-                      type='button'
-                      size='icon'
-                      variant='ghost'
-                      onClick={() => {
-                        removeReferenceUrl(index)
-                        setDuplicateWarnings((prev) => {
-                          const next = { ...prev }
-                          delete next[index]
-                          return next
-                        })
-                      }}
-                      className='shrink-0'
-                    >
-                      <X className='size-4' />
-                    </Button>
-                  </div>
-                  {/* 重複警告 */}
-                  {duplicateWarnings[index] && (
-                    <div className='mt-1 ml-12 flex items-start gap-1.5 text-xs text-amber-600 bg-amber-50 rounded px-2 py-1.5'>
-                      <AlertTriangle className='size-3.5 shrink-0 mt-0.5' />
-                      <div>
-                        <span className='font-medium'>同じURLが設定されているイベントがあります:</span>
-                        <span className='ml-1'>{duplicateWarnings[index]?.name}</span>
-                      </div>
-                    </div>
-                  )}
+            {referenceUrlFields.map((field, index) => (
+              <div key={field.id}>
+                <div className='flex items-center gap-2'>
+                  <span className='shrink-0 text-sm font-medium w-10'>{REFERENCE_URL_TYPE_LABELS[field.type]}</span>
+                  <Input
+                    type='url'
+                    placeholder='https://twitter.com/...'
+                    {...register(`referenceUrls.${index}.url`)}
+                    onBlur={(e) => checkUrlDuplicate(index, e.target.value)}
+                    className='flex-1'
+                  />
+                  <Button
+                    type='button'
+                    size='icon'
+                    variant='ghost'
+                    onClick={() => {
+                      removeReferenceUrl(index)
+                      setDuplicateWarnings((prev) => {
+                        const next = { ...prev }
+                        delete next[index]
+                        return next
+                      })
+                    }}
+                    className='shrink-0'
+                  >
+                    <X className='size-4' />
+                  </Button>
                 </div>
-              ))}
+                {/* 重複警告 */}
+                {duplicateWarnings[index] && (
+                  <div className='mt-1 ml-12 flex items-start gap-1.5 text-xs text-amber-600 bg-amber-50 rounded px-2 py-1.5'>
+                    <AlertTriangle className='size-3.5 shrink-0 mt-0.5' />
+                    <div>
+                      <span className='font-medium'>同じURLが設定されているイベントがあります:</span>
+                      <span className='ml-1'>{duplicateWarnings[index]?.name}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-        </div>
-
-        {/* ステータスフラグ */}
-        <div className='flex items-center gap-2'>
-          <Checkbox
-            id='is-ended'
-            checked={watch('isEnded')}
-            onCheckedChange={(checked) => setValue('isEnded', checked === true)}
-            className='border-rose-400 data-[state=checked]:bg-rose-500 data-[state=checked]:border-rose-500'
-          />
-          <label htmlFor='is-ended' className='text-sm font-medium'>
-            終了済み
-          </label>
         </div>
 
         {/* ボタン */}
