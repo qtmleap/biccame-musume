@@ -22,9 +22,7 @@ const EventsContent = () => {
           </div>
           {isAuthenticated && (
             <Link to='/admin/events/new'>
-              <Button className='bg-red-500 hover:bg-red-600'>
-                新規作成
-              </Button>
+              <Button className='bg-red-500 hover:bg-red-600'>新規作成</Button>
             </Link>
           )}
         </div>

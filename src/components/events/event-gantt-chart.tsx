@@ -16,13 +16,15 @@ const hideScrollbarStyle = `
 /**
  * カテゴリに応じた色を返す
  */
-const getCategoryColor = (category: AckeyCampaign['category']) => {
+const getCategoryColor = (category: AckeyCampaign['category'], isEnded: boolean) => {
+  if (isEnded) {
+    return 'bg-gray-400 opacity-60'
+  }
   switch (category) {
     case 'limited_card':
       return 'bg-purple-700'
     case 'ackey':
       return 'bg-amber-600'
-    case 'other':
     default:
       return 'bg-pink-600'
   }
@@ -67,6 +69,9 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
     other: 2
   }
 
+  const today = dayjs().startOf('day')
+  const todayOffset = today.diff(chartStartDate, 'day')
+
   // イベントのバー位置を計算（開始日→カテゴリ順でソート）
   const eventBars = useMemo(() => {
     // まずイベントをソート: 開始日 → カテゴリ順
@@ -91,17 +96,18 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       const startOffset = eventStart.diff(chartStartDate, 'day')
       const duration = eventEnd.diff(eventStart, 'day') + 1
 
+      // イベントが終了しているかどうかを判定（actualEndDateがあれば終了、なければisEndedフラグを使用）
+      const isEnded = event.actualEndDate ? true : event.isEnded
+
       return {
         event,
         startOffset: Math.max(0, startOffset),
         duration: Math.min(duration, dates.length - Math.max(0, startOffset)),
-        isOngoing: !event.endDate
+        isOngoing: !event.endDate,
+        isEnded
       }
     })
   }, [events, chartStartDate, dates.length])
-
-  const today = dayjs().startOf('day')
-  const todayOffset = today.diff(chartStartDate, 'day')
 
   // スクロールコンテナのref
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -225,8 +231,9 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         </div>
 
         {/* スクロールエリア: ガントチャート */}
-        <div
+        <section
           ref={scrollContainerRef}
+          aria-label='ガントチャートスクロールエリア'
           className={`gantt-scroll-container overflow-x-auto ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
           style={{
             scrollbarWidth: 'none', // Firefox
@@ -252,115 +259,115 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
               })}
             </div>
 
-          {/* ヘッダー: 日付表示 */}
-          <div className='flex h-6'>
-            {dates.map((date) => {
-              const isToday = date.isSame(today, 'day')
-              const isSunday = date.day() === 0
-              const isSaturday = date.day() === 6
+            {/* ヘッダー: 日付表示 */}
+            <div className='flex h-6'>
+              {dates.map((date) => {
+                const isToday = date.isSame(today, 'day')
+                const isSunday = date.day() === 0
+                const isSaturday = date.day() === 6
+                return (
+                  <div
+                    key={date.format('YYYY-MM-DD')}
+                    className={`w-8 shrink-0 border-b flex items-center justify-center text-xs ${
+                      isToday
+                        ? 'bg-rose-50 font-bold text-rose-600'
+                        : isSunday
+                          ? 'text-rose-500'
+                          : isSaturday
+                            ? 'text-blue-500'
+                            : 'text-gray-600'
+                    }`}
+                  >
+                    {date.format('D')}
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* イベント行 */}
+            {eventBars.map(({ event, startOffset, duration, isOngoing, isEnded }) => {
+              const labelOffset = getLabelOffset(startOffset, duration)
+
               return (
-                <div
-                  key={date.format('YYYY-MM-DD')}
-                  className={`w-8 shrink-0 border-b flex items-center justify-center text-xs ${
-                    isToday
-                      ? 'bg-rose-50 font-bold text-rose-600'
-                      : isSunday
-                        ? 'text-rose-500'
-                        : isSaturday
-                          ? 'text-blue-500'
-                          : 'text-gray-600'
-                  }`}
-                >
-                  {date.format('D')}
+                <div key={event.id} className='relative flex h-10'>
+                  {/* 背景グリッド */}
+                  {dates.map((date) => {
+                    const isToday = date.isSame(today, 'day')
+                    return (
+                      <div
+                        key={date.format('YYYY-MM-DD')}
+                        className={`w-8 shrink-0 border-b ${isToday ? 'bg-rose-50' : ''}`}
+                      />
+                    )
+                  })}
+
+                  {/* バー */}
+                  {duration > 0 && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div
+                          className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category, isEnded)} ${isOngoing ? 'opacity-70' : ''}`}
+                          style={{
+                            left: `${startOffset * 32}px`,
+                            width: `${duration * 32 - 4}px`
+                          }}
+                        >
+                          {/* ラベル（スクロール停止時に表示） */}
+                          <div
+                            className={`absolute inset-y-0 flex items-center gap-1.5 px-2 transition-opacity duration-150 ${isScrolling ? 'opacity-0' : 'opacity-100'}`}
+                            style={{ transform: `translateX(${labelOffset}px)` }}
+                          >
+                            <span className='text-xs text-white font-medium truncate'>{event.name}</span>
+                            {event.stores?.[0] && (
+                              <span className='text-xs text-white/70 shrink-0'>({event.stores[0]})</span>
+                            )}
+                            {event.referenceUrls?.[0]?.url && (
+                              <ExternalLink className='size-3 text-white/70 shrink-0' />
+                            )}
+                          </div>
+
+                          {/* クリック領域 */}
+                          {event.referenceUrls?.[0]?.url && (
+                            <a
+                              href={event.referenceUrls[0].url}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='absolute inset-0 hover:bg-white/10 transition-colors'
+                              onClick={(e) => {
+                                // ドラッグしていた場合はリンクを無効化
+                                if (hasDraggedRef.current) {
+                                  e.preventDefault()
+                                }
+                              }}
+                              draggable={false}
+                            >
+                              <span className='sr-only'>{event.name}の詳細を見る</span>
+                            </a>
+                          )}
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side='top' className='max-w-xs'>
+                        <p className='font-medium'>{event.name}</p>
+                        {event.stores && event.stores.length > 0 && (
+                          <p className='text-xs text-gray-500'>{event.stores.join(', ')}</p>
+                        )}
+                        <p className='text-xs text-gray-500'>
+                          {dayjs(event.startDate).format('M/D')}
+                          {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜'}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
                 </div>
               )
             })}
+
+            {/* イベントがない場合 */}
+            {eventBars.length === 0 && (
+              <div className='py-8 text-center text-gray-500'>表示するイベントがありません</div>
+            )}
           </div>
-
-          {/* イベント行 */}
-          {eventBars.map(({ event, startOffset, duration, isOngoing }) => {
-            const labelOffset = getLabelOffset(startOffset, duration)
-
-            return (
-              <div key={event.id} className='relative flex h-10'>
-                {/* 背景グリッド */}
-                {dates.map((date) => {
-                  const isToday = date.isSame(today, 'day')
-                  return (
-                    <div
-                      key={date.format('YYYY-MM-DD')}
-                      className={`w-8 shrink-0 border-b ${isToday ? 'bg-rose-50' : ''}`}
-                    />
-                  )
-                })}
-
-                {/* バー */}
-                {duration > 0 && (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div
-                        className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category)} ${isOngoing ? 'opacity-70' : ''}`}
-                        style={{
-                          left: `${startOffset * 32}px`,
-                          width: `${duration * 32 - 4}px`
-                        }}
-                      >
-                        {/* ラベル（スクロール停止時に表示） */}
-                        <div
-                          className={`absolute inset-y-0 flex items-center gap-1.5 px-2 transition-opacity duration-150 ${isScrolling ? 'opacity-0' : 'opacity-100'}`}
-                          style={{ transform: `translateX(${labelOffset}px)` }}
-                        >
-                          <span className='text-xs text-white font-medium truncate'>{event.name}</span>
-                          {event.stores?.[0] && (
-                            <span className='text-xs text-white/70 shrink-0'>({event.stores[0]})</span>
-                          )}
-                          {event.referenceUrls?.[0]?.url && (
-                            <ExternalLink className='size-3 text-white/70 shrink-0' />
-                          )}
-                        </div>
-
-                        {/* クリック領域 */}
-                        {event.referenceUrls?.[0]?.url && (
-                          <a
-                            href={event.referenceUrls[0].url}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            className='absolute inset-0 hover:bg-white/10 transition-colors'
-                            onClick={(e) => {
-                              // ドラッグしていた場合はリンクを無効化
-                              if (hasDraggedRef.current) {
-                                e.preventDefault()
-                              }
-                            }}
-                            draggable={false}
-                          />
-                        )}
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent side='top' className='max-w-xs'>
-                      <p className='font-medium'>{event.name}</p>
-                      {event.stores && event.stores.length > 0 && (
-                        <p className='text-xs text-gray-500'>{event.stores.join(', ')}</p>
-                      )}
-                      <p className='text-xs text-gray-500'>
-                        {dayjs(event.startDate).format('M/D')}
-                        {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜'}
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                )}
-              </div>
-            )
-          })}
-
-          {/* イベントがない場合 */}
-          {eventBars.length === 0 && (
-            <div className='py-8 text-center text-gray-500'>
-              表示するイベントがありません
-            </div>
-          )}
-          </div>
-        </div>
+        </section>
       </div>
     </TooltipProvider>
   )
