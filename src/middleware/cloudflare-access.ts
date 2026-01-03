@@ -31,13 +31,7 @@ const getPublicKeys = async (teamDomain: string): Promise<CryptoKey[]> => {
 
   const publicKeys = await Promise.all(
     keys.map((key) =>
-      crypto.subtle.importKey(
-        'jwk',
-        key,
-        { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
-        false,
-        ['verify']
-      )
+      crypto.subtle.importKey('jwk', key, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify'])
     )
   )
 
@@ -128,10 +122,12 @@ export const verifyAccessJwt = async (
  * Cloudflare Access認証ミドルウェア
  * ジェネリクスで任意のBindings型に対応
  */
-export const cloudflareAccessMiddleware = async <T extends AccessBindings>(
-  c: Context<{ Bindings: T }>,
-  next: Next
-) => {
+export const cloudflareAccessMiddleware = async <T extends AccessBindings>(c: Context<{ Bindings: T }>, next: Next) => {
+  // ローカル環境では認証をスキップ
+  if (import.meta.env?.DEV || process.env.NODE_ENV === 'development') {
+    return await next()
+  }
+
   const teamDomain = c.env.CF_ACCESS_TEAM_DOMAIN
   const expectedAud = c.env.CF_ACCESS_AUD
 

@@ -1,5 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { AckeyCampaign, CreateAckeyCampaignRequest, UpdateAckeyCampaignRequest } from '@/schemas/ackey-campaign.dto'
+import type {
+  AckeyCampaign,
+  CreateAckeyCampaignRequest,
+  UpdateAckeyCampaignRequest
+} from '@/schemas/ackey-campaign.dto'
 import { client } from '@/utils/client'
 
 /**

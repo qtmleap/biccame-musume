@@ -2,6 +2,7 @@ import { type RateLimitBinding, type RateLimitKeyFunc, rateLimit } from '@elithr
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
+import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
 import {
   type AckeyCampaign,
   AckeyCampaignSchema,
@@ -9,7 +10,6 @@ import {
   type ReferenceUrl,
   UpdateAckeyCampaignRequestSchema
 } from '../schemas/ackey-campaign.dto'
-import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
 
 type Bindings = {
   BICCAME_MUSUME_EVENTS: KVNamespace
@@ -102,10 +102,16 @@ routes.openapi(createEventRoute, async (c) => {
 
   // 新しいイベントを作成
   const now = new Date().toISOString()
+  const nowDate = new Date()
+
+  // isEndedを自動計算
+  const isEnded = !!result.data.actualEndDate || (!!result.data.endDate && new Date(result.data.endDate) < nowDate)
+
   const newEvent = {
     id: crypto.randomUUID(),
     ...result.data,
     startDate: result.data.startDate || now,
+    isEnded,
     createdAt: now,
     updatedAt: now
   }
@@ -271,6 +277,21 @@ routes.openapi(updateEventRoute, async (c) => {
     ...body,
     updatedAt: new Date().toISOString()
   }
+
+  // bodyにendDateが含まれていない場合は削除
+  if (!('endDate' in body)) {
+    delete updatedEvent.endDate
+  }
+
+  // bodyにactualEndDateが含まれていない場合は削除
+  if (!('actualEndDate' in body)) {
+    delete updatedEvent.actualEndDate
+  }
+
+  // isEndedを自動計算: actualEndDateがあるか、endDateが現在より過去なら終了
+  const now = new Date()
+  updatedEvent.isEnded =
+    !!updatedEvent.actualEndDate || (!!updatedEvent.endDate && new Date(updatedEvent.endDate) < now)
 
   events[eventIndex] = updatedEvent
 

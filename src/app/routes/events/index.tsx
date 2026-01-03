@@ -72,7 +72,6 @@ const EventsContent = () => {
     const now = dayjs()
     return events
       .filter((event) => {
-        if (event.isEnded) return false
         // カテゴリフィルター
         if (!categoryFilter.has(event.category)) return false
 
@@ -91,11 +90,20 @@ const EventsContent = () => {
 
         const startDate = dayjs(event.startDate)
         const endDate = event.endDate ? dayjs(event.endDate) : null
+
+        // 終了後1週間経過したイベントは非表示
+        if (endDate?.add(7, 'day').isBefore(now)) {
+          return false
+        }
+
         // 開催中: 開始日が現在以前で、終了日がないか終了日が現在以降
         const isOngoing = startDate.isBefore(now) && (!endDate || endDate.isAfter(now))
         // 開催予定: 開始日が現在以降
         const isUpcoming = startDate.isAfter(now)
-        return isOngoing || isUpcoming
+        // 終了後1週間以内: 終了日があり、終了日から1週間以内
+        const isRecentlyEnded = endDate?.isBefore(now) && endDate.add(7, 'day').isAfter(now)
+
+        return isOngoing || isUpcoming || isRecentlyEnded
       })
       .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
   }, [events, categoryFilter, regionFilter, storePrefectureMap])
@@ -132,14 +140,17 @@ const EventsContent = () => {
         </div>
         <div className='flex flex-wrap gap-4 text-sm'>
           {(['ackey', 'limited_card', 'other'] as const).map((category) => (
-            <label key={category} className='flex items-center gap-2 cursor-pointer'>
+            <div key={category} className='flex items-center gap-2'>
               <Checkbox
+                id={`category-${category}`}
                 checked={categoryFilter.has(category)}
                 onCheckedChange={() => toggleCategory(category)}
                 className={CATEGORY_CHECKBOX_COLORS[category]}
               />
-              <span>{CATEGORY_LABELS[category]}</span>
-            </label>
+              <label htmlFor={`category-${category}`} className='cursor-pointer'>
+                {CATEGORY_LABELS[category]}
+              </label>
+            </div>
           ))}
         </div>
       </div>
