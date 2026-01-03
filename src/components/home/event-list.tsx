@@ -22,7 +22,6 @@ const getCategoryStyle = (category: EventCategory | undefined) => {
         icon: <KeyRound className='size-4' />,
         className: 'bg-amber-100 text-amber-600'
       }
-    case 'other':
     default:
       return {
         icon: <Gift className='size-4' />,
@@ -34,7 +33,8 @@ const getCategoryStyle = (category: EventCategory | undefined) => {
 /**
  * 日数に応じたラベルを返す
  */
-const getDaysLabel = (days: number, isStarted: boolean) => {
+const getDaysLabel = (days: number, isStarted: boolean, isEnded: boolean) => {
+  if (isEnded) return '終了'
   if (isStarted || days === 0) return '開催中'
   if (days === 1) return '明日'
   return `${days}日後`
@@ -47,14 +47,17 @@ const getDaysLabel = (days: number, isStarted: boolean) => {
 export const EventList = () => {
   const { data: events = [], isLoading } = useEvents()
 
-  // 開催中および開催一週間前のイベントをフィルタリングし、開始日時・カテゴリ・店舗順でソート
+  // 開催中および開催一週間前のイベント、終了後1週間以内のイベントをフィルタリングし、開始日時・カテゴリ・店舗順でソート
   const upcomingEvents = orderBy(
     events.filter((event) => {
-      if (event.isEnded) return false
-
       const now = dayjs()
       const startDate = dayjs(event.startDate)
       const endDate = event.endDate ? dayjs(event.endDate) : null
+
+      // 終了後1週間経過したイベントは非表示
+      if (endDate?.add(7, 'day').isBefore(now)) {
+        return false
+      }
 
       // 開催中のイベント
       if (now.isAfter(startDate) && (!endDate || now.isBefore(endDate))) {
@@ -67,13 +70,14 @@ export const EventList = () => {
         return true
       }
 
+      // 終了後1週間以内のイベント
+      if (endDate?.isBefore(now) && endDate.add(7, 'day').isAfter(now)) {
+        return true
+      }
+
       return false
     }),
-    [
-      (e) => dayjs(e.startDate).valueOf(),
-      (e) => e.category,
-      (e) => e.stores?.[0] || ''
-    ],
+    [(e) => dayjs(e.startDate).valueOf(), (e) => e.category, (e) => e.stores?.[0] || ''],
     ['asc', 'asc', 'asc']
   )
 
@@ -95,6 +99,7 @@ export const EventList = () => {
               const now = dayjs()
               const startDate = dayjs(event.startDate)
               const isStarted = now.isAfter(startDate)
+              const isEnded = event.actualEndDate ? true : event.isEnded
               const daysUntil = startDate.diff(now, 'day')
 
               return (
@@ -114,7 +119,9 @@ export const EventList = () => {
                     href={event.referenceUrls?.[0]?.url || '#'}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer'
+                    className={`flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer ${
+                      isEnded ? 'opacity-60' : ''
+                    }`}
                   >
                     <div className={`shrink-0 p-2 rounded-lg ${getCategoryStyle(event.category).className}`}>
                       {getCategoryStyle(event.category).icon}
@@ -140,7 +147,9 @@ export const EventList = () => {
                           </span>
                         )}
                       </div>
-                      {event.conditions.some((c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery') && (
+                      {event.conditions.some(
+                        (c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery'
+                      ) && (
                         <div className='mt-1 flex flex-wrap gap-1'>
                           {event.conditions.map((condition) => {
                             if (condition.type === 'everyone') return null
@@ -159,16 +168,18 @@ export const EventList = () => {
 
                     <div
                       className={`text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
-                        isStarted
-                          ? 'bg-[#e50012] text-white'
-                          : daysUntil === 0
+                        isEnded
+                          ? 'bg-gray-400 text-white'
+                          : isStarted
                             ? 'bg-[#e50012] text-white'
-                            : daysUntil <= 7
-                              ? 'bg-orange-100 text-orange-600'
-                              : 'bg-gray-100 text-gray-600'
+                            : daysUntil === 0
+                              ? 'bg-[#e50012] text-white'
+                              : daysUntil <= 7
+                                ? 'bg-orange-100 text-orange-600'
+                                : 'bg-gray-100 text-gray-600'
                       }`}
                     >
-                      {getDaysLabel(daysUntil, isStarted)}
+                      {getDaysLabel(daysUntil, isStarted, isEnded)}
                     </div>
                   </a>
                 </motion.div>

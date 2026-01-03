@@ -79,11 +79,13 @@ export const AckeyCampaignSchema = z.object({
   limitedQuantity: z.number().min(1).optional(),
   // 開始日時
   startDate: z.string().datetime(),
-  // 終了日時（任意）
+  // 終了予定日時（任意）
   endDate: z.string().datetime().optional(),
+  // 実際の終了日時（任意、配布が終了した実際の日時）
+  actualEndDate: z.string().datetime().optional(),
   // 配布条件
   conditions: z.array(AckeyCampaignConditionSchema).min(1, '最低1つの条件を設定してください'),
-  // 終了済みかどうか
+  // 終了済みかどうか（actualEndDateがある場合は自動的にtrue）
   isEnded: z.boolean().default(false),
   // 作成日時
   createdAt: z.string().datetime(),

@@ -1,13 +1,24 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
 import { orderBy } from 'lodash-es'
 import { Calendar, ExternalLink, Package, Pencil, Store, Trash2, Users } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { eventListActiveTabAtom, eventListPagesAtom } from '@/atoms/eventListAtom'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious
+} from '@/components/ui/pagination'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
+import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
 import type { AckeyCampaign, AckeyCampaignCondition } from '@/schemas/ackey-campaign.dto'
 import { REFERENCE_URL_TYPE_LABELS } from '@/schemas/ackey-campaign.dto'
 
@@ -173,7 +184,12 @@ const CampaignCard = ({
                 編集
               </Button>
             </Link>
-            <Button size='sm' variant='outline' onClick={() => onDelete(campaign.id)} className='h-7 text-xs text-destructive hover:bg-destructive/10'>
+            <Button
+              size='sm'
+              variant='outline'
+              onClick={() => onDelete(campaign.id)}
+              className='h-7 text-xs text-destructive hover:bg-destructive/10'
+            >
               <Trash2 className='mr-1 size-3' />
               削除
             </Button>
@@ -191,21 +207,32 @@ export const EventList = () => {
   const { data: campaigns = [], isLoading, error } = useEvents()
   const deleteEvent = useDeleteEvent()
   const { isAuthenticated } = useCloudflareAccess()
-  const [activeTab, setActiveTab] = useState<AckeyCampaign['category']>('limited_card')
+  const [activeTab, setActiveTab] = useAtom(eventListActiveTabAtom)
+  const [pages, setPages] = useAtom(eventListPagesAtom)
+  const itemsPerPage = 5
+
+  const currentPage = pages[activeTab]
+
+  const setCurrentPage = (page: number) => {
+    setPages((prev) => ({ ...prev, [activeTab]: page }))
+  }
 
   // カテゴリ別にフィルタリングし、開始日時・カテゴリ・店舗順でソート
   const filteredCampaigns = useMemo(() => {
     const filtered = campaigns.filter((campaign) => campaign.category === activeTab)
     return orderBy(
       filtered,
-      [
-        (c) => dayjs(c.startDate).valueOf(),
-        (c) => c.category,
-        (c) => c.stores?.[0] || ''
-      ],
+      [(c) => dayjs(c.startDate).valueOf(), (c) => c.category, (c) => c.stores?.[0] || ''],
       ['asc', 'asc', 'asc']
     )
   }, [campaigns, activeTab])
+
+  // ページネーション処理
+  const totalPages = Math.ceil(filteredCampaigns.length / itemsPerPage)
+  const paginatedCampaigns = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    return filteredCampaigns.slice(startIndex, startIndex + itemsPerPage)
+  }, [filteredCampaigns, currentPage])
 
   // 各カテゴリのイベント数
   const categoryCounts = useMemo(() => {
@@ -271,11 +298,81 @@ export const EventList = () => {
               <p className='text-sm text-muted-foreground'>{CATEGORY_LABELS[category]}のイベントはありません</p>
             </div>
           ) : (
-            <div className='space-y-2.5'>
-              {filteredCampaigns.map((campaign) => (
-                <CampaignCard key={campaign.id} campaign={campaign} onDelete={handleDelete} isAuthenticated={isAuthenticated} />
-              ))}
-            </div>
+            <>
+              <div className='space-y-2.5'>
+                {paginatedCampaigns.map((campaign) => (
+                  <CampaignCard
+                    key={campaign.id}
+                    campaign={campaign}
+                    onDelete={handleDelete}
+                    isAuthenticated={isAuthenticated}
+                  />
+                ))}
+              </div>
+
+              {/* ページネーション */}
+              {totalPages > 1 && (
+                <div className='mt-6'>
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious
+                          size='default'
+                          href='#'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            if (currentPage > 1) setCurrentPage(currentPage - 1)
+                          }}
+                          className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                        />
+                      </PaginationItem>
+
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                        // 最初と最後のページ、現在のページの前後1ページを表示
+                        if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
+                          return (
+                            <PaginationItem key={page}>
+                              <PaginationLink
+                                size='icon'
+                                href='#'
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  setCurrentPage(page)
+                                }}
+                                isActive={currentPage === page}
+                              >
+                                {page}
+                              </PaginationLink>
+                            </PaginationItem>
+                          )
+                        }
+                        // 省略記号を表示
+                        if (page === currentPage - 2 || page === currentPage + 2) {
+                          return (
+                            <PaginationItem key={page}>
+                              <PaginationEllipsis />
+                            </PaginationItem>
+                          )
+                        }
+                        return null
+                      })}
+
+                      <PaginationItem>
+                        <PaginationNext
+                          size='default'
+                          href='#'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            if (currentPage < totalPages) setCurrentPage(currentPage + 1)
+                          }}
+                          className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
+            </>
           )}
         </TabsContent>
       ))}
