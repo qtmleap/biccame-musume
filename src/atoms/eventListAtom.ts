@@ -11,6 +11,7 @@ export const eventListActiveTabAtom = atom<AckeyCampaign['category']>('limited_c
  */
 export const eventListPagesAtom = atom<Record<AckeyCampaign['category'], number>>({
   limited_card: 1,
+  regular_card: 1,
   ackey: 1,
   other: 1
 })
