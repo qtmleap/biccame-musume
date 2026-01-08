@@ -160,7 +160,7 @@ const EventDetailContent = () => {
                     ) : (
                       <span className='text-gray-900'>{storeName}</span>
                     )}
-                    {index < event.stores?.length - 1 && <span className='text-gray-900'>、</span>}
+                    {index < (event.stores?.length ?? 0) - 1 && <span className='text-gray-900'>、</span>}
                   </span>
                 )
               })}
