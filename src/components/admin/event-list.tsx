@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { orderBy } from 'lodash-es'
 import { Calendar, ExternalLink, Package, Pencil, Store, Trash2, Users } from 'lucide-react'
+import { motion } from 'motion/react'
 import { useMemo } from 'react'
 import { eventListActiveTabAtom, eventListPagesAtom } from '@/atoms/eventListAtom'
 import { Badge } from '@/components/ui/badge'
@@ -16,7 +17,7 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
 import type { AckeyCampaign, AckeyCampaignCondition } from '@/schemas/ackey-campaign.dto'
@@ -27,6 +28,7 @@ import { REFERENCE_URL_TYPE_LABELS } from '@/schemas/ackey-campaign.dto'
  */
 const CATEGORY_LABELS: Record<AckeyCampaign['category'], string> = {
   limited_card: '限定名刺',
+  regular_card: '通年名刺',
   ackey: 'アクキー',
   other: 'その他'
 }
@@ -238,6 +240,7 @@ export const EventList = () => {
   const categoryCounts = useMemo(() => {
     return {
       limited_card: campaigns.filter((c) => c.category === 'limited_card').length,
+      regular_card: campaigns.filter((c) => c.category === 'regular_card').length,
       ackey: campaigns.filter((c) => c.category === 'ackey').length,
       other: campaigns.filter((c) => c.category === 'other').length
     }
@@ -282,16 +285,32 @@ export const EventList = () => {
 
   return (
     <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AckeyCampaign['category'])}>
-      <TabsList className='mb-4 w-full bg-gray-200'>
-        {(['limited_card', 'ackey', 'other'] as const).map((category) => (
-          <TabsTrigger key={category} value={category} className='flex-1 data-[state=active]:bg-white'>
-            {CATEGORY_LABELS[category]}
-            <span className='ml-1.5 text-xs text-muted-foreground'>({categoryCounts[category]})</span>
-          </TabsTrigger>
-        ))}
-      </TabsList>
+      <div className='mb-4 relative bg-gray-200 rounded-lg p-1'>
+        <div className='flex relative'>
+          {(['limited_card', 'regular_card', 'ackey', 'other'] as const).map((category) => (
+            <button
+              key={category}
+              type='button'
+              onClick={() => setActiveTab(category)}
+              className='relative flex-1 py-2 text-sm font-medium text-center z-10 transition-colors'
+            >
+              <span className={activeTab === category ? 'text-gray-900' : 'text-gray-600'}>
+                {CATEGORY_LABELS[category]}
+                <span className='ml-1.5 text-xs text-muted-foreground'>({categoryCounts[category]})</span>
+              </span>
+              {activeTab === category && (
+                <motion.div
+                  layoutId='activeTab'
+                  className='absolute inset-0 bg-white rounded-md shadow-sm -z-10'
+                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
 
-      {(['limited_card', 'ackey', 'other'] as const).map((category) => (
+      {(['limited_card', 'regular_card', 'ackey', 'other'] as const).map((category) => (
         <TabsContent key={category} value={category}>
           {filteredCampaigns.length === 0 ? (
             <div className='rounded-lg border p-6 text-center'>

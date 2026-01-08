@@ -18,6 +18,7 @@ import type { AckeyCampaign } from '@/schemas/ackey-campaign.dto'
 const CATEGORY_LABELS: Record<AckeyCampaign['category'], string> = {
   ackey: 'アクキー',
   limited_card: '限定名刺',
+  regular_card: '通年名刺',
   other: 'その他'
 }
 
@@ -27,6 +28,7 @@ const CATEGORY_LABELS: Record<AckeyCampaign['category'], string> = {
 const CATEGORY_CHECKBOX_COLORS: Record<AckeyCampaign['category'], string> = {
   ackey: 'border-amber-500 data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500',
   limited_card: 'border-purple-500 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500',
+  regular_card: 'border-blue-500 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500',
   other: 'border-pink-500 data-[state=checked]:bg-pink-500 data-[state=checked]:border-pink-500'
 }
 
@@ -37,7 +39,7 @@ const EventsContent = () => {
   const { data: events = [], isLoading } = useEvents()
   const { data: characters } = useCharacters()
   const [categoryFilter, setCategoryFilter] = useState<Set<AckeyCampaign['category']>>(
-    new Set(['ackey', 'limited_card', 'other'])
+    new Set(['ackey', 'limited_card', 'regular_card', 'other'])
   )
   const regionFilter = useAtomValue(regionFilterAtom)
 

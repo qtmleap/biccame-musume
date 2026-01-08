@@ -5,6 +5,7 @@ import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getCharacterImageUrl } from '@/lib/utils'
 import type { Character } from '@/schemas/character.dto'
+import { getDisplayName } from '@/utils/character'
 
 type UpcomingEvent = {
   character: Character
@@ -25,13 +26,6 @@ const getDaysLabel = (days: number) => {
   if (days === 0) return '今日'
   if (days === 1) return '明日'
   return `${days}日後`
-}
-
-/**
- * 名前がスラッシュで区切られている場合、最初の部分のみ返す
- */
-const getDisplayName = (name: string) => {
-  return name.split('/')[0].trim()
 }
 
 /**
