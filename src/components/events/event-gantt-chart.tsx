@@ -116,14 +116,25 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       const isPastEndDate = event.endDate ? now.isAfter(dayjs(event.endDate)) : false
       const isEnded = event.actualEndDate ? true : isPastEndDate || hasEndUrl || event.isEnded
 
+      // 終了日がチャート開始日より前なら表示しない
+      if (eventEnd.isBefore(chartStartDate)) {
+        return null
+      }
+
+      // チャート開始より前に始まったイベントは、その分durationを短くする
+      const clippedStartOffset = Math.max(0, startOffset)
+      const clippedDuration = startOffset < 0
+        ? Math.min(duration + startOffset, dates.length)
+        : Math.min(duration, dates.length - clippedStartOffset)
+
       return {
         event,
-        startOffset: Math.max(0, startOffset),
-        duration: Math.min(duration, dates.length - Math.max(0, startOffset)),
+        startOffset: clippedStartOffset,
+        duration: clippedDuration,
         isOngoing: !event.endDate,
         isEnded
       }
-    })
+    }).filter((bar) => bar !== null)
   }, [events, chartStartDate, dates.length])
 
   // 終了イベントのフィルタリング
@@ -351,7 +362,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <div
-                          className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category, isEnded)} ${isOngoing ? 'opacity-70' : ''}`}
+                          className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category, isEnded)}`}
                           style={{
                             left: `${startOffset * 32}px`,
                             width: `${duration * 32 - 4}px`
