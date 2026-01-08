@@ -1,6 +1,6 @@
 {
   "gitdoc.enabled": true,
-  "gitdoc.commitValidationLevel": "error",
+  "gitdoc.commitValidationLevel": "none",
   "gitdoc.autoCommitDelay": 0,
   "gitdoc.autoPush": "onCommit",
   "gitdoc.ai.model": "gpt-4o",

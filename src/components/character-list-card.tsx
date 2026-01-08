@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { Character } from '@/schemas/character.dto'
+import { getDisplayName } from '@/utils/character'
 
 type CharacterListCardProps = {
   character: Character
@@ -39,17 +40,20 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
             }`}
           >
             <div className='flex items-center gap-3'>
-              <Avatar className={`h-16 w-16 border-2 ${isGraduated ? 'border-gray-400' : 'border-pink-400'}`}>
+              <Avatar className='h-16 w-16'>
                 <AvatarImage
                   src={character.image_urls?.[1] || character.image_urls?.[0]}
                   alt={character.character_name}
+                  className='mix-blend-multiply'
                 />
                 <AvatarFallback className={isGraduated ? 'bg-gray-200 text-gray-600' : 'bg-pink-100 text-pink-700'}>
                   {character.character_name[0]}
                 </AvatarFallback>
               </Avatar>
               <div className='flex-1 min-w-0'>
-                <h3 className='text-lg font-semibold mb-2 truncate text-gray-800'>{character.character_name}</h3>
+                <h3 className='text-lg font-semibold mb-2 truncate text-gray-800'>
+                  {getDisplayName(character.character_name)}
+                </h3>
                 <div className='flex items-center gap-2 min-h-6 flex-wrap'>
                   {character.prefecture && (
                     <Badge variant='secondary' className='text-xs bg-blue-100 text-blue-700 border-blue-200'>

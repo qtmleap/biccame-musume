@@ -2,6 +2,7 @@ import { MapPin } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getCharacterImageUrl } from '@/lib/utils'
 import type { Character } from '@/schemas/character.dto'
+import { getDisplayName } from '@/utils/character'
 
 type StoreListItemProps = {
   character: Character
@@ -29,7 +30,9 @@ export const StoreListItem = ({ character }: StoreListItemProps) => {
 
       {/* 店舗情報 */}
       <div className='flex-1 min-w-0'>
-        <h3 className='font-semibold text-sm text-gray-900 dark:text-gray-100 truncate'>{character.character_name}</h3>
+        <h3 className='font-semibold text-sm text-gray-900 dark:text-gray-100 truncate'>
+          {getDisplayName(character.character_name)}
+        </h3>
         {character.address && <p className='text-xs text-gray-600 dark:text-gray-400 truncate'>{character.address}</p>}
       </div>
     </div>

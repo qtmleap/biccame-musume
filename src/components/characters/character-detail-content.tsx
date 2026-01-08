@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import type { Character } from '@/schemas/character.dto'
 import { formatDate } from '@/utils/calendar'
+import { getDisplayName } from '@/utils/character'
 
 type CharacterDetailContentProps = {
   character: Character
@@ -66,7 +67,9 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
           >
             <div className='flex items-start justify-between gap-2'>
               <div className='min-w-0 flex-1'>
-                <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 truncate'>{character.character_name}</h1>
+                <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 truncate'>
+                  {getDisplayName(character.character_name)}
+                </h1>
                 <p className='text-lg text-pink-600 font-medium truncate'>{character.store_name}</p>
               </div>
               <div className='shrink-0 flex flex-col gap-2'>

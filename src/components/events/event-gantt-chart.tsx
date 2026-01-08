@@ -1,6 +1,10 @@
+import { Link } from '@tanstack/react-router'
 import dayjs, { type Dayjs } from 'dayjs'
 import { ExternalLink } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import type { AckeyCampaign } from '@/schemas/ackey-campaign.dto'
 
@@ -23,6 +27,8 @@ const getCategoryColor = (category: AckeyCampaign['category'], isEnded: boolean)
   switch (category) {
     case 'limited_card':
       return 'bg-purple-700'
+    case 'regular_card':
+      return 'bg-blue-600'
     case 'ackey':
       return 'bg-amber-600'
     default:
@@ -51,6 +57,9 @@ type EventGanttChartProps = {
  * カスタムガントチャートコンポーネント
  */
 export const EventGanttChart = ({ events }: EventGanttChartProps) => {
+  // 終了したイベントを表示するかどうか
+  const [showEnded, setShowEnded] = useState(false)
+
   // 表示する日付範囲を計算（今日から30日後まで）
   const { dates, chartStartDate } = useMemo(() => {
     const today = dayjs().startOf('day')
@@ -65,8 +74,9 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   // カテゴリの優先順位
   const categoryOrder: Record<AckeyCampaign['category'], number> = {
     limited_card: 0,
-    ackey: 1,
-    other: 2
+    regular_card: 1,
+    ackey: 2,
+    other: 3
   }
 
   const today = dayjs().startOf('day')
@@ -96,8 +106,15 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       const startOffset = eventStart.diff(chartStartDate, 'day')
       const duration = eventEnd.diff(eventStart, 'day') + 1
 
-      // イベントが終了しているかどうかを判定（actualEndDateがあれば終了、なければisEndedフラグを使用）
-      const isEnded = event.actualEndDate ? true : event.isEnded
+      // イベントが終了しているかどうかを判定
+      // 1. actualEndDateがある
+      // 2. endDateを過ぎている
+      // 3. 終了URLが入力されている
+      // 4. isEndedフラグがtrue
+      const now = dayjs()
+      const hasEndUrl = event.referenceUrls?.some((ref) => ref.type === 'end') ?? false
+      const isPastEndDate = event.endDate ? now.isAfter(dayjs(event.endDate)) : false
+      const isEnded = event.actualEndDate ? true : isPastEndDate || hasEndUrl || event.isEnded
 
       return {
         event,
@@ -108,6 +125,12 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       }
     })
   }, [events, chartStartDate, dates.length])
+
+  // 終了イベントのフィルタリング
+  const filteredEventBars = useMemo(() => {
+    if (showEnded) return eventBars
+    return eventBars.filter((bar) => !bar.isEnded)
+  }, [eventBars, showEnded])
 
   // スクロールコンテナのref
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -225,9 +248,22 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       {/* Chrome/Safari用スクロールバー非表示スタイル */}
       <style>{hideScrollbarStyle}</style>
       <div className='relative'>
-        {/* 固定月表示 */}
-        <div className='absolute top-0 left-0 z-10 h-5 px-1 flex items-center text-xs font-medium text-gray-700 pointer-events-none'>
-          {currentVisibleMonth}
+        {/* ヘッダー: 月表示とフィルタ */}
+        <div className='flex items-center justify-between mb-2'>
+          <div className='h-5 px-1 flex items-center text-xs font-medium text-gray-700'>
+            {currentVisibleMonth}
+          </div>
+          <div className='flex items-center gap-2'>
+            <Checkbox
+              id='show-ended'
+              checked={showEnded}
+              onCheckedChange={(checked) => setShowEnded(checked === true)}
+              className='border-gray-400 data-[state=checked]:bg-gray-400 data-[state=checked]:border-gray-400'
+            />
+            <Label htmlFor='show-ended' className='text-xs text-gray-600 cursor-pointer'>
+              終了したイベントを表示
+            </Label>
+          </div>
         </div>
 
         {/* スクロールエリア: ガントチャート */}
@@ -285,21 +321,30 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
             </div>
 
             {/* イベント行 */}
-            {eventBars.map(({ event, startOffset, duration, isOngoing, isEnded }) => {
-              const labelOffset = getLabelOffset(startOffset, duration)
+            <AnimatePresence mode='popLayout'>
+              {filteredEventBars.map(({ event, startOffset, duration, isOngoing, isEnded }) => {
+                const labelOffset = getLabelOffset(startOffset, duration)
 
-              return (
-                <div key={event.id} className='relative flex h-10'>
-                  {/* 背景グリッド */}
-                  {dates.map((date) => {
-                    const isToday = date.isSame(today, 'day')
-                    return (
-                      <div
-                        key={date.format('YYYY-MM-DD')}
-                        className={`w-8 shrink-0 border-b ${isToday ? 'bg-rose-50' : ''}`}
-                      />
-                    )
-                  })}
+                return (
+                  <motion.div
+                    key={event.id}
+                    layout
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 40 }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className='relative flex'
+                  >
+                    {/* 背景グリッド */}
+                    {dates.map((date) => {
+                      const isToday = date.isSame(today, 'day')
+                      return (
+                        <div
+                          key={date.format('YYYY-MM-DD')}
+                          className={`w-8 shrink-0 border-b ${isToday ? 'bg-rose-50' : ''}`}
+                        />
+                      )
+                    })}
 
                   {/* バー */}
                   {duration > 0 && (
@@ -321,29 +366,24 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                             {event.stores?.[0] && (
                               <span className='text-xs text-white/70 shrink-0'>({event.stores[0]})</span>
                             )}
-                            {event.referenceUrls?.[0]?.url && (
-                              <ExternalLink className='size-3 text-white/70 shrink-0' />
-                            )}
+                            <ExternalLink className='size-3 text-white/70 shrink-0' />
                           </div>
 
                           {/* クリック領域 */}
-                          {event.referenceUrls?.[0]?.url && (
-                            <a
-                              href={event.referenceUrls[0].url}
-                              target='_blank'
-                              rel='noopener noreferrer'
-                              className='absolute inset-0 hover:bg-white/10 transition-colors'
-                              onClick={(e) => {
-                                // ドラッグしていた場合はリンクを無効化
-                                if (hasDraggedRef.current) {
-                                  e.preventDefault()
-                                }
-                              }}
-                              draggable={false}
-                            >
-                              <span className='sr-only'>{event.name}の詳細を見る</span>
-                            </a>
-                          )}
+                          <Link
+                            to='/events/$eventId'
+                            params={{ eventId: event.id }}
+                            className='absolute inset-0 hover:bg-white/10 transition-colors'
+                            onClick={(e) => {
+                              // ドラッグしていた場合はリンクを無効化
+                              if (hasDraggedRef.current) {
+                                e.preventDefault()
+                              }
+                            }}
+                            draggable={false}
+                          >
+                            <span className='sr-only'>{event.name}の詳細を見る</span>
+                          </Link>
                         </div>
                       </TooltipTrigger>
                       <TooltipContent side='top' className='max-w-xs'>
@@ -353,14 +393,15 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                         )}
                         <p className='text-xs text-gray-500'>
                           {dayjs(event.startDate).format('M/D')}
-                          {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜'}
+                          {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜なくなり次第終了'}
                         </p>
                       </TooltipContent>
                     </Tooltip>
                   )}
-                </div>
+                </motion.div>
               )
             })}
+            </AnimatePresence>
 
             {/* イベントがない場合 */}
             {eventBars.length === 0 && (

@@ -5,6 +5,9 @@
   "workspaceFolder": "/home/vscode/app",
   "shutdownAction": "stopCompose",
   "remoteUser": "vscode",
+  "mounts": [
+    "source=${localEnv:HOME}/.gnupg,target=/home/vscode/.gnupg,type=bind,consistency=cached"
+  ],
   "features": {
     "ghcr.io/devcontainers/features/git:1": {
       "version": "2.52.0"

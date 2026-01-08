@@ -1,6 +1,7 @@
 import { ExternalLink, MapPin } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { Character } from '@/schemas/character.dto'
+import { getDisplayName } from '@/utils/character'
 
 type SelectedStoreInfoProps = {
   character: Character
@@ -21,7 +22,9 @@ export const SelectedStoreInfo = ({ character }: SelectedStoreInfoProps) => {
       {/* 店舗情報 */}
       <div className='flex-1 min-w-0 space-y-1.5'>
         <div>
-          <h3 className='text-sm font-semibold text-gray-800 dark:text-gray-100'>{character.character_name}</h3>
+          <h3 className='text-sm font-semibold text-gray-800 dark:text-gray-100'>
+            {getDisplayName(character.character_name)}
+          </h3>
         </div>
 
         {/* 住所情報 */}

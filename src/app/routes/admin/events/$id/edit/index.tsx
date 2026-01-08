@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
 import { EventForm } from '@/components/admin/event-form'
@@ -11,7 +11,7 @@ import { useEvents } from '@/hooks/useEvents'
  */
 const EditEventContent = () => {
   const { id } = Route.useParams()
-  const navigate = useNavigate()
+  const router = useRouter()
   const { data: events = [] } = useEvents()
   const event = events.find((e) => e.id === id)
 
@@ -19,7 +19,7 @@ const EditEventContent = () => {
   console.log('EditEventContent - event.category:', event?.category)
 
   const handleSuccess = () => {
-    navigate({ to: '/admin/events' })
+    router.history.back()
   }
 
   if (!event) {
@@ -34,12 +34,10 @@ const EditEventContent = () => {
     <div className='container mx-auto max-w-4xl px-4 py-6 md:py-8'>
       {/* ヘッダー */}
       <div className='mb-6 md:mb-8'>
-        <Link to='/admin/events'>
-          <Button variant='ghost' size='sm' className='mb-4'>
-            <ArrowLeft className='mr-2 size-4' />
-            一覧に戻る
-          </Button>
-        </Link>
+        <Button variant='ghost' size='sm' className='mb-4' onClick={() => router.history.back()}>
+          <ArrowLeft className='mr-2 size-4' />
+          戻る
+        </Button>
         <h1 className='text-2xl font-bold text-gray-900 md:text-3xl'>イベント編集</h1>
         <p className='mt-2 text-sm text-gray-600 md:text-base'>イベント情報を編集</p>
       </div>
