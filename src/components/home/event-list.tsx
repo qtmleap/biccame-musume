@@ -17,6 +17,11 @@ const getCategoryStyle = (category: EventCategory | undefined) => {
         icon: <CreditCard className='size-4' />,
         className: 'bg-purple-100 text-purple-600'
       }
+    case 'regular_card':
+      return {
+        icon: <CreditCard className='size-4' />,
+        className: 'bg-blue-100 text-blue-600'
+      }
     case 'ackey':
       return {
         icon: <KeyRound className='size-4' />,
@@ -99,7 +104,12 @@ export const EventList = () => {
               const now = dayjs()
               const startDate = dayjs(event.startDate)
               const isStarted = now.isAfter(startDate)
-              const isEnded = event.actualEndDate ? true : event.isEnded
+              const endDate = event.actualEndDate
+                ? dayjs(event.actualEndDate)
+                : event.endDate
+                  ? dayjs(event.endDate)
+                  : null
+              const isEnded = endDate ? now.isAfter(endDate) : event.isEnded
               const daysUntil = startDate.diff(now, 'day')
 
               return (

@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import type { Character } from '@/schemas/character.dto'
+import { getDisplayName } from '@/utils/character'
 
 type CharacterCardProps = {
   character: Character
@@ -36,7 +37,7 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
               <AvatarFallback className='bg-pink-100 text-pink-700'>{character.character_name[0]}</AvatarFallback>
             </Avatar>
             <div className='flex-1 min-w-0'>
-              <CardTitle className='text-xl mb-1 text-gray-800'>{character.character_name}</CardTitle>
+              <CardTitle className='text-xl mb-1 text-gray-800'>{getDisplayName(character.character_name)}</CardTitle>
               <CardDescription className='flex items-center gap-1 text-gray-600'>
                 <Store className='h-3 w-3' />
                 {character.store_name}

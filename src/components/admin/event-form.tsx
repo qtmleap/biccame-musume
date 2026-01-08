@@ -102,7 +102,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
         }
   })
 
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'conditions'
   })
@@ -201,8 +201,7 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
    * 条件を更新（先着・抽選の人数変更時に限定数も更新）
    */
   const handleUpdateQuantity = (index: number, quantity: number) => {
-    const current = fields[index]
-    update(index, { ...current, quantity })
+    setValue(`conditions.${index}.quantity`, quantity)
     setValue('limitedQuantity', quantity)
   }
 
@@ -549,8 +548,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
                         <Input
                           type='number'
                           min='1'
-                          defaultValue={field.quantity || 1}
-                          onChange={(e) => handleUpdateQuantity(index, Number.parseInt(e.target.value, 10))}
+                          {...register(`conditions.${index}.quantity`, { valueAsNumber: true })}
+                          onChange={(e) => handleUpdateQuantity(index, Number.parseInt(e.target.value, 10) || 1)}
                           className='w-full'
                         />
                         <span className='shrink-0 text-sm text-muted-foreground'>名</span>
@@ -562,8 +561,8 @@ export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSucce
                         <Input
                           type='number'
                           min='1'
-                          defaultValue={field.quantity || 1}
-                          onChange={(e) => handleUpdateQuantity(index, Number.parseInt(e.target.value, 10))}
+                          {...register(`conditions.${index}.quantity`, { valueAsNumber: true })}
+                          onChange={(e) => handleUpdateQuantity(index, Number.parseInt(e.target.value, 10) || 1)}
                           className='w-full'
                         />
                         <span className='shrink-0 text-sm text-muted-foreground'>名</span>

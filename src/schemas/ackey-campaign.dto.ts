@@ -3,7 +3,7 @@ import { z } from 'zod'
 /**
  * イベント種別（カテゴリ）
  */
-export const EventCategorySchema = z.enum(['limited_card', 'ackey', 'other'])
+export const EventCategorySchema = z.enum(['limited_card', 'regular_card', 'ackey', 'other'])
 
 export type EventCategory = z.infer<typeof EventCategorySchema>
 
@@ -12,6 +12,7 @@ export type EventCategory = z.infer<typeof EventCategorySchema>
  */
 export const EVENT_CATEGORY_LABELS: Record<EventCategory, string> = {
   limited_card: '限定名刺',
+  regular_card: '通年名刺',
   ackey: 'アクキー',
   other: 'その他'
 }
@@ -44,12 +45,21 @@ export const ReferenceUrlTypeSchema = z.enum(['announce', 'start', 'end'])
 export type ReferenceUrlType = z.infer<typeof ReferenceUrlTypeSchema>
 
 /**
- * 参考URLの種類の表示名
+ * 参考URLの種類の表示名（短縮版：編集画面用）
  */
 export const REFERENCE_URL_TYPE_LABELS: Record<ReferenceUrlType, string> = {
   announce: '告知',
   start: '開始',
   end: '終了'
+}
+
+/**
+ * 参考URLの種類の表示名（詳細版：詳細ページ用）
+ */
+export const REFERENCE_URL_TYPE_LABELS_LONG: Record<ReferenceUrlType, string> = {
+  announce: '告知ツイート',
+  start: '開始ツイート',
+  end: '終了ツイート'
 }
 
 /**

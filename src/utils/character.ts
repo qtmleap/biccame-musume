@@ -3,6 +3,13 @@ import { prefectureToRegion, type RegionType } from '@/atoms/filterAtom'
 import type { Character } from '@/schemas/character.dto'
 
 /**
+ * 名前がスラッシュで区切られている場合、最初の部分のみ返す
+ */
+export const getDisplayName = (name: string) => {
+  return name.split('/')[0].trim()
+}
+
+/**
  * 日付文字列を解析してdayjsオブジェクトに変換
  */
 export const parseDate = (dateStr: string | undefined): dayjs.Dayjs | null => {
