@@ -10,7 +10,7 @@ import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useCharacters } from '@/hooks/useCharacters'
 import { useEvents } from '@/hooks/useEvents'
-import type { AckeyCampaign } from '@/schemas/ackey-campaign.dto'
+import type { AckeyCampaign } from '@/schemas/event.dto'
 
 /**
  * カテゴリラベル

@@ -17,7 +17,7 @@ import {
   EventCategorySchema,
   REFERENCE_URL_TYPE_LABELS,
   ReferenceUrlTypeSchema
-} from '@/schemas/ackey-campaign.dto'
+} from '@/schemas/event.dto'
 
 /**
  * フォームのスキーマ定義
