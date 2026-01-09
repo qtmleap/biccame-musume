@@ -73,7 +73,7 @@ const StatusBadge = ({ campaign }: { campaign: AckeyCampaign }) => {
   const status = (() => {
     if (campaign.actualEndDate != null) return 'ended'
     if (endDate && now.isAfter(endDate)) return 'ended'
-    if (now.isBefore(dayjs(campaign.startDate).startOf('day'))) return 'upcoming'
+    if (now.isBefore(dayjs(campaign.startDate))) return 'upcoming'
     return 'ongoing'
   })()
 
