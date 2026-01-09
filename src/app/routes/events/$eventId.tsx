@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { useCharacters } from '@/hooks/useCharacters'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useEvents } from '@/hooks/useEvents'
-import type { AckeyCampaign, EventCategory, EventStatus } from '@/schemas/event.dto'
+import type { AckeyCampaign, EventCategory } from '@/schemas/event.dto'
 import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS_LONG } from '@/schemas/event.dto'
 
 /**
@@ -82,16 +82,10 @@ const EventDetailContent = () => {
   }
 
   const categoryStyle = getCategoryStyle(event.category)
-  const now = dayjs()
   const startDate = dayjs(event.startDate)
   const endDate = event.actualEndDate ? dayjs(event.actualEndDate) : event.endDate ? dayjs(event.endDate) : null
-  // ガントチャートと同様に、endDateも考慮したstatus計算
-  const status: EventStatus = (() => {
-    if (event.actualEndDate != null) return 'ended'
-    if (endDate && now.isAfter(endDate)) return 'ended'
-    if (now.isBefore(startDate)) return 'upcoming'
-    return 'ongoing'
-  })()
+  // EventSchemaで計算されたstatusを使用
+  const status = event.status
 
   return (
     <div className='container mx-auto px-4 py-8 max-w-6xl'>
