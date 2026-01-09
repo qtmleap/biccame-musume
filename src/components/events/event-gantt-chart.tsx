@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import type { AckeyCampaign, EventStatus } from '@/schemas/event.dto'
+import type { Event, EventStatus } from '@/schemas/event.dto'
 
 /**
  * スクロールバーを非表示にするスタイル（Chrome/Safari用）
@@ -20,7 +20,7 @@ const hideScrollbarStyle = `
 /**
  * カテゴリに応じた色を返す
  */
-const getCategoryColor = (category: AckeyCampaign['category'], status: EventStatus) => {
+const getCategoryColor = (category: Event['category'], status: EventStatus) => {
   if (status === 'ended') {
     return 'bg-gray-400 opacity-60'
   }
@@ -50,7 +50,7 @@ const generateDateRange = (startDate: Dayjs, endDate: Dayjs): Dayjs[] => {
 }
 
 type EventGanttChartProps = {
-  events: AckeyCampaign[]
+  events: Event[]
 }
 
 /**
@@ -72,7 +72,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   }, [])
 
   // カテゴリの優先順位
-  const categoryOrder: Record<AckeyCampaign['category'], number> = {
+  const categoryOrder: Record<Event['category'], number> = {
     limited_card: 0,
     regular_card: 1,
     ackey: 2,
