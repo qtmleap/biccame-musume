@@ -1,5 +1,6 @@
 import { type RateLimitBinding, type RateLimitKeyFunc, rateLimit } from '@elithrar/workers-hono-rate-limit'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import dayjs from 'dayjs'
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
@@ -101,17 +102,12 @@ routes.openapi(createEventRoute, async (c) => {
   }
 
   // 新しいイベントを作成
-  const now = new Date().toISOString()
-  const nowDate = new Date()
-
-  // isEndedを自動計算
-  const isEnded = !!result.data.actualEndDate || (!!result.data.endDate && new Date(result.data.endDate) < nowDate)
+  const now = dayjs().toISOString()
 
   const newEvent = {
     id: crypto.randomUUID(),
     ...result.data,
     startDate: result.data.startDate || now,
-    isEnded,
     createdAt: now,
     updatedAt: now
   }
@@ -126,7 +122,9 @@ routes.openapi(createEventRoute, async (c) => {
   // KVに保存
   await c.env.BICCAME_MUSUME_EVENTS.put('events:list', JSON.stringify(events))
 
-  return c.json(newEvent, 201)
+  // レスポンス用にパース（statusを付与）
+  const parsedEvent = AckeyCampaignSchema.parse(newEvent)
+  return c.json(parsedEvent, 201)
 })
 
 // URL重複チェック（/:id より前に定義する必要がある）
@@ -216,7 +214,9 @@ routes.openapi(getEventRoute, async (c) => {
     throw new HTTPException(404, { message: 'Event not found' })
   }
 
-  return c.json(event)
+  // レスポンス用にパース（statusを付与）
+  const parsedEvent = AckeyCampaignSchema.parse(event)
+  return c.json(parsedEvent, 200)
 })
 
 // イベント更新
@@ -275,7 +275,7 @@ routes.openapi(updateEventRoute, async (c) => {
   const updatedEvent = {
     ...events[eventIndex],
     ...body,
-    updatedAt: new Date().toISOString()
+    updatedAt: dayjs().toISOString()
   }
 
   // bodyにendDateが含まれていない場合は削除
@@ -288,17 +288,17 @@ routes.openapi(updateEventRoute, async (c) => {
     delete updatedEvent.actualEndDate
   }
 
-  // isEndedを自動計算: actualEndDateがあるか、endDateが現在より過去なら終了
-  const now = new Date()
-  updatedEvent.isEnded =
-    !!updatedEvent.actualEndDate || (!!updatedEvent.endDate && new Date(updatedEvent.endDate) < now)
+  // isEndedが古いデータに残っている場合は削除（statusはtransformで計算される）
+  delete updatedEvent.isEnded
 
   events[eventIndex] = updatedEvent
 
   // KVに保存
   await c.env.BICCAME_MUSUME_EVENTS.put('events:list', JSON.stringify(events))
 
-  return c.json(updatedEvent)
+  // レスポンス用にパース（statusを付与）
+  const parsedEvent = AckeyCampaignSchema.parse(updatedEvent)
+  return c.json(parsedEvent, 200)
 })
 
 // イベント削除

@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import type { AckeyCampaign } from '@/schemas/event.dto'
+import type { AckeyCampaign, EventStatus } from '@/schemas/event.dto'
 
 /**
  * スクロールバーを非表示にするスタイル（Chrome/Safari用）
@@ -20,8 +20,8 @@ const hideScrollbarStyle = `
 /**
  * カテゴリに応じた色を返す
  */
-const getCategoryColor = (category: AckeyCampaign['category'], isEnded: boolean) => {
-  if (isEnded) {
+const getCategoryColor = (category: AckeyCampaign['category'], status: EventStatus) => {
+  if (status === 'ended') {
     return 'bg-gray-400 opacity-60'
   }
   switch (category) {
@@ -107,12 +107,15 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         const startOffset = eventStart.diff(chartStartDate, 'day')
         const duration = eventEnd.diff(eventStart, 'day') + 1
 
-        // イベントが終了しているかどうかを判定
-        // 1. actualEndDateがある
-        // 2. endDateを過ぎている
+        // ガントチャート用のステータス判定
+        // schemaのstatusはactualEndDateのみで判定するが、ガントチャートではendDateも考慮
         const now = dayjs().startOf('day')
         const isPastEndDate = event.endDate ? now.isAfter(dayjs(event.endDate).startOf('day')) : false
-        const isEnded = !!event.actualEndDate || isPastEndDate
+        const status: EventStatus = (() => {
+          if (event.actualEndDate != null || isPastEndDate) return 'ended'
+          if (now.isBefore(eventStart)) return 'upcoming'
+          return 'ongoing'
+        })()
 
         // 終了日がチャート開始日より前なら表示しない
         if (eventEnd.isBefore(chartStartDate)) {
@@ -126,21 +129,11 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
             ? Math.min(duration + startOffset, dates.length)
             : Math.min(duration, dates.length - clippedStartOffset)
 
-        // isOngoing判定
-        // 1. 開始日が現在日以前
-        // 2. 「endDateがあって現在日以降」または「endDateがnullかつactualEndDateがnull」
-        const isStarted = !now.isBefore(eventStart)
-        const isOngoing =
-          isStarted &&
-          ((event.endDate && !now.isAfter(dayjs(event.endDate).startOf('day'))) ||
-            (!event.endDate && !event.actualEndDate))
-
         return {
           event,
           startOffset: clippedStartOffset,
           duration: clippedDuration,
-          isOngoing,
-          isEnded
+          status
         }
       })
       .filter((bar) => bar !== null)
@@ -149,7 +142,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   // 終了イベントのフィルタリング
   const filteredEventBars = useMemo(() => {
     if (showEnded) return eventBars
-    return eventBars.filter((bar) => !bar.isEnded)
+    return eventBars.filter((bar) => bar.status !== 'ended')
   }, [eventBars, showEnded])
 
   // スクロールコンテナのref
@@ -340,7 +333,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
 
             {/* イベント行 */}
             <AnimatePresence mode='popLayout'>
-              {filteredEventBars.map(({ event, startOffset, duration, isEnded }) => {
+              {filteredEventBars.map(({ event, startOffset, duration, status }) => {
                 const labelOffset = getLabelOffset(startOffset, duration)
 
                 return (
@@ -369,7 +362,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <div
-                            className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category, isEnded)}`}
+                            className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category, status)}`}
                             style={{
                               left: `${startOffset * 32}px`,
                               width: `${duration * 32 - 4}px`

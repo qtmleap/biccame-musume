@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
 import type { Character } from '@/schemas/character.dto'
@@ -74,7 +75,7 @@ export const BirthdayFullscreenOverlay = ({ characters }: BirthdayFullscreenOver
   const [currentIndex, setCurrentIndex] = useState(0)
   const [imageError, setImageError] = useState(false)
 
-  const sessionKey = `birthday-shown-${new Date().toISOString().split('T')[0]}`
+  const sessionKey = `birthday-shown-${dayjs().format('YYYY-MM-DD')}`
 
   useEffect(() => {
     if (characters.length === 0) return

@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -70,7 +71,7 @@ export const BirthdayDialog = ({ characters }: BirthdayDialogProps) => {
   const [imageError, setImageError] = useState(false)
 
   // セッション中に一度だけ表示するためのキー（本番環境のみ）
-  const sessionKey = `birthday-shown-${new Date().toISOString().split('T')[0]}`
+  const sessionKey = `birthday-shown-${dayjs().format('YYYY-MM-DD')}`
 
   useEffect(() => {
     if (characters.length === 0) return
