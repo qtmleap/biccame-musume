@@ -56,31 +56,25 @@ const getDaysLabel = (days: number, status: EventStatus) => {
 export const EventList = () => {
   const { data: events = [], isLoading } = useEvents()
 
-  // 開催中および開催一週間前のイベント、終了後1週間以内のイベントをフィルタリングし、開始日時・カテゴリ・店舗順でソート
+  // 開催中および開催一週間前のイベントをフィルタリングし、開始日時・カテゴリ・店舗順でソート
   const upcomingEvents = orderBy(
     events.filter((event) => {
-      const now = dayjs()
-      const startDate = dayjs(event.startDate)
-      const endDate = event.endDate ? dayjs(event.endDate) : null
-
-      // 終了後1週間経過したイベントは非表示
-      if (endDate?.add(7, 'day').isBefore(now)) {
+      // 終了したイベントは非表示
+      if (event.status === 'ended') {
         return false
       }
 
+      const now = dayjs()
+      const startDate = dayjs(event.startDate)
+
       // 開催中のイベント
-      if (now.isAfter(startDate) && (!endDate || now.isBefore(endDate))) {
+      if (event.status === 'ongoing') {
         return true
       }
 
       // 開催一週間前のイベント
       const oneWeekBefore = startDate.subtract(7, 'day')
       if (now.isAfter(oneWeekBefore) && now.isBefore(startDate)) {
-        return true
-      }
-
-      // 終了後1週間以内のイベント
-      if (endDate?.isBefore(now) && endDate.add(7, 'day').isAfter(now)) {
         return true
       }
 
@@ -123,10 +117,9 @@ export const EventList = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <a
-                    href={event.referenceUrls?.[0]?.url || '#'}
-                    target='_blank'
-                    rel='noopener noreferrer'
+                  <Link
+                    to='/events/$eventId'
+                    params={{ eventId: event.id }}
                     className={`flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer ${
                       status === 'ended' ? 'opacity-60' : ''
                     }`}
@@ -189,7 +182,7 @@ export const EventList = () => {
                     >
                       {getDaysLabel(daysUntil, status)}
                     </div>
-                  </a>
+                  </Link>
                 </motion.div>
               )
             })}
