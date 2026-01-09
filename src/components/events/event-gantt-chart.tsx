@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import type { AckeyCampaign } from '@/schemas/ackey-campaign.dto'
+import type { AckeyCampaign } from '@/schemas/event.dto'
 
 /**
  * スクロールバーを非表示にするスタイル（Chrome/Safari用）
@@ -91,50 +91,59 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       return categoryOrder[a.category] - categoryOrder[b.category]
     })
 
-    return sortedEvents.map((event) => {
-      const eventStart = dayjs(event.startDate).startOf('day')
-      // 終了日がない場合は月末か開始日から14日後のどちらか長い方
-      let eventEnd: Dayjs
-      if (event.endDate) {
-        eventEnd = dayjs(event.endDate).startOf('day')
-      } else {
-        const endOfMonth = eventStart.endOf('month').startOf('day')
-        const plus14Days = eventStart.add(14, 'day')
-        eventEnd = endOfMonth.isAfter(plus14Days) ? endOfMonth : plus14Days
-      }
+    return sortedEvents
+      .map((event) => {
+        const eventStart = dayjs(event.startDate).startOf('day')
+        // 終了日がない場合は月末か開始日から14日後のどちらか長い方
+        let eventEnd: Dayjs
+        if (event.endDate) {
+          eventEnd = dayjs(event.endDate).startOf('day')
+        } else {
+          const endOfMonth = eventStart.endOf('month').startOf('day')
+          const plus14Days = eventStart.add(14, 'day')
+          eventEnd = endOfMonth.isAfter(plus14Days) ? endOfMonth : plus14Days
+        }
 
-      const startOffset = eventStart.diff(chartStartDate, 'day')
-      const duration = eventEnd.diff(eventStart, 'day') + 1
+        const startOffset = eventStart.diff(chartStartDate, 'day')
+        const duration = eventEnd.diff(eventStart, 'day') + 1
 
-      // イベントが終了しているかどうかを判定
-      // 1. actualEndDateがある
-      // 2. endDateを過ぎている
-      // 3. 終了URLが入力されている
-      // 4. isEndedフラグがtrue
-      const now = dayjs()
-      const hasEndUrl = event.referenceUrls?.some((ref) => ref.type === 'end') ?? false
-      const isPastEndDate = event.endDate ? now.isAfter(dayjs(event.endDate)) : false
-      const isEnded = event.actualEndDate ? true : isPastEndDate || hasEndUrl || event.isEnded
+        // イベントが終了しているかどうかを判定
+        // 1. actualEndDateがある
+        // 2. endDateを過ぎている
+        const now = dayjs().startOf('day')
+        const isPastEndDate = event.endDate ? now.isAfter(dayjs(event.endDate).startOf('day')) : false
+        const isEnded = !!event.actualEndDate || isPastEndDate
 
-      // 終了日がチャート開始日より前なら表示しない
-      if (eventEnd.isBefore(chartStartDate)) {
-        return null
-      }
+        // 終了日がチャート開始日より前なら表示しない
+        if (eventEnd.isBefore(chartStartDate)) {
+          return null
+        }
 
-      // チャート開始より前に始まったイベントは、その分durationを短くする
-      const clippedStartOffset = Math.max(0, startOffset)
-      const clippedDuration = startOffset < 0
-        ? Math.min(duration + startOffset, dates.length)
-        : Math.min(duration, dates.length - clippedStartOffset)
+        // チャート開始より前に始まったイベントは、その分durationを短くする
+        const clippedStartOffset = Math.max(0, startOffset)
+        const clippedDuration =
+          startOffset < 0
+            ? Math.min(duration + startOffset, dates.length)
+            : Math.min(duration, dates.length - clippedStartOffset)
 
-      return {
-        event,
-        startOffset: clippedStartOffset,
-        duration: clippedDuration,
-        isOngoing: !event.endDate,
-        isEnded
-      }
-    }).filter((bar) => bar !== null)
+        // isOngoing判定
+        // 1. 開始日が現在日以前
+        // 2. 「endDateがあって現在日以降」または「endDateがnullかつactualEndDateがnull」
+        const isStarted = !now.isBefore(eventStart)
+        const isOngoing =
+          isStarted &&
+          ((event.endDate && !now.isAfter(dayjs(event.endDate).startOf('day'))) ||
+            (!event.endDate && !event.actualEndDate))
+
+        return {
+          event,
+          startOffset: clippedStartOffset,
+          duration: clippedDuration,
+          isOngoing,
+          isEnded
+        }
+      })
+      .filter((bar) => bar !== null)
   }, [events, chartStartDate, dates.length])
 
   // 終了イベントのフィルタリング
@@ -261,9 +270,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       <div className='relative'>
         {/* ヘッダー: 月表示とフィルタ */}
         <div className='flex items-center justify-between mb-2'>
-          <div className='h-5 px-1 flex items-center text-xs font-medium text-gray-700'>
-            {currentVisibleMonth}
-          </div>
+          <div className='h-5 px-1 flex items-center text-xs font-medium text-gray-700'>{currentVisibleMonth}</div>
           <div className='flex items-center gap-2'>
             <Checkbox
               id='show-ended'
@@ -333,7 +340,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
 
             {/* イベント行 */}
             <AnimatePresence mode='popLayout'>
-              {filteredEventBars.map(({ event, startOffset, duration, isOngoing, isEnded }) => {
+              {filteredEventBars.map(({ event, startOffset, duration, isEnded }) => {
                 const labelOffset = getLabelOffset(startOffset, duration)
 
                 return (
@@ -357,61 +364,61 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                       )
                     })}
 
-                  {/* バー */}
-                  {duration > 0 && (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div
-                          className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category, isEnded)}`}
-                          style={{
-                            left: `${startOffset * 32}px`,
-                            width: `${duration * 32 - 4}px`
-                          }}
-                        >
-                          {/* ラベル（スクロール停止時に表示） */}
+                    {/* バー */}
+                    {duration > 0 && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                           <div
-                            className={`absolute inset-y-0 flex items-center gap-1.5 px-2 transition-opacity duration-150 ${isScrolling ? 'opacity-0' : 'opacity-100'}`}
-                            style={{ transform: `translateX(${labelOffset}px)` }}
-                          >
-                            <span className='text-xs text-white font-medium truncate'>{event.name}</span>
-                            {event.stores?.[0] && (
-                              <span className='text-xs text-white/70 shrink-0'>({event.stores[0]})</span>
-                            )}
-                            <ExternalLink className='size-3 text-white/70 shrink-0' />
-                          </div>
-
-                          {/* クリック領域 */}
-                          <Link
-                            to='/events/$eventId'
-                            params={{ eventId: event.id }}
-                            className='absolute inset-0 hover:bg-white/10 transition-colors'
-                            onClick={(e) => {
-                              // ドラッグしていた場合はリンクを無効化
-                              if (hasDraggedRef.current) {
-                                e.preventDefault()
-                              }
+                            className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category, isEnded)}`}
+                            style={{
+                              left: `${startOffset * 32}px`,
+                              width: `${duration * 32 - 4}px`
                             }}
-                            draggable={false}
                           >
-                            <span className='sr-only'>{event.name}の詳細を見る</span>
-                          </Link>
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent side='top' className='max-w-xs'>
-                        <p className='font-medium'>{event.name}</p>
-                        {event.stores && event.stores.length > 0 && (
-                          <p className='text-xs text-gray-500'>{event.stores.join(', ')}</p>
-                        )}
-                        <p className='text-xs text-gray-500'>
-                          {dayjs(event.startDate).format('M/D')}
-                          {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜なくなり次第終了'}
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
-                </motion.div>
-              )
-            })}
+                            {/* ラベル（スクロール停止時に表示） */}
+                            <div
+                              className={`absolute inset-y-0 flex items-center gap-1.5 px-2 transition-opacity duration-150 ${isScrolling ? 'opacity-0' : 'opacity-100'}`}
+                              style={{ transform: `translateX(${labelOffset}px)` }}
+                            >
+                              <span className='text-xs text-white font-medium truncate'>{event.name}</span>
+                              {event.stores?.[0] && (
+                                <span className='text-xs text-white/70 shrink-0'>({event.stores[0]})</span>
+                              )}
+                              <ExternalLink className='size-3 text-white/70 shrink-0' />
+                            </div>
+
+                            {/* クリック領域 */}
+                            <Link
+                              to='/events/$eventId'
+                              params={{ eventId: event.id }}
+                              className='absolute inset-0 hover:bg-white/10 transition-colors'
+                              onClick={(e) => {
+                                // ドラッグしていた場合はリンクを無効化
+                                if (hasDraggedRef.current) {
+                                  e.preventDefault()
+                                }
+                              }}
+                              draggable={false}
+                            >
+                              <span className='sr-only'>{event.name}の詳細を見る</span>
+                            </Link>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent side='top' className='max-w-xs'>
+                          <p className='font-medium'>{event.name}</p>
+                          {event.stores && event.stores.length > 0 && (
+                            <p className='text-xs text-gray-500'>{event.stores.join(', ')}</p>
+                          )}
+                          <p className='text-xs text-gray-500'>
+                            {dayjs(event.startDate).format('M/D')}
+                            {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜なくなり次第終了'}
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
+                  </motion.div>
+                )
+              })}
             </AnimatePresence>
 
             {/* イベントがない場合 */}

@@ -1,5 +1,5 @@
 import { atom } from 'jotai'
-import type { AckeyCampaign } from '@/schemas/ackey-campaign.dto'
+import type { AckeyCampaign } from '@/schemas/event.dto'
 
 /**
  * アクキー配布キャンペーン一覧のAtom（ローカル状態管理）

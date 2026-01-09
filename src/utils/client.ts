@@ -4,7 +4,7 @@ import {
   AckeyCampaignSchema,
   CreateAckeyCampaignRequestSchema,
   UpdateAckeyCampaignRequestSchema
-} from '@/schemas/ackey-campaign.dto'
+} from '@/schemas/event.dto'
 import { CharactersSchema } from '@/schemas/character.dto'
 import { AllVoteCountsSchema, VoteCountSchema, VoteRequestSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
 

@@ -1,66 +1,136 @@
 import { z } from 'zod'
 
 /**
- * イベント商品タイプ
+ * イベント種別（カテゴリ）
  */
-export const EventProductTypeSchema = z.enum(['アクキー'])
+export const EventCategorySchema = z.enum(['limited_card', 'regular_card', 'ackey', 'other'])
 
-export type EventProductType = z.infer<typeof EventProductTypeSchema>
+export type EventCategory = z.infer<typeof EventCategorySchema>
 
 /**
- * イベント条件タイプ
+ * イベント種別の表示名
  */
-export const EventConditionTypeSchema = z.enum(['3000円以上購入', '先着', '抽選'])
+export const EVENT_CATEGORY_LABELS: Record<EventCategory, string> = {
+  limited_card: '限定名刺',
+  regular_card: '通年名刺',
+  ackey: 'アクキー',
+  other: 'その他'
+}
+
+/**
+ * 配布条件の種類
+ */
+export const EventConditionTypeSchema = z.enum(['purchase', 'first_come', 'lottery', 'everyone'])
 
 export type EventConditionType = z.infer<typeof EventConditionTypeSchema>
 
 /**
- * イベント条件詳細（人数情報を含む）
+ * 配布条件の詳細
  */
 export const EventConditionSchema = z.object({
   type: EventConditionTypeSchema,
-  limit: z.number().int().positive().optional() // 先着・抽選の場合の人数
+  // 購入条件の場合の金額（円）
+  purchaseAmount: z.number().min(0).optional(),
+  // 先着または抽選の人数
+  quantity: z.number().min(1).optional()
 })
 
 export type EventCondition = z.infer<typeof EventConditionSchema>
 
 /**
- * イベント情報のスキーマ定義
+ * 参考URLの種類
+ */
+export const ReferenceUrlTypeSchema = z.enum(['announce', 'start', 'end'])
+
+export type ReferenceUrlType = z.infer<typeof ReferenceUrlTypeSchema>
+
+/**
+ * 参考URLの種類の表示名（短縮版：編集画面用）
+ */
+export const REFERENCE_URL_TYPE_LABELS: Record<ReferenceUrlType, string> = {
+  announce: '告知',
+  start: '開始',
+  end: '終了'
+}
+
+/**
+ * 参考URLの種類の表示名（詳細版：詳細ページ用）
+ */
+export const REFERENCE_URL_TYPE_LABELS_LONG: Record<ReferenceUrlType, string> = {
+  announce: '告知ツイート',
+  start: '開始ツイート',
+  end: '終了ツイート'
+}
+
+/**
+ * 参考URL
+ */
+export const ReferenceUrlSchema = z.object({
+  type: ReferenceUrlTypeSchema,
+  url: z.url('有効なURLを入力してください')
+})
+
+export type ReferenceUrl = z.infer<typeof ReferenceUrlSchema>
+
+/**
+ * イベント
  */
 export const EventSchema = z.object({
-  id: z.string().uuid(),
-  startDate: z.string(), // YYYY-MM-DD形式
-  endDate: z.string().optional(), // YYYY-MM-DD形式
-  productType: EventProductTypeSchema,
-  storeName: z.string(),
-  condition: EventConditionSchema,
-  createdAt: z.string(),
-  updatedAt: z.string()
+  id: z.string(),
+  // イベント種別
+  category: EventCategorySchema,
+  // イベント名
+  name: z.string().nonempty('イベント名は必須です'),
+  // 参考URL（任意、複数可）
+  referenceUrls: z.array(ReferenceUrlSchema).optional(),
+  // 開催店舗（任意、複数可）
+  stores: z.array(z.string()).nonempty(),
+  // 限定数（任意）
+  limitedQuantity: z.number().min(1).optional(),
+  // 開始日時
+  startDate: z.string().datetime(),
+  // 終了予定日時（任意）
+  endDate: z.string().datetime().optional(),
+  // 実際の終了日時（任意、配布が終了した実際の日時）
+  actualEndDate: z.string().datetime().optional(),
+  // 配布条件
+  conditions: z.array(EventConditionSchema).nonempty('最低1つの条件を設定してください'),
+  // 終了済みかどうか（actualEndDateがある場合は自動的にtrue）
+  isEnded: z.boolean().default(false),
+  // 作成日時
+  createdAt: z.string().datetime(),
+  // 更新日時
+  updatedAt: z.string().datetime()
 })
 
 export type Event = z.infer<typeof EventSchema>
 
 /**
- * イベント作成用のスキーマ（idとタイムスタンプを除外）
+ * イベント作成リクエスト
  */
-export const EventCreateSchema = EventSchema.omit({
+export const CreateEventRequestSchema = EventSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true
 })
 
-export type EventCreate = z.infer<typeof EventCreateSchema>
+export type CreateEventRequest = z.infer<typeof CreateEventRequestSchema>
 
 /**
- * イベント更新用のスキーマ
+ * イベント更新リクエスト
  */
-export const EventUpdateSchema = EventCreateSchema.partial()
+export const UpdateEventRequestSchema = CreateEventRequestSchema.partial()
 
-export type EventUpdate = z.infer<typeof EventUpdateSchema>
+export type UpdateEventRequest = z.infer<typeof UpdateEventRequestSchema>
 
-/**
- * イベント一覧のスキーマ
- */
-export const EventsSchema = z.array(EventSchema)
-
-export type Events = z.infer<typeof EventsSchema>
+// 後方互換性のためのエイリアス
+export const AckeyCampaignSchema = EventSchema
+export type AckeyCampaign = Event
+export const AckeyCampaignConditionTypeSchema = EventConditionTypeSchema
+export type AckeyCampaignConditionType = EventConditionType
+export const AckeyCampaignConditionSchema = EventConditionSchema
+export type AckeyCampaignCondition = EventCondition
+export const CreateAckeyCampaignRequestSchema = CreateEventRequestSchema
+export type CreateAckeyCampaignRequest = CreateEventRequest
+export const UpdateAckeyCampaignRequestSchema = UpdateEventRequestSchema
+export type UpdateAckeyCampaignRequest = UpdateEventRequest

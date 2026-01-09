@@ -5,7 +5,7 @@ import { Calendar, CreditCard, Gift, KeyRound, Package, Store } from 'lucide-rea
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { useEvents } from '@/hooks/useEvents'
-import type { EventCategory } from '@/schemas/ackey-campaign.dto'
+import type { EventCategory } from '@/schemas/event.dto'
 
 /**
  * カテゴリに応じたアイコンとスタイルを返す
