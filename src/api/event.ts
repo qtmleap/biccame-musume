@@ -9,7 +9,7 @@ import {
   CreateAckeyCampaignRequestSchema,
   type ReferenceUrl,
   UpdateAckeyCampaignRequestSchema
-} from '../schemas/ackey-campaign.dto'
+} from '../schemas/event.dto'
 
 type Bindings = {
   BICCAME_MUSUME_EVENTS: KVNamespace

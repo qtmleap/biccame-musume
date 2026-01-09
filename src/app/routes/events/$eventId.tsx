@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button'
 import { useCharacters } from '@/hooks/useCharacters'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useEvents } from '@/hooks/useEvents'
-import type { AckeyCampaign, EventCategory } from '@/schemas/ackey-campaign.dto'
-import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS_LONG } from '@/schemas/ackey-campaign.dto'
+import type { AckeyCampaign, EventCategory } from '@/schemas/event.dto'
+import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS_LONG } from '@/schemas/event.dto'
 
 /**
  * カテゴリに応じたスタイルを返す
