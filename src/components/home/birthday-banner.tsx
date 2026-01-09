@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import dayjs from 'dayjs'
 import { X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
@@ -17,7 +18,7 @@ export const BirthdayBanner = ({ characters }: BirthdayBannerProps) => {
   const [open, setOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const sessionKey = `birthday-banner-shown-${new Date().toISOString().split('T')[0]}`
+  const sessionKey = `birthday-banner-shown-${dayjs().format('YYYY-MM-DD')}`
 
   useEffect(() => {
     if (characters.length === 0) return

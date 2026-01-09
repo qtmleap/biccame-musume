@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import dayjs from 'dayjs'
 import { Cake, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
@@ -18,7 +19,7 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
   const [minimized, setMinimized] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const sessionKey = `birthday-floating-shown-${new Date().toISOString().split('T')[0]}`
+  const sessionKey = `birthday-floating-shown-${dayjs().format('YYYY-MM-DD')}`
 
   useEffect(() => {
     if (characters.length === 0) return

@@ -5,7 +5,7 @@ import { Calendar, CreditCard, Gift, KeyRound, Package, Store } from 'lucide-rea
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { useEvents } from '@/hooks/useEvents'
-import type { EventCategory } from '@/schemas/event.dto'
+import type { EventCategory, EventStatus } from '@/schemas/event.dto'
 
 /**
  * カテゴリに応じたアイコンとスタイルを返す
@@ -38,9 +38,9 @@ const getCategoryStyle = (category: EventCategory | undefined) => {
 /**
  * 日数に応じたラベルを返す
  */
-const getDaysLabel = (days: number, isStarted: boolean, isEnded: boolean) => {
-  if (isEnded) return '終了'
-  if (isStarted || days === 0) return '開催中'
+const getDaysLabel = (days: number, status: EventStatus) => {
+  if (status === 'ended') return '終了'
+  if (status === 'ongoing' || days === 0) return '開催中'
   if (days === 1) return '明日'
   return `${days}日後`
 }
@@ -103,13 +103,18 @@ export const EventList = () => {
             {upcomingEvents.map((event, index) => {
               const now = dayjs()
               const startDate = dayjs(event.startDate)
-              const isStarted = now.isAfter(startDate)
               const endDate = event.actualEndDate
                 ? dayjs(event.actualEndDate)
                 : event.endDate
                   ? dayjs(event.endDate)
                   : null
-              const isEnded = endDate ? now.isAfter(endDate) : event.isEnded
+              // ガントチャートと同様に、endDateも考慮したstatus計算
+              const status: EventStatus = (() => {
+                if (event.actualEndDate != null) return 'ended'
+                if (endDate && now.isAfter(endDate)) return 'ended'
+                if (now.isBefore(startDate.startOf('day'))) return 'upcoming'
+                return 'ongoing'
+              })()
               const daysUntil = startDate.diff(now, 'day')
 
               return (
@@ -130,7 +135,7 @@ export const EventList = () => {
                     target='_blank'
                     rel='noopener noreferrer'
                     className={`flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer ${
-                      isEnded ? 'opacity-60' : ''
+                      status === 'ended' ? 'opacity-60' : ''
                     }`}
                   >
                     <div className={`shrink-0 p-2 rounded-lg ${getCategoryStyle(event.category).className}`}>
@@ -178,9 +183,9 @@ export const EventList = () => {
 
                     <div
                       className={`text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
-                        isEnded
+                        status === 'ended'
                           ? 'bg-gray-400 text-white'
-                          : isStarted
+                          : status === 'ongoing'
                             ? 'bg-[#e50012] text-white'
                             : daysUntil === 0
                               ? 'bg-[#e50012] text-white'
@@ -189,7 +194,7 @@ export const EventList = () => {
                                 : 'bg-gray-100 text-gray-600'
                       }`}
                     >
-                      {getDaysLabel(daysUntil, isStarted, isEnded)}
+                      {getDaysLabel(daysUntil, status)}
                     </div>
                   </a>
                 </motion.div>
