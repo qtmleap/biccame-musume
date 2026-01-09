@@ -53,10 +53,9 @@ export const ReferenceUrlSchema = z.object({
 export type ReferenceUrl = z.infer<typeof ReferenceUrlSchema>
 
 /**
- * イベント（ベーススキーマ）
+ * イベントリクエスト（POST/PUT用）
  */
-const EventBaseSchema = z.object({
-  id: z.string(),
+export const EventRequestSchema = z.object({
   // イベント種別
   category: EventCategorySchema,
   // イベント名
@@ -74,51 +73,35 @@ const EventBaseSchema = z.object({
   // 実際の終了日時（任意、配布が終了した実際の日時）
   actualEndDate: z.iso.datetime().optional(),
   // 配布条件
-  conditions: z.array(EventConditionSchema).nonempty('最低1つの条件を設定してください'),
-  // 作成日時
-  createdAt: z.iso.datetime(),
-  // 更新日時
-  updatedAt: z.iso.datetime()
+  conditions: z.array(EventConditionSchema).nonempty('最低1つの条件を設定してください')
 })
 
+export type EventRequest = z.infer<typeof EventRequestSchema>
+
 /**
- * イベント（status付き）
+ * イベントレスポンス（GET用、status・daysUntil付き）
  */
-export const EventSchema = EventBaseSchema.transform((v) => {
-  const now = dayjs()
+export const EventSchema = EventRequestSchema.extend({
+  id: z.string(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime()
+}).transform((v) => {
+  const currentTime = dayjs()
   const startDate = dayjs(v.startDate)
 
   const status: EventStatus = (() => {
-    if (now.isBefore(startDate)) return EventStatusSchema.enum.upcoming
+    if (currentTime.isBefore(startDate)) return EventStatusSchema.enum.upcoming
     // 実際の終了日時が設定されていたら終了済み
     if (v.actualEndDate !== undefined) return EventStatusSchema.enum.ended
     if (v.endDate !== undefined)
-      return now.isAfter(v.endDate) ? EventStatusSchema.enum.ended : EventStatusSchema.enum.ongoing
+      return currentTime.isAfter(v.endDate) ? EventStatusSchema.enum.ended : EventStatusSchema.enum.ongoing
     return EventStatusSchema.enum.ongoing
   })()
 
   // 日本時間で日付の差分を計算
-  const daysUntil = startDate.startOf('day').diff(now.startOf('day'), 'day')
+  const daysUntil = startDate.startOf('day').diff(currentTime.startOf('day'), 'day')
 
   return { ...v, status, daysUntil }
 })
 
 export type Event = z.infer<typeof EventSchema>
-
-/**
- * イベント作成リクエスト
- */
-export const CreateEventRequestSchema = EventBaseSchema.omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true
-})
-
-export type CreateEventRequest = z.infer<typeof CreateEventRequestSchema>
-
-/**
- * イベント更新リクエスト
- */
-export const UpdateEventRequestSchema = CreateEventRequestSchema.partial()
-
-export type UpdateEventRequest = z.infer<typeof UpdateEventRequestSchema>

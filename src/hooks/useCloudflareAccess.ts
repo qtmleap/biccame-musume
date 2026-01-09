@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
 type AccessUser = {
@@ -74,8 +75,8 @@ export const useCloudflareAccess = (): AccessState => {
         const payload = JSON.parse(atob(payloadB64))
 
         // 有効期限チェック
-        const now = Math.floor(Date.now() / 1000)
-        if (payload.exp < now) {
+        const currentTime = dayjs().unix()
+        if (payload.exp < currentTime) {
           setState({
             isLoading: false,
             isAuthenticated: false,
