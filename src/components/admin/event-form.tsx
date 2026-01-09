@@ -11,8 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useCharacters } from '@/hooks/useCharacters'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
 import {
-  type AckeyCampaign,
-  AckeyCampaignConditionTypeSchema,
+  type Event,
+  EventConditionTypeSchema,
   EVENT_CATEGORY_LABELS,
   EventCategorySchema,
   REFERENCE_URL_TYPE_LABELS,
@@ -41,7 +41,7 @@ const EventFormSchema = z.object({
   conditions: z
     .array(
       z.object({
-        type: AckeyCampaignConditionTypeSchema,
+        type: EventConditionTypeSchema,
         purchaseAmount: z.number().min(0).optional(),
         quantity: z.number().min(1).optional()
       })
@@ -54,13 +54,13 @@ type EventFormValues = z.infer<typeof EventFormSchema>
 /**
  * イベントフォーム
  */
-export const EventForm = ({ event, onSuccess }: { event?: AckeyCampaign; onSuccess?: () => void }) => {
+export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () => void }) => {
   const createEvent = useCreateEvent()
   const updateEvent = useUpdateEvent()
   const { data: characters } = useCharacters()
 
   // URL重複チェック結果を保持
-  const [duplicateWarnings, setDuplicateWarnings] = useState<Record<number, AckeyCampaign | null>>({})
+  const [duplicateWarnings, setDuplicateWarnings] = useState<Record<number, Event | null>>({})
 
   // 住所がある店舗のみフィルタリングしてユニークリストを取得
   const storeNames = Array.from(

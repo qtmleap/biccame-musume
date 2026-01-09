@@ -136,7 +136,6 @@ export const EventSchema = EventBaseSchema.transform((v) => {
 
   // 日本時間で日付の差分を計算
   const daysUntil = startDate.startOf('day').diff(now.startOf('day'), 'day')
-  console.log(v.name, status)
 
   return { ...v, status, daysUntil }
 })
@@ -160,15 +159,3 @@ export type CreateEventRequest = z.infer<typeof CreateEventRequestSchema>
 export const UpdateEventRequestSchema = CreateEventRequestSchema.partial()
 
 export type UpdateEventRequest = z.infer<typeof UpdateEventRequestSchema>
-
-// 後方互換性のためのエイリアス
-export const AckeyCampaignSchema = EventSchema
-export type AckeyCampaign = Event
-export const AckeyCampaignConditionTypeSchema = EventConditionTypeSchema
-export type AckeyCampaignConditionType = EventConditionType
-export const AckeyCampaignConditionSchema = EventConditionSchema
-export type AckeyCampaignCondition = EventCondition
-export const CreateAckeyCampaignRequestSchema = CreateEventRequestSchema
-export type CreateAckeyCampaignRequest = CreateEventRequest
-export const UpdateAckeyCampaignRequestSchema = UpdateEventRequestSchema
-export type UpdateAckeyCampaignRequest = UpdateEventRequest

@@ -1,18 +1,14 @@
 import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
 import { CharactersSchema } from '@/schemas/character.dto'
-import {
-  AckeyCampaignSchema,
-  CreateAckeyCampaignRequestSchema,
-  UpdateAckeyCampaignRequestSchema
-} from '@/schemas/event.dto'
+import { CreateEventRequestSchema, EventSchema, UpdateEventRequestSchema } from '@/schemas/event.dto'
 import { AllVoteCountsSchema, VoteCountSchema, VoteRequestSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
 
 /**
  * イベント一覧レスポンス
  */
 const EventsResponseSchema = z.object({
-  events: z.array(AckeyCampaignSchema)
+  events: z.array(EventSchema)
 })
 
 /**
@@ -20,7 +16,7 @@ const EventsResponseSchema = z.object({
  */
 const CheckDuplicateUrlResponseSchema = z.object({
   exists: z.boolean(),
-  event: AckeyCampaignSchema.optional()
+  event: EventSchema.optional()
 })
 
 /**
@@ -86,10 +82,10 @@ const api = makeApi([
       {
         name: 'body',
         type: 'Body',
-        schema: CreateAckeyCampaignRequestSchema
+        schema: CreateEventRequestSchema
       }
     ],
-    response: AckeyCampaignSchema
+    response: EventSchema
   },
   {
     method: 'put',
@@ -100,10 +96,10 @@ const api = makeApi([
       {
         name: 'body',
         type: 'Body',
-        schema: UpdateAckeyCampaignRequestSchema
+        schema: UpdateEventRequestSchema
       }
     ],
-    response: AckeyCampaignSchema
+    response: EventSchema
   },
   {
     method: 'delete',
