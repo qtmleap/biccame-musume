@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { AckeyCampaign, CreateAckeyCampaignRequest, UpdateAckeyCampaignRequest } from '@/schemas/event.dto'
+import type { CreateEventRequest, Event, UpdateEventRequest } from '@/schemas/event.dto'
 import { client } from '@/utils/client'
 
 /**
@@ -8,7 +8,7 @@ import { client } from '@/utils/client'
 export const useEvents = () => {
   return useQuery({
     queryKey: ['events'],
-    queryFn: async (): Promise<AckeyCampaign[]> => {
+    queryFn: async (): Promise<Event[]> => {
       console.log('Fetching events from API...')
       const data = await client.getEvents()
       console.log('Events data:', data.events)
@@ -26,7 +26,7 @@ export const useCreateEvent = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (event: CreateAckeyCampaignRequest): Promise<AckeyCampaign> => {
+    mutationFn: async (event: CreateEventRequest): Promise<Event> => {
       return client.createEvent(event)
     },
     onSuccess: () => {
@@ -60,7 +60,7 @@ export const useUpdateEvent = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: UpdateAckeyCampaignRequest }): Promise<AckeyCampaign> => {
+    mutationFn: async ({ id, data }: { id: string; data: UpdateEventRequest }): Promise<Event> => {
       return client.updateEvent(data, { params: { eventId: id } })
     },
     onSuccess: () => {
@@ -76,6 +76,6 @@ export const useUpdateEvent = () => {
 export const checkDuplicateUrl = async (
   url: string,
   excludeId?: string
-): Promise<{ exists: boolean; event?: AckeyCampaign }> => {
+): Promise<{ exists: boolean; event?: Event }> => {
   return client.checkDuplicateUrl({ queries: { url, excludeId } })
 }

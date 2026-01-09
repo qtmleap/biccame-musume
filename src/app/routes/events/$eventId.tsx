@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { useCharacters } from '@/hooks/useCharacters'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useEvents } from '@/hooks/useEvents'
-import type { AckeyCampaign, EventCategory } from '@/schemas/event.dto'
+import type { Event, EventCategory } from '@/schemas/event.dto'
 import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS_LONG } from '@/schemas/event.dto'
 
 /**
@@ -30,7 +30,7 @@ const getCategoryStyle = (category: EventCategory) => {
 /**
  * 条件の詳細テキストを取得
  */
-const getConditionDetail = (condition: AckeyCampaign['conditions'][0]): string => {
+const getConditionDetail = (condition: Event['conditions'][0]): string => {
   switch (condition.type) {
     case 'purchase':
       return `${condition.purchaseAmount?.toLocaleString()}円以上購入で配布`

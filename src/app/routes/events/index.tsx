@@ -10,12 +10,12 @@ import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useCharacters } from '@/hooks/useCharacters'
 import { useEvents } from '@/hooks/useEvents'
-import type { AckeyCampaign } from '@/schemas/event.dto'
+import type { Event } from '@/schemas/event.dto'
 
 /**
  * カテゴリラベル
  */
-const CATEGORY_LABELS: Record<AckeyCampaign['category'], string> = {
+const CATEGORY_LABELS: Record<Event['category'], string> = {
   ackey: 'アクキー',
   limited_card: '限定名刺',
   regular_card: '通年名刺',
@@ -25,7 +25,7 @@ const CATEGORY_LABELS: Record<AckeyCampaign['category'], string> = {
 /**
  * カテゴリチェックボックス色
  */
-const CATEGORY_CHECKBOX_COLORS: Record<AckeyCampaign['category'], string> = {
+const CATEGORY_CHECKBOX_COLORS: Record<Event['category'], string> = {
   ackey: 'border-amber-500 data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500',
   limited_card: 'border-purple-500 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500',
   regular_card: 'border-blue-500 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500',
@@ -38,7 +38,7 @@ const CATEGORY_CHECKBOX_COLORS: Record<AckeyCampaign['category'], string> = {
 const EventsContent = () => {
   const { data: events = [], isLoading } = useEvents()
   const { data: characters } = useCharacters()
-  const [categoryFilter, setCategoryFilter] = useState<Set<AckeyCampaign['category']>>(
+  const [categoryFilter, setCategoryFilter] = useState<Set<Event['category']>>(
     new Set(['ackey', 'limited_card', 'regular_card', 'other'])
   )
   const regionFilter = useAtomValue(regionFilterAtom)
@@ -57,7 +57,7 @@ const EventsContent = () => {
   /**
    * カテゴリフィルターのトグル
    */
-  const toggleCategory = (category: AckeyCampaign['category']) => {
+  const toggleCategory = (category: Event['category']) => {
     setCategoryFilter((prev) => {
       const next = new Set(prev)
       if (next.has(category)) {

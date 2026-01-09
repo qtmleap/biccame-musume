@@ -20,13 +20,13 @@ import {
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
-import type { AckeyCampaign, AckeyCampaignCondition } from '@/schemas/event.dto'
+import type { Event, EventCondition } from '@/schemas/event.dto'
 import { REFERENCE_URL_TYPE_LABELS } from '@/schemas/event.dto'
 
 /**
  * カテゴリラベル
  */
-const CATEGORY_LABELS: Record<AckeyCampaign['category'], string> = {
+const CATEGORY_LABELS: Record<Event['category'], string> = {
   limited_card: '限定名刺',
   regular_card: '通年名刺',
   ackey: 'アクキー',
@@ -36,7 +36,7 @@ const CATEGORY_LABELS: Record<AckeyCampaign['category'], string> = {
 /**
  * 条件の詳細テキストを取得
  */
-const getConditionDetail = (condition: AckeyCampaignCondition): string => {
+const getConditionDetail = (condition: EventCondition): string => {
   switch (condition.type) {
     case 'purchase':
       return `${condition.purchaseAmount?.toLocaleString()}円以上購入`
@@ -52,7 +52,7 @@ const getConditionDetail = (condition: AckeyCampaignCondition): string => {
 /**
  * 条件アイコンコンポーネント
  */
-const ConditionIcon = ({ type }: { type: AckeyCampaignCondition['type'] }) => {
+const ConditionIcon = ({ type }: { type: EventCondition['type'] }) => {
   switch (type) {
     case 'purchase':
       return null
@@ -66,7 +66,7 @@ const ConditionIcon = ({ type }: { type: AckeyCampaignCondition['type'] }) => {
 /**
  * ステータスに応じたBadgeを返す
  */
-const StatusBadge = ({ campaign }: { campaign: AckeyCampaign }) => {
+const StatusBadge = ({ campaign }: { campaign: Event }) => {
   // ガントチャートと同様に、endDateも考慮したstatus計算
   const now = dayjs()
   const endDate = campaign.endDate ? dayjs(campaign.endDate) : null
@@ -103,7 +103,7 @@ const CampaignCard = ({
   onDelete,
   isAuthenticated
 }: {
-  campaign: AckeyCampaign
+  campaign: Event
   onDelete: (id: string) => void
   isAuthenticated: boolean
 }) => {
@@ -272,7 +272,7 @@ export const EventList = () => {
   }
 
   return (
-    <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AckeyCampaign['category'])}>
+    <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Event['category'])}>
       <div className='mb-4 relative bg-gray-200 rounded-lg p-1'>
         <div className='flex relative'>
           {(['limited_card', 'regular_card', 'ackey', 'other'] as const).map((category) => (

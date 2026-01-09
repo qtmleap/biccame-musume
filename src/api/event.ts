@@ -5,11 +5,11 @@ import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
 import {
-  type AckeyCampaign,
-  AckeyCampaignSchema,
-  CreateAckeyCampaignRequestSchema,
+  CreateEventRequestSchema,
+  type Event,
+  EventSchema,
   type ReferenceUrl,
-  UpdateAckeyCampaignRequestSchema
+  UpdateEventRequestSchema
 } from '../schemas/event.dto'
 
 type Bindings = {
@@ -38,7 +38,7 @@ const listEventsRoute = createRoute({
       content: {
         'application/json': {
           schema: z.object({
-            events: z.array(AckeyCampaignSchema)
+            events: z.array(EventSchema)
           })
         }
       },
@@ -64,7 +64,7 @@ const createEventRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: CreateAckeyCampaignRequestSchema
+          schema: CreateEventRequestSchema
         }
       }
     }
@@ -73,7 +73,7 @@ const createEventRoute = createRoute({
     201: {
       content: {
         'application/json': {
-          schema: AckeyCampaignSchema
+          schema: EventSchema
         }
       },
       description: 'イベント作成成功'
@@ -96,7 +96,7 @@ routes.openapi(createEventRoute, async (c) => {
   const body = c.req.valid('json')
 
   // バリデーション
-  const result = CreateAckeyCampaignRequestSchema.safeParse(body)
+  const result = CreateEventRequestSchema.safeParse(body)
   if (!result.success) {
     throw new HTTPException(400, { message: result.error.message })
   }
@@ -123,7 +123,7 @@ routes.openapi(createEventRoute, async (c) => {
   await c.env.BICCAME_MUSUME_EVENTS.put('events:list', JSON.stringify(events))
 
   // レスポンス用にパース（statusを付与）
-  const parsedEvent = AckeyCampaignSchema.parse(newEvent)
+  const parsedEvent = EventSchema.parse(newEvent)
   return c.json(parsedEvent, 201)
 })
 
@@ -143,7 +143,7 @@ const checkDuplicateUrlRoute = createRoute({
         'application/json': {
           schema: z.object({
             exists: z.boolean(),
-            event: AckeyCampaignSchema.optional()
+            event: EventSchema.optional()
           })
         }
       },
@@ -157,7 +157,7 @@ routes.openapi(checkDuplicateUrlRoute, async (c) => {
   const { url, excludeId } = c.req.valid('query')
 
   const eventsData = await c.env.BICCAME_MUSUME_EVENTS.get('events:list')
-  const events: AckeyCampaign[] = eventsData ? JSON.parse(eventsData) : []
+  const events: Event[] = eventsData ? JSON.parse(eventsData) : []
 
   // URLが一致するイベントを検索（自分自身は除外）
   const matchingEvent = events.find((event) => {
@@ -184,7 +184,7 @@ const getEventRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: AckeyCampaignSchema
+          schema: EventSchema
         }
       },
       description: 'イベント取得成功'
@@ -215,7 +215,7 @@ routes.openapi(getEventRoute, async (c) => {
   }
 
   // レスポンス用にパース（statusを付与）
-  const parsedEvent = AckeyCampaignSchema.parse(event)
+  const parsedEvent = EventSchema.parse(event)
   return c.json(parsedEvent, 200)
 })
 
@@ -231,7 +231,7 @@ const updateEventRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: UpdateAckeyCampaignRequestSchema
+          schema: UpdateEventRequestSchema
         }
       }
     }
@@ -240,7 +240,7 @@ const updateEventRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: AckeyCampaignSchema
+          schema: EventSchema
         }
       },
       description: 'イベント更新成功'
@@ -297,7 +297,7 @@ routes.openapi(updateEventRoute, async (c) => {
   await c.env.BICCAME_MUSUME_EVENTS.put('events:list', JSON.stringify(events))
 
   // レスポンス用にパース（statusを付与）
-  const parsedEvent = AckeyCampaignSchema.parse(updatedEvent)
+  const parsedEvent = EventSchema.parse(updatedEvent)
   return c.json(parsedEvent, 200)
 })
 
