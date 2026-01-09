@@ -20,8 +20,8 @@ import {
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
-import type { AckeyCampaign, AckeyCampaignCondition } from '@/schemas/ackey-campaign.dto'
-import { REFERENCE_URL_TYPE_LABELS } from '@/schemas/ackey-campaign.dto'
+import type { AckeyCampaign, AckeyCampaignCondition } from '@/schemas/event.dto'
+import { REFERENCE_URL_TYPE_LABELS } from '@/schemas/event.dto'
 
 /**
  * カテゴリラベル

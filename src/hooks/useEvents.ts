@@ -3,7 +3,7 @@ import type {
   AckeyCampaign,
   CreateAckeyCampaignRequest,
   UpdateAckeyCampaignRequest
-} from '@/schemas/ackey-campaign.dto'
+} from '@/schemas/event.dto'
 import { client } from '@/utils/client'
 
 /**
