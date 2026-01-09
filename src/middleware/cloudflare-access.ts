@@ -91,8 +91,8 @@ export const verifyAccessJwt = async (
   const { payload } = decodeJwt(token)
 
   // 有効期限チェック
-  const now = Math.floor(Date.now() / 1000)
-  if (payload.exp < now) {
+  const currentTime = Math.floor(Date.now() / 1000)
+  if (payload.exp < currentTime) {
     throw new Error('Token has expired')
   }
 

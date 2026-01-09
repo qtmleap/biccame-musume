@@ -1,7 +1,7 @@
 import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
 import { CharactersSchema } from '@/schemas/character.dto'
-import { CreateEventRequestSchema, EventSchema, UpdateEventRequestSchema } from '@/schemas/event.dto'
+import { EventRequestSchema, EventSchema } from '@/schemas/event.dto'
 import { AllVoteCountsSchema, VoteCountSchema, VoteRequestSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
 
 /**
@@ -82,7 +82,7 @@ const api = makeApi([
       {
         name: 'body',
         type: 'Body',
-        schema: CreateEventRequestSchema
+        schema: EventRequestSchema
       }
     ],
     response: EventSchema
@@ -96,7 +96,7 @@ const api = makeApi([
       {
         name: 'body',
         type: 'Body',
-        schema: UpdateEventRequestSchema
+        schema: EventRequestSchema.partial()
       }
     ],
     response: EventSchema

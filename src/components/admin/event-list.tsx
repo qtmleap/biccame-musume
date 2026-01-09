@@ -58,12 +58,12 @@ const ConditionIcon = ({ type }: { type: EventCondition['type'] }) => {
  */
 const StatusBadge = ({ campaign }: { campaign: Event }) => {
   // ガントチャートと同様に、endDateも考慮したstatus計算
-  const now = dayjs()
+  const currentTime = dayjs()
   const endDate = campaign.endDate ? dayjs(campaign.endDate) : null
   const status = (() => {
     if (campaign.actualEndDate != null) return 'ended'
-    if (endDate && now.isAfter(endDate)) return 'ended'
-    if (now.isBefore(dayjs(campaign.startDate))) return 'upcoming'
+    if (endDate && currentTime.isAfter(endDate)) return 'ended'
+    if (currentTime.isBefore(dayjs(campaign.startDate))) return 'upcoming'
     return 'ongoing'
   })()
 

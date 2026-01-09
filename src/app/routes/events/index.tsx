@@ -71,7 +71,7 @@ const EventsContent = () => {
 
   // 開催中・開催予定のイベントをフィルタリング
   const activeEvents = useMemo(() => {
-    const now = dayjs()
+    const currentTime = dayjs()
     return events
       .filter((event) => {
         // カテゴリフィルター
@@ -94,16 +94,16 @@ const EventsContent = () => {
         const endDate = event.endDate ? dayjs(event.endDate) : null
 
         // 終了後1週間経過したイベントは非表示
-        if (endDate?.add(7, 'day').isBefore(now)) {
+        if (endDate?.add(7, 'day').isBefore(currentTime)) {
           return false
         }
 
         // 開催中: 開始日が現在以前で、終了日がないか終了日が現在以降
-        const isOngoing = startDate.isBefore(now) && (!endDate || endDate.isAfter(now))
+        const isOngoing = startDate.isBefore(currentTime) && (!endDate || endDate.isAfter(currentTime))
         // 開催予定: 開始日が現在以降
-        const isUpcoming = startDate.isAfter(now)
+        const isUpcoming = startDate.isAfter(currentTime)
         // 終了後1週間以内: 終了日があり、終了日から1週間以内
-        const isRecentlyEnded = endDate?.isBefore(now) && endDate.add(7, 'day').isAfter(now)
+        const isRecentlyEnded = endDate?.isBefore(currentTime) && endDate.add(7, 'day').isAfter(currentTime)
 
         return isOngoing || isUpcoming || isRecentlyEnded
       })

@@ -32,7 +32,10 @@
 - ユーティリティ: `lodash-es`
 
 **使用しないもの:**
-- `Date`(dayjsを使用)、`fetch`(Zodiosクライアントを使用)、直接の`svg`、`while`ループ
+- `Date`(dayjsを使用)
+- `fetch`(Zodiosクライアントを使用
+- 直接の`svg`
+- `while`ループ
 
 ### ディレクトリ構成
 - コンポーネント: `src/components/**/*.tsx`

@@ -33,10 +33,10 @@ export const CharacterVoteButton = ({
     if (!lastVoteTime) return false
 
     const lastVote = dayjs(lastVoteTime)
-    const now = dayjs()
+    const currentTime = dayjs()
     // 最後の投票から翌日（次の日の0時）になっているかチェック
     const nextDay = lastVote.add(1, 'day').startOf('day')
-    return now.isBefore(nextDay)
+    return currentTime.isBefore(nextDay)
   }, [lastVoteTimes, characterId])
 
   // 投票成功時に最後の投票時間を記録

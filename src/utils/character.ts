@@ -26,8 +26,8 @@ export const isBirthdayToday = (dateStr: string | undefined): boolean => {
   const birthday = parseDate(dateStr)
   if (!birthday) return false
 
-  const now = dayjs()
-  return birthday.month() === now.month() && birthday.date() === now.date()
+  const currentTime = dayjs()
+  return birthday.month() === currentTime.month() && birthday.date() === currentTime.date()
 }
 
 /**
@@ -50,14 +50,14 @@ export const getDaysFromBirthday = (dateStr: string | undefined): number => {
   const birthday = parseDate(dateStr)
   if (!birthday) return Number.MAX_SAFE_INTEGER
 
-  const now = dayjs()
-  const thisYear = now.year()
+  const currentTime = dayjs()
+  const thisYear = currentTime.year()
   const birthdayThisYear = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
   const birthdayNextYear = birthdayThisYear.add(1, 'year')
 
   // 今年の誕生日と来年の誕生日、両方との差の絶対値を計算
-  const diffThisYear = Math.abs(birthdayThisYear.diff(now, 'day'))
-  const diffNextYear = Math.abs(birthdayNextYear.diff(now, 'day'))
+  const diffThisYear = Math.abs(birthdayThisYear.diff(currentTime, 'day'))
+  const diffNextYear = Math.abs(birthdayNextYear.diff(currentTime, 'day'))
 
   // より近い方を返す
   return Math.min(diffThisYear, diffNextYear)
@@ -70,15 +70,15 @@ export const getDaysUntilBirthday = (dateStr: string | undefined): number => {
   const birthday = parseDate(dateStr)
   if (!birthday) return Number.MAX_SAFE_INTEGER
 
-  const now = dayjs()
-  const thisYear = now.year()
+  const currentTime = dayjs()
+  const thisYear = currentTime.year()
   let nextBirthday = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
 
-  if (nextBirthday.isBefore(now, 'day') || nextBirthday.isSame(now, 'day')) {
+  if (nextBirthday.isBefore(currentTime, 'day') || nextBirthday.isSame(currentTime, 'day')) {
     nextBirthday = nextBirthday.add(1, 'year')
   }
 
-  return nextBirthday.diff(now, 'day')
+  return nextBirthday.diff(currentTime, 'day')
 }
 
 /**

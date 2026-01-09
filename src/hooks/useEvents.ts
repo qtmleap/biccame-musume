@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { CreateEventRequest, Event, UpdateEventRequest } from '@/schemas/event.dto'
+import type { Event, EventRequest } from '@/schemas/event.dto'
 import { client } from '@/utils/client'
 
 /**
@@ -26,7 +26,7 @@ export const useCreateEvent = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (event: CreateEventRequest): Promise<Event> => {
+    mutationFn: async (event: EventRequest): Promise<Event> => {
       return client.createEvent(event)
     },
     onSuccess: () => {
@@ -60,7 +60,7 @@ export const useUpdateEvent = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: UpdateEventRequest }): Promise<Event> => {
+    mutationFn: async ({ id, data }: { id: string; data: Partial<EventRequest> }): Promise<Event> => {
       return client.updateEvent(data, { params: { eventId: id } })
     },
     onSuccess: () => {
