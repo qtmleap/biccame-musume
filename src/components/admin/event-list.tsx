@@ -20,18 +20,8 @@ import {
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
+import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS } from '@/locales/app.content'
 import type { Event, EventCondition } from '@/schemas/event.dto'
-import { REFERENCE_URL_TYPE_LABELS } from '@/schemas/event.dto'
-
-/**
- * カテゴリラベル
- */
-const CATEGORY_LABELS: Record<Event['category'], string> = {
-  limited_card: '限定名刺',
-  regular_card: '通年名刺',
-  ackey: 'アクキー',
-  other: 'その他'
-}
 
 /**
  * 条件の詳細テキストを取得
@@ -283,7 +273,7 @@ export const EventList = () => {
               className='relative flex-1 py-2 text-sm font-medium text-center z-10 transition-colors'
             >
               <span className={activeTab === category ? 'text-gray-900' : 'text-gray-600'}>
-                {CATEGORY_LABELS[category]}
+                {EVENT_CATEGORY_LABELS[category]}
                 <span className='ml-1.5 text-xs text-muted-foreground'>({categoryCounts[category]})</span>
               </span>
               {activeTab === category && (
@@ -302,7 +292,7 @@ export const EventList = () => {
         <TabsContent key={category} value={category}>
           {filteredCampaigns.length === 0 ? (
             <div className='rounded-lg border p-6 text-center'>
-              <p className='text-sm text-muted-foreground'>{CATEGORY_LABELS[category]}のイベントはありません</p>
+              <p className='text-sm text-muted-foreground'>{EVENT_CATEGORY_LABELS[category]}のイベントはありません</p>
             </div>
           ) : (
             <>

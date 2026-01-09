@@ -10,14 +10,8 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/useCharacters'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
-import {
-  type Event,
-  EventConditionTypeSchema,
-  EVENT_CATEGORY_LABELS,
-  EventCategorySchema,
-  REFERENCE_URL_TYPE_LABELS,
-  ReferenceUrlTypeSchema
-} from '@/schemas/event.dto'
+import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS } from '@/locales/app.content'
+import { type Event, EventCategorySchema, EventConditionTypeSchema, ReferenceUrlTypeSchema } from '@/schemas/event.dto'
 
 /**
  * フォームのスキーマ定義
