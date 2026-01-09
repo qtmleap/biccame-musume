@@ -89,7 +89,7 @@ const EventDetailContent = () => {
   const status: EventStatus = (() => {
     if (event.actualEndDate != null) return 'ended'
     if (endDate && now.isAfter(endDate)) return 'ended'
-    if (now.isBefore(startDate.startOf('day'))) return 'upcoming'
+    if (now.isBefore(startDate)) return 'upcoming'
     return 'ongoing'
   })()
 
