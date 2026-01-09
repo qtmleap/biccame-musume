@@ -5,11 +5,10 @@ import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
 import {
-  CreateEventRequestSchema,
   type Event,
+  EventRequestSchema,
   EventSchema,
-  type ReferenceUrl,
-  UpdateEventRequestSchema
+  type ReferenceUrl
 } from '../schemas/event.dto'
 
 type Bindings = {
@@ -64,7 +63,7 @@ const createEventRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: CreateEventRequestSchema
+          schema: EventRequestSchema
         }
       }
     }
@@ -96,20 +95,20 @@ routes.openapi(createEventRoute, async (c) => {
   const body = c.req.valid('json')
 
   // バリデーション
-  const result = CreateEventRequestSchema.safeParse(body)
+  const result = EventRequestSchema.safeParse(body)
   if (!result.success) {
     throw new HTTPException(400, { message: result.error.message })
   }
 
   // 新しいイベントを作成
-  const now = dayjs().toISOString()
+  const currentTime = dayjs().toISOString()
 
   const newEvent = {
     id: crypto.randomUUID(),
     ...result.data,
-    startDate: result.data.startDate || now,
-    createdAt: now,
-    updatedAt: now
+    startDate: result.data.startDate || currentTime,
+    createdAt: currentTime,
+    updatedAt: currentTime
   }
 
   // 既存のイベント一覧を取得
@@ -231,7 +230,7 @@ const updateEventRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: UpdateEventRequestSchema
+          schema: EventRequestSchema.partial()
         }
       }
     }

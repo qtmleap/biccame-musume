@@ -53,9 +53,9 @@ const CalendarContent = () => {
   }
 
   const handleCurrentMonth = () => {
-    const now = dayjs()
-    setSelectedYear(now.year())
-    setSelectedMonth(now.month() + 1)
+    const currentTime = dayjs()
+    setSelectedYear(currentTime.year())
+    setSelectedMonth(currentTime.month() + 1)
   }
 
   const selectedDayEvents = selectedDay ? events.filter((event) => dayjs(event.date).date() === selectedDay) : []
