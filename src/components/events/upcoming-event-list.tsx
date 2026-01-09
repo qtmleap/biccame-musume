@@ -25,19 +25,19 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
    * 直近のイベントを計算
    */
   const upcomingEvents = useMemo(() => {
-    const now = dayjs()
+    const currentTime = dayjs()
     const events: UpcomingEvent[] = []
 
     for (const character of characters) {
       if (character.character_birthday) {
         const birthday = dayjs(character.character_birthday)
         if (birthday.isValid()) {
-          const thisYear = now.year()
+          const thisYear = currentTime.year()
           let nextBirthday = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
-          if (nextBirthday.isBefore(now, 'day')) {
+          if (nextBirthday.isBefore(currentTime, 'day')) {
             nextBirthday = nextBirthday.add(1, 'year')
           }
-          const daysUntil = nextBirthday.diff(now, 'day')
+          const daysUntil = nextBirthday.diff(currentTime, 'day')
           events.push({ character, type: 'character', date: nextBirthday, daysUntil })
         }
       }

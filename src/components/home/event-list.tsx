@@ -64,7 +64,7 @@ export const EventList = () => {
         return false
       }
 
-      const now = dayjs()
+      const currentTime = dayjs()
       const startDate = dayjs(event.startDate)
 
       // 開催中のイベント
@@ -74,7 +74,7 @@ export const EventList = () => {
 
       // 開催一週間前のイベント
       const oneWeekBefore = startDate.subtract(7, 'day')
-      if (now.isAfter(oneWeekBefore) && now.isBefore(startDate)) {
+      if (currentTime.isAfter(oneWeekBefore) && currentTime.isBefore(startDate)) {
         return true
       }
 
