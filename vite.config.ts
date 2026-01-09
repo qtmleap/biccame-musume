@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react-swc'
 import { defineConfig } from 'vite'
+import { intlayer } from 'vite-intlayer' // Add the plugin to the Vite plugin list
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import sitemap from 'vite-plugin-sitemap'
 
@@ -56,19 +57,12 @@ export default defineConfig(({ mode }) => {
         configPath: './wrangler.toml'
       }),
       tailwindcss(),
+      intlayer(),
       sitemap({
         hostname: 'https://biccame-musume.com',
-        dynamicRoutes: [
-          '/',
-          '/about',
-          '/calendar',
-          '/characters',
-          '/contact',
-          '/location',
-          '/ranking'
-        ],
+        dynamicRoutes: ['/', '/about', '/calendar', '/characters', '/contact', '/location', '/ranking'],
         changefreq: 'weekly',
-        outDir: 'dist/client',
+        outDir: 'dist/client'
       })
     ],
     build: {
@@ -85,7 +79,7 @@ export default defineConfig(({ mode }) => {
               '@radix-ui/react-alert-dialog'
             ],
             utils: ['axios', 'dayjs'],
-            react: ['react', 'react-dom'],
+            react: ['react', 'react-dom']
           }
         }
       },
