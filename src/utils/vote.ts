@@ -9,21 +9,21 @@ dayjs.extend(timezone)
  * JSTの今日の日付を YYYY-MM-DD 形式で取得
  */
 export const getJSTDate = (): string => {
-  return dayjs().tz('Asia/Tokyo').format('YYYY-MM-DD')
+  return dayjs().format('YYYY-MM-DD')
 }
 
 /**
  * JSTの次の日付（明日0時）を取得
  */
 export const getNextJSTDate = (): string => {
-  return dayjs().tz('Asia/Tokyo').add(1, 'day').startOf('day').toISOString()
+  return dayjs().add(1, 'day').startOf('day').toISOString()
 }
 
 /**
  * JSTの現在の年を取得
  */
 export const getJSTYear = (): string => {
-  return dayjs().tz('Asia/Tokyo').format('YYYY')
+  return dayjs().format('YYYY')
 }
 
 /**

@@ -1,11 +1,11 @@
 import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
+import { CharactersSchema } from '@/schemas/character.dto'
 import {
   AckeyCampaignSchema,
   CreateAckeyCampaignRequestSchema,
   UpdateAckeyCampaignRequestSchema
 } from '@/schemas/event.dto'
-import { CharactersSchema } from '@/schemas/character.dto'
 import { AllVoteCountsSchema, VoteCountSchema, VoteRequestSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
 
 /**
@@ -135,7 +135,5 @@ const api = makeApi([
 
 /**
  * Zodiosクライアント
- * validateResponse: false でレスポンスのバリデーションを無効化
- * （既存データとスキーマの不一致による本番エラーを回避）
  */
-export const client = new Zodios('/', api, { validate: false })
+export const client = new Zodios('/', api)
