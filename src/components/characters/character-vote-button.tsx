@@ -44,7 +44,7 @@ export const CharacterVoteButton = ({
     if (isSuccess) {
       setLastVoteTimes((prev) => ({
         ...prev,
-        [characterId]: new Date().toISOString()
+        [characterId]: dayjs().toISOString()
       }))
     }
   }, [isSuccess, characterId, setLastVoteTimes])

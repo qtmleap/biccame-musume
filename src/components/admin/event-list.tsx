@@ -64,30 +64,18 @@ const ConditionIcon = ({ type }: { type: AckeyCampaignCondition['type'] }) => {
 }
 
 /**
- * イベントのステータスを取得
- */
-const getEventStatus = (campaign: AckeyCampaign): 'upcoming' | 'ongoing' | 'ended' => {
-  if (campaign.isEnded) return 'ended'
-
-  const now = dayjs()
-  const startDate = dayjs(campaign.startDate)
-  const endDate = campaign.endDate ? dayjs(campaign.endDate) : null
-
-  // 開始前
-  if (now.isBefore(startDate)) return 'upcoming'
-
-  // 終了日が設定されている場合、終了日を過ぎていたら終了
-  if (endDate && now.isAfter(endDate)) return 'ended'
-
-  // 開始日以降で、終了日未設定または終了日前なら開催中
-  return 'ongoing'
-}
-
-/**
  * ステータスに応じたBadgeを返す
  */
 const StatusBadge = ({ campaign }: { campaign: AckeyCampaign }) => {
-  const status = getEventStatus(campaign)
+  // ガントチャートと同様に、endDateも考慮したstatus計算
+  const now = dayjs()
+  const endDate = campaign.endDate ? dayjs(campaign.endDate) : null
+  const status = (() => {
+    if (campaign.actualEndDate != null) return 'ended'
+    if (endDate && now.isAfter(endDate)) return 'ended'
+    if (now.isBefore(dayjs(campaign.startDate).startOf('day'))) return 'upcoming'
+    return 'ongoing'
+  })()
 
   switch (status) {
     case 'upcoming':

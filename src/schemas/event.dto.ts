@@ -1,4 +1,21 @@
+import dayjs from 'dayjs'
 import { z } from 'zod'
+
+/**
+ * イベントステータス
+ */
+export const EventStatusSchema = z.enum(['upcoming', 'ongoing', 'ended'])
+
+export type EventStatus = z.infer<typeof EventStatusSchema>
+
+/**
+ * イベントステータスの表示名
+ */
+export const EVENT_STATUS_LABELS: Record<EventStatus, string> = {
+  upcoming: '開催前',
+  ongoing: '開催中',
+  ended: '終了'
+}
 
 /**
  * イベント種別（カテゴリ）
@@ -73,9 +90,9 @@ export const ReferenceUrlSchema = z.object({
 export type ReferenceUrl = z.infer<typeof ReferenceUrlSchema>
 
 /**
- * イベント
+ * イベント（ベーススキーマ）
  */
-export const EventSchema = z.object({
+const EventBaseSchema = z.object({
   id: z.string(),
   // イベント種別
   category: EventCategorySchema,
@@ -95,12 +112,29 @@ export const EventSchema = z.object({
   actualEndDate: z.string().datetime().optional(),
   // 配布条件
   conditions: z.array(EventConditionSchema).nonempty('最低1つの条件を設定してください'),
-  // 終了済みかどうか（actualEndDateがある場合は自動的にtrue）
-  isEnded: z.boolean().default(false),
   // 作成日時
   createdAt: z.string().datetime(),
   // 更新日時
   updatedAt: z.string().datetime()
+})
+
+/**
+ * イベント（status付き）
+ */
+export const EventSchema = EventBaseSchema.transform((v) => {
+  const now = dayjs()
+  const startDate = dayjs(v.startDate)
+
+  const status: EventStatus = (() => {
+    // actualEndDateがあれば終了
+    if (v.actualEndDate != null) return 'ended'
+    // 開始日前なら開催前
+    if (now.isBefore(startDate.startOf('day'))) return 'upcoming'
+    // それ以外は開催中
+    return 'ongoing'
+  })()
+
+  return { ...v, status }
 })
 
 export type Event = z.infer<typeof EventSchema>
@@ -108,7 +142,7 @@ export type Event = z.infer<typeof EventSchema>
 /**
  * イベント作成リクエスト
  */
-export const CreateEventRequestSchema = EventSchema.omit({
+export const CreateEventRequestSchema = EventBaseSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true
