@@ -29,7 +29,7 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
 
   return (
     <motion.section
-      className='relative mb-6 overflow-hidden rounded-2xl bg-linear-to-r from-pink-500 to-purple-500 p-6'
+      className='relative mb-6 overflow-hidden bg-linear-to-r from-pink-500 to-purple-500 p-6'
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -94,7 +94,7 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             <Button asChild variant='secondary' size='sm'>
-              <Link to='/characters' search={{ character: mainCharacter.key }}>
+              <Link to='/characters/$id' params={{ id: mainCharacter.key }}>
                 詳細を見る
               </Link>
             </Button>
@@ -118,7 +118,7 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
               <p className='mb-2 text-xs text-white/70'>他にも誕生日のキャラクターがいます</p>
               <div className='flex justify-center gap-2 md:justify-start'>
                 {otherCharacters.map((character) => (
-                  <Link key={character.key} to='/characters' search={{ character: character.key }}>
+                  <Link key={character.key} to='/characters/$id' params={{ id: character.key }}>
                     <Avatar className='size-10 border-2 border-white/50 transition-transform hover:scale-110'>
                       <AvatarImage src={character.profile_image_url} alt={character.character_name} />
                       <AvatarFallback>{character.character_name.charAt(0)}</AvatarFallback>

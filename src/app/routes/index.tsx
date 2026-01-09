@@ -96,7 +96,7 @@ const BirthdayDisplay = ({
 const HomeContent = () => {
   const { data: characters } = useCharacters()
   const birthdayCharacters = getBirthdayCharacters(characters)
-  const [displayType, setDisplayType] = useState<BirthdayDisplayType>('dialog')
+  const [displayType, setDisplayType] = useState<BirthdayDisplayType>('hero')
 
   return (
     <div className='flex flex-col gap-3'>
