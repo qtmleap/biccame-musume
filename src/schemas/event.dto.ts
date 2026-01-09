@@ -126,12 +126,9 @@ export const EventSchema = EventBaseSchema.transform((v) => {
   const startDate = dayjs(v.startDate)
 
   const status: EventStatus = (() => {
-    // actualEndDateがあれば終了
-    if (v.actualEndDate != null) return 'ended'
-    // 開始日前なら開催前
-    if (now.isBefore(startDate.startOf('day'))) return 'upcoming'
-    // それ以外は開催中
-    return 'ongoing'
+    if (now.isBefore(startDate)) return EventStatusSchema.enum.upcoming
+    if (v.actualEndDate === undefined || v.endDate === undefined) return EventStatusSchema.enum.ongoing
+    return EventStatusSchema.enum.ongoing
   })()
 
   return { ...v, status }
