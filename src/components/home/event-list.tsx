@@ -40,9 +40,13 @@ const getCategoryStyle = (category: EventCategory | undefined) => {
  */
 const getDaysLabel = (days: number, status: EventStatus) => {
   if (status === 'ended') return '終了'
-  if (status === 'ongoing' || days === 0) return '開催中'
-  if (days === 1) return '明日'
-  return `${days}日後`
+  if (status === 'ongoing') return '開催中'
+  if (status === 'upcoming') {
+    if (days <= 0) return '本日開始'
+    if (days === 1) return '明日'
+    return `${days}日後`
+  }
+  return ''
 }
 
 /**
@@ -101,21 +105,10 @@ export const EventList = () => {
 
           <div className='flex flex-col gap-2'>
             {upcomingEvents.map((event, index) => {
-              const now = dayjs()
               const startDate = dayjs(event.startDate)
-              const endDate = event.actualEndDate
-                ? dayjs(event.actualEndDate)
-                : event.endDate
-                  ? dayjs(event.endDate)
-                  : null
-              // ガントチャートと同様に、endDateも考慮したstatus計算
-              const status: EventStatus = (() => {
-                if (event.actualEndDate != null) return 'ended'
-                if (endDate && now.isAfter(endDate)) return 'ended'
-                if (now.isBefore(startDate)) return 'upcoming'
-                return 'ongoing'
-              })()
-              const daysUntil = startDate.diff(now, 'day')
+              // EventSchemaで計算されたstatusとdaysUntilを使用
+              const status = event.status
+              const daysUntil = event.daysUntil
 
               return (
                 <motion.div
