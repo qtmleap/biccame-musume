@@ -9,30 +9,11 @@ export const EventStatusSchema = z.enum(['upcoming', 'ongoing', 'ended'])
 export type EventStatus = z.infer<typeof EventStatusSchema>
 
 /**
- * イベントステータスの表示名
- */
-export const EVENT_STATUS_LABELS: Record<EventStatus, string> = {
-  upcoming: '開催前',
-  ongoing: '開催中',
-  ended: '終了'
-}
-
-/**
  * イベント種別（カテゴリ）
  */
 export const EventCategorySchema = z.enum(['limited_card', 'regular_card', 'ackey', 'other'])
 
 export type EventCategory = z.infer<typeof EventCategorySchema>
-
-/**
- * イベント種別の表示名
- */
-export const EVENT_CATEGORY_LABELS: Record<EventCategory, string> = {
-  limited_card: '限定名刺',
-  regular_card: '通年名刺',
-  ackey: 'アクキー',
-  other: 'その他'
-}
 
 /**
  * 配布条件の種類
@@ -60,24 +41,6 @@ export type EventCondition = z.infer<typeof EventConditionSchema>
 export const ReferenceUrlTypeSchema = z.enum(['announce', 'start', 'end'])
 
 export type ReferenceUrlType = z.infer<typeof ReferenceUrlTypeSchema>
-
-/**
- * 参考URLの種類の表示名（短縮版：編集画面用）
- */
-export const REFERENCE_URL_TYPE_LABELS: Record<ReferenceUrlType, string> = {
-  announce: '告知',
-  start: '開始',
-  end: '終了'
-}
-
-/**
- * 参考URLの種類の表示名（詳細版：詳細ページ用）
- */
-export const REFERENCE_URL_TYPE_LABELS_LONG: Record<ReferenceUrlType, string> = {
-  announce: '告知ツイート',
-  start: '開始ツイート',
-  end: '終了ツイート'
-}
 
 /**
  * 参考URL
