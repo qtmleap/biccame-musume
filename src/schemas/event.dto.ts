@@ -127,11 +127,18 @@ export const EventSchema = EventBaseSchema.transform((v) => {
 
   const status: EventStatus = (() => {
     if (now.isBefore(startDate)) return EventStatusSchema.enum.upcoming
-    if (v.actualEndDate === undefined || v.endDate === undefined) return EventStatusSchema.enum.ongoing
+    // 実際の終了日時が設定されていたら終了済み
+    if (v.actualEndDate !== undefined) return EventStatusSchema.enum.ended
+    if (v.endDate !== undefined)
+      return now.isAfter(v.endDate) ? EventStatusSchema.enum.ended : EventStatusSchema.enum.ongoing
     return EventStatusSchema.enum.ongoing
   })()
 
-  return { ...v, status }
+  // 日本時間で日付の差分を計算
+  const daysUntil = startDate.startOf('day').diff(now.startOf('day'), 'day')
+  console.log(v.name, status)
+
+  return { ...v, status, daysUntil }
 })
 
 export type Event = z.infer<typeof EventSchema>

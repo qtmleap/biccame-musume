@@ -158,7 +158,7 @@ const checkDuplicateVote = async (votesKV: KVNamespace, characterId: string, ip:
  * 投票を記録（JST0時までの秒数をTTLに設定）
  */
 const recordVote = async (votesKV: KVNamespace, characterId: string, ip: string): Promise<void> => {
-  const jstNow = dayjs().tz('Asia/Tokyo')
+  const jstNow = dayjs()
   const jstMidnight = jstNow.endOf('day')
   const ttl = jstMidnight.diff(jstNow, 'second')
 
