@@ -168,8 +168,8 @@ const EventDetailContent = () => {
           </div>
         )}
 
-        {/* 限定数 */}
-        {event.limitedQuantity && (
+        {/* 限定数（全員配布の場合は表示しない） */}
+        {event.limitedQuantity && !event.conditions.some((c) => c.type === 'everyone') && (
           <div>
             <div className='flex items-center gap-2 text-sm font-medium text-gray-700 mb-2'>
               <Package className='size-4' />
