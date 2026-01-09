@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { useCharacters } from '@/hooks/useCharacters'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useEvents } from '@/hooks/useEvents'
-import type { AckeyCampaign, EventCategory } from '@/schemas/event.dto'
+import type { AckeyCampaign, EventCategory, EventStatus } from '@/schemas/event.dto'
 import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS_LONG } from '@/schemas/event.dto'
 
 /**
@@ -85,9 +85,13 @@ const EventDetailContent = () => {
   const now = dayjs()
   const startDate = dayjs(event.startDate)
   const endDate = event.actualEndDate ? dayjs(event.actualEndDate) : event.endDate ? dayjs(event.endDate) : null
-  const isEnded = endDate ? now.isAfter(endDate) : event.isEnded
-  const isStarted = now.isAfter(startDate)
-  const isOngoing = isStarted && !isEnded
+  // ガントチャートと同様に、endDateも考慮したstatus計算
+  const status: EventStatus = (() => {
+    if (event.actualEndDate != null) return 'ended'
+    if (endDate && now.isAfter(endDate)) return 'ended'
+    if (now.isBefore(startDate.startOf('day'))) return 'upcoming'
+    return 'ongoing'
+  })()
 
   return (
     <div className='container mx-auto px-4 py-8 max-w-6xl'>
@@ -101,9 +105,11 @@ const EventDetailContent = () => {
       <div className='mb-6'>
         <div className='flex items-center gap-2 mb-2'>
           <Badge className={`${categoryStyle} border`}>{EVENT_CATEGORY_LABELS[event.category]}</Badge>
-          {isOngoing && <Badge className='bg-green-100 text-green-700 border-green-300 border'>開催中</Badge>}
-          {isEnded && <Badge className='bg-gray-100 text-gray-700 border-gray-300 border'>終了</Badge>}
-          {!isStarted && <Badge className='bg-blue-100 text-blue-700 border-blue-300 border'>開催前</Badge>}
+          {status === 'ongoing' && (
+            <Badge className='bg-green-100 text-green-700 border-green-300 border'>開催中</Badge>
+          )}
+          {status === 'ended' && <Badge className='bg-gray-100 text-gray-700 border-gray-300 border'>終了</Badge>}
+          {status === 'upcoming' && <Badge className='bg-blue-100 text-blue-700 border-blue-300 border'>開催前</Badge>}
         </div>
         <div className='flex items-center justify-between gap-4'>
           <h1 className='text-2xl font-bold text-gray-900'>{event.name}</h1>
