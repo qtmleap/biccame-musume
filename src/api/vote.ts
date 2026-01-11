@@ -1,5 +1,7 @@
 import { type RateLimitBinding, type RateLimitKeyFunc, rateLimit } from '@elithrar/workers-hono-rate-limit'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { PrismaD1 } from '@prisma/adapter-d1'
+import { PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
@@ -12,13 +14,14 @@ import {
   VoteRequestSchema,
   VoteSuccessResponseSchema
 } from '../schemas/vote.dto'
-import { generateCountKey, generateVoteKey, getNextJSTDate } from '../utils/vote'
+import { generateVoteKey, getNextJSTDate } from '../utils/vote'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
 type Bindings = {
   VOTES: KVNamespace
+  DB: D1Database
   RATE_LIMITER: RateLimitBinding
 }
 
@@ -167,35 +170,53 @@ const recordVote = async (votesKV: KVNamespace, characterId: string, ip: string)
 }
 
 /**
- * カウント更新処理
+ * カウント更新処理（D1に保存）
  */
-const updateVoteCount = async (votesKV: KVNamespace, characterId: string): Promise<void> => {
+const updateVoteCount = async (db: D1Database, characterId: string): Promise<void> => {
   try {
-    const countKey = generateCountKey(characterId)
-    const currentVoteCount = await votesKV.get(countKey)
-    const newCount = (currentVoteCount ? Number.parseInt(currentVoteCount, 10) : 0) + 1
+    const adapter = new PrismaD1(db)
+    const prisma = new PrismaClient({ adapter })
+    const currentYear = dayjs().year()
 
-    await votesKV.put(countKey, String(newCount), {
-      metadata: { count: newCount }
+    await prisma.voteCount.upsert({
+      where: { characterId_year: { characterId, year: currentYear } },
+      update: {
+        count: { increment: 1 },
+        updatedAt: new Date()
+      },
+      create: {
+        characterId,
+        year: currentYear,
+        count: 1
+      }
     })
+
+    await prisma.$disconnect()
   } catch (error) {
     console.error('Vote count update error:', error)
   }
 }
 
 /**
- * 投票カウント取得
+ * 投票カウント取得（D1から取得）
  * GET /api/votes/:characterId
  */
 routes.openapi(getVoteCountRoute, async (c) => {
   const { characterId } = c.req.valid('param')
-  const countKey = generateCountKey(characterId)
+  const currentYear = dayjs().year()
 
-  const count = await c.env.VOTES.get(countKey)
+  const adapter = new PrismaD1(c.env.DB)
+  const prisma = new PrismaClient({ adapter })
+
+  const voteCount = await prisma.voteCount.findUnique({
+    where: { characterId_year: { characterId, year: currentYear } }
+  })
+
+  await prisma.$disconnect()
 
   return c.json({
     characterId,
-    count: count ? Number.parseInt(count, 10) : 0
+    count: voteCount?.count || 0
   })
 })
 
@@ -231,7 +252,7 @@ routes.openapi(postVoteRoute, async (c) => {
       await recordVote(c.env.VOTES, characterId, ip)
     }
 
-    c.executionCtx.waitUntil(updateVoteCount(c.env.VOTES, characterId))
+    c.executionCtx.waitUntil(updateVoteCount(c.env.DB, characterId))
 
     return c.json({
       success: true,
@@ -252,19 +273,27 @@ routes.openapi(postVoteRoute, async (c) => {
 })
 
 /**
- * 全キャラクターの投票カウント取得
+ * 全キャラクターの投票カウント取得（D1から取得）
  * GET /api/votes
  */
 routes.openapi(getAllVoteCountsRoute, async (c) => {
   try {
+    const adapter = new PrismaD1(c.env.DB)
+    const prisma = new PrismaClient({ adapter })
     const currentYear = dayjs().year()
-    const prefix = `count:${currentYear}`
 
-    // KVから全ての今年の投票カウントキーをメタデータ付きで一括取得
-    const list = await c.env.VOTES.list<{ count: number }>({ prefix })
+    const voteCounts = await prisma.voteCount.findMany({
+      where: { year: currentYear },
+      select: {
+        characterId: true,
+        count: true
+      }
+    })
 
-    // メタデータから件数を取得してオブジェクトを作成
-    const counts = Object.fromEntries(list.keys.map((key) => [key.name.replace(prefix, ''), key.metadata?.count || 0]))
+    await prisma.$disconnect()
+
+    // キャラクターIDをキー、カウントを値とするオブジェクトに変換
+    const counts = Object.fromEntries(voteCounts.map((vc) => [vc.characterId, vc.count]))
 
     return c.json(counts)
   } catch (error) {

@@ -99,9 +99,9 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         let eventEnd: Dayjs
         if (event.endDate) {
           eventEnd = dayjs(event.endDate).startOf('day')
-        } else if (event.actualEndDate) {
+        } else if (event.endedAt) {
           // 実際の終了日がある場合はそれを使用
-          eventEnd = dayjs(event.actualEndDate).startOf('day')
+          eventEnd = dayjs(event.endedAt).startOf('day')
         } else {
           // 終了日が未指定かつ終わっていない場合は現在日時+1ヶ月
           eventEnd = currentTime.add(1, 'month')
@@ -111,10 +111,10 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         const duration = eventEnd.diff(eventStart, 'day') + 1
 
         // ガントチャート用のステータス判定
-        // schemaのstatusはactualEndDateのみで判定するが、ガントチャートではendDateも考慮
+        // schemaのstatusはendedAtのみで判定するが、ガントチャートではendDateも考慮
         const isPastEndDate = event.endDate ? currentTime.isAfter(dayjs(event.endDate).startOf('day')) : false
         const status: EventStatus = (() => {
-          if (event.actualEndDate != null || isPastEndDate) return 'ended'
+          if (event.endedAt != null || isPastEndDate) return 'ended'
           if (currentTime.isBefore(eventStart)) return 'upcoming'
           return 'ongoing'
         })()
