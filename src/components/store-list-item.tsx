@@ -35,14 +35,14 @@ export const StoreListItem = ({ character, distance }: StoreListItemProps) => {
         </h3>
         {distance !== undefined && (
           <div className='flex items-center gap-1 mt-0.5'>
-            <MapPin className='w-3 h-3 text-gray-500 dark:text-gray-400' />
-            <span className='text-xs text-gray-500 dark:text-gray-400'>
+            <MapPin className='w-3 h-3 text-gray-600 dark:text-gray-400' />
+            <span className='text-xs text-gray-600 dark:text-gray-400'>
               {distance < 1 ? `${Math.round(distance * 1000)}m` : `${distance.toFixed(1)}km`}
             </span>
           </div>
         )}
-        {character.address && (
-          <p className='text-xs text-gray-600 dark:text-gray-400 truncate mt-0.5'>{character.address}</p>
+        {character.store?.prefecture && (
+          <p className='text-xs text-gray-600 dark:text-gray-400 truncate mt-0.5'>{character.store.prefecture}</p>
         )}
       </div>
     </div>
