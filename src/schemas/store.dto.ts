@@ -78,19 +78,19 @@ export const CharacterSchema = z
 export type Character = z.infer<typeof CharacterSchema>
 
 /**
- * 店舗情報の型定義
+ * キャラクターと店舗情報を含むデータの型定義
  */
-export const StoreSchema = z.object({
+export const StoreDataSchema = z.object({
   id: z.string().nonempty(),
   character: CharacterSchema,
   store: StoreDetailsSchema.optional()
 })
 
-export type StoreData = z.infer<typeof StoreSchema>
+export type StoreData = z.infer<typeof StoreDataSchema>
 
 /**
  * 店舗リストの型定義
  */
-export const StoresSchema = z.array(StoreSchema).nonempty()
+export const StoresSchema = z.array(StoreDataSchema).nonempty()
 
 export type StoresData = z.infer<typeof StoresSchema>
