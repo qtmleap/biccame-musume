@@ -187,19 +187,20 @@ const EventDetailContent = () => {
               <Link2 className='size-4' />
               参考URL
             </div>
-            <div className='ml-6 flex flex-wrap gap-4'>
+            <ul className='ml-6 space-y-1'>
               {event.referenceUrls.map((ref, index) => (
-                <a
-                  key={index}
-                  href={ref.url}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='inline-flex items-center gap-1 text-[#e50012] hover:text-[#c40010] hover:underline transition-colors'
-                >
-                  {REFERENCE_URL_TYPE_LABELS_LONG[ref.type]}
-                </a>
+                <li key={index}>
+                  <a
+                    href={ref.url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='text-[#e50012] hover:text-[#c40010] hover:underline transition-colors'
+                  >
+                    {REFERENCE_URL_TYPE_LABELS_LONG[ref.type]}
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         )}
       </div>
