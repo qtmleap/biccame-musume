@@ -34,6 +34,7 @@ type StoreInfo = {
     store_id?: number
     name?: string
     address?: string
+    prefecture?: string
     postal_code?: string
     phone?: string
     birthday?: string
@@ -60,6 +61,8 @@ type StoreInfo = {
 type AccessInfo = {
   station: string
   description: string
+  duration?: string
+  notes?: string
   lines: string[]
 }
 
@@ -74,6 +77,122 @@ type ParkingInfo = {
 type ParkingCondition = {
   purchase: string
   freeTime: string
+}
+
+/**
+ * 住所または店舗名から都道府県を抽出
+ */
+const extractPrefecture = (
+  address?: string,
+  storeName?: string,
+  characterName?: string,
+  storeId?: string
+): string | undefined => {
+  // 店舗IDベースの例外処理（店舗HTMLがない特殊なキャラクター）
+  const storeIdMap: Record<string, string | null> = {
+    biccamera: null, // ビックカメラ（企業キャラクター）
+    bicsim: null, // ビックシムたん（サービスキャラクター）
+    oeraitan: null, // お偉いたん（役職キャラクター）
+    camera: '東京都', // カメ館たん（池袋カメラ館）
+    funato: '千葉県', // ふなとーたん（船橋）
+    machida: '東京都', // 町田たん
+    naisen: null, // ナイセン（内線キャラクター）
+    photo: '東京都', // フォトたん（写真サービス）
+    prosta: '東京都', // プロスタたん（プロフェッショナルスタッフ）
+    seiseki: '東京都', // せいせきたん（聖蹟桜ヶ丘）
+    tamapla: '神奈川県' // たまプラたん（たまプラーザ）
+  }
+
+  if (storeId && storeId in storeIdMap) {
+    return storeIdMap[storeId] ?? undefined
+  }
+
+  const prefectures = [
+    '北海道',
+    '青森県',
+    '岩手県',
+    '宮城県',
+    '秋田県',
+    '山形県',
+    '福島県',
+    '茨城県',
+    '栃木県',
+    '群馬県',
+    '埼玉県',
+    '千葉県',
+    '東京都',
+    '神奈川県',
+    '新潟県',
+    '富山県',
+    '石川県',
+    '福井県',
+    '山梨県',
+    '長野県',
+    '岐阜県',
+    '静岡県',
+    '愛知県',
+    '三重県',
+    '滋賀県',
+    '京都府',
+    '大阪府',
+    '兵庫県',
+    '奈良県',
+    '和歌山県',
+    '鳥取県',
+    '島根県',
+    '岡山県',
+    '広島県',
+    '山口県',
+    '徳島県',
+    '香川県',
+    '愛媛県',
+    '高知県',
+    '福岡県',
+    '佐賀県',
+    '長崎県',
+    '熊本県',
+    '大分県',
+    '宮崎県',
+    '鹿児島県',
+    '沖縄県'
+  ]
+
+  // 住所から都道府県を抽出
+  if (address) {
+    for (const pref of prefectures) {
+      if (address.includes(pref)) {
+        return pref
+      }
+    }
+  }
+
+  // 店舗名から都道府県を推定
+  const locationMap: Record<string, string> = {
+    札幌: '北海道',
+    新潟: '新潟県',
+    浜松: '静岡県',
+    名古屋: '愛知県',
+    京都: '京都府',
+    大阪: '大阪府',
+    なんば: '大阪府',
+    天神: '福岡県',
+    広島: '広島県',
+    岡山: '岡山県',
+    鹿児島: '鹿児島県',
+    高槻: '大阪府',
+    あべの: '大阪府',
+    八尾: '大阪府'
+  }
+
+  const textToCheck = storeName || characterName || ''
+  for (const [location, pref] of Object.entries(locationMap)) {
+    if (textToCheck.includes(location)) {
+      return pref
+    }
+  }
+
+  // デフォルトは東京都（多くの店舗が東京にあるため）
+  return '東京都'
 }
 
 /**
@@ -240,7 +359,7 @@ const parseProfileHtml = (
 
   // キャラクター説明を取得
   const descElement = root.querySelector('.char_text p')
-  const description = descElement?.text.trim().replace(/\s+/g, ' ') || ''
+  const description = descElement?.text.trim().replace(/\s+/g, '') || ''
 
   // Twitter IDを取得
   const twitterLink = root.querySelector('.tw_bt')?.getAttribute('href') || ''
@@ -351,7 +470,9 @@ const parseStoreHtml = async (
     console.warn(`  ⚠️ Store name not found for ${storeId}`)
     return null
   }
-  const name = nameElement.text.trim()
+  let name = nameElement.text.trim()
+  // 全角英数記号を半角に、半角カタカナを全角に変換
+  name = jaconv.normalize(name)
 
   // 店舗IDを取得（shop-XXX形式）
   const shop_id_match = html.match(/shop-(\d+)/)
@@ -359,7 +480,12 @@ const parseStoreHtml = async (
 
   // 住所を取得
   const addressElement = root.querySelector('#shop_access .bcs_i_maintext')
-  const address = addressElement?.text.trim().replace(/^〒\d{3}-\d{4}\s*/, '') || ''
+  let address = addressElement?.text.trim().replace(/^〒\d{3}-\d{4}\s*/, '') || ''
+  // 全角英数記号を半角に、半角カタカナを全角に変換
+  address = jaconv.normalize(address)
+
+  // 都道府県を抽出
+  const prefecture = extractPrefecture(address, name, undefined, storeId)
 
   // 営業時間を取得
   const hoursElement = root.querySelector('#bcs_shop_hours .info_pickup_text p:nth-child(2)')
@@ -374,30 +500,70 @@ const parseStoreHtml = async (
   const access: AccessInfo[] = []
   const accessElements = root.querySelectorAll('#shop_access .access dl.navi dt')
   for (const dtElement of accessElements) {
-    const stationText = dtElement.childNodes
+    let stationText = dtElement.childNodes
       .filter((node) => node.nodeType === 3)
       .map((node) => node.text.trim())
       .join('')
       .trim()
+    // 全角英数記号を半角に、半角カタカナを全角に変換
+    stationText = jaconv.normalize(stationText)
+
+    // dtタグの直下にある括弧内の情報を出口情報として抽出（例: 「新宿三丁目駅（A5出口）」）
+    const exitMatchInStation = stationText.match(/[()（）]([^()（）]+)[)）]/)
+    const exitFromStation = exitMatchInStation ? exitMatchInStation[1].trim() : undefined
+
+    // 駅名から括弧とその中身を削除（例: 「新宿三丁目駅（A5出口）」→「新宿三丁目駅」）
+    stationText = stationText.replace(/[()（）][^()（）]*[)）]/g, '').trim()
 
     const descriptionElement = dtElement.querySelector('span')
-    let description = descriptionElement?.text.trim() || ''
+    let descriptionText = descriptionElement?.text.trim() || ''
     // 全角英数記号を半角に、半角カタカナを全角に変換
-    description = jaconv.normalize(description)
+    descriptionText = jaconv.normalize(descriptionText)
     // 括弧を削除
-    description = description.replace(/[()（）]/g, '').trim()
-    // 「より」以降を削除（例: 「12号出口より直結」→「12号出口」）
-    description = description.replace(/より.+$/, '').trim()
+    descriptionText = descriptionText.replace(/[()（）]/g, '').trim()
+
+    // 所要時間を抽出（例: 「徒歩4~8分」「徒歩5分」）
+    const durationMatch = descriptionText.match(/徒歩[0-9~]+分/)
+    const duration = durationMatch ? durationMatch[0] : undefined
+
+    // 所要時間を除外
+    const remainingText = descriptionText.replace(/徒歩[0-9~]+分/g, '').trim()
+
+    // 「より」以降を追加情報として抽出（例: 「12号出口より直結」→ description: "12号出口", notes: "直結"）
+    const moreMatch = remainingText.match(/(.+?)より(.+)$/)
+    let description = ''
+    let notes: string | undefined
+
+    if (moreMatch) {
+      description = moreMatch[1].trim()
+      notes = moreMatch[2].trim()
+    } else {
+      description = remainingText
+    }
+
+    // spanタグがない場合、駅名から抽出した出口情報を使用
+    if (!description && exitFromStation) {
+      description = exitFromStation
+    }
 
     const ddElement = dtElement.nextElementSibling
-    const lines = ddElement?.querySelectorAll('span').map((span) => span.text.trim()) || []
+    const lines =
+      ddElement?.querySelectorAll('span').map((span) => {
+        let line = span.text.trim()
+        // 括弧とその中身を削除（例: 「中央（快速／各駅停車）線」→「中央線」）
+        line = line.replace(/[()（）][^()（）]*[)）]/g, '')
+        return line
+      }) || []
 
     if (stationText) {
-      access.push({
+      const accessInfo: AccessInfo = {
         station: stationText,
         description,
         lines
-      })
+      }
+      if (duration) accessInfo.duration = duration
+      if (notes) accessInfo.notes = notes
+      access.push(accessInfo)
     }
   }
 
@@ -449,6 +615,7 @@ const parseStoreHtml = async (
     store_id: shop_id,
     name,
     address,
+    prefecture,
     open_all_year: parsed_hours.open_all_year,
     hours: parsed_hours.hours,
     access,
@@ -515,8 +682,10 @@ const main = async () => {
       } else {
         // 店舗HTMLがない場合でもstore_fieldsをstoreとして設定
         const { postal_code, phone, birthday } = profileInfo.store_fields
-        if (postal_code || phone || birthday) {
-          storeInfo.store = { postal_code, phone, birthday }
+        // 都道府県を推定（店舗IDを使用）
+        const prefecture = extractPrefecture(undefined, undefined, storeInfo.character.name, storeId)
+        if (postal_code || phone || birthday || prefecture !== undefined) {
+          storeInfo.store = { postal_code, phone, birthday, prefecture }
         }
       }
 
