@@ -1,0 +1,417 @@
+
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>たかつきたん | ビッカメ娘 -ビックカメラ店舗擬人化プロジェクト-</title>
+<meta name="description" content="たかつきたん | ビッカメ娘公式WEB。ビッカメ娘はビックカメラの店舗擬人化プロジェクトとして活動しています。">
+<meta name="keywords" content="ビッグカメラ,ビックカメ娘,ビックカメラ,biccamera,bigcamera,ビックカメ娘">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta property="og:title" content="ビッカメ娘 -ビックカメラ店舗擬人化プロジェクト-" />
+<meta property="og:site_name" content="ビッカメ娘 -ビックカメラ店舗擬人化プロジェクト-" />
+<meta property="og:description" content="#ビッカメ娘 公式WEB -ビックカメラ店舗擬人化プロジェクト- https://biccame.jp/">
+<meta property="og:url" content="https://biccame.jp/" />
+<meta property="og:image" content="https://biccame.jp/images/snsimg.png?bbbbb" />
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/animate.css">
+  <link rel="stylesheet" href="/calendar/calendar.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- 画像投稿 -->
+    <link rel="stylesheet" href="node_modules/remodal/dist/remodal.css">
+    <link rel="stylesheet" href="node_modules/remodal/dist/remodal-default-theme.css">
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/remodal/dist/remodal.min.js"></script>
+
+
+    <script>
+        var url = 'test3.php';
+        var wait = 1; // 投稿後の待ち時間（秒）
+        var modal = $('.remodal').remodal();
+        var err = $('.remodal .form-error').eq(0);
+
+        $('.remodal-submit').click(function (evt) {
+            evt.preventDefault();
+
+            var btn = $(this);
+            btn.prop('disabled', true);
+            err.empty();
+
+            $.post(url, { url: $('#url').val() }, function (data) {
+                if (data['error']) {
+                    err.text(data['error']);
+                    return;
+                }
+
+                setTimeout(function () {
+                    modal.close();
+                }, wait * 1000);
+            })
+            .fail(function () {
+                alert('エラーが発生しました。');
+            })
+            .always(function () {
+                btn.prop('disabled', false);
+            });
+        });
+    </script>
+<!-- 画像投稿 -->
+
+
+  <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.5&appId=386963791403845";
+      fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>  
+    <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+    </script>
+
+</head>
+
+<body>
+<!--
+
+<script type="text/javascript" src="/js/hanafubuki.js"></script>
+
+-->
+  <script>document.body.style.display = 'none';</script>
+  <div id="contents">
+
+    <!-- スマホ用固定ヘッダー -->
+    <header class="pc_dis">
+      <div class="button-toggle sp_header_bt"><img src="/images/sp_menu.png"></div>
+      <div class="header_sns_bt">
+        <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja" data-url="https://biccame.jp/" data-text="#ビッカメ娘 公式WEB -ビックカメラ店舗擬人化プロジェクト-">ツイート</a>
+        <div class="fb-share-button" data-href="https://biccame.jp/" data-layout="button"></div>
+      </div>
+      <div class="menu">
+        <ul>
+          <li><a href="/" class="sp_menu_1">TOP</a></li>
+          <li><a href="/about/" class="sp_menu_2">ビッカメ娘とは</a></li>
+          <li><a href="/profile/" class="sp_menu_3">プロフィール</a></li>
+          <li><a href="/news/" class="sp_menu_4">お知らせ</a></li>
+          <li><a href="/contact/" class="sp_menu_5">お問合わせ</a></li>
+        </ul>
+      </div>
+    </header>
+
+    <div class="flex">
+    <div id="left_contents">
+      <a href="/" id="official_web" class="sp_dis"><img src="/images/menu/official_web.png" /></a>
+      <div id="menu" class="sp_dis">
+        <a href="/"><img src="/images/menu/menu_1.png" /></a>
+        <a href="/about/"><img src="/images/menu/menu_2.png" /></a>
+        <a href="/profile/"><img src="/images/menu/menu_3.png" /></a>
+        <a href="/news/"><img src="/images/menu/menu_4.png" /></a>
+        <a href="/contact/"><img src="/images/menu/menu_5.png" /></a>
+      </div>
+
+  <div id="page2" align="center"></div>
+  <script>
+    jQuery(function ($) {
+      var loadPage = function (ev) {
+        ev.preventDefault();
+        console.log(this);
+        var url = $(this).attr('href');
+        $('#page2').load(url);
+      };
+      $('#page2').load('/calendar/cl.html', function () {
+        $(document).on('click', '#cal-prev', loadPage);
+        $(document).on('click', '#cal-next', loadPage);
+      });
+    });
+  </script><br>
+
+      <a href="https://store.line.me/search/ja?q=%E3%83%93%E3%83%83%E3%82%AB%E3%83%A1%E5%A8%98" target="_blank" id="side_banner"><img src="/images/line_banner.png" class="w_100"/></a>
+
+      <a href="https://stampcamera.com/" target="_blank" id="side_banner"><img src="/images/stamp_banner.png" class="w_100"/></a>
+
+      <a href="http://fp.famima.com/illust/biccame" target="_blank" id="side_banner"><img src="/images/famima.png" class="w_100"/></a>
+
+      <a href="https://www.biccamera.com/bc/item/6317389/" target="_blank" id="side_banner"><img src="/images/visualbook.jpg" class="w_100"/></a>
+
+<!--
+      <a href="https://utme.uniqlo.com/tips/8097/" target="_blank" id="side_banner"><img src="/images/utme.jpg" class="w_100"/></a>
+-->
+
+      <a href="http://yahoo-mbga.jp/avatar/gachax/knPgJ2sF" target="_blank" id="side_banner"><img src="/images/mobage.png" class="w_100"/></a>
+
+      <a href="https://twitter.com/biccameraE/status/1279579661786247168" target="_blank" id="side_banner"><img src="/news/a87a39f39de4028d97d16d1ad210ff0d15685842.png" class="w_100"/></a>
+
+<!--
+      <a href="https://twitter.com/biccameraE/status/1367030354972794883" target="_blank" id="side_banner"><img src="/news/2021/04/07/sapporotan.jpg" class="w_100"/></a>
+-->
+
+<!--
+      <a href="https://twitter.com/bic_oeraitan/status/761033943978086400" target="_blank" id="side_banner"><img src="/images/cafe.jpg" class="w_100"/></a>
+-->
+
+<!--
+      <img src="/images/menu/news.png" id="news_title" class="sp_dis" />
+      <div class="sp_news_title pc_dis">NEWS！</div>
+      <div id="menu_news">
+-->
+<!--
+            <a class="twitter-timeline"  href="https://twitter.com/search?q=%23%E3%83%93%E3%83%83%E3%82%AB%E3%83%A1%E5%A8%98%20OR%23%E6%B0%B4%E6%88%B8%E3%81%9F%E3%82%93%20OR%20%23%E6%9F%8F%E3%81%9F%E3%82%93%20OR%20%23%E5%85%AB%E7%8E%8B%E5%AD%90%E3%81%9F%E3%82%93%20OR%20%23%E3%81%B5%E3%81%AA%E3%81%9F%E3%82%93%20OR%20%23%E3%83%93%E3%83%83%E3%82%AF%E3%83%AD%E3%81%9F%E3%82%93%20OR%20%23%E3%81%AF%E3%81%BE%E3%81%9F%E3%82%93%20OR%20%23%E3%81%95%E3%81%8C%E3%81%BF%E3%81%9F%E3%82%93%20OR%20%23%E6%9C%AC%E5%BA%97%E3%81%9F%E3%82%93%20OR%20%23%E3%83%97%E3%83%AD%E3%82%B9%E3%82%BF%E3%81%9F%E3%82%93%20OR%20%23%E5%A4%A7%E5%AE%AE%E3%81%9F%E3%82%93%20OR%20%23%E8%97%A4%E6%B2%A2%E3%81%9F%E3%82%93%20OR%20%23%E3%83%95%E3%82%A9%E3%83%88%E3%81%9F%E3%82%93%20OR%20%23%E3%81%AA%E3%81%94%E3%82%84%E3%81%9F%E3%82%93%20OR%20%23%E6%9C%89%E6%A5%BD%E7%94%BA%E3%81%9F%E3%82%93%20OR%20%23%E6%96%B0%E5%AE%BF%E8%A5%BF%E5%8F%A3%E3%81%9F%E3%82%93%20OR%20%23%E3%82%AB%E3%83%A1%E9%A4%A8%E3%81%9F%E3%82%93%20OR%20%23%E3%83%91%E3%82%BD%E9%A4%A8%E3%81%9F%E3%82%93%20OR%20%23%E3%81%8A%E5%81%89%E3%81%84%E3%81%9F%E3%82%93" data-widget-id="725675621431406593">#ビッカメ娘 OR#水戸たん OR #柏たん OR #八王子たん OR #ふなたん OR #ビックロたん OR #はまたん OR #さがみたん OR #本店たん OR #プロスタたん OR #大宮たん OR #藤沢たん OR #フォトたん OR #なごやたん OR #有楽町たん OR #新宿西口たん OR #カメ館たん OR #パソ館たん OR #お偉いたんに関するツイート</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+<a class="twitter-timeline" data-height="800" href="https://twitter.com/itallinc/lists/list?ref_src=twsrc%5Etfw">A Twitter List by itallinc</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+-->
+<!--
+      </div>
+-->
+    </div>
+
+    <div id="right_contents">
+      <div id="top_contents">
+        <div id="container">
+          <div id="page_title"><img src="/images/profile_top.png" class="w_100" /></div>
+          <div class="pro_deta_top_frame">
+            <img src="https://biccame.jp/profile/images/takatsuki2.png" class="pro_detail_img1"/>
+            <img src="https://biccame.jp/profile/images/takatsuki3.png" class="pro_detail_img2"/>
+            <div class="clear"></div>
+          </div>
+
+          <div class="pro_detail_frame_all">
+            <div class="pro_detail_frame1">
+              <div class="char_name">たかつきたん<font style="font-size:15px;">（ 高槻たん ）</font><span>ビックカメラ
+高槻阪急スクエア店</span></div><a href="https://twitter.com/bic_takatsuki" target="_blank" class="tw_bt"><img src="/x_bt.png" /></a>
+              
+              <div class="clear"></div>
+              <div class="char_text">
+                 <p>ビックカメラ高槻阪急スクエア店の擬人化キャラクター。<br />
+古風なサイドポニーと勾玉の髪飾りが特徴。<br />
+関西のビッカメ娘メンバーや、はにわたんとは特に仲良し。<br />
+胸のモチーフはウノハナ。</p>
+              </div>
+
+
+<!--
+<br>
+<div align="center">
+<a href="https://naisen.jp/cp/uchiwa2017/" target="_blank"><img src="/news/2017/05/10/snsimg.png" width="300"><br>神推ボタンはお休み中です。代わりにこちらに投票してね！<br>#ビックカメラのうちわ娘ユニット選抜 開催中！</a><br>
+</div>
+-->
+
+
+
+<a href="https://twitter.com/intent/tweet?text=%0A%0A%E3%81%9F%E3%81%8B%E3%81%A4%E3%81%8D%E3%81%9F%E3%82%93%EF%BC%88%E9%AB%98%E6%A7%BB%E3%81%9F%E3%82%93%EF%BC%89%E3%82%92%E7%A5%9E%E6%8E%A8%E3%81%97%EF%BC%81%E2%98%86%E5%BD%A1%0A%E3%83%93%E3%83%83%E3%82%AF%E3%82%AB%E3%83%A1%E3%83%A9%E6%93%AC%E4%BA%BA%E5%8C%96%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88+%23%E3%83%93%E3%83%83%E3%82%AB%E3%83%A1%E5%A8%98+%23%E3%81%9F%E3%81%8B%E3%81%A4%E3%81%8D%E3%81%9F%E3%82%93%0A%E2%98%9E%E3%80%90https%3A%2F%2Fbiccame.jp%2Fprofile%2Ftakatsuki.html%E3%80%91+https%3A%2F%2Ftwitter.com%2Fitallinc%2Fstatus%2F1710220625409900931%2Fphoto%2F1" class="char_push">たかつきたん を神推しツイート！</a>
+
+
+
+            </div>
+
+            
+            <div class="pro_detail_frame2">
+
+              <div class="shop_title">お店情報</div>
+              <div class="shop_panel animated pulse infinite">等身大パネル設置中！</div>
+              <div class="clear"></div>
+              <div class="shop_info_frame">
+                <div class="shop_info_frame_left">
+                  <div class="shop_info">住所：〒569-1196<br><p>大阪府高槻市白梅町4-1 高槻阪急3階</p></div>
+                  <div class="shop_info">TEL：072-691-1112</div>
+                  <div class="shop_info">店舗URL：<a href="https://www.biccamera.com/bc/i/shop/shoplist/shop131.jsp" target="_blank">こちらをクリック</a></div>
+
+
+<img src="https://biccame.jp/profile/images/takatsuki4.png" width="100"/>
+<img src="https://biccame.jp/profile/images/takatsuki5.png" width="64"/>
+
+
+                  <div class="shop_info">店舗誕生日：2022年06月10日</div>
+
+                </div>
+
+                <div class="google_map_posi"><p><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3274.09335747551!2d135.61574381172426!3d34.853881474864394!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60010300fca7d3f3%3A0xee82012b398737a4!2z44OT44OD44Kv44Kr44Oh44Op6auY5qe76Ziq5oCl44K544Kv44Ko44Ki5bqX!5e0!3m2!1sja!2sjp!4v1696904331111!5m2!1sja!2sjp" width="300" height="190" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p></div>
+
+                <div class="clear"></div>
+              </div>
+            </div>
+            
+
+
+
+
+            <div class="pro_detail_frame2">
+<!--
+              <div class="tw_left">
+                <div class="tw_left_title"><a href="https://twitter.com/bic_takatsuki" target="_blank">たかつきたん のツイート</a></div>
+                <a class="twitter-timeline" href="https://twitter.com/bic_takatsuki" data-height="600">Tweets by itallinc</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+              </div>
+              <div class="tw_right">
+                <div class="tw_right_title"><a href="https://twitter.com/hashtag/たかつきたん?f=tweets&vertical=default&src=hash" target="_blank">#たかつきたん</a></div>
+                
+              </div>
+-->
+
+              <div class="tw_center">
+                <div class="tw_center_title"><a href="https://twitter.com/bic_takatsuki" target="_blank">たかつきたん のツイート</a></div>
+                <a class="twitter-timeline" data-height="600" href="https://twitter.com/bic_takatsuki?ref_src=twsrc%5Etfw">Tweets by itallinc</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+              </div>
+
+
+              <div class="clear"></div>
+            </div>
+
+
+            
+            <div class="pro_detail_frame1">
+              <div class="detail_under_tw">
+              <div class="shop_title">初登場ツイート（2023年10月06日）</div>
+              <div class="clear"></div>
+              <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">ひるつき(*ﾟ▽ﾟ)ﾉ ✨<br>高槻駅 北口 ペデストリアンデッキ直結！<br><br>１年ぶり４５番目の <a href="https://twitter.com/hashtag/%E3%83%93%E3%83%83%E3%82%AB%E3%83%A1%E5%A8%98?src=hash&amp;ref_src=twsrc%5Etfw">#ビッカメ娘</a> は、ビックカメラ 高槻阪急スクエア店 さんこと、<a href="https://twitter.com/hashtag/%E3%81%9F%E3%81%8B%E3%81%A4%E3%81%8D%E3%81%9F%E3%82%93?src=hash&amp;ref_src=twsrc%5Etfw">#たかつきたん</a>！<a href="https://twitter.com/bic_takatsuki?ref_src=twsrc%5Etfw">@bic_takatsuki</a><br><br>あべのたん、なんばたん、八尾たんに次ぐ、第４の大阪ビッカメ娘！よろつきお願いします～♪<a href="https://twitter.com/hashtag/%E4%BC%81%E6%A5%AD%E5%85%AC%E5%BC%8F%E6%93%AC%E4%BA%BA%E5%8C%96?src=hash&amp;ref_src=twsrc%5Etfw">#企業公式擬人化</a> <a href="https://t.co/P9TskTBVUh">pic.twitter.com/P9TskTBVUh</a></p>&mdash; ナイセン®︎【公式】?ﾃﾚﾜｰｸに役立つｻｰﾋﾞｽ No.1 (@itallinc) <a href="https://twitter.com/itallinc/status/1710128007460135152?ref_src=twsrc%5Etfw">October 6, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+              </div>
+            </div>
+            
+
+        </div>
+      </div>
+
+</div>
+    </div>
+    </div>
+  </div>
+  <div class="clear"></div>
+
+  <footer>
+    <div id="footer_main">
+      <div id="footer_main_in">
+        <div id="f_left">
+          <div id="f_menu">
+            <a href="/">TOP</a>
+            <a href="/about/">ビッカメ娘とは</a>
+            <a href="/profile/">プロフィール</a>
+            <a href="/news/">お知らせ</a>
+            <a href="/contact/">お問合わせ</a>
+            <div class="clear"></div>
+          </div>
+          <a href="http://www.biccamera.com/bc/top/CSfTop.jsp" target="_blank"><img src="/images/banner_2.png" id="banner_2" /></a>
+          <a href="https://naisen.jp/" target="_blank"><img src="/images/banner_3.png" id="banner_3" /></a>
+
+          <div id="footer_sns_bt">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja" data-url="http://biccame.jp/" data-text="#ビッカメ娘 公式WEB -ビックカメラ店舗擬人化プロジェクト-">ツイート</a>
+            <div class="fb-share-button" data-href="http://biccame.jp/" data-layout="button"></div>
+          </div>
+        </div>
+        <div id="f_right">
+          <div id="f_right_text_1">ビッカメ娘への自由なメッセージお待ちしています！</div>
+
+  <div id="page"></div>
+  <script>
+    jQuery(function ($) {
+      $('#page').load('/contact.html');
+      
+      $(document).on('click', '#f_right_bt', function (ev) {
+        ev.preventDefault();
+
+        var form = $('#page form');
+        var data = form.serialize();
+        var url = form.attr('action');
+
+        $.post(url, data, function (html) {
+          $('#page').html(html);
+        });
+      });
+    });
+  </script>
+
+        </div>
+      </div>
+      <a href="#contents" id="top_back">ページトップへ</a>
+    </div>
+    <div class="copylight_frame">
+      <div class="copylight_text_1">ビッカメ娘 プロジェクト事務局<br>サイト運営・イラスト：ナイセン（アイティオール株式会社）</div>
+      <div class="copylight_text_2">© 2016 ナイセン</div>
+    </div>
+  </footer>
+
+  <!-- スマホ用固定ヘッダー -->
+  <script>
+    $(function(){
+      $(".menu").css("display","none");
+      $(".button-toggle").on("click", function() {
+        $(".menu").slideToggle();
+      });
+    });
+  </script>
+
+  <!-- 画面フェードイン　（<body>直下にも別のscriptを設置） -->
+  <script>
+    jQuery(function($){
+      $('body').fadeIn(1300);
+      $(window).on("beforeunload",function(e){
+        $('body').fadeOut();
+      });
+    });
+  </script>
+  <!-- メニューのアニメーション -->
+  <script>
+    $(document).ready(function() {
+      $('#menu a')
+        .hover(function() {
+      $(this).stop(true, true).animate({ right: 30 }, 50);
+          }, function() {
+        $(this).stop(true, true).animate({ right: 0 }, 50);
+      });
+    });
+  </script>
+  <!-- フッター部分の「ページトップへ」 -->
+  <script>
+    $(function(){
+      $('a[href^=#]').click(function() {
+        var speed = 500;
+        var href= $(this).attr("href");
+        var target = $(href == "#" || href == "" ? 'html' : href);
+        var position = target.offset().top;
+        $('body,html').animate({scrollTop:position}, speed, 'swing');
+        return false;
+      });
+    });
+  </script>
+
+</body>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6486640-5', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</html>
+
