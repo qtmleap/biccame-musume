@@ -1,9 +1,9 @@
 import { LayoutGroup } from 'motion/react'
 import { CharacterListCard } from '@/components/character-list-card'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 
 type CharacterListProps = {
-  characters: Character[]
+  characters: StoreData[]
   title?: string
   showTitle?: boolean
 }
@@ -20,7 +20,7 @@ export const CharacterList = ({ characters, title, showTitle = false }: Characte
       <LayoutGroup>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
           {characters.map((character) => (
-            <CharacterListCard key={character.key} character={character} />
+            <CharacterListCard key={character.id} character={character} />
           ))}
         </div>
       </LayoutGroup>

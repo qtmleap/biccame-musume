@@ -56,11 +56,11 @@ const EventDetailContent = () => {
   const event = events.find((e) => e.id === eventId)
 
   /**
-   * 店舗名からキャラクターのkeyを取得
+   * 店舗名からキャラクターのidを取得
    */
   const getCharacterKeyByStoreName = (storeName: string): string | null => {
-    const character = characters.find((c) => c.store_name === storeName)
-    return character?.key ?? null
+    const character = characters.find((c) => c.name === storeName)
+    return character?.id ?? null
   }
 
   if (isLoading) {

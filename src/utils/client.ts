@@ -1,7 +1,7 @@
 import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
-import { CharactersSchema } from '@/schemas/character.dto'
 import { EventRequestSchema, EventSchema } from '@/schemas/event.dto'
+import { StoresSchema } from '@/schemas/store.dto'
 import { AllVoteCountsSchema, VoteCountSchema, VoteRequestSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
 
 /**
@@ -28,7 +28,7 @@ const api = makeApi([
     path: '/characters.json',
     alias: 'getCharacters',
     description: 'ビッカメ娘キャラクター一覧を取得',
-    response: CharactersSchema
+    response: StoresSchema
   },
   {
     method: 'get',

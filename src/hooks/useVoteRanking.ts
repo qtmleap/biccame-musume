@@ -1,9 +1,9 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 import { client } from '@/utils/client'
 
-type CharacterWithVotes = Character & {
+type CharacterWithVotes = StoreData & {
   voteCount: number
 }
 
@@ -17,9 +17,9 @@ const isDevelopment = () => {
 /**
  * 開発環境用のダミー投票データを生成（合計約10万票）
  */
-const generateDummyVoteCounts = (characters: Character[]): Record<string, number> => {
+const generateDummyVoteCounts = (characters: Store[]): Record<string, number> => {
   // ビッカメ娘のみを対象にする
-  const biccameMusumeCharacters = characters.filter((char) => char.is_biccame_musume)
+  const biccameMusumeCharacters = characters.filter((char) => char.character?.isBiccameMusume)
 
   const totalTargetVotes = 100000
   const dummyCounts: Record<string, number> = {}
@@ -35,11 +35,11 @@ const generateDummyVoteCounts = (characters: Character[]): Record<string, number
   const totalWeight = weights.reduce((sum, w) => sum + w, 0)
 
   for (const [index, character] of biccameMusumeCharacters.entries()) {
-    // 重みに基づいて票を配分し、キャラクターkeyベースの疑似ランダム性を加える
+    // 重みに基づいて票を配分し、キャラクターidベースの疑似ランダム性を加える
     const baseVotes = Math.floor((weights[index] / totalWeight) * totalTargetVotes)
-    const seed = character.key.charCodeAt(0) + character.key.length * 100
+    const seed = character.id.charCodeAt(0) + character.id.length * 100
     const randomFactor = 0.8 + seededRandom(seed) * 0.4 // 0.8〜1.2の範囲
-    dummyCounts[character.key] = Math.floor(baseVotes * randomFactor)
+    dummyCounts[character.id] = Math.floor(baseVotes * randomFactor)
   }
 
   return dummyCounts
@@ -48,7 +48,7 @@ const generateDummyVoteCounts = (characters: Character[]): Record<string, number
 /**
  * 全キャラクターの投票数を取得
  */
-const fetchVoteRanking = async (characters: Character[], year: number): Promise<CharacterWithVotes[]> => {
+const fetchVoteRanking = async (characters: Store[], year: number): Promise<CharacterWithVotes[]> => {
   // 開発環境ではダミーデータを使用
   let allVoteCounts: Record<string, number>
 
@@ -58,7 +58,7 @@ const fetchVoteRanking = async (characters: Character[], year: number): Promise<
     // Zodiosを使ってAPIリクエスト
     const rawData = await client.getAllVoteCounts({ queries: { year: year.toString() } })
 
-    // "年:キー"形式のデータを"キー"形式に変換
+    // "年:ID"形式のデータを"ID"形式に変換
     allVoteCounts = {}
     for (const [key, count] of Object.entries(rawData)) {
       // "2025:kyoto" -> "kyoto"
@@ -70,7 +70,7 @@ const fetchVoteRanking = async (characters: Character[], year: number): Promise<
   // キャラクターと投票数をマージ
   const voteCounts = characters.map((character) => ({
     ...character,
-    voteCount: allVoteCounts[character.key] || 0
+    voteCount: allVoteCounts[character.id] || 0
   }))
 
   return voteCounts.sort((a, b) => b.voteCount - a.voteCount)
@@ -79,7 +79,7 @@ const fetchVoteRanking = async (characters: Character[], year: number): Promise<
 /**
  * 投票ランキング取得用のカスタムフック
  */
-export const useVoteRanking = (characters: Character[], year?: number) => {
+export const useVoteRanking = (characters: Store[], year?: number) => {
   const targetYear = year || dayjs().year()
 
   return useSuspenseQuery({

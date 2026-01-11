@@ -1,16 +1,17 @@
 import { Link, useRouter } from '@tanstack/react-router'
+
 import dayjs from 'dayjs'
-import { ArrowLeft, ExternalLink, MapPin } from 'lucide-react'
+import { ArrowLeft, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 import { formatDate } from '@/utils/calendar'
 import { getDisplayName } from '@/utils/character'
 
 type CharacterDetailContentProps = {
-  character: Character
+  character: StoreData
 }
 
 /**
@@ -50,12 +51,12 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
           >
             <Avatar className='h-24 w-24 sm:h-32 sm:w-32 md:h-40 md:w-40 shadow-lg border-2 border-pink-300'>
               <AvatarImage
-                src={character.image_urls?.[1] || character.image_urls?.[0]}
-                alt={character.character_name}
+                src={character.character?.image_url}
+                alt={character.character?.name || ''}
                 className='object-cover'
               />
               <AvatarFallback className='text-2xl sm:text-3xl md:text-4xl bg-pink-100 text-pink-700'>
-                {character.character_name[0]}
+                {character.character?.name?.[0] || '?'}
               </AvatarFallback>
             </Avatar>
           </motion.div>
@@ -68,18 +69,18 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
             <div className='flex items-start justify-between gap-2'>
               <div className='min-w-0 flex-1'>
                 <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 truncate'>
-                  {getDisplayName(character.character_name)}
+                  {getDisplayName(character.character?.name || '')}
                 </h1>
-                <p className='text-lg text-pink-600 font-medium truncate'>{character.store_name}</p>
+                <p className='text-lg text-pink-600 font-medium truncate'>{character.store?.name}</p>
               </div>
               <div className='shrink-0 flex flex-col gap-2'>
-                {character.twitter_url && (
+                {character.character?.twitter_id && (
                   <Button
                     asChild
                     className='rounded-full text-xs font-semibold h-7 px-4 bg-pink-600 text-white hover:bg-pink-700'
                   >
                     <a
-                      href={`https://twitter.com/intent/follow?screen_name=${character.twitter_url.split('/').pop()}`}
+                      href={`https://twitter.com/intent/follow?screen_name=${character.character.twitter_id}`}
                       target='_blank'
                       rel='noopener noreferrer'
                     >
@@ -87,34 +88,74 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                     </a>
                   </Button>
                 )}
-                {character.is_biccame_musume && (
+                {character.character?.is_biccame_musume && (
                   <CharacterVoteButton
-                    characterId={character.key}
-                    characterName={character.character_name}
+                    characterId={character.id}
+                    characterName={character.character.name}
                     variant='compact'
                   />
                 )}
               </div>
             </div>
             <p className='text-sm text-gray-500 mt-1'>
-              {character.prefecture}
-              {character.character_birthday && ` · ${dayjs(character.character_birthday).format('M月D日')}生まれ`}
+              {character.store?.address &&
+                Object.keys({
+                  北海道: true,
+                  青森県: true,
+                  岩手県: true,
+                  宮城県: true,
+                  秋田県: true,
+                  山形県: true,
+                  福島県: true,
+                  茨城県: true,
+                  栃木県: true,
+                  群馬県: true,
+                  埼玉県: true,
+                  千葉県: true,
+                  東京都: true,
+                  神奈川県: true,
+                  新潟県: true,
+                  富山県: true,
+                  石川県: true,
+                  福井県: true,
+                  山梨県: true,
+                  長野県: true,
+                  岐阜県: true,
+                  静岡県: true,
+                  愛知県: true,
+                  三重県: true,
+                  滋賀県: true,
+                  京都府: true,
+                  大阪府: true,
+                  兵庫県: true,
+                  奈良県: true,
+                  和歌山県: true,
+                  鳥取県: true,
+                  島根県: true,
+                  岡山県: true,
+                  広島県: true,
+                  山口県: true,
+                  徳島県: true,
+                  香川県: true,
+                  愛媛県: true,
+                  高知県: true,
+                  福岡県: true,
+                  佐賀県: true,
+                  長崎県: true,
+                  熊本県: true,
+                  大分県: true,
+                  宮崎県: true,
+                  鹿児島県: true,
+                  沖縄県: true
+                }).find((pref) => character.store?.address?.includes(pref))}
+              {character.character?.birthday && ` · ${dayjs(character.character.birthday).format('M月D日')}生まれ`}
             </p>
             {/* リンク */}
             <div className='flex gap-3 mt-2 text-xs'>
-              <a
-                href={character.detail_url}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='text-gray-400 hover:text-pink-600 hover:underline flex items-center gap-1 transition-colors'
-              >
-                詳細を見る
-                <ExternalLink className='h-3 w-3' />
-              </a>
-              {character.latitude && character.longitude && (
+              {character.store?.coordinates && (
                 <Link
                   to='/location'
-                  search={{ id: character.key }}
+                  search={{ id: character.id }}
                   className='text-gray-400 hover:text-pink-600 hover:underline flex items-center gap-1 transition-colors'
                 >
                   地図で見る
@@ -133,7 +174,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
           className='mb-8'
         >
           <h2 className='text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2'>プロフィール</h2>
-          <p className='text-gray-800 leading-relaxed'>{character.description}</p>
+          <p className='text-gray-800 leading-relaxed'>{character.character?.description}</p>
         </motion.div>
 
         {/* 情報リスト */}
@@ -143,37 +184,26 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
           transition={{ duration: 0.5, delay: 0.5, ease: 'easeOut' }}
           className='border-t border-gray-200'
         >
-          {character.character_birthday && (
+          {character.character?.birthday && (
             <div className='flex items-center justify-between py-3 border-b border-gray-100'>
               <span className='text-gray-500'>誕生日</span>
-              <span className='text-gray-900'>{formatDate(character.character_birthday)}</span>
+              <span className='text-gray-900'>{formatDate(character.character.birthday)}</span>
             </div>
           )}
-          {character.store_birthday && (
+          {character.store?.birthday && (
             <div className='flex items-center justify-between py-3 border-b border-gray-100'>
               <span className='text-gray-500'>店舗開店日</span>
-              <span className='text-gray-900'>{formatDate(character.store_birthday)}</span>
+              <span className='text-gray-900'>{formatDate(character.store.birthday)}</span>
             </div>
           )}
-          {character.address && (
+          {character.store?.address && (
             <div className='flex items-start justify-between py-3 border-b border-gray-100'>
               <span className='text-gray-500 shrink-0'>住所</span>
               <div className='text-gray-900 text-right ml-4'>
-                {character.zipcode && <div>〒{character.zipcode}</div>}
-                <div>{character.address}</div>
+                {character.store.postal_code && <div>〒{character.store.postal_code}</div>}
+                <div>{character.store.address}</div>
               </div>
             </div>
-          )}
-          {character.store_link && (
-            <a
-              href={character.store_link}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='flex items-center justify-between py-3 border-b border-gray-100'
-            >
-              <span className='text-gray-500'>店舗情報</span>
-              <span className='text-pink-600'>ビックカメラ.com</span>
-            </a>
           )}
         </motion.div>
       </div>

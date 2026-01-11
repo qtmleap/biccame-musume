@@ -1,9 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
-import { getCharacterImageUrl } from '@/lib/utils'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 
-type CharacterWithVotes = Character & {
+type CharacterWithVotes = StoreData & {
   voteCount: number
 }
 
@@ -124,14 +123,14 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
             paintOrder: 'stroke fill'
           }}
         >
-          {character.character_name}
+          {character.character?.name}
         </h3>
 
         {/* 画像（白色透過） */}
         <div className='relative bg-pink-50 h-28 w-full flex items-center justify-center'>
           <img
-            src={getCharacterImageUrl(character)}
-            alt={character.character_name}
+            src={character.character?.image_url}
+            alt={character.character?.name || ''}
             className='h-full w-auto max-w-full object-contain'
             style={{ mixBlendMode: 'multiply' }}
           />
@@ -162,7 +161,7 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
  */
 export const RankingList = ({ characters }: RankingListProps) => {
   // ビッカメ娘かつ0票より多いキャラクターのみ表示
-  const votedCharacters = characters.filter((char) => char.is_biccame_musume && char.voteCount > 0)
+  const votedCharacters = characters.filter((char) => char.character?.isBiccameMusume && char.voteCount > 0)
 
   return (
     <div className='space-y-6'>
@@ -177,7 +176,7 @@ export const RankingList = ({ characters }: RankingListProps) => {
           <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4'>
             {votedCharacters.map((character, index) => {
               const rank = calculateRank(votedCharacters, index)
-              return <RankingCard key={character.key} character={character} rank={rank} index={index} />
+              return <RankingCard key={character.id} character={character} rank={rank} index={index} />
             })}
           </div>
         </>

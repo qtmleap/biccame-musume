@@ -5,8 +5,8 @@ import { z } from 'zod'
  */
 export const HoursSchema = z.object({
   type: z.enum(['weekday', 'weekend', 'holiday', 'all']),
-  openTime: z.string().nonempty(),
-  closeTime: z.string().nonempty(),
+  open_time: z.string().nonempty(),
+  close_time: z.string().nonempty(),
   note: z.string().nonempty().optional()
 })
 
@@ -34,17 +34,43 @@ export const CoordinatesSchema = z.object({
 export type Coordinates = z.infer<typeof CoordinatesSchema>
 
 /**
+ * 店舗詳細情報の型定義
+ */
+export const StoreDetailsSchema = z.object({
+  store_id: z.number().int().positive().optional(),
+  name: z.string().nonempty().optional(),
+  address: z.string().nonempty().optional(),
+  postal_code: z.string().nonempty().optional(),
+  phone: z.string().nonempty().optional(),
+  birthday: z.string().nonempty().optional(),
+  open_all_year: z.boolean().optional(),
+  hours: z.array(HoursSchema).optional(),
+  access: z.array(AccessInfoSchema).optional(),
+  coordinates: CoordinatesSchema.optional()
+})
+
+export type StoreDetails = z.infer<typeof StoreDetailsSchema>
+
+/**
  * キャラクター情報の型定義
  */
-export const CharacterSchema = z.object({
-  name: z.string().nonempty(),
-  aliases: z.array(z.string().nonempty()).nonempty().optional(),
-  description: z.string().nonempty(),
-  twitterId: z.string(),
-  images: z.array(z.string().nonempty()).nonempty(),
-  birthday: z.string().nonempty().optional(),
-  isBiccameMusume: z.boolean().optional()
-})
+export const CharacterSchema = z
+  .object({
+    name: z.string().nonempty(),
+    aliases: z.array(z.string().nonempty()).nonempty().optional(),
+    description: z.string().nonempty(),
+    twitter_id: z.string(),
+    images: z.array(z.string().nonempty()).nonempty(),
+    birthday: z.string().nonempty().optional(),
+    is_biccame_musume: z.boolean().optional()
+  })
+  .transform((v) => ({
+    ...v,
+    image_url: (() => {
+      const key: string = v.images.findLast((url) => url.endsWith('4.png')) || v.images[v.images.length - 1]
+      return new URL(key, 'https://biccame.jp/profile/').href
+    })()
+  }))
 
 export type Character = z.infer<typeof CharacterSchema>
 
@@ -53,24 +79,15 @@ export type Character = z.infer<typeof CharacterSchema>
  */
 export const StoreSchema = z.object({
   id: z.string().nonempty(),
-  storeId: z.number().int().positive().optional(),
-  name: z.string().nonempty().optional(),
-  address: z.string().nonempty().optional(),
-  postalCode: z.string().nonempty().optional(),
-  phone: z.string().nonempty().optional(),
-  birthday: z.string().nonempty().optional(),
-  openAllYear: z.boolean().optional(),
-  hours: z.array(HoursSchema).optional(),
-  access: z.array(AccessInfoSchema).optional(),
-  coordinates: CoordinatesSchema.optional(),
-  character: CharacterSchema.optional()
+  character: CharacterSchema,
+  store: StoreDetailsSchema.optional()
 })
 
-export type Store = z.infer<typeof StoreSchema>
+export type StoreData = z.infer<typeof StoreSchema>
 
 /**
  * 店舗リストの型定義
  */
 export const StoresSchema = z.array(StoreSchema).nonempty()
 
-export type Stores = z.infer<typeof StoresSchema>
+export type StoresData = z.infer<typeof StoresSchema>

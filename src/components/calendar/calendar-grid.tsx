@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { cn, getCharacterImageUrl } from '@/lib/utils'
-import type { Character } from '@/schemas/character.dto'
+import { cn } from '@/lib/utils'
+import type { StoreData } from '@/schemas/store.dto'
 
 type CalendarEvent = {
   date: string
-  character: Character
+  character: StoreData
   type: 'character' | 'store'
   years: number
 }
@@ -135,19 +135,19 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                       <div className='flex-1 flex flex-wrap items-center justify-center gap-1 py-1'>
                         {dayEvents.map((event) => (
                           <Avatar
-                            key={`${event.character.key}-${event.type}`}
+                            key={`${event.character.id}-${event.type}`}
                             className={cn(
                               'w-8 h-8 ring-2 overflow-hidden',
                               event.type === 'character' ? 'ring-pink-400/50' : 'ring-blue-400/50'
                             )}
                           >
                             <AvatarImage
-                              src={getCharacterImageUrl(event.character)}
-                              alt={event.character.character_name}
+                              src={event.character.character?.image_url}
+                              alt={event.character.character?.name || ''}
                               className='object-cover object-top scale-150 translate-y-2'
                             />
                             <AvatarFallback className='text-[10px] bg-muted'>
-                              {event.character.character_name.slice(0, 1)}
+                              {event.character.character?.name?.slice(0, 1) || '?'}
                             </AvatarFallback>
                           </Avatar>
                         ))}

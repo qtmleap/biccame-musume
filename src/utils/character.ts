@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { prefectureToRegion, type RegionType } from '@/atoms/filterAtom'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 
 /**
  * 名前がスラッシュで区切られている場合、最初の部分のみ返す
@@ -34,12 +34,12 @@ export const isBirthdayToday = (dateStr: string | undefined): boolean => {
  * 今日が誕生日のキャラクターを取得
  * 開発環境では常にkyotoの誕生日として判定
  */
-export const getBirthdayCharacters = (characters: Character[]): Character[] => {
+export const getBirthdayCharacters = (characters: StoreData[]): StoreData[] => {
   if (import.meta.env.DEV) {
-    const kyoto = characters.find((character) => character.key === 'kyoto')
+    const kyoto = characters.find((character) => character.id === 'kyoto')
     return kyoto ? [kyoto] : []
   }
-  return characters.filter((character) => isBirthdayToday(character.character_birthday))
+  return characters.filter((character) => isBirthdayToday(character.character?.birthday))
 }
 
 /**
@@ -96,21 +96,24 @@ const shuffleArray = <T>(array: T[]): T[] => {
 /**
  * キャラクターを娘と娘以外に分類
  */
-export const categorizeCharacters = (characters: Character[]) => {
-  const musume = characters.filter((c) => c.is_biccame_musume !== false)
-  const others = characters.filter((c) => c.is_biccame_musume === false)
+export const categorizeCharacters = (characters: StoreData[]) => {
+  const musume = characters.filter((c) => c.character?.is_biccame_musume !== false)
+  const others = characters.filter((c) => c.character?.is_biccame_musume === false)
   return { musume, others }
 }
 
 /**
  * キャラクターを地域でフィルタリング
  */
-export const filterCharactersByRegion = (characters: Character[], region: RegionType): Character[] => {
+export const filterCharactersByRegion = (characters: StoreData[], region: RegionType): StoreData[] => {
   if (region === 'all') return characters
 
   return characters.filter((character) => {
-    if (!character.prefecture) return false
-    const characterRegion = prefectureToRegion[character.prefecture]
+    // 住所から都道府県を抽出（暂定的に最初の都道府県名を検出）
+    if (!character.store?.address) return false
+    const prefecture = Object.keys(prefectureToRegion).find((pref) => character.store?.address?.includes(pref))
+    if (!prefecture) return false
+    const characterRegion = prefectureToRegion[prefecture]
     return characterRegion === region
   })
 }
@@ -119,17 +122,17 @@ export const filterCharactersByRegion = (characters: Character[], region: Region
  * キャラクターをソートする
  */
 export const sortCharacters = (
-  characters: Character[],
+  characters: StoreData[],
   sortType: 'character_birthday' | 'store_birthday' | 'upcoming_birthday' | 'random'
-): Character[] => {
+): StoreData[] => {
   if (sortType === 'random') {
     return shuffleArray(characters)
   }
 
   return [...characters].sort((a, b) => {
     if (sortType === 'character_birthday') {
-      const dateA = parseDate(a.character_birthday)
-      const dateB = parseDate(b.character_birthday)
+      const dateA = parseDate(a.character?.birthday)
+      const dateB = parseDate(b.character?.birthday)
       if (!dateA && !dateB) return 0
       if (!dateA) return 1
       if (!dateB) return -1
@@ -137,8 +140,8 @@ export const sortCharacters = (
     }
 
     if (sortType === 'store_birthday') {
-      const dateA = parseDate(a.store_birthday)
-      const dateB = parseDate(b.store_birthday)
+      const dateA = parseDate(a.store?.birthday)
+      const dateB = parseDate(b.store?.birthday)
       if (!dateA && !dateB) return 0
       if (!dateA) return 1
       if (!dateB) return -1
@@ -146,8 +149,8 @@ export const sortCharacters = (
     }
 
     if (sortType === 'upcoming_birthday') {
-      const daysA = getDaysFromBirthday(a.character_birthday)
-      const daysB = getDaysFromBirthday(b.character_birthday)
+      const daysA = getDaysFromBirthday(a.character?.birthday)
+      const daysB = getDaysFromBirthday(b.character?.birthday)
       return daysA - daysB
     }
 
