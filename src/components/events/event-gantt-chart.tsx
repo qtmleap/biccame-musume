@@ -256,15 +256,6 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
     [scrollLeft]
   )
 
-  // 現在表示されている月を計算
-  const currentVisibleMonth = useMemo(() => {
-    const dayIndex = Math.floor(scrollLeft / 32)
-    if (dayIndex >= 0 && dayIndex < dates.length) {
-      return dates[dayIndex].format('M月')
-    }
-    return dates[0]?.format('M月') ?? ''
-  }, [scrollLeft, dates])
-
   return (
     <TooltipProvider>
       {/* Chrome/Safari用スクロールバー非表示スタイル */}
