@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { z } from 'zod'
+import { StoreKeySchema } from './store.dto'
 
 /**
  * イベントステータス
@@ -63,7 +64,7 @@ export const EventRequestSchema = z.object({
   // 参考URL（任意、複数可）
   referenceUrls: z.array(ReferenceUrlSchema).optional(),
   // 開催店舗（任意、複数可）
-  stores: z.array(z.string()).nonempty(),
+  stores: z.array(StoreKeySchema).nonempty(),
   // 限定数（任意）
   limitedQuantity: z.number().min(1).optional(),
   // 開始日時
