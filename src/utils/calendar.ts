@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 
 /**
  * 年齢/周年を計算する(対象年を指定)
@@ -11,7 +11,7 @@ export const calculateYears = (birthday: string, targetYear: number): number => 
 
 export type CalendarEvent = {
   date: string
-  character: Character
+  character: StoreData
   type: 'character' | 'store'
   years: number
 }
@@ -20,7 +20,7 @@ export type CalendarEvent = {
  * 指定月のイベントをフィルタリングする
  */
 export const filterMonthEvents = (
-  characters: Character[],
+  characters: StoreData[],
   targetMonth: number,
   targetYear: number
 ): CalendarEvent[] => {
@@ -28,27 +28,27 @@ export const filterMonthEvents = (
 
   characters.forEach((character) => {
     // キャラクター誕生日のチェック
-    if (character.character_birthday) {
-      const birthDate = dayjs(character.character_birthday)
+    if (character.character?.birthday) {
+      const birthDate = dayjs(character.character.birthday)
       if (birthDate.month() + 1 === targetMonth) {
         events.push({
-          date: character.character_birthday,
+          date: character.character.birthday,
           character,
           type: 'character',
-          years: calculateYears(character.character_birthday, targetYear)
+          years: calculateYears(character.character.birthday, targetYear)
         })
       }
     }
 
     // 店舗誕生日のチェック
-    if (character.store_birthday) {
-      const birthDate = dayjs(character.store_birthday)
+    if (character.store?.birthday) {
+      const birthDate = dayjs(character.store.birthday)
       if (birthDate.month() + 1 === targetMonth) {
         events.push({
-          date: character.store_birthday,
+          date: character.store.birthday,
           character,
           type: 'store',
-          years: calculateYears(character.store_birthday, targetYear)
+          years: calculateYears(character.store.birthday, targetYear)
         })
       }
     }
