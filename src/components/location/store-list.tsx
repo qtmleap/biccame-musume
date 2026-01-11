@@ -58,7 +58,7 @@ const StoreListDesktopDialog = ({
           </div>
         </button>
       </DialogTrigger>
-      <DialogContent className='max-w-3xl!'>
+      <DialogContent className='max-w-3xl!' aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>店舗一覧{mapCenter && '（近い順）'}</DialogTitle>
         </DialogHeader>
