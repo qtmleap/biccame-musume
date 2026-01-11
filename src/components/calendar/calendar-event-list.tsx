@@ -5,12 +5,12 @@ import { Cake, Store } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { cn, getCharacterImageUrl } from '@/lib/utils'
-import type { Character } from '@/schemas/character.dto'
+import { cn } from '@/lib/utils'
+import type { StoreData } from '@/schemas/store.dto'
 
 type CalendarEvent = {
   date: string
-  character: Character
+  character: StoreData
   type: 'character' | 'store'
   years: number
 }
@@ -112,17 +112,17 @@ export const CalendarEventList = ({ year, month, events }: CalendarEventListProp
                           {/* キャラクター画像 */}
                           <Avatar className='w-10 h-10 shrink-0 border border-border overflow-hidden'>
                             <AvatarImage
-                              src={getCharacterImageUrl(event.character)}
-                              alt={event.character.character_name}
+                              src={event.character.character?.image_url}
+                              alt={event.character.character?.name || ''}
                               className='object-cover object-top scale-150 translate-y-2'
                             />
-                            <AvatarFallback>{event.character.character_name.slice(0, 1)}</AvatarFallback>
+                            <AvatarFallback>{event.character.character?.name?.slice(0, 1) || '?'}</AvatarFallback>
                           </Avatar>
 
                           {/* 情報 */}
                           <div className='flex-1 min-w-0'>
-                            <p className='text-sm font-medium truncate'>{event.character.character_name}</p>
-                            <p className='text-xs text-muted-foreground truncate'>{event.character.store_name}</p>
+                            <p className='text-sm font-medium truncate'>{event.character.character?.name}</p>
+                            <p className='text-xs text-muted-foreground truncate'>{event.character.name}</p>
                           </div>
 
                           {/* バッジ */}

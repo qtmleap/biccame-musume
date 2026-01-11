@@ -4,13 +4,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { cn } from '@/lib/utils'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 
 type StoreListDialogProps = {
-  characters: Character[]
+  characters: StoreData[]
   isOpen: boolean
   onOpenChange: (open: boolean) => void
-  onCharacterSelect: (character: Character) => void
+  onCharacterSelect: (character: StoreData) => void
 }
 
 /**
@@ -38,7 +38,7 @@ const StoreListDesktopDialog = ({ characters, isOpen, onOpenChange, onCharacterS
           <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
             {characters.map((character) => (
               <button
-                key={character.key}
+                key={character.id}
                 type='button'
                 onClick={() => onCharacterSelect(character)}
                 className='cursor-pointer w-full text-left rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
@@ -78,7 +78,7 @@ const StoreListMobileDrawer = ({ characters, isOpen, onOpenChange, onCharacterSe
           <div className='divide-y divide-gray-200 dark:divide-gray-700'>
             {characters.map((character, index) => (
               <button
-                key={character.key}
+                key={character.id}
                 type='button'
                 onClick={() => onCharacterSelect(character)}
                 className={cn(
