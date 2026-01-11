@@ -59,17 +59,22 @@ type EventGanttChartProps = {
 export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   // 終了したイベントを表示するかどうか
   const [showEnded, setShowEnded] = useState(false)
+  
+  // 表示開始月のオフセット（0=今月、-1=先月、1=来月）
+  const [monthOffset, setMonthOffset] = useState(0)
 
-  // 表示する日付範囲を計算（今日から30日後まで）
+  // 表示する日付範囲を計算
   const { dates, chartStartDate } = useMemo(() => {
     const today = dayjs().startOf('day')
-    const chartStart = today.subtract(7, 'day')
-    const chartEnd = today.add(30, 'day')
+    // 指定月の1日から表示開始
+    const chartStart = today.add(monthOffset, 'month').startOf('month')
+    // 2ヶ月分表示
+    const chartEnd = chartStart.add(2, 'month').subtract(1, 'day')
     return {
       dates: generateDateRange(chartStart, chartEnd),
       chartStartDate: chartStart
     }
-  }, [])
+  }, [monthOffset])
 
   // カテゴリの優先順位
   const categoryOrder: Record<Event['category'], number> = {
@@ -183,9 +188,9 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
     }
   }, [])
 
-  // 初期表示時に今日の日付が左端に来るようにスクロール
+  // 初期表示時に今日の日付が見える位置にスクロール
   useEffect(() => {
-    if (scrollContainerRef.current) {
+    if (scrollContainerRef.current && todayOffset >= 0) {
       // 今日の位置までスクロール（w-8 = 32px）
       scrollContainerRef.current.scrollLeft = todayOffset * 32
       setScrollLeft(todayOffset * 32)
@@ -194,7 +199,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         isInitialMountRef.current = false
       })
     }
-  }, [todayOffset])
+  }, [todayOffset, monthOffset])
 
   // ドラッグ開始
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
