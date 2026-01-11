@@ -20,6 +20,13 @@ const STORE_NAME_TO_KEY = Object.fromEntries(
 ) as Record<string, string>
 
 /**
+ * KVに入ってる誤った店舗名から正しいキーへのマッピング
+ */
+const LEGACY_STORE_NAME_TO_KEY: Record<string, string> = {
+  'あべの キューズモール店': 'abeno'
+}
+
+/**
  * 環境別のKVネームスペースID (BICCAME_MUSUME_EVENTS)
  */
 const KV_NAMESPACE_IDS = {
@@ -129,8 +136,8 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
           .map((store) => {
             const id = crypto.randomUUID()
             const now = new Date().toISOString()
-            // 店舗名をキーに変換（既にキーの場合はそのまま、店舗名の場合は変換）
-            const storeKey = STORE_NAME_TO_KEY[store] || store
+            // 店舗名をキーに変換（レガシー→正規の店舗名→既にキーならそのまま）
+            const storeKey = LEGACY_STORE_NAME_TO_KEY[store] || STORE_NAME_TO_KEY[store] || store
             return `('${id}', '${event.id}', '${storeKey}', '${now}', '${now}')`
           })
           .join(', ')
