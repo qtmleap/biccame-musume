@@ -9,8 +9,9 @@
  */
 
 import { $ } from 'bun'
-import type { Event } from '@/schemas/event.dto'
+import dayjs from 'dayjs'
 import { STORE_NAME_LABELS } from '@/locales/app.content'
+import type { Event } from '@/schemas/event.dto'
 
 /**
  * 店舗名からキーへの逆マッピング
@@ -102,8 +103,8 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
         const endDate = event.endDate || 'NULL'
         const endedAt = event.endedAt || 'NULL'
         const limitedQuantity = event.limitedQuantity || 'NULL'
-        const createdAt = event.createdAt || new Date().toISOString()
-        const updatedAt = event.updatedAt || new Date().toISOString()
+        const createdAt = event.createdAt || dayjs().toISOString()
+        const updatedAt = event.updatedAt || dayjs().toISOString()
 
         return `('${event.id}', '${name}', '${category}', '${startDate}', ${endDate === 'NULL' ? 'NULL' : `'${endDate}'`}, ${endedAt === 'NULL' ? 'NULL' : `'${endedAt}'`}, ${limitedQuantity}, '${createdAt}', '${updatedAt}')`
       })
@@ -121,7 +122,7 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
             const id = crypto.randomUUID()
             const purchaseAmount = condition.purchaseAmount || 'NULL'
             const quantity = condition.quantity || 'NULL'
-            const now = new Date().toISOString()
+            const now = dayjs().toISOString()
             return `('${id}', '${event.id}', '${condition.type}', ${purchaseAmount}, ${quantity}, '${now}', '${now}')`
           })
           .join(', ')
@@ -135,7 +136,7 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
         const storeValues = event.stores
           .map((store) => {
             const id = crypto.randomUUID()
-            const now = new Date().toISOString()
+            const now = dayjs().toISOString()
             // 店舗名をキーに変換（レガシー→正規の店舗名→既にキーならそのまま）
             const storeKey = LEGACY_STORE_NAME_TO_KEY[store] || STORE_NAME_TO_KEY[store] || store
             return `('${id}', '${event.id}', '${storeKey}', '${now}', '${now}')`
@@ -152,7 +153,7 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
           .map((ref) => {
             const id = crypto.randomUUID()
             const url = ref.url.replace(/'/g, "''")
-            const now = new Date().toISOString()
+            const now = dayjs().toISOString()
             return `('${id}', '${event.id}', '${ref.type}', '${url}', '${now}', '${now}')`
           })
           .join(', ')
