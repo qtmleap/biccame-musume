@@ -1,13 +1,13 @@
 import { type RateLimitBinding, type RateLimitKeyFunc, rateLimit } from '@elithrar/workers-hono-rate-limit'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import dayjs from 'dayjs'
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
-import { type Event, EventRequestSchema, EventSchema, type ReferenceUrl } from '../schemas/event.dto'
+import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
+import * as eventService from '@/services/event.service'
 
 type Bindings = {
-  BICCAME_MUSUME_EVENTS: KVNamespace
+  DB: D1Database
   RATE_LIMITER: RateLimitBinding
 }
 
@@ -43,10 +43,10 @@ const listEventsRoute = createRoute({
 })
 
 routes.openapi(listEventsRoute, async (c) => {
-  const events = await c.env.BICCAME_MUSUME_EVENTS.get('events:list')
-  const eventList = events ? JSON.parse(events) : []
+  const prisma = eventService.createPrismaClient(c.env.DB)
+  const events = await eventService.listEvents(prisma)
 
-  return c.json({ events: eventList })
+  return c.json({ events })
 })
 
 // イベント作成
@@ -95,30 +95,10 @@ routes.openapi(createEventRoute, async (c) => {
     throw new HTTPException(400, { message: result.error.message })
   }
 
-  // 新しいイベントを作成
-  const currentTime = dayjs().toISOString()
+  const prisma = eventService.createPrismaClient(c.env.DB)
+  const event = await eventService.createEvent(prisma, result.data)
 
-  const newEvent = {
-    id: crypto.randomUUID(),
-    ...result.data,
-    startDate: result.data.startDate || currentTime,
-    createdAt: currentTime,
-    updatedAt: currentTime
-  }
-
-  // 既存のイベント一覧を取得
-  const eventsData = await c.env.BICCAME_MUSUME_EVENTS.get('events:list')
-  const events = eventsData ? JSON.parse(eventsData) : []
-
-  // 新しいイベントを追加
-  events.push(newEvent)
-
-  // KVに保存
-  await c.env.BICCAME_MUSUME_EVENTS.put('events:list', JSON.stringify(events))
-
-  // レスポンス用にパース（statusを付与）
-  const parsedEvent = EventSchema.parse(newEvent)
-  return c.json(parsedEvent, 201)
+  return c.json(event, 201)
 })
 
 // URL重複チェック（/:id より前に定義する必要がある）
@@ -150,14 +130,8 @@ const checkDuplicateUrlRoute = createRoute({
 routes.openapi(checkDuplicateUrlRoute, async (c) => {
   const { url, excludeId } = c.req.valid('query')
 
-  const eventsData = await c.env.BICCAME_MUSUME_EVENTS.get('events:list')
-  const events: Event[] = eventsData ? JSON.parse(eventsData) : []
-
-  // URLが一致するイベントを検索（自分自身は除外）
-  const matchingEvent = events.find((event) => {
-    if (excludeId && event.id === excludeId) return false
-    return event.referenceUrls?.some((ref: ReferenceUrl) => ref.url === url)
-  })
+  const prisma = eventService.createPrismaClient(c.env.DB)
+  const matchingEvent = await eventService.findEventByUrl(prisma, url, excludeId)
 
   return c.json({
     exists: !!matchingEvent,
@@ -200,17 +174,14 @@ const getEventRoute = createRoute({
 routes.openapi(getEventRoute, async (c) => {
   const { id } = c.req.valid('param')
 
-  const eventsData = await c.env.BICCAME_MUSUME_EVENTS.get('events:list')
-  const events = eventsData ? JSON.parse(eventsData) : []
+  const prisma = eventService.createPrismaClient(c.env.DB)
+  const event = await eventService.getEventById(prisma, id)
 
-  const event = events.find((e: { id: string }) => e.id === id)
   if (!event) {
     throw new HTTPException(404, { message: 'Event not found' })
   }
 
-  // レスポンス用にパース（statusを付与）
-  const parsedEvent = EventSchema.parse(event)
-  return c.json(parsedEvent, 200)
+  return c.json(event)
 })
 
 // イベント更新
@@ -257,42 +228,14 @@ routes.openapi(updateEventRoute, async (c) => {
   const { id } = c.req.valid('param')
   const body = c.req.valid('json')
 
-  const eventsData = await c.env.BICCAME_MUSUME_EVENTS.get('events:list')
-  const events = eventsData ? JSON.parse(eventsData) : []
+  const prisma = eventService.createPrismaClient(c.env.DB)
+  const event = await eventService.updateEvent(prisma, id, body)
 
-  const eventIndex = events.findIndex((e: { id: string }) => e.id === id)
-  if (eventIndex === -1) {
+  if (!event) {
     throw new HTTPException(404, { message: 'Event not found' })
   }
 
-  // イベントを更新
-  const updatedEvent = {
-    ...events[eventIndex],
-    ...body,
-    updatedAt: dayjs().toISOString()
-  }
-
-  // bodyにendDateが含まれていない場合は削除
-  if (!('endDate' in body)) {
-    delete updatedEvent.endDate
-  }
-
-  // bodyにendedAtが含まれていない場合は削除
-  if (!('endedAt' in body)) {
-    delete updatedEvent.endedAt
-  }
-
-  // isEndedが古いデータに残っている場合は削除（statusはtransformで計算される）
-  delete updatedEvent.isEnded
-
-  events[eventIndex] = updatedEvent
-
-  // KVに保存
-  await c.env.BICCAME_MUSUME_EVENTS.put('events:list', JSON.stringify(events))
-
-  // レスポンス用にパース（statusを付与）
-  const parsedEvent = EventSchema.parse(updatedEvent)
-  return c.json(parsedEvent, 200)
+  return c.json(event, 200)
 })
 
 // イベント削除
@@ -326,19 +269,12 @@ const deleteEventRoute = createRoute({
 routes.openapi(deleteEventRoute, async (c) => {
   const { id } = c.req.valid('param')
 
-  const eventsData = await c.env.BICCAME_MUSUME_EVENTS.get('events:list')
-  const events = eventsData ? JSON.parse(eventsData) : []
+  const prisma = eventService.createPrismaClient(c.env.DB)
+  const deleted = await eventService.deleteEvent(prisma, id)
 
-  const eventIndex = events.findIndex((e: { id: string }) => e.id === id)
-  if (eventIndex === -1) {
+  if (!deleted) {
     throw new HTTPException(404, { message: 'Event not found' })
   }
-
-  // イベントを削除
-  events.splice(eventIndex, 1)
-
-  // KVに保存
-  await c.env.BICCAME_MUSUME_EVENTS.put('events:list', JSON.stringify(events))
 
   return c.body(null, 204)
 })
