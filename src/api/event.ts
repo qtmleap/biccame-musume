@@ -5,11 +5,7 @@ import { HTTPException } from 'hono/http-exception'
 import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
 import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
 import * as eventService from '@/services/event.service'
-
-type Bindings = {
-  DB: D1Database
-  RATE_LIMITER: RateLimitBinding
-}
+import type { Bindings } from '@/types/bindings'
 
 const getKey: RateLimitKeyFunc = (c: Context): string => {
   return c.req.header('Authorization') || c.req.header('CF-Connecting-IP') || ''
@@ -43,8 +39,7 @@ const listEventsRoute = createRoute({
 })
 
 routes.openapi(listEventsRoute, async (c) => {
-  const prisma = eventService.createPrismaClient(c.env.DB)
-  const events = await eventService.listEvents(prisma)
+  const events = await eventService.listEvents(c.env.PRISMA)
 
   return c.json({ events })
 })
@@ -95,8 +90,7 @@ routes.openapi(createEventRoute, async (c) => {
     throw new HTTPException(400, { message: result.error.message })
   }
 
-  const prisma = eventService.createPrismaClient(c.env.DB)
-  const event = await eventService.createEvent(prisma, result.data)
+  const event = await eventService.createEvent(c.env.PRISMA, result.data)
 
   return c.json(event, 201)
 })
@@ -130,8 +124,7 @@ const checkDuplicateUrlRoute = createRoute({
 routes.openapi(checkDuplicateUrlRoute, async (c) => {
   const { url, excludeId } = c.req.valid('query')
 
-  const prisma = eventService.createPrismaClient(c.env.DB)
-  const matchingEvent = await eventService.findEventByUrl(prisma, url, excludeId)
+  const matchingEvent = await eventService.findEventByUrl(c.env.PRISMA, url, excludeId)
 
   return c.json({
     exists: !!matchingEvent,
@@ -174,8 +167,7 @@ const getEventRoute = createRoute({
 routes.openapi(getEventRoute, async (c) => {
   const { id } = c.req.valid('param')
 
-  const prisma = eventService.createPrismaClient(c.env.DB)
-  const event = await eventService.getEventById(prisma, id)
+  const event = await eventService.getEventById(c.env.PRISMA, id)
 
   if (!event) {
     return c.json({ error: 'Event not found' }, 404) as any
@@ -228,8 +220,7 @@ routes.openapi(updateEventRoute, async (c) => {
   const { id } = c.req.valid('param')
   const body = c.req.valid('json')
 
-  const prisma = eventService.createPrismaClient(c.env.DB)
-  const event = await eventService.updateEvent(prisma, id, body)
+  const event = await eventService.updateEvent(c.env.PRISMA, id, body)
 
   if (!event) {
     throw new HTTPException(404, { message: 'Event not found' })
@@ -269,8 +260,7 @@ const deleteEventRoute = createRoute({
 routes.openapi(deleteEventRoute, async (c) => {
   const { id } = c.req.valid('param')
 
-  const prisma = eventService.createPrismaClient(c.env.DB)
-  const deleted = await eventService.deleteEvent(prisma, id)
+  const deleted = await eventService.deleteEvent(c.env.PRISMA, id)
 
   if (!deleted) {
     throw new HTTPException(404, { message: 'Event not found' })
