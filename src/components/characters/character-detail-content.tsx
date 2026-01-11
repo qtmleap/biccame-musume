@@ -168,8 +168,11 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                       <div className='min-w-0 flex-1'>
                         <p className='text-sm text-gray-500'>営業時間</p>
                         <div className='space-y-1'>
-                          {character.store.hours.map((hour, index) => (
-                            <div key={index} className='text-sm text-gray-900'>
+                          {character.store.hours.map((hour) => (
+                            <div
+                              key={`${hour.type}-${hour.open_time}-${hour.close_time}`}
+                              className='text-sm text-gray-900'
+                            >
                               {hour.type === 'weekday' && '平日: '}
                               {hour.type === 'weekend' && '土日祝: '}
                               {hour.type === 'holiday' && '日曜・祝日: '}
@@ -189,8 +192,8 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                       <div className='min-w-0 flex-1'>
                         <p className='text-sm text-gray-500'>アクセス</p>
                         <div className='space-y-2'>
-                          {character.store.access.map((access, index) => (
-                            <div key={index}>
+                          {character.store.access.map((access) => (
+                            <div key={access.station}>
                               <p className='text-sm text-gray-900 font-medium'>{access.station}</p>
                               {access.description && <p className='text-sm text-gray-600'>{access.description}</p>}
                               {access.lines && access.lines.length > 0 && (

@@ -1,4 +1,4 @@
-import { type RateLimitBinding, type RateLimitKeyFunc, rateLimit } from '@elithrar/workers-hono-rate-limit'
+import { rateLimit } from '@elithrar/workers-hono-rate-limit'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
@@ -6,6 +6,7 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
+import type { Bindings } from '@/types/bindings'
 import {
   AllVoteCountsSchema,
   VoteCountSchema,
@@ -14,7 +15,6 @@ import {
   VoteSuccessResponseSchema
 } from '../schemas/vote.dto'
 import { generateVoteKey, getNextJSTDate } from '../utils/vote'
-import type { Bindings } from '@/types/bindings'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
