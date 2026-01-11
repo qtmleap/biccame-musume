@@ -51,7 +51,6 @@ const EventsContent = () => {
         map.set(char.id, char.prefecture)
       }
     }
-    console.log('Store prefecture map:', Object.fromEntries(map))
     return map
   }, [characters])
 
@@ -73,8 +72,6 @@ const EventsContent = () => {
   // 開催中・開催予定のイベントをフィルタリング
   const activeEvents = useMemo(() => {
     const currentTime = dayjs()
-    console.log('Filtering with region:', regionFilter)
-    console.log('Total events:', events.length)
     return events
       .filter((event) => {
         // カテゴリフィルター
@@ -82,22 +79,14 @@ const EventsContent = () => {
 
         // 地域フィルター
         if (regionFilter !== 'all') {
-          console.log('Event:', event.name, 'Stores:', event.stores)
           // 店舗がない場合は表示しない
-          if (!event.stores || event.stores.length === 0) {
-            console.log('  -> No stores, filtered out')
-            return false
-          }
+          if (!event.stores || event.stores.length === 0) return false
           // いずれかの店舗が選択された地域に属するかチェック
           const hasMatchingStore = event.stores.some((storeKey) => {
             const prefecture = storePrefectureMap.get(storeKey)
-            console.log('  Store key:', storeKey, '-> Prefecture:', prefecture)
             if (!prefecture) return false
-            const region = prefectureToRegion[prefecture]
-            console.log('  Region:', region, 'vs filter:', regionFilter)
-            return region === regionFilter
+            return prefectureToRegion[prefecture] === regionFilter
           })
-          console.log('  -> hasMatchingStore:', hasMatchingStore)
           if (!hasMatchingStore) return false
         }
 

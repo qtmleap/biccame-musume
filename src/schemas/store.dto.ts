@@ -9,6 +9,64 @@ export const RegionSchema = z.enum(['all', 'hokkaido', 'kanto', 'chubu', 'kansai
 export type Region = z.infer<typeof RegionSchema>
 
 /**
+ * 店舗キーの型定義
+ */
+export const StoreKeySchema = z.enum([
+  'abeno',
+  'akasaka',
+  'akiba',
+  'biccamera',
+  'bicqlo',
+  'bicsim',
+  'camera',
+  'chiba',
+  'chofu',
+  'fujisawa',
+  'funabashi',
+  'funato',
+  'hachioji',
+  'hamamatsu',
+  'hiroshima',
+  'honten',
+  'ikenishi',
+  'kagoshima',
+  'kashiwa',
+  'kawasaki',
+  'kyoto',
+  'machida',
+  'mito',
+  'nagoya',
+  'nagoyagate',
+  'naisen',
+  'nanba',
+  'niigata',
+  'oeraitan',
+  'ohmiya',
+  'okayama',
+  'photo',
+  'pkan',
+  'prosta',
+  'sagami',
+  'sapporo',
+  'seiseki',
+  'shibuhachi',
+  'shibuto',
+  'shinjyuku',
+  'shintou',
+  'shinyoko',
+  'tachikawa',
+  'takatsuki',
+  'tamapla',
+  'tenjin',
+  'tenjin2',
+  'tokorozawa',
+  'yao',
+  'yuurakuchou'
+])
+
+export type StoreKey = z.infer<typeof StoreKeySchema>
+
+/**
  * 営業時間の型定義
  */
 export const HoursSchema = z.object({
