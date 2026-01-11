@@ -37,7 +37,7 @@ const CATEGORY_CHECKBOX_COLORS: Record<Event['category'], string> = {
  */
 const EventsContent = () => {
   const { data: events = [], isLoading } = useEvents()
-  const { data: characters } = useCharacters()
+  const { data: characters = [] } = useCharacters()
   const [categoryFilter, setCategoryFilter] = useState<Set<Event['category']>>(
     new Set(['ackey', 'limited_card', 'regular_card', 'other'])
   )
@@ -46,11 +46,16 @@ const EventsContent = () => {
   // 店舗名から都道府県を取得するマップ
   const storePrefectureMap = useMemo(() => {
     const map = new Map<string, string>()
+    if (!characters || characters.length === 0) {
+      console.log('Characters data is empty for building store prefecture map')
+      return map
+    }
     for (const char of characters) {
       if (char.store?.name && char.prefecture) {
         map.set(char.store.name, char.prefecture)
       }
     }
+    console.log('Store prefecture map built:', map.size, 'entries')
     return map
   }, [characters])
 
@@ -72,6 +77,9 @@ const EventsContent = () => {
   // 開催中・開催予定のイベントをフィルタリング
   const activeEvents = useMemo(() => {
     const currentTime = dayjs()
+    console.log('Filtering events with region:', regionFilter)
+    console.log('Store prefecture map size:', storePrefectureMap.size)
+
     return events
       .filter((event) => {
         // カテゴリフィルター
@@ -80,14 +88,26 @@ const EventsContent = () => {
         // 地域フィルター
         if (regionFilter !== 'all') {
           // 店舗がない場合は表示しない
-          if (!event.stores || event.stores.length === 0) return false
+          if (!event.stores || event.stores.length === 0) {
+            console.log('Event has no stores:', event.name)
+            return false
+          }
           // いずれかの店舗が選択された地域に属するかチェック
           const hasMatchingStore = event.stores.some((storeName) => {
             const prefecture = storePrefectureMap.get(storeName)
-            if (!prefecture) return false
-            return prefectureToRegion[prefecture] === regionFilter
+            if (!prefecture) {
+              console.log('Prefecture not found for store:', storeName)
+              return false
+            }
+            const region = prefectureToRegion[prefecture]
+            const matches = region === regionFilter
+            console.log(`Store: ${storeName}, Prefecture: ${prefecture}, Region: ${region}, Matches: ${matches}`)
+            return matches
           })
-          if (!hasMatchingStore) return false
+          if (!hasMatchingStore) {
+            console.log('Event filtered out (no matching stores):', event.name)
+            return false
+          }
         }
 
         const startDate = dayjs(event.startDate)
