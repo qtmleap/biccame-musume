@@ -37,7 +37,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
         </div>
 
         {/* プロフィールセクション */}
-        <div className='mb-4'>
+        <div className='mb-4 flex items-end justify-between gap-4'>
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -47,35 +47,39 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
               <AvatarImage
                 src={character.character?.image_url}
                 alt={character.character?.name || ''}
-                className='object-cover scale-150'
+                className='object-cover scale-150 translate-y-4'
               />
               <AvatarFallback className='text-4xl bg-pink-100 text-pink-700'>
                 {character.character?.name?.[0] || '?'}
               </AvatarFallback>
             </Avatar>
           </motion.div>
-        </div>
 
-        {/* アクションボタン */}
-        <div className='flex justify-end gap-2 mb-4'>
-          {character.character?.twitter_id && (
-            <Button asChild className='rounded-full font-semibold bg-black text-white hover:bg-gray-800'>
-              <a
-                href={`https://twitter.com/intent/follow?screen_name=${character.character.twitter_id}`}
-                target='_blank'
-                rel='noopener noreferrer'
+          {/* アクションボタン */}
+          <div className='flex gap-2'>
+            {character.character?.twitter_id && (
+              <Button
+                asChild
+                size='sm'
+                className='rounded-full font-semibold bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100'
               >
-                フォロー
-              </a>
-            </Button>
-          )}
-          {character.character?.is_biccame_musume && (
-            <CharacterVoteButton
-              characterId={character.id}
-              characterName={character.character.name}
-              variant='compact'
-            />
-          )}
+                <a
+                  href={`https://twitter.com/intent/follow?screen_name=${character.character.twitter_id}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  フォロー
+                </a>
+              </Button>
+            )}
+            {character.character?.is_biccame_musume && (
+              <CharacterVoteButton
+                characterId={character.id}
+                characterName={character.character.name}
+                variant='compact'
+              />
+            )}
+          </div>
         </div>
 
         {/* 名前と説明 */}
