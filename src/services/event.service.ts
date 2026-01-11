@@ -89,9 +89,9 @@ export const createEvent = async (prisma: PrismaClient, data: EventRequest) => {
       category: data.category,
       name: data.name,
       limitedQuantity: data.limitedQuantity,
-      startDate: new Date(data.startDate),
-      endDate: data.endDate ? new Date(data.endDate) : null,
-      endedAt: data.endedAt ? new Date(data.endedAt) : null,
+      startDate: dayjs(data.startDate).toDate(),
+      endDate: data.endDate ? dayjs(data.endDate).toDate() : null,
+      endedAt: data.endedAt ? dayjs(data.endedAt).toDate() : null,
       conditions: {
         create: data.conditions.map((c) => ({
           type: c.type,
@@ -132,59 +132,56 @@ export const updateEvent = async (prisma: PrismaClient, id: string, data: Partia
   const existingEvent = await prisma.event.findUnique({ where: { id } })
   if (!existingEvent) return null
 
-  // トランザクションで更新
-  const event = await prisma.$transaction(async (tx) => {
-    // 関連データを削除してから再作成（条件、URL、店舗）
-    if (data.conditions) {
-      await tx.eventCondition.deleteMany({ where: { eventId: id } })
-    }
-    if (data.referenceUrls !== undefined) {
-      await tx.eventReferenceUrl.deleteMany({ where: { eventId: id } })
-    }
-    if (data.stores) {
-      await tx.eventStore.deleteMany({ where: { eventId: id } })
-    }
+  // 関連データを削除してから再作成（条件、URL、店舗）
+  if (data.conditions) {
+    await prisma.eventCondition.deleteMany({ where: { eventId: id } })
+  }
+  if (data.referenceUrls !== undefined) {
+    await prisma.eventReferenceUrl.deleteMany({ where: { eventId: id } })
+  }
+  if (data.stores) {
+    await prisma.eventStore.deleteMany({ where: { eventId: id } })
+  }
 
-    // イベント本体と関連データを更新
-    return tx.event.update({
-      where: { id },
-      data: {
-        ...(data.category && { category: data.category }),
-        ...(data.name && { name: data.name }),
-        ...(data.limitedQuantity !== undefined && { limitedQuantity: data.limitedQuantity }),
-        ...(data.startDate && { startDate: new Date(data.startDate) }),
-        // endDateが明示的にundefinedの場合はnullに設定
-        ...('endDate' in data && { endDate: data.endDate ? new Date(data.endDate) : null }),
-        ...('endedAt' in data && { endedAt: data.endedAt ? new Date(data.endedAt) : null }),
-        ...(data.conditions && {
-          conditions: {
-            create: data.conditions.map((c) => ({
-              type: c.type,
-              purchaseAmount: c.purchaseAmount,
-              quantity: c.quantity
-            }))
-          }
-        }),
-        ...(data.referenceUrls !== undefined && {
-          referenceUrls: {
-            create: data.referenceUrls.map((r) => ({
-              type: r.type,
-              url: r.url
-            }))
-          }
-        }),
-        ...(data.stores && {
-          stores: {
-            create: data.stores.map((storeName) => ({ storeKey: storeName }))
-          }
-        })
-      },
-      include: {
-        conditions: true,
-        referenceUrls: true,
-        stores: true
-      }
-    })
+  // イベント本体と関連データを更新
+  const event = await prisma.event.update({
+    where: { id },
+    data: {
+      ...(data.category && { category: data.category }),
+      ...(data.name && { name: data.name }),
+      ...(data.limitedQuantity !== undefined && { limitedQuantity: data.limitedQuantity }),
+      ...(data.startDate && { startDate: dayjs(data.startDate).toDate() }),
+      // endDateが明示的にundefinedの場合はnullに設定
+      ...('endDate' in data && { endDate: data.endDate ? dayjs(data.endDate).toDate() : null }),
+      ...('endedAt' in data && { endedAt: data.endedAt ? dayjs(data.endedAt).toDate() : null }),
+      ...(data.conditions && {
+        conditions: {
+          create: data.conditions.map((c) => ({
+            type: c.type,
+            purchaseAmount: c.purchaseAmount,
+            quantity: c.quantity
+          }))
+        }
+      }),
+      ...(data.referenceUrls !== undefined && {
+        referenceUrls: {
+          create: data.referenceUrls.map((r) => ({
+            type: r.type,
+            url: r.url
+          }))
+        }
+      }),
+      ...(data.stores && {
+        stores: {
+          create: data.stores.map((storeName) => ({ storeKey: storeName }))
+        }
+      })
+    },
+    include: {
+      conditions: true,
+      referenceUrls: true,
+      stores: true
+    }
   })
 
   return transformEventFromDb(event)
