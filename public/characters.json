@@ -59,8 +59,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 34.6438998,
-        "longitude": 135.5091507
+        "latitude": 34.6438953804491,
+        "longitude": 135.50915601523087
       },
       "postal_code": "545-0052",
       "phone": "06-6631-1111",
@@ -116,8 +116,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.6771198,
-        "longitude": 139.7345291
+        "latitude": 35.67711978019513,
+        "longitude": 139.73452911601322
       },
       "postal_code": "107-0052",
       "phone": "03-6230-1111",
@@ -169,8 +169,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.699826,
-        "longitude": 139.7691798
+        "latitude": 35.69950382825271,
+        "longitude": 139.77087353578034
       },
       "postal_code": "101-0021",
       "birthday": "2017-06-22"
@@ -247,8 +247,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.6913041,
-        "longitude": 139.7029741
+        "latitude": 35.691349,
+        "longitude": 139.7029
       },
       "postal_code": "160-0022",
       "phone": "03-3226-1111",
@@ -330,8 +330,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.6117469,
-        "longitude": 140.1155376
+        "latitude": 35.61181349743585,
+        "longitude": 140.11531475316687
       },
       "postal_code": "260-0015",
       "phone": "043-201-1111",
@@ -376,8 +376,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.6522598,
-        "longitude": 139.5405159
+        "latitude": 35.65192478918477,
+        "longitude": 139.54067276588174
       },
       "postal_code": "182-0026",
       "phone": "042-444-1111",
@@ -422,8 +422,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.3395487,
-        "longitude": 139.4856503
+        "latitude": 35.339502,
+        "longitude": 139.488215
       },
       "postal_code": "251-0052",
       "phone": "0466-29-1111",
@@ -474,8 +474,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.7009472,
-        "longitude": 139.9834417
+        "latitude": 35.700662,
+        "longitude": 139.985464
       },
       "postal_code": "273-0005",
       "phone": "047-460-1111",
@@ -544,8 +544,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.654573,
-        "longitude": 139.3362291
+        "latitude": 35.653343,
+        "longitude": 139.350419
       },
       "postal_code": "192-0083",
       "phone": "042-646-1111",
@@ -596,8 +596,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 34.7035326,
-        "longitude": 137.7315838
+        "latitude": 34.70361,
+        "longitude": 137.7307876
       },
       "postal_code": "430-0926",
       "phone": "053-455-1111",
@@ -635,8 +635,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 34.3959004,
-        "longitude": 132.4728761
+        "latitude": 34.39561633507718,
+        "longitude": 132.47488758164647
       },
       "postal_code": "732-0822",
       "phone": "082-506-1111",
@@ -689,6 +689,10 @@
           ]
         }
       ],
+      "coordinates": {
+        "latitude": 35.731747580182486,
+        "longitude": 139.71075251526028
+      },
       "postal_code": "170-0013",
       "phone": "03-5396-1111",
       "birthday": "1992-09-24"
@@ -735,6 +739,10 @@
           ]
         }
       ],
+      "coordinates": {
+        "latitude": 35.7308799801827,
+        "longitude": 139.70682031526016
+      },
       "postal_code": "171-0021",
       "phone": "03-5960-1111",
       "birthday": "2002-09-19"
@@ -778,8 +786,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 31.583909,
-        "longitude": 130.5381123
+        "latitude": 31.58391355116033,
+        "longitude": 130.53811231582384
       },
       "postal_code": "890-0053",
       "phone": "099-814-1111",
@@ -824,8 +832,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.862313,
-        "longitude": 139.9699923
+        "latitude": 35.861985834312286,
+        "longitude": 139.97108885202005
       },
       "postal_code": "277-0005",
       "phone": "04-7165-1111",
@@ -876,8 +884,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.5330257,
-        "longitude": 139.6943756
+        "latitude": 35.533046380229145,
+        "longitude": 139.6947895152548
       },
       "postal_code": "212-0013",
       "phone": "044-520-1111",
@@ -960,8 +968,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 36.3701475,
-        "longitude": 140.4742257
+        "latitude": 36.36978515964381,
+        "longitude": 140.47561284654657
       },
       "postal_code": "310-0015",
       "phone": "029-303-1111",
@@ -1017,8 +1025,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.1703185,
-        "longitude": 136.8772081
+        "latitude": 35.17046773871493,
+        "longitude": 136.87869655285743
       },
       "postal_code": "453-0015",
       "phone": "052-459-1111",
@@ -1072,8 +1080,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.1720609,
-        "longitude": 136.8806117
+        "latitude": 35.17181366534679,
+        "longitude": 136.8809753158667
       },
       "postal_code": "450-0002",
       "birthday": "2017-04-07"
@@ -1138,8 +1146,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 34.6666844,
-        "longitude": 135.5000216
+        "latitude": 34.66669628044325,
+        "longitude": 135.5004216152313
       },
       "postal_code": "542-0074",
       "phone": "06-6634-1111",
@@ -1185,8 +1193,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 37.9117609,
-        "longitude": 139.0614672
+        "latitude": 37.911745212038916,
+        "longitude": 139.06108931599172
       },
       "postal_code": "950-0086",
       "phone": "025-248-1111",
@@ -1248,8 +1256,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.9044019,
-        "longitude": 139.6184078
+        "latitude": 35.904468,
+        "longitude": 139.621129
       },
       "postal_code": "330-0854",
       "phone": "048-647-1111",
@@ -1299,8 +1307,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 34.6658681,
-        "longitude": 133.9172952
+        "latitude": 34.665907980443414,
+        "longitude": 133.91744831523127
       },
       "postal_code": "700-0023",
       "phone": "086-236-1111",
@@ -1373,6 +1381,10 @@
           ]
         }
       ],
+      "coordinates": {
+        "latitude": 35.731589,
+        "longitude": 139.7132525
+      },
       "postal_code": "170-0013",
       "phone": "03-5956-1111",
       "birthday": "1997-11-27"
@@ -1398,6 +1410,10 @@
     "store": {
       "postal_code": "171-0021",
       "phone": "03-3987-5593",
+      "coordinates": {
+        "latitude": 35.73076948695455,
+        "longitude": 139.70825456960466
+      },
       "prefecture": "東京都"
     }
   },
@@ -1439,8 +1455,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.5316511,
-        "longitude": 139.4346498
+        "latitude": 35.531457,
+        "longitude": 139.437167
       },
       "postal_code": "252-0303",
       "phone": "042-701-1111",
@@ -1491,8 +1507,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 43.0674353,
-        "longitude": 141.3506919
+        "latitude": 43.066298090070966,
+        "longitude": 141.35035781204664
       },
       "postal_code": "060-8619",
       "phone": "011-261-1111",
@@ -1567,8 +1583,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.659385,
-        "longitude": 139.6994902
+        "latitude": 35.65934288019936,
+        "longitude": 139.69729111591394
       },
       "postal_code": "150-0043",
       "phone": "03-3477-0002",
@@ -1623,8 +1639,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.6599174,
-        "longitude": 139.7020684
+        "latitude": 35.659971880199194,
+        "longitude": 139.69973441525823
       },
       "postal_code": "150-0002",
       "phone": "03-5466-1111",
@@ -1692,8 +1708,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.6925129,
-        "longitude": 139.695976
+        "latitude": 35.692479680191646,
+        "longitude": 139.6964761152591
       },
       "postal_code": "160-0023",
       "phone": "03-5326-1111",
@@ -1755,8 +1771,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.6920154,
-        "longitude": 139.7018685
+        "latitude": 35.69201538019174,
+        "longitude": 139.69967981525915
       },
       "postal_code": "160-0022",
       "phone": "03-5312-1111",
@@ -1801,8 +1817,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.5079029,
-        "longitude": 139.6154556
+        "latitude": 35.50790724706335,
+        "longitude": 139.61545561630493
       },
       "postal_code": "222-0033",
       "phone": "045-478-1111",
@@ -1852,8 +1868,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.6993944,
-        "longitude": 139.4119818
+        "latitude": 35.69921498019015,
+        "longitude": 139.41271631597147
       },
       "postal_code": "190-0012",
       "phone": "042-548-1111",
@@ -1903,6 +1919,10 @@
           "lines": ["阪急京都線"]
         }
       ],
+      "coordinates": {
+        "latitude": 34.853881474864394,
+        "longitude": 135.61574381172426
+      },
       "postal_code": "569-1196",
       "phone": "072-691-1112",
       "birthday": "2022-06-10"
@@ -1978,8 +1998,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 33.5874693,
-        "longitude": 130.3986198
+        "latitude": 33.58702524954873,
+        "longitude": 130.3988427155932
       },
       "postal_code": "810-0021",
       "phone": "092-732-1112",
@@ -2037,8 +2057,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 33.587547,
-        "longitude": 130.3964353
+        "latitude": 33.5880605,
+        "longitude": 130.3982623
       },
       "postal_code": "810-0001",
       "phone": "092-732-1111",
@@ -2083,6 +2103,10 @@
           "lines": ["西武新宿線・西武池袋線"]
         }
       ],
+      "coordinates": {
+        "latitude": 35.785908480170065,
+        "longitude": 139.47018846526169
+      },
       "postal_code": "359-1123",
       "phone": "04-2903-1111",
       "birthday": "2019-11-08"
@@ -2127,8 +2151,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 34.6333122,
-        "longitude": 135.6036486
+        "latitude": 34.6324873804521,
+        "longitude": 135.60360691523033
       },
       "postal_code": "581-0803",
       "phone": "072-993-1111",
@@ -2186,8 +2210,8 @@
         }
       ],
       "coordinates": {
-        "latitude": 35.6753814,
-        "longitude": 139.7603339
+        "latitude": 35.67558298019562,
+        "longitude": 139.76073981525863
       },
       "postal_code": "100-0006",
       "phone": "03-5221-1111",
