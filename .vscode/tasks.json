@@ -47,6 +47,17 @@
         "reveal": "always",
         "panel": "new"
       }
+    },
+    {
+      "label": "Generate Characters JSON",
+      "type": "shell",
+      "command": "bun",
+      "args": ["${workspaceFolder}/.vscode/scripts/parse_store_info.ts"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
     }
   ]
 }
