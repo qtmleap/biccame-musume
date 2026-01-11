@@ -10,6 +10,14 @@
 
 import { $ } from 'bun'
 import type { Event } from '@/schemas/event.dto'
+import { STORE_NAME_LABELS } from '@/locales/app.content'
+
+/**
+ * 店舗名からキーへの逆マッピング
+ */
+const STORE_NAME_TO_KEY = Object.fromEntries(
+  Object.entries(STORE_NAME_LABELS).map(([key, name]) => [name, key])
+) as Record<string, string>
 
 /**
  * 環境別のKVネームスペースID (BICCAME_MUSUME_EVENTS)
@@ -55,21 +63,21 @@ const fetchEventsFromKV = async (namespaceId: string, env: Environment): Promise
  * D1にイベントデータを投入
  */
 const insertEventsToD1 = async (databaseName: string, events: Event[], env: Environment): Promise<void> => {
-  console.log(`🚀 ${env}環境のD1にイベントデータを投入中...`)
+  console.log(`🚀 ローカルD1にイベントデータを投入中...`)
 
   if (events.length === 0) {
     console.log('  投入するデータがありません')
     return
   }
 
-  const envFlag = `--env=${env}`
-  const remoteFlag = '--remote'
+  // ローカルD1に投入
+  const localFlag = '--local'
 
   // 既存のイベントを削除
-  await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${remoteFlag} --command "DELETE FROM events;"`.quiet()
-  await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${remoteFlag} --command "DELETE FROM event_conditions;"`.quiet()
-  await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${remoteFlag} --command "DELETE FROM event_reference_urls;"`.quiet()
-  await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${remoteFlag} --command "DELETE FROM event_stores;"`.quiet()
+  await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command "DELETE FROM events;"`.quiet()
+  await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command "DELETE FROM event_conditions;"`.quiet()
+  await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command "DELETE FROM event_reference_urls;"`.quiet()
+  await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command "DELETE FROM event_stores;"`.quiet()
 
   console.log(`  ${events.length}件のイベントを投入します`)
 
@@ -95,7 +103,7 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
       .join(', ')
 
     const eventSql = `INSERT INTO events (id, name, category, start_date, end_date, ended_at, limited_quantity, created_at, updated_at) VALUES ${eventValues};`
-    await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${remoteFlag} --command ${eventSql}`.quiet()
+    await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command ${eventSql}`.quiet()
 
     // 各イベントの関連データを投入
     for (const event of batch) {
@@ -112,7 +120,7 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
           .join(', ')
 
         const conditionSql = `INSERT INTO event_conditions (id, event_id, type, purchase_amount, quantity, created_at, updated_at) VALUES ${conditionValues};`
-        await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${remoteFlag} --command ${conditionSql}`.quiet()
+        await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command ${conditionSql}`.quiet()
       }
 
       // 対象店舗
@@ -121,12 +129,14 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
           .map((store) => {
             const id = crypto.randomUUID()
             const now = new Date().toISOString()
-            return `('${id}', '${event.id}', '${store}', '${now}', '${now}')`
+            // 店舗名をキーに変換（既にキーの場合はそのまま、店舗名の場合は変換）
+            const storeKey = STORE_NAME_TO_KEY[store] || store
+            return `('${id}', '${event.id}', '${storeKey}', '${now}', '${now}')`
           })
           .join(', ')
 
         const storeSql = `INSERT INTO event_stores (id, event_id, store_key, created_at, updated_at) VALUES ${storeValues};`
-        await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${remoteFlag} --command ${storeSql}`.quiet()
+        await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command ${storeSql}`.quiet()
       }
 
       // 参考URL
@@ -141,7 +151,7 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
           .join(', ')
 
         const urlSql = `INSERT INTO event_reference_urls (id, event_id, type, url, created_at, updated_at) VALUES ${urlValues};`
-        await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${remoteFlag} --command ${urlSql}`.quiet()
+        await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command ${urlSql}`.quiet()
       }
     }
 
@@ -165,7 +175,7 @@ const main = async () => {
     process.exit(1)
   }
 
-  console.log(`🚀 ${env}環境のKVからD1にイベントデータを同期します\n`)
+  console.log(`🚀 ${env}環境のKVからローカルD1にイベントデータを同期します\n`)
 
   const namespaceId = KV_NAMESPACE_IDS[env]
   const databaseName = await getLocalDatabaseName()

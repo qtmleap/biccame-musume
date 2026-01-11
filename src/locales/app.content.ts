@@ -73,7 +73,7 @@ const appContent = {
       [StoreKeySchema.enum.niigata]: '新潟店',
       [StoreKeySchema.enum.ohmiya]: '大宮西口そごう店',
       [StoreKeySchema.enum.okayama]: '岡山駅前店',
-      [StoreKeySchema.enum.pkan]: '池袋カメラ・パソコン館',
+      [StoreKeySchema.enum.pkan]: '池袋本店パソコン館',
       [StoreKeySchema.enum.sagami]: '相模大野駅店',
       [StoreKeySchema.enum.sapporo]: '札幌店',
       [StoreKeySchema.enum.shibuhachi]: '渋谷ハチ公口店',
