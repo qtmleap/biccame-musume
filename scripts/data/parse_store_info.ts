@@ -720,7 +720,7 @@ const main = async () => {
         // 都道府県を推定（店舗IDを使用）
         const prefecture = extractPrefecture(undefined, undefined, storeInfo.character.name, storeId)
         if (postal_code || phone || birthday || coordinates || prefecture !== undefined) {
-          storeInfo.store = { postal_code, phone, birthday, coordinates, prefecture }
+          storeInfo.store = { postal_code, phone, birthday, coordinates, prefecture: prefecture || undefined }
         }
       }
 
