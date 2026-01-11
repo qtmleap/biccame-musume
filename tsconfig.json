@@ -1,22 +1,11 @@
 {
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".intlayer/**/*.ts"
-  ],
-  "exclude": [
-    "src/components/ui/**/*.tsx"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", ".intlayer/**/*.ts"],
+  "exclude": ["src/components/ui/**/*.tsx"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
     "module": "ESNext",
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable",
-      "WebWorker"
-    ],
+    "lib": ["ES2023", "DOM", "DOM.Iterable", "WebWorker"],
     "types": [
       "vite/client",
       "@cloudflare/workers-types",
@@ -35,9 +24,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   }
 }

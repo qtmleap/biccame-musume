@@ -58,7 +58,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
 
   // 住所がある店舗のみフィルタリングしてユニークリストを取得
   const storeNames = Array.from(
-    new Set(characters.filter((c) => c.address && c.address.trim() !== '').map((c) => c.store_name))
+    new Set(characters.filter((c) => c.address && c.address.trim() !== '').map((c) => c.name || ''))
   ).sort()
 
   const {

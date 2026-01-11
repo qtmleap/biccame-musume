@@ -3,18 +3,18 @@ import dayjs from 'dayjs'
 import { Calendar } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useMemo } from 'react'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 import { UpcomingEventListItem } from './upcoming-event-list-item'
 
 type UpcomingEvent = {
-  character: Character
+  character: StoreData
   type: 'character' | 'store'
   date: dayjs.Dayjs
   daysUntil: number
 }
 
 type UpcomingEventListProps = {
-  characters: Character[]
+  characters: StoreData[]
 }
 
 /**
@@ -29,8 +29,8 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
     const events: UpcomingEvent[] = []
 
     for (const character of characters) {
-      if (character.character_birthday) {
-        const birthday = dayjs(character.character_birthday)
+      if (character.character?.birthday) {
+        const birthday = dayjs(character.character.birthday)
         if (birthday.isValid()) {
           const thisYear = currentTime.year()
           let nextBirthday = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
@@ -62,7 +62,7 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
             <div className='flex flex-col gap-2'>
               {upcomingEvents.map((event, index) => (
                 <UpcomingEventListItem
-                  key={`${event.character.key}-${event.type}-${index}`}
+                  key={`${event.character.id}-${event.type}-${index}`}
                   event={event}
                   index={index}
                 />

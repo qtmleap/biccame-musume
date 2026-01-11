@@ -1,1111 +1,2125 @@
 [
   {
-    "character_name": "水戸たん",
-    "store_name": "水戸駅店",
-    "detail_url": "https://biccame.jp/profile/mito.html",
-    "key": "mito",
-    "description": "ビックカメラ水戸駅店の擬人化キャラクター。わら納豆のようなツインテールが特徴（実は納豆として食べられるらしい...。）水戸市の花・梅の花の小物が好き。戦車のような靴を履いている。少しおっとりしているが、水戸を盛り上げようと色々なPR活動をしている。",
-    "profile_image_url": "https://biccame.jp/profile/images/mito1.png",
-    "twitter_url": "https://twitter.com/biccameramito",
-    "zipcode": "310-0015",
-    "address": "茨城県水戸市宮町1-7-31",
-    "prefecture": "茨城県",
-    "store_birthday": "2011-06-23",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop115.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/mito_img.png",
-      "https://biccame.jp/profile/images/mito_img_sd.png",
-      "https://biccame.jp/profile/images/mito4.png",
-      "https://biccame.jp/profile/images/mito5.png"
-    ],
-    "character_birthday": "2015-04-27",
-    "latitude": 36.3701475,
-    "longitude": 140.4768006,
-    "is_biccame_musume": true
+    "id": "abeno",
+    "character": {
+      "name": "あべのたん",
+      "description": "ビックカメラあべのキューズモール店の擬人化キャラクター。 たこ焼きの髪飾り・タコのぬいぐるみ(？)が特徴。青い腕輪はお店のロゴから。",
+      "twitter_id": "bic_abeno",
+      "images": [
+        "90984e7a605083b17cac42ad3ff95fddedb8c093.png",
+        "images/abeno3.png",
+        "images/abeno4.png",
+        "images/abeno5.png",
+        "images/abeno4.png",
+        "images/abeno5.png"
+      ],
+      "birthday": "2016-09-07",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 118,
+      "name": "ビックカメラあべのキューズモール店",
+      "address": "大阪府大阪市阿倍野区阿倍野筋1-6-1 あべのキューズモール 3F",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "天王寺駅",
+          "description": "12号出口",
+          "lines": ["地下鉄御堂筋線", "谷町線"]
+        },
+        {
+          "station": "阿倍野駅",
+          "description": "2号出口",
+          "lines": ["地下鉄谷町線"]
+        },
+        {
+          "station": "天王寺駅",
+          "description": "南口",
+          "lines": ["JR環状線", "阪和線", "大和路線"]
+        },
+        {
+          "station": "大阪阿部野橋駅",
+          "description": "西改札",
+          "lines": ["近鉄南大阪線"]
+        },
+        {
+          "station": "天王寺駅前駅",
+          "description": "",
+          "lines": ["阪堺電車上町線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 34.6438998,
+        "longitude": 135.5091507
+      },
+      "postal_code": "545-0052",
+      "phone": "06-6631-1111",
+      "birthday": "2016-05-19"
+    }
   },
   {
-    "character_name": "柏たん",
-    "store_name": "柏店",
-    "detail_url": "https://biccame.jp/profile/kashiwa.html",
-    "key": "kashiwa",
-    "description": "ビックカメラ柏店の擬人化キャラクター。メガネと柏餅のような頭が特徴。大好物はもちろんモチモチの柏餅！制服のリボンは柏市の木・柏の葉っぱと、市の花・シバザクラがモチーフになっている。",
-    "profile_image_url": "https://biccame.jp/profile/images/kashiwa1.png",
-    "twitter_url": "https://twitter.com/bic_kashiwa",
-    "zipcode": "277-0005",
-    "address": "千葉県柏市柏1-1-20",
-    "prefecture": "千葉県",
-    "store_birthday": "2005-03-10",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-035.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/kasiwa_img.png",
-      "https://biccame.jp/profile/images/kasiwa_img_sd.png",
-      "https://biccame.jp/profile/images/kashiwa4.png",
-      "https://biccame.jp/profile/images/kashiwa5.png"
-    ],
-    "character_birthday": "2015-05-14",
-    "latitude": 35.86192090000001,
-    "longitude": 139.9717759,
-    "is_biccame_musume": true
+    "id": "akasaka",
+    "character": {
+      "name": "みっけたん",
+      "aliases": ["赤坂たん"],
+      "description": "ビックカメラ赤坂見附駅店の擬人化キャラクター。 港区の花・バラと、バラに見えるようなお団子の髪型、「3」のようなアホ毛、「坂」のヘアピンが特徴。国際社会にPRできるように、いつもお上品を心掛けている。",
+      "twitter_id": "bicakasaka",
+      "images": [
+        "images/akasaka2.png",
+        "images/akasaka3.png",
+        "images/akasaka4.png",
+        "images/akasaka5.png",
+        "images/akasaka4.png",
+        "images/akasaka5.png"
+      ],
+      "birthday": "2019-01-23",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 117,
+      "name": "ビックカメラ赤坂見附駅店",
+      "address": "東京都港区赤坂3-1-6",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "weekday",
+          "open_time": "10:00",
+          "close_time": "22:00"
+        },
+        {
+          "type": "weekend",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "赤坂見附駅",
+          "description": "10番出口",
+          "lines": ["地下鉄銀座線", "丸ノ内線"]
+        },
+        {
+          "station": "永田町駅",
+          "description": "10番出口",
+          "lines": ["地下鉄有楽町線", "半蔵門線", "南北線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.6771198,
+        "longitude": 139.7345291
+      },
+      "postal_code": "107-0052",
+      "phone": "03-6230-1111",
+      "birthday": "2013-06-07"
+    }
   },
   {
-    "character_name": "八王子たん",
-    "store_name": "JR八王子駅店",
-    "detail_url": "https://biccame.jp/profile/hachioji.html",
-    "key": "hachioji",
-    "description": "ビックカメラJR八王子駅店の擬人化キャラクター。王子という名前から王冠の髪飾りをしている。制服のリボンは八王子の銀杏がモチーフになっている。",
-    "profile_image_url": "https://biccame.jp/profile/images/hachioji1.png",
-    "twitter_url": "https://twitter.com/bichachioji",
-    "zipcode": "192-0083",
-    "address": "東京都八王子市旭町1-17",
-    "prefecture": "東京都",
-    "store_birthday": "2010-11-11",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-114.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/hachi_img.png",
-      "https://biccame.jp/profile/images/hachi_img_sd.png",
-      "https://biccame.jp/profile/images/hachoji4.png",
-      "https://biccame.jp/profile/images/hachioji5.png"
-    ],
-    "character_birthday": "2015-05-14",
-    "latitude": 35.6546041,
-    "longitude": 139.3389057,
-    "is_biccame_musume": true
+    "id": "akiba",
+    "character": {
+      "name": "アキバたん",
+      "aliases": ["秋葉原たん"],
+      "description": "ビックカメラAKIBAの擬人化キャラクター。 千代田区の花・桜がモチーフの大きなリボンと、猫耳のようなヘッドドレスが特徴。",
+      "twitter_id": "bic_akiba",
+      "images": [
+        "images/akiba2.png",
+        "images/akiba3.png",
+        "images/akiba4.png",
+        "images/akiba5.png",
+        "images/akiba4.png",
+        "images/akiba5.png"
+      ],
+      "birthday": "2017-06-05",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 121,
+      "name": "ビックカメラＡＫＩＢＡ",
+      "address": "東京都千代田区外神田4-1-1",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "22:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "秋葉原駅",
+          "description": "電気街口",
+          "lines": [
+            "JR山手線",
+            "京浜東北線",
+            "総武線",
+            "地下鉄日比谷線",
+            "つくばエクスプレス"
+          ]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.699826,
+        "longitude": 139.7691798
+      },
+      "postal_code": "101-0021",
+      "birthday": "2017-06-22"
+    }
   },
   {
-    "character_name": "ふなたん/船橋たん",
-    "store_name": "船橋駅FACE店",
-    "detail_url": "https://biccame.jp/profile/funabashi.html",
-    "key": "funabashi",
-    "description": "ビックカメラ船橋駅FACE店の擬人化キャラクター。いつも髪が跳ねている元気いっぱいの子。ビッカメ娘の中で特にハッピを愛している。制服のリボンと髪飾りに船橋市の花のひまわりをあしらっている。",
-    "profile_image_url": "https://biccame.jp/profile/images/funabashi1.png",
-    "twitter_url": "https://twitter.com/bic_funabashi",
-    "zipcode": "273-0005",
-    "address": "千葉県船橋市本町1-3-1",
-    "prefecture": "千葉県",
-    "store_birthday": "2010-02-21",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-109.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/huna_img.png",
-      "https://biccame.jp/profile/images/huna_img_sd.png",
-      "https://biccame.jp/profile/images/funabashi4.png",
-      "https://biccame.jp/profile/images/funabashi5.png"
-    ],
-    "character_birthday": "2015-05-18",
-    "latitude": 35.7007252,
-    "longitude": 139.9854889,
-    "is_biccame_musume": true
+    "id": "biccamera",
+    "character": {
+      "name": "ビックカメラ",
+      "description": "「ビックカメラ」は専門店の集合体！都市型×駅前×大型のお店で便利！ 知識豊富な販売員が親切丁寧にご案内します。カメラ、パソコン、テレビ、家電など、何でも揃う「ビックカメラ」！ ⇒ビックカメラ",
+      "twitter_id": "biccameraE",
+      "images": ["biccamera.png", "biccamera3.png"],
+      "is_biccame_musume": false
+    }
   },
   {
-    "character_name": "しんじゅくたん",
-    "store_name": "新宿東口店",
-    "detail_url": "https://biccame.jp/profile/bicqlo.html",
-    "key": "bicqlo",
-    "description": "ビックカメラ新宿東口店の擬人化キャラクター。オッドアイと、他の娘と少し違うデザインの制服が特徴。「～ですわ」とお嬢様口調。新宿の花・ツツジを髪飾りにしている。",
-    "profile_image_url": "https://biccame.jp/profile/images/bicqlo1.png",
-    "twitter_url": "https://twitter.com/bic_shinjuku3ch",
-    "zipcode": "160-0022",
-    "address": "東京都新宿区新宿3-29-1",
-    "prefecture": "東京都",
-    "store_birthday": "2012-09-27",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-116.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/biccro_img.png",
-      "https://biccame.jp/profile/images/biccro_img_sd.png",
-      "https://biccame.jp/profile/images/bicqlo4.png",
-      "https://biccame.jp/profile/images/bicqlo5.png"
-    ],
-    "character_birthday": "2015-05-18",
-    "latitude": 35.6913489,
-    "longitude": 139.7030056,
-    "is_biccame_musume": true
+    "id": "bicqlo",
+    "character": {
+      "name": "しんじゅくたん",
+      "description": "ビックカメラ新宿東口店の擬人化キャラクター。 オッドアイと、他の娘と少し違うデザインの制服が特徴。 「～ですわ」とお嬢様口調。 新宿の花・ツツジを髪飾りにしている。",
+      "twitter_id": "bic_shinjuku3ch",
+      "images": [
+        "images/biccro_img.png",
+        "images/biccro_img_sd.png",
+        "images/bicqlo4.png",
+        "images/bicqlo5.png",
+        "images/bicqlo4.png",
+        "images/bicqlo5.png"
+      ],
+      "birthday": "2015-05-18",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 116,
+      "name": "ビックカメラ新宿東口店",
+      "address": "東京都新宿区新宿3-29-1",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "22:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "新宿三丁目駅（Ａ５出口）",
+          "description": "",
+          "lines": ["地下鉄丸ノ内線", "副都心線", "都営新宿線"]
+        },
+        {
+          "station": "新宿駅",
+          "description": "東口",
+          "lines": [
+            "JR山手線",
+            "中央（快速／各駅停車）線",
+            "埼京線",
+            "湘南新宿ライン",
+            "小田急線",
+            "京王線",
+            "地下鉄丸ノ内線"
+          ]
+        },
+        {
+          "station": "新宿西口駅",
+          "description": "A5出口",
+          "lines": ["都営大江戸線"]
+        },
+        {
+          "station": "西武新宿駅",
+          "description": "南口",
+          "lines": ["西武新宿線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.6913041,
+        "longitude": 139.7029741
+      },
+      "postal_code": "160-0022",
+      "phone": "03-3226-1111",
+      "birthday": "2012-09-27"
+    }
   },
   {
-    "character_name": "はまたん/浜松たん",
-    "store_name": "浜松店",
-    "detail_url": "https://biccame.jp/profile/hamamatsu.html",
-    "key": "hamamatsu",
-    "description": "ビックカメラ浜松店の擬人化キャラクター。のんびりとした性格。うなぎパイが好き。制服のリボンは浜松市の木・松がモチーフ、ヘアピンは市の花・ミカンがモチーフになっている。",
-    "profile_image_url": "https://biccame.jp/profile/images/hama1.png",
-    "twitter_url": "https://twitter.com/bic_hamamatsu",
-    "zipcode": "430-0926",
-    "address": "静岡県浜松市中央区砂山町322-1",
-    "prefecture": "静岡県",
-    "store_birthday": "2008-11-20",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-105.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/hama_img.png",
-      "https://biccame.jp/profile/images/hama_img_sd.png",
-      "https://biccame.jp/profile/images/hamamatsu4.png",
-      "https://biccame.jp/profile/images/hamamatsu5.png"
-    ],
-    "character_birthday": "2015-05-23",
-    "latitude": 34.7034222,
-    "longitude": 137.7338944,
-    "is_biccame_musume": true
+    "id": "bicsim",
+    "character": {
+      "name": "ビックシムたん",
+      "description": "BICSIMの擬人化キャラクター。先輩の「シムウマ」を尊敬していて、スマホにキーホルダーを付けたり、ウマ耳を真似している。 もっともっと人と人とが繋がれるように「BIC SIM」 を知ってもらい、使ってもらう！のがモットー。",
+      "twitter_id": "bicsim_official",
+      "images": ["images/bicsim2.png", "images/bicsim3.png"],
+      "birthday": "2018-06-13",
+      "is_biccame_musume": false
+    }
   },
   {
-    "character_name": "さがみたん",
-    "store_name": "相模大野駅店",
-    "detail_url": "https://biccame.jp/profile/sagami.html",
-    "key": "sagami",
-    "description": "ビックカメラ相模大野駅店の擬人化キャラクター。他の娘より年下。いつも壁からﾁﾗｯしている。ちょっとさみしがり屋な性格。制服のリボンと髪飾りは、相模原市の花のアジサイがモチーフになっている。",
-    "profile_image_url": "https://biccame.jp/profile/images/sagami1.png",
-    "twitter_url": "https://twitter.com/bic_sagamioono",
-    "zipcode": "252-0303",
-    "address": "神奈川県相模原市南区相模大野3-8-1",
-    "prefecture": "神奈川県",
-    "store_birthday": "2010-03-04",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-108.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/sagami_img.png",
-      "https://biccame.jp/profile/images/sagami_img_sd.png",
-      "https://biccame.jp/profile/images/sagami4.png",
-      "https://biccame.jp/profile/images/sagami5.png"
-    ],
-    "character_birthday": "2015-08-04",
-    "latitude": 35.5320744,
-    "longitude": 139.4380265,
-    "is_biccame_musume": true
+    "id": "camera",
+    "character": {
+      "name": "カメ館たん",
+      "aliases": ["カメラ館たん"],
+      "description": "ビックカメラ池袋東口カメラ館の擬人化キャラクター。 同じ池袋の本店たんがお姉ちゃん。 リボンとくせっ毛がお揃い。カメラをいつも首からさげている。",
+      "twitter_id": "",
+      "images": [
+        "images/camera2.png",
+        "4864f8622ad3133a980acfeba567137323f7a6be.png",
+        "images/camera4.png",
+        "images/camera5.png"
+      ],
+      "birthday": "2016-06-29",
+      "is_biccame_musume": true
+    }
   },
   {
-    "character_name": "本店たん",
-    "store_name": "池袋本店",
-    "detail_url": "https://biccame.jp/profile/honten.html",
-    "key": "honten",
-    "description": "ビックカメラ池袋本店の擬人化キャラクター。他の子とは少し違うオーラを放っている。頭のフクロウの方が本体かも知れないという噂も...？袴のような制服が特徴的。",
-    "profile_image_url": "https://biccame.jp/profile/images/honten1.png",
-    "twitter_url": "https://twitter.com/bicikebukuro",
-    "zipcode": "170-0013",
-    "address": "東京都豊島区東池袋1-41-5",
-    "prefecture": "東京都",
-    "store_birthday": "1992-09-24",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-007.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/honten_img.png",
-      "https://biccame.jp/profile/images/honten_img_sd.png",
-      "https://biccame.jp/profile/images/honten4.png",
-      "https://biccame.jp/profile/images/honten5.png"
-    ],
-    "character_birthday": "2015-10-21",
-    "latitude": 35.7317044,
-    "longitude": 139.7128781,
-    "is_biccame_musume": true
+    "id": "chiba",
+    "character": {
+      "name": "千葉たん",
+      "aliases": ["千葉たん"],
+      "description": "ビックカメラ千葉駅前店の擬人化キャラクター。 エネルギッシュレッドの大きなリボンが特徴。アニメのツンデレキャラに憧れている。相棒のカモメちゃんとは仲良し。 胸のモチーフは月と星。",
+      "twitter_id": "bic_chiba",
+      "images": [
+        "images/chiba2.png",
+        "images/chiba3.png",
+        "images/chiba4.png",
+        "images/chiba5.png",
+        "images/chiba4.png",
+        "images/chiba5.png"
+      ],
+      "birthday": "2024-12-12",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 130,
+      "name": "ビックカメラ 千葉駅前店",
+      "address": "千葉県千葉市中央区富士見2-1-1",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "JR千葉駅",
+          "description": "東口",
+          "lines": ["JR総武線", "JR外房線"]
+        },
+        {
+          "station": "京成千葉駅",
+          "description": "東口",
+          "lines": ["京成線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.6117469,
+        "longitude": 140.1155376
+      },
+      "postal_code": "260-0015",
+      "phone": "043-201-1111",
+      "birthday": "2022-11-01"
+    }
   },
   {
-    "character_name": "プロスタたん",
-    "store_name": "ビックフォトスタジオ 東京写真館",
-    "detail_url": "https://biccame.jp/profile/prosta.html",
-    "key": "prosta",
-    "description": "ビックフォトスタジオ東京写真館の擬人化キャラクター。写真を撮ることとコスプレをするのが好き。法被は腰に巻いている。フィルム風のカチューシャは妹とお揃い。",
-    "profile_image_url": "https://biccame.jp/profile/images/prosta1.png",
-    "twitter_url": "https://twitter.com/bic_shasinkan",
-    "zipcode": "171-0021",
-    "address": "東京都豊島区西池袋1-16-3",
-    "prefecture": "東京都",
-    "image_urls": [
-      "https://biccame.jp/profile/images/pro_img.png",
-      "https://biccame.jp/profile/images/pro_img_sd.png",
-      "https://biccame.jp/profile/images/prosta4.png",
-      "https://biccame.jp/profile/images/shasinkan5.png"
-    ],
-    "character_birthday": "2015-11-11",
-    "latitude": 35.7308323,
-    "longitude": 139.7089542,
-    "is_biccame_musume": true
+    "id": "chofu",
+    "character": {
+      "name": "調布たん",
+      "description": "ビックカメラ京王調布店の擬人化キャラクター。調布市の花・サルスベリが胸の花のモチーフ。映画が好きで、ビデオカメラをよく持っている。髪はカチンコを意識しているとか...。",
+      "twitter_id": "bic_keiochofu",
+      "images": [
+        "images/chofu2.png",
+        "images/chofu3.png",
+        "images/chofu4.png",
+        "images/chofu5.png",
+        "images/chofu4.png",
+        "images/chofu5.png"
+      ],
+      "birthday": "2017-09-27",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 122,
+      "name": "ビックカメラ京王調布店",
+      "address": "東京都調布市小島町2-48-6\nトリエ京王調布 B館 1～4階",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "調布駅",
+          "description": "広場口すぐ",
+          "lines": ["京王線京王相模原線", ""]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.6522598,
+        "longitude": 139.5405159
+      },
+      "postal_code": "182-0026",
+      "phone": "042-444-1111",
+      "birthday": "2017-09-29"
+    }
   },
   {
-    "character_name": "大宮たん",
-    "store_name": "大宮西口そごう店",
-    "detail_url": "https://biccame.jp/profile/ohmiya.html",
-    "key": "ohmiya",
-    "description": "ビックカメラ大宮西口そごう店の擬人化キャラクター。明るい性格でサッカーが大好き。地元のチームカラーのアイテムをよく集めている。",
-    "profile_image_url": "https://biccame.jp/profile/images/ohmiya1.png",
-    "twitter_url": "https://twitter.com/bic_ohmiya",
-    "zipcode": "330-0854",
-    "address": "埼玉県さいたま市大宮区桜木町1-8-4",
-    "prefecture": "埼玉県",
-    "store_birthday": "2003-11-21",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-034.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/omiya_img.png",
-      "https://biccame.jp/profile/images/omiya_img_sd.png",
-      "https://biccame.jp/profile/images/ohmiya4.png",
-      "https://biccame.jp/profile/images/ohmiya5.png"
-    ],
-    "character_birthday": "2015-12-15",
-    "latitude": 35.904428,
-    "longitude": 139.620904,
-    "is_biccame_musume": true
+    "id": "fujisawa",
+    "character": {
+      "name": "藤沢たん",
+      "description": "ビックカメラ藤沢店の擬人化キャラクター。 ロックでクールなお姉さん。「～だぜ」という口調で話す。 イカの触手のような髪は動くという噂も...。 ピンクのエクステと藤の花が特徴。",
+      "twitter_id": "bic_fujisawa",
+      "images": [
+        "images/huji_img.png",
+        "images/huji_img_sd.png",
+        "images/fujisawa4.png",
+        "images/fujisawa5.png",
+        "images/fujisawa4.png",
+        "images/fujisawa5.png"
+      ],
+      "birthday": "2016-02-12",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 37,
+      "name": "ビックカメラ 藤沢店",
+      "address": "神奈川県藤沢市藤沢559",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "藤沢駅",
+          "description": "北口",
+          "lines": ["JR東海道本線", "小田急江ノ島線", "江ノ島電鉄"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.3395487,
+        "longitude": 139.4856503
+      },
+      "postal_code": "251-0052",
+      "phone": "0466-29-1111",
+      "birthday": "2006-08-04"
+    }
   },
   {
-    "character_name": "藤沢たん",
-    "store_name": "藤沢店",
-    "detail_url": "https://biccame.jp/profile/fujisawa.html",
-    "key": "fujisawa",
-    "description": "ビックカメラ藤沢店の擬人化キャラクター。ロックでクールなお姉さん。「～だぜ」という口調で話す。イカの触手のような髪は動くという噂も...。ピンクのエクステと藤の花が特徴。",
-    "profile_image_url": "https://biccame.jp/profile/images/fujisawa1.png",
-    "twitter_url": "https://twitter.com/bic_fujisawa",
-    "zipcode": "251-0052",
-    "address": "神奈川県藤沢市藤沢559",
-    "prefecture": "神奈川県",
-    "store_birthday": "2006-08-04",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-037.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/huji_img.png",
-      "https://biccame.jp/profile/images/huji_img_sd.png",
-      "https://biccame.jp/profile/images/fujisawa4.png",
-      "https://biccame.jp/profile/images/fujisawa5.png"
-    ],
-    "character_birthday": "2016-02-12",
-    "latitude": 35.3398725,
-    "longitude": 139.4886041,
-    "is_biccame_musume": true
+    "id": "funabashi",
+    "character": {
+      "name": "ふなたん",
+      "aliases": ["船橋たん"],
+      "description": "ビックカメラ船橋駅FACE店の擬人化キャラクター。 いつも髪が跳ねている元気いっぱいの子。 ビッカメ娘の中で特にハッピを愛している。 制服のリボンと髪飾りに船橋市の花のひまわりをあしらっている。",
+      "twitter_id": "bic_funabashi",
+      "images": [
+        "images/huna_img.png",
+        "images/huna_img_sd.png",
+        "images/funabashi4.png",
+        "images/funabashi5.png",
+        "images/funabashi4.png",
+        "images/funabashi5.png"
+      ],
+      "birthday": "2015-05-18",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 109,
+      "name": "ビックカメラ船橋駅FACE店",
+      "address": "千葉県船橋市本町1-3-1 船橋FACE 4F",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "船橋駅",
+          "description": "南口",
+          "lines": ["JR総武線", "東武アーバンパークライン（東武野田線）"]
+        },
+        {
+          "station": "京成船橋駅",
+          "description": "東口",
+          "lines": ["京成線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.7009472,
+        "longitude": 139.9834417
+      },
+      "postal_code": "273-0005",
+      "phone": "047-460-1111",
+      "birthday": "2010-02-21"
+    }
   },
   {
-    "character_name": "フォトたん",
-    "store_name": "BIC PHOTO ビックフォト",
-    "detail_url": "https://biccame.jp/profile/photo.html",
-    "key": "photo",
-    "description": "ビックカメラBIC PHOTOの擬人化キャラクター。プロスタたんの妹。お姉ちゃんが撮った写真をプリントしてアルバムにまとめるのが好き。",
-    "profile_image_url": "https://biccame.jp/profile/images/photo1.png",
-    "prefecture": "東京都",
-    "image_urls": [
-      "https://biccame.jp/profile/images/photo_img.png",
-      "https://biccame.jp/profile/images/photo32.png",
-      "https://biccame.jp/profile/images/photo4.png",
-      "https://biccame.jp/profile/images/photo5.png"
-    ],
-    "character_birthday": "2016-03-17",
-    "is_biccame_musume": true
+    "id": "funato",
+    "character": {
+      "name": "ふなとーたん",
+      "description": "ビックカメラ船橋東武店の擬人化キャラクター。 制服のリボンのひまわりはふなたんとお揃い。風車のヘアピンをしている。アンデルセンの本が好き。",
+      "twitter_id": "",
+      "images": [
+        "images/funato2.png",
+        "images/funato3.png",
+        "images/funato4.png",
+        "images/funato0.png"
+      ],
+      "birthday": "2017-11-15",
+      "is_biccame_musume": true
+    }
   },
   {
-    "character_name": "なごやたん/名古屋たん",
-    "store_name": "名古屋駅西店",
-    "detail_url": "https://biccame.jp/profile/nagoya.html",
-    "key": "nagoya",
-    "description": "ビックカメラ名古屋駅西店の擬人化キャラクター。頭のしゃちほこと、エビフライのようなツインテールが特徴。ギャルっぽい性格。制服のリボンは市の花・ユリがモチーフ。",
-    "profile_image_url": "https://biccame.jp/profile/images/nagoya_1.png",
-    "twitter_url": "https://twitter.com/bic_nagoya",
-    "zipcode": "453-0015",
-    "address": "愛知県名古屋市中村区椿町6-9",
-    "prefecture": "愛知県",
-    "store_birthday": "2003-11-07",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-033.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/nagoya2.png",
-      "https://biccame.jp/profile/images/nagoya32.png",
-      "https://biccame.jp/profile/images/nagoya4.png",
-      "https://biccame.jp/profile/images/nagoya5.png"
-    ],
-    "character_birthday": "2016-04-26",
-    "latitude": 35.1707468,
-    "longitude": 136.8805731,
-    "is_biccame_musume": true
+    "id": "hachioji",
+    "character": {
+      "name": "八王子たん",
+      "description": "ビックカメラJR八王子駅店の擬人化キャラクター。 王子という名前から王冠の髪飾りをしている。制服のリボンは八王子の銀杏がモチーフになっている。",
+      "twitter_id": "bichachioji",
+      "images": [
+        "images/hachi_img.png",
+        "images/hachi_img_sd.png",
+        "images/hachoji4.png",
+        "images/hachioji5.png",
+        "images/hachoji4.png",
+        "images/hachioji5.png"
+      ],
+      "birthday": "2015-05-14",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 114,
+      "name": "ビックカメラJR八王子駅店",
+      "address": "東京都八王子市旭町1-17 セレオ八王子南館(1F～5F)",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "八王子駅",
+          "description": "南口",
+          "lines": ["JR中央本線", "JR横浜線", "JR八高線"]
+        },
+        {
+          "station": "京王八王子駅",
+          "description": "中央口",
+          "lines": ["京王線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.654573,
+        "longitude": 139.3362291
+      },
+      "postal_code": "192-0083",
+      "phone": "042-646-1111",
+      "birthday": "2010-11-11"
+    }
   },
   {
-    "character_name": "有楽町たん",
-    "store_name": "有楽町店",
-    "detail_url": "https://biccame.jp/profile/yuurakuchou.html",
-    "key": "yuurakuchou",
-    "description": "ビックカメラ有楽町店の擬人化キャラクター。ビッカメ娘の中でひときわ神々しい存在。少し天然。区の鳥・白鳥のような羽と、着物もようなハッピ、本店たんとお揃いの制服が特徴。",
-    "profile_image_url": "https://biccame.jp/profile/images/yuurakuchou1%20.png",
-    "twitter_url": "https://twitter.com/bic_yuurakuchou",
-    "zipcode": "100-0006",
-    "address": "東京都千代田区有楽町1-11-1",
-    "prefecture": "東京都",
-    "store_birthday": "2001-06-14",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-014.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/yuurakuchou.png",
-      "https://biccame.jp/profile/images/yuurakuchou21.png",
-      "https://biccame.jp/profile/images/yuurakucho4.png",
-      "https://biccame.jp/profile/images/yuurakuchou5.png"
-    ],
-    "character_birthday": "2016-05-11",
-    "latitude": 35.6755004,
-    "longitude": 139.7632464,
-    "is_biccame_musume": true
+    "id": "hamamatsu",
+    "character": {
+      "name": "はまたん",
+      "aliases": ["浜松たん"],
+      "description": "ビックカメラ浜松店の擬人化キャラクター。 のんびりとした性格。うなぎパイが好き。制服のリボンは浜松市の木・松がモチーフ、ヘアピンは市の花・ミカンがモチーフになっている。",
+      "twitter_id": "bic_hamamatsu",
+      "images": [
+        "images/hama_img.png",
+        "images/hama_img_sd.png",
+        "images/hamamatsu4.png",
+        "images/hamamatsu5.png",
+        "images/hamamatsu4.png",
+        "images/hamamatsu5.png"
+      ],
+      "birthday": "2015-05-23",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 105,
+      "name": "ビックカメラ浜松店",
+      "address": "静岡県浜松市中央区砂山町322-1",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "20:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "浜松駅",
+          "description": "北口",
+          "lines": ["JR東海道本線", "東海道新幹線"]
+        },
+        {
+          "station": "新浜松駅",
+          "description": "",
+          "lines": ["遠州鉄道"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 34.7035326,
+        "longitude": 137.7315838
+      },
+      "postal_code": "430-0926",
+      "phone": "053-455-1111",
+      "birthday": "2008-11-20"
+    }
   },
   {
-    "character_name": "新宿西口たん",
-    "store_name": "新宿西口店",
-    "detail_url": "https://biccame.jp/profile/shinjyuku.html",
-    "key": "shinjyuku",
-    "description": "ビックカメラ新宿西口店の擬人化キャラクター。東口にあるビックロたんと対になるような髪をして、性格も活発的な子。新宿の花・ツツジをアクセサリーにしている。",
-    "profile_image_url": "https://biccame.jp/profile/images/shinjuku.png",
-    "twitter_url": "https://twitter.com/bic_shinjyuku",
-    "zipcode": "160-0023",
-    "address": "東京都新宿区西新宿1-5-1",
-    "prefecture": "東京都",
-    "store_birthday": "2002-05-23",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-016.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/shinjuku2.png",
-      "https://biccame.jp/profile/images/shinjuku4.png",
-      "https://biccame.jp/profile/images/shinjyuku4.png",
-      "https://biccame.jp/profile/images/shinjyuku5.png"
-    ],
-    "character_birthday": "2016-05-23",
-    "latitude": 35.6922686,
-    "longitude": 139.6992291,
-    "is_biccame_musume": true
+    "id": "hiroshima",
+    "character": {
+      "name": "広島たん",
+      "description": "ビックカメラ広島駅前店の擬人化キャラクター。 もみじと扇子が特徴。「～じゃ」など広島弁がたまに出る。 ミステリアスな発言をすることがある。",
+      "twitter_id": "bic_hiroshima",
+      "images": [
+        "hiroshima1.png",
+        "images/hiroshima3.png",
+        "images/hiroshima4.png",
+        "images/hiroshima5.png",
+        "images/hiroshima4.png",
+        "images/hiroshima5.png"
+      ],
+      "birthday": "2016-08-24",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "name": "ビックカメラ広島駅前店",
+      "address": "広島県広島市南区松原町5-1",
+      "open_all_year": false,
+      "hours": [],
+      "access": [
+        {
+          "station": "広島駅",
+          "description": "南口",
+          "lines": []
+        }
+      ],
+      "coordinates": {
+        "latitude": 34.3959004,
+        "longitude": 132.4728761
+      },
+      "postal_code": "732-0822",
+      "phone": "082-506-1111",
+      "birthday": "2016-09-14"
+    }
   },
   {
-    "character_name": "カメ館たん/カメラ館たん",
-    "store_name": "池袋東口カメラ館",
-    "detail_url": "https://biccame.jp/profile/camera.html",
-    "key": "camera",
-    "description": "ビックカメラ池袋東口カメラ館の擬人化キャラクター。同じ池袋の本店たんがお姉ちゃん。リボンとくせっ毛がお揃い。カメラをいつも首からさげている。",
-    "profile_image_url": "https://biccame.jp/profile/images/camera1.png",
-    "prefecture": "東京都",
-    "image_urls": [
-      "https://biccame.jp/profile/images/camera2.png",
-      "https://biccame.jp/profile/4864f8622ad3133a980acfeba567137323f7a6be.png",
-      "https://biccame.jp/profile/images/camera4.png",
-      "https://biccame.jp/profile/images/camera5.png"
-    ],
-    "character_birthday": "2016-06-29",
-    "is_biccame_musume": true
+    "id": "honten",
+    "character": {
+      "name": "本店たん",
+      "description": "ビックカメラ池袋本店の擬人化キャラクター。 他の子とは少し違うオーラを放っている。 頭のフクロウの方が本体かも知れないという噂も...？袴のような制服が特徴的。",
+      "twitter_id": "bicikebukuro",
+      "images": [
+        "images/honten_img.png",
+        "images/honten_img_sd.png",
+        "images/honten4.png",
+        "images/honten5.png",
+        "images/honten4.png",
+        "images/honten5.png"
+      ],
+      "birthday": "2015-10-21",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 7,
+      "name": "ビックカメラ池袋本店",
+      "address": "東京都豊島区東池袋1-41-5",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "22:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "池袋駅",
+          "description": "東口",
+          "lines": [
+            "JR山手線",
+            "埼京線",
+            "湘南新宿ライン",
+            "地下鉄有楽町線",
+            "丸ノ内線",
+            "副都心線",
+            "東武東上線",
+            "西武池袋線"
+          ]
+        }
+      ],
+      "postal_code": "170-0013",
+      "phone": "03-5396-1111",
+      "birthday": "1992-09-24"
+    }
   },
   {
-    "character_name": "パソ館たん/パソコン館たん",
-    "store_name": "池袋本店パソコン館",
-    "detail_url": "https://biccame.jp/profile/pkan.html",
-    "key": "pkan",
-    "description": "ビックカメラ本店パソコン館の擬人化キャラクター。同じ池袋の本店たんがお姉ちゃん。リボンとくせっ毛がお揃い。ビルに似たスマホをいつも首からさげている。",
-    "profile_image_url": "https://biccame.jp/profile/images/pkan1.png",
-    "twitter_url": "https://twitter.com/bicpkanhonten",
-    "zipcode": "170-0013",
-    "address": "東京都豊島区東池袋1-6-7",
-    "prefecture": "東京都",
-    "store_birthday": "1997-11-27",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-021.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/pkan2.png",
-      "https://biccame.jp/profile/pkan3.png",
-      "https://biccame.jp/profile/images/pkan4.png",
-      "https://biccame.jp/profile/images/pkan5.png"
-    ],
-    "character_birthday": "2016-06-29",
-    "latitude": 35.731563,
-    "longitude": 139.7135962,
-    "is_biccame_musume": true
+    "id": "ikenishi",
+    "character": {
+      "name": "池西たん",
+      "aliases": ["池袋西口たん"],
+      "description": "ビックカメラ池袋西口店の擬人化キャラクター。 本店たんの妹であり、カメ館パソ館のお姉ちゃんでもある。四姉妹でピンクのリボンをお揃いにしている。",
+      "twitter_id": "bicikenishi",
+      "images": [
+        "images/ikenishi2.png",
+        "images/ikenishi3.png",
+        "images/ikenishi4.png",
+        "images/ikenishi5.png",
+        "images/ikenishi4.png",
+        "images/ikenishi5.png"
+      ],
+      "birthday": "2017-05-09",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 17,
+      "name": "ビックカメラ池袋西口店",
+      "address": "東京都豊島区西池袋1-16-3",
+      "open_all_year": false,
+      "hours": [],
+      "access": [
+        {
+          "station": "池袋駅",
+          "description": "西口・8番出口",
+          "lines": [
+            "JR山手線",
+            "埼京線",
+            "湘南新宿ライン",
+            "地下鉄有楽町線",
+            "丸ノ内線",
+            "副都心線",
+            "東武東上線",
+            "西武池袋線"
+          ]
+        }
+      ],
+      "postal_code": "171-0021",
+      "phone": "03-5960-1111",
+      "birthday": "2002-09-19"
+    }
   },
   {
-    "character_name": "さっぽろたん/札幌たん",
-    "store_name": "札幌店",
-    "detail_url": "https://biccame.jp/profile/sapporo.html",
-    "key": "sapporo",
-    "description": "ビックカメラ札幌店の擬人化キャラクター。雪の結晶のピンが宝物。マフラーとブーツが特徴的。みんなから雪の妖精と呼ばれたりしている。",
-    "profile_image_url": "https://biccame.jp/profile/sapporo1.png",
-    "twitter_url": "https://twitter.com/bic_sapporo",
-    "zipcode": "060-8619",
-    "address": "北海道札幌市中央区北4条西2-1",
-    "prefecture": "北海道",
-    "store_birthday": "2001-07-26",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop132.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/sapporo2.png",
-      "https://biccame.jp/profile/images/sapporo3.png",
-      "https://biccame.jp/profile/images/sapporo4.png",
-      "https://biccame.jp/profile/images/sapporo5.png"
-    ],
-    "character_birthday": "2016-08-10",
-    "latitude": 43.0661886,
-    "longitude": 141.3539156,
-    "is_biccame_musume": true
+    "id": "kagoshima",
+    "character": {
+      "name": "鹿児島たん",
+      "description": "ビックカメラ鹿児島中央駅店の擬人化キャラクター。 法被の裏地は宇宙のような柄。大好物はさつまいも。胸の花はキョウチクトウ。髪の色は県の鳥・ルリカケスのような色。",
+      "twitter_id": "bic_kagoshima",
+      "images": [
+        "images/kagoshima2.png",
+        "images/kagoshima3.png",
+        "images/kagoshima4.png",
+        "images/kagoshima5.png",
+        "images/kagoshima4.png",
+        "images/kagoshima5.png"
+      ],
+      "birthday": "2017-12-18",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 107,
+      "name": "ビックカメラ鹿児島中央駅店",
+      "address": "鹿児島県鹿児島市中央町1-1 1F・2F",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "20:30"
+        }
+      ],
+      "access": [
+        {
+          "station": "鹿児島中央駅",
+          "description": "2Fコンコース直結",
+          "lines": ["JR鹿児島本線", "九州新幹線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 31.583909,
+        "longitude": 130.5381123
+      },
+      "postal_code": "890-0053",
+      "phone": "099-814-1111",
+      "birthday": "2010-02-18"
+    }
   },
   {
-    "character_name": "広島たん",
-    "store_name": "広島駅前店",
-    "detail_url": "https://biccame.jp/profile/hiroshima.html",
-    "key": "hiroshima",
-    "description": "ビックカメラ広島駅前店の擬人化キャラクター。もみじと扇子が特徴。「～じゃ」など広島弁がたまに出る。ミステリアスな発言をすることがある。",
-    "profile_image_url": "https://biccame.jp/profile/hiroshima2.png",
-    "twitter_url": "https://twitter.com/bic_hiroshima",
-    "zipcode": "732-0822",
-    "address": "広島県広島市南区松原町5-1",
-    "prefecture": "広島県",
-    "store_birthday": "2016-09-14",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-119.html",
-    "image_urls": [
-      "https://biccame.jp/profile/hiroshima1.png",
-      "https://biccame.jp/profile/images/hiroshima3.png",
-      "https://biccame.jp/profile/images/hiroshima4.png",
-      "https://biccame.jp/profile/images/hiroshima5.png"
-    ],
-    "character_birthday": "2016-08-24",
-    "latitude": 34.3957984,
-    "longitude": 132.475143,
-    "is_biccame_musume": true
+    "id": "kashiwa",
+    "character": {
+      "name": "柏たん",
+      "description": "ビックカメラ柏店の擬人化キャラクター。 メガネと柏餅のような頭が特徴。 大好物はもちろんモチモチの柏餅！ 制服のリボンは柏市の木・柏の葉っぱと、 市の花・シバザクラがモチーフになっている。",
+      "twitter_id": "bic_kashiwa",
+      "images": [
+        "images/kasiwa_img.png",
+        "images/kasiwa_img_sd.png",
+        "images/kashiwa4.png",
+        "images/kashiwa5.png",
+        "images/kashiwa4.png",
+        "images/kashiwa5.png"
+      ],
+      "birthday": "2015-05-14",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 35,
+      "name": "ビックカメラ柏店",
+      "address": "千葉県柏市柏1-1-20 スカイプラザ柏2F～7F",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "柏駅",
+          "description": "東口",
+          "lines": ["JR常磐線", "東武アーバンパークライン(東武野田線)"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.862313,
+        "longitude": 139.9699923
+      },
+      "postal_code": "277-0005",
+      "phone": "04-7165-1111",
+      "birthday": "2005-03-10"
+    }
   },
   {
-    "character_name": "せいせきたん/聖蹟たん",
-    "store_name": "聖蹟桜ヶ丘駅店",
-    "detail_url": "https://biccame.jp/profile/seiseki.html",
-    "key": "seiseki",
-    "description": "ビックカメラ聖蹟桜ヶ丘駅店の擬人化キャラクター。後ろ髪にある大きな桜の花が特徴。ツイートに桜の花を咲かせるのが得意。",
-    "profile_image_url": "https://biccame.jp/profile/seiseki1.png",
-    "prefecture": "東京都",
-    "image_urls": [
-      "https://biccame.jp/profile/seiseki2.png",
-      "https://biccame.jp/profile/images/seiseki3.png",
-      "https://biccame.jp/profile/images/seiseki4.png",
-      "https://biccame.jp/profile/images/seiseki5.png"
-    ],
-    "character_birthday": "2016-08-31",
-    "is_biccame_musume": true
+    "id": "kawasaki",
+    "character": {
+      "name": "川崎たん",
+      "description": "ビックカメララゾーナ川崎店の擬人化キャラクター。 リボンのようなツインテールと、川崎市の木・ツバキの下にある「川」の文字の様な短冊が特徴。",
+      "twitter_id": "Bic_kawasaki",
+      "images": [
+        "images/kawasaki2.png",
+        "images/kawasaki3.png",
+        "images/kawasaki4.png",
+        "images/kawasaki5.png",
+        "images/kawasaki4.png",
+        "images/kawasaki5.png"
+      ],
+      "birthday": "2016-12-01",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 38,
+      "name": "ビックカメララゾーナ川崎店",
+      "address": "神奈川県川崎市幸区堀川町72-1 ラゾーナ川崎プラザ1F～4F",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "川崎駅",
+          "description": "北改札北口通路直結",
+          "lines": ["JR東海道本線", "京浜東北線", "南武線"]
+        },
+        {
+          "station": "京急川崎駅",
+          "description": "中央口徒歩7分",
+          "lines": ["京急電鉄"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.5330257,
+        "longitude": 139.6943756
+      },
+      "postal_code": "212-0013",
+      "phone": "044-520-1111",
+      "birthday": "2006-09-28"
+    }
   },
   {
-    "character_name": "あべのたん",
-    "store_name": "あべの キューズモール店",
-    "detail_url": "https://biccame.jp/profile/abeno.html",
-    "key": "abeno",
-    "description": "ビックカメラあべのキューズモール店の擬人化キャラクター。たこ焼きの髪飾り・タコのぬいぐるみ(？)が特徴。青い腕輪はお店のロゴから。",
-    "profile_image_url": "https://biccame.jp/profile/abeno1.png",
-    "twitter_url": "https://twitter.com/bic_abeno",
-    "zipcode": "545-0052",
-    "address": "大阪府大阪市阿倍野区阿倍野筋1-6-1",
-    "prefecture": "大阪府",
-    "store_birthday": "2016-05-19",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-118.html",
-    "image_urls": [
-      "https://biccame.jp/profile/90984e7a605083b17cac42ad3ff95fddedb8c093.png",
-      "https://biccame.jp/profile/images/abeno3.png",
-      "https://biccame.jp/profile/images/abeno4.png",
-      "https://biccame.jp/profile/images/abeno5.png"
-    ],
-    "character_birthday": "2016-09-07",
-    "latitude": 34.6434395,
-    "longitude": 135.5116608,
-    "is_biccame_musume": true
+    "id": "kyoto",
+    "character": {
+      "name": "京都たん",
+      "description": "ビックカメラJR京都駅店の擬人化キャラクター。 京都の花・ツバキと目元の紅が特徴。神楽鈴を持っている。たまに京都弁が出ることがある。",
+      "twitter_id": "",
+      "images": [
+        "images/kyoto2.png",
+        "images/kyoto3.png",
+        "images/kyoto4.png",
+        "images/kyoto5.png"
+      ],
+      "birthday": "2017-01-10",
+      "is_biccame_musume": true
+    }
   },
   {
-    "character_name": "岡山たん",
-    "store_name": "岡山駅前店",
-    "detail_url": "https://biccame.jp/profile/okayama.html",
-    "key": "okayama",
-    "description": "ビックカメラ岡山駅前店の擬人化キャラクター。ポニーテールが桃の形になっている。どこからともなくきびだんごを出す。胸の花はキク。",
-    "profile_image_url": "https://biccame.jp/profile/okayama1.png",
-    "twitter_url": "https://twitter.com/Bic_Okayamaten",
-    "zipcode": "700-0023",
-    "address": "岡山県岡山市北区駅前町1-1-1",
-    "prefecture": "岡山県",
-    "store_birthday": "2007-11-20",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-102.html",
-    "image_urls": [
-      "https://biccame.jp/profile/okayama2.png",
-      "https://biccame.jp/profile/okayama3.png",
-      "https://biccame.jp/profile/images/okayama4.png",
-      "https://biccame.jp/profile/images/okayama5.png"
-    ],
-    "character_birthday": "2016-10-05",
-    "latitude": 34.6659315,
-    "longitude": 133.9198144,
-    "is_biccame_musume": true
+    "id": "machida",
+    "character": {
+      "name": "町田たん",
+      "description": "ビックカメラ町田店の擬人化キャラクター。 町田市の花・サルビアと、市の鳥・カワセミのような色の髪が特徴。 前髪につけているクロスしたヘアピンと、横で結んだ髪で「町」という字になるようにしている。渋谷とアキバに遊びに行くのが好き。",
+      "twitter_id": "",
+      "images": [
+        "images/machida2.png",
+        "images/machida3.png",
+        "images/machida4.png",
+        "images/machida5.png"
+      ],
+      "birthday": "2019-03-01",
+      "is_biccame_musume": true
+    }
   },
   {
-    "character_name": "立川たん",
-    "store_name": "立川店",
-    "detail_url": "https://biccame.jp/profile/tachikawa.html",
-    "key": "tachikawa",
-    "description": "ビックカメラ立川店の擬人化キャラクター。少しでも背を大きく見せるため大きな帽子を被っている。謎の横髪は立川の名産・ウドをイメージ。胸の花はコブシ。萌え袖が特徴。",
-    "profile_image_url": "https://biccame.jp/profile/images/tachikawa1.png",
-    "twitter_url": "https://twitter.com/bic_tachikawa",
-    "zipcode": "190-0012",
-    "address": "東京都立川市曙町2-12-2",
-    "prefecture": "東京都",
-    "store_birthday": "2001-01-26",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-012.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/tachikawa2.png",
-      "https://biccame.jp/profile/images/tachikawa3.png",
-      "https://biccame.jp/profile/images/tachikawa4.png",
-      "https://biccame.jp/profile/images/tachikawa5.png"
-    ],
-    "character_birthday": "2016-10-25",
-    "latitude": 35.69921780000001,
-    "longitude": 139.4149141,
-    "is_biccame_musume": true
+    "id": "mito",
+    "character": {
+      "name": "水戸たん",
+      "description": "ビックカメラ水戸駅店の擬人化キャラクター。 わら納豆のようなツインテールが特徴（実は納豆として食べられるらしい...。） 水戸市の花・梅の花の小物が好き。戦車のような靴を履いている。 少しおっとりしているが、水戸を盛り上げようと色々なPR活動をしている。",
+      "twitter_id": "biccameramito",
+      "images": [
+        "images/mito_img.png",
+        "images/mito_img_sd.png",
+        "images/mito4.png",
+        "images/mito5.png",
+        "images/mito4.png",
+        "images/mito5.png"
+      ],
+      "birthday": "2015-04-27",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 115,
+      "name": "ビックカメラ水戸駅店",
+      "address": "茨城県水戸市宮町1-7-31 エクセルみなみ4F・5F",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "20:30"
+        }
+      ],
+      "access": [
+        {
+          "station": "水戸駅",
+          "description": "南口",
+          "lines": ["JR常磐線", "水郡線", "鹿島臨海鉄道 大洗鹿島線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 36.3701475,
+        "longitude": 140.4742257
+      },
+      "postal_code": "310-0015",
+      "phone": "029-303-1111",
+      "birthday": "2011-06-23"
+    }
   },
   {
-    "character_name": "川崎たん",
-    "store_name": "ラゾーナ川崎店",
-    "detail_url": "https://biccame.jp/profile/kawasaki.html",
-    "key": "kawasaki",
-    "description": "ビックカメララゾーナ川崎店の擬人化キャラクター。リボンのようなツインテールと、川崎市の木・ツバキの下にある「川」の文字の様な短冊が特徴。",
-    "profile_image_url": "https://biccame.jp/profile/images/kawasaki1.png",
-    "twitter_url": "https://twitter.com/Bic_kawasaki",
-    "zipcode": "212-0013",
-    "address": "神奈川県川崎市幸区堀川町72-1",
-    "prefecture": "神奈川県",
-    "store_birthday": "2006-09-28",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-038.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/kawasaki2.png",
-      "https://biccame.jp/profile/images/kawasaki3.png",
-      "https://biccame.jp/profile/images/kawasaki4.png",
-      "https://biccame.jp/profile/images/kawasaki5.png"
-    ],
-    "character_birthday": "2016-12-01",
-    "latitude": 35.5329594,
-    "longitude": 139.6959237,
-    "is_biccame_musume": true
+    "id": "nagoya",
+    "character": {
+      "name": "なごやたん",
+      "aliases": ["名古屋たん"],
+      "description": "ビックカメラ名古屋駅西店の擬人化キャラクター。 頭のしゃちほこと、エビフライのようなツインテールが特徴。ギャルっぽい性格。制服のリボンは市の花・ユリがモチーフ。",
+      "twitter_id": "bic_nagoya",
+      "images": [
+        "images/nagoya2.png",
+        "images/nagoya32.png",
+        "images/nagoya4.png",
+        "images/nagoya5.png",
+        "images/nagoya4.png",
+        "images/nagoya5.png"
+      ],
+      "birthday": "2016-04-26",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 33,
+      "name": "ビックカメラ名古屋駅西店",
+      "address": "愛知県名古屋市中村区椿町6-9",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "名古屋駅",
+          "description": "太閤通口・13番出口",
+          "lines": [
+            "JR関西線",
+            "中央線",
+            "東海道線",
+            "東海道山陽新幹線",
+            "名古屋市営地下鉄桜通線",
+            "東山線",
+            "名鉄名古屋本線",
+            "近鉄名古屋線",
+            "あおなみ線"
+          ]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.1703185,
+        "longitude": 136.8772081
+      },
+      "postal_code": "453-0015",
+      "phone": "052-459-1111",
+      "birthday": "2003-11-07"
+    }
   },
   {
-    "character_name": "京都たん",
-    "store_name": "JR京都駅店",
-    "detail_url": "https://biccame.jp/profile/kyoto.html",
-    "key": "kyoto",
-    "description": "ビックカメラJR京都駅店の擬人化キャラクター。京都の花・ツバキと目元の紅が特徴。神楽鈴を持っている。たまに京都弁が出ることがある。",
-    "profile_image_url": "https://biccame.jp/profile/images/kyoto1.png",
-    "prefecture": "京都府",
-    "image_urls": [
-      "https://biccame.jp/profile/images/kyoto2.png",
-      "https://biccame.jp/profile/images/kyoto3.png",
-      "https://biccame.jp/profile/images/kyoto4.png",
-      "https://biccame.jp/profile/images/kyoto5.png"
-    ],
-    "character_birthday": "2017-01-10",
-    "is_biccame_musume": true
+    "id": "nagoyagate",
+    "character": {
+      "name": "なごやげーとたん",
+      "description": "ビックカメラ名古屋JRゲートタワー店の擬人化キャラクター。 頭のしゃちほこと、名古屋巻きのような髪型が特徴。 制服のリボンは、名古屋たんとは色違いで市の花・ユリがモチーフ。",
+      "twitter_id": "bic_nagoyagate",
+      "images": [
+        "images/nagoyagate2.png",
+        "images/nagoyagate3.png",
+        "images/nagoyagate4.png",
+        "images/nagoyagate5.png",
+        "images/nagoyagate4.png",
+        "images/nagoyagate5.png"
+      ],
+      "birthday": "2017-03-30",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 120,
+      "name": "ビックカメラ名古屋JRゲートタワー店",
+      "address": "愛知県名古屋市中村区名駅1-1-3 名古屋JRゲートタワー 9～10F",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "名古屋駅",
+          "description": "",
+          "lines": [
+            "JR東海道本線",
+            "中央本線",
+            "関西本線等",
+            "名鉄線",
+            "近鉄線",
+            "地下鉄東山線",
+            "桜通線",
+            "あおなみ線"
+          ]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.1720609,
+        "longitude": 136.8806117
+      },
+      "postal_code": "450-0002",
+      "birthday": "2017-04-07"
+    }
   },
   {
-    "character_name": "なんばたん",
-    "store_name": "なんば店",
-    "detail_url": "https://biccame.jp/profile/nanba.html",
-    "key": "nanba",
-    "description": "ビックカメラなんば店の擬人化キャラクター。ヒョウ柄のリボンと、あべのたんとお揃いのたこ焼きの髪飾りが特徴。あべのたんのお姉ちゃん的存在。胸の花はパンジー。",
-    "profile_image_url": "https://biccame.jp/profile/images/nanba1.png",
-    "twitter_url": "https://twitter.com/biccamera_nanba",
-    "zipcode": "542-0074",
-    "address": "大阪府大阪市中央区千日前2-10-1",
-    "prefecture": "大阪府",
-    "store_birthday": "2001-05-10",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-013.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/nanba2.png",
-      "https://biccame.jp/profile/images/nanba3.png",
-      "https://biccame.jp/profile/images/nanba4.png",
-      "https://biccame.jp/profile/images/nanba5.png"
-    ],
-    "character_birthday": "2017-02-21",
-    "latitude": 34.6666466,
-    "longitude": 135.5025872,
-    "is_biccame_musume": true
+    "id": "naisen",
+    "character": {
+      "name": "ナイセン",
+      "description": "ビッカメ娘の企画や公式イラストを担当。スマホで03発着信・ナイセンができる「ナイセンクラウド」を運営。主に法人向けの電話サービスではあるが、イラストや動画でアピールしている。 ⇒ナイセンクラウド ⇒なぜナイセンがビッカメ娘を描くのか？ビッカメ娘誕生ストーリーはこちら",
+      "twitter_id": "itallinc",
+      "images": ["itallinc.png", "itallinc3.png"],
+      "is_biccame_musume": false
+    }
   },
   {
-    "character_name": "なごやげーとたん",
-    "store_name": "名古屋 JRゲートタワー店",
-    "detail_url": "https://biccame.jp/profile/nagoyagate.html",
-    "key": "nagoyagate",
-    "description": "ビックカメラ名古屋JRゲートタワー店の擬人化キャラクター。頭のしゃちほこと、名古屋巻きのような髪型が特徴。制服のリボンは、名古屋たんとは色違いで市の花・ユリがモチーフ。",
-    "profile_image_url": "https://biccame.jp/profile/images/nagoyagate1.png",
-    "twitter_url": "https://twitter.com/bic_nagoyagate",
-    "zipcode": "450-0002",
-    "address": "愛知県名古屋市中村区名駅一丁目1番3号",
-    "prefecture": "愛知県",
-    "store_birthday": "2017-04-07",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop120.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/nagoyagate2.png",
-      "https://biccame.jp/profile/images/nagoyagate3.png",
-      "https://biccame.jp/profile/images/nagoyagate4.png",
-      "https://biccame.jp/profile/images/nagoyagate5.png"
-    ],
-    "character_birthday": "2017-03-30",
-    "latitude": 35.1722393,
-    "longitude": 136.8823772,
-    "is_biccame_musume": true
+    "id": "nanba",
+    "character": {
+      "name": "なんばたん",
+      "description": "ビックカメラなんば店の擬人化キャラクター。ヒョウ柄のリボンと、あべのたんとお揃いのたこ焼きの髪飾りが特徴。あべのたんのお姉ちゃん的存在。胸の花はパンジー。",
+      "twitter_id": "biccamera_nanba",
+      "images": [
+        "images/nanba2.png",
+        "images/nanba3.png",
+        "images/nanba4.png",
+        "images/nanba5.png",
+        "images/nanba4.png",
+        "images/nanba5.png"
+      ],
+      "birthday": "2017-02-21",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 13,
+      "name": "ビックカメラなんば店",
+      "address": "大阪府大阪市中央区千日前2-10-1",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "22:00",
+          "note": "（※1F ソフマップ Re Collection、8F アウトレットは 21:00まで）"
+        }
+      ],
+      "access": [
+        {
+          "station": "なんば駅・難波駅",
+          "description": "なんばウォークB17・B19・B21出口",
+          "lines": ["市営地下鉄御堂筋線", "千日前線", "近鉄難波線"]
+        },
+        {
+          "station": "日本橋駅",
+          "description": "なんばウォークB17・B19・B21出口",
+          "lines": ["堺筋線"]
+        },
+        {
+          "station": "難波駅",
+          "description": "北口",
+          "lines": ["南海本線", "JR関西本線", "大和路線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 34.6666844,
+        "longitude": 135.5000216
+      },
+      "postal_code": "542-0074",
+      "phone": "06-6634-1111",
+      "birthday": "2001-05-10"
+    }
   },
   {
-    "character_name": "池西たん/池袋西口たん",
-    "store_name": "池袋西口店",
-    "detail_url": "https://biccame.jp/profile/ikenishi.html",
-    "key": "ikenishi",
-    "description": "ビックカメラ池袋西口店の擬人化キャラクター。本店たんの妹であり、カメ館パソ館のお姉ちゃんでもある。四姉妹でピンクのリボンをお揃いにしている。",
-    "profile_image_url": "https://biccame.jp/profile/images/ikenishi1.png",
-    "twitter_url": "https://twitter.com/bicikenishi",
-    "zipcode": "171-0021",
-    "address": "東京都豊島区西池袋1-16-3",
-    "prefecture": "東京都",
-    "store_birthday": "2002-09-19",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-017.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/ikenishi2.png",
-      "https://biccame.jp/profile/images/ikenishi3.png",
-      "https://biccame.jp/profile/images/ikenishi4.png",
-      "https://biccame.jp/profile/images/ikenishi5.png"
-    ],
-    "character_birthday": "2017-05-09",
-    "latitude": 35.7308323,
-    "longitude": 139.7089542,
-    "is_biccame_musume": true
+    "id": "niigata",
+    "character": {
+      "name": "にいがたたん",
+      "aliases": ["新潟たん"],
+      "description": "ビックカメラ新潟店の擬人化キャラクター。 胸のモチーフは県の花・チューリップと、県の鳥・トキ。お米が大好きで、おにぎりのような形のヘアピンをしている。",
+      "twitter_id": "niigata_bic",
+      "images": [
+        "images/niigata2.png",
+        "images/niigata3.png",
+        "images/niigata4.png",
+        "images/niigata5.png",
+        "images/niigata4.png",
+        "images/niigata5.png"
+      ],
+      "birthday": "2018-02-01",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 106,
+      "name": "ビックカメラ新潟店",
+      "address": "新潟県新潟市中央区花園1-1-21 CoCoLo 南館内2F～3F",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "新潟駅",
+          "description": "東口",
+          "lines": ["JR信越本線", "白新線", "羽越本線", "越後線", "上越新幹線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 37.9117609,
+        "longitude": 139.0614672
+      },
+      "postal_code": "950-0086",
+      "phone": "025-248-1111",
+      "birthday": "2009-02-20"
+    }
   },
   {
-    "character_name": "アキバたん/秋葉原たん",
-    "store_name": "AKIBA",
-    "detail_url": "https://biccame.jp/profile/akiba.html",
-    "key": "akiba",
-    "description": "ビックカメラAKIBAの擬人化キャラクター。千代田区の花・桜がモチーフの大きなリボンと、猫耳のようなヘッドドレスが特徴。",
-    "profile_image_url": "https://biccame.jp/profile/images/akiba1.png",
-    "twitter_url": "https://twitter.com/bic_akiba",
-    "zipcode": "101-0021",
-    "address": "東京都千代田区外神田4-1-1",
-    "prefecture": "東京都",
-    "store_birthday": "2017-06-22",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-121.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/akiba2.png",
-      "https://biccame.jp/profile/images/akiba3.png",
-      "https://biccame.jp/profile/images/akiba4.png",
-      "https://biccame.jp/profile/images/akiba5.png"
-    ],
-    "character_birthday": "2017-06-05",
-    "latitude": 35.6998312,
-    "longitude": 139.7717534,
-    "is_biccame_musume": true
+    "id": "oeraitan",
+    "character": {
+      "name": "お偉いたん",
+      "description": "ビックカメラのお偉いたんです。あくまでもビッカメ娘達の行動を影から見守る少し恥ずかしがりやなお偉いたんです。",
+      "twitter_id": "",
+      "images": ["oeraitan.png", "images/oeraitan3.png"],
+      "is_biccame_musume": false
+    }
   },
   {
-    "character_name": "調布たん",
-    "store_name": "京王調布店",
-    "detail_url": "https://biccame.jp/profile/chofu.html",
-    "key": "chofu",
-    "description": "ビックカメラ京王調布店の擬人化キャラクター。調布市の花・サルスベリが胸の花のモチーフ。映画が好きで、ビデオカメラをよく持っている。髪はカチンコを意識しているとか...。",
-    "profile_image_url": "https://biccame.jp/profile/images/chofu1.png",
-    "twitter_url": "https://twitter.com/bic_keiochofu",
-    "zipcode": "182-0026",
-    "address": "東京都調布市小島町2-48-6",
-    "prefecture": "東京都",
-    "store_birthday": "2017-09-29",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-122.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/chofu2.png",
-      "https://biccame.jp/profile/images/chofu3.png",
-      "https://biccame.jp/profile/images/chofu4.png",
-      "https://biccame.jp/profile/images/chofu5.png"
-    ],
-    "character_birthday": "2017-09-27",
-    "latitude": 35.6521138,
-    "longitude": 139.5432018,
-    "is_biccame_musume": true
+    "id": "ohmiya",
+    "character": {
+      "name": "大宮たん",
+      "description": "ビックカメラ大宮西口そごう店の擬人化キャラクター。 明るい性格でサッカーが大好き。 地元のチームカラーのアイテムをよく集めている。",
+      "twitter_id": "bic_ohmiya",
+      "images": [
+        "images/omiya_img.png",
+        "images/omiya_img_sd.png",
+        "images/ohmiya4.png",
+        "images/ohmiya5.png",
+        "images/ohmiya4.png",
+        "images/ohmiya5.png"
+      ],
+      "birthday": "2015-12-15",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 34,
+      "name": "ビックカメラ大宮西口そごう店",
+      "address": "埼玉県さいたま市大宮区桜木町1-8-4 そごう大宮店 パーキング館 1F～3F",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "大宮駅",
+          "description": "西口",
+          "lines": [
+            "JR京浜東北線",
+            "東北本線",
+            "高崎線",
+            "湘南新宿ライン",
+            "東北・上越・山形・秋田・長野新幹線",
+            "東武アーバンパークライン(東武野田線)"
+          ]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.9044019,
+        "longitude": 139.6184078
+      },
+      "postal_code": "330-0854",
+      "phone": "048-647-1111",
+      "birthday": "2003-11-21"
+    }
   },
   {
-    "character_name": "天神2号たん",
-    "store_name": "天神2号館",
-    "detail_url": "https://biccame.jp/profile/tenjin2.html",
-    "key": "tenjin2",
-    "description": "ビックカメラ天神2号館の擬人化。頭に飾っているのは福岡市の冬の花・サザンカ。梅の花も好き。",
-    "profile_image_url": "https://biccame.jp/profile/images/tenjin2go1.png",
-    "twitter_url": "https://twitter.com/biccameratenjin",
-    "zipcode": "810-0001",
-    "address": "福岡県福岡市中央区天神2-4-5",
-    "prefecture": "福岡県",
-    "store_birthday": "2003-03-27",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-018.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/tenjin2go2.png",
-      "https://biccame.jp/profile/images/tenjin2go3.png",
-      "https://biccame.jp/profile/images/tenjin2go4.png",
-      "https://biccame.jp/profile/images/tenjin2go5.png"
-    ],
-    "character_birthday": "2017-10-25",
-    "latitude": 33.587464,
-    "longitude": 130.3982772,
-    "is_biccame_musume": true
+    "id": "okayama",
+    "character": {
+      "name": "岡山たん",
+      "description": "ビックカメラ岡山駅前店の擬人化キャラクター。 ポニーテールが桃の形になっている。どこからともなくきびだんごを出す。胸の花はキク。",
+      "twitter_id": "Bic_Okayamaten",
+      "images": [
+        "okayama2.png",
+        "okayama3.png",
+        "images/okayama4.png",
+        "images/okayama5.png",
+        "images/okayama4.png",
+        "images/okayama5.png"
+      ],
+      "birthday": "2016-10-05",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 102,
+      "name": "ビックカメラ岡山駅前店",
+      "address": "岡山県岡山市北区駅前町1-1-1",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "20:30"
+        }
+      ],
+      "access": [
+        {
+          "station": "岡山駅",
+          "description": "東口",
+          "lines": ["JR山陽本線", "津山線", "吉備線", "宇野線", "山陽新幹線"]
+        },
+        {
+          "station": "岡山駅前駅",
+          "description": "",
+          "lines": ["岡山電気軌道東山線", "清輝橋線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 34.6658681,
+        "longitude": 133.9172952
+      },
+      "postal_code": "700-0023",
+      "phone": "086-236-1111",
+      "birthday": "2007-11-20"
+    }
   },
   {
-    "character_name": "ふなとーたん",
-    "store_name": "船橋東武店",
-    "detail_url": "https://biccame.jp/profile/funato.html",
-    "key": "funato",
-    "description": "ビックカメラ船橋東武店の擬人化キャラクター。制服のリボンのひまわりはふなたんとお揃い。風車のヘアピンをしている。アンデルセンの本が好き。",
-    "profile_image_url": "https://biccame.jp/profile/images/funato1.png",
-    "prefecture": "千葉県",
-    "image_urls": [
-      "https://biccame.jp/profile/images/funato2.png",
-      "https://biccame.jp/profile/images/funato3.png",
-      "https://biccame.jp/profile/images/funato4.png",
-      "https://biccame.jp/profile/images/funato0.png"
-    ],
-    "character_birthday": "2017-11-15",
-    "is_biccame_musume": true
+    "id": "photo",
+    "character": {
+      "name": "フォトたん",
+      "description": "ビックカメラBIC PHOTOの擬人化キャラクター。 プロスタたんの妹。お姉ちゃんが撮った写真をプリントしてアルバムにまとめるのが好き。",
+      "twitter_id": "",
+      "images": [
+        "images/photo_img.png",
+        "images/photo32.png",
+        "images/photo4.png",
+        "images/photo5.png"
+      ],
+      "birthday": "2016-03-17",
+      "is_biccame_musume": true
+    }
   },
   {
-    "character_name": "鹿児島たん",
-    "store_name": "鹿児島中央駅店",
-    "detail_url": "https://biccame.jp/profile/kagoshima.html",
-    "key": "kagoshima",
-    "description": "ビックカメラ鹿児島中央駅店の擬人化キャラクター。法被の裏地は宇宙のような柄。大好物はさつまいも。胸の花はキョウチクトウ。髪の色は県の鳥・ルリカケスのような色。",
-    "profile_image_url": "https://biccame.jp/profile/images/kagoshima1.png",
-    "twitter_url": "https://twitter.com/bic_kagoshima",
-    "zipcode": "890-0053",
-    "address": "鹿児島県鹿児島市中央町1-1",
-    "prefecture": "鹿児島県",
-    "store_birthday": "2010-02-18",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-107.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/kagoshima2.png",
-      "https://biccame.jp/profile/images/kagoshima3.png",
-      "https://biccame.jp/profile/images/kagoshima4.png",
-      "https://biccame.jp/profile/images/kagoshima5.png"
-    ],
-    "character_birthday": "2017-12-18",
-    "latitude": 31.5828,
-    "longitude": 130.5421136,
-    "is_biccame_musume": true
+    "id": "pkan",
+    "character": {
+      "name": "パソ館たん",
+      "aliases": ["パソコン館たん"],
+      "description": "ビックカメラ本店パソコン館の擬人化キャラクター。 同じ池袋の本店たんがお姉ちゃん。 リボンとくせっ毛がお揃い。ビルに似たスマホをいつも首からさげている。",
+      "twitter_id": "bicpkanhonten",
+      "images": [
+        "images/pkan2.png",
+        "pkan3.png",
+        "images/pkan4.png",
+        "images/pkan5.png",
+        "images/pkan4.png",
+        "images/pkan5.png"
+      ],
+      "birthday": "2016-06-29",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 21,
+      "name": "ビックカメラ 池袋カメラ・パソコン館",
+      "address": "東京都豊島区東池袋1-6-7",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "22:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "池袋駅",
+          "description": "東口",
+          "lines": [
+            "JR山手線",
+            "埼京線",
+            "湘南新宿ライン",
+            "地下鉄有楽町線",
+            "丸ノ内線",
+            "副都心線",
+            "東武東上線",
+            "西武池袋線"
+          ]
+        }
+      ],
+      "postal_code": "170-0013",
+      "phone": "03-5956-1111",
+      "birthday": "1997-11-27"
+    }
   },
   {
-    "character_name": "にいがたたん/新潟たん",
-    "store_name": "新潟店",
-    "detail_url": "https://biccame.jp/profile/niigata.html",
-    "key": "niigata",
-    "description": "ビックカメラ新潟店の擬人化キャラクター。胸のモチーフは県の花・チューリップと、県の鳥・トキ。お米が大好きで、おにぎりのような形のヘアピンをしている。",
-    "profile_image_url": "https://biccame.jp/profile/images/niigata1.png",
-    "twitter_url": "https://twitter.com/niigata_bic",
-    "zipcode": "950-0086",
-    "address": "新潟県新潟市中央区花園1-1-21",
-    "prefecture": "新潟県",
-    "store_birthday": "2009-02-20",
-    "store_link": "http://www.biccamera.co.jp/shoplist/shop-106.html",
-    "image_urls": [
-      "https://biccame.jp/profile/images/niigata2.png",
-      "https://biccame.jp/profile/images/niigata3.png",
-      "https://biccame.jp/profile/images/niigata4.png",
-      "https://biccame.jp/profile/images/niigata5.png"
-    ],
-    "character_birthday": "2018-02-01",
-    "latitude": 37.9115222,
-    "longitude": 139.0627439,
-    "is_biccame_musume": true
+    "id": "prosta",
+    "character": {
+      "name": "プロスタたん",
+      "description": "ビックフォトスタジオ 東京写真館の擬人化キャラクター。 写真を撮ることとコスプレをするのが好き。法被は腰に巻いている。 フィルム風のカチューシャは妹とお揃い。",
+      "twitter_id": "bic_shasinkan",
+      "images": [
+        "images/pro_img.png",
+        "images/pro_img_sd.png",
+        "images/prosta4.png",
+        "images/shasinkan5.png",
+        "images/prosta4.png",
+        "images/shasinkan5.png"
+      ],
+      "birthday": "2015-11-11",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "postal_code": "171-0021",
+      "phone": "03-3987-5593"
+    }
   },
   {
-    "character_name": "みっけたん/赤坂たん",
-    "store_name": "赤坂見附駅店",
-    "detail_url": "https://biccame.jp/profile/akasaka.html",
-    "key": "akasaka",
-    "description": "ビックカメラ赤坂見附駅店の擬人化キャラクター。港区の花・バラと、バラに見えるようなお団子の髪型、「3」のようなアホ毛、「坂」のヘアピンが特徴。国際社会にPRできるように、いつもお上品を心掛けている。",
-    "profile_image_url": "https://biccame.jp/profile/images/akasaka1.png",
-    "twitter_url": "https://twitter.com/bicakasaka",
-    "zipcode": "107-0052",
-    "address": "東京都港区赤坂3-1-6",
-    "prefecture": "東京都",
-    "store_birthday": "2013-06-07",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop117.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/akasaka2.png",
-      "https://biccame.jp/profile/images/akasaka3.png",
-      "https://biccame.jp/profile/images/akasaka4.png",
-      "https://biccame.jp/profile/images/akasaka5.png"
-    ],
-    "character_birthday": "2019-01-23",
-    "latitude": 35.6770825,
-    "longitude": 139.7367614,
-    "is_biccame_musume": true
+    "id": "sagami",
+    "character": {
+      "name": "さがみたん",
+      "description": "ビックカメラ相模大野駅店の擬人化キャラクター。 他の娘より年下。いつも壁からﾁﾗｯしている。ちょっとさみしがり屋な性格。 制服のリボンと髪飾りは、相模原市の花のアジサイがモチーフになっている。",
+      "twitter_id": "bic_sagamioono",
+      "images": [
+        "images/sagami_img.png",
+        "images/sagami_img_sd.png",
+        "images/sagami4.png",
+        "images/sagami5.png",
+        "images/sagami4.png",
+        "images/sagami5.png"
+      ],
+      "birthday": "2015-08-04",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 108,
+      "name": "ビックカメラ相模大野駅店",
+      "address": "神奈川県相模原市南区相模大野3-8-1 相模大野ステーションスクエアB館 6F",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "相模大野駅",
+          "description": "駅ビル内",
+          "lines": ["小田急線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.5316511,
+        "longitude": 139.4346498
+      },
+      "postal_code": "252-0303",
+      "phone": "042-701-1111",
+      "birthday": "2010-03-04"
+    }
   },
   {
-    "character_name": "町田たん",
-    "store_name": "町田店",
-    "detail_url": "https://biccame.jp/profile/machida.html",
-    "key": "machida",
-    "description": "ビックカメラ町田店の擬人化キャラクター。町田市の花・サルビアと、市の鳥・カワセミのような色の髪が特徴。前髪につけているクロスしたヘアピンと、横で結んだ髪で「町」という字になるようにしている。渋谷とアキバに遊びに行くのが好き。",
-    "profile_image_url": "https://biccame.jp/profile/images/machida1.png",
-    "prefecture": "東京都",
-    "image_urls": [
-      "https://biccame.jp/profile/images/machida2.png",
-      "https://biccame.jp/profile/images/machida3.png",
-      "https://biccame.jp/profile/images/machida4.png",
-      "https://biccame.jp/profile/images/machida5.png"
-    ],
-    "character_birthday": "2019-03-01",
-    "is_biccame_musume": true
+    "id": "sapporo",
+    "character": {
+      "name": "さっぽろたん",
+      "aliases": ["札幌たん"],
+      "description": "ビックカメラ札幌店の擬人化キャラクター。 雪の結晶のピンが宝物。マフラーとブーツが特徴的。みんなから雪の妖精と呼ばれたりしている。",
+      "twitter_id": "bic_sapporo",
+      "images": [
+        "sapporo2.png",
+        "images/sapporo3.png",
+        "images/sapporo4.png",
+        "images/sapporo5.png",
+        "images/sapporo4.png",
+        "images/sapporo5.png"
+      ],
+      "birthday": "2016-08-10",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 132,
+      "name": "ビックカメラ札幌店",
+      "address": "北海道札幌市中央区北4条西2-1さっぽろ東急百貨店 5階･6階",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "20:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "札幌駅",
+          "description": "南口",
+          "lines": ["JR函館本線", "千歳線", "札沼線"]
+        },
+        {
+          "station": "さっぽろ駅",
+          "description": "地下直結",
+          "lines": ["札幌市営地下鉄南北線（NO6）", "東豊線（H07）"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 43.0674353,
+        "longitude": 141.3506919
+      },
+      "postal_code": "060-8619",
+      "phone": "011-261-1111",
+      "birthday": "2001-07-26"
+    }
   },
   {
-    "character_name": "しぶハチたん",
-    "store_name": "渋谷ハチ公口店",
-    "detail_url": "https://biccame.jp/profile/shibuhachi.html",
-    "key": "shibuhachi",
-    "description": "ビックカメラ渋谷ハチ公口店の擬人化キャラクター。渋谷区の花・ハナショウブをモチーフにしたリボンと、犬の耳のような髪型が特徴。犬が大好き。",
-    "profile_image_url": "https://biccame.jp/profile/images/shibuhachi1.png",
-    "twitter_url": "https://twitter.com/bicshibuhachi00",
-    "zipcode": "150-0043",
-    "address": "東京都渋谷区道玄坂2-5-9",
-    "prefecture": "東京都",
-    "store_birthday": "1989-12-01",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop004.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/shibuhachi2.png",
-      "https://biccame.jp/profile/images/shibuhachi3.png",
-      "https://biccame.jp/profile/images/shibuhachi4.png",
-      "https://biccame.jp/profile/images/shibuhachi5.png"
-    ],
-    "character_birthday": "2019-07-07",
-    "latitude": 35.6593119,
-    "longitude": 139.6995221,
-    "is_biccame_musume": true
+    "id": "seiseki",
+    "character": {
+      "name": "せいせきたん",
+      "aliases": ["聖蹟たん"],
+      "description": "ビックカメラ聖蹟桜ヶ丘駅店の擬人化キャラクター。 後ろ髪にある大きな桜の花が特徴。ツイートに桜の花を咲かせるのが得意。",
+      "twitter_id": "",
+      "images": [
+        "seiseki2.png",
+        "images/seiseki3.png",
+        "images/seiseki4.png",
+        "images/seiseki5.png"
+      ],
+      "birthday": "2016-08-31",
+      "is_biccame_musume": true
+    }
   },
   {
-    "character_name": "しぶとーたん",
-    "store_name": "渋谷東口店",
-    "detail_url": "https://biccame.jp/profile/shibuto.html",
-    "key": "shibuto",
-    "description": "ビックカメラ渋谷東口店の擬人化キャラクター。渋谷区の花・ハナショウブをモチーフにした髪飾りが特徴。大人っぽい雰囲気が漂っている。実はお絵かきが得意。",
-    "profile_image_url": "https://biccame.jp/profile/images/shibuto1.png",
-    "twitter_url": "https://twitter.com/bic_shibuya",
-    "zipcode": "150-0002",
-    "address": "東京都渋谷区渋谷1-24-12",
-    "prefecture": "東京都",
-    "store_birthday": "1993-02-20",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop008.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/shibuto2.png",
-      "https://biccame.jp/profile/images/shibuto3.png",
-      "https://biccame.jp/profile/images/shibuto4.png",
-      "https://biccame.jp/profile/images/shibuto5.png"
-    ],
-    "character_birthday": "2019-07-07",
-    "latitude": 35.6598999,
-    "longitude": 139.7020679,
-    "is_biccame_musume": true
+    "id": "shibuhachi",
+    "character": {
+      "name": "しぶハチたん",
+      "description": "ビックカメラ渋谷ハチ公口店の擬人化キャラクター。渋谷区の花・ハナショウブをモチーフにしたリボンと、犬の耳のような髪型が特徴。犬が大好き。",
+      "twitter_id": "bicshibuhachi00",
+      "images": [
+        "images/shibuhachi2.png",
+        "images/shibuhachi3.png",
+        "images/shibuhachi4.png",
+        "images/shibuhachi5.png",
+        "images/shibuhachi4.png",
+        "images/shibuhachi5.png"
+      ],
+      "birthday": "2019-07-07",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 4,
+      "name": "ビックカメラ渋谷ハチ公口店",
+      "address": "東京都渋谷区道玄坂2-5-9",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "11:00",
+          "close_time": "22:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "渋谷駅",
+          "description": "ハチ公口・A4出口",
+          "lines": [
+            "JR山手線",
+            "埼京線",
+            "湘南新宿ライン",
+            "地下鉄銀座線",
+            "半蔵門線",
+            "副都心線",
+            "東急東横線",
+            "東急田園都市線",
+            "京王井の頭線"
+          ]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.659385,
+        "longitude": 139.6994902
+      },
+      "postal_code": "150-0043",
+      "phone": "03-3477-0002",
+      "birthday": "1989-12-01"
+    }
   },
   {
-    "character_name": "新横たん",
-    "store_name": "新横浜店",
-    "detail_url": "https://biccame.jp/profile/shinyoko.html",
-    "key": "shinyoko",
-    "description": "ビックカメラ新横浜店の擬人化キャラクター。横浜市の花・バラと、マリンカラーな帽子とリボンが特徴。スポーツ観戦が好き。",
-    "profile_image_url": "https://biccame.jp/profile/images/shinyoko1.png",
-    "twitter_url": "https://twitter.com/bic_shinyoko",
-    "zipcode": "222-0033",
-    "address": "神奈川県横浜市港北区新横浜2-100-45",
-    "prefecture": "神奈川県",
-    "store_birthday": "2008-03-26",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop104.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/shinyoko2.png",
-      "https://biccame.jp/profile/images/shinyoko3.png",
-      "https://biccame.jp/profile/images/shinyoko4.png",
-      "https://biccame.jp/profile/images/shinyoko5.png"
-    ],
-    "character_birthday": "2020-01-23",
-    "latitude": 35.5086887,
-    "longitude": 139.6133356,
-    "is_biccame_musume": true
+    "id": "shibuto",
+    "character": {
+      "name": "しぶとーたん",
+      "description": "ビックカメラ渋谷東口店の擬人化キャラクター。渋谷区の花・ハナショウブをモチーフにした髪飾りが特徴。大人っぽい雰囲気が漂っている。実はお絵かきが得意。",
+      "twitter_id": "bic_shibuya",
+      "images": [
+        "images/shibuto2.png",
+        "images/shibuto3.png",
+        "images/shibuto4.png",
+        "images/shibuto5.png",
+        "images/shibuto4.png",
+        "images/shibuto5.png"
+      ],
+      "birthday": "2019-07-07",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 8,
+      "name": "ビックカメラ渋谷東口店",
+      "address": "本館：東京都渋谷区渋谷1-24-12\n別館：東京都渋谷区渋谷1-24-10",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "22:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "渋谷駅",
+          "description": "宮益坂口・B2出口",
+          "lines": [
+            "JR山手線",
+            "埼京線",
+            "湘南新宿ライン",
+            "地下鉄銀座線",
+            "半蔵門線",
+            "副都心線",
+            "東急東横線",
+            "東急田園都市線",
+            "京王井の頭線"
+          ]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.6599174,
+        "longitude": 139.7020684
+      },
+      "postal_code": "150-0002",
+      "phone": "03-5466-1111",
+      "birthday": "1993-02-20"
+    }
   },
   {
-    "character_name": "新東たん",
-    "store_name": "新宿東口駅前店",
-    "detail_url": "https://biccame.jp/profile/shintou.html",
-    "key": "shintou",
-    "description": "ビックカメラ新宿東口駅店の擬人化キャラクター。白手袋やニーソックスは、同じく新宿にいるビックロたん・新西たんとおそろい。おっとり優しそうなお姉さん。新宿の花・ツツジをアクセサリーにしている。",
-    "profile_image_url": "https://biccame.jp/profile/images/shintou1.png",
-    "twitter_url": "https://twitter.com/Bic_shintoueki",
-    "zipcode": "160-0022",
-    "address": "東京都新宿区新宿3-26-10",
-    "prefecture": "東京都",
-    "store_birthday": "2010-03-03",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop111.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/shintou2.png",
-      "https://biccame.jp/profile/images/shintou3.png",
-      "https://biccame.jp/profile/images/shintou4.png",
-      "https://biccame.jp/profile/images/shintou5.png"
-    ],
-    "character_birthday": "2020-10-19",
-    "latitude": 35.6920018,
-    "longitude": 139.7018347,
-    "is_biccame_musume": true
+    "id": "shinjyuku",
+    "character": {
+      "name": "新宿西口たん",
+      "description": "ビックカメラ新宿西口店の擬人化キャラクター。 東口にあるビックロたんと対になるような髪をして、性格も活発的な子。 新宿の花・ツツジをアクセサリーにしている。",
+      "twitter_id": "bic_shinjyuku",
+      "images": [
+        "images/shinjuku2.png",
+        "images/shinjuku4.png",
+        "images/shinjyuku4.png",
+        "images/shinjyuku5.png",
+        "images/shinjyuku4.png",
+        "images/shinjyuku5.png"
+      ],
+      "birthday": "2016-05-23",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 16,
+      "name": "ビックカメラ新宿西口店",
+      "address": "東京都新宿区西新宿1-5-1 新宿西口ハルク 2F～6F",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "weekday",
+          "open_time": "10:00",
+          "close_time": "20:30"
+        },
+        {
+          "type": "holiday",
+          "open_time": "10:00",
+          "close_time": "20:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "新宿駅",
+          "description": "西口・B16出口",
+          "lines": [
+            "JR山手線",
+            "中央（快速／各駅停車）線",
+            "埼京線",
+            "湘南新宿ライン",
+            "小田急線",
+            "京王線",
+            "地下鉄丸ノ内線"
+          ]
+        },
+        {
+          "station": "新宿西口駅",
+          "description": "B16出口",
+          "lines": ["都営大江戸線"]
+        },
+        {
+          "station": "西武新宿駅",
+          "description": "南口",
+          "lines": ["西武新宿線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.6925129,
+        "longitude": 139.695976
+      },
+      "postal_code": "160-0023",
+      "phone": "03-5326-1111",
+      "birthday": "2002-05-23"
+    }
   },
   {
-    "character_name": "たまプラたん",
-    "store_name": "イトーヨーカドー たまプラーザ店",
-    "detail_url": "https://biccame.jp/profile/tamapla.html",
-    "key": "tamapla",
-    "description": "ビックカメライトーヨーカドーたまプラーザ店の擬人化キャラクター。青葉が輝くような鮮やかな緑色の髪をポニーテールにしている。ヤマザクラをイメージしたアクセサリーを付けている。大人っぽい雰囲気が漂っている。",
-    "profile_image_url": "https://biccame.jp/profile/images/tamapla1.png",
-    "prefecture": "神奈川県",
-    "image_urls": [
-      "https://biccame.jp/profile/images/tamapla2.png",
-      "https://biccame.jp/profile/images/tamapla3.png",
-      "https://biccame.jp/profile/images/tamapla4.png",
-      "https://biccame.jp/profile/images/tamapla5.png"
-    ],
-    "character_birthday": "2020-11-26",
-    "is_biccame_musume": true
+    "id": "shintou",
+    "character": {
+      "name": "新東たん",
+      "description": "ビックカメラ新宿東口駅店の擬人化キャラクター。 白手袋やニーソックスは、同じく新宿にいるビックロたん・新西たんとおそろい。 おっとり優しそうなお姉さん。 新宿の花・ツツジをアクセサリーにしている。",
+      "twitter_id": "Bic_shintoueki",
+      "images": [
+        "images/shintou2.png",
+        "images/shintou3.png",
+        "images/shintou4.png",
+        "images/shintou5.png",
+        "images/shintou4.png",
+        "images/shintou5.png"
+      ],
+      "birthday": "2020-10-19",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 111,
+      "name": "ビックカメラ新宿東口駅前店",
+      "address": "東京都新宿区新宿3-26-10",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "11:00",
+          "close_time": "22:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "新宿駅",
+          "description": "東口・B8出口",
+          "lines": [
+            "JR山手線",
+            "中央（快速／各駅停車）線",
+            "埼京線・湘南新宿ライン",
+            "小田急線",
+            "京王線",
+            "地下鉄丸ノ内線"
+          ]
+        },
+        {
+          "station": "新宿西口駅",
+          "description": "B8出口",
+          "lines": ["都営大江戸線"]
+        },
+        {
+          "station": "西武新宿駅",
+          "description": "南口",
+          "lines": ["西武新宿線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.6920154,
+        "longitude": 139.7018685
+      },
+      "postal_code": "160-0022",
+      "phone": "03-5312-1111",
+      "birthday": "2010-03-03"
+    }
   },
   {
-    "character_name": "天神1号たん",
-    "store_name": "天神1号館",
-    "detail_url": "https://biccame.jp/profile/tenjin.html",
-    "key": "tenjin",
-    "description": "ビックカメラ天神1号館の擬人化。頭に飾っているのは福岡市の夏の花・フヨウ。梅の花も好き。",
-    "profile_image_url": "https://biccame.jp/profile/images/tenjin1_1.png",
-    "twitter_url": "https://twitter.com/bic_tenjin",
-    "zipcode": "810-0021",
-    "address": "福岡県福岡市中央区今泉1-25-1",
-    "prefecture": "福岡県",
-    "store_birthday": "1999-04-24",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop026.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/tenjin1_2.png",
-      "https://biccame.jp/profile/images/tenjin1_3.png",
-      "https://biccame.jp/profile/images/tenjin1_4.png",
-      "https://biccame.jp/profile/images/tenjin1_5.png"
-    ],
-    "character_birthday": "2020-12-13",
-    "latitude": 33.5870834,
-    "longitude": 130.4010139,
-    "is_biccame_musume": true
+    "id": "shinyoko",
+    "character": {
+      "name": "新横たん",
+      "description": "ビックカメラ新横浜店の擬人化キャラクター。 横浜市の花・バラと、マリンカラーな帽子とリボンが特徴。 スポーツ観戦が好き。",
+      "twitter_id": "bic_shinyoko",
+      "images": [
+        "images/shinyoko2.png",
+        "images/shinyoko3.png",
+        "images/shinyoko4.png",
+        "images/shinyoko5.png",
+        "images/shinyoko4.png",
+        "images/shinyoko5.png"
+      ],
+      "birthday": "2020-01-23",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 104,
+      "name": "ビックカメラ新横浜店",
+      "address": "神奈川県横浜市港北区新横浜2-100-45\nキュービックプラザ新横浜3F～9F",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "新横浜駅",
+          "description": "北口・出口1",
+          "lines": ["JR横浜線", "東海道新幹線", "横浜市営地下鉄ブルーライン"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.5079029,
+        "longitude": 139.6154556
+      },
+      "postal_code": "222-0033",
+      "phone": "045-478-1111",
+      "birthday": "2008-03-26"
+    }
   },
   {
-    "character_name": "所沢たん",
-    "store_name": "所沢駅店",
-    "detail_url": "https://biccame.jp/profile/tokorozawa.html",
-    "key": "tokorozawa",
-    "description": "ビックカメラ所沢駅の擬人化キャラクター。CAさんに憧れており、帽子やスカーフにこだわっている。胸の花は、所沢市の花・茶の花。髪の毛と法被の裏地は空をイメージしている。",
-    "profile_image_url": "https://biccame.jp/profile/images/tokorozawa1.png",
-    "twitter_url": "https://twitter.com/bic_toko",
-    "zipcode": "359-1123",
-    "address": "埼玉県所沢市日吉町12-1 西武所沢S.C. 6階",
-    "prefecture": "埼玉県",
-    "store_birthday": "2019-11-08",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop127.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/tokorozawa2.png",
-      "https://biccame.jp/profile/images/tokorozawa3.png",
-      "https://biccame.jp/profile/images/tokorozawa4.png",
-      "https://biccame.jp/profile/images/tokorozawa5.png"
-    ],
-    "character_birthday": "2021-11-08",
-    "latitude": 35.7858745,
-    "longitude": 139.4722607,
-    "is_biccame_musume": true
+    "id": "tachikawa",
+    "character": {
+      "name": "立川たん",
+      "description": "ビックカメラ立川店の擬人化キャラクター。 少しでも背を大きく見せるため大きな帽子を被っている。謎の横髪は立川の名産・ウドをイメージ。胸の花はコブシ。萌え袖が特徴。",
+      "twitter_id": "bic_tachikawa",
+      "images": [
+        "images/tachikawa2.png",
+        "images/tachikawa3.png",
+        "images/tachikawa4.png",
+        "images/tachikawa5.png",
+        "images/tachikawa4.png",
+        "images/tachikawa5.png"
+      ],
+      "birthday": "2016-10-25",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 12,
+      "name": "ビックカメラ立川店",
+      "address": "東京都立川市曙町2-12-2",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "立川駅",
+          "description": "北口",
+          "lines": ["JR中央本線", "青梅線", "南武線"]
+        },
+        {
+          "station": "立川北駅",
+          "description": "JR立川方面出口",
+          "lines": ["多摩都市モノレール"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.6993944,
+        "longitude": 139.4119818
+      },
+      "postal_code": "190-0012",
+      "phone": "042-548-1111",
+      "birthday": "2001-01-26"
+    }
   },
   {
-    "character_name": "八尾たん",
-    "store_name": "アリオ八尾店",
-    "detail_url": "https://biccame.jp/profile/yao.html",
-    "key": "yao",
-    "description": "ビックカメラアリオ八尾店の擬人化キャラクター。髪は八本に分かれている。アーミーなブーツを履いている。胸のリボンは大きなイチョウの葉。",
-    "profile_image_url": "https://biccame.jp/profile/images/yao1.png",
-    "twitter_url": "https://twitter.com/bic_yao",
-    "zipcode": "581-0803",
-    "address": "大阪府八尾市光町2-3 アリオ八尾 2F",
-    "prefecture": "大阪府",
-    "store_birthday": "2019-07-01",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop125.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/yao2.png",
-      "https://biccame.jp/profile/images/yao3.png",
-      "https://biccame.jp/profile/images/yao4.png",
-      "https://biccame.jp/profile/images/yao5.png"
-    ],
-    "character_birthday": "2022-11-14",
-    "latitude": 34.6324874,
-    "longitude": 135.6057956,
-    "is_biccame_musume": true
+    "id": "takatsuki",
+    "character": {
+      "name": "たかつきたん",
+      "aliases": ["高槻たん"],
+      "description": "ビックカメラ高槻阪急スクエア店の擬人化キャラクター。 古風なサイドポニーと勾玉の髪飾りが特徴。 関西のビッカメ娘メンバーや、はにわたんとは特に仲良し。 胸のモチーフはウノハナ。",
+      "twitter_id": "bic_takatsuki",
+      "images": [
+        "images/takatsuki2.png",
+        "images/takatsuki3.png",
+        "images/takatsuki4.png",
+        "images/takatsuki5.png",
+        "images/takatsuki4.png",
+        "images/takatsuki5.png"
+      ],
+      "birthday": "2023-10-06",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 131,
+      "name": "ビックカメラ高槻阪急スクエア店",
+      "address": "大阪府高槻市白梅町4-1 高槻阪急スクエア3階",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "20:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "高槻駅",
+          "description": "北口 ペデストリアンデッキ直結",
+          "lines": ["JR京都線"]
+        },
+        {
+          "station": "高槻市駅",
+          "description": "6番出口",
+          "lines": ["阪急京都線"]
+        }
+      ],
+      "postal_code": "569-1196",
+      "phone": "072-691-1112",
+      "birthday": "2022-06-10"
+    }
   },
   {
-    "character_name": "たかつきたん/高槻たん",
-    "store_name": "高槻阪急スクエア店",
-    "detail_url": "https://biccame.jp/profile/takatsuki.html",
-    "key": "takatsuki",
-    "description": "ビックカメラ高槻阪急スクエア店の擬人化キャラクター。古風なサイドポニーと勾玉の髪飾りが特徴。関西のビッカメ娘メンバーや、はにわたんとは特に仲良し。胸のモチーフはウノハナ。",
-    "profile_image_url": "https://biccame.jp/profile/images/takatsuki1.png",
-    "twitter_url": "https://twitter.com/bic_takatsuki",
-    "zipcode": "569-1196",
-    "address": "大阪府高槻市白梅町4-1 高槻阪急3階",
-    "prefecture": "大阪府",
-    "store_birthday": "2022-06-10",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop131.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/takatsuki2.png",
-      "https://biccame.jp/profile/images/takatsuki3.png",
-      "https://biccame.jp/profile/images/takatsuki4.png",
-      "https://biccame.jp/profile/images/takatsuki5.png"
-    ],
-    "character_birthday": "2023-10-06",
-    "latitude": 34.853417,
-    "longitude": 135.6182789,
-    "is_biccame_musume": true
+    "id": "tamapla",
+    "character": {
+      "name": "たまプラたん",
+      "description": "ビックカメライトーヨーカドーたまプラーザ店の擬人化キャラクター。 青葉が輝くような鮮やかな緑色の髪をポニーテールにしている。ヤマザクラをイメージしたアクセサリーを付けている。大人っぽい雰囲気が漂っている。",
+      "twitter_id": "",
+      "images": [
+        "images/tamapla2.png",
+        "images/tamapla3.png",
+        "images/tamapla4.png",
+        "images/tamapla5.png"
+      ],
+      "birthday": "2020-11-26",
+      "is_biccame_musume": true
+    }
   },
   {
-    "character_name": "千葉たん",
-    "store_name": "千葉駅前店",
-    "detail_url": "https://biccame.jp/profile/chiba.html",
-    "key": "chiba",
-    "description": "ビックカメラ千葉駅前店の擬人化キャラクター。エネルギッシュレッドの大きなリボンが特徴。アニメのツンデレキャラに憧れている。相棒のカモメちゃんとは仲良し。胸のモチーフは月と星。",
-    "profile_image_url": "https://biccame.jp/profile/images/chiba1.png",
-    "twitter_url": "https://twitter.com/bic_chiba",
-    "zipcode": "260-0015",
-    "address": "千葉県千葉市中央区富士見2-1-1",
-    "prefecture": "千葉県",
-    "store_birthday": "2022-11-01",
-    "store_link": "https://www.biccamera.com/bc/i/shop/shoplist/shop130.jsp",
-    "image_urls": [
-      "https://biccame.jp/profile/images/chiba2.png",
-      "https://biccame.jp/profile/images/chiba3.png",
-      "https://biccame.jp/profile/images/chiba4.png",
-      "https://biccame.jp/profile/images/chiba5.png"
-    ],
-    "character_birthday": "2024-12-12",
-    "latitude": 35.6118305,
-    "longitude": 140.1155614,
-    "is_biccame_musume": true
+    "id": "tenjin",
+    "character": {
+      "name": "天神1号たん",
+      "description": "ビックカメラ天神1号館の擬人化。 頭に飾っているのは福岡市の夏の花・フヨウ。梅の花も好き。",
+      "twitter_id": "bic_tenjin",
+      "images": [
+        "images/tenjin1_2.png",
+        "images/tenjin1_3.png",
+        "images/tenjin1_4.png",
+        "images/tenjin1_5.png",
+        "images/tenjin1_4.png",
+        "images/tenjin1_5.png"
+      ],
+      "birthday": "2020-12-13",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 26,
+      "name": "ビックカメラ天神1号館",
+      "address": "福岡県福岡市中央区今泉1-25-1",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "西鉄福岡駅",
+          "description": "南口徒歩2分",
+          "lines": ["西鉄天神大牟田線"]
+        },
+        {
+          "station": "天神駅",
+          "description": "天神地下街 西12a・b出口徒歩1分",
+          "lines": ["福岡市営地下鉄空港線"]
+        },
+        {
+          "station": "天神南駅",
+          "description": "天神地下街 西12a・b出口徒歩1分",
+          "lines": ["福岡市営地下鉄七隈線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 33.5874693,
+        "longitude": 130.3986198
+      },
+      "postal_code": "810-0021",
+      "phone": "092-732-1112",
+      "birthday": "1999-04-24"
+    }
   },
   {
-    "character_name": "ビックカメラ",
-    "store_name": "ビッカメ娘の舞台",
-    "detail_url": "https://biccame.jp/profile/biccamera.html",
-    "key": "biccamera",
-    "description": "「ビックカメラ」は専門店の集合体！都市型×駅前×大型のお店で便利！ 知識豊富な販売員が親切丁寧にご案内します。カメラ、パソコン、テレビ、家電など、何でも揃う「ビックカメラ」！⇒ビックカメラ",
-    "profile_image_url": "https://biccame.jp/profile/images/biccamera1.png",
-    "twitter_url": "https://twitter.com/biccameraE",
-    "image_urls": [
-      "https://biccame.jp/profile/biccamera.png",
-      "https://biccame.jp/profile/biccamera3.png"
-    ],
-    "is_biccame_musume": false
+    "id": "tenjin2",
+    "character": {
+      "name": "天神2号たん",
+      "description": "ビックカメラ天神2号館の擬人化。 頭に飾っているのは福岡市の冬の花・サザンカ。梅の花も好き。",
+      "twitter_id": "biccameratenjin",
+      "images": [
+        "images/tenjin2go2.png",
+        "images/tenjin2go3.png",
+        "images/tenjin2go4.png",
+        "images/tenjin2go5.png",
+        "images/tenjin2go4.png",
+        "images/tenjin2go5.png"
+      ],
+      "birthday": "2017-10-25",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 18,
+      "name": "ビックカメラ天神2号館",
+      "address": "福岡県福岡市中央区天神2-4-5",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "西鉄福岡駅",
+          "description": "中央口徒歩4分",
+          "lines": ["西鉄天神大牟田線"]
+        },
+        {
+          "station": "天神駅",
+          "description": "天神地下街 西10番出口徒歩4分",
+          "lines": ["福岡市営地下鉄空港線"]
+        },
+        {
+          "station": "天神南駅",
+          "description": "天神地下街 西10番出口徒歩4分",
+          "lines": ["福岡市営地下鉄七隈線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 33.587547,
+        "longitude": 130.3964353
+      },
+      "postal_code": "810-0001",
+      "phone": "092-732-1111",
+      "birthday": "2003-03-27"
+    }
   },
   {
-    "character_name": "ナイセン",
-    "store_name": "ビッカメ娘 企画 公式イラスト",
-    "detail_url": "https://biccame.jp/profile/naisen.html",
-    "key": "naisen",
-    "description": "ビッカメ娘の企画や公式イラストを担当。スマホで03発着信・ナイセンができる「ナイセンクラウド」を運営。主に法人向けの電話サービスではあるが、イラストや動画でアピールしている。⇒ナイセンクラウド⇒なぜナイセンがビッカメ娘を描くのか？ビッカメ娘誕生ストーリーはこちら",
-    "profile_image_url": "https://biccame.jp/profile/images/itallinc1.png",
-    "twitter_url": "https://twitter.com/itallinc",
-    "image_urls": [
-      "https://biccame.jp/profile/itallinc.png",
-      "https://biccame.jp/profile/itallinc3.png"
-    ],
-    "is_biccame_musume": false
+    "id": "tokorozawa",
+    "character": {
+      "name": "所沢たん",
+      "aliases": ["所沢たん"],
+      "description": "ビックカメラ所沢駅の擬人化キャラクター。 CAさんに憧れており、帽子やスカーフにこだわっている。 胸の花は、所沢市の花・茶の花。髪の毛と法被の裏地は空をイメージしている。",
+      "twitter_id": "bic_toko",
+      "images": [
+        "images/tokorozawa2.png",
+        "images/tokorozawa3.png",
+        "images/tokorozawa4.png",
+        "images/tokorozawa5.png",
+        "images/tokorozawa4.png",
+        "images/tokorozawa5.png"
+      ],
+      "birthday": "2021-11-08",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 127,
+      "name": "ビックカメラ所沢駅店",
+      "address": "埼玉県所沢市日吉町12-1　西武所沢S.C. 6階",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "20:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "所沢駅",
+          "description": "西口",
+          "lines": ["西武新宿線・西武池袋線"]
+        }
+      ],
+      "postal_code": "359-1123",
+      "phone": "04-2903-1111",
+      "birthday": "2019-11-08"
+    }
   },
   {
-    "character_name": "ビックシムたん",
-    "store_name": "ビッカメ娘のお友達？ BIC SIM 擬人化キャラ",
-    "detail_url": "https://biccame.jp/profile/bicsim.html",
-    "key": "bicsim",
-    "description": "BICSIMの擬人化キャラクター。先輩の「シムウマ」を尊敬していて、スマホにキーホルダーを付けたり、ウマ耳を真似している。もっともっと人と人とが繋がれるように「BIC SIM」 を知ってもらい、使ってもらう！のがモットー。",
-    "profile_image_url": "https://biccame.jp/profile/images/bicsim1.png",
-    "twitter_url": "https://twitter.com/bicsim_official",
-    "image_urls": [
-      "https://biccame.jp/profile/images/bicsim2.png",
-      "https://biccame.jp/profile/images/bicsim3.png"
-    ],
-    "character_birthday": "2018-06-13",
-    "is_biccame_musume": false
+    "id": "yao",
+    "character": {
+      "name": "八尾たん",
+      "aliases": ["八尾たん"],
+      "description": "ビックカメラアリオ八尾店の擬人化キャラクター。 髪は八本に分かれている。 アーミーなブーツを履いている。 胸のリボンは大きなイチョウの葉。",
+      "twitter_id": "bic_yao",
+      "images": [
+        "images/yao2.png",
+        "images/yao3.png",
+        "images/yao4.png",
+        "images/yao5.png",
+        "images/yao4.png",
+        "images/yao5.png"
+      ],
+      "birthday": "2022-11-14",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 125,
+      "name": "ビックカメラアリオ八尾店",
+      "address": "大阪府八尾市光町2-3 アリオ八尾 2F",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "近鉄八尾駅",
+          "description": "中央北口",
+          "lines": ["近鉄大阪線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 34.6333122,
+        "longitude": 135.6036486
+      },
+      "postal_code": "581-0803",
+      "phone": "072-993-1111",
+      "birthday": "2019-07-01"
+    }
   },
   {
-    "character_name": "お偉いたん",
-    "store_name": "ビッカメ娘を見守る お偉いたん",
-    "detail_url": "https://biccame.jp/profile/oeraitan.html",
-    "key": "oeraitan",
-    "description": "ビックカメラのお偉いたんです。あくまでもビッカメ娘達の行動を影から見守る少し恥ずかしがりやなお偉いたんです。",
-    "profile_image_url": "https://biccame.jp/profile/images/oeraitan1.png",
-    "image_urls": [
-      "https://biccame.jp/profile/oeraitan.png",
-      "https://biccame.jp/profile/images/oeraitan3.png"
-    ],
-    "is_biccame_musume": false
+    "id": "yuurakuchou",
+    "character": {
+      "name": "有楽町たん",
+      "description": "ビックカメラ有楽町店の擬人化キャラクター。 ビッカメ娘の中でひときわ神々しい存在。少し天然。区の鳥・白鳥のような羽と、着物もようなハッピ、本店たんとお揃いの制服が特徴。",
+      "twitter_id": "bic_yuurakuchou",
+      "images": [
+        "images/yuurakuchou.png",
+        "images/yuurakuchou21.png",
+        "images/yuurakucho4.png",
+        "images/yuurakuchou5.png",
+        "images/yuurakucho4.png",
+        "images/yuurakuchou5.png"
+      ],
+      "birthday": "2016-05-11",
+      "is_biccame_musume": true
+    },
+    "store": {
+      "store_id": 14,
+      "name": "ビックカメラ有楽町店",
+      "address": "東京都千代田区有楽町1-11-1",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "22:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "有楽町駅",
+          "description": "日比谷口・D4出口徒歩1分",
+          "lines": ["JR山手線", "京浜東北線", "地下鉄有楽町線"]
+        },
+        {
+          "station": "日比谷駅",
+          "description": "D4出口徒歩4~8分地下通路",
+          "lines": ["地下鉄日比谷線", "千代田線", "三田線"]
+        },
+        {
+          "station": "銀座駅",
+          "description": "JR有楽町駅方面出口徒歩5~10分地下通路",
+          "lines": ["地下鉄銀座線", "丸ノ内線", "日比谷線"]
+        }
+      ],
+      "coordinates": {
+        "latitude": 35.6753814,
+        "longitude": 139.7603339
+      },
+      "postal_code": "100-0006",
+      "phone": "03-5221-1111",
+      "birthday": "2001-06-14"
+    }
   }
 ]
