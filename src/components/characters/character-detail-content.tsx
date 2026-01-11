@@ -102,16 +102,16 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
 
               {/* メタ情報 */}
               <div className='flex flex-wrap gap-4 mt-3 text-sm text-gray-500'>
-                {character.store?.prefecture && (
+                {character.prefecture && (
                   <div className='flex items-center gap-1'>
                     <MapPin className='h-4 w-4' />
-                    <span>{character.store.prefecture}</span>
+                    <span>{character.prefecture}</span>
                   </div>
                 )}
                 {character.character?.birthday && (
                   <span>{dayjs(character.character.birthday).format('M月D日')}生まれ</span>
                 )}
-                {character.store?.coordinates && (
+                {character.coordinates && (
                   <Link to='/location' search={{ id: character.id }} className='text-pink-600 hover:underline'>
                     地図で見る
                   </Link>
@@ -144,9 +144,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                       <MapPin className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
                       <div className='min-w-0 flex-1'>
                         <p className='text-sm text-gray-500'>住所</p>
-                        {character.store.postal_code && (
-                          <p className='text-sm text-gray-900'>〒{character.store.postal_code}</p>
-                        )}
+                        {character.postal_code && <p className='text-sm text-gray-900'>〒{character.postal_code}</p>}
                         <p className='text-sm text-gray-900'>{character.store.address}</p>
                       </div>
                     </div>

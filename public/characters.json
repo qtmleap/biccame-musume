@@ -20,7 +20,6 @@
       "store_id": 118,
       "name": "ビックカメラあべのキューズモール店",
       "address": "大阪府大阪市阿倍野区阿倍野筋1-6-1 あべのキューズモール 3F",
-      "prefecture": "大阪府",
       "open_all_year": false,
       "hours": [
         {
@@ -33,45 +32,61 @@
         {
           "station": "天王寺駅",
           "description": "12号出口",
-          "lines": ["地下鉄御堂筋線", "谷町線"],
+          "lines": [
+            "地下鉄御堂筋線",
+            "谷町線"
+          ],
           "notes": "直結"
         },
         {
           "station": "阿倍野駅",
           "description": "2号出口",
-          "lines": ["地下鉄谷町線"],
+          "lines": [
+            "地下鉄谷町線"
+          ],
           "notes": "直結"
         },
         {
           "station": "天王寺駅",
           "description": "南口",
-          "lines": ["JR環状線", "阪和線", "大和路線"]
+          "lines": [
+            "JR環状線",
+            "阪和線",
+            "大和路線"
+          ]
         },
         {
           "station": "大阪阿部野橋駅",
           "description": "西改札",
-          "lines": ["近鉄南大阪線"]
+          "lines": [
+            "近鉄南大阪線"
+          ]
         },
         {
           "station": "天王寺駅前駅",
           "description": "",
-          "lines": ["阪堺電車上町線"]
+          "lines": [
+            "阪堺電車上町線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 34.6438953804491,
-        "longitude": 135.50915601523087
-      },
-      "postal_code": "545-0052",
       "phone": "06-6631-1111",
       "birthday": "2016-05-19"
-    }
+    },
+    "prefecture": "大阪府",
+    "coordinates": {
+      "latitude": 34.6438953804491,
+      "longitude": 135.50915601523087
+    },
+    "postal_code": "545-0052"
   },
   {
     "id": "akasaka",
     "character": {
       "name": "みっけたん",
-      "aliases": ["赤坂たん"],
+      "aliases": [
+        "赤坂たん"
+      ],
       "description": "ビックカメラ赤坂見附駅店の擬人化キャラクター。港区の花・バラと、バラに見えるようなお団子の髪型、「3」のようなアホ毛、「坂」のヘアピンが特徴。国際社会にPRできるように、いつもお上品を心掛けている。",
       "twitter_id": "bicakasaka",
       "images": [
@@ -89,7 +104,6 @@
       "store_id": 117,
       "name": "ビックカメラ赤坂見附駅店",
       "address": "東京都港区赤坂3-1-6",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -107,28 +121,38 @@
         {
           "station": "赤坂見附駅",
           "description": "10番出口",
-          "lines": ["地下鉄銀座線", "丸ノ内線"]
+          "lines": [
+            "地下鉄銀座線",
+            "丸ノ内線"
+          ]
         },
         {
           "station": "永田町駅",
           "description": "10番出口",
-          "lines": ["地下鉄有楽町線", "半蔵門線", "南北線"]
+          "lines": [
+            "地下鉄有楽町線",
+            "半蔵門線",
+            "南北線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.67711978019513,
-        "longitude": 139.73452911601322
-      },
-      "postal_code": "107-0052",
       "phone": "03-6230-1111",
       "birthday": "2013-06-07"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.67711978019513,
+      "longitude": 139.73452911601322
+    },
+    "postal_code": "107-0052"
   },
   {
     "id": "akiba",
     "character": {
       "name": "アキバたん",
-      "aliases": ["秋葉原たん"],
+      "aliases": [
+        "秋葉原たん"
+      ],
       "description": "ビックカメラAKIBAの擬人化キャラクター。千代田区の花・桜がモチーフの大きなリボンと、猫耳のようなヘッドドレスが特徴。",
       "twitter_id": "bic_akiba",
       "images": [
@@ -146,7 +170,6 @@
       "store_id": 121,
       "name": "ビックカメラAKIBA",
       "address": "東京都千代田区外神田4-1-1",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -168,13 +191,14 @@
           ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.69950382825271,
-        "longitude": 139.77087353578034
-      },
-      "postal_code": "101-0021",
       "birthday": "2017-06-22"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.69950382825271,
+      "longitude": 139.77087353578034
+    },
+    "postal_code": "101-0021"
   },
   {
     "id": "biccamera",
@@ -182,9 +206,16 @@
       "name": "ビックカメラ",
       "description": "「ビックカメラ」は専門店の集合体！都市型×駅前×大型のお店で便利！知識豊富な販売員が親切丁寧にご案内します。カメラ、パソコン、テレビ、家電など、何でも揃う「ビックカメラ」！⇒ビックカメラ",
       "twitter_id": "biccameraE",
-      "images": ["biccamera.png", "biccamera3.png"],
+      "images": [
+        "biccamera.png",
+        "biccamera3.png"
+      ],
       "is_biccame_musume": false
-    }
+    },
+    "prefecture": null,
+    "store": null,
+    "coordinates": null,
+    "postal_code": null
   },
   {
     "id": "bicqlo",
@@ -207,7 +238,6 @@
       "store_id": 116,
       "name": "ビックカメラ新宿東口店",
       "address": "東京都新宿区新宿3-29-1",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -220,7 +250,11 @@
         {
           "station": "新宿三丁目駅",
           "description": "A5出口",
-          "lines": ["地下鉄丸ノ内線", "副都心線", "都営新宿線"]
+          "lines": [
+            "地下鉄丸ノ内線",
+            "副都心線",
+            "都営新宿線"
+          ]
         },
         {
           "station": "新宿駅",
@@ -238,22 +272,27 @@
         {
           "station": "新宿西口駅",
           "description": "A5出口",
-          "lines": ["都営大江戸線"]
+          "lines": [
+            "都営大江戸線"
+          ]
         },
         {
           "station": "西武新宿駅",
           "description": "南口",
-          "lines": ["西武新宿線"]
+          "lines": [
+            "西武新宿線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.691349,
-        "longitude": 139.7029
-      },
-      "postal_code": "160-0022",
       "phone": "03-3226-1111",
       "birthday": "2012-09-27"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.691349,
+      "longitude": 139.7029
+    },
+    "postal_code": "160-0022"
   },
   {
     "id": "bicsim",
@@ -261,16 +300,25 @@
       "name": "ビックシムたん",
       "description": "BICSIMの擬人化キャラクター。先輩の「シムウマ」を尊敬していて、スマホにキーホルダーを付けたり、ウマ耳を真似している。もっともっと人と人とが繋がれるように「BICSIM」を知ってもらい、使ってもらう！のがモットー。",
       "twitter_id": "bicsim_official",
-      "images": ["images/bicsim2.png", "images/bicsim3.png"],
+      "images": [
+        "images/bicsim2.png",
+        "images/bicsim3.png"
+      ],
       "birthday": "2018-06-13",
       "is_biccame_musume": false
-    }
+    },
+    "prefecture": null,
+    "store": null,
+    "coordinates": null,
+    "postal_code": null
   },
   {
     "id": "camera",
     "character": {
       "name": "カメ館たん",
-      "aliases": ["カメラ館たん"],
+      "aliases": [
+        "カメラ館たん"
+      ],
       "description": "ビックカメラ池袋東口カメラ館の擬人化キャラクター。同じ池袋の本店たんがお姉ちゃん。リボンとくせっ毛がお揃い。カメラをいつも首からさげている。",
       "twitter_id": "",
       "images": [
@@ -282,15 +330,18 @@
       "birthday": "2016-06-29",
       "is_biccame_musume": true
     },
-    "store": {
-      "prefecture": "東京都"
-    }
+    "store": null,
+    "prefecture": "東京都",
+    "coordinates": null,
+    "postal_code": null
   },
   {
     "id": "chiba",
     "character": {
       "name": "千葉たん",
-      "aliases": ["千葉たん"],
+      "aliases": [
+        "千葉たん"
+      ],
       "description": "ビックカメラ千葉駅前店の擬人化キャラクター。エネルギッシュレッドの大きなリボンが特徴。アニメのツンデレキャラに憧れている。相棒のカモメちゃんとは仲良し。胸のモチーフは月と星。",
       "twitter_id": "bic_chiba",
       "images": [
@@ -308,7 +359,6 @@
       "store_id": 130,
       "name": "ビックカメラ 千葉駅前店",
       "address": "千葉県千葉市中央区富士見2-1-1",
-      "prefecture": "千葉県",
       "open_all_year": false,
       "hours": [
         {
@@ -321,22 +371,28 @@
         {
           "station": "JR千葉駅",
           "description": "東口",
-          "lines": ["JR総武線", "JR外房線"]
+          "lines": [
+            "JR総武線",
+            "JR外房線"
+          ]
         },
         {
           "station": "京成千葉駅",
           "description": "東口",
-          "lines": ["京成線"]
+          "lines": [
+            "京成線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.61181349743585,
-        "longitude": 140.11531475316687
-      },
-      "postal_code": "260-0015",
       "phone": "043-201-1111",
       "birthday": "2022-11-01"
-    }
+    },
+    "prefecture": "千葉県",
+    "coordinates": {
+      "latitude": 35.61181349743585,
+      "longitude": 140.11531475316687
+    },
+    "postal_code": "260-0015"
   },
   {
     "id": "chofu",
@@ -359,7 +415,6 @@
       "store_id": 122,
       "name": "ビックカメラ京王調布店",
       "address": "東京都調布市小島町2-48-6\nトリエ京王調布 B館 1~4階",
-      "prefecture": "東京都",
       "open_all_year": false,
       "hours": [
         {
@@ -372,17 +427,21 @@
         {
           "station": "調布駅",
           "description": "広場口すぐ",
-          "lines": ["京王線京王相模原線", ""]
+          "lines": [
+            "京王線京王相模原線",
+            ""
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.65192478918477,
-        "longitude": 139.54067276588174
-      },
-      "postal_code": "182-0026",
       "phone": "042-444-1111",
       "birthday": "2017-09-29"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.65192478918477,
+      "longitude": 139.54067276588174
+    },
+    "postal_code": "182-0026"
   },
   {
     "id": "fujisawa",
@@ -405,7 +464,6 @@
       "store_id": 37,
       "name": "ビックカメラ 藤沢店",
       "address": "神奈川県藤沢市藤沢559",
-      "prefecture": "神奈川県",
       "open_all_year": true,
       "hours": [
         {
@@ -418,23 +476,30 @@
         {
           "station": "藤沢駅",
           "description": "北口",
-          "lines": ["JR東海道本線", "小田急江ノ島線", "江ノ島電鉄"]
+          "lines": [
+            "JR東海道本線",
+            "小田急江ノ島線",
+            "江ノ島電鉄"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.339502,
-        "longitude": 139.488215
-      },
-      "postal_code": "251-0052",
       "phone": "0466-29-1111",
       "birthday": "2006-08-04"
-    }
+    },
+    "prefecture": "神奈川県",
+    "coordinates": {
+      "latitude": 35.339502,
+      "longitude": 139.488215
+    },
+    "postal_code": "251-0052"
   },
   {
     "id": "funabashi",
     "character": {
       "name": "ふなたん",
-      "aliases": ["船橋たん"],
+      "aliases": [
+        "船橋たん"
+      ],
       "description": "ビックカメラ船橋駅FACE店の擬人化キャラクター。いつも髪が跳ねている元気いっぱいの子。ビッカメ娘の中で特にハッピを愛している。制服のリボンと髪飾りに船橋市の花のひまわりをあしらっている。",
       "twitter_id": "bic_funabashi",
       "images": [
@@ -452,7 +517,6 @@
       "store_id": 109,
       "name": "ビックカメラ船橋駅FACE店",
       "address": "千葉県船橋市本町1-3-1 船橋FACE 4F",
-      "prefecture": "千葉県",
       "open_all_year": true,
       "hours": [
         {
@@ -465,22 +529,28 @@
         {
           "station": "船橋駅",
           "description": "南口",
-          "lines": ["JR総武線", "東武アーバンパークライン"]
+          "lines": [
+            "JR総武線",
+            "東武アーバンパークライン"
+          ]
         },
         {
           "station": "京成船橋駅",
           "description": "東口",
-          "lines": ["京成線"]
+          "lines": [
+            "京成線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.700662,
-        "longitude": 139.985464
-      },
-      "postal_code": "273-0005",
       "phone": "047-460-1111",
       "birthday": "2010-02-21"
-    }
+    },
+    "prefecture": "千葉県",
+    "coordinates": {
+      "latitude": 35.700662,
+      "longitude": 139.985464
+    },
+    "postal_code": "273-0005"
   },
   {
     "id": "funato",
@@ -497,9 +567,10 @@
       "birthday": "2017-11-15",
       "is_biccame_musume": true
     },
-    "store": {
-      "prefecture": "千葉県"
-    }
+    "store": null,
+    "prefecture": "千葉県",
+    "coordinates": null,
+    "postal_code": null
   },
   {
     "id": "hachioji",
@@ -522,7 +593,6 @@
       "store_id": 114,
       "name": "ビックカメラJR八王子駅店",
       "address": "東京都八王子市旭町1-17 セレオ八王子南館(1F~5F)",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -535,28 +605,37 @@
         {
           "station": "八王子駅",
           "description": "南口",
-          "lines": ["JR中央本線", "JR横浜線", "JR八高線"]
+          "lines": [
+            "JR中央本線",
+            "JR横浜線",
+            "JR八高線"
+          ]
         },
         {
           "station": "京王八王子駅",
           "description": "中央口",
-          "lines": ["京王線"]
+          "lines": [
+            "京王線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.653343,
-        "longitude": 139.350419
-      },
-      "postal_code": "192-0083",
       "phone": "042-646-1111",
       "birthday": "2010-11-11"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.653343,
+      "longitude": 139.350419
+    },
+    "postal_code": "192-0083"
   },
   {
     "id": "hamamatsu",
     "character": {
       "name": "はまたん",
-      "aliases": ["浜松たん"],
+      "aliases": [
+        "浜松たん"
+      ],
       "description": "ビックカメラ浜松店の擬人化キャラクター。のんびりとした性格。うなぎパイが好き。制服のリボンは浜松市の木・松がモチーフ、ヘアピンは市の花・ミカンがモチーフになっている。",
       "twitter_id": "bic_hamamatsu",
       "images": [
@@ -574,7 +653,6 @@
       "store_id": 105,
       "name": "ビックカメラ浜松店",
       "address": "静岡県浜松市中央区砂山町322-1",
-      "prefecture": "静岡県",
       "open_all_year": true,
       "hours": [
         {
@@ -587,22 +665,28 @@
         {
           "station": "浜松駅",
           "description": "北口",
-          "lines": ["JR東海道本線", "東海道新幹線"]
+          "lines": [
+            "JR東海道本線",
+            "東海道新幹線"
+          ]
         },
         {
           "station": "新浜松駅",
           "description": "",
-          "lines": ["遠州鉄道"]
+          "lines": [
+            "遠州鉄道"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 34.70361,
-        "longitude": 137.7307876
-      },
-      "postal_code": "430-0926",
       "phone": "053-455-1111",
       "birthday": "2008-11-20"
-    }
+    },
+    "prefecture": "静岡県",
+    "coordinates": {
+      "latitude": 34.70361,
+      "longitude": 137.7307876
+    },
+    "postal_code": "430-0926"
   },
   {
     "id": "hiroshima",
@@ -624,7 +708,6 @@
     "store": {
       "name": "ビックカメラ広島駅前店",
       "address": "広島県広島市南区松原町5-1",
-      "prefecture": "広島県",
       "open_all_year": false,
       "hours": [],
       "access": [
@@ -634,14 +717,15 @@
           "lines": []
         }
       ],
-      "coordinates": {
-        "latitude": 34.39561633507718,
-        "longitude": 132.47488758164647
-      },
-      "postal_code": "732-0822",
       "phone": "082-506-1111",
       "birthday": "2016-09-14"
-    }
+    },
+    "prefecture": "広島県",
+    "coordinates": {
+      "latitude": 34.39561633507718,
+      "longitude": 132.47488758164647
+    },
+    "postal_code": "732-0822"
   },
   {
     "id": "honten",
@@ -664,7 +748,6 @@
       "store_id": 7,
       "name": "ビックカメラ池袋本店",
       "address": "東京都豊島区東池袋1-41-5",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -689,20 +772,23 @@
           ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.731747580182486,
-        "longitude": 139.71075251526028
-      },
-      "postal_code": "170-0013",
       "phone": "03-5396-1111",
       "birthday": "1992-09-24"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.731747580182486,
+      "longitude": 139.71075251526028
+    },
+    "postal_code": "170-0013"
   },
   {
     "id": "ikenishi",
     "character": {
       "name": "池西たん",
-      "aliases": ["池袋西口たん"],
+      "aliases": [
+        "池袋西口たん"
+      ],
       "description": "ビックカメラ池袋西口店の擬人化キャラクター。本店たんの妹であり、カメ館パソ館のお姉ちゃんでもある。四姉妹でピンクのリボンをお揃いにしている。",
       "twitter_id": "bicikenishi",
       "images": [
@@ -720,7 +806,6 @@
       "store_id": 17,
       "name": "ビックカメラ池袋西口店",
       "address": "東京都豊島区西池袋1-16-3",
-      "prefecture": "東京都",
       "open_all_year": false,
       "hours": [],
       "access": [
@@ -739,14 +824,15 @@
           ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.7308799801827,
-        "longitude": 139.70682031526016
-      },
-      "postal_code": "171-0021",
       "phone": "03-5960-1111",
       "birthday": "2002-09-19"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.7308799801827,
+      "longitude": 139.70682031526016
+    },
+    "postal_code": "171-0021"
   },
   {
     "id": "kagoshima",
@@ -769,7 +855,6 @@
       "store_id": 107,
       "name": "ビックカメラ鹿児島中央駅店",
       "address": "鹿児島県鹿児島市中央町1-1 1F・2F",
-      "prefecture": "鹿児島県",
       "open_all_year": true,
       "hours": [
         {
@@ -782,17 +867,21 @@
         {
           "station": "鹿児島中央駅",
           "description": "2Fコンコース直結",
-          "lines": ["JR鹿児島本線", "九州新幹線"]
+          "lines": [
+            "JR鹿児島本線",
+            "九州新幹線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 31.58391355116033,
-        "longitude": 130.53811231582384
-      },
-      "postal_code": "890-0053",
       "phone": "099-814-1111",
       "birthday": "2010-02-18"
-    }
+    },
+    "prefecture": "鹿児島県",
+    "coordinates": {
+      "latitude": 31.58391355116033,
+      "longitude": 130.53811231582384
+    },
+    "postal_code": "890-0053"
   },
   {
     "id": "kashiwa",
@@ -815,7 +904,6 @@
       "store_id": 35,
       "name": "ビックカメラ柏店",
       "address": "千葉県柏市柏1-1-20 スカイプラザ柏2F~7F",
-      "prefecture": "千葉県",
       "open_all_year": true,
       "hours": [
         {
@@ -828,17 +916,21 @@
         {
           "station": "柏駅",
           "description": "東口",
-          "lines": ["JR常磐線", "東武アーバンパークライン"]
+          "lines": [
+            "JR常磐線",
+            "東武アーバンパークライン"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.861985834312286,
-        "longitude": 139.97108885202005
-      },
-      "postal_code": "277-0005",
       "phone": "04-7165-1111",
       "birthday": "2005-03-10"
-    }
+    },
+    "prefecture": "千葉県",
+    "coordinates": {
+      "latitude": 35.861985834312286,
+      "longitude": 139.97108885202005
+    },
+    "postal_code": "277-0005"
   },
   {
     "id": "kawasaki",
@@ -861,7 +953,6 @@
       "store_id": 38,
       "name": "ビックカメララゾーナ川崎店",
       "address": "神奈川県川崎市幸区堀川町72-1 ラゾーナ川崎プラザ1F~4F",
-      "prefecture": "神奈川県",
       "open_all_year": false,
       "hours": [
         {
@@ -874,23 +965,30 @@
         {
           "station": "川崎駅",
           "description": "北改札北口通路直結",
-          "lines": ["JR東海道本線", "京浜東北線", "南武線"]
+          "lines": [
+            "JR東海道本線",
+            "京浜東北線",
+            "南武線"
+          ]
         },
         {
           "station": "京急川崎駅",
           "description": "中央口",
-          "lines": ["京急電鉄"],
+          "lines": [
+            "京急電鉄"
+          ],
           "duration": "徒歩7分"
         }
       ],
-      "coordinates": {
-        "latitude": 35.533046380229145,
-        "longitude": 139.6947895152548
-      },
-      "postal_code": "212-0013",
       "phone": "044-520-1111",
       "birthday": "2006-09-28"
-    }
+    },
+    "prefecture": "神奈川県",
+    "coordinates": {
+      "latitude": 35.533046380229145,
+      "longitude": 139.6947895152548
+    },
+    "postal_code": "212-0013"
   },
   {
     "id": "kyoto",
@@ -907,9 +1005,10 @@
       "birthday": "2017-01-10",
       "is_biccame_musume": true
     },
-    "store": {
-      "prefecture": "京都府"
-    }
+    "store": null,
+    "prefecture": "京都府",
+    "coordinates": null,
+    "postal_code": null
   },
   {
     "id": "machida",
@@ -926,9 +1025,10 @@
       "birthday": "2019-03-01",
       "is_biccame_musume": true
     },
-    "store": {
-      "prefecture": "東京都"
-    }
+    "store": null,
+    "prefecture": "東京都",
+    "coordinates": null,
+    "postal_code": null
   },
   {
     "id": "mito",
@@ -951,7 +1051,6 @@
       "store_id": 115,
       "name": "ビックカメラ水戸駅店",
       "address": "茨城県水戸市宮町1-7-31 エクセルみなみ4F・5F",
-      "prefecture": "茨城県",
       "open_all_year": true,
       "hours": [
         {
@@ -964,23 +1063,30 @@
         {
           "station": "水戸駅",
           "description": "南口",
-          "lines": ["JR常磐線", "水郡線", "鹿島臨海鉄道 大洗鹿島線"]
+          "lines": [
+            "JR常磐線",
+            "水郡線",
+            "鹿島臨海鉄道 大洗鹿島線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 36.36978515964381,
-        "longitude": 140.47561284654657
-      },
-      "postal_code": "310-0015",
       "phone": "029-303-1111",
       "birthday": "2011-06-23"
-    }
+    },
+    "prefecture": "茨城県",
+    "coordinates": {
+      "latitude": 36.36978515964381,
+      "longitude": 140.47561284654657
+    },
+    "postal_code": "310-0015"
   },
   {
     "id": "nagoya",
     "character": {
       "name": "なごやたん",
-      "aliases": ["名古屋たん"],
+      "aliases": [
+        "名古屋たん"
+      ],
       "description": "ビックカメラ名古屋駅西店の擬人化キャラクター。頭のしゃちほこと、エビフライのようなツインテールが特徴。ギャルっぽい性格。制服のリボンは市の花・ユリがモチーフ。",
       "twitter_id": "bic_nagoya",
       "images": [
@@ -998,7 +1104,6 @@
       "store_id": 33,
       "name": "ビックカメラ名古屋駅西店",
       "address": "愛知県名古屋市中村区椿町6-9",
-      "prefecture": "愛知県",
       "open_all_year": true,
       "hours": [
         {
@@ -1024,14 +1129,15 @@
           ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.17046773871493,
-        "longitude": 136.87869655285743
-      },
-      "postal_code": "453-0015",
       "phone": "052-459-1111",
       "birthday": "2003-11-07"
-    }
+    },
+    "prefecture": "愛知県",
+    "coordinates": {
+      "latitude": 35.17046773871493,
+      "longitude": 136.87869655285743
+    },
+    "postal_code": "453-0015"
   },
   {
     "id": "nagoyagate",
@@ -1054,7 +1160,6 @@
       "store_id": 120,
       "name": "ビックカメラ名古屋JRゲートタワー店",
       "address": "愛知県名古屋市中村区名駅1-1-3 名古屋JRゲートタワー 9~10F",
-      "prefecture": "愛知県",
       "open_all_year": false,
       "hours": [
         {
@@ -1079,13 +1184,14 @@
           ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.17181366534679,
-        "longitude": 136.8809753158667
-      },
-      "postal_code": "450-0002",
       "birthday": "2017-04-07"
-    }
+    },
+    "prefecture": "愛知県",
+    "coordinates": {
+      "latitude": 35.17181366534679,
+      "longitude": 136.8809753158667
+    },
+    "postal_code": "450-0002"
   },
   {
     "id": "naisen",
@@ -1093,9 +1199,16 @@
       "name": "ナイセン",
       "description": "ビッカメ娘の企画や公式イラストを担当。スマホで03発着信・ナイセンができる「ナイセンクラウド」を運営。主に法人向けの電話サービスではあるが、イラストや動画でアピールしている。⇒ナイセンクラウド⇒なぜナイセンがビッカメ娘を描くのか？ビッカメ娘誕生ストーリーはこちら",
       "twitter_id": "itallinc",
-      "images": ["itallinc.png", "itallinc3.png"],
+      "images": [
+        "itallinc.png",
+        "itallinc3.png"
+      ],
       "is_biccame_musume": false
-    }
+    },
+    "prefecture": null,
+    "store": null,
+    "coordinates": null,
+    "postal_code": null
   },
   {
     "id": "nanba",
@@ -1118,7 +1231,6 @@
       "store_id": 13,
       "name": "ビックカメラなんば店",
       "address": "大阪府大阪市中央区千日前2-10-1",
-      "prefecture": "大阪府",
       "open_all_year": true,
       "hours": [
         {
@@ -1132,33 +1244,46 @@
         {
           "station": "なんば駅・難波駅",
           "description": "なんばウォークB17・B19・B21出口",
-          "lines": ["市営地下鉄御堂筋線", "千日前線", "近鉄難波線"]
+          "lines": [
+            "市営地下鉄御堂筋線",
+            "千日前線",
+            "近鉄難波線"
+          ]
         },
         {
           "station": "日本橋駅",
           "description": "なんばウォークB17・B19・B21出口",
-          "lines": ["堺筋線"]
+          "lines": [
+            "堺筋線"
+          ]
         },
         {
           "station": "難波駅",
           "description": "北口",
-          "lines": ["南海本線", "JR関西本線", "大和路線"]
+          "lines": [
+            "南海本線",
+            "JR関西本線",
+            "大和路線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 34.66669628044325,
-        "longitude": 135.5004216152313
-      },
-      "postal_code": "542-0074",
       "phone": "06-6634-1111",
       "birthday": "2001-05-10"
-    }
+    },
+    "prefecture": "大阪府",
+    "coordinates": {
+      "latitude": 34.66669628044325,
+      "longitude": 135.5004216152313
+    },
+    "postal_code": "542-0074"
   },
   {
     "id": "niigata",
     "character": {
       "name": "にいがたたん",
-      "aliases": ["新潟たん"],
+      "aliases": [
+        "新潟たん"
+      ],
       "description": "ビックカメラ新潟店の擬人化キャラクター。胸のモチーフは県の花・チューリップと、県の鳥・トキ。お米が大好きで、おにぎりのような形のヘアピンをしている。",
       "twitter_id": "niigata_bic",
       "images": [
@@ -1176,7 +1301,6 @@
       "store_id": 106,
       "name": "ビックカメラ新潟店",
       "address": "新潟県新潟市中央区花園1-1-21 CoCoLo 南館内2F~3F",
-      "prefecture": "新潟県",
       "open_all_year": true,
       "hours": [
         {
@@ -1189,17 +1313,24 @@
         {
           "station": "新潟駅",
           "description": "東口",
-          "lines": ["JR信越本線", "白新線", "羽越本線", "越後線", "上越新幹線"]
+          "lines": [
+            "JR信越本線",
+            "白新線",
+            "羽越本線",
+            "越後線",
+            "上越新幹線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 37.911745212038916,
-        "longitude": 139.06108931599172
-      },
-      "postal_code": "950-0086",
       "phone": "025-248-1111",
       "birthday": "2009-02-20"
-    }
+    },
+    "prefecture": "新潟県",
+    "coordinates": {
+      "latitude": 37.911745212038916,
+      "longitude": 139.06108931599172
+    },
+    "postal_code": "950-0086"
   },
   {
     "id": "oeraitan",
@@ -1207,9 +1338,16 @@
       "name": "お偉いたん",
       "description": "ビックカメラのお偉いたんです。あくまでもビッカメ娘達の行動を影から見守る少し恥ずかしがりやなお偉いたんです。",
       "twitter_id": "",
-      "images": ["oeraitan.png", "images/oeraitan3.png"],
+      "images": [
+        "oeraitan.png",
+        "images/oeraitan3.png"
+      ],
       "is_biccame_musume": false
-    }
+    },
+    "prefecture": null,
+    "store": null,
+    "coordinates": null,
+    "postal_code": null
   },
   {
     "id": "ohmiya",
@@ -1232,7 +1370,6 @@
       "store_id": 34,
       "name": "ビックカメラ大宮西口そごう店",
       "address": "埼玉県さいたま市大宮区桜木町1-8-4 そごう大宮店 パーキング館 1F~3F",
-      "prefecture": "埼玉県",
       "open_all_year": false,
       "hours": [
         {
@@ -1255,14 +1392,15 @@
           ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.904468,
-        "longitude": 139.621129
-      },
-      "postal_code": "330-0854",
       "phone": "048-647-1111",
       "birthday": "2003-11-21"
-    }
+    },
+    "prefecture": "埼玉県",
+    "coordinates": {
+      "latitude": 35.904468,
+      "longitude": 139.621129
+    },
+    "postal_code": "330-0854"
   },
   {
     "id": "okayama",
@@ -1285,7 +1423,6 @@
       "store_id": 102,
       "name": "ビックカメラ岡山駅前店",
       "address": "岡山県岡山市北区駅前町1-1-1",
-      "prefecture": "岡山県",
       "open_all_year": true,
       "hours": [
         {
@@ -1298,22 +1435,32 @@
         {
           "station": "岡山駅",
           "description": "東口",
-          "lines": ["JR山陽本線", "津山線", "吉備線", "宇野線", "山陽新幹線"]
+          "lines": [
+            "JR山陽本線",
+            "津山線",
+            "吉備線",
+            "宇野線",
+            "山陽新幹線"
+          ]
         },
         {
           "station": "岡山駅前駅",
           "description": "",
-          "lines": ["岡山電気軌道東山線", "清輝橋線"]
+          "lines": [
+            "岡山電気軌道東山線",
+            "清輝橋線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 34.665907980443414,
-        "longitude": 133.91744831523127
-      },
-      "postal_code": "700-0023",
       "phone": "086-236-1111",
       "birthday": "2007-11-20"
-    }
+    },
+    "prefecture": "岡山県",
+    "coordinates": {
+      "latitude": 34.665907980443414,
+      "longitude": 133.91744831523127
+    },
+    "postal_code": "700-0023"
   },
   {
     "id": "photo",
@@ -1330,15 +1477,18 @@
       "birthday": "2016-03-17",
       "is_biccame_musume": true
     },
-    "store": {
-      "prefecture": "東京都"
-    }
+    "store": null,
+    "prefecture": "東京都",
+    "coordinates": null,
+    "postal_code": null
   },
   {
     "id": "pkan",
     "character": {
       "name": "パソ館たん",
-      "aliases": ["パソコン館たん"],
+      "aliases": [
+        "パソコン館たん"
+      ],
       "description": "ビックカメラ本店パソコン館の擬人化キャラクター。同じ池袋の本店たんがお姉ちゃん。リボンとくせっ毛がお揃い。ビルに似たスマホをいつも首からさげている。",
       "twitter_id": "bicpkanhonten",
       "images": [
@@ -1356,7 +1506,6 @@
       "store_id": 21,
       "name": "ビックカメラ 池袋カメラ・パソコン館",
       "address": "東京都豊島区東池袋1-6-7",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -1381,14 +1530,15 @@
           ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.731589,
-        "longitude": 139.7132525
-      },
-      "postal_code": "170-0013",
       "phone": "03-5956-1111",
       "birthday": "1997-11-27"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.731589,
+      "longitude": 139.7132525
+    },
+    "postal_code": "170-0013"
   },
   {
     "id": "prosta",
@@ -1408,14 +1558,15 @@
       "is_biccame_musume": true
     },
     "store": {
-      "postal_code": "171-0021",
       "phone": "03-3987-5593",
-      "coordinates": {
-        "latitude": 35.73076948695455,
-        "longitude": 139.70825456960466
-      },
-      "prefecture": "東京都"
-    }
+      "access": []
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.73076948695455,
+      "longitude": 139.70825456960466
+    },
+    "postal_code": "171-0021"
   },
   {
     "id": "sagami",
@@ -1438,7 +1589,6 @@
       "store_id": 108,
       "name": "ビックカメラ相模大野駅店",
       "address": "神奈川県相模原市南区相模大野3-8-1 相模大野ステーションスクエアB館 6F",
-      "prefecture": "神奈川県",
       "open_all_year": false,
       "hours": [
         {
@@ -1451,23 +1601,28 @@
         {
           "station": "相模大野駅",
           "description": "駅ビル内",
-          "lines": ["小田急線"]
+          "lines": [
+            "小田急線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.531457,
-        "longitude": 139.437167
-      },
-      "postal_code": "252-0303",
       "phone": "042-701-1111",
       "birthday": "2010-03-04"
-    }
+    },
+    "prefecture": "神奈川県",
+    "coordinates": {
+      "latitude": 35.531457,
+      "longitude": 139.437167
+    },
+    "postal_code": "252-0303"
   },
   {
     "id": "sapporo",
     "character": {
       "name": "さっぽろたん",
-      "aliases": ["札幌たん"],
+      "aliases": [
+        "札幌たん"
+      ],
       "description": "ビックカメラ札幌店の擬人化キャラクター。雪の結晶のピンが宝物。マフラーとブーツが特徴的。みんなから雪の妖精と呼ばれたりしている。",
       "twitter_id": "bic_sapporo",
       "images": [
@@ -1485,7 +1640,6 @@
       "store_id": 132,
       "name": "ビックカメラ札幌店",
       "address": "北海道札幌市中央区北4条西2-1さっぽろ東急百貨店 5階・6階",
-      "prefecture": "北海道",
       "open_all_year": false,
       "hours": [
         {
@@ -1498,28 +1652,38 @@
         {
           "station": "札幌駅",
           "description": "南口",
-          "lines": ["JR函館本線", "千歳線", "札沼線"]
+          "lines": [
+            "JR函館本線",
+            "千歳線",
+            "札沼線"
+          ]
         },
         {
           "station": "さっぽろ駅",
           "description": "地下直結",
-          "lines": ["札幌市営地下鉄南北線", "東豊線"]
+          "lines": [
+            "札幌市営地下鉄南北線",
+            "東豊線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 43.066298090070966,
-        "longitude": 141.35035781204664
-      },
-      "postal_code": "060-8619",
       "phone": "011-261-1111",
       "birthday": "2001-07-26"
-    }
+    },
+    "prefecture": "北海道",
+    "coordinates": {
+      "latitude": 43.066298090070966,
+      "longitude": 141.35035781204664
+    },
+    "postal_code": "060-8619"
   },
   {
     "id": "seiseki",
     "character": {
       "name": "せいせきたん",
-      "aliases": ["聖蹟たん"],
+      "aliases": [
+        "聖蹟たん"
+      ],
       "description": "ビックカメラ聖蹟桜ヶ丘駅店の擬人化キャラクター。後ろ髪にある大きな桜の花が特徴。ツイートに桜の花を咲かせるのが得意。",
       "twitter_id": "",
       "images": [
@@ -1531,9 +1695,10 @@
       "birthday": "2016-08-31",
       "is_biccame_musume": true
     },
-    "store": {
-      "prefecture": "東京都"
-    }
+    "store": null,
+    "prefecture": "東京都",
+    "coordinates": null,
+    "postal_code": null
   },
   {
     "id": "shibuhachi",
@@ -1556,7 +1721,6 @@
       "store_id": 4,
       "name": "ビックカメラ渋谷ハチ公口店",
       "address": "東京都渋谷区道玄坂2-5-9",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -1582,14 +1746,15 @@
           ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.65934288019936,
-        "longitude": 139.69729111591394
-      },
-      "postal_code": "150-0043",
       "phone": "03-3477-0002",
       "birthday": "1989-12-01"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.65934288019936,
+      "longitude": 139.69729111591394
+    },
+    "postal_code": "150-0043"
   },
   {
     "id": "shibuto",
@@ -1612,7 +1777,6 @@
       "store_id": 8,
       "name": "ビックカメラ渋谷東口店",
       "address": "本館:東京都渋谷区渋谷1-24-12\n別館:東京都渋谷区渋谷1-24-10",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -1638,14 +1802,15 @@
           ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.659971880199194,
-        "longitude": 139.69973441525823
-      },
-      "postal_code": "150-0002",
       "phone": "03-5466-1111",
       "birthday": "1993-02-20"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.659971880199194,
+      "longitude": 139.69973441525823
+    },
+    "postal_code": "150-0002"
   },
   {
     "id": "shinjyuku",
@@ -1668,7 +1833,6 @@
       "store_id": 16,
       "name": "ビックカメラ新宿西口店",
       "address": "東京都新宿区西新宿1-5-1 新宿西口ハルク 2F~6F",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -1699,22 +1863,27 @@
         {
           "station": "新宿西口駅",
           "description": "B16出口",
-          "lines": ["都営大江戸線"]
+          "lines": [
+            "都営大江戸線"
+          ]
         },
         {
           "station": "西武新宿駅",
           "description": "南口",
-          "lines": ["西武新宿線"]
+          "lines": [
+            "西武新宿線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.692479680191646,
-        "longitude": 139.6964761152591
-      },
-      "postal_code": "160-0023",
       "phone": "03-5326-1111",
       "birthday": "2002-05-23"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.692479680191646,
+      "longitude": 139.6964761152591
+    },
+    "postal_code": "160-0023"
   },
   {
     "id": "shintou",
@@ -1737,7 +1906,6 @@
       "store_id": 111,
       "name": "ビックカメラ新宿東口駅前店",
       "address": "東京都新宿区新宿3-26-10",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -1762,22 +1930,27 @@
         {
           "station": "新宿西口駅",
           "description": "B8出口",
-          "lines": ["都営大江戸線"]
+          "lines": [
+            "都営大江戸線"
+          ]
         },
         {
           "station": "西武新宿駅",
           "description": "南口",
-          "lines": ["西武新宿線"]
+          "lines": [
+            "西武新宿線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.69201538019174,
-        "longitude": 139.69967981525915
-      },
-      "postal_code": "160-0022",
       "phone": "03-5312-1111",
       "birthday": "2010-03-03"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.69201538019174,
+      "longitude": 139.69967981525915
+    },
+    "postal_code": "160-0022"
   },
   {
     "id": "shinyoko",
@@ -1800,7 +1973,6 @@
       "store_id": 104,
       "name": "ビックカメラ新横浜店",
       "address": "神奈川県横浜市港北区新横浜2-100-45\nキュービックプラザ新横浜3F~9F",
-      "prefecture": "神奈川県",
       "open_all_year": true,
       "hours": [
         {
@@ -1813,17 +1985,22 @@
         {
           "station": "新横浜駅",
           "description": "北口・出口1",
-          "lines": ["JR横浜線", "東海道新幹線", "横浜市営地下鉄ブルーライン"]
+          "lines": [
+            "JR横浜線",
+            "東海道新幹線",
+            "横浜市営地下鉄ブルーライン"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.50790724706335,
-        "longitude": 139.61545561630493
-      },
-      "postal_code": "222-0033",
       "phone": "045-478-1111",
       "birthday": "2008-03-26"
-    }
+    },
+    "prefecture": "神奈川県",
+    "coordinates": {
+      "latitude": 35.50790724706335,
+      "longitude": 139.61545561630493
+    },
+    "postal_code": "222-0033"
   },
   {
     "id": "tachikawa",
@@ -1846,7 +2023,6 @@
       "store_id": 12,
       "name": "ビックカメラ立川店",
       "address": "東京都立川市曙町2-12-2",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -1859,28 +2035,37 @@
         {
           "station": "立川駅",
           "description": "北口",
-          "lines": ["JR中央本線", "青梅線", "南武線"]
+          "lines": [
+            "JR中央本線",
+            "青梅線",
+            "南武線"
+          ]
         },
         {
           "station": "立川北駅",
           "description": "JR立川方面出口",
-          "lines": ["多摩都市モノレール"]
+          "lines": [
+            "多摩都市モノレール"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.69921498019015,
-        "longitude": 139.41271631597147
-      },
-      "postal_code": "190-0012",
       "phone": "042-548-1111",
       "birthday": "2001-01-26"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.69921498019015,
+      "longitude": 139.41271631597147
+    },
+    "postal_code": "190-0012"
   },
   {
     "id": "takatsuki",
     "character": {
       "name": "たかつきたん",
-      "aliases": ["高槻たん"],
+      "aliases": [
+        "高槻たん"
+      ],
       "description": "ビックカメラ高槻阪急スクエア店の擬人化キャラクター。古風なサイドポニーと勾玉の髪飾りが特徴。関西のビッカメ娘メンバーや、はにわたんとは特に仲良し。胸のモチーフはウノハナ。",
       "twitter_id": "bic_takatsuki",
       "images": [
@@ -1898,7 +2083,6 @@
       "store_id": 131,
       "name": "ビックカメラ高槻阪急スクエア店",
       "address": "大阪府高槻市白梅町4-1 高槻阪急スクエア3階",
-      "prefecture": "大阪府",
       "open_all_year": false,
       "hours": [
         {
@@ -1911,22 +2095,27 @@
         {
           "station": "高槻駅",
           "description": "北口 ペデストリアンデッキ直結",
-          "lines": ["JR京都線"]
+          "lines": [
+            "JR京都線"
+          ]
         },
         {
           "station": "高槻市駅",
           "description": "6番出口",
-          "lines": ["阪急京都線"]
+          "lines": [
+            "阪急京都線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 34.853881474864394,
-        "longitude": 135.61574381172426
-      },
-      "postal_code": "569-1196",
       "phone": "072-691-1112",
       "birthday": "2022-06-10"
-    }
+    },
+    "prefecture": "大阪府",
+    "coordinates": {
+      "latitude": 34.853881474864394,
+      "longitude": 135.61574381172426
+    },
+    "postal_code": "569-1196"
   },
   {
     "id": "tamapla",
@@ -1943,9 +2132,10 @@
       "birthday": "2020-11-26",
       "is_biccame_musume": true
     },
-    "store": {
-      "prefecture": "神奈川県"
-    }
+    "store": null,
+    "prefecture": "神奈川県",
+    "coordinates": null,
+    "postal_code": null
   },
   {
     "id": "tenjin",
@@ -1968,7 +2158,6 @@
       "store_id": 26,
       "name": "ビックカメラ天神1号館",
       "address": "福岡県福岡市中央区今泉1-25-1",
-      "prefecture": "福岡県",
       "open_all_year": true,
       "hours": [
         {
@@ -1981,30 +2170,37 @@
         {
           "station": "西鉄福岡駅",
           "description": "南口",
-          "lines": ["西鉄天神大牟田線"],
+          "lines": [
+            "西鉄天神大牟田線"
+          ],
           "duration": "徒歩2分"
         },
         {
           "station": "天神駅",
           "description": "天神地下街 西12a・b出口",
-          "lines": ["福岡市営地下鉄空港線"],
+          "lines": [
+            "福岡市営地下鉄空港線"
+          ],
           "duration": "徒歩1分"
         },
         {
           "station": "天神南駅",
           "description": "天神地下街 西12a・b出口",
-          "lines": ["福岡市営地下鉄七隈線"],
+          "lines": [
+            "福岡市営地下鉄七隈線"
+          ],
           "duration": "徒歩1分"
         }
       ],
-      "coordinates": {
-        "latitude": 33.58702524954873,
-        "longitude": 130.3988427155932
-      },
-      "postal_code": "810-0021",
       "phone": "092-732-1112",
       "birthday": "1999-04-24"
-    }
+    },
+    "prefecture": "福岡県",
+    "coordinates": {
+      "latitude": 33.58702524954873,
+      "longitude": 130.3988427155932
+    },
+    "postal_code": "810-0021"
   },
   {
     "id": "tenjin2",
@@ -2027,7 +2223,6 @@
       "store_id": 18,
       "name": "ビックカメラ天神2号館",
       "address": "福岡県福岡市中央区天神2-4-5",
-      "prefecture": "福岡県",
       "open_all_year": true,
       "hours": [
         {
@@ -2040,36 +2235,45 @@
         {
           "station": "西鉄福岡駅",
           "description": "中央口",
-          "lines": ["西鉄天神大牟田線"],
+          "lines": [
+            "西鉄天神大牟田線"
+          ],
           "duration": "徒歩4分"
         },
         {
           "station": "天神駅",
           "description": "天神地下街 西10番出口",
-          "lines": ["福岡市営地下鉄空港線"],
+          "lines": [
+            "福岡市営地下鉄空港線"
+          ],
           "duration": "徒歩4分"
         },
         {
           "station": "天神南駅",
           "description": "天神地下街 西10番出口",
-          "lines": ["福岡市営地下鉄七隈線"],
+          "lines": [
+            "福岡市営地下鉄七隈線"
+          ],
           "duration": "徒歩4分"
         }
       ],
-      "coordinates": {
-        "latitude": 33.5880605,
-        "longitude": 130.3982623
-      },
-      "postal_code": "810-0001",
       "phone": "092-732-1111",
       "birthday": "2003-03-27"
-    }
+    },
+    "prefecture": "福岡県",
+    "coordinates": {
+      "latitude": 33.5880605,
+      "longitude": 130.3982623
+    },
+    "postal_code": "810-0001"
   },
   {
     "id": "tokorozawa",
     "character": {
       "name": "所沢たん",
-      "aliases": ["所沢たん"],
+      "aliases": [
+        "所沢たん"
+      ],
       "description": "ビックカメラ所沢駅の擬人化キャラクター。CAさんに憧れており、帽子やスカーフにこだわっている。胸の花は、所沢市の花・茶の花。髪の毛と法被の裏地は空をイメージしている。",
       "twitter_id": "bic_toko",
       "images": [
@@ -2087,7 +2291,6 @@
       "store_id": 127,
       "name": "ビックカメラ所沢駅店",
       "address": "埼玉県所沢市日吉町12-1 西武所沢S.C. 6階",
-      "prefecture": "埼玉県",
       "open_all_year": false,
       "hours": [
         {
@@ -2100,23 +2303,28 @@
         {
           "station": "所沢駅",
           "description": "西口",
-          "lines": ["西武新宿線・西武池袋線"]
+          "lines": [
+            "西武新宿線・西武池袋線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 35.785908480170065,
-        "longitude": 139.47018846526169
-      },
-      "postal_code": "359-1123",
       "phone": "04-2903-1111",
       "birthday": "2019-11-08"
-    }
+    },
+    "prefecture": "埼玉県",
+    "coordinates": {
+      "latitude": 35.785908480170065,
+      "longitude": 139.47018846526169
+    },
+    "postal_code": "359-1123"
   },
   {
     "id": "yao",
     "character": {
       "name": "八尾たん",
-      "aliases": ["八尾たん"],
+      "aliases": [
+        "八尾たん"
+      ],
       "description": "ビックカメラアリオ八尾店の擬人化キャラクター。髪は八本に分かれている。アーミーなブーツを履いている。胸のリボンは大きなイチョウの葉。",
       "twitter_id": "bic_yao",
       "images": [
@@ -2134,7 +2342,6 @@
       "store_id": 125,
       "name": "ビックカメラアリオ八尾店",
       "address": "大阪府八尾市光町2-3 アリオ八尾 2F",
-      "prefecture": "大阪府",
       "open_all_year": false,
       "hours": [
         {
@@ -2147,17 +2354,20 @@
         {
           "station": "近鉄八尾駅",
           "description": "中央北口",
-          "lines": ["近鉄大阪線"]
+          "lines": [
+            "近鉄大阪線"
+          ]
         }
       ],
-      "coordinates": {
-        "latitude": 34.6324873804521,
-        "longitude": 135.60360691523033
-      },
-      "postal_code": "581-0803",
       "phone": "072-993-1111",
       "birthday": "2019-07-01"
-    }
+    },
+    "prefecture": "大阪府",
+    "coordinates": {
+      "latitude": 34.6324873804521,
+      "longitude": 135.60360691523033
+    },
+    "postal_code": "581-0803"
   },
   {
     "id": "yuurakuchou",
@@ -2180,7 +2390,6 @@
       "store_id": 14,
       "name": "ビックカメラ有楽町店",
       "address": "東京都千代田区有楽町1-11-1",
-      "prefecture": "東京都",
       "open_all_year": true,
       "hours": [
         {
@@ -2193,29 +2402,42 @@
         {
           "station": "有楽町駅",
           "description": "日比谷口・D4出口",
-          "lines": ["JR山手線", "京浜東北線", "地下鉄有楽町線"],
+          "lines": [
+            "JR山手線",
+            "京浜東北線",
+            "地下鉄有楽町線"
+          ],
           "duration": "徒歩1分"
         },
         {
           "station": "日比谷駅",
           "description": "D4出口地下通路",
-          "lines": ["地下鉄日比谷線", "千代田線", "三田線"],
+          "lines": [
+            "地下鉄日比谷線",
+            "千代田線",
+            "三田線"
+          ],
           "duration": "徒歩4~8分"
         },
         {
           "station": "銀座駅",
           "description": "JR有楽町駅方面出口地下通路",
-          "lines": ["地下鉄銀座線", "丸ノ内線", "日比谷線"],
+          "lines": [
+            "地下鉄銀座線",
+            "丸ノ内線",
+            "日比谷線"
+          ],
           "duration": "徒歩5~10分"
         }
       ],
-      "coordinates": {
-        "latitude": 35.67558298019562,
-        "longitude": 139.76073981525863
-      },
-      "postal_code": "100-0006",
       "phone": "03-5221-1111",
       "birthday": "2001-06-14"
-    }
+    },
+    "prefecture": "東京都",
+    "coordinates": {
+      "latitude": 35.67558298019562,
+      "longitude": 139.76073981525863
+    },
+    "postal_code": "100-0006"
   }
 ]

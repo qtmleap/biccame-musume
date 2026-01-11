@@ -110,7 +110,7 @@ export const filterCharactersByRegion = (characters: StoreData[], region: Region
 
   return characters.filter((character) => {
     // 都道府県フィールドから地域を判定
-    const prefecture = character.store?.prefecture
+    const prefecture = character.prefecture
     if (!prefecture) return false
     const characterRegion = prefectureToRegion[prefecture]
     return characterRegion === region

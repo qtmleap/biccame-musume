@@ -17,9 +17,9 @@ const isDevelopment = () => {
 /**
  * 開発環境用のダミー投票データを生成（合計約10万票）
  */
-const generateDummyVoteCounts = (characters: Store[]): Record<string, number> => {
+const generateDummyVoteCounts = (characters: StoreData[]): Record<string, number> => {
   // ビッカメ娘のみを対象にする
-  const biccameMusumeCharacters = characters.filter((char) => char.character?.isBiccameMusume)
+  const biccameMusumeCharacters = characters.filter((char) => char.character?.is_biccame_musume)
 
   const totalTargetVotes = 100000
   const dummyCounts: Record<string, number> = {}
@@ -48,7 +48,7 @@ const generateDummyVoteCounts = (characters: Store[]): Record<string, number> =>
 /**
  * 全キャラクターの投票数を取得
  */
-const fetchVoteRanking = async (characters: Store[], year: number): Promise<CharacterWithVotes[]> => {
+const fetchVoteRanking = async (characters: StoreData[], year: number): Promise<CharacterWithVotes[]> => {
   // 開発環境ではダミーデータを使用
   let allVoteCounts: Record<string, number>
 
@@ -79,7 +79,7 @@ const fetchVoteRanking = async (characters: Store[], year: number): Promise<Char
 /**
  * 投票ランキング取得用のカスタムフック
  */
-export const useVoteRanking = (characters: Store[], year?: number) => {
+export const useVoteRanking = (characters: StoreData[], year?: number) => {
   const targetYear = year || dayjs().year()
 
   return useSuspenseQuery({

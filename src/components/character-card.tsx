@@ -19,6 +19,8 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
     return dayjs(dateString).format('YYYY年M月D日')
   }
 
+  const store = character.store
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -41,7 +43,7 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
               </CardTitle>
               <CardDescription className='flex items-center gap-1 text-gray-600'>
                 <Store className='h-3 w-3' />
-                {character.store?.name}
+                {store?.name}
               </CardDescription>
             </div>
           </div>
@@ -60,25 +62,25 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
               </div>
             )}
 
-            {character.store?.birthday && (
+            {store?.birthday && (
               <div className='flex items-start gap-2'>
                 <Store className='h-4 w-4 mt-0.5 text-blue-500 shrink-0' />
                 <div className='flex-1'>
                   <div className='font-medium text-gray-800'>店舗開店日</div>
-                  <div className='text-gray-600'>{formatDate(character.store.birthday)}</div>
+                  <div className='text-gray-600'>{formatDate(store.birthday)}</div>
                 </div>
               </div>
             )}
 
-            {character.store?.address && (
+            {store?.address && (
               <div className='flex items-start gap-2'>
                 <MapPin className='h-4 w-4 mt-0.5 text-green-500 shrink-0' />
                 <div className='flex-1'>
                   <div className='font-medium text-gray-800'>住所</div>
                   <div className='text-gray-600'>
-                    {character.store.postal_code && `〒${character.store.postal_code}`}
-                    {character.store.postal_code && <br />}
-                    {character.store.address}
+                    {character.postal_code && `〒${character.postal_code}`}
+                    {character.postal_code && <br />}
+                    {store.address}
                   </div>
                 </div>
               </div>

@@ -1,9 +1,9 @@
 import { motion } from 'motion/react'
 import { useMemo } from 'react'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 
 type BirthdayBackgroundProps = {
-  characters: Character[]
+  characters: StoreData[]
 }
 
 /**
@@ -47,12 +47,12 @@ export const BirthdayBackground = ({ characters }: BirthdayBackgroundProps) => {
         transition={{ duration: 1 }}
       >
         <img
-          src={getBirthdayImagePath(character.key)}
+          src={getBirthdayImagePath(character.id)}
           alt=''
           className='h-[60vh] w-auto object-contain'
           onError={(e) => {
             const target = e.target as HTMLImageElement
-            target.src = character.profile_image_url || ''
+            target.src = character.character?.image_url || ''
           }}
         />
       </motion.div>
@@ -65,12 +65,12 @@ export const BirthdayBackground = ({ characters }: BirthdayBackgroundProps) => {
         transition={{ duration: 1, delay: 0.3 }}
       >
         <img
-          src={getBirthdayImagePath(character.key)}
+          src={getBirthdayImagePath(character.id)}
           alt=''
           className='h-[30vh] w-auto -scale-x-100 object-contain'
           onError={(e) => {
             const target = e.target as HTMLImageElement
-            target.src = character.profile_image_url || ''
+            target.src = character.character?.image_url || ''
           }}
         />
       </motion.div>
