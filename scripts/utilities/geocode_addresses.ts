@@ -80,7 +80,7 @@ const main = async () => {
   console.log('Starting geocoding process...')
 
   // キャラクターデータを読み込み
-  const inputPath = join(import.meta.dir, '../public/characters.json')
+  const inputPath = join(import.meta.dir, '../../public/characters.json')
   const characters: Character[] = JSON.parse(readFileSync(inputPath, 'utf-8'))
 
   console.log(`Total characters: ${characters.length}`)
