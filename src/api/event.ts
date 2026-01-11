@@ -135,7 +135,7 @@ routes.openapi(checkDuplicateUrlRoute, async (c) => {
 
   return c.json({
     exists: !!matchingEvent,
-    event: matchingEvent
+    event: matchingEvent ?? undefined
   })
 })
 
@@ -178,10 +178,10 @@ routes.openapi(getEventRoute, async (c) => {
   const event = await eventService.getEventById(prisma, id)
 
   if (!event) {
-    throw new HTTPException(404, { message: 'Event not found' })
+    return c.json({ error: 'Event not found' }, 404) as any
   }
 
-  return c.json(event)
+  return c.json(event, 200)
 })
 
 // イベント更新
