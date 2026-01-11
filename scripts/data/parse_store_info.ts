@@ -297,7 +297,28 @@ const expandShortenedUrl = async (url: string): Promise<string> => {
  * Google Maps URLから座標を抽出
  */
 const extractCoordinates = (url: string): { latitude: number; longitude: number } | undefined => {
-  // @緯度,経度 の形式でマッチ
+  // Google Maps埋め込みURL形式（!2d経度!3d緯度 または !3d緯度!2d経度）
+  // 先に !2d経度!3d緯度 の形式をチェック（こちらの方が一般的）
+  const embedMatch2d3d = url.match(/!2d([-0-9.]+)!3d([-0-9.]+)/)
+  if (embedMatch2d3d) {
+    const longitude = Number.parseFloat(embedMatch2d3d[1])
+    const latitude = Number.parseFloat(embedMatch2d3d[2])
+    if (!Number.isNaN(latitude) && !Number.isNaN(longitude)) {
+      return { latitude, longitude }
+    }
+  }
+
+  // !3d緯度!2d経度 の形式もチェック
+  const embedMatch3d2d = url.match(/!3d([-0-9.]+)!2d([-0-9.]+)/)
+  if (embedMatch3d2d) {
+    const latitude = Number.parseFloat(embedMatch3d2d[1])
+    const longitude = Number.parseFloat(embedMatch3d2d[2])
+    if (!Number.isNaN(latitude) && !Number.isNaN(longitude)) {
+      return { latitude, longitude }
+    }
+  }
+
+  // @緯度,経度 の形式でマッチ（従来の形式）
   const match = url.match(/@([-0-9.]+),([-0-9.]+)/)
   if (match) {
     const latitude = Number.parseFloat(match[1])
@@ -326,6 +347,10 @@ const parseProfileHtml = (
     postal_code?: string
     phone?: string
     birthday?: string
+    coordinates?: {
+      latitude: number
+      longitude: number
+    }
   }
 } | null => {
   const root = parse(html)
@@ -417,6 +442,14 @@ const parseProfileHtml = (
   const birthdayMatch = birthdayText.match(/(\d{4})年(\d{2})月(\d{2})日/)
   const birthday = birthdayMatch ? `${birthdayMatch[1]}-${birthdayMatch[2]}-${birthdayMatch[3]}` : undefined
 
+  // Google Maps埋め込みURLから座標を取得
+  const mapIframe = root.querySelector('.google_map_posi iframe')
+  const mapSrc = mapIframe?.getAttribute('src')
+  let coordinates: { latitude: number; longitude: number } | undefined
+  if (mapSrc) {
+    coordinates = extractCoordinates(mapSrc)
+  }
+
   if (!_cleanName) {
     return null
   }
@@ -432,7 +465,8 @@ const parseProfileHtml = (
     store_fields: {
       postal_code,
       phone,
-      birthday
+      birthday,
+      coordinates
     }
   }
 }
@@ -676,16 +710,17 @@ const main = async () => {
             ...storeData,
             postal_code: profileInfo.store_fields.postal_code,
             phone: profileInfo.store_fields.phone,
-            birthday: profileInfo.store_fields.birthday
+            birthday: profileInfo.store_fields.birthday,
+            coordinates: profileInfo.store_fields.coordinates || storeData.coordinates
           }
         }
       } else {
         // 店舗HTMLがない場合でもstore_fieldsをstoreとして設定
-        const { postal_code, phone, birthday } = profileInfo.store_fields
+        const { postal_code, phone, birthday, coordinates } = profileInfo.store_fields
         // 都道府県を推定（店舗IDを使用）
         const prefecture = extractPrefecture(undefined, undefined, storeInfo.character.name, storeId)
-        if (postal_code || phone || birthday || prefecture !== undefined) {
-          storeInfo.store = { postal_code, phone, birthday, prefecture }
+        if (postal_code || phone || birthday || coordinates || prefecture !== undefined) {
+          storeInfo.store = { postal_code, phone, birthday, coordinates, prefecture }
         }
       }
 
