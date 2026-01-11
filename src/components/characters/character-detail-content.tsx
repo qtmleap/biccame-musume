@@ -66,7 +66,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                   <Button
                     asChild
                     size='sm'
-                    className='rounded-full font-semibold bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100'
+                    className='rounded-full px-4 h-7 text-xs font-semibold bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100'
                   >
                     <a
                       href={`https://twitter.com/intent/follow?screen_name=${character.character.twitter_id}`}

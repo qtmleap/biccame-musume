@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { ArrowLeft, Calendar, ExternalLink, Gift, Package, Pencil, Store } from 'lucide-react'
+import { ArrowLeft, Calendar, Gift, Link2, Package, Pencil, Store } from 'lucide-react'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Badge } from '@/components/ui/badge'
@@ -8,8 +8,9 @@ import { Button } from '@/components/ui/button'
 import { useCharacters } from '@/hooks/useCharacters'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useEvents } from '@/hooks/useEvents'
-import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS_LONG } from '@/locales/app.content'
+import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event, EventCategory } from '@/schemas/event.dto'
+import type { StoreKey } from '@/schemas/store.dto'
 
 /**
  * カテゴリに応じたスタイルを返す
@@ -50,18 +51,9 @@ const EventDetailContent = () => {
   const { eventId } = Route.useParams()
   const navigate = useNavigate()
   const { data: events = [], isLoading } = useEvents()
-  const { data: characters = [] } = useCharacters()
   const { isAuthenticated } = useCloudflareAccess()
 
   const event = events.find((e) => e.id === eventId)
-
-  /**
-   * 店舗名からキャラクターのidを取得
-   */
-  const getCharacterKeyByStoreName = (storeName: string): string | null => {
-    const character = characters.find((c) => c.store?.name === storeName)
-    return character?.id ?? null
-  }
 
   if (isLoading) {
     return <LoadingFallback />
@@ -88,7 +80,7 @@ const EventDetailContent = () => {
   const status = event.status
 
   return (
-    <div className='container mx-auto px-4 py-8 max-w-6xl'>
+    <div className='container mx-auto px-4 md:px-8 py-8 max-w-6xl'>
       {/* 戻るボタン */}
       <Button variant='ghost' onClick={() => navigate({ to: '/events' })} className='mb-4'>
         <ArrowLeft className='size-4 mr-2' />
@@ -143,21 +135,17 @@ const EventDetailContent = () => {
               対象店舗
             </div>
             <div className='ml-6 flex flex-wrap gap-x-2 gap-y-1'>
-              {event.stores.map((storeName, index) => {
-                const characterKey = getCharacterKeyByStoreName(storeName)
+              {event.stores.map((storeKey, index) => {
+                const storeName = STORE_NAME_LABELS[storeKey as StoreKey] || storeKey
                 return (
-                  <span key={storeName}>
-                    {characterKey ? (
-                      <Link
-                        to='/location'
-                        search={{ id: characterKey }}
-                        className='text-[#e50012] hover:text-[#c40010] hover:underline transition-colors'
-                      >
-                        {storeName}
-                      </Link>
-                    ) : (
-                      <span className='text-gray-900'>{storeName}</span>
-                    )}
+                  <span key={storeKey}>
+                    <Link
+                      to='/location'
+                      search={{ id: storeKey }}
+                      className='text-[#e50012] hover:text-[#c40010] hover:underline transition-colors'
+                    >
+                      {storeName}
+                    </Link>
                     {index < (event.stores?.length ?? 0) - 1 && <span className='text-gray-900'>、</span>}
                   </span>
                 )
@@ -196,7 +184,7 @@ const EventDetailContent = () => {
         {event.referenceUrls && event.referenceUrls.length > 0 && (
           <div className='md:col-span-2'>
             <div className='flex items-center gap-2 text-sm font-medium text-gray-700 mb-2'>
-              <ExternalLink className='size-4' />
+              <Link2 className='size-4' />
               参考URL
             </div>
             <div className='ml-6 flex flex-wrap gap-4'>
@@ -209,7 +197,6 @@ const EventDetailContent = () => {
                   className='inline-flex items-center gap-1 text-[#e50012] hover:text-[#c40010] hover:underline transition-colors'
                 >
                   {REFERENCE_URL_TYPE_LABELS_LONG[ref.type]}
-                  <ExternalLink className='size-3' />
                 </a>
               ))}
             </div>
