@@ -83,7 +83,7 @@ const EventDetailContent = () => {
 
   const categoryStyle = getCategoryStyle(event.category)
   const startDate = dayjs(event.startDate)
-  const endDate = event.actualEndDate ? dayjs(event.actualEndDate) : event.endDate ? dayjs(event.endDate) : null
+  const endDate = event.endedAt ? dayjs(event.endedAt) : event.endDate ? dayjs(event.endDate) : null
   // EventSchemaで計算されたstatusを使用
   const status = event.status
 
@@ -130,10 +130,8 @@ const EventDetailContent = () => {
             {startDate.format('YYYY年M月D日')}
             {endDate ? ` 〜 ${endDate.format('YYYY年M月D日')}` : ' 〜 なくなり次第終了'}
           </p>
-          {event.actualEndDate && (
-            <p className='text-sm text-gray-500 ml-6 mt-1'>
-              実際の終了: {dayjs(event.actualEndDate).format('YYYY年M月D日')}
-            </p>
+          {event.endedAt && (
+            <p className='text-sm text-gray-500 ml-6 mt-1'>実際の終了: {dayjs(event.endedAt).format('YYYY年M月D日')}</p>
           )}
         </div>
 

@@ -5,6 +5,7 @@ import votes from './api/vote'
 type Bindings = {
   VOTES: KVNamespace
   BICCAME_MUSUME_EVENTS: KVNamespace
+  DB: D1Database
   CF_ACCESS_TEAM_DOMAIN: string
   CF_ACCESS_AUD: string
 }
