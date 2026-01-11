@@ -6,7 +6,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import appContent from '@/locales/app.content'
 import type { Event, EventStatus } from '@/schemas/event.dto'
+import type { StoreKey } from '@/schemas/store.dto'
 
 /**
  * スクロールバーを非表示にするスタイル（Chrome/Safari用）
@@ -59,7 +61,7 @@ type EventGanttChartProps = {
 export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   // 終了したイベントを表示するかどうか
   const [showEnded, setShowEnded] = useState(false)
-  
+
   // 表示開始月のオフセット（0=今月、-1=先月、1=来月）
   const [monthOffset, setMonthOffset] = useState(0)
 
@@ -270,7 +272,34 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       <div className='relative'>
         {/* ヘッダー: 月表示とフィルタ */}
         <div className='flex items-center justify-between mb-2'>
-          <div className='h-5 px-1 flex items-center text-xs font-medium text-gray-700'>{currentVisibleMonth}</div>
+          <div className='flex items-center gap-2'>
+            <button
+              type='button'
+              onClick={() => setMonthOffset((prev) => prev - 1)}
+              className='px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded transition-colors'
+            >
+              ←
+            </button>
+            <div className='h-5 px-1 flex items-center text-xs font-medium text-gray-700 min-w-[80px] text-center'>
+              {chartStartDate.format('YYYY年M月')}
+            </div>
+            <button
+              type='button'
+              onClick={() => setMonthOffset((prev) => prev + 1)}
+              className='px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded transition-colors'
+            >
+              →
+            </button>
+            {monthOffset !== 0 && (
+              <button
+                type='button'
+                onClick={() => setMonthOffset(0)}
+                className='px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 rounded transition-colors'
+              >
+                今月
+              </button>
+            )}
+          </div>
           <div className='flex items-center gap-2'>
             <Checkbox
               id='show-ended'
@@ -382,7 +411,9 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                             >
                               <span className='text-xs text-white font-medium truncate'>{event.name}</span>
                               {event.stores?.[0] && (
-                                <span className='text-xs text-white/70 shrink-0'>({event.stores[0]})</span>
+                                <span className='text-xs text-white/70 shrink-0'>
+                                  ({appContent.content.store_name[event.stores[0] as StoreKey] || event.stores[0]})
+                                </span>
                               )}
                               <ExternalLink className='size-3 text-white/70 shrink-0' />
                             </div>
@@ -407,7 +438,11 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                         <TooltipContent side='top' className='max-w-xs'>
                           <p className='font-medium'>{event.name}</p>
                           {event.stores && event.stores.length > 0 && (
-                            <p className='text-xs text-gray-500'>{event.stores.join(', ')}</p>
+                            <p className='text-xs text-gray-500'>
+                              {event.stores
+                                .map((key) => appContent.content.store_name[key as StoreKey] || key)
+                                .join(', ')}
+                            </p>
                           )}
                           <p className='text-xs text-gray-500'>
                             {dayjs(event.startDate).format('M/D')}
