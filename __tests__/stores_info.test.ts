@@ -38,7 +38,7 @@ describe('stores_info.json parsing', () => {
     if (result.success) {
       for (const store of result.data) {
         if (store.store?.hours && store.store?.hours.length > 0) {
-          for (const hour of store.store?.hours) {
+          for (const hour of store.store.hours) {
             // typeが指定された値のいずれかであること
             expect(['weekday', 'weekend', 'holiday', 'all']).toContain(hour.type)
             // openTimeとcloseTimeが存在すること
@@ -57,7 +57,7 @@ describe('stores_info.json parsing', () => {
     if (result.success) {
       for (const store of result.data) {
         if (store.store?.access && store.store?.access.length > 0) {
-          for (const accessInfo of store.store?.access) {
+          for (const accessInfo of store.store.access) {
             // stationは必須
             expect(accessInfo.station).toBeDefined()
             expect(typeof accessInfo.station).toBe('string')

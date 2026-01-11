@@ -244,7 +244,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
     console.log('Form data:', data)
     console.log('endDate value:', data.endDate, 'type:', typeof data.endDate)
 
-    const payload: any = {
+    const payload = {
       category: data.category,
       name: data.name,
       startDate: dayjs(data.startDate).toISOString(),

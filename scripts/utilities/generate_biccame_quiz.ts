@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import charactersData from '../../public/characters.json'
 
 type StoreData = {
@@ -177,8 +178,8 @@ const generateBirthdayQuizzes = () => {
     const otherBirthdays = biccameMusume
       .filter((c) => c.key !== char.key && c.character_birthday)
       .map((c) => {
-        const d = new Date(c.character_birthday!)
-        return `${d.getMonth() + 1}月${d.getDate()}日`
+        const d = dayjs(c.character_birthday!)
+        return `${d.month() + 1}月${d.date()}日`
       })
 
     if (otherBirthdays.length >= 3) {
@@ -204,9 +205,9 @@ const generateReverseBirthdayQuizzes = () => {
     if (!char.character_birthday) return
 
     const { character_name, character_birthday } = char
-    const date = new Date(character_birthday)
-    const month = date.getMonth() + 1
-    const day = date.getDate()
+    const date = dayjs(character_birthday)
+    const month = date.month() + 1
+    const day = date.date()
 
     const otherChars = getRandomCharacters(char.key, 3)
     const options = [character_name, ...otherChars.map((c) => c.character_name)]

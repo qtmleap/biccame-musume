@@ -171,8 +171,8 @@ const EventDetailContent = () => {
             配布条件
           </div>
           <ul className='ml-6 space-y-1'>
-            {event.conditions.map((condition, index) => (
-              <li key={index} className='text-gray-900'>
+            {event.conditions.map((condition) => (
+              <li key={condition} className='text-gray-900'>
                 • {getConditionDetail(condition)}
               </li>
             ))}
@@ -187,8 +187,8 @@ const EventDetailContent = () => {
               参考URL
             </div>
             <ul className='ml-6 space-y-1'>
-              {event.referenceUrls.map((ref, index) => (
-                <li key={index}>
+              {event.referenceUrls.map((ref) => (
+                <li key={ref.url}>
                   <a
                     href={ref.url}
                     target='_blank'

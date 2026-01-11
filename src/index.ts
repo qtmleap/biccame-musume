@@ -1,8 +1,8 @@
+import { PrismaD1 } from '@prisma/adapter-d1'
+import { PrismaClient } from '@prisma/client'
 import { Hono } from 'hono'
 import events from './api/event'
 import votes from './api/vote'
-import { PrismaClient } from '@prisma/client'
-import { PrismaD1 } from '@prisma/adapter-d1'
 
 type Bindings = {
   VOTES: KVNamespace

@@ -201,7 +201,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         isInitialMountRef.current = false
       })
     }
-  }, [todayOffset, monthOffset])
+  }, [todayOffset])
 
   // ドラッグ開始
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
