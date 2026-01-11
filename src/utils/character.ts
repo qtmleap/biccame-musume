@@ -109,9 +109,8 @@ export const filterCharactersByRegion = (characters: StoreData[], region: Region
   if (region === 'all') return characters
 
   return characters.filter((character) => {
-    // 住所から都道府県を抽出（暂定的に最初の都道府県名を検出）
-    if (!character.store?.address) return false
-    const prefecture = Object.keys(prefectureToRegion).find((pref) => character.store?.address?.includes(pref))
+    // 都道府県フィールドから地域を判定
+    const prefecture = character.store?.prefecture
     if (!prefecture) return false
     const characterRegion = prefectureToRegion[prefecture]
     return characterRegion === region
