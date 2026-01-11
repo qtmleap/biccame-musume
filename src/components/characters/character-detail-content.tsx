@@ -93,7 +93,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
           {character.character?.twitter_id && (
             <p className='text-gray-500 text-sm'>@{character.character.twitter_id}</p>
           )}
-          <p className='text-gray-800 mt-3 leading-relaxed'>{character.character?.description}</p>
+          <p className='text-sm text-gray-800 mt-3 leading-relaxed'>{character.character?.description}</p>
 
           {/* メタ情報 */}
           <div className='flex flex-wrap gap-4 mt-3 text-sm text-gray-500'>
@@ -177,7 +177,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                   <Store className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
                   <div className='min-w-0 flex-1'>
                     <p className='text-sm text-gray-500'>店舗名</p>
-                    <p className='text-gray-900'>{character.store.name}</p>
+                    <p className='text-sm text-gray-900'>{character.store.name}</p>
                   </div>
                 </div>
               )}
@@ -187,8 +187,10 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                   <MapPin className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
                   <div className='min-w-0 flex-1'>
                     <p className='text-sm text-gray-500'>住所</p>
-                    {character.store.postal_code && <p className='text-gray-900'>〒{character.store.postal_code}</p>}
-                    <p className='text-gray-900'>{character.store.address}</p>
+                    {character.store.postal_code && (
+                      <p className='text-sm text-gray-900'>〒{character.store.postal_code}</p>
+                    )}
+                    <p className='text-sm text-gray-900'>{character.store.address}</p>
                   </div>
                 </div>
               )}
@@ -198,7 +200,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                   <Phone className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
                   <div className='min-w-0 flex-1'>
                     <p className='text-sm text-gray-500'>電話番号</p>
-                    <a href={`tel:${character.store.phone}`} className='text-gray-900 hover:text-pink-600'>
+                    <a href={`tel:${character.store.phone}`} className='text-sm text-gray-900 hover:text-pink-600'>
                       {character.store.phone}
                     </a>
                   </div>
@@ -212,7 +214,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                     <p className='text-sm text-gray-500'>営業時間</p>
                     <div className='space-y-1'>
                       {character.store.hours.map((hour, index) => (
-                        <div key={index} className='text-gray-900'>
+                        <div key={index} className='text-sm text-gray-900'>
                           {hour.type === 'weekday' && '平日: '}
                           {hour.type === 'weekend' && '土日祝: '}
                           {hour.type === 'holiday' && '日曜・祝日: '}
@@ -234,7 +236,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                     <div className='space-y-2'>
                       {character.store.access.map((access, index) => (
                         <div key={index}>
-                          <p className='text-gray-900 font-medium'>{access.station}</p>
+                          <p className='text-sm text-gray-900 font-medium'>{access.station}</p>
                           {access.description && <p className='text-sm text-gray-600'>{access.description}</p>}
                           {access.lines && access.lines.length > 0 && (
                             <p className='text-sm text-gray-500'>{access.lines.join(' / ')}</p>
@@ -251,7 +253,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                   <Calendar className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
                   <div className='min-w-0 flex-1'>
                     <p className='text-sm text-gray-500'>店舗開店日</p>
-                    <p className='text-gray-900'>{formatDate(character.store.birthday)}</p>
+                    <p className='text-sm text-gray-900'>{formatDate(character.store.birthday)}</p>
                   </div>
                 </div>
               )}
