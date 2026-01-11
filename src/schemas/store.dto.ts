@@ -18,6 +18,8 @@ export type Hours = z.infer<typeof HoursSchema>
 export const AccessInfoSchema = z.object({
   station: z.string().nonempty(),
   description: z.string(),
+  duration: z.string().nonempty().optional(),
+  notes: z.string().nonempty().optional(),
   lines: z.array(z.string())
 })
 
@@ -40,6 +42,7 @@ export const StoreDetailsSchema = z.object({
   store_id: z.number().int().positive().optional(),
   name: z.string().nonempty().optional(),
   address: z.string().nonempty().optional(),
+  prefecture: z.string().nonempty().optional().nullable(),
   postal_code: z.string().nonempty().optional(),
   phone: z.string().nonempty().optional(),
   birthday: z.string().nonempty().optional(),
