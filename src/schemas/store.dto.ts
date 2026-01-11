@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { prefectureToRegion } from '@/atoms/filterAtom'
 
 /**
  * 地域の型定義
@@ -104,14 +105,19 @@ export type Character = z.infer<typeof CharacterSchema>
 /**
  * キャラクターと店舗情報を含むデータの型定義
  */
-export const StoreDataSchema = z.object({
-  id: z.string().nonempty(),
-  character: CharacterSchema,
-  prefecture: z.string().nonempty(),
-  coordinates: CoordinatesSchema.optional(),
-  postal_code: z.string().nonempty().optional(),
-  store: StoreDetailsSchema.optional()
-})
+export const StoreDataSchema = z
+  .object({
+    id: z.string().nonempty(),
+    character: CharacterSchema,
+    prefecture: z.string().nonempty().nullable(),
+    coordinates: CoordinatesSchema.optional().nullable(),
+    postal_code: z.string().nonempty().optional().nullable(),
+    store: StoreDetailsSchema.optional()
+  })
+  .transform((v) => ({
+    ...v,
+    region: v.prefecture ? prefectureToRegion[v.prefecture] : undefined
+  }))
 
 export type StoreData = z.infer<typeof StoreDataSchema>
 
