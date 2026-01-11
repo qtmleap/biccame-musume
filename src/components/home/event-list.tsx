@@ -5,7 +5,9 @@ import { Calendar, CreditCard, Gift, KeyRound, Package, Store } from 'lucide-rea
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { useEvents } from '@/hooks/useEvents'
+import { STORE_NAME_LABELS } from '@/locales/app.content'
 import type { EventCategory, EventStatus } from '@/schemas/event.dto'
+import type { StoreKey } from '@/schemas/store.dto'
 
 /**
  * カテゴリに応じたアイコンとスタイルを返す
@@ -138,7 +140,9 @@ export const EventList = () => {
                         {event.stores && event.stores.length > 0 && (
                           <span className='flex items-center gap-1'>
                             <Store className='size-3' />
-                            {event.stores.length === 1 ? event.stores[0] : `${event.stores.length}店舗`}
+                            {event.stores.length === 1
+                              ? STORE_NAME_LABELS[event.stores[0] as StoreKey] || event.stores[0]
+                              : `${event.stores.length}店舗`}
                           </span>
                         )}
                         {event.limitedQuantity && !event.conditions.some((c) => c.type === 'everyone') && (
