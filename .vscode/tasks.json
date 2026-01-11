@@ -26,6 +26,27 @@
         "reveal": "always",
         "panel": "new"
       }
+    },
+    {
+      "label": "Reset D1 Database",
+      "type": "shell",
+      "command": "${workspaceFolder}/.vscode/scripts/reset.sh",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Sync KV from Production",
+      "type": "shell",
+      "command": "bun",
+      "args": ["${workspaceFolder}/.vscode/scripts/sync_kv_from_prod.ts"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
     }
   ]
 }

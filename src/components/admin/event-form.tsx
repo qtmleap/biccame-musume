@@ -31,7 +31,7 @@ const EventFormSchema = z.object({
   limitedQuantity: z.number().min(1).optional(),
   startDate: z.string().min(1, '開始日は必須です'),
   endDate: z.string().nullable().optional(),
-  actualEndDate: z.string().nullable().optional(),
+  endedAt: z.string().nullable().optional(),
   conditions: z
     .array(
       z.object({
@@ -80,7 +80,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
           limitedQuantity: event.limitedQuantity,
           startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
           endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : null,
-          actualEndDate: event.actualEndDate ? dayjs(event.actualEndDate).format('YYYY-MM-DD') : null,
+          endedAt: event.endedAt ? dayjs(event.endedAt).format('YYYY-MM-DD') : null,
           conditions: event.conditions
         }
       : {
@@ -91,7 +91,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
           limitedQuantity: undefined,
           startDate: '',
           endDate: null,
-          actualEndDate: null,
+          endedAt: null,
           conditions: []
         }
   })
@@ -151,7 +151,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
         limitedQuantity: event.limitedQuantity,
         startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
         endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : null,
-        actualEndDate: event.actualEndDate ? dayjs(event.actualEndDate).format('YYYY-MM-DD') : null,
+        endedAt: event.endedAt ? dayjs(event.endedAt).format('YYYY-MM-DD') : null,
         conditions: event.conditions
       })
     }
@@ -232,7 +232,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
       limitedQuantity: undefined,
       startDate: '',
       endDate: null,
-      actualEndDate: null,
+      endedAt: null,
       conditions: []
     })
   }
@@ -257,8 +257,8 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
     }
 
     // 実際の終了日が空文字やundefined、nullでない場合のみ設定
-    if (data.actualEndDate && data.actualEndDate.trim() !== '') {
-      payload.actualEndDate = dayjs(data.actualEndDate).toISOString()
+    if (data.endedAt && data.endedAt.trim() !== '') {
+      payload.endedAt = dayjs(data.endedAt).toISOString()
     }
 
     console.log('Payload:', payload)
@@ -349,13 +349,13 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
             実際の終了日（配布終了時に設定）
           </label>
           <div className='flex gap-2'>
-            <Input id='actual-end-date' type='date' {...register('actualEndDate')} className='flex-1' />
+            <Input id='actual-end-date' type='date' {...register('endedAt')} className='flex-1' />
             <Button
               type='button'
               variant='outline'
               size='icon'
               onClick={() => {
-                setValue('actualEndDate', undefined, { shouldDirty: true, shouldValidate: true })
+                setValue('endedAt', undefined, { shouldDirty: true, shouldValidate: true })
                 const actualEndDateInput = document.getElementById('actual-end-date') as HTMLInputElement
                 if (actualEndDateInput) {
                   actualEndDateInput.value = ''

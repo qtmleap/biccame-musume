@@ -4,12 +4,7 @@ import dayjs from 'dayjs'
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
-import {
-  type Event,
-  EventRequestSchema,
-  EventSchema,
-  type ReferenceUrl
-} from '../schemas/event.dto'
+import { type Event, EventRequestSchema, EventSchema, type ReferenceUrl } from '../schemas/event.dto'
 
 type Bindings = {
   BICCAME_MUSUME_EVENTS: KVNamespace
@@ -282,9 +277,9 @@ routes.openapi(updateEventRoute, async (c) => {
     delete updatedEvent.endDate
   }
 
-  // bodyにactualEndDateが含まれていない場合は削除
-  if (!('actualEndDate' in body)) {
-    delete updatedEvent.actualEndDate
+  // bodyにendedAtが含まれていない場合は削除
+  if (!('endedAt' in body)) {
+    delete updatedEvent.endedAt
   }
 
   // isEndedが古いデータに残っている場合は削除（statusはtransformで計算される）

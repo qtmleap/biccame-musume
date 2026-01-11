@@ -61,7 +61,7 @@ const StatusBadge = ({ campaign }: { campaign: Event }) => {
   const currentTime = dayjs()
   const endDate = campaign.endDate ? dayjs(campaign.endDate) : null
   const status = (() => {
-    if (campaign.actualEndDate != null) return 'ended'
+    if (campaign.endedAt != null) return 'ended'
     if (endDate && currentTime.isAfter(endDate)) return 'ended'
     if (currentTime.isBefore(dayjs(campaign.startDate))) return 'upcoming'
     return 'ongoing'
