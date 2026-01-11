@@ -3,12 +3,11 @@ import type dayjs from 'dayjs'
 import { Cake, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { getCharacterImageUrl } from '@/lib/utils'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
 
 type UpcomingEvent = {
-  character: Character
+  character: StoreData
   type: 'character' | 'store'
   date: dayjs.Dayjs
   daysUntil: number
@@ -44,7 +43,7 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
-      <Link to='/characters/$id' params={{ id: event.character.key }}>
+      <Link to='/characters/$id' params={{ id: event.character.id }}>
         <div className='flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer'>
           <div
             className={`p-2 rounded-lg ${event.type === 'character' ? 'bg-pink-100 text-pink-600' : 'bg-blue-100 text-blue-600'}`}
@@ -52,20 +51,20 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
             {event.type === 'character' ? <Cake className='h-4 w-4' /> : <Store className='h-4 w-4' />}
           </div>
 
-          {getCharacterImageUrl(event.character) && (
+          {event.character.character?.image_url && (
             <Avatar className='w-8 h-8 overflow-hidden'>
               <AvatarImage
-                src={getCharacterImageUrl(event.character)}
-                alt={event.character.character_name}
+                src={event.character.character.image_url}
+                alt={event.character.character?.name || ''}
                 className='object-cover object-top scale-150 translate-y-2'
               />
-              <AvatarFallback>{event.character.character_name.charAt(0)}</AvatarFallback>
+              <AvatarFallback>{event.character.character?.name?.charAt(0) || '?'}</AvatarFallback>
             </Avatar>
           )}
 
           <div className='flex-1 min-w-0'>
             <p className='text-sm font-medium text-gray-800 truncate'>
-              {getDisplayName(event.character.character_name)}
+              {getDisplayName(event.character.character?.name || '')}
               <span className='text-gray-400 font-normal ml-1'>の誕生日</span>
             </p>
             <p className='text-xs text-gray-500'>{event.date.format('M月D日')}</p>

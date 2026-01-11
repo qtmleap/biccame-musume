@@ -7,6 +7,7 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import jaconv from 'jaconv'
+import { mapKeys, snakeCase } from 'lodash-es'
 import { parse } from 'node-html-parser'
 import { parse as parseYaml, stringify } from 'yaml'
 
@@ -20,34 +21,36 @@ const CHARACTER_FIELDS_FILE = join(import.meta.dir, '../archive/character_fields
  */
 type StoreInfo = {
   id: string
-  storeId?: number
-  name?: string
-  address?: string
-  postalCode?: string
-  phone?: string
-  birthday?: string
-  openAllYear?: boolean
-  hours?: Array<{
-    type: 'weekday' | 'weekend' | 'holiday' | 'all'
-    openTime: string
-    closeTime: string
-    note?: string
-  }>
-  access?: AccessInfo[]
-  parking?: ParkingInfo[]
-  googleMapsUrl?: string
-  coordinates?: {
-    latitude: number
-    longitude: number
-  }
-  character?: {
+  character: {
     name: string
     aliases?: string[]
     description: string
-    twitterId: string
+    twitter_id: string
     images: string[]
     birthday?: string
     is_biccame_musume?: boolean
+  }
+  store?: {
+    store_id?: number
+    name?: string
+    address?: string
+    postal_code?: string
+    phone?: string
+    birthday?: string
+    open_all_year?: boolean
+    hours?: Array<{
+      type: 'weekday' | 'weekend' | 'holiday' | 'all'
+      open_time: string
+      close_time: string
+      note?: string
+    }>
+    access?: AccessInfo[]
+    parking?: ParkingInfo[]
+    google_maps_url?: string
+    coordinates?: {
+      latitude: number
+      longitude: number
+    }
   }
 }
 
@@ -79,19 +82,19 @@ type ParkingCondition = {
 const parseHours = (
   hoursText: string
 ): {
-  openAllYear: boolean
+  open_all_year: boolean
   hours: Array<{
     type: 'weekday' | 'weekend' | 'holiday' | 'all'
-    openTime: string
-    closeTime: string
+    open_time: string
+    close_time: string
     note?: string
   }>
 } => {
-  const openAllYear = hoursText.includes('年中無休')
+  const open_all_year = hoursText.includes('年中無休')
   const hours: Array<{
     type: 'weekday' | 'weekend' | 'holiday' | 'all'
-    openTime: string
-    closeTime: string
+    open_time: string
+    close_time: string
     note?: string
   }> = []
 
@@ -104,14 +107,14 @@ const parseHours = (
     // 平日
     hours.push({
       type: 'weekday',
-      openTime: weekdayWeekendMatch[1],
-      closeTime: weekdayWeekendMatch[2]
+      open_time: weekdayWeekendMatch[1],
+      close_time: weekdayWeekendMatch[2]
     })
     // 土日祝
     hours.push({
       type: 'weekend',
-      openTime: weekdayWeekendMatch[3],
-      closeTime: weekdayWeekendMatch[4]
+      open_time: weekdayWeekendMatch[3],
+      close_time: weekdayWeekendMatch[4]
     })
   } else {
     // 平日・土曜と日曜・祝日で分かれているパターン（例: 「平日・土曜 10:00～20:30　日曜・祝日 10:00～20:00」）
@@ -123,14 +126,14 @@ const parseHours = (
       // 平日・土曜
       hours.push({
         type: 'weekday',
-        openTime: weekdaySatSunMatch[1],
-        closeTime: weekdaySatSunMatch[2]
+        open_time: weekdaySatSunMatch[1],
+        close_time: weekdaySatSunMatch[2]
       })
       // 日曜・祝日
       hours.push({
         type: 'holiday',
-        openTime: weekdaySatSunMatch[3],
-        closeTime: weekdaySatSunMatch[4]
+        open_time: weekdaySatSunMatch[3],
+        close_time: weekdaySatSunMatch[4]
       })
     } else {
       // 通常の営業時間（全曜日共通）
@@ -139,15 +142,15 @@ const parseHours = (
         const note = hoursText.includes('（') ? hoursText.match(/（[^）]+）/)?.[0] : undefined
         hours.push({
           type: 'all',
-          openTime: timeMatch[1],
-          closeTime: timeMatch[2],
+          open_time: timeMatch[1],
+          close_time: timeMatch[2],
           note
         })
       }
     }
   }
 
-  return { openAllYear, hours }
+  return { open_all_year, hours }
 }
 
 /**
@@ -193,15 +196,17 @@ const extractCoordinates = (url: string): { latitude: number; longitude: number 
 const parseProfileHtml = (
   html: string
 ): {
-  postalCode?: string
-  phone?: string
-  birthday?: string
-  character?: {
+  character: {
     name: string
     aliases?: string[]
     description: string
-    twitterId: string
+    twitter_id: string
     images: string[]
+  }
+  store_fields: {
+    postal_code?: string
+    phone?: string
+    birthday?: string
   }
 } | null => {
   const root = parse(html)
@@ -239,8 +244,8 @@ const parseProfileHtml = (
 
   // Twitter IDを取得
   const twitterLink = root.querySelector('.tw_bt')?.getAttribute('href') || ''
-  const twitterIdMatch = twitterLink.match(/twitter\.com\/([^/?]+)/)
-  const twitterId = twitterIdMatch ? twitterIdMatch[1] : ''
+  const twitter_id_match = twitterLink.match(/twitter\.com\/([^/?]+)/)
+  const twitter_id = twitter_id_match ? twitter_id_match[1] : ''
 
   // 画像URLを取得
   const images: string[] = []
@@ -249,10 +254,22 @@ const parseProfileHtml = (
   if (img1) images.push(img1)
   if (img2) images.push(img2)
 
-  // 追加の画像を取得
+  // 追加の画像を取得（shop_info_frame_left）
   const shopInfoLeft = root.querySelector('.shop_info_frame_left')
   if (shopInfoLeft) {
     const additionalImages = shopInfoLeft.querySelectorAll('img')
+    for (const img of additionalImages) {
+      const src = img.getAttribute('src')
+      if (src?.includes('/profile/images/')) {
+        images.push(src)
+      }
+    }
+  }
+
+  // 追加の画像を取得（pro_detail_frame2）
+  const proDetailFrame2 = root.querySelector('.pro_detail_frame2')
+  if (proDetailFrame2) {
+    const additionalImages = proDetailFrame2.querySelectorAll('img')
     for (const img of additionalImages) {
       const src = img.getAttribute('src')
       if (src?.includes('/profile/images/')) {
@@ -266,8 +283,8 @@ const parseProfileHtml = (
 
   // 郵便番号を取得
   const addressText = root.querySelector('.shop_info')?.text || ''
-  const postalCodeMatch = addressText.match(/〒(\d{3}-\d{4})/)
-  const postalCode = postalCodeMatch ? postalCodeMatch[1] : undefined
+  const postal_code_match = addressText.match(/〒(\d{3}-\d{4})/)
+  const postal_code = postal_code_match ? postal_code_match[1] : undefined
 
   // 電話番号を取得
   const phoneElement = root.querySelectorAll('.shop_info')[1]
@@ -281,26 +298,51 @@ const parseProfileHtml = (
   const birthdayMatch = birthdayText.match(/(\d{4})年(\d{2})月(\d{2})日/)
   const birthday = birthdayMatch ? `${birthdayMatch[1]}-${birthdayMatch[2]}-${birthdayMatch[3]}` : undefined
 
+  if (!_cleanName) {
+    return null
+  }
+
   return {
-    postalCode,
-    phone,
-    birthday,
-    character: _cleanName
-      ? {
-          name: _cleanName,
-          aliases: _aliases.length > 0 ? _aliases : undefined,
-          description,
-          twitterId,
-          images: shortImages
-        }
-      : undefined
+    character: {
+      name: _cleanName,
+      aliases: _aliases.length > 0 ? _aliases : undefined,
+      description,
+      twitter_id,
+      images: shortImages
+    },
+    store_fields: {
+      postal_code,
+      phone,
+      birthday
+    }
   }
 }
 
 /**
  * HTMLから店舗情報を抽出
  */
-const parseStoreHtml = async (html: string, storeId: string): Promise<StoreInfo | null> => {
+const parseStoreHtml = async (
+  html: string,
+  storeId: string
+): Promise<{
+  store_id?: number
+  name?: string
+  address?: string
+  open_all_year?: boolean
+  hours?: Array<{
+    type: 'weekday' | 'weekend' | 'holiday' | 'all'
+    open_time: string
+    close_time: string
+    note?: string
+  }>
+  access?: AccessInfo[]
+  parking?: ParkingInfo[]
+  google_maps_url?: string
+  coordinates?: {
+    latitude: number
+    longitude: number
+  }
+} | null> => {
   const root = parse(html)
 
   // 店舗名を取得
@@ -312,8 +354,8 @@ const parseStoreHtml = async (html: string, storeId: string): Promise<StoreInfo 
   const name = nameElement.text.trim()
 
   // 店舗IDを取得（shop-XXX形式）
-  const shopIdMatch = html.match(/shop-(\d+)/)
-  const shopId = shopIdMatch ? Number.parseInt(shopIdMatch[1], 10) : undefined
+  const shop_id_match = html.match(/shop-(\d+)/)
+  const shop_id = shop_id_match ? Number.parseInt(shop_id_match[1], 10) : undefined
 
   // 住所を取得
   const addressElement = root.querySelector('#shop_access .bcs_i_maintext')
@@ -322,11 +364,11 @@ const parseStoreHtml = async (html: string, storeId: string): Promise<StoreInfo 
   // 営業時間を取得
   const hoursElement = root.querySelector('#bcs_shop_hours .info_pickup_text p:nth-child(2)')
   const hoursText = hoursElement?.text.trim() || ''
-  const parsedHours = parseHours(hoursText)
+  const parsed_hours = parseHours(hoursText)
 
   // Google Maps URLを取得
   const mapLinkElement = root.querySelector('#shop_access .maplink a')
-  const googleMapsUrl = mapLinkElement?.getAttribute('href') || undefined
+  const google_maps_url = mapLinkElement?.getAttribute('href') || undefined
 
   // アクセス情報を取得
   const access: AccessInfo[] = []
@@ -395,24 +437,23 @@ const parseStoreHtml = async (html: string, storeId: string): Promise<StoreInfo 
   }
 
   // Google Maps URLを展開して座標を抽出
-  let expandedUrl = googleMapsUrl
+  let expanded_url = google_maps_url
   let coordinates: { latitude: number; longitude: number } | undefined
 
-  if (googleMapsUrl) {
-    expandedUrl = await expandShortenedUrl(googleMapsUrl)
-    coordinates = extractCoordinates(expandedUrl)
+  if (google_maps_url) {
+    expanded_url = await expandShortenedUrl(google_maps_url)
+    coordinates = extractCoordinates(expanded_url)
   }
 
   return {
-    id: storeId,
-    storeId: shopId,
+    store_id: shop_id,
     name,
     address,
-    openAllYear: parsedHours.openAllYear,
-    hours: parsedHours.hours,
+    open_all_year: parsed_hours.open_all_year,
+    hours: parsed_hours.hours,
     access,
     parking,
-    googleMapsUrl: expandedUrl,
+    google_maps_url: expanded_url,
     coordinates
   }
 }
@@ -446,7 +487,7 @@ const main = async () => {
       const profileHtml = readFileSync(profilePath, 'utf-8')
       const profileInfo = parseProfileHtml(profileHtml)
 
-      if (!profileInfo?.character) {
+      if (!profileInfo) {
         console.warn(`  ⚠️ Character info not found for ${storeId}`)
         continue
       }
@@ -454,9 +495,6 @@ const main = async () => {
       // 基本情報を作成
       const storeInfo: StoreInfo = {
         id: storeId,
-        postalCode: profileInfo.postalCode,
-        phone: profileInfo.phone,
-        birthday: profileInfo.birthday,
         character: profileInfo.character
       }
 
@@ -467,20 +505,23 @@ const main = async () => {
         const storeData = await parseStoreHtml(storeHtml, storeId)
 
         if (storeData) {
-          storeInfo.storeId = storeData.storeId
-          storeInfo.name = storeData.name
-          storeInfo.address = storeData.address
-          storeInfo.openAllYear = storeData.openAllYear
-          storeInfo.hours = storeData.hours
-          storeInfo.access = storeData.access
-          storeInfo.parking = storeData.parking
-          storeInfo.googleMapsUrl = storeData.googleMapsUrl
-          storeInfo.coordinates = storeData.coordinates
+          storeInfo.store = {
+            ...storeData,
+            postal_code: profileInfo.store_fields.postal_code,
+            phone: profileInfo.store_fields.phone,
+            birthday: profileInfo.store_fields.birthday
+          }
+        }
+      } else {
+        // 店舗HTMLがない場合でもstore_fieldsをstoreとして設定
+        const { postal_code, phone, birthday } = profileInfo.store_fields
+        if (postal_code || phone || birthday) {
+          storeInfo.store = { postal_code, phone, birthday }
         }
       }
 
       stores.push(storeInfo)
-      const displayName = storeInfo.name || storeInfo.character.name
+      const displayName = storeInfo.store?.name || storeInfo.character.name
       console.log(`  ✓ ${displayName}`)
     }
 
@@ -518,28 +559,27 @@ const main = async () => {
     const yaml = stringify(stores, { lineWidth: 0 })
     writeFileSync(OUTPUT_FILE, yaml, 'utf-8')
 
-    // キャメルケース変換関数
-    const toCamelCase = (obj: unknown): unknown => {
+    // スネークケース変換関数
+    const toSnakeCase = (obj: unknown): unknown => {
       if (Array.isArray(obj)) {
-        return obj.map(toCamelCase)
+        return obj.map(toSnakeCase)
       }
       if (obj !== null && typeof obj === 'object') {
-        return Object.entries(obj).reduce(
-          (acc, [key, value]) => {
-            const camelKey = key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase())
-            acc[camelKey] = toCamelCase(value)
-            return acc
-          },
-          {} as Record<string, unknown>
-        )
+        return mapKeys(obj, (_value, key) => snakeCase(key))
       }
       return obj
     }
 
-    // JSONファイルに保存（googleMapsUrlとparkingを除外、キャメルケースに変換）
+    // JSONファイルに保存（google_maps_urlとparkingを除外、スネークケースに変換）
     const storesForJson = stores.map((store) => {
-      const { googleMapsUrl, parking, ...rest } = store
-      return toCamelCase(rest)
+      if (store.store) {
+        const { google_maps_url, parking, ...restStore } = store.store
+        return toSnakeCase({
+          ...store,
+          store: restStore
+        })
+      }
+      return toSnakeCase(store)
     })
     const json = JSON.stringify(storesForJson, null, 2)
     writeFileSync(OUTPUT_JSON_FILE, json, 'utf-8')

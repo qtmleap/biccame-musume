@@ -5,7 +5,6 @@ import { z } from 'zod'
 import { StoreList } from '@/components/location/store-list'
 import { SelectedStoreInfo } from '@/components/selected-store-info'
 import { useCharacters } from '@/hooks/useCharacters'
-import type { Character } from '@/schemas/character.dto'
 
 /**
  * 検索パラメータのスキーマ
@@ -17,12 +16,12 @@ const SearchParamsSchema = z.object({
 /**
  * キャラクターから座標を取得する関数
  */
-const getPosition = (character: Character): google.maps.LatLngLiteral => {
-  if (character.latitude !== undefined && character.longitude !== undefined) {
-    return { lat: character.latitude, lng: character.longitude }
+const getPosition = (character: Store): google.maps.LatLngLiteral => {
+  if (character.coordinates) {
+    return { lat: character.coordinates.latitude, lng: character.coordinates.longitude }
   }
 
-  console.warn(`No coordinates for ${character.character_name}, using default`)
+  console.warn(`No coordinates for ${character.character?.name}, using default`)
   return { lat: 35.6812, lng: 139.7671 }
 }
 
@@ -32,9 +31,9 @@ const getPosition = (character: Character): google.maps.LatLngLiteral => {
 const RouteComponent = () => {
   const { id: initialCharacterId } = Route.useSearch()
   const { data: characters } = useCharacters()
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(() => {
+  const [selectedCharacter, setSelectedCharacter] = useState<Store | null>(() => {
     if (initialCharacterId) {
-      const targetCharacter = characters.find((c) => c.key === initialCharacterId)
+      const targetCharacter = characters.find((c) => c.id === initialCharacterId)
       return targetCharacter || null
     }
     return null
@@ -45,11 +44,11 @@ const RouteComponent = () => {
 
   const charactersWithAddress = characters.filter((char) => char.address && char.address.length > 0)
 
-  const handleMarkerClick = (character: Character) => {
+  const handleMarkerClick = (character: Store) => {
     setSelectedCharacter(character)
   }
 
-  const handleCharacterSelect = (character: Character) => {
+  const handleCharacterSelect = (character: Store) => {
     setSelectedCharacter(character)
     setMapKey((prev) => prev + 1)
     setIsStoreListOpen(false)
@@ -84,7 +83,7 @@ const RouteComponent = () => {
           {charactersWithAddress.map((character) => {
             const position = getPosition(character)
             return (
-              <AdvancedMarker key={character.key} position={position} onClick={() => handleMarkerClick(character)}>
+              <AdvancedMarker key={character.id} position={position} onClick={() => handleMarkerClick(character)}>
                 <Pin background='#e50012' borderColor='#fff' glyphColor='#fff' />
               </AdvancedMarker>
             )

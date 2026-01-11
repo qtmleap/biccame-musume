@@ -13,7 +13,7 @@ const CharacterDetailPage = ({ id }: { id: string }) => {
   const { data: characters } = useCharacters()
 
   const character = useMemo(() => {
-    return characters.find((c) => c.key === id)
+    return characters.find((c) => c.id === id)
   }, [characters, id])
 
   if (!character) {
