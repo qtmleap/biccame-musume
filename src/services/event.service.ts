@@ -227,6 +227,20 @@ const transformEventFromDb = (event: {
     storeKey: string
   }>
 }) => {
+  const now = dayjs()
+  const startDate = dayjs(event.startDate)
+  const endDate = event.endedAt ? dayjs(event.endedAt) : event.endDate ? dayjs(event.endDate) : null
+
+  // statusを計算
+  let status: 'upcoming' | 'ongoing' | 'ended'
+  if (event.endedAt || (endDate && now.isAfter(endDate))) {
+    status = 'ended'
+  } else if (now.isBefore(startDate)) {
+    status = 'upcoming'
+  } else {
+    status = 'ongoing'
+  }
+
   return {
     id: event.id,
     category: event.category,
@@ -237,6 +251,7 @@ const transformEventFromDb = (event: {
     endedAt: event.endedAt ? dayjs(event.endedAt).toISOString() : undefined,
     createdAt: dayjs(event.createdAt).toISOString(),
     updatedAt: dayjs(event.updatedAt).toISOString(),
+    status,
     conditions: event.conditions.map((c) => ({
       type: c.type,
       purchaseAmount: c.purchaseAmount ?? undefined,
