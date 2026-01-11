@@ -101,3 +101,4 @@ export const EVENT_CONDITION_LABELS = appContent.content.condition as Record<Eve
 export const REFERENCE_URL_TYPE_LABELS = appContent.content.ref as Record<ReferenceUrlType, string>
 export const REFERENCE_URL_TYPE_LABELS_LONG = appContent.content.refLong as Record<ReferenceUrlType, string>
 export const REGION_LABELS = appContent.content.region as Record<Region, string>
+export const STORE_NAME_LABELS = appContent.content.store_name

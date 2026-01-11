@@ -22,7 +22,7 @@ const stickers = [
 export const LineStickerList = () => {
   return (
     <section className='bg-linear-to-br from-green-50 to-emerald-50'>
-      <div className='container mx-auto px-4'>
+      <div className='container mx-auto px-4 py-4'>
         <div className='max-w-2xl mx-auto'>
           <div className='flex items-center gap-2 mb-4'>
             <Sticker className='h-5 w-5 text-[#00B900]' />
