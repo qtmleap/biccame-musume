@@ -1,11 +1,11 @@
-import { type RateLimitBinding, type RateLimitKeyFunc, rateLimit } from '@elithrar/workers-hono-rate-limit'
+import { rateLimit } from '@elithrar/workers-hono-rate-limit'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
-import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
 import * as eventService from '@/services/event.service'
 import type { Bindings } from '@/types/bindings'
+import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
 
 const getKey: RateLimitKeyFunc = (c: Context): string => {
   return c.req.header('Authorization') || c.req.header('CF-Connecting-IP') || ''
@@ -170,7 +170,7 @@ routes.openapi(getEventRoute, async (c) => {
   const event = await eventService.getEventById(c.env.PRISMA, id)
 
   if (!event) {
-    return c.json({ error: 'Event not found' }, 404) as any
+    return c.json({ error: 'Event not found' }, 404)
   }
 
   return c.json(event, 200)

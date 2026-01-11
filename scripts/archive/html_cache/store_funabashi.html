@@ -51,7 +51,7 @@ var __resourcepath__ = "/bc/resources4";
 <!-- Start Google Tag Manager -->
        <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TXP4QL>"
            height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-       <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+       <script>((w,d,s,l,i)=> {w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
            var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
            j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
            })(window,document,'script','dataLayer','GTM-TXP4QL');</script>
@@ -128,7 +128,7 @@ var __resourcepath__ = "/bc/resources4";
  <script type="text/javascript" charset="UTF-8" src="/bc/c/js/lightbox_plus.js"></script> 
  <script type="text/javascript" src="/bc/c/js/view_timer.js"></script> 
  <script>
-$(function() {
+$(() => {
 $(".bcs_colorbox").colorbox({maxWidth:'100%',maxHeight:'100%',speed:'200'});
 });
 </script> 
@@ -528,7 +528,7 @@ $(".bcs_colorbox").colorbox({maxWidth:'100%',maxHeight:'100%',speed:'200'});
      <!-- 1都3県店舗共用 --> 
      <!-- 20220201Suicaキャンペーン、アウトレットは対象外なので池袋アウトレットでは表示しない --> 
      <script>
-　$(function(){
+　$(()=> {
 　　if(document.URL.match("shop002.jsp")) {
 　　　$("#suica20220201").remove();
 　　}else{

@@ -142,7 +142,10 @@ const insertEventsToLocalD1 = async (databaseName: string, eventsWithDetails: an
       // 対象店舗
       if (stores.length > 0) {
         const storeValues = stores
-          .map((store: any) => `('${store.id}', '${event.id}', '${store.store_key}', '${store.created_at}', '${store.updated_at}')`)
+          .map(
+            (store: any) =>
+              `('${store.id}', '${event.id}', '${store.store_key}', '${store.created_at}', '${store.updated_at}')`
+          )
           .join(', ')
 
         const storeSql = `INSERT INTO event_stores (id, event_id, store_key, created_at, updated_at) VALUES ${storeValues};`

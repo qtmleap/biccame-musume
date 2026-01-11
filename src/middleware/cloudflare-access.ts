@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 
@@ -91,7 +92,7 @@ export const verifyAccessJwt = async (
   const { payload } = decodeJwt(token)
 
   // 有効期限チェック
-  const currentTime = Math.floor(Date.now() / 1000)
+  const currentTime = dayjs().unix()
   if (payload.exp < currentTime) {
     throw new Error('Token has expired')
   }
