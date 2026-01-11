@@ -109,7 +109,7 @@ const RouteComponent = () => {
         </GoogleMap>
 
         {selectedCharacter && (
-          <div className='absolute top-4 right-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-3 max-w-md z-10'>
+          <div className='absolute top-4 left-4 right-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-3 max-w-md z-10'>
             <SelectedStoreInfo character={selectedCharacter} />
           </div>
         )}
