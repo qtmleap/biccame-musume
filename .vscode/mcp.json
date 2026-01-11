@@ -1,0 +1,15 @@
+{
+  "servers": {
+    "Prisma-Local": {
+      "command": "bunx",
+      "args": ["-y", "prisma", "mcp"]
+    },
+    "Prisma-Remote": {
+      "url": "https://mcp.prisma.io/mcp"
+    },
+    "Context7": {
+      "command": "bunx",
+      "args": ["-y", "c7-mcp-server"]
+    }
+  }
+}

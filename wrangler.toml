@@ -29,6 +29,12 @@ id = "04dd77043cc240b2b8bbbd7f0adfd67d"
 binding = "BICCAME_MUSUME_EVENTS"
 id = "ef49185c58d04a0790e7c68394d78089"
 
+[[env.prod.d1_databases]]
+binding = "DB"
+database_name = "biccame-musume"
+database_id = "468c64d3-2a18-4fcf-b700-8c1d24b2baba"
+migrations_dir = "prisma/migrations"
+
 [env.prod.vars]
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
@@ -45,6 +51,12 @@ id = "97c756ffdc3e4e2596946a57092d9b2d"
 [[env.dev.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
 id = "6f3b7b710eb646a0aef7ab524609bb67"
+
+[[env.dev.d1_databases]]
+binding = "DB"
+database_name = "biccame-musume"
+database_id = "468c64d3-2a18-4fcf-b700-8c1d24b2baba"
+migrations_dir = "prisma/migrations"
 
 [env.dev.vars]
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"

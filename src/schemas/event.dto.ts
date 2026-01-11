@@ -71,7 +71,7 @@ export const EventRequestSchema = z.object({
   // 終了予定日時（任意）
   endDate: z.iso.datetime().optional(),
   // 実際の終了日時（任意、配布が終了した実際の日時）
-  actualEndDate: z.iso.datetime().optional(),
+  endedAt: z.iso.datetime().optional(),
   // 配布条件
   conditions: z.array(EventConditionSchema).nonempty('最低1つの条件を設定してください')
 })
@@ -92,7 +92,7 @@ export const EventSchema = EventRequestSchema.extend({
   const status: EventStatus = (() => {
     if (currentTime.isBefore(startDate)) return EventStatusSchema.enum.upcoming
     // 実際の終了日時が設定されていたら終了済み
-    if (v.actualEndDate !== undefined) return EventStatusSchema.enum.ended
+    if (v.endedAt !== undefined) return EventStatusSchema.enum.ended
     if (v.endDate !== undefined)
       return currentTime.isAfter(v.endDate) ? EventStatusSchema.enum.ended : EventStatusSchema.enum.ongoing
     return EventStatusSchema.enum.ongoing
