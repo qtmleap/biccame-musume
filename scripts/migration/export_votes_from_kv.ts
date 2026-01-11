@@ -65,6 +65,7 @@ const parseVoteKey = (key: string): { type: 'vote' | 'count'; characterId?: stri
 /**
  * メイン処理（手動でKVデータを渡す形式）
  */
+// @ts-expect-error このスクリプトは手動実行用
 const _exportVotesFromKV = async (kvData: VoteData[]): Promise<void> => {
   const votes: ExportedVote[] = []
   const voteCounts: ExportedVoteCount[] = []

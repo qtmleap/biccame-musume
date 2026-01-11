@@ -107,7 +107,7 @@ export const createEvent = async (prisma: PrismaClient, data: EventRequest) => {
           })) || []
       },
       stores: {
-        create: data.stores.map((storeName) => ({ storeName }))
+        create: data.stores.map((storeName) => ({ storeKey: storeName }))
       }
     },
     include: {
@@ -175,7 +175,7 @@ export const updateEvent = async (prisma: PrismaClient, id: string, data: Partia
         }),
         ...(data.stores && {
           stores: {
-            create: data.stores.map((storeName) => ({ storeName }))
+            create: data.stores.map((storeName) => ({ storeKey: storeName }))
           }
         })
       },
@@ -227,7 +227,7 @@ const transformEventFromDb = (event: {
     url: string
   }>
   stores: Array<{
-    storeName: string
+    storeKey: string
   }>
 }) => {
   return {
@@ -249,6 +249,6 @@ const transformEventFromDb = (event: {
       type: r.type,
       url: r.url
     })),
-    stores: event.stores.map((s) => s.storeName)
+    stores: event.stores.map((s) => s.storeKey)
   }
 }

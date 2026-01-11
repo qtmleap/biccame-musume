@@ -1,6 +1,6 @@
 {
   "include": ["**/*.ts", "**/*.tsx", ".intlayer/**/*.ts"],
-  "exclude": ["src/components/ui/**/*.tsx"],
+  "exclude": ["src/components/ui/**/*.tsx", "scripts/**/*.ts"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",

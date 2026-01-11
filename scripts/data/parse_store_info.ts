@@ -508,8 +508,8 @@ const parseStoreHtml = async (
   // 全角英数記号を半角に、半角カタカナを全角に変換
   name = jaconv.normalize(name)
 
-  // 店舗IDを取得（shop-XXX形式）
-  const shop_id_match = html.match(/shop-(\d+)/)
+  // 店舗IDを取得（shop119形式またはshop-119形式）
+  const shop_id_match = html.match(/shop-?(\d+)/)
   const shop_id = shop_id_match ? Number.parseInt(shop_id_match[1], 10) : undefined
 
   // 住所を取得

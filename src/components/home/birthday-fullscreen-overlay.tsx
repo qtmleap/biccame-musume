@@ -2,10 +2,10 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 
 type BirthdayFullscreenOverlayProps = {
-  characters: Character[]
+  characters: StoreData[]
 }
 
 /**
@@ -132,7 +132,7 @@ export const BirthdayFullscreenOverlay = ({ characters }: BirthdayFullscreenOver
 
           {/* キャラクター画像 */}
           <motion.div
-            key={currentCharacter.key}
+            key={currentCharacter.id}
             className='relative z-10 flex max-h-[60vh] max-w-[80vw] items-center justify-center'
             initial={{ opacity: 0, scale: 0.5, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -141,8 +141,8 @@ export const BirthdayFullscreenOverlay = ({ characters }: BirthdayFullscreenOver
           >
             {!imageError ? (
               <motion.img
-                src={getBirthdayImagePath(currentCharacter.key)}
-                alt={`${currentCharacter.character_name}の誕生日`}
+                src={getBirthdayImagePath(currentCharacter.id)}
+                alt={`${currentCharacter.character?.name}の誕生日`}
                 className='max-h-[60vh] max-w-full object-contain drop-shadow-2xl'
                 onError={() => setImageError(true)}
                 animate={{ y: [0, -10, 0] }}
@@ -154,8 +154,8 @@ export const BirthdayFullscreenOverlay = ({ characters }: BirthdayFullscreenOver
               />
             ) : (
               <motion.img
-                src={currentCharacter.profile_image_url}
-                alt={currentCharacter.character_name}
+                src={currentCharacter.character?.image_url}
+                alt={currentCharacter.character?.name}
                 className='max-h-[50vh] max-w-[70vw] object-contain drop-shadow-2xl'
                 animate={{ y: [0, -10, 0] }}
                 transition={{
@@ -185,13 +185,13 @@ export const BirthdayFullscreenOverlay = ({ characters }: BirthdayFullscreenOver
             >
               Happy Birthday!
             </motion.h2>
-            <p className='mt-2 text-xl text-white drop-shadow-md md:text-2xl'>{currentCharacter.character_name}</p>
-            <p className='mt-1 text-sm text-white/80 drop-shadow-md'>{currentCharacter.store_name}</p>
+            <p className='mt-2 text-xl text-white drop-shadow-md md:text-2xl'>{currentCharacter.character?.name}</p>
+            <p className='mt-1 text-sm text-white/80 drop-shadow-md'>{currentCharacter.store?.name}</p>
 
             {/* 詳細リンク */}
             <Link
               to='/characters'
-              search={{ character: currentCharacter.key }}
+              search={{ character: currentCharacter.id }}
               className='mt-4 inline-block rounded-full bg-white/20 px-6 py-2 text-sm text-white backdrop-blur-sm transition-colors hover:bg-white/30'
               onClick={(e) => {
                 e.stopPropagation()

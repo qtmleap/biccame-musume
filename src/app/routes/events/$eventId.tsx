@@ -33,9 +33,9 @@ const getCategoryStyle = (category: EventCategory) => {
 const getConditionDetail = (condition: Event['conditions'][0]): string => {
   switch (condition.type) {
     case 'purchase':
-      return `${condition.purchaseAmount?.toLocaleString()}円以上購入で配布`
+      return `${condition.purchaseAmount?.toLocaleString()}円以上購入`
     case 'first_come':
-      return condition.quantity ? `先着${condition.quantity}名` : '先着順'
+      return '先着'
     case 'lottery':
       return condition.quantity ? `抽選${condition.quantity}名` : '抽選'
     case 'everyone':
@@ -59,7 +59,7 @@ const EventDetailContent = () => {
    * 店舗名からキャラクターのidを取得
    */
   const getCharacterKeyByStoreName = (storeName: string): string | null => {
-    const character = characters.find((c) => c.name === storeName)
+    const character = characters.find((c) => c.store?.name === storeName)
     return character?.id ?? null
   }
 

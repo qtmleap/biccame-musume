@@ -3,10 +3,10 @@ import { Cake } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 
 type BirthdayHeroSectionProps = {
-  characters: Character[]
+  characters: StoreData[]
 }
 
 /**
@@ -49,12 +49,12 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <img
-            src={getBirthdayImagePath(mainCharacter.key)}
-            alt={`${mainCharacter.character_name}の誕生日`}
+            src={getBirthdayImagePath(mainCharacter.id)}
+            alt={`${mainCharacter.character?.name}の誕生日`}
             className='h-48 w-auto object-contain drop-shadow-xl md:h-64'
             onError={(e) => {
               const target = e.target as HTMLImageElement
-              target.src = mainCharacter.profile_image_url || ''
+              target.src = mainCharacter.character?.image_url || ''
             }}
           />
           {/* ケーキアイコン */}
@@ -82,8 +82,8 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
             >
               Happy Birthday!
             </motion.h2>
-            <p className='mt-2 text-2xl font-semibold'>{mainCharacter.character_name}</p>
-            <p className='text-white/80'>{mainCharacter.store_name}</p>
+            <p className='mt-2 text-2xl font-semibold'>{mainCharacter.character?.name}</p>
+            <p className='text-white/80'>{mainCharacter.store?.name}</p>
           </motion.div>
 
           {/* アクションボタン */}
@@ -94,13 +94,17 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             <Button asChild variant='secondary' size='sm'>
-              <Link to='/characters/$id' params={{ id: mainCharacter.key }}>
+              <Link to='/characters/$id' params={{ id: mainCharacter.id }}>
                 詳細を見る
               </Link>
             </Button>
-            {mainCharacter.twitter_url && (
+            {mainCharacter.character?.twitter_id && (
               <Button asChild variant='outline' size='sm' className='border-white/30 text-white hover:bg-white/20'>
-                <a href={mainCharacter.twitter_url} target='_blank' rel='noopener noreferrer'>
+                <a
+                  href={`https://twitter.com/intent/follow?screen_name=${mainCharacter.character.twitter_id}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
                   お祝いする
                 </a>
               </Button>
@@ -118,10 +122,10 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
               <p className='mb-2 text-xs text-white/70'>他にも誕生日のキャラクターがいます</p>
               <div className='flex justify-center gap-2 md:justify-start'>
                 {otherCharacters.map((character) => (
-                  <Link key={character.key} to='/characters/$id' params={{ id: character.key }}>
+                  <Link key={character.id} to='/characters/$id' params={{ id: character.id }}>
                     <Avatar className='size-10 border-2 border-white/50 transition-transform hover:scale-110'>
-                      <AvatarImage src={character.profile_image_url} alt={character.character_name} />
-                      <AvatarFallback>{character.character_name.charAt(0)}</AvatarFallback>
+                      <AvatarImage src={character.character?.image_url} alt={character.character?.name} />
+                      <AvatarFallback>{character.character?.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                   </Link>
                 ))}

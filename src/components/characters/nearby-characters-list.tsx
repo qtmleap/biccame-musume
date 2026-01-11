@@ -28,7 +28,7 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
   }
 
   // 現在のキャラクターの座標を取得
-  const currentCoords = currentCharacter.store?.coordinates
+  const currentCoords = currentCharacter.coordinates
   if (!currentCoords?.latitude || !currentCoords?.longitude) {
     return null
   }
@@ -37,7 +37,7 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
   const nearbyCharacters = characters
     .filter((char) => {
       if (char.id === currentCharacter.id) return false
-      if (!char.store?.coordinates?.latitude || !char.store?.coordinates?.longitude) return false
+      if (!char.coordinates?.latitude || !char.coordinates?.longitude) return false
       return true
     })
     .map((char) => ({
@@ -45,8 +45,8 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
       distance: calculateDistance(
         currentCoords.latitude,
         currentCoords.longitude,
-        char.store?.coordinates?.latitude || 0,
-        char.store?.coordinates?.longitude || 0
+        char.coordinates?.latitude || 0,
+        char.coordinates?.longitude || 0
       )
     }))
     .sort((a, b) => a.distance - b.distance)

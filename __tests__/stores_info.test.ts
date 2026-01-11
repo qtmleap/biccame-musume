@@ -37,13 +37,13 @@ describe('stores_info.json parsing', () => {
 
     if (result.success) {
       for (const store of result.data) {
-        if (store.hours && store.hours.length > 0) {
-          for (const hour of store.hours) {
+        if (store.store?.hours && store.store?.hours.length > 0) {
+          for (const hour of store.store?.hours) {
             // typeが指定された値のいずれかであること
             expect(['weekday', 'weekend', 'holiday', 'all']).toContain(hour.type)
             // openTimeとcloseTimeが存在すること
-            expect(hour.openTime).toBeDefined()
-            expect(hour.closeTime).toBeDefined()
+            expect(hour.open_time).toBeDefined()
+            expect(hour.close_time).toBeDefined()
           }
         }
       }
@@ -56,8 +56,8 @@ describe('stores_info.json parsing', () => {
 
     if (result.success) {
       for (const store of result.data) {
-        if (store.access && store.access.length > 0) {
-          for (const accessInfo of store.access) {
+        if (store.store?.access && store.store?.access.length > 0) {
+          for (const accessInfo of store.store?.access) {
             // stationは必須
             expect(accessInfo.station).toBeDefined()
             expect(typeof accessInfo.station).toBe('string')
@@ -108,8 +108,8 @@ describe('stores_info.json parsing', () => {
           expect(store.character.description).toBeDefined()
           expect(typeof store.character.description).toBe('string')
 
-          expect(store.character.twitterId).toBeDefined()
-          expect(typeof store.character.twitterId).toBe('string')
+          expect(store.character.twitter_id).toBeDefined()
+          expect(typeof store.character.twitter_id).toBe('string')
 
           expect(Array.isArray(store.character.images)).toBe(true)
           expect(store.character.images.length).toBeGreaterThan(0)
