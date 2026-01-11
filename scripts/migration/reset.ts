@@ -152,6 +152,11 @@ async function main(): Promise<void> {
     console.log('\nStep 4: Apply Prisma migration to local DB')
     await $`bunx prisma migrate dev`
     console.log('  Done: migration applied to local DB')
+
+    // wranglerのローカルD1にも適用
+    console.log('\nStep 5: Apply migration to wrangler local D1')
+    await $`bun wrangler d1 execute ${DATABASE_NAME} --local --file=${migrationSqlPath}`
+    console.log('  Done: migration applied to wrangler local D1')
   } else {
     console.log(`\nStep 4: Apply to Cloudflare D1 (${targetEnv})`)
     await resetAndMigrateD1(targetEnv, migrationSqlPath)
