@@ -58,6 +58,16 @@
         "reveal": "always",
         "panel": "new"
       }
+    },
+    {
+      "label": "Sync Votes from KV to Local DB",
+      "type": "shell",
+      "command": "${workspaceFolder}/.vscode/scripts/sync_votes_from_kv.sh",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
     }
   ]
 }
