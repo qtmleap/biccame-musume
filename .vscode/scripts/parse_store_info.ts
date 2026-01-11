@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 /**
- * 店舗HTMLから店舗情報を抽出してYAMLファイルに保存するスクリプト
+ * 店舗HTMLから店舗情報を抽出してJSONファイルに保存するスクリプト
  */
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
@@ -9,12 +9,11 @@ import { join } from 'node:path'
 import jaconv from 'jaconv'
 import { mapKeys, snakeCase } from 'lodash-es'
 import { parse } from 'node-html-parser'
-import { parse as parseYaml, stringify } from 'yaml'
+import { parse as parseYaml } from 'yaml'
 
-const CACHE_DIR = join(import.meta.dir, '../archive/html_cache')
-const OUTPUT_FILE = join(import.meta.dir, '../archive/stores_info.yaml')
-const OUTPUT_JSON_FILE = join(import.meta.dir, '../archive/stores_info.json')
-const CHARACTER_FIELDS_FILE = join(import.meta.dir, '../archive/character_fields.yaml')
+const CACHE_DIR = join(import.meta.dir, '../../scripts/archive/html_cache')
+const OUTPUT_FILE = join(import.meta.dir, '../../public/characters.json')
+const CHARACTER_FIELDS_FILE = join(import.meta.dir, '../../scripts/archive/character_fields.yaml')
 
 /**
  * 店舗情報の型定義
@@ -481,6 +480,8 @@ const parseStoreHtml = async (
   store_id?: number
   name?: string
   address?: string
+  prefecture?: string
+  postal_code?: string
   open_all_year?: boolean
   hours?: Array<{
     type: 'weekday' | 'weekend' | 'holiday' | 'all'
@@ -782,10 +783,6 @@ const main = async () => {
       console.log('✓ Character fields merged')
     }
 
-    // YAMLファイルに保存
-    const yaml = stringify(stores, { lineWidth: 0 })
-    writeFileSync(OUTPUT_FILE, yaml, 'utf-8')
-
     // スネークケース変換関数
     const toSnakeCase = (obj: unknown): unknown => {
       if (Array.isArray(obj)) {
@@ -809,11 +806,10 @@ const main = async () => {
       return toSnakeCase(store)
     })
     const json = JSON.stringify(storesForJson, null, 2)
-    writeFileSync(OUTPUT_JSON_FILE, json, 'utf-8')
+    writeFileSync(OUTPUT_FILE, json, 'utf-8')
 
     console.log(`\n✓ Successfully parsed ${stores.length} characters`)
-    console.log(`YAML output: ${OUTPUT_FILE}`)
-    console.log(`JSON output: ${OUTPUT_JSON_FILE}`)
+    console.log(`JSON output: ${OUTPUT_FILE}`)
   } catch (error) {
     console.error('\n✗ Error:', error)
     process.exit(1)
