@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { StoreList } from '@/components/location/store-list'
 import { SelectedStoreInfo } from '@/components/selected-store-info'
 import { useCharacters } from '@/hooks/useCharacters'
+import type { StoreData } from '@/schemas/store.dto'
 
 /**
  * 検索パラメータのスキーマ
@@ -16,9 +17,9 @@ const SearchParamsSchema = z.object({
 /**
  * キャラクターから座標を取得する関数
  */
-const getPosition = (character: Store): google.maps.LatLngLiteral => {
-  if (character.coordinates) {
-    return { lat: character.coordinates.latitude, lng: character.coordinates.longitude }
+const getPosition = (character: StoreData): google.maps.LatLngLiteral => {
+  if (character.store?.coordinates) {
+    return { lat: character.store.coordinates.latitude, lng: character.store.coordinates.longitude }
   }
 
   console.warn(`No coordinates for ${character.character?.name}, using default`)
@@ -31,7 +32,7 @@ const getPosition = (character: Store): google.maps.LatLngLiteral => {
 const RouteComponent = () => {
   const { id: initialCharacterId } = Route.useSearch()
   const { data: characters } = useCharacters()
-  const [selectedCharacter, setSelectedCharacter] = useState<Store | null>(() => {
+  const [selectedCharacter, setSelectedCharacter] = useState<StoreData | null>(() => {
     if (initialCharacterId) {
       const targetCharacter = characters.find((c) => c.id === initialCharacterId)
       return targetCharacter || null
@@ -40,16 +41,28 @@ const RouteComponent = () => {
   })
   const [mapKey, setMapKey] = useState<number>(0)
   const [isStoreListOpen, setIsStoreListOpen] = useState(false)
+  const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral | null>(() => {
+    // 初期値として選択されたキャラクターの位置、または東京駅を設定
+    if (initialCharacterId) {
+      const targetCharacter = characters.find((c) => c.id === initialCharacterId)
+      if (targetCharacter) {
+        return getPosition(targetCharacter)
+      }
+    }
+    return { lat: 35.6812, lng: 139.7671 }
+  })
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
-  const charactersWithAddress = characters.filter((char) => char.address && char.address.length > 0)
+  const charactersWithAddress = characters.filter((char) => char.store?.address && char.store.address.length > 0)
 
-  const handleMarkerClick = (character: Store) => {
+  const handleMarkerClick = (character: StoreData) => {
     setSelectedCharacter(character)
+    setMapCenter(getPosition(character))
   }
 
-  const handleCharacterSelect = (character: Store) => {
+  const handleCharacterSelect = (character: StoreData) => {
     setSelectedCharacter(character)
+    setMapCenter(getPosition(character))
     setMapKey((prev) => prev + 1)
     setIsStoreListOpen(false)
   }
@@ -71,7 +84,7 @@ const RouteComponent = () => {
         <GoogleMap
           key={mapKey}
           defaultCenter={selectedCharacter ? getPosition(selectedCharacter) : { lat: 35.6812, lng: 139.7671 }}
-          defaultZoom={selectedCharacter ? 15 : 5}
+          defaultZoom={selectedCharacter ? 17 : 5}
           mapId='biccamera-stores-map'
           gestureHandling='greedy'
           mapTypeControl={false}
@@ -79,6 +92,11 @@ const RouteComponent = () => {
           fullscreenControl={false}
           minZoom={5}
           maxZoom={18}
+          onCenterChanged={(e) => {
+            if (e.detail.center) {
+              setMapCenter(e.detail.center)
+            }
+          }}
         >
           {charactersWithAddress.map((character) => {
             const position = getPosition(character)
@@ -101,6 +119,7 @@ const RouteComponent = () => {
           isOpen={isStoreListOpen}
           onOpenChange={setIsStoreListOpen}
           onCharacterSelect={handleCharacterSelect}
+          mapCenter={mapCenter}
         />
       </div>
     </APIProvider>
