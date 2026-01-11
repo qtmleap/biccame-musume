@@ -161,7 +161,7 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
  */
 export const RankingList = ({ characters }: RankingListProps) => {
   // ビッカメ娘かつ0票より多いキャラクターのみ表示
-  const votedCharacters = characters.filter((char) => char.character?.isBiccameMusume && char.voteCount > 0)
+  const votedCharacters = characters.filter((char) => char.character?.is_biccame_musume && char.voteCount > 0)
 
   return (
     <div className='space-y-6'>
