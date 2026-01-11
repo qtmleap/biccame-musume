@@ -94,7 +94,7 @@ export const CharacterVoteButton = ({
         onClick={handleVote}
         disabled={hasVotedToday || isVoting}
         className={cn(
-          'rounded-full text-xs font-semibold h-7 px-4',
+          'rounded-full font-semibold',
           hasVotedToday
             ? 'bg-gray-200 text-gray-600 cursor-not-allowed hover:bg-gray-200'
             : 'bg-[#e50012] text-white hover:bg-[#c40010]'
