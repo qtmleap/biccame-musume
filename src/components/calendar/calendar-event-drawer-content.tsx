@@ -33,7 +33,7 @@ export const CalendarEventDrawerContent = ({ events }: CalendarEventDrawerConten
           const isCharacter = event.type === 'character'
           return (
             <motion.div
-              key={`drawer-${event.character.key}-${event.type}`}
+              key={`drawer-${event.character.id}-${event.type}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{
@@ -60,7 +60,7 @@ export const CalendarEventDrawerContent = ({ events }: CalendarEventDrawerConten
                 </Avatar>
                 <div className='flex-1 min-w-0'>
                   <p className='font-medium truncate'>{event.character.character?.name}</p>
-                  <p className='text-sm text-muted-foreground truncate'>{event.character.name}</p>
+                  <p className='text-sm text-muted-foreground truncate'>{event.character.store?.name}</p>
                   <Badge
                     variant='secondary'
                     className={cn(

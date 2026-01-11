@@ -1,6 +1,13 @@
 import { z } from 'zod'
 
 /**
+ * 地域の型定義
+ */
+export const RegionSchema = z.enum(['all', 'hokkaido', 'kanto', 'chubu', 'kansai', 'kyushu'])
+
+export type Region = z.infer<typeof RegionSchema>
+
+/**
  * 営業時間の型定義
  */
 export const HoursSchema = z.object({
@@ -36,20 +43,37 @@ export const CoordinatesSchema = z.object({
 export type Coordinates = z.infer<typeof CoordinatesSchema>
 
 /**
+ * 駐車場条件の型定義
+ */
+export const ParkingConditionSchema = z.object({
+  purchase: z.string(),
+  freeTime: z.string()
+})
+
+export type ParkingCondition = z.infer<typeof ParkingConditionSchema>
+
+/**
+ * 駐車場情報の型定義
+ */
+export const ParkingInfoSchema = z.object({
+  name: z.string().nonempty(),
+  conditions: z.array(ParkingConditionSchema)
+})
+
+export type ParkingInfo = z.infer<typeof ParkingInfoSchema>
+
+/**
  * 店舗詳細情報の型定義
  */
 export const StoreDetailsSchema = z.object({
   store_id: z.number().int().positive().optional(),
   name: z.string().nonempty().optional(),
   address: z.string().nonempty().optional(),
-  prefecture: z.string().nonempty().optional().nullable(),
-  postal_code: z.string().nonempty().optional(),
   phone: z.string().nonempty().optional(),
   birthday: z.string().nonempty().optional(),
   open_all_year: z.boolean().optional(),
   hours: z.array(HoursSchema).optional(),
-  access: z.array(AccessInfoSchema).optional(),
-  coordinates: CoordinatesSchema.optional()
+  access: z.array(AccessInfoSchema)
 })
 
 export type StoreDetails = z.infer<typeof StoreDetailsSchema>
@@ -83,6 +107,9 @@ export type Character = z.infer<typeof CharacterSchema>
 export const StoreDataSchema = z.object({
   id: z.string().nonempty(),
   character: CharacterSchema,
+  prefecture: z.string().nonempty(),
+  coordinates: CoordinatesSchema.optional(),
+  postal_code: z.string().nonempty().optional(),
   store: StoreDetailsSchema.optional()
 })
 

@@ -18,8 +18,8 @@ const SearchParamsSchema = z.object({
  * キャラクターから座標を取得する関数
  */
 const getPosition = (character: StoreData): google.maps.LatLngLiteral => {
-  if (character.store?.coordinates) {
-    return { lat: character.store.coordinates.latitude, lng: character.store.coordinates.longitude }
+  if (character.coordinates) {
+    return { lat: character.coordinates.latitude, lng: character.coordinates.longitude }
   }
 
   console.warn(`No coordinates for ${character.character?.name}, using default`)

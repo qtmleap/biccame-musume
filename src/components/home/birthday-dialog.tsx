@@ -4,10 +4,10 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 
 type BirthdayDialogProps = {
-  characters: Character[]
+  characters: StoreData[]
 }
 
 /**
@@ -121,7 +121,7 @@ export const BirthdayDialog = ({ characters }: BirthdayDialogProps) => {
           <div className='relative aspect-square w-full overflow-hidden bg-linear-to-b from-pink-100 to-purple-100'>
             <AnimatePresence mode='wait'>
               <motion.div
-                key={currentCharacter.key}
+                key={currentCharacter.id}
                 className='flex size-full items-center justify-center'
                 initial={{ opacity: 0, scale: 0.8, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -130,8 +130,8 @@ export const BirthdayDialog = ({ characters }: BirthdayDialogProps) => {
               >
                 {!imageError ? (
                   <motion.img
-                    src={getBirthdayImagePath(currentCharacter.key)}
-                    alt={`${currentCharacter.character_name}の誕生日`}
+                    src={getBirthdayImagePath(currentCharacter.id)}
+                    alt={`${currentCharacter.character?.name}の誕生日`}
                     className='size-full object-contain'
                     initial={{ scale: 0.9 }}
                     animate={{ scale: 1 }}
@@ -141,8 +141,8 @@ export const BirthdayDialog = ({ characters }: BirthdayDialogProps) => {
                 ) : (
                   // 画像がない場合はプロフィール画像を表示
                   <motion.img
-                    src={currentCharacter.profile_image_url}
-                    alt={currentCharacter.character_name}
+                    src={currentCharacter.character?.image_url}
+                    alt={currentCharacter.character?.name}
                     className='max-h-[80%] max-w-[80%] object-contain'
                     animate={{ y: [0, -10, 0] }}
                     transition={{
@@ -181,11 +181,12 @@ export const BirthdayDialog = ({ characters }: BirthdayDialogProps) => {
                 </motion.span>
               </DialogTitle>
               <DialogDescription className='text-lg'>
-                今日は <span className='font-bold text-foreground'>{currentCharacter.character_name}</span> の誕生日です
+                今日は <span className='font-bold text-foreground'>{currentCharacter.character?.name}</span>{' '}
+                の誕生日です
               </DialogDescription>
             </DialogHeader>
 
-            <p className='mt-2 text-sm text-muted-foreground'>{currentCharacter.store_name}</p>
+            <p className='mt-2 text-sm text-muted-foreground'>{currentCharacter.store?.name}</p>
 
             {/* ナビゲーションボタン */}
             <div className='mt-4 flex items-center justify-center gap-2'>
@@ -208,7 +209,7 @@ export const BirthdayDialog = ({ characters }: BirthdayDialogProps) => {
             <div className='mt-4'>
               <Link
                 to='/characters'
-                search={{ character: currentCharacter.key }}
+                search={{ character: currentCharacter.id }}
                 className='text-sm text-primary hover:underline'
                 onClick={() => setOpen(false)}
               >

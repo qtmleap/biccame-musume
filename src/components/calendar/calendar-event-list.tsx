@@ -97,9 +97,9 @@ export const CalendarEventList = ({ year, month, events }: CalendarEventListProp
 
                     return (
                       <Link
-                        key={`${event.character.key}-${event.type}`}
+                        key={`${event.character.id}-${event.type}`}
                         to='/characters/$id'
-                        params={{ id: event.character.key }}
+                        params={{ id: event.character.id }}
                       >
                         <motion.div
                           whileHover={{ scale: 1.02 }}
@@ -122,7 +122,7 @@ export const CalendarEventList = ({ year, month, events }: CalendarEventListProp
                           {/* 情報 */}
                           <div className='flex-1 min-w-0'>
                             <p className='text-sm font-medium truncate'>{event.character.character?.name}</p>
-                            <p className='text-xs text-muted-foreground truncate'>{event.character.name}</p>
+                            <p className='text-xs text-muted-foreground truncate'>{event.character.store?.name}</p>
                           </div>
 
                           {/* バッジ */}

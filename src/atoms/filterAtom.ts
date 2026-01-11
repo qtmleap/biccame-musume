@@ -1,6 +1,7 @@
 import { atomWithStorage } from 'jotai/utils'
+import type { Region } from '@/schemas/store.dto'
 
-export type RegionType = 'all' | 'hokkaido' | 'kanto' | 'chubu' | 'kinki' | 'kyushu'
+export type RegionType = Region
 
 /**
  * 地域フィルターを保存するatom
@@ -10,8 +11,9 @@ export const regionFilterAtom = atomWithStorage<RegionType>('biccame-region-filt
 
 /**
  * 都道府県から地域へのマッピング
+ * 'all'は絞り込み用なのでマッピングには含めない
  */
-export const prefectureToRegion: Record<string, RegionType> = {
+export const prefectureToRegion: Record<string, Exclude<RegionType, 'all'>> = {
   北海道: 'hokkaido',
   茨城県: 'kanto',
   栃木県: 'kanto',
@@ -29,22 +31,22 @@ export const prefectureToRegion: Record<string, RegionType> = {
   岐阜県: 'chubu',
   静岡県: 'chubu',
   愛知県: 'chubu',
-  三重県: 'kinki',
-  滋賀県: 'kinki',
-  京都府: 'kinki',
-  大阪府: 'kinki',
-  兵庫県: 'kinki',
-  奈良県: 'kinki',
-  和歌山県: 'kinki',
-  鳥取県: 'kinki',
-  島根県: 'kinki',
-  岡山県: 'kinki',
-  広島県: 'kinki',
-  山口県: 'kinki',
-  徳島県: 'kinki',
-  香川県: 'kinki',
-  愛媛県: 'kinki',
-  高知県: 'kinki',
+  三重県: 'kansai',
+  滋賀県: 'kansai',
+  京都府: 'kansai',
+  大阪府: 'kansai',
+  兵庫県: 'kansai',
+  奈良県: 'kansai',
+  和歌山県: 'kansai',
+  鳥取県: 'kansai',
+  島根県: 'kansai',
+  岡山県: 'kansai',
+  広島県: 'kansai',
+  山口県: 'kansai',
+  徳島県: 'kansai',
+  香川県: 'kansai',
+  愛媛県: 'kansai',
+  高知県: 'kansai',
   福岡県: 'kyushu',
   佐賀県: 'kyushu',
   長崎県: 'kyushu',
@@ -52,16 +54,4 @@ export const prefectureToRegion: Record<string, RegionType> = {
   大分県: 'kyushu',
   宮崎県: 'kyushu',
   鹿児島県: 'kyushu'
-}
-
-/**
- * 地域名のラベル
- */
-export const regionLabels: Record<RegionType, string> = {
-  all: 'すべて',
-  hokkaido: '北海道',
-  kanto: '関東',
-  chubu: '中部',
-  kinki: '関西',
-  kyushu: '九州'
 }

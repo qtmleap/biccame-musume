@@ -4,10 +4,10 @@ import { Cake, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 
 type BirthdayFloatingCardProps = {
-  characters: Character[]
+  characters: StoreData[]
 }
 
 /**
@@ -74,8 +74,8 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
               whileTap={{ scale: 0.95 }}
             >
               <Avatar className='size-8 border-2 border-white/50'>
-                <AvatarImage src={currentCharacter.profile_image_url} alt={currentCharacter.character_name} />
-                <AvatarFallback>{currentCharacter.character_name.charAt(0)}</AvatarFallback>
+                <AvatarImage src={currentCharacter.character?.image_url} alt={currentCharacter.character?.name} />
+                <AvatarFallback>{currentCharacter.character?.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <Cake className='size-5 text-white' />
             </motion.button>
@@ -110,7 +110,7 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
               <div className='p-4'>
                 <AnimatePresence mode='wait'>
                   <motion.div
-                    key={currentCharacter.key}
+                    key={currentCharacter.id}
                     className='flex items-center gap-4'
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -118,8 +118,8 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
                     transition={{ duration: 0.2 }}
                   >
                     <Avatar className='size-16 border-2 border-pink-200'>
-                      <AvatarImage src={currentCharacter.profile_image_url} alt={currentCharacter.character_name} />
-                      <AvatarFallback>{currentCharacter.character_name.charAt(0)}</AvatarFallback>
+                      <AvatarImage src={currentCharacter.character?.image_url} alt={currentCharacter.character?.name} />
+                      <AvatarFallback>{currentCharacter.character?.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className='flex-1'>
                       <motion.p
@@ -129,8 +129,8 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
                       >
                         Happy Birthday!
                       </motion.p>
-                      <p className='font-medium text-gray-800 dark:text-gray-200'>{currentCharacter.character_name}</p>
-                      <p className='text-xs text-gray-500 dark:text-gray-400'>{currentCharacter.store_name}</p>
+                      <p className='font-medium text-gray-800 dark:text-gray-200'>{currentCharacter.character?.name}</p>
+                      <p className='text-xs text-gray-500 dark:text-gray-400'>{currentCharacter.store?.name}</p>
                     </div>
                   </motion.div>
                 </AnimatePresence>
@@ -161,7 +161,7 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
                 {/* 詳細リンク */}
                 <Link
                   to='/characters'
-                  search={{ character: currentCharacter.key }}
+                  search={{ character: currentCharacter.id }}
                   className='mt-3 block rounded-lg bg-linear-to-r from-pink-500 to-purple-500 py-2 text-center text-sm font-medium text-white transition-opacity hover:opacity-90'
                   onClick={() => setOpen(false)}
                 >
