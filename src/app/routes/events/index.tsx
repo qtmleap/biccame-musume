@@ -10,7 +10,7 @@ import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useCharacters } from '@/hooks/useCharacters'
 import { useEvents } from '@/hooks/useEvents'
-import type { Event } from '@/schemas/event.dto'
+import { type Event, EventCategorySchema } from '@/schemas/event.dto'
 
 /**
  * カテゴリラベル
@@ -47,8 +47,8 @@ const EventsContent = () => {
   const storePrefectureMap = useMemo(() => {
     const map = new Map<string, string>()
     for (const char of characters) {
-      if (char.name && char.prefecture) {
-        map.set(char.name, char.prefecture)
+      if (char.store?.name && char.prefecture) {
+        map.set(char.store.name, char.prefecture)
       }
     }
     return map
@@ -141,7 +141,7 @@ const EventsContent = () => {
           <span className='text-sm font-medium text-gray-700'>種別で絞り込み</span>
         </div>
         <div className='flex flex-wrap gap-4 text-sm'>
-          {(['ackey', 'limited_card', 'other'] as const).map((category) => (
+          {EventCategorySchema.options.map((category) => (
             <div key={category} className='flex items-center gap-2'>
               <Checkbox
                 id={`category-${category}`}

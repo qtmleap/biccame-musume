@@ -9,6 +9,7 @@ import {
   type ReferenceUrlType,
   ReferenceUrlTypeSchema
 } from '@/schemas/event.dto'
+import { type Region, RegionSchema } from '@/schemas/store.dto'
 
 const appContent = {
   key: 'app',
@@ -39,6 +40,14 @@ const appContent = {
       [ReferenceUrlTypeSchema.enum.announce]: '告知ツイート',
       [ReferenceUrlTypeSchema.enum.start]: '開始ツイート',
       [ReferenceUrlTypeSchema.enum.end]: '終了ツイート'
+    },
+    region: {
+      [RegionSchema.enum.all]: '全国',
+      [RegionSchema.enum.hokkaido]: '北海道',
+      [RegionSchema.enum.kanto]: '関東',
+      [RegionSchema.enum.chubu]: '中部',
+      [RegionSchema.enum.kansai]: '関西',
+      [RegionSchema.enum.kyushu]: '九州'
     }
   }
 } satisfies Dictionary
@@ -51,3 +60,4 @@ export const EVENT_CATEGORY_LABELS = appContent.content.category as Record<Event
 export const EVENT_CONDITION_LABELS = appContent.content.condition as Record<EventConditionType, string>
 export const REFERENCE_URL_TYPE_LABELS = appContent.content.ref as Record<ReferenceUrlType, string>
 export const REFERENCE_URL_TYPE_LABELS_LONG = appContent.content.refLong as Record<ReferenceUrlType, string>
+export const REGION_LABELS = appContent.content.region as Record<Region, string>

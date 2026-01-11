@@ -1,8 +1,10 @@
 import { useAtom } from 'jotai'
 import { Filter } from 'lucide-react'
-import { type RegionType, regionFilterAtom, regionLabels } from '@/atoms/filterAtom'
+import { regionFilterAtom } from '@/atoms/filterAtom'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { REGION_LABELS } from '@/locales/app.content'
+import { RegionSchema } from '@/schemas/store.dto'
 
 /**
  * 地域フィルター制御コンポーネント
@@ -10,14 +12,10 @@ import { cn } from '@/lib/utils'
 export const RegionFilterControl = () => {
   const [region, setRegion] = useAtom(regionFilterAtom)
 
-  const regionOptions: { value: RegionType; label: string }[] = [
-    { value: 'all', label: regionLabels.all },
-    { value: 'hokkaido', label: regionLabels.hokkaido },
-    { value: 'kanto', label: regionLabels.kanto },
-    { value: 'chubu', label: regionLabels.chubu },
-    { value: 'kinki', label: regionLabels.kinki },
-    { value: 'kyushu', label: regionLabels.kyushu }
-  ]
+  const regionOptions = RegionSchema.options.map((value) => ({
+    value,
+    label: REGION_LABELS[value]
+  }))
 
   return (
     <div className='w-full'>

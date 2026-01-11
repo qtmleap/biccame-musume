@@ -32,7 +32,7 @@ const StoreListDesktopDialog = ({
 
     return [...characters]
       .map((character) => {
-        const coords = character.store?.coordinates
+        const coords = character.coordinates
         if (!coords) return { character, distance: undefined }
 
         const distance = calculateDistance(mapCenter.lat, mapCenter.lng, coords.latitude, coords.longitude)
@@ -97,7 +97,7 @@ const StoreListMobileDrawer = ({
 
     return [...characters]
       .map((character) => {
-        const coords = character.store?.coordinates
+        const coords = character.coordinates
         if (!coords) return { character, distance: undefined }
 
         const distance = calculateDistance(mapCenter.lat, mapCenter.lng, coords.latitude, coords.longitude)

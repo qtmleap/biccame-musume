@@ -32,8 +32,8 @@ export const SelectedStoreInfo = ({ character }: SelectedStoreInfoProps) => {
           <div className='flex items-start gap-1.5 text-xs'>
             <MapPin className='h-3 w-3 text-gray-500 dark:text-gray-400 mt-0.5 shrink-0' />
             <div className='flex-1 min-w-0 space-y-0.5'>
-              {character.store.postal_code && (
-                <div className='text-gray-500 dark:text-gray-400'>〒{character.store.postal_code}</div>
+              {character.postal_code && (
+                <div className='text-gray-500 dark:text-gray-400'>〒{character.postal_code}</div>
               )}
               <div className='text-gray-700 dark:text-gray-300'>{character.store.address}</div>
             </div>

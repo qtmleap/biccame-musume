@@ -4,10 +4,10 @@ import { X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import type { Character } from '@/schemas/character.dto'
+import type { StoreData } from '@/schemas/store.dto'
 
 type BirthdayBannerProps = {
-  characters: Character[]
+  characters: StoreData[]
 }
 
 /**
@@ -76,14 +76,14 @@ export const BirthdayBanner = ({ characters }: BirthdayBannerProps) => {
             <div className='flex items-center gap-4'>
               {/* キャラクター画像 */}
               <motion.div
-                key={currentCharacter.key}
+                key={currentCharacter.id}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
               >
                 <Avatar className='size-16 border-2 border-white/50'>
-                  <AvatarImage src={currentCharacter.profile_image_url} alt={currentCharacter.character_name} />
-                  <AvatarFallback>{currentCharacter.character_name.charAt(0)}</AvatarFallback>
+                  <AvatarImage src={currentCharacter.character?.image_url} alt={currentCharacter.character?.name} />
+                  <AvatarFallback>{currentCharacter.character?.name.charAt(0)}</AvatarFallback>
                 </Avatar>
               </motion.div>
 
@@ -96,14 +96,14 @@ export const BirthdayBanner = ({ characters }: BirthdayBannerProps) => {
                 >
                   Happy Birthday!
                 </motion.p>
-                <p className='text-lg font-bold text-white'>{currentCharacter.character_name}</p>
-                <p className='text-xs text-white/70'>{currentCharacter.store_name}</p>
+                <p className='text-lg font-bold text-white'>{currentCharacter.character?.name}</p>
+                <p className='text-xs text-white/70'>{currentCharacter.store?.name}</p>
               </div>
 
               {/* 詳細リンク */}
               <Link
                 to='/characters'
-                search={{ character: currentCharacter.key }}
+                search={{ character: currentCharacter.id }}
                 className='rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/30'
                 onClick={() => setOpen(false)}
               >
@@ -116,7 +116,7 @@ export const BirthdayBanner = ({ characters }: BirthdayBannerProps) => {
               <div className='mt-3 flex justify-center gap-1'>
                 {characters.map((_, index) => (
                   <button
-                    key={characters[index].key}
+                    key={characters[index].id}
                     type='button'
                     className={`size-2 rounded-full transition-colors ${
                       index === currentIndex ? 'bg-white' : 'bg-white/40'
