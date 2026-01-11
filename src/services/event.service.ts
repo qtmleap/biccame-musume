@@ -241,9 +241,12 @@ const transformEventFromDb = (event: {
     status = 'ongoing'
   }
 
+  // daysUntilを計算
+  const daysUntil = startDate.diff(now, 'day')
+
   return {
     id: event.id,
-    category: event.category,
+    category: event.category as 'limited_card' | 'regular_card' | 'ackey' | 'other',
     name: event.name,
     limitedQuantity: event.limitedQuantity ?? undefined,
     startDate: dayjs(event.startDate).toISOString(),
@@ -252,15 +255,16 @@ const transformEventFromDb = (event: {
     createdAt: dayjs(event.createdAt).toISOString(),
     updatedAt: dayjs(event.updatedAt).toISOString(),
     status,
+    daysUntil,
     conditions: event.conditions.map((c) => ({
-      type: c.type,
+      type: c.type as 'purchase' | 'first_come' | 'lottery' | 'everyone',
       purchaseAmount: c.purchaseAmount ?? undefined,
       quantity: c.quantity ?? undefined
     })),
     referenceUrls: event.referenceUrls.map((r) => ({
-      type: r.type,
+      type: r.type as 'announce' | 'start' | 'end',
       url: r.url
     })),
-    stores: event.stores.map((s) => s.storeKey)
+    stores: event.stores.map((s) => s.storeKey) as Array<'abeno' | 'akasaka' | 'akiba' | 'biccamera' | 'bicqlo' | 'bicsim' | 'camera' | 'chiba' | 'chofu' | 'fujisawa' | 'funabashi' | 'funato' | 'hachioji' | 'hamamatsu' | 'hiroshima' | 'honten' | 'ikenishi' | 'kagoshima' | 'kashiwa' | 'kawasaki' | 'kyoto' | 'machida' | 'mito' | 'nagoya' | 'nagoyagate' | 'naisen' | 'nanba' | 'niigata' | 'oeraitan' | 'ohmiya' | 'okayama' | 'photo' | 'pkan' | 'prosta' | 'sagami' | 'sapporo' | 'seiseki' | 'shibuhachi' | 'shibuto' | 'shinjyuku' | 'shintou' | 'shinyoko' | 'tachikawa' | 'takatsuki' | 'tamapla' | 'tenjin' | 'tenjin2' | 'tokorozawa' | 'yao' | 'yuurakuchou'>
   }
 }
