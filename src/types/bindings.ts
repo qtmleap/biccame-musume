@@ -5,8 +5,8 @@ import type { PrismaClient } from '@prisma/client'
  * Cloudflare Workersの環境変数の型定義
  */
 export type Bindings = {
-  /** 投票データを保存するKVストア */
-  VOTES: KVNamespace
+  /** 投票データと制限チェックを保存するKVストア */
+  VOTE_LIMITER: KVNamespace
   /** イベントデータを保存するKVストア（レガシー） */
   BICCAME_MUSUME_EVENTS: KVNamespace
   /** D1データベース */

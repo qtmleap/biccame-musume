@@ -2,7 +2,8 @@ import { type RateLimitKeyFunc, rateLimit } from '@elithrar/workers-hono-rate-li
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
-import { VoteCountListSchema, VoteRequestSchema, VoteResponseSchema } from '@/schemas/vote.dto'
+import { voteLimit } from '@/middleware/vote-limit'
+import { VoteCountListSchema, VoteResponseSchema } from '@/schemas/vote.dto'
 import { castVote, getAllVoteCounts } from '@/services/vote.service'
 import type { Bindings } from '@/types/bindings'
 
@@ -37,20 +38,16 @@ const isDevelopmentEnvironment = (c: Context): boolean => {
 
 /**
  * 投票実行
- * POST /api/votes
+ * POST /api/votes/:characterId
  */
 routes.openapi(
   createRoute({
     method: 'post',
-    path: '/',
+    path: '/{characterId}',
     request: {
-      body: {
-        content: {
-          'application/json': {
-            schema: VoteRequestSchema
-          }
-        }
-      }
+      params: z.object({
+        characterId: z.string().min(1).openapi({ example: 'honten' })
+      })
     },
     responses: {
       200: {
@@ -88,13 +85,13 @@ routes.openapi(
     },
     tags: ['votes']
   }),
+  voteLimit,
   async (c) => {
     try {
-      const { characterId } = c.req.valid('json')
+      const { characterId } = c.req.valid('param')
       const ip = getClientIp(c)
-      const isDevelopment = isDevelopmentEnvironment(c)
 
-      const result = await castVote(c.env, characterId, ip, isDevelopment)
+      const result = await castVote(c.env, characterId, ip)
 
       if (!result.success) {
         return c.json(result, 400)
