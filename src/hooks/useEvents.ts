@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import type { Event, EventRequest } from '@/schemas/event.dto'
 import { client } from '@/utils/client'
 
@@ -72,23 +73,15 @@ export const useUpdateEvent = () => {
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<EventRequest> }): Promise<Event> => {
-      console.log('[Hook] Update event mutation started:', { id, data })
-      try {
-        const result = await client.updateEvent(data, { params: { id } })
-        console.log('[Hook] Update event mutation succeeded:', result)
-        return result
-      } catch (error) {
-        console.error('[Hook] Update event mutation failed:', error)
-        throw error
-      }
+      return await client.updateEvent(data, { params: { id } })
     },
-    onSuccess: (_data) => {
-      console.log('[Hook] Update event onSuccess, invalidating queries...')
-      // イベント一覧を再取得
+    onSuccess: () => {
+      toast.success('イベントを更新しました')
       queryClient.invalidateQueries({ queryKey: ['events'] })
     },
     onError: (error) => {
-      console.error('[Hook] Update event onError:', error)
+      toast.error('イベントの更新に失敗しました')
+      console.error(error)
     }
   })
 }

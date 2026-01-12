@@ -151,8 +151,6 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
   // 編集モードの場合、初期値をセット
   useEffect(() => {
     if (event) {
-      console.log('EventForm useEffect - event:', event)
-      console.log('EventForm useEffect - event.category:', event.category)
       reset({
         category: event.category,
         name: event.name,
@@ -253,9 +251,6 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
    * キャンペーンを保存
    */
   const onSubmit = async (data: EventFormValues) => {
-    console.log('Form data:', data)
-    console.log('endDate value:', data.endDate, 'type:', typeof data.endDate)
-
     const payload: any = {
       category: data.category,
       name: data.name,
@@ -294,8 +289,6 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
     if (data.limitedQuantity) {
       payload.limitedQuantity = data.limitedQuantity
     }
-
-    console.log('Payload:', payload)
 
     if (event) {
       await updateEvent.mutateAsync({ id: event.id, data: payload })
@@ -400,7 +393,6 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
               name='category'
               control={control}
               render={({ field }) => {
-                console.log('Controller field.value:', field.value)
                 return (
                   <Select value={field.value ?? ''} onValueChange={field.onChange}>
                     <SelectTrigger className='w-full'>
