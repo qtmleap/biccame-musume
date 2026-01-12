@@ -31,7 +31,7 @@ const EditEventContent = () => {
           <ArrowLeft className='h-4 w-4 mr-1' />
           戻る
         </Button>
-        <h1 className='text-2xl font-bold text-gray-900 md:text-3xl'>イベント編集</h1>
+        <h1 className='text-2xl font-bold text-gray-900'>イベント編集</h1>
         <p className='mt-2 text-sm text-gray-600 md:text-base'>イベント情報を編集</p>
       </div>
 
