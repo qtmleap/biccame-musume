@@ -15,11 +15,7 @@ const RankingContent = () => {
   const { data: characters } = useVoteRanking()
 
   return (
-    <div className='mx-auto px-4 md:px-8 max-w-6xl'>
-      <div className='text-center mb-8'>
-        <h1 className='text-3xl md:text-4xl font-bold text-gray-900 mb-2'>ビッカメ娘総選挙</h1>
-        <p className='text-gray-600'>あなたの推しビッカメ娘を応援しよう！</p>
-      </div>
+    <div className='mx-auto px-4 py-4 md:px-8 max-w-6xl'>
       <RankingList characters={characters} />
     </div>
   )
