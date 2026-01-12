@@ -1,18 +1,9 @@
-import type { PrismaClient } from '@prisma/client'
 import { Hono } from 'hono'
 import events from './api/event'
 import votes from './api/vote'
+import type { Bindings, Variables } from './types/bindings'
 
-type Bindings = {
-  VOTES: KVNamespace
-  BICCAME_MUSUME_EVENTS: KVNamespace
-  DB: D1Database
-  CF_ACCESS_TEAM_DOMAIN: string
-  CF_ACCESS_AUD: string
-  PRISMA: PrismaClient
-}
-
-const app = new Hono<{ Bindings: Bindings }>()
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 // イベント管理APIルート
 app.route('/api/events', events)
