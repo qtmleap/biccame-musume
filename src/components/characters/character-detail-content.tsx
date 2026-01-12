@@ -98,7 +98,14 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
             >
               <h1 className='text-2xl font-bold text-gray-900'>{getDisplayName(character.character?.name || '')}</h1>
               {character.character?.twitter_id && (
-                <p className='text-gray-500 text-sm'>@{character.character.twitter_id}</p>
+                <a
+                  href={`https://twitter.com/${character.character.twitter_id}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-gray-500 text-sm hover:underline hover:text-gray-700'
+                >
+                  @{character.character.twitter_id}
+                </a>
               )}
               <p className='text-sm text-gray-800 mt-3 leading-relaxed'>{character.character?.description}</p>
 

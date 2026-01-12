@@ -95,8 +95,7 @@ export const useCloudflareAccess = (): AccessState => {
           },
           error: null
         })
-      } catch (error) {
-        console.error('Access check failed:', error)
+      } catch (_error) {
         setState({
           isLoading: false,
           isAuthenticated: false,
