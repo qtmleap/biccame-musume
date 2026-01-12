@@ -1,6 +1,7 @@
 // Prismaスキーマ for Cloudflare D1
 generator client {
   provider        = "prisma-client-js"
+  output          = "generated/client"
   previewFeatures = ["driverAdapters"]
 }
 
