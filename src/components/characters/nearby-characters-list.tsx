@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { motion } from 'framer-motion'
 import { MapPin } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useCharacters } from '@/hooks/useCharacters'
@@ -60,8 +61,14 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
     <div className='bg-pink-50 rounded-lg'>
       <h2 className='text-lg font-bold text-gray-900 mb-4'>近くのビッカメ娘</h2>
       <div className='flex flex-col gap-4'>
-        {nearbyCharacters.map((char) => (
-          <div key={char.id} className='flex items-start gap-3'>
+        {nearbyCharacters.map((char, index) => (
+          <motion.div
+            key={`${currentCharacter.id}-${char.id}`}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.05 }}
+            className='flex items-start gap-3'
+          >
             <Link to='/characters/$id' params={{ id: char.id }}>
               <Avatar className='h-14 w-14 border-2 border-gray-200'>
                 <AvatarImage
@@ -89,7 +96,7 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
                 <span className='text-sm text-gray-500'>{char.distance.toFixed(1)}km</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
