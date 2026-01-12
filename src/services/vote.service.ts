@@ -46,53 +46,6 @@ export const recordVote = async (votesKV: KVNamespace, characterId: string, ip: 
   const voteKey = generateVoteKey(characterId, ip)
   await votesKV.put(voteKey, dayjs().toISOString(), { expirationTtl: ttl })
 }
-
-/**
- * 投票カウントを更新する（D1に保存）
- * @param prisma PrismaClient
- * @param characterId キャラクターID
- */
-export const updateVoteCount = async (prisma: PrismaClient, characterId: string): Promise<void> => {
-  try {
-    const currentYear = dayjs().year()
-
-    await prisma.voteCount.upsert({
-      where: { characterId_year: { characterId, year: currentYear } },
-      update: {
-        count: { increment: 1 }
-      },
-      create: {
-        characterId,
-        year: currentYear,
-        count: 1
-      }
-    })
-  } catch (error) {
-    console.error('Vote count update error:', error)
-    throw error
-  }
-}
-
-/**
- * D1に投票レコードを作成する
- * @param prisma PrismaClient
- * @param characterId キャラクターID
- * @param ip IPアドレス
- */
-export const createVoteRecord = async (prisma: PrismaClient, characterId: string, ip: string): Promise<void> => {
-  try {
-    await prisma.vote.create({
-      data: {
-        characterId,
-        ipAddress: ip
-      }
-    })
-  } catch (error) {
-    console.error('Vote record creation error:', error)
-    throw error
-  }
-}
-
 /**
  * 全キャラクターの投票カウントを取得する
  * @param env Bindings
