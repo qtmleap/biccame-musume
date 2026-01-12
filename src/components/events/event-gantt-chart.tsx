@@ -367,14 +367,14 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                   <motion.div
                     key={event.id}
                     layout
-                    initial={{ opacity: 0, scaleY: 0 }}
-                    animate={{ opacity: 1, scaleY: 1 }}
-                    exit={{ opacity: 0, scaleY: 0 }}
-                    transition={{ 
+                    initial={{ opacity: 0, scaleY: 0, transformOrigin: 'top' }}
+                    animate={{ opacity: 1, scaleY: 1, transformOrigin: 'top' }}
+                    exit={{ opacity: 0 }}
+                    transition={{
                       duration: 0.2,
-                      ease: 'easeInOut'
+                      ease: 'easeInOut',
+                      exit: { duration: 0 }
                     }}
-                    style={{ originY: 0 }}
                     className='relative flex h-10'
                   >
                     {/* 背景グリッド */}
