@@ -44,12 +44,13 @@ const extractTokenFromCookie = (cookie: string): string | undefined => {
 }
 
 /**
- * Cloudflare Access認証ミドルウェア
+ * Cloudflare Access認証ミドルウェア（開発環境では自動スキップ）
  */
 export const CFAuth = async <T extends Bindings>(c: Context<{ Bindings: T }>, next: Next) => {
-  // ローカル環境では認証をスキップ
+  // 開発環境では認証をスキップ
   if (import.meta.env?.DEV || process.env.NODE_ENV === 'development') {
-    return await next()
+    await next()
+    return
   }
 
   const { CF_ACCESS_TEAM_DOMAIN: teamDomain, CF_ACCESS_AUD: audience } = c.env
