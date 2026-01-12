@@ -247,11 +247,19 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
     console.log('Form data:', data)
     console.log('endDate value:', data.endDate, 'type:', typeof data.endDate)
 
-    const payload = {
+    const payload: any = {
       category: data.category,
       name: data.name,
       startDate: dayjs(data.startDate).toISOString(),
-      conditions: data.conditions
+      conditions: data.conditions.map((c) => ({
+        id: c.id || crypto.randomUUID(),
+        type: c.type,
+        purchaseAmount: c.purchaseAmount,
+        quantity: c.quantity
+      })),
+      stores: data.stores && data.stores.length > 0 ? data.stores : [],
+      isVerified: true,
+      isPreliminary: false
     }
 
     // 終了日が空文字やundefined、nullでない場合のみ設定
@@ -264,22 +272,21 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
       payload.endedAt = dayjs(data.endedAt).toISOString()
     }
 
-    console.log('Payload:', payload)
-
-    // 店舗が設定されている場合のみ追加
-    if (data.stores && data.stores.length > 0) {
-      payload.stores = data.stores
-    }
-
     // 参照URLが設定されている場合のみ追加
     if (data.referenceUrls && data.referenceUrls.length > 0) {
-      payload.referenceUrls = data.referenceUrls
+      payload.referenceUrls = data.referenceUrls.map((r) => ({
+        id: r.id || crypto.randomUUID(),
+        type: r.type,
+        url: r.url
+      }))
     }
 
     // 限定数量が設定されている場合のみ追加
     if (data.limitedQuantity) {
       payload.limitedQuantity = data.limitedQuantity
     }
+
+    console.log('Payload:', payload)
 
     if (event) {
       await updateEvent.mutateAsync({ id: event.id, data: payload })
