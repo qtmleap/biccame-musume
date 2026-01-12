@@ -3,30 +3,8 @@ import dayjs from 'dayjs'
 import type { StoreData } from '@/schemas/store.dto'
 import { client } from '@/utils/client'
 
-type CharacterWithVotes = StoreData & {
+export type CharacterWithVotes = StoreData & {
   voteCount: number
-}
-
-/**
- * 全キャラクターの投票数を取得
- */
-const _fetchVoteRanking = async (characters: StoreData[], year: number): Promise<CharacterWithVotes[]> => {
-  // Zodiosを使ってAPIリクエスト
-  const rawData = await client.getVotes({ queries: { year: year.toString() } })
-
-  // 配列からRecord形式に変換
-  const allVoteCounts: Record<string, number> = {}
-  for (const item of rawData) {
-    allVoteCounts[item.key] = item.count
-  }
-
-  // キャラクターと投票数をマージ
-  const voteCounts = characters.map((character) => ({
-    ...character,
-    voteCount: allVoteCounts[character.id] || 0
-  }))
-
-  return voteCounts.sort((a, b) => b.voteCount - a.voteCount)
 }
 
 /**

@@ -1,20 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { VoteSuccessResponse } from '@/schemas/vote.dto'
-import { client } from '@/utils/client'
+import type { z } from 'zod'
+import type { VoteSuccessResponseSchema } from '@/schemas/vote.dto'
+
+type VoteSuccessResponse = z.infer<typeof VoteSuccessResponseSchema>
 
 /**
  * 投票カウントを取得
  */
-const fetchVoteCount = async (characterId: string): Promise<number> => {
-  const data = await client.getVoteCount({ params: { characterId } })
-  return data.count
+const fetchVoteCount = async (_characterId: string): Promise<number> => {
+  // TODO: API実装時に修正
+  return 0
 }
 
 /**
  * 投票を送信
  */
-const submitVote = async (characterId: string): Promise<VoteSuccessResponse> => {
-  return await client.submitVote({ characterId })
+const submitVote = async (_characterId: string): Promise<VoteSuccessResponse> => {
+  // TODO: API実装時に修正
+  const nextVoteDate = new Date()
+  nextVoteDate.setDate(nextVoteDate.getDate() + 1)
+  return { success: true, message: 'Vote submitted', nextVoteDate: nextVoteDate.toISOString() }
 }
 
 /**
