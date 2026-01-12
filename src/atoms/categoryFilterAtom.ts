@@ -6,5 +6,5 @@ import type { Event } from '@/schemas/event.dto'
  * デフォルトは全カテゴリを選択状態
  */
 export const categoryFilterAtom = atom<Set<Event['category']>>(
-  new Set(['ackey', 'limited_card', 'regular_card', 'other'])
+  new Set(['ackey', 'limited_card', 'regular_card', 'other'] as Event['category'][])
 )
