@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
-import { AlertTriangle, Calendar, Coins, Link2, Store, Users, X } from 'lucide-react'
+import { AlertTriangle, Calendar, Coins, FileText, Gift, Link2, Package, Store, Users, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
@@ -101,7 +101,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
           endDate: null,
           endedAt: null,
           conditions: [],
-          isVerified: false,
+          isVerified: true,
           isPreliminary: false
         }
   })
@@ -311,7 +311,8 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-3'>
         {/* イベント名 */}
         <div>
-          <label htmlFor='event-name' className='mb-1 block text-sm font-medium'>
+          <label htmlFor='event-name' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
+            <FileText className='size-4' />
             イベント名
           </label>
           <Input
@@ -391,7 +392,8 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
         {/* イベント種別・開催店舗 */}
         <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
           <div>
-            <label htmlFor='category' className='mb-1 block text-sm font-medium'>
+            <label htmlFor='category' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
+              <Package className='size-4' />
               イベント種別
             </label>
             <Controller
@@ -476,7 +478,10 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
 
         {/* 配布条件 */}
         <div>
-          <div className='mb-1.5 block text-sm font-medium'>配布条件</div>
+          <div className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+            <Gift className='size-4' />
+            配布条件
+          </div>
           <div className='mb-2 grid grid-cols-2 gap-2 sm:grid-cols-4'>
             <Button
               type='button'
@@ -672,7 +677,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
         </div>
 
         {/* 検証済み・未確定情報フラグ */}
-        <div className='flex items-center gap-4 rounded-md border border-gray-200 bg-gray-50 p-3'>
+        <div className='grid grid-cols-2 gap-4 rounded-md bg-gray-50 p-3'>
           <div className='flex items-center gap-2'>
             <Controller
               name='isVerified'
