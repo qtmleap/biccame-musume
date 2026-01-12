@@ -59,9 +59,9 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
       category: data.category,
       name: data.name,
       limitedQuantity: data.limitedQuantity,
-      startDate: dayjs(data.startDate).toDate(),
-      endDate: data.endDate ? dayjs(data.endDate).toDate() : null,
-      endedAt: data.endedAt ? dayjs(data.endedAt).toDate() : null,
+      startDate: data.startDate,
+      endDate: data.endDate ?? null,
+      endedAt: data.endedAt ?? null,
       conditions: {
         create: data.conditions.map((c) => ({
           type: c.type,
@@ -77,7 +77,7 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
           })) || []
       },
       stores: {
-        create: data.stores.map((storeName) => ({ storeKey: storeName }))
+        create: data.stores.map((name) => ({ storeKey: name }))
       }
     },
     include: {
@@ -104,8 +104,8 @@ export const updateEvent = async (env: Bindings, id: string, data: EventRequest)
     name: data.name,
     limitedQuantity: data.limitedQuantity,
     startDate: data.startDate ? dayjs(data.startDate).toDate() : undefined,
-    endDate: data.endDate !== undefined ? (data.endDate ? dayjs(data.endDate).toDate() : null) : undefined,
-    endedAt: data.endedAt !== undefined ? (data.endedAt ? dayjs(data.endedAt).toDate() : null) : undefined
+    endDate: data.endDate !== undefined ? data.endDate : undefined,
+    endedAt: data.endedAt !== undefined ? data.endedAt : undefined
   }
 
   // conditionsの更新（全削除して再作成）
