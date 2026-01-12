@@ -1,17 +1,6 @@
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
+import type { PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import type { EventRequest } from '@/schemas/event.dto'
-
-/**
- * D1データベースからPrismaクライアントを生成する
- * @param db D1Database インスタンス
- * @returns PrismaClient インスタンス
- */
-export const createPrismaClient = (db: D1Database) => {
-  const adapter = new PrismaD1(db)
-  return new PrismaClient({ adapter })
-}
 
 /**
  * イベント一覧を取得する
@@ -19,16 +8,26 @@ export const createPrismaClient = (db: D1Database) => {
  * @returns イベント一覧
  */
 export const listEvents = async (prisma: PrismaClient) => {
-  const events = await prisma.event.findMany({
-    include: {
-      conditions: true,
-      referenceUrls: true,
-      stores: true
-    },
-    orderBy: { startDate: 'desc' }
-  })
+  console.log('[Service] listEvents called, prisma client:', prisma ? 'exists' : 'NOT FOUND')
 
-  return events.map(transformEventFromDb)
+  try {
+    const events = await prisma.event.findMany({
+      include: {
+        conditions: true,
+        referenceUrls: true,
+        stores: true
+      },
+      orderBy: { startDate: 'desc' }
+    })
+
+    console.log('[Service] Raw events from DB:', events.length)
+    const transformed = events.map(transformEventFromDb)
+    console.log('[Service] Transformed events:', transformed.length)
+    return transformed
+  } catch (error) {
+    console.error('[Service] Error in listEvents:', error)
+    throw error
+  }
 }
 
 /**
@@ -128,63 +127,94 @@ export const createEvent = async (prisma: PrismaClient, data: EventRequest) => {
  * @returns 更新されたイベント or null
  */
 export const updateEvent = async (prisma: PrismaClient, id: string, data: Partial<EventRequest>) => {
+  console.log('[Service] Update event started:', { id, dataKeys: Object.keys(data) })
+  console.log('[Service] Update data:', JSON.stringify(data, null, 2))
+
   // 既存イベントの存在確認
   const existingEvent = await prisma.event.findUnique({ where: { id } })
-  if (!existingEvent) return null
+  if (!existingEvent) {
+    console.error('[Service] Event not found:', id)
+    return null
+  }
+  console.log('[Service] Existing event found:', { id, name: existingEvent.name })
 
   // 関連データを削除してから再作成（条件、URL、店舗）
   if (data.conditions) {
+    console.log('[Service] Deleting existing conditions...')
     await prisma.eventCondition.deleteMany({ where: { eventId: id } })
+    console.log('[Service] Conditions deleted, will create', data.conditions.length, 'new ones')
   }
   if (data.referenceUrls !== undefined) {
+    console.log('[Service] Deleting existing reference URLs...')
     await prisma.eventReferenceUrl.deleteMany({ where: { eventId: id } })
+    console.log('[Service] Reference URLs deleted, will create', data.referenceUrls.length, 'new ones')
   }
   if (data.stores) {
+    console.log('[Service] Deleting existing stores...')
     await prisma.eventStore.deleteMany({ where: { eventId: id } })
+    console.log('[Service] Stores deleted, will create', data.stores.length, 'new ones')
   }
 
   // イベント本体と関連データを更新
-  const event = await prisma.event.update({
-    where: { id },
-    data: {
-      ...(data.category && { category: data.category }),
-      ...(data.name && { name: data.name }),
-      ...(data.limitedQuantity !== undefined && { limitedQuantity: data.limitedQuantity }),
-      ...(data.startDate && { startDate: dayjs(data.startDate).toDate() }),
-      // endDateが明示的にundefinedの場合はnullに設定
-      ...('endDate' in data && { endDate: data.endDate ? dayjs(data.endDate).toDate() : null }),
-      ...('endedAt' in data && { endedAt: data.endedAt ? dayjs(data.endedAt).toDate() : null }),
-      ...(data.conditions && {
-        conditions: {
-          create: data.conditions.map((c) => ({
-            type: c.type,
-            purchaseAmount: c.purchaseAmount,
-            quantity: c.quantity
-          }))
-        }
-      }),
-      ...(data.referenceUrls !== undefined && {
-        referenceUrls: {
-          create: data.referenceUrls.map((r) => ({
-            type: r.type,
-            url: r.url
-          }))
-        }
-      }),
-      ...(data.stores && {
-        stores: {
-          create: data.stores.map((storeName) => ({ storeKey: storeName }))
-        }
-      })
-    },
-    include: {
-      conditions: true,
-      referenceUrls: true,
-      stores: true
-    }
-  })
+  const updateData = {
+    ...(data.category && { category: data.category }),
+    ...(data.name && { name: data.name }),
+    ...(data.limitedQuantity !== undefined && { limitedQuantity: data.limitedQuantity }),
+    ...(data.startDate && { startDate: dayjs(data.startDate).toDate() }),
+    // endDateが明示的にundefinedの場合はnullに設定
+    ...('endDate' in data && { endDate: data.endDate ? dayjs(data.endDate).toDate() : null }),
+    ...('endedAt' in data && { endedAt: data.endedAt ? dayjs(data.endedAt).toDate() : null }),
+    ...(data.conditions && {
+      conditions: {
+        create: data.conditions.map((c) => ({
+          type: c.type,
+          purchaseAmount: c.purchaseAmount,
+          quantity: c.quantity
+        }))
+      }
+    }),
+    ...(data.referenceUrls !== undefined && {
+      referenceUrls: {
+        create: data.referenceUrls.map((r) => ({
+          type: r.type,
+          url: r.url
+        }))
+      }
+    }),
+    ...(data.stores && {
+      stores: {
+        create: data.stores.map((storeName) => ({ storeKey: storeName }))
+      }
+    })
+  }
 
-  return transformEventFromDb(event)
+  console.log('[Service] Update data structure:', JSON.stringify(updateData, null, 2))
+  console.log('[Service] Executing Prisma update...')
+
+  try {
+    const event = await prisma.event.update({
+      where: { id },
+      data: updateData,
+      include: {
+        conditions: true,
+        referenceUrls: true,
+        stores: true
+      }
+    })
+
+    console.log('[Service] Event updated successfully:', {
+      id: event.id,
+      name: event.name,
+      conditionsCount: event.conditions.length,
+      referenceUrlsCount: event.referenceUrls.length,
+      storesCount: event.stores.length
+    })
+
+    return transformEventFromDb(event)
+  } catch (error) {
+    console.error('[Service] Error updating event:', error)
+    throw error
+  }
 }
 
 /**
