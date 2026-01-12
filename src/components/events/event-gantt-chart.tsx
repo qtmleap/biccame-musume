@@ -366,14 +366,13 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                 return (
                   <motion.div
                     key={event.id}
-                    layout='position'
+                    layout
                     initial={{ opacity: 0, scaleY: 0 }}
                     animate={{ opacity: 1, scaleY: 1 }}
                     exit={{ opacity: 0, scaleY: 0 }}
                     transition={{ 
-                      duration: 0.3,
-                      ease: 'easeInOut',
-                      layout: { duration: 0.3 }
+                      duration: 0.2,
+                      ease: 'easeInOut'
                     }}
                     style={{ originY: 0 }}
                     className='relative flex h-10'
