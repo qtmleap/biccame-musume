@@ -1,10 +1,10 @@
 import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
 import { nullToUndefined } from '@/lib/utils'
 import { type Event, type EventRequest, EventSchema, type EventStatus, EventStatusSchema } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
+import { PrismaClient } from '../../prisma/generated/client'
 
 /**
  * イベントのステータスと残り日数を計算
