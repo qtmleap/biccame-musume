@@ -2,7 +2,7 @@ import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
 import { EventRequestSchema, EventSchema } from '@/schemas/event.dto'
 import { StoresSchema } from '@/schemas/store.dto'
-import { VoteCountListSchema, VoteRequestSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
+import { VoteCountListSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
 
 /**
  * API定義
@@ -31,14 +31,14 @@ const api = makeApi([
   },
   {
     method: 'post',
-    path: '/api/votes',
+    path: '/api/votes/:characterId',
     alias: 'createVote',
     description: '投票',
     parameters: [
       {
-        name: 'body',
-        type: 'Body',
-        schema: VoteRequestSchema
+        name: 'characterId',
+        type: 'Path',
+        schema: z.string()
       }
     ],
     response: VoteSuccessResponseSchema

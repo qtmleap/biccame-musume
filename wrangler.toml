@@ -26,6 +26,10 @@ binding = "VOTES"
 id = "04dd77043cc240b2b8bbbd7f0adfd67d"
 
 [[env.prod.kv_namespaces]]
+binding = "VOTE_LIMITER"
+id = "96019843cb67406799d40584768bcf7a"
+
+[[env.prod.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
 id = "ef49185c58d04a0790e7c68394d78089"
 
@@ -45,8 +49,12 @@ not_found_handling = "single-page-application"
 binding = "ASSETS"
 
 [[env.dev.kv_namespaces]]
-binding = "VOTES"
+binding = "VOTE_LIMITER"
 id = "97c756ffdc3e4e2596946a57092d9b2d"
+
+[[env.dev.kv_namespaces]]
+binding = "VOTE_LIMITER"
+id = "cc87e0f64116414c9d70a080bbb97156"
 
 [[env.dev.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
