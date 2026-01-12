@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowLeft, Pencil } from 'lucide-react'
+import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
@@ -50,7 +51,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
   return (
     <>
       {/* 戻るボタン */}
-      <div className='pt-4 pb-2'>
+      <div className='pb-2'>
         <Button variant='ghost' size='sm' className='text-gray-600 hover:text-gray-900 -ml-2' onClick={onBack}>
           <ArrowLeft className='h-4 w-4 mr-1' />
           戻る
@@ -58,7 +59,13 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
       </div>
 
       {/* ヘッダー */}
-      <div className='mb-6'>
+      <motion.div
+        key={`header-${event.id}`}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className='mb-6'
+      >
         <div className='flex items-center gap-2 mb-2'>
           <Badge className={`${categoryStyle} border`}>{EVENT_CATEGORY_LABELS[event.category]}</Badge>
           {getStatusBadge(event.status)}
@@ -78,7 +85,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
             </Button>
           )}
         </div>
-      </div>
+      </motion.div>
     </>
   )
 }

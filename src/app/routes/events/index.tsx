@@ -92,7 +92,7 @@ const EventsContent = () => {
   }, [events, categoryFilter, regionFilter, storePrefectureMap])
 
   return (
-    <div className='mx-auto px-4 py-4 md:px-8 max-w-6xl'>
+    <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
       <div className='flex flex-col gap-2'>
         {/* カテゴリフィルター */}
         <EventCategoryFilter />

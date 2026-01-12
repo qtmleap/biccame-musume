@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar, Gift, Link2, Package, Store } from 'lucide-react'
+import { motion } from 'motion/react'
 import { REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
@@ -148,7 +149,13 @@ const EventReferenceUrlsSection = ({ referenceUrls }: { referenceUrls?: Event['r
  * イベント情報セクションのコンポーネント
  */
 export const EventDetailInfo = ({ event }: EventDetailInfoProps) => (
-  <div className='space-y-3'>
+  <motion.div
+    key={`info-${event.id}`}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.5, delay: 0.3 }}
+    className='space-y-3'
+  >
     <h2 className='text-xl font-bold text-gray-900'>イベント情報</h2>
     <div className='space-y-3'>
       <EventPeriodSection event={event} />
@@ -157,5 +164,5 @@ export const EventDetailInfo = ({ event }: EventDetailInfoProps) => (
       <EventConditionsSection conditions={event.conditions} />
       <EventReferenceUrlsSection referenceUrls={event.referenceUrls} />
     </div>
-  </div>
+  </motion.div>
 )
