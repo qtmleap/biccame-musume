@@ -21,10 +21,9 @@ type CharacterVoteButtonProps = {
 export const CharacterVoteButton = ({
   characterId,
   characterName: _characterName,
-  variant = 'default',
-  enableVoteCount = true
+  variant = 'default'
 }: CharacterVoteButtonProps) => {
-  const { vote, isVoting, isSuccess, error, voteResponse } = useVote(characterId, { enableVoteCount })
+  const { mutate, isPending, isSuccess, data, error } = useVote(characterId)
   const [lastVoteTimes, setLastVoteTimes] = useAtom(lastVoteTimesAtom)
 
   // 今日既に投票済みかチェック
@@ -50,8 +49,8 @@ export const CharacterVoteButton = ({
   }, [isSuccess, characterId, setLastVoteTimes])
 
   useEffect(() => {
-    if (isSuccess && voteResponse?.message) {
-      toast.success(voteResponse.message, {
+    if (isSuccess && data?.message) {
+      toast.success(data.message, {
         classNames: {
           toast: 'text-gray-900',
           description: 'text-gray-900! font-semibold!',
@@ -60,12 +59,23 @@ export const CharacterVoteButton = ({
         icon: <CircleCheckIcon />
       })
     }
-  }, [isSuccess, voteResponse])
+  }, [isSuccess, data])
 
   useEffect(() => {
     if (error) {
       // エラーレスポンスからメッセージを取得
-      const errorMessage = error.message
+      let errorMessage = '投票に失敗しました'
+
+      try {
+        const errorData = (error as any)?.response?.data
+        if (errorData?.message) {
+          errorMessage = errorData.message
+        } else {
+          errorMessage = error.message
+        }
+      } catch {
+        errorMessage = error.message
+      }
 
       toast.error(errorMessage, {
         classNames: {
@@ -77,13 +87,13 @@ export const CharacterVoteButton = ({
   }, [error])
 
   const handleVote = () => {
-    if (hasVotedToday || isVoting) return
-    vote()
+    if (hasVotedToday || isPending) return
+    mutate()
   }
 
   const getButtonText = () => {
     if (hasVotedToday) return '応援済み'
-    if (isVoting) return '応援中...'
+    if (isPending) return '応援中...'
     return '応援する'
   }
 
@@ -92,7 +102,7 @@ export const CharacterVoteButton = ({
       <Button
         size='sm'
         onClick={handleVote}
-        disabled={hasVotedToday || isVoting}
+        disabled={hasVotedToday || isPending}
         className={cn(
           'rounded-full px-4 h-7 text-xs font-semibold',
           hasVotedToday
@@ -108,7 +118,7 @@ export const CharacterVoteButton = ({
   return (
     <Button
       onClick={handleVote}
-      disabled={hasVotedToday || isVoting}
+      disabled={hasVotedToday || isPending}
       className={cn(
         'w-full font-semibold',
         hasVotedToday ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-[#e50012] hover:bg-[#c40010] text-white'
