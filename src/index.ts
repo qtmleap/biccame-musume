@@ -1,5 +1,4 @@
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
+import type { PrismaClient } from '@prisma/client'
 import { Hono } from 'hono'
 import events from './api/event'
 import votes from './api/vote'
@@ -14,12 +13,6 @@ type Bindings = {
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
-
-app.use('*', async (c, next) => {
-  // PrismaClientをコンテキストに追加
-  c.env.PRISMA = new PrismaClient({ adapter: new PrismaD1(c.env.DB) })
-  await next()
-})
 
 // イベント管理APIルート
 app.route('/api/events', events)
