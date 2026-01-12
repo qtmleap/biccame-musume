@@ -40,6 +40,8 @@ CREATE TABLE "events" (
     "start_date" DATETIME NOT NULL,
     "end_date" DATETIME,
     "ended_at" DATETIME,
+    "is_verified" BOOLEAN NOT NULL DEFAULT false,
+    "is_preliminary" BOOLEAN NOT NULL DEFAULT false,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL
 );
