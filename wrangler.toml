@@ -3,6 +3,7 @@ compatibility_date = "2025-07-12"
 compatibility_flags = ["nodejs_compat_v2"]
 main = "src/index.ts"
 routes = [{ pattern = "biccame-musume.com", custom_domain = true }]
+keep_vars = true
 
 [env.prod]
 name = "biccame-musume-prod"
