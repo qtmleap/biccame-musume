@@ -44,6 +44,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
             {/* プロフィールセクション */}
             <div className='mb-4 flex items-end justify-between gap-4'>
               <motion.div
+                key={`avatar-${character.id}`}
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5 }}
@@ -89,6 +90,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
 
             {/* 名前と説明 */}
             <motion.div
+              key={`profile-${character.id}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -122,6 +124,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
             {/* 店舗情報セクション */}
             {character.store && (
               <motion.div
+                key={`store-${character.id}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
