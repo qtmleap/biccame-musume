@@ -5,7 +5,7 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { HTTPException } from 'hono/http-exception'
 import type { Bindings } from '@/types/bindings'
-import { generateVoteKey, getNextJSTDate } from '@/utils/vote'
+import { generateVoteKey } from '@/utils/vote'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -124,23 +124,26 @@ export const getAllVoteCounts = async (
  * @param ip IPアドレス
  * @returns 投票結果
  */
-export const castVote = async (
+export const vote = async (
   env: Bindings,
   characterId: string,
   ip: string
 ): Promise<{ success: boolean; message: string; nextVoteDate: string }> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
-  if (ip === 'unknown') {
-    throw new HTTPException(400, { message: 'IP address not found' })
-  }
+  const currentYear = dayjs().year()
 
-  // 投票レコードとカウントを更新
-  await Promise.all([createVoteRecord(prisma, characterId, ip), updateVoteCount(prisma, characterId)])
-
-  return {
-    success: true,
-    message: '投票ありがとうございます！',
-    nextVoteDate: getNextJSTDate()
-  }
+  // 投票カウントを更新
+  await prisma.voteCount.upsert({
+    where: { characterId_year: { characterId: characterId, year: currentYear } },
+    update: {
+      count: { increment: 1 }
+    },
+    create: {
+      characterId,
+      year: currentYear,
+      count: 1
+    }
+  })
+  return
 }
