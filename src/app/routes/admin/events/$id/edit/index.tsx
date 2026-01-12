@@ -34,8 +34,13 @@ const EditEventContent = () => {
     <div className='container mx-auto max-w-4xl px-4 py-6 md:py-8'>
       {/* ヘッダー */}
       <div className='mb-6 md:mb-8'>
-        <Button variant='ghost' size='sm' className='mb-4' onClick={() => router.history.back()}>
-          <ArrowLeft className='mr-2 size-4' />
+        <Button
+          variant='ghost'
+          size='sm'
+          className='text-gray-600 hover:text-gray-900 -ml-2 mb-4'
+          onClick={() => router.history.back()}
+        >
+          <ArrowLeft className='h-4 w-4 mr-1' />
           戻る
         </Button>
         <h1 className='text-2xl font-bold text-gray-900 md:text-3xl'>イベント編集</h1>
