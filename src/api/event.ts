@@ -1,272 +1,194 @@
-import { rateLimit } from '@elithrar/workers-hono-rate-limit'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
 import * as eventService from '@/services/event.service'
 import type { Bindings } from '@/types/bindings'
 import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
 
-const getKey: RateLimitKeyFunc = (c: Context): string => {
-  return c.req.header('Authorization') || c.req.header('CF-Connecting-IP') || ''
-}
-
-const rateLimiter = async (c: Context, next: Next) => {
-  return await rateLimit(c.env.RATE_LIMITER, getKey)(c, next)
-}
-
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
-routes.use('*', rateLimiter)
-
-// イベント一覧取得
-const listEventsRoute = createRoute({
-  method: 'get',
-  path: '/',
-  responses: {
-    200: {
-      content: {
-        'application/json': {
-          schema: z.object({
-            events: z.array(EventSchema)
-          })
-        }
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/',
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: z.array(EventSchema)
+          }
+        },
+        description: 'イベント一覧取得成功'
+      }
+    },
+    tags: ['events']
+  }),
+  async (c) => {
+    // const prisma = new PrismaClient({ adapter: new PrismaD1(c.env.DB) })
+    const events = await c.env.PRISMA.event.findMany({
+      include: {
+        conditions: true,
+        referenceUrls: true,
+        stores: true
       },
-      description: 'イベント一覧取得成功'
+      orderBy: { startDate: 'desc' }
+    })
+    const result = EventSchema.array().safeParse(events)
+    if (!result.success) {
+      // console.error(JSON.stringify(events, null, 2))
+      console.error(result.error)
+      throw new HTTPException(400, { message: result.error.message })
     }
-  },
-  tags: ['events']
-})
+    return c.json(result.data)
+  }
+)
 
-routes.openapi(listEventsRoute, async (c) => {
-  const events = await eventService.listEvents(c.env.PRISMA)
-
-  return c.json({ events })
-})
-
-// イベント作成
-const createEventRoute = createRoute({
-  method: 'post',
-  path: '/',
-  middleware: [cloudflareAccessMiddleware],
-  request: {
-    body: {
-      content: {
-        'application/json': {
-          schema: EventRequestSchema
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/',
+    middleware: [cloudflareAccessMiddleware],
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: EventRequestSchema
+          }
         }
       }
-    }
-  },
-  responses: {
-    201: {
-      content: {
-        'application/json': {
-          schema: EventSchema
-        }
-      },
-      description: 'イベント作成成功'
     },
-    400: {
-      content: {
-        'application/json': {
-          schema: z.object({
-            error: z.string()
-          })
-        }
+    responses: {
+      201: {
+        content: {
+          'application/json': {
+            schema: EventSchema
+          }
+        },
+        description: 'イベント作成成功'
       },
-      description: 'バリデーションエラー'
-    }
-  },
-  tags: ['events']
-})
-
-routes.openapi(createEventRoute, async (c) => {
-  const body = c.req.valid('json')
-
-  // バリデーション
-  const result = EventRequestSchema.safeParse(body)
-  if (!result.success) {
-    throw new HTTPException(400, { message: result.error.message })
-  }
-
-  const event = await eventService.createEvent(c.env.PRISMA, result.data)
-
-  return c.json(event, 201)
-})
-
-// URL重複チェック（/:id より前に定義する必要がある）
-const checkDuplicateUrlRoute = createRoute({
-  method: 'get',
-  path: '/check-url',
-  request: {
-    query: z.object({
-      url: z.string(),
-      excludeId: z.string().optional()
-    })
-  },
-  responses: {
-    200: {
-      content: {
-        'application/json': {
-          schema: z.object({
-            exists: z.boolean(),
-            event: EventSchema.optional()
-          })
-        }
-      },
-      description: 'URL重複チェック結果'
-    }
-  },
-  tags: ['events']
-})
-
-routes.openapi(checkDuplicateUrlRoute, async (c) => {
-  const { url, excludeId } = c.req.valid('query')
-
-  const matchingEvent = await eventService.findEventByUrl(c.env.PRISMA, url, excludeId)
-
-  return c.json({
-    exists: !!matchingEvent,
-    event: matchingEvent ?? undefined
-  })
-})
-
-// イベント取得
-const getEventRoute = createRoute({
-  method: 'get',
-  path: '/:id',
-  request: {
-    params: z.object({
-      id: z.string()
-    })
-  },
-  responses: {
-    200: {
-      content: {
-        'application/json': {
-          schema: EventSchema
-        }
-      },
-      description: 'イベント取得成功'
+      400: {
+        content: {
+          'application/json': {
+            schema: z.object({
+              error: z.string()
+            })
+          }
+        },
+        description: 'バリデーションエラー'
+      }
     },
-    404: {
-      content: {
-        'application/json': {
-          schema: z.object({
-            error: z.string()
-          })
-        }
-      },
-      description: 'イベントが見つかりません'
+    tags: ['events']
+  }),
+  async (c) => {
+    const body = c.req.valid('json')
+
+    // バリデーション
+    const result = EventRequestSchema.safeParse(body)
+    if (!result.success) {
+      throw new HTTPException(400, { message: result.error.message })
     }
-  },
-  tags: ['events']
-})
 
-routes.openapi(getEventRoute, async (c) => {
-  const { id } = c.req.valid('param')
+    const event = await eventService.createEvent(c.env.PRISMA, result.data)
 
-  const event = await eventService.getEventById(c.env.PRISMA, id)
-
-  if (!event) {
-    return c.json({ error: 'Event not found' }, 404)
+    return c.json(event, 201)
   }
+)
 
-  return c.json(event, 200)
-})
-
-// イベント更新
-const updateEventRoute = createRoute({
-  method: 'put',
-  path: '/:id',
-  middleware: [cloudflareAccessMiddleware],
-  request: {
-    params: z.object({
-      id: z.string()
-    }),
-    body: {
-      content: {
-        'application/json': {
-          schema: EventRequestSchema.partial()
+routes.openapi(
+  createRoute({
+    method: 'put',
+    path: '/:id',
+    middleware: [cloudflareAccessMiddleware],
+    request: {
+      params: z.object({
+        id: z.string()
+      }),
+      body: {
+        content: {
+          'application/json': {
+            schema: EventRequestSchema.partial()
+          }
         }
       }
-    }
-  },
-  responses: {
-    200: {
-      content: {
-        'application/json': {
-          schema: EventSchema
-        }
-      },
-      description: 'イベント更新成功'
     },
-    404: {
-      content: {
-        'application/json': {
-          schema: z.object({
-            error: z.string()
-          })
-        }
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: EventSchema
+          }
+        },
+        description: 'イベント更新成功'
       },
-      description: 'イベントが見つかりません'
-    }
-  },
-  tags: ['events']
-})
-
-routes.openapi(updateEventRoute, async (c) => {
-  const { id } = c.req.valid('param')
-  const body = c.req.valid('json')
-
-  const event = await eventService.updateEvent(c.env.PRISMA, id, body)
-
-  if (!event) {
-    throw new HTTPException(404, { message: 'Event not found' })
-  }
-
-  return c.json(event, 200)
-})
-
-// イベント削除
-const deleteEventRoute = createRoute({
-  method: 'delete',
-  path: '/:id',
-  middleware: [cloudflareAccessMiddleware],
-  request: {
-    params: z.object({
-      id: z.string()
-    })
-  },
-  responses: {
-    204: {
-      description: 'イベント削除成功'
+      404: {
+        content: {
+          'application/json': {
+            schema: z.object({
+              error: z.string()
+            })
+          }
+        },
+        description: 'イベントが見つかりません'
+      }
     },
-    404: {
-      content: {
-        'application/json': {
-          schema: z.object({
-            error: z.string()
-          })
-        }
-      },
-      description: 'イベントが見つかりません'
+    tags: ['events']
+  }),
+  async (c) => {
+    const { id } = c.req.valid('param')
+    const body = c.req.valid('json')
+
+    console.log('[API] Update event request:', { id, body: JSON.stringify(body, null, 2) })
+
+    const event = await eventService.updateEvent(c.env.PRISMA, id, body)
+
+    if (!event) {
+      console.error('[API] Event not found for update:', id)
+      throw new HTTPException(404, { message: 'Event not found' })
     }
-  },
-  tags: ['events']
-})
 
-routes.openapi(deleteEventRoute, async (c) => {
-  const { id } = c.req.valid('param')
-
-  const deleted = await eventService.deleteEvent(c.env.PRISMA, id)
-
-  if (!deleted) {
-    throw new HTTPException(404, { message: 'Event not found' })
+    console.log('[API] Event updated successfully:', { id, eventName: event.name })
+    return c.json(event, 200)
   }
+)
 
-  return c.body(null, 204)
-})
+routes.openapi(
+  createRoute({
+    method: 'delete',
+    path: '/:id',
+    middleware: [cloudflareAccessMiddleware],
+    request: {
+      params: z.object({
+        id: z.string()
+      })
+    },
+    responses: {
+      204: {
+        description: 'イベント削除成功'
+      },
+      404: {
+        content: {
+          'application/json': {
+            schema: z.object({
+              error: z.string()
+            })
+          }
+        },
+        description: 'イベントが見つかりません'
+      }
+    },
+    tags: ['events']
+  }),
+  async (c) => {
+    const { id } = c.req.valid('param')
+
+    const deleted = await eventService.deleteEvent(c.env.PRISMA, id)
+
+    if (!deleted) {
+      throw new HTTPException(404, { message: 'Event not found' })
+    }
+
+    return c.body(null, 204)
+  }
+)
 
 export default routes
