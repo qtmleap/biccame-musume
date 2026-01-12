@@ -14,12 +14,10 @@ const fetchVoteRanking = async (characters: StoreData[], year: number): Promise<
   // Zodiosを使ってAPIリクエスト
   const rawData = await client.getAllVoteCounts({ queries: { year: year.toString() } })
 
-  // "年:ID"形式のデータを"ID"形式に変換
+  // 配列からRecord形式に変換
   const allVoteCounts: Record<string, number> = {}
-  for (const [key, count] of Object.entries(rawData)) {
-    // "2025:kyoto" -> "kyoto"
-    const characterKey = key.includes(':') ? key.split(':')[1] : key
-    allVoteCounts[characterKey] = count
+  for (const item of rawData) {
+    allVoteCounts[item.key] = item.count
   }
 
   // キャラクターと投票数をマージ
@@ -38,7 +36,7 @@ export const useVoteRanking = (characters: StoreData[], year?: number) => {
   const targetYear = year || dayjs().year()
 
   return useSuspenseQuery({
-    queryKey: ['voteRanking', characters.length, targetYear],
+    queryKey: ['ranking', targetYear],
     queryFn: () => fetchVoteRanking(characters, targetYear),
     staleTime: 1000 * 30, // 30秒間キャッシュ
     refetchInterval: 1000 * 60, // 1分ごとに再取得
