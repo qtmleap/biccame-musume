@@ -40,7 +40,7 @@ const MenuCard = ({
  */
 const AdminContent = () => {
   return (
-    <div className='mx-auto px-4 py-4 md:px-8 max-w-6xl'>
+    <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
       {/* ヘッダー */}
       <div className='mb-6 md:mb-8'>
         <h1 className='text-2xl font-bold text-gray-900 md:text-3xl'>管理画面</h1>

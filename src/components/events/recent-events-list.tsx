@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Store } from 'lucide-react'
+import { motion } from 'motion/react'
 import { STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
@@ -45,17 +46,23 @@ export const RecentEventsList = ({ events, currentEventId }: RecentEventsListPro
   }
 
   return (
-    <div className='bg-pink-50 rounded-lg'>
+    <div key={currentEventId} className='bg-pink-50 rounded-lg'>
       <h2 className='text-lg font-bold text-gray-900 mb-4'>最近更新されたイベント</h2>
       <div className='flex flex-col divide-y divide-gray-200'>
-        {recentEvents.map((event) => {
+        {recentEvents.map((event, index) => {
           // 店舗名を取得（最大2つまで表示、それ以上は「他」と表示）
           const storeNames = event.stores.slice(0, 2).map((key) => STORE_NAME_LABELS[key as StoreKey] || key)
           const hasMore = event.stores.length > 2
           const storeDisplay = hasMore ? `${storeNames.join('、')} 他` : storeNames.join('、')
 
           return (
-            <div key={event.id} className='flex items-start gap-3 py-3 first:pt-0'>
+            <motion.div
+              key={event.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              className='flex items-start gap-3 py-3 first:pt-0'
+            >
               <div className='shrink-0'>
                 <div
                   className={`h-14 w-14 rounded-full flex items-center justify-center text-xs font-bold ${CATEGORY_COLORS[event.category]}`}
@@ -78,7 +85,7 @@ export const RecentEventsList = ({ events, currentEventId }: RecentEventsListPro
                   <span className='text-sm text-gray-600 truncate'>{storeDisplay}</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           )
         })}
       </div>
