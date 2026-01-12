@@ -18,9 +18,7 @@ routes.openapi(
       200: {
         content: {
           'application/json': {
-            schema: z.object({
-              events: z.array(EventSchema)
-            })
+            schema: z.array(EventSchema)
           }
         },
         description: 'イベント一覧取得成功'
@@ -41,16 +39,17 @@ routes.openapi(
       })
     ).map((v) => ({
       ...nullToUndefined(v),
-      stores: ['abeno'],
+      stores: v.stores.map((s) => s.storeKey),
       status: EventStatusSchema.enum.ongoing,
       daysUntil: 0
     }))
+    console.log(events.map((e) => e.stores))
     const result = EventSchema.array().safeParse(events)
     if (!result.success) {
-      console.error(JSON.stringify(events, null, 2))
+      // console.error(JSON.stringify(events, null, 2))
       throw new HTTPException(400, { message: result.error.message })
     }
-    return c.json({ events: result.data })
+    return c.json(result.data)
   }
 )
 
