@@ -3,7 +3,6 @@ import { PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
-import { HTTPException } from 'hono/http-exception'
 import type { Bindings } from '@/types/bindings'
 import { generateVoteKey } from '@/utils/vote'
 
@@ -124,11 +123,7 @@ export const getAllVoteCounts = async (
  * @param ip IPアドレス
  * @returns 投票結果
  */
-export const vote = async (
-  env: Bindings,
-  characterId: string,
-  ip: string
-): Promise<{ success: boolean; message: string; nextVoteDate: string }> => {
+export const vote = async (env: Bindings, characterId: string): Promise<void> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
   const currentYear = dayjs().year()
