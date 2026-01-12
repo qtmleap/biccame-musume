@@ -36,3 +36,24 @@ export type VoteCountItem = z.infer<typeof VoteCountItemSchema>
 export const VoteCountListSchema = z.array(VoteCountItemSchema)
 
 export type VoteCountList = z.infer<typeof VoteCountListSchema>
+
+/**
+ * 全投票カウント（Record形式）
+ */
+export const AllVoteCountsSchema = z.record(z.string(), z.number())
+
+export type AllVoteCounts = z.infer<typeof AllVoteCountsSchema>
+
+/**
+ * 単一キャラクターの投票カウント
+ */
+export const VoteCountSchema = z.object({
+  count: z.number().openapi({ example: 42 })
+})
+
+export type VoteCount = z.infer<typeof VoteCountSchema>
+
+/**
+ * 投票成功レスポンス（VoteResponseSchemaのエイリアス）
+ */
+export const VoteSuccessResponseSchema = VoteResponseSchema
