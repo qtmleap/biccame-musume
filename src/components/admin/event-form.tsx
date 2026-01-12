@@ -1,11 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
-import { AlertTriangle, Calendar, Coins, Users, X } from 'lucide-react'
+import { AlertTriangle, Calendar, Coins, Link2, Store, Users, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/useCharacters'
@@ -43,7 +44,9 @@ const EventFormSchema = z.object({
         quantity: z.number().min(1).optional()
       })
     )
-    .min(1, '最低1つの条件を設定してください')
+    .min(1, '最低1つの条件を設定してください'),
+  isVerified: z.boolean().default(false),
+  isPreliminary: z.boolean().default(false)
 })
 
 type EventFormValues = z.infer<typeof EventFormSchema>
@@ -84,7 +87,9 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
           startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
           endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : null,
           endedAt: event.endedAt ? dayjs(event.endedAt).format('YYYY-MM-DD') : null,
-          conditions: event.conditions
+          conditions: event.conditions,
+          isVerified: event.isVerified ?? false,
+          isPreliminary: event.isPreliminary ?? false
         }
       : {
           category: undefined,
@@ -95,7 +100,9 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
           startDate: '',
           endDate: null,
           endedAt: null,
-          conditions: []
+          conditions: [],
+          isVerified: false,
+          isPreliminary: false
         }
   })
 
@@ -155,7 +162,9 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
         startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
         endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : null,
         endedAt: event.endedAt ? dayjs(event.endedAt).format('YYYY-MM-DD') : null,
-        conditions: event.conditions
+        conditions: event.conditions,
+        isVerified: event.isVerified ?? false,
+        isPreliminary: event.isPreliminary ?? false
       })
     }
   }, [event, reset])
@@ -258,8 +267,8 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
         quantity: c.quantity
       })),
       stores: data.stores && data.stores.length > 0 ? data.stores : [],
-      isVerified: true,
-      isPreliminary: false
+      isVerified: data.isVerified,
+      isPreliminary: data.isPreliminary
     }
 
     // 終了日が空文字やundefined、nullでない場合のみ設定
@@ -410,7 +419,8 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
           </div>
 
           <div>
-            <label htmlFor='store' className='mb-1 block text-sm font-medium'>
+            <label htmlFor='store' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
+              <Store className='size-4' />
               開催店舗（任意）
             </label>
             <Select value='' onValueChange={handleAddStore}>
@@ -594,7 +604,10 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
 
         {/* 参考URL */}
         <div>
-          <div className='mb-1.5 block text-sm font-medium'>参考URL（任意）</div>
+          <div className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+            <Link2 className='size-4' />
+            参考URL（任意）
+          </div>
           <div className='mb-2 flex flex-wrap gap-2'>
             {ReferenceUrlTypeSchema.options.map((type) => (
               <Button
@@ -655,6 +668,44 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
                 )}
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* 検証済み・未確定情報フラグ */}
+        <div className='flex items-center gap-4 rounded-md border border-gray-200 bg-gray-50 p-3'>
+          <div className='flex items-center gap-2'>
+            <Controller
+              name='isVerified'
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  id='is-verified'
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className='data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600'
+                />
+              )}
+            />
+            <label htmlFor='is-verified' className='text-sm font-medium text-gray-700 cursor-pointer'>
+              検証済み
+            </label>
+          </div>
+          <div className='flex items-center gap-2'>
+            <Controller
+              name='isPreliminary'
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  id='is-preliminary'
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className='data-[state=checked]:bg-amber-600 data-[state=checked]:border-amber-600'
+                />
+              )}
+            />
+            <label htmlFor='is-preliminary' className='text-sm font-medium text-gray-700 cursor-pointer'>
+              未確定情報
+            </label>
           </div>
         </div>
 
