@@ -9,13 +9,25 @@ export const useEvents = () => {
   return useQuery({
     queryKey: ['events'],
     queryFn: async (): Promise<Event[]> => {
-      console.log('Fetching events from API...')
-      const data = await client.getEvents()
-      console.log('Events data:', data.events)
-      return data.events
+      console.log('[useEvents] Fetching events from API...')
+      try {
+        const data = await client.getEvents()
+        console.log('[useEvents] Events data received:', data)
+        console.log('[useEvents] Events count:', data.events.length)
+        return data.events
+      } catch (error) {
+        console.error('[useEvents] Failed to fetch events:', error)
+        console.error('[useEvents] Error details:', {
+          message: error instanceof Error ? error.message : 'Unknown error',
+          stack: error instanceof Error ? error.stack : undefined
+        })
+        throw error
+      }
     },
     staleTime: 0, // 常に最新データを取得
-    refetchOnMount: true // マウント時に再取得
+    refetchOnMount: true, // マウント時に再取得
+    retry: 1, // リトライ回数を1回に制限
+    retryDelay: 1000 // 1秒後にリトライ
   })
 }
 
@@ -61,11 +73,23 @@ export const useUpdateEvent = () => {
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<EventRequest> }): Promise<Event> => {
-      return client.updateEvent(data, { params: { eventId: id } })
+      console.log('[Hook] Update event mutation started:', { id, data })
+      try {
+        const result = await client.updateEvent(data, { params: { eventId: id } })
+        console.log('[Hook] Update event mutation succeeded:', result)
+        return result
+      } catch (error) {
+        console.error('[Hook] Update event mutation failed:', error)
+        throw error
+      }
     },
-    onSuccess: () => {
+    onSuccess: (_data) => {
+      console.log('[Hook] Update event onSuccess, invalidating queries...')
       // イベント一覧を再取得
       queryClient.invalidateQueries({ queryKey: ['events'] })
+    },
+    onError: (error) => {
+      console.error('[Hook] Update event onError:', error)
     }
   })
 }
