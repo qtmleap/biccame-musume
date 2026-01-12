@@ -44,7 +44,6 @@ const calculateEventStatus = (event: {
 }
 
 const transform = (event: any): Event => {
-  console.log(JSON.stringify(event, null, 2))
   const { status, daysUntil } = calculateEventStatus(event)
   return {
     ...nullToUndefined(event),
@@ -83,7 +82,6 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
       orderBy: { startDate: 'desc' }
     })
   ).map((v) => transform(v))
-  console.log(events.map((e) => e.stores))
   const result = EventSchema.array().safeParse(events)
   if (!result.success) {
     throw new HTTPException(400, { message: result.error.message })

@@ -30,7 +30,7 @@ export const voteLimit = async (c: Context<{ Bindings: Bindings; Variables: Vari
   const value = await c.env.VOTE_LIMITER.get(key)
   if (value !== null) {
     if (isDev) {
-      console.log(`[Dev] Already voted today for character ${characterId}, but allowing re-vote in development`)
+      console.debug('[VoteLimit] Development environment detected, skipping vote limit check.')
       await next()
       return
     }

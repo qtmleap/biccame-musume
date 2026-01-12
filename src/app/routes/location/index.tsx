@@ -21,8 +21,6 @@ const getPosition = (character: StoreData): google.maps.LatLngLiteral => {
   if (character.coordinates) {
     return { lat: character.coordinates.latitude, lng: character.coordinates.longitude }
   }
-
-  console.warn(`No coordinates for ${character.character?.name}, using default`)
   return { lat: 35.6812, lng: 139.7671 }
 }
 
