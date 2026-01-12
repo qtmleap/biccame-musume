@@ -4,7 +4,7 @@ import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { VoteCountListSchema, VoteRequestSchema, VoteResponseSchema } from '@/schemas/vote.dto'
 import { castVote, getAllVoteCounts } from '@/services/vote.service'
-import type { Bindings } from '@/type/bindings'
+import type { Bindings } from '@/types/bindings'
 
 const getKey: RateLimitKeyFunc = (c: Context): string => {
   // Rate limit on each API token by returning it as the key for our
