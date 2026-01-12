@@ -7,6 +7,7 @@ import { type Event, type EventRequest, EventSchema, EventStatusSchema } from '@
 import type { Bindings } from '@/types/bindings'
 
 const transform = (event: any): Event => {
+  console.log(JSON.stringify(event, null, 2))
   return {
     ...nullToUndefined(event),
     stores: event.stores.map((s: any) => s.storeKey),
@@ -18,7 +19,12 @@ const transform = (event: any): Event => {
 export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
   const event = await prisma.event.findUnique({
-    where: { id }
+    where: { id },
+    include: {
+      conditions: true,
+      referenceUrls: true,
+      stores: true
+    }
   })
   if (event === null) {
     throw new HTTPException(404, { message: 'Not Found' })
