@@ -34,7 +34,7 @@ export const EventCategoryFilter = () => {
    * カテゴリフィルターのトグル
    */
   const toggleCategory = (category: Event['category']) => {
-    setCategoryFilter((prev) => {
+    setCategoryFilter((prev: Set<Event['category']>) => {
       const next = new Set(prev)
       if (next.has(category)) {
         next.delete(category)
