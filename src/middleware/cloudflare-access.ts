@@ -7,7 +7,7 @@ type Bindings = {
   CF_ACCESS_AUD: string
 }
 
-type AccessJWTPayload = {
+type JWTPayload = {
   aud: string[]
   email: string
   exp: number
@@ -20,21 +20,31 @@ type AccessJWTPayload = {
 /**
  * Cloudflare AccessのJWTを検証
  */
-export const verify = async (token: string, teamDomain: string, expectedAud: string): Promise<AccessJWTPayload> => {
-  const certsUrl = `https://${teamDomain}/cdn-cgi/access/certs`
-  const JWKS = createRemoteJWKSet(new URL(certsUrl))
+const verifyJWT = async (token: string, teamDomain: string, audience: string): Promise<JWTPayload> => {
+  const jwksUrl = `https://${teamDomain}/cdn-cgi/access/certs`
+  const jwks = createRemoteJWKSet(new URL(jwksUrl))
 
-  const { payload } = await jwtVerify(token, JWKS, {
+  const { payload } = await jwtVerify(token, jwks, {
     issuer: `https://${teamDomain}`,
-    audience: expectedAud
+    audience
   })
 
-  return payload as AccessJWTPayload
+  return payload as JWTPayload
+}
+
+/**
+ * CookieヘッダーからJWTトークンを抽出
+ */
+const extractTokenFromCookie = (cookie: string): string | undefined => {
+  return cookie
+    .split(';')
+    .find((c) => c.trim().startsWith('CF_Authorization='))
+    ?.split('=')[1]
+    ?.trim()
 }
 
 /**
  * Cloudflare Access認証ミドルウェア
- * ジェネリクスで任意のBindings型に対応
  */
 export const CFAuth = async <T extends Bindings>(c: Context<{ Bindings: T }>, next: Next) => {
   // ローカル環境では認証をスキップ
@@ -42,31 +52,18 @@ export const CFAuth = async <T extends Bindings>(c: Context<{ Bindings: T }>, ne
     return await next()
   }
 
-  const teamDomain = c.env.CF_ACCESS_TEAM_DOMAIN
-  const expectedAud = c.env.CF_ACCESS_AUD
+  const { CF_ACCESS_TEAM_DOMAIN: teamDomain, CF_ACCESS_AUD: audience } = c.env
 
-  if (!teamDomain || !expectedAud) {
-    console.error('Missing Cloudflare Access configuration')
-    throw new HTTPException(500, { message: 'Server configuration error' })
-  }
-
-  // CF-Access-Jwt-Assertion ヘッダーまたは Cookie から JWT を取得
-  const jwtFromHeader = c.req.header('CF-Access-Jwt-Assertion')
-  const cookieHeader = c.req.header('Cookie') || ''
-  const jwtFromCookie = cookieHeader
-    .split(';')
-    .find((cookie) => cookie.trim().startsWith('CF_Authorization='))
-    ?.split('=')[1]
-
-  const token = jwtFromHeader || jwtFromCookie
+  const headerToken = c.req.header('CF-Access-Jwt-Assertion')
+  const cookieToken = extractTokenFromCookie(c.req.header('Cookie') || '')
+  const token = headerToken || cookieToken
 
   if (!token) {
     throw new HTTPException(401, { message: 'Authorization required' })
   }
 
   try {
-    await verify(token, teamDomain, expectedAud)
-
+    await verifyJWT(token, teamDomain, audience)
     await next()
   } catch (error) {
     console.error('Access verification failed:', error)
