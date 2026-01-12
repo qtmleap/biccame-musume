@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
+import { CFAuth } from '@/middleware/cloudflare-access'
 import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/services/event.service'
 import type { Bindings } from '@/types/bindings'
 import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
@@ -68,7 +68,7 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/',
-    middleware: [cloudflareAccessMiddleware],
+    middleware: [CFAuth],
     request: {
       body: {
         content: {
@@ -111,7 +111,7 @@ routes.openapi(
   createRoute({
     method: 'put',
     path: '/:id',
-    middleware: [cloudflareAccessMiddleware],
+    middleware: [CFAuth],
     request: {
       params: z.object({
         id: z.string().nonempty()
@@ -159,7 +159,7 @@ routes.openapi(
   createRoute({
     method: 'delete',
     path: '/:id',
-    middleware: [cloudflareAccessMiddleware],
+    middleware: [CFAuth],
     request: {
       params: z.object({
         id: z.string().nonempty()
