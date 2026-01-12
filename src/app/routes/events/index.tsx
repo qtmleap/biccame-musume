@@ -36,8 +36,8 @@ const CATEGORY_CHECKBOX_COLORS: Record<Event['category'], string> = {
  * イベント一覧のコンテンツ
  */
 const EventsContent = () => {
-  const { data: events = [], isLoading } = useEvents()
-  const { data: characters = [] } = useCharacters()
+  const { data: events } = useEvents()
+  const { data: characters } = useCharacters()
   const [categoryFilter, setCategoryFilter] = useState<Set<Event['category']>>(
     new Set(['ackey', 'limited_card', 'regular_card', 'other'])
   )
@@ -109,10 +109,6 @@ const EventsContent = () => {
       })
       .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
   }, [events, categoryFilter, regionFilter, storePrefectureMap])
-
-  if (isLoading) {
-    return <LoadingFallback />
-  }
 
   return (
     <div className='mx-auto p-4 md:p-8 space-y-4 max-w-6xl'>
