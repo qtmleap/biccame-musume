@@ -9,96 +9,96 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as AdminRouteImport } from './routes/admin'
-import { Route as AdminEventsIdEditIndexRouteImport } from './routes/admin/events/$id/edit/index'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as RankingIndexRouteImport } from './routes/ranking/index'
+import { Route as LocationIndexRouteImport } from './routes/location/index'
+import { Route as EventsIndexRouteImport } from './routes/events/index'
+import { Route as ContactIndexRouteImport } from './routes/contact/index'
+import { Route as CharactersIndexRouteImport } from './routes/characters/index'
+import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AboutIndexRouteImport } from './routes/about/index'
+import { Route as EventsEventIdRouteImport } from './routes/events/$eventId'
+import { Route as CharactersIdRouteImport } from './routes/characters/$id'
 import { Route as AdminEventsIndexRouteImport } from './routes/admin/events/index'
 import { Route as AdminEventsNewIndexRouteImport } from './routes/admin/events/new/index'
-import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
-import { Route as CharactersIdRouteImport } from './routes/characters/$id'
-import { Route as CharactersIndexRouteImport } from './routes/characters/index'
-import { Route as ContactIndexRouteImport } from './routes/contact/index'
-import { Route as EventsEventIdRouteImport } from './routes/events/$eventId'
-import { Route as EventsIndexRouteImport } from './routes/events/index'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as LocationIndexRouteImport } from './routes/location/index'
-import { Route as RankingIndexRouteImport } from './routes/ranking/index'
+import { Route as AdminEventsIdEditIndexRouteImport } from './routes/admin/events/$id/edit/index'
 
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const RankingIndexRoute = RankingIndexRouteImport.update({
   id: '/ranking/',
   path: '/ranking/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const LocationIndexRoute = LocationIndexRouteImport.update({
   id: '/location/',
   path: '/location/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const EventsIndexRoute = EventsIndexRouteImport.update({
   id: '/events/',
   path: '/events/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ContactIndexRoute = ContactIndexRouteImport.update({
   id: '/contact/',
   path: '/contact/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CharactersIndexRoute = CharactersIndexRouteImport.update({
   id: '/characters/',
   path: '/characters/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarIndexRoute = CalendarIndexRouteImport.update({
   id: '/calendar/',
   path: '/calendar/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AdminRoute
+  getParentRoute: () => AdminRoute,
 } as any)
 const AboutIndexRoute = AboutIndexRouteImport.update({
   id: '/about/',
   path: '/about/',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const EventsEventIdRoute = EventsEventIdRouteImport.update({
   id: '/events/$eventId',
   path: '/events/$eventId',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CharactersIdRoute = CharactersIdRouteImport.update({
   id: '/characters/$id',
   path: '/characters/$id',
-  getParentRoute: () => rootRouteImport
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
   id: '/events/',
   path: '/events/',
-  getParentRoute: () => AdminRoute
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminEventsNewIndexRoute = AdminEventsNewIndexRouteImport.update({
   id: '/events/new/',
   path: '/events/new/',
-  getParentRoute: () => AdminRoute
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminEventsIdEditIndexRoute = AdminEventsIdEditIndexRouteImport.update({
   id: '/events/$id/edit/',
   path: '/events/$id/edit/',
-  getParentRoute: () => AdminRoute
+  getParentRoute: () => AdminRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -340,7 +340,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminEventsIndexRoute: AdminEventsIndexRoute,
   AdminEventsNewIndexRoute: AdminEventsNewIndexRoute,
-  AdminEventsIdEditIndexRoute: AdminEventsIdEditIndexRoute
+  AdminEventsIdEditIndexRoute: AdminEventsIdEditIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -356,6 +356,8 @@ const rootRouteChildren: RootRouteChildren = {
   ContactIndexRoute: ContactIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
   LocationIndexRoute: LocationIndexRoute,
-  RankingIndexRoute: RankingIndexRoute
+  RankingIndexRoute: RankingIndexRoute,
 }
-export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>()
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
