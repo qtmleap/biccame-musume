@@ -10,8 +10,9 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/useCharacters'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
-import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS } from '@/locales/app.content'
+import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { type Event, EventCategorySchema, EventConditionTypeSchema, ReferenceUrlTypeSchema } from '@/schemas/event.dto'
+import type { StoreKey } from '@/schemas/store.dto'
 
 /**
  * フォームのスキーマ定義
@@ -434,18 +435,23 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
                 </button>
               </Badge>
             ) : (
-              stores.map((storeName) => (
-                <Badge key={storeName} className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
-                  <span className='text-xs font-semibold'>{storeName}</span>
-                  <button
-                    type='button'
-                    onClick={() => handleRemoveStore(storeName)}
-                    className='ml-0.5 rounded-sm hover:bg-rose-200'
-                  >
-                    <X className='size-3' />
-                  </button>
-                </Badge>
-              ))
+              stores.map((storeName) => {
+                const character = characters.find((c) => c.store?.name === storeName)
+                const storeKey = character?.id as StoreKey
+                const displayName = storeKey ? STORE_NAME_LABELS[storeKey] || storeName : storeName
+                return (
+                  <Badge key={storeName} className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
+                    <span className='text-xs font-semibold'>{displayName}</span>
+                    <button
+                      type='button'
+                      onClick={() => handleRemoveStore(storeName)}
+                      className='ml-0.5 rounded-sm hover:bg-rose-200'
+                    >
+                      <X className='size-3' />
+                    </button>
+                  </Badge>
+                )
+              })
             )}
           </div>
         )}
