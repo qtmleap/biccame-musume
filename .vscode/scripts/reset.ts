@@ -6,7 +6,7 @@
  *
  * 対象:
  *   - local: prisma/dev.db (ローカルSQLite)
- *   - dev: --env=dev --remote (開発環境D1)
+ *   - dev: --local (ローカルwrangler D1)
  *   - prod: --env=prod --remote (本番環境D1)
  *
  * 実行内容:
@@ -39,12 +39,13 @@ const MIGRATIONS_DIR = 'prisma/migrations'
  * wranglerでD1データベースをリセットしてマイグレーションを適用する
  */
 async function resetAndMigrateD1(env: 'dev' | 'prod', migrationSqlPath: string): Promise<void> {
-  const baseArgs = [DATABASE_NAME, `--env=${env}`, '--remote']
+  const isLocal = env === 'dev'
+  const baseArgs = isLocal ? [DATABASE_NAME, '--local'] : [DATABASE_NAME, `--env=${env}`, '--remote']
 
   // Cloudflare内部テーブル（削除対象から除外）
   const excludeTables = new Set(['_cf_METADATA', '_cf_KV', 'd1_migrations'])
 
-  console.log(`\nResetting ${env} remote D1...`)
+  console.log(`\nResetting ${env} ${isLocal ? 'local' : 'remote'} D1...`)
 
   // テーブル一覧を取得
   const tablesResult =
@@ -83,11 +84,11 @@ async function resetAndMigrateD1(env: 'dev' | 'prod', migrationSqlPath: string):
   // _prisma_migrationsテーブルも削除（存在する場合）
   await $`bun wrangler d1 execute ${baseArgs} --command "DROP TABLE IF EXISTS _prisma_migrations;"`.quiet()
 
-  console.log(`\nApplying migration to ${env} remote D1...`)
+  console.log(`\nApplying migration to ${env} ${isLocal ? 'local' : 'remote'} D1...`)
   console.log(`  File: ${migrationSqlPath}`)
   await $`bun wrangler d1 execute ${baseArgs} --file=${migrationSqlPath}`
 
-  console.log(`  Done: ${env} remote D1 migration applied`)
+  console.log(`  Done: ${env} ${isLocal ? 'local' : 'remote'} D1 migration applied`)
 }
 
 async function main(): Promise<void> {
@@ -97,7 +98,7 @@ async function main(): Promise<void> {
     console.error('Usage: bun run scripts/reset.ts [local|dev|prod]')
     console.error('')
     console.error('  local: prisma/dev.db (ローカルSQLite)')
-    console.error('  dev:   --env=dev --remote (開発環境D1)')
+    console.error('  dev:   --local (ローカルwrangler D1)')
     console.error('  prod:  --env=prod --remote (本番環境D1)')
     process.exit(1)
   }

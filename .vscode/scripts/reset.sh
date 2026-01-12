@@ -17,4 +17,4 @@ fi
 echo "Selected: $ENV"
 echo ""
 
-bun run scripts/reset.ts "$ENV"
+bun run .vscode/scripts/reset.ts "$ENV"
