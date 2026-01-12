@@ -1,10 +1,10 @@
 import { PrismaD1 } from '@prisma/adapter-d1'
+import { PrismaClient } from '@prisma/client/wasm'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
 import { nullToUndefined } from '@/lib/utils'
 import { type Event, type EventRequest, EventSchema, type EventStatus, EventStatusSchema } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
-import { PrismaClient } from '../../prisma/generated/client'
 
 /**
  * イベントのステータスと残り日数を計算
@@ -43,10 +43,12 @@ const calculateEventStatus = (event: {
   return { status: EventStatusSchema.enum.ongoing, daysUntil: 0 }
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: reason
 const transform = (event: any): Event => {
   const { status, daysUntil } = calculateEventStatus(event)
   return {
     ...nullToUndefined(event),
+    // biome-ignore lint/suspicious/noExplicitAny: reason
     stores: event.stores.map((s: any) => s.storeKey),
     status,
     daysUntil
