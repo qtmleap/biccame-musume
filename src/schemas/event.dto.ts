@@ -77,6 +77,10 @@ export const EventSchema = z.object({
   stores: z.array(StoreKeySchema).nonempty(),
   // 配布条件
   conditions: z.array(EventConditionSchema).nonempty('最低1つの条件を設定してください'),
+  // 公式情報として検証済みかどうか（管理者が作成/承認したもの）
+  isVerified: z.boolean().default(false),
+  // 公式発表前の未確定情報かどうか
+  isPreliminary: z.boolean().default(false),
   // 作成日時
   createdAt: z.coerce.date(),
   // 更新日時
