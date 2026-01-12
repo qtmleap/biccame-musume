@@ -4,7 +4,7 @@ import { Suspense } from 'react'
 import { EventForm } from '@/components/admin/event-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
-import { useEvents } from '@/hooks/useEvents'
+import { useEvent } from '@/hooks/useEvents'
 
 /**
  * イベント編集画面のコンテンツ
@@ -12,22 +12,10 @@ import { useEvents } from '@/hooks/useEvents'
 const EditEventContent = () => {
   const { id } = Route.useParams()
   const router = useRouter()
-  const { data: events = [] } = useEvents()
-  const event = events.find((e) => e.id === id)
-
-  console.log('EditEventContent - event:', event)
-  console.log('EditEventContent - event.category:', event?.category)
+  const { data: event } = useEvent(id)
 
   const handleSuccess = () => {
     router.history.back()
-  }
-
-  if (!event) {
-    return (
-      <div className='container mx-auto max-w-6xl px-4 py-6 md:py-8'>
-        <p className='text-center text-muted-foreground'>イベントが見つかりません</p>
-      </div>
-    )
   }
 
   return (
