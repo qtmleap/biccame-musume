@@ -24,12 +24,12 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
 
   return (
     <div className='min-h-screen bg-pink-50'>
-      <div className='mx-auto px-4 py-4 md:px-8 max-w-6xl'>
+      <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div className='md:grid md:grid-cols-[1fr_auto_320px] md:gap-6'>
           {/* メインコンテンツ */}
           <div className='max-w-2xl'>
             {/* 戻るボタン */}
-            <div className='pt-4 pb-2'>
+            <div className='pb-2'>
               <Button
                 variant='ghost'
                 size='sm'
