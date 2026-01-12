@@ -1,10 +1,10 @@
 import { PrismaD1 } from '@prisma/adapter-d1'
+import { PrismaClient } from '@prisma/client/wasm'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import type { Bindings } from '@/types/bindings'
 import { generateVoteKey } from '@/utils/vote'
-import { PrismaClient } from '../../prisma/generated/client'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
