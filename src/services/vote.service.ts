@@ -10,29 +10,6 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 
 /**
- * 投票の重複チェックを行う
- * @param votesKV KVNamespace
- * @param characterId キャラクターID
- * @param ip IPアドレス
- * @param isDevelopment 開発環境かどうか
- * @returns 重複している場合true（開発環境の場合は常にfalse）
- */
-export const checkDuplicateVote = async (
-  votesKV: KVNamespace,
-  characterId: string,
-  ip: string,
-  isDevelopment = false
-): Promise<boolean> => {
-  if (isDevelopment) {
-    return false
-  }
-
-  const voteKey = generateVoteKey(characterId, ip)
-  const existingVote = await votesKV.get(voteKey)
-  return existingVote !== null
-}
-
-/**
  * 投票を記録する（KVに保存、JST0時までの秒数をTTLに設定）
  * @param votesKV KVNamespace
  * @param characterId キャラクターID
@@ -76,7 +53,11 @@ export const getAllVoteCounts = async (
  * @param ip IPアドレス
  * @returns 投票結果
  */
-export const vote = async (env: Bindings, characterId: string): Promise<void> => {
+export const vote = async (
+  env: Bindings,
+  characterId: string,
+  ip: string
+): Promise<{ success: boolean; message: string; nextVoteDate: string }> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
   const currentYear = dayjs().year()
@@ -93,5 +74,18 @@ export const vote = async (env: Bindings, characterId: string): Promise<void> =>
       count: 1
     }
   })
-  return
+
+  // 投票レコード作成をバックグラウンドで実行
+  await prisma.vote.create({
+    data: {
+      characterId,
+      ipAddress: ip
+    }
+  })
+
+  return {
+    success: true,
+    message: '投票ありがとうございます！',
+    nextVoteDate: dayjs().add(1, 'day').startOf('day').toISOString()
+  }
 }

@@ -19,7 +19,7 @@ export const useVoteRanking = () => {
     queryFn: async () => {
       const [characters, counts] = await Promise.all([
         client.getCharacters(),
-        client.getVotes({ queries: { year: targetYear.toString() } })
+        client.getVotes()
       ])
 
       // 投票数をオブジェクトに変換
