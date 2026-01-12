@@ -2,7 +2,7 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { CFAuth } from '@/middleware/cloudflare-access'
 import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/services/event.service'
 import type { Bindings } from '@/types/bindings'
-import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
+import { type EventRequest, EventRequestSchema, EventSchema } from '../schemas/event.dto'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
@@ -119,7 +119,7 @@ routes.openapi(
       body: {
         content: {
           'application/json': {
-            schema: EventRequestSchema.partial()
+            schema: EventRequestSchema
           }
         }
       }
@@ -148,7 +148,7 @@ routes.openapi(
   }),
   async (c) => {
     const { id } = c.req.valid('param')
-    const body = c.req.valid('json')
+    const body = c.req.valid('json') as EventRequest
     // 管理者からの更新なので自動的にisVerified=trueを設定
     const eventData = { ...body, isVerified: true }
     return c.json(await updateEvent(c.env, id, eventData), 200)
