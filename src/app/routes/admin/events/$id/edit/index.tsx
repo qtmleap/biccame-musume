@@ -19,7 +19,7 @@ const EditEventContent = () => {
   }
 
   return (
-    <div className='container mx-auto max-w-6xl px-4 py-6 md:py-8'>
+    <div className='mx-auto px-4 py-4 md:px-8 max-w-6xl'>
       {/* ヘッダー */}
       <div className='mb-6 md:mb-8'>
         <Button
