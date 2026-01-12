@@ -20,3 +20,7 @@ export type Bindings = {
   /** レート制限用のバインディング */
   RATE_LIMITER: RateLimitBinding
 }
+
+export type Variables = {
+  CLIENT_IP: string
+}
