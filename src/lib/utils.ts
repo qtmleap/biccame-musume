@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from 'clsx'
+import { isPlainObject, mapValues } from 'lodash-es'
 import { twMerge } from 'tailwind-merge'
 import type { StoreData } from '@/schemas/store.dto'
 
@@ -7,21 +8,24 @@ export const cn = (...inputs: ClassValue[]) => {
 }
 
 /**
- * nullをundefinedに変換するヘルパー関数
+ * nullをundefinedに変換するヘルパー関数（再帰的）
  * DBから返ってきたnull値をアプリケーション層のundefinedに変換
+ * ネストしたオブジェクトや配列にも対応
  */
-export const nullToUndefined = <T extends Record<string, unknown>>(
-  obj: T
-): {
-  [K in keyof T]: T[K] extends null ? undefined : T[K]
-} => {
-  const result = {} as Record<string, unknown>
-  for (const [key, value] of Object.entries(obj)) {
-    result[key] = value === null ? undefined : value
+export const nullToUndefined = <T>(obj: T): T => {
+  if (obj === null) {
+    return undefined as T
   }
-  return result as {
-    [K in keyof T]: T[K] extends null ? undefined : T[K]
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => nullToUndefined(item)) as T
   }
+
+  if (isPlainObject(obj)) {
+    return mapValues(obj, (value) => nullToUndefined(value)) as T
+  }
+
+  return obj
 }
 
 /**
