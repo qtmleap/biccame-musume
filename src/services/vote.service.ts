@@ -122,35 +122,17 @@ export const getAllVoteCounts = async (
  * @param env Bindings
  * @param characterId キャラクターID
  * @param ip IPアドレス
- * @param isDevelopment 開発環境かどうか
  * @returns 投票結果
  */
 export const castVote = async (
   env: Bindings,
   characterId: string,
-  ip: string,
-  isDevelopment = false
+  ip: string
 ): Promise<{ success: boolean; message: string; nextVoteDate: string }> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
   if (ip === 'unknown') {
     throw new HTTPException(400, { message: 'IP address not found' })
-  }
-
-  // 重複チェック（開発環境の場合はスキップ）
-  const hasDuplicateVote = await checkDuplicateVote(env.VOTES, characterId, ip, isDevelopment)
-
-  if (hasDuplicateVote) {
-    return {
-      success: false,
-      message: '本日は既に投票済みです',
-      nextVoteDate: getNextJSTDate()
-    }
-  }
-
-  // 開発環境以外はKVに記録
-  if (!isDevelopment) {
-    await recordVote(env.VOTES, characterId, ip)
   }
 
   // 投票レコードとカウントを更新
