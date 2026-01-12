@@ -21,6 +21,7 @@ export const voteLimit = async (c: Context<{ Bindings: Bindings; Variables: Vari
   const isDevelopment = isDevelopmentEnvironment(c)
 
   if (!characterId) {
+    console.error(characterId)
     throw new HTTPException(400, { message: 'Bad Request' })
   }
 

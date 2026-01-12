@@ -29,13 +29,13 @@ routes.use('*', rateLimiter)
 routes.openapi(
   createRoute({
     method: 'post',
-    path: '/:id',
+    path: '/:characterId',
+    middleware: [ipCheck, voteLimit],
     request: {
       params: z.object({
         characterId: z.string().nonempty()
       })
     },
-    middleware: [ipCheck, voteLimit],
     responses: {
       200: {
         content: {

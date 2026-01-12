@@ -17,7 +17,7 @@ export const ipCheck = async (c: Context<{ Bindings: Bindings; Variables: Variab
   const ip = getClientIp(c)
 
   if (ip === 'unknown') {
-    throw new HTTPException(403, { message: 'IP address not found' })
+    throw new HTTPException(403, { message: 'Forbidden' })
   }
 
   c.set('CLIENT_IP', ip)
