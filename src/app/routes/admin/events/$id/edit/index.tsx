@@ -24,14 +24,14 @@ const EditEventContent = () => {
 
   if (!event) {
     return (
-      <div className='container mx-auto max-w-4xl px-4 py-6 md:py-8'>
+      <div className='container mx-auto max-w-6xl px-4 py-6 md:py-8'>
         <p className='text-center text-muted-foreground'>イベントが見つかりません</p>
       </div>
     )
   }
 
   return (
-    <div className='container mx-auto max-w-4xl px-4 py-6 md:py-8'>
+    <div className='container mx-auto max-w-6xl px-4 py-6 md:py-8'>
       {/* ヘッダー */}
       <div className='mb-6 md:mb-8'>
         <Button
