@@ -1,9 +1,12 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { PrismaD1 } from '@prisma/adapter-d1'
+import { PrismaClient } from '@prisma/client'
 import { HTTPException } from 'hono/http-exception'
+import { nullToUndefined } from '@/lib/utils'
 import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
 import * as eventService from '@/services/event.service'
 import type { Bindings } from '@/types/bindings'
-import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
+import { EventRequestSchema, EventSchema, EventStatusSchema } from '../schemas/event.dto'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
@@ -15,7 +18,9 @@ routes.openapi(
       200: {
         content: {
           'application/json': {
-            schema: z.array(EventSchema)
+            schema: z.object({
+              events: z.array(EventSchema)
+            })
           }
         },
         description: 'イベント一覧取得成功'
@@ -24,22 +29,28 @@ routes.openapi(
     tags: ['events']
   }),
   async (c) => {
-    // const prisma = new PrismaClient({ adapter: new PrismaD1(c.env.DB) })
-    const events = await c.env.PRISMA.event.findMany({
-      include: {
-        conditions: true,
-        referenceUrls: true,
-        stores: true
-      },
-      orderBy: { startDate: 'desc' }
-    })
+    const prisma = new PrismaClient({ adapter: new PrismaD1(c.env.DB) })
+    const events = (
+      await prisma.event.findMany({
+        include: {
+          conditions: true,
+          referenceUrls: true,
+          stores: true
+        },
+        orderBy: { startDate: 'desc' }
+      })
+    ).map((v) => ({
+      ...nullToUndefined(v),
+      stores: ['abeno'],
+      status: EventStatusSchema.enum.ongoing,
+      daysUntil: 0
+    }))
     const result = EventSchema.array().safeParse(events)
     if (!result.success) {
-      // console.error(JSON.stringify(events, null, 2))
-      console.error(result.error)
+      console.error(JSON.stringify(events, null, 2))
       throw new HTTPException(400, { message: result.error.message })
     }
-    return c.json(result.data)
+    return c.json({ events: result.data })
   }
 )
 
