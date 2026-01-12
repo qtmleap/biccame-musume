@@ -373,8 +373,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                       exit={{ opacity: 0 }}
                       transition={{
                         duration: 0.2,
-                        ease: 'easeInOut',
-                        exit: { duration: 0 }
+                        ease: 'easeInOut'
                       }}
                       className='relative flex h-10'
                     >

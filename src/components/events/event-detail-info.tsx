@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar, Gift, Link2, Package, Store } from 'lucide-react'
-import { EVENT_CONDITION_DETAIL, REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app.content'
+import { REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -15,13 +15,13 @@ type EventDetailInfoProps = {
 const getConditionDetail = (condition: Event['conditions'][0]): string => {
   switch (condition.type) {
     case 'purchase':
-      return EVENT_CONDITION_DETAIL.purchase(condition.purchaseAmount ?? 0)
+      return `${(condition.purchaseAmount ?? 0).toLocaleString()}円以上購入`
     case 'first_come':
-      return EVENT_CONDITION_DETAIL.first_come
+      return '先着'
     case 'lottery':
-      return EVENT_CONDITION_DETAIL.lottery(condition.quantity)
+      return condition.quantity ? `抽選${condition.quantity}名` : '抽選'
     case 'everyone':
-      return EVENT_CONDITION_DETAIL.everyone
+      return '全員に配布'
   }
 }
 
