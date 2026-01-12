@@ -67,6 +67,7 @@ export default defineConfig(({ mode }) => {
     ],
     build: {
       rollupOptions: {
+        external: [],
         output: {
           manualChunks: {
             router: ['@tanstack/react-router'],
@@ -83,10 +84,15 @@ export default defineConfig(({ mode }) => {
           }
         }
       },
-      target: 'esnext'
+      target: 'esnext',
+      minify: true
     },
     worker: {
       format: 'es'
+    },
+    ssr: {
+      target: 'webworker',
+      noExternal: ['@prisma/client', '@prisma/adapter-d1']
     },
     resolve: {
       alias: {
