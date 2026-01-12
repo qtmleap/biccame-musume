@@ -1,12 +1,8 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
-import { HTTPException } from 'hono/http-exception'
-import { nullToUndefined } from '@/lib/utils'
 import { cloudflareAccessMiddleware } from '@/middleware/cloudflare-access'
-import * as eventService from '@/services/event.service'
+import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/services/event.service'
 import type { Bindings } from '@/types/bindings'
-import { EventRequestSchema, EventSchema, EventStatusSchema } from '../schemas/event.dto'
+import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
@@ -27,29 +23,44 @@ routes.openapi(
     tags: ['events']
   }),
   async (c) => {
-    const prisma = new PrismaClient({ adapter: new PrismaD1(c.env.DB) })
-    const events = (
-      await prisma.event.findMany({
-        include: {
-          conditions: true,
-          referenceUrls: true,
-          stores: true
-        },
-        orderBy: { startDate: 'desc' }
+    return c.json(await getEvents(c.env))
+  }
+)
+
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/:id',
+    request: {
+      params: z.object({
+        id: z.string().nonempty()
       })
-    ).map((v) => ({
-      ...nullToUndefined(v),
-      stores: v.stores.map((s) => s.storeKey),
-      status: EventStatusSchema.enum.ongoing,
-      daysUntil: 0
-    }))
-    console.log(events.map((e) => e.stores))
-    const result = EventSchema.array().safeParse(events)
-    if (!result.success) {
-      // console.error(JSON.stringify(events, null, 2))
-      throw new HTTPException(400, { message: result.error.message })
-    }
-    return c.json(result.data)
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: EventSchema
+          }
+        },
+        description: 'イベント一覧取得成功'
+      },
+      404: {
+        content: {
+          'application/json': {
+            schema: z.object({
+              error: z.string()
+            })
+          }
+        },
+        description: 'バリデーションエラー'
+      }
+    },
+    tags: ['events']
+  }),
+  async (c) => {
+    const { id } = c.req.valid('param')
+    return c.json(await getEvent(c.env, id), 200)
   }
 )
 
@@ -91,16 +102,7 @@ routes.openapi(
   }),
   async (c) => {
     const body = c.req.valid('json')
-
-    // バリデーション
-    const result = EventRequestSchema.safeParse(body)
-    if (!result.success) {
-      throw new HTTPException(400, { message: result.error.message })
-    }
-
-    const event = await eventService.createEvent(c.env.PRISMA, result.data)
-
-    return c.json(event, 201)
+    return c.json(await createEvent(c.env, body), 201)
   }
 )
 
@@ -111,7 +113,7 @@ routes.openapi(
     middleware: [cloudflareAccessMiddleware],
     request: {
       params: z.object({
-        id: z.string()
+        id: z.string().nonempty()
       }),
       body: {
         content: {
@@ -146,18 +148,7 @@ routes.openapi(
   async (c) => {
     const { id } = c.req.valid('param')
     const body = c.req.valid('json')
-
-    console.log('[API] Update event request:', { id, body: JSON.stringify(body, null, 2) })
-
-    const event = await eventService.updateEvent(c.env.PRISMA, id, body)
-
-    if (!event) {
-      console.error('[API] Event not found for update:', id)
-      throw new HTTPException(404, { message: 'Event not found' })
-    }
-
-    console.log('[API] Event updated successfully:', { id, eventName: event.name })
-    return c.json(event, 200)
+    return c.json(await updateEvent(c.env, id, body), 200)
   }
 )
 
@@ -168,7 +159,7 @@ routes.openapi(
     middleware: [cloudflareAccessMiddleware],
     request: {
       params: z.object({
-        id: z.string()
+        id: z.string().nonempty()
       })
     },
     responses: {
@@ -190,14 +181,7 @@ routes.openapi(
   }),
   async (c) => {
     const { id } = c.req.valid('param')
-
-    const deleted = await eventService.deleteEvent(c.env.PRISMA, id)
-
-    if (!deleted) {
-      throw new HTTPException(404, { message: 'Event not found' })
-    }
-
-    return c.body(null, 204)
+    return c.body(await deleteEvent(c.env, id), 204)
   }
 )
 
