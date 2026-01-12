@@ -1,17 +1,56 @@
 import { PrismaD1 } from '@prisma/adapter-d1'
 import { PrismaClient } from '@prisma/client'
+import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
 import { nullToUndefined } from '@/lib/utils'
-import { type Event, type EventRequest, EventSchema, EventStatusSchema } from '@/schemas/event.dto'
+import { type Event, type EventRequest, EventSchema, type EventStatus, EventStatusSchema } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
+
+/**
+ * イベントのステータスと残り日数を計算
+ */
+const calculateEventStatus = (event: {
+  startDate: Date
+  endDate: Date | null
+  endedAt: Date | null
+}): { status: EventStatus; daysUntil: number } => {
+  const now = dayjs()
+  const startDate = dayjs(event.startDate)
+  const endDate = event.endDate ? dayjs(event.endDate) : null
+  const endedAt = event.endedAt ? dayjs(event.endedAt) : null
+
+  // 実際の終了日時が設定されている場合は終了
+  if (endedAt) {
+    return { status: EventStatusSchema.enum.ended, daysUntil: 0 }
+  }
+
+  // 開始前
+  if (now.isBefore(startDate, 'day')) {
+    return { status: EventStatusSchema.enum.upcoming, daysUntil: startDate.diff(now, 'day') }
+  }
+
+  // 終了日が設定されていて、終了日を過ぎている場合
+  if (endDate && now.isAfter(endDate, 'day')) {
+    return { status: EventStatusSchema.enum.ended, daysUntil: 0 }
+  }
+
+  // 開催中
+  if (endDate) {
+    return { status: EventStatusSchema.enum.ongoing, daysUntil: endDate.diff(now, 'day') }
+  }
+
+  // 終了日未定で開催中
+  return { status: EventStatusSchema.enum.ongoing, daysUntil: 0 }
+}
 
 const transform = (event: any): Event => {
   console.log(JSON.stringify(event, null, 2))
+  const { status, daysUntil } = calculateEventStatus(event)
   return {
     ...nullToUndefined(event),
     stores: event.stores.map((s: any) => s.storeKey),
-    status: EventStatusSchema.enum.ongoing,
-    daysUntil: 0
+    status,
+    daysUntil
   }
 }
 
