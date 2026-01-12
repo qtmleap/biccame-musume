@@ -271,7 +271,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
             >
               ←
             </button>
-            <div className='h-5 px-1 flex items-center text-xs font-medium text-gray-700 min-w-[80px] text-center'>
+            <div className='h-5 px-1 flex items-center text-xs font-medium text-gray-700 min-w-20 text-center'>
               {chartStartDate.format('YYYY年M月')}
             </div>
             <button

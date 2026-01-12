@@ -45,8 +45,8 @@ const EventFormSchema = z.object({
       })
     )
     .min(1, '最低1つの条件を設定してください'),
-  isVerified: z.boolean().default(false),
-  isPreliminary: z.boolean().default(false)
+  isVerified: z.boolean(),
+  isPreliminary: z.boolean()
 })
 
 type EventFormValues = z.infer<typeof EventFormSchema>
