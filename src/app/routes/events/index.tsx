@@ -10,7 +10,6 @@ import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { Checkbox } from '@/components/ui/checkbox'
 import { charactersQueryKey } from '@/hooks/useCharacters'
-import { eventsQueryKey } from '@/hooks/useEvents'
 import { type Event, EventCategorySchema } from '@/schemas/event.dto'
 import { client } from '@/utils/client'
 
@@ -41,7 +40,7 @@ const EventsContent = () => {
   const [eventsQuery, charactersQuery] = useSuspenseQueries({
     queries: [
       {
-        queryKey: eventsQueryKey,
+        queryKey: ['events'],
         queryFn: () => client.getEvents(),
         staleTime: 0,
         refetchOnMount: true
