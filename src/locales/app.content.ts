@@ -31,6 +31,12 @@ const appContent = {
       [EventConditionTypeSchema.enum.lottery]: '抽選',
       [EventConditionTypeSchema.enum.everyone]: '全員配布'
     },
+    conditionDetail: {
+      purchase: (amount: number) => `${amount.toLocaleString()}円以上購入`,
+      first_come: '先着',
+      lottery: (quantity?: number) => (quantity ? `抽選${quantity}名` : '抽選'),
+      everyone: '全員に配布'
+    },
     ref: {
       [ReferenceUrlTypeSchema.enum.announce]: '告知',
       [ReferenceUrlTypeSchema.enum.start]: '開始',
@@ -78,7 +84,7 @@ const appContent = {
       [StoreKeySchema.enum.naisen]: '内線',
       [StoreKeySchema.enum.nanba]: 'なんば店',
       [StoreKeySchema.enum.niigata]: '新潟店',
-      [StoreKeySchema.enum.oeraitan]: 'おーらいたん',
+      [StoreKeySchema.enum.oeraitan]: 'お偉いたん',
       [StoreKeySchema.enum.ohmiya]: '大宮西口そごう店',
       [StoreKeySchema.enum.okayama]: '岡山駅前店',
       [StoreKeySchema.enum.photo]: 'フォト',
@@ -110,6 +116,7 @@ export default appContent
 export const EVENT_STATUS_LABELS = appContent.content.status as Record<EventStatus, string>
 export const EVENT_CATEGORY_LABELS = appContent.content.category as Record<EventCategory, string>
 export const EVENT_CONDITION_LABELS = appContent.content.condition as Record<EventConditionType, string>
+export const EVENT_CONDITION_DETAIL = appContent.content.conditionDetail
 export const REFERENCE_URL_TYPE_LABELS = appContent.content.ref as Record<ReferenceUrlType, string>
 export const REFERENCE_URL_TYPE_LABELS_LONG = appContent.content.refLong as Record<ReferenceUrlType, string>
 export const REGION_LABELS = appContent.content.region as Record<Region, string>
