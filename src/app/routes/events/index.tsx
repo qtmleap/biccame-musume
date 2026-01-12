@@ -1,3 +1,4 @@
+import { useSuspenseQueries } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
@@ -8,9 +9,10 @@ import { RegionFilterControl } from '@/components/characters/region-filter-contr
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { Checkbox } from '@/components/ui/checkbox'
-import { useCharacters } from '@/hooks/useCharacters'
-import { useEvents } from '@/hooks/useEvents'
+import { charactersQueryKey } from '@/hooks/useCharacters'
+import { eventsQueryKey } from '@/hooks/useEvents'
 import { type Event, EventCategorySchema } from '@/schemas/event.dto'
+import { client } from '@/utils/client'
 
 /**
  * カテゴリラベル
@@ -36,8 +38,25 @@ const CATEGORY_CHECKBOX_COLORS: Record<Event['category'], string> = {
  * イベント一覧のコンテンツ
  */
 const EventsContent = () => {
-  const { data: events } = useEvents()
-  const { data: characters } = useCharacters()
+  const [eventsQuery, charactersQuery] = useSuspenseQueries({
+    queries: [
+      {
+        queryKey: eventsQueryKey,
+        queryFn: () => client.getEvents(),
+        staleTime: 0,
+        refetchOnMount: true
+      },
+      {
+        queryKey: charactersQueryKey,
+        queryFn: () => client.getCharacters(),
+        staleTime: 1000 * 60 * 5
+      }
+    ]
+  })
+
+  const events = eventsQuery.data
+  const characters = charactersQuery.data
+
   const [categoryFilter, setCategoryFilter] = useState<Set<Event['category']>>(
     new Set(['ackey', 'limited_card', 'regular_card', 'other'])
   )
