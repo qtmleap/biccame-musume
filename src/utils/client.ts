@@ -5,21 +5,6 @@ import { StoresSchema } from '@/schemas/store.dto'
 import { AllVoteCountsSchema, VoteCountSchema, VoteRequestSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
 
 /**
- * イベント一覧レスポンス
- */
-const EventsResponseSchema = z.object({
-  events: z.array(EventSchema)
-})
-
-/**
- * URL重複チェックレスポンス
- */
-const CheckDuplicateUrlResponseSchema = z.object({
-  exists: z.boolean(),
-  event: EventSchema.optional()
-})
-
-/**
  * API定義
  */
 const api = makeApi([
@@ -71,7 +56,9 @@ const api = makeApi([
     path: '/api/events',
     alias: 'getEvents',
     description: 'イベント一覧を取得',
-    response: EventsResponseSchema
+    response: z.object({
+      events: z.array(EventSchema)
+    })
   },
   {
     method: 'post',
@@ -125,7 +112,10 @@ const api = makeApi([
         schema: z.string().optional()
       }
     ],
-    response: CheckDuplicateUrlResponseSchema
+    response: z.object({
+      exists: z.boolean(),
+      event: EventSchema.optional()
+    })
   }
 ])
 

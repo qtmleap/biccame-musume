@@ -8,22 +8,7 @@ import { client } from '@/utils/client'
 export const useEvents = () => {
   return useQuery({
     queryKey: ['events'],
-    queryFn: async (): Promise<Event[]> => {
-      console.log('[useEvents] Fetching events from API...')
-      try {
-        const data = await client.getEvents()
-        console.log('[useEvents] Events data received:', data)
-        console.log('[useEvents] Events count:', data.events.length)
-        return data.events
-      } catch (error) {
-        console.error('[useEvents] Failed to fetch events:', error)
-        console.error('[useEvents] Error details:', {
-          message: error instanceof Error ? error.message : 'Unknown error',
-          stack: error instanceof Error ? error.stack : undefined
-        })
-        throw error
-      }
-    },
+    queryFn: async () => client.getEvents(),
     staleTime: 0, // 常に最新データを取得
     refetchOnMount: true, // マウント時に再取得
     retry: 1, // リトライ回数を1回に制限
