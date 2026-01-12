@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
-import type { Bindings } from '@/types/bindings'
+import type { Bindings, Variables } from '@/types/bindings'
 
 /**
  * 開発環境かどうかを判定
@@ -17,11 +17,11 @@ const isDevelopmentEnvironment = (c: Context): boolean => {
  */
 export const voteLimit = async (c: Context<{ Bindings: Bindings; Variables: Variables }>, next: Next) => {
   const characterId = c.req.param('characterId')
-  const ip = c.get('clientIp')
+  const ip = c.get('CLIENT_IP')
   const isDevelopment = isDevelopmentEnvironment(c)
 
   if (!characterId) {
-    throw new HTTPException(400, { message: 'Character ID is required' })
+    throw new HTTPException(400, { message: 'Bad Request' })
   }
 
   // 開発環境では投票制限をスキップ
@@ -31,30 +31,17 @@ export const voteLimit = async (c: Context<{ Bindings: Bindings; Variables: Vari
     return
   }
 
-  const voteKey = `vote:${characterId}:${ip}`
   const currentDate = dayjs().format('YYYY-MM-DD')
-
-  try {
-    const lastVoteDate = await c.env.VOTE_LIMITER.get(voteKey)
-
-    if (lastVoteDate === currentDate) {
-      const nextDay = dayjs().add(1, 'day').startOf('day')
-
-      throw new HTTPException(400, {
-        message: JSON.stringify({
-          success: false,
-          message: '本日の投票は完了しています。明日また応援してください！',
-          nextVoteDate: nextDay.toISOString()
-        })
+  const lastVoteDate = await c.env.VOTE_LIMITER.get(`vote:${characterId}:${ip}`)
+  if (lastVoteDate === currentDate) {
+    const nextDay = dayjs().add(1, 'day').startOf('day')
+    throw new HTTPException(400, {
+      message: JSON.stringify({
+        success: false,
+        message: '本日の投票は完了しています。明日また応援してください！',
+        nextVoteDate: nextDay.toISOString()
       })
-    }
-
-    await next()
-  } catch (error) {
-    if (error instanceof HTTPException) {
-      throw error
-    }
-    console.error('Vote limit check error:', error)
-    throw new HTTPException(500, { message: 'Internal server error' })
+    })
   }
+  await next()
 }
