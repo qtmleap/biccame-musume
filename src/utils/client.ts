@@ -59,6 +59,13 @@ const api = makeApi([
     response: z.array(EventSchema)
   },
   {
+    method: 'get',
+    path: '/api/events/:id',
+    alias: 'getEvent',
+    description: '単一イベントを取得',
+    response: EventSchema
+  },
+  {
     method: 'post',
     path: '/api/events',
     alias: 'createEvent',
@@ -74,7 +81,7 @@ const api = makeApi([
   },
   {
     method: 'put',
-    path: '/api/events/:eventId',
+    path: '/api/events/:id',
     alias: 'updateEvent',
     description: 'イベントを更新',
     parameters: [
@@ -88,7 +95,7 @@ const api = makeApi([
   },
   {
     method: 'delete',
-    path: '/api/events/:eventId',
+    path: '/api/events/:id',
     alias: 'deleteEvent',
     description: 'イベントを削除',
     response: z.object({ success: z.boolean() })
