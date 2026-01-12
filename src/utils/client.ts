@@ -2,7 +2,7 @@ import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
 import { EventRequestSchema, EventSchema } from '@/schemas/event.dto'
 import { StoresSchema } from '@/schemas/store.dto'
-import { VoteCountListSchema, VoteCountSchema, VoteRequestSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
+import { VoteCountListSchema, VoteRequestSchema, VoteSuccessResponseSchema } from '@/schemas/vote.dto'
 
 /**
  * API定義
@@ -18,7 +18,7 @@ const api = makeApi([
   {
     method: 'get',
     path: '/api/votes',
-    alias: 'getAllVoteCounts',
+    alias: 'getVotes',
     description: '全キャラクターの投票数を取得',
     response: VoteCountListSchema,
     parameters: [
@@ -30,17 +30,10 @@ const api = makeApi([
     ]
   },
   {
-    method: 'get',
-    path: '/api/votes/:characterId',
-    alias: 'getVoteCount',
-    description: 'キャラクターの投票数を取得',
-    response: VoteCountSchema
-  },
-  {
     method: 'post',
     path: '/api/votes',
-    alias: 'submitVote',
-    description: '投票を送信',
+    alias: 'createVote',
+    description: '投票',
     parameters: [
       {
         name: 'body',
