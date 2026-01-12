@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import { z } from 'zod'
 import { StoreKeySchema } from './store.dto'
 
@@ -56,53 +55,47 @@ export type ReferenceUrl = z.infer<typeof ReferenceUrlSchema>
 /**
  * イベントリクエスト（POST/PUT用）
  */
-export const EventRequestSchema = z.object({
+export const EventSchema = z.object({
+  id: z.uuid(),
   // イベント種別
   category: EventCategorySchema,
   // イベント名
   name: z.string().nonempty('イベント名は必須です'),
+  // 限定数（任意）
+  limitedQuantity: z.number().min(1).optional(),
+  // 開始日時
+  startDate: z.coerce.date(),
+  // 終了予定日時（任意）
+  endDate: z.coerce.date().optional(),
+  // 実際の終了日時（任意、配布が終了した実際の日時）
+  endedAt: z.coerce.date().optional(),
   // 参考URL（任意、複数可）
   referenceUrls: z.array(ReferenceUrlSchema).optional(),
   // 開催店舗（任意、複数可）
   stores: z.array(StoreKeySchema).nonempty(),
-  // 限定数（任意）
-  limitedQuantity: z.number().min(1).optional(),
-  // 開始日時
-  startDate: z.iso.datetime(),
-  // 終了予定日時（任意）
-  endDate: z.iso.datetime().optional(),
-  // 実際の終了日時（任意、配布が終了した実際の日時）
-  endedAt: z.iso.datetime().optional(),
   // 配布条件
-  conditions: z.array(EventConditionSchema).nonempty('最低1つの条件を設定してください')
-})
-
-export type EventRequest = z.infer<typeof EventRequestSchema>
-
-/**
- * イベントレスポンス（GET用、status・daysUntil付き）
- */
-export const EventSchema = EventRequestSchema.extend({
-  id: z.string(),
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime()
-}).transform((v) => {
-  const currentTime = dayjs()
-  const startDate = dayjs(v.startDate)
-
-  const status: EventStatus = (() => {
-    if (currentTime.isBefore(startDate)) return EventStatusSchema.enum.upcoming
-    // 実際の終了日時が設定されていたら終了済み
-    if (v.endedAt !== undefined) return EventStatusSchema.enum.ended
-    if (v.endDate !== undefined)
-      return currentTime.isAfter(v.endDate) ? EventStatusSchema.enum.ended : EventStatusSchema.enum.ongoing
-    return EventStatusSchema.enum.ongoing
-  })()
-
-  // 日本時間で日付の差分を計算
-  const daysUntil = startDate.startOf('day').diff(currentTime.startOf('day'), 'day')
-
-  return { ...v, status, daysUntil }
+  conditions: z.array(EventConditionSchema).nonempty('最低1つの条件を設定してください'),
+  // 作成日時
+  createdAt: z.coerce.date(),
+  // 更新日時
+  updatedAt: z.coerce.date(),
+  // ステータス
+  status: EventStatusSchema,
+  // 開始までの日数
+  daysUntil: z.number()
 })
 
 export type Event = z.infer<typeof EventSchema>
+
+/**
+ * イベント作成・更新リクエスト（POST/PUT用）
+ */
+export const EventRequestSchema = EventSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  status: true,
+  daysUntil: true
+})
+
+export type EventRequest = z.infer<typeof EventRequestSchema>
