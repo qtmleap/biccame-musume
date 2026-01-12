@@ -4,13 +4,6 @@ import { HTTPException } from 'hono/http-exception'
 import type { Bindings } from '@/types/bindings'
 
 /**
- * IPアドレスを取得
- */
-const getClientIp = (c: Context): string => {
-  return c.req.header('CF-Connecting-IP') || c.req.header('X-Real-IP') || 'unknown'
-}
-
-/**
  * 開発環境かどうかを判定
  */
 const isDevelopmentEnvironment = (c: Context): boolean => {
@@ -22,9 +15,9 @@ const isDevelopmentEnvironment = (c: Context): boolean => {
  * 投票制限チェックMiddleware
  * 同じIPアドレスから同じキャラクターに対して1日1回のみ投票可能
  */
-export const voteLimit = async (c: Context<{ Bindings: Bindings }>, next: Next) => {
+export const voteLimit = async (c: Context<{ Bindings: Bindings; Variables: Variables }>, next: Next) => {
   const characterId = c.req.param('characterId')
-  const ip = getClientIp(c)
+  const ip = c.get('clientIp')
   const isDevelopment = isDevelopmentEnvironment(c)
 
   if (!characterId) {

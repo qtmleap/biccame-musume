@@ -1,11 +1,12 @@
 import { type RateLimitKeyFunc, rateLimit } from '@elithrar/workers-hono-rate-limit'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { Context, Next } from 'hono'
-import { HTTPException } from 'hono/http-exception'
+import { ipCheck } from '@/middleware/ip-check'
 import { voteLimit } from '@/middleware/vote-limit'
 import { VoteCountListSchema, VoteResponseSchema } from '@/schemas/vote.dto'
-import { castVote, getAllVoteCounts } from '@/services/vote.service'
-import type { Bindings } from '@/types/bindings'
+import { getAllVoteCounts, vote } from '@/services/vote.service'
+import type { Bindings, Variables } from '@/types/bindings'
+import { getNextJSTDate } from '@/utils/vote'
 
 const getKey: RateLimitKeyFunc = (c: Context): string => {
   // Rate limit on each API token by returning it as the key for our
@@ -17,24 +18,9 @@ const rateLimiter = async (c: Context, next: Next) => {
   return await rateLimit(c.env.RATE_LIMITER, getKey)(c, next)
 }
 
-const routes = new OpenAPIHono<{ Bindings: Bindings }>()
+const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
 
 routes.use('*', rateLimiter)
-
-/**
- * IPアドレスを取得
- */
-const getClientIp = (c: Context): string => {
-  return c.req.header('CF-Connecting-IP') || c.req.header('X-Real-IP') || 'unknown'
-}
-
-/**
- * 開発環境かどうかを判定
- */
-const isDevelopmentEnvironment = (c: Context): boolean => {
-  const host = c.req.header('Host')
-  return host?.includes('localhost') || host?.includes('127.0.0.1') || false
-}
 
 /**
  * 投票実行
@@ -43,12 +29,13 @@ const isDevelopmentEnvironment = (c: Context): boolean => {
 routes.openapi(
   createRoute({
     method: 'post',
-    path: '/{characterId}',
+    path: '/:id',
     request: {
       params: z.object({
-        characterId: z.string().min(1).openapi({ example: 'honten' })
+        characterId: z.string().nonempty()
       })
     },
+    middleware: [ipCheck, voteLimit],
     responses: {
       200: {
         content: {
@@ -85,30 +72,14 @@ routes.openapi(
     },
     tags: ['votes']
   }),
-  voteLimit,
   async (c) => {
-    try {
-      const { characterId } = c.req.valid('param')
-      const ip = getClientIp(c)
-
-      const result = await castVote(c.env, characterId, ip)
-
-      if (!result.success) {
-        return c.json(result, 400)
-      }
-
-      return c.json(result)
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        throw new HTTPException(400, { message: 'Invalid request' })
-      }
-      if (error instanceof HTTPException) {
-        throw error
-      }
-
-      console.error('Vote error:', error)
-      throw new HTTPException(500, { message: 'Internal server error' })
-    }
+    const { characterId } = c.req.valid('param')
+    c.executionCtx.waitUntil(vote(c.env, characterId, c.get('CLIENT_IP')))
+    return c.json({
+      success: true,
+      message: '投票ありがとうございます！',
+      nextVoteDate: getNextJSTDate()
+    })
   }
 )
 
