@@ -23,6 +23,7 @@ const EventFormSchema = z.object({
   referenceUrls: z
     .array(
       z.object({
+        id: z.string().optional(),
         type: ReferenceUrlTypeSchema,
         url: z.string().url('有効なURLを入力してください')
       })
@@ -36,6 +37,7 @@ const EventFormSchema = z.object({
   conditions: z
     .array(
       z.object({
+        id: z.string().optional(),
         type: EventConditionTypeSchema,
         purchaseAmount: z.number().min(0).optional(),
         quantity: z.number().min(1).optional()
@@ -325,7 +327,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
               <Input id='end-date' type='date' {...register('endDate')} className='flex-1' />
               <Button
                 type='button'
-                variant='outline'
+                variant='ghost'
                 size='icon'
                 onClick={() => {
                   setValue('endDate', undefined, { shouldDirty: true, shouldValidate: true })
@@ -353,7 +355,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
             <Input id='actual-end-date' type='date' {...register('endedAt')} className='flex-1' />
             <Button
               type='button'
-              variant='outline'
+              variant='ghost'
               size='icon'
               onClick={() => {
                 setValue('endedAt', undefined, { shouldDirty: true, shouldValidate: true })
@@ -436,9 +438,8 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
               </Badge>
             ) : (
               stores.map((storeName) => {
-                const character = characters.find((c) => c.store?.name === storeName)
-                const storeKey = character?.id as StoreKey
-                const displayName = storeKey ? STORE_NAME_LABELS[storeKey] || storeName : storeName
+                const storeKey = storeName as StoreKey
+                const displayName = STORE_NAME_LABELS[storeKey] || storeName
                 return (
                   <Badge key={storeName} className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
                     <span className='text-xs font-semibold'>{displayName}</span>
