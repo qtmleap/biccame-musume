@@ -56,9 +56,7 @@ const api = makeApi([
     path: '/api/events',
     alias: 'getEvents',
     description: 'イベント一覧を取得',
-    response: z.object({
-      events: z.array(EventSchema)
-    })
+    response: z.array(EventSchema)
   },
   {
     method: 'post',
