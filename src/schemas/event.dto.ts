@@ -26,6 +26,7 @@ export type EventConditionType = z.infer<typeof EventConditionTypeSchema>
  * 配布条件の詳細
  */
 export const EventConditionSchema = z.object({
+  id: z.string().uuid(),
   type: EventConditionTypeSchema,
   // 購入条件の場合の金額（円）
   purchaseAmount: z.number().min(0).optional(),
@@ -46,6 +47,7 @@ export type ReferenceUrlType = z.infer<typeof ReferenceUrlTypeSchema>
  * 参考URL
  */
 export const ReferenceUrlSchema = z.object({
+  id: z.string().uuid(),
   type: ReferenceUrlTypeSchema,
   url: z.url('有効なURLを入力してください')
 })

@@ -1,5 +1,5 @@
 import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
+import { type Prisma, PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
 import { nullToUndefined } from '@/lib/utils'
@@ -89,12 +89,66 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
   return transform(event)
 }
 
-export const updateEvent = async (env: Bindings, id: string, _data: Partial<EventRequest>): Promise<Event> => {
+export const updateEvent = async (env: Bindings, id: string, data: EventRequest): Promise<Event> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
-  const event = await prisma.event.findUnique({ where: { id } })
-  if (event === null) {
+  const existingEvent = await prisma.event.findUnique({
+    where: { id },
+    include: { conditions: true, referenceUrls: true, stores: true }
+  })
+  if (existingEvent === null) {
     throw new HTTPException(404, { message: 'Not Found' })
   }
+
+  const updateData: Prisma.EventUpdateInput = {
+    category: data.category,
+    name: data.name,
+    limitedQuantity: data.limitedQuantity,
+    startDate: data.startDate ? dayjs(data.startDate).toDate() : undefined,
+    endDate: data.endDate !== undefined ? (data.endDate ? dayjs(data.endDate).toDate() : null) : undefined,
+    endedAt: data.endedAt !== undefined ? (data.endedAt ? dayjs(data.endedAt).toDate() : null) : undefined
+  }
+
+  // conditionsの更新（全削除して再作成）
+  if (data.conditions) {
+    updateData.conditions = {
+      deleteMany: {},
+      create: data.conditions.map((c) => ({
+        type: c.type,
+        purchaseAmount: c.purchaseAmount,
+        quantity: c.quantity
+      }))
+    }
+  }
+
+  // referenceUrlsの更新（全削除して再作成）
+  if (data.referenceUrls) {
+    updateData.referenceUrls = {
+      deleteMany: {},
+      create: data.referenceUrls.map((r) => ({
+        type: r.type,
+        url: r.url
+      }))
+    }
+  }
+
+  // storesの更新（全削除して再作成）
+  if (data.stores) {
+    updateData.stores = {
+      deleteMany: {},
+      create: data.stores.map((storeName) => ({ storeKey: storeName }))
+    }
+  }
+
+  const event = await prisma.event.update({
+    where: { id },
+    data: updateData,
+    include: {
+      conditions: true,
+      referenceUrls: true,
+      stores: true
+    }
+  })
+
   return transform(event)
 }
 
