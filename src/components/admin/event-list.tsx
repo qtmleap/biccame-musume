@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { orderBy } from 'lodash-es'
-import { Calendar, ExternalLink, Package, Pencil, Store, Trash2, Users } from 'lucide-react'
+import { Calendar, ExternalLink, Package, Pencil, Store, Trash2 } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useMemo } from 'react'
 import { eventListActiveTabAtom, eventListPagesAtom } from '@/atoms/eventListAtom'
@@ -20,38 +20,9 @@ import {
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
-import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
-import type { Event, EventCondition } from '@/schemas/event.dto'
-
-/**
- * 条件の詳細テキストを取得
- */
-const _getConditionDetail = (condition: EventCondition): string => {
-  switch (condition.type) {
-    case 'purchase':
-      return `${condition.purchaseAmount?.toLocaleString()}円以上購入`
-    case 'first_come':
-      return '先着'
-    case 'lottery':
-      return '抽選'
-    case 'everyone':
-      return '全員配布'
-  }
-}
-
-/**
- * 条件アイコンコンポーネント
- */
-const _ConditionIcon = ({ type }: { type: EventCondition['type'] }) => {
-  switch (type) {
-    case 'purchase':
-      return null
-    case 'first_come':
-    case 'lottery':
-    case 'everyone':
-      return <Users className='size-4' />
-  }
-}
+import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import type { Event } from '@/schemas/event.dto'
+import type { StoreKey } from '@/schemas/store.dto'
 
 /**
  * ステータスに応じたBadgeを返す
@@ -97,8 +68,13 @@ const CampaignCard = ({
   onDelete: (id: string) => void
   isAuthenticated: boolean
 }) => {
+  // 終了判定
+  const currentTime = dayjs()
+  const endDate = campaign.endDate ? dayjs(campaign.endDate) : null
+  const isEnded = campaign.endedAt != null || (endDate && currentTime.isAfter(endDate))
+
   return (
-    <div className='border rounded-lg p-4 bg-white flex flex-col h-full'>
+    <div className={`border rounded-lg p-4 bg-white flex flex-col h-full ${isEnded ? 'opacity-50 grayscale' : ''}`}>
       <div className='mb-2 flex items-start justify-between gap-3'>
         <div className='flex-1'>
           <h3 className='text-sm font-semibold text-gray-900'>{campaign.name}</h3>
@@ -116,7 +92,9 @@ const CampaignCard = ({
             {campaign.stores && campaign.stores.length > 0 && (
               <span className='flex items-center gap-1'>
                 <Store className='size-3' />
-                {campaign.stores.length === 1 ? campaign.stores[0] : `${campaign.stores.length}店舗`}
+                {campaign.stores.length === 1
+                  ? STORE_NAME_LABELS[campaign.stores[0] as StoreKey]
+                  : `${campaign.stores.length}店舗`}
               </span>
             )}
             {campaign.limitedQuantity && !campaign.conditions.some((c) => c.type === 'everyone') && (
@@ -244,7 +222,7 @@ export const EventList = () => {
               key={category}
               type='button'
               onClick={() => setActiveTab(category)}
-              className='relative flex-1 py-2 text-sm font-medium text-center z-10 transition-colors'
+              className='relative flex-1 py-1.5 text-xs font-semibold text-center z-10 transition-colors'
             >
               <span className={activeTab === category ? 'text-gray-900' : 'text-gray-600'}>
                 {EVENT_CATEGORY_LABELS[category]}
