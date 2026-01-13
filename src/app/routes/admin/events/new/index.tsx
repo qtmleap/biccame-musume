@@ -16,14 +16,19 @@ const NewEventContent = () => {
   }
 
   return (
-    <div className='container mx-auto max-w-4xl px-4 py-6 md:py-8'>
+    <div className='container mx-auto max-w-6xl px-4 py-6 md:py-8'>
       {/* ヘッダー */}
       <div className='mb-6 md:mb-8'>
-        <Button variant='ghost' size='sm' className='mb-4' onClick={() => router.history.back()}>
-          <ArrowLeft className='mr-2 size-4' />
+        <Button
+          variant='ghost'
+          size='sm'
+          className='text-gray-600 hover:text-gray-900 -ml-2 mb-4'
+          onClick={() => router.history.back()}
+        >
+          <ArrowLeft className='h-4 w-4 mr-1' />
           戻る
         </Button>
-        <h1 className='text-2xl font-bold text-gray-900 md:text-3xl'>新規イベント登録</h1>
+        <h1 className='text-2xl font-bold text-gray-900 md:text-2xl'>新規イベント登録</h1>
         <p className='mt-2 text-sm text-gray-600 md:text-base'>アクキー配布などのイベント情報を入力</p>
       </div>
 
