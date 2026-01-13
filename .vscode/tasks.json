@@ -78,6 +78,17 @@
         "reveal": "always",
         "panel": "new"
       }
+    },
+    {
+      "label": "Fetch HTML Cache",
+      "type": "shell",
+      "command": "bun",
+      "args": ["${workspaceFolder}/.vscode/scripts/fetch_html.ts"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
     }
   ]
 }
