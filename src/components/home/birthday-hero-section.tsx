@@ -40,7 +40,7 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
         <div className='absolute bottom-0 left-0 size-32 -translate-x-1/2 translate-y-1/2 rounded-full bg-white/10' />
       </div>
 
-      <div className='relative flex flex-col items-center gap-6 md:flex-row'>
+      <div className='relative flex flex-col items-center gap-6 md:flex-row max-w-6xl mx-auto px-4 md:px-8'>
         {/* キャラクター画像 */}
         <motion.div
           className='relative'
