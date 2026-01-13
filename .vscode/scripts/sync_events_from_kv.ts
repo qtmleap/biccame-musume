@@ -45,18 +45,15 @@ type TargetEnvironment = 'local' | 'dev' | 'prod'
 const getDatabaseName = async (env: TargetEnvironment): Promise<string> => {
   const wranglerToml = await Bun.file('wrangler.toml').text()
 
-  if (env === 'local') {
-    const match = wranglerToml.match(/database_name\s*=\s*"([^"]+)"/)
-    if (!match) {
-      throw new Error('wrangler.tomlからdatabase_nameを取得できませんでした')
-    }
-    return match[1]
-  }
+  // localの場合はdevと同じデータベース名を使用
+  const targetEnv = env === 'local' ? 'dev' : env
 
-  // dev/prod環境の場合はenv.から取得
-  const envSection = wranglerToml.match(new RegExp(`\\[env\\.${env}\\][\\s\\S]*?database_name\\s*=\\s*"([^"]+)"`))
+  // env.から取得
+  const envSection = wranglerToml.match(
+    new RegExp(`\\[env\\.${targetEnv}\\][\\s\\S]*?database_name\\s*=\\s*"([^"]+)"`)
+  )
   if (!envSection) {
-    throw new Error(`wrangler.tomlから${env}環境のdatabase_nameを取得できませんでした`)
+    throw new Error(`wrangler.tomlから${targetEnv}環境のdatabase_nameを取得できませんでした`)
   }
   return envSection[1]
 }
@@ -92,7 +89,8 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], toEnv: Ta
 
   // 同期先環境に応じてフラグを切り替え
   const localFlag = toEnv === 'local' ? '--local' : '--remote'
-  const envFlag = toEnv === 'local' ? '' : `--env=${toEnv}`
+  // localの場合はdev環境を指定
+  const envFlag = toEnv === 'local' ? '--env=dev' : `--env=${toEnv}`
 
   // 既存のイベントを削除
   await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${localFlag} --command "DELETE FROM events;"`.quiet()
