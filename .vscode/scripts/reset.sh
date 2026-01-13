@@ -7,7 +7,7 @@ set -e
 cd "$(dirname "$0")/../.."
 
 # 環境選択
-ENV=$(echo -e "local\ndev\nprod" | fzf --prompt="Reset target: " --height=10 --reverse)
+ENV=$(echo -e "local-dev\nremote-dev\nremote-prod" | fzf --prompt="Reset target: " --height=10 --reverse)
 
 if [ -z "$ENV" ]; then
   echo "Cancelled"
