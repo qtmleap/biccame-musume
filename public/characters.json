@@ -12,9 +12,7 @@
         "images/abeno5.png",
         "images/abeno4.png",
         "images/abeno5.png"
-      ],
-      "birthday": "2016-09-07",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -40,29 +38,42 @@
         {
           "station": "天王寺駅",
           "description": "12号出口",
-          "lines": ["地下鉄御堂筋線", "谷町線"],
+          "lines": [
+            "地下鉄御堂筋線",
+            "谷町線"
+          ],
           "notes": "直結"
         },
         {
           "station": "阿倍野駅",
           "description": "2号出口",
-          "lines": ["地下鉄谷町線"],
+          "lines": [
+            "地下鉄谷町線"
+          ],
           "notes": "直結"
         },
         {
           "station": "天王寺駅",
           "description": "南口",
-          "lines": ["JR環状線", "阪和線", "大和路線"]
+          "lines": [
+            "JR環状線",
+            "阪和線",
+            "大和路線"
+          ]
         },
         {
           "station": "大阪阿部野橋駅",
           "description": "西改札",
-          "lines": ["近鉄南大阪線"]
+          "lines": [
+            "近鉄南大阪線"
+          ]
         },
         {
           "station": "天王寺駅前駅",
           "description": "",
-          "lines": ["阪堺電車上町線"]
+          "lines": [
+            "阪堺電車上町線"
+          ]
         }
       ]
     }
@@ -71,7 +82,9 @@
     "id": "akasaka",
     "character": {
       "name": "みっけたん",
-      "aliases": ["赤坂たん"],
+      "aliases": [
+        "赤坂たん"
+      ],
       "description": "ビックカメラ赤坂見附駅店の擬人化キャラクター。港区の花・バラと、バラに見えるようなお団子の髪型、「3」のようなアホ毛、「坂」のヘアピンが特徴。国際社会にPRできるように、いつもお上品を心掛けている。",
       "twitter_id": "bicakasaka",
       "images": [
@@ -81,9 +94,7 @@
         "images/akasaka5.png",
         "images/akasaka4.png",
         "images/akasaka5.png"
-      ],
-      "birthday": "2019-01-23",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -114,12 +125,19 @@
         {
           "station": "赤坂見附駅",
           "description": "10番出口",
-          "lines": ["地下鉄銀座線", "丸ノ内線"]
+          "lines": [
+            "地下鉄銀座線",
+            "丸ノ内線"
+          ]
         },
         {
           "station": "永田町駅",
           "description": "10番出口",
-          "lines": ["地下鉄有楽町線", "半蔵門線", "南北線"]
+          "lines": [
+            "地下鉄有楽町線",
+            "半蔵門線",
+            "南北線"
+          ]
         }
       ]
     }
@@ -128,7 +146,9 @@
     "id": "akiba",
     "character": {
       "name": "アキバたん",
-      "aliases": ["秋葉原たん"],
+      "aliases": [
+        "秋葉原たん"
+      ],
       "description": "ビックカメラAKIBAの擬人化キャラクター。千代田区の花・桜がモチーフの大きなリボンと、猫耳のようなヘッドドレスが特徴。",
       "twitter_id": "bic_akiba",
       "images": [
@@ -138,9 +158,7 @@
         "images/akiba5.png",
         "images/akiba4.png",
         "images/akiba5.png"
-      ],
-      "birthday": "2017-06-05",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -182,8 +200,10 @@
       "name": "ビックカメラ",
       "description": "「ビックカメラ」は専門店の集合体！都市型×駅前×大型のお店で便利！知識豊富な販売員が親切丁寧にご案内します。カメラ、パソコン、テレビ、家電など、何でも揃う「ビックカメラ」！⇒ビックカメラ",
       "twitter_id": "biccameraE",
-      "images": ["biccamera.png", "biccamera3.png"],
-      "is_biccame_musume": false
+      "images": [
+        "biccamera.png",
+        "biccamera3.png"
+      ]
     },
     "prefecture": null,
     "coordinates": null,
@@ -202,9 +222,7 @@
         "images/bicqlo5.png",
         "images/bicqlo4.png",
         "images/bicqlo5.png"
-      ],
-      "birthday": "2015-05-18",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -230,7 +248,11 @@
         {
           "station": "新宿三丁目駅",
           "description": "A5出口",
-          "lines": ["地下鉄丸ノ内線", "副都心線", "都営新宿線"]
+          "lines": [
+            "地下鉄丸ノ内線",
+            "副都心線",
+            "都営新宿線"
+          ]
         },
         {
           "station": "新宿駅",
@@ -248,12 +270,16 @@
         {
           "station": "新宿西口駅",
           "description": "A5出口",
-          "lines": ["都営大江戸線"]
+          "lines": [
+            "都営大江戸線"
+          ]
         },
         {
           "station": "西武新宿駅",
           "description": "南口",
-          "lines": ["西武新宿線"]
+          "lines": [
+            "西武新宿線"
+          ]
         }
       ]
     }
@@ -264,9 +290,10 @@
       "name": "ビックシムたん",
       "description": "BICSIMの擬人化キャラクター。先輩の「シムウマ」を尊敬していて、スマホにキーホルダーを付けたり、ウマ耳を真似している。もっともっと人と人とが繋がれるように「BICSIM」を知ってもらい、使ってもらう！のがモットー。",
       "twitter_id": "bicsim_official",
-      "images": ["images/bicsim2.png", "images/bicsim3.png"],
-      "birthday": "2018-06-13",
-      "is_biccame_musume": false
+      "images": [
+        "images/bicsim2.png",
+        "images/bicsim3.png"
+      ]
     },
     "prefecture": null,
     "coordinates": null,
@@ -276,7 +303,9 @@
     "id": "camera",
     "character": {
       "name": "カメ館たん",
-      "aliases": ["カメラ館たん"],
+      "aliases": [
+        "カメラ館たん"
+      ],
       "description": "ビックカメラ池袋東口カメラ館の擬人化キャラクター。同じ池袋の本店たんがお姉ちゃん。リボンとくせっ毛がお揃い。カメラをいつも首からさげている。",
       "twitter_id": "",
       "images": [
@@ -284,9 +313,7 @@
         "4864f8622ad3133a980acfeba567137323f7a6be.png",
         "images/camera4.png",
         "images/camera5.png"
-      ],
-      "birthday": "2016-06-29",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -296,7 +323,9 @@
     "id": "chiba",
     "character": {
       "name": "千葉たん",
-      "aliases": ["千葉たん"],
+      "aliases": [
+        "千葉たん"
+      ],
       "description": "ビックカメラ千葉駅前店の擬人化キャラクター。エネルギッシュレッドの大きなリボンが特徴。アニメのツンデレキャラに憧れている。相棒のカモメちゃんとは仲良し。胸のモチーフは月と星。",
       "twitter_id": "bic_chiba",
       "images": [
@@ -306,9 +335,7 @@
         "images/chiba5.png",
         "images/chiba4.png",
         "images/chiba5.png"
-      ],
-      "birthday": "2024-12-12",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "千葉県",
     "coordinates": {
@@ -334,12 +361,17 @@
         {
           "station": "JR千葉駅",
           "description": "東口",
-          "lines": ["JR総武線", "JR外房線"]
+          "lines": [
+            "JR総武線",
+            "JR外房線"
+          ]
         },
         {
           "station": "京成千葉駅",
           "description": "東口",
-          "lines": ["京成線"]
+          "lines": [
+            "京成線"
+          ]
         }
       ]
     }
@@ -357,9 +389,7 @@
         "images/chofu5.png",
         "images/chofu4.png",
         "images/chofu5.png"
-      ],
-      "birthday": "2017-09-27",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -385,7 +415,10 @@
         {
           "station": "調布駅",
           "description": "広場口すぐ",
-          "lines": ["京王線京王相模原線", ""]
+          "lines": [
+            "京王線京王相模原線",
+            ""
+          ]
         }
       ]
     }
@@ -403,9 +436,7 @@
         "images/fujisawa5.png",
         "images/fujisawa4.png",
         "images/fujisawa5.png"
-      ],
-      "birthday": "2016-02-12",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -431,7 +462,11 @@
         {
           "station": "藤沢駅",
           "description": "北口",
-          "lines": ["JR東海道本線", "小田急江ノ島線", "江ノ島電鉄"]
+          "lines": [
+            "JR東海道本線",
+            "小田急江ノ島線",
+            "江ノ島電鉄"
+          ]
         }
       ]
     }
@@ -440,7 +475,9 @@
     "id": "funabashi",
     "character": {
       "name": "ふなたん",
-      "aliases": ["船橋たん"],
+      "aliases": [
+        "船橋たん"
+      ],
       "description": "ビックカメラ船橋駅FACE店の擬人化キャラクター。いつも髪が跳ねている元気いっぱいの子。ビッカメ娘の中で特にハッピを愛している。制服のリボンと髪飾りに船橋市の花のひまわりをあしらっている。",
       "twitter_id": "bic_funabashi",
       "images": [
@@ -450,9 +487,7 @@
         "images/funabashi5.png",
         "images/funabashi4.png",
         "images/funabashi5.png"
-      ],
-      "birthday": "2015-05-18",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "千葉県",
     "coordinates": {
@@ -478,12 +513,17 @@
         {
           "station": "船橋駅",
           "description": "南口",
-          "lines": ["JR総武線", "東武アーバンパークライン"]
+          "lines": [
+            "JR総武線",
+            "東武アーバンパークライン"
+          ]
         },
         {
           "station": "京成船橋駅",
           "description": "東口",
-          "lines": ["京成線"]
+          "lines": [
+            "京成線"
+          ]
         }
       ]
     }
@@ -499,9 +539,7 @@
         "images/funato3.png",
         "images/funato4.png",
         "images/funato0.png"
-      ],
-      "birthday": "2017-11-15",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "千葉県",
     "coordinates": null,
@@ -520,9 +558,7 @@
         "images/hachioji5.png",
         "images/hachoji4.png",
         "images/hachioji5.png"
-      ],
-      "birthday": "2015-05-14",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -548,12 +584,18 @@
         {
           "station": "八王子駅",
           "description": "南口",
-          "lines": ["JR中央本線", "JR横浜線", "JR八高線"]
+          "lines": [
+            "JR中央本線",
+            "JR横浜線",
+            "JR八高線"
+          ]
         },
         {
           "station": "京王八王子駅",
           "description": "中央口",
-          "lines": ["京王線"]
+          "lines": [
+            "京王線"
+          ]
         }
       ]
     }
@@ -562,7 +604,9 @@
     "id": "hamamatsu",
     "character": {
       "name": "はまたん",
-      "aliases": ["浜松たん"],
+      "aliases": [
+        "浜松たん"
+      ],
       "description": "ビックカメラ浜松店の擬人化キャラクター。のんびりとした性格。うなぎパイが好き。制服のリボンは浜松市の木・松がモチーフ、ヘアピンは市の花・ミカンがモチーフになっている。",
       "twitter_id": "bic_hamamatsu",
       "images": [
@@ -572,9 +616,7 @@
         "images/hamamatsu5.png",
         "images/hamamatsu4.png",
         "images/hamamatsu5.png"
-      ],
-      "birthday": "2015-05-23",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "静岡県",
     "coordinates": {
@@ -600,12 +642,17 @@
         {
           "station": "浜松駅",
           "description": "北口",
-          "lines": ["JR東海道本線", "東海道新幹線"]
+          "lines": [
+            "JR東海道本線",
+            "東海道新幹線"
+          ]
         },
         {
           "station": "新浜松駅",
           "description": "",
-          "lines": ["遠州鉄道"]
+          "lines": [
+            "遠州鉄道"
+          ]
         }
       ]
     }
@@ -623,9 +670,7 @@
         "images/hiroshima5.png",
         "images/hiroshima4.png",
         "images/hiroshima5.png"
-      ],
-      "birthday": "2016-08-24",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "広島県",
     "coordinates": {
@@ -639,8 +684,14 @@
       "address": "広島県広島市南区松原町5-1",
       "phone": "082-506-1111",
       "birthday": "2016-09-14",
-      "open_all_year": false,
-      "hours": [],
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "20:00"
+        }
+      ],
       "access": [
         {
           "station": "広島駅",
@@ -663,9 +714,7 @@
         "images/honten5.png",
         "images/honten4.png",
         "images/honten5.png"
-      ],
-      "birthday": "2015-10-21",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -709,7 +758,9 @@
     "id": "ikenishi",
     "character": {
       "name": "池西たん",
-      "aliases": ["池袋西口たん"],
+      "aliases": [
+        "池袋西口たん"
+      ],
       "description": "ビックカメラ池袋西口店の擬人化キャラクター。本店たんの妹であり、カメ館パソ館のお姉ちゃんでもある。四姉妹でピンクのリボンをお揃いにしている。",
       "twitter_id": "bicikenishi",
       "images": [
@@ -719,9 +770,7 @@
         "images/ikenishi5.png",
         "images/ikenishi4.png",
         "images/ikenishi5.png"
-      ],
-      "birthday": "2017-05-09",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -735,8 +784,14 @@
       "address": "東京都豊島区西池袋1-16-3",
       "phone": "03-5960-1111",
       "birthday": "2002-09-19",
-      "open_all_year": false,
-      "hours": [],
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
       "access": [
         {
           "station": "池袋駅",
@@ -768,9 +823,7 @@
         "images/kagoshima5.png",
         "images/kagoshima4.png",
         "images/kagoshima5.png"
-      ],
-      "birthday": "2017-12-18",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "鹿児島県",
     "coordinates": {
@@ -796,7 +849,10 @@
         {
           "station": "鹿児島中央駅",
           "description": "2Fコンコース直結",
-          "lines": ["JR鹿児島本線", "九州新幹線"]
+          "lines": [
+            "JR鹿児島本線",
+            "九州新幹線"
+          ]
         }
       ]
     }
@@ -814,9 +870,7 @@
         "images/kashiwa5.png",
         "images/kashiwa4.png",
         "images/kashiwa5.png"
-      ],
-      "birthday": "2015-05-14",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "千葉県",
     "coordinates": {
@@ -842,7 +896,10 @@
         {
           "station": "柏駅",
           "description": "東口",
-          "lines": ["JR常磐線", "東武アーバンパークライン"]
+          "lines": [
+            "JR常磐線",
+            "東武アーバンパークライン"
+          ]
         }
       ]
     }
@@ -860,9 +917,7 @@
         "images/kawasaki5.png",
         "images/kawasaki4.png",
         "images/kawasaki5.png"
-      ],
-      "birthday": "2016-12-01",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -888,12 +943,18 @@
         {
           "station": "川崎駅",
           "description": "北改札北口通路直結",
-          "lines": ["JR東海道本線", "京浜東北線", "南武線"]
+          "lines": [
+            "JR東海道本線",
+            "京浜東北線",
+            "南武線"
+          ]
         },
         {
           "station": "京急川崎駅",
           "description": "中央口",
-          "lines": ["京急電鉄"],
+          "lines": [
+            "京急電鉄"
+          ],
           "duration": "徒歩7分"
         }
       ]
@@ -910,9 +971,7 @@
         "images/kyoto3.png",
         "images/kyoto4.png",
         "images/kyoto5.png"
-      ],
-      "birthday": "2017-01-10",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "京都府",
     "coordinates": null,
@@ -929,9 +988,7 @@
         "images/machida3.png",
         "images/machida4.png",
         "images/machida5.png"
-      ],
-      "birthday": "2019-03-01",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -950,9 +1007,7 @@
         "images/mito5.png",
         "images/mito4.png",
         "images/mito5.png"
-      ],
-      "birthday": "2015-04-27",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "茨城県",
     "coordinates": {
@@ -978,7 +1033,11 @@
         {
           "station": "水戸駅",
           "description": "南口",
-          "lines": ["JR常磐線", "水郡線", "鹿島臨海鉄道 大洗鹿島線"]
+          "lines": [
+            "JR常磐線",
+            "水郡線",
+            "鹿島臨海鉄道 大洗鹿島線"
+          ]
         }
       ]
     }
@@ -987,7 +1046,9 @@
     "id": "nagoya",
     "character": {
       "name": "なごやたん",
-      "aliases": ["名古屋たん"],
+      "aliases": [
+        "名古屋たん"
+      ],
       "description": "ビックカメラ名古屋駅西店の擬人化キャラクター。頭のしゃちほこと、エビフライのようなツインテールが特徴。ギャルっぽい性格。制服のリボンは市の花・ユリがモチーフ。",
       "twitter_id": "bic_nagoya",
       "images": [
@@ -997,9 +1058,7 @@
         "images/nagoya5.png",
         "images/nagoya4.png",
         "images/nagoya5.png"
-      ],
-      "birthday": "2016-04-26",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "愛知県",
     "coordinates": {
@@ -1053,9 +1112,7 @@
         "images/nagoyagate5.png",
         "images/nagoyagate4.png",
         "images/nagoyagate5.png"
-      ],
-      "birthday": "2017-03-30",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "愛知県",
     "coordinates": {
@@ -1100,8 +1157,10 @@
       "name": "ナイセン",
       "description": "ビッカメ娘の企画や公式イラストを担当。スマホで03発着信・ナイセンができる「ナイセンクラウド」を運営。主に法人向けの電話サービスではあるが、イラストや動画でアピールしている。⇒ナイセンクラウド⇒なぜナイセンがビッカメ娘を描くのか？ビッカメ娘誕生ストーリーはこちら",
       "twitter_id": "itallinc",
-      "images": ["itallinc.png", "itallinc3.png"],
-      "is_biccame_musume": false
+      "images": [
+        "itallinc.png",
+        "itallinc3.png"
+      ]
     },
     "prefecture": null,
     "coordinates": null,
@@ -1120,9 +1179,7 @@
         "images/nanba5.png",
         "images/nanba4.png",
         "images/nanba5.png"
-      ],
-      "birthday": "2017-02-21",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -1149,17 +1206,27 @@
         {
           "station": "なんば駅・難波駅",
           "description": "なんばウォークB17・B19・B21出口",
-          "lines": ["市営地下鉄御堂筋線", "千日前線", "近鉄難波線"]
+          "lines": [
+            "市営地下鉄御堂筋線",
+            "千日前線",
+            "近鉄難波線"
+          ]
         },
         {
           "station": "日本橋駅",
           "description": "なんばウォークB17・B19・B21出口",
-          "lines": ["堺筋線"]
+          "lines": [
+            "堺筋線"
+          ]
         },
         {
           "station": "難波駅",
           "description": "北口",
-          "lines": ["南海本線", "JR関西本線", "大和路線"]
+          "lines": [
+            "南海本線",
+            "JR関西本線",
+            "大和路線"
+          ]
         }
       ]
     }
@@ -1168,7 +1235,9 @@
     "id": "niigata",
     "character": {
       "name": "にいがたたん",
-      "aliases": ["新潟たん"],
+      "aliases": [
+        "新潟たん"
+      ],
       "description": "ビックカメラ新潟店の擬人化キャラクター。胸のモチーフは県の花・チューリップと、県の鳥・トキ。お米が大好きで、おにぎりのような形のヘアピンをしている。",
       "twitter_id": "niigata_bic",
       "images": [
@@ -1178,9 +1247,7 @@
         "images/niigata5.png",
         "images/niigata4.png",
         "images/niigata5.png"
-      ],
-      "birthday": "2018-02-01",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "新潟県",
     "coordinates": {
@@ -1206,7 +1273,13 @@
         {
           "station": "新潟駅",
           "description": "東口",
-          "lines": ["JR信越本線", "白新線", "羽越本線", "越後線", "上越新幹線"]
+          "lines": [
+            "JR信越本線",
+            "白新線",
+            "羽越本線",
+            "越後線",
+            "上越新幹線"
+          ]
         }
       ]
     }
@@ -1217,8 +1290,10 @@
       "name": "お偉いたん",
       "description": "ビックカメラのお偉いたんです。あくまでもビッカメ娘達の行動を影から見守る少し恥ずかしがりやなお偉いたんです。",
       "twitter_id": "",
-      "images": ["oeraitan.png", "images/oeraitan3.png"],
-      "is_biccame_musume": false
+      "images": [
+        "oeraitan.png",
+        "images/oeraitan3.png"
+      ]
     },
     "prefecture": null,
     "coordinates": null,
@@ -1237,9 +1312,7 @@
         "images/ohmiya5.png",
         "images/ohmiya4.png",
         "images/ohmiya5.png"
-      ],
-      "birthday": "2015-12-15",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "埼玉県",
     "coordinates": {
@@ -1290,9 +1363,7 @@
         "images/okayama5.png",
         "images/okayama4.png",
         "images/okayama5.png"
-      ],
-      "birthday": "2016-10-05",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "岡山県",
     "coordinates": {
@@ -1318,12 +1389,21 @@
         {
           "station": "岡山駅",
           "description": "東口",
-          "lines": ["JR山陽本線", "津山線", "吉備線", "宇野線", "山陽新幹線"]
+          "lines": [
+            "JR山陽本線",
+            "津山線",
+            "吉備線",
+            "宇野線",
+            "山陽新幹線"
+          ]
         },
         {
           "station": "岡山駅前駅",
           "description": "",
-          "lines": ["岡山電気軌道東山線", "清輝橋線"]
+          "lines": [
+            "岡山電気軌道東山線",
+            "清輝橋線"
+          ]
         }
       ]
     }
@@ -1339,9 +1419,7 @@
         "images/photo32.png",
         "images/photo4.png",
         "images/photo5.png"
-      ],
-      "birthday": "2016-03-17",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -1351,7 +1429,9 @@
     "id": "pkan",
     "character": {
       "name": "パソ館たん",
-      "aliases": ["パソコン館たん"],
+      "aliases": [
+        "パソコン館たん"
+      ],
       "description": "ビックカメラ本店パソコン館の擬人化キャラクター。同じ池袋の本店たんがお姉ちゃん。リボンとくせっ毛がお揃い。ビルに似たスマホをいつも首からさげている。",
       "twitter_id": "bicpkanhonten",
       "images": [
@@ -1361,9 +1441,7 @@
         "images/pkan5.png",
         "images/pkan4.png",
         "images/pkan5.png"
-      ],
-      "birthday": "2016-06-29",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1416,9 +1494,7 @@
         "images/shasinkan5.png",
         "images/prosta4.png",
         "images/shasinkan5.png"
-      ],
-      "birthday": "2015-11-11",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1444,9 +1520,7 @@
         "images/sagami5.png",
         "images/sagami4.png",
         "images/sagami5.png"
-      ],
-      "birthday": "2015-08-04",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -1472,7 +1546,9 @@
         {
           "station": "相模大野駅",
           "description": "駅ビル内",
-          "lines": ["小田急線"]
+          "lines": [
+            "小田急線"
+          ]
         }
       ]
     }
@@ -1481,7 +1557,9 @@
     "id": "sapporo",
     "character": {
       "name": "さっぽろたん",
-      "aliases": ["札幌たん"],
+      "aliases": [
+        "札幌たん"
+      ],
       "description": "ビックカメラ札幌店の擬人化キャラクター。雪の結晶のピンが宝物。マフラーとブーツが特徴的。みんなから雪の妖精と呼ばれたりしている。",
       "twitter_id": "bic_sapporo",
       "images": [
@@ -1491,9 +1569,7 @@
         "images/sapporo5.png",
         "images/sapporo4.png",
         "images/sapporo5.png"
-      ],
-      "birthday": "2016-08-10",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "北海道",
     "coordinates": {
@@ -1519,12 +1595,19 @@
         {
           "station": "札幌駅",
           "description": "南口",
-          "lines": ["JR函館本線", "千歳線", "札沼線"]
+          "lines": [
+            "JR函館本線",
+            "千歳線",
+            "札沼線"
+          ]
         },
         {
           "station": "さっぽろ駅",
           "description": "地下直結",
-          "lines": ["札幌市営地下鉄南北線", "東豊線"]
+          "lines": [
+            "札幌市営地下鉄南北線",
+            "東豊線"
+          ]
         }
       ]
     }
@@ -1533,7 +1616,9 @@
     "id": "seiseki",
     "character": {
       "name": "せいせきたん",
-      "aliases": ["聖蹟たん"],
+      "aliases": [
+        "聖蹟たん"
+      ],
       "description": "ビックカメラ聖蹟桜ヶ丘駅店の擬人化キャラクター。後ろ髪にある大きな桜の花が特徴。ツイートに桜の花を咲かせるのが得意。",
       "twitter_id": "",
       "images": [
@@ -1541,9 +1626,7 @@
         "images/seiseki3.png",
         "images/seiseki4.png",
         "images/seiseki5.png"
-      ],
-      "birthday": "2016-08-31",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -1562,9 +1645,7 @@
         "images/shibuhachi5.png",
         "images/shibuhachi4.png",
         "images/shibuhachi5.png"
-      ],
-      "birthday": "2019-07-07",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1618,9 +1699,7 @@
         "images/shibuto5.png",
         "images/shibuto4.png",
         "images/shibuto5.png"
-      ],
-      "birthday": "2019-07-07",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1674,9 +1753,7 @@
         "images/shinjyuku5.png",
         "images/shinjyuku4.png",
         "images/shinjyuku5.png"
-      ],
-      "birthday": "2016-05-23",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1720,12 +1797,16 @@
         {
           "station": "新宿西口駅",
           "description": "B16出口",
-          "lines": ["都営大江戸線"]
+          "lines": [
+            "都営大江戸線"
+          ]
         },
         {
           "station": "西武新宿駅",
           "description": "南口",
-          "lines": ["西武新宿線"]
+          "lines": [
+            "西武新宿線"
+          ]
         }
       ]
     }
@@ -1743,9 +1824,7 @@
         "images/shintou5.png",
         "images/shintou4.png",
         "images/shintou5.png"
-      ],
-      "birthday": "2020-10-19",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1783,12 +1862,16 @@
         {
           "station": "新宿西口駅",
           "description": "B8出口",
-          "lines": ["都営大江戸線"]
+          "lines": [
+            "都営大江戸線"
+          ]
         },
         {
           "station": "西武新宿駅",
           "description": "南口",
-          "lines": ["西武新宿線"]
+          "lines": [
+            "西武新宿線"
+          ]
         }
       ]
     }
@@ -1806,9 +1889,7 @@
         "images/shinyoko5.png",
         "images/shinyoko4.png",
         "images/shinyoko5.png"
-      ],
-      "birthday": "2020-01-23",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -1834,7 +1915,11 @@
         {
           "station": "新横浜駅",
           "description": "北口・出口1",
-          "lines": ["JR横浜線", "東海道新幹線", "横浜市営地下鉄ブルーライン"]
+          "lines": [
+            "JR横浜線",
+            "東海道新幹線",
+            "横浜市営地下鉄ブルーライン"
+          ]
         }
       ]
     }
@@ -1852,9 +1937,7 @@
         "images/tachikawa5.png",
         "images/tachikawa4.png",
         "images/tachikawa5.png"
-      ],
-      "birthday": "2016-10-25",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1880,12 +1963,18 @@
         {
           "station": "立川駅",
           "description": "北口",
-          "lines": ["JR中央本線", "青梅線", "南武線"]
+          "lines": [
+            "JR中央本線",
+            "青梅線",
+            "南武線"
+          ]
         },
         {
           "station": "立川北駅",
           "description": "JR立川方面出口",
-          "lines": ["多摩都市モノレール"]
+          "lines": [
+            "多摩都市モノレール"
+          ]
         }
       ]
     }
@@ -1894,7 +1983,9 @@
     "id": "takatsuki",
     "character": {
       "name": "たかつきたん",
-      "aliases": ["高槻たん"],
+      "aliases": [
+        "高槻たん"
+      ],
       "description": "ビックカメラ高槻阪急スクエア店の擬人化キャラクター。古風なサイドポニーと勾玉の髪飾りが特徴。関西のビッカメ娘メンバーや、はにわたんとは特に仲良し。胸のモチーフはウノハナ。",
       "twitter_id": "bic_takatsuki",
       "images": [
@@ -1904,9 +1995,7 @@
         "images/takatsuki5.png",
         "images/takatsuki4.png",
         "images/takatsuki5.png"
-      ],
-      "birthday": "2023-10-06",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -1932,12 +2021,16 @@
         {
           "station": "高槻駅",
           "description": "北口 ペデストリアンデッキ直結",
-          "lines": ["JR京都線"]
+          "lines": [
+            "JR京都線"
+          ]
         },
         {
           "station": "高槻市駅",
           "description": "6番出口",
-          "lines": ["阪急京都線"]
+          "lines": [
+            "阪急京都線"
+          ]
         }
       ]
     }
@@ -1953,9 +2046,7 @@
         "images/tamapla3.png",
         "images/tamapla4.png",
         "images/tamapla5.png"
-      ],
-      "birthday": "2020-11-26",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "神奈川県",
     "coordinates": null,
@@ -1974,9 +2065,7 @@
         "images/tenjin1_5.png",
         "images/tenjin1_4.png",
         "images/tenjin1_5.png"
-      ],
-      "birthday": "2020-12-13",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "福岡県",
     "coordinates": {
@@ -2002,19 +2091,25 @@
         {
           "station": "西鉄福岡駅",
           "description": "南口",
-          "lines": ["西鉄天神大牟田線"],
+          "lines": [
+            "西鉄天神大牟田線"
+          ],
           "duration": "徒歩2分"
         },
         {
           "station": "天神駅",
           "description": "天神地下街 西12a・b出口",
-          "lines": ["福岡市営地下鉄空港線"],
+          "lines": [
+            "福岡市営地下鉄空港線"
+          ],
           "duration": "徒歩1分"
         },
         {
           "station": "天神南駅",
           "description": "天神地下街 西12a・b出口",
-          "lines": ["福岡市営地下鉄七隈線"],
+          "lines": [
+            "福岡市営地下鉄七隈線"
+          ],
           "duration": "徒歩1分"
         }
       ]
@@ -2033,9 +2128,7 @@
         "images/tenjin2go5.png",
         "images/tenjin2go4.png",
         "images/tenjin2go5.png"
-      ],
-      "birthday": "2017-10-25",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "福岡県",
     "coordinates": {
@@ -2061,19 +2154,25 @@
         {
           "station": "西鉄福岡駅",
           "description": "中央口",
-          "lines": ["西鉄天神大牟田線"],
+          "lines": [
+            "西鉄天神大牟田線"
+          ],
           "duration": "徒歩4分"
         },
         {
           "station": "天神駅",
           "description": "天神地下街 西10番出口",
-          "lines": ["福岡市営地下鉄空港線"],
+          "lines": [
+            "福岡市営地下鉄空港線"
+          ],
           "duration": "徒歩4分"
         },
         {
           "station": "天神南駅",
           "description": "天神地下街 西10番出口",
-          "lines": ["福岡市営地下鉄七隈線"],
+          "lines": [
+            "福岡市営地下鉄七隈線"
+          ],
           "duration": "徒歩4分"
         }
       ]
@@ -2083,7 +2182,9 @@
     "id": "tokorozawa",
     "character": {
       "name": "所沢たん",
-      "aliases": ["所沢たん"],
+      "aliases": [
+        "所沢たん"
+      ],
       "description": "ビックカメラ所沢駅の擬人化キャラクター。CAさんに憧れており、帽子やスカーフにこだわっている。胸の花は、所沢市の花・茶の花。髪の毛と法被の裏地は空をイメージしている。",
       "twitter_id": "bic_toko",
       "images": [
@@ -2093,9 +2194,7 @@
         "images/tokorozawa5.png",
         "images/tokorozawa4.png",
         "images/tokorozawa5.png"
-      ],
-      "birthday": "2021-11-08",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "埼玉県",
     "coordinates": {
@@ -2121,7 +2220,9 @@
         {
           "station": "所沢駅",
           "description": "西口",
-          "lines": ["西武新宿線・西武池袋線"]
+          "lines": [
+            "西武新宿線・西武池袋線"
+          ]
         }
       ]
     }
@@ -2130,7 +2231,9 @@
     "id": "yao",
     "character": {
       "name": "八尾たん",
-      "aliases": ["八尾たん"],
+      "aliases": [
+        "八尾たん"
+      ],
       "description": "ビックカメラアリオ八尾店の擬人化キャラクター。髪は八本に分かれている。アーミーなブーツを履いている。胸のリボンは大きなイチョウの葉。",
       "twitter_id": "bic_yao",
       "images": [
@@ -2140,9 +2243,7 @@
         "images/yao5.png",
         "images/yao4.png",
         "images/yao5.png"
-      ],
-      "birthday": "2022-11-14",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -2168,7 +2269,9 @@
         {
           "station": "近鉄八尾駅",
           "description": "中央北口",
-          "lines": ["近鉄大阪線"]
+          "lines": [
+            "近鉄大阪線"
+          ]
         }
       ]
     }
@@ -2186,9 +2289,7 @@
         "images/yuurakuchou5.png",
         "images/yuurakucho4.png",
         "images/yuurakuchou5.png"
-      ],
-      "birthday": "2016-05-11",
-      "is_biccame_musume": true
+      ]
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -2214,19 +2315,31 @@
         {
           "station": "有楽町駅",
           "description": "日比谷口・D4出口",
-          "lines": ["JR山手線", "京浜東北線", "地下鉄有楽町線"],
+          "lines": [
+            "JR山手線",
+            "京浜東北線",
+            "地下鉄有楽町線"
+          ],
           "duration": "徒歩1分"
         },
         {
           "station": "日比谷駅",
           "description": "D4出口地下通路",
-          "lines": ["地下鉄日比谷線", "千代田線", "三田線"],
+          "lines": [
+            "地下鉄日比谷線",
+            "千代田線",
+            "三田線"
+          ],
           "duration": "徒歩4~8分"
         },
         {
           "station": "銀座駅",
           "description": "JR有楽町駅方面出口地下通路",
-          "lines": ["地下鉄銀座線", "丸ノ内線", "日比谷線"],
+          "lines": [
+            "地下鉄銀座線",
+            "丸ノ内線",
+            "日比谷線"
+          ],
           "duration": "徒歩5~10分"
         }
       ]
