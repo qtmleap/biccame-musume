@@ -144,7 +144,18 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                       <Store className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
                       <div className='min-w-0 flex-1'>
                         <p className='text-sm text-gray-500'>店舗名</p>
-                        <p className='text-sm text-gray-900'>{character.store.name}</p>
+                        {character.store.store_id ? (
+                          <a
+                            href={`https://www.biccamera.com/bc/i/shop/shoplist/shop${character.store.store_id.toString().padStart(3, '0')}.jsp`}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='text-sm text-gray-900 hover:text-pink-600 hover:underline'
+                          >
+                            {character.store.name}
+                          </a>
+                        ) : (
+                          <p className='text-sm text-gray-900'>{character.store.name}</p>
+                        )}
                       </div>
                     </div>
                   )}
