@@ -1,5 +1,8 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { Trash2 } from 'lucide-react'
 import { Suspense, useState } from 'react'
+import { toast } from 'sonner'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { UpcomingEventList } from '@/components/events/upcoming-event-list'
 import { BirthdayBackground } from '@/components/home/birthday-background'
@@ -11,6 +14,7 @@ import { BirthdayHeroSection } from '@/components/home/birthday-hero-section'
 import { EventList } from '@/components/home/event-list'
 import { HomeHeader } from '@/components/home/home-header'
 import { LineStickerList } from '@/components/home/line-sticker-list'
+import { Button } from '@/components/ui/button'
 import { useCharacters } from '@/hooks/useCharacters'
 import { getBirthdayCharacters } from '@/utils/character'
 
@@ -18,6 +22,40 @@ import { getBirthdayCharacters } from '@/utils/character'
  * 誕生日表示パターンの種類
  */
 type BirthdayDisplayType = 'dialog' | 'fullscreen' | 'banner' | 'hero' | 'floating' | 'background' | 'none'
+
+/**
+ * オフラインキャッシュをリセットするボタン
+ */
+const ClearCacheButton = () => {
+  const queryClient = useQueryClient()
+
+  const handleClearCache = () => {
+    // Tanstack Queryのキャッシュをクリア
+    queryClient.clear()
+    // LocalStorageからオフラインキャッシュを削除
+    localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
+    toast.success('オフラインキャッシュをリセットしたよ！')
+    // ページをリロードして変更を反映
+    setTimeout(() => {
+      window.location.reload()
+    }, 500)
+  }
+
+  if (!import.meta.env.DEV) return null
+
+  return (
+    <Button
+      type='button'
+      onClick={handleClearCache}
+      variant='outline'
+      size='sm'
+      className='fixed bottom-4 right-4 z-100 gap-2 shadow-lg'
+    >
+      <Trash2 className='h-4 w-4' />
+      キャッシュリセット
+    </Button>
+  )
+}
 
 /**
  * 誕生日表示コンポーネントの切り替え（開発環境用）
@@ -101,6 +139,7 @@ const HomeContent = () => {
   return (
     <div className='flex flex-col gap-3'>
       <BirthdayDisplaySwitcher current={displayType} onChange={setDisplayType} />
+      <ClearCacheButton />
       <HomeHeader />
       {/* ヒーローセクションはコンテンツ内に表示 */}
       {displayType === 'hero' && <BirthdayHeroSection characters={birthdayCharacters} />}
