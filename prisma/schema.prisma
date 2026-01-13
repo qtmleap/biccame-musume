@@ -8,8 +8,8 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
-  // engineType      = "library"
-  // runtime         = "workered"
+  engineType      = "library"
+  runtime         = "workered"
 }
 
 datasource db {
