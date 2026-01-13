@@ -17,14 +17,18 @@ const EventsContent = () => {
       <div className='mb-6 md:mb-8'>
         <div className='flex items-start justify-between gap-4'>
           <div className='flex-1'>
-            <h1 className='text-2xl font-bold text-gray-900 md:text-3xl'>イベント管理</h1>
+            <div className='flex justify-between'>
+              <h1 className='text-2xl font-bold text-gray-900 md:text-2xl'>イベント管理</h1>
+              {isAuthenticated && (
+                <Link to='/admin/events/new'>
+                  <Button className='bg-red-500 hover:bg-red-600 text-xs' size='sm'>
+                    新規作成
+                  </Button>
+                </Link>
+              )}
+            </div>
             <p className='mt-2 text-sm text-gray-600 md:text-base'>アクキー配布などのイベントを登録・管理</p>
           </div>
-          {isAuthenticated && (
-            <Link to='/admin/events/new'>
-              <Button className='bg-red-500 hover:bg-red-600'>新規作成</Button>
-            </Link>
-          )}
         </div>
       </div>
 
