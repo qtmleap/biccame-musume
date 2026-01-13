@@ -1,15 +1,12 @@
 import { describe, expect, test } from 'bun:test'
-// import storesInfoJson from '../scripts/archive/stores_info.json'
+import storesInfoJson from '../public/characters.json'
 import { StoresSchema } from '../src/schemas/store.dto'
 
-// テスト用のダミーデータ
-const storesInfoJson: unknown[] = []
-
 /**
- * stores_info.jsonのパースと検証テスト
- * アーカイブされた店舗情報がスキーマに準拠しているかを確認
+ * characters.jsonのパースと検証テスト
+ * 店舗情報がスキーマに準拠しているかを確認
  */
-describe.skip('stores_info.json parsing', () => {
+describe('characters.json parsing', () => {
   test('JSONファイル全体がStoresSchemaに準拠していること', () => {
     const result = StoresSchema.safeParse(storesInfoJson)
 
