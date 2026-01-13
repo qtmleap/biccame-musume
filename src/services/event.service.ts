@@ -10,6 +10,7 @@ import type { Bindings } from '@/types/bindings'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
+dayjs.tz.setDefault('Asia/Tokyo')
 
 /**
  * イベントのステータスと残り日数を計算
@@ -19,10 +20,10 @@ const calculateEventStatus = (event: {
   endDate: Date | null
   endedAt: Date | null
 }): { status: EventStatus; daysUntil: number } => {
-  const now = dayjs().startOf('day')
-  const startDate = dayjs(event.startDate).startOf('day')
-  const endDate = event.endDate ? dayjs(event.endDate).startOf('day') : null
-  const endedAt = event.endedAt ? dayjs(event.endedAt) : null
+  const now = dayjs().tz('Asia/Tokyo').startOf('day')
+  const startDate = dayjs(event.startDate).tz('Asia/Tokyo').startOf('day')
+  const endDate = event.endDate ? dayjs(event.endDate).tz('Asia/Tokyo').startOf('day') : null
+  const endedAt = event.endedAt ? dayjs(event.endedAt).tz('Asia/Tokyo') : null
 
   // 実際の終了日時が設定されている場合は終了
   if (endedAt) {

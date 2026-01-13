@@ -1,8 +1,8 @@
 import { useSuspenseQueries } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
-import { Gift } from 'lucide-react'
+import { Gift, Settings } from 'lucide-react'
 import { Suspense, useMemo } from 'react'
 import { categoryFilterAtom } from '@/atoms/categoryFilterAtom'
 import { prefectureToRegion, regionFilterAtom } from '@/atoms/filterAtom'
@@ -10,6 +10,7 @@ import { RegionFilterControl } from '@/components/characters/region-filter-contr
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
+import { Button } from '@/components/ui/button'
 import { charactersQueryKey } from '@/hooks/useCharacters'
 import { client } from '@/utils/client'
 
@@ -94,8 +95,18 @@ const EventsContent = () => {
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
       <div className='flex flex-col gap-2'>
-        {/* カテゴリフィルター */}
-        <EventCategoryFilter />
+        {/* カテゴリフィルターと管理ボタン */}
+        <div className='flex items-start justify-between gap-4'>
+          <div className='flex-1'>
+            <EventCategoryFilter />
+          </div>
+          <Button asChild size='sm' variant='ghost' className='gap-2 shrink-0'>
+            <Link to='/admin/events'>
+              <Settings className='size-4' />
+              管理
+            </Link>
+          </Button>
+        </div>
 
         {/* 地域フィルター */}
         <RegionFilterControl />
