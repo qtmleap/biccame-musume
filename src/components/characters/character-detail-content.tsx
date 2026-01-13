@@ -149,7 +149,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                             href={`https://www.biccamera.com/bc/i/shop/shoplist/shop${character.store.store_id.toString().padStart(3, '0')}.jsp`}
                             target='_blank'
                             rel='noopener noreferrer'
-                            className='text-sm text-gray-900 hover:text-pink-600 hover:underline'
+                            className='text-sm text-pink-600 hover:underline'
                           >
                             {character.store.name}
                           </a>
@@ -176,7 +176,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
                       <Phone className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
                       <div className='min-w-0 flex-1'>
                         <p className='text-sm text-gray-500'>電話番号</p>
-                        <a href={`tel:${character.store.phone}`} className='text-sm text-gray-900 hover:text-pink-600'>
+                        <a href={`tel:${character.store.phone}`} className='text-sm text-pink-600 hover:underline'>
                           {character.store.phone}
                         </a>
                       </div>
