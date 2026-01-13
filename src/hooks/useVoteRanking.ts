@@ -17,10 +17,7 @@ export const useVoteRanking = () => {
   return useSuspenseQuery({
     queryKey: ['ranking', targetYear],
     queryFn: async () => {
-      const [characters, counts] = await Promise.all([
-        client.getCharacters(),
-        client.getVotes()
-      ])
+      const [characters, counts] = await Promise.all([client.getCharacters(), client.getVotes()])
 
       // 投票数をオブジェクトに変換
       const voteMap = keyBy(counts, 'key')
