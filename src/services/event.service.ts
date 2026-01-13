@@ -1,10 +1,15 @@
 import { PrismaD1 } from '@prisma/adapter-d1'
 import { PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 import { HTTPException } from 'hono/http-exception'
 import { nullToUndefined } from '@/lib/utils'
 import { type Event, type EventRequest, EventSchema, type EventStatus, EventStatusSchema } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 /**
  * イベントのステータスと残り日数を計算
@@ -14,9 +19,9 @@ const calculateEventStatus = (event: {
   endDate: Date | null
   endedAt: Date | null
 }): { status: EventStatus; daysUntil: number } => {
-  const now = dayjs()
-  const startDate = dayjs(event.startDate)
-  const endDate = event.endDate ? dayjs(event.endDate) : null
+  const now = dayjs().startOf('day')
+  const startDate = dayjs(event.startDate).startOf('day')
+  const endDate = event.endDate ? dayjs(event.endDate).startOf('day') : null
   const endedAt = event.endedAt ? dayjs(event.endedAt) : null
 
   // 実際の終了日時が設定されている場合は終了
@@ -25,12 +30,12 @@ const calculateEventStatus = (event: {
   }
 
   // 開始前
-  if (now.isBefore(startDate, 'day')) {
+  if (now.isBefore(startDate)) {
     return { status: EventStatusSchema.enum.upcoming, daysUntil: startDate.diff(now, 'day') }
   }
 
   // 終了日が設定されていて、終了日を過ぎている場合
-  if (endDate && now.isAfter(endDate, 'day')) {
+  if (endDate && now.isAfter(endDate)) {
     return { status: EventStatusSchema.enum.ended, daysUntil: 0 }
   }
 
