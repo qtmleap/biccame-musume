@@ -98,7 +98,7 @@ const CampaignCard = ({
   isAuthenticated: boolean
 }) => {
   return (
-    <div className='border rounded-lg p-4 bg-white'>
+    <div className='border rounded-lg p-4 bg-white flex flex-col h-full'>
       <div className='mb-2 flex items-start justify-between gap-3'>
         <div className='flex-1'>
           <h3 className='text-sm font-semibold text-gray-900'>{campaign.name}</h3>
@@ -131,7 +131,7 @@ const CampaignCard = ({
       </div>
 
       {/* アクション */}
-      <div className='flex items-center justify-between'>
+      <div className='flex items-center justify-between mt-auto'>
         <div className='flex items-center gap-1'>
           <Link to='/events/$eventId' params={{ eventId: campaign.id }}>
             <Button size='sm' variant='outline' className='h-7 text-xs'>
