@@ -333,7 +333,8 @@ const extractCoordinates = (url: string): { latitude: number; longitude: number 
  * プロフィールHTMLからビッカメ娘情報を抽出
  */
 const parseProfileHtml = (
-  html: string
+  html: string,
+  storeId: string
 ): {
   character: {
     name: string
@@ -453,13 +454,19 @@ const parseProfileHtml = (
     return null
   }
 
+  // is_biccame_musumeのデフォルト値を設定
+  // ナイセン、お偉いたん、ビックシムたん、ビックカメラはfalse、それ以外はtrue
+  const excludedCharacterIds = ['naisen', 'oeraitan', 'bicsim', 'biccamera']
+  const is_biccame_musume = !excludedCharacterIds.includes(storeId)
+
   return {
     character: {
       name: _cleanName,
       aliases: _aliases.length > 0 ? _aliases : undefined,
       description,
       twitter_id,
-      images: shortImages
+      images: shortImages,
+      is_biccame_musume
     },
     store_fields: {
       postal_code,
@@ -694,7 +701,7 @@ const main = async () => {
       // プロフィール情報を取得
       const profilePath = join(CACHE_DIR, file)
       const profileHtml = readFileSync(profilePath, 'utf-8')
-      const profileInfo = parseProfileHtml(profileHtml)
+      const profileInfo = parseProfileHtml(profileHtml, storeId)
 
       if (!profileInfo) {
         console.warn(`  ⚠️ Character info not found for ${storeId}`)

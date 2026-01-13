@@ -12,7 +12,8 @@
         "images/abeno5.png",
         "images/abeno4.png",
         "images/abeno5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -94,7 +95,8 @@
         "images/akasaka5.png",
         "images/akasaka4.png",
         "images/akasaka5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -158,7 +160,8 @@
         "images/akiba5.png",
         "images/akiba4.png",
         "images/akiba5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -203,7 +206,8 @@
       "images": [
         "biccamera.png",
         "biccamera3.png"
-      ]
+      ],
+      "is_biccame_musume": false
     },
     "prefecture": null,
     "coordinates": null,
@@ -222,7 +226,8 @@
         "images/bicqlo5.png",
         "images/bicqlo4.png",
         "images/bicqlo5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -293,7 +298,8 @@
       "images": [
         "images/bicsim2.png",
         "images/bicsim3.png"
-      ]
+      ],
+      "is_biccame_musume": false
     },
     "prefecture": null,
     "coordinates": null,
@@ -313,7 +319,8 @@
         "4864f8622ad3133a980acfeba567137323f7a6be.png",
         "images/camera4.png",
         "images/camera5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -335,7 +342,8 @@
         "images/chiba5.png",
         "images/chiba4.png",
         "images/chiba5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "千葉県",
     "coordinates": {
@@ -389,7 +397,8 @@
         "images/chofu5.png",
         "images/chofu4.png",
         "images/chofu5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -436,7 +445,8 @@
         "images/fujisawa5.png",
         "images/fujisawa4.png",
         "images/fujisawa5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -487,7 +497,8 @@
         "images/funabashi5.png",
         "images/funabashi4.png",
         "images/funabashi5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "千葉県",
     "coordinates": {
@@ -539,7 +550,8 @@
         "images/funato3.png",
         "images/funato4.png",
         "images/funato0.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "千葉県",
     "coordinates": null,
@@ -558,7 +570,8 @@
         "images/hachioji5.png",
         "images/hachoji4.png",
         "images/hachioji5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -616,7 +629,8 @@
         "images/hamamatsu5.png",
         "images/hamamatsu4.png",
         "images/hamamatsu5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "静岡県",
     "coordinates": {
@@ -670,7 +684,8 @@
         "images/hiroshima5.png",
         "images/hiroshima4.png",
         "images/hiroshima5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "広島県",
     "coordinates": {
@@ -714,7 +729,8 @@
         "images/honten5.png",
         "images/honten4.png",
         "images/honten5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -770,7 +786,8 @@
         "images/ikenishi5.png",
         "images/ikenishi4.png",
         "images/ikenishi5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -823,7 +840,8 @@
         "images/kagoshima5.png",
         "images/kagoshima4.png",
         "images/kagoshima5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "鹿児島県",
     "coordinates": {
@@ -870,7 +888,8 @@
         "images/kashiwa5.png",
         "images/kashiwa4.png",
         "images/kashiwa5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "千葉県",
     "coordinates": {
@@ -917,7 +936,8 @@
         "images/kawasaki5.png",
         "images/kawasaki4.png",
         "images/kawasaki5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -971,7 +991,8 @@
         "images/kyoto3.png",
         "images/kyoto4.png",
         "images/kyoto5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "京都府",
     "coordinates": null,
@@ -988,7 +1009,8 @@
         "images/machida3.png",
         "images/machida4.png",
         "images/machida5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -1007,7 +1029,8 @@
         "images/mito5.png",
         "images/mito4.png",
         "images/mito5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "茨城県",
     "coordinates": {
@@ -1058,7 +1081,8 @@
         "images/nagoya5.png",
         "images/nagoya4.png",
         "images/nagoya5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "愛知県",
     "coordinates": {
@@ -1112,7 +1136,8 @@
         "images/nagoyagate5.png",
         "images/nagoyagate4.png",
         "images/nagoyagate5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "愛知県",
     "coordinates": {
@@ -1160,7 +1185,8 @@
       "images": [
         "itallinc.png",
         "itallinc3.png"
-      ]
+      ],
+      "is_biccame_musume": false
     },
     "prefecture": null,
     "coordinates": null,
@@ -1179,7 +1205,8 @@
         "images/nanba5.png",
         "images/nanba4.png",
         "images/nanba5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -1247,7 +1274,8 @@
         "images/niigata5.png",
         "images/niigata4.png",
         "images/niigata5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "新潟県",
     "coordinates": {
@@ -1293,7 +1321,8 @@
       "images": [
         "oeraitan.png",
         "images/oeraitan3.png"
-      ]
+      ],
+      "is_biccame_musume": false
     },
     "prefecture": null,
     "coordinates": null,
@@ -1312,7 +1341,8 @@
         "images/ohmiya5.png",
         "images/ohmiya4.png",
         "images/ohmiya5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "埼玉県",
     "coordinates": {
@@ -1363,7 +1393,8 @@
         "images/okayama5.png",
         "images/okayama4.png",
         "images/okayama5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "岡山県",
     "coordinates": {
@@ -1419,7 +1450,8 @@
         "images/photo32.png",
         "images/photo4.png",
         "images/photo5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -1441,7 +1473,8 @@
         "images/pkan5.png",
         "images/pkan4.png",
         "images/pkan5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1494,7 +1527,8 @@
         "images/shasinkan5.png",
         "images/prosta4.png",
         "images/shasinkan5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1520,7 +1554,8 @@
         "images/sagami5.png",
         "images/sagami4.png",
         "images/sagami5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -1569,7 +1604,8 @@
         "images/sapporo5.png",
         "images/sapporo4.png",
         "images/sapporo5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "北海道",
     "coordinates": {
@@ -1626,7 +1662,8 @@
         "images/seiseki3.png",
         "images/seiseki4.png",
         "images/seiseki5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -1645,7 +1682,8 @@
         "images/shibuhachi5.png",
         "images/shibuhachi4.png",
         "images/shibuhachi5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1699,7 +1737,8 @@
         "images/shibuto5.png",
         "images/shibuto4.png",
         "images/shibuto5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1753,7 +1792,8 @@
         "images/shinjyuku5.png",
         "images/shinjyuku4.png",
         "images/shinjyuku5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1824,7 +1864,8 @@
         "images/shintou5.png",
         "images/shintou4.png",
         "images/shintou5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1889,7 +1930,8 @@
         "images/shinyoko5.png",
         "images/shinyoko4.png",
         "images/shinyoko5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -1937,7 +1979,8 @@
         "images/tachikawa5.png",
         "images/tachikawa4.png",
         "images/tachikawa5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1995,7 +2038,8 @@
         "images/takatsuki5.png",
         "images/takatsuki4.png",
         "images/takatsuki5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -2046,7 +2090,8 @@
         "images/tamapla3.png",
         "images/tamapla4.png",
         "images/tamapla5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "神奈川県",
     "coordinates": null,
@@ -2065,7 +2110,8 @@
         "images/tenjin1_5.png",
         "images/tenjin1_4.png",
         "images/tenjin1_5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "福岡県",
     "coordinates": {
@@ -2128,7 +2174,8 @@
         "images/tenjin2go5.png",
         "images/tenjin2go4.png",
         "images/tenjin2go5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "福岡県",
     "coordinates": {
@@ -2194,7 +2241,8 @@
         "images/tokorozawa5.png",
         "images/tokorozawa4.png",
         "images/tokorozawa5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "埼玉県",
     "coordinates": {
@@ -2243,7 +2291,8 @@
         "images/yao5.png",
         "images/yao4.png",
         "images/yao5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -2289,7 +2338,8 @@
         "images/yuurakuchou5.png",
         "images/yuurakucho4.png",
         "images/yuurakuchou5.png"
-      ]
+      ],
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "coordinates": {

@@ -71,12 +71,14 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
           </div>
         </Link>
         <div className='flex justify-end gap-2 mt-2'>
-          <CharacterVoteButton
-            characterId={character.id}
-            characterName={character.character?.name || ''}
-            variant='compact'
-            enableVoteCount={false}
-          />
+          {character.character?.is_biccame_musume && (
+            <CharacterVoteButton
+              characterId={character.id}
+              characterName={character.character?.name || ''}
+              variant='compact'
+              enableVoteCount={false}
+            />
+          )}
           <Button
             size='sm'
             variant='outline'
