@@ -48,7 +48,7 @@ const InfoItem = ({ icon: Icon, label, children }: InfoItemProps) => {
 /**
  * 店舗名コンポーネント
  */
-const StoreName = ({ name, storeId }: { name: string; storeId?: number }) => {
+const StoreName = ({ name, storeId }: { name?: string; storeId?: number }) => {
   if (!name) return null
 
   return (
@@ -72,7 +72,7 @@ const StoreName = ({ name, storeId }: { name: string; storeId?: number }) => {
 /**
  * 住所コンポーネント
  */
-const StoreAddress = ({ address, postalCode }: { address: string; postalCode?: string | null }) => {
+const StoreAddress = ({ address, postalCode }: { address?: string; postalCode?: string | null }) => {
   if (!address) return null
 
   return (
@@ -86,7 +86,7 @@ const StoreAddress = ({ address, postalCode }: { address: string; postalCode?: s
 /**
  * 電話番号コンポーネント
  */
-const StorePhone = ({ phone }: { phone: string }) => {
+const StorePhone = ({ phone }: { phone?: string }) => {
   if (!phone) return null
 
   return (
@@ -105,7 +105,7 @@ const StoreHours = ({
   hours,
   openAllYear
 }: {
-  hours: Array<{ type: string; open_time: string; close_time: string }>
+  hours?: Array<{ type: string; open_time: string; close_time: string }>
   openAllYear?: boolean
 }) => {
   if (!hours || hours.length === 0) return null
@@ -152,7 +152,7 @@ const StoreAccess = ({ access }: { access: Array<{ station: string; description?
 /**
  * 店舗開店日コンポーネント
  */
-const StoreBirthday = ({ birthday }: { birthday: string }) => {
+const StoreBirthday = ({ birthday }: { birthday?: string }) => {
   if (!birthday) return null
 
   return (

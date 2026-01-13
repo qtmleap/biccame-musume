@@ -13,7 +13,8 @@
         "images/abeno4.png",
         "images/abeno5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-09-07"
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -96,7 +97,8 @@
         "images/akasaka4.png",
         "images/akasaka5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2019-01-23"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -161,7 +163,8 @@
         "images/akiba4.png",
         "images/akiba5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2017-06-05"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -227,7 +230,8 @@
         "images/bicqlo4.png",
         "images/bicqlo5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2015-05-18"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -299,7 +303,8 @@
         "images/bicsim2.png",
         "images/bicsim3.png"
       ],
-      "is_biccame_musume": false
+      "is_biccame_musume": false,
+      "birthday": "2018-06-13"
     },
     "prefecture": null,
     "coordinates": null,
@@ -320,7 +325,8 @@
         "images/camera4.png",
         "images/camera5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-06-29"
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -343,7 +349,8 @@
         "images/chiba4.png",
         "images/chiba5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2024-12-12"
     },
     "prefecture": "千葉県",
     "coordinates": {
@@ -398,7 +405,8 @@
         "images/chofu4.png",
         "images/chofu5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2017-09-27"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -446,7 +454,8 @@
         "images/fujisawa4.png",
         "images/fujisawa5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-02-12"
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -498,7 +507,8 @@
         "images/funabashi4.png",
         "images/funabashi5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2015-05-18"
     },
     "prefecture": "千葉県",
     "coordinates": {
@@ -551,7 +561,8 @@
         "images/funato4.png",
         "images/funato0.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2017-11-15"
     },
     "prefecture": "千葉県",
     "coordinates": null,
@@ -571,7 +582,8 @@
         "images/hachoji4.png",
         "images/hachioji5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2015-05-14"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -630,7 +642,8 @@
         "images/hamamatsu4.png",
         "images/hamamatsu5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2015-05-23"
     },
     "prefecture": "静岡県",
     "coordinates": {
@@ -685,7 +698,8 @@
         "images/hiroshima4.png",
         "images/hiroshima5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-08-24"
     },
     "prefecture": "広島県",
     "coordinates": {
@@ -730,7 +744,8 @@
         "images/honten4.png",
         "images/honten5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2015-10-21"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -787,7 +802,8 @@
         "images/ikenishi4.png",
         "images/ikenishi5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2017-05-09"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -841,7 +857,8 @@
         "images/kagoshima4.png",
         "images/kagoshima5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2017-12-18"
     },
     "prefecture": "鹿児島県",
     "coordinates": {
@@ -889,7 +906,8 @@
         "images/kashiwa4.png",
         "images/kashiwa5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2015-05-14"
     },
     "prefecture": "千葉県",
     "coordinates": {
@@ -937,7 +955,8 @@
         "images/kawasaki4.png",
         "images/kawasaki5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-12-01"
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -992,7 +1011,8 @@
         "images/kyoto4.png",
         "images/kyoto5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2017-01-10"
     },
     "prefecture": "京都府",
     "coordinates": null,
@@ -1010,7 +1030,8 @@
         "images/machida4.png",
         "images/machida5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2019-03-01"
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -1030,7 +1051,8 @@
         "images/mito4.png",
         "images/mito5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2015-04-27"
     },
     "prefecture": "茨城県",
     "coordinates": {
@@ -1082,7 +1104,8 @@
         "images/nagoya4.png",
         "images/nagoya5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-04-26"
     },
     "prefecture": "愛知県",
     "coordinates": {
@@ -1137,7 +1160,8 @@
         "images/nagoyagate4.png",
         "images/nagoyagate5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2017-03-30"
     },
     "prefecture": "愛知県",
     "coordinates": {
@@ -1206,7 +1230,8 @@
         "images/nanba4.png",
         "images/nanba5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2017-02-21"
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -1275,7 +1300,8 @@
         "images/niigata4.png",
         "images/niigata5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2018-02-01"
     },
     "prefecture": "新潟県",
     "coordinates": {
@@ -1342,7 +1368,8 @@
         "images/ohmiya4.png",
         "images/ohmiya5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2015-12-15"
     },
     "prefecture": "埼玉県",
     "coordinates": {
@@ -1394,7 +1421,8 @@
         "images/okayama4.png",
         "images/okayama5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-10-05"
     },
     "prefecture": "岡山県",
     "coordinates": {
@@ -1451,7 +1479,8 @@
         "images/photo4.png",
         "images/photo5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-03-17"
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -1474,7 +1503,8 @@
         "images/pkan4.png",
         "images/pkan5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-06-29"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1528,7 +1558,8 @@
         "images/prosta4.png",
         "images/shasinkan5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2015-11-11"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1555,7 +1586,8 @@
         "images/sagami4.png",
         "images/sagami5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2015-08-04"
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -1605,7 +1637,8 @@
         "images/sapporo4.png",
         "images/sapporo5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-08-10"
     },
     "prefecture": "北海道",
     "coordinates": {
@@ -1663,7 +1696,8 @@
         "images/seiseki4.png",
         "images/seiseki5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-08-31"
     },
     "prefecture": "東京都",
     "coordinates": null,
@@ -1683,7 +1717,8 @@
         "images/shibuhachi4.png",
         "images/shibuhachi5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2019-07-07"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1738,7 +1773,8 @@
         "images/shibuto4.png",
         "images/shibuto5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2019-07-07"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1793,7 +1829,8 @@
         "images/shinjyuku4.png",
         "images/shinjyuku5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-05-23"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1865,7 +1902,8 @@
         "images/shintou4.png",
         "images/shintou5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2020-10-19"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -1931,7 +1969,8 @@
         "images/shinyoko4.png",
         "images/shinyoko5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2020-01-23"
     },
     "prefecture": "神奈川県",
     "coordinates": {
@@ -1980,7 +2019,8 @@
         "images/tachikawa4.png",
         "images/tachikawa5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-10-25"
     },
     "prefecture": "東京都",
     "coordinates": {
@@ -2039,7 +2079,8 @@
         "images/takatsuki4.png",
         "images/takatsuki5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2023-10-06"
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -2091,7 +2132,8 @@
         "images/tamapla4.png",
         "images/tamapla5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2020-11-26"
     },
     "prefecture": "神奈川県",
     "coordinates": null,
@@ -2111,7 +2153,8 @@
         "images/tenjin1_4.png",
         "images/tenjin1_5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2020-12-13"
     },
     "prefecture": "福岡県",
     "coordinates": {
@@ -2175,7 +2218,8 @@
         "images/tenjin2go4.png",
         "images/tenjin2go5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2017-10-25"
     },
     "prefecture": "福岡県",
     "coordinates": {
@@ -2242,7 +2286,8 @@
         "images/tokorozawa4.png",
         "images/tokorozawa5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2021-11-08"
     },
     "prefecture": "埼玉県",
     "coordinates": {
@@ -2292,7 +2337,8 @@
         "images/yao4.png",
         "images/yao5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2022-11-14"
     },
     "prefecture": "大阪府",
     "coordinates": {
@@ -2339,7 +2385,8 @@
         "images/yuurakucho4.png",
         "images/yuurakuchou5.png"
       ],
-      "is_biccame_musume": true
+      "is_biccame_musume": true,
+      "birthday": "2016-05-11"
     },
     "prefecture": "東京都",
     "coordinates": {

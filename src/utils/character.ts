@@ -46,7 +46,8 @@ export const getBirthdayCharacters = (characters: StoreData[]): StoreData[] => {
  * 誕生日が近い順にソートするための日数計算（絶対値）
  * 今日を基準に、今年と来年の誕生日のうち、より近い方の日数を返す
  */
-export const getDaysFromBirthday = (dateStr: string | undefined): number => {
+export const getDaysFromBirthday = (dateStr: string | undefined | null): number => {
+  if (!dateStr) return Number.MAX_SAFE_INTEGER
   const birthday = parseDate(dateStr)
   if (!birthday) return Number.MAX_SAFE_INTEGER
 
@@ -66,7 +67,8 @@ export const getDaysFromBirthday = (dateStr: string | undefined): number => {
 /**
  * 誕生日が近い順にソートするための日数計算
  */
-export const getDaysUntilBirthday = (dateStr: string | undefined): number => {
+export const getDaysUntilBirthday = (dateStr: string | undefined | null): number => {
+  if (!dateStr) return Number.MAX_SAFE_INTEGER
   const birthday = parseDate(dateStr)
   if (!birthday) return Number.MAX_SAFE_INTEGER
 
