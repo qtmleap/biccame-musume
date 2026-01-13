@@ -119,11 +119,11 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], toEnv: Ta
         const createdAt = event.createdAt || dayjs().toISOString()
         const updatedAt = event.updatedAt || dayjs().toISOString()
 
-        return `('${event.id}', '${name}', '${category}', '${startDate}', ${endDate === 'NULL' ? 'NULL' : `'${endDate}'`}, ${endedAt === 'NULL' ? 'NULL' : `'${endedAt}'`}, ${limitedQuantity}, '${createdAt}', '${updatedAt}')`
+        return `('${event.id}', '${name}', '${category}', '${startDate}', ${endDate === 'NULL' ? 'NULL' : `'${endDate}'`}, ${endedAt === 'NULL' ? 'NULL' : `'${endedAt}'`}, ${limitedQuantity}, 1, 0, '${createdAt}', '${updatedAt}')`
       })
       .join(', ')
 
-    const eventSql = `INSERT INTO events (id, name, category, start_date, end_date, ended_at, limited_quantity, created_at, updated_at) VALUES ${eventValues};`
+    const eventSql = `INSERT INTO events (id, name, category, start_date, end_date, ended_at, limited_quantity, is_verified, is_preliminary, created_at, updated_at) VALUES ${eventValues};`
     await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${localFlag} --command ${eventSql}`.quiet()
 
     // 各イベントの関連データを投入
