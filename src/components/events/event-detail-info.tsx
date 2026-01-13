@@ -105,8 +105,8 @@ const EventConditionsSection = ({ conditions }: { conditions: Event['conditions'
     <div className='min-w-0 flex-1'>
       <p className='text-sm text-gray-500'>配布条件</p>
       <div className='space-y-1'>
-        {conditions.map((condition, index) => (
-          <div key={index} className='text-sm text-gray-900'>
+        {conditions.map((condition) => (
+          <div key={condition.id} className='text-sm text-gray-900'>
             • {getConditionDetail(condition)}
           </div>
         ))}

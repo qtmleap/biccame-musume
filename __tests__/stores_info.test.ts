@@ -3,7 +3,7 @@ import { describe, expect, test } from 'bun:test'
 import { StoresSchema } from '../src/schemas/store.dto'
 
 // テスト用のダミーデータ
-const storesInfoJson: any[] = []
+const storesInfoJson: unknown[] = []
 
 /**
  * stores_info.jsonのパースと検証テスト

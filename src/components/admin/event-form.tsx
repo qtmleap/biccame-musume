@@ -251,6 +251,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
    * キャンペーンを保存
    */
   const onSubmit = async (data: EventFormValues) => {
+    // biome-ignore lint/suspicious/noExplicitAny: 動的にプロパティを追加するため
     const payload: any = {
       category: data.category,
       name: data.name,
