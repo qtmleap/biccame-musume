@@ -20,13 +20,13 @@ import {
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
-import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS } from '@/locales/app.content'
+import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
 import type { Event, EventCondition } from '@/schemas/event.dto'
 
 /**
  * 条件の詳細テキストを取得
  */
-const getConditionDetail = (condition: EventCondition): string => {
+const _getConditionDetail = (condition: EventCondition): string => {
   switch (condition.type) {
     case 'purchase':
       return `${condition.purchaseAmount?.toLocaleString()}円以上購入`
@@ -42,7 +42,7 @@ const getConditionDetail = (condition: EventCondition): string => {
 /**
  * 条件アイコンコンポーネント
  */
-const ConditionIcon = ({ type }: { type: EventCondition['type'] }) => {
+const _ConditionIcon = ({ type }: { type: EventCondition['type'] }) => {
   switch (type) {
     case 'purchase':
       return null
@@ -98,7 +98,7 @@ const CampaignCard = ({
   isAuthenticated: boolean
 }) => {
   return (
-    <div className='border-b py-3 last:border-b-0'>
+    <div className='border rounded-lg p-4 bg-white'>
       <div className='mb-2 flex items-start justify-between gap-3'>
         <div className='flex-1'>
           <h3 className='text-sm font-semibold text-gray-900'>{campaign.name}</h3>
@@ -130,31 +130,15 @@ const CampaignCard = ({
         <StatusBadge campaign={campaign} />
       </div>
 
-      {/* 配布条件 */}
-      <div className='mb-3 flex flex-wrap gap-2'>
-        {campaign.conditions.map((condition, index) => (
-          <Badge key={`${campaign.id}-${index}`} variant='outline' className='gap-1.5 border-gray-300 px-3 py-1'>
-            <ConditionIcon type={condition.type} />
-            <span>{getConditionDetail(condition)}</span>
-          </Badge>
-        ))}
-      </div>
-
       {/* アクション */}
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-1'>
-          {campaign.referenceUrls && campaign.referenceUrls.length > 0 ? (
-            campaign.referenceUrls.map((ref) => (
-              <a key={ref.type} href={ref.url} target='_blank' rel='noopener noreferrer'>
-                <Button size='sm' variant='outline' className='h-7 text-xs'>
-                  <ExternalLink className='mr-1 size-3' />
-                  {REFERENCE_URL_TYPE_LABELS[ref.type]}
-                </Button>
-              </a>
-            ))
-          ) : (
-            <div />
-          )}
+          <Link to='/events/$eventId' params={{ eventId: campaign.id }}>
+            <Button size='sm' variant='outline' className='h-7 text-xs'>
+              <ExternalLink className='mr-1 size-3' />
+              詳細
+            </Button>
+          </Link>
         </div>
         {isAuthenticated && (
           <div className='flex items-center gap-2'>
@@ -189,7 +173,7 @@ export const EventList = () => {
   const { isAuthenticated } = useCloudflareAccess()
   const [activeTab, setActiveTab] = useAtom(eventListActiveTabAtom)
   const [pages, setPages] = useAtom(eventListPagesAtom)
-  const itemsPerPage = 5
+  const itemsPerPage = 12
 
   const currentPage = pages[activeTab]
 
@@ -213,16 +197,6 @@ export const EventList = () => {
     const startIndex = (currentPage - 1) * itemsPerPage
     return filteredCampaigns.slice(startIndex, startIndex + itemsPerPage)
   }, [filteredCampaigns, currentPage])
-
-  // 各カテゴリのイベント数
-  const categoryCounts = useMemo(() => {
-    return {
-      limited_card: campaigns.filter((c) => c.category === 'limited_card').length,
-      regular_card: campaigns.filter((c) => c.category === 'regular_card').length,
-      ackey: campaigns.filter((c) => c.category === 'ackey').length,
-      other: campaigns.filter((c) => c.category === 'other').length
-    }
-  }, [campaigns])
 
   /**
    * キャンペーンを削除
@@ -274,7 +248,6 @@ export const EventList = () => {
             >
               <span className={activeTab === category ? 'text-gray-900' : 'text-gray-600'}>
                 {EVENT_CATEGORY_LABELS[category]}
-                <span className='ml-1.5 text-xs text-muted-foreground'>({categoryCounts[category]})</span>
               </span>
               {activeTab === category && (
                 <motion.div
@@ -296,7 +269,7 @@ export const EventList = () => {
             </div>
           ) : (
             <>
-              <div className='space-y-2.5'>
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                 {paginatedCampaigns.map((campaign) => (
                   <CampaignCard
                     key={campaign.id}
