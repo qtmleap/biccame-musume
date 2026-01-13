@@ -62,9 +62,9 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
   // URL重複チェック結果を保持
   const [duplicateWarnings, setDuplicateWarnings] = useState<Record<number, Event | null>>({})
 
-  // 住所がある店舗のみフィルタリングしてユニークリストを取得
-  const storeNames = Array.from(
-    new Set(characters.filter((c) => c.store?.address && c.store.address.trim() !== '').map((c) => c.store?.name || ''))
+  // 住所がある店舗のみフィルタリングしてユニークリストを取得（キーのリスト）
+  const storeKeys = Array.from(
+    new Set(characters.filter((c) => c.store?.address && c.store.address.trim() !== '').map((c) => c.id))
   ).sort()
 
   const {
@@ -212,21 +212,21 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
   /**
    * 店舗を追加
    */
-  const handleAddStore = (storeName: string) => {
-    if (storeName === '_all') {
-      setValue('stores', storeNames)
-    } else if (!stores.includes(storeName)) {
-      setValue('stores', [...stores, storeName])
+  const handleAddStore = (storeKey: string) => {
+    if (storeKey === '_all') {
+      setValue('stores', storeKeys)
+    } else if (!stores.includes(storeKey)) {
+      setValue('stores', [...stores, storeKey])
     }
   }
 
   /**
    * 店舗を削除
    */
-  const handleRemoveStore = (storeName: string) => {
+  const handleRemoveStore = (storeKey: string) => {
     setValue(
       'stores',
-      stores.filter((s) => s !== storeName)
+      stores.filter((s) => s !== storeKey)
     )
   }
 
@@ -423,11 +423,15 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value='_all'>全店舗を選択</SelectItem>
-                {storeNames.map((storeName) => (
-                  <SelectItem key={storeName} value={storeName} disabled={stores.includes(storeName)}>
-                    {storeName}
-                  </SelectItem>
-                ))}
+                {storeKeys.map((key) => {
+                  const storeKey = key as StoreKey
+                  const displayName = STORE_NAME_LABELS[storeKey] || key
+                  return (
+                    <SelectItem key={key} value={key} disabled={stores.includes(key)}>
+                      {displayName}
+                    </SelectItem>
+                  )
+                })}
               </SelectContent>
             </Select>
           </div>
@@ -436,7 +440,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
         {/* 選択された店舗のバッジ */}
         {stores.length > 0 && (
           <div className='flex flex-wrap gap-1.5'>
-            {stores.length === storeNames.length ? (
+            {stores.length === storeKeys.length ? (
               <Badge className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
                 <span className='text-xs font-semibold'>全店舗</span>
                 <button
@@ -448,15 +452,15 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
                 </button>
               </Badge>
             ) : (
-              stores.map((storeName) => {
-                const storeKey = storeName as StoreKey
-                const displayName = STORE_NAME_LABELS[storeKey] || storeName
+              stores.map((key) => {
+                const storeKey = key as StoreKey
+                const displayName = STORE_NAME_LABELS[storeKey] || key
                 return (
-                  <Badge key={storeName} className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
+                  <Badge key={key} className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
                     <span className='text-xs font-semibold'>{displayName}</span>
                     <button
                       type='button'
-                      onClick={() => handleRemoveStore(storeName)}
+                      onClick={() => handleRemoveStore(key)}
                       className='ml-0.5 rounded-sm hover:bg-rose-200'
                     >
                       <X className='size-3' />
