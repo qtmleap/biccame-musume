@@ -2,7 +2,6 @@ name = "biccame-musume"
 compatibility_date = "2025-07-12"
 compatibility_flags = ["nodejs_compat_v2"]
 main = "src/index.ts"
-routes = [{ pattern = "biccame-musume.com", custom_domain = true }]
 keep_vars = true
 
 [env.prod]
@@ -11,34 +10,43 @@ workers_dev = false
 preview_urls = false
 routes = [{ pattern = "biccame-musume.com", custom_domain = true }]
 
-[env.dev]
-name = "biccame-musume-dev"
-workers_dev = true
-preview_urls = true
-routes = [{ pattern = "biccame-musume-dev.com", custom_domain = true }]
-
 [env.prod.assets]
 directory = "dist"
 not_found_handling = "single-page-application"
 binding = "ASSETS"
 
 [[env.prod.kv_namespaces]]
-binding = "VOTE_LIMITER"
-id = "96019843cb67406799d40584768bcf7a"
-
-[[env.prod.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
 id = "ef49185c58d04a0790e7c68394d78089"
 
+[[env.prod.kv_namespaces]]
+binding = "VOTE_LIMITER"
+id = "96019843cb67406799d40584768bcf7a"
+
 [[env.prod.d1_databases]]
 binding = "DB"
-database_name = "biccame-musume"
-database_id = "468c64d3-2a18-4fcf-b700-8c1d24b2baba"
+database_name = "biccame-musume-prod"
+database_id = "9812433b-cfc6-46c6-8a0e-90a144b7304b"
 migrations_dir = "prisma/migrations"
 
+[[env.prod.ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 50, period = 60 }
+
 [env.prod.vars]
-CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
+CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
+
+[env.prod.observability]
+enabled = true
+head_sampling_rate = 1
+
+[env.dev]
+name = "biccame-musume-dev"
+workers_dev = true
+preview_urls = true
+routes = [{ pattern = "dev.biccame-musume.com", custom_domain = true }]
 
 [env.dev.assets]
 directory = "dist"
@@ -46,41 +54,28 @@ not_found_handling = "single-page-application"
 binding = "ASSETS"
 
 [[env.dev.kv_namespaces]]
-binding = "VOTE_LIMITER"
-id = "cc87e0f64116414c9d70a080bbb97156"
-
-[[env.dev.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
 id = "6f3b7b710eb646a0aef7ab524609bb67"
 
+[[env.dev.kv_namespaces]]
+binding = "VOTE_LIMITER"
+id = "cc87e0f64116414c9d70a080bbb97156"
+
 [[env.dev.d1_databases]]
 binding = "DB"
-database_name = "biccame-musume"
-database_id = "468c64d3-2a18-4fcf-b700-8c1d24b2baba"
+database_name = "biccame-musume-dev"
+database_id = "be540dec-d75d-46c9-b573-33cb68697778"
 migrations_dir = "prisma/migrations"
-
-[env.dev.vars]
-CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
-CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
-
-[observability]
-[observability.logs]
-enabled = true
-head_sampling_rate = 1
-invocation_logs = true
-persist = true
-
-[[ratelimits]]
-name = "RATE_LIMITER"
-namespace_id = "1001"
-simple = { limit = 50, period = 60 }
 
 [[env.dev.ratelimits]]
 name = "RATE_LIMITER"
 namespace_id = "1001"
 simple = { limit = 50, period = 60 }
 
-[[env.prod.ratelimits]]
-name = "RATE_LIMITER"
-namespace_id = "1001"
-simple = { limit = 50, period = 60 }
+[env.dev.vars]
+CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
+CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
+
+[env.dev.observability]
+enabled = true
+head_sampling_rate = 1
