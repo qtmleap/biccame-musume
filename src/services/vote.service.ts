@@ -1,5 +1,5 @@
 import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client/wasm'
+import { PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
