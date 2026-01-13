@@ -291,9 +291,12 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
     }
 
     if (event) {
-      await updateEvent.mutateAsync({ id: event.id, data: payload })
+      await updateEvent.mutateAsync({
+        id: event.id,
+        data: payload as Parameters<typeof updateEvent.mutateAsync>[0]['data']
+      })
     } else {
-      await createEvent.mutateAsync(payload)
+      await createEvent.mutateAsync(payload as Parameters<typeof createEvent.mutateAsync>[0])
     }
     handleReset()
     onSuccess?.()
