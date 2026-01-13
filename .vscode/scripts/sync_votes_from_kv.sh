@@ -1,25 +1,28 @@
 #!/bin/bash
-# KVの投票データをローカルD1に同期するスクリプト
-# fzfで環境を選択
+# KVの投票データをD1に同期するスクリプト
+# fzfで同期元と同期先を選択
 
-# fzfがインストールされているか確認
-if ! command -v fzf &> /dev/null; then
-    echo "❌ fzfがインストールされていません"
-    echo "インストール: brew install fzf"
-    exit 1
+set -e
+
+cd "$(dirname "$0")/../.."
+
+# 同期元環境を選択
+FROM_ENV=$(echo -e "local\ndev\nprod" | fzf --prompt="Sync from: " --height=10 --reverse)
+
+if [ -z "$FROM_ENV" ]; then
+  echo "Cancelled"
+  exit 0
 fi
 
-# 環境を選択
-ENV=$(echo -e "local\ndev\nprod" | fzf --prompt="同期元の環境を選択: " --height=40% --reverse --border)
+# 同期先環境を選択
+TO_ENV=$(echo -e "local\ndev\nprod" | fzf --prompt="Sync to: " --height=10 --reverse)
 
-# 選択がキャンセルされた場合
-if [ -z "$ENV" ]; then
-    echo "キャンセルされました"
-    exit 0
+if [ -z "$TO_ENV" ]; then
+  echo "Cancelled"
+  exit 0
 fi
 
-echo "🚀 ${ENV}環境から投票データを同期します..."
+echo "Selected: $FROM_ENV -> $TO_ENV"
 echo ""
 
-# スクリプトを実行
-bun "${BASH_SOURCE%/*}/sync_votes_from_kv.ts" "$ENV"
+bun run .vscode/scripts/sync_votes_from_kv.ts "$FROM_ENV" "$TO_ENV"
