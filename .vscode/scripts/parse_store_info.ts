@@ -11,9 +11,9 @@ import { mapKeys, snakeCase } from 'lodash-es'
 import { parse } from 'node-html-parser'
 import { parse as parseYaml } from 'yaml'
 
-const CACHE_DIR = join(import.meta.dir, '../../scripts/archive/html_cache')
+const CACHE_DIR = join(import.meta.dir, '../archive/html_cache')
 const OUTPUT_FILE = join(import.meta.dir, '../../public/characters.json')
-const CHARACTER_FIELDS_FILE = join(import.meta.dir, '../../scripts/archive/character_fields.yaml')
+const CHARACTER_FIELDS_FILE = join(import.meta.dir, './scripts/archive/character_fields.yaml')
 
 /**
  * 店舗情報の型定義
@@ -525,8 +525,11 @@ const parseStoreHtml = async (
   // 都道府県を抽出
   const prefecture = extractPrefecture(address, name, undefined, storeId)
 
-  // 営業時間を取得
-  const hoursElement = root.querySelector('#bcs_shop_hours .info_pickup_text p:nth-child(2)')
+  // 営業時間を取得（2つのパターンを試す）
+  let hoursElement = root.querySelector('#bcs_shop_hours .info_pickup_text p:nth-child(2)')
+  if (!hoursElement) {
+    hoursElement = root.querySelector('.info_pickup_text p:nth-child(2)')
+  }
   const hoursText = hoursElement?.text.trim() || ''
   const parsed_hours = parseHours(hoursText)
 
