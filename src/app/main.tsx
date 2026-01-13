@@ -70,6 +70,40 @@ const persister = createAsyncStoragePersister({
   deserialize: JSON.parse
 })
 
+/**
+ * アプリバージョンをチェックし、新バージョンの場合はキャッシュをクリアする
+ */
+const checkVersionAndClearCache = () => {
+  const STORAGE_KEY = 'APP_VERSION'
+  const currentVersion = `${__APP_VERSION__}-${__GIT_HASH__}`
+  const storedVersion = localStorage.getItem(STORAGE_KEY)
+  const hasOldCache = localStorage.getItem('REACT_QUERY_OFFLINE_CACHE') !== null
+
+  if (!storedVersion) {
+    // 初回アクセス（古いバージョンからの更新を含む）
+    if (hasOldCache) {
+      console.log('Old cache detected on first access. Clearing cache...')
+      localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
+      client.clear()
+      console.log('Cache cleared successfully')
+    }
+    localStorage.setItem(STORAGE_KEY, currentVersion)
+    console.log(`Initial version set: ${currentVersion}`)
+  } else if (storedVersion !== currentVersion) {
+    // バージョンが変更された
+    console.log(`Version changed from ${storedVersion} to ${currentVersion}. Clearing cache...`)
+    localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
+    client.clear()
+    localStorage.setItem(STORAGE_KEY, currentVersion)
+    console.log('Cache cleared successfully')
+  } else {
+    console.log(`Version unchanged: ${currentVersion}`)
+  }
+}
+
+// アプリ起動時にバージョンチェックを実行
+checkVersionAndClearCache()
+
 // Render the app
 // biome-ignore lint/style/noNonNullAssertion: reason
 const rootElement = document.getElementById('root')!
