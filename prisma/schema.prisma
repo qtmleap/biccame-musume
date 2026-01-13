@@ -7,9 +7,9 @@
 // Prismaスキーマ for Cloudflare D1
 generator client {
   provider        = "prisma-client-js"
+  output          = "./node_modules/.prisma/client"
   previewFeatures = ["driverAdapters"]
-  engineType      = "library"
-  runtime         = "workered"
+  // engineType      = "library"
 }
 
 datasource db {
