@@ -3,9 +3,10 @@
  * KVのイベントデータをD1データベースに同期するスクリプト
  *
  * 使い方:
- * bun .vscode/scripts/sync_events_from_kv.ts [環境]
+ * bun .vscode/scripts/sync_events_from_kv.ts [同期元環境] [同期先環境]
  *
- * 環境: dev / prod (デフォルト: prod)
+ * 同期元環境: dev / prod
+ * 同期先環境: local / dev / prod
  */
 
 import { $ } from 'bun'
@@ -36,17 +37,28 @@ const KV_NAMESPACE_IDS = {
 } as const
 
 type Environment = keyof typeof KV_NAMESPACE_IDS
+type TargetEnvironment = 'local' | 'dev' | 'prod'
 
 /**
- * ローカルのwrangler.tomlからD1データベース名を取得
+ * wrangler.tomlからD1データベース名を取得
  */
-const getLocalDatabaseName = async (): Promise<string> => {
+const getDatabaseName = async (env: TargetEnvironment): Promise<string> => {
   const wranglerToml = await Bun.file('wrangler.toml').text()
-  const match = wranglerToml.match(/database_name\s*=\s*"([^"]+)"/)
-  if (!match) {
-    throw new Error('wrangler.tomlからdatabase_nameを取得できませんでした')
+
+  if (env === 'local') {
+    const match = wranglerToml.match(/database_name\s*=\s*"([^"]+)"/)
+    if (!match) {
+      throw new Error('wrangler.tomlからdatabase_nameを取得できませんでした')
+    }
+    return match[1]
   }
-  return match[1]
+
+  // dev/prod環境の場合はenv.から取得
+  const envSection = wranglerToml.match(new RegExp(`\\[env\\.${env}\\][\\s\\S]*?database_name\\s*=\\s*"([^"]+)"`))
+  if (!envSection) {
+    throw new Error(`wrangler.tomlから${env}環境のdatabase_nameを取得できませんでした`)
+  }
+  return envSection[1]
 }
 
 /**
@@ -70,22 +82,23 @@ const fetchEventsFromKV = async (namespaceId: string, env: Environment): Promise
 /**
  * D1にイベントデータを投入
  */
-const insertEventsToD1 = async (databaseName: string, events: Event[], env: Environment): Promise<void> => {
-  console.log(`🚀 ローカルD1にイベントデータを投入中...`)
+const insertEventsToD1 = async (databaseName: string, events: Event[], toEnv: TargetEnvironment): Promise<void> => {
+  console.log(`🚀 ${toEnv}環境のD1にイベントデータを投入中...`)
 
   if (events.length === 0) {
     console.log('  投入するデータがありません')
     return
   }
 
-  // ローカルD1に投入
-  const localFlag = '--local'
+  // 同期先環境に応じてフラグを切り替え
+  const localFlag = toEnv === 'local' ? '--local' : '--remote'
+  const envFlag = toEnv === 'local' ? '' : `--env=${toEnv}`
 
   // 既存のイベントを削除
-  await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command "DELETE FROM events;"`.quiet()
-  await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command "DELETE FROM event_conditions;"`.quiet()
-  await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command "DELETE FROM event_reference_urls;"`.quiet()
-  await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command "DELETE FROM event_stores;"`.quiet()
+  await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${localFlag} --command "DELETE FROM events;"`.quiet()
+  await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${localFlag} --command "DELETE FROM event_conditions;"`.quiet()
+  await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${localFlag} --command "DELETE FROM event_reference_urls;"`.quiet()
+  await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${localFlag} --command "DELETE FROM event_stores;"`.quiet()
 
   console.log(`  ${events.length}件のイベントを投入します`)
 
@@ -111,7 +124,7 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
       .join(', ')
 
     const eventSql = `INSERT INTO events (id, name, category, start_date, end_date, ended_at, limited_quantity, created_at, updated_at) VALUES ${eventValues};`
-    await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command ${eventSql}`.quiet()
+    await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${localFlag} --command ${eventSql}`.quiet()
 
     // 各イベントの関連データを投入
     for (const event of batch) {
@@ -128,7 +141,7 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
           .join(', ')
 
         const conditionSql = `INSERT INTO event_conditions (id, event_id, type, purchase_amount, quantity, created_at, updated_at) VALUES ${conditionValues};`
-        await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command ${conditionSql}`.quiet()
+        await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${localFlag} --command ${conditionSql}`.quiet()
       }
 
       // 対象店舗
@@ -144,7 +157,7 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
           .join(', ')
 
         const storeSql = `INSERT INTO event_stores (id, event_id, store_key, created_at, updated_at) VALUES ${storeValues};`
-        await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command ${storeSql}`.quiet()
+        await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${localFlag} --command ${storeSql}`.quiet()
       }
 
       // 参考URL
@@ -159,7 +172,7 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
           .join(', ')
 
         const urlSql = `INSERT INTO event_reference_urls (id, event_id, type, url, created_at, updated_at) VALUES ${urlValues};`
-        await $`bun wrangler d1 execute ${databaseName} ${localFlag} --command ${urlSql}`.quiet()
+        await $`bun wrangler d1 execute ${databaseName} ${envFlag} ${localFlag} --command ${urlSql}`.quiet()
       }
     }
 
@@ -173,30 +186,40 @@ const insertEventsToD1 = async (databaseName: string, events: Event[], env: Envi
  * メイン処理
  */
 const main = async () => {
-  // 引数から環境を取得（デフォルトはprod）
+  // 引数から同期元と同期先の環境を取得
   const args = process.argv.slice(2)
-  const env: Environment = (args[0] as Environment) || 'prod'
+  const fromEnvArg = args[0] || 'prod'
+  const toEnvArg = args[1] || 'local'
 
-  if (env !== 'dev' && env !== 'prod') {
-    console.error(`❌ 無効な環境: ${env}`)
+  if (fromEnvArg !== 'dev' && fromEnvArg !== 'prod') {
+    console.error(`❌ 無効な同期元環境: ${fromEnvArg}`)
     console.log('利用可能な環境: dev, prod')
     process.exit(1)
   }
 
-  console.log(`🚀 ${env}環境のKVからローカルD1にイベントデータを同期します\n`)
+  if (!['local', 'dev', 'prod'].includes(toEnvArg)) {
+    console.error(`❌ 無効な同期先環境: ${toEnvArg}`)
+    console.log('利用可能な環境: local, dev, prod')
+    process.exit(1)
+  }
 
-  const namespaceId = KV_NAMESPACE_IDS[env]
-  const databaseName = await getLocalDatabaseName()
+  const fromEnv = fromEnvArg as Environment
+  const toEnv = toEnvArg as TargetEnvironment
 
-  console.log(`📦 データベース: ${databaseName}`)
+  console.log(`🚀 ${fromEnv}環境のKVから${toEnv}環境のD1にイベントデータを同期します\n`)
+
+  const namespaceId = KV_NAMESPACE_IDS[fromEnv]
+  const databaseName = await getDatabaseName(toEnv)
+
+  console.log(`💾 データベース: ${databaseName} (${toEnv}環境)`)
   console.log(`🔑 KVネームスペースID: ${namespaceId}\n`)
 
   // KVからイベントデータを取得
-  const events = await fetchEventsFromKV(namespaceId, env)
+  const events = await fetchEventsFromKV(namespaceId, fromEnv)
   console.log(`✅ ${events.length}件のイベントを取得しました\n`)
 
   // D1にデータを投入
-  await insertEventsToD1(databaseName, events, env)
+  await insertEventsToD1(databaseName, events, toEnv)
 
   console.log('\n🎉 同期完了！')
 }
