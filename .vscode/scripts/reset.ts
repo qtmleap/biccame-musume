@@ -1,19 +1,18 @@
 /**
- * Prismaマイグレーションをリセットし、ローカル・リモートD1に適用するスクリプト
+ * Prismaマイグレーションをリセットし、リモートD1に適用するスクリプト
  *
  * 使用方法:
- *   bun run scripts/reset.ts [local|dev|prod]
+ *   bun run scripts/reset.ts [local-dev|remote-dev|remote-prod]
  *
  * 対象:
- *   - local: prisma/dev.db (ローカルSQLite)
- *   - dev: --local (ローカルwrangler D1)
- *   - prod: --env=prod --remote (本番環境D1)
+ *   - local-dev: wrangler --local --env=dev (ローカルwrangler D1 dev環境)
+ *   - remote-dev: wrangler --remote --env=dev (リモートD1 dev環境)
+ *   - remote-prod: wrangler --remote --env=prod (リモートD1 prod環境)
  *
  * 実行内容:
  * 1. prisma/migrationsの全削除
- * 2. prisma/dev.dbの削除
- * 3. prisma migrate dev --name initでマイグレーション作成＆ローカルDB反映
- * 4. 選択した環境にマイグレーション適用（リセット含む）
+ * 2. prisma migrate dev --create-only --name initでマイグレーション作成
+ * 3. 選択した環境にマイグレーション適用（リセット含む）
  */
 
 import { existsSync, readdirSync, renameSync } from 'node:fs'
@@ -21,7 +20,7 @@ import { join } from 'node:path'
 import { $ } from 'bun'
 import dayjs from 'dayjs'
 
-type TargetEnv = 'local' | 'dev' | 'prod'
+type TargetEnv = 'local-dev' | 'remote-dev' | 'remote-prod'
 
 /**
  * マイグレーションディレクトリ名を生成する（YYYYMMDDHHMMSS形式、5分単位、秒は00固定）
@@ -32,24 +31,44 @@ function generateMigrationDirName(): string {
   return now.minute(roundedMinute).format('YYYYMMDDHHmm00')
 }
 
-const DATABASE_NAME = 'biccame-musume'
 const MIGRATIONS_DIR = 'prisma/migrations'
+
+/**
+ * 環境に応じたデータベース名を取得
+ */
+function getDatabaseName(env: TargetEnv): string {
+  return env === 'remote-prod' ? 'biccame-musume-prod' : 'biccame-musume-dev'
+}
 
 /**
  * wranglerでD1データベースをリセットしてマイグレーションを適用する
  */
-async function resetAndMigrateD1(env: 'dev' | 'prod', migrationSqlPath: string): Promise<void> {
-  const isLocal = env === 'dev'
-  const baseArgs = isLocal ? [DATABASE_NAME, '--local'] : [DATABASE_NAME, `--env=${env}`, '--remote']
+async function resetAndMigrateD1(env: TargetEnv, migrationSqlPath: string): Promise<void> {
+  const databaseName = getDatabaseName(env)
+  const isLocal = env === 'local-dev'
+  const envName = env === 'remote-prod' ? 'prod' : 'dev'
+  const baseArgs = isLocal ? [databaseName, '--local', `--env=${envName}`] : [databaseName, '--remote', `--env=${envName}`]
 
   // Cloudflare内部テーブル（削除対象から除外）
   const excludeTables = new Set(['_cf_METADATA', '_cf_KV', 'd1_migrations'])
 
-  console.log(`\nResetting ${env} ${isLocal ? 'local' : 'remote'} D1...`)
+  console.log(`\nResetting ${env} D1...`)
 
   // テーブル一覧を取得
-  const tablesResult =
-    await $`bun wrangler d1 execute ${baseArgs} --json --command "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';"`.quiet()
+  let tablesResult
+  try {
+    tablesResult =
+      await $`bun wrangler d1 execute ${baseArgs} --json --command "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';"`.quiet()
+  } catch (error) {
+    console.error(`  Failed to fetch table list: ${error}`)
+    if (!isLocal) {
+      console.error('\n  Network error may have occurred. You can:')
+      console.error('  1. Retry the command')
+      console.error('  2. Try using local-dev environment instead')
+      console.error('  3. Check your internet connection')
+    }
+    throw error
+  }
   const tablesOutput = tablesResult.stdout.toString()
 
   let tables: string[] = []
@@ -62,7 +81,7 @@ async function resetAndMigrateD1(env: 'dev' | 'prod', migrationSqlPath: string):
   } catch (error) {
     console.log(`  Failed to parse table list: ${error}`)
     console.log(`  Raw output: ${tablesOutput}`)
-    throw new Error(`Failed to reset ${env} remote D1: could not parse table list`)
+    throw new Error(`Failed to reset ${env} D1: could not parse table list`)
   }
 
   if (tables.length > 0) {
@@ -84,22 +103,33 @@ async function resetAndMigrateD1(env: 'dev' | 'prod', migrationSqlPath: string):
   // _prisma_migrationsテーブルも削除（存在する場合）
   await $`bun wrangler d1 execute ${baseArgs} --command "DROP TABLE IF EXISTS _prisma_migrations;"`.quiet()
 
-  console.log(`\nApplying migration to ${env} ${isLocal ? 'local' : 'remote'} D1...`)
+  console.log(`\nApplying migration to ${env} D1...`)
   console.log(`  File: ${migrationSqlPath}`)
-  await $`bun wrangler d1 execute ${baseArgs} --file=${migrationSqlPath}`
 
-  console.log(`  Done: ${env} ${isLocal ? 'local' : 'remote'} D1 migration applied`)
+  try {
+    await $`bun wrangler d1 execute ${baseArgs} --yes --file=${migrationSqlPath}`
+    console.log(`  Done: ${env} D1 migration applied`)
+  } catch (error) {
+    console.error(`  Failed to apply migration: ${error}`)
+    if (!isLocal) {
+      console.error('\n  Network error may have occurred. You can:')
+      console.error('  1. Retry the command')
+      console.error('  2. Try using local-dev environment instead')
+      console.error('  3. Check your internet connection')
+    }
+    throw error
+  }
 }
 
 async function main(): Promise<void> {
   const targetEnv = process.argv[2] as TargetEnv | undefined
 
-  if (!targetEnv || !['local', 'dev', 'prod'].includes(targetEnv)) {
-    console.error('Usage: bun run scripts/reset.ts [local|dev|prod]')
+  if (!targetEnv || !['local-dev', 'remote-dev', 'remote-prod'].includes(targetEnv)) {
+    console.error('Usage: bun run scripts/reset.ts [local-dev|remote-dev|remote-prod]')
     console.error('')
-    console.error('  local: prisma/dev.db (ローカルSQLite)')
-    console.error('  dev:   --local (ローカルwrangler D1)')
-    console.error('  prod:  --env=prod --remote (本番環境D1)')
+    console.error('  local-dev:   wrangler --local --env=dev (ローカルwrangler D1 dev環境)')
+    console.error('  remote-dev:  wrangler --remote --env=dev (リモートD1 dev環境)')
+    console.error('  remote-prod: wrangler --remote --env=prod (リモートD1 prod環境)')
     process.exit(1)
   }
 
@@ -114,17 +144,8 @@ async function main(): Promise<void> {
     console.log('  Skipped: prisma/migrations does not exist')
   }
 
-  // Step 2: prisma/dev.db を削除
-  console.log('\nStep 2: Remove prisma/dev.db')
-  if (existsSync('prisma/dev.db')) {
-    await $`rm -f prisma/dev.db`
-    console.log('  Done: removed prisma/dev.db')
-  } else {
-    console.log('  Skipped: prisma/dev.db does not exist')
-  }
-
-  // Step 3: マイグレーション作成
-  console.log('\nStep 3: Create Prisma migration')
+  // Step 2: マイグレーション作成
+  console.log('\nStep 2: Create Prisma migration')
   await $`bunx prisma migrate dev --create-only --name init`
 
   // 作成されたマイグレーションディレクトリをリネーム
@@ -149,19 +170,8 @@ async function main(): Promise<void> {
   console.log(`\nMigration SQL file: ${migrationSqlPath}`)
 
   // 環境に応じてマイグレーション適用
-  if (targetEnv === 'local') {
-    console.log('\nStep 4: Apply Prisma migration to local DB')
-    await $`bunx prisma migrate dev`
-    console.log('  Done: migration applied to local DB')
-
-    // wranglerのローカルD1にも適用
-    console.log('\nStep 5: Apply migration to wrangler local D1')
-    await $`bun wrangler d1 execute ${DATABASE_NAME} --local --file=${migrationSqlPath}`
-    console.log('  Done: migration applied to wrangler local D1')
-  } else {
-    console.log(`\nStep 4: Apply to Cloudflare D1 (${targetEnv})`)
-    await resetAndMigrateD1(targetEnv, migrationSqlPath)
-  }
+  console.log(`\nStep 3: Apply to Cloudflare D1 (${targetEnv})`)
+  await resetAndMigrateD1(targetEnv, migrationSqlPath)
 
   console.log('\nAll steps completed successfully!')
 }
