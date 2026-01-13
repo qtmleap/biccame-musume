@@ -106,19 +106,35 @@ async function resetAndMigrateD1(env: TargetEnv, migrationSqlPath: string): Prom
   console.log(`\nApplying migration to ${env} D1...`)
   console.log(`  File: ${migrationSqlPath}`)
 
-  try {
-    await $`bun wrangler d1 execute ${baseArgs} --yes --file=${migrationSqlPath}`
-    console.log(`  Done: ${env} D1 migration applied`)
-  } catch (error) {
-    console.error(`  Failed to apply migration: ${error}`)
-    if (!isLocal) {
-      console.error('\n  Network error may have occurred. You can:')
-      console.error('  1. Retry the command')
-      console.error('  2. Try using local-dev environment instead')
-      console.error('  3. Check your internet connection')
+  const maxRetries = 3
+  let lastError: unknown
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      if (attempt > 1) {
+        console.log(`  Retry attempt ${attempt}/${maxRetries}...`)
+        // Wait before retry (exponential backoff)
+        await new Promise(resolve => setTimeout(resolve, 1000 * attempt))
+      }
+      await $`bun wrangler d1 execute ${baseArgs} --file=${migrationSqlPath}`
+      console.log(`  Done: ${env} D1 migration applied`)
+      return
+    } catch (error) {
+      lastError = error
+      if (attempt < maxRetries) {
+        console.log(`  Attempt ${attempt} failed, retrying...`)
+      }
     }
-    throw error
   }
+
+  console.error(`  Failed to apply migration after ${maxRetries} attempts: ${lastError}`)
+  if (!isLocal) {
+    console.error('\n  Network error may have occurred. You can:')
+    console.error('  1. Retry the command manually')
+    console.error('  2. Try using local-dev environment instead')
+    console.error('  3. Check your internet connection')
+  }
+  throw lastError
 }
 
 async function main(): Promise<void> {

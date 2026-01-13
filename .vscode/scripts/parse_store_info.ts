@@ -13,7 +13,7 @@ import { parse as parseYaml } from 'yaml'
 
 const CACHE_DIR = join(import.meta.dir, '../archive/html_cache')
 const OUTPUT_FILE = join(import.meta.dir, '../../public/characters.json')
-const CHARACTER_FIELDS_FILE = join(import.meta.dir, './scripts/archive/character_fields.yaml')
+const BIRTHDAY_FILE = join(import.meta.dir, 'birthday.json')
 
 /**
  * 店舗情報の型定義
@@ -763,34 +763,18 @@ const main = async () => {
       console.log(`  ✓ ${displayName}`)
     }
 
-    // character_fields.yamlを読み込んでマージ
-    if (existsSync(CHARACTER_FIELDS_FILE)) {
-      console.log('\n📋 Merging character fields...')
-      const characterFieldsYaml = readFileSync(CHARACTER_FIELDS_FILE, 'utf-8')
-      const characterFields = parseYaml(characterFieldsYaml) as Record<
-        string,
-        {
-          character: {
-            birthday?: string
-            is_biccame_musume?: boolean
-          }
-        }
-      >
+    // birthday.jsonを読み込んでマージ
+    if (existsSync(BIRTHDAY_FILE)) {
+      console.log('\n📋 Merging birthday data...')
+      const birthdayData = JSON.parse(readFileSync(BIRTHDAY_FILE, 'utf-8')) as Record<string, string>
 
       for (const store of stores) {
-        const fields = characterFields[store.id]
-        if (fields?.character && store.character) {
-          // キャラクター誕生日をマージ
-          if (fields.character.birthday) {
-            store.character.birthday = fields.character.birthday
-          }
-          // is_biccame_musumeをマージ
-          if (fields.character.is_biccame_musume !== undefined) {
-            store.character.is_biccame_musume = fields.character.is_biccame_musume
-          }
+        const birthday = birthdayData[store.id]
+        if (birthday && store.character) {
+          store.character.birthday = birthday
         }
       }
-      console.log('✓ Character fields merged')
+      console.log('✓ Birthday data merged')
     }
 
     // スネークケース変換関数
