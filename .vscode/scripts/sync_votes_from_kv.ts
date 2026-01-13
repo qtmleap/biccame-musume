@@ -1,11 +1,11 @@
 #!/usr/bin/env bun
 /**
- * KVの投票データをローカルDBに同期するスクリプト
+ * KVの投票データをD1に同期するスクリプト
  *
  * 使い方:
- * bun .vscode/scripts/sync_votes_from_kv.ts [環境]
+ * bun .vscode/scripts/sync_votes_from_kv.ts [同期元環境] [同期先環境]
  *
- * 環境: local (デフォルト) / dev / prod
+ * 環境: local / dev / prod
  */
 
 import { $ } from 'bun'
@@ -29,15 +29,25 @@ const KV_NAMESPACE_IDS = {
 type Environment = keyof typeof KV_NAMESPACE_IDS
 
 /**
- * ローカルのwrangler.tomlからD1データベース名を取得
+ * wrangler.tomlからD1データベース名を取得
  */
-const getLocalDatabaseName = async (): Promise<string> => {
+const getDatabaseName = async (env: Environment): Promise<string> => {
   const wranglerToml = await Bun.file('wrangler.toml').text()
-  const match = wranglerToml.match(/database_name\s*=\s*"([^"]+)"/)
-  if (!match) {
-    throw new Error('wrangler.tomlからdatabase_nameを取得できませんでした')
+
+  if (env === 'local') {
+    const match = wranglerToml.match(/database_name\s*=\s*"([^"]+)"/)
+    if (!match) {
+      throw new Error('wrangler.tomlからdatabase_nameを取得できませんでした')
+    }
+    return match[1]
   }
-  return match[1]
+
+  // dev/prod環境の場合はenv.から取得
+  const envSection = wranglerToml.match(new RegExp(`\\[env\\.${env}\\][\\s\\S]*?database_name\\s*=\\s*"([^"]+)"`))
+  if (!envSection) {
+    throw new Error(`wrangler.tomlから${env}環境のdatabase_nameを取得できませんでした`)
+  }
+  return envSection[1]
 }
 
 /**
@@ -75,13 +85,14 @@ const parseCountKey = (key: string): { year: string; characterId: string } | nul
 }
 
 /**
- * ローカルD1にデータを投入
+ * D1にデータを投入
  */
-const insertVotesToLocalD1 = async (
+const insertVotesToD1 = async (
   databaseName: string,
+  toEnv: Environment,
   voteCounts: Map<string, { characterId: string; year: number; count: number }>
 ): Promise<void> => {
-  console.log('🚀 ローカルD1にデータを投入中...')
+  console.log(`🚀 ${toEnv}環境のD1にデータを投入中...`)
 
   const entries = Array.from(voteCounts.values())
   if (entries.length === 0) {
@@ -101,7 +112,9 @@ const insertVotesToLocalD1 = async (
     const sql = `INSERT OR REPLACE INTO vote_counts (character_id, year, count, created_at, updated_at) VALUES ${values};`
 
     try {
-      await $`bun wrangler d1 execute ${databaseName} --command=${sql} --local`.quiet()
+      const localFlag = toEnv === 'local' ? '--local' : '--remote'
+      const envFlag = toEnv === 'local' ? '' : `--env=${toEnv}`
+      await $`bun wrangler d1 execute ${databaseName} --command=${sql} ${envFlag} ${localFlag}`.quiet()
       console.log(`  ✓ ${i + batch.length}/${entries.length}件を投入完了`)
     } catch (error) {
       console.error(`  ✗ バッチ ${i}-${i + batch.length} の投入に失敗:`, error)
@@ -116,22 +129,29 @@ const insertVotesToLocalD1 = async (
  * メイン処理
  */
 const main = async () => {
-  // 引数から環境を取得
+  // 引数から同期元と同期先の環境を取得
   const args = process.argv.slice(2)
-  const envArg = args[0] || 'local'
+  const fromEnvArg = args[0] || 'local'
+  const toEnvArg = args[1] || 'local'
 
-  if (!['local', 'dev', 'prod'].includes(envArg)) {
-    console.error('❌ 環境はlocal, dev, prodのいずれかを指定してください')
+  if (!['local', 'dev', 'prod'].includes(fromEnvArg)) {
+    console.error('❌ 同期元環境はlocal, dev, prodのいずれかを指定してください')
     process.exit(1)
   }
 
-  const env = envArg as Environment
-  const namespaceId = KV_NAMESPACE_IDS[env]
+  if (!['local', 'dev', 'prod'].includes(toEnvArg)) {
+    console.error('❌ 同期先環境はlocal, dev, prodのいずれかを指定してください')
+    process.exit(1)
+  }
 
-  console.log(`\n📦 ${env}環境のKVからローカルD1に投票データを同期します\n`)
+  const fromEnv = fromEnvArg as Environment
+  const toEnv = toEnvArg as Environment
+  const namespaceId = KV_NAMESPACE_IDS[fromEnv]
+
+  console.log(`\n📦 ${fromEnv}環境のKVから${toEnv}環境のD1に投票データを同期します\n`)
 
   // KVからデータを取得
-  const kvKeys = await fetchKVKeys(namespaceId, env)
+  const kvKeys = await fetchKVKeys(namespaceId, fromEnv)
   console.log(`📊 取得したKVキー数: ${kvKeys.length}`)
 
   // カウントデータのみを抽出
@@ -172,12 +192,12 @@ const main = async () => {
 
   console.log(`🔢 マージ後のデータ数: ${mergedCounts.size}件`)
 
-  // ローカルD1データベース名を取得
-  const databaseName = await getLocalDatabaseName()
-  console.log(`💾 ローカルD1データベース: ${databaseName}`)
+  // 同期先D1データベース名を取得
+  const databaseName = await getDatabaseName(toEnv)
+  console.log(`💾 同期先D1データベース: ${databaseName} (${toEnv}環境)`)
 
-  // ローカルD1に投入
-  await insertVotesToLocalD1(databaseName, mergedCounts)
+  // D1に投入
+  await insertVotesToD1(databaseName, toEnv, mergedCounts)
 
   console.log('\n✨ 同期が完了しました\n')
 }

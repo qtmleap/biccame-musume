@@ -1,12 +1,28 @@
-#!/usr/bin/env bash
-# リモートD1からイベントデータをローカルDBに同期するスクリプト（fzf対応）
+#!/bin/bash
+# KVのイベントデータをD1に同期するスクリプト
+# fzfで同期元と同期先を選択
 
-set -euo pipefail
+set -e
 
-# 環境を選択
-ENV=$(echo -e "dev\nprod" | fzf --prompt="同期元の環境を選択 > " --height=40% --reverse)
+cd "$(dirname "$0")/../.."
 
-echo "🚀 ${ENV}環境からイベントデータを同期します"
+# 同期元環境を選択
+FROM_ENV=$(echo -e "dev\nprod" | fzf --prompt="Sync from: " --height=10 --reverse)
 
-# TypeScriptスクリプトを実行
-bun "$(dirname "$0")/sync_events_from_kv.ts" "${ENV}"
+if [ -z "$FROM_ENV" ]; then
+  echo "Cancelled"
+  exit 0
+fi
+
+# 同期先環境を選択
+TO_ENV=$(echo -e "local\ndev\nprod" | fzf --prompt="Sync to: " --height=10 --reverse)
+
+if [ -z "$TO_ENV" ]; then
+  echo "Cancelled"
+  exit 0
+fi
+
+echo "Selected: $FROM_ENV -> $TO_ENV"
+echo ""
+
+bun run .vscode/scripts/sync_events_from_kv.ts "$FROM_ENV" "$TO_ENV"
