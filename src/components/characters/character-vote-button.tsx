@@ -67,6 +67,7 @@ export const CharacterVoteButton = ({
       let errorMessage = '投票に失敗しました'
 
       try {
+        // biome-ignore lint/suspicious/noExplicitAny: エラーオブジェクトの型が不明なため
         const errorData = (error as any)?.response?.data
         if (errorData?.message) {
           errorMessage = errorData.message
