@@ -92,12 +92,16 @@ export default defineConfig(({ mode }) => {
     },
     ssr: {
       target: 'webworker',
-      noExternal: ['@prisma/client', '@prisma/adapter-d1']
+      noExternal: ['@prisma/client', '@prisma/adapter-d1'],
+      resolve: {
+        conditions: ['workerd', 'worker', 'browser']
+      }
     },
     resolve: {
       alias: {
-        '@': resolve(__dirname, './src')
-      }
+        '@': resolve(__dirname, './src'),
+        '.prisma/client/defaultr': './node_modules/.prisma/client/default.js'
+      },
     },
     optimizeDeps: {
       esbuildOptions: {
