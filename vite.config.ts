@@ -100,7 +100,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': resolve(__dirname, './src'),
-        '.prisma/client/defaultr': './node_modules/.prisma/client/default.js'
+        '.prisma/client/default': './node_modules/.prisma/client/default.js'
       },
     },
     optimizeDeps: {
