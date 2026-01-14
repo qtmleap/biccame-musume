@@ -327,7 +327,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                     key={date.format('YYYY-MM-DD')}
                     className={`w-8 shrink-0 border-b flex items-center justify-center text-xs ${
                       isOutOfMonth
-                        ? 'bg-gray-100 text-gray-300'
+                        ? 'bg-gray-100 text-gray-400'
                         : isToday
                           ? 'bg-rose-50 font-bold text-rose-600'
                           : isSunday
