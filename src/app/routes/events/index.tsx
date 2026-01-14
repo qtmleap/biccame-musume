@@ -168,16 +168,14 @@ const EventsContent = () => {
         </div>
 
         {/* イベント表示 */}
-        {activeEvents.length > 0 ? (
-          viewMode === 'gantt' ? (
-            <EventGanttChart events={activeEvents} />
-          ) : (
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
-              {activeEvents.map((event, index) => (
-                <EventGridItem key={event.id} event={event} index={index} />
-              ))}
-            </div>
-          )
+        {viewMode === 'gantt' ? (
+          <EventGanttChart events={activeEvents} />
+        ) : activeEvents.length > 0 ? (
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
+            {activeEvents.map((event, index) => (
+              <EventGridItem key={event.id} event={event} index={index} />
+            ))}
+          </div>
         ) : (
           <div className='text-center py-12 text-gray-500'>
             <Gift className='size-12 mx-auto mb-4 opacity-30' />
