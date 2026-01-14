@@ -137,8 +137,8 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
           return 'ongoing'
         })()
 
-        // 終了日がチャート開始日より前なら表示しない
-        if (eventEnd.isBefore(chartStartDate)) {
+        // 終了日がチャート開始日より前、または開始日が月末より後なら表示しない
+        if (eventEnd.isBefore(chartStartDate) || eventStart.isAfter(actualMonthEnd)) {
           return null
         }
 
@@ -161,6 +161,9 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   }, [events, chartStartDate, actualMonthEnd])
 
   const visibleEventBars = eventBars
+  
+  // デバッグ用
+  console.log('Month offset:', monthOffset, 'Visible events:', visibleEventBars.length)
 
   // スクロールコンテナのref
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -343,24 +346,15 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
             </div>
 
             {/* イベント行 */}
-            <div key={`gantt-${visibleEventBars.map((b) => b.event.id).join('-')}`}>
-              <AnimatePresence mode='popLayout'>
-                {visibleEventBars.map(({ event, startOffset, duration, status }) => {
-                  const labelOffset = getLabelOffset(startOffset, duration)
+            <div key={`gantt-${monthOffset}-${visibleEventBars.map((b) => b.event.id).join('-')}`}>
+              {visibleEventBars.map(({ event, startOffset, duration, status }) => {
+                const labelOffset = getLabelOffset(startOffset, duration)
 
-                  return (
-                    <motion.div
-                      key={event.id}
-                      layout
-                      initial={{ opacity: 0, scaleY: 0, transformOrigin: 'top' }}
-                      animate={{ opacity: 1, scaleY: 1, transformOrigin: 'top' }}
-                      exit={{ opacity: 0 }}
-                      transition={{
-                        duration: 0.2,
-                        ease: 'easeInOut'
-                      }}
-                      className='relative flex h-10'
-                    >
+                return (
+                  <div
+                    key={event.id}
+                    className='relative flex h-10'
+                  >
                       {/* 背景グリッド */}
                       {dates.map((date) => {
                         const isToday = date.isSame(today, 'day')
@@ -431,10 +425,9 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                           </TooltipContent>
                         </Tooltip>
                       )}
-                    </motion.div>
-                  )
-                })}
-              </AnimatePresence>
+                  </div>
+                )
+              })}
             </div>
 
             {/* イベントがない場合 */}
