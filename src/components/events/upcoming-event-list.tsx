@@ -58,7 +58,7 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
         {upcomingEvents.length === 0 ? (
           <div className='text-center py-4 text-gray-500 text-sm'>誕生日がありません</div>
         ) : (
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
             {upcomingEvents.map((event, index) => (
               <UpcomingEventListItem key={`${event.character.id}-${event.type}-${index}`} event={event} index={index} />
             ))}
