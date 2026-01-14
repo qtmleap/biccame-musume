@@ -15,18 +15,18 @@ export const getDisplayName = (name: string) => {
  */
 export const groupCharactersByBirthday = (characters: StoreData[]) => {
   const groups = new Map<string, StoreData[]>()
-  
+
   for (const character of characters) {
     const birthday = character.character?.birthday
     if (!birthday) continue
-    
+
     const key = dayjs(birthday).format('MM-DD')
     if (!groups.has(key)) {
       groups.set(key, [])
     }
     groups.get(key)?.push(character)
   }
-  
+
   return Array.from(groups.entries()).map(([birthday, chars]) => {
     const sortedChars = [...chars].sort((a, b) => a.id.localeCompare(b.id))
     const groupId = sortedChars.map(c => c.id).join('_')
