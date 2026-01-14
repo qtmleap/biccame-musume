@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai'
-import { Filter } from 'lucide-react'
 import { categoryFilterAtom } from '@/atoms/categoryFilterAtom'
+import { FilterHeader } from '@/components/common/filter-header'
 import { Checkbox } from '@/components/ui/checkbox'
 import { type Event, EventCategorySchema } from '@/schemas/event.dto'
 
@@ -47,10 +47,7 @@ export const EventCategoryFilter = () => {
 
   return (
     <div className='w-full'>
-      <div className='flex items-center gap-2 mb-3'>
-        <Filter className='h-4 w-4 text-gray-600' />
-        <span className='text-sm font-medium text-gray-700'>種別で絞り込み</span>
-      </div>
+      <FilterHeader label='種別で絞り込み' />
       <div className='flex flex-wrap gap-4 text-sm'>
         {EventCategorySchema.options.map((category) => (
           <div key={category} className='flex items-center gap-2'>
