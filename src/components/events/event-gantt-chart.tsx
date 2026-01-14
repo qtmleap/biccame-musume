@@ -39,7 +39,7 @@ const getCategoryColor = (category: Event['category'], status: EventStatus) => {
 /**
  * 日付範囲を生成
  */
-const generateDateRange = (startDate: Dayjs, endDate: Dayjs): Dayjs[] => {
+const _generateDateRange = (startDate: Dayjs, endDate: Dayjs): Dayjs[] => {
   const dates: Dayjs[] = []
   let current = startDate
   while (current.isBefore(endDate) || current.isSame(endDate, 'day')) {
@@ -61,15 +61,21 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   const [monthOffset, setMonthOffset] = useState(0)
 
   // 表示する日付範囲を計算
-  const { dates, chartStartDate } = useMemo(() => {
+  const { dates, chartStartDate, actualMonthEnd } = useMemo(() => {
     const today = dayjs().startOf('day')
     // 指定月の1日から表示開始
     const chartStart = today.add(monthOffset, 'month').startOf('month')
-    // 1ヶ月分表示
-    const chartEnd = chartStart.add(1, 'month').subtract(1, 'day')
+    // 実際の月の最終日
+    const monthEnd = chartStart.endOf('month')
+    // 常に31日分生成
+    const allDates: Dayjs[] = []
+    for (let i = 0; i < 31; i++) {
+      allDates.push(chartStart.add(i, 'day'))
+    }
     return {
-      dates: generateDateRange(chartStart, chartEnd),
-      chartStartDate: chartStart
+      dates: allDates,
+      chartStartDate: chartStart,
+      actualMonthEnd: monthEnd
     }
   }, [monthOffset])
 
@@ -84,8 +90,14 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   const today = dayjs().startOf('day')
   const todayOffset = today.diff(chartStartDate, 'day')
 
+  // その月の実際の日数を計算
+  const daysInMonth = useMemo(() => actualMonthEnd.diff(chartStartDate, 'day') + 1, [actualMonthEnd, chartStartDate])
+
   // イベントのバー位置を計算（開始日→カテゴリ順でソート）
   const eventBars = useMemo(() => {
+    // その月の実際の日数を計算
+    const daysInMonth = actualMonthEnd.diff(chartStartDate, 'day') + 1
+
     // まずイベントをソート: 開始日 → カテゴリ順
     const sortedEvents = [...events].sort((a, b) => {
       const startDiff = dayjs(a.startDate).diff(dayjs(b.startDate))
@@ -129,11 +141,12 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         }
 
         // チャート開始より前に始まったイベントは、その分durationを短くする
+        // また、実際の月の日数を超えないように制限
         const clippedStartOffset = Math.max(0, startOffset)
         const clippedDuration =
           startOffset < 0
-            ? Math.min(duration + startOffset, dates.length)
-            : Math.min(duration, dates.length - clippedStartOffset)
+            ? Math.min(duration + startOffset, daysInMonth)
+            : Math.min(duration, daysInMonth - clippedStartOffset)
 
         return {
           event,
@@ -143,7 +156,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         }
       })
       .filter((bar) => bar !== null)
-  }, [events, chartStartDate, dates.length])
+  }, [events, chartStartDate, actualMonthEnd])
 
   const visibleEventBars = eventBars
 
@@ -298,20 +311,23 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                 const isToday = date.isSame(today, 'day')
                 const isSunday = date.day() === 0
                 const isSaturday = date.day() === 6
+                const isOutOfMonth = date.isAfter(actualMonthEnd)
                 return (
                   <div
                     key={date.format('YYYY-MM-DD')}
-                    className={`w-8 shrink-0 border-b flex items-center justify-center text-xs ${
-                      isToday
-                        ? 'bg-rose-50 font-bold text-rose-600'
-                        : isSunday
-                          ? 'text-rose-500'
-                          : isSaturday
-                            ? 'text-blue-500'
-                            : 'text-gray-600'
+                    className={`w-8 shrink-0 border-b flex items-center justify-start pl-1 text-xs ${
+                      isOutOfMonth
+                        ? 'bg-gray-100 text-gray-300'
+                        : isToday
+                          ? 'bg-rose-50 font-bold text-rose-600'
+                          : isSunday
+                            ? 'text-rose-500'
+                            : isSaturday
+                              ? 'text-blue-500'
+                              : 'text-gray-600'
                     }`}
                   >
-                    {date.format('D')}
+                    {isOutOfMonth ? '' : date.format('D')}
                   </div>
                 )
               })}
@@ -339,10 +355,11 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                       {/* 背景グリッド */}
                       {dates.map((date) => {
                         const isToday = date.isSame(today, 'day')
+                        const isOutOfMonth = date.isAfter(actualMonthEnd)
                         return (
                           <div
                             key={date.format('YYYY-MM-DD')}
-                            className={`w-8 shrink-0 border-b ${isToday ? 'bg-rose-50' : ''}`}
+                            className={`w-8 shrink-0 border-b ${isOutOfMonth ? 'bg-gray-50' : isToday ? 'bg-rose-50' : ''}`}
                           />
                         )
                       })}
