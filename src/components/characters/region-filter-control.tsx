@@ -1,7 +1,6 @@
 import { useAtom } from 'jotai'
 import { regionFilterAtom } from '@/atoms/filterAtom'
 import { FilterHeader } from '@/components/common/filter-header'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { REGION_LABELS } from '@/locales/app.content'
@@ -45,23 +44,8 @@ export const RegionFilterControl = () => {
 
   return (
     <div className='w-full'>
-      {/* モバイル: アコーディオン */}
-      <div className='md:hidden'>
-        <Accordion type='single' collapsible defaultValue='region'>
-          <AccordionItem value='region' className='border-none'>
-            <AccordionTrigger className='py-2 hover:no-underline'>
-              <FilterHeader label='地域で絞り込み' />
-            </AccordionTrigger>
-            <AccordionContent>{regionButtons}</AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
-
-      {/* デスクトップ: 常に表示 */}
-      <div className='hidden md:block'>
-        <FilterHeader label='地域で絞り込み' />
-        {regionButtons}
-      </div>
+      <FilterHeader label='地域で絞り込み' />
+      {regionButtons}
     </div>
   )
 }

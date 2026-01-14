@@ -46,7 +46,8 @@ const EventsContent = () => {
   const categoryFilter = useAtomValue(categoryFilterAtom)
   const regionFilter = useAtomValue(regionFilterAtom)
   const [viewMode, setViewMode] = useAtom(eventViewModeAtom)
-  const [statusFilter, _setStatusFilter] = useAtom(eventListStatusFilterAtom)  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+  const [statusFilter] = useAtom(eventListStatusFilterAtom)
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
   // 店舗キー(id)から都道府県を取得するマップ
   const storePrefectureMap = useMemo(() => {
     const map = new Map<string, string>()
@@ -107,11 +108,11 @@ const EventsContent = () => {
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
       <div className='flex flex-col gap-2'>
         {/* カテゴリフィルターとボタン */}
-        <div className='flex items-start justify-between gap-4'>
-          <div className='flex-1'>
+        <div className='flex items-start gap-4'>
+          <div className='flex-1 hidden md:block'>
             <EventCategoryFilter />
           </div>
-          <div className='flex items-center gap-2 shrink-0'>
+          <div className='flex items-center gap-2 shrink-0 ml-auto'>
             {/* モバイル: フィルターボタン */}
             <Sheet open={filterSheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
@@ -124,17 +125,19 @@ const EventsContent = () => {
                 <SheetHeader>
                   <SheetTitle>フィルター</SheetTitle>
                 </SheetHeader>
-                <div className='mt-6 space-y-6 overflow-y-auto h-[calc(90vh-80px)] pb-6'>
-                  {/* 種別フィルター */}
-                  <EventCategoryFilter />
-                  
-                  {/* 地域フィルター */}
-                  <RegionFilterControl />
-                  
-                  {/* ステータスフィルタ */}
-                  <div className='w-full'>
-                    <FilterHeader label='開催状況で絞り込み' />
-                    <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
+                <div className='px-4'>
+                  <div className='space-y-6 overflow-y-auto h-[calc(90vh-72px)] pb-6'>
+                    {/* 種別フィルター */}
+                    <EventCategoryFilter />
+
+                    {/* 地域フィルター */}
+                    <RegionFilterControl />
+
+                    {/* ステータスフィルタ */}
+                    <div className='w-full'>
+                      <FilterHeader label='開催状況で絞り込み' />
+                      <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
+                    </div>
                   </div>
                 </div>
               </SheetContent>
