@@ -107,12 +107,10 @@ const EventsContent = () => {
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
       <div className='flex flex-col gap-2'>
-        {/* カテゴリフィルターとボタン */}
-        <div className='flex items-start gap-4'>
-          <div className='flex-1 hidden md:block'>
-            <EventCategoryFilter />
-          </div>
-          <div className='flex items-center gap-2 shrink-0 ml-auto'>
+        {/* ヘッダーとボタン群 */}
+        <div className='flex items-center justify-between gap-4'>
+          <h1 className='text-2xl font-bold text-gray-900'>イベント一覧</h1>
+          <div className='flex items-center gap-2'>
             {/* モバイル: フィルターボタン */}
             <Sheet open={filterSheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
@@ -121,7 +119,7 @@ const EventsContent = () => {
                   フィルター
                 </Button>
               </SheetTrigger>
-              <SheetContent side='bottom' className='h-[90vh]'>
+              <SheetContent side='bottom' className='h-[50vh]'>
                 <SheetHeader>
                   <SheetTitle>フィルター</SheetTitle>
                 </SheetHeader>
@@ -130,14 +128,14 @@ const EventsContent = () => {
                     {/* 種別フィルター */}
                     <EventCategoryFilter />
 
-                    {/* 地域フィルター */}
-                    <RegionFilterControl />
-
                     {/* ステータスフィルタ */}
                     <div className='w-full'>
                       <FilterHeader label='開催状況で絞り込み' />
                       <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
                     </div>
+
+                    {/* 地域フィルター */}
+                    <RegionFilterControl />
                   </div>
                 </div>
               </SheetContent>
@@ -173,6 +171,9 @@ const EventsContent = () => {
 
         {/* デスクトップ: インラインフィルター */}
         <div className='hidden md:flex md:flex-col md:gap-2'>
+          {/* 種別フィルター */}
+          <EventCategoryFilter />
+
           {/* 地域フィルター */}
           <RegionFilterControl />
 
