@@ -11,7 +11,8 @@ type BirthdayFullscreenOverlayProps = {
 /**
  * 誕生日画像のパスを取得
  */
-const getBirthdayImagePath = (key: string): string => {
+const getBirthdayImagePath = (characters: StoreData[]): string => {
+  const key = characters.map(c => c.id).sort().join('_')
   return `/birth/${key}.webp`
 }
 
@@ -141,7 +142,7 @@ export const BirthdayFullscreenOverlay = ({ characters }: BirthdayFullscreenOver
           >
             {!imageError ? (
               <motion.img
-                src={getBirthdayImagePath(currentCharacter.id)}
+                src={getBirthdayImagePath(characters)}
                 alt={`${currentCharacter.character?.name}の誕生日`}
                 className='max-h-[60vh] max-w-full object-contain drop-shadow-2xl'
                 onError={() => setImageError(true)}

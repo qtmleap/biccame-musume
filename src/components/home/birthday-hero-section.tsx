@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Cake } from 'lucide-react'
-import { motion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
+import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import type { StoreData } from '@/schemas/store.dto'
@@ -12,8 +13,44 @@ type BirthdayHeroSectionProps = {
 /**
  * 誕生日画像のパスを取得
  */
-const getBirthdayImagePath = (key: string): string => {
+const getBirthdayImagePath = (characters: StoreData[]): string => {
+  const key = characters.map(c => c.id).sort().join('_')
   return `/birth/${key}.webp`
+}
+
+/**
+ * フェードイン・フェードアウトで切り替わる名前と店舗名コンポーネント
+ */
+const RotatingCharacterInfo = ({ characters }: { characters: StoreData[] }) => {
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  useEffect(() => {
+    if (characters.length <= 1) return
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % characters.length)
+    }, 3000) // 3秒ごとに切り替え
+
+    return () => clearInterval(interval)
+  }, [characters.length])
+
+  const currentCharacter = characters[currentIndex]
+
+  return (
+    <AnimatePresence mode='wait'>
+      <motion.div
+        key={currentCharacter.id}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.5 }}
+        className='mt-2'
+      >
+        <p className='text-2xl font-semibold'>{currentCharacter.character?.name}</p>
+        <p className='text-white/80'>{currentCharacter.store?.name}</p>
+      </motion.div>
+    </AnimatePresence>
+  )
 }
 
 /**
@@ -49,7 +86,7 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <img
-            src={getBirthdayImagePath(mainCharacter.id)}
+            src={getBirthdayImagePath(characters)}
             alt={`${mainCharacter.character?.name}の誕生日`}
             className='h-48 w-auto object-contain drop-shadow-xl md:h-64'
             onError={(e) => {
@@ -82,8 +119,14 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
             >
               Happy Birthday!
             </motion.h2>
-            <p className='mt-2 text-2xl font-semibold'>{mainCharacter.character?.name}</p>
-            <p className='text-white/80'>{mainCharacter.store?.name}</p>
+            {characters.length > 1 ? (
+              <RotatingCharacterInfo characters={characters} />
+            ) : (
+              <div className='mt-2'>
+                <p className='text-2xl font-semibold'>{mainCharacter.character?.name}</p>
+                <p className='text-white/80'>{mainCharacter.store?.name}</p>
+              </div>
+            )}
           </motion.div>
 
           {/* アクションボタン */}

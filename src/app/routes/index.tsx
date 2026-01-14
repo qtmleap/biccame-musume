@@ -16,7 +16,7 @@ import { HomeHeader } from '@/components/home/home-header'
 import { LineStickerList } from '@/components/home/line-sticker-list'
 import { Button } from '@/components/ui/button'
 import { useCharacters } from '@/hooks/useCharacters'
-import { getBirthdayCharacters } from '@/utils/character'
+import { getBirthdayCharacters, groupCharactersByBirthday } from '@/utils/character'
 
 /**
  * 誕生日表示パターンの種類
@@ -62,10 +62,16 @@ const ClearCacheButton = () => {
  */
 const BirthdayDisplaySwitcher = ({
   current,
-  onChange
+  onChange,
+  characters,
+  selectedCharacterId,
+  onCharacterChange
 }: {
   current: BirthdayDisplayType
   onChange: (type: BirthdayDisplayType) => void
+  characters: ReturnType<typeof useCharacters>['data']
+  selectedCharacterId: string
+  onCharacterChange: (id: string) => void
 }) => {
   if (!import.meta.env.DEV) return null
 
@@ -78,6 +84,8 @@ const BirthdayDisplaySwitcher = ({
     { value: 'background', label: '背景' },
     { value: 'none', label: 'なし' }
   ]
+
+  const birthdayGroups = groupCharactersByBirthday(characters)
 
   return (
     <div className='fixed top-20 left-4 z-100 rounded-lg bg-white/90 p-3 shadow-lg backdrop-blur-sm'>
@@ -95,6 +103,20 @@ const BirthdayDisplaySwitcher = ({
             {option.label}
           </button>
         ))}
+      </div>
+      <div className='mt-3 pt-3 border-t border-gray-200'>
+        <p className='mb-2 text-xs font-medium text-gray-600'>誕生日キャラクター</p>
+        <select
+          value={selectedCharacterId}
+          onChange={(e) => onCharacterChange(e.target.value)}
+          className='w-full rounded border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700 focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500'
+        >
+          {birthdayGroups.map((group) => (
+            <option key={group.id} value={group.id}>
+              {group.name} ({group.birthday})
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   )
@@ -133,12 +155,19 @@ const BirthdayDisplay = ({
  */
 const HomeContent = () => {
   const { data: characters } = useCharacters()
-  const birthdayCharacters = getBirthdayCharacters(characters)
   const [displayType, setDisplayType] = useState<BirthdayDisplayType>('hero')
+  const [selectedCharacterId, setSelectedCharacterId] = useState('kyoto')
+  const birthdayCharacters = getBirthdayCharacters(characters, selectedCharacterId)
 
   return (
     <div className='flex flex-col gap-3'>
-      <BirthdayDisplaySwitcher current={displayType} onChange={setDisplayType} />
+      <BirthdayDisplaySwitcher
+        current={displayType}
+        onChange={setDisplayType}
+        characters={characters}
+        selectedCharacterId={selectedCharacterId}
+        onCharacterChange={setSelectedCharacterId}
+      />
       <ClearCacheButton />
       <HomeHeader />
       {/* ヒーローセクションはコンテンツ内に表示 */}
