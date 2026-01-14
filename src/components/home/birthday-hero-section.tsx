@@ -141,40 +141,7 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
                 詳細を見る
               </Link>
             </Button>
-            {mainCharacter.character?.twitter_id && (
-              <Button asChild variant='outline' size='sm' className='border-white/30 text-white hover:bg-white/20'>
-                <a
-                  href={`https://twitter.com/intent/follow?screen_name=${mainCharacter.character.twitter_id}`}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                >
-                  お祝いする
-                </a>
-              </Button>
-            )}
           </motion.div>
-
-          {/* 他の誕生日キャラクター */}
-          {otherCharacters.length > 0 && (
-            <motion.div
-              className='mt-4'
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-            >
-              <p className='mb-2 text-xs text-white/70'>他にも誕生日のキャラクターがいます</p>
-              <div className='flex justify-center gap-2 md:justify-start'>
-                {otherCharacters.map((character) => (
-                  <Link key={character.id} to='/characters/$id' params={{ id: character.id }}>
-                    <Avatar className='size-10 border-2 border-white/50 transition-transform hover:scale-110'>
-                      <AvatarImage src={character.character?.image_url} alt={character.character?.name} />
-                      <AvatarFallback>{character.character?.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                  </Link>
-                ))}
-              </div>
-            </motion.div>
-          )}
         </div>
       </div>
     </motion.section>
