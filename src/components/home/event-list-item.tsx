@@ -109,7 +109,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
             <span className='flex items-center gap-1'>
               <Calendar className='size-3' />
               {startDate.format('M月D日')}
-              {event.endDate && `〜${dayjs(event.endDate).format('M月D日')}`}
+              {event.endDate ? `〜${dayjs(event.endDate).format('M月D日')}` : '〜なくなり次第終了'}
             </span>
             <div className='flex flex-wrap items-center gap-2'>
               {event.stores && event.stores.length > 0 && (
