@@ -3,7 +3,9 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { ExternalLink } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
 import appContent from '@/locales/app.content'
 import type { Event, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
@@ -91,7 +93,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   const todayOffset = today.diff(chartStartDate, 'day')
 
   // その月の実際の日数を計算
-  const daysInMonth = useMemo(() => actualMonthEnd.diff(chartStartDate, 'day') + 1, [actualMonthEnd, chartStartDate])
+  const _daysInMonth = useMemo(() => actualMonthEnd.diff(chartStartDate, 'day') + 1, [actualMonthEnd, chartStartDate])
 
   // イベントのバー位置を計算（開始日→カテゴリ順でソート）
   const eventBars = useMemo(() => {
@@ -196,18 +198,23 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
     }
   }, [])
 
-  // 初期表示時に今日の日付が見える位置にスクロール
+  // 初期表示時に今日の日付が見える位置にスクロール（今月のみ）
   useEffect(() => {
-    if (scrollContainerRef.current && todayOffset >= 0) {
-      // 今日の位置までスクロール（w-8 = 32px）
-      scrollContainerRef.current.scrollLeft = todayOffset * 32
-      setScrollLeft(todayOffset * 32)
+    if (scrollContainerRef.current) {
+      // 今月の場合のみ今日の位置にスクロール、それ以外は月初め
+      if (monthOffset === 0 && todayOffset >= 0) {
+        scrollContainerRef.current.scrollLeft = todayOffset * 32
+        setScrollLeft(todayOffset * 32)
+      } else {
+        scrollContainerRef.current.scrollLeft = 0
+        setScrollLeft(0)
+      }
       // 初回スクロール後にフラグをクリア
       requestAnimationFrame(() => {
         isInitialMountRef.current = false
       })
     }
-  }, [todayOffset])
+  }, [todayOffset, monthOffset])
 
   // ドラッグ開始
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -268,25 +275,27 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       <style>{hideScrollbarStyle}</style>
       <div className='relative'>
         {/* ヘッダー: 月選択 */}
-        <div className='flex justify-center mb-4'>
-          <div className='inline-flex items-center gap-1 bg-gray-100 rounded-lg p-1'>
-            {[-2, -1, 0, 1, 2].map((offset) => {
-              const monthDate = dayjs().add(offset, 'month')
-              const isSelected = monthOffset === offset
-              return (
-                <button
-                  key={offset}
-                  type='button'
-                  onClick={() => setMonthOffset(offset)}
-                  className={`px-3 py-1.5 text-sm rounded transition-colors ${
-                    isSelected ? 'bg-white shadow-sm text-gray-900 font-medium' : 'text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  {monthDate.format('M月')}
-                </button>
-              )
-            })}
-          </div>
+        <div className='grid grid-cols-5 gap-2 mb-4'>
+          {[-2, -1, 0, 1, 2].map((offset) => {
+            const monthDate = dayjs().add(offset, 'month')
+            const isSelected = monthOffset === offset
+            return (
+              <Button
+                key={offset}
+                type='button'
+                variant={isSelected ? 'default' : 'outline'}
+                onClick={() => setMonthOffset(offset)}
+                className={cn({
+                  'bg-green-500/50 text-white border-green-500/50 hover:bg-green-500/60 hover:text-white dark:bg-green-500/50 dark:text-white dark:border-green-500/50 dark:hover:bg-green-500/60':
+                    isSelected,
+                  'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-200/90 dark:text-gray-800 dark:border-gray-300 dark:hover:bg-gray-200 dark:hover:text-gray-800':
+                    !isSelected
+                })}
+              >
+                {monthDate.format('M月')}
+              </Button>
+            )
+          })}
         </div>
 
         {/* スクロールエリア: ガントチャート */}
@@ -315,7 +324,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                 return (
                   <div
                     key={date.format('YYYY-MM-DD')}
-                    className={`w-8 shrink-0 border-b flex items-center justify-start pl-1 text-xs ${
+                    className={`w-8 shrink-0 border-b flex items-center justify-center text-xs ${
                       isOutOfMonth
                         ? 'bg-gray-100 text-gray-300'
                         : isToday
