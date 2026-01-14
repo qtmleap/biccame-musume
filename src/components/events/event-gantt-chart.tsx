@@ -65,8 +65,8 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
     const today = dayjs().startOf('day')
     // 指定月の1日から表示開始
     const chartStart = today.add(monthOffset, 'month').startOf('month')
-    // 2ヶ月分表示
-    const chartEnd = chartStart.add(2, 'month').subtract(1, 'day')
+    // 1ヶ月分表示
+    const chartEnd = chartStart.add(1, 'month').subtract(1, 'day')
     return {
       dates: generateDateRange(chartStart, chartEnd),
       chartStartDate: chartStart
@@ -254,35 +254,25 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       {/* Chrome/Safari用スクロールバー非表示スタイル */}
       <style>{hideScrollbarStyle}</style>
       <div className='relative'>
-        {/* ヘッダー: 月表示とフィルタ */}
-        <div className='flex items-center justify-between mb-2'>
-          <div className='flex items-center gap-2'>
-            <button
-              type='button'
-              onClick={() => setMonthOffset((prev) => prev - 1)}
-              className='px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded transition-colors'
-            >
-              ←
-            </button>
-            <div className='h-5 px-1 flex items-center text-xs font-medium text-gray-700 min-w-20 text-center'>
-              {chartStartDate.format('YYYY年M月')}
-            </div>
-            <button
-              type='button'
-              onClick={() => setMonthOffset((prev) => prev + 1)}
-              className='px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded transition-colors'
-            >
-              →
-            </button>
-            {monthOffset !== 0 && (
-              <button
-                type='button'
-                onClick={() => setMonthOffset(0)}
-                className='px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 rounded transition-colors'
-              >
-                今月
-              </button>
-            )}
+        {/* ヘッダー: 月選択 */}
+        <div className='flex justify-center mb-4'>
+          <div className='inline-flex items-center gap-1 bg-gray-100 rounded-lg p-1'>
+            {[-2, -1, 0, 1, 2].map((offset) => {
+              const monthDate = dayjs().add(offset, 'month')
+              const isSelected = monthOffset === offset
+              return (
+                <button
+                  key={offset}
+                  type='button'
+                  onClick={() => setMonthOffset(offset)}
+                  className={`px-3 py-1.5 text-sm rounded transition-colors ${
+                    isSelected ? 'bg-white shadow-sm text-gray-900 font-medium' : 'text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {monthDate.format('M月')}
+                </button>
+              )
+            })}
           </div>
         </div>
 
@@ -302,19 +292,6 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
           onMouseLeave={handleMouseLeave}
         >
           <div className='min-w-max'>
-            {/* ヘッダー: 月表示（背景用） */}
-            <div className='flex h-5'>
-              {dates.map((date) => {
-                const isToday = date.isSame(today, 'day')
-                return (
-                  <div
-                    key={date.format('YYYY-MM-DD')}
-                    className={`w-8 shrink-0 border-b ${isToday ? 'bg-rose-50' : ''}`}
-                  />
-                )
-              })}
-            </div>
-
             {/* ヘッダー: 日付表示 */}
             <div className='flex h-6'>
               {dates.map((date) => {
