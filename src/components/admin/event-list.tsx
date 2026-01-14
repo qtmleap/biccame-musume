@@ -7,10 +7,9 @@ import { motion } from 'motion/react'
 import { useMemo } from 'react'
 import { eventListActiveTabAtom, eventListPagesAtom } from '@/atoms/eventListAtom'
 import { eventStatusFilterAtom } from '@/atoms/eventStatusFilterAtom'
+import { EventStatusFilter } from '@/components/events/event-status-filter'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
 import {
   Pagination,
   PaginationContent,
@@ -158,7 +157,7 @@ export const EventList = () => {
   const { isAuthenticated } = useCloudflareAccess()
   const [activeTab, setActiveTab] = useAtom(eventListActiveTabAtom)
   const [pages, setPages] = useAtom(eventListPagesAtom)
-  const [statusFilter, setStatusFilter] = useAtom(eventStatusFilterAtom)
+  const [statusFilter, _setStatusFilter] = useAtom(eventStatusFilterAtom)
   const itemsPerPage = 12
 
   const currentPage = pages[activeTab]
@@ -240,42 +239,8 @@ export const EventList = () => {
   return (
     <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Event['category'])}>
       {/* ステータスフィルタ */}
-      <div className='mb-4 flex items-center gap-4'>
-        <div className='flex items-center gap-4'>
-          <div className='flex items-center gap-2'>
-            <Checkbox
-              id='status-upcoming'
-              checked={statusFilter.upcoming}
-              onCheckedChange={(checked) => setStatusFilter((prev) => ({ ...prev, upcoming: checked === true }))}
-              className='border-gray-400 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600'
-            />
-            <Label htmlFor='status-upcoming' className='text-xs font-semibold text-gray-700 cursor-pointer'>
-              開催前
-            </Label>
-          </div>
-          <div className='flex items-center gap-2'>
-            <Checkbox
-              id='status-ongoing'
-              checked={statusFilter.ongoing}
-              onCheckedChange={(checked) => setStatusFilter((prev) => ({ ...prev, ongoing: checked === true }))}
-              className='border-gray-400 data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600'
-            />
-            <Label htmlFor='status-ongoing' className='text-xs font-semibold text-gray-700 cursor-pointer'>
-              開催中
-            </Label>
-          </div>
-          <div className='flex items-center gap-2'>
-            <Checkbox
-              id='status-ended'
-              checked={statusFilter.ended}
-              onCheckedChange={(checked) => setStatusFilter((prev) => ({ ...prev, ended: checked === true }))}
-              className='border-gray-400 data-[state=checked]:bg-gray-600 data-[state=checked]:border-gray-600'
-            />
-            <Label htmlFor='status-ended' className='text-xs font-semibold text-gray-700 cursor-pointer'>
-              終了済
-            </Label>
-          </div>
-        </div>
+      <div className='mb-4'>
+        <EventStatusFilter statusFilterAtom={eventStatusFilterAtom} />
       </div>
 
       <div className='mb-4 relative bg-gray-200 rounded-lg p-1'>

@@ -3,8 +3,6 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { ExternalLink } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import appContent from '@/locales/app.content'
 import type { Event, EventStatus } from '@/schemas/event.dto'
@@ -59,9 +57,6 @@ type EventGanttChartProps = {
  * カスタムガントチャートコンポーネント
  */
 export const EventGanttChart = ({ events }: EventGanttChartProps) => {
-  // 終了したイベントを表示するかどうか
-  const [showEnded, setShowEnded] = useState(false)
-
   // 表示開始月のオフセット（0=今月、-1=先月、1=来月）
   const [monthOffset, setMonthOffset] = useState(0)
 
@@ -150,11 +145,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       .filter((bar) => bar !== null)
   }, [events, chartStartDate, dates.length])
 
-  // 終了イベントのフィルタリング
-  const filteredEventBars = useMemo(() => {
-    if (showEnded) return eventBars
-    return eventBars.filter((bar) => bar.status !== 'ended')
-  }, [eventBars, showEnded])
+  const visibleEventBars = eventBars
 
   // スクロールコンテナのref
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -293,17 +284,6 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
               </button>
             )}
           </div>
-          <div className='flex items-center gap-2'>
-            <Checkbox
-              id='show-ended'
-              checked={showEnded}
-              onCheckedChange={(checked) => setShowEnded(checked === true)}
-              className='border-gray-400 data-[state=checked]:bg-gray-400 data-[state=checked]:border-gray-400'
-            />
-            <Label htmlFor='show-ended' className='text-xs text-gray-600 cursor-pointer'>
-              終了したイベントを表示
-            </Label>
-          </div>
         </div>
 
         {/* スクロールエリア: ガントチャート */}
@@ -361,9 +341,9 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
             </div>
 
             {/* イベント行 */}
-            <div key={`gantt-${filteredEventBars.map((b) => b.event.id).join('-')}`}>
+            <div key={`gantt-${visibleEventBars.map((b) => b.event.id).join('-')}`}>
               <AnimatePresence mode='popLayout'>
-                {filteredEventBars.map(({ event, startOffset, duration, status }) => {
+                {visibleEventBars.map(({ event, startOffset, duration, status }) => {
                   const labelOffset = getLabelOffset(startOffset, duration)
 
                   return (
