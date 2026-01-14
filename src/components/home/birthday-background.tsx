@@ -9,7 +9,8 @@ type BirthdayBackgroundProps = {
 /**
  * 誕生日画像のパスを取得
  */
-const getBirthdayImagePath = (key: string): string => {
+const getBirthdayImagePath = (characters: StoreData[]): string => {
+  const key = characters.map(c => c.id).sort().join('_')
   return `/birth/${key}.webp`
 }
 
@@ -47,7 +48,7 @@ export const BirthdayBackground = ({ characters }: BirthdayBackgroundProps) => {
         transition={{ duration: 1 }}
       >
         <img
-          src={getBirthdayImagePath(character.id)}
+          src={getBirthdayImagePath(characters)}
           alt=''
           className='h-[60vh] w-auto object-contain'
           onError={(e) => {
@@ -65,7 +66,7 @@ export const BirthdayBackground = ({ characters }: BirthdayBackgroundProps) => {
         transition={{ duration: 1, delay: 0.3 }}
       >
         <img
-          src={getBirthdayImagePath(character.id)}
+          src={getBirthdayImagePath(characters)}
           alt=''
           className='h-[30vh] w-auto -scale-x-100 object-contain'
           onError={(e) => {

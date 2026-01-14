@@ -14,7 +14,8 @@ type BirthdayDialogProps = {
  * 誕生日画像のパスを取得
  * birth/{key}.webp が存在する場合はそれを返す
  */
-const getBirthdayImagePath = (key: string): string => {
+const getBirthdayImagePath = (characters: StoreData[]): string => {
+  const key = characters.map(c => c.id).sort().join('_')
   return `/birth/${key}.webp`
 }
 
@@ -130,7 +131,7 @@ export const BirthdayDialog = ({ characters }: BirthdayDialogProps) => {
               >
                 {!imageError ? (
                   <motion.img
-                    src={getBirthdayImagePath(currentCharacter.id)}
+                    src={getBirthdayImagePath(characters)}
                     alt={`${currentCharacter.character?.name}の誕生日`}
                     className='size-full object-contain'
                     initial={{ scale: 0.9 }}
