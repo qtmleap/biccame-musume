@@ -110,8 +110,10 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
           // 実際の終了日がある場合はそれを使用
           eventEnd = dayjs(event.endedAt).startOf('day')
         } else {
-          // 終了日が未指定かつ終わっていない場合は現在日時+1ヶ月
-          eventEnd = currentTime.add(1, 'month')
+          // 終了日が未指定かつ終わっていない場合は「現在日時+1ヶ月」または「開始時刻+1週間」の遅い方
+          const oneMonthLater = currentTime.add(1, 'month')
+          const oneWeekFromStart = eventStart.add(1, 'week')
+          eventEnd = oneMonthLater.isAfter(oneWeekFromStart) ? oneMonthLater : oneWeekFromStart
         }
 
         const startOffset = eventStart.diff(chartStartDate, 'day')
