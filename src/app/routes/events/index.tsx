@@ -114,7 +114,7 @@ const EventsContent = () => {
             {/* モバイル: フィルターボタン */}
             <Sheet open={filterSheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
-                <Button size='sm' variant='outline' className='md:hidden h-8 w-8 p-0'>
+                <Button size='sm' variant='ghost' className='md:hidden h-8 w-8 p-0'>
                   <Filter className='size-4' />
                 </Button>
               </SheetTrigger>
