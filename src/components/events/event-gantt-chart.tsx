@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import dayjs, { type Dayjs } from 'dayjs'
 import { ExternalLink } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
@@ -63,20 +62,22 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   const [monthOffset, setMonthOffset] = useState(0)
 
   // 表示する日付範囲を計算
-  const { dates, chartStartDate, actualMonthEnd } = useMemo(() => {
+  const { dates, chartStartDate, chartEndDate, actualMonthEnd } = useMemo(() => {
     const today = dayjs().startOf('day')
     // 指定月の1日から表示開始
     const chartStart = today.add(monthOffset, 'month').startOf('month')
     // 実際の月の最終日
     const monthEnd = chartStart.endOf('month')
-    // 常に31日分生成
+    // 1ヶ月+1週間分(38日)生成
     const allDates: Dayjs[] = []
-    for (let i = 0; i < 31; i++) {
+    for (let i = 0; i < 38; i++) {
       allDates.push(chartStart.add(i, 'day'))
     }
+    const chartEnd = chartStart.add(37, 'day')
     return {
       dates: allDates,
       chartStartDate: chartStart,
+      chartEndDate: chartEnd,
       actualMonthEnd: monthEnd
     }
   }, [monthOffset])
@@ -92,13 +93,10 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   const today = dayjs().startOf('day')
   const todayOffset = today.diff(chartStartDate, 'day')
 
-  // その月の実際の日数を計算
-  const _daysInMonth = useMemo(() => actualMonthEnd.diff(chartStartDate, 'day') + 1, [actualMonthEnd, chartStartDate])
-
   // イベントのバー位置を計算（開始日→カテゴリ順でソート）
   const eventBars = useMemo(() => {
-    // その月の実際の日数を計算
-    const daysInMonth = actualMonthEnd.diff(chartStartDate, 'day') + 1
+    // 表示期間の日数（38日）
+    const displayDays = 38
 
     // まずイベントをソート: 開始日 → カテゴリ順
     const sortedEvents = [...events].sort((a, b) => {
@@ -137,18 +135,18 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
           return 'ongoing'
         })()
 
-        // 終了日がチャート開始日より前、または開始日が月末より後なら表示しない
-        if (eventEnd.isBefore(chartStartDate) || eventStart.isAfter(actualMonthEnd)) {
+        // 終了日がチャート開始日より前、または開始日がチャート終了日より後なら表示しない
+        if (eventEnd.isBefore(chartStartDate) || eventStart.isAfter(chartEndDate)) {
           return null
         }
 
         // チャート開始より前に始まったイベントは、その分durationを短くする
-        // また、実際の月の日数を超えないように制限
+        // また、表示期間(38日)を超えないように制限
         const clippedStartOffset = Math.max(0, startOffset)
         const clippedDuration =
           startOffset < 0
-            ? Math.min(duration + startOffset, daysInMonth)
-            : Math.min(duration, daysInMonth - clippedStartOffset)
+            ? Math.min(duration + startOffset, displayDays)
+            : Math.min(duration, displayDays - clippedStartOffset)
 
         return {
           event,
@@ -158,10 +156,10 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         }
       })
       .filter((bar) => bar !== null)
-  }, [events, chartStartDate, actualMonthEnd])
+  }, [events, chartStartDate, chartEndDate])
 
   const visibleEventBars = eventBars
-  
+
   // デバッグ用
   console.log('Month offset:', monthOffset, 'Visible events:', visibleEventBars.length)
 
@@ -339,7 +337,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                               : 'text-gray-600'
                     }`}
                   >
-                    {isOutOfMonth ? '' : date.format('D')}
+                    {date.format('D')}
                   </div>
                 )
               })}
@@ -351,80 +349,77 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                 const labelOffset = getLabelOffset(startOffset, duration)
 
                 return (
-                  <div
-                    key={event.id}
-                    className='relative flex h-10'
-                  >
-                      {/* 背景グリッド */}
-                      {dates.map((date) => {
-                        const isToday = date.isSame(today, 'day')
-                        const isOutOfMonth = date.isAfter(actualMonthEnd)
-                        return (
+                  <div key={event.id} className='relative flex h-10'>
+                    {/* 背景グリッド */}
+                    {dates.map((date) => {
+                      const isToday = date.isSame(today, 'day')
+                      const isOutOfMonth = date.isAfter(actualMonthEnd)
+                      return (
+                        <div
+                          key={date.format('YYYY-MM-DD')}
+                          className={`w-8 shrink-0 border-b ${isOutOfMonth ? 'bg-gray-50' : isToday ? 'bg-rose-50' : ''}`}
+                        />
+                      )
+                    })}
+
+                    {/* バー */}
+                    {duration > 0 && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                           <div
-                            key={date.format('YYYY-MM-DD')}
-                            className={`w-8 shrink-0 border-b ${isOutOfMonth ? 'bg-gray-50' : isToday ? 'bg-rose-50' : ''}`}
-                          />
-                        )
-                      })}
-
-                      {/* バー */}
-                      {duration > 0 && (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
+                            className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category, status)}`}
+                            style={{
+                              left: `${startOffset * 32}px`,
+                              width: `${duration * 32 - 4}px`
+                            }}
+                          >
+                            {/* ラベル（スクロール停止時に表示） */}
                             <div
-                              className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category, status)}`}
-                              style={{
-                                left: `${startOffset * 32}px`,
-                                width: `${duration * 32 - 4}px`
-                              }}
+                              className={`absolute inset-y-0 flex items-center gap-1.5 px-2 transition-opacity duration-150 ${isScrolling ? 'opacity-0' : 'opacity-100'}`}
+                              style={{ transform: `translateX(${labelOffset}px)` }}
                             >
-                              {/* ラベル（スクロール停止時に表示） */}
-                              <div
-                                className={`absolute inset-y-0 flex items-center gap-1.5 px-2 transition-opacity duration-150 ${isScrolling ? 'opacity-0' : 'opacity-100'}`}
-                                style={{ transform: `translateX(${labelOffset}px)` }}
-                              >
-                                <span className='text-xs text-white font-medium truncate'>{event.name}</span>
-                                {event.stores?.[0] && (
-                                  <span className='text-xs text-white/70 shrink-0'>
-                                    ({appContent.content.store_name[event.stores[0] as StoreKey] || event.stores[0]})
-                                  </span>
-                                )}
-                                <ExternalLink className='size-3 text-white/70 shrink-0' />
-                              </div>
-
-                              {/* クリック領域 */}
-                              <Link
-                                to='/events/$eventId'
-                                params={{ eventId: event.id }}
-                                className='absolute inset-0 hover:bg-white/10 transition-colors'
-                                onClick={(e) => {
-                                  // ドラッグしていた場合はリンクを無効化
-                                  if (hasDraggedRef.current) {
-                                    e.preventDefault()
-                                  }
-                                }}
-                                draggable={false}
-                              >
-                                <span className='sr-only'>{event.name}の詳細を見る</span>
-                              </Link>
+                              <span className='text-xs text-white font-medium truncate'>{event.name}</span>
+                              {event.stores?.[0] && (
+                                <span className='text-xs text-white/70 shrink-0'>
+                                  ({appContent.content.store_name[event.stores[0] as StoreKey] || event.stores[0]})
+                                </span>
+                              )}
+                              <ExternalLink className='size-3 text-white/70 shrink-0' />
                             </div>
-                          </TooltipTrigger>
-                          <TooltipContent side='top' className='max-w-xs'>
-                            <p className='font-medium'>{event.name}</p>
-                            {event.stores && event.stores.length > 0 && (
-                              <p className='text-xs text-gray-500'>
-                                {event.stores
-                                  .map((key) => appContent.content.store_name[key as StoreKey] || key)
-                                  .join(', ')}
-                              </p>
-                            )}
+
+                            {/* クリック領域 */}
+                            <Link
+                              to='/events/$eventId'
+                              params={{ eventId: event.id }}
+                              className='absolute inset-0 hover:bg-white/10 transition-colors'
+                              onClick={(e) => {
+                                // ドラッグしていた場合はリンクを無効化
+                                if (hasDraggedRef.current) {
+                                  e.preventDefault()
+                                }
+                              }}
+                              draggable={false}
+                            >
+                              <span className='sr-only'>{event.name}の詳細を見る</span>
+                            </Link>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent side='top' className='max-w-xs'>
+                          <p className='font-medium'>{event.name}</p>
+                          {event.stores && event.stores.length > 0 && (
                             <p className='text-xs text-gray-500'>
-                              {dayjs(event.startDate).format('M/D')}
-                              {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜なくなり次第終了'}
+                              {event.stores
+                                .map((key) => appContent.content.store_name[key as StoreKey] || key)
+                                .join(', ')}
                             </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      )}
+                          )}
+                          <p className='text-xs text-gray-500'>
+                            {dayjs(event.startDate).format('M/D')}
+                            {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜なくなり次第終了'}
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
                   </div>
                 )
               })}
