@@ -1,15 +1,17 @@
 import { useSuspenseQueries } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { useAtomValue } from 'jotai'
-import { Gift, Settings } from 'lucide-react'
+import { useAtom, useAtomValue } from 'jotai'
+import { Calendar, Gift, LayoutGrid, Settings } from 'lucide-react'
 import { Suspense, useMemo } from 'react'
 import { categoryFilterAtom } from '@/atoms/categoryFilterAtom'
+import { eventViewModeAtom } from '@/atoms/eventViewModeAtom'
 import { prefectureToRegion, regionFilterAtom } from '@/atoms/filterAtom'
 import { RegionFilterControl } from '@/components/characters/region-filter-control'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
+import { EventGridItem } from '@/components/events/event-grid-item'
 import { Button } from '@/components/ui/button'
 import { charactersQueryKey } from '@/hooks/useCharacters'
 import { client } from '@/utils/client'
@@ -39,6 +41,7 @@ const EventsContent = () => {
 
   const categoryFilter = useAtomValue(categoryFilterAtom)
   const regionFilter = useAtomValue(regionFilterAtom)
+  const [viewMode, setViewMode] = useAtom(eventViewModeAtom)
 
   // 店舗キー(id)から都道府県を取得するマップ
   const storePrefectureMap = useMemo(() => {
@@ -100,20 +103,49 @@ const EventsContent = () => {
           <div className='flex-1'>
             <EventCategoryFilter />
           </div>
-          <Button asChild size='sm' variant='ghost' className='gap-2 shrink-0 text-gray-600 hover:text-gray-900'>
-            <Link to='/admin/events'>
-              <Settings className='size-4' />
-              管理
-            </Link>
-          </Button>
+          <div className='flex items-center gap-2 shrink-0'>
+            {/* 表示切り替えボタン */}
+            <div className='flex items-center gap-1 bg-gray-100 rounded-lg p-1'>
+              <Button
+                size='sm'
+                variant='ghost'
+                className={`h-7 w-7 p-0 ${viewMode === 'gantt' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:bg-gray-200'}`}
+                onClick={() => setViewMode('gantt')}
+              >
+                <Calendar className='size-4' />
+              </Button>
+              <Button
+                size='sm'
+                variant='ghost'
+                className={`h-7 w-7 p-0 ${viewMode === 'grid' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:bg-gray-200'}`}
+                onClick={() => setViewMode('grid')}
+              >
+                <LayoutGrid className='size-4' />
+              </Button>
+            </div>
+            <Button asChild size='sm' variant='ghost' className='gap-2 text-gray-600 hover:text-gray-900'>
+              <Link to='/admin/events'>
+                <Settings className='size-4' />
+                管理
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* 地域フィルター */}
         <RegionFilterControl />
 
-        {/* ガントチャート */}
+        {/* イベント表示 */}
         {activeEvents.length > 0 ? (
-          <EventGanttChart events={activeEvents} />
+          viewMode === 'gantt' ? (
+            <EventGanttChart events={activeEvents} />
+          ) : (
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
+              {activeEvents.map((event, index) => (
+                <EventGridItem key={event.id} event={event} index={index} />
+              ))}
+            </div>
+          )
         ) : (
           <div className='text-center py-12 text-gray-500'>
             <Gift className='size-12 mx-auto mb-4 opacity-30' />
