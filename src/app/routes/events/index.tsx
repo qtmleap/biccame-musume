@@ -9,7 +9,6 @@ import { eventListStatusFilterAtom } from '@/atoms/eventListStatusFilterAtom'
 import { eventViewModeAtom } from '@/atoms/eventViewModeAtom'
 import { prefectureToRegion, regionFilterAtom } from '@/atoms/filterAtom'
 import { RegionFilterControl } from '@/components/characters/region-filter-control'
-import { FilterHeader } from '@/components/common/filter-header'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
@@ -17,6 +16,7 @@ import { EventGridItem } from '@/components/events/event-grid-item'
 import { EventStatusFilter } from '@/components/events/event-status-filter'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { Toggle } from '@/components/ui/toggle'
 import { charactersQueryKey } from '@/hooks/useCharacters'
 import { client } from '@/utils/client'
 
@@ -114,9 +114,8 @@ const EventsContent = () => {
             {/* モバイル: フィルターボタン */}
             <Sheet open={filterSheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
-                <Button size='sm' variant='outline' className='gap-2 md:hidden'>
+                <Button size='sm' variant='outline' className='md:hidden h-8 w-8 p-0'>
                   <Filter className='size-4' />
-                  フィルター
                 </Button>
               </SheetTrigger>
               <SheetContent side='bottom' className='h-[50vh]'>
@@ -129,10 +128,7 @@ const EventsContent = () => {
                     <EventCategoryFilter />
 
                     {/* ステータスフィルタ */}
-                    <div className='w-full'>
-                      <FilterHeader label='開催状況で絞り込み' />
-                      <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
-                    </div>
+                    <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
 
                     {/* 地域フィルター */}
                     <RegionFilterControl />
@@ -142,24 +138,14 @@ const EventsContent = () => {
             </Sheet>
 
             {/* 表示切り替えボタン */}
-            <div className='flex items-center gap-1 bg-gray-100 rounded-lg p-1'>
-              <Button
-                size='sm'
-                variant='ghost'
-                className={`h-7 w-7 p-0 ${viewMode === 'gantt' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:bg-gray-200'}`}
-                onClick={() => setViewMode('gantt')}
-              >
-                <Calendar className='size-4' />
-              </Button>
-              <Button
-                size='sm'
-                variant='ghost'
-                className={`h-7 w-7 p-0 ${viewMode === 'grid' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:bg-gray-200'}`}
-                onClick={() => setViewMode('grid')}
-              >
-                <LayoutGrid className='size-4' />
-              </Button>
-            </div>
+            <Toggle
+              size='sm'
+              pressed={viewMode === 'grid'}
+              onPressedChange={(pressed) => setViewMode(pressed ? 'grid' : 'gantt')}
+              className='h-8 w-8 p-0'
+            >
+              {viewMode === 'grid' ? <LayoutGrid className='size-4' /> : <Calendar className='size-4' />}
+            </Toggle>
             <Button asChild size='sm' variant='ghost' className='gap-2 text-gray-600 hover:text-gray-900'>
               <Link to='/admin/events'>
                 <Settings className='size-4' />
@@ -174,14 +160,11 @@ const EventsContent = () => {
           {/* 種別フィルター */}
           <EventCategoryFilter />
 
+          {/* ステータスフィルタ */}
+          <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
+
           {/* 地域フィルター */}
           <RegionFilterControl />
-
-          {/* ステータスフィルタ */}
-          <div className='w-full'>
-            <FilterHeader label='開催状況で絞り込み' />
-            <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
-          </div>
         </div>
 
         {/* イベント表示 */}
