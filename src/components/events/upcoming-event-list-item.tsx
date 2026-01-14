@@ -65,7 +65,6 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
           <div className='flex-1 min-w-0'>
             <p className='text-sm font-medium text-gray-800 truncate'>
               {getDisplayName(event.character.character?.name || '')}
-              <span className='text-gray-400 font-normal ml-1'>の誕生日</span>
             </p>
             <p className='text-xs text-gray-500'>{event.date.format('M月D日')}</p>
           </div>

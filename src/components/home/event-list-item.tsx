@@ -105,26 +105,28 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
           </div>
         </div>
         <div className='flex-1 min-w-0'>
-          <div className='flex flex-wrap items-center gap-2 text-xs text-gray-500'>
+          <div className='flex flex-col gap-1 text-xs text-gray-500'>
             <span className='flex items-center gap-1'>
               <Calendar className='size-3' />
               {startDate.format('M月D日')}
               {event.endDate && `〜${dayjs(event.endDate).format('M月D日')}`}
             </span>
-            {event.stores && event.stores.length > 0 && (
-              <span className='flex items-center gap-1'>
-                <Store className='size-3' />
-                {event.stores.length === 1
-                  ? STORE_NAME_LABELS[event.stores[0] as StoreKey] || event.stores[0]
-                  : `${event.stores.length}店舗`}
-              </span>
-            )}
-            {event.limitedQuantity && !event.conditions.some((c) => c.type === 'everyone') && (
-              <span className='flex items-center gap-1'>
-                <Package className='size-3' />
-                限定{event.limitedQuantity}個
-              </span>
-            )}
+            <div className='flex flex-wrap items-center gap-2'>
+              {event.stores && event.stores.length > 0 && (
+                <span className='flex items-center gap-1'>
+                  <Store className='size-3' />
+                  {event.stores.length === 1
+                    ? STORE_NAME_LABELS[event.stores[0] as StoreKey] || event.stores[0]
+                    : `${event.stores.length}店舗`}
+                </span>
+              )}
+              {event.limitedQuantity && !event.conditions.some((c) => c.type === 'everyone') && (
+                <span className='flex items-center gap-1'>
+                  <Package className='size-3' />
+                  限定{event.limitedQuantity}個
+                </span>
+              )}
+            </div>
           </div>
           {event.conditions.some((c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery') && (
             <div className='mt-1 flex flex-wrap gap-1'>
