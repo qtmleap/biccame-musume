@@ -100,7 +100,7 @@ const EventsContent = () => {
           <div className='flex-1'>
             <EventCategoryFilter />
           </div>
-          <Button asChild size='sm' variant='ghost' className='gap-2 shrink-0'>
+          <Button asChild size='sm' variant='ghost' className='gap-2 shrink-0 text-gray-600 hover:text-gray-900'>
             <Link to='/admin/events'>
               <Settings className='size-4' />
               管理
