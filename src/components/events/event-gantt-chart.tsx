@@ -283,8 +283,8 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
             return (
               <Button
                 key={offset}
-                type='button'
-                variant={isSelected ? 'default' : 'outline'}
+                variant='outline'
+                size='sm'
                 onClick={() => setMonthOffset(offset)}
                 className={cn({
                   'bg-green-500/50 text-white border-green-500/50 hover:bg-green-500/60 hover:text-white dark:bg-green-500/50 dark:text-white dark:border-green-500/50 dark:hover:bg-green-500/60':
@@ -293,7 +293,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                     !isSelected
                 })}
               >
-                {monthDate.format('M月')}
+                {monthDate.format('YY/MM')}
               </Button>
             )
           })}

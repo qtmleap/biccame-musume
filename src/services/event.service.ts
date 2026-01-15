@@ -7,6 +7,7 @@ import { HTTPException } from 'hono/http-exception'
 import { nullToUndefined } from '@/lib/utils'
 import { type Event, type EventRequest, EventSchema, type EventStatus, EventStatusSchema } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
+import { tweetEventCreated, tweetEventUpdated } from '@/utils/twitter'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -133,7 +134,16 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
       stores: true
     }
   })
-  return transform(event)
+  const transformedEvent = transform(event)
+
+  // イベント作成をツイート（エラーがあっても処理は継続）
+  try {
+    await tweetEventCreated(env, transformedEvent)
+  } catch (error) {
+    console.error('Failed to tweet event creation:', error)
+  }
+
+  return transformedEvent
 }
 
 export const updateEvent = async (env: Bindings, id: string, data: EventRequest): Promise<Event> => {
@@ -180,7 +190,16 @@ export const updateEvent = async (env: Bindings, id: string, data: EventRequest)
     }
   })
 
-  return transform(event)
+  const transformedEvent = transform(event)
+
+  // イベント更新をツイート（エラーがあっても処理は継続）
+  try {
+    await tweetEventUpdated(env, transformedEvent)
+  } catch (error) {
+    console.error('Failed to tweet event update:', error)
+  }
+
+  return transformedEvent
 }
 
 export const deleteEvent = async (env: Bindings, id: string): Promise<null> => {

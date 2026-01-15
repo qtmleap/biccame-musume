@@ -77,6 +77,7 @@
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
+    "twitter-api-v2": "^1.29.0",
     "vaul": "^1.1.2",
     "workbox-precaching": "^7.4.0",
     "zod": "^4.3.5"
