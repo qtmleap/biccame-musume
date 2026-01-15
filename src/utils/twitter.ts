@@ -2,8 +2,9 @@ import Base64 from 'crypto-js/enc-base64'
 import HmacSHA1 from 'crypto-js/hmac-sha1'
 import OAuth from 'oauth-1.0a'
 import { z } from 'zod'
-import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import { STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
+import type { StoreData } from '@/schemas/store.dto'
 import type { Bindings } from '@/types/bindings'
 
 /**
@@ -27,22 +28,42 @@ const extractTweetId = (url: string): string | null => {
 }
 
 /**
+ * キャラクターデータを取得
+ */
+const fetchCharactersData = async (): Promise<StoreData[]> => {
+  const response = await fetch('https://biccame-musume.com/characters.json')
+  if (!response.ok) {
+    throw new Error(`Failed to fetch characters data: ${response.status}`)
+  }
+  return response.json()
+}
+
+/**
  * イベント情報からツイート本文を生成
  */
-const generateTweetText = (event: Event, isUpdate: boolean): string => {
+const generateTweetText = async (event: Event, isUpdate: boolean): Promise<string> => {
   const action = isUpdate ? '更新' : '追加'
-  const category = EVENT_CATEGORY_LABELS[event.category]
 
   // メイン店舗名（最初の店舗）
   const mainStore = event.stores[0]
   const mainStoreName = STORE_NAME_LABELS[mainStore]
 
+  // キャラクター名を取得
+  let characterName = mainStoreName
+  try {
+    const charactersData = await fetchCharactersData()
+    const character = charactersData.find((c) => c.id === mainStore)
+    characterName = character?.character?.name || mainStoreName
+  } catch (error) {
+    console.warn('Failed to fetch character name, using store name:', error)
+  }
+
   // 複数店舗の場合の表記
   const storeCount = event.stores.length
-  const storeText = storeCount === 1 ? `${mainStoreName}` : `${mainStoreName}など${storeCount}店舗`
+  const storeText = storeCount === 1 ? characterName : `${characterName}など${storeCount}店舗`
 
   const lines = [
-    `${storeText}の${category}イベントを${action}しました！`,
+    `${storeText}の「${event.name}」を${action}しました！`,
     '',
     `https://biccame-musume.com/events/${event.id}`,
     '',
@@ -138,13 +159,13 @@ class TwitterApi {
  * イベント作成時にツイートを投稿
  */
 export const tweetEventCreated = async (env: Bindings, event: Event): Promise<void> => {
-  const text = generateTweetText(event, false)
-
   // 環境変数が設定されていない場合はスキップ
   if (!env.TWITTER_API_KEY || !env.TWITTER_API_SECRET || !env.TWITTER_ACCESS_TOKEN || !env.TWITTER_ACCESS_SECRET) {
     console.warn('Twitter API credentials not configured. Skipping tweet.')
     return
   }
+
+  const text = await generateTweetText(event, false)
 
   const client = new TwitterApi(
     env.TWITTER_API_KEY,
@@ -154,8 +175,9 @@ export const tweetEventCreated = async (env: Bindings, event: Event): Promise<vo
   )
 
   try {
-    // 告知ツイートがあれば引用RT、なければ通常のツイート
-    const announceTweet = event.referenceUrls?.find((ref) => ref.type === 'announce')
+    // 告知ツイートがあれば引用RT、なければ通常のツイート（複数ある場合は最後のものを使用）
+    const announceTweets = event.referenceUrls?.filter((ref) => ref.type === 'announce') || []
+    const announceTweet = announceTweets.at(-1)
     const quoteTweetId = announceTweet ? extractTweetId(announceTweet.url) : null
 
     await client.tweet(text, quoteTweetId || undefined)
@@ -169,13 +191,19 @@ export const tweetEventCreated = async (env: Bindings, event: Event): Promise<vo
  * イベント更新時にツイートを投稿
  */
 export const tweetEventUpdated = async (env: Bindings, event: Event): Promise<void> => {
-  const text = generateTweetText(event, true)
-
   // 環境変数が設定されていない場合はスキップ
   if (!env.TWITTER_API_KEY || !env.TWITTER_API_SECRET || !env.TWITTER_ACCESS_TOKEN || !env.TWITTER_ACCESS_SECRET) {
     console.warn('Twitter API credentials not configured. Skipping tweet.')
     return
   }
+
+  // 開発環境ではスキップ
+  if (env.CLOUDFLARE_ENV !== 'prod') {
+    console.log('Skipping tweet in non-production environment')
+    return
+  }
+
+  const text = await generateTweetText(event, true)
 
   const client = new TwitterApi(
     env.TWITTER_API_KEY,
@@ -185,8 +213,9 @@ export const tweetEventUpdated = async (env: Bindings, event: Event): Promise<vo
   )
 
   try {
-    // 告知ツイートがあれば引用RT、なければ通常のツイート
-    const announceTweet = event.referenceUrls?.find((ref) => ref.type === 'announce')
+    // 告知ツイートがあれば引用RT、なければ通常のツイート（複数ある場合は最後のものを使用）
+    const announceTweets = event.referenceUrls?.filter((ref) => ref.type === 'announce') || []
+    const announceTweet = announceTweets.at(-1)
     const quoteTweetId = announceTweet ? extractTweetId(announceTweet.url) : null
 
     await client.tweet(text, quoteTweetId || undefined)

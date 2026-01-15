@@ -13,7 +13,10 @@ type BirthdayHeroSectionProps = {
  * 誕生日画像のパスを取得
  */
 const getBirthdayImagePath = (characters: StoreData[]): string => {
-  const key = characters.map(c => c.id).sort().join('_')
+  const key = characters
+    .map((c) => c.id)
+    .sort()
+    .join('_')
   return `/birth/${key}.webp`
 }
 
