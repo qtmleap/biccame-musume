@@ -197,12 +197,6 @@ export const tweetEventUpdated = async (env: Bindings, event: Event): Promise<vo
     return
   }
 
-  // 開発環境ではスキップ
-  if (env.CLOUDFLARE_ENV !== 'prod') {
-    console.log('Skipping tweet in non-production environment')
-    return
-  }
-
   const text = await generateTweetText(event, true)
 
   const client = new TwitterApi(
