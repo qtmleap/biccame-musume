@@ -17,13 +17,13 @@ export type Bindings = {
   /** レート制限用のバインディング */
   RATE_LIMITER: RateLimitBinding
   /** Twitter API Key */
-  TWITTER_API_KEY?: string
+  TWITTER_API_KEY: string
   /** Twitter API Secret */
-  TWITTER_API_SECRET?: string
+  TWITTER_API_SECRET: string
   /** Twitter Access Token */
-  TWITTER_ACCESS_TOKEN?: string
+  TWITTER_ACCESS_TOKEN: string
   /** Twitter Access Token Secret */
-  TWITTER_ACCESS_SECRET?: string
+  TWITTER_ACCESS_SECRET: string
 }
 
 export type Variables = {
