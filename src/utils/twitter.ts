@@ -1,4 +1,6 @@
-import { TwitterApi } from 'twitter-api-v2'
+import Base64 from 'crypto-js/enc-base64'
+import HmacSHA1 from 'crypto-js/hmac-sha1'
+import OAuth from 'oauth-1.0a'
 import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
@@ -40,6 +42,80 @@ const generateTweetText = (event: Event, isUpdate: boolean): string => {
 }
 
 /**
+ * シンプルなTwitter APIクライアント
+ */
+class TwitterApi {
+  private oauth: OAuth
+
+  constructor(
+    apiKey: string,
+    apiSecret: string,
+    private accessToken: string,
+    private accessSecret: string
+  ) {
+    this.oauth = new OAuth({
+      consumer: { key: apiKey, secret: apiSecret },
+      signature_method: 'HMAC-SHA1',
+      hash_function(baseString, key) {
+        return Base64.stringify(HmacSHA1(baseString, key))
+      }
+    })
+  }
+
+  /**
+   * ツイートを投稿
+   */
+  async tweet(text: string, quoteTweetId?: string): Promise<{ data: { id: string; text: string } }> {
+    const url = 'https://api.twitter.com/2/tweets'
+    const body: { text: string; quote_tweet_id?: string } = { text }
+    if (quoteTweetId) {
+      body.quote_tweet_id = quoteTweetId
+    }
+
+    const requestData = {
+      url,
+      method: 'POST',
+      data: {} // OAuth署名にはボディを含めない
+    }
+
+    const token = {
+      key: this.accessToken,
+      secret: this.accessSecret
+    }
+
+    const authData = this.oauth.authorize(requestData, token)
+    const authHeader = this.oauth.toHeader(authData)
+
+    console.log('[Twitter API] Request:', {
+      url,
+      body
+    })
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        ...authHeader,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+
+    if (!response.ok) {
+      const error = await response.text()
+      console.error('[Twitter API] Error response:', {
+        status: response.status,
+        body: error
+      })
+      throw new Error(`Twitter API error: ${response.status} ${error}`)
+    }
+
+    const result = await response.json()
+    console.log('Tweet posted successfully:', result)
+    return result
+  }
+}
+
+/**
  * イベント作成時にツイートを投稿
  */
 export const tweetEventCreated = async (env: Bindings, event: Event): Promise<void> => {
@@ -51,25 +127,19 @@ export const tweetEventCreated = async (env: Bindings, event: Event): Promise<vo
     return
   }
 
-  const client = new TwitterApi({
-    appKey: env.TWITTER_API_KEY,
-    appSecret: env.TWITTER_API_SECRET,
-    accessToken: env.TWITTER_ACCESS_TOKEN,
-    accessSecret: env.TWITTER_ACCESS_SECRET
-  })
+  const client = new TwitterApi(
+    env.TWITTER_API_KEY,
+    env.TWITTER_API_SECRET,
+    env.TWITTER_ACCESS_TOKEN,
+    env.TWITTER_ACCESS_SECRET
+  )
 
   try {
     // 告知ツイートがあれば引用RT、なければ通常のツイート
     const announceTweet = event.referenceUrls?.find((ref) => ref.type === 'announce')
     const quoteTweetId = announceTweet ? extractTweetId(announceTweet.url) : null
 
-    if (quoteTweetId) {
-      const result = await client.v2.tweet(text, { quote_tweet_id: quoteTweetId })
-      console.log('Quote tweet posted successfully:', result)
-    } else {
-      const result = await client.v2.tweet(text)
-      console.log('Tweet posted successfully:', result)
-    }
+    await client.tweet(text, quoteTweetId || undefined)
   } catch (error) {
     console.error('Failed to post tweet:', error)
     throw error
@@ -88,25 +158,19 @@ export const tweetEventUpdated = async (env: Bindings, event: Event): Promise<vo
     return
   }
 
-  const client = new TwitterApi({
-    appKey: env.TWITTER_API_KEY,
-    appSecret: env.TWITTER_API_SECRET,
-    accessToken: env.TWITTER_ACCESS_TOKEN,
-    accessSecret: env.TWITTER_ACCESS_SECRET
-  })
+  const client = new TwitterApi(
+    env.TWITTER_API_KEY,
+    env.TWITTER_API_SECRET,
+    env.TWITTER_ACCESS_TOKEN,
+    env.TWITTER_ACCESS_SECRET
+  )
 
   try {
     // 告知ツイートがあれば引用RT、なければ通常のツイート
     const announceTweet = event.referenceUrls?.find((ref) => ref.type === 'announce')
     const quoteTweetId = announceTweet ? extractTweetId(announceTweet.url) : null
 
-    if (quoteTweetId) {
-      const result = await client.v2.tweet(text, { quote_tweet_id: quoteTweetId })
-      console.log('Quote tweet posted successfully:', result)
-    } else {
-      const result = await client.v2.tweet(text)
-      console.log('Tweet posted successfully:', result)
-    }
+    await client.tweet(text, quoteTweetId || undefined)
   } catch (error) {
     console.error('Failed to post tweet:', error)
     throw error
