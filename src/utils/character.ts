@@ -30,7 +30,7 @@ export const groupCharactersByBirthday = (characters: StoreData[]) => {
   return Array.from(groups.entries()).map(([birthday, chars]) => {
     const sortedChars = [...chars].sort((a, b) => a.id.localeCompare(b.id))
     const groupId = sortedChars.map(c => c.id).join('_')
-    const groupName = sortedChars.map(c => c.character?.name || c.name).join(' & ')
+    const groupName = sortedChars.map(c => c.character?.name || c.id).join(' & ')
     return {
       id: groupId,
       birthday,

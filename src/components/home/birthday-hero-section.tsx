@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router'
 import { Cake } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import type { StoreData } from '@/schemas/store.dto'
 
@@ -62,7 +61,6 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
 
   // 複数キャラクターがいる場合は最初の一人をメインに表示
   const mainCharacter = characters[0]
-  const otherCharacters = characters.slice(1)
 
   return (
     <motion.section

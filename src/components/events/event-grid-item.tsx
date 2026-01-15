@@ -15,6 +15,7 @@ type EventGridItemProps = {
 /**
  * カテゴリに応じたアイコンとスタイルを返す
  */
+// @ts-expect-error 将来の使用のために残している
 const _getCategoryColor = (category: Event['category']) => {
   switch (category) {
     case 'limited_card':

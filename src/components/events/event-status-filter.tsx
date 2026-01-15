@@ -28,7 +28,7 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
           <Checkbox
             id='status-upcoming'
             checked={statusFilter.upcoming}
-            onCheckedChange={(checked) => setStatusFilter((prev) => ({ ...prev, upcoming: checked === true }))}
+            onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, upcoming: checked === true })}
             className='border-gray-400 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600'
           />
           <Label htmlFor='status-upcoming' className='text-gray-700 cursor-pointer'>
@@ -39,7 +39,7 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
           <Checkbox
             id='status-ongoing'
             checked={statusFilter.ongoing}
-            onCheckedChange={(checked) => setStatusFilter((prev) => ({ ...prev, ongoing: checked === true }))}
+            onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, ongoing: checked === true })}
             className='border-gray-400 data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600'
           />
           <Label htmlFor='status-ongoing' className='text-gray-700 cursor-pointer'>
@@ -50,7 +50,7 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
           <Checkbox
             id='status-ended'
             checked={statusFilter.ended}
-            onCheckedChange={(checked) => setStatusFilter((prev) => ({ ...prev, ended: checked === true }))}
+            onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, ended: checked === true })}
             className='border-gray-400 data-[state=checked]:bg-gray-600 data-[state=checked]:border-gray-600'
           />
           <Label htmlFor='status-ended' className='text-gray-700 cursor-pointer'>
