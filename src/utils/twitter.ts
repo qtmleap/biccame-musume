@@ -1,9 +1,22 @@
 import Base64 from 'crypto-js/enc-base64'
 import HmacSHA1 from 'crypto-js/hmac-sha1'
 import OAuth from 'oauth-1.0a'
+import { z } from 'zod'
 import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
+
+/**
+ * Twitter API v2 ツイート投稿レスポンススキーマ
+ */
+const TwitterResponseSchema = z.object({
+  data: z.object({
+    id: z.string(),
+    text: z.string()
+  })
+})
+
+type TwitterResponse = z.infer<typeof TwitterResponseSchema>
 
 /**
  * Twitter URLからツイートIDを抽出
@@ -65,7 +78,7 @@ class TwitterApi {
   /**
    * ツイートを投稿
    */
-  async tweet(text: string, quoteTweetId?: string): Promise<{ data: { id: string; text: string } }> {
+  async tweet(text: string, quoteTweetId?: string): Promise<TwitterResponse> {
     const url = 'https://api.twitter.com/2/tweets'
     const body: { text: string; quote_tweet_id?: string } = { text }
     if (quoteTweetId) {
@@ -109,9 +122,15 @@ class TwitterApi {
       throw new Error(`Twitter API error: ${response.status} ${error}`)
     }
 
-    const result = await response.json()
-    console.log('Tweet posted successfully:', result)
-    return result
+    const result = TwitterResponseSchema.safeParse(await response.json())
+
+    if (!result.success) {
+      console.error('[Twitter API] Invalid response format:', result.error)
+      throw new Error('Twitter API returned invalid response format')
+    }
+
+    console.log('Tweet posted successfully:', result.data)
+    return result.data
   }
 }
 
