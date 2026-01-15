@@ -40,6 +40,7 @@ const getCategoryColor = (category: Event['category'], status: EventStatus) => {
 /**
  * 日付範囲を生成
  */
+// @ts-expect-error 将来の使用のために残している
 const _generateDateRange = (startDate: Dayjs, endDate: Dayjs): Dayjs[] => {
   const dates: Dayjs[] = []
   let current = startDate
