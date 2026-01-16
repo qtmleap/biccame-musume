@@ -1,7 +1,7 @@
 import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
 import { EventRequestSchema, EventSchema } from '@/schemas/event.dto'
-import { PageViewQuerySchema, PageViewStatsSchema } from '@/schemas/stats.dto'
+import { PageViewStatsSchema } from '@/schemas/stats.dto'
 import { StoresSchema } from '@/schemas/store.dto'
 import { VoteCountListSchema, VoteResponseSchema } from '@/schemas/vote.dto'
 
@@ -117,9 +117,9 @@ const api = makeApi([
     description: 'ページビュー統計を取得',
     parameters: [
       {
-        name: 'queries',
+        name: 'path',
         type: 'Query',
-        schema: PageViewQuerySchema
+        schema: z.string().optional()
       }
     ],
     response: PageViewStatsSchema
