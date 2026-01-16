@@ -123,6 +123,20 @@ const api = makeApi([
       }
     ],
     response: PageViewStatsSchema
+  },
+  {
+    method: 'post',
+    path: '/api/stats/track',
+    alias: 'trackPageView',
+    description: 'ページビューを記録',
+    parameters: [
+      {
+        name: 'path',
+        type: 'Query',
+        schema: z.string().optional()
+      }
+    ],
+    response: PageViewStatsSchema
   }
 ])
 

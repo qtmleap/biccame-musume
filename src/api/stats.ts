@@ -1,6 +1,12 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 import { PageViewQuerySchema, PageViewStatsSchema } from '@/schemas/stats.dto'
 import type { Bindings, Variables } from '@/types/bindings'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
 
@@ -8,12 +14,7 @@ const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
  * 今日の日付を取得（JST）
  */
 const getTodayKey = (): string => {
-  const now = new Date()
-  const jst = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }))
-  const year = jst.getFullYear()
-  const month = String(jst.getMonth() + 1).padStart(2, '0')
-  const day = String(jst.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
+  return dayjs().tz('Asia/Tokyo').format('YYYY-MM-DD')
 }
 
 /**
@@ -21,7 +22,7 @@ const getTodayKey = (): string => {
  */
 const getPageViewStats = async (env: Bindings, path?: string): Promise<number> => {
   const key = path ? `pv:${path}` : 'pv:total'
-  const value = await env.VOTE_LIMITER.get(key)
+  const value = await env.PAGE_VIEWS.get(key)
   return value ? Number.parseInt(value, 10) : 0
 }
 
@@ -30,7 +31,7 @@ const getPageViewStats = async (env: Bindings, path?: string): Promise<number> =
  */
 const getTodayPageViews = async (env: Bindings): Promise<number> => {
   const todayKey = `pv:daily:${getTodayKey()}`
-  const value = await env.VOTE_LIMITER.get(todayKey)
+  const value = await env.PAGE_VIEWS.get(todayKey)
   return value ? Number.parseInt(value, 10) : 0
 }
 
@@ -40,23 +41,25 @@ const getTodayPageViews = async (env: Bindings): Promise<number> => {
 export const incrementPageView = async (env: Bindings, path: string): Promise<void> => {
   // 全体のカウント
   const totalKey = 'pv:total'
-  const totalValue = await env.VOTE_LIMITER.get(totalKey)
+  const totalValue = await env.PAGE_VIEWS.get(totalKey)
   const totalCount = totalValue ? Number.parseInt(totalValue, 10) : 0
-  await env.VOTE_LIMITER.put(totalKey, String(totalCount + 1))
+  await env.PAGE_VIEWS.put(totalKey, String(totalCount + 1))
 
   // 今日のカウント
   const todayKey = `pv:daily:${getTodayKey()}`
-  const todayValue = await env.VOTE_LIMITER.get(todayKey)
+  const todayValue = await env.PAGE_VIEWS.get(todayKey)
   const todayCount = todayValue ? Number.parseInt(todayValue, 10) : 0
-  await env.VOTE_LIMITER.put(todayKey, String(todayCount + 1), {
+  await env.PAGE_VIEWS.put(todayKey, String(todayCount + 1), {
     expirationTtl: 60 * 60 * 24 * 7 // 7日後に自動削除
   })
 
+  console.log(`[PageView] Today's key: ${todayKey} (count: ${todayCount + 1})`)
+
   // パスごとのカウント
   const pathKey = `pv:${path}`
-  const pathValue = await env.VOTE_LIMITER.get(pathKey)
+  const pathValue = await env.PAGE_VIEWS.get(pathKey)
   const pathCount = pathValue ? Number.parseInt(pathValue, 10) : 0
-  await env.VOTE_LIMITER.put(pathKey, String(pathCount + 1))
+  await env.PAGE_VIEWS.put(pathKey, String(pathCount + 1))
 
   console.log(
     `[PageView] Incremented: ${path} (total: ${totalCount + 1}, today: ${todayCount + 1}, path: ${pathCount + 1})`
@@ -68,13 +71,13 @@ export const incrementPageView = async (env: Bindings, path: string): Promise<vo
  */
 const getAllPathStats = async (env: Bindings): Promise<Record<string, number>> => {
   // KVから全てのpv:*キーを取得
-  const list = await env.VOTE_LIMITER.list({ prefix: 'pv:' })
+  const list = await env.PAGE_VIEWS.list({ prefix: 'pv:' })
   const stats: Record<string, number> = {}
 
   for (const key of list.keys) {
     if (key.name === 'pv:total') continue
     const path = key.name.replace('pv:', '')
-    const value = await env.VOTE_LIMITER.get(key.name)
+    const value = await env.PAGE_VIEWS.get(key.name)
     if (value) {
       stats[path] = Number.parseInt(value, 10)
     }
@@ -128,6 +131,47 @@ routes.openapi(
       total,
       today,
       paths
+    })
+  }
+)
+
+/**
+ * ページビューをインクリメント
+ * POST /api/stats/track
+ */
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/track',
+    request: {
+      query: PageViewQuerySchema
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: PageViewStatsSchema
+          }
+        },
+        description: 'ページビュー記録成功'
+      }
+    }
+  }),
+  async (c) => {
+    const { path } = c.req.valid('query')
+    const trackPath = path || '/'
+
+    await incrementPageView(c.env, trackPath)
+
+    // 更新後の統計を返す
+    const total = await getPageViewStats(c.env)
+    const today = await getTodayPageViews(c.env)
+    const pathCount = await getPageViewStats(c.env, trackPath)
+
+    return c.json({
+      total,
+      today,
+      paths: { [trackPath]: pathCount }
     })
   }
 )

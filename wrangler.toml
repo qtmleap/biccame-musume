@@ -23,6 +23,10 @@ id = "ef49185c58d04a0790e7c68394d78089"
 binding = "VOTE_LIMITER"
 id = "96019843cb67406799d40584768bcf7a"
 
+[[env.prod.kv_namespaces]]
+binding = "PAGE_VIEWS"
+id = "46b03751a94a4180873fa2a473b30606"
+
 [[env.prod.d1_databases]]
 binding = "DB"
 database_name = "biccame-musume-prod"
@@ -65,6 +69,10 @@ id = "6f3b7b710eb646a0aef7ab524609bb67"
 [[env.dev.kv_namespaces]]
 binding = "VOTE_LIMITER"
 id = "cc87e0f64116414c9d70a080bbb97156"
+
+[[env.dev.kv_namespaces]]
+binding = "PAGE_VIEWS"
+id = "e7032f736ed045d993d79261b9ff8a56"
 
 [[env.dev.d1_databases]]
 binding = "DB"
