@@ -9,7 +9,7 @@ import {
   type ReferenceUrlType,
   ReferenceUrlTypeSchema
 } from '@/schemas/event.dto'
-import { type Region, RegionSchema, StoreKeySchema } from '@/schemas/store.dto'
+import { type Region, RegionSchema, type StoreKey, StoreKeySchema } from '@/schemas/store.dto'
 
 const appContent = {
   key: 'app',
@@ -100,6 +100,58 @@ const appContent = {
       [StoreKeySchema.enum.tokorozawa]: '所沢駅店',
       [StoreKeySchema.enum.yao]: 'アリオ八尾店',
       [StoreKeySchema.enum.yuurakuchou]: '有楽町店'
+    },
+    character_name: {
+      [StoreKeySchema.enum.abeno]: 'あべのたん',
+      [StoreKeySchema.enum.akasaka]: 'みっけたん',
+      [StoreKeySchema.enum.akiba]: 'アキバたん',
+      [StoreKeySchema.enum.biccamera]: 'ビックカメラ',
+      [StoreKeySchema.enum.bicqlo]: 'しんじゅくたん',
+      [StoreKeySchema.enum.bicsim]: 'ビックシムたん',
+      [StoreKeySchema.enum.camera]: 'カメ館たん',
+      [StoreKeySchema.enum.chiba]: '千葉たん',
+      [StoreKeySchema.enum.chofu]: '調布たん',
+      [StoreKeySchema.enum.fujisawa]: '藤沢たん',
+      [StoreKeySchema.enum.funabashi]: 'ふなたん',
+      [StoreKeySchema.enum.funato]: 'ふなとーたん',
+      [StoreKeySchema.enum.hachioji]: '八王子たん',
+      [StoreKeySchema.enum.hamamatsu]: 'はまたん',
+      [StoreKeySchema.enum.hiroshima]: '広島たん',
+      [StoreKeySchema.enum.honten]: '本店たん',
+      [StoreKeySchema.enum.ikenishi]: '池西たん',
+      [StoreKeySchema.enum.kagoshima]: '鹿児島たん',
+      [StoreKeySchema.enum.kashiwa]: '柏たん',
+      [StoreKeySchema.enum.kawasaki]: '川崎たん',
+      [StoreKeySchema.enum.kyoto]: '京都たん',
+      [StoreKeySchema.enum.machida]: '町田たん',
+      [StoreKeySchema.enum.mito]: '水戸たん',
+      [StoreKeySchema.enum.nagoya]: 'なごやたん',
+      [StoreKeySchema.enum.nagoyagate]: 'なごやげーとたん',
+      [StoreKeySchema.enum.naisen]: 'ナイセン',
+      [StoreKeySchema.enum.nanba]: 'なんばたん',
+      [StoreKeySchema.enum.niigata]: 'にいがたたん',
+      [StoreKeySchema.enum.oeraitan]: 'お偉いたん',
+      [StoreKeySchema.enum.ohmiya]: '大宮たん',
+      [StoreKeySchema.enum.okayama]: '岡山たん',
+      [StoreKeySchema.enum.photo]: 'フォトたん',
+      [StoreKeySchema.enum.pkan]: 'パソ館たん',
+      [StoreKeySchema.enum.prosta]: 'プロスタたん',
+      [StoreKeySchema.enum.sagami]: 'さがみたん',
+      [StoreKeySchema.enum.sapporo]: 'さっぽろたん',
+      [StoreKeySchema.enum.seiseki]: 'せいせきたん',
+      [StoreKeySchema.enum.shibuhachi]: 'しぶハチたん',
+      [StoreKeySchema.enum.shibuto]: 'しぶとーたん',
+      [StoreKeySchema.enum.shinjyuku]: '新宿西口たん',
+      [StoreKeySchema.enum.shintou]: '新東たん',
+      [StoreKeySchema.enum.shinyoko]: '新横たん',
+      [StoreKeySchema.enum.tachikawa]: '立川たん',
+      [StoreKeySchema.enum.takatsuki]: 'たかつきたん',
+      [StoreKeySchema.enum.tamapla]: 'たまプラたん',
+      [StoreKeySchema.enum.tenjin]: '天神1号たん',
+      [StoreKeySchema.enum.tenjin2]: '天神2号たん',
+      [StoreKeySchema.enum.tokorozawa]: '所沢たん',
+      [StoreKeySchema.enum.yao]: '八尾たん',
+      [StoreKeySchema.enum.yuurakuchou]: '有楽町たん'
     }
   }
 } satisfies Dictionary
@@ -114,3 +166,4 @@ export const REFERENCE_URL_TYPE_LABELS = appContent.content.ref as Record<Refere
 export const REFERENCE_URL_TYPE_LABELS_LONG = appContent.content.refLong as Record<ReferenceUrlType, string>
 export const REGION_LABELS = appContent.content.region as Record<Region, string>
 export const STORE_NAME_LABELS = appContent.content.store_name
+export const CHARACTER_NAME_LABELS = appContent.content.character_name as Record<StoreKey, string>

@@ -2,9 +2,8 @@ import Base64 from 'crypto-js/enc-base64'
 import HmacSHA1 from 'crypto-js/hmac-sha1'
 import OAuth from 'oauth-1.0a'
 import { z } from 'zod'
-import { STORE_NAME_LABELS } from '@/locales/app.content'
+import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
-import type { StoreData } from '@/schemas/store.dto'
 import type { Bindings } from '@/types/bindings'
 
 /**
@@ -28,35 +27,15 @@ const extractTweetId = (url: string): string | null => {
 }
 
 /**
- * キャラクターデータを取得
- */
-const fetchCharactersData = async (): Promise<StoreData[]> => {
-  const response = await fetch('https://biccame-musume.com/characters.json')
-  if (!response.ok) {
-    throw new Error(`Failed to fetch characters data: ${response.status}`)
-  }
-  return response.json()
-}
-
-/**
  * イベント情報からツイート本文を生成
  */
-const generateTweetText = async (event: Event, isUpdate: boolean): Promise<string> => {
+const generateTweetText = (event: Event, isUpdate: boolean): string => {
   const action = isUpdate ? '更新' : '追加'
 
-  // メイン店舗名（最初の店舗）
+  // メイン店舗（最初の店舗）
   const mainStore = event.stores[0]
   const mainStoreName = STORE_NAME_LABELS[mainStore]
-
-  // キャラクター名を取得
-  let characterName = mainStoreName
-  try {
-    const charactersData = await fetchCharactersData()
-    const character = charactersData.find((c) => c.id === mainStore)
-    characterName = character?.character?.name || mainStoreName
-  } catch (error) {
-    console.warn('Failed to fetch character name, using store name:', error)
-  }
+  const characterName = CHARACTER_NAME_LABELS[mainStore] || mainStoreName
 
   // 複数店舗の場合の表記
   const storeCount = event.stores.length
@@ -69,7 +48,8 @@ const generateTweetText = async (event: Event, isUpdate: boolean): Promise<strin
     '',
     '#ビッカメ娘',
     '#ビックカメラ',
-    `#${mainStoreName}`
+    `#${mainStoreName}`,
+    `#${characterName}`
   ]
 
   return lines.join('\n')
@@ -165,7 +145,7 @@ export const tweetEventCreated = async (env: Bindings, event: Event): Promise<vo
     return
   }
 
-  const text = await generateTweetText(event, false)
+  const text = generateTweetText(event, false)
 
   const client = new TwitterApi(
     env.TWITTER_API_KEY,
@@ -197,7 +177,7 @@ export const tweetEventUpdated = async (env: Bindings, event: Event): Promise<vo
     return
   }
 
-  const text = await generateTweetText(event, true)
+  const text = generateTweetText(event, true)
 
   const client = new TwitterApi(
     env.TWITTER_API_KEY,
