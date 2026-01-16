@@ -49,8 +49,8 @@
         "biomejs.biome",
         "bradlc.vscode-tailwindcss",
         "eamodio.gitlens",
+        "pHofer94.vscode-taskviewexplorer",
         "redhat.vscode-yaml",
-        "spmeesseman.vscode-taskexplorer",
         "tamasfe.even-better-toml",
         "vsls-contrib.gitdoc"
       ],
