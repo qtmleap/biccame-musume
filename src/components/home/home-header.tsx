@@ -1,4 +1,6 @@
 import { motion } from 'motion/react'
+import { Suspense } from 'react'
+import { PageViewCounter } from '@/components/common/page-view-counter'
 
 /**
  * ホームページヘッダー
@@ -24,10 +26,19 @@ export const HomeHeader = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.8 }}
           transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
-          className='text-white/80 text-xs md:text-sm'
+          className='text-white/80 text-xs md:text-sm mb-4'
         >
           推し活を全力サポート - イベント追跡から店舗巡りまで
         </motion.p>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.5, ease: 'easeOut' }}
+        >
+          <Suspense fallback={<div className='text-white/60 text-xs'>読み込み中...</div>}>
+            <PageViewCounter className='text-white' />
+          </Suspense>
+        </motion.div>
       </div>
     </header>
   )
