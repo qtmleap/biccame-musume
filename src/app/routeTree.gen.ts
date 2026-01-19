@@ -106,17 +106,17 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/characters/$id': typeof CharactersIdRoute
   '/events/$eventId': typeof EventsEventIdRoute
-  '/about': typeof AboutIndexRoute
+  '/about/': typeof AboutIndexRoute
   '/admin/': typeof AdminIndexRoute
-  '/calendar': typeof CalendarIndexRoute
-  '/characters': typeof CharactersIndexRoute
-  '/contact': typeof ContactIndexRoute
-  '/events': typeof EventsIndexRoute
-  '/location': typeof LocationIndexRoute
-  '/ranking': typeof RankingIndexRoute
-  '/admin/events': typeof AdminEventsIndexRoute
-  '/admin/events/new': typeof AdminEventsNewIndexRoute
-  '/admin/events/$id/edit': typeof AdminEventsIdEditIndexRoute
+  '/calendar/': typeof CalendarIndexRoute
+  '/characters/': typeof CharactersIndexRoute
+  '/contact/': typeof ContactIndexRoute
+  '/events/': typeof EventsIndexRoute
+  '/location/': typeof LocationIndexRoute
+  '/ranking/': typeof RankingIndexRoute
+  '/admin/events/': typeof AdminEventsIndexRoute
+  '/admin/events/new/': typeof AdminEventsNewIndexRoute
+  '/admin/events/$id/edit/': typeof AdminEventsIdEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -159,17 +159,17 @@ export interface FileRouteTypes {
     | '/admin'
     | '/characters/$id'
     | '/events/$eventId'
-    | '/about'
+    | '/about/'
     | '/admin/'
-    | '/calendar'
-    | '/characters'
-    | '/contact'
-    | '/events'
-    | '/location'
-    | '/ranking'
-    | '/admin/events'
-    | '/admin/events/new'
-    | '/admin/events/$id/edit'
+    | '/calendar/'
+    | '/characters/'
+    | '/contact/'
+    | '/events/'
+    | '/location/'
+    | '/ranking/'
+    | '/admin/events/'
+    | '/admin/events/new/'
+    | '/admin/events/$id/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -238,42 +238,42 @@ declare module '@tanstack/react-router' {
     '/ranking/': {
       id: '/ranking/'
       path: '/ranking'
-      fullPath: '/ranking'
+      fullPath: '/ranking/'
       preLoaderRoute: typeof RankingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/location/': {
       id: '/location/'
       path: '/location'
-      fullPath: '/location'
+      fullPath: '/location/'
       preLoaderRoute: typeof LocationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events/': {
       id: '/events/'
       path: '/events'
-      fullPath: '/events'
+      fullPath: '/events/'
       preLoaderRoute: typeof EventsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact/': {
       id: '/contact/'
       path: '/contact'
-      fullPath: '/contact'
+      fullPath: '/contact/'
       preLoaderRoute: typeof ContactIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/characters/': {
       id: '/characters/'
       path: '/characters'
-      fullPath: '/characters'
+      fullPath: '/characters/'
       preLoaderRoute: typeof CharactersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendar/': {
       id: '/calendar/'
       path: '/calendar'
-      fullPath: '/calendar'
+      fullPath: '/calendar/'
       preLoaderRoute: typeof CalendarIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -287,7 +287,7 @@ declare module '@tanstack/react-router' {
     '/about/': {
       id: '/about/'
       path: '/about'
-      fullPath: '/about'
+      fullPath: '/about/'
       preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -308,21 +308,21 @@ declare module '@tanstack/react-router' {
     '/admin/events/': {
       id: '/admin/events/'
       path: '/events'
-      fullPath: '/admin/events'
+      fullPath: '/admin/events/'
       preLoaderRoute: typeof AdminEventsIndexRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/events/new/': {
       id: '/admin/events/new/'
       path: '/events/new'
-      fullPath: '/admin/events/new'
+      fullPath: '/admin/events/new/'
       preLoaderRoute: typeof AdminEventsNewIndexRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/events/$id/edit/': {
       id: '/admin/events/$id/edit/'
       path: '/events/$id/edit'
-      fullPath: '/admin/events/$id/edit'
+      fullPath: '/admin/events/$id/edit/'
       preLoaderRoute: typeof AdminEventsIdEditIndexRouteImport
       parentRoute: typeof AdminRoute
     }
