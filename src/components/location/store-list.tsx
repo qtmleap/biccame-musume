@@ -127,17 +127,14 @@ const StoreListMobileDrawer = ({
         <DrawerHeader className='py-2 px-4'>
           <DrawerTitle className='text-sm font-medium'>店舗一覧{mapCenter && '（近い順）'}</DrawerTitle>
         </DrawerHeader>
-        <div className='overflow-y-auto max-h-[60vh] custom-scrollbar'>
-          <div className='divide-y divide-gray-200 dark:divide-gray-700'>
-            {sortedCharactersWithDistance.map(({ character, distance }, index) => (
+        <div className='overflow-y-auto max-h-[60vh] custom-scrollbar px-2'>
+          <div className='grid grid-cols-2 [&>*:nth-child(4n+1)]:bg-gray-50 [&>*:nth-child(4n+2)]:bg-gray-50 [&>*:nth-child(odd)]:border-r [&>*:nth-child(odd)]:border-gray-200 dark:[&>*:nth-child(4n+1)]:bg-gray-800 dark:[&>*:nth-child(4n+2)]:bg-gray-800 dark:[&>*:nth-child(odd)]:border-gray-700'>
+            {sortedCharactersWithDistance.map(({ character, distance }) => (
               <button
                 key={character.id}
                 type='button'
                 onClick={() => onCharacterSelect(character)}
-                className={cn(
-                  'cursor-pointer w-full text-left px-4 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700',
-                  index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-gray-900'
-                )}
+                className='cursor-pointer w-full text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors'
               >
                 <StoreListItem character={character} distance={distance} />
               </button>
