@@ -1,4 +1,4 @@
-import { MapPin } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
@@ -12,7 +12,11 @@ type SelectedStoreInfoProps = {
  */
 export const SelectedStoreInfo = ({ character }: SelectedStoreInfoProps) => {
   return (
-    <div className='flex items-center gap-4'>
+    <Link
+      to='/characters/$id'
+      params={{ id: character.id }}
+      className='flex items-start gap-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors -m-2 p-2'
+    >
       {/* アバター */}
       <Avatar className='h-16 w-16 border-2 border-pink-400 shrink-0'>
         <AvatarImage src={character.character?.image_url} alt={character.character?.name || ''} />
@@ -29,17 +33,12 @@ export const SelectedStoreInfo = ({ character }: SelectedStoreInfoProps) => {
 
         {/* 住所情報 */}
         {character.store?.address && (
-          <div className='flex items-start gap-1.5 text-xs'>
-            <MapPin className='h-3 w-3 text-gray-500 dark:text-gray-400 mt-0.5 shrink-0' />
-            <div className='flex-1 min-w-0 space-y-0.5'>
-              {character.postal_code && (
-                <div className='text-gray-500 dark:text-gray-400'>〒{character.postal_code}</div>
-              )}
-              <div className='text-gray-700 dark:text-gray-300'>{character.store.address}</div>
-            </div>
+          <div className='text-xs space-y-0.5'>
+            {character.postal_code && <div className='text-gray-500 dark:text-gray-400'>〒{character.postal_code}</div>}
+            <div className='text-gray-700 dark:text-gray-300'>{character.store.address}</div>
           </div>
         )}
       </div>
-    </div>
+    </Link>
   )
 }
