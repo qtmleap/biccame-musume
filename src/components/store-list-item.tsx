@@ -41,9 +41,6 @@ export const StoreListItem = ({ character, distance }: StoreListItemProps) => {
             </span>
           </div>
         )}
-        {character.prefecture && (
-          <p className='text-xs text-gray-600 dark:text-gray-400 truncate mt-0.5'>{character.prefecture}</p>
-        )}
       </div>
     </div>
   )
