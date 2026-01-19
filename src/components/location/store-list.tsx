@@ -4,7 +4,6 @@ import { StoreListItem } from '@/components/store-list-item'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer'
 import { useMediaQuery } from '@/hooks/use-media-query'
-import { cn } from '@/lib/utils'
 import type { StoreData } from '@/schemas/store.dto'
 import { calculateDistance } from '@/utils/distance'
 
