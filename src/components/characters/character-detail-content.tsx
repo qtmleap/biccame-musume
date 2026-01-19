@@ -1,7 +1,7 @@
 import { Link, useRouter } from '@tanstack/react-router'
 
 import dayjs from 'dayjs'
-import { ArrowLeft, Calendar, Clock, MapPin, Phone, Store, Train } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock, ExternalLink, MapPin, Phone, Store, Train } from 'lucide-react'
 import { motion } from 'motion/react'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { NearbyCharactersList } from '@/components/characters/nearby-characters-list'
@@ -229,12 +229,25 @@ const CharacterProfileSection = ({ character }: CharacterProfileSectionProps) =>
             href={`https://twitter.com/${character.character.twitter_id}`}
             target='_blank'
             rel='noopener noreferrer'
-            className='text-gray-500 text-sm hover:underline hover:text-gray-700'
+            className='text-sky-600 text-sm hover:text-sky-800'
           >
             @{character.character.twitter_id}
           </a>
         )}
         <p className='text-sm text-gray-800 mt-3 leading-relaxed'>{character.character?.description}</p>
+
+        {/* 公式プロフィールリンク */}
+        {character.character?.is_biccame_musume && (
+          <a
+            href={`https://biccame.jp/profile/${character.id}.html`}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='inline-flex items-center gap-1 text-sm text-pink-600 hover:text-pink-800 hover:underline mt-3'
+          >
+            <ExternalLink className='h-3.5 w-3.5' />
+            公式プロフィール
+          </a>
+        )}
 
         {/* メタ情報 */}
         <div className='flex flex-wrap gap-4 mt-3 text-sm text-gray-500'>
