@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 import { STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
@@ -65,12 +66,41 @@ const StatusBadge = ({ event }: { event: Event }) => {
 }
 
 /**
+ * 終了間近のイベントの背景色を計算する
+ * 開催期間の進捗率に応じて色が変わる
+ * @returns 背景色のクラス名（終了間近でない場合はundefined）
+ */
+const getEndingSoonBackground = (event: Event): string | undefined => {
+  const currentTime = dayjs()
+  const startDate = dayjs(event.startDate)
+  const endDate = event.endDate ? dayjs(event.endDate) : null
+
+  // 終了日がない、または既に終了している場合は対象外
+  if (!endDate) return undefined
+  if (event.endedAt != null) return undefined
+  if (currentTime.isAfter(endDate)) return undefined
+  if (currentTime.isBefore(startDate)) return undefined
+
+  // 開催期間の進捗率を計算（0〜1）
+  const totalDuration = endDate.diff(startDate)
+  const elapsed = currentTime.diff(startDate)
+  const progress = elapsed / totalDuration
+
+  // 進捗率に応じた背景色
+  if (progress >= 0.95) return 'bg-red-100'
+  if (progress >= 0.85) return 'bg-red-50'
+  if (progress >= 0.7) return 'bg-orange-50'
+  return undefined
+}
+
+/**
  * イベントグリッドアイテム
  */
 export const EventGridItem = ({ event, index }: EventGridItemProps) => {
   const currentTime = dayjs()
   const endDate = event.endDate ? dayjs(event.endDate) : null
   const isEnded = event.endedAt != null || (endDate && currentTime.isAfter(endDate))
+  const endingSoonBg = getEndingSoonBackground(event)
 
   return (
     <motion.div
@@ -85,9 +115,10 @@ export const EventGridItem = ({ event, index }: EventGridItemProps) => {
       <Link
         to='/events/$eventId'
         params={{ eventId: event.id }}
-        className={`block border rounded-lg p-4 bg-white hover:border-[#e50012]/30 transition-colors h-full ${
-          isEnded ? 'opacity-50 grayscale' : ''
-        }`}
+        className={cn(
+          'block border rounded-lg p-4 hover:border-[#e50012]/30 transition-colors h-full',
+          isEnded ? 'opacity-50 grayscale bg-white' : endingSoonBg || 'bg-white'
+        )}
       >
         <div className='mb-2 flex items-start justify-between gap-3'>
           <div className='flex-1'>
