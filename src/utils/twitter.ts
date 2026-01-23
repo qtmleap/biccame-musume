@@ -147,6 +147,17 @@ export const tweetEventCreated = async (env: Bindings, event: Event): Promise<vo
 
   const text = generateTweetText(event, false)
 
+  const quoteTweetId: string | null = (event.referenceUrls ?? []).map((ref) => extractTweetId(ref.url)).at(-1) ?? null
+
+  // ローカル環境ではリクエスト内容をログ出力してスキップ
+  if (!env.ENVIRONMENT || env.ENVIRONMENT === 'local') {
+    console.log('[Twitter] Skipping tweet in local environment. Would have sent:', {
+      text,
+      quoteTweetId: quoteTweetId || undefined
+    })
+    return
+  }
+
   const client = new TwitterApi(
     env.TWITTER_API_KEY,
     env.TWITTER_API_SECRET,
@@ -155,11 +166,6 @@ export const tweetEventCreated = async (env: Bindings, event: Event): Promise<vo
   )
 
   try {
-    // 告知ツイートがあれば引用RT、なければ通常のツイート（複数ある場合は最後のものを使用）
-    const announceTweets = event.referenceUrls?.filter((ref) => ref.type === 'announce') || []
-    const announceTweet = announceTweets.at(-1)
-    const quoteTweetId = announceTweet ? extractTweetId(announceTweet.url) : null
-
     await client.tweet(text, quoteTweetId || undefined)
   } catch (error) {
     console.error('Failed to post tweet:', error)
@@ -179,6 +185,20 @@ export const tweetEventUpdated = async (env: Bindings, event: Event): Promise<vo
 
   const text = generateTweetText(event, true)
 
+  // 告知ツイートがあれば引用RT、なければ通常のツイート（複数ある場合は最後のものを使用）
+  const announceTweets = event.referenceUrls?.filter((ref) => ref.type === 'announce') || []
+  const announceTweet = announceTweets.at(-1)
+  const quoteTweetId = announceTweet ? extractTweetId(announceTweet.url) : null
+
+  // ローカル環境ではリクエスト内容をログ出力してスキップ
+  if (!env.ENVIRONMENT || env.ENVIRONMENT === 'local') {
+    console.log('[Twitter] Skipping tweet in local environment. Would have sent:', {
+      text,
+      quoteTweetId: quoteTweetId || undefined
+    })
+    return
+  }
+
   const client = new TwitterApi(
     env.TWITTER_API_KEY,
     env.TWITTER_API_SECRET,
@@ -187,11 +207,6 @@ export const tweetEventUpdated = async (env: Bindings, event: Event): Promise<vo
   )
 
   try {
-    // 告知ツイートがあれば引用RT、なければ通常のツイート（複数ある場合は最後のものを使用）
-    const announceTweets = event.referenceUrls?.filter((ref) => ref.type === 'announce') || []
-    const announceTweet = announceTweets.at(-1)
-    const quoteTweetId = announceTweet ? extractTweetId(announceTweet.url) : null
-
     await client.tweet(text, quoteTweetId || undefined)
   } catch (error) {
     console.error('Failed to post tweet:', error)
