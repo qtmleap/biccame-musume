@@ -136,24 +136,48 @@ class TwitterApi {
 }
 
 /**
- * イベント作成時にツイートを投稿
+ * Twitter認証情報が設定されているか確認
  */
-export const tweetEventCreated = async (env: Bindings, event: Event): Promise<void> => {
-  // 環境変数が設定されていない場合はスキップ
-  if (!env.TWITTER_API_KEY || !env.TWITTER_API_SECRET || !env.TWITTER_ACCESS_TOKEN || !env.TWITTER_ACCESS_SECRET) {
-    console.warn('Twitter API credentials not configured. Skipping tweet.')
+const hasTwitterCredentials = (env: Bindings): boolean => {
+  return !!(env.TWITTER_API_KEY && env.TWITTER_API_SECRET && env.TWITTER_ACCESS_TOKEN && env.TWITTER_ACCESS_SECRET)
+}
+
+/**
+ * ローカル環境かどうか判定
+ */
+const isLocalEnvironment = (env: Bindings): boolean => {
+  return !env.ENVIRONMENT || env.ENVIRONMENT === 'local'
+}
+
+/**
+ * イベントから引用RT用のツイートIDを抽出
+ */
+const getQuoteTweetId = (event: Event): string | undefined => {
+  const urls: string[] = event.referenceUrls?.map((ref) => ref.url) || []
+  const url: string | undefined = urls.at(-1)
+  if (url === undefined) {
+    return undefined
+  }
+  return extractTweetId(url) ?? undefined
+}
+
+/**
+ * ツイートを投稿する共通処理
+ */
+const postTweet = async (env: Bindings, event: Event, isUpdate: boolean): Promise<void> => {
+  if (!hasTwitterCredentials(env)) {
+    console.warn('[Twitter] API credentials not configured. Skipping tweet.')
     return
   }
 
-  const text = generateTweetText(event, false)
-
-  const quoteTweetId: string | null = (event.referenceUrls ?? []).map((ref) => extractTweetId(ref.url)).at(-1) ?? null
+  const text = generateTweetText(event, isUpdate)
+  const quoteTweetId = getQuoteTweetId(event)
 
   // ローカル環境ではリクエスト内容をログ出力してスキップ
-  if (!env.ENVIRONMENT || env.ENVIRONMENT === 'local') {
+  if (isLocalEnvironment(env)) {
     console.log('[Twitter] Skipping tweet in local environment. Would have sent:', {
       text,
-      quoteTweetId: quoteTweetId || undefined
+      quoteTweetId
     })
     return
   }
@@ -166,50 +190,23 @@ export const tweetEventCreated = async (env: Bindings, event: Event): Promise<vo
   )
 
   try {
-    await client.tweet(text, quoteTweetId || undefined)
+    await client.tweet(text, quoteTweetId)
   } catch (error) {
-    console.error('Failed to post tweet:', error)
+    console.error('[Twitter] Failed to post tweet:', error)
     throw error
   }
+}
+
+/**
+ * イベント作成時にツイートを投稿
+ */
+export const tweetEventCreated = async (env: Bindings, event: Event): Promise<void> => {
+  await postTweet(env, event, false)
 }
 
 /**
  * イベント更新時にツイートを投稿
  */
 export const tweetEventUpdated = async (env: Bindings, event: Event): Promise<void> => {
-  // 環境変数が設定されていない場合はスキップ
-  if (!env.TWITTER_API_KEY || !env.TWITTER_API_SECRET || !env.TWITTER_ACCESS_TOKEN || !env.TWITTER_ACCESS_SECRET) {
-    console.warn('Twitter API credentials not configured. Skipping tweet.')
-    return
-  }
-
-  const text = generateTweetText(event, true)
-
-  // 告知ツイートがあれば引用RT、なければ通常のツイート（複数ある場合は最後のものを使用）
-  const announceTweets = event.referenceUrls?.filter((ref) => ref.type === 'announce') || []
-  const announceTweet = announceTweets.at(-1)
-  const quoteTweetId = announceTweet ? extractTweetId(announceTweet.url) : null
-
-  // ローカル環境ではリクエスト内容をログ出力してスキップ
-  if (!env.ENVIRONMENT || env.ENVIRONMENT === 'local') {
-    console.log('[Twitter] Skipping tweet in local environment. Would have sent:', {
-      text,
-      quoteTweetId: quoteTweetId || undefined
-    })
-    return
-  }
-
-  const client = new TwitterApi(
-    env.TWITTER_API_KEY,
-    env.TWITTER_API_SECRET,
-    env.TWITTER_ACCESS_TOKEN,
-    env.TWITTER_ACCESS_SECRET
-  )
-
-  try {
-    await client.tweet(text, quoteTweetId || undefined)
-  } catch (error) {
-    console.error('Failed to post tweet:', error)
-    throw error
-  }
+  await postTweet(env, event, true)
 }
