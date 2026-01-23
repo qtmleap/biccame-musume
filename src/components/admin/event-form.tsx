@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import { AlertTriangle, Calendar, Coins, FileText, Gift, Link2, Package, Store, Users, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form'
+import { Controller, type DefaultValues, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -46,10 +46,29 @@ const EventFormSchema = z.object({
     )
     .min(1, '最低1つの条件を設定してください'),
   isVerified: z.boolean(),
-  isPreliminary: z.boolean()
+  isPreliminary: z.boolean(),
+  shouldTweet: z.boolean()
 })
 
 type EventFormValues = z.infer<typeof EventFormSchema>
+
+/**
+ * フォームのデフォルト値
+ */
+const EVENT_FORM_DEFAULT_VALUES: DefaultValues<EventFormValues> = {
+  category: undefined,
+  name: '',
+  referenceUrls: [],
+  stores: [],
+  limitedQuantity: undefined,
+  startDate: '',
+  endDate: null,
+  endedAt: null,
+  conditions: [],
+  isVerified: true,
+  isPreliminary: false,
+  shouldTweet: true
+}
 
 /**
  * イベントフォーム
@@ -79,6 +98,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
     resolver: zodResolver(EventFormSchema),
     defaultValues: event
       ? {
+          ...EVENT_FORM_DEFAULT_VALUES,
           category: event.category,
           name: event.name,
           referenceUrls: event.referenceUrls || [],
@@ -91,19 +111,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
           isVerified: event.isVerified ?? false,
           isPreliminary: event.isPreliminary ?? false
         }
-      : {
-          category: undefined,
-          name: '',
-          referenceUrls: [],
-          stores: [],
-          limitedQuantity: undefined,
-          startDate: '',
-          endDate: null,
-          endedAt: null,
-          conditions: [],
-          isVerified: true,
-          isPreliminary: false
-        }
+      : EVENT_FORM_DEFAULT_VALUES
   })
 
   const { fields, append, remove } = useFieldArray({
@@ -152,6 +160,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
   useEffect(() => {
     if (event) {
       reset({
+        ...EVENT_FORM_DEFAULT_VALUES,
         category: event.category,
         name: event.name,
         referenceUrls: event.referenceUrls || [],
@@ -191,13 +200,13 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
     const newCondition = {
       type,
       ...(type === 'purchase' ? { purchaseAmount: 3000 } : {}),
-      ...(type === 'first_come' || type === 'lottery' ? { quantity: 1 } : {})
+      ...(type === 'first_come' || type === 'lottery' ? { quantity: 100 } : {})
     }
     append(newCondition)
 
     // 先着・抽選の場合は限定数を自動入力
     if (type === 'first_come' || type === 'lottery') {
-      setValue('limitedQuantity', 1)
+      setValue('limitedQuantity', 100)
     }
   }
 
@@ -234,17 +243,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
    * フォームをリセット
    */
   const handleReset = () => {
-    reset({
-      category: undefined,
-      name: '',
-      referenceUrls: [],
-      stores: [],
-      limitedQuantity: undefined,
-      startDate: '',
-      endDate: null,
-      endedAt: null,
-      conditions: []
-    })
+    reset(EVENT_FORM_DEFAULT_VALUES)
   }
 
   /**
@@ -264,7 +263,8 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
       })),
       stores: data.stores && data.stores.length > 0 ? data.stores : [],
       isVerified: data.isVerified,
-      isPreliminary: data.isPreliminary
+      isPreliminary: data.isPreliminary,
+      shouldTweet: data.shouldTweet
     }
 
     // 終了日が空文字やundefined、nullでない場合のみ設定
@@ -676,8 +676,8 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
           </div>
         </div>
 
-        {/* 検証済み・未確定情報フラグ */}
-        <div className='grid grid-cols-2 gap-4 rounded-md bg-gray-50 p-3'>
+        {/* 検証済み・未確定情報・ツイート投稿フラグ */}
+        <div className='grid grid-cols-3 gap-4 rounded-md p-3'>
           <div className='flex items-center gap-2'>
             <Controller
               name='isVerified'
@@ -710,6 +710,23 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
             />
             <label htmlFor='is-preliminary' className='text-sm font-medium text-gray-700 cursor-pointer'>
               未確定情報
+            </label>
+          </div>
+          <div className='flex items-center gap-2'>
+            <Controller
+              name='shouldTweet'
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  id='should-tweet'
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className='data-[state=checked]:bg-sky-600 data-[state=checked]:border-sky-600'
+                />
+              )}
+            />
+            <label htmlFor='should-tweet' className='text-sm font-medium text-gray-700 cursor-pointer'>
+              保存時に投稿する
             </label>
           </div>
         </div>
