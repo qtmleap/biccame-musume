@@ -4,6 +4,8 @@ import type { RateLimitBinding } from '@elithrar/workers-hono-rate-limit'
  * Cloudflare Workersの環境変数の型定義
  */
 export type Bindings = {
+  /** 環境名 (prod, dev, local) */
+  ENVIRONMENT?: string
   /** 投票データと制限チェックを保存するKVストア */
   VOTE_LIMITER: KVNamespace
   /** ページビュー統計を保存するKVストア */
