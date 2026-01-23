@@ -99,6 +99,7 @@ const appContent = {
       [StoreKeySchema.enum.tenjin2]: '天神2号館',
       [StoreKeySchema.enum.tokorozawa]: '所沢駅店',
       [StoreKeySchema.enum.yao]: 'アリオ八尾店',
+      [StoreKeySchema.enum.yokonishi]: '横浜西口店',
       [StoreKeySchema.enum.yuurakuchou]: '有楽町店'
     },
     character_name: {
@@ -151,6 +152,7 @@ const appContent = {
       [StoreKeySchema.enum.tenjin2]: '天神2号たん',
       [StoreKeySchema.enum.tokorozawa]: '所沢たん',
       [StoreKeySchema.enum.yao]: '八尾たん',
+      [StoreKeySchema.enum.yokonishi]: '横西たん',
       [StoreKeySchema.enum.yuurakuchou]: '有楽町たん'
     }
   }
