@@ -677,7 +677,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
         </div>
 
         {/* 検証済み・未確定情報・ツイート投稿フラグ */}
-        <div className='grid grid-cols-3 gap-4 rounded-md p-3'>
+        <div className='grid grid-cols-2 gap-4 rounded-md p-3 sm:grid-cols-3'>
           <div className='flex items-center gap-2'>
             <Controller
               name='isVerified'
