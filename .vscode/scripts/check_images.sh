@@ -16,26 +16,26 @@ for KEY in "${KEYS[@]}"; do
   echo "======================================"
   echo "Checking key: $KEY"
   echo "======================================"
-  
+
   # すべての値を抽出してソート (空配列とbirthdayがnullのものは除外)
   VALUES=$(jq -r ".[] | select(.birthday != null) | .images.\"$KEY\" | .[]?" "$JSON_FILE" | sort -n)
-  
+
   if [ -z "$VALUES" ]; then
     echo "No values found for key $KEY"
     echo ""
     continue
   fi
-  
+
   # 配列に変換
   VALUE_ARRAY=($VALUES)
-  
+
   # 最小値と最大値を取得
   MIN=${VALUE_ARRAY[0]}
   MAX=${VALUE_ARRAY[-1]}
-  
+
   echo "Range: $MIN - $MAX"
   echo "Total values: ${#VALUE_ARRAY[@]}"
-  
+
   # 重複チェック
   echo ""
   echo "Duplicates:"
@@ -49,7 +49,7 @@ for KEY in "${KEYS[@]}"; do
       echo "  $DUP: $CHARS"
     done
   fi
-  
+
   # 抜けている番号をチェック
   echo ""
   echo "Missing numbers:"
@@ -59,13 +59,13 @@ for KEY in "${KEYS[@]}"; do
       MISSING+=($i)
     fi
   done
-  
+
   if [ ${#MISSING[@]} -eq 0 ]; then
     echo "  None"
   else
     echo "  ${MISSING[*]}"
   fi
-  
+
   # 空配列のキャラクターを表示 (birthdayがnullでないもののみ)
   echo ""
   echo "Characters with empty array (birthday not null):"
@@ -75,6 +75,6 @@ for KEY in "${KEYS[@]}"; do
   else
     echo "  $EMPTY_CHARS"
   fi
-  
+
   echo ""
 done
