@@ -102,8 +102,7 @@ routes.openapi(
   }),
   async (c) => {
     const body = c.req.valid('json')
-    // 管理者からの作成なので自動的にisVerified=trueを設定
-    return c.json(await createEvent(c.env, { ...body, isVerified: true }), 201)
+    return c.json(await createEvent(c.env, body), 201)
   }
 )
 
@@ -149,9 +148,7 @@ routes.openapi(
   async (c) => {
     const { id } = c.req.valid('param')
     const body = c.req.valid('json') as EventRequest
-    // 管理者からの更新なので自動的にisVerified=trueを設定
-    const eventData = { ...body, isVerified: true }
-    return c.json(await updateEvent(c.env, id, eventData), 200)
+    return c.json(await updateEvent(c.env, id, body), 200)
   }
 )
 
