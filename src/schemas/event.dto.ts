@@ -102,6 +102,9 @@ export const EventRequestSchema = EventSchema.omit({
   updatedAt: true,
   status: true,
   daysUntil: true
+}).extend({
+  // ツイート投稿フラグ（DBには保存しない）
+  shouldTweet: z.boolean().default(true).optional()
 })
 
 export type EventRequest = z.infer<typeof EventRequestSchema>

@@ -137,10 +137,12 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
   const transformedEvent = transform(event)
 
   // イベント作成をツイート（エラーがあっても処理は継続）
-  try {
-    await tweetEventCreated(env, transformedEvent)
-  } catch (error) {
-    console.error('Failed to tweet event creation:', error)
+  if (data.shouldTweet !== false) {
+    try {
+      await tweetEventCreated(env, transformedEvent)
+    } catch (error) {
+      console.error('Failed to tweet event creation:', error)
+    }
   }
 
   return transformedEvent
@@ -193,10 +195,12 @@ export const updateEvent = async (env: Bindings, id: string, data: EventRequest)
   const transformedEvent = transform(event)
 
   // イベント更新をツイート（エラーがあっても処理は継続）
-  try {
-    await tweetEventUpdated(env, transformedEvent)
-  } catch (error) {
-    console.error('Failed to tweet event update:', error)
+  if (data.shouldTweet !== false) {
+    try {
+      await tweetEventUpdated(env, transformedEvent)
+    } catch (error) {
+      console.error('Failed to tweet event update:', error)
+    }
   }
 
   return transformedEvent
