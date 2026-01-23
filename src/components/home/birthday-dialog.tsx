@@ -12,10 +12,14 @@ type BirthdayDialogProps = {
 
 /**
  * 誕生日画像のパスを取得
- * birth/{key}.webp が存在する場合はそれを返す
+ * birth/MMDD.webp 形式で返す（例: 0123.webp）
  */
 const getBirthdayImagePath = (characters: StoreData[]): string => {
-  const key = characters.map(c => c.id).sort().join('_')
+  if (characters.length === 0) return ''
+  const birthday = characters[0].character?.birthday
+  if (!birthday) return ''
+  const date = dayjs(birthday)
+  const key = date.format('MMDD')
   return `/birth/${key}.webp`
 }
 
