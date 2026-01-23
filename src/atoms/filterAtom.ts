@@ -22,7 +22,7 @@ export const prefectureToRegion: Record<string, Exclude<RegionType, 'all'>> = {
   千葉県: 'kanto',
   東京都: 'kanto',
   神奈川県: 'kanto',
-  新潟県: 'chubu',
+  新潟県: 'kanto',
   富山県: 'chubu',
   石川県: 'chubu',
   福井県: 'chubu',
