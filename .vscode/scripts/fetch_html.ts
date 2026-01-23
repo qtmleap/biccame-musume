@@ -57,15 +57,16 @@ const fetchHtml = async (
   cachePath: string,
   timeout = 10000,
   encoding: 'utf-8' | 'shift_jis' = 'utf-8',
-  useCookies = false
+  useCookies = false,
+  forceRefresh = false
 ): Promise<void> => {
   // キャッシュディレクトリがなければ作成
   if (!existsSync(CACHE_DIR)) {
     mkdirSync(CACHE_DIR, { recursive: true })
   }
 
-  // キャッシュがあればスキップ
-  if (existsSync(cachePath)) {
+  // キャッシュがあればスキップ (forceRefreshがtrueの場合は取得)
+  if (existsSync(cachePath) && !forceRefresh) {
     console.log(`✓ Already cached: ${cachePath}`)
     return
   }
@@ -137,7 +138,7 @@ const fetchHtml = async (
 const main = async () => {
   try {
     console.log('=== Fetching Profile Index ===')
-    await fetchHtml(PROFILE_URL, PROFILE_CACHE_PATH)
+    await fetchHtml(PROFILE_URL, PROFILE_CACHE_PATH, 10000, 'utf-8', false, true)
 
     console.log('\n=== Extracting Detail URLs ===')
     const html = readFileSync(PROFILE_CACHE_PATH, 'utf-8')

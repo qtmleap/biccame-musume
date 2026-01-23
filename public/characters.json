@@ -2372,6 +2372,61 @@
     }
   },
   {
+    "id": "yokonishi",
+    "character": {
+      "name": "横西たん",
+      "description": "ビックカメラ横浜西口店の擬人化キャラクター。横浜市の花・バラと、マリンカラーな帽子とリボンが特徴。アイドルに憧れていて、いつかアリーナに立つことを夢見ている。",
+      "twitter_id": "bicyokonishi",
+      "images": [
+        "images/yokonishi2.png",
+        "images/yokonishi3.png",
+        "images/yokonishi4.png",
+        "images/yokonishi5.png",
+        "images/yokonishi4.png",
+        "images/yokonishi5.png"
+      ],
+      "is_biccame_musume": true,
+      "birthday": "2026-01-23"
+    },
+    "prefecture": "神奈川県",
+    "coordinates": {
+      "latitude": 35.464644464274016,
+      "longitude": 139.618873483118
+    },
+    "postal_code": "220-0005",
+    "store": {
+      "store_id": 5,
+      "name": "ビックカメラ横浜西口店",
+      "address": "神奈川県横浜市西区南幸2-1-29",
+      "phone": "045-320-0002",
+      "birthday": "1991-04-23",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "横浜駅",
+          "description": "みなみ西口・西口・5番出口",
+          "lines": [
+            "JR東海道本線",
+            "横須賀線",
+            "京浜東北線",
+            "根岸線",
+            "横浜線",
+            "相模鉄道",
+            "京急電鉄",
+            "横浜市営地下鉄ブルーライン"
+          ]
+        }
+      ]
+    }
+  },
+  {
     "id": "yuurakuchou",
     "character": {
       "name": "有楽町たん",
