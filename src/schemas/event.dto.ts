@@ -4,7 +4,7 @@ import { StoreKeySchema } from './store.dto'
 /**
  * イベントステータス
  */
-export const EventStatusSchema = z.enum(['upcoming', 'ongoing', 'ended'])
+export const EventStatusSchema = z.enum(['upcoming', 'ongoing', 'last_day', 'ended'])
 
 export type EventStatus = z.infer<typeof EventStatusSchema>
 

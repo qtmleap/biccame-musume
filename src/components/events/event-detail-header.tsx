@@ -3,7 +3,7 @@ import { ArrowLeft, Pencil } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
+import { EVENT_CATEGORY_LABELS, EVENT_STATUS_LABELS } from '@/locales/app.content'
 import type { Event, EventCategory, EventStatus } from '@/schemas/event.dto'
 
 type EventDetailHeaderProps = {
@@ -34,11 +34,15 @@ const getCategoryStyle = (category: EventCategory) => {
 const getStatusBadge = (status: EventStatus) => {
   switch (status) {
     case 'ongoing':
-      return <Badge className='bg-green-100 text-green-700 border-green-300 border'>開催中</Badge>
+      return (
+        <Badge className='bg-green-100 text-green-700 border-green-300 border'>{EVENT_STATUS_LABELS[status]}</Badge>
+      )
+    case 'last_day':
+      return <Badge className='bg-red-100 text-red-700 border-red-300 border'>{EVENT_STATUS_LABELS[status]}</Badge>
     case 'ended':
-      return <Badge className='bg-gray-100 text-gray-700 border-gray-300 border'>終了</Badge>
+      return <Badge className='bg-gray-100 text-gray-700 border-gray-300 border'>{EVENT_STATUS_LABELS[status]}</Badge>
     case 'upcoming':
-      return <Badge className='bg-blue-100 text-blue-700 border-blue-300 border'>開催前</Badge>
+      return <Badge className='bg-blue-100 text-blue-700 border-blue-300 border'>{EVENT_STATUS_LABELS[status]}</Badge>
   }
 }
 

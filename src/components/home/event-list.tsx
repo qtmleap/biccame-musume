@@ -24,8 +24,8 @@ export const EventList = () => {
       const currentTime = dayjs()
       const startDate = dayjs(event.startDate)
 
-      // 開催中のイベント
-      if (event.status === 'ongoing') {
+      // 開催中のイベント（最終日も含む）
+      if (event.status === 'ongoing' || event.status === 'last_day') {
         return true
       }
 
