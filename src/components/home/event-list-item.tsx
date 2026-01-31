@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { Calendar, CreditCard, Gift, KeyRound, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
-import { STORE_NAME_LABELS } from '@/locales/app.content'
+import { EVENT_STATUS_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event, EventCategory, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -44,8 +44,9 @@ const getCategoryStyle = (category: EventCategory | undefined) => {
  * 日数に応じたラベルを返す
  */
 const getDaysLabel = (days: number, status: EventStatus) => {
-  if (status === 'ended') return '終了'
-  if (status === 'ongoing') return '開催中'
+  if (status === 'ended') return EVENT_STATUS_LABELS.ended
+  if (status === 'last_day') return EVENT_STATUS_LABELS.last_day
+  if (status === 'ongoing') return EVENT_STATUS_LABELS.ongoing
   if (status === 'upcoming') {
     if (days <= 0) return '本日開始'
     if (days === 1) return '明日'
@@ -92,13 +93,15 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
             className={`shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
               status === 'ended'
                 ? 'bg-gray-400 text-white'
-                : status === 'ongoing'
-                  ? 'bg-[#e50012] text-white'
-                  : daysUntil === 0
+                : status === 'last_day'
+                  ? 'bg-orange-500 text-white'
+                  : status === 'ongoing'
                     ? 'bg-[#e50012] text-white'
-                    : daysUntil <= 7
-                      ? 'bg-orange-100 text-orange-600'
-                      : 'bg-gray-100 text-gray-600'
+                    : daysUntil === 0
+                      ? 'bg-[#e50012] text-white'
+                      : daysUntil <= 7
+                        ? 'bg-orange-100 text-orange-600'
+                        : 'bg-gray-100 text-gray-600'
             }`}
           >
             {getDaysLabel(daysUntil, status)}

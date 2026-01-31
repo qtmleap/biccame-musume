@@ -91,8 +91,9 @@ const EventsContent = () => {
           return 'ongoing'
         })()
 
-        // ステータスフィルタを適用
-        if (!statusFilter[status]) return false
+        // ステータスフィルタを適用（last_dayはongoingとして扱う）
+        const filterStatus = event.status === 'last_day' ? 'ongoing' : status
+        if (!statusFilter[filterStatus]) return false
 
         // 終了後1週間経過したイベントは非表示
         if (endDate?.add(7, 'day').isBefore(currentTime)) {

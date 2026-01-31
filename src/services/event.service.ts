@@ -37,8 +37,13 @@ const calculateEventStatus = (event: {
   }
 
   // 終了日が設定されていて、終了日を過ぎている場合
-  if (endDate && now.isAfter(endDate)) {
+  if (endDate && now.isAfter(endDate, 'day')) {
     return { status: EventStatusSchema.enum.ended, daysUntil: 0 }
+  }
+
+  // 終了日当日は最終日
+  if (endDate && now.isSame(endDate, 'day')) {
+    return { status: EventStatusSchema.enum.last_day, daysUntil: 0 }
   }
 
   // 開催中

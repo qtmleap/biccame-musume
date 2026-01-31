@@ -22,7 +22,7 @@ import {
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
-import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import { EVENT_CATEGORY_LABELS, EVENT_STATUS_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -30,31 +30,27 @@ import type { StoreKey } from '@/schemas/store.dto'
  * ステータスに応じたBadgeを返す
  */
 const StatusBadge = ({ campaign }: { campaign: Event }) => {
-  // ガントチャートと同様に、endDateも考慮したstatus計算
-  const currentTime = dayjs()
-  const endDate = campaign.endDate ? dayjs(campaign.endDate) : null
-  const status = (() => {
-    if (campaign.endedAt != null) return 'ended'
-    if (endDate && currentTime.isAfter(endDate)) return 'ended'
-    if (currentTime.isBefore(dayjs(campaign.startDate))) return 'upcoming'
-    return 'ongoing'
-  })()
-
-  switch (status) {
+  switch (campaign.status) {
     case 'upcoming':
       return (
         <Badge variant='outline' className='border-blue-600 bg-blue-50 text-blue-700'>
-          開催前
+          {EVENT_STATUS_LABELS.upcoming}
         </Badge>
       )
     case 'ongoing':
       return (
         <Badge variant='outline' className='border-green-600 bg-green-50 text-green-700'>
-          開催中
+          {EVENT_STATUS_LABELS.ongoing}
+        </Badge>
+      )
+    case 'last_day':
+      return (
+        <Badge variant='outline' className='border-orange-600 bg-orange-50 text-orange-700'>
+          {EVENT_STATUS_LABELS.last_day}
         </Badge>
       )
     case 'ended':
-      return <Badge variant='secondary'>終了</Badge>
+      return <Badge variant='secondary'>{EVENT_STATUS_LABELS.ended}</Badge>
   }
 }
 

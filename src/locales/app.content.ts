@@ -15,8 +15,9 @@ const appContent = {
   key: 'app',
   content: {
     status: {
-      [EventStatusSchema.enum.upcoming]: '開催予定',
+      [EventStatusSchema.enum.upcoming]: '開催前',
       [EventStatusSchema.enum.ongoing]: '開催中',
+      [EventStatusSchema.enum.last_day]: '最終日',
       [EventStatusSchema.enum.ended]: '終了'
     },
     category: {

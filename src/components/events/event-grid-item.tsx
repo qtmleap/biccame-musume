@@ -4,7 +4,7 @@ import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { STORE_NAME_LABELS } from '@/locales/app.content'
+import { EVENT_STATUS_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -34,32 +34,29 @@ const _getCategoryColor = (category: Event['category']) => {
  * ステータスに応じたBadgeを返す
  */
 const StatusBadge = ({ event }: { event: Event }) => {
-  const currentTime = dayjs()
-  const endDate = event.endDate ? dayjs(event.endDate) : null
-  const status = (() => {
-    if (event.endedAt != null) return 'ended'
-    if (endDate && currentTime.isAfter(endDate)) return 'ended'
-    if (currentTime.isBefore(dayjs(event.startDate))) return 'upcoming'
-    return 'ongoing'
-  })()
-
-  switch (status) {
+  switch (event.status) {
     case 'upcoming':
       return (
         <Badge variant='outline' className='border-blue-600 bg-blue-50 text-blue-700 text-xs'>
-          開催前
+          {EVENT_STATUS_LABELS.upcoming}
         </Badge>
       )
     case 'ongoing':
       return (
         <Badge variant='outline' className='border-green-600 bg-green-50 text-green-700 text-xs'>
-          開催中
+          {EVENT_STATUS_LABELS.ongoing}
+        </Badge>
+      )
+    case 'last_day':
+      return (
+        <Badge variant='outline' className='border-red-600 bg-red-50 text-red-700 text-xs'>
+          {EVENT_STATUS_LABELS.last_day}
         </Badge>
       )
     case 'ended':
       return (
         <Badge variant='secondary' className='text-xs'>
-          終了
+          {EVENT_STATUS_LABELS.ended}
         </Badge>
       )
   }
@@ -97,9 +94,7 @@ const getEndingSoonBackground = (event: Event): string | undefined => {
  * イベントグリッドアイテム
  */
 export const EventGridItem = ({ event, index }: EventGridItemProps) => {
-  const currentTime = dayjs()
-  const endDate = event.endDate ? dayjs(event.endDate) : null
-  const isEnded = event.endedAt != null || (endDate && currentTime.isAfter(endDate))
+  const isEnded = event.status === 'ended'
   const endingSoonBg = getEndingSoonBackground(event)
 
   return (
