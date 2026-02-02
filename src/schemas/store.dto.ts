@@ -32,6 +32,7 @@ export const StoreKeySchema = z.enum([
   'kagoshima',
   'kashiwa',
   'kawasaki',
+  'kumamoto',
   'kyoto',
   'machida',
   'mito',
