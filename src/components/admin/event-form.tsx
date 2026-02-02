@@ -12,15 +12,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useCharacters } from '@/hooks/useCharacters'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
 import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import { type Event, EventCategorySchema, EventConditionTypeSchema, ReferenceUrlTypeSchema } from '@/schemas/event.dto'
+import { type Event, EventCategorySchema, type EventRequest, ReferenceUrlTypeSchema } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 /**
- * フォームのスキーマ定義
+ * フォームのスキーマ定義（日付をstring型で扱う）
  */
 const EventFormSchema = z.object({
   category: EventCategorySchema,
   name: z.string().min(1, 'イベント名は必須です'),
+  stores: z.array(z.string()).min(1, '最低1つの店舗を選択してください'),
+  startDate: z.string().min(1, '開始日は必須です'),
+  endDate: z.string().nullable().optional(),
+  endedAt: z.string().nullable().optional(),
+  limitedQuantity: z.number().min(1).optional(),
   referenceUrls: z
     .array(
       z.object({
@@ -30,16 +35,11 @@ const EventFormSchema = z.object({
       })
     )
     .optional(),
-  stores: z.array(z.string()).optional(),
-  limitedQuantity: z.number().min(1).optional(),
-  startDate: z.string().min(1, '開始日は必須です'),
-  endDate: z.string().nullable().optional(),
-  endedAt: z.string().nullable().optional(),
   conditions: z
     .array(
       z.object({
         id: z.string().optional(),
-        type: EventConditionTypeSchema,
+        type: z.enum(['purchase', 'first_come', 'lottery', 'everyone']),
         purchaseAmount: z.number().min(0).optional(),
         quantity: z.number().min(1).optional()
       })
@@ -73,7 +73,15 @@ const EVENT_FORM_DEFAULT_VALUES: DefaultValues<EventFormValues> = {
 /**
  * イベントフォーム
  */
-export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () => void }) => {
+export const EventForm = ({
+  event,
+  onSuccess,
+  defaultValues
+}: {
+  event?: Event
+  onSuccess?: () => void
+  defaultValues?: Partial<EventRequest>
+}) => {
   const createEvent = useCreateEvent()
   const updateEvent = useUpdateEvent()
   const { data: characters } = useCharacters()
@@ -81,10 +89,48 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
   // URL重複チェック結果を保持
   const [duplicateWarnings, setDuplicateWarnings] = useState<Record<number, Event | null>>({})
 
+  // 確認画面の表示状態
+  const [isConfirming, setIsConfirming] = useState(false)
+  const [confirmedData, setConfirmedData] = useState<EventFormValues | null>(null)
+
   // 住所がある店舗のみフィルタリングしてユニークリストを取得（キーのリスト）
   const storeKeys = Array.from(
     new Set(characters.filter((c) => c.store?.address && c.store.address.trim() !== '').map((c) => c.id))
   ).sort()
+
+  // クエリパラメータとイベントデータを統合したデフォルト値を生成
+  const getInitialValues = (): DefaultValues<EventFormValues> => {
+    if (event) {
+      return {
+        ...EVENT_FORM_DEFAULT_VALUES,
+        category: event.category,
+        name: event.name,
+        referenceUrls: event.referenceUrls || [],
+        stores: event.stores || [],
+        limitedQuantity: event.limitedQuantity,
+        startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
+        endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : null,
+        endedAt: event.endedAt ? dayjs(event.endedAt).format('YYYY-MM-DD') : null,
+        conditions: event.conditions,
+        isVerified: event.isVerified ?? false,
+        isPreliminary: event.isPreliminary ?? false
+      }
+    }
+
+    // クエリパラメータからのデフォルト値を適用
+    if (defaultValues) {
+      return {
+        ...EVENT_FORM_DEFAULT_VALUES,
+        ...defaultValues,
+        // 日付はDate型からstring型に変換
+        startDate: defaultValues.startDate ? dayjs(defaultValues.startDate).format('YYYY-MM-DD') : '',
+        endDate: defaultValues.endDate ? dayjs(defaultValues.endDate).format('YYYY-MM-DD') : null,
+        endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : null
+      }
+    }
+
+    return EVENT_FORM_DEFAULT_VALUES
+  }
 
   const {
     register,
@@ -96,22 +142,7 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
     formState: { errors, isSubmitting }
   } = useForm<EventFormValues>({
     resolver: zodResolver(EventFormSchema),
-    defaultValues: event
-      ? {
-          ...EVENT_FORM_DEFAULT_VALUES,
-          category: event.category,
-          name: event.name,
-          referenceUrls: event.referenceUrls || [],
-          stores: event.stores || [],
-          limitedQuantity: event.limitedQuantity,
-          startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
-          endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : null,
-          endedAt: event.endedAt ? dayjs(event.endedAt).format('YYYY-MM-DD') : null,
-          conditions: event.conditions,
-          isVerified: event.isVerified ?? false,
-          isPreliminary: event.isPreliminary ?? false
-        }
-      : EVENT_FORM_DEFAULT_VALUES
+    defaultValues: getInitialValues()
   })
 
   const { fields, append, remove } = useFieldArray({
@@ -244,42 +275,61 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
    */
   const handleReset = () => {
     reset(EVENT_FORM_DEFAULT_VALUES)
+    setIsConfirming(false)
+    setConfirmedData(null)
+  }
+
+  /**
+   * 確認画面へ進む
+   */
+  const handleConfirm = (data: EventFormValues) => {
+    setConfirmedData(data)
+    setIsConfirming(true)
+  }
+
+  /**
+   * 入力画面に戻る
+   */
+  const handleBack = () => {
+    setIsConfirming(false)
   }
 
   /**
    * キャンペーンを保存
    */
-  const onSubmit = async (data: EventFormValues) => {
+  const onSubmit = async () => {
+    if (!confirmedData) return
+
     // biome-ignore lint/suspicious/noExplicitAny: 動的にプロパティを追加するため
     const payload: any = {
-      category: data.category,
-      name: data.name,
-      startDate: dayjs(data.startDate).toISOString(),
-      conditions: data.conditions.map((c) => ({
+      category: confirmedData.category,
+      name: confirmedData.name,
+      startDate: dayjs(confirmedData.startDate).toISOString(),
+      conditions: confirmedData.conditions.map((c) => ({
         id: c.id || crypto.randomUUID(),
         type: c.type,
         purchaseAmount: c.purchaseAmount,
         quantity: c.quantity
       })),
-      stores: data.stores && data.stores.length > 0 ? data.stores : [],
-      isVerified: data.isVerified,
-      isPreliminary: data.isPreliminary,
-      shouldTweet: data.shouldTweet
+      stores: confirmedData.stores && confirmedData.stores.length > 0 ? confirmedData.stores : [],
+      isVerified: confirmedData.isVerified,
+      isPreliminary: confirmedData.isPreliminary,
+      shouldTweet: confirmedData.shouldTweet
     }
 
     // 終了日が空文字やundefined、nullでない場合のみ設定
-    if (data.endDate && data.endDate.trim() !== '') {
-      payload.endDate = dayjs(data.endDate).toISOString()
+    if (confirmedData.endDate && confirmedData.endDate.trim() !== '') {
+      payload.endDate = dayjs(confirmedData.endDate).toISOString()
     }
 
     // 実際の終了日が空文字やundefined、nullでない場合のみ設定
-    if (data.endedAt && data.endedAt.trim() !== '') {
-      payload.endedAt = dayjs(data.endedAt).toISOString()
+    if (confirmedData.endedAt && confirmedData.endedAt.trim() !== '') {
+      payload.endedAt = dayjs(confirmedData.endedAt).toISOString()
     }
 
     // 参照URLが設定されている場合のみ追加
-    if (data.referenceUrls && data.referenceUrls.length > 0) {
-      payload.referenceUrls = data.referenceUrls.map((r) => ({
+    if (confirmedData.referenceUrls && confirmedData.referenceUrls.length > 0) {
+      payload.referenceUrls = confirmedData.referenceUrls.map((r) => ({
         id: r.id || crypto.randomUUID(),
         type: r.type,
         url: r.url
@@ -287,8 +337,8 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
     }
 
     // 限定数量が設定されている場合のみ追加
-    if (data.limitedQuantity) {
-      payload.limitedQuantity = data.limitedQuantity
+    if (confirmedData.limitedQuantity) {
+      payload.limitedQuantity = confirmedData.limitedQuantity
     }
 
     if (event) {
@@ -303,9 +353,118 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
     onSuccess?.()
   }
 
+  // 確認画面の表示
+  if (isConfirming && confirmedData) {
+    return (
+      <div className='space-y-6'>
+        <div className='rounded-lg border border-amber-200 bg-amber-50 p-4'>
+          <h3 className='mb-4 flex items-center gap-2 text-lg font-semibold text-amber-900'>
+            <AlertTriangle className='size-5' />
+            登録内容の確認
+          </h3>
+          <div className='space-y-4'>
+            {/* イベント種別 */}
+            <div>
+              <div className='text-xs font-medium text-gray-500'>イベント種別</div>
+              <div className='mt-1 text-sm'>{EVENT_CATEGORY_LABELS[confirmedData.category]}</div>
+            </div>
+
+            {/* イベント名 */}
+            <div>
+              <div className='text-xs font-medium text-gray-500'>イベント名</div>
+              <div className='mt-1 text-sm font-medium'>{confirmedData.name}</div>
+            </div>
+
+            {/* 開催期間 */}
+            <div>
+              <div className='text-xs font-medium text-gray-500'>開催期間</div>
+              <div className='mt-1 text-sm'>
+                {dayjs(confirmedData.startDate).format('YYYY/MM/DD')}
+                {confirmedData.endDate && ` 〜 ${dayjs(confirmedData.endDate).format('YYYY/MM/DD')}`}
+              </div>
+            </div>
+
+            {/* 店舗 */}
+            {confirmedData.stores && confirmedData.stores.length > 0 && (
+              <div>
+                <div className='text-xs font-medium text-gray-500'>開催店舗</div>
+                <div className='mt-1 flex flex-wrap gap-1'>
+                  {confirmedData.stores.map((storeKey) => (
+                    <Badge key={storeKey} variant='outline' className='text-xs'>
+                      {STORE_NAME_LABELS[storeKey as StoreKey]}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 配布条件 */}
+            <div>
+              <div className='text-xs font-medium text-gray-500'>配布条件</div>
+              <div className='mt-1 space-y-1'>
+                {confirmedData.conditions.map((condition, index) => (
+                  <div key={index} className='text-sm'>
+                    {condition.type === 'purchase' && `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
+                    {condition.type === 'first_come' && `先着${condition.quantity}名`}
+                    {condition.type === 'lottery' && `抽選${condition.quantity}名`}
+                    {condition.type === 'everyone' && '全員配布'}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 参考URL */}
+            {confirmedData.referenceUrls && confirmedData.referenceUrls.length > 0 && (
+              <div>
+                <div className='text-xs font-medium text-gray-500'>参考URL</div>
+                <div className='mt-1 space-y-1'>
+                  {confirmedData.referenceUrls.map((ref, index) => (
+                    <div key={index} className='text-xs'>
+                      <span className='font-medium'>{REFERENCE_URL_TYPE_LABELS[ref.type]}:</span>
+                      <a
+                        href={ref.url}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='ml-1 text-blue-600 hover:underline'
+                      >
+                        {ref.url}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* フラグ */}
+            <div className='flex flex-wrap gap-2'>
+              {confirmedData.isVerified && <Badge className='bg-blue-600'>検証済み</Badge>}
+              {confirmedData.isPreliminary && <Badge className='bg-amber-600'>未確定情報</Badge>}
+              {confirmedData.shouldTweet && <Badge className='bg-sky-600'>投稿する</Badge>}
+            </div>
+          </div>
+        </div>
+
+        {/* ボタン */}
+        <div className='flex gap-2'>
+          <Button type='button' onClick={handleBack} variant='outline' className='flex-1' disabled={isSubmitting}>
+            修正する
+          </Button>
+          <Button
+            type='button'
+            onClick={onSubmit}
+            className='flex-1 bg-[#e50012] hover:bg-[#c5000f]'
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? '登録中...' : '登録する'}
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} className='space-y-3'>
+      <form onSubmit={handleSubmit(handleConfirm)} className='space-y-3'>
         {/* イベント名 */}
         <div>
           <label htmlFor='event-name' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
@@ -733,8 +892,8 @@ export const EventForm = ({ event, onSuccess }: { event?: Event; onSuccess?: () 
 
         {/* ボタン */}
         <div className='flex gap-2'>
-          <Button type='submit' className='flex-1 bg-[#e50012] hover:bg-[#c5000f]' disabled={isSubmitting}>
-            {isSubmitting ? '登録中...' : '登録'}
+          <Button type='submit' className='flex-1 bg-[#e50012] hover:bg-[#c5000f]'>
+            確認する
           </Button>
           <Button type='button' variant='outline' onClick={handleReset} className='flex-1'>
             クリア
