@@ -1000,6 +1000,57 @@
     }
   },
   {
+    "id": "kumamoto",
+    "character": {
+      "name": "くまもとたん",
+      "description": "ビックカメラアミュプラザくまもと店の擬人化キャラクター。胸の花は肥後椿。くまさんのようなお団子ヘアには、熊本名産のスイカとトマトのヘアピンがついている。アマビエをイメージした鱗のような模様が服の色んなところにある。実は靴の裏には馬の蹄鉄がついている。温泉に入るのが好き。",
+      "twitter_id": "bic_kumamoto",
+      "images": [
+        "images/kumamoto2.png",
+        "images/kumamoto3.png",
+        "images/kumamoto4.png",
+        "images/kumamoto5.png",
+        "images/kumamoto4.png",
+        "images/kumamoto5.png"
+      ],
+      "is_biccame_musume": true,
+      "birthday": "2026-02-02"
+    },
+    "prefecture": "熊本県",
+    "coordinates": {
+      "latitude": 32.789589828589705,
+      "longitude": 130.67838534384688
+    },
+    "postal_code": "860-0047",
+    "store": {
+      "store_id": 129,
+      "name": "ビックカメラアミュプラザくまもと店",
+      "address": "熊本県熊本市西区春日3-15-60 JR熊本白川ビル",
+      "phone": "096-353-1111",
+      "birthday": "2021-03-05",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "20:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "熊本駅",
+          "description": "白川口",
+          "lines": [
+            "鹿児島本線",
+            "豊肥本線",
+            "三角線",
+            "九州新幹線"
+          ]
+        }
+      ]
+    }
+  },
+  {
     "id": "kyoto",
     "character": {
       "name": "京都たん",
