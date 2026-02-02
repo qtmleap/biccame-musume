@@ -90,6 +90,35 @@ VS Codeでプロジェクトを開き、`Cmd/Ctrl + Shift + P`でコマンドパ
 bun dev
 ```
 
+#### イベント作成フォームのテスト
+
+クエリパラメータでデフォルト値を指定してイベント作成ページを開けます。
+
+```
+# 基本的な例
+http://localhost:5173/admin/events/new/?category=ackey&name=新春キャンペーン&startDate=2026-02-10
+
+# 店舗を指定
+http://localhost:5173/admin/events/new/?category=ackey&name=池袋限定配布&stores=honten&startDate=2026-02-10
+
+# 複数店舗を指定（カンマ区切り）
+http://localhost:5173/admin/events/new/?category=limited_card&name=都内3店舗イベント&stores=yuurakuchou,shinjyuku,shibuto&startDate=2026-02-14
+
+# 告知URLを指定
+http://localhost:5173/admin/events/new/?category=ackey&name=新春キャンペーン&startDate=2026-02-10&referenceUrls=https://twitter.com/biccameraE/status/123456
+
+# 全パラメータ指定
+http://localhost:5173/admin/events/new/?category=limited_card&name=バレンタインイベント&stores=honten&startDate=2026-02-14&endDate=2026-02-28&referenceUrls=https://twitter.com/biccameraE/status/123456
+```
+
+**利用可能なパラメータ:**
+- `category`: イベント種別 (`limited_card` | `regular_card` | `ackey` | `other`)
+- `name`: イベント名（文字列）
+- `stores`: 店舗ID（カンマ区切りで複数指定可能。例: `honten,yuurakuchou,shinjyuku,shibuto,akiba` など）
+- `startDate`: 開始日（YYYY-MM-DD形式）
+- `endDate`: 終了日（YYYY-MM-DD形式）
+- `referenceUrls`: 告知URL（告知タイプとして登録されます）
+
 #### ビルド
 
 ```zsh

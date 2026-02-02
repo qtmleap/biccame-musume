@@ -1,15 +1,46 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
+import { z } from 'zod'
 import { EventForm } from '@/components/admin/event-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
+import { EventRequestSchema } from '@/schemas/event.dto'
+import { StoreKeySchema } from '@/schemas/store.dto'
+
+/**
+ * クエリパラメータのスキーマ定義
+ * EventRequestSchemaの一部フィールドを文字列として受け取る
+ */
+const EventNewSearchSchema = z.object({
+  category: EventRequestSchema.shape.category.optional(),
+  name: z.string().optional(),
+  stores: z
+    .string()
+    .transform((val) => val.split(',').map((s) => s.trim()))
+    .pipe(z.array(StoreKeySchema))
+    .optional(),
+  referenceUrls: z
+    .string()
+    .url()
+    .transform((val) => [
+      {
+        id: crypto.randomUUID(),
+        type: 'announce' as const,
+        url: val
+      }
+    ])
+    .optional(),
+  startDate: EventRequestSchema.shape.startDate.optional(),
+  endDate: EventRequestSchema.shape.endDate.optional()
+})
 
 /**
  * イベント新規作成画面のコンテンツ
  */
 const NewEventContent = () => {
   const router = useRouter()
+  const search = useSearch({ from: '/admin/events/new/' })
 
   const handleSuccess = () => {
     router.history.back()
@@ -34,7 +65,7 @@ const NewEventContent = () => {
 
       {/* イベント登録フォーム */}
       <div>
-        <EventForm onSuccess={handleSuccess} />
+        <EventForm onSuccess={handleSuccess} defaultValues={search} />
       </div>
     </div>
   )
@@ -52,5 +83,6 @@ const NewEventPage = () => {
 }
 
 export const Route = createFileRoute('/admin/events/new/')({
-  component: NewEventPage
+  component: NewEventPage,
+  validateSearch: EventNewSearchSchema
 })
