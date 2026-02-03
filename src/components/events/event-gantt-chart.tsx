@@ -2,40 +2,12 @@ import { Link } from '@tanstack/react-router'
 import dayjs, { type Dayjs } from 'dayjs'
 import { ExternalLink } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { GanttDateHeader, GanttGridCell, GanttMonthSelector } from '@/components/events/gantt-chart-parts'
+import { getCategoryColor, hideScrollbarStyle } from '@/components/events/gantt-chart-utils'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { cn } from '@/lib/utils'
 import appContent from '@/locales/app.content'
 import type { Event, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
-
-/**
- * スクロールバーを非表示にするスタイル（Chrome/Safari用）
- */
-const hideScrollbarStyle = `
-  .gantt-scroll-container::-webkit-scrollbar {
-    display: none;
-  }
-`
-
-/**
- * カテゴリに応じた色を返す
- */
-const getCategoryColor = (category: Event['category'], status: EventStatus) => {
-  if (status === 'ended') {
-    return 'bg-gray-400 opacity-60'
-  }
-  switch (category) {
-    case 'limited_card':
-      return 'bg-purple-700'
-    case 'regular_card':
-      return 'bg-blue-600'
-    case 'ackey':
-      return 'bg-amber-600'
-    default:
-      return 'bg-pink-600'
-  }
-}
 
 /**
  * 日付範囲を生成
@@ -277,28 +249,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
       <style>{hideScrollbarStyle}</style>
       <div className='relative'>
         {/* ヘッダー: 月選択 */}
-        <div className='grid grid-cols-5 gap-2 mb-4'>
-          {[-2, -1, 0, 1, 2].map((offset) => {
-            const monthDate = dayjs().add(offset, 'month')
-            const isSelected = monthOffset === offset
-            return (
-              <Button
-                key={offset}
-                variant='outline'
-                size='sm'
-                onClick={() => setMonthOffset(offset)}
-                className={cn({
-                  'bg-green-500/50 text-white border-green-500/50 hover:bg-green-500/60 hover:text-white dark:bg-green-500/50 dark:text-white dark:border-green-500/50 dark:hover:bg-green-500/60':
-                    isSelected,
-                  'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-200/90 dark:text-gray-800 dark:border-gray-300 dark:hover:bg-gray-200 dark:hover:text-gray-800':
-                    !isSelected
-                })}
-              >
-                {monthDate.format('YY/MM')}
-              </Button>
-            )
-          })}
-        </div>
+        <GanttMonthSelector monthOffset={monthOffset} onSelect={setMonthOffset} />
 
         {/* スクロールエリア: ガントチャート */}
         <section
@@ -317,32 +268,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         >
           <div className='min-w-max'>
             {/* ヘッダー: 日付表示 */}
-            <div className='flex h-6'>
-              {dates.map((date) => {
-                const isToday = date.isSame(today, 'day')
-                const isSunday = date.day() === 0
-                const isSaturday = date.day() === 6
-                const isOutOfMonth = date.isAfter(actualMonthEnd)
-                return (
-                  <div
-                    key={date.format('YYYY-MM-DD')}
-                    className={`w-8 shrink-0 border-b flex items-center justify-center text-xs ${
-                      isOutOfMonth
-                        ? 'bg-gray-100 text-gray-400'
-                        : isToday
-                          ? 'bg-rose-50 font-bold text-rose-600'
-                          : isSunday
-                            ? 'text-rose-500'
-                            : isSaturday
-                              ? 'text-blue-500'
-                              : 'text-gray-600'
-                    }`}
-                  >
-                    {date.format('D')}
-                  </div>
-                )
-              })}
-            </div>
+            <GanttDateHeader dates={dates} today={today} actualMonthEnd={actualMonthEnd} />
 
             {/* イベント行 */}
             <div key={`gantt-${monthOffset}-${visibleEventBars.map((b) => b.event.id).join('-')}`}>
@@ -352,16 +278,14 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                 return (
                   <div key={event.id} className='relative flex h-10'>
                     {/* 背景グリッド */}
-                    {dates.map((date) => {
-                      const isToday = date.isSame(today, 'day')
-                      const isOutOfMonth = date.isAfter(actualMonthEnd)
-                      return (
-                        <div
-                          key={date.format('YYYY-MM-DD')}
-                          className={`w-8 shrink-0 border-b ${isOutOfMonth ? 'bg-gray-50' : isToday ? 'bg-rose-50' : ''}`}
-                        />
-                      )
-                    })}
+                    {dates.map((date) => (
+                      <GanttGridCell
+                        key={date.format('YYYY-MM-DD')}
+                        date={date}
+                        today={today}
+                        actualMonthEnd={actualMonthEnd}
+                      />
+                    ))}
 
                     {/* バー */}
                     {duration > 0 && (

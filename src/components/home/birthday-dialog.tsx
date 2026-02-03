@@ -1,69 +1,15 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Confetti } from '@/components/home/birthday-confetti'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import type { StoreData } from '@/schemas/store.dto'
+import { getBirthdayImagePath } from '@/utils/birthday'
 
 type BirthdayDialogProps = {
   characters: StoreData[]
-}
-
-/**
- * 誕生日画像のパスを取得
- * birth/MMDD.webp 形式で返す（例: 0123.webp）
- */
-const getBirthdayImagePath = (characters: StoreData[]): string => {
-  if (characters.length === 0) return ''
-  const birthday = characters[0].character?.birthday
-  if (!birthday) return ''
-  const date = dayjs(birthday)
-  const key = date.format('MMDD')
-  return `/birth/${key}.webp`
-}
-
-/**
- * 紙吹雪コンポーネント
- */
-const Confetti = ({ count = 30 }: { count?: number }) => {
-  const confettiItems = useMemo(() => {
-    const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff85a1', '#a855f7']
-    return Array.from({ length: count }).map((_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      delay: Math.random() * 2,
-      duration: 2 + Math.random() * 2,
-      color: colors[i % colors.length],
-      rotation: Math.random() * 360
-    }))
-  }, [count])
-
-  return (
-    <div className='pointer-events-none absolute inset-0 overflow-hidden'>
-      {confettiItems.map((item) => (
-        <motion.div
-          key={item.id}
-          className='absolute top-0'
-          style={{ left: `${item.x}%` }}
-          initial={{ y: -20, opacity: 1, rotate: 0 }}
-          animate={{
-            y: '100vh',
-            opacity: [1, 1, 0],
-            rotate: item.rotation
-          }}
-          transition={{
-            duration: item.duration,
-            delay: item.delay,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: 'linear'
-          }}
-        >
-          <div className='size-2 rounded-full' style={{ backgroundColor: item.color }} />
-        </motion.div>
-      ))}
-    </div>
-  )
 }
 
 /**
