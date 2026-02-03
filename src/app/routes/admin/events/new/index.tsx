@@ -35,6 +35,11 @@ const NewEventContent = () => {
 
   // クエリパラメータを変換してdefaultValuesを作成
   const hasQueryParams = Object.keys(search).length > 0
+  const parseDate = (date: Date | undefined) => {
+    if (!date) return undefined
+    const parsed = dayjs(date)
+    return parsed.isValid() ? parsed.format('YYYY-MM-DD') : undefined
+  }
   const defaultValues: Partial<EventFormValues> = {
     category: search.category,
     name: search.name,
@@ -46,8 +51,8 @@ const NewEventContent = () => {
           url: url.trim()
         }))
       : undefined,
-    startDate: search.startDate ? dayjs(search.startDate).format('YYYY-MM-DD') : undefined,
-    endDate: search.endDate ? dayjs(search.endDate).format('YYYY-MM-DD') : undefined,
+    startDate: parseDate(search.startDate),
+    endDate: parseDate(search.endDate),
     // クエリパラメータから読み込んだ場合はツイートしない
     shouldTweet: hasQueryParams ? false : undefined
   }
