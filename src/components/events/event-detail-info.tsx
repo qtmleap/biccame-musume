@@ -6,7 +6,7 @@ import { REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
-type EventDetailInfoProps = {
+export type EventDetailInfoProps = {
   event: Event
 }
 

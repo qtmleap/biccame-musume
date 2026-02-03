@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { AlertTriangle, Calendar, Coins, FileText, Gift, Link2, Package, Store, Users, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Controller, type DefaultValues, useFieldArray, useForm, useWatch } from 'react-hook-form'
-import { z } from 'zod'
+import { EventConfirmation } from '@/components/admin/event-confirmation'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -12,45 +12,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useCharacters } from '@/hooks/useCharacters'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
 import { EVENT_CATEGORY_LABELS, REFERENCE_URL_TYPE_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import { type Event, EventCategorySchema, type EventRequest, ReferenceUrlTypeSchema } from '@/schemas/event.dto'
+import { type Event, EventCategorySchema, ReferenceUrlTypeSchema } from '@/schemas/event.dto'
+import { EventFormSchema, type EventFormValues } from '@/schemas/event-form.dto'
 import type { StoreKey } from '@/schemas/store.dto'
-
-/**
- * フォームのスキーマ定義（日付をstring型で扱う）
- */
-const EventFormSchema = z.object({
-  category: EventCategorySchema,
-  name: z.string().min(1, 'イベント名は必須です'),
-  stores: z.array(z.string()).min(1, '最低1つの店舗を選択してください'),
-  startDate: z.string().min(1, '開始日は必須です'),
-  endDate: z.string().nullable().optional(),
-  endedAt: z.string().nullable().optional(),
-  limitedQuantity: z.number().min(1).optional(),
-  referenceUrls: z
-    .array(
-      z.object({
-        id: z.string().optional(),
-        type: ReferenceUrlTypeSchema,
-        url: z.string().url('有効なURLを入力してください')
-      })
-    )
-    .optional(),
-  conditions: z
-    .array(
-      z.object({
-        id: z.string().optional(),
-        type: z.enum(['purchase', 'first_come', 'lottery', 'everyone']),
-        purchaseAmount: z.number().min(0).optional(),
-        quantity: z.number().min(1).optional()
-      })
-    )
-    .min(1, '最低1つの条件を設定してください'),
-  isVerified: z.boolean(),
-  isPreliminary: z.boolean(),
-  shouldTweet: z.boolean()
-})
-
-type EventFormValues = z.infer<typeof EventFormSchema>
 
 /**
  * フォームのデフォルト値
@@ -80,7 +44,7 @@ export const EventForm = ({
 }: {
   event?: Event
   onSuccess?: () => void
-  defaultValues?: Partial<EventRequest>
+  defaultValues?: Partial<EventFormValues>
 }) => {
   const createEvent = useCreateEvent()
   const updateEvent = useUpdateEvent()
@@ -356,109 +320,7 @@ export const EventForm = ({
   // 確認画面の表示
   if (isConfirming && confirmedData) {
     return (
-      <div className='space-y-6'>
-        <div className='rounded-lg border border-amber-200 bg-amber-50 p-4'>
-          <h3 className='mb-4 flex items-center gap-2 text-lg font-semibold text-amber-900'>
-            <AlertTriangle className='size-5' />
-            登録内容の確認
-          </h3>
-          <div className='space-y-4'>
-            {/* イベント種別 */}
-            <div>
-              <div className='text-xs font-medium text-gray-500'>イベント種別</div>
-              <div className='mt-1 text-sm'>{EVENT_CATEGORY_LABELS[confirmedData.category]}</div>
-            </div>
-
-            {/* イベント名 */}
-            <div>
-              <div className='text-xs font-medium text-gray-500'>イベント名</div>
-              <div className='mt-1 text-sm font-medium'>{confirmedData.name}</div>
-            </div>
-
-            {/* 開催期間 */}
-            <div>
-              <div className='text-xs font-medium text-gray-500'>開催期間</div>
-              <div className='mt-1 text-sm'>
-                {dayjs(confirmedData.startDate).format('YYYY/MM/DD')}
-                {confirmedData.endDate && ` 〜 ${dayjs(confirmedData.endDate).format('YYYY/MM/DD')}`}
-              </div>
-            </div>
-
-            {/* 店舗 */}
-            {confirmedData.stores && confirmedData.stores.length > 0 && (
-              <div>
-                <div className='text-xs font-medium text-gray-500'>開催店舗</div>
-                <div className='mt-1 flex flex-wrap gap-1'>
-                  {confirmedData.stores.map((storeKey) => (
-                    <Badge key={storeKey} variant='outline' className='text-xs'>
-                      {STORE_NAME_LABELS[storeKey as StoreKey]}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* 配布条件 */}
-            <div>
-              <div className='text-xs font-medium text-gray-500'>配布条件</div>
-              <div className='mt-1 space-y-1'>
-                {confirmedData.conditions.map((condition, index) => (
-                  <div key={index} className='text-sm'>
-                    {condition.type === 'purchase' && `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
-                    {condition.type === 'first_come' && `先着${condition.quantity}名`}
-                    {condition.type === 'lottery' && `抽選${condition.quantity}名`}
-                    {condition.type === 'everyone' && '全員配布'}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* 参考URL */}
-            {confirmedData.referenceUrls && confirmedData.referenceUrls.length > 0 && (
-              <div>
-                <div className='text-xs font-medium text-gray-500'>参考URL</div>
-                <div className='mt-1 space-y-1'>
-                  {confirmedData.referenceUrls.map((ref, index) => (
-                    <div key={index} className='text-xs'>
-                      <span className='font-medium'>{REFERENCE_URL_TYPE_LABELS[ref.type]}:</span>
-                      <a
-                        href={ref.url}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='ml-1 text-blue-600 hover:underline'
-                      >
-                        {ref.url}
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* フラグ */}
-            <div className='flex flex-wrap gap-2'>
-              {confirmedData.isVerified && <Badge className='bg-blue-600'>検証済み</Badge>}
-              {confirmedData.isPreliminary && <Badge className='bg-amber-600'>未確定情報</Badge>}
-              {confirmedData.shouldTweet && <Badge className='bg-sky-600'>投稿する</Badge>}
-            </div>
-          </div>
-        </div>
-
-        {/* ボタン */}
-        <div className='flex gap-2'>
-          <Button type='button' onClick={handleBack} variant='outline' className='flex-1' disabled={isSubmitting}>
-            修正する
-          </Button>
-          <Button
-            type='button'
-            onClick={onSubmit}
-            className='flex-1 bg-[#e50012] hover:bg-[#c5000f]'
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? '登録中...' : '登録する'}
-          </Button>
-        </div>
-      </div>
+      <EventConfirmation data={confirmedData} isSubmitting={isSubmitting} onBack={handleBack} onSubmit={onSubmit} />
     )
   }
 
