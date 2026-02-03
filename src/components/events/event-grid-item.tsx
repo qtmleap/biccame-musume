@@ -4,7 +4,8 @@ import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { EVENT_STATUS_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import { STORE_NAME_LABELS } from '@/locales/app.content'
+import { STATUS_BADGE_SM } from '@/locales/component.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -27,38 +28,6 @@ const _getCategoryColor = (category: Event['category']) => {
       return 'bg-amber-100 text-amber-600'
     default:
       return 'bg-pink-100 text-pink-600'
-  }
-}
-
-/**
- * ステータスに応じたBadgeを返す
- */
-const StatusBadge = ({ event }: { event: Event }) => {
-  switch (event.status) {
-    case 'upcoming':
-      return (
-        <Badge variant='outline' className='border-blue-600 bg-blue-50 text-blue-700 text-xs'>
-          {EVENT_STATUS_LABELS.upcoming}
-        </Badge>
-      )
-    case 'ongoing':
-      return (
-        <Badge variant='outline' className='border-green-600 bg-green-50 text-green-700 text-xs'>
-          {EVENT_STATUS_LABELS.ongoing}
-        </Badge>
-      )
-    case 'last_day':
-      return (
-        <Badge variant='outline' className='border-red-600 bg-red-50 text-red-700 text-xs'>
-          {EVENT_STATUS_LABELS.last_day}
-        </Badge>
-      )
-    case 'ended':
-      return (
-        <Badge variant='secondary' className='text-xs'>
-          {EVENT_STATUS_LABELS.ended}
-        </Badge>
-      )
   }
 }
 
@@ -149,7 +118,7 @@ export const EventGridItem = ({ event, index }: EventGridItemProps) => {
               </div>
             </div>
           </div>
-          <StatusBadge event={event} />
+          {STATUS_BADGE_SM[event.status]}
         </div>
 
         {event.conditions.some((c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery') && (
