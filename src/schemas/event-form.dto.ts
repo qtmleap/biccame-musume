@@ -12,15 +12,13 @@ export const EventFormSchema = z.object({
   endDate: z.string().nullable().optional(),
   endedAt: z.string().nullable().optional(),
   limitedQuantity: z.number().min(1).optional(),
-  referenceUrls: z
-    .array(
-      z.object({
-        id: z.string().optional(),
-        type: ReferenceUrlTypeSchema,
-        url: z.string().url('有効なURLを入力してください')
-      })
-    )
-    .default([]),
+  referenceUrls: z.array(
+    z.object({
+      id: z.string().optional(),
+      type: ReferenceUrlTypeSchema,
+      url: z.string().url('有効なURLを入力してください')
+    })
+  ),
   conditions: z
     .array(
       z.object({
