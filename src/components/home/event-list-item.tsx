@@ -1,43 +1,16 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { Calendar, CreditCard, Gift, KeyRound, Package, Store } from 'lucide-react'
+import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { EVENT_STATUS_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import type { Event, EventCategory, EventStatus } from '@/schemas/event.dto'
+import { CATEGORY_WITH_ICON } from '@/locales/component.content'
+import type { Event, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 type EventListItemProps = {
   event: Event
   index: number
-}
-
-/**
- * カテゴリに応じたアイコンとスタイルを返す
- */
-const getCategoryStyle = (category: EventCategory | undefined) => {
-  switch (category) {
-    case 'limited_card':
-      return {
-        icon: <CreditCard className='size-4' />,
-        className: 'bg-purple-100 text-purple-600'
-      }
-    case 'regular_card':
-      return {
-        icon: <CreditCard className='size-4' />,
-        className: 'bg-blue-100 text-blue-600'
-      }
-    case 'ackey':
-      return {
-        icon: <KeyRound className='size-4' />,
-        className: 'bg-amber-100 text-amber-600'
-      }
-    default:
-      return {
-        icon: <Gift className='size-4' />,
-        className: 'bg-pink-100 text-pink-600'
-      }
-  }
 }
 
 /**
@@ -84,8 +57,8 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
       >
         <div className='flex items-center justify-between gap-2'>
           <div className='flex items-center gap-2 flex-1 min-w-0'>
-            <div className={`shrink-0 p-2 rounded-lg ${getCategoryStyle(event.category).className}`}>
-              {getCategoryStyle(event.category).icon}
+            <div className={`shrink-0 p-2 rounded-lg ${CATEGORY_WITH_ICON[event.category ?? 'other'].className}`}>
+              {CATEGORY_WITH_ICON[event.category ?? 'other'].icon}
             </div>
             <p className='text-sm font-medium text-gray-800 line-clamp-2'>{event.name}</p>
           </div>
