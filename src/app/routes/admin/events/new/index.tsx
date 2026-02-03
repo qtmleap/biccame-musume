@@ -1,12 +1,14 @@
 import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
+import dayjs from 'dayjs'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
+import type { DefaultValues } from 'react-hook-form'
 import { z } from 'zod'
 import { EventForm } from '@/components/admin/event-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
 import { EventRequestSchema } from '@/schemas/event.dto'
-import { StoreKeySchema } from '@/schemas/store.dto'
+import type { EventFormValues } from '@/schemas/event-form.dto'
 
 /**
  * クエリパラメータのスキーマ定義
@@ -15,22 +17,8 @@ import { StoreKeySchema } from '@/schemas/store.dto'
 const EventNewSearchSchema = z.object({
   category: EventRequestSchema.shape.category.optional(),
   name: z.string().optional(),
-  stores: z
-    .string()
-    .transform((val) => val.split(',').map((s) => s.trim()))
-    .pipe(z.array(StoreKeySchema))
-    .optional(),
-  referenceUrls: z
-    .string()
-    .url()
-    .transform((val) => [
-      {
-        id: crypto.randomUUID(),
-        type: 'announce' as const,
-        url: val
-      }
-    ])
-    .optional(),
+  stores: z.string().optional(),
+  referenceUrls: z.string().optional(),
   startDate: EventRequestSchema.shape.startDate.optional(),
   endDate: EventRequestSchema.shape.endDate.optional()
 })
@@ -44,6 +32,25 @@ const NewEventContent = () => {
 
   const handleSuccess = () => {
     router.history.back()
+  }
+
+  // クエリパラメータを変換してdefaultValuesを作成
+  const hasQueryParams = Object.keys(search).length > 0
+  const defaultValues: DefaultValues<EventFormValues> = {
+    category: search.category,
+    name: search.name,
+    stores: search.stores ? search.stores.split(',').map((s) => s.trim()) : undefined,
+    referenceUrls: search.referenceUrls
+      ? search.referenceUrls.split(',').map((url) => ({
+          id: crypto.randomUUID(),
+          type: 'announce' as const,
+          url: url.trim()
+        }))
+      : undefined,
+    startDate: search.startDate ? dayjs(search.startDate).format('YYYY-MM-DD') : undefined,
+    endDate: search.endDate ? dayjs(search.endDate).format('YYYY-MM-DD') : undefined,
+    // クエリパラメータから読み込んだ場合はツイートしない
+    shouldTweet: hasQueryParams ? false : undefined
   }
 
   return (
@@ -65,7 +72,7 @@ const NewEventContent = () => {
 
       {/* イベント登録フォーム */}
       <div>
-        <EventForm onSuccess={handleSuccess} defaultValues={search} />
+        <EventForm onSuccess={handleSuccess} defaultValues={defaultValues} />
       </div>
     </div>
   )

@@ -9,7 +9,7 @@ import type { Event, EventCategory, EventStatus } from '@/schemas/event.dto'
 type EventDetailHeaderProps = {
   event: Event
   isAuthenticated: boolean
-  onBack: () => void
+  onBack?: () => void
 }
 
 /**
@@ -55,12 +55,14 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
   return (
     <>
       {/* 戻るボタン */}
-      <div className='pb-2'>
-        <Button variant='ghost' size='sm' className='text-gray-600 hover:text-gray-900 -ml-2' onClick={onBack}>
-          <ArrowLeft className='h-4 w-4 mr-1' />
-          戻る
-        </Button>
-      </div>
+      {onBack && (
+        <div className='pb-2'>
+          <Button variant='ghost' size='sm' className='text-gray-600 hover:text-gray-900 -ml-2' onClick={onBack}>
+            <ArrowLeft className='h-4 w-4 mr-1' />
+            戻る
+          </Button>
+        </div>
+      )}
 
       {/* ヘッダー */}
       <motion.div

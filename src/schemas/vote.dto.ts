@@ -4,7 +4,7 @@ import { z } from '@hono/zod-openapi'
  * 投票リクエスト
  */
 export const VoteRequestSchema = z.object({
-  characterId: z.string().min(1).openapi({ example: 'biccame-001' })
+  characterId: z.string().nonempty().openapi({ example: 'biccame-001' })
 })
 
 export type VoteRequest = z.infer<typeof VoteRequestSchema>
