@@ -2,7 +2,6 @@ import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
-import type { DefaultValues } from 'react-hook-form'
 import { z } from 'zod'
 import { EventForm } from '@/components/admin/event-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -36,7 +35,7 @@ const NewEventContent = () => {
 
   // クエリパラメータを変換してdefaultValuesを作成
   const hasQueryParams = Object.keys(search).length > 0
-  const defaultValues: DefaultValues<EventFormValues> = {
+  const defaultValues: Partial<EventFormValues> = {
     category: search.category,
     name: search.name,
     stores: search.stores ? search.stores.split(',').map((s) => s.trim()) : undefined,
