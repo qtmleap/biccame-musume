@@ -753,7 +753,7 @@ export const EventForm = ({
         </div>
 
         {/* ボタン */}
-        <div className='flex gap-2'>
+        <div className='flex gap-2 max-w-md mx-auto'>
           <Button type='submit' className='flex-1 bg-[#e50012] hover:bg-[#c5000f]'>
             確認する
           </Button>

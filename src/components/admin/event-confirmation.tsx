@@ -47,8 +47,11 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
       {/* イベント情報 */}
       <EventDetailInfo event={previewEvent} />
 
+      {/* 投稿通知 */}
+      {data.shouldTweet && <p className='text-base font-medium text-sky-600 text-center'>保存すると投稿されます</p>}
+
       {/* ボタン */}
-      <div className='flex gap-2'>
+      <div className='flex gap-2 max-w-md mx-auto'>
         <Button type='button' onClick={onBack} variant='outline' className='flex-1' disabled={isSubmitting}>
           修正する
         </Button>
