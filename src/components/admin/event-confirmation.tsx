@@ -2,11 +2,11 @@ import dayjs from 'dayjs'
 import { EventDetailInfo } from '@/components/events/event-detail-info'
 import { Button } from '@/components/ui/button'
 import type { Event, EventStatus } from '@/schemas/event.dto'
-import type { EventFormValues } from '@/schemas/event-form.dto'
+import type { EventRequest } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 type EventConfirmationProps = {
-  data: EventFormValues
+  data: EventRequest
   isSubmitting: boolean
   onBack: () => void
   onSubmit: () => void
@@ -16,7 +16,7 @@ type EventConfirmationProps = {
  * イベント登録内容の確認画面コンポーネント
  */
 export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: EventConfirmationProps) => {
-  // EventFormValuesをEvent型に変換
+  // EventRequestをEvent型に変換
   const previewEvent: Event = {
     uuid: 'preview',
     category: data.category,
