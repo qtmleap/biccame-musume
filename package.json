@@ -13,6 +13,7 @@
     "reset": "bun run scripts/rest.ts",
     "generate": "prisma generate",
     "prebuild": "rimraf dist",
+    "predeploy": "tsc -b && vite build --mode ${CLOUDFLARE_ENV}",
     "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV}"
   },
   "dependencies": {
