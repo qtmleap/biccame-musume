@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import { FileText, Package, Store, X } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Controller, type DefaultValues, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
 import { EventConfirmation } from '@/components/admin/event-confirmation'
@@ -39,35 +39,16 @@ const DEFAULT_VALUES: DefaultValues<EventRequest> = {
 }
 
 /**
- * イベントデータをフォーム値に変換
- */
-const toFormValues = (event: Event): DefaultValues<EventRequest> => ({
-  ...DEFAULT_VALUES,
-  category: event.category,
-  title: event.title,
-  referenceUrls: event.referenceUrls || [],
-  stores: event.stores || [],
-  limitedQuantity: event.limitedQuantity,
-  startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
-  endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : undefined,
-  endedAt: event.endedAt ? dayjs(event.endedAt).format('YYYY-MM-DD') : undefined,
-  conditions: event.conditions,
-  isVerified: event.isVerified ?? false,
-  isPreliminary: event.isPreliminary ?? false,
-  uuid: event.uuid
-})
-
-/**
  * イベントフォーム
  */
 export const EventForm = ({
-  event,
+  defaultValues,
   onSuccess,
-  defaultValues
+  isEditMode = false
 }: {
-  event?: Event | null
+  defaultValues?: DefaultValues<EventRequest>
   onSuccess?: () => void
-  defaultValues?: Partial<EventRequest>
+  isEditMode?: boolean
 }) => {
   const createEvent = useCreateEvent()
   const updateEvent = useUpdateEvent()
@@ -87,11 +68,8 @@ export const EventForm = ({
     new Set(characters.filter((c) => c.store?.address && c.store.address.trim() !== '').map((c) => c.id))
   ).sort()
 
-  // クエリパラメータとイベントデータを統合したデフォルト値を生成
+  // デフォルト値を生成
   const getInitialValues = (): DefaultValues<EventRequest> => {
-    if (event) return toFormValues(event)
-
-    // クエリパラメータからのデフォルト値を適用
     if (defaultValues) {
       return {
         ...DEFAULT_VALUES,
@@ -99,7 +77,6 @@ export const EventForm = ({
         startDate: defaultValues.startDate ? dayjs(defaultValues.startDate).format('YYYY-MM-DD') : '',
         endDate: defaultValues.endDate ? dayjs(defaultValues.endDate).format('YYYY-MM-DD') : undefined,
         endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : undefined,
-        // uuidが渡されていればそれを使用、なければ新規生成
         uuid: defaultValues.uuid || uuidv4()
       }
     }
@@ -152,7 +129,7 @@ export const EventForm = ({
       }
 
       try {
-        const result = await checkDuplicateUrl(url, event?.uuid)
+        const result = await checkDuplicateUrl(url, defaultValues?.uuid)
         setDuplicateWarnings((prev) => ({
           ...prev,
           [index]: result.exists ? (result.event ?? null) : null
@@ -162,13 +139,8 @@ export const EventForm = ({
         setDuplicateWarnings((prev) => ({ ...prev, [index]: null }))
       }
     },
-    [event?.uuid]
+    [defaultValues?.uuid]
   )
-
-  // 編集モードの場合、初期値をセット
-  useEffect(() => {
-    if (event) reset(toFormValues(event))
-  }, [event, reset])
 
   /**
    * 店舗を追加
@@ -245,7 +217,7 @@ export const EventForm = ({
       isPreliminary: confirmedData.isPreliminary,
       shouldTweet: confirmedData.shouldTweet,
       // 新規作成時のみクライアント生成のuuidを含める
-      ...(!event && confirmedData.uuid ? { uuid: confirmedData.uuid } : {})
+      ...(!isEditMode && confirmedData.uuid ? { uuid: confirmedData.uuid } : {})
     }
 
     // 終了日が空文字やundefined、nullでない場合のみ設定
@@ -273,9 +245,9 @@ export const EventForm = ({
     }
 
     try {
-      if (event) {
+      if (isEditMode && defaultValues?.uuid) {
         await updateEvent.mutateAsync({
-          id: event.uuid,
+          id: defaultValues.uuid,
           data: payload as Parameters<typeof updateEvent.mutateAsync>[0]['data']
         })
       } else {
