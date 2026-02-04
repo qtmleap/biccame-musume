@@ -71,8 +71,36 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
     // 表示期間の日数（38日）
     const displayDays = 38
 
+    // regular_card（通常名刺）の重複を排除
+    // 通常名刺は店舗ごとに1つだけ表示
+    const deduplicatedEvents = (() => {
+      const regularCardStores = new Set<string>()
+      return events.filter((event) => {
+        if (event.category !== 'regular_card') {
+          return true
+        }
+        // 店舗ごとに1つだけ表示
+        const stores = event.stores || []
+        for (const store of stores) {
+          if (regularCardStores.has(store)) {
+            return false // 既にこの店舗の通常名刺がある
+          }
+          regularCardStores.add(store)
+        }
+        // 店舗がない場合はタイトルで判定
+        if (stores.length === 0) {
+          const key = `no-store-${event.title}`
+          if (regularCardStores.has(key)) {
+            return false
+          }
+          regularCardStores.add(key)
+        }
+        return true
+      })
+    })()
+
     // まずイベントをソート: 開始日 → カテゴリ順
-    const sortedEvents = [...events].sort((a, b) => {
+    const sortedEvents = [...deduplicatedEvents].sort((a, b) => {
       const startDiff = dayjs(a.startDate).diff(dayjs(b.startDate))
       if (startDiff !== 0) return startDiff
       return categoryOrder[a.category] - categoryOrder[b.category]

@@ -13,13 +13,15 @@ import { $ } from 'bun'
 type Environment = 'dev' | 'prod'
 
 /**
- * ローカルのwrangler.tomlからD1データベース名を取得
+ * wrangler.tomlからD1データベース名を取得
  */
-const getLocalDatabaseName = async (): Promise<string> => {
+const getDatabaseName = async (env: Environment): Promise<string> => {
   const wranglerToml = await Bun.file('wrangler.toml').text()
-  const match = wranglerToml.match(/database_name\s*=\s*"([^"]+)"/)
+  // [[env.{env}.d1_databases]]セクションを検索してdatabase_nameを取得
+  const pattern = new RegExp(`\\[\\[env\\.${env}\\.d1_databases\\]\\][^\\[]*database_name\\s*=\\s*"([^"]+)"`)
+  const match = wranglerToml.match(pattern)
   if (!match) {
-    throw new Error('wrangler.tomlからdatabase_nameを取得できませんでした')
+    throw new Error(`wrangler.tomlから${env}環境のdatabase_nameを取得できませんでした`)
   }
   return match[1]
 }
@@ -188,16 +190,20 @@ const main = async () => {
 
   console.log(`🚀 ${env}環境からローカルD1にイベントデータを同期します\n`)
 
-  const databaseName = await getLocalDatabaseName()
+  // リモート環境のデータベース名を取得
+  const remoteDatabaseName = await getDatabaseName(env)
+  // ローカルはdev環境の設定を使う
+  const localDatabaseName = await getDatabaseName('dev')
 
-  console.log(`📦 データベース: ${databaseName}\n`)
+  console.log(`📦 リモートDB: ${remoteDatabaseName}`)
+  console.log(`📦 ローカルDB: ${localDatabaseName}\n`)
 
   // リモートD1からイベントデータを取得
-  const eventsWithDetails = await fetchEventsFromRemoteD1(databaseName, env)
+  const eventsWithDetails = await fetchEventsFromRemoteD1(remoteDatabaseName, env)
   console.log(`✅ ${eventsWithDetails.length}件のイベントを取得しました\n`)
 
   // ローカルD1にデータを投入
-  await insertEventsToLocalD1(databaseName, eventsWithDetails)
+  await insertEventsToLocalD1(localDatabaseName, eventsWithDetails)
 
   console.log('\n🎉 同期完了！')
 }
