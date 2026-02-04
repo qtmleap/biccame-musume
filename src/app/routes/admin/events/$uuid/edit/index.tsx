@@ -100,7 +100,7 @@ const EditEventPage = () => {
   )
 }
 
-export const Route = createFileRoute('/admin/events/$id/edit/')({
+export const Route = createFileRoute('/admin/events/$uuid/edit/')({
   component: EditEventPage,
   validateSearch: EventEditSearchSchema
 })

@@ -24,7 +24,7 @@ import { Route as CharactersIdRouteImport } from './routes/characters/$id'
 import { Route as AdminEventsIndexRouteImport } from './routes/admin/events/index'
 import { Route as AdminEventsNewIndexRouteImport } from './routes/admin/events/new/index'
 import { Route as AdminEventsNewUuidIndexRouteImport } from './routes/admin/events/new/$uuid/index'
-import { Route as AdminEventsIdEditIndexRouteImport } from './routes/admin/events/$id/edit/index'
+import { Route as AdminEventsUuidEditIndexRouteImport } from './routes/admin/events/$uuid/edit/index'
 
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
@@ -101,11 +101,12 @@ const AdminEventsNewUuidIndexRoute = AdminEventsNewUuidIndexRouteImport.update({
   path: '/events/new/$uuid/',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminEventsIdEditIndexRoute = AdminEventsIdEditIndexRouteImport.update({
-  id: '/events/$id/edit/',
-  path: '/events/$id/edit/',
-  getParentRoute: () => AdminRoute,
-} as any)
+const AdminEventsUuidEditIndexRoute =
+  AdminEventsUuidEditIndexRouteImport.update({
+    id: '/events/$uuid/edit/',
+    path: '/events/$uuid/edit/',
+    getParentRoute: () => AdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -122,7 +123,7 @@ export interface FileRoutesByFullPath {
   '/ranking/': typeof RankingIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
   '/admin/events/new/': typeof AdminEventsNewIndexRoute
-  '/admin/events/$id/edit/': typeof AdminEventsIdEditIndexRoute
+  '/admin/events/$uuid/edit/': typeof AdminEventsUuidEditIndexRoute
   '/admin/events/new/$uuid/': typeof AdminEventsNewUuidIndexRoute
 }
 export interface FileRoutesByTo {
@@ -139,7 +140,7 @@ export interface FileRoutesByTo {
   '/ranking': typeof RankingIndexRoute
   '/admin/events': typeof AdminEventsIndexRoute
   '/admin/events/new': typeof AdminEventsNewIndexRoute
-  '/admin/events/$id/edit': typeof AdminEventsIdEditIndexRoute
+  '/admin/events/$uuid/edit': typeof AdminEventsUuidEditIndexRoute
   '/admin/events/new/$uuid': typeof AdminEventsNewUuidIndexRoute
 }
 export interface FileRoutesById {
@@ -158,7 +159,7 @@ export interface FileRoutesById {
   '/ranking/': typeof RankingIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
   '/admin/events/new/': typeof AdminEventsNewIndexRoute
-  '/admin/events/$id/edit/': typeof AdminEventsIdEditIndexRoute
+  '/admin/events/$uuid/edit/': typeof AdminEventsUuidEditIndexRoute
   '/admin/events/new/$uuid/': typeof AdminEventsNewUuidIndexRoute
 }
 export interface FileRouteTypes {
@@ -178,7 +179,7 @@ export interface FileRouteTypes {
     | '/ranking/'
     | '/admin/events/'
     | '/admin/events/new/'
-    | '/admin/events/$id/edit/'
+    | '/admin/events/$uuid/edit/'
     | '/admin/events/new/$uuid/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -195,7 +196,7 @@ export interface FileRouteTypes {
     | '/ranking'
     | '/admin/events'
     | '/admin/events/new'
-    | '/admin/events/$id/edit'
+    | '/admin/events/$uuid/edit'
     | '/admin/events/new/$uuid'
   id:
     | '__root__'
@@ -213,7 +214,7 @@ export interface FileRouteTypes {
     | '/ranking/'
     | '/admin/events/'
     | '/admin/events/new/'
-    | '/admin/events/$id/edit/'
+    | '/admin/events/$uuid/edit/'
     | '/admin/events/new/$uuid/'
   fileRoutesById: FileRoutesById
 }
@@ -338,11 +339,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEventsNewUuidIndexRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/events/$id/edit/': {
-      id: '/admin/events/$id/edit/'
-      path: '/events/$id/edit'
-      fullPath: '/admin/events/$id/edit/'
-      preLoaderRoute: typeof AdminEventsIdEditIndexRouteImport
+    '/admin/events/$uuid/edit/': {
+      id: '/admin/events/$uuid/edit/'
+      path: '/events/$uuid/edit'
+      fullPath: '/admin/events/$uuid/edit/'
+      preLoaderRoute: typeof AdminEventsUuidEditIndexRouteImport
       parentRoute: typeof AdminRoute
     }
   }
@@ -352,7 +353,7 @@ interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminEventsIndexRoute: typeof AdminEventsIndexRoute
   AdminEventsNewIndexRoute: typeof AdminEventsNewIndexRoute
-  AdminEventsIdEditIndexRoute: typeof AdminEventsIdEditIndexRoute
+  AdminEventsUuidEditIndexRoute: typeof AdminEventsUuidEditIndexRoute
   AdminEventsNewUuidIndexRoute: typeof AdminEventsNewUuidIndexRoute
 }
 
@@ -360,7 +361,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminEventsIndexRoute: AdminEventsIndexRoute,
   AdminEventsNewIndexRoute: AdminEventsNewIndexRoute,
-  AdminEventsIdEditIndexRoute: AdminEventsIdEditIndexRoute,
+  AdminEventsUuidEditIndexRoute: AdminEventsUuidEditIndexRoute,
   AdminEventsNewUuidIndexRoute: AdminEventsNewUuidIndexRoute,
 }
 
