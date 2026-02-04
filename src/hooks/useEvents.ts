@@ -63,8 +63,13 @@ export const useCreateEvent = () => {
       return client.createEvent(event)
     },
     onSuccess: () => {
+      toast.success('イベントを登録しました')
       // イベント一覧を再取得
       queryClient.invalidateQueries({ queryKey: ['events'] })
+    },
+    onError: (error) => {
+      toast.error('イベントの登録に失敗しました')
+      console.error(error)
     }
   })
 }

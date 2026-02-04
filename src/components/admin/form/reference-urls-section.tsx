@@ -26,6 +26,7 @@ type Props = {
   duplicateWarnings: Record<number, Event | null>
   onCheckDuplicate: (index: number, url: string) => void
   onClearWarning: (index: number) => void
+  error?: string
 }
 
 /**
@@ -40,7 +41,8 @@ export function ReferenceUrlsSection({
   referenceUrls,
   duplicateWarnings,
   onCheckDuplicate,
-  onClearWarning
+  onClearWarning,
+  error
 }: Props) {
   /**
    * URLタイプが既に追加されているか
@@ -59,8 +61,9 @@ export function ReferenceUrlsSection({
     <div>
       <div className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
         <Link2 className='size-4' />
-        参考URL（任意）
+        参考URL
       </div>
+      {error && <p className='mb-2 text-xs text-destructive'>{error}</p>}
       {/* URLタイプボタン */}
       <div className='mb-2 flex flex-wrap gap-2'>
         {ReferenceUrlTypeSchema.options.map((type) => (
