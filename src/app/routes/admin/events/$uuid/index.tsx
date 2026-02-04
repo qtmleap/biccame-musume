@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
 import type { DefaultValues } from 'react-hook-form'
+import { v4 as uuidv4 } from 'uuid'
 import { EventForm } from '@/components/admin/event-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
@@ -51,7 +52,7 @@ const EditEventContent = () => {
         stores: search.stores ? (search.stores.split(',').map((s) => s.trim()) as StoreKey[]) : undefined,
         referenceUrls: search.referenceUrls
           ? search.referenceUrls.split(',').map((url) => ({
-              id: crypto.randomUUID(),
+              uuid: uuidv4(),
               type: 'announce' as const,
               url: url.trim()
             }))
