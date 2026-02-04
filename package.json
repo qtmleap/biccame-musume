@@ -80,6 +80,7 @@
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
     "twitter-api-v2": "^1.29.0",
+    "uuidv4": "^6.2.13",
     "vaul": "^1.1.2",
     "workbox-precaching": "^7.4.0",
     "zod": "^4.3.6"

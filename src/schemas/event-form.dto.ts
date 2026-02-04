@@ -31,7 +31,9 @@ export const EventFormSchema = z.object({
     .min(1, '最低1つの条件を設定してください'),
   isVerified: z.boolean(),
   isPreliminary: z.boolean(),
-  shouldTweet: z.boolean()
+  shouldTweet: z.boolean(),
+  // 重複作成を防ぐためにクライアント側で生成したid（新規作成時のみ）
+  id: z.string().uuid().optional()
 })
 
 export type EventFormValues = z.infer<typeof EventFormSchema>
