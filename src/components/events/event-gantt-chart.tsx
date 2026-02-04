@@ -303,7 +303,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                               className={`absolute inset-y-0 flex items-center gap-1.5 px-2 transition-opacity duration-150 ${isScrolling ? 'opacity-0' : 'opacity-100'}`}
                               style={{ transform: `translateX(${labelOffset}px)` }}
                             >
-                              <span className='text-xs text-white font-medium truncate'>{event.name}</span>
+                              <span className='text-xs text-white font-medium truncate'>{event.title}</span>
                               {event.stores?.[0] && (
                                 <span className='text-xs text-white/70 shrink-0'>
                                   ({appContent.content.store_name[event.stores[0] as StoreKey] || event.stores[0]})
@@ -325,12 +325,12 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                               }}
                               draggable={false}
                             >
-                              <span className='sr-only'>{event.name}の詳細を見る</span>
+                              <span className='sr-only'>{event.title}の詳細を見る</span>
                             </Link>
                           </div>
                         </TooltipTrigger>
                         <TooltipContent side='top' className='max-w-xs'>
-                          <p className='font-medium'>{event.name}</p>
+                          <p className='font-medium'>{event.title}</p>
                           {event.stores && event.stores.length > 0 && (
                             <p className='text-xs text-gray-500'>
                               {event.stores

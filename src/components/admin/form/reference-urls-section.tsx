@@ -4,9 +4,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { REFERENCE_URL_TYPE_LABELS } from '@/locales/app.content'
-import type { Event, ReferenceUrlType } from '@/schemas/event.dto'
+import type { Event, EventRequest, ReferenceUrlType } from '@/schemas/event.dto'
 import { ReferenceUrlTypeSchema } from '@/schemas/event.dto'
-import type { EventRequest } from '@/schemas/event.dto'
 
 /**
  * 参照URLフィールドの型
@@ -109,7 +108,7 @@ export function ReferenceUrlsSection({
                 <AlertTriangle className='size-3.5 shrink-0 mt-0.5' />
                 <div>
                   <span className='font-medium'>同じURLが設定されているイベントがあります:</span>
-                  <span className='ml-1'>{duplicateWarnings[index]?.name}</span>
+                  <span className='ml-1'>{duplicateWarnings[index]?.title}</span>
                 </div>
               </div>
             )}

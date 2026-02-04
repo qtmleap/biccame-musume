@@ -62,6 +62,8 @@ const transform = (event: any): Event => {
   return {
     ...nullToUndefined(rest),
     uuid: id,
+    // TODO: DBマイグレーション後に削除 - nameカラムをtitleにリネームする予定
+    title: event.name,
     // biome-ignore lint/suspicious/noExplicitAny: reason
     conditions: conditions?.map((c: any) => ({ ...nullToUndefined(c), uuid: c.id })) || [],
     // biome-ignore lint/suspicious/noExplicitAny: reason
@@ -138,7 +140,7 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     data: {
       id: data.uuid,
       category: data.category,
-      name: data.name,
+      name: data.title,
       limitedQuantity: data.limitedQuantity,
       startDate,
       endDate,
@@ -195,7 +197,7 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     where: { id: data.uuid },
     data: {
       category: data.category,
-      name: data.name,
+      name: data.title,
       limitedQuantity: data.limitedQuantity,
       startDate,
       endDate,
