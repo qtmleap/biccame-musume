@@ -37,7 +37,7 @@ const CATEGORY_COLORS: Record<Event['category'], string> = {
 export const RecentEventsList = ({ events, currentEventId }: RecentEventsListProps) => {
   // 最近更新された10件を取得（現在のイベントを除く）
   const recentEvents = events
-    .filter((event) => event.id !== currentEventId)
+    .filter((event) => event.uuid !== currentEventId)
     .sort((a, b) => dayjs(b.updatedAt).diff(dayjs(a.updatedAt)))
     .slice(0, 10)
 
@@ -57,7 +57,7 @@ export const RecentEventsList = ({ events, currentEventId }: RecentEventsListPro
 
           return (
             <motion.div
-              key={event.id}
+              key={event.uuid}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -73,8 +73,8 @@ export const RecentEventsList = ({ events, currentEventId }: RecentEventsListPro
               <div className='min-w-0 flex-1'>
                 <div className='flex items-center gap-1'>
                   <Link
-                    to='/events/$eventId'
-                    params={{ eventId: event.id }}
+                    to='/events/$uuid'
+                    params={{ uuid: event.uuid }}
                     className='font-bold text-base text-gray-900 hover:underline line-clamp-2'
                   >
                     {event.name}

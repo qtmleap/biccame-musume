@@ -55,7 +55,7 @@ const toFormValues = (event: Event): DefaultValues<EventFormValues> => ({
   conditions: event.conditions,
   isVerified: event.isVerified ?? false,
   isPreliminary: event.isPreliminary ?? false,
-  id: event.id
+  id: event.uuid
 })
 
 /**
@@ -66,7 +66,7 @@ export const EventForm = ({
   onSuccess,
   defaultValues
 }: {
-  event?: Event
+  event?: Event | null
   onSuccess?: () => void
   defaultValues?: Partial<EventFormValues>
 }) => {
@@ -153,7 +153,7 @@ export const EventForm = ({
       }
 
       try {
-        const result = await checkDuplicateUrl(url, event?.id)
+        const result = await checkDuplicateUrl(url, event?.uuid)
         setDuplicateWarnings((prev) => ({
           ...prev,
           [index]: result.exists ? (result.event ?? null) : null
@@ -163,7 +163,7 @@ export const EventForm = ({
         setDuplicateWarnings((prev) => ({ ...prev, [index]: null }))
       }
     },
-    [event?.id]
+    [event?.uuid]
   )
 
   // 編集モードの場合、初期値をセット
@@ -276,7 +276,7 @@ export const EventForm = ({
     try {
       if (event) {
         await updateEvent.mutateAsync({
-          id: event.id,
+          id: event.uuid,
           data: payload as Parameters<typeof updateEvent.mutateAsync>[0]['data']
         })
       } else {

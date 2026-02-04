@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Suspense } from 'react'
-import { uuidv4 } from 'zod'
+import { v4 as uuidv4 } from 'uuid'
 import { EventList } from '@/components/admin/event-list'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'

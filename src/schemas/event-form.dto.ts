@@ -14,7 +14,7 @@ export const EventFormSchema = z.object({
   limitedQuantity: z.number().min(1).optional(),
   referenceUrls: z.array(
     z.object({
-      id: z.string().optional(),
+      uuid: z.string().optional(),
       type: ReferenceUrlTypeSchema,
       url: z.string().url('有効なURLを入力してください')
     })
@@ -22,7 +22,7 @@ export const EventFormSchema = z.object({
   conditions: z
     .array(
       z.object({
-        id: z.string().optional(),
+        uuid: z.string().optional(),
         type: z.enum(['purchase', 'first_come', 'lottery', 'everyone']),
         purchaseAmount: z.number().min(0).optional(),
         quantity: z.number().min(1).optional()
@@ -33,7 +33,7 @@ export const EventFormSchema = z.object({
   isPreliminary: z.boolean(),
   shouldTweet: z.boolean(),
   // 重複作成を防ぐためにクライアント側で生成したid（新規作成時のみ）
-  id: z.string().uuid().optional()
+  uuid: z.string().uuid().optional()
 })
 
 export type EventFormValues = z.infer<typeof EventFormSchema>

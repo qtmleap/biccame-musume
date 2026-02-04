@@ -12,9 +12,9 @@ import { useEvent, useEvents } from '@/hooks/useEvents'
  * イベント詳細ページのコンテンツ
  */
 const EventDetailContent = () => {
-  const { eventId } = Route.useParams()
+  const { uuid } = Route.useParams()
   const navigate = useNavigate()
-  const { data: event } = useEvent(eventId)
+  const { data: event } = useEvent(uuid)
   const { data: allEvents } = useEvents()
   const { isAuthenticated } = useCloudflareAccess()
 
@@ -38,7 +38,7 @@ const EventDetailContent = () => {
           {/* サイドバー（デスクトップのみ） */}
           <div className='hidden md:block pt-4'>
             <div className='sticky top-4'>
-              <RecentEventsList events={allEvents} currentEventId={eventId} />
+              <RecentEventsList events={allEvents} currentEventId={uuid} />
             </div>
           </div>
         </div>
@@ -56,6 +56,6 @@ const RouteComponent = () => (
   </Suspense>
 )
 
-export const Route = createFileRoute('/events/$eventId')({
+export const Route = createFileRoute('/events/$uuid/')({
   component: RouteComponent
 })

@@ -58,8 +58,14 @@ const calculateEventStatus = (event: {
 // biome-ignore lint/suspicious/noExplicitAny: reason
 const transform = (event: any): Event => {
   const { status, daysUntil } = calculateEventStatus(event)
+  const { id, conditions, referenceUrls, ...rest } = event
   return {
-    ...nullToUndefined(event),
+    ...nullToUndefined(rest),
+    uuid: id,
+    // biome-ignore lint/suspicious/noExplicitAny: reason
+    conditions: conditions?.map((c: any) => ({ ...nullToUndefined(c), uuid: c.id })) || [],
+    // biome-ignore lint/suspicious/noExplicitAny: reason
+    referenceUrls: referenceUrls?.map((r: any) => ({ ...nullToUndefined(r), uuid: r.id })) || [],
     // biome-ignore lint/suspicious/noExplicitAny: reason
     stores: event.stores.map((s: any) => s.storeKey),
     status,
@@ -107,9 +113,9 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
   // クライアント側でidが指定されている場合、既存イベントをチェック
-  if (data.id) {
+  if (data.uuid) {
     const existingEvent = await prisma.event.findUnique({
-      where: { id: data.id },
+      where: { id: data.uuid },
       include: {
         conditions: true,
         referenceUrls: true,
@@ -118,14 +124,14 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     })
 
     if (existingEvent) {
-      console.log('Event already exists with id:', data.id)
+      console.log('Event already exists with id:', data.uuid)
       return transform(existingEvent)
     }
   }
 
   const event = await prisma.event.create({
     data: {
-      ...(data.id ? { id: data.id } : {}),
+      id: data.uuid,
       category: data.category,
       name: data.name,
       limitedQuantity: data.limitedQuantity,
@@ -172,11 +178,11 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
   return transformedEvent
 }
 
-export const updateEvent = async (env: Bindings, id: string, data: EventRequest): Promise<Event> => {
+export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
   const event = await prisma.event.update({
-    where: { id },
+    where: { id: data.uuid },
     data: {
       category: data.category,
       name: data.name,
@@ -189,7 +195,7 @@ export const updateEvent = async (env: Bindings, id: string, data: EventRequest)
       conditions: {
         deleteMany: {},
         create: data.conditions.map((c) => ({
-          id: c.id,
+          id: c.uuid,
           type: c.type,
           purchaseAmount: c.purchaseAmount,
           quantity: c.quantity
@@ -199,7 +205,7 @@ export const updateEvent = async (env: Bindings, id: string, data: EventRequest)
         deleteMany: {},
         create:
           data.referenceUrls?.map((r) => ({
-            id: r.id,
+            id: r.uuid,
             type: r.type,
             url: r.url
           })) || []

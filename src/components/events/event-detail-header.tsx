@@ -33,7 +33,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
 
       {/* ヘッダー */}
       <motion.div
-        key={`header-${event.id}`}
+        key={`header-${event.uuid}`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
@@ -41,7 +41,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
       >
         <div className='flex items-center gap-2 mb-2'>
           <Badge className={`${categoryStyle} border`}>{EVENT_CATEGORY_LABELS[event.category]}</Badge>
-          {STATUS_BADGE_DETAIL[event.status]}
+          {STATUS_BADGE_DETAIL[event.status]()}
         </div>
         <div className='flex items-center justify-between gap-4'>
           <h1 className='text-2xl font-bold text-gray-900'>{event.name}</h1>
@@ -51,7 +51,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
               size='sm'
               className='rounded-full px-4 h-7 text-xs font-semibold bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100'
             >
-              <Link to='/admin/events/$id/edit' params={{ id: event.id }}>
+              <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
                 <Pencil className='h-3.5 w-3.5 mr-1' />
                 編集
               </Link>
