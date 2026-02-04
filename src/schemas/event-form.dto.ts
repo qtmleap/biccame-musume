@@ -14,7 +14,7 @@ export const EventFormSchema = z.object({
   limitedQuantity: z.number().min(1).optional(),
   referenceUrls: z.array(
     z.object({
-      uuid: z.string().optional(),
+      uuid: z.string(),
       type: ReferenceUrlTypeSchema,
       url: z.string().url('有効なURLを入力してください')
     })
@@ -22,7 +22,7 @@ export const EventFormSchema = z.object({
   conditions: z
     .array(
       z.object({
-        uuid: z.string().optional(),
+        uuid: z.string(),
         type: z.enum(['purchase', 'first_come', 'lottery', 'everyone']),
         purchaseAmount: z.number().min(0).optional(),
         quantity: z.number().min(1).optional()
