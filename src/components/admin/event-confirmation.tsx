@@ -1,8 +1,7 @@
 import dayjs from 'dayjs'
 import { EventDetailInfo } from '@/components/events/event-detail-info'
 import { Button } from '@/components/ui/button'
-import type { Event, EventStatus } from '@/schemas/event.dto'
-import type { EventRequest } from '@/schemas/event.dto'
+import type { Event, EventRequest, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 type EventConfirmationProps = {
@@ -20,7 +19,7 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
   const previewEvent: Event = {
     uuid: 'preview',
     category: data.category,
-    name: data.name,
+    title: data.title,
     stores: data.stores as StoreKey[],
     startDate: dayjs(data.startDate).toDate(),
     endDate: data.endDate ? dayjs(data.endDate).toDate() : undefined,

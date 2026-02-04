@@ -24,13 +24,13 @@ import type { StoreKey } from '@/schemas/store.dto'
  */
 const DEFAULT_VALUES: DefaultValues<EventRequest> = {
   category: undefined,
-  name: '',
+  title: '',
   referenceUrls: [],
   stores: [],
   limitedQuantity: undefined,
   startDate: '',
-  endDate: null,
-  endedAt: null,
+  endDate: undefined,
+  endedAt: undefined,
   conditions: [],
   isVerified: true,
   isPreliminary: false,
@@ -44,13 +44,13 @@ const DEFAULT_VALUES: DefaultValues<EventRequest> = {
 const toFormValues = (event: Event): DefaultValues<EventRequest> => ({
   ...DEFAULT_VALUES,
   category: event.category,
-  name: event.name,
+  title: event.title,
   referenceUrls: event.referenceUrls || [],
   stores: event.stores || [],
   limitedQuantity: event.limitedQuantity,
   startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
-  endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : null,
-  endedAt: event.endedAt ? dayjs(event.endedAt).format('YYYY-MM-DD') : null,
+  endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : undefined,
+  endedAt: event.endedAt ? dayjs(event.endedAt).format('YYYY-MM-DD') : undefined,
   conditions: event.conditions,
   isVerified: event.isVerified ?? false,
   isPreliminary: event.isPreliminary ?? false,
@@ -97,8 +97,8 @@ export const EventForm = ({
         ...DEFAULT_VALUES,
         ...defaultValues,
         startDate: defaultValues.startDate ? dayjs(defaultValues.startDate).format('YYYY-MM-DD') : '',
-        endDate: defaultValues.endDate ? dayjs(defaultValues.endDate).format('YYYY-MM-DD') : null,
-        endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : null,
+        endDate: defaultValues.endDate ? dayjs(defaultValues.endDate).format('YYYY-MM-DD') : undefined,
+        endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : undefined,
         // uuidが渡されていればそれを使用、なければ新規生成
         uuid: defaultValues.uuid || uuidv4()
       }
@@ -175,9 +175,9 @@ export const EventForm = ({
    */
   const handleAddStore = (storeKey: string) => {
     if (storeKey === '_all') {
-      setValue('stores', storeKeys as any)
-    } else if (!stores.includes(storeKey as any)) {
-      setValue('stores', [...stores, storeKey] as any)
+      setValue('stores', storeKeys as StoreKey[])
+    } else if (!stores.includes(storeKey as StoreKey)) {
+      setValue('stores', [...stores, storeKey as StoreKey])
     }
   }
 
@@ -232,7 +232,7 @@ export const EventForm = ({
     // biome-ignore lint/suspicious/noExplicitAny: 動的にプロパティを追加するため
     const payload: any = {
       category: confirmedData.category,
-      name: confirmedData.name,
+      title: confirmedData.title,
       startDate: dayjs(confirmedData.startDate).toISOString(),
       conditions: confirmedData.conditions.map((c) => ({
         uuid: c.uuid || uuidv4(),
@@ -302,18 +302,18 @@ export const EventForm = ({
       <form onSubmit={handleSubmit(handleConfirm)} className='space-y-3'>
         {/* イベント名 */}
         <div>
-          <label htmlFor='event-name' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
+          <label htmlFor='event-title' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
             <FileText className='size-4' />
             イベント名
           </label>
           <Input
-            id='event-name'
+            id='event-title'
             type='text'
             placeholder='例: 新春アクキープレゼント'
-            {...register('name')}
+            {...register('title')}
             className='w-full'
           />
-          {errors.name && <p className='mt-1 text-xs text-destructive'>{errors.name.message}</p>}
+          {errors.title && <p className='mt-1 text-xs text-destructive'>{errors.title.message}</p>}
         </div>
 
         {/* 日付設定 */}
@@ -388,7 +388,7 @@ export const EventForm = ({
                   const storeKey = key as StoreKey
                   const displayName = STORE_NAME_LABELS[storeKey] || key
                   return (
-                    <SelectItem key={key} value={key} disabled={stores.includes(key as any)}>
+                    <SelectItem key={key} value={key} disabled={stores.includes(storeKey)}>
                       {displayName}
                     </SelectItem>
                   )

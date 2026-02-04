@@ -60,7 +60,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
             <div className={`shrink-0 p-2 rounded-lg ${CATEGORY_WITH_ICON[event.category ?? 'other'].className}`}>
               {CATEGORY_WITH_ICON[event.category ?? 'other'].icon}
             </div>
-            <p className='text-sm font-medium text-gray-800 line-clamp-2'>{event.name}</p>
+            <p className='text-sm font-medium text-gray-800 line-clamp-2'>{event.title}</p>
           </div>
           <div
             className={`shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
