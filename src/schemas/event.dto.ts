@@ -104,7 +104,9 @@ export const EventRequestSchema = EventSchema.omit({
   daysUntil: true
 }).extend({
   // ツイート投稿フラグ（DBには保存しない）
-  shouldTweet: z.boolean().default(true).optional()
+  shouldTweet: z.boolean().default(true).optional(),
+  // 重複作成を防ぐためにクライアント側で生成したid（新規作成時のみ、オプショナル）
+  id: z.string().uuid().optional()
 })
 
 export type EventRequest = z.infer<typeof EventRequestSchema>
