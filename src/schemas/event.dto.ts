@@ -58,7 +58,7 @@ export type ReferenceUrl = z.infer<typeof ReferenceUrlSchema>
  * イベントリクエスト（POST/PUT用）
  */
 export const EventSchema = z.object({
-  id: z.uuid(),
+  uuid: z.uuid(),
   // イベント種別
   category: EventCategorySchema,
   // イベント名
@@ -97,7 +97,7 @@ export type Event = z.infer<typeof EventSchema>
  * イベント作成・更新リクエスト（POST/PUT用）
  */
 export const EventRequestSchema = EventSchema.omit({
-  id: true,
+  uuid: true,
   createdAt: true,
   updatedAt: true,
   status: true,
@@ -106,7 +106,7 @@ export const EventRequestSchema = EventSchema.omit({
   // ツイート投稿フラグ（DBには保存しない）
   shouldTweet: z.boolean().default(true).optional(),
   // 重複作成を防ぐためにクライアント側で生成したid（新規作成時のみ、オプショナル）
-  id: z.string().uuid().optional()
+  uuid: z.string().uuid().optional()
 })
 
 export type EventRequest = z.infer<typeof EventRequestSchema>

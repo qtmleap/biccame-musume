@@ -2,6 +2,7 @@ import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import { EventForm } from '@/components/admin/event-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -26,10 +27,10 @@ const EventEditSearchSchema = z.object({
  * イベント編集/新規作成画面のコンテンツ
  */
 const EditEventContent = () => {
-  const { id } = Route.useParams()
+  const { uuid } = Route.useParams()
   const router = useRouter()
-  const search = useSearch({ from: '/admin/events/$id/edit/' })
-  const { data: event } = useEventOrNull(id)
+  const search = useSearch({ from: '/admin/events/$uuid/' })
+  const { data: event } = useEventOrNull(uuid)
 
   const handleSuccess = () => {
     router.history.back()
@@ -50,7 +51,7 @@ const EditEventContent = () => {
         stores: search.stores ? search.stores.split(',').map((s) => s.trim()) : undefined,
         referenceUrls: search.referenceUrls
           ? search.referenceUrls.split(',').map((url) => ({
-              id: crypto.randomUUID(),
+              id: uuidv4(),
               type: 'announce' as const,
               url: url.trim()
             }))
@@ -58,7 +59,7 @@ const EditEventContent = () => {
         startDate: parseDate(search.startDate),
         endDate: parseDate(search.endDate),
         shouldTweet: hasQueryParams ? false : undefined,
-        id: id
+        id: uuid
       }
     : undefined
 
@@ -100,7 +101,7 @@ const EditEventPage = () => {
   )
 }
 
-export const Route = createFileRoute('/admin/events/$uuid/edit/')({
+export const Route = createFileRoute('/admin/events/$uuid/')({
   component: EditEventPage,
   validateSearch: EventEditSearchSchema
 })
