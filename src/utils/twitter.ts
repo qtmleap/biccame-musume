@@ -42,7 +42,7 @@ const generateTweetText = (event: Event, isUpdate: boolean): string => {
   const storeText = storeCount === 1 ? characterName : `${characterName}など${storeCount}店舗`
 
   const lines = [
-    `${storeText}の「${event.name}」を${action}しました！`,
+    `${storeText}の「${event.title}」を${action}しました！`,
     '',
     `https://biccame-musume.com/events/${event.uuid}`,
     '',

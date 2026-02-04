@@ -86,7 +86,7 @@ export const EventGridItem = ({ event, index }: EventGridItemProps) => {
       >
         <div className='mb-2 flex items-start justify-between gap-3'>
           <div className='flex-1'>
-            <h3 className='text-sm font-semibold text-gray-900 line-clamp-2'>{event.name}</h3>
+            <h3 className='text-sm font-semibold text-gray-900 line-clamp-2'>{event.title}</h3>
             <div className='mt-1 flex flex-col gap-1 text-xs text-muted-foreground'>
               <span className='flex items-center gap-1'>
                 <Calendar className='size-3' />

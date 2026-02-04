@@ -8,15 +8,16 @@ import { EventForm } from '@/components/admin/event-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
 import { useEventOrNull } from '@/hooks/useEvents'
-import { EventRequestSchema } from '@/schemas/event.dto'
 import type { EventRequest } from '@/schemas/event.dto'
+import { EventRequestSchema } from '@/schemas/event.dto'
+import type { StoreKey } from '@/schemas/store.dto'
 
 /**
  * クエリパラメータのスキーマ定義
  */
 const EventEditSearchSchema = z.object({
   category: EventRequestSchema.shape.category.optional(),
-  name: z.string().optional(),
+  title: z.string().optional(),
   stores: z.string().optional(),
   referenceUrls: z.string().optional(),
   startDate: EventRequestSchema.shape.startDate.optional(),
@@ -47,10 +48,10 @@ const EditEventContent = () => {
   const defaultValues: Partial<EventRequest> | undefined = !event
     ? {
         category: search.category,
-        name: search.name,
-        stores: search.stores ? (search.stores.split(',').map((s) => s.trim()) as any) : undefined,
+        title: search.title,
+        stores: search.stores ? (search.stores.split(',').map((s: string) => s.trim()) as StoreKey[]) : undefined,
         referenceUrls: search.referenceUrls
-          ? search.referenceUrls.split(',').map((url) => ({
+          ? search.referenceUrls.split(',').map((url: string) => ({
               uuid: uuidv4(),
               type: 'announce' as const,
               url: url.trim()
