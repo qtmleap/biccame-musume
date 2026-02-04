@@ -42,11 +42,6 @@ simple = { limit = 50, period = 60 }
 ENVIRONMENT = "prod"
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
-# Twitter API認証情報（Cloudflareダッシュボードの環境変数で設定）
-# TWITTER_API_KEY = "your-api-key"
-# TWITTER_API_SECRET = "your-api-secret"
-# TWITTER_ACCESS_TOKEN = "your-access-token"
-# TWITTER_ACCESS_SECRET = "your-access-secret"
 
 [env.prod.observability]
 enabled = true

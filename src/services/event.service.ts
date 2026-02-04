@@ -105,8 +105,27 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
 
 export const createEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+
+  // クライアント側でidが指定されている場合、既存イベントをチェック
+  if (data.id) {
+    const existingEvent = await prisma.event.findUnique({
+      where: { id: data.id },
+      include: {
+        conditions: true,
+        referenceUrls: true,
+        stores: true
+      }
+    })
+
+    if (existingEvent) {
+      console.log('Event already exists with id:', data.id)
+      return transform(existingEvent)
+    }
+  }
+
   const event = await prisma.event.create({
     data: {
+      ...(data.id ? { id: data.id } : {}),
       category: data.category,
       name: data.name,
       limitedQuantity: data.limitedQuantity,

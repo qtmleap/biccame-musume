@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { FileText, Package, Store, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Controller, type DefaultValues, useFieldArray, useForm, useWatch } from 'react-hook-form'
+import { v4 as uuidv4 } from 'uuid'
 import { EventConfirmation } from '@/components/admin/event-confirmation'
 import { ConditionsSection } from '@/components/admin/form/conditions-section'
 import { DateField } from '@/components/admin/form/date-field'
@@ -34,7 +35,8 @@ const DEFAULT_VALUES: DefaultValues<EventFormValues> = {
   conditions: [],
   isVerified: true,
   isPreliminary: false,
-  shouldTweet: true
+  shouldTweet: true,
+  id: undefined
 }
 
 /**
@@ -52,7 +54,8 @@ const toFormValues = (event: Event): DefaultValues<EventFormValues> => ({
   endedAt: event.endedAt ? dayjs(event.endedAt).format('YYYY-MM-DD') : null,
   conditions: event.conditions,
   isVerified: event.isVerified ?? false,
-  isPreliminary: event.isPreliminary ?? false
+  isPreliminary: event.isPreliminary ?? false,
+  id: event.id
 })
 
 /**
@@ -77,6 +80,8 @@ export const EventForm = ({
   // 確認画面の表示状態
   const [isConfirming, setIsConfirming] = useState(false)
   const [confirmedData, setConfirmedData] = useState<EventFormValues | null>(null)
+  // 二重送信防止フラグ
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   // 住所がある店舗のみフィルタリングしてユニークリストを取得（キーのリスト）
   const storeKeys = Array.from(
@@ -94,11 +99,17 @@ export const EventForm = ({
         ...defaultValues,
         startDate: defaultValues.startDate ? dayjs(defaultValues.startDate).format('YYYY-MM-DD') : '',
         endDate: defaultValues.endDate ? dayjs(defaultValues.endDate).format('YYYY-MM-DD') : null,
-        endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : null
+        endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : null,
+        // idが渡されていればそれを使用、なければ新規生成
+        id: defaultValues.id || uuidv4()
       }
     }
 
-    return DEFAULT_VALUES
+    // 新規作成時はidを生成
+    return {
+      ...DEFAULT_VALUES,
+      id: uuidv4()
+    }
   }
 
   const {
@@ -188,6 +199,7 @@ export const EventForm = ({
     reset(DEFAULT_VALUES)
     setIsConfirming(false)
     setConfirmedData(null)
+    setIsSubmitted(false)
   }
 
   /**
@@ -210,6 +222,13 @@ export const EventForm = ({
    */
   const onSubmit = async () => {
     if (!confirmedData) return
+    // 二重送信防止
+    if (isSubmitted) {
+      console.warn('Already submitted, skipping duplicate submission')
+      return
+    }
+
+    setIsSubmitted(true)
 
     // biome-ignore lint/suspicious/noExplicitAny: 動的にプロパティを追加するため
     const payload: any = {
@@ -217,7 +236,7 @@ export const EventForm = ({
       name: confirmedData.name,
       startDate: dayjs(confirmedData.startDate).toISOString(),
       conditions: confirmedData.conditions.map((c) => ({
-        id: c.id || crypto.randomUUID(),
+        id: c.id || uuidv4(),
         type: c.type,
         purchaseAmount: c.purchaseAmount,
         quantity: c.quantity
@@ -225,7 +244,9 @@ export const EventForm = ({
       stores: confirmedData.stores && confirmedData.stores.length > 0 ? confirmedData.stores : [],
       isVerified: confirmedData.isVerified,
       isPreliminary: confirmedData.isPreliminary,
-      shouldTweet: confirmedData.shouldTweet
+      shouldTweet: confirmedData.shouldTweet,
+      // 新規作成時のみクライアント生成のidを含める
+      ...(!event && confirmedData.id ? { id: confirmedData.id } : {})
     }
 
     // 終了日が空文字やundefined、nullでない場合のみ設定
@@ -241,7 +262,7 @@ export const EventForm = ({
     // 参照URLが設定されている場合のみ追加
     if (confirmedData.referenceUrls && confirmedData.referenceUrls.length > 0) {
       payload.referenceUrls = confirmedData.referenceUrls.map((r) => ({
-        id: r.id || crypto.randomUUID(),
+        id: r.id || uuidv4(),
         type: r.type,
         url: r.url
       }))
@@ -252,16 +273,22 @@ export const EventForm = ({
       payload.limitedQuantity = confirmedData.limitedQuantity
     }
 
-    if (event) {
-      await updateEvent.mutateAsync({
-        id: event.id,
-        data: payload as Parameters<typeof updateEvent.mutateAsync>[0]['data']
-      })
-    } else {
-      await createEvent.mutateAsync(payload as Parameters<typeof createEvent.mutateAsync>[0])
+    try {
+      if (event) {
+        await updateEvent.mutateAsync({
+          id: event.id,
+          data: payload as Parameters<typeof updateEvent.mutateAsync>[0]['data']
+        })
+      } else {
+        await createEvent.mutateAsync(payload as Parameters<typeof createEvent.mutateAsync>[0])
+      }
+      handleReset()
+      onSuccess?.()
+    } catch (error) {
+      // エラー時は再送信可能にする
+      setIsSubmitted(false)
+      throw error
     }
-    handleReset()
-    onSuccess?.()
   }
 
   // 確認画面の表示
@@ -491,10 +518,10 @@ export const EventForm = ({
 
         {/* ボタン */}
         <div className='flex gap-2 max-w-md mx-auto'>
-          <Button type='submit' className='flex-1 bg-[#e50012] hover:bg-[#c5000f]'>
+          <Button type='submit' className='flex-1 bg-[#e50012] hover:bg-[#c5000f]' disabled={isSubmitted}>
             確認する
           </Button>
-          <Button type='button' variant='outline' onClick={handleReset} className='flex-1'>
+          <Button type='button' variant='outline' onClick={handleReset} className='flex-1' disabled={isSubmitted}>
             クリア
           </Button>
         </div>
