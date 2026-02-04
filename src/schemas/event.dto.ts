@@ -26,7 +26,7 @@ export type EventConditionType = z.infer<typeof EventConditionTypeSchema>
  * 配布条件の詳細
  */
 export const EventConditionSchema = z.object({
-  id: z.string().uuid(),
+  uuid: z.uuidv4(),
   type: EventConditionTypeSchema,
   // 購入条件の場合の金額（円）
   purchaseAmount: z.number().min(0).optional(),
@@ -47,7 +47,7 @@ export type ReferenceUrlType = z.infer<typeof ReferenceUrlTypeSchema>
  * 参考URL
  */
 export const ReferenceUrlSchema = z.object({
-  id: z.string().uuid(),
+  uuid: z.uuidv4(),
   type: ReferenceUrlTypeSchema,
   url: z.url('有効なURLを入力してください')
 })
@@ -58,7 +58,7 @@ export type ReferenceUrl = z.infer<typeof ReferenceUrlSchema>
  * イベントリクエスト（POST/PUT用）
  */
 export const EventSchema = z.object({
-  uuid: z.uuid(),
+  uuid: z.uuidv4(),
   // イベント種別
   category: EventCategorySchema,
   // イベント名
@@ -106,7 +106,7 @@ export const EventRequestSchema = EventSchema.omit({
   // ツイート投稿フラグ（DBには保存しない）
   shouldTweet: z.boolean().default(true).optional(),
   // 重複作成を防ぐためにクライアント側で生成したid（新規作成時のみ、オプショナル）
-  uuid: z.string().uuid().optional()
+  uuid: z.uuidv4()
 })
 
 export type EventRequest = z.infer<typeof EventRequestSchema>
