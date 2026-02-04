@@ -56,10 +56,10 @@ export function ConditionsSection({ fields, register, remove, update, error }: P
     }
     const newCondition =
       type === 'purchase'
-        ? { uuid: uuidv4(), type, purchaseAmount: 500 }
+        ? { uuid: uuidv4(), type, purchaseAmount: 3000 }
         : type === 'everyone'
           ? { uuid: uuidv4(), type }
-          : { uuid: uuidv4(), type, quantity: 1 }
+          : { uuid: uuidv4(), type, quantity: 100 }
     update(fields.length, newCondition as ConditionField)
   }
 
