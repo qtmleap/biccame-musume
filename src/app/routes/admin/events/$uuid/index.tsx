@@ -1,4 +1,5 @@
 import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
+import dayjs from 'dayjs'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
 import type { DefaultValues } from 'react-hook-form'
@@ -10,25 +11,55 @@ import { type EventCategory, type EventRequest, EventRequestQuerySchema } from '
 import type { StoreKey } from '@/schemas/store.dto'
 
 /**
+ * イベントデータをフォーム値に変換
+ */
+const toFormValues = (event: NonNullable<ReturnType<typeof useEventOrNull>['data']>): DefaultValues<EventRequest> => ({
+  uuid: event.uuid,
+  category: event.category,
+  title: event.title,
+  referenceUrls: event.referenceUrls || [],
+  stores: event.stores || [],
+  limitedQuantity: event.limitedQuantity,
+  startDate: dayjs(event.startDate).format('YYYY-MM-DD'),
+  endDate: event.endDate ? dayjs(event.endDate).format('YYYY-MM-DD') : undefined,
+  endedAt: event.endedAt ? dayjs(event.endedAt).format('YYYY-MM-DD') : undefined,
+  conditions: event.conditions,
+  isVerified: event.isVerified ?? false,
+  isPreliminary: event.isPreliminary ?? false,
+  shouldTweet: false
+})
+
+/**
  * イベント編集/新規作成画面のコンテンツ
  */
 const EditEventContent = () => {
   const { uuid } = Route.useParams()
   const router = useRouter()
   const search = useSearch({ from: '/admin/events/$uuid/' })
-  const { data } = useEventOrNull(uuid)
+  const { data: event } = useEventOrNull(uuid)
 
-  const event: DefaultValues<EventRequest> = {
-    ...data,
-    category: search.category as EventCategory,
-    title: search.title,
-    stores: (search.stores ? search.stores.split(',').map((s) => s.trim()) : undefined) as StoreKey[],
-    startDate: search.startDate,
-    endDate: search.endDate,
-    endedAt: search.endAt
-  }
+  // 編集モードか新規作成モードかを判定
+  const isEditMode = !!event
 
-  console.log(search)
+  // デフォルト値を生成
+  const defaultValues: DefaultValues<EventRequest> = event
+    ? toFormValues(event)
+    : {
+        uuid,
+        category: search.category as EventCategory,
+        title: search.title,
+        stores: search.stores ? (search.stores.split(',').map((s) => s.trim()) as StoreKey[]) : undefined,
+        referenceUrls: search.referenceUrls
+          ? search.referenceUrls.split(',').map((url) => ({
+              id: crypto.randomUUID(),
+              type: 'announce' as const,
+              url: url.trim()
+            }))
+          : undefined,
+        startDate: search.startDate,
+        endDate: search.endDate,
+        endedAt: search.endAt
+      }
 
   const handleSuccess = () => {
     router.history.back()
@@ -47,15 +78,15 @@ const EditEventContent = () => {
           <ArrowLeft className='h-4 w-4 mr-1' />
           戻る
         </Button>
-        <h1 className='text-2xl font-bold text-gray-900'>{event ? 'イベント編集' : '新規イベント登録'}</h1>
+        <h1 className='text-2xl font-bold text-gray-900'>{isEditMode ? 'イベント編集' : '新規イベント登録'}</h1>
         <p className='mt-2 text-sm text-gray-600 md:text-base'>
-          {event ? 'イベント情報を編集' : 'アクキー配布などのイベント情報を入力'}
+          {isEditMode ? 'イベント情報を編集' : 'アクキー配布などのイベント情報を入力'}
         </p>
       </div>
 
       {/* イベント編集/新規作成フォーム */}
       <div>
-        <EventForm event={event} onSuccess={handleSuccess} />
+        <EventForm defaultValues={defaultValues} onSuccess={handleSuccess} isEditMode={isEditMode} />
       </div>
     </div>
   )
