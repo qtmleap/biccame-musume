@@ -223,8 +223,8 @@ export const EventForm = ({
       isVerified: confirmedData.isVerified,
       isPreliminary: confirmedData.isPreliminary,
       shouldTweet: confirmedData.shouldTweet,
-      // 新規作成時のみクライアント生成のuuidを含める
-      ...(!isEditMode && confirmedData.uuid ? { uuid: confirmedData.uuid } : {})
+      // 編集時は既存のuuid、新規作成時はクライアント生成のuuidを含める
+      uuid: isEditMode && defaultValues?.uuid ? defaultValues.uuid : (confirmedData.uuid || uuidv4())
     }
 
     // 終了日が空文字やundefined、nullでない場合のみ設定
