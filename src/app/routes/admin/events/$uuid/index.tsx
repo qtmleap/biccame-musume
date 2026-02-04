@@ -1,9 +1,10 @@
-import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
+import { createFileRoute, notFound, useRouter, useSearch } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
 import type { DefaultValues } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
+import { z } from 'zod'
 import { EventForm } from '@/components/admin/event-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
@@ -106,5 +107,11 @@ const EditEventPage = () => {
 
 export const Route = createFileRoute('/admin/events/$uuid/')({
   component: EditEventPage,
-  validateSearch: EventRequestQuerySchema
+  validateSearch: EventRequestQuerySchema,
+  beforeLoad: ({ params }) => {
+    const result = z.uuidv4().safeParse(params.uuid)
+    if (!result.success) {
+      throw notFound()
+    }
+  }
 })
