@@ -3,7 +3,7 @@ import type { UseFieldArrayRemove, UseFieldArrayUpdate, UseFormRegister } from '
 import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import type { EventFormValues } from '@/schemas/event-form.dto'
+import type { EventRequest } from '@/schemas/event.dto'
 
 /**
  * 条件タイプ（配布条件のタイプ）
@@ -23,9 +23,9 @@ type ConditionField = {
 
 type Props = {
   fields: ConditionField[]
-  register: UseFormRegister<EventFormValues>
+  register: UseFormRegister<EventRequest>
   remove: UseFieldArrayRemove
-  update: UseFieldArrayUpdate<EventFormValues, 'conditions'>
+  update: UseFieldArrayUpdate<EventRequest, 'conditions'>
   error?: string
 }
 

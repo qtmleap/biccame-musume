@@ -16,14 +16,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useCharacters } from '@/hooks/useCharacters'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
 import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import { type Event, EventCategorySchema } from '@/schemas/event.dto'
-import { EventFormSchema, type EventFormValues } from '@/schemas/event-form.dto'
+import { type Event, EventCategorySchema, type EventRequest, EventRequestSchema } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 /**
  * フォームのデフォルト値
  */
-const DEFAULT_VALUES: DefaultValues<EventFormValues> = {
+const DEFAULT_VALUES: DefaultValues<EventRequest> = {
   category: undefined,
   name: '',
   referenceUrls: [],
@@ -42,7 +41,7 @@ const DEFAULT_VALUES: DefaultValues<EventFormValues> = {
 /**
  * イベントデータをフォーム値に変換
  */
-const toFormValues = (event: Event): DefaultValues<EventFormValues> => ({
+const toFormValues = (event: Event): DefaultValues<EventRequest> => ({
   ...DEFAULT_VALUES,
   category: event.category,
   name: event.name,
@@ -68,7 +67,7 @@ export const EventForm = ({
 }: {
   event?: Event | null
   onSuccess?: () => void
-  defaultValues?: Partial<EventFormValues>
+  defaultValues?: Partial<EventRequest>
 }) => {
   const createEvent = useCreateEvent()
   const updateEvent = useUpdateEvent()
@@ -79,7 +78,7 @@ export const EventForm = ({
 
   // 確認画面の表示状態
   const [isConfirming, setIsConfirming] = useState(false)
-  const [confirmedData, setConfirmedData] = useState<EventFormValues | null>(null)
+  const [confirmedData, setConfirmedData] = useState<EventRequest | null>(null)
   // 二重送信防止フラグ
   const [isSubmitted, setIsSubmitted] = useState(false)
 
@@ -89,7 +88,7 @@ export const EventForm = ({
   ).sort()
 
   // クエリパラメータとイベントデータを統合したデフォルト値を生成
-  const getInitialValues = (): DefaultValues<EventFormValues> => {
+  const getInitialValues = (): DefaultValues<EventRequest> => {
     if (event) return toFormValues(event)
 
     // クエリパラメータからのデフォルト値を適用
@@ -120,8 +119,8 @@ export const EventForm = ({
     setValue,
     watch,
     formState: { errors, isSubmitting }
-  } = useForm<EventFormValues>({
-    resolver: zodResolver(EventFormSchema),
+  } = useForm<EventRequest>({
+    resolver: zodResolver(EventRequestSchema),
     defaultValues: getInitialValues()
   })
 
@@ -176,9 +175,9 @@ export const EventForm = ({
    */
   const handleAddStore = (storeKey: string) => {
     if (storeKey === '_all') {
-      setValue('stores', storeKeys)
-    } else if (!stores.includes(storeKey)) {
-      setValue('stores', [...stores, storeKey])
+      setValue('stores', storeKeys as any)
+    } else if (!stores.includes(storeKey as any)) {
+      setValue('stores', [...stores, storeKey] as any)
     }
   }
 
@@ -205,7 +204,7 @@ export const EventForm = ({
   /**
    * 確認画面へ進む
    */
-  const handleConfirm = (data: EventFormValues) => {
+  const handleConfirm = (data: EventRequest) => {
     setConfirmedData(data)
     setIsConfirming(true)
   }
@@ -389,7 +388,7 @@ export const EventForm = ({
                   const storeKey = key as StoreKey
                   const displayName = STORE_NAME_LABELS[storeKey] || key
                   return (
-                    <SelectItem key={key} value={key} disabled={stores.includes(key)}>
+                    <SelectItem key={key} value={key} disabled={stores.includes(key as any)}>
                       {displayName}
                     </SelectItem>
                   )

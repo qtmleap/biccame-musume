@@ -9,7 +9,7 @@ import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
 import { useEventOrNull } from '@/hooks/useEvents'
 import { EventRequestSchema } from '@/schemas/event.dto'
-import type { EventFormValues } from '@/schemas/event-form.dto'
+import type { EventRequest } from '@/schemas/event.dto'
 
 /**
  * クエリパラメータのスキーマ定義
@@ -38,17 +38,17 @@ const EditEventContent = () => {
 
   // イベントが存在しない場合、クエリパラメータから初期値を作成
   const hasQueryParams = Object.keys(search).length > 0
-  const parseDate = (date: Date | undefined) => {
+  const parseDate = (date: string | null | undefined) => {
     if (!date) return undefined
     const parsed = dayjs(date)
     return parsed.isValid() ? parsed.format('YYYY-MM-DD') : undefined
   }
 
-  const defaultValues: Partial<EventFormValues> | undefined = !event
+  const defaultValues: Partial<EventRequest> | undefined = !event
     ? {
         category: search.category,
         name: search.name,
-        stores: search.stores ? search.stores.split(',').map((s) => s.trim()) : undefined,
+        stores: search.stores ? (search.stores.split(',').map((s) => s.trim()) as any) : undefined,
         referenceUrls: search.referenceUrls
           ? search.referenceUrls.split(',').map((url) => ({
               uuid: uuidv4(),
