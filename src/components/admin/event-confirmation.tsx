@@ -1,8 +1,7 @@
 import dayjs from 'dayjs'
-import { v4 as uuidv4 } from 'uuid'
 import { EventDetailInfo } from '@/components/events/event-detail-info'
 import { Button } from '@/components/ui/button'
-import type { Event } from '@/schemas/event.dto'
+import type { Event, EventStatus } from '@/schemas/event.dto'
 import type { EventFormValues } from '@/schemas/event-form.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -27,17 +26,11 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
     endDate: data.endDate ? dayjs(data.endDate).toDate() : undefined,
     endedAt: data.endedAt ? dayjs(data.endedAt).toDate() : undefined,
     limitedQuantity: data.limitedQuantity,
-    referenceUrls: data.referenceUrls.map((v) => ({
-      ...v,
-      uuid: v.id || uuidv4()
-    })),
-    conditions: data.conditions.map((c) => ({
-      ...c,
-      uuid: c.id || uuidv4()
-    })),
+    referenceUrls: data.referenceUrls,
+    conditions: data.conditions,
     isVerified: data.isVerified,
     isPreliminary: data.isPreliminary,
-    status: 'upcoming' as const,
+    status: 'upcoming' as EventStatus,
     daysUntil: dayjs(data.startDate).diff(dayjs(), 'day'),
     createdAt: dayjs().toDate(),
     updatedAt: dayjs().toDate()
