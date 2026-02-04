@@ -44,7 +44,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
           {STATUS_BADGE_DETAIL[event.status]()}
         </div>
         <div className='flex items-center justify-between gap-4'>
-          <h1 className='text-2xl font-bold text-gray-900'>{event.name}</h1>
+          <h1 className='text-2xl font-bold text-gray-900'>{event.title}</h1>
           {isAuthenticated && (
             <Button
               asChild

@@ -77,7 +77,7 @@ export const RecentEventsList = ({ events, currentEventId }: RecentEventsListPro
                     params={{ uuid: event.uuid }}
                     className='font-bold text-base text-gray-900 hover:underline line-clamp-2'
                   >
-                    {event.name}
+                    {event.title}
                   </Link>
                 </div>
                 <div className='flex items-center gap-1'>
