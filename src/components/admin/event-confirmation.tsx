@@ -19,7 +19,7 @@ type EventConfirmationProps = {
 export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: EventConfirmationProps) => {
   // EventFormValuesをEvent型に変換
   const previewEvent: Event = {
-    id: 'preview',
+    uuid: 'preview',
     category: data.category,
     name: data.name,
     stores: data.stores as StoreKey[],
@@ -29,11 +29,11 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
     limitedQuantity: data.limitedQuantity,
     referenceUrls: data.referenceUrls.map((v) => ({
       ...v,
-      id: v.id || uuidv4()
+      uuid: v.id || uuidv4()
     })),
     conditions: data.conditions.map((c) => ({
       ...c,
-      id: c.id || uuidv4()
+      uuid: c.id || uuidv4()
     })),
     isVerified: data.isVerified,
     isPreliminary: data.isPreliminary,

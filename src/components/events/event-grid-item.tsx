@@ -77,8 +77,8 @@ export const EventGridItem = ({ event, index }: EventGridItemProps) => {
       }}
     >
       <Link
-        to='/events/$eventId'
-        params={{ eventId: event.id }}
+        to='/events/$uuid'
+        params={{ uuid: event.uuid }}
         className={cn(
           'block border rounded-lg p-4 hover:border-[#e50012]/30 transition-colors h-full',
           isEnded ? 'opacity-50 grayscale bg-white' : endingSoonBg || 'bg-white'
@@ -118,7 +118,7 @@ export const EventGridItem = ({ event, index }: EventGridItemProps) => {
               </div>
             </div>
           </div>
-          {STATUS_BADGE_SM[event.status]}
+          {STATUS_BADGE_SM[event.status]()}
         </div>
 
         {event.conditions.some((c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery') && (
@@ -126,7 +126,7 @@ export const EventGridItem = ({ event, index }: EventGridItemProps) => {
             {event.conditions.map((condition) => {
               if (condition.type === 'everyone') return null
               return (
-                <Badge key={`${event.id}-${condition.type}`} variant='secondary' className='text-xs'>
+                <Badge key={`${event.uuid}-${condition.type}`} variant='secondary' className='text-xs'>
                   {condition.type === 'purchase' && `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
                   {condition.type === 'first_come' && '先着'}
                   {condition.type === 'lottery' && '抽選'}

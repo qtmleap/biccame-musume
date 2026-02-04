@@ -106,7 +106,7 @@ const EventConditionsSection = ({ conditions }: { conditions: Event['conditions'
       <p className='text-sm text-gray-500'>配布条件</p>
       <div className='space-y-1'>
         {conditions.map((condition) => (
-          <div key={condition.id} className='text-sm text-gray-900'>
+          <div key={condition.uuid} className='text-sm text-gray-900'>
             • {getConditionDetail(condition)}
           </div>
         ))}
@@ -150,7 +150,7 @@ const EventReferenceUrlsSection = ({ referenceUrls }: { referenceUrls?: Event['r
  */
 export const EventDetailInfo = ({ event }: EventDetailInfoProps) => (
   <motion.div
-    key={`info-${event.id}`}
+    key={`info-${event.uuid}`}
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 0.5, delay: 0.3 }}

@@ -51,7 +51,7 @@ const EditEventContent = () => {
         stores: search.stores ? search.stores.split(',').map((s) => s.trim()) : undefined,
         referenceUrls: search.referenceUrls
           ? search.referenceUrls.split(',').map((url) => ({
-              id: uuidv4(),
+              uuid: uuidv4(),
               type: 'announce' as const,
               url: url.trim()
             }))
@@ -59,7 +59,7 @@ const EditEventContent = () => {
         startDate: parseDate(search.startDate),
         endDate: parseDate(search.endDate),
         shouldTweet: hasQueryParams ? false : undefined,
-        id: uuid
+        uuid: uuid
       }
     : undefined
 
