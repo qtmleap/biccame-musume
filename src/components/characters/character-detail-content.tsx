@@ -3,12 +3,14 @@ import { Link, useRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { ArrowLeft, Calendar, Clock, ExternalLink, MapPin, Phone, Store, Train } from 'lucide-react'
 import { motion } from 'motion/react'
+import { Suspense } from 'react'
+import { CharacterOngoingEvents } from '@/components/characters/character-ongoing-events'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { NearbyCharactersList } from '@/components/characters/nearby-characters-list'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import type { StoreData } from '@/schemas/store.dto'
+import type { StoreData, StoreKey } from '@/schemas/store.dto'
 import { formatDate } from '@/utils/calendar'
 import { getDisplayName } from '@/utils/character'
 
@@ -324,6 +326,9 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
             </div>
 
             <CharacterProfileSection character={character} />
+            <Suspense fallback={null}>
+              <CharacterOngoingEvents storeKey={character.id as StoreKey} />
+            </Suspense>
             <StoreInfoSection character={character} />
           </div>
 
