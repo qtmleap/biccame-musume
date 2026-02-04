@@ -4,7 +4,7 @@ import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
-import { CATEGORY_STYLE, STATUS_BADGE_DETAIL } from '@/locales/component.content'
+import { CATEGORY_STYLE, STATUS_BADGE_DETAIL } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 
 type EventDetailHeaderProps = {

@@ -1,28 +1,13 @@
 import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
-import dayjs from 'dayjs'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
-import { v4 as uuidv4 } from 'uuid'
-import { z } from 'zod'
+import type { DefaultValues } from 'react-hook-form'
 import { EventForm } from '@/components/admin/event-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
 import { useEventOrNull } from '@/hooks/useEvents'
-import type { EventRequest } from '@/schemas/event.dto'
-import { EventRequestSchema } from '@/schemas/event.dto'
+import { type EventCategory, type EventRequest, EventRequestQuerySchema } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
-
-/**
- * クエリパラメータのスキーマ定義
- */
-const EventEditSearchSchema = z.object({
-  category: EventRequestSchema.shape.category.optional(),
-  title: z.string().optional(),
-  stores: z.string().optional(),
-  referenceUrls: z.string().optional(),
-  startDate: EventRequestSchema.shape.startDate.optional(),
-  endDate: EventRequestSchema.shape.endDate.optional()
-})
 
 /**
  * イベント編集/新規作成画面のコンテンツ
@@ -31,38 +16,23 @@ const EditEventContent = () => {
   const { uuid } = Route.useParams()
   const router = useRouter()
   const search = useSearch({ from: '/admin/events/$uuid/' })
-  const { data: event } = useEventOrNull(uuid)
+  const { data } = useEventOrNull(uuid)
+
+  const event: DefaultValues<EventRequest> = {
+    ...data,
+    category: search.category as EventCategory,
+    title: search.title,
+    stores: (search.stores ? search.stores.split(',').map((s) => s.trim()) : undefined) as StoreKey[],
+    startDate: search.startDate,
+    endDate: search.endDate,
+    endedAt: search.endAt
+  }
+
+  console.log(search)
 
   const handleSuccess = () => {
     router.history.back()
   }
-
-  // イベントが存在しない場合、クエリパラメータから初期値を作成
-  const hasQueryParams = Object.keys(search).length > 0
-  const parseDate = (date: string | null | undefined) => {
-    if (!date) return undefined
-    const parsed = dayjs(date)
-    return parsed.isValid() ? parsed.format('YYYY-MM-DD') : undefined
-  }
-
-  const defaultValues: Partial<EventRequest> | undefined = !event
-    ? {
-        category: search.category,
-        title: search.title,
-        stores: search.stores ? (search.stores.split(',').map((s: string) => s.trim()) as StoreKey[]) : undefined,
-        referenceUrls: search.referenceUrls
-          ? search.referenceUrls.split(',').map((url: string) => ({
-              uuid: uuidv4(),
-              type: 'announce' as const,
-              url: url.trim()
-            }))
-          : undefined,
-        startDate: parseDate(search.startDate),
-        endDate: parseDate(search.endDate),
-        shouldTweet: hasQueryParams ? false : undefined,
-        uuid: uuid
-      }
-    : undefined
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
@@ -85,7 +55,7 @@ const EditEventContent = () => {
 
       {/* イベント編集/新規作成フォーム */}
       <div>
-        <EventForm event={event} onSuccess={handleSuccess} defaultValues={defaultValues} />
+        <EventForm event={event} onSuccess={handleSuccess} />
       </div>
     </div>
   )
@@ -104,5 +74,5 @@ const EditEventPage = () => {
 
 export const Route = createFileRoute('/admin/events/$uuid/')({
   component: EditEventPage,
-  validateSearch: EventEditSearchSchema
+  validateSearch: EventRequestQuerySchema
 })
