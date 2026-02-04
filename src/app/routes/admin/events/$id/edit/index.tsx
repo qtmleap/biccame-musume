@@ -1,22 +1,66 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
+import dayjs from 'dayjs'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
+import { z } from 'zod'
 import { EventForm } from '@/components/admin/event-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
-import { useEvent } from '@/hooks/useEvents'
+import { useEventOrNull } from '@/hooks/useEvents'
+import { EventRequestSchema } from '@/schemas/event.dto'
+import type { EventFormValues } from '@/schemas/event-form.dto'
 
 /**
- * イベント編集画面のコンテンツ
+ * クエリパラメータのスキーマ定義
+ */
+const EventEditSearchSchema = z.object({
+  category: EventRequestSchema.shape.category.optional(),
+  name: z.string().optional(),
+  stores: z.string().optional(),
+  referenceUrls: z.string().optional(),
+  startDate: EventRequestSchema.shape.startDate.optional(),
+  endDate: EventRequestSchema.shape.endDate.optional()
+})
+
+/**
+ * イベント編集/新規作成画面のコンテンツ
  */
 const EditEventContent = () => {
   const { id } = Route.useParams()
   const router = useRouter()
-  const { data: event } = useEvent(id)
+  const search = useSearch({ from: '/admin/events/$id/edit/' })
+  const { data: event } = useEventOrNull(id)
 
   const handleSuccess = () => {
     router.history.back()
   }
+
+  // イベントが存在しない場合、クエリパラメータから初期値を作成
+  const hasQueryParams = Object.keys(search).length > 0
+  const parseDate = (date: Date | undefined) => {
+    if (!date) return undefined
+    const parsed = dayjs(date)
+    return parsed.isValid() ? parsed.format('YYYY-MM-DD') : undefined
+  }
+
+  const defaultValues: Partial<EventFormValues> | undefined = !event
+    ? {
+        category: search.category,
+        name: search.name,
+        stores: search.stores ? search.stores.split(',').map((s) => s.trim()) : undefined,
+        referenceUrls: search.referenceUrls
+          ? search.referenceUrls.split(',').map((url) => ({
+              id: crypto.randomUUID(),
+              type: 'announce' as const,
+              url: url.trim()
+            }))
+          : undefined,
+        startDate: parseDate(search.startDate),
+        endDate: parseDate(search.endDate),
+        shouldTweet: hasQueryParams ? false : undefined,
+        id: id
+      }
+    : undefined
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
@@ -31,13 +75,15 @@ const EditEventContent = () => {
           <ArrowLeft className='h-4 w-4 mr-1' />
           戻る
         </Button>
-        <h1 className='text-2xl font-bold text-gray-900'>イベント編集</h1>
-        <p className='mt-2 text-sm text-gray-600 md:text-base'>イベント情報を編集</p>
+        <h1 className='text-2xl font-bold text-gray-900'>{event ? 'イベント編集' : '新規イベント登録'}</h1>
+        <p className='mt-2 text-sm text-gray-600 md:text-base'>
+          {event ? 'イベント情報を編集' : 'アクキー配布などのイベント情報を入力'}
+        </p>
       </div>
 
-      {/* イベント編集フォーム */}
+      {/* イベント編集/新規作成フォーム */}
       <div>
-        <EventForm event={event} onSuccess={handleSuccess} />
+        <EventForm event={event} onSuccess={handleSuccess} defaultValues={defaultValues} />
       </div>
     </div>
   )
@@ -55,5 +101,6 @@ const EditEventPage = () => {
 }
 
 export const Route = createFileRoute('/admin/events/$id/edit/')({
-  component: EditEventPage
+  component: EditEventPage,
+  validateSearch: EventEditSearchSchema
 })
