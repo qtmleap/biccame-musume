@@ -97,16 +97,13 @@ export type Event = z.infer<typeof EventSchema>
  * イベント作成・更新リクエスト（POST/PUT用）
  */
 export const EventRequestSchema = EventSchema.omit({
-  uuid: true,
   createdAt: true,
   updatedAt: true,
   status: true,
   daysUntil: true
 }).extend({
   // ツイート投稿フラグ（DBには保存しない）
-  shouldTweet: z.boolean().default(true).optional(),
-  // 重複作成を防ぐためにクライアント側で生成したid（新規作成時のみ、オプショナル）
-  uuid: z.uuidv4()
+  shouldTweet: z.boolean().default(true).optional()
 })
 
 export type EventRequest = z.infer<typeof EventRequestSchema>

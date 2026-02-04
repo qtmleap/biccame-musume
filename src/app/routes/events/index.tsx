@@ -174,7 +174,7 @@ const EventsContent = () => {
         ) : activeEvents.length > 0 ? (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
             {activeEvents.map((event, index) => (
-              <EventGridItem key={event.id} event={event} index={index} />
+              <EventGridItem key={event.uuid} event={event} index={index} />
             ))}
           </div>
         ) : (

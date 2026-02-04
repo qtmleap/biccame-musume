@@ -44,7 +44,7 @@ const generateTweetText = (event: Event, isUpdate: boolean): string => {
   const lines = [
     `${storeText}の「${event.name}」を${action}しました！`,
     '',
-    `https://biccame-musume.com/events/${event.id}`,
+    `https://biccame-musume.com/events/${event.uuid}`,
     '',
     '#ビッカメ娘',
     '#ビックカメラ',

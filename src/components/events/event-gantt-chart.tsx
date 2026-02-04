@@ -271,12 +271,12 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
             <GanttDateHeader dates={dates} today={today} actualMonthEnd={actualMonthEnd} />
 
             {/* イベント行 */}
-            <div key={`gantt-${monthOffset}-${visibleEventBars.map((b) => b.event.id).join('-')}`}>
+            <div key={`gantt-${monthOffset}-${visibleEventBars.map((b) => b.event.uuid).join('-')}`}>
               {visibleEventBars.map(({ event, startOffset, duration, status }) => {
                 const labelOffset = getLabelOffset(startOffset, duration)
 
                 return (
-                  <div key={event.id} className='relative flex h-10'>
+                  <div key={event.uuid} className='relative flex h-10'>
                     {/* 背景グリッド */}
                     {dates.map((date) => (
                       <GanttGridCell
@@ -314,8 +314,8 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
 
                             {/* クリック領域 */}
                             <Link
-                              to='/events/$eventId'
-                              params={{ eventId: event.id }}
+                              to='/events/$uuid'
+                              params={{ uuid: event.uuid }}
                               className='absolute inset-0 hover:bg-white/10 transition-colors'
                               onClick={(e) => {
                                 // ドラッグしていた場合はリンクを無効化

@@ -49,8 +49,8 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
       whileTap={{ scale: 0.98 }}
     >
       <Link
-        to='/events/$eventId'
-        params={{ eventId: event.id }}
+        to='/events/$uuid'
+        params={{ uuid: event.uuid }}
         className={`flex flex-col gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer h-full ${
           status === 'ended' ? 'opacity-60' : ''
         }`}
@@ -109,7 +109,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
               {event.conditions.map((condition) => {
                 if (condition.type === 'everyone') return null
                 return (
-                  <Badge key={`${event.id}-${condition.type}`} variant='secondary' className='text-xs'>
+                  <Badge key={`${event.uuid}-${condition.type}`} variant='secondary' className='text-xs'>
                     {condition.type === 'purchase' && `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
                     {condition.type === 'first_come' && '先着'}
                     {condition.type === 'lottery' && '抽選'}

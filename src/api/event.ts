@@ -148,7 +148,7 @@ routes.openapi(
   async (c) => {
     const { id } = c.req.valid('param')
     const body = c.req.valid('json') as EventRequest
-    return c.json(await updateEvent(c.env, id, body), 200)
+    return c.json(await updateEvent(c.env, { ...body, uuid: id }), 200)
   }
 )
 
