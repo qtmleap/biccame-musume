@@ -93,9 +93,16 @@ export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
 
 export const getEvents = async (env: Bindings): Promise<Event[]> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  // 半年前の日付を計算
+  const sixMonthsAgo = dayjs().subtract(6, 'month').toDate()
+
   const events = (
     await prisma.event.findMany({
-      where: { isVerified: true },
+      where: {
+        isVerified: true,
+        // 半年以内に開催されたイベントのみ取得
+        startDate: { gte: sixMonthsAgo }
+      },
       include: {
         conditions: true,
         referenceUrls: true,
