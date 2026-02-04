@@ -129,15 +129,20 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     }
   }
 
+  // 日付をDate型に変換
+  const startDate = new Date(data.startDate)
+  const endDate = data.endDate ? new Date(data.endDate) : null
+  const endedAt = data.endedAt ? new Date(data.endedAt) : null
+
   const event = await prisma.event.create({
     data: {
       id: data.uuid,
       category: data.category,
       name: data.name,
       limitedQuantity: data.limitedQuantity,
-      startDate: data.startDate,
-      endDate: data.endDate ?? null,
-      endedAt: data.endedAt ?? null,
+      startDate,
+      endDate,
+      endedAt,
       isVerified: data.isVerified ?? false,
       isPreliminary: data.isPreliminary ?? false,
       conditions: {
@@ -181,15 +186,20 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
 export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
+  // 日付をDate型に変換
+  const startDate = new Date(data.startDate)
+  const endDate = data.endDate ? new Date(data.endDate) : null
+  const endedAt = data.endedAt ? new Date(data.endedAt) : null
+
   const event = await prisma.event.update({
     where: { id: data.uuid },
     data: {
       category: data.category,
       name: data.name,
       limitedQuantity: data.limitedQuantity,
-      startDate: data.startDate,
-      endDate: data.endDate ?? null,
-      endedAt: data.endedAt ?? null,
+      startDate,
+      endDate,
+      endedAt,
       isVerified: data.isVerified,
       isPreliminary: data.isPreliminary,
       conditions: {

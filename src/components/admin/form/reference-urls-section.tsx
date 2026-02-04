@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { REFERENCE_URL_TYPE_LABELS } from '@/locales/app.content'
 import type { Event, ReferenceUrlType } from '@/schemas/event.dto'
 import { ReferenceUrlTypeSchema } from '@/schemas/event.dto'
-import type { EventFormValues } from '@/schemas/event-form.dto'
+import type { EventRequest } from '@/schemas/event.dto'
 
 /**
  * 参照URLフィールドの型
@@ -20,10 +20,10 @@ type ReferenceUrlField = {
 
 type Props = {
   fields: ReferenceUrlField[]
-  register: UseFormRegister<EventFormValues>
-  append: UseFieldArrayAppend<EventFormValues, 'referenceUrls'>
+  register: UseFormRegister<EventRequest>
+  append: UseFieldArrayAppend<EventRequest, 'referenceUrls'>
   remove: UseFieldArrayRemove
-  referenceUrls: EventFormValues['referenceUrls']
+  referenceUrls: EventRequest['referenceUrls']
   duplicateWarnings: Record<number, Event | null>
   onCheckDuplicate: (index: number, url: string) => void
   onClearWarning: (index: number) => void
