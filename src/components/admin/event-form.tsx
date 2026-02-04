@@ -36,7 +36,7 @@ const DEFAULT_VALUES: DefaultValues<EventFormValues> = {
   isVerified: true,
   isPreliminary: false,
   shouldTweet: true,
-  id: undefined
+  uuid: undefined
 }
 
 /**
@@ -55,7 +55,7 @@ const toFormValues = (event: Event): DefaultValues<EventFormValues> => ({
   conditions: event.conditions,
   isVerified: event.isVerified ?? false,
   isPreliminary: event.isPreliminary ?? false,
-  id: event.uuid
+  uuid: event.uuid
 })
 
 /**
@@ -100,15 +100,15 @@ export const EventForm = ({
         startDate: defaultValues.startDate ? dayjs(defaultValues.startDate).format('YYYY-MM-DD') : '',
         endDate: defaultValues.endDate ? dayjs(defaultValues.endDate).format('YYYY-MM-DD') : null,
         endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : null,
-        // idが渡されていればそれを使用、なければ新規生成
-        id: defaultValues.id || uuidv4()
+        // uuidが渡されていればそれを使用、なければ新規生成
+        uuid: defaultValues.uuid || uuidv4()
       }
     }
 
-    // 新規作成時はidを生成
+    // 新規作成時はuuidを生成
     return {
       ...DEFAULT_VALUES,
-      id: uuidv4()
+      uuid: uuidv4()
     }
   }
 
@@ -236,7 +236,7 @@ export const EventForm = ({
       name: confirmedData.name,
       startDate: dayjs(confirmedData.startDate).toISOString(),
       conditions: confirmedData.conditions.map((c) => ({
-        id: c.id || uuidv4(),
+        uuid: c.uuid || uuidv4(),
         type: c.type,
         purchaseAmount: c.purchaseAmount,
         quantity: c.quantity
@@ -245,8 +245,8 @@ export const EventForm = ({
       isVerified: confirmedData.isVerified,
       isPreliminary: confirmedData.isPreliminary,
       shouldTweet: confirmedData.shouldTweet,
-      // 新規作成時のみクライアント生成のidを含める
-      ...(!event && confirmedData.id ? { id: confirmedData.id } : {})
+      // 新規作成時のみクライアント生成のuuidを含める
+      ...(!event && confirmedData.uuid ? { uuid: confirmedData.uuid } : {})
     }
 
     // 終了日が空文字やundefined、nullでない場合のみ設定
@@ -262,7 +262,7 @@ export const EventForm = ({
     // 参照URLが設定されている場合のみ追加
     if (confirmedData.referenceUrls && confirmedData.referenceUrls.length > 0) {
       payload.referenceUrls = confirmedData.referenceUrls.map((r) => ({
-        id: r.id || uuidv4(),
+        uuid: r.uuid || uuidv4(),
         type: r.type,
         url: r.url
       }))
