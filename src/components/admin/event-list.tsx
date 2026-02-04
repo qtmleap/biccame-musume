@@ -94,7 +94,7 @@ const EventCard = ({
         </div>
         {isAuthenticated && (
           <div className='flex items-center gap-2'>
-            <Link to='/admin/events/$id/edit' params={{ id: event.id }}>
+            <Link to='/admin/events/$id/edit/' params={{ id: event.id }}>
               <Button size='sm' variant='outline' className='h-7 text-xs'>
                 <Pencil className='mr-1 size-3' />
                 編集
