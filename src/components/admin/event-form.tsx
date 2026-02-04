@@ -182,6 +182,13 @@ export const EventForm = ({
   }
 
   /**
+   * バリデーションエラー時のハンドラ
+   */
+  const handleValidationError = (formErrors: typeof errors) => {
+    console.error('Validation errors:', formErrors)
+  }
+
+  /**
    * 入力画面に戻る
    */
   const handleBack = () => {
@@ -269,7 +276,7 @@ export const EventForm = ({
 
   return (
     <div>
-      <form onSubmit={handleSubmit(handleConfirm)} className='space-y-3'>
+      <form onSubmit={handleSubmit(handleConfirm, handleValidationError)} className='space-y-3'>
         {/* イベント名 */}
         <div>
           <label htmlFor='event-title' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
