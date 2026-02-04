@@ -79,13 +79,13 @@ const EventCard = ({
             </div>
           </div>
         </div>
-        {STATUS_BADGE[event.status]}
+        {STATUS_BADGE[event.status]()}
       </div>
 
       {/* アクション */}
       <div className='flex items-center justify-between mt-auto'>
         <div className='flex items-center gap-1'>
-          <Link to='/events/$eventId' params={{ eventId: event.id }}>
+          <Link to='/events/$uuid' params={{ uuid: event.uuid }}>
             <Button size='sm' variant='outline' className='h-7 text-xs'>
               <ExternalLink className='mr-1 size-3' />
               詳細
@@ -94,7 +94,7 @@ const EventCard = ({
         </div>
         {isAuthenticated && (
           <div className='flex items-center gap-2'>
-            <Link to='/admin/events/$id/edit/' params={{ id: event.id }}>
+            <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
               <Button size='sm' variant='outline' className='h-7 text-xs'>
                 <Pencil className='mr-1 size-3' />
                 編集
@@ -103,7 +103,7 @@ const EventCard = ({
             <Button
               size='sm'
               variant='outline'
-              onClick={() => onDelete(event.id)}
+              onClick={() => onDelete(event.uuid)}
               className='h-7 text-xs text-destructive hover:bg-destructive/10'
             >
               <Trash2 className='mr-1 size-3' />
@@ -245,7 +245,7 @@ export const EventList = () => {
             <>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                 {paginated.map((event) => (
-                  <EventCard key={event.id} event={event} onDelete={handleDelete} isAuthenticated={isAuthenticated} />
+                  <EventCard key={event.uuid} event={event} onDelete={handleDelete} isAuthenticated={isAuthenticated} />
                 ))}
               </div>
 
