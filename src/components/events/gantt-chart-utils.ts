@@ -1,4 +1,4 @@
-import { CATEGORY_BG_COLOR } from '@/locales/component.content'
+import { CATEGORY_BG_COLOR } from '@/locales/component'
 import type { Event, EventStatus } from '@/schemas/event.dto'
 
 /**

@@ -5,7 +5,7 @@ import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { STORE_NAME_LABELS } from '@/locales/app.content'
-import { STATUS_BADGE_SM } from '@/locales/component.content'
+import { STATUS_BADGE_SM } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 

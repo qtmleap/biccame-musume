@@ -4,7 +4,7 @@ import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { EVENT_STATUS_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import { CATEGORY_WITH_ICON } from '@/locales/component.content'
+import { CATEGORY_WITH_ICON } from '@/locales/component'
 import type { Event, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 

@@ -22,7 +22,7 @@ import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
 import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import { STATUS_BADGE } from '@/locales/component.content'
+import { STATUS_BADGE } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 

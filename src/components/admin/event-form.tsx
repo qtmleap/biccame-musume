@@ -118,7 +118,7 @@ export const EventForm = ({
     reset,
     setValue,
     watch,
-    formState: { errors, isSubmitting }
+    formState: { errors }
   } = useForm<EventRequest>({
     resolver: zodResolver(EventRequestSchema),
     defaultValues: getInitialValues()
@@ -283,18 +283,16 @@ export const EventForm = ({
       }
       handleReset()
       onSuccess?.()
-    } catch (error) {
-      // エラー時は再送信可能にする
+    } catch (_error) {
+      // エラー時は再送信可能にする（エラー通知はuseMutationのonErrorで処理）
       setIsSubmitted(false)
-      throw error
     }
   }
 
   // 確認画面の表示
   if (isConfirming && confirmedData) {
-    return (
-      <EventConfirmation data={confirmedData} isSubmitting={isSubmitting} onBack={handleBack} onSubmit={onSubmit} />
-    )
+    const isMutating = createEvent.isPending || updateEvent.isPending
+    return <EventConfirmation data={confirmedData} isSubmitting={isMutating} onBack={handleBack} onSubmit={onSubmit} />
   }
 
   return (
@@ -376,7 +374,7 @@ export const EventForm = ({
           <div>
             <label htmlFor='store' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
               <Store className='size-4' />
-              開催店舗（任意）
+              開催店舗
             </label>
             <Select value='' onValueChange={handleAddStore}>
               <SelectTrigger className='w-full'>
@@ -395,6 +393,7 @@ export const EventForm = ({
                 })}
               </SelectContent>
             </Select>
+            {errors.stores && <p className='mt-1 text-xs text-destructive'>{errors.stores.message}</p>}
           </div>
         </div>
 
@@ -458,6 +457,7 @@ export const EventForm = ({
               return next
             })
           }
+          error={errors.referenceUrls?.message}
         />
 
         {/* 検証済み・未確定情報・ツイート投稿フラグ */}

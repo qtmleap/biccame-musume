@@ -65,7 +65,7 @@ export const EventRequestSchema = z.object({
   endDate: z.string().optional(),
   endedAt: z.string().optional(),
   limitedQuantity: z.number().min(1).optional(),
-  referenceUrls: z.array(ReferenceUrlSchema).nonempty(),
+  referenceUrls: z.array(ReferenceUrlSchema).nonempty('最低1つの参考URLを入力してください'),
   conditions: z.array(EventConditionSchema).min(1, '最低1つの条件を設定してください'),
   isVerified: z.boolean(),
   isPreliminary: z.boolean(),
@@ -77,14 +77,13 @@ export type EventRequest = z.infer<typeof EventRequestSchema>
  * クエリパラメータによるイベント作成のバリデーション
  */
 export const EventRequestQuerySchema = z.object({
-  uuid: z.uuidv4(),
-  category: EventCategorySchema,
+  category: EventCategorySchema.optional(),
   title: z.string().optional(),
-  stores: z.string().nonempty(),
+  stores: z.string().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   endAt: z.string().optional(),
-  referenceUrls: z.url()
+  referenceUrls: z.string().url().optional()
 })
 export type EventRequestQuery = z.infer<typeof EventRequestQuerySchema>
 
