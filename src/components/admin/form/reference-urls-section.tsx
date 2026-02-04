@@ -1,17 +1,19 @@
+import { AlertTriangle, Link2, X } from 'lucide-react'
 import type { UseFieldArrayAppend, UseFieldArrayRemove, UseFormRegister } from 'react-hook-form'
+import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { REFERENCE_URL_TYPE_LABELS } from '@/locales/app.content'
 import type { Event, ReferenceUrlType } from '@/schemas/event.dto'
 import { ReferenceUrlTypeSchema } from '@/schemas/event.dto'
 import type { EventFormValues } from '@/schemas/event-form.dto'
-import { REFERENCE_URL_TYPE_LABELS } from '@/locales/app.content'
-import { AlertTriangle, Link2, X } from 'lucide-react'
 
 /**
  * 参照URLフィールドの型
  */
 type ReferenceUrlField = {
   id: string
+  uuid: string
   type: ReferenceUrlType
   url: string
 }
@@ -68,9 +70,11 @@ export function ReferenceUrlsSection({
             type='button'
             size='sm'
             variant='outline'
-            onClick={() => append({ type, url: '' })}
+            onClick={() => append({ uuid: uuidv4(), type, url: '' })}
             disabled={hasType(type)}
-            className={hasType(type) ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''}
+            className={
+              hasType(type) ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''
+            }
           >
             {REFERENCE_URL_TYPE_LABELS[type]}
           </Button>
@@ -89,7 +93,13 @@ export function ReferenceUrlsSection({
                 onBlur={(e) => onCheckDuplicate(index, e.target.value)}
                 className='flex-1'
               />
-              <Button type='button' size='icon' variant='ghost' onClick={() => handleRemove(index)} className='shrink-0'>
+              <Button
+                type='button'
+                size='icon'
+                variant='ghost'
+                onClick={() => handleRemove(index)}
+                className='shrink-0'
+              >
                 <X className='size-4' />
               </Button>
             </div>

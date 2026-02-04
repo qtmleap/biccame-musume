@@ -1,8 +1,9 @@
+import { Coins, Gift, Users, X } from 'lucide-react'
 import type { UseFieldArrayRemove, UseFieldArrayUpdate, UseFormRegister } from 'react-hook-form'
+import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { EventFormValues } from '@/schemas/event-form.dto'
-import { Coins, Gift, Users, X } from 'lucide-react'
 
 /**
  * 条件タイプ（配布条件のタイプ）
@@ -14,6 +15,7 @@ type ConditionType = 'purchase' | 'first_come' | 'lottery' | 'everyone'
  */
 type ConditionField = {
   id: string
+  uuid: string
   type: ConditionType
   purchaseAmount?: number
   quantity?: number
@@ -40,7 +42,8 @@ export function ConditionsSection({ fields, register, remove, update, error }: P
   /**
    * 配布方法（先着・抽選・全員）が既に設定されているか
    */
-  const hasDistributionCondition = () => hasConditionType('first_come') || hasConditionType('lottery') || hasConditionType('everyone')
+  const hasDistributionCondition = () =>
+    hasConditionType('first_come') || hasConditionType('lottery') || hasConditionType('everyone')
 
   /**
    * 条件を追加
@@ -51,7 +54,12 @@ export function ConditionsSection({ fields, register, remove, update, error }: P
       if (idx !== -1) remove(idx)
       return
     }
-    const newCondition = type === 'purchase' ? { type, purchaseAmount: 500 } : type === 'everyone' ? { type } : { type, quantity: 1 }
+    const newCondition =
+      type === 'purchase'
+        ? { uuid: uuidv4(), type, purchaseAmount: 500 }
+        : type === 'everyone'
+          ? { uuid: uuidv4(), type }
+          : { uuid: uuidv4(), type, quantity: 1 }
     update(fields.length, newCondition as ConditionField)
   }
 
@@ -79,7 +87,13 @@ export function ConditionsSection({ fields, register, remove, update, error }: P
       </div>
       {/* 条件タイプボタン */}
       <div className='mb-2 grid grid-cols-2 gap-2 sm:grid-cols-4'>
-        <Button type='button' size='sm' variant='outline' onClick={() => handleAdd('purchase')} className={getButtonClass('purchase')}>
+        <Button
+          type='button'
+          size='sm'
+          variant='outline'
+          onClick={() => handleAdd('purchase')}
+          className={getButtonClass('purchase')}
+        >
           <Coins className='mr-1.5 size-4' />
           購入金額
         </Button>
