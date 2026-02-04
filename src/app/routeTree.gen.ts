@@ -22,9 +22,7 @@ import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as EventsEventIdRouteImport } from './routes/events/$eventId'
 import { Route as CharactersIdRouteImport } from './routes/characters/$id'
 import { Route as AdminEventsIndexRouteImport } from './routes/admin/events/index'
-import { Route as AdminEventsNewIndexRouteImport } from './routes/admin/events/new/index'
-import { Route as AdminEventsNewUuidIndexRouteImport } from './routes/admin/events/new/$uuid/index'
-import { Route as AdminEventsUuidEditIndexRouteImport } from './routes/admin/events/$uuid/edit/index'
+import { Route as AdminEventsUuidIndexRouteImport } from './routes/admin/events/$uuid/index'
 
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
@@ -91,22 +89,11 @@ const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
   path: '/events/',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminEventsNewIndexRoute = AdminEventsNewIndexRouteImport.update({
-  id: '/events/new/',
-  path: '/events/new/',
+const AdminEventsUuidIndexRoute = AdminEventsUuidIndexRouteImport.update({
+  id: '/events/$uuid/',
+  path: '/events/$uuid/',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminEventsNewUuidIndexRoute = AdminEventsNewUuidIndexRouteImport.update({
-  id: '/events/new/$uuid/',
-  path: '/events/new/$uuid/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminEventsUuidEditIndexRoute =
-  AdminEventsUuidEditIndexRouteImport.update({
-    id: '/events/$uuid/edit/',
-    path: '/events/$uuid/edit/',
-    getParentRoute: () => AdminRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -122,9 +109,7 @@ export interface FileRoutesByFullPath {
   '/location/': typeof LocationIndexRoute
   '/ranking/': typeof RankingIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
-  '/admin/events/new/': typeof AdminEventsNewIndexRoute
-  '/admin/events/$uuid/edit/': typeof AdminEventsUuidEditIndexRoute
-  '/admin/events/new/$uuid/': typeof AdminEventsNewUuidIndexRoute
+  '/admin/events/$uuid/': typeof AdminEventsUuidIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -139,9 +124,7 @@ export interface FileRoutesByTo {
   '/location': typeof LocationIndexRoute
   '/ranking': typeof RankingIndexRoute
   '/admin/events': typeof AdminEventsIndexRoute
-  '/admin/events/new': typeof AdminEventsNewIndexRoute
-  '/admin/events/$uuid/edit': typeof AdminEventsUuidEditIndexRoute
-  '/admin/events/new/$uuid': typeof AdminEventsNewUuidIndexRoute
+  '/admin/events/$uuid': typeof AdminEventsUuidIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -158,9 +141,7 @@ export interface FileRoutesById {
   '/location/': typeof LocationIndexRoute
   '/ranking/': typeof RankingIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
-  '/admin/events/new/': typeof AdminEventsNewIndexRoute
-  '/admin/events/$uuid/edit/': typeof AdminEventsUuidEditIndexRoute
-  '/admin/events/new/$uuid/': typeof AdminEventsNewUuidIndexRoute
+  '/admin/events/$uuid/': typeof AdminEventsUuidIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -178,9 +159,7 @@ export interface FileRouteTypes {
     | '/location/'
     | '/ranking/'
     | '/admin/events/'
-    | '/admin/events/new/'
-    | '/admin/events/$uuid/edit/'
-    | '/admin/events/new/$uuid/'
+    | '/admin/events/$uuid/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -195,9 +174,7 @@ export interface FileRouteTypes {
     | '/location'
     | '/ranking'
     | '/admin/events'
-    | '/admin/events/new'
-    | '/admin/events/$uuid/edit'
-    | '/admin/events/new/$uuid'
+    | '/admin/events/$uuid'
   id:
     | '__root__'
     | '/'
@@ -213,9 +190,7 @@ export interface FileRouteTypes {
     | '/location/'
     | '/ranking/'
     | '/admin/events/'
-    | '/admin/events/new/'
-    | '/admin/events/$uuid/edit/'
-    | '/admin/events/new/$uuid/'
+    | '/admin/events/$uuid/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -325,25 +300,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEventsIndexRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/events/new/': {
-      id: '/admin/events/new/'
-      path: '/events/new'
-      fullPath: '/admin/events/new/'
-      preLoaderRoute: typeof AdminEventsNewIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/events/new/$uuid/': {
-      id: '/admin/events/new/$uuid/'
-      path: '/events/new/$uuid'
-      fullPath: '/admin/events/new/$uuid/'
-      preLoaderRoute: typeof AdminEventsNewUuidIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/events/$uuid/edit/': {
-      id: '/admin/events/$uuid/edit/'
-      path: '/events/$uuid/edit'
-      fullPath: '/admin/events/$uuid/edit/'
-      preLoaderRoute: typeof AdminEventsUuidEditIndexRouteImport
+    '/admin/events/$uuid/': {
+      id: '/admin/events/$uuid/'
+      path: '/events/$uuid'
+      fullPath: '/admin/events/$uuid/'
+      preLoaderRoute: typeof AdminEventsUuidIndexRouteImport
       parentRoute: typeof AdminRoute
     }
   }
@@ -352,17 +313,13 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminEventsIndexRoute: typeof AdminEventsIndexRoute
-  AdminEventsNewIndexRoute: typeof AdminEventsNewIndexRoute
-  AdminEventsUuidEditIndexRoute: typeof AdminEventsUuidEditIndexRoute
-  AdminEventsNewUuidIndexRoute: typeof AdminEventsNewUuidIndexRoute
+  AdminEventsUuidIndexRoute: typeof AdminEventsUuidIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminEventsIndexRoute: AdminEventsIndexRoute,
-  AdminEventsNewIndexRoute: AdminEventsNewIndexRoute,
-  AdminEventsUuidEditIndexRoute: AdminEventsUuidEditIndexRoute,
-  AdminEventsNewUuidIndexRoute: AdminEventsNewUuidIndexRoute,
+  AdminEventsUuidIndexRoute: AdminEventsUuidIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

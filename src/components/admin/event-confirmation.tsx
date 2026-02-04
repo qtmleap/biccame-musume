@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { v4 as uuidv4 } from 'uuid'
 import { EventDetailInfo } from '@/components/events/event-detail-info'
 import { Button } from '@/components/ui/button'
 import type { Event } from '@/schemas/event.dto'
@@ -28,11 +29,11 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
     limitedQuantity: data.limitedQuantity,
     referenceUrls: data.referenceUrls.map((v) => ({
       ...v,
-      id: v.id || crypto.randomUUID()
+      id: v.id || uuidv4()
     })),
     conditions: data.conditions.map((c) => ({
       ...c,
-      id: c.id || crypto.randomUUID()
+      id: c.id || uuidv4()
     })),
     isVerified: data.isVerified,
     isPreliminary: data.isPreliminary,
