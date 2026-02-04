@@ -32,6 +32,27 @@ export const useEvent = (eventId: string) => {
 }
 
 /**
+ * 単一イベントを取得するフック（存在しない場合はnullを返す）
+ * 新規作成と編集を統合した画面で使用
+ */
+export const useEventOrNull = (eventId: string) => {
+  return useSuspenseQuery({
+    queryKey: ['events', eventId],
+    queryFn: async () => {
+      try {
+        return await client.getEvent({ params: { id: eventId } })
+      } catch (_error) {
+        // 404の場合はnullを返す（新規作成モード）
+        return null
+      }
+    },
+    staleTime: 0,
+    refetchOnMount: true,
+    retry: false // エラー時はリトライしない
+  })
+}
+
+/**
  * イベントを作成するフック
  */
 export const useCreateEvent = () => {
