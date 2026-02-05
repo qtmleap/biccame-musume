@@ -17,11 +17,11 @@
       "birthday": "2016-09-07"
     },
     "prefecture": "大阪府",
-    "coordinates": {
-      "latitude": 34.6438953804491,
-      "longitude": 135.50915601523087
-    },
     "postal_code": "545-0052",
+    "coordinates": {
+      "latitude": 34.6434395,
+      "longitude": 135.5116608
+    },
     "store": {
       "store_id": 118,
       "name": "ビックカメラあべのキューズモール店",
@@ -101,11 +101,11 @@
       "birthday": "2019-01-23"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.67711978019513,
-      "longitude": 139.73452911601322
-    },
     "postal_code": "107-0052",
+    "coordinates": {
+      "latitude": 35.6770825,
+      "longitude": 139.7367614
+    },
     "store": {
       "store_id": 117,
       "name": "ビックカメラ赤坂見附駅店",
@@ -167,11 +167,11 @@
       "birthday": "2017-06-05"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.69950382825271,
-      "longitude": 139.77087353578034
-    },
     "postal_code": "101-0021",
+    "coordinates": {
+      "latitude": 35.6998312,
+      "longitude": 139.7717534
+    },
     "store": {
       "store_id": 121,
       "name": "ビックカメラAKIBA",
@@ -213,8 +213,8 @@
       "is_biccame_musume": false
     },
     "prefecture": null,
-    "coordinates": null,
-    "postal_code": null
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "bicqlo",
@@ -234,11 +234,11 @@
       "birthday": "2015-05-18"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.691349,
-      "longitude": 139.7029
-    },
     "postal_code": "160-0022",
+    "coordinates": {
+      "latitude": 35.6913489,
+      "longitude": 139.7030056
+    },
     "store": {
       "store_id": 116,
       "name": "ビックカメラ新宿東口店",
@@ -307,8 +307,8 @@
       "birthday": "2018-06-13"
     },
     "prefecture": null,
-    "coordinates": null,
-    "postal_code": null
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "camera",
@@ -329,8 +329,8 @@
       "birthday": "2016-06-29"
     },
     "prefecture": "東京都",
-    "coordinates": null,
-    "postal_code": null
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "chiba",
@@ -353,11 +353,11 @@
       "birthday": "2024-12-12"
     },
     "prefecture": "千葉県",
-    "coordinates": {
-      "latitude": 35.61181349743585,
-      "longitude": 140.11531475316687
-    },
     "postal_code": "260-0015",
+    "coordinates": {
+      "latitude": 35.6118305,
+      "longitude": 140.1155614
+    },
     "store": {
       "store_id": 130,
       "name": "ビックカメラ 千葉駅前店",
@@ -409,11 +409,11 @@
       "birthday": "2017-09-27"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.65192478918477,
-      "longitude": 139.54067276588174
-    },
     "postal_code": "182-0026",
+    "coordinates": {
+      "latitude": 35.6523007,
+      "longitude": 139.5428443
+    },
     "store": {
       "store_id": 122,
       "name": "ビックカメラ京王調布店",
@@ -458,11 +458,11 @@
       "birthday": "2016-02-12"
     },
     "prefecture": "神奈川県",
-    "coordinates": {
-      "latitude": 35.339502,
-      "longitude": 139.488215
-    },
     "postal_code": "251-0052",
+    "coordinates": {
+      "latitude": 35.3398725,
+      "longitude": 139.4886041
+    },
     "store": {
       "store_id": 37,
       "name": "ビックカメラ 藤沢店",
@@ -511,11 +511,11 @@
       "birthday": "2015-05-18"
     },
     "prefecture": "千葉県",
-    "coordinates": {
-      "latitude": 35.700662,
-      "longitude": 139.985464
-    },
     "postal_code": "273-0005",
+    "coordinates": {
+      "latitude": 35.7007039,
+      "longitude": 139.9855394
+    },
     "store": {
       "store_id": 109,
       "name": "ビックカメラ船橋駅FACE店",
@@ -565,8 +565,8 @@
       "birthday": "2017-11-15"
     },
     "prefecture": "千葉県",
-    "coordinates": null,
-    "postal_code": null
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "hachioji",
@@ -586,11 +586,11 @@
       "birthday": "2015-05-14"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.653343,
-      "longitude": 139.350419
-    },
     "postal_code": "192-0083",
+    "coordinates": {
+      "latitude": 35.6545905,
+      "longitude": 139.3387935
+    },
     "store": {
       "store_id": 114,
       "name": "ビックカメラJR八王子駅店",
@@ -646,11 +646,11 @@
       "birthday": "2015-05-23"
     },
     "prefecture": "静岡県",
-    "coordinates": {
-      "latitude": 34.70361,
-      "longitude": 137.7307876
-    },
     "postal_code": "430-0926",
+    "coordinates": {
+      "latitude": 34.7034222,
+      "longitude": 137.7338944
+    },
     "store": {
       "store_id": 105,
       "name": "ビックカメラ浜松店",
@@ -702,11 +702,11 @@
       "birthday": "2016-08-24"
     },
     "prefecture": "広島県",
-    "coordinates": {
-      "latitude": 34.39561633507718,
-      "longitude": 132.47488758164647
-    },
     "postal_code": "732-0822",
+    "coordinates": {
+      "latitude": 34.3957984,
+      "longitude": 132.475143
+    },
     "store": {
       "store_id": 119,
       "name": "ビックカメラ広島駅前店",
@@ -748,11 +748,11 @@
       "birthday": "2015-10-21"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.731747580182486,
-      "longitude": 139.71075251526028
-    },
     "postal_code": "170-0013",
+    "coordinates": {
+      "latitude": 35.7317044,
+      "longitude": 139.7128781
+    },
     "store": {
       "store_id": 7,
       "name": "ビックカメラ池袋本店",
@@ -806,11 +806,11 @@
       "birthday": "2017-05-09"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.7308799801827,
-      "longitude": 139.70682031526016
-    },
     "postal_code": "171-0021",
+    "coordinates": {
+      "latitude": 35.7308323,
+      "longitude": 139.7089542
+    },
     "store": {
       "store_id": 17,
       "name": "ビックカメラ池袋西口店",
@@ -861,11 +861,11 @@
       "birthday": "2017-12-18"
     },
     "prefecture": "鹿児島県",
-    "coordinates": {
-      "latitude": 31.58391355116033,
-      "longitude": 130.53811231582384
-    },
     "postal_code": "890-0053",
+    "coordinates": {
+      "latitude": 31.5845733,
+      "longitude": 130.5427542
+    },
     "store": {
       "store_id": 107,
       "name": "ビックカメラ鹿児島中央駅店",
@@ -910,11 +910,11 @@
       "birthday": "2015-05-14"
     },
     "prefecture": "千葉県",
-    "coordinates": {
-      "latitude": 35.861985834312286,
-      "longitude": 139.97108885202005
-    },
     "postal_code": "277-0005",
+    "coordinates": {
+      "latitude": 35.86192090000001,
+      "longitude": 139.9717759
+    },
     "store": {
       "store_id": 35,
       "name": "ビックカメラ柏店",
@@ -959,11 +959,11 @@
       "birthday": "2016-12-01"
     },
     "prefecture": "神奈川県",
-    "coordinates": {
-      "latitude": 35.533046380229145,
-      "longitude": 139.6947895152548
-    },
     "postal_code": "212-0013",
+    "coordinates": {
+      "latitude": 35.5325201,
+      "longitude": 139.6958714
+    },
     "store": {
       "store_id": 38,
       "name": "ビックカメララゾーナ川崎店",
@@ -1017,11 +1017,11 @@
       "birthday": "2026-02-02"
     },
     "prefecture": "熊本県",
-    "coordinates": {
-      "latitude": 32.789589828589705,
-      "longitude": 130.67838534384688
-    },
     "postal_code": "860-0047",
+    "coordinates": {
+      "latitude": 32.7909826,
+      "longitude": 130.6897656
+    },
     "store": {
       "store_id": 129,
       "name": "ビックカメラアミュプラザくまもと店",
@@ -1066,8 +1066,8 @@
       "birthday": "2017-01-10"
     },
     "prefecture": "京都府",
-    "coordinates": null,
-    "postal_code": null
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "machida",
@@ -1085,8 +1085,8 @@
       "birthday": "2019-03-01"
     },
     "prefecture": "東京都",
-    "coordinates": null,
-    "postal_code": null
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "mito",
@@ -1106,11 +1106,11 @@
       "birthday": "2015-04-27"
     },
     "prefecture": "茨城県",
-    "coordinates": {
-      "latitude": 36.36978515964381,
-      "longitude": 140.47561284654657
-    },
     "postal_code": "310-0015",
+    "coordinates": {
+      "latitude": 36.3700643,
+      "longitude": 140.4766399
+    },
     "store": {
       "store_id": 115,
       "name": "ビックカメラ水戸駅店",
@@ -1159,11 +1159,11 @@
       "birthday": "2016-04-26"
     },
     "prefecture": "愛知県",
-    "coordinates": {
-      "latitude": 35.17046773871493,
-      "longitude": 136.87869655285743
-    },
     "postal_code": "453-0015",
+    "coordinates": {
+      "latitude": 35.1707468,
+      "longitude": 136.8805731
+    },
     "store": {
       "store_id": 33,
       "name": "ビックカメラ名古屋駅西店",
@@ -1215,11 +1215,11 @@
       "birthday": "2017-03-30"
     },
     "prefecture": "愛知県",
-    "coordinates": {
-      "latitude": 35.17181366534679,
-      "longitude": 136.8809753158667
-    },
     "postal_code": "450-0002",
+    "coordinates": {
+      "latitude": 35.1723389,
+      "longitude": 136.8826056
+    },
     "store": {
       "store_id": 120,
       "name": "ビックカメラ名古屋JRゲートタワー店",
@@ -1264,8 +1264,8 @@
       "is_biccame_musume": false
     },
     "prefecture": null,
-    "coordinates": null,
-    "postal_code": null
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "nanba",
@@ -1285,11 +1285,11 @@
       "birthday": "2017-02-21"
     },
     "prefecture": "大阪府",
-    "coordinates": {
-      "latitude": 34.66669628044325,
-      "longitude": 135.5004216152313
-    },
     "postal_code": "542-0074",
+    "coordinates": {
+      "latitude": 34.6666466,
+      "longitude": 135.5025872
+    },
     "store": {
       "store_id": 13,
       "name": "ビックカメラなんば店",
@@ -1355,11 +1355,11 @@
       "birthday": "2018-02-01"
     },
     "prefecture": "新潟県",
-    "coordinates": {
-      "latitude": 37.911745212038916,
-      "longitude": 139.06108931599172
-    },
     "postal_code": "950-0086",
+    "coordinates": {
+      "latitude": 37.9120292,
+      "longitude": 139.0617888
+    },
     "store": {
       "store_id": 106,
       "name": "ビックカメラ新潟店",
@@ -1402,8 +1402,8 @@
       "is_biccame_musume": false
     },
     "prefecture": null,
-    "coordinates": null,
-    "postal_code": null
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "ohmiya",
@@ -1423,11 +1423,11 @@
       "birthday": "2015-12-15"
     },
     "prefecture": "埼玉県",
-    "coordinates": {
-      "latitude": 35.904468,
-      "longitude": 139.621129
-    },
     "postal_code": "330-0854",
+    "coordinates": {
+      "latitude": 35.904703,
+      "longitude": 139.621372
+    },
     "store": {
       "store_id": 34,
       "name": "ビックカメラ大宮西口そごう店",
@@ -1476,11 +1476,11 @@
       "birthday": "2016-10-05"
     },
     "prefecture": "岡山県",
-    "coordinates": {
-      "latitude": 34.665907980443414,
-      "longitude": 133.91744831523127
-    },
     "postal_code": "700-0023",
+    "coordinates": {
+      "latitude": 34.6659315,
+      "longitude": 133.9198144
+    },
     "store": {
       "store_id": 102,
       "name": "ビックカメラ岡山駅前店",
@@ -1534,8 +1534,8 @@
       "birthday": "2016-03-17"
     },
     "prefecture": "東京都",
-    "coordinates": null,
-    "postal_code": null
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "pkan",
@@ -1558,11 +1558,11 @@
       "birthday": "2016-06-29"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.731589,
-      "longitude": 139.7132525
-    },
     "postal_code": "170-0013",
+    "coordinates": {
+      "latitude": 35.731563,
+      "longitude": 139.7135962
+    },
     "store": {
       "store_id": 21,
       "name": "ビックカメラ 池袋カメラ・パソコン館",
@@ -1613,13 +1613,14 @@
       "birthday": "2015-11-11"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.73076948695455,
-      "longitude": 139.70825456960466
-    },
     "postal_code": "171-0021",
+    "coordinates": {
+      "latitude": 35.7308323,
+      "longitude": 139.7089542
+    },
     "store": {
       "phone": "03-3987-5593",
+      "address": "東京都豊島区西池袋1-16-3",
       "access": []
     }
   },
@@ -1641,11 +1642,11 @@
       "birthday": "2015-08-04"
     },
     "prefecture": "神奈川県",
-    "coordinates": {
-      "latitude": 35.531457,
-      "longitude": 139.437167
-    },
     "postal_code": "252-0303",
+    "coordinates": {
+      "latitude": 35.5315122,
+      "longitude": 139.4372374
+    },
     "store": {
       "store_id": 108,
       "name": "ビックカメラ相模大野駅店",
@@ -1692,11 +1693,11 @@
       "birthday": "2016-08-10"
     },
     "prefecture": "北海道",
-    "coordinates": {
-      "latitude": 43.066298090070966,
-      "longitude": 141.35035781204664
-    },
     "postal_code": "060-8619",
+    "coordinates": {
+      "latitude": 43.0662942,
+      "longitude": 141.3529381
+    },
     "store": {
       "store_id": 132,
       "name": "ビックカメラ札幌店",
@@ -1751,8 +1752,8 @@
       "birthday": "2016-08-31"
     },
     "prefecture": "東京都",
-    "coordinates": null,
-    "postal_code": null
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "shibuhachi",
@@ -1772,11 +1773,11 @@
       "birthday": "2019-07-07"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.65934288019936,
-      "longitude": 139.69729111591394
-    },
     "postal_code": "150-0043",
+    "coordinates": {
+      "latitude": 35.6593119,
+      "longitude": 139.6995221
+    },
     "store": {
       "store_id": 4,
       "name": "ビックカメラ渋谷ハチ公口店",
@@ -1828,11 +1829,11 @@
       "birthday": "2019-07-07"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.659971880199194,
-      "longitude": 139.69973441525823
-    },
     "postal_code": "150-0002",
+    "coordinates": {
+      "latitude": 35.6598999,
+      "longitude": 139.7020679
+    },
     "store": {
       "store_id": 8,
       "name": "ビックカメラ渋谷東口店",
@@ -1884,11 +1885,11 @@
       "birthday": "2016-05-23"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.692479680191646,
-      "longitude": 139.6964761152591
-    },
     "postal_code": "160-0023",
+    "coordinates": {
+      "latitude": 35.6925129,
+      "longitude": 139.6985563
+    },
     "store": {
       "store_id": 16,
       "name": "ビックカメラ新宿西口店",
@@ -1957,11 +1958,11 @@
       "birthday": "2020-10-19"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.69201538019174,
-      "longitude": 139.69967981525915
-    },
     "postal_code": "160-0022",
+    "coordinates": {
+      "latitude": 35.6920018,
+      "longitude": 139.7018347
+    },
     "store": {
       "store_id": 111,
       "name": "ビックカメラ新宿東口駅前店",
@@ -2024,11 +2025,11 @@
       "birthday": "2020-01-23"
     },
     "prefecture": "神奈川県",
-    "coordinates": {
-      "latitude": 35.50790724706335,
-      "longitude": 139.61545561630493
-    },
     "postal_code": "222-0033",
+    "coordinates": {
+      "latitude": 35.5080034,
+      "longitude": 139.6175859
+    },
     "store": {
       "store_id": 104,
       "name": "ビックカメラ新横浜店",
@@ -2074,11 +2075,11 @@
       "birthday": "2016-10-25"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.69921498019015,
-      "longitude": 139.41271631597147
-    },
     "postal_code": "190-0012",
+    "coordinates": {
+      "latitude": 35.69921780000001,
+      "longitude": 139.4149141
+    },
     "store": {
       "store_id": 12,
       "name": "ビックカメラ立川店",
@@ -2134,11 +2135,11 @@
       "birthday": "2023-10-06"
     },
     "prefecture": "大阪府",
-    "coordinates": {
-      "latitude": 34.853881474864394,
-      "longitude": 135.61574381172426
-    },
     "postal_code": "569-1196",
+    "coordinates": {
+      "latitude": 34.8532714,
+      "longitude": 135.6181379
+    },
     "store": {
       "store_id": 131,
       "name": "ビックカメラ高槻阪急スクエア店",
@@ -2187,8 +2188,8 @@
       "birthday": "2020-11-26"
     },
     "prefecture": "神奈川県",
-    "coordinates": null,
-    "postal_code": null
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "tenjin",
@@ -2208,11 +2209,11 @@
       "birthday": "2020-12-13"
     },
     "prefecture": "福岡県",
-    "coordinates": {
-      "latitude": 33.58702524954873,
-      "longitude": 130.3988427155932
-    },
     "postal_code": "810-0021",
+    "coordinates": {
+      "latitude": 33.5870834,
+      "longitude": 130.4010139
+    },
     "store": {
       "store_id": 26,
       "name": "ビックカメラ天神1号館",
@@ -2273,11 +2274,11 @@
       "birthday": "2017-10-25"
     },
     "prefecture": "福岡県",
-    "coordinates": {
-      "latitude": 33.5880605,
-      "longitude": 130.3982623
-    },
     "postal_code": "810-0001",
+    "coordinates": {
+      "latitude": 33.587464,
+      "longitude": 130.3982772
+    },
     "store": {
       "store_id": 18,
       "name": "ビックカメラ天神2号館",
@@ -2341,11 +2342,11 @@
       "birthday": "2021-11-08"
     },
     "prefecture": "埼玉県",
-    "coordinates": {
-      "latitude": 35.785908480170065,
-      "longitude": 139.47018846526169
-    },
     "postal_code": "359-1123",
+    "coordinates": {
+      "latitude": 35.7861099,
+      "longitude": 139.4723136
+    },
     "store": {
       "store_id": 127,
       "name": "ビックカメラ所沢駅店",
@@ -2392,11 +2393,11 @@
       "birthday": "2022-11-14"
     },
     "prefecture": "大阪府",
-    "coordinates": {
-      "latitude": 34.6324873804521,
-      "longitude": 135.60360691523033
-    },
     "postal_code": "581-0803",
+    "coordinates": {
+      "latitude": 34.6324874,
+      "longitude": 135.6057956
+    },
     "store": {
       "store_id": 125,
       "name": "ビックカメラアリオ八尾店",
@@ -2440,11 +2441,11 @@
       "birthday": "2026-01-23"
     },
     "prefecture": "神奈川県",
-    "coordinates": {
-      "latitude": 35.464644464274016,
-      "longitude": 139.618873483118
-    },
     "postal_code": "220-0005",
+    "coordinates": {
+      "latitude": 35.4643595,
+      "longitude": 139.6189322
+    },
     "store": {
       "store_id": 5,
       "name": "ビックカメラ横浜西口店",
@@ -2495,11 +2496,11 @@
       "birthday": "2016-05-11"
     },
     "prefecture": "東京都",
-    "coordinates": {
-      "latitude": 35.67558298019562,
-      "longitude": 139.76073981525863
-    },
     "postal_code": "100-0006",
+    "coordinates": {
+      "latitude": 35.6755004,
+      "longitude": 139.7632464
+    },
     "store": {
       "store_id": 14,
       "name": "ビックカメラ有楽町店",
