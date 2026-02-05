@@ -83,7 +83,7 @@ export const EventRequestQuerySchema = z.object({
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   endAt: z.string().optional(),
-  referenceUrls: z.string().url().optional()
+  referenceUrls: z.url().optional()
 })
 export type EventRequestQuery = z.infer<typeof EventRequestQuerySchema>
 
@@ -91,7 +91,7 @@ export type EventRequestQuery = z.infer<typeof EventRequestQuerySchema>
  * イベント（API レスポンス用）
  */
 export const EventSchema = z.object({
-  uuid: z.string(),
+  uuid: z.string().uuid(),
   category: EventCategorySchema,
   title: z.string(),
   stores: z.array(StoreKeySchema),

@@ -60,7 +60,9 @@ const EditEventContent = () => {
           : undefined,
         startDate: search.startDate,
         endDate: search.endDate,
-        endedAt: search.endAt
+        endedAt: search.endAt,
+        // クエリパラメータがある場合は投稿フラグをデフォルトでfalseに
+        shouldTweet: Object.keys(search).length > 0 ? false : undefined
       }
 
   const handleSuccess = () => {
