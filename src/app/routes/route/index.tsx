@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Loader2, MapPin, Route as RouteIcon } from 'lucide-react'
 import { Suspense, useCallback, useMemo, useState } from 'react'
-import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -11,7 +10,6 @@ import {
   useDirections,
   type AvailableStore,
   type SelectedStore,
-  type DirectionsLeg,
   type RouteResult
 } from '@/components/route'
 import { useCharacters } from '@/hooks/useCharacters'
@@ -42,8 +40,6 @@ const RouteCalculator = () => {
   const [result, setResult] = useState<RouteResult | null>(null)
   const [isCalculating, setIsCalculating] = useState(false)
 
-  // Google Maps Directions Service
-  const routesLibrary = useMapsLibrary('routes')
   const { getDirections, calcTotalDuration } = useDirections()
 
   // 座標を持つ店舗のみフィルタリング（京都駅から近い順）
@@ -120,28 +116,18 @@ const RouteCalculator = () => {
   }, [])
 
   /**
-   * 最短ルートを計算してDirections APIで詳細を取得
+   * 最短ルートを計算してAPIで詳細を取得
    */
   const handleCalculate = useCallback(async () => {
-    if (selectedStores.length < 2 || !routesLibrary) return
+    if (selectedStores.length < 2) return
 
     setIsCalculating(true)
 
     // TSPで最短ルートを計算
     const tspResult = solveTsp(selectedStores)
 
-    // Directions Serviceのインスタンス作成
-    const directionsService = new routesLibrary.DirectionsService()
-
-    // 各区間の経路を取得
-    const legs: DirectionsLeg[] = []
-    for (const [i, store] of tspResult.route.entries()) {
-      const nextStore = tspResult.route[i + 1]
-      if (nextStore) {
-        const leg = await getDirections(directionsService, store, nextStore)
-        if (leg) legs.push(leg)
-      }
-    }
+    // APIで経路情報を取得
+    const legs = await getDirections(tspResult.route)
 
     setResult({
       route: tspResult.route,
@@ -150,7 +136,7 @@ const RouteCalculator = () => {
       totalDuration: calcTotalDuration(legs)
     })
     setIsCalculating(false)
-  }, [selectedStores, routesLibrary, getDirections, calcTotalDuration])
+  }, [selectedStores, getDirections, calcTotalDuration])
 
   return (
     <div className='container mx-auto max-w-2xl space-y-6 p-4'>
@@ -172,8 +158,9 @@ const RouteCalculator = () => {
           />
 
           <Button
+            variant='outline'
             className='w-full'
-            disabled={selectedStores.length < 2 || isCalculating || !routesLibrary}
+            disabled={selectedStores.length < 2 || isCalculating}
             onClick={handleCalculate}
           >
             {isCalculating ? (
@@ -197,17 +184,9 @@ const RouteCalculator = () => {
 }
 
 function RouteComponent() {
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-
-  if (!apiKey) {
-    return <div className='p-4 text-center text-red-500'>Google Maps API キーが設定されていません</div>
-  }
-
   return (
-    <APIProvider apiKey={apiKey}>
-      <Suspense fallback={<div className='p-4 text-center'>読み込み中...</div>}>
-        <RouteCalculator />
-      </Suspense>
-    </APIProvider>
+    <Suspense fallback={<div className='p-4 text-center'>読み込み中...</div>}>
+      <RouteCalculator />
+    </Suspense>
   )
 }

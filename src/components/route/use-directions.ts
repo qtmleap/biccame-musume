@@ -2,77 +2,69 @@ import { useCallback } from 'react'
 import type { DirectionsLeg, SelectedStore } from './types'
 
 /**
- * 2点間のユークリッド距離を計算
+ * APIリクエスト用の区間データ
  */
-const calcDistance = (p1: { lat: number; lng: number }, p2: { lat: number; lng: number }) => {
-  const dx = p2.lat - p1.lat
-  const dy = p2.lng - p1.lng
-  return Math.sqrt(dx * dx + dy * dy)
+type LegRequest = {
+  from: string
+  to: string
+  fromStation: string
+  toStation: string
 }
 
 /**
- * Directions APIを使って経路を取得するカスタムフック
+ * 経路情報を取得するカスタムフック
  */
 export const useDirections = () => {
   /**
-   * Directions APIで2点間の経路を取得（駅名を使用）
+   * APIを呼び出して経路情報を取得
    */
-  const getDirections = useCallback(
-    async (
-      directionsService: google.maps.DirectionsService,
-      origin: SelectedStore,
-      destination: SelectedStore
-    ): Promise<DirectionsLeg | null> => {
-      try {
-        const response = await directionsService.route({
-          origin: origin.station,
-          destination: destination.station,
-          travelMode: google.maps.TravelMode.TRANSIT,
-          transitOptions: {
-            modes: [google.maps.TransitMode.RAIL, google.maps.TransitMode.SUBWAY]
-          }
+  const getDirections = useCallback(async (route: SelectedStore[]): Promise<DirectionsLeg[]> => {
+    // 区間データを作成
+    const legs: LegRequest[] = []
+    for (const [i, store] of route.entries()) {
+      const nextStore = route[i + 1]
+      if (nextStore) {
+        legs.push({
+          from: store.name,
+          to: nextStore.name,
+          fromStation: store.station,
+          toStation: nextStore.station
         })
-
-        const leg = response.routes[0]?.legs[0]
-        if (!leg) return null
-
-        return {
-          from: origin.name,
-          to: destination.name,
-          fromStation: origin.station,
-          toStation: destination.station,
-          distance: leg.distance?.text || '不明',
-          duration: leg.duration?.text || '不明'
-        }
-      } catch (error) {
-        console.error('Directions API error:', error)
-        // フォールバック: ユークリッド距離で概算
-        const dist = calcDistance(origin, destination) * 111
-        return {
-          from: origin.name,
-          to: destination.name,
-          fromStation: origin.station,
-          toStation: destination.station,
-          distance: `${dist.toFixed(1)} km（概算）`,
-          duration: '不明'
-        }
       }
-    },
-    []
-  )
+    }
+
+    if (legs.length === 0) return []
+
+    try {
+      const response = await fetch('/api/routes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ legs })
+      })
+
+      if (!response.ok) {
+        throw new Error('API request failed')
+      }
+
+      const data = (await response.json()) as { legs: DirectionsLeg[] }
+      return data.legs
+    } catch (error) {
+      console.error('Route API error:', error)
+      // エラー時はフォールバック
+      return legs.map((leg) => ({
+        ...leg,
+        lines: ['不明'],
+        duration: 0,
+        transfers: 0
+      }))
+    }
+  }, [])
 
   /**
    * 総所要時間を計算
    */
   const calcTotalDuration = useCallback((legs: DirectionsLeg[]): string => {
-    const totalMinutes = legs.reduce((sum, leg) => {
-      const hourMatch = leg.duration.match(/(\d+)\s*時間/)
-      const minMatch = leg.duration.match(/(\d+)\s*分/)
-      const hours = hourMatch ? parseInt(hourMatch[1], 10) : 0
-      const mins = minMatch ? parseInt(minMatch[1], 10) : 0
-      return sum + hours * 60 + mins
-    }, 0)
-
+    const totalMinutes = legs.reduce((sum, leg) => sum + leg.duration, 0)
     const hours = Math.floor(totalMinutes / 60)
     const mins = totalMinutes % 60
     return hours > 0 ? `${hours}時間${mins}分` : `${mins}分`

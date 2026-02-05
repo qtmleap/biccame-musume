@@ -33,8 +33,9 @@ export type DirectionsLeg = {
   to: string
   fromStation: string
   toStation: string
-  distance: string
-  duration: string
+  lines: string[]
+  duration: number
+  transfers: number
 }
 
 /**
