@@ -27,7 +27,7 @@ export const SelectedStoreList = ({ stores, onRemove, onChangeStation, onClearAl
       </div>
       <div className='space-y-2'>
         {stores.map((store, index) => (
-          <div key={store.id} className='bg-secondary/50 flex items-center justify-between gap-2 rounded-lg p-3'>
+          <div key={store.id} className='flex items-center justify-between gap-2 py-2'>
             <div className='flex items-center gap-2'>
               <span className='flex size-6 shrink-0 items-center justify-center rounded-full border text-xs'>
                 {index + 1}

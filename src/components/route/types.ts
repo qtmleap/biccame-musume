@@ -26,6 +26,17 @@ export type SelectedStore = {
 }
 
 /**
+ * 路線区間
+ */
+export type RouteSegment = {
+  operator: string
+  line: string
+  from: string
+  to: string
+  duration: number
+}
+
+/**
  * 経路の1区間
  */
 export type DirectionsLeg = {
@@ -33,7 +44,7 @@ export type DirectionsLeg = {
   to: string
   fromStation: string
   toStation: string
-  lines: string[]
+  routes: RouteSegment[]
   duration: number
   transfers: number
 }
