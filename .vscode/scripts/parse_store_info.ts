@@ -272,61 +272,56 @@ const parseHours = (
 }
 
 /**
- * 短縮URLを展開する
+ * 住所から座標を取得する（Google Geocoding API）
  */
-const expandShortenedUrl = async (url: string): Promise<string> => {
-  // 短縮URLでない場合はそのまま返す
-  if (!url.includes('goo.gl') && !url.includes('maps.app.goo.gl')) {
-    return url
+const geocodeAddress = async (address: string): Promise<{ latitude: number; longitude: number } | undefined> => {
+  if (!address) {
+    return undefined
+  }
+
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY
+  if (!apiKey) {
+    console.warn('  ⚠️ GOOGLE_MAPS_API_KEY is not set')
+    return undefined
   }
 
   try {
-    const response = await fetch(url, {
-      method: 'HEAD',
-      redirect: 'follow'
-    })
-    return response.url
-  } catch (_error) {
-    console.warn(`  ⚠️ Failed to expand URL: ${url}`)
-    return url
-  }
-}
+    const encodedAddress = encodeURIComponent(address)
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${apiKey}&language=ja&region=jp`
+    )
 
-/**
- * Google Maps URLから座標を抽出
- */
-const extractCoordinates = (url: string): { latitude: number; longitude: number } | undefined => {
-  // Google Maps埋め込みURL形式（!2d経度!3d緯度 または !3d緯度!2d経度）
-  // 先に !2d経度!3d緯度 の形式をチェック（こちらの方が一般的）
-  const embedMatch2d3d = url.match(/!2d([-0-9.]+)!3d([-0-9.]+)/)
-  if (embedMatch2d3d) {
-    const longitude = Number.parseFloat(embedMatch2d3d[1])
-    const latitude = Number.parseFloat(embedMatch2d3d[2])
-    if (!Number.isNaN(latitude) && !Number.isNaN(longitude)) {
-      return { latitude, longitude }
+    if (!response.ok) {
+      console.warn(`  ⚠️ Geocoding API error: ${response.status}`)
+      return undefined
     }
-  }
 
-  // !3d緯度!2d経度 の形式もチェック
-  const embedMatch3d2d = url.match(/!3d([-0-9.]+)!2d([-0-9.]+)/)
-  if (embedMatch3d2d) {
-    const latitude = Number.parseFloat(embedMatch3d2d[1])
-    const longitude = Number.parseFloat(embedMatch3d2d[2])
-    if (!Number.isNaN(latitude) && !Number.isNaN(longitude)) {
-      return { latitude, longitude }
+    const data = (await response.json()) as {
+      status: string
+      results: Array<{
+        geometry: {
+          location: {
+            lat: number
+            lng: number
+          }
+        }
+      }>
     }
-  }
 
-  // @緯度,経度 の形式でマッチ（従来の形式）
-  const match = url.match(/@([-0-9.]+),([-0-9.]+)/)
-  if (match) {
-    const latitude = Number.parseFloat(match[1])
-    const longitude = Number.parseFloat(match[2])
-    if (!Number.isNaN(latitude) && !Number.isNaN(longitude)) {
-      return { latitude, longitude }
+    if (data.status !== 'OK' || data.results.length === 0) {
+      console.warn(`  ⚠️ No geocoding result for: ${address} (status: ${data.status})`)
+      return undefined
     }
+
+    const location = data.results[0].geometry.location
+    return {
+      latitude: location.lat,
+      longitude: location.lng
+    }
+  } catch (error) {
+    console.warn(`  ⚠️ Geocoding failed for: ${address}`, error)
+    return undefined
   }
-  return undefined
 }
 
 /**
@@ -347,10 +342,6 @@ const parseProfileHtml = (
     postal_code?: string
     phone?: string
     birthday?: string
-    coordinates?: {
-      latitude: number
-      longitude: number
-    }
   }
 } | null => {
   const root = parse(html)
@@ -426,9 +417,17 @@ const parseProfileHtml = (
   const shortImages = images.map((url) => url.replace('https://biccame.jp/profile/', ''))
 
   // 郵便番号を取得
-  const addressText = root.querySelector('.shop_info')?.text || ''
+  const addressElement = root.querySelector('.shop_info')
+  const addressText = addressElement?.text || ''
   const postal_code_match = addressText.match(/〒(\d{3}-\d{4})/)
   const postal_code = postal_code_match ? postal_code_match[1] : undefined
+
+  // 住所を取得（「住所：〒XXX-XXXX 住所本文」形式）
+  let address: string | undefined
+  const addressMatch = addressText.match(/住所：〒\d{3}-\d{4}\s*([^\n]+)/)
+  if (addressMatch) {
+    address = addressMatch[1].trim().replace(/\s+/g, '')
+  }
 
   // 電話番号を取得
   const phoneElement = root.querySelectorAll('.shop_info')[1]
@@ -441,14 +440,6 @@ const parseProfileHtml = (
   const birthdayText = birthdayElement?.text || ''
   const birthdayMatch = birthdayText.match(/(\d{4})年(\d{2})月(\d{2})日/)
   const birthday = birthdayMatch ? `${birthdayMatch[1]}-${birthdayMatch[2]}-${birthdayMatch[3]}` : undefined
-
-  // Google Maps埋め込みURLから座標を取得
-  const mapIframe = root.querySelector('.google_map_posi iframe')
-  const mapSrc = mapIframe?.getAttribute('src')
-  let coordinates: { latitude: number; longitude: number } | undefined
-  if (mapSrc) {
-    coordinates = extractCoordinates(mapSrc)
-  }
 
   if (!_cleanName) {
     return null
@@ -472,7 +463,7 @@ const parseProfileHtml = (
       postal_code,
       phone,
       birthday,
-      coordinates
+      address
     }
   }
 }
@@ -499,10 +490,6 @@ const parseStoreHtml = async (
   access?: AccessInfo[]
   parking?: ParkingInfo[]
   google_maps_url?: string
-  coordinates?: {
-    latitude: number
-    longitude: number
-  }
 } | null> => {
   const root = parse(html)
 
@@ -650,15 +637,6 @@ const parseStoreHtml = async (
     }
   }
 
-  // Google Maps URLを展開して座標を抽出
-  let expanded_url = google_maps_url
-  let coordinates: { latitude: number; longitude: number } | undefined
-
-  if (google_maps_url) {
-    expanded_url = await expandShortenedUrl(google_maps_url)
-    coordinates = extractCoordinates(expanded_url)
-  }
-
   return {
     store_id: shop_id,
     name,
@@ -669,8 +647,7 @@ const parseStoreHtml = async (
     hours: parsed_hours.hours,
     access,
     parking,
-    google_maps_url: expanded_url,
-    coordinates
+    google_maps_url
   }
 }
 
@@ -680,6 +657,18 @@ const parseStoreHtml = async (
 const main = async () => {
   try {
     console.log('📋 Parsing character and store HTML files...\n')
+
+    // 既存のcharacters.jsonを読み込んで座標キャッシュを作成
+    const existingCoordinates: Record<string, { latitude: number; longitude: number } | null> = {}
+    if (existsSync(OUTPUT_FILE)) {
+      const existingData = JSON.parse(readFileSync(OUTPUT_FILE, 'utf-8')) as StoreInfo[]
+      for (const store of existingData) {
+        if (store.coordinates) {
+          existingCoordinates[store.id] = store.coordinates
+        }
+      }
+      console.log(`📦 Loaded ${Object.keys(existingCoordinates).length} cached coordinates\n`)
+    }
 
     // キャッシュディレクトリ内のプロフィールHTMLファイルを取得
     const files = readdirSync(CACHE_DIR)
@@ -721,10 +710,24 @@ const main = async () => {
         const storeData = await parseStoreHtml(storeHtml, storeId)
 
         if (storeData) {
-          // prefecture, coordinates, postal_codeをrootに移動
+          // prefecture, postal_codeをrootに移動
           storeInfo.prefecture = storeData.prefecture
-          storeInfo.coordinates = profileInfo.store_fields.coordinates || storeData.coordinates
           storeInfo.postal_code = profileInfo.store_fields.postal_code
+
+          // 既存の座標があれば使用、なければGeocoding APIで取得
+          if (existingCoordinates[storeId]) {
+            storeInfo.coordinates = existingCoordinates[storeId]
+            console.log(`  📦 Using cached coordinates: ${storeInfo.coordinates?.latitude}, ${storeInfo.coordinates?.longitude}`)
+          } else if (storeData.address) {
+            console.log(`  📍 Geocoding: ${storeData.address}`)
+            const coordinates = await geocodeAddress(storeData.address)
+            if (coordinates) {
+              storeInfo.coordinates = coordinates
+              console.log(`     → ${coordinates.latitude}, ${coordinates.longitude}`)
+            } else {
+              storeInfo.coordinates = null
+            }
+          }
 
           storeInfo.store = {
             store_id: storeData.store_id,
@@ -741,18 +744,35 @@ const main = async () => {
         }
       } else {
         // 店舗HTMLがない場合でもstore_fieldsをrootに設定
-        const { postal_code, phone, birthday, coordinates } = profileInfo.store_fields
+        const { postal_code, phone, birthday, address } = profileInfo.store_fields
         // 都道府県を推定（店舗IDを使用）
-        const prefecture = extractPrefecture(undefined, undefined, storeInfo.character.name, storeId)
+        const prefecture = extractPrefecture(address, undefined, storeInfo.character.name, storeId)
 
         storeInfo.prefecture = prefecture || null
-        storeInfo.coordinates = coordinates || null
         storeInfo.postal_code = postal_code || null
 
-        if (phone || birthday) {
+        // 既存の座標があれば使用、なければGeocoding APIで取得
+        if (existingCoordinates[storeId]) {
+          storeInfo.coordinates = existingCoordinates[storeId]
+          console.log(`  📦 Using cached coordinates: ${storeInfo.coordinates?.latitude}, ${storeInfo.coordinates?.longitude}`)
+        } else if (address) {
+          console.log(`  📍 Geocoding: ${address}`)
+          const coordinates = await geocodeAddress(address)
+          if (coordinates) {
+            storeInfo.coordinates = coordinates
+            console.log(`     → ${coordinates.latitude}, ${coordinates.longitude}`)
+          } else {
+            storeInfo.coordinates = null
+          }
+        } else {
+          storeInfo.coordinates = null
+        }
+
+        if (phone || birthday || address) {
           storeInfo.store = {
             phone,
             birthday,
+            address,
             access: []
           }
         }
