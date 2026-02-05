@@ -1,17 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Loader2, MapPin, Route as RouteIcon } from 'lucide-react'
 import { Suspense, useCallback, useMemo, useState } from 'react'
+import {
+  type AvailableStore,
+  type RouteResult,
+  RouteResultCard,
+  type SelectedStore,
+  SelectedStoreList,
+  StoreSelect,
+  useDirections
+} from '@/components/route'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  StoreSelect,
-  SelectedStoreList,
-  RouteResultCard,
-  useDirections,
-  type AvailableStore,
-  type SelectedStore,
-  type RouteResult
-} from '@/components/route'
 import { useCharacters } from '@/hooks/useCharacters'
 import { solveTsp } from '@/utils/tsp'
 
@@ -138,6 +138,12 @@ const RouteCalculator = () => {
     setIsCalculating(false)
   }, [selectedStores, getDirections, calcTotalDuration])
 
+  // 駅が指定されていない店舗があるかチェック
+  const hasInvalidStation = useMemo(
+    () => selectedStores.some((store) => !store.station || store.station.trim() === ''),
+    [selectedStores]
+  )
+
   return (
     <div className='container mx-auto max-w-2xl space-y-6 p-4'>
       <Card>
@@ -160,7 +166,7 @@ const RouteCalculator = () => {
           <Button
             variant='outline'
             className='w-full'
-            disabled={selectedStores.length < 2 || isCalculating}
+            disabled={selectedStores.length < 2 || isCalculating || hasInvalidStation}
             onClick={handleCalculate}
           >
             {isCalculating ? (
