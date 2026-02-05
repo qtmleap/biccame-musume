@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import events from './api/event'
+import routes from './api/routes'
 import stats from './api/stats'
 import votes from './api/vote'
 import type { Bindings, Variables } from './types/bindings'
@@ -14,6 +15,9 @@ app.route('/api/votes', votes)
 
 // ページビュー統計APIルート
 app.route('/api/stats', stats)
+
+// ルート計算APIルート
+app.route('/api/routes', routes)
 
 // 静的ファイル配信
 app.use('*', async (_c, next) => {
