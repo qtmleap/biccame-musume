@@ -8,7 +8,9 @@ const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
  * LLMに経路を推測させるプロンプトを生成
  */
 const buildPrompt = (legs: Leg[]) => {
-  const legDescriptions = legs.map((leg, i) => `${i + 1}. ${leg.fromStation} → ${leg.toStation}`).join('\n')
+  const legDescriptions = legs
+    .map((leg, i) => `${i + 1}. ${leg.from}（${leg.fromStation}）→ ${leg.to}（${leg.toStation}）`)
+    .join('\n')
 
   return [
     'あなたは日本の鉄道路線に詳しい専門家です。',
@@ -16,10 +18,10 @@ const buildPrompt = (legs: Leg[]) => {
     '乗り換えがある場合は全ての路線名を含めてください。',
     '',
     '回答に含めるパラメータ:',
-    '- from: 出発店舗名',
-    '- to: 到着店舗名',
-    '- fromStation: 出発駅名',
-    '- toStation: 到着駅名',
+    '- from: 出発店舗名（そのまま返してください）',
+    '- to: 到着店舗名（そのまま返してください）',
+    '- fromStation: 出発駅名（そのまま返してください）',
+    '- toStation: 到着駅名（そのまま返してください）',
     '- lines: 利用する路線名の配列',
     '- duration: 所要時間（分単位の数値）',
     '- transfers: 乗り換え回数',
@@ -96,20 +98,11 @@ app.post('/', async (c) => {
       }
     })
 
-    // レスポンスの型はstring | ReadableStreamまたはobjectの可能性がある
-    let parsedResponse: unknown
-    if (typeof response === 'string') {
-      parsedResponse = JSON.parse(response)
-    } else if (typeof response === 'object' && response !== null) {
-      parsedResponse = response
-    } else {
-      throw new Error('Unexpected response format')
-    }
+    const result = RouteResponseSchema.safeParse(response.response)
 
-    const validatedResponse = RouteResponseSchema.safeParse(parsedResponse)
-
-    if (!validatedResponse.success) {
-      console.error('Invalid LLM response structure:', parsedResponse)
+    if (!result.success) {
+      console.error('[Routes API] Validation failed:', result.error.issues)
+      console.error('[Routes API] Invalid LLM response structure:', response.response)
       // フォールバック: 元のリクエストに推測値を追加
       const fallbackLegs = legs.map((leg) => ({
         ...leg,
@@ -120,7 +113,8 @@ app.post('/', async (c) => {
       return c.json({ legs: fallbackLegs })
     }
 
-    return c.json(validatedResponse.data)
+    console.log('[Routes API] Validation success, returning data')
+    return c.json(result.data)
   } catch (error) {
     console.error('Workers AI error:', error)
     // エラー時もフォールバック
