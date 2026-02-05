@@ -38,8 +38,8 @@ name = "RATE_LIMITER"
 namespace_id = "1001"
 simple = { limit = 50, period = 60 }
 
-# [env.prod.ai]
-# binding = "AI"
+[env.prod.ai]
+binding = "AI"
 
 [env.prod.vars]
 ENVIRONMENT = "prod"
@@ -83,6 +83,9 @@ migrations_dir = "prisma/migrations"
 name = "RATE_LIMITER"
 namespace_id = "1001"
 simple = { limit = 50, period = 60 }
+
+# [env.dev.ai]
+# binding = "AI"
 
 # [env.dev.ai]
 # binding = "AI"

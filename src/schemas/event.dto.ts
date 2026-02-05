@@ -25,7 +25,7 @@ export type EventConditionType = z.infer<typeof EventConditionTypeSchema>
  * 配布条件の詳細
  */
 export const EventConditionSchema = z.object({
-  uuid: z.uuidv4(),
+  uuid: z.uuid(),
   type: EventConditionTypeSchema,
   // 購入条件の場合の金額（円）
   purchaseAmount: z.number().min(0).optional(),
@@ -46,7 +46,7 @@ export type ReferenceUrlType = z.infer<typeof ReferenceUrlTypeSchema>
  * 参考URL
  */
 export const ReferenceUrlSchema = z.object({
-  uuid: z.uuidv4(),
+  uuid: z.uuid(),
   type: ReferenceUrlTypeSchema,
   url: z.url('有効なURLを入力してください')
 })
@@ -57,7 +57,7 @@ export type ReferenceUrl = z.infer<typeof ReferenceUrlSchema>
  * イベント作成・更新リクエスト（GET/PUT/POST用）
  */
 export const EventRequestSchema = z.object({
-  uuid: z.uuidv4(),
+  uuid: z.uuid(),
   category: EventCategorySchema,
   title: z.string().nonempty('イベント名は必須です'),
   stores: z.array(StoreKeySchema).nonempty('最低1つの店舗を選択してください'),
