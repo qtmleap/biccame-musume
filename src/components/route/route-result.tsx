@@ -35,7 +35,7 @@ export const RouteResultCard = ({ result }: Props) => {
               return (
                 <div key={store.id}>
                   <div className='flex items-center gap-2 py-2 text-sm'>
-                    <span className='bg-primary text-primary-foreground flex size-6 shrink-0 items-center justify-center rounded-full text-xs'>
+                    <span className='flex size-6 shrink-0 items-center justify-center rounded-full border text-xs'>
                       {index + 1}
                     </span>
                     <div>
@@ -44,13 +44,21 @@ export const RouteResultCard = ({ result }: Props) => {
                     </div>
                   </div>
                   {leg && (
-                    <div className='text-muted-foreground ml-3 flex items-center gap-2 border-l-2 py-1 pl-4 text-xs'>
-                      <span>↓</span>
-                      <span>
-                        {leg.fromStation} → {leg.toStation}
-                      </span>
-                      <span>{leg.distance}</span>
-                      <span className='text-primary font-medium'>{leg.duration}</span>
+                    <div className='text-muted-foreground ml-3 space-y-1 border-l-2 py-1 pl-4 text-xs'>
+                      <div className='flex items-center gap-2'>
+                        <span>↓</span>
+                        <span className='text-primary font-medium'>
+                          {leg.duration > 0 ? `${leg.duration}分` : '不明'}
+                        </span>
+                        {leg.transfers > 0 && <span>（乗換{leg.transfers}回）</span>}
+                      </div>
+                      <div className='flex flex-wrap gap-1'>
+                        {leg.lines.map((line) => (
+                          <span key={line} className='bg-secondary rounded px-1.5 py-0.5'>
+                            {line}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>

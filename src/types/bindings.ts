@@ -28,6 +28,8 @@ export type Bindings = {
   TWITTER_ACCESS_TOKEN: string
   /** Twitter Access Token Secret */
   TWITTER_ACCESS_SECRET: string
+  /** Workers AI */
+  AI: Ai
 }
 
 export type Variables = {
