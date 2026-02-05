@@ -38,6 +38,9 @@ name = "RATE_LIMITER"
 namespace_id = "1001"
 simple = { limit = 50, period = 60 }
 
+# [env.prod.ai]
+# binding = "AI"
+
 [env.prod.vars]
 ENVIRONMENT = "prod"
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
@@ -80,6 +83,9 @@ migrations_dir = "prisma/migrations"
 name = "RATE_LIMITER"
 namespace_id = "1001"
 simple = { limit = 50, period = 60 }
+
+# [env.dev.ai]
+# binding = "AI"
 
 [env.dev.vars]
 ENVIRONMENT = "dev"

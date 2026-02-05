@@ -38,17 +38,6 @@
       }
     },
     {
-      "label": "Sync KV from Production",
-      "type": "shell",
-      "command": "bun",
-      "args": ["${workspaceFolder}/.vscode/scripts/sync_kv_from_prod.ts"],
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
       "label": "Generate Characters JSON",
       "type": "shell",
       "command": "bun",
@@ -60,30 +49,32 @@
       }
     },
     {
-      "label": "Sync Votes from KV to Local DB",
-      "type": "shell",
-      "command": "${workspaceFolder}/.vscode/scripts/sync_votes_from_kv.sh",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Sync Events from KV to Local DB",
-      "type": "shell",
-      "command": "${workspaceFolder}/.vscode/scripts/sync_events_from_kv.sh",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
       "label": "Fetch HTML Cache",
       "type": "shell",
       "command": "bun",
       "args": ["${workspaceFolder}/.vscode/scripts/fetch_html.ts"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Restore DB from Remote (Dev)",
+      "type": "shell",
+      "command": "${workspaceFolder}/.vscode/scripts/restore_db_from_remote.sh",
+      "args": ["dev"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Restore DB from Remote (Prod)",
+      "type": "shell",
+      "command": "${workspaceFolder}/.vscode/scripts/restore_db_from_remote.sh",
+      "args": ["prod"],
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",

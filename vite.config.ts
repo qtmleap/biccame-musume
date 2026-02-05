@@ -54,7 +54,7 @@ export default defineConfig(({ mode }) => {
       }),
       react(),
       cloudflare({
-        configPath: './wrangler.toml'
+        configPath: './wrangler.toml',
       }),
       tailwindcss(),
       intlayer(),
@@ -104,6 +104,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     optimizeDeps: {
+      include: ['sonner'],
       esbuildOptions: {
         define: {
           global: 'globalThis'
