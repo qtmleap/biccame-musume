@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { RouteResult } from './types'
 
 type Props = {
@@ -10,63 +9,81 @@ type Props = {
  */
 export const RouteResultCard = ({ result }: Props) => {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className='text-lg'>計算結果</CardTitle>
-      </CardHeader>
-      <CardContent className='space-y-4'>
-        <div className='grid grid-cols-2 gap-4'>
-          <div className='bg-primary/10 text-primary rounded-lg p-4 text-center'>
-            <div className='text-sm'>総移動距離</div>
-            <div className='text-xl font-bold'>{(result.totalDistance * 111).toFixed(1)} km</div>
-          </div>
-          <div className='bg-primary/10 text-primary rounded-lg p-4 text-center'>
-            <div className='text-sm'>総所要時間</div>
-            <div className='text-xl font-bold'>{result.totalDuration}</div>
-          </div>
+    <div className='space-y-4'>
+      <h2 className='text-lg font-bold'>ルート案内</h2>
+
+      <div className='grid grid-cols-2 gap-4'>
+        <div className='bg-primary/10 text-primary rounded-lg p-4 text-center'>
+          <div className='text-sm'>総移動距離</div>
+          <div className='text-xl font-bold'>{(result.totalDistance * 111).toFixed(1)} km</div>
         </div>
+        <div className='bg-primary/10 text-primary rounded-lg p-4 text-center'>
+          <div className='text-sm'>総所要時間</div>
+          <div className='text-xl font-bold'>{result.totalDuration}</div>
+        </div>
+      </div>
 
-        <div className='space-y-2'>
-          <div className='font-medium'>最短ルート順序</div>
-          <div className='space-y-0'>
-            {result.route.map((store, index) => {
-              const leg = result.legs[index]
+      <div className='space-y-2'>
+        <div className='font-medium'>最短ルート順序</div>
+        <div>
+          {result.route.map((store, index) => {
+            const leg = result.legs[index]
 
-              return (
-                <div key={store.id}>
-                  <div className='flex items-center gap-2 py-2 text-sm'>
-                    <span className='flex size-6 shrink-0 items-center justify-center rounded-full border text-xs'>
-                      {index + 1}
-                    </span>
-                    <div>
-                      <span>{store.name}</span>
-                      <span className='text-muted-foreground ml-2 text-xs'>({store.station})</span>
+            return (
+              <div key={store.id}>
+                {/* 店舗名 */}
+                <div className='flex items-center gap-2 py-2 text-sm'>
+                  <span className='flex size-6 shrink-0 items-center justify-center rounded-full bg-green-500 text-xs text-white'>
+                    {index + 1}
+                  </span>
+                  <span className='font-medium'>{store.name}</span>
+                </div>
+
+                {/* 経路情報 */}
+                {leg && leg.routes.length > 0 && (
+                  <div className='ml-3 flex gap-6'>
+                    {/* 縦線 + 合計時間オーバーレイ */}
+                    <div className='relative flex flex-col items-center'>
+                      <div className='h-full w-0 border-l-4 border-blue-400' />
+                      {/* 合計時間を中央にオーバーレイ */}
+                      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded bg-blue-400 px-2 py-0.5 text-sm font-medium text-white whitespace-nowrap'>
+                        {leg.duration}分
+                      </div>
+                    </div>
+                    {/* 経路詳細 */}
+                    <div className='text-muted-foreground text-sm'>
+                      {leg.routes.map((segment, i) => (
+                        <div key={`${segment.operator}-${segment.line}-${i}`}>
+                          {/* 出発駅 */}
+                          <div className='py-1 font-medium'>
+                            {segment.from}
+                            {!segment.from.endsWith('駅') && '駅'}
+                          </div>
+                          {/* 路線情報 */}
+                          <div className='text-muted-foreground flex items-center gap-2 py-1 pl-2 text-xs'>
+                            <span>{segment.duration}分</span>
+                            <span>|</span>
+                            <span>
+                              {segment.operator} {segment.line}
+                            </span>
+                          </div>
+                          {/* 到着駅（次のセグメントがない場合のみ表示） */}
+                          {i === leg.routes.length - 1 && (
+                            <div className='py-1 font-medium'>
+                              {segment.to}
+                              {!segment.to.endsWith('駅') && '駅'}
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  {leg && (
-                    <div className='text-muted-foreground ml-3 space-y-1 border-l-2 py-1 pl-4 text-xs'>
-                      <div className='flex items-center gap-2'>
-                        <span>↓</span>
-                        <span className='text-primary font-medium'>
-                          {leg.duration > 0 ? `${leg.duration}分` : '不明'}
-                        </span>
-                        {leg.transfers > 0 && <span>（乗換{leg.transfers}回）</span>}
-                      </div>
-                      <div className='flex flex-wrap gap-1'>
-                        {leg.lines.map((line) => (
-                          <span key={line} className='bg-secondary rounded px-1.5 py-0.5'>
-                            {line}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
+                )}
+              </div>
+            )
+          })}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
