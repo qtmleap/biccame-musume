@@ -111,7 +111,7 @@ export const Route = createFileRoute('/admin/events/$uuid/')({
   component: EditEventPage,
   validateSearch: EventRequestQuerySchema,
   beforeLoad: ({ params }) => {
-    const result = z.uuidv4().safeParse(params.uuid)
+    const result = z.uuid().safeParse(params.uuid)
     if (!result.success) {
       throw notFound()
     }
