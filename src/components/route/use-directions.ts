@@ -53,7 +53,7 @@ export const useDirections = () => {
       // エラー時はフォールバック
       return legs.map((leg) => ({
         ...leg,
-        lines: ['不明'],
+        routes: [],
         duration: 0,
         transfers: 0
       }))

@@ -11,7 +11,6 @@ import {
   useDirections
 } from '@/components/route'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useCharacters } from '@/hooks/useCharacters'
 import { solveTsp } from '@/utils/tsp'
 
@@ -72,10 +71,11 @@ const RouteCalculator = () => {
   )
 
   /**
-   * 店舗を追加
+   * 店舗を追加（最大5店舗まで）
    */
   const handleAddStore = useCallback(
     (storeId: string) => {
+      if (selectedStores.length >= 5) return
       const store = availableStores.find((s) => s.id === storeId)
       if (store) {
         setSelectedStores((prev) => [
@@ -88,7 +88,7 @@ const RouteCalculator = () => {
         setResult(null)
       }
     },
-    [availableStores]
+    [availableStores, selectedStores.length]
   )
 
   /**
@@ -145,44 +145,41 @@ const RouteCalculator = () => {
   )
 
   return (
-    <div className='container mx-auto max-w-2xl space-y-6 p-4'>
-      <Card>
-        <CardHeader>
-          <CardTitle className='flex items-center gap-2'>
-            <RouteIcon className='size-5' />
-            ルート計算
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='space-y-4'>
-          <StoreSelect stores={unselectedStores} onSelect={handleAddStore} />
+    <div className='mx-auto max-w-6xl space-y-6 px-4 py-2 md:py-4 md:px-8'>
+      <h1 className='flex items-center gap-2 text-xl font-bold'>
+        <RouteIcon className='size-5' />
+        ルート計算
+      </h1>
 
-          <SelectedStoreList
-            stores={selectedStores}
-            onRemove={handleRemoveStore}
-            onChangeStation={handleChangeStation}
-            onClearAll={handleClearAll}
-          />
+      <div className='space-y-4'>
+        <StoreSelect stores={unselectedStores} onSelect={handleAddStore} disabled={selectedStores.length >= 5} />
 
-          <Button
-            variant='outline'
-            className='w-full'
-            disabled={selectedStores.length < 2 || isCalculating || hasInvalidStation}
-            onClick={handleCalculate}
-          >
-            {isCalculating ? (
-              <>
-                <Loader2 className='size-4 animate-spin' />
-                計算中...
-              </>
-            ) : (
-              <>
-                <MapPin className='size-4' />
-                最短ルートを計算
-              </>
-            )}
-          </Button>
-        </CardContent>
-      </Card>
+        <SelectedStoreList
+          stores={selectedStores}
+          onRemove={handleRemoveStore}
+          onChangeStation={handleChangeStation}
+          onClearAll={handleClearAll}
+        />
+
+        <Button
+          variant='outline'
+          className='w-full'
+          disabled={selectedStores.length < 2 || isCalculating || hasInvalidStation}
+          onClick={handleCalculate}
+        >
+          {isCalculating ? (
+            <>
+              <Loader2 className='size-4 animate-spin' />
+              探索中...
+            </>
+          ) : (
+            <>
+              <MapPin className='size-4' />
+              最短ルートを探索
+            </>
+          )}
+        </Button>
+      </div>
 
       {result && <RouteResultCard result={result} />}
     </div>
