@@ -58,28 +58,6 @@
         "reveal": "always",
         "panel": "new"
       }
-    },
-    {
-      "label": "Restore DB from Remote (Dev)",
-      "type": "shell",
-      "command": "${workspaceFolder}/.vscode/scripts/restore_db_from_remote.sh",
-      "args": ["dev"],
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Restore DB from Remote (Prod)",
-      "type": "shell",
-      "command": "${workspaceFolder}/.vscode/scripts/restore_db_from_remote.sh",
-      "args": ["prod"],
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
     }
   ]
 }
