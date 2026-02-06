@@ -1,7 +1,7 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { ArrowLeft, LogIn, MapPin, Star, Trophy } from 'lucide-react'
 import { motion } from 'motion/react'
-import { Suspense } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -13,9 +13,26 @@ import { useUserActivity } from '@/hooks/useUserActivity'
  * マイページコンテンツ
  */
 const MyPageContent = () => {
-  const { user, twitterProfile, isAuthenticated, logout, loginWithTwitter } = useAuth()
+  const { user, twitterProfile, isAuthenticated, loading, logout, loginWithTwitter } = useAuth()
   const router = useRouter()
   const { visitedStores, interestedEvents, completedEvents, isLoading } = useUserActivity(user?.uid)
+  const autoLoginAttempted = useRef(false)
+
+  /**
+   * 非ログイン時に自動でログインを試みる
+   */
+  useEffect(() => {
+    if (!loading && !isAuthenticated && !autoLoginAttempted.current) {
+      autoLoginAttempted.current = true
+      loginWithTwitter()
+        .then(() => {
+          toast.success('ログインしました')
+        })
+        .catch(() => {
+          // ユーザーがキャンセルした場合など、エラーは無視
+        })
+    }
+  }, [loading, isAuthenticated, loginWithTwitter])
 
   /**
    * ログアウト処理
