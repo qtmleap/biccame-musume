@@ -1,5 +1,5 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, LogIn, LogOut } from 'lucide-react'
+import { ArrowLeft, LogIn, MapPin, Star, Trophy } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { toast } from 'sonner'
@@ -7,6 +7,7 @@ import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { getLargeTwitterPhoto, useAuth } from '@/hooks/useAuth'
+import { useUserActivity } from '@/hooks/useUserActivity'
 
 /**
  * マイページコンテンツ
@@ -14,6 +15,7 @@ import { getLargeTwitterPhoto, useAuth } from '@/hooks/useAuth'
 const MyPageContent = () => {
   const { user, twitterProfile, isAuthenticated, logout, loginWithTwitter } = useAuth()
   const router = useRouter()
+  const { visitedStores, interestedEvents, completedEvents, isLoading } = useUserActivity(user?.uid)
 
   /**
    * ログアウト処理
@@ -105,6 +107,18 @@ const MyPageContent = () => {
                 </AvatarFallback>
               </Avatar>
             </motion.div>
+
+            {/* アクションボタン */}
+            <div className='flex gap-2'>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={handleLogout}
+                className='rounded-full px-4 h-7 text-xs font-semibold bg-red-50 text-red-600 border border-red-200 hover:bg-red-100'
+              >
+                ログアウト
+              </Button>
+            </div>
           </div>
 
           {/* 名前 */}
@@ -134,8 +148,17 @@ const MyPageContent = () => {
             transition={{ duration: 0.5, delay: 0.4 }}
             className='space-y-3 mb-6'
           >
-            <h2 className='text-xl font-bold text-gray-900'>訪れた店舗の記録</h2>
-            <p className='text-sm text-gray-500'>Coming Soon</p>
+            <div className='flex items-center gap-2'>
+              <MapPin className='h-5 w-5 text-pink-600' />
+              <h2 className='text-xl font-bold text-gray-900'>訪れた店舗の記録</h2>
+            </div>
+            {isLoading ? (
+              <p className='text-sm text-gray-500'>読み込み中...</p>
+            ) : visitedStores.length > 0 ? (
+              <p className='text-sm text-gray-600'>{visitedStores.length}店舗を訪問済み</p>
+            ) : (
+              <p className='text-sm text-gray-500'>まだ訪問した店舗がありません</p>
+            )}
           </motion.div>
 
           {/* 興味のあるイベント */}
@@ -145,8 +168,17 @@ const MyPageContent = () => {
             transition={{ duration: 0.5, delay: 0.5 }}
             className='space-y-3 mb-6'
           >
-            <h2 className='text-xl font-bold text-gray-900'>興味のあるイベント</h2>
-            <p className='text-sm text-gray-500'>Coming Soon</p>
+            <div className='flex items-center gap-2'>
+              <Star className='h-5 w-5 text-yellow-500' />
+              <h2 className='text-xl font-bold text-gray-900'>興味のあるイベント</h2>
+            </div>
+            {isLoading ? (
+              <p className='text-sm text-gray-500'>読み込み中...</p>
+            ) : interestedEvents.length > 0 ? (
+              <p className='text-sm text-gray-600'>{interestedEvents.length}件のイベントに興味あり</p>
+            ) : (
+              <p className='text-sm text-gray-500'>まだ興味のあるイベントがありません</p>
+            )}
           </motion.div>
 
           {/* 達成したイベント */}
@@ -156,16 +188,17 @@ const MyPageContent = () => {
             transition={{ duration: 0.5, delay: 0.6 }}
             className='space-y-3 mb-6'
           >
-            <h2 className='text-xl font-bold text-gray-900'>達成したイベント</h2>
-            <p className='text-sm text-gray-500'>Coming Soon</p>
-          </motion.div>
-
-          {/* ログアウト */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.6 }}>
-            <Button variant='destructive' onClick={handleLogout} className='gap-2'>
-              <LogOut className='w-4 h-4' />
-              ログアウト
-            </Button>
+            <div className='flex items-center gap-2'>
+              <Trophy className='h-5 w-5 text-amber-500' />
+              <h2 className='text-xl font-bold text-gray-900'>達成したイベント</h2>
+            </div>
+            {isLoading ? (
+              <p className='text-sm text-gray-500'>読み込み中...</p>
+            ) : completedEvents.length > 0 ? (
+              <p className='text-sm text-gray-600'>{completedEvents.length}件のイベントを達成</p>
+            ) : (
+              <p className='text-sm text-gray-500'>まだ達成したイベントがありません</p>
+            )}
           </motion.div>
         </div>
       </div>
