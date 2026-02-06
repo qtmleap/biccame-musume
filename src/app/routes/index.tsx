@@ -73,7 +73,8 @@ const BirthdayDisplaySwitcher = ({
   selectedCharacterId: string
   onCharacterChange: (id: string) => void
 }) => {
-  if (!import.meta.env.DEV) return null
+  const [showPatternOptions, setShowPatternOptions] = useState(false)
+  const birthdayGroups = groupCharactersByBirthday(characters)
 
   const options: { value: BirthdayDisplayType; label: string }[] = [
     { value: 'dialog', label: 'ダイアログ' },
@@ -85,26 +86,11 @@ const BirthdayDisplaySwitcher = ({
     { value: 'none', label: 'なし' }
   ]
 
-  const birthdayGroups = groupCharactersByBirthday(characters)
+  if (!import.meta.env.DEV) return null
 
   return (
     <div className='fixed top-20 left-4 z-100 rounded-lg bg-white/90 p-3 shadow-lg backdrop-blur-sm'>
-      <p className='mb-2 text-xs font-medium text-gray-600'>誕生日表示パターン</p>
-      <div className='flex flex-col gap-1'>
-        {options.map((option) => (
-          <button
-            key={option.value}
-            type='button'
-            onClick={() => onChange(option.value)}
-            className={`rounded px-3 py-1 text-left text-xs transition-colors ${
-              current === option.value ? 'bg-pink-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
-      <div className='mt-3 pt-3 border-t border-gray-200'>
+      <div className='mb-2'>
         <p className='mb-2 text-xs font-medium text-gray-600'>誕生日キャラクター</p>
         <select
           value={selectedCharacterId}
@@ -118,6 +104,31 @@ const BirthdayDisplaySwitcher = ({
           ))}
         </select>
       </div>
+      <button
+        type='button'
+        onClick={() => setShowPatternOptions(!showPatternOptions)}
+        className='text-xs text-gray-500 hover:text-gray-700 underline'
+      >
+        {showPatternOptions ? '表示パターンを隠す' : '表示パターンを変更'}
+      </button>
+      {showPatternOptions && (
+        <div className='mt-2 pt-2 border-t border-gray-200'>
+          <div className='flex flex-col gap-1'>
+            {options.map((option) => (
+              <button
+                key={option.value}
+                type='button'
+                onClick={() => onChange(option.value)}
+                className={`rounded px-3 py-1 text-left text-xs transition-colors ${
+                  current === option.value ? 'bg-pink-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

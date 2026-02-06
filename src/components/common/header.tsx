@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Cake, Gift, MapPin, Menu, Trophy, Users, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
+import { LoginButton } from '@/components/auth/login-button'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -71,6 +72,7 @@ export const Header = ({ className }: HeaderProps) => {
                 </Link>
               )
             })}
+            <LoginButton />
           </nav>
 
           {/* モバイルメニューボタン */}
@@ -160,6 +162,15 @@ export const Header = ({ className }: HeaderProps) => {
                     )
                   })}
                 </div>
+                <motion.div
+                  className='mt-3 pt-3 border-t border-border'
+                  initial={{ x: -16, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -16, opacity: 0 }}
+                  transition={{ duration: 0.2, delay: navLinks.length * 0.05, ease: 'easeOut' }}
+                >
+                  <LoginButton variant='menu' />
+                </motion.div>
               </div>
             </motion.nav>
           </>
