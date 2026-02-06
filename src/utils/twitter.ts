@@ -41,37 +41,11 @@ const generateTweetText = (event: Event, isUpdate: boolean): string => {
 }
 
 /**
- * Twitter APIクライアントを作成 (OAuth 1.0a)
- */
-const createTwitterClient = (env: Bindings): TwitterApi => {
-  return new TwitterApi({
-    appKey: env.TWITTER_API_KEY,
-    appSecret: env.TWITTER_API_SECRET,
-    accessToken: env.TWITTER_ACCESS_TOKEN,
-    accessSecret: env.TWITTER_ACCESS_SECRET
-  })
-}
-
-/**
- * Twitter認証情報が設定されているか確認
- */
-const hasTwitterCredentials = (env: Bindings): boolean => {
-  return !!(env.TWITTER_API_KEY && env.TWITTER_API_SECRET && env.TWITTER_ACCESS_TOKEN && env.TWITTER_ACCESS_SECRET)
-}
-
-/**
- * ローカル環境かどうか判定
- */
-const isLocalEnvironment = (env: Bindings): boolean => {
-  return !env.ENVIRONMENT || env.ENVIRONMENT === 'local'
-}
-
-/**
  * イベントから引用RT用のツイートIDを抽出
  */
 const getQuoteTweetId = (event: Event): string | undefined => {
-  const urls: string[] = event.referenceUrls?.map((ref) => ref.url) || []
-  const url: string | undefined = urls.at(-1)
+  const urls = event.referenceUrls?.map((ref) => ref.url) || []
+  const url = urls.at(-1)
   if (url === undefined) {
     return undefined
   }
@@ -79,50 +53,95 @@ const getQuoteTweetId = (event: Event): string | undefined => {
 }
 
 /**
- * ツイートを投稿する共通処理
+ * Twitter APIクライアントクラス
+ * イベントのツイート投稿機能を提供
  */
-const postTweet = async (env: Bindings, event: Event, isUpdate: boolean): Promise<void> => {
-  if (!hasTwitterCredentials(env)) {
-    console.warn('[Twitter] API credentials not configured. Skipping tweet.')
-    return
+export class Twitter {
+  private client: TwitterApi | null = null
+  private isLocal: boolean
+
+  constructor(private env: Bindings) {
+    this.isLocal = !env.ENVIRONMENT || env.ENVIRONMENT === 'local'
   }
 
-  const text = generateTweetText(event, isUpdate)
-  const quoteTweetId = getQuoteTweetId(event)
+  /**
+   * Twitter APIクライアントを取得（遅延初期化）
+   */
+  private getClient(): TwitterApi {
+    if (this.client) {
+      return this.client
+    }
 
-  // ローカル環境ではリクエスト内容をログ出力してスキップ
-  if (isLocalEnvironment(env)) {
-    console.log('[Twitter] Skipping tweet in local environment. Would have sent:', {
-      text,
-      quoteTweetId
+    const { TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } = this.env
+
+    if (!TWITTER_API_KEY || !TWITTER_API_SECRET || !TWITTER_ACCESS_TOKEN || !TWITTER_ACCESS_SECRET) {
+      throw new Error('[Twitter] API credentials not configured')
+    }
+
+    this.client = new TwitterApi({
+      appKey: TWITTER_API_KEY,
+      appSecret: TWITTER_API_SECRET,
+      accessToken: TWITTER_ACCESS_TOKEN,
+      accessSecret: TWITTER_ACCESS_SECRET
     })
-    return
+
+    return this.client
   }
 
-  const client = createTwitterClient(env)
-
-  try {
-    console.log('[Twitter API] Request:', { text, quoteTweetId })
-
-    const result = quoteTweetId ? await client.v2.quote(text, quoteTweetId) : await client.v2.tweet(text)
-
-    console.log('[Twitter] Tweet posted successfully:', result.data)
-  } catch (error) {
-    console.error('[Twitter] Failed to post tweet:', error)
-    throw error
+  /**
+   * 認証情報が設定されているか確認
+   */
+  hasCredentials(): boolean {
+    const { TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } = this.env
+    return !!(TWITTER_API_KEY && TWITTER_API_SECRET && TWITTER_ACCESS_TOKEN && TWITTER_ACCESS_SECRET)
   }
-}
 
-/**
- * イベント作成時にツイートを投稿
- */
-export const tweetEventCreated = async (env: Bindings, event: Event): Promise<void> => {
-  await postTweet(env, event, false)
-}
+  /**
+   * ツイートを投稿
+   */
+  async tweet(text: string, quoteTweetId?: string): Promise<void> {
+    if (!this.hasCredentials()) {
+      console.warn('[Twitter] API credentials not configured. Skipping tweet.')
+      return
+    }
 
-/**
- * イベント更新時にツイートを投稿
- */
-export const tweetEventUpdated = async (env: Bindings, event: Event): Promise<void> => {
-  await postTweet(env, event, true)
+    if (this.isLocal) {
+      console.log('[Twitter] Skipping tweet in local environment. Would have sent:', {
+        text,
+        quoteTweetId
+      })
+      return
+    }
+
+    const client = this.getClient()
+
+    try {
+      console.log('[Twitter API] Request:', { text, quoteTweetId })
+
+      const result = quoteTweetId ? await client.v2.quote(text, quoteTweetId) : await client.v2.tweet(text)
+
+      console.log('[Twitter] Tweet posted successfully:', result.data)
+    } catch (error) {
+      console.error('[Twitter] Failed to post tweet:', error)
+      throw error
+    }
+  }
+
+  /**
+   * イベント作成時にツイートを投稿
+   */
+  async tweetEventCreated(event: Event): Promise<void> {
+    const text = generateTweetText(event, false)
+    const quoteTweetId = getQuoteTweetId(event)
+    await this.tweet(text, quoteTweetId)
+  }
+
+  /**
+   * イベント更新時にツイートを投稿
+   */
+  async tweetEventUpdated(event: Event): Promise<void> {
+    const text = generateTweetText(event, true)
+    const quoteTweetId = getQuoteTweetId(event)
+    await this.tweet(text, quoteTweetId)
+  }
 }

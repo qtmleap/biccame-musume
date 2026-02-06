@@ -7,7 +7,7 @@ import { HTTPException } from 'hono/http-exception'
 import { nullToUndefined } from '@/lib/utils'
 import { type Event, type EventRequest, EventSchema, type EventStatus, EventStatusSchema } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
-import { tweetEventCreated, tweetEventUpdated } from '@/utils/twitter'
+import { Twitter } from '@/utils/twitter'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -15,6 +15,8 @@ dayjs.tz.setDefault('Asia/Tokyo')
 
 /**
  * イベントのステータスと残り日数を計算
+ * @param event - イベントの日付情報
+ * @returns ステータス（upcoming/ongoing/last_day/ended）と残り日数
  */
 const calculateEventStatus = (event: {
   startDate: Date
@@ -55,6 +57,11 @@ const calculateEventStatus = (event: {
   return { status: EventStatusSchema.enum.ongoing, daysUntil: 0 }
 }
 
+/**
+ * PrismaのイベントモデルをAPIレスポンス用のEvent型に変換
+ * @param event - Prismaから取得した生のイベントデータ
+ * @returns APIレスポンス用のEvent型オブジェクト
+ */
 // biome-ignore lint/suspicious/noExplicitAny: reason
 const transform = (event: any): Event => {
   const { status, daysUntil } = calculateEventStatus(event)
@@ -75,6 +82,13 @@ const transform = (event: any): Event => {
   }
 }
 
+/**
+ * 指定されたIDのイベントを取得
+ * @param env - Cloudflare Workers環境変数
+ * @param id - イベントのUUID
+ * @returns イベント情報
+ * @throws HTTPException 404 - イベントが見つからない場合
+ */
 export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
   const event = await prisma.event.findUnique({
@@ -91,6 +105,12 @@ export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
   return transform(event)
 }
 
+/**
+ * 公開済みイベント一覧を取得（半年以内に開催されたもの）
+ * @param env - Cloudflare Workers環境変数
+ * @returns イベント一覧（開始日降順）
+ * @throws HTTPException 400 - バリデーションエラーの場合
+ */
 export const getEvents = async (env: Bindings): Promise<Event[]> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
   // 半年前の日付を計算
@@ -118,6 +138,14 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
   return result.data
 }
 
+/**
+ * 新規イベントを作成
+ * 同一UUIDが存在する場合は既存イベントを返す（冪等性保証）
+ * 作成成功時にTwitterへ自動投稿（shouldTweet=falseで無効化可能）
+ * @param env - Cloudflare Workers環境変数
+ * @param data - イベント作成リクエストデータ
+ * @returns 作成されたイベント情報
+ */
 export const createEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
@@ -183,7 +211,7 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
   // イベント作成をツイート（エラーがあっても処理は継続）
   if (data.shouldTweet !== false) {
     try {
-      await tweetEventCreated(env, transformedEvent)
+      await new Twitter(env).tweetEventCreated(transformedEvent)
     } catch (error) {
       console.error('Failed to tweet event creation:', error)
     }
@@ -192,6 +220,14 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
   return transformedEvent
 }
 
+/**
+ * 既存イベントを更新
+ * 関連データ（conditions, referenceUrls, stores）は全て置換される
+ * 更新成功時にTwitterへ自動投稿（shouldTweet=falseで無効化可能）
+ * @param env - Cloudflare Workers環境変数
+ * @param data - イベント更新リクエストデータ（uuidが必須）
+ * @returns 更新されたイベント情報
+ */
 export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
@@ -246,7 +282,7 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
   // イベント更新をツイート（エラーがあっても処理は継続）
   if (data.shouldTweet !== false) {
     try {
-      await tweetEventUpdated(env, transformedEvent)
+      await new Twitter(env).tweetEventUpdated(transformedEvent)
     } catch (error) {
       console.error('Failed to tweet event update:', error)
     }
@@ -255,6 +291,13 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
   return transformedEvent
 }
 
+/**
+ * イベントを削除
+ * 関連データ（conditions, referenceUrls, stores）もカスケード削除される
+ * @param env - Cloudflare Workers環境変数
+ * @param id - 削除するイベントのUUID
+ * @returns null
+ */
 export const deleteEvent = async (env: Bindings, id: string): Promise<null> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
   await prisma.event.delete({ where: { id: id } })
