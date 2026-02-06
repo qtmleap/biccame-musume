@@ -127,19 +127,37 @@ const MyPageContent = () => {
             )}
           </motion.div>
 
-          {/* 今後の機能予告 */}
+          {/* 訪れた店舗の記録 */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
             className='space-y-3 mb-6'
           >
-            <h2 className='text-xl font-bold text-gray-900'>今後追加予定の機能</h2>
-            <ul className='text-sm text-gray-600 space-y-2'>
-              <li>訪れた店舗の記録</li>
-              <li>興味のあるイベントの保存</li>
-              <li>達成したイベントの管理</li>
-            </ul>
+            <h2 className='text-xl font-bold text-gray-900'>訪れた店舗の記録</h2>
+            <p className='text-sm text-gray-500'>Coming Soon</p>
+          </motion.div>
+
+          {/* 興味のあるイベント */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className='space-y-3 mb-6'
+          >
+            <h2 className='text-xl font-bold text-gray-900'>興味のあるイベント</h2>
+            <p className='text-sm text-gray-500'>Coming Soon</p>
+          </motion.div>
+
+          {/* 達成したイベント */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className='space-y-3 mb-6'
+          >
+            <h2 className='text-xl font-bold text-gray-900'>達成したイベント</h2>
+            <p className='text-sm text-gray-500'>Coming Soon</p>
           </motion.div>
 
           {/* ログアウト */}

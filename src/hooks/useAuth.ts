@@ -1,6 +1,6 @@
-import { onAuthStateChanged, signInWithPopup, signOut, TwitterAuthProvider } from 'firebase/auth'
-import { useAtom } from 'jotai'
-import { useCallback, useEffect } from 'react'
+import { signInWithPopup, signOut, TwitterAuthProvider } from 'firebase/auth'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { useCallback } from 'react'
 import { authLoadingAtom, twitterProfileAtom, userAtom } from '@/atoms/authAtom'
 import { auth } from '@/lib/firebase'
 
@@ -16,40 +16,13 @@ export const getLargeTwitterPhoto = (photoURL: string | null | undefined): strin
 /**
  * Firebase Authentication用カスタムフック
  * Twitterログイン/ログアウト機能を提供
+ * 認証状態の監視はAuthProviderで行う
  */
 export const useAuth = () => {
-  const [user, setUser] = useAtom(userAtom)
-  const [loading, setLoading] = useAtom(authLoadingAtom)
-  const [twitterProfile, setTwitterProfile] = useAtom(twitterProfileAtom)
-
-  /**
-   * 認証状態の監視
-   */
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser)
-      setLoading(false)
-
-      // ログアウト時はtwitterProfileをクリア
-      if (!firebaseUser) {
-        setTwitterProfile(null)
-      }
-      // ログイン時でtwitterProfileがない場合は基本情報のみ設定
-      // screen_nameはloginWithTwitter時に設定される
-      else if (!twitterProfile) {
-        const twitterData = firebaseUser.providerData.find((provider) => provider.providerId === 'twitter.com')
-        if (twitterData) {
-          setTwitterProfile({
-            displayName: twitterData.displayName,
-            photoURL: getLargeTwitterPhoto(twitterData.photoURL) ?? null,
-            screenName: null
-          })
-        }
-      }
-    })
-
-    return () => unsubscribe()
-  }, [setUser, setLoading, setTwitterProfile, twitterProfile])
+  const user = useAtomValue(userAtom)
+  const loading = useAtomValue(authLoadingAtom)
+  const twitterProfile = useAtomValue(twitterProfileAtom)
+  const setTwitterProfile = useSetAtom(twitterProfileAtom)
 
   /**
    * Twitterでログイン
