@@ -114,14 +114,14 @@ export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
 export const getEvents = async (env: Bindings): Promise<Event[]> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
   // 半年前の日付を計算
-  const sixMonthsAgo = dayjs().subtract(6, 'month').toDate()
+  const startDate = dayjs().subtract(6, 'month').toDate()
 
   const events = (
     await prisma.event.findMany({
       where: {
         isVerified: true,
         // 半年以内に開催されたイベントのみ取得
-        startDate: { gte: sixMonthsAgo }
+        startDate: { gte: startDate }
       },
       include: {
         conditions: true,
@@ -149,27 +149,25 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
 export const createEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
-  // クライアント側でidが指定されている場合、既存イベントをチェック
-  if (data.uuid) {
-    const existingEvent = await prisma.event.findUnique({
-      where: { id: data.uuid },
-      include: {
-        conditions: true,
-        referenceUrls: true,
-        stores: true
-      }
-    })
-
-    if (existingEvent) {
-      console.log('Event already exists with id:', data.uuid)
-      return transform(existingEvent)
+  // 既存イベントをチェック
+  const existingEvent = await prisma.event.findUnique({
+    where: { id: data.uuid },
+    include: {
+      conditions: true,
+      referenceUrls: true,
+      stores: true
     }
+  })
+
+  if (existingEvent) {
+    console.log('Event already exists with id:', data.uuid)
+    return transform(existingEvent)
   }
 
   // 日付をDate型に変換
-  const startDate = new Date(data.startDate)
-  const endDate = data.endDate ? new Date(data.endDate) : null
-  const endedAt = data.endedAt ? new Date(data.endedAt) : null
+  const startDate = dayjs(data.startDate).toDate()
+  const endDate = data.endDate ? dayjs(data.endDate).toDate() : null
+  const endedAt = data.endedAt ? dayjs(data.endedAt).toDate() : null
 
   const event = await prisma.event.create({
     data: {
@@ -232,9 +230,9 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
   // 日付をDate型に変換
-  const startDate = new Date(data.startDate)
-  const endDate = data.endDate ? new Date(data.endDate) : null
-  const endedAt = data.endedAt ? new Date(data.endedAt) : null
+  const startDate = dayjs(data.startDate).toDate()
+  const endDate = data.endDate ? dayjs(data.endDate).toDate() : null
+  const endedAt = data.endedAt ? dayjs(data.endedAt).toDate() : null
 
   const event = await prisma.event.update({
     where: { id: data.uuid },
