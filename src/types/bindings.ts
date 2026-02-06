@@ -20,13 +20,13 @@ export type Bindings = {
   CF_ACCESS_AUD: string
   /** レート制限用のバインディング */
   RATE_LIMITER: RateLimitBinding
-  /** Twitter API Key */
+  /** Twitter投稿用 API Key (@_biccame_musume, OAuth 1.0a) */
   TWITTER_API_KEY: string
-  /** Twitter API Secret */
+  /** Twitter投稿用 API Secret (@_biccame_musume, OAuth 1.0a) */
   TWITTER_API_SECRET: string
-  /** Twitter Access Token */
+  /** Twitter投稿用 Access Token (@_biccame_musume, OAuth 1.0a) */
   TWITTER_ACCESS_TOKEN: string
-  /** Twitter Access Token Secret */
+  /** Twitter投稿用 Access Token Secret (@_biccame_musume, OAuth 1.0a) */
   TWITTER_ACCESS_SECRET: string
   /** Workers AI */
   AI: Ai
