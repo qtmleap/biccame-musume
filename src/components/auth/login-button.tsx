@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router'
 import { LogIn, User } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
 
 type LoginButtonProps = {
@@ -81,23 +80,27 @@ export const LoginButton = ({ variant = 'default' }: LoginButtonProps) => {
   // 読み込み中
   if (loading) {
     return (
-      <Button variant='ghost' size='sm' disabled>
+      <span className='text-sm font-medium text-muted-foreground'>
         <div className='w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin' />
-      </Button>
+      </span>
     )
   }
 
   // 未ログイン
   if (!isAuthenticated) {
     return (
-      <Button variant='outline' size='sm' onClick={handleLogin} disabled={isLoggingIn} className='gap-2'>
+      <button
+        type='button'
+        onClick={handleLogin}
+        disabled={isLoggingIn}
+        className='text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4 disabled:opacity-50'
+      >
         {isLoggingIn ? (
-          <div className='w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin' />
+          <div className='w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin inline-block' />
         ) : (
-          <LogIn className='w-4 h-4' />
+          'ログイン'
         )}
-        <span className='hidden sm:inline'>ログイン</span>
-      </Button>
+      </button>
     )
   }
 
