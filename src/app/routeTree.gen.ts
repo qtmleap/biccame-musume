@@ -13,6 +13,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RouteIndexRouteImport } from './routes/route/index'
 import { Route as RankingIndexRouteImport } from './routes/ranking/index'
+import { Route as MeIndexRouteImport } from './routes/me/index'
 import { Route as LocationIndexRouteImport } from './routes/location/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
@@ -43,6 +44,11 @@ const RouteIndexRoute = RouteIndexRouteImport.update({
 const RankingIndexRoute = RankingIndexRouteImport.update({
   id: '/ranking/',
   path: '/ranking/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeIndexRoute = MeIndexRouteImport.update({
+  id: '/me/',
+  path: '/me/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LocationIndexRoute = LocationIndexRouteImport.update({
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/contact/': typeof ContactIndexRoute
   '/events/': typeof EventsIndexRoute
   '/location/': typeof LocationIndexRoute
+  '/me/': typeof MeIndexRoute
   '/ranking/': typeof RankingIndexRoute
   '/route/': typeof RouteIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactIndexRoute
   '/events': typeof EventsIndexRoute
   '/location': typeof LocationIndexRoute
+  '/me': typeof MeIndexRoute
   '/ranking': typeof RankingIndexRoute
   '/route': typeof RouteIndexRoute
   '/admin/events': typeof AdminEventsIndexRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/contact/': typeof ContactIndexRoute
   '/events/': typeof EventsIndexRoute
   '/location/': typeof LocationIndexRoute
+  '/me/': typeof MeIndexRoute
   '/ranking/': typeof RankingIndexRoute
   '/route/': typeof RouteIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/contact/'
     | '/events/'
     | '/location/'
+    | '/me/'
     | '/ranking/'
     | '/route/'
     | '/admin/events/'
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/location'
+    | '/me'
     | '/ranking'
     | '/route'
     | '/admin/events'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/contact/'
     | '/events/'
     | '/location/'
+    | '/me/'
     | '/ranking/'
     | '/route/'
     | '/admin/events/'
@@ -215,6 +227,7 @@ export interface RootRouteChildren {
   ContactIndexRoute: typeof ContactIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
   LocationIndexRoute: typeof LocationIndexRoute
+  MeIndexRoute: typeof MeIndexRoute
   RankingIndexRoute: typeof RankingIndexRoute
   RouteIndexRoute: typeof RouteIndexRoute
   EventsUuidIndexRoute: typeof EventsUuidIndexRoute
@@ -248,6 +261,13 @@ declare module '@tanstack/react-router' {
       path: '/ranking'
       fullPath: '/ranking/'
       preLoaderRoute: typeof RankingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/me/': {
+      id: '/me/'
+      path: '/me'
+      fullPath: '/me/'
+      preLoaderRoute: typeof MeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/location/': {
@@ -354,6 +374,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactIndexRoute: ContactIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
   LocationIndexRoute: LocationIndexRoute,
+  MeIndexRoute: MeIndexRoute,
   RankingIndexRoute: RankingIndexRoute,
   RouteIndexRoute: RouteIndexRoute,
   EventsUuidIndexRoute: EventsUuidIndexRoute,
