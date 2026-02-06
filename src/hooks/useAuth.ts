@@ -3,6 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 import { authLoadingAtom, twitterProfileAtom, userAtom } from '@/atoms/authAtom'
 import { auth } from '@/lib/firebase'
+import { client } from '@/utils/client'
 
 /**
  * Twitterのプロフィール画像URLを大きいサイズに変換
@@ -36,11 +37,25 @@ export const useAuth = () => {
       if (credential) {
         // @ts-expect-error - TwitterAuthProviderのcredentialにはscreen_nameが含まれる
         const screenName = result._tokenResponse?.screenName as string | undefined
+        const photoUrl = getLargeTwitterPhoto(result.user.photoURL) ?? null
         setTwitterProfile({
           displayName: result.user.displayName,
-          photoURL: getLargeTwitterPhoto(result.user.photoURL) ?? null,
+          photoURL: photoUrl,
           screenName: screenName ?? null
         })
+
+        // DBにユーザー情報を保存（screenNameを含む）
+        try {
+          await client.upsertUser({
+            id: result.user.uid,
+            displayName: result.user.displayName,
+            photoUrl,
+            twitterUsername: screenName,
+            email: result.user.email
+          })
+        } catch (error) {
+          console.error('Failed to save user:', error)
+        }
       }
       return result.user
     } catch (error) {

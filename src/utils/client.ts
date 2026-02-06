@@ -137,6 +137,131 @@ const api = makeApi([
       }
     ],
     response: PageViewStatsSchema
+  },
+  // ユーザー関連API
+  {
+    method: 'get',
+    path: '/api/users/:id',
+    alias: 'getUser',
+    description: 'ユーザー情報を取得',
+    response: z.object({
+      id: z.string(),
+      displayName: z.string().nullable(),
+      photoUrl: z.string().nullable(),
+      twitterUsername: z.string().nullable(),
+      email: z.string().nullable(),
+      createdAt: z.string(),
+      updatedAt: z.string()
+    })
+  },
+  {
+    method: 'post',
+    path: '/api/users',
+    alias: 'upsertUser',
+    description: 'ユーザーを作成/更新',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: z.object({
+          id: z.string(),
+          displayName: z.string().nullable().optional(),
+          photoUrl: z.string().nullable().optional(),
+          twitterUsername: z.string().nullable().optional(),
+          email: z.string().nullable().optional()
+        })
+      }
+    ],
+    response: z.object({
+      id: z.string(),
+      displayName: z.string().nullable(),
+      photoUrl: z.string().nullable(),
+      twitterUsername: z.string().nullable(),
+      email: z.string().nullable(),
+      createdAt: z.string(),
+      updatedAt: z.string()
+    })
+  },
+  // ユーザーアクティビティ関連API
+  {
+    method: 'get',
+    path: '/api/user-activity/:userId',
+    alias: 'getUserActivity',
+    description: 'ユーザーのアクティビティ全体を取得',
+    response: z.object({
+      visitedStores: z.array(z.string()),
+      interestedEvents: z.array(z.string()),
+      completedEvents: z.array(z.string())
+    })
+  },
+  {
+    method: 'get',
+    path: '/api/user-activity/:userId/stores',
+    alias: 'getVisitedStores',
+    description: '訪問済み店舗一覧を取得',
+    response: z.object({
+      stores: z.array(z.string())
+    })
+  },
+  {
+    method: 'post',
+    path: '/api/user-activity/:userId/stores/:storeKey',
+    alias: 'addVisitedStore',
+    description: '店舗を訪問済みに追加',
+    response: z.object({ success: z.boolean() })
+  },
+  {
+    method: 'delete',
+    path: '/api/user-activity/:userId/stores/:storeKey',
+    alias: 'removeVisitedStore',
+    description: '店舗を訪問済みから削除',
+    response: z.object({ success: z.boolean() })
+  },
+  {
+    method: 'get',
+    path: '/api/user-activity/:userId/interested',
+    alias: 'getInterestedEvents',
+    description: '興味のあるイベント一覧を取得',
+    response: z.object({
+      events: z.array(z.string())
+    })
+  },
+  {
+    method: 'post',
+    path: '/api/user-activity/:userId/interested/:eventId',
+    alias: 'addInterestedEvent',
+    description: 'イベントを興味ありに追加',
+    response: z.object({ success: z.boolean() })
+  },
+  {
+    method: 'delete',
+    path: '/api/user-activity/:userId/interested/:eventId',
+    alias: 'removeInterestedEvent',
+    description: 'イベントを興味ありから削除',
+    response: z.object({ success: z.boolean() })
+  },
+  {
+    method: 'get',
+    path: '/api/user-activity/:userId/completed',
+    alias: 'getCompletedEvents',
+    description: '達成済みイベント一覧を取得',
+    response: z.object({
+      events: z.array(z.string())
+    })
+  },
+  {
+    method: 'post',
+    path: '/api/user-activity/:userId/completed/:eventId',
+    alias: 'addCompletedEvent',
+    description: 'イベントを達成済みに追加',
+    response: z.object({ success: z.boolean() })
+  },
+  {
+    method: 'delete',
+    path: '/api/user-activity/:userId/completed/:eventId',
+    alias: 'removeCompletedEvent',
+    description: 'イベントを達成済みから削除',
+    response: z.object({ success: z.boolean() })
   }
 ])
 
