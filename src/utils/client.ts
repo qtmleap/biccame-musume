@@ -89,6 +89,38 @@ const api = makeApi([
   },
   {
     method: 'get',
+    path: '/api/events/:id/stats',
+    alias: 'getEventStats',
+    description: 'イベントの興味あり・達成カウントを取得',
+    response: z.object({
+      interestedCount: z.number(),
+      completedCount: z.number()
+    })
+  },
+  {
+    method: 'post',
+    path: '/api/events/stats',
+    alias: 'getEventsStats',
+    description: '複数イベントの興味あり・達成カウントを取得',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: z.object({
+          eventIds: z.array(z.string())
+        })
+      }
+    ],
+    response: z.record(
+      z.string(),
+      z.object({
+        interestedCount: z.number(),
+        completedCount: z.number()
+      })
+    )
+  },
+  {
+    method: 'get',
     path: '/api/events/check-url',
     alias: 'checkDuplicateUrl',
     description: 'URLの重複をチェック',
@@ -269,3 +301,29 @@ const api = makeApi([
  * Zodiosクライアント
  */
 export const client = new Zodios('/', api)
+
+/**
+ * Firebase IDトークンを取得してAuthorizationヘッダーを生成
+ * @returns Authorizationヘッダーオブジェクト、未ログイン時はundefined
+ */
+export const getAuthHeaders = async (): Promise<{ Authorization: string } | undefined> => {
+  // 動的インポートでFirebaseを読み込み（循環参照を避ける）
+  const { auth } = await import('@/lib/firebase')
+  const user = auth.currentUser
+  if (!user) return undefined
+
+  const token = await user.getIdToken()
+  return { Authorization: `Bearer ${token}` }
+}
+
+/**
+ * 認証付きでAPIを呼び出すためのヘルパー
+ * POST/DELETE等の書き込み操作で使用
+ */
+export const withAuth = async <T>(fn: (headers: { Authorization: string }) => Promise<T>): Promise<T> => {
+  const headers = await getAuthHeaders()
+  if (!headers) {
+    throw new Error('Not authenticated')
+  }
+  return fn(headers)
+}

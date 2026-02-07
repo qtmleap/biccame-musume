@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { client } from '@/utils/client'
+import { client, getAuthHeaders } from '@/utils/client'
 
 /**
  * ユーザーアクティビティを取得・操作するカスタムフック
@@ -27,7 +27,8 @@ export const useUserActivity = (userId: string | undefined) => {
   const addVisitedStore = useMutation({
     mutationFn: async (storeKey: string) => {
       if (!userId) throw new Error('userId is required')
-      return client.addVisitedStore(undefined, { params: { userId, storeKey } })
+      const headers = await getAuthHeaders()
+      return client.addVisitedStore(undefined, { params: { userId, storeKey }, headers })
     },
     onSuccess: invalidate
   })
@@ -35,7 +36,8 @@ export const useUserActivity = (userId: string | undefined) => {
   const removeVisitedStore = useMutation({
     mutationFn: async (storeKey: string) => {
       if (!userId) throw new Error('userId is required')
-      return client.removeVisitedStore(undefined, { params: { userId, storeKey } })
+      const headers = await getAuthHeaders()
+      return client.removeVisitedStore(undefined, { params: { userId, storeKey }, headers })
     },
     onSuccess: invalidate
   })
@@ -44,7 +46,8 @@ export const useUserActivity = (userId: string | undefined) => {
   const addInterestedEvent = useMutation({
     mutationFn: async (eventId: string) => {
       if (!userId) throw new Error('userId is required')
-      return client.addInterestedEvent(undefined, { params: { userId, eventId } })
+      const headers = await getAuthHeaders()
+      return client.addInterestedEvent(undefined, { params: { userId, eventId }, headers })
     },
     onSuccess: invalidate
   })
@@ -52,7 +55,8 @@ export const useUserActivity = (userId: string | undefined) => {
   const removeInterestedEvent = useMutation({
     mutationFn: async (eventId: string) => {
       if (!userId) throw new Error('userId is required')
-      return client.removeInterestedEvent(undefined, { params: { userId, eventId } })
+      const headers = await getAuthHeaders()
+      return client.removeInterestedEvent(undefined, { params: { userId, eventId }, headers })
     },
     onSuccess: invalidate
   })
@@ -61,7 +65,8 @@ export const useUserActivity = (userId: string | undefined) => {
   const addCompletedEvent = useMutation({
     mutationFn: async (eventId: string) => {
       if (!userId) throw new Error('userId is required')
-      return client.addCompletedEvent(undefined, { params: { userId, eventId } })
+      const headers = await getAuthHeaders()
+      return client.addCompletedEvent(undefined, { params: { userId, eventId }, headers })
     },
     onSuccess: invalidate
   })
@@ -69,7 +74,8 @@ export const useUserActivity = (userId: string | undefined) => {
   const removeCompletedEvent = useMutation({
     mutationFn: async (eventId: string) => {
       if (!userId) throw new Error('userId is required')
-      return client.removeCompletedEvent(undefined, { params: { userId, eventId } })
+      const headers = await getAuthHeaders()
+      return client.removeCompletedEvent(undefined, { params: { userId, eventId }, headers })
     },
     onSuccess: invalidate
   })

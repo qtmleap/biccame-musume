@@ -1,8 +1,10 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Heart, Trophy } from 'lucide-react'
 import { motion } from 'motion/react'
+import { Suspense } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { useEventStats } from '@/hooks/useEvents'
 import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
 import { CATEGORY_STYLE, STATUS_BADGE_DETAIL } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
@@ -11,6 +13,30 @@ type EventDetailHeaderProps = {
   event: Event
   isAuthenticated: boolean
   onBack?: () => void
+}
+
+type EventStatsBadgesProps = {
+  eventId: string
+}
+
+/**
+ * イベント統計バッジコンポーネント
+ */
+const EventStatsBadges = ({ eventId }: EventStatsBadgesProps) => {
+  const { data: stats } = useEventStats(eventId)
+
+  return (
+    <div className='flex items-center gap-3'>
+      <div className='flex items-center gap-1 text-xs text-gray-500'>
+        <Heart className='h-3.5 w-3.5 text-pink-500' />
+        <span>{stats.interestedCount}</span>
+      </div>
+      <div className='flex items-center gap-1 text-xs text-gray-500'>
+        <Trophy className='h-3.5 w-3.5 text-amber-500' />
+        <span>{stats.completedCount}</span>
+      </div>
+    </div>
+  )
 }
 
 /**
@@ -44,17 +70,22 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
             <Badge className={`${categoryStyle} border`}>{EVENT_CATEGORY_LABELS[event.category]}</Badge>
             {STATUS_BADGE_DETAIL[event.status]()}
           </div>
-          {isAuthenticated && (
-            <Button
-              asChild
-              size='sm'
-              className='rounded-full px-2 py-0.5 h-auto text-xs font-medium bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100'
-            >
-              <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
-                編集
-              </Link>
-            </Button>
-          )}
+          <div className='flex items-center gap-3'>
+            <Suspense fallback={null}>
+              <EventStatsBadges eventId={event.uuid} />
+            </Suspense>
+            {isAuthenticated && (
+              <Button
+                asChild
+                size='sm'
+                className='rounded-full px-2 py-0.5 h-auto text-xs font-medium bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100'
+              >
+                <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
+                  編集
+                </Link>
+              </Button>
+            )}
+          </div>
         </div>
         <h1 className='text-2xl font-bold text-gray-900'>{event.title}</h1>
       </motion.div>
