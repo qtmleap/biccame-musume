@@ -1,9 +1,10 @@
 import type { RateLimitBinding } from '@elithrar/workers-hono-rate-limit'
+import type { VerifyFirebaseAuthEnv } from '@hono/firebase-auth'
 
 /**
  * Cloudflare Workersの環境変数の型定義
  */
-export type Bindings = {
+export type Bindings = VerifyFirebaseAuthEnv & {
   /** 環境名 (prod, dev, local) */
   ENVIRONMENT?: string
   /** 投票データと制限チェックを保存するKVストア */
@@ -20,6 +21,8 @@ export type Bindings = {
   CF_ACCESS_AUD: string
   /** レート制限用のバインディング */
   RATE_LIMITER: RateLimitBinding
+  /** FirebaseプロジェクトID */
+  FIREBASE_PROJECT_ID: string
   /** Twitter投稿用 API Key (@_biccame_musume, OAuth 1.0a) */
   TWITTER_API_KEY: string
   /** Twitter投稿用 API Secret (@_biccame_musume, OAuth 1.0a) */
