@@ -26,6 +26,7 @@
     "@fontsource/m-plus-1-code": "^5.2.8",
     "@fontsource/noto-sans-jp": "^5.2.9",
     "@fontsource/zen-maru-gothic": "^5.2.8",
+    "@hono/firebase-auth": "^1.4.2",
     "@hono/zod-openapi": "^1.2.1",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-d1": "6.19.0",

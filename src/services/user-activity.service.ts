@@ -164,3 +164,67 @@ export const getUserActivity = async (
 
   return { visitedStores, interestedEvents, completedEvents }
 }
+
+/**
+ * イベントごとの興味あり・達成カウントを取得
+ * @param env - Cloudflare Workers Bindings
+ * @param eventId - イベントID
+ * @returns 興味あり・達成のカウント
+ */
+export const getEventStats = async (
+  env: Bindings,
+  eventId: string
+): Promise<{ interestedCount: number; completedCount: number }> => {
+  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+
+  const [interestedCount, completedCount] = await Promise.all([
+    prisma.userInterestedEvent.count({ where: { eventId } }),
+    prisma.userCompletedEvent.count({ where: { eventId } })
+  ])
+
+  return { interestedCount, completedCount }
+}
+
+/**
+ * 複数イベントの興味あり・達成カウントを一括取得
+ * @param env - Cloudflare Workers Bindings
+ * @param eventIds - イベントIDの配列
+ * @returns イベントIDをキーにしたカウントのマップ
+ */
+export const getEventsStats = async (
+  env: Bindings,
+  eventIds: string[]
+): Promise<Record<string, { interestedCount: number; completedCount: number }>> => {
+  if (eventIds.length === 0) return {}
+
+  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+
+  const [interestedCounts, completedCounts] = await Promise.all([
+    prisma.userInterestedEvent.groupBy({
+      by: ['eventId'],
+      where: { eventId: { in: eventIds } },
+      _count: { eventId: true }
+    }),
+    prisma.userCompletedEvent.groupBy({
+      by: ['eventId'],
+      where: { eventId: { in: eventIds } },
+      _count: { eventId: true }
+    })
+  ])
+
+  const result: Record<string, { interestedCount: number; completedCount: number }> = {}
+
+  for (const id of eventIds) {
+    result[id] = { interestedCount: 0, completedCount: 0 }
+  }
+
+  for (const item of interestedCounts) {
+    result[item.eventId].interestedCount = item._count.eventId
+  }
+
+  for (const item of completedCounts) {
+    result[item.eventId].completedCount = item._count.eventId
+  }
+
+  return result
+}
