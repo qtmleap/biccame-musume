@@ -145,19 +145,19 @@ model VoteCount {
 /// ユーザー
 model User {
   /// Firebase Auth UID
-  id              String   @id
+  id           String   @id
   /// 表示名
-  displayName     String?  @map("display_name")
+  displayName  String?  @map("display_name")
   /// プロフィール画像URL
-  photoUrl        String?  @map("photo_url")
+  thumbnailURL String?  @map("thumbnail_url")
   /// Twitterスクリーンネーム（@なし）
-  twitterUsername String?  @map("twitter_username")
+  screenName   String?  @map("screen_name")
   /// メールアドレス（任意）
-  email           String?
+  email        String?
   /// 作成日時
-  createdAt       DateTime @default(now()) @map("created_at")
+  createdAt    DateTime @default(now()) @map("created_at")
   /// 更新日時
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   /// 訪問した店舗
   visitedStores    UserVisitedStore[]
