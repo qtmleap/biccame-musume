@@ -1,74 +1,233 @@
-import { Hono } from 'hono'
-import { z } from 'zod'
+import { getFirebaseToken, verifyFirebaseAuth } from '@hono/firebase-auth'
+import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
+import { HTTPException } from 'hono/http-exception'
+import { ErrorResponseSchema, SuccessResponseSchema } from '@/schemas/user-activity.dto'
+import { UpsertUserRequestSchema, UserResponseSchema } from '@/schemas/user.dto'
 import { deleteUser, getUserById, upsertUser } from '@/services/user.service'
 import type { Bindings, Variables } from '@/types/bindings'
 
-const routes = new Hono<{ Bindings: Bindings; Variables: Variables }>()
+const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
 
 /**
- * ユーザー作成/更新リクエストスキーマ
+ * 開発環境かどうかを判定
  */
-const UpsertUserRequestSchema = z.object({
-  id: z.string(),
-  displayName: z.string().nullable().optional(),
-  photoUrl: z.string().nullable().optional(),
-  twitterUsername: z.string().nullable().optional(),
-  email: z.string().nullable().optional()
-})
+const isDevelopmentEnvironment = (host: string | undefined): boolean => {
+  return host?.includes('localhost') || host?.includes('127.0.0.1') || false
+}
 
 /**
- * ユーザー取得
- * GET /api/users/:id
+ * Firebase認証ミドルウェア
+ * 開発環境ではスキップ
  */
-routes.get('/:id', async (c) => {
-  const id = c.req.param('id')
-  const user = await getUserById(c.env, id)
+routes.use('*', async (c, next) => {
+  const host = c.req.header('Host')
 
-  if (!user) {
-    return c.json({ error: 'User not found' }, 404)
+  // 開発環境ではスキップ
+  if (isDevelopmentEnvironment(host)) {
+    console.log('[Dev] Firebase auth check skipped for development environment')
+    await next()
+    return
   }
 
-  return c.json({
-    ...user,
-    createdAt: user.createdAt.toISOString(),
-    updatedAt: user.updatedAt.toISOString()
+  const firebaseAuth = verifyFirebaseAuth({
+    projectId: c.env.FIREBASE_PROJECT_ID
   })
+
+  await firebaseAuth(c, next)
 })
 
 /**
- * ユーザー作成/更新
+ * 自分のユーザー情報取得
+ * GET /api/users
+ */
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/',
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: UserResponseSchema
+          }
+        },
+        description: 'ユーザー取得成功'
+      },
+      401: {
+        content: {
+          'application/json': {
+            schema: ErrorResponseSchema
+          }
+        },
+        description: '認証エラー'
+      },
+      404: {
+        content: {
+          'application/json': {
+            schema: ErrorResponseSchema
+          }
+        },
+        description: 'ユーザーが見つかりません'
+      }
+    },
+    tags: ['users']
+  }),
+  async (c) => {
+    const host = c.req.header('Host')
+    let userId: string
+
+    if (isDevelopmentEnvironment(host)) {
+      // 開発環境ではクエリパラメータからユーザーIDを取得
+      userId = c.req.query('userId') || 'dev-user'
+    } else {
+      const token = getFirebaseToken(c)
+      if (!token?.uid) {
+        throw new HTTPException(401, { message: 'Unauthorized' })
+      }
+      userId = token.uid
+    }
+
+    const user = await getUserById(c.env, userId)
+
+    if (!user) {
+      return c.json({ error: 'User not found' }, 404)
+    }
+
+    return c.json(user, 200)
+  }
+)
+
+/**
+ * 自分のユーザー情報作成/更新
  * POST /api/users
  */
-routes.post('/', async (c) => {
-  const body = await c.req.json()
-  const parseResult = UpsertUserRequestSchema.safeParse(body)
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/',
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: UpsertUserRequestSchema
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: UserResponseSchema
+          }
+        },
+        description: 'ユーザー作成/更新成功'
+      },
+      400: {
+        content: {
+          'application/json': {
+            schema: ErrorResponseSchema
+          }
+        },
+        description: 'バリデーションエラー'
+      },
+      401: {
+        content: {
+          'application/json': {
+            schema: ErrorResponseSchema
+          }
+        },
+        description: '認証エラー'
+      },
+      403: {
+        content: {
+          'application/json': {
+            schema: ErrorResponseSchema
+          }
+        },
+        description: '権限エラー'
+      }
+    },
+    tags: ['users']
+  }),
+  async (c) => {
+    const body = c.req.valid('json')
+    const host = c.req.header('Host')
 
-  if (!parseResult.success) {
-    return c.json({ error: 'Invalid request', details: parseResult.error.issues }, 400)
+    if (!isDevelopmentEnvironment(host)) {
+      const token = getFirebaseToken(c)
+      if (!token?.uid) {
+        throw new HTTPException(401, { message: 'Unauthorized' })
+      }
+      // 自分以外のユーザー情報は更新できない
+      if (token.uid !== body.id) {
+        throw new HTTPException(403, { message: 'Access denied: user mismatch' })
+      }
+    }
+
+    const user = await upsertUser(c.env, body)
+    return c.json(user, 200)
   }
-
-  const user = await upsertUser(c.env, parseResult.data)
-
-  return c.json({
-    ...user,
-    createdAt: user.createdAt.toISOString(),
-    updatedAt: user.updatedAt.toISOString()
-  })
-})
+)
 
 /**
- * ユーザー削除
- * DELETE /api/users/:id
+ * 自分のユーザー情報削除
+ * DELETE /api/users
  */
-routes.delete('/:id', async (c) => {
-  const id = c.req.param('id')
-  const user = await deleteUser(c.env, id)
+routes.openapi(
+  createRoute({
+    method: 'delete',
+    path: '/',
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: SuccessResponseSchema
+          }
+        },
+        description: 'ユーザー削除成功'
+      },
+      401: {
+        content: {
+          'application/json': {
+            schema: ErrorResponseSchema
+          }
+        },
+        description: '認証エラー'
+      },
+      404: {
+        content: {
+          'application/json': {
+            schema: ErrorResponseSchema
+          }
+        },
+        description: 'ユーザーが見つかりません'
+      }
+    },
+    tags: ['users']
+  }),
+  async (c) => {
+    const host = c.req.header('Host')
+    let userId: string
 
-  if (!user) {
-    return c.json({ error: 'User not found' }, 404)
+    if (isDevelopmentEnvironment(host)) {
+      userId = c.req.query('userId') || 'dev-user'
+    } else {
+      const token = getFirebaseToken(c)
+      if (!token?.uid) {
+        throw new HTTPException(401, { message: 'Unauthorized' })
+      }
+      userId = token.uid
+    }
+
+    const user = await deleteUser(c.env, userId)
+
+    if (!user) {
+      return c.json({ error: 'User not found' }, 404)
+    }
+
+    return c.json({ success: true }, 200)
   }
-
-  return c.json({ success: true })
-})
+)
 
 export default routes

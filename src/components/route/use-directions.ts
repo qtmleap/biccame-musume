@@ -36,7 +36,7 @@ export const useDirections = () => {
     if (legs.length === 0) return []
 
     try {
-      const response = await fetch('/api/routes', {
+      const response = await fetch('/api/directions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ legs })
