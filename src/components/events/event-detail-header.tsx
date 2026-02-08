@@ -104,11 +104,11 @@ const EventStatsBadges = ({ eventId }: EventStatsBadgesProps) => {
       <div className='flex items-center gap-3'>
         <div className='flex items-center gap-1 text-sm text-gray-500'>
           <Heart className='h-4 w-4 text-pink-500' />
-          <span>{stats.interestedCount}</span>
+          <span className='tabular-nums'>{stats.interestedCount}</span>
         </div>
         <div className='flex items-center gap-1 text-sm text-gray-500'>
           <Trophy className='h-4 w-4 text-amber-500' />
-          <span>{stats.completedCount}</span>
+          <span className='tabular-nums'>{stats.completedCount}</span>
         </div>
       </div>
 
@@ -116,92 +116,140 @@ const EventStatsBadges = ({ eventId }: EventStatsBadgesProps) => {
       {isLoggedIn && (
         <div className='flex items-center gap-2'>
           {/* お気に入りボタン */}
-          <div className='relative'>
-            <button
-              type='button'
-              onClick={handleToggleInterested}
-              className={cn(
-                'px-3 py-1.5 rounded-full text-xs font-medium transition-colors border',
-                interested
-                  ? 'bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100'
-                  : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-              )}
-            >
-              {interested ? 'お気に入り済み' : 'お気に入り'}
-            </button>
-            {/* ピコーンアニメーション */}
-            <AnimatePresence>
-              {showHeartAnimation &&
-                HEART_PARTICLES.map((angle) => (
-                  <motion.div
-                    key={`heart-${angle}`}
-                    initial={{ opacity: 1, scale: 0.5, x: 0, y: 0 }}
-                    animate={{
-                      opacity: 0,
-                      scale: 1,
-                      x: Math.cos((angle * Math.PI) / 180) * 30,
-                      y: Math.sin((angle * Math.PI) / 180) * 30 - 10
-                    }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none'
-                  >
-                    <Heart className='h-3 w-3 fill-pink-400 text-pink-400' />
-                  </motion.div>
-                ))}
-            </AnimatePresence>
-          </div>
+          <button
+            type='button'
+            onClick={handleToggleInterested}
+            className={cn(
+              'px-3 py-1.5 rounded-full text-xs font-medium transition-colors border',
+              interested
+                ? 'bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100'
+                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+            )}
+          >
+            {interested ? 'お気に入り済み' : 'お気に入り'}
+          </button>
 
           {/* 達成ボタン */}
-          <div className='relative'>
-            <button
-              type='button'
-              onClick={handleToggleCompleted}
-              className={cn(
-                'px-3 py-1.5 rounded-full text-xs font-medium transition-colors border',
-                completed
-                  ? 'bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100'
-                  : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-              )}
-            >
-              {completed ? '達成済み' : '達成'}
-            </button>
-            {/* 花火アニメーション */}
-            <AnimatePresence>
-              {showFireworkAnimation && (
-                <>
-                  {FIREWORK_PARTICLES.map((particle) => (
-                    <motion.div
-                      key={`firework-${particle.angle}`}
-                      initial={{ opacity: 1, scale: 0, x: 0, y: 0 }}
-                      animate={{
-                        opacity: [1, 1, 0],
-                        scale: [0.3, 0.8, 0.5],
-                        x: Math.cos((particle.angle * Math.PI) / 180) * 40,
-                        y: Math.sin((particle.angle * Math.PI) / 180) * 40 - 15
-                      }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.7, ease: 'easeOut' }}
-                      className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none'
-                    >
-                      <div className={cn('w-2 h-2 rounded-full', particle.color)} />
-                    </motion.div>
-                  ))}
-                  {/* 中央のキラキラ */}
-                  <motion.div
-                    initial={{ opacity: 1, scale: 0 }}
-                    animate={{ opacity: [1, 0], scale: [0, 1.5] }}
-                    transition={{ duration: 0.4 }}
-                    className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none'
-                  >
-                    <Trophy className='h-5 w-5 text-amber-500' />
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
-          </div>
+          <button
+            type='button'
+            onClick={handleToggleCompleted}
+            className={cn(
+              'px-3 py-1.5 rounded-full text-xs font-medium transition-colors border',
+              completed
+                ? 'bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100'
+                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+            )}
+          >
+            {completed ? '達成済み' : '達成'}
+          </button>
         </div>
       )}
+
+      {/* 画面中央のアニメーション */}
+      <AnimatePresence>
+        {showHeartAnimation && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className='fixed inset-0 flex items-center justify-center pointer-events-none z-50'
+          >
+            {/* 背景のフラッシュ */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 0.1, 0] }}
+              transition={{ duration: 0.4 }}
+              className='absolute inset-0 bg-pink-300'
+            />
+            {/* 中央のハート */}
+            <motion.div
+              initial={{ scale: 0, rotate: -15 }}
+              animate={{ scale: [0, 1.2, 1], rotate: [-15, 10, 0] }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            >
+              <Heart className='h-24 w-24 fill-pink-500 text-pink-500 drop-shadow-lg' />
+            </motion.div>
+            {/* 放射状のハート */}
+            {HEART_PARTICLES.map((angle) => (
+              <motion.div
+                key={`heart-center-${angle}`}
+                initial={{ opacity: 1, scale: 0.5, x: 0, y: 0 }}
+                animate={{
+                  opacity: [1, 1, 0],
+                  scale: [0.5, 1, 0.8],
+                  x: Math.cos((angle * Math.PI) / 180) * 120,
+                  y: Math.sin((angle * Math.PI) / 180) * 120
+                }}
+                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
+                className='absolute pointer-events-none'
+              >
+                <Heart className='h-8 w-8 fill-pink-400 text-pink-400' />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showFireworkAnimation && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className='fixed inset-0 flex items-center justify-center pointer-events-none z-50'
+          >
+            {/* 背景のフラッシュ */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 0.15, 0] }}
+              transition={{ duration: 0.5 }}
+              className='absolute inset-0 bg-amber-300'
+            />
+            {/* 中央のトロフィー */}
+            <motion.div
+              initial={{ scale: 0, y: 20 }}
+              animate={{ scale: [0, 1.3, 1], y: [20, -10, 0] }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            >
+              <Trophy className='h-28 w-28 text-amber-500 drop-shadow-lg' />
+            </motion.div>
+            {/* 花火パーティクル */}
+            {FIREWORK_PARTICLES.map((particle) => (
+              <motion.div
+                key={`firework-center-${particle.angle}`}
+                initial={{ opacity: 1, scale: 0, x: 0, y: 0 }}
+                animate={{
+                  opacity: [1, 1, 0],
+                  scale: [0.5, 1.5, 1],
+                  x: Math.cos((particle.angle * Math.PI) / 180) * 150,
+                  y: Math.sin((particle.angle * Math.PI) / 180) * 150
+                }}
+                transition={{ duration: 0.7, ease: 'easeOut', delay: 0.05 }}
+                className='absolute pointer-events-none'
+              >
+                <div className={cn('w-4 h-4 rounded-full', particle.color)} />
+              </motion.div>
+            ))}
+            {/* キラキラ追加 */}
+            {HEART_PARTICLES.map((angle) => (
+              <motion.div
+                key={`sparkle-${angle}`}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  scale: [0, 1, 0.5],
+                  x: Math.cos(((angle + 30) * Math.PI) / 180) * 100,
+                  y: Math.sin(((angle + 30) * Math.PI) / 180) * 100
+                }}
+                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
+                className='absolute pointer-events-none'
+              >
+                <div className='w-2 h-2 bg-yellow-300 rotate-45' />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
