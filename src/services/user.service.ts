@@ -5,16 +5,16 @@ import type { Bindings } from '@/types/bindings'
 type UserInput = {
   id: string
   displayName?: string | null
-  photoUrl?: string | null
-  twitterUsername?: string | null
+  thumbnailURL?: string | null
+  screenName?: string | null
   email?: string | null
 }
 
 type User = {
   id: string
   displayName: string | null
-  photoUrl: string | null
-  twitterUsername: string | null
+  thumbnailURL: string | null
+  screenName: string | null
   email: string | null
   createdAt: Date
   updatedAt: Date
@@ -50,15 +50,15 @@ export const upsertUser = async (env: Bindings, data: UserInput): Promise<User> 
     where: { id: data.id },
     update: {
       displayName: data.displayName,
-      photoUrl: data.photoUrl,
-      twitterUsername: data.twitterUsername,
+      thumbnailURL: data.thumbnailURL,
+      screenName: data.screenName,
       email: data.email
     },
     create: {
       id: data.id,
       displayName: data.displayName,
-      photoUrl: data.photoUrl,
-      twitterUsername: data.twitterUsername,
+      thumbnailURL: data.thumbnailURL,
+      screenName: data.screenName,
       email: data.email
     }
   })

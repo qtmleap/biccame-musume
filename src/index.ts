@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
+import direction from './api/direction'
 import events from './api/event'
-import routes from './api/routes'
 import stats from './api/stats'
 import users from './api/user'
 import userActivity from './api/user-activity'
@@ -18,8 +18,8 @@ app.route('/api/votes', votes)
 // ページビュー統計APIルート
 app.route('/api/stats', stats)
 
-// ルート計算APIルート
-app.route('/api/routes', routes)
+// 経路案内APIルート
+app.route('/api/directions', direction)
 
 // ユーザー管理APIルート
 app.route('/api/users', users)

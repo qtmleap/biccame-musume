@@ -1,6 +1,15 @@
 import { getFirebaseToken, verifyFirebaseAuth } from '@hono/firebase-auth'
-import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
+import {
+  EventIdParamSchema,
+  EventsResponseSchema,
+  StoreKeyParamSchema,
+  StoresResponseSchema,
+  SuccessResponseSchema,
+  UserActivityResponseSchema,
+  UserActivityUserIdParamSchema
+} from '@/schemas/user-activity.dto'
 import {
   addCompletedEvent,
   addInterestedEvent,
@@ -16,39 +25,6 @@ import {
 import type { Bindings, Variables } from '@/types/bindings'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
-
-// 共通スキーマ
-const UserIdParamSchema = z.object({
-  userId: z.string().openapi({ description: 'Firebase Auth UID' })
-})
-
-const StoreKeyParamSchema = z.object({
-  userId: z.string().openapi({ description: 'Firebase Auth UID' }),
-  storeKey: z.string().openapi({ description: '店舗キー' })
-})
-
-const EventIdParamSchema = z.object({
-  userId: z.string().openapi({ description: 'Firebase Auth UID' }),
-  eventId: z.string().openapi({ description: 'イベントID' })
-})
-
-const SuccessResponseSchema = z.object({
-  success: z.boolean()
-})
-
-const StoresResponseSchema = z.object({
-  stores: z.array(z.string())
-})
-
-const EventsResponseSchema = z.object({
-  events: z.array(z.string())
-})
-
-const UserActivityResponseSchema = z.object({
-  visitedStores: z.array(z.string()),
-  interestedEvents: z.array(z.string()),
-  completedEvents: z.array(z.string())
-})
 
 /**
  * 開発環境かどうかを判定
@@ -102,7 +78,7 @@ routes.openapi(
     method: 'get',
     path: '/:userId',
     request: {
-      params: UserIdParamSchema
+      params: UserActivityUserIdParamSchema
     },
     responses: {
       200: {
@@ -130,7 +106,7 @@ routes.openapi(
     method: 'get',
     path: '/:userId/stores',
     request: {
-      params: UserIdParamSchema
+      params: UserActivityUserIdParamSchema
     },
     responses: {
       200: {
@@ -210,7 +186,7 @@ routes.openapi(
     method: 'get',
     path: '/:userId/interested',
     request: {
-      params: UserIdParamSchema
+      params: UserActivityUserIdParamSchema
     },
     responses: {
       200: {
@@ -290,7 +266,7 @@ routes.openapi(
     method: 'get',
     path: '/:userId/completed',
     request: {
-      params: UserIdParamSchema
+      params: UserActivityUserIdParamSchema
     },
     responses: {
       200: {
