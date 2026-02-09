@@ -13,7 +13,7 @@ import { useUserActivity } from '@/hooks/useUserActivity'
  * マイページコンテンツ
  */
 const MyPageContent = () => {
-  const { user, twitterProfile, isAuthenticated, loading, logout, loginWithTwitter } = useAuth()
+  const { user, twitterProfile, isAuthenticated, loading, loggingOut, logout, loginWithTwitter } = useAuth()
   const router = useRouter()
   const { visitedStores, interestedEvents, completedEvents, isLoading } = useUserActivity(user?.uid)
   const autoLoginAttempted = useRef(false)
@@ -56,6 +56,11 @@ const MyPageContent = () => {
     } catch {
       toast.error('ログインに失敗しました')
     }
+  }
+
+  // ログアウト中はローディング表示
+  if (loggingOut) {
+    return <LoadingFallback />
   }
 
   // 未ログイン

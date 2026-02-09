@@ -13,6 +13,11 @@ export const userAtom = atom<User | null>(null)
 export const authLoadingAtom = atom<boolean>(true)
 
 /**
+ * ログアウト処理中フラグ
+ */
+export const loggingOutAtom = atom<boolean>(false)
+
+/**
  * ユーザーのTwitter情報(永続化)
  */
 export const twitterProfileAtom = atomWithStorage<{
