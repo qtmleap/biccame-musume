@@ -105,6 +105,8 @@ export const EventSchema = z.object({
   isPreliminary: z.boolean(),
   status: EventStatusSchema,
   daysUntil: z.number(),
+  interestedCount: z.number().int().nonnegative(),
+  completedCount: z.number().int().nonnegative(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date()
 })

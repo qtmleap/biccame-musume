@@ -88,16 +88,6 @@ const api = makeApi([
     response: z.object({ success: z.boolean() })
   },
   {
-    method: 'get',
-    path: '/api/events/:id/stats',
-    alias: 'getEventStats',
-    description: 'イベントの興味あり・達成カウントを取得',
-    response: z.object({
-      interestedCount: z.number(),
-      completedCount: z.number()
-    })
-  },
-  {
     method: 'post',
     path: '/api/events/stats',
     alias: 'getEventsStats',
