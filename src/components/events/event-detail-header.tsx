@@ -1,11 +1,14 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { ArrowLeft, Heart, Trophy } from 'lucide-react'
+import { ArrowLeft, Award, BarChart2, Heart, Share } from 'lucide-react'
+
 import { AnimatePresence, motion } from 'motion/react'
 import { Suspense, useState } from 'react'
+import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
-import { useEventStats } from '@/hooks/useEvents'
+import { usePageViews } from '@/hooks/usePageViews'
 import { useUserActivity } from '@/hooks/useUserActivity'
 import { cn } from '@/lib/utils'
 import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
@@ -19,7 +22,8 @@ type EventDetailHeaderProps = {
 }
 
 type EventStatsBadgesProps = {
-  eventId: string
+  event: Event
+  onStatsUpdate: () => void
 }
 
 /**
@@ -49,9 +53,9 @@ const FIREWORK_PARTICLES = [
  * イベント統計バッジコンポーネント
  * ログイン中はクリックでお気に入り・達成報告の登録/解除が可能
  */
-const EventStatsBadges = ({ eventId }: EventStatsBadgesProps) => {
-  const { data: stats, refetch } = useEventStats(eventId)
+const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
   const { user } = useAuth()
+  const { data: pageViews } = usePageViews(`/events/${event.uuid}`)
   const {
     isInterested,
     isCompleted,
@@ -61,8 +65,8 @@ const EventStatsBadges = ({ eventId }: EventStatsBadgesProps) => {
     removeCompletedEvent
   } = useUserActivity(user?.uid)
 
-  const interested = isInterested(eventId)
-  const completed = isCompleted(eventId)
+  const interested = isInterested(event.uuid)
+  const completed = isCompleted(event.uuid)
 
   // アニメーション用のstate
   const [showHeartAnimation, setShowHeartAnimation] = useState(false)
@@ -74,11 +78,11 @@ const EventStatsBadges = ({ eventId }: EventStatsBadgesProps) => {
   const handleToggleInterested = () => {
     if (!user) return
     if (interested) {
-      removeInterestedEvent(eventId, { onSuccess: () => refetch() })
+      removeInterestedEvent(event.uuid, { onSuccess: () => onStatsUpdate() })
     } else {
       setShowHeartAnimation(true)
       setTimeout(() => setShowHeartAnimation(false), 600)
-      addInterestedEvent(eventId, { onSuccess: () => refetch() })
+      addInterestedEvent(event.uuid, { onSuccess: () => onStatsUpdate() })
     }
   }
 
@@ -88,62 +92,99 @@ const EventStatsBadges = ({ eventId }: EventStatsBadgesProps) => {
   const handleToggleCompleted = () => {
     if (!user) return
     if (completed) {
-      removeCompletedEvent(eventId, { onSuccess: () => refetch() })
+      removeCompletedEvent(event.uuid, { onSuccess: () => onStatsUpdate() })
     } else {
       setShowFireworkAnimation(true)
       setTimeout(() => setShowFireworkAnimation(false), 800)
-      addCompletedEvent(eventId, { onSuccess: () => refetch() })
+      addCompletedEvent(event.uuid, { onSuccess: () => onStatsUpdate() })
     }
   }
 
   const isLoggedIn = !!user
 
+  /**
+   * シェアボタンの処理
+   */
+  const handleShare = async () => {
+    const url = `${window.location.origin}/events/${event.uuid}`
+    const text = `${event.title}`
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: event.title, text, url })
+      } catch (error) {
+        // ユーザーがキャンセルした場合は何もしない
+        if ((error as Error).name !== 'AbortError') {
+          console.error('Share failed:', error)
+        }
+      }
+    } else {
+      // Web Share APIが使えない場合はクリップボードにコピー
+      await navigator.clipboard.writeText(url)
+      toast.success('URLをコピーしました')
+    }
+  }
+
   return (
-    <div className='flex items-center justify-between gap-4 mt-3'>
-      {/* 統計ラベル */}
-      <div className='flex items-center gap-3'>
-        <div className='flex items-center gap-1 text-sm text-gray-500'>
-          <Heart className='h-4 w-4 text-pink-500' />
-          <span className='tabular-nums'>{stats.interestedCount}</span>
-        </div>
-        <div className='flex items-center gap-1 text-sm text-gray-500'>
-          <Trophy className='h-4 w-4 text-amber-500' />
-          <span className='tabular-nums'>{stats.completedCount}</span>
+    <div className='flex items-center justify-between mt-3'>
+      <div className='flex items-center'>
+        {/* 気になるボタン */}
+        <button
+          type='button'
+          onClick={isLoggedIn ? handleToggleInterested : undefined}
+          disabled={!isLoggedIn}
+          className={cn(
+            'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
+            isLoggedIn ? 'cursor-pointer' : 'cursor-default',
+            interested ? 'text-pink-500' : 'text-gray-400 hover:text-pink-400'
+          )}
+        >
+          <Heart
+            className={cn(
+              'h-5 w-5 transition-all',
+              interested && 'fill-pink-500',
+              isLoggedIn && !interested && 'group-hover:scale-110'
+            )}
+          />
+          <span className='tabular-nums'>{event.interestedCount}</span>
+        </button>
+
+        {/* 達成ボタン */}
+        <button
+          type='button'
+          onClick={isLoggedIn ? handleToggleCompleted : undefined}
+          disabled={!isLoggedIn}
+          className={cn(
+            'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
+            isLoggedIn ? 'cursor-pointer' : 'cursor-default',
+            completed ? 'text-amber-500' : 'text-gray-400 hover:text-amber-400'
+          )}
+        >
+          <Award
+            className={cn(
+              'h-5 w-5 transition-all',
+              completed && 'fill-amber-200',
+              isLoggedIn && !completed && 'group-hover:scale-110'
+            )}
+          />
+          <span className='tabular-nums'>{event.completedCount}</span>
+        </button>
+
+        {/* 閲覧数 */}
+        <div className='flex items-center gap-1.5 text-sm text-gray-400 min-w-16'>
+          <BarChart2 className='h-5 w-5' />
+          <span className='tabular-nums'>{pageViews.total}</span>
         </div>
       </div>
 
-      {/* 登録ボタン（ログイン時のみ表示） */}
-      {isLoggedIn && (
-        <div className='flex items-center gap-2'>
-          {/* お気に入りボタン */}
-          <button
-            type='button'
-            onClick={handleToggleInterested}
-            className={cn(
-              'px-3 py-1.5 rounded-full text-xs font-medium transition-colors border',
-              interested
-                ? 'bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100'
-                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-            )}
-          >
-            {interested ? 'お気に入り済み' : 'お気に入り'}
-          </button>
-
-          {/* 達成ボタン */}
-          <button
-            type='button'
-            onClick={handleToggleCompleted}
-            className={cn(
-              'px-3 py-1.5 rounded-full text-xs font-medium transition-colors border',
-              completed
-                ? 'bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100'
-                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-            )}
-          >
-            {completed ? '達成済み' : '達成'}
-          </button>
-        </div>
-      )}
+      {/* シェアボタン */}
+      <button
+        type='button'
+        onClick={handleShare}
+        className='flex items-center gap-1.5 text-sm text-gray-400 hover:text-blue-500 transition-colors group'
+      >
+        <Share className='h-5 w-5 transition-all group-hover:scale-110' />
+      </button>
 
       {/* 画面中央のアニメーション */}
       <AnimatePresence>
@@ -205,13 +246,13 @@ const EventStatsBadges = ({ eventId }: EventStatsBadgesProps) => {
               transition={{ duration: 0.5 }}
               className='absolute inset-0 bg-amber-300'
             />
-            {/* 中央のトロフィー */}
+            {/* 中央のアワード */}
             <motion.div
               initial={{ scale: 0, y: 20 }}
               animate={{ scale: [0, 1.3, 1], y: [20, -10, 0] }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
-              <Trophy className='h-28 w-28 text-amber-500 drop-shadow-lg' />
+              <Award className='h-28 w-28 text-amber-500 fill-amber-200 drop-shadow-lg' />
             </motion.div>
             {/* 花火パーティクル */}
             {FIREWORK_PARTICLES.map((particle) => (
@@ -259,6 +300,11 @@ const EventStatsBadges = ({ eventId }: EventStatsBadgesProps) => {
  */
 export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetailHeaderProps) => {
   const categoryStyle = CATEGORY_STYLE[event.category]
+  const queryClient = useQueryClient()
+
+  const handleStatsUpdate = () => {
+    queryClient.invalidateQueries({ queryKey: ['events', event.uuid] })
+  }
 
   return (
     <>
@@ -299,7 +345,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
         </div>
         <h1 className='text-2xl font-bold text-gray-900'>{event.title}</h1>
         <Suspense fallback={null}>
-          <EventStatsBadges eventId={event.uuid} />
+          <EventStatsBadges event={event} onStatsUpdate={handleStatsUpdate} />
         </Suspense>
       </motion.div>
     </>

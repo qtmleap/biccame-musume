@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { CFAuth } from '@/middleware/cloudflare-access'
 import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/services/event.service'
-import { getEventStats, getEventsStats } from '@/services/user-activity.service'
+import { getEventsStats } from '@/services/user-activity.service'
 import type { Bindings } from '@/types/bindings'
 import { type EventRequest, EventRequestSchema, EventSchema } from '../schemas/event.dto'
 
@@ -183,39 +183,6 @@ routes.openapi(
   async (c) => {
     const { id } = c.req.valid('param')
     return c.body(await deleteEvent(c.env, id), 204)
-  }
-)
-
-// イベント統計API（興味あり・達成カウント）
-
-routes.openapi(
-  createRoute({
-    method: 'get',
-    path: '/:id/stats',
-    request: {
-      params: z.object({
-        id: z.string().nonempty()
-      })
-    },
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: z.object({
-              interestedCount: z.number(),
-              completedCount: z.number()
-            })
-          }
-        },
-        description: 'イベント統計取得成功'
-      }
-    },
-    tags: ['events']
-  }),
-  async (c) => {
-    const { id } = c.req.valid('param')
-    const stats = await getEventStats(c.env, id)
-    return c.json(stats)
   }
 )
 

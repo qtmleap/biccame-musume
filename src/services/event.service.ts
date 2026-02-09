@@ -60,10 +60,12 @@ const calculateEventStatus = (event: {
 /**
  * PrismaのイベントモデルをAPIレスポンス用のEvent型に変換
  * @param event - Prismaから取得した生のイベントデータ
+ * @param interestedCount - 興味ありカウント（オプション）
+ * @param completedCount - 達成カウント（オプション）
  * @returns APIレスポンス用のEvent型オブジェクト
  */
 // biome-ignore lint/suspicious/noExplicitAny: reason
-const transform = (event: any): Event => {
+const transform = (event: any, interestedCount = 0, completedCount = 0): Event => {
   const { status, daysUntil } = calculateEventStatus(event)
   const { id, conditions, referenceUrls, ...rest } = event
   return {
@@ -78,7 +80,9 @@ const transform = (event: any): Event => {
     // biome-ignore lint/suspicious/noExplicitAny: reason
     stores: event.stores.map((s: any) => s.storeKey),
     status,
-    daysUntil
+    daysUntil,
+    interestedCount,
+    completedCount
   }
 }
 
@@ -86,23 +90,27 @@ const transform = (event: any): Event => {
  * 指定されたIDのイベントを取得
  * @param env - Cloudflare Workers環境変数
  * @param id - イベントのUUID
- * @returns イベント情報
+ * @returns イベント情報（statsを含む）
  * @throws HTTPException 404 - イベントが見つからない場合
  */
 export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
-  const event = await prisma.event.findUnique({
-    where: { id },
-    include: {
-      conditions: true,
-      referenceUrls: true,
-      stores: true
-    }
-  })
+  const [event, interestedCount, completedCount] = await Promise.all([
+    prisma.event.findUnique({
+      where: { id },
+      include: {
+        conditions: true,
+        referenceUrls: true,
+        stores: true
+      }
+    }),
+    prisma.userInterestedEvent.count({ where: { eventId: id } }),
+    prisma.userCompletedEvent.count({ where: { eventId: id } })
+  ])
   if (event === null) {
     throw new HTTPException(404, { message: 'Not Found' })
   }
-  return transform(event)
+  return transform(event, interestedCount, completedCount)
 }
 
 /**

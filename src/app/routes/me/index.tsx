@@ -1,13 +1,91 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, LogIn, MapPin, Star, Trophy } from 'lucide-react'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import { ArrowLeft, Award, ChevronRight, Heart, LogIn, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { getLargeTwitterPhoto, useAuth } from '@/hooks/useAuth'
+import { useEvents } from '@/hooks/useEvents'
 import { useUserActivity } from '@/hooks/useUserActivity'
+import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
+import { CATEGORY_STYLE } from '@/locales/component'
+import type { Event } from '@/schemas/event.dto'
+
+/**
+ * イベントリストアイテム
+ */
+const EventListItem = ({ event }: { event: Event }) => {
+  const categoryStyle = CATEGORY_STYLE[event.category]
+  return (
+    <Link
+      to='/events/$uuid'
+      params={{ uuid: event.uuid }}
+      className='flex items-center justify-between py-2 transition-colors group'
+    >
+      <div className='flex-1 min-w-0'>
+        <p className='text-sm font-medium text-gray-900 truncate group-hover:text-pink-600'>{event.title}</p>
+        <Badge className={`${categoryStyle} border text-xs mt-1`}>{EVENT_CATEGORY_LABELS[event.category]}</Badge>
+      </div>
+      <ChevronRight className='h-4 w-4 text-gray-400 group-hover:text-gray-600 shrink-0' />
+    </Link>
+  )
+}
+
+/**
+ * イベントセクション
+ */
+const EventSection = ({
+  title,
+  icon,
+  events,
+  emptyMessage,
+  isLoading,
+  showAllPath
+}: {
+  title: string
+  icon: React.ReactNode
+  events: Event[]
+  emptyMessage: string
+  isLoading: boolean
+  showAllPath?: string
+}) => {
+  const displayEvents = events.slice(0, 10)
+  const hasMore = events.length > 10
+
+  return (
+    <div className='space-y-2'>
+      <div className='flex items-center justify-between'>
+        <div className='flex items-center gap-2'>
+          {icon}
+          <h2 className='text-xl font-bold text-gray-900'>{title}</h2>
+          {events.length > 0 && <span className='text-sm text-gray-500'>({events.length})</span>}
+        </div>
+      </div>
+      {isLoading ? (
+        <p className='text-sm text-gray-500 py-2'>読み込み中...</p>
+      ) : events.length > 0 ? (
+        <div className='divide-y divide-gray-100'>
+          {displayEvents.map((event) => (
+            <EventListItem key={event.uuid} event={event} />
+          ))}
+          {hasMore && showAllPath && (
+            <Link
+              to={showAllPath}
+              className='flex items-center justify-center py-2.5 text-sm text-pink-600 hover:text-pink-700 transition-colors'
+            >
+              すべて見る
+            </Link>
+          )}
+        </div>
+      ) : (
+        <p className='text-sm text-gray-500 py-2'>{emptyMessage}</p>
+      )}
+    </div>
+  )
+}
 
 /**
  * マイページコンテンツ
@@ -16,7 +94,12 @@ const MyPageContent = () => {
   const { user, twitterProfile, isAuthenticated, loading, loggingOut, logout, loginWithTwitter } = useAuth()
   const router = useRouter()
   const { visitedStores, interestedEvents, completedEvents, isLoading } = useUserActivity(user?.uid)
+  const { data: allEvents } = useEvents()
   const autoLoginAttempted = useRef(false)
+
+  // イベントIDからイベント詳細を取得
+  const interestedEventDetails = allEvents.filter((e) => interestedEvents.includes(e.uuid))
+  const completedEventDetails = allEvents.filter((e) => completedEvents.includes(e.uuid))
 
   /**
    * 非ログイン時に自動でログインを試みる
@@ -188,19 +271,15 @@ const MyPageContent = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className='space-y-3 mb-6'
+            className='mb-6'
           >
-            <div className='flex items-center gap-2'>
-              <Star className='h-5 w-5 text-yellow-500' />
-              <h2 className='text-xl font-bold text-gray-900'>興味のあるイベント</h2>
-            </div>
-            {isLoading ? (
-              <p className='text-sm text-gray-500'>読み込み中...</p>
-            ) : interestedEvents.length > 0 ? (
-              <p className='text-sm text-gray-600'>{interestedEvents.length}件のイベントに興味あり</p>
-            ) : (
-              <p className='text-sm text-gray-500'>まだ興味のあるイベントがありません</p>
-            )}
+            <EventSection
+              title='気になるイベント'
+              icon={<Heart className='h-5 w-5 text-pink-500' />}
+              events={interestedEventDetails}
+              emptyMessage='まだ気になるイベントがありません'
+              isLoading={isLoading}
+            />
           </motion.div>
 
           {/* 達成したイベント */}
@@ -208,19 +287,15 @@ const MyPageContent = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            className='space-y-3 mb-6'
+            className='mb-6'
           >
-            <div className='flex items-center gap-2'>
-              <Trophy className='h-5 w-5 text-amber-500' />
-              <h2 className='text-xl font-bold text-gray-900'>達成したイベント</h2>
-            </div>
-            {isLoading ? (
-              <p className='text-sm text-gray-500'>読み込み中...</p>
-            ) : completedEvents.length > 0 ? (
-              <p className='text-sm text-gray-600'>{completedEvents.length}件のイベントを達成</p>
-            ) : (
-              <p className='text-sm text-gray-500'>まだ達成したイベントがありません</p>
-            )}
+            <EventSection
+              title='達成したイベント'
+              icon={<Award className='h-5 w-5 text-amber-500' />}
+              events={completedEventDetails}
+              emptyMessage='まだ達成したイベントがありません'
+              isLoading={isLoading}
+            />
           </motion.div>
         </div>
       </div>
