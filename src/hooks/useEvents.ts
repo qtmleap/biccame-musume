@@ -121,15 +121,3 @@ export const checkDuplicateUrl = async (
 ): Promise<{ exists: boolean; event?: Event }> => {
   return client.checkDuplicateUrl({ queries: { url, excludeId } })
 }
-
-/**
- * イベントの興味あり・達成カウントを取得するフック
- */
-export const useEventStats = (eventId: string) => {
-  return useSuspenseQuery({
-    queryKey: ['eventStats', eventId],
-    queryFn: async () => client.getEventStats({ params: { id: eventId } }),
-    staleTime: 30000, // 30秒間キャッシュ
-    refetchOnMount: true
-  })
-}
