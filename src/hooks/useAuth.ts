@@ -1,7 +1,7 @@
 import { signInWithPopup, signOut, TwitterAuthProvider } from 'firebase/auth'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
-import { authLoadingAtom, twitterProfileAtom, userAtom } from '@/atoms/authAtom'
+import { authLoadingAtom, loggingOutAtom, twitterProfileAtom, userAtom } from '@/atoms/authAtom'
 import { auth } from '@/lib/firebase'
 import { client } from '@/utils/client'
 
@@ -22,8 +22,10 @@ export const getLargeTwitterPhoto = (photoURL: string | null | undefined): strin
 export const useAuth = () => {
   const user = useAtomValue(userAtom)
   const loading = useAtomValue(authLoadingAtom)
+  const loggingOut = useAtomValue(loggingOutAtom)
   const twitterProfile = useAtomValue(twitterProfileAtom)
   const setTwitterProfile = useSetAtom(twitterProfileAtom)
+  const setLoggingOut = useSetAtom(loggingOutAtom)
 
   /**
    * Twitterでログイン
@@ -66,21 +68,26 @@ export const useAuth = () => {
 
   /**
    * ログアウト
+   * ログアウト後はトップページに遷移する
    */
   const logout = useCallback(async () => {
     try {
+      setLoggingOut(true)
       await signOut(auth)
       setTwitterProfile(null)
+      window.location.href = '/'
     } catch (error) {
+      setLoggingOut(false)
       console.error('Logout failed:', error)
       throw error
     }
-  }, [setTwitterProfile])
+  }, [setTwitterProfile, setLoggingOut])
 
   return {
     user,
     twitterProfile,
     loading,
+    loggingOut,
     isAuthenticated: !!user,
     loginWithTwitter,
     logout
