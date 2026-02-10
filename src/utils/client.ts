@@ -170,7 +170,7 @@ const api = makeApi([
       id: z.string(),
       displayName: z.string().nullable(),
       photoUrl: z.string().nullable(),
-      twitterUsername: z.string().nullable(),
+      screenName: z.string().nullable(),
       email: z.string().nullable(),
       createdAt: z.string(),
       updatedAt: z.string()
@@ -189,7 +189,7 @@ const api = makeApi([
           id: z.string(),
           displayName: z.string().nullable().optional(),
           photoUrl: z.string().nullable().optional(),
-          twitterUsername: z.string().nullable().optional(),
+          screenName: z.string().nullable().optional(),
           email: z.string().nullable().optional()
         })
       }
@@ -198,7 +198,7 @@ const api = makeApi([
       id: z.string(),
       displayName: z.string().nullable(),
       photoUrl: z.string().nullable(),
-      twitterUsername: z.string().nullable(),
+      screenName: z.string().nullable(),
       email: z.string().nullable(),
       createdAt: z.string(),
       updatedAt: z.string()
