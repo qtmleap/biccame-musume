@@ -59,6 +59,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "dayjs": "^1.11.19",
+    "firebase": "^12.9.0",
     "firebase-auth-cloudflare-workers": "^2.0.6",
     "hono": "^4.11.9",
     "intlayer": "^8.0.4",

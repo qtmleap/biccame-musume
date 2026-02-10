@@ -91,7 +91,7 @@ const EventSection = ({
  * マイページコンテンツ
  */
 const MyPageContent = () => {
-  const { user, twitterProfile, isAuthenticated, loading, loggingOut, logout, loginWithTwitter } = useAuth()
+  const { user, isAuthenticated, loginWithTwitter, logout } = useAuth()
   const router = useRouter()
   const { visitedStores, interestedEvents, completedEvents, isLoading } = useUserActivity(user?.uid)
   const { data: allEvents } = useEvents()
@@ -105,7 +105,7 @@ const MyPageContent = () => {
    * 非ログイン時に自動でログインを試みる
    */
   useEffect(() => {
-    if (!loading && !isAuthenticated && !autoLoginAttempted.current) {
+    if (!isAuthenticated && !autoLoginAttempted.current) {
       autoLoginAttempted.current = true
       loginWithTwitter()
         .then(() => {
@@ -115,7 +115,7 @@ const MyPageContent = () => {
           // ユーザーがキャンセルした場合など、エラーは無視
         })
     }
-  }, [loading, isAuthenticated, loginWithTwitter])
+  }, [isAuthenticated, loginWithTwitter])
 
   /**
    * ログアウト処理
@@ -139,11 +139,6 @@ const MyPageContent = () => {
     } catch {
       toast.error('ログインに失敗しました')
     }
-  }
-
-  // ログアウト中はローディング表示
-  if (loggingOut) {
-    return <LoadingFallback />
   }
 
   // 未ログイン
@@ -234,16 +229,6 @@ const MyPageContent = () => {
             className='mb-6'
           >
             <h1 className='text-2xl font-bold text-gray-900'>{user?.displayName}</h1>
-            {twitterProfile?.screenName && (
-              <a
-                href={`https://twitter.com/${twitterProfile.screenName}`}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='text-sky-600 text-sm hover:text-sky-800'
-              >
-                @{twitterProfile.screenName}
-              </a>
-            )}
           </motion.div>
 
           {/* 訪れた店舗の記録 */}
