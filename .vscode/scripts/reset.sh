@@ -13,7 +13,7 @@ retry_command() {
   local max_attempts=3
   local attempt=1
   local delay=5
-  
+
   while [ $attempt -le $max_attempts ]; do
     echo "試行 $attempt/$max_attempts..."
     if "$@"; then

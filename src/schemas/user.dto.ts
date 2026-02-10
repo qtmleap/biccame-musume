@@ -2,14 +2,11 @@ import { z } from '@hono/zod-openapi'
 
 /**
  * ユーザー作成/更新リクエストスキーマ
+ * Firebase認証トークンから取得できない情報のみ受け取る
  */
 export const UpsertUserRequestSchema = z
   .object({
-    id: z.string().openapi({ description: 'ユーザーID' }),
-    displayName: z.string().nullable().optional().openapi({ description: '表示名' }),
-    thumbnailURL: z.string().nullable().optional().openapi({ description: 'プロフィール画像URL' }),
-    screenName: z.string().nullable().optional().openapi({ description: 'Twitterスクリーンネーム' }),
-    email: z.string().nullable().optional().openapi({ description: 'メールアドレス' })
+    // screenName: z.string().openapi({ description: 'Twitterスクリーンネーム' })
   })
   .openapi('UpsertUserRequest')
 
@@ -18,7 +15,7 @@ export const UpsertUserRequestSchema = z
  */
 export const UserResponseSchema = z
   .object({
-    id: z.string().openapi({ description: 'ユーザーID' }),
+    id: z.string().nonempty().openapi({ description: 'ユーザーID' }),
     displayName: z.string().nullable().openapi({ description: '表示名' }),
     thumbnailURL: z.string().nullable().openapi({ description: 'プロフィール画像URL' }),
     screenName: z.string().nullable().openapi({ description: 'Twitterスクリーンネーム' }),
