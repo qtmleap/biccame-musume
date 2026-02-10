@@ -1,0 +1,30 @@
+{
+  "kind": "identitytoolkit#DownloadAccountResponse",
+  "users": [
+    {
+      "localId": "Cyxkq0hyAozFimQPaFIlNlM7x6cU",
+      "lastLoginAt": "1757980869196",
+      "displayName": "Algae Olive",
+      "photoUrl": "",
+      "emailVerified": false,
+      "email": "algae.olive.14@example.com",
+      "salt": "fakeSaltDmuBR68oreXjSPzdhY00",
+      "passwordHash": "fakeHash:salt=fakeSaltDmuBR68oreXjSPzdhY00:password=123456",
+      "passwordUpdatedAt": 1757980847170,
+      "validSince": "1757980847",
+      "mfaInfo": [],
+      "createdAt": "1757980847170",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "algae.olive.14@example.com",
+          "federatedId": "algae.olive.14@example.com",
+          "rawId": "algae.olive.14@example.com",
+          "displayName": "Algae Olive",
+          "photoUrl": ""
+        }
+      ],
+      "lastRefreshAt": "2025-09-16T00:01:09.196Z"
+    }
+  ]
+}

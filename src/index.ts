@@ -1,4 +1,7 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
+import { HTTPException } from 'hono/http-exception'
+import { ZodError } from 'zod'
 import direction from './api/direction'
 import events from './api/event'
 import stats from './api/stats'
@@ -8,6 +11,25 @@ import votes from './api/vote'
 import type { Bindings, Variables } from './types/bindings'
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
+
+app.use(
+  '*',
+  cors({
+    origin: ['http://localhost:5173'],
+    credentials: true,
+    maxAge: 86400
+  })
+)
+app.onError(async (error, c) => {
+  console.error(error)
+  if (error instanceof HTTPException) {
+    return c.json({ message: error.message }, error.status)
+  }
+  if (error instanceof ZodError) {
+    return c.json({ message: 'ZodError', description: error.issues }, 400)
+  }
+  return c.json({ message: 'Unknown Error' }, 500)
+})
 
 // イベント管理APIルート
 app.route('/api/events', events)
