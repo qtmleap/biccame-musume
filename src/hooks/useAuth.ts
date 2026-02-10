@@ -52,7 +52,7 @@ export const useAuth = () => {
             id: result.user.uid,
             displayName: result.user.displayName,
             photoUrl,
-            twitterUsername: screenName,
+            screenName: screenName,
             email: result.user.email
           })
         } catch (error) {

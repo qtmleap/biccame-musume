@@ -12,7 +12,7 @@ const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
  * 開発環境かどうかを判定
  */
 const isDevelopmentEnvironment = (host: string | undefined): boolean => {
-  return host?.includes('localhost') || host?.includes('127.0.0.1') || false
+  return host?.includes('localhost') || host?.includes('127.0.0.1') || host?.includes('dev.biccame-musume.com') || false
 }
 
 /**
