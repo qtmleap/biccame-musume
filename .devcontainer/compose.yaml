@@ -8,6 +8,7 @@ services:
       - ../:/home/vscode/app:cached
     environment:
       CLOUDFLARE_ENV: dev
+      NODE_ENV: development
     tty: true
     stdin_open: true
 

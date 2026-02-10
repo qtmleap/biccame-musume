@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router'
 import { LogIn, User } from 'lucide-react'
-import { useState } from 'react'
 import { toast } from 'sonner'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -15,50 +14,39 @@ type LoginButtonProps = {
  * ログイン時: ユーザーアバター+ドロップダウンメニュー表示
  */
 export const LoginButton = ({ variant = 'default' }: LoginButtonProps) => {
-  const { loading, isAuthenticated, loginWithTwitter } = useAuth()
-  const [isLoggingIn, setIsLoggingIn] = useState(false)
+  const { isAuthenticated, loginWithTwitter } = useAuth()
 
   /**
    * ログイン処理
+   * エミュレーター環境ではリダイレクトされるため、トースト表示は行わない
    */
   const handleLogin = async () => {
-    setIsLoggingIn(true)
     try {
-      await loginWithTwitter()
-      toast.success('ログインしました')
-    } catch {
-      toast.error('ログインに失敗しました')
-    } finally {
-      setIsLoggingIn(false)
+      const result = await loginWithTwitter()
+      // ポップアップでログインした場合のみトースト表示
+      if (result) {
+        toast.success('ログインしました')
+      }
+      // リダイレクトの場合は何もしない（ページが切り替わる）
+    } catch (error) {
+      // ポップアップが閉じられた場合はエラーを表示しない
+      if ((error as { code?: string })?.code !== 'auth/popup-closed-by-user') {
+        toast.error('ログインに失敗しました')
+      }
     }
   }
 
   // メニュー内スタイル
   if (variant === 'menu') {
-    // 読み込み中
-    if (loading) {
-      return (
-        <div className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground'>
-          <div className='w-6 h-6 border-2 border-current border-t-transparent rounded-full animate-spin' />
-          読み込み中...
-        </div>
-      )
-    }
-
     // 未ログイン
     if (!isAuthenticated) {
       return (
         <button
           type='button'
           onClick={handleLogin}
-          disabled={isLoggingIn}
-          className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted w-full disabled:opacity-50'
+          className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted w-full'
         >
-          {isLoggingIn ? (
-            <div className='w-6 h-6 border-2 border-current border-t-transparent rounded-full animate-spin' />
-          ) : (
-            <LogIn className='w-6 h-6' />
-          )}
+          <LogIn className='w-6 h-6' />
           ログイン
         </button>
       )
@@ -77,29 +65,15 @@ export const LoginButton = ({ variant = 'default' }: LoginButtonProps) => {
   }
 
   // デフォルトスタイル（ヘッダー用）
-  // 読み込み中
-  if (loading) {
-    return (
-      <span className='text-sm font-medium text-muted-foreground'>
-        <div className='w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin' />
-      </span>
-    )
-  }
-
   // 未ログイン
   if (!isAuthenticated) {
     return (
       <button
         type='button'
         onClick={handleLogin}
-        disabled={isLoggingIn}
-        className='text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4 disabled:opacity-50'
+        className='text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
       >
-        {isLoggingIn ? (
-          <div className='w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin inline-block' />
-        ) : (
-          'ログイン'
-        )}
+        ログイン
       </button>
     )
   }

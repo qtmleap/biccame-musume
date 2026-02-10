@@ -1,7 +1,7 @@
-import { onAuthStateChanged } from 'firebase/auth'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { getRedirectResult, onAuthStateChanged, TwitterAuthProvider } from 'firebase/auth'
+import { useSetAtom } from 'jotai'
 import { type ReactNode, useEffect } from 'react'
-import { authLoadingAtom, twitterProfileAtom, userAtom } from '@/atoms/authAtom'
+import { userAtom } from '@/atoms/authAtom'
 import { getLargeTwitterPhoto } from '@/hooks/useAuth'
 import { auth } from '@/lib/firebase'
 import { client } from '@/utils/client'
@@ -16,27 +16,53 @@ type AuthProviderProps = {
  */
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const setUser = useSetAtom(userAtom)
-  const setLoading = useSetAtom(authLoadingAtom)
-  const currentTwitterProfile = useAtomValue(twitterProfileAtom)
-  const setTwitterProfile = useSetAtom(twitterProfileAtom)
+
+  // リダイレクト結果を処理（エミュレーター用）
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth)
+        if (result) {
+          console.debug('Redirect login success:', result)
+          // Twitter認証情報からscreen_nameを取得
+          const credential = TwitterAuthProvider.credentialFromResult(result)
+          if (credential) {
+            // @ts-expect-error - TwitterAuthProviderのcredentialにはscreen_nameが含まれる
+            const screenName = result._tokenResponse?.screenName as string | undefined
+            const photoUrl = getLargeTwitterPhoto(result.user.photoURL) ?? null
+
+            // DBにユーザー情報を保存
+            try {
+              await client.upsertUser({
+                id: result.user.uid,
+                displayName: result.user.displayName,
+                photoUrl,
+                screenName: screenName,
+                email: result.user.email
+              })
+            } catch (error) {
+              console.error('Failed to save user:', error)
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Redirect login error:', error)
+      }
+    }
+
+    if (import.meta.env.DEV) {
+      handleRedirectResult()
+    }
+  }, [])
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser)
-      setLoading(false)
 
-      if (!firebaseUser) {
-        setTwitterProfile(null)
-      } else {
+      if (firebaseUser) {
         const twitterData = firebaseUser.providerData.find((provider) => provider.providerId === 'twitter.com')
         if (twitterData) {
           const photoUrl = getLargeTwitterPhoto(twitterData.photoURL) ?? null
-          // 既存のscreenNameを保持（loginWithTwitter時に設定される）
-          setTwitterProfile({
-            displayName: twitterData.displayName,
-            photoURL: photoUrl,
-            screenName: currentTwitterProfile?.screenName ?? null
-          })
 
           // DBにユーザー情報を保存
           try {
@@ -54,7 +80,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     })
 
     return () => unsubscribe()
-  }, [setUser, setLoading, setTwitterProfile, currentTwitterProfile?.screenName])
+  }, [setUser])
 
   return <>{children}</>
 }

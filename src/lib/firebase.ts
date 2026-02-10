@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { connectAuthEmulator, getAuth } from 'firebase/auth'
 
 /**
  * Firebase設定
@@ -23,3 +23,10 @@ export const firebaseApp = initializeApp(firebaseConfig)
  * Firebase Authインスタンス
  */
 export const auth = getAuth(firebaseApp)
+
+/**
+ * 開発環境ではAuthエミュレーターに接続
+ */
+if (import.meta.env.DEV) {
+  connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
+}
