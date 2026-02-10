@@ -16,8 +16,8 @@ type EventConfirmationProps = {
  */
 export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: EventConfirmationProps) => {
   // EventRequestをEvent型に変換
-  const previewEvent: Event = {
-    uuid: 'preview',
+  const event: Event = {
+    uuid: data.uuid,
     category: data.category,
     title: data.title,
     stores: data.stores as StoreKey[],
@@ -31,6 +31,8 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
     isPreliminary: data.isPreliminary,
     status: 'upcoming' as EventStatus,
     daysUntil: dayjs(data.startDate).diff(dayjs(), 'day'),
+    interestedCount: 0,
+    completedCount: 0,
     createdAt: dayjs().toDate(),
     updatedAt: dayjs().toDate()
   }
@@ -38,7 +40,7 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
   return (
     <div className='space-y-6'>
       {/* イベント情報 */}
-      <EventDetailInfo event={previewEvent} />
+      <EventDetailInfo event={event} />
 
       {/* 投稿通知 */}
       {data.shouldTweet && <p className='text-base font-medium text-sky-600 text-center'>保存すると投稿されます</p>}
