@@ -1,8 +1,24 @@
 import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
-import { EventRequestSchema, EventSchema } from '@/schemas/event.dto'
+import {
+  SuccessResponseSchemaForClient,
+  UpdateEventStatusSchema,
+  UpdateStoreStatusSchema,
+  UserActivitiesResponseSchema,
+  UserEventsResponseSchema,
+  UserStoresResponseSchema
+} from '@/schemas/activity.dto'
+import { AuthResponseSchema, CurrentUserResponseSchema } from '@/schemas/auth.dto'
+import {
+  CheckUrlResponseSchema,
+  EventRequestSchema,
+  EventSchema,
+  EventStatsRequestSchema,
+  EventStatsResponseSchema
+} from '@/schemas/event.dto'
 import { PageViewStatsSchema } from '@/schemas/stats.dto'
 import { StoresSchema } from '@/schemas/store.dto'
+import { UpsertUserRequestSchemaForClient, UserResponseSchemaForClient } from '@/schemas/user.dto'
 import { VoteCountListSchema, VoteResponseSchema } from '@/schemas/vote.dto'
 
 /**
@@ -32,7 +48,7 @@ const api = makeApi([
       {
         name: 'characterId',
         type: 'Path',
-        schema: z.string().nonempty()
+        schema: z.string().nonempty().nonempty()
       }
     ],
     response: VoteResponseSchema
@@ -85,7 +101,7 @@ const api = makeApi([
     path: '/api/events/:id',
     alias: 'deleteEvent',
     description: 'イベントを削除',
-    response: z.object({ success: z.boolean() })
+    response: SuccessResponseSchemaForClient
   },
   {
     method: 'post',
@@ -96,18 +112,10 @@ const api = makeApi([
       {
         name: 'body',
         type: 'Body',
-        schema: z.object({
-          eventIds: z.array(z.string())
-        })
+        schema: EventStatsRequestSchema
       }
     ],
-    response: z.record(
-      z.string(),
-      z.object({
-        interestedCount: z.number(),
-        completedCount: z.number()
-      })
-    )
+    response: EventStatsResponseSchema
   },
   {
     method: 'get',
@@ -118,18 +126,15 @@ const api = makeApi([
       {
         name: 'url',
         type: 'Query',
-        schema: z.string()
+        schema: z.string().nonempty()
       },
       {
         name: 'excludeId',
         type: 'Query',
-        schema: z.string().optional()
+        schema: z.string().nonempty().optional()
       }
     ],
-    response: z.object({
-      exists: z.boolean(),
-      event: EventSchema.optional()
-    })
+    response: CheckUrlResponseSchema
   },
   // ページビュー統計API
   {
@@ -141,40 +146,40 @@ const api = makeApi([
       {
         name: 'path',
         type: 'Query',
-        schema: z.string().optional()
+        schema: z.string().nonempty().optional()
       }
     ],
     response: PageViewStatsSchema
+  },
+  // 認証関連API
+  {
+    method: 'post',
+    path: '/api/auth',
+    alias: 'authenticate',
+    description: 'Firebase IDトークンで認証してセッションクッキーを設定',
+    response: AuthResponseSchema
   },
   {
     method: 'post',
-    path: '/api/stats/track',
-    alias: 'trackPageView',
-    description: 'ページビューを記録',
-    parameters: [
-      {
-        name: 'path',
-        type: 'Query',
-        schema: z.string().optional()
-      }
-    ],
-    response: PageViewStatsSchema
+    path: '/api/auth/logout',
+    alias: 'logout',
+    description: 'ログアウトしてセッションクッキーを削除',
+    response: AuthResponseSchema
   },
   // ユーザー関連API
+  {
+    method: 'get',
+    path: '/api/me',
+    alias: 'getCurrentUser',
+    description: '現在ログイン中のユーザー情報を取得',
+    response: CurrentUserResponseSchema
+  },
   {
     method: 'get',
     path: '/api/users/:id',
     alias: 'getUser',
     description: 'ユーザー情報を取得',
-    response: z.object({
-      id: z.string(),
-      displayName: z.string().nullable(),
-      photoUrl: z.string().nullable(),
-      screenName: z.string().nullable(),
-      email: z.string().nullable(),
-      createdAt: z.string(),
-      updatedAt: z.string()
-    })
+    response: UserResponseSchemaForClient
   },
   {
     method: 'post',
@@ -185,105 +190,90 @@ const api = makeApi([
       {
         name: 'body',
         type: 'Body',
-        schema: z.object({
-          id: z.string(),
-          displayName: z.string().nullable().optional(),
-          photoUrl: z.string().nullable().optional(),
-          screenName: z.string().nullable().optional(),
-          email: z.string().nullable().optional()
-        })
+        schema: UpsertUserRequestSchemaForClient
       }
     ],
-    response: z.object({
-      id: z.string(),
-      displayName: z.string().nullable(),
-      photoUrl: z.string().nullable(),
-      screenName: z.string().nullable(),
-      email: z.string().nullable(),
-      createdAt: z.string(),
-      updatedAt: z.string()
-    })
+    response: UserResponseSchemaForClient
   },
   // ユーザーアクティビティ関連API
   {
     method: 'get',
-    path: '/api/user-activity/:userId',
-    alias: 'getUserActivity',
+    path: '/api/users/:userId/activities',
+    alias: 'getUserActivities',
     description: 'ユーザーのアクティビティ全体を取得',
-    response: z.object({
-      visitedStores: z.array(z.string()),
-      interestedEvents: z.array(z.string()),
-      completedEvents: z.array(z.string())
-    })
+    response: UserActivitiesResponseSchema
   },
+  // 店舗関連
   {
     method: 'get',
-    path: '/api/user-activity/:userId/stores',
-    alias: 'getVisitedStores',
-    description: '訪問済み店舗一覧を取得',
-    response: z.object({
-      stores: z.array(z.string())
-    })
+    path: '/api/users/:userId/stores',
+    alias: 'getUserStores',
+    description: 'ユーザーの店舗一覧を取得',
+    parameters: [
+      {
+        name: 'status',
+        type: 'Query',
+        schema: z.enum(['visited', 'favorite', 'want_to_visit']).optional()
+      }
+    ],
+    response: UserStoresResponseSchema
   },
   {
-    method: 'post',
-    path: '/api/user-activity/:userId/stores/:storeKey',
-    alias: 'addVisitedStore',
-    description: '店舗を訪問済みに追加',
-    response: z.object({ success: z.boolean() })
+    method: 'put',
+    path: '/api/users/:userId/stores/:storeKey',
+    alias: 'updateUserStore',
+    description: '店舗のステータスを更新',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: UpdateStoreStatusSchema
+      }
+    ],
+    response: SuccessResponseSchemaForClient
   },
   {
     method: 'delete',
-    path: '/api/user-activity/:userId/stores/:storeKey',
-    alias: 'removeVisitedStore',
-    description: '店舗を訪問済みから削除',
-    response: z.object({ success: z.boolean() })
+    path: '/api/users/:userId/stores/:storeKey',
+    alias: 'deleteUserStore',
+    description: '店舗を削除',
+    response: SuccessResponseSchemaForClient
   },
+  // イベント関連
   {
     method: 'get',
-    path: '/api/user-activity/:userId/interested',
-    alias: 'getInterestedEvents',
-    description: '興味のあるイベント一覧を取得',
-    response: z.object({
-      events: z.array(z.string())
-    })
+    path: '/api/users/:userId/events',
+    alias: 'getUserEvents',
+    description: 'ユーザーのイベント一覧を取得',
+    parameters: [
+      {
+        name: 'status',
+        type: 'Query',
+        schema: z.enum(['interested', 'completed']).optional()
+      }
+    ],
+    response: UserEventsResponseSchema
   },
   {
-    method: 'post',
-    path: '/api/user-activity/:userId/interested/:eventId',
-    alias: 'addInterestedEvent',
-    description: 'イベントを興味ありに追加',
-    response: z.object({ success: z.boolean() })
+    method: 'put',
+    path: '/api/users/:userId/events/:eventId',
+    alias: 'updateUserEvent',
+    description: 'イベントのステータスを更新',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: UpdateEventStatusSchema
+      }
+    ],
+    response: SuccessResponseSchemaForClient
   },
   {
     method: 'delete',
-    path: '/api/user-activity/:userId/interested/:eventId',
-    alias: 'removeInterestedEvent',
-    description: 'イベントを興味ありから削除',
-    response: z.object({ success: z.boolean() })
-  },
-  {
-    method: 'get',
-    path: '/api/user-activity/:userId/completed',
-    alias: 'getCompletedEvents',
-    description: '達成済みイベント一覧を取得',
-    response: z.object({
-      events: z.array(z.string())
-    })
-  },
-  {
-    method: 'post',
-    path: '/api/user-activity/:userId/completed/:eventId',
-    alias: 'addCompletedEvent',
-    description: 'イベントを達成済みに追加',
-    response: z.object({ success: z.boolean() })
-  },
-  {
-    method: 'delete',
-    path: '/api/user-activity/:userId/completed/:eventId',
-    alias: 'removeCompletedEvent',
-    description: 'イベントを達成済みから削除',
-    response: z.object({ success: z.boolean() })
+    path: '/api/users/:userId/events/:eventId',
+    alias: 'deleteUserEvent',
+    description: 'イベントを削除',
+    response: SuccessResponseSchemaForClient
   }
 ])
 

@@ -3,20 +3,37 @@ import { PrismaClient } from '@prisma/client'
 import type { Bindings } from '@/types/bindings'
 
 /**
+ * ユーザーの店舗一覧を取得（ステータスフィルタ対応）
+ * @param env - Cloudflare Workers Bindings
+ * @param userId - Firebase Auth UID
+ * @param status - オプショナルなステータスフィルタ
+ * @returns 店舗のstoreKeyリスト
+ */
+export const getUserStores = async (
+  env: Bindings,
+  userId: string,
+  status?: 'visited' | 'favorite' | 'want_to_visit'
+): Promise<string[]> => {
+  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+
+  const where = status ? { userId, status } : { userId }
+
+  const stores = await prisma.userStore.findMany({
+    where,
+    select: { storeKey: true }
+  })
+
+  return stores.map((s) => s.storeKey)
+}
+
+/**
  * ユーザーの訪問済み店舗一覧を取得
  * @param env - Cloudflare Workers Bindings
  * @param userId - Firebase Auth UID
  * @returns 訪問済み店舗のstoreKeyリスト
  */
 export const getVisitedStores = async (env: Bindings, userId: string): Promise<string[]> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
-
-  const stores = await prisma.userStore.findMany({
-    where: { userId, status: 'visited' },
-    select: { storeKey: true }
-  })
-
-  return stores.map((s) => s.storeKey)
+  return getUserStores(env, userId, 'visited')
 }
 
 /**
@@ -26,12 +43,28 @@ export const getVisitedStores = async (env: Bindings, userId: string): Promise<s
  * @param storeKey - 店舗キー（例: biccame-001）
  */
 export const addVisitedStore = async (env: Bindings, userId: string, storeKey: string): Promise<void> => {
+  return updateUserStore(env, userId, storeKey, 'visited')
+}
+
+/**
+ * 店舗のステータスを更新
+ * @param env - Cloudflare Workers Bindings
+ * @param userId - Firebase Auth UID
+ * @param storeKey - 店舗キー
+ * @param status - 店舗のステータス
+ */
+export const updateUserStore = async (
+  env: Bindings,
+  userId: string,
+  storeKey: string,
+  status: 'visited' | 'favorite' | 'want_to_visit'
+): Promise<void> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
   await prisma.userStore.upsert({
     where: { userId_storeKey: { userId, storeKey } },
-    update: { status: 'visited', markedAt: new Date() },
-    create: { userId, storeKey, status: 'visited', markedAt: new Date() }
+    update: { status, markedAt: new Date() },
+    create: { userId, storeKey, status, markedAt: new Date() }
   })
 }
 
@@ -42,11 +75,45 @@ export const addVisitedStore = async (env: Bindings, userId: string, storeKey: s
  * @param storeKey - 店舗キー
  */
 export const removeVisitedStore = async (env: Bindings, userId: string, storeKey: string): Promise<void> => {
+  return deleteUserStore(env, userId, storeKey)
+}
+
+/**
+ * ユーザーの店舗を削除
+ * @param env - Cloudflare Workers Bindings
+ * @param userId - Firebase Auth UID
+ * @param storeKey - 店舗キー
+ */
+export const deleteUserStore = async (env: Bindings, userId: string, storeKey: string): Promise<void> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
   await prisma.userStore.deleteMany({
     where: { userId, storeKey }
   })
+}
+
+/**
+ * ユーザーのイベント一覧を取得（ステータスフィルタ対応）
+ * @param env - Cloudflare Workers Bindings
+ * @param userId - Firebase Auth UID
+ * @param status - オプショナルなステータスフィルタ
+ * @returns イベントのeventIdリスト
+ */
+export const getUserEvents = async (
+  env: Bindings,
+  userId: string,
+  status?: 'interested' | 'completed'
+): Promise<string[]> => {
+  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+
+  const where = status ? { userId, status } : { userId }
+
+  const events = await prisma.userEvent.findMany({
+    where,
+    select: { eventId: true }
+  })
+
+  return events.map((e) => e.eventId)
 }
 
 /**
@@ -114,6 +181,44 @@ export const getCompletedEvents = async (env: Bindings, userId: string): Promise
 }
 
 /**
+ * ユーザーイベントのステータスを更新
+ * @param env - Cloudflare Workers Bindings
+ * @param userId - Firebase Auth UID
+ * @param eventId - イベントID
+ * @param status - イベントのステータス
+ */
+export const updateUserEvent = async (
+  env: Bindings,
+  userId: string,
+  eventId: string,
+  status: 'interested' | 'completed'
+): Promise<void> => {
+  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+
+  const completedAt = status === 'completed' ? new Date() : null
+
+  await prisma.userEvent.upsert({
+    where: { userId_eventId: { userId, eventId } },
+    update: { status, completedAt },
+    create: { userId, eventId, status, completedAt }
+  })
+}
+
+/**
+ * ユーザーイベントを削除
+ * @param env - Cloudflare Workers Bindings
+ * @param userId - Firebase Auth UID
+ * @param eventId - イベントID
+ */
+export const deleteUserEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
+  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+
+  await prisma.userEvent.deleteMany({
+    where: { userId, eventId }
+  })
+}
+
+/**
  * イベントを達成済みに追加
  * @param env - Cloudflare Workers Bindings
  * @param userId - Firebase Auth UID
@@ -152,17 +257,17 @@ export const getUserActivity = async (
   env: Bindings,
   userId: string
 ): Promise<{
-  visitedStores: string[]
+  stores: string[]
   interestedEvents: string[]
   completedEvents: string[]
 }> => {
-  const [visitedStores, interestedEvents, completedEvents] = await Promise.all([
+  const [stores, interestedEvents, completedEvents] = await Promise.all([
     getVisitedStores(env, userId),
     getInterestedEvents(env, userId),
     getCompletedEvents(env, userId)
   ])
 
-  return { visitedStores, interestedEvents, completedEvents }
+  return { stores, interestedEvents, completedEvents }
 }
 
 /**

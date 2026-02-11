@@ -3,24 +3,25 @@ import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
 import {
   EventIdParamSchema,
+  EventsQuerySchema,
   EventsResponseSchema,
   StoreKeyParamSchema,
+  StoresQuerySchema,
   StoresResponseSchema,
   SuccessResponseSchema,
+  UpdateEventStatusSchema,
+  UpdateStoreStatusSchema,
   UserActivityResponseSchema,
   UserActivityUserIdParamSchema
-} from '@/schemas/user-activity.dto'
+} from '@/schemas/activity.dto'
 import {
-  addCompletedEvent,
-  addInterestedEvent,
-  addVisitedStore,
-  getCompletedEvents,
-  getInterestedEvents,
+  deleteUserEvent,
+  deleteUserStore,
   getUserActivity,
-  getVisitedStores,
-  removeCompletedEvent,
-  removeInterestedEvent,
-  removeVisitedStore
+  getUserEvents,
+  getUserStores,
+  updateUserEvent,
+  updateUserStore
 } from '@/services/user-activity.service'
 import type { Bindings, Variables } from '@/types/bindings'
 
@@ -76,7 +77,7 @@ routes.use('/:userId/*', async (c, next) => {
 routes.openapi(
   createRoute({
     method: 'get',
-    path: '/:userId',
+    path: '/:userId/activities',
     request: {
       params: UserActivityUserIdParamSchema
     },
@@ -106,7 +107,8 @@ routes.openapi(
     method: 'get',
     path: '/:userId/stores',
     request: {
-      params: UserActivityUserIdParamSchema
+      params: UserActivityUserIdParamSchema,
+      query: StoresQuerySchema
     },
     responses: {
       200: {
@@ -115,21 +117,56 @@ routes.openapi(
             schema: StoresResponseSchema
           }
         },
-        description: '訪問済み店舗一覧取得成功'
+        description: '店舗一覧取得成功'
       }
     },
     tags: ['user-activity']
   }),
   async (c) => {
     const { userId } = c.req.valid('param')
-    const stores = await getVisitedStores(c.env, userId)
+    const { status } = c.req.valid('query')
+    const stores = await getUserStores(c.env, userId, status)
     return c.json({ stores })
   }
 )
 
 routes.openapi(
   createRoute({
-    method: 'post',
+    method: 'put',
+    path: '/:userId/stores/:storeKey',
+    request: {
+      params: StoreKeyParamSchema,
+      body: {
+        content: {
+          'application/json': {
+            schema: UpdateStoreStatusSchema
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: SuccessResponseSchema
+          }
+        },
+        description: '店舗ステータス更新成功'
+      }
+    },
+    tags: ['user-activity']
+  }),
+  async (c) => {
+    const { userId, storeKey } = c.req.valid('param')
+    const { status } = c.req.valid('json')
+    await updateUserStore(c.env, userId, storeKey, status)
+    return c.json({ success: true })
+  }
+)
+
+routes.openapi(
+  createRoute({
+    method: 'delete',
     path: '/:userId/stores/:storeKey',
     request: {
       params: StoreKeyParamSchema
@@ -141,52 +178,27 @@ routes.openapi(
             schema: SuccessResponseSchema
           }
         },
-        description: '店舗を訪問済みに追加成功'
+        description: '店舗を削除成功'
       }
     },
     tags: ['user-activity']
   }),
   async (c) => {
     const { userId, storeKey } = c.req.valid('param')
-    await addVisitedStore(c.env, userId, storeKey)
+    await deleteUserStore(c.env, userId, storeKey)
     return c.json({ success: true })
   }
 )
 
-routes.openapi(
-  createRoute({
-    method: 'delete',
-    path: '/:userId/stores/:storeKey',
-    request: {
-      params: StoreKeyParamSchema
-    },
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: SuccessResponseSchema
-          }
-        },
-        description: '店舗を訪問済みから削除成功'
-      }
-    },
-    tags: ['user-activity']
-  }),
-  async (c) => {
-    const { userId, storeKey } = c.req.valid('param')
-    await removeVisitedStore(c.env, userId, storeKey)
-    return c.json({ success: true })
-  }
-)
-
-// ===== 興味のあるイベント =====
+// ===== イベント（統合） =====
 
 routes.openapi(
   createRoute({
     method: 'get',
-    path: '/:userId/interested',
+    path: '/:userId/events',
     request: {
-      params: UserActivityUserIdParamSchema
+      params: UserActivityUserIdParamSchema,
+      query: EventsQuerySchema
     },
     responses: {
       200: {
@@ -195,24 +207,32 @@ routes.openapi(
             schema: EventsResponseSchema
           }
         },
-        description: '興味のあるイベント一覧取得成功'
+        description: 'イベント一覧取得成功'
       }
     },
     tags: ['user-activity']
   }),
   async (c) => {
     const { userId } = c.req.valid('param')
-    const events = await getInterestedEvents(c.env, userId)
+    const { status } = c.req.valid('query')
+    const events = await getUserEvents(c.env, userId, status)
     return c.json({ events })
   }
 )
 
 routes.openapi(
   createRoute({
-    method: 'post',
-    path: '/:userId/interested/:eventId',
+    method: 'put',
+    path: '/:userId/events/:eventId',
     request: {
-      params: EventIdParamSchema
+      params: EventIdParamSchema,
+      body: {
+        content: {
+          'application/json': {
+            schema: UpdateEventStatusSchema
+          }
+        }
+      }
     },
     responses: {
       200: {
@@ -221,14 +241,15 @@ routes.openapi(
             schema: SuccessResponseSchema
           }
         },
-        description: 'イベントを興味ありに追加成功'
+        description: 'イベントステータス更新成功'
       }
     },
     tags: ['user-activity']
   }),
   async (c) => {
     const { userId, eventId } = c.req.valid('param')
-    await addInterestedEvent(c.env, userId, eventId)
+    const { status } = c.req.valid('json')
+    await updateUserEvent(c.env, userId, eventId, status)
     return c.json({ success: true })
   }
 )
@@ -236,7 +257,7 @@ routes.openapi(
 routes.openapi(
   createRoute({
     method: 'delete',
-    path: '/:userId/interested/:eventId',
+    path: '/:userId/events/:eventId',
     request: {
       params: EventIdParamSchema
     },
@@ -247,94 +268,14 @@ routes.openapi(
             schema: SuccessResponseSchema
           }
         },
-        description: 'イベントを興味ありから削除成功'
+        description: 'イベント削除成功'
       }
     },
     tags: ['user-activity']
   }),
   async (c) => {
     const { userId, eventId } = c.req.valid('param')
-    await removeInterestedEvent(c.env, userId, eventId)
-    return c.json({ success: true })
-  }
-)
-
-// ===== 達成済みイベント =====
-
-routes.openapi(
-  createRoute({
-    method: 'get',
-    path: '/:userId/completed',
-    request: {
-      params: UserActivityUserIdParamSchema
-    },
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: EventsResponseSchema
-          }
-        },
-        description: '達成済みイベント一覧取得成功'
-      }
-    },
-    tags: ['user-activity']
-  }),
-  async (c) => {
-    const { userId } = c.req.valid('param')
-    const events = await getCompletedEvents(c.env, userId)
-    return c.json({ events })
-  }
-)
-
-routes.openapi(
-  createRoute({
-    method: 'post',
-    path: '/:userId/completed/:eventId',
-    request: {
-      params: EventIdParamSchema
-    },
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: SuccessResponseSchema
-          }
-        },
-        description: 'イベントを達成済みに追加成功'
-      }
-    },
-    tags: ['user-activity']
-  }),
-  async (c) => {
-    const { userId, eventId } = c.req.valid('param')
-    await addCompletedEvent(c.env, userId, eventId)
-    return c.json({ success: true })
-  }
-)
-
-routes.openapi(
-  createRoute({
-    method: 'delete',
-    path: '/:userId/completed/:eventId',
-    request: {
-      params: EventIdParamSchema
-    },
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: SuccessResponseSchema
-          }
-        },
-        description: 'イベントを達成済みから削除成功'
-      }
-    },
-    tags: ['user-activity']
-  }),
-  async (c) => {
-    const { userId, eventId } = c.req.valid('param')
-    await removeCompletedEvent(c.env, userId, eventId)
+    await deleteUserEvent(c.env, userId, eventId)
     return c.json({ success: true })
   }
 )

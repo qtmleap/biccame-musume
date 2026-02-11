@@ -1,11 +1,13 @@
-import { getFirebaseToken, verifyFirebaseAuth } from '@hono/firebase-auth'
+import { getFirebaseToken } from '@hono/firebase-auth'
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import type { User } from '@prisma/client'
+import { csrf } from 'hono/csrf'
 import { HTTPException } from 'hono/http-exception'
+import { ErrorResponseSchema } from '@/schemas/activity.dto'
 import { UpsertUserRequestSchema, UserResponseSchema } from '@/schemas/user.dto'
-import { ErrorResponseSchema } from '@/schemas/user-activity.dto'
 import { getUserById } from '@/services/user.service'
 import type { Bindings, Variables } from '@/types/bindings'
+import { getJwtPayload, verifyToken } from '@/utils/token'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>({
   defaultHook: (result) => {
@@ -15,26 +17,17 @@ const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>({
   }
 })
 
-/**
- * Firebase認証ミドルウェア
- * 開発環境ではスキップ
- */
-routes.use('*', async (c, next) => {
-  verifyFirebaseAuth({
-    projectId: c.env.FIREBASE_PROJECT_ID,
-    firebaseEmulatorHost: 'localhost:9099'
-  })
-  await next()
-})
+routes.use('*', csrf())
 
 /**
  * 自分のユーザー情報取得
- * GET /api/users
+ * GET /api/me
  */
 routes.openapi(
   createRoute({
     method: 'get',
     path: '/',
+    middlewares: [verifyToken],
     responses: {
       200: {
         content: {
@@ -64,6 +57,23 @@ routes.openapi(
     tags: ['users']
   }),
   async (c) => {
+    // JWTペイロードから情報取得を試みる
+    const jwtPayload = getJwtPayload(c)
+    if (jwtPayload) {
+      // クッキーにユーザー情報があればそれを返す（DBアクセス不要）
+      return c.json(
+        {
+          id: jwtPayload.uid,
+          displayName: jwtPayload.usr.display_name,
+          thumbnailURL: jwtPayload.usr.thumbnail_url,
+          screenName: null,
+          email: jwtPayload.usr.email
+        },
+        200
+      )
+    }
+
+    // クッキーがない場合はFirebaseトークンから取得
     const token = getFirebaseToken(c)
     if (token === null) {
       throw new HTTPException(401, { message: 'Unauthorized' })
@@ -86,6 +96,7 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/',
+    middlewares: [verifyToken],
     request: {
       body: {
         content: {

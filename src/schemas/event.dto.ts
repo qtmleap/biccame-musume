@@ -112,3 +112,33 @@ export const EventSchema = z.object({
 })
 
 export type Event = z.infer<typeof EventSchema>
+
+/**
+ * イベント統計リクエストスキーマ
+ */
+export const EventStatsRequestSchema = z.object({
+  eventIds: z.array(z.string().nonempty())
+})
+
+/**
+ * イベント統計レスポンススキーマ
+ */
+export const EventStatsResponseSchema = z.record(
+  z.string().nonempty(),
+  z.object({
+    interestedCount: z.number(),
+    completedCount: z.number()
+  })
+)
+
+/**
+ * URL重複チェックレスポンススキーマ
+ */
+export const CheckUrlResponseSchema = z.object({
+  exists: z.boolean(),
+  event: EventSchema.optional()
+})
+
+export type EventStatsRequest = z.infer<typeof EventStatsRequestSchema>
+export type EventStatsResponse = z.infer<typeof EventStatsResponseSchema>
+export type CheckUrlResponse = z.infer<typeof CheckUrlResponseSchema>
