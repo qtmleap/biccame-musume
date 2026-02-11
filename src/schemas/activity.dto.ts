@@ -14,7 +14,6 @@ export const UserActivityUserIdParamSchema = z
  */
 export const StoreKeyParamSchema = z
   .object({
-    userId: z.string().openapi({ description: 'Firebase Auth UID' }),
     storeKey: z.string().openapi({ description: '店舗キー' })
   })
   .openapi('StoreKeyParam')
@@ -24,7 +23,6 @@ export const StoreKeyParamSchema = z
  */
 export const EventIdParamSchema = z
   .object({
-    userId: z.string().openapi({ description: 'Firebase Auth UID' }),
     eventId: z.string().openapi({ description: 'イベントID' })
   })
   .openapi('EventIdParam')
@@ -114,6 +112,15 @@ export const EventsQuerySchema = z
     status: z.enum(['interested', 'completed']).optional().openapi({ description: 'イベントのステータスフィルタ' })
   })
   .openapi('EventsQuery')
+
+/**
+ * イベント削除クエリパラメータスキーマ
+ */
+export const EventDeleteQuerySchema = z
+  .object({
+    status: z.enum(['interested', 'completed']).openapi({ description: '削除するステータス' })
+  })
+  .openapi('EventDeleteQuery')
 
 export type UserActivityResponse = z.infer<typeof UserActivityResponseSchema>
 export type StoresResponse = z.infer<typeof StoresResponseSchema>

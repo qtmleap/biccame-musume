@@ -3,18 +3,16 @@ import { client, getAuthHeaders } from '@/utils/client'
 
 /**
  * ユーザーアクティビティを取得・操作するカスタムフック
- * @param userId - Firebase Auth UID
  */
-export const useUserActivity = (userId: string | undefined) => {
+export const useUserActivity = () => {
   const queryClient = useQueryClient()
 
-  const queryKey = ['user-activity', userId]
+  const queryKey = ['user-activity']
 
   const { data } = useSuspenseQuery({
     queryKey,
     queryFn: async () => {
-      if (!userId) throw new Error('userId is required')
-      return client.getUserActivities({ params: { userId } })
+      return client.getUserActivities()
     }
   })
 
@@ -25,18 +23,16 @@ export const useUserActivity = (userId: string | undefined) => {
   // 訪問済み店舗
   const addVisitedStore = useMutation({
     mutationFn: async (storeKey: string) => {
-      if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.updateUserStore({ status: 'visited' }, { params: { userId, storeKey }, headers })
+      return client.updateUserStore({ status: 'visited' }, { params: { storeKey }, headers })
     },
     onSuccess: invalidate
   })
 
   const removeVisitedStore = useMutation({
     mutationFn: async (storeKey: string) => {
-      if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.deleteUserStore(undefined, { params: { userId, storeKey }, headers })
+      return client.deleteUserStore(undefined, { params: { storeKey }, headers })
     },
     onSuccess: invalidate
   })
@@ -44,18 +40,16 @@ export const useUserActivity = (userId: string | undefined) => {
   // 興味のあるイベント
   const addInterestedEvent = useMutation({
     mutationFn: async (eventId: string) => {
-      if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.updateUserEvent({ status: 'interested' }, { params: { userId, eventId }, headers })
+      return client.updateUserEvent({ status: 'interested' }, { params: { eventId }, headers })
     },
     onSuccess: invalidate
   })
 
   const removeInterestedEvent = useMutation({
     mutationFn: async (eventId: string) => {
-      if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.deleteUserEvent(undefined, { params: { userId, eventId }, headers })
+      return client.deleteUserEvent(undefined, { params: { eventId }, queries: { status: 'interested' }, headers })
     },
     onSuccess: invalidate
   })
@@ -63,18 +57,16 @@ export const useUserActivity = (userId: string | undefined) => {
   // 達成済みイベント
   const addCompletedEvent = useMutation({
     mutationFn: async (eventId: string) => {
-      if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.updateUserEvent({ status: 'completed' }, { params: { userId, eventId }, headers })
+      return client.updateUserEvent({ status: 'completed' }, { params: { eventId }, headers })
     },
     onSuccess: invalidate
   })
 
   const removeCompletedEvent = useMutation({
     mutationFn: async (eventId: string) => {
-      if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.deleteUserEvent(undefined, { params: { userId, eventId }, headers })
+      return client.deleteUserEvent(undefined, { params: { eventId }, queries: { status: 'completed' }, headers })
     },
     onSuccess: invalidate
   })

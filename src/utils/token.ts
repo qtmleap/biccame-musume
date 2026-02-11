@@ -7,7 +7,7 @@ import { HTTPException } from 'hono/http-exception'
 import { AlgorithmTypes, sign, verify } from 'hono/jwt'
 import type { Bindings, Variables } from '@/types/bindings'
 
-export const getToken = async (
+export const signToken = async (
   c: Context<{ Bindings: Bindings; Variables: Variables }>,
   idToken: FirebaseIdToken
 ): Promise<string> => {
@@ -41,38 +41,17 @@ export const getToken = async (
 export const verifyToken: MiddlewareHandler<{ Bindings: Bindings; Variables: Variables }> = async (c, next) => {
   const token: string | undefined = getCookie(c, 'session')
   if (token === undefined) {
-    await next()
-    return
+    throw new HTTPException(401, { message: 'Unauthorized' })
   }
-  try {
-    const payload = await verify(token, c.env.JWT_SECRET_KEY, AlgorithmTypes.HS256)
-    // JWTペイロードをコンテキストに保存
-    c.set('jwtPayload', payload)
-  } catch (error) {
-    console.error('Token verification failed:', error)
-    throw new HTTPException(401, { message: 'Invalid token' })
-  }
+  const result = await verify(token, c.env.JWT_SECRET_KEY, AlgorithmTypes.HS256)
+  c.set('jwtPayload', result)
   await next()
 }
 
-/**
- * クッキーからJWTペイロードを取得するヘルパー関数
- */
-export const getJwtPayload = (c: Context<{ Bindings: Bindings; Variables: Variables }>) => {
-  return c.get('jwtPayload') as
-    | {
-        sub: string
-        uid: string
-        usr: {
-          email: string | null
-          email_verified: boolean
-          display_name: string | null
-          thumbnail_url: string | null
-        }
-        iat: number
-        exp: number
-        iss: string
-        aud: string
-      }
-    | undefined
+export const getToken = (c: Context<{ Bindings: Bindings; Variables: Variables }>): string => {
+  const result = c.get('jwtPayload')
+  if (result === undefined) {
+    throw new HTTPException(401, { message: 'Unauthorized' })
+  }
+  return result.uid
 }

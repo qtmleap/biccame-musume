@@ -63,7 +63,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
     removeInterestedEvent,
     addCompletedEvent,
     removeCompletedEvent
-  } = useUserActivity(user?.uid)
+  } = useUserActivity()
 
   const interested = isInterested(event.uuid)
   const completed = isCompleted(event.uuid)

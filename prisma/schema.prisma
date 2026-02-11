@@ -205,7 +205,7 @@ model UserEvent {
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, eventId])
+  @@unique([userId, eventId, status])
   @@index([userId])
   @@index([eventId])
   @@index([status])
