@@ -13,7 +13,7 @@ interface AuthProviderProps {
  */
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
-    onIdTokenChanged(auth, async (user) => {
+    const unsubscribe = onIdTokenChanged(auth, async (user) => {
       console.info('OnIdTokenChanged:', user)
       if (user) {
         const token = await user.getIdToken()
@@ -21,7 +21,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         await client.authenticate(undefined, { headers: { Authorization: `Bearer ${token}` } })
       }
     })
-  })
+
+    return () => unsubscribe()
+  }, [])
 
   return <>{children}</>
 }
