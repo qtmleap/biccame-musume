@@ -1,7 +1,11 @@
-import { verifyFirebaseAuth } from '@hono/firebase-auth'
+import { getFirebaseToken, verifyFirebaseAuth } from '@hono/firebase-auth'
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
+import { PrismaD1 } from '@prisma/adapter-d1'
+import { PrismaClient } from '@prisma/client'
+import type { FirebaseIdToken } from 'firebase-auth-cloudflare-workers'
 import { setCookie } from 'hono/cookie'
 import { csrf } from 'hono/csrf'
+import { HTTPException } from 'hono/http-exception'
 import type { Bindings, Variables } from '@/types/bindings'
 import { getToken } from '@/utils/token'
 
@@ -54,7 +58,25 @@ routes.openapi(
   }),
   async (c) => {
     console.log(c.req.raw)
-    const token = await getToken(c)
+    const idToken: FirebaseIdToken | null = getFirebaseToken(c)
+    if (idToken === null) {
+      throw new HTTPException(401, { message: 'Unauthorized' })
+    }
+    const client = new PrismaClient({ adapter: new PrismaD1(c.env.DB) })
+    client.user.upsert({
+      where: {
+        id: idToken.uid
+      },
+      update: {},
+      create: {
+        id: idToken.uid,
+        displayName: idToken.name || null,
+        thumbnailURL: idToken.picture || null,
+        screenName: null,
+        email: idToken.email || null
+      }
+    })
+    const token = await getToken(c, idToken)
     setCookie(c, 'session', token, {
       maxAge: 60 * 60 * 24 * 5,
       httpOnly: true,
