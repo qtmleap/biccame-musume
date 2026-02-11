@@ -48,7 +48,7 @@ export const useAuth = () => {
    */
   const registerWithEmail = useCallback(async (email: string, password: string, displayName?: string) => {
     try {
-      _displayName
+      displayName
       const result = await createUserWithEmailAndPassword(auth, email, password)
       console.log('Email registration success:', result)
       return result.user

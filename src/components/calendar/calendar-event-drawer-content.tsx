@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DrawerClose, DrawerFooter } from '@/components/ui/drawer'
 import { cn } from '@/lib/utils'
+import { CALENDAR_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
 
 type CalendarEvent = {
