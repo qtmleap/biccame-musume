@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { GanttDateHeader, GanttGridCell, GanttMonthSelector } from '@/components/events/gantt-chart-parts'
 import { getCategoryColor, hideScrollbarStyle } from '@/components/events/gantt-chart-utils'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import appContent, { EVENT_LABELS } from '@/locales/app.content'
+import appContent, { EVENT_LABELS, GANTT_CHART_LABELS } from '@/locales/app.content'
 import type { Event, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -282,7 +282,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         {/* スクロールエリア: ガントチャート */}
         <section
           ref={scrollContainerRef}
-          aria-label='ガントチャートスクロールエリア'
+          aria-label={GANTT_CHART_LABELS.ariaLabel}
           className={`gantt-scroll-container overflow-x-auto ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
           style={{
             scrollbarWidth: 'none', // Firefox

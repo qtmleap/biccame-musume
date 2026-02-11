@@ -31,7 +31,7 @@ type CalendarEventListProps = {
  * イベントを日付ごとにグループ化する
  */
 const groupEventsByDay = (events: CalendarEvent[], year: number, month: number): GroupedEvents[] => {
-  const weekDayNames = ['日', '月', '火', '水', '木', '金', '土']
+  const weekDayNames = CALENDAR_LABELS.weekDays
   const grouped = groupBy(events, (event) => dayjs(event.date).date())
 
   return sortBy(
@@ -137,7 +137,7 @@ export const CalendarEventList = ({ year, month, events }: CalendarEventListProp
                           >
                             {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
                             {event.years}
-                            {isCharacter ? '歳' : '周年'}
+                            {isCharacter ? CALENDAR_LABELS.age : CALENDAR_LABELS.anniversary}
                           </Badge>
                         </motion.div>
                       </Link>

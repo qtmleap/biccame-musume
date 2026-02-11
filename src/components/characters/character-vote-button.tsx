@@ -64,7 +64,7 @@ export const CharacterVoteButton = ({
   useEffect(() => {
     if (error) {
       // エラーレスポンスからメッセージを取得
-      let errorMessage = '投票に失敗しました'
+      let errorMessage = VOTE_LABELS.error
 
       try {
         // biome-ignore lint/suspicious/noExplicitAny: エラーオブジェクトの型が不明なため
@@ -93,9 +93,9 @@ export const CharacterVoteButton = ({
   }
 
   const getButtonText = () => {
-    if (hasVotedToday) return '応援済み'
+    if (hasVotedToday) return VOTE_LABELS.voted
     if (isPending) return '応援中...'
-    return '応援する'
+    return VOTE_LABELS.vote
   }
 
   if (variant === 'compact') {

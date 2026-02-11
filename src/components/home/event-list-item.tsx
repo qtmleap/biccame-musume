@@ -21,8 +21,8 @@ const getDaysLabel = (days: number, status: EventStatus) => {
   if (status === 'last_day') return EVENT_STATUS_LABELS.last_day
   if (status === 'ongoing') return EVENT_STATUS_LABELS.ongoing
   if (status === 'upcoming') {
-    if (days <= 0) return '本日開始'
-    if (days === 1) return '明日'
+    if (days <= 0) return EVENT_LIST_ITEM_LABELS.today
+    if (days === 1) return DATE_LABELS.tomorrow
     return `${days}日後`
   }
   return ''
@@ -111,8 +111,8 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
                 return (
                   <Badge key={`${event.uuid}-${condition.type}`} variant='secondary' className='text-xs'>
                     {condition.type === 'purchase' && `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
-                    {condition.type === 'first_come' && '先着'}
-                    {condition.type === 'lottery' && '抽選'}
+                    {condition.type === 'first_come' && EVENT_LABELS.firstCome}
+                    {condition.type === 'lottery' && EVENT_LABELS.lottery}
                   </Badge>
                 )
               })}

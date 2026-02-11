@@ -152,7 +152,7 @@ export const BirthdayDialog = ({ characters }: BirthdayDialogProps) => {
                 </>
               )}
               <Button variant='outline' size='sm' onClick={handleNext}>
-                {currentIndex === characters.length - 1 ? '閉じる' : '次へ'}
+                {currentIndex === characters.length - 1 ? BIRTHDAY_DIALOG_LABELS.close : BIRTHDAY_DIALOG_LABELS.next}
               </Button>
             </div>
 

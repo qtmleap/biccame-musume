@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { EventDetailInfo } from '@/components/events/event-detail-info'
 import { Button } from '@/components/ui/button'
+import { CONFIRMATION_LABELS } from '@/locales/app.content'
 import type { Event, EventRequest, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -56,7 +57,7 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
           className='flex-1 bg-blue-600 hover:bg-blue-700'
           disabled={isSubmitting}
         >
-          {isSubmitting ? '登録中...' : '登録する'}
+          {isSubmitting ? CONFIRMATION_LABELS.registering : CONFIRMATION_LABELS.register}
         </Button>
       </div>
     </div>
