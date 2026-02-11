@@ -5,10 +5,10 @@ import { motion } from 'motion/react'
 import { useMemo } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { useEvents } from '@/hooks/useEvents'
+import { EVENT_LABELS } from '@/locales/app.content'
 import { STATUS_BADGE_SM } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
-import { EVENT_LABELS } from '@/locales/app.content'
 
 type CharacterOngoingEventsProps = {
   storeKey: StoreKey
@@ -79,11 +79,7 @@ export const CharacterOngoingEvents = ({ storeKey }: CharacterOngoingEventsProps
       <h2 className='text-xl font-bold text-gray-900'>直近のイベント</h2>
       <div className='space-y-3'>
         {upcomingEvents.map((event, index) => (
-          <OngoingEventItem
-            key={event.uuid}
-            event={event}
-            isLast={index === upcomingEvents.length - 1}
-          />
+          <OngoingEventItem key={event.uuid} event={event} isLast={index === upcomingEvents.length - 1} />
         ))}
       </div>
     </motion.div>

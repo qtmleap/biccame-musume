@@ -273,7 +273,27 @@ const appContent = {
       relatedCharactersTitle: 'ビッカメ娘の関係者'
     },
     share: {
-      hashtag: 'ビッカメ娘'
+      hashtag: 'ビッカメ娘',
+      text: 'ビッカメ娘応援プロジェクト'
+    },
+    confirmation: {
+      registering: '登録中...',
+      register: '登録する'
+    },
+    eventList: {
+      deleteError: '削除に失敗しました'
+    },
+    birthdayDialog: {
+      close: '閉じる',
+      next: '次へ'
+    },
+    eventListItem: {
+      today: '本日開始',
+      tomorrow: '明日',
+      untilEnd: '〜なくなり次第終了'
+    },
+    ganttChart: {
+      ariaLabel: 'ガントチャートスクロールエリア'
     }
   }
 } satisfies Dictionary
@@ -304,3 +324,8 @@ export const LINE_STICKER_LABELS = appContent.content.lineSticker
 export const DATE_LABELS = appContent.content.date
 export const HOME_LABELS = appContent.content.home
 export const SHARE_LABELS = appContent.content.share
+export const CONFIRMATION_LABELS = appContent.content.confirmation
+export const EVENT_LIST_LABELS = appContent.content.eventList
+export const BIRTHDAY_DIALOG_LABELS = appContent.content.birthdayDialog
+export const EVENT_LIST_ITEM_LABELS = appContent.content.eventListItem
+export const GANTT_CHART_LABELS = appContent.content.ganttChart
