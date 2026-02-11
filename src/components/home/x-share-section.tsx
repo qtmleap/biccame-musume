@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect } from 'react'
+import { SHARE_LABELS } from '@/locales/app.content'
 
 /**
  * Xシェアボタンセクション
@@ -36,8 +37,8 @@ export const XShareSection = () => {
               className='twitter-share-button'
               data-show-count='false'
               data-lang='ja'
-              data-hashtags='ビッカメ娘'
-              data-text='ビッカメ娘応援プロジェクト'
+              data-hashtags={SHARE_LABELS.hashtag}
+              data-text={SHARE_LABELS.text}
             >
               Tweet
             </a>

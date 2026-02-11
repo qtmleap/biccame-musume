@@ -95,9 +95,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
             <LogIn className='w-5 h-5' />
             ログイン
           </DialogTitle>
-          <DialogDescription>
-            {isEmulator ? AUTH_LABELS.emulatorMessage : AUTH_LABELS.loginMessage}
-          </DialogDescription>
+          <DialogDescription>{isEmulator ? AUTH_LABELS.emulatorMessage : AUTH_LABELS.loginMessage}</DialogDescription>
         </DialogHeader>
 
         <div className='space-y-4'>

@@ -21,7 +21,7 @@ import {
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
 import { useDeleteEvent, useEvents } from '@/hooks/useEvents'
-import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import { EVENT_CATEGORY_LABELS, EVENT_LIST_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { STATUS_BADGE } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
@@ -175,7 +175,7 @@ export const EventList = () => {
       try {
         await deleteEvent.mutateAsync(id)
       } catch {
-        alert('削除に失敗しました')
+        alert(EVENT_LIST_LABELS.deleteError)
       }
     }
   }

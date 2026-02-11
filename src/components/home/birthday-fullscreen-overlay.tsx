@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { Confetti } from '@/components/home/birthday-confetti'
 import type { StoreData } from '@/schemas/store.dto'
 import { getBirthdayImagePath } from '@/utils/birthday'
+import { HOME_LABELS } from '@/locales/app.content'
 
 type BirthdayFullscreenOverlayProps = {
   characters: StoreData[]
@@ -147,7 +148,11 @@ export const BirthdayFullscreenOverlay = ({ characters }: BirthdayFullscreenOver
 
             {/* 閉じるヒント */}
             <p className='mt-6 text-xs text-white/60'>
-              {characters.length > 1 ? `タップして次へ (${currentIndex + 1}/${characters.length})` : 'タップして閉じる'}
+              {characters.length > 1
+                ? HOME_LABELS.nextCharacter
+                    .replace('{current}', (currentIndex + 1).toString())
+                    .replace('{total}', characters.length.toString())
+                : HOME_LABELS.tapToClose}
             </p>
           </motion.div>
         </motion.div>

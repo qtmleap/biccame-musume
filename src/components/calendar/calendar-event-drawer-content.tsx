@@ -72,7 +72,7 @@ export const CalendarEventDrawerContent = ({ events }: CalendarEventDrawerConten
                   >
                     {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
                     {event.years}
-                    {isCharacter ? '歳' : '周年'}
+                    {isCharacter ? CALENDAR_LABELS.age : CALENDAR_LABELS.anniversary}
                   </Badge>
                 </div>
               </Link>

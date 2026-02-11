@@ -2,8 +2,8 @@ import { useAtom } from 'jotai'
 import { categoryFilterAtom } from '@/atoms/categoryFilterAtom'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Checkbox } from '@/components/ui/checkbox'
-import { type Event, EventCategorySchema } from '@/schemas/event.dto'
 import { EVENT_CATEGORY_LABELS, FILTER_LABELS } from '@/locales/app.content'
+import { type Event, EventCategorySchema } from '@/schemas/event.dto'
 
 /**
  * カテゴリチェックボックス色

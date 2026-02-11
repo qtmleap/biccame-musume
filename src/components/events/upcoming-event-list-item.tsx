@@ -3,9 +3,9 @@ import type dayjs from 'dayjs'
 import { Cake, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { DATE_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
-import { DATE_LABELS } from '@/locales/app.content'
 
 type UpcomingEvent = {
   character: StoreData

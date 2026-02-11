@@ -52,7 +52,7 @@ const getEventsForDay = (events: CalendarEvent[], day: number): CalendarEvent[] 
  * カレンダーグリッド表示（デスクトップ用）
  */
 export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridProps) => {
-  const weekDays = ['日', '月', '火', '水', '木', '金', '土']
+  const weekDays = CALENDAR_LABELS.weekDays
   const calendarDays = generateCalendarDays(year, month)
 
   return (

@@ -2,10 +2,9 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar, Gift, Link2, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
-import { REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app.content'
+import { EVENT_LABELS, REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
-import { EVENT_LABELS } from '@/locales/app.content'
 
 export type EventDetailInfoProps = {
   event: Event
@@ -21,7 +20,9 @@ const getConditionDetail = (condition: Event['conditions'][0]): string => {
     case 'first_come':
       return EVENT_LABELS.firstCome
     case 'lottery':
-      return condition.quantity ? EVENT_LABELS.lotteryWithCount.replace('{count}', condition.quantity.toString()) : EVENT_LABELS.lottery
+      return condition.quantity
+        ? EVENT_LABELS.lotteryWithCount.replace('{count}', condition.quantity.toString())
+        : EVENT_LABELS.lottery
     case 'everyone':
       return EVENT_LABELS.everyone
   }

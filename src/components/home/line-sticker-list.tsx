@@ -1,17 +1,18 @@
 import { Sticker } from 'lucide-react'
 import { LineStickerListItem } from './line-sticker-list-item'
+import { LINE_STICKER_LABELS } from '@/locales/app.content'
 
 const stickers = [
   {
     url: 'https://store.line.me/stickershop/product/1391834/ja',
-    title: 'ビッカメ娘',
-    description: 'オリジナルスタンプ',
+    title: LINE_STICKER_LABELS.biccameMusume,
+    description: LINE_STICKER_LABELS.originalStamp,
     delay: 0
   },
   {
     url: 'https://store.line.me/stickershop/product/4137675/ja',
-    title: 'ビッカメ娘 第2弾',
-    description: '日常会話スタンプ',
+    title: `${LINE_STICKER_LABELS.biccameMusume} 第2弾`,
+    description: LINE_STICKER_LABELS.dailyConversation,
     delay: 0.1
   }
 ]

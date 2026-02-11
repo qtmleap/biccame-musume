@@ -10,10 +10,10 @@ import { NearbyCharactersList } from '@/components/characters/nearby-characters-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { CHARACTER_DETAIL_LABELS } from '@/locales/app.content'
 import type { StoreData, StoreKey } from '@/schemas/store.dto'
 import { formatDate } from '@/utils/calendar'
 import { getDisplayName } from '@/utils/character'
-import { CHARACTER_DETAIL_LABELS } from '@/locales/app.content'
 
 type CharacterDetailContentProps = {
   character: StoreData
