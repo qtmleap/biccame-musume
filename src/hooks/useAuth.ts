@@ -89,6 +89,7 @@ export const useAuth = () => {
    */
   const loginWithTwitter = useCallback(async () => {
     const isEmulator = import.meta.env.DEV
+    const provider: TwitterAuthProvider = new TwitterAuthProvider()
 
     console.log('loginWithTwitter called, isEmulator:', isEmulator)
 
@@ -99,9 +100,10 @@ export const useAuth = () => {
       } else {
         // 本番環境ではポップアップを使用
         console.log('Attempting signInWithPopup...')
-        const result = await signInWithPopup(auth, new TwitterAuthProvider())
+        const result = await signInWithPopup(auth, provider)
         console.log('signInWithPopup completed', result)
         // Twitter認証情報からscreen_nameを取得
+        result.user
         const credential = TwitterAuthProvider.credentialFromResult(result)
         if (credential) {
           // @ts-expect-error - TwitterAuthProviderのcredentialにはscreen_nameが含まれる

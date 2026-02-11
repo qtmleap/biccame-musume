@@ -33,6 +33,8 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   TWITTER_ACCESS_SECRET: string
   /** Workers AI */
   AI: Ai
+  /** JWT秘密鍵 */
+  JWT_SECRET_KEY: string
 }
 
 export type Variables = {
