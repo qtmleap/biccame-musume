@@ -3,6 +3,7 @@ import { ArrowLeft, Award, ChevronRight, Heart, LogIn, MapPin } from 'lucide-rea
 import { motion } from 'motion/react'
 import { Suspense, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
+import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -42,14 +43,12 @@ const EventSection = ({
   icon,
   events,
   emptyMessage,
-  isLoading,
   showAllPath
 }: {
   title: string
   icon: React.ReactNode
   events: Event[]
   emptyMessage: string
-  isLoading: boolean
   showAllPath?: string
 }) => {
   const displayEvents = events.slice(0, 10)
@@ -64,9 +63,7 @@ const EventSection = ({
           {events.length > 0 && <span className='text-sm text-gray-500'>({events.length})</span>}
         </div>
       </div>
-      {isLoading ? (
-        <p className='text-sm text-gray-500 py-2'>読み込み中...</p>
-      ) : events.length > 0 ? (
+      {events.length > 0 ? (
         <div className='divide-y divide-gray-100'>
           {displayEvents.map((event) => (
             <EventListItem key={event.uuid} event={event} />
@@ -93,7 +90,7 @@ const EventSection = ({
 const MyPageContent = () => {
   const { user, isAuthenticated, loginWithTwitter, logout } = useAuth()
   const router = useRouter()
-  const { visitedStores, interestedEvents, completedEvents, isLoading } = useUserActivity(user?.uid)
+  const { stores, interestedEvents, completedEvents } = useUserActivity(user?.uid)
   const { data: allEvents } = useEvents()
   const autoLoginAttempted = useRef(false)
 
@@ -242,10 +239,8 @@ const MyPageContent = () => {
               <MapPin className='h-5 w-5 text-pink-600' />
               <h2 className='text-xl font-bold text-gray-900'>訪れた店舗の記録</h2>
             </div>
-            {isLoading ? (
-              <p className='text-sm text-gray-500'>読み込み中...</p>
-            ) : visitedStores.length > 0 ? (
-              <p className='text-sm text-gray-600'>{visitedStores.length}店舗を訪問済み</p>
+            {stores.length > 0 ? (
+              <p className='text-sm text-gray-600'>{stores.length}店舗を訪問済み</p>
             ) : (
               <p className='text-sm text-gray-500'>まだ訪問した店舗がありません</p>
             )}
@@ -263,7 +258,6 @@ const MyPageContent = () => {
               icon={<Heart className='h-5 w-5 text-pink-500' />}
               events={interestedEventDetails}
               emptyMessage='まだ気になるイベントがありません'
-              isLoading={isLoading}
             />
           </motion.div>
 
@@ -279,7 +273,6 @@ const MyPageContent = () => {
               icon={<Award className='h-5 w-5 text-amber-500' />}
               events={completedEventDetails}
               emptyMessage='まだ達成したイベントがありません'
-              isLoading={isLoading}
             />
           </motion.div>
         </div>
@@ -292,9 +285,11 @@ const MyPageContent = () => {
  * ルートコンポーネント
  */
 const RouteComponent = () => (
-  <Suspense fallback={<LoadingFallback />}>
-    <MyPageContent />
-  </Suspense>
+  <ErrorBoundary>
+    <Suspense fallback={<LoadingFallback />}>
+      <MyPageContent />
+    </Suspense>
+  </ErrorBoundary>
 )
 
 export const Route = createFileRoute('/me/')({
