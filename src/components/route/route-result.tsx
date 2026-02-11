@@ -1,3 +1,4 @@
+import { ROUTE_LABELS } from '@/locales/app.content'
 import type { RouteResult } from './types'
 
 type Props = {
