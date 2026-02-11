@@ -57,7 +57,7 @@ export const RouteResultCard = ({ result }: Props) => {
                           {/* 出発駅 */}
                           <div className='py-1 font-medium'>
                             {segment.from}
-                            {!segment.from.endsWith('駅') && '駅'}
+                            {!segment.from.endsWith(ROUTE_LABELS.station) && ROUTE_LABELS.station}
                           </div>
                           {/* 路線情報 */}
                           <div className='text-muted-foreground flex items-center gap-2 py-1 pl-2 text-xs'>
@@ -71,7 +71,7 @@ export const RouteResultCard = ({ result }: Props) => {
                           {i === leg.routes.length - 1 && (
                             <div className='py-1 font-medium'>
                               {segment.to}
-                              {!segment.to.endsWith('駅') && '駅'}
+                              {!segment.to.endsWith(ROUTE_LABELS.station) && ROUTE_LABELS.station}
                             </div>
                           )}
                         </div>

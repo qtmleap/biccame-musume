@@ -8,8 +8,8 @@ import { CharacterSortControl } from '@/components/characters/character-sort-con
 import { RegionFilterControl } from '@/components/characters/region-filter-control'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { useCharacters } from '@/hooks/useCharacters'
-import { categorizeCharacters, filterCharactersByRegion, sortCharacters } from '@/utils/character'
 import { HOME_LABELS } from '@/locales/app.content'
+import { categorizeCharacters, filterCharactersByRegion, sortCharacters } from '@/utils/character'
 
 /**
  * キャラクター一覧コンテンツ

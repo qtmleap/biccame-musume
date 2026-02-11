@@ -357,7 +357,13 @@ export const EventForm = ({
             </label>
             <Select value='' onValueChange={handleAddStore}>
               <SelectTrigger className='w-full'>
-                <SelectValue placeholder={stores.length > 0 ? ADMIN_LABELS.storeSelected.replace('{count}', stores.length.toString()) : ADMIN_LABELS.selectStore} />
+                <SelectValue
+                  placeholder={
+                    stores.length > 0
+                      ? ADMIN_LABELS.storeSelected.replace('{count}', stores.length.toString())
+                      : ADMIN_LABELS.selectStore
+                  }
+                />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value='_all'>全店舗を選択</SelectItem>

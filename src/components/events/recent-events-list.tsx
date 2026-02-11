@@ -2,10 +2,9 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Store } from 'lucide-react'
 import { motion } from 'motion/react'
-import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import { EVENT_CATEGORY_LABELS, EVENT_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
-import { EVENT_LABELS } from '@/locales/app.content'
 
 type RecentEventsListProps = {
   events: Event[]
@@ -44,7 +43,9 @@ export const RecentEventsList = ({ events, currentEventId }: RecentEventsListPro
           // 店舗名を取得（最大2つまで表示、それ以上は「他」と表示）
           const storeNames = event.stores.slice(0, 2).map((key) => STORE_NAME_LABELS[key as StoreKey] || key)
           const hasMore = event.stores.length > 2
-          const storeDisplay = hasMore ? EVENT_LABELS.storeAndOthers.replace('{stores}', storeNames.join('、')) : storeNames.join('、')
+          const storeDisplay = hasMore
+            ? EVENT_LABELS.storeAndOthers.replace('{stores}', storeNames.join('、'))
+            : storeNames.join('、')
 
           return (
             <motion.div
