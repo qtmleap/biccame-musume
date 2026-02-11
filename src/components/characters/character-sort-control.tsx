@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { type SortType, sortTypeAtom } from '@/atoms/sortAtom'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { SORT_LABELS } from '@/locales/app.content'
 
 type CharacterSortControlProps = {
   onRandomize: () => void
@@ -28,10 +29,10 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
   }
 
   const sortOptions: { value: SortType; label: string }[] = [
-    { value: 'random', label: 'ランダム' },
-    { value: 'character_birthday', label: '誕生日順' },
-    { value: 'store_birthday', label: '開店日順' },
-    { value: 'upcoming_birthday', label: '誕生日が近い順' }
+    { value: 'random', label: SORT_LABELS.random },
+    { value: 'character_birthday', label: SORT_LABELS.characterBirthday },
+    { value: 'store_birthday', label: SORT_LABELS.storeBirthday },
+    { value: 'upcoming_birthday', label: SORT_LABELS.upcomingBirthday }
   ]
 
   const currentOption = sortOptions.find((opt) => opt.value === sortType)

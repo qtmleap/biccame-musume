@@ -13,6 +13,7 @@ import { Separator } from '@/components/ui/separator'
 import type { StoreData, StoreKey } from '@/schemas/store.dto'
 import { formatDate } from '@/utils/calendar'
 import { getDisplayName } from '@/utils/character'
+import { CHARACTER_DETAIL_LABELS } from '@/locales/app.content'
 
 type CharacterDetailContentProps = {
   character: StoreData
@@ -54,7 +55,7 @@ const StoreName = ({ name, storeId }: { name?: string; storeId?: number }) => {
   if (!name) return null
 
   return (
-    <InfoItem icon={Store} label='店舗名'>
+    <InfoItem icon={Store} label={CHARACTER_DETAIL_LABELS.storeName}>
       {storeId ? (
         <a
           href={`https://www.biccamera.com/bc/i/shop/shoplist/shop${storeId.toString().padStart(3, '0')}.jsp`}
@@ -78,7 +79,7 @@ const StoreAddress = ({ address, postalCode }: { address?: string; postalCode?: 
   if (!address) return null
 
   return (
-    <InfoItem icon={MapPin} label='住所'>
+    <InfoItem icon={MapPin} label={CHARACTER_DETAIL_LABELS.address}>
       {postalCode && <p className='text-sm text-gray-900'>〒{postalCode}</p>}
       <p className='text-sm text-gray-900'>{address}</p>
     </InfoItem>
@@ -92,7 +93,7 @@ const StorePhone = ({ phone }: { phone?: string }) => {
   if (!phone) return null
 
   return (
-    <InfoItem icon={Phone} label='電話番号'>
+    <InfoItem icon={Phone} label={CHARACTER_DETAIL_LABELS.phone}>
       <a href={`tel:${phone}`} className='text-sm text-pink-600 hover:underline'>
         {phone}
       </a>
@@ -113,7 +114,7 @@ const StoreHours = ({
   if (!hours || hours.length === 0) return null
 
   return (
-    <InfoItem icon={Clock} label='営業時間'>
+    <InfoItem icon={Clock} label={CHARACTER_DETAIL_LABELS.hours}>
       <div className='space-y-1'>
         {hours.map((hour) => (
           <div key={`${hour.type}-${hour.open_time}-${hour.close_time}`} className='text-sm text-gray-900'>
@@ -137,7 +138,7 @@ const StoreAccess = ({ access }: { access: Array<{ station: string; description?
   if (!access || access.length === 0) return null
 
   return (
-    <InfoItem icon={Train} label='アクセス'>
+    <InfoItem icon={Train} label={CHARACTER_DETAIL_LABELS.access}>
       <div className='space-y-2'>
         {access.map((item) => (
           <div key={item.station}>
@@ -158,7 +159,7 @@ const StoreBirthday = ({ birthday }: { birthday?: string }) => {
   if (!birthday) return null
 
   return (
-    <InfoItem icon={Calendar} label='店舗開店日'>
+    <InfoItem icon={Calendar} label={CHARACTER_DETAIL_LABELS.openDate}>
       <p className='text-sm text-gray-900'>{formatDate(birthday)}</p>
     </InfoItem>
   )

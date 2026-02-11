@@ -2,23 +2,14 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Store } from 'lucide-react'
 import { motion } from 'motion/react'
-import { STORE_NAME_LABELS } from '@/locales/app.content'
+import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
+import { EVENT_LABELS } from '@/locales/app.content'
 
 type RecentEventsListProps = {
   events: Event[]
   currentEventId?: string
-}
-
-/**
- * カテゴリラベル
- */
-const CATEGORY_LABELS: Record<Event['category'], string> = {
-  ackey: 'アクキー',
-  limited_card: '限定名刺',
-  regular_card: '通年名刺',
-  other: 'その他'
 }
 
 /**
@@ -53,7 +44,7 @@ export const RecentEventsList = ({ events, currentEventId }: RecentEventsListPro
           // 店舗名を取得（最大2つまで表示、それ以上は「他」と表示）
           const storeNames = event.stores.slice(0, 2).map((key) => STORE_NAME_LABELS[key as StoreKey] || key)
           const hasMore = event.stores.length > 2
-          const storeDisplay = hasMore ? `${storeNames.join('、')} 他` : storeNames.join('、')
+          const storeDisplay = hasMore ? EVENT_LABELS.storeAndOthers.replace('{stores}', storeNames.join('、')) : storeNames.join('、')
 
           return (
             <motion.div
@@ -67,7 +58,7 @@ export const RecentEventsList = ({ events, currentEventId }: RecentEventsListPro
                 <div
                   className={`h-14 w-14 rounded-full flex items-center justify-center text-xs font-bold ${CATEGORY_COLORS[event.category]}`}
                 >
-                  {CATEGORY_LABELS[event.category]}
+                  {EVENT_CATEGORY_LABELS[event.category]}
                 </div>
               </div>
               <div className='min-w-0 flex-1'>

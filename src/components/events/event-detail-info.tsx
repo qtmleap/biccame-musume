@@ -5,6 +5,7 @@ import { motion } from 'motion/react'
 import { REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
+import { EVENT_LABELS } from '@/locales/app.content'
 
 export type EventDetailInfoProps = {
   event: Event
@@ -18,11 +19,11 @@ const getConditionDetail = (condition: Event['conditions'][0]): string => {
     case 'purchase':
       return `${(condition.purchaseAmount ?? 0).toLocaleString()}円以上購入`
     case 'first_come':
-      return '先着'
+      return EVENT_LABELS.firstCome
     case 'lottery':
-      return condition.quantity ? `抽選${condition.quantity}名` : '抽選'
+      return condition.quantity ? EVENT_LABELS.lotteryWithCount.replace('{count}', condition.quantity.toString()) : EVENT_LABELS.lottery
     case 'everyone':
-      return '全員に配布'
+      return EVENT_LABELS.everyone
   }
 }
 

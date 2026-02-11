@@ -12,6 +12,7 @@ import { getLargeTwitterPhoto, useAuth } from '@/hooks/useAuth'
 import { useEvents } from '@/hooks/useEvents'
 import { useUserActivity } from '@/hooks/useUserActivity'
 import { auth } from '@/lib/firebase'
+import { MY_PAGE_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 
 const EventSection = ({
@@ -42,7 +43,7 @@ const EventSection = ({
             to={showAllPath}
             className='text-xs text-pink-600 hover:text-pink-700 transition-colors hover:underline'
           >
-            一覧を見る
+            {MY_PAGE_LABELS.viewAll}
           </Link>
         )}
       </div>
@@ -78,9 +79,9 @@ const MyPageContent = () => {
   const handleLogout = async () => {
     try {
       await logout()
-      toast.success('ログアウトしました')
+      toast.success(MY_PAGE_LABELS.logoutSuccess)
     } catch {
-      toast.error('ログアウトに失敗しました')
+      toast.error(MY_PAGE_LABELS.logoutError)
     }
   }
 
@@ -128,7 +129,7 @@ const MyPageContent = () => {
                 onClick={handleLogout}
                 className='rounded-full px-4 h-7 text-xs font-semibold bg-red-50 text-red-600 border border-red-200 hover:bg-red-100'
               >
-                ログアウト
+                {MY_PAGE_LABELS.logout}
               </Button>
             </div>
           </div>
@@ -152,12 +153,15 @@ const MyPageContent = () => {
           >
             <div className='flex items-center gap-2'>
               <MapPin className='h-5 w-5 text-pink-600' />
-              <h2 className='text-xl font-bold text-gray-900'>訪れた店舗の記録</h2>
+              <h2 className='text-xl font-bold text-gray-900'>{MY_PAGE_LABELS.visitedStores}</h2>
             </div>
             {stores.length > 0 ? (
-              <p className='text-sm text-gray-600'>{stores.length}店舗を訪問済み</p>
+              <p className='text-sm text-gray-600'>
+                {stores.length}
+                {MY_PAGE_LABELS.visitedStoresCount}
+              </p>
             ) : (
-              <p className='text-sm text-gray-500'>まだ訪問した店舗がありません</p>
+              <p className='text-sm text-gray-500'>{MY_PAGE_LABELS.noVisitedStores}</p>
             )}
           </motion.div>
 
@@ -169,10 +173,10 @@ const MyPageContent = () => {
             className='mb-6'
           >
             <EventSection
-              title='気になるイベント'
+              title={MY_PAGE_LABELS.interestedEvents}
               icon={<Heart className='h-5 w-5 text-pink-500' />}
               events={interestedEventDetails}
-              emptyMessage='まだ気になるイベントがありません'
+              emptyMessage={MY_PAGE_LABELS.noInterestedEvents}
               showAllPath='/me/interested'
             />
           </motion.div>
@@ -185,10 +189,10 @@ const MyPageContent = () => {
             className='mb-6'
           >
             <EventSection
-              title='達成したイベント'
+              title={MY_PAGE_LABELS.completedEvents}
               icon={<Award className='h-5 w-5 text-amber-500' />}
               events={completedEventDetails}
-              emptyMessage='まだ達成したイベントがありません'
+              emptyMessage={MY_PAGE_LABELS.noCompletedEvents}
               showAllPath='/me/completed'
             />
           </motion.div>
