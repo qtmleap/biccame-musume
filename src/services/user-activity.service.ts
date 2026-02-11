@@ -11,8 +11,8 @@ import type { Bindings } from '@/types/bindings'
 export const getVisitedStores = async (env: Bindings, userId: string): Promise<string[]> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
-  const stores = await prisma.userVisitedStore.findMany({
-    where: { userId },
+  const stores = await prisma.userStore.findMany({
+    where: { userId, status: 'visited' },
     select: { storeKey: true }
   })
 
@@ -28,10 +28,10 @@ export const getVisitedStores = async (env: Bindings, userId: string): Promise<s
 export const addVisitedStore = async (env: Bindings, userId: string, storeKey: string): Promise<void> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
-  await prisma.userVisitedStore.upsert({
+  await prisma.userStore.upsert({
     where: { userId_storeKey: { userId, storeKey } },
-    update: {},
-    create: { userId, storeKey }
+    update: { status: 'visited', markedAt: new Date() },
+    create: { userId, storeKey, status: 'visited', markedAt: new Date() }
   })
 }
 
@@ -44,7 +44,7 @@ export const addVisitedStore = async (env: Bindings, userId: string, storeKey: s
 export const removeVisitedStore = async (env: Bindings, userId: string, storeKey: string): Promise<void> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
-  await prisma.userVisitedStore.deleteMany({
+  await prisma.userStore.deleteMany({
     where: { userId, storeKey }
   })
 }
@@ -58,8 +58,8 @@ export const removeVisitedStore = async (env: Bindings, userId: string, storeKey
 export const getInterestedEvents = async (env: Bindings, userId: string): Promise<string[]> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
-  const events = await prisma.userInterestedEvent.findMany({
-    where: { userId },
+  const events = await prisma.userEvent.findMany({
+    where: { userId, status: 'interested' },
     select: { eventId: true }
   })
 
@@ -75,10 +75,10 @@ export const getInterestedEvents = async (env: Bindings, userId: string): Promis
 export const addInterestedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
-  await prisma.userInterestedEvent.upsert({
+  await prisma.userEvent.upsert({
     where: { userId_eventId: { userId, eventId } },
-    update: {},
-    create: { userId, eventId }
+    update: { status: 'interested' },
+    create: { userId, eventId, status: 'interested' }
   })
 }
 
@@ -91,7 +91,7 @@ export const addInterestedEvent = async (env: Bindings, userId: string, eventId:
 export const removeInterestedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
-  await prisma.userInterestedEvent.deleteMany({
+  await prisma.userEvent.deleteMany({
     where: { userId, eventId }
   })
 }
@@ -105,8 +105,8 @@ export const removeInterestedEvent = async (env: Bindings, userId: string, event
 export const getCompletedEvents = async (env: Bindings, userId: string): Promise<string[]> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
-  const events = await prisma.userCompletedEvent.findMany({
-    where: { userId },
+  const events = await prisma.userEvent.findMany({
+    where: { userId, status: 'completed' },
     select: { eventId: true }
   })
 
@@ -122,10 +122,10 @@ export const getCompletedEvents = async (env: Bindings, userId: string): Promise
 export const addCompletedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
-  await prisma.userCompletedEvent.upsert({
+  await prisma.userEvent.upsert({
     where: { userId_eventId: { userId, eventId } },
-    update: {},
-    create: { userId, eventId }
+    update: { status: 'completed', completedAt: new Date() },
+    create: { userId, eventId, status: 'completed', completedAt: new Date() }
   })
 }
 
@@ -138,7 +138,7 @@ export const addCompletedEvent = async (env: Bindings, userId: string, eventId: 
 export const removeCompletedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
-  await prisma.userCompletedEvent.deleteMany({
+  await prisma.userEvent.deleteMany({
     where: { userId, eventId }
   })
 }
@@ -178,8 +178,8 @@ export const getEventStats = async (
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
   const [interestedCount, completedCount] = await Promise.all([
-    prisma.userInterestedEvent.count({ where: { eventId } }),
-    prisma.userCompletedEvent.count({ where: { eventId } })
+    prisma.userEvent.count({ where: { eventId, status: 'interested' } }),
+    prisma.userEvent.count({ where: { eventId, status: 'completed' } })
   ])
 
   return { interestedCount, completedCount }
@@ -200,14 +200,14 @@ export const getEventsStats = async (
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
   const [interestedCounts, completedCounts] = await Promise.all([
-    prisma.userInterestedEvent.groupBy({
+    prisma.userEvent.groupBy({
       by: ['eventId'],
-      where: { eventId: { in: eventIds } },
+      where: { eventId: { in: eventIds }, status: 'interested' },
       _count: { eventId: true }
     }),
-    prisma.userCompletedEvent.groupBy({
+    prisma.userEvent.groupBy({
       by: ['eventId'],
-      where: { eventId: { in: eventIds } },
+      where: { eventId: { in: eventIds }, status: 'completed' },
       _count: { eventId: true }
     })
   ])

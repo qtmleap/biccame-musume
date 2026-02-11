@@ -1,4 +1,10 @@
-import { signInWithPopup, signInWithRedirect, signOut, TwitterAuthProvider } from 'firebase/auth'
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  TwitterAuthProvider
+} from 'firebase/auth'
 import { useAtomValue } from 'jotai'
 import { useCallback } from 'react'
 import { userAtom } from '@/atoms/authAtom'
@@ -23,22 +29,78 @@ export const useAuth = () => {
   const user = useAtomValue(userAtom)
 
   /**
+   * メールアドレスでログイン（開発環境用）
+   */
+  const loginWithEmail = useCallback(async (email: string, password: string) => {
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password)
+      console.log('Email login success:', result)
+
+      // DBにユーザー情報を保存
+      try {
+        await client.upsertUser({
+          id: result.user.uid,
+          displayName: result.user.displayName || email.split('@')[0],
+          photoUrl: null,
+          email: result.user.email
+        })
+      } catch (error) {
+        console.error('Failed to save user:', error)
+      }
+
+      return result.user
+    } catch (error) {
+      console.error('Email login failed:', error)
+      throw error
+    }
+  }, [])
+
+  /**
+   * メールアドレスでユーザー登録（開発環境用）
+   */
+  const registerWithEmail = useCallback(async (email: string, password: string, displayName?: string) => {
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password)
+      console.log('Email registration success:', result)
+
+      // DBにユーザー情報を保存
+      try {
+        await client.upsertUser({
+          id: result.user.uid,
+          displayName: displayName || email.split('@')[0],
+          photoUrl: null,
+          email: result.user.email
+        })
+      } catch (error) {
+        console.error('Failed to save user:', error)
+      }
+
+      return result.user
+    } catch (error) {
+      console.error('Email registration failed:', error)
+      throw error
+    }
+  }, [])
+
+  /**
    * Twitterでログイン
-   * エミュレーター環境ではリダイレクト、本番環境ではポップアップを使用
+   * 開発環境ではメール認証を使用
+   * 本番環境ではTwitter認証を使用
    */
   const loginWithTwitter = useCallback(async () => {
-    const provider = new TwitterAuthProvider()
     const isEmulator = import.meta.env.DEV
+
+    console.log('loginWithTwitter called, isEmulator:', isEmulator)
 
     try {
       if (isEmulator) {
-        // エミュレーターではリダイレクトを使用
-        await signInWithRedirect(auth, provider)
-        // リダイレクト後の処理はAuthProviderで行われる
+        // 開発環境ではメール認証を使用するよう案内
+        throw new Error('開発環境ではメール/パスワード認証を使用してください')
       } else {
         // 本番環境ではポップアップを使用
-        const result = await signInWithPopup(auth, provider)
-        console.log(result)
+        console.log('Attempting signInWithPopup...')
+        const result = await signInWithPopup(auth, new TwitterAuthProvider())
+        console.log('signInWithPopup completed', result)
         // Twitter認証情報からscreen_nameを取得
         const credential = TwitterAuthProvider.credentialFromResult(result)
         if (credential) {
@@ -88,6 +150,8 @@ export const useAuth = () => {
     user,
     isAuthenticated: !!user,
     loginWithTwitter,
+    loginWithEmail,
+    registerWithEmail,
     logout
   }
 }

@@ -27,6 +27,13 @@ export const auth = getAuth(firebaseApp)
 /**
  * 開発環境ではAuthエミュレーターに接続
  */
-if (import.meta.env.DEV) {
-  connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
+let emulatorConnected = false
+if (import.meta.env.DEV && !emulatorConnected) {
+  try {
+    connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
+    emulatorConnected = true
+    console.log('Connected to Firebase Auth Emulator at http://localhost:9099')
+  } catch (error) {
+    console.error('Failed to connect to Firebase Auth Emulator:', error)
+  }
 }

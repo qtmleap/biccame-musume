@@ -72,37 +72,35 @@ model EventStore {
 
 /// イベント
 model Event {
-  id              String                @id @default(uuid())
+  id              String              @id @default(uuid())
   /// イベント種別: limited_card, regular_card, ackey, other
   category        String
   /// イベント名
   name            String
   /// 限定数（任意）
-  limitedQuantity Int?                  @map("limited_quantity")
+  limitedQuantity Int?                @map("limited_quantity")
   /// 開始日時
-  startDate       DateTime              @map("start_date")
+  startDate       DateTime            @map("start_date")
   /// 終了予定日時（任意）
-  endDate         DateTime?             @map("end_date")
+  endDate         DateTime?           @map("end_date")
   /// 実際の終了日時（任意、配布が終了した実際の日時）
-  endedAt         DateTime?             @map("ended_at")
+  endedAt         DateTime?           @map("ended_at")
   /// 公式情報として検証済みかどうか（管理者が作成/承認したもの）
-  isVerified      Boolean               @default(false) @map("is_verified")
+  isVerified      Boolean             @default(false) @map("is_verified")
   /// 公式発表前の未確定情報かどうか
-  isPreliminary   Boolean               @default(false) @map("is_preliminary")
+  isPreliminary   Boolean             @default(false) @map("is_preliminary")
   /// 作成日時
-  createdAt       DateTime              @default(now()) @map("created_at")
+  createdAt       DateTime            @default(now()) @map("created_at")
   /// 更新日時
-  updatedAt       DateTime              @updatedAt @map("updated_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
   /// 配布条件
   conditions      EventCondition[]
   /// 参考URL
   referenceUrls   EventReferenceUrl[]
   /// 開催店舗
   stores          EventStore[]
-  /// 興味を持っているユーザー
-  interestedUsers UserInterestedEvent[]
-  /// 達成したユーザー
-  completedUsers  UserCompletedEvent[]
+  /// イベントとユーザーの関係
+  userEvents      UserEvent[]
 
   @@map("events")
 }
@@ -154,74 +152,62 @@ model User {
   screenName   String?  @map("screen_name")
   /// メールアドレス（任意）
   email        String?
+  // /// メールアドレス確認済みフラグ
+  // emailVerified Boolean  @default(false) @map("email_verified")
   /// 作成日時
   createdAt    DateTime @default(now()) @map("created_at")
   /// 更新日時
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   /// 訪問した店舗
-  visitedStores    UserVisitedStore[]
-  /// 興味のあるイベント
-  interestedEvents UserInterestedEvent[]
-  /// 達成したイベント
-  completedEvents  UserCompletedEvent[]
+  stores UserStore[]
+  /// イベントとの関係
+  events UserEvent[]
 
   @@map("users")
 }
 
-/// ユーザーが訪問した店舗
-model UserVisitedStore {
-  id        String   @id @default(uuid())
-  userId    String   @map("user_id")
+/// ユーザーと店舗の関係
+model UserStore {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
   /// 店舗キー（例: biccame-001）
-  storeKey  String   @map("store_key")
-  /// 訪問日時
-  visitedAt DateTime @default(now()) @map("visited_at")
+  storeKey  String    @map("store_key")
+  /// ステータス: visited, favorite, want_to_visit等
+  status    String
+  /// ステータスに関連する日時（visited→訪問日時、favorite→お気に入り登録日時等）
+  markedAt  DateTime? @map("marked_at")
   /// 作成日時
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime  @default(now()) @map("created_at")
   /// 更新日時
-  updatedAt DateTime @updatedAt @map("updated_at")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, storeKey])
   @@index([userId])
-  @@map("user_visited_stores")
+  @@index([status])
+  @@map("user_stores")
 }
 
-/// ユーザーが興味のあるイベント
-model UserInterestedEvent {
-  id        String   @id @default(uuid())
-  userId    String   @map("user_id")
-  eventId   String   @map("event_id")
+/// ユーザーとイベントの関係
+model UserEvent {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  eventId     String    @map("event_id")
+  /// ステータス: interested, completed
+  status      String
+  /// 達成日時（completedの場合）
+  completedAt DateTime? @map("completed_at")
   /// 作成日時
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
   /// 更新日時
-  updatedAt DateTime @updatedAt @map("updated_at")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   @@unique([userId, eventId])
   @@index([userId])
   @@index([eventId])
-  @@map("user_interested_events")
-}
-
-/// ユーザーが達成したイベント
-model UserCompletedEvent {
-  id          String   @id @default(uuid())
-  userId      String   @map("user_id")
-  eventId     String   @map("event_id")
-  /// 達成日時
-  completedAt DateTime @default(now()) @map("completed_at")
-  /// 作成日時
-  createdAt   DateTime @default(now()) @map("created_at")
-  /// 更新日時
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, eventId])
-  @@index([userId])
-  @@index([eventId])
-  @@map("user_completed_events")
+  @@index([status])
+  @@map("user_events")
 }
