@@ -1,43 +1,19 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, Award, ChevronRight, Heart, LogIn, MapPin } from 'lucide-react'
+import { ArrowLeft, Award, Heart, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
-import { Suspense, useEffect, useRef } from 'react'
+import { Suspense } from 'react'
 import { toast } from 'sonner'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
+import { EventCard } from '@/components/events/event-card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { getLargeTwitterPhoto, useAuth } from '@/hooks/useAuth'
 import { useEvents } from '@/hooks/useEvents'
 import { useUserActivity } from '@/hooks/useUserActivity'
-import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
-import { CATEGORY_STYLE } from '@/locales/component'
+import { auth } from '@/lib/firebase'
 import type { Event } from '@/schemas/event.dto'
 
-/**
- * イベントリストアイテム
- */
-const EventListItem = ({ event }: { event: Event }) => {
-  const categoryStyle = CATEGORY_STYLE[event.category]
-  return (
-    <Link
-      to='/events/$uuid'
-      params={{ uuid: event.uuid }}
-      className='flex items-center justify-between py-2 transition-colors group'
-    >
-      <div className='flex-1 min-w-0'>
-        <p className='text-sm font-medium text-gray-900 truncate group-hover:text-pink-600'>{event.title}</p>
-        <Badge className={`${categoryStyle} border text-xs mt-1`}>{EVENT_CATEGORY_LABELS[event.category]}</Badge>
-      </div>
-      <ChevronRight className='h-4 w-4 text-gray-400 group-hover:text-gray-600 shrink-0' />
-    </Link>
-  )
-}
-
-/**
- * イベントセクション
- */
 const EventSection = ({
   title,
   icon,
@@ -51,31 +27,30 @@ const EventSection = ({
   emptyMessage: string
   showAllPath?: string
 }) => {
-  const displayEvents = events.slice(0, 10)
-  const hasMore = events.length > 10
+  const displayEvents = events.slice(0, 12)
 
   return (
-    <div className='space-y-2'>
+    <div className='space-y-3'>
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           {icon}
           <h2 className='text-xl font-bold text-gray-900'>{title}</h2>
           {events.length > 0 && <span className='text-sm text-gray-500'>({events.length})</span>}
         </div>
+        {showAllPath && events.length > 0 && (
+          <Link
+            to={showAllPath}
+            className='text-xs text-pink-600 hover:text-pink-700 transition-colors hover:underline'
+          >
+            一覧を見る
+          </Link>
+        )}
       </div>
       {events.length > 0 ? (
-        <div className='divide-y divide-gray-100'>
+        <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2'>
           {displayEvents.map((event) => (
-            <EventListItem key={event.uuid} event={event} />
+            <EventCard key={event.uuid} event={event} />
           ))}
-          {hasMore && showAllPath && (
-            <Link
-              to={showAllPath}
-              className='flex items-center justify-center py-2.5 text-sm text-pink-600 hover:text-pink-700 transition-colors'
-            >
-              すべて見る
-            </Link>
-          )}
         </div>
       ) : (
         <p className='text-sm text-gray-500 py-2'>{emptyMessage}</p>
@@ -88,31 +63,14 @@ const EventSection = ({
  * マイページコンテンツ
  */
 const MyPageContent = () => {
-  const { user, isAuthenticated, loginWithTwitter, logout } = useAuth()
+  const { user, logout } = useAuth()
   const router = useRouter()
-  const { stores, interestedEvents, completedEvents } = useUserActivity(user?.uid)
+  const { stores, interestedEvents, completedEvents } = useUserActivity()
   const { data: allEvents } = useEvents()
-  const autoLoginAttempted = useRef(false)
 
   // イベントIDからイベント詳細を取得
   const interestedEventDetails = allEvents.filter((e) => interestedEvents.includes(e.uuid))
   const completedEventDetails = allEvents.filter((e) => completedEvents.includes(e.uuid))
-
-  /**
-   * 非ログイン時に自動でログインを試みる
-   */
-  useEffect(() => {
-    if (!isAuthenticated && !autoLoginAttempted.current) {
-      autoLoginAttempted.current = true
-      loginWithTwitter()
-        .then(() => {
-          toast.success('ログインしました')
-        })
-        .catch(() => {
-          // ユーザーがキャンセルした場合など、エラーは無視
-        })
-    }
-  }, [isAuthenticated, loginWithTwitter])
 
   /**
    * ログアウト処理
@@ -126,53 +84,10 @@ const MyPageContent = () => {
     }
   }
 
-  /**
-   * ログイン処理
-   */
-  const handleLogin = async () => {
-    try {
-      await loginWithTwitter()
-      toast.success('ログインしました')
-    } catch {
-      toast.error('ログインに失敗しました')
-    }
-  }
-
-  // 未ログイン
-  if (!isAuthenticated) {
-    return (
-      <div className='min-h-screen bg-pink-50'>
-        <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
-          <div className='max-w-2xl'>
-            {/* 戻るボタン */}
-            <div className='pb-2'>
-              <Button
-                variant='ghost'
-                size='sm'
-                className='text-gray-600 hover:text-gray-900 -ml-2'
-                onClick={() => router.history.back()}
-              >
-                <ArrowLeft className='h-4 w-4 mr-1' />
-                戻る
-              </Button>
-            </div>
-
-            <h1 className='text-2xl font-bold text-gray-900 mb-6'>マイページ</h1>
-            <p className='text-sm text-gray-600 mb-4'>マイページを利用するにはログインしてください</p>
-            <Button onClick={handleLogin} className='gap-2'>
-              <LogIn className='w-4 h-4' />
-              Twitterでログイン
-            </Button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className='min-h-screen bg-pink-50'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
-        <div className='max-w-2xl'>
+        <div>
           {/* 戻るボタン */}
           <div className='pb-2'>
             <Button
@@ -258,6 +173,7 @@ const MyPageContent = () => {
               icon={<Heart className='h-5 w-5 text-pink-500' />}
               events={interestedEventDetails}
               emptyMessage='まだ気になるイベントがありません'
+              showAllPath='/me/interested'
             />
           </motion.div>
 
@@ -273,6 +189,7 @@ const MyPageContent = () => {
               icon={<Award className='h-5 w-5 text-amber-500' />}
               events={completedEventDetails}
               emptyMessage='まだ達成したイベントがありません'
+              showAllPath='/me/completed'
             />
           </motion.div>
         </div>
@@ -293,5 +210,21 @@ const RouteComponent = () => (
 )
 
 export const Route = createFileRoute('/me/')({
-  component: RouteComponent
+  component: RouteComponent,
+  beforeLoad: async () => {
+    return new Promise((resolve) => {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        unsubscribe()
+        if (!user) {
+          throw new Error('Unauthorized')
+        }
+        resolve(undefined)
+      })
+    })
+  },
+  onError: ({ error, navigate }) => {
+    if (error.message === 'Unauthorized') {
+      navigate({ to: '/' })
+    }
+  }
 })
