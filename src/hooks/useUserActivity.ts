@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { client, getAuthHeaders } from '@/utils/client'
 
 /**
@@ -10,13 +10,12 @@ export const useUserActivity = (userId: string | undefined) => {
 
   const queryKey = ['user-activity', userId]
 
-  const { data, isLoading } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey,
     queryFn: async () => {
       if (!userId) throw new Error('userId is required')
-      return client.getUserActivity({ params: { userId } })
-    },
-    enabled: !!userId
+      return client.getUserActivities({ params: { userId } })
+    }
   })
 
   const invalidate = () => {
@@ -28,7 +27,7 @@ export const useUserActivity = (userId: string | undefined) => {
     mutationFn: async (storeKey: string) => {
       if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.addVisitedStore(undefined, { params: { userId, storeKey }, headers })
+      return client.updateUserStore({ status: 'visited' }, { params: { userId, storeKey }, headers })
     },
     onSuccess: invalidate
   })
@@ -37,7 +36,7 @@ export const useUserActivity = (userId: string | undefined) => {
     mutationFn: async (storeKey: string) => {
       if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.removeVisitedStore(undefined, { params: { userId, storeKey }, headers })
+      return client.deleteUserStore(undefined, { params: { userId, storeKey }, headers })
     },
     onSuccess: invalidate
   })
@@ -47,7 +46,7 @@ export const useUserActivity = (userId: string | undefined) => {
     mutationFn: async (eventId: string) => {
       if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.addInterestedEvent(undefined, { params: { userId, eventId }, headers })
+      return client.updateUserEvent({ status: 'interested' }, { params: { userId, eventId }, headers })
     },
     onSuccess: invalidate
   })
@@ -56,7 +55,7 @@ export const useUserActivity = (userId: string | undefined) => {
     mutationFn: async (eventId: string) => {
       if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.removeInterestedEvent(undefined, { params: { userId, eventId }, headers })
+      return client.deleteUserEvent(undefined, { params: { userId, eventId }, headers })
     },
     onSuccess: invalidate
   })
@@ -66,7 +65,7 @@ export const useUserActivity = (userId: string | undefined) => {
     mutationFn: async (eventId: string) => {
       if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.addCompletedEvent(undefined, { params: { userId, eventId }, headers })
+      return client.updateUserEvent({ status: 'completed' }, { params: { userId, eventId }, headers })
     },
     onSuccess: invalidate
   })
@@ -75,20 +74,19 @@ export const useUserActivity = (userId: string | undefined) => {
     mutationFn: async (eventId: string) => {
       if (!userId) throw new Error('userId is required')
       const headers = await getAuthHeaders()
-      return client.removeCompletedEvent(undefined, { params: { userId, eventId }, headers })
+      return client.deleteUserEvent(undefined, { params: { userId, eventId }, headers })
     },
     onSuccess: invalidate
   })
 
   return {
-    visitedStores: data?.visitedStores ?? [],
+    stores: data?.stores ?? [],
     interestedEvents: data?.interestedEvents ?? [],
     completedEvents: data?.completedEvents ?? [],
-    isLoading,
     // 訪問済み店舗
     addVisitedStore: addVisitedStore.mutate,
     removeVisitedStore: removeVisitedStore.mutate,
-    isVisited: (storeKey: string) => data?.visitedStores.includes(storeKey) ?? false,
+    isVisited: (storeKey: string) => data?.stores.includes(storeKey) ?? false,
     // 興味のあるイベント
     addInterestedEvent: addInterestedEvent.mutate,
     removeInterestedEvent: removeInterestedEvent.mutate,

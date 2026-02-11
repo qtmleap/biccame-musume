@@ -135,45 +135,4 @@ routes.openapi(
   }
 )
 
-/**
- * ページビューをインクリメント
- * POST /api/stats/track
- */
-routes.openapi(
-  createRoute({
-    method: 'post',
-    path: '/track',
-    request: {
-      query: PageViewQuerySchema
-    },
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: PageViewStatsSchema
-          }
-        },
-        description: 'ページビュー記録成功'
-      }
-    }
-  }),
-  async (c) => {
-    const { path } = c.req.valid('query')
-    const trackPath = path || '/'
-
-    await incrementPageView(c.env, trackPath)
-
-    // 更新後の統計を返す
-    const total = await getPageViewStats(c.env)
-    const today = await getTodayPageViews(c.env)
-    const pathCount = await getPageViewStats(c.env, trackPath)
-
-    return c.json({
-      total,
-      today,
-      paths: { [trackPath]: pathCount }
-    })
-  }
-)
-
 export default routes
