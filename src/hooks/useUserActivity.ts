@@ -5,12 +5,11 @@ import { client } from '@/utils/client'
  * ユーザーアクティビティを取得・操作するカスタムフック
  */
 export const useUserActivity = () => {
+  const queryKey = ['user_activities']
   const queryClient = useQueryClient()
 
-  const queryKey = ['user-activity']
-
   const { data } = useSuspenseQuery({
-    queryKey,
+    queryKey: queryKey,
     queryFn: async () => {
       return client.getUserActivities()
     }

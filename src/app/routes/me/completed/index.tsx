@@ -3,7 +3,7 @@ import { ArrowLeft, Award } from 'lucide-react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
-import { EventCard } from '@/components/events/event-card'
+import { EventGridItem } from '@/components/events/event-grid-item'
 import { useEvents } from '@/hooks/useEvents'
 import { useUserActivity } from '@/hooks/useUserActivity'
 
@@ -38,9 +38,9 @@ const CompletedEventsContent = () => {
 
         {/* イベント一覧 */}
         {completedEventDetails.length > 0 ? (
-          <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2'>
-            {completedEventDetails.map((event) => (
-              <EventCard key={event.uuid} event={event} />
+          <div className='grid grid-cols-1 md:grid-cols-3gap-2'>
+            {completedEventDetails.map((event, index) => (
+              <EventGridItem key={event.uuid} event={event} index={index} />
             ))}
           </div>
         ) : (

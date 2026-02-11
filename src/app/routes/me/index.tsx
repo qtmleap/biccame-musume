@@ -5,7 +5,7 @@ import { Suspense } from 'react'
 import { toast } from 'sonner'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
-import { EventCard } from '@/components/events/event-card'
+import { EventGridItem } from '@/components/events/event-grid-item'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { getLargeTwitterPhoto, useAuth } from '@/hooks/useAuth'
@@ -47,9 +47,9 @@ const EventSection = ({
         )}
       </div>
       {events.length > 0 ? (
-        <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2'>
-          {displayEvents.map((event) => (
-            <EventCard key={event.uuid} event={event} />
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-2'>
+          {displayEvents.map((event, index) => (
+            <EventGridItem key={event.uuid} event={event} index={index} />
           ))}
         </div>
       ) : (
