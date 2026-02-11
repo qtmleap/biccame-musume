@@ -3,9 +3,9 @@ import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Confetti } from '@/components/home/birthday-confetti'
+import { HOME_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
 import { getBirthdayImagePath } from '@/utils/birthday'
-import { HOME_LABELS } from '@/locales/app.content'
 
 type BirthdayFullscreenOverlayProps = {
   characters: StoreData[]

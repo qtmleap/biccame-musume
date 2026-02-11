@@ -1,6 +1,6 @@
 import { Sticker } from 'lucide-react'
-import { LineStickerListItem } from './line-sticker-list-item'
 import { LINE_STICKER_LABELS } from '@/locales/app.content'
+import { LineStickerListItem } from './line-sticker-list-item'
 
 const stickers = [
   {
