@@ -38,6 +38,10 @@ export const signToken = async (
   return token
 }
 
+export const getJwtPayload = (c: Context<{ Bindings: Bindings; Variables: Variables }>) => {
+  return c.get('jwtPayload')
+}
+
 export const verifyToken: MiddlewareHandler<{ Bindings: Bindings; Variables: Variables }> = async (c, next) => {
   const token: string | undefined = getCookie(c, 'session')
   if (token === undefined) {

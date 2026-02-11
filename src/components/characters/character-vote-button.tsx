@@ -7,6 +7,7 @@ import { lastVoteTimesAtom } from '@/atoms/voteAtom'
 import { Button } from '@/components/ui/button'
 import { useVote } from '@/hooks/useVote'
 import { cn } from '@/lib/utils'
+import { VOTE_LABELS } from '@/locales/app.content'
 
 type CharacterVoteButtonProps = {
   characterId: string
