@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { CFAuth } from '@/middleware/cloudflare-access'
 import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/services/event.service'
-import { getEventsStats } from '@/services/user-activity.service'
+import { getEventsStats } from '@/services/me.service'
 import type { Bindings } from '@/types/bindings'
 import { type EventRequest, EventRequestSchema, EventSchema } from '../schemas/event.dto'
 
