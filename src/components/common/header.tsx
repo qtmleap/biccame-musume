@@ -5,16 +5,17 @@ import { useState } from 'react'
 import { LoginButton } from '@/components/auth/login-button'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { NAVIGATION_LABELS } from '@/locales/app.content'
 
 /**
  * ナビゲーションリンクの定義
  */
 const navLinks = [
-  { to: '/characters', label: 'ビッカメ娘一覧', icon: Users },
-  { to: '/events', label: 'イベント一覧', icon: Gift },
-  { to: '/calendar', label: '誕生日一覧', icon: Cake },
-  { to: '/location', label: 'マップ', icon: MapPin },
-  { to: '/ranking', label: '総選挙', icon: Trophy }
+  { to: '/characters', label: NAVIGATION_LABELS.characters, icon: Users },
+  { to: '/events', label: NAVIGATION_LABELS.events, icon: Gift },
+  { to: '/calendar', label: NAVIGATION_LABELS.calendar, icon: Cake },
+  { to: '/location', label: NAVIGATION_LABELS.location, icon: MapPin },
+  { to: '/ranking', label: NAVIGATION_LABELS.ranking, icon: Trophy }
 ] as const
 
 type HeaderProps = {
@@ -81,7 +82,7 @@ export const Header = ({ className }: HeaderProps) => {
             size='icon'
             className='md:hidden h-12 w-12 flex items-center justify-center'
             onClick={toggleMenu}
-            aria-label={mobileMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
+            aria-label={mobileMenuOpen ? NAVIGATION_LABELS.closeMenu : NAVIGATION_LABELS.openMenu}
           >
             <div className='relative w-6 h-6 flex items-center justify-center'>
               <motion.div
@@ -123,7 +124,7 @@ export const Header = ({ className }: HeaderProps) => {
               className='fixed inset-0 bg-background/80 backdrop-blur-sm md:hidden'
               onClick={closeMenu}
               style={{ top: '3rem' }}
-              aria-label='メニューを閉じる'
+              aria-label={NAVIGATION_LABELS.closeMenu}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

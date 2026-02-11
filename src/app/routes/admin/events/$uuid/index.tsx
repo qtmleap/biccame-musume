@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { useEventOrNull } from '@/hooks/useEvents'
 import { type EventCategory, type EventRequest, EventRequestQuerySchema } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
+import { ADMIN_LABELS } from '@/locales/app.content'
 
 /**
  * イベントデータをフォーム値に変換
@@ -82,9 +83,9 @@ const EditEventContent = () => {
           <ArrowLeft className='h-4 w-4 mr-1' />
           戻る
         </Button>
-        <h1 className='text-2xl font-bold text-gray-900'>{isEditMode ? 'イベント編集' : '新規イベント登録'}</h1>
+        <h1 className='text-2xl font-bold text-gray-900'>{isEditMode ? ADMIN_LABELS.eventEdit : ADMIN_LABELS.eventNew}</h1>
         <p className='mt-2 text-sm text-gray-600 md:text-base'>
-          {isEditMode ? 'イベント情報を編集' : 'アクキー配布などのイベント情報を入力'}
+          {isEditMode ? ADMIN_LABELS.eventEditDesc : ADMIN_LABELS.eventNewDesc}
         </p>
       </div>
 

@@ -3,16 +3,7 @@ import { categoryFilterAtom } from '@/atoms/categoryFilterAtom'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Checkbox } from '@/components/ui/checkbox'
 import { type Event, EventCategorySchema } from '@/schemas/event.dto'
-
-/**
- * カテゴリラベル
- */
-const CATEGORY_LABELS: Record<Event['category'], string> = {
-  ackey: 'アクキー',
-  limited_card: '限定名刺',
-  regular_card: '通年名刺',
-  other: 'その他'
-}
+import { EVENT_CATEGORY_LABELS, FILTER_LABELS } from '@/locales/app.content'
 
 /**
  * カテゴリチェックボックス色
@@ -47,7 +38,7 @@ export const EventCategoryFilter = () => {
 
   return (
     <div className='w-full'>
-      <FilterHeader label='種別で絞り込み' />
+      <FilterHeader label={FILTER_LABELS.category} />
       <div className='flex flex-wrap gap-4 text-sm'>
         {EventCategorySchema.options.map((category) => (
           <div key={category} className='flex items-center gap-2'>
@@ -58,7 +49,7 @@ export const EventCategoryFilter = () => {
               className={CATEGORY_CHECKBOX_COLORS[category]}
             />
             <label htmlFor={`category-${category}`} className='cursor-pointer'>
-              {CATEGORY_LABELS[category]}
+              {EVENT_CATEGORY_LABELS[category]}
             </label>
           </div>
         ))}

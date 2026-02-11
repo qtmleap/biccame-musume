@@ -5,6 +5,7 @@ import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
+import { DATE_LABELS } from '@/locales/app.content'
 
 type UpcomingEvent = {
   character: StoreData
@@ -22,8 +23,8 @@ type UpcomingEventListItemProps = {
  * 日数に応じたラベルを返す
  */
 const getDaysLabel = (days: number) => {
-  if (days === 0) return '今日'
-  if (days === 1) return '明日'
+  if (days === 0) return DATE_LABELS.today
+  if (days === 1) return DATE_LABELS.tomorrow
   return `${days}日後`
 }
 

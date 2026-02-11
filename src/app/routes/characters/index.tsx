@@ -9,6 +9,7 @@ import { RegionFilterControl } from '@/components/characters/region-filter-contr
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { useCharacters } from '@/hooks/useCharacters'
 import { categorizeCharacters, filterCharactersByRegion, sortCharacters } from '@/utils/character'
+import { HOME_LABELS } from '@/locales/app.content'
 
 /**
  * キャラクター一覧コンテンツ
@@ -37,11 +38,11 @@ const CharactersContent = () => {
         <RegionFilterControl />
         <CharacterSortControl onRandomize={() => setRandomCounter((prev) => prev + 1)} />
       </div>
-      <CharacterList characters={sortedMusume} title='ビッカメ娘' showTitle />
+      <CharacterList characters={sortedMusume} title={HOME_LABELS.biccameMusumeTitle} showTitle />
       {sortedOthers.length > 0 && (
         <>
           <div className='my-8 border-t-2 border-gray-300 dark:border-gray-600' />
-          <CharacterList characters={sortedOthers} title='ビッカメ娘の関係者' showTitle />
+          <CharacterList characters={sortedOthers} title={HOME_LABELS.relatedCharactersTitle} showTitle />
         </>
       )}
     </div>

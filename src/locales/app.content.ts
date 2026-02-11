@@ -157,6 +157,123 @@ const appContent = {
       [StoreKeySchema.enum.yao]: '八尾たん',
       [StoreKeySchema.enum.yokonishi]: '横西たん',
       [StoreKeySchema.enum.yuurakuchou]: '有楽町たん'
+    },
+    myPage: {
+      title: 'マイページ',
+      backButton: '戻る',
+      logout: 'ログアウト',
+      logoutSuccess: 'ログアウトしました',
+      logoutError: 'ログアウトに失敗しました',
+      visitedStores: '訪れた店舗の記録',
+      visitedStoresCount: '店舗を訪問済み',
+      noVisitedStores: 'まだ訪問した店舗がありません',
+      interestedEvents: '気になるイベント',
+      noInterestedEvents: 'まだ気になるイベントがありません',
+      completedEvents: '達成したイベント',
+      noCompletedEvents: 'まだ達成したイベントがありません',
+      viewAll: '一覧を見る',
+      backToMyPage: 'マイページに戻る',
+      findEvents: 'イベントを探す'
+    },
+    filter: {
+      region: '地域で絞り込み',
+      category: '種別で絞り込み',
+      status: '開催状況で絞り込み'
+    },
+    sort: {
+      random: 'ランダム',
+      characterBirthday: '誕生日順',
+      storeBirthday: '開店日順',
+      upcomingBirthday: '誕生日が近い順'
+    },
+    characterDetail: {
+      storeName: '店舗名',
+      address: '住所',
+      phone: '電話番号',
+      hours: '営業時間',
+      access: 'アクセス',
+      openDate: '店舗開店日'
+    },
+    event: {
+      untilEnd: '〜なくなり次第',
+      untilStockLasts: '〜なくなり次第終了',
+      firstCome: '先着',
+      lottery: '抽選',
+      lotteryWithCount: '抽選{count}名',
+      everyone: '全員に配布',
+      storeAndOthers: '{stores} 他'
+    },
+    navigation: {
+      characters: 'ビッカメ娘一覧',
+      events: 'イベント一覧',
+      calendar: '誕生日一覧',
+      location: 'マップ',
+      ranking: '総選挙',
+      closeMenu: 'メニューを閉じる',
+      openMenu: 'メニューを開く'
+    },
+    admin: {
+      eventManagement: 'イベント管理',
+      eventManagementDesc: 'アクキー配布などのイベントを登録・管理',
+      eventEdit: 'イベント編集',
+      eventNew: '新規イベント登録',
+      eventEditDesc: 'イベント情報を編集',
+      eventNewDesc: 'アクキー配布などのイベント情報を入力',
+      startDate: '開始日',
+      endDateHint: '配布が終了した場合に設定すると、自動的に「終了」として扱われます',
+      selectCategory: '種別を選択',
+      selectStore: '店舗を選択',
+      storeSelected: '{count}店舗選択中'
+    },
+    auth: {
+      loginSuccess: 'ログインしました',
+      loginError: 'ログインに失敗しました',
+      signupSuccess: 'アカウントを作成しました',
+      signupError: 'アカウント作成に失敗しました',
+      emulatorMessage: '開発環境ではメール/パスワード認証を使用してください',
+      loginMessage: 'アカウントにログインしてください',
+      passwordPlaceholder: 'パスワード',
+      displayNamePlaceholder: '表示名'
+    },
+    calendar: {
+      weekDays: ['日', '月', '火', '水', '木', '金', '土'],
+      age: '歳',
+      anniversary: '周年'
+    },
+    vote: {
+      error: '投票に失敗しました',
+      voted: '応援済み',
+      vote: '応援する'
+    },
+    route: {
+      station: '駅'
+    },
+    lineSticker: {
+      biccameMusume: 'ビッカメ娘',
+      originalStamp: 'オリジナルスタンプ',
+      dailyConversation: '日常会話スタンプ'
+    },
+    date: {
+      today: '今日',
+      tomorrow: '明日'
+    },
+    home: {
+      displayPattern: '表示パターンを変更',
+      hidePattern: '表示パターンを隠す',
+      patternDialog: 'ダイアログ',
+      patternFullscreen: 'フルスクリーン',
+      patternBanner: 'バナー',
+      patternHero: 'ヒーロー',
+      patternFloating: 'フローティング',
+      patternBackground: '背景',
+      patternNone: 'なし',
+      nextCharacter: 'タップして次へ ({current}/{total})',
+      tapToClose: 'タップして閉じる',
+      biccameMusumeTitle: 'ビッカメ娘',
+      relatedCharactersTitle: 'ビッカメ娘の関係者'
+    },
+    share: {
+      hashtag: 'ビッカメ娘'
     }
   }
 } satisfies Dictionary
@@ -172,3 +289,18 @@ export const REFERENCE_URL_TYPE_LABELS_LONG = appContent.content.refLong as Reco
 export const REGION_LABELS = appContent.content.region as Record<Region, string>
 export const STORE_NAME_LABELS = appContent.content.store_name
 export const CHARACTER_NAME_LABELS = appContent.content.character_name as Record<StoreKey, string>
+export const MY_PAGE_LABELS = appContent.content.myPage
+export const FILTER_LABELS = appContent.content.filter
+export const SORT_LABELS = appContent.content.sort
+export const CHARACTER_DETAIL_LABELS = appContent.content.characterDetail
+export const EVENT_LABELS = appContent.content.event
+export const NAVIGATION_LABELS = appContent.content.navigation
+export const ADMIN_LABELS = appContent.content.admin
+export const AUTH_LABELS = appContent.content.auth
+export const CALENDAR_LABELS = appContent.content.calendar
+export const VOTE_LABELS = appContent.content.vote
+export const ROUTE_LABELS = appContent.content.route
+export const LINE_STICKER_LABELS = appContent.content.lineSticker
+export const DATE_LABELS = appContent.content.date
+export const HOME_LABELS = appContent.content.home
+export const SHARE_LABELS = appContent.content.share

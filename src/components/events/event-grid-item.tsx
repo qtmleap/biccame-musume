@@ -128,8 +128,8 @@ export const EventGridItem = ({ event, index }: EventGridItemProps) => {
               return (
                 <Badge key={`${event.uuid}-${condition.type}`} variant='secondary' className='text-xs'>
                   {condition.type === 'purchase' && `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
-                  {condition.type === 'first_come' && '先着'}
-                  {condition.type === 'lottery' && '抽選'}
+                  {condition.type === 'first_come' && EVENT_LABELS.firstCome}
+                  {condition.type === 'lottery' && EVENT_LABELS.lottery}
                 </Badge>
               )
             })}

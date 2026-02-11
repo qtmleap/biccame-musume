@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/useCharacters'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/useEvents'
-import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import { ADMIN_LABELS, EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { type Event, EventCategorySchema, type EventRequest, EventRequestSchema } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -297,7 +297,7 @@ export const EventForm = ({
         <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
           <DateField
             id='start-date'
-            label='開始日'
+            label={ADMIN_LABELS.startDate}
             register={register('startDate')}
             error={errors.startDate?.message}
           />
@@ -317,7 +317,7 @@ export const EventForm = ({
           register={register('endedAt')}
           clearable
           onClear={() => setValue('endedAt', undefined, { shouldDirty: true, shouldValidate: true })}
-          hint='配布が終了した場合に設定すると、自動的に「終了」として扱われます'
+          hint={ADMIN_LABELS.endDateHint}
         />
 
         {/* イベント種別・開催店舗 */}
@@ -334,7 +334,7 @@ export const EventForm = ({
                 return (
                   <Select value={field.value ?? ''} onValueChange={field.onChange}>
                     <SelectTrigger className='w-full'>
-                      <SelectValue placeholder='種別を選択' />
+                      <SelectValue placeholder={ADMIN_LABELS.selectCategory} />
                     </SelectTrigger>
                     <SelectContent>
                       {EventCategorySchema.options.map((cat) => (
@@ -357,7 +357,7 @@ export const EventForm = ({
             </label>
             <Select value='' onValueChange={handleAddStore}>
               <SelectTrigger className='w-full'>
-                <SelectValue placeholder={stores.length > 0 ? `${stores.length}店舗選択中` : '店舗を選択'} />
+                <SelectValue placeholder={stores.length > 0 ? ADMIN_LABELS.storeSelected.replace('{count}', stores.length.toString()) : ADMIN_LABELS.selectStore} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value='_all'>全店舗を選択</SelectItem>

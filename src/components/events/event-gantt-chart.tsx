@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { GanttDateHeader, GanttGridCell, GanttMonthSelector } from '@/components/events/gantt-chart-parts'
 import { getCategoryColor, hideScrollbarStyle } from '@/components/events/gantt-chart-utils'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import appContent from '@/locales/app.content'
+import appContent, { EVENT_LABELS } from '@/locales/app.content'
 import type { Event, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -368,7 +368,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
                           )}
                           <p className='text-xs text-gray-500'>
                             {dayjs(event.startDate).format('M/D')}
-                            {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : '〜なくなり次第終了'}
+                            {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : EVENT_LABELS.untilStockLasts}
                           </p>
                         </TooltipContent>
                       </Tooltip>
