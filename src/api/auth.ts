@@ -7,7 +7,7 @@ import { setCookie } from 'hono/cookie'
 import { csrf } from 'hono/csrf'
 import { HTTPException } from 'hono/http-exception'
 import type { Bindings, Variables } from '@/types/bindings'
-import { getToken } from '@/utils/token'
+import { signToken } from '@/utils/token'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>({
   defaultHook: (result) => {
@@ -76,7 +76,7 @@ routes.openapi(
         email: idToken.email || null
       }
     })
-    const token = await getToken(c, idToken)
+    const token = await signToken(c, idToken)
     setCookie(c, 'session', token, {
       maxAge: 60 * 60 * 24 * 5,
       httpOnly: true,

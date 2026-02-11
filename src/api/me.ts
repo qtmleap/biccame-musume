@@ -1,6 +1,4 @@
-import { getFirebaseToken } from '@hono/firebase-auth'
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
-import { HTTPException } from 'hono/http-exception'
 import {
   EventDeleteQuerySchema,
   EventIdParamSchema,
@@ -48,11 +46,8 @@ routes.openapi(
     tags: ['activities']
   }),
   async (c) => {
-    const token = getFirebaseToken(c)
-    if (!token?.uid) {
-      throw new HTTPException(401, { message: 'Unauthorized' })
-    }
-    const activity = await getUserActivity(c.env, token.uid)
+    const uid = getToken(c)
+    const activity = await getUserActivity(c.env, uid)
     return c.json(activity)
   }
 )
@@ -80,12 +75,9 @@ routes.openapi(
     tags: ['activities']
   }),
   async (c) => {
-    const token = getFirebaseToken(c)
-    if (!token?.uid) {
-      throw new HTTPException(401, { message: 'Unauthorized' })
-    }
+    const uid = getToken(c)
     const { status } = c.req.valid('query')
-    const stores = await getUserStores(c.env, token.uid, status)
+    const stores = await getUserStores(c.env, uid, status)
     return c.json({ stores })
   }
 )
@@ -118,13 +110,10 @@ routes.openapi(
     tags: ['activities']
   }),
   async (c) => {
-    const token = getFirebaseToken(c)
-    if (!token?.uid) {
-      throw new HTTPException(401, { message: 'Unauthorized' })
-    }
+    const uid = getToken(c)
     const { storeKey } = c.req.valid('param')
     const { status } = c.req.valid('json')
-    await updateUserStore(c.env, token.uid, storeKey, status)
+    await updateUserStore(c.env, uid, storeKey, status)
     return c.json({ success: true })
   }
 )
@@ -150,12 +139,9 @@ routes.openapi(
     tags: ['activities']
   }),
   async (c) => {
-    const token = getFirebaseToken(c)
-    if (!token?.uid) {
-      throw new HTTPException(401, { message: 'Unauthorized' })
-    }
+    const uid = getToken(c)
     const { storeKey } = c.req.valid('param')
-    await deleteUserStore(c.env, token.uid, storeKey)
+    await deleteUserStore(c.env, uid, storeKey)
     return c.json({ success: true })
   }
 )
