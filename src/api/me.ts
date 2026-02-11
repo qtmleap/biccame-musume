@@ -1,7 +1,8 @@
-import { getFirebaseToken, verifyFirebaseAuth } from '@hono/firebase-auth'
+import { getFirebaseToken } from '@hono/firebase-auth'
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
 import {
+  EventDeleteQuerySchema,
   EventIdParamSchema,
   EventsQuerySchema,
   EventsResponseSchema,
@@ -11,8 +12,7 @@ import {
   SuccessResponseSchema,
   UpdateEventStatusSchema,
   UpdateStoreStatusSchema,
-  UserActivityResponseSchema,
-  UserActivityUserIdParamSchema
+  UserActivityResponseSchema
 } from '@/schemas/activity.dto'
 import {
   deleteUserEvent,
@@ -22,65 +22,19 @@ import {
   getUserStores,
   updateUserEvent,
   updateUserStore
-} from '@/services/user-activity.service'
+} from '@/services/me.service'
 import type { Bindings, Variables } from '@/types/bindings'
+import { getToken, verifyToken } from '@/utils/token'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
-
-/**
- * 開発環境かどうかを判定
- */
-const isDevelopmentEnvironment = (host: string | undefined): boolean => {
-  return host?.includes('localhost') || host?.includes('127.0.0.1') || false
-}
-
-/**
- * Firebase認証ミドルウェアを適用（書き込み操作のみ）
- * 開発環境ではスキップ
- */
-routes.use('/:userId/*', async (c, next) => {
-  const host = c.req.header('Host')
-
-  // 開発環境ではスキップ
-  if (isDevelopmentEnvironment(host)) {
-    console.log('[Dev] Firebase auth check skipped for development environment')
-    await next()
-    return
-  }
-
-  // GETリクエストは認証不要（読み取りのみ）
-  if (c.req.method === 'GET') {
-    await next()
-    return
-  }
-
-  // POST/DELETE等の書き込み操作は認証必須
-  const firebaseAuth = verifyFirebaseAuth({
-    projectId: c.env.FIREBASE_PROJECT_ID
-  })
-
-  await firebaseAuth(c, async () => {
-    // 認証されたユーザーIDとリクエストされたuserIdが一致するか確認
-    const token = getFirebaseToken(c)
-    const requestedUserId = c.req.param('userId')
-
-    if (token?.uid !== requestedUserId) {
-      throw new HTTPException(403, { message: 'Access denied: user mismatch' })
-    }
-
-    await next()
-  })
-})
 
 // ===== ユーザーアクティビティ全体 =====
 
 routes.openapi(
   createRoute({
     method: 'get',
-    path: '/:userId/activities',
-    request: {
-      params: UserActivityUserIdParamSchema
-    },
+    path: '/me/activities',
+    middleware: [verifyToken],
     responses: {
       200: {
         content: {
@@ -91,11 +45,14 @@ routes.openapi(
         description: 'ユーザーアクティビティ取得成功'
       }
     },
-    tags: ['user-activity']
+    tags: ['activities']
   }),
   async (c) => {
-    const { userId } = c.req.valid('param')
-    const activity = await getUserActivity(c.env, userId)
+    const token = getFirebaseToken(c)
+    if (!token?.uid) {
+      throw new HTTPException(401, { message: 'Unauthorized' })
+    }
+    const activity = await getUserActivity(c.env, token.uid)
     return c.json(activity)
   }
 )
@@ -105,11 +62,11 @@ routes.openapi(
 routes.openapi(
   createRoute({
     method: 'get',
-    path: '/:userId/stores',
+    path: '/me/stores',
     request: {
-      params: UserActivityUserIdParamSchema,
       query: StoresQuerySchema
     },
+    middleware: [verifyToken],
     responses: {
       200: {
         content: {
@@ -120,12 +77,15 @@ routes.openapi(
         description: '店舗一覧取得成功'
       }
     },
-    tags: ['user-activity']
+    tags: ['activities']
   }),
   async (c) => {
-    const { userId } = c.req.valid('param')
+    const token = getFirebaseToken(c)
+    if (!token?.uid) {
+      throw new HTTPException(401, { message: 'Unauthorized' })
+    }
     const { status } = c.req.valid('query')
-    const stores = await getUserStores(c.env, userId, status)
+    const stores = await getUserStores(c.env, token.uid, status)
     return c.json({ stores })
   }
 )
@@ -133,7 +93,8 @@ routes.openapi(
 routes.openapi(
   createRoute({
     method: 'put',
-    path: '/:userId/stores/:storeKey',
+    path: '/me/stores/:storeKey',
+    middleware: [verifyToken],
     request: {
       params: StoreKeyParamSchema,
       body: {
@@ -154,12 +115,16 @@ routes.openapi(
         description: '店舗ステータス更新成功'
       }
     },
-    tags: ['user-activity']
+    tags: ['activities']
   }),
   async (c) => {
-    const { userId, storeKey } = c.req.valid('param')
+    const token = getFirebaseToken(c)
+    if (!token?.uid) {
+      throw new HTTPException(401, { message: 'Unauthorized' })
+    }
+    const { storeKey } = c.req.valid('param')
     const { status } = c.req.valid('json')
-    await updateUserStore(c.env, userId, storeKey, status)
+    await updateUserStore(c.env, token.uid, storeKey, status)
     return c.json({ success: true })
   }
 )
@@ -167,7 +132,8 @@ routes.openapi(
 routes.openapi(
   createRoute({
     method: 'delete',
-    path: '/:userId/stores/:storeKey',
+    path: '/me/stores/:storeKey',
+    middleware: [verifyToken],
     request: {
       params: StoreKeyParamSchema
     },
@@ -181,11 +147,15 @@ routes.openapi(
         description: '店舗を削除成功'
       }
     },
-    tags: ['user-activity']
+    tags: ['activities']
   }),
   async (c) => {
-    const { userId, storeKey } = c.req.valid('param')
-    await deleteUserStore(c.env, userId, storeKey)
+    const token = getFirebaseToken(c)
+    if (!token?.uid) {
+      throw new HTTPException(401, { message: 'Unauthorized' })
+    }
+    const { storeKey } = c.req.valid('param')
+    await deleteUserStore(c.env, token.uid, storeKey)
     return c.json({ success: true })
   }
 )
@@ -195,9 +165,9 @@ routes.openapi(
 routes.openapi(
   createRoute({
     method: 'get',
-    path: '/:userId/events',
+    path: '/me/events',
+    middleware: [verifyToken],
     request: {
-      params: UserActivityUserIdParamSchema,
       query: EventsQuerySchema
     },
     responses: {
@@ -210,12 +180,12 @@ routes.openapi(
         description: 'イベント一覧取得成功'
       }
     },
-    tags: ['user-activity']
+    tags: ['activities']
   }),
   async (c) => {
-    const { userId } = c.req.valid('param')
+    const uid = getToken(c)
     const { status } = c.req.valid('query')
-    const events = await getUserEvents(c.env, userId, status)
+    const events = await getUserEvents(c.env, uid, status)
     return c.json({ events })
   }
 )
@@ -223,7 +193,7 @@ routes.openapi(
 routes.openapi(
   createRoute({
     method: 'put',
-    path: '/:userId/events/:eventId',
+    path: '/me/events/:eventId',
     request: {
       params: EventIdParamSchema,
       body: {
@@ -244,12 +214,13 @@ routes.openapi(
         description: 'イベントステータス更新成功'
       }
     },
-    tags: ['user-activity']
+    tags: ['activities']
   }),
   async (c) => {
-    const { userId, eventId } = c.req.valid('param')
+    const uid = getToken(c)
+    const { eventId } = c.req.valid('param')
     const { status } = c.req.valid('json')
-    await updateUserEvent(c.env, userId, eventId, status)
+    await updateUserEvent(c.env, uid, eventId, status)
     return c.json({ success: true })
   }
 )
@@ -257,9 +228,10 @@ routes.openapi(
 routes.openapi(
   createRoute({
     method: 'delete',
-    path: '/:userId/events/:eventId',
+    path: '/me/events/:eventId',
     request: {
-      params: EventIdParamSchema
+      params: EventIdParamSchema,
+      query: EventDeleteQuerySchema
     },
     responses: {
       200: {
@@ -271,11 +243,13 @@ routes.openapi(
         description: 'イベント削除成功'
       }
     },
-    tags: ['user-activity']
+    tags: ['activities']
   }),
   async (c) => {
-    const { userId, eventId } = c.req.valid('param')
-    await deleteUserEvent(c.env, userId, eventId)
+    const uid = getToken(c)
+    const { eventId } = c.req.valid('param')
+    const { status } = c.req.valid('query')
+    await deleteUserEvent(c.env, uid, eventId, status)
     return c.json({ success: true })
   }
 )

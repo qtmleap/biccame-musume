@@ -63,7 +63,7 @@ routes.openapi(
       throw new HTTPException(401, { message: 'Unauthorized' })
     }
     const client = new PrismaClient({ adapter: new PrismaD1(c.env.DB) })
-    client.user.upsert({
+    await client.user.upsert({
       where: {
         id: idToken.uid
       },

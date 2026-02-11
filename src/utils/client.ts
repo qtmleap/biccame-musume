@@ -198,7 +198,7 @@ const api = makeApi([
   // ユーザーアクティビティ関連API
   {
     method: 'get',
-    path: '/api/users/:userId/activities',
+    path: '/api/me/activities',
     alias: 'getUserActivities',
     description: 'ユーザーのアクティビティ全体を取得',
     response: UserActivitiesResponseSchema
@@ -206,7 +206,7 @@ const api = makeApi([
   // 店舗関連
   {
     method: 'get',
-    path: '/api/users/:userId/stores',
+    path: '/api/me/stores',
     alias: 'getUserStores',
     description: 'ユーザーの店舗一覧を取得',
     parameters: [
@@ -220,7 +220,7 @@ const api = makeApi([
   },
   {
     method: 'put',
-    path: '/api/users/:userId/stores/:storeKey',
+    path: '/api/me/stores/:storeKey',
     alias: 'updateUserStore',
     description: '店舗のステータスを更新',
     parameters: [
@@ -234,7 +234,7 @@ const api = makeApi([
   },
   {
     method: 'delete',
-    path: '/api/users/:userId/stores/:storeKey',
+    path: '/api/me/stores/:storeKey',
     alias: 'deleteUserStore',
     description: '店舗を削除',
     response: SuccessResponseSchemaForClient
@@ -242,7 +242,7 @@ const api = makeApi([
   // イベント関連
   {
     method: 'get',
-    path: '/api/users/:userId/events',
+    path: '/api/me/events',
     alias: 'getUserEvents',
     description: 'ユーザーのイベント一覧を取得',
     parameters: [
@@ -256,7 +256,7 @@ const api = makeApi([
   },
   {
     method: 'put',
-    path: '/api/users/:userId/events/:eventId',
+    path: '/api/me/events/:eventId',
     alias: 'updateUserEvent',
     description: 'イベントのステータスを更新',
     parameters: [
@@ -270,9 +270,16 @@ const api = makeApi([
   },
   {
     method: 'delete',
-    path: '/api/users/:userId/events/:eventId',
+    path: '/api/me/events/:eventId',
     alias: 'deleteUserEvent',
     description: 'イベントを削除',
+    parameters: [
+      {
+        name: 'status',
+        type: 'Query',
+        schema: z.enum(['interested', 'completed'])
+      }
+    ],
     response: SuccessResponseSchemaForClient
   }
 ])

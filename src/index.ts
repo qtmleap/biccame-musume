@@ -2,10 +2,10 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
 import { ZodError } from 'zod'
-import activity from './api/activity'
 import authRoutes from './api/auth'
 import direction from './api/direction'
 import events from './api/event'
+import me from './api/me'
 import stats from './api/stats'
 import users from './api/user'
 import votes from './api/vote'
@@ -52,11 +52,11 @@ app.route('/api/stats', stats)
 // 経路案内APIルート
 app.route('/api/directions', direction)
 
-// ユーザー管理APIルート（アクティビティも含む）
-app.route('/api/me', users)
+// ユーザー管理APIルート
+app.route('/api/users', users)
 
 // ユーザーアクティビティAPIルート
-app.route('/api/users', activity)
+app.route('/api', me)
 
 // 静的ファイル配信
 app.use('*', async (_c, next) => {
