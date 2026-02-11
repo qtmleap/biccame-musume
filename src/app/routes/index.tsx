@@ -77,13 +77,13 @@ const BirthdayDisplaySwitcher = ({
   const birthdayGroups = groupCharactersByBirthday(characters)
 
   const options: { value: BirthdayDisplayType; label: string }[] = [
-    { value: 'dialog', label: 'ダイアログ' },
-    { value: 'fullscreen', label: 'フルスクリーン' },
-    { value: 'banner', label: 'バナー' },
-    { value: 'hero', label: 'ヒーロー' },
-    { value: 'floating', label: 'フローティング' },
-    { value: 'background', label: '背景' },
-    { value: 'none', label: 'なし' }
+    { value: 'dialog', label: HOME_LABELS.patternDialog },
+    { value: 'fullscreen', label: HOME_LABELS.patternFullscreen },
+    { value: 'banner', label: HOME_LABELS.patternBanner },
+    { value: 'hero', label: HOME_LABELS.patternHero },
+    { value: 'floating', label: HOME_LABELS.patternFloating },
+    { value: 'background', label: HOME_LABELS.patternBackground },
+    { value: 'none', label: HOME_LABELS.patternNone }
   ]
 
   if (!import.meta.env.DEV) return null
@@ -109,7 +109,7 @@ const BirthdayDisplaySwitcher = ({
         onClick={() => setShowPatternOptions(!showPatternOptions)}
         className='text-xs text-gray-500 hover:text-gray-700 underline'
       >
-        {showPatternOptions ? '表示パターンを隠す' : '表示パターンを変更'}
+        {showPatternOptions ? HOME_LABELS.hidePattern : HOME_LABELS.displayPattern}
       </button>
       {showPatternOptions && (
         <div className='mt-2 pt-2 border-t border-gray-200'>

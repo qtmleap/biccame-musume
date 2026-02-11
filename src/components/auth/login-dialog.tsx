@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useAuth } from '@/hooks/useAuth'
+import { AUTH_LABELS } from '@/locales/app.content'
 
 type LoginDialogProps = {
   open: boolean
@@ -34,12 +35,12 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
     try {
       const result = await loginWithTwitter()
       if (result) {
-        toast.success('ログインしました')
+        toast.success(AUTH_LABELS.loginSuccess)
         onOpenChange(false)
       }
     } catch (error) {
       const errorMessage = (error as Error).message
-      toast.error(errorMessage || 'ログインに失敗しました')
+      toast.error(errorMessage || AUTH_LABELS.loginError)
     } finally {
       setIsLoading(false)
     }
@@ -53,13 +54,13 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
     setIsLoading(true)
     try {
       await loginWithEmail(email, password)
-      toast.success('ログインしました')
+      toast.success(AUTH_LABELS.loginSuccess)
       onOpenChange(false)
       setEmail('')
       setPassword('')
     } catch (error) {
       console.error('Login error:', error)
-      toast.error('ログインに失敗しました')
+      toast.error(AUTH_LABELS.loginError)
     } finally {
       setIsLoading(false)
     }
@@ -73,14 +74,14 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
     setIsLoading(true)
     try {
       await registerWithEmail(email, password, displayName)
-      toast.success('アカウントを作成しました')
+      toast.success(AUTH_LABELS.signupSuccess)
       onOpenChange(false)
       setEmail('')
       setPassword('')
       setDisplayName('')
     } catch (error) {
       console.error('Registration error:', error)
-      toast.error('アカウント作成に失敗しました')
+      toast.error(AUTH_LABELS.signupError)
     } finally {
       setIsLoading(false)
     }
@@ -95,7 +96,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
             ログイン
           </DialogTitle>
           <DialogDescription>
-            {isEmulator ? '開発環境ではメール/パスワード認証を使用してください' : 'アカウントにログインしてください'}
+            {isEmulator ? AUTH_LABELS.emulatorMessage : AUTH_LABELS.loginMessage}
           </DialogDescription>
         </DialogHeader>
 
@@ -150,7 +151,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
                   <Input
                     id='login-password'
                     type='password'
-                    placeholder='パスワード'
+                    placeholder={AUTH_LABELS.passwordPlaceholder}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -171,7 +172,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
                   <Input
                     id='register-name'
                     type='text'
-                    placeholder='表示名'
+                    placeholder={AUTH_LABELS.displayNamePlaceholder}
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     disabled={isLoading}

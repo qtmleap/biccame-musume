@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { Calendar, ChevronRight } from 'lucide-react'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
+import { ADMIN_LABELS } from '@/locales/app.content'
 
 /**
  * 管理メニューアイテム
@@ -52,8 +53,8 @@ const AdminContent = () => {
         <MenuCard
           to='/admin/events'
           icon={Calendar}
-          title='イベント管理'
-          description='アクキー配布などのイベントを登録・管理'
+          title={ADMIN_LABELS.eventManagement}
+          description={ADMIN_LABELS.eventManagementDesc}
         />
       </div>
     </div>
