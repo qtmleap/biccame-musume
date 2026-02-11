@@ -264,8 +264,10 @@ export const getUserActivity = async (
   userId: string
 ): Promise<{
   stores: string[]
-  interestedEvents: string[]
-  completedEvents: string[]
+  events: {
+    interested: string[]
+    completed: string[]
+  }
 }> => {
   const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
 
@@ -275,7 +277,7 @@ export const getUserActivity = async (
   })
 
   if (!user) {
-    return { stores: [], interestedEvents: [], completedEvents: [] }
+    return { stores: [], events: { interested: [], completed: [] } }
   }
 
   const [stores, interestedEvents, completedEvents] = await Promise.all([
@@ -284,7 +286,7 @@ export const getUserActivity = async (
     getCompletedEvents(env, userId)
   ])
 
-  return { stores, interestedEvents, completedEvents }
+  return { stores, events: { interested: interestedEvents, completed: completedEvents } }
 }
 
 /**
