@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { LogIn, User } from 'lucide-react'
-import { toast } from 'sonner'
+import { useState } from 'react'
+import { LoginDialog } from '@/components/auth/login-dialog'
 import { useAuth } from '@/hooks/useAuth'
 
 type LoginButtonProps = {
@@ -14,26 +15,14 @@ type LoginButtonProps = {
  * ログイン時: ユーザーアバター+ドロップダウンメニュー表示
  */
 export const LoginButton = ({ variant = 'default' }: LoginButtonProps) => {
-  const { isAuthenticated, loginWithTwitter } = useAuth()
+  const { isAuthenticated } = useAuth()
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   /**
-   * ログイン処理
-   * エミュレーター環境ではリダイレクトされるため、トースト表示は行わない
+   * ログインダイアログを開く
    */
-  const handleLogin = async () => {
-    try {
-      const result = await loginWithTwitter()
-      // ポップアップでログインした場合のみトースト表示
-      if (result) {
-        toast.success('ログインしました')
-      }
-      // リダイレクトの場合は何もしない（ページが切り替わる）
-    } catch (error) {
-      // ポップアップが閉じられた場合はエラーを表示しない
-      if ((error as { code?: string })?.code !== 'auth/popup-closed-by-user') {
-        toast.error('ログインに失敗しました')
-      }
-    }
+  const handleLogin = () => {
+    setDialogOpen(true)
   }
 
   // メニュー内スタイル
@@ -41,14 +30,17 @@ export const LoginButton = ({ variant = 'default' }: LoginButtonProps) => {
     // 未ログイン
     if (!isAuthenticated) {
       return (
-        <button
-          type='button'
-          onClick={handleLogin}
-          className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted w-full'
-        >
-          <LogIn className='w-6 h-6' />
-          ログイン
-        </button>
+        <>
+          <button
+            type='button'
+            onClick={handleLogin}
+            className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted w-full'
+          >
+            <LogIn className='w-6 h-6' />
+            ログイン
+          </button>
+          <LoginDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+        </>
       )
     }
 
@@ -68,13 +60,16 @@ export const LoginButton = ({ variant = 'default' }: LoginButtonProps) => {
   // 未ログイン
   if (!isAuthenticated) {
     return (
-      <button
-        type='button'
-        onClick={handleLogin}
-        className='text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
-      >
-        ログイン
-      </button>
+      <>
+        <button
+          type='button'
+          onClick={handleLogin}
+          className='text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
+        >
+          ログイン
+        </button>
+        <LoginDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      </>
     )
   }
 
