@@ -8,6 +8,18 @@
   "mounts": [
     "source=${localEnv:HOME}/.gnupg,target=/home/vscode/.gnupg,type=bind,consistency=cached"
   ],
+  "forwardPorts": [5173, 9099, 4000],
+  "portsAttributes": {
+    "5173": {
+      "label": "Vite Dev Server"
+    },
+    "9099": {
+      "label": "Firebase Auth Emulator"
+    },
+    "4000": {
+      "label": "Firebase Emulator UI"
+    }
+  },
   "features": {
     "ghcr.io/devcontainers/features/git:1": {
       "version": "2.52.0"

@@ -104,8 +104,8 @@ export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
         stores: true
       }
     }),
-    prisma.userInterestedEvent.count({ where: { eventId: id } }),
-    prisma.userCompletedEvent.count({ where: { eventId: id } })
+    prisma.userEvent.count({ where: { eventId: id, status: 'interested' } }),
+    prisma.userEvent.count({ where: { eventId: id, status: 'completed' } })
   ])
   if (event === null) {
     throw new HTTPException(404, { message: 'Not Found' })
