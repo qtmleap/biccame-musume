@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { Confetti } from '@/components/home/birthday-confetti'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { BIRTHDAY_DIALOG_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
 import { getBirthdayImagePath } from '@/utils/birthday'
 
