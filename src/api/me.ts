@@ -180,6 +180,7 @@ routes.openapi(
   createRoute({
     method: 'put',
     path: '/me/events/:eventId',
+    middleware: [verifyToken],
     request: {
       params: EventIdParamSchema,
       body: {
@@ -215,6 +216,7 @@ routes.openapi(
   createRoute({
     method: 'delete',
     path: '/me/events/:eventId',
+    middleware: [verifyToken],
     request: {
       params: EventIdParamSchema,
       query: EventDeleteQuerySchema

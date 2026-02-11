@@ -69,8 +69,12 @@ export const EventsResponseSchema = z
 export const UserActivityResponseSchema = z
   .object({
     stores: z.array(z.string()).openapi({ description: '訪問済み店舗キーの配列' }),
-    interestedEvents: z.array(z.string()).openapi({ description: '興味のあるイベントIDの配列' }),
-    completedEvents: z.array(z.string()).openapi({ description: '達成済みイベントIDの配列' })
+    events: z
+      .object({
+        interested: z.array(z.string()).openapi({ description: '興味のあるイベントIDの配列' }),
+        completed: z.array(z.string()).openapi({ description: '達成済みイベントIDの配列' })
+      })
+      .openapi({ description: 'イベント関連のアクティビティ' })
   })
   .openapi('UserActivityResponse')
 
@@ -134,8 +138,10 @@ export type EventsQuery = z.infer<typeof EventsQuerySchema>
  */
 export const UserActivitiesResponseSchema = z.object({
   stores: z.array(z.string().nonempty()),
-  interestedEvents: z.array(z.string().nonempty()),
-  completedEvents: z.array(z.string().nonempty())
+  events: z.object({
+    interested: z.array(z.string().nonempty()),
+    completed: z.array(z.string().nonempty())
+  })
 })
 
 /**
