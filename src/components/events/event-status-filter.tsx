@@ -3,6 +3,7 @@ import { useAtom } from 'jotai'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
+import { EVENT_STATUS_LABELS, FILTER_LABELS } from '@/locales/app.content'
 
 type StatusFilter = {
   upcoming: boolean
@@ -22,7 +23,7 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
 
   return (
     <div className='w-full'>
-      <FilterHeader label='開催状況で絞り込み' />
+      <FilterHeader label={FILTER_LABELS.status} />
       <div className='flex items-center gap-4'>
         <div className='flex items-center gap-2'>
           <Checkbox
@@ -32,7 +33,7 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
             className='border-gray-400 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600'
           />
           <Label htmlFor='status-upcoming' className='text-gray-700 cursor-pointer'>
-            開催前
+            {EVENT_STATUS_LABELS.upcoming}
           </Label>
         </div>
         <div className='flex items-center gap-2'>
@@ -43,7 +44,7 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
             className='border-gray-400 data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600'
           />
           <Label htmlFor='status-ongoing' className='text-gray-700 cursor-pointer'>
-            開催中
+            {EVENT_STATUS_LABELS.ongoing}
           </Label>
         </div>
         <div className='flex items-center gap-2'>
@@ -54,7 +55,7 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
             className='border-gray-400 data-[state=checked]:bg-gray-600 data-[state=checked]:border-gray-600'
           />
           <Label htmlFor='status-ended' className='text-gray-700 cursor-pointer'>
-            終了済
+            {EVENT_STATUS_LABELS.ended}
           </Label>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { regionFilterAtom } from '@/atoms/filterAtom'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { REGION_LABELS } from '@/locales/app.content'
+import { FILTER_LABELS, REGION_LABELS } from '@/locales/app.content'
 import { RegionSchema } from '@/schemas/store.dto'
 
 /**
@@ -44,7 +44,7 @@ export const RegionFilterControl = () => {
 
   return (
     <div className='w-full'>
-      <FilterHeader label='地域で絞り込み' />
+      <FilterHeader label={FILTER_LABELS.region} />
       {regionButtons}
     </div>
   )

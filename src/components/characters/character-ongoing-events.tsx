@@ -8,6 +8,7 @@ import { useEvents } from '@/hooks/useEvents'
 import { STATUS_BADGE_SM } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
+import { EVENT_LABELS } from '@/locales/app.content'
 
 type CharacterOngoingEventsProps = {
   storeKey: StoreKey
@@ -34,7 +35,7 @@ const OngoingEventItem = ({ event, isLast }: OngoingEventItemProps) => {
           <p className='text-sm text-gray-900'>{event.title}</p>
           <p className='text-sm text-gray-500'>
             {dayjs(event.startDate).format('YYYY/MM/DD')}
-            {event.endDate ? `〜${dayjs(event.endDate).format('YYYY/MM/DD')}` : '〜なくなり次第'}
+            {event.endDate ? `〜${dayjs(event.endDate).format('YYYY/MM/DD')}` : EVENT_LABELS.untilEnd}
           </p>
         </div>
         {STATUS_BADGE_SM[event.status]()}
