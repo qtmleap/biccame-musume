@@ -1,4 +1,3 @@
-import { getFirebaseToken } from '@hono/firebase-auth'
 import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
 import type { FirebaseIdToken } from 'firebase-auth-cloudflare-workers'
@@ -8,8 +7,10 @@ import { HTTPException } from 'hono/http-exception'
 import { AlgorithmTypes, sign, verify } from 'hono/jwt'
 import type { Bindings, Variables } from '@/types/bindings'
 
-export const getToken = async (c: Context<{ Bindings: Bindings; Variables: Variables }>): Promise<string> => {
-  const idToken: FirebaseIdToken | null = getFirebaseToken(c)
+export const getToken = async (
+  c: Context<{ Bindings: Bindings; Variables: Variables }>,
+  idToken: FirebaseIdToken
+): Promise<string> => {
   console.log('Firebase ID Token:', idToken)
   if (!idToken) {
     throw new HTTPException(401, { message: 'Unauthorized' })
