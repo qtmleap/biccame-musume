@@ -44,12 +44,14 @@ export const verifyToken: MiddlewareHandler<{ Bindings: Bindings; Variables: Var
     throw new HTTPException(401, { message: 'Unauthorized' })
   }
   const result = await verify(token, c.env.JWT_SECRET_KEY, AlgorithmTypes.HS256)
+  console.info('VerifyToken:', result)
   c.set('jwtPayload', result)
   await next()
 }
 
 export const getToken = (c: Context<{ Bindings: Bindings; Variables: Variables }>): string => {
   const result = c.get('jwtPayload')
+  console.info('GetToken:', result)
   if (result === undefined) {
     throw new HTTPException(401, { message: 'Unauthorized' })
   }
