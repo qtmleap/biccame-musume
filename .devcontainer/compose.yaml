@@ -11,8 +11,9 @@ services:
       NODE_ENV: development
     tty: true
     stdin_open: true
+    network_mode: service:firebase
 
-  firebase-tools:
+  firebase:
     image: andreysenov/firebase-tools:14.17.0
     environment:
       FIREBASE_TOKEN: $FIREBASE_TOKEN
@@ -21,9 +22,9 @@ services:
       - ./auth:/home/node/auth
       - ./firebase.json:/home/node/firebase.json
       - ./.firebaserc:/home/node/.firebaserc
-    ports:
-      - 4000:4000
-      - 9099:9099
+    # ports:
+    #   - 4000:4000
+    #   - 9099:9099
 
 volumes:
   node_modules:
