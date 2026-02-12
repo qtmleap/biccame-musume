@@ -40,8 +40,8 @@ const InterestedEventsContent = () => {
         {/* イベント一覧 */}
         {interestedEventDetails.length > 0 ? (
           <div className='grid grid-cols-1 md:grid-cols-3 gap-2'>
-            {interestedEventDetails.map((event, index) => (
-              <EventGridItem key={event.uuid} event={event} index={index} />
+            {interestedEventDetails.map((event) => (
+              <EventGridItem key={event.uuid} event={event} />
             ))}
           </div>
         ) : (
