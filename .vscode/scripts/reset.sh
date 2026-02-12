@@ -13,7 +13,7 @@ retry_command() {
   local max_attempts=5
   local attempt=1
   local delay=10
-  
+
   # エラーで終了する動作を一時的に無効化
   set +e
 
@@ -21,7 +21,7 @@ retry_command() {
     echo "🔄 試行 $attempt/$max_attempts..."
     "$@"
     local exit_code=$?
-    
+
     if [ $exit_code -eq 0 ]; then
       echo "✅ 成功しました"
       set -e
@@ -41,7 +41,7 @@ retry_command() {
       fi
     fi
   done
-  
+
   set -e
 }
 
