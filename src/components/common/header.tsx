@@ -46,10 +46,8 @@ export const Header = ({ className }: HeaderProps) => {
       className={cn(
         // 'sticky z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
         'z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
-        // 'pt-safe',
         className
       )}
-      // style={{ top: 'var(--safe-area-inset-top, 0)' }}
     >
       <div className='mx-auto px-4 md:px-8 max-w-6xl'>
         <div className='flex items-center justify-between h-12 md:h-14'>
@@ -124,7 +122,7 @@ export const Header = ({ className }: HeaderProps) => {
               type='button'
               className='fixed inset-0 bg-background/80 backdrop-blur-sm md:hidden'
               onClick={closeMenu}
-              style={{ top: '3rem' }}
+              // style={{ top: '3rem' }}
               aria-label={NAVIGATION_LABELS.closeMenu}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
