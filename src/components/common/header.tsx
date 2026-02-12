@@ -3,6 +3,7 @@ import { Cake, Gift, MapPin, Menu, Trophy, Users, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
+import { LoginButton } from '@/components/auth/login-button'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { NAVIGATION_LABELS } from '@/locales/app.content'
@@ -72,7 +73,7 @@ export const Header = ({ className }: HeaderProps) => {
                 </Link>
               )
             })}
-            {/* <LoginButton /> */}
+            <LoginButton />
           </nav>
 
           {/* モバイルメニューボタン */}
@@ -168,7 +169,7 @@ export const Header = ({ className }: HeaderProps) => {
                         exit={{ x: -16, opacity: 0 }}
                         transition={{ duration: 0.2, delay: navLinks.length * 0.05, ease: 'easeOut' }}
                       >
-                        {/* <LoginButton variant='menu' /> */}
+                        <LoginButton variant='menu' />
                       </motion.div>
                     </div>
                   </div>
