@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import { ArrowLeft, Calendar, Clock, ExternalLink, MapPin, Phone, Store, Train } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
+import { CharacterFollowButton } from '@/components/characters/character-follow-button'
 import { CharacterOngoingEvents } from '@/components/characters/character-ongoing-events'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { NearbyCharactersList } from '@/components/characters/nearby-characters-list'
@@ -193,21 +194,7 @@ const CharacterProfileSection = ({ character }: CharacterProfileSectionProps) =>
 
         {/* アクションボタン */}
         <div className='flex gap-2'>
-          {character.character?.twitter_id && (
-            <Button
-              asChild
-              size='sm'
-              className='rounded-full px-4 h-7 text-xs font-semibold bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100'
-            >
-              <a
-                href={`https://twitter.com/intent/follow?screen_name=${character.character.twitter_id}`}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                フォロー
-              </a>
-            </Button>
-          )}
+          {character.character?.twitter_id && <CharacterFollowButton twitterId={character.character.twitter_id} />}
           {character.character?.is_biccame_musume && (
             <CharacterVoteButton
               characterId={character.id}
