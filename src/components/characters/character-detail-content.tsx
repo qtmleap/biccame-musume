@@ -6,6 +6,7 @@ import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { CharacterFollowButton } from '@/components/characters/character-follow-button'
 import { CharacterOngoingEvents } from '@/components/characters/character-ongoing-events'
+import { CharacterTwitterLink } from '@/components/characters/character-twitter-link'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { NearbyCharactersList } from '@/components/characters/nearby-characters-list'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -214,16 +215,7 @@ const CharacterProfileSection = ({ character }: CharacterProfileSectionProps) =>
         className='mb-6'
       >
         <h1 className='text-2xl font-bold text-gray-900'>{getDisplayName(character.character?.name || '')}</h1>
-        {character.character?.twitter_id && (
-          <a
-            href={`https://twitter.com/${character.character.twitter_id}`}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='text-sky-600 text-sm hover:text-sky-800'
-          >
-            @{character.character.twitter_id}
-          </a>
-        )}
+        <CharacterTwitterLink twitterId={character.character?.twitter_id} />
         <p className='text-sm text-gray-800 mt-3 leading-relaxed'>{character.character?.description}</p>
 
         {/* 公式プロフィールリンク */}
