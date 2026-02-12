@@ -135,8 +135,9 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           disabled={!isLoggedIn}
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
-            isLoggedIn ? 'cursor-pointer' : 'cursor-default',
-            interested ? 'text-pink-500' : 'text-gray-400 hover:text-pink-400'
+            isLoggedIn ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
+            interested ? 'text-pink-500' : 'text-gray-400',
+            isLoggedIn && !interested && 'hover:text-pink-400'
           )}
         >
           <Heart
@@ -156,8 +157,9 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           disabled={!isLoggedIn}
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
-            isLoggedIn ? 'cursor-pointer' : 'cursor-default',
-            completed ? 'text-amber-500' : 'text-gray-400 hover:text-amber-400'
+            isLoggedIn ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
+            completed ? 'text-amber-500' : 'text-gray-400',
+            isLoggedIn && !completed && 'hover:text-amber-400'
           )}
         >
           <Award
