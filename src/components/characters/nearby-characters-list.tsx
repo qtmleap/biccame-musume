@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
 import { MapPin } from 'lucide-react'
+import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useCharacters } from '@/hooks/use-characters'
 import type { StoreData } from '@/schemas/store.dto'
