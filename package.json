@@ -14,7 +14,8 @@
     "generate": "prisma generate",
     "prebuild": "rimraf dist",
     "predeploy": "tsc -b && vite build --mode ${CLOUDFLARE_ENV}",
-    "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV}"
+    "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV}",
+    "knip": "knip"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.24.0",
@@ -101,6 +102,7 @@
     "c7-mcp-server": "^1.0.1",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "globals": "^17.3.0",
+    "knip": "^5.83.1",
     "netscape-cookies-parser": "^1.0.2",
     "node-html-parser": "^7.0.2",
     "openapi-zod-client": "^1.18.3",
