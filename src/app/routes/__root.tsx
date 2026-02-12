@@ -3,7 +3,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { AuthProvider } from '@/components/auth/auth-provider'
 import { ErrorFallback } from '@/components/common/error-fallback'
 import { Footer } from '@/components/common/footer'
-import Header from '@/components/common/header'
+import { Header } from '@/components/common/header'
 import { NotFound } from '@/components/common/not-found'
 
 const RootComponent = () => {
