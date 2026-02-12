@@ -70,11 +70,13 @@ export const EventGridItem = ({ event, index }: EventGridItemProps) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
       transition={{
         duration: 0.4,
         delay: index * 0.05,
         ease: 'easeOut'
       }}
+      layout
     >
       <Link
         to='/events/$uuid'

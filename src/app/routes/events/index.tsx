@@ -2,10 +2,12 @@ import { useSuspenseQueries } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useAtom, useAtomValue } from 'jotai'
-import { Calendar, Filter, Gift, LayoutGrid, Settings } from 'lucide-react'
+import { Calendar, EyeOff, Gift, LayoutGrid, Settings } from 'lucide-react'
+import { AnimatePresence } from 'motion/react'
 import { Suspense, useMemo, useState } from 'react'
 import { categoryFilterAtom } from '@/atoms/categoryFilterAtom'
 import { eventListStatusFilterAtom } from '@/atoms/eventListStatusFilterAtom'
+import { eventUserActivityFilterAtom } from '@/atoms/eventUserActivityFilterAtom'
 import { eventViewModeAtom } from '@/atoms/eventViewModeAtom'
 import { prefectureToRegion, regionFilterAtom } from '@/atoms/filterAtom'
 import { RegionFilterControl } from '@/components/characters/region-filter-control'
@@ -14,10 +16,12 @@ import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { EventGridItem } from '@/components/events/event-grid-item'
 import { EventStatusFilter } from '@/components/events/event-status-filter'
+import { EventUserActivityFilter } from '@/components/events/event-user-activity-filter'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Toggle } from '@/components/ui/toggle'
 import { charactersQueryKey } from '@/hooks/useCharacters'
+import { useUserActivity } from '@/hooks/useUserActivity'
 import { client } from '@/utils/client'
 
 /**
@@ -47,7 +51,9 @@ const EventsContent = () => {
   const regionFilter = useAtomValue(regionFilterAtom)
   const [viewMode, setViewMode] = useAtom(eventViewModeAtom)
   const [statusFilter] = useAtom(eventListStatusFilterAtom)
+  const [activityFilter] = useAtom(eventUserActivityFilterAtom)
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+  const { interestedEvents, completedEvents } = useUserActivity()
   // 店舗キー(id)から都道府県を取得するマップ
   const storePrefectureMap = useMemo(() => {
     const map = new Map<string, string>()
@@ -95,6 +101,13 @@ const EventsContent = () => {
         const filterStatus = event.status === 'last_day' ? 'ongoing' : status
         if (!statusFilter[filterStatus]) return false
 
+        // ユーザーアクティビティフィルタを適用（選択されているものを非表示）
+        const isInterested = interestedEvents.includes(event.uuid)
+        const isCompleted = completedEvents.includes(event.uuid)
+
+        if (isInterested && activityFilter.hideInterested) return false
+        if (isCompleted && activityFilter.hideCompleted) return false
+
         // 終了後1週間経過したイベントは非表示
         if (endDate?.add(7, 'day').isBefore(currentTime)) {
           return false
@@ -103,7 +116,16 @@ const EventsContent = () => {
         return true
       })
       .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
-  }, [events, categoryFilter, regionFilter, storePrefectureMap, statusFilter])
+  }, [
+    events,
+    categoryFilter,
+    regionFilter,
+    storePrefectureMap,
+    statusFilter,
+    activityFilter,
+    interestedEvents,
+    completedEvents
+  ])
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
@@ -116,12 +138,13 @@ const EventsContent = () => {
             <Sheet open={filterSheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
                 <Button size='sm' variant='ghost' className='md:hidden h-8 w-8 p-0'>
-                  <Filter className='size-4' />
+                  <EyeOff className='size-4' />
                 </Button>
               </SheetTrigger>
-              <SheetContent side='bottom' className='h-[50vh]'>
+              <SheetContent side='bottom' className='h-[55vh]'>
                 <SheetHeader>
                   <SheetTitle>フィルター</SheetTitle>
+                  <SheetDescription>イベントの絞り込み条件を選択してください</SheetDescription>
                 </SheetHeader>
                 <div className='px-4'>
                   <div className='space-y-6 overflow-y-auto h-[calc(90vh-72px)] pb-6'>
@@ -130,6 +153,9 @@ const EventsContent = () => {
 
                     {/* ステータスフィルタ */}
                     <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
+
+                    {/* ユーザーアクティビティフィルタ */}
+                    <EventUserActivityFilter />
 
                     {/* 地域フィルター */}
                     <RegionFilterControl />
@@ -161,8 +187,11 @@ const EventsContent = () => {
           {/* 種別フィルター */}
           <EventCategoryFilter />
 
-          {/* ステータスフィルタ */}
-          <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
+          {/* ステータスフィルタとマイアクティビティフィルタ */}
+          <div className='flex gap-4'>
+            <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
+            <EventUserActivityFilter />
+          </div>
 
           {/* 地域フィルター */}
           <RegionFilterControl />
@@ -173,9 +202,11 @@ const EventsContent = () => {
           <EventGanttChart events={activeEvents} />
         ) : activeEvents.length > 0 ? (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
-            {activeEvents.map((event, index) => (
-              <EventGridItem key={event.uuid} event={event} index={index} />
-            ))}
+            <AnimatePresence mode='popLayout'>
+              {activeEvents.map((event, index) => (
+                <EventGridItem key={event.uuid} event={event} index={index} />
+              ))}
+            </AnimatePresence>
           </div>
         ) : (
           <div className='text-center py-12 text-gray-500'>
