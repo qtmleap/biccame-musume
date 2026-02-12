@@ -1,4 +1,5 @@
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAuth } from '@/hooks/use-auth'
 import { client } from '@/utils/client'
 
 /**
@@ -7,12 +8,14 @@ import { client } from '@/utils/client'
 export const useUserActivity = () => {
   const queryKey = ['user_activities']
   const queryClient = useQueryClient()
+  const { isAuthenticated } = useAuth()
 
-  const { data } = useSuspenseQuery({
+  const { data } = useQuery({
     queryKey: queryKey,
     queryFn: async () => {
       return client.getUserActivities()
-    }
+    },
+    enabled: isAuthenticated
   })
 
   const invalidate = () => {

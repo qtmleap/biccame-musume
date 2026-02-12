@@ -4,6 +4,7 @@ import { eventUserActivityFilterAtom } from '@/atoms/event-user-activity-filter-
 import { FilterHeader } from '@/components/common/filter-header'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
+import { useAuth } from '@/hooks/use-auth'
 
 /**
  * イベントユーザーアクティビティフィルタコンポーネント
@@ -11,6 +12,10 @@ import { Label } from '@/components/ui/label'
  */
 export const EventUserActivityFilter = () => {
   const [activityFilter, setActivityFilter] = useAtom(eventUserActivityFilterAtom)
+  const { isAuthenticated } = useAuth()
+
+  // 未ログイン時は非表示
+  if (!isAuthenticated) return null
 
   return (
     <div className='w-full'>
