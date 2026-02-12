@@ -15,7 +15,7 @@ import { EventList } from '@/components/home/event-list'
 import { HomeHeader } from '@/components/home/home-header'
 import { LineStickerList } from '@/components/home/line-sticker-list'
 import { Button } from '@/components/ui/button'
-import { useCharacters } from '@/hooks/useCharacters'
+import { useCharacters } from '@/hooks/use-characters'
 import { HOME_LABELS } from '@/locales/app.content'
 import { getBirthdayCharacters, groupCharactersByBirthday } from '@/utils/character'
 

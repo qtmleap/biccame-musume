@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { prefectureToRegion } from '@/atoms/filterAtom'
+import { prefectureToRegion } from '@/atoms/filter-atom'
 
 /**
  * 地域の型定義

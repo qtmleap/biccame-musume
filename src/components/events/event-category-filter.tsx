@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { categoryFilterAtom } from '@/atoms/categoryFilterAtom'
+import { categoryFilterAtom } from '@/atoms/category-filter-atom'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Checkbox } from '@/components/ui/checkbox'
 import { EVENT_CATEGORY_LABELS, FILTER_LABELS } from '@/locales/app.content'

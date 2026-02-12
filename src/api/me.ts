@@ -20,7 +20,7 @@ import {
   getUserStores,
   updateUserEvent,
   updateUserStore
-} from '@/services/me.service'
+} from '@/services/me-service'
 import type { Bindings, Variables } from '@/types/bindings'
 import { getToken, verifyToken } from '@/utils/token'
 

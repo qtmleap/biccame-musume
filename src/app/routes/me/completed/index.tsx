@@ -4,8 +4,8 @@ import { Suspense } from 'react'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventGridItem } from '@/components/events/event-grid-item'
-import { useEvents } from '@/hooks/useEvents'
-import { useUserActivity } from '@/hooks/useUserActivity'
+import { useEvents } from '@/hooks/use-events'
+import { useUserActivity } from '@/hooks/use-user-activity'
 import { MY_PAGE_LABELS } from '@/locales/app.content'
 
 /**

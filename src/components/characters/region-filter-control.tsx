@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { regionFilterAtom } from '@/atoms/filterAtom'
+import { regionFilterAtom } from '@/atoms/filter-atom'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'

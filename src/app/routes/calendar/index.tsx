@@ -7,8 +7,8 @@ import { CalendarEventList } from '@/components/calendar/calendar-event-list'
 import { CalendarGrid } from '@/components/calendar/calendar-grid'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
+import { useCharacters } from '@/hooks/use-characters'
 import { useMediaQuery } from '@/hooks/use-media-query'
-import { useCharacters } from '@/hooks/useCharacters'
 import { type CalendarEvent, filterMonthEvents } from '@/utils/calendar'
 
 /**
