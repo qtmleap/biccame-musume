@@ -13,10 +13,16 @@ type LoginButtonProps = {
  * ログインボタンコンポーネント
  * 未ログイン時: Twitterログインボタン表示
  * ログイン時: ユーザーアバター+ドロップダウンメニュー表示
+ * 本番環境以外では非表示
  */
 export const LoginButton = ({ variant = 'default' }: LoginButtonProps) => {
   const { isAuthenticated } = useAuth()
   const [dialogOpen, setDialogOpen] = useState(false)
+
+  // 本番環境以外では非表示
+  if (!import.meta.env.PROD) {
+    return null
+  }
 
   /**
    * ログインダイアログを開く
