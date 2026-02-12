@@ -1,4 +1,5 @@
-import { TwitterApi } from 'twitter-api-v2'
+import crypto from 'node:crypto'
+import OAuth from 'oauth-1.0a'
 import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
@@ -57,54 +58,29 @@ const getQuoteTweetId = (event: Event): string | undefined => {
  * イベントのツイート投稿機能を提供
  */
 export class Twitter {
-  private client: TwitterApi | null = null
+  private oauth: OAuth
   private isLocal: boolean
 
   constructor(private env: Bindings) {
     this.isLocal = !env.ENVIRONMENT || env.ENVIRONMENT === 'local'
-  }
 
-  /**
-   * Twitter APIクライアントを取得（遅延初期化）
-   */
-  private getClient(): TwitterApi {
-    if (this.client) {
-      return this.client
-    }
-
-    const { TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } = this.env
-
-    if (!TWITTER_API_KEY || !TWITTER_API_SECRET || !TWITTER_ACCESS_TOKEN || !TWITTER_ACCESS_SECRET) {
-      throw new Error('[Twitter] API credentials not configured')
-    }
-
-    this.client = new TwitterApi({
-      appKey: TWITTER_API_KEY,
-      appSecret: TWITTER_API_SECRET,
-      accessToken: TWITTER_ACCESS_TOKEN,
-      accessSecret: TWITTER_ACCESS_SECRET
+    // OAuth 1.0aクライアントを初期化
+    this.oauth = new OAuth({
+      consumer: {
+        key: env.TWITTER_API_KEY,
+        secret: env.TWITTER_API_SECRET
+      },
+      signature_method: 'HMAC-SHA1',
+      hash_function(baseString, key) {
+        return crypto.createHmac('sha1', key).update(baseString).digest('base64')
+      }
     })
-
-    return this.client
-  }
-
-  /**
-   * 認証情報が設定されているか確認
-   */
-  hasCredentials(): boolean {
-    const { TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } = this.env
-    return !!(TWITTER_API_KEY && TWITTER_API_SECRET && TWITTER_ACCESS_TOKEN && TWITTER_ACCESS_SECRET)
   }
 
   /**
    * ツイートを投稿
    */
   async tweet(text: string, quoteTweetId?: string): Promise<void> {
-    if (!this.hasCredentials()) {
-      console.warn('[Twitter] API credentials not configured. Skipping tweet.')
-      return
-    }
-
     if (this.isLocal) {
       console.log('[Twitter] Skipping tweet in local environment. Would have sent:', {
         text,
@@ -113,14 +89,44 @@ export class Twitter {
       return
     }
 
-    const client = this.getClient()
+    const { TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } = this.env
 
     try {
-      console.log('[Twitter API] Request:', { text, quoteTweetId })
+      const url = 'https://api.twitter.com/2/tweets'
 
-      const result = quoteTweetId ? await client.v2.quote(text, quoteTweetId) : await client.v2.tweet(text)
+      // OAuth 1.0a認証ヘッダーを生成
+      const headers = this.oauth.toHeader(
+        this.oauth.authorize(
+          {
+            url,
+            method: 'POST'
+          },
+          {
+            key: TWITTER_ACCESS_TOKEN,
+            secret: TWITTER_ACCESS_SECRET
+          }
+        )
+      )
 
-      console.log('[Twitter] Tweet posted successfully:', result.data)
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          ...headers,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text: text,
+          quote_tweet_id: quoteTweetId
+        })
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`Twitter API error: ${response.status} ${errorText}`)
+      }
+
+      const result = await response.json()
+      console.log('[Twitter] Tweet posted successfully:', result)
     } catch (error) {
       console.error('[Twitter] Failed to post tweet:', error)
       throw error
