@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Cake, Gift, MapPin, Menu, Trophy, Users, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { NAVIGATION_LABELS } from '@/locales/app.content'
@@ -44,8 +45,7 @@ export const Header = ({ className }: HeaderProps) => {
   return (
     <header
       className={cn(
-        // 'sticky z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
-        'z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
+        'sticky top-0 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
         className
       )}
     >
@@ -114,67 +114,70 @@ export const Header = ({ className }: HeaderProps) => {
       </div>
 
       {/* モバイルナビゲーション(オーバーレイ) */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <>
-            {/* 背景オーバーレイ */}
-            <motion.button
-              type='button'
-              className='fixed inset-0 bg-background/80 backdrop-blur-sm md:hidden'
-              onClick={closeMenu}
-              // style={{ top: '3rem' }}
-              aria-label={NAVIGATION_LABELS.closeMenu}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            />
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <>
+                {/* 背景オーバーレイ */}
+                <motion.button
+                  type='button'
+                  className='fixed inset-0 backdrop-blur-xs md:hidden z-40'
+                  onClick={closeMenu}
+                  aria-label={NAVIGATION_LABELS.closeMenu}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                />
 
-            {/* メニュー本体 */}
-            <motion.nav
-              className='absolute left-0 right-0 md:hidden bg-background border-b border-border shadow-lg'
-              initial={{ y: -16, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -16, opacity: 0 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-            >
-              <div className='mx-auto px-4 py-4'>
-                <div className='flex flex-col gap-1'>
-                  {navLinks.map((link, index) => {
-                    const Icon = link.icon
-                    return (
+                {/* メニュー本体 */}
+                <motion.nav
+                  className='fixed top-12 left-0 right-0 md:hidden bg-background border-b border-border shadow-lg z-50'
+                  initial={{ y: -16, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -16, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                >
+                  <div className='mx-auto px-4 py-4'>
+                    <div className='flex flex-col gap-1'>
+                      {navLinks.map((link, index) => {
+                        const Icon = link.icon
+                        return (
+                          <motion.div
+                            key={link.to}
+                            initial={{ x: -16, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: -16, opacity: 0 }}
+                            transition={{ duration: 0.2, delay: index * 0.05, ease: 'easeOut' }}
+                          >
+                            <Link
+                              to={link.to}
+                              onClick={closeMenu}
+                              className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
+                            >
+                              <Icon className='w-6 h-6' />
+                              {link.label}
+                            </Link>
+                          </motion.div>
+                        )
+                      })}
                       <motion.div
-                        key={link.to}
                         initial={{ x: -16, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -16, opacity: 0 }}
-                        transition={{ duration: 0.2, delay: index * 0.05, ease: 'easeOut' }}
+                        transition={{ duration: 0.2, delay: navLinks.length * 0.05, ease: 'easeOut' }}
                       >
-                        <Link
-                          to={link.to}
-                          onClick={closeMenu}
-                          className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
-                        >
-                          <Icon className='w-6 h-6' />
-                          {link.label}
-                        </Link>
+                        {/* <LoginButton variant='menu' /> */}
                       </motion.div>
-                    )
-                  })}
-                  <motion.div
-                    initial={{ x: -16, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: -16, opacity: 0 }}
-                    transition={{ duration: 0.2, delay: navLinks.length * 0.05, ease: 'easeOut' }}
-                  >
-                    {/* <LoginButton variant='menu' /> */}
-                  </motion.div>
-                </div>
-              </div>
-            </motion.nav>
-          </>
+                    </div>
+                  </div>
+                </motion.nav>
+              </>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </header>
   )
 }
