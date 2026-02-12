@@ -7,6 +7,8 @@ import { useAuth } from '@/hooks/use-auth'
 type LoginButtonProps = {
   /** メニュー内表示用のスタイル */
   variant?: 'default' | 'menu'
+  /** メニューを閉じるコールバック(variant='menu'の時に使用) */
+  onClose?: () => void
 }
 
 /**
@@ -14,7 +16,7 @@ type LoginButtonProps = {
  * 未ログイン時: Twitterログインボタン表示
  * ログイン時: ユーザーアバター+ドロップダウンメニュー表示
  */
-export const LoginButton = ({ variant = 'default' }: LoginButtonProps) => {
+export const LoginButton = ({ variant = 'default', onClose }: LoginButtonProps) => {
   const { isAuthenticated } = useAuth()
   const [dialogOpen, setDialogOpen] = useState(false)
 
@@ -48,6 +50,7 @@ export const LoginButton = ({ variant = 'default' }: LoginButtonProps) => {
     return (
       <Link
         to='/me'
+        onClick={onClose}
         className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
       >
         <User className='w-6 h-6' />

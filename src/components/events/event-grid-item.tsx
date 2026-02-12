@@ -80,7 +80,7 @@ export const EventGridItem = ({ event }: EventGridItemProps) => {
         to='/events/$uuid'
         params={{ uuid: event.uuid }}
         className={cn(
-          'block border rounded-lg p-4 hover:border-[#e50012]/30 transition-colors h-full',
+          'block border border-pink-200 rounded-lg p-4 hover:border-[#e50012]/40 transition-colors h-full',
           isEnded ? 'opacity-50 grayscale bg-white' : endingSoonBg || 'bg-white'
         )}
       >

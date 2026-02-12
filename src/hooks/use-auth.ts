@@ -3,7 +3,10 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  TwitterAuthProvider
+  TwitterAuthProvider,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  OAuthProvider
 } from 'firebase/auth'
 import { useAtomValue } from 'jotai'
 import { useCallback } from 'react'
@@ -21,7 +24,7 @@ export const getLargeTwitterPhoto = (photoURL: string | null | undefined): strin
 
 /**
  * Firebase Authentication用カスタムフック
- * Twitterログイン/ログアウト機能を提供
+ * 複数のログイン方法を提供：Twitter、Google、GitHub、Apple、メール/パスワード
  * 認証状態の監視とアカウント作成はAuthProviderで行う
  */
 export const useAuth = () => {
@@ -60,30 +63,62 @@ export const useAuth = () => {
 
   /**
    * Twitterでログイン
-   * 開発環境ではメール認証を使用
-   * 本番環境ではTwitter認証を使用
    */
   const loginWithTwitter = useCallback(async () => {
-    const isEmulator = import.meta.env.DEV
-    const provider: TwitterAuthProvider = new TwitterAuthProvider()
-
-    console.log('loginWithTwitter called, isEmulator:', isEmulator)
-
+    const provider = new TwitterAuthProvider()
     try {
-      if (isEmulator) {
-        // 開発環境ではメール認証を使用するよう案内
-        throw new Error('開発環境ではメール/パスワード認証を使用してください')
-      } else {
-        // 本番環境ではポップアップを使用
-        console.log('Attempting signInWithPopup...')
-        const result = await signInWithPopup(auth, provider)
-        console.log('signInWithPopup completed', result)
-        // Twitter認証後のユーザー情報送信はAuthProviderで自動実行される
-        return result.user
-      }
+      const result = await signInWithPopup(auth, provider)
+      return result.user
     } catch (error) {
       console.error('Twitter login failed:', error)
-      // ポップアップが閉じられた場合はエラーを表示しない
+      if ((error as { code?: string })?.code !== 'auth/popup-closed-by-user') {
+        throw error
+      }
+    }
+  }, [])
+
+  /**
+   * Googleでログイン
+   */
+  const loginWithGoogle = useCallback(async () => {
+    const provider = new GoogleAuthProvider()
+    try {
+      const result = await signInWithPopup(auth, provider)
+      return result.user
+    } catch (error) {
+      console.error('Google login failed:', error)
+      if ((error as { code?: string })?.code !== 'auth/popup-closed-by-user') {
+        throw error
+      }
+    }
+  }, [])
+
+  /**
+   * GitHubでログイン
+   */
+  const loginWithGithub = useCallback(async () => {
+    const provider = new GithubAuthProvider()
+    try {
+      const result = await signInWithPopup(auth, provider)
+      return result.user
+    } catch (error) {
+      console.error('GitHub login failed:', error)
+      if ((error as { code?: string })?.code !== 'auth/popup-closed-by-user') {
+        throw error
+      }
+    }
+  }, [])
+
+  /**
+   * Appleでログイン
+   */
+  const loginWithApple = useCallback(async () => {
+    const provider = new OAuthProvider('apple.com')
+    try {
+      const result = await signInWithPopup(auth, provider)
+      return result.user
+    } catch (error) {
+      console.error('Apple login failed:', error)
       if ((error as { code?: string })?.code !== 'auth/popup-closed-by-user') {
         throw error
       }
@@ -109,6 +144,9 @@ export const useAuth = () => {
     // Firebase Authの認証状態（userAtom）でログイン判定
     isAuthenticated: !!user,
     loginWithTwitter,
+    loginWithGoogle,
+    loginWithGithub,
+    loginWithApple,
     loginWithEmail,
     registerWithEmail,
     logout

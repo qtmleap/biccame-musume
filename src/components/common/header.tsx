@@ -169,7 +169,7 @@ export const Header = ({ className }: HeaderProps) => {
                         exit={{ x: -16, opacity: 0 }}
                         transition={{ duration: 0.2, delay: navLinks.length * 0.05, ease: 'easeOut' }}
                       >
-                        <LoginButton variant='menu' />
+                        <LoginButton variant='menu' onClose={closeMenu} />
                       </motion.div>
                     </div>
                   </div>
