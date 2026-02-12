@@ -11,7 +11,6 @@ import type { StoreKey } from '@/schemas/store.dto'
 
 type EventGridItemProps = {
   event: Event
-  index: number
 }
 
 /**
@@ -62,7 +61,7 @@ const getEndingSoonBackground = (event: Event): string | undefined => {
 /**
  * イベントグリッドアイテム
  */
-export const EventGridItem = ({ event, index }: EventGridItemProps) => {
+export const EventGridItem = ({ event }: EventGridItemProps) => {
   const isEnded = event.status === 'ended'
   const endingSoonBg = getEndingSoonBackground(event)
 

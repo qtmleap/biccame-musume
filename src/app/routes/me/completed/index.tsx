@@ -40,8 +40,8 @@ const CompletedEventsContent = () => {
         {/* イベント一覧 */}
         {completedEventDetails.length > 0 ? (
           <div className='grid grid-cols-1 md:grid-cols-3 gap-2'>
-            {completedEventDetails.map((event, index) => (
-              <EventGridItem key={event.uuid} event={event} index={index} />
+            {completedEventDetails.map((event) => (
+              <EventGridItem key={event.uuid} event={event} />
             ))}
           </div>
         ) : (

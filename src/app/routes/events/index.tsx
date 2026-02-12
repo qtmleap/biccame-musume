@@ -203,8 +203,8 @@ const EventsContent = () => {
         ) : activeEvents.length > 0 ? (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
             <AnimatePresence mode='popLayout'>
-              {activeEvents.map((event, index) => (
-                <EventGridItem key={event.uuid} event={event} index={index} />
+              {activeEvents.map((event) => (
+                <EventGridItem key={event.uuid} event={event} />
               ))}
             </AnimatePresence>
           </div>

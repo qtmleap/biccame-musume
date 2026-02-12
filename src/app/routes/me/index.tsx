@@ -49,8 +49,8 @@ const EventSection = ({
       </div>
       {events.length > 0 ? (
         <div className='grid grid-cols-1 md:grid-cols-3 gap-2'>
-          {displayEvents.map((event, index) => (
-            <EventGridItem key={event.uuid} event={event} index={index} />
+          {displayEvents.map((event) => (
+            <EventGridItem key={event.uuid} event={event} />
           ))}
         </div>
       ) : (
