@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from 'firebase/auth'
 import { useSetAtom } from 'jotai'
 import { type ReactNode, useEffect } from 'react'
-import { userAtom } from '@/atoms/authAtom'
+import { userAtom } from '@/atoms/auth-atom'
 import { auth } from '@/lib/firebase'
 import { client } from '@/utils/client'
 

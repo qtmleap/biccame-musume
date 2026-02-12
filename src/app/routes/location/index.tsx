@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { StoreList } from '@/components/location/store-list'
 import { SelectedStoreInfo } from '@/components/selected-store-info'
-import { useCharacters } from '@/hooks/useCharacters'
+import { useCharacters } from '@/hooks/use-characters'
 import type { StoreData } from '@/schemas/store.dto'
 
 /**

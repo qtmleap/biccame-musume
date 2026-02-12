@@ -7,7 +7,7 @@ import {
 } from 'firebase/auth'
 import { useAtomValue } from 'jotai'
 import { useCallback } from 'react'
-import { userAtom } from '@/atoms/authAtom'
+import { userAtom } from '@/atoms/auth-atom'
 import { auth } from '@/lib/firebase'
 
 /**

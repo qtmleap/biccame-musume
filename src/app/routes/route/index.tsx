@@ -11,7 +11,7 @@ import {
   useDirections
 } from '@/components/route'
 import { Button } from '@/components/ui/button'
-import { useCharacters } from '@/hooks/useCharacters'
+import { useCharacters } from '@/hooks/use-characters'
 import { solveTsp } from '@/utils/tsp'
 
 export const Route = createFileRoute('/route/')({

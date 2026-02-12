@@ -2,7 +2,7 @@ import { LogIn, ShieldAlert } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
-import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
+import { useCloudflareAccess } from '@/hooks/use-cloudflare-access'
 
 type AccessGateProps = {
   children: ReactNode

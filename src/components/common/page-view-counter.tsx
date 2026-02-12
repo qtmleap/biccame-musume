@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { usePageViews } from '@/hooks/usePageViews'
+import { usePageViews } from '@/hooks/use-page-views'
 
 type PageViewCounterProps = {
   className?: string

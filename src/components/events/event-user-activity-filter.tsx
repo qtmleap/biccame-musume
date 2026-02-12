@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai'
 import { EyeOff } from 'lucide-react'
-import { eventUserActivityFilterAtom } from '@/atoms/eventUserActivityFilterAtom'
+import { eventUserActivityFilterAtom } from '@/atoms/event-user-activity-filter-atom'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'

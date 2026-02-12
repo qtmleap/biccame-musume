@@ -4,7 +4,7 @@ import { Suspense, useMemo } from 'react'
 import { CharacterDetailContent } from '@/components/characters/character-detail-content'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
-import { useCharacters } from '@/hooks/useCharacters'
+import { useCharacters } from '@/hooks/use-characters'
 
 /**
  * キャラクター詳細ページ

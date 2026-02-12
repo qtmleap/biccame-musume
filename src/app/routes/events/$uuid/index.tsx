@@ -5,8 +5,8 @@ import { EventDetailHeader } from '@/components/events/event-detail-header'
 import { EventDetailInfo } from '@/components/events/event-detail-info'
 import { RecentEventsList } from '@/components/events/recent-events-list'
 import { Separator } from '@/components/ui/separator'
-import { useCloudflareAccess } from '@/hooks/useCloudflareAccess'
-import { useEvent, useEvents } from '@/hooks/useEvents'
+import { useCloudflareAccess } from '@/hooks/use-cloudflare-access'
+import { useEvent, useEvents } from '@/hooks/use-events'
 
 /**
  * イベント詳細ページのコンテンツ

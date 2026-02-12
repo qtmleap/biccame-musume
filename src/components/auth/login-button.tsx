@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { LogIn, User } from 'lucide-react'
 import { useState } from 'react'
 import { LoginDialog } from '@/components/auth/login-dialog'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/hooks/use-auth'
 
 type LoginButtonProps = {
   /** メニュー内表示用のスタイル */

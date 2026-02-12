@@ -4,7 +4,7 @@ import type { Context, Next } from 'hono'
 import { ipCheck } from '@/middleware/ip-check'
 import { voteLimit } from '@/middleware/vote-limit'
 import { VoteCountListSchema, VoteResponseSchema } from '@/schemas/vote.dto'
-import { getAllVoteCounts, vote } from '@/services/vote.service'
+import { getAllVoteCounts, vote } from '@/services/vote-service'
 import type { Bindings, Variables } from '@/types/bindings'
 import { getNextJSTDate } from '@/utils/vote'
 
