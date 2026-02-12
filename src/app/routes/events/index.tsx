@@ -2,7 +2,7 @@ import { useSuspenseQueries } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useAtom, useAtomValue } from 'jotai'
-import { Calendar, EyeOff, Gift, LayoutGrid, Settings } from 'lucide-react'
+import { Calendar, Filter, Gift, LayoutGrid, Settings } from 'lucide-react'
 import { AnimatePresence } from 'motion/react'
 import { Suspense, useMemo, useState } from 'react'
 import { categoryFilterAtom } from '@/atoms/category-filter-atom'
@@ -138,7 +138,7 @@ const EventsContent = () => {
             <Sheet open={filterSheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
                 <Button size='sm' variant='ghost' className='md:hidden h-8 w-8 p-0'>
-                  <EyeOff className='size-4' />
+                  <Filter className='size-4' />
                 </Button>
               </SheetTrigger>
               <SheetContent side='bottom' className='h-[55vh]'>
