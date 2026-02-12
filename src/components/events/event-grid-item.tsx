@@ -72,8 +72,7 @@ export const EventGridItem = ({ event, index }: EventGridItemProps) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{
-        duration: 0.4,
-        delay: index * 0.05,
+        duration: 0.3,
         ease: 'easeOut'
       }}
       layout
