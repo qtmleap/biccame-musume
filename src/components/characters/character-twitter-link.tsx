@@ -14,7 +14,7 @@ export const CharacterTwitterLink = ({ twitterId }: CharacterTwitterLinkProps) =
       target='_blank'
       rel='noopener noreferrer'
       onClick={(e) => e.stopPropagation()}
-      className='text-sm text-muted-foreground hover:underline'
+      className='text-sm text-sky-600 hover:text-sky-800'
     >
       @{twitterId}
     </a>
