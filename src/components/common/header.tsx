@@ -44,11 +44,12 @@ export const Header = ({ className }: HeaderProps) => {
   return (
     <header
       className={cn(
-        'sticky z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
-        'pt-safe',
+        // 'sticky z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
+        'z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
+        // 'pt-safe',
         className
       )}
-      style={{ top: 'var(--safe-area-inset-top, 0)' }}
+      // style={{ top: 'var(--safe-area-inset-top, 0)' }}
     >
       <div className='mx-auto px-4 md:px-8 max-w-6xl'>
         <div className='flex items-center justify-between h-12 md:h-14'>
