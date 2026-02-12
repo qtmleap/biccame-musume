@@ -1,4 +1,5 @@
 import { Loader2 } from 'lucide-react'
+import { COMMON_LABELS } from '@/locales/app.content'
 
 /**
  * 共通ローディングフォールバック
@@ -6,8 +7,8 @@ import { Loader2 } from 'lucide-react'
 export const LoadingFallback = () => (
   <div className='min-h-screen flex items-center justify-center'>
     <div className='text-center'>
-      <Loader2 className='h-12 w-12 animate-spin text-primary mx-auto mb-4' />
-      <p className='text-muted-foreground'>読み込み中...</p>
+      <Loader2 className='h-12 w-12 animate-spin text-blue mx-auto mb-4' />
+      <p className='text-muted-foreground'>{COMMON_LABELS.loading}</p>
     </div>
   </div>
 )

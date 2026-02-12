@@ -127,16 +127,9 @@
     --safe-area-inset-right: env(safe-area-inset-right, 0);
     --safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
     --safe-area-inset-left: env(safe-area-inset-left, 0);
-    --app-bg: #fdf2f8; /* ライト・ダーク共通でpink-50 */
-  }
-
-  html,
-  html.dark {
-    background-color: var(--app-bg) !important;
   }
 
   body {
-    background-color: var(--app-bg) !important;
     @apply text-foreground;
     /* セーフエリア対応のパディング */
     padding-top: var(--safe-area-inset-top);
