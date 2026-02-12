@@ -4,7 +4,7 @@
   "description": "ビッカメ娘ファンサイト。ビッカメ娘はビックカメラの店舗擬人化プロジェクトとして活動しています。キャラクター情報、誕生日カレンダー、店舗マップなど。",
   "theme_color": "#ff0000",
   "background_color": "#ff0000",
-  "display": "fullscreen",
+  "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/",
