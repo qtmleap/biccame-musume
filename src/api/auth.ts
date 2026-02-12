@@ -17,17 +17,6 @@ const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>({
   }
 })
 
-/**
- * Firebase認証ミドルウェア
- * 開発環境ではスキップ
- */
-// routes.use('*', async (c, next) => {
-//   verifyFirebaseAuth({
-//     projectId: c.env.FIREBASE_PROJECT_ID,
-//     firebaseEmulatorHost: 'localhost:9099'
-//   })
-//   await next()
-// })
 routes.use('*', csrf())
 
 /**
@@ -57,7 +46,6 @@ routes.openapi(
     }
   }),
   async (c) => {
-    console.log(c.req.raw)
     const idToken: FirebaseIdToken | null = getFirebaseToken(c)
     if (idToken === null) {
       throw new HTTPException(401, { message: 'Unauthorized' })

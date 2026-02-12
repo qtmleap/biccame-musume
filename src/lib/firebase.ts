@@ -5,13 +5,13 @@ import { connectAuthEmulator, getAuth } from 'firebase/auth'
  * Firebase設定
  */
 const firebaseConfig = {
-  apiKey: 'AIzaSyCpmaR3ketnQvCavG4XeInu_5zIdpfXRHM',
-  authDomain: 'bicamemusume.firebaseapp.com',
-  projectId: 'bicamemusume',
-  storageBucket: 'bicamemusume.firebasestorage.app',
-  messagingSenderId: '897152519282',
-  appId: '1:897152519282:web:6539fdbc1a7dc64d1206eb',
-  measurementId: 'G-HB1DXZBJGS'
+  apiKey: 'AIzaSyDhN2ya6f5kVz_ik881-v4EX-uHX70b8Tg',
+  authDomain: 'biccame-musume.firebaseapp.com',
+  projectId: 'biccame-musume',
+  storageBucket: 'biccame-musume.firebasestorage.app',
+  messagingSenderId: '511011902152',
+  appId: '1:511011902152:web:6479a3d3fdbf40a2f40bfd',
+  measurementId: 'G-YM8ZM9P2PF'
 }
 
 /**

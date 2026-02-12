@@ -10,25 +10,39 @@ DATA_FILE="${PROJECT_ROOT}/.wrangler/data.sql"
 
 # リトライ実行関数
 retry_command() {
-  local max_attempts=3
+  local max_attempts=5
   local attempt=1
-  local delay=5
+  local delay=10
+  
+  # エラーで終了する動作を一時的に無効化
+  set +e
 
   while [ $attempt -le $max_attempts ]; do
-    echo "試行 $attempt/$max_attempts..."
-    if "$@"; then
+    echo "🔄 試行 $attempt/$max_attempts..."
+    "$@"
+    local exit_code=$?
+    
+    if [ $exit_code -eq 0 ]; then
+      echo "✅ 成功しました"
+      set -e
       return 0
     else
       if [ $attempt -lt $max_attempts ]; then
-        echo "⚠️  失敗しました。${delay}秒後に再試行します..."
+        echo "⚠️  失敗しました (終了コード: $exit_code)"
+        echo "⏳ ${delay}秒後に再試行します..."
         sleep $delay
+        # 次回は待機時間を少し増やす（指数バックオフ的な動作）
+        delay=$((delay + 5))
         attempt=$((attempt + 1))
       else
         echo "❌ $max_attempts回試行しましたが失敗しました"
+        set -e
         return 1
       fi
     fi
   done
+  
+  set -e
 }
 
 cd "$PROJECT_ROOT"
