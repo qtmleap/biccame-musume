@@ -104,6 +104,36 @@ const checkVersionAndClearCache = () => {
 // アプリ起動時にバージョンチェックを実行
 checkVersionAndClearCache()
 
+/**
+ * Service Workerを登録
+ */
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/sw.js')
+      .then((registration) => {
+        console.log('SW registered:', registration)
+
+        // 更新チェック
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                console.log('New SW available, reloading...')
+                // 新しいSWが利用可能になったらページをリロード
+                window.location.reload()
+              }
+            })
+          }
+        })
+      })
+      .catch((error) => {
+        console.error('SW registration failed:', error)
+      })
+  })
+}
+
 // Render the app
 // biome-ignore lint/style/noNonNullAssertion: reason
 const rootElement = document.getElementById('root')!

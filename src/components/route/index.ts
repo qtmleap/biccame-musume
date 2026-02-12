@@ -1,5 +1,5 @@
-export { StoreSelect } from './store-select'
-export { SelectedStoreList } from './selected-store-list'
 export { RouteResultCard } from './route-result'
+export { SelectedStoreList } from './selected-store-list'
+export { StoreSelect } from './store-select'
+export type { AvailableStore, DirectionsLeg, RouteResult, SelectedStore } from './types'
 export { useDirections } from './use-directions'
-export type { AvailableStore, SelectedStore, DirectionsLeg, RouteResult } from './types'
