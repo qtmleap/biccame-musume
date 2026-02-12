@@ -1,5 +1,6 @@
 'use client'
 
+import { registerSW } from 'virtual:pwa-register'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
@@ -25,6 +26,22 @@ import '@fontsource/m-plus-1-code/700.css'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.tz.setDefault('Asia/Tokyo')
+
+// Service Worker登録
+registerSW({
+  onNeedRefresh() {
+    console.log('New content available, please refresh.')
+  },
+  onOfflineReady() {
+    console.log('App ready to work offline')
+  },
+  onRegistered(registration: ServiceWorkerRegistration | undefined) {
+    console.log('Service Worker registered:', registration)
+  },
+  onRegisterError(error: unknown) {
+    console.error('Service Worker registration failed:', error)
+  }
+})
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -103,36 +120,6 @@ const checkVersionAndClearCache = () => {
 
 // アプリ起動時にバージョンチェックを実行
 checkVersionAndClearCache()
-
-/**
- * Service Workerを登録
- */
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .then((registration) => {
-        console.log('SW registered:', registration)
-
-        // 更新チェック
-        registration.addEventListener('updatefound', () => {
-          const newWorker = registration.installing
-          if (newWorker) {
-            newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                console.log('New SW available, reloading...')
-                // 新しいSWが利用可能になったらページをリロード
-                window.location.reload()
-              }
-            })
-          }
-        })
-      })
-      .catch((error) => {
-        console.error('SW registration failed:', error)
-      })
-  })
-}
 
 // Render the app
 // biome-ignore lint/style/noNonNullAssertion: reason

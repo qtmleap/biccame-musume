@@ -8,6 +8,7 @@
     "lib": ["ES2023", "DOM", "DOM.Iterable", "WebWorker"],
     "types": [
       "vite/client",
+      "vite-plugin-pwa/client",
       "@cloudflare/workers-types",
       "@types/bun",
       "@types/google.maps"
