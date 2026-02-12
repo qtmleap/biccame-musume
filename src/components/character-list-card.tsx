@@ -62,7 +62,7 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
               enableVoteCount={false}
               isBiccameMusume={character.character?.is_biccame_musume}
             />
-            <CharacterFollowButton twitterId={character.character?.twitter_id} variant='compact' />
+            <CharacterFollowButton twitterId={character.character?.twitter_id} />
           </div>
         </Link>
       </div>
