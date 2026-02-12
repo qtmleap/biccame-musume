@@ -1,0 +1,24 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["src/index.ts", "src/app/main.tsx"],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignore": [
+    "src/components/ui/**",
+    "src/app/routeTree.gen.ts",
+    "__tests__/**",
+    ".vscode/scripts/**",
+    "dev-dist/**",
+    "intlayer.config.ts"
+  ],
+  "ignoreExportsUsedInFile": true,
+  "ignoreDependencies": [
+    "@biomejs/biome",
+    "@tanstack/router-devtools",
+    "@tailwindcss/typography",
+    "c7-mcp-server",
+    "conventional-changelog-conventionalcommits",
+    "globals",
+    "tailwindcss",
+    "tailwindcss-animate"
+  ]
+}
