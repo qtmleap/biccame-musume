@@ -158,6 +158,12 @@ const appContent = {
       [StoreKeySchema.enum.yokonishi]: '横西たん',
       [StoreKeySchema.enum.yuurakuchou]: '有楽町たん'
     },
+    common: {
+      loading: '読み込み中...',
+      error: 'エラーが発生しました',
+      retry: '再試行',
+      close: '閉じる'
+    },
     myPage: {
       title: 'マイページ',
       backButton: '戻る',
@@ -329,3 +335,4 @@ export const EVENT_LIST_LABELS = appContent.content.eventList
 export const BIRTHDAY_DIALOG_LABELS = appContent.content.birthdayDialog
 export const EVENT_LIST_ITEM_LABELS = appContent.content.eventListItem
 export const GANTT_CHART_LABELS = appContent.content.ganttChart
+export const COMMON_LABELS = appContent.content.common
