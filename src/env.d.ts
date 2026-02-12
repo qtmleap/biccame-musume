@@ -1,6 +1,8 @@
 declare const __APP_VERSION__: string
 declare const __GIT_HASH__: string
 
+/// <reference types="vite-plugin-pwa/client" />
+
 // 環境変数
 interface ImportMetaEnv {
   // Google Maps
