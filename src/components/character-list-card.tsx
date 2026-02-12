@@ -1,8 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { CharacterFollowButton } from '@/components/characters/character-follow-button'
+import { CharacterTwitterLink } from '@/components/characters/character-twitter-link'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
 
@@ -14,8 +15,6 @@ type CharacterListCardProps = {
  * ビッカメ娘一覧表示用コンパクトカードコンポーネント
  */
 export const CharacterListCard = ({ character }: CharacterListCardProps) => {
-  const isGraduated = !character.character?.twitter_id
-
   return (
     <motion.div
       layout
@@ -36,7 +35,7 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
           className='flex-1 block border border-pink-200 rounded-lg p-3 hover:border-[#e50012]/40 transition-colors bg-white'
         >
           <div className='flex items-center gap-3 mb-2'>
-            <Avatar className='h-16 w-16 border-4 border-white'>
+            <Avatar className='h-16 w-16 border-2 border-pink-200'>
               <AvatarImage
                 src={character.character?.image_url}
                 alt={character.character?.name || ''}
@@ -47,12 +46,15 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
               </AvatarFallback>
             </Avatar>
             <div className='flex-1 min-w-0'>
-              <h3 className='text-sm font-semibold line-clamp-2 text-gray-900'>
+              <h3 className='text-base font-bold line-clamp-1 text-gray-900'>
                 {getDisplayName(character.character?.name || '')}
               </h3>
+              <div className='h-5'>
+                <CharacterTwitterLink twitterId={character.character?.twitter_id} />
+              </div>
             </div>
           </div>
-          <div className='flex justify-end gap-2'>
+          <div className='flex justify-end gap-2 h-7'>
             {character.character?.is_biccame_musume && (
               <CharacterVoteButton
                 characterId={character.id}
@@ -61,25 +63,9 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
                 enableVoteCount={false}
               />
             )}
-            <Button
-              size='sm'
-              variant='outline'
-              asChild={!isGraduated}
-              disabled={isGraduated}
-              className='rounded-full px-4 h-7 text-xs font-semibold'
-              onClick={(e) => {
-                e.stopPropagation()
-                if (isGraduated) return
-              }}
-            >
-              {isGraduated ? (
-                <span>フォロー</span>
-              ) : (
-                <a href={`https://x.com/${character.character?.twitter_id}`} target='_blank' rel='noopener noreferrer'>
-                  フォロー
-                </a>
-              )}
-            </Button>
+            {character.character?.twitter_id && (
+              <CharacterFollowButton twitterId={character.character.twitter_id} variant='compact' />
+            )}
           </div>
         </Link>
       </div>

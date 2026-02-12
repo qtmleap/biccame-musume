@@ -103,7 +103,10 @@ export const CharacterVoteButton = ({
     return (
       <Button
         size='sm'
-        onClick={handleVote}
+        onClick={(e) => {
+          e.stopPropagation()
+          handleVote()
+        }}
         disabled={hasVotedToday || isPending}
         className={cn(
           'rounded-full px-4 h-7 text-xs font-semibold',
@@ -119,7 +122,10 @@ export const CharacterVoteButton = ({
 
   return (
     <Button
-      onClick={handleVote}
+      onClick={(e) => {
+        e.stopPropagation()
+        handleVote()
+      }}
       disabled={hasVotedToday || isPending}
       className={cn(
         'w-full font-semibold',
