@@ -4,7 +4,7 @@ import { orderBy } from 'lodash-es'
 import { Calendar } from 'lucide-react'
 import { motion } from 'motion/react'
 import { EventListItem } from '@/components/home/event-list-item'
-import { useEvents } from '@/hooks/useEvents'
+import { useEvents } from '@/hooks/use-events'
 
 /**
  * 通常名刺（regular_card）の重複を排除し、店舗ごとに最新のものだけを残す

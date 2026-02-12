@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { RankingList } from '@/components/ranking/ranking-list'
-import { useVoteRanking } from '@/hooks/useVoteRanking'
+import { useVoteRanking } from '@/hooks/use-voteRanking'
 
 export const Route = createFileRoute('/ranking/')({
   component: RouteComponent

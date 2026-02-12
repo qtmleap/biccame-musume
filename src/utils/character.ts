@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { prefectureToRegion, type RegionType } from '@/atoms/filterAtom'
+import { prefectureToRegion, type RegionType } from '@/atoms/filter-atom'
 import type { StoreData } from '@/schemas/store.dto'
 
 /**

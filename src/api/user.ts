@@ -5,7 +5,7 @@ import { csrf } from 'hono/csrf'
 import { HTTPException } from 'hono/http-exception'
 import { ErrorResponseSchema } from '@/schemas/activity.dto'
 import { UpsertUserRequestSchema, UserResponseSchema } from '@/schemas/user.dto'
-import { getUserById } from '@/services/user.service'
+import { getUserById } from '@/services/user-service'
 import type { Bindings, Variables } from '@/types/bindings'
 import { getJwtPayload, verifyToken } from '@/utils/token'
 
