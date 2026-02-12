@@ -7,7 +7,7 @@ import { PageViewCounter } from '@/components/common/page-view-counter'
  */
 export const HomeHeader = () => {
   return (
-    <header className='bg-linear-to-r from-[#e50012] to-[#ff3333] py-10 md:py-12'>
+    <header className='bg-linear-to-r from-[#e50012] to-[#ff3333] py-4 md:py-8'>
       <div className='container mx-auto px-4 text-center max-w-4xl'>
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
