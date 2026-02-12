@@ -1,13 +1,15 @@
 import { Button } from '@/components/ui/button'
 
 type CharacterFollowButtonProps = {
-  twitterId: string
+  twitterId?: string
 }
 
 /**
  * ビッカメ娘のフォローボタンコンポーネント
  */
 export const CharacterFollowButton = ({ twitterId }: CharacterFollowButtonProps) => {
+  if (!twitterId) return null
+
   return (
     <Button
       asChild

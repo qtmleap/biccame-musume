@@ -14,6 +14,7 @@ type CharacterVoteButtonProps = {
   characterName?: string
   variant?: 'default' | 'compact'
   enableVoteCount?: boolean
+  isBiccameMusume?: boolean
 }
 
 /**
@@ -22,10 +23,14 @@ type CharacterVoteButtonProps = {
 export const CharacterVoteButton = ({
   characterId,
   characterName: _characterName,
-  variant = 'default'
+  variant = 'default',
+  isBiccameMusume = true
 }: CharacterVoteButtonProps) => {
   const { mutate, isPending, isSuccess, data, error } = useVote(characterId)
   const [lastVoteTimes, setLastVoteTimes] = useAtom(lastVoteTimesAtom)
+
+  // ビッカメ娘でない場合は表示しない
+  if (!isBiccameMusume) return null
 
   // 今日既に投票済みかチェック
   const hasVotedToday = useMemo(() => {
