@@ -9,7 +9,7 @@ import { NotFound } from '@/components/common/not-found'
 const RootComponent = () => {
   return (
     <AuthProvider>
-      <div className='min-h-screen flex flex-col bg-pink-50 select-none'>
+      <div className='min-h-screen flex flex-col select-none' style={{ backgroundColor: 'var(--app-bg)' }}>
         <Header />
         <main className='flex-1'>
           <Outlet />
