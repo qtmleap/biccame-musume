@@ -55,5 +55,6 @@ export type VoteCount = z.infer<typeof VoteCountSchema>
 
 /**
  * 投票成功レスポンス（VoteResponseSchemaのエイリアス）
+ * @deprecated VoteResponseSchema を直接使用してください
  */
 export const VoteSuccessResponseSchema = VoteResponseSchema
