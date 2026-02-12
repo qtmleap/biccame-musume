@@ -182,5 +182,3 @@ export const Header = ({ className }: HeaderProps) => {
     </header>
   )
 }
-
-export default Header
