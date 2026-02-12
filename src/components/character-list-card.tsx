@@ -1,9 +1,7 @@
 import { Link } from '@tanstack/react-router'
-import dayjs from 'dayjs'
 import { motion } from 'motion/react'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
@@ -22,83 +20,68 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
     <motion.div
       layout
       layoutId={character.id}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
       transition={{
-        layout: { type: 'spring', stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 }
+        duration: 0.3,
+        ease: 'easeOut'
       }}
       className='h-full'
     >
       <div className='h-full flex flex-col'>
-        <Link to='/characters/$id' params={{ id: character.id }} className='block flex-1'>
-          <div
-            className={`h-full rounded-lg border shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer p-4 ${
-              isGraduated
-                ? 'border-gray-300 bg-gray-200/90 hover:bg-gray-200 hover:border-gray-400'
-                : 'border-pink-200/40 bg-white/80 hover:bg-white/90 hover:border-pink-400/60'
-            }`}
-          >
-            <div className='flex items-center gap-3'>
-              <Avatar className='h-16 w-16'>
-                <AvatarImage
-                  src={character.character?.image_url}
-                  alt={character.character?.name || ''}
-                  className='mix-blend-multiply'
-                />
-                <AvatarFallback className={isGraduated ? 'bg-gray-200 text-gray-600' : 'bg-pink-100 text-pink-700'}>
-                  {character.character?.name?.[0] || '?'}
-                </AvatarFallback>
-              </Avatar>
-              <div className='flex-1 min-w-0'>
-                <h3 className='text-lg font-semibold mb-2 truncate text-gray-800'>
-                  {getDisplayName(character.character?.name || '')}
-                </h3>
-                <div className='flex items-center gap-2 min-h-6 flex-wrap'>
-                  {character.prefecture && (
-                    <Badge variant='secondary' className='text-xs bg-blue-100 text-blue-700 border-blue-200'>
-                      {character.prefecture}
-                    </Badge>
-                  )}
-                  {character.character?.birthday && (
-                    <Badge variant='secondary' className='text-xs bg-pink-100 text-pink-700 border-pink-200'>
-                      {dayjs(character.character.birthday).format('M月D日')}
-                    </Badge>
-                  )}
-                </div>
-              </div>
+        <Link
+          to='/characters/$id'
+          params={{ id: character.id }}
+          className='flex-1 block border border-pink-200 rounded-lg p-3 hover:border-[#e50012]/40 transition-colors bg-white'
+        >
+          <div className='flex items-center gap-3 mb-2'>
+            <Avatar className='h-16 w-16 border-4 border-white'>
+              <AvatarImage
+                src={character.character?.image_url}
+                alt={character.character?.name || ''}
+                className='mix-blend-multiply scale-150 translate-y-[20%]'
+              />
+              <AvatarFallback className='bg-pink-100 text-pink-700'>
+                {character.character?.name?.[0] || '?'}
+              </AvatarFallback>
+            </Avatar>
+            <div className='flex-1 min-w-0'>
+              <h3 className='text-sm font-semibold line-clamp-2 text-gray-900'>
+                {getDisplayName(character.character?.name || '')}
+              </h3>
             </div>
           </div>
-        </Link>
-        <div className='flex justify-end gap-2 mt-2'>
-          {character.character?.is_biccame_musume && (
-            <CharacterVoteButton
-              characterId={character.id}
-              characterName={character.character?.name || ''}
-              variant='compact'
-              enableVoteCount={false}
-            />
-          )}
-          <Button
-            size='sm'
-            variant='outline'
-            asChild={!isGraduated}
-            disabled={isGraduated}
-            className='rounded-full px-4 h-7 text-xs font-semibold'
-            onClick={(e) => {
-              e.stopPropagation()
-              if (isGraduated) return
-            }}
-          >
-            {isGraduated ? (
-              <span>フォロー</span>
-            ) : (
-              <a href={`https://x.com/${character.character?.twitter_id}`} target='_blank' rel='noopener noreferrer'>
-                フォロー
-              </a>
+          <div className='flex justify-end gap-2'>
+            {character.character?.is_biccame_musume && (
+              <CharacterVoteButton
+                characterId={character.id}
+                characterName={character.character?.name || ''}
+                variant='compact'
+                enableVoteCount={false}
+              />
             )}
-          </Button>
-        </div>
+            <Button
+              size='sm'
+              variant='outline'
+              asChild={!isGraduated}
+              disabled={isGraduated}
+              className='rounded-full px-4 h-7 text-xs font-semibold'
+              onClick={(e) => {
+                e.stopPropagation()
+                if (isGraduated) return
+              }}
+            >
+              {isGraduated ? (
+                <span>フォロー</span>
+              ) : (
+                <a href={`https://x.com/${character.character?.twitter_id}`} target='_blank' rel='noopener noreferrer'>
+                  フォロー
+                </a>
+              )}
+            </Button>
+          </div>
+        </Link>
       </div>
     </motion.div>
   )
