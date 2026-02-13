@@ -70,6 +70,8 @@ export default defineConfig(({ mode }) => {
         includeAssets: ['favicon.ico', 'icons/*.png', 'og_image.webp'],
         manifest: false, // manifest.webmanifestを直接使用
         workbox: {
+          skipWaiting: true,
+          clientsClaim: true,
           globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2}'],
           runtimeCaching: [
             {
@@ -128,7 +130,7 @@ export default defineConfig(({ mode }) => {
             }
           ],
           navigateFallback: '/index.html',
-          navigateFallbackDenylist: [/^\/api/]
+          navigateFallbackDenylist: [/^\/api/, /\/__\/auth/]
         },
         devOptions: {
           enabled: true,
