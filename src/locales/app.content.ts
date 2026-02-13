@@ -232,12 +232,14 @@ const appContent = {
       storeSelected: '{count}店舗選択中'
     },
     auth: {
+      login: 'ログイン・新規登録',
       loginSuccess: 'ログインしました',
       loginError: 'ログインに失敗しました',
       signupSuccess: 'アカウントを作成しました',
       signupError: 'アカウント作成に失敗しました',
       emulatorMessage: '開発環境ではメール/パスワード認証を使用してください',
-      loginMessage: 'アカウントにログインしてください',
+      loginMessage:
+        '外部アカウントを使って、かんたんにログインできます。アカウントをお持ちでない場合は、そのまま新規登録されます。',
       passwordPlaceholder: 'パスワード',
       displayNamePlaceholder: '表示名'
     },

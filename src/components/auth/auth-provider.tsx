@@ -1,8 +1,10 @@
-import { onAuthStateChanged } from 'firebase/auth'
+import { getRedirectResult, onAuthStateChanged } from 'firebase/auth'
 import { useSetAtom } from 'jotai'
 import { type ReactNode, useEffect } from 'react'
+import { toast } from 'sonner'
 import { userAtom } from '@/atoms/auth-atom'
 import { auth } from '@/lib/firebase'
+import { AUTH_LABELS } from '@/locales/app.content'
 import { client } from '@/utils/client'
 
 interface AuthProviderProps {
@@ -16,6 +18,23 @@ interface AuthProviderProps {
  */
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const setUser = useSetAtom(userAtom)
+
+  // リダイレクト認証の結果を処理
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result?.user) {
+          console.info('Redirect login success:', result.user.uid)
+          toast.success(AUTH_LABELS.loginSuccess)
+        }
+      })
+      .catch((error) => {
+        console.error('Redirect login failed:', error)
+        if (error.code !== 'auth/popup-closed-by-user') {
+          toast.error(AUTH_LABELS.loginError)
+        }
+      })
+  }, [])
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
