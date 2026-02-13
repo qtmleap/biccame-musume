@@ -1,12 +1,12 @@
 import { initializeApp } from 'firebase/app'
-import { connectAuthEmulator, getAuth } from 'firebase/auth'
+import { browserLocalPersistence, connectAuthEmulator, getAuth, setPersistence } from 'firebase/auth'
 
 /**
  * Firebase設定
  */
 const firebaseConfig = {
   apiKey: 'AIzaSyDhN2ya6f5kVz_ik881-v4EX-uHX70b8Tg',
-  authDomain: 'biccame-musume.firebaseapp.com',
+  authDomain: 'dev.biccame-musume.com',
   projectId: 'biccame-musume',
   storageBucket: 'biccame-musume.firebasestorage.app',
   messagingSenderId: '511011902152',
@@ -23,6 +23,13 @@ export const firebaseApp = initializeApp(firebaseConfig)
  * Firebase Authインスタンス
  */
 export const auth = getAuth(firebaseApp)
+
+/**
+ * 認証状態の永続化をLocalStorageに設定
+ */
+setPersistence(auth, browserLocalPersistence).catch((error) => {
+  console.error('Failed to set persistence:', error)
+})
 
 /**
  * 開発環境ではAuthエミュレーターに接続

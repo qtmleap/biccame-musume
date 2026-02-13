@@ -29,6 +29,7 @@ dayjs.tz.setDefault('Asia/Tokyo')
 
 // Service Worker登録
 registerSW({
+  immediate: true,
   onNeedRefresh() {
     console.log('New content available, please refresh.')
   },

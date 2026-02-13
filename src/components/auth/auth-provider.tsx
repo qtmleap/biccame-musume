@@ -1,6 +1,6 @@
 import { getRedirectResult, onAuthStateChanged } from 'firebase/auth'
 import { useSetAtom } from 'jotai'
-import { type ReactNode, useEffect } from 'react'
+import { type ReactNode, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import { userAtom } from '@/atoms/auth-atom'
 import { auth } from '@/lib/firebase'
@@ -18,25 +18,41 @@ interface AuthProviderProps {
  */
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const setUser = useSetAtom(userAtom)
+  const redirectResultChecked = useRef(false)
 
-  // リダイレクト認証の結果を処理
   useEffect(() => {
-    getRedirectResult(auth)
-      .then((result) => {
+    // リダイレクト認証の結果を先に処理（1回のみ）
+    const handleRedirectResult = async () => {
+      if (redirectResultChecked.current) {
+        console.info('Redirect result already checked, skipping')
+        return
+      }
+      redirectResultChecked.current = true
+
+      console.info('Checking redirect result...')
+      try {
+        const result = await getRedirectResult(auth)
+        console.info('Redirect result:', result)
         if (result?.user) {
           console.info('Redirect login success:', result.user.uid)
           toast.success(AUTH_LABELS.loginSuccess)
+        } else {
+          console.info('No redirect result (normal page load)')
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error('Redirect login failed:', error)
-        if (error.code !== 'auth/popup-closed-by-user') {
+        const firebaseError = error as { code?: string; message?: string }
+        console.error('Error code:', firebaseError.code)
+        console.error('Error message:', firebaseError.message)
+        if (firebaseError.code !== 'auth/popup-closed-by-user') {
           toast.error(AUTH_LABELS.loginError)
         }
-      })
-  }, [])
+      }
+    }
 
-  useEffect(() => {
+    handleRedirectResult()
+
+    // 認証状態の監視
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       console.info('Auth state changed:', user ? `${user.uid} (${user.email})` : 'Not authenticated')
 

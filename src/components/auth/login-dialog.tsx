@@ -29,23 +29,12 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
   /**
-   * ソーシャルログインの共通ハンドラー
+   * ソーシャルログインの共通ハンドラー（リダイレクト方式）
+   * ページ遷移するため、トースト表示はAuthProviderで行う
    */
-
-  // biome-ignore lint/suspicious/noExplicitAny: reason
-  const handleSocialLogin = async (loginFn: () => Promise<any>) => {
+  const handleSocialLogin = async (loginFn: () => Promise<void>) => {
     setIsLoading(true)
-    try {
-      const result = await loginFn()
-      if (result) {
-        toast.success(AUTH_LABELS.loginSuccess)
-        onOpenChange(false)
-      }
-    } catch (error) {
-      const errorMessage = (error as Error).message
-      toast.error(errorMessage || AUTH_LABELS.loginError)
-      setIsLoading(false)
-    }
+    await loginFn()
   }
 
   /**
@@ -112,23 +101,41 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2'>{AUTH_LABELS.login}</DialogTitle>
-          <DialogDescription>{AUTH_LABELS.loginMessage}</DialogDescription>
+          <DialogDescription className='whitespace-pre-line'>{AUTH_LABELS.loginMessage}</DialogDescription>
         </DialogHeader>
 
         <div className='space-y-4'>
           {/* ソーシャルログインボタン */}
           <div className='grid grid-cols-2 gap-3'>
-            <Button type='button' variant='outline' className='w-full' onClick={handleGoogleLogin} disabled={isLoading}>
+            <Button
+              type='button'
+              variant='outline'
+              className='w-full border-gray-200'
+              onClick={handleGoogleLogin}
+              disabled={isLoading}
+            >
               <FaGoogle className='mr-2 h-4 w-4' />
               Google
             </Button>
 
-            <Button type='button' variant='outline' className='w-full' onClick={handleAppleLogin} disabled={isLoading}>
+            <Button
+              type='button'
+              variant='outline'
+              className='w-full border-gray-200'
+              onClick={handleAppleLogin}
+              disabled={isLoading}
+            >
               <FaApple className='mr-2 h-4 w-4' />
               Apple
             </Button>
 
-            <Button type='button' variant='outline' className='w-full' onClick={handleGithubLogin} disabled={isLoading}>
+            <Button
+              type='button'
+              variant='outline'
+              className='w-full border-gray-200'
+              onClick={handleGithubLogin}
+              disabled={isLoading}
+            >
               <FaGithub className='mr-2 h-4 w-4' />
               GitHub
             </Button>
@@ -136,7 +143,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
             <Button
               type='button'
               variant='outline'
-              className='w-full'
+              className='w-full border-gray-200'
               onClick={handleTwitterLogin}
               disabled={isLoading}
             >
