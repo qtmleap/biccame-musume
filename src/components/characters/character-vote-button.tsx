@@ -29,9 +29,6 @@ export const CharacterVoteButton = ({
   const { mutate, isPending, isSuccess, data, error } = useVote(characterId)
   const [lastVoteTimes, setLastVoteTimes] = useAtom(lastVoteTimesAtom)
 
-  // ビッカメ娘でない場合は表示しない
-  if (!isBiccameMusume) return null
-
   // 今日既に投票済みかチェック
   const hasVotedToday = useMemo(() => {
     const lastVoteTime = lastVoteTimes[characterId]
@@ -92,6 +89,9 @@ export const CharacterVoteButton = ({
       })
     }
   }, [error])
+
+  // ビッカメ娘でない場合は表示しない（hooksの後に配置）
+  if (!isBiccameMusume) return null
 
   const handleVote = () => {
     if (hasVotedToday || isPending) return

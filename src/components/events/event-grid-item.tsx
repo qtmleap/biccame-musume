@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar, Package, Store } from 'lucide-react'
-import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { EVENT_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
@@ -66,16 +65,7 @@ export const EventGridItem = ({ event }: EventGridItemProps) => {
   const endingSoonBg = getEndingSoonBackground(event)
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{
-        duration: 0.3,
-        ease: 'easeOut'
-      }}
-      layout
-    >
+    <div>
       <Link
         to='/events/$uuid'
         params={{ uuid: event.uuid }}
@@ -136,6 +126,6 @@ export const EventGridItem = ({ event }: EventGridItemProps) => {
           </div>
         )}
       </Link>
-    </motion.div>
+    </div>
   )
 }
