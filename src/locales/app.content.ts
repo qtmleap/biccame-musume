@@ -239,7 +239,7 @@ const appContent = {
       signupError: 'アカウント作成に失敗しました',
       emulatorMessage: '開発環境ではメール/パスワード認証を使用してください',
       loginMessage:
-        '外部アカウントを使って、かんたんにログインできます。アカウントをお持ちでない場合は、そのまま新規登録されます。',
+        '外部アカウントを使って、かんたんにログインできます。\nアカウントをお持ちでない場合は、そのまま新規登録されます。',
       passwordPlaceholder: 'パスワード',
       displayNamePlaceholder: '表示名'
     },
