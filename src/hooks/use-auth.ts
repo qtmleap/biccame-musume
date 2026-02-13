@@ -4,7 +4,7 @@ import {
   GoogleAuthProvider,
   OAuthProvider,
   signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithRedirect,
   signOut,
   TwitterAuthProvider
 } from 'firebase/auth'
@@ -62,67 +62,35 @@ export const useAuth = () => {
   }, [])
 
   /**
-   * Twitterでログイン
+   * Twitterでログイン（リダイレクト方式）
    */
   const loginWithTwitter = useCallback(async () => {
     const provider = new TwitterAuthProvider()
-    try {
-      const result = await signInWithPopup(auth, provider)
-      return result.user
-    } catch (error) {
-      console.error('Twitter login failed:', error)
-      if ((error as { code?: string })?.code !== 'auth/popup-closed-by-user') {
-        throw error
-      }
-    }
+    await signInWithRedirect(auth, provider)
   }, [])
 
   /**
-   * Googleでログイン
+   * Googleでログイン（リダイレクト方式）
    */
   const loginWithGoogle = useCallback(async () => {
     const provider = new GoogleAuthProvider()
-    try {
-      const result = await signInWithPopup(auth, provider)
-      return result.user
-    } catch (error) {
-      console.error('Google login failed:', error)
-      if ((error as { code?: string })?.code !== 'auth/popup-closed-by-user') {
-        throw error
-      }
-    }
+    await signInWithRedirect(auth, provider)
   }, [])
 
   /**
-   * GitHubでログイン
+   * GitHubでログイン（リダイレクト方式）
    */
   const loginWithGithub = useCallback(async () => {
     const provider = new GithubAuthProvider()
-    try {
-      const result = await signInWithPopup(auth, provider)
-      return result.user
-    } catch (error) {
-      console.error('GitHub login failed:', error)
-      if ((error as { code?: string })?.code !== 'auth/popup-closed-by-user') {
-        throw error
-      }
-    }
+    await signInWithRedirect(auth, provider)
   }, [])
 
   /**
-   * Appleでログイン
+   * Appleでログイン（リダイレクト方式）
    */
   const loginWithApple = useCallback(async () => {
     const provider = new OAuthProvider('apple.com')
-    try {
-      const result = await signInWithPopup(auth, provider)
-      return result.user
-    } catch (error) {
-      console.error('Apple login failed:', error)
-      if ((error as { code?: string })?.code !== 'auth/popup-closed-by-user') {
-        throw error
-      }
-    }
+    await signInWithRedirect(auth, provider)
   }, [])
 
   /**
