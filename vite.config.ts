@@ -72,6 +72,7 @@ export default defineConfig(({ mode }) => {
         workbox: {
           skipWaiting: true,
           clientsClaim: true,
+          globDirectory: 'dist/client',
           globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2}'],
           runtimeCaching: [
             {
@@ -127,10 +128,13 @@ export default defineConfig(({ mode }) => {
                   statuses: [0, 200]
                 }
               }
-            }
+            },
+            {
+              urlPattern: /\/__\auth\/.*/i,
+              handler: 'NetworkFirst',
+            },
           ],
           navigateFallback: '/index.html',
-          navigateFallbackDenylist: [/^\/api/, /\/__\/auth/]
         },
         devOptions: {
           enabled: true,
@@ -187,7 +191,8 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       __APP_VERSION__: JSON.stringify(version),
-      __GIT_HASH__: JSON.stringify(hash)
+      __GIT_HASH__: JSON.stringify(hash),
+      __AUTH_DOMAIN__: JSON.stringify(mode === 'prod' ? 'biccame-musume.com' : 'dev.biccame-musume.com')
     },
     envPrefix: 'VITE_'
   }
