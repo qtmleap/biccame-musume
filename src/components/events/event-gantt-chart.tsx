@@ -56,12 +56,15 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   }, [monthOffset])
 
   // カテゴリの優先順位
-  const categoryOrder: Record<Event['category'], number> = {
-    limited_card: 0,
-    regular_card: 1,
-    ackey: 2,
-    other: 3
-  }
+  const categoryOrder: Record<Event['category'], number> = useMemo(
+    () => ({
+      limited_card: 0,
+      regular_card: 1,
+      ackey: 2,
+      other: 3
+    }),
+    []
+  )
 
   const today = dayjs().startOf('day')
   const todayOffset = today.diff(chartStartDate, 'day')
@@ -157,7 +160,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
         }
       })
       .filter((bar) => bar !== null)
-  }, [events, chartStartDate, chartEndDate])
+  }, [events, chartStartDate, chartEndDate, categoryOrder])
 
   const visibleEventBars = eventBars
 
