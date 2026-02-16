@@ -109,6 +109,7 @@ export const CharacterVoteButton = ({
       <Button
         size='sm'
         onClick={(e) => {
+          e.preventDefault()
           e.stopPropagation()
           handleVote()
         }}
@@ -128,6 +129,7 @@ export const CharacterVoteButton = ({
   return (
     <Button
       onClick={(e) => {
+        e.preventDefault()
         e.stopPropagation()
         handleVote()
       }}
