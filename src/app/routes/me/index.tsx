@@ -5,7 +5,7 @@ import { Suspense } from 'react'
 import { toast } from 'sonner'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
-import { EventGridItem } from '@/components/events/event-grid-item'
+import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { getLargeTwitterPhoto, useAuth } from '@/hooks/use-auth'
@@ -47,15 +47,12 @@ const EventSection = ({
           </Link>
         )}
       </div>
-      {events.length > 0 ? (
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
-          {displayEvents.map((event) => (
-            <EventGridItem key={event.uuid} event={event} />
-          ))}
-        </div>
-      ) : (
-        <p className='text-sm text-gray-500 py-2'>{emptyMessage}</p>
-      )}
+      <PaginatedEventGrid
+        events={displayEvents}
+        page={1}
+        onPageChange={() => {}}
+        emptyState={<p className='text-sm text-gray-500 py-2'>{emptyMessage}</p>}
+      />
     </div>
   )
 }
