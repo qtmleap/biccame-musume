@@ -6,13 +6,15 @@ import { browserLocalPersistence, connectAuthEmulator, getAuth, setPersistence }
  */
 const firebaseConfig = {
   apiKey: 'AIzaSyDhN2ya6f5kVz_ik881-v4EX-uHX70b8Tg',
-  authDomain: 'dev.biccame-musume.com',
+  authDomain: __AUTH_DOMAIN__,
   projectId: 'biccame-musume',
   storageBucket: 'biccame-musume.firebasestorage.app',
   messagingSenderId: '511011902152',
   appId: '1:511011902152:web:6479a3d3fdbf40a2f40bfd',
   measurementId: 'G-YM8ZM9P2PF'
 }
+
+console.log('Firebase authDomain:', firebaseConfig.authDomain)
 
 /**
  * Firebaseアプリインスタンス
