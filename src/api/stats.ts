@@ -2,7 +2,12 @@ import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
-import { PageViewQuerySchema, PageViewStatsSchema } from '@/schemas/stats.dto'
+import {
+  PageViewQuerySchema,
+  PageViewStatsSchema,
+  TrackPageViewResponseSchema,
+  TrackPageViewSchema
+} from '@/schemas/stats.dto'
 import type { Bindings, Variables } from '@/types/bindings'
 
 dayjs.extend(utc)
@@ -38,7 +43,7 @@ const getTodayPageViews = async (env: Bindings): Promise<number> => {
 /**
  * KVにページビューを記録（インクリメント）
  */
-export const incrementPageView = async (env: Bindings, path: string): Promise<void> => {
+const incrementPageView = async (env: Bindings, path: string): Promise<void> => {
   // 全体のカウント
   const totalKey = 'pv:total'
   const totalValue = await env.PAGE_VIEWS.get(totalKey)
@@ -117,8 +122,7 @@ routes.openapi(
       const today = await getTodayPageViews(c.env)
       return c.json({
         total: count,
-        today,
-        paths: { [path]: count }
+        today
       })
     }
 
@@ -132,6 +136,41 @@ routes.openapi(
       today,
       paths
     })
+  }
+)
+
+/**
+ * ページビュー記録
+ * POST /api/stats
+ */
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/',
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: TrackPageViewSchema
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: TrackPageViewResponseSchema
+          }
+        },
+        description: 'ページビュー記録成功'
+      }
+    }
+  }),
+  async (c) => {
+    const { path } = c.req.valid('json')
+    await incrementPageView(c.env, path)
+    return c.json({ success: true })
   }
 )
 

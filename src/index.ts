@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
+import { proxy } from 'hono/proxy'
 import { ZodError } from 'zod'
 import authRoutes from './api/auth'
 import direction from './api/direction'
@@ -9,7 +10,6 @@ import me from './api/me'
 import stats from './api/stats'
 import users from './api/user'
 import votes from './api/vote'
-import { trackPageViews } from './middleware/page-view'
 import type { Bindings, Variables } from './types/bindings'
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
@@ -23,8 +23,18 @@ app.use(
   })
 )
 
-// ページビュートラッキングミドルウェア（全リクエストに適用）
-app.use('*', trackPageViews())
+/** Firebase認証ヘルパーのリバースプロキシ（最優先で処理） */
+app.all('/__/auth/*', (c) => {
+  const url = new URL(c.req.url)
+  const proxyUrl = `https://biccame-musume.firebaseapp.com${url.pathname}${url.search}`
+  return proxy(proxyUrl, {
+    ...c.req,
+    headers: {
+      ...c.req.header(),
+      host: 'biccame-musume.firebaseapp.com'
+    }
+  })
+})
 
 app.onError(async (error, c) => {
   console.error(error)
