@@ -151,6 +151,21 @@ const api = makeApi([
     ],
     response: PageViewStatsSchema
   },
+  // ページビュー記録API
+  {
+    method: 'post',
+    path: '/api/stats',
+    alias: 'trackPageView',
+    description: 'ページビューを記録',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: z.object({ path: z.string().min(1) })
+      }
+    ],
+    response: z.object({ success: z.boolean() })
+  },
   // 認証関連API
   {
     method: 'post',

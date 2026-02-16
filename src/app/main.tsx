@@ -11,7 +11,7 @@ import utc from 'dayjs/plugin/utc'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { Toaster } from '@/components/ui/sonner'
-
+import { client } from '@/utils/client'
 // フォントのインポート
 import '@fontsource/noto-sans-jp/400.css'
 import '@fontsource/noto-sans-jp/500.css'
@@ -22,6 +22,10 @@ import '@fontsource/zen-maru-gothic/700.css'
 import '@fontsource/m-plus-1-code/400.css'
 import '@fontsource/m-plus-1-code/500.css'
 import '@fontsource/m-plus-1-code/700.css'
+// Import the generated route tree
+import { routeTree } from './routeTree.gen'
+import '../index.css'
+import { QueryClient } from '@tanstack/react-query'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -44,17 +48,19 @@ registerSW({
   }
 })
 
-// Import the generated route tree
-import { routeTree } from './routeTree.gen'
-
-import '../index.css'
-import { QueryClient } from '@tanstack/react-query'
-
 // ルーターインスタンスを作成（ページ遷移時にスクロール位置をトップにリセット）
 const router = createRouter({
   routeTree,
   defaultPreloadStaleTime: 0,
   scrollRestoration: true
+})
+
+// ページ遷移時にページビューを記録
+router.subscribe('onResolved', (evt) => {
+  const path = evt.toLocation.pathname
+  if (!path.startsWith('/api/') && !path.startsWith('/admin')) {
+    client.trackPageView({ path }).catch((err: unknown) => console.error('Failed to track page view:', err))
+  }
 })
 
 // Register the router instance for type safety
@@ -64,7 +70,7 @@ declare module '@tanstack/react-router' {
   }
 }
 
-const client = new QueryClient({
+const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5分間はデータを新鮮とみなす
@@ -102,7 +108,7 @@ const checkVersionAndClearCache = () => {
     if (hasOldCache) {
       console.log('Old cache detected on first access. Clearing cache...')
       localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
-      client.clear()
+      queryClient.clear()
       console.log('Cache cleared successfully')
     }
     localStorage.setItem(STORAGE_KEY, currentVersion)
@@ -111,7 +117,7 @@ const checkVersionAndClearCache = () => {
     // バージョンが変更された
     console.log(`Version changed from ${storedVersion} to ${currentVersion}. Clearing cache...`)
     localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
-    client.clear()
+    queryClient.clear()
     localStorage.setItem(STORAGE_KEY, currentVersion)
     console.log('Cache cleared successfully')
   } else {
@@ -130,7 +136,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <PersistQueryClientProvider
-        client={client}
+        client={queryClient}
         persistOptions={{
           persister: persister,
           maxAge: 1000 * 60 * 60 * 24 * 7, // 7日間LocalStorageに保持
