@@ -14,19 +14,10 @@ import { RegionFilterControl } from '@/components/characters/region-filter-contr
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
-import { EventGridItem } from '@/components/events/event-grid-item'
 import { EventStatusFilter } from '@/components/events/event-status-filter'
 import { EventUserActivityFilter } from '@/components/events/event-user-activity-filter'
+import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { Button } from '@/components/ui/button'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious
-} from '@/components/ui/pagination'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Toggle } from '@/components/ui/toggle'
 import { charactersQueryKey } from '@/hooks/use-characters'
@@ -144,13 +135,6 @@ const EventsContent = () => {
     setPage(1)
   }, [setPage])
 
-  // ページネーション処理
-  const totalPages = Math.ceil(activeEvents.length / PER_PAGE)
-  const paginatedEvents = useMemo(() => {
-    const start = (page - 1) * PER_PAGE
-    return activeEvents.slice(start, start + PER_PAGE)
-  }, [activeEvents, page])
-
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
       <div className='flex flex-col gap-2'>
@@ -224,82 +208,19 @@ const EventsContent = () => {
         {/* イベント表示 */}
         {viewMode === 'gantt' ? (
           <EventGanttChart events={activeEvents} />
-        ) : activeEvents.length > 0 ? (
-          <>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
-              {paginatedEvents.map((event) => (
-                <EventGridItem key={event.uuid} event={event} />
-              ))}
-            </div>
-
-            {/* ページネーション */}
-            {totalPages > 1 && (
-              <div className='mt-6'>
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        size='default'
-                        href='#'
-                        onClick={(e) => {
-                          e.preventDefault()
-                          if (page > 1) setPage(page - 1)
-                        }}
-                        className={page === 1 ? 'pointer-events-none opacity-50' : ''}
-                      />
-                    </PaginationItem>
-
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => {
-                      // 最初と最後のページ、現在のページの前後1ページを表示
-                      if (p === 1 || p === totalPages || (p >= page - 1 && p <= page + 1)) {
-                        return (
-                          <PaginationItem key={p}>
-                            <PaginationLink
-                              size='icon'
-                              href='#'
-                              onClick={(e) => {
-                                e.preventDefault()
-                                setPage(p)
-                              }}
-                              isActive={page === p}
-                            >
-                              {p}
-                            </PaginationLink>
-                          </PaginationItem>
-                        )
-                      }
-                      // 省略記号を表示
-                      if (p === page - 2 || p === page + 2) {
-                        return (
-                          <PaginationItem key={p}>
-                            <PaginationEllipsis />
-                          </PaginationItem>
-                        )
-                      }
-                      return null
-                    })}
-
-                    <PaginationItem>
-                      <PaginationNext
-                        size='default'
-                        href='#'
-                        onClick={(e) => {
-                          e.preventDefault()
-                          if (page < totalPages) setPage(page + 1)
-                        }}
-                        className={page === totalPages ? 'pointer-events-none opacity-50' : ''}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
-            )}
-          </>
         ) : (
-          <div className='text-center py-12 text-gray-500'>
-            <Gift className='size-12 mx-auto mb-4 opacity-30' />
-            <p>開催中・開催予定のイベントはありません</p>
-          </div>
+          <PaginatedEventGrid
+            events={activeEvents}
+            perPage={PER_PAGE}
+            page={page}
+            onPageChange={setPage}
+            emptyState={
+              <div className='text-center py-12 text-gray-500'>
+                <Gift className='size-12 mx-auto mb-4 opacity-30' />
+                <p>開催中・開催予定のイベントはありません</p>
+              </div>
+            }
+          />
         )}
       </div>
     </div>

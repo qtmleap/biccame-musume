@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowLeft, Award } from 'lucide-react'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
-import { EventGridItem } from '@/components/events/event-grid-item'
+import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { useEvents } from '@/hooks/use-events'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { MY_PAGE_LABELS } from '@/locales/app.content'
@@ -14,6 +14,7 @@ import { MY_PAGE_LABELS } from '@/locales/app.content'
 const CompletedEventsContent = () => {
   const { completedEvents } = useUserActivity()
   const { data: allEvents } = useEvents()
+  const [page, setPage] = useState(1)
 
   // イベントIDからイベント詳細を取得
   const completedEventDetails = allEvents.filter((e) => completedEvents.includes(e.uuid))
@@ -38,21 +39,20 @@ const CompletedEventsContent = () => {
         </div>
 
         {/* イベント一覧 */}
-        {completedEventDetails.length > 0 ? (
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
-            {completedEventDetails.map((event) => (
-              <EventGridItem key={event.uuid} event={event} />
-            ))}
-          </div>
-        ) : (
-          <div className='bg-white rounded-lg shadow-sm p-8 text-center'>
-            <Award className='h-12 w-12 text-gray-300 mx-auto mb-3' />
-            <p className='text-gray-600'>{MY_PAGE_LABELS.noCompletedEvents}</p>
-            <Link to='/events' className='inline-block mt-4 text-pink-600 hover:text-pink-700 text-sm font-medium'>
-              {MY_PAGE_LABELS.findEvents}
-            </Link>
-          </div>
-        )}
+        <PaginatedEventGrid
+          events={completedEventDetails}
+          page={page}
+          onPageChange={setPage}
+          emptyState={
+            <div className='bg-white rounded-lg shadow-sm p-8 text-center'>
+              <Award className='h-12 w-12 text-gray-300 mx-auto mb-3' />
+              <p className='text-gray-600'>{MY_PAGE_LABELS.noCompletedEvents}</p>
+              <Link to='/events' className='inline-block mt-4 text-pink-600 hover:text-pink-700 text-sm font-medium'>
+                {MY_PAGE_LABELS.findEvents}
+              </Link>
+            </div>
+          }
+        />
       </div>
     </div>
   )
