@@ -1,5 +1,6 @@
 declare const __APP_VERSION__: string
 declare const __GIT_HASH__: string
+declare const __AUTH_DOMAIN__: string
 
 /// <reference types="vite-plugin-pwa/client" />
 
