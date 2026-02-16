@@ -101,6 +101,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
   }
 
   const isLoggedIn = !!user
+  const isUpcoming = event.status === 'upcoming'
 
   /**
    * シェアボタンの処理
@@ -150,23 +151,23 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           <span className='tabular-nums'>{event.interestedCount}</span>
         </button>
 
-        {/* 達成ボタン */}
+        {/* 達成ボタン（開催前は無効） */}
         <button
           type='button'
-          onClick={isLoggedIn ? handleToggleCompleted : undefined}
-          disabled={!isLoggedIn}
+          onClick={isLoggedIn && !isUpcoming ? handleToggleCompleted : undefined}
+          disabled={!isLoggedIn || isUpcoming}
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
-            isLoggedIn ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
+            isLoggedIn && !isUpcoming ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
             completed ? 'text-amber-500' : 'text-gray-400',
-            isLoggedIn && !completed && 'hover:text-amber-400'
+            isLoggedIn && !isUpcoming && !completed && 'hover:text-amber-400'
           )}
         >
           <Award
             className={cn(
               'h-5 w-5 transition-all',
               completed && 'fill-amber-200',
-              isLoggedIn && !completed && 'group-hover:scale-110'
+              isLoggedIn && !isUpcoming && !completed && 'group-hover:scale-110'
             )}
           />
           <span className='tabular-nums'>{event.completedCount}</span>

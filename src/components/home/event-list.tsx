@@ -5,6 +5,7 @@ import { Calendar } from 'lucide-react'
 import { motion } from 'motion/react'
 import { EventListItem } from '@/components/home/event-list-item'
 import { useEvents } from '@/hooks/use-events'
+import { useUserActivity } from '@/hooks/use-user-activity'
 
 /**
  * 通常名刺（regular_card）の重複を排除し、店舗ごとに最新のものだけを残す
@@ -43,10 +44,16 @@ const deduplicateRegularCards = (events: ReturnType<typeof useEvents>['data']) =
  */
 export const EventList = () => {
   const { data: events = [], isLoading } = useEvents()
+  const { completedEvents } = useUserActivity()
 
   // 開催中および開催一週間前のイベントをフィルタリングし、開始日時・カテゴリ・店舗順でソート
   const filteredEvents = orderBy(
     events.filter((event) => {
+      // 達成済みイベントは非表示
+      if (completedEvents.includes(event.uuid)) {
+        return false
+      }
+
       // 終了したイベントは非表示
       if (event.status === 'ended') {
         return false
