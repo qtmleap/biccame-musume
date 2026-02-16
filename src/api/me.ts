@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
+import { HTTPException } from 'hono/http-exception'
 import {
   EventDeleteQuerySchema,
   EventIdParamSchema,
@@ -12,6 +13,7 @@ import {
   UpdateStoreStatusSchema,
   UserActivityResponseSchema
 } from '@/schemas/activity.dto'
+import { getEvent } from '@/services/event-service'
 import {
   deleteUserEvent,
   deleteUserStore,
@@ -207,6 +209,15 @@ routes.openapi(
     const uid = getToken(c)
     const { eventId } = c.req.valid('param')
     const { status } = c.req.valid('json')
+
+    // 開催前イベントの達成登録を禁止
+    if (status === 'completed') {
+      const event = await getEvent(c.env, eventId)
+      if (event.status === 'upcoming') {
+        throw new HTTPException(400, { message: 'Cannot mark upcoming event as completed' })
+      }
+    }
+
     await updateUserEvent(c.env, uid, eventId, status)
     return c.json({ success: true })
   }
