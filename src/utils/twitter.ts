@@ -63,9 +63,10 @@ const getQuoteTweetId = (event: Event): string | undefined => {
  */
 export class Twitter {
   private oauth: OAuth
+  // private isLocal: boolean
 
   constructor(private env: Bindings) {
-    this.isLocal = !env.ENVIRONMENT || env.ENVIRONMENT === 'local'
+    // this.isLocal = !env.ENVIRONMENT || env.ENVIRONMENT === 'local'
 
     // OAuth 1.0aクライアントを初期化
     this.oauth = new OAuth({
@@ -132,7 +133,7 @@ export class Twitter {
         const errorText = await response.text()
 
         // 403エラーで引用ツイートが禁止されている場合は通常のツイートにフォールバック
-        if (response.status === 403 && quoteTweetId) {
+        if (response.status === 503 && quoteTweetId) {
           console.warn('[Twitter] Quote tweet not allowed, retrying without quote:', {
             quoteTweetId,
             error: errorText
