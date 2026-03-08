@@ -43,14 +43,18 @@ const generateTweetText = (event: Event, isUpdate: boolean): string => {
 
 /**
  * イベントから引用RT用のツイートIDを抽出
+ * 公式のお知らせツイート（type='announce'）を優先的に引用
  */
 const getQuoteTweetId = (event: Event): string | undefined => {
-  const urls = event.referenceUrls?.map((ref) => ref.url) || []
-  const url = urls.at(-1)
-  if (url === undefined) {
+  if (!event.referenceUrls || event.referenceUrls.length === 0) {
     return undefined
   }
-  return extractTweetId(url) ?? undefined
+
+  // type='announce'のURLを優先
+  const announceUrl = event.referenceUrls.find((ref) => ref.type === 'announce')
+  const targetUrl = announceUrl?.url || event.referenceUrls[0].url
+
+  return extractTweetId(targetUrl) ?? undefined
 }
 
 /**
@@ -59,7 +63,6 @@ const getQuoteTweetId = (event: Event): string | undefined => {
  */
 export class Twitter {
   private oauth: OAuth
-  private isLocal: boolean
 
   constructor(private env: Bindings) {
     this.isLocal = !env.ENVIRONMENT || env.ENVIRONMENT === 'local'
@@ -79,15 +82,16 @@ export class Twitter {
 
   /**
    * ツイートを投稿
+   * 引用ツイートが失敗した場合は通常のツイートにフォールバック
    */
   async tweet(text: string, quoteTweetId?: string): Promise<void> {
-    if (this.isLocal) {
-      console.log('[Twitter] Skipping tweet in local environment. Would have sent:', {
-        text,
-        quoteTweetId
-      })
-      return
-    }
+    // if (this.isLocal) {
+    //   console.log('[Twitter] Skipping tweet in local environment. Would have sent:', {
+    //     text,
+    //     quoteTweetId
+    //   })
+    //   return
+    // }
 
     const { TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } = this.env
 
@@ -108,20 +112,34 @@ export class Twitter {
         )
       )
 
+      const payload = {
+        text: text,
+        quote_tweet_id: quoteTweetId
+      }
+
+      console.log('[Twitter] Posting tweet with payload:', JSON.stringify(payload, null, 2))
+
       const response = await fetch(url, {
         method: 'POST',
         headers: {
           ...headers,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          text: text,
-          quote_tweet_id: quoteTweetId
-        })
+        body: JSON.stringify(payload)
       })
 
       if (!response.ok) {
         const errorText = await response.text()
+
+        // 403エラーで引用ツイートが禁止されている場合は通常のツイートにフォールバック
+        if (response.status === 403 && quoteTweetId) {
+          console.warn('[Twitter] Quote tweet not allowed, retrying without quote:', {
+            quoteTweetId,
+            error: errorText
+          })
+          return await this.tweet(text, undefined)
+        }
+
         throw new Error(`Twitter API error: ${response.status} ${errorText}`)
       }
 
