@@ -12,6 +12,8 @@ services:
     tty: true
     stdin_open: true
     network_mode: service:firebase
+    depends_on:
+      - firebase
 
   firebase:
     image: andreysenov/firebase-tools:14.17.0
@@ -22,9 +24,10 @@ services:
       - ./auth:/home/node/auth
       - ./firebase.json:/home/node/firebase.json
       - ./.firebaserc:/home/node/.firebaserc
-    # ports:
-    #   - 4000:4000
-    #   - 9099:9099
+    ports:
+      - 24000:4000
+      - 29099:9099
+      - 25173:5173
 
 volumes:
   node_modules:
