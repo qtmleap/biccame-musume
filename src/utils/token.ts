@@ -5,7 +5,7 @@ import type { Context, MiddlewareHandler } from 'hono'
 import { getCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 import { AlgorithmTypes, sign, verify } from 'hono/jwt'
-import type { Bindings, Variables } from '@/types/bindings'
+import type { Bindings, CustomJwtClaims, Variables } from '@/types/bindings'
 
 export const signToken = async (
   c: Context<{ Bindings: Bindings; Variables: Variables }>,
@@ -38,7 +38,10 @@ export const signToken = async (
   return token
 }
 
-export const getJwtPayload = (c: Context<{ Bindings: Bindings; Variables: Variables }>) => {
+/**
+ * コンテキストからJWTペイロードを取得する
+ */
+export const getJwtPayload = (c: Context<{ Bindings: Bindings; Variables: Variables }>): CustomJwtClaims => {
   return c.get('jwtPayload')
 }
 
@@ -47,17 +50,20 @@ export const verifyToken: MiddlewareHandler<{ Bindings: Bindings; Variables: Var
   if (token === undefined) {
     throw new HTTPException(401, { message: 'Unauthorized' })
   }
-  const result = await verify(token, c.env.JWT_SECRET_KEY, AlgorithmTypes.HS256)
+  const result = (await verify(token, c.env.JWT_SECRET_KEY, AlgorithmTypes.HS256)) as CustomJwtClaims
   console.info('VerifyToken:', result)
   c.set('jwtPayload', result)
   await next()
 }
 
+/**
+ * コンテキストからJWTペイロードのuidを取得する
+ */
 export const getToken = (c: Context<{ Bindings: Bindings; Variables: Variables }>): string => {
-  const result = c.get('jwtPayload')
-  console.info('GetToken:', result)
-  if (result === undefined) {
+  const payload = getJwtPayload(c)
+  console.info('GetToken:', payload)
+  if (payload === undefined) {
     throw new HTTPException(401, { message: 'Unauthorized' })
   }
-  return result.uid
+  return payload.uid
 }
