@@ -1,5 +1,7 @@
 import type { RateLimitBinding } from '@elithrar/workers-hono-rate-limit'
 import type { VerifyFirebaseAuthEnv } from '@hono/firebase-auth'
+import type { JwtVariables } from 'hono/jwt'
+import type { JWTPayload } from 'hono/utils/jwt/types'
 
 /**
  * Cloudflare Workersの環境変数の型定義
@@ -37,6 +39,21 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   JWT_SECRET_KEY: string
 }
 
-export type Variables = {
+/**
+ * JWTトークンに含まれるカスタムクレーム
+ * FirebaseIdTokenから必要な情報を抽出して署名し直したもの
+ */
+export type CustomJwtClaims = JWTPayload & {
+  uid: string
+  usr: {
+    email: string | null
+    email_verified: boolean
+    display_name: string | null
+    thumbnail_url: string | null
+  }
+  pid: undefined
+}
+
+export type Variables = JwtVariables<CustomJwtClaims> & {
   CLIENT_IP: string
 }

@@ -10,6 +10,7 @@ import jaconv from 'jaconv'
 import { mapKeys, snakeCase } from 'lodash-es'
 import { parse } from 'node-html-parser'
 import { parse as parseYaml } from 'yaml'
+import { z } from 'zod'
 
 const CACHE_DIR = join(import.meta.dir, '../archive/html_cache')
 const OUTPUT_FILE = join(import.meta.dir, '../../public/characters.json')
@@ -493,8 +494,8 @@ const parseStoreHtml = async (
 } | null> => {
   const root = parse(html)
 
-  // 店舗名を取得
-  const nameElement = root.querySelector('.bcs_i_area_shop h1')
+  // 店舗名を取得（従来レイアウト → 新レイアウトの順でフォールバック）
+  const nameElement = root.querySelector('.bcs_i_area_shop h1') || root.querySelector('.p-access__store-name')
   if (!nameElement) {
     console.warn(`  ⚠️ Store name not found for ${storeId}`)
     return null
@@ -503,33 +504,68 @@ const parseStoreHtml = async (
   // 全角英数記号を半角に、半角カタカナを全角に変換
   name = jaconv.normalize(name)
 
+  // 新レイアウトかどうかを判定
+  const isNewLayout = !!root.querySelector('.p-access')
+
   // 店舗IDを取得（shop119形式またはshop-119形式）
   const shop_id_match = html.match(/shop-?(\d+)/)
   const shop_id = shop_id_match ? Number.parseInt(shop_id_match[1], 10) : undefined
 
   // 住所と郵便番号を取得
-  const addressElement = root.querySelector('#shop_access .bcs_i_maintext')
-  const addressText = addressElement?.text.trim() || ''
-  const postal_code_match = addressText.match(/^〒(\d{3}-\d{4})\s*/)
+  let addressText = ''
+  if (isNewLayout) {
+    // 新レイアウト: 「住所」アコーディオン内の .p-access__text から取得
+    const accordions = root.querySelectorAll('.p-access__accordion')
+    for (const accordion of accordions) {
+      const label = accordion.querySelector('.p-access__accordion-label')
+      if (label?.text.trim() === '住所') {
+        addressText = accordion.querySelector('.p-access__text')?.text.trim() || ''
+        break
+      }
+    }
+  } else {
+    // 従来レイアウト
+    const addressElement = root.querySelector('#shop_access .bcs_i_maintext')
+    addressText = addressElement?.text.trim() || ''
+  }
+  const postal_code_match = addressText.match(/〒(\d{3}-\d{4})/)
   const postal_code = postal_code_match ? postal_code_match[1] : undefined
-  let address = addressText.replace(/^〒\d{3}-\d{4}\s*/, '')
+  let address = addressText.replace(/〒\d{3}-\d{4}\s*/, '').trim()
   // 全角英数記号を半角に、半角カタカナを全角に変換
   address = jaconv.normalize(address)
 
   // 都道府県を抽出
   const prefecture = extractPrefecture(address, name, undefined, storeId)
 
-  // 営業時間を取得（2つのパターンを試す）
-  let hoursElement = root.querySelector('#bcs_shop_hours .info_pickup_text p:nth-child(2)')
-  if (!hoursElement) {
-    hoursElement = root.querySelector('.info_pickup_text p:nth-child(2)')
+  // 営業時間を取得
+  let hoursText = ''
+  if (isNewLayout) {
+    // 新レイアウト: 「営業時間」の .p-access__value から取得
+    const hoursValue = root.querySelector('.p-access__value')
+    hoursText = hoursValue?.text.trim().split('\n')[0].trim() || ''
+  } else {
+    // 従来レイアウト（2つのパターンを試す）
+    let hoursElement = root.querySelector('#bcs_shop_hours .info_pickup_text p:nth-child(2)')
+    if (!hoursElement) {
+      hoursElement = root.querySelector('.info_pickup_text p:nth-child(2)')
+    }
+    hoursText = hoursElement?.text.trim() || ''
   }
-  const hoursText = hoursElement?.text.trim() || ''
   const parsed_hours = parseHours(hoursText)
 
-  // Google Maps URLを取得
+  // Google Maps URLを取得（従来レイアウト → 新レイアウトの順でフォールバック）
   const mapLinkElement = root.querySelector('#shop_access .maplink a')
-  const google_maps_url = mapLinkElement?.getAttribute('href') || undefined
+  let google_maps_url = mapLinkElement?.getAttribute('href') || undefined
+  if (!google_maps_url && isNewLayout) {
+    const mapLinks = root.querySelectorAll('.p-access__map-link a')
+    for (const link of mapLinks) {
+      const href = link.getAttribute('href')
+      if (href?.includes('maps')) {
+        google_maps_url = href
+        break
+      }
+    }
+  }
 
   // アクセス情報を取得
   const access: AccessInfo[] = []
@@ -697,10 +733,11 @@ const main = async () => {
         continue
       }
 
-      // 基本情報を作成
+      // 基本情報を作成（prefectureは店舗HTML解析で上書きされる）
       const storeInfo: StoreInfo = {
         id: storeId,
-        character: profileInfo.character
+        character: profileInfo.character,
+        prefecture: null
       }
 
       // 店舗HTMLが存在する場合はマージ
@@ -824,7 +861,39 @@ const main = async () => {
 
     console.log(`\n✓ Successfully parsed ${stores.length} characters`)
     console.log(`JSON output: ${OUTPUT_FILE}`)
-  } catch (error) {
+    // 出力JSONをZodスキーマでバリデーション
+    console.log('\n\ud83d\udd0d Validating output JSON...')
+    const OutputStoreSchema = z.object({
+      id: z.string().nonempty(),
+      character: z.object({
+        name: z.string().nonempty(),
+        description: z.string(),
+        twitter_id: z.string(),
+        images: z.array(z.string()),
+        is_biccame_musume: z.boolean()
+      }).passthrough(),
+      prefecture: z.string().nonempty().nullable(),
+      coordinates: z.object({
+        latitude: z.number(),
+        longitude: z.number()
+      }).optional().nullable(),
+      postal_code: z.string().nonempty().optional().nullable()
+    }).passthrough()
+    const OutputStoresSchema = z.array(OutputStoreSchema).nonempty()
+
+    const outputData = JSON.parse(readFileSync(OUTPUT_FILE, 'utf-8'))
+    const validation = OutputStoresSchema.safeParse(outputData)
+    if (!validation.success) {
+      console.error('\n\u2717 Validation failed! Parser update required:')
+      for (const issue of validation.error.issues) {
+        const path = issue.path.join('.')
+        const entry = typeof issue.path[0] === 'number' ? outputData[issue.path[0]] : undefined
+        const id = entry?.id || 'unknown'
+        console.error(`  - [${id}] ${path}: ${issue.message}`)
+      }
+      process.exit(1)
+    }
+    console.log('\u2713 Validation passed')  } catch (error) {
     console.error('\n✗ Error:', error)
     process.exit(1)
   }

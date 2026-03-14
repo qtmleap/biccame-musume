@@ -13,8 +13,7 @@
         "images/abeno4.png",
         "images/abeno5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-09-07"
+      "is_biccame_musume": true
     },
     "prefecture": "大阪府",
     "postal_code": "545-0052",
@@ -97,8 +96,7 @@
         "images/akasaka4.png",
         "images/akasaka5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2019-01-23"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "107-0052",
@@ -163,8 +161,7 @@
         "images/akiba4.png",
         "images/akiba5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2017-06-05"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "101-0021",
@@ -230,8 +227,7 @@
         "images/bicqlo4.png",
         "images/bicqlo5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2015-05-18"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "160-0022",
@@ -303,8 +299,7 @@
         "images/bicsim2.png",
         "images/bicsim3.png"
       ],
-      "is_biccame_musume": false,
-      "birthday": "2018-06-13"
+      "is_biccame_musume": false
     },
     "prefecture": null,
     "postal_code": null,
@@ -325,8 +320,7 @@
         "images/camera4.png",
         "images/camera5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-06-29"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": null,
@@ -349,8 +343,7 @@
         "images/chiba4.png",
         "images/chiba5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2024-12-12"
+      "is_biccame_musume": true
     },
     "prefecture": "千葉県",
     "postal_code": "260-0015",
@@ -405,8 +398,7 @@
         "images/chofu4.png",
         "images/chofu5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2017-09-27"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "182-0026",
@@ -454,8 +446,7 @@
         "images/fujisawa4.png",
         "images/fujisawa5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-02-12"
+      "is_biccame_musume": true
     },
     "prefecture": "神奈川県",
     "postal_code": "251-0052",
@@ -507,8 +498,7 @@
         "images/funabashi4.png",
         "images/funabashi5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2015-05-18"
+      "is_biccame_musume": true
     },
     "prefecture": "千葉県",
     "postal_code": "273-0005",
@@ -561,8 +551,7 @@
         "images/funato4.png",
         "images/funato0.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2017-11-15"
+      "is_biccame_musume": true
     },
     "prefecture": "千葉県",
     "postal_code": null,
@@ -582,8 +571,7 @@
         "images/hachoji4.png",
         "images/hachioji5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2015-05-14"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "192-0083",
@@ -642,8 +630,7 @@
         "images/hamamatsu4.png",
         "images/hamamatsu5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2015-05-23"
+      "is_biccame_musume": true
     },
     "prefecture": "静岡県",
     "postal_code": "430-0926",
@@ -698,8 +685,7 @@
         "images/hiroshima4.png",
         "images/hiroshima5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-08-24"
+      "is_biccame_musume": true
     },
     "prefecture": "広島県",
     "postal_code": "732-0822",
@@ -744,8 +730,7 @@
         "images/honten4.png",
         "images/honten5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2015-10-21"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "170-0013",
@@ -802,8 +787,7 @@
         "images/ikenishi4.png",
         "images/ikenishi5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2017-05-09"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "171-0021",
@@ -844,6 +828,61 @@
     }
   },
   {
+    "id": "itt",
+    "character": {
+      "name": "あいタワたん",
+      "description": "ビックカメラ池袋西口ITtower店の擬人化キャラクター。クールアンドビューティーなお姉さん。ダンスの技を日々磨いている。お団子とツインテールリングに付けているピンクのエクステ、ロングスカートとショートパンツという個性的な見た目が特徴的。",
+      "twitter_id": "bic_itt",
+      "images": [
+        "images/itt2.png",
+        "images/itt3.png",
+        "images/itt4.png",
+        "images/itt5.png",
+        "images/itt4.png",
+        "images/itt5.png"
+      ],
+      "is_biccame_musume": true
+    },
+    "prefecture": "東京都",
+    "postal_code": "171-0021",
+    "coordinates": {
+      "latitude": 35.7312892,
+      "longitude": 139.7076559
+    },
+    "store": {
+      "store_id": 133,
+      "name": "ビックカメラ池袋西口IT tower店",
+      "address": "東京都豊島区西池袋3-28-13",
+      "phone": "03-5951-1111",
+      "birthday": "2026-03-14",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "池袋駅",
+          "description": "C4出口",
+          "lines": [
+            "JR山手線",
+            "JR埼京線",
+            "JR湘南新宿ライン",
+            "東京メトロ丸ノ内線",
+            "東京メトロ有楽町線",
+            "東京メトロ副都心線",
+            "東武東上線",
+            "西武池袋線"
+          ],
+          "notes": "直結"
+        }
+      ]
+    }
+  },
+  {
     "id": "kagoshima",
     "character": {
       "name": "鹿児島たん",
@@ -857,8 +896,7 @@
         "images/kagoshima4.png",
         "images/kagoshima5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2017-12-18"
+      "is_biccame_musume": true
     },
     "prefecture": "鹿児島県",
     "postal_code": "890-0053",
@@ -906,8 +944,7 @@
         "images/kashiwa4.png",
         "images/kashiwa5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2015-05-14"
+      "is_biccame_musume": true
     },
     "prefecture": "千葉県",
     "postal_code": "277-0005",
@@ -955,8 +992,7 @@
         "images/kawasaki4.png",
         "images/kawasaki5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-12-01"
+      "is_biccame_musume": true
     },
     "prefecture": "神奈川県",
     "postal_code": "212-0013",
@@ -1013,8 +1049,7 @@
         "images/kumamoto4.png",
         "images/kumamoto5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2026-02-02"
+      "is_biccame_musume": true
     },
     "prefecture": "熊本県",
     "postal_code": "860-0047",
@@ -1062,8 +1097,7 @@
         "images/kyoto4.png",
         "images/kyoto5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2017-01-10"
+      "is_biccame_musume": true
     },
     "prefecture": "京都府",
     "postal_code": null,
@@ -1081,8 +1115,7 @@
         "images/machida4.png",
         "images/machida5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2019-03-01"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": null,
@@ -1102,8 +1135,7 @@
         "images/mito4.png",
         "images/mito5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2015-04-27"
+      "is_biccame_musume": true
     },
     "prefecture": "茨城県",
     "postal_code": "310-0015",
@@ -1155,8 +1187,7 @@
         "images/nagoya4.png",
         "images/nagoya5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-04-26"
+      "is_biccame_musume": true
     },
     "prefecture": "愛知県",
     "postal_code": "453-0015",
@@ -1211,8 +1242,7 @@
         "images/nagoyagate4.png",
         "images/nagoyagate5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2017-03-30"
+      "is_biccame_musume": true
     },
     "prefecture": "愛知県",
     "postal_code": "450-0002",
@@ -1281,8 +1311,7 @@
         "images/nanba4.png",
         "images/nanba5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2017-02-21"
+      "is_biccame_musume": true
     },
     "prefecture": "大阪府",
     "postal_code": "542-0074",
@@ -1351,8 +1380,7 @@
         "images/niigata4.png",
         "images/niigata5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2018-02-01"
+      "is_biccame_musume": true
     },
     "prefecture": "新潟県",
     "postal_code": "950-0086",
@@ -1419,8 +1447,7 @@
         "images/ohmiya4.png",
         "images/ohmiya5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2015-12-15"
+      "is_biccame_musume": true
     },
     "prefecture": "埼玉県",
     "postal_code": "330-0854",
@@ -1472,8 +1499,7 @@
         "images/okayama4.png",
         "images/okayama5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-10-05"
+      "is_biccame_musume": true
     },
     "prefecture": "岡山県",
     "postal_code": "700-0023",
@@ -1530,8 +1556,7 @@
         "images/photo4.png",
         "images/photo5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-03-17"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": null,
@@ -1554,8 +1579,7 @@
         "images/pkan4.png",
         "images/pkan5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-06-29"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "170-0013",
@@ -1609,8 +1633,7 @@
         "images/prosta4.png",
         "images/shasinkan5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2015-11-11"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "171-0021",
@@ -1638,8 +1661,7 @@
         "images/sagami4.png",
         "images/sagami5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2015-08-04"
+      "is_biccame_musume": true
     },
     "prefecture": "神奈川県",
     "postal_code": "252-0303",
@@ -1689,8 +1711,7 @@
         "images/sapporo4.png",
         "images/sapporo5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-08-10"
+      "is_biccame_musume": true
     },
     "prefecture": "北海道",
     "postal_code": "060-8619",
@@ -1748,8 +1769,7 @@
         "images/seiseki4.png",
         "images/seiseki5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-08-31"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": null,
@@ -1769,8 +1789,7 @@
         "images/shibuhachi4.png",
         "images/shibuhachi5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2019-07-07"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "150-0043",
@@ -1825,8 +1844,7 @@
         "images/shibuto4.png",
         "images/shibuto5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2019-07-07"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "150-0002",
@@ -1881,8 +1899,7 @@
         "images/shinjyuku4.png",
         "images/shinjyuku5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-05-23"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "160-0023",
@@ -1954,8 +1971,7 @@
         "images/shintou4.png",
         "images/shintou5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2020-10-19"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "160-0022",
@@ -2021,8 +2037,7 @@
         "images/shinyoko4.png",
         "images/shinyoko5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2020-01-23"
+      "is_biccame_musume": true
     },
     "prefecture": "神奈川県",
     "postal_code": "222-0033",
@@ -2071,8 +2086,7 @@
         "images/tachikawa4.png",
         "images/tachikawa5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-10-25"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "190-0012",
@@ -2131,8 +2145,7 @@
         "images/takatsuki4.png",
         "images/takatsuki5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2023-10-06"
+      "is_biccame_musume": true
     },
     "prefecture": "大阪府",
     "postal_code": "569-1196",
@@ -2184,8 +2197,7 @@
         "images/tamapla4.png",
         "images/tamapla5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2020-11-26"
+      "is_biccame_musume": true
     },
     "prefecture": "神奈川県",
     "postal_code": null,
@@ -2205,8 +2217,7 @@
         "images/tenjin1_4.png",
         "images/tenjin1_5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2020-12-13"
+      "is_biccame_musume": true
     },
     "prefecture": "福岡県",
     "postal_code": "810-0021",
@@ -2270,8 +2281,7 @@
         "images/tenjin2go4.png",
         "images/tenjin2go5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2017-10-25"
+      "is_biccame_musume": true
     },
     "prefecture": "福岡県",
     "postal_code": "810-0001",
@@ -2338,8 +2348,7 @@
         "images/tokorozawa4.png",
         "images/tokorozawa5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2021-11-08"
+      "is_biccame_musume": true
     },
     "prefecture": "埼玉県",
     "postal_code": "359-1123",
@@ -2389,8 +2398,7 @@
         "images/yao4.png",
         "images/yao5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2022-11-14"
+      "is_biccame_musume": true
     },
     "prefecture": "大阪府",
     "postal_code": "581-0803",
@@ -2437,8 +2445,7 @@
         "images/yokonishi4.png",
         "images/yokonishi5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2026-01-23"
+      "is_biccame_musume": true
     },
     "prefecture": "神奈川県",
     "postal_code": "220-0005",
@@ -2492,8 +2499,7 @@
         "images/yuurakucho4.png",
         "images/yuurakuchou5.png"
       ],
-      "is_biccame_musume": true,
-      "birthday": "2016-05-11"
+      "is_biccame_musume": true
     },
     "prefecture": "東京都",
     "postal_code": "100-0006",
