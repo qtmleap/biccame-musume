@@ -694,16 +694,20 @@ const main = async () => {
   try {
     console.log('📋 Parsing character and store HTML files...\n')
 
-    // 既存のcharacters.jsonを読み込んで座標キャッシュを作成
+    // 既存のcharacters.jsonを読み込んで座標・アクセス情報のキャッシュを作成
     const existingCoordinates: Record<string, { latitude: number; longitude: number } | null> = {}
+    const existingAccess: Record<string, AccessInfo[]> = {}
     if (existsSync(OUTPUT_FILE)) {
       const existingData = JSON.parse(readFileSync(OUTPUT_FILE, 'utf-8')) as StoreInfo[]
       for (const store of existingData) {
         if (store.coordinates) {
           existingCoordinates[store.id] = store.coordinates
         }
+        if (store.store?.access && store.store.access.length > 0) {
+          existingAccess[store.id] = store.store.access
+        }
       }
-      console.log(`📦 Loaded ${Object.keys(existingCoordinates).length} cached coordinates\n`)
+      console.log(`📦 Loaded ${Object.keys(existingCoordinates).length} cached coordinates, ${Object.keys(existingAccess).length} cached access info\n`)
     }
 
     // キャッシュディレクトリ内のプロフィールHTMLファイルを取得
@@ -774,7 +778,9 @@ const main = async () => {
             birthday: profileInfo.store_fields.birthday,
             open_all_year: storeData.open_all_year,
             hours: storeData.hours,
-            access: storeData.access,
+            access: storeData.access && storeData.access.length > 0
+              ? storeData.access
+              : existingAccess[storeId] || [],
             parking: storeData.parking,
             google_maps_url: storeData.google_maps_url
           }
