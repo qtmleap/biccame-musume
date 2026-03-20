@@ -60,7 +60,7 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
             {upcomingEvents.map((event, index) => (
-              <UpcomingEventListItem key={`${event.character.id}-${event.type}-${index}`} event={event} index={index} />
+              <UpcomingEventListItem key={`${event.character.id}-${event.type}`} event={event} index={index} />
             ))}
           </div>
         )}
