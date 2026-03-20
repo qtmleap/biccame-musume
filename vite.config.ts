@@ -4,7 +4,7 @@ import { resolve } from 'node:path'
 import { cloudflare } from '@cloudflare/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { intlayer } from 'vite-intlayer' // Add the plugin to the Vite plugin list
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
@@ -156,7 +156,8 @@ export default defineConfig(({ mode }) => {
         }
       },
       target: 'esnext',
-      minify: true
+      minify: true,
+      drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
     },
     worker: {
       format: 'es'
@@ -176,11 +177,10 @@ export default defineConfig(({ mode }) => {
     },
     optimizeDeps: {
       include: ['sonner'],
-      esbuildOptions: {
+      rolldownOptions: {
         define: {
           global: 'globalThis'
-        },
-        drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
+        }
       }
     },
     define: {
