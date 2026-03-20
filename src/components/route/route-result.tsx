@@ -54,7 +54,7 @@ export const RouteResultCard = ({ result }: Props) => {
                     {/* 経路詳細 */}
                     <div className='text-muted-foreground text-sm'>
                       {leg.routes.map((segment, i) => (
-                        <div key={`${segment.operator}-${segment.line}-${i}`}>
+                        <div key={`${segment.operator}-${segment.line}-${segment.from}`}>
                           {/* 出発駅 */}
                           <div className='py-1 font-medium'>
                             {segment.from}
