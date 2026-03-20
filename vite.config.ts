@@ -146,18 +146,12 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         external: [],
         output: {
-          manualChunks: {
-            router: ['@tanstack/react-router'],
-            query: ['@tanstack/react-query'],
-            ui: [
-              '@radix-ui/react-dialog',
-              '@radix-ui/react-popover',
-              '@radix-ui/react-select',
-              '@radix-ui/react-avatar',
-              '@radix-ui/react-alert-dialog'
-            ],
-            utils: ['axios', 'dayjs'],
-            react: ['react', 'react-dom']
+          manualChunks: (id) => {
+            if (id.includes('@tanstack/react-router')) return 'router'
+            if (id.includes('@tanstack/react-query')) return 'query'
+            if (id.includes('@radix-ui/react-dialog') || id.includes('@radix-ui/react-popover') || id.includes('@radix-ui/react-select') || id.includes('@radix-ui/react-avatar') || id.includes('@radix-ui/react-alert-dialog')) return 'ui'
+            if (id.includes('node_modules/axios') || id.includes('node_modules/dayjs')) return 'utils'
+            if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) return 'react'
           }
         }
       },
