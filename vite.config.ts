@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => {
         include: ['path'],
         exclude: ['http'],
         globals: {
-          Buffer: true,
+          Buffer: false,
           global: true,
           process: true
         },
