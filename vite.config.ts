@@ -177,13 +177,9 @@ export default defineConfig(({ mode }) => {
     },
     optimizeDeps: {
       include: ['sonner'],
-      rolldownOptions: {
-        define: {
-          global: 'globalThis'
-        }
-      }
     },
     define: {
+      global: 'globalThis',
       __APP_VERSION__: JSON.stringify(version),
       __GIT_HASH__: JSON.stringify(hash),
       __AUTH_DOMAIN__: JSON.stringify(mode === 'prod' ? 'biccame-musume.com' : 'dev.biccame-musume.com')
