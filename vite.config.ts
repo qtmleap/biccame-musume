@@ -149,7 +149,14 @@ export default defineConfig(({ mode }) => {
           manualChunks: (id) => {
             if (id.includes('@tanstack/react-router')) return 'router'
             if (id.includes('@tanstack/react-query')) return 'query'
-            if (id.includes('@radix-ui/react-dialog') || id.includes('@radix-ui/react-popover') || id.includes('@radix-ui/react-select') || id.includes('@radix-ui/react-avatar') || id.includes('@radix-ui/react-alert-dialog')) return 'ui'
+            const radixUiPackages = [
+              '@radix-ui/react-dialog',
+              '@radix-ui/react-popover',
+              '@radix-ui/react-select',
+              '@radix-ui/react-avatar',
+              '@radix-ui/react-alert-dialog'
+            ]
+            if (radixUiPackages.some((pkg) => id.includes(pkg))) return 'ui'
             if (id.includes('node_modules/axios') || id.includes('node_modules/dayjs')) return 'utils'
             if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) return 'react'
           }
@@ -157,7 +164,7 @@ export default defineConfig(({ mode }) => {
       },
       target: 'esnext',
       minify: true,
-      drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
+      drop: mode === 'prod' ? ['console', 'debugger'] : []
     },
     worker: {
       format: 'es'
