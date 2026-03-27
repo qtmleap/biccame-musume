@@ -6,6 +6,10 @@
   "author": "@QuantumLeap",
   "private": true,
   "license": "MIT",
+  "patchedDependencies": {
+    "vite-intlayer@8.5.2": "patches/vite-intlayer@8.5.2.patch",
+    "vite-plugin-node-polyfills@0.25.0": "patches/vite-plugin-node-polyfills@0.25.0.patch"
+  },
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build --mode ${CLOUDFLARE_ENV}",
