@@ -10,6 +10,7 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
+import { toast } from 'sonner'
 import { Toaster } from '@/components/ui/sonner'
 import { client } from '@/utils/client'
 // フォントのインポート
@@ -32,16 +33,33 @@ dayjs.extend(timezone)
 dayjs.tz.setDefault('Asia/Tokyo')
 
 // Service Worker登録
+// SW の controller 変更を検知して自動リロード
+let refreshing = false
+navigator.serviceWorker?.addEventListener('controllerchange', () => {
+  if (refreshing) return
+  refreshing = true
+  window.location.reload()
+})
+
 registerSW({
   immediate: true,
   onNeedRefresh() {
-    console.log('New content available, please refresh.')
+    toast('新しいバージョンに更新します...', {
+      description: '数秒後に自動的にページが更新されます',
+      duration: 3000
+    })
   },
   onOfflineReady() {
     console.log('App ready to work offline')
   },
   onRegistered(registration: ServiceWorkerRegistration | undefined) {
     console.log('Service Worker registered:', registration)
+    if (registration) {
+      // 60分ごとに SW の更新をチェック
+      setInterval(() => {
+        registration.update()
+      }, 60 * 60 * 1000)
+    }
   },
   onRegisterError(error: unknown) {
     console.error('Service Worker registration failed:', error)
