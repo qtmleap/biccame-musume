@@ -2171,6 +2171,56 @@
     }
   },
   {
+    "id": "takasaki",
+    "character": {
+      "name": "たかさきたん",
+      "description": "ビックカメラ高崎東口店の擬人化キャラクター。背は小さめだが、どこか存在感がある。相棒のだるまさんとはいつも仲良し。髪は、高崎市の鳥・ウグイスと、高崎市の花・桜をイメージ。ふんわりとしたロングスカートと、鶴の髪飾りも特徴。",
+      "twitter_id": "bictakasaki",
+      "images": [
+        "images/takasaki2.png",
+        "images/takasaki3.png",
+        "images/takasaki4.png",
+        "images/takasaki5.png",
+        "images/takasaki4.png",
+        "images/takasaki5.png"
+      ],
+      "is_biccame_musume": true,
+      "birthday": "2026-03-27"
+    },
+    "prefecture": "群馬県",
+    "postal_code": "370-0841",
+    "coordinates": {
+      "latitude": 36.32169,
+      "longitude": 139.0168129
+    },
+    "store": {
+      "store_id": 91,
+      "name": "ビックカメラ高崎東口店",
+      "address": "群馬県高崎市栄町10-10",
+      "phone": "027-327-2111",
+      "birthday": "1985-06-06",
+      "open_all_year": true,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "20:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "高崎駅",
+          "description": "東口",
+          "lines": [
+            "JR高崎線",
+            "上越新幹線",
+            "上信電鉄"
+          ]
+        }
+      ]
+    }
+  },
+  {
     "id": "takatsuki",
     "character": {
       "name": "たかつきたん",
