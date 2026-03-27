@@ -57,6 +57,7 @@ export const StoreKeySchema = z.enum([
   'shintou',
   'shinyoko',
   'tachikawa',
+  'takasaki',
   'takatsuki',
   'tamapla',
   'tenjin',
