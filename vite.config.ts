@@ -73,7 +73,7 @@ export default defineConfig(({ mode }) => {
           skipWaiting: true,
           clientsClaim: true,
           globDirectory: 'dist/client',
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2}'],
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2,json}'],
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -115,6 +115,20 @@ export default defineConfig(({ mode }) => {
               }
             },
             {
+              urlPattern: /\/characters\.json$/i,
+              handler: 'StaleWhileRevalidate',
+              options: {
+                cacheName: 'characters-json-cache',
+                expiration: {
+                  maxEntries: 1,
+                  maxAgeSeconds: 60 * 60 * 24 // 1日
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
+              }
+            },
+            {
               urlPattern: /\/api\/.*/i,
               handler: 'NetworkFirst',
               options: {
@@ -130,11 +144,12 @@ export default defineConfig(({ mode }) => {
               }
             },
             {
-              urlPattern: /\/__\auth\/.*/i,
+              urlPattern: /^\/__\/auth\/.*/i,
               handler: 'NetworkFirst',
             },
           ],
           navigateFallback: '/index.html',
+          navigateFallbackDenylist: [/^\/__\//, /^\/api\//],
         },
         devOptions: {
           enabled: true,
