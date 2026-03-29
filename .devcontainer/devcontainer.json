@@ -47,7 +47,7 @@
       "dockerDashComposeVersion": "v2"
     },
     "ghcr.io/dhoeric/features/act:1": {
-      "version": "0.2.84"
+      "version": "0.2.86"
     },
     "ghcr.io/va-h/devcontainers-features/uv:1": {
       "version": "latest"
