@@ -124,27 +124,62 @@ const checkVersionAndClearCache = () => {
   if (!storedVersion) {
     // 初回アクセス（古いバージョンからの更新を含む）
     if (hasOldCache) {
-      console.log('Old cache detected on first access. Clearing cache...')
+      console.log('[App] Old cache detected on first access. Clearing cache...')
       localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
       queryClient.clear()
-      console.log('Cache cleared successfully')
+      console.log('[App] Cache cleared successfully')
     }
     localStorage.setItem(STORAGE_KEY, currentVersion)
-    console.log(`Initial version set: ${currentVersion}`)
+    console.log(`[App] Initial version set: ${currentVersion}`)
   } else if (storedVersion !== currentVersion) {
     // バージョンが変更された
-    console.log(`Version changed from ${storedVersion} to ${currentVersion}. Clearing cache...`)
+    console.log(`[App] Version changed from ${storedVersion} to ${currentVersion}. Clearing cache...`)
     localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
     queryClient.clear()
     localStorage.setItem(STORAGE_KEY, currentVersion)
-    console.log('Cache cleared successfully')
+    console.log('[App] Cache cleared successfully')
   } else {
-    console.log(`Version unchanged: ${currentVersion}`)
+    console.log(`[App] Version unchanged: ${currentVersion}`)
+  }
+}
+
+/**
+ * サーバーのバージョンをAPIで確認し、デプロイ後の更新をユーザーに通知する
+ */
+const checkServerVersion = async () => {
+  const STORAGE_KEY = 'SERVER_VERSION_HASH'
+  try {
+    const data = await client.getVersion()
+    const serverHash = data.hash
+    const storedHash = localStorage.getItem(STORAGE_KEY)
+
+    if (!storedHash) {
+      // 初回アクセス: ハッシュを保存するだけで通知しない
+      localStorage.setItem(STORAGE_KEY, serverHash)
+      console.log(`[App] Server version hash stored: ${serverHash}`)
+      return
+    }
+
+    if (storedHash !== serverHash) {
+      console.log(`[App] Server version changed: ${storedHash} → ${serverHash}`)
+      localStorage.setItem(STORAGE_KEY, serverHash)
+      toast('新しいバージョンが利用可能です', {
+        description: 'ページを更新すると最新版に切り替わります',
+        duration: 10000,
+        action: {
+          label: '更新する',
+          onClick: () => window.location.reload()
+        }
+      })
+    }
+  } catch (e) {
+    console.debug('[App] Server version check failed:', e)
   }
 }
 
 // アプリ起動時にバージョンチェックを実行
 checkVersionAndClearCache()
+checkServerVersion()
 
 // Render the app
 // biome-ignore lint/style/noNonNullAssertion: reason

@@ -7,10 +7,10 @@ import { ExternalLink } from 'lucide-react'
 const RouteComponent = () => {
   return (
     <div className='min-h-screen bg-linear-to-b from-blue-50 to-white'>
-      <div className='container mx-auto px-4 py-12'>
-        <h1 className='text-3xl md:text-4xl font-bold mb-12 text-center text-[#e50012]'>当ウェブサイトについて</h1>
+      <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
+        <h1 className='text-2xl font-bold mb-8 text-gray-900'>当ウェブサイトについて</h1>
 
-        <div className='max-w-3xl mx-auto space-y-12'>
+        <div className='space-y-12'>
           {/* サイト概要 */}
           <section>
             <h2 className='text-xl md:text-2xl font-bold mb-4 text-gray-800 border-b-2 border-[#e50012] pb-2'>
@@ -68,27 +68,27 @@ const RouteComponent = () => {
                 href='https://biccame.jp/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-[#e50012] hover:underline inline-flex items-center gap-2 text-lg'
+                className='text-[#e50012] hover:underline inline-flex items-center gap-1.5 text-sm'
               >
-                <ExternalLink className='h-5 w-5' />
+                <ExternalLink className='h-4 w-4' />
                 ビッカメ娘公式サイト
               </a>
               <a
                 href='https://x.com/biccameraE'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-[#e50012] hover:underline inline-flex items-center gap-2 text-lg'
+                className='text-[#e50012] hover:underline inline-flex items-center gap-1.5 text-sm'
               >
-                <ExternalLink className='h-5 w-5' />
+                <ExternalLink className='h-4 w-4' />
                 公式X (Twitter) @biccameraE
               </a>
               <a
                 href='https://www.biccamera.com/'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-[#e50012] hover:underline inline-flex items-center gap-2 text-lg'
+                className='text-[#e50012] hover:underline inline-flex items-center gap-1.5 text-sm'
               >
-                <ExternalLink className='h-5 w-5' />
+                <ExternalLink className='h-4 w-4' />
                 株式会社ビックカメラ
               </a>
             </div>

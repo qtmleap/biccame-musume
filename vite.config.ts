@@ -13,6 +13,7 @@ import sitemap from 'vite-plugin-sitemap'
 
 const version = JSON.parse(readFileSync('./package.json', 'utf-8')).version
 const hash = execSync('git rev-parse --short HEAD').toString().trim()
+const buildAt = new Date().toISOString()
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -204,6 +205,7 @@ export default defineConfig(({ mode }) => {
       global: 'globalThis',
       __APP_VERSION__: JSON.stringify(version),
       __GIT_HASH__: JSON.stringify(hash),
+      __BUILD_AT__: JSON.stringify(buildAt),
       __AUTH_DOMAIN__: JSON.stringify(mode === 'prod' ? 'biccame-musume.com' : 'dev.biccame-musume.com')
     },
     envPrefix: 'VITE_'
