@@ -9,7 +9,7 @@ jobs:
   pr_agent_job:
     name: Code review
     if: ${{ github.event.sender.type != 'Bot' }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     permissions:
       issues: write
       pull-requests: write
