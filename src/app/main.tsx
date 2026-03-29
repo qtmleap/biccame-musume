@@ -56,9 +56,12 @@ registerSW({
     console.log('Service Worker registered:', registration)
     if (registration) {
       // 60分ごとに SW の更新をチェック
-      setInterval(() => {
-        registration.update()
-      }, 60 * 60 * 1000)
+      setInterval(
+        () => {
+          registration.update()
+        },
+        60 * 60 * 1000
+      )
     }
   },
   onRegisterError(error: unknown) {
