@@ -4,7 +4,7 @@ import { resolve } from 'node:path'
 import { cloudflare } from '@cloudflare/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { intlayer } from 'vite-intlayer' // Add the plugin to the Vite plugin list
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
@@ -13,6 +13,7 @@ import sitemap from 'vite-plugin-sitemap'
 
 const version = JSON.parse(readFileSync('./package.json', 'utf-8')).version
 const hash = execSync('git rev-parse --short HEAD').toString().trim()
+const buildAt = new Date().toISOString()
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -38,7 +39,7 @@ export default defineConfig(({ mode }) => {
         include: ['path'],
         exclude: ['http'],
         globals: {
-          Buffer: true,
+          Buffer: false,
           global: true,
           process: true
         },
@@ -73,7 +74,7 @@ export default defineConfig(({ mode }) => {
           skipWaiting: true,
           clientsClaim: true,
           globDirectory: 'dist/client',
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2}'],
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2,json}'],
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -115,6 +116,20 @@ export default defineConfig(({ mode }) => {
               }
             },
             {
+              urlPattern: /\/characters\.json$/i,
+              handler: 'StaleWhileRevalidate',
+              options: {
+                cacheName: 'characters-json-cache',
+                expiration: {
+                  maxEntries: 1,
+                  maxAgeSeconds: 60 * 60 * 24 // 1日
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
+              }
+            },
+            {
               urlPattern: /\/api\/.*/i,
               handler: 'NetworkFirst',
               options: {
@@ -130,11 +145,12 @@ export default defineConfig(({ mode }) => {
               }
             },
             {
-              urlPattern: /\/__\auth\/.*/i,
+              urlPattern: /^\/__\/auth\/.*/i,
               handler: 'NetworkFirst',
             },
           ],
           navigateFallback: '/index.html',
+          navigateFallbackDenylist: [/^\/__\//, /^\/api\//],
         },
         devOptions: {
           enabled: true,
@@ -146,23 +162,25 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         external: [],
         output: {
-          manualChunks: {
-            router: ['@tanstack/react-router'],
-            query: ['@tanstack/react-query'],
-            ui: [
+          manualChunks: (id) => {
+            if (id.includes('@tanstack/react-router')) return 'router'
+            if (id.includes('@tanstack/react-query')) return 'query'
+            const radixUiPackages = [
               '@radix-ui/react-dialog',
               '@radix-ui/react-popover',
               '@radix-ui/react-select',
               '@radix-ui/react-avatar',
               '@radix-ui/react-alert-dialog'
-            ],
-            utils: ['axios', 'dayjs'],
-            react: ['react', 'react-dom']
+            ]
+            if (radixUiPackages.some((pkg) => id.includes(pkg))) return 'ui'
+            if (id.includes('node_modules/axios') || id.includes('node_modules/dayjs')) return 'utils'
+            if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) return 'react'
           }
         }
       },
       target: 'esnext',
-      minify: true
+      minify: true,
+      drop: mode === 'prod' ? ['console', 'debugger'] : []
     },
     worker: {
       format: 'es'
@@ -182,16 +200,12 @@ export default defineConfig(({ mode }) => {
     },
     optimizeDeps: {
       include: ['sonner'],
-      esbuildOptions: {
-        define: {
-          global: 'globalThis'
-        },
-        drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
-      }
     },
     define: {
+      global: 'globalThis',
       __APP_VERSION__: JSON.stringify(version),
       __GIT_HASH__: JSON.stringify(hash),
+      __BUILD_AT__: JSON.stringify(buildAt),
       __AUTH_DOMAIN__: JSON.stringify(mode === 'prod' ? 'biccame-musume.com' : 'dev.biccame-musume.com')
     },
     envPrefix: 'VITE_'

@@ -7,8 +7,8 @@ services:
       - node_modules:/home/vscode/app/node_modules
       - ../:/home/vscode/app:cached
     environment:
-      CLOUDFLARE_ENV: dev
       NODE_ENV: development
+      CLOUDFLARE_ENV: dev
     tty: true
     stdin_open: true
     network_mode: service:firebase
@@ -19,15 +19,11 @@ services:
     image: andreysenov/firebase-tools:14.17.0
     environment:
       FIREBASE_TOKEN: $FIREBASE_TOKEN
-    command: firebase emulators:start --only auth --import=auth --token ${FIREBASE_TOKEN}
+    command: firebase emulators:start --only auth --import=auth
     volumes:
       - ./auth:/home/node/auth
       - ./firebase.json:/home/node/firebase.json
       - ./.firebaserc:/home/node/.firebaserc
-    ports:
-      - 24000:4000
-      - 29099:9099
-      - 25173:5173
 
 volumes:
   node_modules:

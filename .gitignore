@@ -226,6 +226,9 @@ $RECYCLE.BIN/
 # IntLayer
 .intlayer/
 
+# Vite PWA
+dev-dist/
+
 # Tanstack
 .tanstack/
 
