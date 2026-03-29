@@ -1,0 +1,16 @@
+--- a/dist/esm/intlayerPlugin.mjs
++++ b/dist/esm/intlayerPlugin.mjs
+@@ -51,11 +51,11 @@
+ 				cacheTimeoutMs: isBuildCommand ? 1e3 * 30 : 1e3 * 60 * 60,
+ 				env: isBuildCommand ? "prod" : "dev"
+ 			});
+-			return mergeConfig(config, {
++			return {
+ 				resolve: { alias },
+ 				optimizeDeps: { exclude: aliasPackages },
+ 				ssr: { noExternal: [/(^@intlayer\/|intlayer$)/] }
+-			});
++			};
+ 		},
+ 		configureServer: async (server) => {
+ 			if (server.config.mode === "development") watch({ configuration: intlayerConfig });

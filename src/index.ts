@@ -23,6 +23,15 @@ app.use(
   })
 )
 
+/** バージョン情報エンドポイント（認証不要） */
+app.get('/api/version', (c) => {
+  return c.json({
+    version: __APP_VERSION__,
+    hash: __GIT_HASH__,
+    buildAt: __BUILD_AT__
+  })
+})
+
 /** Firebase認証ヘルパーのリバースプロキシ（最優先で処理） */
 app.all('/__/auth/*', (c) => {
   const url = new URL(c.req.url)

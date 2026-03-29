@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install
         if: ${{ github.event.head.user.login == 'act' }}
         run: |
@@ -24,7 +24,7 @@ jobs:
           echo "version=v$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
       - name: Compare Versions
         id: comparison
-        uses: fabriziocacicia/semver-compare-action@v0.1.0
+        uses: fabriziocacicia/semver-compare-action@v0.2.0
         with:
           first: ${{ steps.current_version.outputs.version }}
           second: ${{ steps.latest_version.outputs.version }}
