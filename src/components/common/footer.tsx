@@ -27,7 +27,9 @@ export const Footer = () => {
           </Link>
         </div>
         <div className='space-y-1'>
-          <p className='text-gray-500'>v{__APP_VERSION__} ({__GIT_HASH__})</p>
+          <p className='text-gray-500'>
+            v{__APP_VERSION__} ({__GIT_HASH__})
+          </p>
           <p className='text-gray-500'>
             © {dayjs().year()}{' '}
             <a
