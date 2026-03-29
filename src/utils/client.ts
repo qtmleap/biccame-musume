@@ -22,9 +22,25 @@ import { UpsertUserRequestSchemaForClient, UserResponseSchemaForClient } from '@
 import { VoteCountListSchema, VoteResponseSchema } from '@/schemas/vote.dto'
 
 /**
+ * バージョン情報レスポンススキーマ
+ */
+export const VersionResponseSchema = z.object({
+  version: z.string(),
+  hash: z.string(),
+  buildAt: z.string()
+})
+
+/**
  * API定義
  */
 const api = makeApi([
+  {
+    method: 'get',
+    path: '/api/version',
+    alias: 'getVersion',
+    description: 'アプリのバージョン情報を取得（認証不要）',
+    response: VersionResponseSchema
+  },
   {
     method: 'get',
     path: '/characters.json',

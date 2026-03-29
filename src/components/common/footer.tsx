@@ -26,12 +26,8 @@ export const Footer = () => {
             お問い合わせ
           </Link>
         </div>
-        <div className='space-y-2'>
-          <p className='text-gray-500'>
-            本サイトに掲載されているビッカメ娘の画像等は、株式会社ビックカメラに帰属します。
-            <br className='hidden sm:inline' />
-            画像の再利用は禁止されています。
-          </p>
+        <div className='space-y-1'>
+          <p className='text-gray-500'>v{__APP_VERSION__} ({__GIT_HASH__})</p>
           <p className='text-gray-500'>
             © {dayjs().year()}{' '}
             <a
