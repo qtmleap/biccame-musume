@@ -9,6 +9,7 @@ import events from './api/event'
 import me from './api/me'
 import stats from './api/stats'
 import users from './api/user'
+import version from './api/version'
 import votes from './api/vote'
 import type { Bindings, Variables } from './types/bindings'
 
@@ -22,15 +23,6 @@ app.use(
     maxAge: 86400
   })
 )
-
-/** バージョン情報エンドポイント（認証不要） */
-app.get('/api/version', (c) => {
-  return c.json({
-    version: __APP_VERSION__,
-    hash: __GIT_HASH__,
-    buildAt: __BUILD_AT__
-  })
-})
 
 /** Firebase認証ヘルパーのリバースプロキシ（最優先で処理） */
 app.all('/__/auth/*', (c) => {
@@ -55,6 +47,9 @@ app.onError(async (error, c) => {
   }
   return c.json({ message: 'Unknown Error' }, 500)
 })
+
+// バージョン情報APIルート
+app.route('/api/version', version)
 
 // 認証APIルート
 app.route('/api/auth', authRoutes)
