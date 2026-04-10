@@ -19,7 +19,7 @@ const EventDetailContent = () => {
   const { isAuthenticated } = useCloudflareAccess()
 
   return (
-    <div className='min-h-screen bg-pink-50'>
+    <div className='min-h-screen'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div className='md:grid md:grid-cols-[1fr_auto_320px] md:gap-6'>
           {/* メインコンテンツ */}
@@ -30,6 +30,12 @@ const EventDetailContent = () => {
               onBack={() => navigate({ to: '/events' })}
             />
             <EventDetailInfo event={event} />
+
+            {/* 関連イベント（モバイルのみ） */}
+            <div className='md:hidden mt-6'>
+              <Separator className='mb-6' />
+              <RecentEventsList events={allEvents} currentEventId={uuid} />
+            </div>
           </div>
 
           {/* Separator */}
