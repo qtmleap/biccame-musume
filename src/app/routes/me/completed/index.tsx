@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Award } from 'lucide-react'
+import { ArrowLeft, Award, Heart } from 'lucide-react'
 import { Suspense, useState } from 'react'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -36,6 +36,24 @@ const CompletedEventsContent = () => {
             <Award className='h-6 w-6 text-amber-500' />
             <h1 className='text-2xl font-bold text-gray-900'>{MY_PAGE_LABELS.completedEvents}</h1>
             <span className='text-sm text-gray-500'>({completedEventDetails.length})</span>
+          </div>
+
+          {/* タブナビゲーション */}
+          <div className='mt-4 flex border-b border-border'>
+            <Link
+              to='/me/interested'
+              className='flex items-center gap-1.5 px-4 py-2 text-sm font-medium border-b-2 border-transparent text-muted-foreground hover:text-foreground transition-colors'
+            >
+              <Heart className='h-4 w-4' />
+              気になるを見る
+            </Link>
+            <Link
+              to='/me/completed'
+              className='flex items-center gap-1.5 px-4 py-2 text-sm font-medium border-b-2 border-amber-500 text-amber-600'
+            >
+              <Award className='h-4 w-4' />
+              達成済み
+            </Link>
           </div>
         </div>
 
