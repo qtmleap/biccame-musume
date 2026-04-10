@@ -77,12 +77,16 @@ const LocationContent = () => {
 
   return (
     <APIProvider apiKey={apiKey}>
-      <div className='relative w-full h-[calc(100dvh-3rem)] md:h-[calc(100dvh-3.5rem)] overflow-hidden'>
+      <section
+        className='relative w-full overflow-hidden'
+        style={{ height: 'min(calc(100dvh - 8rem), 800px)' }}
+        aria-label='地図'
+      >
         <GoogleMap
           defaultCenter={selectedCharacter ? getPosition(selectedCharacter) : { lat: 35.6812, lng: 139.7671 }}
           defaultZoom={selectedCharacter ? 17 : 5}
           mapId='biccamera-stores-map'
-          gestureHandling='greedy'
+          gestureHandling='cooperative'
           mapTypeControl={false}
           streetViewControl={false}
           fullscreenControl={false}
@@ -117,7 +121,7 @@ const LocationContent = () => {
           onCharacterSelect={handleCharacterSelect}
           mapCenter={mapCenter}
         />
-      </div>
+      </section>
     </APIProvider>
   )
 }
