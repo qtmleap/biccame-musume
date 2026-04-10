@@ -18,9 +18,9 @@ export const showUpdatePrompt = () => {
       onClick: triggerUpdate
     },
     classNames: {
-      toast: '!bg-gray-900 !border-gray-800 !rounded-xl !shadow-lg',
-      title: '!text-white !text-sm !font-medium',
-      description: '!text-gray-300 !text-xs',
+      toast: '!bg-white !border-pink-100 !rounded-xl !shadow-lg',
+      title: '!text-gray-900 !text-sm !font-medium',
+      description: '!text-gray-600 !text-xs',
       actionButton: '!bg-pink-600 !text-white hover:!bg-pink-700'
     }
   })
