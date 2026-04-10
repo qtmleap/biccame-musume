@@ -18,6 +18,9 @@ type GanttTimelineProps = {
   onMouseMove: (e: React.MouseEvent) => void
   onMouseUp: () => void
   onMouseLeave: () => void
+  onTouchStart: (e: React.TouchEvent) => void
+  onTouchMove: (e: React.TouchEvent) => void
+  onTouchEnd: () => void
   getLabelOffset: (startOffset: number, duration: number) => number
   hasDraggedRef: React.MutableRefObject<boolean>
 }
@@ -36,45 +39,61 @@ export const GanttTimeline = ({
   onMouseMove,
   onMouseUp,
   onMouseLeave,
+  onTouchStart,
+  onTouchMove,
+  onTouchEnd,
   getLabelOffset,
   hasDraggedRef
 }: GanttTimelineProps) => {
   return (
     <>
       <style>{hideScrollbarStyle}</style>
-      <section
-        ref={scrollContainerRef}
-        aria-label={GANTT_CHART_LABELS.ariaLabel}
-        className={`gantt-scroll-container overflow-x-auto ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
-        style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none'
-        }}
-        onScroll={onScroll}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-        onMouseLeave={onMouseLeave}
-      >
-        <div className='min-w-max'>
-          <div key={`gantt-${monthOffset}-${eventBars.map((b) => b.event.uuid).join('-')}`}>
-            {eventBars.map((bar) => (
-              <GanttRow
-                key={bar.event.uuid}
-                bar={bar}
-                dates={dates}
-                today={today}
-                actualMonthEnd={actualMonthEnd}
-                isScrolling={isScrolling}
-                labelOffset={getLabelOffset(bar.startOffset, bar.duration)}
-                hasDraggedRef={hasDraggedRef}
-              />
-            ))}
-          </div>
+      <div className='relative'>
+        <section
+          ref={scrollContainerRef}
+          aria-label={GANTT_CHART_LABELS.ariaLabel}
+          className={`gantt-scroll-container overflow-x-auto ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+          style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            touchAction: 'pan-y'
+          }}
+          onScroll={onScroll}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseLeave}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
+          <div className='min-w-max'>
+            <div key={`gantt-${monthOffset}-${eventBars.map((b) => b.event.uuid).join('-')}`}>
+              {eventBars.map((bar) => (
+                <GanttRow
+                  key={bar.event.uuid}
+                  bar={bar}
+                  dates={dates}
+                  today={today}
+                  actualMonthEnd={actualMonthEnd}
+                  isScrolling={isScrolling}
+                  labelOffset={getLabelOffset(bar.startOffset, bar.duration)}
+                  hasDraggedRef={hasDraggedRef}
+                />
+              ))}
+            </div>
 
-          {eventBars.length === 0 && <div className='py-8 text-center text-gray-500'>表示するイベントがありません</div>}
-        </div>
-      </section>
+            {eventBars.length === 0 && (
+              <div className='py-8 text-center text-gray-500'>表示するイベントがありません</div>
+            )}
+          </div>
+        </section>
+        {/* モバイル: 右端フェードで横スクロール可能を示唆 */}
+        <div
+          aria-hidden='true'
+          className='pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent md:hidden'
+        />
+      </div>
     </>
   )
 }

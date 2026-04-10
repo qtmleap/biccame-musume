@@ -35,6 +35,9 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
           onMouseMove={layout.handleMouseMove}
           onMouseUp={layout.handleMouseUp}
           onMouseLeave={layout.handleMouseLeave}
+          onTouchStart={layout.handleTouchStart}
+          onTouchMove={layout.handleTouchMove}
+          onTouchEnd={layout.handleTouchEnd}
           getLabelOffset={layout.getLabelOffset}
           hasDraggedRef={layout.hasDraggedRef}
         />
