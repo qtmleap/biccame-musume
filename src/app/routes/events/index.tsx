@@ -243,12 +243,17 @@ const EventsContent = () => {
           <div className='flex items-center gap-4'>
             <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
             <EventUserActivityFilter />
-            {isFilterActive && (
-              <Button variant='outline' size='sm' onClick={handleResetFilters} className='ml-auto gap-1.5'>
-                <RotateCcw className='size-3.5' />
-                フィルターをリセット
-              </Button>
-            )}
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={handleResetFilters}
+              disabled={!isFilterActive}
+              aria-disabled={!isFilterActive}
+              className='ml-auto gap-1.5 disabled:text-muted-foreground disabled:border-muted'
+            >
+              <RotateCcw className='size-3.5' />
+              フィルターをリセット
+            </Button>
           </div>
 
           {/* 地域フィルター */}
@@ -256,14 +261,19 @@ const EventsContent = () => {
         </div>
 
         {/* モバイル: リセットボタン */}
-        {isFilterActive && (
-          <div className='md:hidden'>
-            <Button variant='outline' size='sm' onClick={handleResetFilters} className='gap-1.5'>
-              <RotateCcw className='size-3.5' />
-              フィルターをリセット
-            </Button>
-          </div>
-        )}
+        <div className='md:hidden'>
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={handleResetFilters}
+            disabled={!isFilterActive}
+            aria-disabled={!isFilterActive}
+            className='gap-1.5 disabled:text-muted-foreground disabled:border-muted'
+          >
+            <RotateCcw className='size-3.5' />
+            フィルターをリセット
+          </Button>
+        </div>
 
         {/* イベント表示 */}
         {viewMode === 'gantt' ? (
