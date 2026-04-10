@@ -1,12 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ExternalLink } from 'lucide-react'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
 /**
  * お問い合わせページ
  */
 const RouteComponent = () => {
   return (
-    <div className='min-h-screen bg-linear-to-b from-blue-50 to-white'>
+    <div className='min-h-screen'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <h1 className='text-2xl font-bold mb-8 text-gray-900'>お問い合わせ</h1>
 
@@ -93,38 +94,44 @@ const RouteComponent = () => {
             <h2 className='text-xl md:text-2xl font-bold mb-4 text-gray-800 border-b-2 border-[#e50012] pb-2'>
               よくある質問
             </h2>
-            <div className='space-y-4 text-gray-700'>
-              <div>
-                <h3 className='font-bold text-gray-800 mb-2'>Q. 投票は何回できますか？</h3>
-                <p className='text-sm'>
+            <Accordion type='single' collapsible className='text-gray-700'>
+              <AccordionItem value='voting'>
+                <AccordionTrigger className='font-bold text-gray-800'>Q. 投票は何回できますか？</AccordionTrigger>
+                <AccordionContent className='text-sm'>
                   A.
                   各ビッカメ娘に1日1回投票できます。全員に投票するも良し、毎日推しに投票するも良し、自由に応援してください。
-                </p>
-              </div>
+                </AccordionContent>
+              </AccordionItem>
 
-              <div>
-                <h3 className='font-bold text-gray-800 mb-2'>Q. キャラクター情報が古い・間違っています</h3>
-                <p className='text-sm'>
+              <AccordionItem value='outdated-info'>
+                <AccordionTrigger className='font-bold text-gray-800'>
+                  Q. キャラクター情報が古い・間違っています
+                </AccordionTrigger>
+                <AccordionContent className='text-sm'>
                   A. 申し訳ございません。上記のGitHub
                   IssuesまたはXでご報告いただけますと幸いです。確認のうえ修正いたします。
-                </p>
-              </div>
+                </AccordionContent>
+              </AccordionItem>
 
-              <div>
-                <h3 className='font-bold text-gray-800 mb-2'>Q. 新しいビッカメ娘が追加されていません</h3>
-                <p className='text-sm'>
+              <AccordionItem value='new-character'>
+                <AccordionTrigger className='font-bold text-gray-800'>
+                  Q. 新しいビッカメ娘が追加されていません
+                </AccordionTrigger>
+                <AccordionContent className='text-sm'>
                   A.
                   公式サイトの更新を定期的にチェックしておりますが、反映が遅れる場合があります。お気づきの点がございましたらご連絡ください。
-                </p>
-              </div>
+                </AccordionContent>
+              </AccordionItem>
 
-              <div>
-                <h3 className='font-bold text-gray-800 mb-2'>Q. このサイトはビックカメラ公式ですか？</h3>
-                <p className='text-sm'>
+              <AccordionItem value='official'>
+                <AccordionTrigger className='font-bold text-gray-800'>
+                  Q. このサイトはビックカメラ公式ですか？
+                </AccordionTrigger>
+                <AccordionContent className='text-sm'>
                   A. いいえ、非公式のファンサイトです。ビックカメラおよび関連企業とは一切関係ありません。
-                </p>
-              </div>
-            </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </section>
         </div>
       </div>
