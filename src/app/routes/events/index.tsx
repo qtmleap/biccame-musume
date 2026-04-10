@@ -1,11 +1,13 @@
 import { useSuspenseQueries } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { useAtom, useAtomValue } from 'jotai'
-import { Calendar, Filter, Gift, LayoutGrid, Settings } from 'lucide-react'
+import { useAtom } from 'jotai'
+import { Calendar, Filter, Gift, LayoutGrid, RotateCcw, Settings } from 'lucide-react'
 import { Suspense, useEffect, useMemo, useState } from 'react'
+import { z } from 'zod'
 import { categoryFilterAtom } from '@/atoms/category-filter-atom'
 import { eventListStatusFilterAtom } from '@/atoms/event-list-status-filter-atom'
+import { eventListStoreFilterAtom } from '@/atoms/event-list-store-filter-atom'
 import { eventPageAtom } from '@/atoms/event-page-atom'
 import { eventUserActivityFilterAtom } from '@/atoms/event-user-activity-filter-atom'
 import { eventViewModeAtom } from '@/atoms/event-view-mode-atom'
@@ -31,6 +33,7 @@ const PER_PAGE = 12
  * イベント一覧のコンテンツ
  */
 const EventsContent = () => {
+  const { store: storeParam } = Route.useSearch()
   const [eventsQuery, charactersQuery] = useSuspenseQueries({
     queries: [
       {
@@ -50,12 +53,42 @@ const EventsContent = () => {
   const events = eventsQuery.data
   const characters = charactersQuery.data
 
-  const categoryFilter = useAtomValue(categoryFilterAtom)
-  const regionFilter = useAtomValue(regionFilterAtom)
+  const [categoryFilter, setCategoryFilter] = useAtom(categoryFilterAtom)
+  const [regionFilter, setRegionFilter] = useAtom(regionFilterAtom)
   const [viewMode, setViewMode] = useAtom(eventViewModeAtom)
-  const [statusFilter] = useAtom(eventListStatusFilterAtom)
-  const [activityFilter] = useAtom(eventUserActivityFilterAtom)
+  const [statusFilter, setStatusFilter] = useAtom(eventListStatusFilterAtom)
+  const [activityFilter, setActivityFilter] = useAtom(eventUserActivityFilterAtom)
+  const [storeFilter, setStoreFilter] = useAtom(eventListStoreFilterAtom)
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+
+  // URLの store パラメータをatomに同期
+  useEffect(() => {
+    setStoreFilter(storeParam ?? null)
+  }, [storeParam, setStoreFilter])
+
+  const DEFAULT_CATEGORY = new Set(['ackey', 'limited_card', 'regular_card', 'other'] as const)
+  const DEFAULT_STATUS = { upcoming: true, ongoing: true, ended: false }
+  const DEFAULT_ACTIVITY = { hideInterested: false, hideCompleted: false }
+  const DEFAULT_REGION = 'all' as const
+
+  const isFilterActive =
+    regionFilter !== DEFAULT_REGION ||
+    statusFilter.upcoming !== DEFAULT_STATUS.upcoming ||
+    statusFilter.ongoing !== DEFAULT_STATUS.ongoing ||
+    statusFilter.ended !== DEFAULT_STATUS.ended ||
+    activityFilter.hideInterested !== DEFAULT_ACTIVITY.hideInterested ||
+    activityFilter.hideCompleted !== DEFAULT_ACTIVITY.hideCompleted ||
+    categoryFilter.size !== DEFAULT_CATEGORY.size ||
+    [...DEFAULT_CATEGORY].some((c) => !categoryFilter.has(c)) ||
+    storeFilter !== null
+
+  const handleResetFilters = () => {
+    setCategoryFilter(new Set(['ackey', 'limited_card', 'regular_card', 'other']))
+    setRegionFilter(DEFAULT_REGION)
+    setStatusFilter(DEFAULT_STATUS)
+    setActivityFilter(DEFAULT_ACTIVITY)
+    setStoreFilter(null)
+  }
   const [page, setPage] = useAtom(eventPageAtom)
   const { interestedEvents, completedEvents } = useUserActivity()
   const { isAuthenticated } = useAuth()
@@ -77,6 +110,11 @@ const EventsContent = () => {
       .filter((event) => {
         // カテゴリフィルター
         if (!categoryFilter.has(event.category)) return false
+
+        // 店舗フィルター
+        if (storeFilter !== null) {
+          if (!event.stores?.includes(storeFilter as never)) return false
+        }
 
         // 地域フィルター
         if (regionFilter !== 'all') {
@@ -124,6 +162,7 @@ const EventsContent = () => {
   }, [
     events,
     categoryFilter,
+    storeFilter,
     regionFilter,
     storePrefectureMap,
     statusFilter,
@@ -136,7 +175,7 @@ const EventsContent = () => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: filter vars are watched intentionally to trigger page reset
   useEffect(() => {
     setPage(1)
-  }, [setPage, categoryFilter, regionFilter, statusFilter, activityFilter])
+  }, [setPage, categoryFilter, storeFilter, regionFilter, statusFilter, activityFilter])
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
@@ -201,14 +240,30 @@ const EventsContent = () => {
           <EventCategoryFilter />
 
           {/* ステータスフィルタとマイアクティビティフィルタ */}
-          <div className='flex gap-4'>
+          <div className='flex items-center gap-4'>
             <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
             <EventUserActivityFilter />
+            {isFilterActive && (
+              <Button variant='outline' size='sm' onClick={handleResetFilters} className='ml-auto gap-1.5'>
+                <RotateCcw className='size-3.5' />
+                フィルターをリセット
+              </Button>
+            )}
           </div>
 
           {/* 地域フィルター */}
           <RegionFilterControl />
         </div>
+
+        {/* モバイル: リセットボタン */}
+        {isFilterActive && (
+          <div className='md:hidden'>
+            <Button variant='outline' size='sm' onClick={handleResetFilters} className='gap-1.5'>
+              <RotateCcw className='size-3.5' />
+              フィルターをリセット
+            </Button>
+          </div>
+        )}
 
         {/* イベント表示 */}
         {viewMode === 'gantt' ? (
@@ -244,5 +299,8 @@ const EventsPage = () => {
 }
 
 export const Route = createFileRoute('/events/')({
+  validateSearch: z.object({
+    store: z.string().optional()
+  }),
   component: EventsPage
 })
