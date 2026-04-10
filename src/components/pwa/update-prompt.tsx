@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { PERSISTED_ATOM_KEYS } from '@/lib/persisted-atom-keys'
 import { clearAllCaches } from '@/lib/pwa-cache'
 import { UpdateOverlay, type UpdateOverlayStatus } from './update-overlay'
 
@@ -41,14 +40,8 @@ export const UpdatePrompt = () => {
       setOpen(true)
 
       clearAllCaches()
-        .then(() => {
-          for (const key of PERSISTED_ATOM_KEYS) {
-            localStorage.removeItem(key)
-          }
-          setStatus('reloading')
-          window.setTimeout(() => window.location.reload(), 800)
-        })
-        .catch(() => {
+        .catch(() => {})
+        .finally(() => {
           setStatus('reloading')
           window.setTimeout(() => window.location.reload(), 800)
         })
