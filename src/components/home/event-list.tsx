@@ -82,7 +82,7 @@ export const EventList = () => {
   // 通常名刺は店舗ごとに最新のものだけ表示（開始日でソート済みなので最初に出てきたものが最新）
   const upcomingEvents = deduplicateRegularCards(filteredEvents)
 
-  if (isLoading || upcomingEvents.length === 0) {
+  if (isLoading) {
     return null
   }
 
@@ -94,11 +94,15 @@ export const EventList = () => {
           <h2 className='text-base font-bold text-gray-800'>開催中・開催予定のイベント</h2>
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
-          {upcomingEvents.map((event, index) => (
-            <EventListItem key={event.uuid} event={event} index={index} />
-          ))}
-        </div>
+        {upcomingEvents.length === 0 ? (
+          <p className='text-sm text-muted-foreground py-4'>開催予定のイベントはありません</p>
+        ) : (
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
+            {upcomingEvents.map((event, index) => (
+              <EventListItem key={event.uuid} event={event} index={index} />
+            ))}
+          </div>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}
