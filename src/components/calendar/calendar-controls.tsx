@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
+import { DURATION, EASE_OUT, FADE_IN_DOWN } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
 type CalendarHeaderProps = {
@@ -17,9 +18,10 @@ type CalendarHeaderProps = {
 export const CalendarHeader = ({ year, month, onPrevMonth, onNextMonth, onCurrentMonth }: CalendarHeaderProps) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
+      variants={FADE_IN_DOWN}
+      initial='initial'
+      animate='animate'
+      transition={{ duration: DURATION.fast * 2, ease: EASE_OUT }}
       className='flex items-center justify-between'
     >
       <Button variant='ghost' size='icon' onClick={onPrevMonth} className='rounded-full'>

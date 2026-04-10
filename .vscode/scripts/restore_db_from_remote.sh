@@ -8,15 +8,15 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 BACKUP_FILE="${PROJECT_ROOT}/.wrangler/backup.sql"
 
-# 環境選択（デフォルトはdev）
-ENV="${1:-dev}"
+# 環境選択（デフォルトはstaging）
+ENV="${1:-staging}"
 
-if [ "$ENV" = "prod" ]; then
+if [ "$ENV" = "production" ]; then
   DB_NAME="biccame-musume-prod"
   echo "⚠️  Production環境からリストアします"
 else
   DB_NAME="biccame-musume-dev"
-  echo "📦 Dev環境からリストアします"
+  echo "📦 Staging環境からリストアします"
 fi
 
 echo "🔄 リモートDBをエクスポート中..."

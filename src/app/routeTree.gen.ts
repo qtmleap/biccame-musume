@@ -21,7 +21,7 @@ import { Route as CharactersIndexRouteImport } from './routes/characters/index'
 import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
-import { Route as CharactersIdRouteImport } from './routes/characters/$id'
+import { Route as CharactersIdRouteImport } from './routes/characters/$id/index'
 import { Route as MeInterestedIndexRouteImport } from './routes/me/interested/index'
 import { Route as MeCompletedIndexRouteImport } from './routes/me/completed/index'
 import { Route as EventsUuidIndexRouteImport } from './routes/events/$uuid/index'
@@ -89,7 +89,7 @@ const AboutIndexRoute = AboutIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const CharactersIdRoute = CharactersIdRouteImport.update({
-  id: '/characters/$id',
+  id: '/characters/$id/',
   path: '/characters/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
@@ -122,7 +122,7 @@ const AdminEventsUuidIndexRoute = AdminEventsUuidIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
-  '/characters/$id': typeof CharactersIdRoute
+  '/characters/$id/': typeof CharactersIdRoute
   '/about/': typeof AboutIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/calendar/': typeof CalendarIndexRoute
@@ -162,7 +162,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
-  '/characters/$id': typeof CharactersIdRoute
+  '/characters/$id/': typeof CharactersIdRoute
   '/about/': typeof AboutIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/calendar/': typeof CalendarIndexRoute
@@ -184,7 +184,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
-    | '/characters/$id'
+    | '/characters/$id/'
     | '/about/'
     | '/admin/'
     | '/calendar/'
@@ -223,7 +223,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
-    | '/characters/$id'
+    | '/characters/$id/'
     | '/about/'
     | '/admin/'
     | '/calendar/'
@@ -345,10 +345,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/characters/$id': {
-      id: '/characters/$id'
+    '/characters/$id/': {
+      id: '/characters/$id/'
       path: '/characters/$id'
-      fullPath: '/characters/$id'
+      fullPath: '/characters/$id/'
       preLoaderRoute: typeof CharactersIdRouteImport
       parentRoute: typeof rootRouteImport
     }

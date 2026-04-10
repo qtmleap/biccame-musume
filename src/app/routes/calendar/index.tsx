@@ -70,11 +70,15 @@ const CalendarContent = () => {
         onCurrentMonth={handleCurrentMonth}
       />
 
-      <CalendarMonthDots selectedMonth={selectedMonth} onSelectMonth={setSelectedMonth} />
-      <CalendarMonthTabs selectedMonth={selectedMonth} onSelectMonth={setSelectedMonth} />
+      <div className='md:hidden'>
+        <CalendarMonthDots selectedMonth={selectedMonth} onSelectMonth={setSelectedMonth} />
+      </div>
+      <div className='hidden md:block'>
+        <CalendarMonthTabs selectedMonth={selectedMonth} onSelectMonth={setSelectedMonth} />
+      </div>
 
       {isMobile ? (
-        <CalendarEventList year={selectedYear} month={selectedMonth} events={events} />
+        <CalendarEventList year={selectedYear} month={selectedMonth} events={events} onDayClick={handleDayClick} />
       ) : (
         <CalendarGrid year={selectedYear} month={selectedMonth} events={events} onDayClick={handleDayClick} />
       )}
