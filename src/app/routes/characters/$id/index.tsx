@@ -47,6 +47,6 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/characters/$id')({
+export const Route = createFileRoute('/characters/$id/')({
   component: RouteComponent
 })
