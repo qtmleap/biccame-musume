@@ -6,6 +6,7 @@ import { LoadingFallback } from '@/components/common/loading-fallback'
 import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { useEvents } from '@/hooks/use-events'
 import { useUserActivity } from '@/hooks/use-user-activity'
+import { auth } from '@/lib/firebase'
 import { MY_PAGE_LABELS } from '@/locales/app.content'
 
 /**
@@ -70,5 +71,21 @@ const RouteComponent = () => (
 )
 
 export const Route = createFileRoute('/me/completed/')({
-  component: RouteComponent
+  component: RouteComponent,
+  beforeLoad: async () => {
+    return new Promise((resolve) => {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        unsubscribe()
+        if (!user) {
+          throw new Error('Unauthorized')
+        }
+        resolve(undefined)
+      })
+    })
+  },
+  onError: ({ error, navigate }) => {
+    if (error.message === 'Unauthorized') {
+      navigate({ to: '/' })
+    }
+  }
 })
