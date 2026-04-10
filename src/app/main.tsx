@@ -10,6 +10,7 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
+import { IosInstallPrompt } from '@/components/pwa/install-prompt-ios'
 import { showUpdatePrompt, UpdatePrompt } from '@/components/pwa/update-prompt'
 import { Toaster } from '@/components/ui/sonner'
 import { client } from '@/utils/client'
@@ -169,6 +170,7 @@ if (!rootElement.innerHTML) {
         <RouterProvider router={router} />
         <Toaster />
         <UpdatePrompt />
+        <IosInstallPrompt />
       </PersistQueryClientProvider>
     </StrictMode>
   )
