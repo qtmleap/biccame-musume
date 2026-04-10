@@ -11,6 +11,7 @@ import utc from 'dayjs/plugin/utc'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { toast } from 'sonner'
+import { dispatchSwUpdateEvent, UpdatePrompt } from '@/components/pwa/update-prompt'
 import { Toaster } from '@/components/ui/sonner'
 import { client } from '@/utils/client'
 // フォントのインポート
@@ -44,10 +45,7 @@ navigator.serviceWorker?.addEventListener('controllerchange', () => {
 registerSW({
   immediate: true,
   onNeedRefresh() {
-    toast('新しいバージョンに更新します...', {
-      description: '数秒後に自動的にページが更新されます',
-      duration: 3000
-    })
+    dispatchSwUpdateEvent()
   },
   onOfflineReady() {
     console.log('App ready to work offline')
@@ -206,6 +204,7 @@ if (!rootElement.innerHTML) {
       >
         <RouterProvider router={router} />
         <Toaster />
+        <UpdatePrompt />
       </PersistQueryClientProvider>
     </StrictMode>
   )
