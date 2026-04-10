@@ -20,6 +20,7 @@ import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Toggle } from '@/components/ui/toggle'
+import { useAuth } from '@/hooks/use-auth'
 import { charactersQueryKey } from '@/hooks/use-characters'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { client } from '@/utils/client'
@@ -57,6 +58,7 @@ const EventsContent = () => {
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
   const [page, setPage] = useAtom(eventPageAtom)
   const { interestedEvents, completedEvents } = useUserActivity()
+  const { isAuthenticated } = useAuth()
   // 店舗キー(id)から都道府県を取得するマップ
   const storePrefectureMap = useMemo(() => {
     const map = new Map<string, string>()
@@ -131,9 +133,10 @@ const EventsContent = () => {
   ])
 
   // フィルター変更時にページを1にリセット
+  // biome-ignore lint/correctness/useExhaustiveDependencies: filter vars are watched intentionally to trigger page reset
   useEffect(() => {
     setPage(1)
-  }, [setPage])
+  }, [setPage, categoryFilter, regionFilter, statusFilter, activityFilter])
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
@@ -181,12 +184,14 @@ const EventsContent = () => {
             >
               {viewMode === 'grid' ? <LayoutGrid className='size-4' /> : <Calendar className='size-4' />}
             </Toggle>
-            <Button asChild size='sm' variant='ghost' className='gap-2 text-gray-600 hover:text-gray-900'>
-              <Link to='/admin/events'>
-                <Settings className='size-4' />
-                管理
-              </Link>
-            </Button>
+            {isAuthenticated && (
+              <Button asChild size='sm' variant='ghost' className='gap-2 text-gray-600 hover:text-gray-900'>
+                <Link to='/admin/events'>
+                  <Settings className='size-4' />
+                  管理
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
 
