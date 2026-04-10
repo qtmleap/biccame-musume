@@ -2,7 +2,7 @@ import { useSuspenseQueries } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
-import { Calendar, Filter, Gift, LayoutGrid, RotateCcw, Settings } from 'lucide-react'
+import { Calendar, Filter, Gift, LayoutGrid, Settings, X } from 'lucide-react'
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import { z } from 'zod'
 import { categoryFilterAtom } from '@/atoms/category-filter-atom'
@@ -249,10 +249,11 @@ const EventsContent = () => {
               onClick={handleResetFilters}
               disabled={!isFilterActive}
               aria-disabled={!isFilterActive}
-              className='ml-auto gap-1.5 disabled:text-muted-foreground disabled:border-muted'
+              aria-label='フィルターをクリア'
+              title='フィルターをクリア'
+              className='ml-auto h-8 w-8 p-0 disabled:text-muted-foreground disabled:border-muted'
             >
-              <RotateCcw className='size-3.5' />
-              フィルターをリセット
+              <X className='size-4' />
             </Button>
           </div>
 
@@ -268,10 +269,11 @@ const EventsContent = () => {
             onClick={handleResetFilters}
             disabled={!isFilterActive}
             aria-disabled={!isFilterActive}
-            className='gap-1.5 disabled:text-muted-foreground disabled:border-muted'
+            aria-label='フィルターをクリア'
+            title='フィルターをクリア'
+            className='h-8 w-8 p-0 disabled:text-muted-foreground disabled:border-muted'
           >
-            <RotateCcw className='size-3.5' />
-            フィルターをリセット
+            <X className='size-4' />
           </Button>
         </div>
 
