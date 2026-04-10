@@ -18,10 +18,10 @@ export const showUpdatePrompt = () => {
       onClick: triggerUpdate
     },
     classNames: {
-      toast: 'flex items-center gap-3 rounded-xl bg-gray-900 px-4 py-3 shadow-lg',
-      title: 'text-sm font-medium text-white',
-      description: 'text-xs text-gray-300',
-      actionButton: '!bg-pink-600 !text-white !px-3 !py-1.5 !rounded-md !text-xs !font-medium hover:!bg-pink-700'
+      toast: '!bg-gray-900 !border-gray-800 !rounded-xl !shadow-lg',
+      title: '!text-white !text-sm !font-medium',
+      description: '!text-gray-300 !text-xs',
+      actionButton: '!bg-pink-600 !text-white hover:!bg-pink-700'
     }
   })
 }
