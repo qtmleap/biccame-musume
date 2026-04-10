@@ -8,8 +8,10 @@ export const dispatchSwUpdateEvent = () => {
   window.dispatchEvent(new CustomEvent(SW_UPDATE_EVENT))
 }
 
+const isStaging = () => typeof window !== 'undefined' && window.location.hostname === 'dev.biccame-musume.com'
+
 export const UpdatePrompt = () => {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(isStaging)
 
   useEffect(() => {
     const handler = () => setVisible(true)
