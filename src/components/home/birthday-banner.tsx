@@ -4,6 +4,7 @@ import { X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { SPRING_DEFAULT } from '@/lib/motion'
 import type { StoreData } from '@/schemas/store.dto'
 
 type BirthdayBannerProps = {
@@ -61,7 +62,7 @@ export const BirthdayBanner = ({ characters }: BirthdayBannerProps) => {
           initial={{ opacity: 0, y: -100 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -100 }}
-          transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+          transition={SPRING_DEFAULT}
         >
           <div className='relative overflow-hidden rounded-xl bg-linear-to-r from-pink-500 to-purple-500 p-4 shadow-xl'>
             {/* 閉じるボタン */}
