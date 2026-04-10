@@ -1,49 +1,52 @@
-import { RefreshCw, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
+import { Progress } from '@/components/ui/progress'
 
-const SW_UPDATE_EVENT = 'sw:needsRefresh'
+const UPDATE_START_EVENT = 'sw:updating'
+const RELOAD_DELAY_MS = 1200
 
-export const dispatchSwUpdateEvent = () => {
-  window.dispatchEvent(new CustomEvent(SW_UPDATE_EVENT))
+const triggerUpdate = () => {
+  window.dispatchEvent(new CustomEvent(UPDATE_START_EVENT))
+}
+
+export const showUpdatePrompt = () => {
+  toast('新しいバージョンが利用可能です', {
+    description: 'ページを更新すると最新版に切り替わります',
+    duration: Number.POSITIVE_INFINITY,
+    action: {
+      label: '更新',
+      onClick: triggerUpdate
+    }
+  })
 }
 
 const isStaging = import.meta.env.MODE === 'staging'
 
 export const UpdatePrompt = () => {
-  const [visible, setVisible] = useState(isStaging)
+  const [updating, setUpdating] = useState(false)
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
-    const handler = () => setVisible(true)
-    window.addEventListener(SW_UPDATE_EVENT, handler)
-    return () => window.removeEventListener(SW_UPDATE_EVENT, handler)
+    if (isStaging) showUpdatePrompt()
+
+    const handler = () => {
+      setUpdating(true)
+      requestAnimationFrame(() => setProgress(100))
+      window.setTimeout(() => window.location.reload(), RELOAD_DELAY_MS)
+    }
+    window.addEventListener(UPDATE_START_EVENT, handler)
+    return () => window.removeEventListener(UPDATE_START_EVENT, handler)
   }, [])
 
-  if (!visible) return null
+  if (!updating) return null
 
   return (
-    <div className='fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-3 bg-gray-900 px-4 py-3 text-white shadow-lg md:bottom-4 md:left-1/2 md:right-auto md:-translate-x-1/2 md:rounded-xl md:px-5'>
-      <div className='flex items-center gap-2 text-sm'>
-        <RefreshCw className='size-4 shrink-0 text-green-400' />
-        <span>新しいバージョンが利用可能です</span>
-      </div>
-      <div className='flex items-center gap-2'>
-        <Button
-          size='sm'
-          className='h-7 bg-white px-3 text-xs font-medium text-gray-900 hover:bg-gray-100'
-          onClick={() => window.location.reload()}
-        >
-          更新
-        </Button>
-        <button
-          type='button'
-          aria-label='閉じる'
-          className='rounded p-1 text-white/60 transition-colors hover:text-white'
-          onClick={() => setVisible(false)}
-        >
-          <X className='size-4' />
-        </button>
-      </div>
+    <div className='fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-black/80 backdrop-blur-sm'>
+      <p className='text-white text-lg font-medium'>更新中...</p>
+      <Progress
+        value={progress}
+        className='w-64 h-2 bg-white/20 [&>div]:bg-white [&>div]:transition-all [&>div]:duration-1000 [&>div]:ease-out'
+      />
     </div>
   )
 }
