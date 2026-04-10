@@ -7,6 +7,7 @@ import authRoutes from './api/auth'
 import direction from './api/direction'
 import events from './api/event'
 import me from './api/me'
+import search from './api/search'
 import stats from './api/stats'
 import users from './api/user'
 import version from './api/version'
@@ -65,6 +66,9 @@ app.route('/api/stats', stats)
 
 // 経路案内APIルート
 app.route('/api/directions', direction)
+
+// イベント検索APIルート
+app.route('/api/search', search)
 
 // ユーザー管理APIルート
 app.route('/api/users', users)
