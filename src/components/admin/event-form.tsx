@@ -123,7 +123,7 @@ export const EventForm = ({
    */
   const checkUrlDuplicate = useCallback(
     async (index: number, url: string) => {
-      if (!url || !url.startsWith('http')) {
+      if (!url?.startsWith('http')) {
         setDuplicateWarnings((prev) => ({ ...prev, [index]: null }))
         return
       }
