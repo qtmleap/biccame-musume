@@ -10,7 +10,7 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { dispatchSwUpdateEvent, UpdatePrompt } from '@/components/pwa/update-prompt'
+import { showUpdatePrompt, UpdatePrompt } from '@/components/pwa/update-prompt'
 import { Toaster } from '@/components/ui/sonner'
 import { client } from '@/utils/client'
 // フォントのインポート
@@ -44,7 +44,7 @@ navigator.serviceWorker?.addEventListener('controllerchange', () => {
 registerSW({
   immediate: true,
   onNeedRefresh() {
-    dispatchSwUpdateEvent()
+    showUpdatePrompt()
   },
   onOfflineReady() {
     console.log('App ready to work offline')
