@@ -143,36 +143,8 @@ const checkVersionAndClearCache = () => {
   }
 }
 
-/**
- * サーバーのバージョンをAPIで確認し、デプロイ後の更新をユーザーに通知する
- */
-const checkServerVersion = async () => {
-  const STORAGE_KEY = 'SERVER_VERSION_HASH'
-  try {
-    const data = await client.getVersion()
-    const serverHash = data.hash
-    const storedHash = localStorage.getItem(STORAGE_KEY)
-
-    if (!storedHash) {
-      // 初回アクセス: ハッシュを保存するだけで通知しない
-      localStorage.setItem(STORAGE_KEY, serverHash)
-      console.log(`[App] Server version hash stored: ${serverHash}`)
-      return
-    }
-
-    if (storedHash !== serverHash) {
-      console.log(`[App] Server version changed: ${storedHash} → ${serverHash}`)
-      localStorage.setItem(STORAGE_KEY, serverHash)
-      dispatchSwUpdateEvent()
-    }
-  } catch (e) {
-    console.debug('[App] Server version check failed:', e)
-  }
-}
-
 // アプリ起動時にバージョンチェックを実行
 checkVersionAndClearCache()
-checkServerVersion()
 
 // Render the app
 // biome-ignore lint/style/noNonNullAssertion: reason
