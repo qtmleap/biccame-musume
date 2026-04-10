@@ -13,6 +13,8 @@ import ReactDOM from 'react-dom/client'
 import { IosInstallPrompt } from '@/components/pwa/install-prompt-ios'
 import { showUpdatePrompt, UpdatePrompt } from '@/components/pwa/update-prompt'
 import { Toaster } from '@/components/ui/sonner'
+import { PERSISTED_ATOM_KEYS } from '@/lib/persisted-atom-keys'
+import { clearAllCaches } from '@/lib/pwa-cache'
 import { client } from '@/utils/client'
 // フォントのインポート
 import '@fontsource/noto-sans-jp/400.css'
@@ -126,8 +128,12 @@ const checkVersionAndClearCache = () => {
     // 初回アクセス（古いバージョンからの更新を含む）
     if (hasOldCache) {
       console.log('[App] Old cache detected on first access. Clearing cache...')
+      for (const key of PERSISTED_ATOM_KEYS) {
+        localStorage.removeItem(key)
+      }
       localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
       queryClient.clear()
+      clearAllCaches().catch((err: unknown) => console.error('[App] Failed to clear caches:', err))
       console.log('[App] Cache cleared successfully')
     }
     localStorage.setItem(STORAGE_KEY, currentVersion)
@@ -135,8 +141,12 @@ const checkVersionAndClearCache = () => {
   } else if (storedVersion !== currentVersion) {
     // バージョンが変更された
     console.log(`[App] Version changed from ${storedVersion} to ${currentVersion}. Clearing cache...`)
+    for (const key of PERSISTED_ATOM_KEYS) {
+      localStorage.removeItem(key)
+    }
     localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
     queryClient.clear()
+    clearAllCaches().catch((err: unknown) => console.error('[App] Failed to clear caches:', err))
     localStorage.setItem(STORAGE_KEY, currentVersion)
     console.log('[App] Cache cleared successfully')
   } else {

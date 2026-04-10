@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { Progress } from '@/components/ui/progress'
+import { PERSISTED_ATOM_KEYS } from '@/lib/persisted-atom-keys'
+import { clearAllCaches } from '@/lib/pwa-cache'
+import { UpdateOverlay, type UpdateOverlayStatus } from './update-overlay'
 
 const UPDATE_START_EVENT = 'sw:updating'
-const RELOAD_DELAY_MS = 1200
 
 const triggerUpdate = () => {
   window.dispatchEvent(new CustomEvent(UPDATE_START_EVENT))
@@ -29,30 +30,33 @@ export const showUpdatePrompt = () => {
 const isStaging = import.meta.env.MODE === 'staging'
 
 export const UpdatePrompt = () => {
-  const [updating, setUpdating] = useState(false)
-  const [progress, setProgress] = useState(0)
+  const [open, setOpen] = useState(false)
+  const [status, setStatus] = useState<UpdateOverlayStatus>('clearing')
 
   useEffect(() => {
     if (isStaging) showUpdatePrompt()
 
     const handler = () => {
-      setUpdating(true)
-      requestAnimationFrame(() => setProgress(100))
-      window.setTimeout(() => window.location.reload(), RELOAD_DELAY_MS)
+      setStatus('clearing')
+      setOpen(true)
+
+      clearAllCaches()
+        .then(() => {
+          for (const key of PERSISTED_ATOM_KEYS) {
+            localStorage.removeItem(key)
+          }
+          setStatus('reloading')
+          window.setTimeout(() => window.location.reload(), 800)
+        })
+        .catch(() => {
+          setStatus('reloading')
+          window.setTimeout(() => window.location.reload(), 800)
+        })
     }
+
     window.addEventListener(UPDATE_START_EVENT, handler)
     return () => window.removeEventListener(UPDATE_START_EVENT, handler)
   }, [])
 
-  if (!updating) return null
-
-  return (
-    <div className='fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-black/80 backdrop-blur-sm'>
-      <p className='text-white text-lg font-medium'>更新中...</p>
-      <Progress
-        value={progress}
-        className='w-64 h-2 bg-white/20 [&>div]:bg-white [&>div]:transition-all [&>div]:duration-1000 [&>div]:ease-out'
-      />
-    </div>
-  )
+  return <UpdateOverlay open={open} status={status} />
 }
