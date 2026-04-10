@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Loader2, MapPin, Route as RouteIcon } from 'lucide-react'
 import { Suspense, useCallback, useMemo, useState } from 'react'
+import { LoadingFallback } from '@/components/common/loading-fallback'
 import {
   type AvailableStore,
   type RouteResult,
@@ -188,7 +189,7 @@ const RouteCalculator = () => {
 
 function RouteComponent() {
   return (
-    <Suspense fallback={<div className='p-4 text-center'>読み込み中...</div>}>
+    <Suspense fallback={<LoadingFallback />}>
       <RouteCalculator />
     </Suspense>
   )
