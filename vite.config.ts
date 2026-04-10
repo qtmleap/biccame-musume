@@ -180,7 +180,7 @@ export default defineConfig(({ mode }) => {
       },
       target: 'esnext',
       minify: true,
-      drop: mode === 'prod' ? ['console', 'debugger'] : []
+      drop: mode === 'production' ? ['console', 'debugger'] : []
     },
     worker: {
       format: 'es'
@@ -206,7 +206,7 @@ export default defineConfig(({ mode }) => {
       __APP_VERSION__: JSON.stringify(version),
       __GIT_HASH__: JSON.stringify(hash),
       __BUILD_AT__: JSON.stringify(buildAt),
-      __AUTH_DOMAIN__: JSON.stringify(mode === 'prod' ? 'biccame-musume.com' : 'dev.biccame-musume.com')
+      __AUTH_DOMAIN__: JSON.stringify(mode === 'production' ? 'biccame-musume.com' : 'dev.biccame-musume.com')
     },
     envPrefix: 'VITE_'
   }

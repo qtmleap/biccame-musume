@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build --mode ${CLOUDFLARE_ENV}",
-    "migrate": "wrangler d1 execute biccame-musume-events --env=dev --local --file=./prisma/migrations/init/migration.sql",
+    "migrate": "wrangler d1 execute biccame-musume-events --env=staging --local --file=./prisma/migrations/init/migration.sql",
     "reset": "bun run scripts/rest.ts",
     "generate": "prisma generate",
     "prebuild": "rimraf dist",
