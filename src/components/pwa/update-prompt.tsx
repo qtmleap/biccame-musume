@@ -1,7 +1,5 @@
-import { RefreshCw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 
 const UPDATE_START_EVENT = 'sw:updating'
@@ -12,30 +10,20 @@ const triggerUpdate = () => {
 }
 
 export const showUpdatePrompt = () => {
-  toast.custom(
-    (id) => (
-      <div className='flex items-center justify-between gap-3 w-[356px] max-w-[calc(100vw-32px)] rounded-xl bg-gray-900 px-4 py-3 shadow-lg'>
-        <div className='flex items-start gap-3 min-w-0'>
-          <RefreshCw className='size-5 shrink-0 text-green-400 mt-0.5' />
-          <div className='flex flex-col gap-0.5 min-w-0'>
-            <p className='text-sm font-medium text-white'>新しいバージョンが利用可能です</p>
-            <p className='text-xs text-gray-300'>ページを更新すると最新版に切り替わります</p>
-          </div>
-        </div>
-        <Button
-          size='sm'
-          className='shrink-0 h-8 bg-pink-600 px-3 text-xs font-medium text-white hover:bg-pink-700'
-          onClick={() => {
-            toast.dismiss(id)
-            triggerUpdate()
-          }}
-        >
-          更新
-        </Button>
-      </div>
-    ),
-    { duration: Number.POSITIVE_INFINITY }
-  )
+  toast('新しいバージョンが利用可能です', {
+    description: 'ページを更新すると最新版に切り替わります',
+    duration: Number.POSITIVE_INFINITY,
+    action: {
+      label: '更新',
+      onClick: triggerUpdate
+    },
+    classNames: {
+      toast: 'flex items-center gap-3 rounded-xl bg-gray-900 px-4 py-3 shadow-lg',
+      title: 'text-sm font-medium text-white',
+      description: 'text-xs text-gray-300',
+      actionButton: '!bg-pink-600 !text-white !px-3 !py-1.5 !rounded-md !text-xs !font-medium hover:!bg-pink-700'
+    }
+  })
 }
 
 const isStaging = import.meta.env.MODE === 'staging'
