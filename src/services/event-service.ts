@@ -1,11 +1,20 @@
 import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
+import { type Prisma, PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { HTTPException } from 'hono/http-exception'
-import { nullToUndefined } from '@/lib/utils'
-import { type Event, type EventRequest, EventSchema, type EventStatus, EventStatusSchema } from '@/schemas/event.dto'
+import {
+  type Event,
+  type EventCategory,
+  type EventConditionType,
+  type EventRequest,
+  EventSchema,
+  type EventStatus,
+  EventStatusSchema,
+  type ReferenceUrlType
+} from '@/schemas/event.dto'
+import type { StoreKey } from '@/schemas/store.dto'
 import type { Bindings } from '@/types/bindings'
 import { Twitter } from '@/utils/twitter'
 
@@ -64,21 +73,36 @@ const calculateEventStatus = (event: {
  * @param completedCount - 達成カウント（オプション）
  * @returns APIレスポンス用のEvent型オブジェクト
  */
-// biome-ignore lint/suspicious/noExplicitAny: reason
-const transform = (event: any, interestedCount = 0, completedCount = 0): Event => {
+type EventPayload = Prisma.EventGetPayload<{
+  include: { conditions: true; referenceUrls: true; stores: true }
+}>
+
+const transform = (event: EventPayload, interestedCount = 0, completedCount = 0): Event => {
   const { status, daysUntil } = calculateEventStatus(event)
-  const { id, conditions, referenceUrls, ...rest } = event
   return {
-    ...nullToUndefined(rest),
-    uuid: id,
-    // TODO: DBマイグレーション後に削除 - nameカラムをtitleにリネームする予定
-    title: event.name,
-    // biome-ignore lint/suspicious/noExplicitAny: reason
-    conditions: conditions?.map((c: any) => ({ ...nullToUndefined(c), uuid: c.id })) || [],
-    // biome-ignore lint/suspicious/noExplicitAny: reason
-    referenceUrls: referenceUrls?.map((r: any) => ({ ...nullToUndefined(r), uuid: r.id })) || [],
-    // biome-ignore lint/suspicious/noExplicitAny: reason
-    stores: event.stores.map((s: any) => s.storeKey),
+    uuid: event.id,
+    category: event.category as EventCategory,
+    title: event.title,
+    limitedQuantity: event.limitedQuantity ?? undefined,
+    startDate: event.startDate,
+    endDate: event.endDate ?? undefined,
+    endedAt: event.endedAt ?? undefined,
+    isVerified: event.isVerified,
+    isPreliminary: event.isPreliminary,
+    createdAt: event.createdAt,
+    updatedAt: event.updatedAt,
+    conditions: event.conditions.map((c) => ({
+      uuid: c.id,
+      type: c.type as EventConditionType,
+      purchaseAmount: c.purchaseAmount ?? undefined,
+      quantity: c.quantity ?? undefined
+    })),
+    referenceUrls: event.referenceUrls.map((r) => ({
+      uuid: r.id,
+      type: r.type as ReferenceUrlType,
+      url: r.url
+    })),
+    stores: event.stores.map((s) => s.storeKey as StoreKey),
     status,
     daysUntil,
     interestedCount,
@@ -181,7 +205,7 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     data: {
       id: data.uuid,
       category: data.category,
-      name: data.title,
+      title: data.title,
       limitedQuantity: data.limitedQuantity,
       startDate,
       endDate,
@@ -246,7 +270,7 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     where: { id: data.uuid },
     data: {
       category: data.category,
-      name: data.title,
+      title: data.title,
       limitedQuantity: data.limitedQuantity,
       startDate,
       endDate,

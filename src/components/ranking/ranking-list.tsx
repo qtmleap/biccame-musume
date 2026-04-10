@@ -113,28 +113,30 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
         {/* 順位（左寄せ） */}
         <div className={`${style.badge} px-3 py-0.5 rounded-full font-bold text-sm mb-1 self-start`}>{rank}位</div>
 
-        {/* キャラクター名（中央揃え、ポップなフォント、縁取り） */}
-        <h3
-          className='text-gray-900 truncate max-w-full text-lg text-center mb-2'
-          style={{
-            fontFamily: '"Zen Maru Gothic", sans-serif',
-            fontWeight: 900,
-            WebkitTextStroke: '1px white',
-            paintOrder: 'stroke fill'
-          }}
-        >
-          {character.character?.name}
-        </h3>
+        <Link to='/characters/$id' params={{ id: character.id }} className='block'>
+          {/* キャラクター名（中央揃え、ポップなフォント、縁取り） */}
+          <h3
+            className='text-gray-900 truncate max-w-full text-lg text-center mb-2'
+            style={{
+              fontFamily: '"Zen Maru Gothic", sans-serif',
+              fontWeight: 900,
+              WebkitTextStroke: '1px white',
+              paintOrder: 'stroke fill'
+            }}
+          >
+            {character.character?.name}
+          </h3>
 
-        {/* 画像（白色透過） */}
-        <div className='relative bg-pink-50 h-28 w-full flex items-center justify-center'>
-          <img
-            src={character.character?.image_url}
-            alt={character.character?.name || ''}
-            className='h-full w-auto max-w-full object-contain'
-            style={{ mixBlendMode: 'multiply' }}
-          />
-        </div>
+          {/* 画像（白色透過） */}
+          <div className='relative bg-pink-50 h-28 w-full flex items-center justify-center'>
+            <img
+              src={character.character?.image_url}
+              alt={character.character?.name || ''}
+              className='h-full w-auto max-w-full object-contain'
+              style={{ mixBlendMode: 'multiply' }}
+            />
+          </div>
+        </Link>
 
         {/* 票数（リボン装飾） */}
         <div className='mt-3 flex justify-center'>

@@ -10,7 +10,8 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { toast } from 'sonner'
+import { IosInstallPrompt } from '@/components/pwa/install-prompt-ios'
+import { showUpdatePrompt, UpdatePrompt } from '@/components/pwa/update-prompt'
 import { Toaster } from '@/components/ui/sonner'
 import { client } from '@/utils/client'
 // フォントのインポート
@@ -44,10 +45,7 @@ navigator.serviceWorker?.addEventListener('controllerchange', () => {
 registerSW({
   immediate: true,
   onNeedRefresh() {
-    toast('新しいバージョンに更新します...', {
-      description: '数秒後に自動的にページが更新されます',
-      duration: 3000
-    })
+    showUpdatePrompt()
   },
   onOfflineReady() {
     console.log('App ready to work offline')
@@ -146,43 +144,8 @@ const checkVersionAndClearCache = () => {
   }
 }
 
-/**
- * サーバーのバージョンをAPIで確認し、デプロイ後の更新をユーザーに通知する
- */
-const checkServerVersion = async () => {
-  const STORAGE_KEY = 'SERVER_VERSION_HASH'
-  try {
-    const data = await client.getVersion()
-    const serverHash = data.hash
-    const storedHash = localStorage.getItem(STORAGE_KEY)
-
-    if (!storedHash) {
-      // 初回アクセス: ハッシュを保存するだけで通知しない
-      localStorage.setItem(STORAGE_KEY, serverHash)
-      console.log(`[App] Server version hash stored: ${serverHash}`)
-      return
-    }
-
-    if (storedHash !== serverHash) {
-      console.log(`[App] Server version changed: ${storedHash} → ${serverHash}`)
-      localStorage.setItem(STORAGE_KEY, serverHash)
-      toast('新しいバージョンが利用可能です', {
-        description: 'ページを更新すると最新版に切り替わります',
-        duration: 10000,
-        action: {
-          label: '更新する',
-          onClick: () => window.location.reload()
-        }
-      })
-    }
-  } catch (e) {
-    console.debug('[App] Server version check failed:', e)
-  }
-}
-
 // アプリ起動時にバージョンチェックを実行
 checkVersionAndClearCache()
-checkServerVersion()
 
 // Render the app
 // biome-ignore lint/style/noNonNullAssertion: reason
@@ -206,6 +169,8 @@ if (!rootElement.innerHTML) {
       >
         <RouterProvider router={router} />
         <Toaster />
+        <UpdatePrompt />
+        <IosInstallPrompt />
       </PersistQueryClientProvider>
     </StrictMode>
   )

@@ -4,6 +4,7 @@ import { Cake, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { SPRING_DEFAULT } from '@/lib/motion'
 import type { StoreData } from '@/schemas/store.dto'
 
 type BirthdayFloatingCardProps = {
@@ -59,7 +60,7 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
           initial={{ opacity: 0, scale: 0.8, y: 100 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 100 }}
-          transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+          transition={SPRING_DEFAULT}
           drag
           dragConstraints={{ left: -300, right: 0, top: -500, bottom: 0 }}
           dragElastic={0.1}

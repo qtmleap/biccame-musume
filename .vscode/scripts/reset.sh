@@ -48,16 +48,16 @@ retry_command() {
 cd "$PROJECT_ROOT"
 
 # リストア先の環境選択
-DEST_ENV=$(echo -e "local\ndev" | fzf --prompt="リストア先の環境を選択: " --height=10 --border)
+DEST_ENV=$(echo -e "local\nstaging" | fzf --prompt="リストア先の環境を選択: " --height=10 --border)
 
 if [ -z "$DEST_ENV" ]; then
   echo "リストア先の環境が選択されませんでした"
   exit 1
 fi
 
-# リストア元はprod固定
+# リストア元はproduction固定
 SOURCE_DB_NAME="biccame-musume-prod"
-SOURCE_ENV="prod"
+SOURCE_ENV="production"
 
 # リストア先の設定
 if [ "$DEST_ENV" = "local" ]; then
@@ -65,14 +65,14 @@ if [ "$DEST_ENV" = "local" ]; then
   DEST_FLAG="--local"
 else
   DEST_DB_NAME="biccame-musume-dev"
-  DEST_FLAG="--remote --env dev"
+  DEST_FLAG="--remote --env staging"
 fi
 
 echo "🗑️  Step 1: ${DEST_ENV}環境のDBをクリア中..."
 if [ "$DEST_ENV" = "local" ]; then
   rm -rf .wrangler/state
 else
-  # dev環境の場合は既存のテーブルを削除
+  # staging環境の場合は既存のテーブルを削除
   echo "📋 既存のテーブル一覧を取得中..."
   TABLES=$(bun wrangler d1 execute "$DEST_DB_NAME" $DEST_FLAG --command="SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE '_cf_%';" --json | jq -r '.[].results[].name' 2>/dev/null || echo "")
 

@@ -123,7 +123,7 @@ export const EventForm = ({
    */
   const checkUrlDuplicate = useCallback(
     async (index: number, url: string) => {
-      if (!url || !url.startsWith('http')) {
+      if (!url?.startsWith('http')) {
         setDuplicateWarnings((prev) => ({ ...prev, [index]: null }))
         return
       }
@@ -208,8 +208,7 @@ export const EventForm = ({
 
     setIsSubmitted(true)
 
-    // biome-ignore lint/suspicious/noExplicitAny: 動的にプロパティを追加するため
-    const payload: any = {
+    const payload: EventRequest = {
       category: confirmedData.category,
       title: confirmedData.title,
       startDate: dayjs(confirmedData.startDate).toISOString(),
@@ -218,47 +217,38 @@ export const EventForm = ({
         type: c.type,
         purchaseAmount: c.purchaseAmount,
         quantity: c.quantity
-      })),
-      stores: confirmedData.stores && confirmedData.stores.length > 0 ? confirmedData.stores : [],
+      })) as EventRequest['conditions'],
+      stores: confirmedData.stores as EventRequest['stores'],
       isVerified: confirmedData.isVerified,
       isPreliminary: confirmedData.isPreliminary,
       shouldTweet: confirmedData.shouldTweet,
-      // 編集時は既存のuuid、新規作成時はクライアント生成のuuidを含める
-      uuid: isEditMode && defaultValues?.uuid ? defaultValues.uuid : confirmedData.uuid || uuidv4()
-    }
-
-    // 終了日が空文字やundefined、nullでない場合のみ設定
-    if (confirmedData.endDate && confirmedData.endDate.trim() !== '') {
-      payload.endDate = dayjs(confirmedData.endDate).toISOString()
-    }
-
-    // 実際の終了日が空文字やundefined、nullでない場合のみ設定
-    if (confirmedData.endedAt && confirmedData.endedAt.trim() !== '') {
-      payload.endedAt = dayjs(confirmedData.endedAt).toISOString()
-    }
-
-    // 参照URLが設定されている場合のみ追加
-    if (confirmedData.referenceUrls && confirmedData.referenceUrls.length > 0) {
-      payload.referenceUrls = confirmedData.referenceUrls.map((r) => ({
-        uuid: r.uuid || uuidv4(),
-        type: r.type,
-        url: r.url
-      }))
-    }
-
-    // 限定数量が設定されている場合のみ追加
-    if (confirmedData.limitedQuantity) {
-      payload.limitedQuantity = confirmedData.limitedQuantity
+      uuid: isEditMode && defaultValues?.uuid ? defaultValues.uuid : confirmedData.uuid || uuidv4(),
+      endDate:
+        confirmedData.endDate && confirmedData.endDate.trim() !== ''
+          ? dayjs(confirmedData.endDate).toISOString()
+          : undefined,
+      endedAt:
+        confirmedData.endedAt && confirmedData.endedAt.trim() !== ''
+          ? dayjs(confirmedData.endedAt).toISOString()
+          : undefined,
+      referenceUrls: (confirmedData.referenceUrls && confirmedData.referenceUrls.length > 0
+        ? confirmedData.referenceUrls.map((r) => ({
+            uuid: r.uuid || uuidv4(),
+            type: r.type,
+            url: r.url
+          }))
+        : confirmedData.referenceUrls) as EventRequest['referenceUrls'],
+      limitedQuantity: confirmedData.limitedQuantity || undefined
     }
 
     try {
       if (isEditMode && defaultValues?.uuid) {
         await updateEvent.mutateAsync({
           id: defaultValues.uuid,
-          data: payload as Parameters<typeof updateEvent.mutateAsync>[0]['data']
+          data: payload
         })
       } else {
-        await createEvent.mutateAsync(payload as Parameters<typeof createEvent.mutateAsync>[0])
+        await createEvent.mutateAsync(payload)
       }
       handleReset()
       onSuccess?.()

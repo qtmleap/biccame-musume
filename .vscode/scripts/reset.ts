@@ -2,12 +2,12 @@
  * Prismaマイグレーションをリセットし、リモートD1に適用するスクリプト
  *
  * 使用方法:
- *   bun run scripts/reset.ts [local-dev|remote-dev|remote-prod]
+ *   bun run scripts/reset.ts [local-staging|remote-staging|remote-production]
  *
  * 対象:
- *   - local-dev: wrangler --local --env=dev (ローカルwrangler D1 dev環境)
- *   - remote-dev: wrangler --remote --env=dev (リモートD1 dev環境)
- *   - remote-prod: wrangler --remote --env=prod (リモートD1 prod環境)
+ *   - local-staging: wrangler --local --env=staging (ローカルwrangler D1 staging環境)
+ *   - remote-staging: wrangler --remote --env=staging (リモートD1 staging環境)
+ *   - remote-production: wrangler --remote --env=production (リモートD1 production環境)
  *
  * 実行内容:
  * 1. prisma/migrationsの全削除
@@ -20,7 +20,7 @@ import { join } from 'node:path'
 import { $ } from 'bun'
 import dayjs from 'dayjs'
 
-type TargetEnv = 'local-dev' | 'remote-dev' | 'remote-prod'
+type TargetEnv = 'local-staging' | 'remote-staging' | 'remote-production'
 
 /**
  * マイグレーションディレクトリ名を生成する（YYYYMMDDHHMMSS形式、5分単位、秒は00固定）
@@ -37,7 +37,7 @@ const MIGRATIONS_DIR = 'prisma/migrations'
  * 環境に応じたデータベース名を取得
  */
 function getDatabaseName(env: TargetEnv): string {
-  return env === 'remote-prod' ? 'biccame-musume-prod' : 'biccame-musume-dev'
+  return env === 'remote-production' ? 'biccame-musume-prod' : 'biccame-musume-dev'
 }
 
 /**
@@ -45,8 +45,8 @@ function getDatabaseName(env: TargetEnv): string {
  */
 async function resetAndMigrateD1(env: TargetEnv, migrationSqlPath: string): Promise<void> {
   const databaseName = getDatabaseName(env)
-  const isLocal = env === 'local-dev'
-  const envName = env === 'remote-prod' ? 'prod' : 'dev'
+  const isLocal = env === 'local-staging'
+  const envName = env === 'remote-production' ? 'production' : 'staging'
   const baseArgs = isLocal ? [databaseName, '--local', `--env=${envName}`] : [databaseName, '--remote', `--env=${envName}`]
 
   // Cloudflare内部テーブル（削除対象から除外）
@@ -64,7 +64,7 @@ async function resetAndMigrateD1(env: TargetEnv, migrationSqlPath: string): Prom
     if (!isLocal) {
       console.error('\n  Network error may have occurred. You can:')
       console.error('  1. Retry the command')
-      console.error('  2. Try using local-dev environment instead')
+      console.error('  2. Try using local-staging environment instead')
       console.error('  3. Check your internet connection')
     }
     throw error
@@ -131,7 +131,7 @@ async function resetAndMigrateD1(env: TargetEnv, migrationSqlPath: string): Prom
   if (!isLocal) {
     console.error('\n  Network error may have occurred. You can:')
     console.error('  1. Retry the command manually')
-    console.error('  2. Try using local-dev environment instead')
+    console.error('  2. Try using local-staging environment instead')
     console.error('  3. Check your internet connection')
   }
   throw lastError
@@ -140,12 +140,12 @@ async function resetAndMigrateD1(env: TargetEnv, migrationSqlPath: string): Prom
 async function main(): Promise<void> {
   const targetEnv = process.argv[2] as TargetEnv | undefined
 
-  if (!targetEnv || !['local-dev', 'remote-dev', 'remote-prod'].includes(targetEnv)) {
-    console.error('Usage: bun run scripts/reset.ts [local-dev|remote-dev|remote-prod]')
+  if (!targetEnv || !['local-staging', 'remote-staging', 'remote-production'].includes(targetEnv)) {
+    console.error('Usage: bun run scripts/reset.ts [local-staging|remote-staging|remote-production]')
     console.error('')
-    console.error('  local-dev:   wrangler --local --env=dev (ローカルwrangler D1 dev環境)')
-    console.error('  remote-dev:  wrangler --remote --env=dev (リモートD1 dev環境)')
-    console.error('  remote-prod: wrangler --remote --env=prod (リモートD1 prod環境)')
+    console.error('  local-staging:      wrangler --local --env=staging (ローカルwrangler D1 staging環境)')
+    console.error('  remote-staging:     wrangler --remote --env=staging (リモートD1 staging環境)')
+    console.error('  remote-production:  wrangler --remote --env=production (リモートD1 production環境)')
     process.exit(1)
   }
 
