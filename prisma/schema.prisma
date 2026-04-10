@@ -12,6 +12,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 /// イベント配布条件
@@ -73,7 +74,7 @@ model Event {
   /// イベント種別: limited_card, regular_card, ackey, other
   category        String
   /// イベント名
-  name            String
+  title           String
   /// 限定数（任意）
   limitedQuantity Int?                @map("limited_quantity")
   /// 開始日時
