@@ -6,7 +6,7 @@ import { ExternalLink } from 'lucide-react'
  */
 const RouteComponent = () => {
   return (
-    <div className='min-h-screen bg-linear-to-b from-blue-50 to-white'>
+    <div className='min-h-screen'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <h1 className='text-2xl font-bold mb-8 text-gray-900'>当ウェブサイトについて</h1>
 

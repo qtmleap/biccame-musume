@@ -26,6 +26,7 @@ type CalendarEventListProps = {
   year: number
   month: number
   events: CalendarEvent[]
+  onDayClick?: (day: number, dayEvents: CalendarEvent[]) => void
 }
 
 /**
@@ -52,7 +53,7 @@ const groupEventsByDay = (events: CalendarEvent[], year: number, month: number):
 /**
  * カレンダーイベントリスト表示(モバイル用)
  */
-export const CalendarEventList = ({ year, month, events }: CalendarEventListProps) => {
+export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarEventListProps) => {
   return (
     <div className='space-y-2'>
       {events.length === 0 ? (
@@ -86,10 +87,14 @@ export const CalendarEventList = ({ year, month, events }: CalendarEventListProp
                 className='flex gap-3 py-2 border-b border-border/50 last:border-b-0'
               >
                 {/* 日付部分(カレンダー風) */}
-                <div className='flex flex-col items-center justify-start pt-1 w-10 shrink-0'>
+                <button
+                  type='button'
+                  onClick={() => onDayClick?.(group.day, group.events)}
+                  className='flex flex-col items-center justify-start pt-1 w-10 shrink-0 cursor-pointer hover:opacity-70 transition-opacity'
+                >
                   <span className='text-[10px] text-muted-foreground uppercase'>{group.dayOfWeek}</span>
                   <span className='text-xl font-bold tabular-nums'>{group.day}</span>
-                </div>
+                </button>
 
                 {/* イベント一覧(グリッドレイアウト) */}
                 <div className='flex-1 grid grid-cols-1 sm:grid-cols-2 gap-1.5 min-w-0'>
