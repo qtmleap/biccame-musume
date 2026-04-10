@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { AdvancedMarker, APIProvider, Map as GoogleMap, Pin } from '@vis.gl/react-google-maps'
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { z } from 'zod'
+import { LoadingFallback } from '@/components/common/loading-fallback'
 import { StoreList } from '@/components/location/store-list'
 import { SelectedStoreInfo } from '@/components/selected-store-info'
 import { useCharacters } from '@/hooks/use-characters'
@@ -25,9 +26,9 @@ const getPosition = (character: StoreData): google.maps.LatLngLiteral => {
 }
 
 /**
- * 店舗位置マップページ
+ * 店舗位置マップ本体
  */
-const RouteComponent = () => {
+const LocationContent = () => {
   const { id: initialCharacterId } = Route.useSearch()
   const { data: characters } = useCharacters()
   const [selectedCharacter, setSelectedCharacter] = useState<StoreData | null>(() => {
@@ -37,7 +38,6 @@ const RouteComponent = () => {
     }
     return null
   })
-  const [mapKey, setMapKey] = useState<number>(0)
   const [isStoreListOpen, setIsStoreListOpen] = useState(false)
   const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral | null>(() => {
     // 初期値として選択されたキャラクターの位置、または東京駅を設定
@@ -61,7 +61,6 @@ const RouteComponent = () => {
   const handleCharacterSelect = (character: StoreData) => {
     setSelectedCharacter(character)
     setMapCenter(getPosition(character))
-    setMapKey((prev) => prev + 1)
     setIsStoreListOpen(false)
   }
 
@@ -80,7 +79,6 @@ const RouteComponent = () => {
     <APIProvider apiKey={apiKey}>
       <div className='relative w-full h-[calc(100dvh-3rem)] md:h-[calc(100dvh-3.5rem)] overflow-hidden'>
         <GoogleMap
-          key={mapKey}
           defaultCenter={selectedCharacter ? getPosition(selectedCharacter) : { lat: 35.6812, lng: 139.7671 }}
           defaultZoom={selectedCharacter ? 17 : 5}
           mapId='biccamera-stores-map'
@@ -123,6 +121,15 @@ const RouteComponent = () => {
     </APIProvider>
   )
 }
+
+/**
+ * 店舗位置マップページ
+ */
+const RouteComponent = () => (
+  <Suspense fallback={<LoadingFallback />}>
+    <LocationContent />
+  </Suspense>
+)
 
 export const Route = createFileRoute('/location/')({
   component: RouteComponent,
