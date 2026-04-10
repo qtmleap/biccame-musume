@@ -1,0 +1,132 @@
+import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
+import { Gift, MapPin, Users } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from '@/components/ui/command'
+import { useCharacters } from '@/hooks/use-characters'
+import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import type { StoreKey } from '@/schemas/store.dto'
+import { client } from '@/utils/client'
+
+type GlobalSearchProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+const useDebounce = (value: string, delay: number): string => {
+  const [debounced, setDebounced] = useState(value)
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delay)
+    return () => clearTimeout(timer)
+  }, [value, delay])
+  return debounced
+}
+
+export const GlobalSearch = ({ open, onOpenChange }: GlobalSearchProps) => {
+  const [query, setQuery] = useState('')
+  const debouncedQuery = useDebounce(query, 300)
+  const navigate = useNavigate()
+  const { data: characters } = useCharacters()
+
+  const { data: searchResult } = useQuery({
+    queryKey: ['search', debouncedQuery],
+    queryFn: () => client.searchEvents({ queries: { q: debouncedQuery } }),
+    enabled: debouncedQuery.length >= 2,
+    staleTime: 1000 * 30
+  })
+
+  const filteredCharacters = useMemo(() => {
+    if (!characters || debouncedQuery.length < 2) return []
+    const q = debouncedQuery.toLowerCase()
+    return characters.filter((c) => {
+      const name = c.character.name.toLowerCase()
+      const aliases = c.character.aliases?.map((a) => a.toLowerCase()) ?? []
+      return name.includes(q) || aliases.some((a) => a.includes(q))
+    })
+  }, [characters, debouncedQuery])
+
+  const filteredStores = useMemo(() => {
+    if (!characters || debouncedQuery.length < 2) return []
+    const q = debouncedQuery.toLowerCase()
+    return characters.filter((c) => {
+      const storeName = (STORE_NAME_LABELS[c.id as StoreKey] || '').toLowerCase()
+      return storeName.includes(q)
+    })
+  }, [characters, debouncedQuery])
+
+  const handleSelect = (action: () => void) => {
+    action()
+    onOpenChange(false)
+    setQuery('')
+  }
+
+  return (
+    <CommandDialog
+      open={open}
+      onOpenChange={(v) => {
+        onOpenChange(v)
+        if (!v) setQuery('')
+      }}
+      title='グローバル検索'
+      description='イベント・キャラクター・店舗を検索'
+    >
+      <CommandInput placeholder='イベント・キャラクター・店舗を検索...' value={query} onValueChange={setQuery} />
+      <CommandList>
+        {debouncedQuery.length < 2 && <CommandEmpty>2文字以上入力して検索</CommandEmpty>}
+        {debouncedQuery.length >= 2 &&
+          !searchResult?.events?.length &&
+          !filteredCharacters.length &&
+          !filteredStores.length && <CommandEmpty>検索結果がありません</CommandEmpty>}
+
+        {searchResult?.events && searchResult.events.length > 0 && (
+          <CommandGroup heading='イベント'>
+            {searchResult.events.slice(0, 5).map((event) => (
+              <CommandItem
+                key={event.uuid}
+                onSelect={() => handleSelect(() => navigate({ to: '/events/$uuid', params: { uuid: event.uuid } }))}
+              >
+                <Gift className='size-4' />
+                <span className='truncate'>{event.title}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
+
+        {filteredCharacters.length > 0 && (
+          <CommandGroup heading='キャラクター'>
+            {filteredCharacters.slice(0, 5).map((c) => (
+              <CommandItem
+                key={c.id}
+                onSelect={() => handleSelect(() => navigate({ to: '/characters/$id', params: { id: c.id } }))}
+              >
+                <Users className='size-4' />
+                <span className='truncate'>{CHARACTER_NAME_LABELS[c.id as StoreKey] || c.character.name}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
+
+        {filteredStores.length > 0 && (
+          <CommandGroup heading='店舗'>
+            {filteredStores.slice(0, 5).map((c) => (
+              <CommandItem
+                key={c.id}
+                onSelect={() => handleSelect(() => navigate({ to: '/characters/$id', params: { id: c.id } }))}
+              >
+                <MapPin className='size-4' />
+                <span className='truncate'>{STORE_NAME_LABELS[c.id as StoreKey] || c.id}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
+      </CommandList>
+    </CommandDialog>
+  )
+}
