@@ -235,3 +235,4 @@ dev-dist/
 # Act
 .secrets
 !.secrets.example
+prisma/shadow.db
