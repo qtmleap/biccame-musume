@@ -5,6 +5,7 @@ import { CharacterOngoingEvents } from '@/components/characters/character-ongoin
 import { CharacterProfileSection } from '@/components/characters/detail/character-profile-section'
 import { StoreInfoSection } from '@/components/characters/detail/store-info-section'
 import { NearbyCharactersList } from '@/components/characters/nearby-characters-list'
+import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import type { StoreData, StoreKey } from '@/schemas/store.dto'
@@ -21,6 +22,13 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div className='md:grid md:grid-cols-[1fr_auto_320px] md:gap-6'>
           <div className='max-w-2xl'>
+            <AppBreadcrumb
+              items={[
+                { label: 'ホーム', to: '/' },
+                { label: 'キャラクター', to: '/characters' },
+                { label: character.character?.name ?? 'キャラクター詳細' }
+              ]}
+            />
             <div className='pb-2'>
               <Button
                 variant='ghost'
