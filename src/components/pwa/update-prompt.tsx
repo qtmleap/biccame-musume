@@ -28,8 +28,7 @@ export const UpdatePrompt = () => {
       <div className='flex items-center gap-2'>
         <Button
           size='sm'
-          variant='secondary'
-          className='h-7 px-3 text-xs font-medium'
+          className='h-7 bg-white px-3 text-xs font-medium text-gray-900 hover:bg-gray-100'
           onClick={() => window.location.reload()}
         >
           更新
