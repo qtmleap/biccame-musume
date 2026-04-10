@@ -43,7 +43,7 @@ export const UpdatePrompt = () => {
         .catch(() => {})
         .finally(() => {
           setStatus('reloading')
-          window.setTimeout(() => window.location.reload(), 800)
+          window.setTimeout(() => window.location.reload(), 3000)
         })
     }
 
