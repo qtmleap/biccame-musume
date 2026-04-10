@@ -10,7 +10,6 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { toast } from 'sonner'
 import { dispatchSwUpdateEvent, UpdatePrompt } from '@/components/pwa/update-prompt'
 import { Toaster } from '@/components/ui/sonner'
 import { client } from '@/utils/client'
@@ -164,14 +163,7 @@ const checkServerVersion = async () => {
     if (storedHash !== serverHash) {
       console.log(`[App] Server version changed: ${storedHash} → ${serverHash}`)
       localStorage.setItem(STORAGE_KEY, serverHash)
-      toast('新しいバージョンが利用可能です', {
-        description: 'ページを更新すると最新版に切り替わります',
-        duration: 10000,
-        action: {
-          label: '更新する',
-          onClick: () => window.location.reload()
-        }
-      })
+      dispatchSwUpdateEvent()
     }
   } catch (e) {
     console.debug('[App] Server version check failed:', e)
