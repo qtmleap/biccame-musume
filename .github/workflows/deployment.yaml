@@ -35,10 +35,10 @@ jobs:
       - name: Build Workers
         run: bun run build
         env:
-          CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'prod' || 'dev' }}
+          CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}
       - name: Deploy Workers
         run: bun run deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'prod' || 'dev' }}
+          CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}
           NODE_ENV: production
