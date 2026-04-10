@@ -8,7 +8,7 @@ export const dispatchSwUpdateEvent = () => {
   window.dispatchEvent(new CustomEvent(SW_UPDATE_EVENT))
 }
 
-const isStaging = () => typeof window !== 'undefined' && window.location.hostname === 'dev.biccame-musume.com'
+const isStaging = import.meta.env.MODE === 'staging'
 
 export const UpdatePrompt = () => {
   const [visible, setVisible] = useState(isStaging)
