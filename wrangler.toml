@@ -35,6 +35,11 @@ simple = { limit = 50, period = 60 }
 
 [vars]
 ENVIRONMENT = "dev"
+
+[assets]
+not_found_handling = "single-page-application"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/__/auth/*", "/admin/*"]
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 FIREBASE_PROJECT_ID = "biccame-musume"
