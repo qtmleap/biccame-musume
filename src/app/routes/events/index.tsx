@@ -187,29 +187,38 @@ const EventsContent = () => {
             {/* モバイル: フィルターボタン */}
             <Sheet open={filterSheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
-                <Button size='sm' variant='ghost' className='md:hidden h-8 w-8 p-0'>
+                <Button size='sm' variant='ghost' className='md:hidden relative h-10 w-10 p-0'>
                   <Filter className='size-4' />
+                  {isFilterActive && (
+                    <span className='absolute top-1.5 right-1.5 size-2 rounded-full bg-[#e50012]' aria-hidden />
+                  )}
                 </Button>
               </SheetTrigger>
-              <SheetContent side='bottom' className='h-[55vh]'>
+              <SheetContent side='bottom' className='h-auto max-h-[85vh] flex flex-col'>
                 <SheetHeader>
                   <SheetTitle>フィルター</SheetTitle>
                   <SheetDescription>イベントの絞り込み条件を選択してください</SheetDescription>
                 </SheetHeader>
-                <div className='px-4'>
-                  <div className='space-y-6 overflow-y-auto h-[calc(90vh-72px)] pb-6'>
-                    {/* 種別フィルター */}
+                <div className='flex-1 overflow-y-auto px-4'>
+                  <div className='space-y-6 pb-4'>
                     <EventCategoryFilter />
-
-                    {/* ステータスフィルタ */}
                     <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
-
-                    {/* ユーザーアクティビティフィルタ */}
                     <EventUserActivityFilter />
-
-                    {/* 地域フィルター */}
                     <RegionFilterControl />
                   </div>
+                </div>
+                <div className='border-t border-pink-100 px-4 py-3'>
+                  <Button
+                    variant='outline'
+                    size='sm'
+                    onClick={handleResetFilters}
+                    disabled={!isFilterActive}
+                    aria-label='フィルターをクリア'
+                    className='w-full gap-1'
+                  >
+                    <X className='size-4' />
+                    フィルターをクリア
+                  </Button>
                 </div>
               </SheetContent>
             </Sheet>
@@ -259,22 +268,6 @@ const EventsContent = () => {
 
           {/* 地域フィルター */}
           <RegionFilterControl />
-        </div>
-
-        {/* モバイル: リセットボタン */}
-        <div className='md:hidden'>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={handleResetFilters}
-            disabled={!isFilterActive}
-            aria-disabled={!isFilterActive}
-            aria-label='フィルターをクリア'
-            title='フィルターをクリア'
-            className='h-8 w-8 p-0 disabled:text-muted-foreground disabled:border-muted'
-          >
-            <X className='size-4' />
-          </Button>
         </div>
 
         {/* イベント表示 */}
