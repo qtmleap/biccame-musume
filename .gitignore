@@ -236,3 +236,7 @@ dev-dist/
 .secrets
 !.secrets.example
 prisma/shadow.db
+
+# Playwright
+test-results/
+playwright-report/
