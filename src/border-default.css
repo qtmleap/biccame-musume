@@ -1,0 +1,10 @@
+/* Tailwind v4ではborderのデフォルト色がcurrentColorになったため、
+   v3相当のborder-colorデフォルトを復元する */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop {
+    border-color: var(--color-border);
+  }
+}
