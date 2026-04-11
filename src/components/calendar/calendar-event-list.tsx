@@ -136,9 +136,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                             variant='secondary'
                             className={cn(
                               'shrink-0 text-xs flex items-center gap-1',
-                              isCharacter
-                                ? 'bg-pink-500/20 text-pink-700 dark:text-pink-300'
-                                : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
+                              isCharacter ? 'bg-pink-500/20 text-pink-700' : 'bg-blue-500/20 text-blue-700'
                             )}
                           >
                             {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
