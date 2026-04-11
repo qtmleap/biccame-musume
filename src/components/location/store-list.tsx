@@ -49,7 +49,7 @@ const StoreListDesktopDialog = ({
       <DialogTrigger asChild>
         <button
           type='button'
-          className='absolute bottom-4 left-4 bg-white rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-gray-50 transition-colors'
+          className='absolute bottom-4 left-4 bg-card rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-gray-50 transition-colors'
         >
           <div className='flex items-center gap-2'>
             <List className='w-4 h-4' />
@@ -114,7 +114,7 @@ const StoreListMobileDrawer = ({
       <DrawerTrigger asChild>
         <button
           type='button'
-          className='absolute bottom-4 left-4 bg-white rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-gray-50 transition-colors'
+          className='absolute bottom-4 left-4 bg-card rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-gray-50 transition-colors'
         >
           <div className='flex items-center gap-2'>
             <List className='w-4 h-4' />

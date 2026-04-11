@@ -36,13 +36,13 @@ export const BirthdayDisplaySwitcher = ({
   if (!import.meta.env.DEV) return null
 
   return (
-    <div className='fixed top-20 left-4 z-100 rounded-lg bg-white/90 p-3 shadow-lg backdrop-blur-sm'>
+    <div className='fixed top-20 left-4 z-100 rounded-lg bg-card/90 p-3 shadow-lg backdrop-blur-sm'>
       <div className='mb-2'>
         <p className='mb-2 text-xs font-medium text-gray-600'>誕生日キャラクター</p>
         <select
           value={selectedCharacterId}
           onChange={(e) => onCharacterChange(e.target.value)}
-          className='w-full rounded border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700 focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500'
+          className='w-full rounded border border-gray-300 bg-card px-2 py-1 text-xs text-gray-700 focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500'
         >
           {birthdayGroups.map((group) => (
             <option key={group.id} value={group.id}>

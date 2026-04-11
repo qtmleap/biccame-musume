@@ -82,7 +82,7 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
             </motion.button>
           ) : (
             // 展開状態
-            <motion.div className='w-72 overflow-hidden rounded-2xl bg-white shadow-2xl' layout>
+            <motion.div className='w-72 overflow-hidden rounded-2xl bg-card shadow-2xl' layout>
               {/* ヘッダー */}
               <div className='flex items-center justify-between bg-linear-to-r from-pink-500 to-purple-500 p-3'>
                 <div className='flex items-center gap-2'>

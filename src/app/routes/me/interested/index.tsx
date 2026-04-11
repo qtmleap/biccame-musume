@@ -63,7 +63,7 @@ const InterestedEventsContent = () => {
           page={page}
           onPageChange={setPage}
           emptyState={
-            <div className='bg-white rounded-lg shadow-sm p-8 text-center'>
+            <div className='bg-card rounded-lg shadow-sm p-8 text-center'>
               <Heart className='h-12 w-12 text-gray-300 mx-auto mb-3' />
               <p className='text-gray-600'>{MY_PAGE_LABELS.noInterestedEvents}</p>
               <Link to='/events' className='inline-block mt-4 text-pink-600 hover:text-pink-700 text-sm font-medium'>

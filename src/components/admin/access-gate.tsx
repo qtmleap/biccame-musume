@@ -28,7 +28,7 @@ export const AccessGate = ({ children }: AccessGateProps) => {
 
     return (
       <div className='container mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center px-4'>
-        <div className='w-full rounded-lg border bg-white p-8 text-center shadow-sm'>
+        <div className='w-full rounded-lg border bg-card p-8 text-center shadow-sm'>
           <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-amber-100'>
             <ShieldAlert className='size-8 text-amber-600' />
           </div>

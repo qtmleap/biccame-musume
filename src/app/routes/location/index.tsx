@@ -102,14 +102,14 @@ const LocationContent = () => {
             const position = getPosition(character)
             return (
               <AdvancedMarker key={character.id} position={position} onClick={() => handleMarkerClick(character)}>
-                <Pin background='#e50012' borderColor='#fff' glyphColor='#fff' />
+                <Pin background='#e50012' borderColor='#fef2f4' glyphColor='#fef2f4' />
               </AdvancedMarker>
             )
           })}
         </GoogleMap>
 
         {selectedCharacter && (
-          <div className='absolute top-4 left-4 right-4 bg-white rounded-lg shadow-lg p-3 max-w-md z-10'>
+          <div className='absolute top-4 left-4 right-4 bg-card rounded-lg shadow-lg p-3 max-w-md z-10'>
             <SelectedStoreInfo character={selectedCharacter} />
           </div>
         )}
