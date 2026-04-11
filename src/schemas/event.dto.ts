@@ -28,9 +28,12 @@ export const EventConditionSchema = z.object({
   uuid: z.uuid(),
   type: EventConditionTypeSchema,
   // 購入条件の場合の金額（円）
-  purchaseAmount: z.number().min(0).optional(),
+  purchaseAmount: z
+    .number({ error: '金額は数値で入力してください' })
+    .min(0, '金額は 0 円以上で入力してください')
+    .optional(),
   // 先着または抽選の人数
-  quantity: z.number().min(1).optional()
+  quantity: z.number({ error: '人数は数値で入力してください' }).min(1, '人数は 1 人以上で入力してください').optional()
 })
 
 export type EventCondition = z.infer<typeof EventConditionSchema>
@@ -60,13 +63,16 @@ export const EventRequestSchema = z.object({
   uuid: z.uuid(),
   category: EventCategorySchema,
   title: z.string().nonempty('イベント名は必須です'),
-  stores: z.array(StoreKeySchema).nonempty('最低1つの店舗を選択してください'),
+  stores: z.array(StoreKeySchema).nonempty('最低 1 つの店舗を選択してください'),
   startDate: z.string().nonempty('開始日は必須です'),
   endDate: z.string().optional(),
   endedAt: z.string().optional(),
-  limitedQuantity: z.number().min(1).optional(),
-  referenceUrls: z.array(ReferenceUrlSchema).nonempty('最低1つの参考URLを入力してください'),
-  conditions: z.array(EventConditionSchema).min(1, '最低1つの条件を設定してください'),
+  limitedQuantity: z
+    .number({ error: '配布数は数値で入力してください' })
+    .min(1, '配布数は 1 以上で入力してください')
+    .optional(),
+  referenceUrls: z.array(ReferenceUrlSchema).nonempty('最低 1 つの参考 URL を入力してください'),
+  conditions: z.array(EventConditionSchema).min(1, '最低 1 つの配布条件を設定してください'),
   isVerified: z.boolean(),
   isPreliminary: z.boolean(),
   shouldTweet: z.boolean()
