@@ -108,7 +108,7 @@ export const Header = ({ className }: HeaderProps) => {
               onClick={() => setSearchOpen(true)}
               aria-label='検索'
             >
-              <Search className='size-6' />
+              <Search />
             </Button>
 
             {/* モバイルメニューボタン */}
