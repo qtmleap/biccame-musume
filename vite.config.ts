@@ -61,7 +61,7 @@ export default defineConfig(({ mode }) => {
           clientsClaim: true,
           globDirectory: 'dist/client',
           globPatterns:
-            mode === 'development' ? [] : ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2,json}'],
+            mode === 'development' ? [] : ['**/*.{js,css,html,ico,png,svg,webp,json}'],
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -103,6 +103,20 @@ export default defineConfig(({ mode }) => {
               }
             },
             {
+              urlPattern: /\.(?:woff2?|ttf|otf|eot)$/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'fonts-cache',
+                expiration: {
+                  maxEntries: 500,
+                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1年
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
+              }
+            },
+            {
               urlPattern: /\/characters\.json$/i,
               handler: 'StaleWhileRevalidate',
               options: {
@@ -137,7 +151,7 @@ export default defineConfig(({ mode }) => {
             },
           ],
           navigateFallback: '/index.html',
-          navigateFallbackDenylist: [/^\/__\//, /^\/api\//],
+          navigateFallbackDenylist: [/^\/__\//, /^\/api\//, /^\/admin\//],
         },
         devOptions: {
           enabled: true,
