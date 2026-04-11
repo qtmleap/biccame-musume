@@ -151,7 +151,7 @@ export default defineConfig(({ mode }) => {
             },
           ],
           navigateFallback: '/index.html',
-          navigateFallbackDenylist: [/^\/__\//, /^\/api\//, /^\/admin\//],
+          navigateFallbackDenylist: [/^\/__\//, /^\/api\//, /^\/admin\//, /^\/cdn-cgi\//],
         },
         devOptions: {
           enabled: true,
