@@ -91,7 +91,6 @@ app.route('/api', me)
 // 静的ファイル配信 & SPA フォールバック
 app.use('*', async (c, next) => {
   await next()
-  console.log(`[SPA fallback] ${c.req.path} => ${c.res.status}, hasASSETS=${!!c.env?.ASSETS}`)
   // API・認証以外で404の場合、index.htmlにフォールバック（SPA対応）
   if (c.res.status === 404 && !c.req.path.startsWith('/api/') && !c.req.path.startsWith('/__/')) {
     try {
