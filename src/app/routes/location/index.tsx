@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { AdvancedMarker, APIProvider, Map as GoogleMap, Pin, useMap } from '@vis.gl/react-google-maps'
-import { Suspense, useState } from 'react'
+import { Suspense, useCallback, useState } from 'react'
 import { z } from 'zod'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { StoreList } from '@/components/location/store-list'
