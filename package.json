@@ -10,7 +10,7 @@
     "vite-intlayer@8.5.2": "patches/vite-intlayer@8.5.2.patch"
   },
   "scripts": {
-    "dev": "vite --host",
+    "dev": "vite --host --port 15175",
     "build": "tsc -b && vite build --mode ${CLOUDFLARE_ENV}",
     "migrate": "wrangler d1 execute biccame-musume-events --env=staging --local --file=./prisma/migrations/init/migration.sql",
     "reset": "bun run scripts/rest.ts",
