@@ -25,6 +25,10 @@ export const Footer = () => {
           <Link to='/contact' className='text-muted-foreground hover:text-[#e50012] transition-colors'>
             お問い合わせ
           </Link>
+          <span className='text-muted-foreground/50'>|</span>
+          <Link to='/admin/events' className='text-muted-foreground hover:text-[#e50012] transition-colors'>
+            管理
+          </Link>
         </div>
         <div className='space-y-1'>
           <p className='text-muted-foreground'>

@@ -1,8 +1,8 @@
 import { useSuspenseQueries } from '@tanstack/react-query'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
-import { Calendar, Filter, Gift, LayoutGrid, Settings, X } from 'lucide-react'
+import { Calendar, Filter, Gift, LayoutGrid, X } from 'lucide-react'
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import { z } from 'zod'
 import { categoryFilterAtom } from '@/atoms/category-filter-atom'
@@ -22,7 +22,6 @@ import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Toggle } from '@/components/ui/toggle'
-import { useAuth } from '@/hooks/use-auth'
 import { charactersQueryKey } from '@/hooks/use-characters'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { client } from '@/utils/client'
@@ -91,7 +90,6 @@ const EventsContent = () => {
   }
   const [page, setPage] = useAtom(eventPageAtom)
   const { interestedEvents, completedEvents } = useUserActivity()
-  const { isAuthenticated } = useAuth()
   // 店舗キー(id)から都道府県を取得するマップ
   const storePrefectureMap = useMemo(() => {
     const map = new Map<string, string>()
@@ -232,14 +230,6 @@ const EventsContent = () => {
             >
               {viewMode === 'grid' ? <LayoutGrid className='size-4' /> : <Calendar className='size-4' />}
             </Toggle>
-            {isAuthenticated && (
-              <Button asChild size='sm' variant='ghost' className='gap-2 text-gray-600 hover:text-gray-900'>
-                <Link to='/admin/events'>
-                  <Settings className='size-4' />
-                  管理
-                </Link>
-              </Button>
-            )}
           </div>
         </div>
 
