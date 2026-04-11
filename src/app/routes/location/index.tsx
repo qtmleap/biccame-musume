@@ -86,7 +86,7 @@ const LocationContent = () => {
           defaultCenter={selectedCharacter ? getPosition(selectedCharacter) : { lat: 35.6812, lng: 139.7671 }}
           defaultZoom={selectedCharacter ? 17 : 5}
           mapId='biccamera-stores-map'
-          gestureHandling='cooperative'
+          gestureHandling='greedy'
           mapTypeControl={false}
           streetViewControl={false}
           fullscreenControl={false}
