@@ -57,7 +57,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
       <Link
         to='/events/$uuid'
         params={{ uuid: event.uuid }}
-        className={`flex flex-col gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer h-full ${
+        className={`flex flex-col gap-3 bg-card rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer h-full ${
           status === 'ended' ? 'opacity-60' : ''
         }`}
       >

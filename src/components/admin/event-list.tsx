@@ -55,7 +55,7 @@ const EventCard = ({
   const isEnded = event.endedAt != null || (end && now.isAfter(end))
 
   return (
-    <div className={`border rounded-lg p-4 bg-white flex flex-col h-full ${isEnded ? 'opacity-50 grayscale' : ''}`}>
+    <div className={`border rounded-lg p-4 bg-card flex flex-col h-full ${isEnded ? 'opacity-50 grayscale' : ''}`}>
       <div className='mb-2 flex items-start justify-between gap-3'>
         <div className='flex-1'>
           <h3 className='text-sm font-semibold text-gray-900'>{event.title}</h3>
@@ -246,7 +246,7 @@ export const EventList = () => {
               {activeTab === category && (
                 <motion.div
                   layoutId='activeTab'
-                  className='absolute inset-0 bg-white rounded-md shadow-sm -z-10'
+                  className='absolute inset-0 bg-card rounded-md shadow-sm -z-10'
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}

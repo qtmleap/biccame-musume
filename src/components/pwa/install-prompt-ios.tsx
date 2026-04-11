@@ -59,7 +59,7 @@ export const IosInstallPrompt = () => {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent showCloseButton={false} className='bg-white border-pink-100 rounded-xl shadow-lg max-w-sm'>
+      <DialogContent showCloseButton={false} className='bg-card border-pink-100 rounded-xl shadow-lg max-w-sm'>
         <DialogHeader>
           <DialogTitle className='text-gray-900 text-base font-semibold'>ホーム画面に追加</DialogTitle>
         </DialogHeader>

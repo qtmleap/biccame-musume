@@ -45,7 +45,7 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
       whileTap={{ scale: 0.98 }}
     >
       <Link to='/characters/$id' params={{ id: event.character.id }}>
-        <div className='flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer'>
+        <div className='flex items-center gap-3 bg-card rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer'>
           <div
             className={`p-2 rounded-lg ${event.type === 'character' ? 'bg-pink-100 text-pink-600' : 'bg-blue-100 text-blue-600'}`}
           >
