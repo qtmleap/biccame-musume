@@ -28,6 +28,7 @@ import '@fontsource/m-plus-1-code/700.css'
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 import '../index.css'
+import '../border-default.css'
 import { QueryClient } from '@tanstack/react-query'
 
 dayjs.extend(utc)
