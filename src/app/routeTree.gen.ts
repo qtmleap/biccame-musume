@@ -21,10 +21,10 @@ import { Route as CharactersIndexRouteImport } from './routes/characters/index'
 import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
-import { Route as CharactersIdRouteImport } from './routes/characters/$id/index'
 import { Route as MeInterestedIndexRouteImport } from './routes/me/interested/index'
 import { Route as MeCompletedIndexRouteImport } from './routes/me/completed/index'
 import { Route as EventsUuidIndexRouteImport } from './routes/events/$uuid/index'
+import { Route as CharactersIdIndexRouteImport } from './routes/characters/$id/index'
 import { Route as AdminEventsIndexRouteImport } from './routes/admin/events/index'
 import { Route as AdminEventsUuidIndexRouteImport } from './routes/admin/events/$uuid/index'
 
@@ -88,11 +88,6 @@ const AboutIndexRoute = AboutIndexRouteImport.update({
   path: '/about/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CharactersIdRoute = CharactersIdRouteImport.update({
-  id: '/characters/$id/',
-  path: '/characters/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MeInterestedIndexRoute = MeInterestedIndexRouteImport.update({
   id: '/me/interested/',
   path: '/me/interested/',
@@ -106,6 +101,11 @@ const MeCompletedIndexRoute = MeCompletedIndexRouteImport.update({
 const EventsUuidIndexRoute = EventsUuidIndexRouteImport.update({
   id: '/events/$uuid/',
   path: '/events/$uuid/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CharactersIdIndexRoute = CharactersIdIndexRouteImport.update({
+  id: '/characters/$id/',
+  path: '/characters/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
@@ -122,7 +122,6 @@ const AdminEventsUuidIndexRoute = AdminEventsUuidIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
-  '/characters/$id/': typeof CharactersIdRoute
   '/about/': typeof AboutIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/calendar/': typeof CalendarIndexRoute
@@ -134,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/ranking/': typeof RankingIndexRoute
   '/route/': typeof RouteIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
+  '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
   '/me/completed/': typeof MeCompletedIndexRoute
   '/me/interested/': typeof MeInterestedIndexRoute
@@ -141,7 +141,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/characters/$id': typeof CharactersIdRoute
   '/about': typeof AboutIndexRoute
   '/admin': typeof AdminIndexRoute
   '/calendar': typeof CalendarIndexRoute
@@ -153,6 +152,7 @@ export interface FileRoutesByTo {
   '/ranking': typeof RankingIndexRoute
   '/route': typeof RouteIndexRoute
   '/admin/events': typeof AdminEventsIndexRoute
+  '/characters/$id': typeof CharactersIdIndexRoute
   '/events/$uuid': typeof EventsUuidIndexRoute
   '/me/completed': typeof MeCompletedIndexRoute
   '/me/interested': typeof MeInterestedIndexRoute
@@ -162,7 +162,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
-  '/characters/$id/': typeof CharactersIdRoute
   '/about/': typeof AboutIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/calendar/': typeof CalendarIndexRoute
@@ -174,6 +173,7 @@ export interface FileRoutesById {
   '/ranking/': typeof RankingIndexRoute
   '/route/': typeof RouteIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
+  '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
   '/me/completed/': typeof MeCompletedIndexRoute
   '/me/interested/': typeof MeInterestedIndexRoute
@@ -184,7 +184,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
-    | '/characters/$id/'
     | '/about/'
     | '/admin/'
     | '/calendar/'
@@ -196,6 +195,7 @@ export interface FileRouteTypes {
     | '/ranking/'
     | '/route/'
     | '/admin/events/'
+    | '/characters/$id/'
     | '/events/$uuid/'
     | '/me/completed/'
     | '/me/interested/'
@@ -203,7 +203,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/characters/$id'
     | '/about'
     | '/admin'
     | '/calendar'
@@ -215,6 +214,7 @@ export interface FileRouteTypes {
     | '/ranking'
     | '/route'
     | '/admin/events'
+    | '/characters/$id'
     | '/events/$uuid'
     | '/me/completed'
     | '/me/interested'
@@ -223,7 +223,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
-    | '/characters/$id/'
     | '/about/'
     | '/admin/'
     | '/calendar/'
@@ -235,6 +234,7 @@ export interface FileRouteTypes {
     | '/ranking/'
     | '/route/'
     | '/admin/events/'
+    | '/characters/$id/'
     | '/events/$uuid/'
     | '/me/completed/'
     | '/me/interested/'
@@ -244,7 +244,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
-  CharactersIdRoute: typeof CharactersIdRoute
   AboutIndexRoute: typeof AboutIndexRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
   CharactersIndexRoute: typeof CharactersIndexRoute
@@ -254,6 +253,7 @@ export interface RootRouteChildren {
   MeIndexRoute: typeof MeIndexRoute
   RankingIndexRoute: typeof RankingIndexRoute
   RouteIndexRoute: typeof RouteIndexRoute
+  CharactersIdIndexRoute: typeof CharactersIdIndexRoute
   EventsUuidIndexRoute: typeof EventsUuidIndexRoute
   MeCompletedIndexRoute: typeof MeCompletedIndexRoute
   MeInterestedIndexRoute: typeof MeInterestedIndexRoute
@@ -345,13 +345,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/characters/$id/': {
-      id: '/characters/$id/'
-      path: '/characters/$id'
-      fullPath: '/characters/$id/'
-      preLoaderRoute: typeof CharactersIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/me/interested/': {
       id: '/me/interested/'
       path: '/me/interested'
@@ -371,6 +364,13 @@ declare module '@tanstack/react-router' {
       path: '/events/$uuid'
       fullPath: '/events/$uuid/'
       preLoaderRoute: typeof EventsUuidIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/characters/$id/': {
+      id: '/characters/$id/'
+      path: '/characters/$id'
+      fullPath: '/characters/$id/'
+      preLoaderRoute: typeof CharactersIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/events/': {
@@ -407,7 +407,6 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
-  CharactersIdRoute: CharactersIdRoute,
   AboutIndexRoute: AboutIndexRoute,
   CalendarIndexRoute: CalendarIndexRoute,
   CharactersIndexRoute: CharactersIndexRoute,
@@ -417,6 +416,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeIndexRoute: MeIndexRoute,
   RankingIndexRoute: RankingIndexRoute,
   RouteIndexRoute: RouteIndexRoute,
+  CharactersIdIndexRoute: CharactersIdIndexRoute,
   EventsUuidIndexRoute: EventsUuidIndexRoute,
   MeCompletedIndexRoute: MeCompletedIndexRoute,
   MeInterestedIndexRoute: MeInterestedIndexRoute,
