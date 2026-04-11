@@ -3,14 +3,16 @@ import { toast } from 'sonner'
 import { clearAllCaches } from '@/lib/pwa-cache'
 import { UpdateOverlay, type UpdateOverlayStatus } from './update-overlay'
 
-const UPDATE_START_EVENT = 'sw:updating'
+let dispatchUpdate: (() => void) | null = null
 
 const triggerUpdate = () => {
-  window.dispatchEvent(new CustomEvent(UPDATE_START_EVENT))
+  console.log('[UpdatePrompt] triggerUpdate called, dispatchUpdate=', dispatchUpdate)
+  dispatchUpdate?.()
 }
 
 export const showUpdatePrompt = () => {
   toast('新しいバージョンが利用可能です', {
+    id: 'pwa-update-prompt',
     description: 'ページを更新すると最新版に切り替わります',
     duration: Number.POSITIVE_INFINITY,
     action: {
@@ -26,18 +28,18 @@ export const showUpdatePrompt = () => {
   })
 }
 
-const isStaging = import.meta.env.MODE === 'staging'
+const isProduction = import.meta.env.MODE === 'production'
 
 export const UpdatePrompt = () => {
   const [open, setOpen] = useState(false)
   const [status, setStatus] = useState<UpdateOverlayStatus>('clearing')
 
   useEffect(() => {
-    if (isStaging) showUpdatePrompt()
-
-    const handler = () => {
+    dispatchUpdate = () => {
+      console.log('[UpdatePrompt] dispatchUpdate handler running, opening overlay')
       setStatus('clearing')
       setOpen(true)
+      toast.dismiss('pwa-update-prompt')
 
       clearAllCaches()
         .catch(() => {})
@@ -47,8 +49,11 @@ export const UpdatePrompt = () => {
         })
     }
 
-    window.addEventListener(UPDATE_START_EVENT, handler)
-    return () => window.removeEventListener(UPDATE_START_EVENT, handler)
+    if (!isProduction) showUpdatePrompt()
+
+    return () => {
+      dispatchUpdate = null
+    }
   }, [])
 
   return <UpdateOverlay open={open} status={status} />
