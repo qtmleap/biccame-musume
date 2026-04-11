@@ -79,7 +79,7 @@ const RouteComponent = () => {
                     href='https://x.com/ultemica'
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-medium text-sm'
+                    className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors font-medium text-sm'
                   >
                     <ExternalLink className='h-3.5 w-3.5' />
                     @ultemica をフォロー
