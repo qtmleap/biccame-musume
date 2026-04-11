@@ -100,52 +100,53 @@ export const Header = ({ className }: HeaderProps) => {
               <LoginButton />
             </nav>
 
-            {/* モバイル: 検索ボタン */}
-            <Button
-              variant='ghost'
-              size='icon'
-              className='md:hidden h-12 w-12 flex items-center justify-center'
-              onClick={() => setSearchOpen(true)}
-              aria-label='検索'
-            >
-              <Search />
-            </Button>
+            {/* モバイル: 検索 + メニュー */}
+            <div className='md:hidden flex items-center'>
+              <Button
+                variant='ghost'
+                size='icon'
+                className='h-12 w-12 flex items-center justify-center'
+                onClick={() => setSearchOpen(true)}
+                aria-label='検索'
+              >
+                <Search />
+              </Button>
 
-            {/* モバイルメニューボタン */}
-            <Button
-              variant='ghost'
-              size='icon'
-              className='md:hidden h-12 w-12 flex items-center justify-center'
-              onClick={toggleMenu}
-              aria-label={mobileMenuOpen ? NAVIGATION_LABELS.closeMenu : NAVIGATION_LABELS.openMenu}
-            >
-              <div className='relative w-6 h-6 flex items-center justify-center'>
-                <motion.div
-                  initial={false}
-                  animate={{
-                    opacity: mobileMenuOpen ? 0 : 1,
-                    rotate: mobileMenuOpen ? 90 : 0,
-                    scale: mobileMenuOpen ? 0.5 : 1
-                  }}
-                  transition={{ duration: 0.2 }}
-                  className='absolute'
-                >
-                  <Menu />
-                </motion.div>
-                <motion.div
-                  initial={false}
-                  animate={{
-                    opacity: mobileMenuOpen ? 1 : 0,
-                    rotate: mobileMenuOpen ? 0 : -90,
-                    scale: mobileMenuOpen ? 1 : 0.5
-                  }}
-                  transition={{ duration: 0.2 }}
-                  className='absolute'
-                >
-                  <X />
-                </motion.div>
-              </div>
-            </Button>
+              <Button
+                variant='ghost'
+                size='icon'
+                className='h-12 w-12 flex items-center justify-center'
+                onClick={toggleMenu}
+                aria-label={mobileMenuOpen ? NAVIGATION_LABELS.closeMenu : NAVIGATION_LABELS.openMenu}
+              >
+                <div className='relative w-6 h-6 flex items-center justify-center'>
+                  <motion.div
+                    initial={false}
+                    animate={{
+                      opacity: mobileMenuOpen ? 0 : 1,
+                      rotate: mobileMenuOpen ? 90 : 0,
+                      scale: mobileMenuOpen ? 0.5 : 1
+                    }}
+                    transition={{ duration: 0.2 }}
+                    className='absolute'
+                  >
+                    <Menu />
+                  </motion.div>
+                  <motion.div
+                    initial={false}
+                    animate={{
+                      opacity: mobileMenuOpen ? 1 : 0,
+                      rotate: mobileMenuOpen ? 0 : -90,
+                      scale: mobileMenuOpen ? 1 : 0.5
+                    }}
+                    transition={{ duration: 0.2 }}
+                    className='absolute'
+                  >
+                    <X />
+                  </motion.div>
+                </div>
+              </Button>
+            </div>
           </div>
         </div>
 
