@@ -20,9 +20,9 @@ export const AccessGate = ({ children }: AccessGateProps) => {
   }
 
   if (!isAuthenticated) {
+    // 未認証の場合は edge の Cloudflare Access にリダイレクトさせる
+    // 正しく Access が設定されていれば、reload で edge がログイン画面へ飛ばす
     const handleLogin = () => {
-      // 現在のページへリダイレクトするためのURL
-      // Cloudflare Accessは認証後に元のURLにリダイレクトする
       window.location.reload()
     }
 

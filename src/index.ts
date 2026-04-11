@@ -25,6 +25,18 @@ app.use(
   })
 )
 
+/**
+ * /admin/* の HTML は CDN キャッシュさせない
+ * Cloudflare Access の認証 Cookie が切れた状態でキャッシュヒットすると
+ * 未認証のまま管理画面がレンダリングされうるため
+ */
+app.get('/admin/*', async (c) => {
+  const assetResponse = await c.env.ASSETS.fetch(c.req.raw)
+  const response = new Response(assetResponse.body, assetResponse)
+  response.headers.set('Cache-Control', 'private, no-store, must-revalidate')
+  return response
+})
+
 /** Firebase認証ヘルパーのリバースプロキシ（最優先で処理） */
 app.all('/__/auth/*', (c) => {
   const url = new URL(c.req.url)
