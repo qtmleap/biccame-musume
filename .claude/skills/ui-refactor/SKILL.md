@@ -89,3 +89,16 @@ Ask the user: **"この改善を実行してよろしいですか？全て / 一
 - Do NOT edit files under `src/components/ui/` — override styles via className on the consumer side.
 - Verify the build succeeds: `bun run build`.
 - Report what was changed.
+
+### Step 7: Verify Visually with Playwright
+
+After the build succeeds, take screenshots of the refactored page/component using Playwright and confirm the result visually before reporting as complete.
+
+- Start the dev server if not already running (`bun run dev`).
+- Use Playwright to navigate to the affected page and capture screenshots at both mobile (375px) and desktop (≥1280px) viewports.
+- Check that:
+  - The golden path still renders correctly
+  - No layout breaks, overflow, or regressions
+  - Interactive states (hover, focus, active, open drawer/sheet) look as intended
+- Attach or reference the screenshots in the final report.
+- If a screenshot reveals a regression, fix it before declaring the task complete.
