@@ -39,6 +39,7 @@ const LocationContent = () => {
     return null
   })
   const [isStoreListOpen, setIsStoreListOpen] = useState(false)
+  const [mapZoom, setMapZoom] = useState<number>(initialCharacterId ? 17 : 5)
   const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral | null>(() => {
     // 初期値として選択されたキャラクターの位置、または東京駅を設定
     if (initialCharacterId) {
@@ -56,11 +57,13 @@ const LocationContent = () => {
   const handleMarkerClick = (character: StoreData) => {
     setSelectedCharacter(character)
     setMapCenter(getPosition(character))
+    setMapZoom(17)
   }
 
   const handleCharacterSelect = (character: StoreData) => {
     setSelectedCharacter(character)
     setMapCenter(getPosition(character))
+    setMapZoom(17)
     setIsStoreListOpen(false)
   }
 
@@ -83,8 +86,8 @@ const LocationContent = () => {
         aria-label='地図'
       >
         <GoogleMap
-          defaultCenter={selectedCharacter ? getPosition(selectedCharacter) : { lat: 35.6812, lng: 139.7671 }}
-          defaultZoom={selectedCharacter ? 17 : 5}
+          center={mapCenter}
+          zoom={mapZoom}
           mapId='biccamera-stores-map'
           gestureHandling='greedy'
           mapTypeControl={false}
@@ -95,6 +98,11 @@ const LocationContent = () => {
           onCenterChanged={(e) => {
             if (e.detail.center) {
               setMapCenter(e.detail.center)
+            }
+          }}
+          onZoomChanged={(e) => {
+            if (e.detail.zoom) {
+              setMapZoom(e.detail.zoom)
             }
           }}
         >
