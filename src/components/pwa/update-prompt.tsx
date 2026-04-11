@@ -18,11 +18,15 @@ export const showUpdatePrompt = () => {
       label: '更新',
       onClick: triggerUpdate
     },
+    actionButtonStyle: {
+      background: 'oklch(59.2% 0.249 0.584)',
+      color: 'white'
+    },
     classNames: {
       toast: '!bg-card !border-pink-100 !rounded-xl !shadow-lg',
-      title: '!text-gray-900 !text-sm !font-medium',
-      description: '!text-gray-600 !text-xs',
-      actionButton: '!bg-pink-600 !text-white hover:!bg-pink-700'
+      title: '!text-foreground !text-sm !font-medium',
+      description: '!text-muted-foreground !text-xs',
+      actionButton: 'hover:!brightness-110'
     }
   })
 }

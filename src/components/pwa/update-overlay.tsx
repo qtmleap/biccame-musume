@@ -33,16 +33,12 @@ const isInCenter = (x: number, y: number) =>
 
 const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min
 
-const pickPositionAvoidingCenter = (): { top: number; left: number } => {
-  let top: number
-  let left: number
-  let attempts = 0
-  do {
-    top = randomInRange(5, 88)
-    left = randomInRange(5, 88)
-    attempts++
-  } while (isInCenter(left, top) && attempts < 20)
-  return { top, left }
+const pickPositionAvoidingCenter = (maxAttempts = 20): { top: number; left: number } => {
+  const candidates = Array.from({ length: maxAttempts }, () => ({
+    top: randomInRange(5, 88),
+    left: randomInRange(5, 88)
+  }))
+  return candidates.find(({ left, top }) => !isInCenter(left, top)) ?? candidates[0]
 }
 
 export const UpdateOverlay = ({ open, status }: Props) => {
@@ -150,7 +146,7 @@ export const UpdateOverlay = ({ open, status }: Props) => {
               {([0, 1, 2] as const).map((i) => (
                 <motion.span
                   key={i}
-                  className='h-2 w-2 rounded-full bg-primary'
+                  className='h-2 w-2 rounded-full bg-pink-400'
                   animate={{ opacity: [0.3, 1, 0.3] }}
                   transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: i * 0.22, ease: 'easeInOut' }}
                 />
