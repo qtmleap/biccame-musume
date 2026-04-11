@@ -37,6 +37,7 @@
       "moby": false,
       "dockerDashComposeVersion": "v2"
     },
+    "ghcr.io/schlich/devcontainer-features/playwright:0": {},
     "ghcr.io/stu-bell/devcontainer-features/claude-code:0": {},
     "ghcr.io/dhoeric/features/act:1": {}
   },
