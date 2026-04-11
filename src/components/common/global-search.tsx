@@ -76,6 +76,7 @@ export const GlobalSearch = ({ open, onOpenChange }: GlobalSearchProps) => {
       }}
       title='グローバル検索'
       description='イベント・キャラクター・店舗を検索'
+      shouldFilter={false}
     >
       <CommandInput placeholder='イベント・キャラクター・店舗を検索...' value={query} onValueChange={setQuery} />
       <CommandList>
@@ -87,15 +88,28 @@ export const GlobalSearch = ({ open, onOpenChange }: GlobalSearchProps) => {
 
         {searchResult?.events && searchResult.events.length > 0 && (
           <CommandGroup heading='イベント'>
-            {searchResult.events.slice(0, 5).map((event) => (
-              <CommandItem
-                key={event.uuid}
-                onSelect={() => handleSelect(() => navigate({ to: '/events/$uuid', params: { uuid: event.uuid } }))}
-              >
-                <Gift className='size-4' />
-                <span className='truncate'>{event.title}</span>
-              </CommandItem>
-            ))}
+            {searchResult.events.slice(0, 5).map((event) => {
+              const storeLabel = event.stores.map((s) => STORE_NAME_LABELS[s as StoreKey] || s).join(' / ')
+              const isOngoing = event.status === 'ongoing' || event.status === 'last_day'
+              return (
+                <CommandItem
+                  key={event.uuid}
+                  value={event.uuid}
+                  onSelect={() => handleSelect(() => navigate({ to: '/events/$uuid', params: { uuid: event.uuid } }))}
+                >
+                  <Gift className='size-4' />
+                  <div className='flex min-w-0 flex-1 items-center gap-2'>
+                    <span className='truncate'>{event.title}</span>
+                    {storeLabel && <span className='shrink-0 text-xs text-muted-foreground'>{storeLabel}</span>}
+                    {isOngoing && (
+                      <span className='shrink-0 rounded-full bg-pink-100 px-2 py-0.5 text-[10px] font-medium text-pink-700'>
+                        {event.status === 'last_day' ? '本日最終日' : '開催中'}
+                      </span>
+                    )}
+                  </div>
+                </CommandItem>
+              )
+            })}
           </CommandGroup>
         )}
 
@@ -104,6 +118,7 @@ export const GlobalSearch = ({ open, onOpenChange }: GlobalSearchProps) => {
             {filteredCharacters.slice(0, 5).map((c) => (
               <CommandItem
                 key={c.id}
+                value={`character-${c.id}`}
                 onSelect={() => handleSelect(() => navigate({ to: '/characters/$id', params: { id: c.id } }))}
               >
                 <Users className='size-4' />
@@ -118,6 +133,7 @@ export const GlobalSearch = ({ open, onOpenChange }: GlobalSearchProps) => {
             {filteredStores.slice(0, 5).map((c) => (
               <CommandItem
                 key={c.id}
+                value={`store-${c.id}`}
                 onSelect={() => handleSelect(() => navigate({ to: '/characters/$id', params: { id: c.id } }))}
               >
                 <MapPin className='size-4' />
