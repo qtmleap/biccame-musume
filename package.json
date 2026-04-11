@@ -7,8 +7,7 @@
   "private": true,
   "license": "MIT",
   "patchedDependencies": {
-    "vite-intlayer@8.5.2": "patches/vite-intlayer@8.5.2.patch",
-    "vite-plugin-node-polyfills@0.25.0": "patches/vite-plugin-node-polyfills@0.25.0.patch"
+    "vite-intlayer@8.5.2": "patches/vite-intlayer@8.5.2.patch"
   },
   "scripts": {
     "dev": "vite --host",
@@ -118,7 +117,6 @@
     "typescript": "^6.0.2",
     "vite": "^8.0.8",
     "vite-intlayer": "^8.6.10",
-    "vite-plugin-node-polyfills": "^0.26.0",
     "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-sitemap": "^0.8.2",
     "workbox-window": "^7.4.0",
