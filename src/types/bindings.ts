@@ -37,6 +37,8 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   AI: Ai
   /** JWT秘密鍵 */
   JWT_SECRET_KEY: string
+  /** 静的アセット配信バインディング */
+  ASSETS: Fetcher
 }
 
 /**

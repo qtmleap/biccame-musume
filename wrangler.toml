@@ -50,7 +50,7 @@ routes = [{ pattern = "dev.biccame-musume.com", custom_domain = true }]
 directory = "dist"
 not_found_handling = "single-page-application"
 binding = "ASSETS"
-run_worker_first = ["/api/*", "/__/auth/*"]
+run_worker_first = ["/api/*", "/__/auth/*", "/admin/*"]
 
 [[env.staging.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
@@ -100,7 +100,7 @@ routes = [{ pattern = "biccame-musume.com", custom_domain = true }]
 directory = "dist"
 not_found_handling = "single-page-application"
 binding = "ASSETS"
-run_worker_first = ["/api/*", "/__/auth/*"]
+run_worker_first = ["/api/*", "/__/auth/*", "/admin/*"]
 
 [[env.production.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
