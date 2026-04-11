@@ -116,6 +116,23 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-body {
+/* Tailwind v4ではborder/ring/outline等のデフォルト色がcurrentColorになるため、
+   v3相当のデフォルト色を復元する */
+/* body {
   @apply bg-pink-50;
+} */
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop {
+    border-color: var(--color-border);
+    --tw-ring-color: var(--color-ring);
+    outline-color: var(--color-ring);
+  }
+
+  body {
+    @apply bg-pink-50;
+  }
 }
