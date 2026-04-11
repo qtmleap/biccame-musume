@@ -81,7 +81,7 @@ simple = { limit = 50, period = 60 }
 
 [env.staging.vars]
 ENVIRONMENT = "dev"
-CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
+CF_ACCESS_AUD = "995cb37056207392cb90c93562f05361eaaa4dca46ba1f5bda4175cf7a4b860c"
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 FIREBASE_PROJECT_ID = "biccame-musume"
 PUBLIC_JWK_CACHE_KEY = "firebase-public-jwk-cache"
