@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AdvancedMarker, APIProvider, Map as GoogleMap, Pin } from '@vis.gl/react-google-maps'
+import { AdvancedMarker, APIProvider, Map as GoogleMap, Pin, useMap } from '@vis.gl/react-google-maps'
 import { Suspense, useState } from 'react'
 import { z } from 'zod'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -39,31 +39,28 @@ const LocationContent = () => {
     return null
   })
   const [isStoreListOpen, setIsStoreListOpen] = useState(false)
-  const [mapZoom, setMapZoom] = useState<number>(initialCharacterId ? 17 : 5)
-  const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral | null>(() => {
-    // 初期値として選択されたキャラクターの位置、または東京駅を設定
-    if (initialCharacterId) {
-      const targetCharacter = characters.find((c) => c.id === initialCharacterId)
-      if (targetCharacter) {
-        return getPosition(targetCharacter)
-      }
-    }
-    return { lat: 35.6812, lng: 139.7671 }
-  })
+  const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral | null>(null)
+  const map = useMap()
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
   const charactersWithAddress = characters.filter((char) => char.store?.address && char.store.address.length > 0)
 
+  const moveToCharacter = (character: StoreData) => {
+    const pos = getPosition(character)
+    if (map) {
+      map.panTo(pos)
+      map.setZoom(17)
+    }
+  }
+
   const handleMarkerClick = (character: StoreData) => {
     setSelectedCharacter(character)
-    setMapCenter(getPosition(character))
-    setMapZoom(17)
+    moveToCharacter(character)
   }
 
   const handleCharacterSelect = (character: StoreData) => {
     setSelectedCharacter(character)
-    setMapCenter(getPosition(character))
-    setMapZoom(17)
+    moveToCharacter(character)
     setIsStoreListOpen(false)
   }
 
@@ -86,8 +83,8 @@ const LocationContent = () => {
         aria-label='地図'
       >
         <GoogleMap
-          center={mapCenter}
-          zoom={mapZoom}
+          defaultCenter={selectedCharacter ? getPosition(selectedCharacter) : { lat: 35.6812, lng: 139.7671 }}
+          defaultZoom={selectedCharacter ? 17 : 5}
           mapId='biccamera-stores-map'
           gestureHandling='greedy'
           mapTypeControl={false}
@@ -98,11 +95,6 @@ const LocationContent = () => {
           onCenterChanged={(e) => {
             if (e.detail.center) {
               setMapCenter(e.detail.center)
-            }
-          }}
-          onZoomChanged={(e) => {
-            if (e.detail.zoom) {
-              setMapZoom(e.detail.zoom)
             }
           }}
         >
