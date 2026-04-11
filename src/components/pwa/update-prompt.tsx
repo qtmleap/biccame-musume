@@ -47,7 +47,8 @@ export const UpdatePrompt = () => {
         .catch(() => {})
         .finally(() => {
           setStatus('reloading')
-          window.setTimeout(() => window.location.reload(), 3000)
+          // サブルートでリロードすると404になるためトップに遷移
+          window.setTimeout(() => window.location.replace('/'), 3000)
         })
     }
 
