@@ -88,9 +88,23 @@ app.route('/api/users', users)
 // ユーザーアクティビティAPIルート
 app.route('/api', me)
 
-// 静的ファイル配信
-app.use('*', async (_c, next) => {
+// 静的ファイル配信 & SPA フォールバック
+app.use('*', async (c, next) => {
   await next()
+  // API・認証以外で404の場合、index.htmlにフォールバック（SPA対応）
+  if (c.res.status === 404 && !c.req.path.startsWith('/api/') && !c.req.path.startsWith('/__/')) {
+    try {
+      const assetResponse = await c.env.ASSETS.fetch(new Request(new URL('/', c.req.url), c.req.raw))
+      if (assetResponse.ok) {
+        c.res = new Response(assetResponse.body, {
+          status: 200,
+          headers: assetResponse.headers,
+        })
+      }
+    } catch {
+      // ASSETS が利用できない場合（devサーバーなど）はそのまま
+    }
+  }
 })
 
 export default app
