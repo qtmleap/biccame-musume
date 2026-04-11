@@ -215,8 +215,8 @@ const appContent = {
     },
     navigation: {
       characters: 'ビッカメ娘一覧',
-      events: 'イベント一覧',
-      calendar: '誕生日一覧',
+      events: 'イベント',
+      calendar: '誕生日',
       location: 'マップ',
       ranking: '総選挙',
       closeMenu: 'メニューを閉じる',
