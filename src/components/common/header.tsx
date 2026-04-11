@@ -104,11 +104,11 @@ export const Header = ({ className }: HeaderProps) => {
             <Button
               variant='ghost'
               size='icon'
-              className='md:hidden h-10 w-10 flex items-center justify-center text-muted-foreground'
+              className='md:hidden h-12 w-12 flex items-center justify-center'
               onClick={() => setSearchOpen(true)}
               aria-label='検索'
             >
-              <Search className='size-5' />
+              <Search className='size-6' />
             </Button>
 
             {/* モバイルメニューボタン */}
