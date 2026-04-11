@@ -6,7 +6,6 @@ import { UpdateOverlay, type UpdateOverlayStatus } from './update-overlay'
 let dispatchUpdate: (() => void) | null = null
 
 const triggerUpdate = () => {
-  console.log('[UpdatePrompt] triggerUpdate called, dispatchUpdate=', dispatchUpdate)
   dispatchUpdate?.()
 }
 
@@ -36,7 +35,6 @@ export const UpdatePrompt = () => {
 
   useEffect(() => {
     dispatchUpdate = () => {
-      console.log('[UpdatePrompt] dispatchUpdate handler running, opening overlay')
       setStatus('clearing')
       setOpen(true)
       toast.dismiss('pwa-update-prompt')
