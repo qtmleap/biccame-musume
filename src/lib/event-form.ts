@@ -17,7 +17,7 @@ export const DEFAULT_VALUES: DefaultValues<EventRequest> = {
   conditions: [],
   isVerified: true,
   isPreliminary: false,
-  shouldTweet: true,
+  shouldTweet: false,
   uuid: undefined
 }
 
@@ -53,8 +53,7 @@ export const toFormValuesFromQuery = (search: EventRequestQuery, uuid: string): 
     : undefined,
   startDate: search.startDate,
   endDate: search.endDate,
-  endedAt: search.endAt,
-  shouldTweet: Object.keys(search).length > 0 ? false : undefined
+  endedAt: search.endAt
 })
 
 export const buildInitialValues = (defaultValues?: DefaultValues<EventRequest>): DefaultValues<EventRequest> => {
@@ -65,9 +64,6 @@ export const buildInitialValues = (defaultValues?: DefaultValues<EventRequest>):
       startDate: defaultValues.startDate ? dayjs(defaultValues.startDate).format('YYYY-MM-DD') : '',
       endDate: defaultValues.endDate ? dayjs(defaultValues.endDate).format('YYYY-MM-DD') : undefined,
       endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : undefined,
-      isVerified: defaultValues.isVerified ?? false,
-      isPreliminary: defaultValues.isPreliminary ?? false,
-      shouldTweet: defaultValues.shouldTweet ?? false,
       uuid: defaultValues.uuid || uuidv4()
     }
   }
