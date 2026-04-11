@@ -65,6 +65,9 @@ export const buildInitialValues = (defaultValues?: DefaultValues<EventRequest>):
       startDate: defaultValues.startDate ? dayjs(defaultValues.startDate).format('YYYY-MM-DD') : '',
       endDate: defaultValues.endDate ? dayjs(defaultValues.endDate).format('YYYY-MM-DD') : undefined,
       endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : undefined,
+      isVerified: defaultValues.isVerified ?? false,
+      isPreliminary: defaultValues.isPreliminary ?? false,
+      shouldTweet: defaultValues.shouldTweet ?? false,
       uuid: defaultValues.uuid || uuidv4()
     }
   }

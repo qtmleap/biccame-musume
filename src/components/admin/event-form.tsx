@@ -338,8 +338,8 @@ export const EventForm = ({
               render={({ field }) => (
                 <Checkbox
                   id='is-verified'
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
+                  checked={field.value ?? false}
+                  onCheckedChange={(checked) => field.onChange(checked === true)}
                   className='data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600'
                 />
               )}
@@ -355,8 +355,8 @@ export const EventForm = ({
               render={({ field }) => (
                 <Checkbox
                   id='is-preliminary'
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
+                  checked={field.value ?? false}
+                  onCheckedChange={(checked) => field.onChange(checked === true)}
                   className='data-[state=checked]:bg-amber-600 data-[state=checked]:border-amber-600'
                 />
               )}
@@ -372,8 +372,8 @@ export const EventForm = ({
               render={({ field }) => (
                 <Checkbox
                   id='should-tweet'
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
+                  checked={field.value ?? false}
+                  onCheckedChange={(checked) => field.onChange(checked === true)}
                   className='data-[state=checked]:bg-sky-600 data-[state=checked]:border-sky-600'
                 />
               )}
