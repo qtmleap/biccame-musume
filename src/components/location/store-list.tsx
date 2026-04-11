@@ -49,11 +49,11 @@ const StoreListDesktopDialog = ({
       <DialogTrigger asChild>
         <button
           type='button'
-          className='absolute bottom-4 left-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+          className='absolute bottom-4 left-4 bg-white rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-gray-50 transition-colors'
         >
           <div className='flex items-center gap-2'>
             <List className='w-4 h-4' />
-            <span className='font-medium text-sm text-gray-800 dark:text-gray-100'>店舗一覧</span>
+            <span className='font-medium text-sm text-gray-800'>店舗一覧</span>
           </div>
         </button>
       </DialogTrigger>
@@ -68,7 +68,7 @@ const StoreListDesktopDialog = ({
                 key={character.id}
                 type='button'
                 onClick={() => onCharacterSelect(character)}
-                className='cursor-pointer w-full text-left rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                className='cursor-pointer w-full text-left rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors'
               >
                 <StoreListItem character={character} distance={distance} />
               </button>
@@ -114,11 +114,11 @@ const StoreListMobileDrawer = ({
       <DrawerTrigger asChild>
         <button
           type='button'
-          className='absolute bottom-4 left-4 bg-white dark:bg-gray-900 rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+          className='absolute bottom-4 left-4 bg-white rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-gray-50 transition-colors'
         >
           <div className='flex items-center gap-2'>
             <List className='w-4 h-4' />
-            <span className='font-medium text-sm text-gray-800 dark:text-gray-100'>店舗一覧</span>
+            <span className='font-medium text-sm text-gray-800'>店舗一覧</span>
           </div>
         </button>
       </DrawerTrigger>
@@ -127,13 +127,13 @@ const StoreListMobileDrawer = ({
           <DrawerTitle className='text-sm font-medium'>店舗一覧{mapCenter && '（近い順）'}</DrawerTitle>
         </DrawerHeader>
         <div className='overflow-y-auto max-h-[60vh] custom-scrollbar px-2'>
-          <div className='grid grid-cols-2 [&>*:nth-child(4n+1)]:bg-gray-50 [&>*:nth-child(4n+2)]:bg-gray-50 [&>*:nth-child(odd)]:border-r [&>*:nth-child(odd)]:border-gray-200 dark:[&>*:nth-child(4n+1)]:bg-gray-800 dark:[&>*:nth-child(4n+2)]:bg-gray-800 dark:[&>*:nth-child(odd)]:border-gray-700'>
+          <div className='grid grid-cols-2 [&>*:nth-child(4n+1)]:bg-gray-50 [&>*:nth-child(4n+2)]:bg-gray-50 [&>*:nth-child(odd)]:border-r [&>*:nth-child(odd)]:border-gray-200'>
             {sortedCharactersWithDistance.map(({ character, distance }) => (
               <button
                 key={character.id}
                 type='button'
                 onClick={() => onCharacterSelect(character)}
-                className='cursor-pointer w-full text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors'
+                className='cursor-pointer w-full text-left hover:bg-gray-200 transition-colors'
               >
                 <StoreListItem character={character} distance={distance} />
               </button>

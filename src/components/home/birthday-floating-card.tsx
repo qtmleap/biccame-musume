@@ -82,7 +82,7 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
             </motion.button>
           ) : (
             // 展開状態
-            <motion.div className='w-72 overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800' layout>
+            <motion.div className='w-72 overflow-hidden rounded-2xl bg-white shadow-2xl' layout>
               {/* ヘッダー */}
               <div className='flex items-center justify-between bg-linear-to-r from-pink-500 to-purple-500 p-3'>
                 <div className='flex items-center gap-2'>
@@ -130,8 +130,8 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
                       >
                         Happy Birthday!
                       </motion.p>
-                      <p className='font-medium text-gray-800 dark:text-gray-200'>{currentCharacter.character?.name}</p>
-                      <p className='text-xs text-gray-500 dark:text-gray-400'>{currentCharacter.store?.name}</p>
+                      <p className='font-medium text-gray-800'>{currentCharacter.character?.name}</p>
+                      <p className='text-xs text-gray-500'>{currentCharacter.store?.name}</p>
                     </div>
                   </motion.div>
                 </AnimatePresence>
@@ -142,7 +142,7 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
                     <button
                       type='button'
                       onClick={handlePrevious}
-                      className='rounded-full p-1 text-gray-500 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700'
+                      className='rounded-full p-1 text-gray-500 transition-colors hover:bg-gray-100'
                     >
                       <ChevronLeft className='size-5' />
                     </button>
@@ -152,7 +152,7 @@ export const BirthdayFloatingCard = ({ characters }: BirthdayFloatingCardProps) 
                     <button
                       type='button'
                       onClick={handleNext}
-                      className='rounded-full p-1 text-gray-500 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700'
+                      className='rounded-full p-1 text-gray-500 transition-colors hover:bg-gray-100'
                     >
                       <ChevronRight className='size-5' />
                     </button>
