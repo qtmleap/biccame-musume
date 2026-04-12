@@ -3,3 +3,4 @@ telemetry = false
 [test]
 smol = true
 coverage = true
+root = "./__tests__"
