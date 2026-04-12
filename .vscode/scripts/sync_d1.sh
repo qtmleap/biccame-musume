@@ -46,6 +46,7 @@ retry_command() {
 }
 
 cd "$PROJECT_ROOT"
+source .env
 
 # 同期先の環境選択（引数があればそれを使用、なければfzfで選択）
 if [ -n "$1" ]; then
