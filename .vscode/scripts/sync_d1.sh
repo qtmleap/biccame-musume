@@ -117,6 +117,6 @@ echo "📥 Step 5: ${DEST_ENV}環境にデータをインポート中..."
 retry_command bun wrangler d1 execute "$DEST_DB_NAME" $DEST_FLAG --file="$DATA_FILE" --yes
 
 echo ""
-echo "✅ リセット&リストア完了! (${SOURCE_ENV} → ${DEST_ENV})"
+echo "✅ 同期完了! (${SOURCE_ENV} → ${DEST_ENV})"
 echo "📋 スキーマファイル: $SCHEMA_FILE"
 echo "💾 データファイル: $DATA_FILE"
