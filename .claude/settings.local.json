@@ -1,8 +1,25 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git checkout:*)",
-      "Bash(git rm:*)"
-    ]
-  }
+      "Bash",
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Agent",
+      "Skill",
+      "WebFetch",
+      "WebSearch",
+      "NotebookEdit",
+      "TaskCreate",
+      "TaskUpdate"
+    ],
+    "deny": [],
+    "bypassPermissionsMode": "allow",
+    "defaultMode": "bypassPermissions",
+    "disableBypassPermissionsMode": "disable"
+  },
+  "effortLevel": "high",
+  "alwaysThinkingEnabled": true
 }
