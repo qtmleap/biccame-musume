@@ -8,6 +8,17 @@ import { useMemo } from 'react'
 import { eventListActiveTabAtom, eventListPagesAtom } from '@/atoms/event-list-atom'
 import { eventStatusFilterAtom } from '@/atoms/event-status-filter-atom'
 import { EventStatusFilter } from '@/components/events/event-status-filter'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import {
   Pagination,
@@ -44,7 +55,7 @@ const EventCard = ({
   const isEnded = event.endedAt != null || (end && now.isAfter(end))
 
   return (
-    <div className={`border rounded-lg p-4 bg-white flex flex-col h-full ${isEnded ? 'opacity-50 grayscale' : ''}`}>
+    <div className={`border rounded-lg p-4 bg-card flex flex-col h-full ${isEnded ? 'opacity-50 grayscale' : ''}`}>
       <div className='mb-2 flex items-start justify-between gap-3'>
         <div className='flex-1'>
           <h3 className='text-sm font-semibold text-gray-900'>{event.title}</h3>
@@ -100,15 +111,26 @@ const EventCard = ({
                 編集
               </Button>
             </Link>
-            <Button
-              size='sm'
-              variant='outline'
-              onClick={() => onDelete(event.uuid)}
-              className='h-7 text-xs text-destructive hover:bg-destructive/10'
-            >
-              <Trash2 className='mr-1 size-3' />
-              削除
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button size='sm' variant='outline' className='h-7 text-xs text-destructive hover:bg-destructive/10'>
+                  <Trash2 className='mr-1 size-3' />
+                  削除
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>イベントを削除しますか？</AlertDialogTitle>
+                  <AlertDialogDescription>この操作は取り消せません。</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                  <AlertDialogAction variant='destructive' onClick={() => onDelete(event.uuid)}>
+                    削除する
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         )}
       </div>
@@ -171,12 +193,10 @@ export const EventList = () => {
    * イベントを削除
    */
   const handleDelete = async (id: string) => {
-    if (confirm('このイベントを削除しますか?')) {
-      try {
-        await deleteEvent.mutateAsync(id)
-      } catch {
-        alert(EVENT_LIST_LABELS.deleteError)
-      }
+    try {
+      await deleteEvent.mutateAsync(id)
+    } catch {
+      alert(EVENT_LIST_LABELS.deleteError)
     }
   }
 
@@ -226,7 +246,7 @@ export const EventList = () => {
               {activeTab === category && (
                 <motion.div
                   layoutId='activeTab'
-                  className='absolute inset-0 bg-white rounded-md shadow-sm -z-10'
+                  className='absolute inset-0 bg-card rounded-md shadow-sm -z-10'
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}

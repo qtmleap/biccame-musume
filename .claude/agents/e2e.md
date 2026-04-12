@@ -13,32 +13,62 @@ This agent must only be called **after** the qa agent has passed (type check, li
 
 ## Workflow
 
-### 1. Start the local server
+### 1. Determine the dev server URL
+
+Read `playwright.config.ts` to find `baseURL` and the `webServer.url` / `webServer.command`.
+Do **not** hardcode any port — always derive it from the project config.
+
+### 2. Start the local server
+
+If the dev server is not already running, start it:
 
 ```sh
 bun run dev &
 ```
 
-Wait until the server is ready on `http://localhost:25173`.
+Wait until the server responds at the URL found in step 1.
 
-### 2. Run Playwright E2E tests
+### 3. Run Playwright E2E tests
 
 ```sh
-PLAYWRIGHT_SKIP_WEBSERVER=1 bunx playwright test --project=local
+bunx playwright test
 ```
 
-- The `local` project targets `http://localhost:25173`
-- `PLAYWRIGHT_SKIP_WEBSERVER=1` skips the auto dev server since we already started it
 - If no test files exist under `e2e/`, report that to the user and stop
 
-### 3. Clean up
+### 4. Clean up
 
-Kill the dev server when done.
+Kill the dev server when done (only if this agent started it).
 
-### 4. Report results
+### 5. Report results
 
 - If all tests pass → report success
 - If tests fail → report failures with details (test name, error message, screenshot paths if any)
+
+## Writing Tests
+
+When writing new e2e tests, always capture screenshots at key checkpoints:
+
+- Save screenshots in **WEBP** format under `test-results/`
+- Playwright does not natively export WEBP. Use the following pattern:
+
+```ts
+import { writeFile, mkdir } from 'node:fs/promises'
+import sharp from 'sharp'
+
+await mkdir('test-results', { recursive: true })
+const buffer = await page.screenshot()
+const webp = await sharp(buffer).webp({ quality: 80 }).toBuffer()
+await writeFile(`test-results/${name}.webp`, webp)
+```
+
+- If `sharp` is not available, fall back to PNG:
+
+```ts
+await page.screenshot({ path: `test-results/${name}.png` })
+```
+
+- `test-results/` is gitignored
 
 ## Constraints
 

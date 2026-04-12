@@ -16,7 +16,7 @@ type RankingListProps = {
  */
 const RibbonBadge = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className='inline-flex items-center justify-center bg-[#0068B7] border-2 border-[#004080] px-4 py-0.5 min-w-24'>
+    <div className='inline-flex items-center justify-center bg-blue-600 border-2 border-blue-800 px-4 py-0.5 min-w-24'>
       {children}
     </div>
   )

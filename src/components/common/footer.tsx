@@ -6,31 +6,35 @@ import dayjs from 'dayjs'
  */
 export const Footer = () => {
   return (
-    <footer className='text-center text-xs text-gray-500 px-4 py-4 border-t border-gray-200 bg-gray-50'>
+    <footer className='text-center text-xs text-muted-foreground px-4 py-4 border-t border-border bg-muted'>
       <div className='container mx-auto space-y-2'>
         <div className='flex flex-wrap justify-center gap-3'>
-          <Link to='/about' className='text-gray-600 hover:text-[#e50012] transition-colors'>
+          <Link to='/about' className='text-muted-foreground hover:text-[#e50012] transition-colors'>
             サイトについて
           </Link>
-          <span className='text-gray-400'>|</span>
+          <span className='text-muted-foreground/50'>|</span>
           <a
             href='https://biccame.jp/guideline/'
             target='_blank'
             rel='noopener noreferrer'
-            className='text-gray-600 hover:text-[#e50012] transition-colors'
+            className='text-muted-foreground hover:text-[#e50012] transition-colors'
           >
             ガイドライン
           </a>
-          <span className='text-gray-400'>|</span>
-          <Link to='/contact' className='text-gray-600 hover:text-[#e50012] transition-colors'>
+          <span className='text-muted-foreground/50'>|</span>
+          <Link to='/contact' className='text-muted-foreground hover:text-[#e50012] transition-colors'>
             お問い合わせ
+          </Link>
+          <span className='text-muted-foreground/50'>|</span>
+          <Link to='/admin/events' className='text-muted-foreground hover:text-[#e50012] transition-colors'>
+            管理
           </Link>
         </div>
         <div className='space-y-1'>
-          <p className='text-gray-500'>
+          <p className='text-muted-foreground'>
             v{__APP_VERSION__} ({__GIT_HASH__})
           </p>
-          <p className='text-gray-500'>
+          <p className='text-muted-foreground'>
             © {dayjs().year()}{' '}
             <a
               href='https://www.itall.co.jp/'

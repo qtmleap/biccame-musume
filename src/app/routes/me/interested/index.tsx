@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Heart } from 'lucide-react'
+import { ArrowLeft, Award, Heart } from 'lucide-react'
 import { Suspense, useState } from 'react'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -37,6 +37,24 @@ const InterestedEventsContent = () => {
             <h1 className='text-2xl font-bold text-gray-900'>{MY_PAGE_LABELS.interestedEvents}</h1>
             <span className='text-sm text-gray-500'>({interestedEventDetails.length})</span>
           </div>
+
+          {/* タブナビゲーション */}
+          <div className='mt-4 flex border-b border-border'>
+            <Link
+              to='/me/interested'
+              className='flex items-center gap-1.5 px-4 py-2 text-sm font-medium border-b-2 border-pink-500 text-pink-600'
+            >
+              <Heart className='h-4 w-4' />
+              気になる
+            </Link>
+            <Link
+              to='/me/completed'
+              className='flex items-center gap-1.5 px-4 py-2 text-sm font-medium border-b-2 border-transparent text-muted-foreground hover:text-foreground transition-colors'
+            >
+              <Award className='h-4 w-4' />
+              達成済みを見る
+            </Link>
+          </div>
         </div>
 
         {/* イベント一覧 */}
@@ -45,7 +63,7 @@ const InterestedEventsContent = () => {
           page={page}
           onPageChange={setPage}
           emptyState={
-            <div className='bg-white rounded-lg shadow-sm p-8 text-center'>
+            <div className='bg-card rounded-lg shadow-sm p-8 text-center'>
               <Heart className='h-12 w-12 text-gray-300 mx-auto mb-3' />
               <p className='text-gray-600'>{MY_PAGE_LABELS.noInterestedEvents}</p>
               <Link to='/events' className='inline-block mt-4 text-pink-600 hover:text-pink-700 text-sm font-medium'>

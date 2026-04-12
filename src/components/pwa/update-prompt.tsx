@@ -1,58 +1,63 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { Progress } from '@/components/ui/progress'
+import { clearAllCaches } from '@/lib/pwa-cache'
+import { UpdateOverlay, type UpdateOverlayStatus } from './update-overlay'
 
-const UPDATE_START_EVENT = 'sw:updating'
-const RELOAD_DELAY_MS = 1200
+let dispatchUpdate: (() => void) | null = null
 
 const triggerUpdate = () => {
-  window.dispatchEvent(new CustomEvent(UPDATE_START_EVENT))
+  dispatchUpdate?.()
 }
 
 export const showUpdatePrompt = () => {
   toast('新しいバージョンが利用可能です', {
+    id: 'pwa-update-prompt',
     description: 'ページを更新すると最新版に切り替わります',
     duration: Number.POSITIVE_INFINITY,
     action: {
       label: '更新',
       onClick: triggerUpdate
     },
+    actionButtonStyle: {
+      background: 'oklch(59.2% 0.249 0.584)',
+      color: 'white'
+    },
     classNames: {
-      toast: '!bg-white !border-pink-100 !rounded-xl !shadow-lg',
-      title: '!text-gray-900 !text-sm !font-medium',
-      description: '!text-gray-600 !text-xs',
-      actionButton: '!bg-pink-600 !text-white hover:!bg-pink-700'
+      toast: '!bg-card !border-pink-100 !rounded-xl !shadow-lg',
+      title: '!text-foreground !text-sm !font-medium',
+      description: '!text-muted-foreground !text-xs',
+      actionButton: 'hover:!brightness-110'
     }
   })
 }
 
-const isStaging = import.meta.env.MODE === 'staging'
+const isProduction = import.meta.env.MODE === 'production'
 
 export const UpdatePrompt = () => {
-  const [updating, setUpdating] = useState(false)
-  const [progress, setProgress] = useState(0)
+  const [open, setOpen] = useState(false)
+  const [status, setStatus] = useState<UpdateOverlayStatus>('clearing')
 
   useEffect(() => {
-    if (isStaging) showUpdatePrompt()
+    dispatchUpdate = () => {
+      setStatus('clearing')
+      setOpen(true)
+      toast.dismiss('pwa-update-prompt')
 
-    const handler = () => {
-      setUpdating(true)
-      requestAnimationFrame(() => setProgress(100))
-      window.setTimeout(() => window.location.reload(), RELOAD_DELAY_MS)
+      clearAllCaches()
+        .catch(() => {})
+        .finally(() => {
+          setStatus('reloading')
+          // サブルートでリロードすると404になるためトップに遷移
+          window.setTimeout(() => window.location.replace('/'), 3000)
+        })
     }
-    window.addEventListener(UPDATE_START_EVENT, handler)
-    return () => window.removeEventListener(UPDATE_START_EVENT, handler)
+
+    if (!isProduction) showUpdatePrompt()
+
+    return () => {
+      dispatchUpdate = null
+    }
   }, [])
 
-  if (!updating) return null
-
-  return (
-    <div className='fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-black/80 backdrop-blur-sm'>
-      <p className='text-white text-lg font-medium'>更新中...</p>
-      <Progress
-        value={progress}
-        className='w-64 h-2 bg-white/20 [&>div]:bg-white [&>div]:transition-all [&>div]:duration-1000 [&>div]:ease-out'
-      />
-    </div>
-  )
+  return <UpdateOverlay open={open} status={status} />
 }

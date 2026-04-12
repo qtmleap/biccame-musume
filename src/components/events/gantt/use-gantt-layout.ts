@@ -28,6 +28,9 @@ type GanttLayout = {
   handleMouseMove: (e: React.MouseEvent) => void
   handleMouseUp: () => void
   handleMouseLeave: () => void
+  handleTouchStart: (e: React.TouchEvent) => void
+  handleTouchMove: (e: React.TouchEvent) => void
+  handleTouchEnd: () => void
   getLabelOffset: (startOffset: number, duration: number) => number
   hasDraggedRef: React.MutableRefObject<boolean>
 }
@@ -217,6 +220,35 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
     setIsDragging(false)
   }, [])
 
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (!scrollContainerRef.current) return
+    const touch = e.touches[0]
+    setIsDragging(true)
+    hasDraggedRef.current = false
+    dragStartRef.current = {
+      x: touch.clientX,
+      scrollLeft: scrollContainerRef.current.scrollLeft
+    }
+  }, [])
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!isDragging || !scrollContainerRef.current) return
+      const touch = e.touches[0]
+      const dx = touch.clientX - dragStartRef.current.x
+      if (Math.abs(dx) > 5) {
+        hasDraggedRef.current = true
+        e.preventDefault()
+      }
+      scrollContainerRef.current.scrollLeft = dragStartRef.current.scrollLeft - dx
+    },
+    [isDragging]
+  )
+
+  const handleTouchEnd = useCallback(() => {
+    setIsDragging(false)
+  }, [])
+
   const getLabelOffset = useCallback(
     (startOffset: number, duration: number) => {
       const barLeft = startOffset * 32
@@ -248,6 +280,9 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
     handleMouseMove,
     handleMouseUp,
     handleMouseLeave,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
     getLabelOffset,
     hasDraggedRef
   }

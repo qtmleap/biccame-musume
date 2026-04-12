@@ -67,9 +67,16 @@ const EventStoresSection = ({ stores }: { stores: string[] }) => {
           {stores.map((storeKey, index) => {
             const storeName = STORE_NAME_LABELS[storeKey as StoreKey] || storeKey
             return (
-              <span key={storeKey}>
+              <span key={storeKey} className='flex items-center gap-1'>
                 <Link to='/characters/$id' params={{ id: storeKey }} className='text-pink-600 hover:underline'>
                   {storeName}
+                </Link>
+                <Link
+                  to='/events'
+                  search={{ store: storeKey }}
+                  className='text-xs text-gray-400 hover:text-pink-600 hover:underline'
+                >
+                  イベントを見る
                 </Link>
                 {index < stores.length - 1 && <span>、</span>}
               </span>
