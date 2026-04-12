@@ -47,12 +47,20 @@ retry_command() {
 
 cd "$PROJECT_ROOT"
 
-# リストア先の環境選択
-DEST_ENV=$(echo -e "local\nstaging" | fzf --prompt="リストア先の環境を選択: " --height=10 --border)
+# 同期先の環境選択（引数があればそれを使用、なければfzfで選択）
+if [ -n "$1" ]; then
+  DEST_ENV="$1"
+  if [ "$DEST_ENV" != "local" ] && [ "$DEST_ENV" != "staging" ]; then
+    echo "❌ 無効な環境: $DEST_ENV (local または staging を指定してください)"
+    exit 1
+  fi
+else
+  DEST_ENV=$(echo -e "local\nstaging" | fzf --prompt="同期先の環境を選択: " --height=10 --border)
 
-if [ -z "$DEST_ENV" ]; then
-  echo "リストア先の環境が選択されませんでした"
-  exit 1
+  if [ -z "$DEST_ENV" ]; then
+    echo "同期先の環境が選択されませんでした"
+    exit 1
+  fi
 fi
 
 # リストア元はproduction固定
