@@ -33,7 +33,7 @@ const LocationMapInner = ({
   selectedCharacter,
   setSelectedCharacter,
   isStoreListOpen,
-  setIsStoreListOpen,
+  setIsStoreListOpen
 }: {
   characters: StoreData[]
   selectedCharacter: StoreData | null
