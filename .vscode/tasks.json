@@ -28,9 +28,43 @@
       }
     },
     {
-      "label": "Reset D1 Database",
+      "label": "Sync D1: Production → Local",
       "type": "shell",
-      "command": "${workspaceFolder}/.vscode/scripts/reset.sh",
+      "command": "${workspaceFolder}/.vscode/scripts/sync_d1.sh",
+      "args": ["local"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Sync D1: Production → Staging",
+      "type": "shell",
+      "command": "${workspaceFolder}/.vscode/scripts/sync_d1.sh",
+      "args": ["staging"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Check D1 Schema: Production vs Local",
+      "type": "shell",
+      "command": "${workspaceFolder}/.vscode/scripts/check_d1_schema.sh",
+      "args": ["local"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Check D1 Schema: Production vs Staging",
+      "type": "shell",
+      "command": "${workspaceFolder}/.vscode/scripts/check_d1_schema.sh",
+      "args": ["staging"],
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
