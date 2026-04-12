@@ -19,7 +19,7 @@ const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 app.use(
   '*',
   cors({
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:15175'],
     credentials: true,
     maxAge: 86400
   })
@@ -32,7 +32,10 @@ app.use(
  */
 app.get('/admin/*', async (c) => {
   const assetResponse = await c.env.ASSETS.fetch(c.req.raw)
-  const response = new Response(assetResponse.body, assetResponse)
+  const response = new Response(assetResponse.body, {
+    status: assetResponse.status,
+    headers: assetResponse.headers,
+  })
   response.headers.set('Cache-Control', 'private, no-store, must-revalidate')
   return response
 })
