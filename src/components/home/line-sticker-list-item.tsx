@@ -24,7 +24,7 @@ export const LineStickerListItem = ({ url, title, description, delay }: LineStic
       whileTap={{ scale: 0.98 }}
       className='block'
     >
-      <div className='bg-white rounded-lg p-4 shadow-sm border-2 border-[#00B900]/20 hover:border-[#00B900]/50 transition-all h-full'>
+      <div className='bg-card rounded-lg p-4 shadow-sm border-2 border-[#00B900]/20 hover:border-[#00B900]/50 transition-all h-full'>
         <div className='flex items-start gap-3'>
           <Avatar className='h-10 w-10 shrink-0'>
             <AvatarImage src='/icons/line.png' alt='LINE' />

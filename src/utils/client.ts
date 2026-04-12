@@ -16,6 +16,7 @@ import {
   EventStatsRequestSchema,
   EventStatsResponseSchema
 } from '@/schemas/event.dto'
+import { SearchResultSchema } from '@/schemas/search.dto'
 import { PageViewStatsSchema } from '@/schemas/stats.dto'
 import { StoresSchema } from '@/schemas/store.dto'
 import { UpsertUserRequestSchemaForClient, UserResponseSchemaForClient } from '@/schemas/user.dto'
@@ -151,6 +152,21 @@ const api = makeApi([
       }
     ],
     response: CheckUrlResponseSchema
+  },
+  // 検索API
+  {
+    method: 'get',
+    path: '/api/search',
+    alias: 'searchEvents',
+    description: 'イベントをタイトルで全文検索',
+    parameters: [
+      {
+        name: 'q',
+        type: 'Query',
+        schema: z.string().min(1).max(100)
+      }
+    ],
+    response: SearchResultSchema
   },
   // ページビュー統計API
   {

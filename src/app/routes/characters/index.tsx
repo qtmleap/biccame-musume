@@ -41,7 +41,7 @@ const CharactersContent = () => {
       <CharacterList characters={sortedMusume} title={HOME_LABELS.biccameMusumeTitle} showTitle />
       {sortedOthers.length > 0 && (
         <>
-          <div className='my-8 border-t-2 border-gray-300 dark:border-gray-600' />
+          <div className='my-8 border-t-2 border-gray-300' />
           <CharacterList characters={sortedOthers} title={HOME_LABELS.relatedCharactersTitle} showTitle />
         </>
       )}

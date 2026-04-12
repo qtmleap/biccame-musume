@@ -37,7 +37,7 @@ export class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className='flex flex-col items-center justify-center min-h-100 px-4'>
+        <div className='flex flex-col items-center min-h-100 px-4 pt-24'>
           <div className='text-center max-w-md'>
             <AlertCircle className='h-16 w-16 text-red-500 mx-auto mb-4' />
             <h2 className='text-2xl font-bold text-gray-900 mb-2'>エラーが発生しました</h2>
