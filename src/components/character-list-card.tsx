@@ -32,7 +32,7 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
         <Link
           to='/characters/$id'
           params={{ id: character.id }}
-          className='flex-1 block border border-pink-200 rounded-lg p-3 hover:border-[#e50012]/40 transition-colors bg-white'
+          className='flex-1 block border border-pink-200 rounded-lg p-3 hover:border-[#e50012]/40 transition-colors bg-card'
         >
           <div className='flex items-center gap-3 mb-2'>
             <Avatar className='h-16 w-16 border-2 border-pink-200'>

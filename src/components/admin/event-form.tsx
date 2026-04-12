@@ -1,9 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import dayjs from 'dayjs'
 import { FileText, Package, Store, X } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { Controller, type DefaultValues, useFieldArray, useForm, useWatch } from 'react-hook-form'
-import { v4 as uuidv4 } from 'uuid'
 import { EventConfirmation } from '@/components/admin/event-confirmation'
 import { ConditionsSection } from '@/components/admin/form/conditions-section'
 import { DateField } from '@/components/admin/form/date-field'
@@ -15,32 +13,11 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/use-characters'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/use-events'
+import { buildInitialValues, toEventPayload } from '@/lib/event-form'
 import { ADMIN_LABELS, EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { type Event, EventCategorySchema, type EventRequest, EventRequestSchema } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
-/**
- * フォームのデフォルト値
- */
-const DEFAULT_VALUES: DefaultValues<EventRequest> = {
-  category: undefined,
-  title: '',
-  referenceUrls: [],
-  stores: [],
-  limitedQuantity: undefined,
-  startDate: '',
-  endDate: undefined,
-  endedAt: undefined,
-  conditions: [],
-  isVerified: true,
-  isPreliminary: false,
-  shouldTweet: true,
-  uuid: undefined
-}
-
-/**
- * イベントフォーム
- */
 export const EventForm = ({
   defaultValues,
   onSuccess,
@@ -54,39 +31,14 @@ export const EventForm = ({
   const updateEvent = useUpdateEvent()
   const { data: characters } = useCharacters()
 
-  // URL重複チェック結果を保持
   const [duplicateWarnings, setDuplicateWarnings] = useState<Record<number, Event | null>>({})
-
-  // 確認画面の表示状態
   const [isConfirming, setIsConfirming] = useState(false)
   const [confirmedData, setConfirmedData] = useState<EventRequest | null>(null)
-  // 二重送信防止フラグ
   const [isSubmitted, setIsSubmitted] = useState(false)
 
-  // 住所がある店舗のみフィルタリングしてユニークリストを取得（キーのリスト）
   const storeKeys = Array.from(
     new Set(characters.filter((c) => c.store?.address && c.store.address.trim() !== '').map((c) => c.id))
   ).sort()
-
-  // デフォルト値を生成
-  const getInitialValues = (): DefaultValues<EventRequest> => {
-    if (defaultValues) {
-      return {
-        ...DEFAULT_VALUES,
-        ...defaultValues,
-        startDate: defaultValues.startDate ? dayjs(defaultValues.startDate).format('YYYY-MM-DD') : '',
-        endDate: defaultValues.endDate ? dayjs(defaultValues.endDate).format('YYYY-MM-DD') : undefined,
-        endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : undefined,
-        uuid: defaultValues.uuid || uuidv4()
-      }
-    }
-
-    // 新規作成時はuuidを生成
-    return {
-      ...DEFAULT_VALUES,
-      uuid: uuidv4()
-    }
-  }
 
   const {
     register,
@@ -98,10 +50,11 @@ export const EventForm = ({
     formState: { errors }
   } = useForm<EventRequest>({
     resolver: zodResolver(EventRequestSchema),
-    defaultValues: getInitialValues()
+    defaultValues: buildInitialValues(defaultValues),
+    mode: 'onBlur'
   })
 
-  const { fields, remove, update } = useFieldArray({
+  const { fields, remove, append } = useFieldArray({
     control,
     name: 'conditions'
   })
@@ -118,9 +71,6 @@ export const EventForm = ({
   const stores = watch('stores') || []
   const referenceUrls = useWatch({ control, name: 'referenceUrls' }) || []
 
-  /**
-   * URLの重複チェック
-   */
   const checkUrlDuplicate = useCallback(
     async (index: number, url: string) => {
       if (!url?.startsWith('http')) {
@@ -135,16 +85,12 @@ export const EventForm = ({
           [index]: result.exists ? (result.event ?? null) : null
         }))
       } catch {
-        // エラー時は警告を消す
         setDuplicateWarnings((prev) => ({ ...prev, [index]: null }))
       }
     },
     [defaultValues?.uuid]
   )
 
-  /**
-   * 店舗を追加
-   */
   const handleAddStore = (storeKey: string) => {
     if (storeKey === '_all') {
       setValue('stores', storeKeys as StoreKey[])
@@ -153,9 +99,6 @@ export const EventForm = ({
     }
   }
 
-  /**
-   * 店舗を削除
-   */
   const handleRemoveStore = (storeKey: string) => {
     setValue(
       'stores',
@@ -163,44 +106,28 @@ export const EventForm = ({
     )
   }
 
-  /**
-   * フォームをリセット
-   */
   const handleReset = () => {
-    reset(DEFAULT_VALUES)
+    reset(buildInitialValues(defaultValues))
     setIsConfirming(false)
     setConfirmedData(null)
     setIsSubmitted(false)
   }
 
-  /**
-   * 確認画面へ進む
-   */
   const handleConfirm = (data: EventRequest) => {
     setConfirmedData(data)
     setIsConfirming(true)
   }
 
-  /**
-   * バリデーションエラー時のハンドラ
-   */
   const handleValidationError = (formErrors: typeof errors) => {
     console.error('Validation errors:', formErrors)
   }
 
-  /**
-   * 入力画面に戻る
-   */
   const handleBack = () => {
     setIsConfirming(false)
   }
 
-  /**
-   * キャンペーンを保存
-   */
   const onSubmit = async () => {
     if (!confirmedData) return
-    // 二重送信防止
     if (isSubmitted) {
       console.warn('Already submitted, skipping duplicate submission')
       return
@@ -208,38 +135,7 @@ export const EventForm = ({
 
     setIsSubmitted(true)
 
-    const payload: EventRequest = {
-      category: confirmedData.category,
-      title: confirmedData.title,
-      startDate: dayjs(confirmedData.startDate).toISOString(),
-      conditions: confirmedData.conditions.map((c) => ({
-        uuid: c.uuid || uuidv4(),
-        type: c.type,
-        purchaseAmount: c.purchaseAmount,
-        quantity: c.quantity
-      })) as EventRequest['conditions'],
-      stores: confirmedData.stores as EventRequest['stores'],
-      isVerified: confirmedData.isVerified,
-      isPreliminary: confirmedData.isPreliminary,
-      shouldTweet: confirmedData.shouldTweet,
-      uuid: isEditMode && defaultValues?.uuid ? defaultValues.uuid : confirmedData.uuid || uuidv4(),
-      endDate:
-        confirmedData.endDate && confirmedData.endDate.trim() !== ''
-          ? dayjs(confirmedData.endDate).toISOString()
-          : undefined,
-      endedAt:
-        confirmedData.endedAt && confirmedData.endedAt.trim() !== ''
-          ? dayjs(confirmedData.endedAt).toISOString()
-          : undefined,
-      referenceUrls: (confirmedData.referenceUrls && confirmedData.referenceUrls.length > 0
-        ? confirmedData.referenceUrls.map((r) => ({
-            uuid: r.uuid || uuidv4(),
-            type: r.type,
-            url: r.url
-          }))
-        : confirmedData.referenceUrls) as EventRequest['referenceUrls'],
-      limitedQuantity: confirmedData.limitedQuantity || undefined
-    }
+    const payload = toEventPayload(confirmedData, { isEditMode, fallbackUuid: defaultValues?.uuid })
 
     try {
       if (isEditMode && defaultValues?.uuid) {
@@ -253,12 +149,10 @@ export const EventForm = ({
       handleReset()
       onSuccess?.()
     } catch (_error) {
-      // エラー時は再送信可能にする（エラー通知はuseMutationのonErrorで処理）
       setIsSubmitted(false)
     }
   }
 
-  // 確認画面の表示
   if (isConfirming && confirmedData) {
     const isMutating = createEvent.isPending || updateEvent.isPending
     return <EventConfirmation data={confirmedData} isSubmitting={isMutating} onBack={handleBack} onSubmit={onSubmit} />
@@ -412,7 +306,7 @@ export const EventForm = ({
           fields={fields}
           register={register}
           remove={remove}
-          update={update}
+          append={append}
           error={errors.conditions?.message}
         />
 
@@ -444,8 +338,8 @@ export const EventForm = ({
               render={({ field }) => (
                 <Checkbox
                   id='is-verified'
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
+                  checked={field.value ?? false}
+                  onCheckedChange={(checked) => field.onChange(checked === true)}
                   className='data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600'
                 />
               )}
@@ -461,8 +355,8 @@ export const EventForm = ({
               render={({ field }) => (
                 <Checkbox
                   id='is-preliminary'
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
+                  checked={field.value ?? false}
+                  onCheckedChange={(checked) => field.onChange(checked === true)}
                   className='data-[state=checked]:bg-amber-600 data-[state=checked]:border-amber-600'
                 />
               )}
@@ -478,8 +372,8 @@ export const EventForm = ({
               render={({ field }) => (
                 <Checkbox
                   id='should-tweet'
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
+                  checked={field.value ?? false}
+                  onCheckedChange={(checked) => field.onChange(checked === true)}
                   className='data-[state=checked]:bg-sky-600 data-[state=checked]:border-sky-600'
                 />
               )}

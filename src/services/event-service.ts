@@ -322,6 +322,36 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
 }
 
 /**
+ * イベントをタイトルで全文検索
+ * @param env - Cloudflare Workers環境変数
+ * @param q - 検索クエリ文字列
+ * @returns 検索結果のイベント一覧（開始日降順、最大50件）
+ */
+export const searchEvents = async (env: Bindings, q: string): Promise<Event[]> => {
+  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const events = (
+    await prisma.event.findMany({
+      where: {
+        title: { contains: q },
+        isVerified: true
+      },
+      include: {
+        conditions: true,
+        referenceUrls: true,
+        stores: true
+      },
+      orderBy: { startDate: 'desc' },
+      take: 50
+    })
+  ).map((v) => transform(v))
+  const result = EventSchema.array().safeParse(events)
+  if (!result.success) {
+    throw new HTTPException(400, { message: result.error.message })
+  }
+  return result.data
+}
+
+/**
  * イベントを削除
  * 関連データ（conditions, referenceUrls, stores）もカスケード削除される
  * @param env - Cloudflare Workers環境変数

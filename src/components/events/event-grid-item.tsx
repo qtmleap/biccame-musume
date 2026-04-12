@@ -71,7 +71,7 @@ export const EventGridItem = ({ event }: EventGridItemProps) => {
         params={{ uuid: event.uuid }}
         className={cn(
           'block border border-pink-200 rounded-lg p-4 hover:border-[#e50012]/40 transition-colors h-full',
-          isEnded ? 'opacity-50 grayscale bg-white' : endingSoonBg || 'bg-white'
+          isEnded ? 'opacity-50 grayscale bg-card' : endingSoonBg || 'bg-card'
         )}
       >
         <div className='mb-2 flex items-start justify-between gap-3'>

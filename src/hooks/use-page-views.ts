@@ -8,7 +8,7 @@ export const usePageViews = (path?: string) => {
   return useSuspenseQuery({
     queryKey: ['pageViews', path],
     queryFn: () => client.getPageViews({ queries: { path } }),
-    refetchInterval: 5000, // 5秒ごとに自動更新
-    staleTime: 0
+    refetchInterval: 30000, // 30秒ごとに自動更新
+    staleTime: 30000
   })
 }

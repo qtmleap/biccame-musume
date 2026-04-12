@@ -49,11 +49,11 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(0.99 0.004 340);
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: oklch(0.99 0.004 340);
   --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
+  --popover: oklch(0.99 0.004 340);
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
@@ -116,6 +116,23 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-body {
+/* Tailwind v4ではborder/ring/outline等のデフォルト色がcurrentColorになるため、
+   v3相当のデフォルト色を復元する */
+/* body {
   @apply bg-pink-50;
+} */
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop {
+    border-color: var(--color-border);
+    --tw-ring-color: var(--color-ring);
+    outline-color: var(--color-ring);
+  }
+
+  body {
+    @apply bg-pink-50;
+  }
 }

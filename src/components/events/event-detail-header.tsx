@@ -1,12 +1,13 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { ArrowLeft, Award, BarChart2, Heart, Share } from 'lucide-react'
+import { ArrowLeft, Award, BarChart2, Copy, Heart, Share, X } from 'lucide-react'
 
 import { AnimatePresence, motion } from 'motion/react'
 import { Suspense, useState } from 'react'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useAuth } from '@/hooks/use-auth'
 import { usePageViews } from '@/hooks/use-page-views'
 import { useUserActivity } from '@/hooks/use-user-activity'
@@ -103,27 +104,30 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
   const isLoggedIn = !!user
   const isUpcoming = event.status === 'upcoming'
 
+  const shareUrl = `${window.location.origin}/events/${event.uuid}`
+  const shareText = event.title
+  const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`
+  const canNativeShare = typeof navigator !== 'undefined' && !!navigator.share
+
   /**
-   * シェアボタンの処理
+   * シェアボタンの処理（Web Share API利用可能時）
    */
   const handleShare = async () => {
-    const url = `${window.location.origin}/events/${event.uuid}`
-    const text = `${event.title}`
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: event.title, text, url })
-      } catch (error) {
-        // ユーザーがキャンセルした場合は何もしない
-        if ((error as Error).name !== 'AbortError') {
-          console.error('Share failed:', error)
-        }
+    try {
+      await navigator.share({ title: event.title, text: shareText, url: shareUrl })
+    } catch (error) {
+      if ((error as Error).name !== 'AbortError') {
+        console.error('Share failed:', error)
       }
-    } else {
-      // Web Share APIが使えない場合はクリップボードにコピー
-      await navigator.clipboard.writeText(url)
-      toast.success('URLをコピーしました')
     }
+  }
+
+  /**
+   * URLをクリップボードにコピー
+   */
+  const handleCopyUrl = async () => {
+    await navigator.clipboard.writeText(shareUrl)
+    toast.success('URLをコピーしました')
   }
 
   return (
@@ -134,6 +138,9 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           type='button'
           onClick={isLoggedIn ? handleToggleInterested : undefined}
           disabled={!isLoggedIn}
+          aria-disabled={!isLoggedIn || undefined}
+          aria-label={!isLoggedIn ? 'ログインが必要です' : interested ? '気になるを解除する' : '気になる登録をする'}
+          title={!isLoggedIn ? 'ログインが必要です' : undefined}
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
             isLoggedIn ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
@@ -156,6 +163,17 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           type='button'
           onClick={isLoggedIn && !isUpcoming ? handleToggleCompleted : undefined}
           disabled={!isLoggedIn || isUpcoming}
+          aria-disabled={!isLoggedIn || isUpcoming || undefined}
+          aria-label={
+            !isLoggedIn
+              ? 'ログインが必要です'
+              : isUpcoming
+                ? '開催前のため達成できません'
+                : completed
+                  ? '達成報告を取り消す'
+                  : '達成報告をする'
+          }
+          title={!isLoggedIn ? 'ログインが必要です' : isUpcoming ? '開催前のため達成できません' : undefined}
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
             isLoggedIn && !isUpcoming ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
@@ -181,13 +199,47 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
       </div>
 
       {/* シェアボタン */}
-      <button
-        type='button'
-        onClick={handleShare}
-        className='flex items-center gap-1.5 text-sm text-gray-400 hover:text-blue-500 transition-colors group'
-      >
-        <Share className='h-5 w-5 transition-all group-hover:scale-110' />
-      </button>
+      {canNativeShare ? (
+        <button
+          type='button'
+          onClick={handleShare}
+          className='flex items-center gap-1.5 text-sm text-gray-400 hover:text-blue-500 transition-colors group'
+        >
+          <Share className='h-5 w-5 transition-all group-hover:scale-110' />
+        </button>
+      ) : (
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              type='button'
+              className='flex items-center gap-1.5 text-sm text-gray-400 hover:text-blue-500 transition-colors group'
+            >
+              <Share className='h-5 w-5 transition-all group-hover:scale-110' />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className='w-48 p-2' align='end'>
+            <div className='flex flex-col gap-1'>
+              <a
+                href={twitterShareUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent transition-colors'
+              >
+                <X className='h-4 w-4' />
+                Xでシェア
+              </a>
+              <button
+                type='button'
+                onClick={handleCopyUrl}
+                className='flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent transition-colors w-full text-left'
+              >
+                <Copy className='h-4 w-4' />
+                URLをコピー
+              </button>
+            </div>
+          </PopoverContent>
+        </Popover>
+      )}
 
       {/* 画面中央のアニメーション */}
       <AnimatePresence>

@@ -7,7 +7,6 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { intlayer } from 'vite-intlayer' // Add the plugin to the Vite plugin list
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { VitePWA } from 'vite-plugin-pwa'
 import sitemap from 'vite-plugin-sitemap'
 
@@ -35,19 +34,6 @@ export default defineConfig(({ mode }) => {
           mkdirSync('dist/client', { recursive: true })
         }
       },
-      nodePolyfills({
-        include: ['path'],
-        exclude: ['http'],
-        globals: {
-          Buffer: false,
-          global: true,
-          process: true
-        },
-        overrides: {
-          fs: 'memfs'
-        },
-        protocolImports: true
-      }),
       tanstackRouter({
         target: 'react',
         autoCodeSplitting: true,
@@ -74,7 +60,8 @@ export default defineConfig(({ mode }) => {
           skipWaiting: true,
           clientsClaim: true,
           globDirectory: 'dist/client',
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2,json}'],
+          globPatterns:
+            mode === 'development' ? [] : ['**/*.{js,css,html,ico,png,svg,webp,json}'],
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -116,6 +103,20 @@ export default defineConfig(({ mode }) => {
               }
             },
             {
+              urlPattern: /\.(?:woff2?|ttf|otf|eot)$/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'fonts-cache',
+                expiration: {
+                  maxEntries: 500,
+                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1年
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
+              }
+            },
+            {
               urlPattern: /\/characters\.json$/i,
               handler: 'StaleWhileRevalidate',
               options: {
@@ -150,7 +151,7 @@ export default defineConfig(({ mode }) => {
             },
           ],
           navigateFallback: '/index.html',
-          navigateFallbackDenylist: [/^\/__\//, /^\/api\//],
+          navigateFallbackDenylist: [/^\/__\//, /^\/api\//, /^\/admin\//, /^\/cdn-cgi\//],
         },
         devOptions: {
           enabled: true,

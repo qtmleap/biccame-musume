@@ -13,6 +13,7 @@ import ReactDOM from 'react-dom/client'
 import { IosInstallPrompt } from '@/components/pwa/install-prompt-ios'
 import { showUpdatePrompt, UpdatePrompt } from '@/components/pwa/update-prompt'
 import { Toaster } from '@/components/ui/sonner'
+import { clearAllCaches } from '@/lib/pwa-cache'
 import { client } from '@/utils/client'
 // フォントのインポート
 import '@fontsource/noto-sans-jp/400.css'
@@ -39,7 +40,8 @@ let refreshing = false
 navigator.serviceWorker?.addEventListener('controllerchange', () => {
   if (refreshing) return
   refreshing = true
-  window.location.reload()
+  // サブルートでリロードすると404になるためトップに遷移
+  window.location.replace('/')
 })
 
 registerSW({
@@ -128,6 +130,7 @@ const checkVersionAndClearCache = () => {
       console.log('[App] Old cache detected on first access. Clearing cache...')
       localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
       queryClient.clear()
+      clearAllCaches().catch((err: unknown) => console.error('[App] Failed to clear caches:', err))
       console.log('[App] Cache cleared successfully')
     }
     localStorage.setItem(STORAGE_KEY, currentVersion)
@@ -137,6 +140,7 @@ const checkVersionAndClearCache = () => {
     console.log(`[App] Version changed from ${storedVersion} to ${currentVersion}. Clearing cache...`)
     localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
     queryClient.clear()
+    clearAllCaches().catch((err: unknown) => console.error('[App] Failed to clear caches:', err))
     localStorage.setItem(STORAGE_KEY, currentVersion)
     console.log('[App] Cache cleared successfully')
   } else {

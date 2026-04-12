@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Suspense } from 'react'
+import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventDetailHeader } from '@/components/events/event-detail-header'
 import { EventDetailInfo } from '@/components/events/event-detail-info'
@@ -21,6 +22,9 @@ const EventDetailContent = () => {
   return (
     <div className='min-h-screen'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
+        <AppBreadcrumb
+          items={[{ label: 'ホーム', to: '/' }, { label: 'イベント', to: '/events' }, { label: event.title }]}
+        />
         <div className='md:grid md:grid-cols-[1fr_auto_320px] md:gap-6'>
           {/* メインコンテンツ */}
           <div className='max-w-2xl'>
