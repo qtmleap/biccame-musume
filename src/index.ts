@@ -34,7 +34,7 @@ app.get('/admin/*', async (c) => {
   const assetResponse = await c.env.ASSETS.fetch(c.req.raw)
   const response = new Response(assetResponse.body, {
     status: assetResponse.status,
-    headers: assetResponse.headers,
+    headers: assetResponse.headers
   })
   response.headers.set('Cache-Control', 'private, no-store, must-revalidate')
   return response
@@ -101,7 +101,7 @@ app.use('*', async (c, next) => {
       if (assetResponse.ok) {
         c.res = new Response(assetResponse.body, {
           status: 200,
-          headers: assetResponse.headers,
+          headers: assetResponse.headers
         })
       }
     } catch {
