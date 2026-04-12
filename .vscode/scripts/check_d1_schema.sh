@@ -13,6 +13,7 @@ PROD_SCHEMA="${WORK_DIR}/schema_production.sql"
 TARGET_SCHEMA="${WORK_DIR}/schema_target.sql"
 
 cd "$PROJECT_ROOT"
+source .env
 
 # チェック先の環境選択（引数があればそれを使用、なければfzfで選択）
 if [ -n "$1" ]; then
