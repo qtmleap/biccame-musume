@@ -17,7 +17,7 @@ export const DEFAULT_VALUES: DefaultValues<EventRequest> = {
   conditions: [],
   isVerified: true,
   isPreliminary: false,
-  shouldTweet: false,
+  shouldTweet: true,
   uuid: undefined
 }
 
