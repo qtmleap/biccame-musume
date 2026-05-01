@@ -1,5 +1,4 @@
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
+import { getPrisma } from '@/lib/prisma'
 import type { Bindings } from '@/types/bindings'
 
 type UserInput = {
@@ -27,7 +26,7 @@ type User = {
  * @returns ユーザー情報、存在しない場合はnull
  */
 export const getUserById = async (env: Bindings, id: string): Promise<User | null> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   const user = await prisma.user.findUnique({
     where: { id }
@@ -44,7 +43,7 @@ export const getUserById = async (env: Bindings, id: string): Promise<User | nul
  * @returns 作成または更新されたユーザー
  */
 export const upsertUser = async (env: Bindings, data: UserInput): Promise<User> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   const user = await prisma.user.upsert({
     where: { id: data.id },
@@ -73,7 +72,7 @@ export const upsertUser = async (env: Bindings, data: UserInput): Promise<User> 
  * @returns 削除されたユーザー、存在しない場合はnull
  */
 export const deleteUser = async (env: Bindings, id: string): Promise<User | null> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   try {
     const user = await prisma.user.delete({
