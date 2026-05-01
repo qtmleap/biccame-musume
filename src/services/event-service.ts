@@ -16,7 +16,6 @@ import {
 } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 import type { Bindings } from '@/types/bindings'
-import { Twitter } from '@/utils/twitter'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -173,7 +172,6 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
 /**
  * 新規イベントを作成
  * 同一UUIDが存在する場合は既存イベントを返す（冪等性保証）
- * 作成成功時にTwitterへ自動投稿（shouldTweet=falseで無効化可能）
  * @param env - Cloudflare Workers環境変数
  * @param data - イベント作成リクエストデータ
  * @returns 作成されたイベント情報
@@ -236,24 +234,12 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
       stores: true
     }
   })
-  const transformedEvent = transform(event)
-
-  // イベント作成をツイート（エラーがあっても処理は継続）
-  if (data.shouldTweet !== false) {
-    try {
-      await new Twitter(env).tweetEventCreated(transformedEvent)
-    } catch (error) {
-      console.error('Failed to tweet event creation:', error)
-    }
-  }
-
-  return transformedEvent
+  return transform(event)
 }
 
 /**
  * 既存イベントを更新
  * 関連データ（conditions, referenceUrls, stores）は全て置換される
- * 更新成功時にTwitterへ自動投稿（shouldTweet=falseで無効化可能）
  * @param env - Cloudflare Workers環境変数
  * @param data - イベント更新リクエストデータ（uuidが必須）
  * @returns 更新されたイベント情報
@@ -307,18 +293,7 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     }
   })
 
-  const transformedEvent = transform(event)
-
-  // イベント更新をツイート（エラーがあっても処理は継続）
-  if (data.shouldTweet !== false) {
-    try {
-      await new Twitter(env).tweetEventUpdated(transformedEvent)
-    } catch (error) {
-      console.error('Failed to tweet event update:', error)
-    }
-  }
-
-  return transformedEvent
+  return transform(event)
 }
 
 /**
