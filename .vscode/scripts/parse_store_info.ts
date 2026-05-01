@@ -9,7 +9,6 @@ import { join } from 'node:path'
 import jaconv from 'jaconv'
 import { mapKeys, snakeCase } from 'lodash-es'
 import { parse } from 'node-html-parser'
-import { parse as parseYaml } from 'yaml'
 import { z } from 'zod'
 
 const CACHE_DIR = join(import.meta.dir, '../archive/html_cache')
@@ -26,7 +25,7 @@ type StoreInfo = {
     description: string
     twitter_id: string
     images: string[]
-    birthday: string
+    birthday?: string
     is_biccame_musume: boolean
   }
   prefecture: string | null
@@ -36,12 +35,12 @@ type StoreInfo = {
   } | null
   postal_code?: string | null
   store?: {
-    store_id: number
-    name: string
-    address: string
+    store_id?: number
+    name?: string
+    address?: string
     phone?: string
-    birthday: string
-    open_all_year: boolean
+    birthday?: string
+    open_all_year?: boolean
     hours?: Array<{
       type: 'weekday' | 'weekend' | 'holiday' | 'all'
       open_time: string
@@ -421,11 +420,13 @@ const parseProfileHtml = (
     description: string
     twitter_id: string
     images: string[]
+    is_biccame_musume: boolean
   }
   store_fields: {
     postal_code?: string
     phone?: string
     birthday?: string
+    address?: string
   }
 } | null => {
   const root = parse(html)
@@ -835,7 +836,7 @@ const main = async () => {
 
         if (storeData) {
           // prefecture, postal_codeをrootに移動
-          storeInfo.prefecture = storeData.prefecture
+          storeInfo.prefecture = storeData.prefecture ?? null
           storeInfo.postal_code = profileInfo.store_fields.postal_code
 
           // 既存の座標があれば使用、なければGeocoding APIで取得
