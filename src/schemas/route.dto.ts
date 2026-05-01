@@ -60,7 +60,3 @@ export const RouteResponseSchema = z
   .openapi('RouteResponse')
 
 export type Leg = z.infer<typeof LegSchema>
-export type RouteRequest = z.infer<typeof RouteRequestSchema>
-export type RouteSegment = z.infer<typeof RouteSegmentSchema>
-export type LegResponse = z.infer<typeof LegResponseSchema>
-export type RouteResponse = z.infer<typeof RouteResponseSchema>
