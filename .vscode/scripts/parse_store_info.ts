@@ -14,7 +14,6 @@ import { z } from 'zod'
 
 const CACHE_DIR = join(import.meta.dir, '../archive/html_cache')
 const OUTPUT_FILE = join(import.meta.dir, '../../public/characters.json')
-const BIRTHDAY_FILE = join(import.meta.dir, 'birthday.json')
 
 /**
  * 店舗情報の型定義
@@ -323,6 +322,86 @@ const geocodeAddress = async (address: string): Promise<{ latitude: number; long
     console.warn(`  ⚠️ Geocoding failed for: ${address}`, error)
     return undefined
   }
+}
+
+/**
+ * カレンダーHTMLから誕生日情報を抽出
+ * - 「擬人化N周年」または「擬人化記念日」(=デビュー年) → character birthday
+ * - 「店舗誕生N周年」または「店舗誕生記念日」 → store birthday
+ * - グレーセル (color:#CCCCCC) は隣月分なので除外
+ */
+type CalendarBirthday = {
+  character_birthday?: string
+  store_birthday?: string
+}
+
+const parseCalendarHtml = (html: string, year: number, month: number): Record<string, CalendarBirthday> => {
+  const root = parse(html)
+  const map: Record<string, CalendarBirthday> = {}
+  const cells = root.querySelectorAll('td[class*="wd"]')
+
+  for (const cell of cells) {
+    const style = cell.getAttribute('style') || ''
+    if (style.includes('#CCCCCC')) continue
+
+    const dayDiv = cell.querySelector('div')
+    if (!dayDiv) continue
+    const day = Number.parseInt(dayDiv.text.trim(), 10)
+    if (!Number.isFinite(day)) continue
+
+    const links = cell.querySelectorAll('a[href*="/profile/"]')
+    for (const a of links) {
+      const href = a.getAttribute('href') || ''
+      const keyMatch = href.match(/\/profile\/([^/]+)\.html/)
+      if (!keyMatch) continue
+      const key = keyMatch[1]
+
+      const text = a.text.trim()
+      const labelMatch = text.match(/^.+?(擬人化|店舗誕生)(?:記念日|(\d+)周年)$/)
+      if (!labelMatch) continue
+
+      const kind = labelMatch[1]
+      const yearsAgo = labelMatch[2] ? Number.parseInt(labelMatch[2], 10) : 0
+      const originYear = year - yearsAgo
+      const date = `${originYear}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+
+      map[key] ??= {}
+      if (kind === '擬人化') {
+        map[key].character_birthday = date
+      } else {
+        map[key].store_birthday = date
+      }
+    }
+  }
+
+  return map
+}
+
+/**
+ * すべてのカレンダーHTMLから誕生日マップを構築
+ */
+const buildCalendarBirthdayMap = (): Record<string, CalendarBirthday> => {
+  const map: Record<string, CalendarBirthday> = {}
+  const files = readdirSync(CACHE_DIR)
+    .filter((file) => file.startsWith('calendar_') && file.endsWith('.html'))
+    .sort()
+
+  for (const file of files) {
+    const fileMatch = file.match(/^calendar_(\d{4})_(\d{2})\.html$/)
+    if (!fileMatch) continue
+    const year = Number.parseInt(fileMatch[1], 10)
+    const month = Number.parseInt(fileMatch[2], 10)
+
+    const html = readFileSync(join(CACHE_DIR, file), 'utf-8')
+    const monthMap = parseCalendarHtml(html, year, month)
+    for (const [key, entry] of Object.entries(monthMap)) {
+      map[key] ??= {}
+      if (entry.character_birthday) map[key].character_birthday = entry.character_birthday
+      if (entry.store_birthday) map[key].store_birthday = entry.store_birthday
+    }
+  }
+
+  return map
 }
 
 /**
@@ -826,18 +905,25 @@ const main = async () => {
       console.log(`  ✓ ${displayName}`)
     }
 
-    // birthday.jsonを読み込んでマージ
-    if (existsSync(BIRTHDAY_FILE)) {
-      console.log('\n📋 Merging birthday data...')
-      const birthdayData = JSON.parse(readFileSync(BIRTHDAY_FILE, 'utf-8')) as Record<string, string>
-
+    // カレンダーHTMLから誕生日マップを構築してマージ
+    console.log('\n📋 Merging birthday data from calendar HTML...')
+    const calendarBirthdayMap = buildCalendarBirthdayMap()
+    const calendarKeyCount = Object.keys(calendarBirthdayMap).length
+    if (calendarKeyCount === 0) {
+      console.warn('  ⚠️ No calendar HTML found. Run "Fetch HTML Cache" first.')
+    } else {
+      console.log(`  ✓ Loaded ${calendarKeyCount} keys from calendar HTML`)
       for (const store of stores) {
-        const birthday = birthdayData[store.id]
-        if (birthday && store.character) {
-          store.character.birthday = birthday
+        const entry = calendarBirthdayMap[store.id]
+        if (!entry) continue
+        if (entry.character_birthday) {
+          store.character.birthday = entry.character_birthday
+        }
+        if (entry.store_birthday && store.store && !store.store.birthday) {
+          store.store.birthday = entry.store_birthday
         }
       }
-      console.log('✓ Birthday data merged')
+      console.log('✓ Birthday data merged from calendar')
     }
 
     // スネークケース変換関数
