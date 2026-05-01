@@ -30,7 +30,7 @@ export const UserResponseSchema = z
 export const UserResponseSchemaForClient = z.object({
   id: z.string().nonempty(),
   displayName: z.string().nonempty().nullable(),
-  photoUrl: z.string().nonempty().nullable(),
+  thumbnailURL: z.string().nonempty().nullable(),
   screenName: z.string().nonempty().nullable(),
   email: z.string().nonempty().nullable()
 })
@@ -41,7 +41,7 @@ export const UserResponseSchemaForClient = z.object({
 export const UpsertUserRequestSchemaForClient = z.object({
   id: z.string().nonempty(),
   displayName: z.string().nonempty().nullish(),
-  photoUrl: z.string().nonempty().nullish(),
+  thumbnailURL: z.string().nonempty().nullish(),
   screenName: z.string().nonempty().nullish(),
   email: z.string().nonempty().nullish()
 })

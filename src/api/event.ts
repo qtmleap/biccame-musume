@@ -3,6 +3,7 @@ import { CFAuth } from '@/middleware/cloudflare-access'
 import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/services/event-service'
 import { getEventsStats } from '@/services/me-service'
 import type { Bindings } from '@/types/bindings'
+import { Twitter } from '@/utils/twitter'
 import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
@@ -103,7 +104,15 @@ routes.openapi(
   }),
   async (c) => {
     const body = c.req.valid('json')
-    return c.json(await createEvent(c.env, body), 201)
+    const event = await createEvent(c.env, body)
+    if (body.shouldTweet !== false) {
+      try {
+        await new Twitter(c.env).tweetEventCreated(event)
+      } catch (error) {
+        console.error('Failed to tweet event creation:', error)
+      }
+    }
+    return c.json(event, 201)
   }
 )
 
@@ -149,7 +158,15 @@ routes.openapi(
   async (c) => {
     const { id } = c.req.valid('param')
     const body = c.req.valid('json')
-    return c.json(await updateEvent(c.env, { ...body, uuid: id }), 200)
+    const event = await updateEvent(c.env, { ...body, uuid: id })
+    if (body.shouldTweet !== false) {
+      try {
+        await new Twitter(c.env).tweetEventUpdated(event)
+      } catch (error) {
+        console.error('Failed to tweet event update:', error)
+      }
+    }
+    return c.json(event, 200)
   }
 )
 
