@@ -1,9 +1,9 @@
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { type Prisma, PrismaClient } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { HTTPException } from 'hono/http-exception'
+import { getPrisma } from '@/lib/prisma'
 import {
   type Event,
   type EventCategory,
@@ -117,7 +117,7 @@ const transform = (event: EventPayload, interestedCount = 0, completedCount = 0)
  * @throws HTTPException 404 - イベントが見つからない場合
  */
 export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
   const [event, interestedCount, completedCount] = await Promise.all([
     prisma.event.findUnique({
       where: { id },
@@ -143,7 +143,7 @@ export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
  * @throws HTTPException 400 - バリデーションエラーの場合
  */
 export const getEvents = async (env: Bindings): Promise<Event[]> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
   // 半年前の日付を計算
   const startDate = dayjs().subtract(6, 'month').toDate()
 
@@ -177,7 +177,7 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
  * @returns 作成されたイベント情報
  */
 export const createEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   // 既存イベントをチェック
   const existingEvent = await prisma.event.findUnique({
@@ -245,7 +245,7 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
  * @returns 更新されたイベント情報
  */
 export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   // 日付をDate型に変換
   const startDate = dayjs(data.startDate).toDate()
@@ -303,7 +303,7 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
  * @returns 検索結果のイベント一覧（開始日降順、最大50件）
  */
 export const searchEvents = async (env: Bindings, q: string): Promise<Event[]> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
   const events = (
     await prisma.event.findMany({
       where: {
@@ -334,7 +334,7 @@ export const searchEvents = async (env: Bindings, q: string): Promise<Event[]> =
  * @returns null
  */
 export const deleteEvent = async (env: Bindings, id: string): Promise<null> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
   await prisma.event.delete({ where: { id: id } })
   return null
 }

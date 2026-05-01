@@ -4,14 +4,6 @@ import { HTTPException } from 'hono/http-exception'
 import type { Bindings, Variables } from '@/types/bindings'
 
 /**
- * 開発環境かどうかを判定
- */
-const isDevelopmentEnvironment = (c: Context): boolean => {
-  const host = c.req.header('Host')
-  return host?.includes('localhost') || host?.includes('127.0.0.1') || false
-}
-
-/**
  * 投票制限チェックMiddleware
  * 同じIPアドレスから同じキャラクターに対して1日1回のみ投票可能
  * 開発環境では投票済みでもエラーを返さずに投票を許可
@@ -20,7 +12,7 @@ export const voteLimit = async (c: Context<{ Bindings: Bindings; Variables: Vari
   const characterId = c.req.param('characterId')
   const ip = c.get('CLIENT_IP')
   const key = `${characterId}:${ip}`
-  const isDev = isDevelopmentEnvironment(c)
+  const isDev = c.env.ENVIRONMENT === 'local'
 
   if (!characterId) {
     throw new HTTPException(400, { message: 'Bad Request' })
