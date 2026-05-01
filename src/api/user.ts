@@ -153,69 +153,8 @@ routes.openapi(
       throw new HTTPException(404, { message: 'Not Found' })
     }
 
-    console.log(user)
     return c.json(user, 200)
-    // return c.json(user, 200)
-    // const user = await upsertUser(c.env, {
-    //   id: token.uid,
-    //   displayName: token.name || null,
-    //   email: token.email || null,
-    //   thumbnailURL: token.picture || null,
-    //   screenName: body.screenName
-    // })
-    // return c.json(user, 200)
   }
 )
-
-// /**
-//  * 自分のユーザー情報削除
-//  * DELETE /api/users
-//  */
-// routes.openapi(
-//   createRoute({
-//     method: 'delete',
-//     path: '/',
-//     responses: {
-//       200: {
-//         content: {
-//           'application/json': {
-//             schema: SuccessResponseSchema
-//           }
-//         },
-//         description: 'ユーザー削除成功'
-//       },
-//       401: {
-//         content: {
-//           'application/json': {
-//             schema: ErrorResponseSchema
-//           }
-//         },
-//         description: '認証エラー'
-//       },
-//       404: {
-//         content: {
-//           'application/json': {
-//             schema: ErrorResponseSchema
-//           }
-//         },
-//         description: 'ユーザーが見つかりません'
-//       }
-//     },
-//     tags: ['users']
-//   }),
-//   async (c) => {
-//     const token = getFirebaseToken(c)
-//     if (token === null) {
-//       throw new HTTPException(401, { message: 'Unauthorized' })
-//     }
-//     const user: User | null = await getUserById(c.env, token.uid)
-
-//     if (user === null) {
-//       throw new HTTPException(404, { message: 'Not found' })
-//     }
-
-//     return c.json(user, 200)
-//   }
-// )
 
 export default routes
