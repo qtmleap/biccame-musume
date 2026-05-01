@@ -3,7 +3,7 @@ import { CFAuth } from '@/middleware/cloudflare-access'
 import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/services/event-service'
 import { getEventsStats } from '@/services/me-service'
 import type { Bindings } from '@/types/bindings'
-import { type EventRequest, EventRequestSchema, EventSchema } from '../schemas/event.dto'
+import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
@@ -148,7 +148,7 @@ routes.openapi(
   }),
   async (c) => {
     const { id } = c.req.valid('param')
-    const body = c.req.valid('json') as EventRequest
+    const body = c.req.valid('json')
     return c.json(await updateEvent(c.env, { ...body, uuid: id }), 200)
   }
 )
