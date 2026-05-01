@@ -1,13 +1,6 @@
 import { z } from 'zod'
 
 /**
- * 認証リクエストスキーマ
- */
-export const AuthRequestSchema = z.object({
-  idToken: z.string().nonempty()
-})
-
-/**
  * 認証成功レスポンススキーマ
  */
 export const AuthResponseSchema = z.object({
@@ -25,6 +18,3 @@ export const CurrentUserResponseSchema = z.object({
   email: z.string().nonempty().nullable()
 })
 
-export type AuthRequest = z.infer<typeof AuthRequestSchema>
-export type AuthResponse = z.infer<typeof AuthResponseSchema>
-export type CurrentUserResponse = z.infer<typeof CurrentUserResponseSchema>
