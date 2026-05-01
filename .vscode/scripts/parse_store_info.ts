@@ -330,12 +330,16 @@ const geocodeAddress = async (address: string): Promise<{ latitude: number; long
  * - 「店舗誕生N周年」または「店舗誕生記念日」 → store birthday
  * - グレーセル (color:#CCCCCC) は隣月分なので除外
  */
-type CalendarBirthday = {
+export type CalendarBirthday = {
   character_birthday?: string
   store_birthday?: string
 }
 
-const parseCalendarHtml = (html: string, year: number, month: number): Record<string, CalendarBirthday> => {
+export const parseCalendarHtml = (
+  html: string,
+  year: number,
+  month: number
+): Record<string, CalendarBirthday> => {
   const root = parse(html)
   const map: Record<string, CalendarBirthday> = {}
   const cells = root.querySelectorAll('td[class*="wd"]')
@@ -991,4 +995,6 @@ const main = async () => {
   }
 }
 
-main()
+if (import.meta.main) {
+  main()
+}
