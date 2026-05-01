@@ -27,11 +27,13 @@ Audit and improve existing non-UI code (server, schemas, lib, hooks, workers, te
 
 ### Step 1: Determine Scope
 
-If the user specified a target, use it. Otherwise ask which area:
+If the user specified a target, use it. Otherwise use the `AskUserQuestion` tool to present these options:
 - A specific module (e.g. `src/app/server/recordings`)
 - A specific file (e.g. `schemas/anime.dto.ts`)
 - A feature slice across server + schemas + lib
 - All non-UI code (full audit — warn that this is large)
+
+Do NOT list options as plain text — always use `AskUserQuestion` for selectable choices.
 
 ### Step 2: Load Context
 
@@ -102,9 +104,9 @@ Present findings in Japanese as a structured report:
 
 ### Step 5: Ask for Approval
 
-Ask the user: **「この改善を実行してよろしいですか？全て / 一部を選択 / キャンセル」**
+Use the `AskUserQuestion` tool with options: 全て実行 / 一部を選択 / キャンセル.
 
-Do NOT proceed without explicit approval.
+Do NOT proceed without explicit approval. Do NOT ask via plain text.
 
 ### Step 6: Execute (after approval)
 
