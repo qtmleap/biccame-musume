@@ -12,10 +12,12 @@ Review and improve existing UI components based on modern UX best practices.
 
 ### Step 1: Determine Scope
 
-If the user specified a component or page, use that. Otherwise, ask which area to refactor:
+If the user specified a component or page, use that. Otherwise use the `AskUserQuestion` tool to present these options:
 - A specific component (e.g., "dashboard", "meal-form")
 - A specific page (e.g., "/", "/settings")
 - All components (full audit)
+
+Do NOT list options as plain text — always use `AskUserQuestion` for selectable choices.
 
 ### Step 2: Load Context
 
@@ -80,7 +82,9 @@ Present findings in Japanese as a structured report:
 
 ### Step 5: Ask for Approval
 
-Ask the user: **"この改善を実行してよろしいですか？全て / 一部を選択 / キャンセル"**
+Use the `AskUserQuestion` tool with options: 全て実行 / 一部を選択 / キャンセル.
+
+Do NOT ask via plain text.
 
 ### Step 6: Execute (after approval)
 
