@@ -4,7 +4,7 @@ import type { User } from '@prisma/client'
 import { csrf } from 'hono/csrf'
 import { HTTPException } from 'hono/http-exception'
 import { ErrorResponseSchema } from '@/schemas/activity.dto'
-import { UpsertUserRequestSchema, UserResponseSchema } from '@/schemas/user.dto'
+import { UserResponseSchema } from '@/schemas/user.dto'
 import { getUserById } from '@/services/user-service'
 import type { Bindings, Variables } from '@/types/bindings'
 import { getJwtPayload, verifyToken } from '@/utils/token'
@@ -82,75 +82,6 @@ routes.openapi(
 
     if (user === null) {
       throw new HTTPException(404, { message: 'Not found' })
-    }
-
-    return c.json(user, 200)
-  }
-)
-
-/**
- * 自分のユーザー情報作成/更新
- * POST /api/users
- */
-routes.openapi(
-  createRoute({
-    method: 'post',
-    path: '/',
-    middlewares: [verifyToken],
-    request: {
-      body: {
-        content: {
-          'application/json': {
-            schema: UpsertUserRequestSchema
-          }
-        }
-      }
-    },
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: UserResponseSchema
-          }
-        },
-        description: 'ユーザー作成/更新成功'
-      },
-      400: {
-        content: {
-          'application/json': {
-            schema: ErrorResponseSchema
-          }
-        },
-        description: 'バリデーションエラー'
-      },
-      401: {
-        content: {
-          'application/json': {
-            schema: ErrorResponseSchema
-          }
-        },
-        description: '認証エラー'
-      },
-      403: {
-        content: {
-          'application/json': {
-            schema: ErrorResponseSchema
-          }
-        },
-        description: '権限エラー'
-      }
-    },
-    tags: ['users']
-  }),
-  async (c) => {
-    const token = getFirebaseToken(c)
-    if (token === null) {
-      throw new HTTPException(401, { message: 'Unauthorized' })
-    }
-    const user: User | null = await getUserById(c.env, token.uid)
-
-    if (user === null) {
-      throw new HTTPException(404, { message: 'Not Found' })
     }
 
     return c.json(user, 200)

@@ -1,16 +1,6 @@
 import { z } from '@hono/zod-openapi'
 
 /**
- * ユーザー作成/更新リクエストスキーマ
- * Firebase認証トークンから取得できない情報のみ受け取る
- */
-export const UpsertUserRequestSchema = z
-  .object({
-    // screenName: z.string().openapi({ description: 'Twitterスクリーンネーム' })
-  })
-  .openapi('UpsertUserRequest')
-
-/**
  * ユーザーレスポンススキーマ
  */
 export const UserResponseSchema = z
@@ -35,18 +25,5 @@ export const UserResponseSchemaForClient = z.object({
   email: z.string().nonempty().nullable()
 })
 
-/**
- * ユーザー作成/更新リクエスト（client用）
- */
-export const UpsertUserRequestSchemaForClient = z.object({
-  id: z.string().nonempty(),
-  displayName: z.string().nonempty().nullish(),
-  thumbnailURL: z.string().nonempty().nullish(),
-  screenName: z.string().nonempty().nullish(),
-  email: z.string().nonempty().nullish()
-})
-
-export type UpsertUserRequest = z.infer<typeof UpsertUserRequestSchema>
 export type UserResponse = z.infer<typeof UserResponseSchema>
 export type UserResponseForClient = z.infer<typeof UserResponseSchemaForClient>
-export type UpsertUserRequestForClient = z.infer<typeof UpsertUserRequestSchemaForClient>
