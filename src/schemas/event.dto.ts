@@ -36,7 +36,6 @@ export const EventConditionSchema = z.object({
   quantity: z.number({ error: '人数は数値で入力してください' }).min(1, '人数は 1 人以上で入力してください').optional()
 })
 
-export type EventCondition = z.infer<typeof EventConditionSchema>
 
 /**
  * 参考URLの種類
@@ -54,7 +53,6 @@ export const ReferenceUrlSchema = z.object({
   url: z.url('有効なURLを入力してください')
 })
 
-export type ReferenceUrl = z.infer<typeof ReferenceUrlSchema>
 
 /**
  * イベント作成・更新リクエスト（GET/PUT/POST用）
@@ -145,6 +143,3 @@ export const CheckUrlResponseSchema = z.object({
   event: EventSchema.optional()
 })
 
-export type EventStatsRequest = z.infer<typeof EventStatsRequestSchema>
-export type EventStatsResponse = z.infer<typeof EventStatsResponseSchema>
-export type CheckUrlResponse = z.infer<typeof CheckUrlResponseSchema>

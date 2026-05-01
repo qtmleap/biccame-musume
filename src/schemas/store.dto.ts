@@ -80,7 +80,6 @@ export const HoursSchema = z.object({
   note: z.string().nonempty().optional()
 })
 
-export type Hours = z.infer<typeof HoursSchema>
 
 /**
  * アクセス情報の型定義
@@ -93,7 +92,6 @@ export const AccessInfoSchema = z.object({
   lines: z.array(z.string())
 })
 
-export type AccessInfo = z.infer<typeof AccessInfoSchema>
 
 /**
  * 座標の型定義
@@ -103,27 +101,6 @@ export const CoordinatesSchema = z.object({
   longitude: z.number()
 })
 
-export type Coordinates = z.infer<typeof CoordinatesSchema>
-
-/**
- * 駐車場条件の型定義
- */
-export const ParkingConditionSchema = z.object({
-  purchase: z.string(),
-  freeTime: z.string()
-})
-
-export type ParkingCondition = z.infer<typeof ParkingConditionSchema>
-
-/**
- * 駐車場情報の型定義
- */
-export const ParkingInfoSchema = z.object({
-  name: z.string().nonempty(),
-  conditions: z.array(ParkingConditionSchema)
-})
-
-export type ParkingInfo = z.infer<typeof ParkingInfoSchema>
 
 /**
  * 店舗詳細情報の型定義
@@ -139,7 +116,6 @@ export const StoreDetailsSchema = z.object({
   access: z.array(AccessInfoSchema)
 })
 
-export type StoreDetails = z.infer<typeof StoreDetailsSchema>
 
 /**
  * キャラクター情報の型定義
@@ -162,7 +138,6 @@ export const CharacterSchema = z
     })()
   }))
 
-export type Character = z.infer<typeof CharacterSchema>
 
 /**
  * キャラクターと店舗情報を含むデータの型定義
@@ -188,4 +163,3 @@ export type StoreData = z.infer<typeof StoreDataSchema>
  */
 export const StoresSchema = z.array(StoreDataSchema).nonempty()
 
-export type StoresData = z.infer<typeof StoresSchema>

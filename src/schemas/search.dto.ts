@@ -9,5 +9,3 @@ export const SearchResultSchema = z.object({
   events: z.array(EventSchema)
 })
 
-export type SearchQuery = z.infer<typeof SearchQuerySchema>
-export type SearchResult = z.infer<typeof SearchResultSchema>

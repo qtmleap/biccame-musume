@@ -3,25 +3,10 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { getPrisma } from '@/lib/prisma'
 import type { Bindings } from '@/types/bindings'
-import { generateVoteKey } from '@/utils/vote'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-/**
- * 投票を記録する（KVに保存、JST0時までの秒数をTTLに設定）
- * @param votesKV KVNamespace
- * @param characterId キャラクターID
- * @param ip IPアドレス
- */
-export const recordVote = async (votesKV: KVNamespace, characterId: string, ip: string): Promise<void> => {
-  const jstNow = dayjs()
-  const jstMidnight = jstNow.endOf('day')
-  const ttl = jstMidnight.diff(jstNow, 'second')
-
-  const voteKey = generateVoteKey(characterId, ip)
-  await votesKV.put(voteKey, dayjs().toISOString(), { expirationTtl: ttl })
-}
 /**
  * 全キャラクターの投票カウントを取得する
  * @param env Bindings

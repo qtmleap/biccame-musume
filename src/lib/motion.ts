@@ -1,14 +1,6 @@
-import type { Transition, Variants } from 'motion/react'
-
-export const SPRING_DEFAULT: Transition = {
-  type: 'spring',
-  damping: 20,
-  stiffness: 300
-}
+import type { Variants } from 'motion/react'
 
 export const EASE_OUT = [0.0, 0.0, 0.2, 1.0] as const
-
-export const EASE_IN_OUT = [0.4, 0.0, 0.2, 1.0] as const
 
 export const DURATION = {
   fast: 0.2,
@@ -40,8 +32,3 @@ export const SCALE_IN: Variants = {
   exit: { opacity: 0, scale: 0.8 }
 }
 
-export const SLIDE_IN_LEFT: Variants = {
-  initial: { opacity: 0, x: -20 },
-  animate: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: -20 }
-}

@@ -1,15 +1,6 @@
 import { z } from '@hono/zod-openapi'
 
 /**
- * ユーザーIDパラメータスキーマ
- */
-export const UserActivityUserIdParamSchema = z
-  .object({
-    userId: z.string().openapi({ description: 'Firebase Auth UID' })
-  })
-  .openapi('UserActivityUserIdParam')
-
-/**
  * 店舗キーパラメータスキーマ
  */
 export const StoreKeyParamSchema = z
@@ -126,12 +117,6 @@ export const EventDeleteQuerySchema = z
   })
   .openapi('EventDeleteQuery')
 
-export type UserActivityResponse = z.infer<typeof UserActivityResponseSchema>
-export type StoresResponse = z.infer<typeof StoresResponseSchema>
-export type EventsResponse = z.infer<typeof EventsResponseSchema>
-export type UpdateStoreStatus = z.infer<typeof UpdateStoreStatusSchema>
-export type UpdateEventStatus = z.infer<typeof UpdateEventStatusSchema>
-export type EventsQuery = z.infer<typeof EventsQuerySchema>
 
 /**
  * ユーザーアクティビティ統合レスポンススキーマ（Zodiosクライアント用）
@@ -165,6 +150,3 @@ export const SuccessResponseSchemaForClient = z.object({
   success: z.boolean()
 })
 
-export type UserActivitiesResponse = z.infer<typeof UserActivitiesResponseSchema>
-export type UserEventsResponse = z.infer<typeof UserEventsResponseSchema>
-export type UserStoresResponse = z.infer<typeof UserStoresResponseSchema>

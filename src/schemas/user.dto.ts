@@ -25,5 +25,3 @@ export const UserResponseSchemaForClient = z.object({
   email: z.string().nonempty().nullable()
 })
 
-export type UserResponse = z.infer<typeof UserResponseSchema>
-export type UserResponseForClient = z.infer<typeof UserResponseSchemaForClient>
