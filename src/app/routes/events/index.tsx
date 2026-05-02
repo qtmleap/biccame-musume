@@ -17,6 +17,7 @@ import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { EventStatusFilter } from '@/components/events/event-status-filter'
+import { EventStoreFilter } from '@/components/events/event-store-filter'
 import { EventUserActivityFilter } from '@/components/events/event-user-activity-filter'
 import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { Button } from '@/components/ui/button'
@@ -203,6 +204,7 @@ const EventsContent = () => {
                     <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
                     <EventUserActivityFilter />
                     <RegionFilterControl />
+                    <EventStoreFilter />
                   </div>
                 </div>
                 <div className='border-t border-pink-100 px-4 py-3'>
@@ -257,6 +259,9 @@ const EventsContent = () => {
 
           {/* 地域フィルター */}
           <RegionFilterControl />
+
+          {/* 店舗フィルター */}
+          <EventStoreFilter />
         </div>
 
         {/* イベント表示 */}
