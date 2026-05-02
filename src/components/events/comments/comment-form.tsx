@@ -152,14 +152,14 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               control={form.control}
               name='body'
               render={({ field }) => (
-                <FormItem className='flex-1 min-w-0 pt-3'>
+                <FormItem className='flex-1 min-w-0 self-center'>
                   <FormControl>
                     <Input
                       type='text'
-                      placeholder='いまどうしてる？'
+                      placeholder='このイベントについてコメントを書こう'
                       maxLength={MAX_BODY_LENGTH}
                       autoComplete='off'
-                      className='border-0 shadow-none focus-visible:ring-0 px-0 text-2xl h-auto placeholder:text-muted-foreground placeholder:text-2xl'
+                      className='border-0 shadow-none focus-visible:ring-0 px-0 text-base h-auto placeholder:text-muted-foreground'
                       {...field}
                     />
                   </FormControl>
