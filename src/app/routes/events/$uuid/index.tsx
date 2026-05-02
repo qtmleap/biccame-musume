@@ -40,8 +40,7 @@ const EventDetailContent = () => {
             </div>
 
             {/* 関連イベント（モバイルのみ・アコーディオン） */}
-            <div className='md:hidden mt-6'>
-              <Separator className='mb-6' />
+            <div className='md:hidden'>
               <Accordion type='single' collapsible>
                 <AccordionItem value='recent-events' className='border-none'>
                   <AccordionTrigger className='text-lg font-bold text-gray-900 hover:no-underline'>
