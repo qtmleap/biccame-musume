@@ -59,38 +59,8 @@ export default defineConfig(({ mode }) => {
         workbox: {
           skipWaiting: true,
           clientsClaim: false,
-          globDirectory: 'dist/client',
-          globPatterns:
-            mode === 'development' ? [] : ['**/*.{js,css,html,ico,png,svg,webp,json}'],
+          globPatterns: [],
           runtimeCaching: [
-            {
-              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'google-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1年
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            {
-              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'gstatic-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1年
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
             {
               urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
               handler: 'CacheFirst',
@@ -101,53 +71,6 @@ export default defineConfig(({ mode }) => {
                   maxAgeSeconds: 60 * 60 * 24 * 30 // 30日
                 }
               }
-            },
-            {
-              urlPattern: /\.(?:woff2?|ttf|otf|eot)$/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'fonts-cache',
-                expiration: {
-                  maxEntries: 500,
-                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1年
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            {
-              urlPattern: /\/characters\.json$/i,
-              handler: 'StaleWhileRevalidate',
-              options: {
-                cacheName: 'characters-json-cache',
-                expiration: {
-                  maxEntries: 1,
-                  maxAgeSeconds: 60 * 60 * 24 // 1日
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            {
-              urlPattern: /\/api\/.*/i,
-              handler: 'NetworkFirst',
-              options: {
-                cacheName: 'api-cache',
-                networkTimeoutSeconds: 10,
-                expiration: {
-                  maxEntries: 50,
-                  maxAgeSeconds: 60 * 5 // 5分
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            {
-              urlPattern: /^\/__\/auth\/.*/i,
-              handler: 'NetworkFirst',
             },
           ],
         },
