@@ -42,7 +42,6 @@ export const EventConditionSchema = z.object({
   quantity: z.number({ error: '人数は数値で入力してください' }).min(1, '人数は 1 人以上で入力してください').optional()
 })
 
-
 /**
  * 参考URLの種類
  */
@@ -60,7 +59,6 @@ export const ReferenceUrlSchema = z.object({
   type: ReferenceUrlTypeSchema,
   url: z.url('有効なURLを入力してください')
 })
-
 
 /**
  * イベント作成・更新リクエスト（GET/PUT/POST用）
