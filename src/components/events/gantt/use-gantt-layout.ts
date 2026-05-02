@@ -152,6 +152,7 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
 
   const [isDragging, setIsDragging] = useState(false)
   const dragStartRef = useRef({ x: 0, scrollLeft: 0 })
+  const dragStartYRef = useRef(0)
   const hasDraggedRef = useRef(false)
 
   const handleScroll = useCallback(() => {
@@ -225,33 +226,46 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
     setIsDragging(false)
   }, [])
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (!scrollContainerRef.current) return
-    const touch = e.touches[0]
-    setIsDragging(true)
-    hasDraggedRef.current = false
-    dragStartRef.current = {
-      x: touch.clientX,
-      scrollLeft: scrollContainerRef.current.scrollLeft
-    }
-  }, [])
+  useEffect(() => {
+    const node = scrollContainerRef.current
+    if (!node) return
 
-  const handleTouchMove = useCallback(
-    (e: React.TouchEvent) => {
-      if (!isDragging || !scrollContainerRef.current) return
+    const isHorizontalDragRef = { current: false }
+
+    const onTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0]
+      hasDraggedRef.current = false
+      isHorizontalDragRef.current = false
+      dragStartRef.current = {
+        x: touch.clientX,
+        scrollLeft: node.scrollLeft
+      }
+      dragStartYRef.current = touch.clientY
+    }
+
+    const onTouchMove = (e: TouchEvent) => {
       const touch = e.touches[0]
       const dx = touch.clientX - dragStartRef.current.x
-      if (Math.abs(dx) > 5) {
-        hasDraggedRef.current = true
-        e.preventDefault()
-      }
-      scrollContainerRef.current.scrollLeft = dragStartRef.current.scrollLeft - dx
-    },
-    [isDragging]
-  )
+      const dy = touch.clientY - dragStartYRef.current
 
-  const handleTouchEnd = useCallback(() => {
-    setIsDragging(false)
+      if (!isHorizontalDragRef.current) {
+        if (Math.abs(dx) <= 5 && Math.abs(dy) <= 5) return
+        if (Math.abs(dx) <= Math.abs(dy)) return
+        isHorizontalDragRef.current = true
+        hasDraggedRef.current = true
+      }
+
+      e.preventDefault()
+      node.scrollLeft = dragStartRef.current.scrollLeft - dx
+    }
+
+    node.addEventListener('touchstart', onTouchStart, { passive: true })
+    node.addEventListener('touchmove', onTouchMove, { passive: false })
+
+    return () => {
+      node.removeEventListener('touchstart', onTouchStart)
+      node.removeEventListener('touchmove', onTouchMove)
+    }
   }, [])
 
   const getLabelOffset = useCallback(
@@ -285,9 +299,6 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
     handleMouseMove,
     handleMouseUp,
     handleMouseLeave,
-    handleTouchStart,
-    handleTouchMove,
-    handleTouchEnd,
     getLabelOffset,
     hasDraggedRef
   }
