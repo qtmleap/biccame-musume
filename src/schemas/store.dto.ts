@@ -93,7 +93,7 @@ export const AccessInfoSchema = z.object({
   description: z.string().nonempty('アクセス説明は必須です'),
   duration: z.string().nonempty('所要時間は必須です').optional(),
   notes: z.string().nonempty('備考は必須です').optional(),
-  lines: z.array(z.string().nonempty('路線名は必須です')).nonempty('路線を最低 1 つ指定してください')
+  lines: z.array(z.string().nonempty('路線名は必須です'))
 })
 
 /**
@@ -126,7 +126,7 @@ export const CharacterSchema = z
     name: z.string().nonempty('キャラクター名は必須です'),
     aliases: z.array(z.string().nonempty('別名は必須です')).nonempty('別名を最低 1 つ指定してください').optional(),
     description: z.string().nonempty('説明は必須です'),
-    twitter_id: z.string().nonempty('Twitter IDは必須です'),
+    twitter_id: z.string(),
     images: z.array(z.string().nonempty('画像URLは必須です')).nonempty('画像を最低 1 つ指定してください'),
     birthday: z.string().nonempty('誕生日は必須です').optional(),
     is_biccame_musume: z.boolean().optional()
