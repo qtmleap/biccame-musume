@@ -243,14 +243,14 @@ const EventsContent = () => {
             <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
             <EventUserActivityFilter />
             <Button
-              variant='outline'
+              variant='ghost'
               size='sm'
               onClick={handleResetFilters}
               disabled={!isFilterActive}
               aria-disabled={!isFilterActive}
               aria-label='フィルターをクリア'
               title='フィルターをクリア'
-              className='ml-auto h-8 w-8 p-0 border-pink-200 text-pink-600 hover:bg-pink-50 hover:text-pink-700 disabled:text-gray-300 disabled:border-gray-200'
+              className='ml-auto h-8 w-8 p-0 text-gray-600 hover:text-gray-900'
             >
               <X className='size-4' />
             </Button>
