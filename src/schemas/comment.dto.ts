@@ -5,11 +5,10 @@ import { z } from '@hono/zod-openapi'
  */
 export const CreateCommentRequestSchema = z
   .object({
-    nickname: z
+    characterId: z
       .string()
-      .min(1, 'ニックネームは必須です')
-      .max(20, 'ニックネームは 20 文字以内で入力してください')
-      .openapi({ description: 'ニックネーム（1〜20文字）', example: 'たろう' }),
+      .min(1, 'キャラクターを選択してください')
+      .openapi({ description: '選択したビッカメ娘キャラクター ID', example: 'abeno' }),
     body: z
       .string()
       .min(1, 'コメントは必須です')
@@ -30,7 +29,7 @@ export type CreateCommentRequest = z.infer<typeof CreateCommentRequestSchema>
 export const CommentResponseSchema = z
   .object({
     id: z.string().uuid().openapi({ description: 'コメントID', example: '550e8400-e29b-41d4-a716-446655440000' }),
-    nickname: z.string().openapi({ description: 'ニックネーム', example: 'たろう' }),
+    characterId: z.string().openapi({ description: '投稿者が選んだキャラクター ID', example: 'abeno' }),
     body: z.string().openapi({ description: 'コメント本文', example: 'イベント楽しみにしています！' }),
     createdAt: z.string().datetime().openapi({ description: '投稿日時', example: '2026-05-02T07:00:00.000Z' })
   })

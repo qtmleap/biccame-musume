@@ -1,9 +1,10 @@
 import type { PrismaClient } from '@prisma/client'
 import type { CommentResponse } from '@/schemas/comment.dto'
 
+// nickname カラムには選択された characterId を保存している（マイグレーション回避のためカラム再利用）
 const toResponse = (comment: { id: string; nickname: string; body: string; createdAt: Date }): CommentResponse => ({
   id: comment.id,
-  nickname: comment.nickname,
+  characterId: comment.nickname,
   body: comment.body,
   createdAt: comment.createdAt.toISOString()
 })
@@ -26,12 +27,12 @@ export const listComments = async (prisma: PrismaClient, eventId: string): Promi
 export const createComment = async (
   prisma: PrismaClient,
   eventId: string,
-  data: { nickname: string; body: string; ipAddress: string }
+  data: { characterId: string; body: string; ipAddress: string }
 ): Promise<CommentResponse> => {
   const comment = await prisma.eventComment.create({
     data: {
       eventId,
-      nickname: data.nickname,
+      nickname: data.characterId,
       body: data.body,
       ipAddress: data.ipAddress
     },

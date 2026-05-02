@@ -16,10 +16,10 @@
       "TaskUpdate"
     ],
     "deny": [],
-    "bypassPermissionsMode": "allow",
     "defaultMode": "bypassPermissions",
-    "disableBypassPermissionsMode": "disable"
+    "disableBypassPermissionsMode": "disable",
+    "bypassPermissionsMode": "allow"
   },
-  "effortLevel": "high",
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high"
 }

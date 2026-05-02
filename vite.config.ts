@@ -58,7 +58,7 @@ export default defineConfig(({ mode }) => {
         manifest: false, // manifest.webmanifestを直接使用
         workbox: {
           skipWaiting: true,
-          clientsClaim: true,
+          clientsClaim: false,
           globDirectory: 'dist/client',
           globPatterns:
             mode === 'development' ? [] : ['**/*.{js,css,html,ico,png,svg,webp,json}'],
@@ -150,8 +150,6 @@ export default defineConfig(({ mode }) => {
               handler: 'NetworkFirst',
             },
           ],
-          navigateFallback: '/index.html',
-          navigateFallbackDenylist: [/^\/__\//, /^\/api\//, /^\/admin\//, /^\/cdn-cgi\//],
         },
         devOptions: {
           enabled: true,

@@ -99,7 +99,7 @@ routes.openapi(
   }),
   async (c) => {
     const { uuid } = c.req.valid('param')
-    const { nickname, body, turnstileToken } = c.req.valid('json')
+    const { characterId, body, turnstileToken } = c.req.valid('json')
 
     const ip = c.req.header('cf-connecting-ip') ?? '127.0.0.1'
 
@@ -129,7 +129,7 @@ routes.openapi(
     }
 
     // 5. コメント作成
-    const comment = await createComment(prisma, uuid, { nickname, body, ipAddress: ip })
+    const comment = await createComment(prisma, uuid, { characterId, body, ipAddress: ip })
     return c.json(comment, 201)
   }
 )
