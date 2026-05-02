@@ -1,7 +1,7 @@
+import { describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { describe, expect, test } from 'bun:test'
-import { type CalendarBirthday, parseCalendarHtml } from '../.vscode/scripts/parse_store_info'
+import { type CalendarBirthday, parseCalendarHtml } from '../.vscode/scripts/parsers/calendar'
 
 const CACHE_DIR = join(__dirname, '..', '.vscode', 'archive', 'html_cache')
 
