@@ -16,7 +16,7 @@ services:
       - firebase
 
   firebase:
-    image: andreysenov/firebase-tools:14.17.0
+    image: andreysenov/firebase-tools:latest
     command: firebase emulators:start --only auth --import=auth
     volumes:
       - ./auth:/home/node/auth
