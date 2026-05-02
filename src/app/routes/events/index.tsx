@@ -237,8 +237,15 @@ const EventsContent = () => {
 
         {/* デスクトップ: インラインフィルター */}
         <div className='hidden md:flex md:flex-col md:gap-2'>
-          {/* 種別フィルター */}
-          <EventCategoryFilter />
+          {/* 種別フィルターと店舗フィルター */}
+          <div className='flex items-end gap-4'>
+            <div className='flex-1'>
+              <EventCategoryFilter />
+            </div>
+            <div className='w-64 shrink-0'>
+              <EventStoreFilter />
+            </div>
+          </div>
 
           {/* ステータスフィルタとマイアクティビティフィルタ */}
           <div className='flex items-center gap-4'>
@@ -259,9 +266,6 @@ const EventsContent = () => {
 
           {/* 地域フィルター */}
           <RegionFilterControl />
-
-          {/* 店舗フィルター */}
-          <EventStoreFilter />
         </div>
 
         {/* イベント表示 */}
