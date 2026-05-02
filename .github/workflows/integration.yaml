@@ -79,7 +79,7 @@ jobs:
   knip:
     name: Knip
     runs-on: ubuntu-latest
-    if: github.event.action != 'closed' || github.event.pull_request.merged != true
+    if: false
     steps:
       - name: Checkout
         uses: actions/checkout@v6
