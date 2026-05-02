@@ -197,6 +197,19 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
     }
   }, [todayOffset, monthOffset])
 
+  useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+      if (scrollTimeoutRef.current !== null) {
+        clearTimeout(scrollTimeoutRef.current)
+        scrollTimeoutRef.current = null
+      }
+    }
+  }, [])
+
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (!scrollContainerRef.current) return
     setIsDragging(true)
