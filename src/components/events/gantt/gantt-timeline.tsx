@@ -51,7 +51,7 @@ export const GanttTimeline = ({
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
-            touchAction: 'pan-y'
+            touchAction: 'pan-x pan-y'
           }}
           onScroll={onScroll}
           onMouseDown={onMouseDown}
