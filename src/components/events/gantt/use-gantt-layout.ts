@@ -152,7 +152,6 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
 
   const [isDragging, setIsDragging] = useState(false)
   const dragStartRef = useRef({ x: 0, scrollLeft: 0 })
-  const dragStartYRef = useRef(0)
   const hasDraggedRef = useRef(false)
 
   const handleScroll = useCallback(() => {
@@ -230,41 +229,33 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
     const node = scrollContainerRef.current
     if (!node) return
 
-    const isHorizontalDragRef = { current: false }
+    let startX = 0
+    let startY = 0
+    let startScrollLeft = 0
 
     const onTouchStart = (e: TouchEvent) => {
       const touch = e.touches[0]
+      startX = touch.clientX
+      startY = touch.clientY
+      startScrollLeft = node.scrollLeft
       hasDraggedRef.current = false
-      isHorizontalDragRef.current = false
-      dragStartRef.current = {
-        x: touch.clientX,
-        scrollLeft: node.scrollLeft
-      }
-      dragStartYRef.current = touch.clientY
     }
 
-    const onTouchMove = (e: TouchEvent) => {
-      const touch = e.touches[0]
-      const dx = touch.clientX - dragStartRef.current.x
-      const dy = touch.clientY - dragStartYRef.current
-
-      if (!isHorizontalDragRef.current) {
-        if (Math.abs(dx) <= 5 && Math.abs(dy) <= 5) return
-        if (Math.abs(dx) <= Math.abs(dy)) return
-        isHorizontalDragRef.current = true
+    const onTouchEnd = (e: TouchEvent) => {
+      const touch = e.changedTouches[0]
+      const dx = Math.abs(touch.clientX - startX)
+      const dy = Math.abs(touch.clientY - startY)
+      if (dx > 5 || dy > 5 || node.scrollLeft !== startScrollLeft) {
         hasDraggedRef.current = true
       }
-
-      e.preventDefault()
-      node.scrollLeft = dragStartRef.current.scrollLeft - dx
     }
 
     node.addEventListener('touchstart', onTouchStart, { passive: true })
-    node.addEventListener('touchmove', onTouchMove, { passive: false })
+    node.addEventListener('touchend', onTouchEnd, { passive: true })
 
     return () => {
       node.removeEventListener('touchstart', onTouchStart)
-      node.removeEventListener('touchmove', onTouchMove)
+      node.removeEventListener('touchend', onTouchEnd)
     }
   }, [])
 
