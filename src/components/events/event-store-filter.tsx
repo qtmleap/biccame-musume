@@ -19,7 +19,7 @@ export const EventStoreFilter = () => {
   const storeOptions = useMemo(
     () =>
       characters
-        .filter((c) => c.character?.is_biccame_musume)
+        .filter((c) => c.store !== undefined)
         .map((c) => ({ value: c.id as StoreKey, label: STORE_NAME_LABELS[c.id as StoreKey] ?? c.id }))
         .sort((a, b) => a.label.localeCompare(b.label, 'ja')),
     [characters]
