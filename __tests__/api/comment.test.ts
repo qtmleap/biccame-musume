@@ -129,7 +129,7 @@ const buildApp = (env: Bindings, prisma: PrismaClient) => {
 
   app.post('/api/events/:uuid/comments', async (c) => {
     const uuid = c.req.param('uuid')
-    const body = await c.req.json<{ nickname: string; body: string; turnstileToken: string }>()
+    const body = await c.req.json<{ characterId: string; body: string; turnstileToken: string }>()
 
     const ip = c.req.header('cf-connecting-ip') ?? '127.0.0.1'
 
@@ -163,7 +163,7 @@ const buildApp = (env: Bindings, prisma: PrismaClient) => {
     }
 
     const comment = await createComment(prisma, uuid, {
-      nickname: body.nickname,
+      characterId: body.characterId,
       body: body.body,
       ipAddress: ip
     })
@@ -212,15 +212,15 @@ describe('GET /api/events/:uuid/comments', () => {
     const app = buildApp(env, makeDb(rows, true))
     const res = await app.request(`/api/events/${EVENT_UUID}/comments`)
     expect(res.status).toBe(200)
-    const data = (await res.json()) as Array<{ nickname: string }>
+    const data = (await res.json()) as Array<{ characterId: string }>
     expect(data).toHaveLength(1)
-    expect(data[0]?.nickname).toBe('Alice')
+    expect(data[0]?.characterId).toBe('Alice')
   })
 })
 
 describe('POST /api/events/:uuid/comments', () => {
   const validBody = {
-    nickname: 'たろう',
+    characterId: 'abeno',
     body: 'イベント楽しみ！',
     turnstileToken: 'valid-token'
   }
@@ -234,8 +234,8 @@ describe('POST /api/events/:uuid/comments', () => {
       body: JSON.stringify(validBody)
     })
     expect(res.status).toBe(201)
-    const data = (await res.json()) as { nickname: string; body: string }
-    expect(data.nickname).toBe('たろう')
+    const data = (await res.json()) as { characterId: string; body: string }
+    expect(data.characterId).toBe('abeno')
     expect(data.body).toBe('イベント楽しみ！')
   })
 
@@ -285,7 +285,7 @@ describe('CommentResponseSchema', () => {
   test('validates a well-formed comment', () => {
     const result = CommentResponseSchema.safeParse({
       id: '550e8400-e29b-41d4-a716-446655440000',
-      nickname: 'たろう',
+      characterId: 'abeno',
       body: 'コメント',
       createdAt: '2026-05-02T07:00:00.000Z'
     })
@@ -293,7 +293,7 @@ describe('CommentResponseSchema', () => {
   })
 
   test('rejects missing fields', () => {
-    const result = CommentResponseSchema.safeParse({ nickname: 'x' })
+    const result = CommentResponseSchema.safeParse({ characterId: 'abeno' })
     expect(result.success).toBe(false)
   })
 })
@@ -303,7 +303,7 @@ describe('ListCommentsResponseSchema', () => {
     const result = ListCommentsResponseSchema.safeParse([
       {
         id: '550e8400-e29b-41d4-a716-446655440000',
-        nickname: 'たろう',
+        characterId: 'abeno',
         body: 'コメント',
         createdAt: '2026-05-02T07:00:00.000Z'
       }
