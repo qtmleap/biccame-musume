@@ -165,11 +165,11 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
                               : 'opacity-60 hover:opacity-100'
                           }`}
                         >
-                          <Avatar className='size-12 overflow-hidden'>
+                          <Avatar className='size-12 overflow-hidden border-2 border-[#e50012]'>
                             <AvatarImage
                               src={character.character?.image_url}
                               alt=''
-                              className='object-cover object-top scale-[1.8] mix-blend-multiply'
+                              className='object-cover scale-[1.8] translate-y-[18%] mix-blend-multiply'
                             />
                             <AvatarFallback>{character.character?.name?.[0] ?? '?'}</AvatarFallback>
                           </Avatar>
