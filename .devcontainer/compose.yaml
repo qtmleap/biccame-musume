@@ -16,7 +16,7 @@ services:
       - firebase
 
   firebase:
-    image: andreysenov/firebase-tools:latest
+    image: andreysenov/firebase-tools:15.16.0
     command: firebase emulators:start --only auth --import=auth
     ports:
       - 19299:9099
