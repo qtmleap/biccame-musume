@@ -134,7 +134,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               title='タップで別のキャラに変える'
               className='shrink-0 rounded-full hover:opacity-80 transition-opacity'
             >
-              <Avatar className='size-10 overflow-hidden border-2 border-[#e50012]'>
+              <Avatar className='size-14 overflow-hidden border-2 border-[#e50012]'>
                 <AvatarImage
                   src={character?.character?.image_url}
                   alt=''
@@ -148,13 +148,13 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               control={form.control}
               name='body'
               render={({ field }) => (
-                <FormItem className='flex-1 min-w-0 pt-1.5'>
+                <FormItem className='flex-1 min-w-0 pt-2'>
                   <FormControl>
                     <Textarea
                       placeholder='いまどうしてる？'
                       maxLength={200}
                       rows={3}
-                      className='border-0 shadow-none focus-visible:ring-0 px-0 resize-none text-lg placeholder:text-muted-foreground'
+                      className='border-0 shadow-none focus-visible:ring-0 px-0 resize-none text-xl placeholder:text-muted-foreground'
                       {...field}
                     />
                   </FormControl>
@@ -172,6 +172,10 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
             onError={() => setTurnstileToken(null)}
             onExpire={() => setTurnstileToken(null)}
           />
+
+          <p className='text-xs text-muted-foreground'>
+            投稿後の編集・削除はできません。アイコンをタップで別のキャラに変えられます。
+          </p>
 
           <div className='flex items-center justify-end gap-3 pt-3 border-t border-border'>
             {bodyValue.length > 0 && (

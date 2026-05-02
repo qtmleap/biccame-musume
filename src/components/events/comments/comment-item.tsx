@@ -18,7 +18,7 @@ export const CommentItem = ({ comment }: CommentItemProps) => {
 
   return (
     <article className='flex gap-3 py-3'>
-      <Avatar className='size-10 shrink-0 overflow-hidden border-2 border-[#e50012]'>
+      <Avatar className='size-12 shrink-0 overflow-hidden border-2 border-[#e50012]'>
         <AvatarImage
           src={character?.character?.image_url}
           alt=''
@@ -26,15 +26,15 @@ export const CommentItem = ({ comment }: CommentItemProps) => {
         />
         <AvatarFallback>{displayName[0] ?? '?'}</AvatarFallback>
       </Avatar>
-      <div className='flex-1 min-w-0 space-y-0.5'>
-        <div className='flex items-center gap-2 text-sm'>
+      <div className='flex-1 min-w-0 space-y-1'>
+        <div className='flex items-center gap-2'>
           <span className='font-semibold text-foreground'>{displayName}</span>
           <span className='text-muted-foreground'>·</span>
-          <time dateTime={comment.createdAt} className='text-xs text-muted-foreground'>
+          <time dateTime={comment.createdAt} className='text-sm text-muted-foreground'>
             {dayjs(comment.createdAt).fromNow()}
           </time>
         </div>
-        <p className='text-sm text-foreground whitespace-pre-wrap break-words'>{comment.body}</p>
+        <p className='text-base text-foreground whitespace-pre-wrap break-words'>{comment.body}</p>
       </div>
     </article>
   )
