@@ -187,7 +187,9 @@ const appContent = {
     filter: {
       region: '地域で絞り込み',
       category: '種別で絞り込み',
-      status: '開催状況で絞り込み'
+      status: '開催状況で絞り込み',
+      store: '店舗で絞り込み',
+      storeAll: 'すべての店舗'
     },
     sort: {
       random: 'ランダム',
