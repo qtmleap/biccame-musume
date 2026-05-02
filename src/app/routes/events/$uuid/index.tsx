@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { Suspense } from 'react'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -14,7 +14,7 @@ import { useEvent, useEvents } from '@/hooks/use-events'
  */
 const EventDetailContent = () => {
   const { uuid } = Route.useParams()
-  const navigate = useNavigate()
+  const router = useRouter()
   const { data: event } = useEvent(uuid)
   const { data: allEvents } = useEvents()
   const { isAuthenticated } = useCloudflareAccess()
@@ -28,11 +28,7 @@ const EventDetailContent = () => {
         <div className='md:grid md:grid-cols-[1fr_auto_320px] md:gap-6'>
           {/* メインコンテンツ */}
           <div className='max-w-2xl'>
-            <EventDetailHeader
-              event={event}
-              isAuthenticated={isAuthenticated}
-              onBack={() => navigate({ to: '/events' })}
-            />
+            <EventDetailHeader event={event} isAuthenticated={isAuthenticated} onBack={() => router.history.back()} />
             <EventDetailInfo event={event} />
 
             {/* 関連イベント（モバイルのみ） */}
