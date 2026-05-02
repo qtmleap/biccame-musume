@@ -10,12 +10,7 @@ type CommentFormDialogProps = {
   eventUuid: string
 }
 
-const TriggerButton = () => (
-  <Button type='button' aria-label='コメントを投稿する' className='w-full bg-[#e50012] hover:bg-[#c5000f] text-white'>
-    <MessageSquarePlus className='size-4' />
-    コメントを投稿する
-  </Button>
-)
+const triggerButtonClassName = 'w-full bg-[#e50012] hover:bg-[#c5000f] text-white'
 
 export const CommentFormDialog = ({ eventUuid }: CommentFormDialogProps) => {
   const isDesktop = useMediaQuery('(min-width: 768px)')
@@ -25,7 +20,10 @@ export const CommentFormDialog = ({ eventUuid }: CommentFormDialogProps) => {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <TriggerButton />
+          <Button type='button' aria-label='コメントを投稿する' className={triggerButtonClassName}>
+            <MessageSquarePlus className='size-4' />
+            コメントを投稿する
+          </Button>
         </DialogTrigger>
         <DialogContent className='max-w-lg'>
           <DialogHeader>
@@ -40,7 +38,10 @@ export const CommentFormDialog = ({ eventUuid }: CommentFormDialogProps) => {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <TriggerButton />
+        <Button type='button' aria-label='コメントを投稿する' className={triggerButtonClassName}>
+          <MessageSquarePlus className='size-4' />
+          コメントを投稿する
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
