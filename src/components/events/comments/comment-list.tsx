@@ -47,7 +47,7 @@ export const CommentList = ({ eventUuid }: CommentListProps) => {
   }
 
   return (
-    <div className='space-y-3'>
+    <div className='divide-y divide-border'>
       {data.map((comment) => (
         <CommentItem key={comment.id} comment={comment} />
       ))}
