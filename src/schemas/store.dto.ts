@@ -4,69 +4,74 @@ import { prefectureToRegion } from '@/atoms/filter-atom'
 /**
  * 地域の型定義
  */
-export const RegionSchema = z.enum(['all', 'hokkaido', 'kanto', 'chubu', 'kansai', 'kyushu'])
+export const RegionSchema = z.enum(['all', 'hokkaido', 'kanto', 'chubu', 'kansai', 'kyushu'], {
+  error: '有効な地域を選択してください'
+})
 
 export type Region = z.infer<typeof RegionSchema>
 
 /**
  * 店舗キーの型定義
  */
-export const StoreKeySchema = z.enum([
-  'abeno',
-  'akasaka',
-  'akiba',
-  'biccamera',
-  'bicqlo',
-  'bicsim',
-  'camera',
-  'chiba',
-  'chofu',
-  'fujisawa',
-  'funabashi',
-  'funato',
-  'hachioji',
-  'hamamatsu',
-  'hiroshima',
-  'honten',
-  'ikenishi',
-  'itt',
-  'kagoshima',
-  'kashiwa',
-  'kawasaki',
-  'kumamoto',
-  'kyoto',
-  'machida',
-  'mito',
-  'nagoya',
-  'nagoyagate',
-  'naisen',
-  'nanba',
-  'niigata',
-  'oeraitan',
-  'ohmiya',
-  'okayama',
-  'photo',
-  'pkan',
-  'prosta',
-  'sagami',
-  'sapporo',
-  'seiseki',
-  'shibuhachi',
-  'shibuto',
-  'shinjyuku',
-  'shintou',
-  'shinyoko',
-  'tachikawa',
-  'takasaki',
-  'takatsuki',
-  'tamapla',
-  'tenjin',
-  'tenjin2',
-  'tokorozawa',
-  'yao',
-  'yokonishi',
-  'yuurakuchou'
-])
+export const StoreKeySchema = z.enum(
+  [
+    'abeno',
+    'akasaka',
+    'akiba',
+    'biccamera',
+    'bicqlo',
+    'bicsim',
+    'camera',
+    'chiba',
+    'chofu',
+    'fujisawa',
+    'funabashi',
+    'funato',
+    'hachioji',
+    'hamamatsu',
+    'hiroshima',
+    'honten',
+    'ikenishi',
+    'itt',
+    'kagoshima',
+    'kashiwa',
+    'kawasaki',
+    'kumamoto',
+    'kyoto',
+    'machida',
+    'mito',
+    'nagoya',
+    'nagoyagate',
+    'naisen',
+    'nanba',
+    'niigata',
+    'oeraitan',
+    'ohmiya',
+    'okayama',
+    'photo',
+    'pkan',
+    'prosta',
+    'sagami',
+    'sapporo',
+    'seiseki',
+    'shibuhachi',
+    'shibuto',
+    'shinjyuku',
+    'shintou',
+    'shinyoko',
+    'tachikawa',
+    'takasaki',
+    'takatsuki',
+    'tamapla',
+    'tenjin',
+    'tenjin2',
+    'tokorozawa',
+    'yao',
+    'yokonishi',
+    'yuurakuchou'
+  ],
+  { error: '有効な店舗を選択してください' }
+)
 
 export type StoreKey = z.infer<typeof StoreKeySchema>
 
@@ -74,10 +79,10 @@ export type StoreKey = z.infer<typeof StoreKeySchema>
  * 営業時間の型定義
  */
 export const HoursSchema = z.object({
-  type: z.enum(['weekday', 'weekend', 'holiday', 'all']),
-  open_time: z.string().nonempty(),
-  close_time: z.string().nonempty(),
-  note: z.string().nonempty().optional()
+  type: z.enum(['weekday', 'weekend', 'holiday', 'all'], { error: '営業時間の種別が不正です' }),
+  open_time: z.string().nonempty('開店時刻は必須です'),
+  close_time: z.string().nonempty('閉店時刻は必須です'),
+  note: z.string().nonempty('備考は必須です').optional()
 })
 
 
@@ -85,11 +90,11 @@ export const HoursSchema = z.object({
  * アクセス情報の型定義
  */
 export const AccessInfoSchema = z.object({
-  station: z.string().nonempty(),
-  description: z.string(),
-  duration: z.string().nonempty().optional(),
-  notes: z.string().nonempty().optional(),
-  lines: z.array(z.string())
+  station: z.string().nonempty('駅名は必須です'),
+  description: z.string().nonempty('アクセス説明は必須です'),
+  duration: z.string().nonempty('所要時間は必須です').optional(),
+  notes: z.string().nonempty('備考は必須です').optional(),
+  lines: z.array(z.string().nonempty('路線名は必須です')).nonempty('路線を最低 1 つ指定してください')
 })
 
 
@@ -107,10 +112,10 @@ export const CoordinatesSchema = z.object({
  */
 export const StoreDetailsSchema = z.object({
   store_id: z.number().int().positive().optional(),
-  name: z.string().nonempty().optional(),
-  address: z.string().nonempty().optional(),
-  phone: z.string().nonempty().optional(),
-  birthday: z.string().nonempty().optional(),
+  name: z.string().nonempty('店舗名は必須です').optional(),
+  address: z.string().nonempty('住所は必須です').optional(),
+  phone: z.string().nonempty('電話番号は必須です').optional(),
+  birthday: z.string().nonempty('誕生日は必須です').optional(),
   open_all_year: z.boolean().optional(),
   hours: z.array(HoursSchema).optional(),
   access: z.array(AccessInfoSchema)
@@ -122,12 +127,12 @@ export const StoreDetailsSchema = z.object({
  */
 export const CharacterSchema = z
   .object({
-    name: z.string().nonempty(),
-    aliases: z.array(z.string().nonempty()).nonempty().optional(),
-    description: z.string().nonempty(),
-    twitter_id: z.string(),
-    images: z.array(z.string().nonempty()).nonempty(),
-    birthday: z.string().nonempty().optional(),
+    name: z.string().nonempty('キャラクター名は必須です'),
+    aliases: z.array(z.string().nonempty('別名は必須です')).nonempty('別名を最低 1 つ指定してください').optional(),
+    description: z.string().nonempty('説明は必須です'),
+    twitter_id: z.string().nonempty('Twitter IDは必須です'),
+    images: z.array(z.string().nonempty('画像URLは必須です')).nonempty('画像を最低 1 つ指定してください'),
+    birthday: z.string().nonempty('誕生日は必須です').optional(),
     is_biccame_musume: z.boolean().optional()
   })
   .transform((v) => ({
@@ -144,11 +149,11 @@ export const CharacterSchema = z
  */
 export const StoreDataSchema = z
   .object({
-    id: z.string().nonempty(),
+    id: z.string().nonempty('店舗IDは必須です'),
     character: CharacterSchema,
-    prefecture: z.string().nonempty().nullable(),
+    prefecture: z.string().nonempty('都道府県は必須です').nullable(),
     coordinates: CoordinatesSchema.optional().nullable(),
-    postal_code: z.string().nonempty().optional().nullable(),
+    postal_code: z.string().nonempty('郵便番号は必須です').optional().nullable(),
     store: StoreDetailsSchema.optional()
   })
   .transform((v) => ({
@@ -161,5 +166,4 @@ export type StoreData = z.infer<typeof StoreDataSchema>
 /**
  * 店舗リストの型定義
  */
-export const StoresSchema = z.array(StoreDataSchema).nonempty()
-
+export const StoresSchema = z.array(StoreDataSchema).nonempty('店舗データを最低 1 つ指定してください')
