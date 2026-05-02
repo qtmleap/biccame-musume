@@ -148,13 +148,13 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               control={form.control}
               name='body'
               render={({ field }) => (
-                <FormItem className='flex-1 min-w-0'>
+                <FormItem className='flex-1 min-w-0 pt-1.5'>
                   <FormControl>
                     <Textarea
-                      placeholder='コメントを入力'
+                      placeholder='いまどうしてる？'
                       maxLength={200}
                       rows={3}
-                      className='border-0 shadow-none focus-visible:ring-0 px-0 resize-none text-base'
+                      className='border-0 shadow-none focus-visible:ring-0 px-0 resize-none text-lg placeholder:text-muted-foreground'
                       {...field}
                     />
                   </FormControl>
@@ -173,14 +173,26 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
             onExpire={() => setTurnstileToken(null)}
           />
 
-          <div className='flex items-center justify-between gap-3 pt-2 border-t border-border'>
-            <span className='text-xs text-muted-foreground'>{bodyValue.length} / 200</span>
+          <div className='flex items-center justify-end gap-3 pt-3 border-t border-border'>
+            {bodyValue.length > 0 && (
+              <span
+                className={`text-xs tabular-nums ${
+                  bodyValue.length >= 200
+                    ? 'text-[#e50012] font-semibold'
+                    : bodyValue.length >= 180
+                      ? 'text-amber-600'
+                      : 'text-muted-foreground'
+                }`}
+              >
+                {200 - bodyValue.length}
+              </span>
+            )}
             <Button
               type='submit'
               disabled={!canSubmit}
               aria-label='コメントを投稿する'
               size='sm'
-              className='bg-[#e50012] hover:bg-[#c5000f] text-white rounded-full px-6'
+              className='bg-[#e50012] hover:bg-[#c5000f] text-white rounded-full px-6 font-bold'
             >
               {isPending ? '送信中...' : '投稿'}
             </Button>
