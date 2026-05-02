@@ -137,6 +137,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
           <Turnstile
             ref={turnstileRef}
             siteKey={TURNSTILE_SITE_KEY}
+            options={{ appearance: 'interaction-only', size: 'invisible' }}
             onSuccess={(token) => setTurnstileToken(token)}
             onError={() => setTurnstileToken(null)}
             onExpire={() => setTurnstileToken(null)}
