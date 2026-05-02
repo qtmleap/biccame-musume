@@ -39,9 +39,9 @@ setPersistence(auth, browserLocalPersistence).catch((error) => {
 let emulatorConnected = false
 if (import.meta.env.DEV && !emulatorConnected) {
   try {
-    connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
+    connectAuthEmulator(auth, 'http://localhost:19299', { disableWarnings: true })
     emulatorConnected = true
-    console.log('Connected to Firebase Auth Emulator at http://localhost:9099')
+    console.log('Connected to Firebase Auth Emulator at http://localhost:19299')
   } catch (error) {
     console.error('Failed to connect to Firebase Auth Emulator:', error)
   }

@@ -36,16 +36,6 @@ export const getVisitedStores = async (env: Bindings, userId: string): Promise<s
 }
 
 /**
- * 店舗を訪問済みに追加
- * @param env - Cloudflare Workers Bindings
- * @param userId - Firebase Auth UID
- * @param storeKey - 店舗キー（例: biccame-001）
- */
-export const addVisitedStore = async (env: Bindings, userId: string, storeKey: string): Promise<void> => {
-  return updateUserStore(env, userId, storeKey, 'visited')
-}
-
-/**
  * 店舗のステータスを更新
  * @param env - Cloudflare Workers Bindings
  * @param userId - Firebase Auth UID
@@ -65,16 +55,6 @@ export const updateUserStore = async (
     update: { status, markedAt: new Date() },
     create: { userId, storeKey, status, markedAt: new Date() }
   })
-}
-
-/**
- * 店舗を訪問済みから削除
- * @param env - Cloudflare Workers Bindings
- * @param userId - Firebase Auth UID
- * @param storeKey - 店舗キー
- */
-export const removeVisitedStore = async (env: Bindings, userId: string, storeKey: string): Promise<void> => {
-  return deleteUserStore(env, userId, storeKey)
 }
 
 /**
@@ -130,36 +110,6 @@ export const getInterestedEvents = async (env: Bindings, userId: string): Promis
   })
 
   return events.map((e) => e.eventId)
-}
-
-/**
- * イベントを興味ありに追加
- * @param env - Cloudflare Workers Bindings
- * @param userId - Firebase Auth UID
- * @param eventId - イベントID
- */
-export const addInterestedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
-  const prisma = getPrisma(env)
-
-  await prisma.userEvent.upsert({
-    where: { userId_eventId_status: { userId, eventId, status: 'interested' } },
-    update: {},
-    create: { userId, eventId, status: 'interested' }
-  })
-}
-
-/**
- * イベントを興味ありから削除
- * @param env - Cloudflare Workers Bindings
- * @param userId - Firebase Auth UID
- * @param eventId - イベントID
- */
-export const removeInterestedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
-  const prisma = getPrisma(env)
-
-  await prisma.userEvent.deleteMany({
-    where: { userId, eventId, status: 'interested' }
-  })
 }
 
 /**
@@ -224,36 +174,6 @@ export const deleteUserEvent = async (
 }
 
 /**
- * イベントを達成済みに追加
- * @param env - Cloudflare Workers Bindings
- * @param userId - Firebase Auth UID
- * @param eventId - イベントID
- */
-export const addCompletedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
-  const prisma = getPrisma(env)
-
-  await prisma.userEvent.upsert({
-    where: { userId_eventId_status: { userId, eventId, status: 'completed' } },
-    update: { completedAt: new Date() },
-    create: { userId, eventId, status: 'completed', completedAt: new Date() }
-  })
-}
-
-/**
- * イベントを達成済みから削除
- * @param env - Cloudflare Workers Bindings
- * @param userId - Firebase Auth UID
- * @param eventId - イベントID
- */
-export const removeCompletedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
-  const prisma = getPrisma(env)
-
-  await prisma.userEvent.deleteMany({
-    where: { userId, eventId, status: 'completed' }
-  })
-}
-
-/**
  * ユーザーのアクティビティ全体を取得
  * @param env - Cloudflare Workers Bindings
  * @param userId - Firebase Auth UID
@@ -286,26 +206,6 @@ export const getUserActivity = async (
   ])
 
   return { stores, events: { interested: interestedEvents, completed: completedEvents } }
-}
-
-/**
- * イベントごとの興味あり・達成カウントを取得
- * @param env - Cloudflare Workers Bindings
- * @param eventId - イベントID
- * @returns 興味あり・達成のカウント
- */
-export const getEventStats = async (
-  env: Bindings,
-  eventId: string
-): Promise<{ interestedCount: number; completedCount: number }> => {
-  const prisma = getPrisma(env)
-
-  const [interestedCount, completedCount] = await Promise.all([
-    prisma.userEvent.count({ where: { eventId, status: 'interested' } }),
-    prisma.userEvent.count({ where: { eventId, status: 'completed' } })
-  ])
-
-  return { interestedCount, completedCount }
 }
 
 /**
