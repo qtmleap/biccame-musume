@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { Calendar } from 'lucide-react'
+import { Calendar, ChevronRight } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useMemo } from 'react'
 import { Separator } from '@/components/ui/separator'
@@ -82,6 +82,14 @@ export const CharacterOngoingEvents = ({ storeKey }: CharacterOngoingEventsProps
           <OngoingEventItem key={event.uuid} event={event} isLast={index === upcomingEvents.length - 1} />
         ))}
       </div>
+      <Link
+        to='/events'
+        search={{ store: storeKey }}
+        className='inline-flex items-center gap-1 text-sm text-pink-600 hover:underline'
+      >
+        もっと見る
+        <ChevronRight className='h-4 w-4' />
+      </Link>
     </motion.div>
   )
 }
