@@ -5,6 +5,7 @@ import { createComment, listComments } from '@/services/comment-service'
 import type { Bindings, Variables } from '@/types/bindings'
 import { loadBiccameMusumeIdSet } from '@/utils/character-whitelist'
 import { moderateText } from '@/utils/moderation'
+import { containsNgWord } from '@/utils/ng-words'
 import { sanitizeCommentBody } from '@/utils/sanitize'
 import { verifyTurnstileToken } from '@/utils/turnstile'
 
@@ -129,20 +130,25 @@ routes.openapi(
       return c.json({ message: 'コメントは必須です' }, 400)
     }
 
-    // 5. モデレーション (sanitize 済みのテキストで判定)
+    // 5. 静的 NG ワードリストで安価に弾く (Llama Guard より前)
+    if (containsNgWord(sanitizedBody)) {
+      return c.json({ message: '不適切な内容と判定されました' }, 400)
+    }
+
+    // 6. モデレーション (sanitize 済みのテキストで判定)
     const { safe } = await moderateText(sanitizedBody, c.env.AI, c.env)
     if (!safe) {
       return c.json({ message: '不適切な内容と判定されました' }, 400)
     }
 
-    // 6. イベント存在確認
+    // 7. イベント存在確認
     const prisma = getPrisma(c.env)
     const event = await prisma.event.findUnique({ where: { id: uuid }, select: { id: true } })
     if (event === null) {
       return c.json({ message: 'Not Found' }, 404)
     }
 
-    // 7. コメント作成
+    // 8. コメント作成
     const comment = await createComment(prisma, uuid, { characterId, body: sanitizedBody, ipAddress: ip })
     return c.json(comment, 201)
   }
