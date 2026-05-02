@@ -18,8 +18,12 @@ export const CommentItem = ({ comment }: CommentItemProps) => {
 
   return (
     <article className='flex gap-3 py-3'>
-      <Avatar className='size-10 shrink-0'>
-        <AvatarImage src={character?.character?.image_url} alt='' className='object-cover mix-blend-multiply' />
+      <Avatar className='size-10 shrink-0 overflow-hidden'>
+        <AvatarImage
+          src={character?.character?.image_url}
+          alt=''
+          className='object-cover object-top scale-[1.8] mix-blend-multiply'
+        />
         <AvatarFallback>{displayName[0] ?? '?'}</AvatarFallback>
       </Avatar>
       <div className='flex-1 min-w-0 space-y-0.5'>
