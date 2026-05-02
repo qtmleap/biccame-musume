@@ -207,6 +207,7 @@ const appContent = {
       untilEnd: '〜なくなり次第',
       untilStockLasts: '〜なくなり次第終了',
       firstCome: '先着',
+      firstComeWithCount: '先着{count}名',
       lottery: '抽選',
       lotteryWithCount: '抽選{count}名',
       everyone: '全員に配布',
