@@ -250,7 +250,7 @@ const EventsContent = () => {
               aria-disabled={!isFilterActive}
               aria-label='フィルターをクリア'
               title='フィルターをクリア'
-              className='ml-auto h-8 w-8 p-0 disabled:text-muted-foreground disabled:border-muted'
+              className='ml-auto h-8 w-8 p-0 border-pink-200 text-pink-600 hover:bg-pink-50 hover:text-pink-700 disabled:text-gray-300 disabled:border-gray-200'
             >
               <X className='size-4' />
             </Button>
