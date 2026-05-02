@@ -177,7 +177,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
             onExpire={() => setTurnstileToken(null)}
           />
 
-          <p className='text-xs text-muted-foreground'>
+          <p className='text-xs text-muted-foreground pt-3'>
             投稿後の編集・削除はできません。アイコンをタップで別のキャラに変えられます。
           </p>
 
