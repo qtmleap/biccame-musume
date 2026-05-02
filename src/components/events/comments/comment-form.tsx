@@ -159,7 +159,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
                       placeholder='このイベントについてコメントを書こう'
                       maxLength={MAX_BODY_LENGTH}
                       autoComplete='off'
-                      className='border-0 shadow-none focus-visible:ring-0 px-0 text-base h-14 placeholder:text-muted-foreground'
+                      className='border-0 shadow-none focus-visible:ring-0 px-0 text-base md:text-base h-14 placeholder:text-muted-foreground'
                       {...field}
                     />
                   </FormControl>
