@@ -1,20 +1,25 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { AlertCircle } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { AlertCircle, RefreshCw } from 'lucide-react'
+import { useCallback, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { useCharacters } from '@/hooks/use-characters'
+import type { StoreData } from '@/schemas/store.dto'
 import { client } from '@/utils/client'
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA'
 
+const PICK_COUNT = 5
+
 const FormSchema = z.object({
+  characterId: z.string().min(1, 'アイコンを選択してください'),
   body: z.string().min(1, 'コメントは必須です').max(200, 'コメントは 200 文字以内で入力してください')
 })
 
@@ -30,7 +35,17 @@ type PostError = {
   message?: string
 }
 
-const pickRandom = <T,>(arr: T[]): T | undefined => arr[Math.floor(Math.random() * arr.length)]
+const sampleN = <T,>(arr: T[], n: number): T[] => {
+  const copy = [...arr]
+  const out: T[] = []
+  const target = Math.min(n, copy.length)
+  for (let i = 0; i < target; i++) {
+    const idx = Math.floor(Math.random() * copy.length)
+    const picked = copy.splice(idx, 1)[0]
+    if (picked !== undefined) out.push(picked)
+  }
+  return out
+}
 
 export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
   const queryClient = useQueryClient()
@@ -39,32 +54,38 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
   const [globalError, setGlobalError] = useState<{ status: number; message: string } | null>(null)
   const turnstileRef = useRef<TurnstileInstance | undefined>(undefined)
 
-  const biccameMusumeCharacters = allCharacters.filter((c) => c.character?.is_biccame_musume === true)
+  const biccameMusumePool = allCharacters.filter((c) => c.character?.is_biccame_musume === true)
+
+  const [candidates, setCandidates] = useState<StoreData[]>(() => sampleN(biccameMusumePool, PICK_COUNT))
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { body: '' },
+    defaultValues: { characterId: '', body: '' },
     mode: 'onBlur'
   })
 
   const bodyValue = form.watch('body')
+  const selectedCharacterId = form.watch('characterId')
+
+  const reroll = useCallback(() => {
+    const next = sampleN(biccameMusumePool, PICK_COUNT)
+    setCandidates(next)
+    form.setValue('characterId', '')
+  }, [biccameMusumePool, form])
 
   const mutation = useMutation({
     mutationFn: async (values: FormValues) => {
       if (!turnstileToken) {
         throw new Error('Turnstile token is missing')
       }
-      const characterId = pickRandom(biccameMusumeCharacters)?.id
-      if (!characterId) {
-        throw new Error('No character available')
-      }
       return client.createEventComment(
-        { characterId, body: values.body, turnstileToken },
+        { characterId: values.characterId, body: values.body, turnstileToken },
         { params: { uuid: eventUuid } }
       )
     },
     onSuccess: () => {
-      form.reset()
+      form.reset({ characterId: '', body: '' })
+      setCandidates(sampleN(biccameMusumePool, PICK_COUNT))
       setGlobalError(null)
       setTurnstileToken(null)
       turnstileRef.current?.reset()
@@ -98,7 +119,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
   }
 
   const isPending = mutation.isPending
-  const canSubmit = !isPending && !!turnstileToken
+  const canSubmit = !isPending && !!turnstileToken && !!selectedCharacterId
 
   return (
     <div className='space-y-4'>
@@ -111,6 +132,57 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+          <FormField
+            control={form.control}
+            name='characterId'
+            render={({ field }) => (
+              <FormItem>
+                <div className='flex items-center justify-between'>
+                  <FormLabel>アイコンを選ぶ</FormLabel>
+                  <button
+                    type='button'
+                    onClick={reroll}
+                    className='inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors'
+                  >
+                    <RefreshCw className='size-3' />
+                    引き直す
+                  </button>
+                </div>
+                <FormControl>
+                  <div className='flex justify-between gap-2'>
+                    {candidates.map((character) => {
+                      const isSelected = field.value === character.id
+                      return (
+                        <button
+                          key={character.id}
+                          type='button'
+                          onClick={() => field.onChange(character.id)}
+                          aria-label={character.character?.name}
+                          aria-pressed={isSelected}
+                          className={`shrink-0 rounded-full transition-all ${
+                            isSelected
+                              ? 'ring-2 ring-[#e50012] ring-offset-2 scale-110'
+                              : 'opacity-60 hover:opacity-100'
+                          }`}
+                        >
+                          <Avatar className='size-12 overflow-hidden'>
+                            <AvatarImage
+                              src={character.character?.image_url}
+                              alt=''
+                              className='object-cover object-top scale-[1.8] mix-blend-multiply'
+                            />
+                            <AvatarFallback>{character.character?.name?.[0] ?? '?'}</AvatarFallback>
+                          </Avatar>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name='body'
@@ -137,9 +209,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
             onExpire={() => setTurnstileToken(null)}
           />
 
-          <p className='text-xs text-muted-foreground'>
-            投稿後は削除できません。アイコンはビッカメ娘の中からランダムで選ばれます。
-          </p>
+          <p className='text-xs text-muted-foreground'>投稿後は削除できません。送信前に内容を確認してください。</p>
 
           <Button
             type='submit'
