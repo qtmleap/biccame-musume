@@ -130,7 +130,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className='flex gap-3'>
+          <div className='flex items-start gap-3'>
             <button
               type='button'
               onClick={rerollCharacter}
@@ -152,14 +152,14 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               control={form.control}
               name='body'
               render={({ field }) => (
-                <FormItem className='flex-1 min-w-0 self-center'>
+                <FormItem className='flex-1 min-w-0'>
                   <FormControl>
                     <Input
                       type='text'
                       placeholder='このイベントについてコメントを書こう'
                       maxLength={MAX_BODY_LENGTH}
                       autoComplete='off'
-                      className='border-0 shadow-none focus-visible:ring-0 px-0 text-base h-auto placeholder:text-muted-foreground'
+                      className='border-0 shadow-none focus-visible:ring-0 px-0 text-base h-14 placeholder:text-muted-foreground'
                       {...field}
                     />
                   </FormControl>

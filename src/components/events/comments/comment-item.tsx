@@ -1,7 +1,10 @@
 import dayjs from 'dayjs'
+import { Trash2 } from 'lucide-react'
 import { useMemo } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import { useCharacters } from '@/hooks/use-characters'
+import { useCloudflareAccess } from '@/hooks/use-cloudflare-access'
 import type { CommentResponse } from '@/schemas/comment.dto'
 
 type CommentItemProps = {
@@ -10,6 +13,7 @@ type CommentItemProps = {
 
 export const CommentItem = ({ comment }: CommentItemProps) => {
   const { data: characters } = useCharacters()
+  const { isAuthenticated } = useCloudflareAccess()
   const character = useMemo(
     () => characters.find((c) => c.id === comment.characterId),
     [characters, comment.characterId]
@@ -36,6 +40,19 @@ export const CommentItem = ({ comment }: CommentItemProps) => {
         </div>
         <p className='text-base text-foreground whitespace-pre-wrap break-words'>{comment.body}</p>
       </div>
+      {isAuthenticated && (
+        <Button
+          type='button'
+          variant='ghost'
+          size='icon'
+          aria-label='コメントを削除する（管理者）'
+          title='管理者：コメントを削除（未実装）'
+          disabled
+          className='shrink-0 size-8 text-muted-foreground hover:text-[#e50012]'
+        >
+          <Trash2 className='size-4' />
+        </Button>
+      )}
     </article>
   )
 }
