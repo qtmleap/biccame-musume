@@ -2,6 +2,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { Suspense } from 'react'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { LoadingFallback } from '@/components/common/loading-fallback'
+import { CommentSection } from '@/components/events/comments/comment-section'
 import { EventDetailHeader } from '@/components/events/event-detail-header'
 import { EventDetailInfo } from '@/components/events/event-detail-info'
 import { RecentEventsList } from '@/components/events/recent-events-list'
@@ -30,6 +31,12 @@ const EventDetailContent = () => {
           <div className='max-w-2xl'>
             <EventDetailHeader event={event} isAuthenticated={isAuthenticated} onBack={() => router.history.back()} />
             <EventDetailInfo event={event} />
+
+            {/* コメント */}
+            <div className='mt-8'>
+              <Separator className='mb-6' />
+              <CommentSection eventUuid={uuid} />
+            </div>
 
             {/* 関連イベント（モバイルのみ） */}
             <div className='md:hidden mt-6'>

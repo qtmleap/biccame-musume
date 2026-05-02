@@ -98,8 +98,32 @@ model Event {
   stores          EventStore[]
   /// イベントとユーザーの関係
   userEvents      UserEvent[]
+  /// コメント
+  comments        EventComment[]
 
   @@map("events")
+}
+
+/// イベントコメント（匿名）
+model EventComment {
+  id        String    @id @default(uuid())
+  eventId   String    @map("event_id")
+  /// ニックネーム（1〜20文字、バリデーションはDTOで）
+  nickname  String
+  /// 本文（1〜200文字、バリデーションはDTOで）
+  body      String
+  /// 投稿者IPアドレス
+  ipAddress String    @map("ip_address")
+  /// 論理削除日時（Phase 2 管理者削除用）
+  deletedAt DateTime? @map("deleted_at")
+  /// 作成日時
+  createdAt DateTime  @default(now()) @map("created_at")
+  /// 更新日時
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+  @@map("event_comments")
 }
 
 /// キャラクター投票

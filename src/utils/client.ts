@@ -9,6 +9,7 @@ import {
   UserStoresResponseSchema
 } from '@/schemas/activity.dto'
 import { AuthResponseSchema, CurrentUserResponseSchema } from '@/schemas/auth.dto'
+import { CreateCommentRequestSchema, ListCommentsResponseSchema } from '@/schemas/comment.dto'
 import {
   CheckUrlResponseSchema,
   EventRequestSchema,
@@ -314,6 +315,28 @@ const api = makeApi([
       }
     ],
     response: SuccessResponseSchemaForClient
+  },
+  // コメント関連API
+  {
+    method: 'get',
+    path: '/api/events/:uuid/comments',
+    alias: 'getEventComments',
+    description: 'イベントのコメント一覧を取得',
+    response: ListCommentsResponseSchema
+  },
+  {
+    method: 'post',
+    path: '/api/events/:uuid/comments',
+    alias: 'createEventComment',
+    description: 'イベントにコメントを投稿',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: CreateCommentRequestSchema
+      }
+    ],
+    response: z.object({ id: z.string() })
   }
 ])
 
