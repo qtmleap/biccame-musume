@@ -90,7 +90,7 @@ export const HoursSchema = z.object({
  */
 export const AccessInfoSchema = z.object({
   station: z.string().nonempty('駅名は必須です'),
-  description: z.string().nonempty('アクセス説明は必須です'),
+  description: z.string().nonempty('アクセス説明は必須です').optional(),
   duration: z.string().nonempty('所要時間は必須です').optional(),
   notes: z.string().nonempty('備考は必須です').optional(),
   lines: z.array(z.string().nonempty('路線名は必須です'))
