@@ -19,7 +19,6 @@ export const VoteCountItemSchema = z.object({
   count: z.number().openapi({ example: 42 })
 })
 
-
 /**
  * 投票カウント一覧
  */

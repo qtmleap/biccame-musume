@@ -85,7 +85,6 @@ export const HoursSchema = z.object({
   note: z.string().nonempty('備考は必須です').optional()
 })
 
-
 /**
  * アクセス情報の型定義
  */
@@ -97,7 +96,6 @@ export const AccessInfoSchema = z.object({
   lines: z.array(z.string().nonempty('路線名は必須です')).nonempty('路線を最低 1 つ指定してください')
 })
 
-
 /**
  * 座標の型定義
  */
@@ -105,7 +103,6 @@ export const CoordinatesSchema = z.object({
   latitude: z.number(),
   longitude: z.number()
 })
-
 
 /**
  * 店舗詳細情報の型定義
@@ -120,7 +117,6 @@ export const StoreDetailsSchema = z.object({
   hours: z.array(HoursSchema).optional(),
   access: z.array(AccessInfoSchema)
 })
-
 
 /**
  * キャラクター情報の型定義
@@ -142,7 +138,6 @@ export const CharacterSchema = z
       return new URL(key, 'https://biccame.jp/profile/').href
     })()
   }))
-
 
 /**
  * キャラクターと店舗情報を含むデータの型定義
