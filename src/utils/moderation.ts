@@ -20,7 +20,8 @@ export const moderateText = async (text: string, ai: Ai, env?: { ENVIRONMENT?: s
       messages: [{ role: 'user', content: text }]
     })
 
-    const response = (result as { response?: string }).response ?? ''
+    // Workers AI の Llama Guard は "\n\nsafe" / "\n\nunsafe\nS1" のように先頭改行を含めて返す
+    const response = ((result as { response?: string }).response ?? '').trim()
 
     if (!response.startsWith('unsafe')) {
       return { safe: true }
