@@ -1,5 +1,4 @@
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
+import { getPrisma } from '@/lib/prisma'
 import type { Bindings } from '@/types/bindings'
 
 /**
@@ -14,7 +13,7 @@ export const getUserStores = async (
   userId: string,
   status?: 'visited' | 'favorite' | 'want_to_visit'
 ): Promise<string[]> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   const where = status ? { userId, status } : { userId }
 
@@ -59,7 +58,7 @@ export const updateUserStore = async (
   storeKey: string,
   status: 'visited' | 'favorite' | 'want_to_visit'
 ): Promise<void> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   await prisma.userStore.upsert({
     where: { userId_storeKey: { userId, storeKey } },
@@ -85,7 +84,7 @@ export const removeVisitedStore = async (env: Bindings, userId: string, storeKey
  * @param storeKey - 店舗キー
  */
 export const deleteUserStore = async (env: Bindings, userId: string, storeKey: string): Promise<void> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   await prisma.userStore.deleteMany({
     where: { userId, storeKey }
@@ -104,7 +103,7 @@ export const getUserEvents = async (
   userId: string,
   status?: 'interested' | 'completed'
 ): Promise<string[]> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   const where = status ? { userId, status } : { userId }
 
@@ -123,7 +122,7 @@ export const getUserEvents = async (
  * @returns 興味のあるイベントのeventIdリスト
  */
 export const getInterestedEvents = async (env: Bindings, userId: string): Promise<string[]> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   const events = await prisma.userEvent.findMany({
     where: { userId, status: 'interested' },
@@ -140,7 +139,7 @@ export const getInterestedEvents = async (env: Bindings, userId: string): Promis
  * @param eventId - イベントID
  */
 export const addInterestedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   await prisma.userEvent.upsert({
     where: { userId_eventId_status: { userId, eventId, status: 'interested' } },
@@ -156,7 +155,7 @@ export const addInterestedEvent = async (env: Bindings, userId: string, eventId:
  * @param eventId - イベントID
  */
 export const removeInterestedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   await prisma.userEvent.deleteMany({
     where: { userId, eventId, status: 'interested' }
@@ -170,7 +169,7 @@ export const removeInterestedEvent = async (env: Bindings, userId: string, event
  * @returns 達成済みイベントのeventIdリスト
  */
 export const getCompletedEvents = async (env: Bindings, userId: string): Promise<string[]> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   const events = await prisma.userEvent.findMany({
     where: { userId, status: 'completed' },
@@ -193,7 +192,7 @@ export const updateUserEvent = async (
   eventId: string,
   status: 'interested' | 'completed'
 ): Promise<void> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   const completedAt = status === 'completed' ? new Date() : null
 
@@ -217,7 +216,7 @@ export const deleteUserEvent = async (
   eventId: string,
   status: 'interested' | 'completed'
 ): Promise<void> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   await prisma.userEvent.deleteMany({
     where: { userId, eventId, status }
@@ -231,7 +230,7 @@ export const deleteUserEvent = async (
  * @param eventId - イベントID
  */
 export const addCompletedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   await prisma.userEvent.upsert({
     where: { userId_eventId_status: { userId, eventId, status: 'completed' } },
@@ -247,7 +246,7 @@ export const addCompletedEvent = async (env: Bindings, userId: string, eventId: 
  * @param eventId - イベントID
  */
 export const removeCompletedEvent = async (env: Bindings, userId: string, eventId: string): Promise<void> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   await prisma.userEvent.deleteMany({
     where: { userId, eventId, status: 'completed' }
@@ -269,7 +268,7 @@ export const getUserActivity = async (
     completed: string[]
   }
 }> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   // ユーザーの存在チェック
   const user = await prisma.user.findUnique({
@@ -299,7 +298,7 @@ export const getEventStats = async (
   env: Bindings,
   eventId: string
 ): Promise<{ interestedCount: number; completedCount: number }> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   const [interestedCount, completedCount] = await Promise.all([
     prisma.userEvent.count({ where: { eventId, status: 'interested' } }),
@@ -321,7 +320,7 @@ export const getEventsStats = async (
 ): Promise<Record<string, { interestedCount: number; completedCount: number }>> => {
   if (eventIds.length === 0) return {}
 
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   const [interestedCounts, completedCounts] = await Promise.all([
     prisma.userEvent.groupBy({

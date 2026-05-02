@@ -150,6 +150,7 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
   const [scrollLeft, setScrollLeft] = useState(0)
   const [isScrolling, setIsScrolling] = useState(false)
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const rafRef = useRef<number | null>(null)
   const isInitialMountRef = useRef(true)
 
   const [isDragging, setIsDragging] = useState(false)
@@ -157,7 +158,14 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
   const hasDraggedRef = useRef(false)
 
   const handleScroll = useCallback(() => {
-    if (scrollContainerRef.current) {
+    if (!scrollContainerRef.current) return
+
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current)
+    }
+
+    rafRef.current = requestAnimationFrame(() => {
+      if (!scrollContainerRef.current) return
       setScrollLeft(scrollContainerRef.current.scrollLeft)
 
       if (isInitialMountRef.current) return
@@ -171,7 +179,7 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
       scrollTimeoutRef.current = setTimeout(() => {
         setIsScrolling(false)
       }, 150)
-    }
+    })
   }, [])
 
   useEffect(() => {
@@ -188,6 +196,19 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
       })
     }
   }, [todayOffset, monthOffset])
+
+  useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+      if (scrollTimeoutRef.current !== null) {
+        clearTimeout(scrollTimeoutRef.current)
+        scrollTimeoutRef.current = null
+      }
+    }
+  }, [])
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (!scrollContainerRef.current) return

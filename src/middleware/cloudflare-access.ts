@@ -5,6 +5,7 @@ import { createRemoteJWKSet, jwtVerify } from 'jose'
 type Bindings = {
   CF_ACCESS_TEAM_DOMAIN: string
   CF_ACCESS_AUD: string
+  ENVIRONMENT?: string
 }
 
 type JWTPayload = {
@@ -15,14 +16,6 @@ type JWTPayload = {
   iss: string
   sub: string
   type: string
-}
-
-/**
- * 開発環境かどうかを判定
- */
-const isDevelopmentEnvironment = (c: Context): boolean => {
-  const host = c.req.header('Host')
-  return host?.includes('localhost') || host?.includes('127.0.0.1') || false
 }
 
 /**
@@ -56,8 +49,8 @@ const extractTokenFromCookie = (cookie: string): string | undefined => {
  * 開発環境では認証をスキップ
  */
 export const CFAuth = async <T extends Bindings>(c: Context<{ Bindings: T }>, next: Next) => {
-  // 開発環境では認証をスキップ
-  if (isDevelopmentEnvironment(c)) {
+  // ローカル開発環境では認証をスキップ
+  if (c.env.ENVIRONMENT === 'local') {
     console.log('[Dev] Cloudflare Access check skipped for development environment')
     await next()
     return

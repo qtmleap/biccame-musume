@@ -1,5 +1,6 @@
 import type { Dayjs } from 'dayjs'
 import { GanttRow } from '@/components/events/gantt/gantt-row'
+import { GanttDateHeader } from '@/components/events/gantt-chart-parts'
 import { hideScrollbarStyle } from '@/components/events/gantt-chart-utils'
 import { GANTT_CHART_LABELS } from '@/locales/app.content'
 import type { EventBar } from './use-gantt-layout'
@@ -68,6 +69,7 @@ export const GanttTimeline = ({
           onTouchEnd={onTouchEnd}
         >
           <div className='min-w-max'>
+            <GanttDateHeader dates={dates} today={today} actualMonthEnd={actualMonthEnd} />
             <div key={`gantt-${monthOffset}-${eventBars.map((b) => b.event.uuid).join('-')}`}>
               {eventBars.map((bar) => (
                 <GanttRow
