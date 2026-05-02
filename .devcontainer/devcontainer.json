@@ -38,7 +38,9 @@
       "dockerDashComposeVersion": "v2"
     },
     "ghcr.io/schlich/devcontainer-features/playwright:0": {},
-    "ghcr.io/stu-bell/devcontainer-features/claude-code:0": {},
+    "ghcr.io/stu-bell/devcontainer-features/claude-code:0": {
+      "version": "latest"
+    },
     "ghcr.io/dhoeric/features/act:1": {}
   },
   "postAttachCommand": "/bin/sh .devcontainer/postAttachCommand.sh",
