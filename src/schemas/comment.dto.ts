@@ -12,8 +12,8 @@ export const CreateCommentRequestSchema = z
     body: z
       .string()
       .min(1, 'コメントは必須です')
-      .max(200, 'コメントは 200 文字以内で入力してください')
-      .openapi({ description: 'コメント本文（1〜200文字）', example: 'イベント楽しみにしています！' }),
+      .max(40, 'コメントは 40 文字以内で入力してください')
+      .openapi({ description: 'コメント本文（1〜40文字）', example: 'イベント楽しみ！' }),
     turnstileToken: z
       .string()
       .min(1, 'Turnstileトークンは必須です')
