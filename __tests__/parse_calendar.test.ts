@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { parseCalendarHtml } from '../.vscode/scripts/parse_store_info'
+import { parseCalendarHtml } from '../.vscode/scripts/parsers/calendar'
 
 const buildCell = (day: number, opts: { gray?: boolean; entries?: { key: string; label: string }[] } = {}): string => {
   const style = opts.gray ? 'color:#CCCCCC;height:100px;' : 'height:100px;'
