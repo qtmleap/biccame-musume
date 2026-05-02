@@ -18,6 +18,8 @@ services:
   firebase:
     image: andreysenov/firebase-tools:latest
     command: firebase emulators:start --only auth --import=auth
+    ports:
+      - 19299:9099
     volumes:
       - ./auth:/home/node/auth
       - ./firebase.json:/home/node/firebase.json
