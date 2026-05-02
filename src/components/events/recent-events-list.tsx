@@ -9,6 +9,7 @@ import type { StoreKey } from '@/schemas/store.dto'
 type RecentEventsListProps = {
   events: Event[]
   currentEventId?: string
+  hideHeading?: boolean
 }
 
 /**
@@ -24,7 +25,7 @@ const CATEGORY_COLORS: Record<Event['category'], string> = {
 /**
  * 最近更新されたイベントリスト
  */
-export const RecentEventsList = ({ events, currentEventId }: RecentEventsListProps) => {
+export const RecentEventsList = ({ events, currentEventId, hideHeading = false }: RecentEventsListProps) => {
   // 最近更新された10件を取得（現在のイベントを除く）
   const recentEvents = events
     .filter((event) => event.uuid !== currentEventId)
@@ -37,7 +38,7 @@ export const RecentEventsList = ({ events, currentEventId }: RecentEventsListPro
 
   return (
     <div key={currentEventId} className='bg-pink-50 rounded-lg'>
-      <h2 className='text-lg font-bold text-gray-900 mb-4'>最近更新されたイベント</h2>
+      {!hideHeading && <h2 className='text-lg font-bold text-gray-900 mb-4'>最近更新されたイベント</h2>}
       <div className='flex flex-col divide-y divide-gray-200'>
         {recentEvents.map((event, index) => {
           // 店舗名を取得（最大2つまで表示、それ以上は「他」と表示）
