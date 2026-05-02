@@ -2,7 +2,6 @@ import type { Dictionary } from 'intlayer'
 import {
   type EventCategory,
   EventCategorySchema,
-  type EventConditionType,
   EventConditionTypeSchema,
   type EventStatus,
   EventStatusSchema,
@@ -182,13 +181,14 @@ const appContent = {
       completedEvents: '達成したイベント',
       noCompletedEvents: 'まだ達成したイベントがありません',
       viewAll: '一覧を見る',
-      backToMyPage: 'マイページに戻る',
       findEvents: 'イベントを探す'
     },
     filter: {
       region: '地域で絞り込み',
       category: '種別で絞り込み',
-      status: '開催状況で絞り込み'
+      status: '開催状況で絞り込み',
+      store: '店舗で絞り込み',
+      storeAll: 'すべての店舗'
     },
     sort: {
       random: 'ランダム',
@@ -208,6 +208,7 @@ const appContent = {
       untilEnd: '〜なくなり次第',
       untilStockLasts: '〜なくなり次第終了',
       firstCome: '先着',
+      firstComeWithCount: '先着{count}名',
       lottery: '抽選',
       lotteryWithCount: '抽選{count}名',
       everyone: '全員に配布',
@@ -315,7 +316,6 @@ export default appContent
 // コンポーネントから使いやすいようにエクスポート
 export const EVENT_STATUS_LABELS = appContent.content.status as Record<EventStatus, string>
 export const EVENT_CATEGORY_LABELS = appContent.content.category as Record<EventCategory, string>
-export const EVENT_CONDITION_LABELS = appContent.content.condition as Record<EventConditionType, string>
 export const REFERENCE_URL_TYPE_LABELS = appContent.content.ref as Record<ReferenceUrlType, string>
 export const REFERENCE_URL_TYPE_LABELS_LONG = appContent.content.refLong as Record<ReferenceUrlType, string>
 export const REGION_LABELS = appContent.content.region as Record<Region, string>
@@ -335,10 +335,7 @@ export const ROUTE_LABELS = appContent.content.route
 export const LINE_STICKER_LABELS = appContent.content.lineSticker
 export const DATE_LABELS = appContent.content.date
 export const HOME_LABELS = appContent.content.home
-export const SHARE_LABELS = appContent.content.share
 export const CONFIRMATION_LABELS = appContent.content.confirmation
 export const EVENT_LIST_LABELS = appContent.content.eventList
-export const BIRTHDAY_DIALOG_LABELS = appContent.content.birthdayDialog
 export const EVENT_LIST_ITEM_LABELS = appContent.content.eventListItem
 export const GANTT_CHART_LABELS = appContent.content.ganttChart
-export const COMMON_LABELS = appContent.content.common

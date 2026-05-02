@@ -6,28 +6,22 @@ import { z } from 'zod'
 export const PageViewStatsSchema = z.object({
   total: z.number().int().nonnegative(),
   today: z.number().int().nonnegative(),
-  paths: z.record(z.string(), z.number().int().nonnegative()).optional()
+  paths: z.record(z.string().nonempty('パスは必須です'), z.number().int().nonnegative()).optional()
 })
-
-export type PageViewStats = z.infer<typeof PageViewStatsSchema>
 
 /**
  * ページビュー取得リクエストのクエリパラメータ
  */
 export const PageViewQuerySchema = z.object({
-  path: z.string().optional()
+  path: z.string().nonempty('パスは必須です').optional()
 })
-
-export type PageViewQuery = z.infer<typeof PageViewQuerySchema>
 
 /**
  * ページビュー記録リクエストのスキーマ
  */
 export const TrackPageViewSchema = z.object({
-  path: z.string().min(1)
+  path: z.string().nonempty('パスは必須です')
 })
-
-export type TrackPageView = z.infer<typeof TrackPageViewSchema>
 
 /**
  * ページビュー記録レスポンスのスキーマ
@@ -35,5 +29,3 @@ export type TrackPageView = z.infer<typeof TrackPageViewSchema>
 export const TrackPageViewResponseSchema = z.object({
   success: z.boolean()
 })
-
-export type TrackPageViewResponse = z.infer<typeof TrackPageViewResponseSchema>

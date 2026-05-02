@@ -1,20 +1,11 @@
 import { z } from '@hono/zod-openapi'
 
 /**
- * ユーザーIDパラメータスキーマ
- */
-export const UserActivityUserIdParamSchema = z
-  .object({
-    userId: z.string().openapi({ description: 'Firebase Auth UID' })
-  })
-  .openapi('UserActivityUserIdParam')
-
-/**
  * 店舗キーパラメータスキーマ
  */
 export const StoreKeyParamSchema = z
   .object({
-    storeKey: z.string().openapi({ description: '店舗キー' })
+    storeKey: z.string().nonempty('店舗キーは必須です').openapi({ description: '店舗キー' })
   })
   .openapi('StoreKeyParam')
 
@@ -23,7 +14,7 @@ export const StoreKeyParamSchema = z
  */
 export const EventIdParamSchema = z
   .object({
-    eventId: z.string().openapi({ description: 'イベントID' })
+    eventId: z.string().nonempty('イベントIDは必須です').openapi({ description: 'イベントID' })
   })
   .openapi('EventIdParam')
 
@@ -41,7 +32,7 @@ export const SuccessResponseSchema = z
  */
 export const ErrorResponseSchema = z
   .object({
-    error: z.string().openapi({ description: 'エラーメッセージ' })
+    error: z.string().nonempty('エラーメッセージは必須です').openapi({ description: 'エラーメッセージ' })
   })
   .openapi('ErrorResponse')
 
@@ -50,7 +41,7 @@ export const ErrorResponseSchema = z
  */
 export const StoresResponseSchema = z
   .object({
-    stores: z.array(z.string()).openapi({ description: '店舗キーの配列' })
+    stores: z.array(z.string().nonempty('店舗キーは必須です')).openapi({ description: '店舗キーの配列' })
   })
   .openapi('StoresResponse')
 
@@ -59,7 +50,7 @@ export const StoresResponseSchema = z
  */
 export const EventsResponseSchema = z
   .object({
-    events: z.array(z.string()).openapi({ description: 'イベントIDの配列' })
+    events: z.array(z.string().nonempty('イベントIDは必須です')).openapi({ description: 'イベントIDの配列' })
   })
   .openapi('EventsResponse')
 
@@ -68,11 +59,15 @@ export const EventsResponseSchema = z
  */
 export const UserActivityResponseSchema = z
   .object({
-    stores: z.array(z.string()).openapi({ description: '訪問済み店舗キーの配列' }),
+    stores: z.array(z.string().nonempty('店舗キーは必須です')).openapi({ description: '訪問済み店舗キーの配列' }),
     events: z
       .object({
-        interested: z.array(z.string()).openapi({ description: '興味のあるイベントIDの配列' }),
-        completed: z.array(z.string()).openapi({ description: '達成済みイベントIDの配列' })
+        interested: z
+          .array(z.string().nonempty('イベントIDは必須です'))
+          .openapi({ description: '興味のあるイベントIDの配列' }),
+        completed: z
+          .array(z.string().nonempty('イベントIDは必須です'))
+          .openapi({ description: '達成済みイベントIDの配列' })
       })
       .openapi({ description: 'イベント関連のアクティビティ' })
   })
@@ -83,7 +78,9 @@ export const UserActivityResponseSchema = z
  */
 export const UpdateStoreStatusSchema = z
   .object({
-    status: z.enum(['visited', 'favorite', 'want_to_visit']).openapi({ description: '店舗のステータス' })
+    status: z
+      .enum(['visited', 'favorite', 'want_to_visit'], { error: '有効な店舗ステータスを選択してください' })
+      .openapi({ description: '店舗のステータス' })
   })
   .openapi('UpdateStoreStatus')
 
@@ -93,7 +90,7 @@ export const UpdateStoreStatusSchema = z
 export const StoresQuerySchema = z
   .object({
     status: z
-      .enum(['visited', 'favorite', 'want_to_visit'])
+      .enum(['visited', 'favorite', 'want_to_visit'], { error: '有効な店舗ステータスを選択してください' })
       .optional()
       .openapi({ description: '店舗のステータスフィルタ' })
   })
@@ -104,7 +101,9 @@ export const StoresQuerySchema = z
  */
 export const UpdateEventStatusSchema = z
   .object({
-    status: z.enum(['interested', 'completed']).openapi({ description: 'イベントのステータス' })
+    status: z
+      .enum(['interested', 'completed'], { error: '有効なイベントステータスを選択してください' })
+      .openapi({ description: 'イベントのステータス' })
   })
   .openapi('UpdateEventStatus')
 
@@ -113,7 +112,10 @@ export const UpdateEventStatusSchema = z
  */
 export const EventsQuerySchema = z
   .object({
-    status: z.enum(['interested', 'completed']).optional().openapi({ description: 'イベントのステータスフィルタ' })
+    status: z
+      .enum(['interested', 'completed'], { error: '有効なイベントステータスを選択してください' })
+      .optional()
+      .openapi({ description: 'イベントのステータスフィルタ' })
   })
   .openapi('EventsQuery')
 
@@ -122,25 +124,20 @@ export const EventsQuerySchema = z
  */
 export const EventDeleteQuerySchema = z
   .object({
-    status: z.enum(['interested', 'completed']).openapi({ description: '削除するステータス' })
+    status: z
+      .enum(['interested', 'completed'], { error: '有効なイベントステータスを選択してください' })
+      .openapi({ description: '削除するステータス' })
   })
   .openapi('EventDeleteQuery')
-
-export type UserActivityResponse = z.infer<typeof UserActivityResponseSchema>
-export type StoresResponse = z.infer<typeof StoresResponseSchema>
-export type EventsResponse = z.infer<typeof EventsResponseSchema>
-export type UpdateStoreStatus = z.infer<typeof UpdateStoreStatusSchema>
-export type UpdateEventStatus = z.infer<typeof UpdateEventStatusSchema>
-export type EventsQuery = z.infer<typeof EventsQuerySchema>
 
 /**
  * ユーザーアクティビティ統合レスポンススキーマ（Zodiosクライアント用）
  */
 export const UserActivitiesResponseSchema = z.object({
-  stores: z.array(z.string().nonempty()),
+  stores: z.array(z.string().nonempty('店舗キーは必須です')),
   events: z.object({
-    interested: z.array(z.string().nonempty()),
-    completed: z.array(z.string().nonempty())
+    interested: z.array(z.string().nonempty('イベントIDは必須です')),
+    completed: z.array(z.string().nonempty('イベントIDは必須です'))
   })
 })
 
@@ -148,14 +145,14 @@ export const UserActivitiesResponseSchema = z.object({
  * ユーザーイベント一覧レスポンススキーマ（Zodiosクライアント用）
  */
 export const UserEventsResponseSchema = z.object({
-  events: z.array(z.string().nonempty())
+  events: z.array(z.string().nonempty('イベントIDは必須です'))
 })
 
 /**
  * ユーザー店舗一覧レスポンススキーマ（Zodiosクライアント用）
  */
 export const UserStoresResponseSchema = z.object({
-  stores: z.array(z.string().nonempty())
+  stores: z.array(z.string().nonempty('店舗キーは必須です'))
 })
 
 /**
@@ -164,7 +161,3 @@ export const UserStoresResponseSchema = z.object({
 export const SuccessResponseSchemaForClient = z.object({
   success: z.boolean()
 })
-
-export type UserActivitiesResponse = z.infer<typeof UserActivitiesResponseSchema>
-export type UserEventsResponse = z.infer<typeof UserEventsResponseSchema>
-export type UserStoresResponse = z.infer<typeof UserStoresResponseSchema>

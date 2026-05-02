@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog'
 
 const STORAGE_KEY = 'pwa:ios-install-prompt-dismissed-at'
 const SUPPRESSION_DAYS = 14
@@ -62,6 +69,7 @@ export const IosInstallPrompt = () => {
       <DialogContent showCloseButton={false} className='bg-card border-pink-100 rounded-xl shadow-lg max-w-sm'>
         <DialogHeader>
           <DialogTitle className='text-gray-900 text-base font-semibold'>ホーム画面に追加</DialogTitle>
+          <DialogDescription className='sr-only'>このアプリをホーム画面に追加する手順</DialogDescription>
         </DialogHeader>
         <div className='flex flex-col gap-3 text-sm text-gray-700'>
           <ul className='list-disc list-inside space-y-1 text-gray-600 text-xs'>

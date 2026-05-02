@@ -3,21 +3,27 @@ import { StoreKeySchema } from './store.dto'
 /**
  * イベントステータス
  */
-export const EventStatusSchema = z.enum(['upcoming', 'ongoing', 'last_day', 'ended'])
+export const EventStatusSchema = z.enum(['upcoming', 'ongoing', 'last_day', 'ended'], {
+  error: 'イベントステータスが不正です'
+})
 
 export type EventStatus = z.infer<typeof EventStatusSchema>
 
 /**
  * イベント種別（カテゴリ）
  */
-export const EventCategorySchema = z.enum(['limited_card', 'regular_card', 'ackey', 'other'])
+export const EventCategorySchema = z.enum(['limited_card', 'regular_card', 'ackey', 'other'], {
+  error: 'イベント種別を選択してください'
+})
 
 export type EventCategory = z.infer<typeof EventCategorySchema>
 
 /**
  * 配布条件の種類
  */
-export const EventConditionTypeSchema = z.enum(['purchase', 'first_come', 'lottery', 'everyone'])
+export const EventConditionTypeSchema = z.enum(['purchase', 'first_come', 'lottery', 'everyone'], {
+  error: '配布条件の種類を選択してください'
+})
 
 export type EventConditionType = z.infer<typeof EventConditionTypeSchema>
 
@@ -36,12 +42,12 @@ export const EventConditionSchema = z.object({
   quantity: z.number({ error: '人数は数値で入力してください' }).min(1, '人数は 1 人以上で入力してください').optional()
 })
 
-export type EventCondition = z.infer<typeof EventConditionSchema>
-
 /**
  * 参考URLの種類
  */
-export const ReferenceUrlTypeSchema = z.enum(['announce', 'start', 'end'])
+export const ReferenceUrlTypeSchema = z.enum(['announce', 'start', 'end'], {
+  error: 'URL の種類を選択してください'
+})
 
 export type ReferenceUrlType = z.infer<typeof ReferenceUrlTypeSchema>
 
@@ -54,8 +60,6 @@ export const ReferenceUrlSchema = z.object({
   url: z.url('有効なURLを入力してください')
 })
 
-export type ReferenceUrl = z.infer<typeof ReferenceUrlSchema>
-
 /**
  * イベント作成・更新リクエスト（GET/PUT/POST用）
  */
@@ -65,8 +69,8 @@ export const EventRequestSchema = z.object({
   title: z.string().nonempty('イベント名は必須です'),
   stores: z.array(StoreKeySchema).nonempty('最低 1 つの店舗を選択してください'),
   startDate: z.string().nonempty('開始日は必須です'),
-  endDate: z.string().optional(),
-  endedAt: z.string().optional(),
+  endDate: z.string().nonempty('終了日は必須です').optional(),
+  endedAt: z.string().nonempty('終了日時は必須です').optional(),
   limitedQuantity: z
     .number({ error: '配布数は数値で入力してください' })
     .min(1, '配布数は 1 以上で入力してください')
@@ -84,11 +88,11 @@ export type EventRequest = z.infer<typeof EventRequestSchema>
  */
 export const EventRequestQuerySchema = z.object({
   category: EventCategorySchema.optional(),
-  title: z.string().optional(),
-  stores: z.string().optional(),
-  startDate: z.string().optional(),
-  endDate: z.string().optional(),
-  endAt: z.string().optional(),
+  title: z.string().nonempty('イベント名は必須です').optional(),
+  stores: z.string().nonempty('店舗は必須です').optional(),
+  startDate: z.string().nonempty('開始日は必須です').optional(),
+  endDate: z.string().nonempty('終了日は必須です').optional(),
+  endAt: z.string().nonempty('終了日時は必須です').optional(),
   referenceUrls: z.url().optional()
 })
 export type EventRequestQuery = z.infer<typeof EventRequestQuerySchema>
@@ -97,10 +101,10 @@ export type EventRequestQuery = z.infer<typeof EventRequestQuerySchema>
  * イベント（API レスポンス用）
  */
 export const EventSchema = z.object({
-  uuid: z.string().uuid(),
+  uuid: z.uuid(),
   category: EventCategorySchema,
-  title: z.string(),
-  stores: z.array(StoreKeySchema),
+  title: z.string().nonempty('イベント名は必須です'),
+  stores: z.array(StoreKeySchema).nonempty('最低 1 つの店舗を選択してください'),
   startDate: z.coerce.date(),
   endDate: z.coerce.date().optional(),
   endedAt: z.coerce.date().optional(),
@@ -123,7 +127,7 @@ export type Event = z.infer<typeof EventSchema>
  * イベント統計リクエストスキーマ
  */
 export const EventStatsRequestSchema = z.object({
-  eventIds: z.array(z.string().nonempty())
+  eventIds: z.array(z.string().nonempty('イベントIDは必須です')).nonempty('イベントIDを最低 1 つ指定してください')
 })
 
 /**
@@ -144,7 +148,3 @@ export const CheckUrlResponseSchema = z.object({
   exists: z.boolean(),
   event: EventSchema.optional()
 })
-
-export type EventStatsRequest = z.infer<typeof EventStatsRequestSchema>
-export type EventStatsResponse = z.infer<typeof EventStatsResponseSchema>
-export type CheckUrlResponse = z.infer<typeof CheckUrlResponseSchema>

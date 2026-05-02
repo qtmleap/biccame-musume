@@ -17,6 +17,7 @@ import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { EventStatusFilter } from '@/components/events/event-status-filter'
+import { EventStoreFilter } from '@/components/events/event-store-filter'
 import { EventUserActivityFilter } from '@/components/events/event-user-activity-filter'
 import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { Button } from '@/components/ui/button'
@@ -203,6 +204,7 @@ const EventsContent = () => {
                     <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
                     <EventUserActivityFilter />
                     <RegionFilterControl />
+                    <EventStoreFilter />
                   </div>
                 </div>
                 <div className='border-t border-pink-100 px-4 py-3'>
@@ -235,25 +237,31 @@ const EventsContent = () => {
 
         {/* デスクトップ: インラインフィルター */}
         <div className='hidden md:flex md:flex-col md:gap-2'>
-          {/* 種別フィルター */}
-          <EventCategoryFilter />
+          {/* 種別フィルターと店舗フィルター */}
+          <div className='flex items-end gap-4'>
+            <div className='flex-1'>
+              <EventCategoryFilter />
+            </div>
+            <div className='w-64 shrink-0'>
+              <EventStoreFilter />
+            </div>
+          </div>
 
           {/* ステータスフィルタとマイアクティビティフィルタ */}
           <div className='flex items-center gap-4'>
             <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
             <EventUserActivityFilter />
-            <Button
-              variant='outline'
+            <Toggle
               size='sm'
-              onClick={handleResetFilters}
+              pressed={false}
+              onPressedChange={() => handleResetFilters()}
               disabled={!isFilterActive}
-              aria-disabled={!isFilterActive}
               aria-label='フィルターをクリア'
               title='フィルターをクリア'
-              className='ml-auto h-8 w-8 p-0 disabled:text-muted-foreground disabled:border-muted'
+              className='ml-auto h-8 w-8 p-0 text-gray-600 hover:text-gray-900 data-[state=on]:text-gray-900'
             >
               <X className='size-4' />
-            </Button>
+            </Toggle>
           </div>
 
           {/* 地域フィルター */}

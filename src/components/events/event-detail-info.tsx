@@ -18,7 +18,9 @@ const getConditionDetail = (condition: Event['conditions'][0]): string => {
     case 'purchase':
       return `${(condition.purchaseAmount ?? 0).toLocaleString()}円以上購入`
     case 'first_come':
-      return EVENT_LABELS.firstCome
+      return condition.quantity
+        ? EVENT_LABELS.firstComeWithCount.replace('{count}', condition.quantity.toString())
+        : EVENT_LABELS.firstCome
     case 'lottery':
       return condition.quantity
         ? EVENT_LABELS.lotteryWithCount.replace('{count}', condition.quantity.toString())
@@ -70,13 +72,6 @@ const EventStoresSection = ({ stores }: { stores: string[] }) => {
               <span key={storeKey} className='flex items-center gap-1'>
                 <Link to='/characters/$id' params={{ id: storeKey }} className='text-pink-600 hover:underline'>
                   {storeName}
-                </Link>
-                <Link
-                  to='/events'
-                  search={{ store: storeKey }}
-                  className='text-xs text-gray-400 hover:text-pink-600 hover:underline'
-                >
-                  イベントを見る
                 </Link>
                 {index < stores.length - 1 && <span>、</span>}
               </span>
