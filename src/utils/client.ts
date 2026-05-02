@@ -19,7 +19,7 @@ import {
 import { SearchResultSchema } from '@/schemas/search.dto'
 import { PageViewStatsSchema } from '@/schemas/stats.dto'
 import { StoresSchema } from '@/schemas/store.dto'
-import { UpsertUserRequestSchemaForClient, UserResponseSchemaForClient } from '@/schemas/user.dto'
+import { UserResponseSchemaForClient } from '@/schemas/user.dto'
 import { VoteCountListSchema, VoteResponseSchema } from '@/schemas/vote.dto'
 
 /**
@@ -226,20 +226,6 @@ const api = makeApi([
     path: '/api/users/:id',
     alias: 'getUser',
     description: 'ユーザー情報を取得',
-    response: UserResponseSchemaForClient
-  },
-  {
-    method: 'post',
-    path: '/api/users',
-    alias: 'upsertUser',
-    description: 'ユーザーを作成/更新',
-    parameters: [
-      {
-        name: 'body',
-        type: 'Body',
-        schema: UpsertUserRequestSchemaForClient
-      }
-    ],
     response: UserResponseSchemaForClient
   },
   // ユーザーアクティビティ関連API

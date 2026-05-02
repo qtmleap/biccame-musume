@@ -54,7 +54,8 @@ export const LegResponseSchema = z
  */
 export const RouteResponseSchema = z
   .object({
-    legs: z.array(LegResponseSchema).openapi({ description: '経路情報の配列' })
+    legs: z.array(LegResponseSchema).openapi({ description: '経路情報の配列' }),
+    degraded: z.boolean().optional().openapi({ description: 'LLM failure fallback indicator' })
   })
   .openapi('RouteResponse')
 

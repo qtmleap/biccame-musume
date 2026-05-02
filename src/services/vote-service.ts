@@ -1,8 +1,7 @@
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
+import { getPrisma } from '@/lib/prisma'
 import type { Bindings } from '@/types/bindings'
 import { generateVoteKey } from '@/utils/vote'
 
@@ -33,7 +32,7 @@ export const getAllVoteCounts = async (
   env: Bindings,
   year?: number
 ): Promise<Array<{ key: string; count: number }>> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
   return (
     await prisma.voteCount.findMany({
       where: { year: year || dayjs().year() },
@@ -58,7 +57,7 @@ export const vote = async (
   characterId: string,
   ip: string
 ): Promise<{ success: boolean; message: string; nextVoteDate: string }> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   const currentYear = dayjs().year()
 
