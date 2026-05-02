@@ -142,7 +142,12 @@ export const CommentForm = ({ eventUuid }: CommentFormProps) => {
 
           <p className='text-xs text-muted-foreground'>投稿後は削除できません。送信前に内容を確認してください。</p>
 
-          <Button type='submit' disabled={!canSubmit} aria-label='コメントを投稿する' className='w-full'>
+          <Button
+            type='submit'
+            disabled={!canSubmit}
+            aria-label='コメントを投稿する'
+            className='w-full bg-[#e50012] hover:bg-[#c5000f] text-white'
+          >
             {isPending ? '送信中...' : 'コメントを投稿する'}
           </Button>
         </form>
