@@ -130,7 +130,6 @@ export const EventDeleteQuerySchema = z
   })
   .openapi('EventDeleteQuery')
 
-
 /**
  * ユーザーアクティビティ統合レスポンススキーマ（Zodiosクライアント用）
  */

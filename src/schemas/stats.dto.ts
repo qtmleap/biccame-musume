@@ -9,7 +9,6 @@ export const PageViewStatsSchema = z.object({
   paths: z.record(z.string().nonempty('パスは必須です'), z.number().int().nonnegative()).optional()
 })
 
-
 /**
  * ページビュー取得リクエストのクエリパラメータ
  */
@@ -17,14 +16,12 @@ export const PageViewQuerySchema = z.object({
   path: z.string().nonempty('パスは必須です').optional()
 })
 
-
 /**
  * ページビュー記録リクエストのスキーマ
  */
 export const TrackPageViewSchema = z.object({
   path: z.string().nonempty('パスは必須です')
 })
-
 
 /**
  * ページビュー記録レスポンスのスキーマ
