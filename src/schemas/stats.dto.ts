@@ -6,7 +6,7 @@ import { z } from 'zod'
 export const PageViewStatsSchema = z.object({
   total: z.number().int().nonnegative(),
   today: z.number().int().nonnegative(),
-  paths: z.record(z.string(), z.number().int().nonnegative()).optional()
+  paths: z.record(z.string().nonempty('パスは必須です'), z.number().int().nonnegative()).optional()
 })
 
 
@@ -14,7 +14,7 @@ export const PageViewStatsSchema = z.object({
  * ページビュー取得リクエストのクエリパラメータ
  */
 export const PageViewQuerySchema = z.object({
-  path: z.string().optional()
+  path: z.string().nonempty('パスは必須です').optional()
 })
 
 
@@ -22,7 +22,7 @@ export const PageViewQuerySchema = z.object({
  * ページビュー記録リクエストのスキーマ
  */
 export const TrackPageViewSchema = z.object({
-  path: z.string().min(1)
+  path: z.string().nonempty('パスは必須です')
 })
 
 
@@ -32,4 +32,3 @@ export const TrackPageViewSchema = z.object({
 export const TrackPageViewResponseSchema = z.object({
   success: z.boolean()
 })
-
