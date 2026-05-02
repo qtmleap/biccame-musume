@@ -1,11 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { AlertCircle } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
-import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
@@ -33,11 +32,6 @@ type CommentFormProps = {
   onSuccess?: () => void
 }
 
-type PostError = {
-  status?: number
-  message?: string
-}
-
 const pickRandom = <T,>(arr: T[]): T | undefined => arr[Math.floor(Math.random() * arr.length)]
 
 const pickRandomDifferent = <T extends { id: string }>(arr: T[], currentId?: string): T | undefined => {
@@ -49,7 +43,6 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
   const queryClient = useQueryClient()
   const { data: allCharacters } = useCharacters()
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
-  const [globalError, setGlobalError] = useState<{ status: number; message: string } | null>(null)
   const turnstileRef = useRef<TurnstileInstance | undefined>(undefined)
 
   const biccameMusumePool = allCharacters.filter((c) => c.character?.is_biccame_musume === true)
@@ -85,21 +78,20 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
       const next = pickRandom(biccameMusumePool)
       setCharacter(next)
       form.reset({ characterId: next?.id ?? '', body: '' })
-      setGlobalError(null)
       setTurnstileToken(null)
       turnstileRef.current?.reset()
       queryClient.invalidateQueries({ queryKey: ['events', eventUuid, 'comments'] })
+      toast.success('コメントを投稿しました')
       onSuccess?.()
     },
-    onError: (error: PostError) => {
+    onError: () => {
       turnstileRef.current?.reset()
       setTurnstileToken(null)
-      setGlobalError({ status: error?.status ?? 0, message: '投稿できませんでした' })
+      toast.error('投稿できませんでした')
     }
   })
 
   const onSubmit = (values: FormValues) => {
-    setGlobalError(null)
     mutation.mutate(values)
   }
 
@@ -108,13 +100,6 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
 
   return (
     <div className='space-y-3'>
-      {globalError && (
-        <Alert variant='destructive' role='alert'>
-          <AlertCircle className='h-4 w-4' />
-          <AlertDescription>{globalError.message}</AlertDescription>
-        </Alert>
-      )}
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className='flex items-start gap-3'>
