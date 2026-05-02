@@ -1,11 +1,8 @@
 import { describe, expect, test } from 'bun:test'
 import { parseCalendarHtml } from '../.vscode/scripts/parse_store_info'
 
-const buildCell = (
-  day: number,
-  opts: { gray?: boolean; entries?: { key: string; label: string }[] } = {}
-): string => {
-  const style = opts.gray ? "color:#CCCCCC;height:100px;" : "height:100px;"
+const buildCell = (day: number, opts: { gray?: boolean; entries?: { key: string; label: string }[] } = {}): string => {
+  const style = opts.gray ? 'color:#CCCCCC;height:100px;' : 'height:100px;'
   const entries = (opts.entries ?? [])
     .map(
       ({ key, label }) =>
@@ -23,33 +20,25 @@ const wrapTable = (cells: string[]): string => `
 
 describe('parseCalendarHtml', () => {
   test('擬人化N周年から character_birthday を抽出 (year - N)', () => {
-    const html = wrapTable([
-      buildCell(26, { entries: [{ key: 'nagoya', label: 'なごやたん擬人化10周年' }] })
-    ])
+    const html = wrapTable([buildCell(26, { entries: [{ key: 'nagoya', label: 'なごやたん擬人化10周年' }] })])
     const result = parseCalendarHtml(html, 2026, 4)
     expect(result.nagoya?.character_birthday).toBe('2016-04-26')
   })
 
   test('店舗誕生N周年から store_birthday を抽出', () => {
-    const html = wrapTable([
-      buildCell(10, { entries: [{ key: 'nanba', label: 'なんばたん店舗誕生25周年' }] })
-    ])
+    const html = wrapTable([buildCell(10, { entries: [{ key: 'nanba', label: 'なんばたん店舗誕生25周年' }] })])
     const result = parseCalendarHtml(html, 2026, 5)
     expect(result.nanba?.store_birthday).toBe('2001-05-10')
   })
 
   test('擬人化記念日 (デビュー年) は year - 0 として扱う', () => {
-    const html = wrapTable([
-      buildCell(14, { entries: [{ key: 'itt', label: 'いっとーたん擬人化記念日' }] })
-    ])
+    const html = wrapTable([buildCell(14, { entries: [{ key: 'itt', label: 'いっとーたん擬人化記念日' }] })])
     const result = parseCalendarHtml(html, 2026, 3)
     expect(result.itt?.character_birthday).toBe('2026-03-14')
   })
 
   test('店舗誕生記念日 (新規店) も year - 0 として扱う', () => {
-    const html = wrapTable([
-      buildCell(20, { entries: [{ key: 'aitawa', label: 'あいタワたん店舗誕生記念日' }] })
-    ])
+    const html = wrapTable([buildCell(20, { entries: [{ key: 'aitawa', label: 'あいタワたん店舗誕生記念日' }] })])
     const result = parseCalendarHtml(html, 2026, 6)
     expect(result.aitawa?.store_birthday).toBe('2026-06-20')
   })
@@ -100,9 +89,7 @@ describe('parseCalendarHtml', () => {
   })
 
   test('未知のラベル形式は黙って無視する', () => {
-    const html = wrapTable([
-      buildCell(15, { entries: [{ key: 'bar', label: 'ばーたんイベント開催' }] })
-    ])
+    const html = wrapTable([buildCell(15, { entries: [{ key: 'bar', label: 'ばーたんイベント開催' }] })])
     const result = parseCalendarHtml(html, 2026, 5)
     expect(result.bar).toBeUndefined()
   })
