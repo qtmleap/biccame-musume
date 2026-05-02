@@ -94,20 +94,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
     onError: (error: PostError) => {
       turnstileRef.current?.reset()
       setTurnstileToken(null)
-
-      const status = error?.status ?? 0
-      if (status === 400) {
-        const msg = error?.message ?? ''
-        if (msg.toLowerCase().includes('turnstile')) {
-          setGlobalError({ status: 400, message: 'Turnstile 検証に失敗しました' })
-        } else {
-          setGlobalError({ status: 400, message: '不適切な内容と判定されました' })
-        }
-      } else if (status === 429) {
-        setGlobalError({ status: 429, message: '送信が多すぎます。しばらくしてからお試しください' })
-      } else {
-        setGlobalError({ status, message: 'コメントの送信に失敗しました。もう一度お試しください' })
-      }
+      setGlobalError({ status: error?.status ?? 0, message: '投稿できませんでした' })
     }
   })
 
