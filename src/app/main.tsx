@@ -6,8 +6,10 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 // dayjs設定
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
+import 'dayjs/locale/ja'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { IosInstallPrompt } from '@/components/pwa/install-prompt-ios'
@@ -30,8 +32,10 @@ import { routeTree } from './routeTree.gen'
 import '../index.css'
 import { QueryClient } from '@tanstack/react-query'
 
+dayjs.extend(relativeTime)
 dayjs.extend(utc)
 dayjs.extend(timezone)
+dayjs.locale('ja')
 dayjs.tz.setDefault('Asia/Tokyo')
 
 // Service Worker登録

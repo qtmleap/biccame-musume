@@ -4,6 +4,7 @@ import { HTTPException } from 'hono/http-exception'
 import { proxy } from 'hono/proxy'
 import { ZodError } from 'zod'
 import authRoutes from './api/auth'
+import comments from './api/comment'
 import direction from './api/direction'
 import events from './api/event'
 import me from './api/me'
@@ -72,6 +73,9 @@ app.route('/api/auth', authRoutes)
 
 // イベント管理APIルート
 app.route('/api/events', events)
+
+// イベントコメントAPIルート
+app.route('/api/events', comments)
 
 // 投票APIルート
 app.route('/api/votes', votes)
