@@ -28,9 +28,6 @@ type GanttLayout = {
   handleMouseMove: (e: React.MouseEvent) => void
   handleMouseUp: () => void
   handleMouseLeave: () => void
-  handleTouchStart: (e: React.TouchEvent) => void
-  handleTouchMove: (e: React.TouchEvent) => void
-  handleTouchEnd: () => void
   getLabelOffset: (startOffset: number, duration: number) => number
   hasDraggedRef: React.MutableRefObject<boolean>
 }
