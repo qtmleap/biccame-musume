@@ -242,18 +242,17 @@ const EventsContent = () => {
           <div className='flex items-center gap-4'>
             <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
             <EventUserActivityFilter />
-            <Button
-              variant='ghost'
+            <Toggle
               size='sm'
-              onClick={handleResetFilters}
+              pressed={false}
+              onPressedChange={() => handleResetFilters()}
               disabled={!isFilterActive}
-              aria-disabled={!isFilterActive}
               aria-label='フィルターをクリア'
               title='フィルターをクリア'
-              className='ml-auto h-8 w-8 p-0 text-gray-600 hover:text-gray-900'
+              className='ml-auto h-8 w-8 p-0 text-gray-600 hover:text-gray-900 data-[state=on]:text-gray-900'
             >
               <X className='size-4' />
-            </Button>
+            </Toggle>
           </div>
 
           {/* 地域フィルター */}
