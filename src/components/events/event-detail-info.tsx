@@ -18,7 +18,9 @@ const getConditionDetail = (condition: Event['conditions'][0]): string => {
     case 'purchase':
       return `${(condition.purchaseAmount ?? 0).toLocaleString()}円以上購入`
     case 'first_come':
-      return EVENT_LABELS.firstCome
+      return condition.quantity
+        ? EVENT_LABELS.firstComeWithCount.replace('{count}', condition.quantity.toString())
+        : EVENT_LABELS.firstCome
     case 'lottery':
       return condition.quantity
         ? EVENT_LABELS.lotteryWithCount.replace('{count}', condition.quantity.toString())
