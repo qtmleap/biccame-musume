@@ -8,17 +8,22 @@ import { z } from 'zod'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-import { Textarea } from '@/components/ui/textarea'
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { useCharacters } from '@/hooks/use-characters'
 import type { StoreData } from '@/schemas/store.dto'
 import { client } from '@/utils/client'
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA'
 
+const MAX_BODY_LENGTH = 40
+
 const FormSchema = z.object({
   characterId: z.string().min(1, 'アイコンを選択してください'),
-  body: z.string().min(1, 'コメントは必須です').max(200, 'コメントは 200 文字以内で入力してください')
+  body: z
+    .string()
+    .min(1, 'コメントは必須です')
+    .max(MAX_BODY_LENGTH, `コメントは ${MAX_BODY_LENGTH} 文字以内で入力してください`)
 })
 
 type FormValues = z.infer<typeof FormSchema>
@@ -94,11 +99,10 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
       if (status === 400) {
         const msg = error?.message ?? ''
         if (msg.toLowerCase().includes('turnstile')) {
-          form.setError('body', { message: 'Turnstile 検証に失敗しました' })
+          setGlobalError({ status: 400, message: 'Turnstile 検証に失敗しました' })
         } else {
-          form.setError('body', { message: '不適切な内容と判定されました' })
+          setGlobalError({ status: 400, message: '不適切な内容と判定されました' })
         }
-        setGlobalError(null)
       } else if (status === 429) {
         setGlobalError({ status: 429, message: '送信が多すぎます。しばらくしてからお試しください' })
       } else {
@@ -148,17 +152,17 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               control={form.control}
               name='body'
               render={({ field }) => (
-                <FormItem className='flex-1 min-w-0 pt-2'>
+                <FormItem className='flex-1 min-w-0 pt-3'>
                   <FormControl>
-                    <Textarea
+                    <Input
+                      type='text'
                       placeholder='いまどうしてる？'
-                      maxLength={200}
-                      rows={3}
-                      className='border-0 shadow-none focus-visible:ring-0 px-0 resize-none text-xl placeholder:text-muted-foreground'
+                      maxLength={MAX_BODY_LENGTH}
+                      autoComplete='off'
+                      className='border-0 shadow-none focus-visible:ring-0 px-0 text-2xl h-auto placeholder:text-muted-foreground placeholder:text-2xl'
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -181,14 +185,14 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
             {bodyValue.length > 0 && (
               <span
                 className={`text-xs tabular-nums ${
-                  bodyValue.length >= 200
+                  bodyValue.length >= MAX_BODY_LENGTH
                     ? 'text-[#e50012] font-semibold'
-                    : bodyValue.length >= 180
+                    : bodyValue.length >= MAX_BODY_LENGTH - 5
                       ? 'text-amber-600'
                       : 'text-muted-foreground'
                 }`}
               >
-                {200 - bodyValue.length}
+                {MAX_BODY_LENGTH - bodyValue.length}
               </span>
             )}
             <Button
