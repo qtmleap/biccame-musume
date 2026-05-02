@@ -61,11 +61,12 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: { characterId: '', body: '' },
-    mode: 'onBlur'
+    mode: 'onChange'
   })
 
   const bodyValue = form.watch('body')
   const selectedCharacterId = form.watch('characterId')
+  const isValid = form.formState.isValid
 
   const reroll = useCallback(() => {
     const next = sampleN(biccameMusumePool, PICK_COUNT)
@@ -119,7 +120,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
   }
 
   const isPending = mutation.isPending
-  const canSubmit = !isPending && !!turnstileToken && !!selectedCharacterId
+  const canSubmit = !isPending && !!turnstileToken && isValid && !!selectedCharacterId
 
   return (
     <div className='space-y-4'>
