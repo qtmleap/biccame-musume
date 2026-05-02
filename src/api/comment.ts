@@ -109,36 +109,36 @@ routes.openapi(
     // 1. レート制限
     const { success: rateLimitOk } = await c.env.COMMENT_RATE_LIMITER.limit({ key: ip })
     if (!rateLimitOk) {
-      return c.json({ message: '送信が多すぎます。しばらくしてからお試しください' }, 429)
+      return c.json({ message: '投稿できませんでした' }, 429)
     }
 
     // 2. Turnstile 検証
     const turnstileOk = await verifyTurnstileToken(turnstileToken, c.env.TURNSTILE_SECRET_KEY, ip, c.env)
     if (!turnstileOk) {
-      return c.json({ message: 'Turnstile 検証に失敗しました' }, 400)
+      return c.json({ message: '投稿できませんでした' }, 400)
     }
 
     // 3. characterId をホワイトリスト検証 (改ざんされたフォーム対策)
     const validIds = await loadBiccameMusumeIdSet(c.env.ASSETS, c.req.url)
     if (!validIds.has(characterId)) {
-      return c.json({ message: '無効なキャラクター ID です' }, 400)
+      return c.json({ message: '投稿できませんでした' }, 400)
     }
 
     // 4. 本文を制御文字 / RTL override / zero-width で正規化
     const sanitizedBody = sanitizeCommentBody(body)
     if (sanitizedBody.length === 0) {
-      return c.json({ message: 'コメントは必須です' }, 400)
+      return c.json({ message: '投稿できませんでした' }, 400)
     }
 
     // 5. 静的 NG ワードリストで安価に弾く (Llama Guard より前)
     if (containsNgWord(sanitizedBody)) {
-      return c.json({ message: '不適切な内容と判定されました' }, 400)
+      return c.json({ message: '投稿できませんでした' }, 400)
     }
 
     // 6. モデレーション (sanitize 済みのテキストで判定)
     const { safe } = await moderateText(sanitizedBody, c.env.AI, c.env)
     if (!safe) {
-      return c.json({ message: '不適切な内容と判定されました' }, 400)
+      return c.json({ message: '投稿できませんでした' }, 400)
     }
 
     // 7. イベント存在確認
