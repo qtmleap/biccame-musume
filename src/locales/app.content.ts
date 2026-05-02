@@ -181,7 +181,6 @@ const appContent = {
       completedEvents: '達成したイベント',
       noCompletedEvents: 'まだ達成したイベントがありません',
       viewAll: '一覧を見る',
-      backToMyPage: 'マイページに戻る',
       findEvents: 'イベントを探す'
     },
     filter: {

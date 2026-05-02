@@ -26,4 +26,3 @@ export const getUserById = async (env: Bindings, id: string): Promise<User | nul
 
   return user
 }
-
