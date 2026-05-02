@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
 import { proxy } from 'hono/proxy'
+import { secureHeaders } from 'hono/secure-headers'
 import { ZodError } from 'zod'
 import authRoutes from './api/auth'
 import comments from './api/comment'
@@ -23,6 +24,20 @@ app.use(
     origin: ['http://localhost:15175'],
     credentials: true,
     maxAge: 86400
+  })
+)
+
+// セキュリティヘッダ (XSS/Clickjacking/MIME sniffing 対策のベースライン)。
+// CSP は Google Maps / Firebase / Turnstile / Twitter 画像など多数のオリジンが絡むため
+// 全体監査が済むまで未設定。Phase 2 で Report-Only から段階導入する想定。
+app.use(
+  '*',
+  secureHeaders({
+    xContentTypeOptions: 'nosniff',
+    xFrameOptions: 'SAMEORIGIN',
+    referrerPolicy: 'strict-origin-when-cross-origin',
+    crossOriginOpenerPolicy: 'same-origin',
+    permissionsPolicy: { camera: [], microphone: [], geolocation: [] }
   })
 )
 
