@@ -23,6 +23,7 @@ type FormValues = z.infer<typeof FormSchema>
 
 type CommentFormProps = {
   eventUuid: string
+  onSuccess?: () => void
 }
 
 type PostError = {
@@ -30,7 +31,7 @@ type PostError = {
   message?: string
 }
 
-export const CommentForm = ({ eventUuid }: CommentFormProps) => {
+export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
   const queryClient = useQueryClient()
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [globalError, setGlobalError] = useState<{ status: number; message: string } | null>(null)
@@ -60,6 +61,7 @@ export const CommentForm = ({ eventUuid }: CommentFormProps) => {
       setTurnstileToken(null)
       turnstileRef.current?.reset()
       queryClient.invalidateQueries({ queryKey: ['events', eventUuid, 'comments'] })
+      onSuccess?.()
     },
     onError: (error: PostError) => {
       turnstileRef.current?.reset()
