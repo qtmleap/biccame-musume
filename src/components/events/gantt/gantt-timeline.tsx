@@ -19,9 +19,6 @@ type GanttTimelineProps = {
   onMouseMove: (e: React.MouseEvent) => void
   onMouseUp: () => void
   onMouseLeave: () => void
-  onTouchStart: (e: React.TouchEvent) => void
-  onTouchMove: (e: React.TouchEvent) => void
-  onTouchEnd: () => void
   getLabelOffset: (startOffset: number, duration: number) => number
   hasDraggedRef: React.MutableRefObject<boolean>
 }
@@ -40,9 +37,6 @@ export const GanttTimeline = ({
   onMouseMove,
   onMouseUp,
   onMouseLeave,
-  onTouchStart,
-  onTouchMove,
-  onTouchEnd,
   getLabelOffset,
   hasDraggedRef
 }: GanttTimelineProps) => {
@@ -64,9 +58,6 @@ export const GanttTimeline = ({
           onMouseMove={onMouseMove}
           onMouseUp={onMouseUp}
           onMouseLeave={onMouseLeave}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
         >
           <div className='min-w-max'>
             <GanttDateHeader dates={dates} today={today} actualMonthEnd={actualMonthEnd} />

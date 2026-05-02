@@ -14,10 +14,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
   return (
     <TooltipProvider>
       <div className='relative'>
-        <GanttHeader
-          monthOffset={layout.monthOffset}
-          onMonthSelect={layout.setMonthOffset}
-        />
+        <GanttHeader monthOffset={layout.monthOffset} onMonthSelect={layout.setMonthOffset} />
         <GanttTimeline
           eventBars={layout.eventBars}
           dates={layout.dates}
@@ -32,9 +29,6 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
           onMouseMove={layout.handleMouseMove}
           onMouseUp={layout.handleMouseUp}
           onMouseLeave={layout.handleMouseLeave}
-          onTouchStart={layout.handleTouchStart}
-          onTouchMove={layout.handleTouchMove}
-          onTouchEnd={layout.handleTouchEnd}
           getLabelOffset={layout.getLabelOffset}
           hasDraggedRef={layout.hasDraggedRef}
         />
