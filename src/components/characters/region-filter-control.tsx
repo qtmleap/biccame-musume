@@ -28,7 +28,7 @@ export const RegionFilterControl = () => {
             size='sm'
             onClick={() => setRegion(option.value)}
             className={
-              isSelected ? 'w-full text-sm h-8 bg-brand hover:bg-brand/90 text-brand-foreground' : 'w-full text-sm h-8'
+              isSelected ? 'w-full text-sm bg-brand hover:bg-brand/90 text-brand-foreground' : 'w-full text-sm'
             }
           >
             {option.label}

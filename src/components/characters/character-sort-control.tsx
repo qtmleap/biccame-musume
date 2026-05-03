@@ -85,7 +85,7 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
                     size='sm'
                     onClick={() => handleSortChange(option.value)}
                     className={
-                      isSelected ? 'w-full text-xs bg-brand hover:bg-brand/90 text-brand-foreground' : 'w-full text-xs'
+                      isSelected ? 'w-full text-sm bg-brand hover:bg-brand/90 text-brand-foreground' : 'w-full text-sm'
                     }
                   >
                     {option.label}
