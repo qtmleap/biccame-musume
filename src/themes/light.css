@@ -50,4 +50,14 @@
   --status-last-day-foreground: var(--color-red-700);
   --status-ended: var(--color-zinc-100);
   --status-ended-foreground: var(--color-zinc-600);
+
+  /* Category badges (event type) */
+  --category-limited-card: var(--color-purple-100);
+  --category-limited-card-foreground: var(--color-purple-700);
+  --category-regular-card: var(--color-blue-100);
+  --category-regular-card-foreground: var(--color-blue-700);
+  --category-ackey: var(--color-amber-100);
+  --category-ackey-foreground: var(--color-amber-700);
+  --category-other: var(--color-pink-100);
+  --category-other-foreground: var(--color-pink-700);
 }
