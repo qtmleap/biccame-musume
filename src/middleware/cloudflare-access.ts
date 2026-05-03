@@ -18,9 +18,6 @@ type JWTPayload = {
   type: string
 }
 
-/**
- * Cloudflare AccessのJWTを検証
- */
 const verifyJWT = async (token: string, teamDomain: string, audience: string): Promise<JWTPayload> => {
   const jwksUrl = `https://${teamDomain}/cdn-cgi/access/certs`
   const jwks = createRemoteJWKSet(new URL(jwksUrl))
@@ -33,9 +30,6 @@ const verifyJWT = async (token: string, teamDomain: string, audience: string): P
   return payload as JWTPayload
 }
 
-/**
- * CookieヘッダーからJWTトークンを抽出
- */
 const extractTokenFromCookie = (cookie: string): string | undefined => {
   return cookie
     .split(';')
@@ -45,13 +39,16 @@ const extractTokenFromCookie = (cookie: string): string | undefined => {
 }
 
 /**
- * Cloudflare Access認証ミドルウェア
- * 開発環境では認証をスキップ
+ * Cloudflare Access 認証ミドルウェア（必須）
+ * 未認証・検証失敗は 401 を返す
  */
-export const CFAuth = async <T extends Bindings>(c: Context<{ Bindings: T }>, next: Next) => {
-  // ローカル開発環境では認証をスキップ
+export const CFAuth = async <T extends Bindings>(
+  c: Context<{ Bindings: T; Variables: { adminEmail?: string } }>,
+  next: Next
+) => {
   if (c.env.ENVIRONMENT === 'local') {
     console.log('[Dev] Cloudflare Access check skipped for development environment')
+    c.set('adminEmail', 'dev@localhost')
     await next()
     return
   }
@@ -67,10 +64,47 @@ export const CFAuth = async <T extends Bindings>(c: Context<{ Bindings: T }>, ne
   }
 
   try {
-    await verifyJWT(token, teamDomain, audience)
+    const payload = await verifyJWT(token, teamDomain, audience)
+    c.set('adminEmail', payload.email)
     await next()
   } catch (error) {
     console.error('Access verification failed:', error)
     throw new HTTPException(401, { message: 'Invalid or expired token' })
   }
+}
+
+/**
+ * Cloudflare Access 認証ミドルウェア（オプション）
+ * JWT がなければ素通し、あれば検証して adminEmail をセットする
+ * 検証失敗時もエラーにせず素通し（POST など公開エンドポイントで管理者情報を付加するだけ）
+ */
+export const CFAuthOptional = async <T extends Bindings>(
+  c: Context<{ Bindings: T; Variables: { adminEmail?: string } }>,
+  next: Next
+) => {
+  if (c.env.ENVIRONMENT === 'local') {
+    c.set('adminEmail', 'dev@localhost')
+    await next()
+    return
+  }
+
+  const { CF_ACCESS_TEAM_DOMAIN: teamDomain, CF_ACCESS_AUD: audience } = c.env
+
+  const headerToken = c.req.header('CF-Access-Jwt-Assertion')
+  const cookieToken = extractTokenFromCookie(c.req.header('Cookie') || '')
+  const token = headerToken || cookieToken
+
+  if (!token) {
+    await next()
+    return
+  }
+
+  try {
+    const payload = await verifyJWT(token, teamDomain, audience)
+    c.set('adminEmail', payload.email)
+  } catch (error) {
+    console.error('CFAuthOptional: token verification failed, continuing as public:', error)
+  }
+
+  await next()
 }

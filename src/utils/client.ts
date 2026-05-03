@@ -337,6 +337,25 @@ const api = makeApi([
       }
     ],
     response: z.object({ id: z.string() })
+  },
+  {
+    method: 'delete',
+    path: '/api/events/:uuid/comments/:commentId',
+    alias: 'deleteEventComment',
+    description: 'イベントのコメントを削除（管理者）',
+    parameters: [
+      {
+        name: 'uuid',
+        type: 'Path',
+        schema: z.string().nonempty()
+      },
+      {
+        name: 'commentId',
+        type: 'Path',
+        schema: z.string().nonempty()
+      }
+    ],
+    response: SuccessResponseSchemaForClient
   }
 ])
 

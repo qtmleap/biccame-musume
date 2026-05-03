@@ -62,4 +62,5 @@ export type CustomJwtClaims = JWTPayload & {
 
 export type Variables = JwtVariables<CustomJwtClaims> & {
   CLIENT_IP: string
+  adminEmail?: string
 }
