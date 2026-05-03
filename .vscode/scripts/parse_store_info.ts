@@ -286,8 +286,8 @@ const parseProfileHtml = (
   }
 
   // is_biccame_musumeのデフォルト値を設定
-  // ナイセン、お偉いたん、ビックシムたん、ビックカメラはfalse、それ以外はtrue
-  const excludedCharacterIds = ['naisen', 'oeraitan', 'bicsim', 'biccamera']
+  // ナイセン、お偉いたん、ビックシムたん、ビックカメラ、Airたんはfalse、それ以外はtrue
+  const excludedCharacterIds = ['naisen', 'oeraitan', 'bicsim', 'biccamera', 'air']
   const is_biccame_musume = !excludedCharacterIds.includes(storeId)
 
   return {
