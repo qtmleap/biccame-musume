@@ -32,7 +32,7 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
             onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, upcoming: checked === true })}
             className='border-gray-400 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600'
           />
-          <Label htmlFor='status-upcoming' className='text-gray-700 cursor-pointer'>
+          <Label htmlFor='status-upcoming' className='text-muted-foreground cursor-pointer'>
             {EVENT_STATUS_LABELS.upcoming}
           </Label>
         </div>
@@ -43,7 +43,7 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
             onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, ongoing: checked === true })}
             className='border-gray-400 data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600'
           />
-          <Label htmlFor='status-ongoing' className='text-gray-700 cursor-pointer'>
+          <Label htmlFor='status-ongoing' className='text-muted-foreground cursor-pointer'>
             {EVENT_STATUS_LABELS.ongoing}
           </Label>
         </div>
@@ -54,7 +54,7 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
             onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, ended: checked === true })}
             className='border-gray-400 data-[state=checked]:bg-gray-600 data-[state=checked]:border-gray-600'
           />
-          <Label htmlFor='status-ended' className='text-gray-700 cursor-pointer'>
+          <Label htmlFor='status-ended' className='text-muted-foreground cursor-pointer'>
             {EVENT_STATUS_LABELS.ended}
           </Label>
         </div>

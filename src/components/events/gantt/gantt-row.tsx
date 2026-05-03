@@ -77,11 +77,11 @@ export const GanttRow = ({
           <TooltipContent side='top' className='max-w-xs'>
             <p className='font-medium'>{event.title}</p>
             {event.stores && event.stores.length > 0 && (
-              <p className='text-xs text-gray-500'>
+              <p className='text-xs text-muted-foreground'>
                 {event.stores.map((key) => appContent.content.store_name[key as StoreKey] || key).join(', ')}
               </p>
             )}
-            <p className='text-xs text-gray-500'>
+            <p className='text-xs text-muted-foreground'>
               {dayjs(event.startDate).format('M/D')}
               {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : EVENT_LABELS.untilStockLasts}
             </p>

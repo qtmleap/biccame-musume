@@ -39,7 +39,9 @@ const VoteInfo = ({ showSubMessage = false, compact = false }: VoteInfoProps) =>
       transition={{ duration: compact ? 0.5 : 0.6, ease: 'easeOut' }}
     >
       <motion.p
-        className={compact ? 'text-gray-700 text-base mb-4 font-bold' : 'text-gray-700 text-lg mb-4 font-bold'}
+        className={
+          compact ? 'text-muted-foreground text-base mb-4 font-bold' : 'text-muted-foreground text-lg mb-4 font-bold'
+        }
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: compact ? 0.1 : 0.2 }}
@@ -48,7 +50,7 @@ const VoteInfo = ({ showSubMessage = false, compact = false }: VoteInfoProps) =>
       </motion.p>
       {showSubMessage && (
         <motion.p
-          className='text-gray-500 text-base mb-6'
+          className='text-muted-foreground text-base mb-6'
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
@@ -65,7 +67,7 @@ const VoteInfo = ({ showSubMessage = false, compact = false }: VoteInfoProps) =>
       >
         <Link
           to='/characters'
-          className='inline-block px-4 py-2 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
+          className='inline-block px-4 py-2 bg-brand text-brand-foreground rounded-full hover:bg-brand/90 transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
         >
           ビッカメ娘一覧を見る
         </Link>
@@ -116,7 +118,7 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
         <Link to='/characters/$id' params={{ id: character.id }} className='block'>
           {/* キャラクター名（中央揃え、ポップなフォント、縁取り） */}
           <h3
-            className='text-gray-900 truncate max-w-full text-lg text-center mb-2'
+            className='text-foreground truncate max-w-full text-lg text-center mb-2'
             style={{
               fontFamily: '"Zen Maru Gothic", sans-serif',
               fontWeight: 900,
@@ -128,7 +130,7 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
           </h3>
 
           {/* 画像（白色透過） */}
-          <div className='relative bg-pink-50 h-28 w-full flex items-center justify-center'>
+          <div className='relative bg-page-bg h-28 w-full flex items-center justify-center'>
             <img
               src={character.character?.image_url}
               alt={character.character?.name || ''}

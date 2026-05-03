@@ -67,7 +67,7 @@ export const CommentItem = ({ eventUuid, comment }: CommentItemProps) => {
               aria-label='コメントを削除する'
               title='コメントを削除する'
               disabled={mutation.isPending}
-              className='shrink-0 size-8 text-muted-foreground hover:text-[#e50012]'
+              className='shrink-0 size-8 text-muted-foreground hover:text-brand'
             >
               <Trash2 className='size-4' />
             </Button>

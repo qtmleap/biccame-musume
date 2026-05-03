@@ -43,7 +43,7 @@ const EventDetailContent = () => {
             <div className='md:hidden'>
               <Accordion type='single' collapsible>
                 <AccordionItem value='recent-events' className='border-none'>
-                  <AccordionTrigger className='text-lg font-bold text-gray-900 hover:no-underline'>
+                  <AccordionTrigger className='text-lg font-bold text-foreground hover:no-underline'>
                     最近更新されたイベント
                   </AccordionTrigger>
                   <AccordionContent>

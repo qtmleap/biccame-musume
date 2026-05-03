@@ -32,7 +32,7 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
         <Link
           to='/characters/$id'
           params={{ id: character.id }}
-          className='flex-1 block border border-pink-200 rounded-lg p-3 hover:border-[#e50012]/40 transition-colors bg-card'
+          className='flex-1 block border-card rounded-lg p-3 hover:border-brand/40 transition-colors bg-card'
         >
           <div className='flex items-center gap-3 mb-2'>
             <Avatar className='h-16 w-16'>
@@ -41,12 +41,12 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
                 alt={character.character?.name || ''}
                 className='mix-blend-multiply scale-150 translate-y-[20%]'
               />
-              <AvatarFallback className='bg-pink-100 text-pink-700'>
+              <AvatarFallback className='bg-brand/10 text-brand'>
                 {character.character?.name?.[0] || '?'}
               </AvatarFallback>
             </Avatar>
             <div className='flex-1 min-w-0'>
-              <h3 className='text-base font-bold line-clamp-1 text-gray-900'>
+              <h3 className='text-base font-bold line-clamp-1 text-foreground'>
                 {getDisplayName(character.character?.name || '')}
               </h3>
               <div className='h-5'>

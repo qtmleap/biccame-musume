@@ -58,7 +58,7 @@ const EventCard = ({
     <div className={`border rounded-lg p-4 bg-card flex flex-col h-full ${isEnded ? 'opacity-50 grayscale' : ''}`}>
       <div className='mb-2 flex items-start justify-between gap-3'>
         <div className='flex-1'>
-          <h3 className='text-sm font-semibold text-gray-900'>{event.title}</h3>
+          <h3 className='text-sm font-semibold text-foreground'>{event.title}</h3>
           <div className='mt-1 flex flex-col gap-1 text-xs text-muted-foreground'>
             <span className='flex items-center gap-1'>
               <Calendar className='size-3' />
@@ -240,7 +240,7 @@ export const EventList = () => {
               onClick={() => setActiveTab(category)}
               className='relative flex-1 py-1.5 text-xs font-semibold text-center z-10 transition-colors'
             >
-              <span className={activeTab === category ? 'text-gray-900' : 'text-gray-600'}>
+              <span className={activeTab === category ? 'text-foreground' : 'text-muted-foreground'}>
                 {EVENT_CATEGORY_LABELS[category]}
               </span>
               {activeTab === category && (

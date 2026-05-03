@@ -66,7 +66,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
             <div className={`shrink-0 p-2 rounded-lg ${CATEGORY_WITH_ICON[event.category ?? 'other'].className}`}>
               {CATEGORY_WITH_ICON[event.category ?? 'other'].icon}
             </div>
-            <p className='text-sm font-medium text-gray-800 line-clamp-2'>{event.title}</p>
+            <p className='text-sm font-medium text-foreground line-clamp-2'>{event.title}</p>
           </div>
           <div
             className={`shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
@@ -75,19 +75,19 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
                 : status === 'last_day'
                   ? 'bg-orange-500 text-white'
                   : status === 'ongoing'
-                    ? 'bg-[#e50012] text-white'
+                    ? 'bg-brand text-brand-foreground'
                     : daysUntil === 0
-                      ? 'bg-[#e50012] text-white'
+                      ? 'bg-brand text-brand-foreground'
                       : daysUntil <= 7
                         ? 'bg-orange-100 text-orange-600'
-                        : 'bg-gray-100 text-gray-600'
+                        : 'bg-muted text-muted-foreground'
             }`}
           >
             {getDaysLabel(daysUntil, status)}
           </div>
         </div>
         <div className='flex-1 min-w-0'>
-          <div className='flex flex-col gap-1 text-xs text-gray-500'>
+          <div className='flex flex-col gap-1 text-xs text-muted-foreground'>
             <span className='flex items-center gap-1'>
               <Calendar className='size-3' />
               {startDate.format('M月D日')}

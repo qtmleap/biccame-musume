@@ -37,9 +37,9 @@ export const RecentEventsList = ({ events, currentEventId, hideHeading = false }
   }
 
   return (
-    <div key={currentEventId} className='bg-pink-50 rounded-lg'>
-      {!hideHeading && <h2 className='text-lg font-bold text-gray-900 mb-4'>最近更新されたイベント</h2>}
-      <div className='flex flex-col divide-y divide-gray-200'>
+    <div key={currentEventId} className='bg-page-bg rounded-lg'>
+      {!hideHeading && <h2 className='text-lg font-bold text-foreground mb-4'>最近更新されたイベント</h2>}
+      <div className='flex flex-col divide-y divide-card'>
         {recentEvents.map((event, index) => {
           // 店舗名を取得（最大2つまで表示、それ以上は「他」と表示）
           const storeNames = event.stores.slice(0, 2).map((key) => STORE_NAME_LABELS[key as StoreKey] || key)
@@ -68,14 +68,14 @@ export const RecentEventsList = ({ events, currentEventId, hideHeading = false }
                   <Link
                     to='/events/$uuid'
                     params={{ uuid: event.uuid }}
-                    className='font-bold text-base text-gray-900 hover:underline line-clamp-2'
+                    className='font-bold text-base text-foreground hover:underline line-clamp-2'
                   >
                     {event.title}
                   </Link>
                 </div>
                 <div className='flex items-center gap-1'>
-                  <Store className='h-4 w-4 text-gray-400' />
-                  <span className='text-sm text-gray-600 truncate'>{storeDisplay}</span>
+                  <Store className='h-4 w-4 text-muted-foreground/50' />
+                  <span className='text-sm text-muted-foreground truncate'>{storeDisplay}</span>
                 </div>
               </div>
             </motion.div>

@@ -58,8 +58,8 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
   }
 
   return (
-    <div className='bg-pink-50 rounded-lg'>
-      <h2 className='text-lg font-bold text-gray-900 mb-4'>近くのビッカメ娘</h2>
+    <div className='bg-page-bg rounded-lg'>
+      <h2 className='text-lg font-bold text-foreground mb-4'>近くのビッカメ娘</h2>
       <div className='flex flex-col gap-4'>
         {nearbyCharacters.map((char, index) => (
           <motion.div
@@ -84,14 +84,14 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
                 <Link
                   to='/characters/$id'
                   params={{ id: char.id }}
-                  className='font-bold text-base text-gray-900 hover:underline truncate'
+                  className='font-bold text-base text-foreground hover:underline truncate'
                 >
                   {getDisplayName(char.character?.name || '')}
                 </Link>
               </div>
               <div className='flex items-center gap-1'>
-                <MapPin className='h-4 w-4 text-gray-400' />
-                <span className='text-sm text-gray-500'>{char.distance.toFixed(1)}km</span>
+                <MapPin className='h-4 w-4 text-muted-foreground/50' />
+                <span className='text-sm text-muted-foreground'>{char.distance.toFixed(1)}km</span>
               </div>
             </div>
           </motion.div>
