@@ -6,7 +6,6 @@ import { toast } from 'sonner'
 import { lastVoteTimesAtom } from '@/atoms/vote-atom'
 import { Button } from '@/components/ui/button'
 import { useVote } from '@/hooks/use-vote'
-import { cn } from '@/lib/utils'
 import { VOTE_LABELS } from '@/locales/app.content'
 
 type CharacterVoteButtonProps = {
@@ -108,18 +107,13 @@ export const CharacterVoteButton = ({
     return (
       <Button
         size='sm'
+        variant={hasVotedToday ? 'secondary' : 'default'}
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
           handleVote()
         }}
         disabled={hasVotedToday || isPending}
-        className={cn(
-          'rounded-full px-4 h-7 text-xs font-semibold',
-          hasVotedToday
-            ? 'bg-gray-200 text-gray-600 cursor-not-allowed hover:bg-gray-200'
-            : 'bg-[#e50012] text-white hover:bg-[#c40010]'
-        )}
       >
         {getButtonText()}
       </Button>
@@ -128,16 +122,14 @@ export const CharacterVoteButton = ({
 
   return (
     <Button
+      variant={hasVotedToday ? 'secondary' : 'default'}
       onClick={(e) => {
         e.preventDefault()
         e.stopPropagation()
         handleVote()
       }}
       disabled={hasVotedToday || isPending}
-      className={cn(
-        'w-full font-semibold',
-        hasVotedToday ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-[#e50012] hover:bg-[#c40010] text-white'
-      )}
+      className='w-full font-semibold'
     >
       {getButtonText()}
     </Button>
