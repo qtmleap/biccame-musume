@@ -132,13 +132,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                           </div>
 
                           {/* バッジ */}
-                          <Badge
-                            variant='secondary'
-                            className={cn(
-                              'shrink-0 text-xs flex items-center gap-1',
-                              isCharacter ? 'bg-pink-500/20 text-pink-700' : 'bg-blue-500/20 text-blue-700'
-                            )}
-                          >
+                          <Badge variant='secondary'>
                             {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
                             {event.years}
                             {isCharacter ? CALENDAR_LABELS.age : CALENDAR_LABELS.anniversary}
