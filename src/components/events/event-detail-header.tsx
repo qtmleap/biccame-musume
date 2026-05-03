@@ -5,7 +5,6 @@ import { ArrowLeft, Award, BarChart2, Copy, Heart, Share, X } from 'lucide-react
 import { AnimatePresence, motion } from 'motion/react'
 import { Suspense, useState } from 'react'
 import { toast } from 'sonner'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useAuth } from '@/hooks/use-auth'
@@ -13,7 +12,7 @@ import { usePageViews } from '@/hooks/use-page-views'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { cn } from '@/lib/utils'
 import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
-import { STATUS_BADGE_DETAIL } from '@/locales/component'
+import { CATEGORY_BADGE, STATUS_BADGE_DETAIL } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 
 type EventDetailHeaderProps = {
@@ -382,7 +381,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
       >
         <div className='flex items-center justify-between gap-2 mb-2'>
           <div className='flex items-center gap-2'>
-            <Badge variant='outline'>{EVENT_CATEGORY_LABELS[event.category]}</Badge>
+            {CATEGORY_BADGE[event.category](EVENT_CATEGORY_LABELS[event.category])}
             {STATUS_BADGE_DETAIL[event.status]()}
           </div>
           {isAuthenticated && (
