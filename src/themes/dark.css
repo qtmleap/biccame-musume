@@ -31,6 +31,9 @@
   --sidebar-border: var(--color-zinc-800);
   --sidebar-ring: var(--color-zinc-500);
 
+  /* Page background */
+  --page-bg: var(--color-zinc-950);
+
   /* Card border (distinguish from page bg) */
   --card-border: var(--color-zinc-700);
   --card-border-width: 1px;
