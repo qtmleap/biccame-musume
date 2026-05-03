@@ -70,7 +70,7 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
             className='flex items-start gap-3'
           >
             <Link to='/characters/$id' params={{ id: char.id }}>
-              <Avatar className='h-14 w-14'>
+              <Avatar className='h-14 w-14 border border-card-border'>
                 <AvatarImage
                   src={char.character?.image_url}
                   alt={char.character?.name || ''}
