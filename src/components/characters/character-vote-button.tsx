@@ -114,6 +114,7 @@ export const CharacterVoteButton = ({
           handleVote()
         }}
         disabled={hasVotedToday || isPending}
+        className={hasVotedToday ? '' : 'bg-brand hover:bg-brand/90 text-brand-foreground'}
       >
         {getButtonText()}
       </Button>
@@ -129,7 +130,9 @@ export const CharacterVoteButton = ({
         handleVote()
       }}
       disabled={hasVotedToday || isPending}
-      className='w-full font-semibold'
+      className={
+        hasVotedToday ? 'w-full font-semibold' : 'w-full font-semibold bg-brand hover:bg-brand/90 text-brand-foreground'
+      }
     >
       {getButtonText()}
     </Button>

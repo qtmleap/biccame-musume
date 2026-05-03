@@ -32,7 +32,14 @@ export const DateField = ({ id, label, register, error, clearable, onClear, hint
       <div className='flex gap-2'>
         <Input id={id} type='date' {...register} className={clearable ? 'flex-1' : 'w-full'} />
         {clearable && (
-          <Button type='button' variant='ghost' size='icon' onClick={handleClear} title={`${label}をクリア`}>
+          <Button
+            type='button'
+            variant='ghost'
+            size='icon'
+            onClick={handleClear}
+            title={`${label}をクリア`}
+            className='border border-transparent'
+          >
             <X className='size-4' />
           </Button>
         )}

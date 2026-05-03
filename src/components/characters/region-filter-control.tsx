@@ -27,7 +27,9 @@ export const RegionFilterControl = () => {
             variant={isSelected ? 'default' : 'outline'}
             size='sm'
             onClick={() => setRegion(option.value)}
-            className='w-full text-sm h-8'
+            className={
+              isSelected ? 'w-full text-sm h-8 bg-brand hover:bg-brand/90 text-brand-foreground' : 'w-full text-sm h-8'
+            }
           >
             {option.label}
           </Button>

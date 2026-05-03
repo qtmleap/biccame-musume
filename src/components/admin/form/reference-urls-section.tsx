@@ -100,7 +100,7 @@ export function ReferenceUrlsSection({
                 size='icon'
                 variant='ghost'
                 onClick={() => handleRemove(index)}
-                className='shrink-0'
+                className='shrink-0 border border-transparent'
               >
                 <X className='size-4' />
               </Button>
