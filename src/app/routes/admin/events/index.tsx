@@ -22,7 +22,9 @@ const EventsContent = () => {
               <h1 className='text-2xl font-bold text-foreground md:text-2xl'>イベント管理</h1>
               {isAuthenticated && (
                 <Link to='/admin/events/$uuid' params={{ uuid: uuidv4() }}>
-                  <Button size='sm'>新規作成</Button>
+                  <Button size='sm' className='bg-brand hover:bg-brand/90 text-brand-foreground'>
+                    新規作成
+                  </Button>
                 </Link>
               )}
             </div>

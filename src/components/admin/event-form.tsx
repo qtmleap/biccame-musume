@@ -378,7 +378,11 @@ export const EventForm = ({
 
         {/* ボタン */}
         <div className='flex gap-2 max-w-md mx-auto'>
-          <Button type='submit' className='flex-1' disabled={isSubmitted}>
+          <Button
+            type='submit'
+            className='flex-1 bg-brand hover:bg-brand/90 text-brand-foreground'
+            disabled={isSubmitted}
+          >
             確認する
           </Button>
           <Button type='button' variant='outline' onClick={handleReset} className='flex-1' disabled={isSubmitted}>

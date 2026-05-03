@@ -186,7 +186,11 @@ const EventsContent = () => {
             {/* モバイル: フィルターボタン */}
             <Sheet open={filterSheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
-                <Button size='sm' variant='ghost' className='md:hidden relative h-10 w-10 p-0'>
+                <Button
+                  size='sm'
+                  variant='ghost'
+                  className='md:hidden relative h-10 w-10 p-0 border border-transparent'
+                >
                   <Filter className='size-4' />
                   {isFilterActive && (
                     <span className='absolute top-1.5 right-1.5 size-2 rounded-full bg-brand' aria-hidden />

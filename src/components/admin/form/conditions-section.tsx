@@ -151,7 +151,13 @@ export function ConditionsSection({ fields, register, remove, append, error }: P
                   </div>
                 )}
               </div>
-              <Button type='button' size='icon' variant='ghost' onClick={() => remove(index)}>
+              <Button
+                type='button'
+                size='icon'
+                variant='ghost'
+                onClick={() => remove(index)}
+                className='border border-transparent'
+              >
                 <X className='size-4' />
               </Button>
             </div>

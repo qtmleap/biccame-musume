@@ -33,7 +33,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
               <Button
                 variant='ghost'
                 size='sm'
-                className='text-muted-foreground hover:text-foreground -ml-2'
+                className='text-muted-foreground hover:text-foreground -ml-2 border border-transparent'
                 onClick={() => router.history.back()}
               >
                 <ArrowLeft className='h-4 w-4 mr-1' />

@@ -17,7 +17,13 @@ export const GanttMonthSelector = ({ monthOffset, onSelect }: MonthSelectorProps
         const monthDate = dayjs().add(offset, 'month')
         const isSelected = monthOffset === offset
         return (
-          <Button key={offset} variant={isSelected ? 'default' : 'outline'} size='sm' onClick={() => onSelect(offset)}>
+          <Button
+            key={offset}
+            variant={isSelected ? 'default' : 'outline'}
+            size='sm'
+            onClick={() => onSelect(offset)}
+            className={isSelected ? 'bg-brand hover:bg-brand/90 text-brand-foreground' : ''}
+          >
             {monthDate.format('YY/MM')}
           </Button>
         )
