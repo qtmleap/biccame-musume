@@ -5,6 +5,7 @@ import { motion } from 'motion/react'
 import { useMemo } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { useEvents } from '@/hooks/use-events'
+import { DURATION } from '@/lib/motion'
 import { EVENT_LABELS } from '@/locales/app.content'
 import { STATUS_BADGE_SM } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
@@ -73,7 +74,7 @@ export const CharacterOngoingEvents = ({ storeKey }: CharacterOngoingEventsProps
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, delay: 0.3 }}
+      transition={{ duration: DURATION.normal, delay: 0.3 }}
       className='space-y-3 mb-6'
     >
       <h2 className='text-xl font-bold text-foreground'>直近のイベント</h2>

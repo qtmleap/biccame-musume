@@ -5,6 +5,7 @@ import { Cake, Store } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
+import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { CALENDAR_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
@@ -60,7 +61,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: DURATION.normal }}
           className='py-8 text-center text-muted-foreground'
         >
           今月のイベントはありません
@@ -72,7 +73,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
             initial={{ opacity: 0, x: 15 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -15 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: DURATION.fast }}
           >
             {groupEventsByDay(events, year, month).map((group, groupIndex) => (
               <motion.div
@@ -80,7 +81,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{
-                  duration: 0.15,
+                  duration: DURATION.fast,
                   delay: groupIndex * 0.05,
                   ease: 'easeOut'
                 }}
@@ -92,7 +93,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                   onClick={() => onDayClick?.(group.day, group.events)}
                   className='flex flex-col items-center justify-start pt-1 w-10 shrink-0 cursor-pointer hover:opacity-70 transition-opacity'
                 >
-                  <span className='text-[10px] text-muted-foreground uppercase'>{group.dayOfWeek}</span>
+                  <span className='text-xs text-muted-foreground uppercase'>{group.dayOfWeek}</span>
                   <span className='text-xl font-bold tabular-nums'>{group.day}</span>
                 </button>
 

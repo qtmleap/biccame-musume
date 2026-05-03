@@ -120,7 +120,7 @@ export const CharacterVoteButton = ({
         }}
         aria-disabled={hasVotedToday || isPending}
         disabled={isPending}
-        className={cn('h-7 px-3 rounded-full text-xs', stateClass)}
+        className={cn('h-9 px-3 rounded-full text-xs', stateClass)}
       >
         {getButtonText()}
       </Button>
@@ -137,7 +137,7 @@ export const CharacterVoteButton = ({
       }}
       aria-disabled={hasVotedToday || isPending}
       disabled={isPending}
-      className={cn('w-full h-8 rounded-full text-xs font-semibold', stateClass)}
+      className={cn('w-full h-9 rounded-full text-xs font-semibold', stateClass)}
     >
       {getButtonText()}
     </Button>

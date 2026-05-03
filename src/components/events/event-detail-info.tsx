@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar, Gift, Link2, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
+import { DURATION } from '@/lib/motion'
 import { EVENT_LABELS, REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
@@ -159,7 +160,7 @@ export const EventDetailInfo = ({ event }: EventDetailInfoProps) => (
     key={`info-${event.uuid}`}
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
-    transition={{ duration: 0.5, delay: 0.3 }}
+    transition={{ duration: DURATION.normal, delay: 0.3 }}
     className='space-y-3'
   >
     <h2 className='text-xl font-bold text-foreground'>イベント情報</h2>

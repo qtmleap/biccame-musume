@@ -4,6 +4,7 @@ import { CharacterFollowButton } from '@/components/characters/character-follow-
 import { CharacterTwitterLink } from '@/components/characters/character-twitter-link'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { DURATION } from '@/lib/motion'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
 
@@ -23,7 +24,7 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{
-        duration: 0.3,
+        duration: DURATION.normal,
         ease: 'easeOut'
       }}
       className='h-full'
@@ -54,7 +55,7 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
               </div>
             </div>
           </div>
-          <div className='flex justify-end gap-2 h-7'>
+          <div className='flex justify-end gap-2 h-9'>
             <CharacterFollowButton twitterId={character.character?.twitter_id} />
             <CharacterVoteButton
               characterId={character.id}

@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { DURATION } from '@/lib/motion'
 
 type LineStickerListItemProps = {
   url: string
@@ -19,7 +20,7 @@ export const LineStickerListItem = ({ url, title, description, delay }: LineStic
       rel='noopener noreferrer'
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay, ease: 'easeOut' }}
+      transition={{ duration: DURATION.normal, delay, ease: 'easeOut' }}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.98 }}
       className='block'

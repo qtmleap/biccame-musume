@@ -4,6 +4,7 @@ import { Cake } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { DURATION } from '@/lib/motion'
 import type { StoreData } from '@/schemas/store.dto'
 
 type BirthdayHeroSectionProps = {
@@ -48,7 +49,7 @@ const RotatingCharacterInfo = ({ characters }: { characters: StoreData[] }) => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: DURATION.normal }}
         className='mt-2'
       >
         <p className='text-2xl font-semibold'>{currentCharacter.character?.name}</p>
@@ -73,7 +74,7 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
       className='relative mb-6 overflow-hidden bg-linear-to-r from-celebrate-from to-celebrate-to p-6'
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: DURATION.normal }}
     >
       {/* 背景装飾 */}
       <div className='absolute inset-0 overflow-hidden'>
@@ -87,7 +88,7 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
           className='relative'
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: DURATION.normal, delay: 0.2 }}
         >
           <img
             src={getBirthdayImagePath(characters)}
@@ -113,7 +114,7 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: DURATION.normal, delay: 0.3 }}
           >
             <p className='text-sm font-medium text-white/80'>Today's Birthday</p>
             <motion.h2
@@ -138,7 +139,7 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
             className='mt-4 flex flex-wrap justify-center gap-2 md:justify-start'
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ duration: DURATION.normal, delay: 0.4 }}
           >
             <Button asChild variant='secondary' size='sm'>
               <Link to='/characters/$id' params={{ id: mainCharacter.id }}>

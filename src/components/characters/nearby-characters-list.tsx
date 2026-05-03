@@ -3,6 +3,7 @@ import { MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useCharacters } from '@/hooks/use-characters'
+import { DURATION } from '@/lib/motion'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
 
@@ -66,7 +67,7 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
             key={`${currentCharacter.id}-${char.id}`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
+            transition={{ duration: DURATION.normal, delay: index * 0.05 }}
             className='flex items-start gap-3'
           >
             <Link to='/characters/$id' params={{ id: char.id }}>

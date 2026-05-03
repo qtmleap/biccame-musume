@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { Calendar } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useMemo } from 'react'
+import { DURATION } from '@/lib/motion'
 import type { StoreData } from '@/schemas/store.dto'
 import { UpcomingEventListItem } from './upcoming-event-list-item'
 
@@ -69,7 +70,7 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6, ease: 'easeOut' }}
+            transition={{ duration: DURATION.normal, delay: 0.6, ease: 'easeOut' }}
             className='mt-4 text-right'
           >
             <Link
