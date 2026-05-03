@@ -19,7 +19,7 @@ export const NotFound = () => {
 
           {/* アクション */}
           <div className='flex flex-col sm:flex-row gap-4 justify-center items-center pt-8'>
-            <Button asChild size='lg' className='bg-[#e50012] hover:bg-[#c4000f]'>
+            <Button asChild size='lg'>
               <Link to='/'>
                 <Home className='mr-2 h-5 w-5' />
                 トップページに戻る

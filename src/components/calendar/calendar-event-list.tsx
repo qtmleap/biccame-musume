@@ -116,7 +116,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                           )}
                         >
                           {/* キャラクター画像 */}
-                          <Avatar className='w-10 h-10 shrink-0 border border-border overflow-hidden'>
+                          <Avatar className='w-10 h-10'>
                             <AvatarImage
                               src={event.character.character?.image_url}
                               alt={event.character.character?.name || ''}

@@ -53,7 +53,7 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
           </div>
 
           {event.character.character?.image_url && (
-            <Avatar className='w-8 h-8 overflow-hidden'>
+            <Avatar className='w-8 h-8'>
               <AvatarImage
                 src={event.character.character.image_url}
                 alt={event.character.character?.name || ''}

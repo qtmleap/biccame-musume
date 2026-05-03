@@ -117,7 +117,7 @@ const MyPageContent = () => {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <Avatar className='h-21.25 w-21.25 border-2 border-gray-800'>
+              <Avatar className='h-21.25 w-21.25'>
                 <AvatarImage
                   src={getLargeTwitterPhoto(user?.photoURL)}
                   alt={user?.displayName ?? 'User'}

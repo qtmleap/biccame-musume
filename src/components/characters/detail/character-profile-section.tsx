@@ -25,15 +25,13 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
           animate='animate'
           transition={{ duration: DURATION.normal }}
         >
-          <Avatar className='h-21.25 w-21.25 border-2 border-gray-800'>
+          <Avatar className='h-21.25 w-21.25'>
             <AvatarImage
               src={character.character?.image_url}
               alt={character.character?.name || ''}
               className='object-cover scale-150 translate-y-4'
             />
-            <AvatarFallback className='text-4xl bg-pink-100 text-pink-700'>
-              {character.character?.name?.[0] || '?'}
-            </AvatarFallback>
+            <AvatarFallback className='text-4xl'>{character.character?.name?.[0] || '?'}</AvatarFallback>
           </Avatar>
         </motion.div>
 

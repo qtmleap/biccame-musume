@@ -135,13 +135,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                     {hasEvents && (
                       <div className='flex-1 flex flex-wrap items-center justify-center gap-1 py-1'>
                         {dayEvents.map((event) => (
-                          <Avatar
-                            key={`${event.character.id}-${event.type}`}
-                            className={cn(
-                              'w-8 h-8 ring-2 overflow-hidden',
-                              event.type === 'character' ? 'ring-pink-400/50' : 'ring-blue-400/50'
-                            )}
-                          >
+                          <Avatar key={`${event.character.id}-${event.type}`} className='w-8 h-8'>
                             <AvatarImage
                               src={event.character.character?.image_url}
                               alt={event.character.character?.name || ''}
