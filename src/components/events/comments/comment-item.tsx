@@ -79,10 +79,7 @@ export const CommentItem = ({ eventUuid, comment }: CommentItemProps) => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>キャンセル</AlertDialogCancel>
-              <AlertDialogAction
-                className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
-                onClick={() => mutation.mutate(comment.id)}
-              >
+              <AlertDialogAction variant='destructive' onClick={() => mutation.mutate(comment.id)}>
                 削除する
               </AlertDialogAction>
             </AlertDialogFooter>
