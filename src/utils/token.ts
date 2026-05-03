@@ -63,6 +63,25 @@ export const verifyToken: MiddlewareHandler<{ Bindings: Bindings; Variables: Var
 }
 
 /**
+ * 認証は任意。session Cookie があれば検証して jwtPayload をセット、なければ素通し。
+ * 検証失敗もエラーにせず素通し（公開エンドポイントにログインユーザー情報を付加するだけ）。
+ */
+export const verifyTokenOptional: MiddlewareHandler<{ Bindings: Bindings; Variables: Variables }> = async (c, next) => {
+  const token: string | undefined = getCookie(c, 'session')
+  if (token === undefined || !c.env.JWT_SECRET_KEY) {
+    await next()
+    return
+  }
+  try {
+    const result = (await verify(token, c.env.JWT_SECRET_KEY, AlgorithmTypes.HS256)) as CustomJwtClaims
+    c.set('jwtPayload', result)
+  } catch (error) {
+    console.warn('verifyTokenOptional: invalid session token, continuing as anonymous:', error)
+  }
+  await next()
+}
+
+/**
  * コンテキストからJWTペイロードのuidを取得する
  */
 export const getToken = (c: Context<{ Bindings: Bindings; Variables: Variables }>): string => {

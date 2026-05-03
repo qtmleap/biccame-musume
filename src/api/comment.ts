@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { getPrisma } from '@/lib/prisma'
-import { CFAuth, CFAuthOptional } from '@/middleware/cloudflare-access'
+import { CFAuth } from '@/middleware/cloudflare-access'
 import { CommentResponseSchema, CreateCommentRequestSchema, ListCommentsResponseSchema } from '@/schemas/comment.dto'
 import { createComment, deleteComment, listComments } from '@/services/comment-service'
 import type { Bindings, Variables } from '@/types/bindings'
@@ -8,6 +8,7 @@ import { loadBiccameMusumeIdSet } from '@/utils/character-whitelist'
 import { moderateText } from '@/utils/moderation'
 import { containsNgWord } from '@/utils/ng-words'
 import { sanitizeCommentBody } from '@/utils/sanitize'
+import { verifyTokenOptional } from '@/utils/token'
 import { verifyTurnstileToken } from '@/utils/turnstile'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
@@ -99,13 +100,13 @@ routes.openapi(
         description: 'レート制限エラー'
       }
     },
-    middleware: [CFAuthOptional] as const,
+    middleware: [verifyTokenOptional] as const,
     tags: ['comments']
   }),
   async (c) => {
     const { uuid } = c.req.valid('param')
     const { characterId, body, turnstileToken } = c.req.valid('json')
-    const adminEmail = c.get('adminEmail')
+    const userId = c.get('jwtPayload')?.uid
 
     const ip = c.req.header('cf-connecting-ip') ?? '127.0.0.1'
 
@@ -156,7 +157,7 @@ routes.openapi(
       characterId,
       body: sanitizedBody,
       ipAddress: ip,
-      adminEmail
+      userId
     })
     return c.json(comment, 201)
   }

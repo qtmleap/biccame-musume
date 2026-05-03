@@ -42,13 +42,9 @@ const extractTokenFromCookie = (cookie: string): string | undefined => {
  * Cloudflare Access 認証ミドルウェア（必須）
  * 未認証・検証失敗は 401 を返す
  */
-export const CFAuth = async <T extends Bindings>(
-  c: Context<{ Bindings: T; Variables: { adminEmail?: string } }>,
-  next: Next
-) => {
+export const CFAuth = async <T extends Bindings>(c: Context<{ Bindings: T }>, next: Next) => {
   if (c.env.ENVIRONMENT === 'local') {
     console.log('[Dev] Cloudflare Access check skipped for development environment')
-    c.set('adminEmail', 'dev@localhost')
     await next()
     return
   }
@@ -64,47 +60,10 @@ export const CFAuth = async <T extends Bindings>(
   }
 
   try {
-    const payload = await verifyJWT(token, teamDomain, audience)
-    c.set('adminEmail', payload.email)
+    await verifyJWT(token, teamDomain, audience)
     await next()
   } catch (error) {
     console.error('Access verification failed:', error)
     throw new HTTPException(401, { message: 'Invalid or expired token' })
   }
-}
-
-/**
- * Cloudflare Access 認証ミドルウェア（オプション）
- * JWT がなければ素通し、あれば検証して adminEmail をセットする
- * 検証失敗時もエラーにせず素通し（POST など公開エンドポイントで管理者情報を付加するだけ）
- */
-export const CFAuthOptional = async <T extends Bindings>(
-  c: Context<{ Bindings: T; Variables: { adminEmail?: string } }>,
-  next: Next
-) => {
-  if (c.env.ENVIRONMENT === 'local') {
-    c.set('adminEmail', 'dev@localhost')
-    await next()
-    return
-  }
-
-  const { CF_ACCESS_TEAM_DOMAIN: teamDomain, CF_ACCESS_AUD: audience } = c.env
-
-  const headerToken = c.req.header('CF-Access-Jwt-Assertion')
-  const cookieToken = extractTokenFromCookie(c.req.header('Cookie') || '')
-  const token = headerToken || cookieToken
-
-  if (!token) {
-    await next()
-    return
-  }
-
-  try {
-    const payload = await verifyJWT(token, teamDomain, audience)
-    c.set('adminEmail', payload.email)
-  } catch (error) {
-    console.error('CFAuthOptional: token verification failed, continuing as public:', error)
-  }
-
-  await next()
 }
