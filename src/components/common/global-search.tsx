@@ -101,7 +101,7 @@ export const GlobalSearch = ({ open, onOpenChange }: GlobalSearchProps) => {
                         <span className='truncate'>{event.title}</span>
                         {storeLabel && <span className='shrink-0 text-xs text-muted-foreground'>{storeLabel}</span>}
                         {isOngoing && (
-                          <span className='shrink-0 rounded-full bg-brand/10 px-2 py-0.5 text-[10px] font-medium text-brand'>
+                          <span className='shrink-0 rounded-full bg-brand/10 px-2 py-0.5 text-xs font-medium text-brand'>
                             {event.status === 'last_day' ? '本日最終日' : '開催中'}
                           </span>
                         )}

@@ -23,6 +23,7 @@ import { getLargeTwitterPhoto, useAuth } from '@/hooks/use-auth'
 import { useEvents } from '@/hooks/use-events'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { auth } from '@/lib/firebase'
+import { DURATION } from '@/lib/motion'
 import { MY_PAGE_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 
@@ -112,7 +113,7 @@ const MyPageContent = () => {
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: DURATION.normal }}
             >
               <Avatar className='h-21.25 w-21.25'>
                 <AvatarImage
@@ -133,7 +134,7 @@ const MyPageContent = () => {
                   <Button
                     variant='outline'
                     size='sm'
-                    className='rounded-full px-4 h-7 text-xs font-semibold bg-destructive/10 text-destructive border border-destructive/30 hover:bg-destructive/20'
+                    className='rounded-full px-4 h-9 text-xs font-semibold bg-destructive/10 text-destructive border border-destructive/30 hover:bg-destructive/20'
                   >
                     {MY_PAGE_LABELS.logout}
                   </Button>
@@ -158,7 +159,7 @@ const MyPageContent = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: DURATION.normal, delay: 0.2 }}
             className='mb-6'
           >
             <h1 className='text-2xl font-bold text-foreground'>{user?.displayName}</h1>
@@ -168,7 +169,7 @@ const MyPageContent = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ duration: DURATION.normal, delay: 0.4 }}
             className='space-y-3 mb-6'
           >
             <div className='flex items-center gap-2'>
@@ -189,7 +190,7 @@ const MyPageContent = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+            transition={{ duration: DURATION.normal, delay: 0.5 }}
             className='mb-6'
           >
             <EventSection
@@ -205,7 +206,7 @@ const MyPageContent = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            transition={{ duration: DURATION.normal, delay: 0.6 }}
             className='mb-6'
           >
             <EventSection

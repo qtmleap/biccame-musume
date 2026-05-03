@@ -201,7 +201,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
                       disabled={isLoading}
                     >
                       <Mail className='mr-2 h-4 w-4' />
-                      ログイン
+                      {isLoading ? 'ログイン中...' : 'ログイン'}
                     </Button>
                   </form>
                 </TabsContent>
@@ -250,7 +250,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
                       disabled={isLoading}
                     >
                       <Mail className='mr-2 h-4 w-4' />
-                      新規登録
+                      {isLoading ? '登録中...' : '新規登録'}
                     </Button>
                   </form>
                 </TabsContent>

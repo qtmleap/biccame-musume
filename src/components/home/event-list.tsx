@@ -4,8 +4,10 @@ import { orderBy } from 'lodash-es'
 import { Calendar } from 'lucide-react'
 import { motion } from 'motion/react'
 import { EventListItem } from '@/components/home/event-list-item'
+import { Skeleton } from '@/components/ui/skeleton'
 import { useEvents } from '@/hooks/use-events'
 import { useUserActivity } from '@/hooks/use-user-activity'
+import { DURATION } from '@/lib/motion'
 
 /**
  * 通常名刺（regular_card）の重複を排除し、店舗ごとに最新のものだけを残す
@@ -83,7 +85,21 @@ export const EventList = () => {
   const upcomingEvents = deduplicateRegularCards(filteredEvents)
 
   if (isLoading) {
-    return null
+    return (
+      <section>
+        <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
+          <div className='flex items-center gap-2 mb-4'>
+            <Calendar className='h-5 w-5 text-brand' />
+            <h2 className='text-base font-bold text-foreground'>開催中・開催予定のイベント</h2>
+          </div>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
+            {(['sk-0', 'sk-1', 'sk-2'] as const).map((k) => (
+              <Skeleton key={k} className='h-28 w-full rounded-lg' />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
   }
 
   return (
@@ -107,7 +123,7 @@ export const EventList = () => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6, ease: 'easeOut' }}
+          transition={{ duration: DURATION.normal, delay: 0.6, ease: 'easeOut' }}
           className='mt-4 text-right'
         >
           <Link

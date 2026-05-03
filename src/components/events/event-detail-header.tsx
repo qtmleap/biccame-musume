@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { useAuth } from '@/hooks/use-auth'
 import { usePageViews } from '@/hooks/use-page-views'
 import { useUserActivity } from '@/hooks/use-user-activity'
+import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
 import { CATEGORY_BADGE, STATUS_BADGE_DETAIL } from '@/locales/component'
@@ -253,14 +254,14 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.1, 0] }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: DURATION.normal }}
               className='absolute inset-0 bg-action-interest-soft'
             />
             {/* 中央のハート */}
             <motion.div
               initial={{ scale: 0, rotate: -15 }}
               animate={{ scale: [0, 1.2, 1], rotate: [-15, 10, 0] }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
+              transition={{ duration: DURATION.normal, ease: 'easeOut' }}
             >
               <Heart className='h-24 w-24 fill-action-interest text-action-interest drop-shadow-lg' />
             </motion.div>
@@ -275,7 +276,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
                   x: Math.cos((angle * Math.PI) / 180) * 120,
                   y: Math.sin((angle * Math.PI) / 180) * 120
                 }}
-                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
+                transition={{ duration: DURATION.slow, ease: 'easeOut', delay: 0.1 }}
                 className='absolute pointer-events-none'
               >
                 <Heart className='h-8 w-8 fill-action-interest-soft text-action-interest-soft' />
@@ -297,14 +298,14 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.15, 0] }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: DURATION.normal }}
               className='absolute inset-0 bg-action-award-soft'
             />
             {/* 中央のアワード */}
             <motion.div
               initial={{ scale: 0, y: 20 }}
               animate={{ scale: [0, 1.3, 1], y: [20, -10, 0] }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
+              transition={{ duration: DURATION.normal, ease: 'easeOut' }}
             >
               <Award className='h-28 w-28 text-action-award fill-action-award-soft drop-shadow-lg' />
             </motion.div>
@@ -319,7 +320,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
                   x: Math.cos((particle.angle * Math.PI) / 180) * 150,
                   y: Math.sin((particle.angle * Math.PI) / 180) * 150
                 }}
-                transition={{ duration: 0.7, ease: 'easeOut', delay: 0.05 }}
+                transition={{ duration: DURATION.slow, ease: 'easeOut', delay: 0.05 }}
                 className='absolute pointer-events-none'
               >
                 <div className={cn('w-4 h-4 rounded-full', particle.color)} />
@@ -336,7 +337,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
                   x: Math.cos(((angle + 30) * Math.PI) / 180) * 100,
                   y: Math.sin(((angle + 30) * Math.PI) / 180) * 100
                 }}
-                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
+                transition={{ duration: DURATION.slow, ease: 'easeOut', delay: 0.15 }}
                 className='absolute pointer-events-none'
               >
                 <div className='w-2 h-2 bg-rank-gold rotate-45' />
@@ -376,7 +377,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
         key={`header-${event.uuid}`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
+        transition={{ duration: DURATION.normal, delay: 0.1 }}
         className='mb-6'
       >
         <div className='flex items-center justify-between gap-2 mb-2'>

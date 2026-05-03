@@ -40,7 +40,7 @@ export const SelectedStoreList = ({ stores, onRemove, onChangeStation, onClearAl
                 onValueChange={(v) => onChangeStation(store.id, v)}
                 disabled={store.stations.length === 1}
               >
-                <SelectTrigger className='h-8 w-auto min-w-[120px]'>
+                <SelectTrigger className='h-9 w-auto min-w-[120px]'>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -53,8 +53,8 @@ export const SelectedStoreList = ({ stores, onRemove, onChangeStation, onClearAl
               </Select>
               <Button
                 variant='ghost'
-                size='icon-sm'
-                className='size-8 border border-transparent'
+                size='icon'
+                className='size-9 border border-transparent'
                 onClick={() => onRemove(store.id)}
               >
                 <Trash2 className='size-4' />

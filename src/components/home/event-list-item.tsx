@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
+import { DURATION } from '@/lib/motion'
 import {
   DATE_LABELS,
   EVENT_LABELS,
@@ -47,7 +48,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{
-        duration: 0.4,
+        duration: DURATION.normal,
         delay: index * 0.1,
         ease: 'easeOut'
       }}
