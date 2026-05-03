@@ -355,7 +355,7 @@ const api = makeApi([
         schema: z.string().nonempty()
       }
     ],
-    response: SuccessResponseSchemaForClient
+    response: z.object({ message: z.string() })
   }
 ])
 
