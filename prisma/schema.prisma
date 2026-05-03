@@ -113,9 +113,11 @@ model EventComment {
   /// 本文（1〜200文字、バリデーションはDTOで）
   body      String
   /// 投稿者IPアドレス
-  ipAddress String    @map("ip_address")
+  ipAddress  String    @map("ip_address")
+  /// 管理者が投稿した場合のログインメール
+  adminEmail String?   @map("admin_email")
   /// 論理削除日時（Phase 2 管理者削除用）
-  deletedAt DateTime? @map("deleted_at")
+  deletedAt  DateTime? @map("deleted_at")
   /// 作成日時
   createdAt DateTime  @default(now()) @map("created_at")
   /// 更新日時

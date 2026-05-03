@@ -49,7 +49,7 @@ export const CommentList = ({ eventUuid }: CommentListProps) => {
   return (
     <div className='divide-y divide-border'>
       {data.map((comment) => (
-        <CommentItem key={comment.id} comment={comment} />
+        <CommentItem key={comment.id} eventUuid={eventUuid} comment={comment} />
       ))}
     </div>
   )
