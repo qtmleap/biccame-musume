@@ -43,7 +43,7 @@ export const ErrorFallback = ({ error, reset }: ErrorFallbackProps) => {
 
         {/* アクション */}
         <div className='flex flex-col sm:flex-row gap-4 justify-center items-center pt-4'>
-          <Button onClick={handleReset} size='lg' className='bg-[#e50012] hover:bg-[#c4000f]'>
+          <Button onClick={handleReset} size='lg'>
             <RefreshCw className='mr-2 size-5' />
             再読み込み
           </Button>

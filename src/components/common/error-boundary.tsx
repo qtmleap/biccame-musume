@@ -48,7 +48,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 <pre className='text-xs text-gray-600 overflow-auto'>{this.state.error.message}</pre>
               </details>
             )}
-            <Button onClick={() => window.location.reload()} className='bg-pink-600 hover:bg-pink-700'>
+            <Button onClick={() => window.location.reload()}>
               <RefreshCw className='h-4 w-4 mr-2' />
               ページを再読み込み
             </Button>
