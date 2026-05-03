@@ -45,16 +45,20 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
         className='flex items-center justify-between w-full sm:hidden mb-3'
       >
         <div className='flex items-center gap-2'>
-          <ArrowUpDown className='h-4 w-4 text-gray-600' />
-          <span className='text-sm font-medium text-gray-700'>並び替え: {currentOption?.label}</span>
+          <ArrowUpDown className='h-4 w-4 text-muted-foreground' />
+          <span className='text-sm font-medium text-muted-foreground'>並び替え: {currentOption?.label}</span>
         </div>
-        {isOpen ? <ChevronUp className='h-4 w-4 text-gray-600' /> : <ChevronDown className='h-4 w-4 text-gray-600' />}
+        {isOpen ? (
+          <ChevronUp className='h-4 w-4 text-muted-foreground' />
+        ) : (
+          <ChevronDown className='h-4 w-4 text-muted-foreground' />
+        )}
       </button>
 
       {/* デスクトップ用ヘッダー */}
       <div className='hidden sm:flex items-center gap-2 mb-3'>
-        <ArrowUpDown className='h-4 w-4 text-gray-600' />
-        <span className='text-sm font-medium text-gray-700'>並び替え</span>
+        <ArrowUpDown className='h-4 w-4 text-muted-foreground' />
+        <span className='text-sm font-medium text-muted-foreground'>並び替え</span>
       </div>
 
       {/* ボタングリッド（モバイルでは開閉可能） */}

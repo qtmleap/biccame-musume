@@ -336,7 +336,7 @@ export const EventForm = ({
                 />
               )}
             />
-            <label htmlFor='is-verified' className='text-sm font-medium text-gray-700 cursor-pointer'>
+            <label htmlFor='is-verified' className='text-sm font-medium text-muted-foreground cursor-pointer'>
               検証済み
             </label>
           </div>
@@ -353,7 +353,7 @@ export const EventForm = ({
                 />
               )}
             />
-            <label htmlFor='is-preliminary' className='text-sm font-medium text-gray-700 cursor-pointer'>
+            <label htmlFor='is-preliminary' className='text-sm font-medium text-muted-foreground cursor-pointer'>
               未確定情報
             </label>
           </div>
@@ -370,7 +370,7 @@ export const EventForm = ({
                 />
               )}
             />
-            <label htmlFor='should-tweet' className='text-sm font-medium text-gray-700 cursor-pointer'>
+            <label htmlFor='should-tweet' className='text-sm font-medium text-muted-foreground cursor-pointer'>
               保存時に投稿する
             </label>
           </div>

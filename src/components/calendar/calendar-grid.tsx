@@ -112,7 +112,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                   'min-h-20 p-1.5 rounded-lg transition-all text-left',
                   day === null && 'bg-transparent cursor-default',
                   day !== null && isToday && 'bg-rose-100 border border-rose-300',
-                  day !== null && !isToday && 'bg-card border border-gray-200 hover:bg-gray-50',
+                  day !== null && !isToday && 'bg-card border-card hover:bg-muted/30',
                   hasEvents && 'cursor-pointer'
                 )}
                 disabled={!hasEvents}

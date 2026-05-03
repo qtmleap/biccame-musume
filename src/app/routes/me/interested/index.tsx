@@ -23,14 +23,14 @@ const InterestedEventsContent = () => {
   const interestedEventDetails = allEvents.filter((e) => interestedEvents.includes(e.uuid))
 
   return (
-    <div className='min-h-screen bg-pink-50'>
+    <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto px-4 py-4 md:py-6 md:px-8 max-w-6xl'>
         {/* ヘッダー */}
         <div className='mb-6'>
           <Button
             variant='ghost'
             size='sm'
-            className='text-gray-600 hover:text-gray-900 -ml-2 mb-4'
+            className='text-muted-foreground hover:text-foreground -ml-2 mb-4'
             onClick={() => router.history.back()}
           >
             <ArrowLeft className='h-4 w-4 mr-1' />
@@ -38,15 +38,15 @@ const InterestedEventsContent = () => {
           </Button>
           <div className='flex items-center gap-2'>
             <Heart className='h-6 w-6 text-pink-500' />
-            <h1 className='text-2xl font-bold text-gray-900'>{MY_PAGE_LABELS.interestedEvents}</h1>
-            <span className='text-sm text-gray-500'>({interestedEventDetails.length})</span>
+            <h1 className='text-2xl font-bold text-foreground'>{MY_PAGE_LABELS.interestedEvents}</h1>
+            <span className='text-sm text-muted-foreground'>({interestedEventDetails.length})</span>
           </div>
 
           {/* タブナビゲーション */}
           <div className='mt-4 flex border-b border-border'>
             <Link
               to='/me/interested'
-              className='flex items-center gap-1.5 px-4 py-2 text-sm font-medium border-b-2 border-pink-500 text-pink-600'
+              className='flex items-center gap-1.5 px-4 py-2 text-sm font-medium border-b-2 border-brand text-brand'
             >
               <Heart className='h-4 w-4' />
               気になる
@@ -68,9 +68,9 @@ const InterestedEventsContent = () => {
           onPageChange={setPage}
           emptyState={
             <div className='bg-card rounded-lg shadow-sm p-8 text-center'>
-              <Heart className='h-12 w-12 text-gray-300 mx-auto mb-3' />
-              <p className='text-gray-600'>{MY_PAGE_LABELS.noInterestedEvents}</p>
-              <Link to='/events' className='inline-block mt-4 text-pink-600 hover:text-pink-700 text-sm font-medium'>
+              <Heart className='h-12 w-12 text-muted-foreground/30 mx-auto mb-3' />
+              <p className='text-muted-foreground'>{MY_PAGE_LABELS.noInterestedEvents}</p>
+              <Link to='/events' className='inline-block mt-4 text-brand hover:text-brand text-sm font-medium'>
                 {MY_PAGE_LABELS.findEvents}
               </Link>
             </div>

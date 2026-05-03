@@ -26,7 +26,7 @@ export const LineStickerList = () => {
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div className='flex items-center gap-2 mb-4'>
           <Sticker className='h-5 w-5 text-[#00B900]' />
-          <h2 className='text-base font-bold text-gray-800'>LINEスタンプ</h2>
+          <h2 className='text-base font-bold text-foreground'>LINEスタンプ</h2>
         </div>
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'>
           {stickers.map((sticker) => (

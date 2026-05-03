@@ -61,7 +61,7 @@ export const CalendarMonthTabs = ({ selectedMonth, onSelectMonth }: CalendarMont
           className={cn(
             'shrink-0 rounded-full px-4 transition-all',
             selectedMonth === month
-              ? 'bg-rose-500 font-bold text-white shadow-md hover:bg-rose-600 hover:text-white'
+              ? 'bg-brand font-bold text-brand-foreground shadow-md hover:bg-brand/90 hover:text-brand-foreground'
               : 'hover:bg-muted/50 text-muted-foreground'
           )}
         >

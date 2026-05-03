@@ -38,7 +38,7 @@ export const DateField = ({ id, label, register, error, clearable, onClear, hint
         )}
       </div>
       {error && <p className='mt-1 text-xs text-destructive'>{error}</p>}
-      {hint && <p className='mt-1 text-xs text-gray-500'>{hint}</p>}
+      {hint && <p className='mt-1 text-xs text-muted-foreground'>{hint}</p>}
     </div>
   )
 }

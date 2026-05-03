@@ -54,8 +54,8 @@ export const CharacterVoteButton = ({
     if (isSuccess && data?.message) {
       toast.success(data.message, {
         classNames: {
-          toast: 'text-gray-900',
-          description: 'text-gray-900! font-semibold!',
+          toast: 'text-foreground',
+          description: 'text-foreground! font-semibold!',
           icon: 'text-green-600'
         },
         icon: <CircleCheckIcon />
@@ -82,8 +82,8 @@ export const CharacterVoteButton = ({
 
       toast.error(errorMessage, {
         classNames: {
-          toast: 'text-gray-900',
-          description: 'text-gray-900!'
+          toast: 'text-foreground',
+          description: 'text-foreground!'
         }
       })
     }

@@ -77,7 +77,7 @@ export const GanttTimeline = ({
             </div>
 
             {eventBars.length === 0 && (
-              <div className='py-8 text-center text-gray-500'>表示するイベントがありません</div>
+              <div className='py-8 text-center text-muted-foreground'>表示するイベントがありません</div>
             )}
           </div>
         </section>

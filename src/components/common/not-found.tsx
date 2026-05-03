@@ -12,9 +12,9 @@ export const NotFound = () => {
         <div className='max-w-2xl mx-auto text-center space-y-8'>
           {/* エラーコード */}
           <div>
-            <h1 className='text-8xl md:text-9xl font-bold text-[#e50012] mb-4'>404</h1>
-            <h2 className='text-2xl md:text-3xl font-bold text-gray-800 mb-4'>ページが見つかりませんでした</h2>
-            <p className='text-gray-600 text-lg'>お探しのページは存在しないか、移動した可能性があります。</p>
+            <h1 className='text-8xl md:text-9xl font-bold text-brand mb-4'>404</h1>
+            <h2 className='text-2xl md:text-3xl font-bold text-foreground mb-4'>ページが見つかりませんでした</h2>
+            <p className='text-muted-foreground text-lg'>お探しのページは存在しないか、移動した可能性があります。</p>
           </div>
 
           {/* アクション */}
@@ -34,26 +34,26 @@ export const NotFound = () => {
           </div>
 
           {/* 補足情報 */}
-          <div className='pt-12 border-t border-gray-200'>
-            <h3 className='text-lg font-bold text-gray-800 mb-4'>よくアクセスされるページ</h3>
-            <ul className='space-y-2 text-gray-700'>
+          <div className='pt-12 border-t border-card'>
+            <h3 className='text-lg font-bold text-foreground mb-4'>よくアクセスされるページ</h3>
+            <ul className='space-y-2 text-muted-foreground'>
               <li>
-                <Link to='/characters' className='text-[#e50012] hover:underline'>
+                <Link to='/characters' className='text-brand hover:underline'>
                   ビッカメ娘一覧
                 </Link>
               </li>
               <li>
-                <Link to='/calendar' className='text-[#e50012] hover:underline'>
+                <Link to='/calendar' className='text-brand hover:underline'>
                   カレンダー
                 </Link>
               </li>
               <li>
-                <Link to='/location' className='text-[#e50012] hover:underline'>
+                <Link to='/location' className='text-brand hover:underline'>
                   マップ
                 </Link>
               </li>
               <li>
-                <Link to='/ranking' className='text-[#e50012] hover:underline'>
+                <Link to='/ranking' className='text-brand hover:underline'>
                   総選挙
                 </Link>
               </li>

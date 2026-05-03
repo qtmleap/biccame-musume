@@ -12,7 +12,7 @@ const CATEGORY_CHECKBOX_COLORS: Record<Event['category'], string> = {
   ackey: 'border-amber-500 data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500',
   limited_card: 'border-purple-500 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500',
   regular_card: 'border-blue-500 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500',
-  other: 'border-pink-500 data-[state=checked]:bg-pink-500 data-[state=checked]:border-pink-500'
+  other: 'border-brand data-[state=checked]:bg-brand data-[state=checked]:border-brand'
 }
 
 /**

@@ -143,7 +143,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
             isLoggedIn ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
-            interested ? 'text-pink-500' : 'text-gray-400',
+            interested ? 'text-pink-500' : 'text-muted-foreground',
             isLoggedIn && !interested && 'hover:text-pink-400'
           )}
         >
@@ -176,7 +176,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
             isLoggedIn && !isUpcoming ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
-            completed ? 'text-amber-500' : 'text-gray-400',
+            completed ? 'text-amber-500' : 'text-muted-foreground',
             isLoggedIn && !isUpcoming && !completed && 'hover:text-amber-400'
           )}
         >
@@ -191,7 +191,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
         </button>
 
         {/* 閲覧数 */}
-        <div className='flex items-center gap-1.5 text-sm text-gray-400 min-w-16'>
+        <div className='flex items-center gap-1.5 text-sm text-muted-foreground min-w-16'>
           <BarChart2 className='h-5 w-5' />
           <span className='tabular-nums'>{pageViews.total}</span>
         </div>
@@ -202,7 +202,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
         <button
           type='button'
           onClick={handleShare}
-          className='flex items-center gap-1.5 text-sm text-gray-400 hover:text-blue-500 transition-colors group'
+          className='flex items-center gap-1.5 text-sm text-muted-foreground hover:text-blue-500 transition-colors group'
         >
           <Share className='h-5 w-5 transition-all group-hover:scale-110' />
         </button>
@@ -211,7 +211,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           <PopoverTrigger asChild>
             <button
               type='button'
-              className='flex items-center gap-1.5 text-sm text-gray-400 hover:text-blue-500 transition-colors group'
+              className='flex items-center gap-1.5 text-sm text-muted-foreground hover:text-blue-500 transition-colors group'
             >
               <Share className='h-5 w-5 transition-all group-hover:scale-110' />
             </button>
@@ -392,7 +392,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
             </Button>
           )}
         </div>
-        <h1 className='text-2xl font-bold text-gray-900'>{event.title}</h1>
+        <h1 className='text-2xl font-bold text-foreground'>{event.title}</h1>
         <Suspense fallback={null}>
           <EventStatsBadges event={event} onStatsUpdate={handleStatsUpdate} />
         </Suspense>

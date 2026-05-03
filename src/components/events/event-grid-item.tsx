@@ -70,13 +70,13 @@ export const EventGridItem = ({ event }: EventGridItemProps) => {
         to='/events/$uuid'
         params={{ uuid: event.uuid }}
         className={cn(
-          'block border border-pink-200 rounded-lg p-4 hover:border-[#e50012]/40 transition-colors h-full',
+          'block border-card rounded-lg p-4 hover:border-brand/40 transition-colors h-full',
           isEnded ? 'opacity-50 grayscale bg-card' : endingSoonBg || 'bg-card'
         )}
       >
         <div className='mb-2 flex items-start justify-between gap-3'>
           <div className='flex-1'>
-            <h3 className='text-sm font-semibold text-gray-900 line-clamp-2'>{event.title}</h3>
+            <h3 className='text-sm font-semibold text-foreground line-clamp-2'>{event.title}</h3>
             <div className='mt-1 flex flex-col gap-1 text-xs text-muted-foreground'>
               <span className='flex items-center gap-1'>
                 <Calendar className='size-3' />

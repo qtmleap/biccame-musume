@@ -181,7 +181,7 @@ const EventsContent = () => {
       <div className='flex flex-col gap-2'>
         {/* ヘッダーとボタン群 */}
         <div className='flex items-center justify-between gap-4'>
-          <h1 className='text-2xl font-bold text-gray-900'>イベント一覧</h1>
+          <h1 className='text-2xl font-bold text-foreground'>イベント一覧</h1>
           <div className='flex items-center gap-2'>
             {/* モバイル: フィルターボタン */}
             <Sheet open={filterSheetOpen} onOpenChange={setFilterSheetOpen}>
@@ -189,7 +189,7 @@ const EventsContent = () => {
                 <Button size='sm' variant='ghost' className='md:hidden relative h-10 w-10 p-0'>
                   <Filter className='size-4' />
                   {isFilterActive && (
-                    <span className='absolute top-1.5 right-1.5 size-2 rounded-full bg-[#e50012]' aria-hidden />
+                    <span className='absolute top-1.5 right-1.5 size-2 rounded-full bg-brand' aria-hidden />
                   )}
                 </Button>
               </SheetTrigger>
@@ -207,7 +207,7 @@ const EventsContent = () => {
                     <EventStoreFilter />
                   </div>
                 </div>
-                <div className='border-t border-pink-100 px-4 py-3'>
+                <div className='border-t border-card px-4 py-3'>
                   <Button
                     variant='outline'
                     size='sm'
@@ -228,7 +228,7 @@ const EventsContent = () => {
               size='sm'
               pressed={viewMode === 'grid'}
               onPressedChange={(pressed) => setViewMode(pressed ? 'grid' : 'gantt')}
-              className='h-8 w-8 p-0 text-gray-600 hover:text-gray-900 data-[state=on]:text-gray-900'
+              className='h-8 w-8 p-0 text-muted-foreground hover:text-foreground data-[state=on]:text-foreground'
             >
               {viewMode === 'grid' ? <LayoutGrid className='size-4' /> : <Calendar className='size-4' />}
             </Toggle>
@@ -258,7 +258,7 @@ const EventsContent = () => {
               disabled={!isFilterActive}
               aria-label='フィルターをクリア'
               title='フィルターをクリア'
-              className='ml-auto h-8 w-8 p-0 text-gray-600 hover:text-gray-900 data-[state=on]:text-gray-900'
+              className='ml-auto h-8 w-8 p-0 text-muted-foreground hover:text-foreground data-[state=on]:text-foreground'
             >
               <X className='size-4' />
             </Toggle>
@@ -278,7 +278,7 @@ const EventsContent = () => {
             page={page}
             onPageChange={setPage}
             emptyState={
-              <div className='text-center py-12 text-gray-500'>
+              <div className='text-center py-12 text-muted-foreground'>
                 <Gift className='size-12 mx-auto mb-4 opacity-30' />
                 <p>開催中・開催予定のイベントはありません</p>
               </div>
