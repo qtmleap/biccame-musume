@@ -7,13 +7,13 @@ const toResponse = (comment: {
   nickname: string
   body: string
   createdAt: Date
-  adminEmail: string | null
+  userId: string | null
 }): CommentResponse => ({
   id: comment.id,
   characterId: comment.nickname,
   body: comment.body,
   createdAt: comment.createdAt.toISOString(),
-  adminEmail: comment.adminEmail ?? undefined
+  userId: comment.userId ?? undefined
 })
 
 /**
@@ -23,7 +23,7 @@ export const listComments = async (prisma: PrismaClient, eventId: string): Promi
   const rows = await prisma.eventComment.findMany({
     where: { eventId, deletedAt: null },
     orderBy: { createdAt: 'desc' },
-    select: { id: true, nickname: true, body: true, createdAt: true, adminEmail: true }
+    select: { id: true, nickname: true, body: true, createdAt: true, userId: true }
   })
   return rows.map(toResponse)
 }
@@ -34,7 +34,7 @@ export const listComments = async (prisma: PrismaClient, eventId: string): Promi
 export const createComment = async (
   prisma: PrismaClient,
   eventId: string,
-  data: { characterId: string; body: string; ipAddress: string; adminEmail?: string }
+  data: { characterId: string; body: string; ipAddress: string; userId?: string }
 ): Promise<CommentResponse> => {
   const comment = await prisma.eventComment.create({
     data: {
@@ -42,9 +42,9 @@ export const createComment = async (
       nickname: data.characterId,
       body: data.body,
       ipAddress: data.ipAddress,
-      adminEmail: data.adminEmail ?? null
+      userId: data.userId ?? null
     },
-    select: { id: true, nickname: true, body: true, createdAt: true, adminEmail: true }
+    select: { id: true, nickname: true, body: true, createdAt: true, userId: true }
   })
   return toResponse(comment)
 }
