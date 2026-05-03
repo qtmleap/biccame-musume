@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { CALENDAR_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
@@ -63,7 +64,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.98 }}
-        transition={{ duration: 0.15 }}
+        transition={{ duration: DURATION.fast }}
         className='p-2'
       >
         {/* 曜日ヘッダー */}
@@ -101,7 +102,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{
-                  duration: 0.15,
+                  duration: DURATION.fast,
                   delay: baseDelay,
                   ease: 'easeOut'
                 }}
@@ -141,7 +142,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                               alt={event.character.character?.name || ''}
                               className='object-cover object-top scale-150 translate-y-2'
                             />
-                            <AvatarFallback className='text-[10px] bg-muted'>
+                            <AvatarFallback className='text-xs bg-muted'>
                               {event.character.character?.name?.slice(0, 1) || '?'}
                             </AvatarFallback>
                           </Avatar>

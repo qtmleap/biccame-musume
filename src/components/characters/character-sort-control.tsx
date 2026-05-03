@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 import { type SortType, sortTypeAtom } from '@/atoms/sort-atom'
 import { Button } from '@/components/ui/button'
+import { DURATION } from '@/lib/motion'
 import { SORT_LABELS } from '@/locales/app.content'
 
 type CharacterSortControlProps = {
@@ -71,7 +72,7 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
               opacity: isOpen ? 1 : 0
             }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: DURATION.normal, ease: 'easeInOut' }}
             className='overflow-hidden sm:h-auto! sm:opacity-100!'
           >
             <div className='grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 sm:mt-0'>

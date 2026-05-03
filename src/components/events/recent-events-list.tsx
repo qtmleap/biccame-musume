@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Store } from 'lucide-react'
 import { motion } from 'motion/react'
+import { DURATION } from '@/lib/motion'
 import { EVENT_CATEGORY_LABELS, EVENT_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
@@ -53,7 +54,7 @@ export const RecentEventsList = ({ events, currentEventId, hideHeading = false }
               key={event.uuid}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
+              transition={{ duration: DURATION.normal, delay: index * 0.05 }}
               className='flex items-start gap-3 py-3 first:pt-0'
             >
               <div className='shrink-0'>

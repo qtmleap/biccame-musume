@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DrawerClose, DrawerFooter } from '@/components/ui/drawer'
+import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { CALENDAR_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
@@ -38,7 +39,7 @@ export const CalendarEventDrawerContent = ({ events }: CalendarEventDrawerConten
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{
-                duration: 0.15,
+                duration: DURATION.fast,
                 delay: eventIndex * 0.05,
                 ease: 'easeOut'
               }}

@@ -3,6 +3,7 @@ import type dayjs from 'dayjs'
 import { Cake, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { DURATION } from '@/lib/motion'
 import { DATE_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
@@ -37,7 +38,7 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{
-        duration: 0.4,
+        duration: DURATION.normal,
         delay: index * 0.1,
         ease: 'easeOut'
       }}

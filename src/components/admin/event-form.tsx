@@ -383,7 +383,7 @@ export const EventForm = ({
             className='flex-1 bg-brand hover:bg-brand/90 text-brand-foreground'
             disabled={isSubmitted}
           >
-            確認する
+            {isSubmitted ? '送信中...' : '確認する'}
           </Button>
           <Button type='button' variant='outline' onClick={handleReset} className='flex-1' disabled={isSubmitted}>
             クリア
