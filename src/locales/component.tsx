@@ -13,10 +13,10 @@ import type { EventCategory, EventStatus } from '@/schemas/event.dto'
  * event-list.tsxで使用
  */
 export const STATUS_BADGE = {
-  upcoming: () => <Badge variant='outline'>開催前</Badge>,
-  ongoing: () => <Badge variant='outline'>開催中</Badge>,
-  last_day: () => <Badge variant='outline'>最終日</Badge>,
-  ended: () => <Badge variant='secondary'>終了</Badge>
+  upcoming: () => <Badge variant='secondary'>開催前</Badge>,
+  ongoing: () => <Badge>開催中</Badge>,
+  last_day: () => <Badge variant='destructive'>最終日</Badge>,
+  ended: () => <Badge variant='outline'>終了</Badge>
 } satisfies Record<EventStatus, () => React.ReactNode>
 
 /**
@@ -24,10 +24,10 @@ export const STATUS_BADGE = {
  * event-grid-item.tsxで使用
  */
 export const STATUS_BADGE_SM = {
-  upcoming: () => <Badge variant='outline'>開催前</Badge>,
-  ongoing: () => <Badge variant='outline'>開催中</Badge>,
-  last_day: () => <Badge variant='outline'>最終日</Badge>,
-  ended: () => <Badge variant='secondary'>終了</Badge>
+  upcoming: () => <Badge variant='secondary'>開催前</Badge>,
+  ongoing: () => <Badge>開催中</Badge>,
+  last_day: () => <Badge variant='destructive'>最終日</Badge>,
+  ended: () => <Badge variant='outline'>終了</Badge>
 } satisfies Record<EventStatus, () => React.ReactNode>
 
 /**
@@ -35,10 +35,10 @@ export const STATUS_BADGE_SM = {
  * event-detail-header.tsxで使用
  */
 export const STATUS_BADGE_DETAIL = {
-  upcoming: () => <Badge>開催前</Badge>,
+  upcoming: () => <Badge variant='secondary'>開催前</Badge>,
   ongoing: () => <Badge>開催中</Badge>,
-  last_day: () => <Badge>最終日</Badge>,
-  ended: () => <Badge variant='secondary'>終了</Badge>
+  last_day: () => <Badge variant='destructive'>最終日</Badge>,
+  ended: () => <Badge variant='outline'>終了</Badge>
 } satisfies Record<EventStatus, () => React.ReactNode>
 
 /**
