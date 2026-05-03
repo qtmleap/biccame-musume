@@ -238,7 +238,7 @@ const EventsContent = () => {
         {/* デスクトップ: インラインフィルター */}
         <div className='hidden md:flex md:flex-col md:gap-2'>
           {/* 種別フィルターと店舗フィルター */}
-          <div className='flex items-end gap-4'>
+          <div className='flex items-start gap-4'>
             <div className='flex-1'>
               <EventCategoryFilter />
             </div>
