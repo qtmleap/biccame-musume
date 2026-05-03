@@ -102,6 +102,14 @@
   --action-award: var(--color-amber-400);
   --action-award-soft: var(--color-amber-200);
 
+  /* Button surfaces (outline-style buttons over dark page bg) */
+  --button-surface: var(--color-zinc-800);
+  --button-surface-foreground: var(--color-zinc-50);
+  --button-surface-hover: var(--color-zinc-700);
+  --button-disabled: var(--color-zinc-700);
+  --button-disabled-foreground: var(--color-zinc-400);
+  --button-disabled-border: var(--color-zinc-600);
+
   /* Social brand */
   --social-github: var(--color-zinc-700);
   --social-github-foreground: var(--color-zinc-50);
