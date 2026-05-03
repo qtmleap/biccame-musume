@@ -133,7 +133,7 @@ const MyPageContent = () => {
                   <Button
                     variant='outline'
                     size='sm'
-                    className='rounded-full px-4 h-7 text-xs font-semibold bg-red-50 text-red-600 border border-red-200 hover:bg-red-100'
+                    className='rounded-full px-4 h-7 text-xs font-semibold bg-destructive/10 text-destructive border border-destructive/30 hover:bg-destructive/20'
                   >
                     {MY_PAGE_LABELS.logout}
                   </Button>
@@ -194,7 +194,7 @@ const MyPageContent = () => {
           >
             <EventSection
               title={MY_PAGE_LABELS.interestedEvents}
-              icon={<Heart className='h-5 w-5 text-pink-500' />}
+              icon={<Heart className='h-5 w-5 text-action-interest' />}
               events={interestedEventDetails}
               emptyMessage={MY_PAGE_LABELS.noInterestedEvents}
               showAllPath='/me/interested'
@@ -210,7 +210,7 @@ const MyPageContent = () => {
           >
             <EventSection
               title={MY_PAGE_LABELS.completedEvents}
-              icon={<Award className='h-5 w-5 text-amber-500' />}
+              icon={<Award className='h-5 w-5 text-action-award' />}
               events={completedEventDetails}
               emptyMessage={MY_PAGE_LABELS.noCompletedEvents}
               showAllPath='/me/completed'

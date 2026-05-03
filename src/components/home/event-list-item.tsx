@@ -71,15 +71,15 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
           <div
             className={`shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
               status === 'ended'
-                ? 'bg-gray-400 text-white'
+                ? 'bg-muted text-muted-foreground'
                 : status === 'last_day'
-                  ? 'bg-orange-500 text-white'
+                  ? 'bg-status-last-day text-status-last-day-foreground'
                   : status === 'ongoing'
                     ? 'bg-brand text-brand-foreground'
                     : daysUntil === 0
                       ? 'bg-brand text-brand-foreground'
                       : daysUntil <= 7
-                        ? 'bg-orange-100 text-orange-600'
+                        ? 'bg-warning/20 text-warning'
                         : 'bg-muted text-muted-foreground'
             }`}
           >

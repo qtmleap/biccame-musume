@@ -15,7 +15,7 @@ export const SelectedStoreInfo = ({ character }: SelectedStoreInfoProps) => {
     <Link
       to='/characters/$id'
       params={{ id: character.id }}
-      className='flex items-start gap-4 hover:bg-gray-50 rounded-lg transition-colors -m-2 p-2'
+      className='flex items-start gap-4 hover:bg-muted/30 rounded-lg transition-colors -m-2 p-2'
     >
       {/* アバター */}
       <Avatar className='h-16 w-16'>

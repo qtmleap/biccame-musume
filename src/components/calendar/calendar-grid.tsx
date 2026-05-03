@@ -73,7 +73,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
               key={day}
               className={cn(
                 'text-center font-medium py-1 text-xs',
-                index === 0 && 'text-rose-500',
+                index === 0 && 'text-calendar-sunday',
                 index === 6 && 'text-sky-500',
                 index !== 0 && index !== 6 && 'text-muted-foreground'
               )}
@@ -111,7 +111,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                 className={cn(
                   'min-h-20 p-1.5 rounded-lg transition-all text-left',
                   day === null && 'bg-transparent cursor-default',
-                  day !== null && isToday && 'bg-rose-100 border border-rose-300',
+                  day !== null && isToday && 'bg-calendar-today border border-calendar-today-border',
                   day !== null && !isToday && 'bg-card border-card hover:bg-muted/30',
                   hasEvents && 'cursor-pointer'
                 )}
@@ -124,7 +124,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                       className={cn(
                         'text-sm font-semibold tabular-nums',
                         isToday && 'text-primary',
-                        !isToday && isSunday && 'text-rose-500',
+                        !isToday && isSunday && 'text-calendar-sunday',
                         !isToday && isSaturday && 'text-sky-500',
                         !isToday && !isSunday && !isSaturday && 'text-foreground'
                       )}

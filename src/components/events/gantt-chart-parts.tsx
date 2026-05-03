@@ -56,11 +56,11 @@ export const GanttDateHeader = ({ dates, today, actualMonthEnd }: DateHeaderProp
               isOutOfMonth
                 ? 'bg-muted text-muted-foreground'
                 : isToday
-                  ? 'bg-rose-50 font-bold text-rose-600'
+                  ? 'bg-calendar-today/50 font-bold text-calendar-sunday'
                   : isSunday
-                    ? 'text-rose-500'
+                    ? 'text-calendar-sunday'
                     : isSaturday
-                      ? 'text-blue-500'
+                      ? 'text-calendar-saturday'
                       : 'text-muted-foreground'
             }`}
           >
@@ -87,7 +87,7 @@ export const GanttGridCell = ({ date, today, actualMonthEnd }: DateGridCellProps
   return (
     <div
       key={date.format('YYYY-MM-DD')}
-      className={`w-8 shrink-0 border-b border-card ${isOutOfMonth ? 'bg-muted/50' : isToday ? 'bg-rose-50' : ''}`}
+      className={`w-8 shrink-0 border-b border-card ${isOutOfMonth ? 'bg-muted/50' : isToday ? 'bg-calendar-today/30' : ''}`}
     />
   )
 }

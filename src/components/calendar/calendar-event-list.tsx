@@ -112,7 +112,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                           whileTap={{ scale: 0.98 }}
                           className={cn(
                             'flex items-center gap-3 p-2 rounded-lg',
-                            isCharacter ? 'bg-pink-500/10' : 'bg-blue-500/10'
+                            isCharacter ? 'bg-action-interest/10' : 'bg-info/10'
                           )}
                         >
                           {/* キャラクター画像 */}

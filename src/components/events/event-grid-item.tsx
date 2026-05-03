@@ -19,13 +19,13 @@ type EventGridItemProps = {
 const _getCategoryColor = (category: Event['category']) => {
   switch (category) {
     case 'limited_card':
-      return 'bg-purple-100 text-purple-600'
+      return 'bg-category-limited-card text-category-limited-card-foreground'
     case 'regular_card':
-      return 'bg-blue-100 text-blue-600'
+      return 'bg-category-regular-card text-category-regular-card-foreground'
     case 'ackey':
-      return 'bg-amber-100 text-amber-600'
+      return 'bg-category-ackey text-category-ackey-foreground'
     default:
-      return 'bg-pink-100 text-pink-600'
+      return 'bg-category-other text-category-other-foreground'
   }
 }
 
@@ -51,9 +51,9 @@ const getEndingSoonBackground = (event: Event): string | undefined => {
   const progress = elapsed / totalDuration
 
   // 進捗率に応じた背景色
-  if (progress >= 0.95) return 'bg-red-100'
-  if (progress >= 0.85) return 'bg-red-50'
-  if (progress >= 0.7) return 'bg-orange-50'
+  if (progress >= 0.95) return 'bg-destructive/20'
+  if (progress >= 0.85) return 'bg-destructive/10'
+  if (progress >= 0.7) return 'bg-warning/10'
   return undefined
 }
 

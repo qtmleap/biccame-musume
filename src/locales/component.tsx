@@ -74,8 +74,8 @@ export const CATEGORY_WITH_ICON = {
  * gantt-chart-utils.tsで使用
  */
 export const CATEGORY_BG_COLOR = {
-  limited_card: 'bg-purple-700',
-  regular_card: 'bg-blue-600',
-  ackey: 'bg-amber-600',
-  other: 'bg-pink-600'
+  limited_card: 'bg-category-limited-card-solid',
+  regular_card: 'bg-category-regular-card-solid',
+  ackey: 'bg-category-ackey-solid',
+  other: 'bg-category-other-solid'
 } satisfies Record<EventCategory, string>

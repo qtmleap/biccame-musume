@@ -56,7 +56,7 @@ export const CharacterVoteButton = ({
         classNames: {
           toast: 'text-foreground',
           description: 'text-foreground! font-semibold!',
-          icon: 'text-green-600'
+          icon: 'text-success'
         },
         icon: <CircleCheckIcon />
       })
