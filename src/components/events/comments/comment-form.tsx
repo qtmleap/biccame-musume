@@ -110,7 +110,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               title='タップで別のキャラに変える'
               className='shrink-0 rounded-full hover:opacity-80 transition-opacity'
             >
-              <Avatar className='size-14'>
+              <Avatar className='size-14 border border-card-border'>
                 <AvatarImage
                   src={character?.character?.image_url}
                   alt=''
@@ -153,7 +153,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
             投稿後の編集・削除はできません。アイコンをタップで別のキャラに変えられます。
           </p>
 
-          <div className='flex items-center justify-end gap-3 pt-3 border-t border-border'>
+          <div className='flex items-center justify-end gap-3 pt-3'>
             {bodyValue.length > 0 && (
               <span
                 className={`text-xs tabular-nums ${

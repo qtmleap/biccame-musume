@@ -25,7 +25,7 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
           animate='animate'
           transition={{ duration: DURATION.normal }}
         >
-          <Avatar className='h-21.25 w-21.25'>
+          <Avatar className='h-21.25 w-21.25 border border-card-border'>
             <AvatarImage
               src={character.character?.image_url}
               alt={character.character?.name || ''}

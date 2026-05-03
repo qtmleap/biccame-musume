@@ -36,7 +36,7 @@ export const CommentItem = ({ eventUuid, comment }: CommentItemProps) => {
 
   return (
     <article className='flex gap-3 py-3'>
-      <Avatar className='size-12'>
+      <Avatar className='size-12 border border-card-border'>
         <AvatarImage
           src={character?.character?.image_url}
           alt=''
