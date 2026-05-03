@@ -91,7 +91,7 @@ export const Header = ({ className }: HeaderProps) => {
               <Button
                 variant='ghost'
                 size='icon'
-                className='h-8 w-8 text-muted-foreground hover:text-foreground'
+                className='h-8 w-8 text-muted-foreground hover:text-foreground border border-transparent'
                 onClick={() => setSearchOpen(true)}
                 aria-label='検索'
               >
@@ -105,7 +105,7 @@ export const Header = ({ className }: HeaderProps) => {
               <Button
                 variant='ghost'
                 size='icon'
-                className='h-12 w-12 flex items-center justify-center'
+                className='h-12 w-12 flex items-center justify-center border border-transparent'
                 onClick={() => setSearchOpen(true)}
                 aria-label='検索'
               >
@@ -115,7 +115,7 @@ export const Header = ({ className }: HeaderProps) => {
               <Button
                 variant='ghost'
                 size='icon'
-                className='h-12 w-12 flex items-center justify-center'
+                className='h-12 w-12 flex items-center justify-center border border-transparent'
                 onClick={toggleMenu}
                 aria-label={mobileMenuOpen ? NAVIGATION_LABELS.closeMenu : NAVIGATION_LABELS.openMenu}
               >

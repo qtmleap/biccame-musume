@@ -54,7 +54,7 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
         <Button
           type='button'
           onClick={onSubmit}
-          className='flex-1 bg-blue-600 hover:bg-blue-700'
+          className='flex-1 bg-brand hover:bg-brand/90 text-brand-foreground'
           disabled={isSubmitting}
         >
           {isSubmitting ? CONFIRMATION_LABELS.registering : CONFIRMATION_LABELS.register}
