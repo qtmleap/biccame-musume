@@ -13,10 +13,10 @@ import type { EventCategory, EventStatus } from '@/schemas/event.dto'
  * event-list.tsxで使用
  */
 export const STATUS_BADGE = {
-  upcoming: () => <Badge variant='secondary'>開催前</Badge>,
-  ongoing: () => <Badge>開催中</Badge>,
-  last_day: () => <Badge variant='destructive'>最終日</Badge>,
-  ended: () => <Badge variant='outline'>終了</Badge>
+  upcoming: () => <Badge className='bg-status-upcoming text-status-upcoming-foreground'>開催前</Badge>,
+  ongoing: () => <Badge className='bg-status-ongoing text-status-ongoing-foreground'>開催中</Badge>,
+  last_day: () => <Badge className='bg-status-last-day text-status-last-day-foreground'>最終日</Badge>,
+  ended: () => <Badge className='bg-status-ended text-status-ended-foreground'>終了</Badge>
 } satisfies Record<EventStatus, () => React.ReactNode>
 
 /**
