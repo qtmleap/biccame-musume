@@ -31,7 +31,7 @@ export const GanttRow = ({
   const { event, startOffset, duration, status } = bar
 
   return (
-    <div className='relative flex h-10'>
+    <div className='relative flex h-8'>
       {dates.map((date) => (
         <GanttGridCell key={date.format('YYYY-MM-DD')} date={date} today={today} actualMonthEnd={actualMonthEnd} />
       ))}
@@ -40,7 +40,7 @@ export const GanttRow = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <div
-              className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category, status as EventStatus)}`}
+              className={`absolute top-1 bottom-1 rounded-sm overflow-hidden ${getCategoryColor(event.category, status as EventStatus)}`}
               style={{
                 left: `${startOffset * 32}px`,
                 width: `${duration * 32 - 4}px`
