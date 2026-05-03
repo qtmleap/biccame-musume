@@ -43,6 +43,9 @@
   /* Page surface */
   --color-page-bg: var(--page-bg);
 
+  /* Card border color (use as text/border color utility) */
+  --color-card-border: var(--card-border);
+
   /* Separator (stronger than --border to stand out on page-bg) */
   --color-separator: var(--separator);
 
