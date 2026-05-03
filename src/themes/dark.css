@@ -107,4 +107,8 @@
   --social-github-foreground: var(--color-zinc-50);
   --social-x: var(--color-zinc-800);
   --social-x-foreground: var(--color-zinc-50);
+
+  /* Celebrate gradient (birthday hero) */
+  --celebrate-from: var(--color-pink-400);
+  --celebrate-to: var(--color-purple-400);
 }

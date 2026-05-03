@@ -146,7 +146,7 @@ export const UpdateOverlay = ({ open, status }: Props) => {
               {([0, 1, 2] as const).map((i) => (
                 <motion.span
                   key={i}
-                  className='h-2 w-2 rounded-full bg-pink-400'
+                  className='h-2 w-2 rounded-full bg-action-interest-soft'
                   animate={{ opacity: [0.3, 1, 0.3] }}
                   transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: i * 0.22, ease: 'easeInOut' }}
                 />

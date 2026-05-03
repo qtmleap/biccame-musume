@@ -37,7 +37,7 @@ const CompletedEventsContent = () => {
             戻る
           </Button>
           <div className='flex items-center gap-2'>
-            <Award className='h-6 w-6 text-amber-500' />
+            <Award className='h-6 w-6 text-action-award' />
             <h1 className='text-2xl font-bold text-foreground'>{MY_PAGE_LABELS.completedEvents}</h1>
             <span className='text-sm text-muted-foreground'>({completedEventDetails.length})</span>
           </div>
@@ -53,7 +53,7 @@ const CompletedEventsContent = () => {
             </Link>
             <Link
               to='/me/completed'
-              className='flex items-center gap-1.5 px-4 py-2 text-sm font-medium border-b-2 border-amber-500 text-amber-600'
+              className='flex items-center gap-1.5 px-4 py-2 text-sm font-medium border-b-2 border-action-award text-action-award'
             >
               <Award className='h-4 w-4' />
               達成済み

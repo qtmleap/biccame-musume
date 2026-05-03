@@ -6,7 +6,7 @@ import type { Event, EventStatus } from '@/schemas/event.dto'
  */
 export const getCategoryColor = (category: Event['category'], status: EventStatus): string => {
   if (status === 'ended') {
-    return 'bg-gray-400 opacity-60'
+    return 'bg-muted-foreground/60'
   }
   return CATEGORY_BG_COLOR[category]
 }

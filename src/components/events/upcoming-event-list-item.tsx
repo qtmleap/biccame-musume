@@ -47,7 +47,7 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
       <Link to='/characters/$id' params={{ id: event.character.id }}>
         <div className='flex items-center gap-3 bg-card rounded-lg p-3 shadow-sm border-card transition-colors cursor-pointer'>
           <div
-            className={`p-2 rounded-lg ${event.type === 'character' ? 'bg-pink-100 text-pink-600' : 'bg-blue-100 text-blue-600'}`}
+            className={`p-2 rounded-lg ${event.type === 'character' ? 'bg-category-other text-category-other-foreground' : 'bg-category-regular-card text-category-regular-card-foreground'}`}
           >
             {event.type === 'character' ? <Cake className='h-4 w-4' /> : <Store className='h-4 w-4' />}
           </div>
@@ -75,7 +75,7 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
               event.daysUntil === 0
                 ? 'bg-brand text-brand-foreground'
                 : event.daysUntil <= 7
-                  ? 'bg-orange-100 text-orange-600'
+                  ? 'bg-warning/20 text-warning'
                   : 'bg-muted text-muted-foreground'
             }`}
           >

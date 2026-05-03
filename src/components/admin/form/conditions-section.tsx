@@ -47,7 +47,7 @@ export function ConditionsSection({ fields, register, remove, append, error }: P
   }
 
   const getButtonClass = (type: ConditionType) =>
-    hasConditionType(type) ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''
+    hasConditionType(type) ? 'border-destructive bg-destructive/10 text-destructive hover:bg-destructive/20' : ''
 
   return (
     <div>

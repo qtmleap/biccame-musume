@@ -112,4 +112,8 @@
   --color-social-github-foreground: var(--social-github-foreground);
   --color-social-x: var(--social-x);
   --color-social-x-foreground: var(--social-x-foreground);
+
+  /* Celebrate gradient (birthday hero) */
+  --color-celebrate-from: var(--celebrate-from);
+  --color-celebrate-to: var(--celebrate-to);
 }

@@ -35,18 +35,18 @@ const HEART_PARTICLES = [0, 60, 120, 180, 240, 300] as const
  * 花火アニメーション用のパーティクル角度とカラー
  */
 const FIREWORK_PARTICLES = [
-  { angle: 0, color: 'bg-amber-400' },
-  { angle: 30, color: 'bg-orange-400' },
-  { angle: 60, color: 'bg-yellow-400' },
-  { angle: 90, color: 'bg-amber-400' },
-  { angle: 120, color: 'bg-orange-400' },
-  { angle: 150, color: 'bg-yellow-400' },
-  { angle: 180, color: 'bg-amber-400' },
-  { angle: 210, color: 'bg-orange-400' },
-  { angle: 240, color: 'bg-yellow-400' },
-  { angle: 270, color: 'bg-amber-400' },
-  { angle: 300, color: 'bg-orange-400' },
-  { angle: 330, color: 'bg-yellow-400' }
+  { angle: 0, color: 'bg-action-award' },
+  { angle: 30, color: 'bg-warning' },
+  { angle: 60, color: 'bg-rank-gold' },
+  { angle: 90, color: 'bg-action-award' },
+  { angle: 120, color: 'bg-warning' },
+  { angle: 150, color: 'bg-rank-gold' },
+  { angle: 180, color: 'bg-action-award' },
+  { angle: 210, color: 'bg-warning' },
+  { angle: 240, color: 'bg-rank-gold' },
+  { angle: 270, color: 'bg-action-award' },
+  { angle: 300, color: 'bg-warning' },
+  { angle: 330, color: 'bg-rank-gold' }
 ] as const
 
 /**
@@ -143,14 +143,14 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
             isLoggedIn ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
-            interested ? 'text-pink-500' : 'text-muted-foreground',
-            isLoggedIn && !interested && 'hover:text-pink-400'
+            interested ? 'text-action-interest' : 'text-muted-foreground',
+            isLoggedIn && !interested && 'hover:text-action-interest/80'
           )}
         >
           <Heart
             className={cn(
               'h-5 w-5 transition-all',
-              interested && 'fill-pink-500',
+              interested && 'fill-action-interest',
               isLoggedIn && !interested && 'group-hover:scale-110'
             )}
           />
@@ -176,14 +176,14 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
             isLoggedIn && !isUpcoming ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
-            completed ? 'text-amber-500' : 'text-muted-foreground',
-            isLoggedIn && !isUpcoming && !completed && 'hover:text-amber-400'
+            completed ? 'text-action-award' : 'text-muted-foreground',
+            isLoggedIn && !isUpcoming && !completed && 'hover:text-action-award/80'
           )}
         >
           <Award
             className={cn(
               'h-5 w-5 transition-all',
-              completed && 'fill-amber-200',
+              completed && 'fill-action-award-soft',
               isLoggedIn && !isUpcoming && !completed && 'group-hover:scale-110'
             )}
           />
@@ -202,7 +202,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
         <button
           type='button'
           onClick={handleShare}
-          className='flex items-center gap-1.5 text-sm text-muted-foreground hover:text-blue-500 transition-colors group'
+          className='flex items-center gap-1.5 text-sm text-muted-foreground hover:text-brand transition-colors group'
         >
           <Share className='h-5 w-5 transition-all group-hover:scale-110' />
         </button>
@@ -211,7 +211,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           <PopoverTrigger asChild>
             <button
               type='button'
-              className='flex items-center gap-1.5 text-sm text-muted-foreground hover:text-blue-500 transition-colors group'
+              className='flex items-center gap-1.5 text-sm text-muted-foreground hover:text-brand transition-colors group'
             >
               <Share className='h-5 w-5 transition-all group-hover:scale-110' />
             </button>
@@ -254,7 +254,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.1, 0] }}
               transition={{ duration: 0.4 }}
-              className='absolute inset-0 bg-pink-300'
+              className='absolute inset-0 bg-action-interest-soft'
             />
             {/* 中央のハート */}
             <motion.div
@@ -262,7 +262,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
               animate={{ scale: [0, 1.2, 1], rotate: [-15, 10, 0] }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
             >
-              <Heart className='h-24 w-24 fill-pink-500 text-pink-500 drop-shadow-lg' />
+              <Heart className='h-24 w-24 fill-action-interest text-action-interest drop-shadow-lg' />
             </motion.div>
             {/* 放射状のハート */}
             {HEART_PARTICLES.map((angle) => (
@@ -278,7 +278,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
                 transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
                 className='absolute pointer-events-none'
               >
-                <Heart className='h-8 w-8 fill-pink-400 text-pink-400' />
+                <Heart className='h-8 w-8 fill-action-interest-soft text-action-interest-soft' />
               </motion.div>
             ))}
           </motion.div>
@@ -298,7 +298,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.15, 0] }}
               transition={{ duration: 0.5 }}
-              className='absolute inset-0 bg-amber-300'
+              className='absolute inset-0 bg-action-award-soft'
             />
             {/* 中央のアワード */}
             <motion.div
@@ -306,7 +306,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
               animate={{ scale: [0, 1.3, 1], y: [20, -10, 0] }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
-              <Award className='h-28 w-28 text-amber-500 fill-amber-200 drop-shadow-lg' />
+              <Award className='h-28 w-28 text-action-award fill-action-award-soft drop-shadow-lg' />
             </motion.div>
             {/* 花火パーティクル */}
             {FIREWORK_PARTICLES.map((particle) => (
@@ -339,7 +339,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
                 transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
                 className='absolute pointer-events-none'
               >
-                <div className='w-2 h-2 bg-yellow-300 rotate-45' />
+                <div className='w-2 h-2 bg-rank-gold rotate-45' />
               </motion.div>
             ))}
           </motion.div>

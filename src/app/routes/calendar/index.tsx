@@ -101,11 +101,11 @@ const CalendarContent = () => {
 
       <div className='flex flex-wrap justify-center gap-4 text-sm text-muted-foreground'>
         <div className='flex items-center gap-2'>
-          <div className='w-4 h-4 rounded bg-linear-to-r from-pink-500/30 to-rose-500/30 border border-pink-500/30' />
+          <div className='w-4 h-4 rounded bg-action-interest/30 border border-action-interest/30' />
           <span>キャラクター誕生日</span>
         </div>
         <div className='flex items-center gap-2'>
-          <div className='w-4 h-4 rounded bg-linear-to-r from-blue-500/30 to-cyan-500/30 border border-blue-500/30' />
+          <div className='w-4 h-4 rounded bg-info/30 border border-info/30' />
           <span>店舗記念日</span>
         </div>
       </div>

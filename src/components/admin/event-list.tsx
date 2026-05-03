@@ -231,7 +231,7 @@ export const EventList = () => {
         <EventStatusFilter statusFilterAtom={eventStatusFilterAtom} />
       </div>
 
-      <div className='mb-4 relative bg-gray-200 rounded-lg p-1'>
+      <div className='mb-4 relative bg-muted rounded-lg p-1'>
         <div className='flex relative'>
           {(['limited_card', 'regular_card', 'ackey', 'other'] as const).map((category) => (
             <button
