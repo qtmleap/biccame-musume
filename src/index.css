@@ -13,3 +13,10 @@
 body {
   @apply bg-pink-50;
 }
+
+@layer utilities {
+  .border-card {
+    border-width: var(--card-border-width);
+    border-color: var(--card-border);
+  }
+}

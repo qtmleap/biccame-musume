@@ -34,6 +34,10 @@
   --sidebar-border: var(--color-zinc-200);
   --sidebar-ring: var(--color-zinc-400);
 
+  /* Card border (distinguish from page bg) */
+  --card-border: var(--color-pink-200);
+  --card-border-width: 1px;
+
   /* Status badges (event lifecycle) */
   --status-upcoming: var(--color-blue-100);
   --status-upcoming-foreground: var(--color-blue-700);
