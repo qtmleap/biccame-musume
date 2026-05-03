@@ -71,7 +71,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
           <div
             className={`shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
               status === 'ended'
-                ? 'bg-muted text-muted-foreground'
+                ? 'bg-status-ended text-status-ended-foreground'
                 : status === 'last_day'
                   ? 'bg-status-last-day text-status-last-day-foreground'
                   : status === 'ongoing'
@@ -79,8 +79,8 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
                     : daysUntil === 0
                       ? 'bg-brand text-brand-foreground'
                       : daysUntil <= 7
-                        ? 'bg-warning/20 text-warning'
-                        : 'bg-muted text-muted-foreground'
+                        ? 'bg-status-interested text-status-interested-foreground'
+                        : 'bg-status-ended text-status-ended-foreground'
             }`}
           >
             {getDaysLabel(daysUntil, status)}
