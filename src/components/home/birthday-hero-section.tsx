@@ -70,7 +70,7 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
 
   return (
     <motion.section
-      className='relative mb-6 overflow-hidden bg-linear-to-r from-pink-500 to-purple-500 p-6'
+      className='relative mb-6 overflow-hidden bg-linear-to-r from-celebrate-from to-celebrate-to p-6'
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -100,11 +100,11 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
           />
           {/* ケーキアイコン */}
           <motion.div
-            className='absolute -top-2 -right-2 rounded-full bg-yellow-400 p-2 shadow-lg'
+            className='absolute -top-2 -right-2 rounded-full bg-rank-gold p-2 shadow-lg'
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
           >
-            <Cake className='size-5 text-yellow-800' />
+            <Cake className='size-5 text-rank-gold-foreground' />
           </motion.div>
         </motion.div>
 

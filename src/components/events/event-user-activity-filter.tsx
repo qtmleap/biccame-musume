@@ -26,7 +26,7 @@ export const EventUserActivityFilter = () => {
             id='activity-interested'
             checked={activityFilter.hideInterested}
             onCheckedChange={(checked) => setActivityFilter({ ...activityFilter, hideInterested: checked === true })}
-            className='border-gray-400 data-[state=checked]:bg-yellow-600 data-[state=checked]:border-yellow-600'
+            className='border-card data-[state=checked]:bg-action-interest data-[state=checked]:border-action-interest'
           />
           <Label htmlFor='activity-interested' className='text-muted-foreground cursor-pointer'>
             興味あり
@@ -37,7 +37,7 @@ export const EventUserActivityFilter = () => {
             id='activity-completed'
             checked={activityFilter.hideCompleted}
             onCheckedChange={(checked) => setActivityFilter({ ...activityFilter, hideCompleted: checked === true })}
-            className='border-gray-400 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600'
+            className='border-card data-[state=checked]:bg-action-award data-[state=checked]:border-action-award'
           />
           <Label htmlFor='activity-completed' className='text-muted-foreground cursor-pointer'>
             達成済み

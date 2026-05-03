@@ -160,7 +160,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
                   bodyValue.length >= MAX_BODY_LENGTH
                     ? 'text-brand font-semibold'
                     : bodyValue.length >= MAX_BODY_LENGTH - 5
-                      ? 'text-amber-600'
+                      ? 'text-warning'
                       : 'text-muted-foreground'
                 }`}
               >

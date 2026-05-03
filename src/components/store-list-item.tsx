@@ -19,7 +19,7 @@ export const StoreListItem = ({ character, distance }: StoreListItemProps) => {
       {/* アバター画像 */}
       <Avatar className='w-12 h-12'>
         <AvatarImage src={imageUrl} alt={character.character?.name || ''} className='object-cover mix-blend-multiply' />
-        <AvatarFallback className='bg-gray-200'>
+        <AvatarFallback className='bg-muted'>
           <MapPin className='w-4 h-4 text-muted-foreground' />
         </AvatarFallback>
       </Avatar>

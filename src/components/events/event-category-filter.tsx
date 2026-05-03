@@ -9,9 +9,12 @@ import { type Event, EventCategorySchema } from '@/schemas/event.dto'
  * カテゴリチェックボックス色
  */
 const CATEGORY_CHECKBOX_COLORS: Record<Event['category'], string> = {
-  ackey: 'border-amber-500 data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500',
-  limited_card: 'border-purple-500 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500',
-  regular_card: 'border-blue-500 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500',
+  ackey:
+    'border-category-ackey-solid data-[state=checked]:bg-category-ackey-solid data-[state=checked]:border-category-ackey-solid',
+  limited_card:
+    'border-category-limited-card-solid data-[state=checked]:bg-category-limited-card-solid data-[state=checked]:border-category-limited-card-solid',
+  regular_card:
+    'border-category-regular-card-solid data-[state=checked]:bg-category-regular-card-solid data-[state=checked]:border-category-regular-card-solid',
   other: 'border-brand data-[state=checked]:bg-brand data-[state=checked]:border-brand'
 }
 

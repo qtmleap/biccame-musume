@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
  */
 export const NotFound = () => {
   return (
-    <div className='min-h-screen bg-linear-to-b from-blue-50 to-white'>
+    <div className='min-h-screen bg-page-bg'>
       <div className='container mx-auto px-4 py-12'>
         <div className='max-w-2xl mx-auto text-center space-y-8'>
           {/* エラーコード */}

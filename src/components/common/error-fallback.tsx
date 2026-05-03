@@ -27,7 +27,7 @@ export const ErrorFallback = ({ error, reset }: ErrorFallbackProps) => {
       <div className='max-w-2xl mx-auto text-center space-y-6'>
         {/* エラーアイコン */}
         <div className='flex justify-center'>
-          <AlertCircle className='size-16 text-red-500' />
+          <AlertCircle className='size-16 text-destructive' />
         </div>
 
         {/* エラーメッセージ */}
@@ -35,8 +35,8 @@ export const ErrorFallback = ({ error, reset }: ErrorFallbackProps) => {
           <h1 className='text-3xl font-bold text-foreground mb-4'>エラーが発生しました</h1>
           <p className='text-muted-foreground text-lg mb-2'>申し訳ございません。予期しないエラーが発生しました。</p>
           {import.meta.env.DEV && (
-            <div className='mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-left'>
-              <p className='text-sm font-mono text-red-800 break-all'>{error.message}</p>
+            <div className='mt-4 p-4 bg-destructive/10 border border-destructive/30 rounded-lg text-left'>
+              <p className='text-sm font-mono text-destructive break-all'>{error.message}</p>
             </div>
           )}
         </div>

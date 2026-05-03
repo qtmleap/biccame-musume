@@ -332,7 +332,7 @@ export const EventForm = ({
                   id='is-verified'
                   checked={field.value ?? false}
                   onCheckedChange={(checked) => field.onChange(checked === true)}
-                  className='data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600'
+                  className='data-[state=checked]:bg-status-upcoming-foreground data-[state=checked]:border-status-upcoming-foreground'
                 />
               )}
             />
@@ -349,7 +349,7 @@ export const EventForm = ({
                   id='is-preliminary'
                   checked={field.value ?? false}
                   onCheckedChange={(checked) => field.onChange(checked === true)}
-                  className='data-[state=checked]:bg-amber-600 data-[state=checked]:border-amber-600'
+                  className='data-[state=checked]:bg-category-ackey-solid data-[state=checked]:border-category-ackey-solid'
                 />
               )}
             />

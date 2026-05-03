@@ -51,7 +51,7 @@ const RouteComponent = () => {
                     href='https://github.com/qtmleap/vite-hono-workers/issues'
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium text-sm'
+                    className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-social-github text-social-github-foreground rounded-lg hover:bg-social-github/90 transition-colors font-medium text-sm'
                   >
                     <ExternalLink className='h-3.5 w-3.5' />
                     GitHubでIssueを作成
@@ -79,7 +79,7 @@ const RouteComponent = () => {
                     href='https://x.com/ultemica'
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors font-medium text-sm'
+                    className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-social-x text-social-x-foreground rounded-lg hover:bg-social-x/90 transition-colors font-medium text-sm'
                   >
                     <ExternalLink className='h-3.5 w-3.5' />
                     @ultemica をフォロー

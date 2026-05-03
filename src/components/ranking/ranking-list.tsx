@@ -16,7 +16,7 @@ type RankingListProps = {
  */
 const RibbonBadge = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className='inline-flex items-center justify-center bg-blue-600 border-2 border-blue-800 px-4 py-0.5 min-w-24'>
+    <div className='inline-flex items-center justify-center bg-brand border-2 border-brand px-4 py-0.5 min-w-24'>
       {children}
     </div>
   )
@@ -97,10 +97,10 @@ const calculateRank = (characters: CharacterWithVotes[], index: number): number 
  */
 const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes; rank: number; index: number }) => {
   const getRankStyle = (rank: number) => {
-    if (rank === 1) return { badge: 'bg-yellow-400 text-yellow-900' }
-    if (rank === 2) return { badge: 'bg-gray-400 text-gray-900' }
-    if (rank === 3) return { badge: 'bg-amber-600 text-white' }
-    return { badge: 'bg-blue-500 text-white' }
+    if (rank === 1) return { badge: 'bg-rank-gold text-rank-gold-foreground' }
+    if (rank === 2) return { badge: 'bg-rank-silver text-rank-silver-foreground' }
+    if (rank === 3) return { badge: 'bg-rank-bronze text-rank-bronze-foreground' }
+    return { badge: 'bg-rank-default text-rank-default-foreground' }
   }
 
   const style = getRankStyle(rank)
