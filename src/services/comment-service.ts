@@ -1,4 +1,5 @@
 import type { PrismaClient } from '@prisma/client'
+import dayjs from 'dayjs'
 import type { CommentResponse } from '@/schemas/comment.dto'
 
 // nickname カラムには選択された characterId を保存している（マイグレーション回避のためカラム再利用）
@@ -62,7 +63,7 @@ export const deleteComment = async (prisma: PrismaClient, commentId: string): Pr
   }
   await prisma.eventComment.update({
     where: { id: commentId },
-    data: { deletedAt: new Date() }
+    data: { deletedAt: dayjs().toDate() }
   })
   return true
 }
