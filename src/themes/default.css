@@ -107,6 +107,14 @@
   --color-action-award: var(--action-award);
   --color-action-award-soft: var(--action-award-soft);
 
+  /* Button surfaces (avoid pure white on pink page bg) */
+  --color-button-surface: var(--button-surface);
+  --color-button-surface-foreground: var(--button-surface-foreground);
+  --color-button-surface-hover: var(--button-surface-hover);
+  --color-button-disabled: var(--button-disabled);
+  --color-button-disabled-foreground: var(--button-disabled-foreground);
+  --color-button-disabled-border: var(--button-disabled-border);
+
   /* Social brand */
   --color-social-github: var(--social-github);
   --color-social-github-foreground: var(--social-github-foreground);

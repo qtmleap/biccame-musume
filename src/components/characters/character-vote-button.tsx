@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { lastVoteTimesAtom } from '@/atoms/vote-atom'
 import { Button } from '@/components/ui/button'
 import { useVote } from '@/hooks/use-vote'
+import { cn } from '@/lib/utils'
 import { VOTE_LABELS } from '@/locales/app.content'
 
 type CharacterVoteButtonProps = {
@@ -103,6 +104,10 @@ export const CharacterVoteButton = ({
     return VOTE_LABELS.vote
   }
 
+  const stateClass = hasVotedToday
+    ? 'bg-button-disabled text-button-disabled-foreground border border-button-disabled-border cursor-not-allowed disabled:opacity-100 hover:bg-button-disabled'
+    : 'bg-brand hover:bg-brand/90 text-brand-foreground'
+
   if (variant === 'compact') {
     return (
       <Button
@@ -113,8 +118,9 @@ export const CharacterVoteButton = ({
           e.stopPropagation()
           handleVote()
         }}
-        disabled={hasVotedToday || isPending}
-        className={hasVotedToday ? '' : 'bg-brand hover:bg-brand/90 text-brand-foreground'}
+        aria-disabled={hasVotedToday || isPending}
+        disabled={isPending}
+        className={cn('h-7 px-3 rounded-full text-xs', stateClass)}
       >
         {getButtonText()}
       </Button>
@@ -129,10 +135,9 @@ export const CharacterVoteButton = ({
         e.stopPropagation()
         handleVote()
       }}
-      disabled={hasVotedToday || isPending}
-      className={
-        hasVotedToday ? 'w-full font-semibold' : 'w-full font-semibold bg-brand hover:bg-brand/90 text-brand-foreground'
-      }
+      aria-disabled={hasVotedToday || isPending}
+      disabled={isPending}
+      className={cn('w-full h-8 rounded-full text-xs font-semibold', stateClass)}
     >
       {getButtonText()}
     </Button>
