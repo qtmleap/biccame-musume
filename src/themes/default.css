@@ -52,4 +52,14 @@
   --color-status-last-day-foreground: var(--status-last-day-foreground);
   --color-status-ended: var(--status-ended);
   --color-status-ended-foreground: var(--status-ended-foreground);
+
+  /* Category badges */
+  --color-category-limited-card: var(--category-limited-card);
+  --color-category-limited-card-foreground: var(--category-limited-card-foreground);
+  --color-category-regular-card: var(--category-regular-card);
+  --color-category-regular-card-foreground: var(--category-regular-card-foreground);
+  --color-category-ackey: var(--category-ackey);
+  --color-category-ackey-foreground: var(--category-ackey-foreground);
+  --color-category-other: var(--category-other);
+  --color-category-other-foreground: var(--category-other-foreground);
 }

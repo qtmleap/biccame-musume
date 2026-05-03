@@ -23,23 +23,28 @@ export const STATUS_BADGE = {
  * ステータスバッジ（小サイズ）
  * event-grid-item.tsxで使用
  */
-export const STATUS_BADGE_SM = {
-  upcoming: () => <Badge variant='secondary'>開催前</Badge>,
-  ongoing: () => <Badge>開催中</Badge>,
-  last_day: () => <Badge variant='destructive'>最終日</Badge>,
-  ended: () => <Badge variant='outline'>終了</Badge>
-} satisfies Record<EventStatus, () => React.ReactNode>
+export const STATUS_BADGE_SM = STATUS_BADGE
 
 /**
  * ステータスバッジ（詳細ページ用）
  * event-detail-header.tsxで使用
  */
-export const STATUS_BADGE_DETAIL = {
-  upcoming: () => <Badge variant='secondary'>開催前</Badge>,
-  ongoing: () => <Badge>開催中</Badge>,
-  last_day: () => <Badge variant='destructive'>最終日</Badge>,
-  ended: () => <Badge variant='outline'>終了</Badge>
-} satisfies Record<EventStatus, () => React.ReactNode>
+export const STATUS_BADGE_DETAIL = STATUS_BADGE
+
+/**
+ * カテゴリバッジ
+ * event-detail-header.tsxで使用
+ */
+export const CATEGORY_BADGE = {
+  limited_card: (label: string) => (
+    <Badge className='bg-category-limited-card text-category-limited-card-foreground'>{label}</Badge>
+  ),
+  regular_card: (label: string) => (
+    <Badge className='bg-category-regular-card text-category-regular-card-foreground'>{label}</Badge>
+  ),
+  ackey: (label: string) => <Badge className='bg-category-ackey text-category-ackey-foreground'>{label}</Badge>,
+  other: (label: string) => <Badge className='bg-category-other text-category-other-foreground'>{label}</Badge>
+} satisfies Record<EventCategory, (label: string) => React.ReactNode>
 
 /**
  * カテゴリスタイル（アイコン付き）
@@ -48,19 +53,19 @@ export const STATUS_BADGE_DETAIL = {
 export const CATEGORY_WITH_ICON = {
   limited_card: {
     icon: <CreditCard className='size-4' />,
-    className: 'bg-purple-100 text-purple-600'
+    className: 'bg-category-limited-card text-category-limited-card-foreground'
   },
   regular_card: {
     icon: <CreditCard className='size-4' />,
-    className: 'bg-blue-100 text-blue-600'
+    className: 'bg-category-regular-card text-category-regular-card-foreground'
   },
   ackey: {
     icon: <KeyRound className='size-4' />,
-    className: 'bg-amber-100 text-amber-600'
+    className: 'bg-category-ackey text-category-ackey-foreground'
   },
   other: {
     icon: <Gift className='size-4' />,
-    className: 'bg-pink-100 text-pink-600'
+    className: 'bg-category-other text-category-other-foreground'
   }
 } satisfies Record<EventCategory, { icon: React.ReactNode; className: string }>
 
