@@ -365,7 +365,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
       {/* 戻るボタン */}
       {onBack && (
         <div className='pb-2'>
-          <Button variant='ghost' size='sm' className='text-gray-600 hover:text-gray-900 -ml-2' onClick={onBack}>
+          <Button variant='ghost' size='sm' className='-ml-2' onClick={onBack}>
             <ArrowLeft className='h-4 w-4 mr-1' />
             戻る
           </Button>

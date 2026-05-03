@@ -1,6 +1,5 @@
 import dayjs, { type Dayjs } from 'dayjs'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 
 type MonthSelectorProps = {
   monthOffset: number
@@ -18,16 +17,7 @@ export const GanttMonthSelector = ({ monthOffset, onSelect }: MonthSelectorProps
         const monthDate = dayjs().add(offset, 'month')
         const isSelected = monthOffset === offset
         return (
-          <Button
-            key={offset}
-            variant='outline'
-            size='sm'
-            onClick={() => onSelect(offset)}
-            className={cn({
-              'bg-green-500/50 text-white border-green-500/50 hover:bg-green-500/60 hover:text-white': isSelected,
-              'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 hover:text-gray-700': !isSelected
-            })}
-          >
+          <Button key={offset} variant={isSelected ? 'default' : 'outline'} size='sm' onClick={() => onSelect(offset)}>
             {monthDate.format('YY/MM')}
           </Button>
         )
