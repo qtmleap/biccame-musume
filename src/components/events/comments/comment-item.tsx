@@ -78,9 +78,7 @@ export const CommentItem = ({ eventUuid, comment }: CommentItemProps) => {
               <AlertDialogDescription>この操作は取り消せません。</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel className='border-border bg-muted text-foreground hover:bg-muted/80'>
-                キャンセル
-              </AlertDialogCancel>
+              <AlertDialogCancel className='border-border'>キャンセル</AlertDialogCancel>
               <AlertDialogAction variant='destructive' onClick={() => mutation.mutate(comment.id)}>
                 削除する
               </AlertDialogAction>
