@@ -34,6 +34,10 @@
   /* Page background */
   --page-bg: var(--color-zinc-950);
 
+  /* Brand (corporate red) */
+  --brand: #ff3344;
+  --brand-foreground: var(--color-zinc-50);
+
   /* Card border (distinguish from page bg) */
   --card-border: var(--color-zinc-700);
   --card-border-width: 1px;

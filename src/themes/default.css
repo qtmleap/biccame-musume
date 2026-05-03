@@ -43,6 +43,10 @@
   /* Page surface */
   --color-page-bg: var(--page-bg);
 
+  /* Brand */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+
   /* Status badges */
   --color-status-upcoming: var(--status-upcoming);
   --color-status-upcoming-foreground: var(--status-upcoming-foreground);
