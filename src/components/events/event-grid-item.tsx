@@ -116,7 +116,7 @@ export const EventGridItem = ({ event }: EventGridItemProps) => {
             {event.conditions.map((condition) => {
               if (condition.type === 'everyone') return null
               return (
-                <Badge key={`${event.uuid}-${condition.type}`} variant='secondary' className='text-xs'>
+                <Badge key={`${event.uuid}-${condition.type}`} variant='secondary'>
                   {condition.type === 'purchase' && `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
                   {condition.type === 'first_come' && EVENT_LABELS.firstCome}
                   {condition.type === 'lottery' && EVENT_LABELS.lottery}
