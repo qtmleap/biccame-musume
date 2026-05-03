@@ -45,35 +45,38 @@
   --card-border: var(--color-pink-300);
   --card-border-width: 1px;
 
+  /* Separator (visible against page-bg pink-100) */
+  --separator: var(--color-pink-300);
+
   /* Status badges (event lifecycle) */
-  --status-upcoming: var(--color-blue-100);
-  --status-upcoming-foreground: var(--color-blue-700);
-  --status-ongoing: var(--color-green-100);
-  --status-ongoing-foreground: var(--color-green-700);
-  --status-last-day: var(--color-red-100);
-  --status-last-day-foreground: var(--color-red-700);
-  --status-ended: var(--color-zinc-100);
-  --status-ended-foreground: var(--color-zinc-600);
+  --status-upcoming: var(--color-blue-200);
+  --status-upcoming-foreground: var(--color-blue-800);
+  --status-ongoing: var(--color-green-200);
+  --status-ongoing-foreground: var(--color-green-800);
+  --status-last-day: var(--color-red-200);
+  --status-last-day-foreground: var(--color-red-800);
+  --status-ended: var(--color-zinc-200);
+  --status-ended-foreground: var(--color-zinc-700);
 
   /* Category badges (event type) */
-  --category-limited-card: var(--color-purple-100);
-  --category-limited-card-foreground: var(--color-purple-700);
+  --category-limited-card: var(--color-purple-200);
+  --category-limited-card-foreground: var(--color-purple-800);
   --category-limited-card-solid: var(--color-purple-600);
-  --category-regular-card: var(--color-blue-100);
-  --category-regular-card-foreground: var(--color-blue-700);
+  --category-regular-card: var(--color-blue-200);
+  --category-regular-card-foreground: var(--color-blue-800);
   --category-regular-card-solid: var(--color-blue-600);
-  --category-ackey: var(--color-amber-100);
-  --category-ackey-foreground: var(--color-amber-700);
+  --category-ackey: var(--color-amber-200);
+  --category-ackey-foreground: var(--color-amber-800);
   --category-ackey-solid: var(--color-amber-500);
-  --category-other: var(--color-pink-100);
-  --category-other-foreground: var(--color-pink-700);
+  --category-other: var(--color-rose-200);
+  --category-other-foreground: var(--color-rose-800);
   --category-other-solid: var(--color-pink-500);
 
   /* Activity / interaction state */
-  --status-interested: var(--color-yellow-100);
-  --status-interested-foreground: var(--color-yellow-800);
-  --status-completed: var(--color-purple-100);
-  --status-completed-foreground: var(--color-purple-800);
+  --status-interested: var(--color-yellow-200);
+  --status-interested-foreground: var(--color-yellow-900);
+  --status-completed: var(--color-purple-200);
+  --status-completed-foreground: var(--color-purple-900);
 
   /* Rank medals */
   --rank-gold: var(--color-yellow-400);

@@ -53,7 +53,7 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
           </div>
 
           {event.character.character?.image_url && (
-            <Avatar className='w-8 h-8'>
+            <Avatar className='w-8 h-8 border border-card-border'>
               <AvatarImage
                 src={event.character.character.image_url}
                 alt={event.character.character?.name || ''}
@@ -75,8 +75,8 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
               event.daysUntil === 0
                 ? 'bg-brand text-brand-foreground'
                 : event.daysUntil <= 7
-                  ? 'bg-warning/20 text-warning'
-                  : 'bg-muted text-muted-foreground'
+                  ? 'bg-status-interested text-status-interested-foreground'
+                  : 'bg-status-ended text-status-ended-foreground'
             }`}
           >
             {getDaysLabel(event.daysUntil)}
