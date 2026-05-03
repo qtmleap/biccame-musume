@@ -18,9 +18,9 @@ export const SelectedStoreInfo = ({ character }: SelectedStoreInfoProps) => {
       className='flex items-start gap-4 hover:bg-gray-50 rounded-lg transition-colors -m-2 p-2'
     >
       {/* アバター */}
-      <Avatar className='h-16 w-16 border-2 border-pink-400 shrink-0'>
+      <Avatar className='h-16 w-16'>
         <AvatarImage src={character.character?.image_url} alt={character.character?.name || ''} />
-        <AvatarFallback className='bg-pink-100 text-pink-700'>{character.character?.name?.[0] || '?'}</AvatarFallback>
+        <AvatarFallback>{character.character?.name?.[0] || '?'}</AvatarFallback>
       </Avatar>
 
       {/* 店舗情報 */}

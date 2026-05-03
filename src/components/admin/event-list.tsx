@@ -97,7 +97,7 @@ const EventCard = ({
       <div className='flex items-center justify-between mt-auto'>
         <div className='flex items-center gap-1'>
           <Link to='/events/$uuid' params={{ uuid: event.uuid }}>
-            <Button size='sm' variant='outline' className='h-7 text-xs'>
+            <Button size='sm' variant='outline'>
               <ExternalLink className='mr-1 size-3' />
               詳細
             </Button>
@@ -106,14 +106,14 @@ const EventCard = ({
         {isAuthenticated && (
           <div className='flex items-center gap-2'>
             <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
-              <Button size='sm' variant='outline' className='h-7 text-xs'>
+              <Button size='sm' variant='outline'>
                 <Pencil className='mr-1 size-3' />
                 編集
               </Button>
             </Link>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button size='sm' variant='outline' className='h-7 text-xs text-destructive hover:bg-destructive/10'>
+                <Button size='sm' variant='destructive'>
                   <Trash2 className='mr-1 size-3' />
                   削除
                 </Button>
