@@ -58,7 +58,7 @@ export const RecentEventsList = ({ events, currentEventId, hideHeading = false }
             >
               <div className='shrink-0'>
                 <div
-                  className={`h-14 w-14 rounded-full flex items-center justify-center text-xs font-bold ${CATEGORY_COLORS[event.category]}`}
+                  className={`h-14 w-14 rounded-full flex items-center justify-center text-xs font-bold border border-card-border ${CATEGORY_COLORS[event.category]}`}
                 >
                   {EVENT_CATEGORY_LABELS[event.category]}
                 </div>

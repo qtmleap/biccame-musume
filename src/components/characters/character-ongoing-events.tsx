@@ -40,7 +40,7 @@ const OngoingEventItem = ({ event, isLast }: OngoingEventItemProps) => {
         </div>
         {STATUS_BADGE_SM[event.status]()}
       </Link>
-      {!isLast && <Separator className='my-3' />}
+      {!isLast && <Separator className='my-3 bg-card-border' />}
     </>
   )
 }
