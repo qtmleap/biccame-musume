@@ -70,15 +70,13 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
             className='flex items-start gap-3'
           >
             <Link to='/characters/$id' params={{ id: char.id }}>
-              <Avatar className='h-14 w-14 border-2 border-gray-200'>
+              <Avatar className='h-14 w-14'>
                 <AvatarImage
                   src={char.character?.image_url}
                   alt={char.character?.name || ''}
                   className='object-cover scale-125'
                 />
-                <AvatarFallback className='text-sm bg-pink-100 text-pink-700'>
-                  {char.character?.name?.[0] || '?'}
-                </AvatarFallback>
+                <AvatarFallback className='text-sm'>{char.character?.name?.[0] || '?'}</AvatarFallback>
               </Avatar>
             </Link>
             <div className='min-w-0 flex-1'>

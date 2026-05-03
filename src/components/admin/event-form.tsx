@@ -270,13 +270,9 @@ export const EventForm = ({
         {stores.length > 0 && (
           <div className='flex flex-wrap gap-1.5'>
             {stores.length === storeKeys.length ? (
-              <Badge className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
+              <Badge variant='secondary' className='pr-1'>
                 <span className='text-xs font-semibold'>全店舗</span>
-                <button
-                  type='button'
-                  onClick={() => setValue('stores', [])}
-                  className='ml-0.5 rounded-sm hover:bg-rose-200'
-                >
+                <button type='button' onClick={() => setValue('stores', [])} className='ml-0.5 rounded-sm'>
                   <X className='size-3' />
                 </button>
               </Badge>
@@ -285,13 +281,9 @@ export const EventForm = ({
                 const storeKey = key as StoreKey
                 const displayName = STORE_NAME_LABELS[storeKey] || key
                 return (
-                  <Badge key={key} className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
+                  <Badge key={key} variant='secondary' className='pr-1'>
                     <span className='text-xs font-semibold'>{displayName}</span>
-                    <button
-                      type='button'
-                      onClick={() => handleRemoveStore(key)}
-                      className='ml-0.5 rounded-sm hover:bg-rose-200'
-                    >
+                    <button type='button' onClick={() => handleRemoveStore(key)} className='ml-0.5 rounded-sm'>
                       <X className='size-3' />
                     </button>
                   </Badge>
@@ -386,7 +378,7 @@ export const EventForm = ({
 
         {/* ボタン */}
         <div className='flex gap-2 max-w-md mx-auto'>
-          <Button type='submit' className='flex-1 bg-[#e50012] hover:bg-[#c5000f]' disabled={isSubmitted}>
+          <Button type='submit' className='flex-1' disabled={isSubmitted}>
             確認する
           </Button>
           <Button type='button' variant='outline' onClick={handleReset} className='flex-1' disabled={isSubmitted}>

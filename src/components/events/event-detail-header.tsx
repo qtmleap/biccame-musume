@@ -13,7 +13,7 @@ import { usePageViews } from '@/hooks/use-page-views'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { cn } from '@/lib/utils'
 import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
-import { CATEGORY_STYLE, STATUS_BADGE_DETAIL } from '@/locales/component'
+import { STATUS_BADGE_DETAIL } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 
 type EventDetailHeaderProps = {
@@ -354,7 +354,6 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
  * イベント詳細ページのヘッダーコンポーネント
  */
 export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetailHeaderProps) => {
-  const categoryStyle = CATEGORY_STYLE[event.category]
   const queryClient = useQueryClient()
 
   const handleStatsUpdate = () => {
@@ -383,15 +382,11 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
       >
         <div className='flex items-center justify-between gap-2 mb-2'>
           <div className='flex items-center gap-2'>
-            <Badge className={`${categoryStyle} border`}>{EVENT_CATEGORY_LABELS[event.category]}</Badge>
+            <Badge variant='outline'>{EVENT_CATEGORY_LABELS[event.category]}</Badge>
             {STATUS_BADGE_DETAIL[event.status]()}
           </div>
           {isAuthenticated && (
-            <Button
-              asChild
-              size='sm'
-              className='rounded-full px-2 py-0.5 h-auto text-xs font-medium bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100'
-            >
+            <Button asChild size='sm' variant='outline'>
               <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
                 編集
               </Link>

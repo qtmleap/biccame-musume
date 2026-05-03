@@ -37,7 +37,7 @@ export const AccessGate = ({ children }: AccessGateProps) => {
             このページにアクセスするには管理者権限が必要です。
             {error && <span className='mt-2 block text-destructive'>{error}</span>}
           </p>
-          <Button onClick={handleLogin} aria-label='Cloudflare Access でログイン' className='w-full gap-2'>
+          <Button onClick={handleLogin} aria-label='Cloudflare Access でログイン' className='w-full'>
             <LogIn className='size-4' />
             ログイン
           </Button>

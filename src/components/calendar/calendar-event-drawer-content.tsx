@@ -51,7 +51,7 @@ export const CalendarEventDrawerContent = ({ events }: CalendarEventDrawerConten
                   isCharacter ? 'bg-pink-500/10 hover:bg-pink-500/20' : 'bg-blue-500/10 hover:bg-blue-500/20'
                 )}
               >
-                <Avatar className='w-12 h-12 border border-border overflow-hidden'>
+                <Avatar className='w-12 h-12'>
                   <AvatarImage
                     src={event.character.character?.image_url}
                     alt={event.character.character?.name || ''}

@@ -110,7 +110,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               title='タップで別のキャラに変える'
               className='shrink-0 rounded-full hover:opacity-80 transition-opacity'
             >
-              <Avatar className='size-14 overflow-hidden border-2 border-[#e50012]'>
+              <Avatar className='size-14'>
                 <AvatarImage
                   src={character?.character?.image_url}
                   alt=''
