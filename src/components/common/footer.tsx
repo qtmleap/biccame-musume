@@ -9,7 +9,7 @@ export const Footer = () => {
     <footer className='text-center text-xs text-muted-foreground px-4 py-4 border-t border-border bg-muted'>
       <div className='container mx-auto space-y-2'>
         <div className='flex flex-wrap justify-center gap-3'>
-          <Link to='/about' className='text-muted-foreground hover:text-[#e50012] transition-colors'>
+          <Link to='/about' className='text-muted-foreground hover:text-brand transition-colors'>
             サイトについて
           </Link>
           <span className='text-muted-foreground/50'>|</span>
@@ -17,16 +17,16 @@ export const Footer = () => {
             href='https://biccame.jp/guideline/'
             target='_blank'
             rel='noopener noreferrer'
-            className='text-muted-foreground hover:text-[#e50012] transition-colors'
+            className='text-muted-foreground hover:text-brand transition-colors'
           >
             ガイドライン
           </a>
           <span className='text-muted-foreground/50'>|</span>
-          <Link to='/contact' className='text-muted-foreground hover:text-[#e50012] transition-colors'>
+          <Link to='/contact' className='text-muted-foreground hover:text-brand transition-colors'>
             お問い合わせ
           </Link>
           <span className='text-muted-foreground/50'>|</span>
-          <Link to='/admin/events' className='text-muted-foreground hover:text-[#e50012] transition-colors'>
+          <Link to='/admin/events' className='text-muted-foreground hover:text-brand transition-colors'>
             管理
           </Link>
         </div>
@@ -40,7 +40,7 @@ export const Footer = () => {
               href='https://www.itall.co.jp/'
               target='_blank'
               rel='noopener noreferrer'
-              className='hover:text-[#e50012] transition-colors'
+              className='hover:text-brand transition-colors'
             >
               itall
             </a>
@@ -49,7 +49,7 @@ export const Footer = () => {
               href='https://qleap.jp/'
               target='_blank'
               rel='noopener noreferrer'
-              className='hover:text-[#e50012] transition-colors'
+              className='hover:text-brand transition-colors'
             >
               QuantumLeap
             </a>

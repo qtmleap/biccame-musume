@@ -64,19 +64,19 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
           )}
 
           <div className='flex-1 min-w-0'>
-            <p className='text-sm font-medium text-gray-800 truncate'>
+            <p className='text-sm font-medium text-foreground truncate'>
               {getDisplayName(event.character.character?.name || '')}
             </p>
-            <p className='text-xs text-gray-500'>{event.date.format('M月D日')}</p>
+            <p className='text-xs text-muted-foreground'>{event.date.format('M月D日')}</p>
           </div>
 
           <div
             className={`text-xs font-bold px-2 py-1 rounded ${
               event.daysUntil === 0
-                ? 'bg-[#e50012] text-white'
+                ? 'bg-brand text-brand-foreground'
                 : event.daysUntil <= 7
                   ? 'bg-orange-100 text-orange-600'
-                  : 'bg-gray-100 text-gray-600'
+                  : 'bg-muted text-muted-foreground'
             }`}
           >
             {getDaysLabel(event.daysUntil)}

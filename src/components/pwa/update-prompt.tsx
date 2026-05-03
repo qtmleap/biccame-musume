@@ -23,7 +23,7 @@ export const showUpdatePrompt = () => {
       color: 'white'
     },
     classNames: {
-      toast: '!bg-card !border-pink-100 !rounded-xl !shadow-lg',
+      toast: '!bg-card !border-card !rounded-xl !shadow-lg',
       title: '!text-foreground !text-sm !font-medium',
       description: '!text-muted-foreground !text-xs',
       actionButton: 'hover:!brightness-110'

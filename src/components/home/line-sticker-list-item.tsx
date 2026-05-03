@@ -31,8 +31,8 @@ export const LineStickerListItem = ({ url, title, description, delay }: LineStic
             <AvatarFallback>L</AvatarFallback>
           </Avatar>
           <div className='flex-1 min-w-0'>
-            <h3 className='text-sm font-bold text-gray-900 mb-0.5'>{title}</h3>
-            <p className='text-xs text-gray-600 leading-tight'>{description}</p>
+            <h3 className='text-sm font-bold text-foreground mb-0.5'>{title}</h3>
+            <p className='text-xs text-muted-foreground leading-tight'>{description}</p>
           </div>
         </div>
       </div>

@@ -158,7 +158,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               <span
                 className={`text-xs tabular-nums ${
                   bodyValue.length >= MAX_BODY_LENGTH
-                    ? 'text-[#e50012] font-semibold'
+                    ? 'text-brand font-semibold'
                     : bodyValue.length >= MAX_BODY_LENGTH - 5
                       ? 'text-amber-600'
                       : 'text-muted-foreground'
@@ -172,7 +172,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               disabled={!canSubmit}
               aria-label='コメントを投稿する'
               size='sm'
-              className='bg-[#e50012] hover:bg-[#c5000f] text-white rounded-full px-6 font-bold'
+              className='bg-brand hover:bg-brand/90 text-brand-foreground rounded-full px-6 font-bold'
             >
               {isPending ? '送信中...' : '投稿'}
             </Button>

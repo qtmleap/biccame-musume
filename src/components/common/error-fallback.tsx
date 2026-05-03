@@ -32,8 +32,8 @@ export const ErrorFallback = ({ error, reset }: ErrorFallbackProps) => {
 
         {/* エラーメッセージ */}
         <div>
-          <h1 className='text-3xl font-bold text-gray-800 mb-4'>エラーが発生しました</h1>
-          <p className='text-gray-600 text-lg mb-2'>申し訳ございません。予期しないエラーが発生しました。</p>
+          <h1 className='text-3xl font-bold text-foreground mb-4'>エラーが発生しました</h1>
+          <p className='text-muted-foreground text-lg mb-2'>申し訳ございません。予期しないエラーが発生しました。</p>
           {import.meta.env.DEV && (
             <div className='mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-left'>
               <p className='text-sm font-mono text-red-800 break-all'>{error.message}</p>
