@@ -43,6 +43,9 @@
   /* Page surface */
   --color-page-bg: var(--page-bg);
 
+  /* Separator (stronger than --border to stand out on page-bg) */
+  --color-separator: var(--separator);
+
   /* Brand */
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);

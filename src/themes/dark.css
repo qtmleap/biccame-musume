@@ -42,6 +42,9 @@
   --card-border: var(--color-zinc-700);
   --card-border-width: 1px;
 
+  /* Separator (visible against dark page-bg) */
+  --separator: var(--color-zinc-600);
+
   /* Status badges (event lifecycle) */
   --status-upcoming: var(--color-blue-900);
   --status-upcoming-foreground: var(--color-blue-200);
