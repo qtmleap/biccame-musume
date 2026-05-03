@@ -11,7 +11,7 @@
 @import "./themes/dark.css";
 
 body {
-  @apply bg-pink-50;
+  @apply bg-page-bg;
 }
 
 @layer utilities {
