@@ -109,9 +109,9 @@
   --action-award-soft: var(--color-amber-300);
 
   /* Button surfaces (outline-style buttons over pink page bg) */
-  --button-surface: var(--color-pink-50);
+  --button-surface: var(--color-pink-200);
   --button-surface-foreground: var(--color-pink-900);
-  --button-surface-hover: var(--color-pink-200);
+  --button-surface-hover: var(--color-pink-300);
   --button-disabled: var(--color-zinc-300);
   --button-disabled-foreground: var(--color-zinc-500);
   --button-disabled-border: var(--color-zinc-400);
