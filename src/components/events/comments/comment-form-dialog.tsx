@@ -24,7 +24,7 @@ type CommentFormDialogProps = {
   eventUuid: string
 }
 
-const triggerButtonClassName = 'w-full md:max-w-sm md:mx-auto md:flex bg-[#e50012] hover:bg-[#c5000f] text-white'
+const triggerButtonClassName = 'w-full md:max-w-sm md:mx-auto md:flex'
 
 export const CommentFormDialog = ({ eventUuid }: CommentFormDialogProps) => {
   const isDesktop = useMediaQuery('(min-width: 768px)')
