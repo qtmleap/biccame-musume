@@ -22,12 +22,16 @@ body {
 }
 
 @layer base {
-  /* Unify outline buttons + select triggers to theme button-surface tokens */
+  /* Unify outline buttons + select triggers to theme button-surface tokens.
+     Use CSS outline (drawn inside via negative offset) instead of border-color
+     so 1px frame doesn't eat into content width / overlap with neighbors. */
   [data-slot="button"][data-variant="outline"],
   [data-slot="select-trigger"] {
     background-color: var(--button-surface);
     color: var(--button-surface-foreground);
-    border-color: var(--card-border);
+    border-color: transparent;
+    outline: 1px solid var(--card-border);
+    outline-offset: -1px;
   }
   [data-slot="button"][data-variant="outline"]:hover,
   [data-slot="select-trigger"]:hover {

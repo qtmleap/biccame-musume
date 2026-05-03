@@ -19,10 +19,10 @@ export const GanttMonthSelector = ({ monthOffset, onSelect }: MonthSelectorProps
         return (
           <Button
             key={offset}
-            variant={isSelected ? 'default' : 'outline'}
+            variant={isSelected ? 'default' : 'ghost'}
             size='sm'
             onClick={() => onSelect(offset)}
-            className={isSelected ? 'bg-brand hover:bg-brand/90 text-brand-foreground' : ''}
+            className={isSelected ? 'bg-brand hover:bg-brand/90 text-brand-foreground' : 'text-muted-foreground'}
           >
             {monthDate.format('YY/MM')}
           </Button>
@@ -52,7 +52,7 @@ export const GanttDateHeader = ({ dates, today, actualMonthEnd }: DateHeaderProp
         return (
           <div
             key={date.format('YYYY-MM-DD')}
-            className={`w-8 shrink-0 border-b border-card flex items-center justify-center text-xs ${
+            className={`w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs ${
               isOutOfMonth
                 ? 'bg-muted text-muted-foreground'
                 : isToday
@@ -87,7 +87,7 @@ export const GanttGridCell = ({ date, today, actualMonthEnd }: DateGridCellProps
   return (
     <div
       key={date.format('YYYY-MM-DD')}
-      className={`w-8 shrink-0 border-b border-card ${isOutOfMonth ? 'bg-muted/50' : isToday ? 'bg-calendar-today/30' : ''}`}
+      className={`w-8 shrink-0 border-r border-card-border last:border-r-0 ${isOutOfMonth ? 'bg-muted/50' : isToday ? 'bg-calendar-today/30' : ''}`}
     />
   )
 }
