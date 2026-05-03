@@ -60,10 +60,56 @@
   /* Category badges */
   --color-category-limited-card: var(--category-limited-card);
   --color-category-limited-card-foreground: var(--category-limited-card-foreground);
+  --color-category-limited-card-solid: var(--category-limited-card-solid);
   --color-category-regular-card: var(--category-regular-card);
   --color-category-regular-card-foreground: var(--category-regular-card-foreground);
+  --color-category-regular-card-solid: var(--category-regular-card-solid);
   --color-category-ackey: var(--category-ackey);
   --color-category-ackey-foreground: var(--category-ackey-foreground);
+  --color-category-ackey-solid: var(--category-ackey-solid);
   --color-category-other: var(--category-other);
   --color-category-other-foreground: var(--category-other-foreground);
+  --color-category-other-solid: var(--category-other-solid);
+
+  /* Activity / interaction state */
+  --color-status-interested: var(--status-interested);
+  --color-status-interested-foreground: var(--status-interested-foreground);
+  --color-status-completed: var(--status-completed);
+  --color-status-completed-foreground: var(--status-completed-foreground);
+
+  /* Rank medals */
+  --color-rank-gold: var(--rank-gold);
+  --color-rank-gold-foreground: var(--rank-gold-foreground);
+  --color-rank-silver: var(--rank-silver);
+  --color-rank-silver-foreground: var(--rank-silver-foreground);
+  --color-rank-bronze: var(--rank-bronze);
+  --color-rank-bronze-foreground: var(--rank-bronze-foreground);
+  --color-rank-default: var(--rank-default);
+  --color-rank-default-foreground: var(--rank-default-foreground);
+
+  /* Calendar markers */
+  --color-calendar-sunday: var(--calendar-sunday);
+  --color-calendar-saturday: var(--calendar-saturday);
+  --color-calendar-today: var(--calendar-today);
+  --color-calendar-today-border: var(--calendar-today-border);
+
+  /* Semantic */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  /* Engagement icons */
+  --color-action-interest: var(--action-interest);
+  --color-action-interest-soft: var(--action-interest-soft);
+  --color-action-award: var(--action-award);
+  --color-action-award-soft: var(--action-award-soft);
+
+  /* Social brand */
+  --color-social-github: var(--social-github);
+  --color-social-github-foreground: var(--social-github-foreground);
+  --color-social-x: var(--social-x);
+  --color-social-x-foreground: var(--social-x-foreground);
 }

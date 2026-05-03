@@ -58,10 +58,56 @@
   /* Category badges (event type) */
   --category-limited-card: var(--color-purple-100);
   --category-limited-card-foreground: var(--color-purple-700);
+  --category-limited-card-solid: var(--color-purple-600);
   --category-regular-card: var(--color-blue-100);
   --category-regular-card-foreground: var(--color-blue-700);
+  --category-regular-card-solid: var(--color-blue-600);
   --category-ackey: var(--color-amber-100);
   --category-ackey-foreground: var(--color-amber-700);
+  --category-ackey-solid: var(--color-amber-500);
   --category-other: var(--color-pink-100);
   --category-other-foreground: var(--color-pink-700);
+  --category-other-solid: var(--color-pink-500);
+
+  /* Activity / interaction state */
+  --status-interested: var(--color-yellow-100);
+  --status-interested-foreground: var(--color-yellow-800);
+  --status-completed: var(--color-purple-100);
+  --status-completed-foreground: var(--color-purple-800);
+
+  /* Rank medals */
+  --rank-gold: var(--color-yellow-400);
+  --rank-gold-foreground: var(--color-yellow-900);
+  --rank-silver: var(--color-zinc-300);
+  --rank-silver-foreground: var(--color-zinc-900);
+  --rank-bronze: var(--color-amber-600);
+  --rank-bronze-foreground: var(--color-zinc-50);
+  --rank-default: var(--color-blue-500);
+  --rank-default-foreground: var(--color-zinc-50);
+
+  /* Calendar markers */
+  --calendar-sunday: var(--color-rose-500);
+  --calendar-saturday: var(--color-blue-500);
+  --calendar-today: var(--color-rose-100);
+  --calendar-today-border: var(--color-rose-300);
+
+  /* Semantic */
+  --success: var(--color-green-500);
+  --success-foreground: var(--color-zinc-50);
+  --info: var(--color-blue-500);
+  --info-foreground: var(--color-zinc-50);
+  --warning: var(--color-amber-500);
+  --warning-foreground: var(--color-zinc-50);
+
+  /* Engagement icons */
+  --action-interest: var(--color-pink-500);
+  --action-interest-soft: var(--color-pink-300);
+  --action-award: var(--color-amber-500);
+  --action-award-soft: var(--color-amber-300);
+
+  /* Social brand */
+  --social-github: var(--color-zinc-800);
+  --social-github-foreground: var(--color-zinc-50);
+  --social-x: var(--color-zinc-900);
+  --social-x-foreground: var(--color-zinc-50);
 }
