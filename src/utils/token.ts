@@ -15,6 +15,9 @@ export const signToken = async (
   if (!idToken) {
     throw new HTTPException(401, { message: 'Unauthorized' })
   }
+  if (!c.env.JWT_SECRET_KEY) {
+    throw new HTTPException(500, { message: 'JWT_SECRET_KEY is not configured' })
+  }
   const current_time: Dayjs = dayjs()
   const token = await sign(
     {
@@ -49,6 +52,9 @@ export const verifyToken: MiddlewareHandler<{ Bindings: Bindings; Variables: Var
   const token: string | undefined = getCookie(c, 'session')
   if (token === undefined) {
     throw new HTTPException(401, { message: 'Unauthorized' })
+  }
+  if (!c.env.JWT_SECRET_KEY) {
+    throw new HTTPException(500, { message: 'JWT_SECRET_KEY is not configured' })
   }
   const result = (await verify(token, c.env.JWT_SECRET_KEY, AlgorithmTypes.HS256)) as CustomJwtClaims
   console.info('VerifyToken:', result)
