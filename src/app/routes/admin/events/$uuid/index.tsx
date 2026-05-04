@@ -21,7 +21,7 @@ const EditEventContent = () => {
   const defaultValues = event ? toFormValues(event) : toFormValuesFromQuery(search, uuid)
 
   const handleSuccess = () => {
-    router.history.back()
+    router.navigate({ to: '/admin/events' })
   }
 
   return (
