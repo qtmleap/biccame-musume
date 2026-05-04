@@ -28,7 +28,8 @@ body {
      Placed in `utilities` layer so it wins over Tailwind utility classes like
      `bg-transparent` baked into the shadcn primitives. */
   [data-slot="button"][data-variant="outline"],
-  [data-slot="select-trigger"] {
+  [data-slot="select-trigger"],
+  [data-slot="input"] {
     background-color: var(--button-surface);
     color: var(--button-surface-foreground);
     border-color: transparent;
