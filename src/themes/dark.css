@@ -7,7 +7,7 @@
   --popover-foreground: var(--color-zinc-50);
   --primary: var(--color-zinc-200);
   --primary-foreground: var(--color-zinc-900);
-  --secondary: var(--color-zinc-800);
+  --secondary: var(--color-zinc-700);
   --secondary-foreground: var(--color-zinc-50);
   --muted: var(--color-zinc-800);
   --muted-foreground: var(--color-zinc-400);
@@ -109,8 +109,8 @@
   --button-surface: var(--color-zinc-800);
   --button-surface-foreground: var(--color-zinc-50);
   --button-surface-hover: var(--color-zinc-700);
-  --button-disabled: var(--color-zinc-700);
-  --button-disabled-foreground: var(--color-zinc-400);
+  --button-disabled: var(--color-zinc-800);
+  --button-disabled-foreground: var(--color-zinc-200);
   --button-disabled-border: var(--color-zinc-600);
 
   /* Social brand */

@@ -10,7 +10,7 @@
   --popover-foreground: var(--color-zinc-950);
   --primary: var(--color-zinc-900);
   --primary-foreground: var(--color-zinc-50);
-  --secondary: var(--color-zinc-100);
+  --secondary: var(--color-zinc-300);
   --secondary-foreground: var(--color-zinc-900);
   --muted: var(--color-zinc-100);
   --muted-foreground: var(--color-zinc-500);
@@ -65,8 +65,8 @@
   --category-regular-card: var(--color-blue-200);
   --category-regular-card-foreground: var(--color-blue-800);
   --category-regular-card-solid: var(--color-blue-600);
-  --category-ackey: var(--color-amber-200);
-  --category-ackey-foreground: var(--color-amber-800);
+  --category-ackey: var(--color-amber-300);
+  --category-ackey-foreground: var(--color-amber-900);
   --category-ackey-solid: var(--color-amber-500);
   --category-other: var(--color-rose-200);
   --category-other-foreground: var(--color-rose-800);
@@ -109,11 +109,11 @@
   --action-award-soft: var(--color-amber-300);
 
   /* Button surfaces (outline-style buttons over pink page bg) */
-  --button-surface: var(--color-pink-200);
-  --button-surface-foreground: var(--color-pink-900);
-  --button-surface-hover: var(--color-pink-300);
-  --button-disabled: var(--color-zinc-300);
-  --button-disabled-foreground: var(--color-zinc-500);
+  --button-surface: var(--color-zinc-50);
+  --button-surface-foreground: var(--color-zinc-900);
+  --button-surface-hover: var(--color-zinc-100);
+  --button-disabled: var(--color-zinc-200);
+  --button-disabled-foreground: var(--color-zinc-700);
   --button-disabled-border: var(--color-zinc-400);
 
   /* Social brand */
