@@ -156,7 +156,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
             <>
               <div className='relative'>
                 <div className='absolute inset-0 flex items-center'>
-                  <Separator />
+                  <Separator className='bg-separator' />
                 </div>
                 <div className='relative flex justify-center text-xs uppercase'>
                   <span className='bg-background px-2 text-muted-foreground'>または</span>
