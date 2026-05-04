@@ -3,8 +3,8 @@ import dayjs from 'dayjs'
 import { Calendar, Package, Store } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { EVENT_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import { STATUS_BADGE_SM } from '@/locales/component'
+import { EVENT_CATEGORY_LABELS, EVENT_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import { CATEGORY_BADGE, STATUS_BADGE_SM } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -75,11 +75,14 @@ export const EventGridItem = ({ event }: EventGridItemProps) => {
         )}
       >
         <div className='mb-2 flex items-start justify-between gap-3'>
-          <div className='flex-1'>
-            <h3 className='text-sm font-semibold text-foreground line-clamp-2'>{event.title}</h3>
+          <div className='flex-1 min-w-0'>
+            <div className='mb-1.5 flex flex-wrap items-center gap-1.5'>
+              {CATEGORY_BADGE[event.category](EVENT_CATEGORY_LABELS[event.category])}
+            </div>
+            <h3 className='text-base font-semibold text-foreground line-clamp-2'>{event.title}</h3>
             <div className='mt-1 flex flex-col gap-1 text-xs text-muted-foreground'>
               <span className='flex items-center gap-1'>
-                <Calendar className='size-3' />
+                <Calendar className='size-3.5' />
                 <span>{dayjs(event.startDate).format('YYYY/MM/DD')}</span>
                 {event.endDate ? (
                   <>
@@ -93,7 +96,7 @@ export const EventGridItem = ({ event }: EventGridItemProps) => {
               <div className='flex flex-wrap items-center gap-2'>
                 {event.stores && event.stores.length > 0 && (
                   <span className='flex items-center gap-1'>
-                    <Store className='size-3' />
+                    <Store className='size-3.5' />
                     {event.stores.length === 1
                       ? STORE_NAME_LABELS[event.stores[0] as StoreKey]
                       : `${event.stores.length}店舗`}
@@ -101,7 +104,7 @@ export const EventGridItem = ({ event }: EventGridItemProps) => {
                 )}
                 {event.limitedQuantity && !event.conditions.some((c) => c.type === 'everyone') && (
                   <span className='flex items-center gap-1'>
-                    <Package className='size-3' />
+                    <Package className='size-3.5' />
                     限定{event.limitedQuantity}個
                   </span>
                 )}
