@@ -47,14 +47,14 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
       {data.shouldTweet && <p className='text-base font-medium text-sky-600 text-center'>保存すると投稿されます</p>}
 
       {/* ボタン */}
-      <div className='flex gap-2 max-w-md mx-auto'>
-        <Button type='button' onClick={onBack} variant='outline' className='flex-1' disabled={isSubmitting}>
+      <div className='flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
+        <Button type='button' onClick={onBack} variant='outline' className='sm:w-32' disabled={isSubmitting}>
           修正する
         </Button>
         <Button
           type='button'
           onClick={onSubmit}
-          className='flex-1 bg-brand hover:bg-brand/90 text-brand-foreground'
+          className='bg-brand hover:bg-brand/90 text-brand-foreground sm:w-48'
           disabled={isSubmitting}
         >
           {isSubmitting ? CONFIRMATION_LABELS.registering : CONFIRMATION_LABELS.register}
