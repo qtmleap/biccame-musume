@@ -182,20 +182,25 @@ export const EventForm = ({
           <DateField
             id='start-date'
             label={ADMIN_LABELS.startDate}
-            control={control}
-            name='startDate'
+            register={register('startDate')}
             error={errors.startDate?.message}
           />
-          <DateField id='end-date' label='終了日（任意）' control={control} name='endDate' clearable />
+          <DateField
+            id='end-date'
+            label='終了日（任意）'
+            register={register('endDate')}
+            clearable
+            onClear={() => setValue('endDate', undefined, { shouldDirty: true, shouldValidate: true })}
+          />
         </div>
 
         {/* 実際の終了日 */}
         <DateField
           id='actual-end-date'
           label='実際の終了日（配布終了時に設定）'
-          control={control}
-          name='endedAt'
+          register={register('endedAt')}
           clearable
+          onClear={() => setValue('endedAt', undefined, { shouldDirty: true, shouldValidate: true })}
           hint={ADMIN_LABELS.endDateHint}
         />
 
