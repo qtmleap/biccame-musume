@@ -4,11 +4,11 @@ import { Calendar, Gift, Link2, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { DURATION } from '@/lib/motion'
 import { EVENT_LABELS, REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app.content'
-import type { Event } from '@/schemas/event.dto'
+import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 export type EventDetailInfoProps = {
-  event: Event
+  event: EventDetail
 }
 
 /**
@@ -125,7 +125,7 @@ const EventConditionsSection = ({ conditions }: { conditions: Event['conditions'
 /**
  * 参考URLセクション
  */
-const EventReferenceUrlsSection = ({ referenceUrls }: { referenceUrls?: Event['referenceUrls'] }) => {
+const EventReferenceUrlsSection = ({ referenceUrls }: { referenceUrls?: EventDetail['referenceUrls'] }) => {
   if (!referenceUrls || referenceUrls.length === 0) return null
 
   return (

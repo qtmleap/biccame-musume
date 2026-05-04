@@ -1,7 +1,7 @@
 import crypto from 'node:crypto'
 import OAuth from 'oauth-1.0a'
 import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import type { Event } from '@/schemas/event.dto'
+import type { EventDetail } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
 
 /**
@@ -15,7 +15,7 @@ const extractTweetId = (url: string): string | null => {
 /**
  * イベント情報からツイート本文を生成
  */
-const generateTweetText = (event: Event, isUpdate: boolean): string => {
+const generateTweetText = (event: EventDetail, isUpdate: boolean): string => {
   const action = isUpdate ? '更新' : '追加'
 
   // メイン店舗（最初の店舗）
@@ -45,7 +45,7 @@ const generateTweetText = (event: Event, isUpdate: boolean): string => {
  * イベントから引用RT用のツイートIDを抽出
  * 公式のお知らせツイート（type='announce'）を優先的に引用
  */
-const getQuoteTweetId = (event: Event): string | undefined => {
+const getQuoteTweetId = (event: EventDetail): string | undefined => {
   if (!event.referenceUrls || event.referenceUrls.length === 0) {
     return undefined
   }
@@ -155,7 +155,7 @@ export class Twitter {
   /**
    * イベント作成時にツイートを投稿
    */
-  async tweetEventCreated(event: Event): Promise<void> {
+  async tweetEventCreated(event: EventDetail): Promise<void> {
     const text = generateTweetText(event, false)
     const quoteTweetId = getQuoteTweetId(event)
     await this.tweet(text, quoteTweetId)
@@ -164,7 +164,7 @@ export class Twitter {
   /**
    * イベント更新時にツイートを投稿
    */
-  async tweetEventUpdated(event: Event): Promise<void> {
+  async tweetEventUpdated(event: EventDetail): Promise<void> {
     const text = generateTweetText(event, true)
     const quoteTweetId = getQuoteTweetId(event)
     await this.tweet(text, quoteTweetId)
