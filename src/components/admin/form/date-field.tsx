@@ -1,40 +1,26 @@
 import { Calendar, X } from 'lucide-react'
-import type { ChangeEvent } from 'react'
-import { type Control, type FieldPath, type FieldValues, useController } from 'react-hook-form'
+import type { UseFormRegisterReturn } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-type DateFieldProps<T extends FieldValues> = {
+type DateFieldProps = {
   id: string
   label: string
-  control: Control<T>
-  name: FieldPath<T>
+  register: UseFormRegisterReturn
   error?: string
   clearable?: boolean
+  onClear?: () => void
   hint?: string
 }
 
 /**
  * 日付入力フィールドコンポーネント
- *
- * `<input type="date">` は未入力時に value を `''` で返すが、optional な
- * 日付フィールドは undefined を期待しているため、空文字を undefined に
- * 寄せて RHF の状態に流す。
  */
-export const DateField = <T extends FieldValues>({
-  id,
-  label,
-  control,
-  name,
-  error,
-  clearable,
-  hint
-}: DateFieldProps<T>) => {
-  const { field } = useController({ name, control })
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    field.onChange(value === '' ? undefined : value)
+export const DateField = ({ id, label, register, error, clearable, onClear, hint }: DateFieldProps) => {
+  const handleClear = () => {
+    const input = document.getElementById(id) as HTMLInputElement
+    if (input) input.value = ''
+    onClear?.()
   }
 
   return (
@@ -44,22 +30,13 @@ export const DateField = <T extends FieldValues>({
         {label}
       </label>
       <div className='flex gap-2'>
-        <Input
-          id={id}
-          type='date'
-          value={(field.value as string | undefined) ?? ''}
-          onChange={handleChange}
-          onBlur={field.onBlur}
-          name={field.name}
-          ref={field.ref}
-          className={clearable ? 'flex-1' : 'w-full'}
-        />
+        <Input id={id} type='date' {...register} className={clearable ? 'flex-1' : 'w-full'} />
         {clearable && (
           <Button
             type='button'
             variant='ghost'
             size='icon'
-            onClick={() => field.onChange(undefined)}
+            onClick={handleClear}
             title={`${label}をクリア`}
             className='border border-transparent'
           >
