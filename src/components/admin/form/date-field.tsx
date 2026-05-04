@@ -67,7 +67,6 @@ export const DateField = <T extends FieldValues>({
             size='icon'
             onClick={() => field.onChange(undefined)}
             title={`${label}をクリア`}
-            className='border border-transparent'
           >
             <X className='size-4' />
           </Button>
