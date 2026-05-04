@@ -144,7 +144,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
             isLoggedIn ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
-            interested ? 'text-action-interest' : 'text-muted-foreground',
+            interested ? 'text-action-interest' : 'text-foreground/70',
             isLoggedIn && !interested && 'hover:text-action-interest/80'
           )}
         >
@@ -177,7 +177,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
             isLoggedIn && !isUpcoming ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
-            completed ? 'text-action-award' : 'text-muted-foreground',
+            completed ? 'text-action-award' : 'text-foreground/70',
             isLoggedIn && !isUpcoming && !completed && 'hover:text-action-award/80'
           )}
         >
@@ -192,7 +192,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
         </button>
 
         {/* 閲覧数 */}
-        <div className='flex items-center gap-1.5 text-sm text-muted-foreground min-w-16'>
+        <div className='flex items-center gap-1.5 text-sm text-foreground/70 min-w-16'>
           <BarChart2 className='h-5 w-5' />
           <span className='tabular-nums'>{pageViews.total}</span>
         </div>
@@ -203,7 +203,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
         <button
           type='button'
           onClick={handleShare}
-          className='flex items-center gap-1.5 text-sm text-muted-foreground hover:text-brand transition-colors group'
+          className='flex items-center gap-1.5 text-sm text-foreground/70 hover:text-brand transition-colors group'
         >
           <Share className='h-5 w-5 transition-all group-hover:scale-110' />
         </button>
@@ -212,7 +212,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           <PopoverTrigger asChild>
             <button
               type='button'
-              className='flex items-center gap-1.5 text-sm text-muted-foreground hover:text-brand transition-colors group'
+              className='flex items-center gap-1.5 text-sm text-foreground/70 hover:text-brand transition-colors group'
             >
               <Share className='h-5 w-5 transition-all group-hover:scale-110' />
             </button>
@@ -386,7 +386,12 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
             {STATUS_BADGE_DETAIL[event.status]()}
           </div>
           {isAuthenticated && (
-            <Button asChild size='sm' variant='outline'>
+            <Button
+              asChild
+              size='sm'
+              variant='outline'
+              className='h-auto px-2.5 py-0.5 text-xs rounded-full border-brand/50 text-brand hover:bg-brand/10 hover:text-brand'
+            >
               <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
                 編集
               </Link>

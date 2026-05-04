@@ -19,7 +19,7 @@ const EventsContent = () => {
         <div className='flex items-start justify-between gap-4'>
           <div className='flex-1'>
             <div className='flex justify-between'>
-              <h1 className='text-2xl font-bold text-foreground md:text-2xl'>イベント管理</h1>
+              <h1 className='text-2xl font-bold text-foreground'>イベント管理</h1>
               {isAuthenticated && (
                 <Link to='/admin/events/$uuid' params={{ uuid: uuidv4() }}>
                   <Button size='sm' className='bg-brand hover:bg-brand/90 text-brand-foreground'>

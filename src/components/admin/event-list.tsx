@@ -55,10 +55,12 @@ const EventCard = ({
   const isEnded = event.endedAt != null || (end && now.isAfter(end))
 
   return (
-    <div className={`border rounded-lg p-4 bg-card flex flex-col h-full ${isEnded ? 'opacity-50 grayscale' : ''}`}>
+    <div
+      className={`border-card rounded-lg p-3 bg-card flex flex-col h-full transition-colors hover:border-brand/40 ${isEnded ? 'opacity-50 grayscale' : ''}`}
+    >
       <div className='mb-2 flex items-start justify-between gap-3'>
-        <div className='flex-1'>
-          <h3 className='text-sm font-semibold text-foreground'>{event.title}</h3>
+        <div className='flex-1 min-w-0'>
+          <h3 className='text-base font-semibold text-foreground line-clamp-2'>{event.title}</h3>
           <div className='mt-1 flex flex-col gap-1 text-xs text-muted-foreground'>
             <span className='flex items-center gap-1'>
               <Calendar className='size-3' />
@@ -97,7 +99,7 @@ const EventCard = ({
       <div className='flex items-center justify-between mt-auto'>
         <div className='flex items-center gap-1'>
           <Link to='/events/$uuid' params={{ uuid: event.uuid }}>
-            <Button size='sm' variant='outline'>
+            <Button size='sm' variant='outline' className='border-card-border'>
               <ExternalLink className='mr-1 size-3' />
               詳細
             </Button>
@@ -106,7 +108,7 @@ const EventCard = ({
         {isAuthenticated && (
           <div className='flex items-center gap-2'>
             <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
-              <Button size='sm' variant='outline'>
+              <Button size='sm' variant='outline' className='border-card-border'>
                 <Pencil className='mr-1 size-3' />
                 編集
               </Button>
@@ -263,7 +265,7 @@ export const EventList = () => {
             </div>
           ) : (
             <>
-              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
                 {paginated.map((event) => (
                   <EventCard key={event.uuid} event={event} onDelete={handleDelete} isAuthenticated={isAuthenticated} />
                 ))}

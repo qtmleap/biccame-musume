@@ -189,7 +189,7 @@ const EventsContent = () => {
                 <Button
                   size='sm'
                   variant='ghost'
-                  className='md:hidden relative h-10 w-10 p-0 border border-transparent'
+                  className='md:hidden relative h-11 w-11 p-0 border border-transparent'
                 >
                   <Filter className='size-4' />
                   {isFilterActive && (
@@ -232,7 +232,7 @@ const EventsContent = () => {
               size='sm'
               pressed={viewMode === 'grid'}
               onPressedChange={(pressed) => setViewMode(pressed ? 'grid' : 'gantt')}
-              className='h-8 w-8 p-0 text-muted-foreground hover:text-foreground data-[state=on]:text-foreground'
+              className='h-9 w-9 p-0 text-muted-foreground hover:text-foreground data-[state=on]:text-foreground'
             >
               {viewMode === 'grid' ? <LayoutGrid className='size-4' /> : <Calendar className='size-4' />}
             </Toggle>
