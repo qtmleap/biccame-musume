@@ -51,7 +51,7 @@ type CalendarMonthTabsProps = {
  */
 export const CalendarMonthTabs = ({ selectedMonth, onSelectMonth }: CalendarMonthTabsProps) => {
   return (
-    <div className='hidden md:flex gap-1 overflow-x-auto pb-2 justify-center'>
+    <div className='hidden md:flex gap-1 overflow-x-auto pt-2 pb-2 justify-center'>
       {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
         <Button
           key={month}
