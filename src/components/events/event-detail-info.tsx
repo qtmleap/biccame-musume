@@ -40,9 +40,9 @@ const EventPeriodSection = ({ event }: { event: Event }) => {
 
   return (
     <div className='flex items-start gap-3'>
-      <Calendar className='h-5 w-5 text-muted-foreground/50 shrink-0 mt-0.5' />
+      <Calendar className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
       <div className='min-w-0 flex-1'>
-        <p className='text-sm text-muted-foreground'>開催期間</p>
+        <p className='text-xs font-medium text-muted-foreground'>開催期間</p>
         <p className='text-sm text-foreground'>
           {startDate.format('YYYY年M月D日')}
           {endDate ? ` 〜 ${endDate.format('YYYY年M月D日')}` : ' 〜 なくなり次第終了'}
@@ -65,9 +65,9 @@ const EventStoresSection = ({ stores }: { stores: string[] }) => {
 
   return (
     <div className='flex items-start gap-3'>
-      <Store className='h-5 w-5 text-muted-foreground/50 shrink-0 mt-0.5' />
+      <Store className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
       <div className='min-w-0 flex-1'>
-        <p className='text-sm text-muted-foreground'>対象店舗</p>
+        <p className='text-xs font-medium text-muted-foreground'>対象店舗</p>
         <div className='text-sm text-foreground flex flex-wrap gap-x-1'>
           {stores.map((storeKey, index) => {
             const storeName = STORE_NAME_LABELS[storeKey as StoreKey] || storeKey
@@ -94,9 +94,9 @@ const EventLimitedQuantitySection = ({ event }: { event: Event }) => {
 
   return (
     <div className='flex items-start gap-3'>
-      <Package className='h-5 w-5 text-muted-foreground/50 shrink-0 mt-0.5' />
+      <Package className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
       <div className='min-w-0 flex-1'>
-        <p className='text-sm text-muted-foreground'>限定数</p>
+        <p className='text-xs font-medium text-muted-foreground'>限定数</p>
         <p className='text-sm text-foreground'>{event.limitedQuantity.toLocaleString()}個</p>
       </div>
     </div>
@@ -108,16 +108,16 @@ const EventLimitedQuantitySection = ({ event }: { event: Event }) => {
  */
 const EventConditionsSection = ({ conditions }: { conditions: Event['conditions'] }) => (
   <div className='flex items-start gap-3'>
-    <Gift className='h-5 w-5 text-muted-foreground/50 shrink-0 mt-0.5' />
+    <Gift className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
     <div className='min-w-0 flex-1'>
-      <p className='text-sm text-muted-foreground'>配布条件</p>
-      <div className='space-y-1'>
+      <p className='text-xs font-medium text-muted-foreground'>配布条件</p>
+      <ul className='list-disc list-inside space-y-1 marker:text-muted-foreground'>
         {conditions.map((condition) => (
-          <div key={condition.uuid} className='text-sm text-foreground'>
-            • {getConditionDetail(condition)}
-          </div>
+          <li key={condition.uuid} className='text-sm text-foreground'>
+            {getConditionDetail(condition)}
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   </div>
 )
@@ -130,9 +130,9 @@ const EventReferenceUrlsSection = ({ referenceUrls }: { referenceUrls?: Event['r
 
   return (
     <div className='flex items-start gap-3'>
-      <Link2 className='h-5 w-5 text-muted-foreground/50 shrink-0 mt-0.5' />
+      <Link2 className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
       <div className='min-w-0 flex-1'>
-        <p className='text-sm text-muted-foreground'>参考URL</p>
+        <p className='text-xs font-medium text-muted-foreground'>参考URL</p>
         <div className='space-y-1'>
           {referenceUrls.map((ref) => (
             <div key={ref.url}>
