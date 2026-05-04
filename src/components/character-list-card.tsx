@@ -36,7 +36,7 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
           className='flex-1 block border-card rounded-lg p-3 hover:border-brand/40 transition-colors bg-card'
         >
           <div className='flex items-center gap-3 mb-2'>
-            <Avatar className='h-16 w-16'>
+            <Avatar className='h-16 w-16 border-2 border-card-border'>
               <AvatarImage
                 src={character.character?.image_url}
                 alt={character.character?.name || ''}
