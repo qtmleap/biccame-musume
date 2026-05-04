@@ -320,7 +320,7 @@ export const EventForm = ({
       <Separator />
 
       {/* 検証済み・未確定情報・ツイート投稿フラグ */}
-      <div className='grid grid-cols-2 gap-3 rounded-md bg-muted/30 p-3 sm:grid-cols-3'>
+      <div className='grid grid-cols-2 gap-3 sm:grid-cols-3'>
         <div className='flex items-center gap-2'>
           <Controller
             name='isVerified'
