@@ -4,10 +4,12 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { HTTPException } from 'hono/http-exception'
 import { getPrisma } from '@/lib/prisma'
+import type { CommentResponse } from '@/schemas/comment.dto'
 import {
   type Event,
   type EventCategory,
   type EventConditionType,
+  type EventDetail,
   type EventRequest,
   EventSchema,
   type EventStatus,
@@ -72,11 +74,15 @@ const calculateEventStatus = (event: {
  * @param completedCount - 達成カウント（オプション）
  * @returns APIレスポンス用のEvent型オブジェクト
  */
-type EventPayload = Prisma.EventGetPayload<{
-  include: { conditions: true; referenceUrls: true; stores: true }
+type EventListPayload = Prisma.EventGetPayload<{
+  include: { conditions: true; stores: true }
 }>
 
-const transform = (event: EventPayload, interestedCount = 0, completedCount = 0): Event => {
+type EventDetailPayload = Prisma.EventGetPayload<{
+  include: { conditions: true; referenceUrls: true; stores: true; comments: true }
+}>
+
+const transform = (event: EventListPayload, interestedCount = 0, completedCount = 0): Event => {
   const { status, daysUntil } = calculateEventStatus(event)
   return {
     uuid: event.id,
@@ -96,11 +102,6 @@ const transform = (event: EventPayload, interestedCount = 0, completedCount = 0)
       purchaseAmount: c.purchaseAmount ?? undefined,
       quantity: c.quantity ?? undefined
     })),
-    referenceUrls: event.referenceUrls.map((r) => ({
-      uuid: r.id,
-      type: r.type as ReferenceUrlType,
-      url: r.url
-    })),
     stores: event.stores.map((s) => s.storeKey as StoreKey),
     status,
     daysUntil,
@@ -109,6 +110,33 @@ const transform = (event: EventPayload, interestedCount = 0, completedCount = 0)
   }
 }
 
+const toCommentResponse = (comment: {
+  id: string
+  nickname: string
+  body: string
+  createdAt: Date
+  userId: string | null
+}): CommentResponse => ({
+  id: comment.id,
+  characterId: comment.nickname,
+  body: comment.body,
+  createdAt: comment.createdAt.toISOString(),
+  userId: comment.userId ?? undefined
+})
+
+const transformDetail = (event: EventDetailPayload, interestedCount = 0, completedCount = 0): EventDetail => ({
+  ...transform(event, interestedCount, completedCount),
+  referenceUrls: event.referenceUrls.map((r) => ({
+    uuid: r.id,
+    type: r.type as ReferenceUrlType,
+    url: r.url
+  })),
+  comments: event.comments
+    .filter((c) => c.deletedAt === null)
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    .map(toCommentResponse)
+})
+
 /**
  * 指定されたIDのイベントを取得
  * @param env - Cloudflare Workers環境変数
@@ -116,7 +144,7 @@ const transform = (event: EventPayload, interestedCount = 0, completedCount = 0)
  * @returns イベント情報（statsを含む）
  * @throws HTTPException 404 - イベントが見つからない場合
  */
-export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
+export const getEvent = async (env: Bindings, id: string): Promise<EventDetail> => {
   const prisma = getPrisma(env)
   const [event, interestedCount, completedCount] = await Promise.all([
     prisma.event.findUnique({
@@ -124,7 +152,8 @@ export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
       include: {
         conditions: true,
         referenceUrls: true,
-        stores: true
+        stores: true,
+        comments: true
       }
     }),
     prisma.userEvent.count({ where: { eventId: id, status: 'interested' } }),
@@ -133,7 +162,7 @@ export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
   if (event === null) {
     throw new HTTPException(404, { message: 'Not Found' })
   }
-  return transform(event, interestedCount, completedCount)
+  return transformDetail(event, interestedCount, completedCount)
 }
 
 /**
@@ -156,7 +185,6 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
       },
       include: {
         conditions: true,
-        referenceUrls: true,
         stores: true
       },
       orderBy: { startDate: 'desc' }
@@ -176,7 +204,7 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
  * @param data - イベント作成リクエストデータ
  * @returns 作成されたイベント情報
  */
-export const createEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
+export const createEvent = async (env: Bindings, data: EventRequest): Promise<EventDetail> => {
   const prisma = getPrisma(env)
 
   // 既存イベントをチェック
@@ -185,13 +213,14 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     include: {
       conditions: true,
       referenceUrls: true,
-      stores: true
+      stores: true,
+      comments: true
     }
   })
 
   if (existingEvent) {
     console.log('Event already exists with id:', data.uuid)
-    return transform(existingEvent)
+    return transformDetail(existingEvent)
   }
 
   // 日付をDate型に変換
@@ -231,10 +260,11 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     include: {
       conditions: true,
       referenceUrls: true,
-      stores: true
+      stores: true,
+      comments: true
     }
   })
-  return transform(event)
+  return transformDetail(event)
 }
 
 /**
@@ -244,7 +274,7 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
  * @param data - イベント更新リクエストデータ（uuidが必須）
  * @returns 更新されたイベント情報
  */
-export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
+export const updateEvent = async (env: Bindings, data: EventRequest): Promise<EventDetail> => {
   const prisma = getPrisma(env)
 
   // 日付をDate型に変換
@@ -289,11 +319,12 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     include: {
       conditions: true,
       referenceUrls: true,
-      stores: true
+      stores: true,
+      comments: true
     }
   })
 
-  return transform(event)
+  return transformDetail(event)
 }
 
 /**
@@ -312,7 +343,6 @@ export const searchEvents = async (env: Bindings, q: string): Promise<Event[]> =
       },
       include: {
         conditions: true,
-        referenceUrls: true,
         stores: true
       },
       orderBy: { startDate: 'desc' },

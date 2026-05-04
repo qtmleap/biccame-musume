@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { EventDetailInfo } from '@/components/events/event-detail-info'
 import { Button } from '@/components/ui/button'
 import { CONFIRMATION_LABELS } from '@/locales/app.content'
-import type { Event, EventRequest, EventStatus } from '@/schemas/event.dto'
+import type { EventDetail, EventRequest, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 type EventConfirmationProps = {
@@ -16,8 +16,8 @@ type EventConfirmationProps = {
  * イベント登録内容の確認画面コンポーネント
  */
 export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: EventConfirmationProps) => {
-  // EventRequestをEvent型に変換
-  const event: Event = {
+  // EventRequestをEventDetail型に変換
+  const event: EventDetail = {
     uuid: data.uuid,
     category: data.category,
     title: data.title,
@@ -27,6 +27,7 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
     endedAt: data.endedAt ? dayjs(data.endedAt).toDate() : undefined,
     limitedQuantity: data.limitedQuantity,
     referenceUrls: data.referenceUrls,
+    comments: [],
     conditions: data.conditions,
     isVerified: data.isVerified,
     isPreliminary: data.isPreliminary,
