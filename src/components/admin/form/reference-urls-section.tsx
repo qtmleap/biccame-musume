@@ -87,7 +87,9 @@ export function ReferenceUrlsSection({
         {fields.map((field, index) => (
           <div key={field.id}>
             <div className='flex items-center gap-2'>
-              <span className='shrink-0 text-sm font-medium w-10'>{REFERENCE_URL_TYPE_LABELS[field.type]}</span>
+              <span className='shrink-0 truncate text-sm font-medium min-w-[3rem]'>
+                {REFERENCE_URL_TYPE_LABELS[field.type]}
+              </span>
               <Input
                 type='url'
                 placeholder='https://twitter.com/...'
@@ -100,7 +102,7 @@ export function ReferenceUrlsSection({
                 size='icon'
                 variant='ghost'
                 onClick={() => handleRemove(index)}
-                className='shrink-0 border border-transparent'
+                className='shrink-0'
               >
                 <X className='size-4' />
               </Button>
