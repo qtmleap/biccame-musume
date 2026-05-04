@@ -183,14 +183,16 @@ export const EventForm = ({
       </div>
 
       {/* 実際の終了日 */}
-      <DateField
-        id='actual-end-date'
-        label='実際の終了日（配布終了時に設定）'
-        control={control}
-        name='endedAt'
-        clearable
-        hint={ADMIN_LABELS.endDateHint}
-      />
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+        <DateField
+          id='actual-end-date'
+          label='実際の終了日（配布終了時に設定）'
+          control={control}
+          name='endedAt'
+          clearable
+          hint={ADMIN_LABELS.endDateHint}
+        />
+      </div>
 
       <Separator />
 
