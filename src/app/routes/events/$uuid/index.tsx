@@ -35,7 +35,7 @@ const EventDetailContent = () => {
 
             {/* コメント */}
             <div className='mt-8'>
-              <Separator className='mb-6' />
+              <Separator className='mb-6 bg-separator' />
               <CommentSection eventUuid={uuid} />
             </div>
 
@@ -55,7 +55,7 @@ const EventDetailContent = () => {
           </div>
 
           {/* Separator */}
-          <Separator orientation='vertical' className='hidden md:block' />
+          <Separator orientation='vertical' className='hidden md:block bg-separator' />
 
           {/* サイドバー（デスクトップのみ） */}
           <div className='hidden md:block pt-4'>

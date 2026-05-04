@@ -40,7 +40,7 @@ export const RecentEventsList = ({ events, currentEventId, hideHeading = false }
   return (
     <div key={currentEventId} className='bg-page-bg rounded-lg'>
       {!hideHeading && <h2 className='text-lg font-bold text-foreground mb-4'>最近更新されたイベント</h2>}
-      <div className='flex flex-col divide-y divide-card'>
+      <div className='flex flex-col divide-y divide-separator'>
         {recentEvents.map((event, index) => {
           // 店舗名を取得（最大2つまで表示、それ以上は「他」と表示）
           const storeNames = event.stores.slice(0, 2).map((key) => STORE_NAME_LABELS[key as StoreKey] || key)

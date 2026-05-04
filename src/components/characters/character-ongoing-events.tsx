@@ -41,7 +41,7 @@ const OngoingEventItem = ({ event, isLast }: OngoingEventItemProps) => {
         </div>
         {STATUS_BADGE_SM[event.status]()}
       </Link>
-      {!isLast && <Separator className='my-3 h-0.5 bg-separator' />}
+      {!isLast && <Separator className='my-3 bg-separator' />}
     </>
   )
 }
