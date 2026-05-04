@@ -69,8 +69,8 @@ export const EventRequestSchema = z.object({
   title: z.string().nonempty('イベント名は必須です'),
   stores: z.array(StoreKeySchema).nonempty('最低 1 つの店舗を選択してください'),
   startDate: z.string().nonempty('開始日は必須です'),
-  endDate: z.string().nonempty('終了日は必須です').optional(),
-  endedAt: z.string().nonempty('終了日時は必須です').optional(),
+  endDate: z.string().optional(),
+  endedAt: z.string().optional(),
   limitedQuantity: z
     .number({ error: '配布数は数値で入力してください' })
     .min(1, '配布数は 1 以上で入力してください')

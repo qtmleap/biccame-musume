@@ -188,7 +188,7 @@ export const EventForm = ({
           <DateField
             id='end-date'
             label='終了日（任意）'
-            register={register('endDate', { setValueAs: (v) => (v === '' ? undefined : v) })}
+            register={register('endDate')}
             clearable
             onClear={() => setValue('endDate', undefined, { shouldDirty: true, shouldValidate: true })}
           />
@@ -198,7 +198,7 @@ export const EventForm = ({
         <DateField
           id='actual-end-date'
           label='実際の終了日（配布終了時に設定）'
-          register={register('endedAt', { setValueAs: (v) => (v === '' ? undefined : v) })}
+          register={register('endedAt')}
           clearable
           onClear={() => setValue('endedAt', undefined, { shouldDirty: true, shouldValidate: true })}
           hint={ADMIN_LABELS.endDateHint}
