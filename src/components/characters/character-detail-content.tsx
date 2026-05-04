@@ -48,7 +48,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
             <StoreInfoSection character={character} />
           </div>
 
-          <Separator orientation='vertical' className='hidden md:block' />
+          <Separator orientation='vertical' className='hidden md:block bg-separator' />
 
           <div className='hidden md:block pt-4'>
             <div className='sticky top-4'>
