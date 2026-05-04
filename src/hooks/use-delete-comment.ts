@@ -7,7 +7,7 @@ export const useDeleteComment = (eventUuid: string) => {
   return useMutation({
     mutationFn: (commentId: string) => client.deleteEventComment(undefined, { params: { uuid: eventUuid, commentId } }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['events', eventUuid, 'comments'] })
+      queryClient.invalidateQueries({ queryKey: ['events', eventUuid] })
       toast.success('コメントを削除しました')
     },
     onError: () => {

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import type { Event, EventRequest } from '@/schemas/event.dto'
+import type { Event, EventDetail, EventRequest } from '@/schemas/event.dto'
 import { client } from '@/utils/client'
 
 /**
@@ -59,7 +59,7 @@ export const useCreateEvent = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (event: EventRequest): Promise<Event> => {
+    mutationFn: async (event: EventRequest): Promise<EventDetail> => {
       return client.createEvent(event)
     },
     onSuccess: () => {
@@ -98,7 +98,7 @@ export const useUpdateEvent = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: Partial<EventRequest> }): Promise<Event> => {
+    mutationFn: async ({ id, data }: { id: string; data: Partial<EventRequest> }): Promise<EventDetail> => {
       return await client.updateEvent(data, { params: { id } })
     },
     onSuccess: () => {

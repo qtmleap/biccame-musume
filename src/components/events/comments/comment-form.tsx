@@ -80,7 +80,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
       form.reset({ characterId: next?.id ?? '', body: '' })
       setTurnstileToken(null)
       turnstileRef.current?.reset()
-      queryClient.invalidateQueries({ queryKey: ['events', eventUuid, 'comments'] })
+      queryClient.invalidateQueries({ queryKey: ['events', eventUuid] })
       toast.success('コメントを投稿しました')
       onSuccess?.()
     },
