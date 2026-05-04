@@ -36,7 +36,7 @@ const EventDetailContent = () => {
             {/* コメント */}
             <div className='mt-8'>
               <Separator className='mb-6 bg-separator' />
-              <CommentSection eventUuid={uuid} comments={event.comments ?? []} />
+              <CommentSection eventUuid={uuid} comments={event.comments} />
             </div>
 
             {/* 関連イベント（モバイルのみ・アコーディオン） */}
