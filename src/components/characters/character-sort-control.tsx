@@ -75,9 +75,9 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
             }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: DURATION.normal, ease: 'easeInOut' }}
-            className='overflow-hidden sm:h-auto! sm:opacity-100!'
+            className='overflow-hidden sm:h-auto! sm:opacity-100! sm:overflow-visible'
           >
-            <div className='grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 sm:mt-0'>
+            <div className='grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 sm:mt-0 py-1'>
               {sortOptions.map((option) => {
                 const isSelected = sortType === option.value
 
