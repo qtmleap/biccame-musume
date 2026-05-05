@@ -2,10 +2,19 @@ import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { getPrisma } from '@/lib/prisma'
+import { isVoteLimited, markVoteLimited } from '@/middleware/vote-limit'
 import type { Bindings } from '@/types/bindings'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
+
+/**
+ * 一括投票結果アイテム
+ */
+export type BulkVoteResult = {
+  characterId: string
+  status: 'voted' | 'skipped'
+}
 
 /**
  * 全キャラクターの投票カウントを取得する
@@ -72,4 +81,35 @@ export const vote = async (
     message: '投票ありがとうございます！',
     nextVoteDate: dayjs().add(1, 'day').startOf('day').toISOString()
   }
+}
+
+/**
+ * 複数キャラクターへの一括投票
+ * - 既に本日投票済みのキャラは skipped にして残りだけ通す
+ * - dev 環境では制限を無視して全件投票
+ *
+ * @param env Bindings
+ * @param characterIds 投票対象のキャラクターIDの配列
+ * @param ip 投票者のIPアドレス
+ * @returns キャラクター毎の投票結果
+ */
+export const bulkVote = async (env: Bindings, characterIds: string[], ip: string): Promise<BulkVoteResult[]> => {
+  const isDev = env.ENVIRONMENT === 'local'
+  const results: BulkVoteResult[] = []
+
+  // 重複排除
+  const uniqueIds = Array.from(new Set(characterIds))
+
+  for (const characterId of uniqueIds) {
+    const limited = await isVoteLimited(env.VOTE_LIMITER, characterId, ip)
+    if (limited && !isDev) {
+      results.push({ characterId, status: 'skipped' })
+      continue
+    }
+    await markVoteLimited(env.VOTE_LIMITER, characterId, ip)
+    await vote(env, characterId, ip)
+    results.push({ characterId, status: 'voted' })
+  }
+
+  return results
 }

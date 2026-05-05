@@ -23,3 +23,61 @@ export const VoteCountItemSchema = z.object({
  * 投票カウント一覧
  */
 export const VoteCountListSchema = z.array(VoteCountItemSchema)
+
+/**
+ * 一括投票リクエスト
+ */
+export const BulkVoteRequestSchema = z
+  .object({
+    characterIds: z
+      .array(z.string().nonempty('キャラクターIDは必須です'))
+      .min(1, 'キャラクターIDを1つ以上指定してください')
+      .max(200, 'キャラクターIDは200個まで指定可能です')
+      .openapi({ description: '投票対象のキャラクターIDの配列' })
+  })
+  .openapi('BulkVoteRequest')
+
+/**
+ * 一括投票結果アイテム
+ */
+export const BulkVoteResultItemSchema = z
+  .object({
+    characterId: z.string().nonempty('キャラクターIDは必須です').openapi({ example: 'biccame-001' }),
+    /// voted: 新規投票成功 / skipped: 本日投票済み
+    status: z.enum(['voted', 'skipped']).openapi({ description: '投票結果ステータス' })
+  })
+  .openapi('BulkVoteResultItem')
+
+/**
+ * 一括投票レスポンス
+ */
+export const BulkVoteResponseSchema = z
+  .object({
+    success: z.boolean().openapi({ example: true }),
+    /// 投票結果の内訳
+    results: z.array(BulkVoteResultItemSchema).openapi({ description: 'キャラクター別の投票結果' }),
+    /// 新規投票数
+    votedCount: z.number().openapi({ example: 3 }),
+    /// 投票済みでスキップされた数
+    skippedCount: z.number().openapi({ example: 1 }),
+    nextVoteDate: z.string().nonempty('次回投票日は必須です').openapi({ example: '2026-05-06' })
+  })
+  .openapi('BulkVoteResponse')
+
+export type BulkVoteResponse = z.infer<typeof BulkVoteResponseSchema>
+
+/**
+ * Zodios クライアント用
+ */
+export const BulkVoteResponseSchemaForClient = z.object({
+  success: z.boolean(),
+  results: z.array(
+    z.object({
+      characterId: z.string().nonempty(),
+      status: z.enum(['voted', 'skipped'])
+    })
+  ),
+  votedCount: z.number(),
+  skippedCount: z.number(),
+  nextVoteDate: z.string().nonempty()
+})

@@ -3,8 +3,13 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { Context, Next } from 'hono'
 import { ipCheck } from '@/middleware/ip-check'
 import { voteLimit } from '@/middleware/vote-limit'
-import { VoteCountListSchema, VoteResponseSchema } from '@/schemas/vote.dto'
-import { getAllVoteCounts, vote } from '@/services/vote-service'
+import {
+  BulkVoteRequestSchema,
+  BulkVoteResponseSchema,
+  VoteCountListSchema,
+  VoteResponseSchema
+} from '@/schemas/vote.dto'
+import { bulkVote, getAllVoteCounts, vote } from '@/services/vote-service'
 import type { Bindings, Variables } from '@/types/bindings'
 import { getNextJSTDate } from '@/utils/vote'
 
@@ -114,6 +119,61 @@ routes.openapi(
   async (c) => {
     const counts = await getAllVoteCounts(c.env)
     return c.json(counts)
+  }
+)
+
+/**
+ * 一括投票
+ * POST /api/votes/bulk
+ * - 推し一括 / 全員一括 共通エンドポイント
+ * - 投票済みのキャラは skipped として返す
+ */
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/bulk',
+    middleware: [ipCheck],
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: BulkVoteRequestSchema
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: BulkVoteResponseSchema
+          }
+        },
+        description: '一括投票完了（skip 含む）'
+      },
+      400: {
+        content: {
+          'application/json': {
+            schema: BulkVoteResponseSchema
+          }
+        },
+        description: 'バリデーションエラー'
+      }
+    },
+    tags: ['votes']
+  }),
+  async (c) => {
+    const { characterIds } = c.req.valid('json')
+    const results = await bulkVote(c.env, characterIds, c.get('CLIENT_IP'))
+    const votedCount = results.filter((r) => r.status === 'voted').length
+    const skippedCount = results.filter((r) => r.status === 'skipped').length
+    return c.json({
+      success: true,
+      results,
+      votedCount,
+      skippedCount,
+      nextVoteDate: getNextJSTDate()
+    })
   }
 )
 
