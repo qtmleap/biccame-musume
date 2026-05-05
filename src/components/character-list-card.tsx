@@ -60,37 +60,32 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
             />
           )}
 
-          <div className='flex items-center gap-3'>
-            <Link
-              to='/characters/$id'
-              params={{ id: character.id }}
-              className='shrink-0 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
-            >
-              <Avatar className='h-14 w-14 border-2 border-card-border'>
-                <AvatarImage
-                  src={character.character?.image_url}
-                  alt={character.character?.name || ''}
-                  className='mix-blend-multiply scale-150 translate-y-[20%]'
-                />
-                <AvatarFallback className='bg-brand/10 text-brand'>
-                  {character.character?.name?.[0] || '?'}
-                </AvatarFallback>
-              </Avatar>
-            </Link>
+          <Link
+            to='/characters/$id'
+            params={{ id: character.id }}
+            aria-label={`${character.character?.name ?? 'キャラクター'}の詳細を見る`}
+            className='absolute inset-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
+          />
+
+          <div className='relative flex items-center gap-3 pointer-events-none'>
+            <Avatar className='h-14 w-14 border-2 border-card-border shrink-0'>
+              <AvatarImage
+                src={character.character?.image_url}
+                alt={character.character?.name || ''}
+                className='mix-blend-multiply scale-150 translate-y-[20%]'
+              />
+              <AvatarFallback className='bg-brand/10 text-brand'>
+                {character.character?.name?.[0] || '?'}
+              </AvatarFallback>
+            </Avatar>
             <div className='flex-1 min-w-0 flex flex-col gap-1.5'>
-              <Link
-                to='/characters/$id'
-                params={{ id: character.id }}
-                className='rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
+              <h3
+                className='truncate text-foreground text-sm md:text-base'
+                style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 800 }}
               >
-                <h3
-                  className='truncate text-foreground text-sm md:text-base'
-                  style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 800 }}
-                >
-                  {getDisplayName(character.character?.name || '')}
-                </h3>
-              </Link>
-              <div className='flex justify-end gap-2'>
+                {getDisplayName(character.character?.name || '')}
+              </h3>
+              <div className='flex justify-end gap-2 pointer-events-auto'>
                 <CharacterFollowButton twitterId={character.character?.twitter_id} iconOnly />
                 <CharacterVoteButton
                   characterId={character.id}
