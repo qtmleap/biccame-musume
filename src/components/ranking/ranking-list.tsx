@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
-import { Heart } from 'lucide-react'
 import { motion } from 'motion/react'
 import { BulkVoteButton } from '@/components/characters/bulk-vote-button'
+import { RankingVoteBadge } from '@/components/ranking/ranking-vote-badge'
 import { DURATION } from '@/lib/motion'
 import type { StoreData } from '@/schemas/store.dto'
 
@@ -111,17 +111,9 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
           </div>
         </Link>
 
-        {/* 票数バッジ（ハート + 数字のピル） */}
+        {/* 票数バッジ兼投票ボタン（押すと投票） */}
         <div className='mt-3 flex justify-center'>
-          <div className='inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-vote-count text-vote-count-foreground border border-card-border'>
-            <Heart className='h-3.5 w-3.5 text-vote-count-icon fill-current' />
-            <p
-              className='tabular-nums text-sm whitespace-nowrap'
-              style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 700 }}
-            >
-              {character.voteCount.toLocaleString()}
-            </p>
-          </div>
+          <RankingVoteBadge characterId={character.id} voteCount={character.voteCount} />
         </div>
       </div>
     </motion.div>
