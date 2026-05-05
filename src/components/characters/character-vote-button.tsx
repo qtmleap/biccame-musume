@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
-import { CircleCheckIcon } from 'lucide-react'
+import { CircleCheckIcon, PartyPopper } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
@@ -17,6 +17,8 @@ type CharacterVoteButtonProps = {
   variant?: 'default' | 'compact'
   enableVoteCount?: boolean
   isBiccameMusume?: boolean
+  /** アイコンのみ表示（一覧などコンパクト表示用） */
+  iconOnly?: boolean
 }
 
 /**
@@ -26,7 +28,8 @@ export const CharacterVoteButton = ({
   characterId,
   characterName: _characterName,
   variant = 'default',
-  isBiccameMusume = true
+  isBiccameMusume = true,
+  iconOnly = false
 }: CharacterVoteButtonProps) => {
   const { mutate, isPending, isSuccess, data, error } = useVote(characterId)
   const [lastVoteTimes, setLastVoteTimes] = useAtom(lastVoteTimesAtom)
@@ -111,6 +114,31 @@ export const CharacterVoteButton = ({
   const stateClass = hasVotedToday
     ? 'bg-button-disabled text-button-disabled-foreground border border-button-disabled-border cursor-not-allowed disabled:opacity-100 hover:bg-button-disabled'
     : 'bg-brand hover:bg-brand/90 text-brand-foreground'
+
+  if (iconOnly) {
+    return (
+      <span className='relative inline-block'>
+        <motion.span whileTap={!hasVotedToday ? { scale: 0.9 } : undefined} className='inline-block'>
+          <Button
+            size='icon'
+            variant={hasVotedToday ? 'secondary' : 'default'}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              handleVote()
+            }}
+            aria-disabled={hasVotedToday || isPending}
+            disabled={isPending}
+            aria-label={getButtonText()}
+            className={cn('h-8 w-8 rounded-full', stateClass)}
+          >
+            <PartyPopper className={cn('h-4 w-4', hasVotedToday && 'fill-current')} />
+          </Button>
+        </motion.span>
+        <VoteBurst triggerKey={burstKey} count={4} />
+      </span>
+    )
+  }
 
   if (variant === 'compact') {
     return (
