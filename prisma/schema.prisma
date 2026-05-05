@@ -186,8 +186,26 @@ model User {
   stores UserStore[]
   /// イベントとの関係
   events UserEvent[]
+  /// お気に入りキャラクター
+  favoriteCharacters FavoriteCharacter[]
 
   @@map("users")
+}
+
+/// ユーザーのお気に入りキャラクター
+model FavoriteCharacter {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  /// キャラクターID（例: biccame-001）
+  characterId String   @map("character_id")
+  /// 作成日時
+  createdAt   DateTime @default(now()) @map("created_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, characterId])
+  @@index([userId])
+  @@index([characterId])
+  @@map("favorite_characters")
 }
 
 /// ユーザーと店舗の関係
