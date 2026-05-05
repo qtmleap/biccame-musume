@@ -80,7 +80,8 @@ export const RankingVoteBadge = ({ characterId, voteCount }: RankingVoteBadgePro
         aria-pressed={hasVotedToday}
         aria-label={hasVotedToday ? '本日投票済み' : '投票する'}
         className={cn(
-          'inline-flex items-center gap-1.5 px-3 py-1 rounded-full border transition-colors',
+          'inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-full border transition-colors',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-favorite focus-visible:ring-offset-2 focus-visible:ring-offset-card',
           hasVotedToday
             ? 'bg-vote-count text-vote-count-foreground border-card-border cursor-not-allowed'
             : 'bg-vote-count text-vote-count-foreground border-card-border hover:bg-favorite/10 hover:border-favorite/50 hover:text-favorite cursor-pointer'
@@ -88,7 +89,7 @@ export const RankingVoteBadge = ({ characterId, voteCount }: RankingVoteBadgePro
       >
         <Heart
           className={cn(
-            'h-3.5 w-3.5 transition-colors',
+            'h-4 w-4 transition-colors',
             hasVotedToday ? 'text-vote-count-icon fill-current' : 'text-vote-count-icon'
           )}
         />

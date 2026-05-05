@@ -90,7 +90,7 @@ export const BulkVoteButton = ({
             className
           )}
         >
-          <Heart className={cn('h-4 w-4', !allVotedToday && 'fill-current')} />
+          <Heart className={cn('h-4 w-4', allVotedToday && 'fill-current')} />
           {buttonText}
         </Button>
       </motion.span>
