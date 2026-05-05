@@ -14,9 +14,9 @@ import type { Bindings, Variables } from '@/types/bindings'
 import { getNextJSTDate } from '@/utils/vote'
 
 const getKey: RateLimitKeyFunc = (c: Context): string => {
-  // Rate limit on each API token by returning it as the key for our
-  // middleware to use.
-  return c.req.header('Authorization') || ''
+  // 匿名でも一括投票するため、Authorization が無ければ
+  // CF-Connecting-IP / X-Real-IP をフォールバックキーにする
+  return c.req.header('Authorization') || c.req.header('CF-Connecting-IP') || c.req.header('X-Real-IP') || 'anonymous'
 }
 
 const rateLimiter = async (c: Context, next: Next) => {
