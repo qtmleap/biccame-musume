@@ -113,6 +113,15 @@
   --color-action-award: var(--action-award);
   --color-action-award-soft: var(--action-award-soft);
 
+  /* Favorite (推し) */
+  --color-favorite: var(--favorite);
+  --color-favorite-foreground: var(--favorite-foreground);
+
+  /* Vote count badge */
+  --color-vote-count: var(--vote-count);
+  --color-vote-count-foreground: var(--vote-count-foreground);
+  --color-vote-count-icon: var(--vote-count-icon);
+
   /* Button surfaces (avoid pure white on pink page bg) */
   --color-button-surface: var(--button-surface);
   --color-button-surface-foreground: var(--button-surface-foreground);

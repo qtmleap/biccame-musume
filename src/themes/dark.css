@@ -105,6 +105,15 @@
   --action-award: var(--color-amber-400);
   --action-award-soft: var(--color-amber-200);
 
+  /* Favorite (推し) */
+  --favorite: var(--color-rose-400);
+  --favorite-foreground: var(--color-zinc-50);
+
+  /* Vote count (落ち着いた muted トーン) */
+  --vote-count: var(--color-zinc-800);
+  --vote-count-foreground: var(--color-zinc-200);
+  --vote-count-icon: var(--color-rose-400);
+
   /* Button surfaces (outline-style buttons over dark page bg) */
   --button-surface: var(--color-zinc-800);
   --button-surface-foreground: var(--color-zinc-50);
