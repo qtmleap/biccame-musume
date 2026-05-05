@@ -35,15 +35,15 @@ const EventDetailContent = () => {
 
             {/* コメント */}
             <div className='mt-8'>
-              <Separator className='mb-6' />
-              <CommentSection eventUuid={uuid} />
+              <Separator className='mb-6 bg-separator' />
+              <CommentSection eventUuid={uuid} comments={event.comments} />
             </div>
 
             {/* 関連イベント（モバイルのみ・アコーディオン） */}
             <div className='md:hidden'>
               <Accordion type='single' collapsible>
                 <AccordionItem value='recent-events' className='border-none'>
-                  <AccordionTrigger className='text-lg font-bold text-gray-900 hover:no-underline'>
+                  <AccordionTrigger className='text-lg font-bold text-foreground hover:no-underline'>
                     最近更新されたイベント
                   </AccordionTrigger>
                   <AccordionContent>
@@ -55,7 +55,7 @@ const EventDetailContent = () => {
           </div>
 
           {/* Separator */}
-          <Separator orientation='vertical' className='hidden md:block' />
+          <Separator orientation='vertical' className='hidden md:block bg-separator' />
 
           {/* サイドバー（デスクトップのみ） */}
           <div className='hidden md:block pt-4'>

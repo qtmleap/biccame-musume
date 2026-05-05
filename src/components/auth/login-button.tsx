@@ -36,7 +36,7 @@ export const LoginButton = ({ variant = 'default', onClose }: LoginButtonProps) 
           <button
             type='button'
             onClick={handleLogin}
-            className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted w-full'
+            className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200 text-muted-foreground hover:text-foreground hover:bg-muted w-full'
           >
             <LogIn className='w-6 h-6' />
             ログイン
@@ -51,7 +51,7 @@ export const LoginButton = ({ variant = 'default', onClose }: LoginButtonProps) 
       <Link
         to='/me'
         onClick={onClose}
-        className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
+        className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
       >
         <User className='w-6 h-6' />
         マイページ
@@ -67,7 +67,7 @@ export const LoginButton = ({ variant = 'default', onClose }: LoginButtonProps) 
         <button
           type='button'
           onClick={handleLogin}
-          className='text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
+          className='text-sm font-medium transition-colors text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
         >
           ログイン
         </button>
@@ -80,7 +80,7 @@ export const LoginButton = ({ variant = 'default', onClose }: LoginButtonProps) 
   return (
     <Link
       to='/me'
-      className='text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
+      className='text-sm font-medium transition-colors text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
     >
       マイページ
     </Link>

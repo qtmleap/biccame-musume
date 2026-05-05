@@ -21,7 +21,7 @@ export const StoreInfoSection = ({ character }: StoreInfoSectionProps) => {
       transition={{ duration: DURATION.normal, delay: 0.4 }}
       className='space-y-3'
     >
-      <h2 className='text-xl font-bold text-gray-900'>店舗情報</h2>
+      <h2 className='text-xl font-bold text-foreground'>店舗情報</h2>
       <div className='space-y-3'>
         <StoreName name={character.store.name} storeId={character.store.store_id} />
         <StoreAddress address={character.store.address} postalCode={character.postal_code} />

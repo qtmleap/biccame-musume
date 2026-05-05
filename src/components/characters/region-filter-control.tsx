@@ -2,7 +2,6 @@ import { useAtom } from 'jotai'
 import { regionFilterAtom } from '@/atoms/filter-atom'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 import { FILTER_LABELS, REGION_LABELS } from '@/locales/app.content'
 import { RegionSchema } from '@/schemas/store.dto'
 
@@ -25,15 +24,12 @@ export const RegionFilterControl = () => {
         return (
           <Button
             key={option.value}
-            variant='outline'
+            variant={isSelected ? 'default' : 'outline'}
             size='sm'
             onClick={() => setRegion(option.value)}
-            className={cn(
-              'w-full text-sm h-8',
-              isSelected
-                ? 'bg-green-500/50 text-white border-green-500/50 hover:bg-green-500/60 hover:text-white'
-                : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 hover:text-gray-700'
-            )}
+            className={
+              isSelected ? 'w-full text-sm bg-brand hover:bg-brand/90 text-brand-foreground' : 'w-full text-sm'
+            }
           >
             {option.label}
           </Button>

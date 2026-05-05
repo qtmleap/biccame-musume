@@ -80,7 +80,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
       form.reset({ characterId: next?.id ?? '', body: '' })
       setTurnstileToken(null)
       turnstileRef.current?.reset()
-      queryClient.invalidateQueries({ queryKey: ['events', eventUuid, 'comments'] })
+      queryClient.invalidateQueries({ queryKey: ['events', eventUuid] })
       toast.success('コメントを投稿しました')
       onSuccess?.()
     },
@@ -110,7 +110,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               title='タップで別のキャラに変える'
               className='shrink-0 rounded-full hover:opacity-80 transition-opacity'
             >
-              <Avatar className='size-14 overflow-hidden border-2 border-[#e50012]'>
+              <Avatar className='size-14 border border-card-border'>
                 <AvatarImage
                   src={character?.character?.image_url}
                   alt=''
@@ -128,7 +128,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
                   <FormControl>
                     <Input
                       type='text'
-                      placeholder='このイベントについてコメントを書こう'
+                      placeholder='感想や気になることを書いてみよう'
                       maxLength={MAX_BODY_LENGTH}
                       autoComplete='off'
                       className='border-0 shadow-none focus-visible:ring-0 px-0 text-base md:text-base h-14 placeholder:text-muted-foreground'
@@ -153,14 +153,14 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
             投稿後の編集・削除はできません。アイコンをタップで別のキャラに変えられます。
           </p>
 
-          <div className='flex items-center justify-end gap-3 pt-3 border-t border-border'>
+          <div className='flex items-center justify-end gap-3 pt-3'>
             {bodyValue.length > 0 && (
               <span
                 className={`text-xs tabular-nums ${
                   bodyValue.length >= MAX_BODY_LENGTH
-                    ? 'text-[#e50012] font-semibold'
+                    ? 'text-brand font-semibold'
                     : bodyValue.length >= MAX_BODY_LENGTH - 5
-                      ? 'text-amber-600'
+                      ? 'text-warning'
                       : 'text-muted-foreground'
                 }`}
               >
@@ -172,7 +172,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               disabled={!canSubmit}
               aria-label='コメントを投稿する'
               size='sm'
-              className='bg-[#e50012] hover:bg-[#c5000f] text-white rounded-full px-6 font-bold'
+              className='bg-brand hover:bg-brand/90 text-brand-foreground rounded-full px-6 font-bold'
             >
               {isPending ? '送信中...' : '投稿'}
             </Button>

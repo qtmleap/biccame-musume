@@ -5,15 +5,15 @@ import { ArrowLeft, Award, BarChart2, Copy, Heart, Share, X } from 'lucide-react
 import { AnimatePresence, motion } from 'motion/react'
 import { Suspense, useState } from 'react'
 import { toast } from 'sonner'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useAuth } from '@/hooks/use-auth'
 import { usePageViews } from '@/hooks/use-page-views'
 import { useUserActivity } from '@/hooks/use-user-activity'
+import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
-import { CATEGORY_STYLE, STATUS_BADGE_DETAIL } from '@/locales/component'
+import { CATEGORY_BADGE, STATUS_BADGE_DETAIL } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 
 type EventDetailHeaderProps = {
@@ -36,18 +36,18 @@ const HEART_PARTICLES = [0, 60, 120, 180, 240, 300] as const
  * 花火アニメーション用のパーティクル角度とカラー
  */
 const FIREWORK_PARTICLES = [
-  { angle: 0, color: 'bg-amber-400' },
-  { angle: 30, color: 'bg-orange-400' },
-  { angle: 60, color: 'bg-yellow-400' },
-  { angle: 90, color: 'bg-amber-400' },
-  { angle: 120, color: 'bg-orange-400' },
-  { angle: 150, color: 'bg-yellow-400' },
-  { angle: 180, color: 'bg-amber-400' },
-  { angle: 210, color: 'bg-orange-400' },
-  { angle: 240, color: 'bg-yellow-400' },
-  { angle: 270, color: 'bg-amber-400' },
-  { angle: 300, color: 'bg-orange-400' },
-  { angle: 330, color: 'bg-yellow-400' }
+  { angle: 0, color: 'bg-action-award' },
+  { angle: 30, color: 'bg-warning' },
+  { angle: 60, color: 'bg-rank-gold' },
+  { angle: 90, color: 'bg-action-award' },
+  { angle: 120, color: 'bg-warning' },
+  { angle: 150, color: 'bg-rank-gold' },
+  { angle: 180, color: 'bg-action-award' },
+  { angle: 210, color: 'bg-warning' },
+  { angle: 240, color: 'bg-rank-gold' },
+  { angle: 270, color: 'bg-action-award' },
+  { angle: 300, color: 'bg-warning' },
+  { angle: 330, color: 'bg-rank-gold' }
 ] as const
 
 /**
@@ -144,14 +144,14 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
             isLoggedIn ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
-            interested ? 'text-pink-500' : 'text-gray-400',
-            isLoggedIn && !interested && 'hover:text-pink-400'
+            interested ? 'text-action-interest' : 'text-foreground/70',
+            isLoggedIn && !interested && 'hover:text-action-interest/80'
           )}
         >
           <Heart
             className={cn(
               'h-5 w-5 transition-all',
-              interested && 'fill-pink-500',
+              interested && 'fill-action-interest',
               isLoggedIn && !interested && 'group-hover:scale-110'
             )}
           />
@@ -177,14 +177,14 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           className={cn(
             'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
             isLoggedIn && !isUpcoming ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
-            completed ? 'text-amber-500' : 'text-gray-400',
-            isLoggedIn && !isUpcoming && !completed && 'hover:text-amber-400'
+            completed ? 'text-action-award' : 'text-foreground/70',
+            isLoggedIn && !isUpcoming && !completed && 'hover:text-action-award/80'
           )}
         >
           <Award
             className={cn(
               'h-5 w-5 transition-all',
-              completed && 'fill-amber-200',
+              completed && 'fill-action-award-soft',
               isLoggedIn && !isUpcoming && !completed && 'group-hover:scale-110'
             )}
           />
@@ -192,7 +192,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
         </button>
 
         {/* 閲覧数 */}
-        <div className='flex items-center gap-1.5 text-sm text-gray-400 min-w-16'>
+        <div className='flex items-center gap-1.5 text-sm text-foreground/70 min-w-16'>
           <BarChart2 className='h-5 w-5' />
           <span className='tabular-nums'>{pageViews.total}</span>
         </div>
@@ -203,7 +203,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
         <button
           type='button'
           onClick={handleShare}
-          className='flex items-center gap-1.5 text-sm text-gray-400 hover:text-blue-500 transition-colors group'
+          className='flex items-center gap-1.5 text-sm text-foreground/70 hover:text-brand transition-colors group'
         >
           <Share className='h-5 w-5 transition-all group-hover:scale-110' />
         </button>
@@ -212,7 +212,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
           <PopoverTrigger asChild>
             <button
               type='button'
-              className='flex items-center gap-1.5 text-sm text-gray-400 hover:text-blue-500 transition-colors group'
+              className='flex items-center gap-1.5 text-sm text-foreground/70 hover:text-brand transition-colors group'
             >
               <Share className='h-5 w-5 transition-all group-hover:scale-110' />
             </button>
@@ -254,16 +254,16 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.1, 0] }}
-              transition={{ duration: 0.4 }}
-              className='absolute inset-0 bg-pink-300'
+              transition={{ duration: DURATION.normal }}
+              className='absolute inset-0 bg-action-interest-soft'
             />
             {/* 中央のハート */}
             <motion.div
               initial={{ scale: 0, rotate: -15 }}
               animate={{ scale: [0, 1.2, 1], rotate: [-15, 10, 0] }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
+              transition={{ duration: DURATION.normal, ease: 'easeOut' }}
             >
-              <Heart className='h-24 w-24 fill-pink-500 text-pink-500 drop-shadow-lg' />
+              <Heart className='h-24 w-24 fill-action-interest text-action-interest drop-shadow-lg' />
             </motion.div>
             {/* 放射状のハート */}
             {HEART_PARTICLES.map((angle) => (
@@ -276,10 +276,10 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
                   x: Math.cos((angle * Math.PI) / 180) * 120,
                   y: Math.sin((angle * Math.PI) / 180) * 120
                 }}
-                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
+                transition={{ duration: DURATION.slow, ease: 'easeOut', delay: 0.1 }}
                 className='absolute pointer-events-none'
               >
-                <Heart className='h-8 w-8 fill-pink-400 text-pink-400' />
+                <Heart className='h-8 w-8 fill-action-interest-soft text-action-interest-soft' />
               </motion.div>
             ))}
           </motion.div>
@@ -298,16 +298,16 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.15, 0] }}
-              transition={{ duration: 0.5 }}
-              className='absolute inset-0 bg-amber-300'
+              transition={{ duration: DURATION.normal }}
+              className='absolute inset-0 bg-action-award-soft'
             />
             {/* 中央のアワード */}
             <motion.div
               initial={{ scale: 0, y: 20 }}
               animate={{ scale: [0, 1.3, 1], y: [20, -10, 0] }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
+              transition={{ duration: DURATION.normal, ease: 'easeOut' }}
             >
-              <Award className='h-28 w-28 text-amber-500 fill-amber-200 drop-shadow-lg' />
+              <Award className='h-28 w-28 text-action-award fill-action-award-soft drop-shadow-lg' />
             </motion.div>
             {/* 花火パーティクル */}
             {FIREWORK_PARTICLES.map((particle) => (
@@ -320,7 +320,7 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
                   x: Math.cos((particle.angle * Math.PI) / 180) * 150,
                   y: Math.sin((particle.angle * Math.PI) / 180) * 150
                 }}
-                transition={{ duration: 0.7, ease: 'easeOut', delay: 0.05 }}
+                transition={{ duration: DURATION.slow, ease: 'easeOut', delay: 0.05 }}
                 className='absolute pointer-events-none'
               >
                 <div className={cn('w-4 h-4 rounded-full', particle.color)} />
@@ -337,10 +337,10 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
                   x: Math.cos(((angle + 30) * Math.PI) / 180) * 100,
                   y: Math.sin(((angle + 30) * Math.PI) / 180) * 100
                 }}
-                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
+                transition={{ duration: DURATION.slow, ease: 'easeOut', delay: 0.15 }}
                 className='absolute pointer-events-none'
               >
-                <div className='w-2 h-2 bg-yellow-300 rotate-45' />
+                <div className='w-2 h-2 bg-rank-gold rotate-45' />
               </motion.div>
             ))}
           </motion.div>
@@ -354,7 +354,6 @@ const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
  * イベント詳細ページのヘッダーコンポーネント
  */
 export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetailHeaderProps) => {
-  const categoryStyle = CATEGORY_STYLE[event.category]
   const queryClient = useQueryClient()
 
   const handleStatsUpdate = () => {
@@ -366,7 +365,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
       {/* 戻るボタン */}
       {onBack && (
         <div className='pb-2'>
-          <Button variant='ghost' size='sm' className='text-gray-600 hover:text-gray-900 -ml-2' onClick={onBack}>
+          <Button variant='ghost' size='sm' className='-ml-2 border border-transparent' onClick={onBack}>
             <ArrowLeft className='h-4 w-4 mr-1' />
             戻る
           </Button>
@@ -378,19 +377,20 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
         key={`header-${event.uuid}`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
+        transition={{ duration: DURATION.normal, delay: 0.1 }}
         className='mb-6'
       >
         <div className='flex items-center justify-between gap-2 mb-2'>
           <div className='flex items-center gap-2'>
-            <Badge className={`${categoryStyle} border`}>{EVENT_CATEGORY_LABELS[event.category]}</Badge>
+            {CATEGORY_BADGE[event.category](EVENT_CATEGORY_LABELS[event.category])}
             {STATUS_BADGE_DETAIL[event.status]()}
           </div>
           {isAuthenticated && (
             <Button
               asChild
               size='sm'
-              className='rounded-full px-2 py-0.5 h-auto text-xs font-medium bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100'
+              variant='outline'
+              className='h-auto px-2.5 py-0.5 text-xs rounded-full border-brand/50 text-brand hover:bg-brand/10 hover:text-brand'
             >
               <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
                 編集
@@ -398,7 +398,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
             </Button>
           )}
         </div>
-        <h1 className='text-2xl font-bold text-gray-900'>{event.title}</h1>
+        <h1 className='text-2xl font-bold text-foreground'>{event.title}</h1>
         <Suspense fallback={null}>
           <EventStatsBadges event={event} onStatsUpdate={handleStatsUpdate} />
         </Suspense>

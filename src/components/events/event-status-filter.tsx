@@ -30,9 +30,9 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
             id='status-upcoming'
             checked={statusFilter.upcoming}
             onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, upcoming: checked === true })}
-            className='border-gray-400 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600'
+            className='border-card data-[state=checked]:bg-status-upcoming-foreground data-[state=checked]:border-status-upcoming-foreground'
           />
-          <Label htmlFor='status-upcoming' className='text-gray-700 cursor-pointer'>
+          <Label htmlFor='status-upcoming' className='text-muted-foreground cursor-pointer'>
             {EVENT_STATUS_LABELS.upcoming}
           </Label>
         </div>
@@ -41,9 +41,9 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
             id='status-ongoing'
             checked={statusFilter.ongoing}
             onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, ongoing: checked === true })}
-            className='border-gray-400 data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600'
+            className='border-card data-[state=checked]:bg-success data-[state=checked]:border-success'
           />
-          <Label htmlFor='status-ongoing' className='text-gray-700 cursor-pointer'>
+          <Label htmlFor='status-ongoing' className='text-muted-foreground cursor-pointer'>
             {EVENT_STATUS_LABELS.ongoing}
           </Label>
         </div>
@@ -52,9 +52,9 @@ export const EventStatusFilter = ({ statusFilterAtom }: EventStatusFilterProps) 
             id='status-ended'
             checked={statusFilter.ended}
             onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, ended: checked === true })}
-            className='border-gray-400 data-[state=checked]:bg-gray-600 data-[state=checked]:border-gray-600'
+            className='border-card data-[state=checked]:bg-muted-foreground data-[state=checked]:border-muted-foreground'
           />
-          <Label htmlFor='status-ended' className='text-gray-700 cursor-pointer'>
+          <Label htmlFor='status-ended' className='text-muted-foreground cursor-pointer'>
             {EVENT_STATUS_LABELS.ended}
           </Label>
         </div>

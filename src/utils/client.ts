@@ -12,6 +12,7 @@ import { AuthResponseSchema, CurrentUserResponseSchema } from '@/schemas/auth.dt
 import { CreateCommentRequestSchema, ListCommentsResponseSchema } from '@/schemas/comment.dto'
 import {
   CheckUrlResponseSchema,
+  EventDetailSchema,
   EventRequestSchema,
   EventSchema,
   EventStatsRequestSchema,
@@ -84,7 +85,7 @@ const api = makeApi([
     path: '/api/events/:id',
     alias: 'getEvent',
     description: '単一イベントを取得',
-    response: EventSchema
+    response: EventDetailSchema
   },
   {
     method: 'post',
@@ -98,7 +99,7 @@ const api = makeApi([
         schema: EventRequestSchema
       }
     ],
-    response: EventSchema
+    response: EventDetailSchema
   },
   {
     method: 'put',
@@ -112,7 +113,7 @@ const api = makeApi([
         schema: EventRequestSchema.partial()
       }
     ],
-    response: EventSchema
+    response: EventDetailSchema
   },
   {
     method: 'delete',
@@ -337,6 +338,25 @@ const api = makeApi([
       }
     ],
     response: z.object({ id: z.string() })
+  },
+  {
+    method: 'delete',
+    path: '/api/events/:uuid/comments/:commentId',
+    alias: 'deleteEventComment',
+    description: 'イベントのコメントを削除（管理者）',
+    parameters: [
+      {
+        name: 'uuid',
+        type: 'Path',
+        schema: z.string().nonempty()
+      },
+      {
+        name: 'commentId',
+        type: 'Path',
+        schema: z.string().nonempty()
+      }
+    ],
+    response: z.object({ message: z.string() })
   }
 ])
 

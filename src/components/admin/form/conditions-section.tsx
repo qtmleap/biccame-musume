@@ -1,4 +1,4 @@
-import { Coins, Gift, Users, X } from 'lucide-react'
+import { Coins, Dice5, Gift, Megaphone, Users, X } from 'lucide-react'
 import type { UseFieldArrayAppend, UseFieldArrayRemove, UseFormRegister } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/ui/button'
@@ -47,7 +47,7 @@ export function ConditionsSection({ fields, register, remove, append, error }: P
   }
 
   const getButtonClass = (type: ConditionType) =>
-    hasConditionType(type) ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''
+    hasConditionType(type) ? 'border-destructive bg-destructive/10 text-destructive hover:bg-destructive/20' : ''
 
   return (
     <div>
@@ -85,7 +85,7 @@ export function ConditionsSection({ fields, register, remove, append, error }: P
           disabled={hasDistributionCondition() && !hasConditionType('lottery')}
           className={getButtonClass('lottery')}
         >
-          <Users className='mr-1.5 size-4' />
+          <Dice5 className='mr-1.5 size-4' />
           抽選
         </Button>
         <Button
@@ -96,15 +96,15 @@ export function ConditionsSection({ fields, register, remove, append, error }: P
           disabled={hasDistributionCondition() && !hasConditionType('everyone')}
           className={getButtonClass('everyone')}
         >
-          <Users className='mr-1.5 size-4' />
+          <Megaphone className='mr-1.5 size-4' />
           全員配布
         </Button>
       </div>
       {error && <p className='mb-2 text-xs text-destructive'>{error}</p>}
 
-      <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-x-4'>
+      <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-x-4 sm:divide-x sm:divide-card-border'>
         {fields.map((field, index) => (
-          <div key={field.id} className={index % 2 === 0 && fields.length > 1 ? 'sm:border-r sm:pr-4' : ''}>
+          <div key={field.id} className={index % 2 === 0 ? 'sm:pr-4' : 'sm:pl-4'}>
             <div className='flex items-center gap-2'>
               <div className='flex-1'>
                 {field.type === 'purchase' && (
@@ -134,7 +134,7 @@ export function ConditionsSection({ fields, register, remove, append, error }: P
                 )}
                 {field.type === 'lottery' && (
                   <div className='flex items-center gap-2'>
-                    <Users className='size-4 shrink-0 text-muted-foreground' />
+                    <Dice5 className='size-4 shrink-0 text-muted-foreground' />
                     <Input
                       type='number'
                       min='1'
@@ -146,12 +146,12 @@ export function ConditionsSection({ fields, register, remove, append, error }: P
                 )}
                 {field.type === 'everyone' && (
                   <div className='flex items-center gap-2'>
-                    <Users className='size-4 shrink-0 text-muted-foreground' />
+                    <Megaphone className='size-4 shrink-0 text-muted-foreground' />
                     <span className='text-sm text-muted-foreground'>全員配布</span>
                   </div>
                 )}
               </div>
-              <Button type='button' size='icon' variant='ghost' onClick={() => remove(index)} className='shrink-0'>
+              <Button type='button' size='icon' variant='ghost' onClick={() => remove(index)}>
                 <X className='size-4' />
               </Button>
             </div>

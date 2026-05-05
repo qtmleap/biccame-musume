@@ -3,6 +3,7 @@ import { MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useCharacters } from '@/hooks/use-characters'
+import { DURATION } from '@/lib/motion'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
 
@@ -58,27 +59,25 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
   }
 
   return (
-    <div className='bg-pink-50 rounded-lg'>
-      <h2 className='text-lg font-bold text-gray-900 mb-4'>近くのビッカメ娘</h2>
+    <div className='bg-page-bg rounded-lg'>
+      <h2 className='text-lg font-bold text-foreground mb-4'>近くのビッカメ娘</h2>
       <div className='flex flex-col gap-4'>
         {nearbyCharacters.map((char, index) => (
           <motion.div
             key={`${currentCharacter.id}-${char.id}`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
+            transition={{ duration: DURATION.normal, delay: index * 0.05 }}
             className='flex items-start gap-3'
           >
             <Link to='/characters/$id' params={{ id: char.id }}>
-              <Avatar className='h-14 w-14 border-2 border-gray-200'>
+              <Avatar className='h-14 w-14 border border-card-border'>
                 <AvatarImage
                   src={char.character?.image_url}
                   alt={char.character?.name || ''}
                   className='object-cover scale-125'
                 />
-                <AvatarFallback className='text-sm bg-pink-100 text-pink-700'>
-                  {char.character?.name?.[0] || '?'}
-                </AvatarFallback>
+                <AvatarFallback className='text-sm'>{char.character?.name?.[0] || '?'}</AvatarFallback>
               </Avatar>
             </Link>
             <div className='min-w-0 flex-1'>
@@ -86,14 +85,14 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
                 <Link
                   to='/characters/$id'
                   params={{ id: char.id }}
-                  className='font-bold text-base text-gray-900 hover:underline truncate'
+                  className='font-bold text-base text-foreground hover:underline truncate'
                 >
                   {getDisplayName(char.character?.name || '')}
                 </Link>
               </div>
               <div className='flex items-center gap-1'>
-                <MapPin className='h-4 w-4 text-gray-400' />
-                <span className='text-sm text-gray-500'>{char.distance.toFixed(1)}km</span>
+                <MapPin className='h-4 w-4 text-muted-foreground/50' />
+                <span className='text-sm text-muted-foreground'>{char.distance.toFixed(1)}km</span>
               </div>
             </div>
           </motion.div>

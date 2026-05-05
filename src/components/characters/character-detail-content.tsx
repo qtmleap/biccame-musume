@@ -18,7 +18,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
   const router = useRouter()
 
   return (
-    <div className='min-h-screen bg-pink-50'>
+    <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div className='md:grid md:grid-cols-[1fr_auto_320px] md:gap-6'>
           <div className='max-w-2xl'>
@@ -33,7 +33,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
               <Button
                 variant='ghost'
                 size='sm'
-                className='text-gray-600 hover:text-gray-900 -ml-2'
+                className='text-muted-foreground hover:text-foreground -ml-2 border border-transparent'
                 onClick={() => router.history.back()}
               >
                 <ArrowLeft className='h-4 w-4 mr-1' />
@@ -48,7 +48,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
             <StoreInfoSection character={character} />
           </div>
 
-          <Separator orientation='vertical' className='hidden md:block' />
+          <Separator orientation='vertical' className='hidden md:block bg-separator' />
 
           <div className='hidden md:block pt-4'>
             <div className='sticky top-4'>

@@ -5,6 +5,7 @@ import { motion } from 'motion/react'
 import { useMemo } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { useEvents } from '@/hooks/use-events'
+import { DURATION } from '@/lib/motion'
 import { EVENT_LABELS } from '@/locales/app.content'
 import { STATUS_BADGE_SM } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
@@ -30,17 +31,17 @@ const OngoingEventItem = ({ event, isLast }: OngoingEventItemProps) => {
         params={{ uuid: event.uuid }}
         className='flex items-start gap-3 hover:opacity-70 transition-opacity'
       >
-        <Calendar className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
+        <Calendar className='h-5 w-5 text-muted-foreground/50 shrink-0 mt-0.5' />
         <div className='min-w-0 flex-1'>
-          <p className='text-sm text-gray-900'>{event.title}</p>
-          <p className='text-sm text-gray-500'>
+          <p className='text-sm text-foreground'>{event.title}</p>
+          <p className='text-sm text-muted-foreground'>
             {dayjs(event.startDate).format('YYYY/MM/DD')}
             {event.endDate ? `〜${dayjs(event.endDate).format('YYYY/MM/DD')}` : EVENT_LABELS.untilEnd}
           </p>
         </div>
         {STATUS_BADGE_SM[event.status]()}
       </Link>
-      {!isLast && <Separator className='my-3' />}
+      {!isLast && <Separator className='my-3 bg-separator' />}
     </>
   )
 }
@@ -73,10 +74,10 @@ export const CharacterOngoingEvents = ({ storeKey }: CharacterOngoingEventsProps
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, delay: 0.3 }}
+      transition={{ duration: DURATION.normal, delay: 0.3 }}
       className='space-y-3 mb-6'
     >
-      <h2 className='text-xl font-bold text-gray-900'>直近のイベント</h2>
+      <h2 className='text-xl font-bold text-foreground'>直近のイベント</h2>
       <div className='space-y-3'>
         {upcomingEvents.map((event, index) => (
           <OngoingEventItem key={event.uuid} event={event} isLast={index === upcomingEvents.length - 1} />
@@ -86,7 +87,7 @@ export const CharacterOngoingEvents = ({ storeKey }: CharacterOngoingEventsProps
         <Link
           to='/events'
           search={{ store: storeKey }}
-          className='inline-flex items-center gap-1 text-sm text-pink-600 hover:underline'
+          className='inline-flex items-center gap-1 text-sm text-brand hover:underline'
         >
           もっと見る
           <ChevronRight className='h-4 w-4' />

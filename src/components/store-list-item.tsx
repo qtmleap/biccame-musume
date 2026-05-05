@@ -19,20 +19,20 @@ export const StoreListItem = ({ character, distance }: StoreListItemProps) => {
       {/* アバター画像 */}
       <Avatar className='w-12 h-12'>
         <AvatarImage src={imageUrl} alt={character.character?.name || ''} className='object-cover mix-blend-multiply' />
-        <AvatarFallback className='bg-gray-200'>
-          <MapPin className='w-4 h-4 text-gray-500' />
+        <AvatarFallback className='bg-muted'>
+          <MapPin className='w-4 h-4 text-muted-foreground' />
         </AvatarFallback>
       </Avatar>
 
       {/* 店舗情報 */}
       <div className='flex-1 min-w-0'>
-        <h3 className='font-semibold text-sm text-gray-900 truncate'>
+        <h3 className='font-semibold text-sm text-foreground truncate'>
           {getDisplayName(character.character?.name || '')}
         </h3>
         {distance !== undefined && (
           <div className='flex items-center gap-1 mt-0.5'>
-            <MapPin className='w-3 h-3 text-gray-600' />
-            <span className='text-xs text-gray-600'>
+            <MapPin className='w-3 h-3 text-muted-foreground' />
+            <span className='text-xs text-muted-foreground'>
               {distance < 1 ? `${Math.round(distance * 1000)}m` : `${distance.toFixed(1)}km`}
             </span>
           </div>

@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
+import { DURATION } from '@/lib/motion'
 import {
   DATE_LABELS,
   EVENT_LABELS,
@@ -47,7 +48,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{
-        duration: 0.4,
+        duration: DURATION.normal,
         delay: index * 0.1,
         ease: 'easeOut'
       }}
@@ -57,7 +58,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
       <Link
         to='/events/$uuid'
         params={{ uuid: event.uuid }}
-        className={`flex flex-col gap-3 bg-card rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer h-full ${
+        className={`flex flex-col gap-3 bg-card rounded-lg p-3 shadow-sm border-card transition-colors cursor-pointer h-full ${
           status === 'ended' ? 'opacity-60' : ''
         }`}
       >
@@ -66,28 +67,28 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
             <div className={`shrink-0 p-2 rounded-lg ${CATEGORY_WITH_ICON[event.category ?? 'other'].className}`}>
               {CATEGORY_WITH_ICON[event.category ?? 'other'].icon}
             </div>
-            <p className='text-sm font-medium text-gray-800 line-clamp-2'>{event.title}</p>
+            <p className='text-sm font-medium text-foreground line-clamp-2'>{event.title}</p>
           </div>
           <div
             className={`shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
               status === 'ended'
-                ? 'bg-gray-400 text-white'
+                ? 'bg-status-ended text-status-ended-foreground'
                 : status === 'last_day'
-                  ? 'bg-orange-500 text-white'
+                  ? 'bg-status-last-day text-status-last-day-foreground'
                   : status === 'ongoing'
-                    ? 'bg-[#e50012] text-white'
+                    ? 'bg-brand text-brand-foreground'
                     : daysUntil === 0
-                      ? 'bg-[#e50012] text-white'
+                      ? 'bg-brand text-brand-foreground'
                       : daysUntil <= 7
-                        ? 'bg-orange-100 text-orange-600'
-                        : 'bg-gray-100 text-gray-600'
+                        ? 'bg-status-interested text-status-interested-foreground'
+                        : 'bg-status-ended text-status-ended-foreground'
             }`}
           >
             {getDaysLabel(daysUntil, status)}
           </div>
         </div>
         <div className='flex-1 min-w-0'>
-          <div className='flex flex-col gap-1 text-xs text-gray-500'>
+          <div className='flex flex-col gap-1 text-xs text-muted-foreground'>
             <span className='flex items-center gap-1'>
               <Calendar className='size-3' />
               {startDate.format('M月D日')}
@@ -115,7 +116,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
               {event.conditions.map((condition) => {
                 if (condition.type === 'everyone') return null
                 return (
-                  <Badge key={`${event.uuid}-${condition.type}`} variant='secondary' className='text-xs'>
+                  <Badge key={`${event.uuid}-${condition.type}`} variant='secondary'>
                     {condition.type === 'purchase' && `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
                     {condition.type === 'first_come' && EVENT_LABELS.firstCome}
                     {condition.type === 'lottery' && EVENT_LABELS.lottery}
