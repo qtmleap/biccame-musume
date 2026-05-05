@@ -1,5 +1,7 @@
 import { Link } from '@tanstack/react-router'
+import { Heart } from 'lucide-react'
 import { motion } from 'motion/react'
+import { BulkVoteButton } from '@/components/characters/bulk-vote-button'
 import { DURATION } from '@/lib/motion'
 import type { StoreData } from '@/schemas/store.dto'
 
@@ -12,62 +14,28 @@ type RankingListProps = {
 }
 
 /**
- * リボン装飾コンポーネント（サンリオ風）
- * シンプルな長方形+ボーダー
+ * 投票案内（票がまだ0件のときの空状態）
  */
-const RibbonBadge = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className='inline-flex items-center justify-center bg-brand border-2 border-brand px-4 py-0.5 min-w-24'>
-      {children}
-    </div>
-  )
-}
-
-/**
- * 投票案内コンポーネント
- */
-type VoteInfoProps = {
-  showSubMessage?: boolean
-  compact?: boolean
-}
-
-const VoteInfo = ({ showSubMessage = false, compact = false }: VoteInfoProps) => {
+const EmptyVoteInfo = () => {
   return (
     <motion.div
-      className={compact ? 'text-center py-6' : 'text-center py-16'}
-      initial={{ opacity: 0, y: compact ? 20 : 30 }}
+      className='text-center py-16'
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: compact ? DURATION.normal : DURATION.slow, ease: 'easeOut' }}
+      transition={{ duration: DURATION.slow, ease: 'easeOut' }}
     >
       <motion.p
-        className={
-          compact ? 'text-muted-foreground text-base mb-4 font-bold' : 'text-muted-foreground text-lg mb-4 font-bold'
-        }
+        className='text-muted-foreground text-lg mb-6'
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: DURATION.normal, delay: compact ? 0.1 : 0.2 }}
+        transition={{ duration: DURATION.normal, delay: 0.2 }}
       >
-        各ビッカメ娘を1日に1回応援できます
+        まだ票が入ってないよ
       </motion.p>
-      {showSubMessage && (
-        <motion.p
-          className='text-muted-foreground text-base mb-6'
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: DURATION.normal, delay: 0.3 }}
-        >
-          現在投票受付中です
-        </motion.p>
-      )}
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{
-          duration: compact ? DURATION.normal : DURATION.normal,
-          delay: compact ? 0.2 : 0.4,
-          type: 'spring',
-          stiffness: 200
-        }}
+        transition={{ duration: DURATION.normal, delay: 0.4, type: 'spring', stiffness: 200 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -99,7 +67,7 @@ const calculateRank = (characters: CharacterWithVotes[], index: number): number 
 }
 
 /**
- * ランキングカード（共通コンポーネント）
+ * ランキングカード
  */
 const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes; rank: number; index: number }) => {
   const getRankStyle = (rank: number) => {
@@ -118,11 +86,9 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
       transition={{ duration: DURATION.normal, delay: index * 0.05 }}
     >
       <div className='flex flex-col'>
-        {/* 順位（左寄せ） */}
         <div className={`${style.badge} px-3 py-0.5 rounded-full font-bold text-sm mb-1 self-start`}>{rank}位</div>
 
         <Link to='/characters/$id' params={{ id: character.id }} className='block'>
-          {/* キャラクター名（中央揃え、ポップなフォント、縁取り） */}
           <h3
             className='text-foreground truncate max-w-full text-lg text-center mb-2'
             style={{
@@ -135,7 +101,6 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
             {character.character?.name}
           </h3>
 
-          {/* 画像（白色透過） */}
           <div className='relative bg-page-bg h-28 w-full flex items-center justify-center'>
             <img
               src={character.character?.image_url}
@@ -146,20 +111,17 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
           </div>
         </Link>
 
-        {/* 票数（リボン装飾） */}
+        {/* 票数バッジ（ハート + 数字のピル） */}
         <div className='mt-3 flex justify-center'>
-          <RibbonBadge>
+          <div className='inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-vote-count text-vote-count-foreground border border-card-border'>
+            <Heart className='h-3.5 w-3.5 text-vote-count-icon fill-current' />
             <p
-              className='text-white tabular-nums text-base text-center whitespace-nowrap'
-              style={{
-                fontFamily: '"Zen Maru Gothic", sans-serif',
-                fontWeight: 700
-              }}
+              className='tabular-nums text-sm whitespace-nowrap'
+              style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 700 }}
             >
               {character.voteCount.toLocaleString()}
-              <span className='text-xs ml-0.5'>票</span>
             </p>
-          </RibbonBadge>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -170,26 +132,29 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
  * 投票ランキングリスト
  */
 export const RankingList = ({ characters }: RankingListProps) => {
-  // ビッカメ娘かつ0票より多いキャラクターのみ表示
-  const votedCharacters = characters.filter((char) => char.character?.is_biccame_musume && char.voteCount > 0)
+  // ビッカメ娘のみ抽出（全員投票ボタン用にも使う）
+  const biccameCharacters = characters.filter((c) => c.character?.is_biccame_musume)
+  const votedCharacters = biccameCharacters.filter((c) => c.voteCount > 0)
+  const allBiccameIds = biccameCharacters.map((c) => c.id)
 
   return (
     <div className='space-y-6'>
-      {votedCharacters.length === 0 ? (
-        <VoteInfo showSubMessage={true} compact={false} />
-      ) : (
-        <>
-          {/* 投票案内とキャラクター一覧へのリンク */}
-          <VoteInfo showSubMessage={false} compact={true} />
+      {/* 全員投票ボタン（総選挙の中心アクション） */}
+      {allBiccameIds.length > 0 && (
+        <div className='flex justify-center py-2'>
+          <BulkVoteButton characterIds={allBiccameIds} label='ビッカメ娘全員に投票' />
+        </div>
+      )}
 
-          {/* ランキング(モバイル2列、タブレット3列、デスクトップ4列、ワイド5列、超ワイド6列) */}
-          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4'>
-            {votedCharacters.map((character, index) => {
-              const rank = calculateRank(votedCharacters, index)
-              return <RankingCard key={character.id} character={character} rank={rank} index={index} />
-            })}
-          </div>
-        </>
+      {votedCharacters.length === 0 ? (
+        <EmptyVoteInfo />
+      ) : (
+        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4'>
+          {votedCharacters.map((character, index) => {
+            const rank = calculateRank(votedCharacters, index)
+            return <RankingCard key={character.id} character={character} rank={rank} index={index} />
+          })}
+        </div>
       )}
     </div>
   )
