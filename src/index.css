@@ -40,4 +40,24 @@ body {
   [data-slot="select-trigger"]:hover {
     background-color: var(--button-surface-hover);
   }
+
+  /* date input の年月日プレースホルダがブラウザ既定で半透明になり読み辛いため、
+     テーマのフォアグラウンド色で塗り直す。値が入っているときは通常色、
+     空のフィールドは muted-foreground で「未選択」とわかるトーンに。 */
+  input[type="date"]::-webkit-datetime-edit,
+  input[type="date"]::-webkit-datetime-edit-text,
+  input[type="date"]::-webkit-datetime-edit-year-field,
+  input[type="date"]::-webkit-datetime-edit-month-field,
+  input[type="date"]::-webkit-datetime-edit-day-field {
+    color: var(--foreground);
+    opacity: 1;
+  }
+  input[type="date"]:required:invalid::-webkit-datetime-edit-year-field,
+  input[type="date"]:required:invalid::-webkit-datetime-edit-month-field,
+  input[type="date"]:required:invalid::-webkit-datetime-edit-day-field,
+  input[type="date"]:not(:focus):invalid::-webkit-datetime-edit-year-field,
+  input[type="date"]:not(:focus):invalid::-webkit-datetime-edit-month-field,
+  input[type="date"]:not(:focus):invalid::-webkit-datetime-edit-day-field {
+    color: var(--muted-foreground);
+  }
 }
