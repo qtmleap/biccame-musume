@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import { BulkVoteButton } from '@/components/characters/bulk-vote-button'
 import { RankingVoteBadge } from '@/components/ranking/ranking-vote-badge'
 import { DURATION } from '@/lib/motion'
+import { getStickerRotation, STICKER_SHADOW, STICKER_SHADOW_SM, stickerTransformStyle } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import type { StoreData } from '@/schemas/store.dto'
 
@@ -13,9 +14,6 @@ type CharacterWithVotes = StoreData & {
 type RankingListProps = {
   characters: CharacterWithVotes[]
 }
-
-const STICKER_SHADOW = 'drop-shadow(0 6px 8px rgba(0,0,0,0.12))'
-const STICKER_SHADOW_SM = 'drop-shadow(0 3px 5px rgba(0,0,0,0.10))'
 
 /**
  * 投票案内（票がまだ0件のときの空状態）
@@ -94,18 +92,21 @@ type CardProps = {
   rank: number
   index: number
   maxVote: number
+  /** 紙の傾き（degrees）。未指定なら順位ごとの既定、0 で傾きなし。 */
+  rotation?: number
 }
 
 /**
  * 上位3位のステッカー風カード
  */
-const PodiumCard = ({ character, rank, index, maxVote }: CardProps & { isFirst?: boolean }) => {
+const PodiumCard = ({ character, rank, index, maxVote, rotation }: CardProps) => {
   const percent = maxVote > 0 ? Math.max(4, Math.round((character.voteCount / maxVote) * 100)) : 0
   const isFirst = rank === 1
   const isSecond = rank === 2
 
-  // 紙の傾き
-  const rotation = rank === 1 ? 'rotate-1' : isSecond ? '-rotate-3' : 'rotate-2'
+  // 紙の傾き（degrees）：1位=+1、2位=-3、3位=+2
+  const defaultPodiumRotation = isFirst ? 1 : isSecond ? -3 : 2
+  const rotationDeg = rotation ?? defaultPodiumRotation
   // 紙の縁
   const cardBorder =
     rank === 1 ? 'border-2 border-yellow-200' : isSecond ? 'border border-zinc-200' : 'border border-orange-200'
@@ -125,7 +126,7 @@ const PodiumCard = ({ character, rank, index, maxVote }: CardProps & { isFirst?:
       className='h-full'
       style={{ filter: STICKER_SHADOW }}
     >
-      <div className={cn('h-full', rotation)}>
+      <div className='h-full' style={stickerTransformStyle(rotationDeg)}>
         <div
           className={cn(
             'relative h-full flex flex-col bg-card',
@@ -210,15 +211,7 @@ const PodiumCard = ({ character, rank, index, maxVote }: CardProps & { isFirst?:
   )
 }
 
-// 4位以降のステッカー回転とマステ装飾を index でデコレーションする
-const ROW_ROTATIONS = [
-  'rotate-[1.5deg]',
-  '-rotate-[2deg]',
-  'rotate-[1deg]',
-  '-rotate-[1.5deg]',
-  'rotate-[2deg]',
-  '-rotate-[1deg]'
-]
+// 4位以降のステッカー装飾を index でデコレーションする
 const ROW_TAPES: ({ side: 'left' | 'right'; color: string; angle: string } | null)[] = [
   { side: 'left', color: 'bg-yellow-200/80', angle: '-rotate-[12deg]' },
   { side: 'right', color: 'bg-pink-200/80', angle: 'rotate-[10deg]' },
@@ -231,9 +224,9 @@ const ROW_TAPES: ({ side: 'left' | 'right'; color: string; angle: string } | nul
 /**
  * 4位以降のステッカー横長行
  */
-const RankingRow = ({ character, rank, index, maxVote }: CardProps) => {
+const RankingRow = ({ character, rank, index, maxVote, rotation }: CardProps) => {
   const percent = maxVote > 0 ? Math.max(4, Math.round((character.voteCount / maxVote) * 100)) : 0
-  const rotation = ROW_ROTATIONS[index % ROW_ROTATIONS.length]
+  const rotationDeg = getStickerRotation(index, rotation)
   const tape = ROW_TAPES[index % ROW_TAPES.length]
 
   return (
@@ -243,7 +236,7 @@ const RankingRow = ({ character, rank, index, maxVote }: CardProps) => {
       transition={{ duration: DURATION.normal, delay: index * 0.03 }}
       style={{ filter: STICKER_SHADOW_SM }}
     >
-      <div className={cn(rotation)}>
+      <div style={stickerTransformStyle(rotationDeg)}>
         <div className='relative bg-card rounded-xl border border-zinc-200 dark:border-card-border p-3 flex items-center gap-3'>
           {tape && (
             <div
