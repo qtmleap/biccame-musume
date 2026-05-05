@@ -4,6 +4,7 @@ import { CharacterFollowButton } from '@/components/characters/character-follow-
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DURATION } from '@/lib/motion'
+import { getStickerRotation, STICKER_SHADOW_SM, stickerTransformStyle } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
@@ -11,18 +12,9 @@ import { getDisplayName } from '@/utils/character'
 type CharacterListCardProps = {
   character: StoreData
   index?: number
+  /** 紙の傾き（degrees）。未指定なら index 巡回、0 で傾きなし。 */
+  rotation?: number
 }
-
-const STICKER_SHADOW_SM = 'drop-shadow(0 3px 5px rgba(0,0,0,0.10))'
-
-const ROTATIONS = [
-  'rotate-[1.5deg]',
-  '-rotate-[2deg]',
-  'rotate-[1deg]',
-  '-rotate-[1.5deg]',
-  'rotate-[2deg]',
-  '-rotate-[1deg]'
-]
 
 const TAPES: ({ side: 'left' | 'right'; color: string; angle: string } | null)[] = [
   { side: 'left', color: 'bg-yellow-200/80', angle: '-rotate-[12deg]' },
@@ -36,8 +28,8 @@ const TAPES: ({ side: 'left' | 'right'; color: string; angle: string } | null)[]
 /**
  * ビッカメ娘一覧表示用コンパクトカードコンポーネント（ステッカー風）
  */
-export const CharacterListCard = ({ character, index = 0 }: CharacterListCardProps) => {
-  const rotation = ROTATIONS[index % ROTATIONS.length]
+export const CharacterListCard = ({ character, index = 0, rotation }: CharacterListCardProps) => {
+  const rotationDeg = getStickerRotation(index, rotation)
   const tape = TAPES[index % TAPES.length]
 
   return (
@@ -51,7 +43,7 @@ export const CharacterListCard = ({ character, index = 0 }: CharacterListCardPro
       className='h-full'
       style={{ filter: STICKER_SHADOW_SM }}
     >
-      <div className={cn('h-full', rotation)}>
+      <div className='h-full' style={stickerTransformStyle(rotationDeg)}>
         <div className='relative h-full bg-card rounded-xl border border-zinc-200 dark:border-card-border p-3'>
           {tape && (
             <div
