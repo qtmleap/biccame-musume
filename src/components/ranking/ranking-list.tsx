@@ -86,7 +86,10 @@ const getRankStyle = (rank: number) => {
       badge: 'bg-rank-gold text-rank-gold-foreground',
       ring: 'ring-2 ring-rank-gold/70',
       Icon: Crown,
-      bar: 'bg-rank-gold'
+      bar: 'bg-rank-gold',
+      gradient: 'bg-gradient-to-b from-rank-gold/20 via-card to-card',
+      glow: 'shadow-xl shadow-rank-gold/40',
+      medalRing: 'ring-rank-gold'
     }
   }
   if (rank === 2) {
@@ -94,7 +97,10 @@ const getRankStyle = (rank: number) => {
       badge: 'bg-rank-silver text-rank-silver-foreground',
       ring: 'ring-2 ring-rank-silver/70',
       Icon: Medal,
-      bar: 'bg-rank-silver'
+      bar: 'bg-rank-silver',
+      gradient: 'bg-gradient-to-b from-rank-silver/25 via-card to-card',
+      glow: 'shadow-lg shadow-rank-silver/30',
+      medalRing: 'ring-rank-silver'
     }
   }
   if (rank === 3) {
@@ -102,14 +108,20 @@ const getRankStyle = (rank: number) => {
       badge: 'bg-rank-bronze text-rank-bronze-foreground',
       ring: 'ring-2 ring-rank-bronze/70',
       Icon: Medal,
-      bar: 'bg-rank-bronze'
+      bar: 'bg-rank-bronze',
+      gradient: 'bg-gradient-to-b from-rank-bronze/20 via-card to-card',
+      glow: 'shadow-lg shadow-rank-bronze/30',
+      medalRing: 'ring-rank-bronze'
     }
   }
   return {
     badge: 'bg-rank-default text-rank-default-foreground',
     ring: '',
     Icon: null,
-    bar: 'bg-favorite/60'
+    bar: 'bg-favorite/60',
+    gradient: '',
+    glow: '',
+    medalRing: ''
   }
 }
 
@@ -122,34 +134,68 @@ type CardProps = {
 }
 
 /**
- * ランキングカード
+ * 上位3位の豪華カード
  */
-const RankingCard = ({ character, rank, index, maxVote, size = 'sm' }: CardProps) => {
-  const { badge, ring, Icon, bar } = getRankStyle(rank)
-  const isPodium = rank <= 3
+const PodiumCard = ({ character, rank, index, maxVote, size = 'md' }: CardProps) => {
+  const { ring, Icon, bar, gradient, glow, medalRing, badge } = getRankStyle(rank)
   const percent = maxVote > 0 ? Math.max(4, Math.round((character.voteCount / maxVote) * 100)) : 0
 
-  const imageHeight = size === 'lg' ? 'h-36 md:h-44' : size === 'md' ? 'h-28 md:h-32' : 'h-28'
-  const titleSize = size === 'lg' ? 'text-lg md:text-xl' : 'text-base'
+  const isFirst = rank === 1
+  const imageHeight = size === 'lg' ? 'h-36 md:h-44' : 'h-28 md:h-32'
+  const titleSize = size === 'lg' ? 'text-lg md:text-xl' : 'text-base md:text-lg'
+  const medalSize = size === 'lg' ? 'h-12 w-12 md:h-14 md:w-14' : 'h-10 w-10 md:h-12 md:w-12'
+  const iconSize = size === 'lg' ? 'h-5 w-5 md:h-6 md:w-6' : 'h-4 w-4 md:h-5 md:w-5'
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: DURATION.normal, delay: index * 0.05 }}
-      className='h-full'
+      transition={{ duration: DURATION.slow, delay: index * 0.08, type: 'spring', stiffness: 120 }}
+      className='relative h-full pt-6 md:pt-7'
     >
-      <div className={cn('h-full flex flex-col rounded-lg p-3 bg-card', ring || 'border-card')}>
-        <div className='flex items-center justify-between mb-2'>
+      {/* フロートメダル */}
+      <motion.div
+        initial={{ scale: 0, rotate: -180 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ duration: DURATION.slow, delay: 0.3 + index * 0.08, type: 'spring', stiffness: 200 }}
+        className='absolute left-1/2 top-0 -translate-x-1/2 z-10'
+      >
+        <div
+          className={cn('flex items-center justify-center rounded-full bg-card ring-4 shadow-lg', medalSize, medalRing)}
+        >
+          <span className={cn('flex items-center justify-center rounded-full w-full h-full', badge)}>
+            {Icon && <Icon className={cn(iconSize)} strokeWidth={2.4} />}
+          </span>
+        </div>
+        {isFirst && (
+          <motion.span
+            aria-hidden
+            className='absolute -inset-2 rounded-full bg-rank-gold/30 -z-10'
+            animate={{ scale: [1, 1.25, 1], opacity: [0.6, 0, 0.6] }}
+            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
+          />
+        )}
+      </motion.div>
+
+      <div
+        className={cn(
+          'h-full flex flex-col rounded-xl p-3 pt-7 md:pt-8 relative overflow-hidden',
+          ring,
+          glow,
+          gradient || 'bg-card'
+        )}
+      >
+        {/* 順位ラベル */}
+        <div className='text-center mb-1'>
           <span
             className={cn(
-              'inline-flex items-center gap-1 rounded-full font-bold',
-              badge,
-              size === 'lg' ? 'h-8 px-3.5 text-sm' : isPodium ? 'h-7 px-3 text-sm' : 'h-6 px-2.5 text-xs'
+              'inline-block tabular-nums tracking-wide font-bold',
+              isFirst ? 'text-xl md:text-2xl' : 'text-base md:text-lg'
             )}
+            style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 900 }}
           >
-            {Icon && <Icon className={cn(size === 'lg' ? 'h-4 w-4' : 'h-3.5 w-3.5')} />}
-            {rank}位
+            {rank}
+            <span className='text-xs md:text-sm ml-0.5 font-bold'>位</span>
           </span>
         </div>
 
@@ -179,14 +225,13 @@ const RankingCard = ({ character, rank, index, maxVote, size = 'sm' }: CardProps
           </h3>
         </Link>
 
-        {/* 票数比較バー */}
         <div className='mt-2'>
           <div className='h-1.5 w-full rounded-full bg-vote-count overflow-hidden'>
             <motion.div
               className={cn('h-full rounded-full', bar)}
               initial={{ width: 0 }}
               animate={{ width: `${percent}%` }}
-              transition={{ duration: DURATION.slow, delay: 0.2 + index * 0.04, ease: 'easeOut' }}
+              transition={{ duration: DURATION.slow, delay: 0.4 + index * 0.05, ease: 'easeOut' }}
             />
           </div>
         </div>
@@ -278,9 +323,9 @@ const Podium = ({ top3, ranks, maxVote }: { top3: CharacterWithVotes[]; ranks: n
 
   return (
     <div className='grid grid-cols-3 gap-2 md:gap-4 items-end'>
-      <div className='pt-6 md:pt-10'>{second && <RankingCard {...second} maxVote={maxVote} size='md' />}</div>
-      <div className='pt-0'>{first && <RankingCard {...first} maxVote={maxVote} size='lg' />}</div>
-      <div className='pt-10 md:pt-16'>{third && <RankingCard {...third} maxVote={maxVote} size='md' />}</div>
+      <div className='pt-6 md:pt-10'>{second && <PodiumCard {...second} maxVote={maxVote} size='md' />}</div>
+      <div className='pt-0'>{first && <PodiumCard {...first} maxVote={maxVote} size='lg' />}</div>
+      <div className='pt-10 md:pt-16'>{third && <PodiumCard {...third} maxVote={maxVote} size='md' />}</div>
     </div>
   )
 }
