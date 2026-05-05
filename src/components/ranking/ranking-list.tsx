@@ -3,7 +3,7 @@ import { motion } from 'motion/react'
 import { BulkVoteButton } from '@/components/characters/bulk-vote-button'
 import { RankingVoteBadge } from '@/components/ranking/ranking-vote-badge'
 import { DURATION } from '@/lib/motion'
-import { getStickerRotation, STICKER_SHADOW, STICKER_SHADOW_SM, stickerTransformStyle } from '@/lib/sticker'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import type { StoreData } from '@/schemas/store.dto'
 
@@ -126,7 +126,13 @@ const PodiumCard = ({ character, rank, index, maxVote, rotation }: CardProps) =>
       className='h-full'
       style={{ filter: STICKER_SHADOW }}
     >
-      <div className='h-full' style={stickerTransformStyle(rotationDeg)}>
+      <motion.div
+        className='h-full'
+        style={{ rotate: rotationDeg }}
+        whileHover={{ scale: isFirst ? 1.04 : 1.05, rotate: 0 }}
+        whileTap={{ scale: 0.98 }}
+        transition={STICKER_HOVER_TRANSITION}
+      >
         <div
           className={cn(
             'relative h-full flex flex-col bg-card',
@@ -206,7 +212,7 @@ const PodiumCard = ({ character, rank, index, maxVote, rotation }: CardProps) =>
             <RankingVoteBadge characterId={character.id} voteCount={character.voteCount} />
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
@@ -236,7 +242,12 @@ const RankingRow = ({ character, rank, index, maxVote, rotation }: CardProps) =>
       transition={{ duration: DURATION.normal, delay: index * 0.03 }}
       style={{ filter: STICKER_SHADOW_SM }}
     >
-      <div style={stickerTransformStyle(rotationDeg)}>
+      <motion.div
+        style={{ rotate: rotationDeg }}
+        whileHover={{ scale: 1.03, rotate: 0 }}
+        whileTap={{ scale: 0.98 }}
+        transition={STICKER_HOVER_TRANSITION}
+      >
         <div className='relative bg-card rounded-xl border border-zinc-200 dark:border-card-border p-3 flex items-center gap-3'>
           {tape && (
             <div
@@ -295,7 +306,7 @@ const RankingRow = ({ character, rank, index, maxVote, rotation }: CardProps) =>
             <RankingVoteBadge characterId={character.id} voteCount={character.voteCount} />
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }

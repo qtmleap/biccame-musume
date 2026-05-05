@@ -5,7 +5,7 @@ import { CharacterVoteButton } from '@/components/characters/character-vote-butt
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
-import { getStickerRotation, STICKER_SHADOW_SM, stickerTransformStyle } from '@/lib/sticker'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
@@ -46,7 +46,13 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
       className='h-full'
       style={{ filter: STICKER_SHADOW_SM }}
     >
-      <div className='h-full' style={stickerTransformStyle(rotationDeg)}>
+      <motion.div
+        className='h-full'
+        style={{ rotate: rotationDeg }}
+        whileHover={{ scale: 1.04, rotate: 0 }}
+        whileTap={{ scale: 0.97 }}
+        transition={STICKER_HOVER_TRANSITION}
+      >
         <div className='relative h-full bg-card rounded-xl border border-zinc-200 dark:border-card-border p-3'>
           {tape && (
             <div
@@ -98,7 +104,7 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
