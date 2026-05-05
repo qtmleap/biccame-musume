@@ -28,6 +28,96 @@ const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
 routes.use('*', rateLimiter)
 
 /**
+ * 全キャラクターの投票カウント取得（D1から取得）
+ * GET /api/votes
+ */
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/',
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: VoteCountListSchema
+          }
+        },
+        description: '全キャラクターの投票カウント取得成功'
+      },
+      500: {
+        content: {
+          'application/json': {
+            schema: z.object({})
+          }
+        },
+        description: 'サーバーエラー'
+      }
+    },
+    tags: ['votes']
+  }),
+  async (c) => {
+    const counts = await getAllVoteCounts(c.env)
+    return c.json(counts)
+  }
+)
+
+/**
+ * 一括投票
+ * POST /api/votes/bulk
+ * - 推し一括 / 全員一括 共通エンドポイント
+ * - 投票済みのキャラは skipped として返す
+ * - NOTE: /:characterId より先に登録しないと bulk が characterId として吸収される
+ */
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/bulk',
+    middleware: [ipCheck],
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: BulkVoteRequestSchema
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: BulkVoteResponseSchema
+          }
+        },
+        description: '一括投票完了（skip 含む）'
+      },
+      400: {
+        content: {
+          'application/json': {
+            schema: BulkVoteResponseSchema
+          }
+        },
+        description: 'バリデーションエラー'
+      }
+    },
+    tags: ['votes']
+  }),
+  async (c) => {
+    const { characterIds } = c.req.valid('json')
+    const results = await bulkVote(c.env, characterIds, c.get('CLIENT_IP'))
+    const votedCount = results.filter((r) => r.status === 'voted').length
+    const skippedCount = results.filter((r) => r.status === 'skipped').length
+    return c.json({
+      success: true,
+      results,
+      votedCount,
+      skippedCount,
+      nextVoteDate: getNextJSTDate()
+    })
+  }
+)
+
+/**
  * 投票実行
  * POST /api/votes/:characterId
  */
@@ -83,95 +173,6 @@ routes.openapi(
     return c.json({
       success: true,
       message: '投票ありがとうございます！',
-      nextVoteDate: getNextJSTDate()
-    })
-  }
-)
-
-/**
- * 全キャラクターの投票カウント取得（D1から取得）
- * GET /api/votes
- */
-routes.openapi(
-  createRoute({
-    method: 'get',
-    path: '/',
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: VoteCountListSchema
-          }
-        },
-        description: '全キャラクターの投票カウント取得成功'
-      },
-      500: {
-        content: {
-          'application/json': {
-            schema: z.object({})
-          }
-        },
-        description: 'サーバーエラー'
-      }
-    },
-    tags: ['votes']
-  }),
-  async (c) => {
-    const counts = await getAllVoteCounts(c.env)
-    return c.json(counts)
-  }
-)
-
-/**
- * 一括投票
- * POST /api/votes/bulk
- * - 推し一括 / 全員一括 共通エンドポイント
- * - 投票済みのキャラは skipped として返す
- */
-routes.openapi(
-  createRoute({
-    method: 'post',
-    path: '/bulk',
-    middleware: [ipCheck],
-    request: {
-      body: {
-        content: {
-          'application/json': {
-            schema: BulkVoteRequestSchema
-          }
-        }
-      }
-    },
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: BulkVoteResponseSchema
-          }
-        },
-        description: '一括投票完了（skip 含む）'
-      },
-      400: {
-        content: {
-          'application/json': {
-            schema: BulkVoteResponseSchema
-          }
-        },
-        description: 'バリデーションエラー'
-      }
-    },
-    tags: ['votes']
-  }),
-  async (c) => {
-    const { characterIds } = c.req.valid('json')
-    const results = await bulkVote(c.env, characterIds, c.get('CLIENT_IP'))
-    const votedCount = results.filter((r) => r.status === 'voted').length
-    const skippedCount = results.filter((r) => r.status === 'skipped').length
-    return c.json({
-      success: true,
-      results,
-      votedCount,
-      skippedCount,
       nextVoteDate: getNextJSTDate()
     })
   }
