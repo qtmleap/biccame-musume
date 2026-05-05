@@ -29,15 +29,19 @@ export const AccessGate = ({ children }: AccessGateProps) => {
     return (
       <div className='container mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center px-4'>
         <div className='w-full rounded-2xl border border-border/60 bg-card p-8 text-center shadow-md'>
-          <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30'>
-            <ShieldAlert className='size-8 animate-pulse text-amber-600 dark:text-amber-400' />
+          <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-warning/10'>
+            <ShieldAlert className='size-8 animate-pulse text-warning' />
           </div>
           <h1 className='mb-2 text-xl font-bold text-foreground'>認証が必要です</h1>
           <p className='mb-6 text-sm text-muted-foreground'>
             このページにアクセスするには管理者権限が必要です。
             {error && <span className='mt-2 block text-destructive'>{error}</span>}
           </p>
-          <Button onClick={handleLogin} aria-label='Cloudflare Access でログイン' className='w-full gap-2'>
+          <Button
+            onClick={handleLogin}
+            aria-label='Cloudflare Access でログイン'
+            className='w-full bg-brand hover:bg-brand/90 text-brand-foreground'
+          >
             <LogIn className='size-4' />
             ログイン
           </Button>

@@ -23,6 +23,7 @@ import { getLargeTwitterPhoto, useAuth } from '@/hooks/use-auth'
 import { useEvents } from '@/hooks/use-events'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { auth } from '@/lib/firebase'
+import { DURATION } from '@/lib/motion'
 import { MY_PAGE_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 
@@ -46,14 +47,11 @@ const EventSection = ({
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           {icon}
-          <h2 className='text-xl font-bold text-gray-900'>{title}</h2>
-          {events.length > 0 && <span className='text-sm text-gray-500'>({events.length})</span>}
+          <h2 className='text-xl font-bold text-foreground'>{title}</h2>
+          {events.length > 0 && <span className='text-sm text-muted-foreground'>({events.length})</span>}
         </div>
         {showAllPath && events.length > 0 && (
-          <Link
-            to={showAllPath}
-            className='text-xs text-pink-600 hover:text-pink-700 transition-colors hover:underline'
-          >
+          <Link to={showAllPath} className='text-xs text-brand hover:text-brand transition-colors hover:underline'>
             {MY_PAGE_LABELS.viewAll}
           </Link>
         )}
@@ -62,7 +60,7 @@ const EventSection = ({
         events={displayEvents}
         page={1}
         onPageChange={() => {}}
-        emptyState={<p className='text-sm text-gray-500 py-2'>{emptyMessage}</p>}
+        emptyState={<p className='text-sm text-muted-foreground py-2'>{emptyMessage}</p>}
       />
     </div>
   )
@@ -94,7 +92,7 @@ const MyPageContent = () => {
   }
 
   return (
-    <div className='min-h-screen bg-pink-50'>
+    <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div>
           {/* 戻るボタン */}
@@ -102,7 +100,7 @@ const MyPageContent = () => {
             <Button
               variant='ghost'
               size='sm'
-              className='text-gray-600 hover:text-gray-900 -ml-2'
+              className='text-muted-foreground hover:text-foreground -ml-2 border border-transparent'
               onClick={() => router.history.back()}
             >
               <ArrowLeft className='h-4 w-4 mr-1' />
@@ -115,15 +113,15 @@ const MyPageContent = () => {
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: DURATION.normal }}
             >
-              <Avatar className='h-21.25 w-21.25 border-2 border-gray-800'>
+              <Avatar className='h-21.25 w-21.25'>
                 <AvatarImage
                   src={getLargeTwitterPhoto(user?.photoURL)}
                   alt={user?.displayName ?? 'User'}
                   className='object-cover'
                 />
-                <AvatarFallback className='text-4xl bg-pink-100 text-pink-700'>
+                <AvatarFallback className='text-4xl bg-brand/10 text-brand'>
                   {user?.displayName?.charAt(0) ?? 'U'}
                 </AvatarFallback>
               </Avatar>
@@ -136,7 +134,7 @@ const MyPageContent = () => {
                   <Button
                     variant='outline'
                     size='sm'
-                    className='rounded-full px-4 h-7 text-xs font-semibold bg-red-50 text-red-600 border border-red-200 hover:bg-red-100'
+                    className='rounded-full px-4 h-9 text-xs font-semibold bg-destructive/10 text-destructive border border-destructive/30 hover:bg-destructive/20'
                   >
                     {MY_PAGE_LABELS.logout}
                   </Button>
@@ -161,30 +159,30 @@ const MyPageContent = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: DURATION.normal, delay: 0.2 }}
             className='mb-6'
           >
-            <h1 className='text-2xl font-bold text-gray-900'>{user?.displayName}</h1>
+            <h1 className='text-2xl font-bold text-foreground'>{user?.displayName}</h1>
           </motion.div>
 
           {/* 訪れた店舗の記録 */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ duration: DURATION.normal, delay: 0.4 }}
             className='space-y-3 mb-6'
           >
             <div className='flex items-center gap-2'>
-              <MapPin className='h-5 w-5 text-pink-600' />
-              <h2 className='text-xl font-bold text-gray-900'>{MY_PAGE_LABELS.visitedStores}</h2>
+              <MapPin className='h-5 w-5 text-brand' />
+              <h2 className='text-xl font-bold text-foreground'>{MY_PAGE_LABELS.visitedStores}</h2>
             </div>
             {stores.length > 0 ? (
-              <p className='text-sm text-gray-600'>
+              <p className='text-sm text-muted-foreground'>
                 {stores.length}
                 {MY_PAGE_LABELS.visitedStoresCount}
               </p>
             ) : (
-              <p className='text-sm text-gray-500'>{MY_PAGE_LABELS.noVisitedStores}</p>
+              <p className='text-sm text-muted-foreground'>{MY_PAGE_LABELS.noVisitedStores}</p>
             )}
           </motion.div>
 
@@ -192,12 +190,12 @@ const MyPageContent = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+            transition={{ duration: DURATION.normal, delay: 0.5 }}
             className='mb-6'
           >
             <EventSection
               title={MY_PAGE_LABELS.interestedEvents}
-              icon={<Heart className='h-5 w-5 text-pink-500' />}
+              icon={<Heart className='h-5 w-5 text-action-interest' />}
               events={interestedEventDetails}
               emptyMessage={MY_PAGE_LABELS.noInterestedEvents}
               showAllPath='/me/interested'
@@ -208,12 +206,12 @@ const MyPageContent = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            transition={{ duration: DURATION.normal, delay: 0.6 }}
             className='mb-6'
           >
             <EventSection
               title={MY_PAGE_LABELS.completedEvents}
-              icon={<Award className='h-5 w-5 text-amber-500' />}
+              icon={<Award className='h-5 w-5 text-action-award' />}
               events={completedEventDetails}
               emptyMessage={MY_PAGE_LABELS.noCompletedEvents}
               showAllPath='/me/completed'

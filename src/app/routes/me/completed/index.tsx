@@ -23,23 +23,23 @@ const CompletedEventsContent = () => {
   const completedEventDetails = allEvents.filter((e) => completedEvents.includes(e.uuid))
 
   return (
-    <div className='min-h-screen bg-pink-50'>
+    <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto px-4 py-4 md:py-6 md:px-8 max-w-6xl'>
         {/* ヘッダー */}
         <div className='mb-6'>
           <Button
             variant='ghost'
             size='sm'
-            className='text-gray-600 hover:text-gray-900 -ml-2 mb-4'
+            className='text-muted-foreground hover:text-foreground -ml-2 mb-4 border border-transparent'
             onClick={() => router.history.back()}
           >
             <ArrowLeft className='h-4 w-4 mr-1' />
             戻る
           </Button>
           <div className='flex items-center gap-2'>
-            <Award className='h-6 w-6 text-amber-500' />
-            <h1 className='text-2xl font-bold text-gray-900'>{MY_PAGE_LABELS.completedEvents}</h1>
-            <span className='text-sm text-gray-500'>({completedEventDetails.length})</span>
+            <Award className='h-6 w-6 text-action-award' />
+            <h1 className='text-2xl font-bold text-foreground'>{MY_PAGE_LABELS.completedEvents}</h1>
+            <span className='text-sm text-muted-foreground'>({completedEventDetails.length})</span>
           </div>
 
           {/* タブナビゲーション */}
@@ -53,7 +53,7 @@ const CompletedEventsContent = () => {
             </Link>
             <Link
               to='/me/completed'
-              className='flex items-center gap-1.5 px-4 py-2 text-sm font-medium border-b-2 border-amber-500 text-amber-600'
+              className='flex items-center gap-1.5 px-4 py-2 text-sm font-medium border-b-2 border-action-award text-action-award'
             >
               <Award className='h-4 w-4' />
               達成済み
@@ -68,9 +68,9 @@ const CompletedEventsContent = () => {
           onPageChange={setPage}
           emptyState={
             <div className='bg-card rounded-lg shadow-sm p-8 text-center'>
-              <Award className='h-12 w-12 text-gray-300 mx-auto mb-3' />
-              <p className='text-gray-600'>{MY_PAGE_LABELS.noCompletedEvents}</p>
-              <Link to='/events' className='inline-block mt-4 text-pink-600 hover:text-pink-700 text-sm font-medium'>
+              <Award className='h-12 w-12 text-muted-foreground/30 mx-auto mb-3' />
+              <p className='text-muted-foreground'>{MY_PAGE_LABELS.noCompletedEvents}</p>
+              <Link to='/events' className='inline-block mt-4 text-brand hover:text-brand text-sm font-medium'>
                 {MY_PAGE_LABELS.findEvents}
               </Link>
             </div>

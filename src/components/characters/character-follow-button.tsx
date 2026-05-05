@@ -14,7 +14,8 @@ export const CharacterFollowButton = ({ twitterId }: CharacterFollowButtonProps)
     <Button
       asChild
       size='sm'
-      className='rounded-full px-4 h-7 text-xs font-semibold bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100'
+      variant='outline'
+      className='h-8 px-3 rounded-full text-xs border-brand/50 text-brand hover:bg-brand/10 hover:text-brand'
     >
       <a
         href={`https://twitter.com/intent/follow?screen_name=${twitterId}`}

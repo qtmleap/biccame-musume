@@ -20,7 +20,7 @@ export const SelectedStoreList = ({ stores, onRemove, onChangeStation, onClearAl
     <div className='space-y-3'>
       <div className='flex items-center justify-between'>
         <span className='text-muted-foreground text-sm'>選択中: {stores.length}店舗</span>
-        <Button variant='ghost' size='sm' onClick={onClearAll}>
+        <Button variant='ghost' size='sm' onClick={onClearAll} className='border border-transparent'>
           <Trash2 className='size-4' />
           全てクリア
         </Button>
@@ -40,7 +40,7 @@ export const SelectedStoreList = ({ stores, onRemove, onChangeStation, onClearAl
                 onValueChange={(v) => onChangeStation(store.id, v)}
                 disabled={store.stations.length === 1}
               >
-                <SelectTrigger className='h-8 w-auto min-w-[120px]'>
+                <SelectTrigger className='h-9 w-auto min-w-[120px]'>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -51,7 +51,12 @@ export const SelectedStoreList = ({ stores, onRemove, onChangeStation, onClearAl
                   ))}
                 </SelectContent>
               </Select>
-              <Button variant='ghost' size='icon-sm' className='size-8' onClick={() => onRemove(store.id)}>
+              <Button
+                variant='ghost'
+                size='icon'
+                className='size-9 border border-transparent'
+                onClick={() => onRemove(store.id)}
+              >
                 <Trash2 className='size-4' />
               </Button>
             </div>

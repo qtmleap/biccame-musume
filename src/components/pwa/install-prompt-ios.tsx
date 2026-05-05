@@ -66,13 +66,13 @@ export const IosInstallPrompt = () => {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent showCloseButton={false} className='bg-card border-pink-100 rounded-xl shadow-lg max-w-sm'>
+      <DialogContent showCloseButton={false} className='bg-card border-card rounded-xl shadow-lg max-w-sm'>
         <DialogHeader>
-          <DialogTitle className='text-gray-900 text-base font-semibold'>ホーム画面に追加</DialogTitle>
+          <DialogTitle className='text-foreground text-base font-semibold'>ホーム画面に追加</DialogTitle>
           <DialogDescription className='sr-only'>このアプリをホーム画面に追加する手順</DialogDescription>
         </DialogHeader>
-        <div className='flex flex-col gap-3 text-sm text-gray-700'>
-          <ul className='list-disc list-inside space-y-1 text-gray-600 text-xs'>
+        <div className='flex flex-col gap-3 text-sm text-muted-foreground'>
+          <ul className='list-disc list-inside space-y-1 text-muted-foreground text-xs'>
             <li>全画面表示で快適に利用できます</li>
             <li>オフラインでも一部機能が使えます</li>
           </ul>
@@ -86,7 +86,7 @@ export const IosInstallPrompt = () => {
           <button
             type='button'
             onClick={handleClose}
-            className='w-full rounded-lg bg-pink-600 px-4 py-2 text-sm font-medium text-white hover:bg-pink-700 transition-colors'
+            className='w-full rounded-lg bg-brand px-4 py-2 text-sm font-medium text-brand-foreground hover:bg-brand/90 transition-colors'
           >
             閉じる
           </button>

@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 import { type SortType, sortTypeAtom } from '@/atoms/sort-atom'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { DURATION } from '@/lib/motion'
 import { SORT_LABELS } from '@/locales/app.content'
 
 type CharacterSortControlProps = {
@@ -46,16 +46,20 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
         className='flex items-center justify-between w-full sm:hidden mb-3'
       >
         <div className='flex items-center gap-2'>
-          <ArrowUpDown className='h-4 w-4 text-gray-600' />
-          <span className='text-sm font-medium text-gray-700'>並び替え: {currentOption?.label}</span>
+          <ArrowUpDown className='h-4 w-4 text-muted-foreground' />
+          <span className='text-sm font-medium text-muted-foreground'>並び替え: {currentOption?.label}</span>
         </div>
-        {isOpen ? <ChevronUp className='h-4 w-4 text-gray-600' /> : <ChevronDown className='h-4 w-4 text-gray-600' />}
+        {isOpen ? (
+          <ChevronUp className='h-4 w-4 text-muted-foreground' />
+        ) : (
+          <ChevronDown className='h-4 w-4 text-muted-foreground' />
+        )}
       </button>
 
       {/* デスクトップ用ヘッダー */}
       <div className='hidden sm:flex items-center gap-2 mb-3'>
-        <ArrowUpDown className='h-4 w-4 text-gray-600' />
-        <span className='text-sm font-medium text-gray-700'>並び替え</span>
+        <ArrowUpDown className='h-4 w-4 text-muted-foreground' />
+        <span className='text-sm font-medium text-muted-foreground'>並び替え</span>
       </div>
 
       {/* ボタングリッド（モバイルでは開閉可能） */}
@@ -68,7 +72,7 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
               opacity: isOpen ? 1 : 0
             }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: DURATION.normal, ease: 'easeInOut' }}
             className='overflow-hidden sm:h-auto! sm:opacity-100!'
           >
             <div className='grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 sm:mt-0'>
@@ -78,15 +82,12 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
                 return (
                   <Button
                     key={option.value}
-                    variant='outline'
+                    variant={isSelected ? 'default' : 'outline'}
                     size='sm'
                     onClick={() => handleSortChange(option.value)}
-                    className={cn(
-                      'w-full text-xs',
-                      isSelected
-                        ? 'bg-green-500/50 text-white border-green-500/50 hover:bg-green-500/60 hover:text-white'
-                        : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 hover:text-gray-700'
-                    )}
+                    className={
+                      isSelected ? 'w-full text-sm bg-brand hover:bg-brand/90 text-brand-foreground' : 'w-full text-sm'
+                    }
                   >
                     {option.label}
                   </Button>

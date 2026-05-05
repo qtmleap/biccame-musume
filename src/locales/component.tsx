@@ -13,72 +13,38 @@ import type { EventCategory, EventStatus } from '@/schemas/event.dto'
  * event-list.tsxで使用
  */
 export const STATUS_BADGE = {
-  upcoming: () => (
-    <Badge variant='outline' className='border-blue-600 bg-blue-50 text-blue-700'>
-      開催前
-    </Badge>
-  ),
-  ongoing: () => (
-    <Badge variant='outline' className='border-green-600 bg-green-50 text-green-700'>
-      開催中
-    </Badge>
-  ),
-  last_day: () => (
-    <Badge variant='outline' className='border-orange-600 bg-orange-50 text-orange-700'>
-      最終日
-    </Badge>
-  ),
-  ended: () => <Badge variant='secondary'>終了</Badge>
+  upcoming: () => <Badge className='bg-status-upcoming text-status-upcoming-foreground'>開催前</Badge>,
+  ongoing: () => <Badge className='bg-status-ongoing text-status-ongoing-foreground'>開催中</Badge>,
+  last_day: () => <Badge className='bg-status-last-day text-status-last-day-foreground'>最終日</Badge>,
+  ended: () => <Badge className='bg-status-ended text-status-ended-foreground'>終了</Badge>
 } satisfies Record<EventStatus, () => React.ReactNode>
 
 /**
  * ステータスバッジ（小サイズ）
  * event-grid-item.tsxで使用
  */
-export const STATUS_BADGE_SM = {
-  upcoming: () => (
-    <Badge variant='outline' className='border-blue-600 bg-blue-50 text-blue-700 text-xs'>
-      開催前
-    </Badge>
-  ),
-  ongoing: () => (
-    <Badge variant='outline' className='border-green-600 bg-green-50 text-green-700 text-xs'>
-      開催中
-    </Badge>
-  ),
-  last_day: () => (
-    <Badge variant='outline' className='border-red-600 bg-red-50 text-red-700 text-xs'>
-      最終日
-    </Badge>
-  ),
-  ended: () => (
-    <Badge variant='secondary' className='text-xs'>
-      終了
-    </Badge>
-  )
-} satisfies Record<EventStatus, () => React.ReactNode>
+export const STATUS_BADGE_SM = STATUS_BADGE
 
 /**
  * ステータスバッジ（詳細ページ用）
  * event-detail-header.tsxで使用
  */
-export const STATUS_BADGE_DETAIL = {
-  upcoming: () => <Badge className='bg-blue-100 text-blue-700 border-blue-300 border'>開催前</Badge>,
-  ongoing: () => <Badge className='bg-green-100 text-green-700 border-green-300 border'>開催中</Badge>,
-  last_day: () => <Badge className='bg-red-100 text-red-700 border-red-300 border'>最終日</Badge>,
-  ended: () => <Badge className='bg-gray-100 text-gray-700 border-gray-300 border'>終了</Badge>
-} satisfies Record<EventStatus, () => React.ReactNode>
+export const STATUS_BADGE_DETAIL = STATUS_BADGE
 
 /**
- * カテゴリスタイル（詳細ページ用）
+ * カテゴリバッジ
  * event-detail-header.tsxで使用
  */
-export const CATEGORY_STYLE = {
-  limited_card: 'bg-purple-100 text-purple-700 border-purple-300',
-  regular_card: 'bg-blue-100 text-blue-700 border-blue-300',
-  ackey: 'bg-amber-100 text-amber-700 border-amber-300',
-  other: 'bg-pink-100 text-pink-700 border-pink-300'
-} satisfies Record<EventCategory, string>
+export const CATEGORY_BADGE = {
+  limited_card: (label: string) => (
+    <Badge className='bg-category-limited-card text-category-limited-card-foreground'>{label}</Badge>
+  ),
+  regular_card: (label: string) => (
+    <Badge className='bg-category-regular-card text-category-regular-card-foreground'>{label}</Badge>
+  ),
+  ackey: (label: string) => <Badge className='bg-category-ackey text-category-ackey-foreground'>{label}</Badge>,
+  other: (label: string) => <Badge className='bg-category-other text-category-other-foreground'>{label}</Badge>
+} satisfies Record<EventCategory, (label: string) => React.ReactNode>
 
 /**
  * カテゴリスタイル（アイコン付き）
@@ -87,19 +53,19 @@ export const CATEGORY_STYLE = {
 export const CATEGORY_WITH_ICON = {
   limited_card: {
     icon: <CreditCard className='size-4' />,
-    className: 'bg-purple-100 text-purple-600'
+    className: 'bg-category-limited-card text-category-limited-card-foreground'
   },
   regular_card: {
     icon: <CreditCard className='size-4' />,
-    className: 'bg-blue-100 text-blue-600'
+    className: 'bg-category-regular-card text-category-regular-card-foreground'
   },
   ackey: {
     icon: <KeyRound className='size-4' />,
-    className: 'bg-amber-100 text-amber-600'
+    className: 'bg-category-ackey text-category-ackey-foreground'
   },
   other: {
     icon: <Gift className='size-4' />,
-    className: 'bg-pink-100 text-pink-600'
+    className: 'bg-category-other text-category-other-foreground'
   }
 } satisfies Record<EventCategory, { icon: React.ReactNode; className: string }>
 
@@ -108,8 +74,8 @@ export const CATEGORY_WITH_ICON = {
  * gantt-chart-utils.tsで使用
  */
 export const CATEGORY_BG_COLOR = {
-  limited_card: 'bg-purple-700',
-  regular_card: 'bg-blue-600',
-  ackey: 'bg-amber-600',
-  other: 'bg-pink-600'
+  limited_card: 'bg-category-limited-card-solid',
+  regular_card: 'bg-category-regular-card-solid',
+  ackey: 'bg-category-ackey-solid',
+  other: 'bg-category-other-solid'
 } satisfies Record<EventCategory, string>

@@ -110,7 +110,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
             <Button
               type='button'
               variant='outline'
-              className='w-full border-gray-200'
+              className='w-full border-card'
               onClick={handleGoogleLogin}
               disabled={isLoading}
             >
@@ -121,7 +121,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
             <Button
               type='button'
               variant='outline'
-              className='w-full border-gray-200'
+              className='w-full border-card'
               onClick={handleAppleLogin}
               disabled={isLoading}
             >
@@ -132,7 +132,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
             <Button
               type='button'
               variant='outline'
-              className='w-full border-gray-200'
+              className='w-full border-card'
               onClick={handleGithubLogin}
               disabled={isLoading}
             >
@@ -143,7 +143,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
             <Button
               type='button'
               variant='outline'
-              className='w-full border-gray-200'
+              className='w-full border-card'
               onClick={handleTwitterLogin}
               disabled={isLoading}
             >
@@ -156,7 +156,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
             <>
               <div className='relative'>
                 <div className='absolute inset-0 flex items-center'>
-                  <Separator />
+                  <Separator className='bg-separator' />
                 </div>
                 <div className='relative flex justify-center text-xs uppercase'>
                   <span className='bg-background px-2 text-muted-foreground'>または</span>
@@ -197,11 +197,11 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
                     </div>
                     <Button
                       type='submit'
-                      className='w-full bg-pink-500 hover:bg-pink-600 text-white'
+                      className='w-full bg-brand hover:bg-brand/90 text-brand-foreground'
                       disabled={isLoading}
                     >
                       <Mail className='mr-2 h-4 w-4' />
-                      ログイン
+                      {isLoading ? 'ログイン中...' : 'ログイン'}
                     </Button>
                   </form>
                 </TabsContent>
@@ -246,11 +246,11 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
                     </div>
                     <Button
                       type='submit'
-                      className='w-full bg-pink-500 hover:bg-pink-600 text-white'
+                      className='w-full bg-brand hover:bg-brand/90 text-brand-foreground'
                       disabled={isLoading}
                     >
                       <Mail className='mr-2 h-4 w-4' />
-                      新規登録
+                      {isLoading ? '登録中...' : '新規登録'}
                     </Button>
                   </form>
                 </TabsContent>

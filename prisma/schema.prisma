@@ -114,6 +114,8 @@ model EventComment {
   body      String
   /// 投稿者IPアドレス
   ipAddress String    @map("ip_address")
+  /// 投稿者が Firebase Auth でログイン済みの場合の UID
+  userId    String?   @map("user_id")
   /// 論理削除日時（Phase 2 管理者削除用）
   deletedAt DateTime? @map("deleted_at")
   /// 作成日時

@@ -1,8 +1,22 @@
 import { MessageSquarePlus } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger
+} from '@/components/ui/drawer'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { CommentForm } from './comment-form'
 
@@ -10,7 +24,7 @@ type CommentFormDialogProps = {
   eventUuid: string
 }
 
-const triggerButtonClassName = 'w-full bg-[#e50012] hover:bg-[#c5000f] text-white'
+const triggerButtonClassName = 'w-full md:max-w-sm md:mx-auto md:flex bg-brand hover:bg-brand/90 text-brand-foreground'
 
 export const CommentFormDialog = ({ eventUuid }: CommentFormDialogProps) => {
   const isDesktop = useMediaQuery('(min-width: 768px)')
@@ -28,6 +42,7 @@ export const CommentFormDialog = ({ eventUuid }: CommentFormDialogProps) => {
         <DialogContent className='max-w-lg'>
           <DialogHeader>
             <DialogTitle>コメントを投稿</DialogTitle>
+            <DialogDescription>このイベントへの感想や気になることを書き込めます。</DialogDescription>
           </DialogHeader>
           <CommentForm eventUuid={eventUuid} onSuccess={() => setOpen(false)} />
         </DialogContent>
@@ -46,6 +61,7 @@ export const CommentFormDialog = ({ eventUuid }: CommentFormDialogProps) => {
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>コメントを投稿</DrawerTitle>
+          <DrawerDescription>このイベントへの感想や気になることを書き込めます。</DrawerDescription>
         </DrawerHeader>
         <div className='px-4 pb-6'>
           <CommentForm eventUuid={eventUuid} onSuccess={() => setOpen(false)} />

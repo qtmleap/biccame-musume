@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { CALENDAR_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
@@ -63,7 +64,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.98 }}
-        transition={{ duration: 0.15 }}
+        transition={{ duration: DURATION.fast }}
         className='p-2'
       >
         {/* 曜日ヘッダー */}
@@ -73,7 +74,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
               key={day}
               className={cn(
                 'text-center font-medium py-1 text-xs',
-                index === 0 && 'text-rose-500',
+                index === 0 && 'text-calendar-sunday',
                 index === 6 && 'text-sky-500',
                 index !== 0 && index !== 6 && 'text-muted-foreground'
               )}
@@ -101,7 +102,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{
-                  duration: 0.15,
+                  duration: DURATION.fast,
                   delay: baseDelay,
                   ease: 'easeOut'
                 }}
@@ -111,8 +112,8 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                 className={cn(
                   'min-h-20 p-1.5 rounded-lg transition-all text-left',
                   day === null && 'bg-transparent cursor-default',
-                  day !== null && isToday && 'bg-rose-100 border border-rose-300',
-                  day !== null && !isToday && 'bg-card border border-gray-200 hover:bg-gray-50',
+                  day !== null && isToday && 'bg-calendar-today border border-calendar-today-border',
+                  day !== null && !isToday && 'bg-card border-card hover:bg-muted/30',
                   hasEvents && 'cursor-pointer'
                 )}
                 disabled={!hasEvents}
@@ -124,7 +125,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                       className={cn(
                         'text-sm font-semibold tabular-nums',
                         isToday && 'text-primary',
-                        !isToday && isSunday && 'text-rose-500',
+                        !isToday && isSunday && 'text-calendar-sunday',
                         !isToday && isSaturday && 'text-sky-500',
                         !isToday && !isSunday && !isSaturday && 'text-foreground'
                       )}
@@ -135,19 +136,13 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                     {hasEvents && (
                       <div className='flex-1 flex flex-wrap items-center justify-center gap-1 py-1'>
                         {dayEvents.map((event) => (
-                          <Avatar
-                            key={`${event.character.id}-${event.type}`}
-                            className={cn(
-                              'w-8 h-8 ring-2 overflow-hidden',
-                              event.type === 'character' ? 'ring-pink-400/50' : 'ring-blue-400/50'
-                            )}
-                          >
+                          <Avatar key={`${event.character.id}-${event.type}`} className='w-8 h-8'>
                             <AvatarImage
                               src={event.character.character?.image_url}
                               alt={event.character.character?.name || ''}
                               className='object-cover object-top scale-150 translate-y-2'
                             />
-                            <AvatarFallback className='text-[10px] bg-muted'>
+                            <AvatarFallback className='text-xs bg-muted'>
                               {event.character.character?.name?.slice(0, 1) || '?'}
                             </AvatarFallback>
                           </Avatar>

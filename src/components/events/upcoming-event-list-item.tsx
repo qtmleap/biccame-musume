@@ -3,6 +3,7 @@ import type dayjs from 'dayjs'
 import { Cake, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { DURATION } from '@/lib/motion'
 import { DATE_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
@@ -37,7 +38,7 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{
-        duration: 0.4,
+        duration: DURATION.normal,
         delay: index * 0.1,
         ease: 'easeOut'
       }}
@@ -45,15 +46,15 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
       whileTap={{ scale: 0.98 }}
     >
       <Link to='/characters/$id' params={{ id: event.character.id }}>
-        <div className='flex items-center gap-3 bg-card rounded-lg p-3 shadow-sm border border-gray-100 hover:border-[#e50012]/30 transition-colors cursor-pointer'>
+        <div className='flex items-center gap-3 bg-card rounded-lg p-3 shadow-sm border-card transition-colors cursor-pointer'>
           <div
-            className={`p-2 rounded-lg ${event.type === 'character' ? 'bg-pink-100 text-pink-600' : 'bg-blue-100 text-blue-600'}`}
+            className={`p-2 rounded-lg ${event.type === 'character' ? 'bg-category-other text-category-other-foreground' : 'bg-category-regular-card text-category-regular-card-foreground'}`}
           >
             {event.type === 'character' ? <Cake className='h-4 w-4' /> : <Store className='h-4 w-4' />}
           </div>
 
           {event.character.character?.image_url && (
-            <Avatar className='w-8 h-8 overflow-hidden'>
+            <Avatar className='w-8 h-8 border border-card-border'>
               <AvatarImage
                 src={event.character.character.image_url}
                 alt={event.character.character?.name || ''}
@@ -64,19 +65,19 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
           )}
 
           <div className='flex-1 min-w-0'>
-            <p className='text-sm font-medium text-gray-800 truncate'>
+            <p className='text-sm font-medium text-foreground truncate'>
               {getDisplayName(event.character.character?.name || '')}
             </p>
-            <p className='text-xs text-gray-500'>{event.date.format('M月D日')}</p>
+            <p className='text-xs text-muted-foreground'>{event.date.format('M月D日')}</p>
           </div>
 
           <div
             className={`text-xs font-bold px-2 py-1 rounded ${
               event.daysUntil === 0
-                ? 'bg-[#e50012] text-white'
+                ? 'bg-brand text-brand-foreground'
                 : event.daysUntil <= 7
-                  ? 'bg-orange-100 text-orange-600'
-                  : 'bg-gray-100 text-gray-600'
+                  ? 'bg-status-interested text-status-interested-foreground'
+                  : 'bg-status-ended text-status-ended-foreground'
             }`}
           >
             {getDaysLabel(event.daysUntil)}

@@ -1,4 +1,5 @@
 import type { Dayjs } from 'dayjs'
+import { useEffect, useRef } from 'react'
 import { GanttRow } from '@/components/events/gantt/gantt-row'
 import { GanttDateHeader } from '@/components/events/gantt-chart-parts'
 import { hideScrollbarStyle } from '@/components/events/gantt-chart-utils'
@@ -40,10 +41,33 @@ export const GanttTimeline = ({
   getLabelOffset,
   hasDraggedRef
 }: GanttTimelineProps) => {
+  const headerScrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const body = scrollContainerRef.current
+    const header = headerScrollRef.current
+    if (!body || !header) return
+    const syncBodyToHeader = () => {
+      header.scrollLeft = body.scrollLeft
+    }
+    body.addEventListener('scroll', syncBodyToHeader, { passive: true })
+    return () => body.removeEventListener('scroll', syncBodyToHeader)
+  }, [scrollContainerRef])
+
   return (
     <>
       <style>{hideScrollbarStyle}</style>
       <div className='relative'>
+        <div
+          ref={headerScrollRef}
+          aria-hidden='true'
+          className='gantt-scroll-container sticky top-12 md:top-14 z-10 overflow-x-auto bg-page-bg'
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          <div className='min-w-max'>
+            <GanttDateHeader dates={dates} today={today} actualMonthEnd={actualMonthEnd} />
+          </div>
+        </div>
         <section
           ref={scrollContainerRef}
           aria-label={GANTT_CHART_LABELS.ariaLabel}
@@ -60,7 +84,6 @@ export const GanttTimeline = ({
           onMouseLeave={onMouseLeave}
         >
           <div className='min-w-max'>
-            <GanttDateHeader dates={dates} today={today} actualMonthEnd={actualMonthEnd} />
             <div key={`gantt-${monthOffset}-${eventBars.map((b) => b.event.uuid).join('-')}`}>
               {eventBars.map((bar) => (
                 <GanttRow
@@ -77,7 +100,7 @@ export const GanttTimeline = ({
             </div>
 
             {eventBars.length === 0 && (
-              <div className='py-8 text-center text-gray-500'>表示するイベントがありません</div>
+              <div className='py-8 text-center text-muted-foreground'>表示するイベントがありません</div>
             )}
           </div>
         </section>

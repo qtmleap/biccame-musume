@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { DURATION } from '@/lib/motion'
 import type { StoreData } from '@/schemas/store.dto'
 
 type CharacterWithVotes = StoreData & {
@@ -16,7 +17,7 @@ type RankingListProps = {
  */
 const RibbonBadge = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className='inline-flex items-center justify-center bg-blue-600 border-2 border-blue-800 px-4 py-0.5 min-w-24'>
+    <div className='inline-flex items-center justify-center bg-brand border-2 border-brand px-4 py-0.5 min-w-24'>
       {children}
     </div>
   )
@@ -36,22 +37,24 @@ const VoteInfo = ({ showSubMessage = false, compact = false }: VoteInfoProps) =>
       className={compact ? 'text-center py-6' : 'text-center py-16'}
       initial={{ opacity: 0, y: compact ? 20 : 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: compact ? 0.5 : 0.6, ease: 'easeOut' }}
+      transition={{ duration: compact ? DURATION.normal : DURATION.slow, ease: 'easeOut' }}
     >
       <motion.p
-        className={compact ? 'text-gray-700 text-base mb-4 font-bold' : 'text-gray-700 text-lg mb-4 font-bold'}
+        className={
+          compact ? 'text-muted-foreground text-base mb-4 font-bold' : 'text-muted-foreground text-lg mb-4 font-bold'
+        }
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: compact ? 0.1 : 0.2 }}
+        transition={{ duration: DURATION.normal, delay: compact ? 0.1 : 0.2 }}
       >
         各ビッカメ娘を1日に1回応援できます
       </motion.p>
       {showSubMessage && (
         <motion.p
-          className='text-gray-500 text-base mb-6'
+          className='text-muted-foreground text-base mb-6'
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          transition={{ duration: DURATION.normal, delay: 0.3 }}
         >
           現在投票受付中です
         </motion.p>
@@ -59,13 +62,18 @@ const VoteInfo = ({ showSubMessage = false, compact = false }: VoteInfoProps) =>
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: compact ? 0.4 : 0.5, delay: compact ? 0.2 : 0.4, type: 'spring', stiffness: 200 }}
+        transition={{
+          duration: compact ? DURATION.normal : DURATION.normal,
+          delay: compact ? 0.2 : 0.4,
+          type: 'spring',
+          stiffness: 200
+        }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
         <Link
           to='/characters'
-          className='inline-block px-4 py-2 bg-[#e50012] text-white rounded-full hover:bg-[#c40010] transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
+          className='inline-block px-4 py-2 bg-brand text-brand-foreground rounded-full hover:bg-brand/90 transition-colors text-sm font-medium shadow-lg hover:shadow-xl'
         >
           ビッカメ娘一覧を見る
         </Link>
@@ -95,10 +103,10 @@ const calculateRank = (characters: CharacterWithVotes[], index: number): number 
  */
 const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes; rank: number; index: number }) => {
   const getRankStyle = (rank: number) => {
-    if (rank === 1) return { badge: 'bg-yellow-400 text-yellow-900' }
-    if (rank === 2) return { badge: 'bg-gray-400 text-gray-900' }
-    if (rank === 3) return { badge: 'bg-amber-600 text-white' }
-    return { badge: 'bg-blue-500 text-white' }
+    if (rank === 1) return { badge: 'bg-rank-gold text-rank-gold-foreground' }
+    if (rank === 2) return { badge: 'bg-rank-silver text-rank-silver-foreground' }
+    if (rank === 3) return { badge: 'bg-rank-bronze text-rank-bronze-foreground' }
+    return { badge: 'bg-rank-default text-rank-default-foreground' }
   }
 
   const style = getRankStyle(rank)
@@ -107,7 +115,7 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
+      transition={{ duration: DURATION.normal, delay: index * 0.05 }}
     >
       <div className='flex flex-col'>
         {/* 順位（左寄せ） */}
@@ -116,7 +124,7 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
         <Link to='/characters/$id' params={{ id: character.id }} className='block'>
           {/* キャラクター名（中央揃え、ポップなフォント、縁取り） */}
           <h3
-            className='text-gray-900 truncate max-w-full text-lg text-center mb-2'
+            className='text-foreground truncate max-w-full text-lg text-center mb-2'
             style={{
               fontFamily: '"Zen Maru Gothic", sans-serif',
               fontWeight: 900,
@@ -128,7 +136,7 @@ const RankingCard = ({ character, rank, index }: { character: CharacterWithVotes
           </h3>
 
           {/* 画像（白色透過） */}
-          <div className='relative bg-pink-50 h-28 w-full flex items-center justify-center'>
+          <div className='relative bg-page-bg h-28 w-full flex items-center justify-center'>
             <img
               src={character.character?.image_url}
               alt={character.character?.name || ''}

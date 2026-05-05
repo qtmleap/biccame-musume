@@ -5,7 +5,7 @@ import { DURATION, EASE_OUT, FADE_IN, FADE_IN_DOWN } from '@/lib/motion'
 
 export const HomeHeader = () => {
   return (
-    <header className='bg-linear-to-r from-[#e50012] to-[#ff3333] py-4 md:py-8'>
+    <header className='bg-linear-to-r from-brand to-brand/80 py-4 md:py-8'>
       <div className='container mx-auto px-4 text-center max-w-4xl'>
         <motion.h1
           variants={FADE_IN_DOWN}
