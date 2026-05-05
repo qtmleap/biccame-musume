@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
 import { DURATION, EASE_OUT, FADE_IN_DOWN } from '@/lib/motion'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 
 type CalendarHeaderProps = {
@@ -51,23 +52,33 @@ type CalendarMonthTabsProps = {
  */
 export const CalendarMonthTabs = ({ selectedMonth, onSelectMonth }: CalendarMonthTabsProps) => {
   return (
-    <div className='hidden md:flex gap-1 overflow-x-auto pt-2 pb-2 justify-center'>
-      {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-        <Button
-          key={month}
-          variant='ghost'
-          onClick={() => onSelectMonth(month)}
-          size='sm'
-          className={cn(
-            'shrink-0 rounded-full px-4 transition-all border border-transparent',
-            selectedMonth === month
-              ? 'bg-brand font-bold text-brand-foreground shadow-md hover:bg-brand/90 hover:text-brand-foreground'
-              : 'hover:bg-muted/50 text-muted-foreground'
-          )}
-        >
-          {month}月
-        </Button>
-      ))}
+    <div className='hidden md:flex gap-2 overflow-x-auto py-2 justify-center'>
+      {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => {
+        const isSelected = selectedMonth === month
+        return (
+          <motion.div
+            key={month}
+            style={{ filter: STICKER_SHADOW_SM }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            transition={STICKER_HOVER_TRANSITION}
+          >
+            <Button
+              variant='secondary'
+              onClick={() => onSelectMonth(month)}
+              size='sm'
+              className={cn(
+                'shrink-0 rounded-full px-4 text-sm border',
+                isSelected
+                  ? 'bg-brand font-bold text-brand-foreground border-brand hover:bg-brand/90 hover:text-brand-foreground'
+                  : 'bg-button-surface text-foreground border-card-border hover:bg-button-surface-hover'
+              )}
+            >
+              {month}月
+            </Button>
+          </motion.div>
+        )
+      })}
     </div>
   )
 }
