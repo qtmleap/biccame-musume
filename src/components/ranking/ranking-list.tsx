@@ -358,26 +358,36 @@ export const RankingList = ({ characters }: RankingListProps) => {
       {votedCharacters.length === 0 ? (
         <EmptyVoteInfo />
       ) : (
-        <div className='space-y-8'>
-          <Podium top3={podiumChars} ranks={podiumRanks} maxVote={maxVote} />
+        <>
+          {/* デスクトップ: 表彰台 + 4位以降グリッド */}
+          <div className='hidden md:block space-y-8'>
+            <Podium top3={podiumChars} ranks={podiumRanks} maxVote={maxVote} />
 
-          {restIndices.length > 0 && (
-            <>
-              <div className='h-px bg-separator/60' />
-              <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 md:gap-3'>
-                {restIndices.map((i, j) => (
-                  <RankingRow
-                    key={votedCharacters[i].id}
-                    character={votedCharacters[i]}
-                    rank={ranks[i]}
-                    index={j}
-                    maxVote={maxVote}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-        </div>
+            {restIndices.length > 0 && (
+              <>
+                <div className='h-px bg-separator/60' />
+                <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 md:gap-3'>
+                  {restIndices.map((i, j) => (
+                    <RankingRow
+                      key={votedCharacters[i].id}
+                      character={votedCharacters[i]}
+                      rank={ranks[i]}
+                      index={j}
+                      maxVote={maxVote}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* モバイル: 全件リスト */}
+          <div className='md:hidden space-y-2'>
+            {votedCharacters.map((c, i) => (
+              <RankingRow key={c.id} character={c} rank={ranks[i]} index={i} maxVote={maxVote} />
+            ))}
+          </div>
+        </>
       )}
     </div>
   )
