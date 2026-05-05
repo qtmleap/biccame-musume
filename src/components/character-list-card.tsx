@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import { CharacterFollowButton } from '@/components/characters/character-follow-button'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
 import { getStickerRotation, STICKER_SHADOW_SM, stickerTransformStyle } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
@@ -29,7 +30,9 @@ const TAPES: ({ side: 'left' | 'right'; color: string; angle: string } | null)[]
  * ビッカメ娘一覧表示用コンパクトカードコンポーネント（ステッカー風）
  */
 export const CharacterListCard = ({ character, index = 0, rotation }: CharacterListCardProps) => {
-  const rotationDeg = getStickerRotation(index, rotation)
+  // 1列レイアウトでは交互傾きが不自然なので無効化（rotation 明示時はそれを尊重）
+  const isMultiColumn = useMediaQuery('(min-width: 640px)')
+  const rotationDeg = rotation ?? (isMultiColumn ? getStickerRotation(index) : 0)
   const tape = TAPES[index % TAPES.length]
 
   return (
