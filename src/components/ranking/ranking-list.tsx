@@ -372,7 +372,7 @@ export const RankingList = ({ characters }: RankingListProps) => {
           {/* モバイル: 全件リスト */}
           <div className='md:hidden space-y-3'>
             {votedCharacters.map((c, i) => (
-              <RankingRow key={c.id} character={c} rank={ranks[i]} index={i} maxVote={maxVote} />
+              <RankingRow key={c.id} character={c} rank={ranks[i]} index={i} maxVote={maxVote} rotation={0} />
             ))}
           </div>
         </>
