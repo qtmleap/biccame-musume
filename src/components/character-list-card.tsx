@@ -91,13 +91,13 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
                 </h3>
               </Link>
               <div className='flex justify-end gap-2'>
-                <CharacterFollowButton twitterId={character.character?.twitter_id} />
+                <CharacterFollowButton twitterId={character.character?.twitter_id} iconOnly />
                 <CharacterVoteButton
                   characterId={character.id}
                   characterName={character.character?.name || ''}
-                  variant='compact'
                   enableVoteCount={false}
                   isBiccameMusume={character.character?.is_biccame_musume}
+                  iconOnly
                 />
               </div>
             </div>
