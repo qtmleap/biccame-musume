@@ -58,8 +58,8 @@ export const PaginatedEventGrid = ({
         全 {events.length} 件中 {start}–{end} 件を表示
       </p>
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3'>
-        {paginatedEvents.map((event) => (
-          <EventGridItem key={event.uuid} event={event} />
+        {paginatedEvents.map((event, index) => (
+          <EventGridItem key={event.uuid} event={event} index={index} />
         ))}
       </div>
 
