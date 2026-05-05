@@ -24,3 +24,6 @@ export const stickerTransformStyle = (deg: number): { transform?: string } => {
   if (deg === 0) return {}
   return { transform: `rotate(${deg}deg)` }
 }
+
+/** ステッカーカードの spring ホバー / タップトランジション */
+export const STICKER_HOVER_TRANSITION = { type: 'spring' as const, stiffness: 320, damping: 18 }
