@@ -8,6 +8,7 @@ import authRoutes from './api/auth'
 import comments from './api/comment'
 import direction from './api/direction'
 import events from './api/event'
+import favorite from './api/favorite'
 import me from './api/me'
 import search from './api/search'
 import stats from './api/stats'
@@ -109,6 +110,9 @@ app.route('/api/users', users)
 
 // ユーザーアクティビティAPIルート
 app.route('/api', me)
+
+// お気に入りキャラクターAPIルート
+app.route('/api', favorite)
 
 // 静的ファイル配信 & SPA フォールバック
 app.use('*', async (c, next) => {
