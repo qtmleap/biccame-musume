@@ -5,6 +5,8 @@ import { useState } from 'react'
 import { type SortType, sortTypeAtom } from '@/atoms/sort-atom'
 import { Button } from '@/components/ui/button'
 import { DURATION } from '@/lib/motion'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
+import { cn } from '@/lib/utils'
 import { SORT_LABELS } from '@/locales/app.content'
 
 type CharacterSortControlProps = {
@@ -80,17 +82,28 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
                 const isSelected = sortType === option.value
 
                 return (
-                  <Button
+                  <motion.div
                     key={option.value}
-                    variant={isSelected ? 'default' : 'outline'}
-                    size='sm'
-                    onClick={() => handleSortChange(option.value)}
-                    className={
-                      isSelected ? 'w-full text-sm bg-brand hover:bg-brand/90 text-brand-foreground' : 'w-full text-sm'
-                    }
+                    className='w-full'
+                    style={{ filter: STICKER_SHADOW_SM }}
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={STICKER_HOVER_TRANSITION}
                   >
-                    {option.label}
-                  </Button>
+                    <Button
+                      variant='secondary'
+                      size='sm'
+                      onClick={() => handleSortChange(option.value)}
+                      className={cn(
+                        'w-full text-sm rounded-full border',
+                        isSelected
+                          ? 'bg-brand text-brand-foreground border-brand hover:bg-brand/90'
+                          : 'bg-button-surface text-foreground border-card-border hover:bg-button-surface-hover'
+                      )}
+                    >
+                      {option.label}
+                    </Button>
+                  </motion.div>
                 )
               })}
             </div>
