@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { Crown, Medal } from 'lucide-react'
 import { motion } from 'motion/react'
 import { BulkVoteButton } from '@/components/characters/bulk-vote-button'
 import { RankingVoteBadge } from '@/components/ranking/ranking-vote-badge'
@@ -14,6 +13,9 @@ type CharacterWithVotes = StoreData & {
 type RankingListProps = {
   characters: CharacterWithVotes[]
 }
+
+const STICKER_SHADOW = 'drop-shadow(0 6px 8px rgba(0,0,0,0.12))'
+const STICKER_SHADOW_SM = 'drop-shadow(0 3px 5px rgba(0,0,0,0.10))'
 
 /**
  * 投票案内（票がまだ0件のときの空状態）
@@ -78,51 +80,13 @@ const calculateRanks = (characters: CharacterWithVotes[]): number[] => {
 }
 
 /**
- * 順位ごとのスタイル（バッジ色 / 表彰台リング）
+ * 順位ごとのバー色
  */
-const getRankStyle = (rank: number) => {
-  if (rank === 1) {
-    return {
-      badge: 'bg-rank-gold text-rank-gold-foreground',
-      ring: 'ring-2 ring-rank-gold/70',
-      Icon: Crown,
-      bar: 'bg-rank-gold',
-      gradient: 'bg-gradient-to-b from-rank-gold/20 via-card to-card',
-      glow: 'shadow-xl shadow-rank-gold/40',
-      medalRing: 'ring-rank-gold'
-    }
-  }
-  if (rank === 2) {
-    return {
-      badge: 'bg-rank-silver text-rank-silver-foreground',
-      ring: 'ring-2 ring-rank-silver/70',
-      Icon: Medal,
-      bar: 'bg-rank-silver',
-      gradient: 'bg-gradient-to-b from-rank-silver/25 via-card to-card',
-      glow: 'shadow-lg shadow-rank-silver/30',
-      medalRing: 'ring-rank-silver'
-    }
-  }
-  if (rank === 3) {
-    return {
-      badge: 'bg-rank-bronze text-rank-bronze-foreground',
-      ring: 'ring-2 ring-rank-bronze/70',
-      Icon: Medal,
-      bar: 'bg-rank-bronze',
-      gradient: 'bg-gradient-to-b from-rank-bronze/20 via-card to-card',
-      glow: 'shadow-lg shadow-rank-bronze/30',
-      medalRing: 'ring-rank-bronze'
-    }
-  }
-  return {
-    badge: 'bg-rank-default text-rank-default-foreground',
-    ring: '',
-    Icon: null,
-    bar: 'bg-favorite/60',
-    gradient: '',
-    glow: '',
-    medalRing: ''
-  }
+const getBarClass = (rank: number) => {
+  if (rank === 1) return 'bg-rank-gold'
+  if (rank === 2) return 'bg-rank-silver'
+  if (rank === 3) return 'bg-rank-bronze'
+  return 'bg-favorite/60'
 }
 
 type CardProps = {
@@ -130,177 +94,213 @@ type CardProps = {
   rank: number
   index: number
   maxVote: number
-  size?: 'sm' | 'md' | 'lg'
 }
 
 /**
- * 上位3位の豪華カード
+ * 上位3位のステッカー風カード
  */
-const PodiumCard = ({ character, rank, index, maxVote, size = 'md' }: CardProps) => {
-  const { ring, Icon, bar, gradient, glow, medalRing, badge } = getRankStyle(rank)
+const PodiumCard = ({ character, rank, index, maxVote }: CardProps & { isFirst?: boolean }) => {
   const percent = maxVote > 0 ? Math.max(4, Math.round((character.voteCount / maxVote) * 100)) : 0
-
   const isFirst = rank === 1
-  const imageHeight = size === 'lg' ? 'h-36 md:h-44' : 'h-28 md:h-32'
-  const titleSize = size === 'lg' ? 'text-lg md:text-xl' : 'text-base md:text-lg'
-  const medalSize = size === 'lg' ? 'h-12 w-12 md:h-14 md:w-14' : 'h-10 w-10 md:h-12 md:w-12'
-  const iconSize = size === 'lg' ? 'h-5 w-5 md:h-6 md:w-6' : 'h-4 w-4 md:h-5 md:w-5'
+  const isSecond = rank === 2
+
+  // 紙の傾き
+  const rotation = rank === 1 ? 'rotate-1' : isSecond ? '-rotate-3' : 'rotate-2'
+  // 紙の縁
+  const cardBorder =
+    rank === 1 ? 'border-2 border-yellow-200' : isSecond ? 'border border-zinc-200' : 'border border-orange-200'
+  // 順位ナンバー色
+  const numColor = rank === 1 ? 'text-rank-gold' : isSecond ? 'text-rank-silver' : 'text-rank-bronze'
+
+  const imageHeight = isFirst ? 'h-36 md:h-44' : 'h-28 md:h-32'
+  const titleSize = isFirst ? 'text-xl' : 'text-base md:text-lg'
+  const numSize = isFirst ? 'text-5xl md:text-6xl' : 'text-3xl md:text-4xl'
+  const padding = isFirst ? 'p-4' : 'p-3'
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: DURATION.slow, delay: index * 0.08, type: 'spring', stiffness: 120 }}
-      className='relative h-full pt-6 md:pt-7'
+      className='h-full'
+      style={{ filter: STICKER_SHADOW }}
     >
-      {/* フロートメダル */}
-      <motion.div
-        initial={{ scale: 0, rotate: -180 }}
-        animate={{ scale: 1, rotate: 0 }}
-        transition={{ duration: DURATION.slow, delay: 0.3 + index * 0.08, type: 'spring', stiffness: 200 }}
-        className='absolute left-1/2 top-0 -translate-x-1/2 z-10'
-      >
+      <div className={cn('h-full', rotation)}>
         <div
-          className={cn('flex items-center justify-center rounded-full bg-card ring-4 shadow-lg', medalSize, medalRing)}
+          className={cn(
+            'relative h-full flex flex-col bg-card',
+            cardBorder,
+            isFirst ? 'rounded-3xl' : 'rounded-2xl',
+            padding
+          )}
         >
-          <span className={cn('flex items-center justify-center rounded-full w-full h-full', badge)}>
-            {Icon && <Icon className={cn(iconSize)} strokeWidth={2.4} />}
-          </span>
-        </div>
-        {isFirst && (
-          <motion.span
-            aria-hidden
-            className='absolute -inset-2 rounded-full bg-rank-gold/30 -z-10'
-            animate={{ scale: [1, 1.25, 1], opacity: [0.6, 0, 0.6] }}
-            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
-          />
-        )}
-      </motion.div>
+          {/* マスキングテープ */}
+          {rank === 1 && (
+            <>
+              <div aria-hidden className='absolute -top-3 left-4 w-14 h-5 bg-yellow-300/80 -rotate-6 rounded-sm' />
+              <div aria-hidden className='absolute -top-3 right-6 w-10 h-4 bg-pink-200/80 rotate-[5deg] rounded-sm' />
+              <div aria-hidden className='absolute -right-3 top-2 text-rank-gold text-2xl rotate-12 select-none'>
+                ★
+              </div>
+            </>
+          )}
+          {isSecond && (
+            <div aria-hidden className='absolute -top-2 left-3 w-12 h-4 bg-zinc-300/70 -rotate-[8deg] rounded-sm' />
+          )}
+          {rank === 3 && (
+            <div aria-hidden className='absolute -top-2 right-3 w-12 h-4 bg-orange-300/70 rotate-[7deg] rounded-sm' />
+          )}
 
-      <div
-        className={cn(
-          'h-full flex flex-col rounded-xl p-3 pt-7 md:pt-8 relative overflow-hidden',
-          ring,
-          glow,
-          gradient || 'bg-card'
-        )}
-      >
-        {/* 順位ラベル */}
-        <div className='text-center mb-1'>
-          <span
-            className={cn(
-              'inline-block tabular-nums tracking-wide font-bold',
-              isFirst ? 'text-xl md:text-2xl' : 'text-base md:text-lg'
-            )}
-            style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 900 }}
+          <Link
+            to='/characters/$id'
+            params={{ id: character.id }}
+            className='block group rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
           >
-            {rank}
-            <span className='text-xs md:text-sm ml-0.5 font-bold'>位</span>
-          </span>
-        </div>
+            <div
+              className={cn(
+                'relative bg-page-bg w-full flex items-center justify-center overflow-hidden',
+                isFirst ? 'rounded-2xl' : 'rounded-xl',
+                imageHeight
+              )}
+            >
+              <img
+                src={character.character?.image_url}
+                alt={character.character?.name || ''}
+                className='h-full w-auto max-w-full object-contain transition-transform duration-300 group-hover:scale-105'
+                style={{ mixBlendMode: 'multiply' }}
+              />
+            </div>
+          </Link>
 
-        <Link
-          to='/characters/$id'
-          params={{ id: character.id }}
-          className='block group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
-        >
-          <div
-            className={cn(
-              'relative bg-page-bg rounded-md w-full flex items-center justify-center overflow-hidden',
-              imageHeight
-            )}
-          >
-            <img
-              src={character.character?.image_url}
-              alt={character.character?.name || ''}
-              className='h-full w-auto max-w-full object-contain transition-transform duration-300 group-hover:scale-105'
-              style={{ mixBlendMode: 'multiply' }}
-            />
+          <div className='flex items-baseline justify-between gap-2 mt-3'>
+            <span
+              className={cn('font-black tabular-nums leading-none shrink-0', numColor, numSize)}
+              style={{ fontFamily: 'Inter, system-ui, sans-serif', letterSpacing: '-0.06em' }}
+            >
+              {rank}
+            </span>
+            <div className='text-right min-w-0 flex-1'>
+              <h3
+                className={cn('truncate text-foreground', titleSize)}
+                style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 800 }}
+              >
+                {character.character?.name}
+              </h3>
+              {isFirst && <div className='text-[10px] tracking-[0.3em] text-muted-foreground'>CHAMPION</div>}
+            </div>
           </div>
-          <h3
-            className={cn('mt-2 text-foreground truncate text-center', titleSize)}
-            style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 800 }}
-          >
-            {character.character?.name}
-          </h3>
-        </Link>
 
-        <div className='mt-2'>
-          <div className='h-1.5 w-full rounded-full bg-vote-count overflow-hidden'>
-            <motion.div
-              className={cn('h-full rounded-full', bar)}
-              initial={{ width: 0 }}
-              animate={{ width: `${percent}%` }}
-              transition={{ duration: DURATION.slow, delay: 0.4 + index * 0.05, ease: 'easeOut' }}
-            />
+          <div className='mt-3'>
+            <div className={cn('rounded-full bg-vote-count overflow-hidden', isFirst ? 'h-2' : 'h-1.5')}>
+              <motion.div
+                className={cn('h-full rounded-full', getBarClass(rank))}
+                initial={{ width: 0 }}
+                animate={{ width: `${percent}%` }}
+                transition={{ duration: DURATION.slow, delay: 0.4 + index * 0.05, ease: 'easeOut' }}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className='mt-2 flex justify-center'>
-          <RankingVoteBadge characterId={character.id} voteCount={character.voteCount} />
+          <div className='mt-3 flex justify-center'>
+            <RankingVoteBadge characterId={character.id} voteCount={character.voteCount} />
+          </div>
         </div>
       </div>
     </motion.div>
   )
 }
 
+// 4位以降のステッカー回転とマステ装飾を index でデコレーションする
+const ROW_ROTATIONS = [
+  'rotate-[1.5deg]',
+  '-rotate-[2deg]',
+  'rotate-[1deg]',
+  '-rotate-[1.5deg]',
+  'rotate-[2deg]',
+  '-rotate-[1deg]'
+]
+const ROW_TAPES: ({ side: 'left' | 'right'; color: string; angle: string } | null)[] = [
+  { side: 'left', color: 'bg-yellow-200/80', angle: '-rotate-[12deg]' },
+  { side: 'right', color: 'bg-pink-200/80', angle: 'rotate-[10deg]' },
+  { side: 'left', color: 'bg-blue-200/80', angle: '-rotate-[8deg]' },
+  null,
+  { side: 'right', color: 'bg-green-200/80', angle: 'rotate-[8deg]' },
+  null
+]
+
 /**
- * 4位以降の横長行リスト
+ * 4位以降のステッカー横長行
  */
 const RankingRow = ({ character, rank, index, maxVote }: CardProps) => {
-  const { badge, bar } = getRankStyle(rank)
   const percent = maxVote > 0 ? Math.max(4, Math.round((character.voteCount / maxVote) * 100)) : 0
+  const rotation = ROW_ROTATIONS[index % ROW_ROTATIONS.length]
+  const tape = ROW_TAPES[index % ROW_TAPES.length]
 
   return (
     <motion.div
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: DURATION.normal, delay: index * 0.03 }}
+      style={{ filter: STICKER_SHADOW_SM }}
     >
-      <div className='flex items-center gap-3 md:gap-4 border-card rounded-lg bg-card px-3 py-2.5 hover:bg-button-surface-hover transition-colors'>
-        <span
-          className={cn(
-            'inline-flex items-center justify-center rounded-full font-bold tabular-nums shrink-0',
-            badge,
-            'h-7 w-7 md:h-8 md:w-8 text-xs md:text-sm'
-          )}
-        >
-          {rank}
-        </span>
-
-        <Link
-          to='/characters/$id'
-          params={{ id: character.id }}
-          className='flex items-center gap-3 flex-1 min-w-0 group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
-        >
-          <div className='relative bg-page-bg rounded-full h-12 w-12 md:h-14 md:w-14 flex items-center justify-center overflow-hidden shrink-0'>
-            <img
-              src={character.character?.image_url}
-              alt={character.character?.name || ''}
-              className='h-full w-auto max-w-none scale-150 translate-y-[15%] object-contain transition-transform duration-300 group-hover:scale-[1.6]'
-              style={{ mixBlendMode: 'multiply' }}
+      <div className={cn(rotation)}>
+        <div className='relative bg-card rounded-xl border border-zinc-200 dark:border-card-border p-3 flex items-center gap-3'>
+          {tape && (
+            <div
+              aria-hidden
+              className={cn(
+                'absolute -top-1.5 w-8 h-3 rounded-sm',
+                tape.color,
+                tape.angle,
+                tape.side === 'left' ? 'left-4' : 'right-4'
+              )}
             />
-          </div>
-          <div className='flex-1 min-w-0'>
-            <h3
-              className='text-foreground truncate text-sm md:text-base'
-              style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 800 }}
-            >
-              {character.character?.name}
-            </h3>
-            <div className='mt-1 h-1.5 w-full rounded-full bg-vote-count overflow-hidden'>
-              <motion.div
-                className={cn('h-full rounded-full', bar)}
-                initial={{ width: 0 }}
-                animate={{ width: `${percent}%` }}
-                transition={{ duration: DURATION.slow, delay: 0.1 + index * 0.02, ease: 'easeOut' }}
+          )}
+
+          <span
+            className={cn(
+              'font-black tabular-nums w-8 text-center shrink-0 text-3xl text-muted-foreground',
+              getBarClass(rank).startsWith('bg-rank') && 'text-foreground'
+            )}
+            style={{ fontFamily: 'Inter, system-ui, sans-serif', letterSpacing: '-0.06em' }}
+          >
+            {rank}
+          </span>
+
+          <Link
+            to='/characters/$id'
+            params={{ id: character.id }}
+            className='flex items-center gap-3 flex-1 min-w-0 group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
+          >
+            <div className='relative bg-page-bg rounded-full h-14 w-14 flex items-center justify-center overflow-hidden shrink-0'>
+              <img
+                src={character.character?.image_url}
+                alt={character.character?.name || ''}
+                className='h-full w-auto max-w-none scale-150 translate-y-[15%] object-contain transition-transform duration-300 group-hover:scale-[1.6]'
+                style={{ mixBlendMode: 'multiply' }}
               />
             </div>
-          </div>
-        </Link>
+            <div className='flex-1 min-w-0'>
+              <h3
+                className='text-foreground truncate text-sm md:text-base'
+                style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 800 }}
+              >
+                {character.character?.name}
+              </h3>
+              <div className='mt-1 h-1.5 w-full rounded-full bg-vote-count overflow-hidden'>
+                <motion.div
+                  className={cn('h-full rounded-full', getBarClass(rank))}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${percent}%` }}
+                  transition={{ duration: DURATION.slow, delay: 0.1 + index * 0.02, ease: 'easeOut' }}
+                />
+              </div>
+            </div>
+          </Link>
 
-        <div className='shrink-0'>
-          <RankingVoteBadge characterId={character.id} voteCount={character.voteCount} />
+          <div className='shrink-0'>
+            <RankingVoteBadge characterId={character.id} voteCount={character.voteCount} />
+          </div>
         </div>
       </div>
     </motion.div>
@@ -311,7 +311,6 @@ const RankingRow = ({ character, rank, index, maxVote }: CardProps) => {
  * 上位3位の表彰台ブロック（2位左 / 1位中央(大) / 3位右）
  */
 const Podium = ({ top3, ranks, maxVote }: { top3: CharacterWithVotes[]; ranks: number[]; maxVote: number }) => {
-  // 配置: 2位を左、1位を中央、3位を右に並べる（同率の場合は元順序）
   const byRank = (target: number) => {
     const idx = ranks.findIndex((r) => r === target)
     return idx >= 0 ? { character: top3[idx], rank: ranks[idx], index: idx } : null
@@ -322,10 +321,10 @@ const Podium = ({ top3, ranks, maxVote }: { top3: CharacterWithVotes[]; ranks: n
   const third = byRank(3)
 
   return (
-    <div className='grid grid-cols-3 gap-2 md:gap-4 items-end'>
-      <div className='pt-6 md:pt-10'>{second && <PodiumCard {...second} maxVote={maxVote} size='md' />}</div>
-      <div className='pt-0'>{first && <PodiumCard {...first} maxVote={maxVote} size='lg' />}</div>
-      <div className='pt-10 md:pt-16'>{third && <PodiumCard {...third} maxVote={maxVote} size='md' />}</div>
+    <div className='grid grid-cols-3 gap-4 md:gap-6 items-end'>
+      <div className='pt-10 md:pt-12'>{second && <PodiumCard {...second} maxVote={maxVote} />}</div>
+      <div className='pt-0'>{first && <PodiumCard {...first} maxVote={maxVote} />}</div>
+      <div className='pt-12 md:pt-16'>{third && <PodiumCard {...third} maxVote={maxVote} />}</div>
     </div>
   )
 }
@@ -340,7 +339,6 @@ export const RankingList = ({ characters }: RankingListProps) => {
   const ranks = calculateRanks(votedCharacters)
   const maxVote = votedCharacters[0]?.voteCount ?? 0
 
-  // 上位3位（同率対応：rank<=3 のものを集める）
   const podiumIndices = ranks.map((r, i) => (r <= 3 ? i : -1)).filter((i) => i >= 0)
   const restIndices = ranks.map((_, i) => i).filter((i) => !podiumIndices.includes(i))
 
@@ -360,29 +358,26 @@ export const RankingList = ({ characters }: RankingListProps) => {
       ) : (
         <>
           {/* デスクトップ: 表彰台 + 4位以降グリッド */}
-          <div className='hidden md:block space-y-8'>
+          <div className='hidden md:block space-y-10'>
             <Podium top3={podiumChars} ranks={podiumRanks} maxVote={maxVote} />
 
             {restIndices.length > 0 && (
-              <>
-                <div className='h-px bg-separator/60' />
-                <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 md:gap-3'>
-                  {restIndices.map((i, j) => (
-                    <RankingRow
-                      key={votedCharacters[i].id}
-                      character={votedCharacters[i]}
-                      rank={ranks[i]}
-                      index={j}
-                      maxVote={maxVote}
-                    />
-                  ))}
-                </div>
-              </>
+              <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4'>
+                {restIndices.map((i, j) => (
+                  <RankingRow
+                    key={votedCharacters[i].id}
+                    character={votedCharacters[i]}
+                    rank={ranks[i]}
+                    index={j}
+                    maxVote={maxVote}
+                  />
+                ))}
+              </div>
             )}
           </div>
 
           {/* モバイル: 全件リスト */}
-          <div className='md:hidden space-y-2'>
+          <div className='md:hidden space-y-3'>
             {votedCharacters.map((c, i) => (
               <RankingRow key={c.id} character={c} rank={ranks[i]} index={i} maxVote={maxVote} />
             ))}
