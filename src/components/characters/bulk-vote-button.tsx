@@ -8,6 +8,7 @@ import { lastVoteTimesAtom } from '@/atoms/vote-atom'
 import { VoteBurst } from '@/components/characters/vote-burst'
 import { Button } from '@/components/ui/button'
 import { useBulkVote } from '@/hooks/use-bulk-vote'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 
 type BulkVoteButtonProps = {
@@ -75,7 +76,13 @@ export const BulkVoteButton = ({
 
   return (
     <span className='relative inline-block'>
-      <motion.span whileTap={!disabled ? { scale: 0.94 } : undefined} className='inline-block'>
+      <motion.span
+        className='inline-block'
+        style={!disabled ? { filter: STICKER_SHADOW_SM } : undefined}
+        whileHover={!disabled ? { scale: 1.04 } : undefined}
+        whileTap={!disabled ? { scale: 0.96 } : undefined}
+        transition={STICKER_HOVER_TRANSITION}
+      >
         <Button
           onClick={() => {
             if (disabled) return
@@ -86,7 +93,7 @@ export const BulkVoteButton = ({
             'h-10 px-5 rounded-full text-sm font-semibold gap-2',
             allVotedToday
               ? 'bg-button-disabled text-button-disabled-foreground border border-button-disabled-border hover:bg-button-disabled disabled:opacity-100 cursor-not-allowed'
-              : 'bg-brand text-brand-foreground hover:bg-brand/90 shadow-sm hover:shadow-md',
+              : 'bg-brand text-brand-foreground hover:bg-brand/90',
             className
           )}
         >
