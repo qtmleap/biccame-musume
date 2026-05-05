@@ -139,7 +139,7 @@ const RankingCard = ({ character, rank, index, maxVote, size = 'sm' }: CardProps
       transition={{ duration: DURATION.normal, delay: index * 0.05 }}
       className='h-full'
     >
-      <div className={cn('h-full flex flex-col border-card rounded-lg p-3 bg-card', ring)}>
+      <div className={cn('h-full flex flex-col rounded-lg p-3 bg-card', ring || 'border-card')}>
         <div className='flex items-center justify-between mb-2'>
           <span
             className={cn(
