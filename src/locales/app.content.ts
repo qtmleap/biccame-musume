@@ -215,7 +215,7 @@ const appContent = {
       storeAndOthers: '{stores} 他'
     },
     navigation: {
-      characters: 'ビッカメ娘一覧',
+      characters: 'ビッカメ娘',
       events: 'イベント',
       calendar: '誕生日',
       location: 'マップ',

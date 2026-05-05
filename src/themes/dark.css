@@ -1,0 +1,125 @@
+.dark {
+  --background: var(--color-zinc-950);
+  --foreground: var(--color-zinc-50);
+  --card: var(--color-zinc-900);
+  --card-foreground: var(--color-zinc-50);
+  --popover: var(--color-zinc-900);
+  --popover-foreground: var(--color-zinc-50);
+  --primary: var(--color-zinc-200);
+  --primary-foreground: var(--color-zinc-900);
+  --secondary: var(--color-zinc-700);
+  --secondary-foreground: var(--color-zinc-50);
+  --muted: var(--color-zinc-800);
+  --muted-foreground: var(--color-zinc-400);
+  --accent: var(--color-zinc-800);
+  --accent-foreground: var(--color-zinc-50);
+  --destructive: var(--color-red-500);
+  --border: var(--color-zinc-800);
+  --input: var(--color-zinc-800);
+  --ring: var(--color-zinc-500);
+  --chart-1: var(--color-indigo-500);
+  --chart-2: var(--color-emerald-500);
+  --chart-3: var(--color-yellow-500);
+  --chart-4: var(--color-purple-500);
+  --chart-5: var(--color-rose-500);
+  --sidebar: var(--color-zinc-900);
+  --sidebar-foreground: var(--color-zinc-50);
+  --sidebar-primary: var(--color-indigo-500);
+  --sidebar-primary-foreground: var(--color-zinc-50);
+  --sidebar-accent: var(--color-zinc-800);
+  --sidebar-accent-foreground: var(--color-zinc-50);
+  --sidebar-border: var(--color-zinc-800);
+  --sidebar-ring: var(--color-zinc-500);
+
+  /* Page background */
+  --page-bg: var(--color-zinc-950);
+
+  /* Brand (corporate red) */
+  --brand: var(--color-red-500);
+  --brand-foreground: var(--color-zinc-50);
+
+  /* Card border (distinguish from page bg) */
+  --card-border: var(--color-zinc-700);
+  --card-border-width: 1px;
+
+  /* Separator (visible against dark page-bg) */
+  --separator: var(--color-zinc-600);
+
+  /* Status badges (event lifecycle) */
+  --status-upcoming: var(--color-blue-900);
+  --status-upcoming-foreground: var(--color-blue-200);
+  --status-ongoing: var(--color-green-900);
+  --status-ongoing-foreground: var(--color-green-200);
+  --status-last-day: var(--color-red-900);
+  --status-last-day-foreground: var(--color-red-200);
+  --status-ended: var(--color-zinc-800);
+  --status-ended-foreground: var(--color-zinc-400);
+
+  /* Category badges (event type) */
+  --category-limited-card: var(--color-purple-900);
+  --category-limited-card-foreground: var(--color-purple-200);
+  --category-limited-card-solid: var(--color-purple-500);
+  --category-regular-card: var(--color-blue-900);
+  --category-regular-card-foreground: var(--color-blue-200);
+  --category-regular-card-solid: var(--color-blue-500);
+  --category-ackey: var(--color-amber-900);
+  --category-ackey-foreground: var(--color-amber-200);
+  --category-ackey-solid: var(--color-amber-400);
+  --category-other: var(--color-pink-900);
+  --category-other-foreground: var(--color-pink-200);
+  --category-other-solid: var(--color-pink-400);
+
+  /* Activity / interaction state */
+  --status-interested: var(--color-yellow-900);
+  --status-interested-foreground: var(--color-yellow-200);
+  --status-completed: var(--color-purple-900);
+  --status-completed-foreground: var(--color-purple-200);
+
+  /* Rank medals */
+  --rank-gold: var(--color-yellow-500);
+  --rank-gold-foreground: var(--color-yellow-50);
+  --rank-silver: var(--color-zinc-400);
+  --rank-silver-foreground: var(--color-zinc-50);
+  --rank-bronze: var(--color-amber-700);
+  --rank-bronze-foreground: var(--color-zinc-50);
+  --rank-default: var(--color-blue-600);
+  --rank-default-foreground: var(--color-zinc-50);
+
+  /* Calendar markers */
+  --calendar-sunday: var(--color-rose-400);
+  --calendar-saturday: var(--color-blue-400);
+  --calendar-today: var(--color-rose-900);
+  --calendar-today-border: var(--color-rose-700);
+
+  /* Semantic */
+  --success: var(--color-green-500);
+  --success-foreground: var(--color-zinc-50);
+  --info: var(--color-blue-500);
+  --info-foreground: var(--color-zinc-50);
+  --warning: var(--color-amber-500);
+  --warning-foreground: var(--color-zinc-50);
+
+  /* Engagement icons */
+  --action-interest: var(--color-pink-400);
+  --action-interest-soft: var(--color-pink-200);
+  --action-award: var(--color-amber-400);
+  --action-award-soft: var(--color-amber-200);
+
+  /* Button surfaces (outline-style buttons over dark page bg) */
+  --button-surface: var(--color-zinc-800);
+  --button-surface-foreground: var(--color-zinc-50);
+  --button-surface-hover: var(--color-zinc-700);
+  --button-disabled: var(--color-zinc-800);
+  --button-disabled-foreground: var(--color-zinc-200);
+  --button-disabled-border: var(--color-zinc-600);
+
+  /* Social brand */
+  --social-github: var(--color-zinc-700);
+  --social-github-foreground: var(--color-zinc-50);
+  --social-x: var(--color-zinc-800);
+  --social-x-foreground: var(--color-zinc-50);
+
+  /* Celebrate gradient (birthday hero) */
+  --celebrate-from: var(--color-pink-400);
+  --celebrate-to: var(--color-purple-400);
+}

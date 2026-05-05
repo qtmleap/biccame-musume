@@ -55,9 +55,9 @@ export const CharacterVoteButton = ({
     if (isSuccess && data?.message) {
       toast.success(data.message, {
         classNames: {
-          toast: 'text-gray-900',
-          description: 'text-gray-900! font-semibold!',
-          icon: 'text-green-600'
+          toast: 'text-foreground',
+          description: 'text-foreground! font-semibold!',
+          icon: 'text-success'
         },
         icon: <CircleCheckIcon />
       })
@@ -83,8 +83,8 @@ export const CharacterVoteButton = ({
 
       toast.error(errorMessage, {
         classNames: {
-          toast: 'text-gray-900',
-          description: 'text-gray-900!'
+          toast: 'text-foreground',
+          description: 'text-foreground!'
         }
       })
     }
@@ -104,22 +104,23 @@ export const CharacterVoteButton = ({
     return VOTE_LABELS.vote
   }
 
+  const stateClass = hasVotedToday
+    ? 'bg-button-disabled text-button-disabled-foreground border border-button-disabled-border cursor-not-allowed disabled:opacity-100 hover:bg-button-disabled'
+    : 'bg-brand hover:bg-brand/90 text-brand-foreground'
+
   if (variant === 'compact') {
     return (
       <Button
         size='sm'
+        variant={hasVotedToday ? 'secondary' : 'default'}
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
           handleVote()
         }}
-        disabled={hasVotedToday || isPending}
-        className={cn(
-          'rounded-full px-4 h-7 text-xs font-semibold',
-          hasVotedToday
-            ? 'bg-gray-200 text-gray-600 cursor-not-allowed hover:bg-gray-200'
-            : 'bg-[#e50012] text-white hover:bg-[#c40010]'
-        )}
+        aria-disabled={hasVotedToday || isPending}
+        disabled={isPending}
+        className={cn('h-8 px-3 rounded-full text-xs', stateClass)}
       >
         {getButtonText()}
       </Button>
@@ -128,16 +129,15 @@ export const CharacterVoteButton = ({
 
   return (
     <Button
+      variant={hasVotedToday ? 'secondary' : 'default'}
       onClick={(e) => {
         e.preventDefault()
         e.stopPropagation()
         handleVote()
       }}
-      disabled={hasVotedToday || isPending}
-      className={cn(
-        'w-full font-semibold',
-        hasVotedToday ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-[#e50012] hover:bg-[#c40010] text-white'
-      )}
+      aria-disabled={hasVotedToday || isPending}
+      disabled={isPending}
+      className={cn('w-full h-9 rounded-full text-xs font-semibold', stateClass)}
     >
       {getButtonText()}
     </Button>

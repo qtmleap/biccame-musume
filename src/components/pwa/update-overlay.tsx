@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo } from 'react'
 import { charactersQueryKey } from '@/hooks/use-characters'
+import { DURATION } from '@/lib/motion'
 import { client } from '@/utils/client'
 
 export type UpdateOverlayStatus = 'clearing' | 'reloading'
@@ -59,7 +60,9 @@ export const UpdateOverlay = ({ open, status }: Props) => {
 
     return shuffled.map((c, i) => {
       const { top, left } = pickPositionAvoidingCenter()
-      const imageKey = c.character.images[Math.floor(Math.random() * c.character.images.length)]
+      const sdImages = c.character.images.filter((url) => !url.endsWith('4.png'))
+      const pool = sdImages.length > 0 ? sdImages : c.character.images
+      const imageKey = pool[Math.floor(Math.random() * pool.length)]
       const imageUrl = new URL(imageKey, 'https://biccame.jp/profile/').href
       return {
         id: `${c.id}-${i}`,
@@ -81,7 +84,7 @@ export const UpdateOverlay = ({ open, status }: Props) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: DURATION.fast }}
           className='fixed inset-0 z-[200] flex items-center justify-center bg-background/80 backdrop-blur-md overflow-hidden'
         >
           {slots.map((slot) => (
@@ -111,7 +114,7 @@ export const UpdateOverlay = ({ open, status }: Props) => {
                   damping: 14,
                   delay: slot.delay
                 },
-                opacity: { duration: 0.2, delay: slot.delay },
+                opacity: { duration: DURATION.fast, delay: slot.delay },
                 y: {
                   duration: 2.8,
                   repeat: Number.POSITIVE_INFINITY,
@@ -126,7 +129,7 @@ export const UpdateOverlay = ({ open, status }: Props) => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
+            transition={{ duration: DURATION.normal, delay: 0.1 }}
             className='relative z-10 flex flex-col items-center gap-4 text-center px-6'
           >
             <motion.img
@@ -146,7 +149,7 @@ export const UpdateOverlay = ({ open, status }: Props) => {
               {([0, 1, 2] as const).map((i) => (
                 <motion.span
                   key={i}
-                  className='h-2 w-2 rounded-full bg-pink-400'
+                  className='h-2 w-2 rounded-full bg-action-interest-soft'
                   animate={{ opacity: [0.3, 1, 0.3] }}
                   transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, delay: i * 0.22, ease: 'easeInOut' }}
                 />

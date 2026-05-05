@@ -31,7 +31,7 @@ export const GanttRow = ({
   const { event, startOffset, duration, status } = bar
 
   return (
-    <div className='relative flex h-10'>
+    <div className='relative flex h-8'>
       {dates.map((date) => (
         <GanttGridCell key={date.format('YYYY-MM-DD')} date={date} today={today} actualMonthEnd={actualMonthEnd} />
       ))}
@@ -40,7 +40,7 @@ export const GanttRow = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <div
-              className={`absolute top-1 bottom-1 rounded overflow-hidden ${getCategoryColor(event.category, status as EventStatus)}`}
+              className={`absolute top-1 bottom-1 rounded-sm overflow-hidden ${getCategoryColor(event.category, status as EventStatus)}`}
               style={{
                 left: `${startOffset * 32}px`,
                 width: `${duration * 32 - 4}px`
@@ -77,11 +77,11 @@ export const GanttRow = ({
           <TooltipContent side='top' className='max-w-xs'>
             <p className='font-medium'>{event.title}</p>
             {event.stores && event.stores.length > 0 && (
-              <p className='text-xs text-gray-500'>
+              <p className='text-xs text-muted-foreground'>
                 {event.stores.map((key) => appContent.content.store_name[key as StoreKey] || key).join(', ')}
               </p>
             )}
-            <p className='text-xs text-gray-500'>
+            <p className='text-xs text-muted-foreground'>
               {dayjs(event.startDate).format('M/D')}
               {event.endDate ? `〜${dayjs(event.endDate).format('M/D')}` : EVENT_LABELS.untilStockLasts}
             </p>

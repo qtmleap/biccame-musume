@@ -34,7 +34,7 @@ export const RouteResultCard = ({ result }: Props) => {
               <div key={store.id}>
                 {/* 店舗名 */}
                 <div className='flex items-center gap-2 py-2 text-sm'>
-                  <span className='flex size-6 shrink-0 items-center justify-center rounded-full bg-green-500 text-xs text-white'>
+                  <span className='flex size-6 shrink-0 items-center justify-center rounded-full bg-success text-xs text-success-foreground'>
                     {index + 1}
                   </span>
                   <span className='font-medium'>{store.name}</span>
@@ -45,9 +45,9 @@ export const RouteResultCard = ({ result }: Props) => {
                   <div className='ml-3 flex gap-6'>
                     {/* 縦線 + 合計時間オーバーレイ */}
                     <div className='relative flex flex-col items-center'>
-                      <div className='h-full w-0 border-l-4 border-blue-400' />
+                      <div className='h-full w-0 border-l-4 border-info' />
                       {/* 合計時間を中央にオーバーレイ */}
-                      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded bg-blue-400 px-2 py-0.5 text-sm font-medium text-white whitespace-nowrap'>
+                      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded bg-info px-2 py-0.5 text-sm font-medium text-info-foreground whitespace-nowrap'>
                         {leg.duration}分
                       </div>
                     </div>

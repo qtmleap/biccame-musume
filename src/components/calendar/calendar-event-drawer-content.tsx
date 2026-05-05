@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DrawerClose, DrawerFooter } from '@/components/ui/drawer'
+import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { CALENDAR_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
@@ -38,7 +39,7 @@ export const CalendarEventDrawerContent = ({ events }: CalendarEventDrawerConten
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{
-                duration: 0.15,
+                duration: DURATION.fast,
                 delay: eventIndex * 0.05,
                 ease: 'easeOut'
               }}
@@ -48,10 +49,10 @@ export const CalendarEventDrawerContent = ({ events }: CalendarEventDrawerConten
                 params={{ id: event.character.id }}
                 className={cn(
                   'flex items-center gap-3 p-3 rounded-lg transition-colors',
-                  isCharacter ? 'bg-pink-500/10 hover:bg-pink-500/20' : 'bg-blue-500/10 hover:bg-blue-500/20'
+                  isCharacter ? 'bg-action-interest/10 hover:bg-action-interest/20' : 'bg-info/10 hover:bg-info/20'
                 )}
               >
-                <Avatar className='w-12 h-12 border border-border overflow-hidden'>
+                <Avatar className='w-12 h-12'>
                   <AvatarImage
                     src={event.character.character?.image_url}
                     alt={event.character.character?.name || ''}
@@ -62,13 +63,7 @@ export const CalendarEventDrawerContent = ({ events }: CalendarEventDrawerConten
                 <div className='flex-1 min-w-0'>
                   <p className='font-medium truncate'>{event.character.character?.name}</p>
                   <p className='text-sm text-muted-foreground truncate'>{event.character.store?.name}</p>
-                  <Badge
-                    variant='secondary'
-                    className={cn(
-                      'mt-1 text-xs flex items-center gap-1 w-fit',
-                      isCharacter ? 'bg-pink-500/20 text-pink-700' : 'bg-blue-500/20 text-blue-700'
-                    )}
-                  >
+                  <Badge variant='secondary' className='mt-1'>
                     {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
                     {event.years}
                     {isCharacter ? CALENDAR_LABELS.age : CALENDAR_LABELS.anniversary}

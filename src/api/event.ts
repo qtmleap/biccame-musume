@@ -4,7 +4,7 @@ import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/se
 import { getEventsStats } from '@/services/me-service'
 import type { Bindings } from '@/types/bindings'
 import { Twitter } from '@/utils/twitter'
-import { EventRequestSchema, EventSchema } from '../schemas/event.dto'
+import { EventDetailSchema, EventRequestSchema, EventSchema } from '../schemas/event.dto'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
@@ -42,10 +42,10 @@ routes.openapi(
       200: {
         content: {
           'application/json': {
-            schema: EventSchema
+            schema: EventDetailSchema
           }
         },
-        description: 'イベント一覧取得成功'
+        description: 'イベント詳細取得成功'
       },
       404: {
         content: {
@@ -84,7 +84,7 @@ routes.openapi(
       201: {
         content: {
           'application/json': {
-            schema: EventSchema
+            schema: EventDetailSchema
           }
         },
         description: 'イベント作成成功'
@@ -137,7 +137,7 @@ routes.openapi(
       200: {
         content: {
           'application/json': {
-            schema: EventSchema
+            schema: EventDetailSchema
           }
         },
         description: 'イベント更新成功'

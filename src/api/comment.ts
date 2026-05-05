@@ -1,12 +1,14 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { getPrisma } from '@/lib/prisma'
+import { CFAuth } from '@/middleware/cloudflare-access'
 import { CommentResponseSchema, CreateCommentRequestSchema, ListCommentsResponseSchema } from '@/schemas/comment.dto'
-import { createComment, listComments } from '@/services/comment-service'
+import { createComment, deleteComment, listComments } from '@/services/comment-service'
 import type { Bindings, Variables } from '@/types/bindings'
 import { loadBiccameMusumeIdSet } from '@/utils/character-whitelist'
 import { moderateText } from '@/utils/moderation'
 import { containsNgWord } from '@/utils/ng-words'
 import { sanitizeCommentBody } from '@/utils/sanitize'
+import { verifyTokenOptional } from '@/utils/token'
 import { verifyTurnstileToken } from '@/utils/turnstile'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
@@ -98,11 +100,13 @@ routes.openapi(
         description: 'レート制限エラー'
       }
     },
+    middleware: [verifyTokenOptional] as const,
     tags: ['comments']
   }),
   async (c) => {
     const { uuid } = c.req.valid('param')
     const { characterId, body, turnstileToken } = c.req.valid('json')
+    const userId = c.get('jwtPayload')?.uid
 
     const ip = c.req.header('cf-connecting-ip') ?? '127.0.0.1'
 
@@ -149,8 +153,67 @@ routes.openapi(
     }
 
     // 8. コメント作成
-    const comment = await createComment(prisma, uuid, { characterId, body: sanitizedBody, ipAddress: ip })
+    const comment = await createComment(prisma, uuid, {
+      characterId,
+      body: sanitizedBody,
+      ipAddress: ip,
+      userId
+    })
     return c.json(comment, 201)
+  }
+)
+
+/**
+ * コメント削除（管理者のみ・論理削除）
+ * DELETE /api/events/:uuid/comments/:commentId
+ */
+routes.openapi(
+  createRoute({
+    method: 'delete',
+    path: '/:uuid/comments/:commentId',
+    request: {
+      params: z.object({
+        uuid: z.string().nonempty().uuid(),
+        commentId: z.string().nonempty().uuid()
+      })
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: z.object({ message: z.string().nonempty() })
+          }
+        },
+        description: 'コメント削除成功'
+      },
+      401: {
+        content: {
+          'application/json': {
+            schema: z.object({ message: z.string().nonempty() })
+          }
+        },
+        description: '認証エラー'
+      },
+      404: {
+        content: {
+          'application/json': {
+            schema: z.object({ message: z.string().nonempty() })
+          }
+        },
+        description: 'コメントが見つかりません'
+      }
+    },
+    middleware: [CFAuth] as const,
+    tags: ['comments']
+  }),
+  async (c) => {
+    const { commentId } = c.req.valid('param')
+    const prisma = getPrisma(c.env)
+    const ok = await deleteComment(prisma, commentId)
+    if (!ok) {
+      return c.json({ message: 'Not Found' }, 404)
+    }
+    return c.json({ message: 'ok' }, 200)
   }
 )
 

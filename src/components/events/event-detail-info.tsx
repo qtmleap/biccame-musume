@@ -2,12 +2,13 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar, Gift, Link2, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
+import { DURATION } from '@/lib/motion'
 import { EVENT_LABELS, REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app.content'
-import type { Event } from '@/schemas/event.dto'
+import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 export type EventDetailInfoProps = {
-  event: Event
+  event: EventDetail
 }
 
 /**
@@ -39,15 +40,17 @@ const EventPeriodSection = ({ event }: { event: Event }) => {
 
   return (
     <div className='flex items-start gap-3'>
-      <Calendar className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
+      <Calendar className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
       <div className='min-w-0 flex-1'>
-        <p className='text-sm text-gray-500'>開催期間</p>
-        <p className='text-sm text-gray-900'>
+        <p className='text-xs font-medium text-muted-foreground'>開催期間</p>
+        <p className='text-sm text-foreground'>
           {startDate.format('YYYY年M月D日')}
           {endDate ? ` 〜 ${endDate.format('YYYY年M月D日')}` : ' 〜 なくなり次第終了'}
         </p>
         {event.endedAt && (
-          <p className='text-xs text-gray-500 mt-0.5'>実際の終了: {dayjs(event.endedAt).format('YYYY年M月D日')}</p>
+          <p className='text-xs text-muted-foreground mt-0.5'>
+            実際の終了: {dayjs(event.endedAt).format('YYYY年M月D日')}
+          </p>
         )}
       </div>
     </div>
@@ -62,15 +65,15 @@ const EventStoresSection = ({ stores }: { stores: string[] }) => {
 
   return (
     <div className='flex items-start gap-3'>
-      <Store className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
+      <Store className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
       <div className='min-w-0 flex-1'>
-        <p className='text-sm text-gray-500'>対象店舗</p>
-        <div className='text-sm text-gray-900 flex flex-wrap gap-x-1'>
+        <p className='text-xs font-medium text-muted-foreground'>対象店舗</p>
+        <div className='text-sm text-foreground flex flex-wrap gap-x-1'>
           {stores.map((storeKey, index) => {
             const storeName = STORE_NAME_LABELS[storeKey as StoreKey] || storeKey
             return (
               <span key={storeKey} className='flex items-center gap-1'>
-                <Link to='/characters/$id' params={{ id: storeKey }} className='text-pink-600 hover:underline'>
+                <Link to='/characters/$id' params={{ id: storeKey }} className='text-brand hover:underline'>
                   {storeName}
                 </Link>
                 {index < stores.length - 1 && <span>、</span>}
@@ -91,10 +94,10 @@ const EventLimitedQuantitySection = ({ event }: { event: Event }) => {
 
   return (
     <div className='flex items-start gap-3'>
-      <Package className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
+      <Package className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
       <div className='min-w-0 flex-1'>
-        <p className='text-sm text-gray-500'>限定数</p>
-        <p className='text-sm text-gray-900'>{event.limitedQuantity.toLocaleString()}個</p>
+        <p className='text-xs font-medium text-muted-foreground'>限定数</p>
+        <p className='text-sm text-foreground'>{event.limitedQuantity.toLocaleString()}個</p>
       </div>
     </div>
   )
@@ -105,16 +108,16 @@ const EventLimitedQuantitySection = ({ event }: { event: Event }) => {
  */
 const EventConditionsSection = ({ conditions }: { conditions: Event['conditions'] }) => (
   <div className='flex items-start gap-3'>
-    <Gift className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
+    <Gift className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
     <div className='min-w-0 flex-1'>
-      <p className='text-sm text-gray-500'>配布条件</p>
-      <div className='space-y-1'>
+      <p className='text-xs font-medium text-muted-foreground'>配布条件</p>
+      <ul className='list-disc list-inside space-y-1 marker:text-muted-foreground'>
         {conditions.map((condition) => (
-          <div key={condition.uuid} className='text-sm text-gray-900'>
-            • {getConditionDetail(condition)}
-          </div>
+          <li key={condition.uuid} className='text-sm text-foreground'>
+            {getConditionDetail(condition)}
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   </div>
 )
@@ -122,14 +125,14 @@ const EventConditionsSection = ({ conditions }: { conditions: Event['conditions'
 /**
  * 参考URLセクション
  */
-const EventReferenceUrlsSection = ({ referenceUrls }: { referenceUrls?: Event['referenceUrls'] }) => {
+const EventReferenceUrlsSection = ({ referenceUrls }: { referenceUrls?: EventDetail['referenceUrls'] }) => {
   if (!referenceUrls || referenceUrls.length === 0) return null
 
   return (
     <div className='flex items-start gap-3'>
-      <Link2 className='h-5 w-5 text-gray-400 shrink-0 mt-0.5' />
+      <Link2 className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
       <div className='min-w-0 flex-1'>
-        <p className='text-sm text-gray-500'>参考URL</p>
+        <p className='text-xs font-medium text-muted-foreground'>参考URL</p>
         <div className='space-y-1'>
           {referenceUrls.map((ref) => (
             <div key={ref.url}>
@@ -137,7 +140,7 @@ const EventReferenceUrlsSection = ({ referenceUrls }: { referenceUrls?: Event['r
                 href={ref.url}
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-sm text-pink-600 hover:underline'
+                className='text-sm text-brand hover:underline'
               >
                 {REFERENCE_URL_TYPE_LABELS_LONG[ref.type]}
               </a>
@@ -157,10 +160,10 @@ export const EventDetailInfo = ({ event }: EventDetailInfoProps) => (
     key={`info-${event.uuid}`}
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
-    transition={{ duration: 0.5, delay: 0.3 }}
+    transition={{ duration: DURATION.normal, delay: 0.3 }}
     className='space-y-3'
   >
-    <h2 className='text-xl font-bold text-gray-900'>イベント情報</h2>
+    <h2 className='text-xl font-bold text-foreground'>イベント情報</h2>
     <div className='space-y-3'>
       <EventPeriodSection event={event} />
       <EventStoresSection stores={event.stores ?? []} />

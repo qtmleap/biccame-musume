@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { Calendar } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useMemo } from 'react'
+import { DURATION } from '@/lib/motion'
 import type { StoreData } from '@/schemas/store.dto'
 import { UpcomingEventListItem } from './upcoming-event-list-item'
 
@@ -51,12 +52,12 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
     <section>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div className='flex items-center gap-2 mb-4'>
-          <Calendar className='h-5 w-5 text-[#e50012]' />
-          <h2 className='text-base font-bold text-gray-800'>直近の誕生日</h2>
+          <Calendar className='h-5 w-5 text-brand' />
+          <h2 className='text-base font-bold text-foreground'>直近の誕生日</h2>
         </div>
 
         {upcomingEvents.length === 0 ? (
-          <div className='text-center py-4 text-gray-500 text-sm'>誕生日がありません</div>
+          <div className='text-center py-4 text-muted-foreground text-sm'>誕生日がありません</div>
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
             {upcomingEvents.map((event, index) => (
@@ -69,12 +70,12 @@ export const UpcomingEventList = ({ characters }: UpcomingEventListProps) => {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6, ease: 'easeOut' }}
+            transition={{ duration: DURATION.normal, delay: 0.6, ease: 'easeOut' }}
             className='mt-4 text-right'
           >
             <Link
               to='/calendar'
-              className='text-sm text-gray-700 hover:text-gray-900 font-semibold hover:underline transition-colors'
+              className='text-sm text-muted-foreground hover:text-foreground font-semibold hover:underline transition-colors'
             >
               今後の誕生日一覧
             </Link>

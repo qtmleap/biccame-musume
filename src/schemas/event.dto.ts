@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { CommentResponseSchema } from './comment.dto'
 import { StoreKeySchema } from './store.dto'
 /**
  * イベントステータス
@@ -98,7 +99,7 @@ export const EventRequestQuerySchema = z.object({
 export type EventRequestQuery = z.infer<typeof EventRequestQuerySchema>
 
 /**
- * イベント（API レスポンス用）
+ * イベント（API レスポンス用・一覧）
  */
 export const EventSchema = z.object({
   uuid: z.uuid(),
@@ -109,7 +110,6 @@ export const EventSchema = z.object({
   endDate: z.coerce.date().optional(),
   endedAt: z.coerce.date().optional(),
   limitedQuantity: z.number().optional(),
-  referenceUrls: z.array(ReferenceUrlSchema),
   conditions: z.array(EventConditionSchema),
   isVerified: z.boolean(),
   isPreliminary: z.boolean(),
@@ -122,6 +122,17 @@ export const EventSchema = z.object({
 })
 
 export type Event = z.infer<typeof EventSchema>
+
+/**
+ * イベント詳細（API レスポンス用・単件）
+ * 一覧スキーマに referenceUrls と comments を追加
+ */
+export const EventDetailSchema = EventSchema.extend({
+  referenceUrls: z.array(ReferenceUrlSchema),
+  comments: z.array(CommentResponseSchema)
+})
+
+export type EventDetail = z.infer<typeof EventDetailSchema>
 
 /**
  * イベント統計リクエストスキーマ

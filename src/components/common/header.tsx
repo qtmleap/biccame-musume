@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom'
 import { LoginButton } from '@/components/auth/login-button'
 import { GlobalSearch } from '@/components/common/global-search'
 import { Button } from '@/components/ui/button'
+import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { NAVIGATION_LABELS } from '@/locales/app.content'
 
@@ -82,7 +83,7 @@ export const Header = ({ className }: HeaderProps) => {
                   <Link
                     key={link.to}
                     to={link.to}
-                    className='text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
+                    className='text-sm font-medium transition-colors text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
                   >
                     {link.label}
                   </Link>
@@ -91,7 +92,7 @@ export const Header = ({ className }: HeaderProps) => {
               <Button
                 variant='ghost'
                 size='icon'
-                className='h-8 w-8 text-muted-foreground hover:text-foreground'
+                className='h-8 w-8 text-muted-foreground hover:text-foreground border border-transparent'
                 onClick={() => setSearchOpen(true)}
                 aria-label='検索'
               >
@@ -105,7 +106,7 @@ export const Header = ({ className }: HeaderProps) => {
               <Button
                 variant='ghost'
                 size='icon'
-                className='h-12 w-12 flex items-center justify-center'
+                className='h-12 w-12 flex items-center justify-center border border-transparent'
                 onClick={() => setSearchOpen(true)}
                 aria-label='検索'
               >
@@ -115,7 +116,7 @@ export const Header = ({ className }: HeaderProps) => {
               <Button
                 variant='ghost'
                 size='icon'
-                className='h-12 w-12 flex items-center justify-center'
+                className='h-12 w-12 flex items-center justify-center border border-transparent'
                 onClick={toggleMenu}
                 aria-label={mobileMenuOpen ? NAVIGATION_LABELS.closeMenu : NAVIGATION_LABELS.openMenu}
               >
@@ -127,7 +128,7 @@ export const Header = ({ className }: HeaderProps) => {
                       rotate: mobileMenuOpen ? 90 : 0,
                       scale: mobileMenuOpen ? 0.5 : 1
                     }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: DURATION.fast }}
                     className='absolute'
                   >
                     <Menu />
@@ -139,7 +140,7 @@ export const Header = ({ className }: HeaderProps) => {
                       rotate: mobileMenuOpen ? 0 : -90,
                       scale: mobileMenuOpen ? 1 : 0.5
                     }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: DURATION.fast }}
                     className='absolute'
                   >
                     <X />
@@ -165,7 +166,7 @@ export const Header = ({ className }: HeaderProps) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: DURATION.fast }}
                   />
 
                   {/* メニュー本体 */}
@@ -174,7 +175,7 @@ export const Header = ({ className }: HeaderProps) => {
                     initial={{ y: -16, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -16, opacity: 0 }}
-                    transition={{ duration: 0.2, ease: 'easeOut' }}
+                    transition={{ duration: DURATION.fast, ease: 'easeOut' }}
                   >
                     <div className='mx-auto px-4 py-4'>
                       <div className='flex flex-col gap-1'>
@@ -186,12 +187,12 @@ export const Header = ({ className }: HeaderProps) => {
                               initial={{ x: -16, opacity: 0 }}
                               animate={{ x: 0, opacity: 1 }}
                               exit={{ x: -16, opacity: 0 }}
-                              transition={{ duration: 0.2, delay: index * 0.05, ease: 'easeOut' }}
+                              transition={{ duration: DURATION.fast, delay: index * 0.05, ease: 'easeOut' }}
                             >
                               <Link
                                 to={link.to}
                                 onClick={closeMenu}
-                                className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
+                                className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
                               >
                                 <Icon className='w-6 h-6' />
                                 {link.label}
@@ -203,7 +204,7 @@ export const Header = ({ className }: HeaderProps) => {
                           initial={{ x: -16, opacity: 0 }}
                           animate={{ x: 0, opacity: 1 }}
                           exit={{ x: -16, opacity: 0 }}
-                          transition={{ duration: 0.2, delay: navLinks.length * 0.05, ease: 'easeOut' }}
+                          transition={{ duration: DURATION.fast, delay: navLinks.length * 0.05, ease: 'easeOut' }}
                         >
                           <LoginButton variant='menu' onClose={closeMenu} />
                         </motion.div>

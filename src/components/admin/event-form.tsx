@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
 import { useCharacters } from '@/hooks/use-characters'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/use-events'
 import { buildInitialValues, toEventPayload } from '@/lib/event-form'
@@ -118,20 +119,13 @@ export const EventForm = ({
     setIsConfirming(true)
   }
 
-  const handleValidationError = (formErrors: typeof errors) => {
-    console.error('Validation errors:', formErrors)
-  }
-
   const handleBack = () => {
     setIsConfirming(false)
   }
 
   const onSubmit = async () => {
     if (!confirmedData) return
-    if (isSubmitted) {
-      console.warn('Already submitted, skipping duplicate submission')
-      return
-    }
+    if (isSubmitted) return
 
     setIsSubmitted(true)
 
@@ -159,241 +153,240 @@ export const EventForm = ({
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(handleConfirm, handleValidationError)} className='space-y-3'>
-        {/* イベント名 */}
-        <div>
-          <label htmlFor='event-title' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
-            <FileText className='size-4' />
-            イベント名
-          </label>
-          <Input
-            id='event-title'
-            type='text'
-            placeholder='例: 新春アクキープレゼント'
-            {...register('title')}
-            className='w-full'
-          />
-          {errors.title && <p className='mt-1 text-xs text-destructive'>{errors.title.message}</p>}
-        </div>
+    <form onSubmit={handleSubmit(handleConfirm)} className='space-y-5'>
+      {/* イベント名 */}
+      <div>
+        <label htmlFor='event-title' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+          <FileText className='size-4' />
+          イベント名
+        </label>
+        <Input
+          id='event-title'
+          type='text'
+          placeholder='例: 新春アクキープレゼント'
+          {...register('title')}
+          className='w-full'
+        />
+        {errors.title && <p className='mt-1 text-xs text-destructive'>{errors.title.message}</p>}
+      </div>
 
-        {/* 日付設定 */}
-        <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-          <DateField
-            id='start-date'
-            label={ADMIN_LABELS.startDate}
-            register={register('startDate')}
-            error={errors.startDate?.message}
-          />
-          <DateField
-            id='end-date'
-            label='終了日（任意）'
-            register={register('endDate')}
-            clearable
-            onClear={() => setValue('endDate', undefined, { shouldDirty: true, shouldValidate: true })}
-          />
-        </div>
+      {/* 日付設定 */}
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+        <DateField
+          id='start-date'
+          label={ADMIN_LABELS.startDate}
+          control={control}
+          name='startDate'
+          error={errors.startDate?.message}
+        />
+        <DateField id='end-date' label='終了日（任意）' control={control} name='endDate' clearable />
+      </div>
 
-        {/* 実際の終了日 */}
+      {/* 実際の終了日 */}
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
         <DateField
           id='actual-end-date'
           label='実際の終了日（配布終了時に設定）'
-          register={register('endedAt')}
+          control={control}
+          name='endedAt'
           clearable
-          onClear={() => setValue('endedAt', undefined, { shouldDirty: true, shouldValidate: true })}
           hint={ADMIN_LABELS.endDateHint}
         />
+      </div>
 
-        {/* イベント種別・開催店舗 */}
-        <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-          <div>
-            <label htmlFor='category' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
-              <Package className='size-4' />
-              イベント種別
-            </label>
-            <Controller
-              name='category'
-              control={control}
-              render={({ field }) => {
-                return (
-                  <Select value={field.value ?? ''} onValueChange={field.onChange}>
-                    <SelectTrigger className='w-full'>
-                      <SelectValue placeholder={ADMIN_LABELS.selectCategory} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {EventCategorySchema.options.map((cat) => (
-                        <SelectItem key={cat} value={cat}>
-                          {EVENT_CATEGORY_LABELS[cat]}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )
-              }}
-            />
-            {errors.category && <p className='mt-1 text-xs text-destructive'>{errors.category.message}</p>}
-          </div>
+      <Separator />
 
-          <div>
-            <label htmlFor='store' className='mb-1 flex items-center gap-1.5 text-sm font-medium'>
-              <Store className='size-4' />
-              開催店舗
-            </label>
-            <Select value='' onValueChange={handleAddStore}>
-              <SelectTrigger className='w-full'>
-                <SelectValue
-                  placeholder={
-                    stores.length > 0
-                      ? ADMIN_LABELS.storeSelected.replace('{count}', stores.length.toString())
-                      : ADMIN_LABELS.selectStore
-                  }
-                />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='_all'>全店舗を選択</SelectItem>
-                {storeKeys.map((key) => {
-                  const storeKey = key as StoreKey
-                  const displayName = STORE_NAME_LABELS[storeKey] || key
-                  return (
-                    <SelectItem key={key} value={key} disabled={stores.includes(storeKey)}>
-                      {displayName}
-                    </SelectItem>
-                  )
-                })}
-              </SelectContent>
-            </Select>
-            {errors.stores && <p className='mt-1 text-xs text-destructive'>{errors.stores.message}</p>}
-          </div>
+      {/* イベント種別・開催店舗 */}
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+        <div>
+          <label htmlFor='category-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+            <Package className='size-4' />
+            イベント種別
+          </label>
+          <Controller
+            name='category'
+            control={control}
+            render={({ field }) => {
+              return (
+                <Select value={field.value ?? ''} onValueChange={field.onChange}>
+                  <SelectTrigger id='category-trigger' className='w-full'>
+                    <SelectValue placeholder={ADMIN_LABELS.selectCategory} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {EventCategorySchema.options.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {EVENT_CATEGORY_LABELS[cat]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )
+            }}
+          />
+          {errors.category && <p className='mt-1 text-xs text-destructive'>{errors.category.message}</p>}
         </div>
 
-        {/* 選択された店舗のバッジ */}
-        {stores.length > 0 && (
-          <div className='flex flex-wrap gap-1.5'>
-            {stores.length === storeKeys.length ? (
-              <Badge className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
-                <span className='text-xs font-semibold'>全店舗</span>
-                <button
-                  type='button'
-                  onClick={() => setValue('stores', [])}
-                  className='ml-0.5 rounded-sm hover:bg-rose-200'
-                >
-                  <X className='size-3' />
-                </button>
-              </Badge>
-            ) : (
-              stores.map((key) => {
+        <div>
+          <label htmlFor='store-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+            <Store className='size-4' />
+            開催店舗
+          </label>
+          <Select value='' onValueChange={handleAddStore}>
+            <SelectTrigger id='store-trigger' className='w-full'>
+              <SelectValue
+                placeholder={
+                  stores.length > 0
+                    ? ADMIN_LABELS.storeSelected.replace('{count}', stores.length.toString())
+                    : ADMIN_LABELS.selectStore
+                }
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='_all'>全店舗を選択</SelectItem>
+              {storeKeys.map((key) => {
                 const storeKey = key as StoreKey
                 const displayName = STORE_NAME_LABELS[storeKey] || key
                 return (
-                  <Badge key={key} className='gap-1 pr-1 bg-rose-100 text-rose-700 hover:bg-rose-200'>
-                    <span className='text-xs font-semibold'>{displayName}</span>
-                    <button
-                      type='button'
-                      onClick={() => handleRemoveStore(key)}
-                      className='ml-0.5 rounded-sm hover:bg-rose-200'
-                    >
-                      <X className='size-3' />
-                    </button>
-                  </Badge>
+                  <SelectItem key={key} value={key} disabled={stores.includes(storeKey)}>
+                    {displayName}
+                  </SelectItem>
                 )
-              })
-            )}
-          </div>
-        )}
+              })}
+            </SelectContent>
+          </Select>
+          {errors.stores && <p className='mt-1 text-xs text-destructive'>{errors.stores.message}</p>}
+        </div>
+      </div>
 
-        {/* 配布条件 */}
-        <ConditionsSection
-          fields={fields}
-          register={register}
-          remove={remove}
-          append={append}
-          error={errors.conditions?.message}
-        />
-
-        {/* 参考URL */}
-        <ReferenceUrlsSection
-          fields={referenceUrlFields}
-          register={register}
-          append={appendReferenceUrl}
-          remove={removeReferenceUrl}
-          referenceUrls={referenceUrls}
-          duplicateWarnings={duplicateWarnings}
-          onCheckDuplicate={checkUrlDuplicate}
-          onClearWarning={(index) =>
-            setDuplicateWarnings((prev) => {
-              const next = { ...prev }
-              delete next[index]
-              return next
+      {/* 選択された店舗のバッジ */}
+      {stores.length > 0 && (
+        <div className='flex flex-wrap gap-1.5'>
+          {stores.length === storeKeys.length ? (
+            <Badge variant='secondary' className='pr-1'>
+              <span className='text-xs font-semibold'>全店舗</span>
+              <button type='button' onClick={() => setValue('stores', [])} className='ml-0.5 rounded-sm'>
+                <X className='size-3' />
+              </button>
+            </Badge>
+          ) : (
+            stores.map((key) => {
+              const storeKey = key as StoreKey
+              const displayName = STORE_NAME_LABELS[storeKey] || key
+              return (
+                <Badge key={key} variant='secondary' className='pr-1'>
+                  <span className='text-xs font-semibold'>{displayName}</span>
+                  <button type='button' onClick={() => handleRemoveStore(key)} className='ml-0.5 rounded-sm'>
+                    <X className='size-3' />
+                  </button>
+                </Badge>
+              )
             })
-          }
-          error={errors.referenceUrls?.message}
-        />
-
-        {/* 検証済み・未確定情報・ツイート投稿フラグ */}
-        <div className='grid grid-cols-2 gap-4 rounded-md p-3 sm:grid-cols-3'>
-          <div className='flex items-center gap-2'>
-            <Controller
-              name='isVerified'
-              control={control}
-              render={({ field }) => (
-                <Checkbox
-                  id='is-verified'
-                  checked={field.value ?? false}
-                  onCheckedChange={(checked) => field.onChange(checked === true)}
-                  className='data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600'
-                />
-              )}
-            />
-            <label htmlFor='is-verified' className='text-sm font-medium text-gray-700 cursor-pointer'>
-              検証済み
-            </label>
-          </div>
-          <div className='flex items-center gap-2'>
-            <Controller
-              name='isPreliminary'
-              control={control}
-              render={({ field }) => (
-                <Checkbox
-                  id='is-preliminary'
-                  checked={field.value ?? false}
-                  onCheckedChange={(checked) => field.onChange(checked === true)}
-                  className='data-[state=checked]:bg-amber-600 data-[state=checked]:border-amber-600'
-                />
-              )}
-            />
-            <label htmlFor='is-preliminary' className='text-sm font-medium text-gray-700 cursor-pointer'>
-              未確定情報
-            </label>
-          </div>
-          <div className='flex items-center gap-2'>
-            <Controller
-              name='shouldTweet'
-              control={control}
-              render={({ field }) => (
-                <Checkbox
-                  id='should-tweet'
-                  checked={field.value ?? false}
-                  onCheckedChange={(checked) => field.onChange(checked === true)}
-                  className='data-[state=checked]:bg-sky-600 data-[state=checked]:border-sky-600'
-                />
-              )}
-            />
-            <label htmlFor='should-tweet' className='text-sm font-medium text-gray-700 cursor-pointer'>
-              保存時に投稿する
-            </label>
-          </div>
+          )}
         </div>
+      )}
 
-        {/* ボタン */}
-        <div className='flex gap-2 max-w-md mx-auto'>
-          <Button type='submit' className='flex-1 bg-[#e50012] hover:bg-[#c5000f]' disabled={isSubmitted}>
-            確認する
-          </Button>
-          <Button type='button' variant='outline' onClick={handleReset} className='flex-1' disabled={isSubmitted}>
-            クリア
-          </Button>
+      <Separator />
+
+      {/* 配布条件 */}
+      <ConditionsSection
+        fields={fields}
+        register={register}
+        remove={remove}
+        append={append}
+        error={errors.conditions?.message}
+      />
+
+      <Separator />
+
+      {/* 参考URL */}
+      <ReferenceUrlsSection
+        fields={referenceUrlFields}
+        register={register}
+        append={appendReferenceUrl}
+        remove={removeReferenceUrl}
+        referenceUrls={referenceUrls}
+        duplicateWarnings={duplicateWarnings}
+        onCheckDuplicate={checkUrlDuplicate}
+        onClearWarning={(index) =>
+          setDuplicateWarnings((prev) => {
+            const next = { ...prev }
+            delete next[index]
+            return next
+          })
+        }
+        error={errors.referenceUrls?.message}
+      />
+
+      <Separator />
+
+      {/* 検証済み・未確定情報・ツイート投稿フラグ */}
+      <div className='grid grid-cols-2 gap-3 sm:grid-cols-3'>
+        <div className='flex items-center gap-2'>
+          <Controller
+            name='isVerified'
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                id='is-verified'
+                checked={field.value ?? false}
+                onCheckedChange={(checked) => field.onChange(checked === true)}
+                className='data-[state=checked]:bg-info data-[state=checked]:border-info'
+              />
+            )}
+          />
+          <label htmlFor='is-verified' className='text-sm font-medium cursor-pointer'>
+            検証済み
+          </label>
         </div>
-      </form>
-    </div>
+        <div className='flex items-center gap-2'>
+          <Controller
+            name='isPreliminary'
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                id='is-preliminary'
+                checked={field.value ?? false}
+                onCheckedChange={(checked) => field.onChange(checked === true)}
+                className='data-[state=checked]:bg-warning data-[state=checked]:border-warning'
+              />
+            )}
+          />
+          <label htmlFor='is-preliminary' className='text-sm font-medium cursor-pointer'>
+            未確定情報
+          </label>
+        </div>
+        <div className='flex items-center gap-2'>
+          <Controller
+            name='shouldTweet'
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                id='should-tweet'
+                checked={field.value ?? false}
+                onCheckedChange={(checked) => field.onChange(checked === true)}
+                className='data-[state=checked]:bg-social-x data-[state=checked]:border-social-x'
+              />
+            )}
+          />
+          <label htmlFor='should-tweet' className='text-sm font-medium cursor-pointer'>
+            保存時に投稿する
+          </label>
+        </div>
+      </div>
+
+      {/* ボタン */}
+      <div className='flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
+        <Button type='button' variant='outline' onClick={handleReset} disabled={isSubmitted} className='sm:w-32'>
+          クリア
+        </Button>
+        <Button
+          type='submit'
+          className='bg-brand hover:bg-brand/90 text-brand-foreground sm:w-48'
+          disabled={isSubmitted}
+        >
+          {isSubmitted ? '送信中…' : '確認する'}
+        </Button>
+      </div>
+    </form>
   )
 }

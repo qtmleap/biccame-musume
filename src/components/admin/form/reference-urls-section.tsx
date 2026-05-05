@@ -75,7 +75,7 @@ export function ReferenceUrlsSection({
             onClick={() => append({ uuid: uuidv4(), type, url: '' })}
             disabled={hasType(type)}
             className={
-              hasType(type) ? 'border-rose-500 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800' : ''
+              hasType(type) ? 'border-destructive bg-destructive/10 text-destructive hover:bg-destructive/20' : ''
             }
           >
             {REFERENCE_URL_TYPE_LABELS[type]}
@@ -87,7 +87,9 @@ export function ReferenceUrlsSection({
         {fields.map((field, index) => (
           <div key={field.id}>
             <div className='flex items-center gap-2'>
-              <span className='shrink-0 text-sm font-medium w-10'>{REFERENCE_URL_TYPE_LABELS[field.type]}</span>
+              <span className='shrink-0 truncate text-sm font-medium min-w-[3rem]'>
+                {REFERENCE_URL_TYPE_LABELS[field.type]}
+              </span>
               <Input
                 type='url'
                 placeholder='https://twitter.com/...'
@@ -107,7 +109,7 @@ export function ReferenceUrlsSection({
             </div>
             {/* 重複警告 */}
             {duplicateWarnings[index] && (
-              <div className='mt-1 ml-12 flex items-start gap-1.5 text-xs text-amber-600 bg-amber-50 rounded px-2 py-1.5'>
+              <div className='mt-1 ml-12 flex items-start gap-1.5 text-xs text-warning bg-warning/10 rounded px-2 py-1.5'>
                 <AlertTriangle className='size-3.5 shrink-0 mt-0.5' />
                 <div>
                   <span className='font-medium'>同じURLが設定されているイベントがあります:</span>

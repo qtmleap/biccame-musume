@@ -21,7 +21,7 @@ const EditEventContent = () => {
   const defaultValues = event ? toFormValues(event) : toFormValuesFromQuery(search, uuid)
 
   const handleSuccess = () => {
-    router.history.back()
+    router.navigate({ to: '/admin/events' })
   }
 
   return (
@@ -31,16 +31,16 @@ const EditEventContent = () => {
         <Button
           variant='ghost'
           size='sm'
-          className='text-gray-600 hover:text-gray-900 -ml-2 mb-4'
+          className='text-muted-foreground hover:text-foreground -ml-2 mb-4'
           onClick={() => router.history.back()}
         >
           <ArrowLeft className='h-4 w-4 mr-1' />
           戻る
         </Button>
-        <h1 className='text-2xl font-bold text-gray-900'>
+        <h1 className='text-2xl font-bold text-foreground'>
           {isEditMode ? ADMIN_LABELS.eventEdit : ADMIN_LABELS.eventNew}
         </h1>
-        <p className='mt-2 text-sm text-gray-600 md:text-base'>
+        <p className='mt-2 text-sm text-muted-foreground md:text-base'>
           {isEditMode ? ADMIN_LABELS.eventEditDesc : ADMIN_LABELS.eventNewDesc}
         </p>
       </div>

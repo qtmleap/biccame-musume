@@ -24,7 +24,7 @@ export const CalendarHeader = ({ year, month, onPrevMonth, onNextMonth, onCurren
       transition={{ duration: DURATION.fast * 2, ease: EASE_OUT }}
       className='flex items-center justify-between'
     >
-      <Button variant='ghost' size='icon' onClick={onPrevMonth} className='rounded-full'>
+      <Button variant='ghost' size='icon' onClick={onPrevMonth} className='rounded-full border border-transparent'>
         <ChevronLeft className='h-5 w-5' />
       </Button>
       <button
@@ -34,7 +34,7 @@ export const CalendarHeader = ({ year, month, onPrevMonth, onNextMonth, onCurren
       >
         {year}年{month}月
       </button>
-      <Button variant='ghost' size='icon' onClick={onNextMonth} className='rounded-full'>
+      <Button variant='ghost' size='icon' onClick={onNextMonth} className='rounded-full border border-transparent'>
         <ChevronRight className='h-5 w-5' />
       </Button>
     </motion.div>
@@ -51,7 +51,7 @@ type CalendarMonthTabsProps = {
  */
 export const CalendarMonthTabs = ({ selectedMonth, onSelectMonth }: CalendarMonthTabsProps) => {
   return (
-    <div className='hidden md:flex gap-1 overflow-x-auto pb-2 justify-center'>
+    <div className='hidden md:flex gap-1 overflow-x-auto pt-2 pb-2 justify-center'>
       {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
         <Button
           key={month}
@@ -59,9 +59,9 @@ export const CalendarMonthTabs = ({ selectedMonth, onSelectMonth }: CalendarMont
           onClick={() => onSelectMonth(month)}
           size='sm'
           className={cn(
-            'shrink-0 rounded-full px-4 transition-all',
+            'shrink-0 rounded-full px-4 transition-all border border-transparent',
             selectedMonth === month
-              ? 'bg-rose-500 font-bold text-white shadow-md hover:bg-rose-600 hover:text-white'
+              ? 'bg-brand font-bold text-brand-foreground shadow-md hover:bg-brand/90 hover:text-brand-foreground'
               : 'hover:bg-muted/50 text-muted-foreground'
           )}
         >

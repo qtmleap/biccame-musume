@@ -1,6 +1,5 @@
 import dayjs, { type Dayjs } from 'dayjs'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 
 type MonthSelectorProps = {
   monthOffset: number
@@ -20,13 +19,10 @@ export const GanttMonthSelector = ({ monthOffset, onSelect }: MonthSelectorProps
         return (
           <Button
             key={offset}
-            variant='outline'
+            variant={isSelected ? 'default' : 'ghost'}
             size='sm'
             onClick={() => onSelect(offset)}
-            className={cn({
-              'bg-green-500/50 text-white border-green-500/50 hover:bg-green-500/60 hover:text-white': isSelected,
-              'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 hover:text-gray-700': !isSelected
-            })}
+            className={isSelected ? 'bg-brand hover:bg-brand/90 text-brand-foreground' : 'text-muted-foreground'}
           >
             {monthDate.format('YY/MM')}
           </Button>
@@ -56,16 +52,16 @@ export const GanttDateHeader = ({ dates, today, actualMonthEnd }: DateHeaderProp
         return (
           <div
             key={date.format('YYYY-MM-DD')}
-            className={`w-8 shrink-0 border-b border-gray-200 flex items-center justify-center text-xs ${
+            className={`w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs ${
               isOutOfMonth
-                ? 'bg-gray-100 text-gray-400'
+                ? 'bg-muted text-muted-foreground'
                 : isToday
-                  ? 'bg-rose-50 font-bold text-rose-600'
+                  ? 'bg-calendar-today/50 font-bold text-calendar-sunday'
                   : isSunday
-                    ? 'text-rose-500'
+                    ? 'text-calendar-sunday'
                     : isSaturday
-                      ? 'text-blue-500'
-                      : 'text-gray-600'
+                      ? 'text-calendar-saturday'
+                      : 'text-muted-foreground'
             }`}
           >
             {date.format('D')}
@@ -91,7 +87,7 @@ export const GanttGridCell = ({ date, today, actualMonthEnd }: DateGridCellProps
   return (
     <div
       key={date.format('YYYY-MM-DD')}
-      className={`w-8 shrink-0 border-b border-gray-200 ${isOutOfMonth ? 'bg-gray-50' : isToday ? 'bg-rose-50' : ''}`}
+      className={`w-8 shrink-0 border-r border-card-border last:border-r-0 ${isOutOfMonth ? 'bg-muted/50' : isToday ? 'bg-calendar-today/30' : ''}`}
     />
   )
 }
