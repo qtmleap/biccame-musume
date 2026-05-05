@@ -80,7 +80,7 @@ export const RankingVoteBadge = ({ characterId, voteCount }: RankingVoteBadgePro
         aria-pressed={hasVotedToday}
         aria-label={hasVotedToday ? '本日投票済み' : '投票する'}
         className={cn(
-          'inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-full border transition-colors',
+          'inline-flex items-center justify-center gap-1 h-8 px-3 rounded-full border transition-colors',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-favorite focus-visible:ring-offset-2 focus-visible:ring-offset-card',
           hasVotedToday
             ? 'bg-vote-count text-vote-count-foreground border-card-border cursor-not-allowed'
