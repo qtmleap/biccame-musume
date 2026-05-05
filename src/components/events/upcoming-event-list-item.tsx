@@ -3,7 +3,10 @@ import type dayjs from 'dayjs'
 import { Cake, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
+import { cn } from '@/lib/utils'
 import { DATE_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
@@ -20,6 +23,15 @@ type UpcomingEventListItemProps = {
   index: number
 }
 
+const TAPES: ({ side: 'left' | 'right'; color: string; angle: string } | null)[] = [
+  { side: 'left', color: 'bg-yellow-200/80', angle: '-rotate-[12deg]' },
+  { side: 'right', color: 'bg-pink-200/80', angle: 'rotate-[10deg]' },
+  { side: 'left', color: 'bg-blue-200/80', angle: '-rotate-[8deg]' },
+  null,
+  { side: 'right', color: 'bg-green-200/80', angle: 'rotate-[8deg]' },
+  null
+]
+
 /**
  * 日数に応じたラベルを返す
  */
@@ -33,20 +45,40 @@ const getDaysLabel = (days: number) => {
  * 直近のイベントリストアイテム
  */
 export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemProps) => {
+  const isMultiColumn = useMediaQuery('(min-width: 768px)')
+  const rotationDeg = isMultiColumn ? getStickerRotation(index) : 0
+  const tape = TAPES[index % TAPES.length]
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{
-        duration: DURATION.normal,
-        delay: index * 0.1,
-        ease: 'easeOut'
-      }}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      transition={{ duration: DURATION.normal, delay: index * 0.1, ease: 'easeOut' }}
+      style={{ filter: STICKER_SHADOW_SM }}
     >
-      <Link to='/characters/$id' params={{ id: event.character.id }}>
-        <div className='flex items-center gap-3 bg-card rounded-lg p-3 shadow-sm border-card transition-colors cursor-pointer'>
+      <motion.div
+        style={{ rotate: rotationDeg }}
+        whileHover={{ scale: 1.04, rotate: 0 }}
+        whileTap={{ scale: 0.97 }}
+        transition={STICKER_HOVER_TRANSITION}
+      >
+        <Link
+          to='/characters/$id'
+          params={{ id: event.character.id }}
+          className='relative flex items-center gap-3 bg-card rounded-xl p-3 border border-zinc-200 dark:border-card-border'
+        >
+          {tape && (
+            <div
+              aria-hidden
+              className={cn(
+                'absolute -top-1.5 w-8 h-3 rounded-sm',
+                tape.color,
+                tape.angle,
+                tape.side === 'left' ? 'left-4' : 'right-4'
+              )}
+            />
+          )}
+
           <div
             className={`p-2 rounded-lg ${event.type === 'character' ? 'bg-category-other text-category-other-foreground' : 'bg-category-regular-card text-category-regular-card-foreground'}`}
           >
@@ -82,8 +114,8 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
           >
             {getDaysLabel(event.daysUntil)}
           </div>
-        </div>
-      </Link>
+        </Link>
+      </motion.div>
     </motion.div>
   )
 }
