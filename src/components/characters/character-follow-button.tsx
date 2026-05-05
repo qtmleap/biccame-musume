@@ -35,8 +35,10 @@ export const CharacterFollowButton = ({ twitterId, iconOnly = false }: Character
     <Button
       asChild
       size='sm'
-      variant='outline'
-      className={cn('h-8 px-3 rounded-full text-xs border-brand/50 text-brand hover:bg-brand/10 hover:text-brand')}
+      variant='secondary'
+      className={cn(
+        'h-8 px-3 rounded-full text-xs border border-brand/50 bg-button-surface text-brand hover:bg-brand/10 hover:text-brand'
+      )}
     >
       <a href={href} target='_blank' rel='noopener noreferrer' onClick={(e) => e.stopPropagation()}>
         フォロー
