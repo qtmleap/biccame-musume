@@ -319,7 +319,7 @@ export const RankingList = ({ characters }: RankingListProps) => {
           {restIndices.length > 0 && (
             <>
               <div className='h-px bg-separator/60' />
-              <div className='space-y-2'>
+              <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 md:gap-3'>
                 {restIndices.map((i, j) => (
                   <RankingRow
                     key={votedCharacters[i].id}
