@@ -73,7 +73,7 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
             className='absolute inset-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
           />
 
-          <div className='relative flex items-center gap-3 pointer-events-none'>
+          <div className='relative flex items-center gap-3 pointer-events-none [&_*]:pointer-events-none [&_button]:pointer-events-auto [&_a]:pointer-events-auto'>
             <Avatar className='h-14 w-14 border-2 border-card-border shrink-0'>
               <AvatarImage
                 src={character.character?.image_url}
@@ -91,7 +91,7 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
               >
                 {getDisplayName(character.character?.name || '')}
               </h3>
-              <div className='flex justify-end gap-2 pointer-events-auto'>
+              <div className='flex justify-end gap-2'>
                 <CharacterFollowButton twitterId={character.character?.twitter_id} iconOnly />
                 <CharacterVoteButton
                   characterId={character.id}
