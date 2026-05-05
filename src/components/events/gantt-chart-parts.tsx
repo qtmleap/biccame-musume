@@ -1,5 +1,8 @@
 import dayjs, { type Dayjs } from 'dayjs'
+import { motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
+import { cn } from '@/lib/utils'
 
 type MonthSelectorProps = {
   monthOffset: number
@@ -12,20 +15,33 @@ type MonthSelectorProps = {
  */
 export const GanttMonthSelector = ({ monthOffset, onSelect }: MonthSelectorProps) => {
   return (
-    <div className='grid grid-cols-5 gap-2 mb-4'>
+    <div className='grid grid-cols-5 gap-2 mb-4 py-1'>
       {[-2, -1, 0, 1, 2].map((offset) => {
         const monthDate = dayjs().add(offset, 'month')
         const isSelected = monthOffset === offset
         return (
-          <Button
+          <motion.div
             key={offset}
-            variant={isSelected ? 'default' : 'ghost'}
-            size='sm'
-            onClick={() => onSelect(offset)}
-            className={isSelected ? 'bg-brand hover:bg-brand/90 text-brand-foreground' : 'text-muted-foreground'}
+            className='w-full'
+            style={{ filter: STICKER_SHADOW_SM }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            transition={STICKER_HOVER_TRANSITION}
           >
-            {monthDate.format('YY/MM')}
-          </Button>
+            <Button
+              variant='secondary'
+              size='sm'
+              onClick={() => onSelect(offset)}
+              className={cn(
+                'w-full text-sm rounded-full border',
+                isSelected
+                  ? 'bg-brand text-brand-foreground border-brand hover:bg-brand/90'
+                  : 'bg-button-surface text-foreground border-card-border hover:bg-button-surface-hover'
+              )}
+            >
+              {monthDate.format('YY/MM')}
+            </Button>
+          </motion.div>
         )
       })}
     </div>
