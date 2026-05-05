@@ -18,11 +18,17 @@ import {
   EventStatsRequestSchema,
   EventStatsResponseSchema
 } from '@/schemas/event.dto'
+import { FavoriteCharactersResponseSchemaForClient } from '@/schemas/favorite.dto'
 import { SearchResultSchema } from '@/schemas/search.dto'
 import { PageViewStatsSchema } from '@/schemas/stats.dto'
 import { StoresSchema } from '@/schemas/store.dto'
 import { UserResponseSchemaForClient } from '@/schemas/user.dto'
-import { VoteCountListSchema, VoteResponseSchema } from '@/schemas/vote.dto'
+import {
+  BulkVoteRequestSchema,
+  BulkVoteResponseSchemaForClient,
+  VoteCountListSchema,
+  VoteResponseSchema
+} from '@/schemas/vote.dto'
 
 /**
  * バージョン情報レスポンススキーマ
@@ -71,6 +77,20 @@ const api = makeApi([
       }
     ],
     response: VoteResponseSchema
+  },
+  {
+    method: 'post',
+    path: '/api/votes/bulk',
+    alias: 'createBulkVote',
+    description: '一括投票（推し or 全員）',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: BulkVoteRequestSchema
+      }
+    ],
+    response: BulkVoteResponseSchemaForClient
   },
   // イベント関連API
   {
@@ -313,6 +333,42 @@ const api = makeApi([
         name: 'status',
         type: 'Query',
         schema: z.enum(['interested', 'completed'])
+      }
+    ],
+    response: SuccessResponseSchemaForClient
+  },
+  // お気に入りキャラクター関連API
+  {
+    method: 'get',
+    path: '/api/me/favorites',
+    alias: 'getFavoriteCharacters',
+    description: 'お気に入りキャラクター一覧を取得',
+    response: FavoriteCharactersResponseSchemaForClient
+  },
+  {
+    method: 'post',
+    path: '/api/me/favorites/:characterId',
+    alias: 'addFavoriteCharacter',
+    description: 'お気に入りキャラクターを追加',
+    parameters: [
+      {
+        name: 'characterId',
+        type: 'Path',
+        schema: z.string().nonempty()
+      }
+    ],
+    response: SuccessResponseSchemaForClient
+  },
+  {
+    method: 'delete',
+    path: '/api/me/favorites/:characterId',
+    alias: 'removeFavoriteCharacter',
+    description: 'お気に入りキャラクターを削除',
+    parameters: [
+      {
+        name: 'characterId',
+        type: 'Path',
+        schema: z.string().nonempty()
       }
     ],
     response: SuccessResponseSchemaForClient

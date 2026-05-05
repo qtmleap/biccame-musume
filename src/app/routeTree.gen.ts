@@ -22,6 +22,7 @@ import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as MeInterestedIndexRouteImport } from './routes/me/interested/index'
+import { Route as MeFavoritesIndexRouteImport } from './routes/me/favorites/index'
 import { Route as MeCompletedIndexRouteImport } from './routes/me/completed/index'
 import { Route as EventsUuidIndexRouteImport } from './routes/events/$uuid/index'
 import { Route as CharactersIdIndexRouteImport } from './routes/characters/$id/index'
@@ -93,6 +94,11 @@ const MeInterestedIndexRoute = MeInterestedIndexRouteImport.update({
   path: '/me/interested/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeFavoritesIndexRoute = MeFavoritesIndexRouteImport.update({
+  id: '/me/favorites/',
+  path: '/me/favorites/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MeCompletedIndexRoute = MeCompletedIndexRouteImport.update({
   id: '/me/completed/',
   path: '/me/completed/',
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
   '/me/completed/': typeof MeCompletedIndexRoute
+  '/me/favorites/': typeof MeFavoritesIndexRoute
   '/me/interested/': typeof MeInterestedIndexRoute
   '/admin/events/$uuid/': typeof AdminEventsUuidIndexRoute
 }
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/characters/$id': typeof CharactersIdIndexRoute
   '/events/$uuid': typeof EventsUuidIndexRoute
   '/me/completed': typeof MeCompletedIndexRoute
+  '/me/favorites': typeof MeFavoritesIndexRoute
   '/me/interested': typeof MeInterestedIndexRoute
   '/admin/events/$uuid': typeof AdminEventsUuidIndexRoute
 }
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
   '/me/completed/': typeof MeCompletedIndexRoute
+  '/me/favorites/': typeof MeFavoritesIndexRoute
   '/me/interested/': typeof MeInterestedIndexRoute
   '/admin/events/$uuid/': typeof AdminEventsUuidIndexRoute
 }
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
     | '/characters/$id/'
     | '/events/$uuid/'
     | '/me/completed/'
+    | '/me/favorites/'
     | '/me/interested/'
     | '/admin/events/$uuid/'
   fileRoutesByTo: FileRoutesByTo
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/characters/$id'
     | '/events/$uuid'
     | '/me/completed'
+    | '/me/favorites'
     | '/me/interested'
     | '/admin/events/$uuid'
   id:
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/characters/$id/'
     | '/events/$uuid/'
     | '/me/completed/'
+    | '/me/favorites/'
     | '/me/interested/'
     | '/admin/events/$uuid/'
   fileRoutesById: FileRoutesById
@@ -256,6 +268,7 @@ export interface RootRouteChildren {
   CharactersIdIndexRoute: typeof CharactersIdIndexRoute
   EventsUuidIndexRoute: typeof EventsUuidIndexRoute
   MeCompletedIndexRoute: typeof MeCompletedIndexRoute
+  MeFavoritesIndexRoute: typeof MeFavoritesIndexRoute
   MeInterestedIndexRoute: typeof MeInterestedIndexRoute
 }
 
@@ -352,6 +365,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeInterestedIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/me/favorites/': {
+      id: '/me/favorites/'
+      path: '/me/favorites'
+      fullPath: '/me/favorites/'
+      preLoaderRoute: typeof MeFavoritesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/me/completed/': {
       id: '/me/completed/'
       path: '/me/completed'
@@ -419,6 +439,7 @@ const rootRouteChildren: RootRouteChildren = {
   CharactersIdIndexRoute: CharactersIdIndexRoute,
   EventsUuidIndexRoute: EventsUuidIndexRoute,
   MeCompletedIndexRoute: MeCompletedIndexRoute,
+  MeFavoritesIndexRoute: MeFavoritesIndexRoute,
   MeInterestedIndexRoute: MeInterestedIndexRoute,
 }
 export const routeTree = rootRouteImport

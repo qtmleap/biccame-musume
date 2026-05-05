@@ -186,6 +186,23 @@ const MyPageContent = () => {
             )}
           </motion.div>
 
+          {/* 推しのビッカメ娘 */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: DURATION.normal, delay: 0.45 }}
+            className='space-y-3 mb-6'
+          >
+            <Link
+              to='/me/favorites'
+              className='inline-flex items-center gap-2 text-foreground hover:text-brand transition-colors'
+            >
+              <Heart className='h-5 w-5 text-favorite fill-current' />
+              <h2 className='text-xl font-bold'>推しのビッカメ娘</h2>
+            </Link>
+            <p className='text-sm text-muted-foreground'>推しを登録して、まとめて応援できるよ</p>
+          </motion.div>
+
           {/* 興味のあるイベント */}
           <motion.div
             initial={{ opacity: 0 }}

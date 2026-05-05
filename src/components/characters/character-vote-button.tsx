@@ -1,9 +1,11 @@
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { CircleCheckIcon } from 'lucide-react'
-import { useEffect, useMemo } from 'react'
+import { motion } from 'motion/react'
+import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { lastVoteTimesAtom } from '@/atoms/vote-atom'
+import { VoteBurst } from '@/components/characters/vote-burst'
 import { Button } from '@/components/ui/button'
 import { useVote } from '@/hooks/use-vote'
 import { cn } from '@/lib/utils'
@@ -28,6 +30,7 @@ export const CharacterVoteButton = ({
 }: CharacterVoteButtonProps) => {
   const { mutate, isPending, isSuccess, data, error } = useVote(characterId)
   const [lastVoteTimes, setLastVoteTimes] = useAtom(lastVoteTimesAtom)
+  const [burstKey, setBurstKey] = useState<number | null>(null)
 
   // 今日既に投票済みかチェック
   const hasVotedToday = useMemo(() => {
@@ -41,13 +44,14 @@ export const CharacterVoteButton = ({
     return currentTime.isBefore(nextDay)
   }, [lastVoteTimes, characterId])
 
-  // 投票成功時に最後の投票時間を記録
+  // 投票成功時に最後の投票時間を記録 + バースト発火
   useEffect(() => {
     if (isSuccess) {
       setLastVoteTimes((prev) => ({
         ...prev,
         [characterId]: dayjs().toISOString()
       }))
+      setBurstKey(Date.now())
     }
   }, [isSuccess, characterId, setLastVoteTimes])
 
@@ -110,36 +114,46 @@ export const CharacterVoteButton = ({
 
   if (variant === 'compact') {
     return (
-      <Button
-        size='sm'
-        variant={hasVotedToday ? 'secondary' : 'default'}
-        onClick={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          handleVote()
-        }}
-        aria-disabled={hasVotedToday || isPending}
-        disabled={isPending}
-        className={cn('h-8 px-3 rounded-full text-xs', stateClass)}
-      >
-        {getButtonText()}
-      </Button>
+      <span className='relative inline-block'>
+        <motion.span whileTap={{ scale: 0.92 }} className='inline-block'>
+          <Button
+            size='sm'
+            variant={hasVotedToday ? 'secondary' : 'default'}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              handleVote()
+            }}
+            aria-disabled={hasVotedToday || isPending}
+            disabled={isPending}
+            className={cn('h-8 px-3 rounded-full text-xs', stateClass)}
+          >
+            {getButtonText()}
+          </Button>
+        </motion.span>
+        <VoteBurst triggerKey={burstKey} count={4} />
+      </span>
     )
   }
 
   return (
-    <Button
-      variant={hasVotedToday ? 'secondary' : 'default'}
-      onClick={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        handleVote()
-      }}
-      aria-disabled={hasVotedToday || isPending}
-      disabled={isPending}
-      className={cn('w-full h-9 rounded-full text-xs font-semibold', stateClass)}
-    >
-      {getButtonText()}
-    </Button>
+    <span className='relative block'>
+      <motion.span whileTap={{ scale: 0.96 }} className='block'>
+        <Button
+          variant={hasVotedToday ? 'secondary' : 'default'}
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            handleVote()
+          }}
+          aria-disabled={hasVotedToday || isPending}
+          disabled={isPending}
+          className={cn('w-full h-9 rounded-full text-xs font-semibold', stateClass)}
+        >
+          {getButtonText()}
+        </Button>
+      </motion.span>
+      <VoteBurst triggerKey={burstKey} count={6} />
+    </span>
   )
 }
