@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { DURATION } from '@/lib/motion'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { CALENDAR_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
@@ -109,11 +110,13 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                         params={{ id: event.character.id }}
                       >
                         <motion.div
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+                          style={{ filter: STICKER_SHADOW_SM }}
+                          whileHover={{ scale: 1.04 }}
+                          whileTap={{ scale: 0.97 }}
+                          transition={STICKER_HOVER_TRANSITION}
                           className={cn(
-                            'flex items-center gap-3 p-2 rounded-lg',
-                            isCharacter ? 'bg-action-interest/10' : 'bg-info/10'
+                            'flex items-center gap-3 p-2 rounded-xl border border-zinc-200 dark:border-card-border',
+                            isCharacter ? 'bg-action-interest/15' : 'bg-info/15'
                           )}
                         >
                           {/* キャラクター画像 */}
