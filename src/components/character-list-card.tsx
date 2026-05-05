@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
-import { CharacterFavoriteButton } from '@/components/characters/character-favorite-button'
 import { CharacterFollowButton } from '@/components/characters/character-follow-button'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -50,11 +49,7 @@ export const CharacterListCard = ({ character }: CharacterListCardProps) => {
               <h3 className='text-base font-bold line-clamp-1 text-foreground'>
                 {getDisplayName(character.character?.name || '')}
               </h3>
-              <div className='flex justify-end items-center gap-2'>
-                <CharacterFavoriteButton
-                  characterId={character.id}
-                  isBiccameMusume={character.character?.is_biccame_musume}
-                />
+              <div className='flex justify-end gap-2'>
                 <CharacterFollowButton twitterId={character.character?.twitter_id} />
                 <CharacterVoteButton
                   characterId={character.id}

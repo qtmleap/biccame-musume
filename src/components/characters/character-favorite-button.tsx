@@ -12,14 +12,14 @@ type CharacterFavoriteButtonProps = {
 
 /**
  * お気に入り（推し）登録ボタン
- * - ビッカメ娘でない場合は表示しない
- * - 未ログイン時は disabled + tooltip 風タイトルでヒント
+ * - ビッカメ娘でない場合は非表示
+ * - 未ログイン時も非表示（詳細画面でログインユーザーだけが触れる導線）
  */
 export const CharacterFavoriteButton = ({ characterId, isBiccameMusume = true }: CharacterFavoriteButtonProps) => {
   const { isAuthenticated } = useAuth()
   const { isFavorite, addFavorite, removeFavorite, isAddPending, isRemovePending } = useFavorites()
 
-  if (!isBiccameMusume) return null
+  if (!isBiccameMusume || !isAuthenticated) return null
 
   const favored = isFavorite(characterId)
   const pending = isAddPending || isRemovePending
@@ -27,7 +27,7 @@ export const CharacterFavoriteButton = ({ characterId, isBiccameMusume = true }:
   const handleToggle = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    if (!isAuthenticated || pending) return
+    if (pending) return
     if (favored) {
       removeFavorite(characterId)
     } else {
@@ -42,8 +42,7 @@ export const CharacterFavoriteButton = ({ characterId, isBiccameMusume = true }:
       onClick={handleToggle}
       aria-pressed={favored}
       aria-label={favored ? 'お気に入り解除' : 'お気に入り登録'}
-      disabled={!isAuthenticated || pending}
-      title={!isAuthenticated ? 'ログインすると推し登録できるよ' : undefined}
+      disabled={pending}
       className={cn(
         'h-8 w-8 p-0 rounded-full',
         favored
