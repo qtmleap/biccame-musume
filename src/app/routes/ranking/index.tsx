@@ -21,11 +21,7 @@ const RankingContent = () => {
 
   return (
     <div className='mx-auto max-w-6xl'>
-      <header className='relative overflow-hidden px-4 pt-8 pb-6 md:pt-12 md:pb-10 md:px-8'>
-        <div
-          className='pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-celebrate-from/15 via-celebrate-to/5 to-transparent'
-          aria-hidden
-        />
+      <header className='px-4 pt-8 pb-6 md:pt-12 md:pb-10 md:px-8'>
         <div className='flex flex-col items-center text-center gap-2'>
           <span className='inline-flex items-center justify-center h-12 w-12 rounded-full bg-rank-gold/20 text-rank-gold-foreground ring-2 ring-rank-gold/40'>
             <Trophy className='h-6 w-6 text-rank-gold' />
