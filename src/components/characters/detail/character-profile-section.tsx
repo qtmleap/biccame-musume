@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { ExternalLink, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
+import { CharacterFavoriteButton } from '@/components/characters/character-favorite-button'
 import { CharacterFollowButton } from '@/components/characters/character-follow-button'
 import { CharacterTwitterLink } from '@/components/characters/character-twitter-link'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
@@ -35,7 +36,11 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
           </Avatar>
         </motion.div>
 
-        <div className='flex gap-2'>
+        <div className='flex items-center gap-2'>
+          <CharacterFavoriteButton
+            characterId={character.id}
+            isBiccameMusume={character.character?.is_biccame_musume}
+          />
           {character.character?.twitter_id && <CharacterFollowButton twitterId={character.character.twitter_id} />}
           {character.character?.is_biccame_musume && (
             <CharacterVoteButton
