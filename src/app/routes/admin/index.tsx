@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Award, Calendar } from 'lucide-react'
+import { ArrowLeft, Award, Calendar, MessageSquare } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
