@@ -24,6 +24,14 @@ const MENU_ITEMS = [
     description: ADMIN_LABELS.badgeManagementDesc,
     iconBg: 'bg-favorite/15',
     iconText: 'text-favorite'
+  },
+  {
+    to: '/admin/comments',
+    icon: MessageSquare,
+    title: ADMIN_LABELS.commentManagement,
+    description: ADMIN_LABELS.commentManagementDesc,
+    iconBg: 'bg-brand/15',
+    iconText: 'text-brand'
   }
 ] as const
 
