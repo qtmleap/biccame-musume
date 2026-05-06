@@ -6,6 +6,7 @@ import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { CALENDAR_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
+import { getHolidayName } from '@/utils/holidays'
 
 type CalendarEvent = {
   date: string
@@ -99,6 +100,8 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
             const isToday = date.isSame(dayjs(), 'day')
             const isSunday = date.day() === 0
             const isSaturday = date.day() === 6
+            const holidayName = getHolidayName(year, month, day)
+            const isHoliday = holidayName !== null
             const hasEvents = dayEvents.length > 0
             // index ベースで決定論的に並べる: 一日あたり ~16ms ずつ遅らせて 1ヶ月で約 0.5s 以内に収める
             const baseDelay = Math.min(index * 0.016, 0.5)
@@ -118,7 +121,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                 whileTap={hasEvents ? { scale: 0.96, transition: STICKER_HOVER_TRANSITION } : undefined}
                 onClick={() => onDayClick(day, dayEvents)}
                 style={hasEvents ? { filter: STICKER_SHADOW_SM } : undefined}
-                aria-label={`${year}年${month}月${day}日${hasEvents ? `(イベント${dayEvents.length}件)` : ''}`}
+                aria-label={`${year}年${month}月${day}日${isHoliday ? `(${holidayName})` : ''}${hasEvents ? `(イベント${dayEvents.length}件)` : ''}`}
                 className={cn(
                   'min-h-20 p-1.5 rounded-xl text-left',
                   isToday ? 'bg-calendar-today border-2 border-calendar-today-border' : 'bg-card',
@@ -132,13 +135,19 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                     className={cn(
                       'text-lg font-numeric font-black tabular-nums leading-none',
                       isToday && 'text-primary',
-                      !isToday && isSunday && 'text-calendar-sunday',
-                      !isToday && isSaturday && 'text-calendar-saturday',
-                      !isToday && !isSunday && !isSaturday && 'text-foreground'
+                      !isToday && (isSunday || isHoliday) && 'text-calendar-sunday',
+                      !isToday && !isSunday && !isHoliday && isSaturday && 'text-calendar-saturday',
+                      !isToday && !isSunday && !isSaturday && !isHoliday && 'text-foreground'
                     )}
                   >
                     {day}
                   </span>
+                  {/* 祝日名 */}
+                  {isHoliday && (
+                    <span className='text-[10px] leading-tight text-calendar-sunday font-medium truncate mt-0.5'>
+                      {holidayName}
+                    </span>
+                  )}
                   {/* アイコン */}
                   {hasEvents && (
                     <div className='flex-1 flex flex-wrap items-center justify-center gap-1 py-1'>
