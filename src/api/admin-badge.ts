@@ -9,6 +9,7 @@ import {
   prismaBadgeToDto,
   UpdateBadgeBodySchema
 } from '@/schemas/badge.dto'
+import { evaluateAndAwardBadges } from '@/services/badge-evaluator'
 import type { Bindings } from '@/types/bindings'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
@@ -281,6 +282,44 @@ routes.openapi(
 
     await prisma.badge.delete({ where: { code } })
     return c.body(null, 204)
+  }
+)
+
+// POST /api/admin/badges/recalculate — 全ユーザー × 全バッジを再評価して獲得を反映
+// 店舗数や条件メタが変わった時に管理者が手動で叩く想定。重い処理なので頻繁には呼ばない。
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/admin/badges/recalculate',
+    middleware: [CFAuth],
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: z
+              .object({
+                processedUsers: z.number(),
+                awardedTotal: z.number()
+              })
+              .openapi('AdminBadgeRecalculateResult')
+          }
+        },
+        description: 'バッジ再評価完了'
+      }
+    },
+    tags: ['admin-badges']
+  }),
+  async (c) => {
+    const prisma = getPrisma(c.env)
+    const users = await prisma.user.findMany({ select: { id: true } })
+
+    let awardedTotal = 0
+    for (const user of users) {
+      const newBadges = await evaluateAndAwardBadges({ env: c.env, prisma, userId: user.id })
+      awardedTotal += newBadges.length
+    }
+
+    return c.json({ processedUsers: users.length, awardedTotal }, 200)
   }
 )
 

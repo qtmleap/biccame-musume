@@ -468,6 +468,23 @@ const api = makeApi([
     ],
     response: z.void()
   },
+  {
+    method: 'post',
+    path: '/api/admin/badges/recalculate',
+    alias: 'recalculateBadges',
+    description: '全ユーザーのバッジ獲得状況を再評価（admin）',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: z.object({}).optional()
+      }
+    ],
+    response: z.object({
+      processedUsers: z.number(),
+      awardedTotal: z.number()
+    })
+  },
   // コメント関連API
   {
     method: 'get',
