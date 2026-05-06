@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createFileRoute } from '@tanstack/react-router'
-import { Pencil, Plus, Trash2 } from 'lucide-react'
-import { Suspense, useState } from 'react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { ArrowLeft, Pencil, Plus, RotateCcw, Trash2 } from 'lucide-react'
+import { motion } from 'motion/react'
+import { Suspense, useMemo, useState } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import {
@@ -22,9 +23,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { PHYSICAL_STORE_KEYS } from '@/data/badges/store-exclusion'
 import { useAllBadges, useCreateSpecialBadge, useDeleteBadge, useUpdateBadge } from '@/hooks/use-admin-badges'
+import { BADGE_CATEGORY_DEFS } from '@/lib/badge-categories'
 import { getBadgeIcon, ICON_MAP } from '@/lib/badge-icons'
+import { DURATION } from '@/lib/motion'
+import { cn } from '@/lib/utils'
 import { STORE_NAME_LABELS } from '@/locales/app.content'
 import {
   type Badge as BadgeDto,
@@ -53,17 +58,30 @@ const RARITY_CHIP: Record<string, string> = {
   legendary: 'bg-rank-gold text-rank-gold-foreground'
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
-  store: '店舗訪問',
-  area: 'エリア',
-  milestone: 'マイルストーン',
-  event: 'イベント参加',
-  event_clear: '店舗別イベント達成',
-  vote: '投票',
-  special: '特別'
+const RARITY_ICON_BG: Record<string, string> = {
+  common: 'bg-muted text-muted-foreground',
+  rare: 'bg-status-upcoming/30 text-status-upcoming-foreground',
+  epic: 'bg-favorite/20 text-favorite',
+  legendary: 'bg-rank-gold/20 text-rank-gold-foreground'
 }
 
 const ICON_NAMES = Object.keys(ICON_MAP)
+
+const ACCENT_DOT: Record<string, string> = {
+  'rank-gold': 'bg-rank-gold',
+  favorite: 'bg-favorite',
+  brand: 'bg-brand',
+  'category-limited-card-solid': 'bg-category-limited-card-solid',
+  'rank-bronze': 'bg-rank-bronze'
+}
+
+const ACCENT_TEXT: Record<string, string> = {
+  'rank-gold': 'text-rank-gold',
+  favorite: 'text-favorite',
+  brand: 'text-brand',
+  'category-limited-card-solid': 'text-category-limited-card-solid',
+  'rank-bronze': 'text-rank-bronze'
+}
 
 // ---------------------------------------------------------------------------
 // Edit form
@@ -111,7 +129,7 @@ const EditBadgeDialog = ({ badge, open, onClose }: { badge: BadgeDto; open: bool
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className='max-w-lg max-h-[90vh] overflow-y-auto'>
         <DialogHeader>
-          <DialogTitle>バッジ編集: {badge.code}</DialogTitle>
+          <DialogTitle className='font-display'>バッジ編集: {badge.code}</DialogTitle>
         </DialogHeader>
 
         {!isSpecial && (
@@ -351,7 +369,7 @@ const CreateBadgeDialog = ({ open, onClose }: { open: boolean; onClose: () => vo
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className='max-w-lg max-h-[90vh] overflow-y-auto'>
         <DialogHeader>
-          <DialogTitle>特別バッジ 新規作成</DialogTitle>
+          <DialogTitle className='font-display'>特別バッジ 新規作成</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
@@ -550,45 +568,66 @@ const BadgeRow = ({ badge }: { badge: BadgeDto }) => {
 
   return (
     <>
-      <div className='flex items-center gap-3 rounded-lg border p-3 bg-card'>
-        <div className='flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary'>
+      <div className='group flex items-center gap-3 rounded-xl border border-card-border p-3 bg-card'>
+        <div
+          className={cn('flex size-10 shrink-0 items-center justify-center rounded-lg', RARITY_ICON_BG[badge.rarity])}
+        >
           {Icon && <Icon className='size-5' />}
         </div>
 
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 flex-wrap'>
-            <span className='text-sm font-semibold text-foreground truncate'>{badge.name}</span>
-            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${RARITY_CHIP[badge.rarity]}`}>
+            <span className='text-sm font-bold text-foreground truncate'>{badge.name}</span>
+            <span
+              className={cn(
+                'text-[10px] font-numeric font-bold tracking-widest px-1.5 py-0.5 rounded-full',
+                RARITY_CHIP[badge.rarity]
+              )}
+            >
               {RARITY_LABELS[badge.rarity]}
             </span>
             {badge.is_hidden && (
-              <span className='text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-destructive/20 text-destructive'>
+              <span className='text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground'>
                 非表示
               </span>
             )}
             {isSpecial && (
-              <span className='text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground'>
+              <span className='text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-rank-gold/15 text-rank-gold-foreground'>
                 特別
               </span>
             )}
           </div>
-          <p className='text-xs text-muted-foreground truncate mt-0.5'>{badge.code}</p>
+          <p className='text-xs font-numeric text-muted-foreground truncate mt-0.5'>{badge.code}</p>
         </div>
 
-        <div className='flex items-center gap-1 shrink-0'>
-          <Button size='sm' variant='outline' onClick={() => setEditOpen(true)}>
-            <Pencil className='size-3 mr-1' />
-            編集
-          </Button>
+        <div className='flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity'>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button size='icon' variant='ghost' className='size-8' onClick={() => setEditOpen(true)}>
+                  <Pencil className='size-3.5' />
+                  <span className='sr-only'>編集</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>編集</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
           {isSpecial && (
             <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button size='sm' variant='destructive'>
-                  <Trash2 className='size-3 mr-1' />
-                  削除
-                </Button>
-              </AlertDialogTrigger>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <AlertDialogTrigger asChild>
+                      <Button size='icon' variant='ghost' className='size-8 text-destructive hover:text-destructive'>
+                        <Trash2 className='size-3.5' />
+                        <span className='sr-only'>削除</span>
+                      </Button>
+                    </AlertDialogTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>削除</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>バッジを削除しますか？</AlertDialogTitle>
@@ -617,73 +656,294 @@ const BadgeRow = ({ badge }: { badge: BadgeDto }) => {
 // Category section
 // ---------------------------------------------------------------------------
 
-const CategorySection = ({ category, badges }: { category: string; badges: BadgeDto[] }) => {
+const CategorySection = ({
+  categoryKey,
+  badges,
+  totalInCategory
+}: {
+  categoryKey: string
+  badges: BadgeDto[]
+  totalInCategory: number
+}) => {
+  const catDef = BADGE_CATEGORY_DEFS.find((d) => d.key === categoryKey)
+  const label = catDef?.label ?? categoryKey
+  const accent = catDef?.accent ?? 'rank-gold'
+
   return (
-    <section>
-      <h2 className='text-base font-bold text-foreground mb-2'>
-        {CATEGORY_LABELS[category] ?? category}
-        <span className='ml-2 text-sm font-normal text-muted-foreground'>({badges.length})</span>
-      </h2>
+    <motion.section
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: DURATION.normal }}
+    >
+      <header className='flex items-center justify-between gap-3 mb-3'>
+        <div className='flex items-center gap-2 min-w-0'>
+          <span aria-hidden className={cn('inline-block size-2.5 rounded-full shrink-0', ACCENT_DOT[accent])} />
+          <h2 className={cn('font-bold text-base md:text-lg truncate', ACCENT_TEXT[accent])}>{label}</h2>
+        </div>
+        <span className='shrink-0 text-xs font-numeric tabular-nums text-muted-foreground'>
+          <span className='font-bold text-foreground'>{badges.length}</span>
+          {badges.length !== totalInCategory && <span> / {totalInCategory}</span>}
+        </span>
+      </header>
       <div className='space-y-2'>
         {badges.map((badge) => (
           <BadgeRow key={badge.code} badge={badge} />
         ))}
       </div>
-    </section>
+    </motion.section>
   )
 }
+
+// ---------------------------------------------------------------------------
+// Stats hero
+// ---------------------------------------------------------------------------
+
+type StatCardProps = { label: string; value: number; accent?: string }
+
+const StatCard = ({ label, value, accent = 'text-foreground' }: StatCardProps) => (
+  <div className='bg-card border border-card-border rounded-xl px-4 py-3 flex-1 min-w-0 text-center'>
+    <div
+      className={cn('font-numeric font-black tabular-nums text-2xl md:text-3xl leading-none', accent)}
+      style={{ letterSpacing: '-0.04em' }}
+    >
+      {value}
+    </div>
+    <div className='mt-1 text-[11px] text-muted-foreground'>{label}</div>
+  </div>
+)
+
+// ---------------------------------------------------------------------------
+// Filter types
+// ---------------------------------------------------------------------------
+
+type RarityFilter = 'all' | 'common' | 'rare' | 'epic' | 'legendary'
+type CategoryFilter = 'all' | 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'special'
+
+const CATEGORY_FILTER_LABELS: { key: CategoryFilter; label: string }[] = [
+  { key: 'all', label: '全部' },
+  { key: 'store', label: '店舗' },
+  { key: 'area', label: 'エリア' },
+  { key: 'milestone', label: 'マイルストーン' },
+  { key: 'event', label: 'イベント' },
+  { key: 'event_clear', label: '達成' },
+  { key: 'vote', label: '投票' },
+  { key: 'special', label: '特別' }
+]
+
+const RARITY_FILTER_LABELS: { key: RarityFilter; label: string }[] = [
+  { key: 'all', label: '全部' },
+  { key: 'common', label: 'COMMON' },
+  { key: 'rare', label: 'RARE' },
+  { key: 'epic', label: 'EPIC' },
+  { key: 'legendary', label: 'LEGENDARY' }
+]
 
 // ---------------------------------------------------------------------------
 // Main content
 // ---------------------------------------------------------------------------
 
+const categoryOrder: CategoryFilter[] = ['store', 'area', 'milestone', 'event', 'event_clear', 'vote', 'special']
+
 const BadgesContent = () => {
   const [createOpen, setCreateOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all')
+  const [rarityFilter, setRarityFilter] = useState<RarityFilter>('all')
+  const [hiddenOnly, setHiddenOnly] = useState(false)
   const { data } = useAllBadges()
   const badges = data.badges
 
-  const grouped = badges.reduce<Record<string, BadgeDto[]>>((acc, badge) => {
-    const cat = badge.category
-    if (!acc[cat]) acc[cat] = []
-    acc[cat].push(badge)
-    return acc
-  }, {})
+  const totalCount = badges.length
+  const hiddenCount = badges.filter((b) => b.is_hidden).length
+  const visibleCount = totalCount - hiddenCount
+  const specialCount = badges.filter((b) => b.category === 'special').length
 
-  const categoryOrder = ['store', 'area', 'milestone', 'event', 'event_clear', 'vote', 'special']
+  const filteredBadges = useMemo(() => {
+    const q = searchQuery.toLowerCase()
+    return badges.filter((b) => {
+      if (
+        q &&
+        !b.name.toLowerCase().includes(q) &&
+        !b.code.toLowerCase().includes(q) &&
+        !b.description.toLowerCase().includes(q)
+      )
+        return false
+      if (categoryFilter !== 'all' && b.category !== categoryFilter) return false
+      if (rarityFilter !== 'all' && b.rarity !== rarityFilter) return false
+      if (hiddenOnly && !b.is_hidden) return false
+      return true
+    })
+  }, [badges, searchQuery, categoryFilter, rarityFilter, hiddenOnly])
+
+  const grouped = useMemo(() => {
+    return filteredBadges.reduce<Record<string, BadgeDto[]>>((acc, badge) => {
+      const cat = badge.category
+      if (!acc[cat]) acc[cat] = []
+      acc[cat].push(badge)
+      return acc
+    }, {})
+  }, [filteredBadges])
+
+  const totalsByCategory = useMemo(() => {
+    return badges.reduce<Record<string, number>>((acc, badge) => {
+      acc[badge.category] = (acc[badge.category] ?? 0) + 1
+      return acc
+    }, {})
+  }, [badges])
+
+  const isFiltered = searchQuery !== '' || categoryFilter !== 'all' || rarityFilter !== 'all' || hiddenOnly
+
+  const resetFilters = () => {
+    setSearchQuery('')
+    setCategoryFilter('all')
+    setRarityFilter('all')
+    setHiddenOnly(false)
+  }
 
   return (
-    <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
-      <div className='mb-6 md:mb-8'>
-        <div className='flex items-start justify-between gap-4'>
-          <div>
-            <h1 className='text-2xl font-bold text-foreground'>バッジ管理</h1>
-            <p className='mt-2 text-sm text-muted-foreground'>
-              特別バッジの作成・編集と表示設定。自動生成バッジは表示フィールドのみ編集可。
-            </p>
-            <p className='mt-1 text-xs text-muted-foreground'>
-              ※ 非表示バッジは現時点の API では一覧から除外されます (MVP 制限)。
-            </p>
-          </div>
+    <div className='min-h-screen bg-page-bg'>
+      <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
+        <div className='pb-2'>
           <Button
+            variant='ghost'
             size='sm'
-            className='bg-brand hover:bg-brand/90 text-brand-foreground shrink-0'
-            onClick={() => setCreateOpen(true)}
+            className='text-muted-foreground hover:text-foreground -ml-2 border border-transparent'
+            asChild
           >
-            <Plus className='size-4 mr-1' />
-            特別バッジ作成
+            <Link to='/admin'>
+              <ArrowLeft className='h-4 w-4 mr-1' />
+              管理画面に戻る
+            </Link>
           </Button>
         </div>
-      </div>
 
-      <div className='space-y-8'>
-        {categoryOrder
-          .filter((cat) => grouped[cat]?.length)
-          .map((cat) => (
-            <CategorySection key={cat} category={cat} badges={grouped[cat]} />
-          ))}
-      </div>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: DURATION.normal }}
+          className='mb-4 md:mb-6'
+        >
+          <div className='flex items-start justify-between gap-4'>
+            <div>
+              <h1 className='font-display font-bold text-2xl md:text-3xl text-foreground'>バッジ管理</h1>
+              <p className='mt-1 text-sm text-muted-foreground'>
+                特別バッジの作成・編集と表示設定。自動生成バッジは表示フィールドのみ編集可。
+              </p>
+            </div>
+            <Button
+              size='sm'
+              className='bg-brand hover:bg-brand/90 text-brand-foreground shrink-0'
+              onClick={() => setCreateOpen(true)}
+            >
+              <Plus className='size-4 mr-1' />
+              特別バッジ作成
+            </Button>
+          </div>
+        </motion.div>
 
-      <CreateBadgeDialog open={createOpen} onClose={() => setCreateOpen(false)} />
+        {/* Stats hero */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: DURATION.normal, delay: 0.06 }}
+          className='flex gap-2 md:gap-3 mb-5 md:mb-6'
+        >
+          <StatCard label='総バッジ' value={totalCount} accent='text-foreground' />
+          <StatCard label='表示中' value={visibleCount} accent='text-brand' />
+          <StatCard label='非表示' value={hiddenCount} accent='text-muted-foreground' />
+          <StatCard label='特別' value={specialCount} accent='text-rank-gold' />
+        </motion.div>
+
+        {/* Filter row */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: DURATION.normal, delay: 0.1 }}
+          className='bg-card border border-card-border rounded-2xl p-3 md:p-4 mb-6 space-y-3'
+        >
+          <div className='flex items-center gap-2'>
+            <Input
+              placeholder='バッジ検索...'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className='md:text-base h-8 md:h-9'
+            />
+            {isFiltered && (
+              <Button size='sm' variant='ghost' className='shrink-0 gap-1 text-muted-foreground' onClick={resetFilters}>
+                <RotateCcw className='size-3.5' />
+                リセット
+              </Button>
+            )}
+          </div>
+
+          <div className='flex items-center gap-1.5 flex-wrap'>
+            {CATEGORY_FILTER_LABELS.map(({ key, label }) => (
+              <button
+                key={key}
+                type='button'
+                onClick={() => setCategoryFilter(key)}
+                className={cn(
+                  'text-[11px] font-bold px-2.5 py-1 rounded-full transition-colors',
+                  categoryFilter === key
+                    ? 'bg-foreground text-background'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div className='flex items-center gap-1.5 flex-wrap'>
+            {RARITY_FILTER_LABELS.map(({ key, label }) => (
+              <button
+                key={key}
+                type='button'
+                onClick={() => setRarityFilter(key)}
+                className={cn(
+                  'text-[11px] font-numeric font-bold tracking-widest px-2.5 py-1 rounded-full transition-colors',
+                  rarityFilter === key
+                    ? key === 'all'
+                      ? 'bg-foreground text-background'
+                      : RARITY_CHIP[key]
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                )}
+              >
+                {label}
+              </button>
+            ))}
+            <Label htmlFor='hidden-only-filter' className='flex items-center gap-1.5 cursor-pointer ml-1 font-normal'>
+              <Checkbox
+                id='hidden-only-filter'
+                checked={hiddenOnly}
+                onCheckedChange={(v) => setHiddenOnly(v === true)}
+                className='size-3.5'
+              />
+              <span className='text-[11px] text-muted-foreground select-none'>非表示のみ</span>
+            </Label>
+          </div>
+        </motion.div>
+
+        {/* Badge list */}
+        <div className='space-y-8'>
+          {categoryOrder
+            .filter((cat) => grouped[cat]?.length)
+            .map((cat) => (
+              <CategorySection
+                key={cat}
+                categoryKey={cat}
+                badges={grouped[cat]}
+                totalInCategory={totalsByCategory[cat] ?? 0}
+              />
+            ))}
+          {filteredBadges.length === 0 && (
+            <div className='text-center py-12 text-muted-foreground text-sm'>条件に一致するバッジが見つかりません</div>
+          )}
+        </div>
+
+        <CreateBadgeDialog open={createOpen} onClose={() => setCreateOpen(false)} />
+      </div>
     </div>
   )
 }
