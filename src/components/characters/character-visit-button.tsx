@@ -111,11 +111,7 @@ export const CharacterVisitButton = ({ storeKey, storeName, hasStore = true }: C
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>キャンセル</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={handleConfirm}
-            variant='outline'
-            className='border-brand/50 text-brand hover:bg-brand/10 hover:text-brand hover:border-brand/50'
-          >
+          <AlertDialogAction onClick={handleConfirm} variant='destructive'>
             訪問済みにする
           </AlertDialogAction>
         </AlertDialogFooter>
