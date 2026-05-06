@@ -9,12 +9,19 @@ export type BadgeCategoryDef = {
   accent: BadgeAccent
 }
 
+export type BadgeSubSectionDef = {
+  key: string
+  label: string
+  categories: BadgeCategory[]
+}
+
 export type BadgeSuperCategoryDef = {
   key: 'visit' | 'event_participation' | 'vote'
   label: string
   description: string
   accent: BadgeAccent
   includes: BadgeCategory[]
+  subSections?: BadgeSubSectionDef[]
 }
 
 export const BADGE_SUPER_CATEGORY_DEFS: BadgeSuperCategoryDef[] = [
@@ -30,7 +37,12 @@ export const BADGE_SUPER_CATEGORY_DEFS: BadgeSuperCategoryDef[] = [
     label: 'イベント参加',
     description: 'イベントに参加した記録',
     accent: 'brand',
-    includes: ['event_clear_store', 'event_clear_area', 'event']
+    includes: ['event_clear_store', 'event_clear_area', 'event'],
+    subSections: [
+      { key: 'debut_complete', label: 'デビュー・コンプ', categories: ['event_clear_area'] },
+      { key: 'per_store', label: '個別店舗', categories: ['event_clear_store'] },
+      { key: 'milestone', label: 'N店舗目', categories: ['event'] }
+    ]
   },
   {
     key: 'vote',
