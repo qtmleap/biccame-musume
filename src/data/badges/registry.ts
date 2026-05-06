@@ -408,7 +408,7 @@ function getBadgeRegistry(): BadgeDef[] {
   // "All areas event clear" meta badge
   badges.push({
     code: 'milestone_clear_areas',
-    category: 'milestone',
+    category: 'event_clear_area',
     subCategory: 'all_areas_any_event_clear',
     name: '全国達成',
     description: '全 10 地区それぞれで 1 件以上イベント完了しました',
