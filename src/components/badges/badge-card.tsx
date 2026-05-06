@@ -105,11 +105,6 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
           >
             {earned ? badge.name : '？？？'}
           </div>
-          {!earned && (
-            <div className='mt-0.5 text-[10px] md:text-[11px] text-muted-foreground line-clamp-2 min-h-[2.4em]'>
-              {badge.hint}
-            </div>
-          )}
         </div>
       </motion.div>
     </motion.div>
