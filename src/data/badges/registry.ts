@@ -252,7 +252,7 @@ function getBadgeRegistry(): BadgeDef[] {
   // "All areas visited" meta badge
   badges.push({
     code: 'milestone_visit_areas',
-    category: 'milestone',
+    category: 'area',
     subCategory: 'all_areas_any_visit',
     name: '全国デビュー',
     description: '全 10 地区それぞれで 1 店舗以上を訪問しました',
