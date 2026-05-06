@@ -10,6 +10,7 @@ import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { CALENDAR_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
+import { getHolidayName } from '@/utils/holidays'
 
 type CalendarEvent = {
   date: string
@@ -21,6 +22,7 @@ type CalendarEvent = {
 type GroupedEvents = {
   day: number
   dayOfWeek: string
+  holidayName: string | null
   events: CalendarEvent[]
 }
 
@@ -32,19 +34,32 @@ type CalendarEventListProps = {
 }
 
 /**
- * イベントを日付ごとにグループ化する
+ * イベントと祝日を日付ごとにグループ化する
  */
 const groupEventsByDay = (events: CalendarEvent[], year: number, month: number): GroupedEvents[] => {
   const weekDayNames = CALENDAR_LABELS.weekDays
   const grouped = groupBy(events, (event) => dayjs(event.date).date())
+  const daysInMonth = dayjs(`${year}-${month}-01`).daysInMonth()
+
+  const dayMap = new Map<number, CalendarEvent[]>()
+  Object.entries(grouped).forEach(([day, evts]) => {
+    dayMap.set(Number(day), evts)
+  })
+
+  // 祝日のある日も dayMap に追加(イベントがなければ空配列)
+  for (let day = 1; day <= daysInMonth; day++) {
+    if (getHolidayName(year, month, day) !== null && !dayMap.has(day)) {
+      dayMap.set(day, [])
+    }
+  }
 
   return sortBy(
-    Object.entries(grouped).map(([day, evts]) => {
-      // 表示している年月の日付で曜日を計算する
+    Array.from(dayMap.entries()).map(([day, evts]) => {
       const displayDate = dayjs(`${year}-${month}-${day}`)
       return {
-        day: Number(day),
+        day,
         dayOfWeek: weekDayNames[displayDate.day()],
+        holidayName: getHolidayName(year, month, day),
         events: evts
       }
     }),
@@ -56,9 +71,11 @@ const groupEventsByDay = (events: CalendarEvent[], year: number, month: number):
  * カレンダーイベントリスト表示(モバイル用)
  */
 export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarEventListProps) => {
+  const groups = groupEventsByDay(events, year, month)
+
   return (
     <div className='space-y-2'>
-      {events.length === 0 ? (
+      {groups.length === 0 ? (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -77,7 +94,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
             exit={{ opacity: 0, x: -15 }}
             transition={{ duration: DURATION.fast }}
           >
-            {groupEventsByDay(events, year, month).map((group, groupIndex) => (
+            {groups.map((group, groupIndex) => (
               <motion.div
                 key={`day-${group.day}`}
                 initial={{ opacity: 0 }}
@@ -93,15 +110,27 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                 <button
                   type='button'
                   onClick={() => onDayClick?.(group.day, group.events)}
-                  aria-label={`${month}月${group.day}日のイベントを開く`}
-                  className='flex flex-col items-center justify-center min-w-11 min-h-11 shrink-0 cursor-pointer hover:opacity-70 transition-opacity'
+                  aria-label={`${month}月${group.day}日${group.holidayName ? `(${group.holidayName})` : ''}のイベントを開く`}
+                  disabled={group.events.length === 0}
+                  className={cn(
+                    'flex flex-col items-center justify-center min-w-11 min-h-11 shrink-0 transition-opacity',
+                    group.events.length > 0 && 'cursor-pointer hover:opacity-70'
+                  )}
                 >
                   <span className='text-xs text-muted-foreground uppercase'>{group.dayOfWeek}</span>
-                  <span className='text-xl font-bold tabular-nums'>{group.day}</span>
+                  <span className={cn('text-xl font-bold tabular-nums', group.holidayName && 'text-calendar-sunday')}>
+                    {group.day}
+                  </span>
                 </button>
 
                 {/* イベント一覧(グリッドレイアウト) */}
                 <div className='flex-1 grid grid-cols-1 sm:grid-cols-2 gap-1.5 min-w-0'>
+                  {group.holidayName && (
+                    <div className='col-span-full flex items-center gap-2 px-2 py-1 rounded-xl bg-calendar-sunday/10 text-calendar-sunday text-xs font-medium'>
+                      <span>祝</span>
+                      <span>{group.holidayName}</span>
+                    </div>
+                  )}
                   {group.events.map((event) => {
                     const isCharacter = event.type === 'character'
 
