@@ -749,7 +749,7 @@ const CATEGORY_FILTER_LABELS: { key: CategoryFilter; label: string }[] = [
   { key: 'area', label: 'エリア' },
   { key: 'milestone', label: 'マイルストーン' },
   { key: 'event', label: 'イベント' },
-  { key: 'event_clear', label: '達成' },
+  { key: 'event_clear', label: '参加' },
   { key: 'vote', label: '投票' },
   { key: 'special', label: '特別' }
 ]
