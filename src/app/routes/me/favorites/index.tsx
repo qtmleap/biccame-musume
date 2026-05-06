@@ -3,6 +3,7 @@ import { ArrowLeft, Heart } from 'lucide-react'
 import { Suspense } from 'react'
 import { CharacterListCard } from '@/components/character-list-card'
 import { BulkVoteButton } from '@/components/characters/bulk-vote-button'
+import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
@@ -23,6 +24,13 @@ const FavoritesContent = () => {
   return (
     <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto px-4 py-4 md:py-6 md:px-8 max-w-6xl'>
+        <AppBreadcrumb
+          items={[
+            { label: 'ホーム', to: '/' },
+            { label: 'マイページ', to: '/me' },
+            { label: '推しのビッカメ娘' }
+          ]}
+        />
         <div className='mb-6'>
           <Button
             variant='ghost'
