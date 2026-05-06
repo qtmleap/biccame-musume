@@ -1,9 +1,22 @@
 import { motion } from 'motion/react'
 import { BadgeCard } from '@/components/badges/badge-card'
+import { CLOSED_STORE_KEYS } from '@/data/badges/store-exclusion'
 import { BADGE_SUPER_CATEGORY_DEFS } from '@/lib/badge-categories'
 import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
-import type { Badge } from '@/schemas/badge.dto'
+import type { Badge, BadgeConditionMeta } from '@/schemas/badge.dto'
+import type { StoreKey } from '@/schemas/store.dto'
+
+const isClosedStoreBadge = (badge: Badge): boolean => {
+  try {
+    const meta = JSON.parse(badge.condition_meta) as BadgeConditionMeta
+    if (meta.storeKey && CLOSED_STORE_KEYS.has(meta.storeKey as StoreKey)) return true
+    if (meta.storeKeys?.some((k) => CLOSED_STORE_KEYS.has(k as StoreKey))) return true
+    return false
+  } catch {
+    return false
+  }
+}
 
 type BadgeGridProps = {
   badges: Badge[]
@@ -33,6 +46,7 @@ export const BadgeGrid = ({ badges, earnedMap }: BadgeGridProps) => {
         const visible = badges.filter((b) => {
           if (!category.includes.includes(b.category)) return false
           if (earnedMap.has(b.code)) return true
+          if (isClosedStoreBadge(b)) return false
           return b.rarity === 'common'
         })
         const items = visible.toSorted((a, b) => {
