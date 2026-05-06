@@ -155,20 +155,21 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
             {!compact && STATUS_BADGE_SM[event.status]()}
           </div>
 
-          {!compact && event.conditions.some((c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery') && (
-            <div className='mt-2 flex flex-wrap gap-1'>
-              {event.conditions.map((condition) => {
-                if (condition.type === 'everyone') return null
-                return (
-                  <Badge key={`${event.uuid}-${condition.type}`} variant='secondary'>
-                    {condition.type === 'purchase' && `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
-                    {condition.type === 'first_come' && EVENT_LABELS.firstCome}
-                    {condition.type === 'lottery' && EVENT_LABELS.lottery}
-                  </Badge>
-                )
-              })}
-            </div>
-          )}
+          {!compact &&
+            event.conditions.some((c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery') && (
+              <div className='mt-2 flex flex-wrap gap-1'>
+                {event.conditions.map((condition) => {
+                  if (condition.type === 'everyone') return null
+                  return (
+                    <Badge key={`${event.uuid}-${condition.type}`} variant='secondary'>
+                      {condition.type === 'purchase' && `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
+                      {condition.type === 'first_come' && EVENT_LABELS.firstCome}
+                      {condition.type === 'lottery' && EVENT_LABELS.lottery}
+                    </Badge>
+                  )
+                })}
+              </div>
+            )}
         </Link>
       </motion.div>
     </motion.div>

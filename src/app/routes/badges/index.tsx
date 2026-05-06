@@ -17,11 +17,7 @@ const BadgesContent = () => {
     <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <AppBreadcrumb
-          items={[
-            { label: 'ホーム', to: '/' },
-            { label: 'マイページ', to: '/me' },
-            { label: 'バッジコレクション' }
-          ]}
+          items={[{ label: 'ホーム', to: '/' }, { label: 'マイページ', to: '/me' }, { label: 'バッジコレクション' }]}
         />
         <motion.header
           initial={{ opacity: 0, y: 10 }}
