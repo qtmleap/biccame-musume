@@ -137,7 +137,13 @@ const MyPageContent = () => {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleLogout}>ログアウトする</AlertDialogAction>
+                    <AlertDialogAction
+                      onClick={handleLogout}
+                      variant='outline'
+                      className='bg-brand text-brand-foreground hover:bg-brand/90 border-transparent'
+                    >
+                      ログアウトする
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
