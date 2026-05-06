@@ -97,7 +97,7 @@ export const UpcomingEventListItem = ({ event, index }: UpcomingEventListItemPro
           )}
 
           <div className='flex-1 min-w-0'>
-            <p className='text-sm font-medium text-foreground truncate'>
+            <p className='text-base font-semibold text-foreground truncate'>
               {getDisplayName(event.character.character?.name || '')}
             </p>
             <p className='text-xs text-muted-foreground'>{event.date.format('M月D日')}</p>
