@@ -1,75 +1,123 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Award, Calendar, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Award, Calendar } from 'lucide-react'
+import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
+import { Button } from '@/components/ui/button'
+import { DURATION } from '@/lib/motion'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { ADMIN_LABELS } from '@/locales/app.content'
 
-/**
- * 管理メニューアイテム
- */
+const MENU_ITEMS = [
+  {
+    to: '/admin/events',
+    icon: Calendar,
+    title: ADMIN_LABELS.eventManagement,
+    description: ADMIN_LABELS.eventManagementDesc,
+    iconBg: 'bg-rank-gold/15',
+    iconText: 'text-rank-gold'
+  },
+  {
+    to: '/admin/badges',
+    icon: Award,
+    title: ADMIN_LABELS.badgeManagement,
+    description: ADMIN_LABELS.badgeManagementDesc,
+    iconBg: 'bg-favorite/15',
+    iconText: 'text-favorite'
+  }
+] as const
+
 const MenuCard = ({
   to,
   icon: Icon,
   title,
-  description
+  description,
+  iconBg,
+  iconText,
+  index
 }: {
   to: string
   icon: React.ElementType
   title: string
   description: string
+  iconBg: string
+  iconText: string
+  index: number
 }) => {
+  const rotation = getStickerRotation(index)
+
   return (
-    <Link to={to}>
-      <div className='group rounded-lg border p-4 transition-colors hover:border-primary hover:bg-accent/50 md:p-6'>
-        <div className='flex items-center gap-4'>
-          <div className='flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary md:size-14'>
-            <Icon className='size-6 md:size-7' />
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: DURATION.normal, delay: index * 0.08 }}
+      style={{ filter: STICKER_SHADOW_SM }}
+    >
+      <motion.div
+        style={{ rotate: rotation }}
+        whileHover={{ scale: 1.02, rotate: 0 }}
+        whileTap={{ scale: 0.98 }}
+        transition={STICKER_HOVER_TRANSITION}
+      >
+        <Link
+          to={to}
+          className='block group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-2xl'
+        >
+          <div className='bg-card border border-card-border rounded-2xl p-5 md:p-6 flex items-center gap-4'>
+            <div
+              className={`flex size-12 shrink-0 items-center justify-center rounded-xl md:size-14 ${iconBg} ${iconText}`}
+            >
+              <Icon className='size-6 md:size-7' />
+            </div>
+            <div className='flex-1 min-w-0'>
+              <h3 className='font-bold text-base md:text-lg text-foreground truncate'>{title}</h3>
+              <p className='mt-0.5 text-sm text-muted-foreground'>{description}</p>
+            </div>
           </div>
-          <div className='flex-1'>
-            <h3 className='text-lg font-semibold text-foreground md:text-xl'>{title}</h3>
-            <p className='mt-1 text-sm text-muted-foreground'>{description}</p>
-          </div>
-          <ChevronRight className='size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1' />
-        </div>
-      </div>
-    </Link>
+        </Link>
+      </motion.div>
+    </motion.div>
   )
 }
 
-/**
- * 管理画面のコンテンツ
- */
 const AdminContent = () => {
   return (
-    <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
-      {/* ヘッダー */}
-      <div className='mb-6 md:mb-8'>
-        <h1 className='text-2xl font-bold text-foreground md:text-3xl'>管理画面</h1>
-        <p className='mt-2 text-sm text-muted-foreground md:text-base'>各種管理機能へのアクセス</p>
-      </div>
+    <div className='min-h-screen bg-page-bg'>
+      <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-3xl'>
+        <div className='pb-2'>
+          <Button
+            variant='ghost'
+            size='sm'
+            className='text-muted-foreground hover:text-foreground -ml-2 border border-transparent'
+            asChild
+          >
+            <Link to='/'>
+              <ArrowLeft className='h-4 w-4 mr-1' />
+              サイトに戻る
+            </Link>
+          </Button>
+        </div>
 
-      {/* 管理メニュー */}
-      <div className='space-y-4'>
-        <MenuCard
-          to='/admin/events'
-          icon={Calendar}
-          title={ADMIN_LABELS.eventManagement}
-          description={ADMIN_LABELS.eventManagementDesc}
-        />
-        <MenuCard
-          to='/admin/badges'
-          icon={Award}
-          title={ADMIN_LABELS.badgeManagement}
-          description={ADMIN_LABELS.badgeManagementDesc}
-        />
+        <motion.header
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: DURATION.normal }}
+          className='mb-6 md:mb-8'
+        >
+          <h1 className='font-display font-bold text-2xl md:text-3xl text-foreground tracking-tight'>管理画面</h1>
+          <p className='mt-1 text-sm text-muted-foreground'>各種管理機能へのアクセス</p>
+        </motion.header>
+
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5'>
+          {MENU_ITEMS.map((item, index) => (
+            <MenuCard key={item.to} {...item} index={index} />
+          ))}
+        </div>
       </div>
     </div>
   )
 }
 
-/**
- * 管理画面ページ
- */
 const AdminPage = () => {
   return (
     <Suspense fallback={<LoadingFallback />}>
