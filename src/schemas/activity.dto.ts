@@ -1,4 +1,5 @@
 import { z } from '@hono/zod-openapi'
+import { BadgeSchema } from './badge.dto'
 
 /**
  * 店舗キーパラメータスキーマ
@@ -26,6 +27,30 @@ export const SuccessResponseSchema = z
     success: z.boolean().openapi({ description: '成功フラグ' })
   })
   .openapi('SuccessResponse')
+
+/**
+ * 店舗ステータス更新レスポンススキーマ（新規獲得バッジを含む）
+ */
+export const UpdateStoreResponseSchema = z
+  .object({
+    success: z.boolean().openapi({ description: '成功フラグ' }),
+    newBadges: z.array(BadgeSchema).default([]).openapi({ description: '今回新たに獲得したバッジの一覧' })
+  })
+  .openapi('UpdateStoreResponse')
+
+export type UpdateStoreResponse = z.infer<typeof UpdateStoreResponseSchema>
+
+/**
+ * イベントステータス更新レスポンススキーマ（新規獲得バッジを含む）
+ */
+export const UpdateEventResponseSchema = z
+  .object({
+    success: z.boolean().openapi({ description: '成功フラグ' }),
+    newBadges: z.array(BadgeSchema).default([]).openapi({ description: '今回新たに獲得したバッジの一覧' })
+  })
+  .openapi('UpdateEventResponse')
+
+export type UpdateEventResponse = z.infer<typeof UpdateEventResponseSchema>
 
 /**
  * エラーレスポンススキーマ

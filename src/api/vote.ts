@@ -1,16 +1,20 @@
 import { type RateLimitKeyFunc, rateLimit } from '@elithrar/workers-hono-rate-limit'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { Context, Next } from 'hono'
+import { getPrisma } from '@/lib/prisma'
 import { ipCheck } from '@/middleware/ip-check'
 import { voteLimit } from '@/middleware/vote-limit'
+import { prismaBadgeToDto } from '@/schemas/badge.dto'
 import {
   BulkVoteRequestSchema,
   BulkVoteResponseSchema,
   VoteCountListSchema,
   VoteResponseSchema
 } from '@/schemas/vote.dto'
+import { evaluateOnVote } from '@/services/badge-evaluator'
 import { bulkVote, getAllVoteCounts, vote } from '@/services/vote-service'
 import type { Bindings, Variables } from '@/types/bindings'
+import { getJwtPayload, verifyTokenOptional } from '@/utils/token'
 import { getNextJSTDate } from '@/utils/vote'
 
 const getKey: RateLimitKeyFunc = (c: Context): string => {
@@ -72,7 +76,7 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/bulk',
-    middleware: [ipCheck],
+    middleware: [ipCheck, verifyTokenOptional],
     request: {
       body: {
         content: {
@@ -104,15 +108,36 @@ routes.openapi(
   }),
   async (c) => {
     const { characterIds } = c.req.valid('json')
-    const results = await bulkVote(c.env, characterIds, c.get('CLIENT_IP'))
+    const userId = (() => {
+      try {
+        return getJwtPayload(c).uid
+      } catch {
+        return undefined
+      }
+    })()
+    const results = await bulkVote(c.env, characterIds, c.get('CLIENT_IP'), userId)
     const votedCount = results.filter((r) => r.status === 'voted').length
     const skippedCount = results.filter((r) => r.status === 'skipped').length
+
+    let newBadges: ReturnType<typeof prismaBadgeToDto>[] = []
+    if (userId !== undefined && votedCount > 0) {
+      const prisma = getPrisma(c.env)
+      const votedCharacterIds = results.filter((r) => r.status === 'voted').map((r) => r.characterId)
+      // Evaluate once for the last voted character (all vote-related badges are user-level, not per-character)
+      const lastVotedId = votedCharacterIds[votedCharacterIds.length - 1]
+      if (lastVotedId !== undefined) {
+        const earned = await evaluateOnVote({ env: c.env, prisma, userId }, lastVotedId)
+        newBadges = earned.map(prismaBadgeToDto)
+      }
+    }
+
     return c.json({
       success: true,
       results,
       votedCount,
       skippedCount,
-      nextVoteDate: getNextJSTDate()
+      nextVoteDate: getNextJSTDate(),
+      newBadges
     })
   }
 )
@@ -125,7 +150,7 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/:characterId',
-    middleware: [ipCheck, voteLimit],
+    middleware: [ipCheck, voteLimit, verifyTokenOptional],
     request: {
       params: z.object({
         characterId: z.string().nonempty()
@@ -169,11 +194,27 @@ routes.openapi(
   }),
   async (c) => {
     const { characterId } = c.req.valid('param')
-    c.executionCtx.waitUntil(vote(c.env, characterId, c.get('CLIENT_IP')))
+    const userId = (() => {
+      try {
+        return getJwtPayload(c).uid
+      } catch {
+        return undefined
+      }
+    })()
+    await vote(c.env, characterId, c.get('CLIENT_IP'), userId)
+
+    let newBadges: ReturnType<typeof prismaBadgeToDto>[] = []
+    if (userId !== undefined) {
+      const prisma = getPrisma(c.env)
+      const earned = await evaluateOnVote({ env: c.env, prisma, userId }, characterId)
+      newBadges = earned.map(prismaBadgeToDto)
+    }
+
     return c.json({
       success: true,
       message: '投票ありがとうございます！',
-      nextVoteDate: getNextJSTDate()
+      nextVoteDate: getNextJSTDate(),
+      newBadges
     })
   }
 )
