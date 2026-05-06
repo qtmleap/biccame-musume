@@ -98,7 +98,8 @@ export const CharacterVisitButton = ({ storeKey, storeName, hasStore = true }: C
           <AlertDialogCancel>キャンセル</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
-            className='bg-brand text-brand-foreground hover:bg-brand/90'
+            variant='outline'
+            className='bg-brand text-brand-foreground hover:bg-brand/90 border-transparent'
           >
             訪問済みにする
           </AlertDialogAction>
