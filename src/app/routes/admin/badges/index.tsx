@@ -36,7 +36,7 @@ import { getBadgeIcon, ICON_MAP } from '@/lib/badge-icons'
 import { DURATION } from '@/lib/motion'
 import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
-import { STORE_NAME_LABELS } from '@/locales/app.content'
+import { BADGE_LABELS, BADGE_RARITY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import {
   type Badge as BadgeDto,
   BadgeRaritySchema,
@@ -49,13 +49,6 @@ import {
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-const RARITY_LABELS: Record<string, string> = {
-  common: 'COMMON',
-  rare: 'RARE',
-  epic: 'EPIC',
-  legendary: 'LEGENDARY'
-}
 
 const RARITY_CHIP: Record<string, string> = {
   common: 'bg-muted text-muted-foreground',
@@ -178,7 +171,7 @@ const EditBadgeDialog = ({ badge, open, onClose }: { badge: BadgeDto; open: bool
                     <SelectContent>
                       {BadgeRaritySchema.options.map((r) => (
                         <SelectItem key={r} value={r}>
-                          {RARITY_LABELS[r]}
+                          {BADGE_RARITY_LABELS[r]}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -411,7 +404,7 @@ const CreateBadgeDialog = ({ open, onClose }: { open: boolean; onClose: () => vo
                     <SelectContent>
                       {BadgeRaritySchema.options.map((r) => (
                         <SelectItem key={r} value={r}>
-                          {RARITY_LABELS[r]}
+                          {BADGE_RARITY_LABELS[r]}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -603,16 +596,18 @@ const BadgeCard = ({ badge, index }: { badge: BadgeDto; index: number }) => {
                 <div className='flex-1 min-w-0'>
                   <h3 className='text-base font-semibold text-foreground line-clamp-2 leading-tight'>{badge.name}</h3>
                   <p className='mt-1 text-xs text-muted-foreground line-clamp-2'>{badge.description}</p>
-                  <div className='mt-1 flex items-center gap-2 text-xs text-muted-foreground'>
+                  <div className='mt-1 flex items-center gap-1.5 flex-wrap'>
                     <span
                       className={cn(
                         'font-numeric font-bold text-[10px] px-1.5 py-0.5 rounded-full tracking-widest',
                         RARITY_CHIP[badge.rarity]
                       )}
                     >
-                      {RARITY_LABELS[badge.rarity]}
+                      {BADGE_RARITY_LABELS[badge.rarity]}
                     </span>
-                    <span className='tabular-nums'>獲得 {badge.earned_count ?? 0}</span>
+                    <span className='font-numeric font-bold text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums'>
+                      {BADGE_LABELS.earnedCount.replace('{count}', String(badge.earned_count ?? 0))}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -620,12 +615,12 @@ const BadgeCard = ({ badge, index }: { badge: BadgeDto; index: number }) => {
                 <div className='shrink-0 flex flex-col items-end gap-1'>
                   {isSpecial && (
                     <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-rank-gold/15 text-rank-gold-foreground'>
-                      特別
+                      {BADGE_LABELS.special}
                     </span>
                   )}
                   {badge.is_hidden && (
                     <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground'>
-                      非表示
+                      {BADGE_LABELS.hidden}
                     </span>
                   )}
                 </div>

@@ -268,6 +268,17 @@ const appContent = {
     route: {
       station: '駅'
     },
+    badge: {
+      rarity: {
+        common: 'COMMON',
+        rare: 'RARE',
+        epic: 'EPIC',
+        legendary: 'LEGENDARY'
+      },
+      earnedCount: '獲得 {count}人',
+      hidden: '非表示',
+      special: '特別'
+    },
     lineSticker: {
       biccameMusume: 'ビッカメ娘',
       originalStamp: 'オリジナルスタンプ',
@@ -346,3 +357,8 @@ export const CONFIRMATION_LABELS = appContent.content.confirmation
 export const EVENT_LIST_LABELS = appContent.content.eventList
 export const EVENT_LIST_ITEM_LABELS = appContent.content.eventListItem
 export const GANTT_CHART_LABELS = appContent.content.ganttChart
+export const BADGE_LABELS = appContent.content.badge
+export const BADGE_RARITY_LABELS = appContent.content.badge.rarity as Record<
+  'common' | 'rare' | 'epic' | 'legendary',
+  string
+>
