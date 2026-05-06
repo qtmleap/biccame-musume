@@ -14,6 +14,8 @@ import type { StoreKey } from '@/schemas/store.dto'
 type EventGridItemProps = {
   event: Event
   index?: number
+  /** ステータス・条件バッジを隠し、終了時の grayscale を無効化する */
+  compact?: boolean
 }
 
 type Tape = {
@@ -84,13 +86,14 @@ const getEndingSoonBackground = (event: Event): string | undefined => {
 /**
  * イベントグリッドアイテム
  */
-export const EventGridItem = ({ event, index = 0 }: EventGridItemProps) => {
+export const EventGridItem = ({ event, index = 0, compact = false }: EventGridItemProps) => {
   const isMultiColumn = useMediaQuery('(min-width: 640px)')
   const rotationDeg = isMultiColumn ? getStickerRotation(index) : 0
   const tape = TAPES[index % TAPES.length]
 
   const isEnded = event.status === 'ended'
   const endingSoonBg = getEndingSoonBackground(event)
+  const dimEnded = isEnded && !compact
 
   return (
     <motion.div className='h-full' style={{ filter: STICKER_SHADOW_SM }}>
@@ -106,7 +109,7 @@ export const EventGridItem = ({ event, index = 0 }: EventGridItemProps) => {
           params={{ uuid: event.uuid }}
           className={cn(
             'relative block rounded-xl p-4 border border-zinc-200 dark:border-card-border h-full',
-            isEnded ? 'opacity-50 grayscale bg-card' : endingSoonBg || 'bg-card'
+            dimEnded ? 'opacity-50 grayscale bg-card' : endingSoonBg || 'bg-card'
           )}
         >
           {tape && (
@@ -149,10 +152,10 @@ export const EventGridItem = ({ event, index = 0 }: EventGridItemProps) => {
                 </div>
               </div>
             </div>
-            {STATUS_BADGE_SM[event.status]()}
+            {!compact && STATUS_BADGE_SM[event.status]()}
           </div>
 
-          {event.conditions.some((c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery') && (
+          {!compact && event.conditions.some((c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery') && (
             <div className='mt-2 flex flex-wrap gap-1'>
               {event.conditions.map((condition) => {
                 if (condition.type === 'everyone') return null
