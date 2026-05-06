@@ -286,25 +286,26 @@ routes.openapi(
 )
 
 // POST /api/admin/badges/recalculate — 全ユーザー × 全バッジを再評価して獲得を反映
-// 店舗数や条件メタが変わった時に管理者が手動で叩く想定。重い処理なので頻繁には呼ばない。
+// 店舗数や条件メタが変わった時に管理者が手動で叩く想定。
+// 重いので waitUntil でバックグラウンド実行し、レスポンスは即返す。
 routes.openapi(
   createRoute({
     method: 'post',
     path: '/admin/badges/recalculate',
     middleware: [CFAuth],
     responses: {
-      200: {
+      202: {
         content: {
           'application/json': {
             schema: z
               .object({
                 processedUsers: z.number(),
-                awardedTotal: z.number()
+                scheduled: z.literal(true)
               })
               .openapi('AdminBadgeRecalculateResult')
           }
         },
-        description: 'バッジ再評価完了'
+        description: 'バッジ再評価をバックグラウンドで開始'
       }
     },
     tags: ['admin-badges']
@@ -313,12 +314,11 @@ routes.openapi(
     const prisma = getPrisma(c.env)
     const users = await prisma.user.findMany({ select: { id: true } })
 
-    const awardedCounts = await Promise.all(
-      users.map(async (user) => (await evaluateAndAwardBadges({ env: c.env, prisma, userId: user.id })).length)
+    c.executionCtx.waitUntil(
+      Promise.all(users.map((user) => evaluateAndAwardBadges({ env: c.env, prisma, userId: user.id })))
     )
-    const awardedTotal = awardedCounts.reduce((sum, n) => sum + n, 0)
 
-    return c.json({ processedUsers: users.length, awardedTotal }, 200)
+    return c.json({ processedUsers: users.length, scheduled: true as const }, 202)
   }
 )
 
