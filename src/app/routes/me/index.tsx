@@ -88,6 +88,8 @@ const MyPageContent = () => {
   const completedEventDetails = allEvents.filter((e) => completedEvents.includes(e.uuid))
   const favoriteCharacters = characters.filter((c) => c.character?.is_biccame_musume && favorites.includes(c.id))
   const displayFavorites = favoriteCharacters.slice(0, 5)
+  const visitedCharacters = characters.filter((c) => stores.includes(c.id))
+  const displayVisited = visitedCharacters.slice(0, 5)
 
   /**
    * ログアウト処理
@@ -145,14 +147,18 @@ const MyPageContent = () => {
             <div className='flex items-center gap-2'>
               <MapPin className='h-5 w-5 text-brand' />
               <h2 className='text-xl font-bold text-foreground'>{MY_PAGE_LABELS.visitedStores}</h2>
+              {visitedCharacters.length > 0 && (
+                <span className='text-sm text-muted-foreground'>({visitedCharacters.length})</span>
+              )}
             </div>
-            {stores.length > 0 ? (
-              <p className='text-sm text-muted-foreground'>
-                {stores.length}
-                {MY_PAGE_LABELS.visitedStoresCount}
-              </p>
+            {visitedCharacters.length === 0 ? (
+              <p className='text-sm text-muted-foreground py-2'>{MY_PAGE_LABELS.noVisitedStores}</p>
             ) : (
-              <p className='text-sm text-muted-foreground'>{MY_PAGE_LABELS.noVisitedStores}</p>
+              <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
+                {displayVisited.map((character, index) => (
+                  <CharacterListCard key={character.id} character={character} index={index} />
+                ))}
+              </div>
             )}
           </motion.div>
 
