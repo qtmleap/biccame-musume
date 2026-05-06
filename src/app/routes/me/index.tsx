@@ -132,7 +132,7 @@ const MyPageContent = () => {
                     {MY_PAGE_LABELS.logout}
                   </Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className='rounded-3xl shadow-2xl border-transparent'>
+                <AlertDialogContent className='rounded-2xl shadow-2xl border-transparent'>
                   <AlertDialogHeader>
                     <AlertDialogTitle>ログアウトしますか？</AlertDialogTitle>
                     <AlertDialogDescription>
