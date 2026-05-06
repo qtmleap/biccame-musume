@@ -133,9 +133,9 @@ routes.openapi(
       rank: idx + 1
     }))
 
-    let me: { rank: number; earnedCount: number } | undefined
+    const me = await (async (): Promise<{ rank: number; earnedCount: number } | undefined> => {
+      if (!uid) return undefined
 
-    if (uid) {
       type MyStatsRow = {
         earned_count: bigint
         first_earned: string | null
@@ -173,8 +173,8 @@ routes.openapi(
       `
 
       const rankAbove = rankRows.length > 0 ? Number(rankRows[0].rank_above) : 0
-      me = { rank: rankAbove + 1, earnedCount: myCount }
-    }
+      return { rank: rankAbove + 1, earnedCount: myCount }
+    })()
 
     c.header('Cache-Control', 'public, max-age=60, s-maxage=120')
     return c.json({ top, ...(me !== undefined ? { me } : {}) })
