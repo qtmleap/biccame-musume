@@ -3,7 +3,6 @@ import { ArrowLeft } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { BadgeGrid } from '@/components/badges/badge-grid'
-import { BadgeSummary } from '@/components/badges/badge-summary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
 import { useBadges } from '@/hooks/use-badges'
@@ -35,18 +34,21 @@ const BadgesContent = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: DURATION.normal }}
-          className='mb-4 text-center'
+          className='mb-6 md:mb-8 text-center'
         >
           <h1 className='font-display font-bold text-2xl md:text-3xl text-foreground tracking-tight'>
             バッジコレクション
           </h1>
+          <div
+            className='mt-3 font-numeric font-black tabular-nums text-rank-gold leading-none text-5xl md:text-6xl'
+            style={{ letterSpacing: '-0.06em' }}
+          >
+            {earnedCount}
+            <span className='ml-1 text-xl md:text-2xl text-muted-foreground'>個</span>
+          </div>
         </motion.header>
 
-        <BadgeSummary earnedCount={earnedCount} />
-
-        <div className='mt-6 md:mt-8'>
-          <BadgeGrid badges={badges} earnedMap={earnedMap} />
-        </div>
+        <BadgeGrid badges={badges} earnedMap={earnedMap} />
 
         <div className='mt-8 mb-6 text-center'>
           <p className='text-xs text-muted-foreground mb-3'>もっと集めるには？</p>
