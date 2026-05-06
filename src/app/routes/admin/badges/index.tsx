@@ -658,11 +658,6 @@ const BadgeCard = ({ badge }: { badge: BadgeDto }) => {
                 </div>
                 <p className='text-[10px] font-numeric text-muted-foreground'>{badge.code}</p>
                 <p className='text-xs'>{badge.description}</p>
-                {badge.earned_count !== undefined && (
-                  <p className='text-[10px] tabular-nums text-muted-foreground pt-1 border-t border-border'>
-                    達成 <span className='font-bold text-foreground'>{badge.earned_count}</span>人
-                  </p>
-                )}
               </div>
             </TooltipContent>
           </Tooltip>
