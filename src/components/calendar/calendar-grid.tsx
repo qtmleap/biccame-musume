@@ -121,7 +121,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                 aria-label={`${year}年${month}月${day}日${hasEvents ? `(イベント${dayEvents.length}件)` : ''}`}
                 className={cn(
                   'min-h-20 p-1.5 rounded-xl text-left',
-                  isToday ? 'bg-calendar-today border-2 border-calendar-today-border' : 'bg-card border-card',
+                  isToday ? 'bg-calendar-today border-2 border-calendar-today-border' : 'bg-card',
                   hasEvents && 'cursor-pointer'
                 )}
                 disabled={!hasEvents}
