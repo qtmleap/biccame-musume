@@ -28,14 +28,14 @@ export const BADGE_CATEGORY_DEFS: BadgeCategoryDef[] = [
   },
   {
     key: 'event',
-    label: 'イベント参加',
-    description: 'リアル・オンラインイベントへの参加で獲得',
+    label: 'イベントマイルストーン',
+    description: '累計イベント完了数で段階的に解放される称号',
     accent: 'brand'
   },
   {
     key: 'event_clear',
-    label: 'イベント制覇',
-    description: '店舗別のイベント達成で得られる勲章',
+    label: 'イベント参加',
+    description: '店舗別のイベント参加で得られる勲章',
     accent: 'rank-gold'
   },
   {
