@@ -29,9 +29,6 @@ export const BadgeSubCategorySchema = z.enum([
   'all_areas_any_visit',
   'all_areas_any_event_clear',
   'vote_total',
-  'vote_unique',
-  'vote_devotion',
-  'vote_all_biccame',
   'special_multi_store_clear',
   'special_event_id'
 ])

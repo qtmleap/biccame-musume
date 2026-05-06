@@ -26,9 +26,6 @@ export type BadgeSubCategory =
   | 'all_areas_any_visit'
   | 'all_areas_any_event_clear'
   | 'vote_total'
-  | 'vote_unique'
-  | 'vote_devotion'
-  | 'vote_all_biccame'
   | 'special_multi_store_clear'
   | 'special_event_id'
 
@@ -423,14 +420,14 @@ function getBadgeRegistry(): BadgeDef[] {
   })
 
   // -----------------------------------------------------------------------
-  // 8. Vote total milestone badges (11)
+  // 8. Vote total milestone badges (20)
   //
-  // Thresholds: 1, then 100-step from 100 to 1000 = 11 entries.
+  // Thresholds: 1, 10, 20, ..., 90, 100, 200, ..., 1000 = 20 entries.
   // Rarity grading:
-  //   common:    1, 100              (2 entries)
-  //   rare:      200, 300            (2 entries)
-  //   epic:      400, 500, 600, 700  (4 entries)
-  //   legendary: 800, 900, 1000      (3 entries)
+  //   common:    1, 10, 20, 30, 40, 50     (6 entries)
+  //   rare:      60, 70, 80, 90, 100       (5 entries)
+  //   epic:      200, 300, 400, 500, 600   (5 entries)
+  //   legendary: 700, 800, 900, 1000       (4 entries)
   // -----------------------------------------------------------------------
   const VOTE_TOTAL_NAMED: Record<number, string> = {
     1: '初投票',
@@ -439,14 +436,16 @@ function getBadgeRegistry(): BadgeDef[] {
     1000: '投票名人'
   }
   function voteTotalRarity(count: number): BadgeRarity {
-    if (count <= 100) return 'common'
-    if (count <= 300) return 'rare'
-    if (count <= 700) return 'epic'
+    if (count <= 50) return 'common'
+    if (count <= 100) return 'rare'
+    if (count <= 600) return 'epic'
     return 'legendary'
   }
-  const VOTE_TOTAL_THRESHOLDS: number[] = [1, ...Array.from({ length: 10 }, (_, i) => (i + 1) * 100)]
+  const VOTE_TOTAL_THRESHOLDS: number[] = [
+    1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
+  ]
   for (const count of VOTE_TOTAL_THRESHOLDS) {
-    const name = VOTE_TOTAL_NAMED[count] ?? `${count} 票`
+    const name = VOTE_TOTAL_NAMED[count] ?? `投票 ${count} 票`
     const rarity = voteTotalRarity(count)
     badges.push({
       code: `vote_total_${count}`,
@@ -462,64 +461,6 @@ function getBadgeRegistry(): BadgeDef[] {
     })
   }
 
-  // -----------------------------------------------------------------------
-  // 9. Vote unique (diversity) badges — 5-step milestones + all_biccame (10)
-  // -----------------------------------------------------------------------
-  const BICCAME_MUSUME_COUNT = 50
-  const uniqueSteps = milestoneSteps(BICCAME_MUSUME_COUNT)
-  const uniqueStepRarities: BadgeRarity[] = ['common', 'common', 'rare', 'rare', 'rare', 'epic', 'epic', 'epic', 'epic']
-  for (let i = 0; i < uniqueSteps.length; i++) {
-    const count = uniqueSteps[i]
-    const rarity = uniqueStepRarities[i] ?? 'epic'
-    badges.push({
-      code: `vote_unique_${count}`,
-      category: 'vote',
-      subCategory: 'vote_unique',
-      name: `推し ${count} 人`,
-      description: `${count} 人の異なるキャラクターに投票しました`,
-      hint: `${count} 人の異なるキャラクターに投票するとゲットできます`,
-      rarity,
-      iconName: 'Users',
-      sortOrder: next(),
-      conditionMeta: { count }
-    })
-  }
-  // All biccame musume legendary badge
-  badges.push({
-    code: 'vote_unique_all_biccame',
-    category: 'vote',
-    subCategory: 'vote_all_biccame',
-    name: '全員推し',
-    description: `ビッカメ娘全 ${BICCAME_MUSUME_COUNT} キャラクターに 1 票以上投票しました`,
-    hint: `ビッカメ娘全員に 1 票以上投票するとゲットできます`,
-    rarity: 'legendary',
-    iconName: 'Heart',
-    sortOrder: next(),
-    conditionMeta: { count: BICCAME_MUSUME_COUNT }
-  })
-
-  // -----------------------------------------------------------------------
-  // 10. Vote devotion badges (2)
-  // -----------------------------------------------------------------------
-  const devotionBadges: Array<{ count: number; name: string; rarity: BadgeRarity }> = [
-    { count: 10, name: '推し決定', rarity: 'common' },
-    { count: 100, name: '推し一筋', rarity: 'epic' }
-  ]
-  for (const { count, name, rarity } of devotionBadges) {
-    badges.push({
-      code: `vote_devotion_${count}`,
-      category: 'vote',
-      subCategory: 'vote_devotion',
-      name,
-      description: `同じキャラクターに累計 ${count} 票投票しました`,
-      hint: `同じキャラクターに累計 ${count} 票投票するとゲットできます`,
-      rarity,
-      iconName: 'HeartHandshake',
-      sortOrder: next(),
-      conditionMeta: { count }
-    })
-  }
-
   return badges
 }
 
@@ -527,7 +468,7 @@ export { getBadgeRegistry }
 
 export const BADGE_REGISTRY: readonly BadgeDef[] = Object.freeze(getBadgeRegistry())
 
-// Sanity assertion: registry size must be in [200, 220].
-if (BADGE_REGISTRY.length < 200 || BADGE_REGISTRY.length > 220) {
-  throw new Error(`BADGE_REGISTRY size out of expected range [200, 220]: got ${BADGE_REGISTRY.length}`)
+// Sanity assertion: registry size must be in [210, 220].
+if (BADGE_REGISTRY.length < 210 || BADGE_REGISTRY.length > 220) {
+  throw new Error(`BADGE_REGISTRY size out of expected range [210, 220]: got ${BADGE_REGISTRY.length}`)
 }

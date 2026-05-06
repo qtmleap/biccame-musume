@@ -19,10 +19,7 @@ import {
   evaluateSpecialEventId,
   evaluateSpecialMultiStoreClear,
   evaluateVisit,
-  evaluateVoteAllBiccame,
-  evaluateVoteDevotion,
-  evaluateVoteTotal,
-  evaluateVoteUnique
+  evaluateVoteTotal
 } from '../../src/services/badge-evaluator'
 
 // ---------------------------------------------------------------------------
@@ -361,112 +358,6 @@ describe('evaluateVoteTotal', () => {
     })
     const result = await evaluateVoteTotal(ctx, { count: threshold })
     expect(result).toBe(expected)
-  })
-})
-
-// ---------------------------------------------------------------------------
-// evaluateVoteUnique
-// ---------------------------------------------------------------------------
-
-describe('evaluateVoteUnique', () => {
-  test('returns true when distinct character count meets threshold', async () => {
-    // groupBy returns one entry per distinct character
-    const ctx = makeCtx({
-      vote: {
-        groupBy: async () => [{ characterId: 'char-1' }, { characterId: 'char-2' }, { characterId: 'char-3' }]
-      } as never
-    })
-    const result = await evaluateVoteUnique(ctx, { count: 3 })
-    expect(result).toBe(true)
-  })
-
-  test('returns false when distinct character count is below threshold', async () => {
-    const ctx = makeCtx({
-      vote: {
-        groupBy: async () => [{ characterId: 'char-1' }, { characterId: 'char-2' }]
-      } as never
-    })
-    const result = await evaluateVoteUnique(ctx, { count: 3 })
-    expect(result).toBe(false)
-  })
-})
-
-// ---------------------------------------------------------------------------
-// evaluateVoteDevotion
-// ---------------------------------------------------------------------------
-
-describe('evaluateVoteDevotion', () => {
-  test('returns true when max single-character votes meets threshold', async () => {
-    const ctx = makeCtx({
-      vote: {
-        groupBy: async () => [{ characterId: 'char-1', _count: { characterId: 10 } }]
-      } as never
-    })
-    const result = await evaluateVoteDevotion(ctx, { count: 10 })
-    expect(result).toBe(true)
-  })
-
-  test('returns false when max single-character votes is below threshold', async () => {
-    const ctx = makeCtx({
-      vote: {
-        groupBy: async () => [{ characterId: 'char-1', _count: { characterId: 9 } }]
-      } as never
-    })
-    const result = await evaluateVoteDevotion(ctx, { count: 10 })
-    expect(result).toBe(false)
-  })
-
-  test('returns false when no votes exist', async () => {
-    const ctx = makeCtx({
-      vote: {
-        groupBy: async () => []
-      } as never
-    })
-    const result = await evaluateVoteDevotion(ctx, { count: 1 })
-    expect(result).toBe(false)
-  })
-})
-
-// ---------------------------------------------------------------------------
-// evaluateVoteAllBiccame
-// ---------------------------------------------------------------------------
-
-describe('evaluateVoteAllBiccame', () => {
-  test('returns true when all biccame musume characters have been voted for', async () => {
-    // The module uses BICCAME_MUSUME_IDS from characters.json.
-    // We mock groupBy to return the same number of rows as the set size.
-    // Since we can't easily access BICCAME_MUSUME_IDS directly, we test using a
-    // large enough count that satisfies any reasonable set size.
-    // This test verifies the comparison logic rather than the exact set.
-    //
-    // Strategy: mock groupBy to return rows equal to what the code compares against.
-    // We import the evaluator and let it use the real BICCAME_MUSUME_IDS — we just
-    // need to ensure the voted count equals BICCAME_MUSUME_IDS.size.
-
-    // Import characters.json directly to know the expected count
-    const chars = (await import('../../public/characters.json')).default as Array<{
-      id: string
-      character: { is_biccame_musume?: boolean }
-    }>
-    const biccameCount = chars.filter((c) => c.character.is_biccame_musume === true).length
-
-    const ctx = makeCtx({
-      vote: {
-        groupBy: async () => Array.from({ length: biccameCount }, (_, i) => ({ characterId: `char-${i}` }))
-      } as never
-    })
-    const result = await evaluateVoteAllBiccame(ctx)
-    expect(result).toBe(true)
-  })
-
-  test('returns false when some biccame musume characters have not been voted for', async () => {
-    const ctx = makeCtx({
-      vote: {
-        groupBy: async () => [{ characterId: 'char-1' }] // only 1 character
-      } as never
-    })
-    const result = await evaluateVoteAllBiccame(ctx)
-    expect(result).toBe(false)
   })
 })
 
