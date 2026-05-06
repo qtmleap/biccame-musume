@@ -7,7 +7,6 @@ import { CharacterListCard } from '@/components/character-list-card'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventGridItem } from '@/components/events/event-grid-item'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -56,24 +55,11 @@ const EventSection = ({
       {events.length === 0 ? (
         <p className='text-sm text-muted-foreground py-2'>{emptyMessage}</p>
       ) : (
-        <>
-          <div className='md:hidden grid grid-cols-1 gap-3'>
-            {displayEvents.map((event, index) => (
-              <EventGridItem key={event.uuid} event={event} index={index} compact />
-            ))}
-          </div>
-          <Carousel opts={{ align: 'start', loop: false }} className='hidden md:block px-12'>
-            <CarouselContent className='-ml-3'>
-              {displayEvents.map((event, index) => (
-                <CarouselItem key={event.uuid} className='pl-3 md:basis-1/2 lg:basis-1/3'>
-                  <EventGridItem event={event} index={index} compact />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
+          {displayEvents.map((event, index) => (
+            <EventGridItem key={event.uuid} event={event} index={index} compact />
+          ))}
+        </div>
       )}
       {showAllPath && events.length > 0 && (
         <div className='mt-4 text-right'>
@@ -221,25 +207,11 @@ const MyPageContent = () => {
               <p className='text-sm text-muted-foreground py-2'>推しを登録して、まとめて応援できるよ</p>
             ) : (
               <>
-                <div className='md:hidden grid grid-cols-1 gap-3'>
+                <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
                   {displayFavorites.map((character, index) => (
                     <CharacterListCard key={character.id} character={character} index={index} />
                   ))}
                 </div>
-                <Carousel
-                  opts={{ align: 'start', loop: false }}
-                  className='hidden md:block px-12'
-                >
-                  <CarouselContent className='-ml-3'>
-                    {displayFavorites.map((character, index) => (
-                      <CarouselItem key={character.id} className='pl-3 md:basis-1/3 lg:basis-1/4 xl:basis-1/5'>
-                        <CharacterListCard character={character} index={index} />
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </Carousel>
                 <div className='mt-4 text-right'>
                   <Link
                     to='/me/favorites'
