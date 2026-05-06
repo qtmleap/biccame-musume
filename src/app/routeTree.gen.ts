@@ -22,6 +22,7 @@ import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
 import { Route as BadgesIndexRouteImport } from './routes/badges/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
+import { Route as MeVisitedIndexRouteImport } from './routes/me/visited/index'
 import { Route as MeInterestedIndexRouteImport } from './routes/me/interested/index'
 import { Route as MeFavoritesIndexRouteImport } from './routes/me/favorites/index'
 import { Route as MeCompletedIndexRouteImport } from './routes/me/completed/index'
@@ -98,6 +99,11 @@ const AboutIndexRoute = AboutIndexRouteImport.update({
   path: '/about/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeVisitedIndexRoute = MeVisitedIndexRouteImport.update({
+  id: '/me/visited/',
+  path: '/me/visited/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MeInterestedIndexRoute = MeInterestedIndexRouteImport.update({
   id: '/me/interested/',
   path: '/me/interested/',
@@ -172,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/me/completed/': typeof MeCompletedIndexRoute
   '/me/favorites/': typeof MeFavoritesIndexRoute
   '/me/interested/': typeof MeInterestedIndexRoute
+  '/me/visited/': typeof MeVisitedIndexRoute
   '/admin/events/$uuid/': typeof AdminEventsUuidIndexRoute
 }
 export interface FileRoutesByTo {
@@ -196,6 +203,7 @@ export interface FileRoutesByTo {
   '/me/completed': typeof MeCompletedIndexRoute
   '/me/favorites': typeof MeFavoritesIndexRoute
   '/me/interested': typeof MeInterestedIndexRoute
+  '/me/visited': typeof MeVisitedIndexRoute
   '/admin/events/$uuid': typeof AdminEventsUuidIndexRoute
 }
 export interface FileRoutesById {
@@ -222,6 +230,7 @@ export interface FileRoutesById {
   '/me/completed/': typeof MeCompletedIndexRoute
   '/me/favorites/': typeof MeFavoritesIndexRoute
   '/me/interested/': typeof MeInterestedIndexRoute
+  '/me/visited/': typeof MeVisitedIndexRoute
   '/admin/events/$uuid/': typeof AdminEventsUuidIndexRoute
 }
 export interface FileRouteTypes {
@@ -249,6 +258,7 @@ export interface FileRouteTypes {
     | '/me/completed/'
     | '/me/favorites/'
     | '/me/interested/'
+    | '/me/visited/'
     | '/admin/events/$uuid/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -273,6 +283,7 @@ export interface FileRouteTypes {
     | '/me/completed'
     | '/me/favorites'
     | '/me/interested'
+    | '/me/visited'
     | '/admin/events/$uuid'
   id:
     | '__root__'
@@ -298,6 +309,7 @@ export interface FileRouteTypes {
     | '/me/completed/'
     | '/me/favorites/'
     | '/me/interested/'
+    | '/me/visited/'
     | '/admin/events/$uuid/'
   fileRoutesById: FileRoutesById
 }
@@ -319,6 +331,7 @@ export interface RootRouteChildren {
   MeCompletedIndexRoute: typeof MeCompletedIndexRoute
   MeFavoritesIndexRoute: typeof MeFavoritesIndexRoute
   MeInterestedIndexRoute: typeof MeInterestedIndexRoute
+  MeVisitedIndexRoute: typeof MeVisitedIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -412,6 +425,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about/'
       preLoaderRoute: typeof AboutIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/me/visited/': {
+      id: '/me/visited/'
+      path: '/me/visited'
+      fullPath: '/me/visited/'
+      preLoaderRoute: typeof MeVisitedIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/me/interested/': {
@@ -525,6 +545,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeCompletedIndexRoute: MeCompletedIndexRoute,
   MeFavoritesIndexRoute: MeFavoritesIndexRoute,
   MeInterestedIndexRoute: MeInterestedIndexRoute,
+  MeVisitedIndexRoute: MeVisitedIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
