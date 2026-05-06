@@ -94,10 +94,10 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                   type='button'
                   onClick={() => onDayClick?.(group.day, group.events)}
                   aria-label={`${month}月${group.day}日のイベントを開く`}
-                  className='flex flex-col items-center justify-center min-w-12 min-h-11 shrink-0 cursor-pointer hover:opacity-70 transition-opacity leading-none gap-1'
+                  className='flex flex-col items-center justify-center min-w-11 min-h-11 shrink-0 cursor-pointer hover:opacity-70 transition-opacity'
                 >
-                  <span className='text-[10px] tracking-widest text-muted-foreground uppercase'>{group.dayOfWeek}</span>
-                  <span className='text-3xl font-numeric font-black tabular-nums text-foreground'>{group.day}</span>
+                  <span className='text-xs text-muted-foreground uppercase'>{group.dayOfWeek}</span>
+                  <span className='text-xl font-bold tabular-nums'>{group.day}</span>
                 </button>
 
                 {/* イベント一覧(グリッドレイアウト) */}
