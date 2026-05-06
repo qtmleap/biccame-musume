@@ -36,29 +36,32 @@ const UsersContent = () => {
           <p className='mt-2 text-sm text-muted-foreground md:text-base'>登録ユーザーの一覧確認。</p>
         </div>
 
-        <div className='bg-card border border-card-border rounded-2xl divide-y divide-card-border'>
-          {users.length === 0 ? (
-            <p className='text-sm text-muted-foreground py-8 text-center'>登録ユーザーがいません</p>
-          ) : (
-            users.map((user) => (
-              <div key={user.id} className='flex items-center gap-3 px-3 py-3 md:px-4 md:py-4'>
-                <Avatar className='size-10 shrink-0'>
+        {users.length === 0 ? (
+          <p className='text-sm text-muted-foreground py-8 text-center'>登録ユーザーがいません</p>
+        ) : (
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
+            {users.map((user) => (
+              <div
+                key={user.id}
+                className='bg-card border border-card-border rounded-2xl p-4 flex items-center gap-3'
+              >
+                <Avatar className='size-12 shrink-0'>
                   <AvatarImage src={user.thumbnailURL ?? undefined} alt={user.displayName ?? 'user'} />
-                  <AvatarFallback className='text-sm bg-brand/10 text-brand'>
+                  <AvatarFallback className='text-base bg-brand/10 text-brand'>
                     {user.displayName?.charAt(0) ?? 'U'}
                   </AvatarFallback>
                 </Avatar>
                 <div className='flex-1 min-w-0'>
                   <div className='font-bold text-sm text-foreground truncate'>{user.displayName ?? '(未設定)'}</div>
                   <div className='text-xs text-muted-foreground truncate'>{user.email ?? '(メール未登録)'}</div>
-                </div>
-                <div className='shrink-0 text-xs font-numeric tabular-nums text-muted-foreground'>
-                  {dayjs(user.createdAt).format('YYYY/MM/DD')}
+                  <div className='mt-1 text-[11px] font-numeric tabular-nums text-muted-foreground'>
+                    {dayjs(user.createdAt).format('YYYY/MM/DD')} 登録
+                  </div>
                 </div>
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
