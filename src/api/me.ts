@@ -127,7 +127,7 @@ routes.openapi(
     if (status === 'visited') {
       const prisma = getPrisma(c.env)
       const earned = await evaluateOnVisit({ env: c.env, prisma, userId: uid }, storeKey as StoreKey)
-      newBadges = earned.map(prismaBadgeToDto)
+      newBadges = earned.map((b) => prismaBadgeToDto(b))
     }
 
     return c.json({ success: true, newBadges })
@@ -238,7 +238,7 @@ routes.openapi(
     if (status === 'completed') {
       const prisma = getPrisma(c.env)
       const earned = await evaluateOnEventComplete({ env: c.env, prisma, userId: uid }, eventId)
-      newBadges = earned.map(prismaBadgeToDto)
+      newBadges = earned.map((b) => prismaBadgeToDto(b))
     }
 
     return c.json({ success: true, newBadges })

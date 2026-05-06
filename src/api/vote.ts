@@ -127,7 +127,7 @@ routes.openapi(
       const lastVotedId = votedCharacterIds[votedCharacterIds.length - 1]
       if (lastVotedId !== undefined) {
         const earned = await evaluateOnVote({ env: c.env, prisma, userId }, lastVotedId)
-        newBadges = earned.map(prismaBadgeToDto)
+        newBadges = earned.map((b) => prismaBadgeToDto(b))
       }
     }
 
@@ -207,7 +207,7 @@ routes.openapi(
     if (userId !== undefined) {
       const prisma = getPrisma(c.env)
       const earned = await evaluateOnVote({ env: c.env, prisma, userId }, characterId)
-      newBadges = earned.map(prismaBadgeToDto)
+      newBadges = earned.map((b) => prismaBadgeToDto(b))
     }
 
     return c.json({

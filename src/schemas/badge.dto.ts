@@ -56,9 +56,10 @@ export const BadgeSchema = z
     code: z.string().nonempty().openapi({ example: 'store_visit_akiba' }),
     category: BadgeCategorySchema.openapi({ example: 'store' }),
     sub_category: BadgeSubCategorySchema.openapi({ example: 'visit' }),
-    name: z.string().nonempty().openapi({ example: 'AKIBA店訪問' }),
-    description: z.string().nonempty().openapi({ example: 'ビックカメラAKIBAを訪問しました' }),
-    hint: z.string().nonempty().openapi({ example: 'ビックカメラAKIBAを訪問するとゲットできます' }),
+    // 未取得バッジではネタバレ防止のため name/description/hint は返さない（admin と取得済みのみ含む）
+    name: z.string().nonempty().optional().openapi({ example: 'AKIBA店訪問' }),
+    description: z.string().nonempty().optional().openapi({ example: 'ビックカメラAKIBAを訪問しました' }),
+    hint: z.string().nonempty().optional().openapi({ example: 'ビックカメラAKIBAを訪問するとゲットできます' }),
     rarity: BadgeRaritySchema.openapi({ example: 'common' }),
     icon_name: z.string().nonempty().openapi({ example: 'MapPin' }),
     sort_order: z.number().int().nonnegative().openapi({ example: 1 }),
@@ -79,14 +80,15 @@ export const BadgeListSchema = z.array(BadgeSchema).openapi('BadgeList')
 
 /**
  * Convert a Prisma Badge row to the BadgeSchema DTO shape.
+ * `mask=true` のとき name/description/hint を返さない（未取得ユーザー向けのネタバレ防止）
  */
-export const prismaBadgeToDto = (b: PrismaBadge, earnedCount?: number): Badge => ({
+export const prismaBadgeToDto = (b: PrismaBadge, earnedCount?: number, mask = false): Badge => ({
   code: b.code,
   category: b.category as Badge['category'],
   sub_category: b.subCategory as Badge['sub_category'],
-  name: b.name,
-  description: b.description,
-  hint: b.hint,
+  name: mask ? undefined : b.name,
+  description: mask ? undefined : b.description,
+  hint: mask ? undefined : b.hint,
   rarity: b.rarity as Badge['rarity'],
   icon_name: b.iconName,
   sort_order: b.sortOrder,
