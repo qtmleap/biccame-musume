@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import { CharacterListCard } from '@/components/character-list-card'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
-import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
+import { EventGridItem } from '@/components/events/event-grid-item'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import {
   AlertDialog,
@@ -53,13 +53,28 @@ const EventSection = ({
         <h2 className='text-xl font-bold text-foreground'>{title}</h2>
         {events.length > 0 && <span className='text-sm text-muted-foreground'>({events.length})</span>}
       </div>
-      <PaginatedEventGrid
-        events={displayEvents}
-        page={1}
-        onPageChange={() => {}}
-        compact
-        emptyState={<p className='text-sm text-muted-foreground py-2'>{emptyMessage}</p>}
-      />
+      {events.length === 0 ? (
+        <p className='text-sm text-muted-foreground py-2'>{emptyMessage}</p>
+      ) : (
+        <>
+          <div className='md:hidden grid grid-cols-1 gap-3'>
+            {displayEvents.map((event, index) => (
+              <EventGridItem key={event.uuid} event={event} index={index} compact />
+            ))}
+          </div>
+          <Carousel opts={{ align: 'start', loop: false }} className='hidden md:block px-12'>
+            <CarouselContent className='-ml-3'>
+              {displayEvents.map((event, index) => (
+                <CarouselItem key={event.uuid} className='pl-3 md:basis-1/2 lg:basis-1/3'>
+                  <EventGridItem event={event} index={index} compact />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </>
+      )}
       {showAllPath && events.length > 0 && (
         <div className='mt-4 text-right'>
           <Link
