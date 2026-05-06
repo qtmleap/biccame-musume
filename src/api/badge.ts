@@ -3,6 +3,7 @@ import { getPrisma } from '@/lib/prisma'
 import {
   GetBadgeLeaderboardQuerySchema,
   GetBadgeLeaderboardResponseSchema,
+  GetBadgesQuerySchema,
   GetBadgesResponseSchema,
   GetMyBadgesResponseSchema,
   prismaBadgeToDto
@@ -16,6 +17,9 @@ routes.openapi(
   createRoute({
     method: 'get',
     path: '/badges',
+    request: {
+      query: GetBadgesQuerySchema
+    },
     responses: {
       200: {
         content: {
@@ -29,12 +33,18 @@ routes.openapi(
     tags: ['badges']
   }),
   async (c) => {
+    const { includeHidden } = c.req.valid('query')
+    const showHidden = includeHidden !== undefined
     const prisma = getPrisma(c.env)
     const rows = await prisma.badge.findMany({
-      where: { isHidden: false },
+      where: showHidden ? undefined : { isHidden: false },
       orderBy: [{ category: 'asc' }, { sortOrder: 'asc' }]
     })
-    c.header('Cache-Control', 'public, max-age=300, s-maxage=3600')
+    if (showHidden) {
+      c.header('Cache-Control', 'no-store')
+    } else {
+      c.header('Cache-Control', 'public, max-age=300, s-maxage=3600')
+    }
     return c.json({ badges: rows.map(prismaBadgeToDto) })
   }
 )

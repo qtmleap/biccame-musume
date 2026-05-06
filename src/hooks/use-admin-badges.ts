@@ -3,15 +3,10 @@ import { toast } from 'sonner'
 import type { CreateSpecialBadgeBody, UpdateBadgeBody } from '@/schemas/badge.dto'
 import { client } from '@/utils/client'
 
-/**
- * 管理者向け: 全バッジ一覧を取得するフック
- * NOTE: 現時点の GET /api/badges は isHidden=true のバッジを除外している。
- * admin 向けの includeHidden パラメータは未実装のため、非表示バッジは一覧に含まれない (MVP 制限)。
- */
 export const useAllBadges = () => {
   return useSuspenseQuery({
-    queryKey: ['badges'],
-    queryFn: () => client.getBadges(),
+    queryKey: ['badges', 'admin', 'all'],
+    queryFn: () => client.getBadges({ queries: { includeHidden: '1' } }),
     staleTime: 0
   })
 }

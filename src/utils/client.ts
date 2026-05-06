@@ -389,6 +389,13 @@ const api = makeApi([
     path: '/api/badges',
     alias: 'getBadges',
     description: '全バッジ定義を取得（認証不要）',
+    parameters: [
+      {
+        name: 'includeHidden',
+        type: 'Query',
+        schema: z.enum(['1', 'true']).optional()
+      }
+    ],
     response: GetBadgesResponseSchema
   },
   {
