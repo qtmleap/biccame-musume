@@ -306,7 +306,7 @@ const RankingRow = ({ character, rank, index, maxVote, rotation }: CardProps) =>
  */
 const Podium = ({ top3, ranks, maxVote }: { top3: CharacterWithVotes[]; ranks: number[]; maxVote: number }) => {
   const byRank = (target: number) => {
-    const idx = ranks.findIndex((r) => r === target)
+    const idx = ranks.indexOf(target)
     return idx >= 0 ? { character: top3[idx], rank: ranks[idx], index: idx } : null
   }
 
