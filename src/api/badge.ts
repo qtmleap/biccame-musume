@@ -42,10 +42,15 @@ routes.openapi(
     })
     if (showHidden) {
       c.header('Cache-Control', 'no-store')
-    } else {
-      c.header('Cache-Control', 'public, max-age=300, s-maxage=3600')
+      const countRows = await prisma.userBadge.groupBy({
+        by: ['badgeCode'],
+        _count: { _all: true }
+      })
+      const countMap = new Map<string, number>(countRows.map((r) => [r.badgeCode, r._count._all]))
+      return c.json({ badges: rows.map((b) => prismaBadgeToDto(b, countMap.get(b.code) ?? 0)) })
     }
-    return c.json({ badges: rows.map(prismaBadgeToDto) })
+    c.header('Cache-Control', 'public, max-age=300, s-maxage=3600')
+    return c.json({ badges: rows.map((b) => prismaBadgeToDto(b)) })
   }
 )
 
