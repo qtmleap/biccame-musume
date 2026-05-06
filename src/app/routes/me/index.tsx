@@ -7,6 +7,7 @@ import { CharacterListCard } from '@/components/character-list-card'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -205,11 +206,25 @@ const MyPageContent = () => {
               <p className='text-sm text-muted-foreground py-2'>推しを登録して、まとめて応援できるよ</p>
             ) : (
               <>
-                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3'>
+                <div className='md:hidden grid grid-cols-1 gap-3'>
                   {displayFavorites.map((character, index) => (
                     <CharacterListCard key={character.id} character={character} index={index} />
                   ))}
                 </div>
+                <Carousel
+                  opts={{ align: 'start', loop: false }}
+                  className='hidden md:block px-12'
+                >
+                  <CarouselContent className='-ml-3'>
+                    {displayFavorites.map((character, index) => (
+                      <CarouselItem key={character.id} className='pl-3 md:basis-1/3 lg:basis-1/4 xl:basis-1/5'>
+                        <CharacterListCard character={character} index={index} />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
                 <div className='mt-4 text-right'>
                   <Link
                     to='/me/favorites'
