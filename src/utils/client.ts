@@ -84,7 +84,7 @@ const api = makeApi([
       {
         name: 'characterId',
         type: 'Path',
-        schema: z.string().nonempty().nonempty()
+        schema: z.string().nonempty()
       }
     ],
     response: VoteResponseSchema
