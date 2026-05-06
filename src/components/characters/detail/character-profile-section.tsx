@@ -38,21 +38,23 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
         </motion.div>
 
         <div className='flex items-center gap-2'>
+          {/* ログイン必須（左） */}
           <CharacterFavoriteButton
             characterId={character.id}
             characterName={character.character?.name}
             isBiccameMusume={character.character?.is_biccame_musume}
           />
-          {character.character?.twitter_id && (
-            <CharacterFollowButton twitterId={character.character.twitter_id} iconOnly />
-          )}
           <CharacterVisitButton
             storeKey={character.id}
             storeName={character.store?.name}
             hasStore={Boolean(character.store)}
           />
+          {/* ログイン不要（右） */}
           {character.character?.is_biccame_musume && (
             <CharacterVoteButton characterId={character.id} characterName={character.character.name} iconOnly />
+          )}
+          {character.character?.twitter_id && (
+            <CharacterFollowButton twitterId={character.character.twitter_id} iconOnly />
           )}
         </div>
       </div>
