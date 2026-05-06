@@ -32,7 +32,7 @@ Date: 2026-05-06
 
 | カテゴリ | 件数 | 条件 | レアリティ |
 | --- | --- | --- | --- |
-| 各店舗訪問 | 約 50 | `UserStore.status='visited'` がその店舗で 1 件以上 | common |
+| 各店舗訪問 | 50 | `UserStore.status='visited'` がその店舗で 1 件以上 | common |
 | エリア参加 (10) | 10 | その地区で `visited` が 1 件以上 | rare |
 | エリアコンプ (10) | 10 | その地区の全店舗 `visited` | epic |
 | マイルストーン | 約 9 | 累計 `visited` ユニーク店舗数が 5/10/15/.../X (X = 実店舗数未満で最大の 5 の倍数) | common→rare→epic |
@@ -48,7 +48,7 @@ Date: 2026-05-06
 
 #### 実店舗の絞り込み
 
-`StoreKeySchema` の中にはサービス系・概念キーが混在 (`biccamera`, `bicqlo`, `bicsim`, `camera`, `photo`, `pkan`, `prosta`, `naisen`, `itt`, `oeraitan` 等)。バッジ対象は **`stores.yaml` 等の店舗マスタで `prefecture` を持つ実店舗のみ**に絞る。除外リストは `src/data/badges/store-exclusion.ts` で明示し、テストで「除外リスト + 実店舗 = 全 StoreKey」をアサート。
+`StoreKeySchema` の中にはサービス系・概念キーが混在 (`biccamera`, `bicsim`, `naisen`, `oeraitan` 等)。バッジ対象は **`stores.yaml` 等の店舗マスタで `prefecture` を持つ実店舗のみ**に絞る。除外リストは `src/data/badges/store-exclusion.ts` で明示し、テストで「除外リスト + 実店舗 = 全 StoreKey」をアサート。
 
 ### イベント参加系 (31 個)
 
@@ -76,7 +76,7 @@ Date: 2026-05-06
 
 | カテゴリ | 件数 | 条件 | レアリティ |
 | --- | --- | --- | --- |
-| 各店舗イベント制覇 | 約 50 | その店舗で開催されたイベントを 1 件以上 completed | rare |
+| 各店舗イベント制覇 | 50 | その店舗で開催されたイベントを 1 件以上 completed | rare |
 | エリアイベントデビュー (10) | 10 | その地区の店舗で 1 件以上 イベント completed | epic |
 | エリアイベントコンプ (10) | 10 | その地区の全店舗でイベント completed | legendary |
 | イベント制覇マイルストーン | 約 9 | イベント完了したユニーク店舗数が 5/10/15/.../X (X = 実店舗数未満で最大の 5 倍数) | common→rare→epic |
@@ -159,7 +159,7 @@ Date: 2026-05-06
 - MVP 開始時点では 0 個 (admin が後追いで作成)
 - 命名はポジティブ語のみ (memory `feedback_positive_naming.md`)
 
-**MVP 合計: 208 バッジ** (店舗 49 + エリア 20 + マイルストーン 11 + イベント参加 31 + 店舗別イベント達成 80 + 投票 17。実店舗数とビッカメ娘数で前後。メタバッジ 2 件を含む)
+**MVP 合計: 210 バッジ** (店舗 50 + エリア 20 + マイルストーン 11 + イベント参加 31 + 店舗別イベント達成 81 + 投票 17。実店舗数とビッカメ娘数で前後。メタバッジ 2 件を含む)
 
 ## データモデル
 
