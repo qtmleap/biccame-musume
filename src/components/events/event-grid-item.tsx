@@ -4,7 +4,7 @@ import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Badge } from '@/components/ui/badge'
 import { useMediaQuery } from '@/hooks/use-media-query'
-import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { EVENT_CATEGORY_LABELS, EVENT_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { CATEGORY_BADGE, STATUS_BADGE_SM } from '@/locales/component'
@@ -17,46 +17,6 @@ type EventGridItemProps = {
   /** ステータス・条件バッジを隠し、終了時の grayscale を無効化する */
   compact?: boolean
 }
-
-type Tape = {
-  /** absolute 配置クラス（rounded カードに対する位置） */
-  position: string
-  /** w-/h- サイズクラス */
-  size: string
-  /** 背景色クラス */
-  color: string
-  /** 回転クラス */
-  angle: string
-}
-
-const TAPES: (Tape | null)[] = [
-  // Top edge — short, near corners
-  { position: '-top-1.5 left-4', size: 'w-8 h-3', color: 'bg-yellow-200/80', angle: '-rotate-[12deg]' },
-  { position: '-top-1.5 right-4', size: 'w-8 h-3', color: 'bg-pink-200/80', angle: 'rotate-[10deg]' },
-  // Top edge — wider, slight inset
-  { position: '-top-2 left-1/3', size: 'w-10 h-3.5', color: 'bg-blue-200/80', angle: '-rotate-[5deg]' },
-  { position: '-top-1 right-1/3', size: 'w-10 h-3.5', color: 'bg-green-200/80', angle: 'rotate-[6deg]' },
-  // Top edge — centered
-  {
-    position: '-top-2 left-1/2 -translate-x-1/2',
-    size: 'w-12 h-3',
-    color: 'bg-yellow-200/80',
-    angle: '-rotate-[3deg]'
-  },
-  null,
-  // Bottom edge
-  { position: '-bottom-1.5 left-6', size: 'w-8 h-3', color: 'bg-purple-200/80', angle: 'rotate-[8deg]' },
-  { position: '-bottom-1.5 right-6', size: 'w-8 h-3', color: 'bg-orange-200/80', angle: '-rotate-[10deg]' },
-  null,
-  // Side edges — small tape sticking off the sides
-  { position: 'top-3 -left-2', size: 'w-6 h-3', color: 'bg-blue-200/80', angle: 'rotate-[35deg]' },
-  { position: 'top-4 -right-2', size: 'w-6 h-3', color: 'bg-green-200/80', angle: '-rotate-[35deg]' },
-  null,
-  // Bottom corners — tape pointing outward
-  { position: 'bottom-3 -left-2', size: 'w-6 h-3', color: 'bg-pink-200/80', angle: '-rotate-[28deg]' },
-  { position: 'bottom-4 -right-2', size: 'w-6 h-3', color: 'bg-yellow-200/80', angle: 'rotate-[28deg]' },
-  null
-]
 
 /**
  * 終了間近のイベントの背景色を計算する
@@ -89,7 +49,7 @@ const getEndingSoonBackground = (event: Event): string | undefined => {
 export const EventGridItem = ({ event, index = 0, compact = false }: EventGridItemProps) => {
   const isMultiColumn = useMediaQuery('(min-width: 640px)')
   const rotationDeg = isMultiColumn ? getStickerRotation(index) : 0
-  const tape = TAPES[index % TAPES.length]
+  const tape = STICKER_TAPES[index % STICKER_TAPES.length]
 
   const isEnded = event.status === 'ended'
   const endingSoonBg = getEndingSoonBackground(event)
