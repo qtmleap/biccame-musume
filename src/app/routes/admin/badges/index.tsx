@@ -632,8 +632,6 @@ const BadgeCard = ({ badge, index }: { badge: BadgeDto; index: number }) => {
               )}
             </div>
 
-            <p className='text-[10px] font-numeric text-muted-foreground truncate mb-2'>{badge.code}</p>
-
             {/* アクション */}
             <div className='flex items-center justify-end gap-2 mt-auto'>
               <Button size='sm' variant='outline' className='border-card-border' onClick={() => setEditOpen(true)}>
