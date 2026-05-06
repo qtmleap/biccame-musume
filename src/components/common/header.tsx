@@ -1,11 +1,12 @@
 import { Link } from '@tanstack/react-router'
-import { Cake, Gift, MapPin, Menu, Search, Trophy, Users, X } from 'lucide-react'
+import { Award, Cake, Gift, MapPin, Menu, Search, Trophy, Users, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { LoginButton } from '@/components/auth/login-button'
 import { GlobalSearch } from '@/components/common/global-search'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/hooks/use-auth'
 import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { NAVIGATION_LABELS } from '@/locales/app.content'
@@ -14,11 +15,12 @@ import { NAVIGATION_LABELS } from '@/locales/app.content'
  * ナビゲーションリンクの定義
  */
 const navLinks = [
-  { to: '/characters', label: NAVIGATION_LABELS.characters, icon: Users },
-  { to: '/events', label: NAVIGATION_LABELS.events, icon: Gift },
-  { to: '/calendar', label: NAVIGATION_LABELS.calendar, icon: Cake },
-  { to: '/location', label: NAVIGATION_LABELS.location, icon: MapPin },
-  { to: '/ranking', label: NAVIGATION_LABELS.ranking, icon: Trophy }
+  { to: '/characters', label: NAVIGATION_LABELS.characters, icon: Users, requiresAuth: false },
+  { to: '/events', label: NAVIGATION_LABELS.events, icon: Gift, requiresAuth: false },
+  { to: '/calendar', label: NAVIGATION_LABELS.calendar, icon: Cake, requiresAuth: false },
+  { to: '/location', label: NAVIGATION_LABELS.location, icon: MapPin, requiresAuth: false },
+  { to: '/ranking', label: NAVIGATION_LABELS.ranking, icon: Trophy, requiresAuth: false },
+  { to: '/badges', label: NAVIGATION_LABELS.badges, icon: Award, requiresAuth: true }
 ] as const
 
 type HeaderProps = {
@@ -31,6 +33,9 @@ type HeaderProps = {
 export const Header = ({ className }: HeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const { isAuthenticated } = useAuth()
+
+  const visibleLinks = navLinks.filter((link) => !link.requiresAuth || isAuthenticated)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -78,7 +83,7 @@ export const Header = ({ className }: HeaderProps) => {
 
             {/* デスクトップナビゲーション */}
             <nav className='hidden md:flex items-center gap-6'>
-              {navLinks.map((link) => {
+              {visibleLinks.map((link) => {
                 return (
                   <Link
                     key={link.to}
@@ -179,7 +184,7 @@ export const Header = ({ className }: HeaderProps) => {
                   >
                     <div className='mx-auto px-4 py-4'>
                       <div className='flex flex-col gap-1'>
-                        {navLinks.map((link, index) => {
+                        {visibleLinks.map((link, index) => {
                           const Icon = link.icon
                           return (
                             <motion.div
@@ -204,7 +209,7 @@ export const Header = ({ className }: HeaderProps) => {
                           initial={{ x: -16, opacity: 0 }}
                           animate={{ x: 0, opacity: 1 }}
                           exit={{ x: -16, opacity: 0 }}
-                          transition={{ duration: DURATION.fast, delay: navLinks.length * 0.05, ease: 'easeOut' }}
+                          transition={{ duration: DURATION.fast, delay: visibleLinks.length * 0.05, ease: 'easeOut' }}
                         >
                           <LoginButton variant='menu' onClose={closeMenu} />
                         </motion.div>

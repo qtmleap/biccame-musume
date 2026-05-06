@@ -17,7 +17,7 @@ import {
   Vote
 } from 'lucide-react'
 
-const ICON_MAP: Record<string, LucideIcon> = {
+export const ICON_MAP: Record<string, LucideIcon> = {
   Award,
   CalendarCheck,
   Compass,

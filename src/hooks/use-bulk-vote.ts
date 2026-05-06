@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useSetAtom } from 'jotai'
+import { toast } from 'sonner'
 import { lastVoteTimesAtom } from '@/atoms/vote-atom'
 import type { BulkVoteResponse } from '@/schemas/vote.dto'
 import { client } from '@/utils/client'
@@ -27,6 +28,12 @@ export const useBulkVote = () => {
         return next
       })
       queryClient.invalidateQueries({ queryKey: ['ranking'] })
+      for (const badge of data.newBadges) {
+        toast.success(`バッジ獲得: ${badge.name}`, { description: badge.description })
+      }
+      if (data.newBadges.length > 0) {
+        queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+      }
     }
   })
 }
