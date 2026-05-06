@@ -289,7 +289,7 @@ type BadgeDef = {
 - `PUT /api/users/me/events/:eventId` (status='completed' のとき)
   - 評価対象: `event_count[*]`, さらに該当 event の `EventStore` に紐づく全 `storeKey` に対して: `event_clear_at_store[storeKey]`, `event_clear_area_any[region]`, `event_clear_area_complete[region]`, `event_clear_count[*]`, `event_clear_all`, `special_event_id[eventId]`, `special_multi_store_clear[該当 storeKey 含むもの全部]`
 - `POST /api/votes` (投票が成立したとき)
-  - 評価対象: `vote_total[*]`, `vote_unique[*]`, `vote_devotion[投票先キャラのみ]`, `vote_all_biccame`
+  - 評価対象: `vote_total[*]`
 
 すでに獲得済みのバッジは判定スキップ。新規獲得は `UserBadge` に insert + 型のあるレスポンス `{ newBadges: Badge[] }` を返却し、フロントで toast ポップアップ。
 
