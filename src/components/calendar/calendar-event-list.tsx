@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { groupBy, sortBy } from 'lodash-es'
-import { Cake, Store } from 'lucide-react'
+import { Cake, CalendarOff, Store } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -63,9 +63,10 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: DURATION.normal }}
-          className='py-8 text-center text-muted-foreground'
+          className='flex flex-col items-center gap-2 py-12 text-center text-muted-foreground'
         >
-          今月のイベントはありません
+          <CalendarOff className='w-8 h-8 opacity-60' aria-hidden='true' />
+          <span className='text-sm'>今月のイベントはありません</span>
         </motion.div>
       ) : (
         <AnimatePresence mode='wait'>
@@ -92,7 +93,8 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                 <button
                   type='button'
                   onClick={() => onDayClick?.(group.day, group.events)}
-                  className='flex flex-col items-center justify-start pt-1 w-10 shrink-0 cursor-pointer hover:opacity-70 transition-opacity'
+                  aria-label={`${month}月${group.day}日のイベントを開く`}
+                  className='flex flex-col items-center justify-center min-w-11 min-h-11 shrink-0 cursor-pointer hover:opacity-70 transition-opacity'
                 >
                   <span className='text-xs text-muted-foreground uppercase'>{group.dayOfWeek}</span>
                   <span className='text-xl font-bold tabular-nums'>{group.day}</span>
@@ -115,7 +117,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                           whileTap={{ scale: 0.97 }}
                           transition={STICKER_HOVER_TRANSITION}
                           className={cn(
-                            'flex items-center gap-3 p-2 rounded-xl border border-zinc-200 dark:border-card-border',
+                            'flex items-center gap-3 p-2 rounded-xl border-card',
                             isCharacter ? 'bg-action-interest/15' : 'bg-info/15'
                           )}
                         >
