@@ -41,7 +41,7 @@ export const BADGE_SUPER_CATEGORY_DEFS: BadgeSuperCategoryDef[] = [
     subSections: [
       { key: 'debut_complete', label: 'デビュー・コンプ', categories: ['event_clear_area'] },
       { key: 'per_store', label: '個別店舗', categories: ['event_clear_store'] },
-      { key: 'milestone', label: 'N店舗目', categories: ['event'] }
+      { key: 'milestone', label: '累計マイルストーン', categories: ['event'] }
     ]
   },
   {
