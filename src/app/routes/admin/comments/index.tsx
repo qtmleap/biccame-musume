@@ -18,13 +18,23 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious
+} from '@/components/ui/pagination'
 import { useAllComments, useDeleteAdminComment } from '@/hooks/use-admin-comments'
 import { useCharacters } from '@/hooks/use-characters'
 import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import type { AdminComment } from '@/schemas/admin-comment.dto'
+
+const PER_PAGE = 30
 
 type StatCardProps = { label: string; value: number; accent?: string }
 
@@ -134,8 +144,8 @@ const CommentRow = ({ comment }: { comment: AdminComment }) => {
 }
 
 const CommentsContent = () => {
-  const [searchQuery, setSearchQuery] = useState('')
   const [includeDeleted, setIncludeDeleted] = useState(false)
+  const [page, setPage] = useState(1)
   const { data } = useAllComments(includeDeleted)
   const comments = data.comments
 
@@ -144,17 +154,17 @@ const CommentsContent = () => {
   const activeCount = totalCount - deletedCount
   const loginCount = comments.filter((c) => c.userId).length
 
-  const filteredComments = useMemo(() => {
-    const q = searchQuery.toLowerCase()
-    if (!q) return comments
-    return comments.filter(
-      (c) =>
-        c.body.toLowerCase().includes(q) ||
-        c.eventTitle.toLowerCase().includes(q) ||
-        c.characterId.toLowerCase().includes(q) ||
-        c.ipAddress.includes(q)
-    )
-  }, [comments, searchQuery])
+  const totalPages = Math.max(1, Math.ceil(totalCount / PER_PAGE))
+  const safePage = Math.min(page, totalPages)
+  const start = (safePage - 1) * PER_PAGE
+  const pagedComments = comments.slice(start, start + PER_PAGE)
+  const showingFrom = totalCount === 0 ? 0 : start + 1
+  const showingTo = Math.min(start + PER_PAGE, totalCount)
+
+  const handleIncludeDeletedChange = (v: boolean) => {
+    setIncludeDeleted(v)
+    setPage(1)
+  }
 
   return (
     <div className='min-h-screen bg-page-bg'>
@@ -190,7 +200,7 @@ const CommentsContent = () => {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: DURATION.normal, delay: 0.06 }}
-          className='flex gap-2 md:gap-3 mb-5 md:mb-6'
+          className='flex gap-2 md:gap-3 mb-4'
         >
           <StatCard label='総コメント' value={totalCount} accent='text-foreground' />
           <StatCard label='公開中' value={activeCount} accent='text-brand' />
@@ -198,40 +208,91 @@ const CommentsContent = () => {
           <StatCard label='ログイン投稿' value={loginCount} accent='text-favorite' />
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: DURATION.normal, delay: 0.1 }}
-          className='bg-card border border-card-border rounded-2xl p-3 md:p-4 mb-6 space-y-3'
-        >
-          <Input
-            placeholder='本文・イベント名・IPで検索...'
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className='md:text-base h-8 md:h-9'
-          />
-
+        <div className='flex items-center justify-between gap-3 mb-4'>
           <Label htmlFor='include-deleted' className='flex items-center gap-1.5 cursor-pointer font-normal'>
             <Checkbox
               id='include-deleted'
               checked={includeDeleted}
-              onCheckedChange={(v) => setIncludeDeleted(v === true)}
+              onCheckedChange={(v) => handleIncludeDeletedChange(v === true)}
               className='size-4'
             />
             <span className='text-xs text-muted-foreground select-none'>削除済みも表示</span>
           </Label>
-        </motion.div>
-
-        <div className='space-y-2'>
-          {filteredComments.map((comment) => (
-            <CommentRow key={comment.id} comment={comment} />
-          ))}
-          {filteredComments.length === 0 && (
-            <div className='text-center py-12 text-muted-foreground text-sm'>
-              {comments.length === 0 ? 'コメントはまだありません' : '条件に一致するコメントが見つかりません'}
-            </div>
+          {totalCount > 0 && (
+            <p className='text-xs text-muted-foreground tabular-nums'>
+              {showingFrom}–{showingTo} / {totalCount} 件
+            </p>
           )}
         </div>
+
+        <div className='space-y-2'>
+          {pagedComments.map((comment) => (
+            <CommentRow key={comment.id} comment={comment} />
+          ))}
+          {totalCount === 0 && (
+            <div className='text-center py-12 text-muted-foreground text-sm'>コメントはまだありません</div>
+          )}
+        </div>
+
+        {totalPages > 1 && (
+          <div className='mt-6'>
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    size='default'
+                    href='#'
+                    onClick={(e) => {
+                      e.preventDefault()
+                      if (safePage > 1) setPage(safePage - 1)
+                    }}
+                    className={safePage === 1 ? 'pointer-events-none opacity-50' : ''}
+                  />
+                </PaginationItem>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => {
+                  if (p === 1 || p === totalPages || (p >= safePage - 1 && p <= safePage + 1)) {
+                    return (
+                      <PaginationItem key={p}>
+                        <PaginationLink
+                          size='icon'
+                          href='#'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            setPage(p)
+                          }}
+                          isActive={safePage === p}
+                        >
+                          {p}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )
+                  }
+                  if (p === safePage - 2 || p === safePage + 2) {
+                    return (
+                      <PaginationItem key={p}>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    )
+                  }
+                  return null
+                })}
+
+                <PaginationItem>
+                  <PaginationNext
+                    size='default'
+                    href='#'
+                    onClick={(e) => {
+                      e.preventDefault()
+                      if (safePage < totalPages) setPage(safePage + 1)
+                    }}
+                    className={safePage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </div>
     </div>
   )
