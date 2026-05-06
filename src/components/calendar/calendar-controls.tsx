@@ -23,7 +23,7 @@ export const CalendarHeader = ({ year, month, onPrevMonth, onNextMonth, onCurren
       initial='initial'
       animate='animate'
       transition={{ duration: DURATION.fast * 2, ease: EASE_OUT }}
-      className='flex items-center justify-between'
+      className='flex items-center justify-between py-2 md:py-4'
     >
       <Button variant='ghost' size='icon' onClick={onPrevMonth} className='rounded-full border border-transparent'>
         <ChevronLeft className='h-5 w-5' />
@@ -52,7 +52,7 @@ type CalendarMonthTabsProps = {
  */
 export const CalendarMonthTabs = ({ selectedMonth, onSelectMonth }: CalendarMonthTabsProps) => {
   return (
-    <div className='hidden md:flex gap-2 overflow-x-auto py-2 justify-center'>
+    <div className='hidden md:flex gap-2 overflow-x-auto py-3 md:py-4 justify-center'>
       {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => {
         const isSelected = selectedMonth === month
         return (
@@ -93,7 +93,7 @@ type CalendarMonthDotsProps = {
  */
 export const CalendarMonthDots = ({ selectedMonth, onSelectMonth }: CalendarMonthDotsProps) => {
   return (
-    <div className='flex justify-center md:hidden'>
+    <div className='flex justify-center md:hidden py-2'>
       {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
         <button
           key={month}
