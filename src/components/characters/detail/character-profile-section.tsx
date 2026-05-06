@@ -41,13 +41,11 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
             characterId={character.id}
             isBiccameMusume={character.character?.is_biccame_musume}
           />
-          {character.character?.twitter_id && <CharacterFollowButton twitterId={character.character.twitter_id} />}
+          {character.character?.twitter_id && (
+            <CharacterFollowButton twitterId={character.character.twitter_id} iconOnly />
+          )}
           {character.character?.is_biccame_musume && (
-            <CharacterVoteButton
-              characterId={character.id}
-              characterName={character.character.name}
-              variant='compact'
-            />
+            <CharacterVoteButton characterId={character.id} characterName={character.character.name} iconOnly />
           )}
         </div>
       </div>
