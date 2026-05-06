@@ -31,7 +31,7 @@ export const CalendarHeader = ({ year, month, onPrevMonth, onNextMonth, onCurren
       <button
         type='button'
         onClick={onCurrentMonth}
-        className='text-2xl md:text-4xl font-bold tracking-tight text-center tabular-nums hover:text-primary transition-colors'
+        className='font-display text-2xl md:text-4xl font-bold tracking-tight text-center tabular-nums hover:text-primary transition-colors'
       >
         {year}年{month}月
       </button>
