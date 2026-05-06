@@ -17,6 +17,8 @@ export const BadgeSubCategorySchema = z.enum([
   'event_clear_area_complete',
   'event_clear_count',
   'event_clear_all',
+  'all_areas_any_visit',
+  'all_areas_any_event_clear',
   'vote_total',
   'vote_unique',
   'vote_devotion',
