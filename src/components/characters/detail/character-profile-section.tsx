@@ -47,7 +47,7 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
           />
           <CharacterVisitButton
             storeKey={character.id}
-            storeName={character.store?.name ?? character.character?.name}
+            storeName={character.character?.name}
             hasStore={Boolean(character.store) || CLOSED_STORE_KEYS.has(character.id as StoreKey)}
           />
           {/* ログイン不要 */}
