@@ -45,7 +45,6 @@ const InterestedEventsContent = () => {
             戻る
           </Button>
           <div className='flex items-center gap-2'>
-            <Heart className='h-6 w-6 text-action-interest' />
             <h1 className='text-2xl font-bold text-foreground'>{MY_PAGE_LABELS.interestedEvents}</h1>
             <span className='text-sm text-muted-foreground'>({interestedEventDetails.length})</span>
           </div>

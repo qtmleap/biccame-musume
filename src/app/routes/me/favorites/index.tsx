@@ -43,7 +43,6 @@ const FavoritesContent = () => {
           </Button>
           <div className='flex items-center justify-between flex-wrap gap-3'>
             <div className='flex items-center gap-2'>
-              <Heart className='h-6 w-6 text-favorite fill-current' />
               <h1 className='text-2xl font-bold text-foreground'>推しのビッカメ娘</h1>
               <span className='text-sm text-muted-foreground'>({favoriteCharacters.length})</span>
             </div>
