@@ -335,7 +335,7 @@ function getBadgeRegistry(): BadgeDef[] {
       name: `${areaLabel}イベントデビュー`,
       description: `${areaLabel}のいずれかの店舗でイベントを達成しました`,
       hint: `${areaLabel}の店舗で 1 件以上イベントを完了するとゲットできます`,
-      rarity: 'common',
+      rarity: 'rare',
       iconName: 'Compass',
       sortOrder: next(),
       conditionMeta: { region: area }
