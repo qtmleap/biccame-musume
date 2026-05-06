@@ -61,16 +61,14 @@ export const CharacterFavoriteButton = ({
     <>
       <Button
         size='sm'
-        variant='outline'
+        variant='ghost'
         onClick={handleToggle}
         aria-pressed={favored}
         aria-label={favored ? 'お気に入り解除' : 'お気に入り登録'}
         disabled={pending}
         className={cn(
           'h-8 w-8 p-0 rounded-full',
-          favored
-            ? 'border-favorite/60 bg-favorite/10 text-favorite hover:bg-favorite/15 hover:text-favorite'
-            : 'border-muted-foreground/30 text-muted-foreground hover:text-favorite hover:border-favorite/40'
+          favored ? 'bg-favorite/10 text-favorite hover:bg-favorite/15' : 'text-muted-foreground hover:text-favorite'
         )}
       >
         <motion.span
