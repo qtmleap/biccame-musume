@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Calendar, ChevronRight } from 'lucide-react'
+import { Award, Calendar, ChevronRight } from 'lucide-react'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { ADMIN_LABELS } from '@/locales/app.content'
@@ -55,6 +55,12 @@ const AdminContent = () => {
           icon={Calendar}
           title={ADMIN_LABELS.eventManagement}
           description={ADMIN_LABELS.eventManagementDesc}
+        />
+        <MenuCard
+          to='/admin/badges'
+          icon={Award}
+          title={ADMIN_LABELS.badgeManagement}
+          description={ADMIN_LABELS.badgeManagementDesc}
         />
       </div>
     </div>
