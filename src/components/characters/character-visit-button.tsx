@@ -101,7 +101,7 @@ export const CharacterVisitButton = ({ storeKey, storeName, hasStore = true }: C
         </AlertDialogTrigger>
         <TooltipContent>{tooltipContent}</TooltipContent>
       </Tooltip>
-      <AlertDialogContent>
+      <AlertDialogContent className='rounded-3xl shadow-2xl border-transparent'>
         <AlertDialogHeader>
           <AlertDialogTitle>この店舗を訪問しましたか？</AlertDialogTitle>
           <AlertDialogDescription>
