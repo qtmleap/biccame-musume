@@ -23,7 +23,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { PHYSICAL_STORE_KEYS } from '@/data/badges/store-exclusion'
 import {
   useAllBadges,
@@ -583,51 +582,72 @@ const BadgeCard = ({ badge, index }: { badge: BadgeDto; index: number }) => {
           whileTap={{ scale: 0.98 }}
           transition={STICKER_HOVER_TRANSITION}
         >
-          <div className='group relative flex flex-col h-full rounded-xl border border-zinc-200 dark:border-card-border bg-card p-3'>
+          <div className='relative flex flex-col h-full rounded-xl border border-zinc-200 dark:border-card-border bg-card p-3'>
             {tape && (
               <div
                 aria-hidden
                 className={cn('absolute rounded-sm', tape.position, tape.size, tape.color, tape.angle)}
               />
             )}
-            {/* Hover actions */}
-            <div className='absolute top-1.5 right-1.5 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity'>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      size='icon'
-                      variant='ghost'
-                      className='size-7 bg-card/80 backdrop-blur'
-                      onClick={() => setEditOpen(true)}
+            {/* ヘッダ: アイコン + 名称・説明・rarity・獲得数 + ステータス */}
+            <div className='mb-2 flex items-start justify-between gap-3'>
+              <div className='flex-1 min-w-0 flex items-start gap-3'>
+                <div
+                  className={cn(
+                    'flex size-12 shrink-0 items-center justify-center rounded-2xl',
+                    RARITY_ICON_BG[badge.rarity]
+                  )}
+                >
+                  {Icon && <Icon className='size-6' />}
+                </div>
+                <div className='flex-1 min-w-0'>
+                  <h3 className='text-base font-semibold text-foreground line-clamp-2 leading-tight'>{badge.name}</h3>
+                  <p className='mt-1 text-xs text-muted-foreground line-clamp-2'>{badge.description}</p>
+                  <div className='mt-1 flex items-center gap-2 text-xs text-muted-foreground'>
+                    <span
+                      className={cn(
+                        'font-numeric font-bold text-[10px] px-1.5 py-0.5 rounded-full tracking-widest',
+                        RARITY_CHIP[badge.rarity]
+                      )}
                     >
-                      <Pencil className='size-3.5' />
-                      <span className='sr-only'>編集</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>編集</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                      {RARITY_LABELS[badge.rarity]}
+                    </span>
+                    <span className='tabular-nums'>獲得 {badge.earned_count ?? 0}</span>
+                  </div>
+                </div>
+              </div>
+              {(badge.is_hidden || isSpecial) && (
+                <div className='shrink-0 flex flex-col items-end gap-1'>
+                  {isSpecial && (
+                    <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-rank-gold/15 text-rank-gold-foreground'>
+                      特別
+                    </span>
+                  )}
+                  {badge.is_hidden && (
+                    <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground'>
+                      非表示
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
 
+            <p className='text-[10px] font-numeric text-muted-foreground truncate mb-2'>{badge.code}</p>
+
+            {/* アクション */}
+            <div className='flex items-center justify-end gap-2 mt-auto'>
+              <Button size='sm' variant='outline' className='border-card-border' onClick={() => setEditOpen(true)}>
+                <Pencil className='mr-1 size-3' />
+                編集
+              </Button>
               {isSpecial && (
                 <AlertDialog>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <AlertDialogTrigger asChild>
-                          <Button
-                            size='icon'
-                            variant='ghost'
-                            className='size-7 bg-card/80 backdrop-blur text-destructive hover:text-destructive'
-                          >
-                            <Trash2 className='size-3.5' />
-                            <span className='sr-only'>削除</span>
-                          </Button>
-                        </AlertDialogTrigger>
-                      </TooltipTrigger>
-                      <TooltipContent>削除</TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <AlertDialogTrigger asChild>
+                    <Button size='sm' variant='destructive'>
+                      <Trash2 className='mr-1 size-3' />
+                      削除
+                    </Button>
+                  </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>バッジを削除しますか？</AlertDialogTitle>
@@ -646,63 +666,6 @@ const BadgeCard = ({ badge, index }: { badge: BadgeDto; index: number }) => {
                 </AlertDialog>
               )}
             </div>
-
-            {/* Tooltip-wrapped main content (icon + name) */}
-            <TooltipProvider delayDuration={200}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className='flex flex-col cursor-default'>
-                    <div className='flex justify-center mb-2'>
-                      <div
-                        className={cn(
-                          'flex size-14 items-center justify-center rounded-2xl',
-                          RARITY_ICON_BG[badge.rarity]
-                        )}
-                      >
-                        {Icon && <Icon className='size-7' />}
-                      </div>
-                    </div>
-
-                    <p className='text-sm font-bold text-foreground line-clamp-2 leading-tight min-h-[2.5em] text-center'>
-                      {badge.name}
-                    </p>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent side='bottom' className='max-w-xs'>
-                  <div className='space-y-1'>
-                    <div className='flex items-center gap-1.5'>
-                      <span
-                        className={cn(
-                          'text-[9px] font-numeric font-bold tracking-widest px-1.5 py-0.5 rounded-full',
-                          RARITY_CHIP[badge.rarity]
-                        )}
-                      >
-                        {RARITY_LABELS[badge.rarity]}
-                      </span>
-                      <span className='font-bold'>{badge.name}</span>
-                    </div>
-                    <p className='text-[10px] font-numeric text-muted-foreground'>{badge.code}</p>
-                    <p className='text-xs'>{badge.description}</p>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-
-            {/* Status chips (only when meaningful) */}
-            {(badge.is_hidden || isSpecial) && (
-              <div className='mt-1.5 flex items-center justify-center gap-1 flex-wrap'>
-                {badge.is_hidden && (
-                  <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground'>
-                    非表示
-                  </span>
-                )}
-                {isSpecial && (
-                  <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-rank-gold/15 text-rank-gold-foreground'>
-                    特別
-                  </span>
-                )}
-              </div>
-            )}
           </div>
         </motion.div>
       </motion.div>
