@@ -192,7 +192,7 @@ function getBadgeRegistry(): BadgeDef[] {
       name: `${areaLabel}デビュー`,
       description: `${areaLabel}のいずれかの店舗を訪問しました`,
       hint: `${areaLabel}の店舗を 1 店以上訪問するとゲットできます`,
-      rarity: 'rare',
+      rarity: 'common',
       iconName: 'Navigation',
       sortOrder: next(),
       conditionMeta: { region: area }
@@ -208,7 +208,7 @@ function getBadgeRegistry(): BadgeDef[] {
       name: `${areaLabel}コンプ`,
       description: `${areaLabel}の全 ${storeCount} 店舗を訪問しました`,
       hint: `${areaLabel}の全店舗を訪問するとゲットできます`,
-      rarity: 'epic',
+      rarity: 'rare',
       iconName: 'Trophy',
       sortOrder: next(),
       conditionMeta: { region: area }
