@@ -111,7 +111,7 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
         </div>
 
         {earned && earnedAt && (
-          <div className='mt-0.5 text-[9px] font-numeric tabular-nums text-muted-foreground'>
+          <div className='mt-1 text-xs font-numeric tabular-nums text-muted-foreground'>
             {earnedAt.slice(0, 10)}
           </div>
         )}
