@@ -57,7 +57,11 @@ export const BadgeSchema = z
     condition_meta: z.string().nonempty().openapi({ description: 'JSON-encoded BadgeConditionMeta' }),
     is_hidden: z.boolean().openapi({ example: false }),
     created_at: z.string().openapi({ example: '2026-05-06T00:00:00.000Z' }),
-    updated_at: z.string().openapi({ example: '2026-05-06T00:00:00.000Z' })
+    updated_at: z.string().openapi({ example: '2026-05-06T00:00:00.000Z' }),
+    earned_count: z.number().int().nonnegative().optional().openapi({
+      description: '獲得者数 (admin 専用、includeHidden=1 のときのみ)',
+      example: 42
+    })
   })
   .openapi('Badge')
 
@@ -68,7 +72,7 @@ export const BadgeListSchema = z.array(BadgeSchema).openapi('BadgeList')
 /**
  * Convert a Prisma Badge row to the BadgeSchema DTO shape.
  */
-export const prismaBadgeToDto = (b: PrismaBadge): Badge => ({
+export const prismaBadgeToDto = (b: PrismaBadge, earnedCount?: number): Badge => ({
   code: b.code,
   category: b.category as Badge['category'],
   sub_category: b.subCategory as Badge['sub_category'],
@@ -81,7 +85,8 @@ export const prismaBadgeToDto = (b: PrismaBadge): Badge => ({
   condition_meta: b.conditionMeta,
   is_hidden: b.isHidden,
   created_at: b.createdAt.toISOString(),
-  updated_at: b.updatedAt.toISOString()
+  updated_at: b.updatedAt.toISOString(),
+  earned_count: earnedCount
 })
 
 export const UserBadgeSchema = z
