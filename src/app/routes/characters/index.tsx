@@ -34,9 +34,7 @@ const CharactersContent = () => {
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
-      <header className='mb-4 md:mb-6 text-center'>
-        <h1 className='font-display font-bold text-3xl md:text-4xl text-foreground tracking-tight'>ビッカメ娘一覧</h1>
-      </header>
+      <h1 className='text-2xl font-bold text-foreground mb-4'>ビッカメ娘一覧</h1>
       <div className='mb-8 grid grid-cols-1 lg:grid-cols-2 gap-4'>
         <RegionFilterControl />
         <CharacterSortControl onRandomize={() => setRandomCounter((prev) => prev + 1)} />

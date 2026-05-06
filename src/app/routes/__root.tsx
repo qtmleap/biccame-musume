@@ -9,9 +9,9 @@ import { NotFound } from '@/components/common/not-found'
 const RootComponent = () => {
   return (
     <AuthProvider>
-      <div className='min-h-screen flex flex-col select-none'>
+      <div className='min-h-screen grid grid-rows-[auto_1fr_auto] select-none'>
         <Header />
-        <main className='flex-1'>
+        <main className='min-h-0'>
           <Outlet />
         </main>
         <Footer />
