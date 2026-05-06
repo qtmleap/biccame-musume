@@ -91,6 +91,8 @@ export const useUserActivity = () => {
     // 訪問済み店舗
     addVisitedStore: addVisitedStore.mutate,
     removeVisitedStore: removeVisitedStore.mutate,
+    isAddVisitedStorePending: addVisitedStore.isPending,
+    isRemoveVisitedStorePending: removeVisitedStore.isPending,
     isVisited: (storeKey: string) => data?.stores.includes(storeKey) ?? false,
     // 興味のあるイベント
     addInterestedEvent: addInterestedEvent.mutate,

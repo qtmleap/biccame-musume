@@ -5,6 +5,7 @@ import { motion } from 'motion/react'
 import { CharacterFavoriteButton } from '@/components/characters/character-favorite-button'
 import { CharacterFollowButton } from '@/components/characters/character-follow-button'
 import { CharacterTwitterLink } from '@/components/characters/character-twitter-link'
+import { CharacterVisitButton } from '@/components/characters/character-visit-button'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DURATION, FADE_IN_UP, SCALE_IN } from '@/lib/motion'
@@ -45,6 +46,11 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
           {character.character?.twitter_id && (
             <CharacterFollowButton twitterId={character.character.twitter_id} iconOnly />
           )}
+          <CharacterVisitButton
+            storeKey={character.id}
+            storeName={character.store?.name}
+            hasStore={Boolean(character.store)}
+          />
           {character.character?.is_biccame_musume && (
             <CharacterVoteButton characterId={character.id} characterName={character.character.name} iconOnly />
           )}
