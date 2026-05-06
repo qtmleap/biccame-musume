@@ -46,7 +46,7 @@ export const BadgeGrid = ({ badges, earnedMap }: BadgeGridProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: DURATION.normal, delay: sectionIdx * 0.06 }}
           >
-            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-3'>
+            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-3 px-1 py-2'>
               {items.map((badge, i) => (
                 <BadgeCard key={badge.code} badge={badge} earnedAt={earnedMap.get(badge.code) ?? null} index={i} />
               ))}

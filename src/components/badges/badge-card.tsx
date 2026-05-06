@@ -59,6 +59,7 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
         damping: 14
       }}
       style={{ filter: earned ? STICKER_SHADOW_SM : undefined }}
+      className='py-1.5'
     >
       <motion.div
         style={{ rotate: rotation }}
