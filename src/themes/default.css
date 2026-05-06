@@ -1,9 +1,9 @@
 @theme inline {
   /* Typography (theme-overridable) */
-  --font-sans: var(--font-sans);
-  --font-display: var(--font-display);
-  --font-handwritten: var(--font-handwritten);
-  --font-numeric: var(--font-numeric);
+  --font-sans: var(--font-family-sans);
+  --font-display: var(--font-family-display);
+  --font-handwritten: var(--font-family-handwritten);
+  --font-numeric: var(--font-family-numeric);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
