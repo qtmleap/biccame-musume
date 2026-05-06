@@ -764,7 +764,8 @@ const RecalculateBadgesButton = () => {
               recalc.mutate()
               setOpen(false)
             }}
-            className='bg-brand text-brand-foreground hover:bg-brand/90'
+            variant='outline'
+            className='bg-brand text-brand-foreground hover:bg-brand/90 border-transparent'
           >
             実行する
           </AlertDialogAction>
