@@ -176,8 +176,10 @@ model Badge {
   iconName     String   @map("icon_name")
   /// 並び順 (カテゴリ内ソート用)
   sortOrder    Int      @map("sort_order")
-  /// 条件メタ (JSON 文字列): { storeKey?, region?, count?, eventCount? }
+  /// 条件メタ (JSON 文字列): { storeKey?, region?, count?, eventCount?, storeKeys?, eventId? }
   conditionMeta String  @map("condition_meta")
+  /// 表示・判定を OFF にするフラグ (admin で切り替え可能)
+  isHidden     Boolean  @default(false) @map("is_hidden")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
@@ -348,8 +350,9 @@ LIMIT 50;
 - [ ] Prisma スキーマに `Badge` / `UserBadge` 追加 + マイグレーション (`prisma migrate diff`)
 - [ ] `src/data/badges/store-exclusion.ts` で実店舗以外を列挙 + テストでスキーマと突き合わせ
 - [ ] `src/data/badges/registry.ts` で全バッジ定義を生成
-- [ ] `bun run badges:seed` スクリプト (upsert で Badge テーブル投入、`category='special'` は触らない)
-- [ ] `POST/PATCH/DELETE /api/admin/badges` (special バッジの CRUD)
+- [ ] `bun run badges:seed` スクリプト (upsert で Badge テーブル投入、`category='special'` は触らない、auto-generated でも admin が編集した表示フィールドは保持)
+- [ ] `POST/PATCH/DELETE /api/admin/badges` (special バッジの全項目 CRUD)
+- [ ] `PATCH /api/admin/badges/:code` (auto-generated バッジは表示フィールドのみ編集 = name/description/hint/iconName/rarity/sortOrder/isHidden)
 - [ ] `src/services/badge-evaluator.ts` で subCategory 別 evaluator 実装
 - [ ] `src/services/badge-evaluator.ts` に `evaluateOnVisit` / `evaluateOnEventComplete` / `evaluateOnVote` ヘルパー
 - [ ] 既存の `PUT /api/users/me/stores/:storeKey` に評価フック追加 + 新規バッジ返却
@@ -368,7 +371,8 @@ LIMIT 50;
 - [ ] 店舗カテゴリの**エリアサブセクション化** (3 列 × 多段でも視認性を保つ)
 - [ ] 獲得時 toast (店舗訪問/イベント完了 mutation の onSuccess で分岐)
 - [ ] ヘッダー nav に `/badges` 追加 (ログイン時のみ)
-- [ ] `/control_panel/badges` 管理画面 (一覧 / 作成フォーム / 編集 / 削除、storeKey multi-select & event 検索付き)
+- [ ] `/admin/badges` 管理画面 (一覧 / 作成 (special のみ) / 編集 / 削除 (special のみ)、storeKey multi-select & event 検索付き)
+- [ ] `/admin` トップに「バッジ管理」`MenuCard` 追加 (既存の「イベント管理」と並べる)
 
 ### QA
 
@@ -390,6 +394,19 @@ LIMIT 50;
 - 店舗マスタ (`stores.yaml` 等) のうち実店舗判定の根拠 → `prefecture` 必須でよいか
 - 多様性最終段とコンプの関係: 全 50 人なら 5/10/.../45 + 全員推し 50 で確定。51 人になったら 50 マイルストーンが新たに発生 (生やすか / マイグレで再判定するかは Phase 2)
 - アイコン採用方針: lucide で全 ~182 個分けるか、店舗系 (訪問 / 制覇) は地図ピン共通＋色違いで区別など節約するか
+
+## admin での編集ポリシー (A 案で確定)
+
+複雑性を抑えるため、「**条件式は code が持つ・表示は admin が触れる**」の二層構造で割る。
+
+| バッジの種類 | code 編集可否 | 表示フィールド (name / description / hint / iconName / rarity / sortOrder / isHidden) | 条件 (subCategory / conditionMeta) |
+| --- | --- | --- | --- |
+| auto-generated (店舗 / エリア / マイルストーン / イベント参加 / 店舗別イベント / 投票) | × (registry が固定) | ○ admin で編集可 (registry seed は表示フィールドを上書きしない) | × (コード変更 + デプロイが必要) |
+| special (コラボ・限定企画) | ○ admin が新規発行時に slug 自動生成 | ○ 全項目 admin で編集可 | ○ admin で storeKeys / eventId を選択 |
+
+- スレッショルド調整 (例: 票職人 500 → 1000) は registry 改修 + マイグレ + バックフィル再実行で対応 (admin では変更させない)
+- 既存バッジを「ちょっと隠したい」運用には `isHidden` フラグで対応 (Badge 行に列追加。表示・判定 OFF)
+- registry seeder は upsert 時に `name / description / hint / iconName / rarity / sortOrder / isHidden` を**書き換えない** (= admin の編集を温存)。書き換えるのは構造 (code / category / subCategory / conditionMeta) のみ
 - キャンペーン対象外の実店舗 (例: ビッグカメラ単独店で campaign に未掲載のもの) を 10 地区のどこへ振るかの個別判断 (registry.ts のマップで明示)
 - リーダーボードの匿名表示オプト (Phase 2)
 
