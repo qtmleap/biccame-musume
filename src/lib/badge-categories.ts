@@ -34,19 +34,19 @@ export const BADGE_CATEGORY_DEFS: BadgeCategoryDef[] = [
   },
   {
     key: 'milestone',
-    label: 'マイルストーン',
-    description: '累計訪問・イベント達成数で段階的に解放される称号',
+    label: '訪問マイルストーン',
+    description: '累計訪問数で段階的に解放される称号',
     accent: 'rank-gold'
   },
   {
     key: 'event',
-    label: 'イベントマイルストーン',
+    label: '達成マイルストーン',
     description: '累計イベント完了数で段階的に解放される称号',
     accent: 'brand'
   },
   {
     key: 'vote',
-    label: '投票実績',
+    label: '投票マイルストーン',
     description: '推しへの票で積み重なる勲章',
     accent: 'favorite'
   },
