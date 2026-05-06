@@ -46,7 +46,7 @@ export const CharacterFavoriteButton = ({ characterId, isBiccameMusume = true }:
       className={cn(
         'h-8 w-8 p-0 rounded-full',
         favored
-          ? 'border-favorite/60 text-favorite hover:bg-favorite/10 hover:text-favorite'
+          ? 'border-favorite/60 bg-favorite/10 text-favorite hover:bg-favorite/15 hover:text-favorite'
           : 'border-muted-foreground/30 text-muted-foreground hover:text-favorite hover:border-favorite/40'
       )}
     >
@@ -56,7 +56,7 @@ export const CharacterFavoriteButton = ({ characterId, isBiccameMusume = true }:
         transition={{ duration: 0.35, ease: 'easeOut' }}
         className='inline-flex items-center justify-center'
       >
-        <Heart className={cn('h-4 w-4', favored && 'fill-current')} />
+        <Heart className={cn('h-4 w-4', favored && 'fill-favorite/40')} />
       </motion.span>
     </Button>
   )
