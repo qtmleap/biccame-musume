@@ -282,7 +282,7 @@ export const MOCK_BADGES: Badge[] = [
   {
     id: 'vote-03',
     categoryKey: 'vote',
-    name: 'ガチ勢',
+    name: '推し一筋',
     description: '同一キャラに 100 票',
     hint: '同じキャラへ累計 100 票',
     rarity: 'epic',
@@ -292,7 +292,7 @@ export const MOCK_BADGES: Badge[] = [
   {
     id: 'vote-04',
     categoryKey: 'vote',
-    name: '布教活動家',
+    name: '推し広め隊',
     description: '異なる 11 キャラに投票',
     hint: '違うキャラに 11 人分投票',
     rarity: 'legendary',
