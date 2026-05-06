@@ -18,7 +18,9 @@
     "predeploy": "tsc -b && vite build --mode ${CLOUDFLARE_ENV}",
     "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV}",
     "knip": "knip",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "badges:seed": "bun run scripts/seed-badges.ts",
+    "badges:backfill": "bun run scripts/backfill-badges.ts"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.35.0",
