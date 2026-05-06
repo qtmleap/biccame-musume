@@ -37,6 +37,7 @@ export const BulkVoteButton = ({
   // ローカル localStorage 上で全員投票済みかどうか
   const allVotedToday = useMemo(() => {
     if (characterIds.length === 0) return true
+    if (import.meta.env.DEV) return false
     return characterIds.every((id) => {
       const last = lastVoteTimes[id]
       if (!last) return false
