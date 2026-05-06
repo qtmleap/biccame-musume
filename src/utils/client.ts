@@ -2,7 +2,9 @@ import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
 import {
   SuccessResponseSchemaForClient,
+  UpdateEventResponseSchema,
   UpdateEventStatusSchema,
+  UpdateStoreResponseSchema,
   UpdateStoreStatusSchema,
   UserActivitiesResponseSchema,
   UserEventsResponseSchema,
@@ -293,7 +295,7 @@ const api = makeApi([
         schema: UpdateStoreStatusSchema
       }
     ],
-    response: SuccessResponseSchemaForClient
+    response: UpdateStoreResponseSchema
   },
   {
     method: 'delete',
@@ -329,7 +331,7 @@ const api = makeApi([
         schema: UpdateEventStatusSchema
       }
     ],
-    response: SuccessResponseSchemaForClient
+    response: UpdateEventResponseSchema
   },
   {
     method: 'delete',
