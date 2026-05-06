@@ -19,6 +19,7 @@ import {
   GetMyBadgesResponseSchema,
   UpdateBadgeBodySchema
 } from '@/schemas/badge.dto'
+import { AdminCommentsResponseSchema } from '@/schemas/admin-comment.dto'
 import { CreateCommentRequestSchema, ListCommentsResponseSchema } from '@/schemas/comment.dto'
 import {
   CheckUrlResponseSchema,
@@ -507,6 +508,21 @@ const api = makeApi([
       }
     ],
     response: z.object({ message: z.string() })
+  },
+  // 管理者コメント一覧
+  {
+    method: 'get',
+    path: '/api/admin/comments',
+    alias: 'getAdminComments',
+    description: '全コメント一覧を取得（admin）',
+    parameters: [
+      {
+        name: 'includeDeleted',
+        type: 'Query',
+        schema: z.union([z.literal('1'), z.literal('0')]).optional()
+      }
+    ],
+    response: AdminCommentsResponseSchema
   }
 ])
 
