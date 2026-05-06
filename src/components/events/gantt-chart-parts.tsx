@@ -68,7 +68,7 @@ export const GanttDateHeader = ({ dates, today, actualMonthEnd }: DateHeaderProp
         return (
           <div
             key={date.format('YYYY-MM-DD')}
-            className={`w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs ${
+            className={`w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold ${
               isOutOfMonth
                 ? 'bg-muted text-muted-foreground'
                 : isToday
