@@ -2,8 +2,9 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Store } from 'lucide-react'
 import { motion } from 'motion/react'
+import { Fragment } from 'react'
 import { DURATION } from '@/lib/motion'
-import { EVENT_CATEGORY_LABELS, EVENT_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -42,12 +43,9 @@ export const RecentEventsList = ({ events, currentEventId, hideHeading = false }
       {!hideHeading && <h2 className='text-lg font-bold text-foreground mb-4'>最近更新されたイベント</h2>}
       <div className='flex flex-col divide-y divide-separator'>
         {recentEvents.map((event, index) => {
-          // 店舗名を取得（最大2つまで表示、それ以上は「他」と表示）
-          const storeNames = event.stores.slice(0, 2).map((key) => STORE_NAME_LABELS[key as StoreKey] || key)
+          // 店舗名を取得（最大2つまでリンク表示、それ以上は「他」と末尾に追加）
+          const visibleStores = event.stores.slice(0, 2) as StoreKey[]
           const hasMore = event.stores.length > 2
-          const storeDisplay = hasMore
-            ? EVENT_LABELS.storeAndOthers.replace('{stores}', storeNames.join('、'))
-            : storeNames.join('、')
 
           return (
             <motion.div
@@ -74,9 +72,23 @@ export const RecentEventsList = ({ events, currentEventId, hideHeading = false }
                     {event.title}
                   </Link>
                 </div>
-                <div className='flex items-center gap-1'>
-                  <Store className='h-4 w-4 text-muted-foreground/50' />
-                  <span className='text-sm text-muted-foreground truncate'>{storeDisplay}</span>
+                <div className='flex items-center gap-1 min-w-0'>
+                  <Store className='h-4 w-4 shrink-0 text-muted-foreground/50' />
+                  <div className='text-sm text-muted-foreground truncate'>
+                    {visibleStores.map((key, i) => (
+                      <Fragment key={key}>
+                        {i > 0 && '、'}
+                        <Link
+                          to='/characters/$id'
+                          params={{ id: key }}
+                          className='hover:text-foreground hover:underline underline-offset-2'
+                        >
+                          {STORE_NAME_LABELS[key] || key}
+                        </Link>
+                      </Fragment>
+                    ))}
+                    {hasMore && ' 他'}
+                  </div>
                 </div>
               </div>
             </motion.div>
