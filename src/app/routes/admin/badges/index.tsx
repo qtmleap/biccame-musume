@@ -550,10 +550,10 @@ const CreateBadgeDialog = ({ open, onClose }: { open: boolean; onClose: () => vo
 }
 
 // ---------------------------------------------------------------------------
-// Badge row
+// Badge card
 // ---------------------------------------------------------------------------
 
-const BadgeRow = ({ badge }: { badge: BadgeDto }) => {
+const BadgeCard = ({ badge }: { badge: BadgeDto }) => {
   const [editOpen, setEditOpen] = useState(false)
   const deleteBadge = useDeleteBadge()
   const isSpecial = badge.code.startsWith('special_')
@@ -568,46 +568,18 @@ const BadgeRow = ({ badge }: { badge: BadgeDto }) => {
 
   return (
     <>
-      <div className='group flex items-center gap-3 rounded-xl border border-card-border p-3 bg-card'>
-        <div
-          className={cn('flex size-10 shrink-0 items-center justify-center rounded-lg', RARITY_ICON_BG[badge.rarity])}
-        >
-          {Icon && <Icon className='size-5' />}
-        </div>
-
-        <div className='flex-1 min-w-0'>
-          <div className='flex items-center gap-2 flex-wrap'>
-            <span className='text-sm font-bold text-foreground truncate'>{badge.name}</span>
-            <span
-              className={cn(
-                'text-[10px] font-numeric font-bold tracking-widest px-1.5 py-0.5 rounded-full',
-                RARITY_CHIP[badge.rarity]
-              )}
-            >
-              {RARITY_LABELS[badge.rarity]}
-            </span>
-            {badge.is_hidden && (
-              <span className='text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground'>
-                非表示
-              </span>
-            )}
-            {isSpecial && (
-              <span className='text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-rank-gold/15 text-rank-gold-foreground'>
-                特別
-              </span>
-            )}
-            {badge.earned_count !== undefined && (
-              <span className='text-[10px] tabular-nums text-muted-foreground'>達成 {badge.earned_count}人</span>
-            )}
-          </div>
-          <p className='text-xs font-numeric text-muted-foreground truncate mt-0.5'>{badge.code}</p>
-        </div>
-
-        <div className='flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity'>
+      <div className='group relative flex flex-col rounded-xl border border-card-border bg-card p-3 transition-shadow hover:shadow-sm'>
+        {/* Hover actions */}
+        <div className='absolute top-1.5 right-1.5 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity'>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size='icon' variant='ghost' className='size-8' onClick={() => setEditOpen(true)}>
+                <Button
+                  size='icon'
+                  variant='ghost'
+                  className='size-7 bg-card/80 backdrop-blur'
+                  onClick={() => setEditOpen(true)}
+                >
                   <Pencil className='size-3.5' />
                   <span className='sr-only'>編集</span>
                 </Button>
@@ -622,7 +594,11 @@ const BadgeRow = ({ badge }: { badge: BadgeDto }) => {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <AlertDialogTrigger asChild>
-                      <Button size='icon' variant='ghost' className='size-8 text-destructive hover:text-destructive'>
+                      <Button
+                        size='icon'
+                        variant='ghost'
+                        className='size-7 bg-card/80 backdrop-blur text-destructive hover:text-destructive'
+                      >
                         <Trash2 className='size-3.5' />
                         <span className='sr-only'>削除</span>
                       </Button>
@@ -648,6 +624,55 @@ const BadgeRow = ({ badge }: { badge: BadgeDto }) => {
             </AlertDialog>
           )}
         </div>
+
+        {/* Icon */}
+        <div className='flex justify-center mb-2'>
+          <div
+            className={cn(
+              'flex size-14 items-center justify-center rounded-2xl',
+              RARITY_ICON_BG[badge.rarity]
+            )}
+          >
+            {Icon && <Icon className='size-7' />}
+          </div>
+        </div>
+
+        {/* Name & code */}
+        <div className='text-center'>
+          <p className='text-sm font-bold text-foreground line-clamp-2 leading-tight min-h-[2.5em]'>{badge.name}</p>
+          <p className='text-[10px] font-numeric text-muted-foreground truncate mt-1'>{badge.code}</p>
+        </div>
+
+        {/* Chips */}
+        <div className='mt-2 flex items-center justify-center gap-1 flex-wrap'>
+          <span
+            className={cn(
+              'text-[9px] font-numeric font-bold tracking-widest px-1.5 py-0.5 rounded-full',
+              RARITY_CHIP[badge.rarity]
+            )}
+          >
+            {RARITY_LABELS[badge.rarity]}
+          </span>
+          {badge.is_hidden && (
+            <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground'>
+              非表示
+            </span>
+          )}
+          {isSpecial && (
+            <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-rank-gold/15 text-rank-gold-foreground'>
+              特別
+            </span>
+          )}
+        </div>
+
+        {/* Earned count */}
+        {badge.earned_count !== undefined && (
+          <div className='mt-2 pt-2 border-t border-card-border text-center'>
+            <span className='text-[10px] tabular-nums text-muted-foreground'>
+              達成 <span className='font-bold text-foreground'>{badge.earned_count}</span>人
+            </span>
+          </div>
+        )}
       </div>
 
       <EditBadgeDialog badge={badge} open={editOpen} onClose={() => setEditOpen(false)} />
@@ -688,9 +713,9 @@ const CategorySection = ({
           {badges.length !== totalInCategory && <span> / {totalInCategory}</span>}
         </span>
       </header>
-      <div className='space-y-2'>
+      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3'>
         {badges.map((badge) => (
-          <BadgeRow key={badge.code} badge={badge} />
+          <BadgeCard key={badge.code} badge={badge} />
         ))}
       </div>
     </motion.section>
