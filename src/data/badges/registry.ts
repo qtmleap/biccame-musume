@@ -415,11 +415,7 @@ function getBadgeRegistry(): BadgeDef[] {
   //   epic:      200, 300, 400, 500, 600   (5 entries)
   //   legendary: 700, 800, 900, 1000       (4 entries)
   // -----------------------------------------------------------------------
-  const VOTE_TOTAL_NAMED: Record<number, string> = {
-    1: '初投票',
-    500: '票職人',
-    1000: '投票名人'
-  }
+  const VOTE_TOTAL_NAMED: Record<number, string> = {}
   function voteTotalRarity(count: number): BadgeRarity {
     if (count <= 50) return 'common'
     if (count <= 100) return 'rare'
