@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import type { VoteResponse } from '@/schemas/vote.dto'
 import { client } from '@/utils/client'
 
@@ -13,12 +14,17 @@ const submitVote = async (characterId: string): Promise<VoteResponse> => {
  * 投票機能のカスタムフック
  */
 export const useVote = (characterId: string) => {
-  const client = useQueryClient()
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: () => submitVote(characterId),
-    onSuccess: () => {
-      // 投票後はランキングを再取得
-      client.invalidateQueries({ queryKey: ['ranking'] })
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['ranking'] })
+      for (const badge of data.newBadges) {
+        toast.success(`バッジ獲得: ${badge.name}`, { description: badge.description })
+      }
+      if (data.newBadges.length > 0) {
+        queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+      }
     }
   })
 }

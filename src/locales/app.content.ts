@@ -220,12 +220,15 @@ const appContent = {
       calendar: '誕生日',
       location: 'マップ',
       ranking: '総選挙',
+      badges: 'バッジ',
       closeMenu: 'メニューを閉じる',
       openMenu: 'メニューを開く'
     },
     admin: {
       eventManagement: 'イベント管理',
       eventManagementDesc: 'アクキー配布などのイベントを登録・管理',
+      badgeManagement: 'バッジ管理',
+      badgeManagementDesc: '特別バッジの作成・編集と表示の調整',
       eventEdit: 'イベント編集',
       eventNew: '新規イベント登録',
       eventEditDesc: 'イベント情報を編集',

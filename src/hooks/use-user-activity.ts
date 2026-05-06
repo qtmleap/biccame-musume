@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { useAuth } from '@/hooks/use-auth'
 import { client } from '@/utils/client'
 
@@ -27,7 +28,15 @@ export const useUserActivity = () => {
     mutationFn: async (storeKey: string) => {
       return client.updateUserStore({ status: 'visited' }, { params: { storeKey } })
     },
-    onSuccess: invalidate
+    onSuccess: (data) => {
+      invalidate()
+      for (const badge of data.newBadges) {
+        toast.success(`バッジ獲得: ${badge.name}`, { description: badge.description })
+      }
+      if (data.newBadges.length > 0) {
+        queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+      }
+    }
   })
 
   const removeVisitedStore = useMutation({
@@ -57,7 +66,15 @@ export const useUserActivity = () => {
     mutationFn: async (eventId: string) => {
       return client.updateUserEvent({ status: 'completed' }, { params: { eventId } })
     },
-    onSuccess: invalidate
+    onSuccess: (data) => {
+      invalidate()
+      for (const badge of data.newBadges) {
+        toast.success(`バッジ獲得: ${badge.name}`, { description: badge.description })
+      }
+      if (data.newBadges.length > 0) {
+        queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+      }
+    }
   })
 
   const removeCompletedEvent = useMutation({
