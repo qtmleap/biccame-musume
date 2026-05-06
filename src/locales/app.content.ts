@@ -270,10 +270,10 @@ const appContent = {
     },
     badge: {
       rarity: {
-        common: 'COMMON',
-        rare: 'RARE',
-        epic: 'EPIC',
-        legendary: 'LEGENDARY'
+        common: 'コモン',
+        rare: 'レア',
+        epic: 'エピック',
+        legendary: 'レジェンダリー'
       },
       earnedCount: '獲得 {count}人',
       hidden: '非表示',
