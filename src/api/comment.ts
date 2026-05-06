@@ -23,7 +23,7 @@ routes.openapi(
     path: '/:uuid/comments',
     request: {
       params: z.object({
-        uuid: z.string().uuid()
+        uuid: z.uuid()
       })
     },
     responses: {
@@ -56,7 +56,7 @@ routes.openapi(
     path: '/:uuid/comments',
     request: {
       params: z.object({
-        uuid: z.string().uuid()
+        uuid: z.uuid()
       }),
       body: {
         content: {

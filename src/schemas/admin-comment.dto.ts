@@ -2,8 +2,8 @@ import { z } from '@hono/zod-openapi'
 
 export const AdminCommentSchema = z
   .object({
-    id: z.string().uuid().openapi({ description: 'コメントID' }),
-    eventId: z.string().uuid().openapi({ description: 'イベントID' }),
+    id: z.uuid().openapi({ description: 'コメントID' }),
+    eventId: z.uuid().openapi({ description: 'イベントID' }),
     eventTitle: z.string().nonempty().openapi({ description: 'イベント名' }),
     characterId: z.string().nonempty().openapi({ description: '投稿者キャラクターID' }),
     body: z.string().nonempty().openapi({ description: 'コメント本文' }),
