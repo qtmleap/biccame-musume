@@ -224,7 +224,7 @@ function getBadgeRegistry(): BadgeDef[] {
     const count = visitSteps[i]
     const rarity = visitMilestoneRarity(i, visitSteps.length)
     badges.push({
-      code: `milestone_count_${count}`,
+      code: `milestone_visit_${count}`,
       category: 'milestone',
       subCategory: 'count',
       name: `${count} 店訪問`,
@@ -238,7 +238,7 @@ function getBadgeRegistry(): BadgeDef[] {
   }
   // "All stores" completion badge
   badges.push({
-    code: `milestone_count_all`,
+    code: `milestone_visit_all`,
     category: 'milestone',
     subCategory: 'count',
     name: '全店制覇',
@@ -251,7 +251,7 @@ function getBadgeRegistry(): BadgeDef[] {
   })
   // "All areas visited" meta badge
   badges.push({
-    code: 'milestone_all_areas_visit',
+    code: 'milestone_visit_areas',
     category: 'milestone',
     subCategory: 'all_areas_any_visit',
     name: '全国デビュー',
@@ -380,7 +380,7 @@ function getBadgeRegistry(): BadgeDef[] {
     const count = clearSteps[i]
     const rarity = visitMilestoneRarity(i, clearSteps.length)
     badges.push({
-      code: `event_clear_count_${count}`,
+      code: `milestone_clear_${count}`,
       category: 'milestone',
       subCategory: 'event_clear_count',
       name: `${count} 店制覇`,
@@ -394,7 +394,7 @@ function getBadgeRegistry(): BadgeDef[] {
   }
   // "All stores" event clear completion badge
   badges.push({
-    code: 'event_clear_all',
+    code: 'milestone_clear_all',
     category: 'milestone',
     subCategory: 'event_clear_all',
     name: '全店イベント制覇',
@@ -407,7 +407,7 @@ function getBadgeRegistry(): BadgeDef[] {
   })
   // "All areas event clear" meta badge
   badges.push({
-    code: 'event_clear_all_areas',
+    code: 'milestone_clear_areas',
     category: 'milestone',
     subCategory: 'all_areas_any_event_clear',
     name: '全国達成',
@@ -431,7 +431,6 @@ function getBadgeRegistry(): BadgeDef[] {
   // -----------------------------------------------------------------------
   const VOTE_TOTAL_NAMED: Record<number, string> = {
     1: '初投票',
-    100: '投票熟練',
     500: '票職人',
     1000: '投票名人'
   }
