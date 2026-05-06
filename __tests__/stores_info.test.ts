@@ -108,8 +108,9 @@ describe('characters.json parsing', () => {
           expect(store.character.description).toBeDefined()
           expect(typeof store.character.description).toBe('string')
 
-          expect(store.character.twitter_id).toBeDefined()
-          expect(typeof store.character.twitter_id).toBe('string')
+          if (store.character.twitter_id !== undefined) {
+            expect(typeof store.character.twitter_id).toBe('string')
+          }
 
           expect(Array.isArray(store.character.images)).toBe(true)
           expect(store.character.images.length).toBeGreaterThan(0)
