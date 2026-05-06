@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Calendar } from 'lucide-react'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -37,26 +37,35 @@ const UsersContent = () => {
         </div>
 
         {users.length === 0 ? (
-          <p className='text-sm text-muted-foreground py-8 text-center'>登録ユーザーがいません</p>
+          <div className='rounded-lg border p-6 text-center'>
+            <p className='text-sm text-muted-foreground'>登録ユーザーがいません</p>
+          </div>
         ) : (
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
             {users.map((user) => (
               <div
                 key={user.id}
-                className='bg-card border border-card-border rounded-2xl p-4 flex items-center gap-3'
+                className='border-card rounded-lg p-3 bg-card flex flex-col h-full transition-colors hover:border-brand/40'
               >
-                <Avatar className='size-12 shrink-0'>
-                  <AvatarImage src={user.thumbnailURL ?? undefined} alt={user.displayName ?? 'user'} />
-                  <AvatarFallback className='text-base bg-brand/10 text-brand'>
-                    {user.displayName?.charAt(0) ?? 'U'}
-                  </AvatarFallback>
-                </Avatar>
-                <div className='flex-1 min-w-0'>
-                  <div className='font-bold text-sm text-foreground truncate'>{user.displayName ?? '(未設定)'}</div>
-                  <div className='text-xs text-muted-foreground truncate'>{user.email ?? '(メール未登録)'}</div>
-                  <div className='mt-1 text-[11px] font-numeric tabular-nums text-muted-foreground'>
-                    {dayjs(user.createdAt).format('YYYY/MM/DD')} 登録
+                <div className='mb-2 flex items-start gap-3'>
+                  <Avatar className='size-10 shrink-0'>
+                    <AvatarImage src={user.thumbnailURL ?? undefined} alt={user.displayName ?? 'user'} />
+                    <AvatarFallback className='text-sm bg-brand/10 text-brand'>
+                      {user.displayName?.charAt(0) ?? 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className='flex-1 min-w-0'>
+                    <h3 className='text-base font-semibold text-foreground line-clamp-1'>
+                      {user.displayName ?? '(未設定)'}
+                    </h3>
+                    <div className='mt-0.5 text-xs text-muted-foreground truncate'>
+                      {user.email ?? '(メール未登録)'}
+                    </div>
                   </div>
+                </div>
+                <div className='mt-auto pt-2 flex items-center gap-1 text-xs text-muted-foreground font-numeric tabular-nums'>
+                  <Calendar className='size-3' />
+                  <span>{dayjs(user.createdAt).format('YYYY/MM/DD')} 登録</span>
                 </div>
               </div>
             ))}
