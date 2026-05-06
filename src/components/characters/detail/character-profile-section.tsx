@@ -8,8 +8,9 @@ import { CharacterTwitterLink } from '@/components/characters/character-twitter-
 import { CharacterVisitButton } from '@/components/characters/character-visit-button'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { CLOSED_STORE_KEYS } from '@/data/badges/store-exclusion'
 import { DURATION, FADE_IN_UP, SCALE_IN } from '@/lib/motion'
-import type { StoreData } from '@/schemas/store.dto'
+import type { StoreData, StoreKey } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
 
 type CharacterProfileSectionProps = {
@@ -46,8 +47,8 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
           />
           <CharacterVisitButton
             storeKey={character.id}
-            storeName={character.store?.name}
-            hasStore={Boolean(character.store)}
+            storeName={character.store?.name ?? character.character?.name}
+            hasStore={Boolean(character.store) || CLOSED_STORE_KEYS.has(character.id as StoreKey)}
           />
           {/* ログイン不要 */}
           {character.character?.twitter_id && (
