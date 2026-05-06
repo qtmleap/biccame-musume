@@ -116,9 +116,9 @@ export const BirthdayHeroSection = ({ characters }: BirthdayHeroSectionProps) =>
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: DURATION.normal, delay: 0.3 }}
           >
-            <p className='text-sm font-medium text-white/80'>Today's Birthday</p>
+            <p className='font-handwritten text-sm font-medium text-white/80'>Today's Birthday</p>
             <motion.h2
-              className='mt-1 text-3xl font-bold md:text-4xl'
+              className='font-handwritten mt-1 text-3xl font-bold md:text-4xl'
               animate={{ scale: [1, 1.02, 1] }}
               transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
             >
