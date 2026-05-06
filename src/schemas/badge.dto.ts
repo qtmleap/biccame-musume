@@ -101,7 +101,7 @@ export const prismaBadgeToDto = (b: PrismaBadge, earnedCount?: number, mask = fa
 
 export const UserBadgeSchema = z
   .object({
-    id: z.string().uuid().openapi({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' }),
+    id: z.uuid().openapi({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' }),
     user_id: z.string().nonempty().openapi({ example: 'firebase-uid-xyz' }),
     badge_code: z.string().nonempty().openapi({ example: 'store_visit_akiba' }),
     earned_at: z.string().nonempty().openapi({ example: '2026-05-06T12:00:00.000Z' })
@@ -214,7 +214,7 @@ export const GetBadgeLeaderboardResponseSchema = BadgeLeaderboardResponseSchema
 
 const SpecialConditionMetaSchema = z.union([
   z.object({ storeKeys: z.array(StoreKeySchema).min(1) }),
-  z.object({ eventId: z.string().uuid() })
+  z.object({ eventId: z.uuid() })
 ])
 
 export const CreateSpecialBadgeBodySchema = z
