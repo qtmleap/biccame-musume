@@ -2,9 +2,9 @@ import { motion } from 'motion/react'
 import { useMemo } from 'react'
 import { BadgeCard } from '@/components/badges/badge-card'
 import { CLOSED_STORE_KEYS } from '@/data/badges/store-exclusion'
-import { BADGE_SUPER_CATEGORY_DEFS } from '@/lib/badge-categories'
+import { BADGE_SUPER_CATEGORY_DEFS, type BadgeSubSectionDef } from '@/lib/badge-categories'
 import { DURATION } from '@/lib/motion'
-import type { Badge, BadgeConditionMeta } from '@/schemas/badge.dto'
+import type { Badge, BadgeCategory, BadgeConditionMeta } from '@/schemas/badge.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 /** セクションごとに表示する未取得バッジの最大数（多すぎ防止） */
@@ -35,30 +35,51 @@ type BadgeGridProps = {
   earnedMap: Map<string, string>
 }
 
+const pickItems = (badges: Badge[], earnedMap: Map<string, string>, allow: (b: Badge) => boolean): Badge[] => {
+  const earned: Badge[] = []
+  const unearnedCandidates: Badge[] = []
+  for (const b of badges) {
+    if (!allow(b)) continue
+    if (earnedMap.has(b.code)) {
+      earned.push(b)
+    } else if (!isClosedStoreBadge(b) && b.rarity === 'common') {
+      unearnedCandidates.push(b)
+    }
+  }
+  const unearned = shuffle(unearnedCandidates).slice(0, MAX_UNEARNED_PER_SECTION)
+  return [...earned, ...unearned]
+}
+
+const BadgeRow = ({ items, earnedMap }: { items: Badge[]; earnedMap: Map<string, string> }) => (
+  <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-3'>
+    {items.map((badge, i) => (
+      <BadgeCard key={badge.code} badge={badge} earnedAt={earnedMap.get(badge.code) ?? null} index={i} />
+    ))}
+  </div>
+)
+
 export const BadgeGrid = ({ badges, earnedMap }: BadgeGridProps) => {
   // セクション毎に「獲得済み全件 + 未獲得をランダム最大10件」を計算。
   // useMemo で badges/earnedMap が変わらない間は安定（再 shuffle しない）。
   const sections = useMemo(() => {
     return BADGE_SUPER_CATEGORY_DEFS.map((category) => {
-      const earned: Badge[] = []
-      const unearnedCandidates: Badge[] = []
-      for (const b of badges) {
-        if (!category.includes.includes(b.category)) continue
-        if (earnedMap.has(b.code)) {
-          earned.push(b)
-        } else if (!isClosedStoreBadge(b) && b.rarity === 'common') {
-          unearnedCandidates.push(b)
-        }
-      }
-      const unearned = shuffle(unearnedCandidates).slice(0, MAX_UNEARNED_PER_SECTION)
-      return { category, items: [...earned, ...unearned] }
+      const subs: { sub: BadgeSubSectionDef; items: Badge[] }[] | null = category.subSections
+        ? category.subSections.map((sub) => ({
+            sub,
+            items: pickItems(badges, earnedMap, (b) => sub.categories.includes(b.category as BadgeCategory))
+          }))
+        : null
+      const flatItems = subs
+        ? subs.flatMap((s) => s.items)
+        : pickItems(badges, earnedMap, (b) => category.includes.includes(b.category as BadgeCategory))
+      return { category, subs, flatItems }
     })
   }, [badges, earnedMap])
 
   return (
     <div className='space-y-8'>
-      {sections.map(({ category, items }, sectionIdx) => {
-        if (items.length === 0) return null
+      {sections.map(({ category, subs, flatItems }, sectionIdx) => {
+        if (flatItems.length === 0) return null
 
         return (
           <motion.section
@@ -71,11 +92,20 @@ export const BadgeGrid = ({ badges, earnedMap }: BadgeGridProps) => {
               <h2 className='text-lg md:text-xl font-bold text-foreground'>{category.label}</h2>
               <p className='text-xs md:text-sm text-muted-foreground mt-0.5'>{category.description}</p>
             </header>
-            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-3'>
-              {items.map((badge, i) => (
-                <BadgeCard key={badge.code} badge={badge} earnedAt={earnedMap.get(badge.code) ?? null} index={i} />
-              ))}
-            </div>
+            {subs ? (
+              <div className='space-y-5'>
+                {subs.map(({ sub, items }) =>
+                  items.length === 0 ? null : (
+                    <div key={sub.key}>
+                      <h3 className='text-sm md:text-base font-semibold text-muted-foreground mb-2'>{sub.label}</h3>
+                      <BadgeRow items={items} earnedMap={earnedMap} />
+                    </div>
+                  )
+                )}
+              </div>
+            ) : (
+              <BadgeRow items={flatItems} earnedMap={earnedMap} />
+            )}
           </motion.section>
         )
       })}
