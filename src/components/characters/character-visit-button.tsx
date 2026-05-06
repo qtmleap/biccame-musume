@@ -114,7 +114,7 @@ export const CharacterVisitButton = ({ storeKey, storeName, hasStore = true }: C
           <AlertDialogAction
             onClick={handleConfirm}
             variant='outline'
-            className='bg-brand text-brand-foreground hover:bg-brand/90 border-transparent'
+            className='border-brand/50 text-brand hover:bg-brand/10 hover:text-brand hover:border-brand/50'
           >
             訪問済みにする
           </AlertDialogAction>
