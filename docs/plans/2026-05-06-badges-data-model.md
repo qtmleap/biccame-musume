@@ -70,18 +70,32 @@ Date: 2026-05-06
 - `event_count_575`「イベント極み」が新たな legendary ピーク
 - 旧 `event_count_570` は廃止 (DB から削除済み)
 
-### 店舗別イベント達成系 (約 80 個)
+### 店舗別イベント達成系 (81 個 → 3 カテゴリに分割)
 
 「**その店舗で開催されたイベントを完了 (`UserEvent.status='completed'`)**」を条件とする系列。訪問バッジの上位互換的ポジション (訪問 < イベントクリア)。判定式は「completed なイベントが、その店舗を `EventStore` リレーションに持つか」。エリア区分は店舗訪問系と同じ 10 地区。
+
+#### 各店舗イベント参加 (`event_clear_store`, 50 個)
 
 | カテゴリ | 件数 | 条件 | レアリティ |
 | --- | --- | --- | --- |
 | 各店舗イベント制覇 | 50 | その店舗で開催されたイベントを 1 件以上 completed | rare |
+
+#### エリアイベント参加 (`event_clear_area`, 20 個)
+
+| カテゴリ | 件数 | 条件 | レアリティ |
+| --- | --- | --- | --- |
 | エリアイベントデビュー (10) | 10 | その地区の店舗で 1 件以上 イベント completed | epic |
 | エリアイベントコンプ (10) | 10 | その地区の全店舗でイベント completed | legendary |
-| イベント制覇マイルストーン | 約 9 | イベント完了したユニーク店舗数が 5/10/15/.../X (X = 実店舗数未満で最大の 5 倍数) | common→rare→epic |
-| 全店イベント制覇 | 1 | 全実店舗でイベント completed | legendary |
-| メタバッジ「全国達成」 | 1 | 全 10 地区それぞれで 1 件以上イベント completed | legendary |
+
+#### マイルストーン統合 (`milestone`, visit 11 + event_clear 11 = 22 個)
+
+イベント制覇マイルストーン・全店制覇・メタバッジは訪問系マイルストーンと同じ `milestone` カテゴリに統合。
+
+| 件数 | 条件 | レアリティ |
+| --- | --- | --- |
+| 約 9 | イベント完了したユニーク店舗数が 5/10/15/.../X (X = 実店舗数未満で最大の 5 倍数) | common→rare→epic |
+| 1 | 全実店舗でイベント completed | legendary |
+| 1 | 全 10 地区それぞれで 1 件以上イベント completed (メタバッジ「全国達成」) | legendary |
 
 **命名規約 (訪問系との区別):**
 - 訪問系の動詞: 「訪問」「参加」「コンプ」
@@ -159,7 +173,7 @@ Date: 2026-05-06
 - MVP 開始時点では 0 個 (admin が後追いで作成)
 - 命名はポジティブ語のみ (memory `feedback_positive_naming.md`)
 
-**MVP 合計: 216 バッジ** (店舗 50 + エリア 20 + マイルストーン 11 + イベント参加 31 + 店舗別イベント達成 81 + 投票 23。実店舗数とビッカメ娘数で前後。メタバッジ 2 件を含む)
+**MVP 合計: 216 バッジ** (店舗訪問 50 + エリア訪問 20 + マイルストーン 22 [visit 11 + event_clear 11] + イベント参加 31 + 各店舗イベント参加 50 + エリアイベント参加 20 + 投票 23。実店舗数とビッカメ娘数で前後)
 
 ## データモデル
 
@@ -170,7 +184,7 @@ Date: 2026-05-06
 model Badge {
   /// バッジコード (例: 'store_visit_akiba', 'area_complete_kanto', 'store_milestone_10')
   code         String   @id
-  /// カテゴリ: 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'special'
+  /// カテゴリ: 'store' | 'area' | 'milestone' | 'event' | 'event_clear_store' | 'event_clear_area' | 'vote' | 'special'
   category     String
   /// サブカテゴリ: 'visit' | 'area_any' | 'area_complete' | 'count' | 'event_count' | 'event_clear_at_store' | 'event_clear_area_any' | 'event_clear_area_complete' | 'event_clear_count' | 'event_clear_all' | 'vote_total' | 'vote_unique' | 'vote_devotion' | 'vote_all_biccame'
   subCategory  String   @map("sub_category")
@@ -224,7 +238,7 @@ model UserBadge {
 ```ts
 type BadgeDef = {
   code: string
-  category: 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'special'
+  category: 'store' | 'area' | 'milestone' | 'event' | 'event_clear_store' | 'event_clear_area' | 'vote' | 'special'
   subCategory:
     | 'visit' | 'area_any' | 'area_complete' | 'count'
     | 'event_count'

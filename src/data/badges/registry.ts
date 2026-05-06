@@ -2,7 +2,15 @@ import type { StoreKey } from '@/schemas/store.dto'
 import { BADGE_AREA_LABELS, type BadgeArea, storeKeyToBadgeArea } from './area-mapping'
 import { PHYSICAL_STORE_KEYS } from './store-exclusion'
 
-export type BadgeCategory = 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'special'
+export type BadgeCategory =
+  | 'store'
+  | 'area'
+  | 'milestone'
+  | 'event'
+  | 'event_clear_store'
+  | 'event_clear_area'
+  | 'vote'
+  | 'special'
 
 export type BadgeSubCategory =
   | 'visit'
@@ -320,7 +328,7 @@ function getBadgeRegistry(): BadgeDef[] {
     const storeName = STORE_DISPLAY_NAMES[storeKey]
     badges.push({
       code: `event_clear_at_store_${storeKey}`,
-      category: 'event_clear',
+      category: 'event_clear_store',
       subCategory: 'event_clear_at_store',
       name: `${storeName}制覇`,
       description: `${storeName}のイベントを達成しました`,
@@ -339,7 +347,7 @@ function getBadgeRegistry(): BadgeDef[] {
     const areaLabel = BADGE_AREA_LABELS[area]
     badges.push({
       code: `event_clear_area_any_${area}`,
-      category: 'event_clear',
+      category: 'event_clear_area',
       subCategory: 'event_clear_area_any',
       name: `${areaLabel}イベントデビュー`,
       description: `${areaLabel}のいずれかの店舗でイベントを達成しました`,
@@ -355,7 +363,7 @@ function getBadgeRegistry(): BadgeDef[] {
     const storeCount = STORES_BY_AREA[area].length
     badges.push({
       code: `event_clear_area_complete_${area}`,
-      category: 'event_clear',
+      category: 'event_clear_area',
       subCategory: 'event_clear_area_complete',
       name: `${areaLabel}制覇`,
       description: `${areaLabel}の全 ${storeCount} 店舗でイベントを達成しました`,
@@ -376,7 +384,7 @@ function getBadgeRegistry(): BadgeDef[] {
     const rarity = visitMilestoneRarity(i, clearSteps.length)
     badges.push({
       code: `event_clear_count_${count}`,
-      category: 'event_clear',
+      category: 'milestone',
       subCategory: 'event_clear_count',
       name: `${count} 店制覇`,
       description: `${count} 店舗でイベントを達成しました`,
@@ -390,7 +398,7 @@ function getBadgeRegistry(): BadgeDef[] {
   // "All stores" event clear completion badge
   badges.push({
     code: 'event_clear_all',
-    category: 'event_clear',
+    category: 'milestone',
     subCategory: 'event_clear_all',
     name: '全店イベント制覇',
     description: `全 ${physicalCount} 店舗でイベントを達成しました`,
@@ -403,7 +411,7 @@ function getBadgeRegistry(): BadgeDef[] {
   // "All areas event clear" meta badge
   badges.push({
     code: 'event_clear_all_areas',
-    category: 'event_clear',
+    category: 'milestone',
     subCategory: 'all_areas_any_event_clear',
     name: '全国達成',
     description: '全 10 地区それぞれで 1 件以上イベント完了しました',
