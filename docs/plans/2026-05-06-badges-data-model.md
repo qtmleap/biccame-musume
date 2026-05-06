@@ -37,6 +37,7 @@ Date: 2026-05-06
 | エリアコンプ (10) | 10 | その地区の全店舗 `visited` | epic |
 | マイルストーン | 約 9 | 累計 `visited` ユニーク店舗数が 5/10/15/.../X (X = 実店舗数未満で最大の 5 の倍数) | common→rare→epic |
 | 全店制覇 | 1 | 全店舗 `visited` (= 実店舗数。マイルストーン最大値の次の段階) | legendary |
+| メタバッジ「全国デビュー」 | 1 | 全 10 地区それぞれで 1 店舗以上 `visited` | epic |
 
 **マイルストーンの段階数ルール (店舗 / 多様性で共通):**
 - 母数 N に対し 5 の倍数で 5, 10, 15, ..., M (M = N 未満で最大の 5 の倍数) までを segment milestone とする
@@ -72,6 +73,7 @@ Date: 2026-05-06
 | エリアイベントコンプ (10) | 10 | その地区の全店舗でイベント completed | legendary |
 | イベント制覇マイルストーン | 約 9 | イベント完了したユニーク店舗数が 5/10/15/.../X (X = 実店舗数未満で最大の 5 倍数) | common→rare→epic |
 | 全店イベント制覇 | 1 | 全実店舗でイベント completed | legendary |
+| メタバッジ「全国達成」 | 1 | 全 10 地区それぞれで 1 件以上イベント completed | legendary |
 
 **命名規約 (訪問系との区別):**
 - 訪問系の動詞: 「訪問」「参加」「コンプ」
@@ -149,7 +151,7 @@ Date: 2026-05-06
 - MVP 開始時点では 0 個 (admin が後追いで作成)
 - 命名はポジティブ語のみ (memory `feedback_positive_naming.md`)
 
-**MVP 合計: 約 182 バッジ** (店舗訪問 80 + イベント参加 5 + 店舗別イベント達成 80 + 投票 17。実店舗数とビッカメ娘数で前後)
+**MVP 合計: 約 182 バッジ** (店舗訪問系 81 + イベント参加 5 + 店舗別イベント達成系 81 + 投票 17。実店舗数とビッカメ娘数で前後。メタバッジ 2 件を含む)
 
 ## データモデル
 
@@ -219,6 +221,7 @@ type BadgeDef = {
     | 'visit' | 'area_any' | 'area_complete' | 'count'
     | 'event_count'
     | 'event_clear_at_store' | 'event_clear_area_any' | 'event_clear_area_complete' | 'event_clear_count' | 'event_clear_all'
+    | 'all_areas_any_visit' | 'all_areas_any_event_clear'
     | 'vote_total' | 'vote_unique' | 'vote_devotion' | 'vote_all_biccame'
     | 'special_multi_store_clear' | 'special_event_id'
   conditionMeta: { storeKey?: StoreKey; region?: Region; count?: number; storeKeys?: StoreKey[]; eventId?: string }
@@ -246,6 +249,8 @@ type BadgeDef = {
 | `event_clear_area_complete` | `userId, region` | そのエリアの全店舗で event clear |
 | `event_clear_count` | `userId, count` | event clear したユニーク店舗数 ≥ count |
 | `event_clear_all` | `userId` | 全実店舗で event clear |
+| `all_areas_any_visit` | `userId` | 全 10 BadgeArea でそれぞれ 1 件以上 visited |
+| `all_areas_any_event_clear` | `userId` | 全 10 BadgeArea でそれぞれ 1 件以上 event clear |
 | `vote_total` | `userId, count` | `Vote` テーブルの行数 ≥ count |
 | `vote_unique` | `userId, count` | `COUNT(DISTINCT character_id)` ≥ count |
 | `vote_devotion` | `userId, count` | 単一キャラへの票数の最大値 ≥ count |
@@ -380,7 +385,7 @@ LIMIT 50;
 - [x] バックフィル冪等性のテスト
 - [x] リーダーボードの順位計算 (タイブレーク含む) のテスト
 - [ ] e2e: ログイン → 店舗訪問 → 該当バッジが UI に出現 — TODO スタブのみ (`e2e/badges-flow.spec.ts`, Firebase エミュレータ + 認証セットアップ要)
-- [x] biome / tsc / `bun test` 全パス (88 テスト pass)
+- [x] biome / tsc / `bun test` 全パス (88 テスト pass、メタバッジ追加後も同数)
 
 ## 設計原則 (バッジ全体)
 

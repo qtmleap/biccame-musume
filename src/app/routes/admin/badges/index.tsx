@@ -627,12 +627,7 @@ const BadgeCard = ({ badge }: { badge: BadgeDto }) => {
 
         {/* Icon */}
         <div className='flex justify-center mb-2'>
-          <div
-            className={cn(
-              'flex size-14 items-center justify-center rounded-2xl',
-              RARITY_ICON_BG[badge.rarity]
-            )}
-          >
+          <div className={cn('flex size-14 items-center justify-center rounded-2xl', RARITY_ICON_BG[badge.rarity])}>
             {Icon && <Icon className='size-7' />}
           </div>
         </div>

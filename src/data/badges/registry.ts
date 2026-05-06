@@ -15,6 +15,8 @@ export type BadgeSubCategory =
   | 'event_clear_area_complete'
   | 'event_clear_count'
   | 'event_clear_all'
+  | 'all_areas_any_visit'
+  | 'all_areas_any_event_clear'
   | 'vote_total'
   | 'vote_unique'
   | 'vote_devotion'
@@ -242,6 +244,19 @@ function getBadgeRegistry(): BadgeDef[] {
     sortOrder: next(),
     conditionMeta: { count: physicalCount }
   })
+  // "All areas visited" meta badge
+  badges.push({
+    code: 'milestone_all_areas_visit',
+    category: 'milestone',
+    subCategory: 'all_areas_any_visit',
+    name: '全国デビュー',
+    description: '全 10 地区それぞれで 1 店舗以上を訪問しました',
+    hint: '各地区から 1 店ずつ訪問するとゲット',
+    rarity: 'epic',
+    iconName: 'Globe',
+    sortOrder: next(),
+    conditionMeta: {}
+  })
 
   // -----------------------------------------------------------------------
   // 4. Event participation milestone badges (5)
@@ -354,6 +369,19 @@ function getBadgeRegistry(): BadgeDef[] {
     iconName: 'Sparkles',
     sortOrder: next(),
     conditionMeta: { count: physicalCount }
+  })
+  // "All areas event clear" meta badge
+  badges.push({
+    code: 'event_clear_all_areas',
+    category: 'event_clear',
+    subCategory: 'all_areas_any_event_clear',
+    name: '全国達成',
+    description: '全 10 地区それぞれで 1 件以上イベント完了しました',
+    hint: '各地区で 1 件ずつイベントクリアするとゲット',
+    rarity: 'legendary',
+    iconName: 'Globe',
+    sortOrder: next(),
+    conditionMeta: {}
   })
 
   // -----------------------------------------------------------------------
