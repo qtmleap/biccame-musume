@@ -2,7 +2,7 @@ import type { Badge, PrismaClient } from '@prisma/client'
 import type { BadgeArea } from '@/data/badges/area-mapping'
 import { storeKeyToBadgeArea } from '@/data/badges/area-mapping'
 import type { BadgeConditionMeta, BadgeSubCategory } from '@/data/badges/registry'
-import { PHYSICAL_STORE_KEYS } from '@/data/badges/store-exclusion'
+import { ACTIVE_PHYSICAL_STORE_KEYS, PHYSICAL_STORE_KEYS } from '@/data/badges/store-exclusion'
 import type { StoreKey } from '@/schemas/store.dto'
 import type { Bindings } from '@/types/bindings'
 
@@ -45,7 +45,8 @@ export async function evaluateAreaAny(ctx: EvaluatorContext, meta: { region: Bad
 }
 
 export async function evaluateAreaComplete(ctx: EvaluatorContext, meta: { region: BadgeArea }): Promise<boolean> {
-  const storeKeys = PHYSICAL_STORE_KEYS.filter((k) => storeKeyToBadgeArea[k] === meta.region)
+  // 閉店店舗を除いた現役店舗だけで判定する（閉店店舗を訪問せずともコンプ扱い）
+  const storeKeys = ACTIVE_PHYSICAL_STORE_KEYS.filter((k) => storeKeyToBadgeArea[k] === meta.region)
   const count = await ctx.prisma.userStore.count({
     where: { userId: ctx.userId, storeKey: { in: storeKeys as string[] }, status: 'visited' }
   })
@@ -101,7 +102,8 @@ export async function evaluateEventClearAreaComplete(
   ctx: EvaluatorContext,
   meta: { region: BadgeArea }
 ): Promise<boolean> {
-  const storeKeys = PHYSICAL_STORE_KEYS.filter((k) => storeKeyToBadgeArea[k] === meta.region)
+  // 閉店店舗を除いた現役店舗だけで判定する（閉店店舗で達成せずともコンプ扱い）
+  const storeKeys = ACTIVE_PHYSICAL_STORE_KEYS.filter((k) => storeKeyToBadgeArea[k] === meta.region)
   // For each store in the area, check that the user has at least one completed event at that store.
   const results = await Promise.all(storeKeys.map((sk) => evaluateEventClearAtStore(ctx, { storeKey: sk })))
   return results.every(Boolean)
