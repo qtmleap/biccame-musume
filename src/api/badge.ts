@@ -9,7 +9,7 @@ import {
   prismaBadgeToDto
 } from '@/schemas/badge.dto'
 import type { Bindings, Variables } from '@/types/bindings'
-import { getToken, verifyToken } from '@/utils/token'
+import { getJwtPayload, getToken, verifyToken, verifyTokenOptional } from '@/utils/token'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
 
@@ -17,6 +17,7 @@ routes.openapi(
   createRoute({
     method: 'get',
     path: '/badges',
+    middleware: [verifyTokenOptional],
     request: {
       query: GetBadgesQuerySchema
     },
@@ -49,8 +50,31 @@ routes.openapi(
       const countMap = new Map<string, number>(countRows.map((r) => [r.badgeCode, r._count._all]))
       return c.json({ badges: rows.map((b) => prismaBadgeToDto(b, countMap.get(b.code) ?? 0)) })
     }
-    c.header('Cache-Control', 'public, max-age=300, s-maxage=3600')
-    return c.json({ badges: rows.map((b) => prismaBadgeToDto(b)) })
+
+    // 未取得バッジは name/description/hint をマスクしてネタバレ防止
+    const uid = ((): string | null => {
+      try {
+        return getJwtPayload(c).uid
+      } catch {
+        return null
+      }
+    })()
+
+    const earnedSet = uid
+      ? new Set(
+          (
+            await prisma.userBadge.findMany({
+              where: { userId: uid },
+              select: { badgeCode: true }
+            })
+          ).map((ub) => ub.badgeCode)
+        )
+      : new Set<string>()
+
+    // 認証あり = ユーザーごとのレスポンスはキャッシュ不可、未認証は全件マスクで public 可
+    c.header('Cache-Control', uid ? 'no-store' : 'public, max-age=300, s-maxage=3600')
+
+    return c.json({ badges: rows.map((b) => prismaBadgeToDto(b, undefined, !earnedSet.has(b.code))) })
   }
 )
 
