@@ -21,7 +21,6 @@ const BadgesContent = () => {
   const { data: leaderboard } = useBadgeLeaderboard(user?.uid)
 
   const earnedCount = earnedMap.size
-  const totalCount = badges.length
   const myRank = leaderboard.me?.rank ?? leaderboard.top.length + 1
   const totalUsers = leaderboard.top.length
 
@@ -56,20 +55,14 @@ const BadgesContent = () => {
           <p className='mt-1 text-xs md:text-sm text-muted-foreground'>集めて、自慢して、コンプを目指そう</p>
         </motion.header>
 
-        <BadgeSummary
-          user={user}
-          earnedCount={earnedCount}
-          totalCount={totalCount}
-          myRank={myRank}
-          totalUsers={totalUsers}
-        />
+        <BadgeSummary user={user} earnedCount={earnedCount} myRank={myRank} totalUsers={totalUsers} />
 
         <div className='mt-6 md:mt-8'>
           <BadgeGrid badges={badges} earnedMap={earnedMap} />
         </div>
 
         <div className='mt-8 md:mt-10'>
-          <BadgeLeaderboard leaderboard={leaderboard} totalBadges={totalCount} myUid={user?.uid} />
+          <BadgeLeaderboard leaderboard={leaderboard} myUid={user?.uid} />
         </div>
 
         <div className='mt-8 mb-6 text-center'>

@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { BadgeCard } from '@/components/badges/badge-card'
-import { BADGE_CATEGORY_DEFS } from '@/lib/badge-categories'
+import { BADGE_SUPER_CATEGORY_DEFS } from '@/lib/badge-categories'
 import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import type { Badge } from '@/schemas/badge.dto'
@@ -29,10 +29,9 @@ const ACCENT_DOT: Record<string, string> = {
 export const BadgeGrid = ({ badges, earnedMap }: BadgeGridProps) => {
   return (
     <div className='space-y-8'>
-      {BADGE_CATEGORY_DEFS.map((category, sectionIdx) => {
-        const items = badges.filter((b) => b.category === category.key)
+      {BADGE_SUPER_CATEGORY_DEFS.map((category, sectionIdx) => {
+        const items = badges.filter((b) => category.includes.includes(b.category))
         if (items.length === 0) return null
-        const earnedInCategory = items.filter((b) => earnedMap.has(b.code)).length
 
         return (
           <motion.section
@@ -41,17 +40,10 @@ export const BadgeGrid = ({ badges, earnedMap }: BadgeGridProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: DURATION.normal, delay: sectionIdx * 0.06 }}
           >
-            <header className='flex items-end justify-between gap-3 mb-3'>
-              <div className='flex items-center gap-2 min-w-0'>
-                <span aria-hidden className={cn('inline-block size-2.5 rounded-full', ACCENT_DOT[category.accent])} />
-                <h2 className={cn('font-bold text-base md:text-lg truncate', ACCENT_TEXT[category.accent])}>
-                  {category.label}
-                </h2>
-                <span className='text-[10px] md:text-xs text-muted-foreground truncate'>{category.description}</span>
-              </div>
-              <span className='shrink-0 text-xs font-numeric tabular-nums text-muted-foreground'>
-                <span className='font-bold text-foreground'>{earnedInCategory}</span> / {items.length}
-              </span>
+            <header className='flex items-center gap-2 mb-3 min-w-0'>
+              <span aria-hidden className={cn('inline-block size-2.5 rounded-full', ACCENT_DOT[category.accent])} />
+              <h2 className={cn('font-bold text-base md:text-lg', ACCENT_TEXT[category.accent])}>{category.label}</h2>
+              <span className='text-[10px] md:text-xs text-muted-foreground truncate'>{category.description}</span>
             </header>
 
             <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2.5 md:gap-3'>

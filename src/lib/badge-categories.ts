@@ -1,11 +1,45 @@
 import type { BadgeCategory } from '@/schemas/badge.dto'
 
+export type BadgeAccent = 'rank-gold' | 'favorite' | 'brand' | 'category-limited-card-solid' | 'rank-bronze'
+
 export type BadgeCategoryDef = {
   key: BadgeCategory
   label: string
   description: string
-  accent: 'rank-gold' | 'favorite' | 'brand' | 'category-limited-card-solid' | 'rank-bronze'
+  accent: BadgeAccent
 }
+
+export type BadgeSuperCategoryDef = {
+  key: 'visit' | 'event_participation' | 'vote'
+  label: string
+  description: string
+  accent: BadgeAccent
+  includes: BadgeCategory[]
+}
+
+export const BADGE_SUPER_CATEGORY_DEFS: BadgeSuperCategoryDef[] = [
+  {
+    key: 'visit',
+    label: '訪問',
+    description: '店舗やエリアを巡って積み重ねよう',
+    accent: 'category-limited-card-solid',
+    includes: ['store', 'area', 'milestone']
+  },
+  {
+    key: 'event_participation',
+    label: 'イベント参加',
+    description: 'イベントに参加した記録',
+    accent: 'brand',
+    includes: ['event_clear_store', 'event_clear_area', 'event']
+  },
+  {
+    key: 'vote',
+    label: '投票',
+    description: '推しへの票でもらえる勲章',
+    accent: 'favorite',
+    includes: ['vote']
+  }
+]
 
 export const BADGE_CATEGORY_DEFS: BadgeCategoryDef[] = [
   {
