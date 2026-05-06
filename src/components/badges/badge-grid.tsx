@@ -1,10 +1,14 @@
 import { motion } from 'motion/react'
+import { useMemo } from 'react'
 import { BadgeCard } from '@/components/badges/badge-card'
 import { CLOSED_STORE_KEYS } from '@/data/badges/store-exclusion'
 import { BADGE_SUPER_CATEGORY_DEFS } from '@/lib/badge-categories'
 import { DURATION } from '@/lib/motion'
 import type { Badge, BadgeConditionMeta } from '@/schemas/badge.dto'
 import type { StoreKey } from '@/schemas/store.dto'
+
+/** セクションごとに表示する未取得バッジの最大数（多すぎ防止） */
+const MAX_UNEARNED_PER_SECTION = 10
 
 const isClosedStoreBadge = (badge: Badge): boolean => {
   try {
@@ -17,26 +21,43 @@ const isClosedStoreBadge = (badge: Badge): boolean => {
   }
 }
 
+const shuffle = <T,>(arr: T[]): T[] => {
+  const out = [...arr]
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[out[i], out[j]] = [out[j] as T, out[i] as T]
+  }
+  return out
+}
+
 type BadgeGridProps = {
   badges: Badge[]
   earnedMap: Map<string, string>
 }
 
 export const BadgeGrid = ({ badges, earnedMap }: BadgeGridProps) => {
+  // セクション毎に「獲得済み全件 + 未獲得をランダム最大10件」を計算。
+  // useMemo で badges/earnedMap が変わらない間は安定（再 shuffle しない）。
+  const sections = useMemo(() => {
+    return BADGE_SUPER_CATEGORY_DEFS.map((category) => {
+      const earned: Badge[] = []
+      const unearnedCandidates: Badge[] = []
+      for (const b of badges) {
+        if (!category.includes.includes(b.category)) continue
+        if (earnedMap.has(b.code)) {
+          earned.push(b)
+        } else if (!isClosedStoreBadge(b) && b.rarity === 'common') {
+          unearnedCandidates.push(b)
+        }
+      }
+      const unearned = shuffle(unearnedCandidates).slice(0, MAX_UNEARNED_PER_SECTION)
+      return { category, items: [...earned, ...unearned] }
+    })
+  }, [badges, earnedMap])
+
   return (
     <div className='space-y-8'>
-      {BADGE_SUPER_CATEGORY_DEFS.map((category, sectionIdx) => {
-        const visible = badges.filter((b) => {
-          if (!category.includes.includes(b.category)) return false
-          if (earnedMap.has(b.code)) return true
-          if (isClosedStoreBadge(b)) return false
-          return b.rarity === 'common'
-        })
-        const items = visible.toSorted((a, b) => {
-          const aEarned = earnedMap.has(a.code) ? 0 : 1
-          const bEarned = earnedMap.has(b.code) ? 0 : 1
-          return aEarned - bEarned
-        })
+      {sections.map(({ category, items }, sectionIdx) => {
         if (items.length === 0) return null
 
         return (
