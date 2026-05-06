@@ -69,8 +69,8 @@ export const CharacterFavoriteButton = ({
         className={cn(
           'h-8 w-8 p-0 rounded-full',
           favored
-            ? 'bg-favorite text-favorite-foreground hover:bg-favorite/90'
-            : 'text-muted-foreground hover:text-favorite'
+            ? 'bg-favorite text-favorite-foreground hover:bg-favorite/90 hover:text-favorite-foreground'
+            : 'text-muted-foreground hover:bg-favorite/10 hover:text-favorite'
         )}
       >
         <motion.span
