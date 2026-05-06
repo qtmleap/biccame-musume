@@ -625,47 +625,68 @@ const BadgeCard = ({ badge }: { badge: BadgeDto }) => {
           )}
         </div>
 
-        {/* Icon */}
-        <div className='flex justify-center mb-2'>
-          <div className={cn('flex size-14 items-center justify-center rounded-2xl', RARITY_ICON_BG[badge.rarity])}>
-            {Icon && <Icon className='size-7' />}
-          </div>
-        </div>
+        {/* Tooltip-wrapped main content (icon + name + earned count) */}
+        <TooltipProvider delayDuration={200}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className='flex flex-col cursor-default'>
+                <div className='flex justify-center mb-2'>
+                  <div
+                    className={cn(
+                      'flex size-14 items-center justify-center rounded-2xl',
+                      RARITY_ICON_BG[badge.rarity]
+                    )}
+                  >
+                    {Icon && <Icon className='size-7' />}
+                  </div>
+                </div>
 
-        {/* Name & code */}
-        <div className='text-center'>
-          <p className='text-sm font-bold text-foreground line-clamp-2 leading-tight min-h-[2.5em]'>{badge.name}</p>
-          <p className='text-[10px] font-numeric text-muted-foreground truncate mt-1'>{badge.code}</p>
-        </div>
+                <p className='text-sm font-bold text-foreground line-clamp-2 leading-tight min-h-[2.5em] text-center'>
+                  {badge.name}
+                </p>
 
-        {/* Chips */}
-        <div className='mt-2 flex items-center justify-center gap-1 flex-wrap'>
-          <span
-            className={cn(
-              'text-[9px] font-numeric font-bold tracking-widest px-1.5 py-0.5 rounded-full',
-              RARITY_CHIP[badge.rarity]
+                {badge.earned_count !== undefined && (
+                  <div className='mt-1.5 text-center'>
+                    <span className='text-[10px] tabular-nums text-muted-foreground'>
+                      達成 <span className='font-bold text-foreground'>{badge.earned_count}</span>人
+                    </span>
+                  </div>
+                )}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side='bottom' className='max-w-xs'>
+              <div className='space-y-1'>
+                <div className='flex items-center gap-1.5'>
+                  <span
+                    className={cn(
+                      'text-[9px] font-numeric font-bold tracking-widest px-1.5 py-0.5 rounded-full',
+                      RARITY_CHIP[badge.rarity]
+                    )}
+                  >
+                    {RARITY_LABELS[badge.rarity]}
+                  </span>
+                  <span className='font-bold'>{badge.name}</span>
+                </div>
+                <p className='text-[10px] font-numeric text-muted-foreground'>{badge.code}</p>
+                <p className='text-xs'>{badge.description}</p>
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        {/* Status chips (only when meaningful) */}
+        {(badge.is_hidden || isSpecial) && (
+          <div className='mt-1.5 flex items-center justify-center gap-1 flex-wrap'>
+            {badge.is_hidden && (
+              <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground'>
+                非表示
+              </span>
             )}
-          >
-            {RARITY_LABELS[badge.rarity]}
-          </span>
-          {badge.is_hidden && (
-            <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground'>
-              非表示
-            </span>
-          )}
-          {isSpecial && (
-            <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-rank-gold/15 text-rank-gold-foreground'>
-              特別
-            </span>
-          )}
-        </div>
-
-        {/* Earned count */}
-        {badge.earned_count !== undefined && (
-          <div className='mt-2 pt-2 border-t border-card-border text-center'>
-            <span className='text-[10px] tabular-nums text-muted-foreground'>
-              達成 <span className='font-bold text-foreground'>{badge.earned_count}</span>人
-            </span>
+            {isSpecial && (
+              <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-rank-gold/15 text-rank-gold-foreground'>
+                特別
+              </span>
+            )}
           </div>
         )}
       </div>
@@ -740,7 +761,16 @@ const StatCard = ({ label, value, accent = 'text-foreground' }: StatCardProps) =
 // ---------------------------------------------------------------------------
 
 type RarityFilter = 'all' | 'common' | 'rare' | 'epic' | 'legendary'
-type CategoryFilter = 'all' | 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'special'
+type CategoryFilter =
+  | 'all'
+  | 'store'
+  | 'area'
+  | 'milestone'
+  | 'event'
+  | 'event_clear_store'
+  | 'event_clear_area'
+  | 'vote'
+  | 'special'
 type SortMode = 'default' | 'earned_desc'
 
 const CATEGORY_FILTER_LABELS: { key: CategoryFilter; label: string }[] = [
@@ -749,7 +779,8 @@ const CATEGORY_FILTER_LABELS: { key: CategoryFilter; label: string }[] = [
   { key: 'area', label: 'エリア' },
   { key: 'milestone', label: 'マイルストーン' },
   { key: 'event', label: 'イベント' },
-  { key: 'event_clear', label: '参加' },
+  { key: 'event_clear_store', label: '店舗参加' },
+  { key: 'event_clear_area', label: 'エリア参加' },
   { key: 'vote', label: '投票' },
   { key: 'special', label: '特別' }
 ]
@@ -766,7 +797,16 @@ const RARITY_FILTER_LABELS: { key: RarityFilter; label: string }[] = [
 // Main content
 // ---------------------------------------------------------------------------
 
-const categoryOrder: CategoryFilter[] = ['store', 'area', 'milestone', 'event', 'event_clear', 'vote', 'special']
+const categoryOrder: CategoryFilter[] = [
+  'store',
+  'area',
+  'event_clear_store',
+  'event_clear_area',
+  'milestone',
+  'event',
+  'vote',
+  'special'
+]
 
 const BadgesContent = () => {
   const [createOpen, setCreateOpen] = useState(false)
