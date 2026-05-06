@@ -138,7 +138,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                           </div>
 
                           {/* バッジ */}
-                          <Badge variant='secondary'>
+                          <Badge variant='secondary' className='bg-card text-foreground border-card'>
                             {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
                             {event.years}
                             {isCharacter ? CALENDAR_LABELS.age : CALENDAR_LABELS.anniversary}
