@@ -67,19 +67,19 @@ routes.openapi(
             schema: z.object({
               badge: z
                 .object({
-                  code: z.string(),
-                  category: z.string(),
-                  sub_category: z.string(),
-                  name: z.string().optional(),
-                  description: z.string().optional(),
-                  hint: z.string().optional(),
-                  rarity: z.string(),
-                  icon_name: z.string(),
+                  code: z.string().nonempty(),
+                  category: z.string().nonempty(),
+                  sub_category: z.string().nonempty(),
+                  name: z.string().nonempty().optional(),
+                  description: z.string().nonempty().optional(),
+                  hint: z.string().nonempty().optional(),
+                  rarity: z.string().nonempty(),
+                  icon_name: z.string().nonempty(),
                   sort_order: z.number(),
-                  condition_meta: z.string(),
+                  condition_meta: z.string().nonempty(),
                   is_hidden: z.boolean(),
-                  created_at: z.string(),
-                  updated_at: z.string()
+                  created_at: z.string().nonempty(),
+                  updated_at: z.string().nonempty()
                 })
                 .openapi('AdminCreatedBadge')
             })
@@ -90,7 +90,7 @@ routes.openapi(
       400: {
         content: {
           'application/json': {
-            schema: z.object({ error: z.string() })
+            schema: z.object({ error: z.string().nonempty() })
           }
         },
         description: 'バリデーションエラー'
@@ -151,19 +151,19 @@ routes.openapi(
             schema: z.object({
               badge: z
                 .object({
-                  code: z.string(),
-                  category: z.string(),
-                  sub_category: z.string(),
-                  name: z.string().optional(),
-                  description: z.string().optional(),
-                  hint: z.string().optional(),
-                  rarity: z.string(),
-                  icon_name: z.string(),
+                  code: z.string().nonempty(),
+                  category: z.string().nonempty(),
+                  sub_category: z.string().nonempty(),
+                  name: z.string().nonempty().optional(),
+                  description: z.string().nonempty().optional(),
+                  hint: z.string().nonempty().optional(),
+                  rarity: z.string().nonempty(),
+                  icon_name: z.string().nonempty(),
                   sort_order: z.number(),
-                  condition_meta: z.string(),
+                  condition_meta: z.string().nonempty(),
                   is_hidden: z.boolean(),
-                  created_at: z.string(),
-                  updated_at: z.string()
+                  created_at: z.string().nonempty(),
+                  updated_at: z.string().nonempty()
                 })
                 .openapi('AdminUpdatedBadge')
             })
@@ -174,7 +174,7 @@ routes.openapi(
       400: {
         content: {
           'application/json': {
-            schema: z.object({ error: z.string() })
+            schema: z.object({ error: z.string().nonempty() })
           }
         },
         description: 'バリデーションエラー'
@@ -182,7 +182,7 @@ routes.openapi(
       404: {
         content: {
           'application/json': {
-            schema: z.object({ error: z.string() })
+            schema: z.object({ error: z.string().nonempty() })
           }
         },
         description: 'バッジが見つかりません'
@@ -251,7 +251,7 @@ routes.openapi(
       400: {
         content: {
           'application/json': {
-            schema: z.object({ error: z.string() })
+            schema: z.object({ error: z.string().nonempty() })
           }
         },
         description: 'auto-generated バッジは削除できません'
@@ -259,7 +259,7 @@ routes.openapi(
       404: {
         content: {
           'application/json': {
-            schema: z.object({ error: z.string() })
+            schema: z.object({ error: z.string().nonempty() })
           }
         },
         description: 'バッジが見つかりません'
@@ -313,11 +313,10 @@ routes.openapi(
     const prisma = getPrisma(c.env)
     const users = await prisma.user.findMany({ select: { id: true } })
 
-    let awardedTotal = 0
-    for (const user of users) {
-      const newBadges = await evaluateAndAwardBadges({ env: c.env, prisma, userId: user.id })
-      awardedTotal += newBadges.length
-    }
+    const awardedCounts = await Promise.all(
+      users.map(async (user) => (await evaluateAndAwardBadges({ env: c.env, prisma, userId: user.id })).length)
+    )
+    const awardedTotal = awardedCounts.reduce((sum, n) => sum + n, 0)
 
     return c.json({ processedUsers: users.length, awardedTotal }, 200)
   }
