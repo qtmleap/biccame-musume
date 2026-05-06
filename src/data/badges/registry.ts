@@ -259,22 +259,23 @@ function getBadgeRegistry(): BadgeDef[] {
   })
 
   // -----------------------------------------------------------------------
-  // 4. Event participation milestone badges (59)
+  // 4. Event participation milestone badges (31)
   //
-  // Thresholds: 1, 5, then 10-step from 10 to 570 (57 entries) = 59 total
+  // Thresholds: 1, 5, then 10-step from 10 to 100 (10 entries),
+  //             then 25-step from 125 to 575 (19 entries) = 31 total
   // Rarity grading:
-  //   common:    1, 5, 10          (3 entries)
-  //   rare:      20–100            (9 entries)
-  //   epic:      110–300           (20 entries)
-  //   legendary: 310–570           (27 entries)
+  //   common:    1, 5, 10, 20, 30      (5 entries)
+  //   rare:      40–100                (7 entries)
+  //   epic:      125–300               (8 entries)
+  //   legendary: 325–575               (11 entries)
   //
   // Named entries (stable codes preserved):
   //   event_count_1   → はじめてのイベント
   //   event_count_5   → 常連さん
   //   event_count_10  → イベントマスター
   //   event_count_20  → イベント愛好家
-  //   event_count_50  → イベントの主  (demoted to rare per new grading — kept for stable code)
-  //   event_count_570 → イベント極み  (new legendary peak)
+  //   event_count_50  → イベントの主
+  //   event_count_575 → イベント極み   (new legendary peak)
   //   all others      → イベント X 件
   // -----------------------------------------------------------------------
   const EVENT_COUNT_NAMED: Record<number, string> = {
@@ -283,15 +284,18 @@ function getBadgeRegistry(): BadgeDef[] {
     10: 'イベントマスター',
     20: 'イベント愛好家',
     50: 'イベントの主',
-    570: 'イベント極み'
+    575: 'イベント極み'
   }
   function eventCountRarity(count: number): BadgeRarity {
-    if (count <= 10) return 'common'
+    if (count <= 30) return 'common'
     if (count <= 100) return 'rare'
     if (count <= 300) return 'epic'
     return 'legendary'
   }
-  const EVENT_COUNT_THRESHOLDS: number[] = [1, 5, ...Array.from({ length: 57 }, (_, i) => 10 + i * 10)]
+  const EVENT_COUNT_THRESHOLDS: number[] = [
+    1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450,
+    475, 500, 525, 550, 575
+  ]
   for (const count of EVENT_COUNT_THRESHOLDS) {
     const name = EVENT_COUNT_NAMED[count] ?? `イベント ${count} 件`
     const rarity = eventCountRarity(count)
@@ -500,7 +504,7 @@ export { getBadgeRegistry }
 
 export const BADGE_REGISTRY: readonly BadgeDef[] = Object.freeze(getBadgeRegistry())
 
-// Sanity assertion: registry size must be in [230, 250].
-if (BADGE_REGISTRY.length < 230 || BADGE_REGISTRY.length > 250) {
-  throw new Error(`BADGE_REGISTRY size out of expected range [230, 250]: got ${BADGE_REGISTRY.length}`)
+// Sanity assertion: registry size must be in [200, 220].
+if (BADGE_REGISTRY.length < 200 || BADGE_REGISTRY.length > 220) {
+  throw new Error(`BADGE_REGISTRY size out of expected range [200, 220]: got ${BADGE_REGISTRY.length}`)
 }

@@ -12,9 +12,9 @@ describe('badge registry', () => {
     expect(unique.size).toBe(codes.length)
   })
 
-  test('total badge count is in expected range [230, 250]', () => {
-    expect(BADGE_REGISTRY.length).toBeGreaterThanOrEqual(230)
-    expect(BADGE_REGISTRY.length).toBeLessThanOrEqual(250)
+  test('total badge count is in expected range [200, 220]', () => {
+    expect(BADGE_REGISTRY.length).toBeGreaterThanOrEqual(200)
+    expect(BADGE_REGISTRY.length).toBeLessThanOrEqual(220)
   })
 
   test('every physical store has a visit badge', () => {
@@ -111,11 +111,14 @@ describe('badge registry', () => {
     }
   })
 
-  test('event participation badges (event_count) have 59 entries covering 1, 5, 10–570 in 10-steps', () => {
+  test('event participation badges (event_count) have 31 entries covering mixed-step ladder', () => {
     const eventBadges = BADGE_REGISTRY.filter((b) => b.subCategory === 'event_count')
-    expect(eventBadges).toHaveLength(59)
+    expect(eventBadges).toHaveLength(31)
     const counts = eventBadges.map((b) => b.conditionMeta.count as number).sort((a, b) => a - b)
-    const expected = [1, 5, ...Array.from({ length: 57 }, (_, i) => 10 + i * 10)]
+    const expected = [
+      1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425,
+      450, 475, 500, 525, 550, 575
+    ]
     expect(counts).toEqual(expected)
   })
 
