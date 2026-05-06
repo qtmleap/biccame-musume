@@ -67,6 +67,10 @@ export const BadgeGrid = ({ badges, earnedMap }: BadgeGridProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: DURATION.normal, delay: sectionIdx * 0.06 }}
           >
+            <header className='mb-3 md:mb-4'>
+              <h2 className='text-lg md:text-xl font-bold text-foreground'>{category.label}</h2>
+              <p className='text-xs md:text-sm text-muted-foreground mt-0.5'>{category.description}</p>
+            </header>
             <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-3'>
               {items.map((badge, i) => (
                 <BadgeCard key={badge.code} badge={badge} earnedAt={earnedMap.get(badge.code) ?? null} index={i} />
