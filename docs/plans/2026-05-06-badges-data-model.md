@@ -110,9 +110,25 @@ Date: 2026-05-06
 - 一括投票ボタン専用バッジは作らない。手段を問わず「全員に 1 票」で達成できる「全員推し」に集約 (DB 列を増やさない)
 - 推し愛はサブ軸なので 5 刻みでなく 10 / 100 の対数刻み (累計票数と平仄合わせ)
 
-### 11 周年限定 (将来拡張用、MVP では空)
+### 特別イベント (コラボ・限定企画)
 
-`category='anniversary'` で枠だけ用意。MVP では 0 件、後続でハードコード追加可能に。
+`category='special'` で**店舗単独の達成では出ない、横断的・限定的な条件**のバッジ枠。registry の自動生成対象外で、登場するたびに手書きで registry.ts に追記する運用。
+
+| サブカテゴリ | 用途 | 条件メタ |
+| --- | --- | --- |
+| `special_multi_store_clear` | 指定された複数店舗群**すべて**でイベント clear | `{ storeKeys: StoreKey[] }` |
+| `special_event_id` | 指定された特定 event を clear | `{ eventId: string }` |
+
+**MVP 例 (架空・実装時に整理):**
+
+| 名称 | サブカテゴリ | 条件 | レアリティ |
+| --- | --- | --- | --- |
+| 新宿コラボ達成 | `special_multi_store_clear` | 新宿 3 店舗 (`shinjyuku` / `shintou` / `新宿西口`) すべてで event clear | epic |
+| 渋谷ペア達成 | `special_multi_store_clear` | `shibuhachi` / `shibuto` 両方で event clear | rare |
+| 池袋総力戦 | `special_multi_store_clear` | 池袋地区 6 店舗すべてで event clear | legendary |
+
+- MVP 開始時点では 0 〜 数個。コラボ企画が立つたびに増やしていく
+- 命名はポジティブ語のみ (memory `feedback_positive_naming.md`)
 
 **MVP 合計: 約 182 バッジ** (店舗訪問 80 + イベント参加 5 + 店舗別イベント達成 80 + 投票 17。実店舗数とビッカメ娘数で前後)
 
@@ -125,7 +141,7 @@ Date: 2026-05-06
 model Badge {
   /// バッジコード (例: 'store_visit_akiba', 'area_complete_kanto', 'store_milestone_10')
   code         String   @id
-  /// カテゴリ: 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'anniversary'
+  /// カテゴリ: 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'special'
   category     String
   /// サブカテゴリ: 'visit' | 'area_any' | 'area_complete' | 'count' | 'event_count' | 'event_clear_at_store' | 'event_clear_area_any' | 'event_clear_area_complete' | 'event_clear_count' | 'event_clear_all' | 'vote_total' | 'vote_unique' | 'vote_devotion' | 'vote_all_biccame'
   subCategory  String   @map("sub_category")
@@ -177,13 +193,14 @@ model UserBadge {
 ```ts
 type BadgeDef = {
   code: string
-  category: 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'anniversary'
+  category: 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'special'
   subCategory:
     | 'visit' | 'area_any' | 'area_complete' | 'count'
     | 'event_count'
     | 'event_clear_at_store' | 'event_clear_area_any' | 'event_clear_area_complete' | 'event_clear_count' | 'event_clear_all'
     | 'vote_total' | 'vote_unique' | 'vote_devotion' | 'vote_all_biccame'
-  conditionMeta: { storeKey?: StoreKey; region?: Region; count?: number }
+    | 'special_multi_store_clear' | 'special_event_id'
+  conditionMeta: { storeKey?: StoreKey; region?: Region; count?: number; storeKeys?: StoreKey[]; eventId?: string }
   // ... name/description/hint/rarity/iconName/sortOrder
 }
 ```
@@ -212,6 +229,8 @@ type BadgeDef = {
 | `vote_unique` | `userId, count` | `COUNT(DISTINCT character_id)` ≥ count |
 | `vote_devotion` | `userId, count` | 単一キャラへの票数の最大値 ≥ count |
 | `vote_all_biccame` | `userId` | 現在の `is_biccame_musume=true` 全キャラに各 1 票以上 |
+| `special_multi_store_clear` | `userId, storeKeys` | 指定された全 storeKey で event clear (= AND 条件) |
+| `special_event_id` | `userId, eventId` | その event ID が `UserEvent.completed` に存在 |
 
 各 evaluator は `(env, userId, conditionMeta) => Promise<boolean>` の純粋関数。
 
@@ -222,7 +241,7 @@ type BadgeDef = {
 - `PUT /api/users/me/stores/:storeKey` (status='visited' のとき)
   - 評価対象: `visit[storeKey]`, `area_any[region(storeKey)]`, `area_complete[region(storeKey)]`, `count[*]`, `legendary 全店制覇`
 - `PUT /api/users/me/events/:eventId` (status='completed' のとき)
-  - 評価対象: `event_count[*]`, さらに該当 event の `EventStore` に紐づく全 `storeKey` に対して: `event_clear_at_store[storeKey]`, `event_clear_area_any[region]`, `event_clear_area_complete[region]`, `event_clear_count[*]`, `event_clear_all`
+  - 評価対象: `event_count[*]`, さらに該当 event の `EventStore` に紐づく全 `storeKey` に対して: `event_clear_at_store[storeKey]`, `event_clear_area_any[region]`, `event_clear_area_complete[region]`, `event_clear_count[*]`, `event_clear_all`, `special_event_id[eventId]`, `special_multi_store_clear[該当 storeKey 含むもの全部]`
 - `POST /api/votes` (投票が成立したとき)
   - 評価対象: `vote_total[*]`, `vote_unique[*]`, `vote_devotion[投票先キャラのみ]`, `vote_all_biccame`
 
