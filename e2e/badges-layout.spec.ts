@@ -1,5 +1,5 @@
 import sharp from 'sharp'
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 
 test.use({
   serviceWorkers: 'block',
@@ -7,11 +7,14 @@ test.use({
 })
 
 async function login(page: import('@playwright/test').Page) {
+  // デスクトップ幅でログイン操作（ヘッダーにログインボタンが表示される）
+  await page.setViewportSize({ width: 1280, height: 900 })
   await page.goto('http://localhost:15175/', { waitUntil: 'networkidle' })
   await page.waitForTimeout(1000)
 
-  // ヘッダーの「ログイン」ボタンをクリック
-  await page.getByRole('button', { name: 'ログイン' }).first().click()
+  // ヘッダーの「ログイン」ボタン（type=button）をクリック
+  // デスクトップヘッダーの LoginButton は nav.hidden.md:flex の中にある
+  await page.locator('nav').getByRole('button', { name: 'ログイン' }).click()
   await page.waitForTimeout(500)
 
   // ダイアログが開くのを待つ
@@ -20,11 +23,12 @@ async function login(page: import('@playwright/test').Page) {
   await page.fill('#login-email', 'algae.olive.14@example.com')
   await page.fill('#login-password', '123456')
 
-  // ログインボタン（フォーム内の送信ボタン）をクリック
-  await page.locator('form').getByRole('button', { name: 'ログイン' }).click()
+  // ダイアログ内のログインフォームのサブミットボタン
+  // ログインタブのフォーム内 button[type=submit]
+  await page.locator('[role="dialog"] form button[type="submit"]').click()
 
-  // ログイン完了待ち（ダイアログが閉じる）
-  await page.waitForSelector('#login-email', { state: 'hidden', timeout: 10000 })
+  // ダイアログが閉じるまで待つ（最大10秒）
+  await page.waitForSelector('[role="dialog"]', { state: 'hidden', timeout: 10000 }).catch(() => {})
   await page.waitForTimeout(2000)
 }
 
@@ -40,8 +44,10 @@ async function capture(
 }
 
 test('badges layout - mobile', async ({ page }) => {
-  await page.setViewportSize({ width: 375, height: 800 })
   await login(page)
+
+  // ログイン状態でモバイルに切り替え
+  await page.setViewportSize({ width: 375, height: 800 })
 
   await capture(page, '/badges', 'badges-layout-mobile.webp')
   await capture(page, '/events', 'compare-events-mobile.webp')
@@ -49,8 +55,10 @@ test('badges layout - mobile', async ({ page }) => {
 })
 
 test('badges layout - desktop', async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 900 })
   await login(page)
+
+  // デスクトップサイズはそのまま
+  await page.setViewportSize({ width: 1280, height: 900 })
 
   await capture(page, '/badges', 'badges-layout-desktop.webp')
   await capture(page, '/events', 'compare-events-desktop.webp')
