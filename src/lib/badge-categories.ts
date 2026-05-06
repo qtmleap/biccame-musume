@@ -30,7 +30,12 @@ export const BADGE_SUPER_CATEGORY_DEFS: BadgeSuperCategoryDef[] = [
     label: '訪問',
     description: '店舗やエリアを巡って積み重ねよう',
     accent: 'category-limited-card-solid',
-    includes: ['store', 'area', 'milestone']
+    includes: ['store', 'area', 'milestone'],
+    subSections: [
+      { key: 'debut_complete', label: 'デビュー・コンプ', categories: ['area'] },
+      { key: 'per_store', label: '個別店舗', categories: ['store'] },
+      { key: 'milestone', label: '累計マイルストーン', categories: ['milestone'] }
+    ]
   },
   {
     key: 'event_participation',
