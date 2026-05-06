@@ -30,7 +30,16 @@ export const BadgeGrid = ({ badges, earnedMap }: BadgeGridProps) => {
   return (
     <div className='space-y-8'>
       {BADGE_SUPER_CATEGORY_DEFS.map((category, sectionIdx) => {
-        const items = badges.filter((b) => category.includes.includes(b.category))
+        const visible = badges.filter((b) => {
+          if (!category.includes.includes(b.category)) return false
+          if (earnedMap.has(b.code)) return true
+          return b.rarity === 'common'
+        })
+        const items = visible.toSorted((a, b) => {
+          const aEarned = earnedMap.has(a.code) ? 0 : 1
+          const bEarned = earnedMap.has(b.code) ? 0 : 1
+          return aEarned - bEarned
+        })
         if (items.length === 0) return null
 
         return (
