@@ -103,36 +103,37 @@ Date: 2026-05-06
 - 例: 訪問→「秋葉原店訪問」、イベント達成→「秋葉原店制覇」
 - 例: 訪問→「関東コンプ」、イベント達成→「関東制覇」
 
-### 投票系 (23 個)
+### 投票系 (20 個)
 
-「ちまちま投票してれば自然に届く」「強要しない」がコンセプト。**ストリーク (連続 X 日) や時限制限は採用しない**。すべて累計・多様性・愛着の積み上げ系。
+「ちまちま投票してれば自然に届く」「強要しない」がコンセプト。**ストリーク (連続 X 日) や時限制限は採用しない**。累計票数の一軸のみ。
 
 | サブカテゴリ | 名称 | 条件 | レアリティ |
 | --- | --- | --- | --- |
 | 累計票数 | 初投票 | 累計 1 票 | common |
-| 累計票数 | 投票熟練 | 累計 100 票 | common |
-| 累計票数 | 200 票〜300 票 | 100 刻み (2 段) | rare |
-| 累計票数 | 400 票〜700 票 | 100 刻み (4 段、`票職人` を 500 票枠に含む) | epic |
-| 累計票数 | 800 票〜1000 票 | 100 刻み (3 段、`投票名人` を 1000 票枠に) | legendary |
-| 多様性 | 推し 5 人 | 異なる 5 キャラに投票 | common |
-| 多様性 | 推し 10 人 | 異なる 10 キャラに投票 | common |
-| 多様性 | 推し 15 人 | 異なる 15 キャラに投票 | rare |
-| 多様性 | 推し 20 人 | 異なる 20 キャラに投票 | rare |
-| 多様性 | 推し 25 人 | 異なる 25 キャラに投票 | rare |
-| 多様性 | 推し 30 人 | 異なる 30 キャラに投票 | epic |
-| 多様性 | 推し 35 人 | 異なる 35 キャラに投票 | epic |
-| 多様性 | 推し 40 人 | 異なる 40 キャラに投票 | epic |
-| 多様性 | 推し 45 人 | 異なる 45 キャラに投票 | epic |
-| 多様性 | 全員推し | ビッカメ娘全キャラに 1 票以上 (現時点 50 人) | legendary |
-| 推し愛 | 推し決定 | 同一キャラに累計 10 票 | common |
-| 推し愛 | 推し一筋 | 同一キャラに累計 100 票 | epic |
+| 累計票数 | 投票 10 票 | 累計 10 票 | common |
+| 累計票数 | 投票 20 票 | 累計 20 票 | common |
+| 累計票数 | 投票 30 票 | 累計 30 票 | common |
+| 累計票数 | 投票 40 票 | 累計 40 票 | common |
+| 累計票数 | 投票 50 票 | 累計 50 票 | common |
+| 累計票数 | 投票 60 票 | 累計 60 票 | rare |
+| 累計票数 | 投票 70 票 | 累計 70 票 | rare |
+| 累計票数 | 投票 80 票 | 累計 80 票 | rare |
+| 累計票数 | 投票 90 票 | 累計 90 票 | rare |
+| 累計票数 | 投票熟練 | 累計 100 票 | rare |
+| 累計票数 | 投票 200 票 | 累計 200 票 | epic |
+| 累計票数 | 投票 300 票 | 累計 300 票 | epic |
+| 累計票数 | 投票 400 票 | 累計 400 票 | epic |
+| 累計票数 | 票職人 | 累計 500 票 | epic |
+| 累計票数 | 投票 600 票 | 累計 600 票 | epic |
+| 累計票数 | 投票 700 票 | 累計 700 票 | legendary |
+| 累計票数 | 投票 800 票 | 累計 800 票 | legendary |
+| 累計票数 | 投票 900 票 | 累計 900 票 | legendary |
+| 累計票数 | 投票名人 | 累計 1000 票 | legendary |
 
 **設計メモ:**
-- 累計票数は 1 + 100 刻み (100〜1000) の 11 段構成 (event_count と平仄を合わせるため)
-- 多様性は **5 刻みルール** (店舗マイルストーンと同じ思想) を適用。50 人なら 5/10/.../45 (9 段) + 全員推し (50, legendary)。キャラ追加で 51 人になれば 5/10/.../50 (10 段) + 全員推し 51
-- 「全員推し」は legendary だがあくまで自然な配票で届く範囲。"全員" の母集団は「現時点で `is_biccame_musume=true` のキャラ」に対してのみ判定
-- 一括投票ボタン専用バッジは作らない。手段を問わず「全員に 1 票」で達成できる「全員推し」に集約 (DB 列を増やさない)
-- 推し愛はサブ軸なので 5 刻みでなく 10 / 100 の対数刻み (累計票数と平仄合わせ)
+- 累計票数のみの一軸構成 (20 段)。1〜50 は 10 刻み (common)、60〜100 は 10 刻み (rare)、200〜600 は 100 刻み (epic)、700〜1000 は 100 刻み (legendary)
+- 名前付きの特別枠: 初投票 (1)、投票熟練 (100)、票職人 (500)、投票名人 (1000)
+- 多様性軸 (`vote_unique`) と推し愛軸 (`vote_devotion`) は廃止。cumulative 票数だけで十分シンプル
 
 ### 特別イベント (コラボ・限定企画)
 
@@ -173,7 +174,7 @@ Date: 2026-05-06
 - MVP 開始時点では 0 個 (admin が後追いで作成)
 - 命名はポジティブ語のみ (memory `feedback_positive_naming.md`)
 
-**MVP 合計: 216 バッジ** (店舗訪問 50 + エリア訪問 20 + マイルストーン 22 [visit 11 + event_clear 11] + イベント参加 31 + 各店舗イベント参加 50 + エリアイベント参加 20 + 投票 23。実店舗数とビッカメ娘数で前後)
+**MVP 合計: 213 バッジ** (店舗訪問 50 + エリア訪問 20 + マイルストーン 22 [visit 11 + event_clear 11] + イベント参加 31 + 各店舗イベント参加 50 + エリアイベント参加 20 + 投票 20。実店舗数で前後)
 
 ## データモデル
 
@@ -186,7 +187,7 @@ model Badge {
   code         String   @id
   /// カテゴリ: 'store' | 'area' | 'milestone' | 'event' | 'event_clear_store' | 'event_clear_area' | 'vote' | 'special'
   category     String
-  /// サブカテゴリ: 'visit' | 'area_any' | 'area_complete' | 'count' | 'event_count' | 'event_clear_at_store' | 'event_clear_area_any' | 'event_clear_area_complete' | 'event_clear_count' | 'event_clear_all' | 'vote_total' | 'vote_unique' | 'vote_devotion' | 'vote_all_biccame'
+  /// サブカテゴリ: 'visit' | 'area_any' | 'area_complete' | 'count' | 'event_count' | 'event_clear_at_store' | 'event_clear_area_any' | 'event_clear_area_complete' | 'event_clear_count' | 'event_clear_all' | 'vote_total'
   subCategory  String   @map("sub_category")
   /// 表示名
   name         String
@@ -244,7 +245,7 @@ type BadgeDef = {
     | 'event_count'
     | 'event_clear_at_store' | 'event_clear_area_any' | 'event_clear_area_complete' | 'event_clear_count' | 'event_clear_all'
     | 'all_areas_any_visit' | 'all_areas_any_event_clear'
-    | 'vote_total' | 'vote_unique' | 'vote_devotion' | 'vote_all_biccame'
+    | 'vote_total'
     | 'special_multi_store_clear' | 'special_event_id'
   conditionMeta: { storeKey?: StoreKey; region?: Region; count?: number; storeKeys?: StoreKey[]; eventId?: string }
   // ... name/description/hint/rarity/iconName/sortOrder
@@ -274,9 +275,6 @@ type BadgeDef = {
 | `all_areas_any_visit` | `userId` | 全 10 BadgeArea でそれぞれ 1 件以上 visited |
 | `all_areas_any_event_clear` | `userId` | 全 10 BadgeArea でそれぞれ 1 件以上 event clear |
 | `vote_total` | `userId, count` | `Vote` テーブルの行数 ≥ count |
-| `vote_unique` | `userId, count` | `COUNT(DISTINCT character_id)` ≥ count |
-| `vote_devotion` | `userId, count` | 単一キャラへの票数の最大値 ≥ count |
-| `vote_all_biccame` | `userId` | 現在の `is_biccame_musume=true` 全キャラに各 1 票以上 |
 | `special_multi_store_clear` | `userId, storeKeys` | 指定された全 storeKey で event clear (= AND 条件) |
 | `special_event_id` | `userId, eventId` | その event ID が `UserEvent.completed` に存在 |
 
