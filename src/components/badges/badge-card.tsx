@@ -64,24 +64,13 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
         whileTap={{ scale: 0.97 }}
         transition={STICKER_HOVER_TRANSITION}
         className={cn(
-          'relative aspect-square rounded-2xl overflow-hidden',
-          'flex flex-col items-center justify-center gap-1.5 p-3',
+          'relative rounded-2xl overflow-hidden',
+          'flex flex-col items-center justify-center gap-1 px-2 py-3',
           earned ? 'bg-card' : 'bg-muted/40',
           style.ring,
           earned && style.glow
         )}
       >
-        {earned && (
-          <span
-            className={cn(
-              'absolute top-1.5 right-1.5 text-[9px] font-numeric font-bold tracking-widest px-1.5 py-0.5 rounded-full',
-              style.chip
-            )}
-          >
-            {style.label}
-          </span>
-        )}
-
         <div
           className={cn(
             'relative flex items-center justify-center rounded-full size-14 md:size-16',
@@ -114,9 +103,11 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
           >
             {earned ? badge.name : '？？？'}
           </div>
-          <div className='mt-0.5 text-[10px] md:text-[11px] text-muted-foreground line-clamp-2 min-h-[2.4em]'>
-            {earned ? badge.description : badge.hint}
-          </div>
+          {!earned && (
+            <div className='mt-0.5 text-[10px] md:text-[11px] text-muted-foreground line-clamp-2 min-h-[2.4em]'>
+              {badge.hint}
+            </div>
+          )}
         </div>
 
         {earned && earnedAt && (
