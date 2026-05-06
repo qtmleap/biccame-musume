@@ -6,12 +6,7 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
-import {
-  DATE_LABELS,
-  EVENT_LIST_ITEM_LABELS,
-  EVENT_STATUS_LABELS,
-  STORE_NAME_LABELS
-} from '@/locales/app.content'
+import { DATE_LABELS, EVENT_LIST_ITEM_LABELS, EVENT_STATUS_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { CATEGORY_WITH_ICON } from '@/locales/component'
 import type { Event, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'

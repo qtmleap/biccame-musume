@@ -36,7 +36,9 @@ describe('badge registry', () => {
       expectedSteps.push(i)
     }
 
-    const milestoneBadges = BADGE_REGISTRY.filter((b) => b.subCategory === 'count' && b.code !== 'milestone_visit_count_all')
+    const milestoneBadges = BADGE_REGISTRY.filter(
+      (b) => b.subCategory === 'count' && b.code !== 'milestone_visit_count_all'
+    )
     const actualCounts = milestoneBadges.map((b) => b.conditionMeta.count as number).sort((a, b) => a - b)
 
     expect(actualCounts).toEqual(expectedSteps)
