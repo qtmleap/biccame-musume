@@ -93,17 +93,26 @@ type CalendarMonthDotsProps = {
  */
 export const CalendarMonthDots = ({ selectedMonth, onSelectMonth }: CalendarMonthDotsProps) => {
   return (
-    <div className='flex justify-center gap-1.5 md:hidden'>
+    <div className='flex justify-center md:hidden'>
       {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
         <button
           key={month}
           type='button'
           onClick={() => onSelectMonth(month)}
-          className={`w-2.5 h-2.5 rounded-full transition-all ${
-            selectedMonth === month ? 'bg-primary scale-125' : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
-          }`}
+          className='inline-flex items-center justify-center w-9 h-11 group'
           aria-label={`${month}月に移動`}
-        />
+          aria-pressed={selectedMonth === month}
+        >
+          <span
+            aria-hidden='true'
+            className={cn(
+              'block w-2.5 h-2.5 rounded-full transition-all',
+              selectedMonth === month
+                ? 'bg-primary scale-125'
+                : 'bg-muted-foreground/30 group-hover:bg-muted-foreground/50'
+            )}
+          />
+        </button>
       ))}
     </div>
   )
