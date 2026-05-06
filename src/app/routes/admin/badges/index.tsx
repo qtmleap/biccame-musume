@@ -749,7 +749,7 @@ const RecalculateBadgesButton = () => {
           {recalc.isPending ? '再評価中...' : 'バッジ再評価'}
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className='rounded-3xl shadow-2xl border-transparent'>
+      <AlertDialogContent className='rounded-2xl shadow-2xl border-transparent'>
         <AlertDialogHeader>
           <AlertDialogTitle>全ユーザーのバッジを再評価しますか？</AlertDialogTitle>
           <AlertDialogDescription>
