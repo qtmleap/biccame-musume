@@ -50,145 +50,143 @@ export const Header = ({ className }: HeaderProps) => {
   }
 
   return (
-    <>
-      <header
-        className={cn(
-          'sticky top-0 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
-          className
-        )}
-      >
-        <div className='mx-auto px-4 md:px-8 max-w-6xl'>
-          <div className='flex items-center justify-between h-12 md:h-14'>
-            {/* ロゴ */}
-            <Link
-              to='/'
-              className='flex items-center font-bold text-lg md:text-xl tracking-tight hover:text-primary transition-colors'
+    <header
+      className={cn(
+        'sticky top-0 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
+        className
+      )}
+    >
+      <div className='mx-auto px-4 md:px-8 max-w-6xl'>
+        <div className='flex items-center justify-between h-12 md:h-14'>
+          {/* ロゴ */}
+          <Link
+            to='/'
+            className='flex items-center font-bold text-lg md:text-xl tracking-tight hover:text-primary transition-colors'
+          >
+            ビッカメ娘
+          </Link>
+
+          {/* デスクトップナビゲーション */}
+          <nav className='hidden md:flex items-center gap-6'>
+            {visibleLinks.map((link) => {
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className='text-sm font-medium transition-colors text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
+            <LoginButton />
+          </nav>
+
+          {/* モバイル: メニュー */}
+          <div className='md:hidden flex items-center'>
+            <Button
+              variant='ghost'
+              size='icon'
+              className='h-12 w-12 flex items-center justify-center border border-transparent'
+              onClick={toggleMenu}
+              aria-label={mobileMenuOpen ? NAVIGATION_LABELS.closeMenu : NAVIGATION_LABELS.openMenu}
             >
-              ビッカメ娘
-            </Link>
-
-            {/* デスクトップナビゲーション */}
-            <nav className='hidden md:flex items-center gap-6'>
-              {visibleLinks.map((link) => {
-                return (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    className='text-sm font-medium transition-colors text-muted-foreground hover:text-foreground hover:underline decoration-2 decoration-primary underline-offset-4'
-                  >
-                    {link.label}
-                  </Link>
-                )
-              })}
-              <LoginButton />
-            </nav>
-
-            {/* モバイル: メニュー */}
-            <div className='md:hidden flex items-center'>
-              <Button
-                variant='ghost'
-                size='icon'
-                className='h-12 w-12 flex items-center justify-center border border-transparent'
-                onClick={toggleMenu}
-                aria-label={mobileMenuOpen ? NAVIGATION_LABELS.closeMenu : NAVIGATION_LABELS.openMenu}
-              >
-                <div className='relative w-6 h-6 flex items-center justify-center'>
-                  <motion.div
-                    initial={false}
-                    animate={{
-                      opacity: mobileMenuOpen ? 0 : 1,
-                      rotate: mobileMenuOpen ? 90 : 0,
-                      scale: mobileMenuOpen ? 0.5 : 1
-                    }}
-                    transition={{ duration: DURATION.fast }}
-                    className='absolute'
-                  >
-                    <Menu />
-                  </motion.div>
-                  <motion.div
-                    initial={false}
-                    animate={{
-                      opacity: mobileMenuOpen ? 1 : 0,
-                      rotate: mobileMenuOpen ? 0 : -90,
-                      scale: mobileMenuOpen ? 1 : 0.5
-                    }}
-                    transition={{ duration: DURATION.fast }}
-                    className='absolute'
-                  >
-                    <X />
-                  </motion.div>
-                </div>
-              </Button>
-            </div>
+              <div className='relative w-6 h-6 flex items-center justify-center'>
+                <motion.div
+                  initial={false}
+                  animate={{
+                    opacity: mobileMenuOpen ? 0 : 1,
+                    rotate: mobileMenuOpen ? 90 : 0,
+                    scale: mobileMenuOpen ? 0.5 : 1
+                  }}
+                  transition={{ duration: DURATION.fast }}
+                  className='absolute'
+                >
+                  <Menu />
+                </motion.div>
+                <motion.div
+                  initial={false}
+                  animate={{
+                    opacity: mobileMenuOpen ? 1 : 0,
+                    rotate: mobileMenuOpen ? 0 : -90,
+                    scale: mobileMenuOpen ? 1 : 0.5
+                  }}
+                  transition={{ duration: DURATION.fast }}
+                  className='absolute'
+                >
+                  <X />
+                </motion.div>
+              </div>
+            </Button>
           </div>
         </div>
+      </div>
 
-        {/* モバイルナビゲーション(オーバーレイ) */}
-        {typeof document !== 'undefined' &&
-          createPortal(
-            <AnimatePresence>
-              {mobileMenuOpen && (
-                <>
-                  {/* 背景オーバーレイ */}
-                  <motion.button
-                    type='button'
-                    className='fixed inset-0 backdrop-blur-xs md:hidden z-40'
-                    onClick={closeMenu}
-                    aria-label={NAVIGATION_LABELS.closeMenu}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: DURATION.fast }}
-                  />
+      {/* モバイルナビゲーション(オーバーレイ) */}
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <>
+                {/* 背景オーバーレイ */}
+                <motion.button
+                  type='button'
+                  className='fixed inset-0 backdrop-blur-xs md:hidden z-40'
+                  onClick={closeMenu}
+                  aria-label={NAVIGATION_LABELS.closeMenu}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: DURATION.fast }}
+                />
 
-                  {/* メニュー本体 */}
-                  <motion.nav
-                    className='fixed top-12 left-0 right-0 md:hidden bg-background border-b border-border shadow-lg z-50'
-                    initial={{ y: -16, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -16, opacity: 0 }}
-                    transition={{ duration: DURATION.fast, ease: 'easeOut' }}
-                  >
-                    <div className='mx-auto px-4 py-4'>
-                      <div className='flex flex-col gap-1'>
-                        {visibleLinks.map((link, index) => {
-                          const Icon = link.icon
-                          return (
-                            <motion.div
-                              key={link.to}
-                              initial={{ x: -16, opacity: 0 }}
-                              animate={{ x: 0, opacity: 1 }}
-                              exit={{ x: -16, opacity: 0 }}
-                              transition={{ duration: DURATION.fast, delay: index * 0.05, ease: 'easeOut' }}
+                {/* メニュー本体 */}
+                <motion.nav
+                  className='fixed top-12 left-0 right-0 md:hidden bg-background border-b border-border shadow-lg z-50'
+                  initial={{ y: -16, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -16, opacity: 0 }}
+                  transition={{ duration: DURATION.fast, ease: 'easeOut' }}
+                >
+                  <div className='mx-auto px-4 py-4'>
+                    <div className='flex flex-col gap-1'>
+                      {visibleLinks.map((link, index) => {
+                        const Icon = link.icon
+                        return (
+                          <motion.div
+                            key={link.to}
+                            initial={{ x: -16, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: -16, opacity: 0 }}
+                            transition={{ duration: DURATION.fast, delay: index * 0.05, ease: 'easeOut' }}
+                          >
+                            <Link
+                              to={link.to}
+                              onClick={closeMenu}
+                              className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
                             >
-                              <Link
-                                to={link.to}
-                                onClick={closeMenu}
-                                className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
-                              >
-                                <Icon className='w-6 h-6' />
-                                {link.label}
-                              </Link>
-                            </motion.div>
-                          )
-                        })}
-                        <motion.div
-                          initial={{ x: -16, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          exit={{ x: -16, opacity: 0 }}
-                          transition={{ duration: DURATION.fast, delay: visibleLinks.length * 0.05, ease: 'easeOut' }}
-                        >
-                          <LoginButton variant='menu' onClose={closeMenu} />
-                        </motion.div>
-                      </div>
+                              <Icon className='w-6 h-6' />
+                              {link.label}
+                            </Link>
+                          </motion.div>
+                        )
+                      })}
+                      <motion.div
+                        initial={{ x: -16, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: -16, opacity: 0 }}
+                        transition={{ duration: DURATION.fast, delay: visibleLinks.length * 0.05, ease: 'easeOut' }}
+                      >
+                        <LoginButton variant='menu' onClose={closeMenu} />
+                      </motion.div>
                     </div>
-                  </motion.nav>
-                </>
-              )}
-            </AnimatePresence>,
-            document.body
-          )}
-      </header>
-    </>
+                  </div>
+                </motion.nav>
+              </>
+            )}
+          </AnimatePresence>,
+          document.body
+        )}
+    </header>
   )
 }
