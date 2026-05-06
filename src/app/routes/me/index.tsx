@@ -1,5 +1,5 @@
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, Award, Heart, MapPin } from 'lucide-react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { Award, Heart, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { toast } from 'sonner'
@@ -71,7 +71,6 @@ const EventSection = ({
  */
 const MyPageContent = () => {
   const { user, logout } = useAuth()
-  const router = useRouter()
   const { stores, interestedEvents, completedEvents } = useUserActivity()
   const { data: allEvents } = useEvents()
 
@@ -95,19 +94,6 @@ const MyPageContent = () => {
     <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div>
-          {/* 戻るボタン */}
-          <div className='pb-2'>
-            <Button
-              variant='ghost'
-              size='sm'
-              className='text-muted-foreground hover:text-foreground -ml-2 border border-transparent'
-              onClick={() => router.history.back()}
-            >
-              <ArrowLeft className='h-4 w-4 mr-1' />
-              戻る
-            </Button>
-          </div>
-
           {/* プロフィールセクション */}
           <div className='mb-4 flex items-end justify-between gap-4'>
             <motion.div
