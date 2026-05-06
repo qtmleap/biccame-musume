@@ -8,7 +8,7 @@ import type { Badge, BadgeCategory, BadgeConditionMeta } from '@/schemas/badge.d
 import type { StoreKey } from '@/schemas/store.dto'
 
 /** セクションごとに表示する未取得バッジの最大数（多すぎ防止） */
-const MAX_UNEARNED_PER_SECTION = 10
+const MAX_UNEARNED_PER_SECTION = 3
 
 const isClosedStoreBadge = (badge: Badge): boolean => {
   try {
