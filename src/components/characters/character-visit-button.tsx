@@ -66,8 +66,8 @@ export const CharacterVisitButton = ({ storeKey, storeName, hasStore = true }: C
       className={cn(
         'h-8 w-8 p-0 rounded-full',
         visited
-          ? 'border-brand/60 bg-brand/10 text-brand disabled:opacity-100'
-          : 'border-muted-foreground/30 text-muted-foreground hover:text-brand hover:border-brand/40'
+          ? 'border-brand/60 bg-brand/10 text-brand disabled:opacity-100 disabled:cursor-not-allowed hover:bg-brand/10 hover:text-brand'
+          : 'border-muted-foreground/30 text-muted-foreground hover:bg-brand/10 hover:text-brand hover:border-brand/40'
       )}
     >
       <motion.span
