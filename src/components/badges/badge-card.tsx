@@ -1,18 +1,17 @@
 import { Lock } from 'lucide-react'
 import { motion } from 'motion/react'
-import type { Badge, BadgeRarity } from '@/data/badges.mock'
+import { getBadgeIcon } from '@/lib/badge-icons'
 import { DURATION } from '@/lib/motion'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
+import type { Badge, BadgeRarity } from '@/schemas/badge.dto'
 
 type BadgeCardProps = {
   badge: Badge
+  earnedAt: string | null
   index: number
 }
 
-/**
- * 希少度ごとの装飾クラス
- */
 const RARITY_STYLES: Record<BadgeRarity, { ring: string; glow: string; label: string; chip: string }> = {
   common: {
     ring: 'ring-1 ring-border',
@@ -40,12 +39,10 @@ const RARITY_STYLES: Record<BadgeRarity, { ring: string; glow: string; label: st
   }
 }
 
-/**
- * バッジカード（コンプガチャ風）
- */
-export const BadgeCard = ({ badge, index }: BadgeCardProps) => {
-  const { earned, icon: Icon, rarity } = badge
-  const style = RARITY_STYLES[rarity]
+export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
+  const earned = earnedAt !== null
+  const Icon = getBadgeIcon(badge.icon_name)
+  const style = RARITY_STYLES[badge.rarity]
   const rotation = earned ? getStickerRotation(index) : 0
 
   return (
@@ -74,7 +71,6 @@ export const BadgeCard = ({ badge, index }: BadgeCardProps) => {
           earned && style.glow
         )}
       >
-        {/* 希少度チップ（獲得済みのみ） */}
         {earned && (
           <span
             className={cn(
@@ -86,7 +82,6 @@ export const BadgeCard = ({ badge, index }: BadgeCardProps) => {
           </span>
         )}
 
-        {/* アイコン or シルエット */}
         <div
           className={cn(
             'relative flex items-center justify-center rounded-full size-14 md:size-16',
@@ -110,7 +105,6 @@ export const BadgeCard = ({ badge, index }: BadgeCardProps) => {
           )}
         </div>
 
-        {/* 名称 */}
         <div className='mt-1 text-center px-1 leading-tight'>
           <div
             className={cn(
@@ -125,9 +119,10 @@ export const BadgeCard = ({ badge, index }: BadgeCardProps) => {
           </div>
         </div>
 
-        {/* 取得日 */}
-        {earned && badge.earnedAt && (
-          <div className='mt-0.5 text-[9px] font-numeric tabular-nums text-muted-foreground'>{badge.earnedAt}</div>
+        {earned && earnedAt && (
+          <div className='mt-0.5 text-[9px] font-numeric tabular-nums text-muted-foreground'>
+            {earnedAt.slice(0, 10)}
+          </div>
         )}
       </motion.div>
     </motion.div>
