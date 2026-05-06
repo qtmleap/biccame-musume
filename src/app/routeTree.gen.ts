@@ -28,6 +28,7 @@ import { Route as MeCompletedIndexRouteImport } from './routes/me/completed/inde
 import { Route as EventsUuidIndexRouteImport } from './routes/events/$uuid/index'
 import { Route as CharactersIdIndexRouteImport } from './routes/characters/$id/index'
 import { Route as AdminEventsIndexRouteImport } from './routes/admin/events/index'
+import { Route as AdminBadgesIndexRouteImport } from './routes/admin/badges/index'
 import { Route as AdminEventsUuidIndexRouteImport } from './routes/admin/events/$uuid/index'
 
 const AdminRoute = AdminRouteImport.update({
@@ -125,6 +126,11 @@ const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
   path: '/events/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBadgesIndexRoute = AdminBadgesIndexRouteImport.update({
+  id: '/badges/',
+  path: '/badges/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminEventsUuidIndexRoute = AdminEventsUuidIndexRouteImport.update({
   id: '/events/$uuid/',
   path: '/events/$uuid/',
@@ -145,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/me/': typeof MeIndexRoute
   '/ranking/': typeof RankingIndexRoute
   '/route/': typeof RouteIndexRoute
+  '/admin/badges/': typeof AdminBadgesIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
@@ -166,6 +173,7 @@ export interface FileRoutesByTo {
   '/me': typeof MeIndexRoute
   '/ranking': typeof RankingIndexRoute
   '/route': typeof RouteIndexRoute
+  '/admin/badges': typeof AdminBadgesIndexRoute
   '/admin/events': typeof AdminEventsIndexRoute
   '/characters/$id': typeof CharactersIdIndexRoute
   '/events/$uuid': typeof EventsUuidIndexRoute
@@ -189,6 +197,7 @@ export interface FileRoutesById {
   '/me/': typeof MeIndexRoute
   '/ranking/': typeof RankingIndexRoute
   '/route/': typeof RouteIndexRoute
+  '/admin/badges/': typeof AdminBadgesIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
@@ -213,6 +222,7 @@ export interface FileRouteTypes {
     | '/me/'
     | '/ranking/'
     | '/route/'
+    | '/admin/badges/'
     | '/admin/events/'
     | '/characters/$id/'
     | '/events/$uuid/'
@@ -234,6 +244,7 @@ export interface FileRouteTypes {
     | '/me'
     | '/ranking'
     | '/route'
+    | '/admin/badges'
     | '/admin/events'
     | '/characters/$id'
     | '/events/$uuid'
@@ -256,6 +267,7 @@ export interface FileRouteTypes {
     | '/me/'
     | '/ranking/'
     | '/route/'
+    | '/admin/badges/'
     | '/admin/events/'
     | '/characters/$id/'
     | '/events/$uuid/'
@@ -420,6 +432,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEventsIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/badges/': {
+      id: '/admin/badges/'
+      path: '/badges'
+      fullPath: '/admin/badges/'
+      preLoaderRoute: typeof AdminBadgesIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/events/$uuid/': {
       id: '/admin/events/$uuid/'
       path: '/events/$uuid'
@@ -432,12 +451,14 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminBadgesIndexRoute: typeof AdminBadgesIndexRoute
   AdminEventsIndexRoute: typeof AdminEventsIndexRoute
   AdminEventsUuidIndexRoute: typeof AdminEventsUuidIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
+  AdminBadgesIndexRoute: AdminBadgesIndexRoute,
   AdminEventsIndexRoute: AdminEventsIndexRoute,
   AdminEventsUuidIndexRoute: AdminEventsUuidIndexRoute,
 }
