@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { FavoriteBurst } from '@/components/characters/favorite-burst'
 import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useAuth } from '@/hooks/use-auth'
 import { useFavorites } from '@/hooks/use-favorites'
 import { cn } from '@/lib/utils'
@@ -59,29 +60,34 @@ export const CharacterFavoriteButton = ({
 
   return (
     <>
-      <Button
-        size='sm'
-        variant='ghost'
-        onClick={handleToggle}
-        aria-pressed={favored}
-        aria-label={favored ? 'お気に入り解除' : 'お気に入り登録'}
-        disabled={pending}
-        className={cn(
-          'h-8 w-8 p-0 rounded-full',
-          favored
-            ? 'bg-favorite text-favorite-foreground hover:bg-favorite/90 hover:text-favorite-foreground'
-            : 'text-muted-foreground hover:bg-favorite/10 hover:text-favorite'
-        )}
-      >
-        <motion.span
-          initial={false}
-          animate={favored ? { scale: [1, 1.3, 1] } : { scale: 1 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
-          className='inline-flex items-center justify-center'
-        >
-          <Heart className={cn('h-4 w-4', favored && 'fill-current')} />
-        </motion.span>
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            size='sm'
+            variant='ghost'
+            onClick={handleToggle}
+            aria-pressed={favored}
+            aria-label={favored ? 'お気に入り解除' : 'お気に入り登録'}
+            disabled={pending}
+            className={cn(
+              'h-8 w-8 p-0 rounded-full',
+              favored
+                ? 'bg-favorite text-favorite-foreground hover:bg-favorite/90 hover:text-favorite-foreground'
+                : 'text-muted-foreground hover:bg-favorite/10 hover:text-favorite'
+            )}
+          >
+            <motion.span
+              initial={false}
+              animate={favored ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              className='inline-flex items-center justify-center'
+            >
+              <Heart className={cn('h-4 w-4', favored && 'fill-current')} />
+            </motion.span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>{favored ? '推し解除' : '推しに登録'}</TooltipContent>
+      </Tooltip>
       <FavoriteBurst triggerKey={burstKey} />
     </>
   )
