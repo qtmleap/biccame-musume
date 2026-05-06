@@ -68,7 +68,9 @@ export const CharacterFavoriteButton = ({
         disabled={pending}
         className={cn(
           'h-8 w-8 p-0 rounded-full',
-          favored ? 'bg-favorite/10 text-favorite hover:bg-favorite/15' : 'text-muted-foreground hover:text-favorite'
+          favored
+            ? 'bg-favorite text-favorite-foreground hover:bg-favorite/90'
+            : 'text-muted-foreground hover:text-favorite'
         )}
       >
         <motion.span
@@ -77,7 +79,7 @@ export const CharacterFavoriteButton = ({
           transition={{ duration: 0.35, ease: 'easeOut' }}
           className='inline-flex items-center justify-center'
         >
-          <Heart className={cn('h-4 w-4', favored && 'fill-favorite/40')} />
+          <Heart className={cn('h-4 w-4', favored && 'fill-current')} />
         </motion.span>
       </Button>
       <FavoriteBurst triggerKey={burstKey} />
