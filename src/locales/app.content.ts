@@ -277,7 +277,79 @@ const appContent = {
       },
       earnedCount: '獲得 {count}人',
       hidden: '非表示',
-      special: '特別'
+      special: '特別',
+      template: {
+        storeVisit: {
+          name: '{storeName}訪問',
+          description: '{storeName}を訪問しました',
+          hint: '{storeName}を訪問するとゲットできます'
+        },
+        areaAny: {
+          name: '{areaLabel}デビュー',
+          description: '{areaLabel}のいずれかの店舗を訪問しました',
+          hint: '{areaLabel}の店舗を 1 店以上訪問するとゲットできます'
+        },
+        areaComplete: {
+          name: '{areaLabel}コンプ',
+          description: '{areaLabel}の全 {storeCount} 店舗を訪問しました',
+          hint: '{areaLabel}の全店舗を訪問するとゲットできます'
+        },
+        visitMilestone: {
+          name: '{count} 店訪問',
+          description: '累計 {count} 店舗を訪問しました',
+          hint: '{count} 店舗を訪問するとゲットできます'
+        },
+        visitMilestoneAll: {
+          name: '全店訪問',
+          description: '全 {totalStores} 店舗を訪問しました',
+          hint: '全 {totalStores} 店舗を訪問するとゲットできます'
+        },
+        visitAllAreas: {
+          name: '全国デビュー',
+          description: '全 10 地区それぞれで 1 店舗以上を訪問しました',
+          hint: '各地区から 1 店ずつ訪問するとゲット'
+        },
+        eventCount: {
+          name: 'イベント {count} 件',
+          description: 'イベントを {count} 件完了しました',
+          hint: 'イベントを {count} 件完了するとゲットできます'
+        },
+        eventClearAtStore: {
+          name: '{storeName}参加',
+          description: '{storeName}のイベントを達成しました',
+          hint: '{storeName}で開催されたイベントを 1 件以上完了するとゲットできます'
+        },
+        eventClearAreaAny: {
+          name: '{areaLabel}イベントデビュー',
+          description: '{areaLabel}のいずれかの店舗でイベントを達成しました',
+          hint: '{areaLabel}の店舗で 1 件以上イベントを完了するとゲットできます'
+        },
+        eventClearAreaComplete: {
+          name: '{areaLabel}イベントコンプ',
+          description: '{areaLabel}の全 {storeCount} 店舗でイベントを達成しました',
+          hint: '{areaLabel}の全店舗でイベントを完了するとゲットできます'
+        },
+        clearMilestone: {
+          name: '{count} 店達成',
+          description: '{count} 店舗でイベントを達成しました',
+          hint: '{count} 店舗でイベントを完了するとゲットできます'
+        },
+        clearMilestoneAll: {
+          name: '全店イベント達成',
+          description: '全 {totalStores} 店舗でイベントを達成しました',
+          hint: '全 {totalStores} 店舗でイベントを完了するとゲットできます'
+        },
+        clearAllAreas: {
+          name: '全国達成',
+          description: '全 10 地区それぞれで 1 件以上イベント完了しました',
+          hint: '各地区で 1 件ずつイベントクリアするとゲット'
+        },
+        voteTotal: {
+          name: '投票 {count} 票',
+          description: '累計 {count} 票投票しました',
+          hint: '累計 {count} 票投票するとゲットできます'
+        }
+      }
     },
     lineSticker: {
       biccameMusume: 'ビッカメ娘',
@@ -362,3 +434,4 @@ export const BADGE_RARITY_LABELS = appContent.content.badge.rarity as Record<
   'common' | 'rare' | 'epic' | 'legendary',
   string
 >
+export const BADGE_TEMPLATES = appContent.content.badge.template
