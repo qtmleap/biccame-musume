@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { Lock } from 'lucide-react'
 import { motion } from 'motion/react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { getBadgeIcon } from '@/lib/badge-icons'
 import { DURATION } from '@/lib/motion'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
@@ -46,7 +47,7 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
   const style = RARITY_STYLES[badge.rarity]
   const rotation = earned ? getStickerRotation(index) : 0
 
-  return (
+  const card = (
     <motion.div
       initial={{ opacity: 0, scale: 0.85, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -67,7 +68,7 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
         className={cn(
           'relative rounded-2xl overflow-hidden',
           'flex flex-col items-center justify-center gap-1 px-2 py-3',
-          earned ? 'bg-card' : 'bg-muted/40',
+          earned ? 'bg-card cursor-help' : 'bg-muted/40',
           style.ring,
           earned && style.glow
         )}
@@ -110,13 +111,20 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
             </div>
           )}
         </div>
-
-        {earned && earnedAt && (
-          <div className='mt-1 text-xs font-numeric tabular-nums text-muted-foreground'>
-            {dayjs(earnedAt).format('YYYY/MM/DD')}
-          </div>
-        )}
       </motion.div>
     </motion.div>
+  )
+
+  if (!earned || !earnedAt) {
+    return card
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{card}</TooltipTrigger>
+      <TooltipContent side='top' className='font-numeric tabular-nums'>
+        {dayjs(earnedAt).format('YYYY/MM/DD')} 獲得
+      </TooltipContent>
+    </Tooltip>
   )
 }
