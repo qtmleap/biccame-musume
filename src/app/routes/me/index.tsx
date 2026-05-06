@@ -3,6 +3,7 @@ import { Award, Heart, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { toast } from 'sonner'
+import { CharacterListCard } from '@/components/character-list-card'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
@@ -20,7 +21,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { getLargeTwitterPhoto, useAuth } from '@/hooks/use-auth'
+import { useCharacters } from '@/hooks/use-characters'
 import { useEvents } from '@/hooks/use-events'
+import { useFavorites } from '@/hooks/use-favorites'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { auth } from '@/lib/firebase'
 import { DURATION } from '@/lib/motion'
@@ -77,10 +80,13 @@ const MyPageContent = () => {
   const { user, logout } = useAuth()
   const { stores, interestedEvents, completedEvents } = useUserActivity()
   const { data: allEvents } = useEvents()
+  const { data: characters } = useCharacters()
+  const { favorites } = useFavorites()
 
-  // イベントIDからイベント詳細を取得
   const interestedEventDetails = allEvents.filter((e) => interestedEvents.includes(e.uuid))
   const completedEventDetails = allEvents.filter((e) => completedEvents.includes(e.uuid))
+  const favoriteCharacters = characters.filter((c) => c.character?.is_biccame_musume && favorites.includes(c.id))
+  const displayFavorites = favoriteCharacters.slice(0, 5)
 
   /**
    * ログアウト処理
@@ -188,14 +194,32 @@ const MyPageContent = () => {
             transition={{ duration: DURATION.normal, delay: 0.45 }}
             className='space-y-3 mb-6'
           >
-            <Link
-              to='/me/favorites'
-              className='inline-flex items-center gap-2 text-foreground hover:text-brand transition-colors'
-            >
+            <div className='flex items-center gap-2'>
               <Heart className='h-5 w-5 text-favorite fill-current' />
-              <h2 className='text-xl font-bold'>推しのビッカメ娘</h2>
-            </Link>
-            <p className='text-sm text-muted-foreground'>推しを登録して、まとめて応援できるよ</p>
+              <h2 className='text-xl font-bold text-foreground'>推しのビッカメ娘</h2>
+              {favoriteCharacters.length > 0 && (
+                <span className='text-sm text-muted-foreground'>({favoriteCharacters.length})</span>
+              )}
+            </div>
+            {favoriteCharacters.length === 0 ? (
+              <p className='text-sm text-muted-foreground py-2'>推しを登録して、まとめて応援できるよ</p>
+            ) : (
+              <>
+                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3'>
+                  {displayFavorites.map((character, index) => (
+                    <CharacterListCard key={character.id} character={character} index={index} />
+                  ))}
+                </div>
+                <div className='mt-4 text-right'>
+                  <Link
+                    to='/me/favorites'
+                    className='text-sm text-muted-foreground hover:text-foreground font-semibold hover:underline transition-colors'
+                  >
+                    {MY_PAGE_LABELS.viewAll}
+                  </Link>
+                </div>
+              </>
+            )}
           </motion.div>
 
           {/* 興味のあるイベント */}
