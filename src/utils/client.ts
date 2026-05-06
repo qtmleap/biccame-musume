@@ -9,6 +9,11 @@ import {
   UserStoresResponseSchema
 } from '@/schemas/activity.dto'
 import { AuthResponseSchema, CurrentUserResponseSchema } from '@/schemas/auth.dto'
+import {
+  GetBadgeLeaderboardResponseSchema,
+  GetBadgesResponseSchema,
+  GetMyBadgesResponseSchema
+} from '@/schemas/badge.dto'
 import { CreateCommentRequestSchema, ListCommentsResponseSchema } from '@/schemas/comment.dto'
 import {
   CheckUrlResponseSchema,
@@ -372,6 +377,35 @@ const api = makeApi([
       }
     ],
     response: SuccessResponseSchemaForClient
+  },
+  // バッジ関連API
+  {
+    method: 'get',
+    path: '/api/badges',
+    alias: 'getBadges',
+    description: '全バッジ定義を取得（認証不要）',
+    response: GetBadgesResponseSchema
+  },
+  {
+    method: 'get',
+    path: '/api/users/me/badges',
+    alias: 'getMyBadges',
+    description: '自分の獲得バッジ一覧を取得',
+    response: GetMyBadgesResponseSchema
+  },
+  {
+    method: 'get',
+    path: '/api/badges/leaderboard',
+    alias: 'getBadgeLeaderboard',
+    description: 'バッジリーダーボードを取得',
+    parameters: [
+      {
+        name: 'uid',
+        type: 'Query',
+        schema: z.string().optional()
+      }
+    ],
+    response: GetBadgeLeaderboardResponseSchema
   },
   // コメント関連API
   {
