@@ -1,8 +1,8 @@
 import type { User } from 'firebase/auth'
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { getTierFromCount } from '@/data/badges.mock'
 import { getLargeTwitterPhoto } from '@/hooks/use-auth'
+import { getTierFromCount } from '@/lib/badge-tier'
 import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 

@@ -1,11 +1,13 @@
 import { motion } from 'motion/react'
 import { BadgeCard } from '@/components/badges/badge-card'
-import { BADGE_CATEGORIES, type Badge } from '@/data/badges.mock'
+import { BADGE_CATEGORY_DEFS } from '@/lib/badge-categories'
 import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
+import type { Badge } from '@/schemas/badge.dto'
 
 type BadgeGridProps = {
   badges: Badge[]
+  earnedMap: Map<string, string>
 }
 
 const ACCENT_TEXT: Record<string, string> = {
@@ -24,16 +26,13 @@ const ACCENT_DOT: Record<string, string> = {
   'rank-bronze': 'bg-rank-bronze'
 }
 
-/**
- * カテゴリごとにグループ化したバッジグリッド
- */
-export const BadgeGrid = ({ badges }: BadgeGridProps) => {
+export const BadgeGrid = ({ badges, earnedMap }: BadgeGridProps) => {
   return (
     <div className='space-y-8'>
-      {BADGE_CATEGORIES.map((category, sectionIdx) => {
-        const items = badges.filter((b) => b.categoryKey === category.key)
+      {BADGE_CATEGORY_DEFS.map((category, sectionIdx) => {
+        const items = badges.filter((b) => b.category === category.key)
         if (items.length === 0) return null
-        const earnedInCategory = items.filter((b) => b.earned).length
+        const earnedInCategory = items.filter((b) => earnedMap.has(b.code)).length
 
         return (
           <motion.section
@@ -57,7 +56,7 @@ export const BadgeGrid = ({ badges }: BadgeGridProps) => {
 
             <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2.5 md:gap-3'>
               {items.map((badge, i) => (
-                <BadgeCard key={badge.id} badge={badge} index={i} />
+                <BadgeCard key={badge.code} badge={badge} earnedAt={earnedMap.get(badge.code) ?? null} index={i} />
               ))}
             </div>
           </motion.section>
