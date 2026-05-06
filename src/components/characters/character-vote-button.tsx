@@ -37,6 +37,7 @@ export const CharacterVoteButton = ({
 
   // 今日既に投票済みかチェック
   const hasVotedToday = useMemo(() => {
+    if (import.meta.env.DEV) return false
     const lastVoteTime = lastVoteTimes[characterId]
     if (!lastVoteTime) return false
 
