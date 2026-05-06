@@ -116,7 +116,7 @@ const AdminContent = () => {
           <p className='mt-1 text-sm text-muted-foreground'>各種管理機能へのアクセス</p>
         </motion.header>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5'>
           {MENU_ITEMS.map((item, index) => (
             <MenuCard key={item.to} {...item} index={index} />
           ))}
