@@ -4,6 +4,7 @@ import { HTTPException } from 'hono/http-exception'
 import { proxy } from 'hono/proxy'
 import { secureHeaders } from 'hono/secure-headers'
 import { ZodError } from 'zod'
+import adminBadges from './api/admin-badge'
 import authRoutes from './api/auth'
 import badges from './api/badge'
 import comments from './api/comment'
@@ -117,6 +118,9 @@ app.route('/api', favorite)
 
 // バッジAPIルート
 app.route('/api', badges)
+
+// 管理者バッジCRUDルート
+app.route('/api', adminBadges)
 
 // 静的ファイル配信 & SPA フォールバック
 app.use('*', async (c, next) => {

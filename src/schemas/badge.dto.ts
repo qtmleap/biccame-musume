@@ -1,5 +1,6 @@
 import { z } from '@hono/zod-openapi'
 import type { Badge as PrismaBadge } from '@prisma/client'
+import { StoreKeySchema } from '@/schemas/store.dto'
 
 export const BadgeCategorySchema = z.enum(['store', 'area', 'milestone', 'event', 'event_clear', 'vote', 'special'])
 
@@ -185,3 +186,72 @@ export const GetBadgeLeaderboardQuerySchema = z
   .openapi('GetBadgeLeaderboardQuery')
 
 export const GetBadgeLeaderboardResponseSchema = BadgeLeaderboardResponseSchema
+
+// ---------------------------------------------------------------------------
+// Admin CRUD schemas
+// ---------------------------------------------------------------------------
+
+const SpecialConditionMetaSchema = z.union([
+  z.object({ storeKeys: z.array(StoreKeySchema).min(1) }),
+  z.object({ eventId: z.string().uuid() })
+])
+
+export const CreateSpecialBadgeBodySchema = z
+  .object({
+    name: z.string().min(1).max(50).openapi({ example: '新宿コラボ達成' }),
+    description: z.string().min(1).max(200).openapi({ example: '新宿 3 店舗すべてでイベントを達成しました' }),
+    hint: z.string().min(1).max(200).openapi({ example: '新宿 3 店舗のイベントをすべて完了するとゲットできます' }),
+    rarity: BadgeRaritySchema.openapi({ example: 'epic' }),
+    icon_name: z.string().min(1).max(40).openapi({ example: 'Star' }),
+    sort_order: z.number().int().nonnegative().default(0).openapi({ example: 0 }),
+    sub_category: z
+      .enum(['special_multi_store_clear', 'special_event_id'])
+      .openapi({ example: 'special_multi_store_clear' }),
+    condition_meta: SpecialConditionMetaSchema
+  })
+  .openapi('CreateSpecialBadgeBody')
+
+export type CreateSpecialBadgeBody = z.infer<typeof CreateSpecialBadgeBodySchema>
+
+export const UpdateBadgeBodySchema = z
+  .object({
+    name: z.string().min(1).max(50).optional().openapi({ example: '新宿コラボ達成' }),
+    description: z
+      .string()
+      .min(1)
+      .max(200)
+      .optional()
+      .openapi({ example: '新宿 3 店舗すべてでイベントを達成しました' }),
+    hint: z
+      .string()
+      .min(1)
+      .max(200)
+      .optional()
+      .openapi({ example: '新宿 3 店舗のイベントをすべて完了するとゲットできます' }),
+    rarity: BadgeRaritySchema.optional().openapi({ example: 'epic' }),
+    icon_name: z.string().min(1).max(40).optional().openapi({ example: 'Star' }),
+    sort_order: z.number().int().nonnegative().optional().openapi({ example: 0 }),
+    is_hidden: z.boolean().optional().openapi({ example: false }),
+    sub_category: z
+      .enum(['special_multi_store_clear', 'special_event_id'])
+      .optional()
+      .openapi({ example: 'special_multi_store_clear' }),
+    condition_meta: SpecialConditionMetaSchema.optional()
+  })
+  .openapi('UpdateBadgeBody')
+
+export type UpdateBadgeBody = z.infer<typeof UpdateBadgeBodySchema>
+
+export const AdminBadgeResponseSchema = BadgeSchema
+
+export const AdminDeleteBadgeParamsSchema = z
+  .object({
+    code: z.string().nonempty().openapi({ example: 'special_ab12cd34' })
+  })
+  .openapi('AdminDeleteBadgeParams')
+
+export const AdminBadgeParamsSchema = z
+  .object({
+    code: z.string().nonempty().openapi({ example: 'special_ab12cd34' })
+  })
+  .openapi('AdminBadgeParams')
