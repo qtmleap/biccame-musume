@@ -1,11 +1,7 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { getPrisma } from '@/lib/prisma'
 import { CFAuth } from '@/middleware/cloudflare-access'
-import {
-  type AdminComment,
-  AdminCommentsQuerySchema,
-  AdminCommentsResponseSchema
-} from '@/schemas/admin-comment.dto'
+import { type AdminComment, AdminCommentsQuerySchema, AdminCommentsResponseSchema } from '@/schemas/admin-comment.dto'
 import type { Bindings } from '@/types/bindings'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()

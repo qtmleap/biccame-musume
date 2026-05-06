@@ -21,9 +21,21 @@ export const BADGE_CATEGORY_DEFS: BadgeCategoryDef[] = [
     accent: 'rank-bronze'
   },
   {
+    key: 'event_clear_store',
+    label: '各店舗でイベント参加',
+    description: '店舗ごとのイベント達成で得られる勲章',
+    accent: 'brand'
+  },
+  {
+    key: 'event_clear_area',
+    label: 'エリアごとのイベント参加',
+    description: 'エリア単位のイベント達成実績を積み重ねよう',
+    accent: 'rank-bronze'
+  },
+  {
     key: 'milestone',
-    label: '訪問マイルストーン',
-    description: '累計訪問数で段階的に解放される称号',
+    label: 'マイルストーン',
+    description: '累計訪問・イベント達成数で段階的に解放される称号',
     accent: 'rank-gold'
   },
   {
@@ -31,12 +43,6 @@ export const BADGE_CATEGORY_DEFS: BadgeCategoryDef[] = [
     label: 'イベントマイルストーン',
     description: '累計イベント完了数で段階的に解放される称号',
     accent: 'brand'
-  },
-  {
-    key: 'event_clear',
-    label: 'イベント参加',
-    description: '店舗別のイベント参加で得られる勲章',
-    accent: 'rank-gold'
   },
   {
     key: 'vote',

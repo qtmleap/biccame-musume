@@ -10,6 +10,7 @@ import {
   UserEventsResponseSchema,
   UserStoresResponseSchema
 } from '@/schemas/activity.dto'
+import { AdminCommentsResponseSchema } from '@/schemas/admin-comment.dto'
 import { AuthResponseSchema, CurrentUserResponseSchema } from '@/schemas/auth.dto'
 import {
   BadgeSchema,
@@ -19,7 +20,6 @@ import {
   GetMyBadgesResponseSchema,
   UpdateBadgeBodySchema
 } from '@/schemas/badge.dto'
-import { AdminCommentsResponseSchema } from '@/schemas/admin-comment.dto'
 import { CreateCommentRequestSchema, ListCommentsResponseSchema } from '@/schemas/comment.dto'
 import {
   CheckUrlResponseSchema,
