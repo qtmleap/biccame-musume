@@ -224,7 +224,7 @@ function getBadgeRegistry(): BadgeDef[] {
     const count = visitSteps[i]
     const rarity = visitMilestoneRarity(i, visitSteps.length)
     badges.push({
-      code: `milestone_visit_${count}`,
+      code: `milestone_visit_count_${count}`,
       category: 'milestone',
       subCategory: 'count',
       name: `${count} 店訪問`,
@@ -238,7 +238,7 @@ function getBadgeRegistry(): BadgeDef[] {
   }
   // "All stores" completion badge
   badges.push({
-    code: `milestone_visit_all`,
+    code: 'milestone_visit_count_all',
     category: 'milestone',
     subCategory: 'count',
     name: '全店制覇',
@@ -366,7 +366,7 @@ function getBadgeRegistry(): BadgeDef[] {
     const count = clearSteps[i]
     const rarity = visitMilestoneRarity(i, clearSteps.length)
     badges.push({
-      code: `milestone_clear_${count}`,
+      code: `milestone_clear_count_${count}`,
       category: 'milestone',
       subCategory: 'event_clear_count',
       name: `${count} 店制覇`,
@@ -380,7 +380,7 @@ function getBadgeRegistry(): BadgeDef[] {
   }
   // "All stores" event clear completion badge
   badges.push({
-    code: 'milestone_clear_all',
+    code: 'milestone_clear_count_all',
     category: 'milestone',
     subCategory: 'event_clear_all',
     name: '全店イベント制覇',
