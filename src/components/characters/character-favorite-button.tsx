@@ -1,6 +1,6 @@
 import { Heart } from 'lucide-react'
 import { motion } from 'motion/react'
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { toast } from 'sonner'
 import { FavoriteBurst } from '@/components/characters/favorite-burst'
 import { Button } from '@/components/ui/button'
@@ -19,6 +19,7 @@ type CharacterFavoriteButtonProps = {
  * お気に入り（推し）登録ボタン
  * - ビッカメ娘でない場合は非表示
  * - 未ログイン時も非表示（詳細画面でログインユーザーだけが触れる導線）
+ * - 認証ガードを通過してから内部で useSuspenseQuery を呼ぶ構造
  */
 export const CharacterFavoriteButton = ({
   characterId,
@@ -26,10 +27,19 @@ export const CharacterFavoriteButton = ({
   isBiccameMusume = true
 }: CharacterFavoriteButtonProps) => {
   const { isAuthenticated } = useAuth()
-  const { isFavorite, addFavorite, removeFavorite, isAddPending, isRemovePending } = useFavorites()
-  const [burstKey, setBurstKey] = useState<number | null>(null)
 
   if (!isBiccameMusume || !isAuthenticated) return null
+
+  return (
+    <Suspense fallback={null}>
+      <FavoriteToggle characterId={characterId} characterName={characterName} />
+    </Suspense>
+  )
+}
+
+const FavoriteToggle = ({ characterId, characterName }: Omit<CharacterFavoriteButtonProps, 'isBiccameMusume'>) => {
+  const { isFavorite, addFavorite, removeFavorite, isAddPending, isRemovePending } = useFavorites()
+  const [burstKey, setBurstKey] = useState<number | null>(null)
 
   const favored = isFavorite(characterId)
   const pending = isAddPending || isRemovePending
