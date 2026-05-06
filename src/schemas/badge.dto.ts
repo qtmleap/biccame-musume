@@ -129,8 +129,8 @@ export type BadgeDefDto = z.infer<typeof BadgeDefSchema>
 export const LeaderboardEntrySchema = z
   .object({
     uid: z.string().nonempty().openapi({ example: 'firebase-uid-xyz' }),
-    displayName: z.string().nonempty().openapi({ example: 'あきばたん' }),
-    thumbnailURL: z.string().optional().openapi({ example: 'https://example.com/avatar.png' }),
+    displayName: z.string().nullable().openapi({ example: 'あきばたん' }),
+    thumbnailURL: z.string().nullable().optional().openapi({ example: 'https://example.com/avatar.png' }),
     earnedCount: z.number().int().nonnegative().openapi({ example: 42 }),
     rank: z.number().int().positive().openapi({ example: 1 })
   })
@@ -149,3 +149,39 @@ export const BadgeLeaderboardResponseSchema = z
   .openapi('BadgeLeaderboardResponse')
 
 export type BadgeLeaderboardResponse = z.infer<typeof BadgeLeaderboardResponseSchema>
+
+export const GetBadgesResponseSchema = z
+  .object({
+    badges: z.array(BadgeSchema)
+  })
+  .openapi('GetBadgesResponse')
+
+export type GetBadgesResponse = z.infer<typeof GetBadgesResponseSchema>
+
+export const EarnedBadgeSchema = z
+  .object({
+    code: z.string().openapi({ example: 'store_visit_akiba' }),
+    earnedAt: z.string().openapi({ example: '2026-05-06T12:00:00.000Z' })
+  })
+  .openapi('EarnedBadge')
+
+export type EarnedBadge = z.infer<typeof EarnedBadgeSchema>
+
+export const GetMyBadgesResponseSchema = MyBadgesResponseSchema
+
+export const MeRankSchema = z
+  .object({
+    rank: z.number().int().positive().openapi({ example: 7 }),
+    earnedCount: z.number().int().nonnegative().openapi({ example: 15 })
+  })
+  .openapi('MeRank')
+
+export type MeRank = z.infer<typeof MeRankSchema>
+
+export const GetBadgeLeaderboardQuerySchema = z
+  .object({
+    uid: z.string().optional().openapi({ example: 'firebase-uid-xyz' })
+  })
+  .openapi('GetBadgeLeaderboardQuery')
+
+export const GetBadgeLeaderboardResponseSchema = BadgeLeaderboardResponseSchema
