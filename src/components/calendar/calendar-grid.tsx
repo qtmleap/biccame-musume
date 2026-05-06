@@ -130,7 +130,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                   {/* 日付 */}
                   <span
                     className={cn(
-                      'text-sm font-semibold tabular-nums',
+                      'text-lg font-numeric font-black tabular-nums leading-none',
                       isToday && 'text-primary',
                       !isToday && isSunday && 'text-calendar-sunday',
                       !isToday && isSaturday && 'text-calendar-saturday',
