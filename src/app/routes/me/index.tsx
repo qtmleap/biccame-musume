@@ -44,17 +44,10 @@ const EventSection = ({
 
   return (
     <div className='space-y-3'>
-      <div className='flex items-center justify-between'>
-        <div className='flex items-center gap-2'>
-          {icon}
-          <h2 className='text-xl font-bold text-foreground'>{title}</h2>
-          {events.length > 0 && <span className='text-sm text-muted-foreground'>({events.length})</span>}
-        </div>
-        {showAllPath && events.length > 0 && (
-          <Link to={showAllPath} className='text-xs text-brand hover:text-brand transition-colors hover:underline'>
-            {MY_PAGE_LABELS.viewAll}
-          </Link>
-        )}
+      <div className='flex items-center gap-2'>
+        {icon}
+        <h2 className='text-xl font-bold text-foreground'>{title}</h2>
+        {events.length > 0 && <span className='text-sm text-muted-foreground'>({events.length})</span>}
       </div>
       <PaginatedEventGrid
         events={displayEvents}
@@ -63,6 +56,16 @@ const EventSection = ({
         compact
         emptyState={<p className='text-sm text-muted-foreground py-2'>{emptyMessage}</p>}
       />
+      {showAllPath && events.length > 0 && (
+        <div className='mt-4 text-right'>
+          <Link
+            to={showAllPath}
+            className='text-sm text-muted-foreground hover:text-foreground font-semibold hover:underline transition-colors'
+          >
+            {MY_PAGE_LABELS.viewAll}
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
