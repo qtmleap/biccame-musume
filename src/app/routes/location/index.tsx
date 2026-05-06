@@ -143,8 +143,7 @@ const LocationContent = () => {
   return (
     <APIProvider apiKey={apiKey}>
       <section
-        className='relative w-full overflow-hidden'
-        style={{ height: 'min(calc(100dvh - 8rem), 800px)' }}
+        className='relative w-full overflow-hidden h-[min(calc(100dvh-9rem),800px)] md:h-[min(calc(100dvh-9.5rem),800px)]'
         aria-label='地図'
       >
         <LocationMapInner

@@ -16,12 +16,43 @@ type EventGridItemProps = {
   index?: number
 }
 
-const TAPES: ({ side: 'left' | 'right'; color: string; angle: string } | null)[] = [
-  { side: 'left', color: 'bg-yellow-200/80', angle: '-rotate-[12deg]' },
-  { side: 'right', color: 'bg-pink-200/80', angle: 'rotate-[10deg]' },
-  { side: 'left', color: 'bg-blue-200/80', angle: '-rotate-[8deg]' },
+type Tape = {
+  /** absolute 配置クラス（rounded カードに対する位置） */
+  position: string
+  /** w-/h- サイズクラス */
+  size: string
+  /** 背景色クラス */
+  color: string
+  /** 回転クラス */
+  angle: string
+}
+
+const TAPES: (Tape | null)[] = [
+  // Top edge — short, near corners
+  { position: '-top-1.5 left-4', size: 'w-8 h-3', color: 'bg-yellow-200/80', angle: '-rotate-[12deg]' },
+  { position: '-top-1.5 right-4', size: 'w-8 h-3', color: 'bg-pink-200/80', angle: 'rotate-[10deg]' },
+  // Top edge — wider, slight inset
+  { position: '-top-2 left-1/3', size: 'w-10 h-3.5', color: 'bg-blue-200/80', angle: '-rotate-[5deg]' },
+  { position: '-top-1 right-1/3', size: 'w-10 h-3.5', color: 'bg-green-200/80', angle: 'rotate-[6deg]' },
+  // Top edge — centered
+  {
+    position: '-top-2 left-1/2 -translate-x-1/2',
+    size: 'w-12 h-3',
+    color: 'bg-yellow-200/80',
+    angle: '-rotate-[3deg]'
+  },
   null,
-  { side: 'right', color: 'bg-green-200/80', angle: 'rotate-[8deg]' },
+  // Bottom edge
+  { position: '-bottom-1.5 left-6', size: 'w-8 h-3', color: 'bg-purple-200/80', angle: 'rotate-[8deg]' },
+  { position: '-bottom-1.5 right-6', size: 'w-8 h-3', color: 'bg-orange-200/80', angle: '-rotate-[10deg]' },
+  null,
+  // Side edges — small tape sticking off the sides
+  { position: 'top-3 -left-2', size: 'w-6 h-3', color: 'bg-blue-200/80', angle: 'rotate-[35deg]' },
+  { position: 'top-4 -right-2', size: 'w-6 h-3', color: 'bg-green-200/80', angle: '-rotate-[35deg]' },
+  null,
+  // Bottom corners — tape pointing outward
+  { position: 'bottom-3 -left-2', size: 'w-6 h-3', color: 'bg-pink-200/80', angle: '-rotate-[28deg]' },
+  { position: 'bottom-4 -right-2', size: 'w-6 h-3', color: 'bg-yellow-200/80', angle: 'rotate-[28deg]' },
   null
 ]
 
@@ -79,15 +110,7 @@ export const EventGridItem = ({ event, index = 0 }: EventGridItemProps) => {
           )}
         >
           {tape && (
-            <div
-              aria-hidden
-              className={cn(
-                'absolute -top-1.5 w-8 h-3 rounded-sm',
-                tape.color,
-                tape.angle,
-                tape.side === 'left' ? 'left-4' : 'right-4'
-              )}
-            />
+            <div aria-hidden className={cn('absolute rounded-sm', tape.position, tape.size, tape.color, tape.angle)} />
           )}
           <div className='mb-2 flex items-start justify-between gap-3'>
             <div className='flex-1 min-w-0'>
