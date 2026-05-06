@@ -17,7 +17,7 @@ const BadgesContent = () => {
 
   return (
     <div className='min-h-screen bg-page-bg'>
-      <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-5xl'>
+      <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div className='pb-2'>
           <Button
             variant='ghost'
@@ -34,13 +34,11 @@ const BadgesContent = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: DURATION.normal }}
-          className='mb-6 md:mb-8 text-center'
+          className='mb-6 md:mb-8'
         >
-          <h1 className='font-display font-bold text-2xl md:text-3xl text-foreground tracking-tight'>
-            バッジコレクション
-          </h1>
+          <h1 className='text-2xl font-bold text-foreground mb-4'>バッジコレクション</h1>
           <div
-            className='mt-3 font-numeric font-black tabular-nums text-rank-gold leading-none text-5xl md:text-6xl'
+            className='font-numeric font-black tabular-nums text-rank-gold leading-none text-5xl md:text-6xl'
             style={{ letterSpacing: '-0.06em' }}
           >
             {earnedCount}
