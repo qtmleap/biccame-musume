@@ -7,11 +7,15 @@ export const useBadges = () => {
       {
         queryKey: ['badges'],
         queryFn: () => client.getBadges(),
-        staleTime: 5 * 60 * 1000
+        staleTime: 5 * 60 * 1000,
+        // QueryClient のグローバル設定が refetchOnMount: false なので、
+        // localStorage キャッシュが効いて /badges を開いても再フェッチされない問題を回避
+        refetchOnMount: 'always' as const
       },
       {
         queryKey: ['me', 'badges'],
-        queryFn: () => client.getMyBadges()
+        queryFn: () => client.getMyBadges(),
+        refetchOnMount: 'always' as const
       }
     ]
   })
