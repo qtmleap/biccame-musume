@@ -18,9 +18,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { getLargeTwitterPhoto, useAuth } from '@/hooks/use-auth'
+import { useAuth } from '@/hooks/use-auth'
 import { useCharacters } from '@/hooks/use-characters'
 import { useEvents } from '@/hooks/use-events'
 import { useFavorites } from '@/hooks/use-favorites'
@@ -79,7 +78,7 @@ const EventSection = ({
  * マイページコンテンツ
  */
 const MyPageContent = () => {
-  const { user, logout } = useAuth()
+  const { logout } = useAuth()
   const { stores, interestedEvents, completedEvents } = useUserActivity()
   const { data: allEvents } = useEvents()
   const { data: characters } = useCharacters()
@@ -106,67 +105,35 @@ const MyPageContent = () => {
     <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div>
-          {/* タイトル */}
-          <h1 className='text-2xl font-bold text-foreground mb-4'>マイページ</h1>
-
-          {/* プロフィールセクション */}
-          <div className='mb-4 flex items-end justify-between gap-4'>
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: DURATION.normal }}
-            >
-              <Avatar className='h-21.25 w-21.25'>
-                <AvatarImage
-                  src={getLargeTwitterPhoto(user?.photoURL)}
-                  alt={user?.displayName ?? 'User'}
-                  className='object-cover'
-                />
-                <AvatarFallback className='text-4xl bg-brand/10 text-brand'>
-                  {user?.displayName?.charAt(0) ?? 'U'}
-                </AvatarFallback>
-              </Avatar>
-            </motion.div>
-
-            {/* アクションボタン */}
-            <div className='flex gap-2'>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant='outline'
-                    size='sm'
-                    className='rounded-full px-4 h-9 text-xs font-semibold bg-destructive/10 text-destructive border border-destructive/30 hover:bg-destructive/20'
-                  >
-                    {MY_PAGE_LABELS.logout}
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent className='rounded-2xl shadow-2xl border-transparent'>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>ログアウトしますか？</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      ログアウトするとマイページにアクセスできなくなります。
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleLogout} variant='destructive'>
-                      ログアウトする
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
+          {/* タイトル + ログアウト */}
+          <div className='mb-4 flex items-center justify-between gap-4'>
+            <h1 className='text-2xl font-bold text-foreground'>マイページ</h1>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  className='rounded-full px-4 h-9 text-xs font-semibold bg-destructive/10 text-destructive border border-destructive/30 hover:bg-destructive/20'
+                >
+                  {MY_PAGE_LABELS.logout}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className='rounded-2xl shadow-2xl border-transparent'>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>ログアウトしますか？</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    ログアウトするとマイページにアクセスできなくなります。
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleLogout} variant='destructive'>
+                    ログアウトする
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
-
-          {/* 名前 */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: DURATION.normal, delay: 0.2 }}
-            className='mb-6'
-          >
-            <h2 className='text-2xl font-bold text-foreground'>{user?.displayName}</h2>
-          </motion.div>
 
           {/* 訪れた店舗の記録 */}
           <motion.div
