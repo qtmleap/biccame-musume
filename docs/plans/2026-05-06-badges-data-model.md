@@ -91,11 +91,18 @@ Date: 2026-05-06
 
 イベント制覇マイルストーン・全店制覇・メタバッジは訪問系マイルストーンと同じ `milestone` カテゴリに統合。
 
-| 件数 | 条件 | レアリティ |
-| --- | --- | --- |
-| 約 9 | イベント完了したユニーク店舗数が 5/10/15/.../X (X = 実店舗数未満で最大の 5 倍数) | common→rare→epic |
-| 1 | 全実店舗でイベント completed | legendary |
-| 1 | 全 10 地区それぞれで 1 件以上イベント completed (メタバッジ「全国達成」) | legendary |
+**コードプレフィックス規約 (軸の明確化):**
+- 訪問マイルストーン: `milestone_visit_*` (例: `milestone_visit_5`, `milestone_visit_all`, `milestone_visit_areas`)
+- イベント制覇マイルストーン: `milestone_clear_*` (例: `milestone_clear_5`, `milestone_clear_all`, `milestone_clear_areas`)
+
+| コード例 | 件数 | 条件 | レアリティ |
+| --- | --- | --- | --- |
+| `milestone_visit_5` 〜 `milestone_visit_45` | 約 9 | 累計訪問ユニーク店舗数が 5/10/15/.../X | common→rare→epic |
+| `milestone_visit_all` | 1 | 全実店舗 visited | legendary |
+| `milestone_visit_areas` | 1 | 全 10 地区それぞれで 1 店舗以上 visited (メタバッジ「全国デビュー」) | epic |
+| `milestone_clear_5` 〜 `milestone_clear_45` | 約 9 | イベント完了したユニーク店舗数が 5/10/15/.../X | common→rare→epic |
+| `milestone_clear_all` | 1 | 全実店舗でイベント completed | legendary |
+| `milestone_clear_areas` | 1 | 全 10 地区それぞれで 1 件以上イベント completed (メタバッジ「全国達成」) | legendary |
 
 **命名規約 (訪問系との区別):**
 - 訪問系の動詞: 「訪問」「参加」「コンプ」
@@ -161,7 +168,7 @@ Date: 2026-05-06
 
 - registry.ts は `category != 'special'` のバッジのみ管理 (上書き)
 - `category = 'special'` のレコードは admin が作成するためシードで触らない
-- seeder の upsert は **`code` のドメイン (例: `store_visit_*`, `area_*`, `milestone_*`, `event_count_*`, `event_clear_*`, `vote_*`) を whitelist** にし、それ以外のレコードは保持
+- seeder の upsert は **`code` のドメイン (例: `store_visit_*`, `area_*`, `milestone_visit_*`, `milestone_clear_*`, `event_count_*`, `event_clear_at_store_*`, `event_clear_area_*`, `vote_*`) を whitelist** にし、それ以外のレコードは保持
 
 #### コラボ例 (admin が登録するイメージ)
 
