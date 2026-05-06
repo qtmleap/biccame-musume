@@ -4,11 +4,11 @@ export const AdminCommentSchema = z
   .object({
     id: z.string().uuid().openapi({ description: 'コメントID' }),
     eventId: z.string().uuid().openapi({ description: 'イベントID' }),
-    eventTitle: z.string().openapi({ description: 'イベント名' }),
-    characterId: z.string().openapi({ description: '投稿者キャラクターID' }),
-    body: z.string().openapi({ description: 'コメント本文' }),
-    ipAddress: z.string().openapi({ description: '投稿者IP' }),
-    userId: z.string().nullable().openapi({ description: 'Firebase UID（ログイン投稿時のみ）' }),
+    eventTitle: z.string().nonempty().openapi({ description: 'イベント名' }),
+    characterId: z.string().nonempty().openapi({ description: '投稿者キャラクターID' }),
+    body: z.string().nonempty().openapi({ description: 'コメント本文' }),
+    ipAddress: z.string().nonempty().openapi({ description: '投稿者IP' }),
+    userId: z.string().nonempty().nullable().openapi({ description: 'Firebase UID（ログイン投稿時のみ）' }),
     deletedAt: z.string().datetime().nullable().openapi({ description: '論理削除日時（未削除なら null）' }),
     createdAt: z.string().datetime().openapi({ description: '投稿日時' })
   })

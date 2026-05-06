@@ -41,11 +41,11 @@ export type BadgeRarity = z.infer<typeof BadgeRaritySchema>
 
 export const BadgeConditionMetaSchema = z
   .object({
-    storeKey: z.string().optional(),
-    region: z.string().optional(),
+    storeKey: z.string().nonempty().optional(),
+    region: z.string().nonempty().optional(),
     count: z.number().int().positive().optional(),
-    storeKeys: z.array(z.string()).optional(),
-    eventId: z.string().optional()
+    storeKeys: z.array(z.string().nonempty()).optional(),
+    eventId: z.string().nonempty().optional()
   })
   .openapi('BadgeConditionMeta')
 
@@ -65,8 +65,8 @@ export const BadgeSchema = z
     sort_order: z.number().int().nonnegative().openapi({ example: 1 }),
     condition_meta: z.string().nonempty().openapi({ description: 'JSON-encoded BadgeConditionMeta' }),
     is_hidden: z.boolean().openapi({ example: false }),
-    created_at: z.string().openapi({ example: '2026-05-06T00:00:00.000Z' }),
-    updated_at: z.string().openapi({ example: '2026-05-06T00:00:00.000Z' }),
+    created_at: z.string().nonempty().openapi({ example: '2026-05-06T00:00:00.000Z' }),
+    updated_at: z.string().nonempty().openapi({ example: '2026-05-06T00:00:00.000Z' }),
     earned_count: z.number().int().nonnegative().optional().openapi({
       description: '獲得者数 (admin 専用、includeHidden=1 のときのみ)',
       example: 42
@@ -104,7 +104,7 @@ export const UserBadgeSchema = z
     id: z.string().uuid().openapi({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' }),
     user_id: z.string().nonempty().openapi({ example: 'firebase-uid-xyz' }),
     badge_code: z.string().nonempty().openapi({ example: 'store_visit_akiba' }),
-    earned_at: z.string().openapi({ example: '2026-05-06T12:00:00.000Z' })
+    earned_at: z.string().nonempty().openapi({ example: '2026-05-06T12:00:00.000Z' })
   })
   .openapi('UserBadge')
 
@@ -117,7 +117,7 @@ export const MyBadgesResponseSchema = z
     earned: z.array(
       z.object({
         code: z.string().nonempty().openapi({ example: 'store_visit_akiba' }),
-        earnedAt: z.string().openapi({ example: '2026-05-06T12:00:00.000Z' })
+        earnedAt: z.string().nonempty().openapi({ example: '2026-05-06T12:00:00.000Z' })
       })
     )
   })
@@ -145,8 +145,8 @@ export type BadgeDefDto = z.infer<typeof BadgeDefSchema>
 export const LeaderboardEntrySchema = z
   .object({
     uid: z.string().nonempty().openapi({ example: 'firebase-uid-xyz' }),
-    displayName: z.string().nullable().openapi({ example: 'あきばたん' }),
-    thumbnailURL: z.string().nullable().optional().openapi({ example: 'https://example.com/avatar.png' }),
+    displayName: z.string().nonempty().nullable().openapi({ example: 'あきばたん' }),
+    thumbnailURL: z.string().nonempty().nullable().optional().openapi({ example: 'https://example.com/avatar.png' }),
     earnedCount: z.number().int().nonnegative().openapi({ example: 42 }),
     rank: z.number().int().positive().openapi({ example: 1 })
   })
@@ -182,8 +182,8 @@ export type GetBadgesResponse = z.infer<typeof GetBadgesResponseSchema>
 
 export const EarnedBadgeSchema = z
   .object({
-    code: z.string().openapi({ example: 'store_visit_akiba' }),
-    earnedAt: z.string().openapi({ example: '2026-05-06T12:00:00.000Z' })
+    code: z.string().nonempty().openapi({ example: 'store_visit_akiba' }),
+    earnedAt: z.string().nonempty().openapi({ example: '2026-05-06T12:00:00.000Z' })
   })
   .openapi('EarnedBadge')
 
@@ -202,7 +202,7 @@ export type MeRank = z.infer<typeof MeRankSchema>
 
 export const GetBadgeLeaderboardQuerySchema = z
   .object({
-    uid: z.string().optional().openapi({ example: 'firebase-uid-xyz' })
+    uid: z.string().nonempty().optional().openapi({ example: 'firebase-uid-xyz' })
   })
   .openapi('GetBadgeLeaderboardQuery')
 
