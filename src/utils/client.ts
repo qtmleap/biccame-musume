@@ -33,7 +33,7 @@ import { FavoriteCharactersResponseSchemaForClient } from '@/schemas/favorite.dt
 import { SearchResultSchema } from '@/schemas/search.dto'
 import { PageViewStatsSchema } from '@/schemas/stats.dto'
 import { StoresSchema } from '@/schemas/store.dto'
-import { UserResponseSchemaForClient } from '@/schemas/user.dto'
+import { AdminUserListResponseSchemaForClient, UserResponseSchemaForClient } from '@/schemas/user.dto'
 import {
   BulkVoteRequestSchema,
   BulkVoteResponseSchemaForClient,
@@ -540,6 +540,14 @@ const api = makeApi([
       }
     ],
     response: AdminCommentsResponseSchema
+  },
+  // 管理者ユーザー一覧
+  {
+    method: 'get',
+    path: '/api/admin/users',
+    alias: 'getAdminUsers',
+    description: '全ユーザー一覧を取得（admin）',
+    response: AdminUserListResponseSchemaForClient
   }
 ])
 

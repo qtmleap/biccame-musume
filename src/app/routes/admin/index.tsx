@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Award, Calendar, MessageSquare } from 'lucide-react'
+import { ArrowLeft, Award, Calendar, MessageSquare, Users } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -32,6 +32,14 @@ const MENU_ITEMS = [
     description: ADMIN_LABELS.commentManagementDesc,
     iconBg: 'bg-brand/15',
     iconText: 'text-brand'
+  },
+  {
+    to: '/admin/users',
+    icon: Users,
+    title: ADMIN_LABELS.userManagement,
+    description: ADMIN_LABELS.userManagementDesc,
+    iconBg: 'bg-status-upcoming/15',
+    iconText: 'text-status-upcoming-foreground'
   }
 ] as const
 

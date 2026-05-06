@@ -6,6 +6,7 @@ import { secureHeaders } from 'hono/secure-headers'
 import { ZodError } from 'zod'
 import adminBadges from './api/admin-badge'
 import adminComments from './api/admin-comment'
+import adminUsers from './api/admin-user'
 import authRoutes from './api/auth'
 import badges from './api/badge'
 import comments from './api/comment'
@@ -125,6 +126,9 @@ app.route('/api', adminBadges)
 
 // 管理者コメント一覧ルート
 app.route('/api', adminComments)
+
+// 管理者ユーザー一覧ルート
+app.route('/api', adminUsers)
 
 // 静的ファイル配信 & SPA フォールバック
 app.use('*', async (c, next) => {
