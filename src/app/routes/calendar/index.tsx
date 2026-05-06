@@ -104,6 +104,10 @@ const CalendarContent = () => {
           <div className='w-4 h-4 rounded-md bg-info/15 border-card' />
           <span>店舗記念日</span>
         </div>
+        <div className='flex items-center gap-2'>
+          <div className='w-4 h-4 rounded-md bg-calendar-sunday/15 border-card' />
+          <span>祝日</span>
+        </div>
       </div>
     </div>
   )
