@@ -61,7 +61,10 @@ const CalendarContent = () => {
   const selectedDayEvents = selectedDay ? events.filter((event) => dayjs(event.date).date() === selectedDay) : []
 
   return (
-    <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
+    <div
+      className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'
+      style={{ fontFamily: '"Klee One", "Zen Maru Gothic", sans-serif' }}
+    >
       <CalendarHeader
         year={selectedYear}
         month={selectedMonth}
