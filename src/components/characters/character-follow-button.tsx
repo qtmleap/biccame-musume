@@ -1,5 +1,6 @@
 import { UserRoundPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 
 type CharacterFollowButtonProps = {
@@ -17,17 +18,22 @@ export const CharacterFollowButton = ({ twitterId, iconOnly = false }: Character
 
   if (iconOnly) {
     return (
-      <Button
-        asChild
-        size='icon'
-        variant='outline'
-        className='h-8 w-8 rounded-full border-brand/50 text-brand hover:bg-brand/10 hover:text-brand'
-        aria-label='フォロー'
-      >
-        <a href={href} target='_blank' rel='noopener noreferrer' onClick={(e) => e.stopPropagation()}>
-          <UserRoundPlus className='h-4 w-4' />
-        </a>
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            asChild
+            size='icon'
+            variant='outline'
+            className='h-8 w-8 rounded-full border-brand/50 text-brand hover:bg-brand/10 hover:text-brand'
+            aria-label='フォロー'
+          >
+            <a href={href} target='_blank' rel='noopener noreferrer' onClick={(e) => e.stopPropagation()}>
+              <UserRoundPlus className='h-4 w-4' />
+            </a>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>X (Twitter) でフォロー</TooltipContent>
+      </Tooltip>
     )
   }
 

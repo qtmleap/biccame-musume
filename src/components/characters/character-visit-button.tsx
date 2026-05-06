@@ -14,6 +14,7 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useAuth } from '@/hooks/use-auth'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { cn } from '@/lib/utils'
@@ -81,11 +82,25 @@ export const CharacterVisitButton = ({ storeKey, storeName, hasStore = true }: C
     </Button>
   )
 
-  if (visited) return button
+  const tooltipContent = visited ? '訪問済み（解除不可）' : 'この店舗を訪問済みにする'
+
+  if (visited) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>{button}</TooltipTrigger>
+        <TooltipContent>{tooltipContent}</TooltipContent>
+      </Tooltip>
+    )
+  }
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>{button}</AlertDialogTrigger>
+      <Tooltip>
+        <AlertDialogTrigger asChild>
+          <TooltipTrigger asChild>{button}</TooltipTrigger>
+        </AlertDialogTrigger>
+        <TooltipContent>{tooltipContent}</TooltipContent>
+      </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>この店舗を訪問しましたか？</AlertDialogTitle>

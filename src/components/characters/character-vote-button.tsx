@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { lastVoteTimesAtom } from '@/atoms/vote-atom'
 import { VoteBurst } from '@/components/characters/vote-burst'
 import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useVote } from '@/hooks/use-vote'
 import { cn } from '@/lib/utils'
 import { VOTE_LABELS } from '@/locales/app.content'
@@ -119,23 +120,28 @@ export const CharacterVoteButton = ({
   if (iconOnly) {
     return (
       <span className='relative inline-block'>
-        <motion.span whileTap={!hasVotedToday ? { scale: 0.9 } : undefined} className='inline-block'>
-          <Button
-            size='icon'
-            variant={hasVotedToday ? 'secondary' : 'default'}
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              handleVote()
-            }}
-            aria-disabled={hasVotedToday || isPending}
-            disabled={isPending}
-            aria-label={getButtonText()}
-            className={cn('h-8 w-8 rounded-full', stateClass)}
-          >
-            <PartyPopper className={cn('h-4 w-4', hasVotedToday && 'fill-current')} />
-          </Button>
-        </motion.span>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <motion.span whileTap={!hasVotedToday ? { scale: 0.9 } : undefined} className='inline-block'>
+              <Button
+                size='icon'
+                variant={hasVotedToday ? 'secondary' : 'default'}
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  handleVote()
+                }}
+                aria-disabled={hasVotedToday || isPending}
+                disabled={isPending}
+                aria-label={getButtonText()}
+                className={cn('h-8 w-8 rounded-full', stateClass)}
+              >
+                <PartyPopper className={cn('h-4 w-4', hasVotedToday && 'fill-current')} />
+              </Button>
+            </motion.span>
+          </TooltipTrigger>
+          <TooltipContent>{hasVotedToday ? '本日は応援済み（明日また応援できる）' : '今日の応援を送る'}</TooltipContent>
+        </Tooltip>
         <VoteBurst triggerKey={burstKey} count={4} />
       </span>
     )
