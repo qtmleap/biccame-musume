@@ -1,13 +1,17 @@
 import { z } from '@hono/zod-openapi'
+import { BadgeSchema } from './badge.dto'
 
 /**
  * 投票レスポンス（成功・エラー共通）
  */
-export const VoteResponseSchema = z.object({
-  success: z.boolean().openapi({ example: true }),
-  message: z.string().nonempty('メッセージは必須です').openapi({ example: '投票ありがとうございます！' }),
-  nextVoteDate: z.string().nonempty('次回投票日は必須です').openapi({ example: '2025-12-23' })
-})
+export const VoteResponseSchema = z
+  .object({
+    success: z.boolean().openapi({ example: true }),
+    message: z.string().nonempty('メッセージは必須です').openapi({ example: '投票ありがとうございます！' }),
+    nextVoteDate: z.string().nonempty('次回投票日は必須です').openapi({ example: '2025-12-23' }),
+    newBadges: z.array(BadgeSchema).default([]).openapi({ description: '今回新たに獲得したバッジの一覧' })
+  })
+  .openapi('VoteResponse')
 
 export type VoteResponse = z.infer<typeof VoteResponseSchema>
 
@@ -60,7 +64,8 @@ export const BulkVoteResponseSchema = z
     votedCount: z.number().openapi({ example: 3 }),
     /// 投票済みでスキップされた数
     skippedCount: z.number().openapi({ example: 1 }),
-    nextVoteDate: z.string().nonempty('次回投票日は必須です').openapi({ example: '2026-05-06' })
+    nextVoteDate: z.string().nonempty('次回投票日は必須です').openapi({ example: '2026-05-06' }),
+    newBadges: z.array(BadgeSchema).default([]).openapi({ description: '今回新たに獲得したバッジの一覧' })
   })
   .openapi('BulkVoteResponse')
 
@@ -79,5 +84,6 @@ export const BulkVoteResponseSchemaForClient = z.object({
   ),
   votedCount: z.number(),
   skippedCount: z.number(),
-  nextVoteDate: z.string().nonempty()
+  nextVoteDate: z.string().nonempty(),
+  newBadges: z.array(BadgeSchema).default([])
 })

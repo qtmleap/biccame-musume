@@ -1,4 +1,5 @@
 import { z } from '@hono/zod-openapi'
+import type { Badge as PrismaBadge } from '@prisma/client'
 
 export const BadgeCategorySchema = z.enum(['store', 'area', 'milestone', 'event', 'event_clear', 'vote', 'special'])
 
@@ -62,6 +63,25 @@ export const BadgeSchema = z
 export type Badge = z.infer<typeof BadgeSchema>
 
 export const BadgeListSchema = z.array(BadgeSchema).openapi('BadgeList')
+
+/**
+ * Convert a Prisma Badge row to the BadgeSchema DTO shape.
+ */
+export const prismaBadgeToDto = (b: PrismaBadge): Badge => ({
+  code: b.code,
+  category: b.category as Badge['category'],
+  sub_category: b.subCategory as Badge['sub_category'],
+  name: b.name,
+  description: b.description,
+  hint: b.hint,
+  rarity: b.rarity as Badge['rarity'],
+  icon_name: b.iconName,
+  sort_order: b.sortOrder,
+  condition_meta: b.conditionMeta,
+  is_hidden: b.isHidden,
+  created_at: b.createdAt.toISOString(),
+  updated_at: b.updatedAt.toISOString()
+})
 
 export const UserBadgeSchema = z
   .object({

@@ -44,12 +44,14 @@ export const getAllVoteCounts = async (
  * @param env Bindings
  * @param characterId キャラクターID
  * @param ip IPアドレス
+ * @param userId ログインユーザーのFirebase Auth UID（任意）
  * @returns 投票結果
  */
 export const vote = async (
   env: Bindings,
   characterId: string,
-  ip: string
+  ip: string,
+  userId?: string
 ): Promise<{ success: boolean; message: string; nextVoteDate: string }> => {
   const prisma = getPrisma(env)
 
@@ -68,11 +70,12 @@ export const vote = async (
     }
   })
 
-  // 投票レコード作成をバックグラウンドで実行
+  // 投票レコード作成
   await prisma.vote.create({
     data: {
       characterId,
-      ipAddress: ip
+      ipAddress: ip,
+      userId: userId ?? null
     }
   })
 
@@ -91,9 +94,15 @@ export const vote = async (
  * @param env Bindings
  * @param characterIds 投票対象のキャラクターIDの配列
  * @param ip 投票者のIPアドレス
+ * @param userId ログインユーザーのFirebase Auth UID（任意）
  * @returns キャラクター毎の投票結果
  */
-export const bulkVote = async (env: Bindings, characterIds: string[], ip: string): Promise<BulkVoteResult[]> => {
+export const bulkVote = async (
+  env: Bindings,
+  characterIds: string[],
+  ip: string,
+  userId?: string
+): Promise<BulkVoteResult[]> => {
   const isDev = env.ENVIRONMENT === 'local'
   const results: BulkVoteResult[] = []
 
@@ -107,7 +116,7 @@ export const bulkVote = async (env: Bindings, characterIds: string[], ip: string
       continue
     }
     await markVoteLimited(env.VOTE_LIMITER, characterId, ip)
-    await vote(env, characterId, ip)
+    await vote(env, characterId, ip, userId)
     results.push({ characterId, status: 'voted' })
   }
 
