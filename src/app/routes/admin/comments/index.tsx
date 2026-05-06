@@ -234,65 +234,63 @@ const CommentsContent = () => {
           )}
         </div>
 
-        {totalPages > 1 && (
-          <div className='mt-6'>
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    size='default'
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault()
-                      if (safePage > 1) setPage(safePage - 1)
-                    }}
-                    className={safePage === 1 ? 'pointer-events-none opacity-50' : ''}
-                  />
-                </PaginationItem>
+        <div className='mt-6'>
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  size='default'
+                  href='#'
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (safePage > 1) setPage(safePage - 1)
+                  }}
+                  className={safePage === 1 ? 'pointer-events-none opacity-50' : ''}
+                />
+              </PaginationItem>
 
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => {
-                  if (p === 1 || p === totalPages || (p >= safePage - 1 && p <= safePage + 1)) {
-                    return (
-                      <PaginationItem key={p}>
-                        <PaginationLink
-                          size='icon'
-                          href='#'
-                          onClick={(e) => {
-                            e.preventDefault()
-                            setPage(p)
-                          }}
-                          isActive={safePage === p}
-                        >
-                          {p}
-                        </PaginationLink>
-                      </PaginationItem>
-                    )
-                  }
-                  if (p === safePage - 2 || p === safePage + 2) {
-                    return (
-                      <PaginationItem key={p}>
-                        <PaginationEllipsis />
-                      </PaginationItem>
-                    )
-                  }
-                  return null
-                })}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => {
+                if (p === 1 || p === totalPages || (p >= safePage - 1 && p <= safePage + 1)) {
+                  return (
+                    <PaginationItem key={p}>
+                      <PaginationLink
+                        size='icon'
+                        href='#'
+                        onClick={(e) => {
+                          e.preventDefault()
+                          setPage(p)
+                        }}
+                        isActive={safePage === p}
+                      >
+                        {p}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )
+                }
+                if (p === safePage - 2 || p === safePage + 2) {
+                  return (
+                    <PaginationItem key={p}>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )
+                }
+                return null
+              })}
 
-                <PaginationItem>
-                  <PaginationNext
-                    size='default'
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault()
-                      if (safePage < totalPages) setPage(safePage + 1)
-                    }}
-                    className={safePage === totalPages ? 'pointer-events-none opacity-50' : ''}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
-        )}
+              <PaginationItem>
+                <PaginationNext
+                  size='default'
+                  href='#'
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (safePage < totalPages) setPage(safePage + 1)
+                  }}
+                  className={safePage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
       </div>
     </div>
   )
