@@ -64,7 +64,7 @@ export const CharacterFavoriteButton = ({
         <TooltipTrigger asChild>
           <Button
             size='sm'
-            variant='ghost'
+            variant='outline'
             onClick={handleToggle}
             aria-pressed={favored}
             aria-label={favored ? 'お気に入り解除' : 'お気に入り登録'}
@@ -72,8 +72,8 @@ export const CharacterFavoriteButton = ({
             className={cn(
               'h-8 w-8 p-0 rounded-full',
               favored
-                ? 'bg-favorite text-favorite-foreground hover:bg-favorite/90 hover:text-favorite-foreground'
-                : 'text-muted-foreground hover:bg-favorite/10 hover:text-favorite'
+                ? 'bg-favorite text-favorite-foreground hover:bg-favorite/90 hover:text-favorite-foreground border-transparent'
+                : 'border-muted-foreground/30 text-muted-foreground hover:bg-favorite/10 hover:text-favorite hover:border-favorite/40'
             )}
           >
             <motion.span
