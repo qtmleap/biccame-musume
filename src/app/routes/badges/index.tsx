@@ -1,28 +1,20 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, Sparkles } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { BadgeGrid } from '@/components/badges/badge-grid'
-import { BadgeLeaderboard } from '@/components/badges/badge-leaderboard'
 import { BadgeSummary } from '@/components/badges/badge-summary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
-import { useAuth } from '@/hooks/use-auth'
-import { useBadgeLeaderboard } from '@/hooks/use-badge-leaderboard'
 import { useBadges } from '@/hooks/use-badges'
 import { auth } from '@/lib/firebase'
 import { DURATION } from '@/lib/motion'
 
 const BadgesContent = () => {
-  const { user } = useAuth()
   const router = useRouter()
 
   const { badges, earnedMap } = useBadges()
-  const { data: leaderboard } = useBadgeLeaderboard(user?.uid)
-
   const earnedCount = earnedMap.size
-  const myRank = leaderboard.me?.rank ?? leaderboard.top.length + 1
-  const totalUsers = leaderboard.top.length
 
   return (
     <div className='min-h-screen bg-page-bg'>
@@ -43,26 +35,17 @@ const BadgesContent = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: DURATION.normal }}
-          className='mb-4 text-center relative'
+          className='mb-4 text-center'
         >
-          <div className='inline-flex items-center gap-1.5 text-[10px] md:text-xs font-bold tracking-widest text-rank-gold bg-rank-gold/10 px-3 py-1 rounded-full'>
-            <Sparkles className='size-3' />
-            11TH ANNIVERSARY
-          </div>
-          <h1 className='mt-2 font-display font-bold text-2xl md:text-3xl text-foreground tracking-tight'>
+          <h1 className='font-display font-bold text-2xl md:text-3xl text-foreground tracking-tight'>
             バッジコレクション
           </h1>
-          <p className='mt-1 text-xs md:text-sm text-muted-foreground'>集めて、自慢して、コンプを目指そう</p>
         </motion.header>
 
-        <BadgeSummary user={user} earnedCount={earnedCount} myRank={myRank} totalUsers={totalUsers} />
+        <BadgeSummary earnedCount={earnedCount} />
 
         <div className='mt-6 md:mt-8'>
           <BadgeGrid badges={badges} earnedMap={earnedMap} />
-        </div>
-
-        <div className='mt-8 md:mt-10'>
-          <BadgeLeaderboard leaderboard={leaderboard} myUid={user?.uid} />
         </div>
 
         <div className='mt-8 mb-6 text-center'>

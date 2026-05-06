@@ -1,60 +1,34 @@
-import type { User } from 'firebase/auth'
 import { motion } from 'motion/react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { getLargeTwitterPhoto } from '@/hooks/use-auth'
 import { DURATION } from '@/lib/motion'
 
 type BadgeSummaryProps = {
-  user: User | null
   earnedCount: number
-  /** 自分のリーダーボード順位 */
-  myRank: number
-  totalUsers: number
 }
 
 /**
- * 上部の進捗サマリー
+ * 獲得バッジ数だけを大きく見せる自己満足サマリー
  */
-export const BadgeSummary = ({ user, earnedCount, myRank, totalUsers }: BadgeSummaryProps) => {
+export const BadgeSummary = ({ earnedCount }: BadgeSummaryProps) => {
   return (
     <motion.section
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: DURATION.normal }}
-      className='relative bg-card border border-card-border rounded-3xl p-4 md:p-6 overflow-hidden'
+      className='relative bg-card border border-card-border rounded-3xl py-6 md:py-8 px-4 overflow-hidden text-center'
     >
-      {/* マスキングテープ装飾 */}
       <div aria-hidden className='absolute -top-3 left-6 w-16 h-5 bg-rank-gold/70 -rotate-6 rounded-sm' />
       <div
         aria-hidden
         className='absolute -top-2 right-8 w-10 h-4 bg-action-interest-soft/80 rotate-[5deg] rounded-sm'
       />
 
-      <div className='flex items-center gap-4'>
-        <Avatar className='size-14 md:size-16 ring-2 ring-rank-gold'>
-          <AvatarImage src={getLargeTwitterPhoto(user?.photoURL)} alt={user?.displayName ?? 'User'} />
-          <AvatarFallback className='bg-brand/10 text-brand text-2xl'>
-            {user?.displayName?.charAt(0) ?? 'U'}
-          </AvatarFallback>
-        </Avatar>
-
-        <div className='flex-1 min-w-0'>
-          <h2 className='text-base md:text-lg font-bold text-foreground truncate'>{user?.displayName ?? 'ゲスト'}</h2>
-          <p className='mt-0.5 text-xs text-muted-foreground'>
-            ランキング <span className='font-numeric font-bold tabular-nums text-foreground'>#{myRank}</span> /{' '}
-            {totalUsers} 人中
-          </p>
-        </div>
-
-        <div className='text-right shrink-0'>
-          <div
-            className='font-numeric font-black tabular-nums text-rank-gold leading-none text-4xl md:text-5xl'
-            style={{ letterSpacing: '-0.06em' }}
-          >
-            {earnedCount}
-          </div>
-          <div className='mt-1 text-[10px] md:text-xs text-muted-foreground'>個 獲得</div>
-        </div>
+      <p className='text-xs md:text-sm text-muted-foreground tracking-wide'>獲得バッジ</p>
+      <div
+        className='font-numeric font-black tabular-nums text-rank-gold leading-none mt-1 text-5xl md:text-6xl'
+        style={{ letterSpacing: '-0.06em' }}
+      >
+        {earnedCount}
+        <span className='ml-1 text-xl md:text-2xl text-muted-foreground'>個</span>
       </div>
     </motion.section>
   )
