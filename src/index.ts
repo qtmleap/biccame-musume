@@ -5,6 +5,7 @@ import { proxy } from 'hono/proxy'
 import { secureHeaders } from 'hono/secure-headers'
 import { ZodError } from 'zod'
 import authRoutes from './api/auth'
+import badges from './api/badge'
 import comments from './api/comment'
 import direction from './api/direction'
 import events from './api/event'
@@ -113,6 +114,9 @@ app.route('/api', me)
 
 // お気に入りキャラクターAPIルート
 app.route('/api', favorite)
+
+// バッジAPIルート
+app.route('/api', badges)
 
 // 静的ファイル配信 & SPA フォールバック
 app.use('*', async (c, next) => {
