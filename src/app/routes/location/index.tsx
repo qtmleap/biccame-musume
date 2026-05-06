@@ -142,7 +142,7 @@ const LocationContent = () => {
 
   return (
     <APIProvider apiKey={apiKey}>
-      <section className='relative w-full h-full overflow-hidden' aria-label='地図'>
+      <section className='relative w-full flex-1 min-h-0 overflow-hidden' aria-label='地図'>
         <LocationMapInner
           characters={charactersWithAddress}
           selectedCharacter={selectedCharacter}
