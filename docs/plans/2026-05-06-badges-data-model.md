@@ -347,40 +347,40 @@ LIMIT 50;
 
 ### Backend
 
-- [ ] Prisma スキーマに `Badge` / `UserBadge` 追加 + マイグレーション (`prisma migrate diff`)
-- [ ] `src/data/badges/store-exclusion.ts` で実店舗以外を列挙 + テストでスキーマと突き合わせ
-- [ ] `src/data/badges/registry.ts` で全バッジ定義を生成
-- [ ] `bun run badges:seed` スクリプト (upsert で Badge テーブル投入、`category='special'` は触らない、auto-generated でも admin が編集した表示フィールドは保持)
-- [ ] `POST/PATCH/DELETE /api/admin/badges` (special バッジの全項目 CRUD)
-- [ ] `PATCH /api/admin/badges/:code` (auto-generated バッジは表示フィールドのみ編集 = name/description/hint/iconName/rarity/sortOrder/isHidden)
-- [ ] `src/services/badge-evaluator.ts` で subCategory 別 evaluator 実装
-- [ ] `src/services/badge-evaluator.ts` に `evaluateOnVisit` / `evaluateOnEventComplete` / `evaluateOnVote` ヘルパー
-- [ ] 既存の `PUT /api/users/me/stores/:storeKey` に評価フック追加 + 新規バッジ返却
-- [ ] 既存の `PUT /api/users/me/events/:eventId` に評価フック追加 + 新規バッジ返却
-- [ ] 既存の `POST /api/votes` (一括投票含む) に評価フック追加 + 新規バッジ返却
-- [ ] `GET /api/badges`, `GET /api/users/me/badges`, `GET /api/badges/leaderboard` 実装
-- [ ] `scripts/backfill-badges.ts` (全ユーザー一括判定)
-- [ ] OpenAPI spec / Zod スキーマ整備
+- [x] Prisma スキーマに `Badge` / `UserBadge` 追加 + マイグレーション (`prisma migrate diff`)
+- [x] `src/data/badges/store-exclusion.ts` で実店舗以外を列挙 + テストでスキーマと突き合わせ
+- [x] `src/data/badges/registry.ts` で全バッジ定義を生成
+- [x] `bun run badges:seed` スクリプト (upsert で Badge テーブル投入、`category='special'` は触らない、auto-generated でも admin が編集した表示フィールドは保持)
+- [x] `POST/PATCH/DELETE /api/admin/badges` (special バッジの全項目 CRUD)
+- [x] `PATCH /api/admin/badges/:code` (auto-generated バッジは表示フィールドのみ編集 = name/description/hint/iconName/rarity/sortOrder/isHidden)
+- [x] `src/services/badge-evaluator.ts` で subCategory 別 evaluator 実装
+- [x] `src/services/badge-evaluator.ts` に `evaluateOnVisit` / `evaluateOnEventComplete` / `evaluateOnVote` ヘルパー
+- [x] 既存の `PUT /api/users/me/stores/:storeKey` に評価フック追加 + 新規バッジ返却
+- [x] 既存の `PUT /api/users/me/events/:eventId` に評価フック追加 + 新規バッジ返却
+- [x] 既存の `POST /api/votes` (一括投票含む) に評価フック追加 + 新規バッジ返却
+- [x] `GET /api/badges`, `GET /api/users/me/badges`, `GET /api/badges/leaderboard` 実装
+- [x] `scripts/backfill-badges.ts` (全ユーザー一括判定)
+- [x] OpenAPI spec / Zod スキーマ整備
 
 ### Frontend
 
-- [ ] `src/hooks/use-badges.ts` (`useSuspenseQuery` 2 つ束ねる)
-- [ ] `src/hooks/use-badge-leaderboard.ts`
-- [ ] `src/data/badges.mock.ts` を削除し、components/badges/ をフック経由で接続
-- [ ] アイコンは `iconName` 文字列 → lucide コンポーネント参照のマッピング表 (`src/lib/badge-icons.ts`)
-- [ ] 店舗カテゴリの**エリアサブセクション化** (3 列 × 多段でも視認性を保つ)
-- [ ] 獲得時 toast (店舗訪問/イベント完了 mutation の onSuccess で分岐)
-- [ ] ヘッダー nav に `/badges` 追加 (ログイン時のみ)
-- [ ] `/admin/badges` 管理画面 (一覧 / 作成 (special のみ) / 編集 / 削除 (special のみ)、storeKey multi-select & event 検索付き)
-- [ ] `/admin` トップに「バッジ管理」`MenuCard` 追加 (既存の「イベント管理」と並べる)
+- [x] `src/hooks/use-badges.ts` (`useSuspenseQuery` 2 つ束ねる)
+- [x] `src/hooks/use-badge-leaderboard.ts`
+- [x] `src/data/badges.mock.ts` を削除し、components/badges/ をフック経由で接続
+- [x] アイコンは `iconName` 文字列 → lucide コンポーネント参照のマッピング表 (`src/lib/badge-icons.ts`)
+- [ ] 店舗カテゴリの**エリアサブセクション化** (3 列 × 多段でも視認性を保つ) — `BADGE_CATEGORY_DEFS` でカテゴリ単位の分割は実装済、エリアサブセクションは Phase 6 で
+- [x] 獲得時 toast (店舗訪問/イベント完了 mutation の onSuccess で分岐)
+- [x] ヘッダー nav に `/badges` 追加 (ログイン時のみ)
+- [x] `/admin/badges` 管理画面 (一覧 / 作成 (special のみ) / 編集 / 削除 (special のみ)、storeKey multi-select & event 検索付き)
+- [x] `/admin` トップに「バッジ管理」`MenuCard` 追加 (既存の「イベント管理」と並べる)
 
 ### QA
 
-- [ ] Evaluator のユニットテスト (各 subCategory ごとに境界値)
-- [ ] バックフィル冪等性のテスト
-- [ ] リーダーボードの順位計算 (タイブレーク含む) のテスト
-- [ ] e2e: ログイン → 店舗訪問 → 該当バッジが UI に出現
-- [ ] biome / tsc / playwright 全パス
+- [x] Evaluator のユニットテスト (各 subCategory ごとに境界値)
+- [x] バックフィル冪等性のテスト
+- [x] リーダーボードの順位計算 (タイブレーク含む) のテスト
+- [ ] e2e: ログイン → 店舗訪問 → 該当バッジが UI に出現 — TODO スタブのみ (`e2e/badges-flow.spec.ts`, Firebase エミュレータ + 認証セットアップ要)
+- [x] biome / tsc / `bun test` 全パス (88 テスト pass)
 
 ## 設計原則 (バッジ全体)
 
