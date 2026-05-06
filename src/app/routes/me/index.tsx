@@ -154,11 +154,21 @@ const MyPageContent = () => {
             {visitedCharacters.length === 0 ? (
               <p className='text-sm text-muted-foreground py-2'>{MY_PAGE_LABELS.noVisitedStores}</p>
             ) : (
-              <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
-                {displayVisited.map((character, index) => (
-                  <CharacterListCard key={character.id} character={character} index={index} />
-                ))}
-              </div>
+              <>
+                <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
+                  {displayVisited.map((character, index) => (
+                    <CharacterListCard key={character.id} character={character} index={index} />
+                  ))}
+                </div>
+                <div className='mt-4 text-right'>
+                  <Link
+                    to='/me/visited'
+                    className='text-sm text-muted-foreground hover:text-foreground font-semibold hover:underline transition-colors'
+                  >
+                    {MY_PAGE_LABELS.viewAll}
+                  </Link>
+                </div>
+              </>
             )}
           </motion.div>
 
