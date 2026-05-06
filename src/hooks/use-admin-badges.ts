@@ -65,3 +65,22 @@ export const useDeleteBadge = () => {
     }
   })
 }
+
+/**
+ * 管理者向け: 全ユーザーのバッジ獲得状況を再評価するフック
+ * 店舗数や条件が変わった時に押す。重いので連打しない想定。
+ */
+export const useRecalculateBadges = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () => client.recalculateBadges({}),
+    onSuccess: (data) => {
+      toast.success(`再評価完了: ${data.processedUsers}人 / 新規付与 ${data.awardedTotal}件`)
+      queryClient.invalidateQueries({ queryKey: ['badges'] })
+      queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+    },
+    onError: () => {
+      toast.error('バッジ再評価に失敗しました')
+    }
+  })
+}

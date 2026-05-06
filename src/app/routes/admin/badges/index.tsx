@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Pencil, Plus, RotateCcw, Trash2 } from 'lucide-react'
+import { ArrowLeft, Pencil, Plus, RefreshCw, RotateCcw, Trash2 } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense, useMemo, useState } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
@@ -25,7 +25,13 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { PHYSICAL_STORE_KEYS } from '@/data/badges/store-exclusion'
-import { useAllBadges, useCreateSpecialBadge, useDeleteBadge, useUpdateBadge } from '@/hooks/use-admin-badges'
+import {
+  useAllBadges,
+  useCreateSpecialBadge,
+  useDeleteBadge,
+  useRecalculateBadges,
+  useUpdateBadge
+} from '@/hooks/use-admin-badges'
 import { BADGE_CATEGORY_DEFS } from '@/lib/badge-categories'
 import { getBadgeIcon, ICON_MAP } from '@/lib/badge-icons'
 import { DURATION } from '@/lib/motion'
@@ -728,6 +734,46 @@ const CategorySection = ({
 }
 
 // ---------------------------------------------------------------------------
+// Recalculate button
+// ---------------------------------------------------------------------------
+
+const RecalculateBadgesButton = () => {
+  const recalc = useRecalculateBadges()
+  const [open, setOpen] = useState(false)
+
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
+        <Button size='sm' variant='outline' disabled={recalc.isPending}>
+          <RefreshCw className={cn('size-4 mr-1', recalc.isPending && 'animate-spin')} />
+          {recalc.isPending ? '再評価中...' : 'バッジ再評価'}
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>全ユーザーのバッジを再評価しますか？</AlertDialogTitle>
+          <AlertDialogDescription>
+            店舗数や条件メタが変わった時に使用。全ユーザー × 全バッジを評価して未獲得の条件達成バッジを付与します。
+            ユーザー数によっては数十秒かかる場合があります。
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>キャンセル</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => {
+              recalc.mutate()
+              setOpen(false)
+            }}
+          >
+            実行する
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Stats hero
 // ---------------------------------------------------------------------------
 
@@ -883,14 +929,17 @@ const BadgesContent = () => {
                 特別バッジの作成・編集と表示設定。自動生成バッジは表示フィールドのみ編集可。
               </p>
             </div>
-            <Button
-              size='sm'
-              className='bg-brand hover:bg-brand/90 text-brand-foreground shrink-0'
-              onClick={() => setCreateOpen(true)}
-            >
-              <Plus className='size-4 mr-1' />
-              特別バッジ作成
-            </Button>
+            <div className='flex items-center gap-2 shrink-0'>
+              <RecalculateBadgesButton />
+              <Button
+                size='sm'
+                className='bg-brand hover:bg-brand/90 text-brand-foreground'
+                onClick={() => setCreateOpen(true)}
+              >
+                <Plus className='size-4 mr-1' />
+                特別バッジ作成
+              </Button>
+            </div>
           </div>
         </motion.div>
 
