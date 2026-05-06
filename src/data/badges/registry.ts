@@ -274,23 +274,9 @@ function getBadgeRegistry(): BadgeDef[] {
   //   epic:      125–300               (8 entries)
   //   legendary: 325–575               (11 entries)
   //
-  // Named entries (stable codes preserved):
-  //   event_count_1   → はじめてのイベント
-  //   event_count_5   → 常連さん
-  //   event_count_10  → イベントマスター
-  //   event_count_20  → イベント愛好家
-  //   event_count_50  → イベントの主
-  //   event_count_575 → イベント極み   (new legendary peak)
-  //   all others      → イベント X 件
+  // All entries use the auto-name pattern 'イベント X 件'.
   // -----------------------------------------------------------------------
-  const EVENT_COUNT_NAMED: Record<number, string> = {
-    1: 'はじめてのイベント',
-    5: '常連さん',
-    10: 'イベントマスター',
-    20: 'イベント愛好家',
-    50: 'イベントの主',
-    575: 'イベント極み'
-  }
+  const EVENT_COUNT_NAMED: Record<number, string> = {}
   function eventCountRarity(count: number): BadgeRarity {
     if (count <= 30) return 'common'
     if (count <= 100) return 'rare'
