@@ -2,14 +2,12 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
-import { Badge } from '@/components/ui/badge'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import {
   DATE_LABELS,
-  EVENT_LABELS,
   EVENT_LIST_ITEM_LABELS,
   EVENT_STATUS_LABELS,
   STORE_NAME_LABELS
@@ -98,7 +96,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
               <div className={`shrink-0 p-2 rounded-lg ${CATEGORY_WITH_ICON[event.category ?? 'other'].className}`}>
                 {CATEGORY_WITH_ICON[event.category ?? 'other'].icon}
               </div>
-              <p className='text-sm font-medium text-foreground line-clamp-2'>{event.title}</p>
+              <p className='text-base font-semibold text-foreground truncate'>{event.title}</p>
             </div>
             <div
               className={`shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
@@ -142,20 +140,6 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
                 )}
               </div>
             </div>
-            {event.conditions.some((c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery') && (
-              <div className='mt-1 flex flex-wrap gap-1'>
-                {event.conditions.map((condition) => {
-                  if (condition.type === 'everyone') return null
-                  return (
-                    <Badge key={`${event.uuid}-${condition.type}`} variant='secondary'>
-                      {condition.type === 'purchase' && `${condition.purchaseAmount?.toLocaleString()}円以上購入`}
-                      {condition.type === 'first_come' && EVENT_LABELS.firstCome}
-                      {condition.type === 'lottery' && EVENT_LABELS.lottery}
-                    </Badge>
-                  )
-                })}
-              </div>
-            )}
           </div>
         </Link>
       </motion.div>
