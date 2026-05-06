@@ -35,6 +35,7 @@ import {
 import { BADGE_CATEGORY_DEFS } from '@/lib/badge-categories'
 import { getBadgeIcon, ICON_MAP } from '@/lib/badge-icons'
 import { DURATION } from '@/lib/motion'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { STORE_NAME_LABELS } from '@/locales/app.content'
 import {
@@ -559,10 +560,11 @@ const CreateBadgeDialog = ({ open, onClose }: { open: boolean; onClose: () => vo
 // Badge card
 // ---------------------------------------------------------------------------
 
-const BadgeCard = ({ badge }: { badge: BadgeDto }) => {
+const BadgeCard = ({ badge, index }: { badge: BadgeDto; index: number }) => {
   const [editOpen, setEditOpen] = useState(false)
   const deleteBadge = useDeleteBadge()
   const isSpecial = badge.code.startsWith('special_')
+  const tape = STICKER_TAPES[index % STICKER_TAPES.length]
 
   const Icon = (() => {
     try {
@@ -574,117 +576,136 @@ const BadgeCard = ({ badge }: { badge: BadgeDto }) => {
 
   return (
     <>
-      <div className='group relative flex flex-col rounded-xl border border-card-border bg-card p-3 transition-shadow hover:shadow-sm'>
-        {/* Hover actions */}
-        <div className='absolute top-1.5 right-1.5 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity'>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size='icon'
-                  variant='ghost'
-                  className='size-7 bg-card/80 backdrop-blur'
-                  onClick={() => setEditOpen(true)}
-                >
-                  <Pencil className='size-3.5' />
-                  <span className='sr-only'>編集</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>編集</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          {isSpecial && (
-            <AlertDialog>
+      <motion.div className='h-full' style={{ filter: STICKER_SHADOW_SM }}>
+        <motion.div
+          className='h-full'
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          transition={STICKER_HOVER_TRANSITION}
+        >
+          <div className='group relative flex flex-col h-full rounded-xl border border-zinc-200 dark:border-card-border bg-card p-3'>
+            {tape && (
+              <div
+                aria-hidden
+                className={cn('absolute rounded-sm', tape.position, tape.size, tape.color, tape.angle)}
+              />
+            )}
+            {/* Hover actions */}
+            <div className='absolute top-1.5 right-1.5 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity'>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        size='icon'
-                        variant='ghost'
-                        className='size-7 bg-card/80 backdrop-blur text-destructive hover:text-destructive'
-                      >
-                        <Trash2 className='size-3.5' />
-                        <span className='sr-only'>削除</span>
-                      </Button>
-                    </AlertDialogTrigger>
+                    <Button
+                      size='icon'
+                      variant='ghost'
+                      className='size-7 bg-card/80 backdrop-blur'
+                      onClick={() => setEditOpen(true)}
+                    >
+                      <Pencil className='size-3.5' />
+                      <span className='sr-only'>編集</span>
+                    </Button>
                   </TooltipTrigger>
-                  <TooltipContent>削除</TooltipContent>
+                  <TooltipContent>編集</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>バッジを削除しますか？</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    「{badge.name}」を削除します。この操作は取り消せません。獲得済みユーザーのバッジ記録も削除されます。
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                  <AlertDialogAction variant='destructive' onClick={() => deleteBadge.mutate(badge.code)}>
-                    削除する
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )}
-        </div>
 
-        {/* Tooltip-wrapped main content (icon + name) */}
-        <TooltipProvider delayDuration={200}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className='flex flex-col cursor-default'>
-                <div className='flex justify-center mb-2'>
-                  <div
-                    className={cn('flex size-14 items-center justify-center rounded-2xl', RARITY_ICON_BG[badge.rarity])}
-                  >
-                    {Icon && <Icon className='size-7' />}
+              {isSpecial && (
+                <AlertDialog>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            size='icon'
+                            variant='ghost'
+                            className='size-7 bg-card/80 backdrop-blur text-destructive hover:text-destructive'
+                          >
+                            <Trash2 className='size-3.5' />
+                            <span className='sr-only'>削除</span>
+                          </Button>
+                        </AlertDialogTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>削除</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>バッジを削除しますか？</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        「{badge.name}
+                        」を削除します。この操作は取り消せません。獲得済みユーザーのバッジ記録も削除されます。
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                      <AlertDialogAction variant='destructive' onClick={() => deleteBadge.mutate(badge.code)}>
+                        削除する
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+            </div>
+
+            {/* Tooltip-wrapped main content (icon + name) */}
+            <TooltipProvider delayDuration={200}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className='flex flex-col cursor-default'>
+                    <div className='flex justify-center mb-2'>
+                      <div
+                        className={cn(
+                          'flex size-14 items-center justify-center rounded-2xl',
+                          RARITY_ICON_BG[badge.rarity]
+                        )}
+                      >
+                        {Icon && <Icon className='size-7' />}
+                      </div>
+                    </div>
+
+                    <p className='text-sm font-bold text-foreground line-clamp-2 leading-tight min-h-[2.5em] text-center'>
+                      {badge.name}
+                    </p>
                   </div>
-                </div>
+                </TooltipTrigger>
+                <TooltipContent side='bottom' className='max-w-xs'>
+                  <div className='space-y-1'>
+                    <div className='flex items-center gap-1.5'>
+                      <span
+                        className={cn(
+                          'text-[9px] font-numeric font-bold tracking-widest px-1.5 py-0.5 rounded-full',
+                          RARITY_CHIP[badge.rarity]
+                        )}
+                      >
+                        {RARITY_LABELS[badge.rarity]}
+                      </span>
+                      <span className='font-bold'>{badge.name}</span>
+                    </div>
+                    <p className='text-[10px] font-numeric text-muted-foreground'>{badge.code}</p>
+                    <p className='text-xs'>{badge.description}</p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
-                <p className='text-sm font-bold text-foreground line-clamp-2 leading-tight min-h-[2.5em] text-center'>
-                  {badge.name}
-                </p>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side='bottom' className='max-w-xs'>
-              <div className='space-y-1'>
-                <div className='flex items-center gap-1.5'>
-                  <span
-                    className={cn(
-                      'text-[9px] font-numeric font-bold tracking-widest px-1.5 py-0.5 rounded-full',
-                      RARITY_CHIP[badge.rarity]
-                    )}
-                  >
-                    {RARITY_LABELS[badge.rarity]}
+            {/* Status chips (only when meaningful) */}
+            {(badge.is_hidden || isSpecial) && (
+              <div className='mt-1.5 flex items-center justify-center gap-1 flex-wrap'>
+                {badge.is_hidden && (
+                  <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground'>
+                    非表示
                   </span>
-                  <span className='font-bold'>{badge.name}</span>
-                </div>
-                <p className='text-[10px] font-numeric text-muted-foreground'>{badge.code}</p>
-                <p className='text-xs'>{badge.description}</p>
+                )}
+                {isSpecial && (
+                  <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-rank-gold/15 text-rank-gold-foreground'>
+                    特別
+                  </span>
+                )}
               </div>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        {/* Status chips (only when meaningful) */}
-        {(badge.is_hidden || isSpecial) && (
-          <div className='mt-1.5 flex items-center justify-center gap-1 flex-wrap'>
-            {badge.is_hidden && (
-              <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground'>
-                非表示
-              </span>
-            )}
-            {isSpecial && (
-              <span className='text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-rank-gold/15 text-rank-gold-foreground'>
-                特別
-              </span>
             )}
           </div>
-        )}
-      </div>
+        </motion.div>
+      </motion.div>
 
       <EditBadgeDialog badge={badge} open={editOpen} onClose={() => setEditOpen(false)} />
     </>
@@ -725,8 +746,8 @@ const CategorySection = ({
         </span>
       </header>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-3'>
-        {badges.map((badge) => (
-          <BadgeCard key={badge.code} badge={badge} />
+        {badges.map((badge, index) => (
+          <BadgeCard key={badge.code} badge={badge} index={index} />
         ))}
       </div>
     </motion.section>
