@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { ArrowLeft, MessageSquare, Trash2 } from 'lucide-react'
+import { ArrowLeft, Trash2 } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense, useMemo, useState } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -189,10 +189,7 @@ const CommentsContent = () => {
           transition={{ duration: DURATION.normal }}
           className='mb-4 md:mb-6'
         >
-          <div className='flex items-center gap-2'>
-            <MessageSquare className='size-6 text-brand' />
-            <h1 className='font-display font-bold text-2xl md:text-3xl text-foreground'>コメント管理</h1>
-          </div>
+          <h1 className='font-display font-bold text-2xl md:text-3xl text-foreground'>コメント管理</h1>
           <p className='mt-1 text-sm text-muted-foreground'>イベントに投稿されたコメントの確認と削除。</p>
         </motion.div>
 
