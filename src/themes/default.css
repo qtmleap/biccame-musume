@@ -1,4 +1,10 @@
 @theme inline {
+  /* Typography (theme-overridable) */
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-handwritten: var(--font-handwritten);
+  --font-numeric: var(--font-numeric);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

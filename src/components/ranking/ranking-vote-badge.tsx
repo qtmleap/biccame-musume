@@ -93,12 +93,7 @@ export const RankingVoteBadge = ({ characterId, voteCount }: RankingVoteBadgePro
             hasVotedToday ? 'text-vote-count-icon fill-current' : 'text-vote-count-icon'
           )}
         />
-        <span
-          className='tabular-nums text-sm whitespace-nowrap'
-          style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 700 }}
-        >
-          {displayCount}
-        </span>
+        <span className='font-bold tabular-nums text-sm whitespace-nowrap'>{displayCount}</span>
       </motion.button>
       <VoteBurst triggerKey={burstKey} count={5} />
     </span>

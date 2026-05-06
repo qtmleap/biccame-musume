@@ -1,6 +1,12 @@
 :root {
   --radius: 0.625rem;
 
+  /* Typography */
+  --font-sans: "Zen Maru Gothic", sans-serif;
+  --font-display: "Zen Maru Gothic", sans-serif;
+  --font-handwritten: "Klee One", "Zen Maru Gothic", sans-serif;
+  --font-numeric: Inter, system-ui, sans-serif;
+
   /* Shadcn base palette */
   --background: var(--color-white);
   --foreground: var(--color-zinc-950);
