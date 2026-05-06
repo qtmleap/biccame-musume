@@ -19,6 +19,7 @@ import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as CharactersIndexRouteImport } from './routes/characters/index'
 import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
+import { Route as BadgesIndexRouteImport } from './routes/badges/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as MeInterestedIndexRouteImport } from './routes/me/interested/index'
@@ -79,6 +80,11 @@ const CalendarIndexRoute = CalendarIndexRouteImport.update({
   path: '/calendar/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BadgesIndexRoute = BadgesIndexRouteImport.update({
+  id: '/badges/',
+  path: '/badges/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/about/': typeof AboutIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/badges/': typeof BadgesIndexRoute
   '/calendar/': typeof CalendarIndexRoute
   '/characters/': typeof CharactersIndexRoute
   '/contact/': typeof ContactIndexRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutIndexRoute
   '/admin': typeof AdminIndexRoute
+  '/badges': typeof BadgesIndexRoute
   '/calendar': typeof CalendarIndexRoute
   '/characters': typeof CharactersIndexRoute
   '/contact': typeof ContactIndexRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/about/': typeof AboutIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/badges/': typeof BadgesIndexRoute
   '/calendar/': typeof CalendarIndexRoute
   '/characters/': typeof CharactersIndexRoute
   '/contact/': typeof ContactIndexRoute
@@ -195,6 +204,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/about/'
     | '/admin/'
+    | '/badges/'
     | '/calendar/'
     | '/characters/'
     | '/contact/'
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/badges'
     | '/calendar'
     | '/characters'
     | '/contact'
@@ -236,6 +247,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/about/'
     | '/admin/'
+    | '/badges/'
     | '/calendar/'
     | '/characters/'
     | '/contact/'
@@ -257,6 +269,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AboutIndexRoute: typeof AboutIndexRoute
+  BadgesIndexRoute: typeof BadgesIndexRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
   CharactersIndexRoute: typeof CharactersIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
@@ -344,6 +357,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalendarIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/badges/': {
+      id: '/badges/'
+      path: '/badges'
+      fullPath: '/badges/'
+      preLoaderRoute: typeof BadgesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -428,6 +448,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AboutIndexRoute: AboutIndexRoute,
+  BadgesIndexRoute: BadgesIndexRoute,
   CalendarIndexRoute: CalendarIndexRoute,
   CharactersIndexRoute: CharactersIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
