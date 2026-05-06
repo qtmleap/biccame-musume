@@ -2,7 +2,16 @@ import { z } from '@hono/zod-openapi'
 import type { Badge as PrismaBadge } from '@prisma/client'
 import { StoreKeySchema } from '@/schemas/store.dto'
 
-export const BadgeCategorySchema = z.enum(['store', 'area', 'milestone', 'event', 'event_clear', 'vote', 'special'])
+export const BadgeCategorySchema = z.enum([
+  'store',
+  'area',
+  'milestone',
+  'event',
+  'event_clear_store',
+  'event_clear_area',
+  'vote',
+  'special'
+])
 
 export type BadgeCategory = z.infer<typeof BadgeCategorySchema>
 
