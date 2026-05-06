@@ -20,6 +20,12 @@ export const EXCLUDED_STORE_KEYS: ReadonlySet<StoreKey> = new Set(EXCLUDED)
 //   photo   (フォトスタジオ)                      — listed as a separate campaign store for ikebukuro
 //   prosta  (ビックフォトスタジオ東京写真館)        — listed as a separate campaign store for ikebukuro (11th anniversary)
 //   bicqlo  (ビックカメラ新宿東口店)               — the former ビックロ building, now a physical BicCamera store
+// 閉店した店舗。area_complete / count / event_clear_* 等の集合系条件から除外する
+// （個別 visit / event_clear_at_store バッジは「永久未達」のままでよい）
+const CLOSED: readonly StoreKey[] = [] as const satisfies StoreKey[]
+
+export const CLOSED_STORE_KEYS: ReadonlySet<StoreKey> = new Set(CLOSED)
+
 export const PHYSICAL_STORE_KEYS: readonly StoreKey[] = [
   'abeno',
   'akasaka',
@@ -72,3 +78,9 @@ export const PHYSICAL_STORE_KEYS: readonly StoreKey[] = [
   'yokonishi',
   'yuurakuchou'
 ] as const satisfies StoreKey[]
+
+// 集合系バッジ判定で使う「現役」店舗キー。閉店店舗を除く。
+// area_complete / count / event_clear_count / event_clear_all 等はここを基準にする。
+export const ACTIVE_PHYSICAL_STORE_KEYS: readonly StoreKey[] = PHYSICAL_STORE_KEYS.filter(
+  (k) => !CLOSED_STORE_KEYS.has(k)
+)
