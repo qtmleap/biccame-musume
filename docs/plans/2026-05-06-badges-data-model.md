@@ -4,7 +4,7 @@ Date: 2026-05-06
 
 ## Goal
 
-ビックカメラ 11 周年キャンペーンを念頭に、店舗訪問とイベント参加に基づくバッジ獲得システムを設計・実装する。`/badges` ルートのモック ([2026-05-06 commit b7bf3ab](../../src/app/routes/badges/index.tsx)) を実データへ移行し、Prisma で `Badge` / `UserBadge` を管理、店舗訪問・イベント参加のフックで非同期判定する。
+ビックカメラ 11 周年キャンペーンを念頭に、**店舗訪問・イベント参加・店舗別イベント達成・投票**を軸としたバッジ獲得システムを設計・実装する。`/badges` ルートのモック ([2026-05-06 commit b7bf3ab](../../src/app/routes/badges/index.tsx)) を実データへ移行し、Prisma で `Badge` / `UserBadge` を管理、店舗訪問・イベント完了・投票成立のフックで同期判定する。
 
 ## バッジ一覧 (MVP)
 
@@ -157,8 +157,12 @@ model UserBadge {
 ```ts
 type BadgeDef = {
   code: string
-  category: 'store' | 'area' | 'milestone' | 'event' | 'anniversary'
-  subCategory: 'visit' | 'area_any' | 'area_complete' | 'count' | 'event_count'
+  category: 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'anniversary'
+  subCategory:
+    | 'visit' | 'area_any' | 'area_complete' | 'count'
+    | 'event_count'
+    | 'event_clear_at_store' | 'event_clear_area_any' | 'event_clear_area_complete' | 'event_clear_count' | 'event_clear_all'
+    | 'vote_total' | 'vote_unique' | 'vote_devotion' | 'vote_all_biccame'
   conditionMeta: { storeKey?: StoreKey; region?: Region; count?: number }
   // ... name/description/hint/rarity/iconName/sortOrder
 }
@@ -270,7 +274,8 @@ LIMIT 50;
 - ヘッダーナビに `/badges` リンク (Award アイコン)。ログイン時のみ表示。
 - 店舗詳細 (`/location?store=...` 周辺) に「未獲得バッジ」表示
 - 獲得時の toast (`bun run dev` で sonner 経由)
-- グリッドが約 70 マスになるので、店舗カテゴリは**エリアごとにサブセクション分割** (関東 / 中部 / 関西 / 九州 / 北海道)
+- グリッドが約 162 マスになるので、**店舗訪問・店舗別イベント達成カテゴリはエリアごとにサブセクション分割** (関東 / 中部 / 関西 / 九州 / 北海道)。投票系は軸ごと (累計 / 多様性 / 推し愛) のサブセクション
+- 同じ店舗の「訪問」と「制覇」を**並べて見せる**レイアウト案 (各店舗カードを縦 2 段で訪問→制覇に展開) も検討
 
 ## 認証/認可
 
@@ -324,7 +329,7 @@ LIMIT 50;
 
 - 店舗マスタ (`stores.yaml` 等) のうち実店舗判定の根拠 → `prefecture` 必須でよいか
 - 多様性最終段とコンプの関係: 全 50 人なら 5/10/.../45 + 全員推し 50 で確定。51 人になったら 50 マイルストーンが新たに発生 (生やすか / マイグレで再判定するかは Phase 2)
-- アイコン採用方針: lucide で全 ~86 個分けるか、店舗系は地図ピン共通で OK か
+- アイコン採用方針: lucide で全 ~162 個分けるか、店舗系 (訪問 / 制覇) は地図ピン共通＋色違いで区別など節約するか
 - リーダーボードの匿名表示オプト (Phase 2)
 
 ## ステップ実装順
