@@ -189,8 +189,10 @@ const CommentsContent = () => {
           transition={{ duration: DURATION.normal }}
           className='mb-4 md:mb-6'
         >
-          <h1 className='font-display font-bold text-2xl md:text-3xl text-foreground'>コメント管理</h1>
-          <p className='mt-1 text-sm text-muted-foreground'>イベントに投稿されたコメントの確認と削除。</p>
+          <h1 className='text-2xl font-bold text-foreground'>コメント管理</h1>
+          <p className='mt-2 text-sm text-muted-foreground md:text-base'>
+            イベントに投稿されたコメントの確認と削除。
+          </p>
         </motion.div>
 
         <motion.div
