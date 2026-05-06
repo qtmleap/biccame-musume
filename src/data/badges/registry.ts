@@ -335,7 +335,7 @@ function getBadgeRegistry(): BadgeDef[] {
       name: `${areaLabel}イベントデビュー`,
       description: `${areaLabel}のいずれかの店舗でイベントを達成しました`,
       hint: `${areaLabel}の店舗で 1 件以上イベントを完了するとゲットできます`,
-      rarity: 'epic',
+      rarity: 'common',
       iconName: 'Compass',
       sortOrder: next(),
       conditionMeta: { region: area }
@@ -351,7 +351,7 @@ function getBadgeRegistry(): BadgeDef[] {
       name: `${areaLabel}制覇`,
       description: `${areaLabel}の全 ${storeCount} 店舗でイベントを達成しました`,
       hint: `${areaLabel}の全店舗でイベントを完了するとゲットできます`,
-      rarity: 'legendary',
+      rarity: 'epic',
       iconName: 'Award',
       sortOrder: next(),
       conditionMeta: { region: area }
