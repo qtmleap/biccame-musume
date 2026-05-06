@@ -39,6 +39,7 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
         <div className='flex items-center gap-2'>
           <CharacterFavoriteButton
             characterId={character.id}
+            characterName={character.character?.name}
             isBiccameMusume={character.character?.is_biccame_musume}
           />
           {character.character?.twitter_id && (
