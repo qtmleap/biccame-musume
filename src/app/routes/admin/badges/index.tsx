@@ -596,6 +596,9 @@ const BadgeRow = ({ badge }: { badge: BadgeDto }) => {
                 特別
               </span>
             )}
+            {badge.earned_count !== undefined && (
+              <span className='text-[10px] tabular-nums text-muted-foreground'>達成 {badge.earned_count}人</span>
+            )}
           </div>
           <p className='text-xs font-numeric text-muted-foreground truncate mt-0.5'>{badge.code}</p>
         </div>
@@ -718,6 +721,7 @@ const StatCard = ({ label, value, accent = 'text-foreground' }: StatCardProps) =
 
 type RarityFilter = 'all' | 'common' | 'rare' | 'epic' | 'legendary'
 type CategoryFilter = 'all' | 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'special'
+type SortMode = 'default' | 'earned_desc'
 
 const CATEGORY_FILTER_LABELS: { key: CategoryFilter; label: string }[] = [
   { key: 'all', label: '全部' },
@@ -750,6 +754,7 @@ const BadgesContent = () => {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all')
   const [rarityFilter, setRarityFilter] = useState<RarityFilter>('all')
   const [hiddenOnly, setHiddenOnly] = useState(false)
+  const [sortMode, setSortMode] = useState<SortMode>('default')
   const { data } = useAllBadges()
   const badges = data.badges
 
@@ -757,6 +762,7 @@ const BadgesContent = () => {
   const hiddenCount = badges.filter((b) => b.is_hidden).length
   const visibleCount = totalCount - hiddenCount
   const specialCount = badges.filter((b) => b.category === 'special').length
+  const totalEarned = badges.reduce((s, b) => s + (b.earned_count ?? 0), 0)
 
   const filteredBadges = useMemo(() => {
     const q = searchQuery.toLowerCase()
@@ -776,13 +782,19 @@ const BadgesContent = () => {
   }, [badges, searchQuery, categoryFilter, rarityFilter, hiddenOnly])
 
   const grouped = useMemo(() => {
-    return filteredBadges.reduce<Record<string, BadgeDto[]>>((acc, badge) => {
+    const result = filteredBadges.reduce<Record<string, BadgeDto[]>>((acc, badge) => {
       const cat = badge.category
       if (!acc[cat]) acc[cat] = []
       acc[cat].push(badge)
       return acc
     }, {})
-  }, [filteredBadges])
+    if (sortMode === 'earned_desc') {
+      for (const cat of Object.keys(result)) {
+        result[cat].sort((a, b) => (b.earned_count ?? 0) - (a.earned_count ?? 0))
+      }
+    }
+    return result
+  }, [filteredBadges, sortMode])
 
   const totalsByCategory = useMemo(() => {
     return badges.reduce<Record<string, number>>((acc, badge) => {
@@ -791,13 +803,15 @@ const BadgesContent = () => {
     }, {})
   }, [badges])
 
-  const isFiltered = searchQuery !== '' || categoryFilter !== 'all' || rarityFilter !== 'all' || hiddenOnly
+  const isFiltered =
+    searchQuery !== '' || categoryFilter !== 'all' || rarityFilter !== 'all' || hiddenOnly || sortMode !== 'default'
 
   const resetFilters = () => {
     setSearchQuery('')
     setCategoryFilter('all')
     setRarityFilter('all')
     setHiddenOnly(false)
+    setSortMode('default')
   }
 
   return (
@@ -853,6 +867,7 @@ const BadgesContent = () => {
           <StatCard label='表示中' value={visibleCount} accent='text-brand' />
           <StatCard label='非表示' value={hiddenCount} accent='text-muted-foreground' />
           <StatCard label='特別' value={specialCount} accent='text-rank-gold' />
+          <StatCard label='総獲得数' value={totalEarned} accent='text-favorite' />
         </motion.div>
 
         {/* Filter row */}
@@ -922,6 +937,18 @@ const BadgesContent = () => {
               />
               <span className='text-[11px] text-muted-foreground select-none'>非表示のみ</span>
             </Label>
+            <button
+              type='button'
+              onClick={() => setSortMode((prev) => (prev === 'earned_desc' ? 'default' : 'earned_desc'))}
+              className={cn(
+                'text-[11px] font-bold px-2.5 py-1 rounded-full transition-colors ml-1',
+                sortMode === 'earned_desc'
+                  ? 'bg-foreground text-background'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              )}
+            >
+              獲得者順
+            </button>
           </div>
         </motion.div>
 
