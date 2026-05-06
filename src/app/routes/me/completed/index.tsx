@@ -45,7 +45,6 @@ const CompletedEventsContent = () => {
             戻る
           </Button>
           <div className='flex items-center gap-2'>
-            <Award className='h-6 w-6 text-action-award' />
             <h1 className='text-2xl font-bold text-foreground'>{MY_PAGE_LABELS.completedEvents}</h1>
             <span className='text-sm text-muted-foreground'>({completedEventDetails.length})</span>
           </div>
