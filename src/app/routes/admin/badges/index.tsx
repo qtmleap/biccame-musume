@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Pencil, Plus, RefreshCw, RotateCcw, Trash2 } from 'lucide-react'
+import { ArrowLeft, Pencil, Plus, RefreshCw, Trash2 } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense, useMemo, useState } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
@@ -794,47 +794,10 @@ const StatCard = ({ label, value, accent = 'text-foreground' }: StatCardProps) =
 )
 
 // ---------------------------------------------------------------------------
-// Filter types
-// ---------------------------------------------------------------------------
-
-type RarityFilter = 'all' | 'common' | 'rare' | 'epic' | 'legendary'
-type CategoryFilter =
-  | 'all'
-  | 'store'
-  | 'area'
-  | 'milestone'
-  | 'event'
-  | 'event_clear_store'
-  | 'event_clear_area'
-  | 'vote'
-  | 'special'
-type SortMode = 'default' | 'earned_desc'
-
-const CATEGORY_FILTER_LABELS: { key: CategoryFilter; label: string }[] = [
-  { key: 'all', label: '全部' },
-  { key: 'store', label: '店舗' },
-  { key: 'area', label: 'エリア' },
-  { key: 'milestone', label: 'マイルストーン' },
-  { key: 'event', label: 'イベント' },
-  { key: 'event_clear_store', label: '店舗参加' },
-  { key: 'event_clear_area', label: 'エリア参加' },
-  { key: 'vote', label: '投票' },
-  { key: 'special', label: '特別' }
-]
-
-const RARITY_FILTER_LABELS: { key: RarityFilter; label: string }[] = [
-  { key: 'all', label: '全部' },
-  { key: 'common', label: 'COMMON' },
-  { key: 'rare', label: 'RARE' },
-  { key: 'epic', label: 'EPIC' },
-  { key: 'legendary', label: 'LEGENDARY' }
-]
-
-// ---------------------------------------------------------------------------
 // Main content
 // ---------------------------------------------------------------------------
 
-const categoryOrder: CategoryFilter[] = [
+const categoryOrder: string[] = [
   'store',
   'area',
   'event_clear_store',
@@ -847,10 +810,6 @@ const categoryOrder: CategoryFilter[] = [
 
 const BadgesContent = () => {
   const [createOpen, setCreateOpen] = useState(false)
-  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all')
-  const [rarityFilter, setRarityFilter] = useState<RarityFilter>('all')
-  const [hiddenOnly, setHiddenOnly] = useState(false)
-  const [sortMode, setSortMode] = useState<SortMode>('default')
   const { data } = useAllBadges()
   const badges = data.badges
 
@@ -860,29 +819,14 @@ const BadgesContent = () => {
   const specialCount = badges.filter((b) => b.category === 'special').length
   const totalEarned = badges.reduce((s, b) => s + (b.earned_count ?? 0), 0)
 
-  const filteredBadges = useMemo(() => {
-    return badges.filter((b) => {
-      if (categoryFilter !== 'all' && b.category !== categoryFilter) return false
-      if (rarityFilter !== 'all' && b.rarity !== rarityFilter) return false
-      if (hiddenOnly && !b.is_hidden) return false
-      return true
-    })
-  }, [badges, categoryFilter, rarityFilter, hiddenOnly])
-
   const grouped = useMemo(() => {
-    const result = filteredBadges.reduce<Record<string, BadgeDto[]>>((acc, badge) => {
+    return badges.reduce<Record<string, BadgeDto[]>>((acc, badge) => {
       const cat = badge.category
       if (!acc[cat]) acc[cat] = []
       acc[cat].push(badge)
       return acc
     }, {})
-    if (sortMode === 'earned_desc') {
-      for (const cat of Object.keys(result)) {
-        result[cat].sort((a, b) => (b.earned_count ?? 0) - (a.earned_count ?? 0))
-      }
-    }
-    return result
-  }, [filteredBadges, sortMode])
+  }, [badges])
 
   const totalsByCategory = useMemo(() => {
     return badges.reduce<Record<string, number>>((acc, badge) => {
@@ -890,15 +834,6 @@ const BadgesContent = () => {
       return acc
     }, {})
   }, [badges])
-
-  const isFiltered = categoryFilter !== 'all' || rarityFilter !== 'all' || hiddenOnly || sortMode !== 'default'
-
-  const resetFilters = () => {
-    setCategoryFilter('all')
-    setRarityFilter('all')
-    setHiddenOnly(false)
-    setSortMode('default')
-  }
 
   return (
     <div className='min-h-screen bg-page-bg'>
@@ -959,84 +894,6 @@ const BadgesContent = () => {
           <StatCard label='総獲得数' value={totalEarned} accent='text-favorite' />
         </motion.div>
 
-        {/* Filter row */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: DURATION.normal, delay: 0.1 }}
-          className='bg-card border border-card-border rounded-2xl p-3 md:p-4 mb-6 space-y-3'
-        >
-          <div className='flex items-center gap-1.5 flex-wrap'>
-            {CATEGORY_FILTER_LABELS.map(({ key, label }) => (
-              <button
-                key={key}
-                type='button'
-                onClick={() => setCategoryFilter(key)}
-                className={cn(
-                  'text-[11px] font-bold px-2.5 py-1 rounded-full transition-colors',
-                  categoryFilter === key
-                    ? 'bg-foreground text-background'
-                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                )}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-
-          <div className='flex items-center gap-1.5 flex-wrap'>
-            {RARITY_FILTER_LABELS.map(({ key, label }) => (
-              <button
-                key={key}
-                type='button'
-                onClick={() => setRarityFilter(key)}
-                className={cn(
-                  'text-[11px] font-numeric font-bold tracking-widest px-2.5 py-1 rounded-full transition-colors',
-                  rarityFilter === key
-                    ? key === 'all'
-                      ? 'bg-foreground text-background'
-                      : RARITY_CHIP[key]
-                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                )}
-              >
-                {label}
-              </button>
-            ))}
-            <Label htmlFor='hidden-only-filter' className='flex items-center gap-1.5 cursor-pointer ml-1 font-normal'>
-              <Checkbox
-                id='hidden-only-filter'
-                checked={hiddenOnly}
-                onCheckedChange={(v) => setHiddenOnly(v === true)}
-                className='size-3.5'
-              />
-              <span className='text-[11px] text-muted-foreground select-none'>非表示のみ</span>
-            </Label>
-            <button
-              type='button'
-              onClick={() => setSortMode((prev) => (prev === 'earned_desc' ? 'default' : 'earned_desc'))}
-              className={cn(
-                'text-[11px] font-bold px-2.5 py-1 rounded-full transition-colors ml-1',
-                sortMode === 'earned_desc'
-                  ? 'bg-foreground text-background'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
-              )}
-            >
-              獲得者順
-            </button>
-            {isFiltered && (
-              <Button
-                size='sm'
-                variant='ghost'
-                className='ml-auto h-7 gap-1 text-muted-foreground'
-                onClick={resetFilters}
-              >
-                <RotateCcw className='size-3.5' />
-                リセット
-              </Button>
-            )}
-          </div>
-        </motion.div>
-
         {/* Badge list */}
         <div className='space-y-8'>
           {categoryOrder
@@ -1049,9 +906,6 @@ const BadgesContent = () => {
                 totalInCategory={totalsByCategory[cat] ?? 0}
               />
             ))}
-          {filteredBadges.length === 0 && (
-            <div className='text-center py-12 text-muted-foreground text-sm'>条件に一致するバッジが見つかりません</div>
-          )}
         </div>
 
         <CreateBadgeDialog open={createOpen} onClose={() => setCreateOpen(false)} />
