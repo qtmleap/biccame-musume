@@ -122,10 +122,10 @@ describe('badge registry', () => {
     expect(counts).toEqual(expected)
   })
 
-  test('vote_total badges have counts [1, 10, 50, 100, 500]', () => {
+  test('vote_total milestones cover [1, 100, 200, ..., 1000]', () => {
     const totalBadges = BADGE_REGISTRY.filter((b) => b.subCategory === 'vote_total')
     const counts = totalBadges.map((b) => b.conditionMeta.count as number).sort((a, b) => a - b)
-    expect(counts).toEqual([1, 10, 50, 100, 500])
+    expect(counts).toEqual([1, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000])
   })
 
   test('vote_devotion badges have counts [10, 100]', () => {

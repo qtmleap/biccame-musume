@@ -415,16 +415,31 @@ function getBadgeRegistry(): BadgeDef[] {
   })
 
   // -----------------------------------------------------------------------
-  // 8. Vote total badges (5)
+  // 8. Vote total milestone badges (11)
+  //
+  // Thresholds: 1, then 100-step from 100 to 1000 = 11 entries.
+  // Rarity grading:
+  //   common:    1, 100              (2 entries)
+  //   rare:      200, 300            (2 entries)
+  //   epic:      400, 500, 600, 700  (4 entries)
+  //   legendary: 800, 900, 1000      (3 entries)
   // -----------------------------------------------------------------------
-  const voteTotalBadges: Array<{ count: number; name: string; rarity: BadgeRarity }> = [
-    { count: 1, name: '初投票', rarity: 'common' },
-    { count: 10, name: '投票デビュー', rarity: 'common' },
-    { count: 50, name: '投票上手', rarity: 'rare' },
-    { count: 100, name: '投票熟練', rarity: 'rare' },
-    { count: 500, name: '票職人', rarity: 'epic' }
-  ]
-  for (const { count, name, rarity } of voteTotalBadges) {
+  const VOTE_TOTAL_NAMED: Record<number, string> = {
+    1: '初投票',
+    100: '投票熟練',
+    500: '票職人',
+    1000: '投票名人'
+  }
+  function voteTotalRarity(count: number): BadgeRarity {
+    if (count <= 100) return 'common'
+    if (count <= 300) return 'rare'
+    if (count <= 700) return 'epic'
+    return 'legendary'
+  }
+  const VOTE_TOTAL_THRESHOLDS: number[] = [1, ...Array.from({ length: 10 }, (_, i) => (i + 1) * 100)]
+  for (const count of VOTE_TOTAL_THRESHOLDS) {
+    const name = VOTE_TOTAL_NAMED[count] ?? `${count} 票`
+    const rarity = voteTotalRarity(count)
     badges.push({
       code: `vote_total_${count}`,
       category: 'vote',
