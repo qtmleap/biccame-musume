@@ -799,7 +799,6 @@ const categoryOrder: CategoryFilter[] = [
 
 const BadgesContent = () => {
   const [createOpen, setCreateOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all')
   const [rarityFilter, setRarityFilter] = useState<RarityFilter>('all')
   const [hiddenOnly, setHiddenOnly] = useState(false)
@@ -814,21 +813,13 @@ const BadgesContent = () => {
   const totalEarned = badges.reduce((s, b) => s + (b.earned_count ?? 0), 0)
 
   const filteredBadges = useMemo(() => {
-    const q = searchQuery.toLowerCase()
     return badges.filter((b) => {
-      if (
-        q &&
-        !b.name.toLowerCase().includes(q) &&
-        !b.code.toLowerCase().includes(q) &&
-        !b.description.toLowerCase().includes(q)
-      )
-        return false
       if (categoryFilter !== 'all' && b.category !== categoryFilter) return false
       if (rarityFilter !== 'all' && b.rarity !== rarityFilter) return false
       if (hiddenOnly && !b.is_hidden) return false
       return true
     })
-  }, [badges, searchQuery, categoryFilter, rarityFilter, hiddenOnly])
+  }, [badges, categoryFilter, rarityFilter, hiddenOnly])
 
   const grouped = useMemo(() => {
     const result = filteredBadges.reduce<Record<string, BadgeDto[]>>((acc, badge) => {
@@ -852,11 +843,9 @@ const BadgesContent = () => {
     }, {})
   }, [badges])
 
-  const isFiltered =
-    searchQuery !== '' || categoryFilter !== 'all' || rarityFilter !== 'all' || hiddenOnly || sortMode !== 'default'
+  const isFiltered = categoryFilter !== 'all' || rarityFilter !== 'all' || hiddenOnly || sortMode !== 'default'
 
   const resetFilters = () => {
-    setSearchQuery('')
     setCategoryFilter('all')
     setRarityFilter('all')
     setHiddenOnly(false)
@@ -926,21 +915,6 @@ const BadgesContent = () => {
           transition={{ duration: DURATION.normal, delay: 0.1 }}
           className='bg-card border border-card-border rounded-2xl p-3 md:p-4 mb-6 space-y-3'
         >
-          <div className='flex items-center gap-2'>
-            <Input
-              placeholder='バッジ検索...'
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className='md:text-base h-8 md:h-9'
-            />
-            {isFiltered && (
-              <Button size='sm' variant='ghost' className='shrink-0 gap-1 text-muted-foreground' onClick={resetFilters}>
-                <RotateCcw className='size-3.5' />
-                リセット
-              </Button>
-            )}
-          </div>
-
           <div className='flex items-center gap-1.5 flex-wrap'>
             {CATEGORY_FILTER_LABELS.map(({ key, label }) => (
               <button
@@ -998,6 +972,17 @@ const BadgesContent = () => {
             >
               獲得者順
             </button>
+            {isFiltered && (
+              <Button
+                size='sm'
+                variant='ghost'
+                className='ml-auto h-7 gap-1 text-muted-foreground'
+                onClick={resetFilters}
+              >
+                <RotateCcw className='size-3.5' />
+                リセット
+              </Button>
+            )}
           </div>
         </motion.div>
 
