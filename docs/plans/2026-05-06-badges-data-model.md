@@ -112,22 +112,41 @@ Date: 2026-05-06
 
 ### 特別イベント (コラボ・限定企画)
 
-`category='special'` で**店舗単独の達成では出ない、横断的・限定的な条件**のバッジ枠。registry の自動生成対象外で、登場するたびに手書きで registry.ts に追記する運用。
+`category='special'` で**店舗単独の達成では出ない、横断的・限定的な条件**のバッジ枠。**コードを変更せず admin UI から店舗を選んで追加できる**ようにする。コラボは新宿だけでなくいつでも・どの組み合わせでも企画される前提。
 
 | サブカテゴリ | 用途 | 条件メタ |
 | --- | --- | --- |
 | `special_multi_store_clear` | 指定された複数店舗群**すべて**でイベント clear | `{ storeKeys: StoreKey[] }` |
 | `special_event_id` | 指定された特定 event を clear | `{ eventId: string }` |
 
-**MVP 例 (架空・実装時に整理):**
+#### admin UI で完結させる仕組み
+
+- `/control_panel/badges` (Cloudflare Access 保護、memory `project_admin_auth.md` 参照) に「特別バッジ作成」フォームを設置
+- フォーム項目:
+  - 名称 / 説明 / ヒント (必須)
+  - レアリティ (`common` / `rare` / `epic` / `legendary` のセレクト)
+  - サブカテゴリ (`special_multi_store_clear` / `special_event_id` のセレクト)
+  - 対象 storeKey (multi-select、`special_multi_store_clear` 選択時のみ表示)
+  - 対象 eventId (event 検索、`special_event_id` 選択時のみ表示)
+  - アイコン (lucide 名のセレクト or 既定の星アイコン)
+- 保存時に `code` を slug 自動生成 (例: `special_collab_${nanoid(6)}`)、`Badge` テーブルへ insert
+- 一覧画面で削除・編集も可能 (削除時は `UserBadge` も cascade)
+
+#### registry seeder との共存
+
+- registry.ts は `category != 'special'` のバッジのみ管理 (上書き)
+- `category = 'special'` のレコードは admin が作成するためシードで触らない
+- seeder の upsert は **`code` のドメイン (例: `store_visit_*`, `area_*`, `milestone_*`, `event_count_*`, `event_clear_*`, `vote_*`) を whitelist** にし、それ以外のレコードは保持
+
+#### コラボ例 (admin が登録するイメージ)
 
 | 名称 | サブカテゴリ | 条件 | レアリティ |
 | --- | --- | --- | --- |
-| 新宿コラボ達成 | `special_multi_store_clear` | 新宿 3 店舗 (`shinjyuku` / `shintou` / `新宿西口`) すべてで event clear | epic |
-| 渋谷ペア達成 | `special_multi_store_clear` | `shibuhachi` / `shibuto` 両方で event clear | rare |
-| 池袋総力戦 | `special_multi_store_clear` | 池袋地区 6 店舗すべてで event clear | legendary |
+| 新宿コラボ達成 | `special_multi_store_clear` | 新宿 3 店舗すべてで event clear | epic |
+| 渋谷ペア達成 | `special_multi_store_clear` | 渋谷 2 店舗で event clear | rare |
+| 池袋総力戦 | `special_multi_store_clear` | 池袋地区全店で event clear | legendary |
 
-- MVP 開始時点では 0 〜 数個。コラボ企画が立つたびに増やしていく
+- MVP 開始時点では 0 個 (admin が後追いで作成)
 - 命名はポジティブ語のみ (memory `feedback_positive_naming.md`)
 
 **MVP 合計: 約 182 バッジ** (店舗訪問 80 + イベント参加 5 + 店舗別イベント達成 80 + 投票 17。実店舗数とビッカメ娘数で前後)
@@ -329,7 +348,8 @@ LIMIT 50;
 - [ ] Prisma スキーマに `Badge` / `UserBadge` 追加 + マイグレーション (`prisma migrate diff`)
 - [ ] `src/data/badges/store-exclusion.ts` で実店舗以外を列挙 + テストでスキーマと突き合わせ
 - [ ] `src/data/badges/registry.ts` で全バッジ定義を生成
-- [ ] `bun run badges:seed` スクリプト (upsert で Badge テーブル投入)
+- [ ] `bun run badges:seed` スクリプト (upsert で Badge テーブル投入、`category='special'` は触らない)
+- [ ] `POST/PATCH/DELETE /api/admin/badges` (special バッジの CRUD)
 - [ ] `src/services/badge-evaluator.ts` で subCategory 別 evaluator 実装
 - [ ] `src/services/badge-evaluator.ts` に `evaluateOnVisit` / `evaluateOnEventComplete` / `evaluateOnVote` ヘルパー
 - [ ] 既存の `PUT /api/users/me/stores/:storeKey` に評価フック追加 + 新規バッジ返却
@@ -348,6 +368,7 @@ LIMIT 50;
 - [ ] 店舗カテゴリの**エリアサブセクション化** (3 列 × 多段でも視認性を保つ)
 - [ ] 獲得時 toast (店舗訪問/イベント完了 mutation の onSuccess で分岐)
 - [ ] ヘッダー nav に `/badges` 追加 (ログイン時のみ)
+- [ ] `/control_panel/badges` 管理画面 (一覧 / 作成フォーム / 編集 / 削除、storeKey multi-select & event 検索付き)
 
 ### QA
 
