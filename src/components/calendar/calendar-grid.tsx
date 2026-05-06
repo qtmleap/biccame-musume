@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DURATION } from '@/lib/motion'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { CALENDAR_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
@@ -85,7 +86,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
         </div>
 
         {/* カレンダーグリッド */}
-        <div className='grid grid-cols-7 gap-1'>
+        <div className='grid grid-cols-7 gap-2'>
           {calendarDays.map((day, index) => {
             const dayEvents = day ? getEventsForDay(events, day) : []
             const date = day ? dayjs(`${year}-${month}-${day}`) : null
@@ -106,14 +107,15 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                   delay: baseDelay,
                   ease: 'easeOut'
                 }}
-                whileHover={hasEvents ? { scale: 1.05 } : undefined}
-                whileTap={hasEvents ? { scale: 0.95 } : undefined}
+                whileHover={hasEvents ? { scale: 1.06, transition: STICKER_HOVER_TRANSITION } : undefined}
+                whileTap={hasEvents ? { scale: 0.96, transition: STICKER_HOVER_TRANSITION } : undefined}
                 onClick={() => day !== null && onDayClick(day, dayEvents)}
+                style={hasEvents ? { filter: STICKER_SHADOW_SM } : undefined}
                 className={cn(
-                  'min-h-20 p-1.5 rounded-lg transition-all text-left',
+                  'min-h-20 p-1.5 rounded-xl text-left',
                   day === null && 'bg-transparent cursor-default',
-                  day !== null && isToday && 'bg-calendar-today border border-calendar-today-border',
-                  day !== null && !isToday && 'bg-card border-card hover:bg-muted/30',
+                  day !== null && isToday && 'bg-calendar-today border-2 border-calendar-today-border',
+                  day !== null && !isToday && 'bg-card border border-zinc-200 dark:border-card-border',
                   hasEvents && 'cursor-pointer'
                 )}
                 disabled={!hasEvents}
