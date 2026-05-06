@@ -181,18 +181,13 @@ const PodiumCard = ({ character, rank, index, maxVote, rotation }: CardProps) =>
 
           <div className='flex items-baseline justify-between gap-2 mt-3'>
             <span
-              className={cn('font-black tabular-nums leading-none shrink-0', numColor, numSize)}
-              style={{ fontFamily: 'Inter, system-ui, sans-serif', letterSpacing: '-0.06em' }}
+              className={cn('font-numeric font-black tabular-nums leading-none shrink-0', numColor, numSize)}
+              style={{ letterSpacing: '-0.06em' }}
             >
               {rank}
             </span>
             <div className='text-right min-w-0 flex-1'>
-              <h3
-                className={cn('truncate text-foreground', titleSize)}
-                style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 700 }}
-              >
-                {character.character?.name}
-              </h3>
+              <h3 className={cn('font-bold truncate text-foreground', titleSize)}>{character.character?.name}</h3>
               {isFirst && <div className='text-[10px] tracking-[0.3em] text-muted-foreground'>CHAMPION</div>}
             </div>
           </div>
@@ -263,10 +258,10 @@ const RankingRow = ({ character, rank, index, maxVote, rotation }: CardProps) =>
 
           <span
             className={cn(
-              'font-black tabular-nums w-8 text-center shrink-0 text-3xl text-muted-foreground',
+              'font-numeric font-black tabular-nums w-8 text-center shrink-0 text-3xl text-muted-foreground',
               getBarClass(rank).startsWith('bg-rank') && 'text-foreground'
             )}
-            style={{ fontFamily: 'Inter, system-ui, sans-serif', letterSpacing: '-0.06em' }}
+            style={{ letterSpacing: '-0.06em' }}
           >
             {rank}
           </span>
@@ -285,12 +280,7 @@ const RankingRow = ({ character, rank, index, maxVote, rotation }: CardProps) =>
               />
             </div>
             <div className='flex-1 min-w-0'>
-              <h3
-                className='text-foreground truncate text-sm md:text-base'
-                style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 700 }}
-              >
-                {character.character?.name}
-              </h3>
+              <h3 className='font-bold text-foreground truncate text-sm md:text-base'>{character.character?.name}</h3>
               <div className='mt-1 h-1.5 w-full rounded-full bg-vote-count overflow-hidden'>
                 <motion.div
                   className={cn('h-full rounded-full', getBarClass(rank))}
