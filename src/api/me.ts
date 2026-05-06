@@ -123,12 +123,12 @@ routes.openapi(
     const { status } = c.req.valid('json')
     await updateUserStore(c.env, uid, storeKey, status)
 
-    let newBadges: ReturnType<typeof prismaBadgeToDto>[] = []
-    if (status === 'visited') {
-      const prisma = getPrisma(c.env)
-      const earned = await evaluateOnVisit({ env: c.env, prisma, userId: uid }, storeKey as StoreKey)
-      newBadges = earned.map((b) => prismaBadgeToDto(b))
-    }
+    const newBadges =
+      status === 'visited'
+        ? (await evaluateOnVisit({ env: c.env, prisma: getPrisma(c.env), userId: uid }, storeKey as StoreKey)).map(
+            (b) => prismaBadgeToDto(b)
+          )
+        : []
 
     return c.json({ success: true, newBadges })
   }
@@ -234,12 +234,12 @@ routes.openapi(
 
     await updateUserEvent(c.env, uid, eventId, status)
 
-    let newBadges: ReturnType<typeof prismaBadgeToDto>[] = []
-    if (status === 'completed') {
-      const prisma = getPrisma(c.env)
-      const earned = await evaluateOnEventComplete({ env: c.env, prisma, userId: uid }, eventId)
-      newBadges = earned.map((b) => prismaBadgeToDto(b))
-    }
+    const newBadges =
+      status === 'completed'
+        ? (await evaluateOnEventComplete({ env: c.env, prisma: getPrisma(c.env), userId: uid }, eventId)).map((b) =>
+            prismaBadgeToDto(b)
+          )
+        : []
 
     return c.json({ success: true, newBadges })
   }

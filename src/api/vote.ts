@@ -119,17 +119,18 @@ routes.openapi(
     const votedCount = results.filter((r) => r.status === 'voted').length
     const skippedCount = results.filter((r) => r.status === 'skipped').length
 
-    let newBadges: ReturnType<typeof prismaBadgeToDto>[] = []
-    if (userId !== undefined && votedCount > 0) {
-      const prisma = getPrisma(c.env)
-      const votedCharacterIds = results.filter((r) => r.status === 'voted').map((r) => r.characterId)
-      // Evaluate once for the last voted character (all vote-related badges are user-level, not per-character)
-      const lastVotedId = votedCharacterIds[votedCharacterIds.length - 1]
-      if (lastVotedId !== undefined) {
-        const earned = await evaluateOnVote({ env: c.env, prisma, userId }, lastVotedId)
-        newBadges = earned.map((b) => prismaBadgeToDto(b))
-      }
-    }
+    // 投票成功時のみ、最後に投票したキャラ ID で 1 回だけバッジ評価
+    // (vote 系バッジは user-level なのでキャラ単位では評価しない)
+    const lastVotedId =
+      userId !== undefined && votedCount > 0
+        ? results.filter((r) => r.status === 'voted').at(-1)?.characterId
+        : undefined
+    const newBadges =
+      userId !== undefined && lastVotedId !== undefined
+        ? (await evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId }, lastVotedId)).map((b) =>
+            prismaBadgeToDto(b)
+          )
+        : []
 
     return c.json({
       success: true,
@@ -203,12 +204,12 @@ routes.openapi(
     })()
     await vote(c.env, characterId, c.get('CLIENT_IP'), userId)
 
-    let newBadges: ReturnType<typeof prismaBadgeToDto>[] = []
-    if (userId !== undefined) {
-      const prisma = getPrisma(c.env)
-      const earned = await evaluateOnVote({ env: c.env, prisma, userId }, characterId)
-      newBadges = earned.map((b) => prismaBadgeToDto(b))
-    }
+    const newBadges =
+      userId !== undefined
+        ? (await evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId }, characterId)).map((b) =>
+            prismaBadgeToDto(b)
+          )
+        : []
 
     return c.json({
       success: true,
