@@ -259,16 +259,42 @@ function getBadgeRegistry(): BadgeDef[] {
   })
 
   // -----------------------------------------------------------------------
-  // 4. Event participation milestone badges (5)
+  // 4. Event participation milestone badges (59)
+  //
+  // Thresholds: 1, 5, then 10-step from 10 to 570 (57 entries) = 59 total
+  // Rarity grading:
+  //   common:    1, 5, 10          (3 entries)
+  //   rare:      20–100            (9 entries)
+  //   epic:      110–300           (20 entries)
+  //   legendary: 310–570           (27 entries)
+  //
+  // Named entries (stable codes preserved):
+  //   event_count_1   → はじめてのイベント
+  //   event_count_5   → 常連さん
+  //   event_count_10  → イベントマスター
+  //   event_count_20  → イベント愛好家
+  //   event_count_50  → イベントの主  (demoted to rare per new grading — kept for stable code)
+  //   event_count_570 → イベント極み  (new legendary peak)
+  //   all others      → イベント X 件
   // -----------------------------------------------------------------------
-  const eventCountBadges: Array<{ count: number; name: string; rarity: BadgeRarity }> = [
-    { count: 1, name: 'はじめてのイベント', rarity: 'common' },
-    { count: 5, name: '常連さん', rarity: 'rare' },
-    { count: 10, name: 'イベントマスター', rarity: 'rare' },
-    { count: 20, name: 'イベント愛好家', rarity: 'epic' },
-    { count: 50, name: 'イベントの主', rarity: 'legendary' }
-  ]
-  for (const { count, name, rarity } of eventCountBadges) {
+  const EVENT_COUNT_NAMED: Record<number, string> = {
+    1: 'はじめてのイベント',
+    5: '常連さん',
+    10: 'イベントマスター',
+    20: 'イベント愛好家',
+    50: 'イベントの主',
+    570: 'イベント極み'
+  }
+  function eventCountRarity(count: number): BadgeRarity {
+    if (count <= 10) return 'common'
+    if (count <= 100) return 'rare'
+    if (count <= 300) return 'epic'
+    return 'legendary'
+  }
+  const EVENT_COUNT_THRESHOLDS: number[] = [1, 5, ...Array.from({ length: 57 }, (_, i) => 10 + i * 10)]
+  for (const count of EVENT_COUNT_THRESHOLDS) {
+    const name = EVENT_COUNT_NAMED[count] ?? `イベント ${count} 件`
+    const rarity = eventCountRarity(count)
     badges.push({
       code: `event_count_${count}`,
       category: 'event',
@@ -474,7 +500,7 @@ export { getBadgeRegistry }
 
 export const BADGE_REGISTRY: readonly BadgeDef[] = Object.freeze(getBadgeRegistry())
 
-// Sanity assertion: registry size must be in [175, 200].
-if (BADGE_REGISTRY.length < 175 || BADGE_REGISTRY.length > 200) {
-  throw new Error(`BADGE_REGISTRY size out of expected range [175, 200]: got ${BADGE_REGISTRY.length}`)
+// Sanity assertion: registry size must be in [230, 250].
+if (BADGE_REGISTRY.length < 230 || BADGE_REGISTRY.length > 250) {
+  throw new Error(`BADGE_REGISTRY size out of expected range [230, 250]: got ${BADGE_REGISTRY.length}`)
 }
