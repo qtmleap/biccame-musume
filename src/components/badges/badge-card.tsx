@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { Lock } from 'lucide-react'
 import { motion } from 'motion/react'
 import { getBadgeIcon } from '@/lib/badge-icons'
@@ -112,7 +113,7 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
 
         {earned && earnedAt && (
           <div className='mt-1 text-xs font-numeric tabular-nums text-muted-foreground'>
-            {earnedAt.slice(0, 10)}
+            {dayjs(earnedAt).format('YYYY/MM/DD')}
           </div>
         )}
       </motion.div>
