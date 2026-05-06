@@ -1,4 +1,4 @@
-import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { getPrisma } from '@/lib/prisma'
 import { CFAuth } from '@/middleware/cloudflare-access'
 import {
