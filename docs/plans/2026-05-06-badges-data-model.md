@@ -29,7 +29,9 @@ Date: 2026-05-06
 
 `StoreKeySchema` の中にはサービス系・概念キーが混在 (`biccamera`, `bicqlo`, `bicsim`, `camera`, `photo`, `pkan`, `prosta`, `naisen`, `itt`, `oeraitan` 等)。バッジ対象は **`stores.yaml` 等の店舗マスタで `prefecture` を持つ実店舗のみ**に絞る。除外リストは `src/data/badges/store-exclusion.ts` で明示し、テストで「除外リスト + 実店舗 = 全 StoreKey」をアサート。
 
-### イベント系 (5 個)
+### イベント参加系 (5 個)
+
+「イベントを何件こなしたか」(店舗を問わない総件数)。コンプ概念なし。
 
 | 名称 | 条件 | レアリティ |
 | --- | --- | --- |
@@ -39,7 +41,23 @@ Date: 2026-05-06
 | イベント愛好家 | 20 件 | epic |
 | イベントの主 | 50 件 | legendary |
 
-コンプ概念なし。
+### 店舗別イベント達成系 (約 70 個)
+
+「**その店舗で開催されたイベントを完了 (`UserEvent.status='completed'`)**」を条件とする系列。訪問バッジの上位互換的ポジション (訪問 < イベントクリア)。判定式は「completed なイベントが、その店舗を `EventStore` リレーションに持つか」。
+
+| カテゴリ | 件数 | 条件 | レアリティ |
+| --- | --- | --- | --- |
+| 各店舗イベント制覇 | 約 50 | その店舗で開催されたイベントを 1 件以上 completed | rare |
+| エリアイベントデビュー (5) | 5 | そのエリアの店舗で 1 件以上 イベント completed | epic |
+| エリアイベントコンプ (5) | 5 | そのエリアの全店舗でイベント completed | legendary |
+| イベント制覇マイルストーン | 約 9 | イベント完了したユニーク店舗数が 5/10/15/.../X (X = 実店舗数未満で最大の 5 倍数) | common→rare→epic |
+| 全店イベント制覇 | 1 | 全実店舗でイベント completed | legendary |
+
+**命名規約 (訪問系との区別):**
+- 訪問系の動詞: 「訪問」「参加」「コンプ」
+- イベント達成系の動詞: 「制覇」「達成」
+- 例: 訪問→「秋葉原店訪問」、イベント達成→「秋葉原店制覇」
+- 例: 訪問→「関東コンプ」、イベント達成→「関東制覇」
 
 ### 投票系 (約 17 個)
 
@@ -76,7 +94,7 @@ Date: 2026-05-06
 
 `category='anniversary'` で枠だけ用意。MVP では 0 件、後続でハードコード追加可能に。
 
-**MVP 合計: 約 92 バッジ** (店舗 70 + イベント 5 + 投票 17。実店舗数とビッカメ娘数で前後)
+**MVP 合計: 約 162 バッジ** (店舗訪問 70 + イベント参加 5 + 店舗別イベント達成 70 + 投票 17。実店舗数とビッカメ娘数で前後)
 
 ## データモデル
 
@@ -87,9 +105,9 @@ Date: 2026-05-06
 model Badge {
   /// バッジコード (例: 'store_visit_akiba', 'area_complete_kanto', 'store_milestone_10')
   code         String   @id
-  /// カテゴリ: 'store' | 'area' | 'milestone' | 'event' | 'vote' | 'anniversary'
+  /// カテゴリ: 'store' | 'area' | 'milestone' | 'event' | 'event_clear' | 'vote' | 'anniversary'
   category     String
-  /// サブカテゴリ: 'visit' | 'area_any' | 'area_complete' | 'count' | 'event_count' | 'vote_total' | 'vote_unique' | 'vote_devotion' | 'vote_bulk' 等
+  /// サブカテゴリ: 'visit' | 'area_any' | 'area_complete' | 'count' | 'event_count' | 'event_clear_at_store' | 'event_clear_area_any' | 'event_clear_area_complete' | 'event_clear_count' | 'event_clear_all' | 'vote_total' | 'vote_unique' | 'vote_devotion' | 'vote_all_biccame'
   subCategory  String   @map("sub_category")
   /// 表示名
   name         String
@@ -161,6 +179,11 @@ type BadgeDef = {
 | `area_complete` | `userId, region` | そのエリアの店舗をすべて visited |
 | `count` | `userId, count` | 累計ユニーク visited 店舗数 ≥ count |
 | `event_count` | `userId, count` | `UserEvent.status='completed'` の件数 ≥ count |
+| `event_clear_at_store` | `userId, storeKey` | `UserEvent.status='completed'` で `EventStore.storeKey=X` を持つ event が 1 件以上 |
+| `event_clear_area_any` | `userId, region` | そのエリアの店舗で 1 件以上 event clear |
+| `event_clear_area_complete` | `userId, region` | そのエリアの全店舗で event clear |
+| `event_clear_count` | `userId, count` | event clear したユニーク店舗数 ≥ count |
+| `event_clear_all` | `userId` | 全実店舗で event clear |
 | `vote_total` | `userId, count` | `Vote` テーブルの行数 ≥ count |
 | `vote_unique` | `userId, count` | `COUNT(DISTINCT character_id)` ≥ count |
 | `vote_devotion` | `userId, count` | 単一キャラへの票数の最大値 ≥ count |
@@ -175,7 +198,7 @@ type BadgeDef = {
 - `PUT /api/users/me/stores/:storeKey` (status='visited' のとき)
   - 評価対象: `visit[storeKey]`, `area_any[region(storeKey)]`, `area_complete[region(storeKey)]`, `count[*]`, `legendary 全店制覇`
 - `PUT /api/users/me/events/:eventId` (status='completed' のとき)
-  - 評価対象: `event_count[*]`
+  - 評価対象: `event_count[*]`, さらに該当 event の `EventStore` に紐づく全 `storeKey` に対して: `event_clear_at_store[storeKey]`, `event_clear_area_any[region]`, `event_clear_area_complete[region]`, `event_clear_count[*]`, `event_clear_all`
 - `POST /api/votes` (投票が成立したとき)
   - 評価対象: `vote_total[*]`, `vote_unique[*]`, `vote_devotion[投票先キャラのみ]`, `vote_all_biccame`
 
