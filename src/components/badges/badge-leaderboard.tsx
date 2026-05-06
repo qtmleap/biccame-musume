@@ -6,7 +6,6 @@ import type { BadgeLeaderboardResponse } from '@/schemas/badge.dto'
 
 type BadgeLeaderboardProps = {
   leaderboard: BadgeLeaderboardResponse
-  totalBadges: number
   myUid?: string
 }
 
@@ -17,29 +16,19 @@ const RANK_COLOR = (rank: number) => {
   return 'text-muted-foreground'
 }
 
-const RANK_BAR = (rank: number) => {
-  if (rank === 1) return 'bg-rank-gold'
-  if (rank === 2) return 'bg-rank-silver'
-  if (rank === 3) return 'bg-rank-bronze'
-  return 'bg-favorite/60'
-}
-
-export const BadgeLeaderboard = ({ leaderboard, totalBadges, myUid }: BadgeLeaderboardProps) => {
+export const BadgeLeaderboard = ({ leaderboard, myUid }: BadgeLeaderboardProps) => {
   const { top } = leaderboard
-  const maxCount = top[0]?.earnedCount ?? totalBadges
 
   return (
     <section className='space-y-3'>
-      <header className='flex items-end justify-between gap-3 px-1'>
+      <header className='px-1'>
         <h2 className='font-bold text-base md:text-lg text-foreground'>達成リーダーボード</h2>
-        <span className='text-xs text-muted-foreground'>獲得バッジ数で集計</span>
       </header>
 
       <div className='bg-card border border-card-border rounded-2xl divide-y divide-border overflow-hidden'>
         {top.map((entry, i) => {
           const isMe = entry.uid === myUid
           const displayName = entry.displayName ?? 'ユーザー'
-          const percent = maxCount > 0 ? Math.round((entry.earnedCount / maxCount) * 100) : 0
           return (
             <motion.div
               key={entry.uid}
@@ -76,21 +65,13 @@ export const BadgeLeaderboard = ({ leaderboard, totalBadges, myUid }: BadgeLeade
                     </span>
                   )}
                 </div>
-                <div className='mt-1 h-1.5 w-full rounded-full bg-vote-count overflow-hidden'>
-                  <motion.div
-                    className={cn('h-full rounded-full', RANK_BAR(entry.rank))}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${percent}%` }}
-                    transition={{ duration: DURATION.slow, delay: 0.1 + i * 0.02, ease: 'easeOut' }}
-                  />
-                </div>
               </div>
 
               <div className='shrink-0 text-right'>
                 <div className='font-numeric font-black tabular-nums text-base md:text-lg text-foreground leading-none'>
                   {entry.earnedCount}
-                  <span className='text-xs text-muted-foreground'> / {totalBadges}</span>
                 </div>
+                <div className='text-[10px] text-muted-foreground'>個</div>
               </div>
             </motion.div>
           )
