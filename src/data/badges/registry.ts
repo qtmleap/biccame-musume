@@ -313,7 +313,7 @@ function getBadgeRegistry(): BadgeDef[] {
       code: `event_clear_at_store_${storeKey}`,
       category: 'event_clear_store',
       subCategory: 'event_clear_at_store',
-      name: `${storeName}制覇`,
+      name: `${storeName}参加`,
       description: `${storeName}のイベントを達成しました`,
       hint: `${storeName}で開催されたイベントを 1 件以上完了するとゲットできます`,
       rarity: 'rare',
