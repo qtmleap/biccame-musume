@@ -861,8 +861,8 @@ const BadgesContent = () => {
         >
           <div className='flex items-start justify-between gap-4'>
             <div>
-              <h1 className='font-display font-bold text-2xl md:text-3xl text-foreground'>バッジ管理</h1>
-              <p className='mt-1 text-sm text-muted-foreground'>
+              <h1 className='text-2xl font-bold text-foreground'>バッジ管理</h1>
+              <p className='mt-2 text-sm text-muted-foreground md:text-base'>
                 特別バッジの作成・編集と表示設定。自動生成バッジは表示フィールドのみ編集可。
               </p>
             </div>
