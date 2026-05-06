@@ -66,6 +66,7 @@ const CompletedEventsContent = () => {
           events={completedEventDetails}
           page={page}
           onPageChange={setPage}
+          compact
           emptyState={
             <div className='bg-card rounded-lg shadow-sm p-8 text-center'>
               <Award className='h-12 w-12 text-muted-foreground/30 mx-auto mb-3' />

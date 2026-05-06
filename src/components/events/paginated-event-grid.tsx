@@ -25,6 +25,8 @@ type PaginatedEventGridProps = {
   onPageChange: (page: number) => void
   /** イベントが0件のときに表示する空状態 */
   emptyState?: ReactNode
+  /** ステータス・条件バッジを隠し、終了時の grayscale を無効化する */
+  compact?: boolean
 }
 
 /**
@@ -36,7 +38,8 @@ export const PaginatedEventGrid = ({
   perPage = DEFAULT_PER_PAGE,
   page,
   onPageChange,
-  emptyState
+  emptyState,
+  compact = false
 }: PaginatedEventGridProps) => {
   const totalPages = Math.ceil(events.length / perPage)
 
@@ -59,7 +62,7 @@ export const PaginatedEventGrid = ({
       </p>
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3'>
         {paginatedEvents.map((event, index) => (
-          <EventGridItem key={event.uuid} event={event} index={index} />
+          <EventGridItem key={event.uuid} event={event} index={index} compact={compact} />
         ))}
       </div>
 
