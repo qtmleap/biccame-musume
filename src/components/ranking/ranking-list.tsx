@@ -189,7 +189,7 @@ const PodiumCard = ({ character, rank, index, maxVote, rotation }: CardProps) =>
             <div className='text-right min-w-0 flex-1'>
               <h3
                 className={cn('truncate text-foreground', titleSize)}
-                style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 800 }}
+                style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 700 }}
               >
                 {character.character?.name}
               </h3>
@@ -287,7 +287,7 @@ const RankingRow = ({ character, rank, index, maxVote, rotation }: CardProps) =>
             <div className='flex-1 min-w-0'>
               <h3
                 className='text-foreground truncate text-sm md:text-base'
-                style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 800 }}
+                style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 700 }}
               >
                 {character.character?.name}
               </h3>
