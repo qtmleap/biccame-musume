@@ -1,4 +1,6 @@
+import { BADGE_TEMPLATES } from '@/locales/app.content'
 import type { StoreKey } from '@/schemas/store.dto'
+import { formatTemplate } from '@/utils/template'
 import { BADGE_AREA_LABELS, type BadgeArea, storeKeyToBadgeArea } from './area-mapping'
 import { PHYSICAL_STORE_KEYS } from './store-exclusion'
 
@@ -166,13 +168,14 @@ function getBadgeRegistry(): BadgeDef[] {
   // -----------------------------------------------------------------------
   for (const storeKey of PHYSICAL_STORE_KEYS) {
     const storeName = STORE_DISPLAY_NAMES[storeKey]
+    const t = BADGE_TEMPLATES.storeVisit
     badges.push({
       code: `store_visit_${storeKey}`,
       category: 'store',
       subCategory: 'visit',
-      name: `${storeName}訪問`,
-      description: `${storeName}を訪問しました`,
-      hint: `${storeName}を訪問するとゲットできます`,
+      name: formatTemplate(t.name, { storeName }),
+      description: formatTemplate(t.description, { storeName }),
+      hint: formatTemplate(t.hint, { storeName }),
       rarity: 'common',
       iconName: 'MapPin',
       sortOrder: next(),
@@ -185,13 +188,14 @@ function getBadgeRegistry(): BadgeDef[] {
   // -----------------------------------------------------------------------
   for (const area of ALL_AREAS) {
     const areaLabel = BADGE_AREA_LABELS[area]
+    const t = BADGE_TEMPLATES.areaAny
     badges.push({
       code: `area_any_${area}`,
       category: 'area',
       subCategory: 'area_any',
-      name: `${areaLabel}デビュー`,
-      description: `${areaLabel}のいずれかの店舗を訪問しました`,
-      hint: `${areaLabel}の店舗を 1 店以上訪問するとゲットできます`,
+      name: formatTemplate(t.name, { areaLabel }),
+      description: formatTemplate(t.description, { areaLabel }),
+      hint: formatTemplate(t.hint, { areaLabel }),
       rarity: 'common',
       iconName: 'Navigation',
       sortOrder: next(),
@@ -201,13 +205,14 @@ function getBadgeRegistry(): BadgeDef[] {
   for (const area of ALL_AREAS) {
     const areaLabel = BADGE_AREA_LABELS[area]
     const storeCount = STORES_BY_AREA[area].length
+    const t = BADGE_TEMPLATES.areaComplete
     badges.push({
       code: `area_complete_${area}`,
       category: 'area',
       subCategory: 'area_complete',
-      name: `${areaLabel}コンプ`,
-      description: `${areaLabel}の全 ${storeCount} 店舗を訪問しました`,
-      hint: `${areaLabel}の全店舗を訪問するとゲットできます`,
+      name: formatTemplate(t.name, { areaLabel, storeCount }),
+      description: formatTemplate(t.description, { areaLabel, storeCount }),
+      hint: formatTemplate(t.hint, { areaLabel, storeCount }),
       rarity: 'rare',
       iconName: 'Trophy',
       sortOrder: next(),
@@ -223,13 +228,14 @@ function getBadgeRegistry(): BadgeDef[] {
   for (let i = 0; i < visitSteps.length; i++) {
     const count = visitSteps[i]
     const rarity = visitMilestoneRarity(i, visitSteps.length)
+    const t = BADGE_TEMPLATES.visitMilestone
     badges.push({
       code: `milestone_visit_count_${count}`,
       category: 'milestone',
       subCategory: 'count',
-      name: `${count} 店訪問`,
-      description: `累計 ${count} 店舗を訪問しました`,
-      hint: `${count} 店舗を訪問するとゲットできます`,
+      name: formatTemplate(t.name, { count }),
+      description: formatTemplate(t.description, { count }),
+      hint: formatTemplate(t.hint, { count }),
       rarity,
       iconName: 'Star',
       sortOrder: next(),
@@ -237,26 +243,28 @@ function getBadgeRegistry(): BadgeDef[] {
     })
   }
   // "All stores" completion badge
+  const visitAllT = BADGE_TEMPLATES.visitMilestoneAll
   badges.push({
     code: 'milestone_visit_count_all',
     category: 'milestone',
     subCategory: 'count',
-    name: '全店訪問',
-    description: `全 ${physicalCount} 店舗を訪問しました`,
-    hint: `全 ${physicalCount} 店舗を訪問するとゲットできます`,
+    name: formatTemplate(visitAllT.name, { totalStores: physicalCount }),
+    description: formatTemplate(visitAllT.description, { totalStores: physicalCount }),
+    hint: formatTemplate(visitAllT.hint, { totalStores: physicalCount }),
     rarity: 'legendary',
     iconName: 'Crown',
     sortOrder: next(),
     conditionMeta: { count: physicalCount }
   })
   // "All areas visited" meta badge
+  const visitAreasT = BADGE_TEMPLATES.visitAllAreas
   badges.push({
     code: 'milestone_visit_areas',
     category: 'area',
     subCategory: 'all_areas_any_visit',
-    name: '全国デビュー',
-    description: '全 10 地区それぞれで 1 店舗以上を訪問しました',
-    hint: '各地区から 1 店ずつ訪問するとゲット',
+    name: visitAreasT.name,
+    description: visitAreasT.description,
+    hint: visitAreasT.hint,
     rarity: 'epic',
     iconName: 'Globe',
     sortOrder: next(),
@@ -288,15 +296,16 @@ function getBadgeRegistry(): BadgeDef[] {
     475, 500, 525, 550, 575
   ]
   for (const count of EVENT_COUNT_THRESHOLDS) {
-    const name = EVENT_COUNT_NAMED[count] ?? `イベント ${count} 件`
+    const t = BADGE_TEMPLATES.eventCount
+    const name = EVENT_COUNT_NAMED[count] ?? formatTemplate(t.name, { count })
     const rarity = eventCountRarity(count)
     badges.push({
       code: `event_count_${count}`,
       category: 'event',
       subCategory: 'event_count',
       name,
-      description: `イベントを ${count} 件完了しました`,
-      hint: `イベントを ${count} 件完了するとゲットできます`,
+      description: formatTemplate(t.description, { count }),
+      hint: formatTemplate(t.hint, { count }),
       rarity,
       iconName: 'CalendarCheck',
       sortOrder: next(),
@@ -309,13 +318,14 @@ function getBadgeRegistry(): BadgeDef[] {
   // -----------------------------------------------------------------------
   for (const storeKey of PHYSICAL_STORE_KEYS) {
     const storeName = STORE_DISPLAY_NAMES[storeKey]
+    const t = BADGE_TEMPLATES.eventClearAtStore
     badges.push({
       code: `event_clear_at_store_${storeKey}`,
       category: 'event_clear_store',
       subCategory: 'event_clear_at_store',
-      name: `${storeName}参加`,
-      description: `${storeName}のイベントを達成しました`,
-      hint: `${storeName}で開催されたイベントを 1 件以上完了するとゲットできます`,
+      name: formatTemplate(t.name, { storeName }),
+      description: formatTemplate(t.description, { storeName }),
+      hint: formatTemplate(t.hint, { storeName }),
       rarity: 'rare',
       iconName: 'MapPinCheck',
       sortOrder: next(),
@@ -328,13 +338,14 @@ function getBadgeRegistry(): BadgeDef[] {
   // -----------------------------------------------------------------------
   for (const area of ALL_AREAS) {
     const areaLabel = BADGE_AREA_LABELS[area]
+    const t = BADGE_TEMPLATES.eventClearAreaAny
     badges.push({
       code: `event_clear_area_any_${area}`,
       category: 'event_clear_area',
       subCategory: 'event_clear_area_any',
-      name: `${areaLabel}イベントデビュー`,
-      description: `${areaLabel}のいずれかの店舗でイベントを達成しました`,
-      hint: `${areaLabel}の店舗で 1 件以上イベントを完了するとゲットできます`,
+      name: formatTemplate(t.name, { areaLabel }),
+      description: formatTemplate(t.description, { areaLabel }),
+      hint: formatTemplate(t.hint, { areaLabel }),
       rarity: 'rare',
       iconName: 'Compass',
       sortOrder: next(),
@@ -344,13 +355,14 @@ function getBadgeRegistry(): BadgeDef[] {
   for (const area of ALL_AREAS) {
     const areaLabel = BADGE_AREA_LABELS[area]
     const storeCount = STORES_BY_AREA[area].length
+    const t = BADGE_TEMPLATES.eventClearAreaComplete
     badges.push({
       code: `event_clear_area_complete_${area}`,
       category: 'event_clear_area',
       subCategory: 'event_clear_area_complete',
-      name: `${areaLabel}イベントコンプ`,
-      description: `${areaLabel}の全 ${storeCount} 店舗でイベントを達成しました`,
-      hint: `${areaLabel}の全店舗でイベントを完了するとゲットできます`,
+      name: formatTemplate(t.name, { areaLabel, storeCount }),
+      description: formatTemplate(t.description, { areaLabel, storeCount }),
+      hint: formatTemplate(t.hint, { areaLabel, storeCount }),
       rarity: 'epic',
       iconName: 'Award',
       sortOrder: next(),
@@ -365,13 +377,14 @@ function getBadgeRegistry(): BadgeDef[] {
   for (let i = 0; i < clearSteps.length; i++) {
     const count = clearSteps[i]
     const rarity = visitMilestoneRarity(i, clearSteps.length)
+    const t = BADGE_TEMPLATES.clearMilestone
     badges.push({
       code: `milestone_clear_count_${count}`,
       category: 'milestone',
       subCategory: 'event_clear_count',
-      name: `${count} 店達成`,
-      description: `${count} 店舗でイベントを達成しました`,
-      hint: `${count} 店舗でイベントを完了するとゲットできます`,
+      name: formatTemplate(t.name, { count }),
+      description: formatTemplate(t.description, { count }),
+      hint: formatTemplate(t.hint, { count }),
       rarity,
       iconName: 'Swords',
       sortOrder: next(),
@@ -379,26 +392,28 @@ function getBadgeRegistry(): BadgeDef[] {
     })
   }
   // "All stores" event clear completion badge
+  const clearAllT = BADGE_TEMPLATES.clearMilestoneAll
   badges.push({
     code: 'milestone_clear_count_all',
     category: 'milestone',
     subCategory: 'event_clear_all',
-    name: '全店イベント達成',
-    description: `全 ${physicalCount} 店舗でイベントを達成しました`,
-    hint: `全 ${physicalCount} 店舗でイベントを完了するとゲットできます`,
+    name: formatTemplate(clearAllT.name, { totalStores: physicalCount }),
+    description: formatTemplate(clearAllT.description, { totalStores: physicalCount }),
+    hint: formatTemplate(clearAllT.hint, { totalStores: physicalCount }),
     rarity: 'legendary',
     iconName: 'Sparkles',
     sortOrder: next(),
     conditionMeta: { count: physicalCount }
   })
   // "All areas event clear" meta badge
+  const clearAreasT = BADGE_TEMPLATES.clearAllAreas
   badges.push({
     code: 'milestone_clear_areas',
     category: 'event_clear_area',
     subCategory: 'all_areas_any_event_clear',
-    name: '全国達成',
-    description: '全 10 地区それぞれで 1 件以上イベント完了しました',
-    hint: '各地区で 1 件ずつイベントクリアするとゲット',
+    name: clearAreasT.name,
+    description: clearAreasT.description,
+    hint: clearAreasT.hint,
     rarity: 'legendary',
     iconName: 'Globe',
     sortOrder: next(),
@@ -426,15 +441,16 @@ function getBadgeRegistry(): BadgeDef[] {
     1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
   ]
   for (const count of VOTE_TOTAL_THRESHOLDS) {
-    const name = VOTE_TOTAL_NAMED[count] ?? `投票 ${count} 票`
+    const t = BADGE_TEMPLATES.voteTotal
+    const name = VOTE_TOTAL_NAMED[count] ?? formatTemplate(t.name, { count })
     const rarity = voteTotalRarity(count)
     badges.push({
       code: `vote_total_${count}`,
       category: 'vote',
       subCategory: 'vote_total',
       name,
-      description: `累計 ${count} 票投票しました`,
-      hint: `累計 ${count} 票投票するとゲットできます`,
+      description: formatTemplate(t.description, { count }),
+      hint: formatTemplate(t.hint, { count }),
       rarity,
       iconName: 'Vote',
       sortOrder: next(),
