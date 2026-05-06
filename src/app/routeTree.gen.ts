@@ -27,6 +27,7 @@ import { Route as MeFavoritesIndexRouteImport } from './routes/me/favorites/inde
 import { Route as MeCompletedIndexRouteImport } from './routes/me/completed/index'
 import { Route as EventsUuidIndexRouteImport } from './routes/events/$uuid/index'
 import { Route as CharactersIdIndexRouteImport } from './routes/characters/$id/index'
+import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminEventsIndexRouteImport } from './routes/admin/events/index'
 import { Route as AdminCommentsIndexRouteImport } from './routes/admin/comments/index'
 import { Route as AdminBadgesIndexRouteImport } from './routes/admin/badges/index'
@@ -122,6 +123,11 @@ const CharactersIdIndexRoute = CharactersIdIndexRouteImport.update({
   path: '/characters/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
   id: '/events/',
   path: '/events/',
@@ -160,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/admin/badges/': typeof AdminBadgesIndexRoute
   '/admin/comments/': typeof AdminCommentsIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
+  '/admin/users/': typeof AdminUsersIndexRoute
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
   '/me/completed/': typeof MeCompletedIndexRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/admin/badges': typeof AdminBadgesIndexRoute
   '/admin/comments': typeof AdminCommentsIndexRoute
   '/admin/events': typeof AdminEventsIndexRoute
+  '/admin/users': typeof AdminUsersIndexRoute
   '/characters/$id': typeof CharactersIdIndexRoute
   '/events/$uuid': typeof EventsUuidIndexRoute
   '/me/completed': typeof MeCompletedIndexRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/admin/badges/': typeof AdminBadgesIndexRoute
   '/admin/comments/': typeof AdminCommentsIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
+  '/admin/users/': typeof AdminUsersIndexRoute
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
   '/me/completed/': typeof MeCompletedIndexRoute
@@ -234,6 +243,7 @@ export interface FileRouteTypes {
     | '/admin/badges/'
     | '/admin/comments/'
     | '/admin/events/'
+    | '/admin/users/'
     | '/characters/$id/'
     | '/events/$uuid/'
     | '/me/completed/'
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/admin/badges'
     | '/admin/comments'
     | '/admin/events'
+    | '/admin/users'
     | '/characters/$id'
     | '/events/$uuid'
     | '/me/completed'
@@ -281,6 +292,7 @@ export interface FileRouteTypes {
     | '/admin/badges/'
     | '/admin/comments/'
     | '/admin/events/'
+    | '/admin/users/'
     | '/characters/$id/'
     | '/events/$uuid/'
     | '/me/completed/'
@@ -437,6 +449,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CharactersIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/users/': {
+      id: '/admin/users/'
+      path: '/users'
+      fullPath: '/admin/users/'
+      preLoaderRoute: typeof AdminUsersIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/events/': {
       id: '/admin/events/'
       path: '/events'
@@ -473,6 +492,7 @@ interface AdminRouteChildren {
   AdminBadgesIndexRoute: typeof AdminBadgesIndexRoute
   AdminCommentsIndexRoute: typeof AdminCommentsIndexRoute
   AdminEventsIndexRoute: typeof AdminEventsIndexRoute
+  AdminUsersIndexRoute: typeof AdminUsersIndexRoute
   AdminEventsUuidIndexRoute: typeof AdminEventsUuidIndexRoute
 }
 
@@ -481,6 +501,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBadgesIndexRoute: AdminBadgesIndexRoute,
   AdminCommentsIndexRoute: AdminCommentsIndexRoute,
   AdminEventsIndexRoute: AdminEventsIndexRoute,
+  AdminUsersIndexRoute: AdminUsersIndexRoute,
   AdminEventsUuidIndexRoute: AdminEventsUuidIndexRoute,
 }
 
