@@ -625,7 +625,7 @@ const BadgeCard = ({ badge }: { badge: BadgeDto }) => {
           )}
         </div>
 
-        {/* Tooltip-wrapped main content (icon + name + earned count) */}
+        {/* Tooltip-wrapped main content (icon + name) */}
         <TooltipProvider delayDuration={200}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -641,14 +641,6 @@ const BadgeCard = ({ badge }: { badge: BadgeDto }) => {
                 <p className='text-sm font-bold text-foreground line-clamp-2 leading-tight min-h-[2.5em] text-center'>
                   {badge.name}
                 </p>
-
-                {badge.earned_count !== undefined && (
-                  <div className='mt-1.5 text-center'>
-                    <span className='text-[10px] tabular-nums text-muted-foreground'>
-                      達成 <span className='font-bold text-foreground'>{badge.earned_count}</span>人
-                    </span>
-                  </div>
-                )}
               </div>
             </TooltipTrigger>
             <TooltipContent side='bottom' className='max-w-xs'>
@@ -666,6 +658,11 @@ const BadgeCard = ({ badge }: { badge: BadgeDto }) => {
                 </div>
                 <p className='text-[10px] font-numeric text-muted-foreground'>{badge.code}</p>
                 <p className='text-xs'>{badge.description}</p>
+                {badge.earned_count !== undefined && (
+                  <p className='text-[10px] tabular-nums text-muted-foreground pt-1 border-t border-border'>
+                    達成 <span className='font-bold text-foreground'>{badge.earned_count}</span>人
+                  </p>
+                )}
               </div>
             </TooltipContent>
           </Tooltip>
