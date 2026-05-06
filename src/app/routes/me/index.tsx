@@ -60,6 +60,7 @@ const EventSection = ({
         events={displayEvents}
         page={1}
         onPageChange={() => {}}
+        compact
         emptyState={<p className='text-sm text-muted-foreground py-2'>{emptyMessage}</p>}
       />
     </div>
