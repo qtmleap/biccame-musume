@@ -49,12 +49,13 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
             storeName={character.store?.name}
             hasStore={Boolean(character.store)}
           />
-          {/* ログイン不要（右） */}
-          {character.character?.is_biccame_musume && (
-            <CharacterVoteButton characterId={character.id} characterName={character.character.name} iconOnly />
-          )}
+          {/* ログイン不要 */}
           {character.character?.twitter_id && (
             <CharacterFollowButton twitterId={character.character.twitter_id} iconOnly />
+          )}
+          {/* 応援は一番右（primary action） */}
+          {character.character?.is_biccame_musume && (
+            <CharacterVoteButton characterId={character.id} characterName={character.character.name} iconOnly />
           )}
         </div>
       </div>
