@@ -31,6 +31,7 @@ import {
 import { useAllComments, useDeleteAdminComment } from '@/hooks/use-admin-comments'
 import { useCharacters } from '@/hooks/use-characters'
 import { DURATION } from '@/lib/motion'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import type { AdminComment } from '@/schemas/admin-comment.dto'
 
@@ -50,7 +51,7 @@ const StatCard = ({ label, value, accent = 'text-foreground' }: StatCardProps) =
   </div>
 )
 
-const CommentRow = ({ comment }: { comment: AdminComment }) => {
+const CommentRow = ({ comment, index }: { comment: AdminComment; index: number }) => {
   const { data: characters } = useCharacters()
   const deleteComment = useDeleteAdminComment()
   const character = useMemo(
@@ -59,87 +60,95 @@ const CommentRow = ({ comment }: { comment: AdminComment }) => {
   )
   const displayName = character?.character?.name ?? comment.characterId
   const isDeleted = comment.deletedAt !== null
+  const tape = STICKER_TAPES[index % STICKER_TAPES.length]
 
   return (
-    <article
-      className={cn(
-        'flex gap-3 rounded-xl border border-card-border bg-card p-3 transition-colors',
-        isDeleted && 'opacity-60'
-      )}
-    >
-      <Avatar className='size-10 shrink-0 border border-card-border'>
-        <AvatarImage
-          src={character?.character?.image_url}
-          alt=''
-          className='object-cover scale-[1.8] translate-y-[18%] mix-blend-multiply'
-        />
-        <AvatarFallback>{displayName[0] ?? '?'}</AvatarFallback>
-      </Avatar>
-
-      <div className='flex-1 min-w-0 space-y-1'>
-        <div className='flex items-center gap-2 flex-wrap text-xs'>
-          <span className='font-bold text-foreground truncate'>{displayName}</span>
-          {comment.userId && (
-            <span className='rounded bg-sky-100 px-1.5 py-0.5 text-[10px] font-medium text-sky-700'>ログイン</span>
+    <motion.div style={{ filter: STICKER_SHADOW_SM }}>
+      <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }} transition={STICKER_HOVER_TRANSITION}>
+        <article
+          className={cn(
+            'relative flex gap-3 rounded-xl border border-zinc-200 dark:border-card-border bg-card p-3',
+            isDeleted && 'opacity-60'
           )}
-          {isDeleted && (
-            <span className='rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] font-medium text-destructive'>
-              削除済み
-            </span>
+        >
+          {tape && (
+            <div aria-hidden className={cn('absolute rounded-sm', tape.position, tape.size, tape.color, tape.angle)} />
           )}
-          <span className='text-muted-foreground'>·</span>
-          <time dateTime={comment.createdAt} className='text-muted-foreground tabular-nums'>
-            {dayjs(comment.createdAt).format('YYYY/MM/DD HH:mm')}
-          </time>
-        </div>
+          <Avatar className='size-10 shrink-0 border border-card-border'>
+            <AvatarImage
+              src={character?.character?.image_url}
+              alt=''
+              className='object-cover scale-[1.8] translate-y-[18%] mix-blend-multiply'
+            />
+            <AvatarFallback>{displayName[0] ?? '?'}</AvatarFallback>
+          </Avatar>
 
-        <p className='text-sm text-foreground whitespace-pre-wrap break-words'>{comment.body}</p>
+          <div className='flex-1 min-w-0 space-y-1'>
+            <div className='flex items-center gap-2 flex-wrap text-xs'>
+              <span className='font-bold text-foreground truncate'>{displayName}</span>
+              {comment.userId && (
+                <span className='rounded bg-sky-100 px-1.5 py-0.5 text-[10px] font-medium text-sky-700'>ログイン</span>
+              )}
+              {isDeleted && (
+                <span className='rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] font-medium text-destructive'>
+                  削除済み
+                </span>
+              )}
+              <span className='text-muted-foreground'>·</span>
+              <time dateTime={comment.createdAt} className='text-muted-foreground tabular-nums'>
+                {dayjs(comment.createdAt).format('YYYY/MM/DD HH:mm')}
+              </time>
+            </div>
 
-        <div className='flex items-center gap-2 text-[11px] text-muted-foreground'>
-          <Link
-            to='/admin/events/$uuid'
-            params={{ uuid: comment.eventId }}
-            className='hover:text-brand truncate underline-offset-2 hover:underline'
-          >
-            {comment.eventTitle}
-          </Link>
-          <span>·</span>
-          <span className='font-numeric tabular-nums'>{comment.ipAddress}</span>
-        </div>
-      </div>
+            <p className='text-sm text-foreground whitespace-pre-wrap break-words'>{comment.body}</p>
 
-      {!isDeleted && (
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              type='button'
-              variant='ghost'
-              size='icon'
-              aria-label='コメントを削除する'
-              disabled={deleteComment.isPending}
-              className='shrink-0 size-8 text-muted-foreground hover:text-destructive'
-            >
-              <Trash2 className='size-4' />
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent size='sm'>
-            <AlertDialogHeader>
-              <AlertDialogTitle>コメントを削除しますか？</AlertDialogTitle>
-              <AlertDialogDescription>論理削除されます。本文は閲覧できなくなります。</AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>キャンセル</AlertDialogCancel>
-              <AlertDialogAction
-                variant='destructive'
-                onClick={() => deleteComment.mutate({ eventId: comment.eventId, commentId: comment.id })}
+            <div className='flex items-center gap-2 text-[11px] text-muted-foreground'>
+              <Link
+                to='/admin/events/$uuid'
+                params={{ uuid: comment.eventId }}
+                className='hover:text-brand truncate underline-offset-2 hover:underline'
               >
-                削除する
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
-    </article>
+                {comment.eventTitle}
+              </Link>
+              <span>·</span>
+              <span className='font-numeric tabular-nums'>{comment.ipAddress}</span>
+            </div>
+          </div>
+
+          {!isDeleted && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  type='button'
+                  variant='ghost'
+                  size='icon'
+                  aria-label='コメントを削除する'
+                  disabled={deleteComment.isPending}
+                  className='shrink-0 size-8 text-muted-foreground hover:text-destructive'
+                >
+                  <Trash2 className='size-4' />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent size='sm'>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>コメントを削除しますか？</AlertDialogTitle>
+                  <AlertDialogDescription>論理削除されます。本文は閲覧できなくなります。</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                  <AlertDialogAction
+                    variant='destructive'
+                    onClick={() => deleteComment.mutate({ eventId: comment.eventId, commentId: comment.id })}
+                  >
+                    削除する
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+        </article>
+      </motion.div>
+    </motion.div>
   )
 }
 
@@ -190,9 +199,7 @@ const CommentsContent = () => {
           className='mb-4 md:mb-6'
         >
           <h1 className='text-2xl font-bold text-foreground'>コメント管理</h1>
-          <p className='mt-2 text-sm text-muted-foreground md:text-base'>
-            イベントに投稿されたコメントの確認と削除。
-          </p>
+          <p className='mt-2 text-sm text-muted-foreground md:text-base'>イベントに投稿されたコメントの確認と削除。</p>
         </motion.div>
 
         <motion.div
@@ -225,8 +232,8 @@ const CommentsContent = () => {
         </div>
 
         <div className='space-y-2'>
-          {pagedComments.map((comment) => (
-            <CommentRow key={comment.id} comment={comment} />
+          {pagedComments.map((comment, index) => (
+            <CommentRow key={comment.id} comment={comment} index={index} />
           ))}
           {totalCount === 0 && (
             <div className='text-center py-12 text-muted-foreground text-sm'>コメントはまだありません</div>
