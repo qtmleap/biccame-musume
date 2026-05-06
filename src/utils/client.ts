@@ -482,7 +482,7 @@ const api = makeApi([
     ],
     response: z.object({
       processedUsers: z.number(),
-      awardedTotal: z.number()
+      scheduled: z.literal(true)
     })
   },
   // コメント関連API

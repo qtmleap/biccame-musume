@@ -75,12 +75,12 @@ export const useRecalculateBadges = () => {
   return useMutation({
     mutationFn: () => client.recalculateBadges({}),
     onSuccess: (data) => {
-      toast.success(`再評価完了: ${data.processedUsers}人 / 新規付与 ${data.awardedTotal}件`)
+      toast.success(`再評価をバックグラウンドで開始しました (対象 ${data.processedUsers}人)`)
       queryClient.invalidateQueries({ queryKey: ['badges'] })
       queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
     },
     onError: () => {
-      toast.error('バッジ再評価に失敗しました')
+      toast.error('バッジ再評価の開始に失敗しました')
     }
   })
 }
