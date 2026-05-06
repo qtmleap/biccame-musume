@@ -7,29 +7,43 @@ test.use({
 })
 
 async function login(page: import('@playwright/test').Page) {
-  // デスクトップ幅でログイン操作（ヘッダーにログインボタンが表示される）
-  await page.setViewportSize({ width: 1280, height: 900 })
-  await page.goto('http://localhost:15175/', { waitUntil: 'networkidle' })
-  await page.waitForTimeout(1000)
+  const errors: string[] = []
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') errors.push(msg.text())
+  })
+  page.on('pageerror', (err) => errors.push(err.message))
 
-  // ヘッダーの「ログイン」ボタン（type=button）をクリック
-  // デスクトップヘッダーの LoginButton は nav.hidden.md:flex の中にある
-  await page.locator('nav').getByRole('button', { name: 'ログイン' }).click()
-  await page.waitForTimeout(500)
+  await page.setViewportSize({ width: 1280, height: 900 })
+  await page.goto('http://localhost:15175/', { waitUntil: 'domcontentloaded' })
+  await page.waitForTimeout(2000)
+
+  // ヘッダーの「ログイン」ボタン（デスクトップナビ内）
+  const loginBtn = page.locator('header nav').getByRole('button', { name: 'ログイン' })
+  await loginBtn.waitFor({ state: 'visible', timeout: 10000 })
+  await loginBtn.click()
 
   // ダイアログが開くのを待つ
-  await page.waitForSelector('#login-email', { state: 'visible' })
+  await page.waitForSelector('[role="dialog"]', { state: 'visible', timeout: 10000 })
+  await page.waitForSelector('#login-email', { state: 'visible', timeout: 5000 })
 
   await page.fill('#login-email', 'algae.olive.14@example.com')
   await page.fill('#login-password', '123456')
 
-  // ダイアログ内のログインフォームのサブミットボタン
-  // ログインタブのフォーム内 button[type=submit]
-  await page.locator('[role="dialog"] form button[type="submit"]').click()
+  // フォームを submit - ボタンテキストを確認してから
+  const submitBtn = page.locator('[role="dialog"] form').getByRole('button', { name: /ログイン/ })
+  await submitBtn.waitFor({ state: 'visible', timeout: 5000 })
+  console.log('submit button disabled?', await submitBtn.isDisabled())
+  await submitBtn.click()
 
-  // ダイアログが閉じるまで待つ（最大10秒）
-  await page.waitForSelector('[role="dialog"]', { state: 'hidden', timeout: 10000 }).catch(() => {})
-  await page.waitForTimeout(2000)
+  // エラーが出ていないか確認しながら待つ
+  await page.waitForTimeout(5000)
+  if (errors.length > 0) {
+    console.log('Login errors:', errors)
+  }
+
+  // ダイアログが閉じたか確認
+  const dialogVisible = await page.locator('[role="dialog"]').isVisible()
+  console.log('Dialog still visible after login:', dialogVisible)
 }
 
 async function capture(
@@ -37,30 +51,18 @@ async function capture(
   route: string,
   filename: string,
 ) {
-  await page.goto(`http://localhost:15175${route}`, { waitUntil: 'networkidle' })
-  await page.waitForTimeout(3000)
+  await page.goto(`http://localhost:15175${route}`, { waitUntil: 'domcontentloaded' })
+  await page.waitForTimeout(8000)
   const buf = await page.screenshot({ fullPage: true, type: 'png' })
   await sharp(buf).webp({ quality: 85 }).toFile(`e2e/__screenshots__/${filename}`)
 }
 
-test('badges layout - mobile', async ({ page }) => {
+test.setTimeout(120000)
+
+// デバッグ用: ログインフローのみ
+test('debug login', async ({ page }) => {
   await login(page)
 
-  // ログイン状態でモバイルに切り替え
-  await page.setViewportSize({ width: 375, height: 800 })
-
-  await capture(page, '/badges', 'badges-layout-mobile.webp')
-  await capture(page, '/events', 'compare-events-mobile.webp')
-  await capture(page, '/characters', 'compare-characters-mobile.webp')
-})
-
-test('badges layout - desktop', async ({ page }) => {
-  await login(page)
-
-  // デスクトップサイズはそのまま
-  await page.setViewportSize({ width: 1280, height: 900 })
-
-  await capture(page, '/badges', 'badges-layout-desktop.webp')
-  await capture(page, '/events', 'compare-events-desktop.webp')
-  await capture(page, '/characters', 'compare-characters-desktop.webp')
+  // ログイン後のスクショ
+  await page.screenshot({ path: 'e2e/__screenshots__/debug-after-login.png' })
 })
