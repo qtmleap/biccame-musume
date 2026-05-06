@@ -10,9 +10,12 @@ import {
 } from '@/schemas/activity.dto'
 import { AuthResponseSchema, CurrentUserResponseSchema } from '@/schemas/auth.dto'
 import {
+  BadgeSchema,
+  CreateSpecialBadgeBodySchema,
   GetBadgeLeaderboardResponseSchema,
   GetBadgesResponseSchema,
-  GetMyBadgesResponseSchema
+  GetMyBadgesResponseSchema,
+  UpdateBadgeBodySchema
 } from '@/schemas/badge.dto'
 import { CreateCommentRequestSchema, ListCommentsResponseSchema } from '@/schemas/comment.dto'
 import {
@@ -406,6 +409,54 @@ const api = makeApi([
       }
     ],
     response: GetBadgeLeaderboardResponseSchema
+  },
+  // 管理者バッジCRUD API
+  {
+    method: 'post',
+    path: '/api/admin/badges',
+    alias: 'createSpecialBadge',
+    description: 'special バッジを作成（admin）',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: CreateSpecialBadgeBodySchema
+      }
+    ],
+    response: z.object({ badge: BadgeSchema })
+  },
+  {
+    method: 'patch',
+    path: '/api/admin/badges/:code',
+    alias: 'updateBadge',
+    description: 'バッジを更新（admin）',
+    parameters: [
+      {
+        name: 'code',
+        type: 'Path',
+        schema: z.string().nonempty()
+      },
+      {
+        name: 'body',
+        type: 'Body',
+        schema: UpdateBadgeBodySchema
+      }
+    ],
+    response: z.object({ badge: BadgeSchema })
+  },
+  {
+    method: 'delete',
+    path: '/api/admin/badges/:code',
+    alias: 'deleteBadge',
+    description: 'special バッジを削除（admin）',
+    parameters: [
+      {
+        name: 'code',
+        type: 'Path',
+        schema: z.string().nonempty()
+      }
+    ],
+    response: z.void()
   },
   // コメント関連API
   {
