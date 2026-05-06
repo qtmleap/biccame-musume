@@ -85,10 +85,7 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
               </AvatarFallback>
             </Avatar>
             <div className='flex-1 min-w-0 flex flex-col gap-1.5'>
-              <h3
-                className='truncate text-foreground text-sm md:text-base'
-                style={{ fontFamily: '"Zen Maru Gothic", sans-serif', fontWeight: 700 }}
-              >
+              <h3 className='font-bold truncate text-foreground text-sm md:text-base'>
                 {getDisplayName(character.character?.name || '')}
               </h3>
               <div className='flex justify-end gap-2'>
