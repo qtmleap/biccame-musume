@@ -16,7 +16,7 @@ export const BADGE_CATEGORY_DEFS: BadgeCategoryDef[] = [
   },
   {
     key: 'area',
-    label: 'エリア制覇',
+    label: 'エリア訪問',
     description: '地区ごとの訪問実績を積み重ねよう',
     accent: 'rank-bronze'
   },
