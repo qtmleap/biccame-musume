@@ -1,9 +1,9 @@
 .dark {
   /* Typography */
-  --font-sans: "Zen Maru Gothic", sans-serif;
-  --font-display: "Zen Maru Gothic", sans-serif;
-  --font-handwritten: "Klee One", "Zen Maru Gothic", sans-serif;
-  --font-numeric: Inter, system-ui, sans-serif;
+  --font-family-sans: "Zen Maru Gothic", sans-serif;
+  --font-family-display: "Zen Maru Gothic", sans-serif;
+  --font-family-handwritten: "Klee One", "Zen Maru Gothic", sans-serif;
+  --font-family-numeric: Inter, system-ui, sans-serif;
 
   --background: var(--color-zinc-950);
   --foreground: var(--color-zinc-50);
