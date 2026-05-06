@@ -23,7 +23,7 @@ export const CalendarHeader = ({ year, month, onPrevMonth, onNextMonth, onCurren
       initial='initial'
       animate='animate'
       transition={{ duration: DURATION.fast * 2, ease: EASE_OUT }}
-      className='flex items-center justify-between py-2 md:py-4'
+      className='flex items-center justify-between pb-2 md:pb-4'
     >
       <Button variant='ghost' size='icon' onClick={onPrevMonth} className='rounded-full border border-transparent'>
         <ChevronLeft className='h-5 w-5' />
