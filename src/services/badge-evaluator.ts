@@ -19,16 +19,6 @@ const ALL_BADGE_AREAS: BadgeArea[] = [
   'kyushu'
 ]
 
-// IDs of all characters with is_biccame_musume=true, read from public/characters.json at module load.
-// This avoids a runtime FS read inside each request.
-import CHARACTERS_JSON from '../../public/characters.json' with { type: 'json' }
-
-const BICCAME_MUSUME_IDS: ReadonlySet<string> = new Set(
-  (CHARACTERS_JSON as Array<{ id: string; character: { is_biccame_musume?: boolean } }>)
-    .filter((c) => c.character.is_biccame_musume === true)
-    .map((c) => c.id)
-)
-
 export type EvaluatorContext = {
   env: Bindings
   prisma: PrismaClient
@@ -159,34 +149,6 @@ export async function evaluateVoteTotal(ctx: EvaluatorContext, meta: { count: nu
   return count >= meta.count
 }
 
-export async function evaluateVoteUnique(ctx: EvaluatorContext, meta: { count: number }): Promise<boolean> {
-  const rows = await ctx.prisma.vote.groupBy({
-    by: ['characterId'],
-    where: { userId: ctx.userId }
-  })
-  return rows.length >= meta.count
-}
-
-export async function evaluateVoteDevotion(ctx: EvaluatorContext, meta: { count: number }): Promise<boolean> {
-  const rows = await ctx.prisma.vote.groupBy({
-    by: ['characterId'],
-    where: { userId: ctx.userId },
-    _count: { characterId: true },
-    orderBy: { _count: { characterId: 'desc' } },
-    take: 1
-  })
-  if (rows.length === 0) return false
-  return rows[0]._count.characterId >= meta.count
-}
-
-export async function evaluateVoteAllBiccame(ctx: EvaluatorContext): Promise<boolean> {
-  const voted = await ctx.prisma.vote.groupBy({
-    by: ['characterId'],
-    where: { userId: ctx.userId, characterId: { in: Array.from(BICCAME_MUSUME_IDS) } }
-  })
-  return voted.length >= BICCAME_MUSUME_IDS.size
-}
-
 export async function evaluateSpecialMultiStoreClear(
   ctx: EvaluatorContext,
   meta: { storeKeys: StoreKey[] }
@@ -259,17 +221,6 @@ export async function evaluateBadge(ctx: EvaluatorContext, badge: Badge): Promis
     case 'vote_total':
       if (meta.count === undefined) throw new Error(`Badge ${badge.code}: missing count`)
       return evaluateVoteTotal(ctx, { count: meta.count })
-
-    case 'vote_unique':
-      if (meta.count === undefined) throw new Error(`Badge ${badge.code}: missing count`)
-      return evaluateVoteUnique(ctx, { count: meta.count })
-
-    case 'vote_devotion':
-      if (meta.count === undefined) throw new Error(`Badge ${badge.code}: missing count`)
-      return evaluateVoteDevotion(ctx, { count: meta.count })
-
-    case 'vote_all_biccame':
-      return evaluateVoteAllBiccame(ctx)
 
     case 'special_multi_store_clear':
       if (!meta.storeKeys) throw new Error(`Badge ${badge.code}: missing storeKeys`)
@@ -419,7 +370,7 @@ export async function evaluateOnEventComplete(ctx: EvaluatorContext, eventId: st
 
 /**
  * Called from POST /votes/* when a vote is cast for a characterId by an authenticated user.
- * Evaluates: vote_total[*], vote_unique[*], vote_devotion[*], vote_all_biccame
+ * Evaluates: vote_total[*]
  */
 export async function evaluateOnVote(ctx: EvaluatorContext, _characterId: string): Promise<Badge[]> {
   const allBadges = await ctx.prisma.badge.findMany({
@@ -430,7 +381,7 @@ export async function evaluateOnVote(ctx: EvaluatorContext, _characterId: string
   const candidateCodes = allBadges
     .filter((b) => {
       const sub = b.subCategory as BadgeSubCategory
-      return sub === 'vote_total' || sub === 'vote_unique' || sub === 'vote_devotion' || sub === 'vote_all_biccame'
+      return sub === 'vote_total'
     })
     .map((b) => b.code)
 
