@@ -94,6 +94,9 @@ const MyPageContent = () => {
     <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div>
+          {/* タイトル */}
+          <h1 className='text-2xl font-bold text-foreground mb-4'>マイページ</h1>
+
           {/* プロフィールセクション */}
           <div className='mb-4 flex items-end justify-between gap-4'>
             <motion.div
@@ -148,7 +151,7 @@ const MyPageContent = () => {
             transition={{ duration: DURATION.normal, delay: 0.2 }}
             className='mb-6'
           >
-            <h1 className='text-2xl font-bold text-foreground'>{user?.displayName}</h1>
+            <h2 className='text-2xl font-bold text-foreground'>{user?.displayName}</h2>
           </motion.div>
 
           {/* 訪れた店舗の記録 */}
