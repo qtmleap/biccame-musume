@@ -34,11 +34,34 @@ Date: 2026-05-06
 
 コンプ概念なし。
 
+### 投票系 (11 個)
+
+「ちまちま投票してれば自然に届く」「強要しない」がコンセプト。**ストリーク (連続 X 日) や時限制限は採用しない**。すべて累計・多様性・愛着の積み上げ系。
+
+| サブカテゴリ | 名称 | 条件 | レアリティ |
+| --- | --- | --- | --- |
+| 累計票数 | 初投票 | 累計 1 票 | common |
+| 累計票数 | 投票デビュー | 累計 10 票 | common |
+| 累計票数 | 投票上手 | 累計 50 票 | rare |
+| 累計票数 | 投票熟練 | 累計 100 票 | rare |
+| 累計票数 | 票職人 | 累計 500 票 | epic |
+| 多様性 | 推しが増えた | 異なる 3 キャラに投票 | common |
+| 多様性 | 推し広め隊 | 異なる 11 キャラに投票 | rare |
+| 多様性 | 全員推し | ビッカメ娘全キャラに 1 票以上 | legendary |
+| 推し愛 | 推し決定 | 同一キャラに累計 10 票 | common |
+| 推し愛 | 推し一筋 | 同一キャラに累計 100 票 | epic |
+| 一括投票 | みんなに一票 | 「ビッカメ娘全員に投票」を一度でも実行 | rare |
+
+**設計メモ:**
+- 上限は 500 票で打ち止め (1000 はちまちま勢には遠すぎる)
+- 「全員推し」は legendary だがあくまで自然な配票で届く範囲。"全員" の母集団は「現時点で `is_biccame_musume=true` のキャラ」に対してのみ判定
+- 「みんなに一票」は既存の `BulkVoteButton` 経由でも単発投票の累積でも OK (実質「全員推し」と同条件で、片方は手段問わず・もう片方は一括ボタン明示)。…と思ったが冗長になるので **一括投票専用フラグ** (Vote 行に `via_bulk` 列追加 or アクションログ) で区別する。**MVP では「みんなに一票」=「全員推し」と統合してドロップ**し、10 個に絞る案も Plan として保持。
+
 ### 11 周年限定 (将来拡張用、MVP では空)
 
 `category='anniversary'` で枠だけ用意。MVP では 0 件、後続でハードコード追加可能に。
 
-**MVP 合計: 約 76 バッジ**
+**MVP 合計: 約 86 バッジ** (店舗 71 + イベント 5 + 投票 10〜11)
 
 ## データモデル
 
@@ -49,9 +72,9 @@ Date: 2026-05-06
 model Badge {
   /// バッジコード (例: 'store_visit_akiba', 'area_complete_kanto', 'store_milestone_10')
   code         String   @id
-  /// カテゴリ: 'store' | 'area' | 'milestone' | 'event' | 'anniversary'
+  /// カテゴリ: 'store' | 'area' | 'milestone' | 'event' | 'vote' | 'anniversary'
   category     String
-  /// サブカテゴリ: 'visit' | 'area_any' | 'area_complete' | 'count' | 'event_count' 等
+  /// サブカテゴリ: 'visit' | 'area_any' | 'area_complete' | 'count' | 'event_count' | 'vote_total' | 'vote_unique' | 'vote_devotion' | 'vote_bulk' 等
   subCategory  String   @map("sub_category")
   /// 表示名
   name         String
@@ -123,6 +146,10 @@ type BadgeDef = {
 | `area_complete` | `userId, region` | そのエリアの店舗をすべて visited |
 | `count` | `userId, count` | 累計ユニーク visited 店舗数 ≥ count |
 | `event_count` | `userId, count` | `UserEvent.status='completed'` の件数 ≥ count |
+| `vote_total` | `userId, count` | `Vote` テーブルの行数 ≥ count |
+| `vote_unique` | `userId, count` | `COUNT(DISTINCT character_id)` ≥ count |
+| `vote_devotion` | `userId, count` | 単一キャラへの票数の最大値 ≥ count |
+| `vote_unique_all_biccame` | `userId` | 現在の `is_biccame_musume=true` 全キャラに各 1 票以上 |
 
 各 evaluator は `(env, userId, conditionMeta) => Promise<boolean>` の純粋関数。
 
@@ -134,6 +161,8 @@ type BadgeDef = {
   - 評価対象: `visit[storeKey]`, `area_any[region(storeKey)]`, `area_complete[region(storeKey)]`, `count[*]`, `legendary 全店制覇`
 - `PUT /api/users/me/events/:eventId` (status='completed' のとき)
   - 評価対象: `event_count[*]`
+- `POST /api/votes` (投票が成立したとき)
+  - 評価対象: `vote_total[*]`, `vote_unique[*]`, `vote_devotion[投票先キャラのみ]`, `vote_unique_all_biccame`
 
 すでに獲得済みのバッジは判定スキップ。新規獲得は `UserBadge` に insert + 型のあるレスポンス `{ newBadges: Badge[] }` を返却し、フロントで toast ポップアップ。
 
@@ -220,9 +249,10 @@ LIMIT 50;
 - [ ] `src/data/badges/registry.ts` で全バッジ定義を生成
 - [ ] `bun run badges:seed` スクリプト (upsert で Badge テーブル投入)
 - [ ] `src/services/badge-evaluator.ts` で subCategory 別 evaluator 実装
-- [ ] `src/services/badge-evaluator.ts` に `evaluateOnVisit` / `evaluateOnEventComplete` ヘルパー
+- [ ] `src/services/badge-evaluator.ts` に `evaluateOnVisit` / `evaluateOnEventComplete` / `evaluateOnVote` ヘルパー
 - [ ] 既存の `PUT /api/users/me/stores/:storeKey` に評価フック追加 + 新規バッジ返却
 - [ ] 既存の `PUT /api/users/me/events/:eventId` に評価フック追加 + 新規バッジ返却
+- [ ] 既存の `POST /api/votes` (一括投票含む) に評価フック追加 + 新規バッジ返却
 - [ ] `GET /api/badges`, `GET /api/users/me/badges`, `GET /api/badges/leaderboard` 実装
 - [ ] `scripts/backfill-badges.ts` (全ユーザー一括判定)
 - [ ] OpenAPI spec / Zod スキーマ整備
@@ -245,11 +275,19 @@ LIMIT 50;
 - [ ] e2e: ログイン → 店舗訪問 → 該当バッジが UI に出現
 - [ ] biome / tsc / playwright 全パス
 
+## 設計原則 (バッジ全体)
+
+- **ストリーク・連続日数を要求しない** ("連続 X 日" の発想は採らない)。アプリの温度感「パッと入力、たまに見返す」(memory `feedback_app_philosophy.md`) と矛盾するため
+- 全バッジは**累計・多様性・愛着**のいずれかの軸で「ちまちまやれば自然に届く」ように設計
+- レアリティの上限は「ヘビーユーザーなら数ヶ月で届く」程度に。**コンプを目標にしないでも遊べる**ことを優先
+- ラベル・名称はポジティブ語のみ (memory `feedback_positive_naming.md`)
+
 ## 未確定事項 (実装中に詰める)
 
 - 店舗マスタ (`stores.yaml` 等) のうち実店舗判定の根拠 → `prefecture` 必須でよいか
 - 全店制覇とマイルストーン 50 (実店舗数次第) が同等になる可能性 → 「全店制覇」だけ legendary、50 マイルストーンは epic で別バッジ扱いに
-- アイコン採用方針: lucide で全 76 個分けるか、店舗系は地図ピン共通で OK か
+- 投票系の「みんなに一票 (一括ボタン経由)」を残すか、「全員推し (累計でも OK)」に統合するか → 投票ログに `via_bulk` 列が必要なら統合推奨
+- アイコン採用方針: lucide で全 ~86 個分けるか、店舗系は地図ピン共通で OK か
 - リーダーボードの匿名表示オプト (Phase 2)
 
 ## ステップ実装順
