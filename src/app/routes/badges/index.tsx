@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { BadgeGrid } from '@/components/badges/badge-grid'
+import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
 import { useBadges } from '@/hooks/use-badges'
@@ -15,6 +16,13 @@ const BadgesContent = () => {
   return (
     <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
+        <AppBreadcrumb
+          items={[
+            { label: 'ホーム', to: '/' },
+            { label: 'マイページ', to: '/me' },
+            { label: 'バッジコレクション' }
+          ]}
+        />
         <motion.header
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
