@@ -1,10 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { Award, Cake, Gift, MapPin, Menu, Search, Trophy, Users, X } from 'lucide-react'
+import { Award, Cake, Gift, MapPin, Menu, Trophy, Users, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { LoginButton } from '@/components/auth/login-button'
-import { GlobalSearch } from '@/components/common/global-search'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/use-auth'
 import { DURATION } from '@/lib/motion'
@@ -32,21 +31,9 @@ type HeaderProps = {
  */
 export const Header = ({ className }: HeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
   const { isAuthenticated } = useAuth()
 
   const visibleLinks = navLinks.filter((link) => !link.requiresAuth || isAuthenticated)
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        setSearchOpen((prev) => !prev)
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
 
   /**
    * メニュートグル
@@ -64,7 +51,6 @@ export const Header = ({ className }: HeaderProps) => {
 
   return (
     <>
-      <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
       <header
         className={cn(
           'sticky top-0 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border',
@@ -94,30 +80,11 @@ export const Header = ({ className }: HeaderProps) => {
                   </Link>
                 )
               })}
-              <Button
-                variant='ghost'
-                size='icon'
-                className='h-8 w-8 text-muted-foreground hover:text-foreground border border-transparent'
-                onClick={() => setSearchOpen(true)}
-                aria-label='検索'
-              >
-                <Search className='size-4' />
-              </Button>
               <LoginButton />
             </nav>
 
-            {/* モバイル: 検索 + メニュー */}
+            {/* モバイル: メニュー */}
             <div className='md:hidden flex items-center'>
-              <Button
-                variant='ghost'
-                size='icon'
-                className='h-12 w-12 flex items-center justify-center border border-transparent'
-                onClick={() => setSearchOpen(true)}
-                aria-label='検索'
-              >
-                <Search />
-              </Button>
-
               <Button
                 variant='ghost'
                 size='icon'
