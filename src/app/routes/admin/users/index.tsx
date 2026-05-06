@@ -7,8 +7,7 @@ import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { useAdminUsers } from '@/hooks/use-admin-users'
-import { useMediaQuery } from '@/hooks/use-media-query'
-import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 
 type AdminUser = {
@@ -20,16 +19,15 @@ type AdminUser = {
 }
 
 const UserCard = ({ user, index }: { user: AdminUser; index: number }) => {
-  const isMultiColumn = useMediaQuery('(min-width: 640px)')
-  const rotationDeg = isMultiColumn ? getStickerRotation(index) : 0
+  // 管理画面なので傾きはなし。マスキングテープ装飾だけ流用してステッカー感を出す
+  const tape = STICKER_TAPES[index % STICKER_TAPES.length]
 
   return (
     <motion.div className='h-full' style={{ filter: STICKER_SHADOW_SM }}>
       <motion.div
         className='h-full'
-        style={{ rotate: rotationDeg }}
-        whileHover={{ scale: 1.04, rotate: 0 }}
-        whileTap={{ scale: 0.97 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         transition={STICKER_HOVER_TRANSITION}
       >
         <div
@@ -37,6 +35,9 @@ const UserCard = ({ user, index }: { user: AdminUser; index: number }) => {
             'relative block rounded-xl p-4 border border-zinc-200 dark:border-card-border h-full bg-card flex flex-col'
           )}
         >
+          {tape && (
+            <div aria-hidden className={cn('absolute rounded-sm', tape.position, tape.size, tape.color, tape.angle)} />
+          )}
           <div className='mb-2 flex items-start gap-3'>
             <Avatar className='size-10 shrink-0'>
               <AvatarImage src={user.thumbnailURL ?? undefined} alt={user.displayName ?? 'user'} />
