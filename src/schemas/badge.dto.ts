@@ -151,6 +151,12 @@ export const BadgeLeaderboardResponseSchema = z
 
 export type BadgeLeaderboardResponse = z.infer<typeof BadgeLeaderboardResponseSchema>
 
+export const GetBadgesQuerySchema = z
+  .object({
+    includeHidden: z.enum(['1', 'true']).optional().openapi({ example: '1' })
+  })
+  .openapi('GetBadgesQuery')
+
 export const GetBadgesResponseSchema = z
   .object({
     badges: z.array(BadgeSchema)
