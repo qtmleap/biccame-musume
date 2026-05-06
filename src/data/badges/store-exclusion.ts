@@ -6,20 +6,20 @@ const EXCLUDED: readonly StoreKey[] = [
   'biccamera', // brand mascot character, no prefecture, no physical store
   'bicsim', // MVNO service character (BIC SIM), no prefecture, no physical store
   'naisen', // internal character (ナイセン = internal line), no prefecture, no physical store
-  'oeraitan', // concept character (お偉いたん = management mascot), no prefecture, no physical store
-  'prosta' // プロスタジアム section inside ikenishi (same address, no independent store name)
+  'oeraitan' // concept character (お偉いたん = management mascot), no prefecture, no physical store
 ]
 
 export const EXCLUDED_STORE_KEYS: ReadonlySet<StoreKey> = new Set(EXCLUDED)
 
 // All StoreKey values that represent independent physical stores.
 // Includes:
-//   camera  (ビックカメラ池袋東口カメラ館)   — distinct physical building in the campaign
-//   ikenishi (ビックカメラ池袋西口店)        — distinct physical store with own address
-//   itt     (ビックカメラ池袋西口IT tower店) — distinct physical building in the campaign
-//   pkan    (ビックカメラ池袋カメラ・パソコン館) — distinct physical building with own address
-//   photo   (フォトスタジオ)               — listed as a separate campaign store for ikebukuro
-//   bicqlo  (ビックカメラ新宿東口店)        — the former ビックロ building, now a physical BicCamera store
+//   camera  (ビックカメラ池袋東口カメラ館)         — distinct physical building in the campaign
+//   ikenishi (ビックカメラ池袋西口店)              — distinct physical store with own address
+//   itt     (ビックカメラ池袋西口IT tower店)       — distinct physical building in the campaign
+//   pkan    (ビックカメラ池袋カメラ・パソコン館)     — distinct physical building with own address
+//   photo   (フォトスタジオ)                      — listed as a separate campaign store for ikebukuro
+//   prosta  (ビックフォトスタジオ東京写真館)        — listed as a separate campaign store for ikebukuro (11th anniversary)
+//   bicqlo  (ビックカメラ新宿東口店)               — the former ビックロ building, now a physical BicCamera store
 export const PHYSICAL_STORE_KEYS: readonly StoreKey[] = [
   'abeno',
   'akasaka',
@@ -52,6 +52,7 @@ export const PHYSICAL_STORE_KEYS: readonly StoreKey[] = [
   'okayama',
   'photo',
   'pkan',
+  'prosta',
   'sagami',
   'sapporo',
   'seiseki',

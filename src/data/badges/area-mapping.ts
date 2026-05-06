@@ -62,12 +62,13 @@ export const storeKeyToBadgeArea: Record<StoreKey, BadgeArea> = {
   shibuhachi: 'shinjuku_shibuya', // 渋谷ハチ公口
   shibuto: 'shinjuku_shibuya', // 渋谷東口
 
-  // ikebukuro — 池袋地区 (campaign: 本店・カメラ館・パソコン館・西口・フォトスタジオ・IT tower)
+  // ikebukuro — 池袋地区 (campaign: 本店・カメラ館・パソコン館・西口・フォトスタジオ・プロスタ・IT tower)
   honten: 'ikebukuro',
   camera: 'ikebukuro', // 池袋東口カメラ館 — distinct physical building listed in campaign
   pkan: 'ikebukuro', // 池袋カメラ・パソコン館 — distinct physical building listed in campaign
   ikenishi: 'ikebukuro', // 池袋西口店
   photo: 'ikebukuro', // フォトスタジオ — listed in campaign as a separate ikebukuro store
+  prosta: 'ikebukuro', // ビックフォトスタジオ東京写真館 — listed in 11th anniversary campaign as a separate ikebukuro store
   itt: 'ikebukuro', // 池袋西口IT tower店
 
   // kanagawa — 神奈川地区 (campaign: 相模大野・たまプラーザ・川崎・新横浜・横浜西口・藤沢)
@@ -103,8 +104,7 @@ export const storeKeyToBadgeArea: Record<StoreKey, BadgeArea> = {
   biccamera: 'tokyo_metro',
   bicsim: 'tokyo_metro',
   naisen: 'tokyo_metro',
-  oeraitan: 'tokyo_metro',
-  prosta: 'ikebukuro'
+  oeraitan: 'tokyo_metro'
 }
 
 // Runtime assertion: every PHYSICAL_STORE_KEY must appear in storeKeyToBadgeArea
