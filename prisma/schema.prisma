@@ -135,6 +135,8 @@ model Vote {
   characterId String   @map("character_id")
   /// 投票者のIPアドレス
   ipAddress   String   @map("ip_address")
+  /// ログインユーザーのFirebase Auth UID（匿名投票の場合はnull）
+  userId      String?  @map("user_id")
   /// 投票日時
   createdAt   DateTime @default(now()) @map("created_at")
   /// 更新日時
@@ -143,6 +145,7 @@ model Vote {
   @@index([characterId])
   @@index([ipAddress, characterId])
   @@index([createdAt])
+  @@index([userId])
   @@map("votes")
 }
 
