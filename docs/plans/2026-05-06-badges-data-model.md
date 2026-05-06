@@ -34,7 +34,7 @@ Date: 2026-05-06
 
 コンプ概念なし。
 
-### 投票系 (11 個)
+### 投票系 (10 個)
 
 「ちまちま投票してれば自然に届く」「強要しない」がコンセプト。**ストリーク (連続 X 日) や時限制限は採用しない**。すべて累計・多様性・愛着の積み上げ系。
 
@@ -50,18 +50,17 @@ Date: 2026-05-06
 | 多様性 | 全員推し | ビッカメ娘全キャラに 1 票以上 | legendary |
 | 推し愛 | 推し決定 | 同一キャラに累計 10 票 | common |
 | 推し愛 | 推し一筋 | 同一キャラに累計 100 票 | epic |
-| 一括投票 | みんなに一票 | 「ビッカメ娘全員に投票」を一度でも実行 | rare |
 
 **設計メモ:**
 - 上限は 500 票で打ち止め (1000 はちまちま勢には遠すぎる)
 - 「全員推し」は legendary だがあくまで自然な配票で届く範囲。"全員" の母集団は「現時点で `is_biccame_musume=true` のキャラ」に対してのみ判定
-- 「みんなに一票」は既存の `BulkVoteButton` 経由でも単発投票の累積でも OK (実質「全員推し」と同条件で、片方は手段問わず・もう片方は一括ボタン明示)。…と思ったが冗長になるので **一括投票専用フラグ** (Vote 行に `via_bulk` 列追加 or アクションログ) で区別する。**MVP では「みんなに一票」=「全員推し」と統合してドロップ**し、10 個に絞る案も Plan として保持。
+- 一括投票ボタン専用バッジは作らない。手段を問わず「全員に 1 票」で達成できる「全員推し」に集約 (DB 列を増やさない)
 
 ### 11 周年限定 (将来拡張用、MVP では空)
 
 `category='anniversary'` で枠だけ用意。MVP では 0 件、後続でハードコード追加可能に。
 
-**MVP 合計: 約 86 バッジ** (店舗 71 + イベント 5 + 投票 10〜11)
+**MVP 合計: 約 86 バッジ** (店舗 71 + イベント 5 + 投票 10)
 
 ## データモデル
 
@@ -149,7 +148,7 @@ type BadgeDef = {
 | `vote_total` | `userId, count` | `Vote` テーブルの行数 ≥ count |
 | `vote_unique` | `userId, count` | `COUNT(DISTINCT character_id)` ≥ count |
 | `vote_devotion` | `userId, count` | 単一キャラへの票数の最大値 ≥ count |
-| `vote_unique_all_biccame` | `userId` | 現在の `is_biccame_musume=true` 全キャラに各 1 票以上 |
+| `vote_all_biccame` | `userId` | 現在の `is_biccame_musume=true` 全キャラに各 1 票以上 |
 
 各 evaluator は `(env, userId, conditionMeta) => Promise<boolean>` の純粋関数。
 
@@ -162,7 +161,7 @@ type BadgeDef = {
 - `PUT /api/users/me/events/:eventId` (status='completed' のとき)
   - 評価対象: `event_count[*]`
 - `POST /api/votes` (投票が成立したとき)
-  - 評価対象: `vote_total[*]`, `vote_unique[*]`, `vote_devotion[投票先キャラのみ]`, `vote_unique_all_biccame`
+  - 評価対象: `vote_total[*]`, `vote_unique[*]`, `vote_devotion[投票先キャラのみ]`, `vote_all_biccame`
 
 すでに獲得済みのバッジは判定スキップ。新規獲得は `UserBadge` に insert + 型のあるレスポンス `{ newBadges: Badge[] }` を返却し、フロントで toast ポップアップ。
 
@@ -286,7 +285,6 @@ LIMIT 50;
 
 - 店舗マスタ (`stores.yaml` 等) のうち実店舗判定の根拠 → `prefecture` 必須でよいか
 - 全店制覇とマイルストーン 50 (実店舗数次第) が同等になる可能性 → 「全店制覇」だけ legendary、50 マイルストーンは epic で別バッジ扱いに
-- 投票系の「みんなに一票 (一括ボタン経由)」を残すか、「全員推し (累計でも OK)」に統合するか → 投票ログに `via_bulk` 列が必要なら統合推奨
 - アイコン採用方針: lucide で全 ~86 個分けるか、店舗系は地図ピン共通で OK か
 - リーダーボードの匿名表示オプト (Phase 2)
 
