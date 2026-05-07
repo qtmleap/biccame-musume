@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { resolveBadgeText } from '@/lib/badge-display'
 import type { VoteResponse } from '@/schemas/vote.dto'
 import { client } from '@/utils/client'
 
@@ -20,7 +21,8 @@ export const useVote = (characterId: string) => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['ranking'] })
       for (const badge of data.newBadges) {
-        toast.success(`バッジ獲得: ${badge.name}`, { description: badge.description })
+        const { name, description } = resolveBadgeText(badge)
+        toast.success(`バッジ獲得: ${name}`, { description })
       }
       if (data.newBadges.length > 0) {
         queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
