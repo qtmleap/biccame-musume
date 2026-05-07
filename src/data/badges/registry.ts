@@ -325,11 +325,11 @@ function getBadgeRegistry(): BadgeDef[] {
     { count: 5, rarity: 'rare' },
     { count: 10, rarity: 'epic' }
   ]
-  for (const storeKey of PHYSICAL_STORE_KEYS) {
-    const storeName = STORE_DISPLAY_NAMES[storeKey]
-    for (const tier of EVENT_CLEAR_AT_STORE_TIERS) {
-      const isFirst = tier.count === 1
-      const t = isFirst ? BADGE_TEMPLATES.eventClearAtStore : BADGE_TEMPLATES.eventClearAtStoreMultiple
+  for (const tier of EVENT_CLEAR_AT_STORE_TIERS) {
+    const isFirst = tier.count === 1
+    const t = isFirst ? BADGE_TEMPLATES.eventClearAtStore : BADGE_TEMPLATES.eventClearAtStoreMultiple
+    for (const storeKey of PHYSICAL_STORE_KEYS) {
+      const storeName = STORE_DISPLAY_NAMES[storeKey]
       const code = isFirst ? `event_clear_at_store_${storeKey}` : `event_clear_at_store_${storeKey}_${tier.count}`
       const vars = { storeName, count: tier.count }
       badges.push({
