@@ -94,7 +94,8 @@ export const EventRequestQuerySchema = z.object({
   startDate: z.string().nonempty('開始日は必須です').optional(),
   endDate: z.string().nonempty('終了日は必須です').optional(),
   endAt: z.string().nonempty('終了日時は必須です').optional(),
-  referenceUrls: z.url().optional()
+  referenceUrls: z.url().optional(),
+  from: z.uuid().optional()
 })
 export type EventRequestQuery = z.infer<typeof EventRequestQuerySchema>
 
