@@ -7,11 +7,13 @@
  * IMPORTANT: Must be run with `source .env &&` prefix so that CLOUDFLARE_API_TOKEN is available
  * to wrangler. See project memory: feedback_wrangler_source_env.md
  *
- * Upsert policy (per the spec's "admin での編集ポリシー"):
+ * Upsert policy:
  *   - On insert: write all fields.
- *   - On conflict (code already exists):
- *       UPDATE category, sub_category, condition_meta only.
- *       DO NOT overwrite name / description / hint / icon_name / rarity / sort_order / is_hidden.
+ *   - On conflict (code already exists, non-special):
+ *       Overwrite ALL display & structural fields from the registry
+ *       (name / description / hint / icon_name / rarity / sort_order /
+ *        category / sub_category / condition_meta).
+ *       is_hidden は admin の表示制御なので保持する。
  *   - Rows with category='special' (admin-created) are never touched.
  *   - category='special' rows not in the registry are preserved.
  */
@@ -85,9 +87,9 @@ async function main(): Promise<void> {
       )
       insertCount++
     } else {
-      // UPDATE path — only update structural fields, not admin-editable display fields
+      // UPDATE path — registry を真とし、is_hidden 以外の全フィールドを上書き
       lines.push(
-        `UPDATE badges SET category='${badge.category}', sub_category='${badge.subCategory}', condition_meta='${meta}', updated_at=datetime('now') WHERE code='${code}' AND category != 'special';`
+        `UPDATE badges SET category='${badge.category}', sub_category='${badge.subCategory}', name='${name}', description='${description}', hint='${hint}', rarity='${badge.rarity}', icon_name='${iconName}', sort_order=${badge.sortOrder}, condition_meta='${meta}', updated_at=datetime('now') WHERE code='${code}' AND category != 'special';`
       )
       updateCount++
     }
@@ -101,10 +103,9 @@ async function main(): Promise<void> {
     await $`rm -f ${tmpFile}`.quiet()
   }
 
-  const skippedCount = updateCount // rows that existed; display fields not overwritten
   console.log(`Done.`)
   console.log(`  Inserted: ${insertCount}`)
-  console.log(`  Updated (structural fields only): ${skippedCount}`)
+  console.log(`  Updated (registry overwrite): ${updateCount}`)
 }
 
 main().catch((error) => {
