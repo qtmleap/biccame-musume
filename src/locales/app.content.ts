@@ -280,7 +280,7 @@ const appContent = {
       special: '特別',
       template: {
         storeVisit: {
-          name: '{storeName}訪問',
+          name: '{storeName}',
           description: '{storeName}を訪問しました',
           hint: '{storeName}を訪問するとゲットできます'
         },
@@ -315,7 +315,7 @@ const appContent = {
           hint: 'イベントを {count} 件完了するとゲットできます'
         },
         eventClearAtStore: {
-          name: '{storeName}参加',
+          name: '{storeName}',
           description: '{storeName}のイベントを達成しました',
           hint: '{storeName}で開催されたイベントを 1 件以上完了するとゲットできます'
         },
