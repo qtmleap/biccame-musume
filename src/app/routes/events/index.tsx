@@ -184,11 +184,11 @@ const EventsContent = () => {
                 <Button
                   size='sm'
                   variant='ghost'
-                  className='md:hidden relative h-11 w-11 p-0 border border-transparent'
+                  className='md:hidden relative h-9 w-9 p-0 text-muted-foreground hover:text-foreground'
                 >
                   <Filter className='size-4' />
                   {isFilterActive && (
-                    <span className='absolute top-1.5 right-1.5 size-2 rounded-full bg-brand' aria-hidden />
+                    <span className='absolute top-0.5 right-0.5 size-2 rounded-full bg-brand' aria-hidden />
                   )}
                 </Button>
               </SheetTrigger>
