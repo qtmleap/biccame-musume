@@ -39,6 +39,12 @@ const RARITY_STYLES: Record<BadgeRarity, { ring: string; glow: string; label: st
     glow: 'shadow-[0_0_28px_-2px_var(--rank-gold)]',
     label: 'LEGENDARY',
     chip: 'bg-rank-gold text-rank-gold-foreground'
+  },
+  mythic: {
+    ring: 'ring-2 ring-rank-mythic',
+    glow: 'shadow-[0_0_36px_-2px_var(--rank-mythic-via)]',
+    label: 'MYTHIC',
+    chip: 'bg-gradient-to-br from-rank-mythic-from via-rank-mythic-via to-rank-mythic-to text-rank-mythic-foreground'
   }
 }
 

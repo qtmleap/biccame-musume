@@ -35,7 +35,7 @@ export const BadgeSubCategorySchema = z.enum([
 
 export type BadgeSubCategory = z.infer<typeof BadgeSubCategorySchema>
 
-export const BadgeRaritySchema = z.enum(['common', 'rare', 'epic', 'legendary'])
+export const BadgeRaritySchema = z.enum(['common', 'rare', 'epic', 'legendary', 'mythic'])
 
 export type BadgeRarity = z.infer<typeof BadgeRaritySchema>
 
