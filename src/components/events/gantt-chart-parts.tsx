@@ -15,7 +15,7 @@ type MonthSelectorProps = {
  */
 export const GanttMonthSelector = ({ monthOffset, onSelect }: MonthSelectorProps) => {
   return (
-    <div className='grid grid-cols-5 gap-2 mb-4 py-1'>
+    <div className='grid grid-cols-5 gap-1 md:gap-2 mb-4 py-1'>
       {[-2, -1, 0, 1, 2].map((offset) => {
         const monthDate = dayjs().add(offset, 'month')
         const isSelected = monthOffset === offset
@@ -33,7 +33,7 @@ export const GanttMonthSelector = ({ monthOffset, onSelect }: MonthSelectorProps
               size='sm'
               onClick={() => onSelect(offset)}
               className={cn(
-                'w-full text-sm rounded-full border',
+                'w-full text-xs md:text-sm px-2 md:px-3 rounded-full border',
                 isSelected
                   ? 'bg-brand text-brand-foreground border-brand hover:bg-brand/90'
                   : 'bg-button-surface text-foreground border-card-border hover:bg-button-surface-hover'
