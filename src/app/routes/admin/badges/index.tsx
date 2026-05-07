@@ -839,8 +839,8 @@ const BadgesContent = () => {
           transition={{ duration: DURATION.normal }}
           className='mb-4 md:mb-6'
         >
-          <div className='flex items-start justify-between gap-4'>
-            <div>
+          <div className='flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-4'>
+            <div className='min-w-0'>
               <h1 className='text-2xl font-bold text-foreground'>バッジ管理</h1>
               <p className='mt-2 text-sm text-muted-foreground md:text-base'>
                 特別バッジの作成・編集と表示設定。自動生成バッジは表示フィールドのみ編集可。
