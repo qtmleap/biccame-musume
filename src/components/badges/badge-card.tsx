@@ -1,7 +1,14 @@
 import dayjs from 'dayjs'
 import { Lock } from 'lucide-react'
 import { motion } from 'motion/react'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog'
 import { resolveBadgeText } from '@/lib/badge-display'
 import { getBadgeIcon } from '@/lib/badge-icons'
 import { DURATION } from '@/lib/motion'
@@ -53,7 +60,7 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
   const Icon = getBadgeIcon(badge.icon_name)
   const style = RARITY_STYLES[badge.rarity]
   const rotation = earned ? getStickerRotation(index) : 0
-  const { name: displayName } = resolveBadgeText(badge)
+  const { name: displayName, description: displayDescription } = resolveBadgeText(badge)
 
   const card = (
     <motion.div
@@ -77,7 +84,7 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
         className={cn(
           'relative rounded-2xl overflow-hidden',
           'flex flex-col items-center justify-center gap-1 px-2 py-3',
-          earned ? 'bg-card cursor-help' : 'bg-muted/40',
+          earned ? 'bg-card cursor-pointer' : 'bg-muted/40',
           style.ring,
           earned && style.glow
         )}
@@ -124,11 +131,42 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
   }
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>{card}</TooltipTrigger>
-      <TooltipContent side='top' className='font-numeric tabular-nums'>
-        {dayjs(earnedAt).format('YYYY/MM/DD')} 獲得
-      </TooltipContent>
-    </Tooltip>
+    <Dialog>
+      <DialogTrigger asChild>
+        <button type='button' className='block w-full text-left' aria-label={`${displayName ?? 'バッジ'} の詳細を見る`}>
+          {card}
+        </button>
+      </DialogTrigger>
+      <DialogContent className='sm:max-w-sm'>
+        <DialogHeader className='items-center text-center'>
+          <div
+            className={cn(
+              'flex items-center justify-center rounded-full size-20 mb-3',
+              style.chip,
+              'shadow-inner',
+              style.glow
+            )}
+            aria-hidden
+          >
+            <Icon className='size-10' strokeWidth={2.2} />
+          </div>
+          <span
+            className={cn(
+              'inline-flex items-center justify-center rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-wider',
+              style.chip
+            )}
+          >
+            {style.label}
+          </span>
+          <DialogTitle className='text-lg md:text-xl mt-2'>{displayName ?? 'バッジ'}</DialogTitle>
+          {displayDescription ? (
+            <DialogDescription className='text-sm leading-relaxed'>{displayDescription}</DialogDescription>
+          ) : null}
+        </DialogHeader>
+        <div className='mt-2 flex items-center justify-center text-xs text-muted-foreground font-numeric tabular-nums'>
+          {dayjs(earnedAt).format('YYYY/MM/DD')} 獲得
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
