@@ -40,14 +40,14 @@ const PER_PAGE = 30
 type StatCardProps = { label: string; value: number; accent?: string }
 
 const StatCard = ({ label, value, accent = 'text-foreground' }: StatCardProps) => (
-  <div className='bg-card border border-card-border rounded-xl px-4 py-3 flex-1 min-w-0 text-center'>
+  <div className='bg-card border border-card-border rounded-xl px-3 py-3 md:px-4 min-w-0 text-center overflow-hidden'>
     <div
-      className={cn('font-numeric font-black tabular-nums text-2xl md:text-3xl leading-none', accent)}
+      className={cn('font-numeric font-black tabular-nums text-xl md:text-3xl leading-none truncate', accent)}
       style={{ letterSpacing: '-0.04em' }}
     >
       {value}
     </div>
-    <div className='mt-1 text-[11px] text-muted-foreground'>{label}</div>
+    <div className='mt-1 text-[10px] md:text-[11px] text-muted-foreground truncate'>{label}</div>
   </div>
 )
 
@@ -102,16 +102,16 @@ const CommentRow = ({ comment, index }: { comment: AdminComment; index: number }
 
             <p className='text-sm text-foreground whitespace-pre-wrap break-words'>{comment.body}</p>
 
-            <div className='flex items-center gap-2 text-[11px] text-muted-foreground'>
+            <div className='flex items-center gap-2 flex-wrap text-[11px] text-muted-foreground'>
               <Link
                 to='/admin/events/$uuid'
                 params={{ uuid: comment.eventId }}
-                className='hover:text-brand truncate underline-offset-2 hover:underline'
+                className='hover:text-brand truncate underline-offset-2 hover:underline max-w-full'
               >
                 {comment.eventTitle}
               </Link>
               <span>·</span>
-              <span className='font-numeric tabular-nums'>{comment.ipAddress}</span>
+              <span className='font-numeric tabular-nums break-all'>{comment.ipAddress}</span>
             </div>
           </div>
 
@@ -206,7 +206,7 @@ const CommentsContent = () => {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: DURATION.normal, delay: 0.06 }}
-          className='flex gap-2 md:gap-3 mb-4'
+          className='grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-4'
         >
           <StatCard label='総コメント' value={totalCount} accent='text-foreground' />
           <StatCard label='公開中' value={activeCount} accent='text-brand' />
