@@ -414,7 +414,7 @@ function getBadgeRegistry(): BadgeDef[] {
     name: formatTemplate(clearAllT.name, { totalStores: physicalCount }),
     description: formatTemplate(clearAllT.description, { totalStores: physicalCount }),
     hint: formatTemplate(clearAllT.hint, { totalStores: physicalCount }),
-    rarity: 'legendary',
+    rarity: 'mythic',
     iconName: 'Sparkles',
     sortOrder: next(),
     conditionMeta: { count: physicalCount }
