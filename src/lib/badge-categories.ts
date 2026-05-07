@@ -16,7 +16,7 @@ export type BadgeSubSectionDef = {
 }
 
 export type BadgeSuperCategoryDef = {
-  key: 'visit' | 'event_participation' | 'vote'
+  key: 'visit' | 'event_participation' | 'conquest' | 'vote'
   label: string
   description: string
   accent: BadgeAccent
@@ -48,6 +48,13 @@ export const BADGE_SUPER_CATEGORY_DEFS: BadgeSuperCategoryDef[] = [
       { key: 'per_store', label: '個別店舗', categories: ['event_clear_store'] },
       { key: 'milestone', label: '累計マイルストーン', categories: ['event'] }
     ]
+  },
+  {
+    key: 'conquest',
+    label: '制覇',
+    description: '全店舗・全国を網羅した究極の証',
+    accent: 'rank-gold',
+    includes: ['conquest']
   },
   {
     key: 'vote',
@@ -94,6 +101,12 @@ export const BADGE_CATEGORY_DEFS: BadgeCategoryDef[] = [
     label: 'イベントマイルストーン',
     description: '累計イベント完了数で段階的に解放される称号',
     accent: 'brand'
+  },
+  {
+    key: 'conquest',
+    label: '制覇',
+    description: '全店舗・全国を網羅した究極の証',
+    accent: 'rank-gold'
   },
   {
     key: 'vote',
