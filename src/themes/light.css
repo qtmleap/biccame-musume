@@ -93,6 +93,11 @@
   --rank-bronze-foreground: var(--color-zinc-50);
   --rank-default: var(--color-blue-500);
   --rank-default-foreground: var(--color-zinc-50);
+  --rank-mythic-from: var(--color-fuchsia-500);
+  --rank-mythic-via: var(--color-violet-500);
+  --rank-mythic-to: var(--color-cyan-400);
+  --rank-mythic: var(--color-fuchsia-500);
+  --rank-mythic-foreground: var(--color-zinc-50);
 
   /* Calendar markers */
   --calendar-sunday: var(--color-rose-500);

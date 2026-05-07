@@ -54,14 +54,16 @@ const RARITY_CHIP: Record<string, string> = {
   common: 'bg-muted text-muted-foreground',
   rare: 'bg-status-upcoming text-status-upcoming-foreground',
   epic: 'bg-favorite text-favorite-foreground',
-  legendary: 'bg-rank-gold text-rank-gold-foreground'
+  legendary: 'bg-rank-gold text-rank-gold-foreground',
+  mythic: 'bg-gradient-to-br from-rank-mythic-from via-rank-mythic-via to-rank-mythic-to text-rank-mythic-foreground'
 }
 
 const RARITY_ICON_BG: Record<string, string> = {
   common: 'bg-muted text-muted-foreground',
   rare: 'bg-status-upcoming/30 text-status-upcoming-foreground',
   epic: 'bg-favorite/20 text-favorite',
-  legendary: 'bg-rank-gold/20 text-rank-gold-foreground'
+  legendary: 'bg-rank-gold/20 text-rank-gold-foreground',
+  mythic: 'bg-rank-mythic/20 text-rank-mythic'
 }
 
 const ICON_NAMES = Object.keys(ICON_MAP)
