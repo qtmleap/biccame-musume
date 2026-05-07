@@ -71,8 +71,24 @@ export async function evaluateEventCount(ctx: EvaluatorContext, meta: { count: n
   return count >= meta.count
 }
 
-export async function evaluateEventClearAtStore(ctx: EvaluatorContext, meta: { storeKey: StoreKey }): Promise<boolean> {
-  const row = await ctx.prisma.userEvent.findFirst({
+export async function evaluateEventClearAtStore(
+  ctx: EvaluatorContext,
+  meta: { storeKey: StoreKey; count?: number }
+): Promise<boolean> {
+  const required = meta.count ?? 1
+  if (required <= 1) {
+    const row = await ctx.prisma.userEvent.findFirst({
+      where: {
+        userId: ctx.userId,
+        status: 'completed',
+        event: {
+          stores: { some: { storeKey: meta.storeKey } }
+        }
+      }
+    })
+    return row !== null
+  }
+  const cleared = await ctx.prisma.userEvent.count({
     where: {
       userId: ctx.userId,
       status: 'completed',
@@ -81,7 +97,7 @@ export async function evaluateEventClearAtStore(ctx: EvaluatorContext, meta: { s
       }
     }
   })
-  return row !== null
+  return cleared >= required
 }
 
 export async function evaluateEventClearAreaAny(ctx: EvaluatorContext, meta: { region: BadgeArea }): Promise<boolean> {
@@ -197,7 +213,10 @@ export async function evaluateBadge(ctx: EvaluatorContext, badge: Badge): Promis
 
     case 'event_clear_at_store':
       if (!meta.storeKey) throw new Error(`Badge ${badge.code}: missing storeKey`)
-      return evaluateEventClearAtStore(ctx, { storeKey: meta.storeKey as StoreKey })
+      return evaluateEventClearAtStore(ctx, {
+        storeKey: meta.storeKey as StoreKey,
+        count: meta.count
+      })
 
     case 'event_clear_area_any':
       if (!meta.region) throw new Error(`Badge ${badge.code}: missing region`)

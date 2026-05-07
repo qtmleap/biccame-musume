@@ -320,6 +320,11 @@ const appContent = {
           description: '{storeName}のイベントを達成しました',
           hint: '{storeName}で開催されたイベントを 1 件以上完了するとゲットできます'
         },
+        eventClearAtStoreMultiple: {
+          name: '{storeName} {count}回',
+          description: '{storeName}のイベントを {count} 回達成しました',
+          hint: '{storeName}で開催されたイベントを {count} 回以上完了するとゲットできます'
+        },
         eventClearAreaAny: {
           name: '{areaLabel}イベントデビュー',
           description: '{areaLabel}のいずれかの店舗でイベントを達成しました',
