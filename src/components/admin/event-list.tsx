@@ -2,9 +2,10 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { orderBy } from 'lodash-es'
-import { Calendar, ExternalLink, Package, Pencil, Store, Trash2 } from 'lucide-react'
+import { Calendar, Copy, ExternalLink, Package, Pencil, Store, Trash2 } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useMemo } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import { eventListActiveTabAtom, eventListPagesAtom } from '@/atoms/event-list-atom'
 import { eventStatusFilterAtom } from '@/atoms/event-status-filter-atom'
 import { EventStatusFilter } from '@/components/events/event-status-filter'
@@ -125,6 +126,17 @@ const EventCard = ({
             </div>
             {isAuthenticated && (
               <div className='flex items-center gap-2'>
+                <Link
+                  to='/admin/events/$uuid'
+                  params={{ uuid: uuidv4() }}
+                  search={{ from: event.uuid }}
+                  aria-label='コピーして新規作成'
+                >
+                  <Button size='sm' variant='outline' className='border-card-border'>
+                    <Copy className='mr-1 size-3' />
+                    コピー
+                  </Button>
+                </Link>
                 <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
                   <Button size='sm' variant='outline' className='border-card-border'>
                     <Pencil className='mr-1 size-3' />

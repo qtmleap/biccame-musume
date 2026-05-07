@@ -39,6 +39,18 @@ export const toFormValues = (
   shouldTweet: false
 })
 
+export const toCopyFormValues = (
+  event: NonNullable<ReturnType<typeof useEventOrNull>['data']>,
+  newUuid: string
+): DefaultValues<EventRequest> => ({
+  ...toFormValues(event),
+  uuid: newUuid,
+  conditions: event.conditions.map((c) => ({ ...c, uuid: uuidv4() })),
+  referenceUrls: (event.referenceUrls ?? []).map((r) => ({ ...r, uuid: uuidv4() })),
+  endedAt: undefined,
+  shouldTweet: true
+})
+
 export const toFormValuesFromQuery = (search: EventRequestQuery, uuid: string): DefaultValues<EventRequest> => ({
   uuid,
   category: search.category as EventCategory,
