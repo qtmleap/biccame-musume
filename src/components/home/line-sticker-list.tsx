@@ -29,13 +29,14 @@ export const LineStickerList = () => {
           <h2 className='text-base font-bold text-foreground'>LINEスタンプ</h2>
         </div>
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'>
-          {stickers.map((sticker) => (
+          {stickers.map((sticker, index) => (
             <LineStickerListItem
               key={sticker.url}
               url={sticker.url}
               title={sticker.title}
               description={sticker.description}
               delay={sticker.delay}
+              index={index}
             />
           ))}
         </div>

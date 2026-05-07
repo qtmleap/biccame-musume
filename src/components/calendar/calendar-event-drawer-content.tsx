@@ -48,8 +48,8 @@ export const CalendarEventDrawerContent = ({ events }: CalendarEventDrawerConten
                 to='/characters/$id'
                 params={{ id: event.character.id }}
                 className={cn(
-                  'flex items-center gap-3 p-3 rounded-lg transition-colors',
-                  isCharacter ? 'bg-action-interest/10 hover:bg-action-interest/20' : 'bg-info/10 hover:bg-info/20'
+                  'flex items-center gap-3 p-3 rounded-xl border-card transition-colors',
+                  isCharacter ? 'bg-action-interest/15 hover:bg-action-interest/25' : 'bg-info/15 hover:bg-info/25'
                 )}
               >
                 <Avatar className='w-12 h-12'>

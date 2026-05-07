@@ -1,4 +1,10 @@
 @theme inline {
+  /* Typography (theme-overridable) */
+  --font-sans: var(--font-family-sans);
+  --font-display: var(--font-family-display);
+  --font-handwritten: var(--font-family-handwritten);
+  --font-numeric: var(--font-family-numeric);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -92,6 +98,11 @@
   --color-rank-bronze-foreground: var(--rank-bronze-foreground);
   --color-rank-default: var(--rank-default);
   --color-rank-default-foreground: var(--rank-default-foreground);
+  --color-rank-mythic: var(--rank-mythic);
+  --color-rank-mythic-foreground: var(--rank-mythic-foreground);
+  --color-rank-mythic-from: var(--rank-mythic-from);
+  --color-rank-mythic-via: var(--rank-mythic-via);
+  --color-rank-mythic-to: var(--rank-mythic-to);
 
   /* Calendar markers */
   --color-calendar-sunday: var(--calendar-sunday);
@@ -112,6 +123,15 @@
   --color-action-interest-soft: var(--action-interest-soft);
   --color-action-award: var(--action-award);
   --color-action-award-soft: var(--action-award-soft);
+
+  /* Favorite (推し) */
+  --color-favorite: var(--favorite);
+  --color-favorite-foreground: var(--favorite-foreground);
+
+  /* Vote count badge */
+  --color-vote-count: var(--vote-count);
+  --color-vote-count-foreground: var(--vote-count-foreground);
+  --color-vote-count-icon: var(--vote-count-icon);
 
   /* Button surfaces (avoid pure white on pink page bg) */
   --color-button-surface: var(--button-surface);

@@ -37,8 +37,9 @@ export const useEvent = (eventId: string) => {
  */
 export const useEventOrNull = (eventId: string) => {
   return useSuspenseQuery({
-    queryKey: ['events', eventId],
+    queryKey: ['events', eventId || '__none__'],
     queryFn: async () => {
+      if (!eventId) return null
       try {
         return await client.getEvent({ params: { id: eventId } })
       } catch (_error) {

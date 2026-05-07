@@ -51,7 +51,7 @@ routes.openapi(
         content: {
           'application/json': {
             schema: z.object({
-              error: z.string()
+              error: z.string().nonempty()
             })
           }
         },
@@ -93,7 +93,7 @@ routes.openapi(
         content: {
           'application/json': {
             schema: z.object({
-              error: z.string()
+              error: z.string().nonempty()
             })
           }
         },
@@ -146,7 +146,7 @@ routes.openapi(
         content: {
           'application/json': {
             schema: z.object({
-              error: z.string()
+              error: z.string().nonempty()
             })
           }
         },
@@ -188,7 +188,7 @@ routes.openapi(
         content: {
           'application/json': {
             schema: z.object({
-              error: z.string()
+              error: z.string().nonempty()
             })
           }
         },
@@ -212,7 +212,7 @@ routes.openapi(
         content: {
           'application/json': {
             schema: z.object({
-              eventIds: z.array(z.string())
+              eventIds: z.array(z.string().nonempty())
             })
           }
         }
@@ -223,7 +223,7 @@ routes.openapi(
         content: {
           'application/json': {
             schema: z.record(
-              z.string(),
+              z.string().nonempty(),
               z.object({
                 interestedCount: z.number(),
                 completedCount: z.number()

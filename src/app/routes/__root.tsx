@@ -5,18 +5,21 @@ import { ErrorFallback } from '@/components/common/error-fallback'
 import { Footer } from '@/components/common/footer'
 import { Header } from '@/components/common/header'
 import { NotFound } from '@/components/common/not-found'
+import { TooltipProvider } from '@/components/ui/tooltip'
 
 const RootComponent = () => {
   return (
     <AuthProvider>
-      <div className='min-h-screen flex flex-col select-none'>
-        <Header />
-        <main className='flex-1'>
-          <Outlet />
-        </main>
-        <Footer />
-        <TanStackRouterDevtools position='bottom-right' />
-      </div>
+      <TooltipProvider delayDuration={200}>
+        <div className='min-h-screen grid grid-cols-1 grid-rows-[auto_1fr_auto] select-none'>
+          <Header />
+          <main className='min-h-0'>
+            <Outlet />
+          </main>
+          <Footer />
+          <TanStackRouterDevtools position='bottom-right' />
+        </div>
+      </TooltipProvider>
     </AuthProvider>
   )
 }

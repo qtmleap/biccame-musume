@@ -1,4 +1,10 @@
 .dark {
+  /* Typography */
+  --font-family-sans: "Zen Maru Gothic", sans-serif;
+  --font-family-display: "Zen Maru Gothic", sans-serif;
+  --font-family-handwritten: "Klee One", "Zen Maru Gothic", sans-serif;
+  --font-family-numeric: Inter, system-ui, sans-serif;
+
   --background: var(--color-zinc-950);
   --foreground: var(--color-zinc-50);
   --card: var(--color-zinc-900);
@@ -84,6 +90,11 @@
   --rank-bronze-foreground: var(--color-zinc-50);
   --rank-default: var(--color-blue-600);
   --rank-default-foreground: var(--color-zinc-50);
+  --rank-mythic-from: var(--color-fuchsia-400);
+  --rank-mythic-via: var(--color-violet-400);
+  --rank-mythic-to: var(--color-cyan-300);
+  --rank-mythic: var(--color-fuchsia-400);
+  --rank-mythic-foreground: var(--color-zinc-50);
 
   /* Calendar markers */
   --calendar-sunday: var(--color-rose-400);
@@ -104,6 +115,15 @@
   --action-interest-soft: var(--color-pink-200);
   --action-award: var(--color-amber-400);
   --action-award-soft: var(--color-amber-200);
+
+  /* Favorite (推し) */
+  --favorite: var(--color-rose-400);
+  --favorite-foreground: var(--color-zinc-50);
+
+  /* Vote count (落ち着いた muted トーン) */
+  --vote-count: var(--color-zinc-800);
+  --vote-count-foreground: var(--color-zinc-200);
+  --vote-count-icon: var(--color-rose-400);
 
   /* Button surfaces (outline-style buttons over dark page bg) */
   --button-surface: var(--color-zinc-800);
