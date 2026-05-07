@@ -9,9 +9,9 @@ describe('badge registry', () => {
     expect(unique.size).toBe(codes.length)
   })
 
-  test('total badge count is in expected range [210, 220]', () => {
-    expect(BADGE_REGISTRY.length).toBeGreaterThanOrEqual(210)
-    expect(BADGE_REGISTRY.length).toBeLessThanOrEqual(220)
+  test('total badge count is in expected range [300, 320]', () => {
+    expect(BADGE_REGISTRY.length).toBeGreaterThanOrEqual(300)
+    expect(BADGE_REGISTRY.length).toBeLessThanOrEqual(320)
   })
 
   test('every physical store has a visit badge', () => {
@@ -49,7 +49,7 @@ describe('badge registry', () => {
     const allBadge = BADGE_REGISTRY.find((b) => b.code === 'milestone_visit_count_all')
     expect(allBadge).toBeDefined()
     expect(allBadge?.conditionMeta.count).toBe(n)
-    expect(allBadge?.rarity).toBe('legendary')
+    expect(allBadge?.rarity).toBe('mythic')
   })
 
   test('event_clear_count milestones follow the same 5-step rule', () => {
@@ -75,8 +75,8 @@ describe('badge registry', () => {
     }
   })
 
-  test('every badge rarity is one of the four allowed values', () => {
-    const allowed = new Set(['common', 'rare', 'epic', 'legendary'])
+  test('every badge rarity is one of the five allowed values', () => {
+    const allowed = new Set(['common', 'rare', 'epic', 'legendary', 'mythic'])
     for (const b of BADGE_REGISTRY) {
       expect(allowed.has(b.rarity)).toBe(true)
     }
