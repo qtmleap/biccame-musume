@@ -326,12 +326,12 @@ const appContent = {
           hint: '{storeName}で開催されたイベントを {count} 回以上完了するとゲットできます'
         },
         eventClearAreaAny: {
-          name: '{areaLabel}イベントデビュー',
+          name: '{areaLabel}デビュー',
           description: '{areaLabel}のいずれかの店舗でイベントを達成した',
           hint: '{areaLabel}の店舗で 1 件以上イベントを完了するとゲットできます'
         },
         eventClearAreaComplete: {
-          name: '{areaLabel}イベントコンプ',
+          name: '{areaLabel}コンプ',
           description: '{areaLabel}の全 {storeCount} 店舗でイベントを達成した',
           hint: '{areaLabel}の全店舗でイベントを完了するとゲットできます'
         },
