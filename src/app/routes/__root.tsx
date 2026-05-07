@@ -11,7 +11,7 @@ const RootComponent = () => {
   return (
     <AuthProvider>
       <TooltipProvider delayDuration={200}>
-        <div className='min-h-screen grid grid-rows-[auto_1fr_auto] select-none'>
+        <div className='min-h-screen grid grid-cols-1 grid-rows-[auto_1fr_auto] select-none'>
           <Header />
           <main className='min-h-0'>
             <Outlet />
