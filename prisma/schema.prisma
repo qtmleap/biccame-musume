@@ -135,6 +135,8 @@ model Vote {
   characterId String   @map("character_id")
   /// 投票者のIPアドレス
   ipAddress   String   @map("ip_address")
+  /// ログインユーザーのFirebase Auth UID（匿名投票の場合はnull）
+  userId      String?  @map("user_id")
   /// 投票日時
   createdAt   DateTime @default(now()) @map("created_at")
   /// 更新日時
@@ -143,6 +145,7 @@ model Vote {
   @@index([characterId])
   @@index([ipAddress, characterId])
   @@index([createdAt])
+  @@index([userId])
   @@map("votes")
 }
 
@@ -186,8 +189,64 @@ model User {
   stores UserStore[]
   /// イベントとの関係
   events UserEvent[]
+  /// お気に入りキャラクター
+  favoriteCharacters FavoriteCharacter[]
+  /// 獲得したバッジ
+  userBadges UserBadge[]
 
   @@map("users")
+}
+
+/// バッジ定義 (静的・シードで投入)
+model Badge {
+  code          String      @id
+  category      String
+  subCategory   String      @map("sub_category")
+  name          String
+  description   String
+  hint          String
+  rarity        String
+  iconName      String      @map("icon_name")
+  sortOrder     Int         @map("sort_order")
+  conditionMeta String      @map("condition_meta")
+  isHidden      Boolean     @default(false) @map("is_hidden")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  userBadges    UserBadge[]
+
+  @@index([category])
+  @@map("badges")
+}
+
+/// ユーザーが獲得したバッジ
+model UserBadge {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  badgeCode String   @map("badge_code")
+  earnedAt  DateTime @default(now()) @map("earned_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge     Badge    @relation(fields: [badgeCode], references: [code], onDelete: Cascade)
+
+  @@unique([userId, badgeCode])
+  @@index([userId])
+  @@index([badgeCode])
+  @@map("user_badges")
+}
+
+/// ユーザーのお気に入りキャラクター
+model FavoriteCharacter {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  /// キャラクターID（例: biccame-001）
+  characterId String   @map("character_id")
+  /// 作成日時
+  createdAt   DateTime @default(now()) @map("created_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, characterId])
+  @@index([userId])
+  @@index([characterId])
+  @@map("favorite_characters")
 }
 
 /// ユーザーと店舗の関係

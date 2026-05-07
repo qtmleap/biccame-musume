@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
 import { DURATION, EASE_OUT, FADE_IN_DOWN } from '@/lib/motion'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 
 type CalendarHeaderProps = {
@@ -22,7 +23,7 @@ export const CalendarHeader = ({ year, month, onPrevMonth, onNextMonth, onCurren
       initial='initial'
       animate='animate'
       transition={{ duration: DURATION.fast * 2, ease: EASE_OUT }}
-      className='flex items-center justify-between'
+      className='flex items-center justify-between pb-2 md:pb-4'
     >
       <Button variant='ghost' size='icon' onClick={onPrevMonth} className='rounded-full border border-transparent'>
         <ChevronLeft className='h-5 w-5' />
@@ -30,7 +31,7 @@ export const CalendarHeader = ({ year, month, onPrevMonth, onNextMonth, onCurren
       <button
         type='button'
         onClick={onCurrentMonth}
-        className='text-2xl md:text-4xl font-bold tracking-tight text-center tabular-nums hover:text-primary transition-colors'
+        className='font-display text-2xl md:text-4xl font-bold tracking-tight text-center tabular-nums hover:text-primary transition-colors'
       >
         {year}年{month}月
       </button>
@@ -51,23 +52,33 @@ type CalendarMonthTabsProps = {
  */
 export const CalendarMonthTabs = ({ selectedMonth, onSelectMonth }: CalendarMonthTabsProps) => {
   return (
-    <div className='hidden md:flex gap-1 overflow-x-auto pt-2 pb-2 justify-center'>
-      {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-        <Button
-          key={month}
-          variant='ghost'
-          onClick={() => onSelectMonth(month)}
-          size='sm'
-          className={cn(
-            'shrink-0 rounded-full px-4 transition-all border border-transparent',
-            selectedMonth === month
-              ? 'bg-brand font-bold text-brand-foreground shadow-md hover:bg-brand/90 hover:text-brand-foreground'
-              : 'hover:bg-muted/50 text-muted-foreground'
-          )}
-        >
-          {month}月
-        </Button>
-      ))}
+    <div className='hidden md:flex gap-2 overflow-x-auto py-3 md:py-4 justify-center'>
+      {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => {
+        const isSelected = selectedMonth === month
+        return (
+          <motion.div
+            key={month}
+            style={{ filter: STICKER_SHADOW_SM }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            transition={STICKER_HOVER_TRANSITION}
+          >
+            <Button
+              variant='secondary'
+              onClick={() => onSelectMonth(month)}
+              size='sm'
+              className={cn(
+                'shrink-0 rounded-full px-4 text-sm border',
+                isSelected
+                  ? 'bg-brand font-bold text-brand-foreground border-brand hover:bg-brand/90 hover:text-brand-foreground'
+                  : 'bg-button-surface text-foreground border-card-border hover:bg-button-surface-hover'
+              )}
+            >
+              {month}月
+            </Button>
+          </motion.div>
+        )
+      })}
     </div>
   )
 }
@@ -82,17 +93,26 @@ type CalendarMonthDotsProps = {
  */
 export const CalendarMonthDots = ({ selectedMonth, onSelectMonth }: CalendarMonthDotsProps) => {
   return (
-    <div className='flex justify-center gap-1.5 md:hidden'>
+    <div className='flex justify-center md:hidden py-2'>
       {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
         <button
           key={month}
           type='button'
           onClick={() => onSelectMonth(month)}
-          className={`w-2.5 h-2.5 rounded-full transition-all ${
-            selectedMonth === month ? 'bg-primary scale-125' : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
-          }`}
+          className='inline-flex items-center justify-center w-9 h-11 group'
           aria-label={`${month}月に移動`}
-        />
+          aria-pressed={selectedMonth === month}
+        >
+          <span
+            aria-hidden='true'
+            className={cn(
+              'block w-2.5 h-2.5 rounded-full transition-all',
+              selectedMonth === month
+                ? 'bg-primary scale-125'
+                : 'bg-muted-foreground/30 group-hover:bg-muted-foreground/50'
+            )}
+          />
+        </button>
       ))}
     </div>
   )

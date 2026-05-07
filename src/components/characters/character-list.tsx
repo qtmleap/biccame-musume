@@ -18,9 +18,9 @@ export const CharacterList = ({ characters, title, showTitle = false }: Characte
     <div className='mb-8'>
       {showTitle && title && <h2 className='text-xl font-bold mb-4 text-foreground'>{title}</h2>}
       <LayoutGroup>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3'>
-          {characters.map((character) => (
-            <CharacterListCard key={character.id} character={character} />
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
+          {characters.map((character, index) => (
+            <CharacterListCard key={character.id} character={character} index={index} />
           ))}
         </div>
       </LayoutGroup>

@@ -176,7 +176,15 @@ if (!rootElement.innerHTML) {
         }}
       >
         <RouterProvider router={router} />
-        <Toaster />
+        <Toaster
+          toastOptions={{
+            classNames: {
+              toast: 'text-popover-foreground',
+              title: 'text-popover-foreground font-semibold',
+              description: 'text-popover-foreground/80'
+            }
+          }}
+        />
         <UpdatePrompt />
         <IosInstallPrompt />
       </PersistQueryClientProvider>

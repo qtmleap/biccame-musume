@@ -11,7 +11,7 @@
 @import "./themes/dark.css";
 
 body {
-  @apply bg-page-bg;
+  @apply bg-page-bg font-sans;
 }
 
 @layer utilities {
@@ -40,4 +40,17 @@ body {
   [data-slot="select-trigger"]:hover {
     background-color: var(--button-surface-hover);
   }
+
+}
+
+/* date input の年月日プレースホルダがブラウザ既定で半透明になり読み辛いため、
+   テーマの色で塗り直す。@layer 外 + !important で UA 既定より優先。 */
+input[type="date"]::-webkit-datetime-edit,
+input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-year-field,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field {
+  color: var(--foreground) !important;
+  opacity: 1 !important;
 }

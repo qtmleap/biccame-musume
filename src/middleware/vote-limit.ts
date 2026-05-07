@@ -3,6 +3,31 @@ import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import type { Bindings, Variables } from '@/types/bindings'
 
+const buildKey = (characterId: string, ip: string): string => `${characterId}:${ip}`
+
+/**
+ * 指定キャラ × IP の本日投票済みフラグを取得
+ */
+export const isVoteLimited = async (kv: KVNamespace, characterId: string, ip: string): Promise<boolean> => {
+  return (await kv.get(buildKey(characterId, ip))) !== null
+}
+
+/**
+ * 投票記録を KV に書き込む（翌日0時に expire）
+ */
+export const markVoteLimited = async (kv: KVNamespace, characterId: string, ip: string): Promise<void> => {
+  const ttl = dayjs().add(1, 'day').startOf('day').diff(dayjs(), 'second')
+  await kv.put(
+    buildKey(characterId, ip),
+    JSON.stringify({
+      id: characterId,
+      ip,
+      created_at: dayjs().toISOString()
+    }),
+    { expirationTtl: ttl }
+  )
+}
+
 /**
  * 投票制限チェックMiddleware
  * 同じIPアドレスから同じキャラクターに対して1日1回のみ投票可能
@@ -11,16 +36,13 @@ import type { Bindings, Variables } from '@/types/bindings'
 export const voteLimit = async (c: Context<{ Bindings: Bindings; Variables: Variables }>, next: Next) => {
   const characterId = c.req.param('characterId')
   const ip = c.get('CLIENT_IP')
-  const key = `${characterId}:${ip}`
   const isDev = c.env.ENVIRONMENT === 'local'
 
   if (!characterId) {
     throw new HTTPException(400, { message: 'Bad Request' })
   }
-  const currentTime = dayjs().toISOString()
-  // 投票記録があるかをチェックする
-  const value = await c.env.VOTE_LIMITER.get(key)
-  if (value !== null) {
+
+  if (await isVoteLimited(c.env.VOTE_LIMITER, characterId, ip)) {
     if (isDev) {
       console.debug('[VoteLimit] Development environment detected, skipping vote limit check.')
       await next()
@@ -34,16 +56,7 @@ export const voteLimit = async (c: Context<{ Bindings: Bindings; Variables: Vari
       })
     })
   }
-  // 投票記録を消す時間を設定
-  const ttl = dayjs().add(1, 'day').startOf('day').diff(dayjs(), 'second')
-  await c.env.VOTE_LIMITER.put(
-    key,
-    JSON.stringify({
-      id: characterId,
-      ip: ip,
-      created_at: currentTime
-    }),
-    { expirationTtl: ttl }
-  )
+
+  await markVoteLimited(c.env.VOTE_LIMITER, characterId, ip)
   await next()
 }
