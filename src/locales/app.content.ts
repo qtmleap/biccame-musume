@@ -273,7 +273,8 @@ const appContent = {
         common: 'コモン',
         rare: 'レア',
         epic: 'エピック',
-        legendary: 'レジェンダリー'
+        legendary: 'レジェンダリー',
+        mythic: 'ミシック'
       },
       earnedCount: '獲得 {count}人',
       hidden: '非表示',
@@ -431,7 +432,7 @@ export const EVENT_LIST_ITEM_LABELS = appContent.content.eventListItem
 export const GANTT_CHART_LABELS = appContent.content.ganttChart
 export const BADGE_LABELS = appContent.content.badge
 export const BADGE_RARITY_LABELS = appContent.content.badge.rarity as Record<
-  'common' | 'rare' | 'epic' | 'legendary',
+  'common' | 'rare' | 'epic' | 'legendary' | 'mythic',
   string
 >
 export const BADGE_TEMPLATES = appContent.content.badge.template
