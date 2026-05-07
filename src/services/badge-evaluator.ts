@@ -283,23 +283,23 @@ export async function evaluateAndAwardBadges(ctx: EvaluatorContext, candidateCod
     where: { isHidden: false, ...whereCode }
   })
 
-  const newBadges: Badge[] = []
-
-  for (const badge of candidates) {
-    const earned = await evaluateBadge(ctx, badge)
-    if (earned) {
+  const results = await Promise.all(
+    candidates.map(async (badge) => {
+      const earned = await evaluateBadge(ctx, badge)
+      if (!earned) return null
       try {
         await ctx.prisma.userBadge.create({
           data: { userId: ctx.userId, badgeCode: badge.code }
         })
-        newBadges.push(badge)
+        return badge
       } catch {
         // UNIQUE violation means the badge was already awarded concurrently — swallow silently.
+        return null
       }
-    }
-  }
+    })
+  )
 
-  return newBadges
+  return results.filter((b): b is Badge => b !== null)
 }
 
 // ---------------------------------------------------------------------------
