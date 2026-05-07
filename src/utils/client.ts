@@ -389,14 +389,7 @@ const api = makeApi([
     method: 'get',
     path: '/api/badges',
     alias: 'getBadges',
-    description: '全バッジ定義を取得（認証不要）',
-    parameters: [
-      {
-        name: 'includeHidden',
-        type: 'Query',
-        schema: z.enum(['1', 'true']).optional()
-      }
-    ],
+    description: '全バッジ定義を取得（認証不要、未取得バッジはマスク）',
     response: GetBadgesResponseSchema
   },
   {
@@ -421,6 +414,13 @@ const api = makeApi([
     response: GetBadgeLeaderboardResponseSchema
   },
   // 管理者バッジCRUD API
+  {
+    method: 'get',
+    path: '/api/admin/badges',
+    alias: 'getAllBadgesAdmin',
+    description: '全バッジ定義を取得（admin、隠しバッジ + 獲得者数を含む）',
+    response: GetBadgesResponseSchema
+  },
   {
     method: 'post',
     path: '/api/admin/badges',

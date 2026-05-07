@@ -6,7 +6,7 @@ import { client } from '@/utils/client'
 export const useAllBadges = () => {
   return useSuspenseQuery({
     queryKey: ['badges', 'admin', 'all'],
-    queryFn: () => client.getBadges({ queries: { includeHidden: '1' } }),
+    queryFn: () => client.getAllBadgesAdmin(),
     staleTime: 0
   })
 }
