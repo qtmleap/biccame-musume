@@ -9,6 +9,7 @@ export const BadgeCategorySchema = z.enum([
   'event',
   'event_clear_store',
   'event_clear_area',
+  'conquest',
   'vote',
   'special'
 ])

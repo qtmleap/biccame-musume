@@ -11,6 +11,7 @@ export type BadgeCategory =
   | 'event'
   | 'event_clear_store'
   | 'event_clear_area'
+  | 'conquest'
   | 'vote'
   | 'special'
 
@@ -246,7 +247,7 @@ function getBadgeRegistry(): BadgeDef[] {
   const visitAllT = BADGE_TEMPLATES.visitMilestoneAll
   badges.push({
     code: 'milestone_visit_count_all',
-    category: 'milestone',
+    category: 'conquest',
     subCategory: 'count',
     name: formatTemplate(visitAllT.name, { totalStores: physicalCount }),
     description: formatTemplate(visitAllT.description, { totalStores: physicalCount }),
@@ -260,7 +261,7 @@ function getBadgeRegistry(): BadgeDef[] {
   const visitAreasT = BADGE_TEMPLATES.visitAllAreas
   badges.push({
     code: 'milestone_visit_areas',
-    category: 'area',
+    category: 'conquest',
     subCategory: 'all_areas_any_visit',
     name: visitAreasT.name,
     description: visitAreasT.description,
@@ -380,7 +381,7 @@ function getBadgeRegistry(): BadgeDef[] {
     const t = BADGE_TEMPLATES.clearMilestone
     badges.push({
       code: `milestone_clear_count_${count}`,
-      category: 'event',
+      category: 'milestone',
       subCategory: 'event_clear_count',
       name: formatTemplate(t.name, { count }),
       description: formatTemplate(t.description, { count }),
@@ -395,7 +396,7 @@ function getBadgeRegistry(): BadgeDef[] {
   const clearAllT = BADGE_TEMPLATES.clearMilestoneAll
   badges.push({
     code: 'milestone_clear_count_all',
-    category: 'event',
+    category: 'conquest',
     subCategory: 'event_clear_all',
     name: formatTemplate(clearAllT.name, { totalStores: physicalCount }),
     description: formatTemplate(clearAllT.description, { totalStores: physicalCount }),
@@ -409,7 +410,7 @@ function getBadgeRegistry(): BadgeDef[] {
   const clearAreasT = BADGE_TEMPLATES.clearAllAreas
   badges.push({
     code: 'milestone_clear_areas',
-    category: 'event_clear_area',
+    category: 'conquest',
     subCategory: 'all_areas_any_event_clear',
     name: clearAreasT.name,
     description: clearAreasT.description,

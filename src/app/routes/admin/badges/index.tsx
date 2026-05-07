@@ -783,6 +783,7 @@ const categoryOrder: string[] = [
   'event_clear_area',
   'milestone',
   'event',
+  'conquest',
   'vote',
   'special'
 ]
