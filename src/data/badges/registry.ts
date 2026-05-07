@@ -315,23 +315,36 @@ function getBadgeRegistry(): BadgeDef[] {
   }
 
   // -----------------------------------------------------------------------
-  // 5. Per-store event clear badges (~50)
+  // 5. Per-store event clear badges (50 stores × 3 thresholds = 150)
+  //
+  // Thresholds: 1 (common), 5 (rare), 10 (epic).
+  // count=1 は既存コード `event_clear_at_store_${storeKey}` を維持。
   // -----------------------------------------------------------------------
+  const EVENT_CLEAR_AT_STORE_TIERS: { count: number; rarity: BadgeRarity }[] = [
+    { count: 1, rarity: 'common' },
+    { count: 5, rarity: 'rare' },
+    { count: 10, rarity: 'epic' }
+  ]
   for (const storeKey of PHYSICAL_STORE_KEYS) {
     const storeName = STORE_DISPLAY_NAMES[storeKey]
-    const t = BADGE_TEMPLATES.eventClearAtStore
-    badges.push({
-      code: `event_clear_at_store_${storeKey}`,
-      category: 'event_clear_store',
-      subCategory: 'event_clear_at_store',
-      name: formatTemplate(t.name, { storeName }),
-      description: formatTemplate(t.description, { storeName }),
-      hint: formatTemplate(t.hint, { storeName }),
-      rarity: 'rare',
-      iconName: 'MapPinCheck',
-      sortOrder: next(),
-      conditionMeta: { storeKey }
-    })
+    for (const tier of EVENT_CLEAR_AT_STORE_TIERS) {
+      const isFirst = tier.count === 1
+      const t = isFirst ? BADGE_TEMPLATES.eventClearAtStore : BADGE_TEMPLATES.eventClearAtStoreMultiple
+      const code = isFirst ? `event_clear_at_store_${storeKey}` : `event_clear_at_store_${storeKey}_${tier.count}`
+      const vars = { storeName, count: tier.count }
+      badges.push({
+        code,
+        category: 'event_clear_store',
+        subCategory: 'event_clear_at_store',
+        name: formatTemplate(t.name, vars),
+        description: formatTemplate(t.description, vars),
+        hint: formatTemplate(t.hint, vars),
+        rarity: tier.rarity,
+        iconName: 'MapPinCheck',
+        sortOrder: next(),
+        conditionMeta: { storeKey, ...(isFirst ? {} : { count: tier.count }) }
+      })
+    }
   }
 
   // -----------------------------------------------------------------------
@@ -471,7 +484,7 @@ export const BADGE_REGISTRY: readonly BadgeDef[] = Object.freeze(getBadgeRegistr
  */
 export const BADGE_REGISTRY_BY_CODE: ReadonlyMap<string, BadgeDef> = new Map(BADGE_REGISTRY.map((b) => [b.code, b]))
 
-// Sanity assertion: registry size must be in [210, 220].
-if (BADGE_REGISTRY.length < 210 || BADGE_REGISTRY.length > 220) {
-  throw new Error(`BADGE_REGISTRY size out of expected range [210, 220]: got ${BADGE_REGISTRY.length}`)
+// Sanity assertion: registry size must be in [310, 320].
+if (BADGE_REGISTRY.length < 310 || BADGE_REGISTRY.length > 320) {
+  throw new Error(`BADGE_REGISTRY size out of expected range [310, 320]: got ${BADGE_REGISTRY.length}`)
 }
