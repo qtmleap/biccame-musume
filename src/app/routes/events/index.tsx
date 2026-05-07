@@ -150,11 +150,6 @@ const EventsContent = () => {
         if (isInterested && activityFilter.hideInterested) return false
         if (isCompleted && activityFilter.hideCompleted) return false
 
-        // 終了後1週間経過したイベントは非表示
-        if (endDate?.add(7, 'day').isBefore(currentTime)) {
-          return false
-        }
-
         return true
       })
       .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
