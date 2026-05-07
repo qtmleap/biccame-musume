@@ -124,12 +124,12 @@ function milestoneSteps(n: number): number[] {
   return steps
 }
 
-// Rarity for store/event_clear visit milestones by position (0-based index in steps array).
-function visitMilestoneRarity(index: number, totalSteps: number): BadgeRarity {
-  const position = index / totalSteps
-  if (position < 0.4) return 'common'
-  if (position < 0.75) return 'rare'
-  return 'epic'
+// Rarity for store visit milestones by accumulated count.
+function visitMilestoneRarity(count: number): BadgeRarity {
+  if (count <= 10) return 'common'
+  if (count <= 25) return 'rare'
+  if (count <= 35) return 'epic'
+  return 'legendary'
 }
 
 // Rarity for event clear count milestones, mapped explicitly by threshold.
@@ -236,7 +236,7 @@ function getBadgeRegistry(): BadgeDef[] {
   const visitSteps = milestoneSteps(physicalCount)
   for (let i = 0; i < visitSteps.length; i++) {
     const count = visitSteps[i]
-    const rarity = visitMilestoneRarity(i, visitSteps.length)
+    const rarity = visitMilestoneRarity(count)
     const t = BADGE_TEMPLATES.visitMilestone
     badges.push({
       code: `milestone_visit_count_${count}`,
@@ -260,7 +260,7 @@ function getBadgeRegistry(): BadgeDef[] {
     name: formatTemplate(visitAllT.name, { totalStores: physicalCount }),
     description: formatTemplate(visitAllT.description, { totalStores: physicalCount }),
     hint: formatTemplate(visitAllT.hint, { totalStores: physicalCount }),
-    rarity: 'legendary',
+    rarity: 'mythic',
     iconName: 'Crown',
     sortOrder: next(),
     conditionMeta: { count: physicalCount }
