@@ -21,6 +21,14 @@ const isClosedStoreBadge = (badge: Badge): boolean => {
   }
 }
 
+// コンプ・制覇系は達成時のみ表示する (未達成は隠す)
+const isConquestLikeBadge = (badge: Badge): boolean => {
+  if (badge.category === 'conquest') return true
+  if (badge.sub_category === 'area_complete') return true
+  if (badge.sub_category === 'event_clear_area_complete') return true
+  return false
+}
+
 const shuffle = <T,>(arr: T[]): T[] => {
   const out = [...arr]
   for (let i = out.length - 1; i > 0; i--) {
@@ -42,7 +50,7 @@ const pickItems = (badges: Badge[], earnedMap: Map<string, string>, allow: (b: B
     if (!allow(b)) continue
     if (earnedMap.has(b.code)) {
       earned.push(b)
-    } else if (!isClosedStoreBadge(b) && b.rarity === 'common') {
+    } else if (!isClosedStoreBadge(b) && !isConquestLikeBadge(b) && b.rarity === 'common') {
       unearnedCandidates.push(b)
     }
   }
