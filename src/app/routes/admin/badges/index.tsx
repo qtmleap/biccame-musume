@@ -761,14 +761,14 @@ const RecalculateBadgesButton = () => {
 type StatCardProps = { label: string; value: number; accent?: string }
 
 const StatCard = ({ label, value, accent = 'text-foreground' }: StatCardProps) => (
-  <div className='bg-card border border-card-border rounded-xl px-4 py-3 flex-1 min-w-0 text-center'>
+  <div className='bg-card border border-card-border rounded-xl px-3 py-3 md:px-4 min-w-0 text-center overflow-hidden'>
     <div
-      className={cn('font-numeric font-black tabular-nums text-2xl md:text-3xl leading-none', accent)}
+      className={cn('font-numeric font-black tabular-nums text-xl md:text-3xl leading-none truncate', accent)}
       style={{ letterSpacing: '-0.04em' }}
     >
       {value}
     </div>
-    <div className='mt-1 text-[11px] text-muted-foreground'>{label}</div>
+    <div className='mt-1 text-[10px] md:text-[11px] text-muted-foreground truncate'>{label}</div>
   </div>
 )
 
@@ -865,7 +865,7 @@ const BadgesContent = () => {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: DURATION.normal, delay: 0.06 }}
-          className='flex gap-2 md:gap-3 mb-5 md:mb-6'
+          className='grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-3 mb-5 md:mb-6'
         >
           <StatCard label='総バッジ' value={totalCount} accent='text-foreground' />
           <StatCard label='表示中' value={visibleCount} accent='text-brand' />
