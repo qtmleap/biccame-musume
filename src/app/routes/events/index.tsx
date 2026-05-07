@@ -227,7 +227,7 @@ const EventsContent = () => {
               size='sm'
               pressed={viewMode === 'grid'}
               onPressedChange={(pressed) => setViewMode(pressed ? 'grid' : 'gantt')}
-              className='h-9 w-9 p-0 text-muted-foreground hover:text-foreground data-[state=on]:text-foreground'
+              className='h-9 w-9 p-0 text-muted-foreground hover:text-foreground'
             >
               {viewMode === 'grid' ? <LayoutGrid className='size-4' /> : <Calendar className='size-4' />}
             </Toggle>
