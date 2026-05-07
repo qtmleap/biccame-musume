@@ -394,7 +394,7 @@ function getBadgeRegistry(): BadgeDef[] {
     const t = BADGE_TEMPLATES.clearMilestone
     badges.push({
       code: `milestone_clear_count_${count}`,
-      category: 'milestone',
+      category: 'event',
       subCategory: 'event_clear_count',
       name: formatTemplate(t.name, { count }),
       description: formatTemplate(t.description, { count }),
