@@ -132,6 +132,14 @@ function visitMilestoneRarity(index: number, totalSteps: number): BadgeRarity {
   return 'epic'
 }
 
+// Rarity for event clear count milestones, mapped explicitly by threshold.
+function eventClearCountRarity(count: number): BadgeRarity {
+  if (count <= 10) return 'common'
+  if (count <= 20) return 'rare'
+  if (count <= 30) return 'epic'
+  return 'legendary'
+}
+
 // All areas in stable order.
 const ALL_AREAS: BadgeArea[] = [
   'hokkaido',
@@ -390,7 +398,7 @@ function getBadgeRegistry(): BadgeDef[] {
   const clearSteps = milestoneSteps(physicalCount)
   for (let i = 0; i < clearSteps.length; i++) {
     const count = clearSteps[i]
-    const rarity = visitMilestoneRarity(i, clearSteps.length)
+    const rarity = eventClearCountRarity(count)
     const t = BADGE_TEMPLATES.clearMilestone
     badges.push({
       code: `milestone_clear_count_${count}`,
