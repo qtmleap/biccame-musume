@@ -32,7 +32,7 @@ export const BADGE_SUPER_CATEGORY_DEFS: BadgeSuperCategoryDef[] = [
     accent: 'category-limited-card-solid',
     includes: ['store', 'area', 'milestone'],
     subSections: [
-      { key: 'debut_complete', label: 'デビュー・コンプ', categories: ['area'] },
+      { key: 'debut_complete', label: 'エリア', categories: ['area'] },
       { key: 'per_store', label: '個別店舗', categories: ['store'] },
       { key: 'milestone', label: '累計マイルストーン', categories: ['milestone'] }
     ]
