@@ -3,7 +3,6 @@ import { getPrisma } from '@/lib/prisma'
 import {
   GetBadgeLeaderboardQuerySchema,
   GetBadgeLeaderboardResponseSchema,
-  GetBadgesQuerySchema,
   GetBadgesResponseSchema,
   GetMyBadgesResponseSchema,
   prismaBadgeToDto
@@ -18,9 +17,6 @@ routes.openapi(
     method: 'get',
     path: '/badges',
     middleware: [verifyTokenOptional],
-    request: {
-      query: GetBadgesQuerySchema
-    },
     responses: {
       200: {
         content: {
@@ -34,22 +30,11 @@ routes.openapi(
     tags: ['badges']
   }),
   async (c) => {
-    const { includeHidden } = c.req.valid('query')
-    const showHidden = includeHidden !== undefined
     const prisma = getPrisma(c.env)
     const rows = await prisma.badge.findMany({
-      where: showHidden ? undefined : { isHidden: false },
+      where: { isHidden: false },
       orderBy: [{ category: 'asc' }, { sortOrder: 'asc' }]
     })
-    if (showHidden) {
-      c.header('Cache-Control', 'no-store')
-      const countRows = await prisma.userBadge.groupBy({
-        by: ['badgeCode'],
-        _count: { _all: true }
-      })
-      const countMap = new Map<string, number>(countRows.map((r) => [r.badgeCode, r._count._all]))
-      return c.json({ badges: rows.map((b) => prismaBadgeToDto(b, countMap.get(b.code) ?? 0)) })
-    }
 
     // 未取得バッジは name/description/hint をマスクしてネタバレ防止
     const uid = ((): string | null => {

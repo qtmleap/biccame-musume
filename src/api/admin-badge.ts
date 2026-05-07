@@ -6,6 +6,7 @@ import {
   AdminDeleteBadgeParamsSchema,
   type CreateSpecialBadgeBody,
   CreateSpecialBadgeBodySchema,
+  GetBadgesResponseSchema,
   prismaBadgeToDto,
   UpdateBadgeBodySchema
 } from '@/schemas/badge.dto'
@@ -13,6 +14,39 @@ import { evaluateAndAwardBadges } from '@/services/badge-evaluator'
 import type { Bindings } from '@/types/bindings'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
+
+// GET /api/admin/badges — 全バッジ取得 (隠しバッジ + earnedCount 含む、admin 専用)
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/admin/badges',
+    middleware: [CFAuth],
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: GetBadgesResponseSchema
+          }
+        },
+        description: '全バッジ定義取得成功 (admin)'
+      }
+    },
+    tags: ['admin-badges']
+  }),
+  async (c) => {
+    const prisma = getPrisma(c.env)
+    const rows = await prisma.badge.findMany({
+      orderBy: [{ category: 'asc' }, { sortOrder: 'asc' }]
+    })
+    const countRows = await prisma.userBadge.groupBy({
+      by: ['badgeCode'],
+      _count: { _all: true }
+    })
+    const countMap = new Map<string, number>(countRows.map((r) => [r.badgeCode, r._count._all]))
+    c.header('Cache-Control', 'no-store')
+    return c.json({ badges: rows.map((b) => prismaBadgeToDto(b, countMap.get(b.code) ?? 0)) })
+  }
+)
 
 /**
  * Generate an 8-char URL-safe random string using Web Crypto (no nanoid dep).

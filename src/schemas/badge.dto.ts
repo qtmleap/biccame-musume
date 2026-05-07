@@ -69,7 +69,7 @@ export const BadgeSchema = z
     created_at: z.string().nonempty().openapi({ example: '2026-05-06T00:00:00.000Z' }),
     updated_at: z.string().nonempty().openapi({ example: '2026-05-06T00:00:00.000Z' }),
     earned_count: z.number().int().nonnegative().optional().openapi({
-      description: '獲得者数 (admin 専用、includeHidden=1 のときのみ)',
+      description: '獲得者数 (admin 専用、GET /api/admin/badges のレスポンスにのみ含まれる)',
       example: 42
     })
   })
@@ -166,12 +166,6 @@ export const BadgeLeaderboardResponseSchema = z
   .openapi('BadgeLeaderboardResponse')
 
 export type BadgeLeaderboardResponse = z.infer<typeof BadgeLeaderboardResponseSchema>
-
-export const GetBadgesQuerySchema = z
-  .object({
-    includeHidden: z.enum(['1', 'true']).optional().openapi({ example: '1' })
-  })
-  .openapi('GetBadgesQuery')
 
 export const GetBadgesResponseSchema = z
   .object({
