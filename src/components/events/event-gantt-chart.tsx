@@ -13,7 +13,7 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
 
   return (
     <TooltipProvider>
-      <div className='relative min-w-0'>
+      <div className='relative'>
         <GanttHeader monthOffset={layout.monthOffset} onMonthSelect={layout.setMonthOffset} />
         <GanttTimeline
           eventBars={layout.eventBars}
