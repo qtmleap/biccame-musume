@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { useAuth } from '@/hooks/use-auth'
+import { resolveBadgeText } from '@/lib/badge-display'
 import { client } from '@/utils/client'
 
 /**
@@ -31,7 +32,8 @@ export const useUserActivity = () => {
     onSuccess: (data) => {
       invalidate()
       for (const badge of data.newBadges) {
-        toast.success(`バッジ獲得: ${badge.name}`, { description: badge.description })
+        const { name, description } = resolveBadgeText(badge)
+        toast.success(`バッジ獲得: ${name}`, { description })
       }
       if (data.newBadges.length > 0) {
         queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
@@ -69,7 +71,8 @@ export const useUserActivity = () => {
     onSuccess: (data) => {
       invalidate()
       for (const badge of data.newBadges) {
-        toast.success(`バッジ獲得: ${badge.name}`, { description: badge.description })
+        const { name, description } = resolveBadgeText(badge)
+        toast.success(`バッジ獲得: ${name}`, { description })
       }
       if (data.newBadges.length > 0) {
         queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })

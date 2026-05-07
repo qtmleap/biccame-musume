@@ -465,6 +465,11 @@ export { getBadgeRegistry }
 
 export const BADGE_REGISTRY: readonly BadgeDef[] = Object.freeze(getBadgeRegistry())
 
+/**
+ * code -> registry entry のマップ。フロントで code から name/description/hint を引くのに使う。
+ */
+export const BADGE_REGISTRY_BY_CODE: ReadonlyMap<string, BadgeDef> = new Map(BADGE_REGISTRY.map((b) => [b.code, b]))
+
 // Sanity assertion: registry size must be in [210, 220].
 if (BADGE_REGISTRY.length < 210 || BADGE_REGISTRY.length > 220) {
   throw new Error(`BADGE_REGISTRY size out of expected range [210, 220]: got ${BADGE_REGISTRY.length}`)

@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { Lock } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { resolveBadgeText } from '@/lib/badge-display'
 import { getBadgeIcon } from '@/lib/badge-icons'
 import { DURATION } from '@/lib/motion'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
@@ -46,6 +47,7 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
   const Icon = getBadgeIcon(badge.icon_name)
   const style = RARITY_STYLES[badge.rarity]
   const rotation = earned ? getStickerRotation(index) : 0
+  const { name: displayName } = resolveBadgeText(badge)
 
   const card = (
     <motion.div
@@ -104,7 +106,7 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
               earned ? 'text-foreground' : 'text-muted-foreground'
             )}
           >
-            {earned ? badge.name : '？？？'}
+            {earned ? displayName : '？？？'}
           </div>
         </div>
       </motion.div>
