@@ -32,7 +32,7 @@ export type BadgeSubCategory =
   | 'special_multi_store_clear'
   | 'special_event_id'
 
-export type BadgeRarity = 'common' | 'rare' | 'epic' | 'legendary'
+export type BadgeRarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythic'
 
 export type BadgeConditionMeta = {
   storeKey?: StoreKey
