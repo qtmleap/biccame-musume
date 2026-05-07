@@ -40,14 +40,14 @@ const PER_PAGE = 30
 type StatCardProps = { label: string; value: number; accent?: string }
 
 const StatCard = ({ label, value, accent = 'text-foreground' }: StatCardProps) => (
-  <div className='bg-card border border-card-border rounded-xl px-4 py-3 flex-1 min-w-0 text-center'>
+  <div className='bg-card border border-card-border rounded-xl px-2 py-3 md:px-4 flex-1 min-w-0 text-center'>
     <div
-      className={cn('font-numeric font-black tabular-nums text-2xl md:text-3xl leading-none', accent)}
+      className={cn('font-numeric font-black tabular-nums text-xl md:text-3xl leading-none', accent)}
       style={{ letterSpacing: '-0.04em' }}
     >
       {value}
     </div>
-    <div className='mt-1 text-[11px] text-muted-foreground'>{label}</div>
+    <div className='mt-1 text-[10px] md:text-[11px] text-muted-foreground'>{label}</div>
   </div>
 )
 
