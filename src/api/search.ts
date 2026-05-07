@@ -25,7 +25,7 @@ routes.openapi(
         content: {
           'application/json': {
             schema: z.object({
-              error: z.string()
+              error: z.string().nonempty()
             })
           }
         },

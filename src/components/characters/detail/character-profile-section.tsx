@@ -2,12 +2,15 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { ExternalLink, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
+import { CharacterFavoriteButton } from '@/components/characters/character-favorite-button'
 import { CharacterFollowButton } from '@/components/characters/character-follow-button'
 import { CharacterTwitterLink } from '@/components/characters/character-twitter-link'
+import { CharacterVisitButton } from '@/components/characters/character-visit-button'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { CLOSED_STORE_KEYS } from '@/data/badges/store-exclusion'
 import { DURATION, FADE_IN_UP, SCALE_IN } from '@/lib/motion'
-import type { StoreData } from '@/schemas/store.dto'
+import type { StoreData, StoreKey } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
 
 type CharacterProfileSectionProps = {
@@ -35,14 +38,25 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
           </Avatar>
         </motion.div>
 
-        <div className='flex gap-2'>
-          {character.character?.twitter_id && <CharacterFollowButton twitterId={character.character.twitter_id} />}
+        <div className='flex items-center gap-2'>
+          {/* ログイン必須（左） */}
+          <CharacterFavoriteButton
+            characterId={character.id}
+            characterName={character.character?.name}
+            isBiccameMusume={character.character?.is_biccame_musume}
+          />
+          <CharacterVisitButton
+            storeKey={character.id}
+            storeName={character.character?.name}
+            hasStore={Boolean(character.store) || CLOSED_STORE_KEYS.has(character.id as StoreKey)}
+          />
+          {/* ログイン不要 */}
+          {character.character?.twitter_id && (
+            <CharacterFollowButton twitterId={character.character.twitter_id} iconOnly />
+          )}
+          {/* 応援は一番右（primary action） */}
           {character.character?.is_biccame_musume && (
-            <CharacterVoteButton
-              characterId={character.id}
-              characterName={character.character.name}
-              variant='compact'
-            />
+            <CharacterVoteButton characterId={character.id} characterName={character.character.name} iconOnly />
           )}
         </div>
       </div>

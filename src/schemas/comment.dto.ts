@@ -28,9 +28,9 @@ export type CreateCommentRequest = z.infer<typeof CreateCommentRequestSchema>
  */
 export const CommentResponseSchema = z
   .object({
-    id: z.string().uuid().openapi({ description: 'コメントID', example: '550e8400-e29b-41d4-a716-446655440000' }),
-    characterId: z.string().openapi({ description: '投稿者が選んだキャラクター ID', example: 'abeno' }),
-    body: z.string().openapi({ description: 'コメント本文', example: 'イベント楽しみにしています！' }),
+    id: z.uuid().openapi({ description: 'コメントID', example: '550e8400-e29b-41d4-a716-446655440000' }),
+    characterId: z.string().nonempty().openapi({ description: '投稿者が選んだキャラクター ID', example: 'abeno' }),
+    body: z.string().nonempty().openapi({ description: 'コメント本文', example: 'イベント楽しみにしています！' }),
     createdAt: z.string().datetime().openapi({ description: '投稿日時', example: '2026-05-02T07:00:00.000Z' }),
     userId: z
       .string()

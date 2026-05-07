@@ -23,7 +23,7 @@ routes.openapi(
     path: '/:uuid/comments',
     request: {
       params: z.object({
-        uuid: z.string().uuid()
+        uuid: z.uuid()
       })
     },
     responses: {
@@ -56,7 +56,7 @@ routes.openapi(
     path: '/:uuid/comments',
     request: {
       params: z.object({
-        uuid: z.string().uuid()
+        uuid: z.uuid()
       }),
       body: {
         content: {
@@ -78,7 +78,7 @@ routes.openapi(
       400: {
         content: {
           'application/json': {
-            schema: z.object({ message: z.string() })
+            schema: z.object({ message: z.string().nonempty() })
           }
         },
         description: 'バリデーションエラーまたはモデレーションNG'
@@ -86,7 +86,7 @@ routes.openapi(
       404: {
         content: {
           'application/json': {
-            schema: z.object({ message: z.string() })
+            schema: z.object({ message: z.string().nonempty() })
           }
         },
         description: 'イベントが見つかりません'
@@ -94,7 +94,7 @@ routes.openapi(
       429: {
         content: {
           'application/json': {
-            schema: z.object({ message: z.string() })
+            schema: z.object({ message: z.string().nonempty() })
           }
         },
         description: 'レート制限エラー'
