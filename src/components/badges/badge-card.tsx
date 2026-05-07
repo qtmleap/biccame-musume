@@ -14,6 +14,7 @@ import { getBadgeIcon } from '@/lib/badge-icons'
 import { DURATION } from '@/lib/motion'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
+import { BADGE_RARITY_LABELS } from '@/locales/app.content'
 import type { Badge, BadgeRarity } from '@/schemas/badge.dto'
 
 type BadgeCardProps = {
@@ -22,35 +23,30 @@ type BadgeCardProps = {
   index: number
 }
 
-const RARITY_STYLES: Record<BadgeRarity, { ring: string; glow: string; label: string; chip: string }> = {
+const RARITY_STYLES: Record<BadgeRarity, { ring: string; glow: string; chip: string }> = {
   common: {
     ring: 'ring-1 ring-border',
     glow: '',
-    label: 'COMMON',
     chip: 'bg-muted text-muted-foreground'
   },
   rare: {
     ring: 'ring-2 ring-status-upcoming',
     glow: 'shadow-[0_0_18px_-4px_var(--status-upcoming)]',
-    label: 'RARE',
     chip: 'bg-status-upcoming text-status-upcoming-foreground'
   },
   epic: {
     ring: 'ring-2 ring-favorite',
     glow: 'shadow-[0_0_22px_-4px_var(--favorite)]',
-    label: 'EPIC',
     chip: 'bg-favorite text-favorite-foreground'
   },
   legendary: {
     ring: 'ring-2 ring-rank-gold',
     glow: 'shadow-[0_0_28px_-2px_var(--rank-gold)]',
-    label: 'LEGENDARY',
     chip: 'bg-rank-gold text-rank-gold-foreground'
   },
   mythic: {
     ring: 'ring-2 ring-rank-mythic',
     glow: 'shadow-[0_0_36px_-2px_var(--rank-mythic-via)]',
-    label: 'MYTHIC',
     chip: 'bg-gradient-to-br from-rank-mythic-from via-rank-mythic-via to-rank-mythic-to text-rank-mythic-foreground'
   }
 }
@@ -156,7 +152,7 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
               style.chip
             )}
           >
-            {style.label}
+            {BADGE_RARITY_LABELS[badge.rarity]}
           </span>
           <DialogTitle className='text-lg md:text-xl mt-2'>{displayName ?? 'バッジ'}</DialogTitle>
           {displayDescription ? (

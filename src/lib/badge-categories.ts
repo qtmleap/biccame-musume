@@ -99,7 +99,7 @@ export const BADGE_CATEGORY_DEFS: BadgeCategoryDef[] = [
   {
     key: 'event',
     label: 'イベントマイルストーン',
-    description: '累計イベント完了数で段階的に解放される称号',
+    description: '累計イベント達成数で段階的に解放される称号',
     accent: 'brand'
   },
   {
