@@ -171,3 +171,7 @@ TURNSTILE_SECRET_KEY = "1x0000000000000000000000000000000AA"
 [env.production.observability]
 enabled = true
 head_sampling_rate = 1
+
+# 0:00 UTC = 9:00 JST 毎日。当日開始のイベントを 1 ツイートにまとめて告知する。
+[env.production.triggers]
+crons = ["0 0 * * *"]

@@ -368,3 +368,25 @@ export const deleteEvent = async (env: Bindings, id: string): Promise<null> => {
   await prisma.event.delete({ where: { id: id } })
   return null
 }
+
+/**
+ * 「JST で本日開始」のイベントを取得（毎朝の cron 告知ツイート用）
+ */
+export const getEventsStartingToday = async (env: Bindings, now: Date = new Date()): Promise<Event[]> => {
+  const prisma = getPrisma(env)
+  const startOfDayJst = dayjs(now).tz('Asia/Tokyo').startOf('day')
+  const startOfNextDayJst = startOfDayJst.add(1, 'day')
+  const events = (
+    await prisma.event.findMany({
+      where: {
+        isVerified: true,
+        startDate: { gte: startOfDayJst.toDate(), lt: startOfNextDayJst.toDate() }
+      },
+      include: { conditions: true, stores: true },
+      orderBy: { startDate: 'asc' }
+    })
+  ).map((v) => transform(v))
+  const result = EventSchema.array().safeParse(events)
+  if (!result.success) throw new HTTPException(400, { message: result.error.message })
+  return result.data
+}
