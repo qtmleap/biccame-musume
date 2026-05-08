@@ -1,17 +1,31 @@
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, Award, Heart, MapPin } from 'lucide-react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { Award, Heart, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { toast } from 'sonner'
+import { CharacterListCard } from '@/components/character-list-card'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
-import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { EventGridItem } from '@/components/events/event-grid-item'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { getLargeTwitterPhoto, useAuth } from '@/hooks/use-auth'
+import { useAuth } from '@/hooks/use-auth'
+import { useCharacters } from '@/hooks/use-characters'
 import { useEvents } from '@/hooks/use-events'
+import { useFavorites } from '@/hooks/use-favorites'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { auth } from '@/lib/firebase'
+import { DURATION } from '@/lib/motion'
 import { MY_PAGE_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 
@@ -32,27 +46,30 @@ const EventSection = ({
 
   return (
     <div className='space-y-3'>
-      <div className='flex items-center justify-between'>
-        <div className='flex items-center gap-2'>
-          {icon}
-          <h2 className='text-xl font-bold text-gray-900'>{title}</h2>
-          {events.length > 0 && <span className='text-sm text-gray-500'>({events.length})</span>}
+      <div className='flex items-center gap-2'>
+        {icon}
+        <h2 className='text-xl font-bold text-foreground'>{title}</h2>
+        {events.length > 0 && <span className='text-sm text-muted-foreground'>({events.length})</span>}
+      </div>
+      {events.length === 0 ? (
+        <p className='text-sm text-muted-foreground py-2'>{emptyMessage}</p>
+      ) : (
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
+          {displayEvents.map((event, index) => (
+            <EventGridItem key={event.uuid} event={event} index={index} compact />
+          ))}
         </div>
-        {showAllPath && events.length > 0 && (
+      )}
+      {showAllPath && events.length > 0 && (
+        <div className='mt-4 text-right'>
           <Link
             to={showAllPath}
-            className='text-xs text-pink-600 hover:text-pink-700 transition-colors hover:underline'
+            className='text-sm text-muted-foreground hover:text-foreground font-semibold hover:underline transition-colors'
           >
             {MY_PAGE_LABELS.viewAll}
           </Link>
-        )}
-      </div>
-      <PaginatedEventGrid
-        events={displayEvents}
-        page={1}
-        onPageChange={() => {}}
-        emptyState={<p className='text-sm text-gray-500 py-2'>{emptyMessage}</p>}
-      />
+        </div>
+      )}
     </div>
   )
 }
@@ -61,14 +78,18 @@ const EventSection = ({
  * マイページコンテンツ
  */
 const MyPageContent = () => {
-  const { user, logout } = useAuth()
-  const router = useRouter()
+  const { logout } = useAuth()
   const { stores, interestedEvents, completedEvents } = useUserActivity()
   const { data: allEvents } = useEvents()
+  const { data: characters } = useCharacters()
+  const { favorites } = useFavorites()
 
-  // イベントIDからイベント詳細を取得
   const interestedEventDetails = allEvents.filter((e) => interestedEvents.includes(e.uuid))
   const completedEventDetails = allEvents.filter((e) => completedEvents.includes(e.uuid))
+  const favoriteCharacters = characters.filter((c) => c.character?.is_biccame_musume && favorites.includes(c.id))
+  const displayFavorites = favoriteCharacters.slice(0, 5)
+  const visitedCharacters = characters.filter((c) => stores.includes(c.id))
+  const displayVisited = visitedCharacters.slice(0, 5)
 
   /**
    * ログアウト処理
@@ -83,82 +104,106 @@ const MyPageContent = () => {
   }
 
   return (
-    <div className='min-h-screen bg-pink-50'>
+    <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div>
-          {/* 戻るボタン */}
-          <div className='pb-2'>
-            <Button
-              variant='ghost'
-              size='sm'
-              className='text-gray-600 hover:text-gray-900 -ml-2'
-              onClick={() => router.history.back()}
-            >
-              <ArrowLeft className='h-4 w-4 mr-1' />
-              戻る
-            </Button>
+          {/* タイトル + ログアウト */}
+          <div className='mb-4 flex items-center justify-between gap-4'>
+            <h1 className='text-2xl font-bold text-foreground'>マイページ</h1>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  className='rounded-full px-4 h-9 text-xs font-semibold bg-destructive/10 text-destructive border border-destructive/30 hover:bg-destructive/20'
+                >
+                  {MY_PAGE_LABELS.logout}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className='rounded-2xl shadow-2xl border-transparent'>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>ログアウトしますか？</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    ログアウトするとマイページにアクセスできなくなります。
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleLogout} variant='destructive'>
+                    ログアウトする
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
-
-          {/* プロフィールセクション */}
-          <div className='mb-4 flex items-end justify-between gap-4'>
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Avatar className='h-21.25 w-21.25 border-2 border-gray-800'>
-                <AvatarImage
-                  src={getLargeTwitterPhoto(user?.photoURL)}
-                  alt={user?.displayName ?? 'User'}
-                  className='object-cover'
-                />
-                <AvatarFallback className='text-4xl bg-pink-100 text-pink-700'>
-                  {user?.displayName?.charAt(0) ?? 'U'}
-                </AvatarFallback>
-              </Avatar>
-            </motion.div>
-
-            {/* アクションボタン */}
-            <div className='flex gap-2'>
-              <Button
-                variant='outline'
-                size='sm'
-                onClick={handleLogout}
-                className='rounded-full px-4 h-7 text-xs font-semibold bg-red-50 text-red-600 border border-red-200 hover:bg-red-100'
-              >
-                {MY_PAGE_LABELS.logout}
-              </Button>
-            </div>
-          </div>
-
-          {/* 名前 */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className='mb-6'
-          >
-            <h1 className='text-2xl font-bold text-gray-900'>{user?.displayName}</h1>
-          </motion.div>
 
           {/* 訪れた店舗の記録 */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ duration: DURATION.normal, delay: 0.4 }}
             className='space-y-3 mb-6'
           >
             <div className='flex items-center gap-2'>
-              <MapPin className='h-5 w-5 text-pink-600' />
-              <h2 className='text-xl font-bold text-gray-900'>{MY_PAGE_LABELS.visitedStores}</h2>
+              <MapPin className='h-5 w-5 text-brand' />
+              <h2 className='text-xl font-bold text-foreground'>{MY_PAGE_LABELS.visitedStores}</h2>
+              {visitedCharacters.length > 0 && (
+                <span className='text-sm text-muted-foreground'>({visitedCharacters.length})</span>
+              )}
             </div>
-            {stores.length > 0 ? (
-              <p className='text-sm text-gray-600'>
-                {stores.length}
-                {MY_PAGE_LABELS.visitedStoresCount}
-              </p>
+            {visitedCharacters.length === 0 ? (
+              <p className='text-sm text-muted-foreground py-2'>{MY_PAGE_LABELS.noVisitedStores}</p>
             ) : (
-              <p className='text-sm text-gray-500'>{MY_PAGE_LABELS.noVisitedStores}</p>
+              <>
+                <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
+                  {displayVisited.map((character, index) => (
+                    <CharacterListCard key={character.id} character={character} index={index} />
+                  ))}
+                </div>
+                <div className='mt-4 text-right'>
+                  <Link
+                    to='/me/visited'
+                    className='text-sm text-muted-foreground hover:text-foreground font-semibold hover:underline transition-colors'
+                  >
+                    {MY_PAGE_LABELS.viewAll}
+                  </Link>
+                </div>
+              </>
+            )}
+          </motion.div>
+
+          {/* 推しのビッカメ娘 */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: DURATION.normal, delay: 0.45 }}
+            className='space-y-3 mb-6'
+          >
+            <div className='flex items-center gap-2'>
+              <Heart className='h-5 w-5 text-favorite fill-current' />
+              <h2 className='text-xl font-bold text-foreground'>推しのビッカメ娘</h2>
+              {favoriteCharacters.length > 0 && (
+                <span className='text-sm text-muted-foreground'>({favoriteCharacters.length})</span>
+              )}
+            </div>
+            {favoriteCharacters.length === 0 ? (
+              <p className='text-sm text-muted-foreground py-2'>推しを登録して、まとめて応援できるよ</p>
+            ) : (
+              <>
+                <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
+                  {displayFavorites.map((character, index) => (
+                    <CharacterListCard key={character.id} character={character} index={index} />
+                  ))}
+                </div>
+                <div className='mt-4 text-right'>
+                  <Link
+                    to='/me/favorites'
+                    className='text-sm text-muted-foreground hover:text-foreground font-semibold hover:underline transition-colors'
+                  >
+                    {MY_PAGE_LABELS.viewAll}
+                  </Link>
+                </div>
+              </>
             )}
           </motion.div>
 
@@ -166,12 +211,12 @@ const MyPageContent = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+            transition={{ duration: DURATION.normal, delay: 0.5 }}
             className='mb-6'
           >
             <EventSection
               title={MY_PAGE_LABELS.interestedEvents}
-              icon={<Heart className='h-5 w-5 text-pink-500' />}
+              icon={<Heart className='h-5 w-5 text-action-interest' />}
               events={interestedEventDetails}
               emptyMessage={MY_PAGE_LABELS.noInterestedEvents}
               showAllPath='/me/interested'
@@ -182,12 +227,12 @@ const MyPageContent = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            transition={{ duration: DURATION.normal, delay: 0.6 }}
             className='mb-6'
           >
             <EventSection
               title={MY_PAGE_LABELS.completedEvents}
-              icon={<Award className='h-5 w-5 text-amber-500' />}
+              icon={<Award className='h-5 w-5 text-action-award' />}
               events={completedEventDetails}
               emptyMessage={MY_PAGE_LABELS.noCompletedEvents}
               showAllPath='/me/completed'

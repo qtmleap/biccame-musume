@@ -7,7 +7,6 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { intlayer } from 'vite-intlayer' // Add the plugin to the Vite plugin list
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { VitePWA } from 'vite-plugin-pwa'
 import sitemap from 'vite-plugin-sitemap'
 
@@ -35,19 +34,18 @@ export default defineConfig(({ mode }) => {
           mkdirSync('dist/client', { recursive: true })
         }
       },
-      nodePolyfills({
-        include: ['path'],
-        exclude: ['http'],
-        globals: {
-          Buffer: false,
-          global: true,
-          process: true
+      {
+        name: 'virtual-public-characters',
+        resolveId(id) {
+          if (id === 'virtual:public-characters') return `\0${id}`
         },
-        overrides: {
-          fs: 'memfs'
-        },
-        protocolImports: true
-      }),
+        load(id) {
+          if (id === '\0virtual:public-characters') {
+            const raw = readFileSync(resolve(__dirname, 'public/characters.json'), 'utf-8')
+            return `export default ${raw}`
+          }
+        }
+      },
       tanstackRouter({
         target: 'react',
         autoCodeSplitting: true,
@@ -72,38 +70,9 @@ export default defineConfig(({ mode }) => {
         manifest: false, // manifest.webmanifestを直接使用
         workbox: {
           skipWaiting: true,
-          clientsClaim: true,
-          globDirectory: 'dist/client',
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2,json}'],
+          clientsClaim: false,
+          globPatterns: [],
           runtimeCaching: [
-            {
-              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'google-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1年
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            {
-              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'gstatic-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1年
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
             {
               urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
               handler: 'CacheFirst',
@@ -115,42 +84,7 @@ export default defineConfig(({ mode }) => {
                 }
               }
             },
-            {
-              urlPattern: /\/characters\.json$/i,
-              handler: 'StaleWhileRevalidate',
-              options: {
-                cacheName: 'characters-json-cache',
-                expiration: {
-                  maxEntries: 1,
-                  maxAgeSeconds: 60 * 60 * 24 // 1日
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            {
-              urlPattern: /\/api\/.*/i,
-              handler: 'NetworkFirst',
-              options: {
-                cacheName: 'api-cache',
-                networkTimeoutSeconds: 10,
-                expiration: {
-                  maxEntries: 50,
-                  maxAgeSeconds: 60 * 5 // 5分
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            {
-              urlPattern: /^\/__\/auth\/.*/i,
-              handler: 'NetworkFirst',
-            },
           ],
-          navigateFallback: '/index.html',
-          navigateFallbackDenylist: [/^\/__\//, /^\/api\//],
         },
         devOptions: {
           enabled: true,
@@ -180,7 +114,7 @@ export default defineConfig(({ mode }) => {
       },
       target: 'esnext',
       minify: true,
-      drop: mode === 'prod' ? ['console', 'debugger'] : []
+      drop: mode === 'production' ? ['console', 'debugger'] : []
     },
     worker: {
       format: 'es'
@@ -206,7 +140,7 @@ export default defineConfig(({ mode }) => {
       __APP_VERSION__: JSON.stringify(version),
       __GIT_HASH__: JSON.stringify(hash),
       __BUILD_AT__: JSON.stringify(buildAt),
-      __AUTH_DOMAIN__: JSON.stringify(mode === 'prod' ? 'biccame-musume.com' : 'dev.biccame-musume.com')
+      __AUTH_DOMAIN__: JSON.stringify(mode === 'production' ? 'biccame-musume.com' : 'dev.biccame-musume.com')
     },
     envPrefix: 'VITE_'
   }

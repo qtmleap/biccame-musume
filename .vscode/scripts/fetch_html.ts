@@ -10,9 +10,11 @@ import { CookieJar } from 'netscape-cookies-parser'
 import { parse } from 'node-html-parser'
 
 const PROFILE_URL = 'https://biccame.jp/profile/'
+const CALENDAR_URL_BASE = 'https://biccame.jp/calendar'
 const CACHE_DIR = join(import.meta.dir, '../archive/html_cache')
 const PROFILE_CACHE_PATH = join(CACHE_DIR, 'profile_index.html')
 const COOKIE_FILE = join(import.meta.dir, 'cookie.txt')
+const CALENDAR_YEAR = new Date().getFullYear()
 
 /**
  * Cookieファイルを読み込んでCookie文字列を生成
@@ -215,6 +217,15 @@ const main = async () => {
       } catch (_error) {
         console.error(`  ⚠️ Failed to fetch store page, continuing...`)
       }
+    }
+
+    console.log('\n=== Fetching Calendars ===')
+    for (let m = 1; m <= 12; m++) {
+      const mm = String(m).padStart(2, '0')
+      const url = `${CALENDAR_URL_BASE}/${CALENDAR_YEAR}/${mm}/`
+      const cachePath = join(CACHE_DIR, `calendar_${CALENDAR_YEAR}_${mm}.html`)
+      console.log(`[${m}/12] ${CALENDAR_YEAR}-${mm}`)
+      await fetchHtml(url, cachePath, 10000, 'utf-8', false, true)
     }
 
     console.log('\n✓ All HTML files cached successfully!')

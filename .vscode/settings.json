@@ -1,5 +1,5 @@
 {
-  "gitdoc.enabled": true,
+  "gitdoc.enabled": false,
   "gitdoc.commitValidationLevel": "none",
   "gitdoc.autoCommitDelay": 0,
   "gitdoc.autoPush": "onCommit",
@@ -14,7 +14,8 @@
     ".tanstack": true,
     ".wrangler": true,
     "dev-dist": true,
-    "dist": true
+    "dist": true,
+    "node_modules": true,
   },
   "files.watcherExclude": {
     "**/node_modules/**": true

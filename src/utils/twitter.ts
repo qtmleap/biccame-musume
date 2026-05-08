@@ -1,172 +1,179 @@
-import crypto from 'node:crypto'
-import OAuth from 'oauth-1.0a'
-import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import type { Event } from '@/schemas/event.dto'
+import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '@/lib/x-transaction'
+import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
+import {
+  buildDailySummaryTweets,
+  buildEventCreatedText,
+  buildEventUpdatedText,
+  getQuoteTweetId
+} from '@/utils/tweet-text'
+
+const CREATE_TWEET_QUERY_ID = 'oB-5XsHNAbjvARJEc8CZFw'
+const CREATE_TWEET_PATH = `/i/api/graphql/${CREATE_TWEET_QUERY_ID}/CreateTweet`
+// Bearer is hardcoded in https://abs.twimg.com/responsive-web/client-web/main.<hash>.js
+// as two concatenated string literals, rotates infrequently. Re-extract from a live
+// browser request when 401 "Could not authenticate you" starts appearing.
+const X_BEARER =
+  'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'
+
+const HOME_PAGE_CACHE_KEY = 'https://x-transaction-cache.local/home-page'
+const ONDEMAND_CACHE_KEY = 'https://x-transaction-cache.local/ondemand'
+const CACHE_TTL_SECONDS = 60 * 30
 
 /**
- * Twitter URLからツイートIDを抽出
+ * Cached fetch of the X home page + ondemand.s file. Re-fetched at most every
+ * `CACHE_TTL_SECONDS` to keep CPU/bandwidth bounded — the underlying key/animation
+ * material rotates infrequently.
  */
-const extractTweetId = (url: string): string | null => {
-  const match = url.match(/(?:twitter\.com|x\.com)\/\w+\/status\/(\d+)/)
-  return match ? match[1] : null
+const getCachedTransactionInputs = async (): Promise<{ homePageHtml: string; ondemandFileText: string }> => {
+  const cache = await caches.open('x-transaction')
+  const cachedHome = await cache.match(HOME_PAGE_CACHE_KEY)
+  const cachedOndemand = await cache.match(ONDEMAND_CACHE_KEY)
+  if (cachedHome && cachedOndemand) {
+    return { homePageHtml: await cachedHome.text(), ondemandFileText: await cachedOndemand.text() }
+  }
+  const homePageHtml = await fetchHomePageHtml()
+  const ondemandFileText = await fetchOnDemandFileText(homePageHtml)
+  const cacheControl = `max-age=${CACHE_TTL_SECONDS}`
+  await Promise.all([
+    cache.put(HOME_PAGE_CACHE_KEY, new Response(homePageHtml, { headers: { 'cache-control': cacheControl } })),
+    cache.put(ONDEMAND_CACHE_KEY, new Response(ondemandFileText, { headers: { 'cache-control': cacheControl } }))
+  ])
+  return { homePageHtml, ondemandFileText }
 }
 
-/**
- * イベント情報からツイート本文を生成
- */
-const generateTweetText = (event: Event, isUpdate: boolean): string => {
-  const action = isUpdate ? '更新' : '追加'
+type TweetOptions = { quoteTweetId?: string; replyToTweetId?: string }
 
-  // メイン店舗（最初の店舗）
-  const store = event.stores[0]
-  const storeName = STORE_NAME_LABELS[store]
-  const characterName = CHARACTER_NAME_LABELS[store] || storeName
+const buildCreateTweetBody = (text: string, opts: TweetOptions): string =>
+  JSON.stringify({
+    variables: {
+      tweet_text: text,
+      dark_request: false,
+      media: { media_entities: [], possibly_sensitive: false },
+      semantic_annotation_ids: [],
+      ...(opts.quoteTweetId ? { attachment_url: `https://x.com/i/status/${opts.quoteTweetId}` } : {}),
+      ...(opts.replyToTweetId
+        ? { reply: { in_reply_to_tweet_id: opts.replyToTweetId, exclude_reply_user_ids: [] } }
+        : {})
+    },
+    features: {
+      communities_web_enable_tweet_community_results_fetch: true,
+      c9s_tweet_anatomy_moderator_badge_enabled: true,
+      responsive_web_grok_analyze_button_fetch_trends_enabled: false,
+      responsive_web_grok_analyze_post_followups_enabled: true,
+      responsive_web_jetfuel_frame: false,
+      responsive_web_grok_share_attachment_enabled: true,
+      responsive_web_edit_tweet_api_enabled: true,
+      graphql_is_translatable_rweb_tweet_is_translatable_enabled: true,
+      view_counts_everywhere_api_enabled: true,
+      longform_notetweets_consumption_enabled: true,
+      responsive_web_twitter_article_tweet_consumption_enabled: true,
+      tweet_awards_web_tipping_enabled: false,
+      responsive_web_grok_show_grok_translated_post: false,
+      responsive_web_grok_analysis_button_from_backend: true,
+      creator_subscriptions_quote_tweet_preview_enabled: false,
+      longform_notetweets_rich_text_read_enabled: true,
+      longform_notetweets_inline_media_enabled: true,
+      profile_label_improvements_pcf_label_in_post_enabled: true,
+      rweb_tipjar_consumption_enabled: true,
+      responsive_web_graphql_exclude_directive_enabled: true,
+      verified_phone_label_enabled: false,
+      articles_preview_enabled: true,
+      responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
+      responsive_web_graphql_timeline_navigation_enabled: true,
+      responsive_web_enhance_cards_enabled: false
+    },
+    queryId: CREATE_TWEET_QUERY_ID
+  })
 
-  // 複数店舗の場合の表記
-  const length = event.stores.length
-  const storeText = length === 1 ? characterName : `${characterName}など${length}店舗`
+export class Twitter {
+  constructor(private env: Bindings) {}
 
-  const lines = [
-    `${storeText}の「${event.title}」を${action}しました！`,
-    '',
-    `https://biccame-musume.com/events/${event.uuid}`,
-    '',
-    '#ビッカメ娘',
-    '#ビックカメラ',
-    `#${storeName}`,
-    `#${characterName}`
-  ]
+  async tweet(text: string, opts: TweetOptions = {}): Promise<string> {
+    const { TWITTER_AUTH_TOKEN, TWITTER_CSRF_TOKEN } = this.env
 
-  return lines.join('\n')
-}
+    const { homePageHtml, ondemandFileText } = await getCachedTransactionInputs()
+    const tx = ClientTransaction.create({ homePageHtml, ondemandFileText })
+    const transactionId = await tx.generateTransactionId('POST', CREATE_TWEET_PATH)
 
-/**
- * イベントから引用RT用のツイートIDを抽出
- * 公式のお知らせツイート（type='announce'）を優先的に引用
- */
-const getQuoteTweetId = (event: Event): string | undefined => {
-  if (!event.referenceUrls || event.referenceUrls.length === 0) {
-    return undefined
+    const url = `https://x.com${CREATE_TWEET_PATH}`
+    const body = buildCreateTweetBody(text, opts)
+
+    console.log('[Twitter] Posting tweet:', { textLength: text.length, ...opts })
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        accept: '*/*',
+        'accept-language': 'en-US,en;q=0.9,ja;q=0.8',
+        authorization: `Bearer ${X_BEARER}`,
+        'content-type': 'application/json',
+        cookie: `auth_token=${TWITTER_AUTH_TOKEN}; ct0=${TWITTER_CSRF_TOKEN}`,
+        origin: 'https://x.com',
+        priority: 'u=1, i',
+        referer: 'https://x.com/home',
+        'sec-ch-ua': '"Google Chrome";v="147", "Not.A/Brand";v="8", "Chromium";v="147"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"macOS"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-origin',
+        'user-agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36',
+        'x-client-transaction-id': transactionId,
+        'x-csrf-token': TWITTER_CSRF_TOKEN,
+        'x-twitter-active-user': 'yes',
+        'x-twitter-auth-type': 'OAuth2Session',
+        'x-twitter-client-language': 'en'
+      },
+      body
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      if (opts.quoteTweetId && response.status === 403) {
+        console.warn('[Twitter] Quote tweet not allowed, retrying without quote:', {
+          quoteTweetId: opts.quoteTweetId,
+          error: errorText
+        })
+        return await this.tweet(text, { ...opts, quoteTweetId: undefined })
+      }
+      throw new Error(`X API error: ${response.status} ${errorText}`)
+    }
+
+    const result = (await response.json()) as {
+      data?: { create_tweet?: { tweet_results?: { result?: { rest_id?: string } } } }
+    }
+    const tweetId = result.data?.create_tweet?.tweet_results?.result?.rest_id
+    if (!tweetId) throw new Error(`X API: no rest_id in response: ${JSON.stringify(result).slice(0, 300)}`)
+    console.log('[Twitter] Tweet posted successfully:', { tweetId })
+    return tweetId
   }
 
-  // type='announce'のURLを優先
-  const announceUrl = event.referenceUrls.find((ref) => ref.type === 'announce')
-  const targetUrl = announceUrl?.url || event.referenceUrls[0].url
+  async tweetEventCreated(event: EventDetail): Promise<void> {
+    await this.tweet(buildEventCreatedText(event), {
+      quoteTweetId: getQuoteTweetId(event.referenceUrls ?? [], 'create')
+    })
+  }
 
-  return extractTweetId(targetUrl) ?? undefined
-}
-
-/**
- * Twitter APIクライアントクラス
- * イベントのツイート投稿機能を提供
- */
-export class Twitter {
-  private oauth: OAuth
-  // private isLocal: boolean
-
-  constructor(private env: Bindings) {
-    // this.isLocal = !env.ENVIRONMENT || env.ENVIRONMENT === 'local'
-
-    // OAuth 1.0aクライアントを初期化
-    this.oauth = new OAuth({
-      consumer: {
-        key: env.TWITTER_API_KEY,
-        secret: env.TWITTER_API_SECRET
-      },
-      signature_method: 'HMAC-SHA1',
-      hash_function(baseString, key) {
-        return crypto.createHmac('sha1', key).update(baseString).digest('base64')
-      }
+  async tweetEventUpdated(event: EventDetail): Promise<void> {
+    await this.tweet(buildEventUpdatedText(event), {
+      quoteTweetId: getQuoteTweetId(event.referenceUrls ?? [], 'update')
     })
   }
 
   /**
-   * ツイートを投稿
-   * 引用ツイートが失敗した場合は通常のツイートにフォールバック
+   * Post the daily-summary thread. Each tweet contains up to 3 events; the
+   * 2nd+ tweets are posted as replies to the previous tweet to form a thread.
    */
-  async tweet(text: string, quoteTweetId?: string): Promise<void> {
-    // if (this.isLocal) {
-    //   console.log('[Twitter] Skipping tweet in local environment. Would have sent:', {
-    //     text,
-    //     quoteTweetId
-    //   })
-    //   return
-    // }
-
-    const { TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } = this.env
-
-    try {
-      const url = 'https://api.twitter.com/2/tweets'
-
-      // OAuth 1.0a認証ヘッダーを生成
-      const headers = this.oauth.toHeader(
-        this.oauth.authorize(
-          {
-            url,
-            method: 'POST'
-          },
-          {
-            key: TWITTER_ACCESS_TOKEN,
-            secret: TWITTER_ACCESS_SECRET
-          }
-        )
-      )
-
-      const payload = {
-        text: text,
-        quote_tweet_id: quoteTweetId
-      }
-
-      console.log('[Twitter] Posting tweet with payload:', JSON.stringify(payload, null, 2))
-
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          ...headers,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      })
-
-      if (!response.ok) {
-        const errorText = await response.text()
-
-        // 403エラーで引用ツイートが禁止されている場合は通常のツイートにフォールバック
-        if (response.status === 503 && quoteTweetId) {
-          console.warn('[Twitter] Quote tweet not allowed, retrying without quote:', {
-            quoteTweetId,
-            error: errorText
-          })
-          return await this.tweet(text, undefined)
-        }
-
-        throw new Error(`Twitter API error: ${response.status} ${errorText}`)
-      }
-
-      const result = await response.json()
-      console.log('[Twitter] Tweet posted successfully:', result)
-    } catch (error) {
-      console.error('[Twitter] Failed to post tweet:', error)
-      throw error
+  async tweetDailySummary(events: Event[]): Promise<void> {
+    if (events.length === 0) return
+    const bodies = buildDailySummaryTweets(events)
+    const post = async (idx: number, replyToTweetId: string | undefined): Promise<void> => {
+      if (idx >= bodies.length) return
+      const id = await this.tweet(bodies[idx], { replyToTweetId })
+      await post(idx + 1, id)
     }
-  }
-
-  /**
-   * イベント作成時にツイートを投稿
-   */
-  async tweetEventCreated(event: Event): Promise<void> {
-    const text = generateTweetText(event, false)
-    const quoteTweetId = getQuoteTweetId(event)
-    await this.tweet(text, quoteTweetId)
-  }
-
-  /**
-   * イベント更新時にツイートを投稿
-   */
-  async tweetEventUpdated(event: Event): Promise<void> {
-    const text = generateTweetText(event, true)
-    const quoteTweetId = getQuoteTweetId(event)
-    await this.tweet(text, quoteTweetId)
+    await post(0, undefined)
   }
 }

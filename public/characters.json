@@ -72,13 +72,28 @@
         },
         {
           "station": "天王寺駅前駅",
-          "description": "",
           "lines": [
             "阪堺電車上町線"
           ]
         }
       ]
     }
+  },
+  {
+    "id": "air",
+    "character": {
+      "name": "Airたん",
+      "description": "AirBicCameraの擬人化キャラクター。空港で色んな国のお客様を案内している。雲のようなフワフワの髪と、マジックアワー色の瞳とスカーフが特徴的。所沢たんが憧れているお姉さん。",
+      "twitter_id": "air_biccamera",
+      "images": [
+        "images/air2.png",
+        "images/air3.png"
+      ],
+      "is_biccame_musume": false
+    },
+    "prefecture": "東京都",
+    "postal_code": null,
+    "coordinates": null
   },
   {
     "id": "akasaka",
@@ -318,7 +333,6 @@
         "カメラ館たん"
       ],
       "description": "ビックカメラ池袋東口カメラ館の擬人化キャラクター。同じ池袋の本店たんがお姉ちゃん。リボンとくせっ毛がお揃い。カメラをいつも首からさげている。",
-      "twitter_id": "",
       "images": [
         "images/camera2.png",
         "4864f8622ad3133a980acfeba567137323f7a6be.png",
@@ -433,8 +447,8 @@
           "station": "調布駅",
           "description": "広場口すぐ",
           "lines": [
-            "京王線京王相模原線",
-            ""
+            "京王相模原線",
+            "京王線"
           ]
         }
       ]
@@ -554,7 +568,6 @@
     "character": {
       "name": "ふなとーたん",
       "description": "ビックカメラ船橋東武店の擬人化キャラクター。制服のリボンのひまわりはふなたんとお揃い。風車のヘアピンをしている。アンデルセンの本が好き。",
-      "twitter_id": "",
       "images": [
         "images/funato2.png",
         "images/funato3.png",
@@ -676,7 +689,6 @@
         },
         {
           "station": "新浜松駅",
-          "description": "",
           "lines": [
             "遠州鉄道"
           ]
@@ -1111,7 +1123,6 @@
     "character": {
       "name": "京都たん",
       "description": "ビックカメラJR京都駅店の擬人化キャラクター。京都の花・ツバキと目元の紅が特徴。神楽鈴を持っている。たまに京都弁が出ることがある。",
-      "twitter_id": "",
       "images": [
         "images/kyoto2.png",
         "images/kyoto3.png",
@@ -1130,7 +1141,6 @@
     "character": {
       "name": "町田たん",
       "description": "ビックカメラ町田店の擬人化キャラクター。町田市の花・サルビアと、市の鳥・カワセミのような色の髪が特徴。前髪につけているクロスしたヘアピンと、横で結んだ髪で「町」という字になるようにしている。渋谷とアキバに遊びに行くのが好き。",
-      "twitter_id": "",
       "images": [
         "images/machida2.png",
         "images/machida3.png",
@@ -1292,7 +1302,6 @@
       "access": [
         {
           "station": "名古屋駅",
-          "description": "",
           "lines": [
             "JR東海道本線",
             "中央本線",
@@ -1450,7 +1459,6 @@
     "character": {
       "name": "お偉いたん",
       "description": "ビックカメラのお偉いたんです。あくまでもビッカメ娘達の行動を影から見守る少し恥ずかしがりやなお偉いたんです。",
-      "twitter_id": "",
       "images": [
         "oeraitan.png",
         "images/oeraitan3.png"
@@ -1565,7 +1573,6 @@
         },
         {
           "station": "岡山駅前駅",
-          "description": "",
           "lines": [
             "岡山電気軌道東山線",
             "清輝橋線"
@@ -1579,7 +1586,6 @@
     "character": {
       "name": "フォトたん",
       "description": "ビックカメラBICPHOTOの擬人化キャラクター。プロスタたんの妹。お姉ちゃんが撮った写真をプリントしてアルバムにまとめるのが好き。",
-      "twitter_id": "",
       "images": [
         "images/photo_img.png",
         "images/photo32.png",
@@ -1797,7 +1803,6 @@
         "聖蹟たん"
       ],
       "description": "ビックカメラ聖蹟桜ヶ丘駅店の擬人化キャラクター。後ろ髪にある大きな桜の花が特徴。ツイートに桜の花を咲かせるのが得意。",
-      "twitter_id": "",
       "images": [
         "seiseki2.png",
         "images/seiseki3.png",
@@ -2283,7 +2288,6 @@
     "character": {
       "name": "たまプラたん",
       "description": "ビックカメライトーヨーカドーたまプラーザ店の擬人化キャラクター。青葉が輝くような鮮やかな緑色の髪をポニーテールにしている。ヤマザクラをイメージしたアクセサリーを付けている。大人っぽい雰囲気が漂っている。",
-      "twitter_id": "",
       "images": [
         "images/tamapla2.png",
         "images/tamapla3.png",

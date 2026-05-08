@@ -1,9 +1,10 @@
 import { useSuspenseQueries } from '@tanstack/react-query'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { useAtom, useAtomValue } from 'jotai'
-import { Calendar, Filter, Gift, LayoutGrid, Settings } from 'lucide-react'
+import { useAtom } from 'jotai'
+import { Calendar, Filter, Gift, LayoutGrid, X } from 'lucide-react'
 import { Suspense, useEffect, useMemo, useState } from 'react'
+import { z } from 'zod'
 import { categoryFilterAtom } from '@/atoms/category-filter-atom'
 import { eventListStatusFilterAtom } from '@/atoms/event-list-status-filter-atom'
 import { eventPageAtom } from '@/atoms/event-page-atom'
@@ -15,6 +16,7 @@ import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { EventStatusFilter } from '@/components/events/event-status-filter'
+import { EventStoreFilter } from '@/components/events/event-store-filter'
 import { EventUserActivityFilter } from '@/components/events/event-user-activity-filter'
 import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { Button } from '@/components/ui/button'
@@ -30,6 +32,8 @@ const PER_PAGE = 12
  * イベント一覧のコンテンツ
  */
 const EventsContent = () => {
+  const { store: storeParam } = Route.useSearch()
+  const navigate = Route.useNavigate()
   const [eventsQuery, charactersQuery] = useSuspenseQueries({
     queries: [
       {
@@ -49,12 +53,42 @@ const EventsContent = () => {
   const events = eventsQuery.data
   const characters = charactersQuery.data
 
-  const categoryFilter = useAtomValue(categoryFilterAtom)
-  const regionFilter = useAtomValue(regionFilterAtom)
+  const [categoryFilter, setCategoryFilter] = useAtom(categoryFilterAtom)
+  const [regionFilter, setRegionFilter] = useAtom(regionFilterAtom)
   const [viewMode, setViewMode] = useAtom(eventViewModeAtom)
-  const [statusFilter] = useAtom(eventListStatusFilterAtom)
-  const [activityFilter] = useAtom(eventUserActivityFilterAtom)
+  const [statusFilter, setStatusFilter] = useAtom(eventListStatusFilterAtom)
+  const [activityFilter, setActivityFilter] = useAtom(eventUserActivityFilterAtom)
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+
+  // 店舗フィルタはURLを唯一のsource of truthとして扱う（atomとの双方向同期は循環参照になるため避ける）
+  const storeFilter = storeParam ?? null
+  const setStoreFilter = (next: string | null) => {
+    navigate({ search: (prev) => ({ ...prev, store: next ?? undefined }), replace: true })
+  }
+
+  const DEFAULT_CATEGORY = new Set(['ackey', 'limited_card', 'regular_card', 'other'] as const)
+  const DEFAULT_STATUS = { upcoming: true, ongoing: true, ended: false }
+  const DEFAULT_ACTIVITY = { hideInterested: false, hideCompleted: false }
+  const DEFAULT_REGION = 'all' as const
+
+  const isFilterActive =
+    regionFilter !== DEFAULT_REGION ||
+    statusFilter.upcoming !== DEFAULT_STATUS.upcoming ||
+    statusFilter.ongoing !== DEFAULT_STATUS.ongoing ||
+    statusFilter.ended !== DEFAULT_STATUS.ended ||
+    activityFilter.hideInterested !== DEFAULT_ACTIVITY.hideInterested ||
+    activityFilter.hideCompleted !== DEFAULT_ACTIVITY.hideCompleted ||
+    categoryFilter.size !== DEFAULT_CATEGORY.size ||
+    [...DEFAULT_CATEGORY].some((c) => !categoryFilter.has(c)) ||
+    storeFilter !== null
+
+  const handleResetFilters = () => {
+    setCategoryFilter(new Set(['ackey', 'limited_card', 'regular_card', 'other']))
+    setRegionFilter(DEFAULT_REGION)
+    setStatusFilter(DEFAULT_STATUS)
+    setActivityFilter(DEFAULT_ACTIVITY)
+    setStoreFilter(null)
+  }
   const [page, setPage] = useAtom(eventPageAtom)
   const { interestedEvents, completedEvents } = useUserActivity()
   // 店舗キー(id)から都道府県を取得するマップ
@@ -68,6 +102,16 @@ const EventsContent = () => {
     return map
   }, [characters])
 
+  // 店舗が指定されたら対応する地域を自動で設定（URLシェア時の利便性）
+  // 注: regionFilter を依存に入れると手動変更時に上書きされてしまうので除外
+  useEffect(() => {
+    if (storeFilter === null) return
+    const prefecture = storePrefectureMap.get(storeFilter)
+    if (!prefecture) return
+    const region = prefectureToRegion[prefecture]
+    if (region) setRegionFilter(region)
+  }, [storeFilter, storePrefectureMap, setRegionFilter])
+
   // 開催中・開催予定のイベントをフィルタリング
   const activeEvents = useMemo(() => {
     const currentTime = dayjs()
@@ -75,6 +119,11 @@ const EventsContent = () => {
       .filter((event) => {
         // カテゴリフィルター
         if (!categoryFilter.has(event.category)) return false
+
+        // 店舗フィルター
+        if (storeFilter !== null) {
+          if (!event.stores?.includes(storeFilter as never)) return false
+        }
 
         // 地域フィルター
         if (regionFilter !== 'all') {
@@ -111,17 +160,13 @@ const EventsContent = () => {
         if (isInterested && activityFilter.hideInterested) return false
         if (isCompleted && activityFilter.hideCompleted) return false
 
-        // 終了後1週間経過したイベントは非表示
-        if (endDate?.add(7, 'day').isBefore(currentTime)) {
-          return false
-        }
-
         return true
       })
       .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
   }, [
     events,
     categoryFilter,
+    storeFilter,
     regionFilter,
     storePrefectureMap,
     statusFilter,
@@ -131,43 +176,58 @@ const EventsContent = () => {
   ])
 
   // フィルター変更時にページを1にリセット
+  // biome-ignore lint/correctness/useExhaustiveDependencies: filter vars are watched intentionally to trigger page reset
   useEffect(() => {
     setPage(1)
-  }, [setPage])
+  }, [setPage, categoryFilter, storeFilter, regionFilter, statusFilter, activityFilter])
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
       <div className='flex flex-col gap-2'>
         {/* ヘッダーとボタン群 */}
         <div className='flex items-center justify-between gap-4'>
-          <h1 className='text-2xl font-bold text-gray-900'>イベント一覧</h1>
+          <h1 className='text-2xl font-bold text-foreground'>イベント一覧</h1>
           <div className='flex items-center gap-2'>
             {/* モバイル: フィルターボタン */}
             <Sheet open={filterSheetOpen} onOpenChange={setFilterSheetOpen}>
               <SheetTrigger asChild>
-                <Button size='sm' variant='ghost' className='md:hidden h-8 w-8 p-0'>
+                <Button
+                  size='sm'
+                  variant='ghost'
+                  className='md:hidden relative h-9 w-9 p-0 text-muted-foreground hover:text-foreground'
+                >
                   <Filter className='size-4' />
+                  {isFilterActive && (
+                    <span className='absolute top-0.5 right-0.5 size-2 rounded-full bg-brand' aria-hidden />
+                  )}
                 </Button>
               </SheetTrigger>
-              <SheetContent side='bottom' className='h-[55vh]'>
+              <SheetContent side='bottom' className='h-auto max-h-[85vh] flex flex-col'>
                 <SheetHeader>
                   <SheetTitle>フィルター</SheetTitle>
                   <SheetDescription>イベントの絞り込み条件を選択してください</SheetDescription>
                 </SheetHeader>
-                <div className='px-4'>
-                  <div className='space-y-6 overflow-y-auto h-[calc(90vh-72px)] pb-6'>
-                    {/* 種別フィルター */}
+                <div className='flex-1 overflow-y-auto px-4'>
+                  <div className='space-y-6 pb-4'>
                     <EventCategoryFilter />
-
-                    {/* ステータスフィルタ */}
                     <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
-
-                    {/* ユーザーアクティビティフィルタ */}
                     <EventUserActivityFilter />
-
-                    {/* 地域フィルター */}
                     <RegionFilterControl />
+                    <EventStoreFilter value={storeFilter} onChange={setStoreFilter} />
                   </div>
+                </div>
+                <div className='border-t border-card px-4 py-3'>
+                  <Button
+                    variant='outline'
+                    size='sm'
+                    onClick={handleResetFilters}
+                    disabled={!isFilterActive}
+                    aria-label='フィルターをクリア'
+                    className='w-full gap-1'
+                  >
+                    <X className='size-4' />
+                    フィルターをクリア
+                  </Button>
                 </div>
               </SheetContent>
             </Sheet>
@@ -177,28 +237,40 @@ const EventsContent = () => {
               size='sm'
               pressed={viewMode === 'grid'}
               onPressedChange={(pressed) => setViewMode(pressed ? 'grid' : 'gantt')}
-              className='h-8 w-8 p-0 text-gray-600 hover:text-gray-900 data-[state=on]:text-gray-900'
+              className='h-9 w-9 p-0 text-muted-foreground hover:text-foreground'
             >
               {viewMode === 'grid' ? <LayoutGrid className='size-4' /> : <Calendar className='size-4' />}
             </Toggle>
-            <Button asChild size='sm' variant='ghost' className='gap-2 text-gray-600 hover:text-gray-900'>
-              <Link to='/admin/events'>
-                <Settings className='size-4' />
-                管理
-              </Link>
-            </Button>
           </div>
         </div>
 
         {/* デスクトップ: インラインフィルター */}
         <div className='hidden md:flex md:flex-col md:gap-2'>
-          {/* 種別フィルター */}
-          <EventCategoryFilter />
+          {/* 種別フィルターと店舗フィルター */}
+          <div className='flex items-start gap-4'>
+            <div className='flex-1'>
+              <EventCategoryFilter />
+            </div>
+            <div className='w-64 shrink-0'>
+              <EventStoreFilter value={storeFilter} onChange={setStoreFilter} />
+            </div>
+          </div>
 
           {/* ステータスフィルタとマイアクティビティフィルタ */}
-          <div className='flex gap-4'>
+          <div className='flex items-center gap-4'>
             <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
             <EventUserActivityFilter />
+            <Toggle
+              size='sm'
+              pressed={false}
+              onPressedChange={() => handleResetFilters()}
+              disabled={!isFilterActive}
+              aria-label='フィルターをクリア'
+              title='フィルターをクリア'
+              className='ml-auto h-8 w-8 p-0 text-muted-foreground hover:text-foreground data-[state=on]:text-foreground'
+            >
+              <X className='size-4' />
+            </Toggle>
           </div>
 
           {/* 地域フィルター */}
@@ -215,7 +287,7 @@ const EventsContent = () => {
             page={page}
             onPageChange={setPage}
             emptyState={
-              <div className='text-center py-12 text-gray-500'>
+              <div className='text-center py-12 text-muted-foreground'>
                 <Gift className='size-12 mx-auto mb-4 opacity-30' />
                 <p>開催中・開催予定のイベントはありません</p>
               </div>
@@ -239,5 +311,8 @@ const EventsPage = () => {
 }
 
 export const Route = createFileRoute('/events/')({
+  validateSearch: z.object({
+    store: z.string().optional()
+  }),
   component: EventsPage
 })

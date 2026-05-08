@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Loader2, MapPin, Route as RouteIcon } from 'lucide-react'
 import { Suspense, useCallback, useMemo, useState } from 'react'
+import { toast } from 'sonner'
+import { LoadingFallback } from '@/components/common/loading-fallback'
 import {
   type AvailableStore,
   type RouteResult,
@@ -127,7 +129,11 @@ const RouteCalculator = () => {
     const tspResult = solveTsp(selectedStores)
 
     // APIで経路情報を取得
-    const legs = await getDirections(tspResult.route)
+    const { legs, degraded } = await getDirections(tspResult.route)
+
+    if (degraded) {
+      toast.warning('経路情報の取得に問題が発生しました。表示中の所要時間は概算です。')
+    }
 
     setResult({
       route: tspResult.route,
@@ -188,7 +194,7 @@ const RouteCalculator = () => {
 
 function RouteComponent() {
   return (
-    <Suspense fallback={<div className='p-4 text-center'>読み込み中...</div>}>
+    <Suspense fallback={<LoadingFallback />}>
       <RouteCalculator />
     </Suspense>
   )

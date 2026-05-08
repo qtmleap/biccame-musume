@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 import { type SortType, sortTypeAtom } from '@/atoms/sort-atom'
 import { Button } from '@/components/ui/button'
+import { DURATION } from '@/lib/motion'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { SORT_LABELS } from '@/locales/app.content'
 
@@ -46,16 +48,20 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
         className='flex items-center justify-between w-full sm:hidden mb-3'
       >
         <div className='flex items-center gap-2'>
-          <ArrowUpDown className='h-4 w-4 text-gray-600' />
-          <span className='text-sm font-medium text-gray-700'>並び替え: {currentOption?.label}</span>
+          <ArrowUpDown className='h-4 w-4 text-muted-foreground' />
+          <span className='text-sm font-medium text-muted-foreground'>並び替え: {currentOption?.label}</span>
         </div>
-        {isOpen ? <ChevronUp className='h-4 w-4 text-gray-600' /> : <ChevronDown className='h-4 w-4 text-gray-600' />}
+        {isOpen ? (
+          <ChevronUp className='h-4 w-4 text-muted-foreground' />
+        ) : (
+          <ChevronDown className='h-4 w-4 text-muted-foreground' />
+        )}
       </button>
 
       {/* デスクトップ用ヘッダー */}
       <div className='hidden sm:flex items-center gap-2 mb-3'>
-        <ArrowUpDown className='h-4 w-4 text-gray-600' />
-        <span className='text-sm font-medium text-gray-700'>並び替え</span>
+        <ArrowUpDown className='h-4 w-4 text-muted-foreground' />
+        <span className='text-sm font-medium text-muted-foreground'>並び替え</span>
       </div>
 
       {/* ボタングリッド（モバイルでは開閉可能） */}
@@ -68,28 +74,36 @@ export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps)
               opacity: isOpen ? 1 : 0
             }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className='overflow-hidden sm:h-auto! sm:opacity-100!'
+            transition={{ duration: DURATION.normal, ease: 'easeInOut' }}
+            className='overflow-hidden sm:h-auto! sm:opacity-100! sm:overflow-visible'
           >
-            <div className='grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 sm:mt-0'>
+            <div className='grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 sm:mt-0 py-1'>
               {sortOptions.map((option) => {
                 const isSelected = sortType === option.value
 
                 return (
-                  <Button
+                  <motion.div
                     key={option.value}
-                    variant='outline'
-                    size='sm'
-                    onClick={() => handleSortChange(option.value)}
-                    className={cn(
-                      'w-full text-xs',
-                      isSelected
-                        ? 'bg-green-500/50 text-white border-green-500/50 hover:bg-green-500/60 hover:text-white dark:bg-green-500/50 dark:text-white dark:border-green-500/50 dark:hover:bg-green-500/60'
-                        : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-200/90 dark:text-gray-800 dark:border-gray-300 dark:hover:bg-gray-200 dark:hover:text-gray-800'
-                    )}
+                    className='w-full'
+                    style={{ filter: STICKER_SHADOW_SM }}
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={STICKER_HOVER_TRANSITION}
                   >
-                    {option.label}
-                  </Button>
+                    <Button
+                      variant='secondary'
+                      size='sm'
+                      onClick={() => handleSortChange(option.value)}
+                      className={cn(
+                        'w-full text-sm rounded-full border',
+                        isSelected
+                          ? 'bg-brand text-brand-foreground border-brand hover:bg-brand/90'
+                          : 'bg-button-surface text-foreground border-card-border hover:bg-button-surface-hover'
+                      )}
+                    >
+                      {option.label}
+                    </Button>
+                  </motion.div>
                 )
               })}
             </div>

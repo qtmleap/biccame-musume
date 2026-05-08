@@ -6,12 +6,16 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 // dayjs設定
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
+import 'dayjs/locale/ja'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { toast } from 'sonner'
+import { IosInstallPrompt } from '@/components/pwa/install-prompt-ios'
+import { showUpdatePrompt, UpdatePrompt } from '@/components/pwa/update-prompt'
 import { Toaster } from '@/components/ui/sonner'
+import { clearAllCaches } from '@/lib/pwa-cache'
 import { client } from '@/utils/client'
 // フォントのインポート
 import '@fontsource/noto-sans-jp/400.css'
@@ -28,8 +32,10 @@ import { routeTree } from './routeTree.gen'
 import '../index.css'
 import { QueryClient } from '@tanstack/react-query'
 
+dayjs.extend(relativeTime)
 dayjs.extend(utc)
 dayjs.extend(timezone)
+dayjs.locale('ja')
 dayjs.tz.setDefault('Asia/Tokyo')
 
 // Service Worker登録
@@ -38,16 +44,14 @@ let refreshing = false
 navigator.serviceWorker?.addEventListener('controllerchange', () => {
   if (refreshing) return
   refreshing = true
-  window.location.reload()
+  // サブルートでリロードすると404になるためトップに遷移
+  window.location.replace('/')
 })
 
 registerSW({
   immediate: true,
   onNeedRefresh() {
-    toast('新しいバージョンに更新します...', {
-      description: '数秒後に自動的にページが更新されます',
-      duration: 3000
-    })
+    showUpdatePrompt()
   },
   onOfflineReady() {
     console.log('App ready to work offline')
@@ -130,6 +134,7 @@ const checkVersionAndClearCache = () => {
       console.log('[App] Old cache detected on first access. Clearing cache...')
       localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
       queryClient.clear()
+      clearAllCaches().catch((err: unknown) => console.error('[App] Failed to clear caches:', err))
       console.log('[App] Cache cleared successfully')
     }
     localStorage.setItem(STORAGE_KEY, currentVersion)
@@ -139,6 +144,7 @@ const checkVersionAndClearCache = () => {
     console.log(`[App] Version changed from ${storedVersion} to ${currentVersion}. Clearing cache...`)
     localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
     queryClient.clear()
+    clearAllCaches().catch((err: unknown) => console.error('[App] Failed to clear caches:', err))
     localStorage.setItem(STORAGE_KEY, currentVersion)
     console.log('[App] Cache cleared successfully')
   } else {
@@ -146,43 +152,8 @@ const checkVersionAndClearCache = () => {
   }
 }
 
-/**
- * サーバーのバージョンをAPIで確認し、デプロイ後の更新をユーザーに通知する
- */
-const checkServerVersion = async () => {
-  const STORAGE_KEY = 'SERVER_VERSION_HASH'
-  try {
-    const data = await client.getVersion()
-    const serverHash = data.hash
-    const storedHash = localStorage.getItem(STORAGE_KEY)
-
-    if (!storedHash) {
-      // 初回アクセス: ハッシュを保存するだけで通知しない
-      localStorage.setItem(STORAGE_KEY, serverHash)
-      console.log(`[App] Server version hash stored: ${serverHash}`)
-      return
-    }
-
-    if (storedHash !== serverHash) {
-      console.log(`[App] Server version changed: ${storedHash} → ${serverHash}`)
-      localStorage.setItem(STORAGE_KEY, serverHash)
-      toast('新しいバージョンが利用可能です', {
-        description: 'ページを更新すると最新版に切り替わります',
-        duration: 10000,
-        action: {
-          label: '更新する',
-          onClick: () => window.location.reload()
-        }
-      })
-    }
-  } catch (e) {
-    console.debug('[App] Server version check failed:', e)
-  }
-}
-
 // アプリ起動時にバージョンチェックを実行
 checkVersionAndClearCache()
-checkServerVersion()
 
 // Render the app
 // biome-ignore lint/style/noNonNullAssertion: reason
@@ -205,7 +176,17 @@ if (!rootElement.innerHTML) {
         }}
       >
         <RouterProvider router={router} />
-        <Toaster />
+        <Toaster
+          toastOptions={{
+            classNames: {
+              toast: 'text-popover-foreground',
+              title: 'text-popover-foreground font-semibold',
+              description: 'text-popover-foreground/80'
+            }
+          }}
+        />
+        <UpdatePrompt />
+        <IosInstallPrompt />
       </PersistQueryClientProvider>
     </StrictMode>
   )

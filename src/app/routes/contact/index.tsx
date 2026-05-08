@@ -1,56 +1,77 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ExternalLink } from 'lucide-react'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
 /**
  * お問い合わせページ
  */
 const RouteComponent = () => {
   return (
-    <div className='min-h-screen bg-linear-to-b from-blue-50 to-white'>
+    <div className='min-h-screen'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
-        <h1 className='text-2xl font-bold mb-8 text-gray-900'>お問い合わせ</h1>
+        <h1 className='text-2xl font-bold mb-8 text-foreground'>お問い合わせ</h1>
 
         <div className='space-y-12'>
-          {/* 注意事項 */}
+          {/* お問い合わせ先のご案内 */}
           <section>
-            <h2 className='text-xl md:text-2xl font-bold mb-4 text-gray-800 border-b-2 border-[#e50012] pb-2'>
-              ご注意ください
+            <h2 className='text-xl md:text-2xl font-bold mb-4 text-foreground border-b-2 border-brand pb-2'>
+              お問い合わせ先のご案内
             </h2>
-            <div className='space-y-3 text-gray-700'>
-              <p>このサイトは非公式ファンサイトです。</p>
+            <div className='space-y-4 text-muted-foreground'>
               <p>
-                ビックカメラ公式やビッカメ娘に関する公式のお問い合わせは、
-                <a
-                  href='https://www.biccamera.co.jp/company/contact.html'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-[#e50012] hover:underline inline-flex items-center gap-1'
-                >
-                  ビックカメラ公式サイト
-                  <ExternalLink className='h-4 w-4' />
-                </a>
-                からお願いいたします。
+                本サイトはファンが個人で運営している応援サイトです。お問い合わせ内容に応じて、最適な窓口を以下にご案内します。
               </p>
+              <ul className='space-y-3'>
+                <li>
+                  <p className='font-bold text-foreground'>ビックカメラの製品・サービス・店舗等について</p>
+                  <a
+                    href='https://www.biccamera.com/bc/c/info/enqueteselect/index.jsp'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='text-brand hover:underline inline-flex items-center gap-1 text-sm'
+                  >
+                    ビックカメラ公式のお問い合わせ窓口
+                    <ExternalLink className='h-4 w-4' />
+                  </a>
+                </li>
+                <li>
+                  <p className='font-bold text-foreground'>ビッカメ娘キャラクター自体について</p>
+                  <a
+                    href='https://www.itall.co.jp/contact/'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='text-brand hover:underline inline-flex items-center gap-1 text-sm'
+                  >
+                    アイティオール株式会社のお問い合わせフォーム
+                    <ExternalLink className='h-4 w-4' />
+                  </a>
+                  <span className='block text-xs mt-1'>※ お問合せ区分は「その他お問い合わせ」をご選択ください。</span>
+                </li>
+                <li>
+                  <p className='font-bold text-foreground'>本サイトの不具合・ご意見・ご要望について</p>
+                  <span className='text-sm'>下記「当サイトに関するお問い合わせ」の窓口をご利用ください。</span>
+                </li>
+              </ul>
             </div>
           </section>
 
           {/* サイトに関するお問い合わせ */}
           <section>
-            <h2 className='text-xl md:text-2xl font-bold mb-4 text-gray-800 border-b-2 border-[#e50012] pb-2'>
+            <h2 className='text-xl md:text-2xl font-bold mb-4 text-foreground border-b-2 border-brand pb-2'>
               当サイトに関するお問い合わせ
             </h2>
-            <div className='space-y-4 text-gray-700'>
+            <div className='space-y-4 text-muted-foreground'>
               <p>当サイトの不具合報告、改善のご提案、その他ご意見・ご要望は、以下の方法でお寄せください。</p>
 
               <div className='space-y-4 mt-6'>
                 <div>
-                  <h3 className='font-bold text-gray-800 mb-2'>GitHub Issues（推奨）</h3>
+                  <h3 className='font-bold text-foreground mb-2'>GitHub Issues（推奨）</h3>
                   <p className='text-sm mb-3'>技術的な不具合報告や機能要望は、GitHubのIssuesでお願いします。</p>
                   <a
                     href='https://github.com/qtmleap/vite-hono-workers/issues'
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium text-sm'
+                    className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-social-github text-social-github-foreground rounded-lg hover:bg-social-github/90 transition-colors font-medium text-sm'
                   >
                     <ExternalLink className='h-3.5 w-3.5' />
                     GitHubでIssueを作成
@@ -58,7 +79,7 @@ const RouteComponent = () => {
                 </div>
 
                 <div>
-                  <h3 className='font-bold text-gray-800 mb-2'>Googleフォーム (簡単なお問い合わせ) </h3>
+                  <h3 className='font-bold text-foreground mb-2'>Googleフォーム (簡単なお問い合わせ) </h3>
                   <p className='text-sm mb-3'>簡単なご意見・ご要望はこちらのフォームからお寄せください。</p>
                   <a
                     href='https://forms.gle/kpD1EQZQRZdeNDUQ6'
@@ -72,13 +93,13 @@ const RouteComponent = () => {
                 </div>
 
                 <div>
-                  <h3 className='font-bold text-gray-800 mb-2'>X (旧Twitter)</h3>
+                  <h3 className='font-bold text-foreground mb-2'>X (旧Twitter)</h3>
                   <p className='text-sm mb-3'>カジュアルなご意見やご感想は、Xでお気軽にお寄せください。</p>
                   <a
                     href='https://x.com/ultemica'
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-medium text-sm'
+                    className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-social-x text-social-x-foreground rounded-lg hover:bg-social-x/90 transition-colors font-medium text-sm'
                   >
                     <ExternalLink className='h-3.5 w-3.5' />
                     @ultemica をフォロー
@@ -90,41 +111,48 @@ const RouteComponent = () => {
 
           {/* よくある質問 */}
           <section>
-            <h2 className='text-xl md:text-2xl font-bold mb-4 text-gray-800 border-b-2 border-[#e50012] pb-2'>
+            <h2 className='text-xl md:text-2xl font-bold mb-4 text-foreground border-b-2 border-brand pb-2'>
               よくある質問
             </h2>
-            <div className='space-y-4 text-gray-700'>
-              <div>
-                <h3 className='font-bold text-gray-800 mb-2'>Q. 投票は何回できますか？</h3>
-                <p className='text-sm'>
+            <Accordion type='single' collapsible className='text-muted-foreground'>
+              <AccordionItem value='voting'>
+                <AccordionTrigger className='font-bold text-foreground'>Q. 投票は何回できますか？</AccordionTrigger>
+                <AccordionContent className='text-sm'>
                   A.
                   各ビッカメ娘に1日1回投票できます。全員に投票するも良し、毎日推しに投票するも良し、自由に応援してください。
-                </p>
-              </div>
+                </AccordionContent>
+              </AccordionItem>
 
-              <div>
-                <h3 className='font-bold text-gray-800 mb-2'>Q. キャラクター情報が古い・間違っています</h3>
-                <p className='text-sm'>
+              <AccordionItem value='outdated-info'>
+                <AccordionTrigger className='font-bold text-foreground'>
+                  Q. キャラクター情報が古い・間違っています
+                </AccordionTrigger>
+                <AccordionContent className='text-sm'>
                   A. 申し訳ございません。上記のGitHub
                   IssuesまたはXでご報告いただけますと幸いです。確認のうえ修正いたします。
-                </p>
-              </div>
+                </AccordionContent>
+              </AccordionItem>
 
-              <div>
-                <h3 className='font-bold text-gray-800 mb-2'>Q. 新しいビッカメ娘が追加されていません</h3>
-                <p className='text-sm'>
+              <AccordionItem value='new-character'>
+                <AccordionTrigger className='font-bold text-foreground'>
+                  Q. 新しいビッカメ娘が追加されていません
+                </AccordionTrigger>
+                <AccordionContent className='text-sm'>
                   A.
                   公式サイトの更新を定期的にチェックしておりますが、反映が遅れる場合があります。お気づきの点がございましたらご連絡ください。
-                </p>
-              </div>
+                </AccordionContent>
+              </AccordionItem>
 
-              <div>
-                <h3 className='font-bold text-gray-800 mb-2'>Q. このサイトはビックカメラ公式ですか？</h3>
-                <p className='text-sm'>
-                  A. いいえ、非公式のファンサイトです。ビックカメラおよび関連企業とは一切関係ありません。
-                </p>
-              </div>
-            </div>
+              <AccordionItem value='official'>
+                <AccordionTrigger className='font-bold text-foreground'>
+                  Q. このサイトはどなたが運営していますか？
+                </AccordionTrigger>
+                <AccordionContent className='text-sm'>
+                  A.
+                  ファンが個人で運営している応援サイトです。公式の運営とは独立しており、キャラクター使用のガイドラインを踏まえた非営利のファン活動として制作しています。
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </section>
         </div>
       </div>

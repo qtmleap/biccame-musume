@@ -2,7 +2,6 @@ import type { Dictionary } from 'intlayer'
 import {
   type EventCategory,
   EventCategorySchema,
-  type EventConditionType,
   EventConditionTypeSchema,
   type EventStatus,
   EventStatusSchema,
@@ -182,13 +181,14 @@ const appContent = {
       completedEvents: '達成したイベント',
       noCompletedEvents: 'まだ達成したイベントがありません',
       viewAll: '一覧を見る',
-      backToMyPage: 'マイページに戻る',
       findEvents: 'イベントを探す'
     },
     filter: {
       region: '地域で絞り込み',
       category: '種別で絞り込み',
-      status: '開催状況で絞り込み'
+      status: '開催状況で絞り込み',
+      store: '店舗で絞り込み',
+      storeAll: 'すべての店舗'
     },
     sort: {
       random: 'ランダム',
@@ -208,27 +208,38 @@ const appContent = {
       untilEnd: '〜なくなり次第',
       untilStockLasts: '〜なくなり次第終了',
       firstCome: '先着',
+      firstComeWithCount: '先着{count}名',
       lottery: '抽選',
       lotteryWithCount: '抽選{count}名',
       everyone: '全員に配布',
       storeAndOthers: '{stores} 他'
     },
     navigation: {
-      characters: 'ビッカメ娘一覧',
-      events: 'イベント一覧',
-      calendar: '誕生日一覧',
+      characters: 'ビッカメ娘',
+      events: 'イベント',
+      calendar: '誕生日',
       location: 'マップ',
       ranking: '総選挙',
+      badges: 'バッジ',
       closeMenu: 'メニューを閉じる',
       openMenu: 'メニューを開く'
     },
     admin: {
       eventManagement: 'イベント管理',
       eventManagementDesc: 'アクキー配布などのイベントを登録・管理',
+      badgeManagement: 'バッジ管理',
+      badgeManagementDesc: '特別バッジの作成・編集と表示の調整',
+      commentManagement: 'コメント管理',
+      commentManagementDesc: 'イベントコメントの確認と削除',
+      userManagement: 'ユーザー管理',
+      userManagementDesc: '登録ユーザーの一覧確認',
       eventEdit: 'イベント編集',
       eventNew: '新規イベント登録',
+      eventCopy: 'イベントをコピーして新規作成',
       eventEditDesc: 'イベント情報を編集',
       eventNewDesc: 'アクキー配布などのイベント情報を入力',
+      eventCopyDesc: '既存イベントの内容を元に新しいイベントを作成',
+      eventCopyAction: 'コピー',
       startDate: '開始日',
       endDateHint: '配布が終了した場合に設定すると、自動的に「終了」として扱われます',
       selectCategory: '種別を選択',
@@ -259,6 +270,95 @@ const appContent = {
     },
     route: {
       station: '駅'
+    },
+    badge: {
+      rarity: {
+        common: 'コモン',
+        rare: 'レア',
+        epic: 'エピック',
+        legendary: 'レジェンダリー',
+        mythic: 'ミシック'
+      },
+      earnedCount: '獲得 {count}人',
+      hidden: '非表示',
+      special: '特別',
+      template: {
+        storeVisit: {
+          name: '{storeName}',
+          description: '{storeName}を訪問した',
+          hint: '{storeName}を訪問するとゲットできます'
+        },
+        areaAny: {
+          name: '{areaLabel}デビュー',
+          description: '{areaLabel}のいずれかの店舗を訪問した',
+          hint: '{areaLabel}の店舗を 1 店以上訪問するとゲットできます'
+        },
+        areaComplete: {
+          name: '{areaLabel}コンプ',
+          description: '{areaLabel}の全 {storeCount} 店舗を訪問した',
+          hint: '{areaLabel}の全店舗を訪問するとゲットできます'
+        },
+        visitMilestone: {
+          name: '{count} 店訪問',
+          description: '累計 {count} 店舗を訪問した',
+          hint: '{count} 店舗を訪問するとゲットできます'
+        },
+        visitMilestoneAll: {
+          name: '全店訪問',
+          description: '全 {totalStores} 店舗を訪問した',
+          hint: '全 {totalStores} 店舗を訪問するとゲットできます'
+        },
+        visitAllAreas: {
+          name: '全国デビュー',
+          description: '全 10 地区それぞれで 1 店舗以上を訪問した',
+          hint: '各地区から 1 店ずつ訪問するとゲット'
+        },
+        eventCount: {
+          name: 'イベント {count} 件',
+          description: 'イベントを {count} 件達成した',
+          hint: 'イベントを {count} 件達成するとゲットできます'
+        },
+        eventClearAtStore: {
+          name: '{storeName}',
+          description: '{storeName}のイベントを達成した',
+          hint: '{storeName}で開催されたイベントを 1 件以上達成するとゲットできます'
+        },
+        eventClearAtStoreMultiple: {
+          name: '{storeName} {count}回',
+          description: '{storeName}のイベントを {count} 回達成した',
+          hint: '{storeName}で開催されたイベントを {count} 回以上達成するとゲットできます'
+        },
+        eventClearAreaAny: {
+          name: '{areaLabel}デビュー',
+          description: '{areaLabel}のいずれかの店舗でイベントを達成した',
+          hint: '{areaLabel}の店舗で 1 件以上イベントを達成するとゲットできます'
+        },
+        eventClearAreaComplete: {
+          name: '{areaLabel}コンプ',
+          description: '{areaLabel}の全 {storeCount} 店舗でイベントを達成した',
+          hint: '{areaLabel}の全店舗でイベントを達成するとゲットできます'
+        },
+        clearMilestone: {
+          name: '{count} 店達成',
+          description: '{count} 店舗でイベントを達成した',
+          hint: '{count} 店舗でイベントを達成するとゲットできます'
+        },
+        clearMilestoneAll: {
+          name: '全店イベント達成',
+          description: '全 {totalStores} 店舗でイベントを達成した',
+          hint: '全 {totalStores} 店舗でイベントを達成するとゲットできます'
+        },
+        clearAllAreas: {
+          name: '全国達成',
+          description: '全 10 地区それぞれで 1 件以上イベント達成した',
+          hint: '各地区で 1 件ずつイベント達成するとゲット'
+        },
+        voteTotal: {
+          name: '投票 {count} 票',
+          description: '累計 {count} 票投票した',
+          hint: '累計 {count} 票投票するとゲットできます'
+        }
+      }
     },
     lineSticker: {
       biccameMusume: 'ビッカメ娘',
@@ -315,7 +415,6 @@ export default appContent
 // コンポーネントから使いやすいようにエクスポート
 export const EVENT_STATUS_LABELS = appContent.content.status as Record<EventStatus, string>
 export const EVENT_CATEGORY_LABELS = appContent.content.category as Record<EventCategory, string>
-export const EVENT_CONDITION_LABELS = appContent.content.condition as Record<EventConditionType, string>
 export const REFERENCE_URL_TYPE_LABELS = appContent.content.ref as Record<ReferenceUrlType, string>
 export const REFERENCE_URL_TYPE_LABELS_LONG = appContent.content.refLong as Record<ReferenceUrlType, string>
 export const REGION_LABELS = appContent.content.region as Record<Region, string>
@@ -335,10 +434,13 @@ export const ROUTE_LABELS = appContent.content.route
 export const LINE_STICKER_LABELS = appContent.content.lineSticker
 export const DATE_LABELS = appContent.content.date
 export const HOME_LABELS = appContent.content.home
-export const SHARE_LABELS = appContent.content.share
 export const CONFIRMATION_LABELS = appContent.content.confirmation
 export const EVENT_LIST_LABELS = appContent.content.eventList
-export const BIRTHDAY_DIALOG_LABELS = appContent.content.birthdayDialog
 export const EVENT_LIST_ITEM_LABELS = appContent.content.eventListItem
 export const GANTT_CHART_LABELS = appContent.content.ganttChart
-export const COMMON_LABELS = appContent.content.common
+export const BADGE_LABELS = appContent.content.badge
+export const BADGE_RARITY_LABELS = appContent.content.badge.rarity as Record<
+  'common' | 'rare' | 'epic' | 'legendary' | 'mythic',
+  string
+>
+export const BADGE_TEMPLATES = appContent.content.badge.template

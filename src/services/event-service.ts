@@ -1,13 +1,23 @@
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { HTTPException } from 'hono/http-exception'
-import { nullToUndefined } from '@/lib/utils'
-import { type Event, type EventRequest, EventSchema, type EventStatus, EventStatusSchema } from '@/schemas/event.dto'
+import { getPrisma } from '@/lib/prisma'
+import type { CommentResponse } from '@/schemas/comment.dto'
+import {
+  type Event,
+  type EventCategory,
+  type EventConditionType,
+  type EventDetail,
+  type EventRequest,
+  EventSchema,
+  type EventStatus,
+  EventStatusSchema,
+  type ReferenceUrlType
+} from '@/schemas/event.dto'
+import type { StoreKey } from '@/schemas/store.dto'
 import type { Bindings } from '@/types/bindings'
-import { Twitter } from '@/utils/twitter'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -64,27 +74,68 @@ const calculateEventStatus = (event: {
  * @param completedCount - 達成カウント（オプション）
  * @returns APIレスポンス用のEvent型オブジェクト
  */
-// biome-ignore lint/suspicious/noExplicitAny: reason
-const transform = (event: any, interestedCount = 0, completedCount = 0): Event => {
+type EventListPayload = Prisma.EventGetPayload<{
+  include: { conditions: true; stores: true }
+}>
+
+type EventDetailPayload = Prisma.EventGetPayload<{
+  include: { conditions: true; referenceUrls: true; stores: true; comments: true }
+}>
+
+const transform = (event: EventListPayload, interestedCount = 0, completedCount = 0): Event => {
   const { status, daysUntil } = calculateEventStatus(event)
-  const { id, conditions, referenceUrls, ...rest } = event
   return {
-    ...nullToUndefined(rest),
-    uuid: id,
-    // TODO: DBマイグレーション後に削除 - nameカラムをtitleにリネームする予定
-    title: event.name,
-    // biome-ignore lint/suspicious/noExplicitAny: reason
-    conditions: conditions?.map((c: any) => ({ ...nullToUndefined(c), uuid: c.id })) || [],
-    // biome-ignore lint/suspicious/noExplicitAny: reason
-    referenceUrls: referenceUrls?.map((r: any) => ({ ...nullToUndefined(r), uuid: r.id })) || [],
-    // biome-ignore lint/suspicious/noExplicitAny: reason
-    stores: event.stores.map((s: any) => s.storeKey),
+    uuid: event.id,
+    category: event.category as EventCategory,
+    title: event.title,
+    limitedQuantity: event.limitedQuantity ?? undefined,
+    startDate: event.startDate,
+    endDate: event.endDate ?? undefined,
+    endedAt: event.endedAt ?? undefined,
+    isVerified: event.isVerified,
+    isPreliminary: event.isPreliminary,
+    createdAt: event.createdAt,
+    updatedAt: event.updatedAt,
+    conditions: event.conditions.map((c) => ({
+      uuid: c.id,
+      type: c.type as EventConditionType,
+      purchaseAmount: c.purchaseAmount ?? undefined,
+      quantity: c.quantity ?? undefined
+    })),
+    stores: event.stores.map((s) => s.storeKey as StoreKey),
     status,
     daysUntil,
     interestedCount,
     completedCount
   }
 }
+
+const toCommentResponse = (comment: {
+  id: string
+  nickname: string
+  body: string
+  createdAt: Date
+  userId: string | null
+}): CommentResponse => ({
+  id: comment.id,
+  characterId: comment.nickname,
+  body: comment.body,
+  createdAt: comment.createdAt.toISOString(),
+  userId: comment.userId ?? undefined
+})
+
+const transformDetail = (event: EventDetailPayload, interestedCount = 0, completedCount = 0): EventDetail => ({
+  ...transform(event, interestedCount, completedCount),
+  referenceUrls: event.referenceUrls.map((r) => ({
+    uuid: r.id,
+    type: r.type as ReferenceUrlType,
+    url: r.url
+  })),
+  comments: event.comments
+    .filter((c) => c.deletedAt === null)
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    .map(toCommentResponse)
+})
 
 /**
  * 指定されたIDのイベントを取得
@@ -93,15 +144,16 @@ const transform = (event: any, interestedCount = 0, completedCount = 0): Event =
  * @returns イベント情報（statsを含む）
  * @throws HTTPException 404 - イベントが見つからない場合
  */
-export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+export const getEvent = async (env: Bindings, id: string): Promise<EventDetail> => {
+  const prisma = getPrisma(env)
   const [event, interestedCount, completedCount] = await Promise.all([
     prisma.event.findUnique({
       where: { id },
       include: {
         conditions: true,
         referenceUrls: true,
-        stores: true
+        stores: true,
+        comments: true
       }
     }),
     prisma.userEvent.count({ where: { eventId: id, status: 'interested' } }),
@@ -110,7 +162,7 @@ export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
   if (event === null) {
     throw new HTTPException(404, { message: 'Not Found' })
   }
-  return transform(event, interestedCount, completedCount)
+  return transformDetail(event, interestedCount, completedCount)
 }
 
 /**
@@ -120,7 +172,7 @@ export const getEvent = async (env: Bindings, id: string): Promise<Event> => {
  * @throws HTTPException 400 - バリデーションエラーの場合
  */
 export const getEvents = async (env: Bindings): Promise<Event[]> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
   // 半年前の日付を計算
   const startDate = dayjs().subtract(6, 'month').toDate()
 
@@ -133,7 +185,6 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
       },
       include: {
         conditions: true,
-        referenceUrls: true,
         stores: true
       },
       orderBy: { startDate: 'desc' }
@@ -149,13 +200,12 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
 /**
  * 新規イベントを作成
  * 同一UUIDが存在する場合は既存イベントを返す（冪等性保証）
- * 作成成功時にTwitterへ自動投稿（shouldTweet=falseで無効化可能）
  * @param env - Cloudflare Workers環境変数
  * @param data - イベント作成リクエストデータ
  * @returns 作成されたイベント情報
  */
-export const createEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+export const createEvent = async (env: Bindings, data: EventRequest): Promise<EventDetail> => {
+  const prisma = getPrisma(env)
 
   // 既存イベントをチェック
   const existingEvent = await prisma.event.findUnique({
@@ -163,13 +213,14 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     include: {
       conditions: true,
       referenceUrls: true,
-      stores: true
+      stores: true,
+      comments: true
     }
   })
 
   if (existingEvent) {
     console.log('Event already exists with id:', data.uuid)
-    return transform(existingEvent)
+    return transformDetail(existingEvent)
   }
 
   // 日付をDate型に変換
@@ -181,7 +232,7 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     data: {
       id: data.uuid,
       category: data.category,
-      name: data.title,
+      title: data.title,
       limitedQuantity: data.limitedQuantity,
       startDate,
       endDate,
@@ -209,33 +260,22 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     include: {
       conditions: true,
       referenceUrls: true,
-      stores: true
+      stores: true,
+      comments: true
     }
   })
-  const transformedEvent = transform(event)
-
-  // イベント作成をツイート（エラーがあっても処理は継続）
-  if (data.shouldTweet !== false) {
-    try {
-      await new Twitter(env).tweetEventCreated(transformedEvent)
-    } catch (error) {
-      console.error('Failed to tweet event creation:', error)
-    }
-  }
-
-  return transformedEvent
+  return transformDetail(event)
 }
 
 /**
  * 既存イベントを更新
  * 関連データ（conditions, referenceUrls, stores）は全て置換される
- * 更新成功時にTwitterへ自動投稿（shouldTweet=falseで無効化可能）
  * @param env - Cloudflare Workers環境変数
  * @param data - イベント更新リクエストデータ（uuidが必須）
  * @returns 更新されたイベント情報
  */
-export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Event> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+export const updateEvent = async (env: Bindings, data: EventRequest): Promise<EventDetail> => {
+  const prisma = getPrisma(env)
 
   // 日付をDate型に変換
   const startDate = dayjs(data.startDate).toDate()
@@ -246,7 +286,7 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     where: { id: data.uuid },
     data: {
       category: data.category,
-      name: data.title,
+      title: data.title,
       limitedQuantity: data.limitedQuantity,
       startDate,
       endDate,
@@ -279,22 +319,41 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
     include: {
       conditions: true,
       referenceUrls: true,
-      stores: true
+      stores: true,
+      comments: true
     }
   })
 
-  const transformedEvent = transform(event)
+  return transformDetail(event)
+}
 
-  // イベント更新をツイート（エラーがあっても処理は継続）
-  if (data.shouldTweet !== false) {
-    try {
-      await new Twitter(env).tweetEventUpdated(transformedEvent)
-    } catch (error) {
-      console.error('Failed to tweet event update:', error)
-    }
+/**
+ * イベントをタイトルで全文検索
+ * @param env - Cloudflare Workers環境変数
+ * @param q - 検索クエリ文字列
+ * @returns 検索結果のイベント一覧（開始日降順、最大50件）
+ */
+export const searchEvents = async (env: Bindings, q: string): Promise<Event[]> => {
+  const prisma = getPrisma(env)
+  const events = (
+    await prisma.event.findMany({
+      where: {
+        title: { contains: q },
+        isVerified: true
+      },
+      include: {
+        conditions: true,
+        stores: true
+      },
+      orderBy: { startDate: 'desc' },
+      take: 50
+    })
+  ).map((v) => transform(v))
+  const result = EventSchema.array().safeParse(events)
+  if (!result.success) {
+    throw new HTTPException(400, { message: result.error.message })
   }
-
-  return transformedEvent
+  return result.data
 }
 
 /**
@@ -305,7 +364,29 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
  * @returns null
  */
 export const deleteEvent = async (env: Bindings, id: string): Promise<null> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
   await prisma.event.delete({ where: { id: id } })
   return null
+}
+
+/**
+ * 「JST で本日開始」のイベントを取得（毎朝の cron 告知ツイート用）
+ */
+export const getEventsStartingToday = async (env: Bindings, now: Date = new Date()): Promise<Event[]> => {
+  const prisma = getPrisma(env)
+  const startOfDayJst = dayjs(now).tz('Asia/Tokyo').startOf('day')
+  const startOfNextDayJst = startOfDayJst.add(1, 'day')
+  const events = (
+    await prisma.event.findMany({
+      where: {
+        isVerified: true,
+        startDate: { gte: startOfDayJst.toDate(), lt: startOfNextDayJst.toDate() }
+      },
+      include: { conditions: true, stores: true },
+      orderBy: { startDate: 'asc' }
+    })
+  ).map((v) => transform(v))
+  const result = EventSchema.array().safeParse(events)
+  if (!result.success) throw new HTTPException(400, { message: result.error.message })
+  return result.data
 }

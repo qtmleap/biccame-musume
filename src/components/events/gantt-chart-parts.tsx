@@ -1,5 +1,7 @@
 import dayjs, { type Dayjs } from 'dayjs'
+import { motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 
 type MonthSelectorProps = {
@@ -13,25 +15,33 @@ type MonthSelectorProps = {
  */
 export const GanttMonthSelector = ({ monthOffset, onSelect }: MonthSelectorProps) => {
   return (
-    <div className='grid grid-cols-5 gap-2 mb-4'>
+    <div className='grid grid-cols-5 gap-1 md:gap-2 mb-4 py-1'>
       {[-2, -1, 0, 1, 2].map((offset) => {
         const monthDate = dayjs().add(offset, 'month')
         const isSelected = monthOffset === offset
         return (
-          <Button
+          <motion.div
             key={offset}
-            variant='outline'
-            size='sm'
-            onClick={() => onSelect(offset)}
-            className={cn({
-              'bg-green-500/50 text-white border-green-500/50 hover:bg-green-500/60 hover:text-white dark:bg-green-500/50 dark:text-white dark:border-green-500/50 dark:hover:bg-green-500/60':
-                isSelected,
-              'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-200/90 dark:text-gray-800 dark:border-gray-300 dark:hover:bg-gray-200 dark:hover:text-gray-800':
-                !isSelected
-            })}
+            className='w-full'
+            style={{ filter: STICKER_SHADOW_SM }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            transition={STICKER_HOVER_TRANSITION}
           >
-            {monthDate.format('YY/MM')}
-          </Button>
+            <Button
+              variant='secondary'
+              size='sm'
+              onClick={() => onSelect(offset)}
+              className={cn(
+                'w-full text-xs md:text-sm px-1 md:px-3 rounded-full border',
+                isSelected
+                  ? 'bg-brand text-brand-foreground border-brand hover:bg-brand/90'
+                  : 'bg-button-surface text-foreground border-card-border hover:bg-button-surface-hover'
+              )}
+            >
+              {monthDate.format('YY/MM')}
+            </Button>
+          </motion.div>
         )
       })}
     </div>
@@ -58,16 +68,16 @@ export const GanttDateHeader = ({ dates, today, actualMonthEnd }: DateHeaderProp
         return (
           <div
             key={date.format('YYYY-MM-DD')}
-            className={`w-8 shrink-0 border-b border-gray-200 flex items-center justify-center text-xs ${
+            className={`w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold ${
               isOutOfMonth
-                ? 'bg-gray-100 text-gray-400'
+                ? 'bg-muted text-muted-foreground'
                 : isToday
-                  ? 'bg-rose-50 font-bold text-rose-600'
+                  ? 'bg-calendar-today/50 font-bold text-calendar-sunday'
                   : isSunday
-                    ? 'text-rose-500'
+                    ? 'text-calendar-sunday'
                     : isSaturday
-                      ? 'text-blue-500'
-                      : 'text-gray-600'
+                      ? 'text-calendar-saturday'
+                      : 'text-muted-foreground'
             }`}
           >
             {date.format('D')}
@@ -93,7 +103,7 @@ export const GanttGridCell = ({ date, today, actualMonthEnd }: DateGridCellProps
   return (
     <div
       key={date.format('YYYY-MM-DD')}
-      className={`w-8 shrink-0 border-b border-gray-200 ${isOutOfMonth ? 'bg-gray-50' : isToday ? 'bg-rose-50' : ''}`}
+      className={`w-8 shrink-0 border-r border-card-border last:border-r-0 ${isOutOfMonth ? 'bg-muted/50' : isToday ? 'bg-calendar-today/30' : ''}`}
     />
   )
 }

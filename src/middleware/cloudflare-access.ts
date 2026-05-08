@@ -5,6 +5,7 @@ import { createRemoteJWKSet, jwtVerify } from 'jose'
 type Bindings = {
   CF_ACCESS_TEAM_DOMAIN: string
   CF_ACCESS_AUD: string
+  ENVIRONMENT?: string
 }
 
 type JWTPayload = {
@@ -17,17 +18,6 @@ type JWTPayload = {
   type: string
 }
 
-/**
- * 開発環境かどうかを判定
- */
-const isDevelopmentEnvironment = (c: Context): boolean => {
-  const host = c.req.header('Host')
-  return host?.includes('localhost') || host?.includes('127.0.0.1') || false
-}
-
-/**
- * Cloudflare AccessのJWTを検証
- */
 const verifyJWT = async (token: string, teamDomain: string, audience: string): Promise<JWTPayload> => {
   const jwksUrl = `https://${teamDomain}/cdn-cgi/access/certs`
   const jwks = createRemoteJWKSet(new URL(jwksUrl))
@@ -40,9 +30,6 @@ const verifyJWT = async (token: string, teamDomain: string, audience: string): P
   return payload as JWTPayload
 }
 
-/**
- * CookieヘッダーからJWTトークンを抽出
- */
 const extractTokenFromCookie = (cookie: string): string | undefined => {
   return cookie
     .split(';')
@@ -52,12 +39,11 @@ const extractTokenFromCookie = (cookie: string): string | undefined => {
 }
 
 /**
- * Cloudflare Access認証ミドルウェア
- * 開発環境では認証をスキップ
+ * Cloudflare Access 認証ミドルウェア（必須）
+ * 未認証・検証失敗は 401 を返す
  */
 export const CFAuth = async <T extends Bindings>(c: Context<{ Bindings: T }>, next: Next) => {
-  // 開発環境では認証をスキップ
-  if (isDevelopmentEnvironment(c)) {
+  if (c.env.ENVIRONMENT === 'local') {
     console.log('[Dev] Cloudflare Access check skipped for development environment')
     await next()
     return
