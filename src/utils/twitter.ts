@@ -5,8 +5,11 @@ import type { Bindings } from '@/types/bindings'
 
 const CREATE_TWEET_QUERY_ID = 'oB-5XsHNAbjvARJEc8CZFw'
 const CREATE_TWEET_PATH = `/i/api/graphql/${CREATE_TWEET_QUERY_ID}/CreateTweet`
+// Bearer is hardcoded in https://abs.twimg.com/responsive-web/client-web/main.<hash>.js
+// as two concatenated string literals, rotates infrequently. Re-extract from a live
+// browser request when 401 "Could not authenticate you" starts appearing.
 const X_BEARER =
-  'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3DBoHiEa1kU76Hn5wMdPS4ZMwG9DkEnv4iJyOFNQSgcHGaEGAhT3'
+  'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'
 
 const HOME_PAGE_CACHE_KEY = 'https://x-transaction-cache.local/home-page'
 const ONDEMAND_CACHE_KEY = 'https://x-transaction-cache.local/ondemand'
@@ -122,18 +125,27 @@ export class Twitter {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
+        accept: '*/*',
+        'accept-language': 'en-US,en;q=0.9,ja;q=0.8',
         authorization: `Bearer ${X_BEARER}`,
-        cookie: `auth_token=${TWITTER_AUTH_TOKEN}; ct0=${TWITTER_CSRF_TOKEN}`,
-        'x-csrf-token': TWITTER_CSRF_TOKEN,
-        'x-twitter-auth-type': 'OAuth2Session',
-        'x-twitter-active-user': 'yes',
-        'x-twitter-client-language': 'ja',
-        'x-client-transaction-id': transactionId,
         'content-type': 'application/json',
+        cookie: `auth_token=${TWITTER_AUTH_TOKEN}; ct0=${TWITTER_CSRF_TOKEN}`,
         origin: 'https://x.com',
+        priority: 'u=1, i',
         referer: 'https://x.com/home',
+        'sec-ch-ua': '"Google Chrome";v="147", "Not.A/Brand";v="8", "Chromium";v="147"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"macOS"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-origin',
         'user-agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36'
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36',
+        'x-client-transaction-id': transactionId,
+        'x-csrf-token': TWITTER_CSRF_TOKEN,
+        'x-twitter-active-user': 'yes',
+        'x-twitter-auth-type': 'OAuth2Session',
+        'x-twitter-client-language': 'en'
       },
       body
     })
