@@ -397,7 +397,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
               variant='outline'
               className='h-auto px-2.5 py-0.5 text-xs rounded-full border-brand/50 text-brand hover:bg-brand/10 hover:text-brand'
             >
-              <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
+              <Link to='/admin/events/$uuid/edit' params={{ uuid: event.uuid }}>
                 編集
               </Link>
             </Button>

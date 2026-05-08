@@ -5,7 +5,6 @@ import { orderBy } from 'lodash-es'
 import { Calendar, Copy, ExternalLink, Package, Pencil, Store, Trash2 } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useMemo } from 'react'
-import { v4 as uuidv4 } from 'uuid'
 import { eventListActiveTabAtom, eventListPagesAtom } from '@/atoms/event-list-atom'
 import { eventStatusFilterAtom } from '@/atoms/event-status-filter-atom'
 import { EventStatusFilter } from '@/components/events/event-status-filter'
@@ -126,18 +125,13 @@ const EventCard = ({
             </div>
             {isAuthenticated && (
               <div className='flex items-center gap-2'>
-                <Link
-                  to='/admin/events/$uuid'
-                  params={{ uuid: uuidv4() }}
-                  search={{ from: event.uuid }}
-                  aria-label='コピーして新規作成'
-                >
+                <Link to='/admin/events/new' search={{ from: event.uuid }} aria-label='コピーして新規作成'>
                   <Button size='sm' variant='outline' className='border-card-border'>
                     <Copy className='mr-1 size-3' />
                     コピー
                   </Button>
                 </Link>
-                <Link to='/admin/events/$uuid' params={{ uuid: event.uuid }}>
+                <Link to='/admin/events/$uuid/edit' params={{ uuid: event.uuid }}>
                   <Button size='sm' variant='outline' className='border-card-border'>
                     <Pencil className='mr-1 size-3' />
                     編集
