@@ -20,7 +20,7 @@ const RouteComponent = () => {
             <div className='space-y-3 text-muted-foreground'>
               <p>このサイトはファンサイトです。</p>
               <p>
-                ビックカメラ公式やビッカメ娘に関する公式のお問い合わせは、
+                ビックカメラの製品・サービス・店舗等に関する公式のお問い合わせは、
                 <a
                   href='https://www.biccamera.co.jp/company/contact.html'
                   target='_blank'
@@ -31,6 +31,19 @@ const RouteComponent = () => {
                   <ExternalLink className='h-4 w-4' />
                 </a>
                 からお願いいたします。
+              </p>
+              <p>
+                ビッカメ娘キャラクター自体に関するお問い合わせは、
+                <a
+                  href='https://www.itall.co.jp/contact/'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-brand hover:underline inline-flex items-center gap-1'
+                >
+                  アイティオール株式会社のお問い合わせフォーム
+                  <ExternalLink className='h-4 w-4' />
+                </a>
+                からお願いいたします（お問合せ区分は「その他お問い合わせ」をご選択ください）。
               </p>
             </div>
           </section>
