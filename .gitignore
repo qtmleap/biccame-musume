@@ -246,3 +246,4 @@ backups/
 
 # Claude Code scheduled tasks lock
 .claude/scheduled_tasks.lock
+cookie.txt
