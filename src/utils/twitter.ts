@@ -1,7 +1,12 @@
 import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '@/lib/x-transaction'
-import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import type { EventDetail } from '@/schemas/event.dto'
+import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
+import {
+  buildDailySummaryText,
+  buildEventCreatedText,
+  buildEventUpdatedText,
+  getQuoteTweetId
+} from '@/utils/tweet-text'
 
 const CREATE_TWEET_QUERY_ID = 'oB-5XsHNAbjvARJEc8CZFw'
 const CREATE_TWEET_PATH = `/i/api/graphql/${CREATE_TWEET_QUERY_ID}/CreateTweet`
@@ -14,37 +19,6 @@ const X_BEARER =
 const HOME_PAGE_CACHE_KEY = 'https://x-transaction-cache.local/home-page'
 const ONDEMAND_CACHE_KEY = 'https://x-transaction-cache.local/ondemand'
 const CACHE_TTL_SECONDS = 60 * 30
-
-const extractTweetId = (url: string): string | null => {
-  const match = url.match(/(?:twitter\.com|x\.com)\/\w+\/status\/(\d+)/)
-  return match ? match[1] : null
-}
-
-const generateTweetText = (event: EventDetail, isUpdate: boolean): string => {
-  const action = isUpdate ? '更新' : '追加'
-  const store = event.stores[0]
-  const storeName = STORE_NAME_LABELS[store]
-  const characterName = CHARACTER_NAME_LABELS[store] || storeName
-  const length = event.stores.length
-  const storeText = length === 1 ? characterName : `${characterName}など${length}店舗`
-  return [
-    `${storeText}の「${event.title}」を${action}しました！`,
-    '',
-    `https://biccame-musume.com/events/${event.uuid}`,
-    '',
-    '#ビッカメ娘',
-    '#ビックカメラ',
-    `#${storeName}`,
-    `#${characterName}`
-  ].join('\n')
-}
-
-const getQuoteTweetId = (event: EventDetail): string | undefined => {
-  if (!event.referenceUrls || event.referenceUrls.length === 0) return undefined
-  const announceUrl = event.referenceUrls.find((ref) => ref.type === 'announce')
-  const targetUrl = announceUrl?.url || event.referenceUrls[0].url
-  return extractTweetId(targetUrl) ?? undefined
-}
 
 /**
  * Cached fetch of the X home page + ondemand.s file. Re-fetched at most every
@@ -164,10 +138,19 @@ export class Twitter {
   }
 
   async tweetEventCreated(event: EventDetail): Promise<void> {
-    await this.tweet(generateTweetText(event, false), getQuoteTweetId(event))
+    await this.tweet(buildEventCreatedText(event), getQuoteTweetId(event.referenceUrls ?? [], 'create'))
   }
 
   async tweetEventUpdated(event: EventDetail): Promise<void> {
-    await this.tweet(generateTweetText(event, true), getQuoteTweetId(event))
+    await this.tweet(buildEventUpdatedText(event), getQuoteTweetId(event.referenceUrls ?? [], 'update'))
+  }
+
+  /**
+   * Daily summary tweet: "本日開始のイベント (N件)" + per-event lines, with
+   * automatic truncation if the body would exceed 280 weighted chars.
+   */
+  async tweetDailySummary(events: Event[]): Promise<void> {
+    if (events.length === 0) return
+    await this.tweet(buildDailySummaryText(events))
   }
 }
