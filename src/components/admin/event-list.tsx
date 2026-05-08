@@ -216,17 +216,13 @@ export const EventList = () => {
     )
   }, [events, activeTab, statusFilter, storeFilter])
 
-  // 店舗フィルタ変更時は全タブのページを1に戻す
-  useEffect(() => {
-    setPages({ limited_card: 1, regular_card: 1, ackey: 1, other: 1 })
-  }, [storeFilter])
-
-  // ページネーション処理
+  // ページネーション処理（フィルタ変更で結果が減った場合は範囲内に clamp）
   const totalPages = Math.ceil(filtered.length / perPage)
+  const effectivePage = Math.min(Math.max(page, 1), Math.max(totalPages, 1))
   const paginated = useMemo(() => {
-    const start = (page - 1) * perPage
+    const start = (effectivePage - 1) * perPage
     return filtered.slice(start, start + perPage)
-  }, [filtered, page])
+  }, [filtered, effectivePage])
 
   /**
    * イベントを削除
