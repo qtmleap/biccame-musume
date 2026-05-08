@@ -63,9 +63,9 @@ export const useCreateEvent = () => {
     mutationFn: async (event: EventRequest): Promise<EventDetail> => {
       return client.createEvent(event)
     },
-    onSuccess: () => {
+    onSuccess: (created) => {
       toast.success('イベントを登録しました')
-      // イベント一覧を再取得
+      queryClient.setQueryData(['events', created.uuid], created)
       queryClient.invalidateQueries({ queryKey: ['events'] })
     },
     onError: (error) => {
@@ -102,8 +102,9 @@ export const useUpdateEvent = () => {
     mutationFn: async ({ id, data }: { id: string; data: Partial<EventRequest> }): Promise<EventDetail> => {
       return await client.updateEvent(data, { params: { id } })
     },
-    onSuccess: () => {
+    onSuccess: (updated) => {
       toast.success('イベントを更新しました')
+      queryClient.setQueryData(['events', updated.uuid], updated)
       queryClient.invalidateQueries({ queryKey: ['events'] })
     },
     onError: (error) => {

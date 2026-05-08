@@ -30,9 +30,11 @@ import { Route as EventsUuidIndexRouteImport } from './routes/events/$uuid/index
 import { Route as CharactersIdIndexRouteImport } from './routes/characters/$id/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminEventsIndexRouteImport } from './routes/admin/events/index'
+import { Route as AdminEventsNewIndexRouteImport } from './routes/admin/events/new/index'
 import { Route as AdminCommentsIndexRouteImport } from './routes/admin/comments/index'
 import { Route as AdminBadgesIndexRouteImport } from './routes/admin/badges/index'
 import { Route as AdminEventsUuidIndexRouteImport } from './routes/admin/events/$uuid/index'
+import { Route as AdminEventsUuidEditIndexRouteImport } from './routes/admin/events/$uuid/edit/index'
 
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
@@ -139,6 +141,11 @@ const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
   path: '/events/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEventsNewIndexRoute = AdminEventsNewIndexRouteImport.update({
+  id: '/events/new/',
+  path: '/events/new/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCommentsIndexRoute = AdminCommentsIndexRouteImport.update({
   id: '/comments/',
   path: '/comments/',
@@ -152,6 +159,11 @@ const AdminBadgesIndexRoute = AdminBadgesIndexRouteImport.update({
 const AdminEventsUuidIndexRoute = AdminEventsUuidIndexRouteImport.update({
   id: '/events/$uuid/',
   path: '/events/$uuid/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEventsUuidEditIndexRoute = AdminEventsUuidEditIndexRouteImport.update({
+  id: '/events/$uuid/edit/',
+  path: '/events/$uuid/edit/',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -172,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/admin/badges/': typeof AdminBadgesIndexRoute
   '/admin/comments/': typeof AdminCommentsIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
+  '/admin/events/new/': typeof AdminEventsNewIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
@@ -180,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/me/interested/': typeof MeInterestedIndexRoute
   '/me/visited/': typeof MeVisitedIndexRoute
   '/admin/events/$uuid/': typeof AdminEventsUuidIndexRoute
+  '/admin/events/$uuid/edit/': typeof AdminEventsUuidEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -197,6 +211,7 @@ export interface FileRoutesByTo {
   '/admin/badges': typeof AdminBadgesIndexRoute
   '/admin/comments': typeof AdminCommentsIndexRoute
   '/admin/events': typeof AdminEventsIndexRoute
+  '/admin/events/new': typeof AdminEventsNewIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/characters/$id': typeof CharactersIdIndexRoute
   '/events/$uuid': typeof EventsUuidIndexRoute
@@ -205,6 +220,7 @@ export interface FileRoutesByTo {
   '/me/interested': typeof MeInterestedIndexRoute
   '/me/visited': typeof MeVisitedIndexRoute
   '/admin/events/$uuid': typeof AdminEventsUuidIndexRoute
+  '/admin/events/$uuid/edit': typeof AdminEventsUuidEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -224,6 +240,7 @@ export interface FileRoutesById {
   '/admin/badges/': typeof AdminBadgesIndexRoute
   '/admin/comments/': typeof AdminCommentsIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
+  '/admin/events/new/': typeof AdminEventsNewIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
@@ -232,6 +249,7 @@ export interface FileRoutesById {
   '/me/interested/': typeof MeInterestedIndexRoute
   '/me/visited/': typeof MeVisitedIndexRoute
   '/admin/events/$uuid/': typeof AdminEventsUuidIndexRoute
+  '/admin/events/$uuid/edit/': typeof AdminEventsUuidEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -252,6 +270,7 @@ export interface FileRouteTypes {
     | '/admin/badges/'
     | '/admin/comments/'
     | '/admin/events/'
+    | '/admin/events/new/'
     | '/admin/users/'
     | '/characters/$id/'
     | '/events/$uuid/'
@@ -260,6 +279,7 @@ export interface FileRouteTypes {
     | '/me/interested/'
     | '/me/visited/'
     | '/admin/events/$uuid/'
+    | '/admin/events/$uuid/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -277,6 +297,7 @@ export interface FileRouteTypes {
     | '/admin/badges'
     | '/admin/comments'
     | '/admin/events'
+    | '/admin/events/new'
     | '/admin/users'
     | '/characters/$id'
     | '/events/$uuid'
@@ -285,6 +306,7 @@ export interface FileRouteTypes {
     | '/me/interested'
     | '/me/visited'
     | '/admin/events/$uuid'
+    | '/admin/events/$uuid/edit'
   id:
     | '__root__'
     | '/'
@@ -303,6 +325,7 @@ export interface FileRouteTypes {
     | '/admin/badges/'
     | '/admin/comments/'
     | '/admin/events/'
+    | '/admin/events/new/'
     | '/admin/users/'
     | '/characters/$id/'
     | '/events/$uuid/'
@@ -311,6 +334,7 @@ export interface FileRouteTypes {
     | '/me/interested/'
     | '/me/visited/'
     | '/admin/events/$uuid/'
+    | '/admin/events/$uuid/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -483,6 +507,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEventsIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/events/new/': {
+      id: '/admin/events/new/'
+      path: '/events/new'
+      fullPath: '/admin/events/new/'
+      preLoaderRoute: typeof AdminEventsNewIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/comments/': {
       id: '/admin/comments/'
       path: '/comments'
@@ -504,6 +535,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEventsUuidIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/events/$uuid/edit/': {
+      id: '/admin/events/$uuid/edit/'
+      path: '/events/$uuid/edit'
+      fullPath: '/admin/events/$uuid/edit/'
+      preLoaderRoute: typeof AdminEventsUuidEditIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
@@ -512,8 +550,10 @@ interface AdminRouteChildren {
   AdminBadgesIndexRoute: typeof AdminBadgesIndexRoute
   AdminCommentsIndexRoute: typeof AdminCommentsIndexRoute
   AdminEventsIndexRoute: typeof AdminEventsIndexRoute
+  AdminEventsNewIndexRoute: typeof AdminEventsNewIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
   AdminEventsUuidIndexRoute: typeof AdminEventsUuidIndexRoute
+  AdminEventsUuidEditIndexRoute: typeof AdminEventsUuidEditIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -521,8 +561,10 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBadgesIndexRoute: AdminBadgesIndexRoute,
   AdminCommentsIndexRoute: AdminCommentsIndexRoute,
   AdminEventsIndexRoute: AdminEventsIndexRoute,
+  AdminEventsNewIndexRoute: AdminEventsNewIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
   AdminEventsUuidIndexRoute: AdminEventsUuidIndexRoute,
+  AdminEventsUuidEditIndexRoute: AdminEventsUuidEditIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
