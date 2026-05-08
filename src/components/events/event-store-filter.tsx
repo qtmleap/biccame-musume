@@ -1,6 +1,4 @@
-import { useAtom } from 'jotai'
 import { useMemo } from 'react'
-import { eventListStoreFilterAtom } from '@/atoms/event-list-store-filter-atom'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/use-characters'
@@ -9,11 +7,15 @@ import type { StoreKey } from '@/schemas/store.dto'
 
 const ALL_VALUE = '__all__'
 
+type EventStoreFilterProps = {
+  value: string | null
+  onChange: (value: string | null) => void
+}
+
 /**
  * 店舗フィルター制御コンポーネント
  */
-export const EventStoreFilter = () => {
-  const [storeFilter, setStoreFilter] = useAtom(eventListStoreFilterAtom)
+export const EventStoreFilter = ({ value, onChange }: EventStoreFilterProps) => {
   const { data: characters } = useCharacters()
 
   const storeOptions = useMemo(
@@ -25,14 +27,14 @@ export const EventStoreFilter = () => {
     [characters]
   )
 
-  const handleChange = (value: string) => {
-    setStoreFilter(value === ALL_VALUE ? null : (value as StoreKey))
+  const handleChange = (next: string) => {
+    onChange(next === ALL_VALUE ? null : (next as StoreKey))
   }
 
   return (
     <div className='w-full'>
       <FilterHeader label={FILTER_LABELS.store} />
-      <Select value={storeFilter ?? ALL_VALUE} onValueChange={handleChange}>
+      <Select value={value ?? ALL_VALUE} onValueChange={handleChange}>
         <SelectTrigger size='sm' className='w-full'>
           <SelectValue placeholder={FILTER_LABELS.storeAll} />
         </SelectTrigger>
