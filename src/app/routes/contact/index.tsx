@@ -18,7 +18,7 @@ const RouteComponent = () => {
               ご注意ください
             </h2>
             <div className='space-y-3 text-muted-foreground'>
-              <p>このサイトは非公式ファンサイトです。</p>
+              <p>このサイトはファンサイトです。</p>
               <p>
                 ビックカメラ公式やビッカメ娘に関する公式のお問い合わせは、
                 <a
