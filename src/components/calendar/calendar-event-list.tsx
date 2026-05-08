@@ -10,7 +10,6 @@ import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { CALENDAR_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
-import { getHolidayName } from '@/utils/holidays'
 
 type CalendarEvent = {
   date: string
