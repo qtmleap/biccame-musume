@@ -7,7 +7,6 @@ import { Suspense, useEffect, useMemo, useState } from 'react'
 import { z } from 'zod'
 import { categoryFilterAtom } from '@/atoms/category-filter-atom'
 import { eventListStatusFilterAtom } from '@/atoms/event-list-status-filter-atom'
-import { eventListStoreFilterAtom } from '@/atoms/event-list-store-filter-atom'
 import { eventPageAtom } from '@/atoms/event-page-atom'
 import { eventUserActivityFilterAtom } from '@/atoms/event-user-activity-filter-atom'
 import { eventViewModeAtom } from '@/atoms/event-view-mode-atom'
@@ -59,20 +58,13 @@ const EventsContent = () => {
   const [viewMode, setViewMode] = useAtom(eventViewModeAtom)
   const [statusFilter, setStatusFilter] = useAtom(eventListStatusFilterAtom)
   const [activityFilter, setActivityFilter] = useAtom(eventUserActivityFilterAtom)
-  const [storeFilter, setStoreFilter] = useAtom(eventListStoreFilterAtom)
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
 
-  // URLの store パラメータをatomに同期
-  useEffect(() => {
-    setStoreFilter(storeParam ?? null)
-  }, [storeParam, setStoreFilter])
-
-  // atom の変更をURLに反映（共有・履歴対応）
-  useEffect(() => {
-    const next = storeFilter ?? undefined
-    if (next === storeParam) return
-    navigate({ search: (prev) => ({ ...prev, store: next }), replace: true })
-  }, [storeFilter, storeParam, navigate])
+  // 店舗フィルタはURLを唯一のsource of truthとして扱う（atomとの双方向同期は循環参照になるため避ける）
+  const storeFilter = storeParam ?? null
+  const setStoreFilter = (next: string | null) => {
+    navigate({ search: (prev) => ({ ...prev, store: next ?? undefined }), replace: true })
+  }
 
   const DEFAULT_CATEGORY = new Set(['ackey', 'limited_card', 'regular_card', 'other'] as const)
   const DEFAULT_STATUS = { upcoming: true, ongoing: true, ended: false }
@@ -211,7 +203,7 @@ const EventsContent = () => {
                     <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
                     <EventUserActivityFilter />
                     <RegionFilterControl />
-                    <EventStoreFilter storeFilterAtom={eventListStoreFilterAtom} />
+                    <EventStoreFilter value={storeFilter} onChange={setStoreFilter} />
                   </div>
                 </div>
                 <div className='border-t border-card px-4 py-3'>
@@ -250,7 +242,7 @@ const EventsContent = () => {
               <EventCategoryFilter />
             </div>
             <div className='w-64 shrink-0'>
-              <EventStoreFilter storeFilterAtom={eventListStoreFilterAtom} />
+              <EventStoreFilter value={storeFilter} onChange={setStoreFilter} />
             </div>
           </div>
 
