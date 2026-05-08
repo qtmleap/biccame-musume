@@ -44,6 +44,71 @@ const RouteComponent = () => {
             </div>
           </section>
 
+          {/* ガイドライン遵守 */}
+          <section>
+            <h2 className='text-xl md:text-2xl font-bold mb-4 text-foreground border-b-2 border-brand pb-2'>
+              ガイドライン遵守について
+            </h2>
+            <p className='text-muted-foreground mb-4'>
+              本サイトは、
+              <a
+                href='https://biccame.jp/guideline/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-brand hover:underline inline-flex items-center gap-1'
+              >
+                キャラクター使用のガイドライン
+              </a>
+              の各条項を以下のとおり遵守しています。
+            </p>
+            <ol className='space-y-4 text-muted-foreground'>
+              <li className='flex gap-3'>
+                <span className='shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-full bg-brand text-brand-foreground text-xs font-bold'>
+                  1
+                </span>
+                <div className='flex-1 space-y-1'>
+                  <p className='font-bold text-foreground'>第二条（使用許諾）</p>
+                  <p className='text-sm'>
+                    本サイトは非営利かつ無償のウェブサイトであり、第二条に列挙される「ウェブサイト、ブログ、ＳＮＳでの本キャラクターの紹介」の使用許諾要件を満たしています。
+                  </p>
+                </div>
+              </li>
+              <li className='flex gap-3'>
+                <span className='shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-full bg-brand text-brand-foreground text-xs font-bold'>
+                  2
+                </span>
+                <div className='flex-1 space-y-1'>
+                  <p className='font-bold text-foreground'>第三条（本キャラクターの使用に関する注意事項）</p>
+                  <p className='text-sm'>
+                    本サイトはビッカメ娘の画像をそのままの形で利用するにあたり、著作権者「citall」の表示および本サイトを経由した画像の再使用の禁止を明記しています。
+                  </p>
+                </div>
+              </li>
+              <li className='flex gap-3'>
+                <span className='shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-full bg-brand text-brand-foreground text-xs font-bold'>
+                  3
+                </span>
+                <div className='flex-1 space-y-1'>
+                  <p className='font-bold text-foreground'>第四条（禁止事項）</p>
+                  <p className='text-sm'>
+                    本サイトは、ビッカメ娘および二次創作物の著作者の社会的評価を損なう使用、ならびに他者の権利を侵害するような使用を一切行っておりません。
+                  </p>
+                </div>
+              </li>
+              <li className='flex gap-3'>
+                <span className='shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-full bg-brand text-brand-foreground text-xs font-bold'>
+                  4
+                </span>
+                <div className='flex-1 space-y-1'>
+                  <p className='font-bold text-foreground'>第六条（営利活動）</p>
+                  <p className='text-sm'>
+                    本サイトは第六条で指定される営利活動を一切行っておらず、アイティオール株式会社による別途の使用許諾を必要としません。
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </section>
+
           {/* 画像について */}
           <section>
             <h2 className='text-xl md:text-2xl font-bold mb-4 text-foreground border-b-2 border-brand pb-2'>
