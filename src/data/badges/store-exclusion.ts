@@ -1,5 +1,5 @@
+import charactersData from 'virtual:public-characters'
 import type { StoreKey } from '@/schemas/store.dto'
-import charactersData from '../../../public/characters.json'
 
 // StoreKey values that are NOT independent physical retail stores.
 // These are brand/service concepts, mascots, or sections within another store.
