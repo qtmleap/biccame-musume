@@ -80,7 +80,10 @@ const RouteComponent = () => {
                 <div className='flex-1 space-y-1'>
                   <p className='font-bold text-foreground'>第三条（本キャラクターの使用に関する注意事項）</p>
                   <p className='text-sm'>
-                    本サイトはビッカメ娘の画像をそのままの形で利用するにあたり、著作権者「© itall（ガイドライン原文表記: citall）」の表示および本サイトを経由した画像の再使用の禁止を明記しています。
+                    本サイトはビッカメ娘の画像をそのままの形で利用するにあたり、著作権者「© itall」の表示、および本サイトを経由した画像の再使用の禁止を明記しています。
+                  </p>
+                  <p className='text-xs text-muted-foreground/70'>
+                    ※ ガイドライン原文では「citall」と表記されていますが、アイティオール株式会社（itall Inc.）の英文表記および公式X（@itallinc）等を踏まえ「© itall」と解釈しています。
                   </p>
                 </div>
               </li>
