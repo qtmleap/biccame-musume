@@ -12,39 +12,44 @@ const RouteComponent = () => {
         <h1 className='text-2xl font-bold mb-8 text-foreground'>お問い合わせ</h1>
 
         <div className='space-y-12'>
-          {/* 注意事項 */}
+          {/* お問い合わせ先のご案内 */}
           <section>
             <h2 className='text-xl md:text-2xl font-bold mb-4 text-foreground border-b-2 border-brand pb-2'>
-              ご注意ください
+              お問い合わせ先のご案内
             </h2>
-            <div className='space-y-3 text-muted-foreground'>
-              <p>このサイトはファンサイトです。</p>
-              <p>
-                ビックカメラの製品・サービス・店舗等に関する公式のお問い合わせは、
-                <a
-                  href='https://www.biccamera.co.jp/company/contact.html'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-brand hover:underline inline-flex items-center gap-1'
-                >
-                  ビックカメラ公式サイト
-                  <ExternalLink className='h-4 w-4' />
-                </a>
-                からお願いいたします。
-              </p>
-              <p>
-                ビッカメ娘キャラクター自体に関するお問い合わせは、
-                <a
-                  href='https://www.itall.co.jp/contact/'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-brand hover:underline inline-flex items-center gap-1'
-                >
-                  アイティオール株式会社のお問い合わせフォーム
-                  <ExternalLink className='h-4 w-4' />
-                </a>
-                からお願いいたします（お問合せ区分は「その他お問い合わせ」をご選択ください）。
-              </p>
+            <div className='space-y-4 text-muted-foreground'>
+              <p>本サイトはファンが個人で運営している応援サイトです。お問い合わせ内容に応じて、最適な窓口を以下にご案内します。</p>
+              <ul className='space-y-3'>
+                <li>
+                  <p className='font-bold text-foreground'>ビックカメラの製品・サービス・店舗等について</p>
+                  <a
+                    href='https://www.biccamera.co.jp/company/contact.html'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='text-brand hover:underline inline-flex items-center gap-1 text-sm'
+                  >
+                    ビックカメラ公式サイトのお問い合わせフォーム
+                    <ExternalLink className='h-4 w-4' />
+                  </a>
+                </li>
+                <li>
+                  <p className='font-bold text-foreground'>ビッカメ娘キャラクター自体について</p>
+                  <a
+                    href='https://www.itall.co.jp/contact/'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='text-brand hover:underline inline-flex items-center gap-1 text-sm'
+                  >
+                    アイティオール株式会社のお問い合わせフォーム
+                    <ExternalLink className='h-4 w-4' />
+                  </a>
+                  <span className='block text-xs mt-1'>※ お問合せ区分は「その他お問い合わせ」をご選択ください。</span>
+                </li>
+                <li>
+                  <p className='font-bold text-foreground'>本サイトの不具合・ご意見・ご要望について</p>
+                  <span className='text-sm'>下記「当サイトに関するお問い合わせ」の窓口をご利用ください。</span>
+                </li>
+              </ul>
             </div>
           </section>
 
@@ -138,10 +143,11 @@ const RouteComponent = () => {
 
               <AccordionItem value='official'>
                 <AccordionTrigger className='font-bold text-foreground'>
-                  Q. このサイトはビックカメラ公式ですか？
+                  Q. このサイトはどなたが運営していますか？
                 </AccordionTrigger>
                 <AccordionContent className='text-sm'>
-                  A. いいえ、ファンサイトです。ビックカメラおよび関連企業とは一切関係ありません。
+                  A.
+                  ファンが個人で運営している応援サイトです。公式の運営とは独立しており、キャラクター使用のガイドラインを踏まえた非営利のファン活動として制作しています。
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
