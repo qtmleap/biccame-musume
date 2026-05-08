@@ -1,7 +1,12 @@
 import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '@/lib/x-transaction'
-import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import type { EventDetail } from '@/schemas/event.dto'
+import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
+import {
+  buildDailySummaryTweets,
+  buildEventCreatedText,
+  buildEventUpdatedText,
+  getQuoteTweetId
+} from '@/utils/tweet-text'
 
 const CREATE_TWEET_QUERY_ID = 'oB-5XsHNAbjvARJEc8CZFw'
 const CREATE_TWEET_PATH = `/i/api/graphql/${CREATE_TWEET_QUERY_ID}/CreateTweet`
@@ -14,37 +19,6 @@ const X_BEARER =
 const HOME_PAGE_CACHE_KEY = 'https://x-transaction-cache.local/home-page'
 const ONDEMAND_CACHE_KEY = 'https://x-transaction-cache.local/ondemand'
 const CACHE_TTL_SECONDS = 60 * 30
-
-const extractTweetId = (url: string): string | null => {
-  const match = url.match(/(?:twitter\.com|x\.com)\/\w+\/status\/(\d+)/)
-  return match ? match[1] : null
-}
-
-const generateTweetText = (event: EventDetail, isUpdate: boolean): string => {
-  const action = isUpdate ? '更新' : '追加'
-  const store = event.stores[0]
-  const storeName = STORE_NAME_LABELS[store]
-  const characterName = CHARACTER_NAME_LABELS[store] || storeName
-  const length = event.stores.length
-  const storeText = length === 1 ? characterName : `${characterName}など${length}店舗`
-  return [
-    `${storeText}の「${event.title}」を${action}しました！`,
-    '',
-    `https://biccame-musume.com/events/${event.uuid}`,
-    '',
-    '#ビッカメ娘',
-    '#ビックカメラ',
-    `#${storeName}`,
-    `#${characterName}`
-  ].join('\n')
-}
-
-const getQuoteTweetId = (event: EventDetail): string | undefined => {
-  if (!event.referenceUrls || event.referenceUrls.length === 0) return undefined
-  const announceUrl = event.referenceUrls.find((ref) => ref.type === 'announce')
-  const targetUrl = announceUrl?.url || event.referenceUrls[0].url
-  return extractTweetId(targetUrl) ?? undefined
-}
 
 /**
  * Cached fetch of the X home page + ondemand.s file. Re-fetched at most every
@@ -68,14 +42,19 @@ const getCachedTransactionInputs = async (): Promise<{ homePageHtml: string; ond
   return { homePageHtml, ondemandFileText }
 }
 
-const buildCreateTweetBody = (text: string, quoteTweetId: string | undefined): string =>
+type TweetOptions = { quoteTweetId?: string; replyToTweetId?: string }
+
+const buildCreateTweetBody = (text: string, opts: TweetOptions): string =>
   JSON.stringify({
     variables: {
       tweet_text: text,
       dark_request: false,
       media: { media_entities: [], possibly_sensitive: false },
       semantic_annotation_ids: [],
-      ...(quoteTweetId ? { attachment_url: `https://x.com/i/status/${quoteTweetId}` } : {})
+      ...(opts.quoteTweetId ? { attachment_url: `https://x.com/i/status/${opts.quoteTweetId}` } : {}),
+      ...(opts.replyToTweetId
+        ? { reply: { in_reply_to_tweet_id: opts.replyToTweetId, exclude_reply_user_ids: [] } }
+        : {})
     },
     features: {
       communities_web_enable_tweet_community_results_fetch: true,
@@ -110,7 +89,7 @@ const buildCreateTweetBody = (text: string, quoteTweetId: string | undefined): s
 export class Twitter {
   constructor(private env: Bindings) {}
 
-  async tweet(text: string, quoteTweetId?: string): Promise<void> {
+  async tweet(text: string, opts: TweetOptions = {}): Promise<string> {
     const { TWITTER_AUTH_TOKEN, TWITTER_CSRF_TOKEN } = this.env
 
     const { homePageHtml, ondemandFileText } = await getCachedTransactionInputs()
@@ -118,9 +97,9 @@ export class Twitter {
     const transactionId = await tx.generateTransactionId('POST', CREATE_TWEET_PATH)
 
     const url = `https://x.com${CREATE_TWEET_PATH}`
-    const body = buildCreateTweetBody(text, quoteTweetId)
+    const body = buildCreateTweetBody(text, opts)
 
-    console.log('[Twitter] Posting tweet:', { textLength: text.length, quoteTweetId })
+    console.log('[Twitter] Posting tweet:', { textLength: text.length, ...opts })
 
     const response = await fetch(url, {
       method: 'POST',
@@ -152,22 +131,49 @@ export class Twitter {
 
     if (!response.ok) {
       const errorText = await response.text()
-      if (quoteTweetId && response.status === 403) {
-        console.warn('[Twitter] Quote tweet not allowed, retrying without quote:', { quoteTweetId, error: errorText })
-        return await this.tweet(text, undefined)
+      if (opts.quoteTweetId && response.status === 403) {
+        console.warn('[Twitter] Quote tweet not allowed, retrying without quote:', {
+          quoteTweetId: opts.quoteTweetId,
+          error: errorText
+        })
+        return await this.tweet(text, { ...opts, quoteTweetId: undefined })
       }
       throw new Error(`X API error: ${response.status} ${errorText}`)
     }
 
-    const result = await response.json()
-    console.log('[Twitter] Tweet posted successfully:', result)
+    const result = (await response.json()) as {
+      data?: { create_tweet?: { tweet_results?: { result?: { rest_id?: string } } } }
+    }
+    const tweetId = result.data?.create_tweet?.tweet_results?.result?.rest_id
+    if (!tweetId) throw new Error(`X API: no rest_id in response: ${JSON.stringify(result).slice(0, 300)}`)
+    console.log('[Twitter] Tweet posted successfully:', { tweetId })
+    return tweetId
   }
 
   async tweetEventCreated(event: EventDetail): Promise<void> {
-    await this.tweet(generateTweetText(event, false), getQuoteTweetId(event))
+    await this.tweet(buildEventCreatedText(event), {
+      quoteTweetId: getQuoteTweetId(event.referenceUrls ?? [], 'create')
+    })
   }
 
   async tweetEventUpdated(event: EventDetail): Promise<void> {
-    await this.tweet(generateTweetText(event, true), getQuoteTweetId(event))
+    await this.tweet(buildEventUpdatedText(event), {
+      quoteTweetId: getQuoteTweetId(event.referenceUrls ?? [], 'update')
+    })
+  }
+
+  /**
+   * Post the daily-summary thread. Each tweet contains up to 3 events; the
+   * 2nd+ tweets are posted as replies to the previous tweet to form a thread.
+   */
+  async tweetDailySummary(events: Event[]): Promise<void> {
+    if (events.length === 0) return
+    const bodies = buildDailySummaryTweets(events)
+    const post = async (idx: number, replyToTweetId: string | undefined): Promise<void> => {
+      if (idx >= bodies.length) return
+      const id = await this.tweet(bodies[idx], { replyToTweetId })
+      await post(idx + 1, id)
+    }
+    await post(0, undefined)
   }
 }
