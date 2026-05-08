@@ -128,7 +128,7 @@ const RouteComponent = () => {
                   Q. このサイトはビックカメラ公式ですか？
                 </AccordionTrigger>
                 <AccordionContent className='text-sm'>
-                  A. いいえ、非公式のファンサイトです。ビックカメラおよび関連企業とは一切関係ありません。
+                  A. いいえ、ファンサイトです。ビックカメラおよび関連企業とは一切関係ありません。
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
