@@ -4,10 +4,12 @@ import { useAtom } from 'jotai'
 import { orderBy } from 'lodash-es'
 import { Calendar, Copy, ExternalLink, Package, Pencil, Store, Trash2 } from 'lucide-react'
 import { motion } from 'motion/react'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+import { eventListAdminStoreFilterAtom } from '@/atoms/event-list-admin-store-filter-atom'
 import { eventListActiveTabAtom, eventListPagesAtom } from '@/atoms/event-list-atom'
 import { eventStatusFilterAtom } from '@/atoms/event-status-filter-atom'
 import { EventStatusFilter } from '@/components/events/event-status-filter'
+import { EventStoreFilter } from '@/components/events/event-store-filter'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -176,6 +178,7 @@ export const EventList = () => {
   const [activeTab, setActiveTab] = useAtom(eventListActiveTabAtom)
   const [pages, setPages] = useAtom(eventListPagesAtom)
   const [statusFilter] = useAtom(eventStatusFilterAtom)
+  const [storeFilter] = useAtom(eventListAdminStoreFilterAtom)
   const perPage = 12
 
   const page = pages[activeTab]
@@ -184,10 +187,13 @@ export const EventList = () => {
     setPages((prev) => ({ ...prev, [activeTab]: p }))
   }
 
-  // カテゴリ別とステータス別にフィルタリングし、開始日時・カテゴリ・店舗順でソート
+  // カテゴリ別・ステータス別・店舗別にフィルタリングし、開始日時・カテゴリ・店舗順でソート
   const filtered = useMemo(() => {
     const list = events.filter((e) => {
       if (e.category !== activeTab) return false
+
+      // 店舗フィルタを適用
+      if (storeFilter !== null && !e.stores?.includes(storeFilter as StoreKey)) return false
 
       // ステータスを計算
       const now = dayjs()
@@ -208,7 +214,12 @@ export const EventList = () => {
       [(e) => dayjs(e.startDate).valueOf(), (e) => e.category, (e) => e.stores?.[0] || ''],
       ['asc', 'asc', 'asc']
     )
-  }, [events, activeTab, statusFilter])
+  }, [events, activeTab, statusFilter, storeFilter])
+
+  // 店舗フィルタ変更時は全タブのページを1に戻す
+  useEffect(() => {
+    setPages({ limited_card: 1, regular_card: 1, ackey: 1, other: 1 })
+  }, [setPages])
 
   // ページネーション処理
   const totalPages = Math.ceil(filtered.length / perPage)
@@ -254,9 +265,14 @@ export const EventList = () => {
 
   return (
     <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Event['category'])}>
-      {/* ステータスフィルタ */}
-      <div className='mb-4'>
-        <EventStatusFilter statusFilterAtom={eventStatusFilterAtom} />
+      {/* ステータス・店舗フィルタ */}
+      <div className='mb-4 flex flex-col gap-3 md:flex-row md:items-end md:gap-4'>
+        <div className='flex-1'>
+          <EventStatusFilter statusFilterAtom={eventStatusFilterAtom} />
+        </div>
+        <div className='w-full md:w-64 md:shrink-0'>
+          <EventStoreFilter storeFilterAtom={eventListAdminStoreFilterAtom} />
+        </div>
       </div>
 
       <div className='mb-4 relative bg-muted rounded-lg p-1'>
