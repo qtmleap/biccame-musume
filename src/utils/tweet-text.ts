@@ -70,13 +70,13 @@ export const buildEventUpdatedText = (event: EventDetail): string => {
   ].join('\n')
 }
 
-const dailyHeader = (count: number): string => `本日開始のイベント (${count}件)`
-const dailyHashtags = '#ビッカメ娘 #ビックカメラ'
+const dailyHeader = (count: number): string => `本日は${count}件のイベントが開催予定です！`
+const dailyHashtags = ['#ビッカメ娘', '#ビックカメラ']
 const dailySiteUrl = `${SITE_BASE}/events`
 
-const formatEventLine = (event: Pick<Event, 'stores' | 'title' | 'uuid'>): string => {
+const formatEventLine = (event: Pick<Event, 'stores' | 'title'>): string => {
   const { characterName } = eventStoreLabel(event)
-  return `・${characterName}「${event.title}」\n  ${SITE_BASE}/events/${event.uuid}`
+  return `- ${characterName}の${event.title}`
 }
 
 /**
@@ -85,7 +85,7 @@ const formatEventLine = (event: Pick<Event, 'stores' | 'title' | 'uuid'>): strin
  *   "本日開始のイベント (N件)\n<first M events>\n他 K 件\nhttps://biccame-musume.com/events\n#..."
  * progressively dropping events until it fits.
  */
-type DailySummaryEvent = Pick<Event, 'stores' | 'title' | 'uuid'>
+type DailySummaryEvent = Pick<Event, 'stores' | 'title'>
 
 export const buildDailySummaryText = (events: DailySummaryEvent[]): string => {
   if (events.length === 0) throw new Error('buildDailySummaryText called with 0 events')
@@ -94,14 +94,14 @@ export const buildDailySummaryText = (events: DailySummaryEvent[]): string => {
     const head = dailyHeader(events.length)
     const visible = events.slice(0, count).map(formatEventLine)
     const omitted = events.length - count
-    const omitNotice = omitted > 0 ? [`他 ${omitted} 件`, dailySiteUrl] : []
-    return [head, '', ...visible, ...(omitNotice.length ? ['', ...omitNotice] : []), '', dailyHashtags].join('\n')
+    const tail = omitted > 0 ? [`- 他 ${omitted} 件`, '', dailySiteUrl] : []
+    return [head, '', ...visible, ...(tail.length ? ['', ...tail] : []), '', ...dailyHashtags].join('\n')
   }
 
   const findFit = (count: number): string => {
     if (count <= 0) {
       const head = dailyHeader(events.length)
-      return [head, '', dailySiteUrl, '', dailyHashtags].join('\n')
+      return [head, '', dailySiteUrl, '', ...dailyHashtags].join('\n')
     }
     const body = buildBody(count)
     if (weightedLength(body) <= TWEET_WEIGHT_LIMIT) return body

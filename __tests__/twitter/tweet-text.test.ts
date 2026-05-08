@@ -101,12 +101,13 @@ describe('buildDailySummaryText', () => {
     expect(() => buildDailySummaryText([])).toThrow()
   })
 
-  test('1 event: contains header + line + URL + hashtags', () => {
+  test('1 event: contains header + per-line + 2 hashtags (no per-event URL)', () => {
     const out = buildDailySummaryText([e(1)])
-    expect(out).toContain('本日開始のイベント (1件)')
-    expect(out).toContain('テストイベント1')
-    expect(out).toContain('biccame-musume.com/events/00000001')
+    expect(out).toContain('本日は1件のイベントが開催予定です！')
+    expect(out).toContain('- さがみたんのテストイベント1')
+    expect(out).not.toContain('biccame-musume.com/events/00000001')
     expect(out).toContain('#ビッカメ娘')
+    expect(out).toContain('#ビックカメラ')
   })
 
   test('3 events: lists all 3', () => {
@@ -120,7 +121,7 @@ describe('buildDailySummaryText', () => {
   test('many events: truncates to "他 N 件" + site URL while keeping first M', () => {
     const events = Array.from({ length: 30 }, (_, i) => e(i + 1))
     const out = buildDailySummaryText(events)
-    expect(out).toContain('本日開始のイベント (30件)')
+    expect(out).toContain('本日は30件のイベントが開催予定です！')
     expect(out).toMatch(/他 \d+ 件/)
     expect(out).toContain('https://biccame-musume.com/events')
     expect(weightedLength(out)).toBeLessThanOrEqual(TWEET_LIMIT)
@@ -130,7 +131,7 @@ describe('buildDailySummaryText', () => {
     // synthesise an event whose single line already overflows
     const giantTitle = 'あ'.repeat(1000)
     const out = buildDailySummaryText([{ ...e(1), title: giantTitle }])
-    expect(out).toContain('本日開始のイベント (1件)')
+    expect(out).toContain('本日は1件のイベントが開催予定です！')
     expect(out).toContain('https://biccame-musume.com/events')
     expect(weightedLength(out)).toBeLessThanOrEqual(TWEET_LIMIT)
   })
