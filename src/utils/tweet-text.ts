@@ -3,7 +3,7 @@ import type { Event, EventDetail } from '@/schemas/event.dto'
 
 const SITE_BASE = 'https://biccame-musume.com'
 const TWITTER_URL_WEIGHT = 23
-const TWEET_WEIGHT_LIMIT = 280
+export const TWEET_WEIGHT_LIMIT = 280
 
 /**
  * Twitter weighted character count.
@@ -72,43 +72,40 @@ export const buildEventUpdatedText = (event: EventDetail): string => {
 
 const dailyHeader = (count: number): string => `本日は${count}件のイベントが開催予定です！`
 const dailyHashtags = ['#ビッカメ娘', '#ビックカメラ']
-const dailySiteUrl = `${SITE_BASE}/events`
 
 const formatEventLine = (event: Pick<Event, 'stores' | 'title'>): string => {
   const { characterName } = eventStoreLabel(event)
   return `- ${characterName}の${event.title}`
 }
 
-/**
- * Build the daily-summary tweet body.
- * If the body would exceed 280 weighted chars, fall back to:
- *   "本日開始のイベント (N件)\n<first M events>\n他 K 件\nhttps://biccame-musume.com/events\n#..."
- * progressively dropping events until it fits.
- */
 type DailySummaryEvent = Pick<Event, 'stores' | 'title'>
 
-export const buildDailySummaryText = (events: DailySummaryEvent[]): string => {
-  if (events.length === 0) throw new Error('buildDailySummaryText called with 0 events')
+const MAX_EVENTS_PER_TWEET = 3
 
-  const buildBody = (count: number): string => {
-    const head = dailyHeader(events.length)
-    const visible = events.slice(0, count).map(formatEventLine)
-    const omitted = events.length - count
-    const tail = omitted > 0 ? [`- 他 ${omitted} 件`, '', dailySiteUrl] : []
-    return [head, '', ...visible, ...(tail.length ? ['', ...tail] : []), '', ...dailyHashtags].join('\n')
-  }
+const chunk = <T>(arr: T[], size: number): T[][] =>
+  arr.length === 0 ? [] : [arr.slice(0, size), ...chunk(arr.slice(size), size)]
 
-  const findFit = (count: number): string => {
-    if (count <= 0) {
-      const head = dailyHeader(events.length)
-      return [head, '', dailySiteUrl, '', ...dailyHashtags].join('\n')
+/**
+ * Build the daily-summary tweet thread.
+ * - 1 つのツイートに最大 3 イベント
+ * - 1 ツイート目だけ "本日は{N}件…" のヘッダを付ける
+ * - 各ツイートに #ビッカメ娘 / #ビックカメラ ハッシュタグを付ける
+ * - 連投時は呼び出し側で順次リプライチェーンに繋ぐ前提
+ */
+export const buildDailySummaryTweets = (events: DailySummaryEvent[]): string[] => {
+  if (events.length === 0) throw new Error('buildDailySummaryTweets called with 0 events')
+  const groups = chunk(events, MAX_EVENTS_PER_TWEET)
+  const tweets = groups.map((group, i) => {
+    const lines = group.map(formatEventLine)
+    const header = i === 0 ? [dailyHeader(events.length), ''] : []
+    return [...header, ...lines, '', ...dailyHashtags].join('\n')
+  })
+  for (const t of tweets) {
+    if (weightedLength(t) > TWEET_WEIGHT_LIMIT) {
+      throw new Error(`Daily summary tweet exceeds ${TWEET_WEIGHT_LIMIT} weighted chars: ${weightedLength(t)}`)
     }
-    const body = buildBody(count)
-    if (weightedLength(body) <= TWEET_WEIGHT_LIMIT) return body
-    return findFit(count - 1)
   }
-
-  return findFit(events.length)
+  return tweets
 }
 
 const TWITTER_URL_RE = /(?:twitter\.com|x\.com)\/\w+\/status\/(\d+)/

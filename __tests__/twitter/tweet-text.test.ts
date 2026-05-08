@@ -1,14 +1,15 @@
 import { describe, expect, test } from 'bun:test'
 import type { EventDetail } from '../../src/schemas/event.dto'
 import {
-  buildDailySummaryText,
+  buildDailySummaryTweets,
   buildEventCreatedText,
   buildEventUpdatedText,
   getQuoteTweetId,
+  TWEET_WEIGHT_LIMIT,
   weightedLength
 } from '../../src/utils/tweet-text'
 
-const TWEET_LIMIT = 280
+const TWEET_LIMIT = TWEET_WEIGHT_LIMIT
 
 const baseEvent = (overrides: Partial<EventDetail> = {}): EventDetail =>
   ({
@@ -98,42 +99,63 @@ describe('buildDailySummaryText', () => {
     }) as Pick<EventDetail, 'uuid' | 'title' | 'stores'>
 
   test('throws when 0 events', () => {
-    expect(() => buildDailySummaryText([])).toThrow()
+    expect(() => buildDailySummaryTweets([])).toThrow()
   })
 
-  test('1 event: contains header + per-line + 2 hashtags (no per-event URL)', () => {
-    const out = buildDailySummaryText([e(1)])
-    expect(out).toContain('本日は1件のイベントが開催予定です！')
-    expect(out).toContain('- さがみたんのテストイベント1')
-    expect(out).not.toContain('biccame-musume.com/events/00000001')
-    expect(out).toContain('#ビッカメ娘')
-    expect(out).toContain('#ビックカメラ')
+  test('1 event: 1 tweet, header + line + hashtags, no URL', () => {
+    const tweets = buildDailySummaryTweets([e(1)])
+    expect(tweets).toHaveLength(1)
+    const t = tweets[0]
+    expect(t).toContain('本日は1件のイベントが開催予定です！')
+    expect(t).toContain('- さがみたんのテストイベント1')
+    expect(t).not.toContain('biccame-musume.com/events/00000001')
+    expect(t).toContain('#ビッカメ娘')
+    expect(t).toContain('#ビックカメラ')
   })
 
-  test('3 events: lists all 3', () => {
-    const out = buildDailySummaryText([e(1), e(2), e(3)])
-    expect(out).toContain('テストイベント1')
-    expect(out).toContain('テストイベント2')
-    expect(out).toContain('テストイベント3')
-    expect(weightedLength(out)).toBeLessThanOrEqual(TWEET_LIMIT)
+  test('3 events fit in 1 tweet', () => {
+    const tweets = buildDailySummaryTweets([e(1), e(2), e(3)])
+    expect(tweets).toHaveLength(1)
+    expect(tweets[0]).toContain('テストイベント1')
+    expect(tweets[0]).toContain('テストイベント2')
+    expect(tweets[0]).toContain('テストイベント3')
   })
 
-  test('many events: truncates to "他 N 件" + site URL while keeping first M', () => {
-    const events = Array.from({ length: 30 }, (_, i) => e(i + 1))
-    const out = buildDailySummaryText(events)
-    expect(out).toContain('本日は30件のイベントが開催予定です！')
-    expect(out).toMatch(/他 \d+ 件/)
-    expect(out).toContain('https://biccame-musume.com/events')
-    expect(weightedLength(out)).toBeLessThanOrEqual(TWEET_LIMIT)
+  test('4 events split into 2 tweets (3 + 1)', () => {
+    const tweets = buildDailySummaryTweets([e(1), e(2), e(3), e(4)])
+    expect(tweets).toHaveLength(2)
+    expect(tweets[0]).toContain('テストイベント1')
+    expect(tweets[0]).toContain('テストイベント3')
+    expect(tweets[1]).toContain('テストイベント4')
+    expect(tweets[1]).not.toContain('本日は')
   })
 
-  test('fallback when nothing fits: header + site URL + hashtags only', () => {
-    // synthesise an event whose single line already overflows
+  test('only the first tweet has the "本日は…件" header', () => {
+    const tweets = buildDailySummaryTweets(Array.from({ length: 7 }, (_, i) => e(i + 1)))
+    expect(tweets).toHaveLength(3)
+    expect(tweets[0]).toContain('本日は7件のイベントが開催予定です！')
+    expect(tweets[1]).not.toContain('本日は')
+    expect(tweets[2]).not.toContain('本日は')
+  })
+
+  test('every tweet in the thread has both #ビッカメ娘 and #ビックカメラ', () => {
+    const tweets = buildDailySummaryTweets(Array.from({ length: 10 }, (_, i) => e(i + 1)))
+    for (const t of tweets) {
+      expect(t).toContain('#ビッカメ娘')
+      expect(t).toContain('#ビックカメラ')
+    }
+  })
+
+  test('every tweet in the thread fits within 280 weighted chars (= 140 JP chars)', () => {
+    const tweets = buildDailySummaryTweets(Array.from({ length: 30 }, (_, i) => e(i + 1)))
+    for (const t of tweets) {
+      expect(weightedLength(t)).toBeLessThanOrEqual(TWEET_LIMIT)
+    }
+  })
+
+  test('throws when a single event line is so long it cannot fit', () => {
     const giantTitle = 'あ'.repeat(1000)
-    const out = buildDailySummaryText([{ ...e(1), title: giantTitle }])
-    expect(out).toContain('本日は1件のイベントが開催予定です！')
-    expect(out).toContain('https://biccame-musume.com/events')
-    expect(weightedLength(out)).toBeLessThanOrEqual(TWEET_LIMIT)
+    expect(() => buildDailySummaryTweets([{ ...e(1), title: giantTitle }])).toThrow(/exceeds/)
   })
 })
 

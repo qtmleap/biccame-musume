@@ -2,7 +2,7 @@ import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '@/l
 import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
 import {
-  buildDailySummaryText,
+  buildDailySummaryTweets,
   buildEventCreatedText,
   buildEventUpdatedText,
   getQuoteTweetId
@@ -42,14 +42,19 @@ const getCachedTransactionInputs = async (): Promise<{ homePageHtml: string; ond
   return { homePageHtml, ondemandFileText }
 }
 
-const buildCreateTweetBody = (text: string, quoteTweetId: string | undefined): string =>
+type TweetOptions = { quoteTweetId?: string; replyToTweetId?: string }
+
+const buildCreateTweetBody = (text: string, opts: TweetOptions): string =>
   JSON.stringify({
     variables: {
       tweet_text: text,
       dark_request: false,
       media: { media_entities: [], possibly_sensitive: false },
       semantic_annotation_ids: [],
-      ...(quoteTweetId ? { attachment_url: `https://x.com/i/status/${quoteTweetId}` } : {})
+      ...(opts.quoteTweetId ? { attachment_url: `https://x.com/i/status/${opts.quoteTweetId}` } : {}),
+      ...(opts.replyToTweetId
+        ? { reply: { in_reply_to_tweet_id: opts.replyToTweetId, exclude_reply_user_ids: [] } }
+        : {})
     },
     features: {
       communities_web_enable_tweet_community_results_fetch: true,
@@ -84,7 +89,7 @@ const buildCreateTweetBody = (text: string, quoteTweetId: string | undefined): s
 export class Twitter {
   constructor(private env: Bindings) {}
 
-  async tweet(text: string, quoteTweetId?: string): Promise<void> {
+  async tweet(text: string, opts: TweetOptions = {}): Promise<string> {
     const { TWITTER_AUTH_TOKEN, TWITTER_CSRF_TOKEN } = this.env
 
     const { homePageHtml, ondemandFileText } = await getCachedTransactionInputs()
@@ -92,9 +97,9 @@ export class Twitter {
     const transactionId = await tx.generateTransactionId('POST', CREATE_TWEET_PATH)
 
     const url = `https://x.com${CREATE_TWEET_PATH}`
-    const body = buildCreateTweetBody(text, quoteTweetId)
+    const body = buildCreateTweetBody(text, opts)
 
-    console.log('[Twitter] Posting tweet:', { textLength: text.length, quoteTweetId })
+    console.log('[Twitter] Posting tweet:', { textLength: text.length, ...opts })
 
     const response = await fetch(url, {
       method: 'POST',
@@ -126,31 +131,49 @@ export class Twitter {
 
     if (!response.ok) {
       const errorText = await response.text()
-      if (quoteTweetId && response.status === 403) {
-        console.warn('[Twitter] Quote tweet not allowed, retrying without quote:', { quoteTweetId, error: errorText })
-        return await this.tweet(text, undefined)
+      if (opts.quoteTweetId && response.status === 403) {
+        console.warn('[Twitter] Quote tweet not allowed, retrying without quote:', {
+          quoteTweetId: opts.quoteTweetId,
+          error: errorText
+        })
+        return await this.tweet(text, { ...opts, quoteTweetId: undefined })
       }
       throw new Error(`X API error: ${response.status} ${errorText}`)
     }
 
-    const result = await response.json()
-    console.log('[Twitter] Tweet posted successfully:', result)
+    const result = (await response.json()) as {
+      data?: { create_tweet?: { tweet_results?: { result?: { rest_id?: string } } } }
+    }
+    const tweetId = result.data?.create_tweet?.tweet_results?.result?.rest_id
+    if (!tweetId) throw new Error(`X API: no rest_id in response: ${JSON.stringify(result).slice(0, 300)}`)
+    console.log('[Twitter] Tweet posted successfully:', { tweetId })
+    return tweetId
   }
 
   async tweetEventCreated(event: EventDetail): Promise<void> {
-    await this.tweet(buildEventCreatedText(event), getQuoteTweetId(event.referenceUrls ?? [], 'create'))
+    await this.tweet(buildEventCreatedText(event), {
+      quoteTweetId: getQuoteTweetId(event.referenceUrls ?? [], 'create')
+    })
   }
 
   async tweetEventUpdated(event: EventDetail): Promise<void> {
-    await this.tweet(buildEventUpdatedText(event), getQuoteTweetId(event.referenceUrls ?? [], 'update'))
+    await this.tweet(buildEventUpdatedText(event), {
+      quoteTweetId: getQuoteTweetId(event.referenceUrls ?? [], 'update')
+    })
   }
 
   /**
-   * Daily summary tweet: "本日開始のイベント (N件)" + per-event lines, with
-   * automatic truncation if the body would exceed 280 weighted chars.
+   * Post the daily-summary thread. Each tweet contains up to 3 events; the
+   * 2nd+ tweets are posted as replies to the previous tweet to form a thread.
    */
   async tweetDailySummary(events: Event[]): Promise<void> {
     if (events.length === 0) return
-    await this.tweet(buildDailySummaryText(events))
+    const bodies = buildDailySummaryTweets(events)
+    const post = async (idx: number, replyToTweetId: string | undefined): Promise<void> => {
+      if (idx >= bodies.length) return
+      const id = await this.tweet(bodies[idx], { replyToTweetId })
+      await post(idx + 1, id)
+    }
+    await post(0, undefined)
   }
 }
