@@ -18,7 +18,9 @@ const RouteComponent = () => {
               お問い合わせ先のご案内
             </h2>
             <div className='space-y-4 text-muted-foreground'>
-              <p>本サイトはファンが個人で運営している応援サイトです。お問い合わせ内容に応じて、最適な窓口を以下にご案内します。</p>
+              <p>
+                本サイトはファンが個人で運営している応援サイトです。お問い合わせ内容に応じて、最適な窓口を以下にご案内します。
+              </p>
               <ul className='space-y-3'>
                 <li>
                   <p className='font-bold text-foreground'>ビックカメラの製品・サービス・店舗等について</p>

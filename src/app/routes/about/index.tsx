@@ -28,7 +28,9 @@ const RouteComponent = () => {
               著作権について
             </h2>
             <div className='space-y-3 text-muted-foreground'>
-              <p>ビッカメ娘に関する著作権は、株式会社ビックカメラおよびアイティオール株式会社（© itall）に帰属します。</p>
+              <p>
+                ビッカメ娘に関する著作権は、株式会社ビックカメラおよびアイティオール株式会社（© itall）に帰属します。
+              </p>
               <p>
                 本サイトは、
                 <a
@@ -80,12 +82,16 @@ const RouteComponent = () => {
                 <div className='flex-1 space-y-1'>
                   <p className='font-bold text-foreground'>第三条（本キャラクターの使用に関する注意事項）</p>
                   <p className='text-sm'>
-                    本サイトでは、ビッカメ娘の公式画像をそのまま参照表示するにあたり、著作権者「© itall」を表示するとともに、
-                    <strong className='text-foreground'>本サイトを経由したキャラクター画像の再使用・転載を固くお断りすることをここに明記</strong>
+                    本サイトでは、ビッカメ娘の公式画像をそのまま参照表示するにあたり、著作権者「©
+                    itall」を表示するとともに、
+                    <strong className='text-foreground'>
+                      本サイトを経由したキャラクター画像の再使用・転載を固くお断りすることをここに明記
+                    </strong>
                     します。
                   </p>
                   <p className='text-xs text-muted-foreground/70'>
-                    ※ ガイドライン原文では「citall」と表記されていますが、アイティオール株式会社（itall Inc.）の英文表記および公式X（@itallinc）等を踏まえ「© itall」と解釈しています。
+                    ※ ガイドライン原文では「citall」と表記されていますが、アイティオール株式会社（itall
+                    Inc.）の英文表記および公式X（@itallinc）等を踏まえ「© itall」と解釈しています。
                   </p>
                 </div>
               </li>
