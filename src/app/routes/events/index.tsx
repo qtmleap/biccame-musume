@@ -203,7 +203,7 @@ const EventsContent = () => {
                     <EventStatusFilter statusFilterAtom={eventListStatusFilterAtom} />
                     <EventUserActivityFilter />
                     <RegionFilterControl />
-                    <EventStoreFilter />
+                    <EventStoreFilter storeFilterAtom={eventListStoreFilterAtom} />
                   </div>
                 </div>
                 <div className='border-t border-card px-4 py-3'>
@@ -242,7 +242,7 @@ const EventsContent = () => {
               <EventCategoryFilter />
             </div>
             <div className='w-64 shrink-0'>
-              <EventStoreFilter />
+              <EventStoreFilter storeFilterAtom={eventListStoreFilterAtom} />
             </div>
           </div>
 
