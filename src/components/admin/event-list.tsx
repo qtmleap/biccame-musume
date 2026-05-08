@@ -178,7 +178,7 @@ export const EventList = () => {
   const [activeTab, setActiveTab] = useAtom(eventListActiveTabAtom)
   const [pages, setPages] = useAtom(eventListPagesAtom)
   const [statusFilter] = useAtom(eventStatusFilterAtom)
-  const [storeFilter] = useAtom(eventListAdminStoreFilterAtom)
+  const [storeFilter, setStoreFilter] = useAtom(eventListAdminStoreFilterAtom)
   const perPage = 12
 
   const page = pages[activeTab]
@@ -267,7 +267,7 @@ export const EventList = () => {
           <EventStatusFilter statusFilterAtom={eventStatusFilterAtom} />
         </div>
         <div className='w-full md:w-64 md:shrink-0'>
-          <EventStoreFilter storeFilterAtom={eventListAdminStoreFilterAtom} />
+          <EventStoreFilter value={storeFilter} onChange={setStoreFilter} />
         </div>
       </div>
 
