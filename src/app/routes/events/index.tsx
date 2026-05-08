@@ -67,6 +67,13 @@ const EventsContent = () => {
     setStoreFilter(storeParam ?? null)
   }, [storeParam, setStoreFilter])
 
+  // atom の変更をURLに反映（共有・履歴対応）
+  useEffect(() => {
+    const next = storeFilter ?? undefined
+    if (next === storeParam) return
+    navigate({ search: (prev) => ({ ...prev, store: next }), replace: true })
+  }, [storeFilter, storeParam, navigate])
+
   const DEFAULT_CATEGORY = new Set(['ackey', 'limited_card', 'regular_card', 'other'] as const)
   const DEFAULT_STATUS = { upcoming: true, ongoing: true, ended: false }
   const DEFAULT_ACTIVITY = { hideInterested: false, hideCompleted: false }
