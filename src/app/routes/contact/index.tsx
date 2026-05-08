@@ -23,12 +23,12 @@ const RouteComponent = () => {
                 <li>
                   <p className='font-bold text-foreground'>ビックカメラの製品・サービス・店舗等について</p>
                   <a
-                    href='https://www.biccamera.co.jp/company/contact.html'
+                    href='https://www.biccamera.com/bc/c/info/enqueteselect/index.jsp'
                     target='_blank'
                     rel='noopener noreferrer'
                     className='text-brand hover:underline inline-flex items-center gap-1 text-sm'
                   >
-                    ビックカメラ公式サイトのお問い合わせフォーム
+                    ビックカメラ公式のお問い合わせ窓口
                     <ExternalLink className='h-4 w-4' />
                   </a>
                 </li>
