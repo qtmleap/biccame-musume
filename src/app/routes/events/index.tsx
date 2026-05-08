@@ -34,6 +34,7 @@ const PER_PAGE = 12
  */
 const EventsContent = () => {
   const { store: storeParam } = Route.useSearch()
+  const navigate = Route.useNavigate()
   const [eventsQuery, charactersQuery] = useSuspenseQueries({
     queries: [
       {
