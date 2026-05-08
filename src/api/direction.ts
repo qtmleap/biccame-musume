@@ -200,7 +200,7 @@ app.openapi(
           duration: 0,
           transfers: 0
         }))
-        return c.json({ legs: fallbackLegs }, 200)
+        return c.json({ legs: fallbackLegs, degraded: true }, 200)
       }
 
       console.log('[Routes API] Validation success, returning data')
@@ -214,7 +214,7 @@ app.openapi(
         duration: 0,
         transfers: 0
       }))
-      return c.json({ legs: fallbackLegs }, 200)
+      return c.json({ legs: fallbackLegs, degraded: true }, 200)
     }
   }
 )

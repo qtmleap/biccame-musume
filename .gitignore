@@ -235,3 +235,15 @@ dev-dist/
 # Act
 .secrets
 !.secrets.example
+prisma/shadow.db
+
+# Playwright
+test-results/
+playwright-report/
+
+# D1 backups (contains production data, do not commit)
+backups/
+
+# Claude Code scheduled tasks lock
+.claude/scheduled_tasks.lock
+cookie.txt

@@ -1,25 +1,15 @@
 import { z } from '@hono/zod-openapi'
 
 /**
- * ユーザー作成/更新リクエストスキーマ
- * Firebase認証トークンから取得できない情報のみ受け取る
- */
-export const UpsertUserRequestSchema = z
-  .object({
-    // screenName: z.string().openapi({ description: 'Twitterスクリーンネーム' })
-  })
-  .openapi('UpsertUserRequest')
-
-/**
  * ユーザーレスポンススキーマ
  */
 export const UserResponseSchema = z
   .object({
-    id: z.string().nonempty().openapi({ description: 'ユーザーID' }),
-    displayName: z.string().nullable().openapi({ description: '表示名' }),
-    thumbnailURL: z.string().nullable().openapi({ description: 'プロフィール画像URL' }),
-    screenName: z.string().nullable().openapi({ description: 'Twitterスクリーンネーム' }),
-    email: z.string().nullable().openapi({ description: 'メールアドレス' })
+    id: z.string().nonempty('ユーザーIDは必須です').openapi({ description: 'ユーザーID' }),
+    displayName: z.string().nonempty().nullable().openapi({ description: '表示名' }),
+    thumbnailURL: z.string().nonempty().nullable().openapi({ description: 'プロフィール画像URL' }),
+    screenName: z.string().nonempty().nullable().openapi({ description: 'Twitterスクリーンネーム' }),
+    email: z.string().nonempty().nullable().openapi({ description: 'メールアドレス' })
   })
   .openapi('UserResponse')
 
@@ -28,25 +18,40 @@ export const UserResponseSchema = z
  * Zodiosクライアント用にopenapiメソッドを使わないバージョン
  */
 export const UserResponseSchemaForClient = z.object({
-  id: z.string().nonempty(),
-  displayName: z.string().nonempty().nullable(),
-  photoUrl: z.string().nonempty().nullable(),
-  screenName: z.string().nonempty().nullable(),
-  email: z.string().nonempty().nullable()
+  id: z.string().nonempty('ユーザーIDは必須です'),
+  displayName: z.string().nonempty('表示名は必須です').nullable(),
+  thumbnailURL: z.string().nonempty('プロフィール画像URLは必須です').nullable(),
+  screenName: z.string().nonempty('スクリーンネームは必須です').nullable(),
+  email: z.string().nonempty('メールアドレスは必須です').nullable()
 })
 
 /**
- * ユーザー作成/更新リクエスト（client用）
+ * 管理画面のユーザー一覧 1 件分
  */
-export const UpsertUserRequestSchemaForClient = z.object({
+export const AdminUserSchema = z
+  .object({
+    id: z.string().nonempty().openapi({ description: 'Firebase UID' }),
+    displayName: z.string().nonempty().nullable().openapi({ description: '表示名' }),
+    email: z.string().nonempty().nullable().openapi({ description: 'メールアドレス' }),
+    thumbnailURL: z.string().nonempty().nullable().openapi({ description: 'プロフィール画像URL' }),
+    createdAt: z.string().nonempty().openapi({ description: '登録日時' })
+  })
+  .openapi('AdminUser')
+
+export const AdminUserListResponseSchema = z
+  .object({
+    users: z.array(AdminUserSchema)
+  })
+  .openapi('AdminUserListResponse')
+
+export const AdminUserSchemaForClient = z.object({
   id: z.string().nonempty(),
-  displayName: z.string().nonempty().nullish(),
-  photoUrl: z.string().nonempty().nullish(),
-  screenName: z.string().nonempty().nullish(),
-  email: z.string().nonempty().nullish()
+  displayName: z.string().nonempty().nullable(),
+  email: z.string().nonempty().nullable(),
+  thumbnailURL: z.string().nonempty().nullable(),
+  createdAt: z.string().nonempty()
 })
 
-export type UpsertUserRequest = z.infer<typeof UpsertUserRequestSchema>
-export type UserResponse = z.infer<typeof UserResponseSchema>
-export type UserResponseForClient = z.infer<typeof UserResponseSchemaForClient>
-export type UpsertUserRequestForClient = z.infer<typeof UpsertUserRequestSchemaForClient>
+export const AdminUserListResponseSchemaForClient = z.object({
+  users: z.array(AdminUserSchemaForClient)
+})

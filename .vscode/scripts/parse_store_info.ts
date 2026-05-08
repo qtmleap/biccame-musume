@@ -9,12 +9,13 @@ import { join } from 'node:path'
 import jaconv from 'jaconv'
 import { mapKeys, snakeCase } from 'lodash-es'
 import { parse } from 'node-html-parser'
-import { parse as parseYaml } from 'yaml'
 import { z } from 'zod'
+import { parseHours } from './lib/hours'
+import { extractPrefecture } from './lib/prefecture'
+import { type CalendarBirthday, parseCalendarHtml } from './parsers/calendar'
 
 const CACHE_DIR = join(import.meta.dir, '../archive/html_cache')
 const OUTPUT_FILE = join(import.meta.dir, '../../public/characters.json')
-const BIRTHDAY_FILE = join(import.meta.dir, 'birthday.json')
 
 /**
  * 店舗情報の型定義
@@ -27,7 +28,7 @@ type StoreInfo = {
     description: string
     twitter_id: string
     images: string[]
-    birthday: string
+    birthday?: string
     is_biccame_musume: boolean
   }
   prefecture: string | null
@@ -37,12 +38,12 @@ type StoreInfo = {
   } | null
   postal_code?: string | null
   store?: {
-    store_id: number
-    name: string
-    address: string
+    store_id?: number
+    name?: string
+    address?: string
     phone?: string
-    birthday: string
-    open_all_year: boolean
+    birthday?: string
+    open_all_year?: boolean
     hours?: Array<{
       type: 'weekday' | 'weekend' | 'holiday' | 'all'
       open_time: string
@@ -79,198 +80,7 @@ type ParkingCondition = {
   freeTime: string
 }
 
-/**
- * 住所または店舗名から都道府県を抽出
- */
-const extractPrefecture = (
-  address?: string,
-  storeName?: string,
-  characterName?: string,
-  storeId?: string
-): string | undefined => {
-  // 店舗IDベースの例外処理（店舗HTMLがない特殊なキャラクター）
-  const storeIdMap: Record<string, string | null> = {
-    biccamera: null, // ビックカメラ（企業キャラクター）
-    bicsim: null, // ビックシムたん（サービスキャラクター）
-    oeraitan: null, // お偉いたん（役職キャラクター）
-    camera: '東京都', // カメ館たん（池袋カメラ館）
-    funato: '千葉県', // ふなとーたん（船橋）
-    machida: '東京都', // 町田たん
-    naisen: null, // ナイセン（内線キャラクター）
-    photo: '東京都', // フォトたん（写真サービス）
-    prosta: '東京都', // プロスタたん（プロフェッショナルスタッフ）
-    seiseki: '東京都', // せいせきたん（聖蹟桜ヶ丘）
-    tamapla: '神奈川県' // たまプラたん（たまプラーザ）
-  }
 
-  if (storeId && storeId in storeIdMap) {
-    return storeIdMap[storeId] ?? undefined
-  }
-
-  const prefectures = [
-    '北海道',
-    '青森県',
-    '岩手県',
-    '宮城県',
-    '秋田県',
-    '山形県',
-    '福島県',
-    '茨城県',
-    '栃木県',
-    '群馬県',
-    '埼玉県',
-    '千葉県',
-    '東京都',
-    '神奈川県',
-    '新潟県',
-    '富山県',
-    '石川県',
-    '福井県',
-    '山梨県',
-    '長野県',
-    '岐阜県',
-    '静岡県',
-    '愛知県',
-    '三重県',
-    '滋賀県',
-    '京都府',
-    '大阪府',
-    '兵庫県',
-    '奈良県',
-    '和歌山県',
-    '鳥取県',
-    '島根県',
-    '岡山県',
-    '広島県',
-    '山口県',
-    '徳島県',
-    '香川県',
-    '愛媛県',
-    '高知県',
-    '福岡県',
-    '佐賀県',
-    '長崎県',
-    '熊本県',
-    '大分県',
-    '宮崎県',
-    '鹿児島県',
-    '沖縄県'
-  ]
-
-  // 住所から都道府県を抽出
-  if (address) {
-    for (const pref of prefectures) {
-      if (address.includes(pref)) {
-        return pref
-      }
-    }
-  }
-
-  // 店舗名から都道府県を推定
-  const locationMap: Record<string, string> = {
-    札幌: '北海道',
-    新潟: '新潟県',
-    浜松: '静岡県',
-    名古屋: '愛知県',
-    京都: '京都府',
-    大阪: '大阪府',
-    なんば: '大阪府',
-    天神: '福岡県',
-    広島: '広島県',
-    岡山: '岡山県',
-    鹿児島: '鹿児島県',
-    高槻: '大阪府',
-    あべの: '大阪府',
-    八尾: '大阪府'
-  }
-
-  const textToCheck = storeName || characterName || ''
-  for (const [location, pref] of Object.entries(locationMap)) {
-    if (textToCheck.includes(location)) {
-      return pref
-    }
-  }
-
-  // デフォルトは東京都（多くの店舗が東京にあるため）
-  return '東京都'
-}
-
-/**
- * 営業時間文字列をパース
- */
-const parseHours = (
-  hoursText: string
-): {
-  open_all_year: boolean
-  hours: Array<{
-    type: 'weekday' | 'weekend' | 'holiday' | 'all'
-    open_time: string
-    close_time: string
-    note?: string
-  }>
-} => {
-  const open_all_year = hoursText.includes('年中無休')
-  const hours: Array<{
-    type: 'weekday' | 'weekend' | 'holiday' | 'all'
-    open_time: string
-    close_time: string
-    note?: string
-  }> = []
-
-  // 平日と土日祝で分かれているパターン（例: 「平日10:00～22:00 / 土日祝10:00～21:00」）
-  const weekdayWeekendPattern =
-    /平日[^\d]*(\d{1,2}:\d{2})\s*[～〜~-]\s*(\d{1,2}:\d{2})[^/]*\/[^\d]*土日[^\d]*(\d{1,2}:\d{2})\s*[～〜~-]\s*(\d{1,2}:\d{2})/
-  const weekdayWeekendMatch = hoursText.match(weekdayWeekendPattern)
-
-  if (weekdayWeekendMatch) {
-    // 平日
-    hours.push({
-      type: 'weekday',
-      open_time: weekdayWeekendMatch[1],
-      close_time: weekdayWeekendMatch[2]
-    })
-    // 土日祝
-    hours.push({
-      type: 'weekend',
-      open_time: weekdayWeekendMatch[3],
-      close_time: weekdayWeekendMatch[4]
-    })
-  } else {
-    // 平日・土曜と日曜・祝日で分かれているパターン（例: 「平日・土曜 10:00～20:30　日曜・祝日 10:00～20:00」）
-    const weekdaySatSunPattern =
-      /平日[^\d]*(\d{1,2}:\d{2})\s*[～〜~-]\s*(\d{1,2}:\d{2})[^\d]*日曜[^\d]*(\d{1,2}:\d{2})\s*[～〜~-]\s*(\d{1,2}:\d{2})/
-    const weekdaySatSunMatch = hoursText.match(weekdaySatSunPattern)
-
-    if (weekdaySatSunMatch) {
-      // 平日・土曜
-      hours.push({
-        type: 'weekday',
-        open_time: weekdaySatSunMatch[1],
-        close_time: weekdaySatSunMatch[2]
-      })
-      // 日曜・祝日
-      hours.push({
-        type: 'holiday',
-        open_time: weekdaySatSunMatch[3],
-        close_time: weekdaySatSunMatch[4]
-      })
-    } else {
-      // 通常の営業時間（全曜日共通）
-      const timeMatch = hoursText.match(/(\d{1,2}:\d{2})\s*[～〜~-]\s*(\d{1,2}:\d{2})/)
-      if (timeMatch) {
-        const note = hoursText.includes('（') ? hoursText.match(/（[^）]+）/)?.[0] : undefined
-        hours.push({
-          type: 'all',
-          open_time: timeMatch[1],
-          close_time: timeMatch[2],
-          note
-        })
-      }
-    }
-  }
-
-  return { open_all_year, hours }
-}
 
 /**
  * 住所から座標を取得する（Google Geocoding API）
@@ -326,6 +136,33 @@ const geocodeAddress = async (address: string): Promise<{ latitude: number; long
 }
 
 /**
+ * すべてのカレンダーHTMLから誕生日マップを構築
+ */
+const buildCalendarBirthdayMap = (): Record<string, CalendarBirthday> => {
+  const map: Record<string, CalendarBirthday> = {}
+  const files = readdirSync(CACHE_DIR)
+    .filter((file) => file.startsWith('calendar_') && file.endsWith('.html'))
+    .sort()
+
+  for (const file of files) {
+    const fileMatch = file.match(/^calendar_(\d{4})_(\d{2})\.html$/)
+    if (!fileMatch) continue
+    const year = Number.parseInt(fileMatch[1], 10)
+    const month = Number.parseInt(fileMatch[2], 10)
+
+    const html = readFileSync(join(CACHE_DIR, file), 'utf-8')
+    const monthMap = parseCalendarHtml(html, year, month)
+    for (const [key, entry] of Object.entries(monthMap)) {
+      map[key] ??= {}
+      if (entry.character_birthday) map[key].character_birthday = entry.character_birthday
+      if (entry.store_birthday) map[key].store_birthday = entry.store_birthday
+    }
+  }
+
+  return map
+}
+
+/**
  * プロフィールHTMLからビッカメ娘情報を抽出
  */
 const parseProfileHtml = (
@@ -338,11 +175,13 @@ const parseProfileHtml = (
     description: string
     twitter_id: string
     images: string[]
+    is_biccame_musume: boolean
   }
   store_fields: {
     postal_code?: string
     phone?: string
     birthday?: string
+    address?: string
   }
 } | null => {
   const root = parse(html)
@@ -447,8 +286,8 @@ const parseProfileHtml = (
   }
 
   // is_biccame_musumeのデフォルト値を設定
-  // ナイセン、お偉いたん、ビックシムたん、ビックカメラはfalse、それ以外はtrue
-  const excludedCharacterIds = ['naisen', 'oeraitan', 'bicsim', 'biccamera']
+  // ナイセン、お偉いたん、ビックシムたん、ビックカメラ、Airたんはfalse、それ以外はtrue
+  const excludedCharacterIds = ['naisen', 'oeraitan', 'bicsim', 'biccamera', 'air']
   const is_biccame_musume = !excludedCharacterIds.includes(storeId)
 
   return {
@@ -752,7 +591,7 @@ const main = async () => {
 
         if (storeData) {
           // prefecture, postal_codeをrootに移動
-          storeInfo.prefecture = storeData.prefecture
+          storeInfo.prefecture = storeData.prefecture ?? null
           storeInfo.postal_code = profileInfo.store_fields.postal_code
 
           // 既存の座標があれば使用、なければGeocoding APIで取得
@@ -826,18 +665,25 @@ const main = async () => {
       console.log(`  ✓ ${displayName}`)
     }
 
-    // birthday.jsonを読み込んでマージ
-    if (existsSync(BIRTHDAY_FILE)) {
-      console.log('\n📋 Merging birthday data...')
-      const birthdayData = JSON.parse(readFileSync(BIRTHDAY_FILE, 'utf-8')) as Record<string, string>
-
+    // カレンダーHTMLから誕生日マップを構築してマージ
+    console.log('\n📋 Merging birthday data from calendar HTML...')
+    const calendarBirthdayMap = buildCalendarBirthdayMap()
+    const calendarKeyCount = Object.keys(calendarBirthdayMap).length
+    if (calendarKeyCount === 0) {
+      console.warn('  ⚠️ No calendar HTML found. Run "Fetch HTML Cache" first.')
+    } else {
+      console.log(`  ✓ Loaded ${calendarKeyCount} keys from calendar HTML`)
       for (const store of stores) {
-        const birthday = birthdayData[store.id]
-        if (birthday && store.character) {
-          store.character.birthday = birthday
+        const entry = calendarBirthdayMap[store.id]
+        if (!entry) continue
+        if (entry.character_birthday) {
+          store.character.birthday = entry.character_birthday
+        }
+        if (entry.store_birthday && store.store && !store.store.birthday) {
+          store.store.birthday = entry.store_birthday
         }
       }
-      console.log('✓ Birthday data merged')
+      console.log('✓ Birthday data merged from calendar')
     }
 
     // スネークケース変換関数
@@ -905,4 +751,6 @@ const main = async () => {
   }
 }
 
-main()
+if (import.meta.main) {
+  main()
+}

@@ -34,6 +34,7 @@ const CharactersContent = () => {
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
+      <h1 className='text-2xl font-bold text-foreground mb-4'>ビッカメ娘一覧</h1>
       <div className='mb-8 grid grid-cols-1 lg:grid-cols-2 gap-4'>
         <RegionFilterControl />
         <CharacterSortControl onRandomize={() => setRandomCounter((prev) => prev + 1)} />
@@ -41,7 +42,7 @@ const CharactersContent = () => {
       <CharacterList characters={sortedMusume} title={HOME_LABELS.biccameMusumeTitle} showTitle />
       {sortedOthers.length > 0 && (
         <>
-          <div className='my-8 border-t-2 border-gray-300 dark:border-gray-600' />
+          <div className='my-8 border-t-2 border-card' />
           <CharacterList characters={sortedOthers} title={HOME_LABELS.relatedCharactersTitle} showTitle />
         </>
       )}

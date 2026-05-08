@@ -2,24 +2,44 @@ import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
 import {
   SuccessResponseSchemaForClient,
+  UpdateEventResponseSchema,
   UpdateEventStatusSchema,
+  UpdateStoreResponseSchema,
   UpdateStoreStatusSchema,
   UserActivitiesResponseSchema,
   UserEventsResponseSchema,
   UserStoresResponseSchema
 } from '@/schemas/activity.dto'
+import { AdminCommentsResponseSchema } from '@/schemas/admin-comment.dto'
 import { AuthResponseSchema, CurrentUserResponseSchema } from '@/schemas/auth.dto'
 import {
+  BadgeSchema,
+  CreateSpecialBadgeBodySchema,
+  GetBadgeLeaderboardResponseSchema,
+  GetBadgesResponseSchema,
+  GetMyBadgesResponseSchema,
+  UpdateBadgeBodySchema
+} from '@/schemas/badge.dto'
+import { CreateCommentRequestSchema, ListCommentsResponseSchema } from '@/schemas/comment.dto'
+import {
   CheckUrlResponseSchema,
+  EventDetailSchema,
   EventRequestSchema,
   EventSchema,
   EventStatsRequestSchema,
   EventStatsResponseSchema
 } from '@/schemas/event.dto'
+import { FavoriteCharactersResponseSchemaForClient } from '@/schemas/favorite.dto'
+import { SearchResultSchema } from '@/schemas/search.dto'
 import { PageViewStatsSchema } from '@/schemas/stats.dto'
 import { StoresSchema } from '@/schemas/store.dto'
-import { UpsertUserRequestSchemaForClient, UserResponseSchemaForClient } from '@/schemas/user.dto'
-import { VoteCountListSchema, VoteResponseSchema } from '@/schemas/vote.dto'
+import { AdminUserListResponseSchemaForClient, UserResponseSchemaForClient } from '@/schemas/user.dto'
+import {
+  BulkVoteRequestSchema,
+  BulkVoteResponseSchemaForClient,
+  VoteCountListSchema,
+  VoteResponseSchema
+} from '@/schemas/vote.dto'
 
 /**
  * バージョン情報レスポンススキーマ
@@ -64,10 +84,24 @@ const api = makeApi([
       {
         name: 'characterId',
         type: 'Path',
-        schema: z.string().nonempty().nonempty()
+        schema: z.string().nonempty()
       }
     ],
     response: VoteResponseSchema
+  },
+  {
+    method: 'post',
+    path: '/api/votes/bulk',
+    alias: 'createBulkVote',
+    description: '一括投票（推し or 全員）',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: BulkVoteRequestSchema
+      }
+    ],
+    response: BulkVoteResponseSchemaForClient
   },
   // イベント関連API
   {
@@ -82,7 +116,7 @@ const api = makeApi([
     path: '/api/events/:id',
     alias: 'getEvent',
     description: '単一イベントを取得',
-    response: EventSchema
+    response: EventDetailSchema
   },
   {
     method: 'post',
@@ -96,7 +130,7 @@ const api = makeApi([
         schema: EventRequestSchema
       }
     ],
-    response: EventSchema
+    response: EventDetailSchema
   },
   {
     method: 'put',
@@ -110,7 +144,7 @@ const api = makeApi([
         schema: EventRequestSchema.partial()
       }
     ],
-    response: EventSchema
+    response: EventDetailSchema
   },
   {
     method: 'delete',
@@ -151,6 +185,21 @@ const api = makeApi([
       }
     ],
     response: CheckUrlResponseSchema
+  },
+  // 検索API
+  {
+    method: 'get',
+    path: '/api/search',
+    alias: 'searchEvents',
+    description: 'イベントをタイトルで全文検索',
+    parameters: [
+      {
+        name: 'q',
+        type: 'Query',
+        schema: z.string().min(1).max(100)
+      }
+    ],
+    response: SearchResultSchema
   },
   // ページビュー統計API
   {
@@ -212,20 +261,6 @@ const api = makeApi([
     description: 'ユーザー情報を取得',
     response: UserResponseSchemaForClient
   },
-  {
-    method: 'post',
-    path: '/api/users',
-    alias: 'upsertUser',
-    description: 'ユーザーを作成/更新',
-    parameters: [
-      {
-        name: 'body',
-        type: 'Body',
-        schema: UpsertUserRequestSchemaForClient
-      }
-    ],
-    response: UserResponseSchemaForClient
-  },
   // ユーザーアクティビティ関連API
   {
     method: 'get',
@@ -261,7 +296,7 @@ const api = makeApi([
         schema: UpdateStoreStatusSchema
       }
     ],
-    response: SuccessResponseSchemaForClient
+    response: UpdateStoreResponseSchema
   },
   {
     method: 'delete',
@@ -297,7 +332,7 @@ const api = makeApi([
         schema: UpdateEventStatusSchema
       }
     ],
-    response: SuccessResponseSchemaForClient
+    response: UpdateEventResponseSchema
   },
   {
     method: 'delete',
@@ -312,6 +347,207 @@ const api = makeApi([
       }
     ],
     response: SuccessResponseSchemaForClient
+  },
+  // お気に入りキャラクター関連API
+  {
+    method: 'get',
+    path: '/api/me/favorites',
+    alias: 'getFavoriteCharacters',
+    description: 'お気に入りキャラクター一覧を取得',
+    response: FavoriteCharactersResponseSchemaForClient
+  },
+  {
+    method: 'post',
+    path: '/api/me/favorites/:characterId',
+    alias: 'addFavoriteCharacter',
+    description: 'お気に入りキャラクターを追加',
+    parameters: [
+      {
+        name: 'characterId',
+        type: 'Path',
+        schema: z.string().nonempty()
+      }
+    ],
+    response: SuccessResponseSchemaForClient
+  },
+  {
+    method: 'delete',
+    path: '/api/me/favorites/:characterId',
+    alias: 'removeFavoriteCharacter',
+    description: 'お気に入りキャラクターを削除',
+    parameters: [
+      {
+        name: 'characterId',
+        type: 'Path',
+        schema: z.string().nonempty()
+      }
+    ],
+    response: SuccessResponseSchemaForClient
+  },
+  // バッジ関連API
+  {
+    method: 'get',
+    path: '/api/badges',
+    alias: 'getBadges',
+    description: '全バッジ定義を取得（認証不要、未取得バッジはマスク）',
+    response: GetBadgesResponseSchema
+  },
+  {
+    method: 'get',
+    path: '/api/users/me/badges',
+    alias: 'getMyBadges',
+    description: '自分の獲得バッジ一覧を取得',
+    response: GetMyBadgesResponseSchema
+  },
+  {
+    method: 'get',
+    path: '/api/badges/leaderboard',
+    alias: 'getBadgeLeaderboard',
+    description: 'バッジリーダーボードを取得',
+    parameters: [
+      {
+        name: 'uid',
+        type: 'Query',
+        schema: z.string().optional()
+      }
+    ],
+    response: GetBadgeLeaderboardResponseSchema
+  },
+  // 管理者バッジCRUD API
+  {
+    method: 'get',
+    path: '/api/admin/badges',
+    alias: 'getAllBadgesAdmin',
+    description: '全バッジ定義を取得（admin、隠しバッジ + 獲得者数を含む）',
+    response: GetBadgesResponseSchema
+  },
+  {
+    method: 'post',
+    path: '/api/admin/badges',
+    alias: 'createSpecialBadge',
+    description: 'special バッジを作成（admin）',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: CreateSpecialBadgeBodySchema
+      }
+    ],
+    response: z.object({ badge: BadgeSchema })
+  },
+  {
+    method: 'patch',
+    path: '/api/admin/badges/:code',
+    alias: 'updateBadge',
+    description: 'バッジを更新（admin）',
+    parameters: [
+      {
+        name: 'code',
+        type: 'Path',
+        schema: z.string().nonempty()
+      },
+      {
+        name: 'body',
+        type: 'Body',
+        schema: UpdateBadgeBodySchema
+      }
+    ],
+    response: z.object({ badge: BadgeSchema })
+  },
+  {
+    method: 'delete',
+    path: '/api/admin/badges/:code',
+    alias: 'deleteBadge',
+    description: 'special バッジを削除（admin）',
+    parameters: [
+      {
+        name: 'code',
+        type: 'Path',
+        schema: z.string().nonempty()
+      }
+    ],
+    response: z.void()
+  },
+  {
+    method: 'post',
+    path: '/api/admin/badges/recalculate',
+    alias: 'recalculateBadges',
+    description: '全ユーザーのバッジ獲得状況を再評価（admin）',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: z.object({}).optional()
+      }
+    ],
+    response: z.object({
+      processedUsers: z.number(),
+      scheduled: z.literal(true)
+    })
+  },
+  // コメント関連API
+  {
+    method: 'get',
+    path: '/api/events/:uuid/comments',
+    alias: 'getEventComments',
+    description: 'イベントのコメント一覧を取得',
+    response: ListCommentsResponseSchema
+  },
+  {
+    method: 'post',
+    path: '/api/events/:uuid/comments',
+    alias: 'createEventComment',
+    description: 'イベントにコメントを投稿',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: CreateCommentRequestSchema
+      }
+    ],
+    response: z.object({ id: z.string() })
+  },
+  {
+    method: 'delete',
+    path: '/api/events/:uuid/comments/:commentId',
+    alias: 'deleteEventComment',
+    description: 'イベントのコメントを削除（管理者）',
+    parameters: [
+      {
+        name: 'uuid',
+        type: 'Path',
+        schema: z.string().nonempty()
+      },
+      {
+        name: 'commentId',
+        type: 'Path',
+        schema: z.string().nonempty()
+      }
+    ],
+    response: z.object({ message: z.string() })
+  },
+  // 管理者コメント一覧
+  {
+    method: 'get',
+    path: '/api/admin/comments',
+    alias: 'getAdminComments',
+    description: '全コメント一覧を取得（admin）',
+    parameters: [
+      {
+        name: 'includeDeleted',
+        type: 'Query',
+        schema: z.union([z.literal('1'), z.literal('0')]).optional()
+      }
+    ],
+    response: AdminCommentsResponseSchema
+  },
+  // 管理者ユーザー一覧
+  {
+    method: 'get',
+    path: '/api/admin/users',
+    alias: 'getAdminUsers',
+    description: '全ユーザー一覧を取得（admin）',
+    response: AdminUserListResponseSchemaForClient
   }
 ])
 

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import type { Event, EventRequest } from '@/schemas/event.dto'
+import type { Event, EventDetail, EventRequest } from '@/schemas/event.dto'
 import { client } from '@/utils/client'
 
 /**
@@ -37,8 +37,9 @@ export const useEvent = (eventId: string) => {
  */
 export const useEventOrNull = (eventId: string) => {
   return useSuspenseQuery({
-    queryKey: ['events', eventId],
+    queryKey: ['events', eventId || '__none__'],
     queryFn: async () => {
+      if (!eventId) return null
       try {
         return await client.getEvent({ params: { id: eventId } })
       } catch (_error) {
@@ -59,12 +60,12 @@ export const useCreateEvent = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (event: EventRequest): Promise<Event> => {
+    mutationFn: async (event: EventRequest): Promise<EventDetail> => {
       return client.createEvent(event)
     },
-    onSuccess: () => {
+    onSuccess: (created) => {
       toast.success('イベントを登録しました')
-      // イベント一覧を再取得
+      queryClient.setQueryData(['events', created.uuid], created)
       queryClient.invalidateQueries({ queryKey: ['events'] })
     },
     onError: (error) => {
@@ -98,11 +99,12 @@ export const useUpdateEvent = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: Partial<EventRequest> }): Promise<Event> => {
+    mutationFn: async ({ id, data }: { id: string; data: Partial<EventRequest> }): Promise<EventDetail> => {
       return await client.updateEvent(data, { params: { id } })
     },
-    onSuccess: () => {
+    onSuccess: (updated) => {
       toast.success('イベントを更新しました')
+      queryClient.setQueryData(['events', updated.uuid], updated)
       queryClient.invalidateQueries({ queryKey: ['events'] })
     },
     onError: (error) => {

@@ -1,0 +1,153 @@
+@theme inline {
+  /* Typography (theme-overridable) */
+  --font-sans: var(--font-family-sans);
+  --font-display: var(--font-family-display);
+  --font-handwritten: var(--font-family-handwritten);
+  --font-numeric: var(--font-family-numeric);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Shadcn base palette */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Page surface */
+  --color-page-bg: var(--page-bg);
+
+  /* Card border color (use as text/border color utility) */
+  --color-card-border: var(--card-border);
+
+  /* Separator (stronger than --border to stand out on page-bg) */
+  --color-separator: var(--separator);
+
+  /* Brand */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+
+  /* Status badges */
+  --color-status-upcoming: var(--status-upcoming);
+  --color-status-upcoming-foreground: var(--status-upcoming-foreground);
+  --color-status-ongoing: var(--status-ongoing);
+  --color-status-ongoing-foreground: var(--status-ongoing-foreground);
+  --color-status-last-day: var(--status-last-day);
+  --color-status-last-day-foreground: var(--status-last-day-foreground);
+  --color-status-ended: var(--status-ended);
+  --color-status-ended-foreground: var(--status-ended-foreground);
+
+  /* Category badges */
+  --color-category-limited-card: var(--category-limited-card);
+  --color-category-limited-card-foreground: var(--category-limited-card-foreground);
+  --color-category-limited-card-solid: var(--category-limited-card-solid);
+  --color-category-regular-card: var(--category-regular-card);
+  --color-category-regular-card-foreground: var(--category-regular-card-foreground);
+  --color-category-regular-card-solid: var(--category-regular-card-solid);
+  --color-category-ackey: var(--category-ackey);
+  --color-category-ackey-foreground: var(--category-ackey-foreground);
+  --color-category-ackey-solid: var(--category-ackey-solid);
+  --color-category-other: var(--category-other);
+  --color-category-other-foreground: var(--category-other-foreground);
+  --color-category-other-solid: var(--category-other-solid);
+
+  /* Activity / interaction state */
+  --color-status-interested: var(--status-interested);
+  --color-status-interested-foreground: var(--status-interested-foreground);
+  --color-status-completed: var(--status-completed);
+  --color-status-completed-foreground: var(--status-completed-foreground);
+
+  /* Rank medals */
+  --color-rank-gold: var(--rank-gold);
+  --color-rank-gold-foreground: var(--rank-gold-foreground);
+  --color-rank-silver: var(--rank-silver);
+  --color-rank-silver-foreground: var(--rank-silver-foreground);
+  --color-rank-bronze: var(--rank-bronze);
+  --color-rank-bronze-foreground: var(--rank-bronze-foreground);
+  --color-rank-default: var(--rank-default);
+  --color-rank-default-foreground: var(--rank-default-foreground);
+  --color-rank-mythic: var(--rank-mythic);
+  --color-rank-mythic-foreground: var(--rank-mythic-foreground);
+  --color-rank-mythic-from: var(--rank-mythic-from);
+  --color-rank-mythic-via: var(--rank-mythic-via);
+  --color-rank-mythic-to: var(--rank-mythic-to);
+
+  /* Calendar markers */
+  --color-calendar-sunday: var(--calendar-sunday);
+  --color-calendar-saturday: var(--calendar-saturday);
+  --color-calendar-today: var(--calendar-today);
+  --color-calendar-today-border: var(--calendar-today-border);
+
+  /* Semantic */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  /* Engagement icons */
+  --color-action-interest: var(--action-interest);
+  --color-action-interest-soft: var(--action-interest-soft);
+  --color-action-award: var(--action-award);
+  --color-action-award-soft: var(--action-award-soft);
+
+  /* Favorite (推し) */
+  --color-favorite: var(--favorite);
+  --color-favorite-foreground: var(--favorite-foreground);
+
+  /* Vote count badge */
+  --color-vote-count: var(--vote-count);
+  --color-vote-count-foreground: var(--vote-count-foreground);
+  --color-vote-count-icon: var(--vote-count-icon);
+
+  /* Button surfaces (avoid pure white on pink page bg) */
+  --color-button-surface: var(--button-surface);
+  --color-button-surface-foreground: var(--button-surface-foreground);
+  --color-button-surface-hover: var(--button-surface-hover);
+  --color-button-disabled: var(--button-disabled);
+  --color-button-disabled-foreground: var(--button-disabled-foreground);
+  --color-button-disabled-border: var(--button-disabled-border);
+
+  /* Social brand */
+  --color-social-github: var(--social-github);
+  --color-social-github-foreground: var(--social-github-foreground);
+  --color-social-x: var(--social-x);
+  --color-social-x-foreground: var(--social-x-foreground);
+
+  /* Celebrate gradient (birthday hero) */
+  --color-celebrate-from: var(--celebrate-from);
+  --color-celebrate-to: var(--celebrate-to);
+}

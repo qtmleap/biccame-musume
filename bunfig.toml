@@ -3,3 +3,5 @@ telemetry = false
 [test]
 smol = true
 coverage = true
+root = "./__tests__"
+preload = ["./__tests__/setup.ts"]
