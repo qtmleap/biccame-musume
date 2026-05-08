@@ -34,6 +34,18 @@ export default defineConfig(({ mode }) => {
           mkdirSync('dist/client', { recursive: true })
         }
       },
+      {
+        name: 'virtual-public-characters',
+        resolveId(id) {
+          if (id === 'virtual:public-characters') return `\0${id}`
+        },
+        load(id) {
+          if (id === '\0virtual:public-characters') {
+            const raw = readFileSync(resolve(__dirname, 'public/characters.json'), 'utf-8')
+            return `export default ${raw}`
+          }
+        }
+      },
       tanstackRouter({
         target: 'react',
         autoCodeSplitting: true,
