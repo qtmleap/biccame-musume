@@ -219,7 +219,7 @@ export const EventList = () => {
   // 店舗フィルタ変更時は全タブのページを1に戻す
   useEffect(() => {
     setPages({ limited_card: 1, regular_card: 1, ackey: 1, other: 1 })
-  }, [setPages])
+  }, [storeFilter])
 
   // ページネーション処理
   const totalPages = Math.ceil(filtered.length / perPage)
