@@ -1,6 +1,6 @@
+import type { WritableAtom } from 'jotai'
 import { useAtom } from 'jotai'
 import { useMemo } from 'react'
-import { eventListStoreFilterAtom } from '@/atoms/event-list-store-filter-atom'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCharacters } from '@/hooks/use-characters'
@@ -9,11 +9,17 @@ import type { StoreKey } from '@/schemas/store.dto'
 
 const ALL_VALUE = '__all__'
 
+type StoreFilter = string | null
+
+type EventStoreFilterProps = {
+  storeFilterAtom: WritableAtom<StoreFilter, [StoreFilter], void>
+}
+
 /**
  * 店舗フィルター制御コンポーネント
  */
-export const EventStoreFilter = () => {
-  const [storeFilter, setStoreFilter] = useAtom(eventListStoreFilterAtom)
+export const EventStoreFilter = ({ storeFilterAtom }: EventStoreFilterProps) => {
+  const [storeFilter, setStoreFilter] = useAtom(storeFilterAtom)
   const { data: characters } = useCharacters()
 
   const storeOptions = useMemo(
