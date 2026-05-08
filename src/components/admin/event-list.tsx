@@ -262,7 +262,7 @@ export const EventList = () => {
   return (
     <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Event['category'])}>
       {/* ステータス・店舗フィルタ */}
-      <div className='mb-4 flex flex-col gap-3 md:flex-row md:items-end md:gap-4'>
+      <div className='mb-4 flex flex-col gap-3 md:flex-row md:items-start md:gap-4'>
         <div className='flex-1'>
           <EventStatusFilter statusFilterAtom={eventStatusFilterAtom} />
         </div>
