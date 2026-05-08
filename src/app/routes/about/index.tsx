@@ -19,6 +19,10 @@ const RouteComponent = () => {
             <div className='space-y-3 text-muted-foreground'>
               <p>このサイトは、ビックカメラの店舗擬人化キャラクター「ビッカメ娘」を応援するファンサイトです。</p>
               <p>ビッカメ娘の情報を整理・集約し、ファンの皆様がキャラクターをより楽しめることを目的としています。</p>
+              <p>
+                ビッカメ娘は株式会社ビックカメラの店舗を擬人化したキャラクターであることから、本サイトは
+                <strong className='text-foreground'>同社のイメージを損なう、または営業に支障をきたすような内容を一切扱いません。</strong>
+              </p>
             </div>
           </section>
 
@@ -92,9 +96,15 @@ const RouteComponent = () => {
                   3
                 </span>
                 <div className='flex-1 space-y-1'>
-                  <p className='font-bold text-foreground'>第四条（禁止事項）</p>
+                  <p className='font-bold text-foreground'>第四条（使用禁止）</p>
+                  <p className='text-sm'>本サイトは、第四条に定める以下の使用を一切行っておりません。</p>
+                  <ul className='text-sm list-disc list-inside space-y-1 pl-1'>
+                    <li>ビッカメ娘および二次創作物の著作者の社会的評価を損なうような使用</li>
+                    <li>他者の権利を侵害する、または侵害のおそれがある使用</li>
+                    <li>公序良俗に反する態様、その他ビッカメ娘のイメージを損なうと判断される態様での使用</li>
+                  </ul>
                   <p className='text-sm'>
-                    本サイトは、ビッカメ娘および二次創作物の著作者の社会的評価を損なう使用、ならびに他者の権利を侵害するような使用を一切行っておりません。
+                    また、株式会社ビックカメラまたはアイティオール株式会社の判断により、使用の差止め・許諾内容の変更・許諾停止等の措置がとられた場合は、速やかにこれに従います。
                   </p>
                 </div>
               </li>
@@ -103,9 +113,42 @@ const RouteComponent = () => {
                   4
                 </span>
                 <div className='flex-1 space-y-1'>
+                  <p className='font-bold text-foreground'>第五条（使用許諾の終了）</p>
+                  <p className='text-sm'>
+                    本サイトは、ガイドラインに違反した場合に使用許諾が自動的に終了することを認識しており、その場合は速やかにキャラクターの使用を停止します。
+                  </p>
+                </div>
+              </li>
+              <li className='flex gap-3'>
+                <span className='shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-full bg-brand text-brand-foreground text-xs font-bold'>
+                  5
+                </span>
+                <div className='flex-1 space-y-1'>
                   <p className='font-bold text-foreground'>第六条（営利活動）</p>
                   <p className='text-sm'>
                     本サイトは第六条で指定される営利活動を一切行っておらず、アイティオール株式会社による別途の使用許諾を必要としません。
+                  </p>
+                </div>
+              </li>
+              <li className='flex gap-3'>
+                <span className='shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-full bg-brand text-brand-foreground text-xs font-bold'>
+                  6
+                </span>
+                <div className='flex-1 space-y-1'>
+                  <p className='font-bold text-foreground'>第七条（ガイドライン変更への追従）</p>
+                  <p className='text-sm'>
+                    ガイドラインが変更された場合は、変更後の内容に従って本サイトの運営方針および記載内容を速やかに更新します。
+                  </p>
+                </div>
+              </li>
+              <li className='flex gap-3'>
+                <span className='shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-full bg-brand text-brand-foreground text-xs font-bold'>
+                  7
+                </span>
+                <div className='flex-1 space-y-1'>
+                  <p className='font-bold text-foreground'>第八条 第1項（法令遵守）</p>
+                  <p className='text-sm'>
+                    本サイトは、ガイドラインのほか、著作権法その他の適用法令を遵守して運営しています。
                   </p>
                 </div>
               </li>
