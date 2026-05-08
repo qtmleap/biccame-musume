@@ -102,6 +102,16 @@ const EventsContent = () => {
     return map
   }, [characters])
 
+  // 店舗が指定されたら対応する地域を自動で設定（URLシェア時の利便性）
+  // 注: regionFilter を依存に入れると手動変更時に上書きされてしまうので除外
+  useEffect(() => {
+    if (storeFilter === null) return
+    const prefecture = storePrefectureMap.get(storeFilter)
+    if (!prefecture) return
+    const region = prefectureToRegion[prefecture]
+    if (region) setRegionFilter(region)
+  }, [storeFilter, storePrefectureMap, setRegionFilter])
+
   // 開催中・開催予定のイベントをフィルタリング
   const activeEvents = useMemo(() => {
     const currentTime = dayjs()
