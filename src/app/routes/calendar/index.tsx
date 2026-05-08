@@ -74,7 +74,7 @@ const CalendarContent = () => {
       <CalendarMonthTabs selectedMonth={selectedMonth} onSelectMonth={setSelectedMonth} />
 
       {isMobile ? (
-        <CalendarEventList year={selectedYear} month={selectedMonth} events={events} />
+        <CalendarEventList year={selectedYear} month={selectedMonth} events={events} onDayClick={handleDayClick} />
       ) : (
         <CalendarGrid year={selectedYear} month={selectedMonth} events={events} onDayClick={handleDayClick} />
       )}
@@ -97,12 +97,16 @@ const CalendarContent = () => {
 
       <div className='flex flex-wrap justify-center gap-4 text-sm text-muted-foreground'>
         <div className='flex items-center gap-2'>
-          <div className='w-4 h-4 rounded bg-linear-to-r from-pink-500/30 to-rose-500/30 border border-pink-500/30' />
-          <span>キャラクター誕生日</span>
+          <div className='w-4 h-4 rounded-md bg-action-interest/15 border-card' />
+          <span>爆誕記念日</span>
         </div>
         <div className='flex items-center gap-2'>
-          <div className='w-4 h-4 rounded bg-linear-to-r from-blue-500/30 to-cyan-500/30 border border-blue-500/30' />
+          <div className='w-4 h-4 rounded-md bg-info/15 border-card' />
           <span>店舗記念日</span>
+        </div>
+        <div className='flex items-center gap-2'>
+          <div className='w-4 h-4 rounded-md bg-calendar-sunday/15 border-card' />
+          <span>祝日</span>
         </div>
       </div>
     </div>

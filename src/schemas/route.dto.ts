@@ -54,12 +54,9 @@ export const LegResponseSchema = z
  */
 export const RouteResponseSchema = z
   .object({
-    legs: z.array(LegResponseSchema).openapi({ description: '経路情報の配列' })
+    legs: z.array(LegResponseSchema).openapi({ description: '経路情報の配列' }),
+    degraded: z.boolean().optional().openapi({ description: 'LLM failure fallback indicator' })
   })
   .openapi('RouteResponse')
 
 export type Leg = z.infer<typeof LegSchema>
-export type RouteRequest = z.infer<typeof RouteRequestSchema>
-export type RouteSegment = z.infer<typeof RouteSegmentSchema>
-export type LegResponse = z.infer<typeof LegResponseSchema>
-export type RouteResponse = z.infer<typeof RouteResponseSchema>

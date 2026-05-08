@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { EventDetailInfo } from '@/components/events/event-detail-info'
 import { Button } from '@/components/ui/button'
 import { CONFIRMATION_LABELS } from '@/locales/app.content'
-import type { Event, EventRequest, EventStatus } from '@/schemas/event.dto'
+import type { EventDetail, EventRequest, EventStatus } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 type EventConfirmationProps = {
@@ -16,8 +16,8 @@ type EventConfirmationProps = {
  * イベント登録内容の確認画面コンポーネント
  */
 export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: EventConfirmationProps) => {
-  // EventRequestをEvent型に変換
-  const event: Event = {
+  // EventRequestをEventDetail型に変換
+  const event: EventDetail = {
     uuid: data.uuid,
     category: data.category,
     title: data.title,
@@ -27,6 +27,7 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
     endedAt: data.endedAt ? dayjs(data.endedAt).toDate() : undefined,
     limitedQuantity: data.limitedQuantity,
     referenceUrls: data.referenceUrls,
+    comments: [],
     conditions: data.conditions,
     isVerified: data.isVerified,
     isPreliminary: data.isPreliminary,
@@ -47,14 +48,14 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
       {data.shouldTweet && <p className='text-base font-medium text-sky-600 text-center'>保存すると投稿されます</p>}
 
       {/* ボタン */}
-      <div className='flex gap-2 max-w-md mx-auto'>
-        <Button type='button' onClick={onBack} variant='outline' className='flex-1' disabled={isSubmitting}>
+      <div className='flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
+        <Button type='button' onClick={onBack} variant='outline' className='sm:w-32' disabled={isSubmitting}>
           修正する
         </Button>
         <Button
           type='button'
           onClick={onSubmit}
-          className='flex-1 bg-blue-600 hover:bg-blue-700'
+          className='bg-brand hover:bg-brand/90 text-brand-foreground sm:w-48'
           disabled={isSubmitting}
         >
           {isSubmitting ? CONFIRMATION_LABELS.registering : CONFIRMATION_LABELS.register}

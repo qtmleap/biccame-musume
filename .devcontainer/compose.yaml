@@ -8,7 +8,7 @@ services:
       - ../:/home/vscode/app:cached
     environment:
       NODE_ENV: development
-      CLOUDFLARE_ENV: dev
+      NODE_OPTIONS: "--no-deprecation"
     tty: true
     stdin_open: true
     network_mode: service:firebase
@@ -16,10 +16,10 @@ services:
       - firebase
 
   firebase:
-    image: andreysenov/firebase-tools:14.17.0
-    environment:
-      FIREBASE_TOKEN: $FIREBASE_TOKEN
+    image: andreysenov/firebase-tools:15.16.0
     command: firebase emulators:start --only auth --import=auth
+    ports:
+      - 19299:9099
     volumes:
       - ./auth:/home/node/auth
       - ./firebase.json:/home/node/firebase.json
@@ -27,3 +27,4 @@ services:
 
 volumes:
   node_modules:
+    driver: local

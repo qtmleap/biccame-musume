@@ -25,18 +25,20 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   RATE_LIMITER: RateLimitBinding
   /** FirebaseプロジェクトID */
   FIREBASE_PROJECT_ID: string
-  /** Twitter投稿用 API Key (@_biccame_musume, OAuth 1.0a) */
-  TWITTER_API_KEY: string
-  /** Twitter投稿用 API Secret (@_biccame_musume, OAuth 1.0a) */
-  TWITTER_API_SECRET: string
-  /** Twitter投稿用 Access Token (@_biccame_musume, OAuth 1.0a) */
-  TWITTER_ACCESS_TOKEN: string
-  /** Twitter投稿用 Access Token Secret (@_biccame_musume, OAuth 1.0a) */
-  TWITTER_ACCESS_SECRET: string
+  /** X (Twitter) Web セッションの auth_token cookie (@_biccame_musume) */
+  TWITTER_AUTH_TOKEN: string
+  /** X (Twitter) Web セッションの ct0 (CSRF) cookie (@_biccame_musume) */
+  TWITTER_CSRF_TOKEN: string
   /** Workers AI */
   AI: Ai
+  /** コメント投稿レート制限用バインディング */
+  COMMENT_RATE_LIMITER: RateLimitBinding
+  /** Cloudflare Turnstile シークレットキー */
+  TURNSTILE_SECRET_KEY: string
   /** JWT秘密鍵 */
   JWT_SECRET_KEY: string
+  /** 静的アセット配信バインディング */
+  ASSETS: Fetcher
 }
 
 /**

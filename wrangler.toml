@@ -4,105 +4,174 @@ compatibility_flags = ["nodejs_compat_v2"]
 main = "src/index.ts"
 keep_vars = true
 
-[env.dev]
-name = "biccame-musume-dev"
-workers_dev = true
-preview_urls = true
-routes = [{ pattern = "dev.biccame-musume.com", custom_domain = true }]
-
-[env.dev.assets]
-directory = "dist"
-not_found_handling = "single-page-application"
-binding = "ASSETS"
-run_worker_first = ["/api/*", "/__/auth/*"]
-
-[[env.dev.kv_namespaces]]
+# Top-level bindings for local dev (vite dev / miniflare).
+# Production/staging deployments use [env.*] sections below.
+[[kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
 id = "6f3b7b710eb646a0aef7ab524609bb67"
 
-[[env.dev.kv_namespaces]]
+[[kv_namespaces]]
 binding = "VOTE_LIMITER"
 id = "cc87e0f64116414c9d70a080bbb97156"
 
-[[env.dev.kv_namespaces]]
+[[kv_namespaces]]
 binding = "PAGE_VIEWS"
 id = "e7032f736ed045d993d79261b9ff8a56"
 
-[[env.dev.kv_namespaces]]
+[[kv_namespaces]]
 binding = "PUBLIC_JWK_CACHE_KV"
 id = "e4d041b77a2b4575bed33650b13a43b2"
 
-[[env.dev.d1_databases]]
+[[d1_databases]]
 binding = "DB"
 database_name = "biccame-musume-dev"
 database_id = "be540dec-d75d-46c9-b573-33cb68697778"
 migrations_dir = "prisma/migrations"
 
-[[env.dev.ratelimits]]
+[[ratelimits]]
 name = "RATE_LIMITER"
 namespace_id = "1001"
 simple = { limit = 50, period = 60 }
 
-[env.dev.vars]
-ENVIRONMENT = "dev"
+[[ratelimits]]
+name = "COMMENT_RATE_LIMITER"
+namespace_id = "1002"
+simple = { limit = 5, period = 60 }
+
+[ai]
+binding = "AI"
+
+[assets]
+not_found_handling = "single-page-application"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/__/auth/*", "/admin/*"]
+
+[vars]
+ENVIRONMENT = "local"
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 FIREBASE_PROJECT_ID = "biccame-musume"
 PUBLIC_JWK_CACHE_KEY = "firebase-public-jwk-cache"
+TURNSTILE_SECRET_KEY = "1x0000000000000000000000000000000AA"
 
-[env.dev.observability]
+[env.staging]
+name = "biccame-musume-dev"
+workers_dev = true
+preview_urls = true
+routes = [{ pattern = "dev.biccame-musume.com", custom_domain = true }]
+
+[env.staging.assets]
+directory = "dist"
+not_found_handling = "single-page-application"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/__/auth/*", "/admin/*"]
+
+[[env.staging.kv_namespaces]]
+binding = "BICCAME_MUSUME_EVENTS"
+id = "6f3b7b710eb646a0aef7ab524609bb67"
+
+[[env.staging.kv_namespaces]]
+binding = "VOTE_LIMITER"
+id = "cc87e0f64116414c9d70a080bbb97156"
+
+[[env.staging.kv_namespaces]]
+binding = "PAGE_VIEWS"
+id = "e7032f736ed045d993d79261b9ff8a56"
+
+[[env.staging.kv_namespaces]]
+binding = "PUBLIC_JWK_CACHE_KV"
+id = "e4d041b77a2b4575bed33650b13a43b2"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "biccame-musume-dev"
+database_id = "be540dec-d75d-46c9-b573-33cb68697778"
+migrations_dir = "prisma/migrations"
+
+[[env.staging.ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 50, period = 60 }
+
+[[env.staging.ratelimits]]
+name = "COMMENT_RATE_LIMITER"
+namespace_id = "1002"
+simple = { limit = 5, period = 60 }
+
+[env.staging.ai]
+binding = "AI"
+
+[env.staging.vars]
+ENVIRONMENT = "dev"
+CF_ACCESS_AUD = "995cb37056207392cb90c93562f05361eaaa4dca46ba1f5bda4175cf7a4b860c"
+CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
+FIREBASE_PROJECT_ID = "biccame-musume"
+PUBLIC_JWK_CACHE_KEY = "firebase-public-jwk-cache"
+TURNSTILE_SECRET_KEY = "1x0000000000000000000000000000000AA"
+
+[env.staging.observability]
 enabled = true
 head_sampling_rate = 1
 
-[env.prod]
+[env.production]
 name = "biccame-musume-prod"
 workers_dev = false
 preview_urls = false
 routes = [{ pattern = "biccame-musume.com", custom_domain = true }]
 
-[env.prod.assets]
+[env.production.assets]
 directory = "dist"
 not_found_handling = "single-page-application"
 binding = "ASSETS"
-run_worker_first = ["/api/*", "/__/auth/*"]
+run_worker_first = ["/api/*", "/__/auth/*", "/admin/*"]
 
-[[env.prod.kv_namespaces]]
+[[env.production.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
 id = "ef49185c58d04a0790e7c68394d78089"
 
-[[env.prod.kv_namespaces]]
+[[env.production.kv_namespaces]]
 binding = "VOTE_LIMITER"
 id = "96019843cb67406799d40584768bcf7a"
 
-[[env.prod.kv_namespaces]]
+[[env.production.kv_namespaces]]
 binding = "PAGE_VIEWS"
 id = "46b03751a94a4180873fa2a473b30606"
 
-[[env.prod.kv_namespaces]]
+[[env.production.kv_namespaces]]
 binding = "PUBLIC_JWK_CACHE_KV"
 id = "dc0381c80cc8476aa62100d7cb987e95"
 
-[[env.prod.d1_databases]]
+[[env.production.d1_databases]]
 binding = "DB"
 database_name = "biccame-musume-prod"
 database_id = "9812433b-cfc6-46c6-8a0e-90a144b7304b"
 migrations_dir = "prisma/migrations"
 
-[[env.prod.ratelimits]]
+[[env.production.ratelimits]]
 name = "RATE_LIMITER"
 namespace_id = "1001"
 simple = { limit = 50, period = 60 }
 
-[env.prod.ai]
+[[env.production.ratelimits]]
+name = "COMMENT_RATE_LIMITER"
+namespace_id = "1002"
+simple = { limit = 5, period = 60 }
+
+[env.production.ai]
 binding = "AI"
 
-[env.prod.vars]
+[env.production.vars]
 ENVIRONMENT = "prod"
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 FIREBASE_PROJECT_ID = "biccame-musume"
 PUBLIC_JWK_CACHE_KEY = "firebase-public-jwk-cache"
+TURNSTILE_SECRET_KEY = "1x0000000000000000000000000000000AA"
 
-[env.prod.observability]
+[env.production.observability]
 enabled = true
 head_sampling_rate = 1
+
+# 0:00 UTC = 9:00 JST 毎日。当日開始のイベントを 1 ツイートにまとめて告知する。
+[env.production.triggers]
+crons = ["0 0 * * *"]

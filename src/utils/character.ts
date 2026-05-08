@@ -10,39 +10,6 @@ export const getDisplayName = (name: string) => {
 }
 
 /**
- * 誕生日でキャラクターをグループ化
- * 同じ誕生日のキャラクターをIDでアルファベット順にソートしてアンダーバー区切りで結合
- */
-export const groupCharactersByBirthday = (characters: StoreData[]) => {
-  const groups = new Map<string, StoreData[]>()
-
-  for (const character of characters) {
-    const birthday = character.character?.birthday
-    if (!birthday) continue
-
-    const key = dayjs(birthday).format('MM-DD')
-    if (!groups.has(key)) {
-      groups.set(key, [])
-    }
-    groups.get(key)?.push(character)
-  }
-
-  return Array.from(groups.entries())
-    .map(([birthday, chars]) => {
-      const sortedChars = [...chars].sort((a, b) => a.id.localeCompare(b.id))
-      const groupId = sortedChars.map((c) => c.id).join('_')
-      const groupName = sortedChars.map((c) => c.character?.name || c.id).join(' & ')
-      return {
-        id: groupId,
-        birthday,
-        name: groupName,
-        characters: sortedChars
-      }
-    })
-    .sort((a, b) => a.birthday.localeCompare(b.birthday))
-}
-
-/**
  * 日付文字列を解析してdayjsオブジェクトに変換
  */
 export const parseDate = (dateStr: string | undefined): dayjs.Dayjs | null => {
@@ -99,25 +66,6 @@ export const getDaysFromBirthday = (dateStr: string | undefined | null): number 
 
   // より近い方を返す
   return Math.min(diffThisYear, diffNextYear)
-}
-
-/**
- * 誕生日が近い順にソートするための日数計算
- */
-export const getDaysUntilBirthday = (dateStr: string | undefined | null): number => {
-  if (!dateStr) return Number.MAX_SAFE_INTEGER
-  const birthday = parseDate(dateStr)
-  if (!birthday) return Number.MAX_SAFE_INTEGER
-
-  const currentTime = dayjs()
-  const thisYear = currentTime.year()
-  let nextBirthday = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
-
-  if (nextBirthday.isBefore(currentTime, 'day') || nextBirthday.isSame(currentTime, 'day')) {
-    nextBirthday = nextBirthday.add(1, 'year')
-  }
-
-  return nextBirthday.diff(currentTime, 'day')
 }
 
 /**

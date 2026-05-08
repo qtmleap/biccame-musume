@@ -1,11 +1,10 @@
 import { getFirebaseToken, verifyFirebaseAuth } from '@hono/firebase-auth'
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
 import type { FirebaseIdToken } from 'firebase-auth-cloudflare-workers'
 import { setCookie } from 'hono/cookie'
 import { csrf } from 'hono/csrf'
 import { HTTPException } from 'hono/http-exception'
+import { getPrisma } from '@/lib/prisma'
 import type { Bindings, Variables } from '@/types/bindings'
 import { signToken } from '@/utils/token'
 
@@ -50,7 +49,7 @@ routes.openapi(
     if (idToken === null) {
       throw new HTTPException(401, { message: 'Unauthorized' })
     }
-    const client = new PrismaClient({ adapter: new PrismaD1(c.env.DB) })
+    const client = getPrisma(c.env)
     await client.user.upsert({
       where: {
         id: idToken.uid

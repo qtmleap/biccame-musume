@@ -1,28 +1,21 @@
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
+import { getPrisma } from '@/lib/prisma'
+import { isVoteLimited, markVoteLimited } from '@/middleware/vote-limit'
 import type { Bindings } from '@/types/bindings'
-import { generateVoteKey } from '@/utils/vote'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
 /**
- * 投票を記録する（KVに保存、JST0時までの秒数をTTLに設定）
- * @param votesKV KVNamespace
- * @param characterId キャラクターID
- * @param ip IPアドレス
+ * 一括投票結果アイテム
  */
-export const recordVote = async (votesKV: KVNamespace, characterId: string, ip: string): Promise<void> => {
-  const jstNow = dayjs()
-  const jstMidnight = jstNow.endOf('day')
-  const ttl = jstMidnight.diff(jstNow, 'second')
-
-  const voteKey = generateVoteKey(characterId, ip)
-  await votesKV.put(voteKey, dayjs().toISOString(), { expirationTtl: ttl })
+export type BulkVoteResult = {
+  characterId: string
+  status: 'voted' | 'skipped'
 }
+
 /**
  * 全キャラクターの投票カウントを取得する
  * @param env Bindings
@@ -33,7 +26,7 @@ export const getAllVoteCounts = async (
   env: Bindings,
   year?: number
 ): Promise<Array<{ key: string; count: number }>> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
   return (
     await prisma.voteCount.findMany({
       where: { year: year || dayjs().year() },
@@ -51,14 +44,16 @@ export const getAllVoteCounts = async (
  * @param env Bindings
  * @param characterId キャラクターID
  * @param ip IPアドレス
+ * @param userId ログインユーザーのFirebase Auth UID（任意）
  * @returns 投票結果
  */
 export const vote = async (
   env: Bindings,
   characterId: string,
-  ip: string
+  ip: string,
+  userId?: string
 ): Promise<{ success: boolean; message: string; nextVoteDate: string }> => {
-  const prisma = new PrismaClient({ adapter: new PrismaD1(env.DB) })
+  const prisma = getPrisma(env)
 
   const currentYear = dayjs().year()
 
@@ -75,11 +70,12 @@ export const vote = async (
     }
   })
 
-  // 投票レコード作成をバックグラウンドで実行
+  // 投票レコード作成
   await prisma.vote.create({
     data: {
       characterId,
-      ipAddress: ip
+      ipAddress: ip,
+      userId: userId ?? null
     }
   })
 
@@ -88,4 +84,41 @@ export const vote = async (
     message: '投票ありがとうございます！',
     nextVoteDate: dayjs().add(1, 'day').startOf('day').toISOString()
   }
+}
+
+/**
+ * 複数キャラクターへの一括投票
+ * - 既に本日投票済みのキャラは skipped にして残りだけ通す
+ * - dev 環境では制限を無視して全件投票
+ *
+ * @param env Bindings
+ * @param characterIds 投票対象のキャラクターIDの配列
+ * @param ip 投票者のIPアドレス
+ * @param userId ログインユーザーのFirebase Auth UID（任意）
+ * @returns キャラクター毎の投票結果
+ */
+export const bulkVote = async (
+  env: Bindings,
+  characterIds: string[],
+  ip: string,
+  userId?: string
+): Promise<BulkVoteResult[]> => {
+  const isDev = env.ENVIRONMENT === 'local'
+  const results: BulkVoteResult[] = []
+
+  // 重複排除
+  const uniqueIds = Array.from(new Set(characterIds))
+
+  for (const characterId of uniqueIds) {
+    const limited = await isVoteLimited(env.VOTE_LIMITER, characterId, ip)
+    if (limited && !isDev) {
+      results.push({ characterId, status: 'skipped' })
+      continue
+    }
+    await markVoteLimited(env.VOTE_LIMITER, characterId, ip)
+    await vote(env, characterId, ip, userId)
+    results.push({ characterId, status: 'voted' })
+  }
+
+  return results
 }

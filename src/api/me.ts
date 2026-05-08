@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
+import { getPrisma } from '@/lib/prisma'
 import {
   EventDeleteQuerySchema,
   EventIdParamSchema,
@@ -9,10 +10,15 @@ import {
   StoresQuerySchema,
   StoresResponseSchema,
   SuccessResponseSchema,
+  UpdateEventResponseSchema,
   UpdateEventStatusSchema,
+  UpdateStoreResponseSchema,
   UpdateStoreStatusSchema,
   UserActivityResponseSchema
 } from '@/schemas/activity.dto'
+import { prismaBadgeToDto } from '@/schemas/badge.dto'
+import type { StoreKey } from '@/schemas/store.dto'
+import { evaluateOnEventComplete, evaluateOnVisit } from '@/services/badge-evaluator'
 import { getEvent } from '@/services/event-service'
 import {
   deleteUserEvent,
@@ -103,7 +109,7 @@ routes.openapi(
       200: {
         content: {
           'application/json': {
-            schema: SuccessResponseSchema
+            schema: UpdateStoreResponseSchema
           }
         },
         description: '店舗ステータス更新成功'
@@ -116,7 +122,15 @@ routes.openapi(
     const { storeKey } = c.req.valid('param')
     const { status } = c.req.valid('json')
     await updateUserStore(c.env, uid, storeKey, status)
-    return c.json({ success: true })
+
+    const newBadges =
+      status === 'visited'
+        ? (await evaluateOnVisit({ env: c.env, prisma: getPrisma(c.env), userId: uid }, storeKey as StoreKey)).map(
+            (b) => prismaBadgeToDto(b)
+          )
+        : []
+
+    return c.json({ success: true, newBadges })
   }
 )
 
@@ -197,7 +211,7 @@ routes.openapi(
       200: {
         content: {
           'application/json': {
-            schema: SuccessResponseSchema
+            schema: UpdateEventResponseSchema
           }
         },
         description: 'イベントステータス更新成功'
@@ -219,7 +233,15 @@ routes.openapi(
     }
 
     await updateUserEvent(c.env, uid, eventId, status)
-    return c.json({ success: true })
+
+    const newBadges =
+      status === 'completed'
+        ? (await evaluateOnEventComplete({ env: c.env, prisma: getPrisma(c.env), userId: uid }, eventId)).map((b) =>
+            prismaBadgeToDto(b)
+          )
+        : []
+
+    return c.json({ success: true, newBadges })
   }
 )
 

@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { useAuth } from '@/hooks/use-auth'
+import { resolveBadgeText } from '@/lib/badge-display'
 import { client } from '@/utils/client'
 
 /**
@@ -27,7 +29,16 @@ export const useUserActivity = () => {
     mutationFn: async (storeKey: string) => {
       return client.updateUserStore({ status: 'visited' }, { params: { storeKey } })
     },
-    onSuccess: invalidate
+    onSuccess: (data) => {
+      invalidate()
+      for (const badge of data.newBadges) {
+        const { name, description } = resolveBadgeText(badge)
+        toast.success(`バッジ獲得: ${name}`, { description })
+      }
+      if (data.newBadges.length > 0) {
+        queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+      }
+    }
   })
 
   const removeVisitedStore = useMutation({
@@ -57,7 +68,16 @@ export const useUserActivity = () => {
     mutationFn: async (eventId: string) => {
       return client.updateUserEvent({ status: 'completed' }, { params: { eventId } })
     },
-    onSuccess: invalidate
+    onSuccess: (data) => {
+      invalidate()
+      for (const badge of data.newBadges) {
+        const { name, description } = resolveBadgeText(badge)
+        toast.success(`バッジ獲得: ${name}`, { description })
+      }
+      if (data.newBadges.length > 0) {
+        queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+      }
+    }
   })
 
   const removeCompletedEvent = useMutation({
@@ -74,6 +94,8 @@ export const useUserActivity = () => {
     // 訪問済み店舗
     addVisitedStore: addVisitedStore.mutate,
     removeVisitedStore: removeVisitedStore.mutate,
+    isAddVisitedStorePending: addVisitedStore.isPending,
+    isRemoveVisitedStorePending: removeVisitedStore.isPending,
     isVisited: (storeKey: string) => data?.stores.includes(storeKey) ?? false,
     // 興味のあるイベント
     addInterestedEvent: addInterestedEvent.mutate,

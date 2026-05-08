@@ -1,8 +1,8 @@
-import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
 type AccessUser = {
   email: string
+  name?: string
   isAuthenticated: boolean
 }
 
@@ -14,8 +14,23 @@ type AccessState = {
 }
 
 /**
- * Cloudflare Accessの認証状態を確認するフック
- * CF_Authorizationクッキーの存在をチェックする
+ * Cloudflare Access の /cdn-cgi/access/get-identity レスポンス
+ * Cookie は HttpOnly のため、この endpoint 経由でのみ認証状態を取得できる
+ */
+type AccessIdentity = {
+  id?: string
+  email?: string
+  name?: string
+  user_uuid?: string
+  amr?: string[]
+  iat?: number
+  exp?: number
+}
+
+const GET_IDENTITY_ENDPOINT = '/cdn-cgi/access/get-identity'
+
+/**
+ * Cloudflare Access の認証状態を確認するフック
  * 開発環境では常に認証済みとして扱う
  */
 export const useCloudflareAccess = (): AccessState => {
@@ -27,27 +42,30 @@ export const useCloudflareAccess = (): AccessState => {
   })
 
   useEffect(() => {
-    const checkAccess = () => {
-      // 開発環境では常に認証済みとして扱う
-      if (import.meta.env.DEV) {
-        setState({
-          isLoading: false,
-          isAuthenticated: true,
-          user: {
-            email: 'dev@localhost',
-            isAuthenticated: true
-          },
-          error: null
-        })
-        return
-      }
+    if (import.meta.env.DEV) {
+      setState({
+        isLoading: false,
+        isAuthenticated: true,
+        user: {
+          email: 'dev@localhost',
+          isAuthenticated: true
+        },
+        error: null
+      })
+      return
+    }
 
+    const controller = new AbortController()
+
+    const fetchIdentity = async () => {
       try {
-        // CF_Authorization クッキーが存在するか確認
-        const cookies = document.cookie.split(';')
-        const accessCookie = cookies.find((c) => c.trim().startsWith('CF_Authorization='))
+        const response = await fetch(GET_IDENTITY_ENDPOINT, {
+          credentials: 'include',
+          signal: controller.signal,
+          headers: { Accept: 'application/json' }
+        })
 
-        if (!accessCookie) {
+        if (!response.ok) {
           setState({
             isLoading: false,
             isAuthenticated: false,
@@ -57,31 +75,13 @@ export const useCloudflareAccess = (): AccessState => {
           return
         }
 
-        const token = accessCookie.split('=')[1]
-
-        // JWTのペイロードをデコード（署名検証はサーバー側で行う）
-        const parts = token.split('.')
-        if (parts.length !== 3) {
+        const identity = (await response.json()) as AccessIdentity
+        if (!identity.email) {
           setState({
             isLoading: false,
             isAuthenticated: false,
             user: null,
-            error: 'Invalid token format'
-          })
-          return
-        }
-
-        const payloadB64 = parts[1].replace(/-/g, '+').replace(/_/g, '/')
-        const payload = JSON.parse(atob(payloadB64))
-
-        // 有効期限チェック
-        const currentTime = dayjs().unix()
-        if (payload.exp < currentTime) {
-          setState({
-            isLoading: false,
-            isAuthenticated: false,
-            user: null,
-            error: 'Token expired'
+            error: 'Invalid identity response'
           })
           return
         }
@@ -90,22 +90,26 @@ export const useCloudflareAccess = (): AccessState => {
           isLoading: false,
           isAuthenticated: true,
           user: {
-            email: payload.email,
+            email: identity.email,
+            name: identity.name,
             isAuthenticated: true
           },
           error: null
         })
-      } catch (_error) {
+      } catch (error) {
+        if (controller.signal.aborted) return
         setState({
           isLoading: false,
           isAuthenticated: false,
           user: null,
-          error: 'Failed to verify access'
+          error: error instanceof Error ? error.message : 'Failed to verify access'
         })
       }
     }
 
-    checkAccess()
+    fetchIdentity()
+
+    return () => controller.abort()
   }, [])
 
   return state
