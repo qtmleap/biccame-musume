@@ -104,7 +104,7 @@ const CommentRow = ({ comment, index }: { comment: AdminComment; index: number }
 
             <div className='flex items-center gap-2 flex-wrap text-[11px] text-muted-foreground'>
               <Link
-                to='/admin/events/$uuid'
+                to='/admin/events/$uuid/edit'
                 params={{ uuid: comment.eventId }}
                 className='hover:text-brand truncate underline-offset-2 hover:underline max-w-full'
               >

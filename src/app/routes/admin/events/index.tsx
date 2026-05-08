@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
-import { v4 as uuidv4 } from 'uuid'
 import { EventList } from '@/components/admin/event-list'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
@@ -36,7 +35,7 @@ const EventsContent = () => {
             <div className='flex justify-between'>
               <h1 className='text-2xl font-bold text-foreground'>イベント管理</h1>
               {isAuthenticated && (
-                <Link to='/admin/events/$uuid' params={{ uuid: uuidv4() }}>
+                <Link to='/admin/events/new'>
                   <Button size='sm' className='bg-brand hover:bg-brand/90 text-brand-foreground'>
                     新規作成
                   </Button>
