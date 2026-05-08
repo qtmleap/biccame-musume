@@ -133,7 +133,7 @@ export class Twitter {
         const errorText = await response.text()
 
         // 403エラーで引用ツイートが禁止されている場合は通常のツイートにフォールバック
-        if (response.status === 503 && quoteTweetId) {
+        if (response.status === 403 && quoteTweetId) {
           console.warn('[Twitter] Quote tweet not allowed, retrying without quote:', {
             quoteTweetId,
             error: errorText
