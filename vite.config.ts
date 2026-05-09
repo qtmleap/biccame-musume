@@ -65,11 +65,11 @@ export default defineConfig(({ mode }) => {
         outDir: 'dist/client'
       }),
       VitePWA({
-        registerType: 'autoUpdate',
+        registerType: 'prompt',
         includeAssets: ['favicon.ico', 'icons/*.png', 'og_image.webp'],
         manifest: false, // manifest.webmanifestを直接使用
         workbox: {
-          skipWaiting: true,
+          skipWaiting: false,
           clientsClaim: false,
           globPatterns: [],
           runtimeCaching: [
