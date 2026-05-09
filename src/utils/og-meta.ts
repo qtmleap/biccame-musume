@@ -121,7 +121,7 @@ const resolveEvent = async (env: Bindings, id: string, path: string): Promise<Og
       title: `${event.title} | ビッカメ娘イベント`,
       description: truncate(`${event.title} ${formatDateRange(event.startDate, event.endDate)}`, 140),
       url: `${SITE_BASE}${path}`,
-      image: DEFAULT_IMAGE,
+      image: `${SITE_BASE}/og/events/${id}.png`,
       type: 'article'
     }
   } catch {

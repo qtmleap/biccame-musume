@@ -15,6 +15,7 @@ import direction from './api/direction'
 import events from './api/event'
 import favorite from './api/favorite'
 import me from './api/me'
+import og from './api/og'
 import search from './api/search'
 import stats from './api/stats'
 import users from './api/user'
@@ -141,6 +142,9 @@ app.route('/api', adminUsers)
 
 // 管理者 Twitter ヘルスチェックルート
 app.route('/api', adminTwitter)
+
+// Event の OG 画像をランタイム生成 (asset middleware より前に置く)
+app.route('/og', og)
 
 /**
  * 静的ファイル配信 & SPA フォールバック + OGP 動的書き換え

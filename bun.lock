@@ -30,6 +30,7 @@
         "@radix-ui/react-tabs": "^1.1.13",
         "@radix-ui/react-toggle": "^1.1.10",
         "@radix-ui/react-tooltip": "^1.2.8",
+        "@resvg/resvg-wasm": "^2.6.2",
         "@tailwindcss/typography": "^0.5.19",
         "@tailwindcss/vite": "^4.2.4",
         "@tanstack/query-async-storage-persister": "^5.100.9",
@@ -944,6 +945,8 @@
     "@resvg/resvg-js-win32-ia32-msvc": ["@resvg/resvg-js-win32-ia32-msvc@2.6.2", "", { "os": "win32", "cpu": "ia32" }, "sha512-har4aPAlvjnLcil40AC77YDIk6loMawuJwFINEM7n0pZviwMkMvjb2W5ZirsNOZY4aDbo5tLx0wNMREp5Brk+w=="],
 
     "@resvg/resvg-js-win32-x64-msvc": ["@resvg/resvg-js-win32-x64-msvc@2.6.2", "", { "os": "win32", "cpu": "x64" }, "sha512-ZXtYhtUr5SSaBrUDq7DiyjOFJqBVL/dOBN7N/qmi/pO0IgiWW/f/ue3nbvu9joWE5aAKDoIzy/CxsY0suwGosQ=="],
+
+    "@resvg/resvg-wasm": ["@resvg/resvg-wasm@2.6.2", "", {}, "sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw=="],
 
     "@rolldown/binding-android-arm64": ["@rolldown/binding-android-arm64@1.0.0-rc.17", "", { "os": "android", "cpu": "arm64" }, "sha512-s70pVGhw4zqGeFnXWvAzJDlvxhlRollagdCCKRgOsgUOH3N1l0LIxf83AtGzmb5SiVM4Hjl5HyarMRfdfj3DaQ=="],
 
