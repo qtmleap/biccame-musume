@@ -197,7 +197,7 @@ const buildOgVDom = (params: {
                 type: 'div',
                 props: {
                   style: {
-                    fontSize: '24px',
+                    fontSize: '28px',
                     color: '#dc2626',
                     fontWeight: 700,
                     marginBottom: '16px',
@@ -223,7 +223,7 @@ const buildOgVDom = (params: {
                 type: 'div',
                 props: {
                   style: {
-                    fontSize: '24px',
+                    fontSize: '28px',
                     color: '#525252',
                     fontWeight: 500,
                     marginBottom: '32px',
@@ -236,7 +236,7 @@ const buildOgVDom = (params: {
                 type: 'div',
                 props: {
                   style: {
-                    fontSize: '20px',
+                    fontSize: '24px',
                     color: '#737373',
                     fontWeight: 500,
                     lineHeight: 1.6,
@@ -252,7 +252,7 @@ const buildOgVDom = (params: {
                   style: {
                     marginTop: 'auto',
                     paddingTop: '32px',
-                    fontSize: '20px',
+                    fontSize: '24px',
                     color: '#1a1a1a',
                     fontWeight: 700
                   },
