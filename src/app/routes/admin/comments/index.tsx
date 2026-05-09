@@ -206,7 +206,7 @@ const CommentsContent = () => {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: DURATION.normal, delay: 0.06 }}
-          className='grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 mb-4'
+          className='grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-4'
         >
           <StatCard label='総コメント' value={totalCount} accent='text-foreground' />
           <StatCard label='公開中' value={activeCount} accent='text-brand' />

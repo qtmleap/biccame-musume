@@ -163,7 +163,7 @@ const TwitterStatusContent = () => {
               className='space-y-3'
             >
               <h2 className='text-xl font-bold text-foreground'>アクティビティ</h2>
-              <div className='grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4'>
+              <div className='grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4'>
                 <InfoItem icon={MessageSquare} label='ツイート'>
                   <p className='text-sm text-foreground tabular-nums font-numeric'>
                     {data.account.statusesCount.toLocaleString()}
