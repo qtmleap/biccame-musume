@@ -233,6 +233,8 @@ const appContent = {
       commentManagementDesc: 'イベントコメントの確認と削除',
       userManagement: 'ユーザー管理',
       userManagementDesc: '登録ユーザーの一覧確認',
+      twitterManagement: 'Twitter 連携',
+      twitterManagementDesc: '投稿用アカウントの状態確認',
       eventEdit: 'イベント編集',
       eventNew: '新規イベント登録',
       eventCopy: 'イベントをコピーして新規作成',

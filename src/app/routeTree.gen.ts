@@ -29,6 +29,7 @@ import { Route as MeCompletedIndexRouteImport } from './routes/me/completed/inde
 import { Route as EventsUuidIndexRouteImport } from './routes/events/$uuid/index'
 import { Route as CharactersIdIndexRouteImport } from './routes/characters/$id/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
+import { Route as AdminTwitterIndexRouteImport } from './routes/admin/twitter/index'
 import { Route as AdminEventsIndexRouteImport } from './routes/admin/events/index'
 import { Route as AdminCommentsIndexRouteImport } from './routes/admin/comments/index'
 import { Route as AdminBadgesIndexRouteImport } from './routes/admin/badges/index'
@@ -136,6 +137,11 @@ const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   path: '/users/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTwitterIndexRoute = AdminTwitterIndexRouteImport.update({
+  id: '/twitter/',
+  path: '/twitter/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
   id: '/events/',
   path: '/events/',
@@ -185,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/admin/badges/': typeof AdminBadgesIndexRoute
   '/admin/comments/': typeof AdminCommentsIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
+  '/admin/twitter/': typeof AdminTwitterIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
@@ -212,6 +219,7 @@ export interface FileRoutesByTo {
   '/admin/badges': typeof AdminBadgesIndexRoute
   '/admin/comments': typeof AdminCommentsIndexRoute
   '/admin/events': typeof AdminEventsIndexRoute
+  '/admin/twitter': typeof AdminTwitterIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/characters/$id': typeof CharactersIdIndexRoute
   '/events/$uuid': typeof EventsUuidIndexRoute
@@ -241,6 +249,7 @@ export interface FileRoutesById {
   '/admin/badges/': typeof AdminBadgesIndexRoute
   '/admin/comments/': typeof AdminCommentsIndexRoute
   '/admin/events/': typeof AdminEventsIndexRoute
+  '/admin/twitter/': typeof AdminTwitterIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
@@ -271,6 +280,7 @@ export interface FileRouteTypes {
     | '/admin/badges/'
     | '/admin/comments/'
     | '/admin/events/'
+    | '/admin/twitter/'
     | '/admin/users/'
     | '/characters/$id/'
     | '/events/$uuid/'
@@ -298,6 +308,7 @@ export interface FileRouteTypes {
     | '/admin/badges'
     | '/admin/comments'
     | '/admin/events'
+    | '/admin/twitter'
     | '/admin/users'
     | '/characters/$id'
     | '/events/$uuid'
@@ -326,6 +337,7 @@ export interface FileRouteTypes {
     | '/admin/badges/'
     | '/admin/comments/'
     | '/admin/events/'
+    | '/admin/twitter/'
     | '/admin/users/'
     | '/characters/$id/'
     | '/events/$uuid/'
@@ -501,6 +513,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/twitter/': {
+      id: '/admin/twitter/'
+      path: '/twitter'
+      fullPath: '/admin/twitter/'
+      preLoaderRoute: typeof AdminTwitterIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/events/': {
       id: '/admin/events/'
       path: '/events'
@@ -551,6 +570,7 @@ interface AdminRouteChildren {
   AdminBadgesIndexRoute: typeof AdminBadgesIndexRoute
   AdminCommentsIndexRoute: typeof AdminCommentsIndexRoute
   AdminEventsIndexRoute: typeof AdminEventsIndexRoute
+  AdminTwitterIndexRoute: typeof AdminTwitterIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
   AdminEventsUuidIndexRoute: typeof AdminEventsUuidIndexRoute
   AdminEventsNewIndexRoute: typeof AdminEventsNewIndexRoute
@@ -562,6 +582,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBadgesIndexRoute: AdminBadgesIndexRoute,
   AdminCommentsIndexRoute: AdminCommentsIndexRoute,
   AdminEventsIndexRoute: AdminEventsIndexRoute,
+  AdminTwitterIndexRoute: AdminTwitterIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
   AdminEventsUuidIndexRoute: AdminEventsUuidIndexRoute,
   AdminEventsNewIndexRoute: AdminEventsNewIndexRoute,
