@@ -28,6 +28,22 @@ jobs:
           path: |
             node_modules
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+      # OG 画像の生成結果を再利用するキャッシュ。生成ロジック (script / map / characters.json)
+      # のハッシュを key にしているので、いずれかが変わると key が変わって再生成される。
+      # 変更なしなら scripts/generate-og-images.ts が既存 PNG を検知してスキップする。
+      - name: Cache OG images
+        uses: actions/cache@v5
+        with:
+          path: |
+            public/og/characters
+          key: >-
+            ${{ runner.os }}-og-${{
+              hashFiles(
+                'scripts/generate-og-images.ts',
+                'scripts/stampcamera-map.ts',
+                'public/characters.json'
+              )
+            }}
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
       - name: Generate Prisma Client
