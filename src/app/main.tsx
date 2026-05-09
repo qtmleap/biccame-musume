@@ -39,15 +39,9 @@ dayjs.locale('ja')
 dayjs.tz.setDefault('Asia/Tokyo')
 
 // Service Worker登録
-// SW の controller 変更を検知して自動リロード
-let refreshing = false
-navigator.serviceWorker?.addEventListener('controllerchange', () => {
-  if (refreshing) return
-  refreshing = true
-  // サブルートでリロードすると404になるためトップに遷移
-  window.location.replace('/')
-})
-
+// controllerchange による自動リロードはしない。
+// 「更新」ボタン押下時にオーバーレイのアニメーションを見せてから
+// update-prompt 側で明示的にリダイレクトする。
 const updateSW = registerSW({
   immediate: true,
   onNeedRefresh() {
