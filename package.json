@@ -1,6 +1,6 @@
 {
   "name": "biccame-musume",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "type": "module",
   "description": "ビックカメラの店舗擬人化キャラクター「ビッカメ娘」を応援する非公式ファンサイト",
   "author": "@QuantumLeap",
@@ -14,13 +14,14 @@
     "build": "tsc -b && vite build --mode ${CLOUDFLARE_ENV}",
     "migrate": "wrangler d1 execute biccame-musume-events --env=staging --local --file=./prisma/migrations/init/migration.sql",
     "generate": "prisma generate",
-    "prebuild": "rimraf dist && bun run og:generate",
+    "prebuild": "rimraf dist && bun run images:download && bun run og:generate",
     "predeploy": "tsc -b && vite build --mode ${CLOUDFLARE_ENV}",
     "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV}",
     "knip": "knip",
     "test:e2e": "playwright test",
     "badges:seed": "bun run scripts/seed-badges.ts",
     "badges:backfill": "bun run scripts/backfill-badges.ts",
+    "images:download": "bun run scripts/download-character-images.ts",
     "og:generate": "bun run scripts/generate-og-images.ts"
   },
   "dependencies": {
@@ -111,6 +112,7 @@
     "prisma": "7.8.0",
     "rimraf": "^6.1.3",
     "satori": "^0.26.0",
+    "sharp": "^0.34.5",
     "tw-animate-css": "^1.4.0",
     "typescript": "^6.0.3",
     "vite": "^8.0.10",
