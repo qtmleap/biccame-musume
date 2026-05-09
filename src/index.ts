@@ -39,13 +39,18 @@ app.use(
 // セキュリティヘッダ (XSS/Clickjacking/MIME sniffing 対策のベースライン)。
 // CSP は Google Maps / Firebase / Turnstile / Twitter 画像など多数のオリジンが絡むため
 // 全体監査が済むまで未設定。Phase 2 で Report-Only から段階導入する想定。
+//
+// CORP/COOP はデフォルトで same-origin が付与されるが、og:image を X / Bluesky 等の
+// クローラーから cross-origin 参照させる必要があるため明示的に無効化する。
+// SharedArrayBuffer も使っていないので isolation 系は不要。
 app.use(
   '*',
   secureHeaders({
     xContentTypeOptions: 'nosniff',
     xFrameOptions: 'SAMEORIGIN',
     referrerPolicy: 'strict-origin-when-cross-origin',
-    crossOriginOpenerPolicy: 'same-origin',
+    crossOriginResourcePolicy: false,
+    crossOriginOpenerPolicy: false,
     permissionsPolicy: { camera: [], microphone: [], geolocation: [] }
   })
 )
