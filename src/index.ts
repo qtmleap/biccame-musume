@@ -20,6 +20,7 @@ import stats from './api/stats'
 import users from './api/user'
 import version from './api/version'
 import votes from './api/vote'
+import { rewriteIndexHtml } from './middleware/og-rewrite'
 import { getEventsStartingToday } from './services/event-service'
 import type { Bindings, Variables } from './types/bindings'
 import { Twitter } from './utils/twitter'
@@ -136,23 +137,30 @@ app.route('/api', adminUsers)
 // 管理者 Twitter ヘルスチェックルート
 app.route('/api', adminTwitter)
 
-// 静的ファイル配信 & SPA フォールバック
+/**
+ * 静的ファイル配信 & SPA フォールバック + OGP 動的書き換え
+ *
+ * - 静的アセット (拡張子付き) は ASSETS バインディングがそのまま返す
+ * - HTML を返すリクエストは renderRewrittenIndex 経由で OG/Twitter Card メタを差し替える
+ *   ことで X / Bluesky 等のクローラーがページ別カードを生成できるようにする
+ */
 app.use('*', async (c, next) => {
-  await next()
-  // API・認証以外で404の場合、index.htmlにフォールバック（SPA対応）
-  if (c.res.status === 404 && !c.req.path.startsWith('/api/') && !c.req.path.startsWith('/__/')) {
-    try {
-      const assetResponse = await c.env.ASSETS.fetch(new Request(new URL('/', c.req.url), c.req.raw))
-      if (assetResponse.ok) {
-        c.res = new Response(assetResponse.body, {
-          status: 200,
-          headers: assetResponse.headers
-        })
-      }
-    } catch {
-      // ASSETS が利用できない場合（devサーバーなど）はそのまま
-    }
+  if (c.req.path.startsWith('/api/') || c.req.path.startsWith('/__/')) {
+    return next()
   }
+
+  if (c.req.method !== 'GET' && c.req.method !== 'HEAD') {
+    return next()
+  }
+
+  const assetResponse = await c.env.ASSETS.fetch(c.req.raw)
+  const contentType = assetResponse.headers.get('content-type') ?? ''
+
+  if (assetResponse.ok && contentType.includes('text/html')) {
+    return rewriteIndexHtml(c, assetResponse)
+  }
+
+  return assetResponse
 })
 
 const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, ctx) => {
