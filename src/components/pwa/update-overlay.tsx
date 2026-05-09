@@ -3,7 +3,16 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useMemo } from 'react'
 import { charactersQueryKey } from '@/hooks/use-characters'
 import { DURATION } from '@/lib/motion'
+import { STAMPCAMERA_POSES, type StampcameraEntry } from '@/lib/stampcamera-map'
 import { client } from '@/utils/client'
+
+const stampImageUrl = (entry: StampcameraEntry) =>
+  `/images/stamps/${entry.packageId}-${String(entry.stickerId).padStart(3, '0')}.webp`
+
+// オーバーレイで使う stampcamera パッケージ。新しめのデザインに揃える。
+const ALLOWED_PACKAGES = new Set([53, 83, 112, 113])
+
+const allowedPoses = (id: string) => STAMPCAMERA_POSES[id]?.filter((p) => ALLOWED_PACKAGES.has(p.packageId)) ?? []
 
 export type UpdateOverlayStatus = 'clearing' | 'reloading'
 
@@ -52,22 +61,30 @@ export const UpdateOverlay = ({ open, status }: Props) => {
 
   const slots = useMemo<CharacterSlot[]>(() => {
     if (!open) return []
-    const biccame = (characters ?? []).filter((c) => c.character?.is_biccame_musume === true)
-    if (biccame.length === 0) return []
+    const withStamps = (characters ?? []).filter(
+      (c) => c.character?.is_biccame_musume === true && allowedPoses(c.id).length > 0
+    )
+    if (withStamps.length === 0) return []
 
-    const count = Math.min(biccame.length, Math.floor(randomInRange(6, 11)))
-    const shuffled = [...biccame].sort(() => Math.random() - 0.5).slice(0, count)
+    // 各キャラを 2-3 巡分シャッフルしてプールにし、先頭から count 個取る。
+    // これで同じキャラの違うポーズも次々に出てくる。
+    const count = Math.min(35, withStamps.length * 3)
+    const repeats = Math.ceil(count / withStamps.length)
+    const pool = Array.from({ length: repeats }, () => [...withStamps].sort(() => Math.random() - 0.5)).flat()
+    const picks = pool.slice(0, count)
 
-    return shuffled.map((c, i) => {
+    return picks.map((c, i) => {
       const { top, left } = pickPositionAvoidingCenter()
+      const poses = allowedPoses(c.id)
+      const pose = poses[Math.floor(Math.random() * poses.length)]
       return {
         id: `${c.id}-${i}`,
-        imageUrl: c.character.image_url,
+        imageUrl: stampImageUrl(pose),
         top: `${top}%`,
         left: `${left}%`,
         size: Math.floor(randomInRange(60, 121)),
         rotation: randomInRange(-15, 15),
-        delay: i * 0.15
+        delay: i * 0.08
       }
     })
   }, [open, characters])
