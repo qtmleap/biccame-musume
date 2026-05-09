@@ -8,9 +8,12 @@
  *   2. stampcamera.com packages    — STAMPCAMERA_POSES に書かれたパッケージ × スタンプ番号
  *      (透過 SD 画像、複数ポーズ)
  *
+ * 取得した PNG はそのまま保存せず、 sharp で WebP (quality 95) に変換してから書き出す
+ * ので、容量が PNG 比で 30〜50% 程度に縮む。元の寸法は保持する。
+ *
  * Output:
- *   public/images/characters/{key}                — biccame.jp 画像 (相対パスを保つ)
- *   public/images/stamps/{packageId}-{NNN}.png    — stampcamera 画像 (キャラ非依存で重複排除)
+ *   public/images/characters/{key}.webp        — biccame.jp 由来 (相対パスを保つ)
+ *   public/images/stamps/{packageId}-{NNN}.webp — stampcamera 由来 (キャラ非依存で重複排除)
  *
  * Run via:
  *   bun run scripts/download-character-images.ts
@@ -23,6 +26,7 @@ import { unzipSync } from 'fflate'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
+import sharp from 'sharp'
 import { STAMPCAMERA_POSES } from './stampcamera-map'
 
 // stampcamera.com の証明書が期限切れの間バイパスする。スクリプト内のみ。
@@ -33,6 +37,7 @@ const PUBLIC_DIR = resolve(ROOT, 'public')
 const CHARACTERS_JSON = resolve(PUBLIC_DIR, 'characters.json')
 const BICCAME_OUT_DIR = resolve(PUBLIC_DIR, 'images/characters')
 const STAMPS_OUT_DIR = resolve(PUBLIC_DIR, 'images/stamps')
+const WEBP_QUALITY = 95
 
 type RawCharacter = {
   id: string
@@ -41,22 +46,33 @@ type RawCharacter = {
 
 const padStickerId = (n: number): string => String(n).padStart(3, '0')
 
-const downloadFile = async (url: string, outPath: string): Promise<'downloaded' | 'skipped'> => {
+const swapExtToWebp = (key: string): string => key.replace(/\.[^./]+$/, '.webp')
+
+const encodeWebp = async (input: Buffer | Uint8Array): Promise<Buffer> =>
+  sharp(input).webp({ quality: WEBP_QUALITY }).toBuffer()
+
+const writeWebp = async (outPath: string, source: Buffer | Uint8Array): Promise<void> => {
+  const webp = await encodeWebp(source)
+  await mkdir(dirname(outPath), { recursive: true })
+  await writeFile(outPath, webp)
+}
+
+const fetchAndConvert = async (
+  url: string,
+  outPath: string
+): Promise<'downloaded' | 'skipped'> => {
   if (existsSync(outPath)) return 'skipped'
   const res = await fetch(url)
   if (!res.ok) {
     throw new Error(`Failed to fetch ${url}: ${res.status}`)
   }
-  const buf = Buffer.from(await res.arrayBuffer())
-  await mkdir(dirname(outPath), { recursive: true })
-  await writeFile(outPath, buf)
+  await writeWebp(outPath, Buffer.from(await res.arrayBuffer()))
   return 'downloaded'
 }
 
 const downloadBiccameImages = async (
   characters: RawCharacter[]
 ): Promise<{ downloaded: number; skipped: number; failed: number }> => {
-  // 同じファイルを複数キャラが参照している可能性は低いがユニーク化しておく
   const keys = new Set<string>()
   for (const c of characters) {
     for (const k of c.character.images) keys.add(k)
@@ -67,9 +83,9 @@ const downloadBiccameImages = async (
   let failed = 0
   for (const key of keys) {
     const url = new URL(key, 'https://biccame.jp/profile/').href
-    const outPath = resolve(BICCAME_OUT_DIR, key)
+    const outPath = resolve(BICCAME_OUT_DIR, swapExtToWebp(key))
     try {
-      const status = await downloadFile(url, outPath)
+      const status = await fetchAndConvert(url, outPath)
       if (status === 'downloaded') {
         downloaded += 1
         console.log(`[bic] ✓ ${key}`)
@@ -109,9 +125,8 @@ const downloadStampcameraImages = async (): Promise<{
   let failed = 0
 
   for (const [packageId, stickerIds] of byPackage) {
-    // パッケージ内で 1 つでも未取得なら zip を fetch
     const missing = [...stickerIds].filter(
-      (id) => !existsSync(resolve(STAMPS_OUT_DIR, `${packageId}-${padStickerId(id)}.png`))
+      (id) => !existsSync(resolve(STAMPS_OUT_DIR, `${packageId}-${padStickerId(id)}.webp`))
     )
     if (missing.length === 0) {
       skipped += stickerIds.size
@@ -135,7 +150,7 @@ const downloadStampcameraImages = async (): Promise<{
 
     for (const stickerId of stickerIds) {
       const padded = padStickerId(stickerId)
-      const outPath = resolve(STAMPS_OUT_DIR, `${packageId}-${padded}.png`)
+      const outPath = resolve(STAMPS_OUT_DIR, `${packageId}-${padded}.webp`)
       if (existsSync(outPath)) {
         skipped += 1
         continue
@@ -147,10 +162,14 @@ const downloadStampcameraImages = async (): Promise<{
         failed += 1
         continue
       }
-      await mkdir(dirname(outPath), { recursive: true })
-      await writeFile(outPath, bytes)
-      downloaded += 1
-      console.log(`[stamp] ✓ ${packageId}-${padded}`)
+      try {
+        await writeWebp(outPath, bytes)
+        downloaded += 1
+        console.log(`[stamp] ✓ ${packageId}-${padded}`)
+      } catch (err) {
+        console.error(`[stamp] ✗ ${packageId}-${padded}: ${err instanceof Error ? err.message : err}`)
+        failed += 1
+      }
     }
   }
 
@@ -161,7 +180,7 @@ const main = async () => {
   const charactersRaw = await readFile(CHARACTERS_JSON, 'utf-8')
   const characters = JSON.parse(charactersRaw) as RawCharacter[]
 
-  console.log(`[dl] downloading character images → ${PUBLIC_DIR}/images/`)
+  console.log(`[dl] downloading character images → ${PUBLIC_DIR}/images/ (webp q=${WEBP_QUALITY})`)
   const bic = await downloadBiccameImages(characters)
   console.log(
     `[dl] biccame.jp: ${bic.downloaded} downloaded, ${bic.skipped} cached, ${bic.failed} failed`

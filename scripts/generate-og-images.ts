@@ -22,6 +22,7 @@ import { existsSync } from 'node:fs'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import satori from 'satori'
+import sharp from 'sharp'
 import { getCanonicalPose, type StampcameraEntry } from './stampcamera-map'
 
 const ROOT = resolve(import.meta.dir, '..')
@@ -56,16 +57,22 @@ const padStickerId = (n: number): string => String(n).padStart(3, '0')
 const bufferToDataUrl = (buf: Buffer, mime = 'image/png'): string =>
   `data:${mime};base64,${buf.toString('base64')}`
 
-const readLocalAsDataUrl = async (filePath: string): Promise<string> =>
-  bufferToDataUrl(await readFile(filePath))
+/**
+ * satori は WebP を直接デコードできない (PNG/JPEG のみ)。
+ * ローカルは WebP で保存しているので、 sharp で PNG に戻してから data URL 化する。
+ */
+const readLocalAsDataUrl = async (filePath: string): Promise<string> => {
+  const png = await sharp(await readFile(filePath)).png().toBuffer()
+  return bufferToDataUrl(png)
+}
 
 const stampLocalPath = ({ packageId, stickerId }: StampcameraEntry): string =>
-  resolve(STAMPS_LOCAL_DIR, `${packageId}-${padStickerId(stickerId)}.png`)
+  resolve(STAMPS_LOCAL_DIR, `${packageId}-${padStickerId(stickerId)}.webp`)
 
 const biccameLocalPath = (images: string[]): string => {
   const preferred = images.findLast((url) => url.endsWith('4.png'))
   const key = preferred ?? images[images.length - 1]
-  return resolve(BICCAME_LOCAL_DIR, key)
+  return resolve(BICCAME_LOCAL_DIR, key.replace(/\.[^./]+$/, '.webp'))
 }
 
 /**

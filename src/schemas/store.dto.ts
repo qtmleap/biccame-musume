@@ -136,8 +136,8 @@ export const CharacterSchema = z
     image_url: (() => {
       const key: string = v.images.findLast((url) => url.endsWith('4.png')) || v.images[v.images.length - 1]
       // セルフホスト済みなので biccame.jp 直リンクではなく `/images/characters/` 配下を指す。
-      // ファイル本体は scripts/download-character-images.ts が prebuild で配置する。
-      return `/images/characters/${key}`
+      // download-character-images.ts が WebP 化して配置するので拡張子を差し替える。
+      return `/images/characters/${key.replace(/\.[^./]+$/, '.webp')}`
     })()
   }))
 
