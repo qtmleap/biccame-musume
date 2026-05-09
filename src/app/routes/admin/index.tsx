@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Award, Calendar, MessageSquare, Users } from 'lucide-react'
+import { ArrowLeft, Award, Bird, Calendar, MessageSquare, Users } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -40,6 +40,14 @@ const MENU_ITEMS = [
     description: ADMIN_LABELS.userManagementDesc,
     iconBg: 'bg-status-upcoming/15',
     iconText: 'text-status-upcoming-foreground'
+  },
+  {
+    to: '/admin/twitter',
+    icon: Bird,
+    title: ADMIN_LABELS.twitterManagement,
+    description: ADMIN_LABELS.twitterManagementDesc,
+    iconBg: 'bg-status-ongoing/15',
+    iconText: 'text-status-ongoing-foreground'
   }
 ] as const
 
