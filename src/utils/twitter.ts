@@ -10,6 +10,11 @@ import {
 
 const CREATE_TWEET_QUERY_ID = 'oB-5XsHNAbjvARJEc8CZFw'
 const CREATE_TWEET_PATH = `/i/api/graphql/${CREATE_TWEET_QUERY_ID}/CreateTweet`
+// UserByScreenName GraphQL queryId. Like CREATE_TWEET, this rotates infrequently;
+// re-extract from a live browser request when 404 / "operation not found" appears.
+const USER_BY_SCREEN_NAME_QUERY_ID = 'qRRnQQM12fHPMWfKwc4taw'
+const USER_BY_SCREEN_NAME_PATH = `/i/api/graphql/${USER_BY_SCREEN_NAME_QUERY_ID}/UserByScreenName`
+const BOT_SCREEN_NAME = '_biccame_musume'
 // Bearer is hardcoded in https://abs.twimg.com/responsive-web/client-web/main.<hash>.js
 // as two concatenated string literals, rotates infrequently. Re-extract from a live
 // browser request when 401 "Could not authenticate you" starts appearing.
@@ -43,6 +48,18 @@ const getCachedTransactionInputs = async (): Promise<{ homePageHtml: string; ond
 }
 
 type TweetOptions = { quoteTweetId?: string; replyToTweetId?: string }
+
+export type TwitterAccountInfo = {
+  restId: string
+  screenName: string
+  name: string
+  followersCount: number
+  friendsCount: number
+  statusesCount: number
+  createdAt: string
+  profileImageUrl: string
+  description: string
+}
 
 const buildCreateTweetBody = (text: string, opts: TweetOptions): string =>
   JSON.stringify({
@@ -148,6 +165,99 @@ export class Twitter {
     if (!tweetId) throw new Error(`X API: no rest_id in response: ${JSON.stringify(result).slice(0, 300)}`)
     console.log('[Twitter] Tweet posted successfully:', { tweetId })
     return tweetId
+  }
+
+  /**
+   * 投稿用アカウントの公開プロフィールを取得する。
+   * 認証 cookie と x-client-transaction-id 生成が機能しているかをまとめて検証する用途。
+   * X のレート制限は無視できないので連打しないこと。
+   */
+  async getOwnAccount(): Promise<TwitterAccountInfo> {
+    const { TWITTER_AUTH_TOKEN, TWITTER_CSRF_TOKEN } = this.env
+
+    const { homePageHtml, ondemandFileText } = await getCachedTransactionInputs()
+    const tx = ClientTransaction.create({ homePageHtml, ondemandFileText })
+    const transactionId = await tx.generateTransactionId('GET', USER_BY_SCREEN_NAME_PATH)
+
+    const variables = { screen_name: BOT_SCREEN_NAME }
+    const features = {
+      hidden_profile_likes_enabled: true,
+      hidden_profile_subscriptions_enabled: true,
+      responsive_web_graphql_exclude_directive_enabled: true,
+      verified_phone_label_enabled: false,
+      subscriptions_verification_info_is_identity_verified_enabled: true,
+      subscriptions_verification_info_verified_since_enabled: true,
+      highlights_tweets_tab_ui_enabled: true,
+      responsive_web_twitter_article_notes_tab_enabled: true,
+      creator_subscriptions_tweet_preview_api_enabled: true,
+      responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
+      responsive_web_graphql_timeline_navigation_enabled: true
+    }
+    const fieldToggles = { withAuxiliaryUserLabels: false }
+
+    const url = new URL(`https://x.com${USER_BY_SCREEN_NAME_PATH}`)
+    url.searchParams.set('variables', JSON.stringify(variables))
+    url.searchParams.set('features', JSON.stringify(features))
+    url.searchParams.set('fieldToggles', JSON.stringify(fieldToggles))
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        accept: '*/*',
+        'accept-language': 'en-US,en;q=0.9,ja;q=0.8',
+        authorization: `Bearer ${X_BEARER}`,
+        cookie: `auth_token=${TWITTER_AUTH_TOKEN}; ct0=${TWITTER_CSRF_TOKEN}`,
+        referer: `https://x.com/${BOT_SCREEN_NAME}`,
+        'user-agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36',
+        'x-client-transaction-id': transactionId,
+        'x-csrf-token': TWITTER_CSRF_TOKEN,
+        'x-twitter-active-user': 'yes',
+        'x-twitter-auth-type': 'OAuth2Session',
+        'x-twitter-client-language': 'en'
+      }
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(`X API error: ${response.status} ${errorText.slice(0, 300)}`)
+    }
+
+    const result = (await response.json()) as {
+      data?: {
+        user?: {
+          result?: {
+            rest_id?: string
+            legacy?: {
+              screen_name?: string
+              name?: string
+              followers_count?: number
+              friends_count?: number
+              statuses_count?: number
+              created_at?: string
+              profile_image_url_https?: string
+              description?: string
+            }
+          }
+        }
+      }
+    }
+    const user = result.data?.user?.result
+    const legacy = user?.legacy
+    if (!user?.rest_id || !legacy?.screen_name) {
+      throw new Error(`X API: unexpected payload: ${JSON.stringify(result).slice(0, 300)}`)
+    }
+    return {
+      restId: user.rest_id,
+      screenName: legacy.screen_name,
+      name: legacy.name ?? '',
+      followersCount: legacy.followers_count ?? 0,
+      friendsCount: legacy.friends_count ?? 0,
+      statusesCount: legacy.statuses_count ?? 0,
+      createdAt: legacy.created_at ?? '',
+      profileImageUrl: legacy.profile_image_url_https ?? '',
+      description: legacy.description ?? ''
+    }
   }
 
   async tweetEventCreated(event: EventDetail): Promise<void> {
