@@ -30,89 +30,26 @@ export const STAMPCAMERA_POSES: Record<string, StampcameraEntry[]> = {
   fujisawa: [entry(16, 12), entry(53, 12), entry(78, 11), entry(83, 11), entry(112, 11), entry(113, 11)],
   photo: [entry(16, 13), entry(53, 13), entry(78, 12), entry(83, 12), entry(112, 12), entry(113, 12)],
   nagoya: [entry(16, 14), entry(53, 14), entry(78, 13), entry(83, 13), entry(112, 13), entry(113, 13)],
-  yuurakuchou: [
-    entry(16, 15),
-    entry(53, 15),
-    entry(78, 14),
-    entry(83, 14),
-    entry(112, 14),
-    entry(113, 14)
-  ],
-  shinjyuku: [
-    entry(16, 16),
-    entry(53, 16),
-    entry(78, 15),
-    entry(83, 15),
-    entry(112, 15),
-    entry(113, 15)
-  ],
+  yuurakuchou: [entry(16, 15), entry(53, 15), entry(78, 14), entry(83, 14), entry(112, 14), entry(113, 14)],
+  shinjyuku: [entry(16, 16), entry(53, 16), entry(78, 15), entry(83, 15), entry(112, 15), entry(113, 15)],
   camera: [entry(16, 17), entry(53, 20), entry(78, 16), entry(83, 16), entry(112, 16), entry(113, 16)],
   pkan: [entry(16, 18), entry(53, 21), entry(78, 17), entry(83, 17), entry(112, 17), entry(113, 17)],
-  sapporo: [
-    entry(16, 19),
-    entry(53, 23),
-    entry(78, 18),
-    entry(83, 18),
-    entry(112, 18),
-    entry(113, 18)
-  ],
-  hiroshima: [
-    entry(16, 20),
-    entry(53, 24),
-    entry(78, 19),
-    entry(83, 19),
-    entry(112, 19),
-    entry(113, 19)
-  ],
+  sapporo: [entry(16, 19), entry(53, 23), entry(78, 18), entry(83, 18), entry(112, 18), entry(113, 18)],
+  hiroshima: [entry(16, 20), entry(53, 24), entry(78, 19), entry(83, 19), entry(112, 19), entry(113, 19)],
   seiseki: [entry(16, 23), entry(53, 25), entry(78, 20), entry(83, 20), entry(112, 20), entry(113, 20)],
   abeno: [entry(16, 24), entry(53, 26), entry(78, 21), entry(83, 21), entry(112, 21), entry(113, 21)],
   okayama: [entry(16, 25), entry(53, 27), entry(78, 22), entry(83, 22), entry(112, 22), entry(113, 22)],
-  tachikawa: [
-    entry(16, 26),
-    entry(53, 28),
-    entry(78, 23),
-    entry(83, 23),
-    entry(112, 23),
-    entry(113, 23)
-  ],
-  kawasaki: [
-    entry(16, 27),
-    entry(53, 29),
-    entry(78, 24),
-    entry(83, 24),
-    entry(112, 24),
-    entry(113, 24)
-  ],
+  tachikawa: [entry(16, 26), entry(53, 28), entry(78, 23), entry(83, 23), entry(112, 23), entry(113, 23)],
+  kawasaki: [entry(16, 27), entry(53, 29), entry(78, 24), entry(83, 24), entry(112, 24), entry(113, 24)],
   kyoto: [entry(16, 28), entry(53, 30), entry(78, 26), entry(83, 27), entry(112, 25), entry(113, 25)],
   nanba: [entry(16, 29), entry(53, 31), entry(78, 27), entry(83, 28), entry(112, 26), entry(113, 26)],
-  nagoyagate: [
-    entry(16, 30),
-    entry(53, 32),
-    entry(78, 28),
-    entry(83, 29),
-    entry(112, 27),
-    entry(113, 27)
-  ],
-  ikenishi: [
-    entry(16, 31),
-    entry(53, 33),
-    entry(78, 29),
-    entry(83, 30),
-    entry(112, 28),
-    entry(113, 28)
-  ],
+  nagoyagate: [entry(16, 30), entry(53, 32), entry(78, 28), entry(83, 29), entry(112, 27), entry(113, 27)],
+  ikenishi: [entry(16, 31), entry(53, 33), entry(78, 29), entry(83, 30), entry(112, 28), entry(113, 28)],
   akiba: [entry(16, 32), entry(53, 34), entry(78, 30), entry(83, 31), entry(112, 29), entry(113, 29)],
   chofu: [entry(16, 33), entry(53, 35), entry(78, 31), entry(83, 32), entry(112, 30), entry(113, 30)],
   tenjin2: [entry(16, 34), entry(53, 36), entry(78, 32), entry(83, 33), entry(112, 31), entry(113, 31)],
   funato: [entry(16, 35), entry(53, 37), entry(78, 33), entry(83, 34), entry(112, 32), entry(113, 32)],
-  kagoshima: [
-    entry(16, 36),
-    entry(53, 38),
-    entry(78, 34),
-    entry(83, 35),
-    entry(112, 33),
-    entry(113, 33)
-  ],
+  kagoshima: [entry(16, 36), entry(53, 38), entry(78, 34), entry(83, 35), entry(112, 33), entry(113, 33)],
   niigata: [entry(16, 37), entry(53, 39), entry(78, 35), entry(83, 36), entry(112, 34), entry(113, 34)],
   bicsim: [entry(16, 38)],
   akasaka: [entry(16, 39), entry(53, 40), entry(78, 36), entry(113, 35)],

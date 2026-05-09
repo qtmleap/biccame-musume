@@ -27,7 +27,7 @@ import { existsSync } from 'node:fs'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import sharp from 'sharp'
-import { STAMPCAMERA_POSES } from './stampcamera-map'
+import { STAMPCAMERA_POSES } from '../src/lib/stampcamera-map'
 
 // stampcamera.com の証明書が期限切れの間バイパスする。スクリプト内のみ。
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'

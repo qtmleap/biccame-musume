@@ -23,7 +23,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import satori from 'satori'
 import sharp from 'sharp'
-import { getCanonicalPose, type StampcameraEntry } from './stampcamera-map'
+import { getCanonicalPose, type StampcameraEntry } from '../src/lib/stampcamera-map'
 
 const ROOT = resolve(import.meta.dir, '..')
 const PUBLIC_DIR = resolve(ROOT, 'public')

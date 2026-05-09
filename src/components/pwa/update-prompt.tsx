@@ -48,17 +48,24 @@ export const UpdatePrompt = () => {
       setOpen(true)
       toast.dismiss('pwa-update-prompt')
 
+      const wait = (ms: number) => new Promise<void>((res) => window.setTimeout(res, ms))
+
       const applyUpdate = async () => {
         await clearAllCaches().catch(() => {})
+        // clearing ステータスのアニメーションを見せる時間
+        await wait(1500)
+
+        setStatus('reloading')
         // SW を新バージョンに切り替え (skipWaiting メッセージ送信)。
         // reloadPage=false なので自分でトップへリダイレクトする。
         await updateServiceWorker?.(false).catch(() => {})
+        // reloading ステータスのアニメーションを見せる時間
+        await wait(1500)
       }
 
       applyUpdate().finally(() => {
-        setStatus('reloading')
         // サブルートでリロードすると404になるためトップに遷移
-        window.setTimeout(() => window.location.replace('/'), 3000)
+        window.location.replace('/')
       })
     }
 
