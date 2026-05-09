@@ -13,13 +13,51 @@
       "WebSearch",
       "NotebookEdit",
       "TaskCreate",
-      "TaskUpdate"
+      "TaskUpdate",
+      "mcp__github__get_file_contents",
+      "mcp__github__search_repositories"
     ],
     "deny": [],
     "defaultMode": "bypassPermissions",
-    "disableBypassPermissionsMode": "disable",
     "bypassPermissionsMode": "allow"
   },
+  "model": "claude-opus-4-7",
+  "enabledMcpjsonServers": [
+    "docker",
+    "github",
+    "tailwindcss",
+    "shadcn",
+    "prisma",
+    "zod"
+  ],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; [ -n \"$f\" ] && bunx --bun @biomejs/biome check --write --no-errors-on-unmatched \"$f\"; } 2>/dev/null || true",
+            "timeout": 30,
+            "statusMessage": "Biome (auto-fix)"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bunx --bun @biomejs/biome check --no-errors-on-unmatched . 2>&1 | tail -40; [ -f tsconfig.base.json ] && bunx tsc -b --noEmit 2>&1 | tail -40; bun test 2>&1 | tail -40; true",
+            "timeout": 120,
+            "statusMessage": "Biome + tsc + test (repo check)",
+            "async": true
+          }
+        ]
+      }
+    ]
+  },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high"
+  "effortLevel": "xhigh"
 }
