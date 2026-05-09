@@ -13,7 +13,7 @@ import 'dayjs/locale/ja'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { IosInstallPrompt } from '@/components/pwa/install-prompt-ios'
-import { showUpdatePrompt, UpdatePrompt } from '@/components/pwa/update-prompt'
+import { setUpdateServiceWorker, showUpdatePrompt, UpdatePrompt } from '@/components/pwa/update-prompt'
 import { Toaster } from '@/components/ui/sonner'
 import { clearAllCaches } from '@/lib/pwa-cache'
 import { client } from '@/utils/client'
@@ -48,7 +48,7 @@ navigator.serviceWorker?.addEventListener('controllerchange', () => {
   window.location.replace('/')
 })
 
-registerSW({
+const updateSW = registerSW({
   immediate: true,
   onNeedRefresh() {
     showUpdatePrompt()
@@ -72,6 +72,8 @@ registerSW({
     console.error('Service Worker registration failed:', error)
   }
 })
+
+setUpdateServiceWorker(updateSW)
 
 // ルーターインスタンスを作成（ページ遷移時にスクロール位置をトップにリセット）
 const router = createRouter({
