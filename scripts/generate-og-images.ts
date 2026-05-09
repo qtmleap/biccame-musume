@@ -287,7 +287,12 @@ const main = async () => {
     await mkdir(OUT_DIR, { recursive: true })
   }
 
-  console.log(`[og] generating ${targets.length} character OG images → ${OUT_DIR}`)
+  // FORCE_OG=1 で既存ファイルを無視して再生成する。CI ではキャッシュキーが入力ファイル
+  // (script / map / characters.json) のハッシュに紐付いているため、key 一致 = ロジック未変更
+  // とみなして既存 PNG をそのまま使い回す。
+  const force = process.env.FORCE_OG === '1'
+
+  console.log(`[og] generating ${targets.length} character OG images → ${OUT_DIR}${force ? ' (force)' : ''}`)
 
   const fonts = [
     { name: 'Zen Maru Gothic', data: fontRegular, weight: 500 as const, style: 'normal' as const },
@@ -295,8 +300,15 @@ const main = async () => {
   ]
 
   let ok = 0
+  let skipped = 0
   let fail = 0
   for (const c of targets) {
+    const outPath = resolve(OUT_DIR, `${c.id}.png`)
+    if (!force && existsSync(outPath)) {
+      skipped += 1
+      continue
+    }
+
     try {
       const imageDataUrl = await resolveCharacterImage(c)
 
@@ -311,7 +323,6 @@ const main = async () => {
       const svg = await satori(vdom, { width: 1200, height: 630, fonts })
       const png = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng()
 
-      const outPath = resolve(OUT_DIR, `${c.id}.png`)
       await mkdir(dirname(outPath), { recursive: true })
       await writeFile(outPath, png)
       ok += 1
@@ -322,7 +333,7 @@ const main = async () => {
     }
   }
 
-  console.log(`[og] done: ${ok} ok, ${fail} failed`)
+  console.log(`[og] done: ${ok} generated, ${skipped} cached, ${fail} failed`)
   if (fail > 0 && ok === 0) {
     process.exit(1)
   }
