@@ -30,6 +30,7 @@ export const STAMPCAMERA_PACKAGE_MAP: Record<string, StampcameraEntry> = {
   nagoya: { packageId: 53, stickerId: 14 },
   yuurakuchou: { packageId: 53, stickerId: 15 },
   shinjyuku: { packageId: 53, stickerId: 16 },
+  naisen: { packageId: 53, stickerId: 17 },
   camera: { packageId: 53, stickerId: 20 },
   pkan: { packageId: 53, stickerId: 21 },
   sapporo: { packageId: 53, stickerId: 23 },
