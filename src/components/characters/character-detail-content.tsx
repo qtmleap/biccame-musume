@@ -25,8 +25,8 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
             <AppBreadcrumb
               items={[
                 { label: 'ホーム', to: '/' },
-                { label: 'キャラクター', to: '/characters' },
-                { label: character.character?.name ?? 'キャラクター詳細' }
+                { label: 'ビッカメ娘', to: '/characters' },
+                { label: character.character?.name ?? 'ビッカメ娘詳細' }
               ]}
             />
             <div className='pb-2'>
