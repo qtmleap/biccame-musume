@@ -1,27 +1,42 @@
 /**
  * Generate per-character OG images at build time.
  *
- * Reads public/characters.json, fetches each character's SD portrait from biccame.jp,
- * composes a 1200x630 OG card with satori, rasterizes it with resvg, and writes
- * the PNG to public/og/characters/{id}.png.
+ * Reads public/characters.json, fetches each character's SD portrait, composes a
+ * 1200x630 OG card with satori, rasterizes it with resvg, and writes the PNG to
+ * public/og/characters/{id}.png.
+ *
+ * Image source priority:
+ *   1. stampcamera_package_id present → fetch transparent SD image from
+ *      stampcamera.com/packages/{id}/package.zip (cached under .cache/stamp-packages/)
+ *   2. fall back to biccame.jp/profile/ images[]
  *
  * Run via:
  *   bun run scripts/generate-og-images.ts
  *
  * Hooked into prebuild so production deploys always have fresh images. Output is
  * gitignored — regenerate locally if you want them for `vite dev`.
+ *
+ * NOTE: stampcamera.com の SSL 証明書が時々期限切れになるため、ビルド時のみ
+ * NODE_TLS_REJECT_UNAUTHORIZED=0 を設定して証明書検証をバイパスする。プロセス
+ * 全体スコープなのでこのスクリプト以外のネットワークコールも無効化される点に注意。
  */
 
 import { Resvg } from '@resvg/resvg-js'
-import { readFile, writeFile, mkdir } from 'node:fs/promises'
+import { unzipSync } from 'fflate'
 import { existsSync } from 'node:fs'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import satori from 'satori'
+
+// stampcamera.com の証明書が期限切れの間バイパスするためのビルド時専用フラグ。
+// import 解決後・fetch 実行前に必ず設定するためモジュール先頭で代入する。
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const ROOT = resolve(import.meta.dir, '..')
 const PUBLIC_DIR = resolve(ROOT, 'public')
 const OUT_DIR = resolve(PUBLIC_DIR, 'og/characters')
 const CHARACTERS_JSON = resolve(PUBLIC_DIR, 'characters.json')
+const STAMP_CACHE_DIR = resolve(ROOT, '.cache/stamp-packages')
 const FONT_REGULAR = resolve(
   ROOT,
   'node_modules/@fontsource/zen-maru-gothic/files/zen-maru-gothic-japanese-500-normal.woff'
@@ -38,6 +53,7 @@ type RawCharacter = {
     description: string
     images: string[]
     is_biccame_musume?: boolean
+    stampcamera_package_id?: number
   }
   store?: { name?: string }
   prefecture?: string | null
@@ -49,14 +65,57 @@ const pickCanonicalImage = (images: string[]): string => {
   return new URL(key, 'https://biccame.jp/profile/').href
 }
 
+const bufferToDataUrl = (buf: Buffer, mime = 'image/png'): string =>
+  `data:${mime};base64,${buf.toString('base64')}`
+
 const fetchImageAsDataUrl = async (url: string): Promise<string> => {
   const res = await fetch(url)
   if (!res.ok) {
     throw new Error(`Failed to fetch ${url}: ${res.status}`)
   }
-  const buf = Buffer.from(await res.arrayBuffer())
-  const mime = res.headers.get('content-type') ?? 'image/png'
-  return `data:${mime};base64,${buf.toString('base64')}`
+  return bufferToDataUrl(Buffer.from(await res.arrayBuffer()), res.headers.get('content-type') ?? 'image/png')
+}
+
+/**
+ * stampcamera.com のパッケージ zip を取得して transparent SD 画像 (images/001.png) を
+ * 抽出する。一度展開した PNG は .cache/stamp-packages/{id}.png にキャッシュ。
+ */
+const fetchStampcameraImage = async (packageId: number): Promise<string> => {
+  const cachePath = resolve(STAMP_CACHE_DIR, `${packageId}.png`)
+  if (existsSync(cachePath)) {
+    return bufferToDataUrl(await readFile(cachePath))
+  }
+
+  const url = `https://stampcamera.com/packages/${packageId}/package.zip`
+  const res = await fetch(url)
+  if (!res.ok) {
+    throw new Error(`Failed to fetch ${url}: ${res.status}`)
+  }
+  const zipBuf = new Uint8Array(await res.arrayBuffer())
+  const entries = unzipSync(zipBuf, {
+    filter: (file) => file.name === `${packageId}/images/001.png`
+  })
+  const imageBytes = entries[`${packageId}/images/001.png`]
+  if (!imageBytes) {
+    throw new Error(`images/001.png not found in package ${packageId}`)
+  }
+
+  await mkdir(STAMP_CACHE_DIR, { recursive: true })
+  await writeFile(cachePath, imageBytes)
+  return bufferToDataUrl(Buffer.from(imageBytes))
+}
+
+const resolveCharacterImage = async (c: RawCharacter): Promise<string> => {
+  if (c.character.stampcamera_package_id !== undefined) {
+    try {
+      return await fetchStampcameraImage(c.character.stampcamera_package_id)
+    } catch (err) {
+      console.warn(
+        `[og]  ! ${c.id}: stampcamera fallback to biccame.jp (${err instanceof Error ? err.message : err})`
+      )
+    }
+  }
+  return fetchImageAsDataUrl(pickCanonicalImage(c.character.images))
 }
 
 const buildOgVDom = (params: {
@@ -231,8 +290,7 @@ const main = async () => {
   let fail = 0
   for (const c of targets) {
     try {
-      const imageUrl = pickCanonicalImage(c.character.images)
-      const imageDataUrl = await fetchImageAsDataUrl(imageUrl)
+      const imageDataUrl = await resolveCharacterImage(c)
 
       // biome-ignore lint/suspicious/noExplicitAny: satori's VDom type accepts loose object trees
       const vdom = buildOgVDom({

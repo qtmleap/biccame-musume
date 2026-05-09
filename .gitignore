@@ -250,3 +250,6 @@ cookie.txt
 
 # Build-time generated OG images (regenerated via `bun run og:generate`)
 public/og/
+
+# Build-time download cache (stampcamera package zips, etc.)
+.cache/

@@ -1752,7 +1752,8 @@
         "images/sapporo5.png"
       ],
       "is_biccame_musume": true,
-      "birthday": "2016-08-10"
+      "birthday": "2016-08-10",
+      "stampcamera_package_id": 53
     },
     "prefecture": "北海道",
     "postal_code": "060-8619",
