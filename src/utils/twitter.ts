@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '@/lib/x-transaction'
 import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
@@ -48,6 +49,35 @@ const getCachedTransactionInputs = async (): Promise<{ homePageHtml: string; ond
 }
 
 type TweetOptions = { quoteTweetId?: string; replyToTweetId?: string }
+
+/**
+ * UserByScreenName GraphQL のレスポンスのうち、ヘルスチェック画面で使う
+ * フィールドだけを抜き出した Zod スキーマ。X が新フィールドを生やしても
+ * 壊れないよう、未使用のキーには触れない。
+ */
+const UserByScreenNameResponseSchema = z.object({
+  data: z.object({
+    user: z.object({
+      result: z.object({
+        rest_id: z.string().nonempty(),
+        core: z.object({
+          name: z.string(),
+          screen_name: z.string().nonempty(),
+          created_at: z.string().nonempty()
+        }),
+        avatar: z.object({
+          image_url: z.string()
+        }),
+        legacy: z.object({
+          followers_count: z.number().int().nonnegative(),
+          friends_count: z.number().int().nonnegative(),
+          statuses_count: z.number().int().nonnegative(),
+          description: z.string()
+        })
+      })
+    })
+  })
+})
 
 export type TwitterAccountInfo = {
   restId: string
@@ -225,40 +255,22 @@ export class Twitter {
       throw new Error(`X API error: ${response.status} ${errorText.slice(0, 300)}`)
     }
 
-    const result = (await response.json()) as {
-      data?: {
-        user?: {
-          result?: {
-            rest_id?: string
-            legacy?: {
-              screen_name?: string
-              name?: string
-              followers_count?: number
-              friends_count?: number
-              statuses_count?: number
-              created_at?: string
-              profile_image_url_https?: string
-              description?: string
-            }
-          }
-        }
-      }
+    const json = await response.json()
+    const parsed = UserByScreenNameResponseSchema.safeParse(json)
+    if (!parsed.success) {
+      throw new Error(`X API: unexpected payload: ${parsed.error.message} / ${JSON.stringify(json).slice(0, 300)}`)
     }
-    const user = result.data?.user?.result
-    const legacy = user?.legacy
-    if (!user?.rest_id || !legacy?.screen_name) {
-      throw new Error(`X API: unexpected payload: ${JSON.stringify(result).slice(0, 300)}`)
-    }
+    const { rest_id, core, avatar, legacy } = parsed.data.data.user.result
     return {
-      restId: user.rest_id,
-      screenName: legacy.screen_name,
-      name: legacy.name ?? '',
-      followersCount: legacy.followers_count ?? 0,
-      friendsCount: legacy.friends_count ?? 0,
-      statusesCount: legacy.statuses_count ?? 0,
-      createdAt: legacy.created_at ?? '',
-      profileImageUrl: legacy.profile_image_url_https ?? '',
-      description: legacy.description ?? ''
+      restId: rest_id,
+      screenName: core.screen_name,
+      name: core.name,
+      followersCount: legacy.followers_count,
+      friendsCount: legacy.friends_count,
+      statusesCount: legacy.statuses_count,
+      createdAt: core.created_at,
+      profileImageUrl: avatar.image_url,
+      description: legacy.description
     }
   }
 
