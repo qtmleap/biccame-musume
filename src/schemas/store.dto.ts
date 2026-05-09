@@ -129,9 +129,7 @@ export const CharacterSchema = z
     twitter_id: z.string().nonempty().optional(),
     images: z.array(z.string().nonempty('画像URLは必須です')).nonempty('画像を最低 1 つ指定してください'),
     birthday: z.string().nonempty('誕生日は必須です').optional(),
-    is_biccame_musume: z.boolean().optional(),
-    /** stampcamera.com のキャラクターパッケージID。OG 画像生成時に透過版 SD 画像を取得するのに使う */
-    stampcamera_package_id: z.number().int().positive().optional()
+    is_biccame_musume: z.boolean().optional()
   })
   .transform((v) => ({
     ...v,

@@ -27,6 +27,7 @@ import { existsSync } from 'node:fs'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import satori from 'satori'
+import { STAMPCAMERA_PACKAGE_MAP, type StampcameraEntry } from './stampcamera-map'
 
 // stampcamera.com の証明書が期限切れの間バイパスするためのビルド時専用フラグ。
 // import 解決後・fetch 実行前に必ず設定するためモジュール先頭で代入する。
@@ -53,7 +54,6 @@ type RawCharacter = {
     description: string
     images: string[]
     is_biccame_musume?: boolean
-    stampcamera_package_id?: number
   }
   store?: { name?: string }
   prefecture?: string | null
@@ -76,12 +76,16 @@ const fetchImageAsDataUrl = async (url: string): Promise<string> => {
   return bufferToDataUrl(Buffer.from(await res.arrayBuffer()), res.headers.get('content-type') ?? 'image/png')
 }
 
+const padStickerId = (n: number): string => String(n).padStart(3, '0')
+
 /**
- * stampcamera.com のパッケージ zip を取得して transparent SD 画像 (images/001.png) を
- * 抽出する。一度展開した PNG は .cache/stamp-packages/{id}.png にキャッシュ。
+ * stampcamera.com のパッケージ zip を取得し、指定スタンプの透過 SD 画像
+ * (images/{NNN}.png) を抽出する。展開した PNG は
+ * .cache/stamp-packages/{packageId}-{stickerId}.png にキャッシュ。
  */
-const fetchStampcameraImage = async (packageId: number): Promise<string> => {
-  const cachePath = resolve(STAMP_CACHE_DIR, `${packageId}.png`)
+const fetchStampcameraImage = async ({ packageId, stickerId }: StampcameraEntry): Promise<string> => {
+  const stickerName = padStickerId(stickerId)
+  const cachePath = resolve(STAMP_CACHE_DIR, `${packageId}-${stickerName}.png`)
   if (existsSync(cachePath)) {
     return bufferToDataUrl(await readFile(cachePath))
   }
@@ -92,12 +96,11 @@ const fetchStampcameraImage = async (packageId: number): Promise<string> => {
     throw new Error(`Failed to fetch ${url}: ${res.status}`)
   }
   const zipBuf = new Uint8Array(await res.arrayBuffer())
-  const entries = unzipSync(zipBuf, {
-    filter: (file) => file.name === `${packageId}/images/001.png`
-  })
-  const imageBytes = entries[`${packageId}/images/001.png`]
+  const entryName = `${packageId}/images/${stickerName}.png`
+  const entries = unzipSync(zipBuf, { filter: (file) => file.name === entryName })
+  const imageBytes = entries[entryName]
   if (!imageBytes) {
-    throw new Error(`images/001.png not found in package ${packageId}`)
+    throw new Error(`${entryName} not found in package ${packageId}`)
   }
 
   await mkdir(STAMP_CACHE_DIR, { recursive: true })
@@ -106,9 +109,10 @@ const fetchStampcameraImage = async (packageId: number): Promise<string> => {
 }
 
 const resolveCharacterImage = async (c: RawCharacter): Promise<string> => {
-  if (c.character.stampcamera_package_id !== undefined) {
+  const entry = STAMPCAMERA_PACKAGE_MAP[c.id]
+  if (entry !== undefined) {
     try {
-      return await fetchStampcameraImage(c.character.stampcamera_package_id)
+      return await fetchStampcameraImage(entry)
     } catch (err) {
       console.warn(
         `[og]  ! ${c.id}: stampcamera fallback to biccame.jp (${err instanceof Error ? err.message : err})`
@@ -155,20 +159,20 @@ const buildOgVDom = (params: {
           type: 'div',
           props: {
             style: {
-              width: '520px',
+              width: '600px',
               height: '630px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '48px'
+              padding: '24px'
             },
             children: [
               {
                 type: 'img',
                 props: {
                   src: imageDataUrl,
-                  width: 420,
-                  height: 420,
+                  width: 560,
+                  height: 560,
                   style: {
                     objectFit: 'contain',
                     filter: 'drop-shadow(0 12px 32px rgba(220, 38, 38, 0.25))'
@@ -186,7 +190,7 @@ const buildOgVDom = (params: {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              padding: '64px 64px 64px 0'
+              padding: '56px 56px 56px 0'
             },
             children: [
               {
