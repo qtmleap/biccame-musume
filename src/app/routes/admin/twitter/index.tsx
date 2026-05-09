@@ -148,7 +148,7 @@ const TwitterStatusContent = () => {
 
               <div className='flex flex-wrap gap-x-4 gap-y-1 mt-3 text-sm text-muted-foreground'>
                 <span>{formatXDate(data.account.createdAt)} 開設</span>
-                <span className='tabular-nums font-numeric'>ID: {data.account.restId}</span>
+                <span className='tabular-nums'>ID: {data.account.restId}</span>
               </div>
             </motion.div>
 
