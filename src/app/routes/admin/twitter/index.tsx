@@ -165,34 +165,24 @@ const TwitterStatusContent = () => {
               <h2 className='text-xl font-bold text-foreground'>アクティビティ</h2>
               <div className='grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4'>
                 <InfoItem icon={MessageSquare} label='ツイート'>
-                  <p className='text-sm text-foreground tabular-nums font-numeric'>
-                    {data.account.statusesCount.toLocaleString()}
-                  </p>
+                  <p className='text-sm text-foreground tabular-nums'>{data.account.statusesCount.toLocaleString()}</p>
                 </InfoItem>
                 <InfoItem icon={Users} label='フォロワー'>
-                  <p className='text-sm text-foreground tabular-nums font-numeric'>
-                    {data.account.followersCount.toLocaleString()}
-                  </p>
+                  <p className='text-sm text-foreground tabular-nums'>{data.account.followersCount.toLocaleString()}</p>
                 </InfoItem>
                 <InfoItem icon={UserPlus} label='フォロー'>
-                  <p className='text-sm text-foreground tabular-nums font-numeric'>
-                    {data.account.friendsCount.toLocaleString()}
-                  </p>
+                  <p className='text-sm text-foreground tabular-nums'>{data.account.friendsCount.toLocaleString()}</p>
                 </InfoItem>
                 <InfoItem icon={Heart} label='いいね'>
-                  <p className='text-sm text-foreground tabular-nums font-numeric'>
+                  <p className='text-sm text-foreground tabular-nums'>
                     {data.account.favouritesCount.toLocaleString()}
                   </p>
                 </InfoItem>
                 <InfoItem icon={ImageIcon} label='メディア'>
-                  <p className='text-sm text-foreground tabular-nums font-numeric'>
-                    {data.account.mediaCount.toLocaleString()}
-                  </p>
+                  <p className='text-sm text-foreground tabular-nums'>{data.account.mediaCount.toLocaleString()}</p>
                 </InfoItem>
                 <InfoItem icon={Bookmark} label='リスト掲載'>
-                  <p className='text-sm text-foreground tabular-nums font-numeric'>
-                    {data.account.listedCount.toLocaleString()}
-                  </p>
+                  <p className='text-sm text-foreground tabular-nums'>{data.account.listedCount.toLocaleString()}</p>
                 </InfoItem>
               </div>
             </motion.div>
