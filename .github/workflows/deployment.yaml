@@ -28,6 +28,22 @@ jobs:
           path: |
             node_modules
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+      # 自前ホストするキャラ画像 (biccame.jp + stampcamera) のキャッシュ。
+      # characters.json と stampcamera-map.ts が変わらない限り再 DL 不要。
+      - name: Cache character images
+        uses: actions/cache@v5
+        with:
+          path: |
+            public/images/characters
+            public/images/stamps
+          key: >-
+            ${{ runner.os }}-character-images-${{
+              hashFiles(
+                'scripts/download-character-images.ts',
+                'scripts/stampcamera-map.ts',
+                'public/characters.json'
+              )
+            }}
       # OG 画像の生成結果を再利用するキャッシュ。生成ロジック (script / map / characters.json)
       # のハッシュを key にしているので、いずれかが変わると key が変わって再生成される。
       # 変更なしなら scripts/generate-og-images.ts が既存 PNG を検知してスキップする。
