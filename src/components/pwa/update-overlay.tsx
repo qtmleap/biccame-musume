@@ -98,7 +98,7 @@ export const UpdateOverlay = ({ open, status }: Props) => {
               }}
               initial={{ scale: 0, opacity: 0 }}
               animate={{
-                scale: [1, 1.06, 0.97, 1.03, 1],
+                scale: 1,
                 opacity: 1,
                 y: [0, -6, 0, -4, 0]
               }}
