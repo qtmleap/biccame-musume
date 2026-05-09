@@ -12,7 +12,7 @@ const CREATE_TWEET_QUERY_ID = 'oB-5XsHNAbjvARJEc8CZFw'
 const CREATE_TWEET_PATH = `/i/api/graphql/${CREATE_TWEET_QUERY_ID}/CreateTweet`
 // UserByScreenName GraphQL queryId. Like CREATE_TWEET, this rotates infrequently;
 // re-extract from a live browser request when 404 / "operation not found" appears.
-const USER_BY_SCREEN_NAME_QUERY_ID = 'qRRnQQM12fHPMWfKwc4taw'
+const USER_BY_SCREEN_NAME_QUERY_ID = 'IGgvgiOx4QZndDHuD3x9TQ'
 const USER_BY_SCREEN_NAME_PATH = `/i/api/graphql/${USER_BY_SCREEN_NAME_QUERY_ID}/UserByScreenName`
 const BOT_SCREEN_NAME = '_biccame_musume'
 // Bearer is hardcoded in https://abs.twimg.com/responsive-web/client-web/main.<hash>.js
@@ -179,21 +179,23 @@ export class Twitter {
     const tx = ClientTransaction.create({ homePageHtml, ondemandFileText })
     const transactionId = await tx.generateTransactionId('GET', USER_BY_SCREEN_NAME_PATH)
 
-    const variables = { screen_name: BOT_SCREEN_NAME }
+    const variables = { screen_name: BOT_SCREEN_NAME, withGrokTranslatedBio: true }
     const features = {
-      hidden_profile_likes_enabled: true,
       hidden_profile_subscriptions_enabled: true,
-      responsive_web_graphql_exclude_directive_enabled: true,
+      profile_label_improvements_pcf_label_in_post_enabled: true,
+      responsive_web_profile_redirect_enabled: false,
+      rweb_tipjar_consumption_enabled: false,
       verified_phone_label_enabled: false,
       subscriptions_verification_info_is_identity_verified_enabled: true,
       subscriptions_verification_info_verified_since_enabled: true,
       highlights_tweets_tab_ui_enabled: true,
       responsive_web_twitter_article_notes_tab_enabled: true,
+      subscriptions_feature_can_gift_premium: true,
       creator_subscriptions_tweet_preview_api_enabled: true,
       responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
       responsive_web_graphql_timeline_navigation_enabled: true
     }
-    const fieldToggles = { withAuxiliaryUserLabels: false }
+    const fieldToggles = { withPayments: false, withAuxiliaryUserLabels: true }
 
     const url = new URL(`https://x.com${USER_BY_SCREEN_NAME_PATH}`)
     url.searchParams.set('variables', JSON.stringify(variables))
