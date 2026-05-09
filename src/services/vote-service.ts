@@ -57,6 +57,7 @@ export const vote = async (
 
   const currentYear = dayjs().year()
 
+  const tUpsertStart = Date.now()
   // 投票カウントを更新
   await prisma.voteCount.upsert({
     where: { characterId_year: { characterId: characterId, year: currentYear } },
@@ -69,6 +70,7 @@ export const vote = async (
       count: 1
     }
   })
+  const tUpsertEnd = Date.now()
 
   // 投票レコード作成
   await prisma.vote.create({
@@ -78,6 +80,9 @@ export const vote = async (
       userId: userId ?? null
     }
   })
+  const tCreateEnd = Date.now()
+
+  console.log(`[vote:${characterId}] upsert=${tUpsertEnd - tUpsertStart}ms create=${tCreateEnd - tUpsertEnd}ms`)
 
   return {
     success: true,
@@ -103,6 +108,7 @@ export const bulkVote = async (
   ip: string,
   userId?: string
 ): Promise<BulkVoteResult[]> => {
+  const tStart = Date.now()
   const isDev = env.ENVIRONMENT === 'local'
   const results: BulkVoteResult[] = []
 
@@ -110,15 +116,24 @@ export const bulkVote = async (
   const uniqueIds = Array.from(new Set(characterIds))
 
   for (const characterId of uniqueIds) {
+    const tLimitStart = Date.now()
     const limited = await isVoteLimited(env.VOTE_LIMITER, characterId, ip)
+    const tLimitEnd = Date.now()
     if (limited && !isDev) {
       results.push({ characterId, status: 'skipped' })
+      console.log(`[bulkVote:${characterId}] limit=${tLimitEnd - tLimitStart}ms (skipped)`)
       continue
     }
     await markVoteLimited(env.VOTE_LIMITER, characterId, ip)
+    const tMarkEnd = Date.now()
     await vote(env, characterId, ip, userId)
+    const tVoteEnd = Date.now()
     results.push({ characterId, status: 'voted' })
+    console.log(
+      `[bulkVote:${characterId}] limit=${tLimitEnd - tLimitStart}ms mark=${tMarkEnd - tLimitEnd}ms vote=${tVoteEnd - tMarkEnd}ms`
+    )
   }
 
+  console.log(`[bulkVote] total=${Date.now() - tStart}ms n=${uniqueIds.length}`)
   return results
 }
