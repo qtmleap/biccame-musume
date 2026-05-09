@@ -14,13 +14,14 @@
     "build": "tsc -b && vite build --mode ${CLOUDFLARE_ENV}",
     "migrate": "wrangler d1 execute biccame-musume-events --env=staging --local --file=./prisma/migrations/init/migration.sql",
     "generate": "prisma generate",
-    "prebuild": "rimraf dist && bun run og:generate",
+    "prebuild": "rimraf dist && bun run images:download && bun run og:generate",
     "predeploy": "tsc -b && vite build --mode ${CLOUDFLARE_ENV}",
     "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV}",
     "knip": "knip",
     "test:e2e": "playwright test",
     "badges:seed": "bun run scripts/seed-badges.ts",
     "badges:backfill": "bun run scripts/backfill-badges.ts",
+    "images:download": "bun run scripts/download-character-images.ts",
     "og:generate": "bun run scripts/generate-og-images.ts"
   },
   "dependencies": {

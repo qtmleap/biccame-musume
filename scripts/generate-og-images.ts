@@ -1,43 +1,35 @@
 /**
  * Generate per-character OG images at build time.
  *
- * Reads public/characters.json, fetches each character's SD portrait, composes a
- * 1200x630 OG card with satori, rasterizes it with resvg, and writes the PNG to
- * public/og/characters/{id}.png.
+ * Reads public/characters.json, loads each character's SD portrait from the
+ * locally cached image folders (populated by download-character-images.ts),
+ * composes a 1200x630 OG card with satori, rasterizes it with resvg, and writes
+ * the PNG to public/og/characters/{id}.png.
  *
  * Image source priority:
- *   1. stampcamera_package_id present → fetch transparent SD image from
- *      stampcamera.com/packages/{id}/package.zip (cached under .cache/stamp-packages/)
- *   2. fall back to biccame.jp/profile/ images[]
+ *   1. STAMPCAMERA_POSES に登録があれば public/images/stamps/ から透過 SD 画像
+ *   2. fall back to biccame.jp 由来の public/images/characters/ 配下
  *
  * Run via:
  *   bun run scripts/generate-og-images.ts
  *
- * Hooked into prebuild so production deploys always have fresh images. Output is
- * gitignored — regenerate locally if you want them for `vite dev`.
- *
- * NOTE: stampcamera.com の SSL 証明書が時々期限切れになるため、ビルド時のみ
- * NODE_TLS_REJECT_UNAUTHORIZED=0 を設定して証明書検証をバイパスする。プロセス
- * 全体スコープなのでこのスクリプト以外のネットワークコールも無効化される点に注意。
+ * Hooked into prebuild (after images:download). Output is gitignored —
+ * regenerate locally if you want them for `vite dev`.
  */
 
 import { Resvg } from '@resvg/resvg-js'
-import { unzipSync } from 'fflate'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import satori from 'satori'
-import { STAMPCAMERA_PACKAGE_MAP, type StampcameraEntry } from './stampcamera-map'
-
-// stampcamera.com の証明書が期限切れの間バイパスするためのビルド時専用フラグ。
-// import 解決後・fetch 実行前に必ず設定するためモジュール先頭で代入する。
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+import { getCanonicalPose, type StampcameraEntry } from './stampcamera-map'
 
 const ROOT = resolve(import.meta.dir, '..')
 const PUBLIC_DIR = resolve(ROOT, 'public')
 const OUT_DIR = resolve(PUBLIC_DIR, 'og/characters')
 const CHARACTERS_JSON = resolve(PUBLIC_DIR, 'characters.json')
-const STAMP_CACHE_DIR = resolve(ROOT, '.cache/stamp-packages')
+const BICCAME_LOCAL_DIR = resolve(PUBLIC_DIR, 'images/characters')
+const STAMPS_LOCAL_DIR = resolve(PUBLIC_DIR, 'images/stamps')
 const FONT_REGULAR = resolve(
   ROOT,
   'node_modules/@fontsource/zen-maru-gothic/files/zen-maru-gothic-japanese-500-normal.woff'
@@ -59,67 +51,39 @@ type RawCharacter = {
   prefecture?: string | null
 }
 
-const pickCanonicalImage = (images: string[]): string => {
-  const preferred = images.findLast((url) => url.endsWith('4.png'))
-  const key = preferred ?? images[images.length - 1]
-  return new URL(key, 'https://biccame.jp/profile/').href
-}
+const padStickerId = (n: number): string => String(n).padStart(3, '0')
 
 const bufferToDataUrl = (buf: Buffer, mime = 'image/png'): string =>
   `data:${mime};base64,${buf.toString('base64')}`
 
-const fetchImageAsDataUrl = async (url: string): Promise<string> => {
-  const res = await fetch(url)
-  if (!res.ok) {
-    throw new Error(`Failed to fetch ${url}: ${res.status}`)
-  }
-  return bufferToDataUrl(Buffer.from(await res.arrayBuffer()), res.headers.get('content-type') ?? 'image/png')
-}
+const readLocalAsDataUrl = async (filePath: string): Promise<string> =>
+  bufferToDataUrl(await readFile(filePath))
 
-const padStickerId = (n: number): string => String(n).padStart(3, '0')
+const stampLocalPath = ({ packageId, stickerId }: StampcameraEntry): string =>
+  resolve(STAMPS_LOCAL_DIR, `${packageId}-${padStickerId(stickerId)}.png`)
+
+const biccameLocalPath = (images: string[]): string => {
+  const preferred = images.findLast((url) => url.endsWith('4.png'))
+  const key = preferred ?? images[images.length - 1]
+  return resolve(BICCAME_LOCAL_DIR, key)
+}
 
 /**
- * stampcamera.com のパッケージ zip を取得し、指定スタンプの透過 SD 画像
- * (images/{NNN}.png) を抽出する。展開した PNG は
- * .cache/stamp-packages/{packageId}-{stickerId}.png にキャッシュ。
+ * 画像はすべて事前に download-character-images.ts でローカル配置されている前提。
+ * stampcamera のポーズが登録されていればそれを優先、なければ biccame.jp 由来の画像。
  */
-const fetchStampcameraImage = async ({ packageId, stickerId }: StampcameraEntry): Promise<string> => {
-  const stickerName = padStickerId(stickerId)
-  const cachePath = resolve(STAMP_CACHE_DIR, `${packageId}-${stickerName}.png`)
-  if (existsSync(cachePath)) {
-    return bufferToDataUrl(await readFile(cachePath))
-  }
-
-  const url = `https://stampcamera.com/packages/${packageId}/package.zip`
-  const res = await fetch(url)
-  if (!res.ok) {
-    throw new Error(`Failed to fetch ${url}: ${res.status}`)
-  }
-  const zipBuf = new Uint8Array(await res.arrayBuffer())
-  const entryName = `${packageId}/images/${stickerName}.png`
-  const entries = unzipSync(zipBuf, { filter: (file) => file.name === entryName })
-  const imageBytes = entries[entryName]
-  if (!imageBytes) {
-    throw new Error(`${entryName} not found in package ${packageId}`)
-  }
-
-  await mkdir(STAMP_CACHE_DIR, { recursive: true })
-  await writeFile(cachePath, imageBytes)
-  return bufferToDataUrl(Buffer.from(imageBytes))
-}
-
 const resolveCharacterImage = async (c: RawCharacter): Promise<string> => {
-  const entry = STAMPCAMERA_PACKAGE_MAP[c.id]
+  const entry = getCanonicalPose(c.id)
   if (entry !== undefined) {
-    try {
-      return await fetchStampcameraImage(entry)
-    } catch (err) {
-      console.warn(
-        `[og]  ! ${c.id}: stampcamera fallback to biccame.jp (${err instanceof Error ? err.message : err})`
-      )
-    }
+    const path = stampLocalPath(entry)
+    if (existsSync(path)) return readLocalAsDataUrl(path)
+    console.warn(`[og]  ! ${c.id}: stampcamera local file missing (${path}), falling back to biccame.jp`)
   }
-  return fetchImageAsDataUrl(pickCanonicalImage(c.character.images))
+  const path = biccameLocalPath(c.character.images)
+  if (!existsSync(path)) {
+    throw new Error(`Local biccame image not found: ${path} (run \`bun run images:download\` first)`)
+  }
+  return readLocalAsDataUrl(path)
 }
 
 const buildOgVDom = (params: {
@@ -280,7 +244,7 @@ const main = async () => {
   // is_biccame_musume===false でも stampcamera マップに登録されているキャラは生成対象に含める。
   // (air / bicsim 等、公式分類は外れるが OG カードは出したい例)
   const targets = characters.filter(
-    (c) => c.character.is_biccame_musume !== false || STAMPCAMERA_PACKAGE_MAP[c.id] !== undefined
+    (c) => c.character.is_biccame_musume !== false || getCanonicalPose(c.id) !== undefined
   )
 
   if (!existsSync(OUT_DIR)) {

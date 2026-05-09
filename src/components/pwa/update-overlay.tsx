@@ -63,7 +63,7 @@ export const UpdateOverlay = ({ open, status }: Props) => {
       const sdImages = c.character.images.filter((url) => !url.endsWith('4.png'))
       const pool = sdImages.length > 0 ? sdImages : c.character.images
       const imageKey = pool[Math.floor(Math.random() * pool.length)]
-      const imageUrl = new URL(imageKey, 'https://biccame.jp/profile/').href
+      const imageUrl = `/images/characters/${imageKey}`
       return {
         id: `${c.id}-${i}`,
         imageUrl,
