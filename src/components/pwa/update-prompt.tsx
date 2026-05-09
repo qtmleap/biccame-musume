@@ -4,9 +4,14 @@ import { clearAllCaches } from '@/lib/pwa-cache'
 import { UpdateOverlay, type UpdateOverlayStatus } from './update-overlay'
 
 let dispatchUpdate: (() => void) | null = null
+let updateServiceWorker: ((reloadPage?: boolean) => Promise<void>) | null = null
 
 const triggerUpdate = () => {
   dispatchUpdate?.()
+}
+
+export const setUpdateServiceWorker = (fn: (reloadPage?: boolean) => Promise<void>) => {
+  updateServiceWorker = fn
 }
 
 export const showUpdatePrompt = () => {
@@ -43,13 +48,18 @@ export const UpdatePrompt = () => {
       setOpen(true)
       toast.dismiss('pwa-update-prompt')
 
-      clearAllCaches()
-        .catch(() => {})
-        .finally(() => {
-          setStatus('reloading')
-          // サブルートでリロードすると404になるためトップに遷移
-          window.setTimeout(() => window.location.replace('/'), 3000)
-        })
+      const applyUpdate = async () => {
+        await clearAllCaches().catch(() => {})
+        // SW を新バージョンに切り替え (skipWaiting メッセージ送信)。
+        // reloadPage=false なので自分でトップへリダイレクトする。
+        await updateServiceWorker?.(false).catch(() => {})
+      }
+
+      applyUpdate().finally(() => {
+        setStatus('reloading')
+        // サブルートでリロードすると404になるためトップに遷移
+        window.setTimeout(() => window.location.replace('/'), 3000)
+      })
     }
 
     if (!isProduction) showUpdatePrompt()
