@@ -72,7 +72,11 @@ const UserByScreenNameResponseSchema = z.object({
           followers_count: z.number().int().nonnegative(),
           friends_count: z.number().int().nonnegative(),
           statuses_count: z.number().int().nonnegative(),
-          description: z.string()
+          favourites_count: z.number().int().nonnegative(),
+          listed_count: z.number().int().nonnegative(),
+          media_count: z.number().int().nonnegative(),
+          description: z.string(),
+          profile_banner_url: z.string().nonempty().optional()
         })
       })
     })
@@ -86,10 +90,23 @@ export type TwitterAccountInfo = {
   followersCount: number
   friendsCount: number
   statusesCount: number
+  favouritesCount: number
+  listedCount: number
+  mediaCount: number
   createdAt: string
   profileImageUrl: string
+  profileBannerUrl: string | null
   description: string
 }
+
+/**
+ * X のプロフィール画像 URL は末尾の `_normal.{ext}` で 48px に縮小されている。
+ * 任意の解像度サフィックス (`_400x400`, `_bigger` 等) に置換すると高解像度版が返る。
+ */
+const upgradeProfileImageResolution = (url: string): string => url.replace(/_normal(\.[^.]+)$/, '_400x400$1')
+
+/** バナー画像はパスサフィックスでサイズ指定する。`/1500x500` で横 1500px。 */
+const upgradeBannerResolution = (url: string): string => `${url}/1500x500`
 
 const buildCreateTweetBody = (text: string, opts: TweetOptions): string =>
   JSON.stringify({
@@ -268,8 +285,12 @@ export class Twitter {
       followersCount: legacy.followers_count,
       friendsCount: legacy.friends_count,
       statusesCount: legacy.statuses_count,
+      favouritesCount: legacy.favourites_count,
+      listedCount: legacy.listed_count,
+      mediaCount: legacy.media_count,
       createdAt: core.created_at,
-      profileImageUrl: avatar.image_url,
+      profileImageUrl: upgradeProfileImageResolution(avatar.image_url),
+      profileBannerUrl: legacy.profile_banner_url ? upgradeBannerResolution(legacy.profile_banner_url) : null,
       description: legacy.description
     }
   }
