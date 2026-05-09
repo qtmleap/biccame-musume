@@ -247,3 +247,9 @@ backups/
 # Claude Code scheduled tasks lock
 .claude/scheduled_tasks.lock
 cookie.txt
+
+# Build-time generated OG images (regenerated via `bun run og:generate`)
+public/og/
+
+# Build-time download cache (stampcamera package zips, etc.)
+.cache/
