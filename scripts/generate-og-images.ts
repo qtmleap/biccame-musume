@@ -277,7 +277,11 @@ const main = async () => {
   ])
 
   const characters = JSON.parse(charactersRaw) as RawCharacter[]
-  const targets = characters.filter((c) => c.character.is_biccame_musume !== false)
+  // is_biccame_musume===false でも stampcamera マップに登録されているキャラは生成対象に含める。
+  // (air / bicsim 等、公式分類は外れるが OG カードは出したい例)
+  const targets = characters.filter(
+    (c) => c.character.is_biccame_musume !== false || STAMPCAMERA_PACKAGE_MAP[c.id] !== undefined
+  )
 
   if (!existsSync(OUT_DIR)) {
     await mkdir(OUT_DIR, { recursive: true })

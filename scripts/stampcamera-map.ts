@@ -62,6 +62,10 @@ export const STAMPCAMERA_PACKAGE_MAP: Record<string, StampcameraEntry> = {
   takatsuki: { packageId: 53, stickerId: 50 },
   chiba: { packageId: 53, stickerId: 51 },
   yokonishi: { packageId: 53, stickerId: 52 },
+  kumamoto: { packageId: 53, stickerId: 53 },
+  itt: { packageId: 53, stickerId: 54 },
+  takasaki: { packageId: 53, stickerId: 55 },
+  air: { packageId: 53, stickerId: 56 },
   // bicsim は package 53 に未収録、package 16 を使う
   bicsim: { packageId: 16, stickerId: 38 }
 }
