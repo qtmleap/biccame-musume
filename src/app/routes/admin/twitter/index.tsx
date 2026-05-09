@@ -77,7 +77,7 @@ const TwitterStatusContent = () => {
 
   return (
     <div className='min-h-screen bg-page-bg'>
-      <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-2xl'>
+      <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
         <div className='pb-2'>
           <Button
             variant='ghost'
