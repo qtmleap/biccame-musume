@@ -148,7 +148,7 @@ const TwitterStatusContent = () => {
 
               <div className='flex flex-wrap gap-x-4 gap-y-1 mt-3 text-sm text-muted-foreground'>
                 <span>{formatXDate(data.account.createdAt)} 開設</span>
-                <span className='font-mono tabular-nums'>ID: {data.account.restId}</span>
+                <span className='tabular-nums font-numeric'>ID: {data.account.restId}</span>
               </div>
             </motion.div>
 
@@ -163,7 +163,7 @@ const TwitterStatusContent = () => {
               className='space-y-3'
             >
               <h2 className='text-xl font-bold text-foreground'>アクティビティ</h2>
-              <div className='space-y-3'>
+              <div className='grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4'>
                 <InfoItem icon={MessageSquare} label='ツイート'>
                   <p className='text-sm text-foreground tabular-nums font-numeric'>
                     {data.account.statusesCount.toLocaleString()}
