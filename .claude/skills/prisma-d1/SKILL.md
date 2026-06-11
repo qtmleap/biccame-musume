@@ -1,6 +1,10 @@
 ---
 name: prisma-d1
 description: Prisma ORM with Cloudflare D1 — schema configuration, migration workflow, client setup, and deployment. Load when working with Prisma + D1 migrations, schema changes, or PrismaClient instantiation in Workers.
+metadata:
+  author: Yuki Minakami
+  version: "0.1.0"
+  source: https://github.com/qtmleap/claude-plugins
 ---
 
 # Prisma ORM + Cloudflare D1
@@ -156,3 +160,4 @@ DATABASE_URL="file:./prisma/db.sqlite"
 4. **Missing `$disconnect()`** — causes Workers memory exhaustion
 5. **Local and remote are separate** — migrations must be applied independently with `--local` and `--remote`
 6. **SQLite limitations** — D1 is SQLite-based, so some Prisma features like `@db.Text` and `Json` type are unavailable
+7. **No interactive transactions** — D1 does not support Prisma's interactive `$transaction(async (tx) => …)`; it always fails at runtime. Use a batch `$transaction([...])` of array-form operations, or restructure the code to avoid a transaction

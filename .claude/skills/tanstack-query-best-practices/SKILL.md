@@ -1,6 +1,10 @@
 ---
 name: tanstack-query-best-practices
 description: TanStack Query (React Query) best practices for data fetching, caching, mutations, and server state management. Activate when building data-driven React applications with server state.
+metadata:
+  author: Yuki Minakami
+  version: "0.1.0"
+  source: https://github.com/qtmleap/claude-plugins
 ---
 
 # TanStack Query Best Practices
