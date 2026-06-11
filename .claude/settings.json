@@ -1,4 +1,20 @@
 {
+  "extraKnownMarketplaces": {
+    "qtmleap-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "qtmleap/claude-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "devflow@qtmleap-plugins": true,
+    "frontend@qtmleap-plugins": true,
+    "backend@qtmleap-plugins": true,
+    "data@qtmleap-plugins": true,
+    "cloudflare@qtmleap-plugins": true,
+    "frontend-design@qtmleap-plugins": true
+  },
   "hooks": {
     "PostToolUse": [
       {
