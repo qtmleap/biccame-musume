@@ -12,12 +12,10 @@ Review and improve existing UI components based on modern UX best practices.
 
 ### Step 1: Determine Scope
 
-If the user specified a component or page, use that. Otherwise use the `AskUserQuestion` tool to present these options:
+If the user specified a component or page, use that. Otherwise, ask which area to refactor:
 - A specific component (e.g., "dashboard", "meal-form")
 - A specific page (e.g., "/", "/settings")
 - All components (full audit)
-
-Do NOT list options as plain text — always use `AskUserQuestion` for selectable choices.
 
 ### Step 2: Load Context
 
@@ -82,9 +80,7 @@ Present findings in Japanese as a structured report:
 
 ### Step 5: Ask for Approval
 
-Use the `AskUserQuestion` tool with options: 全て実行 / 一部を選択 / キャンセル.
-
-Do NOT ask via plain text.
+Ask the user: **"この改善を実行してよろしいですか？全て / 一部を選択 / キャンセル"**
 
 ### Step 6: Execute (after approval)
 
@@ -93,16 +89,3 @@ Do NOT ask via plain text.
 - Do NOT edit files under `src/components/ui/` — override styles via className on the consumer side.
 - Verify the build succeeds: `bun run build`.
 - Report what was changed.
-
-### Step 7: Verify Visually with Playwright
-
-After the build succeeds, take screenshots of the refactored page/component using Playwright and confirm the result visually before reporting as complete.
-
-- Start the dev server if not already running (`bun run dev`).
-- Use Playwright to navigate to the affected page and capture screenshots at both mobile (375px) and desktop (≥1280px) viewports.
-- Check that:
-  - The golden path still renders correctly
-  - No layout breaks, overflow, or regressions
-  - Interactive states (hover, focus, active, open drawer/sheet) look as intended
-- Attach or reference the screenshots in the final report.
-- If a screenshot reveals a regression, fix it before declaring the task complete.
