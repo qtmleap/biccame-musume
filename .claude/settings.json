@@ -14,18 +14,5 @@
     "data@qtmleap-plugins": true,
     "cloudflare@qtmleap-plugins": true,
     "frontend-design@qtmleap-plugins": true
-  },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/auto-version-bump.sh"
-          }
-        ]
-      }
-    ]
   }
 }
