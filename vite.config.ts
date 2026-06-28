@@ -65,11 +65,11 @@ export default defineConfig(({ mode }) => {
         outDir: 'dist/client'
       }),
       VitePWA({
-        registerType: 'autoUpdate',
+        registerType: 'prompt',
         includeAssets: ['favicon.ico', 'icons/*.png', 'og_image.webp'],
         manifest: false, // manifest.webmanifestを直接使用
         workbox: {
-          skipWaiting: true,
+          skipWaiting: false,
           clientsClaim: false,
           globPatterns: [],
           runtimeCaching: [
@@ -87,7 +87,7 @@ export default defineConfig(({ mode }) => {
           ],
         },
         devOptions: {
-          enabled: true,
+          enabled: false,
           type: 'module'
         }
       })
@@ -128,8 +128,7 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        '@': resolve(__dirname, './src'),
-        '.prisma/client/default': './node_modules/.prisma/client/default.js'
+        '@': resolve(__dirname, './src')
       },
     },
     optimizeDeps: {

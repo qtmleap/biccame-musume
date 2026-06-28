@@ -5,6 +5,16 @@ import { resolveBadgeText } from '@/lib/badge-display'
 import { client } from '@/utils/client'
 
 /**
+ * 未認証/初期表示時のフォールバック。 initialData として渡すことで data 自体が
+ * 必ず defined になり、 呼び出し側で `data?.` や `?? []` が不要になる。
+ * initialDataUpdatedAt: 0 で常に stale 扱いとし、 認証された瞬間にネットワーク取得が走る。
+ */
+const EMPTY_ACTIVITY = {
+  stores: [] as string[],
+  events: { interested: [] as string[], completed: [] as string[] }
+} as const
+
+/**
  * ユーザーアクティビティを取得・操作するカスタムフック
  */
 export const useUserActivity = () => {
@@ -17,7 +27,9 @@ export const useUserActivity = () => {
     queryFn: async () => {
       return client.getUserActivities()
     },
-    enabled: isAuthenticated
+    enabled: isAuthenticated,
+    initialData: EMPTY_ACTIVITY,
+    initialDataUpdatedAt: 0
   })
 
   const invalidate = () => {
@@ -88,22 +100,22 @@ export const useUserActivity = () => {
   })
 
   return {
-    stores: data?.stores ?? [],
-    interestedEvents: data?.events.interested ?? [],
-    completedEvents: data?.events.completed ?? [],
+    stores: data.stores,
+    interestedEvents: data.events.interested,
+    completedEvents: data.events.completed,
     // 訪問済み店舗
     addVisitedStore: addVisitedStore.mutate,
     removeVisitedStore: removeVisitedStore.mutate,
     isAddVisitedStorePending: addVisitedStore.isPending,
     isRemoveVisitedStorePending: removeVisitedStore.isPending,
-    isVisited: (storeKey: string) => data?.stores.includes(storeKey) ?? false,
+    isVisited: (storeKey: string) => data.stores.includes(storeKey),
     // 興味のあるイベント
     addInterestedEvent: addInterestedEvent.mutate,
     removeInterestedEvent: removeInterestedEvent.mutate,
-    isInterested: (eventId: string) => data?.events.interested.includes(eventId) ?? false,
+    isInterested: (eventId: string) => data.events.interested.includes(eventId),
     // 達成済みイベント
     addCompletedEvent: addCompletedEvent.mutate,
     removeCompletedEvent: removeCompletedEvent.mutate,
-    isCompleted: (eventId: string) => data?.events.completed.includes(eventId) ?? false
+    isCompleted: (eventId: string) => data.events.completed.includes(eventId)
   }
 }

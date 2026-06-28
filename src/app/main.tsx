@@ -1,6 +1,5 @@
 'use client'
 
-import { registerSW } from 'virtual:pwa-register'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
@@ -13,7 +12,7 @@ import 'dayjs/locale/ja'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { IosInstallPrompt } from '@/components/pwa/install-prompt-ios'
-import { showUpdatePrompt, UpdatePrompt } from '@/components/pwa/update-prompt'
+import { setUpdateServiceWorker, showUpdatePrompt, UpdatePrompt } from '@/components/pwa/update-prompt'
 import { Toaster } from '@/components/ui/sonner'
 import { clearAllCaches } from '@/lib/pwa-cache'
 import { client } from '@/utils/client'
@@ -39,39 +38,40 @@ dayjs.locale('ja')
 dayjs.tz.setDefault('Asia/Tokyo')
 
 // Service Worker登録
-// SW の controller 変更を検知して自動リロード
-let refreshing = false
-navigator.serviceWorker?.addEventListener('controllerchange', () => {
-  if (refreshing) return
-  refreshing = true
-  // サブルートでリロードすると404になるためトップに遷移
-  window.location.replace('/')
-})
-
-registerSW({
-  immediate: true,
-  onNeedRefresh() {
-    showUpdatePrompt()
-  },
-  onOfflineReady() {
-    console.log('App ready to work offline')
-  },
-  onRegistered(registration: ServiceWorkerRegistration | undefined) {
-    console.log('Service Worker registered:', registration)
-    if (registration) {
-      // 60分ごとに SW の更新をチェック
-      setInterval(
-        () => {
-          registration.update()
-        },
-        60 * 60 * 1000
-      )
+// controllerchange による自動リロードはしない。
+// 「更新」ボタン押下時にオーバーレイのアニメーションを見せてから
+// update-prompt 側で明示的にリダイレクトする。
+// dev では SW を登録しない（vite-plugin-pwa の dev 時 virtual import を回避）
+let updateSW: (reloadPage?: boolean) => Promise<void> = () => Promise.resolve()
+if (import.meta.env.PROD) {
+  const { registerSW } = await import('virtual:pwa-register')
+  updateSW = registerSW({
+    immediate: true,
+    onNeedRefresh() {
+      showUpdatePrompt()
+    },
+    onOfflineReady() {
+      console.log('App ready to work offline')
+    },
+    onRegistered(registration: ServiceWorkerRegistration | undefined) {
+      console.log('Service Worker registered:', registration)
+      if (registration) {
+        // 60分ごとに SW の更新をチェック
+        setInterval(
+          () => {
+            registration.update()
+          },
+          60 * 60 * 1000
+        )
+      }
+    },
+    onRegisterError(error: unknown) {
+      console.error('Service Worker registration failed:', error)
     }
-  },
-  onRegisterError(error: unknown) {
-    console.error('Service Worker registration failed:', error)
-  }
-})
+  })
+}
+
+setUpdateServiceWorker(updateSW)
 
 // ルーターインスタンスを作成（ページ遷移時にスクロール位置をトップにリセット）
 const router = createRouter({

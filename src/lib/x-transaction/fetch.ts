@@ -28,7 +28,7 @@ const extractMigrationFormAction = (html: string): { url: string; data: Record<s
  * inserts one (returning the final HTML).
  */
 export const fetchHomePageHtml = async (): Promise<string> => {
-  const initial = await fetch('https://x.com/', { headers: HOMEPAGE_HEADERS })
+  const initial = await fetch('https://x.com/home', { headers: HOMEPAGE_HEADERS })
   const initialHtml = await initial.text()
 
   const redirectMatch = initialHtml.match(MIGRATION_REDIRECT_RE)

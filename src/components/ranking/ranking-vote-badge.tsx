@@ -45,6 +45,13 @@ export const RankingVoteBadge = ({ characterId, voteCount }: RankingVoteBadgePro
     }
   }, [isSuccess, data, characterId, setLastVoteTimes])
 
+  // ranking refetch で voteCount 自体が +1 反映されたら optimistic bump をリセット。
+  // 二重加算 (server +1 と optimistic +1 の合算) を防ぐ。
+  // biome-ignore lint/correctness/useExhaustiveDependencies: voteCount の prop 変化検出が目的
+  useEffect(() => {
+    setOptimisticBump(0)
+  }, [voteCount])
+
   useEffect(() => {
     if (error) {
       let message = '投票に失敗しちゃった…'
