@@ -22,7 +22,9 @@
     "badges:seed": "bun run scripts/seed-badges.ts",
     "badges:backfill": "bun run scripts/backfill-badges.ts",
     "images:download": "bun run scripts/download-character-images.ts",
-    "og:generate": "bun run scripts/generate-og-images.ts"
+    "og:generate": "bun run scripts/generate-og-images.ts",
+    "act:deploy:staging": "act pull_request -W .github/workflows/deployment.yaml --job deploy -e .github/pull_request.closed.develop.json",
+    "act:deploy:production": "act pull_request -W .github/workflows/deployment.yaml --job deploy -e .github/pull_request.closed.master.json"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.42.3",
