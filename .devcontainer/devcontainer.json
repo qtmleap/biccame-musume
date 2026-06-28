@@ -22,20 +22,14 @@
     "source=${env:HOME}/.config/gh,target=/home/vscode/.config/gh,type=bind,consistency=cached"
   ],
   "features": {
-    "ghcr.io/devcontainers/features/git:1": {
-      "version": "2.53.0"
-    },
     "ghcr.io/devcontainers/features/common-utils:2": {
       "configureZshAsDefaultShell": true
     },
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/shyim/devcontainers-features/bun:0": {},
-    "ghcr.io/devcontainers/features/node:1.5.0": {
+    "ghcr.io/devcontainers/features/node:1": {
       "version": "25.4.0"
     },
-    "ghcr.io/devcontainers-extra/features/fzf:1": {},
-    "ghcr.io/devcontainers/features/aws-cli:1": {},
-    "ghcr.io/devcontainers/features/terraform:1": {},
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
       "moby": false,
       "dockerDashComposeVersion": "v2"
@@ -53,23 +47,18 @@
       "extensions": [
         "Anthropic.claude-code",
         "EditorConfig.EditorConfig",
-        "GitHub.copilot",
-        "GitHub.copilot-chat",
         "Lokalise.i18n-ally",
         "PKief.material-icon-theme",
         "Prisma.prisma",
         "antfu.file-nesting",
         "bierner.github-markdown-preview",
-        "bierner.markdown-mermaid",
         "bierner.markdown-preview-github-styles",
         "biomejs.biome",
-        "eamodio.gitlens",
         "ms-playwright.playwright",
         "ms-vscode.vscode-typescript-next",
         "pHofer94.vscode-taskviewexplorer",
         "redhat.vscode-yaml",
-        "tamasfe.even-better-toml",
-        "vsls-contrib.gitdoc"
+        "tamasfe.even-better-toml"
       ],
       "settings": {}
     }

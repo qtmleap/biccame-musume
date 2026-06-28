@@ -13,23 +13,13 @@
       "WebSearch",
       "NotebookEdit",
       "TaskCreate",
-      "TaskUpdate",
-      "mcp__github__get_file_contents",
-      "mcp__github__search_repositories"
+      "TaskUpdate"
     ],
     "deny": [],
     "defaultMode": "bypassPermissions",
     "bypassPermissionsMode": "allow"
   },
   "model": "claude-opus-4-7",
-  "enabledMcpjsonServers": [
-    "docker",
-    "github",
-    "tailwindcss",
-    "shadcn",
-    "prisma",
-    "zod"
-  ],
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh"
 }
