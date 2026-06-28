@@ -44,7 +44,7 @@ binding = "AI"
 [assets]
 not_found_handling = "single-page-application"
 binding = "ASSETS"
-run_worker_first = ["/api/*", "/__/auth/*", "/admin/*"]
+run_worker_first = ["/*"]
 
 [vars]
 ENVIRONMENT = "local"
@@ -64,7 +64,7 @@ routes = [{ pattern = "dev.biccame-musume.com", custom_domain = true }]
 directory = "dist"
 not_found_handling = "single-page-application"
 binding = "ASSETS"
-run_worker_first = ["/api/*", "/__/auth/*", "/admin/*"]
+run_worker_first = ["/*"]
 
 [[env.staging.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
@@ -123,7 +123,7 @@ routes = [{ pattern = "biccame-musume.com", custom_domain = true }]
 directory = "dist"
 not_found_handling = "single-page-application"
 binding = "ASSETS"
-run_worker_first = ["/api/*", "/__/auth/*", "/admin/*"]
+run_worker_first = ["/*"]
 
 [[env.production.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"

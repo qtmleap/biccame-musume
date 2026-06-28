@@ -11,6 +11,7 @@ import {
   UserStoresResponseSchema
 } from '@/schemas/activity.dto'
 import { AdminCommentsResponseSchema } from '@/schemas/admin-comment.dto'
+import { AdminTwitterStatusResponseSchema } from '@/schemas/admin-twitter.dto'
 import { AuthResponseSchema, CurrentUserResponseSchema } from '@/schemas/auth.dto'
 import {
   BadgeSchema,
@@ -548,6 +549,14 @@ const api = makeApi([
     alias: 'getAdminUsers',
     description: '全ユーザー一覧を取得（admin）',
     response: AdminUserListResponseSchemaForClient
+  },
+  // 管理者: 投稿用 X アカウントのヘルスチェック
+  {
+    method: 'get',
+    path: '/api/admin/twitter/status',
+    alias: 'getAdminTwitterStatus',
+    description: '投稿用 X アカウントの取得結果（admin）',
+    response: AdminTwitterStatusResponseSchema
   }
 ])
 

@@ -104,21 +104,48 @@ export const bulkVote = async (
   userId?: string
 ): Promise<BulkVoteResult[]> => {
   const isDev = env.ENVIRONMENT === 'local'
-  const results: BulkVoteResult[] = []
-
-  // 重複排除
   const uniqueIds = Array.from(new Set(characterIds))
+  if (uniqueIds.length === 0) return []
 
-  for (const characterId of uniqueIds) {
-    const limited = await isVoteLimited(env.VOTE_LIMITER, characterId, ip)
-    if (limited && !isDev) {
-      results.push({ characterId, status: 'skipped' })
-      continue
-    }
-    await markVoteLimited(env.VOTE_LIMITER, characterId, ip)
-    await vote(env, characterId, ip, userId)
-    results.push({ characterId, status: 'voted' })
+  // 1) rate-limit チェックを並列化 (50 件 → 1 ラウンド)
+  const limitChecks = await Promise.all(
+    uniqueIds.map(async (characterId) => ({
+      characterId,
+      limited: await isVoteLimited(env.VOTE_LIMITER, characterId, ip)
+    }))
+  )
+
+  const toVote = limitChecks.filter(({ limited }) => !limited || isDev).map((x) => x.characterId)
+
+  if (toVote.length === 0) {
+    return uniqueIds.map((characterId) => ({ characterId, status: 'skipped' as const }))
   }
 
-  return results
+  // 2) rate-limit マークも並列化
+  // 3) DB は voteCount upsert (×N) と vote createMany (×1) を $transaction で 1 ラウンドに
+  const prisma = getPrisma(env)
+  const currentYear = dayjs().year()
+
+  await Promise.all([
+    Promise.all(toVote.map((characterId) => markVoteLimited(env.VOTE_LIMITER, characterId, ip))),
+    prisma.$transaction([
+      ...toVote.map((characterId) =>
+        prisma.voteCount.upsert({
+          where: { characterId_year: { characterId, year: currentYear } },
+          update: { count: { increment: 1 } },
+          create: { characterId, year: currentYear, count: 1 }
+        })
+      ),
+      prisma.vote.createMany({
+        data: toVote.map((characterId) => ({ characterId, ipAddress: ip, userId: userId ?? null }))
+      })
+    ])
+  ])
+
+  // 元の uniqueIds 順を保ったまま結果を返す
+  const votedSet = new Set(toVote)
+  return uniqueIds.map((characterId) => ({
+    characterId,
+    status: votedSet.has(characterId) ? 'voted' : 'skipped'
+  }))
 }
