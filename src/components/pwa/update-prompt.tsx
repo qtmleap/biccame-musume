@@ -4,9 +4,14 @@ import { clearAllCaches } from '@/lib/pwa-cache'
 import { UpdateOverlay, type UpdateOverlayStatus } from './update-overlay'
 
 let dispatchUpdate: (() => void) | null = null
+let updateServiceWorker: ((reloadPage?: boolean) => Promise<void>) | null = null
 
 const triggerUpdate = () => {
   dispatchUpdate?.()
+}
+
+export const setUpdateServiceWorker = (fn: (reloadPage?: boolean) => Promise<void>) => {
+  updateServiceWorker = fn
 }
 
 export const showUpdatePrompt = () => {
@@ -43,13 +48,25 @@ export const UpdatePrompt = () => {
       setOpen(true)
       toast.dismiss('pwa-update-prompt')
 
-      clearAllCaches()
-        .catch(() => {})
-        .finally(() => {
-          setStatus('reloading')
-          // サブルートでリロードすると404になるためトップに遷移
-          window.setTimeout(() => window.location.replace('/'), 3000)
-        })
+      const wait = (ms: number) => new Promise<void>((res) => window.setTimeout(res, ms))
+
+      const applyUpdate = async () => {
+        await clearAllCaches().catch(() => {})
+        // clearing ステータスのアニメーションを見せる時間
+        await wait(1500)
+
+        setStatus('reloading')
+        // SW を新バージョンに切り替え (skipWaiting メッセージ送信)。
+        // reloadPage=false なので自分でトップへリダイレクトする。
+        await updateServiceWorker?.(false).catch(() => {})
+        // reloading ステータスのアニメーションを見せる時間
+        await wait(1500)
+      }
+
+      applyUpdate().finally(() => {
+        // サブルートでリロードすると404になるためトップに遷移
+        window.location.replace('/')
+      })
     }
 
     if (!isProduction) showUpdatePrompt()

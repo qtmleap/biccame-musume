@@ -17,9 +17,9 @@
     ],
     "deny": [],
     "defaultMode": "bypassPermissions",
-    "disableBypassPermissionsMode": "disable",
     "bypassPermissionsMode": "allow"
   },
+  "model": "claude-opus-4-7",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high"
+  "effortLevel": "xhigh"
 }

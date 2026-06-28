@@ -166,7 +166,7 @@ export const EventDetailInfo = ({ event }: EventDetailInfoProps) => (
     <h2 className='text-xl font-bold text-foreground'>イベント情報</h2>
     <div className='space-y-3'>
       <EventPeriodSection event={event} />
-      <EventStoresSection stores={event.stores ?? []} />
+      <EventStoresSection stores={event.stores} />
       <EventLimitedQuantitySection event={event} />
       <EventConditionsSection conditions={event.conditions} />
       <EventReferenceUrlsSection referenceUrls={event.referenceUrls} />

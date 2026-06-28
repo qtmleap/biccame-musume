@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '@/lib/x-transaction'
 import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
@@ -10,6 +11,11 @@ import {
 
 const CREATE_TWEET_QUERY_ID = 'oB-5XsHNAbjvARJEc8CZFw'
 const CREATE_TWEET_PATH = `/i/api/graphql/${CREATE_TWEET_QUERY_ID}/CreateTweet`
+// UserByScreenName GraphQL queryId. Like CREATE_TWEET, this rotates infrequently;
+// re-extract from a live browser request when 404 / "operation not found" appears.
+const USER_BY_SCREEN_NAME_QUERY_ID = 'IGgvgiOx4QZndDHuD3x9TQ'
+const USER_BY_SCREEN_NAME_PATH = `/i/api/graphql/${USER_BY_SCREEN_NAME_QUERY_ID}/UserByScreenName`
+const BOT_SCREEN_NAME = '_biccame_musume'
 // Bearer is hardcoded in https://abs.twimg.com/responsive-web/client-web/main.<hash>.js
 // as two concatenated string literals, rotates infrequently. Re-extract from a live
 // browser request when 401 "Could not authenticate you" starts appearing.
@@ -43,6 +49,64 @@ const getCachedTransactionInputs = async (): Promise<{ homePageHtml: string; ond
 }
 
 type TweetOptions = { quoteTweetId?: string; replyToTweetId?: string }
+
+/**
+ * UserByScreenName GraphQL のレスポンスのうち、ヘルスチェック画面で使う
+ * フィールドだけを抜き出した Zod スキーマ。X が新フィールドを生やしても
+ * 壊れないよう、未使用のキーには触れない。
+ */
+const UserByScreenNameResponseSchema = z.object({
+  data: z.object({
+    user: z.object({
+      result: z.object({
+        rest_id: z.string().nonempty(),
+        core: z.object({
+          name: z.string(),
+          screen_name: z.string().nonempty(),
+          created_at: z.string().nonempty()
+        }),
+        avatar: z.object({
+          image_url: z.string()
+        }),
+        legacy: z.object({
+          followers_count: z.number().int().nonnegative(),
+          friends_count: z.number().int().nonnegative(),
+          statuses_count: z.number().int().nonnegative(),
+          favourites_count: z.number().int().nonnegative(),
+          listed_count: z.number().int().nonnegative(),
+          media_count: z.number().int().nonnegative(),
+          description: z.string(),
+          profile_banner_url: z.string().nonempty().optional()
+        })
+      })
+    })
+  })
+})
+
+export type TwitterAccountInfo = {
+  restId: string
+  screenName: string
+  name: string
+  followersCount: number
+  friendsCount: number
+  statusesCount: number
+  favouritesCount: number
+  listedCount: number
+  mediaCount: number
+  createdAt: string
+  profileImageUrl: string
+  profileBannerUrl: string | null
+  description: string
+}
+
+/**
+ * X のプロフィール画像 URL は末尾の `_normal.{ext}` で 48px に縮小されている。
+ * 任意の解像度サフィックス (`_400x400`, `_bigger` 等) に置換すると高解像度版が返る。
+ */
+const upgradeProfileImageResolution = (url: string): string => url.replace(/_normal(\.[^.]+)$/, '_400x400$1')
+
+/** バナー画像はパスサフィックスでサイズ指定する。`/1500x500` で横 1500px。 */
+const upgradeBannerResolution = (url: string): string => `${url}/1500x500`
 
 const buildCreateTweetBody = (text: string, opts: TweetOptions): string =>
   JSON.stringify({
@@ -148,6 +212,87 @@ export class Twitter {
     if (!tweetId) throw new Error(`X API: no rest_id in response: ${JSON.stringify(result).slice(0, 300)}`)
     console.log('[Twitter] Tweet posted successfully:', { tweetId })
     return tweetId
+  }
+
+  /**
+   * 投稿用アカウントの公開プロフィールを取得する。
+   * 認証 cookie と x-client-transaction-id 生成が機能しているかをまとめて検証する用途。
+   * X のレート制限は無視できないので連打しないこと。
+   */
+  async getOwnAccount(): Promise<TwitterAccountInfo> {
+    const { TWITTER_AUTH_TOKEN, TWITTER_CSRF_TOKEN } = this.env
+
+    const { homePageHtml, ondemandFileText } = await getCachedTransactionInputs()
+    const tx = ClientTransaction.create({ homePageHtml, ondemandFileText })
+    const transactionId = await tx.generateTransactionId('GET', USER_BY_SCREEN_NAME_PATH)
+
+    const variables = { screen_name: BOT_SCREEN_NAME, withGrokTranslatedBio: true }
+    const features = {
+      hidden_profile_subscriptions_enabled: true,
+      profile_label_improvements_pcf_label_in_post_enabled: true,
+      responsive_web_profile_redirect_enabled: false,
+      rweb_tipjar_consumption_enabled: false,
+      verified_phone_label_enabled: false,
+      subscriptions_verification_info_is_identity_verified_enabled: true,
+      subscriptions_verification_info_verified_since_enabled: true,
+      highlights_tweets_tab_ui_enabled: true,
+      responsive_web_twitter_article_notes_tab_enabled: true,
+      subscriptions_feature_can_gift_premium: true,
+      creator_subscriptions_tweet_preview_api_enabled: true,
+      responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
+      responsive_web_graphql_timeline_navigation_enabled: true
+    }
+    const fieldToggles = { withPayments: false, withAuxiliaryUserLabels: true }
+
+    const url = new URL(`https://x.com${USER_BY_SCREEN_NAME_PATH}`)
+    url.searchParams.set('variables', JSON.stringify(variables))
+    url.searchParams.set('features', JSON.stringify(features))
+    url.searchParams.set('fieldToggles', JSON.stringify(fieldToggles))
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        accept: '*/*',
+        'accept-language': 'en-US,en;q=0.9,ja;q=0.8',
+        authorization: `Bearer ${X_BEARER}`,
+        cookie: `auth_token=${TWITTER_AUTH_TOKEN}; ct0=${TWITTER_CSRF_TOKEN}`,
+        referer: `https://x.com/${BOT_SCREEN_NAME}`,
+        'user-agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36',
+        'x-client-transaction-id': transactionId,
+        'x-csrf-token': TWITTER_CSRF_TOKEN,
+        'x-twitter-active-user': 'yes',
+        'x-twitter-auth-type': 'OAuth2Session',
+        'x-twitter-client-language': 'en'
+      }
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(`X API error: ${response.status} ${errorText.slice(0, 300)}`)
+    }
+
+    const json = await response.json()
+    const parsed = UserByScreenNameResponseSchema.safeParse(json)
+    if (!parsed.success) {
+      throw new Error(`X API: unexpected payload: ${parsed.error.message} / ${JSON.stringify(json).slice(0, 300)}`)
+    }
+    const { rest_id, core, avatar, legacy } = parsed.data.data.user.result
+    return {
+      restId: rest_id,
+      screenName: core.screen_name,
+      name: core.name,
+      followersCount: legacy.followers_count,
+      friendsCount: legacy.friends_count,
+      statusesCount: legacy.statuses_count,
+      favouritesCount: legacy.favourites_count,
+      listedCount: legacy.listed_count,
+      mediaCount: legacy.media_count,
+      createdAt: core.created_at,
+      profileImageUrl: upgradeProfileImageResolution(avatar.image_url),
+      profileBannerUrl: legacy.profile_banner_url ? upgradeBannerResolution(legacy.profile_banner_url) : null,
+      description: legacy.description
+    }
   }
 
   async tweetEventCreated(event: EventDetail): Promise<void> {
