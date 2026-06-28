@@ -1,6 +1,5 @@
 'use client'
 
-import { registerSW } from 'virtual:pwa-register'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
@@ -42,30 +41,35 @@ dayjs.tz.setDefault('Asia/Tokyo')
 // controllerchange による自動リロードはしない。
 // 「更新」ボタン押下時にオーバーレイのアニメーションを見せてから
 // update-prompt 側で明示的にリダイレクトする。
-const updateSW = registerSW({
-  immediate: true,
-  onNeedRefresh() {
-    showUpdatePrompt()
-  },
-  onOfflineReady() {
-    console.log('App ready to work offline')
-  },
-  onRegistered(registration: ServiceWorkerRegistration | undefined) {
-    console.log('Service Worker registered:', registration)
-    if (registration) {
-      // 60分ごとに SW の更新をチェック
-      setInterval(
-        () => {
-          registration.update()
-        },
-        60 * 60 * 1000
-      )
+// dev では SW を登録しない（vite-plugin-pwa の dev 時 virtual import を回避）
+let updateSW: (reloadPage?: boolean) => Promise<void> = () => Promise.resolve()
+if (import.meta.env.PROD) {
+  const { registerSW } = await import('virtual:pwa-register')
+  updateSW = registerSW({
+    immediate: true,
+    onNeedRefresh() {
+      showUpdatePrompt()
+    },
+    onOfflineReady() {
+      console.log('App ready to work offline')
+    },
+    onRegistered(registration: ServiceWorkerRegistration | undefined) {
+      console.log('Service Worker registered:', registration)
+      if (registration) {
+        // 60分ごとに SW の更新をチェック
+        setInterval(
+          () => {
+            registration.update()
+          },
+          60 * 60 * 1000
+        )
+      }
+    },
+    onRegisterError(error: unknown) {
+      console.error('Service Worker registration failed:', error)
     }
-  },
-  onRegisterError(error: unknown) {
-    console.error('Service Worker registration failed:', error)
-  }
-})
+  })
+}
 
 setUpdateServiceWorker(updateSW)
 
