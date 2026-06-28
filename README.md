@@ -126,6 +126,21 @@ http://localhost:5173/admin/events/550e8400-e29b-41d4-a716-446655440004/?categor
 bun run build
 ```
 
+#### デプロイビルドをローカルで再現 (act)
+
+`deployment.yaml` の build 工程をローカルの Docker (`act`) で再現できる。
+本番 CI でしか起きないビルドエラー（`--frozen-lockfile --ignore-scripts`
+での依存解決差など）を事前に検知できる。`Deploy Workers` step は
+`env.ACT != 'true'` で skip するので、Cloudflare 認証情報は不要。
+
+```zsh
+# develop マージ相当 (staging build)
+bun run act:deploy:staging
+
+# master マージ相当 (production build)
+bun run act:deploy:production
+```
+
 #### テスト実行
 
 ```zsh
