@@ -34,8 +34,6 @@ export const BadgeSubCategorySchema = z.enum([
   'special_event_id'
 ])
 
-export type BadgeSubCategory = z.infer<typeof BadgeSubCategorySchema>
-
 export const BadgeRaritySchema = z.enum(['common', 'rare', 'epic', 'legendary', 'mythic'])
 
 export type BadgeRarity = z.infer<typeof BadgeRaritySchema>
@@ -77,8 +75,6 @@ export const BadgeSchema = z
 
 export type Badge = z.infer<typeof BadgeSchema>
 
-export const BadgeListSchema = z.array(BadgeSchema).openapi('BadgeList')
-
 /**
  * Convert a Prisma Badge row to the BadgeSchema DTO shape.
  * `mask=true` のとき name/description/hint を返さない（未取得ユーザー向けのネタバレ防止）
@@ -100,19 +96,6 @@ export const prismaBadgeToDto = (b: PrismaBadge, earnedCount?: number, mask = fa
   earned_count: earnedCount
 })
 
-export const UserBadgeSchema = z
-  .object({
-    id: z.uuid().openapi({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' }),
-    user_id: z.string().nonempty().openapi({ example: 'firebase-uid-xyz' }),
-    badge_code: z.string().nonempty().openapi({ example: 'store_visit_akiba' }),
-    earned_at: z.string().nonempty().openapi({ example: '2026-05-06T12:00:00.000Z' })
-  })
-  .openapi('UserBadge')
-
-export type UserBadge = z.infer<typeof UserBadgeSchema>
-
-export const UserBadgeListSchema = z.array(UserBadgeSchema).openapi('UserBadgeList')
-
 export const MyBadgesResponseSchema = z
   .object({
     earned: z.array(
@@ -123,25 +106,6 @@ export const MyBadgesResponseSchema = z
     )
   })
   .openapi('MyBadgesResponse')
-
-export type MyBadgesResponse = z.infer<typeof MyBadgesResponseSchema>
-
-export const BadgeDefSchema = z
-  .object({
-    code: z.string().nonempty().openapi({ example: 'store_visit_akiba' }),
-    category: BadgeCategorySchema,
-    subCategory: BadgeSubCategorySchema,
-    name: z.string().nonempty(),
-    description: z.string().nonempty(),
-    hint: z.string().nonempty(),
-    rarity: BadgeRaritySchema,
-    iconName: z.string().nonempty(),
-    sortOrder: z.number().int().nonnegative(),
-    conditionMeta: BadgeConditionMetaSchema
-  })
-  .openapi('BadgeDef')
-
-export type BadgeDefDto = z.infer<typeof BadgeDefSchema>
 
 export const LeaderboardEntrySchema = z
   .object({
@@ -165,43 +129,17 @@ export const BadgeLeaderboardResponseSchema = z
   })
   .openapi('BadgeLeaderboardResponse')
 
-export type BadgeLeaderboardResponse = z.infer<typeof BadgeLeaderboardResponseSchema>
-
 export const GetBadgesResponseSchema = z
   .object({
     badges: z.array(BadgeSchema)
   })
   .openapi('GetBadgesResponse')
 
-export type GetBadgesResponse = z.infer<typeof GetBadgesResponseSchema>
-
-export const EarnedBadgeSchema = z
-  .object({
-    code: z.string().nonempty().openapi({ example: 'store_visit_akiba' }),
-    earnedAt: z.string().nonempty().openapi({ example: '2026-05-06T12:00:00.000Z' })
-  })
-  .openapi('EarnedBadge')
-
-export type EarnedBadge = z.infer<typeof EarnedBadgeSchema>
-
-export const GetMyBadgesResponseSchema = MyBadgesResponseSchema
-
-export const MeRankSchema = z
-  .object({
-    rank: z.number().int().positive().openapi({ example: 7 }),
-    earnedCount: z.number().int().nonnegative().openapi({ example: 15 })
-  })
-  .openapi('MeRank')
-
-export type MeRank = z.infer<typeof MeRankSchema>
-
 export const GetBadgeLeaderboardQuerySchema = z
   .object({
     uid: z.string().nonempty().optional().openapi({ example: 'firebase-uid-xyz' })
   })
   .openapi('GetBadgeLeaderboardQuery')
-
-export const GetBadgeLeaderboardResponseSchema = BadgeLeaderboardResponseSchema
 
 // ---------------------------------------------------------------------------
 // Admin CRUD schemas
@@ -257,8 +195,6 @@ export const UpdateBadgeBodySchema = z
   .openapi('UpdateBadgeBody')
 
 export type UpdateBadgeBody = z.infer<typeof UpdateBadgeBodySchema>
-
-export const AdminBadgeResponseSchema = BadgeSchema
 
 export const AdminDeleteBadgeParamsSchema = z
   .object({

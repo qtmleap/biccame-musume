@@ -22,8 +22,6 @@ export const AdminCommentsResponseSchema = z
   })
   .openapi('AdminCommentsResponse')
 
-export type AdminCommentsResponse = z.infer<typeof AdminCommentsResponseSchema>
-
 export const AdminCommentsQuerySchema = z.object({
   includeDeleted: z
     .union([z.literal('1'), z.literal('0')])
