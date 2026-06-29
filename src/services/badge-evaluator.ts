@@ -186,76 +186,69 @@ export async function evaluateSpecialEventId(ctx: EvaluatorContext, meta: { even
 // Dispatcher
 // ---------------------------------------------------------------------------
 
+type EvaluatorEntry = (ctx: EvaluatorContext, badge: Badge, meta: BadgeConditionMeta) => Promise<boolean>
+
+/**
+ * conditionMeta から必須フィールドを取り出すヘルパ。
+ * 欠落時はバッジコード付きの分かりやすいエラーで落とす。
+ * 将来 BadgeConditionMeta を discriminated union 化すれば不要になる。
+ */
+const requireStoreKey = (badge: Badge, meta: BadgeConditionMeta): StoreKey => {
+  if (!meta.storeKey) throw new Error(`Badge ${badge.code}: missing storeKey`)
+  return meta.storeKey as StoreKey
+}
+
+const requireRegion = (badge: Badge, meta: BadgeConditionMeta): BadgeArea => {
+  if (!meta.region) throw new Error(`Badge ${badge.code}: missing region`)
+  return meta.region as BadgeArea
+}
+
+const requireCount = (badge: Badge, meta: BadgeConditionMeta): number => {
+  if (meta.count === undefined) throw new Error(`Badge ${badge.code}: missing count`)
+  return meta.count
+}
+
+const requireStoreKeys = (badge: Badge, meta: BadgeConditionMeta): StoreKey[] => {
+  if (!meta.storeKeys) throw new Error(`Badge ${badge.code}: missing storeKeys`)
+  return meta.storeKeys as StoreKey[]
+}
+
+const requireEventId = (badge: Badge, meta: BadgeConditionMeta): string => {
+  if (!meta.eventId) throw new Error(`Badge ${badge.code}: missing eventId`)
+  return meta.eventId
+}
+
+/**
+ * sub_category → 評価関数のテーブル。
+ * 新規 sub_category 追加時はここに 1 行足すだけで済む (型レベルで網羅性が担保される)。
+ */
+const EVALUATORS: Record<BadgeSubCategory, EvaluatorEntry> = {
+  visit: (ctx, b, m) => evaluateVisit(ctx, { storeKey: requireStoreKey(b, m) }),
+  area_any: (ctx, b, m) => evaluateAreaAny(ctx, { region: requireRegion(b, m) }),
+  area_complete: (ctx, b, m) => evaluateAreaComplete(ctx, { region: requireRegion(b, m) }),
+  count: (ctx, b, m) => evaluateCount(ctx, { count: requireCount(b, m) }),
+  event_count: (ctx, b, m) => evaluateEventCount(ctx, { count: requireCount(b, m) }),
+  event_clear_at_store: (ctx, b, m) =>
+    evaluateEventClearAtStore(ctx, { storeKey: requireStoreKey(b, m), count: m.count }),
+  event_clear_area_any: (ctx, b, m) => evaluateEventClearAreaAny(ctx, { region: requireRegion(b, m) }),
+  event_clear_area_complete: (ctx, b, m) => evaluateEventClearAreaComplete(ctx, { region: requireRegion(b, m) }),
+  event_clear_count: (ctx, b, m) => evaluateEventClearCount(ctx, { count: requireCount(b, m) }),
+  event_clear_all: (ctx) => evaluateEventClearAll(ctx),
+  all_areas_any_visit: (ctx) => evaluateAllAreasAnyVisit(ctx),
+  all_areas_any_event_clear: (ctx) => evaluateAllAreasAnyEventClear(ctx),
+  vote_total: (ctx, b, m) => evaluateVoteTotal(ctx, { count: requireCount(b, m) }),
+  special_multi_store_clear: (ctx, b, m) => evaluateSpecialMultiStoreClear(ctx, { storeKeys: requireStoreKeys(b, m) }),
+  special_event_id: (ctx, b, m) => evaluateSpecialEventId(ctx, { eventId: requireEventId(b, m) })
+}
+
 export async function evaluateBadge(ctx: EvaluatorContext, badge: Badge): Promise<boolean> {
   const meta = JSON.parse(badge.conditionMeta) as BadgeConditionMeta
   const sub = badge.subCategory as BadgeSubCategory
-
-  switch (sub) {
-    case 'visit':
-      if (!meta.storeKey) throw new Error(`Badge ${badge.code}: missing storeKey`)
-      return evaluateVisit(ctx, { storeKey: meta.storeKey as StoreKey })
-
-    case 'area_any':
-      if (!meta.region) throw new Error(`Badge ${badge.code}: missing region`)
-      return evaluateAreaAny(ctx, { region: meta.region as BadgeArea })
-
-    case 'area_complete':
-      if (!meta.region) throw new Error(`Badge ${badge.code}: missing region`)
-      return evaluateAreaComplete(ctx, { region: meta.region as BadgeArea })
-
-    case 'count':
-      if (meta.count === undefined) throw new Error(`Badge ${badge.code}: missing count`)
-      return evaluateCount(ctx, { count: meta.count })
-
-    case 'event_count':
-      if (meta.count === undefined) throw new Error(`Badge ${badge.code}: missing count`)
-      return evaluateEventCount(ctx, { count: meta.count })
-
-    case 'event_clear_at_store':
-      if (!meta.storeKey) throw new Error(`Badge ${badge.code}: missing storeKey`)
-      return evaluateEventClearAtStore(ctx, {
-        storeKey: meta.storeKey as StoreKey,
-        count: meta.count
-      })
-
-    case 'event_clear_area_any':
-      if (!meta.region) throw new Error(`Badge ${badge.code}: missing region`)
-      return evaluateEventClearAreaAny(ctx, { region: meta.region as BadgeArea })
-
-    case 'event_clear_area_complete':
-      if (!meta.region) throw new Error(`Badge ${badge.code}: missing region`)
-      return evaluateEventClearAreaComplete(ctx, { region: meta.region as BadgeArea })
-
-    case 'event_clear_count':
-      if (meta.count === undefined) throw new Error(`Badge ${badge.code}: missing count`)
-      return evaluateEventClearCount(ctx, { count: meta.count })
-
-    case 'event_clear_all':
-      return evaluateEventClearAll(ctx)
-
-    case 'all_areas_any_visit':
-      return evaluateAllAreasAnyVisit(ctx)
-
-    case 'all_areas_any_event_clear':
-      return evaluateAllAreasAnyEventClear(ctx)
-
-    case 'vote_total':
-      if (meta.count === undefined) throw new Error(`Badge ${badge.code}: missing count`)
-      return evaluateVoteTotal(ctx, { count: meta.count })
-
-    case 'special_multi_store_clear':
-      if (!meta.storeKeys) throw new Error(`Badge ${badge.code}: missing storeKeys`)
-      return evaluateSpecialMultiStoreClear(ctx, { storeKeys: meta.storeKeys as StoreKey[] })
-
-    case 'special_event_id':
-      if (!meta.eventId) throw new Error(`Badge ${badge.code}: missing eventId`)
-      return evaluateSpecialEventId(ctx, { eventId: meta.eventId })
-
-    default: {
-      const _exhaustive: never = sub
-      throw new Error(`Unknown badge subCategory: ${_exhaustive}`)
-    }
+  const evaluator = EVALUATORS[sub]
+  if (!evaluator) {
+    throw new Error(`Unknown badge subCategory: ${sub}`)
   }
+  return evaluator(ctx, badge, meta)
 }
 
 // ---------------------------------------------------------------------------
