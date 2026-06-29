@@ -224,7 +224,7 @@ $RECYCLE.BIN/
 .wrangler/
 # Local helper scripts that source .env (kept out of source tree)
 scripts/cf-whoami.sh
-scripts/sync-secrets.sh
+scripts/sync-cf-secrets.sh
 
 # IntLayer
 .intlayer/
