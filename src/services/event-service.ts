@@ -74,13 +74,46 @@ const calculateEventStatus = (event: {
  * @param completedCount - 達成カウント（オプション）
  * @returns APIレスポンス用のEvent型オブジェクト
  */
-type EventListPayload = Prisma.EventGetPayload<{
-  include: { conditions: true; stores: true }
-}>
+/**
+ * イベント一覧用の select 句。
+ * transform() で実際に参照する列のみ取得して D1 のシリアライズコストを抑える。
+ */
+const EVENT_LIST_SELECT = {
+  id: true,
+  category: true,
+  title: true,
+  limitedQuantity: true,
+  startDate: true,
+  endDate: true,
+  endedAt: true,
+  isVerified: true,
+  isPreliminary: true,
+  createdAt: true,
+  updatedAt: true,
+  conditions: {
+    select: { id: true, type: true, purchaseAmount: true, quantity: true }
+  },
+  stores: {
+    select: { storeKey: true }
+  }
+} as const satisfies Prisma.EventSelect
 
-type EventDetailPayload = Prisma.EventGetPayload<{
-  include: { conditions: true; referenceUrls: true; stores: true; comments: true }
-}>
+/**
+ * イベント詳細用の select 句。 EVENT_LIST_SELECT に referenceUrls / comments を加える。
+ */
+const EVENT_DETAIL_SELECT = {
+  ...EVENT_LIST_SELECT,
+  referenceUrls: {
+    select: { id: true, type: true, url: true }
+  },
+  comments: {
+    select: { id: true, nickname: true, body: true, createdAt: true, userId: true, deletedAt: true }
+  }
+} as const satisfies Prisma.EventSelect
+
+type EventListPayload = Prisma.EventGetPayload<{ select: typeof EVENT_LIST_SELECT }>
+
+type EventDetailPayload = Prisma.EventGetPayload<{ select: typeof EVENT_DETAIL_SELECT }>
 
 const transform = (event: EventListPayload, interestedCount = 0, completedCount = 0): Event => {
   const { status, daysUntil } = calculateEventStatus(event)
@@ -149,7 +182,7 @@ export const getEvent = async (env: Bindings, id: string): Promise<EventDetail> 
   const [event, interestedCount, completedCount] = await Promise.all([
     prisma.event.findUnique({
       where: { id },
-      include: EVENT_DETAIL_INCLUDE
+      select: EVENT_DETAIL_SELECT
     }),
     prisma.userEvent.count({ where: { eventId: id, status: 'interested' } }),
     prisma.userEvent.count({ where: { eventId: id, status: 'completed' } })
@@ -178,10 +211,7 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
         // 半年以内に開催されたイベントのみ取得
         startDate: { gte: startDate }
       },
-      include: {
-        conditions: true,
-        stores: true
-      },
+      select: EVENT_LIST_SELECT,
       orderBy: { startDate: 'desc' }
     })
   ).map((v) => transform(v))
@@ -191,16 +221,6 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
   }
   return result.data
 }
-
-/**
- * EventDetail を返却するクエリで使う共通 include 句
- */
-const EVENT_DETAIL_INCLUDE = {
-  conditions: true,
-  referenceUrls: true,
-  stores: true,
-  comments: true
-} as const
 
 /**
  * EventRequest の日付フィールドを Prisma 用の Date / null に変換
@@ -245,7 +265,7 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
 
   const existingEvent = await prisma.event.findUnique({
     where: { id: data.uuid },
-    include: EVENT_DETAIL_INCLUDE
+    select: EVENT_DETAIL_SELECT
   })
 
   if (existingEvent) {
@@ -266,7 +286,7 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
       referenceUrls: { create: toReferenceUrlsCreate(data, false) },
       stores: { create: toStoresCreate(data) }
     },
-    include: EVENT_DETAIL_INCLUDE
+    select: EVENT_DETAIL_SELECT
   })
   return transformDetail(event)
 }
@@ -294,7 +314,7 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
       referenceUrls: { deleteMany: {}, create: toReferenceUrlsCreate(data, true) },
       stores: { deleteMany: {}, create: toStoresCreate(data) }
     },
-    include: EVENT_DETAIL_INCLUDE
+    select: EVENT_DETAIL_SELECT
   })
 
   return transformDetail(event)
@@ -314,10 +334,7 @@ export const searchEvents = async (env: Bindings, q: string): Promise<Event[]> =
         title: { contains: q },
         isVerified: true
       },
-      include: {
-        conditions: true,
-        stores: true
-      },
+      select: EVENT_LIST_SELECT,
       orderBy: { startDate: 'desc' },
       take: 50
     })
@@ -355,7 +372,7 @@ export const getEventsStartingToday = async (env: Bindings, now: Date = new Date
         isVerified: true,
         startDate: { gte: startOfDayJst.toDate(), lt: startOfNextDayJst.toDate() }
       },
-      include: { conditions: true, stores: true },
+      select: EVENT_LIST_SELECT,
       orderBy: { startDate: 'asc' }
     })
   ).map((v) => transform(v))
