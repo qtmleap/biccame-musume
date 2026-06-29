@@ -2,6 +2,7 @@ import type { RateLimitBinding } from '@elithrar/workers-hono-rate-limit'
 import type { VerifyFirebaseAuthEnv } from '@hono/firebase-auth'
 import type { JwtVariables } from 'hono/jwt'
 import type { JWTPayload } from 'hono/utils/jwt/types'
+import type { StatsDO } from '@/durable-objects/stats'
 
 /**
  * Cloudflare Workersの環境変数の型定義
@@ -11,8 +12,10 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   ENVIRONMENT?: string
   /** 投票データと制限チェックを保存するKVストア */
   VOTE_LIMITER: KVNamespace
-  /** ページビュー統計を保存するKVストア */
+  /** ページビュー統計を保存するKVストア (StatsDO 移行中の dual-write 元) */
   PAGE_VIEWS: KVNamespace
+  /** ページビュー統計の atomic 集計を行う Durable Object */
+  STATS: DurableObjectNamespace<StatsDO>
   /** イベントデータを保存するKVストア（レガシー） */
   BICCAME_MUSUME_EVENTS: KVNamespace
   /** D1データベース */
