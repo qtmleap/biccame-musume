@@ -14,7 +14,7 @@ import { AdminCommentsResponseSchema } from '@/schemas/admin-comment.dto'
 import { AdminTwitterStatusResponseSchema } from '@/schemas/admin-twitter.dto'
 import { AuthResponseSchema, CurrentUserResponseSchema } from '@/schemas/auth.dto'
 import {
-  BadgeSchema,
+  BadgeMutationResponseSchema,
   CreateSpecialBadgeBodySchema,
   GetBadgeLeaderboardResponseSchema,
   GetBadgesResponseSchema,
@@ -434,7 +434,7 @@ const api = makeApi([
         schema: CreateSpecialBadgeBodySchema
       }
     ],
-    response: z.object({ badge: BadgeSchema })
+    response: BadgeMutationResponseSchema
   },
   {
     method: 'patch',
@@ -453,7 +453,7 @@ const api = makeApi([
         schema: UpdateBadgeBodySchema
       }
     ],
-    response: z.object({ badge: BadgeSchema })
+    response: BadgeMutationResponseSchema
   },
   {
     method: 'delete',
