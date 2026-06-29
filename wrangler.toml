@@ -22,6 +22,14 @@ id = "e7032f736ed045d993d79261b9ff8a56"
 binding = "PUBLIC_JWK_CACHE_KV"
 id = "e4d041b77a2b4575bed33650b13a43b2"
 
+[[durable_objects.bindings]]
+name = "STATS"
+class_name = "StatsDO"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["StatsDO"]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "biccame-musume-dev"
@@ -82,6 +90,14 @@ id = "e7032f736ed045d993d79261b9ff8a56"
 binding = "PUBLIC_JWK_CACHE_KV"
 id = "e4d041b77a2b4575bed33650b13a43b2"
 
+[[env.staging.durable_objects.bindings]]
+name = "STATS"
+class_name = "StatsDO"
+
+[[env.staging.migrations]]
+tag = "v1"
+new_sqlite_classes = ["StatsDO"]
+
 [[env.staging.d1_databases]]
 binding = "DB"
 database_name = "biccame-musume-dev"
@@ -140,6 +156,14 @@ id = "46b03751a94a4180873fa2a473b30606"
 [[env.production.kv_namespaces]]
 binding = "PUBLIC_JWK_CACHE_KV"
 id = "dc0381c80cc8476aa62100d7cb987e95"
+
+[[env.production.durable_objects.bindings]]
+name = "STATS"
+class_name = "StatsDO"
+
+[[env.production.migrations]]
+tag = "v1"
+new_sqlite_classes = ["StatsDO"]
 
 [[env.production.d1_databases]]
 binding = "DB"
