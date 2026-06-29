@@ -14,6 +14,7 @@ import ReactDOM from 'react-dom/client'
 import { IosInstallPrompt } from '@/components/pwa/install-prompt-ios'
 import { setUpdateServiceWorker, showUpdatePrompt, UpdatePrompt } from '@/components/pwa/update-prompt'
 import { Toaster } from '@/components/ui/sonner'
+import { usePushStream } from '@/hooks/use-push-stream'
 import { clearAllCaches } from '@/lib/pwa-cache'
 import { client } from '@/utils/client'
 // フォントのインポート
@@ -165,6 +166,15 @@ const checkVersionAndClearCache = () => {
 // アプリ起動時にバージョンチェックを実行
 checkVersionAndClearCache()
 
+/**
+ * UserPushDO への WebSocket 接続をアプリ起動中ずっと維持するブリッジ。
+ * useQueryClient を使うため PersistQueryClientProvider の内側に置く必要がある。
+ */
+const PushStreamBridge = (): null => {
+  usePushStream()
+  return null
+}
+
 // Render the app
 // biome-ignore lint/style/noNonNullAssertion: reason
 const rootElement = document.getElementById('root')!
@@ -185,6 +195,7 @@ if (!rootElement.innerHTML) {
           }
         }}
       >
+        <PushStreamBridge />
         <RouterProvider router={router} />
         <Toaster
           toastOptions={{

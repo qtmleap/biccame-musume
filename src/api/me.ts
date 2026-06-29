@@ -18,6 +18,7 @@ import {
 } from '@/schemas/activity.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 import { evaluateOnEventComplete, evaluateOnVisit } from '@/services/badge-evaluator'
+import { pushEarnedBadges } from '@/services/badge-push'
 import { getEvent } from '@/services/event-service'
 import {
   deleteUserEvent,
@@ -125,7 +126,9 @@ routes.openapi(
     // バッジ評価は waitUntil でバックグラウンド実行、レスポンスは即返す
     if (status === 'visited') {
       c.executionCtx.waitUntil(
-        evaluateOnVisit({ env: c.env, prisma: getPrisma(c.env), userId: uid }, storeKey as StoreKey)
+        evaluateOnVisit({ env: c.env, prisma: getPrisma(c.env), userId: uid }, storeKey as StoreKey).then((badges) =>
+          pushEarnedBadges(c.env, uid, badges)
+        )
       )
     }
 
@@ -235,7 +238,11 @@ routes.openapi(
 
     // バッジ評価は waitUntil でバックグラウンド実行、レスポンスは即返す
     if (status === 'completed') {
-      c.executionCtx.waitUntil(evaluateOnEventComplete({ env: c.env, prisma: getPrisma(c.env), userId: uid }, eventId))
+      c.executionCtx.waitUntil(
+        evaluateOnEventComplete({ env: c.env, prisma: getPrisma(c.env), userId: uid }, eventId).then((badges) =>
+          pushEarnedBadges(c.env, uid, badges)
+        )
+      )
     }
 
     return c.json({ success: true, newBadges: [] })
@@ -271,5 +278,20 @@ routes.openapi(
     return c.json({ success: true })
   }
 )
+
+// ===== WebSocket: バッジ獲得などの push 通知 =====
+//
+// OpenAPI スキーマには載せない素の Hono ルート。 verifyToken は Cookie の
+// session JWT を見るので、 ブラウザの `new WebSocket(...)` が同一オリジンで
+// 送る Cookie がそのまま使える。 UserPushDO に upgrade request を委譲する。
+routes.get('/me/ws', verifyToken, async (c) => {
+  const uid = getToken(c)
+  const upgrade = c.req.header('Upgrade')
+  if (upgrade?.toLowerCase() !== 'websocket') {
+    throw new HTTPException(426, { message: 'Expected Upgrade: websocket' })
+  }
+  const stub = c.env.USER_PUSH.get(c.env.USER_PUSH.idFromName(uid))
+  return stub.fetch(c.req.raw)
+})
 
 export default routes
