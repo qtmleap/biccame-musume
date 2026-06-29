@@ -1,15 +1,9 @@
-import { Mail } from 'lucide-react'
 import { useState } from 'react'
-import { FaApple, FaGithub, FaGoogle, FaXTwitter } from 'react-icons/fa6'
-import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useAuth } from '@/hooks/use-auth'
 import { AUTH_LABELS } from '@/locales/app.content'
+import { EmailAuthTabs } from './email-auth-tabs'
+import { SocialLoginButtons } from './social-login-buttons'
 
 type LoginDialogProps = {
   open: boolean
@@ -18,83 +12,10 @@ type LoginDialogProps = {
 
 /**
  * ログインダイアログ
- * Google、Apple、GitHub、Twitter、メール/パスワード認証をサポート
+ * Google / Apple / GitHub / X 認証 (本番)、 メール/パスワード認証 (開発のみ)
  */
 export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
-  const { loginWithTwitter, loginWithGoogle, loginWithGithub, loginWithApple, loginWithEmail, registerWithEmail } =
-    useAuth()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [displayName, setDisplayName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-
-  /**
-   * ソーシャルログインの共通ハンドラー（リダイレクト方式）
-   * ページ遷移するため、トースト表示はAuthProviderで行う
-   */
-  const handleSocialLogin = async (loginFn: () => Promise<void>) => {
-    setIsLoading(true)
-    await loginFn()
-  }
-
-  /**
-   * Twitter認証
-   */
-  const handleTwitterLogin = () => handleSocialLogin(loginWithTwitter)
-
-  /**
-   * Google認証
-   */
-  const handleGoogleLogin = () => handleSocialLogin(loginWithGoogle)
-
-  /**
-   * GitHub認証
-   */
-  const handleGithubLogin = () => handleSocialLogin(loginWithGithub)
-
-  /**
-   * Apple認証
-   */
-  const handleAppleLogin = () => handleSocialLogin(loginWithApple)
-
-  /**
-   * メール/パスワードログイン
-   */
-  const handleEmailLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    try {
-      await loginWithEmail(email, password)
-      toast.success(AUTH_LABELS.loginSuccess)
-      onOpenChange(false)
-      setEmail('')
-      setPassword('')
-    } catch (error) {
-      console.error('Login error:', error)
-      toast.error(AUTH_LABELS.loginError)
-      setIsLoading(false)
-    }
-  }
-
-  /**
-   * メール/パスワード新規登録
-   */
-  const handleEmailRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    try {
-      await registerWithEmail(email, password, displayName)
-      toast.success(AUTH_LABELS.signupSuccess)
-      onOpenChange(false)
-      setEmail('')
-      setPassword('')
-      setDisplayName('')
-    } catch (error) {
-      console.error('Registration error:', error)
-      toast.error(AUTH_LABELS.signupError)
-      setIsLoading(false)
-    }
-  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -105,51 +26,7 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
         </DialogHeader>
 
         <div className='space-y-4'>
-          {/* ソーシャルログインボタン */}
-          <div className='grid grid-cols-2 gap-3'>
-            <Button
-              type='button'
-              variant='outline'
-              className='w-full border-card'
-              onClick={handleGoogleLogin}
-              disabled={isLoading}
-            >
-              <FaGoogle className='mr-2 h-4 w-4' />
-              Google
-            </Button>
-
-            <Button
-              type='button'
-              variant='outline'
-              className='w-full border-card'
-              onClick={handleAppleLogin}
-              disabled={isLoading}
-            >
-              <FaApple className='mr-2 h-4 w-4' />
-              Apple
-            </Button>
-
-            <Button
-              type='button'
-              variant='outline'
-              className='w-full border-card'
-              onClick={handleGithubLogin}
-              disabled={isLoading}
-            >
-              <FaGithub className='mr-2 h-4 w-4' />
-              GitHub
-            </Button>
-
-            <Button
-              type='button'
-              variant='outline'
-              className='w-full border-card'
-              onClick={handleTwitterLogin}
-              disabled={isLoading}
-            >
-              <FaXTwitter className='mr-2 h-4 w-4' />X
-            </Button>
-          </div>
+          <SocialLoginButtons isLoading={isLoading} onLoadingChange={setIsLoading} />
 
           {/* メール/パスワード認証（開発環境のみ） */}
           {import.meta.env.DEV && (
@@ -163,98 +40,11 @@ export const LoginDialog = ({ open, onOpenChange }: LoginDialogProps) => {
                 </div>
               </div>
 
-              <Tabs defaultValue='login' className='w-full'>
-                <TabsList className='grid w-full grid-cols-2'>
-                  <TabsTrigger value='login'>ログイン</TabsTrigger>
-                  <TabsTrigger value='register'>新規登録</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value='login'>
-                  <form onSubmit={handleEmailLogin} className='space-y-4'>
-                    <div className='space-y-2'>
-                      <Label htmlFor='login-email'>メールアドレス</Label>
-                      <Input
-                        id='login-email'
-                        type='email'
-                        placeholder='example@email.com'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <div className='space-y-2'>
-                      <Label htmlFor='login-password'>パスワード</Label>
-                      <Input
-                        id='login-password'
-                        type='password'
-                        placeholder={AUTH_LABELS.passwordPlaceholder}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <Button
-                      type='submit'
-                      className='w-full bg-brand hover:bg-brand/90 text-brand-foreground'
-                      disabled={isLoading}
-                    >
-                      <Mail className='mr-2 h-4 w-4' />
-                      {isLoading ? 'ログイン中...' : 'ログイン'}
-                    </Button>
-                  </form>
-                </TabsContent>
-
-                <TabsContent value='register'>
-                  <form onSubmit={handleEmailRegister} className='space-y-4'>
-                    <div className='space-y-2'>
-                      <Label htmlFor='register-name'>表示名</Label>
-                      <Input
-                        id='register-name'
-                        type='text'
-                        placeholder={AUTH_LABELS.displayNamePlaceholder}
-                        value={displayName}
-                        onChange={(e) => setDisplayName(e.target.value)}
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <div className='space-y-2'>
-                      <Label htmlFor='register-email'>メールアドレス</Label>
-                      <Input
-                        id='register-email'
-                        type='email'
-                        placeholder='example@email.com'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <div className='space-y-2'>
-                      <Label htmlFor='register-password'>パスワード</Label>
-                      <Input
-                        id='register-password'
-                        type='password'
-                        placeholder='パスワード（6文字以上）'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        minLength={6}
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <Button
-                      type='submit'
-                      className='w-full bg-brand hover:bg-brand/90 text-brand-foreground'
-                      disabled={isLoading}
-                    >
-                      <Mail className='mr-2 h-4 w-4' />
-                      {isLoading ? '登録中...' : '新規登録'}
-                    </Button>
-                  </form>
-                </TabsContent>
-              </Tabs>
+              <EmailAuthTabs
+                isLoading={isLoading}
+                onLoadingChange={setIsLoading}
+                onSuccess={() => onOpenChange(false)}
+              />
             </>
           )}
         </div>
