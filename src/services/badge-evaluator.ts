@@ -1,12 +1,14 @@
 import type { Badge, PrismaClient } from '@prisma/client'
+import { z } from 'zod'
 import type { BadgeArea } from '@/data/badges/area-mapping'
 import { storeKeyToBadgeArea } from '@/data/badges/area-mapping'
 import type { BadgeConditionMeta, BadgeSubCategory } from '@/data/badges/registry'
 import { ACTIVE_PHYSICAL_STORE_KEYS, PHYSICAL_STORE_KEYS } from '@/data/badges/store-exclusion'
 import type { StoreKey } from '@/schemas/store.dto'
+import { StoreKeySchema } from '@/schemas/store.dto'
 import type { Bindings } from '@/types/bindings'
 
-const ALL_BADGE_AREAS: BadgeArea[] = [
+const ALL_BADGE_AREAS = [
   'hokkaido',
   'kanto_north',
   'chiba',
@@ -17,7 +19,9 @@ const ALL_BADGE_AREAS: BadgeArea[] = [
   'chubu',
   'sanyo_kinki',
   'kyushu'
-]
+] as const satisfies readonly BadgeArea[]
+
+const BadgeAreaSchema = z.enum(ALL_BADGE_AREAS)
 
 export type EvaluatorContext = {
   env: Bindings
@@ -186,69 +190,58 @@ export async function evaluateSpecialEventId(ctx: EvaluatorContext, meta: { even
 // Dispatcher
 // ---------------------------------------------------------------------------
 
-type EvaluatorEntry = (ctx: EvaluatorContext, badge: Badge, meta: BadgeConditionMeta) => Promise<boolean>
-
 /**
- * conditionMeta から必須フィールドを取り出すヘルパ。
- * 欠落時はバッジコード付きの分かりやすいエラーで落とす。
- * 将来 BadgeConditionMeta を discriminated union 化すれば不要になる。
+ * sub_category ごとの conditionMeta スキーマ。
+ * バッジ評価時に raw JSON をこのスキーマで parse することで、 ランタイム検証と型 narrow を同時に行う。
  */
-const requireStoreKey = (badge: Badge, meta: BadgeConditionMeta): StoreKey => {
-  if (!meta.storeKey) throw new Error(`Badge ${badge.code}: missing storeKey`)
-  return meta.storeKey as StoreKey
-}
-
-const requireRegion = (badge: Badge, meta: BadgeConditionMeta): BadgeArea => {
-  if (!meta.region) throw new Error(`Badge ${badge.code}: missing region`)
-  return meta.region as BadgeArea
-}
-
-const requireCount = (badge: Badge, meta: BadgeConditionMeta): number => {
-  if (meta.count === undefined) throw new Error(`Badge ${badge.code}: missing count`)
-  return meta.count
-}
-
-const requireStoreKeys = (badge: Badge, meta: BadgeConditionMeta): StoreKey[] => {
-  if (!meta.storeKeys) throw new Error(`Badge ${badge.code}: missing storeKeys`)
-  return meta.storeKeys as StoreKey[]
-}
-
-const requireEventId = (badge: Badge, meta: BadgeConditionMeta): string => {
-  if (!meta.eventId) throw new Error(`Badge ${badge.code}: missing eventId`)
-  return meta.eventId
-}
+const StoreKeyMetaSchema = z.object({ storeKey: StoreKeySchema })
+const AreaMetaSchema = z.object({ region: BadgeAreaSchema })
+const CountMetaSchema = z.object({ count: z.number().int().positive() })
+const EventClearAtStoreMetaSchema = z.object({
+  storeKey: StoreKeySchema,
+  count: z.number().int().positive().optional()
+})
+const StoreKeysMetaSchema = z.object({ storeKeys: z.array(StoreKeySchema).min(1) })
+const EventIdMetaSchema = z.object({ eventId: z.string().nonempty() })
 
 /**
  * sub_category → 評価関数のテーブル。
- * 新規 sub_category 追加時はここに 1 行足すだけで済む (型レベルで網羅性が担保される)。
+ * 各エントリは raw JSON を sub に対応するスキーマで parse し、 typed meta を評価関数に渡す。
+ * 新規 sub_category 追加時はテーブルに 1 行足すだけで済み、 型レベルで網羅性が保証される。
  */
-const EVALUATORS: Record<BadgeSubCategory, EvaluatorEntry> = {
-  visit: (ctx, b, m) => evaluateVisit(ctx, { storeKey: requireStoreKey(b, m) }),
-  area_any: (ctx, b, m) => evaluateAreaAny(ctx, { region: requireRegion(b, m) }),
-  area_complete: (ctx, b, m) => evaluateAreaComplete(ctx, { region: requireRegion(b, m) }),
-  count: (ctx, b, m) => evaluateCount(ctx, { count: requireCount(b, m) }),
-  event_count: (ctx, b, m) => evaluateEventCount(ctx, { count: requireCount(b, m) }),
-  event_clear_at_store: (ctx, b, m) =>
-    evaluateEventClearAtStore(ctx, { storeKey: requireStoreKey(b, m), count: m.count }),
-  event_clear_area_any: (ctx, b, m) => evaluateEventClearAreaAny(ctx, { region: requireRegion(b, m) }),
-  event_clear_area_complete: (ctx, b, m) => evaluateEventClearAreaComplete(ctx, { region: requireRegion(b, m) }),
-  event_clear_count: (ctx, b, m) => evaluateEventClearCount(ctx, { count: requireCount(b, m) }),
-  event_clear_all: (ctx) => evaluateEventClearAll(ctx),
-  all_areas_any_visit: (ctx) => evaluateAllAreasAnyVisit(ctx),
-  all_areas_any_event_clear: (ctx) => evaluateAllAreasAnyEventClear(ctx),
-  vote_total: (ctx, b, m) => evaluateVoteTotal(ctx, { count: requireCount(b, m) }),
-  special_multi_store_clear: (ctx, b, m) => evaluateSpecialMultiStoreClear(ctx, { storeKeys: requireStoreKeys(b, m) }),
-  special_event_id: (ctx, b, m) => evaluateSpecialEventId(ctx, { eventId: requireEventId(b, m) })
+const EVALUATORS: Record<BadgeSubCategory, (ctx: EvaluatorContext, raw: unknown) => Promise<boolean>> = {
+  visit: (ctx, raw) => evaluateVisit(ctx, StoreKeyMetaSchema.parse(raw)),
+  area_any: (ctx, raw) => evaluateAreaAny(ctx, AreaMetaSchema.parse(raw)),
+  area_complete: (ctx, raw) => evaluateAreaComplete(ctx, AreaMetaSchema.parse(raw)),
+  count: (ctx, raw) => evaluateCount(ctx, CountMetaSchema.parse(raw)),
+  event_count: (ctx, raw) => evaluateEventCount(ctx, CountMetaSchema.parse(raw)),
+  event_clear_at_store: (ctx, raw) => evaluateEventClearAtStore(ctx, EventClearAtStoreMetaSchema.parse(raw)),
+  event_clear_area_any: (ctx, raw) => evaluateEventClearAreaAny(ctx, AreaMetaSchema.parse(raw)),
+  event_clear_area_complete: (ctx, raw) => evaluateEventClearAreaComplete(ctx, AreaMetaSchema.parse(raw)),
+  event_clear_count: (ctx, raw) => evaluateEventClearCount(ctx, CountMetaSchema.parse(raw)),
+  event_clear_all: (ctx, _raw) => evaluateEventClearAll(ctx),
+  all_areas_any_visit: (ctx, _raw) => evaluateAllAreasAnyVisit(ctx),
+  all_areas_any_event_clear: (ctx, _raw) => evaluateAllAreasAnyEventClear(ctx),
+  vote_total: (ctx, raw) => evaluateVoteTotal(ctx, CountMetaSchema.parse(raw)),
+  special_multi_store_clear: (ctx, raw) => evaluateSpecialMultiStoreClear(ctx, StoreKeysMetaSchema.parse(raw)),
+  special_event_id: (ctx, raw) => evaluateSpecialEventId(ctx, EventIdMetaSchema.parse(raw))
 }
 
 export async function evaluateBadge(ctx: EvaluatorContext, badge: Badge): Promise<boolean> {
-  const meta = JSON.parse(badge.conditionMeta) as BadgeConditionMeta
+  const raw = JSON.parse(badge.conditionMeta) as unknown
   const sub = badge.subCategory as BadgeSubCategory
   const evaluator = EVALUATORS[sub]
   if (!evaluator) {
     throw new Error(`Unknown badge subCategory: ${sub}`)
   }
-  return evaluator(ctx, badge, meta)
+  try {
+    return await evaluator(ctx, raw)
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      throw new Error(`Badge ${badge.code}: invalid conditionMeta for sub_category ${sub} — ${err.message}`)
+    }
+    throw err
+  }
 }
 
 // ---------------------------------------------------------------------------

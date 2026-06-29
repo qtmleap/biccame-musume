@@ -476,30 +476,30 @@ describe('evaluateBadge dispatcher', () => {
   test('throws when visit badge is missing storeKey', async () => {
     const ctx = makeCtx({})
     const badge = makeBadge('visit', {})
-    expect(evaluateBadge(ctx, badge)).rejects.toThrow('missing storeKey')
+    expect(evaluateBadge(ctx, badge)).rejects.toThrow(/storeKey/)
   })
 
   test('throws when area_any badge is missing region', async () => {
     const ctx = makeCtx({})
     const badge = makeBadge('area_any', {})
-    expect(evaluateBadge(ctx, badge)).rejects.toThrow('missing region')
+    expect(evaluateBadge(ctx, badge)).rejects.toThrow(/region/)
   })
 
   test('throws when count badge is missing count', async () => {
     const ctx = makeCtx({})
     const badge = makeBadge('count', {})
-    expect(evaluateBadge(ctx, badge)).rejects.toThrow('missing count')
+    expect(evaluateBadge(ctx, badge)).rejects.toThrow(/count/)
   })
 
   test('throws when special_multi_store_clear badge is missing storeKeys', async () => {
     const ctx = makeCtx({})
     const badge = makeBadge('special_multi_store_clear', {})
-    expect(evaluateBadge(ctx, badge)).rejects.toThrow('missing storeKeys')
+    expect(evaluateBadge(ctx, badge)).rejects.toThrow(/storeKeys/)
   })
 
   test('throws when special_event_id badge is missing eventId', async () => {
     const ctx = makeCtx({})
     const badge = makeBadge('special_event_id', {})
-    expect(evaluateBadge(ctx, badge)).rejects.toThrow('missing eventId')
+    expect(evaluateBadge(ctx, badge)).rejects.toThrow(/eventId/)
   })
 })
