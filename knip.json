@@ -1,7 +1,18 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": [".vscode/scripts/*.ts"],
-  "project": ["src/**/*.{ts,tsx}", ".vscode/scripts/*.ts"],
+  "entry": [
+    ".vscode/scripts/*.ts",
+    "__tests__/**/*.test.ts",
+    "__tests__/setup.ts",
+    "e2e/**/*.spec.ts",
+    "scripts/**/*.ts"
+  ],
+  "project": [
+    "src/**/*.{ts,tsx}",
+    ".vscode/scripts/*.ts",
+    "__tests__/**/*.ts",
+    "scripts/**/*.ts"
+  ],
   "ignore": ["src/components/ui/**"],
   "ignoreExportsUsedInFile": true,
   "ignoreDependencies": [

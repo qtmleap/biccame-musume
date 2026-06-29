@@ -38,8 +38,6 @@ export const UpdateStoreResponseSchema = z
   })
   .openapi('UpdateStoreResponse')
 
-export type UpdateStoreResponse = z.infer<typeof UpdateStoreResponseSchema>
-
 /**
  * イベントステータス更新レスポンススキーマ（新規獲得バッジを含む）
  */
@@ -49,8 +47,6 @@ export const UpdateEventResponseSchema = z
     newBadges: z.array(BadgeSchema).default([]).openapi({ description: '今回新たに獲得したバッジの一覧' })
   })
   .openapi('UpdateEventResponse')
-
-export type UpdateEventResponse = z.infer<typeof UpdateEventResponseSchema>
 
 /**
  * エラーレスポンススキーマ

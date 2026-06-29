@@ -1,10 +1,10 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { getPrisma } from '@/lib/prisma'
 import {
+  BadgeLeaderboardResponseSchema,
   GetBadgeLeaderboardQuerySchema,
-  GetBadgeLeaderboardResponseSchema,
   GetBadgesResponseSchema,
-  GetMyBadgesResponseSchema,
+  MyBadgesResponseSchema,
   prismaBadgeToDto
 } from '@/schemas/badge.dto'
 import type { Bindings, Variables } from '@/types/bindings'
@@ -74,7 +74,7 @@ routes.openapi(
       200: {
         content: {
           'application/json': {
-            schema: GetBadgeLeaderboardResponseSchema
+            schema: BadgeLeaderboardResponseSchema
           }
         },
         description: 'バッジリーダーボード取得成功'
@@ -175,7 +175,7 @@ routes.openapi(
       200: {
         content: {
           'application/json': {
-            schema: GetMyBadgesResponseSchema
+            schema: MyBadgesResponseSchema
           }
         },
         description: '自分の獲得バッジ取得成功'
