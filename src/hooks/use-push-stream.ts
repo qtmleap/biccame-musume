@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { useAuth } from '@/hooks/use-auth'
+import { client } from '@/utils/client'
 
 type PushedBadge = {
   code: string
@@ -32,16 +33,23 @@ const buildWsUrl = (): string => {
  */
 export const usePushStream = (): void => {
   const queryClient = useQueryClient()
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
 
   useEffect(() => {
-    if (!isAuthenticated) return
+    if (!isAuthenticated || user === null) return
 
     let ws: WebSocket | null = null
     let pingTimer: ReturnType<typeof setInterval> | null = null
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null
     let reconnectDelay = RECONNECT_INITIAL_MS
     let cancelled = false
+    // session Cookie は auth-provider が並列に発行しているため、
+    // Firebase Auth state だけで WS を張ると Cookie 到着前に 401 で
+    // ハンドシェイクが失敗する。 初回 connect の前に同じ
+    // /api/auth エンドポイントを叩いて Cookie の確立を保証する。
+    // 一度成立すれば maxAge 5 日のため、 再接続時はスキップする。
+    // Biome noLet を避けるため mutable フラグはオブジェクトで持つ。
+    const sessionState = { ensured: false }
 
     const clearTimers = () => {
       if (pingTimer !== null) {
@@ -77,8 +85,27 @@ export const usePushStream = (): void => {
       }
     }
 
-    const connect = () => {
+    const ensureSession = async (): Promise<boolean> => {
+      if (sessionState.ensured) return true
+      try {
+        const idToken = await user.getIdToken()
+        await client.authenticate(undefined, { headers: { Authorization: `Bearer ${idToken}` } })
+        sessionState.ensured = true
+        return true
+      } catch (err) {
+        console.warn('[push-stream] session establish failed:', err)
+        return false
+      }
+    }
+
+    const connect = async () => {
       if (cancelled) return
+      const ok = await ensureSession()
+      if (cancelled) return
+      if (!ok) {
+        scheduleReconnect()
+        return
+      }
       try {
         ws = new WebSocket(buildWsUrl())
       } catch (err) {
@@ -134,5 +161,5 @@ export const usePushStream = (): void => {
         // ignore
       }
     }
-  }, [isAuthenticated, queryClient])
+  }, [isAuthenticated, user, queryClient])
 }
