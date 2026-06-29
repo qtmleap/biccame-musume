@@ -36,7 +36,15 @@ app.use(
 
 // セキュリティヘッダ (XSS/Clickjacking/MIME sniffing 対策のベースライン)。
 // CSP は Google Maps / Firebase / Turnstile / Twitter 画像など多数のオリジンが絡むため
-// 全体監査が済むまで未設定。Phase 2 で Report-Only から段階導入する想定。
+// Report-Only モードで段階導入する。 本番で違反ログを集めて、 問題なければ Enforce に切替予定。
+//
+// 含まれているオリジンの根拠:
+// - Firebase Auth (OAuth redirect): apis.google.com / *.googleapis.com / accounts.google.com /
+//   *.firebaseapp.com / securetoken.googleapis.com
+// - Cloudflare Turnstile: challenges.cloudflare.com (v0/api.js を動的 inject する)
+// - Google Maps: maps.googleapis.com / maps.gstatic.com
+// - Twitter プロフィール画像: pbs.twimg.com
+// - 認証 redirect helper: biccame-musume.firebaseapp.com
 //
 // CORP/COOP はデフォルトで same-origin が付与されるが、og:image を X / Bluesky 等の
 // クローラーから cross-origin 参照させる必要があるため明示的に無効化する。
@@ -49,7 +57,66 @@ app.use(
     referrerPolicy: 'strict-origin-when-cross-origin',
     crossOriginResourcePolicy: false,
     crossOriginOpenerPolicy: false,
-    permissionsPolicy: { camera: [], microphone: [], geolocation: [] }
+    permissionsPolicy: { camera: [], microphone: [], geolocation: [] },
+    contentSecurityPolicyReportOnly: {
+      defaultSrc: ["'self'"],
+      scriptSrc: [
+        "'self'",
+        // Firebase / Google sign-in
+        'https://apis.google.com',
+        'https://www.gstatic.com',
+        'https://accounts.google.com',
+        // Turnstile
+        'https://challenges.cloudflare.com',
+        // Google Maps
+        'https://maps.googleapis.com',
+        // Cloudflare Web Analytics (有効化されていれば使う)
+        'https://static.cloudflareinsights.com'
+      ],
+      styleSrc: [
+        "'self'",
+        // Tailwind / Radix / sonner は inline style を多用するため一旦許容 (Report-Only で観測)
+        "'unsafe-inline'",
+        'https://fonts.googleapis.com'
+      ],
+      imgSrc: [
+        "'self'",
+        'data:',
+        'blob:',
+        // Google avatar (Firebase Auth login user thumbnail)
+        'https://lh3.googleusercontent.com',
+        'https://*.googleusercontent.com',
+        // Twitter avatar
+        'https://pbs.twimg.com',
+        // Google Maps
+        'https://maps.gstatic.com',
+        'https://maps.googleapis.com',
+        // GitHub avatar (Firebase GitHub provider)
+        'https://avatars.githubusercontent.com'
+      ],
+      fontSrc: ["'self'", 'data:', 'https://fonts.gstatic.com'],
+      connectSrc: [
+        "'self'",
+        'https://*.googleapis.com',
+        'https://*.firebaseio.com',
+        'https://identitytoolkit.googleapis.com',
+        'https://securetoken.googleapis.com',
+        'https://challenges.cloudflare.com',
+        'https://maps.googleapis.com'
+      ],
+      frameSrc: [
+        // Firebase Auth helper (popup / iframe)
+        'https://biccame-musume.firebaseapp.com',
+        'https://accounts.google.com',
+        // Turnstile widget は iframe で表示される
+        'https://challenges.cloudflare.com'
+      ],
+      workerSrc: ["'self'", 'blob:'],
+      manifestSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"]
+    }
   })
 )
 
