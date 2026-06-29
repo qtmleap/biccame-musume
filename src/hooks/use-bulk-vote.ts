@@ -1,11 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useSetAtom } from 'jotai'
-import { toast } from 'sonner'
 import { lastVoteTimesAtom } from '@/atoms/vote-atom'
-import { resolveBadgeText } from '@/lib/badge-display'
 import type { BulkVoteResponse } from '@/schemas/vote.dto'
 import { client } from '@/utils/client'
+
+/**
+ * サーバー側でバッジ評価が waitUntil 実行されるため、
+ * 完了を待ってから ['me', 'badges'] を invalidate するための遅延 (ms)
+ */
+const BADGE_REFETCH_DELAY_MS = 2500
 
 /**
  * 一括投票フック
@@ -29,13 +33,10 @@ export const useBulkVote = () => {
         return next
       })
       queryClient.invalidateQueries({ queryKey: ['ranking'] })
-      for (const badge of data.newBadges) {
-        const { name, description } = resolveBadgeText(badge)
-        toast.success(`バッジ獲得: ${name}`, { description })
-      }
-      if (data.newBadges.length > 0) {
+      // バッジ評価はサーバー側で waitUntil 実行されるため、少し遅らせて再取得
+      setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
-      }
+      }, BADGE_REFETCH_DELAY_MS)
     }
   })
 }
