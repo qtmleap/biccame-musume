@@ -4,7 +4,6 @@ import type { Context, Next } from 'hono'
 import { getPrisma } from '@/lib/prisma'
 import { ipCheck } from '@/middleware/ip-check'
 import { voteLimit } from '@/middleware/vote-limit'
-import { prismaBadgeToDto } from '@/schemas/badge.dto'
 import {
   BulkVoteRequestSchema,
   BulkVoteResponseSchema,
@@ -121,16 +120,14 @@ routes.openapi(
 
     // 投票成功時のみ、最後に投票したキャラ ID で 1 回だけバッジ評価
     // (vote 系バッジは user-level なのでキャラ単位では評価しない)
+    // 重いので waitUntil でバックグラウンド実行、レスポンスは即返す
     const lastVotedId =
       userId !== undefined && votedCount > 0
         ? results.filter((r) => r.status === 'voted').at(-1)?.characterId
         : undefined
-    const newBadges =
-      userId !== undefined && lastVotedId !== undefined
-        ? (await evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId }, lastVotedId)).map((b) =>
-            prismaBadgeToDto(b)
-          )
-        : []
+    if (userId !== undefined && lastVotedId !== undefined) {
+      c.executionCtx.waitUntil(evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId }, lastVotedId))
+    }
 
     return c.json({
       success: true,
@@ -138,7 +135,7 @@ routes.openapi(
       votedCount,
       skippedCount,
       nextVoteDate: getNextJSTDate(),
-      newBadges
+      newBadges: []
     })
   }
 )
@@ -204,18 +201,16 @@ routes.openapi(
     })()
     await vote(c.env, characterId, c.get('CLIENT_IP'), userId)
 
-    const newBadges =
-      userId !== undefined
-        ? (await evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId }, characterId)).map((b) =>
-            prismaBadgeToDto(b)
-          )
-        : []
+    // バッジ評価は waitUntil でバックグラウンド実行、レスポンスは即返す
+    if (userId !== undefined) {
+      c.executionCtx.waitUntil(evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId }, characterId))
+    }
 
     return c.json({
       success: true,
       message: '投票ありがとうございます！',
       nextVoteDate: getNextJSTDate(),
-      newBadges
+      newBadges: []
     })
   }
 )
