@@ -26,5 +26,3 @@ export const AdminTwitterStatusResponseSchema = z
     fetchedAt: z.string().datetime().openapi({ description: '取得試行時刻' })
   })
   .openapi('AdminTwitterStatusResponse')
-
-export type AdminTwitterStatusResponse = z.infer<typeof AdminTwitterStatusResponseSchema>

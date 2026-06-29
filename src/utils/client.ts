@@ -14,11 +14,11 @@ import { AdminCommentsResponseSchema } from '@/schemas/admin-comment.dto'
 import { AdminTwitterStatusResponseSchema } from '@/schemas/admin-twitter.dto'
 import { AuthResponseSchema, CurrentUserResponseSchema } from '@/schemas/auth.dto'
 import {
+  BadgeLeaderboardResponseSchema,
   BadgeMutationResponseSchema,
   CreateSpecialBadgeBodySchema,
-  GetBadgeLeaderboardResponseSchema,
   GetBadgesResponseSchema,
-  GetMyBadgesResponseSchema,
+  MyBadgesResponseSchema,
   UpdateBadgeBodySchema
 } from '@/schemas/badge.dto'
 import { CreateCommentRequestSchema, ListCommentsResponseSchema } from '@/schemas/comment.dto'
@@ -398,7 +398,7 @@ const api = makeApi([
     path: '/api/users/me/badges',
     alias: 'getMyBadges',
     description: '自分の獲得バッジ一覧を取得',
-    response: GetMyBadgesResponseSchema
+    response: MyBadgesResponseSchema
   },
   {
     method: 'get',
@@ -412,7 +412,7 @@ const api = makeApi([
         schema: z.string().optional()
       }
     ],
-    response: GetBadgeLeaderboardResponseSchema
+    response: BadgeLeaderboardResponseSchema
   },
   // 管理者バッジCRUD API
   {
