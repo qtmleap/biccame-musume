@@ -23,6 +23,19 @@ const getTodayKey = (): string => {
 }
 
 /**
+ * IP + UA を SHA-256 でハッシュし、本日のユニークユーザー集計用キーに使う。
+ * 先頭 16 文字 (64 bit) で 1 日 10 万ユニーク程度の衝突は無視できる。
+ */
+const computeUserKey = async (ip: string, userAgent: string): Promise<string> => {
+  const data = new TextEncoder().encode(`${ip}\n${userAgent}`)
+  const buffer = await crypto.subtle.digest('SHA-256', data)
+  const hex = Array.from(new Uint8Array(buffer))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
+  return hex.slice(0, 16)
+}
+
+/**
  * KVからページビュー統計を取得
  */
 const getPageViewStats = async (env: Bindings, path?: string): Promise<number> => {
@@ -170,6 +183,17 @@ routes.openapi(
   async (c) => {
     const { path } = c.req.valid('json')
     await incrementPageView(c.env, path)
+
+    // Phase A: StatsDO への dual-write。 KV write が成功した後で、DO 書き込みは
+    // fire-and-forget で発火する。 DO 側の障害が KV write の結果を汚さないよう
+    // waitUntil に逃がしているため、ユーザー応答時間にも影響しない。
+    const ip = c.req.header('CF-Connecting-IP') ?? c.req.header('X-Forwarded-For') ?? 'unknown'
+    const userAgent = c.req.header('User-Agent') ?? 'unknown'
+    const userKey = await computeUserKey(ip, userAgent)
+    const dateKey = getTodayKey()
+    const stub = c.env.STATS.get(c.env.STATS.idFromName('global'))
+    c.executionCtx.waitUntil(stub.increment({ path, dateKey, userKey }))
+
     return c.json({ success: true })
   }
 )
