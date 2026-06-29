@@ -125,3 +125,58 @@ jobs:
       - name: Test
         run: |
           bun tsc --noEmit
+  build:
+    name: Vite Build (production)
+    runs-on: ubuntu-latest
+    if: github.event.action != 'closed' || github.event.pull_request.merged != true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Cache
+        uses: actions/cache@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+      # Build asset caches mirror deployment.yaml so this job catches
+      # build-time failures (e.g. vite-plugin-pwa × intlayer) before merge.
+      - name: Cache character images
+        uses: actions/cache@v5
+        with:
+          path: |
+            public/images/characters
+            public/images/stamps
+          key: >-
+            ${{ runner.os }}-character-images-${{
+              hashFiles(
+                'scripts/download-character-images.ts',
+                'scripts/stampcamera-map.ts',
+                'public/characters.json'
+              )
+            }}
+      - name: Cache OG images
+        uses: actions/cache@v5
+        with:
+          path: |
+            public/og/characters
+          key: >-
+            ${{ runner.os }}-og-${{
+              hashFiles(
+                'scripts/generate-og-images.ts',
+                'scripts/stampcamera-map.ts',
+                'public/characters.json'
+              )
+            }}
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+      - name: Generate Prisma Client
+        run: bun run generate
+      - name: Build
+        run: bun run build
+        env:
+          CLOUDFLARE_ENV: production
