@@ -4,6 +4,7 @@ import type { JwtVariables } from 'hono/jwt'
 import type { JWTPayload } from 'hono/utils/jwt/types'
 import type { StatsDO } from '@/durable-objects/stats'
 import type { UserPushDO } from '@/durable-objects/user-push'
+import type { VoteCounterDO } from '@/durable-objects/vote-counter'
 
 /**
  * Cloudflare Workersの環境変数の型定義
@@ -19,6 +20,8 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   STATS: DurableObjectNamespace<StatsDO>
   /** ユーザーごとの WebSocket Hibernation 接続を保持する Durable Object */
   USER_PUSH: DurableObjectNamespace<UserPushDO>
+  /** 年スコープごとの投票カウンタを in-memory 集計する Durable Object */
+  VOTE_COUNTER: DurableObjectNamespace<VoteCounterDO>
   /** イベントデータを保存するKVストア（レガシー） */
   BICCAME_MUSUME_EVENTS: KVNamespace
   /** D1データベース */
