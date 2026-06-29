@@ -8,26 +8,18 @@ type Bindings = {
   ENVIRONMENT?: string
 }
 
-type JWTPayload = {
-  aud: string[]
-  email: string
-  exp: number
-  iat: number
-  iss: string
-  sub: string
-  type: string
-}
-
-const verifyJWT = async (token: string, teamDomain: string, audience: string): Promise<JWTPayload> => {
+/**
+ * Cloudflare Access JWT を署名検証する。 payload の内容は CFAuth では参照しないため
+ * 戻り値は持たず、 検証失敗時のみ jwtVerify が throw する。
+ */
+const verifyJWT = async (token: string, teamDomain: string, audience: string): Promise<void> => {
   const jwksUrl = `https://${teamDomain}/cdn-cgi/access/certs`
   const jwks = createRemoteJWKSet(new URL(jwksUrl))
 
-  const { payload } = await jwtVerify(token, jwks, {
+  await jwtVerify(token, jwks, {
     issuer: `https://${teamDomain}`,
     audience
   })
-
-  return payload as JWTPayload
 }
 
 const extractTokenFromCookie = (cookie: string): string | undefined => {
