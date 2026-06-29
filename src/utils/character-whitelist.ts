@@ -21,10 +21,3 @@ export const loadBiccameMusumeIdSet = async (assets: Fetcher, baseUrl: string): 
   cachedSet = new Set(data.filter((c) => c.character?.is_biccame_musume === true).map((c) => c.id))
   return cachedSet
 }
-
-/**
- * テスト用にキャッシュをクリアする。プロダクションでは呼ばれない。
- */
-export const __resetBiccameMusumeIdCache = () => {
-  cachedSet = null
-}
