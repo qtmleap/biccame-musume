@@ -16,7 +16,6 @@ import {
   UpdateStoreStatusSchema,
   UserActivityResponseSchema
 } from '@/schemas/activity.dto'
-import { prismaBadgeToDto } from '@/schemas/badge.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 import { evaluateOnEventComplete, evaluateOnVisit } from '@/services/badge-evaluator'
 import { getEvent } from '@/services/event-service'
@@ -123,14 +122,14 @@ routes.openapi(
     const { status } = c.req.valid('json')
     await updateUserStore(c.env, uid, storeKey, status)
 
-    const newBadges =
-      status === 'visited'
-        ? (await evaluateOnVisit({ env: c.env, prisma: getPrisma(c.env), userId: uid }, storeKey as StoreKey)).map(
-            (b) => prismaBadgeToDto(b)
-          )
-        : []
+    // バッジ評価は waitUntil でバックグラウンド実行、レスポンスは即返す
+    if (status === 'visited') {
+      c.executionCtx.waitUntil(
+        evaluateOnVisit({ env: c.env, prisma: getPrisma(c.env), userId: uid }, storeKey as StoreKey)
+      )
+    }
 
-    return c.json({ success: true, newBadges })
+    return c.json({ success: true, newBadges: [] })
   }
 )
 
@@ -234,14 +233,12 @@ routes.openapi(
 
     await updateUserEvent(c.env, uid, eventId, status)
 
-    const newBadges =
-      status === 'completed'
-        ? (await evaluateOnEventComplete({ env: c.env, prisma: getPrisma(c.env), userId: uid }, eventId)).map((b) =>
-            prismaBadgeToDto(b)
-          )
-        : []
+    // バッジ評価は waitUntil でバックグラウンド実行、レスポンスは即返す
+    if (status === 'completed') {
+      c.executionCtx.waitUntil(evaluateOnEventComplete({ env: c.env, prisma: getPrisma(c.env), userId: uid }, eventId))
+    }
 
-    return c.json({ success: true, newBadges })
+    return c.json({ success: true, newBadges: [] })
   }
 )
 

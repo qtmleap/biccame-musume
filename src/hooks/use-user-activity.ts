@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { useAuth } from '@/hooks/use-auth'
-import { resolveBadgeText } from '@/lib/badge-display'
 import { client } from '@/utils/client'
+
+const BADGE_REFETCH_DELAY_MS = 2500
 
 /**
  * 未認証/初期表示時のフォールバック。 initialData として渡すことで data 自体が
@@ -41,15 +41,12 @@ export const useUserActivity = () => {
     mutationFn: async (storeKey: string) => {
       return client.updateUserStore({ status: 'visited' }, { params: { storeKey } })
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       invalidate()
-      for (const badge of data.newBadges) {
-        const { name, description } = resolveBadgeText(badge)
-        toast.success(`バッジ獲得: ${name}`, { description })
-      }
-      if (data.newBadges.length > 0) {
+      // バッジ評価はサーバー側で waitUntil 実行されるため、少し遅らせて再取得
+      setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
-      }
+      }, BADGE_REFETCH_DELAY_MS)
     }
   })
 
@@ -80,15 +77,12 @@ export const useUserActivity = () => {
     mutationFn: async (eventId: string) => {
       return client.updateUserEvent({ status: 'completed' }, { params: { eventId } })
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       invalidate()
-      for (const badge of data.newBadges) {
-        const { name, description } = resolveBadgeText(badge)
-        toast.success(`バッジ獲得: ${name}`, { description })
-      }
-      if (data.newBadges.length > 0) {
+      // バッジ評価はサーバー側で waitUntil 実行されるため、少し遅らせて再取得
+      setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
-      }
+      }, BADGE_REFETCH_DELAY_MS)
     }
   })
 
