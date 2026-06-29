@@ -26,9 +26,17 @@ id = "e4d041b77a2b4575bed33650b13a43b2"
 name = "STATS"
 class_name = "StatsDO"
 
+[[durable_objects.bindings]]
+name = "USER_PUSH"
+class_name = "UserPushDO"
+
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["StatsDO"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["UserPushDO"]
 
 [[d1_databases]]
 binding = "DB"
@@ -94,9 +102,17 @@ id = "e4d041b77a2b4575bed33650b13a43b2"
 name = "STATS"
 class_name = "StatsDO"
 
+[[env.staging.durable_objects.bindings]]
+name = "USER_PUSH"
+class_name = "UserPushDO"
+
 [[env.staging.migrations]]
 tag = "v1"
 new_sqlite_classes = ["StatsDO"]
+
+[[env.staging.migrations]]
+tag = "v2"
+new_sqlite_classes = ["UserPushDO"]
 
 [[env.staging.d1_databases]]
 binding = "DB"
@@ -161,9 +177,17 @@ id = "dc0381c80cc8476aa62100d7cb987e95"
 name = "STATS"
 class_name = "StatsDO"
 
+[[env.production.durable_objects.bindings]]
+name = "USER_PUSH"
+class_name = "UserPushDO"
+
 [[env.production.migrations]]
 tag = "v1"
 new_sqlite_classes = ["StatsDO"]
+
+[[env.production.migrations]]
+tag = "v2"
+new_sqlite_classes = ["UserPushDO"]
 
 [[env.production.d1_databases]]
 binding = "DB"

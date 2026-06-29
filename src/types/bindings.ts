@@ -3,6 +3,7 @@ import type { VerifyFirebaseAuthEnv } from '@hono/firebase-auth'
 import type { JwtVariables } from 'hono/jwt'
 import type { JWTPayload } from 'hono/utils/jwt/types'
 import type { StatsDO } from '@/durable-objects/stats'
+import type { UserPushDO } from '@/durable-objects/user-push'
 
 /**
  * Cloudflare Workersの環境変数の型定義
@@ -16,6 +17,8 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   PAGE_VIEWS: KVNamespace
   /** ページビュー統計の atomic 集計を行う Durable Object */
   STATS: DurableObjectNamespace<StatsDO>
+  /** ユーザーごとの WebSocket Hibernation 接続を保持する Durable Object */
+  USER_PUSH: DurableObjectNamespace<UserPushDO>
   /** イベントデータを保存するKVストア（レガシー） */
   BICCAME_MUSUME_EVENTS: KVNamespace
   /** D1データベース */

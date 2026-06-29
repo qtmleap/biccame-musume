@@ -247,5 +247,6 @@ const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, 
 }
 
 export { StatsDO } from './durable-objects/stats'
+export { UserPushDO } from './durable-objects/user-push'
 
 export default { fetch: app.fetch, scheduled }
