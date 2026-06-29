@@ -14,15 +14,6 @@ import { userAtom } from '@/atoms/auth-atom'
 import { auth } from '@/lib/firebase'
 
 /**
- * Twitterのプロフィール画像URLを大きいサイズに変換
- * _normal (48x48) → _400x400 (400x400)
- */
-export const getLargeTwitterPhoto = (photoURL: string | null | undefined): string | undefined => {
-  if (!photoURL) return undefined
-  return photoURL.replace('_normal', '_400x400')
-}
-
-/**
  * Firebase Authentication用カスタムフック
  * 複数のログイン方法を提供：Twitter、Google、GitHub、Apple、メール/パスワード
  * 認証状態の監視とアカウント作成はAuthProviderで行う
