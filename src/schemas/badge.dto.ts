@@ -258,7 +258,15 @@ export const UpdateBadgeBodySchema = z
 
 export type UpdateBadgeBody = z.infer<typeof UpdateBadgeBodySchema>
 
-export const AdminBadgeResponseSchema = BadgeSchema
+/**
+ * バッジを返却するミューテーション系エンドポイント共通レスポンス
+ * (POST /api/admin/badges, PATCH /api/admin/badges/:code)
+ */
+export const BadgeMutationResponseSchema = z
+  .object({
+    badge: BadgeSchema
+  })
+  .openapi('BadgeMutationResponse')
 
 export const AdminDeleteBadgeParamsSchema = z
   .object({
