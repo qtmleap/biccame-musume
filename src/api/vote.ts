@@ -11,6 +11,7 @@ import {
   VoteResponseSchema
 } from '@/schemas/vote.dto'
 import { evaluateOnVote } from '@/services/badge-evaluator'
+import { pushEarnedBadges } from '@/services/badge-push'
 import { bulkVote, getAllVoteCounts, vote } from '@/services/vote-service'
 import type { Bindings, Variables } from '@/types/bindings'
 import { getJwtPayload, verifyTokenOptional } from '@/utils/token'
@@ -126,7 +127,12 @@ routes.openapi(
         ? results.filter((r) => r.status === 'voted').at(-1)?.characterId
         : undefined
     if (userId !== undefined && lastVotedId !== undefined) {
-      c.executionCtx.waitUntil(evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId }, lastVotedId))
+      const evalUserId = userId
+      c.executionCtx.waitUntil(
+        evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId: evalUserId }, lastVotedId).then((badges) =>
+          pushEarnedBadges(c.env, evalUserId, badges)
+        )
+      )
     }
 
     return c.json({
@@ -203,7 +209,12 @@ routes.openapi(
 
     // バッジ評価は waitUntil でバックグラウンド実行、レスポンスは即返す
     if (userId !== undefined) {
-      c.executionCtx.waitUntil(evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId }, characterId))
+      const evalUserId = userId
+      c.executionCtx.waitUntil(
+        evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId: evalUserId }, characterId).then((badges) =>
+          pushEarnedBadges(c.env, evalUserId, badges)
+        )
+      )
     }
 
     return c.json({
