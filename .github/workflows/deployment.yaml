@@ -68,6 +68,7 @@ jobs:
         run: bun run build
         env:
           CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
       - name: Deploy Workers
         if: env.ACT != 'true'
         run: bun run deploy
