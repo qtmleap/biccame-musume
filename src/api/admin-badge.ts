@@ -1,6 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { getPrisma } from '@/lib/prisma'
-import { CFAuth } from '@/middleware/cloudflare-access'
 import {
   AdminBadgeParamsSchema,
   AdminDeleteBadgeParamsSchema,
@@ -20,7 +19,6 @@ routes.openapi(
   createRoute({
     method: 'get',
     path: '/admin/badges',
-    middleware: [CFAuth],
     responses: {
       200: {
         content: {
@@ -84,7 +82,6 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/admin/badges',
-    middleware: [CFAuth],
     request: {
       body: {
         content: {
@@ -167,7 +164,6 @@ routes.openapi(
   createRoute({
     method: 'patch',
     path: '/admin/badges/:code',
-    middleware: [CFAuth],
     request: {
       params: AdminBadgeParamsSchema,
       body: {
@@ -274,7 +270,6 @@ routes.openapi(
   createRoute({
     method: 'delete',
     path: '/admin/badges/:code',
-    middleware: [CFAuth],
     request: {
       params: AdminDeleteBadgeParamsSchema
     },
@@ -326,7 +321,6 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/admin/badges/recalculate',
-    middleware: [CFAuth],
     responses: {
       202: {
         content: {

@@ -1,17 +1,16 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { getPrisma } from '@/lib/prisma'
-import { CFAuth } from '@/middleware/cloudflare-access'
 import { type AdminComment, AdminCommentsQuerySchema, AdminCommentsResponseSchema } from '@/schemas/admin-comment.dto'
 import type { Bindings } from '@/types/bindings'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
 // GET /api/admin/comments — 全コメント一覧（イベント名つき・新しい順）
+// 認証は src/api/admin/index.ts で `/admin/*` 全体に CFAuth を適用
 routes.openapi(
   createRoute({
     method: 'get',
     path: '/admin/comments',
-    middleware: [CFAuth],
     request: {
       query: AdminCommentsQuerySchema
     },
