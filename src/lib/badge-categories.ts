@@ -121,7 +121,3 @@ export const BADGE_CATEGORY_DEFS: BadgeCategoryDef[] = [
     accent: 'rank-gold'
   }
 ]
-
-export const BADGE_CATEGORY_MAP = new Map<BadgeCategory, BadgeCategoryDef>(
-  BADGE_CATEGORY_DEFS.map((def) => [def.key, def])
-)

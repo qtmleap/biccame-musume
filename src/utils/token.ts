@@ -5,7 +5,35 @@ import type { Context, MiddlewareHandler } from 'hono'
 import { getCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 import { AlgorithmTypes, sign, verify } from 'hono/jwt'
+import { z } from 'zod'
 import type { Bindings, CustomJwtClaims, Variables } from '@/types/bindings'
+
+/**
+ * `verify()` から返ってくる JWT payload を実行時に検証するスキーマ。
+ * `CustomJwtClaims` (= `JWTPayload & { uid, usr, pid }`) と整合するフィールドだけ検証し、
+ * 標準クレーム (sub/iat/exp/iss/aud 等) は passthrough で透過させる。
+ * スキーマと検証失敗をきちんと型で扱うことで、 verify 直後の `as CustomJwtClaims` キャストを排除する。
+ */
+const CustomJwtClaimsSchema = z
+  .object({
+    uid: z.string().nonempty(),
+    usr: z.object({
+      email: z.string().nullable(),
+      email_verified: z.boolean(),
+      display_name: z.string().nullable(),
+      thumbnail_url: z.string().nullable()
+    })
+  })
+  .passthrough()
+
+/**
+ * `hono/jwt` の verify が返した unknown payload を検証し、 CustomJwtClaims として確定させる
+ */
+const parseJwtPayload = (raw: unknown): CustomJwtClaims | null => {
+  const result = CustomJwtClaimsSchema.safeParse(raw)
+  if (!result.success) return null
+  return result.data as CustomJwtClaims
+}
 
 export const signToken = async (
   c: Context<{ Bindings: Bindings; Variables: Variables }>,
@@ -56,9 +84,13 @@ export const verifyToken: MiddlewareHandler<{ Bindings: Bindings; Variables: Var
   if (!c.env.JWT_SECRET_KEY) {
     throw new HTTPException(500, { message: 'JWT_SECRET_KEY is not configured' })
   }
-  const result = (await verify(token, c.env.JWT_SECRET_KEY, AlgorithmTypes.HS256)) as CustomJwtClaims
-  console.info('VerifyToken:', result)
-  c.set('jwtPayload', result)
+  const raw = await verify(token, c.env.JWT_SECRET_KEY, AlgorithmTypes.HS256)
+  const payload = parseJwtPayload(raw)
+  if (payload === null) {
+    throw new HTTPException(401, { message: 'Invalid token payload' })
+  }
+  console.info('VerifyToken:', payload)
+  c.set('jwtPayload', payload)
   await next()
 }
 
@@ -73,8 +105,13 @@ export const verifyTokenOptional: MiddlewareHandler<{ Bindings: Bindings; Variab
     return
   }
   try {
-    const result = (await verify(token, c.env.JWT_SECRET_KEY, AlgorithmTypes.HS256)) as CustomJwtClaims
-    c.set('jwtPayload', result)
+    const raw = await verify(token, c.env.JWT_SECRET_KEY, AlgorithmTypes.HS256)
+    const payload = parseJwtPayload(raw)
+    if (payload !== null) {
+      c.set('jwtPayload', payload)
+    } else {
+      console.warn('verifyTokenOptional: payload shape mismatch, continuing as anonymous')
+    }
   } catch (error) {
     console.warn('verifyTokenOptional: invalid session token, continuing as anonymous:', error)
   }

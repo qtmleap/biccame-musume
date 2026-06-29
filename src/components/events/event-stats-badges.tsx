@@ -1,0 +1,137 @@
+import { Award, BarChart2, Heart } from 'lucide-react'
+import { useState } from 'react'
+import { useAuth } from '@/hooks/use-auth'
+import { usePageViews } from '@/hooks/use-page-views'
+import { useUserActivity } from '@/hooks/use-user-activity'
+import { cn } from '@/lib/utils'
+import type { Event } from '@/schemas/event.dto'
+import { EventShareButton } from './event-share-button'
+import { FireworkBurstOverlay, HeartBurstOverlay } from './event-stats-animations'
+
+type EventStatsBadgesProps = {
+  event: Event
+  onStatsUpdate: () => void
+}
+
+/**
+ * イベント統計バッジコンポーネント
+ * ログイン中はクリックでお気に入り・達成報告の登録/解除が可能
+ */
+export const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
+  const { user } = useAuth()
+  const { data: pageViews } = usePageViews(`/events/${event.uuid}`)
+  const {
+    isInterested,
+    isCompleted,
+    addInterestedEvent,
+    removeInterestedEvent,
+    addCompletedEvent,
+    removeCompletedEvent
+  } = useUserActivity()
+
+  const interested = isInterested(event.uuid)
+  const completed = isCompleted(event.uuid)
+
+  const [showHeartAnimation, setShowHeartAnimation] = useState(false)
+  const [showFireworkAnimation, setShowFireworkAnimation] = useState(false)
+
+  const handleToggleInterested = () => {
+    if (!user) return
+    if (interested) {
+      removeInterestedEvent(event.uuid, { onSuccess: () => onStatsUpdate() })
+    } else {
+      setShowHeartAnimation(true)
+      setTimeout(() => setShowHeartAnimation(false), 600)
+      addInterestedEvent(event.uuid, { onSuccess: () => onStatsUpdate() })
+    }
+  }
+
+  const handleToggleCompleted = () => {
+    if (!user) return
+    if (completed) {
+      removeCompletedEvent(event.uuid, { onSuccess: () => onStatsUpdate() })
+    } else {
+      setShowFireworkAnimation(true)
+      setTimeout(() => setShowFireworkAnimation(false), 800)
+      addCompletedEvent(event.uuid, { onSuccess: () => onStatsUpdate() })
+    }
+  }
+
+  const isLoggedIn = !!user
+  const isUpcoming = event.status === 'upcoming'
+
+  return (
+    <div className='flex items-center justify-between mt-3'>
+      <div className='flex items-center'>
+        {/* 気になるボタン */}
+        <button
+          type='button'
+          onClick={isLoggedIn ? handleToggleInterested : undefined}
+          disabled={!isLoggedIn}
+          aria-disabled={!isLoggedIn || undefined}
+          aria-label={!isLoggedIn ? 'ログインが必要です' : interested ? '気になるを解除する' : '気になる登録をする'}
+          title={!isLoggedIn ? 'ログインが必要です' : undefined}
+          className={cn(
+            'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
+            isLoggedIn ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
+            interested ? 'text-action-interest' : 'text-foreground/70',
+            isLoggedIn && !interested && 'hover:text-action-interest/80'
+          )}
+        >
+          <Heart
+            className={cn(
+              'h-5 w-5 transition-all',
+              interested && 'fill-action-interest',
+              isLoggedIn && !interested && 'group-hover:scale-110'
+            )}
+          />
+          <span className='tabular-nums'>{event.interestedCount}</span>
+        </button>
+
+        {/* 達成ボタン（開催前は無効） */}
+        <button
+          type='button'
+          onClick={isLoggedIn && !isUpcoming ? handleToggleCompleted : undefined}
+          disabled={!isLoggedIn || isUpcoming}
+          aria-disabled={!isLoggedIn || isUpcoming || undefined}
+          aria-label={
+            !isLoggedIn
+              ? 'ログインが必要です'
+              : isUpcoming
+                ? '開催前のため達成できません'
+                : completed
+                  ? '達成報告を取り消す'
+                  : '達成報告をする'
+          }
+          title={!isLoggedIn ? 'ログインが必要です' : isUpcoming ? '開催前のため達成できません' : undefined}
+          className={cn(
+            'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
+            isLoggedIn && !isUpcoming ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
+            completed ? 'text-action-award' : 'text-foreground/70',
+            isLoggedIn && !isUpcoming && !completed && 'hover:text-action-award/80'
+          )}
+        >
+          <Award
+            className={cn(
+              'h-5 w-5 transition-all',
+              completed && 'fill-action-award-soft',
+              isLoggedIn && !isUpcoming && !completed && 'group-hover:scale-110'
+            )}
+          />
+          <span className='tabular-nums'>{event.completedCount}</span>
+        </button>
+
+        {/* 閲覧数 */}
+        <div className='flex items-center gap-1.5 text-sm text-foreground/70 min-w-16'>
+          <BarChart2 className='h-5 w-5' />
+          <span className='tabular-nums'>{pageViews.total}</span>
+        </div>
+      </div>
+
+      <EventShareButton title={event.title} uuid={event.uuid} />
+
+      <HeartBurstOverlay visible={showHeartAnimation} />
+      <FireworkBurstOverlay visible={showFireworkAnimation} />
+    </div>
+  )
+}

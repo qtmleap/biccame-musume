@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { resolveBadgeText } from '@/lib/badge-display'
 import type { VoteResponse } from '@/schemas/vote.dto'
 import { client } from '@/utils/client'
+
+const BADGE_REFETCH_DELAY_MS = 2500
 
 /**
  * 投票を送信
@@ -18,15 +18,12 @@ export const useVote = (characterId: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: () => submitVote(characterId),
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ranking'] })
-      for (const badge of data.newBadges) {
-        const { name, description } = resolveBadgeText(badge)
-        toast.success(`バッジ獲得: ${name}`, { description })
-      }
-      if (data.newBadges.length > 0) {
+      // バッジ評価はサーバー側で waitUntil 実行されるため、少し遅らせて再取得
+      setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
-      }
+      }, BADGE_REFETCH_DELAY_MS)
     }
   })
 }
