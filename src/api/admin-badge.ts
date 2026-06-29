@@ -3,6 +3,7 @@ import { getPrisma } from '@/lib/prisma'
 import {
   AdminBadgeParamsSchema,
   AdminDeleteBadgeParamsSchema,
+  BadgeMutationResponseSchema,
   type CreateSpecialBadgeBody,
   CreateSpecialBadgeBodySchema,
   GetBadgesResponseSchema,
@@ -95,25 +96,7 @@ routes.openapi(
       201: {
         content: {
           'application/json': {
-            schema: z.object({
-              badge: z
-                .object({
-                  code: z.string().nonempty(),
-                  category: z.string().nonempty(),
-                  sub_category: z.string().nonempty(),
-                  name: z.string().nonempty().optional(),
-                  description: z.string().nonempty().optional(),
-                  hint: z.string().nonempty().optional(),
-                  rarity: z.string().nonempty(),
-                  icon_name: z.string().nonempty(),
-                  sort_order: z.number(),
-                  condition_meta: z.string().nonempty(),
-                  is_hidden: z.boolean(),
-                  created_at: z.string().nonempty(),
-                  updated_at: z.string().nonempty()
-                })
-                .openapi('AdminCreatedBadge')
-            })
+            schema: BadgeMutationResponseSchema
           }
         },
         description: 'special バッジ作成成功'
@@ -178,25 +161,7 @@ routes.openapi(
       200: {
         content: {
           'application/json': {
-            schema: z.object({
-              badge: z
-                .object({
-                  code: z.string().nonempty(),
-                  category: z.string().nonempty(),
-                  sub_category: z.string().nonempty(),
-                  name: z.string().nonempty().optional(),
-                  description: z.string().nonempty().optional(),
-                  hint: z.string().nonempty().optional(),
-                  rarity: z.string().nonempty(),
-                  icon_name: z.string().nonempty(),
-                  sort_order: z.number(),
-                  condition_meta: z.string().nonempty(),
-                  is_hidden: z.boolean(),
-                  created_at: z.string().nonempty(),
-                  updated_at: z.string().nonempty()
-                })
-                .openapi('AdminUpdatedBadge')
-            })
+            schema: BadgeMutationResponseSchema
           }
         },
         description: 'バッジ更新成功'
