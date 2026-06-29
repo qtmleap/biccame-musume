@@ -1,5 +1,4 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
-import { CFAuth } from '@/middleware/cloudflare-access'
 import { AdminTwitterStatusResponseSchema } from '@/schemas/admin-twitter.dto'
 import type { Bindings } from '@/types/bindings'
 import { Twitter } from '@/utils/twitter'
@@ -7,11 +6,11 @@ import { Twitter } from '@/utils/twitter'
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
 // GET /api/admin/twitter/status — 投稿用アカウントのヘルスチェック
+// 認証は src/api/admin/index.ts で `/admin/*` 全体に CFAuth を適用
 routes.openapi(
   createRoute({
     method: 'get',
     path: '/admin/twitter/status',
-    middleware: [CFAuth],
     responses: {
       200: {
         content: {
