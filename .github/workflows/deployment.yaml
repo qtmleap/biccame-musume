@@ -76,3 +76,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}
           NODE_ENV: production
+          # predeploy フックが vite build を再実行するため、Build Workers と同じ
+          # ビルド時 env をここにも渡す必要がある。これがないと VITE_* が
+          # undefined のままバンドルされ、デプロイされる成果物に焼き込まれない。
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
