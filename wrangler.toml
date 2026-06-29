@@ -30,6 +30,10 @@ class_name = "StatsDO"
 name = "USER_PUSH"
 class_name = "UserPushDO"
 
+[[durable_objects.bindings]]
+name = "VOTE_COUNTER"
+class_name = "VoteCounterDO"
+
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["StatsDO"]
@@ -37,6 +41,10 @@ new_sqlite_classes = ["StatsDO"]
 [[migrations]]
 tag = "v2"
 new_sqlite_classes = ["UserPushDO"]
+
+[[migrations]]
+tag = "v3"
+new_sqlite_classes = ["VoteCounterDO"]
 
 [[d1_databases]]
 binding = "DB"
@@ -106,6 +114,10 @@ class_name = "StatsDO"
 name = "USER_PUSH"
 class_name = "UserPushDO"
 
+[[env.staging.durable_objects.bindings]]
+name = "VOTE_COUNTER"
+class_name = "VoteCounterDO"
+
 [[env.staging.migrations]]
 tag = "v1"
 new_sqlite_classes = ["StatsDO"]
@@ -113,6 +125,10 @@ new_sqlite_classes = ["StatsDO"]
 [[env.staging.migrations]]
 tag = "v2"
 new_sqlite_classes = ["UserPushDO"]
+
+[[env.staging.migrations]]
+tag = "v3"
+new_sqlite_classes = ["VoteCounterDO"]
 
 [[env.staging.d1_databases]]
 binding = "DB"
@@ -181,6 +197,10 @@ class_name = "StatsDO"
 name = "USER_PUSH"
 class_name = "UserPushDO"
 
+[[env.production.durable_objects.bindings]]
+name = "VOTE_COUNTER"
+class_name = "VoteCounterDO"
+
 [[env.production.migrations]]
 tag = "v1"
 new_sqlite_classes = ["StatsDO"]
@@ -188,6 +208,10 @@ new_sqlite_classes = ["StatsDO"]
 [[env.production.migrations]]
 tag = "v2"
 new_sqlite_classes = ["UserPushDO"]
+
+[[env.production.migrations]]
+tag = "v3"
+new_sqlite_classes = ["VoteCounterDO"]
 
 [[env.production.d1_databases]]
 binding = "DB"
