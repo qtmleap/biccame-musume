@@ -19,12 +19,6 @@ export const getStickerRotation = (index: number, override?: number) => {
   return override ?? STICKER_ROTATIONS_DEG[index % STICKER_ROTATIONS_DEG.length]
 }
 
-/** rotation 値を CSS transform スタイルに変換（0 のときは undefined を返す） */
-export const stickerTransformStyle = (deg: number): { transform?: string } => {
-  if (deg === 0) return {}
-  return { transform: `rotate(${deg}deg)` }
-}
-
 /** ステッカーカードの spring ホバー / タップトランジション */
 export const STICKER_HOVER_TRANSITION = { type: 'spring' as const, stiffness: 320, damping: 18 }
 
