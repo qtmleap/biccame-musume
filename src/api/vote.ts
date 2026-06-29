@@ -1,10 +1,10 @@
 import { type RateLimitKeyFunc, rateLimit } from '@elithrar/workers-hono-rate-limit'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import dayjs from 'dayjs'
 import type { Context, Next } from 'hono'
 import { getPrisma } from '@/lib/prisma'
 import { ipCheck } from '@/middleware/ip-check'
 import { voteLimit } from '@/middleware/vote-limit'
-import { prismaBadgeToDto } from '@/schemas/badge.dto'
 import {
   BulkVoteRequestSchema,
   BulkVoteResponseSchema,
@@ -12,6 +12,7 @@ import {
   VoteResponseSchema
 } from '@/schemas/vote.dto'
 import { evaluateOnVote } from '@/services/badge-evaluator'
+import { pushEarnedBadges } from '@/services/badge-push'
 import { bulkVote, getAllVoteCounts, vote } from '@/services/vote-service'
 import type { Bindings, Variables } from '@/types/bindings'
 import { getJwtPayload, verifyTokenOptional } from '@/utils/token'
@@ -119,18 +120,31 @@ routes.openapi(
     const votedCount = results.filter((r) => r.status === 'voted').length
     const skippedCount = results.filter((r) => r.status === 'skipped').length
 
+    // Phase A: VoteCounterDO への dual-write。 D1 書き込みが成功した投票だけ
+    // in-memory カウンタに +1 する。 fire-and-forget で発火し、 DO 障害が
+    // ユーザー応答を汚さないよう waitUntil に逃がす。
+    const votedIds = results.filter((r) => r.status === 'voted').map((r) => r.characterId)
+    if (votedIds.length > 0) {
+      const yearKey = String(dayjs().year())
+      const stub = c.env.VOTE_COUNTER.get(c.env.VOTE_COUNTER.idFromName(yearKey))
+      c.executionCtx.waitUntil(stub.recordVotes({ characterIds: votedIds }))
+    }
+
     // 投票成功時のみ、最後に投票したキャラ ID で 1 回だけバッジ評価
     // (vote 系バッジは user-level なのでキャラ単位では評価しない)
+    // 重いので waitUntil でバックグラウンド実行、レスポンスは即返す
     const lastVotedId =
       userId !== undefined && votedCount > 0
         ? results.filter((r) => r.status === 'voted').at(-1)?.characterId
         : undefined
-    const newBadges =
-      userId !== undefined && lastVotedId !== undefined
-        ? (await evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId }, lastVotedId)).map((b) =>
-            prismaBadgeToDto(b)
-          )
-        : []
+    if (userId !== undefined && lastVotedId !== undefined) {
+      const evalUserId = userId
+      c.executionCtx.waitUntil(
+        evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId: evalUserId }, lastVotedId).then((badges) =>
+          pushEarnedBadges(c.env, evalUserId, badges)
+        )
+      )
+    }
 
     return c.json({
       success: true,
@@ -138,7 +152,7 @@ routes.openapi(
       votedCount,
       skippedCount,
       nextVoteDate: getNextJSTDate(),
-      newBadges
+      newBadges: []
     })
   }
 )
@@ -204,18 +218,29 @@ routes.openapi(
     })()
     await vote(c.env, characterId, c.get('CLIENT_IP'), userId)
 
-    const newBadges =
-      userId !== undefined
-        ? (await evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId }, characterId)).map((b) =>
-            prismaBadgeToDto(b)
-          )
-        : []
+    // Phase A: VoteCounterDO への dual-write。 D1 書き込み成功時のみ
+    // in-memory カウンタに +1 する。
+    {
+      const yearKey = String(dayjs().year())
+      const stub = c.env.VOTE_COUNTER.get(c.env.VOTE_COUNTER.idFromName(yearKey))
+      c.executionCtx.waitUntil(stub.recordVotes({ characterIds: [characterId] }))
+    }
+
+    // バッジ評価は waitUntil でバックグラウンド実行、レスポンスは即返す
+    if (userId !== undefined) {
+      const evalUserId = userId
+      c.executionCtx.waitUntil(
+        evaluateOnVote({ env: c.env, prisma: getPrisma(c.env), userId: evalUserId }, characterId).then((badges) =>
+          pushEarnedBadges(c.env, evalUserId, badges)
+        )
+      )
+    }
 
     return c.json({
       success: true,
       message: '投票ありがとうございます！',
       nextVoteDate: getNextJSTDate(),
-      newBadges
+      newBadges: []
     })
   }
 )

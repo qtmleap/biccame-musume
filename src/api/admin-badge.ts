@@ -1,9 +1,9 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { getPrisma } from '@/lib/prisma'
-import { CFAuth } from '@/middleware/cloudflare-access'
 import {
   AdminBadgeParamsSchema,
   AdminDeleteBadgeParamsSchema,
+  BadgeMutationResponseSchema,
   type CreateSpecialBadgeBody,
   CreateSpecialBadgeBodySchema,
   GetBadgesResponseSchema,
@@ -20,7 +20,6 @@ routes.openapi(
   createRoute({
     method: 'get',
     path: '/admin/badges',
-    middleware: [CFAuth],
     responses: {
       200: {
         content: {
@@ -84,7 +83,6 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/admin/badges',
-    middleware: [CFAuth],
     request: {
       body: {
         content: {
@@ -98,25 +96,7 @@ routes.openapi(
       201: {
         content: {
           'application/json': {
-            schema: z.object({
-              badge: z
-                .object({
-                  code: z.string().nonempty(),
-                  category: z.string().nonempty(),
-                  sub_category: z.string().nonempty(),
-                  name: z.string().nonempty().optional(),
-                  description: z.string().nonempty().optional(),
-                  hint: z.string().nonempty().optional(),
-                  rarity: z.string().nonempty(),
-                  icon_name: z.string().nonempty(),
-                  sort_order: z.number(),
-                  condition_meta: z.string().nonempty(),
-                  is_hidden: z.boolean(),
-                  created_at: z.string().nonempty(),
-                  updated_at: z.string().nonempty()
-                })
-                .openapi('AdminCreatedBadge')
-            })
+            schema: BadgeMutationResponseSchema
           }
         },
         description: 'special バッジ作成成功'
@@ -167,7 +147,6 @@ routes.openapi(
   createRoute({
     method: 'patch',
     path: '/admin/badges/:code',
-    middleware: [CFAuth],
     request: {
       params: AdminBadgeParamsSchema,
       body: {
@@ -182,25 +161,7 @@ routes.openapi(
       200: {
         content: {
           'application/json': {
-            schema: z.object({
-              badge: z
-                .object({
-                  code: z.string().nonempty(),
-                  category: z.string().nonempty(),
-                  sub_category: z.string().nonempty(),
-                  name: z.string().nonempty().optional(),
-                  description: z.string().nonempty().optional(),
-                  hint: z.string().nonempty().optional(),
-                  rarity: z.string().nonempty(),
-                  icon_name: z.string().nonempty(),
-                  sort_order: z.number(),
-                  condition_meta: z.string().nonempty(),
-                  is_hidden: z.boolean(),
-                  created_at: z.string().nonempty(),
-                  updated_at: z.string().nonempty()
-                })
-                .openapi('AdminUpdatedBadge')
-            })
+            schema: BadgeMutationResponseSchema
           }
         },
         description: 'バッジ更新成功'
@@ -274,7 +235,6 @@ routes.openapi(
   createRoute({
     method: 'delete',
     path: '/admin/badges/:code',
-    middleware: [CFAuth],
     request: {
       params: AdminDeleteBadgeParamsSchema
     },
@@ -326,7 +286,6 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/admin/badges/recalculate',
-    middleware: [CFAuth],
     responses: {
       202: {
         content: {

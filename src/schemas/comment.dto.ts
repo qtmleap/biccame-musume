@@ -21,8 +21,6 @@ export const CreateCommentRequestSchema = z
   })
   .openapi('CreateCommentRequest')
 
-export type CreateCommentRequest = z.infer<typeof CreateCommentRequestSchema>
-
 /**
  * コメントレスポンススキーマ
  */
@@ -47,5 +45,3 @@ export type CommentResponse = z.infer<typeof CommentResponseSchema>
  * コメント一覧レスポンススキーマ
  */
 export const ListCommentsResponseSchema = z.array(CommentResponseSchema).openapi('ListCommentsResponse')
-
-export type ListCommentsResponse = z.infer<typeof ListCommentsResponseSchema>
