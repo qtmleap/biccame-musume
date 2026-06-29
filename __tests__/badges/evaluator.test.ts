@@ -473,6 +473,155 @@ describe('evaluateBadge dispatcher', () => {
     expect(result).toBe(true)
   })
 
+  test('dispatches area_any subCategory', async () => {
+    const ctx = makeCtx({
+      userStore: {
+        count: async () => 1
+      } as never
+    })
+    const badge = makeBadge('area_any', { region: 'hokkaido' })
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('dispatches area_complete subCategory', async () => {
+    const hokkaidoStores = PHYSICAL_STORE_KEYS.filter((k) => storeKeyToBadgeArea[k] === 'hokkaido')
+    const ctx = makeCtx({
+      userStore: {
+        count: async () => hokkaidoStores.length
+      } as never
+    })
+    const badge = makeBadge('area_complete', { region: 'hokkaido' })
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('dispatches event_count subCategory', async () => {
+    const ctx = makeCtx({
+      userEvent: {
+        count: async () => 5
+      } as never
+    })
+    const badge = makeBadge('event_count', { count: 5 })
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('dispatches event_clear_at_store subCategory', async () => {
+    const ctx = makeCtx({
+      userEvent: {
+        findFirst: async () => ({ id: 'ue-1' })
+      } as never
+    })
+    const badge = makeBadge('event_clear_at_store', { storeKey: 'akiba' })
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('dispatches event_clear_area_any subCategory', async () => {
+    const ctx = makeCtx({
+      userEvent: {
+        findFirst: async () => ({ id: 'ue-1' })
+      } as never
+    })
+    const badge = makeBadge('event_clear_area_any', { region: 'hokkaido' })
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('dispatches event_clear_area_complete subCategory', async () => {
+    // evaluateEventClearAreaComplete は内部で evaluateEventClearAtStore を Promise.all する
+    const ctx = makeCtx({
+      userEvent: {
+        findFirst: async () => ({ id: 'ue-1' })
+      } as never
+    })
+    const badge = makeBadge('event_clear_area_complete', { region: 'hokkaido' })
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('dispatches event_clear_count subCategory', async () => {
+    const allPhysical = PHYSICAL_STORE_KEYS.map((sk) => ({ event: { stores: [{ storeKey: sk }] } }))
+    const ctx = makeCtx({
+      userEvent: {
+        findMany: async () => allPhysical
+      } as never
+    })
+    const badge = makeBadge('event_clear_count', { count: 3 })
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('dispatches event_clear_all subCategory', async () => {
+    const allPhysical = PHYSICAL_STORE_KEYS.map((sk) => ({ event: { stores: [{ storeKey: sk }] } }))
+    const ctx = makeCtx({
+      userEvent: {
+        findMany: async () => allPhysical
+      } as never
+    })
+    const badge = makeBadge('event_clear_all', {})
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('dispatches all_areas_any_visit subCategory', async () => {
+    // 全エリアで count >= 1 を返すモック
+    const ctx = makeCtx({
+      userStore: {
+        count: async () => 1
+      } as never
+    })
+    const badge = makeBadge('all_areas_any_visit', {})
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('dispatches all_areas_any_event_clear subCategory', async () => {
+    const ctx = makeCtx({
+      userEvent: {
+        findFirst: async () => ({ id: 'ue-1' })
+      } as never
+    })
+    const badge = makeBadge('all_areas_any_event_clear', {})
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('dispatches special_multi_store_clear subCategory', async () => {
+    const ctx = makeCtx({
+      userEvent: {
+        findFirst: async () => ({ id: 'ue-1' })
+      } as never
+    })
+    const badge = makeBadge('special_multi_store_clear', { storeKeys: ['akiba', 'shinjyuku'] })
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('dispatches special_event_id subCategory', async () => {
+    const ctx = makeCtx({
+      userEvent: {
+        findFirst: async () => ({ id: 'ue-1' })
+      } as never
+    })
+    const badge = makeBadge('special_event_id', { eventId: '550e8400-e29b-41d4-a716-446655440000' })
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(true)
+  })
+
+  test('returns false when dispatched evaluator returns false', async () => {
+    // count subCategory で閾値未満
+    const ctx = makeCtx({
+      userStore: {
+        count: async () => 1
+      } as never
+    })
+    const badge = makeBadge('count', { count: 10 })
+    const result = await evaluateBadge(ctx, badge)
+    expect(result).toBe(false)
+  })
+
   test('throws when visit badge is missing storeKey', async () => {
     const ctx = makeCtx({})
     const badge = makeBadge('visit', {})
