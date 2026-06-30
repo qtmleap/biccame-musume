@@ -30,6 +30,14 @@ export const toGroupFormValues = (group: EventGroupDetail): DefaultValues<EventG
   sortOrder: group.sortOrder
 })
 
+/**
+ * コピー作成用: 元グループの値を引き継ぎつつ uuid を新規 UUID に差し替える
+ */
+export const toCopyGroupFormValues = (group: EventGroupDetail, newUuid: string): DefaultValues<EventGroupRequest> => ({
+  ...toGroupFormValues(group),
+  uuid: newUuid
+})
+
 const buildInitialValues = (defaultValues?: DefaultValues<EventGroupRequest>): DefaultValues<EventGroupRequest> => {
   if (defaultValues) {
     return {

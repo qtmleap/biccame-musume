@@ -46,6 +46,26 @@ export const useAdminEventGroup = (id: string) => {
 }
 
 /**
+ * 同上だが、コピー作成画面のように id が空 or 存在しない場合に null を返す
+ */
+export const useAdminEventGroupOrNull = (id: string) => {
+  return useSuspenseQuery({
+    queryKey: ['event-groups', 'admin', id || '__none__'],
+    queryFn: async () => {
+      if (!id) return null
+      try {
+        return await client.getAdminEventGroup({ params: { id } })
+      } catch (_error) {
+        return null
+      }
+    },
+    staleTime: 0,
+    refetchOnMount: true,
+    retry: false
+  })
+}
+
+/**
  * イベントグループを作成
  */
 export const useCreateEventGroup = () => {
