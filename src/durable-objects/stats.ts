@@ -42,6 +42,14 @@ export class StatsDO extends DurableObject<Bindings> {
       if (snapshot) {
         this.restore(snapshot)
       }
+      // 旧 PAGE_VIEWS KV から DO へ total を一度だけシード。
+      // 廃止された KV `pv:total` の累積値を反映する。次回リリースで削除する想定。
+      const seeded = await ctx.storage.get<boolean>('migration:total_seeded_v1')
+      if (!seeded) {
+        this.total = Math.max(this.total, 31_816)
+        await ctx.storage.put('migration:total_seeded_v1', true)
+        this.dirty = true
+      }
       const existingAlarm = await ctx.storage.getAlarm()
       if (existingAlarm === null) {
         await ctx.storage.setAlarm(Date.now() + ALARM_INTERVAL_MS)
