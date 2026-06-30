@@ -15,10 +15,6 @@ binding = "VOTE_LIMITER"
 id = "cc87e0f64116414c9d70a080bbb97156"
 
 [[kv_namespaces]]
-binding = "PAGE_VIEWS"
-id = "e7032f736ed045d993d79261b9ff8a56"
-
-[[kv_namespaces]]
 binding = "PUBLIC_JWK_CACHE_KV"
 id = "e4d041b77a2b4575bed33650b13a43b2"
 
@@ -99,10 +95,6 @@ binding = "VOTE_LIMITER"
 id = "cc87e0f64116414c9d70a080bbb97156"
 
 [[env.staging.kv_namespaces]]
-binding = "PAGE_VIEWS"
-id = "e7032f736ed045d993d79261b9ff8a56"
-
-[[env.staging.kv_namespaces]]
 binding = "PUBLIC_JWK_CACHE_KV"
 id = "e4d041b77a2b4575bed33650b13a43b2"
 
@@ -180,10 +172,6 @@ id = "ef49185c58d04a0790e7c68394d78089"
 [[env.production.kv_namespaces]]
 binding = "VOTE_LIMITER"
 id = "96019843cb67406799d40584768bcf7a"
-
-[[env.production.kv_namespaces]]
-binding = "PAGE_VIEWS"
-id = "46b03751a94a4180873fa2a473b30606"
 
 [[env.production.kv_namespaces]]
 binding = "PUBLIC_JWK_CACHE_KV"

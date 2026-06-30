@@ -1,6 +1,4 @@
 import { motion } from 'motion/react'
-import { Suspense } from 'react'
-import { PageViewCounter } from '@/components/common/page-view-counter'
 import { DURATION, EASE_OUT, FADE_IN, FADE_IN_DOWN } from '@/lib/motion'
 
 export const HomeHeader = () => {
@@ -30,16 +28,6 @@ export const HomeHeader = () => {
         >
           推し活を全力サポート - イベント追跡から店舗巡りまで
         </motion.p>
-        <motion.div
-          variants={FADE_IN}
-          initial='initial'
-          animate='animate'
-          transition={{ duration: DURATION.slow * 0.75, delay: 0.5, ease: EASE_OUT }}
-        >
-          <Suspense fallback={<div className='text-white/60 text-xs'>読み込み中...</div>}>
-            <PageViewCounter className='text-white' />
-          </Suspense>
-        </motion.div>
       </div>
     </header>
   )
