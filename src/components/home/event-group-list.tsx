@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Sparkles } from 'lucide-react'
+import { Package, Sparkles } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useEventGroups } from '@/hooks/use-event-groups'
 import { DURATION } from '@/lib/motion'
@@ -45,7 +45,10 @@ export const EventGroupList = () => {
                     <h3 className='text-base font-semibold text-foreground group-hover:text-action-award line-clamp-2'>
                       {group.title}
                     </h3>
-                    <p className='mt-1 text-xs text-muted-foreground'>所属イベント: {group.eventCount} 件</p>
+                    <p className='mt-1 flex items-center gap-1 text-xs text-muted-foreground'>
+                      <Package className='size-3.5' />
+                      <span className='tabular-nums'>{group.eventCount}</span> 件
+                    </p>
                   </div>
                 </div>
               </Link>
