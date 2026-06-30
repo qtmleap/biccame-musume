@@ -286,8 +286,10 @@ routes.openapi(
 // 送る Cookie がそのまま使える。 UserPushDO に upgrade request を委譲する。
 routes.get('/me/ws', verifyToken, async (c) => {
   const uid = getToken(c)
-  const upgrade = c.req.header('Upgrade')
-  if (upgrade?.toLowerCase() !== 'websocket') {
+  // Cloudflare エッジが Upgrade ヘッダを除去するため sec-websocket-key で判定する。
+  const isWebSocket =
+    c.req.header('Upgrade')?.toLowerCase() === 'websocket' || c.req.header('sec-websocket-key') !== undefined
+  if (!isWebSocket) {
     throw new HTTPException(426, { message: 'Expected Upgrade: websocket' })
   }
   const stub = c.env.USER_PUSH.get(c.env.USER_PUSH.idFromName(uid))
