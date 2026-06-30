@@ -2,6 +2,7 @@ import { createFileRoute, notFound, useRouter } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
 import { z } from 'zod'
+import { EventGroupEventManager } from '@/components/admin/event-group-event-manager'
 import { EventGroupForm, toGroupFormValues } from '@/components/admin/event-group-form'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
@@ -37,8 +38,9 @@ const EditEventGroupContent = () => {
         </p>
       </div>
 
-      <div>
+      <div className='space-y-6'>
         <EventGroupForm defaultValues={defaultValues} onSuccess={handleSuccess} isEditMode={true} />
+        <EventGroupEventManager groupId={group.uuid} linkedEvents={group.events} />
       </div>
     </div>
   )
