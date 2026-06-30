@@ -5,6 +5,7 @@ import {
   deleteEventGroup,
   getEventGroupById,
   getEventGroups,
+  setEventsGroup,
   updateEventGroup
 } from '@/services/event-group-service'
 import type { Bindings } from '@/types/bindings'
@@ -70,7 +71,7 @@ routes.openapi(
   }),
   async (c) => {
     const { id } = c.req.valid('param')
-    return c.json(await getEventGroupById(c.env, id), 200)
+    return c.json(await getEventGroupById(c.env, id, true), 200)
   }
 )
 
@@ -191,6 +192,64 @@ routes.openapi(
   async (c) => {
     const { id } = c.req.valid('param')
     return c.body(await deleteEventGroup(c.env, id), 204)
+  }
+)
+
+const EventLinkResponseSchema = z.object({ updated: z.number().int().nonnegative() })
+const EventLinkBodySchema = z.object({ eventIds: z.array(z.string().nonempty()) })
+
+// POST /admin/event-groups/:id/events — 指定 Event をこのグループに紐付け
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/admin/event-groups/:id/events',
+    request: {
+      params: z.object({ id: z.string().nonempty() }),
+      body: {
+        content: { 'application/json': { schema: EventLinkBodySchema } }
+      }
+    },
+    responses: {
+      200: {
+        content: { 'application/json': { schema: EventLinkResponseSchema } },
+        description: 'Event のグループ紐付け成功'
+      },
+      404: {
+        content: { 'application/json': { schema: z.object({ error: z.string().nonempty() }) } },
+        description: 'グループが見つかりません'
+      }
+    },
+    tags: ['admin-event-groups']
+  }),
+  async (c) => {
+    const { id } = c.req.valid('param')
+    const { eventIds } = c.req.valid('json')
+    return c.json(await setEventsGroup(c.env, id, eventIds), 200)
+  }
+)
+
+// DELETE /admin/event-groups/:id/events — 指定 Event のグループ所属を解除
+routes.openapi(
+  createRoute({
+    method: 'delete',
+    path: '/admin/event-groups/:id/events',
+    request: {
+      params: z.object({ id: z.string().nonempty() }),
+      body: {
+        content: { 'application/json': { schema: EventLinkBodySchema } }
+      }
+    },
+    responses: {
+      200: {
+        content: { 'application/json': { schema: EventLinkResponseSchema } },
+        description: 'Event のグループ所属解除成功'
+      }
+    },
+    tags: ['admin-event-groups']
+  }),
+  async (c) => {
+    const { eventIds } = c.req.valid('json')
+    return c.json(await setEventsGroup(c.env, null, eventIds), 200)
   }
 )
 

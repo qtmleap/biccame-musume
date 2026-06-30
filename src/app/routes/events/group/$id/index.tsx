@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { useAuth } from '@/hooks/use-auth'
-import { useEventGroupBySlug } from '@/hooks/use-event-groups'
+import { useEventGroup } from '@/hooks/use-event-groups'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { cn } from '@/lib/utils'
 import { STORE_NAME_LABELS } from '@/locales/app.content'
@@ -107,9 +107,9 @@ const EventCheckCard = ({ event, completed, canToggle, onToggle }: EventCheckPro
 }
 
 const GroupContent = () => {
-  const { slug } = Route.useParams()
+  const { id } = Route.useParams()
   const router = useRouter()
-  const { data: group } = useEventGroupBySlug(slug)
+  const { data: group } = useEventGroup(id)
   const { user } = useAuth()
   const { completedEvents, addCompletedEvent, removeCompletedEvent } = useUserActivity()
 
@@ -233,6 +233,6 @@ const GroupPage = () => (
   </ErrorBoundary>
 )
 
-export const Route = createFileRoute('/events/group/$slug/')({
+export const Route = createFileRoute('/events/group/$id/')({
   component: GroupPage
 })

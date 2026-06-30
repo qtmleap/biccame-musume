@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { EventGroupDetailSchema, EventGroupSchema } from '@/schemas/event-group.dto'
-import { getEventGroupBySlug, getEventGroups } from '@/services/event-group-service'
+import { getEventGroupById, getEventGroups } from '@/services/event-group-service'
 import type { Bindings } from '@/types/bindings'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
@@ -29,10 +29,10 @@ routes.openapi(
 routes.openapi(
   createRoute({
     method: 'get',
-    path: '/:slug',
+    path: '/:id',
     request: {
       params: z.object({
-        slug: z.string().nonempty()
+        id: z.string().nonempty()
       })
     },
     responses: {
@@ -58,8 +58,8 @@ routes.openapi(
     tags: ['event-groups']
   }),
   async (c) => {
-    const { slug } = c.req.valid('param')
-    return c.json(await getEventGroupBySlug(c.env, slug), 200)
+    const { id } = c.req.valid('param')
+    return c.json(await getEventGroupById(c.env, id), 200)
   }
 )
 

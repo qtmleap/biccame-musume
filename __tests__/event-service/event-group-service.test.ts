@@ -18,13 +18,10 @@ const prismaMock = {
       findUniqueCalls++
       return existingRow
     },
-    create: async (args: {
-      data: { id: string; slug: string; title: string; itemType: string; sortOrder: number }
-    }) => {
+    create: async (args: { data: { id: string; title: string; itemType: string; sortOrder: number } }) => {
       createCalls++
       existingRow = {
         id: args.data.id,
-        slug: args.data.slug,
         title: args.data.title,
         description: null,
         itemType: args.data.itemType,
@@ -50,7 +47,6 @@ const env = {} as Bindings
 
 const baseRequest = {
   uuid: 'aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee',
-  slug: 'anniversary-11-cards',
   title: '11周年記念名刺',
   description: '11周年記念で全店舗で配布される名刺',
   itemType: 'card' as const,
@@ -72,7 +68,6 @@ describe('createEventGroup — 冪等性', () => {
     expect(findUniqueCalls).toBe(1)
     expect(createCalls).toBe(1)
     expect(result.uuid).toBe(baseRequest.uuid)
-    expect(result.slug).toBe(baseRequest.slug)
     expect(result.title).toBe(baseRequest.title)
     expect(result.itemType).toBe('card')
     expect(result.eventCount).toBe(0)

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
-import { FileText, FolderTree, Hash, ListOrdered, Package } from 'lucide-react'
+import { FileText, FolderTree, ListOrdered, Package } from 'lucide-react'
 import { useState } from 'react'
 import { Controller, type DefaultValues, useForm } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
@@ -26,7 +26,6 @@ const ITEM_TYPE_LABELS: Record<EventGroupRequest['itemType'], string> = {
 
 const DEFAULT_VALUES: DefaultValues<EventGroupRequest> = {
   uuid: undefined,
-  slug: '',
   title: '',
   description: '',
   itemType: undefined,
@@ -37,7 +36,6 @@ const DEFAULT_VALUES: DefaultValues<EventGroupRequest> = {
 
 export const toGroupFormValues = (group: EventGroupDetail): DefaultValues<EventGroupRequest> => ({
   uuid: group.uuid,
-  slug: group.slug,
   title: group.title,
   description: group.description ?? '',
   itemType: group.itemType,
@@ -67,7 +65,6 @@ const toPayload = (
   opts: { isEditMode: boolean; fallbackUuid?: string }
 ): EventGroupRequest => ({
   uuid: opts.isEditMode && opts.fallbackUuid ? opts.fallbackUuid : data.uuid || uuidv4(),
-  slug: data.slug.trim(),
   title: data.title.trim(),
   description: data.description?.trim() ? data.description.trim() : undefined,
   itemType: data.itemType,
@@ -82,7 +79,7 @@ export const EventGroupForm = ({
   isEditMode = false
 }: {
   defaultValues?: DefaultValues<EventGroupRequest>
-  onSuccess?: (group: { uuid: string; slug: string }) => void
+  onSuccess?: (group: { uuid: string }) => void
   isEditMode?: boolean
 }) => {
   const createGroup = useCreateEventGroup()
@@ -116,7 +113,7 @@ export const EventGroupForm = ({
           ? await updateGroup.mutateAsync({ id: defaultValues.uuid, data: payload })
           : await createGroup.mutateAsync(payload)
       handleReset()
-      onSuccess?.({ uuid: result.uuid, slug: result.slug })
+      onSuccess?.({ uuid: result.uuid })
     } catch (_error) {
       setIsSubmitted(false)
     }
@@ -138,23 +135,6 @@ export const EventGroupForm = ({
           className='w-full'
         />
         {errors.title && <p className='mt-1 text-xs text-destructive'>{errors.title.message}</p>}
-      </div>
-
-      {/* スラッグ */}
-      <div>
-        <label htmlFor='group-slug' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
-          <Hash className='size-4' />
-          スラッグ（URL に使われます）
-        </label>
-        <Input
-          id='group-slug'
-          type='text'
-          placeholder='例: anniversary-11-cards'
-          {...register('slug')}
-          className='w-full'
-        />
-        <p className='mt-1 text-xs text-muted-foreground'>半角英数字とハイフンのみ、3〜64 文字。</p>
-        {errors.slug && <p className='mt-1 text-xs text-destructive'>{errors.slug.message}</p>}
       </div>
 
       {/* アイテム種別・並び順 */}

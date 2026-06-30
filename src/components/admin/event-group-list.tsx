@@ -50,7 +50,7 @@ const EventGroupRow = ({ group }: { group: EventGroup }) => {
             <Badge variant='secondary'>{ITEM_TYPE_LABELS[group.itemType]}</Badge>
             <h3 className='text-base font-semibold text-foreground'>{group.title}</h3>
           </div>
-          <p className='mt-1 text-xs text-muted-foreground break-all'>/events/group/{group.slug}</p>
+          <p className='mt-1 text-xs text-muted-foreground break-all'>/events/group/{group.uuid}</p>
           {group.description && <p className='mt-2 text-sm text-foreground/80'>{group.description}</p>}
           <div className='mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground'>
             <span>{formatPeriod(group)}</span>

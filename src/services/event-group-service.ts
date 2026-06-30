@@ -12,7 +12,6 @@ import { getEventsStats } from './me-service'
  */
 const EVENT_GROUP_LIST_SELECT = {
   id: true,
-  slug: true,
   title: true,
   description: true,
   itemType: true,
@@ -28,7 +27,6 @@ type EventGroupListPayload = Prisma.EventGroupGetPayload<{ select: typeof EVENT_
 
 const transform = (group: EventGroupListPayload): EventGroup => ({
   uuid: group.id,
-  slug: group.slug,
   title: group.title,
   description: group.description ?? undefined,
   itemType: group.itemType as EventGroupItemType,
@@ -53,34 +51,14 @@ export const getEventGroups = async (env: Bindings): Promise<EventGroup[]> => {
 }
 
 /**
- * イベントグループ詳細 + 紐付くイベント一覧 を slug から取得
+ * イベントグループ詳細 + 紐付くイベント一覧 を ID から取得
+ * @param includeUnverified - true の場合は未検証イベントも含む（管理画面用）
  */
-export const getEventGroupBySlug = async (env: Bindings, slug: string): Promise<EventGroupDetail> => {
-  const prisma = getPrisma(env)
-  const group = await prisma.eventGroup.findUnique({
-    where: { slug },
-    select: EVENT_GROUP_LIST_SELECT
-  })
-  if (group === null) {
-    throw new HTTPException(404, { message: 'Not Found' })
-  }
-  const events = await prisma.event.findMany({
-    where: { groupId: group.id, isVerified: true },
-    select: EVENT_LIST_SELECT,
-    orderBy: [{ startDate: 'desc' }, { createdAt: 'desc' }]
-  })
-  const eventIds = events.map((e) => e.id)
-  const stats = await getEventsStats(env, eventIds)
-  return {
-    ...transform(group),
-    events: events.map((e) => transformEvent(e, stats[e.id]?.interestedCount ?? 0, stats[e.id]?.completedCount ?? 0))
-  }
-}
-
-/**
- * イベントグループ詳細 + 紐付くイベント一覧 を ID から取得（管理画面用）
- */
-export const getEventGroupById = async (env: Bindings, id: string): Promise<EventGroupDetail> => {
+export const getEventGroupById = async (
+  env: Bindings,
+  id: string,
+  includeUnverified = false
+): Promise<EventGroupDetail> => {
   const prisma = getPrisma(env)
   const group = await prisma.eventGroup.findUnique({
     where: { id },
@@ -90,7 +68,7 @@ export const getEventGroupById = async (env: Bindings, id: string): Promise<Even
     throw new HTTPException(404, { message: 'Not Found' })
   }
   const events = await prisma.event.findMany({
-    where: { groupId: group.id },
+    where: { groupId: group.id, ...(includeUnverified ? {} : { isVerified: true }) },
     select: EVENT_LIST_SELECT,
     orderBy: [{ startDate: 'desc' }, { createdAt: 'desc' }]
   })
@@ -123,7 +101,6 @@ export const createEventGroup = async (env: Bindings, data: EventGroupRequest): 
   const group = await prisma.eventGroup.create({
     data: {
       id: data.uuid,
-      slug: data.slug,
       title: data.title,
       description: data.description ?? null,
       itemType: data.itemType,
@@ -143,7 +120,6 @@ export const updateEventGroup = async (env: Bindings, data: EventGroupRequest): 
   const group = await prisma.eventGroup.update({
     where: { id: data.uuid },
     data: {
-      slug: data.slug,
       title: data.title,
       description: data.description ?? null,
       itemType: data.itemType,
@@ -153,6 +129,33 @@ export const updateEventGroup = async (env: Bindings, data: EventGroupRequest): 
     select: EVENT_GROUP_LIST_SELECT
   })
   return transform(group)
+}
+
+/**
+ * 指定の Event 群を 1 つの EventGroup に一括で紐付ける（または groupId をクリア）
+ * @param env - Cloudflare Workers 環境変数
+ * @param groupId - 紐付ける EventGroup の UUID。null の場合は対象 Event の所属を解除
+ * @param eventIds - 対象の Event UUID 配列
+ * @returns 更新件数
+ */
+export const setEventsGroup = async (
+  env: Bindings,
+  groupId: string | null,
+  eventIds: string[]
+): Promise<{ updated: number }> => {
+  if (eventIds.length === 0) return { updated: 0 }
+  const prisma = getPrisma(env)
+  if (groupId !== null) {
+    const group = await prisma.eventGroup.findUnique({ where: { id: groupId }, select: { id: true } })
+    if (group === null) {
+      throw new HTTPException(404, { message: 'Event group not found' })
+    }
+  }
+  const result = await prisma.event.updateMany({
+    where: { id: { in: eventIds } },
+    data: { groupId }
+  })
+  return { updated: result.count }
 }
 
 /**

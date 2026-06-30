@@ -11,21 +11,10 @@ export const EventGroupItemTypeSchema = z.enum(['card', 'badge', 'other'], {
 export type EventGroupItemType = z.infer<typeof EventGroupItemTypeSchema>
 
 /**
- * URL スラッグ
- * 半角英数字 + ハイフン、3〜64 文字
- */
-export const EventGroupSlugSchema = z
-  .string()
-  .min(3, 'スラッグは 3 文字以上で入力してください')
-  .max(64, 'スラッグは 64 文字以下で入力してください')
-  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'スラッグは半角英数字とハイフンのみで指定してください')
-
-/**
  * イベントグループ作成・更新リクエスト
  */
 export const EventGroupRequestSchema = z.object({
   uuid: z.uuid(),
-  slug: EventGroupSlugSchema,
   title: z.string().nonempty('グループ名は必須です'),
   description: z.string().optional(),
   itemType: EventGroupItemTypeSchema,
@@ -40,7 +29,6 @@ export type EventGroupRequest = z.infer<typeof EventGroupRequestSchema>
  */
 export const EventGroupSchema = z.object({
   uuid: z.uuid(),
-  slug: EventGroupSlugSchema,
   title: z.string().nonempty(),
   description: z.string().optional(),
   itemType: EventGroupItemTypeSchema,

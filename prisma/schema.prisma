@@ -70,8 +70,6 @@ model EventStore {
 /// イベントグループ（11周年記念キャンペーン等、複数Eventを束ねる）
 model EventGroup {
   id          String    @id @default(uuid())
-  /// URLスラッグ（例: "anniversary-11-cards"）
-  slug        String    @unique
   /// グループ名
   title       String
   /// 説明文（任意）
