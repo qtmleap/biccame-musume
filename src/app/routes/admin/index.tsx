@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Award, Bird, Calendar, MessageSquare, Users } from 'lucide-react'
+import { ArrowLeft, Award, Bird, Calendar, FolderTree, MessageSquare, Users } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -16,6 +16,14 @@ const MENU_ITEMS = [
     description: ADMIN_LABELS.eventManagementDesc,
     iconBg: 'bg-rank-gold/15',
     iconText: 'text-rank-gold'
+  },
+  {
+    to: '/admin/event-groups',
+    icon: FolderTree,
+    title: 'イベントグループ管理',
+    description: '11周年記念キャンペーン等、複数イベントを束ねるグループを登録・管理',
+    iconBg: 'bg-action-award/15',
+    iconText: 'text-action-award'
   },
   {
     to: '/admin/badges',
