@@ -114,7 +114,10 @@ export const usePushStream = (): void => {
         return
       }
 
+      let opened = false
+
       ws.onopen = () => {
+        opened = true
         reconnectDelay = RECONNECT_INITIAL_MS
         try {
           ws?.send('sync')
@@ -145,6 +148,12 @@ export const usePushStream = (): void => {
         if (pingTimer !== null) {
           clearInterval(pingTimer)
           pingTimer = null
+        }
+        // onopen が一度も来なかった = upgrade 拒否 (401/426 等)。
+        // session cookie が expire している可能性があるため、
+        // 次回接続前に /api/auth を叩き直すようフラグをリセットする。
+        if (!opened) {
+          sessionState.ensured = false
         }
         scheduleReconnect()
       }

@@ -1,5 +1,5 @@
 name = "biccame-musume"
-compatibility_date = "2026-06-28"
+compatibility_date = "2026-05-11"
 compatibility_flags = ["nodejs_compat", "enable_nodejs_http_modules"]
 main = "src/index.ts"
 keep_vars = true
