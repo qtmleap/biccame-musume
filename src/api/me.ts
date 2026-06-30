@@ -284,16 +284,4 @@ routes.openapi(
 // OpenAPI スキーマには載せない素の Hono ルート。 verifyToken は Cookie の
 // session JWT を見るので、 ブラウザの `new WebSocket(...)` が同一オリジンで
 // 送る Cookie がそのまま使える。 UserPushDO に upgrade request を委譲する。
-routes.get('/me/ws', verifyToken, async (c) => {
-  const uid = getToken(c)
-  // Cloudflare エッジが Upgrade ヘッダを除去するため sec-websocket-key で判定する。
-  const isWebSocket =
-    c.req.header('Upgrade')?.toLowerCase() === 'websocket' || c.req.header('sec-websocket-key') !== undefined
-  if (!isWebSocket) {
-    throw new HTTPException(426, { message: 'Expected Upgrade: websocket' })
-  }
-  const stub = c.env.USER_PUSH.get(c.env.USER_PUSH.idFromName(uid))
-  return stub.fetch(c.req.raw)
-})
-
 export default routes

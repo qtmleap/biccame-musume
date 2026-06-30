@@ -32,8 +32,11 @@ type ServerMessage = { type: 'badge_earned'; badge: PushBadgePayload } | { type:
  */
 export class UserPushDO extends DurableObject<Bindings> {
   async fetch(req: Request): Promise<Response> {
-    const upgrade = req.headers.get('Upgrade')
-    if (upgrade?.toLowerCase() !== 'websocket') {
+    console.info('[DO] headers:', Object.fromEntries(req.headers))
+    // Cloudflare エッジが Upgrade ヘッダを除去するため sec-websocket-key で判定する。
+    const isWebSocket =
+      req.headers.get('Upgrade')?.toLowerCase() === 'websocket' || req.headers.get('sec-websocket-key') !== null
+    if (!isWebSocket) {
       return new Response('Expected Upgrade: websocket', { status: 426 })
     }
     const pair = new WebSocketPair()
@@ -44,7 +47,11 @@ export class UserPushDO extends DurableObject<Bindings> {
     // webSocketOpen は呼ばれない可能性があるため、 接続確立タイミングで
     // 確実に取りこぼし配信できる本フローを正規ルートとする。
     await this.drainPending(server)
-    return new Response(null, { status: 101, webSocket: client })
+    return new Response(null, {
+      status: 101,
+      webSocket: client,
+      headers: { upgrade: 'websocket' }
+    })
   }
 
   /**
