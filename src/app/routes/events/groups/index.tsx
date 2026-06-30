@@ -22,9 +22,7 @@ const GroupsContent = () => {
   return (
     <div className='min-h-screen bg-page-bg'>
       <div className='mx-auto max-w-4xl px-4 py-4 md:px-8 md:py-6'>
-        <AppBreadcrumb
-          items={[{ label: 'ホーム', to: '/' }, { label: 'イベント', to: '/events' }, { label: 'イベントグループ' }]}
-        />
+        <AppBreadcrumb items={[{ label: 'ホーム', to: '/' }, { label: 'イベントグループ' }]} />
 
         <Button
           variant='ghost'
