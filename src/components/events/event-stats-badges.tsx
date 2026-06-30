@@ -1,5 +1,16 @@
 import { Award, BarChart2, Heart } from 'lucide-react'
 import { useState } from 'react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '@/components/ui/alert-dialog'
 import { useAuth } from '@/hooks/use-auth'
 import { usePageViews } from '@/hooks/use-page-views'
 import { useUserActivity } from '@/hooks/use-user-activity'
@@ -20,20 +31,14 @@ type EventStatsBadgesProps = {
 export const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps) => {
   const { user } = useAuth()
   const { data: pageViews } = usePageViews(`/events/${event.uuid}`)
-  const {
-    isInterested,
-    isCompleted,
-    addInterestedEvent,
-    removeInterestedEvent,
-    addCompletedEvent,
-    removeCompletedEvent
-  } = useUserActivity()
+  const { isInterested, isCompleted, addInterestedEvent, removeInterestedEvent, addCompletedEvent } = useUserActivity()
 
   const interested = isInterested(event.uuid)
   const completed = isCompleted(event.uuid)
 
   const [showHeartAnimation, setShowHeartAnimation] = useState(false)
   const [showFireworkAnimation, setShowFireworkAnimation] = useState(false)
+  const [confirmCompletedOpen, setConfirmCompletedOpen] = useState(false)
 
   const handleToggleInterested = () => {
     if (!user) return
@@ -46,19 +51,16 @@ export const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps
     }
   }
 
-  const handleToggleCompleted = () => {
-    if (!user) return
-    if (completed) {
-      removeCompletedEvent(event.uuid, { onSuccess: () => onStatsUpdate() })
-    } else {
-      setShowFireworkAnimation(true)
-      setTimeout(() => setShowFireworkAnimation(false), 800)
-      addCompletedEvent(event.uuid, { onSuccess: () => onStatsUpdate() })
-    }
+  const handleConfirmCompleted = () => {
+    setConfirmCompletedOpen(false)
+    setShowFireworkAnimation(true)
+    setTimeout(() => setShowFireworkAnimation(false), 800)
+    addCompletedEvent(event.uuid, { onSuccess: () => onStatsUpdate() })
   }
 
   const isLoggedIn = !!user
   const isUpcoming = event.status === 'upcoming'
+  const completedDisabled = !isLoggedIn || isUpcoming || completed
 
   return (
     <div className='flex items-center justify-between mt-3'>
@@ -88,38 +90,66 @@ export const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps
           <span className='tabular-nums'>{event.interestedCount}</span>
         </button>
 
-        {/* 達成ボタン（開催前は無効） */}
-        <button
-          type='button'
-          onClick={isLoggedIn && !isUpcoming ? handleToggleCompleted : undefined}
-          disabled={!isLoggedIn || isUpcoming}
-          aria-disabled={!isLoggedIn || isUpcoming || undefined}
-          aria-label={
-            !isLoggedIn
-              ? 'ログインが必要です'
-              : isUpcoming
-                ? '開催前のため達成できません'
-                : completed
-                  ? '達成報告を取り消す'
-                  : '達成報告をする'
-          }
-          title={!isLoggedIn ? 'ログインが必要です' : isUpcoming ? '開催前のため達成できません' : undefined}
-          className={cn(
-            'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
-            isLoggedIn && !isUpcoming ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
-            completed ? 'text-action-award' : 'text-foreground/70',
-            isLoggedIn && !isUpcoming && !completed && 'hover:text-action-award/80'
-          )}
-        >
-          <Award
-            className={cn(
-              'h-5 w-5 transition-all',
-              completed && 'fill-action-award-soft',
-              isLoggedIn && !isUpcoming && !completed && 'group-hover:scale-110'
-            )}
-          />
-          <span className='tabular-nums'>{event.completedCount}</span>
-        </button>
+        {/* 達成ボタン（開催前 / 達成済みは無効。確定後の取り消しは不可） */}
+        <AlertDialog open={confirmCompletedOpen} onOpenChange={setConfirmCompletedOpen}>
+          <AlertDialogTrigger asChild>
+            <button
+              type='button'
+              disabled={completedDisabled}
+              aria-disabled={completedDisabled || undefined}
+              aria-pressed={completed}
+              aria-label={
+                !isLoggedIn
+                  ? 'ログインが必要です'
+                  : isUpcoming
+                    ? '開催前のため達成できません'
+                    : completed
+                      ? '達成済み（解除不可）'
+                      : '達成報告をする'
+              }
+              title={
+                !isLoggedIn
+                  ? 'ログインが必要です'
+                  : isUpcoming
+                    ? '開催前のため達成できません'
+                    : completed
+                      ? '達成済み（解除不可）'
+                      : undefined
+              }
+              className={cn(
+                'flex items-center gap-1.5 text-sm transition-colors group min-w-16',
+                completedDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
+                !isLoggedIn || isUpcoming ? 'opacity-50' : undefined,
+                completed ? 'text-action-award' : 'text-foreground/70',
+                !completedDisabled && 'hover:text-action-award/80'
+              )}
+            >
+              <Award
+                className={cn(
+                  'h-5 w-5 transition-all',
+                  completed && 'fill-action-award-soft',
+                  !completedDisabled && 'group-hover:scale-110'
+                )}
+              />
+              <span className='tabular-nums'>{event.completedCount}</span>
+            </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent className='rounded-2xl shadow-2xl border-transparent'>
+            <AlertDialogHeader>
+              <AlertDialogTitle>このイベントを達成済みにしますか？</AlertDialogTitle>
+              <AlertDialogDescription>
+                「{event.title}」を達成済みとして記録します。
+                一度登録すると取り消しできないので、実際にもらったイベントだけ申告してね。
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>キャンセル</AlertDialogCancel>
+              <AlertDialogAction onClick={handleConfirmCompleted} variant='destructive'>
+                達成にする
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         {/* 閲覧数 */}
         <div className='flex items-center gap-1.5 text-sm text-foreground/70 min-w-16'>
