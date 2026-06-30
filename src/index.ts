@@ -10,6 +10,7 @@ import badges from './api/badge'
 import comments from './api/comment'
 import direction from './api/direction'
 import events from './api/event'
+import eventGroups from './api/event-group'
 import favorite from './api/favorite'
 import me from './api/me'
 import og from './api/og'
@@ -167,6 +168,9 @@ app.route('/api/auth', authRoutes)
 
 // イベント管理APIルート
 app.route('/api/events', events)
+
+// イベントグループAPIルート
+app.route('/api/event-groups', eventGroups)
 
 // イベントコメントAPIルート
 app.route('/api/events', comments)

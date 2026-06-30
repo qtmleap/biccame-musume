@@ -4,6 +4,7 @@ import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { UpcomingEventList } from '@/components/events/upcoming-event-list'
 import { BirthdayHeroSection } from '@/components/home/birthday-hero-section'
+import { EventGroupList } from '@/components/home/event-group-list'
 import { EventList } from '@/components/home/event-list'
 import { HomeHeader } from '@/components/home/home-header'
 import { LineStickerList } from '@/components/home/line-sticker-list'
@@ -18,6 +19,7 @@ const HomeContent = () => {
     <div className='flex flex-col gap-3'>
       <HomeHeader />
       <BirthdayHeroSection characters={birthdayCharacters} />
+      <EventGroupList />
       <UpcomingEventList characters={characters} />
       <EventList />
       <LineStickerList />

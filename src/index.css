@@ -54,3 +54,11 @@ input[type="date"]::-webkit-datetime-edit-day-field {
   color: var(--foreground) !important;
   opacity: 1 !important;
 }
+
+/* Sonner toast の文字色をテーマの popover-foreground で強制する。
+   success / error などの type バリアントでも背景はそのまま、本文だけ確実に黒文字で
+   読めるようにする。ui/sonner.tsx は shadcn 生成物のため触らず、ここで上書き。 */
+[data-sonner-toast] [data-title],
+[data-sonner-toast] [data-description] {
+  color: var(--popover-foreground) !important;
+}
