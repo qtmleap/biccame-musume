@@ -265,7 +265,7 @@ export const EventForm = ({
                   <SelectValue placeholder='グループを選択' />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={NO_GROUP_VALUE}>（なし）</SelectItem>
+                  <SelectItem value={NO_GROUP_VALUE}>なし</SelectItem>
                   {eventGroups.map((group) => (
                     <SelectItem key={group.uuid} value={group.uuid}>
                       {group.title}
