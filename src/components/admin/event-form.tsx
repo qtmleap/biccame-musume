@@ -144,8 +144,9 @@ export const EventForm = ({
       } else {
         await createEvent.mutateAsync(payload)
       }
-      handleReset()
+      // 先に親に成功を伝えて navigate を走らせる。handleReset は遷移後の表示には不要。
       onSuccess?.()
+      handleReset()
     } catch (_error) {
       setIsSubmitted(false)
     }

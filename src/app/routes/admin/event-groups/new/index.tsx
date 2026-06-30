@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useRouter, useSearch } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
@@ -14,6 +14,7 @@ const NewEventGroupSearchSchema = z.object({
 
 const NewEventGroupContent = () => {
   const router = useRouter()
+  const navigate = useNavigate()
   const search = useSearch({ from: '/admin/event-groups/new/' })
   const [newUuid] = useState(() => uuidv4())
   const { data: copySource } = useAdminEventGroupOrNull(search.from ?? '')
@@ -22,7 +23,7 @@ const NewEventGroupContent = () => {
   const defaultValues = isCopyMode && copySource ? toCopyGroupFormValues(copySource, newUuid) : undefined
 
   const handleSuccess = ({ uuid }: { uuid: string }) => {
-    router.navigate({ to: '/admin/event-groups/$uuid/edit', params: { uuid } })
+    navigate({ to: '/admin/event-groups/$uuid/edit', params: { uuid }, replace: true })
   }
 
   const headerTitle = isCopyMode ? 'イベントグループのコピー作成' : 'イベントグループの新規作成'

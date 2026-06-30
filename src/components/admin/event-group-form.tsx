@@ -105,8 +105,10 @@ export const EventGroupForm = ({
         isEditMode && defaultValues?.uuid
           ? await updateGroup.mutateAsync({ id: defaultValues.uuid, data: payload })
           : await createGroup.mutateAsync(payload)
-      handleReset()
+      // 先に親に成功を伝えて navigate を走らせる。
+      // この後の handleReset は同期で動くが、画面遷移が間に合えば form 状態は捨てられる。
       onSuccess?.({ uuid: result.uuid })
+      handleReset()
     } catch (_error) {
       setIsSubmitted(false)
     }
