@@ -78,7 +78,7 @@ const calculateEventStatus = (event: {
  * イベント一覧用の select 句。
  * transform() で実際に参照する列のみ取得して D1 のシリアライズコストを抑える。
  */
-const EVENT_LIST_SELECT = {
+export const EVENT_LIST_SELECT = {
   id: true,
   category: true,
   title: true,
@@ -88,6 +88,7 @@ const EVENT_LIST_SELECT = {
   endedAt: true,
   isVerified: true,
   isPreliminary: true,
+  groupId: true,
   createdAt: true,
   updatedAt: true,
   conditions: {
@@ -111,11 +112,11 @@ const EVENT_DETAIL_SELECT = {
   }
 } as const satisfies Prisma.EventSelect
 
-type EventListPayload = Prisma.EventGetPayload<{ select: typeof EVENT_LIST_SELECT }>
+export type EventListPayload = Prisma.EventGetPayload<{ select: typeof EVENT_LIST_SELECT }>
 
 type EventDetailPayload = Prisma.EventGetPayload<{ select: typeof EVENT_DETAIL_SELECT }>
 
-const transform = (event: EventListPayload, interestedCount = 0, completedCount = 0): Event => {
+export const transform = (event: EventListPayload, interestedCount = 0, completedCount = 0): Event => {
   const { status, daysUntil } = calculateEventStatus(event)
   return {
     uuid: event.id,
@@ -127,6 +128,7 @@ const transform = (event: EventListPayload, interestedCount = 0, completedCount 
     endedAt: event.endedAt ?? undefined,
     isVerified: event.isVerified,
     isPreliminary: event.isPreliminary,
+    groupId: event.groupId ?? undefined,
     createdAt: event.createdAt,
     updatedAt: event.updatedAt,
     conditions: event.conditions.map((c) => ({
@@ -282,6 +284,7 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
       ...toEventDates(data),
       isVerified: data.isVerified ?? false,
       isPreliminary: data.isPreliminary ?? false,
+      groupId: data.groupId ?? null,
       conditions: { create: toConditionsCreate(data, false) },
       referenceUrls: { create: toReferenceUrlsCreate(data, false) },
       stores: { create: toStoresCreate(data) }
@@ -310,6 +313,7 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
       ...toEventDates(data),
       isVerified: data.isVerified,
       isPreliminary: data.isPreliminary,
+      groupId: data.groupId ?? null,
       conditions: { deleteMany: {}, create: toConditionsCreate(data, true) },
       referenceUrls: { deleteMany: {}, create: toReferenceUrlsCreate(data, true) },
       stores: { deleteMany: {}, create: toStoresCreate(data) }
