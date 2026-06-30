@@ -61,12 +61,14 @@ routes.openapi(
     const { path } = c.req.valid('query')
     const dateKey = getTodayKey()
     const stub = c.env.STATS.get(c.env.STATS.idFromName('global'))
-    const snap = await stub.snapshot({ dateKey })
 
-    return c.json({
-      total: path ? (snap.paths[path] ?? 0) : snap.total,
-      today: snap.today
-    })
+    if (path) {
+      const [pathCount, snap] = await Promise.all([stub.getPathCount({ path }), stub.snapshot({ dateKey })])
+      return c.json({ total: pathCount, today: snap.today })
+    }
+
+    const snap = await stub.snapshot({ dateKey })
+    return c.json({ total: snap.total, today: snap.today })
   }
 )
 
