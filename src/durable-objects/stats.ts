@@ -18,7 +18,6 @@ type Snapshot = {
 export type StatsSnapshot = {
   total: number
   today: number
-  paths: Record<string, number>
   todayUserCount: number
 }
 
@@ -67,9 +66,12 @@ export class StatsDO extends DurableObject<Bindings> {
     return {
       total: this.total,
       today: this.daily.get(input.dateKey) ?? 0,
-      paths: Object.fromEntries(this.paths),
       todayUserCount: this.dailyUsers.get(input.dateKey)?.size ?? 0
     }
+  }
+
+  async getPathCount(input: { path: string }): Promise<number> {
+    return this.paths.get(input.path) ?? 0
   }
 
   override async alarm(): Promise<void> {
