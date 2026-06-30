@@ -19,6 +19,7 @@
     "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV}",
     "knip": "knip",
     "test:e2e": "playwright test",
+    "anniversary:seed": "bun run scripts/seed-anniversary-11.ts",
     "badges:seed": "bun run scripts/seed-badges.ts",
     "badges:backfill": "bun run scripts/backfill-badges.ts",
     "images:download": "bun run scripts/download-character-images.ts",
