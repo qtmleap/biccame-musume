@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { ArrowLeft, Check, FolderTree, Lock, LogIn, Sparkles } from 'lucide-react'
+import { ArrowLeft, Check, FolderTree, LogIn, Sparkles } from 'lucide-react'
+import type { MouseEvent } from 'react'
 import { Suspense } from 'react'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { ErrorBoundary } from '@/components/common/error-boundary'
@@ -13,6 +14,7 @@ import { useEventGroup } from '@/hooks/use-event-groups'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { cn } from '@/lib/utils'
 import { STORE_NAME_LABELS } from '@/locales/app.content'
+import { STATUS_BADGE_SM } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { EventGroupItemType } from '@/schemas/event-group.dto'
 import type { StoreKey } from '@/schemas/store.dto'
@@ -53,56 +55,68 @@ type EventCheckProps = {
 
 const EventCheckCard = ({ event, completed, canToggle, onToggle }: EventCheckProps) => {
   const isUpcoming = event.status === 'upcoming'
-  const disabled = !canToggle || isUpcoming
+  const checkDisabled = !canToggle || isUpcoming
   const label = eventPrimaryStoreLabel(event)
 
+  const handleCheckClick = (e: MouseEvent<HTMLButtonElement>) => {
+    // 親 Link への navigate を必ず止めてからトグル
+    e.preventDefault()
+    e.stopPropagation()
+    if (!checkDisabled) onToggle(event.uuid)
+  }
+
   return (
-    <div className='relative'>
-      <button
-        type='button'
-        onClick={disabled ? undefined : () => onToggle(event.uuid)}
-        disabled={disabled}
-        aria-pressed={completed}
-        className={cn(
-          'group relative w-full overflow-hidden rounded-lg border p-4 text-left transition-all',
-          completed
-            ? 'border-action-award bg-action-award/10 shadow-sm'
-            : 'border-border bg-card hover:border-action-award/40 hover:shadow-sm',
-          disabled && 'cursor-not-allowed opacity-60'
-        )}
-      >
-        <div className='flex items-start justify-between gap-3'>
-          <div className='min-w-0 flex-1'>
-            <p className='text-sm font-semibold text-foreground line-clamp-2'>{label}</p>
-            <p className='mt-1 text-xs text-muted-foreground line-clamp-2'>{event.title}</p>
-            {isUpcoming && (
-              <span className='mt-2 inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground'>
-                <Lock className='size-3' />
-                開催前
-              </span>
-            )}
-          </div>
-          <div
-            aria-hidden='true'
-            className={cn(
-              'flex size-8 shrink-0 items-center justify-center rounded-full border-2 transition-all',
-              completed
-                ? 'border-action-award bg-action-award text-white'
-                : 'border-border bg-background text-transparent group-hover:border-action-award/60'
-            )}
-          >
-            <Check className='size-4' />
-          </div>
+    <Link
+      to='/events/$uuid'
+      params={{ uuid: event.uuid }}
+      aria-label={`${label}（${event.title}）の詳細を見る`}
+      className={cn(
+        'group relative block w-full overflow-hidden rounded-lg border p-4 text-left transition-all',
+        completed
+          ? 'border-action-award bg-action-award/10 shadow-sm'
+          : 'border-border bg-card hover:border-action-award/40 hover:shadow-sm'
+      )}
+    >
+      <div className='flex items-start justify-between gap-3'>
+        <div className='min-w-0 flex-1'>
+          <p className='text-sm font-semibold text-foreground line-clamp-2'>{label}</p>
+          <p className='mt-1 text-xs text-muted-foreground line-clamp-2'>{event.title}</p>
+          <div className='mt-2'>{STATUS_BADGE_SM[event.status]()}</div>
         </div>
-      </button>
-      <Link
-        to='/events/$uuid'
-        params={{ uuid: event.uuid }}
-        className='mt-1 inline-block text-xs text-muted-foreground hover:text-foreground'
-      >
-        詳細を見る →
-      </Link>
-    </div>
+        <button
+          type='button'
+          onClick={handleCheckClick}
+          disabled={checkDisabled}
+          aria-pressed={completed}
+          aria-label={
+            !canToggle
+              ? 'ログインするとコンプ状況を保存できます'
+              : isUpcoming
+                ? '開催前のため達成にできません'
+                : completed
+                  ? '達成を取り消す'
+                  : '達成にする'
+          }
+          title={
+            !canToggle
+              ? 'ログインするとコンプ状況を保存できます'
+              : isUpcoming
+                ? '開催前のため達成にできません'
+                : undefined
+          }
+          className={cn(
+            'flex size-9 shrink-0 items-center justify-center rounded-full border-2 transition-all',
+            completed
+              ? 'border-action-award bg-action-award text-white'
+              : 'border-border bg-background text-transparent hover:border-action-award/60',
+            checkDisabled && 'cursor-not-allowed opacity-60',
+            !checkDisabled && 'cursor-pointer hover:scale-105'
+          )}
+        >
+          <Check className='size-4' />
+        </button>
+      </div>
+    </Link>
   )
 }
 
