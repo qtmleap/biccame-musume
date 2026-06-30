@@ -80,6 +80,8 @@ export const EventRequestSchema = z.object({
   conditions: z.array(EventConditionSchema).min(1, '最低 1 つの配布条件を設定してください'),
   isVerified: z.boolean(),
   isPreliminary: z.boolean(),
+  // 所属するイベントグループの UUID（任意）
+  groupId: z.uuid('グループ ID は UUID 形式で指定してください').optional(),
   shouldTweet: z.boolean()
 })
 export type EventRequest = z.infer<typeof EventRequestSchema>
@@ -114,6 +116,8 @@ export const EventSchema = z.object({
   conditions: z.array(EventConditionSchema),
   isVerified: z.boolean(),
   isPreliminary: z.boolean(),
+  // 所属するイベントグループの UUID（任意）
+  groupId: z.string().optional(),
   status: EventStatusSchema,
   daysUntil: z.number(),
   interestedCount: z.number().int().nonnegative(),
