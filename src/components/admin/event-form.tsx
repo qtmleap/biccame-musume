@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FileText, FolderTree, Package } from 'lucide-react'
+import { FileText, FolderTree, Package, Store } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { Controller, type DefaultValues, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { EventConfirmation } from '@/components/admin/event-confirmation'
@@ -7,7 +7,6 @@ import { ConditionsSection } from '@/components/admin/form/conditions-section'
 import { DateField } from '@/components/admin/form/date-field'
 import { EventFlagsSection } from '@/components/admin/form/event-flags-section'
 import { ReferenceUrlsSection } from '@/components/admin/form/reference-urls-section'
-import { SelectedStoreBadges, StoreSelectField } from '@/components/admin/form/store-selector'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -16,7 +15,7 @@ import { useCharacters } from '@/hooks/use-characters'
 import { useEventGroups } from '@/hooks/use-event-groups'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/use-events'
 import { buildInitialValues, toEventPayload } from '@/lib/event-form'
-import { ADMIN_LABELS, EVENT_CATEGORY_LABELS } from '@/locales/app.content'
+import { ADMIN_LABELS, EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { type Event, EventCategorySchema, type EventRequest, EventRequestSchema } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -50,8 +49,6 @@ export const EventForm = ({
     control,
     handleSubmit,
     reset,
-    setValue,
-    watch,
     formState: { errors }
   } = useForm<EventRequest>({
     resolver: zodResolver(EventRequestSchema),
@@ -73,7 +70,6 @@ export const EventForm = ({
     name: 'referenceUrls'
   })
 
-  const stores = watch('stores') || []
   const referenceUrls = useWatch({ control, name: 'referenceUrls' }) || []
 
   const checkUrlDuplicate = useCallback(
@@ -95,21 +91,6 @@ export const EventForm = ({
     },
     [defaultValues?.uuid]
   )
-
-  const handleAddStore = (storeKey: string) => {
-    if (storeKey === '_all') {
-      setValue('stores', storeKeys as StoreKey[])
-    } else if (!stores.includes(storeKey as StoreKey)) {
-      setValue('stores', [...stores, storeKey as StoreKey])
-    }
-  }
-
-  const handleRemoveStore = (storeKey: string) => {
-    setValue(
-      'stores',
-      stores.filter((s) => s !== storeKey)
-    )
-  }
 
   const handleReset = () => {
     reset(buildInitialValues(defaultValues))
@@ -231,20 +212,35 @@ export const EventForm = ({
           {errors.category && <p className='mt-1 text-xs text-destructive'>{errors.category.message}</p>}
         </div>
 
-        <StoreSelectField
-          allStoreKeys={storeKeys}
-          selectedStoreKeys={stores}
-          onAdd={handleAddStore}
-          error={errors.stores?.message}
-        />
+        <div>
+          <label htmlFor='store-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+            <Store className='size-4' />
+            開催店舗
+          </label>
+          <Controller
+            name='stores'
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={(field.value?.[0] as string) ?? ''}
+                onValueChange={(value) => field.onChange([value as StoreKey])}
+              >
+                <SelectTrigger id='store-trigger' className='w-full'>
+                  <SelectValue placeholder='店舗を選択' />
+                </SelectTrigger>
+                <SelectContent>
+                  {storeKeys.map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {STORE_NAME_LABELS[key as StoreKey] ?? key}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.stores && <p className='mt-1 text-xs text-destructive'>{errors.stores.message}</p>}
+        </div>
       </div>
-
-      <SelectedStoreBadges
-        allStoreKeys={storeKeys}
-        selectedStoreKeys={stores}
-        onRemove={handleRemoveStore}
-        onClearAll={() => setValue('stores', [])}
-      />
 
       {/* 所属グループ（将来的に横にもう 1 項目追加する想定で 2 列 grid） */}
       <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
