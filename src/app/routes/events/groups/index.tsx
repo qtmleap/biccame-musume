@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { ArrowLeft, FolderTree, Sparkles } from 'lucide-react'
+import { ArrowLeft, Calendar, FolderTree, Package, Sparkles } from 'lucide-react'
+import { motion } from 'motion/react'
 import { Suspense, useMemo, useState } from 'react'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { ErrorBoundary } from '@/components/common/error-boundary'
@@ -16,14 +17,70 @@ import {
   PaginationPrevious
 } from '@/components/ui/pagination'
 import { useEventGroups } from '@/hooks/use-event-groups'
+import { useMediaQuery } from '@/hooks/use-media-query'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
+import { cn } from '@/lib/utils'
 import type { EventGroup } from '@/schemas/event-group.dto'
 
 const PER_PAGE = 12
 
-const formatPeriod = (group: EventGroup): string => {
-  const start = dayjs(group.startDate).format('YYYY/MM/DD')
-  if (!group.endDate) return `${start} 〜 期間未定`
-  return `${start} 〜 ${dayjs(group.endDate).format('YYYY/MM/DD')}`
+type EventGroupGridItemProps = {
+  group: EventGroup
+  index: number
+}
+
+const EventGroupGridItem = ({ group, index }: EventGroupGridItemProps) => {
+  const isMultiColumn = useMediaQuery('(min-width: 640px)')
+  const rotationDeg = isMultiColumn ? getStickerRotation(index) : 0
+  const tape = STICKER_TAPES[index % STICKER_TAPES.length]
+
+  return (
+    <motion.div className='h-full' style={{ filter: STICKER_SHADOW_SM }}>
+      <motion.div
+        className='h-full'
+        style={{ rotate: rotationDeg }}
+        whileHover={{ scale: 1.04, rotate: 0 }}
+        whileTap={{ scale: 0.97 }}
+        transition={STICKER_HOVER_TRANSITION}
+      >
+        <Link
+          to='/events/group/$id'
+          params={{ id: group.uuid }}
+          className='relative block rounded-xl p-4 border border-zinc-200 dark:border-card-border h-full bg-card'
+        >
+          {tape && (
+            <div aria-hidden className={cn('absolute rounded-sm', tape.position, tape.size, tape.color, tape.angle)} />
+          )}
+          <div className='mb-2 flex items-start justify-between gap-3'>
+            <div className='flex-1 min-w-0'>
+              <h3 className='text-base font-semibold text-foreground line-clamp-2'>{group.title}</h3>
+              <div className='mt-1 flex flex-col gap-1 text-xs text-muted-foreground'>
+                <span className='flex items-center gap-1'>
+                  <Calendar className='size-3.5' />
+                  <span>{dayjs(group.startDate).format('YYYY/MM/DD')}</span>
+                  {group.endDate ? (
+                    <>
+                      <span>〜</span>
+                      <span>{dayjs(group.endDate).format('YYYY/MM/DD')}</span>
+                    </>
+                  ) : (
+                    <span>〜期間未定</span>
+                  )}
+                </span>
+                <span className='flex items-center gap-1'>
+                  <Package className='size-3.5' />
+                  {group.eventCount} 件
+                </span>
+              </div>
+              {group.description && (
+                <p className='mt-2 text-xs text-muted-foreground line-clamp-2'>{group.description}</p>
+              )}
+            </div>
+          </div>
+        </Link>
+      </motion.div>
+    </motion.div>
+  )
 }
 
 const GroupsContent = () => {
@@ -76,32 +133,9 @@ const GroupsContent = () => {
             <p className='text-sm text-muted-foreground mb-3'>
               全 {groups.length} 件中 {start}–{end} 件を表示
             </p>
-            <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-              {paginatedGroups.map((group) => (
-                <Link
-                  key={group.uuid}
-                  to='/events/group/$id'
-                  params={{ id: group.uuid }}
-                  className='group block rounded-xl border border-border bg-card p-5 shadow-sm transition-all hover:border-action-award/40 hover:shadow-md'
-                >
-                  <div className='flex items-center gap-3'>
-                    <div className='shrink-0 p-2 rounded-lg bg-action-award/15 text-action-award'>
-                      <Sparkles className='size-4' />
-                    </div>
-                    <div className='min-w-0 flex-1'>
-                      <h2 className='text-base font-semibold text-foreground group-hover:text-action-award'>
-                        {group.title}
-                      </h2>
-                      <div className='mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground'>
-                        <span>{formatPeriod(group)}</span>
-                        <span>所属イベント: {group.eventCount} 件</span>
-                      </div>
-                      {group.description && (
-                        <p className='mt-1 text-sm text-foreground/80 line-clamp-2'>{group.description}</p>
-                      )}
-                    </div>
-                  </div>
-                </Link>
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3'>
+              {paginatedGroups.map((group, i) => (
+                <EventGroupGridItem key={group.uuid} group={group} index={(currentPage - 1) * PER_PAGE + i} />
               ))}
             </div>
 
