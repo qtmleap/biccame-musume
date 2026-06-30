@@ -67,33 +67,32 @@ export const EventList = () => {
         return false
       }
 
-      const currentTime = dayjs()
-      const startDate = dayjs(event.startDate)
-      const oneWeekAhead = currentTime.add(7, 'day')
-      const twoWeeksAgo = currentTime.subtract(14, 'day')
+      // 日付単位で比較するため時刻を切り捨てる（境界日のイベントが時刻のズレで漏れないように）
+      const today = dayjs().startOf('day')
+      const startDate = dayjs(event.startDate).startOf('day')
+      const oneWeekAhead = today.add(7, 'day')
+      const twoWeeksAgo = today.subtract(14, 'day')
 
       const isOngoing = event.status === 'ongoing' || event.status === 'last_day'
+      const isWithin = (date: dayjs.Dayjs, from: dayjs.Dayjs, to: dayjs.Dayjs) =>
+        !date.isBefore(from) && !date.isAfter(to)
 
-      // (1) 今後一週間以内に終了する開催中イベント
+      // (1) 今後一週間以内に終了する開催中イベント（今日終了も含む）
       if (isOngoing && event.endDate) {
-        const endDate = dayjs(event.endDate)
-        if (endDate.isAfter(currentTime) && endDate.isBefore(oneWeekAhead)) {
+        const endDate = dayjs(event.endDate).startOf('day')
+        if (isWithin(endDate, today, oneWeekAhead)) {
           return true
         }
       }
 
-      // (2) 今後一週間以内に開催される未開催イベント
-      if (event.status === 'upcoming') {
-        if (startDate.isAfter(currentTime) && startDate.isBefore(oneWeekAhead)) {
-          return true
-        }
+      // (2) 今後一週間以内に開催される未開催イベント（今日開催も含む）
+      if (event.status === 'upcoming' && isWithin(startDate, today, oneWeekAhead)) {
+        return true
       }
 
       // (3) 二週間以内に開催が始まった開催中イベント
-      if (isOngoing) {
-        if (startDate.isAfter(twoWeeksAgo) && !startDate.isAfter(currentTime)) {
-          return true
-        }
+      if (isOngoing && isWithin(startDate, twoWeeksAgo, today)) {
+        return true
       }
 
       return false
