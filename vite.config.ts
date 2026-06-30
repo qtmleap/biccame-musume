@@ -72,6 +72,7 @@ export default defineConfig(({ mode }) => {
           skipWaiting: false,
           clientsClaim: false,
           globPatterns: [],
+          navigateFallback: null,
           runtimeCaching: [
             {
               urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
