@@ -287,6 +287,7 @@ routes.openapi(
 routes.get('/me/ws', verifyToken, async (c) => {
   const uid = getToken(c)
   const upgrade = c.req.header('Upgrade')
+  console.info('WS headers:', Object.fromEntries(c.req.raw.headers), 'upgrade:', upgrade)
   if (upgrade?.toLowerCase() !== 'websocket') {
     throw new HTTPException(426, { message: 'Expected Upgrade: websocket' })
   }
