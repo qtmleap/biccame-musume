@@ -143,9 +143,9 @@ export const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>キャンセル</AlertDialogCancel>
+              <AlertDialogCancel>いいえ</AlertDialogCancel>
               <AlertDialogAction onClick={handleConfirmCompleted} variant='destructive'>
-                達成にする
+                はい
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
