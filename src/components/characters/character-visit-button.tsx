@@ -109,7 +109,7 @@ export const CharacterVisitButton = ({ storeKey, storeName, hasStore = true }: C
             一度登録すると取り消しできないので、実際に訪問したお店だけ申告してね。
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className='flex-row justify-end'>
           <AlertDialogCancel>いいえ</AlertDialogCancel>
           <AlertDialogAction onClick={handleConfirm} variant='destructive'>
             はい
