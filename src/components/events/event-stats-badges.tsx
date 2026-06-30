@@ -151,7 +151,7 @@ export const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps
                 </div>
               </AlertDialogDescription>
             </AlertDialogHeader>
-            <AlertDialogFooter className='flex-row justify-end'>
+            <AlertDialogFooter className='grid grid-cols-2 gap-2'>
               <AlertDialogCancel>いいえ</AlertDialogCancel>
               <AlertDialogAction onClick={handleConfirmCompleted} variant='destructive'>
                 はい
