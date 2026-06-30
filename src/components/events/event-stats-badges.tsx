@@ -143,9 +143,9 @@ export const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps
               <AlertDialogTitle>このイベントを達成済みにしますか？</AlertDialogTitle>
               <AlertDialogDescription asChild>
                 <div className='space-y-2'>
-                  <div className='flex items-baseline justify-between gap-3 rounded-lg border border-border bg-muted/40 px-3 py-2 text-foreground'>
-                    <p className='font-semibold text-sm min-w-0 flex-1 truncate'>{event.title}</p>
-                    {storeName && <p className='text-xs text-muted-foreground shrink-0'>{storeName}</p>}
+                  <div className='rounded-lg border border-border bg-muted/40 px-3 py-2 text-foreground'>
+                    <p className='font-semibold text-sm'>{event.title}</p>
+                    {storeName && <p className='mt-0.5 text-xs text-muted-foreground text-right'>{storeName}</p>}
                   </div>
                   <p>一度登録すると取り消しできないので、実際にもらったイベントだけ申告してね。</p>
                 </div>
