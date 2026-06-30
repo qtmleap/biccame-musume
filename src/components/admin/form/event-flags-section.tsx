@@ -20,7 +20,7 @@ export const EventFlagsSection = ({ control }: EventFlagsSectionProps) => (
             id='is-verified'
             checked={field.value ?? false}
             onCheckedChange={(checked) => field.onChange(checked === true)}
-            className='data-[state=checked]:bg-info data-[state=checked]:border-info'
+            className='data-[state=checked]:bg-info data-[state=checked]:border-info data-[state=checked]:text-info-foreground'
           />
         )}
       />
@@ -37,7 +37,7 @@ export const EventFlagsSection = ({ control }: EventFlagsSectionProps) => (
             id='is-preliminary'
             checked={field.value ?? false}
             onCheckedChange={(checked) => field.onChange(checked === true)}
-            className='data-[state=checked]:bg-warning data-[state=checked]:border-warning'
+            className='data-[state=checked]:bg-warning data-[state=checked]:border-warning data-[state=checked]:text-warning-foreground'
           />
         )}
       />
@@ -54,7 +54,7 @@ export const EventFlagsSection = ({ control }: EventFlagsSectionProps) => (
             id='should-tweet'
             checked={field.value ?? false}
             onCheckedChange={(checked) => field.onChange(checked === true)}
-            className='data-[state=checked]:bg-social-x data-[state=checked]:border-social-x'
+            className='data-[state=checked]:bg-social-x data-[state=checked]:border-social-x data-[state=checked]:text-social-x-foreground'
           />
         )}
       />
