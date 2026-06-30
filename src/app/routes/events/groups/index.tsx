@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { ArrowLeft, Calendar, FolderTree, Package, Sparkles } from 'lucide-react'
+import { ArrowLeft, Calendar, FolderTree, Package } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense, useMemo, useState } from 'react'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
@@ -114,10 +114,7 @@ const GroupsContent = () => {
         </Button>
 
         <div className='mb-6'>
-          <div className='flex items-center gap-2'>
-            <Sparkles className='size-5 text-action-award' />
-            <h1 className='text-2xl font-bold text-foreground'>イベントグループ</h1>
-          </div>
+          <h1 className='text-2xl font-bold text-foreground'>イベントグループ一覧</h1>
           <p className='mt-1 text-sm text-muted-foreground'>
             複数イベントを束ねたグループを店舗別にコンプリートしよう。
           </p>
