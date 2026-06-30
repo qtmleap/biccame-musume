@@ -63,17 +63,9 @@ routes.openapi(
     const stub = c.env.STATS.get(c.env.STATS.idFromName('global'))
     const snap = await stub.snapshot({ dateKey })
 
-    if (path) {
-      return c.json({
-        total: snap.paths[path] ?? 0,
-        today: snap.today
-      })
-    }
-
     return c.json({
-      total: snap.total,
-      today: snap.today,
-      paths: snap.paths
+      total: path ? (snap.paths[path] ?? 0) : snap.total,
+      today: snap.today
     })
   }
 )
