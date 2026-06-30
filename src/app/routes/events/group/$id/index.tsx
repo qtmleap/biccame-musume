@@ -54,7 +54,6 @@ const EventCheckCard = ({ event, completed }: EventCheckProps) => {
       <div className='flex items-start justify-between gap-3'>
         <div className='min-w-0 flex-1'>
           <p className='text-base font-semibold text-foreground line-clamp-2'>{label}</p>
-          <p className='mt-1 text-xs text-muted-foreground line-clamp-2'>{event.title}</p>
           <div className='mt-2'>{STATUS_BADGE_SM[event.status]()}</div>
         </div>
         <div

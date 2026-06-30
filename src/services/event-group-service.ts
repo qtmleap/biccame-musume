@@ -72,13 +72,16 @@ export const getEventGroupById = async (
   })
   const eventIds = events.map((e) => e.id)
   const stats = await getEventsStats(env, eventIds)
-  // 開催日昇順 → 先頭店舗キー昇順（ja ロケール）で安定ソート。同一キャンペーンは
-  // タイトルが似通うため、店舗順で並ぶことで一覧の視認性が上がる。
+  // 開催日昇順 → タイトル昇順 → 先頭店舗キー昇順（いずれも ja ロケール）で安定ソート。
+  // 同一グループ内のタイトルがほぼ同じ前提のため、表示上は店舗順が支配的になるが、
+  // タイトルが分岐する場合に同名イベントを束ねるためのキーとして組み入れる。
   const transformed = events
     .map((e) => transformEvent(e, stats[e.id]?.interestedCount ?? 0, stats[e.id]?.completedCount ?? 0))
     .sort((a, b) => {
       const dateDiff = a.startDate.getTime() - b.startDate.getTime()
       if (dateDiff !== 0) return dateDiff
+      const titleDiff = a.title.localeCompare(b.title, 'ja')
+      if (titleDiff !== 0) return titleDiff
       const aStore = a.stores[0] ?? ''
       const bStore = b.stores[0] ?? ''
       return aStore.localeCompare(bStore, 'ja')
