@@ -110,9 +110,9 @@ export const CharacterVisitButton = ({ storeKey, storeName, hasStore = true }: C
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>キャンセル</AlertDialogCancel>
+          <AlertDialogCancel>いいえ</AlertDialogCancel>
           <AlertDialogAction onClick={handleConfirm} variant='destructive'>
-            訪問済みにする
+            はい
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
