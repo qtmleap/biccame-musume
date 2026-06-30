@@ -2,22 +2,12 @@ import { z } from 'zod'
 import { EventSchema } from './event.dto'
 
 /**
- * イベントグループ アイテム種別
- */
-export const EventGroupItemTypeSchema = z.enum(['card', 'badge', 'other'], {
-  error: 'アイテム種別を選択してください'
-})
-
-export type EventGroupItemType = z.infer<typeof EventGroupItemTypeSchema>
-
-/**
  * イベントグループ作成・更新リクエスト
  */
 export const EventGroupRequestSchema = z.object({
   uuid: z.uuid(),
   title: z.string().nonempty('グループ名は必須です'),
   description: z.string().optional(),
-  itemType: EventGroupItemTypeSchema,
   startDate: z.string().nonempty('開始日は必須です'),
   endDate: z.string().nonempty('終了日は必須です').optional(),
   sortOrder: z.number({ error: '並び順は数値で入力してください' }).int().nonnegative()
@@ -31,7 +21,6 @@ export const EventGroupSchema = z.object({
   uuid: z.uuid(),
   title: z.string().nonempty(),
   description: z.string().optional(),
-  itemType: EventGroupItemTypeSchema,
   startDate: z.coerce.date(),
   endDate: z.coerce.date().optional(),
   sortOrder: z.number().int().nonnegative(),

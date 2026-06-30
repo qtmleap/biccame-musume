@@ -14,14 +14,7 @@ import { cn } from '@/lib/utils'
 import { STORE_NAME_LABELS } from '@/locales/app.content'
 import { STATUS_BADGE_SM } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
-import type { EventGroupItemType } from '@/schemas/event-group.dto'
 import type { StoreKey } from '@/schemas/store.dto'
-
-const ITEM_TYPE_LABELS: Record<EventGroupItemType, string> = {
-  card: '名刺',
-  badge: '缶バッジ',
-  other: 'アイテム'
-}
 
 const formatPeriod = (startDate: Date, endDate: Date | undefined): string => {
   const start = dayjs(startDate).format('YYYY/MM/DD')
@@ -153,8 +146,7 @@ const GroupContent = () => {
             <div className='flex items-start gap-2'>
               <LogIn className='mt-0.5 size-4 shrink-0 text-action-interest' />
               <p className='text-sm text-foreground'>
-                ログインするとコンプ状況を保存できます。集めた{ITEM_TYPE_LABELS[group.itemType]}
-                にチェックしていきましょう。
+                ログインするとコンプ状況を保存できます。集めたイベントにチェックしていきましょう。
               </p>
             </div>
             <Button asChild size='sm' variant='outline' className='self-stretch md:self-auto'>

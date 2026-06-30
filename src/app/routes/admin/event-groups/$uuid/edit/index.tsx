@@ -32,10 +32,7 @@ const EditEventGroupContent = () => {
           戻る
         </Button>
         <h1 className='text-2xl font-bold text-foreground'>イベントグループの編集</h1>
-        <p className='mt-2 text-sm text-muted-foreground md:text-base'>
-          公開ページは <span className='font-mono text-foreground'>/events/group/{group.uuid}</span>{' '}
-          から確認できます。所属イベント: {group.events.length} 件。
-        </p>
+        <p className='mt-2 text-sm text-muted-foreground md:text-base'>所属イベント: {group.events.length} 件。</p>
       </div>
 
       <div className='space-y-6'>

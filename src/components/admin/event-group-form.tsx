@@ -1,34 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
-import { FileText, FolderTree, ListOrdered, Package } from 'lucide-react'
+import { FileText, FolderTree, ListOrdered } from 'lucide-react'
 import { useState } from 'react'
-import { Controller, type DefaultValues, useForm } from 'react-hook-form'
+import { type DefaultValues, useForm } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
 import { DateField } from '@/components/admin/form/date-field'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { useCreateEventGroup, useUpdateEventGroup } from '@/hooks/use-event-groups'
-import {
-  type EventGroupDetail,
-  EventGroupItemTypeSchema,
-  type EventGroupRequest,
-  EventGroupRequestSchema
-} from '@/schemas/event-group.dto'
-
-const ITEM_TYPE_LABELS: Record<EventGroupRequest['itemType'], string> = {
-  card: '名刺',
-  badge: '缶バッジ',
-  other: 'その他'
-}
+import { type EventGroupDetail, type EventGroupRequest, EventGroupRequestSchema } from '@/schemas/event-group.dto'
 
 const DEFAULT_VALUES: DefaultValues<EventGroupRequest> = {
   uuid: undefined,
   title: '',
   description: '',
-  itemType: undefined,
   startDate: '',
   endDate: undefined,
   sortOrder: 0
@@ -38,7 +25,6 @@ export const toGroupFormValues = (group: EventGroupDetail): DefaultValues<EventG
   uuid: group.uuid,
   title: group.title,
   description: group.description ?? '',
-  itemType: group.itemType,
   startDate: dayjs(group.startDate).format('YYYY-MM-DD'),
   endDate: group.endDate ? dayjs(group.endDate).format('YYYY-MM-DD') : undefined,
   sortOrder: group.sortOrder
@@ -67,7 +53,6 @@ const toPayload = (
   uuid: opts.isEditMode && opts.fallbackUuid ? opts.fallbackUuid : data.uuid || uuidv4(),
   title: data.title.trim(),
   description: data.description?.trim() ? data.description.trim() : undefined,
-  itemType: data.itemType,
   startDate: dayjs(data.startDate).toISOString(),
   endDate: data.endDate && data.endDate.trim() !== '' ? dayjs(data.endDate).toISOString() : undefined,
   sortOrder: data.sortOrder ?? 0
@@ -137,48 +122,20 @@ export const EventGroupForm = ({
         {errors.title && <p className='mt-1 text-xs text-destructive'>{errors.title.message}</p>}
       </div>
 
-      {/* アイテム種別・並び順 */}
-      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-        <div>
-          <label htmlFor='group-item-type-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
-            <Package className='size-4' />
-            アイテム種別
-          </label>
-          <Controller
-            name='itemType'
-            control={control}
-            render={({ field }) => (
-              <Select value={field.value ?? ''} onValueChange={field.onChange}>
-                <SelectTrigger id='group-item-type-trigger' className='w-full'>
-                  <SelectValue placeholder='種別を選択' />
-                </SelectTrigger>
-                <SelectContent>
-                  {EventGroupItemTypeSchema.options.map((opt) => (
-                    <SelectItem key={opt} value={opt}>
-                      {ITEM_TYPE_LABELS[opt]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-          {errors.itemType && <p className='mt-1 text-xs text-destructive'>{errors.itemType.message}</p>}
-        </div>
-
-        <div>
-          <label htmlFor='group-sort-order' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
-            <ListOrdered className='size-4' />
-            並び順
-          </label>
-          <Input
-            id='group-sort-order'
-            type='number'
-            min={0}
-            {...register('sortOrder', { valueAsNumber: true })}
-            className='w-full'
-          />
-          {errors.sortOrder && <p className='mt-1 text-xs text-destructive'>{errors.sortOrder.message}</p>}
-        </div>
+      {/* 並び順 */}
+      <div>
+        <label htmlFor='group-sort-order' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+          <ListOrdered className='size-4' />
+          並び順
+        </label>
+        <Input
+          id='group-sort-order'
+          type='number'
+          min={0}
+          {...register('sortOrder', { valueAsNumber: true })}
+          className='w-full'
+        />
+        {errors.sortOrder && <p className='mt-1 text-xs text-destructive'>{errors.sortOrder.message}</p>}
       </div>
 
       {/* 期間 */}

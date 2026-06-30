@@ -74,8 +74,6 @@ model EventGroup {
   title       String
   /// 説明文（任意）
   description String?
-  /// アイテム種別: card, badge, other
-  itemType    String    @map("item_type")
   /// 表示開始日時
   startDate   DateTime  @map("start_date")
   /// 表示終了日時（null = 期間未定）

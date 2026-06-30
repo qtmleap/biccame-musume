@@ -2,7 +2,7 @@ import type { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
 import { getPrisma } from '@/lib/prisma'
-import type { EventGroup, EventGroupDetail, EventGroupItemType, EventGroupRequest } from '@/schemas/event-group.dto'
+import type { EventGroup, EventGroupDetail, EventGroupRequest } from '@/schemas/event-group.dto'
 import type { Bindings } from '@/types/bindings'
 import { EVENT_LIST_SELECT, transform as transformEvent } from './event-service'
 import { getEventsStats } from './me-service'
@@ -14,7 +14,6 @@ const EVENT_GROUP_LIST_SELECT = {
   id: true,
   title: true,
   description: true,
-  itemType: true,
   startDate: true,
   endDate: true,
   sortOrder: true,
@@ -29,7 +28,6 @@ const transform = (group: EventGroupListPayload): EventGroup => ({
   uuid: group.id,
   title: group.title,
   description: group.description ?? undefined,
-  itemType: group.itemType as EventGroupItemType,
   startDate: group.startDate,
   endDate: group.endDate ?? undefined,
   sortOrder: group.sortOrder,
@@ -114,7 +112,6 @@ export const createEventGroup = async (env: Bindings, data: EventGroupRequest): 
       id: data.uuid,
       title: data.title,
       description: data.description ?? null,
-      itemType: data.itemType,
       sortOrder: data.sortOrder,
       ...toGroupDates(data)
     },
@@ -133,7 +130,6 @@ export const updateEventGroup = async (env: Bindings, data: EventGroupRequest): 
     data: {
       title: data.title,
       description: data.description ?? null,
-      itemType: data.itemType,
       sortOrder: data.sortOrder,
       ...toGroupDates(data)
     },
