@@ -70,13 +70,24 @@ export const getEventGroupById = async (
   const events = await prisma.event.findMany({
     where: { groupId: group.id, ...(includeUnverified ? {} : { isVerified: true }) },
     select: EVENT_LIST_SELECT,
-    orderBy: [{ startDate: 'desc' }, { createdAt: 'desc' }]
+    orderBy: [{ startDate: 'asc' }, { createdAt: 'asc' }]
   })
   const eventIds = events.map((e) => e.id)
   const stats = await getEventsStats(env, eventIds)
+  // 開催日昇順 → 先頭店舗キー昇順（ja ロケール）で安定ソート。同一キャンペーンは
+  // タイトルが似通うため、店舗順で並ぶことで一覧の視認性が上がる。
+  const transformed = events
+    .map((e) => transformEvent(e, stats[e.id]?.interestedCount ?? 0, stats[e.id]?.completedCount ?? 0))
+    .sort((a, b) => {
+      const dateDiff = a.startDate.getTime() - b.startDate.getTime()
+      if (dateDiff !== 0) return dateDiff
+      const aStore = a.stores[0] ?? ''
+      const bStore = b.stores[0] ?? ''
+      return aStore.localeCompare(bStore, 'ja')
+    })
   return {
     ...transform(group),
-    events: events.map((e) => transformEvent(e, stats[e.id]?.interestedCount ?? 0, stats[e.id]?.completedCount ?? 0))
+    events: transformed
   }
 }
 

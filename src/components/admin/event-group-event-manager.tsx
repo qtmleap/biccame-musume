@@ -73,10 +73,20 @@ export const EventGroupEventManager = ({ groupId, linkedEvents }: EventGroupEven
 
   const candidates = useMemo(() => {
     const normalized = query.trim().toLowerCase()
+    // 開催日昇順 → 先頭店舗キー昇順で並べる。タイトルが似通うキャンペーン用途で
+    // 一覧の視認性を上げるための統一ソート（公開ページ / API レスポンスと同じ規則）
     return allEvents
       .filter((e) => !linkedIds.has(e.uuid))
       .filter((e) => !e.groupId)
       .filter((e) => (normalized === '' ? true : e.title.toLowerCase().includes(normalized)))
+      .slice()
+      .sort((a, b) => {
+        const dateDiff = new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        if (dateDiff !== 0) return dateDiff
+        const aStore = a.stores[0] ?? ''
+        const bStore = b.stores[0] ?? ''
+        return aStore.localeCompare(bStore, 'ja')
+      })
       .slice(0, 50)
   }, [allEvents, linkedIds, query])
 

@@ -26,6 +26,7 @@ import { Route as MeVisitedIndexRouteImport } from './routes/me/visited/index'
 import { Route as MeInterestedIndexRouteImport } from './routes/me/interested/index'
 import { Route as MeFavoritesIndexRouteImport } from './routes/me/favorites/index'
 import { Route as MeCompletedIndexRouteImport } from './routes/me/completed/index'
+import { Route as EventsGroupsIndexRouteImport } from './routes/events/groups/index'
 import { Route as EventsUuidIndexRouteImport } from './routes/events/$uuid/index'
 import { Route as CharactersIdIndexRouteImport } from './routes/characters/$id/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
@@ -126,6 +127,11 @@ const MeCompletedIndexRoute = MeCompletedIndexRouteImport.update({
   path: '/me/completed/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsGroupsIndexRoute = EventsGroupsIndexRouteImport.update({
+  id: '/events/groups/',
+  path: '/events/groups/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventsUuidIndexRoute = EventsUuidIndexRouteImport.update({
   id: '/events/$uuid/',
   path: '/events/$uuid/',
@@ -222,6 +228,7 @@ export interface FileRoutesByFullPath {
   '/admin/users/': typeof AdminUsersIndexRoute
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
+  '/events/groups/': typeof EventsGroupsIndexRoute
   '/me/completed/': typeof MeCompletedIndexRoute
   '/me/favorites/': typeof MeFavoritesIndexRoute
   '/me/interested/': typeof MeInterestedIndexRoute
@@ -254,6 +261,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersIndexRoute
   '/characters/$id': typeof CharactersIdIndexRoute
   '/events/$uuid': typeof EventsUuidIndexRoute
+  '/events/groups': typeof EventsGroupsIndexRoute
   '/me/completed': typeof MeCompletedIndexRoute
   '/me/favorites': typeof MeFavoritesIndexRoute
   '/me/interested': typeof MeInterestedIndexRoute
@@ -288,6 +296,7 @@ export interface FileRoutesById {
   '/admin/users/': typeof AdminUsersIndexRoute
   '/characters/$id/': typeof CharactersIdIndexRoute
   '/events/$uuid/': typeof EventsUuidIndexRoute
+  '/events/groups/': typeof EventsGroupsIndexRoute
   '/me/completed/': typeof MeCompletedIndexRoute
   '/me/favorites/': typeof MeFavoritesIndexRoute
   '/me/interested/': typeof MeInterestedIndexRoute
@@ -323,6 +332,7 @@ export interface FileRouteTypes {
     | '/admin/users/'
     | '/characters/$id/'
     | '/events/$uuid/'
+    | '/events/groups/'
     | '/me/completed/'
     | '/me/favorites/'
     | '/me/interested/'
@@ -355,6 +365,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/characters/$id'
     | '/events/$uuid'
+    | '/events/groups'
     | '/me/completed'
     | '/me/favorites'
     | '/me/interested'
@@ -388,6 +399,7 @@ export interface FileRouteTypes {
     | '/admin/users/'
     | '/characters/$id/'
     | '/events/$uuid/'
+    | '/events/groups/'
     | '/me/completed/'
     | '/me/favorites/'
     | '/me/interested/'
@@ -415,6 +427,7 @@ export interface RootRouteChildren {
   RouteIndexRoute: typeof RouteIndexRoute
   CharactersIdIndexRoute: typeof CharactersIdIndexRoute
   EventsUuidIndexRoute: typeof EventsUuidIndexRoute
+  EventsGroupsIndexRoute: typeof EventsGroupsIndexRoute
   MeCompletedIndexRoute: typeof MeCompletedIndexRoute
   MeFavoritesIndexRoute: typeof MeFavoritesIndexRoute
   MeInterestedIndexRoute: typeof MeInterestedIndexRoute
@@ -541,6 +554,13 @@ declare module '@tanstack/react-router' {
       path: '/me/completed'
       fullPath: '/me/completed/'
       preLoaderRoute: typeof MeCompletedIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events/groups/': {
+      id: '/events/groups/'
+      path: '/events/groups'
+      fullPath: '/events/groups/'
+      preLoaderRoute: typeof EventsGroupsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events/$uuid/': {
@@ -691,6 +711,7 @@ const rootRouteChildren: RootRouteChildren = {
   RouteIndexRoute: RouteIndexRoute,
   CharactersIdIndexRoute: CharactersIdIndexRoute,
   EventsUuidIndexRoute: EventsUuidIndexRoute,
+  EventsGroupsIndexRoute: EventsGroupsIndexRoute,
   MeCompletedIndexRoute: MeCompletedIndexRoute,
   MeFavoritesIndexRoute: MeFavoritesIndexRoute,
   MeInterestedIndexRoute: MeInterestedIndexRoute,
