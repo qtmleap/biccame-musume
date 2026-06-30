@@ -160,41 +160,36 @@ const GroupContent = () => {
           戻る
         </Button>
 
-        {/* ヘッダーカード */}
-        <div className='rounded-xl border border-border bg-card p-5 shadow-sm md:p-6'>
-          <div className='flex items-start gap-3'>
-            <div
-              aria-hidden='true'
-              className='flex size-12 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-2xl'
-            >
-              {ITEM_TYPE_ICONS[group.itemType]}
-            </div>
-            <div className='min-w-0 flex-1'>
-              <div className='flex flex-wrap items-center gap-2'>
-                <Badge variant='secondary'>{ITEM_TYPE_LABELS[group.itemType]}コンプリート</Badge>
-                <span className='text-xs text-muted-foreground'>{formatPeriod(group.startDate, group.endDate)}</span>
-              </div>
-              <h1 className='mt-2 text-2xl font-bold text-foreground'>{group.title}</h1>
-              {group.description && (
-                <p className='mt-2 whitespace-pre-line text-sm text-foreground/80'>{group.description}</p>
-              )}
-            </div>
+        {/* ヘッダー */}
+        <div className='flex items-start gap-3'>
+          <div aria-hidden='true' className='flex size-12 shrink-0 items-center justify-center text-3xl'>
+            {ITEM_TYPE_ICONS[group.itemType]}
           </div>
+          <div className='min-w-0 flex-1'>
+            <div className='flex flex-wrap items-center gap-2'>
+              <Badge variant='secondary'>{ITEM_TYPE_LABELS[group.itemType]}コンプリート</Badge>
+              <span className='text-xs text-muted-foreground'>{formatPeriod(group.startDate, group.endDate)}</span>
+            </div>
+            <h1 className='mt-2 text-2xl font-bold text-foreground'>{group.title}</h1>
+            {group.description && (
+              <p className='mt-2 whitespace-pre-line text-sm text-foreground/80'>{group.description}</p>
+            )}
+          </div>
+        </div>
 
-          {/* プログレス */}
-          <div className='mt-5'>
-            <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-1.5 text-sm font-medium text-foreground'>
-                <Sparkles className='size-4 text-action-award' />
-                コンプリート状況
-              </div>
-              <span className='text-sm font-semibold tabular-nums text-foreground'>
-                {completedCount} / {totalCount}
-              </span>
+        {/* プログレス */}
+        <div className='mt-5'>
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center gap-1.5 text-sm font-medium text-foreground'>
+              <Sparkles className='size-4 text-action-award' />
+              コンプリート状況
             </div>
-            <Progress value={completionRate} className='mt-2 h-3' />
-            <p className='mt-1 text-right text-xs text-muted-foreground tabular-nums'>{completionRate}%</p>
+            <span className='text-sm font-semibold tabular-nums text-foreground'>
+              {completedCount} / {totalCount}
+            </span>
           </div>
+          <Progress value={completionRate} className='mt-2 h-3' />
+          <p className='mt-1 text-right text-xs text-muted-foreground tabular-nums'>{completionRate}%</p>
         </div>
 
         {/* ログイン誘導 */}
