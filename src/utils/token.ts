@@ -39,7 +39,6 @@ export const signToken = async (
   c: Context<{ Bindings: Bindings; Variables: Variables }>,
   idToken: FirebaseIdToken
 ): Promise<string> => {
-  console.log('Firebase ID Token:', idToken)
   if (!idToken) {
     throw new HTTPException(401, { message: 'Unauthorized' })
   }
@@ -51,7 +50,7 @@ export const signToken = async (
     {
       sub: idToken.sub,
       iat: current_time.unix(),
-      exp: current_time.add(1, 'hours').unix(),
+      exp: current_time.add(5, 'days').unix(),
       iss: new URL(c.req.url).host,
       aud: idToken.aud,
       uid: idToken.uid,

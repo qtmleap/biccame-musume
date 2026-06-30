@@ -32,8 +32,7 @@ type ServerMessage = { type: 'badge_earned'; badge: PushBadgePayload } | { type:
  */
 export class UserPushDO extends DurableObject<Bindings> {
   async fetch(req: Request): Promise<Response> {
-    const upgrade = req.headers.get('Upgrade')
-    if (upgrade?.toLowerCase() !== 'websocket') {
+    if (req.headers.get('Upgrade')?.toLowerCase() !== 'websocket') {
       return new Response('Expected Upgrade: websocket', { status: 426 })
     }
     const pair = new WebSocketPair()
