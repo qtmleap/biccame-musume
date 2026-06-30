@@ -21,7 +21,7 @@ const MENU_ITEMS = [
     to: '/admin/event-groups',
     icon: FolderTree,
     title: 'イベントグループ管理',
-    description: '11周年記念キャンペーン等、複数イベントを束ねるグループを登録・管理',
+    description: '複数イベントを束ねるグループを管理',
     iconBg: 'bg-action-award/15',
     iconText: 'text-action-award'
   },
