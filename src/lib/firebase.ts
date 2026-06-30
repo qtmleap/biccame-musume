@@ -37,7 +37,7 @@ setPersistence(auth, browserLocalPersistence).catch((error) => {
  * 開発環境ではAuthエミュレーターに接続
  */
 let emulatorConnected = false
-if (import.meta.env.DEV && !emulatorConnected) {
+if (import.meta.env.MODE === 'development' && !emulatorConnected) {
   try {
     connectAuthEmulator(auth, 'http://localhost:19299', { disableWarnings: true })
     emulatorConnected = true
