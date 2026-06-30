@@ -258,7 +258,7 @@ export const EventForm = ({
             control={control}
             render={({ field }) => (
               <Select
-                value={field.value ?? NO_GROUP_VALUE}
+                value={field.value ?? ''}
                 onValueChange={(value) => field.onChange(value === NO_GROUP_VALUE ? undefined : value)}
               >
                 <SelectTrigger id='group-trigger' className='w-full'>
