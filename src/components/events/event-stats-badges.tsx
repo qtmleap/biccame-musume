@@ -15,7 +15,9 @@ import { useAuth } from '@/hooks/use-auth'
 import { usePageViews } from '@/hooks/use-page-views'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { cn } from '@/lib/utils'
+import { STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
+import type { StoreKey } from '@/schemas/store.dto'
 import { EventShareButton } from './event-share-button'
 import { FireworkBurstOverlay, HeartBurstOverlay } from './event-stats-animations'
 
@@ -61,6 +63,8 @@ export const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps
   const isLoggedIn = !!user
   const isUpcoming = event.status === 'upcoming'
   const completedDisabled = !isLoggedIn || isUpcoming || completed
+  const storeKey = event.stores[0]
+  const storeName = storeKey ? (STORE_NAME_LABELS[storeKey as StoreKey] ?? storeKey) : undefined
 
   return (
     <div className='flex items-center justify-between mt-3'>
@@ -137,9 +141,14 @@ export const EventStatsBadges = ({ event, onStatsUpdate }: EventStatsBadgesProps
           <AlertDialogContent className='rounded-2xl shadow-2xl border-transparent'>
             <AlertDialogHeader>
               <AlertDialogTitle>このイベントを達成済みにしますか？</AlertDialogTitle>
-              <AlertDialogDescription>
-                「{event.title}」を達成済みとして記録します。
-                一度登録すると取り消しできないので、実際にもらったイベントだけ申告してね。
+              <AlertDialogDescription asChild>
+                <div className='space-y-2'>
+                  <div className='rounded-lg border border-border bg-muted/40 px-3 py-2 text-sm text-foreground'>
+                    {storeName && <p className='font-semibold'>{storeName}</p>}
+                    <p className={cn(storeName && 'mt-0.5 text-xs text-muted-foreground')}>{event.title}</p>
+                  </div>
+                  <p>一度登録すると取り消しできないので、実際にもらったイベントだけ申告してね。</p>
+                </div>
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
