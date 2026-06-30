@@ -1,0 +1,62 @@
+import { z } from 'zod'
+import { EventSchema } from './event.dto'
+
+/**
+ * イベントグループ アイテム種別
+ */
+export const EventGroupItemTypeSchema = z.enum(['card', 'badge', 'other'], {
+  error: 'アイテム種別を選択してください'
+})
+
+export type EventGroupItemType = z.infer<typeof EventGroupItemTypeSchema>
+
+/**
+ * URL スラッグ
+ * 半角英数字 + ハイフン、3〜64 文字
+ */
+export const EventGroupSlugSchema = z
+  .string()
+  .min(3, 'スラッグは 3 文字以上で入力してください')
+  .max(64, 'スラッグは 64 文字以下で入力してください')
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'スラッグは半角英数字とハイフンのみで指定してください')
+
+/**
+ * イベントグループ作成・更新リクエスト
+ */
+export const EventGroupRequestSchema = z.object({
+  uuid: z.uuid(),
+  slug: EventGroupSlugSchema,
+  title: z.string().nonempty('グループ名は必須です'),
+  description: z.string().optional(),
+  itemType: EventGroupItemTypeSchema,
+  startDate: z.string().nonempty('開始日は必須です'),
+  endDate: z.string().nonempty('終了日は必須です').optional(),
+  sortOrder: z.number({ error: '並び順は数値で入力してください' }).int().nonnegative().default(0)
+})
+export type EventGroupRequest = z.infer<typeof EventGroupRequestSchema>
+
+/**
+ * イベントグループ（一覧 / 基本情報）
+ */
+export const EventGroupSchema = z.object({
+  uuid: z.uuid(),
+  slug: EventGroupSlugSchema,
+  title: z.string().nonempty(),
+  description: z.string().optional(),
+  itemType: EventGroupItemTypeSchema,
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date().optional(),
+  sortOrder: z.number().int().nonnegative(),
+  eventCount: z.number().int().nonnegative(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date()
+})
+export type EventGroup = z.infer<typeof EventGroupSchema>
+
+/**
+ * イベントグループ詳細（紐付く Event 一覧を含む）
+ */
+export const EventGroupDetailSchema = EventGroupSchema.extend({
+  events: z.array(EventSchema)
+})
+export type EventGroupDetail = z.infer<typeof EventGroupDetailSchema>
