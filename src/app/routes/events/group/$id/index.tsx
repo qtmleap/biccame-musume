@@ -108,36 +108,40 @@ const GroupContent = () => {
           戻る
         </Button>
 
-        {/* ヘッダー */}
-        <div className='flex items-center gap-3'>
-          <div className='shrink-0 p-2 rounded-lg bg-action-award/15 text-action-award'>
-            <Sparkles className='size-4' />
-          </div>
+        {/* ヘッダー + プログレス。md+ は横並び、モバイルは縦積み。 */}
+        <div className='md:flex md:items-start md:gap-6'>
           <div className='min-w-0 flex-1'>
-            <h1 className='text-2xl font-semibold text-foreground'>{group.title}</h1>
-            <p className='mt-1 text-xs text-muted-foreground'>{formatPeriod(group.startDate, group.endDate)}</p>
-          </div>
-        </div>
-        {group.description && (
-          <p className='mt-3 whitespace-pre-line text-sm text-foreground/80'>{group.description}</p>
-        )}
-
-        {/* プログレス */}
-        <div className='mt-5'>
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-1.5 text-sm font-medium text-foreground'>
-              <Sparkles className='size-4 text-action-award' />
-              コンプリート状況
+            <div className='flex items-center gap-3'>
+              <div className='shrink-0 p-2 rounded-lg bg-action-award/15 text-action-award'>
+                <Sparkles className='size-4' />
+              </div>
+              <div className='min-w-0 flex-1'>
+                <h1 className='text-2xl font-semibold text-foreground'>{group.title}</h1>
+                <p className='mt-1 text-xs text-muted-foreground'>{formatPeriod(group.startDate, group.endDate)}</p>
+              </div>
             </div>
-            <span className='text-sm font-semibold tabular-nums text-foreground'>
-              {completedCount} / {totalCount}
-            </span>
+            {group.description && (
+              <p className='mt-3 whitespace-pre-line text-sm text-foreground/80'>{group.description}</p>
+            )}
           </div>
-          <Progress
-            value={completionRate}
-            className='mt-2 h-3 bg-action-award/20 [&>[data-slot=progress-indicator]]:bg-action-award'
-          />
-          <p className='mt-1 text-right text-xs text-muted-foreground tabular-nums'>{completionRate}%</p>
+
+          {/* プログレス */}
+          <div className='mt-5 md:mt-0 md:w-72 md:shrink-0'>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center gap-1.5 text-sm font-medium text-foreground'>
+                <Sparkles className='size-4 text-action-award' />
+                コンプリート状況
+              </div>
+              <span className='text-sm font-semibold tabular-nums text-foreground'>
+                {completedCount} / {totalCount}
+              </span>
+            </div>
+            <Progress
+              value={completionRate}
+              className='mt-2 h-3 bg-action-award/20 [&>[data-slot=progress-indicator]]:bg-action-award'
+            />
+            <p className='mt-1 text-right text-xs text-muted-foreground tabular-nums'>{completionRate}%</p>
+          </div>
         </div>
 
         {/* ログイン誘導 */}
