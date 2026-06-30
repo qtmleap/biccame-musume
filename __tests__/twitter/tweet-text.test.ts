@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test'
 import type { EventDetail } from '../../src/schemas/event.dto'
 import {
   buildDailySummaryTweets,
+  buildEndingTodaySummaryTweets,
   buildEventCreatedText,
   buildEventUpdatedText,
   getQuoteTweetId,
@@ -156,6 +157,45 @@ describe('buildDailySummaryText', () => {
   test('throws when a single event line is so long it cannot fit', () => {
     const giantTitle = 'あ'.repeat(1000)
     expect(() => buildDailySummaryTweets([{ ...e(1), title: giantTitle }])).toThrow(/exceeds/)
+  })
+})
+
+describe('buildEndingTodaySummaryTweets', () => {
+  const e = (i: number) =>
+    ({
+      uuid: `${String(i).padStart(8, '0')}-1111-4111-8111-111111111111`,
+      title: `終了イベント${i}`,
+      stores: ['sagami']
+    }) as Pick<EventDetail, 'uuid' | 'title' | 'stores'>
+
+  test('throws when 0 events', () => {
+    expect(() => buildEndingTodaySummaryTweets([])).toThrow()
+  })
+
+  test('1 event: 1 tweet with ending-today header', () => {
+    const tweets = buildEndingTodaySummaryTweets([e(1)])
+    expect(tweets).toHaveLength(1)
+    const t = tweets[0]
+    expect(t).toContain('本日最終日のイベントは1件！')
+    expect(t).toContain('- さがみたんの終了イベント1')
+    expect(t).toContain('#ビッカメ娘')
+    expect(t).toContain('#ビックカメラ')
+  })
+
+  test('4 events split into 2 tweets, only the first has the header', () => {
+    const tweets = buildEndingTodaySummaryTweets([e(1), e(2), e(3), e(4)])
+    expect(tweets).toHaveLength(2)
+    expect(tweets[0]).toContain('本日最終日のイベントは4件！')
+    expect(tweets[0]).toContain('終了イベント3')
+    expect(tweets[1]).toContain('終了イベント4')
+    expect(tweets[1]).not.toContain('本日最終日')
+  })
+
+  test('every tweet in the thread fits within the tweet weight limit', () => {
+    const tweets = buildEndingTodaySummaryTweets(Array.from({ length: 30 }, (_, i) => e(i + 1)))
+    for (const t of tweets) {
+      expect(weightedLength(t)).toBeLessThanOrEqual(TWEET_LIMIT)
+    }
   })
 })
 
