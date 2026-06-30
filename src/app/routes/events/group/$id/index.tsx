@@ -111,15 +111,8 @@ const GroupContent = () => {
         {/* ヘッダー + プログレス。md+ は横並び、モバイルは縦積み。 */}
         <div className='md:flex md:items-start md:gap-6'>
           <div className='min-w-0 flex-1'>
-            <div className='flex items-center gap-3'>
-              <div className='shrink-0 p-2 rounded-lg bg-action-award/15 text-action-award'>
-                <Sparkles className='size-4' />
-              </div>
-              <div className='min-w-0 flex-1'>
-                <h1 className='text-2xl font-semibold text-foreground'>{group.title}</h1>
-                <p className='mt-1 text-xs text-muted-foreground'>{formatPeriod(group.startDate, group.endDate)}</p>
-              </div>
-            </div>
+            <h1 className='text-2xl font-semibold text-foreground'>{group.title}</h1>
+            <p className='mt-1 text-xs text-muted-foreground'>{formatPeriod(group.startDate, group.endDate)}</p>
             {group.description && (
               <p className='mt-3 whitespace-pre-line text-sm text-foreground/80'>{group.description}</p>
             )}
