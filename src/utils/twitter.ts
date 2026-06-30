@@ -4,6 +4,7 @@ import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
 import {
   buildDailySummaryTweets,
+  buildEndingTodaySummaryTweets,
   buildEventCreatedText,
   buildEventUpdatedText,
   getQuoteTweetId
@@ -308,17 +309,31 @@ export class Twitter {
   }
 
   /**
-   * Post the daily-summary thread. Each tweet contains up to 3 events; the
+   * Post a summary tweet thread. Each tweet contains up to 3 events; the
    * 2nd+ tweets are posted as replies to the previous tweet to form a thread.
    */
-  async tweetDailySummary(events: Event[]): Promise<void> {
-    if (events.length === 0) return
-    const bodies = buildDailySummaryTweets(events)
+  private async tweetSummaryThread(bodies: string[]): Promise<void> {
     const post = async (idx: number, replyToTweetId: string | undefined): Promise<void> => {
       if (idx >= bodies.length) return
       const id = await this.tweet(bodies[idx], { replyToTweetId })
       await post(idx + 1, id)
     }
     await post(0, undefined)
+  }
+
+  /**
+   * Post the daily-summary thread for events starting today.
+   */
+  async tweetDailySummary(events: Event[]): Promise<void> {
+    if (events.length === 0) return
+    await this.tweetSummaryThread(buildDailySummaryTweets(events))
+  }
+
+  /**
+   * Post the ending-today summary thread for events whose last day is today.
+   */
+  async tweetEndingTodaySummary(events: Event[]): Promise<void> {
+    if (events.length === 0) return
+    await this.tweetSummaryThread(buildEndingTodaySummaryTweets(events))
   }
 }

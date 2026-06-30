@@ -15,6 +15,7 @@ import { RegionFilterControl } from '@/components/characters/region-filter-contr
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
+import { EventGroupBanner } from '@/components/events/event-group-banner'
 import { EventStatusFilter } from '@/components/events/event-status-filter'
 import { EventStoreFilter } from '@/components/events/event-store-filter'
 import { EventUserActivityFilter } from '@/components/events/event-user-activity-filter'
@@ -183,7 +184,8 @@ const EventsContent = () => {
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
-      <div className='flex flex-col gap-2'>
+      <EventGroupBanner />
+      <div className='flex flex-col gap-2 mt-3'>
         {/* ヘッダーとボタン群 */}
         <div className='flex items-center justify-between gap-4'>
           <h1 className='text-2xl font-bold text-foreground'>イベント一覧</h1>

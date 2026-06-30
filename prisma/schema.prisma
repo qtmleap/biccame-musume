@@ -67,6 +67,29 @@ model EventStore {
   @@map("event_stores")
 }
 
+/// イベントグループ（11周年記念キャンペーン等、複数Eventを束ねる）
+model EventGroup {
+  id          String    @id @default(uuid())
+  /// グループ名
+  title       String
+  /// 説明文（任意）
+  description String?
+  /// 表示開始日時
+  startDate   DateTime  @map("start_date")
+  /// 表示終了日時（null = 期間未定）
+  endDate     DateTime? @map("end_date")
+  /// 並び順
+  sortOrder   Int       @default(0) @map("sort_order")
+  /// 作成日時
+  createdAt   DateTime  @default(now()) @map("created_at")
+  /// 更新日時
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  /// 所属するイベント
+  events      Event[]
+
+  @@map("event_groups")
+}
+
 /// イベント
 model Event {
   id              String              @id @default(uuid())
@@ -86,6 +109,8 @@ model Event {
   isVerified      Boolean             @default(false) @map("is_verified")
   /// 公式発表前の未確定情報かどうか
   isPreliminary   Boolean             @default(false) @map("is_preliminary")
+  /// 所属するイベントグループ（任意）
+  groupId         String?             @map("group_id")
   /// 作成日時
   createdAt       DateTime            @default(now()) @map("created_at")
   /// 更新日時
@@ -100,7 +125,10 @@ model Event {
   userEvents      UserEvent[]
   /// コメント
   comments        EventComment[]
+  /// 所属するイベントグループ
+  group           EventGroup?         @relation(fields: [groupId], references: [id], onDelete: SetNull)
 
+  @@index([groupId])
   @@map("events")
 }
 
@@ -186,13 +214,13 @@ model User {
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   /// 訪問した店舗
-  stores UserStore[]
+  stores             UserStore[]
   /// イベントとの関係
-  events UserEvent[]
+  events             UserEvent[]
   /// お気に入りキャラクター
   favoriteCharacters FavoriteCharacter[]
   /// 獲得したバッジ
-  userBadges UserBadge[]
+  userBadges         UserBadge[]
 
   @@map("users")
 }
