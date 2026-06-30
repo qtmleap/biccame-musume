@@ -31,7 +31,7 @@ export const EventGroupRequestSchema = z.object({
   itemType: EventGroupItemTypeSchema,
   startDate: z.string().nonempty('開始日は必須です'),
   endDate: z.string().nonempty('終了日は必須です').optional(),
-  sortOrder: z.number({ error: '並び順は数値で入力してください' }).int().nonnegative().default(0)
+  sortOrder: z.number({ error: '並び順は数値で入力してください' }).int().nonnegative()
 })
 export type EventGroupRequest = z.infer<typeof EventGroupRequestSchema>
 

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FileText, Package } from 'lucide-react'
+import { FileText, FolderTree, Package } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { Controller, type DefaultValues, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { EventConfirmation } from '@/components/admin/event-confirmation'
@@ -13,11 +13,14 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { useCharacters } from '@/hooks/use-characters'
+import { useEventGroups } from '@/hooks/use-event-groups'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/use-events'
 import { buildInitialValues, toEventPayload } from '@/lib/event-form'
 import { ADMIN_LABELS, EVENT_CATEGORY_LABELS } from '@/locales/app.content'
 import { type Event, EventCategorySchema, type EventRequest, EventRequestSchema } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
+
+const NO_GROUP_VALUE = '__none__'
 
 export const EventForm = ({
   defaultValues,
@@ -31,6 +34,7 @@ export const EventForm = ({
   const createEvent = useCreateEvent()
   const updateEvent = useUpdateEvent()
   const { data: characters } = useCharacters()
+  const { data: eventGroups } = useEventGroups()
 
   const [duplicateWarnings, setDuplicateWarnings] = useState<Record<number, Event | null>>({})
   const [isConfirming, setIsConfirming] = useState(false)
@@ -240,6 +244,37 @@ export const EventForm = ({
         onRemove={handleRemoveStore}
         onClearAll={() => setValue('stores', [])}
       />
+
+      {/* 所属グループ */}
+      <div>
+        <label htmlFor='group-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+          <FolderTree className='size-4' />
+          所属グループ（任意）
+        </label>
+        <Controller
+          name='groupId'
+          control={control}
+          render={({ field }) => (
+            <Select
+              value={field.value ?? NO_GROUP_VALUE}
+              onValueChange={(value) => field.onChange(value === NO_GROUP_VALUE ? undefined : value)}
+            >
+              <SelectTrigger id='group-trigger' className='w-full'>
+                <SelectValue placeholder='グループを選択' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NO_GROUP_VALUE}>（なし）</SelectItem>
+                {eventGroups.map((group) => (
+                  <SelectItem key={group.uuid} value={group.uuid}>
+                    {group.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
+        {errors.groupId && <p className='mt-1 text-xs text-destructive'>{errors.groupId.message}</p>}
+      </div>
 
       <Separator />
 
