@@ -1,12 +1,10 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { ArrowLeft, Check, FolderTree, LogIn, Sparkles } from 'lucide-react'
-import type { MouseEvent } from 'react'
 import { Suspense } from 'react'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { useAuth } from '@/hooks/use-auth'
@@ -23,12 +21,6 @@ const ITEM_TYPE_LABELS: Record<EventGroupItemType, string> = {
   card: '名刺',
   badge: '缶バッジ',
   other: 'アイテム'
-}
-
-const ITEM_TYPE_ICONS: Record<EventGroupItemType, string> = {
-  card: '🎴',
-  badge: '📛',
-  other: '✨'
 }
 
 const formatPeriod = (startDate: Date, endDate: Date | undefined): string => {
@@ -49,21 +41,10 @@ const eventPrimaryStoreLabel = (event: Event): string => {
 type EventCheckProps = {
   event: Event
   completed: boolean
-  canToggle: boolean
-  onToggle: (eventId: string) => void
 }
 
-const EventCheckCard = ({ event, completed, canToggle, onToggle }: EventCheckProps) => {
-  const isUpcoming = event.status === 'upcoming'
-  const checkDisabled = !canToggle || isUpcoming
+const EventCheckCard = ({ event, completed }: EventCheckProps) => {
   const label = eventPrimaryStoreLabel(event)
-
-  const handleCheckClick = (e: MouseEvent<HTMLButtonElement>) => {
-    // 親 Link への navigate を必ず止めてからトグル
-    e.preventDefault()
-    e.stopPropagation()
-    if (!checkDisabled) onToggle(event.uuid)
-  }
 
   return (
     <Link
@@ -79,42 +60,21 @@ const EventCheckCard = ({ event, completed, canToggle, onToggle }: EventCheckPro
     >
       <div className='flex items-start justify-between gap-3'>
         <div className='min-w-0 flex-1'>
-          <p className='text-sm font-semibold text-foreground line-clamp-2'>{label}</p>
+          <p className='text-base font-semibold text-foreground line-clamp-2'>{label}</p>
           <p className='mt-1 text-xs text-muted-foreground line-clamp-2'>{event.title}</p>
           <div className='mt-2'>{STATUS_BADGE_SM[event.status]()}</div>
         </div>
-        <button
-          type='button'
-          onClick={handleCheckClick}
-          disabled={checkDisabled}
-          aria-pressed={completed}
-          aria-label={
-            !canToggle
-              ? 'ログインするとコンプ状況を保存できます'
-              : isUpcoming
-                ? '開催前のため達成にできません'
-                : completed
-                  ? '達成を取り消す'
-                  : '達成にする'
-          }
-          title={
-            !canToggle
-              ? 'ログインするとコンプ状況を保存できます'
-              : isUpcoming
-                ? '開催前のため達成にできません'
-                : undefined
-          }
+        <div
+          aria-hidden='true'
           className={cn(
-            'flex size-9 shrink-0 items-center justify-center rounded-full border-2 transition-all',
+            'flex size-9 shrink-0 items-center justify-center rounded-full border-2',
             completed
               ? 'border-action-award bg-action-award text-white'
-              : 'border-border bg-background text-transparent hover:border-action-award/60',
-            checkDisabled && 'cursor-not-allowed opacity-60',
-            !checkDisabled && 'cursor-pointer hover:scale-105'
+              : 'border-border bg-background text-transparent'
           )}
         >
           <Check className='size-4' />
-        </button>
+        </div>
       </div>
     </Link>
   )
@@ -125,7 +85,7 @@ const GroupContent = () => {
   const router = useRouter()
   const { data: group } = useEventGroup(id)
   const { user } = useAuth()
-  const { completedEvents, addCompletedEvent, removeCompletedEvent } = useUserActivity()
+  const { completedEvents } = useUserActivity()
 
   const isLoggedIn = !!user
   const completedSet = new Set(completedEvents)
@@ -133,15 +93,6 @@ const GroupContent = () => {
   const completedCount = collectableEvents.filter((e) => completedSet.has(e.uuid)).length
   const totalCount = collectableEvents.length
   const completionRate = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100)
-
-  const handleToggle = (eventId: string) => {
-    if (!isLoggedIn) return
-    if (completedSet.has(eventId)) {
-      removeCompletedEvent(eventId)
-    } else {
-      addCompletedEvent(eventId)
-    }
-  }
 
   return (
     <div className='min-h-screen bg-page-bg'>
@@ -161,21 +112,18 @@ const GroupContent = () => {
         </Button>
 
         {/* ヘッダー */}
-        <div className='flex items-start gap-3'>
-          <div aria-hidden='true' className='flex size-12 shrink-0 items-center justify-center text-3xl'>
-            {ITEM_TYPE_ICONS[group.itemType]}
+        <div className='flex items-center gap-3'>
+          <div className='shrink-0 p-2 rounded-lg bg-action-award/15 text-action-award'>
+            <Sparkles className='size-4' />
           </div>
           <div className='min-w-0 flex-1'>
-            <div className='flex flex-wrap items-center gap-2'>
-              <Badge variant='secondary'>{ITEM_TYPE_LABELS[group.itemType]}コンプリート</Badge>
-              <span className='text-xs text-muted-foreground'>{formatPeriod(group.startDate, group.endDate)}</span>
-            </div>
-            <h1 className='mt-2 text-2xl font-bold text-foreground'>{group.title}</h1>
-            {group.description && (
-              <p className='mt-2 whitespace-pre-line text-sm text-foreground/80'>{group.description}</p>
-            )}
+            <h1 className='text-2xl font-semibold text-foreground'>{group.title}</h1>
+            <p className='mt-1 text-xs text-muted-foreground'>{formatPeriod(group.startDate, group.endDate)}</p>
           </div>
         </div>
+        {group.description && (
+          <p className='mt-3 whitespace-pre-line text-sm text-foreground/80'>{group.description}</p>
+        )}
 
         {/* プログレス */}
         <div className='mt-5'>
@@ -221,13 +169,7 @@ const GroupContent = () => {
           ) : (
             <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3'>
               {collectableEvents.map((event) => (
-                <EventCheckCard
-                  key={event.uuid}
-                  event={event}
-                  completed={completedSet.has(event.uuid)}
-                  canToggle={isLoggedIn}
-                  onToggle={handleToggle}
-                />
+                <EventCheckCard key={event.uuid} event={event} completed={completedSet.has(event.uuid)} />
               ))}
             </div>
           )}

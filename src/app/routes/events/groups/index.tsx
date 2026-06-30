@@ -5,22 +5,9 @@ import { Suspense } from 'react'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useEventGroups } from '@/hooks/use-event-groups'
-import type { EventGroup, EventGroupItemType } from '@/schemas/event-group.dto'
-
-const ITEM_TYPE_LABELS: Record<EventGroupItemType, string> = {
-  card: '名刺',
-  badge: '缶バッジ',
-  other: 'アイテム'
-}
-
-const ITEM_TYPE_ICONS: Record<EventGroupItemType, string> = {
-  card: '🎴',
-  badge: '📛',
-  other: '✨'
-}
+import type { EventGroup } from '@/schemas/event-group.dto'
 
 const formatPeriod = (group: EventGroup): string => {
   const start = dayjs(group.startDate).format('YYYY/MM/DD')
@@ -73,25 +60,21 @@ const GroupsContent = () => {
                 params={{ id: group.uuid }}
                 className='group block rounded-xl border border-border bg-card p-5 shadow-sm transition-all hover:border-action-award/40 hover:shadow-md'
               >
-                <div className='flex items-start gap-3'>
-                  <div
-                    aria-hidden='true'
-                    className='flex size-12 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-2xl'
-                  >
-                    {ITEM_TYPE_ICONS[group.itemType]}
+                <div className='flex items-center gap-3'>
+                  <div className='shrink-0 p-2 rounded-lg bg-action-award/15 text-action-award'>
+                    <Sparkles className='size-4' />
                   </div>
                   <div className='min-w-0 flex-1'>
-                    <Badge variant='secondary'>{ITEM_TYPE_LABELS[group.itemType]}コンプリート</Badge>
-                    <h2 className='mt-2 text-lg font-bold text-foreground group-hover:text-action-award'>
+                    <h2 className='text-base font-semibold text-foreground group-hover:text-action-award'>
                       {group.title}
                     </h2>
-                    {group.description && (
-                      <p className='mt-1 text-sm text-foreground/80 line-clamp-2'>{group.description}</p>
-                    )}
-                    <div className='mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground'>
+                    <div className='mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground'>
                       <span>{formatPeriod(group)}</span>
                       <span>所属イベント: {group.eventCount} 件</span>
                     </div>
+                    {group.description && (
+                      <p className='mt-1 text-sm text-foreground/80 line-clamp-2'>{group.description}</p>
+                    )}
                   </div>
                 </div>
               </Link>

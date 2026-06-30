@@ -1,22 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { Sparkles } from 'lucide-react'
 import { motion } from 'motion/react'
-import { Badge } from '@/components/ui/badge'
 import { useEventGroups } from '@/hooks/use-event-groups'
 import { DURATION } from '@/lib/motion'
-import type { EventGroupItemType } from '@/schemas/event-group.dto'
-
-const ITEM_TYPE_LABELS: Record<EventGroupItemType, string> = {
-  card: '名刺',
-  badge: '缶バッジ',
-  other: 'アイテム'
-}
-
-const ITEM_TYPE_ICONS: Record<EventGroupItemType, string> = {
-  card: '🎴',
-  badge: '📛',
-  other: '✨'
-}
 
 const MAX_GROUPS_ON_HOME = 3
 
@@ -51,18 +37,12 @@ export const EventGroupList = () => {
                 params={{ id: group.uuid }}
                 className='group block h-full rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:border-action-award/40 hover:shadow-md'
               >
-                <div className='flex items-start gap-3'>
-                  <div
-                    aria-hidden='true'
-                    className='flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-xl'
-                  >
-                    {ITEM_TYPE_ICONS[group.itemType]}
+                <div className='flex items-center gap-3'>
+                  <div className='shrink-0 p-2 rounded-lg bg-action-award/15 text-action-award'>
+                    <Sparkles className='size-4' />
                   </div>
                   <div className='min-w-0 flex-1'>
-                    <Badge variant='secondary' className='text-[10px]'>
-                      {ITEM_TYPE_LABELS[group.itemType]}コンプリート
-                    </Badge>
-                    <h3 className='mt-1 text-sm font-bold text-foreground group-hover:text-action-award line-clamp-2'>
+                    <h3 className='text-base font-semibold text-foreground group-hover:text-action-award line-clamp-2'>
                       {group.title}
                     </h3>
                     <p className='mt-1 text-xs text-muted-foreground'>所属イベント: {group.eventCount} 件</p>
