@@ -28,7 +28,7 @@ const NewEventGroupContent = () => {
   const headerTitle = isCopyMode ? 'イベントグループのコピー作成' : 'イベントグループの新規作成'
   const headerDesc = isCopyMode
     ? '元のグループの内容をコピーして新しいグループを作成します。'
-    : '複数イベントを束ねるグループを作成します。'
+    : '関連イベントをまとめるグループを作成します。'
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>

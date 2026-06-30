@@ -116,7 +116,7 @@ const GroupsContent = () => {
         <div className='mb-6'>
           <h1 className='text-2xl font-bold text-foreground'>イベントグループ一覧</h1>
           <p className='mt-1 text-sm text-muted-foreground'>
-            複数イベントを束ねたグループを店舗別にコンプリートしよう。
+            関連イベントをまとめて、コンプ状況をひと目で確認できます。
           </p>
         </div>
 

@@ -39,7 +39,7 @@ const EventGroupsContent = () => {
               )}
             </div>
             <p className='mt-2 text-sm text-muted-foreground md:text-base'>
-              11周年記念キャンペーンなど、複数イベントを束ねるグループを登録・管理。
+              11周年記念キャンペーンなど、関連イベントをまとめたグループを登録・管理。
             </p>
           </div>
         </div>

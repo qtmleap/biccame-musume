@@ -74,7 +74,7 @@ export const getEventGroupById = async (
   const stats = await getEventsStats(env, eventIds)
   // 開催日昇順 → タイトル昇順 → 先頭店舗キー昇順（いずれも ja ロケール）で安定ソート。
   // 同一グループ内のタイトルがほぼ同じ前提のため、表示上は店舗順が支配的になるが、
-  // タイトルが分岐する場合に同名イベントを束ねるためのキーとして組み入れる。
+  // タイトルが分岐する場合に同名イベントをまとめるためのキーとして組み入れる。
   const transformed = events
     .map((e) => transformEvent(e, stats[e.id]?.interestedCount ?? 0, stats[e.id]?.completedCount ?? 0))
     .sort((a, b) => {
