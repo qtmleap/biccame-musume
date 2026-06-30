@@ -19,7 +19,7 @@ import users from './api/user'
 import version from './api/version'
 import votes from './api/vote'
 import { rewriteIndexHtml } from './middleware/og-rewrite'
-import { getEventsStartingToday } from './services/event-service'
+import { getEventsEndingToday, getEventsStartingToday } from './services/event-service'
 import type { Bindings, Variables } from './types/bindings'
 import { Twitter } from './utils/twitter'
 
@@ -229,21 +229,38 @@ app.use('*', async (c, next) => {
 })
 
 const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, ctx) => {
-  ctx.waitUntil(
-    (async () => {
-      try {
-        const events = await getEventsStartingToday(env, new Date(event.scheduledTime))
-        if (events.length === 0) {
-          console.log('[Cron] No events starting today (JST), skipping daily summary tweet')
-          return
-        }
-        console.log(`[Cron] Posting daily summary for ${events.length} event(s)`)
-        await new Twitter(env).tweetDailySummary(events)
-      } catch (err) {
-        console.error('[Cron] Failed to post daily summary tweet:', err)
+  const scheduledAt = new Date(event.scheduledTime)
+  const twitter = new Twitter(env)
+
+  const postStartingToday = async (): Promise<void> => {
+    try {
+      const events = await getEventsStartingToday(env, scheduledAt)
+      if (events.length === 0) {
+        console.log('[Cron] No events starting today (JST), skipping daily summary tweet')
+        return
       }
-    })()
-  )
+      console.log(`[Cron] Posting daily summary for ${events.length} event(s) starting today`)
+      await twitter.tweetDailySummary(events)
+    } catch (err) {
+      console.error('[Cron] Failed to post daily summary tweet:', err)
+    }
+  }
+
+  const postEndingToday = async (): Promise<void> => {
+    try {
+      const events = await getEventsEndingToday(env, scheduledAt)
+      if (events.length === 0) {
+        console.log('[Cron] No events ending today (JST), skipping ending-today tweet')
+        return
+      }
+      console.log(`[Cron] Posting ending-today summary for ${events.length} event(s)`)
+      await twitter.tweetEndingTodaySummary(events)
+    } catch (err) {
+      console.error('[Cron] Failed to post ending-today summary tweet:', err)
+    }
+  }
+
+  ctx.waitUntil(Promise.all([postStartingToday(), postEndingToday()]))
 }
 
 export { StatsDO } from './durable-objects/stats'

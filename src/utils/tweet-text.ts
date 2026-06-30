@@ -71,6 +71,7 @@ export const buildEventUpdatedText = (event: EventDetail): string => {
 }
 
 const dailyHeader = (count: number): string => `本日は${count}件のイベントが開催予定です！`
+const endingTodayHeader = (count: number): string => `本日最終日のイベントは${count}件！`
 const dailyHashtags = ['#ビッカメ娘', '#ビックカメラ']
 
 const formatEventLine = (event: Pick<Event, 'stores' | 'title'>): string => {
@@ -86,27 +87,43 @@ const chunk = <T>(arr: T[], size: number): T[][] =>
   arr.length === 0 ? [] : [arr.slice(0, size), ...chunk(arr.slice(size), size)]
 
 /**
- * Build the daily-summary tweet thread.
+ * Build a summary tweet thread for a list of events.
  * - 1 つのツイートに最大 3 イベント
- * - 1 ツイート目だけ "本日は{N}件…" のヘッダを付ける
+ * - 1 ツイート目だけ buildHeader(N) のヘッダを付ける
  * - 各ツイートに #ビッカメ娘 / #ビックカメラ ハッシュタグを付ける
  * - 連投時は呼び出し側で順次リプライチェーンに繋ぐ前提
  */
-export const buildDailySummaryTweets = (events: DailySummaryEvent[]): string[] => {
-  if (events.length === 0) throw new Error('buildDailySummaryTweets called with 0 events')
+const buildSummaryTweets = (
+  events: DailySummaryEvent[],
+  buildHeader: (count: number) => string,
+  label: string
+): string[] => {
+  if (events.length === 0) throw new Error(`${label} called with 0 events`)
   const groups = chunk(events, MAX_EVENTS_PER_TWEET)
   const tweets = groups.map((group, i) => {
     const lines = group.map(formatEventLine)
-    const header = i === 0 ? [dailyHeader(events.length), ''] : []
+    const header = i === 0 ? [buildHeader(events.length), ''] : []
     return [...header, ...lines, '', ...dailyHashtags].join('\n')
   })
   for (const t of tweets) {
     if (weightedLength(t) > TWEET_WEIGHT_LIMIT) {
-      throw new Error(`Daily summary tweet exceeds ${TWEET_WEIGHT_LIMIT} weighted chars: ${weightedLength(t)}`)
+      throw new Error(`${label} tweet exceeds ${TWEET_WEIGHT_LIMIT} weighted chars: ${weightedLength(t)}`)
     }
   }
   return tweets
 }
+
+/**
+ * 本日開催開始のイベントを告知するスレッド本文。
+ */
+export const buildDailySummaryTweets = (events: DailySummaryEvent[]): string[] =>
+  buildSummaryTweets(events, dailyHeader, 'buildDailySummaryTweets')
+
+/**
+ * 本日最終日のイベントを告知するスレッド本文。
+ */
+export const buildEndingTodaySummaryTweets = (events: DailySummaryEvent[]): string[] =>
+  buildSummaryTweets(events, endingTodayHeader, 'buildEndingTodaySummaryTweets')
 
 const TWITTER_URL_RE = /(?:twitter\.com|x\.com)\/\w+\/status\/(\d+)/
 

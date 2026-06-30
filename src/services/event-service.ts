@@ -380,3 +380,25 @@ export const getEventsStartingToday = async (env: Bindings, now: Date = new Date
   if (!result.success) throw new HTTPException(400, { message: result.error.message })
   return result.data
 }
+
+/**
+ * 「JST で本日終了」のイベントを取得（毎朝の cron 最終日告知ツイート用）
+ */
+export const getEventsEndingToday = async (env: Bindings, now: Date = new Date()): Promise<Event[]> => {
+  const prisma = getPrisma(env)
+  const startOfDayJst = dayjs(now).tz('Asia/Tokyo').startOf('day')
+  const startOfNextDayJst = startOfDayJst.add(1, 'day')
+  const events = (
+    await prisma.event.findMany({
+      where: {
+        isVerified: true,
+        endDate: { gte: startOfDayJst.toDate(), lt: startOfNextDayJst.toDate() }
+      },
+      select: EVENT_LIST_SELECT,
+      orderBy: { startDate: 'asc' }
+    })
+  ).map((v) => transform(v))
+  const result = EventSchema.array().safeParse(events)
+  if (!result.success) throw new HTTPException(400, { message: result.error.message })
+  return result.data
+}
