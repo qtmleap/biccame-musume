@@ -5,8 +5,7 @@ import { z } from 'zod'
  */
 export const PageViewStatsSchema = z.object({
   total: z.number().int().nonnegative(),
-  today: z.number().int().nonnegative(),
-  paths: z.record(z.string().nonempty('パスは必須です'), z.number().int().nonnegative()).optional()
+  today: z.number().int().nonnegative()
 })
 
 /**
