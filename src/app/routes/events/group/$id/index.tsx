@@ -188,7 +188,10 @@ const GroupContent = () => {
               {completedCount} / {totalCount}
             </span>
           </div>
-          <Progress value={completionRate} className='mt-2 h-3' />
+          <Progress
+            value={completionRate}
+            className='mt-2 h-3 bg-action-award/20 [&>[data-slot=progress-indicator]]:bg-action-award'
+          />
           <p className='mt-1 text-right text-xs text-muted-foreground tabular-nums'>{completionRate}%</p>
         </div>
 
