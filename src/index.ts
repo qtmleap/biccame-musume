@@ -250,33 +250,4 @@ export { StatsDO } from './durable-objects/stats'
 export { UserPushDO } from './durable-objects/user-push'
 export { VoteCounterDO } from './durable-objects/vote-counter'
 
-const fetchHandler: ExportedHandlerFetchHandler<Bindings> = async (request, env, ctx) => {
-  const url = new URL(request.url)
-  // /api/me/ws は Hono を通さず直接 DO に転送する。
-  // Cloudflare エッジが Upgrade ヘッダを除去するため、ここで付け直す。
-  if (url.pathname === '/api/me/ws') {
-    console.info('[ws] raw headers at fetch entry:', Object.fromEntries(request.headers))
-    // session cookie から JWT を検証して uid を取得 (verifyToken 相当)
-    const { verify } = await import('hono/jwt')
-    const cookieHeader = request.headers.get('cookie') ?? ''
-    const sessionMatch = cookieHeader.match(/(?:^|;\s*)session=([^;]+)/)
-    const token = sessionMatch?.[1]
-    if (!token || !env.JWT_SECRET_KEY) {
-      return new Response('Unauthorized', { status: 401 })
-    }
-    let uid: string
-    try {
-      const payload = await verify(token, env.JWT_SECRET_KEY, 'HS256')
-      uid = payload['uid'] as string
-      if (!uid) throw new Error('no uid')
-    } catch {
-      return new Response('Unauthorized', { status: 401 })
-    }
-    // 元の request をそのまま DO に転送する (new Request で作り直すと WS として認識されない)
-    const stub = env.USER_PUSH.get(env.USER_PUSH.idFromName(uid))
-    return stub.fetch(request)
-  }
-  return app.fetch(request, env, ctx)
-}
-
-export default { fetch: fetchHandler, scheduled }
+export default { fetch: app.fetch, scheduled }
