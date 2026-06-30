@@ -42,13 +42,19 @@ const deduplicateRegularCards = (events: ReturnType<typeof useEvents>['data']) =
 
 /**
  * トップページ用のイベント一覧
- * 開催中および開催一週間前のイベントを表示
+ * 以下のいずれかに該当するイベントを表示:
+ * - 今後一週間以内に終了する開催中イベント
+ * - 今後一週間以内に開催される未開催イベント
+ * - 二週間以内に開催が始まった開催中イベント
  */
 export const EventList = () => {
   const { data: events = [], isLoading } = useEvents()
   const { completedEvents } = useUserActivity()
 
-  // 開催中および開催一週間前のイベントをフィルタリングし、開始日時・カテゴリ・店舗順でソート
+  // 以下の3条件のいずれかを満たすイベントを表示し、開始日時・カテゴリ・店舗順でソート
+  // 1. 今後一週間以内に終了する開催中イベント
+  // 2. 今後一週間以内に開催される未開催イベント
+  // 3. 二週間以内に開催が始まった開催中イベント
   const filteredEvents = orderBy(
     events.filter((event) => {
       // 達成済みイベントは非表示
@@ -63,16 +69,31 @@ export const EventList = () => {
 
       const currentTime = dayjs()
       const startDate = dayjs(event.startDate)
+      const oneWeekAhead = currentTime.add(7, 'day')
+      const twoWeeksAgo = currentTime.subtract(14, 'day')
 
-      // 開催中のイベント（最終日も含む）
-      if (event.status === 'ongoing' || event.status === 'last_day') {
-        return true
+      const isOngoing = event.status === 'ongoing' || event.status === 'last_day'
+
+      // (1) 今後一週間以内に終了する開催中イベント
+      if (isOngoing && event.endDate) {
+        const endDate = dayjs(event.endDate)
+        if (endDate.isAfter(currentTime) && endDate.isBefore(oneWeekAhead)) {
+          return true
+        }
       }
 
-      // 開催一週間前のイベント
-      const oneWeekBefore = startDate.subtract(7, 'day')
-      if (currentTime.isAfter(oneWeekBefore) && currentTime.isBefore(startDate)) {
-        return true
+      // (2) 今後一週間以内に開催される未開催イベント
+      if (event.status === 'upcoming') {
+        if (startDate.isAfter(currentTime) && startDate.isBefore(oneWeekAhead)) {
+          return true
+        }
+      }
+
+      // (3) 二週間以内に開催が始まった開催中イベント
+      if (isOngoing) {
+        if (startDate.isAfter(twoWeeksAgo) && !startDate.isAfter(currentTime)) {
+          return true
+        }
       }
 
       return false
