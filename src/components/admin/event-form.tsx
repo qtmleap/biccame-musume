@@ -246,35 +246,37 @@ export const EventForm = ({
         onClearAll={() => setValue('stores', [])}
       />
 
-      {/* 所属グループ */}
-      <div>
-        <label htmlFor='group-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
-          <FolderTree className='size-4' />
-          所属グループ（任意）
-        </label>
-        <Controller
-          name='groupId'
-          control={control}
-          render={({ field }) => (
-            <Select
-              value={field.value ?? NO_GROUP_VALUE}
-              onValueChange={(value) => field.onChange(value === NO_GROUP_VALUE ? undefined : value)}
-            >
-              <SelectTrigger id='group-trigger' className='w-full'>
-                <SelectValue placeholder='グループを選択' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={NO_GROUP_VALUE}>（なし）</SelectItem>
-                {eventGroups.map((group) => (
-                  <SelectItem key={group.uuid} value={group.uuid}>
-                    {group.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        />
-        {errors.groupId && <p className='mt-1 text-xs text-destructive'>{errors.groupId.message}</p>}
+      {/* 所属グループ（将来的に横にもう 1 項目追加する想定で 2 列 grid） */}
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+        <div>
+          <label htmlFor='group-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+            <FolderTree className='size-4' />
+            所属グループ（任意）
+          </label>
+          <Controller
+            name='groupId'
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value ?? NO_GROUP_VALUE}
+                onValueChange={(value) => field.onChange(value === NO_GROUP_VALUE ? undefined : value)}
+              >
+                <SelectTrigger id='group-trigger' className='w-full'>
+                  <SelectValue placeholder='グループを選択' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={NO_GROUP_VALUE}>（なし）</SelectItem>
+                  {eventGroups.map((group) => (
+                    <SelectItem key={group.uuid} value={group.uuid}>
+                      {group.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.groupId && <p className='mt-1 text-xs text-destructive'>{errors.groupId.message}</p>}
+        </div>
       </div>
 
       <Separator />
