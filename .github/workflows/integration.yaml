@@ -1,184 +1,134 @@
-name: Continuous Integration
+name: Integration
 on:
   push:
+    branches-ignore:
+      - main
+      - master
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   commitlint:
-    name: CommitLint
-    if: github.event.action != 'closed' || github.event.pull_request.merged != true
+    name: Commit Lint
     runs-on: ubuntu-latest
+    if: github.event.action != 'closed' || github.event.pull_request.merged != true
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Bun
-        uses: oven-sh/setup-bun@v2
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - name: Cache
-        uses: actions/cache@v5
+      - name: Cache Bun install
+        uses: actions/cache@v4
         with:
-          path: node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock', '**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-bun-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile --ignore-scripts
-      - name: Validate current commit (last commit) with commitlint
-        if: github.event_name == 'push'
-        run: bun commitlint --last --verbose
-      - name: Validate PR commits with commitlint
+            bun-${{ runner.os }}-
+      - name: Install commitlint
+        run: |
+          bun install conventional-changelog-conventionalcommits
+          bun install @commitlint/config-conventional@latest
+          bun install commitlint@latest
+      - name: Validate PR commits
         if: github.event_name == 'pull_request'
-        run: bun commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
+        run: |
+          bunx commitlint \
+            --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} \
+            --to ${{ github.event.pull_request.head.sha }} \
+            --verbose
+      - name: Validate last commit
+        if: github.event_name == 'push'
+        run: bunx commitlint --last --verbose
+
   check:
     name: Code Check
     runs-on: ubuntu-latest
-    if: github.event.action != 'closed' || github.event.pull_request.merged != true
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v5
         with:
-          submodules: true
-      - name: Bun
-        uses: oven-sh/setup-bun@v2
+          submodules: recursive
+      - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - name: Cache
-        uses: actions/cache@v5
+      - name: Cache Bun install
+        uses: actions/cache@v4
         with:
-          path: node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock', '**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-bun-
+            bun-${{ runner.os }}-
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
-      - name: Check
-        run: |
-          bun biome check src __tests__
+      - name: Biome check
+        run: bunx --bun biome check
+
+  typecheck:
+    name: TypeScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Cache Bun install
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock', '**/package.json') }}
+          restore-keys: |
+            bun-${{ runner.os }}-
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+      - name: Generate Prisma client
+        run: bun run --cwd workers/db generate
+      - name: Type check (all workspaces)
+        run: bun run --filter '@app/*' typecheck
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Cache Bun install
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock', '**/package.json') }}
+          restore-keys: |
+            bun-${{ runner.os }}-
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+      - name: Generate Prisma client
+        run: bun run --cwd workers/db generate
+      - name: Vite build (app worker)
+        run: bun run --cwd workers/app build
+
   test:
     name: Test
     runs-on: ubuntu-latest
-    if: github.event.action != 'closed' || github.event.pull_request.merged != true
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Bun
-        uses: oven-sh/setup-bun@v2
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - name: Cache
-        uses: actions/cache@v5
+      - name: Cache Bun install
+        uses: actions/cache@v4
         with:
-          path: node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock', '**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-bun-
+            bun-${{ runner.os }}-
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
-      - name: Generate Prisma Client
-        run: bun run generate
-      - name: Test
-        run: |
-          bun test
-  knip:
-    name: Knip
-    runs-on: ubuntu-latest
-    if: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-      - name: Cache
-        uses: actions/cache@v5
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile --ignore-scripts
-      - name: Generate Prisma Client
-        run: bun run generate
-      - name: Knip
-        run: bun knip
-  tsc:
-    name: Compile TypeScript
-    runs-on: ubuntu-latest
-    if: github.event.action != 'closed' || github.event.pull_request.merged != true
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-      - name: Cache
-        uses: actions/cache@v5
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile --ignore-scripts
-      - name: Generate Prisma Client
-        run: bun run generate
-      - name: Test
-        run: |
-          bun tsc --noEmit
-  build:
-    name: Vite Build (production)
-    runs-on: ubuntu-latest
-    if: github.event.action != 'closed' || github.event.pull_request.merged != true
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-      - name: Cache
-        uses: actions/cache@v5
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-
-      # Build asset caches mirror deployment.yaml so this job catches
-      # build-time failures (e.g. vite-plugin-pwa × intlayer) before merge.
-      - name: Cache character images
-        uses: actions/cache@v5
-        with:
-          path: |
-            public/images/characters
-            public/images/stamps
-          key: >-
-            ${{ runner.os }}-character-images-${{
-              hashFiles(
-                'scripts/download-character-images.ts',
-                'scripts/stampcamera-map.ts',
-                'public/characters.json'
-              )
-            }}
-      - name: Cache OG images
-        uses: actions/cache@v5
-        with:
-          path: |
-            public/og/characters
-          key: >-
-            ${{ runner.os }}-og-${{
-              hashFiles(
-                'scripts/generate-og-images.ts',
-                'scripts/stampcamera-map.ts',
-                'public/characters.json'
-              )
-            }}
-      - name: Install dependencies
-        run: bun install --frozen-lockfile --ignore-scripts
-      - name: Generate Prisma Client
-        run: bun run generate
-      - name: Build
-        run: bun run build
-        env:
-          CLOUDFLARE_ENV: production
+      - name: Generate Prisma client
+        run: bun run --cwd workers/db generate
+      - name: Run tests
+        run: bun test

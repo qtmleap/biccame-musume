@@ -261,3 +261,4 @@ public/images/stamps/
 
 # Build-time download cache (stampcamera package zips, etc.)
 .cache/
+worker-configuration.d.ts
