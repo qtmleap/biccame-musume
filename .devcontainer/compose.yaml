@@ -4,27 +4,23 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
+      # Monorepo: name-space node_modules of both the root workspace and each
+      # workspace member to keep them off the host FS.
       - node_modules:/home/vscode/app/node_modules
+      - workers_api_node_modules:/home/vscode/app/workers/api/node_modules
+      - workers_app_node_modules:/home/vscode/app/workers/app/node_modules
+      - workers_db_node_modules:/home/vscode/app/workers/db/node_modules
+      - packages_shared_node_modules:/home/vscode/app/packages/shared/node_modules
       - ../:/home/vscode/app:cached
     environment:
       NODE_ENV: development
       NODE_OPTIONS: "--no-deprecation"
     tty: true
     stdin_open: true
-    network_mode: service:firebase
-    depends_on:
-      - firebase
-
-  firebase:
-    image: andreysenov/firebase-tools:15.16.0
-    command: firebase emulators:start --only auth --import=auth
-    ports:
-      - 19299:9099
-    volumes:
-      - ./auth:/home/node/auth
-      - ./firebase.json:/home/node/firebase.json
-      - ./.firebaserc:/home/node/.firebaserc
 
 volumes:
   node_modules:
-    driver: local
+  workers_api_node_modules:
+  workers_app_node_modules:
+  workers_db_node_modules:
+  packages_shared_node_modules:
