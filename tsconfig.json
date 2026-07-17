@@ -2,6 +2,7 @@
   "include": ["**/*.ts", "**/*.tsx", ".intlayer/**/*.ts", ".vscode/scripts/fetch_html.ts"],
   "exclude": ["src/components/ui/**/*.tsx", "scripts/**/*.ts"],
   "compilerOptions": {
+    "noImplicitAny": false,
     "target": "ES2022",
     "jsx": "react-jsx",
     "module": "ESNext",
