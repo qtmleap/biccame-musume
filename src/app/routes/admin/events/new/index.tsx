@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, useRouter, useSearch } from '@tanstack/react-router'
+import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
@@ -12,7 +12,6 @@ import { EventRequestQuerySchema } from '@/schemas/event.dto'
 
 const NewEventContent = () => {
   const router = useRouter()
-  const navigate = useNavigate()
   const search = useSearch({ from: '/admin/events/new/' })
   const [newUuid] = useState(() => uuidv4())
   const { data: copySource } = useEventOrNull(search.from ?? '')
@@ -23,7 +22,8 @@ const NewEventContent = () => {
     isCopyMode && copySource ? toCopyFormValues(copySource, newUuid) : toFormValuesFromQuery(search, newUuid)
 
   const handleSuccess = () => {
-    navigate({ to: '/admin/events/$uuid/edit', params: { uuid: newUuid }, replace: true })
+    router.history.replace('/admin/events')
+    router.navigate({ to: '/admin/events/$uuid/edit', params: { uuid: newUuid } })
   }
 
   const headerTitle = isCopyMode ? ADMIN_LABELS.eventCopy : ADMIN_LABELS.eventNew
@@ -46,7 +46,7 @@ const NewEventContent = () => {
       </div>
 
       <div>
-        <EventForm defaultValues={defaultValues} onSuccess={handleSuccess} isEditMode={false} />
+        <EventForm defaultValues={defaultValues} onSuccess={handleSuccess} isEditMode={false} mode='create' />
       </div>
     </div>
   )

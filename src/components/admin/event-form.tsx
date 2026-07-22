@@ -7,6 +7,7 @@ import { ConditionsSection } from '@/components/admin/form/conditions-section'
 import { DateField } from '@/components/admin/form/date-field'
 import { EventFlagsSection } from '@/components/admin/form/event-flags-section'
 import { ReferenceUrlsSection } from '@/components/admin/form/reference-urls-section'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -24,12 +25,15 @@ const NO_GROUP_VALUE = '__none__'
 export const EventForm = ({
   defaultValues,
   onSuccess,
-  isEditMode = false
+  isEditMode = false,
+  mode
 }: {
   defaultValues?: DefaultValues<EventRequest>
   onSuccess?: () => void
   isEditMode?: boolean
+  mode?: 'create' | 'edit'
 }) => {
+  const formMode = mode || (isEditMode ? 'edit' : 'create')
   const createEvent = useCreateEvent()
   const updateEvent = useUpdateEvent()
   const { data: characters } = useCharacters()
@@ -135,11 +139,23 @@ export const EventForm = ({
 
   if (isConfirming && confirmedData) {
     const isMutating = createEvent.isPending || updateEvent.isPending
-    return <EventConfirmation data={confirmedData} isSubmitting={isMutating} onBack={handleBack} onSubmit={onSubmit} />
+    return (
+      <EventConfirmation
+        data={confirmedData}
+        isSubmitting={isMutating}
+        onBack={handleBack}
+        onSubmit={onSubmit}
+        mode={formMode}
+      />
+    )
   }
 
   return (
     <form onSubmit={handleSubmit(handleConfirm)} className='space-y-5'>
+      <Badge variant={formMode === 'edit' ? 'secondary' : 'default'}>
+        {formMode === 'edit' ? ADMIN_LABELS.eventEdit : ADMIN_LABELS.eventNew}
+      </Badge>
+
       {/* イベント名 */}
       <div>
         <label htmlFor='event-title' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>

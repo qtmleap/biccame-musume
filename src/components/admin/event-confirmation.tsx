@@ -10,12 +10,21 @@ type EventConfirmationProps = {
   isSubmitting: boolean
   onBack: () => void
   onSubmit: () => void
+  mode?: 'create' | 'edit'
 }
 
 /**
  * イベント登録内容の確認画面コンポーネント
  */
-export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: EventConfirmationProps) => {
+export const EventConfirmation = ({
+  data,
+  isSubmitting,
+  onBack,
+  onSubmit,
+  mode = 'create'
+}: EventConfirmationProps) => {
+  const submitLabel = mode === 'edit' ? '更新する' : CONFIRMATION_LABELS.register
+  const submittingLabel = mode === 'edit' ? '更新中…' : CONFIRMATION_LABELS.registering
   // EventRequestをEventDetail型に変換
   const event: EventDetail = {
     uuid: data.uuid,
@@ -58,7 +67,7 @@ export const EventConfirmation = ({ data, isSubmitting, onBack, onSubmit }: Even
           className='bg-brand hover:bg-brand/90 text-brand-foreground sm:w-48'
           disabled={isSubmitting}
         >
-          {isSubmitting ? CONFIRMATION_LABELS.registering : CONFIRMATION_LABELS.register}
+          {isSubmitting ? submittingLabel : submitLabel}
         </Button>
       </div>
     </div>
