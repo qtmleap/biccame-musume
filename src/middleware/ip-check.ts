@@ -4,9 +4,15 @@ import type { Bindings, Variables } from '@/types/bindings'
 
 /**
  * IPアドレスを取得
+ * CF-Connecting-IP のみを信頼する（クライアントが偽装可能な X-Real-IP は使用しない）
+ * ローカル開発環境ではヘッダーが付与されないため 127.0.0.1 にフォールバックする
  */
-const getClientIp = (c: Context): string => {
-  return c.req.header('CF-Connecting-IP') || c.req.header('X-Real-IP') || 'unknown'
+const getClientIp = (c: Context<{ Bindings: Bindings; Variables: Variables }>): string => {
+  const ip = c.req.header('CF-Connecting-IP')
+  if (ip) {
+    return ip
+  }
+  return c.env.ENVIRONMENT === 'local' ? '127.0.0.1' : 'unknown'
 }
 
 /**

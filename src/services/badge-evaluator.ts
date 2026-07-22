@@ -4,6 +4,7 @@ import type { BadgeArea } from '@/data/badges/area-mapping'
 import { storeKeyToBadgeArea } from '@/data/badges/area-mapping'
 import type { BadgeConditionMeta, BadgeSubCategory } from '@/data/badges/registry'
 import { ACTIVE_PHYSICAL_STORE_KEYS, PHYSICAL_STORE_KEYS } from '@/data/badges/store-exclusion'
+import { parseJsonWithSchema } from '@/lib/parse-json'
 import type { StoreKey } from '@/schemas/store.dto'
 import { StoreKeySchema } from '@/schemas/store.dto'
 import type { Bindings } from '@/types/bindings'
@@ -205,6 +206,18 @@ const StoreKeysMetaSchema = z.object({ storeKeys: z.array(StoreKeySchema).min(1)
 const EventIdMetaSchema = z.object({ eventId: z.string().nonempty() })
 
 /**
+ * conditionMeta の汎用スキーマ。 BadgeConditionMeta 型をそのまま Zod で写したもの。
+ * evaluateBadge の初回 parse や、 sub_category を跨いだフィルタリングで使う。
+ */
+const badgeConditionMetaSchema: z.ZodType<BadgeConditionMeta> = z.object({
+  storeKey: StoreKeySchema.optional(),
+  region: BadgeAreaSchema.optional(),
+  count: z.number().int().positive().optional(),
+  storeKeys: z.array(StoreKeySchema).default([]),
+  eventId: z.string().nonempty().optional()
+})
+
+/**
  * sub_category → 評価関数のテーブル。
  * 各エントリは raw JSON を sub に対応するスキーマで parse し、 typed meta を評価関数に渡す。
  * 新規 sub_category 追加時はテーブルに 1 行足すだけで済み、 型レベルで網羅性が保証される。
@@ -228,7 +241,7 @@ const EVALUATORS: Record<BadgeSubCategory, (ctx: EvaluatorContext, raw: unknown)
 }
 
 export async function evaluateBadge(ctx: EvaluatorContext, badge: Badge): Promise<boolean> {
-  const raw = JSON.parse(badge.conditionMeta) as unknown
+  const raw = parseJsonWithSchema(badge.conditionMeta, badgeConditionMetaSchema)
   const sub = badge.subCategory as BadgeSubCategory
   const evaluator = EVALUATORS[sub]
   if (!evaluator) {
@@ -353,20 +366,20 @@ export async function evaluateOnEventComplete(ctx: EvaluatorContext, eventId: st
       if (sub === 'event_clear_all') return true
       if (sub === 'all_areas_any_event_clear') return true
       if (sub === 'special_event_id') {
-        const meta = JSON.parse(b.conditionMeta) as BadgeConditionMeta
+        const meta = parseJsonWithSchema(b.conditionMeta, badgeConditionMetaSchema)
         return meta.eventId === eventId
       }
       if (sub === 'special_multi_store_clear') {
-        const meta = JSON.parse(b.conditionMeta) as BadgeConditionMeta
+        const meta = parseJsonWithSchema(b.conditionMeta, badgeConditionMetaSchema)
         return (meta.storeKeys ?? []).some((sk) => storeKeys.includes(sk))
       }
       if (sub === 'event_clear_at_store') {
-        const meta = JSON.parse(b.conditionMeta) as BadgeConditionMeta
+        const meta = parseJsonWithSchema(b.conditionMeta, badgeConditionMetaSchema)
         return storeKeys.includes(meta.storeKey ?? '')
       }
       if (sub === 'event_clear_area_any' || sub === 'event_clear_area_complete') {
-        const meta = JSON.parse(b.conditionMeta) as BadgeConditionMeta
-        return areas.has(meta.region as BadgeArea)
+        const meta = parseJsonWithSchema(b.conditionMeta, badgeConditionMetaSchema)
+        return meta.region !== undefined && areas.has(meta.region)
       }
       return false
     })
