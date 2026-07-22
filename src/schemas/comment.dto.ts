@@ -13,11 +13,7 @@ export const CreateCommentRequestSchema = z
       .string()
       .min(1, 'コメントは必須です')
       .max(40, 'コメントは 40 文字以内で入力してください')
-      .openapi({ description: 'コメント本文（1〜40文字）', example: 'イベント楽しみ！' }),
-    turnstileToken: z
-      .string()
-      .min(1, 'Turnstileトークンは必須です')
-      .openapi({ description: 'Cloudflare Turnstile 検証トークン' })
+      .openapi({ description: 'コメント本文（1〜40文字）', example: 'イベント楽しみ！' })
   })
   .openapi('CreateCommentRequest')
 

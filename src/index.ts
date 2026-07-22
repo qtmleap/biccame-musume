@@ -38,13 +38,12 @@ app.use(
 )
 
 // セキュリティヘッダ (XSS/Clickjacking/MIME sniffing 対策のベースライン)。
-// CSP は Google Maps / Firebase / Turnstile / Twitter 画像など多数のオリジンが絡むため
+// CSP は Google Maps / Firebase / Twitter 画像など多数のオリジンが絡むため
 // Report-Only モードで段階導入する。 本番で違反ログを集めて、 問題なければ Enforce に切替予定。
 //
 // 含まれているオリジンの根拠:
 // - Firebase Auth (OAuth redirect): apis.google.com / *.googleapis.com / accounts.google.com /
 //   *.firebaseapp.com / securetoken.googleapis.com
-// - Cloudflare Turnstile: challenges.cloudflare.com (v0/api.js を動的 inject する)
 // - Google Maps: maps.googleapis.com / maps.gstatic.com
 // - Twitter プロフィール画像: pbs.twimg.com
 // - 認証 redirect helper: biccame-musume.firebaseapp.com
@@ -69,8 +68,6 @@ app.use(
         'https://apis.google.com',
         'https://www.gstatic.com',
         'https://accounts.google.com',
-        // Turnstile
-        'https://challenges.cloudflare.com',
         // Google Maps
         'https://maps.googleapis.com',
         // Cloudflare Web Analytics (有効化されていれば使う)
@@ -104,15 +101,12 @@ app.use(
         'https://*.firebaseio.com',
         'https://identitytoolkit.googleapis.com',
         'https://securetoken.googleapis.com',
-        'https://challenges.cloudflare.com',
         'https://maps.googleapis.com'
       ],
       frameSrc: [
         // Firebase Auth helper (popup / iframe)
         'https://biccame-musume.firebaseapp.com',
-        'https://accounts.google.com',
-        // Turnstile widget は iframe で表示される
-        'https://challenges.cloudflare.com'
+        'https://accounts.google.com'
       ],
       workerSrc: ["'self'", 'blob:'],
       manifestSrc: ["'self'"],

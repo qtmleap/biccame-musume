@@ -9,7 +9,6 @@ import { moderateText } from '@/utils/moderation'
 import { containsNgWord } from '@/utils/ng-words'
 import { sanitizeCommentBody } from '@/utils/sanitize'
 import { verifyTokenOptional } from '@/utils/token'
-import { verifyTurnstileToken } from '@/utils/turnstile'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
 
@@ -105,7 +104,7 @@ routes.openapi(
   }),
   async (c) => {
     const { uuid } = c.req.valid('param')
-    const { characterId, body, turnstileToken } = c.req.valid('json')
+    const { characterId, body } = c.req.valid('json')
     const userId = c.get('jwtPayload')?.uid
 
     const ip = c.req.header('cf-connecting-ip') ?? '127.0.0.1'
@@ -116,13 +115,7 @@ routes.openapi(
       return c.json({ message: '投稿できませんでした' }, 429)
     }
 
-    // 2. Turnstile 検証
-    const turnstileOk = await verifyTurnstileToken(turnstileToken, c.env.TURNSTILE_SECRET_KEY, ip, c.env)
-    if (!turnstileOk) {
-      return c.json({ message: '投稿できませんでした' }, 400)
-    }
-
-    // 3. characterId をホワイトリスト検証 (改ざんされたフォーム対策)
+    // 2. characterId をホワイトリスト検証 (改ざんされたフォーム対策)
     const validIds = await loadBiccameMusumeIdSet(c.env.ASSETS, c.req.url)
     if (!validIds.has(characterId)) {
       return c.json({ message: '投稿できませんでした' }, 400)

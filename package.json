@@ -50,7 +50,6 @@
     "@hono/firebase-auth": "^1.4.2",
     "@hono/zod-openapi": "^1.5.1",
     "@hookform/resolvers": "^5.4.0",
-    "@marsidev/react-turnstile": "^1.5.3",
     "@prisma/adapter-d1": "7.9.0",
     "@prisma/client": "7.9.0",
     "@resvg/resvg-wasm": "^2.6.2",

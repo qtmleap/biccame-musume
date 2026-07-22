@@ -72,7 +72,6 @@ CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 FIREBASE_PROJECT_ID = "biccame-musume"
 PUBLIC_JWK_CACHE_KEY = "firebase-public-jwk-cache"
-# TURNSTILE_SECRET_KEY はローカルは .dev.vars で "1x0000000000000000000000000000000AA" を使用。staging / production は wrangler secret put で注入する。
 # CSRF 許可オリジン。カンマ区切りの絶対オリジン (例: "https://biccame.example,https://www.biccame.example")
 ORIGIN_ALLOWLIST = ""
 
@@ -149,7 +148,6 @@ CF_ACCESS_AUD = "995cb37056207392cb90c93562f05361eaaa4dca46ba1f5bda4175cf7a4b860
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 FIREBASE_PROJECT_ID = "biccame-musume"
 PUBLIC_JWK_CACHE_KEY = "firebase-public-jwk-cache"
-# TURNSTILE_SECRET_KEY はローカルは .dev.vars で "1x0000000000000000000000000000000AA" を使用。staging / production は wrangler secret put で注入する。
 # CSRF 許可オリジン。カンマ区切りの絶対オリジン
 ORIGIN_ALLOWLIST = "https://dev.biccame-musume.com"
 
@@ -230,7 +228,6 @@ CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 FIREBASE_PROJECT_ID = "biccame-musume"
 PUBLIC_JWK_CACHE_KEY = "firebase-public-jwk-cache"
-# TURNSTILE_SECRET_KEY はローカルは .dev.vars で "1x0000000000000000000000000000000AA" を使用。staging / production は wrangler secret put で注入する。
 # CSRF 許可オリジン。カンマ区切りの絶対オリジン
 ORIGIN_ALLOWLIST = "https://biccame-musume.com"
 

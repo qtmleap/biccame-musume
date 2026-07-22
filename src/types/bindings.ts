@@ -40,8 +40,6 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   AI: Ai
   /** コメント投稿レート制限用バインディング */
   COMMENT_RATE_LIMITER: RateLimitBinding
-  /** Cloudflare Turnstile シークレットキー */
-  TURNSTILE_SECRET_KEY: string
   /** JWT秘密鍵 */
   JWT_SECRET_KEY: string
   /** 静的アセット配信バインディング */
