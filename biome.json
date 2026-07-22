@@ -42,7 +42,7 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
-    "lineWidth": 80
+    "lineWidth": 120
   },
   "javascript": {
     "formatter": {
@@ -54,9 +54,6 @@
       "quoteStyle": "single",
       "quoteProperties": "asNeeded",
       "semicolons": "asNeeded",
-      "indentStyle": "space",
-      "indentWidth": 2,
-      "lineWidth": 120,
       "trailingCommas": "none"
     }
   },

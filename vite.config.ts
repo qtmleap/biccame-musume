@@ -132,9 +132,6 @@ export default defineConfig(({ mode }) => {
         '@': resolve(__dirname, './src')
       },
     },
-    optimizeDeps: {
-      include: ['sonner'],
-    },
     define: {
       global: 'globalThis',
       __APP_VERSION__: JSON.stringify(version),
