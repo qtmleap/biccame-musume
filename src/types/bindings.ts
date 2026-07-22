@@ -46,6 +46,8 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   JWT_SECRET_KEY: string
   /** 静的アセット配信バインディング */
   ASSETS: Fetcher
+  /** CSRF 許可オリジン (カンマ区切りの絶対オリジン) */
+  ORIGIN_ALLOWLIST?: string
 }
 
 /**

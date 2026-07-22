@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { csrf } from 'hono/csrf'
 import { HTTPException } from 'hono/http-exception'
 import { proxy } from 'hono/proxy'
 import { secureHeaders } from 'hono/secure-headers'
@@ -19,6 +20,7 @@ import stats from './api/stats'
 import users from './api/user'
 import version from './api/version'
 import votes from './api/vote'
+import { isAllowedOrigin } from './lib/allowed-origin'
 import { rewriteIndexHtml } from './middleware/og-rewrite'
 import { getEventsEndingToday, getEventsStartingToday } from './services/event-service'
 import type { Bindings, Variables } from './types/bindings'
@@ -120,6 +122,9 @@ app.use(
     }
   })
 )
+
+// CSRF 対策 (Cookie-JWT 認証を持つミューテーション経路すべてに一括適用)
+app.use('/api/*', csrf({ origin: (origin, c) => isAllowedOrigin(origin, c.env) }))
 
 /**
  * /admin/* の HTML は CDN キャッシュさせない
