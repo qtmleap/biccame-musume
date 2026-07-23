@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { ArrowLeft, MapPin } from 'lucide-react'
 import { Suspense } from 'react'
+import { BackendSessionGate } from '@/components/auth/backend-session-gate'
 import { CharacterListCard } from '@/components/character-list-card'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { ErrorBoundary } from '@/components/common/error-boundary'
@@ -65,7 +66,9 @@ const VisitedContent = () => {
 const RouteComponent = () => (
   <ErrorBoundary>
     <Suspense fallback={<LoadingFallback />}>
-      <VisitedContent />
+      <BackendSessionGate>
+        <VisitedContent />
+      </BackendSessionGate>
     </Suspense>
   </ErrorBoundary>
 )

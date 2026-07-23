@@ -17,7 +17,8 @@ type LoginButtonProps = {
  * ログイン時: ユーザーアバター+ドロップダウンメニュー表示
  */
 export const LoginButton = ({ variant = 'default', onClose }: LoginButtonProps) => {
-  const { isAuthenticated } = useAuth()
+  // 表示切替は Firebase Auth 完了で判定 (backend session を待つと切替が遅れて見える)
+  const { isFirebaseAuthenticated: isAuthenticated } = useAuth()
   const [dialogOpen, setDialogOpen] = useState(false)
 
   /**

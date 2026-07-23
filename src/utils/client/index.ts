@@ -40,5 +40,11 @@ const api = makeApi([
 
 /**
  * Zodios クライアント
+ * axiosConfig.withCredentials=true にすることで session Cookie を確実に送受信する。
+ * 同一オリジンでは実質必須ではないが、 挙動を明示的に固定するためにセットする。
  */
-export const client = new Zodios('/', api)
+export const client = new Zodios('/', api, {
+  axiosConfig: {
+    withCredentials: true
+  }
+})

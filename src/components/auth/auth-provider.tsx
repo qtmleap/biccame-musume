@@ -2,7 +2,7 @@ import { getRedirectResult, onAuthStateChanged } from 'firebase/auth'
 import { useSetAtom } from 'jotai'
 import { type ReactNode, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
-import { userAtom } from '@/atoms/auth-atom'
+import { backendSessionReadyAtom, userAtom } from '@/atoms/auth-atom'
 import { auth } from '@/lib/firebase'
 import { AUTH_LABELS } from '@/locales/app.content'
 import { client } from '@/utils/client'
@@ -18,6 +18,7 @@ interface AuthProviderProps {
  */
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const setUser = useSetAtom(userAtom)
+  const setBackendSessionReady = useSetAtom(backendSessionReadyAtom)
   const redirectResultChecked = useRef(false)
 
   useEffect(() => {
@@ -56,25 +57,30 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       console.info('Auth state changed:', user ? `${user.uid} (${user.email})` : 'Not authenticated')
 
-      // userAtomを更新してログイン状態を反映
+      // Firebase Auth の user は即座に反映する (Login ボタン等の表示切替はこれで動く)。
+      // backend session Cookie は非同期で確立するので、 useSuspenseQuery を守るのは
+      // backendSessionReadyAtom (BackendSessionGate) 側で行う。
       setUser(user)
 
-      if (user) {
-        // 認証済みの場合はIDトークンを取得してバックエンドに送信
-        try {
-          const token = await user.getIdToken()
-          console.info('ID token obtained')
+      if (user === null) {
+        setBackendSessionReady(false)
+        return
+      }
 
-          // バックエンドにユーザー情報を送信（アカウント作成・更新を一任）
-          await client.authenticate(undefined, { headers: { Authorization: `Bearer ${token}` } })
-        } catch (error) {
-          console.error('Failed to authenticate with backend:', error)
-        }
+      try {
+        const token = await user.getIdToken()
+        console.info('ID token obtained')
+        await client.authenticate(undefined, { headers: { Authorization: `Bearer ${token}` } })
+        console.info('Backend session established')
+        setBackendSessionReady(true)
+      } catch (error) {
+        console.error('Failed to authenticate with backend:', error)
+        setBackendSessionReady(false)
       }
     })
 
     return () => unsubscribe()
-  }, [setUser])
+  }, [setUser, setBackendSessionReady])
 
   return <>{children}</>
 }
