@@ -17,7 +17,7 @@ import {
   UserActivityResponseSchema
 } from '@/schemas/activity.dto'
 import type { StoreKey } from '@/schemas/store.dto'
-import { evaluateOnEventComplete, evaluateOnVisit } from '@/services/badge-evaluator'
+import { evaluateOnEventComplete, evaluateOnVisit } from '@/services/badge'
 import { pushEarnedBadges } from '@/services/badge-push'
 import { getEvent } from '@/services/event-service'
 import {

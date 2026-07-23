@@ -11,7 +11,7 @@ import {
   VoteCountListSchema,
   VoteResponseSchema
 } from '@/schemas/vote.dto'
-import { evaluateOnVote } from '@/services/badge-evaluator'
+import { evaluateOnVote } from '@/services/badge'
 import { pushEarnedBadges } from '@/services/badge-push'
 import { bulkVote, getAllVoteCounts, vote } from '@/services/vote-service'
 import type { Bindings, Variables } from '@/types/bindings'

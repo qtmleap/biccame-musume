@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Plus } from 'lucide-react'
+import { ArrowLeft, Plus, Trophy } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense, useMemo, useState } from 'react'
 import { CATEGORY_ORDER } from '@/components/admin/badges/badge-display-constants'
@@ -72,6 +72,12 @@ const BadgesContent = () => {
               </p>
             </div>
             <div className='flex items-center gap-2 shrink-0'>
+              <Button variant='outline' size='sm' asChild>
+                <Link to='/admin/badges/ranking'>
+                  <Trophy className='size-4 mr-1' />
+                  所持数ランキング
+                </Link>
+              </Button>
               <RecalculateBadgesButton />
               <Button
                 size='sm'

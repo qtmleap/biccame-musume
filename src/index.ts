@@ -23,7 +23,7 @@ import votes from './api/vote'
 import { isAllowedOrigin } from './lib/allowed-origin'
 import { getPrisma } from './lib/prisma'
 import { rewriteIndexHtml } from './middleware/og-rewrite'
-import { evaluateAllUsersBadges } from './services/badge-evaluator'
+import { evaluateAllUsersBadges } from './services/badge'
 import { getEventsEndingToday, getEventsStartingToday } from './services/event-service'
 import type { Bindings, Variables } from './types/bindings'
 import { Twitter } from './utils/twitter'
@@ -268,8 +268,13 @@ const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, 
   const reevaluateBadges = async (): Promise<void> => {
     try {
       const prisma = getPrisma(env)
-      const { processedUsers, totalAwarded } = await evaluateAllUsersBadges(env, prisma)
-      console.log(`[Cron] Badge re-evaluation: users=${processedUsers} newly_awarded=${totalAwarded}`)
+      // 日次 cron は「直近 25 時間で stores/events を更新したユーザー」に限定して
+      // Workers のサブリクエスト上限を超えないようにする。全体再計算は admin PATCH から。
+      const since = new Date(scheduledAt.getTime() - 25 * 60 * 60 * 1000)
+      const { processedUsers, totalAwarded } = await evaluateAllUsersBadges(env, prisma, 25, { since })
+      console.log(
+        `[Cron] Badge re-evaluation: users=${processedUsers} newly_awarded=${totalAwarded} since=${since.toISOString()}`
+      )
     } catch (err) {
       console.error('[Cron] Failed to re-evaluate badges:', err)
     }

@@ -2,7 +2,7 @@ import { BADGE_TEMPLATES } from '@/locales/app.content'
 import type { StoreKey } from '@/schemas/store.dto'
 import { formatTemplate } from '@/utils/template'
 import { BADGE_AREA_LABELS, type BadgeArea, storeKeyToBadgeArea } from './area-mapping'
-import { PHYSICAL_STORE_KEYS } from './store-exclusion'
+import { ACTIVE_PHYSICAL_STORE_KEYS, PHYSICAL_STORE_KEYS } from './store-exclusion'
 
 export type BadgeCategory =
   | 'store'
@@ -155,12 +155,13 @@ const ALL_AREAS: BadgeArea[] = [
 ]
 
 // Stores grouped by area (computed once).
+// 現役店舗のみで集計。エリアの storeCount 表示と area_complete 系の判定基準を揃える。
 const STORES_BY_AREA: Record<BadgeArea, StoreKey[]> = (() => {
   const map = {} as Record<BadgeArea, StoreKey[]>
   for (const area of ALL_AREAS) {
     map[area] = []
   }
-  for (const key of PHYSICAL_STORE_KEYS) {
+  for (const key of ACTIVE_PHYSICAL_STORE_KEYS) {
     map[storeKeyToBadgeArea[key]].push(key)
   }
   return map
@@ -232,7 +233,10 @@ function getBadgeRegistry(): BadgeDef[] {
   // -----------------------------------------------------------------------
   // 3. Store visit milestone badges
   // -----------------------------------------------------------------------
-  const physicalCount = PHYSICAL_STORE_KEYS.length
+  // milestone / conquest 系の閾値は現役店舗数を上限にする。
+  // 閉店店舗ぶんの過去訪問はカウント側では加算されるが（寛大側）、
+  // 「N 店舗中 N 到達で mythic」の N が現役数を超えると永久未達になるのを防ぐ。
+  const physicalCount = ACTIVE_PHYSICAL_STORE_KEYS.length
   const visitSteps = milestoneSteps(physicalCount)
   for (let i = 0; i < visitSteps.length; i++) {
     const count = visitSteps[i]
@@ -492,7 +496,5 @@ export const BADGE_REGISTRY: readonly BadgeDef[] = Object.freeze(getBadgeRegistr
  */
 export const BADGE_REGISTRY_BY_CODE: ReadonlyMap<string, BadgeDef> = new Map(BADGE_REGISTRY.map((b) => [b.code, b]))
 
-// Sanity assertion: registry size must be in [310, 320].
-if (BADGE_REGISTRY.length < 310 || BADGE_REGISTRY.length > 320) {
-  throw new Error(`BADGE_REGISTRY size out of expected range [310, 320]: got ${BADGE_REGISTRY.length}`)
-}
+// Registry のサニティチェックは __tests__/badge_registry.test.ts で担保する。
+// 以前は module load 時に throw していたが、店舗の増減で全 API が 500 になるリスクがあった。

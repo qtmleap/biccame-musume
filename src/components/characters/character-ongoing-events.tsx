@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { useEvents } from '@/hooks/use-events'
 import { DURATION } from '@/lib/motion'
 import { EVENT_LABELS } from '@/locales/app.content'
-import { STATUS_BADGE_SM } from '@/locales/component'
+import { STATUS_BADGE } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -39,7 +39,7 @@ const OngoingEventItem = ({ event, isLast }: OngoingEventItemProps) => {
             {event.endDate ? `〜${dayjs(event.endDate).format('YYYY/MM/DD')}` : EVENT_LABELS.untilEnd}
           </p>
         </div>
-        {STATUS_BADGE_SM[event.status]()}
+        {STATUS_BADGE[event.status]()}
       </Link>
       {!isLast && <Separator className='my-3 bg-separator' />}
     </>

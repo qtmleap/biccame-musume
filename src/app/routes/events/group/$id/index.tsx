@@ -12,7 +12,7 @@ import { useEventGroup } from '@/hooks/use-event-groups'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { cn } from '@/lib/utils'
 import { STORE_NAME_LABELS } from '@/locales/app.content'
-import { STATUS_BADGE_SM } from '@/locales/component'
+import { STATUS_BADGE } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -54,7 +54,7 @@ const EventCheckCard = ({ event, completed }: EventCheckProps) => {
       <div className='flex items-start justify-between gap-3'>
         <div className='min-w-0 flex-1'>
           <p className='text-base font-semibold text-foreground line-clamp-2'>{label}</p>
-          <div className='mt-2'>{STATUS_BADGE_SM[event.status]()}</div>
+          <div className='mt-2'>{STATUS_BADGE[event.status]()}</div>
         </div>
         <div
           aria-hidden='true'

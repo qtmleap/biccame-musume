@@ -4,6 +4,7 @@ import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
+import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { ADMIN_LABELS } from '@/locales/app.content'
@@ -76,7 +77,8 @@ const MenuCard = ({
   iconText: string
   index: number
 }) => {
-  const rotation = getStickerRotation(index)
+  const isDesktop = useMediaQuery('(min-width: 768px)')
+  const rotation = isDesktop ? getStickerRotation(index) : 0
 
   return (
     <motion.div
