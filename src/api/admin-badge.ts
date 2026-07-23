@@ -10,7 +10,7 @@ import {
   prismaBadgeToDto,
   UpdateBadgeBodySchema
 } from '@/schemas/badge.dto'
-import { evaluateAndAwardBadges } from '@/services/badge-evaluator'
+import { evaluateAllUsersBadges } from '@/services/badge-evaluator'
 import type { Bindings } from '@/types/bindings'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
@@ -307,9 +307,7 @@ routes.openapi(
     const prisma = getPrisma(c.env)
     const users = await prisma.user.findMany({ select: { id: true } })
 
-    c.executionCtx.waitUntil(
-      Promise.all(users.map((user) => evaluateAndAwardBadges({ env: c.env, prisma, userId: user.id })))
-    )
+    c.executionCtx.waitUntil(evaluateAllUsersBadges(c.env, prisma))
 
     return c.json({ processedUsers: users.length, scheduled: true as const }, 202)
   }

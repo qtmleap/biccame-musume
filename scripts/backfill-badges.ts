@@ -13,7 +13,7 @@
 import { $ } from 'bun'
 import { storeKeyToBadgeArea } from '../src/data/badges/area-mapping'
 import type { BadgeArea } from '../src/data/badges/area-mapping'
-import { PHYSICAL_STORE_KEYS } from '../src/data/badges/store-exclusion'
+import { ACTIVE_PHYSICAL_STORE_KEYS, PHYSICAL_STORE_KEYS } from '../src/data/badges/store-exclusion'
 import type { BadgeSubCategory } from '../src/data/badges/registry'
 
 type TargetEnv = 'local-staging' | 'remote-staging' | 'remote-production'
@@ -65,8 +65,9 @@ async function evaluateBadgeForUser(
     }
 
     case 'area_complete': {
+      // runtime (evaluateAreaComplete) と合わせて閉店店舗は集計から除外する
       const region = String(conditionMeta.region ?? '') as BadgeArea
-      const storeKeysInArea = PHYSICAL_STORE_KEYS.filter((k) => storeKeyToBadgeArea[k] === region)
+      const storeKeysInArea = ACTIVE_PHYSICAL_STORE_KEYS.filter((k) => storeKeyToBadgeArea[k] === region)
       if (storeKeysInArea.length === 0) return false
       const storeKeysSql = storeKeysInArea.map((k) => `'${k}'`).join(',')
       const rows = await queryJson<{ c: number }>(
@@ -122,8 +123,9 @@ async function evaluateBadgeForUser(
     }
 
     case 'event_clear_area_complete': {
+      // runtime (evaluateEventClearAreaComplete) と合わせて閉店店舗は集計から除外する
       const region = String(conditionMeta.region ?? '') as BadgeArea
-      const storeKeysInArea = PHYSICAL_STORE_KEYS.filter((k) => storeKeyToBadgeArea[k] === region)
+      const storeKeysInArea = ACTIVE_PHYSICAL_STORE_KEYS.filter((k) => storeKeyToBadgeArea[k] === region)
       if (storeKeysInArea.length === 0) return false
       // Check each store individually
       for (const sk of storeKeysInArea) {
@@ -171,37 +173,35 @@ async function evaluateBadgeForUser(
       return (rows[0]?.c ?? 0) >= count
     }
 
-    case 'vote_unique': {
-      const count = Number(conditionMeta.count ?? 0)
-      const rows = await queryJson<{ c: number }>(
-        args,
-        `SELECT COUNT(DISTINCT character_id) as c FROM votes WHERE user_id='${uid}';`
-      )
-      return (rows[0]?.c ?? 0) >= count
-    }
-
-    case 'vote_devotion': {
-      const count = Number(conditionMeta.count ?? 0)
-      const rows = await queryJson<{ c: number }>(
-        args,
-        `SELECT MAX(cnt) as c FROM (SELECT COUNT(*) as cnt FROM votes WHERE user_id='${uid}' GROUP BY character_id);`
-      )
-      return (rows[0]?.c ?? 0) >= count
-    }
-
-    case 'vote_all_biccame': {
-      // Read biccame musume IDs from characters.json
-      const chars = (await import('../public/characters.json', { with: { type: 'json' } })) as {
-        default: Array<{ id: string; character: { is_biccame_musume?: boolean } }>
+    case 'all_areas_any_visit': {
+      // 各エリアで少なくとも1店舗訪問済みなら達成
+      for (const area of new Set(PHYSICAL_STORE_KEYS.map((k) => storeKeyToBadgeArea[k]))) {
+        const storeKeys = PHYSICAL_STORE_KEYS.filter((k) => storeKeyToBadgeArea[k] === area)
+          .map((k) => `'${k}'`)
+          .join(',')
+        const rows = await queryJson<{ c: number }>(
+          args,
+          `SELECT COUNT(*) as c FROM user_stores WHERE user_id='${uid}' AND store_key IN (${storeKeys}) AND status='visited';`
+        )
+        if ((rows[0]?.c ?? 0) < 1) return false
       }
-      const biccameIds = chars.default.filter((c) => c.character.is_biccame_musume === true).map((c) => c.id)
-      if (biccameIds.length === 0) return false
-      const idsSql = biccameIds.map((id) => `'${id.replace(/'/g, "''")}'`).join(',')
-      const rows = await queryJson<{ c: number }>(
-        args,
-        `SELECT COUNT(DISTINCT character_id) as c FROM votes WHERE user_id='${uid}' AND character_id IN (${idsSql});`
-      )
-      return (rows[0]?.c ?? 0) >= biccameIds.length
+      return true
+    }
+
+    case 'all_areas_any_event_clear': {
+      for (const area of new Set(PHYSICAL_STORE_KEYS.map((k) => storeKeyToBadgeArea[k]))) {
+        const storeKeys = PHYSICAL_STORE_KEYS.filter((k) => storeKeyToBadgeArea[k] === area)
+          .map((k) => `'${k}'`)
+          .join(',')
+        const rows = await queryJson<{ c: number }>(
+          args,
+          `SELECT COUNT(*) as c FROM user_events ue ` +
+            `JOIN event_stores es ON ue.event_id = es.event_id ` +
+            `WHERE ue.user_id='${uid}' AND ue.status='completed' AND es.store_key IN (${storeKeys});`
+        )
+        if ((rows[0]?.c ?? 0) < 1) return false
+      }
+      return true
     }
 
     case 'special_multi_store_clear': {

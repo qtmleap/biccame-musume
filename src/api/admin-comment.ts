@@ -48,6 +48,7 @@ routes.openapi(
       createdAt: row.createdAt.toISOString()
     }))
 
+    c.header('Cache-Control', 'no-store')
     return c.json({ comments }, 200)
   }
 )

@@ -1,7 +1,9 @@
-import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { getPrisma } from '@/lib/prisma'
 import {
+  BadgeHoldersResponseSchema,
   BadgeLeaderboardResponseSchema,
+  GetBadgeHoldersParamsSchema,
   GetBadgeLeaderboardQuerySchema,
   GetBadgesResponseSchema,
   MyBadgesResponseSchema,
@@ -163,6 +165,80 @@ routes.openapi(
 
     c.header('Cache-Control', 'public, max-age=60, s-maxage=120')
     return c.json({ top, ...(me !== undefined ? { me } : {}) })
+  }
+)
+
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/badges/:code/holders',
+    request: {
+      params: GetBadgeHoldersParamsSchema
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: BadgeHoldersResponseSchema
+          }
+        },
+        description: 'バッジ獲得者一覧取得成功'
+      },
+      404: {
+        content: {
+          'application/json': {
+            schema: z.object({ error: z.string().nonempty() })
+          }
+        },
+        description: 'バッジが見つかりません'
+      }
+    },
+    tags: ['badges']
+  }),
+  async (c) => {
+    const { code } = c.req.valid('param')
+    const prisma = getPrisma(c.env)
+
+    const badge = await prisma.badge.findUnique({ where: { code }, select: { isHidden: true } })
+    if (!badge || badge.isHidden) {
+      return c.json({ error: 'バッジが見つかりません' }, 404)
+    }
+
+    type HolderRow = {
+      uid: string
+      display_name: string | null
+      thumbnail_url: string | null
+      earned_at: string
+    }
+
+    const rows = await prisma.$queryRaw<HolderRow[]>`
+      SELECT
+        u.id AS uid,
+        u.display_name,
+        u.thumbnail_url,
+        ub.earned_at
+      FROM user_badges ub
+      JOIN users u ON ub.user_id = u.id
+      WHERE ub.badge_code = ${code}
+      ORDER BY ub.earned_at ASC
+      LIMIT 100
+    `
+
+    type TotalRow = { total: bigint }
+    const totalRows = await prisma.$queryRaw<TotalRow[]>`
+      SELECT COUNT(*) AS total FROM user_badges WHERE badge_code = ${code}
+    `
+    const total = totalRows.length > 0 ? Number(totalRows[0].total) : 0
+
+    const holders = rows.map((row) => ({
+      uid: row.uid,
+      displayName: row.display_name,
+      thumbnailURL: row.thumbnail_url ?? undefined,
+      earnedAt: row.earned_at
+    }))
+
+    c.header('Cache-Control', 'public, max-age=60, s-maxage=120')
+    return c.json({ total, holders }, 200)
   }
 )
 

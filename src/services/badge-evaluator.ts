@@ -307,7 +307,8 @@ export async function evaluateAndAwardBadges(ctx: EvaluatorContext, candidateCod
 
 /**
  * Called from PUT /me/stores/:storeKey when status='visited'.
- * Evaluates: visit[storeKey], area_any[region], area_complete[region], count[*], milestone_count_all
+ * Evaluates: visit[storeKey], area_any[region], area_complete[region],
+ *   milestone_visit_count_*, milestone_visit_count_all, milestone_visit_areas
  */
 export async function evaluateOnVisit(ctx: EvaluatorContext, storeKey: StoreKey): Promise<Badge[]> {
   const area = storeKeyToBadgeArea[storeKey]
@@ -325,8 +326,8 @@ export async function evaluateOnVisit(ctx: EvaluatorContext, storeKey: StoreKey)
         code === `store_visit_${storeKey}` ||
         code === `area_any_${area}` ||
         code === `area_complete_${area}` ||
-        code.startsWith('milestone_count_') ||
-        code === 'milestone_all_areas_visit'
+        code.startsWith('milestone_visit_count_') ||
+        code === 'milestone_visit_areas'
       )
     })
 
@@ -406,4 +407,32 @@ export async function evaluateOnVote(ctx: EvaluatorContext, _characterId: string
     .map((b) => b.code)
 
   return evaluateAndAwardBadges(ctx, candidateCodes)
+}
+
+// ---------------------------------------------------------------------------
+// Scheduled re-evaluation (cron & admin recalculate)
+// ---------------------------------------------------------------------------
+
+/**
+ * 全ユーザーに対して未取得バッジを再評価する。
+ * Workers CPU 制限を考慮して chunk 単位で逐次実行し、chunk 内はユーザーごとに並列。
+ * Returns aggregate counts for logging.
+ */
+export async function evaluateAllUsersBadges(
+  env: Bindings,
+  prisma: PrismaClient,
+  chunkSize = 25
+): Promise<{ processedUsers: number; totalAwarded: number }> {
+  const users = await prisma.user.findMany({ select: { id: true } })
+  let totalAwarded = 0
+
+  for (let i = 0; i < users.length; i += chunkSize) {
+    const chunk = users.slice(i, i + chunkSize)
+    const awarded = await Promise.all(
+      chunk.map((u) => evaluateAndAwardBadges({ env, prisma, userId: u.id }).then((badges) => badges.length))
+    )
+    totalAwarded += awarded.reduce((a, b) => a + b, 0)
+  }
+
+  return { processedUsers: users.length, totalAwarded }
 }

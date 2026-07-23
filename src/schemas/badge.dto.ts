@@ -141,6 +141,28 @@ export const GetBadgeLeaderboardQuerySchema = z
   })
   .openapi('GetBadgeLeaderboardQuery')
 
+export const BadgeHolderEntrySchema = z
+  .object({
+    uid: z.string().nonempty().openapi({ example: 'firebase-uid-xyz' }),
+    displayName: z.string().nonempty().nullable().openapi({ example: 'あきばたん' }),
+    thumbnailURL: z.string().nonempty().nullable().optional().openapi({ example: 'https://example.com/avatar.png' }),
+    earnedAt: z.string().nonempty().openapi({ example: '2026-05-06T12:00:00.000Z' })
+  })
+  .openapi('BadgeHolderEntry')
+
+export const BadgeHoldersResponseSchema = z
+  .object({
+    total: z.number().int().nonnegative().openapi({ example: 42 }),
+    holders: z.array(BadgeHolderEntrySchema)
+  })
+  .openapi('BadgeHoldersResponse')
+
+export const GetBadgeHoldersParamsSchema = z
+  .object({
+    code: z.string().nonempty().openapi({ example: 'store_visit_akiba' })
+  })
+  .openapi('GetBadgeHoldersParams')
+
 // ---------------------------------------------------------------------------
 // Admin CRUD schemas
 // ---------------------------------------------------------------------------

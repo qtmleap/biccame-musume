@@ -1,6 +1,8 @@
 import dayjs from 'dayjs'
 import { Lock } from 'lucide-react'
 import { motion } from 'motion/react'
+import { useState } from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Dialog,
   DialogContent,
@@ -9,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
+import { useBadgeHolders } from '@/hooks/use-badge-holders'
 import { resolveBadgeText } from '@/lib/badge-display'
 import { getBadgeIcon } from '@/lib/badge-icons'
 import { DURATION } from '@/lib/motion'
@@ -57,6 +60,8 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
   const style = RARITY_STYLES[badge.rarity]
   const rotation = earned ? getStickerRotation(index) : 0
   const { name: displayName, description: displayDescription } = resolveBadgeText(badge)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const holdersQuery = useBadgeHolders(badge.code, dialogOpen && earned)
 
   const card = (
     <motion.div
@@ -127,7 +132,7 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
   }
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <button type='button' className='block w-full text-left' aria-label={`${displayName ?? 'バッジ'} の詳細を見る`}>
           {card}
@@ -162,7 +167,49 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
         <div className='mt-2 flex items-center justify-center text-xs text-muted-foreground font-numeric tabular-nums'>
           {dayjs(earnedAt).format('YYYY/MM/DD')} 獲得
         </div>
+        <BadgeHoldersSection query={holdersQuery} />
       </DialogContent>
     </Dialog>
+  )
+}
+
+type HoldersQuery = ReturnType<typeof useBadgeHolders>
+
+const BadgeHoldersSection = ({ query }: { query: HoldersQuery }) => {
+  if (query.isLoading) {
+    return <div className='mt-4 pt-4 border-t text-center text-xs text-muted-foreground'>獲得者を読み込み中…</div>
+  }
+  if (query.isError || !query.data) {
+    return null
+  }
+  const { total, holders } = query.data
+  return (
+    <div className='mt-4 pt-4 border-t'>
+      <div className='mb-2 flex items-center justify-between'>
+        <div className='text-xs font-bold text-foreground'>獲得者</div>
+        <div className='text-xs text-muted-foreground font-numeric tabular-nums'>{total} 人</div>
+      </div>
+      {holders.length === 0 ? (
+        <div className='text-center text-xs text-muted-foreground py-2'>まだ誰も獲得していません</div>
+      ) : (
+        <ul className='space-y-1.5 max-h-52 overflow-y-auto pr-1'>
+          {holders.map((h) => (
+            <li key={h.uid} className='flex items-center gap-2'>
+              <Avatar className='size-6'>
+                {h.thumbnailURL ? <AvatarImage src={h.thumbnailURL} alt='' /> : null}
+                <AvatarFallback className='text-[10px]'>{(h.displayName ?? '?').slice(0, 1)}</AvatarFallback>
+              </Avatar>
+              <span className='text-xs text-foreground truncate flex-1'>{h.displayName ?? '名無しさん'}</span>
+              <span className='text-[10px] text-muted-foreground font-numeric tabular-nums shrink-0'>
+                {dayjs(h.earnedAt).format('YYYY/MM/DD')}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {total > holders.length ? (
+        <div className='mt-2 text-center text-[10px] text-muted-foreground'>最初の {holders.length} 人まで表示</div>
+      ) : null}
+    </div>
   )
 }

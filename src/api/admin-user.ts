@@ -42,6 +42,7 @@ routes.openapi(
       thumbnailURL: u.thumbnailURL,
       createdAt: u.createdAt.toISOString()
     }))
+    c.header('Cache-Control', 'no-store')
     return c.json({ users }, 200)
   }
 )

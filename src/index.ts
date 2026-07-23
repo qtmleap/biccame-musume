@@ -21,7 +21,9 @@ import users from './api/user'
 import version from './api/version'
 import votes from './api/vote'
 import { isAllowedOrigin } from './lib/allowed-origin'
+import { getPrisma } from './lib/prisma'
 import { rewriteIndexHtml } from './middleware/og-rewrite'
+import { evaluateAllUsersBadges } from './services/badge-evaluator'
 import { getEventsEndingToday, getEventsStartingToday } from './services/event-service'
 import type { Bindings, Variables } from './types/bindings'
 import { Twitter } from './utils/twitter'
@@ -263,7 +265,17 @@ const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, 
     }
   }
 
-  ctx.waitUntil(Promise.all([postStartingToday(), postEndingToday()]))
+  const reevaluateBadges = async (): Promise<void> => {
+    try {
+      const prisma = getPrisma(env)
+      const { processedUsers, totalAwarded } = await evaluateAllUsersBadges(env, prisma)
+      console.log(`[Cron] Badge re-evaluation: users=${processedUsers} newly_awarded=${totalAwarded}`)
+    } catch (err) {
+      console.error('[Cron] Failed to re-evaluate badges:', err)
+    }
+  }
+
+  ctx.waitUntil(Promise.all([postStartingToday(), postEndingToday(), reevaluateBadges()]))
 }
 
 export { StatsDO } from './durable-objects/stats'
