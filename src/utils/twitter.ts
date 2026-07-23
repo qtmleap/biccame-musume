@@ -84,6 +84,30 @@ const UserByScreenNameResponseSchema = z.object({
   })
 })
 
+/**
+ * CreateTweet GraphQL のレスポンスのうち、投稿済みツイート ID の取得に使う
+ * フィールドだけを抜き出した Zod スキーマ。
+ */
+const CreateTweetResponseSchema = z.object({
+  data: z
+    .object({
+      create_tweet: z
+        .object({
+          tweet_results: z
+            .object({
+              result: z
+                .object({
+                  rest_id: z.string().nonempty().optional()
+                })
+                .optional()
+            })
+            .optional()
+        })
+        .optional()
+    })
+    .optional()
+})
+
 export type TwitterAccountInfo = {
   restId: string
   screenName: string
@@ -206,11 +230,13 @@ export class Twitter {
       throw new Error(`X API error: ${response.status} ${errorText}`)
     }
 
-    const result = (await response.json()) as {
-      data?: { create_tweet?: { tweet_results?: { result?: { rest_id?: string } } } }
+    const json = await response.json()
+    const parsed = CreateTweetResponseSchema.safeParse(json)
+    if (!parsed.success) {
+      throw new Error(`X API: unexpected payload: ${parsed.error.message} / ${JSON.stringify(json).slice(0, 300)}`)
     }
-    const tweetId = result.data?.create_tweet?.tweet_results?.result?.rest_id
-    if (!tweetId) throw new Error(`X API: no rest_id in response: ${JSON.stringify(result).slice(0, 300)}`)
+    const tweetId = parsed.data.data?.create_tweet?.tweet_results?.result?.rest_id
+    if (!tweetId) throw new Error(`X API: no rest_id in response: ${JSON.stringify(parsed.data).slice(0, 300)}`)
     console.log('[Twitter] Tweet posted successfully:', { tweetId })
     return tweetId
   }

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import { BADGE_REGISTRY } from '../../src/data/badges/registry'
-import { PHYSICAL_STORE_KEYS } from '../../src/data/badges/store-exclusion'
+import { ACTIVE_PHYSICAL_STORE_KEYS, PHYSICAL_STORE_KEYS } from '../../src/data/badges/store-exclusion'
 
 describe('badge registry', () => {
   test('has unique codes', () => {
@@ -29,8 +29,8 @@ describe('badge registry', () => {
   })
 
   test('visit milestone counts follow the 5-step rule', () => {
-    const n = PHYSICAL_STORE_KEYS.length
-    // expected steps: 5, 10, ..., M where M = largest multiple of 5 strictly < n
+    // 閉店店舗を除いた現役数を上限にする（PHYSICAL のままだと mythic が永久未達）
+    const n = ACTIVE_PHYSICAL_STORE_KEYS.length
     const expectedSteps: number[] = []
     for (let i = 5; i < n; i += 5) {
       expectedSteps.push(i)
@@ -44,8 +44,8 @@ describe('badge registry', () => {
     expect(actualCounts).toEqual(expectedSteps)
   })
 
-  test('visit milestone has a completion badge at exactly N (all stores)', () => {
-    const n = PHYSICAL_STORE_KEYS.length
+  test('visit milestone has a completion badge at exactly N (active stores)', () => {
+    const n = ACTIVE_PHYSICAL_STORE_KEYS.length
     const allBadge = BADGE_REGISTRY.find((b) => b.code === 'milestone_visit_count_all')
     expect(allBadge).toBeDefined()
     expect(allBadge?.conditionMeta.count).toBe(n)
@@ -53,7 +53,7 @@ describe('badge registry', () => {
   })
 
   test('event_clear_count milestones follow the same 5-step rule', () => {
-    const n = PHYSICAL_STORE_KEYS.length
+    const n = ACTIVE_PHYSICAL_STORE_KEYS.length
     const expectedSteps: number[] = []
     for (let i = 5; i < n; i += 5) {
       expectedSteps.push(i)

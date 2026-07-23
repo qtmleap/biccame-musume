@@ -1,7 +1,13 @@
-type CharactersJson = Array<{
-  id: string
-  character?: { is_biccame_musume?: boolean }
-}>
+import { z } from 'zod'
+
+const CharactersJsonSchema = z.array(
+  z.object({
+    id: z.string().nonempty(),
+    character: z.object({ is_biccame_musume: z.boolean().default(false) }).optional()
+  })
+)
+
+type CharactersJson = z.infer<typeof CharactersJsonSchema>
 
 let cachedSet: Set<string> | null = null
 
@@ -17,7 +23,11 @@ export const loadBiccameMusumeIdSet = async (assets: Fetcher, baseUrl: string): 
   if (!res.ok) {
     return new Set()
   }
-  const data = (await res.json()) as CharactersJson
+  const parsed = CharactersJsonSchema.safeParse(await res.json())
+  if (!parsed.success) {
+    return new Set()
+  }
+  const data: CharactersJson = parsed.data
   cachedSet = new Set(data.filter((c) => c.character?.is_biccame_musume === true).map((c) => c.id))
   return cachedSet
 }

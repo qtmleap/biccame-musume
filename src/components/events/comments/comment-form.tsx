@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -12,8 +11,6 @@ import { Input } from '@/components/ui/input'
 import { useCharacters } from '@/hooks/use-characters'
 import type { StoreData } from '@/schemas/store.dto'
 import { client } from '@/utils/client'
-
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA'
 
 const MAX_BODY_LENGTH = 40
 
@@ -42,8 +39,6 @@ const pickRandomDifferent = <T extends { id: string }>(arr: T[], currentId?: str
 export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
   const queryClient = useQueryClient()
   const { data: allCharacters } = useCharacters()
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
-  const turnstileRef = useRef<TurnstileInstance | undefined>(undefined)
 
   const biccameMusumePool = allCharacters.filter((c) => c.character?.is_biccame_musume === true)
 
@@ -66,11 +61,8 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
 
   const mutation = useMutation({
     mutationFn: async (values: FormValues) => {
-      if (!turnstileToken) {
-        throw new Error('Turnstile token is missing')
-      }
       return client.createEventComment(
-        { characterId: values.characterId, body: values.body, turnstileToken },
+        { characterId: values.characterId, body: values.body },
         { params: { uuid: eventUuid } }
       )
     },
@@ -78,15 +70,11 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
       const next = pickRandom(biccameMusumePool)
       setCharacter(next)
       form.reset({ characterId: next?.id ?? '', body: '' })
-      setTurnstileToken(null)
-      turnstileRef.current?.reset()
       queryClient.invalidateQueries({ queryKey: ['events', eventUuid] })
       toast.success('コメントを投稿しました')
       onSuccess?.()
     },
     onError: () => {
-      turnstileRef.current?.reset()
-      setTurnstileToken(null)
       toast.error('投稿できませんでした')
     }
   })
@@ -96,7 +84,7 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
   }
 
   const isPending = mutation.isPending
-  const canSubmit = !isPending && !!turnstileToken && isValid
+  const canSubmit = !isPending && isValid
 
   return (
     <div className='space-y-3'>
@@ -139,15 +127,6 @@ export const CommentForm = ({ eventUuid, onSuccess }: CommentFormProps) => {
               )}
             />
           </div>
-
-          <Turnstile
-            ref={turnstileRef}
-            siteKey={TURNSTILE_SITE_KEY}
-            options={{ appearance: 'interaction-only', size: 'invisible' }}
-            onSuccess={(token) => setTurnstileToken(token)}
-            onError={() => setTurnstileToken(null)}
-            onExpire={() => setTurnstileToken(null)}
-          />
 
           <p className='text-xs text-muted-foreground pt-3'>
             投稿後の編集・削除はできません。アイコンをタップで別のキャラに変えられます。

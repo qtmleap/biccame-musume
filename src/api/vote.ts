@@ -11,7 +11,7 @@ import {
   VoteCountListSchema,
   VoteResponseSchema
 } from '@/schemas/vote.dto'
-import { evaluateOnVote } from '@/services/badge-evaluator'
+import { evaluateOnVote } from '@/services/badge'
 import { pushEarnedBadges } from '@/services/badge-push'
 import { bulkVote, getAllVoteCounts, vote } from '@/services/vote-service'
 import type { Bindings, Variables } from '@/types/bindings'
@@ -20,8 +20,8 @@ import { getNextJSTDate } from '@/utils/vote'
 
 const getKey: RateLimitKeyFunc = (c: Context): string => {
   // 匿名でも一括投票するため、Authorization が無ければ
-  // CF-Connecting-IP / X-Real-IP をフォールバックキーにする
-  return c.req.header('Authorization') || c.req.header('CF-Connecting-IP') || c.req.header('X-Real-IP') || 'anonymous'
+  // CF-Connecting-IP をフォールバックキーにする（偽装可能な X-Real-IP は使用しない）
+  return c.req.header('Authorization') || c.req.header('CF-Connecting-IP') || 'anonymous'
 }
 
 const rateLimiter = async (c: Context, next: Next) => {

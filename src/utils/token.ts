@@ -22,7 +22,8 @@ const CustomJwtClaimsSchema = z
       email_verified: z.boolean(),
       display_name: z.string().nullable(),
       thumbnail_url: z.string().nullable()
-    })
+    }),
+    pid: z.undefined()
   })
   .passthrough()
 
@@ -32,7 +33,7 @@ const CustomJwtClaimsSchema = z
 const parseJwtPayload = (raw: unknown): CustomJwtClaims | null => {
   const result = CustomJwtClaimsSchema.safeParse(raw)
   if (!result.success) return null
-  return result.data as CustomJwtClaims
+  return result.data
 }
 
 export const signToken = async (

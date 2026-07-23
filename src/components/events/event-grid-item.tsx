@@ -7,7 +7,7 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { EVENT_CATEGORY_LABELS, EVENT_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import { CATEGORY_BADGE, STATUS_BADGE_SM } from '@/locales/component'
+import { CATEGORY_BADGE, STATUS_BADGE } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -112,7 +112,7 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
                 </div>
               </div>
             </div>
-            {!compact && STATUS_BADGE_SM[event.status]()}
+            {!compact && STATUS_BADGE[event.status]()}
           </div>
 
           {!compact &&

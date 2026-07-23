@@ -2,9 +2,60 @@ import { Link } from '@tanstack/react-router'
 import { Package, Sparkles } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useEventGroups } from '@/hooks/use-event-groups'
+import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 
 const MAX_GROUPS_ON_HOME = 3
+
+type EventGroupCardProps = {
+  group: { uuid: string; title: string; eventCount: number }
+  index: number
+}
+
+const EventGroupCard = ({ group, index }: EventGroupCardProps) => {
+  const isDesktop = useMediaQuery('(min-width: 768px)')
+  const rotation = isDesktop ? getStickerRotation(index) : 0
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: DURATION.normal, delay: index * 0.08 }}
+      className='h-full'
+      style={{ filter: STICKER_SHADOW_SM }}
+    >
+      <motion.div
+        className='h-full'
+        style={{ rotate: rotation }}
+        whileHover={{ scale: 1.02, rotate: 0 }}
+        whileTap={{ scale: 0.98 }}
+        transition={STICKER_HOVER_TRANSITION}
+      >
+        <Link
+          to='/events/group/$id'
+          params={{ id: group.uuid }}
+          className='group block h-full rounded-xl border border-border bg-card p-4 hover:border-action-award/40'
+        >
+          <div className='flex items-center gap-3'>
+            <div className='shrink-0 p-2 rounded-lg bg-action-award/15 text-action-award'>
+              <Sparkles className='size-4' />
+            </div>
+            <div className='min-w-0 flex-1'>
+              <h3 className='text-base font-semibold text-foreground group-hover:text-action-award line-clamp-2'>
+                {group.title}
+              </h3>
+              <p className='mt-1 flex items-center gap-1 text-xs text-muted-foreground'>
+                <Package className='size-3.5' />
+                <span className='tabular-nums'>{group.eventCount}</span> 件
+              </p>
+            </div>
+          </div>
+        </Link>
+      </motion.div>
+    </motion.div>
+  )
+}
 
 /**
  * トップページのイベントグループ一覧。
@@ -26,33 +77,7 @@ export const EventGroupList = () => {
 
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3'>
           {visibleGroups.map((group, index) => (
-            <motion.div
-              key={group.uuid}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: DURATION.normal, delay: index * 0.08 }}
-            >
-              <Link
-                to='/events/group/$id'
-                params={{ id: group.uuid }}
-                className='group block h-full rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:border-action-award/40 hover:shadow-md'
-              >
-                <div className='flex items-center gap-3'>
-                  <div className='shrink-0 p-2 rounded-lg bg-action-award/15 text-action-award'>
-                    <Sparkles className='size-4' />
-                  </div>
-                  <div className='min-w-0 flex-1'>
-                    <h3 className='text-base font-semibold text-foreground group-hover:text-action-award line-clamp-2'>
-                      {group.title}
-                    </h3>
-                    <p className='mt-1 flex items-center gap-1 text-xs text-muted-foreground'>
-                      <Package className='size-3.5' />
-                      <span className='tabular-nums'>{group.eventCount}</span> 件
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
+            <EventGroupCard key={group.uuid} group={group} index={index} />
           ))}
         </div>
 

@@ -2,7 +2,6 @@ import { getFirebaseToken, verifyFirebaseAuth } from '@hono/firebase-auth'
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import type { FirebaseIdToken } from 'firebase-auth-cloudflare-workers'
 import { setCookie } from 'hono/cookie'
-import { csrf } from 'hono/csrf'
 import { HTTPException } from 'hono/http-exception'
 import { getPrisma } from '@/lib/prisma'
 import type { Bindings, Variables } from '@/types/bindings'
@@ -15,8 +14,6 @@ const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>({
     }
   }
 })
-
-routes.use('*', csrf())
 
 /**
  * ページビュー統計取得

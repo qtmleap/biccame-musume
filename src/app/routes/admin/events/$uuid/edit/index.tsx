@@ -17,7 +17,7 @@ const EditEventContent = () => {
   const defaultValues = toFormValues(event)
 
   const handleSuccess = () => {
-    router.navigate({ to: '/admin/events' })
+    router.navigate({ to: '/admin/events', replace: true })
   }
 
   return (
@@ -37,7 +37,7 @@ const EditEventContent = () => {
       </div>
 
       <div>
-        <EventForm defaultValues={defaultValues} onSuccess={handleSuccess} isEditMode={true} />
+        <EventForm defaultValues={defaultValues} onSuccess={handleSuccess} isEditMode={true} mode='edit' />
       </div>
     </div>
   )

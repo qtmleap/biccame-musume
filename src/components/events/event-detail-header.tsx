@@ -6,7 +6,7 @@ import { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { DURATION } from '@/lib/motion'
 import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
-import { CATEGORY_BADGE, STATUS_BADGE_DETAIL } from '@/locales/component'
+import { CATEGORY_BADGE, STATUS_BADGE } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import { EventStatsBadges } from './event-stats-badges'
 
@@ -54,7 +54,7 @@ export const EventDetailHeader = ({ event, isAuthenticated, onBack }: EventDetai
         <div className='flex items-center justify-between gap-2 mb-2'>
           <div className='flex items-center gap-2'>
             {CATEGORY_BADGE[event.category](EVENT_CATEGORY_LABELS[event.category])}
-            {STATUS_BADGE_DETAIL[event.status]()}
+            {STATUS_BADGE[event.status]()}
           </div>
           {isAuthenticated && (
             <Button

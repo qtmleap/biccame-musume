@@ -9,8 +9,8 @@ import type { EventCategory, EventStatus } from '@/schemas/event.dto'
  */
 
 /**
- * ステータスバッジ（デフォルト）
- * event-list.tsxで使用
+ * ステータスバッジ。event 一覧・グリッド・詳細ヘッダで共通で使う。
+ * かつて _SM / _DETAIL 別 export を持っていたが、実装は同一だったため統合した。
  */
 export const STATUS_BADGE = {
   upcoming: () => <Badge className='bg-status-upcoming text-status-upcoming-foreground'>開催前</Badge>,
@@ -18,18 +18,6 @@ export const STATUS_BADGE = {
   last_day: () => <Badge className='bg-status-last-day text-status-last-day-foreground'>最終日</Badge>,
   ended: () => <Badge className='bg-status-ended text-status-ended-foreground'>終了</Badge>
 } satisfies Record<EventStatus, () => React.ReactNode>
-
-/**
- * ステータスバッジ（小サイズ）
- * event-grid-item.tsxで使用
- */
-export const STATUS_BADGE_SM = STATUS_BADGE
-
-/**
- * ステータスバッジ（詳細ページ用）
- * event-detail-header.tsxで使用
- */
-export const STATUS_BADGE_DETAIL = STATUS_BADGE
 
 /**
  * カテゴリバッジ

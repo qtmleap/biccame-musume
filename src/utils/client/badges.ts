@@ -1,6 +1,11 @@
 import { makeApi } from '@zodios/core'
 import { z } from 'zod'
-import { BadgeLeaderboardResponseSchema, GetBadgesResponseSchema, MyBadgesResponseSchema } from '@/schemas/badge.dto'
+import {
+  BadgeHoldersResponseSchema,
+  BadgeLeaderboardResponseSchema,
+  GetBadgesResponseSchema,
+  MyBadgesResponseSchema
+} from '@/schemas/badge.dto'
 
 export const badgesEndpoints = makeApi([
   {
@@ -30,5 +35,12 @@ export const badgesEndpoints = makeApi([
       }
     ],
     response: BadgeLeaderboardResponseSchema
+  },
+  {
+    method: 'get',
+    path: '/api/badges/:code/holders',
+    alias: 'getBadgeHolders',
+    description: '指定バッジの獲得者一覧を取得',
+    response: BadgeHoldersResponseSchema
   }
 ])

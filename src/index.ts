@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { csrf } from 'hono/csrf'
 import { HTTPException } from 'hono/http-exception'
 import { proxy } from 'hono/proxy'
 import { secureHeaders } from 'hono/secure-headers'
@@ -19,7 +20,10 @@ import stats from './api/stats'
 import users from './api/user'
 import version from './api/version'
 import votes from './api/vote'
+import { isAllowedOrigin } from './lib/allowed-origin'
+import { getPrisma } from './lib/prisma'
 import { rewriteIndexHtml } from './middleware/og-rewrite'
+import { evaluateAllUsersBadges } from './services/badge'
 import { getEventsEndingToday, getEventsStartingToday } from './services/event-service'
 import type { Bindings, Variables } from './types/bindings'
 import { Twitter } from './utils/twitter'
@@ -36,13 +40,12 @@ app.use(
 )
 
 // セキュリティヘッダ (XSS/Clickjacking/MIME sniffing 対策のベースライン)。
-// CSP は Google Maps / Firebase / Turnstile / Twitter 画像など多数のオリジンが絡むため
+// CSP は Google Maps / Firebase / Twitter 画像など多数のオリジンが絡むため
 // Report-Only モードで段階導入する。 本番で違反ログを集めて、 問題なければ Enforce に切替予定。
 //
 // 含まれているオリジンの根拠:
 // - Firebase Auth (OAuth redirect): apis.google.com / *.googleapis.com / accounts.google.com /
 //   *.firebaseapp.com / securetoken.googleapis.com
-// - Cloudflare Turnstile: challenges.cloudflare.com (v0/api.js を動的 inject する)
 // - Google Maps: maps.googleapis.com / maps.gstatic.com
 // - Twitter プロフィール画像: pbs.twimg.com
 // - 認証 redirect helper: biccame-musume.firebaseapp.com
@@ -67,8 +70,6 @@ app.use(
         'https://apis.google.com',
         'https://www.gstatic.com',
         'https://accounts.google.com',
-        // Turnstile
-        'https://challenges.cloudflare.com',
         // Google Maps
         'https://maps.googleapis.com',
         // Cloudflare Web Analytics (有効化されていれば使う)
@@ -102,15 +103,12 @@ app.use(
         'https://*.firebaseio.com',
         'https://identitytoolkit.googleapis.com',
         'https://securetoken.googleapis.com',
-        'https://challenges.cloudflare.com',
         'https://maps.googleapis.com'
       ],
       frameSrc: [
         // Firebase Auth helper (popup / iframe)
         'https://biccame-musume.firebaseapp.com',
-        'https://accounts.google.com',
-        // Turnstile widget は iframe で表示される
-        'https://challenges.cloudflare.com'
+        'https://accounts.google.com'
       ],
       workerSrc: ["'self'", 'blob:'],
       manifestSrc: ["'self'"],
@@ -120,6 +118,9 @@ app.use(
     }
   })
 )
+
+// CSRF 対策 (Cookie-JWT 認証を持つミューテーション経路すべてに一括適用)
+app.use('/api/*', csrf({ origin: (origin, c) => isAllowedOrigin(origin, c.env) }))
 
 /**
  * /admin/* の HTML は CDN キャッシュさせない
@@ -264,7 +265,22 @@ const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, 
     }
   }
 
-  ctx.waitUntil(Promise.all([postStartingToday(), postEndingToday()]))
+  const reevaluateBadges = async (): Promise<void> => {
+    try {
+      const prisma = getPrisma(env)
+      // 日次 cron は「直近 25 時間で stores/events を更新したユーザー」に限定して
+      // Workers のサブリクエスト上限を超えないようにする。全体再計算は admin PATCH から。
+      const since = new Date(scheduledAt.getTime() - 25 * 60 * 60 * 1000)
+      const { processedUsers, totalAwarded } = await evaluateAllUsersBadges(env, prisma, 25, { since })
+      console.log(
+        `[Cron] Badge re-evaluation: users=${processedUsers} newly_awarded=${totalAwarded} since=${since.toISOString()}`
+      )
+    } catch (err) {
+      console.error('[Cron] Failed to re-evaluate badges:', err)
+    }
+  }
+
+  ctx.waitUntil(Promise.all([postStartingToday(), postEndingToday(), reevaluateBadges()]))
 }
 
 export { StatsDO } from './durable-objects/stats'

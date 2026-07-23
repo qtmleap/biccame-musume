@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import type { PrismaClient } from '@prisma/client'
-import { type EvaluatorContext, evaluateAndAwardBadges } from '../../src/services/badge-evaluator'
+import { Prisma, type PrismaClient } from '@prisma/client'
+import { type EvaluatorContext, evaluateAndAwardBadges } from '../../src/services/badge'
 
 /**
  * Backfill idempotency tests.
@@ -9,25 +9,22 @@ import { type EvaluatorContext, evaluateAndAwardBadges } from '../../src/service
  *
  *   await ctx.prisma.userBadge.create({ data: { userId, badgeCode } })
  *
- * wrapped in a try/catch that silently swallows the error on UNIQUE violation.
- * The Prisma schema enforces @@unique([userId, badgeCode]) on user_badges,
- * so a second create for the same (userId, badgeCode) pair throws a
- * PrismaClientKnownRequestError (P2002). The catch block absorbs that, meaning
+ * wrapped in a try/catch that silently swallows PrismaClientKnownRequestError
+ * with code P2002 (UNIQUE violation). The Prisma schema enforces
+ * @@unique([userId, badgeCode]) on user_badges, so a second create for the same
+ * (userId, badgeCode) pair throws P2002. The catch block absorbs that, meaning
  * a second backfill run is a no-op for already-earned badges.
- *
- * These tests verify that behaviour using a mocked PrismaClient:
- *   1. First call: create succeeds → badge is returned as newly earned.
- *   2. Second call: create throws → error is swallowed → empty array returned.
  */
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function makeUniqueError(): Error {
-  const err = new Error('Unique constraint failed') as Error & { code?: string }
-  err.code = 'P2002'
-  return err
+function makeUniqueError(): Prisma.PrismaClientKnownRequestError {
+  return new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
+    code: 'P2002',
+    clientVersion: 'test'
+  })
 }
 
 type CreateFn = (args: { data: { userId: string; badgeCode: string } }) => Promise<{ id: string }>
@@ -50,7 +47,12 @@ const ALL_BADGES = [
   }
 ]
 
-/** Build a minimal PrismaClient mock that tracks create calls. */
+/**
+ * Build a minimal PrismaClient mock that tracks create calls.
+ * Snapshot 実装対応:
+ *   - badge.findMany は earned の除外を JS 側で行うので where フィルタは無視して全件返す
+ *   - snapshot 用に userStore/userEvent の findMany と vote.count を提供
+ */
 function makeIdempotencyCtx(opts: { initialEarned: string[]; createShouldThrow: boolean }): {
   ctx: EvaluatorContext
   createCalls: string[]
@@ -72,14 +74,17 @@ function makeIdempotencyCtx(opts: { initialEarned: string[]; createShouldThrow: 
         create: createFn
       },
       badge: {
-        // Simulate the DB-level filter: exclude codes already in earnedSet.
-        findMany: async (args?: { where?: { NOT?: { code?: { in?: string[] } } } }) => {
-          const excludedCodes: string[] = args?.where?.NOT?.code?.in ?? []
-          return ALL_BADGES.filter((b) => !excludedCodes.includes(b.code))
-        }
+        findMany: async () => ALL_BADGES
       },
+      // snapshot 用: 訪問済み storeKey は akiba のみ → store_visit_akiba を条件成立させる
       userStore: {
-        findFirst: async () => ({ id: 'row-1', status: 'visited' })
+        findMany: async () => [{ storeKey: 'akiba' }]
+      },
+      userEvent: {
+        findMany: async () => []
+      },
+      vote: {
+        count: async () => 0
       }
     } as unknown as PrismaClient
   }
@@ -100,14 +105,7 @@ describe('backfill idempotency', () => {
   })
 
   test('second run swallows UNIQUE violation and returns empty array', async () => {
-    // Simulate second run: badge is already earned AND the create throws.
-    // The code first checks earnedSet, so already-earned badges are filtered out
-    // before even calling evaluateBadge. Test both paths:
-    //
-    //   Path A: badge is in the earned set → skipped at query time (findMany filters it).
-    //   Path B: concurrent insert — badge not in earned set but create throws.
-
-    // Path A: already in earnedSet
+    // Path A: already in earnedSet → filtered out at JS side
     const { ctx: ctxA } = makeIdempotencyCtx({
       initialEarned: ['store_visit_akiba'],
       createShouldThrow: false
@@ -122,16 +120,13 @@ describe('backfill idempotency', () => {
       initialEarned: [],
       createShouldThrow: true
     })
-    // Should NOT throw — the catch block swallows it.
+    // Should NOT throw — the catch block swallows P2002.
     const resultB = await evaluateAndAwardBadges(ctxB)
-    expect(resultB).toHaveLength(0) // Badge not added to newBadges on error
-    expect(createCalls).toHaveLength(1) // create was attempted
+    expect(resultB).toHaveLength(0)
+    expect(createCalls).toHaveLength(1)
   })
 
   test('running evaluateAndAwardBadges twice does not double-insert', async () => {
-    // Simulate two sequential backfill runs against the same "DB":
-    // Run 1: earned set is empty → badge is awarded and stored.
-    // Run 2: earned set now contains the badge → badge is skipped entirely.
     const awarded: string[] = []
 
     const ctx: EvaluatorContext = {
@@ -147,13 +142,16 @@ describe('backfill idempotency', () => {
           }
         },
         badge: {
-          findMany: async (args?: { where?: { NOT?: { code?: { in?: string[] } } } }) => {
-            const excludedCodes: string[] = args?.where?.NOT?.code?.in ?? []
-            return ALL_BADGES.filter((b) => !excludedCodes.includes(b.code))
-          }
+          findMany: async () => ALL_BADGES
         },
         userStore: {
-          findFirst: async () => ({ id: 'row-1', status: 'visited' })
+          findMany: async () => [{ storeKey: 'akiba' }]
+        },
+        userEvent: {
+          findMany: async () => []
+        },
+        vote: {
+          count: async () => 0
         }
       } as unknown as PrismaClient
     }
@@ -163,6 +161,6 @@ describe('backfill idempotency', () => {
 
     expect(run1).toHaveLength(1)
     expect(run2).toHaveLength(0)
-    expect(awarded).toHaveLength(1) // Only one insert total
+    expect(awarded).toHaveLength(1)
   })
 })

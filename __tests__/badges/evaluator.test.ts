@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test'
 import type { Badge, PrismaClient } from '@prisma/client'
 import { storeKeyToBadgeArea } from '../../src/data/badges/area-mapping'
 import type { BadgeConditionMeta, BadgeSubCategory } from '../../src/data/badges/registry'
-import { PHYSICAL_STORE_KEYS } from '../../src/data/badges/store-exclusion'
+import { ACTIVE_PHYSICAL_STORE_KEYS, PHYSICAL_STORE_KEYS } from '../../src/data/badges/store-exclusion'
 import type { StoreKey } from '../../src/schemas/store.dto'
 import {
   type EvaluatorContext,
@@ -20,7 +20,7 @@ import {
   evaluateSpecialMultiStoreClear,
   evaluateVisit,
   evaluateVoteTotal
-} from '../../src/services/badge-evaluator'
+} from '../../src/services/badge'
 
 // ---------------------------------------------------------------------------
 // Helper to build a minimal EvaluatorContext with an injected prisma mock.
@@ -280,15 +280,15 @@ describe('evaluateEventClearCount', () => {
     })
 
   test('returns true when distinct cleared store count meets threshold', async () => {
-    // Use 5 distinct stores
-    const stores = PHYSICAL_STORE_KEYS.slice(0, 5) as StoreKey[]
+    // Use 5 distinct ACTIVE stores（閉店店舗は count に加算されないので ACTIVE から取る）
+    const stores = ACTIVE_PHYSICAL_STORE_KEYS.slice(0, 5) as StoreKey[]
     const ctx = makeCtxWithStores(stores)
     const result = await evaluateEventClearCount(ctx, { count: 5 })
     expect(result).toBe(true)
   })
 
   test('returns false when distinct cleared store count is below threshold', async () => {
-    const stores = PHYSICAL_STORE_KEYS.slice(0, 4) as StoreKey[]
+    const stores = ACTIVE_PHYSICAL_STORE_KEYS.slice(0, 4) as StoreKey[]
     const ctx = makeCtxWithStores(stores)
     const result = await evaluateEventClearCount(ctx, { count: 5 })
     expect(result).toBe(false)
@@ -296,7 +296,7 @@ describe('evaluateEventClearCount', () => {
 
   test('deduplicates stores across multiple events', async () => {
     // Same store appears twice → still counts as 1
-    const stores = [PHYSICAL_STORE_KEYS[0] as StoreKey, PHYSICAL_STORE_KEYS[0] as StoreKey]
+    const stores = [ACTIVE_PHYSICAL_STORE_KEYS[0] as StoreKey, ACTIVE_PHYSICAL_STORE_KEYS[0] as StoreKey]
     const ctx = makeCtxWithStores(stores)
     const result = await evaluateEventClearCount(ctx, { count: 2 })
     expect(result).toBe(false)

@@ -1,7 +1,6 @@
 import { getFirebaseToken } from '@hono/firebase-auth'
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import type { User } from '@prisma/client'
-import { csrf } from 'hono/csrf'
 import { HTTPException } from 'hono/http-exception'
 import { ErrorResponseSchema } from '@/schemas/activity.dto'
 import { UserResponseSchema } from '@/schemas/user.dto'
@@ -16,8 +15,6 @@ const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>({
     }
   }
 })
-
-routes.use('*', csrf())
 
 /**
  * 自分のユーザー情報取得

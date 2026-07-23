@@ -3,6 +3,8 @@ import { z } from 'zod'
 import { AdminCommentsResponseSchema } from '@/schemas/admin-comment.dto'
 import { AdminTwitterStatusResponseSchema } from '@/schemas/admin-twitter.dto'
 import {
+  AdminBadgeRankingResponseSchema,
+  AdminUserBadgesResponseSchema,
   BadgeMutationResponseSchema,
   CreateSpecialBadgeBodySchema,
   GetBadgesResponseSchema,
@@ -70,6 +72,25 @@ export const adminEndpoints = makeApi([
     response: z.void()
   },
   {
+    method: 'get',
+    path: '/api/admin/badges/leaderboard',
+    alias: 'getAdminBadgeRanking',
+    description: 'バッジ所持数ランキングを取得（admin、ページング対応）',
+    parameters: [
+      {
+        name: 'limit',
+        type: 'Query',
+        schema: z.coerce.number().int().min(1).max(200).optional()
+      },
+      {
+        name: 'offset',
+        type: 'Query',
+        schema: z.coerce.number().int().min(0).optional()
+      }
+    ],
+    response: AdminBadgeRankingResponseSchema
+  },
+  {
     method: 'post',
     path: '/api/admin/badges/recalculate',
     alias: 'recalculateBadges',
@@ -108,6 +129,20 @@ export const adminEndpoints = makeApi([
     alias: 'getAdminUsers',
     description: '全ユーザー一覧を取得（admin）',
     response: AdminUserListResponseSchemaForClient
+  },
+  {
+    method: 'get',
+    path: '/api/admin/users/:uid/badges',
+    alias: 'getAdminUserBadges',
+    description: '特定ユーザーの獲得バッジ一覧を取得（admin、レアリティ→獲得日順）',
+    parameters: [
+      {
+        name: 'uid',
+        type: 'Path',
+        schema: z.string().nonempty()
+      }
+    ],
+    response: AdminUserBadgesResponseSchema
   },
   // 管理者: 投稿用 X アカウントのヘルスチェック
   {
