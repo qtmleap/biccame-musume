@@ -60,7 +60,6 @@ export type CustomJwtClaims = JWTPayload & {
     display_name: string | null
     thumbnail_url: string | null
   }
-  pid: undefined
 }
 
 export type Variables = JwtVariables<CustomJwtClaims> & {
