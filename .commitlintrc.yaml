@@ -6,6 +6,11 @@ rules:
     - 2
     - always
     - 128
+  # 日本語 subject に JWT / API / HTTP のような英字略語や固有名詞を混ぜると
+  # commitlint の case 判定が sentence-case / upper-case と誤判定して落ちる。
+  # 日本語主体の subject では case ルール自体が実質意味を持たないため、無効化する。
+  subject-case:
+    - 0
   type-enum:
     - 2
     - always
