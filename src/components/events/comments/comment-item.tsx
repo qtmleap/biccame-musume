@@ -47,7 +47,7 @@ export const CommentItem = ({ eventUuid, comment }: CommentItemProps) => {
       <div className='flex-1 min-w-0 space-y-1'>
         <div className='flex items-center gap-2'>
           <span className='font-semibold text-foreground'>{displayName}</span>
-          {comment.userId && (
+          {comment.verified && (
             <span className='ml-1 rounded bg-sky-100 px-1.5 py-0.5 text-xs font-medium text-sky-700'>ログイン</span>
           )}
           <span className='text-muted-foreground'>·</span>

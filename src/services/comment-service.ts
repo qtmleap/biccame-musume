@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import type { CommentResponse } from '@/schemas/comment.dto'
 
 // nickname カラムには選択された characterId を保存している（マイグレーション回避のためカラム再利用）
+// userId はレスポンスに含めない (他ユーザーの Firebase uid を公開しないため、ログイン投稿かの boolean のみ返す)
 const toResponse = (comment: {
   id: string
   nickname: string
@@ -14,7 +15,7 @@ const toResponse = (comment: {
   characterId: comment.nickname,
   body: comment.body,
   createdAt: comment.createdAt.toISOString(),
-  userId: comment.userId ?? undefined
+  verified: comment.userId !== null
 })
 
 /**
