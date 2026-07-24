@@ -92,7 +92,6 @@ export const verifyToken: MiddlewareHandler<{ Bindings: Bindings; Variables: Var
   if (payload === null) {
     throw new HTTPException(401, { message: 'Invalid token payload' })
   }
-  console.info('VerifyToken:', payload)
   c.set('jwtPayload', payload)
   await next()
 }
@@ -126,7 +125,6 @@ export const verifyTokenOptional: MiddlewareHandler<{ Bindings: Bindings; Variab
  */
 export const getToken = (c: Context<{ Bindings: Bindings; Variables: Variables }>): string => {
   const payload = getJwtPayload(c)
-  console.info('GetToken:', payload)
   if (payload === undefined) {
     throw new HTTPException(401, { message: 'Unauthorized' })
   }

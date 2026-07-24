@@ -24,7 +24,7 @@ routes.openapi(
   createRoute({
     method: 'get',
     path: '/',
-    middlewares: [verifyToken],
+    middleware: [verifyToken],
     responses: {
       200: {
         content: {
