@@ -159,6 +159,13 @@ export const BadgeHoldersResponseSchema = z
   })
   .openapi('BadgeHoldersResponse')
 
+// 公開API用: 個人情報を含まず、獲得人数のみ返す
+export const BadgeHoldersCountResponseSchema = z
+  .object({
+    total: z.number().int().nonnegative().openapi({ example: 42 })
+  })
+  .openapi('BadgeHoldersCountResponse')
+
 export const GetBadgeHoldersParamsSchema = z
   .object({
     code: z.string().nonempty().openapi({ example: 'store_visit_akiba' })
