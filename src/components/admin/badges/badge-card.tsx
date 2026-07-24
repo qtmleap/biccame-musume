@@ -16,8 +16,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { useAdminBadgeHolders } from '@/hooks/use-admin-badge-holders'
 import { useDeleteBadge } from '@/hooks/use-admin-badges'
-import { useBadgeHolders } from '@/hooks/use-badge-holders'
 import { getBadgeIcon } from '@/lib/badge-icons'
 import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
@@ -178,7 +178,7 @@ export const BadgeCard = ({ badge, index }: { badge: BadgeDto; index: number }) 
 }
 
 const BadgeHoldersDialogSection = ({ code }: { code: string }) => {
-  const { data } = useBadgeHolders(code)
+  const { data } = useAdminBadgeHolders(code)
   const { total, holders } = data
   return (
     <div className='py-1'>

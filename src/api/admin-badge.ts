@@ -5,9 +5,11 @@ import {
   AdminBadgeRankingQuerySchema,
   AdminBadgeRankingResponseSchema,
   AdminDeleteBadgeParamsSchema,
+  BadgeHoldersResponseSchema,
   BadgeMutationResponseSchema,
   type CreateSpecialBadgeBody,
   CreateSpecialBadgeBodySchema,
+  GetBadgeHoldersParamsSchema,
   GetBadgesResponseSchema,
   prismaBadgeToDto,
   UpdateBadgeBodySchema
@@ -374,6 +376,77 @@ routes.openapi(
 
     c.header('Cache-Control', 'no-store')
     return c.json({ total, entries }, 200)
+  }
+)
+
+// GET /api/admin/badges/:code/holders — 指定バッジの獲得者一覧 (admin 専用)
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/admin/badges/:code/holders',
+    request: {
+      params: GetBadgeHoldersParamsSchema
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: BadgeHoldersResponseSchema
+          }
+        },
+        description: 'バッジ獲得者一覧取得成功 (admin)'
+      },
+      404: {
+        content: {
+          'application/json': {
+            schema: z.object({ error: z.string().nonempty() })
+          }
+        },
+        description: 'バッジが見つかりません'
+      }
+    },
+    tags: ['admin-badges']
+  }),
+  async (c) => {
+    const { code } = c.req.valid('param')
+    const prisma = getPrisma(c.env)
+
+    const badge = await prisma.badge.findUnique({ where: { code }, select: { code: true } })
+    if (!badge) {
+      return c.json({ error: 'バッジが見つかりません' }, 404)
+    }
+
+    type HolderRow = {
+      uid: string
+      display_name: string | null
+      thumbnail_url: string | null
+      earned_at: string
+    }
+
+    const rows = await prisma.$queryRaw<HolderRow[]>`
+      SELECT
+        u.id AS uid,
+        u.display_name,
+        u.thumbnail_url,
+        ub.earned_at
+      FROM user_badges ub
+      JOIN users u ON ub.user_id = u.id
+      WHERE ub.badge_code = ${code}
+      ORDER BY ub.earned_at ASC
+      LIMIT 100
+    `
+
+    const total = await prisma.userBadge.count({ where: { badgeCode: code } })
+
+    const holders = rows.map((row) => ({
+      uid: row.uid,
+      displayName: row.display_name,
+      thumbnailURL: row.thumbnail_url ?? undefined,
+      earnedAt: row.earned_at
+    }))
+
+    c.header('Cache-Control', 'no-store')
+    return c.json({ total, holders }, 200)
   }
 )
 

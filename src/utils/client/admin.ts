@@ -5,6 +5,7 @@ import { AdminTwitterStatusResponseSchema } from '@/schemas/admin-twitter.dto'
 import {
   AdminBadgeRankingResponseSchema,
   AdminUserBadgesResponseSchema,
+  BadgeHoldersResponseSchema,
   BadgeMutationResponseSchema,
   CreateSpecialBadgeBodySchema,
   GetBadgesResponseSchema,
@@ -70,6 +71,20 @@ export const adminEndpoints = makeApi([
       }
     ],
     response: z.void()
+  },
+  {
+    method: 'get',
+    path: '/api/admin/badges/:code/holders',
+    alias: 'getAdminBadgeHolders',
+    description: '指定バッジの獲得者一覧を取得（admin、個人情報を含む）',
+    parameters: [
+      {
+        name: 'code',
+        type: 'Path',
+        schema: z.string().nonempty()
+      }
+    ],
+    response: BadgeHoldersResponseSchema
   },
   {
     method: 'get',

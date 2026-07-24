@@ -2,7 +2,6 @@ import dayjs from 'dayjs'
 import { Lock } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense, useState } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Dialog,
   DialogContent,
@@ -11,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { useBadgeHolders } from '@/hooks/use-badge-holders'
+import { useBadgeHoldersCount } from '@/hooks/use-badge-holders'
 import { resolveBadgeText } from '@/lib/badge-display'
 import { getBadgeIcon } from '@/lib/badge-icons'
 import { DURATION } from '@/lib/motion'
@@ -168,50 +167,22 @@ export const BadgeCard = ({ badge, earnedAt, index }: BadgeCardProps) => {
         </div>
         <Suspense
           fallback={
-            <div className='mt-4 pt-4 border-t text-center text-xs text-muted-foreground'>獲得者を読み込み中…</div>
+            <div className='mt-4 pt-4 border-t text-center text-xs text-muted-foreground'>獲得人数を読み込み中…</div>
           }
         >
-          <BadgeHoldersSection code={badge.code} />
+          <BadgeHolderCount code={badge.code} />
         </Suspense>
       </DialogContent>
     </Dialog>
   )
 }
 
-const BadgeHoldersSection = ({ code }: { code: string }) => {
-  const { data } = useBadgeHolders(code)
-  const { total, holders } = data
+const BadgeHolderCount = ({ code }: { code: string }) => {
+  const { data } = useBadgeHoldersCount(code)
   return (
-    <div className='mt-4 pt-4 border-t'>
-      <div className='mb-2 flex items-center justify-between'>
-        <div className='text-xs font-bold text-foreground'>獲得者</div>
-        <div className='text-xs text-muted-foreground font-numeric tabular-nums'>{total} 人</div>
-      </div>
-      {holders.length === 0 ? (
-        <div className='text-center text-xs text-muted-foreground py-2'>まだ誰も獲得していません</div>
-      ) : (
-        <ul className='space-y-1.5 max-h-52 overflow-y-auto pr-1'>
-          {holders.map((h) => (
-            <li key={h.uid} className='flex items-center gap-2'>
-              <Avatar className='size-6'>
-                {h.thumbnailURL ? <AvatarImage src={h.thumbnailURL} alt='' /> : null}
-                <AvatarFallback className='text-[10px]'>
-                  {(h.displayName === null ? '?' : h.displayName).slice(0, 1)}
-                </AvatarFallback>
-              </Avatar>
-              <span className='text-xs text-foreground truncate flex-1'>
-                {h.displayName === null ? '名無しさん' : h.displayName}
-              </span>
-              <span className='text-[10px] text-muted-foreground font-numeric tabular-nums shrink-0'>
-                {dayjs(h.earnedAt).format('YYYY/MM/DD')}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-      {total > holders.length ? (
-        <div className='mt-2 text-center text-[10px] text-muted-foreground'>最初の {holders.length} 人まで表示</div>
-      ) : null}
+    <div className='mt-4 pt-4 border-t flex items-center justify-between'>
+      <div className='text-xs font-bold text-foreground'>獲得人数</div>
+      <div className='text-xs text-muted-foreground font-numeric tabular-nums'>{data.total} 人</div>
     </div>
   )
 }

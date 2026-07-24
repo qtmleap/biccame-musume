@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { getPrisma } from '@/lib/prisma'
 import {
-  BadgeHoldersResponseSchema,
+  BadgeHoldersCountResponseSchema,
   BadgeLeaderboardResponseSchema,
   GetBadgeHoldersParamsSchema,
   GetBadgeLeaderboardQuerySchema,
@@ -168,6 +168,7 @@ routes.openapi(
   }
 )
 
+// 個人情報保護のため公開APIは獲得人数のみ返す。獲得者一覧は /api/admin/badges/:code/holders (admin) から取得する。
 routes.openapi(
   createRoute({
     method: 'get',
@@ -179,10 +180,10 @@ routes.openapi(
       200: {
         content: {
           'application/json': {
-            schema: BadgeHoldersResponseSchema
+            schema: BadgeHoldersCountResponseSchema
           }
         },
-        description: 'バッジ獲得者一覧取得成功'
+        description: 'バッジ獲得人数取得成功'
       },
       404: {
         content: {
@@ -204,41 +205,10 @@ routes.openapi(
       return c.json({ error: 'バッジが見つかりません' }, 404)
     }
 
-    type HolderRow = {
-      uid: string
-      display_name: string | null
-      thumbnail_url: string | null
-      earned_at: string
-    }
-
-    const rows = await prisma.$queryRaw<HolderRow[]>`
-      SELECT
-        u.id AS uid,
-        u.display_name,
-        u.thumbnail_url,
-        ub.earned_at
-      FROM user_badges ub
-      JOIN users u ON ub.user_id = u.id
-      WHERE ub.badge_code = ${code}
-      ORDER BY ub.earned_at ASC
-      LIMIT 100
-    `
-
-    type TotalRow = { total: bigint }
-    const totalRows = await prisma.$queryRaw<TotalRow[]>`
-      SELECT COUNT(*) AS total FROM user_badges WHERE badge_code = ${code}
-    `
-    const total = totalRows.length > 0 ? Number(totalRows[0].total) : 0
-
-    const holders = rows.map((row) => ({
-      uid: row.uid,
-      displayName: row.display_name,
-      thumbnailURL: row.thumbnail_url ?? undefined,
-      earnedAt: row.earned_at
-    }))
+    const total = await prisma.userBadge.count({ where: { badgeCode: code } })
 
     c.header('Cache-Control', 'public, max-age=60, s-maxage=120')
-    return c.json({ total, holders }, 200)
+    return c.json({ total }, 200)
   }
 )
 
