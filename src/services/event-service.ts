@@ -145,6 +145,7 @@ export const transform = (event: EventListPayload, interestedCount = 0, complete
   }
 }
 
+// userId はレスポンスに含めない (他ユーザーの Firebase uid を公開しないため、ログイン投稿かの boolean のみ返す)
 const toCommentResponse = (comment: {
   id: string
   nickname: string
@@ -156,7 +157,7 @@ const toCommentResponse = (comment: {
   characterId: comment.nickname,
   body: comment.body,
   createdAt: comment.createdAt.toISOString(),
-  userId: comment.userId ?? undefined
+  verified: comment.userId !== null
 })
 
 const transformDetail = (event: EventDetailPayload, interestedCount = 0, completedCount = 0): EventDetail => ({

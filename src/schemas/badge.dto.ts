@@ -109,39 +109,11 @@ export const MyBadgesResponseSchema = z
   })
   .openapi('MyBadgesResponse')
 
-export const LeaderboardEntrySchema = z
-  .object({
-    uid: z.string().nonempty().openapi({ example: 'firebase-uid-xyz' }),
-    displayName: z.string().nonempty().nullable().openapi({ example: 'あきばたん' }),
-    thumbnailURL: z.string().nonempty().nullable().optional().openapi({ example: 'https://example.com/avatar.png' }),
-    earnedCount: z.number().int().nonnegative().openapi({ example: 42 }),
-    rank: z.number().int().positive().openapi({ example: 1 })
-  })
-  .openapi('LeaderboardEntry')
-
-export const BadgeLeaderboardResponseSchema = z
-  .object({
-    top: z.array(LeaderboardEntrySchema),
-    me: z
-      .object({
-        rank: z.number().int().positive().openapi({ example: 7 }),
-        earnedCount: z.number().int().nonnegative().openapi({ example: 15 })
-      })
-      .optional()
-  })
-  .openapi('BadgeLeaderboardResponse')
-
 export const GetBadgesResponseSchema = z
   .object({
     badges: z.array(BadgeSchema)
   })
   .openapi('GetBadgesResponse')
-
-export const GetBadgeLeaderboardQuerySchema = z
-  .object({
-    uid: z.string().nonempty().optional().openapi({ example: 'firebase-uid-xyz' })
-  })
-  .openapi('GetBadgeLeaderboardQuery')
 
 export const BadgeHolderEntrySchema = z
   .object({

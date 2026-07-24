@@ -26,12 +26,9 @@ export const CommentResponseSchema = z
     characterId: z.string().nonempty().openapi({ description: '投稿者が選んだキャラクター ID', example: 'abeno' }),
     body: z.string().nonempty().openapi({ description: 'コメント本文', example: 'イベント楽しみにしています！' }),
     createdAt: z.string().datetime().openapi({ description: '投稿日時', example: '2026-05-02T07:00:00.000Z' }),
-    userId: z
-      .string()
-      .nonempty()
-      .nullable()
-      .optional()
-      .openapi({ description: '投稿者が Firebase Auth でログイン済みの場合の UID', example: 'firebase-uid-xyz' })
+    verified: z
+      .boolean()
+      .openapi({ description: '投稿者が Firebase Auth でログイン済みの投稿か（true=ログイン投稿）', example: true })
   })
   .openapi('CommentResponse')
 
