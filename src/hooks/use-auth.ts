@@ -10,7 +10,7 @@ import {
 } from 'firebase/auth'
 import { useAtomValue } from 'jotai'
 import { useCallback } from 'react'
-import { userAtom } from '@/atoms/auth-atom'
+import { backendSessionReadyAtom, userAtom } from '@/atoms/auth-atom'
 import { auth } from '@/lib/firebase'
 
 /**
@@ -20,6 +20,7 @@ import { auth } from '@/lib/firebase'
  */
 export const useAuth = () => {
   const user = useAtomValue(userAtom)
+  const backendSessionReady = useAtomValue(backendSessionReadyAtom)
 
   /**
    * メールアドレスでログイン（開発環境用）
@@ -100,8 +101,12 @@ export const useAuth = () => {
 
   return {
     user,
-    // Firebase Authの認証状態（userAtom）でログイン判定
-    isAuthenticated: !!user,
+    // Firebase Auth 完了 かつ バックエンド session Cookie 確立済みで初めて認証扱い。
+    // これで Cookie 認証が必要な useSuspenseQuery が 401 を踏まないようにする。
+    isAuthenticated: !!user && backendSessionReady,
+    // Firebase Auth 単体の完了状態 (backend session の有無は問わない)
+    isFirebaseAuthenticated: !!user,
+    backendSessionReady,
     loginWithTwitter,
     loginWithGoogle,
     loginWithGithub,

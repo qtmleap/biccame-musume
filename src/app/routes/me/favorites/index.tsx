@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { ArrowLeft, Heart } from 'lucide-react'
 import { Suspense } from 'react'
+import { BackendSessionGate } from '@/components/auth/backend-session-gate'
 import { CharacterListCard } from '@/components/character-list-card'
 import { BulkVoteButton } from '@/components/characters/bulk-vote-button'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
@@ -71,7 +72,9 @@ const FavoritesContent = () => {
 const RouteComponent = () => (
   <ErrorBoundary>
     <Suspense fallback={<LoadingFallback />}>
-      <FavoritesContent />
+      <BackendSessionGate>
+        <FavoritesContent />
+      </BackendSessionGate>
     </Suspense>
   </ErrorBoundary>
 )

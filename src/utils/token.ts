@@ -10,9 +10,14 @@ import type { Bindings, CustomJwtClaims, Variables } from '@/types/bindings'
 
 /**
  * `verify()` から返ってくる JWT payload を実行時に検証するスキーマ。
- * `CustomJwtClaims` (= `JWTPayload & { uid, usr, pid }`) と整合するフィールドだけ検証し、
- * 標準クレーム (sub/iat/exp/iss/aud 等) は passthrough で透過させる。
- * スキーマと検証失敗をきちんと型で扱うことで、 verify 直後の `as CustomJwtClaims` キャストを排除する。
+ * `CustomJwtClaims` と整合するフィールドだけ検証し、標準クレーム (sub/iat/exp/iss/aud 等) は
+ * passthrough で透過させる。 スキーマと検証失敗をきちんと型で扱うことで、
+ * verify 直後の `as CustomJwtClaims` キャストを排除する。
+ *
+ * 注意: `sign()` に `pid: undefined` を渡すと JSON.stringify で drop され、 verify で
+ * 復元される payload に `pid` キーが存在しない。 現行 zod では `z.undefined()` は
+ * 「キーが missing」を nonoptional として reject するため、 pid は schema から除外する
+ * (どのみち検証対象にする意味も無い)。
  */
 const CustomJwtClaimsSchema = z
   .object({
@@ -22,8 +27,7 @@ const CustomJwtClaimsSchema = z
       email_verified: z.boolean(),
       display_name: z.string().nullable(),
       thumbnail_url: z.string().nullable()
-    }),
-    pid: z.undefined()
+    })
   })
   .passthrough()
 
@@ -60,8 +64,7 @@ export const signToken = async (
         email_verified: idToken.email_verified || false,
         display_name: idToken.name || null,
         thumbnail_url: idToken.picture || null
-      },
-      pid: undefined
+      }
     },
     c.env.JWT_SECRET_KEY,
     AlgorithmTypes.HS256

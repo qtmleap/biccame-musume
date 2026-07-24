@@ -3,6 +3,7 @@ import { Award, Heart, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { toast } from 'sonner'
+import { BackendSessionGate } from '@/components/auth/backend-session-gate'
 import { CharacterListCard } from '@/components/character-list-card'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -250,7 +251,9 @@ const MyPageContent = () => {
 const RouteComponent = () => (
   <ErrorBoundary>
     <Suspense fallback={<LoadingFallback />}>
-      <MyPageContent />
+      <BackendSessionGate>
+        <MyPageContent />
+      </BackendSessionGate>
     </Suspense>
   </ErrorBoundary>
 )

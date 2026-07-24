@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
+import { BackendSessionGate } from '@/components/auth/backend-session-gate'
 import { BadgeGrid } from '@/components/badges/badge-grid'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -58,7 +59,9 @@ const BadgesContent = () => {
 
 const RouteComponent = () => (
   <Suspense fallback={<LoadingFallback />}>
-    <BadgesContent />
+    <BackendSessionGate>
+      <BadgesContent />
+    </BackendSessionGate>
   </Suspense>
 )
 
