@@ -120,25 +120,53 @@ http://localhost:5173/admin/events/550e8400-e29b-41d4-a716-446655440004/?categor
 - `endDate`: 終了日（YYYY-MM-DD形式）
 - `referenceUrls`: 告知URL（告知タイプとして登録されます）
 
-#### ビルド
+#### マイグレーション
+
+`prisma/schema.prisma` を変更したら SQL を生成してローカル D1 に適用する。
+生成し忘れた PR は CI の `Migrations` ジョブが落とす。
+
+生成は Prisma、適用は wrangler が担当する。Prisma 7 の CLI は D1 に直接接続
+できないため、`migrate:new` は shadow DB (`prisma/shadow.db`) 上でコミット済みの
+マイグレーション履歴を再生し、そこからスキーマとの差分 SQL を書き出す。
 
 ```zsh
-bun run build
+# schema.prisma の差分から migration.sql を生成
+bun run migrate:new --name add_event_character
+
+# ローカル D1 に適用 / 適用状況の確認
+bun run migrate
+bun run migrate:status
 ```
 
-#### デプロイビルドをローカルで再現 (act)
+生成された SQL に `PRAGMA foreign_keys=OFF` (テーブル再定義) が含まれていたら
+**そのまま適用してはいけない**。D1 はこの PRAGMA を無視するため、`DROP TABLE` で
+子テーブルが CASCADE 削除される。`defer_foreign_keys=ON` でも防げないことを実測済み。
+子テーブルを一時テーブルへ退避してから書き戻す形に手で書き換える
+(実例: `prisma/migrations/20260807175125_fix_events_group_fk/migration.sql`)。
 
-`deployment.yaml` の build 工程をローカルの Docker (`act`) で再現できる。
-本番 CI でしか起きないビルドエラー（`--frozen-lockfile --ignore-scripts`
-での依存解決差など）を事前に検知できる。`Deploy Workers` step は
-`env.ACT != 'true'` で skip するので、Cloudflare 認証情報は不要。
+staging / production へは `deployment.yaml` の `Apply D1 migrations` step が
+デプロイ前に自動で適用する。適用済みかどうかは D1 側の `d1_migrations` 台帳で
+判定されるので、未適用の SQL だけが流れる。
+
+手元から直接当てたい場合は同じコマンドを `--remote` で叩く。
+`CLOUDFLARE_API_TOKEN` が要るので `.env` を読み込むこと。
 
 ```zsh
-# develop マージ相当 (staging build)
-bun run act:deploy:staging
+source .env && wrangler d1 migrations apply DB --env=staging    --remote
+source .env && wrangler d1 migrations apply DB --env=production --remote
+```
 
-# master マージ相当 (production build)
-bun run act:deploy:production
+#### ビルド
+
+ビルド工程は `.github/workflows/deployment.yaml` の `Build Workers` step に
+直接書かれている。ローカルで再現する場合は同じ順序で実行する。
+
+```zsh
+bunx rimraf dist
+bun run scripts/download-character-images.ts
+bun run scripts/generate-og-images.ts
+bun tsc -b
+bun vite build --mode production
 ```
 
 #### テスト実行
@@ -150,11 +178,11 @@ bun test
 #### リント・フォーマット
 
 ```zsh
-# リント実行
-bun run lint
+# チェックのみ
+bunx biome check .
 
-# フォーマット実行
-bun run format
+# 自動修正
+bunx biome check --write .
 ```
 
 ### プロジェクト構成
