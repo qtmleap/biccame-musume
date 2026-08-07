@@ -18,6 +18,7 @@ export const DEFAULT_VALUES: DefaultValues<EventRequest> = {
   isVerified: true,
   isPreliminary: false,
   groupId: undefined,
+  characterId: undefined,
   shouldTweet: true,
   uuid: undefined
 }
@@ -38,6 +39,7 @@ export const toFormValues = (
   isVerified: event.isVerified ?? false,
   isPreliminary: event.isPreliminary ?? false,
   groupId: event.groupId,
+  characterId: event.characterId,
   shouldTweet: false
 })
 
@@ -105,6 +107,7 @@ export const toEventPayload = (
   isVerified: data.isVerified,
   isPreliminary: data.isPreliminary,
   groupId: data.groupId,
+  characterId: data.characterId,
   shouldTweet: data.shouldTweet,
   uuid: opts.isEditMode && opts.fallbackUuid ? opts.fallbackUuid : data.uuid || uuidv4(),
   endDate: data.endDate && data.endDate.trim() !== '' ? dayjs(data.endDate).toISOString() : undefined,

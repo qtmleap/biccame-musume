@@ -111,6 +111,8 @@ model Event {
   isPreliminary   Boolean             @default(false) @map("is_preliminary")
   /// 所属するイベントグループ（任意）
   groupId         String?             @map("group_id")
+  /// 対象のビッカメ娘（任意）。null のときは開催店舗と同一とみなす
+  characterId     String?             @map("character_id")
   /// 作成日時
   createdAt       DateTime            @default(now()) @map("created_at")
   /// 更新日時

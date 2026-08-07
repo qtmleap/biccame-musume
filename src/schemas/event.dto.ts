@@ -82,6 +82,8 @@ export const EventRequestSchema = z.object({
   isPreliminary: z.boolean(),
   // 所属するイベントグループの UUID（任意）
   groupId: z.uuid('グループ ID は UUID 形式で指定してください').optional(),
+  // 対象のビッカメ娘（任意）。未指定なら開催店舗と同一とみなす
+  characterId: StoreKeySchema.optional(),
   shouldTweet: z.boolean()
 })
 export type EventRequest = z.infer<typeof EventRequestSchema>
@@ -118,6 +120,8 @@ export const EventSchema = z.object({
   isPreliminary: z.boolean(),
   // 所属するイベントグループの UUID（任意）
   groupId: z.string().optional(),
+  // 対象のビッカメ娘（任意）。未指定なら開催店舗と同一とみなす
+  characterId: StoreKeySchema.optional(),
   status: EventStatusSchema,
   daysUntil: z.number(),
   interestedCount: z.number().int().nonnegative(),

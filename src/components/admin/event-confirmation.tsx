@@ -31,6 +31,7 @@ export const EventConfirmation = ({
     category: data.category,
     title: data.title,
     stores: data.stores as StoreKey[],
+    characterId: data.characterId,
     startDate: dayjs(data.startDate).toDate(),
     endDate: data.endDate ? dayjs(data.endDate).toDate() : undefined,
     endedAt: data.endedAt ? dayjs(data.endedAt).toDate() : undefined,

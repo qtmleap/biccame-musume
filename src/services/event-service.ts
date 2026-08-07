@@ -89,6 +89,7 @@ export const EVENT_LIST_SELECT = {
   isVerified: true,
   isPreliminary: true,
   groupId: true,
+  characterId: true,
   createdAt: true,
   updatedAt: true,
   conditions: {
@@ -129,6 +130,7 @@ export const transform = (event: EventListPayload, interestedCount = 0, complete
     isVerified: event.isVerified,
     isPreliminary: event.isPreliminary,
     groupId: event.groupId ?? undefined,
+    characterId: (event.characterId ?? undefined) as StoreKey | undefined,
     createdAt: event.createdAt,
     updatedAt: event.updatedAt,
     conditions: event.conditions.map((c) => ({
@@ -197,23 +199,17 @@ export const getEvent = async (env: Bindings, id: string): Promise<EventDetail> 
 }
 
 /**
- * 公開済みイベント一覧を取得（半年以内に開催されたもの）
+ * 公開済みイベント一覧を取得
  * @param env - Cloudflare Workers環境変数
  * @returns イベント一覧（開始日降順）
  * @throws HTTPException 400 - バリデーションエラーの場合
  */
 export const getEvents = async (env: Bindings): Promise<Event[]> => {
   const prisma = getPrisma(env)
-  // 半年前の日付を計算
-  const startDate = dayjs().subtract(6, 'month').toDate()
 
   const events = (
     await prisma.event.findMany({
-      where: {
-        isVerified: true,
-        // 半年以内に開催されたイベントのみ取得
-        startDate: { gte: startDate }
-      },
+      where: { isVerified: true },
       select: EVENT_LIST_SELECT,
       orderBy: { startDate: 'desc' }
     })
@@ -286,6 +282,7 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
       isVerified: data.isVerified ?? false,
       isPreliminary: data.isPreliminary ?? false,
       groupId: data.groupId ?? null,
+      characterId: data.characterId ?? null,
       conditions: { create: toConditionsCreate(data, false) },
       referenceUrls: { create: toReferenceUrlsCreate(data, false) },
       stores: { create: toStoresCreate(data) }
@@ -315,6 +312,7 @@ export const updateEvent = async (env: Bindings, data: EventRequest): Promise<Ev
       isVerified: data.isVerified,
       isPreliminary: data.isPreliminary,
       groupId: data.groupId ?? null,
+      characterId: data.characterId ?? null,
       conditions: { deleteMany: {}, create: toConditionsCreate(data, true) },
       referenceUrls: { deleteMany: {}, create: toReferenceUrlsCreate(data, true) },
       stores: { deleteMany: {}, create: toStoresCreate(data) }
