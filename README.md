@@ -125,14 +125,24 @@ http://localhost:5173/admin/events/550e8400-e29b-41d4-a716-446655440004/?categor
 `prisma/schema.prisma` を変更したら SQL を生成してローカル D1 に適用する。
 生成し忘れた PR は CI の `Migrations` ジョブが落とす。
 
+生成は Prisma、適用は wrangler が担当する。Prisma 7 の CLI は D1 に直接接続
+できないため、`migrate:new` は shadow DB (`prisma/shadow.db`) 上でコミット済みの
+マイグレーション履歴を再生し、そこからスキーマとの差分 SQL を書き出す。
+
 ```zsh
 # schema.prisma の差分から migration.sql を生成
-bun run migrate:new
+bun run migrate:new --name add_event_character
 
 # ローカル D1 に適用 / 適用状況の確認
 bun run migrate
 bun run migrate:status
 ```
+
+生成された SQL に `PRAGMA foreign_keys=OFF` (テーブル再定義) が含まれていたら
+**そのまま適用してはいけない**。D1 はこの PRAGMA を無視するため、`DROP TABLE` で
+子テーブルが CASCADE 削除される。`defer_foreign_keys=ON` でも防げないことを実測済み。
+子テーブルを一時テーブルへ退避してから書き戻す形に手で書き換える
+(実例: `prisma/migrations/20260807175125_fix_events_group_fk/migration.sql`)。
 
 staging / production へは `deployment.yaml` の `Apply D1 migrations` step が
 デプロイ前に自動で適用する。適用済みかどうかは D1 側の `d1_migrations` 台帳で
