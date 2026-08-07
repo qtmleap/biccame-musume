@@ -11,9 +11,9 @@
   },
   "scripts": {
     "dev": "vite --host --port 15175",
-    "migrate": "wrangler d1 migrations apply biccame-musume-dev --local",
+    "migrate": "wrangler d1 migrations apply DB --local",
     "migrate:new": "bun run scripts/create-migration.ts",
-    "migrate:status": "wrangler d1 migrations list biccame-musume-dev --local",
+    "migrate:status": "wrangler d1 migrations list DB --local",
     "generate": "prisma generate",
     "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV:-production}"
   },

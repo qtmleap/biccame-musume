@@ -134,12 +134,16 @@ bun run migrate
 bun run migrate:status
 ```
 
-staging / production への適用は頻度が低いので wrangler を直接叩く。
-`--remote` は `CLOUDFLARE_API_TOKEN` を要求するため `.env` を読み込むこと。
+staging / production へは `deployment.yaml` の `Apply D1 migrations` step が
+デプロイ前に自動で適用する。適用済みかどうかは D1 側の `d1_migrations` 台帳で
+判定されるので、未適用の SQL だけが流れる。
+
+手元から直接当てたい場合は同じコマンドを `--remote` で叩く。
+`CLOUDFLARE_API_TOKEN` が要るので `.env` を読み込むこと。
 
 ```zsh
-source .env && wrangler d1 migrations apply biccame-musume-dev  --env=staging    --remote
-source .env && wrangler d1 migrations apply biccame-musume-prod --env=production --remote
+source .env && wrangler d1 migrations apply DB --env=staging    --remote
+source .env && wrangler d1 migrations apply DB --env=production --remote
 ```
 
 #### ビルド
