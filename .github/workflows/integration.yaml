@@ -55,6 +55,36 @@ jobs:
       - name: Check
         run: |
           bun biome check src __tests__
+  migrations:
+    name: Migrations
+    runs-on: ubuntu-latest
+    if: github.event.action != 'closed' || github.event.pull_request.merged != true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Cache
+        uses: actions/cache@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+      # schema.prisma を変更したのにマイグレーションを生成し忘れた PR を落とす。
+      # --from-migrations はコミット済み履歴の再生結果が起点なので DB もクレデンシャルも不要。
+      # 差分があれば --exit-code が 2 を返してジョブが失敗する。
+      - name: Check migrations are up to date
+        run: |
+          bunx prisma migrate diff \
+            --from-migrations ./prisma/migrations \
+            --to-schema ./prisma/schema.prisma \
+            --config ./prisma/prisma.config.ts \
+            --exit-code
   test:
     name: Test
     runs-on: ubuntu-latest

@@ -240,7 +240,7 @@ src/app/routeTree.gen.ts
 # Act
 .secrets
 !.secrets.example
-prisma/shadow.db
+prisma/*.db
 
 # Playwright
 test-results/
