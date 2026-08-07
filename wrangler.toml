@@ -47,6 +47,8 @@ binding = "DB"
 database_name = "biccame-musume-dev"
 database_id = "be540dec-d75d-46c9-b573-33cb68697778"
 migrations_dir = "prisma/migrations"
+# Prisma は <timestamp>/migration.sql 形式で出力するため、wrangler 既定の *.sql では検出されない
+migrations_pattern = "prisma/migrations/*/migration.sql"
 
 [[ratelimits]]
 name = "RATE_LIMITER"
@@ -128,6 +130,8 @@ binding = "DB"
 database_name = "biccame-musume-dev"
 database_id = "be540dec-d75d-46c9-b573-33cb68697778"
 migrations_dir = "prisma/migrations"
+# Prisma は <timestamp>/migration.sql 形式で出力するため、wrangler 既定の *.sql では検出されない
+migrations_pattern = "prisma/migrations/*/migration.sql"
 
 [[env.staging.ratelimits]]
 name = "RATE_LIMITER"
@@ -208,6 +212,8 @@ binding = "DB"
 database_name = "biccame-musume-prod"
 database_id = "9812433b-cfc6-46c6-8a0e-90a144b7304b"
 migrations_dir = "prisma/migrations"
+# Prisma は <timestamp>/migration.sql 形式で出力するため、wrangler 既定の *.sql では検出されない
+migrations_pattern = "prisma/migrations/*/migration.sql"
 
 [[env.production.ratelimits]]
 name = "RATE_LIMITER"
