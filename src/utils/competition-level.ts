@@ -14,8 +14,6 @@ export type CompetitionStats = {
   score: number
   /** 集計に使えたイベント数（配り切った回＋配り切れなかった回） */
   sampleSize: number
-  /** うち配り切った回数 */
-  soldOutCount: number
   /** 配り切った回の平均日数。一度も配り切っていなければ undefined */
   averageDays: number | undefined
   /** 1回あたりの平均配布数 */
@@ -113,7 +111,6 @@ export const calculateCompetitionStats = (
     level: toLevel(score),
     score,
     sampleSize: records.length,
-    soldOutCount: soldOutRecords.length,
     averageDays:
       soldOutRecords.length > 0
         ? soldOutRecords.reduce((sum, r) => sum + r.days, 0) / soldOutRecords.length
