@@ -84,7 +84,6 @@ export const CharacterCompetitionLevel = ({ storeKey }: CharacterCompetitionLeve
           ) : (
             <p className='text-sm text-foreground'>
               平均 {stats.averageDays < 1 ? '当日' : `${stats.averageDays.toFixed(1)}日`}
-              {stats.soldOutCount < stats.sampleSize && `（${stats.sampleSize} 回中 ${stats.soldOutCount} 回）`}
             </p>
           )}
         </InfoItem>
