@@ -6,82 +6,90 @@ user_invocable: true
 
 # /code-refactor — Non-UI Code Refactoring Command
 
-Audit and improve existing non-UI code (server, schemas, lib, hooks, workers, tests) based on structural quality criteria. Delegates execution to the `refactor` agent and the `qa` agent.
+Audit and improve existing non-UI code (server, schemas, lib, hooks, workers, tests) against structural quality criteria. Execution is delegated to the `refactor` agent and the `qa` agent.
 
 ## Scope
 
 ### In Scope
-- `src/app/server/**` — Hono routes, middleware
-- `schemas/**` — Zod DTOs
-- `prisma/**` — schema, migrations
-- `src/lib/**` — non-presentational utilities
-- `src/hooks/**` — data / query hooks (no JSX)
-- `workers/**` — Cloudflare Worker entrypoints
-- `tests/**` — unit / integration tests
 
-### Out of Scope (refer user to `/ui-refactor`)
+| Path | Contents |
+|------|----------|
+| `src/app/server/**` | Hono routes, middleware |
+| `schemas/**` | Zod DTOs |
+| `prisma/**` | schema, migrations |
+| `src/lib/**` | non-presentational utilities |
+| `src/hooks/**` | data / query hooks (no JSX) |
+| `workers/**` | Cloudflare Worker entrypoints |
+| `tests/**` | unit / integration tests |
+
+### Out of Scope
+
+Refer the user to `/ui-refactor` for:
+
 - `src/components/**`
-- `src/app/routes/**` JSX bodies
+- JSX bodies in `src/app/routes/**`
 
-## Instructions
+## Workflow
 
 ### Step 1: Determine Scope
 
-If the user specified a target, use it. Otherwise use the `AskUserQuestion` tool to present these options:
-- A specific module (e.g. `src/app/server/recordings`)
-- A specific file (e.g. `schemas/anime.dto.ts`)
-- A feature slice across server + schemas + lib
-- All non-UI code (full audit — warn that this is large)
+- If the user specified a target, use it.
+- Otherwise, use the `AskUserQuestion` tool to present these options:
+  - A specific module (e.g. `src/app/server/recordings`)
+  - A specific file (e.g. `schemas/anime.dto.ts`)
+  - A feature slice across server + schemas + lib
+  - All non-UI code (full audit — warn that this is large)
 
-Do NOT list options as plain text — always use `AskUserQuestion` for selectable choices.
+DON'T: list options as plain text. Always use `AskUserQuestion` for selectable choices.
 
 ### Step 2: Load Context
 
-Read project conventions:
-- `CLAUDE.md` for repo-wide rules
-- `.claude/agents/backend.md` for backend conventions
-- `.claude/agents/refactor.md` for refactor agent's scope and criteria
+Read, in this order of relevance:
+
+- `CLAUDE.md` — repo-wide rules
+- `.claude/agents/backend.md` — backend conventions
+- `.claude/agents/refactor.md` — refactor agent's scope and criteria
 - The target files themselves
-- Adjacent files that import / are imported by the target (use `grep` to find call sites)
+- Adjacent files that import, or are imported by, the target (use `grep` to find call sites)
 
 ### Step 3: Audit
 
-Evaluate against these criteria:
+Evaluate the target against all six criteria:
 
-**Reuse / Duplication**
+**1. Reuse / Duplication**
 - Same logic appearing in multiple files
 - Near-duplicate functions that could be unified
 - Repeated Zod schema fragments that should be extracted
 
-**Separation of Concerns**
+**2. Separation of Concerns**
 - Hono route handlers doing too much (validation + business logic + DB + transform)
 - Business logic mixed with HTTP concerns
 - DB queries scattered instead of centralized per feature
 
-**Type Safety**
+**3. Type Safety**
 - `any` / unsafe `as` casts
 - Missing Zod validation at boundaries (request / response / external API input)
-- DTO naming: must be `schemas/<feature>.dto.ts`, PascalCase exports
+- DTO naming: must be `schemas/<feature>.dto.ts`, with PascalCase exports
 
-**Database**
+**4. Database**
 - N+1 query patterns
 - Missing `select` projections (over-fetching)
 - Raw SQL where Prisma would work
 - Schema changes that bypassed migrations
 
-**Dead Code**
+**5. Dead Code**
 - Unused exports / imports / files
 - Commented-out blocks
 - `_unused` parameters or backwards-compat shims with no current consumer
 
-**Conventions**
+**6. Conventions**
 - File placement matches `CLAUDE.md` rules
 - DTO field naming matches source data casing (don't force camelCase on snake_case sources)
 - No `npm` / `npx` / `yarn` references in scripts
 
 ### Step 4: Report
 
-Present findings in Japanese as a structured report:
+Present findings in Japanese, using this structure:
 
 ```
 ## コードリファクタリングレポート: [対象]
@@ -104,36 +112,37 @@ Present findings in Japanese as a structured report:
 
 ### Step 5: Ask for Approval
 
-Use the `AskUserQuestion` tool with options: 全て実行 / 一部を選択 / キャンセル.
+Use the `AskUserQuestion` tool with exactly these options: 全て実行 / 一部を選択 / キャンセル.
 
-Do NOT proceed without explicit approval. Do NOT ask via plain text.
+- DON'T: proceed without explicit approval.
+- DON'T: ask via plain text.
 
-### Step 6: Execute (after approval)
+### Step 6: Execute (only after approval)
 
-Delegate via the Agent tool:
+Delegate via the Agent tool, in two stages:
 
 1. Launch the `refactor` agent with:
    - Specific file paths to modify
    - Each approved change as a discrete instruction
    - Constraint reminder: do not touch `src/components/**` or route JSX
-2. After the refactor agent reports completion, launch the `qa` agent to:
+2. After the `refactor` agent reports completion, launch the `qa` agent to:
    - Run `bunx tsc -b --noEmit`
    - Run `bunx biome check src/` (fix with `--write` where safe)
    - Commit in commitlint format: `refactor(<scope>): <description>`
 
 ### Step 7: Verify
 
-- Confirm tests still pass if a test suite exists for the touched area:
+- If a test suite exists for the touched area, confirm tests still pass:
   ```sh
   bun test <path>
   ```
-- For DB-touching changes: verify `bunx prisma migrate status` is clean and no raw SQL was applied
-- Report final diff summary and any deferred items
+- For DB-touching changes: verify `bunx prisma migrate status` is clean and no raw SQL was applied.
+- Report the final diff summary and any deferred items.
 
 ## Constraints
 
-- Use `bun` / `bunx`, never `npm` / `npx` / `yarn`
-- Do not edit `src/components/**` or `src/app/routes/**` JSX bodies — refer the user to `/ui-refactor`
-- DB schema changes must go through Prisma migrations
-- Don't add features or invent abstractions; refactor for what's currently used
-- All inter-agent prompts in English; user-facing reports in Japanese
+- DO: use `bun` / `bunx`. DON'T: use `npm` / `npx` / `yarn`.
+- DON'T: edit `src/components/**` or JSX bodies in `src/app/routes/**` — refer the user to `/ui-refactor`.
+- DO: route all DB schema changes through Prisma migrations.
+- DON'T: add features or invent abstractions. Refactor only for what's currently used.
+- DO: write all inter-agent prompts in English; write user-facing reports in Japanese.

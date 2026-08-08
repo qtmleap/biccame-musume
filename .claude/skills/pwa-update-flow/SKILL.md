@@ -5,50 +5,37 @@ description: PWA update notification and cache invalidation pattern for Vite + S
 
 # PWA Update Flow (Service Worker + Version Check)
 
-A full working pattern for PWAs that: ships updates to users already running the installed app, shows a non-intrusive "update available" banner, and cleanly wipes old caches before reloading. No libraries — ~120 lines of code total.
+A complete, working pattern for PWAs, with no libraries (~120 lines of code total). It:
+
+- Ships updates to users already running the installed app.
+- Shows a non-intrusive "update available" banner.
+- Cleanly wipes old caches before reloading.
 
 ## Why not `vite-plugin-pwa` or Workbox?
 
-Both are fine tools but they:
+Both are fine tools, but they:
+
 - Generate opaque runtime code you can't easily debug.
-- Couple the cache strategy to build config rather than keeping it in one readable file.
+- Couple the cache strategy to build config instead of keeping it in one readable file.
 - Overfit to SPA shells and make custom update UX awkward.
 
-For apps with simple caching needs (static assets cache-first, HTML network-first, API never cached), a hand-written 50-line SW is clearer and more maintainable.
+For apps with simple caching needs (static assets cache-first, HTML network-first, API never cached), a hand-written ~50-line Service Worker is clearer and more maintainable.
 
 ## Architecture
 
-```
-┌──────────────────┐     build-time        ┌──────────────────┐
-│   vite.config    │ ──── inject ──────▶   │ __APP_VERSION__  │
-└──────────────────┘                        └──────────────────┘
-                                                    │
-                              ┌─────────────────────┼─────────────────────┐
-                              ▼                     ▼                     ▼
-                   ┌──────────────────┐   ┌──────────────────┐  ┌──────────────────┐
-                   │ /api/version GET │   │ localStorage key │  │ service worker   │
-                   │ returns {version}│   │ "app_version"    │  │ cache name       │
-                   └──────────────────┘   └──────────────────┘  └──────────────────┘
-                              │                     │
-                              └─────────┬───────────┘
-                                        ▼
-                              ┌──────────────────┐
-                              │ useVersionCheck  │ ◀── polls on mount
-                              └──────────────────┘
-                                        │
-                                        ▼
-                              ┌──────────────────┐
-                              │  update banner   │ ◀── user taps
-                              └──────────────────┘
-                                        │
-                                        ▼
-                              ┌────────────────────────────────┐
-                              │ 1. sw.update()                 │
-                              │ 2. caches.keys + caches.delete │
-                              │ 3. clear localStorage version  │
-                              │ 4. window.location.reload()    │
-                              └────────────────────────────────┘
-```
+The build-time version stamp flows through the system like this:
+
+1. `vite.config` injects `__APP_VERSION__` at build time.
+2. `__APP_VERSION__` feeds three consumers:
+   - The `/api/version` GET endpoint, which returns `{version}`.
+   - The `localStorage` key `"app_version"`.
+   - The Service Worker cache name.
+3. The `useVersionCheck` hook polls on mount, comparing `/api/version` against the stored `localStorage` value.
+4. On mismatch, the update banner appears. When the user taps it, the update runs:
+   1. `sw.update()`
+   2. `caches.keys()` + `caches.delete()`
+   3. Clear the `localStorage` version.
+   4. `window.location.reload()`
 
 ## Part 1: Build-time version stamp
 
@@ -64,9 +51,9 @@ export default defineConfig({
 })
 ```
 
-Base-36 timestamp gives monotonic, short, URL-safe IDs without git dependency. If you want git SHA instead: `execSync('git rev-parse --short HEAD').toString().trim()`.
+A base-36 timestamp gives monotonic, short, URL-safe IDs with no git dependency. If you prefer the git SHA instead: `execSync('git rev-parse --short HEAD').toString().trim()`.
 
-Declare the global for TypeScript in any file that uses it:
+For TypeScript, declare the global in any file that uses it:
 
 ```ts
 declare const __APP_VERSION__: string
@@ -74,7 +61,7 @@ declare const __APP_VERSION__: string
 
 ## Part 2: `/api/version` endpoint
 
-Trivial — returns the same compile-time constant that the client already has:
+Trivial — it returns the same compile-time constant the client already has:
 
 ```ts
 // src/app/api/version/route.ts
@@ -85,7 +72,7 @@ export function GET() {
 }
 ```
 
-**Key insight**: the client's bundled JS has version X baked in. When the server redeploys with version Y, `/api/version` returns Y while the client's constant is still X → mismatch detected. No separate version file needed, no manual bumping.
+**Key insight:** the client's bundled JS has version X baked in. When the server redeploys with version Y, `/api/version` returns Y while the client's constant is still X — mismatch detected. No separate version file, no manual bumping.
 
 ## Part 3: The `useVersionCheck` hook
 
@@ -155,10 +142,10 @@ export function useVersionCheck() {
 
 ### Design choices worth keeping
 
-- **Seed `localStorage` on first visit, don't set `hasUpdate`.** First-load users have no baseline to compare against — skip the banner until the *second* visit after an update ships.
-- **Two-step flow**: `prepare()` runs the cache wipe, shows a progress animation, then `reload()` is a separate user action. Don't auto-reload — users lose in-progress form input.
-- **`import.meta.env.DEV` guard**: dev server has hot reload, no need for update banners.
-- **Failure is silent**: if `/api/version` is unreachable (offline, API down), don't show a stale banner or an error toast.
+- **Seed `localStorage` on first visit; do not set `hasUpdate`.** First-load users have no baseline to compare against — skip the banner until the *second* visit after an update ships.
+- **Two-step flow.** `prepare()` runs the cache wipe and shows a progress animation; `reload()` is a separate user action. Don't auto-reload — users lose in-progress form input.
+- **`import.meta.env.DEV` guard.** The dev server has hot reload; update banners are unnecessary there.
+- **Failure is silent.** If `/api/version` is unreachable (offline, API down), show neither a stale banner nor an error toast.
 
 ## Part 4: Update banner UI
 
@@ -196,8 +183,9 @@ const { hasUpdate, state: updateState, prepare, reload } = useVersionCheck()
 ```
 
 UX notes:
-- The banner lives inline in the page content, not as a fixed toast — respects the user's scroll position.
-- The overlay only appears *after* the user opts in via `prepare()`. It's explanatory, not interruptive.
+
+- The banner lives inline in the page content, not as a fixed toast — this respects the user's scroll position.
+- The overlay appears only *after* the user opts in via `prepare()`. It is explanatory, not interruptive.
 - The progress bar duration equals the `setTimeout(2000)` inside `prepare()` — the animation is cosmetic, not functional.
 - After `ready`, the Reload button is the only action — no auto-reload.
 
@@ -263,16 +251,17 @@ self.addEventListener('fetch', (event) => {
 ### Three rules that matter
 
 1. **Never cache `/api/*`.** Returning early from the `fetch` handler means no cache interference — the browser handles the request normally.
-2. **Network-first for HTML.** Ensures users always see the freshest entry point. Falls back to the cached root on offline so the app shell still loads.
-3. **Cache-first for hashed assets.** Vite's bundled JS/CSS have content hashes in the filename, so once cached, they never go stale — the old hash just stops being referenced.
+2. **Network-first for HTML.** Users always see the freshest entry point. When offline, it falls back to the cached root so the app shell still loads.
+3. **Cache-first for hashed assets.** Vite's bundled JS/CSS have content hashes in the filename, so once cached they never go stale — an old hash simply stops being referenced.
 
 ### Why `skipWaiting()` + `clients.claim()`?
 
-Without them, a new SW sits in "waiting" state until every tab closes — users get stuck on the old version for days. This pair activates the new SW on next page load, which pairs perfectly with the "Reload" button in `useVersionCheck`.
+Without them, a new SW sits in "waiting" state until every tab closes — users stay stuck on the old version for days. This pair activates the new SW on the next page load, which pairs perfectly with the "Reload" button in `useVersionCheck`.
 
 ### Bumping `CACHE_NAME`
 
-When you change cache strategy or want to force-evict everything, bump the version in the filename (`myapp-v2` → `myapp-v3`). The `activate` handler automatically deletes all other caches. Otherwise leave it alone — the content-hashed asset filenames naturally handle cache busting.
+- **Do bump** the version in the name (`myapp-v2` → `myapp-v3`) when you change cache strategy or want to force-evict everything. The `activate` handler automatically deletes all other caches.
+- **Otherwise leave it alone** — content-hashed asset filenames handle cache busting naturally.
 
 ## Part 6: Register the SW inline in `<head>`
 
@@ -287,6 +276,7 @@ When you change cache strategy or want to force-evict everything, bump the versi
 ```
 
 Inline registration (not in a module) is intentional:
+
 - Runs before React mounts — catches the first render.
 - No import waterfall.
 - Safely guarded by the feature check.
@@ -323,7 +313,12 @@ Linked from `<head>`:
 
 ### Must-have for iOS install
 
-iOS Safari requires all four of `apple-mobile-web-app-capable`, `apple-mobile-web-app-status-bar-style`, `apple-touch-icon`, and a `theme-color` meta. Missing any one of these degrades the installed experience.
+iOS Safari requires all four of the following; missing any one degrades the installed experience:
+
+- `apple-mobile-web-app-capable`
+- `apple-mobile-web-app-status-bar-style`
+- `apple-touch-icon`
+- a `theme-color` meta
 
 ## Part 8: Theme initialization (avoid flash)
 
@@ -340,34 +335,34 @@ Runs **inline before paint** so dark mode doesn't flash on load:
 
 Keep it tiny and IIFE-wrapped. Any error (e.g. blocked localStorage) is caught so it never breaks the page.
 
-## Anti-patterns to avoid
+## Anti-patterns to avoid (DON'T)
 
-- ❌ **Caching API responses in the SW.** Leads to stale data bugs that are hard to reproduce.
-- ❌ **Auto-reloading when an update is detected.** Users lose in-progress form input and get whiplashed.
-- ❌ **Polling `/api/version` every N seconds.** Mount-only check is plenty — users will remount via navigation.
-- ❌ **Registering the SW inside a React `useEffect`.** Delays activation by one hydration cycle and races with the first navigation.
-- ❌ **Using a module SW (`type: 'module'`) unless you need it.** Browser support and caching semantics are trickier; a classic SW is simpler and ubiquitous.
-- ❌ **Hard-coding the version string in source.** Use a build-time `define` so every build gets a unique id automatically.
-- ❌ **Using Workbox / `vite-plugin-pwa` for simple needs.** Generated runtime code is hard to debug and overkill for 50 lines of hand-written logic.
-- ❌ **Showing the update banner on first load.** Seed `localStorage` without setting `hasUpdate` — there's no old version to compare against yet.
-- ❌ **Missing `self.clients.claim()`.** The new SW won't take over existing tabs, making the update banner feel like a lie.
+- **DON'T cache API responses in the SW.** Leads to stale-data bugs that are hard to reproduce.
+- **DON'T auto-reload when an update is detected.** Users lose in-progress form input and get whiplashed.
+- **DON'T poll `/api/version` every N seconds.** A mount-only check is plenty — users will remount via navigation.
+- **DON'T register the SW inside a React `useEffect`.** It delays activation by one hydration cycle and races with the first navigation.
+- **DON'T use a module SW (`type: 'module'`) unless you need it.** Browser support and caching semantics are trickier; a classic SW is simpler and ubiquitous.
+- **DON'T hard-code the version string in source.** Use a build-time `define` so every build gets a unique id automatically.
+- **DON'T use Workbox / `vite-plugin-pwa` for simple needs.** Generated runtime code is hard to debug and overkill for 50 lines of hand-written logic.
+- **DON'T show the update banner on first load.** Seed `localStorage` without setting `hasUpdate` — there is no old version to compare against yet.
+- **DON'T omit `self.clients.claim()`.** The new SW won't take over existing tabs, making the update banner feel like a lie.
 
 ## Testing the update flow locally
 
 1. `bun run build && bun run preview` (or deploy).
 2. Open the app. `localStorage.getItem('app_version')` is now set.
-3. `bun run build` again — timestamp changes, `__APP_VERSION__` bumps.
+3. `bun run build` again — the timestamp changes, so `__APP_VERSION__` bumps.
 4. Refresh the tab *without* cleaning — the banner should appear.
-5. Tap it → overlay → reload → new version loads.
+5. Tap it → overlay → reload → the new version loads.
 6. DevTools → Application → Cache Storage: only the new cache name remains.
 
 ## Bootstrap checklist
 
 1. `vite.config.ts` — add `define: { __APP_VERSION__: JSON.stringify(Date.now().toString(36)) }`.
 2. Create `src/app/api/version/route.ts` (or equivalent) returning `{ version: __APP_VERSION__ }`.
-3. Create `src/lib/use-version-check.ts` — copy the hook verbatim, adjust dev guard if needed.
-4. Create `public/sw.js` — copy the SW verbatim, replace `CACHE_NAME`.
+3. Create `src/lib/use-version-check.ts` — copy the hook verbatim; adjust the dev guard if needed.
+4. Create `public/sw.js` — copy the SW verbatim; replace `CACHE_NAME`.
 5. Create `public/manifest.json` — adjust colors, icons, name.
 6. Add the inline SW registration + manifest/theme meta tags to `<head>`.
 7. Add the update banner component wherever the app's landing view lives.
-8. Build, preview, verify the flow end-to-end before shipping.
+8. Build, preview, and verify the flow end-to-end before shipping.

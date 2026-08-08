@@ -5,7 +5,8 @@ description: Backend architecture reference for Cloudflare Workers projects usin
 
 # Cloudflare Workers Backend Stack
 
-Patterns extracted from a production Cloudflare Workers backend. Copy the patterns, not the app-specific schema.
+Patterns extracted from a production Cloudflare Workers backend.
+Copy the patterns, not the app-specific schema.
 
 ## Stack
 
@@ -18,7 +19,7 @@ Patterns extracted from a production Cloudflare Workers backend. Copy the patter
 | Validation | **Zod** schemas shared with the frontend (`src/lib/schema.ts`, `schemas/*.dto.ts`) |
 | Auth | Firebase Auth on client → ID token verified server-side → HttpOnly cookie with HS256 JWT |
 | AI | Workers AI binding (`env.AI`) routed through **AI Gateway** for observability |
-| Secrets / vars | `wrangler.toml` `[vars]` for public, `wrangler secret put` for sensitive |
+| Secrets / vars | `wrangler.toml` `[vars]` for public values; `wrangler secret put` for sensitive values |
 
 ## Directory layout
 
@@ -41,9 +42,10 @@ worker/
 wrangler.toml                      # Bindings: D1, AI, vars
 ```
 
-## Route handlers — the App Router pattern
+## Route handlers (App Router pattern)
 
-Each `route.ts` exports named HTTP method functions. The handler receives a `Request` and returns a `Response`.
+Each `route.ts` exports named HTTP method functions (`GET`, `POST`, `PUT`, `DELETE`).
+Each handler receives a `Request` and returns a `Response`.
 
 ```ts
 // src/app/api/foods/route.ts
@@ -90,11 +92,11 @@ export async function POST(request: Request) {
 
 ### Non-negotiable rules
 
-- **`cloudflare:workers` import** — `import { env } from 'cloudflare:workers'` is how you reach bindings inside route handlers. Don't pass `env` through parameters.
-- **First line of every authenticated handler** is the auth guard pattern below.
-- **Always `safeParse`** incoming bodies with the shared Zod schema, never cast to a type.
-- **Shape the response** explicitly — never return raw Prisma rows (snake_case columns leak through `@map`). Map to the camelCase DTO shape that matches `schemas/<Name>.dto.ts`.
-- **Query param parsing** uses `new URL(request.url)` + `.searchParams`. Always clamp numeric params.
+- **DO** access bindings via `import { env } from 'cloudflare:workers'` inside route handlers. **DON'T** pass `env` through function parameters.
+- **DO** start every authenticated handler with the auth guard: call `getAuthUser(request)`, then `if (userOrRes instanceof Response) return userOrRes`.
+- **DO** validate every incoming body with `safeParse` using the shared Zod schema. **DON'T** cast the body to a type.
+- **DO** shape every response explicitly, mapping to the camelCase DTO shape defined in `schemas/<Name>.dto.ts`. **DON'T** return raw Prisma rows — snake_case column names leak through `@map`.
+- **DO** parse query params with `new URL(request.url)` + `.searchParams`, and always clamp numeric params.
 
 ### Error response shape
 
@@ -103,9 +105,9 @@ export async function POST(request: Request) {
 { error: { fieldErrors: {...}, formErrors: [...] } }   // from zod flatten()
 ```
 
-The frontend's Zodios error plugin reads `data.error` when it's a string and displays it as a toast. Keep this contract.
+Keep this contract: the frontend's Zodios error plugin reads `data.error` when it is a string and displays it as a toast.
 
-## Auth middleware pattern
+## Auth middleware
 
 ```ts
 // src/lib/auth-middleware.ts
@@ -134,11 +136,14 @@ export async function getAuthUser(request: Request): Promise<FirebaseUser | Resp
 }
 ```
 
-**Return-type trick**: `FirebaseUser | Response`. The handler checks `instanceof Response` and short-circuits. This keeps auth concerns out of every handler while staying fully typed without any third-party middleware framework.
+**Return-type trick:** the return type is `FirebaseUser | Response`.
+The handler checks `instanceof Response` and short-circuits.
+This keeps auth logic out of every handler while staying fully typed, with no third-party middleware framework.
 
-## Session pattern — HttpOnly cookie + HS256 JWT (no external deps)
+## Sessions: HttpOnly cookie + HS256 JWT (no external deps)
 
-Workers don't have Node crypto, so use `crypto.subtle` directly. This pattern is ~60 lines and requires zero dependencies:
+Workers do not have Node crypto, so use `crypto.subtle` directly.
+This pattern is ~60 lines and requires zero dependencies:
 
 ```ts
 // src/lib/session.ts
@@ -200,18 +205,19 @@ export function clearSessionCookie(): string {
 
 ### Login flow
 
-1. Client authenticates with Firebase Auth, gets ID token.
-2. POSTs ID token to `/api/auth/login`.
-3. Server verifies the Firebase ID token with `firebase-auth-cloudflare-workers`, extracts `uid` + `email`.
-4. Server issues HS256 JWT, sets it as `__session` cookie with `HttpOnly; Secure; SameSite=Lax; Path=/api`.
-5. All subsequent API calls use the cookie — no Bearer header gymnastics on the frontend.
+1. Client authenticates with Firebase Auth and gets an ID token.
+2. Client POSTs the ID token to `/api/auth/login`.
+3. Server verifies the Firebase ID token with `firebase-auth-cloudflare-workers` and extracts `uid` + `email`.
+4. Server issues an HS256 JWT and sets it as the `__session` cookie with `HttpOnly; Secure; SameSite=Lax; Path=/api`.
+5. All subsequent API calls use the cookie — no Bearer header handling on the frontend.
 
-**Why HttpOnly cookie and not a Firebase ID token Bearer?**
-- ID tokens expire in ~1 hour → requires constant refresh on the client.
-- HttpOnly cookies are inaccessible to JavaScript → XSS-safe for session theft.
-- Scoping to `Path=/api` avoids leaking the cookie to static asset requests.
+### Why an HttpOnly cookie instead of a Firebase ID token Bearer header?
 
-## Prisma + D1 pattern
+- ID tokens expire in ~1 hour, which would require constant refresh on the client.
+- HttpOnly cookies are inaccessible to JavaScript, so sessions cannot be stolen via XSS.
+- Scoping the cookie to `Path=/api` avoids leaking it to static asset requests.
+
+## Prisma + D1
 
 ```prisma
 // prisma/schema.prisma
@@ -237,22 +243,30 @@ export function getPrisma(env: Cloudflare.Env) {
 }
 ```
 
-- **One `getPrisma(env)` call per handler.** The client is cheap; don't memoize across requests (would leak between isolates).
-- Schema fields use `@map("snake_case")` + camelCase TS names. Always shape the response explicitly when returning from handlers.
-- **Never write migration SQL by hand.** Always `bunx prisma migrate dev --name <name>` and commit the generated SQL.
-- Apply migrations to local D1 (miniflare reads a separate SQLite file from Prisma):
-  ```sh
-  for f in prisma/migrations/*/migration.sql; do
-    bunx wrangler d1 execute <db-name> --local --file="$f"
-  done
-  ```
-- For remote: add `--remote` instead of `--local`.
+### Rules
+
+- **DO** call `getPrisma(env)` once per handler. The client is cheap to create. **DON'T** memoize it across requests — that leaks between isolates.
+- Schema fields use `@map("snake_case")` with camelCase TS names. **DO** shape the response explicitly whenever returning data from handlers.
+- **DON'T** write migration SQL by hand. **DO** run `bunx prisma migrate dev --name <name>` and commit the generated SQL.
+
+### Applying migrations to D1
+
+Miniflare reads a separate SQLite file from Prisma, so apply migrations to local D1 with:
+
+```sh
+for f in prisma/migrations/*/migration.sql; do
+  bunx wrangler d1 execute <db-name> --local --file="$f"
+done
+```
+
+For remote D1, use `--remote` instead of `--local`.
 
 ### Indexes
 
-Always add `@@index([userId, ...])` on tables scoped per user. D1 is SQLite — missing indexes show up fast.
+**DO** add `@@index([userId, ...])` on every table scoped per user.
+D1 is SQLite — missing indexes show up fast.
 
-### `findFirst` vs `findUnique` for ownership checks
+### Ownership checks: `findFirst`, not `findUnique`
 
 ```ts
 // ✅ Checks ownership in one query
@@ -262,9 +276,9 @@ const template = await prisma.mealTemplate.findFirst({
 if (!template) return Response.json({ error: 'Not found' }, { status: 404 })
 ```
 
-Don't do `findUnique({ where: { id } })` then compare `template.userId` in JS — that's a second trip and leaks existence.
+**DON'T** do `findUnique({ where: { id } })` and then compare `template.userId` in JS — that costs a second trip and leaks record existence.
 
-## Workers AI + AI Gateway pattern
+## Workers AI + AI Gateway
 
 ```ts
 // src/lib/ai-gateway.ts
@@ -293,14 +307,16 @@ const result = await env.AI.run(
 )
 ```
 
-- **Gateway id as a `[vars]` entry** in `wrangler.toml`, not a secret. One per environment (e.g. `health-app` / `health-app-staging`).
-- **Metadata per call** — tag with `userId` + `endpoint` so the Gateway dashboard can slice by feature.
-- **Tolerates missing gateway** — returns `undefined` when `AI_GATEWAY_ID` is empty so local dev works without configuring one.
-- Gateway gives you neurons-consumed, cost, latency, cache hits, and per-request logs without any DB writes.
+### Rules
 
-### Rate limiting pattern
+- **DO** store the gateway id as a `[vars]` entry in `wrangler.toml`, not a secret. Use one gateway per environment (e.g. `health-app` / `health-app-staging`).
+- **DO** attach metadata per call — tag with `userId` + `endpoint` so the Gateway dashboard can slice by feature.
+- The helper tolerates a missing gateway: it returns `undefined` when `AI_GATEWAY_ID` is empty, so local dev works without configuring one.
+- The Gateway gives you neurons-consumed, cost, latency, cache hits, and per-request logs without any DB writes.
 
-Simple per-user daily counter in the DB:
+### Rate limiting
+
+A simple per-user daily counter in the DB:
 
 ```ts
 // src/lib/ai-rate-limit.ts
@@ -339,11 +355,11 @@ if (!allowed) {
 }
 ```
 
-**Always return a descriptive error message**, not just the status code. The frontend surfaces `data.error` as the toast message.
+**DO** always return a descriptive error message, not just the status code — the frontend surfaces `data.error` as the toast message.
 
-## Parsing AI text responses
+### Parsing AI text responses
 
-LLMs return free-form text; when you need JSON, match+parse safely:
+LLMs return free-form text. When you need JSON, match and parse safely:
 
 ```ts
 const text = aiResponse.response
@@ -352,7 +368,8 @@ if (!match) return Response.json({ error: 'AI response parse failed', raw: text 
 const parsed = JSON.parse(match[0])
 ```
 
-Validate the parsed object with Zod before returning. Return `502` for model-side errors so the frontend can distinguish from `400` (user input errors).
+- **DO** validate the parsed object with Zod before returning it.
+- **DO** return `502` for model-side errors so the frontend can distinguish them from `400` (user input errors).
 
 ## `wrangler.toml` skeleton
 
@@ -394,7 +411,7 @@ binding = "AI"
 AI_GATEWAY_ID = "my-app-staging"
 ```
 
-**After any `wrangler.toml` change, run `bunx wrangler types`** to regenerate `worker-configuration.d.ts`.
+**DO** run `bunx wrangler types` after any `wrangler.toml` change to regenerate `worker-configuration.d.ts`.
 
 ## Vite plugin wiring (for Vinext)
 
@@ -424,7 +441,7 @@ export default defineConfig({
 export { default } from 'vinext/server/app-router-entry'
 ```
 
-## Prisma on Workers: source map quirk
+### Prisma on Workers: source map quirk
 
 Prisma's generated client ships with source maps that break Vite's module graph. Add this plugin:
 
@@ -443,26 +460,26 @@ function prismaSourcemapFix(): Plugin {
 }
 ```
 
-## Anti-patterns to avoid
+## Anti-patterns (never do these)
 
 - ❌ Returning raw Prisma rows — snake_case column names leak through `@map`.
-- ❌ Writing D1 migrations by hand — always `prisma migrate dev`.
-- ❌ `findUnique({ where: { id } })` then checking `userId` in JS for ownership checks.
+- ❌ Writing D1 migration SQL by hand — always use `prisma migrate dev`.
+- ❌ Using `findUnique({ where: { id } })` and then checking `userId` in JS for ownership checks.
 - ❌ Returning bare status codes like `new Response(null, { status: 429 })` — always include `{ error: string }` so the frontend toast shows something useful.
 - ❌ Memoizing `PrismaClient` in module-level globals — it leaks across isolates.
 - ❌ Writing AI route handlers without the rate-limit check — quota will burn instantly.
-- ❌ Inline auth checks (`const user = ...; if (!user) return ...`) duplicated per handler — use `getAuthUser` + `instanceof Response`.
-- ❌ Skipping AI Gateway — you'll have zero visibility into model usage.
-- ❌ `compatibility_flags = ["nodejs_compat_v2"]` without also setting a recent `compatibility_date`.
+- ❌ Duplicating inline auth checks (`const user = ...; if (!user) return ...`) in each handler — use `getAuthUser` + `instanceof Response`.
+- ❌ Skipping AI Gateway — you will have zero visibility into model usage.
+- ❌ Setting `compatibility_flags = ["nodejs_compat_v2"]` without also setting a recent `compatibility_date`.
 
 ## Bootstrap checklist
 
 1. `bun install` — Prisma 7, `@prisma/adapter-d1`, `firebase-auth-cloudflare-workers`, `zod`, `vinext`, `@cloudflare/vite-plugin`.
-2. Create a D1 database: `bunx wrangler d1 create <name>`, copy the id into `wrangler.toml`.
-3. `prisma/schema.prisma` with `runtime = "cloudflare"`, `provider = "sqlite"`.
-4. `bunx prisma migrate dev --name init`, then apply SQL to D1 local with the loop above.
+2. Create a D1 database: `bunx wrangler d1 create <name>`, then copy the id into `wrangler.toml`.
+3. Create `prisma/schema.prisma` with `runtime = "cloudflare"` and `provider = "sqlite"`.
+4. Run `bunx prisma migrate dev --name init`, then apply the SQL to local D1 with the migration loop above ("Applying migrations to D1").
 5. Copy `src/lib/db.ts`, `session.ts`, `auth-middleware.ts`, `ai-gateway.ts`, `ai-rate-limit.ts`.
-6. Create AI Gateway in Cloudflare dashboard, add id to `[vars].AI_GATEWAY_ID`.
-7. `bunx wrangler secret put SESSION_SECRET` — long random string.
-8. `bunx wrangler types` to generate `worker-configuration.d.ts`.
-9. First `route.ts` — use the foods route as the template.
+6. Create an AI Gateway in the Cloudflare dashboard and add its id to `[vars].AI_GATEWAY_ID`.
+7. Run `bunx wrangler secret put SESSION_SECRET` with a long random string.
+8. Run `bunx wrangler types` to generate `worker-configuration.d.ts`.
+9. Write the first `route.ts` — use the foods route above as the template.

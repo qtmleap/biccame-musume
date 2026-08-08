@@ -49,11 +49,16 @@ schemas/
 └─ *.dto.ts                      # Zod output (response) schemas — PascalCase
 ```
 
-Path alias: `@/*` → `./src/*`. `../../schemas/*` for response DTOs kept outside `src/`.
+Path aliases:
+
+- `@/*` → `./src/*`
+- `../../schemas/*` — response DTOs, kept outside `src/`
 
 ## Core pattern: Zodios as the API contract
 
-**The single highest-value pattern in this stack.** One file defines all endpoints, types flow automatically to both client callsites and server handlers.
+**This is the single highest-value pattern in this stack.** One file defines all endpoints; types flow automatically to both client callsites and server handlers.
+
+### 1. Define the contract
 
 ```ts
 // src/lib/api-contract.ts
@@ -83,6 +88,8 @@ export const apiDefinition = makeApi([
 ])
 ```
 
+### 2. Create the singleton client
+
 ```ts
 // src/lib/api.ts — singleton client
 import { Zodios, type ZodiosPlugin } from '@zodios/core'
@@ -109,7 +116,9 @@ export const api = new Zodios('/api', apiDefinition)
 api.use(errorToastPlugin)
 ```
 
-Usage from components — fully typed via the `alias`:
+### 3. Call from components
+
+Fully typed via the `alias`:
 
 ```ts
 api.listFoods({ queries: { q: 'chicken', limit: 10 } })  // → FoodRow[]
@@ -118,14 +127,20 @@ api.createFood({ name: 'rice', calories: 250 })          // → FoodRow
 
 ### Two schema locations — intentional split
 
-- **`src/lib/schema.ts`** — *input* schemas (form data). Loose: `z.number().min(0).default(0)`. Shared between RHF resolver and server parse.
-- **`schemas/*.dto.ts`** — *output* schemas (server responses). Strict. Kept outside `src/` to stay portable and avoid app imports. Naming: `PascalCase.dto.ts`, `<Name>RowSchema` + `type <Name>Row = z.infer<typeof ...>`.
+| Location | Role | Style |
+|---|---|---|
+| `src/lib/schema.ts` | **Input** schemas (form data) | Loose — e.g. `z.number().min(0).default(0)`. Shared between the RHF resolver and server-side parse. |
+| `schemas/*.dto.ts` | **Output** schemas (server responses) | Strict. Kept outside `src/` to stay portable and avoid app imports. |
 
-### Never write a `ZodiosPlugin` as an axios interceptor
+DTO naming: file is `PascalCase.dto.ts`; each exports `<Name>RowSchema` plus `type <Name>Row = z.infer<typeof ...>`.
 
-Use the Zodios plugin API (`error`, `request`, `response` hooks) instead of wrapping a custom `axios.create()` instance. Keeps error handling scoped to the client.
+### DON'T: write error handling as an axios interceptor
+
+Use the Zodios plugin API (`error`, `request`, `response` hooks) instead of wrapping a custom `axios.create()` instance. This keeps error handling scoped to the client.
 
 ## TanStack Query patterns
+
+Create the client in `Providers`:
 
 ```tsx
 // Providers.tsx
@@ -136,8 +151,11 @@ const [queryClient] = useState(
 )
 ```
 
-- **Query key convention**: `[<feature>, ...subkey]` — e.g. `['foods', 'frequent']`, `['meals', date]`.
+Rules:
+
+- **Query key convention:** `[<feature>, ...subkey]` — e.g. `['foods', 'frequent']`, `['meals', date]`.
 - **Invalidate in `onSuccess`** of mutations:
+
   ```ts
   useMutation({
     mutationFn: (data) => api.createMeal(data),
@@ -148,11 +166,12 @@ const [queryClient] = useState(
     }
   })
   ```
-- Let the error-toast plugin handle failure toasts — don't add `onError` unless you need custom behavior.
+
+- **Failure toasts:** let the error-toast plugin handle them. Don't add `onError` unless you need custom behavior.
 
 ## Forms — react-hook-form + Zod
 
-**Every form follows this exact pattern.** No ad-hoc `useState` + `fetch`.
+**Every form follows this exact pattern.** Never use ad-hoc `useState` + `fetch`.
 
 ```tsx
 const form = useForm<FoodInput>({
@@ -188,29 +207,32 @@ Use shadcn/ui `<Form>`, `<FormField>`, `<FormItem>`, `<FormLabel>`, `<FormContro
 />
 ```
 
-Why:
-1. `value={field.value ?? ''}` — shows empty string when `undefined`. Without it React warns controlled→uncontrolled.
-2. onChange maps empty → `undefined`, **never** back to `0`. Otherwise the default `0` resurrects on every keystroke and the field is impossible to clear.
+Why each part matters:
+
+1. `value={field.value ?? ''}` — shows an empty string when the value is `undefined`. Without it, React warns about a controlled→uncontrolled switch.
+2. `onChange` maps empty input to `undefined`, **never** back to `0`. Otherwise the default `0` resurrects on every keystroke and the field is impossible to clear.
 3. `defaultValues` should be `undefined` for number fields. Use `z.number().default(0)` in the schema to backfill on submit.
 
-### Always `mode: 'onBlur'`
+### Always use `mode: 'onBlur'`
 
-Validate when focus leaves a field, not only on submit. Gives immediate feedback without being noisy on every keystroke.
+Validate when focus leaves a field, not only on submit. This gives immediate feedback without being noisy on every keystroke.
 
 ## Styling conventions
 
-- **Tailwind v4** via `@tailwindcss/vite` — no `tailwind.config.js`. Config lives in `index.css` with `@theme`.
-- **Never use template-literal conditional classes.** Always use `cn()`:
+- **Tailwind v4** via `@tailwindcss/vite` — there is no `tailwind.config.js`. Config lives in `index.css` with `@theme`.
+- **DON'T use template-literal conditional classes. DO use `cn()`:**
+
   ```tsx
   // ❌ BAD
   className={`rounded ${selected ? 'bg-primary' : 'bg-muted'}`}
   // ✅ GOOD — cn() from @/lib/utils: twMerge(clsx(...))
   className={cn('rounded', selected ? 'bg-primary' : 'bg-muted')}
   ```
-- **Never edit shadcn/ui files in `src/components/ui/`.** Override via `className` at the usage site. If structural changes are needed, wrap it.
+
+- **DON'T edit shadcn/ui files in `src/components/ui/`.** Override via `className` at the usage site. If structural changes are needed, wrap the component instead.
 - Add shadcn components with `bunx --bun shadcn@latest add <name>`.
 
-## `cn()` utility
+### `cn()` utility
 
 ```ts
 // src/lib/utils.ts
@@ -236,17 +258,23 @@ import * as m from 'motion/react-m'   // tree-shaken import path
 
 ### SSR hydration gotcha
 
-`initial={{ opacity: 0 }}` leaves elements invisible during SSR until hydration finishes.
+Problem: `initial={{ opacity: 0 }}` leaves elements invisible during SSR until hydration finishes.
 
-1. `src/index.css`:
+Fix (three parts):
+
+1. In `src/index.css`:
+
    ```css
    html:not([data-hydrated]) [data-motion-initial] { opacity: 1 !important; }
    ```
+
 2. In `Providers`:
+
    ```tsx
    useEffect(() => { document.documentElement.dataset.hydrated = '' }, [])
    ```
-3. Provide a `useSkipAnimation()` hook returning `true` on first client render so you can write `initial={skipAnimation ? false : {...}}`.
+
+3. Provide a `useSkipAnimation()` hook that returns `true` on the first client render, so you can write `initial={skipAnimation ? false : {...}}`.
 
 ## Providers ordering (matters)
 
@@ -264,18 +292,22 @@ import * as m from 'motion/react-m'   // tree-shaken import path
 
 ## Global state guidance
 
+Pick the store by the kind of state:
+
 - **Server state → TanStack Query.** Never put API responses in Jotai or Context.
 - **Cross-page UI state → Jotai.** E.g. selected date, open sheets that survive navigation.
-- **Local-only state → `useState`.** Don't reach for a global store just to share between siblings.
+- **Local-only state → `useState`.** Don't reach for a global store just to share state between siblings.
 
 ## TypeScript conventions
 
 - `"strict": true`. Run `bunx tsc --noEmit` on every change.
 - Exclude shadcn files from strict checks:
+
   ```jsonc
   // tsconfig.json
   "exclude": ["src/components/ui/**/*.tsx"]
   ```
+
 - Prefer `as never` over `as any` when casting around RHF/Zod generics.
 
 ## Biome config (copy verbatim)
@@ -308,9 +340,9 @@ Always run `bunx biome check --write` after edits.
 1. `bun install` with the dependencies listed above.
 2. Copy `biome.json`, `tsconfig.json`, `vite.config.ts`.
 3. Create `src/lib/utils.ts` (`cn()`), `src/lib/api-contract.ts`, `src/lib/api.ts`, `src/lib/schema.ts`.
-4. Create `schemas/` directory outside `src/` for response DTOs.
-5. Add shadcn primitives with `bunx --bun shadcn@latest init` then `add <component>`.
-6. Mirror `src/components/providers.tsx` ordering.
+4. Create the `schemas/` directory outside `src/` for response DTOs.
+5. Add shadcn primitives with `bunx --bun shadcn@latest init`, then `add <component>`.
+6. Mirror the `src/components/providers.tsx` ordering.
 7. Use one form (e.g. `food-form.tsx`) as the template for all other forms.
 8. Add `mode: 'onBlur'` and the number-input gotcha fix to every `useForm` call from day one.
 
@@ -319,7 +351,7 @@ Always run `bunx biome check --write` after edits.
 - ❌ Hand-written fetch wrappers when Zodios can generate them.
 - ❌ Editing files in `src/components/ui/`.
 - ❌ Template-literal conditional class strings.
-- ❌ `onChange` that maps empty string to `0` on number inputs.
+- ❌ `onChange` that maps an empty string to `0` on number inputs.
 - ❌ Storing server data in Jotai or React Context.
-- ❌ `mode: 'onSubmit'` (the default) — use `'onBlur'`.
+- ❌ `mode: 'onSubmit'` (the RHF default) — use `'onBlur'`.
 - ❌ Mixing `npm`/`yarn` with Bun.
