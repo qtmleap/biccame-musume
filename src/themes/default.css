@@ -124,6 +124,26 @@
   --color-action-award: var(--action-award);
   --color-action-award-soft: var(--action-award-soft);
 
+  /* 対象ビッカメ娘バッジ */
+  --color-character: var(--character);
+  --color-character-foreground: var(--character-foreground);
+
+  /* 激戦区レベル */
+  --color-heat-ss-plus: var(--heat-ss-plus);
+  --color-heat-ss-plus-foreground: var(--heat-ss-plus-foreground);
+  --color-heat-ss: var(--heat-ss);
+  --color-heat-ss-foreground: var(--heat-ss-foreground);
+  --color-heat-s: var(--heat-s);
+  --color-heat-s-foreground: var(--heat-s-foreground);
+  --color-heat-a: var(--heat-a);
+  --color-heat-a-foreground: var(--heat-a-foreground);
+  --color-heat-b: var(--heat-b);
+  --color-heat-b-foreground: var(--heat-b-foreground);
+  --color-heat-c: var(--heat-c);
+  --color-heat-c-foreground: var(--heat-c-foreground);
+  --color-heat-d: var(--heat-d);
+  --color-heat-d-foreground: var(--heat-d-foreground);
+
   /* Favorite (推し) */
   --color-favorite: var(--favorite);
   --color-favorite-foreground: var(--favorite-foreground);

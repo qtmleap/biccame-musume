@@ -1,6 +1,7 @@
 import { useRouter } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { Suspense } from 'react'
+import { CharacterCompetitionLevel } from '@/components/characters/character-competition-level'
 import { CharacterOngoingEvents } from '@/components/characters/character-ongoing-events'
 import { CharacterProfileSection } from '@/components/characters/detail/character-profile-section'
 import { StoreInfoSection } from '@/components/characters/detail/store-info-section'
@@ -44,6 +45,9 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
             <CharacterProfileSection character={character} />
             <Suspense fallback={null}>
               <CharacterOngoingEvents storeKey={character.id as StoreKey} />
+            </Suspense>
+            <Suspense fallback={null}>
+              <CharacterCompetitionLevel storeKey={character.id as StoreKey} />
             </Suspense>
             <StoreInfoSection character={character} />
           </div>

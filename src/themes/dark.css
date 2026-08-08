@@ -116,6 +116,26 @@
   --action-award: var(--color-amber-400);
   --action-award-soft: var(--color-amber-200);
 
+  /* 対象ビッカメ娘バッジ */
+  --character: var(--color-amber-300);
+  --character-foreground: var(--color-amber-950);
+
+  /* 激戦区レベル（熱いほど赤、穏やかなほど寒色） */
+  --heat-ss-plus: var(--color-rose-500);
+  --heat-ss-plus-foreground: var(--color-zinc-50);
+  --heat-ss: var(--color-red-400);
+  --heat-ss-foreground: var(--color-red-950);
+  --heat-s: var(--color-orange-400);
+  --heat-s-foreground: var(--color-orange-950);
+  --heat-a: var(--color-amber-300);
+  --heat-a-foreground: var(--color-amber-950);
+  --heat-b: var(--color-lime-400);
+  --heat-b-foreground: var(--color-lime-950);
+  --heat-c: var(--color-sky-300);
+  --heat-c-foreground: var(--color-sky-950);
+  --heat-d: var(--color-zinc-600);
+  --heat-d-foreground: var(--color-zinc-200);
+
   /* Favorite (推し) */
   --favorite: var(--color-rose-400);
   --favorite-foreground: var(--color-zinc-50);

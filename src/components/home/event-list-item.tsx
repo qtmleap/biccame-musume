@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
+import { EventCharacterBadge } from '@/components/events/event-character-badge'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
@@ -127,6 +128,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
                       : `${event.stores.length}店舗`}
                   </span>
                 )}
+                <EventCharacterBadge event={event} />
                 {event.limitedQuantity && !event.conditions.some((c) => c.type === 'everyone') && (
                   <span className='flex items-center gap-1'>
                     <Package className='size-3' />
