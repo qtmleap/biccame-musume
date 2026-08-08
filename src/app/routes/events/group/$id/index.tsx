@@ -6,6 +6,7 @@ import { Suspense } from 'react'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { LoadingFallback } from '@/components/common/loading-fallback'
+import { EventCharacterBadge } from '@/components/events/event-character-badge'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { useAuth } from '@/hooks/use-auth'
@@ -14,8 +15,8 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
-import { STORE_NAME_LABELS } from '@/locales/app.content'
-import { STATUS_BADGE } from '@/locales/component'
+import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import { CATEGORY_BADGE, STATUS_BADGE } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
@@ -38,9 +39,11 @@ type EventCheckProps = {
   event: Event
   completed: boolean
   index: number
+  /** グループ内でカテゴリが複数あるときだけカテゴリバッジを出す */
+  showCategory: boolean
 }
 
-const EventCheckCard = ({ event, completed, index }: EventCheckProps) => {
+const EventCheckCard = ({ event, completed, index, showCategory }: EventCheckProps) => {
   const label = eventPrimaryStoreLabel(event)
   const isMultiColumn = useMediaQuery('(min-width: 640px)')
   const rotationDeg = isMultiColumn ? getStickerRotation(index) : 0
@@ -72,7 +75,11 @@ const EventCheckCard = ({ event, completed, index }: EventCheckProps) => {
           <div className='flex items-start justify-between gap-3'>
             <div className='min-w-0 flex-1'>
               <p className='text-base font-semibold text-foreground line-clamp-2'>{label}</p>
-              <div className='mt-2'>{STATUS_BADGE[event.status]()}</div>
+              <div className='mt-2 flex flex-wrap items-center gap-1.5'>
+                {STATUS_BADGE[event.status]()}
+                {showCategory && CATEGORY_BADGE[event.category](EVENT_CATEGORY_LABELS[event.category])}
+                <EventCharacterBadge event={event} />
+              </div>
             </div>
             <div
               aria-hidden='true'
@@ -104,6 +111,7 @@ const GroupContent = () => {
   const collectableEvents = group.events
   const completedCount = collectableEvents.filter((e) => completedSet.has(e.uuid)).length
   const totalCount = collectableEvents.length
+  const hasMixedCategories = new Set(collectableEvents.map((e) => e.category)).size > 1
   const completionRate = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100)
 
   return (
@@ -181,7 +189,13 @@ const GroupContent = () => {
           ) : (
             <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3'>
               {collectableEvents.map((event, index) => (
-                <EventCheckCard key={event.uuid} event={event} completed={completedSet.has(event.uuid)} index={index} />
+                <EventCheckCard
+                  key={event.uuid}
+                  event={event}
+                  completed={completedSet.has(event.uuid)}
+                  index={index}
+                  showCategory={hasMixedCategories}
+                />
               ))}
             </div>
           )}

@@ -17,6 +17,11 @@ const EditEventContent = () => {
   const defaultValues = toFormValues(event)
 
   const handleSuccess = () => {
+    // 編集に入る前のページへ戻す。直リンクで来て履歴がないときは一覧へ。
+    if (router.history.canGoBack()) {
+      router.history.back()
+      return
+    }
     router.navigate({ to: '/admin/events', replace: true })
   }
 

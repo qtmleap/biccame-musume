@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
+import { EventCharacterBadge } from '@/components/events/event-character-badge'
 import { Badge } from '@/components/ui/badge'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
@@ -79,6 +80,7 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
             <div className='flex-1 min-w-0'>
               <div className='mb-1.5 flex flex-wrap items-center gap-1.5'>
                 {CATEGORY_BADGE[event.category](EVENT_CATEGORY_LABELS[event.category])}
+                <EventCharacterBadge event={event} />
               </div>
               <h3 className='text-base font-semibold text-foreground line-clamp-2'>{event.title}</h3>
               <div className='mt-1 flex flex-col gap-1 text-xs text-muted-foreground'>
