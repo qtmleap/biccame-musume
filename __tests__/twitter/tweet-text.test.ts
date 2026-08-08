@@ -77,6 +77,19 @@ describe('buildEventCreatedText', () => {
   test('fits within 280 weighted chars', () => {
     expect(weightedLength(out)).toBeLessThanOrEqual(TWEET_LIMIT)
   })
+
+  test('uses the hosting store character when characterId is unset', () => {
+    expect(out).toContain('さがみたん')
+  })
+
+  test('uses characterId over the hosting store when set', () => {
+    // 閉店した町田店の娘のイベントを相模原店が開催するケース
+    const text = buildEventCreatedText(baseEvent({ characterId: 'machida' }))
+    expect(text).toContain('町田たん')
+    expect(text).not.toContain('さがみたんの')
+    // 店舗ハッシュタグは開催店舗のまま
+    expect(text).toContain('#相模大野駅店')
+  })
 })
 
 describe('buildEventUpdatedText', () => {

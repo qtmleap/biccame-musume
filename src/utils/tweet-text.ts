@@ -1,5 +1,6 @@
 import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event, EventDetail } from '@/schemas/event.dto'
+import { resolveEventCharacter } from '@/utils/event-character'
 
 const SITE_BASE = 'https://biccame-musume.com'
 const TWITTER_URL_WEIGHT = 23
@@ -29,17 +30,19 @@ export const weightedLength = (text: string): number => {
   return urlWeight + charWeight
 }
 
-const eventStoreLabel = (event: Pick<Event, 'stores'>): { storeName: string; characterName: string } => {
-  const store = event.stores[0]
+type EventStoreLabelSource = Pick<Event, 'stores' | 'characterId'>
+
+const eventStoreLabel = (event: EventStoreLabelSource): { storeName: string; characterName: string } => {
+  const character = resolveEventCharacter(event)
   return {
-    storeName: STORE_NAME_LABELS[store],
-    characterName: CHARACTER_NAME_LABELS[store] || STORE_NAME_LABELS[store]
+    storeName: STORE_NAME_LABELS[event.stores[0]],
+    characterName: CHARACTER_NAME_LABELS[character] || STORE_NAME_LABELS[character]
   }
 }
 
-const eventStoreText = ({ stores }: Pick<Event, 'stores'>): string => {
-  const { characterName } = eventStoreLabel({ stores })
-  return stores.length === 1 ? characterName : `${characterName}など${stores.length}店舗`
+const eventStoreText = (event: EventStoreLabelSource): string => {
+  const { characterName } = eventStoreLabel(event)
+  return event.stores.length === 1 ? characterName : `${characterName}など${event.stores.length}店舗`
 }
 
 export const buildEventCreatedText = (event: EventDetail): string => {
@@ -74,12 +77,12 @@ const dailyHeader = (count: number): string => `本日は${count}件のイベン
 const endingTodayHeader = (count: number): string => `本日最終日のイベントは${count}件！`
 const dailyHashtags = ['#ビッカメ娘', '#ビックカメラ']
 
-const formatEventLine = (event: Pick<Event, 'stores' | 'title'>): string => {
+type DailySummaryEvent = Pick<Event, 'stores' | 'characterId' | 'title'>
+
+const formatEventLine = (event: DailySummaryEvent): string => {
   const { characterName } = eventStoreLabel(event)
   return `- ${characterName}の${event.title}`
 }
-
-type DailySummaryEvent = Pick<Event, 'stores' | 'title'>
 
 const MAX_EVENTS_PER_TWEET = 3
 

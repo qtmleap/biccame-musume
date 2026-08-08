@@ -226,9 +226,9 @@ const appContent = {
     },
     admin: {
       eventManagement: 'イベント管理',
-      eventManagementDesc: 'アクキー配布などのイベントを登録・管理',
+      eventManagementDesc: 'イベントの登録と管理',
       badgeManagement: 'バッジ管理',
-      badgeManagementDesc: '特別バッジの作成・編集と表示の調整',
+      badgeManagementDesc: 'バッジの作成と編集',
       commentManagement: 'コメント管理',
       commentManagementDesc: 'イベントコメントの確認と削除',
       userManagement: 'ユーザー管理',

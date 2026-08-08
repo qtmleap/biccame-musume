@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FileText, FolderTree, Package, Store } from 'lucide-react'
+import { FileText, FolderTree, Package, Store, UserRound } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { Controller, type DefaultValues, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { EventConfirmation } from '@/components/admin/event-confirmation'
@@ -16,11 +16,12 @@ import { useCharacters } from '@/hooks/use-characters'
 import { useEventGroups } from '@/hooks/use-event-groups'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/use-events'
 import { buildInitialValues, toEventPayload } from '@/lib/event-form'
-import { ADMIN_LABELS, EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import { ADMIN_LABELS, CHARACTER_NAME_LABELS, EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { type Event, EventCategorySchema, type EventRequest, EventRequestSchema } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 const NO_GROUP_VALUE = '__none__'
+const SAME_AS_STORE_VALUE = '__same_as_store__'
 
 export const EventForm = ({
   defaultValues,
@@ -47,6 +48,11 @@ export const EventForm = ({
   const storeKeys = Array.from(
     new Set(characters.filter((c) => c.store?.address && c.store.address.trim() !== '').map((c) => c.id))
   ).sort()
+
+  // 閉店店舗の娘のイベントを別の娘が担当することがあるため、店舗の有無で絞らない
+  const characterKeys = Array.from(
+    new Set(characters.filter((c) => c.character?.is_biccame_musume === true).map((c) => c.id))
+  ).sort() as StoreKey[]
 
   const {
     register,
@@ -258,7 +264,7 @@ export const EventForm = ({
         </div>
       </div>
 
-      {/* 所属グループ（将来的に横にもう 1 項目追加する想定で 2 列 grid） */}
+      {/* 所属グループ・対象ビッカメ娘 */}
       <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
         <div>
           <label htmlFor='group-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
@@ -288,6 +294,36 @@ export const EventForm = ({
             )}
           />
           {errors.groupId && <p className='mt-1 text-xs text-destructive'>{errors.groupId.message}</p>}
+        </div>
+
+        <div>
+          <label htmlFor='character-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+            <UserRound className='size-4' />
+            対象ビッカメ娘（任意）
+          </label>
+          <Controller
+            name='characterId'
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value ?? ''}
+                onValueChange={(value) => field.onChange(value === SAME_AS_STORE_VALUE ? undefined : value)}
+              >
+                <SelectTrigger id='character-trigger' className='w-full'>
+                  <SelectValue placeholder='開催店舗と同じ' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={SAME_AS_STORE_VALUE}>開催店舗と同じ</SelectItem>
+                  {characterKeys.map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {CHARACTER_NAME_LABELS[key] ?? STORE_NAME_LABELS[key] ?? key}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.characterId && <p className='mt-1 text-xs text-destructive'>{errors.characterId.message}</p>}
         </div>
       </div>
 

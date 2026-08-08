@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { ArrowLeft, Check, FolderTree, LogIn, Sparkles } from 'lucide-react'
+import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { ErrorBoundary } from '@/components/common/error-boundary'
@@ -9,7 +10,9 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { useAuth } from '@/hooks/use-auth'
 import { useEventGroup } from '@/hooks/use-event-groups'
+import { useMediaQuery } from '@/hooks/use-media-query'
 import { useUserActivity } from '@/hooks/use-user-activity'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { STORE_NAME_LABELS } from '@/locales/app.content'
 import { STATUS_BADGE } from '@/locales/component'
@@ -34,41 +37,58 @@ const eventPrimaryStoreLabel = (event: Event): string => {
 type EventCheckProps = {
   event: Event
   completed: boolean
+  index: number
 }
 
-const EventCheckCard = ({ event, completed }: EventCheckProps) => {
+const EventCheckCard = ({ event, completed, index }: EventCheckProps) => {
   const label = eventPrimaryStoreLabel(event)
+  const isMultiColumn = useMediaQuery('(min-width: 640px)')
+  const rotationDeg = isMultiColumn ? getStickerRotation(index) : 0
+  const tape = STICKER_TAPES[index % STICKER_TAPES.length]
 
   return (
-    <Link
-      to='/events/$uuid'
-      params={{ uuid: event.uuid }}
-      aria-label={`${label}（${event.title}）の詳細を見る`}
-      className={cn(
-        'group relative block w-full overflow-hidden rounded-lg border p-4 text-left transition-all',
-        completed
-          ? 'border-action-award bg-action-award/10 shadow-sm'
-          : 'border-border bg-card hover:border-action-award/40 hover:shadow-sm'
-      )}
-    >
-      <div className='flex items-start justify-between gap-3'>
-        <div className='min-w-0 flex-1'>
-          <p className='text-base font-semibold text-foreground line-clamp-2'>{label}</p>
-          <div className='mt-2'>{STATUS_BADGE[event.status]()}</div>
-        </div>
-        <div
-          aria-hidden='true'
+    <motion.div className='h-full' style={{ filter: STICKER_SHADOW_SM }}>
+      <motion.div
+        className='h-full'
+        style={{ rotate: rotationDeg }}
+        whileHover={{ scale: 1.04, rotate: 0 }}
+        whileTap={{ scale: 0.97 }}
+        transition={STICKER_HOVER_TRANSITION}
+      >
+        <Link
+          to='/events/$uuid'
+          params={{ uuid: event.uuid }}
+          aria-label={`${label}（${event.title}）の詳細を見る`}
           className={cn(
-            'flex size-9 shrink-0 items-center justify-center rounded-full border-2',
+            'relative block h-full w-full rounded-xl border p-4 text-left',
             completed
-              ? 'border-action-award bg-action-award text-white'
-              : 'border-border bg-background text-transparent'
+              ? 'border-action-award bg-action-award/10'
+              : 'border-zinc-200 dark:border-card-border bg-card hover:border-action-award/40'
           )}
         >
-          <Check className='size-4' />
-        </div>
-      </div>
-    </Link>
+          {tape && (
+            <div aria-hidden className={cn('absolute rounded-sm', tape.position, tape.size, tape.color, tape.angle)} />
+          )}
+          <div className='flex items-start justify-between gap-3'>
+            <div className='min-w-0 flex-1'>
+              <p className='text-base font-semibold text-foreground line-clamp-2'>{label}</p>
+              <div className='mt-2'>{STATUS_BADGE[event.status]()}</div>
+            </div>
+            <div
+              aria-hidden='true'
+              className={cn(
+                'flex size-9 shrink-0 items-center justify-center rounded-full border-2',
+                completed
+                  ? 'border-action-award bg-action-award text-white'
+                  : 'border-border bg-background text-transparent'
+              )}
+            >
+              <Check className='size-4' />
+            </div>
+          </div>
+        </Link>
+      </motion.div>
+    </motion.div>
   )
 }
 
@@ -160,8 +180,8 @@ const GroupContent = () => {
             </div>
           ) : (
             <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3'>
-              {collectableEvents.map((event) => (
-                <EventCheckCard key={event.uuid} event={event} completed={completedSet.has(event.uuid)} />
+              {collectableEvents.map((event, index) => (
+                <EventCheckCard key={event.uuid} event={event} completed={completedSet.has(event.uuid)} index={index} />
               ))}
             </div>
           )}

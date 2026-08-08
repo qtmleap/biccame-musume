@@ -1,5 +1,5 @@
 {
-  "name": "Hono Vite React Workers + Prisma (monorepo)",
+  "name": "Biccame Musume",
   "dockerComposeFile": ["compose.yaml"],
   "service": "app",
   "workspaceFolder": "/home/vscode/app",

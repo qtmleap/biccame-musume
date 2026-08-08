@@ -1,11 +1,17 @@
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { Calendar, Gift, Link2, Package, Store } from 'lucide-react'
+import { Calendar, Gift, Link2, Package, Store, UserRound } from 'lucide-react'
 import { motion } from 'motion/react'
 import { DURATION } from '@/lib/motion'
-import { EVENT_LABELS, REFERENCE_URL_TYPE_LABELS_LONG, STORE_NAME_LABELS } from '@/locales/app.content'
+import {
+  CHARACTER_NAME_LABELS,
+  EVENT_LABELS,
+  REFERENCE_URL_TYPE_LABELS_LONG,
+  STORE_NAME_LABELS
+} from '@/locales/app.content'
 import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
+import { resolveEventCharacter } from '@/utils/event-character'
 
 export type EventDetailInfoProps = {
   event: EventDetail
@@ -80,6 +86,29 @@ const EventStoresSection = ({ stores }: { stores: string[] }) => {
               </span>
             )
           })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * 対象ビッカメ娘セクション
+ * 開催店舗の娘がそのまま対象のときは「対象店舗」と重複するため表示しない
+ */
+const EventCharacterSection = ({ event }: { event: Event }) => {
+  const character = resolveEventCharacter(event)
+  if (character === event.stores[0]) return null
+
+  return (
+    <div className='flex items-start gap-3'>
+      <UserRound className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
+      <div className='min-w-0 flex-1'>
+        <p className='text-xs font-medium text-muted-foreground'>対象ビッカメ娘</p>
+        <div className='text-sm text-foreground'>
+          <Link to='/characters/$id' params={{ id: character }} className='text-brand hover:underline'>
+            {CHARACTER_NAME_LABELS[character] || STORE_NAME_LABELS[character] || character}
+          </Link>
         </div>
       </div>
     </div>
@@ -167,6 +196,7 @@ export const EventDetailInfo = ({ event }: EventDetailInfoProps) => (
     <div className='space-y-3'>
       <EventPeriodSection event={event} />
       <EventStoresSection stores={event.stores} />
+      <EventCharacterSection event={event} />
       <EventLimitedQuantitySection event={event} />
       <EventConditionsSection conditions={event.conditions} />
       <EventReferenceUrlsSection referenceUrls={event.referenceUrls} />

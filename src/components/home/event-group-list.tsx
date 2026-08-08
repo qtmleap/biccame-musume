@@ -4,7 +4,8 @@ import { motion } from 'motion/react'
 import { useEventGroups } from '@/hooks/use-event-groups'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
-import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
+import { cn } from '@/lib/utils'
 
 const MAX_GROUPS_ON_HOME = 3
 
@@ -16,6 +17,7 @@ type EventGroupCardProps = {
 const EventGroupCard = ({ group, index }: EventGroupCardProps) => {
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const rotation = isDesktop ? getStickerRotation(index) : 0
+  const tape = STICKER_TAPES[index % STICKER_TAPES.length]
 
   return (
     <motion.div
@@ -35,8 +37,11 @@ const EventGroupCard = ({ group, index }: EventGroupCardProps) => {
         <Link
           to='/events/group/$id'
           params={{ id: group.uuid }}
-          className='group block h-full rounded-xl border border-border bg-card p-4 hover:border-action-award/40'
+          className='group relative block h-full rounded-xl border border-border bg-card p-4 hover:border-action-award/40'
         >
+          {tape && (
+            <div aria-hidden className={cn('absolute rounded-sm', tape.position, tape.size, tape.color, tape.angle)} />
+          )}
           <div className='flex items-center gap-3'>
             <div className='shrink-0 p-2 rounded-lg bg-action-award/15 text-action-award'>
               <Sparkles className='size-4' />
