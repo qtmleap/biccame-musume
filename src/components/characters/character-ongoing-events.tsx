@@ -10,7 +10,7 @@ import { EVENT_LABELS } from '@/locales/app.content'
 import { STATUS_BADGE } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
-import { resolveEventCharacter } from '@/utils/event-character'
+import { isEventForCharacter } from '@/utils/event-character'
 
 type CharacterOngoingEventsProps = {
   storeKey: StoreKey
@@ -62,7 +62,7 @@ export const CharacterOngoingEvents = ({ storeKey }: CharacterOngoingEventsProps
           return false
         }
         // 開催店舗、または対象ビッカメ娘としてこの娘が指定されているか
-        return event.stores.includes(storeKey) || resolveEventCharacter(event) === storeKey
+        return event.stores.includes(storeKey) || isEventForCharacter(event, storeKey)
       })
       .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
   }, [events, storeKey])

@@ -7,11 +7,12 @@ import {
   CHARACTER_NAME_LABELS,
   EVENT_LABELS,
   REFERENCE_URL_TYPE_LABELS_LONG,
+  SPECIAL_CHARACTER_LABELS,
   STORE_NAME_LABELS
 } from '@/locales/app.content'
 import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
-import { resolveEventCharacter } from '@/utils/event-character'
+import { isSpecialCharacter, resolveEventCharacter } from '@/utils/event-character'
 
 export type EventDetailInfoProps = {
   event: EventDetail
@@ -106,9 +107,13 @@ const EventCharacterSection = ({ event }: { event: Event }) => {
       <div className='min-w-0 flex-1'>
         <p className='text-xs font-medium text-muted-foreground'>対象ビッカメ娘</p>
         <div className='text-sm text-foreground'>
-          <Link to='/characters/$id' params={{ id: character }} className='text-brand hover:underline'>
-            {CHARACTER_NAME_LABELS[character] || STORE_NAME_LABELS[character] || character}
-          </Link>
+          {isSpecialCharacter(character) ? (
+            <span>{SPECIAL_CHARACTER_LABELS[character]}</span>
+          ) : (
+            <Link to='/characters/$id' params={{ id: character }} className='text-brand hover:underline'>
+              {CHARACTER_NAME_LABELS[character] || STORE_NAME_LABELS[character] || character}
+            </Link>
+          )}
         </div>
       </div>
     </div>

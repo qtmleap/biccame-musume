@@ -90,6 +90,14 @@ describe('buildEventCreatedText', () => {
     // 店舗ハッシュタグは開催店舗のまま
     expect(text).toContain('#相模大野駅店')
   })
+
+  test('falls back to the hosting store character for special characterId', () => {
+    for (const characterId of ['other', 'secret'] as const) {
+      const text = buildEventCreatedText(baseEvent({ characterId }))
+      expect(text).toContain('さがみたん')
+      expect(text).not.toContain(characterId)
+    }
+  })
 })
 
 describe('buildEventUpdatedText', () => {

@@ -6,7 +6,9 @@ import {
   type EventStatus,
   EventStatusSchema,
   type ReferenceUrlType,
-  ReferenceUrlTypeSchema
+  ReferenceUrlTypeSchema,
+  type SpecialCharacter,
+  SpecialCharacterSchema
 } from '@/schemas/event.dto'
 import { type Region, RegionSchema, type StoreKey, StoreKeySchema } from '@/schemas/store.dto'
 
@@ -160,6 +162,10 @@ const appContent = {
       [StoreKeySchema.enum.yao]: '八尾たん',
       [StoreKeySchema.enum.yokonishi]: '横西たん',
       [StoreKeySchema.enum.yuurakuchou]: '有楽町たん'
+    },
+    special_character: {
+      [SpecialCharacterSchema.enum.other]: 'その他',
+      [SpecialCharacterSchema.enum.secret]: 'シークレット'
     },
     common: {
       loading: '読み込み中...',
@@ -422,6 +428,7 @@ export const REFERENCE_URL_TYPE_LABELS_LONG = appContent.content.refLong as Reco
 export const REGION_LABELS = appContent.content.region as Record<Region, string>
 export const STORE_NAME_LABELS = appContent.content.store_name
 export const CHARACTER_NAME_LABELS = appContent.content.character_name as Record<StoreKey, string>
+export const SPECIAL_CHARACTER_LABELS = appContent.content.special_character as Record<SpecialCharacter, string>
 export const MY_PAGE_LABELS = appContent.content.myPage
 export const FILTER_LABELS = appContent.content.filter
 export const SORT_LABELS = appContent.content.sort

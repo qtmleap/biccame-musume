@@ -16,8 +16,20 @@ import { useCharacters } from '@/hooks/use-characters'
 import { useEventGroups } from '@/hooks/use-event-groups'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/use-events'
 import { buildInitialValues, toEventPayload } from '@/lib/event-form'
-import { ADMIN_LABELS, CHARACTER_NAME_LABELS, EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
-import { type Event, EventCategorySchema, type EventRequest, EventRequestSchema } from '@/schemas/event.dto'
+import {
+  ADMIN_LABELS,
+  CHARACTER_NAME_LABELS,
+  EVENT_CATEGORY_LABELS,
+  SPECIAL_CHARACTER_LABELS,
+  STORE_NAME_LABELS
+} from '@/locales/app.content'
+import {
+  type Event,
+  EventCategorySchema,
+  type EventRequest,
+  EventRequestSchema,
+  SpecialCharacterSchema
+} from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 const NO_GROUP_VALUE = '__none__'
@@ -314,6 +326,11 @@ export const EventForm = ({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={SAME_AS_STORE_VALUE}>開催店舗と同じ</SelectItem>
+                  {SpecialCharacterSchema.options.map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {SPECIAL_CHARACTER_LABELS[key]}
+                    </SelectItem>
+                  ))}
                   {characterKeys.map((key) => (
                     <SelectItem key={key} value={key}>
                       {CHARACTER_NAME_LABELS[key] ?? STORE_NAME_LABELS[key] ?? key}
