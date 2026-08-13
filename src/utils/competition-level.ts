@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
-import { resolveEventCharacter } from '@/utils/event-character'
+import { isEventForCharacter } from '@/utils/event-character'
 
 /**
  * 激戦区レベル。限定配布が「どれだけ早く・どれだけの量が捌けたか」を段階化する。
@@ -80,7 +80,7 @@ export const calculateCompetitionStats = (
   now: Date = dayjs().toDate()
 ): CompetitionStats | null => {
   const records = events.flatMap((event) => {
-    if (resolveEventCharacter(event) !== storeKey) return []
+    if (!isEventForCharacter(event, storeKey)) return []
     const quantity = distributionLimit(event)
     if (quantity === undefined) return []
 

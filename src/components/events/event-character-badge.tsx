@@ -1,9 +1,9 @@
 import { UserRound } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
+import { CHARACTER_NAME_LABELS, SPECIAL_CHARACTER_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
-import { resolveEventCharacter } from '@/utils/event-character'
+import { isSpecialCharacter, resolveEventCharacter } from '@/utils/event-character'
 
 type EventCharacterBadgeProps = {
   event: Pick<Event, 'characterId' | 'stores'>
@@ -21,7 +21,9 @@ export const EventCharacterBadge = ({ event, className }: EventCharacterBadgePro
   return (
     <Badge className={cn('gap-1 border-transparent bg-character text-character-foreground', className)}>
       <UserRound className='size-3' />
-      {CHARACTER_NAME_LABELS[character] || STORE_NAME_LABELS[character] || character}
+      {isSpecialCharacter(character)
+        ? SPECIAL_CHARACTER_LABELS[character]
+        : CHARACTER_NAME_LABELS[character] || STORE_NAME_LABELS[character] || character}
     </Badge>
   )
 }

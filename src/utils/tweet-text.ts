@@ -1,6 +1,6 @@
 import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import type { Event, EventDetail } from '@/schemas/event.dto'
-import { resolveEventCharacter } from '@/utils/event-character'
+import { isSpecialCharacter, resolveEventCharacter } from '@/utils/event-character'
 
 const SITE_BASE = 'https://biccame-musume.com'
 const TWITTER_URL_WEIGHT = 23
@@ -33,7 +33,9 @@ export const weightedLength = (text: string): number => {
 type EventStoreLabelSource = Pick<Event, 'stores' | 'characterId'>
 
 const eventStoreLabel = (event: EventStoreLabelSource): { storeName: string; characterName: string } => {
-  const character = resolveEventCharacter(event)
+  const resolved = resolveEventCharacter(event)
+  // その他・シークレットは特定の娘に紐付かないため、ツイートでは開催店舗の娘として扱う
+  const character = isSpecialCharacter(resolved) ? event.stores[0] : resolved
   return {
     storeName: STORE_NAME_LABELS[event.stores[0]],
     characterName: CHARACTER_NAME_LABELS[character] || STORE_NAME_LABELS[character]

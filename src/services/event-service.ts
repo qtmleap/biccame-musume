@@ -8,6 +8,7 @@ import type { CommentResponse } from '@/schemas/comment.dto'
 import {
   type Event,
   type EventCategory,
+  type EventCharacter,
   type EventConditionType,
   type EventDetail,
   type EventRequest,
@@ -130,7 +131,7 @@ export const transform = (event: EventListPayload, interestedCount = 0, complete
     isVerified: event.isVerified,
     isPreliminary: event.isPreliminary,
     groupId: event.groupId ?? undefined,
-    characterId: (event.characterId ?? undefined) as StoreKey | undefined,
+    characterId: (event.characterId ?? undefined) as EventCharacter | undefined,
     createdAt: event.createdAt,
     updatedAt: event.updatedAt,
     conditions: event.conditions.map((c) => ({
