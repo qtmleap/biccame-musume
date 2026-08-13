@@ -33,7 +33,7 @@ fi
 
 # Playwright MCP 用ブラウザ。Linux Arm64 には Google Chrome が存在せず、
 # MCP サーバーは /opt/google/chrome/chrome を探すため Chromium を symlink で見せる
-bunx playwright install chromium
+bunx playwright install --with-deps chromium
 chromium_bin=$(ls -d ~/.cache/ms-playwright/chromium-*/chrome-linux/chrome 2>/dev/null | tail -1)
 if [ -n "$chromium_bin" ]; then
   sudo mkdir -p /opt/google/chrome
