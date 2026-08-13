@@ -53,6 +53,26 @@ export const ReferenceUrlTypeSchema = z.enum(['announce', 'start', 'end'], {
 export type ReferenceUrlType = z.infer<typeof ReferenceUrlTypeSchema>
 
 /**
+ * 特殊な対象ビッカメ娘。
+ * - other: 特定の娘に紐付かないイベント
+ * - secret: 対象が伏せられているイベント
+ */
+export const SpecialCharacterSchema = z.enum(['other', 'secret'], {
+  error: '対象ビッカメ娘が不正です'
+})
+
+export type SpecialCharacter = z.infer<typeof SpecialCharacterSchema>
+
+/**
+ * イベントの対象ビッカメ娘。店舗キーまたは特殊値
+ */
+export const EventCharacterSchema = z.union([StoreKeySchema, SpecialCharacterSchema], {
+  error: '対象ビッカメ娘が不正です'
+})
+
+export type EventCharacter = z.infer<typeof EventCharacterSchema>
+
+/**
  * 参考URL
  */
 export const ReferenceUrlSchema = z.object({
@@ -83,7 +103,7 @@ export const EventRequestSchema = z.object({
   // 所属するイベントグループの UUID（任意）
   groupId: z.uuid('グループ ID は UUID 形式で指定してください').optional(),
   // 対象のビッカメ娘（任意）。未指定なら開催店舗と同一とみなす
-  characterId: StoreKeySchema.optional(),
+  characterId: EventCharacterSchema.optional(),
   shouldTweet: z.boolean()
 })
 export type EventRequest = z.infer<typeof EventRequestSchema>
@@ -121,7 +141,7 @@ export const EventSchema = z.object({
   // 所属するイベントグループの UUID（任意）
   groupId: z.string().optional(),
   // 対象のビッカメ娘（任意）。未指定なら開催店舗と同一とみなす
-  characterId: StoreKeySchema.optional(),
+  characterId: EventCharacterSchema.optional(),
   status: EventStatusSchema,
   daysUntil: z.number(),
   interestedCount: z.number().int().nonnegative(),
