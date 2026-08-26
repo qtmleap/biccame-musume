@@ -82,6 +82,15 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}
+      # バッジ評価は badges テーブルを唯一の対象にしているので、行が無いバッジは
+      # 条件を満たしても永久に付与されない。registry からの upsert なので毎回流してよい。
+      # 既存ユーザーへの遡及付与は日次 cron と POST /api/admin/badges/recalculate が担う。
+      - name: Seed badges
+        if: env.ACT != 'true'
+        run: bun run badges:seed "${SEED_TARGET}"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          SEED_TARGET: ${{ github.event.pull_request.base.ref == 'master' && 'remote-production' || 'remote-staging' }}
       - name: Deploy Workers
         if: env.ACT != 'true'
         run: bun run deploy
