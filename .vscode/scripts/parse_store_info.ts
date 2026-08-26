@@ -8,7 +8,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import jaconv from 'jaconv'
 import { mapKeys, snakeCase } from 'lodash-es'
-import { parse } from 'node-html-parser'
+import { HTMLElement, type Node, parse } from 'node-html-parser'
 import { z } from 'zod'
 import { parseHours } from './lib/hours'
 import { extractPrefecture } from './lib/prefecture'
@@ -16,6 +16,15 @@ import { type CalendarBirthday, parseCalendarHtml } from './parsers/calendar'
 
 const CACHE_DIR = join(import.meta.dir, '../archive/html_cache')
 const OUTPUT_FILE = join(import.meta.dir, '../../public/characters.json')
+
+/**
+ * 擬人化記念日はカレンダーの「擬人化N周年」表記から逆算するため、
+ * 初年度のキャラはどこにも載らず取得できない。掲載され次第カレンダー側が優先される。
+ * profile ページの「店舗誕生日」は開店日であって擬人化記念日ではないので流用できない。
+ */
+const CHARACTER_BIRTHDAY_OVERRIDES: Record<string, string> = {
+  urawa: '2026-08-26'
+}
 
 /**
  * 店舗情報の型定義
@@ -26,7 +35,7 @@ type StoreInfo = {
     name: string
     aliases?: string[]
     description: string
-    twitter_id: string
+    twitter_id?: string
     images: string[]
     birthday?: string
     is_biccame_musume: boolean
@@ -61,11 +70,19 @@ type StoreInfo = {
  */
 type AccessInfo = {
   station: string
-  description: string
+  description?: string
   duration?: string
   notes?: string
   lines: string[]
 }
+
+/**
+ * 路線名の span は並列 (`<span>A</span><span>B</span>`) にも
+ * 入れ子 (`<span>A<span></span>B</span>`) にもなりうるため、
+ * 要素そのものではなくテキストノード単位で拾う。
+ */
+const collectTextParts = (node: Node): string[] =>
+  node.childNodes.flatMap((child) => (child.nodeType === 3 ? [child.text] : collectTextParts(child)))
 
 /**
  * 駐車場情報の型定義
@@ -173,7 +190,7 @@ const parseProfileHtml = (
     name: string
     aliases?: string[]
     description: string
-    twitter_id: string
+    twitter_id?: string
     images: string[]
     is_biccame_musume: boolean
   }
@@ -295,7 +312,7 @@ const parseProfileHtml = (
       name: _cleanName,
       aliases: _aliases.length > 0 ? _aliases : undefined,
       description,
-      twitter_id,
+      twitter_id: twitter_id || undefined,
       images: shortImages,
       is_biccame_musume
     },
@@ -457,18 +474,18 @@ const parseStoreHtml = async (
     }
 
     const ddElement = dtElement.nextElementSibling
-    const lines =
-      ddElement?.querySelectorAll('span').map((span) => {
-        let line = span.text.trim()
-        // 括弧とその中身を削除（例: 「中央（快速／各駅停車）線」→「中央線」）
-        line = line.replace(/[()（）][^()（）]*[)）]/g, '')
-        return line
-      }) || []
+    // dd 直下が地の文だけの店舗もあるため、span の配下に限って路線名を拾う
+    const lines = (ddElement?.childNodes || [])
+      .filter((child) => child instanceof HTMLElement && child.rawTagName === 'span')
+      .flatMap((span) => collectTextParts(span))
+      // 括弧とその中身を削除（例: 「中央（快速／各駅停車）線」→「中央線」）
+      .map((part) => part.trim().replace(/[()（）][^()（）]*[)）]/g, ''))
+      .filter((line) => line.length > 0)
 
     if (stationText) {
       const accessInfo: AccessInfo = {
         station: stationText,
-        description,
+        description: description || undefined,
         lines
       }
       if (duration) accessInfo.duration = duration
@@ -686,6 +703,14 @@ const main = async () => {
       console.log('✓ Birthday data merged from calendar')
     }
 
+    for (const store of stores) {
+      const override = CHARACTER_BIRTHDAY_OVERRIDES[store.id]
+      if (override && !store.character.birthday) {
+        store.character.birthday = override
+        console.log(`  ✓ Applied character birthday override: ${store.id} → ${override}`)
+      }
+    }
+
     // スネークケース変換関数
     const toSnakeCase = (obj: unknown): unknown => {
       if (Array.isArray(obj)) {
@@ -708,7 +733,7 @@ const main = async () => {
       }
       return toSnakeCase(store)
     })
-    const json = JSON.stringify(storesForJson, null, 2)
+    const json = `${JSON.stringify(storesForJson, null, 2)}\n`
     writeFileSync(OUTPUT_FILE, json, 'utf-8')
 
     console.log(`\n✓ Successfully parsed ${stores.length} characters`)
@@ -720,7 +745,7 @@ const main = async () => {
       character: z.object({
         name: z.string().nonempty(),
         description: z.string(),
-        twitter_id: z.string(),
+        twitter_id: z.string().nonempty().optional(),
         images: z.array(z.string()),
         is_biccame_musume: z.boolean()
       }).passthrough(),

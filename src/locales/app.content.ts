@@ -103,6 +103,7 @@ const appContent = {
       [StoreKeySchema.enum.tenjin]: '天神1号館',
       [StoreKeySchema.enum.tenjin2]: '天神2号館',
       [StoreKeySchema.enum.tokorozawa]: '所沢駅店',
+      [StoreKeySchema.enum.urawa]: '浦和西口店',
       [StoreKeySchema.enum.yao]: 'アリオ八尾店',
       [StoreKeySchema.enum.yokonishi]: '横浜西口店',
       [StoreKeySchema.enum.yuurakuchou]: '有楽町店'
@@ -159,6 +160,7 @@ const appContent = {
       [StoreKeySchema.enum.tenjin]: '天神1号たん',
       [StoreKeySchema.enum.tenjin2]: '天神2号たん',
       [StoreKeySchema.enum.tokorozawa]: '所沢たん',
+      [StoreKeySchema.enum.urawa]: '浦和たん',
       [StoreKeySchema.enum.yao]: '八尾たん',
       [StoreKeySchema.enum.yokonishi]: '横西たん',
       [StoreKeySchema.enum.yuurakuchou]: '有楽町たん'
