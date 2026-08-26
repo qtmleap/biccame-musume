@@ -15,7 +15,8 @@
     "migrate:new": "DATABASE_URL=file:./shadow.db prisma migrate dev --create-only --config ./prisma/prisma.config.ts",
     "migrate:status": "wrangler d1 migrations list DB --local",
     "generate": "prisma generate",
-    "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV:-production}"
+    "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV:-production}",
+    "badges:seed": "bun --preload ./scripts/virtual-characters-plugin.ts scripts/seed-badges.ts"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "~1.54.0",
