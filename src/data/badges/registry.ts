@@ -103,6 +103,7 @@ const STORE_DISPLAY_NAMES: Record<StoreKey, string> = {
   tenjin: '天神1号館',
   tenjin2: '天神2号館',
   tokorozawa: '所沢駅店',
+  urawa: '浦和西口店',
   yao: 'アリオ八尾店',
   yokonishi: '横浜西口店',
   yuurakuchou: '有楽町店',

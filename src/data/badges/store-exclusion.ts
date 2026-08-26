@@ -85,6 +85,7 @@ export const PHYSICAL_STORE_KEYS: readonly StoreKey[] = [
   'tenjin',
   'tenjin2',
   'tokorozawa',
+  'urawa',
   'yao',
   'yokonishi',
   'yuurakuchou'
