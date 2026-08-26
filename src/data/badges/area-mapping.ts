@@ -35,6 +35,7 @@ export const storeKeyToBadgeArea: Record<StoreKey, BadgeArea> = {
   // kanto_north — 埼玉・茨城・群馬・新潟地区
   ohmiya: 'kanto_north',
   tokorozawa: 'kanto_north',
+  urawa: 'kanto_north',
   mito: 'kanto_north',
   takasaki: 'kanto_north',
   niigata: 'kanto_north',

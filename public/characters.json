@@ -447,8 +447,8 @@
           "station": "調布駅",
           "description": "広場口すぐ",
           "lines": [
-            "京王相模原線",
-            "京王線"
+            "京王線",
+            "京王相模原線"
           ]
         }
       ]
@@ -2477,6 +2477,57 @@
           "description": "西口",
           "lines": [
             "西武新宿線・西武池袋線"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "urawa",
+    "character": {
+      "name": "浦和たん",
+      "description": "ビックカメラ浦和西口店の擬人化キャラクター。ちょっとプライドが高め。髪を赤のインナーカラーで染めている。胸の花はニチニチソウ。跳ね髪やデコ出し、大きなリボンは大宮たんとお揃いだが...？",
+      "twitter_id": "bic_urawa",
+      "images": [
+        "images/urawa2.png",
+        "images/urawa3.png",
+        "images/urawa4.png",
+        "images/urawa5.png",
+        "images/urawa4.png",
+        "images/urawa5.png"
+      ],
+      "is_biccame_musume": true,
+      "birthday": "2026-08-26"
+    },
+    "prefecture": "埼玉県",
+    "postal_code": "330-0063",
+    "coordinates": {
+      "latitude": 35.8576053,
+      "longitude": 139.6569438
+    },
+    "store": {
+      "store_id": 136,
+      "name": "ビックカメラ 浦和西口店",
+      "address": "埼玉県さいたま市浦和区高砂1丁目10番1号 1F~2F",
+      "birthday": "2026-08-29",
+      "open_all_year": false,
+      "hours": [
+        {
+          "type": "all",
+          "open_time": "10:00",
+          "close_time": "21:00"
+        }
+      ],
+      "access": [
+        {
+          "station": "浦和駅",
+          "description": "西口",
+          "lines": [
+            "JR京浜東北・根岸線",
+            "東北本線",
+            "高崎線",
+            "湘南新宿ライン",
+            "宇都宮線"
           ]
         }
       ]
