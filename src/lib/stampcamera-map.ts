@@ -65,6 +65,7 @@ export const STAMPCAMERA_POSES: Record<string, StampcameraEntry[]> = {
   takatsuki: [entry(16, 49), entry(53, 50), entry(78, 46)],
   chiba: [entry(16, 50), entry(53, 51), entry(78, 47)],
   yokonishi: [entry(16, 51), entry(53, 52), entry(78, 48)],
+  urawa: [entry(16, 56), entry(53, 57), entry(78, 53)],
   kumamoto: [entry(53, 53)],
   itt: [entry(53, 54)],
   takasaki: [entry(53, 55)],
