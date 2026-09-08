@@ -3,8 +3,9 @@ import type { UseFieldArrayAppend, UseFieldArrayRemove, UseFormRegister } from '
 import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import type { EventFormValues } from '@/lib/event-form'
 import { REFERENCE_URL_TYPE_LABELS } from '@/locales/app.content'
-import type { Event, EventRequest, ReferenceUrlType } from '@/schemas/event.dto'
+import type { Event, ReferenceUrlType } from '@/schemas/event.dto'
 import { ReferenceUrlTypeSchema } from '@/schemas/event.dto'
 
 /**
@@ -19,10 +20,10 @@ type ReferenceUrlField = {
 
 type Props = {
   fields: ReferenceUrlField[]
-  register: UseFormRegister<EventRequest>
-  append: UseFieldArrayAppend<EventRequest, 'referenceUrls'>
+  register: UseFormRegister<EventFormValues>
+  append: UseFieldArrayAppend<EventFormValues, 'referenceUrls'>
   remove: UseFieldArrayRemove
-  referenceUrls: EventRequest['referenceUrls']
+  referenceUrls: EventFormValues['referenceUrls']
   duplicateWarnings: Record<number, Event | null>
   onCheckDuplicate: (index: number, url: string) => void
   onClearWarning: (index: number) => void
