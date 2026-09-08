@@ -91,11 +91,11 @@ run_worker_first = ["/*"]
 
 [[env.staging.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
-id = "6f3b7b710eb646a0aef7ab524609bb67"
+id = "ff75aa8a92354e14936c24304505866a"
 
 [[env.staging.kv_namespaces]]
 binding = "PUBLIC_JWK_CACHE_KV"
-id = "e4d041b77a2b4575bed33650b13a43b2"
+id = "3805176f4bed4099868cddf4d24d46e3"
 
 [[env.staging.durable_objects.bindings]]
 name = "STATS"
@@ -144,6 +144,8 @@ binding = "AI"
 
 [env.staging.vars]
 ENVIRONMENT = "dev"
+# vars は環境に継承されないため、迂回しないことを明示する
+VOTE_LIMIT_BYPASS = "false"
 CF_ACCESS_AUD = "995cb37056207392cb90c93562f05361eaaa4dca46ba1f5bda4175cf7a4b860c"
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 FIREBASE_PROJECT_ID = "biccame-musume"
@@ -222,6 +224,8 @@ binding = "AI"
 
 [env.production.vars]
 ENVIRONMENT = "prod"
+# vars は環境に継承されないため、迂回しないことを明示する
+VOTE_LIMIT_BYPASS = "false"
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 FIREBASE_PROJECT_ID = "biccame-musume"
