@@ -11,10 +11,6 @@ binding = "BICCAME_MUSUME_EVENTS"
 id = "6f3b7b710eb646a0aef7ab524609bb67"
 
 [[kv_namespaces]]
-binding = "VOTE_LIMITER"
-id = "cc87e0f64116414c9d70a080bbb97156"
-
-[[kv_namespaces]]
 binding = "PUBLIC_JWK_CACHE_KV"
 id = "e4d041b77a2b4575bed33650b13a43b2"
 
@@ -72,6 +68,8 @@ run_worker_first = ["/*"]
 
 [vars]
 ENVIRONMENT = "local"
+# ローカル開発で 1 日 1 回制限を迂回する。E2E は vite.config.ts 側で false に上書きする
+VOTE_LIMIT_BYPASS = "true"
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 FIREBASE_PROJECT_ID = "biccame-musume"
@@ -94,10 +92,6 @@ run_worker_first = ["/*"]
 [[env.staging.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
 id = "6f3b7b710eb646a0aef7ab524609bb67"
-
-[[env.staging.kv_namespaces]]
-binding = "VOTE_LIMITER"
-id = "cc87e0f64116414c9d70a080bbb97156"
 
 [[env.staging.kv_namespaces]]
 binding = "PUBLIC_JWK_CACHE_KV"
@@ -176,10 +170,6 @@ run_worker_first = ["/*"]
 [[env.production.kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
 id = "ef49185c58d04a0790e7c68394d78089"
-
-[[env.production.kv_namespaces]]
-binding = "VOTE_LIMITER"
-id = "96019843cb67406799d40584768bcf7a"
 
 [[env.production.kv_namespaces]]
 binding = "PUBLIC_JWK_CACHE_KV"
