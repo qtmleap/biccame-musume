@@ -1,8 +1,8 @@
-import type { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { HTTPException } from 'hono/http-exception'
+import type { Prisma } from '@/generated/prisma/client'
 import { getPrisma } from '@/lib/prisma'
 import type { CommentResponse } from '@/schemas/comment.dto'
 import {

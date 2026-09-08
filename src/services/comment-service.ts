@@ -1,5 +1,5 @@
-import type { PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
+import type { PrismaClient } from '@/generated/prisma/client'
 import type { CommentResponse } from '@/schemas/comment.dto'
 
 // nickname カラムには選択された characterId を保存している（マイグレーション回避のためカラム再利用）

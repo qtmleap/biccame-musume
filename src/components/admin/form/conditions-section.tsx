@@ -3,7 +3,7 @@ import type { UseFieldArrayAppend, UseFieldArrayRemove, UseFormRegister } from '
 import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import type { EventRequest } from '@/schemas/event.dto'
+import type { EventFormValues } from '@/lib/event-form'
 
 type ConditionType = 'purchase' | 'first_come' | 'lottery' | 'everyone'
 
@@ -17,9 +17,9 @@ type ConditionField = {
 
 type Props = {
   fields: ConditionField[]
-  register: UseFormRegister<EventRequest>
+  register: UseFormRegister<EventFormValues>
   remove: UseFieldArrayRemove
-  append: UseFieldArrayAppend<EventRequest, 'conditions'>
+  append: UseFieldArrayAppend<EventFormValues, 'conditions'>
   error?: string
 }
 

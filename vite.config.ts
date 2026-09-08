@@ -41,7 +41,7 @@ export default defineConfig(({ mode }) => {
         },
         load(id) {
           if (id === '\0virtual:public-characters') {
-            const raw = readFileSync(resolve(__dirname, 'public/characters.json'), 'utf-8')
+            const raw = readFileSync(resolve(import.meta.dirname, 'public/characters.json'), 'utf-8')
             return `export default ${raw}`
           }
         }
@@ -49,8 +49,8 @@ export default defineConfig(({ mode }) => {
       tanstackRouter({
         target: 'react',
         autoCodeSplitting: true,
-        routesDirectory: resolve(__dirname, './src/app/routes'),
-        generatedRouteTree: resolve(__dirname, './src/app/routeTree.gen.ts')
+        routesDirectory: resolve(import.meta.dirname, './src/app/routes'),
+        generatedRouteTree: resolve(import.meta.dirname, './src/app/routeTree.gen.ts')
       }),
       react(),
       cloudflare({
@@ -129,7 +129,7 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        '@': resolve(__dirname, './src')
+        '@': resolve(import.meta.dirname, './src')
       },
     },
     define: {

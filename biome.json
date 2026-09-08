@@ -23,6 +23,7 @@
       "!src/**/components/ui/*.{ts,tsx}",
       "!src/**/index.css",
       "!src/**/routeTree.gen.ts",
+      "!src/generated",
       "__tests__/**/*.{ts,tsx}"
     ]
   },
