@@ -268,3 +268,6 @@ worker-configuration.d.ts
 
 # Prisma Client (regenerated via `bun run generate`)
 src/generated/prisma/
+
+# スクレイピング結果の生 HTML キャッシュ (CRLF のため改行正規化で毎回差分が出る)
+.vscode/archive/html_cache/
