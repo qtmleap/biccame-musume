@@ -1,9 +1,9 @@
-import type { Badge } from '@/generated/prisma/client'
 import { z } from 'zod'
 import type { BadgeArea } from '@/data/badges/area-mapping'
 import { storeKeyToBadgeArea } from '@/data/badges/area-mapping'
 import type { BadgeSubCategory } from '@/data/badges/registry'
 import { ACTIVE_PHYSICAL_STORE_KEYS, PHYSICAL_STORE_KEYS } from '@/data/badges/store-exclusion'
+import type { Badge } from '@/generated/prisma/client'
 import { parseJsonWithSchema } from '@/lib/parse-json'
 import type { StoreKey } from '@/schemas/store.dto'
 import {
