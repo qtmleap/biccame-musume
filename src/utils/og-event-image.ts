@@ -136,11 +136,16 @@ const buildVDom = (e: EventOgInput) => {
   }
 }
 
-export const renderEventOgImage = async (env: Bindings, origin: string, e: EventOgInput): Promise<Uint8Array> => {
+export const renderEventOgImage = async (
+  env: Bindings,
+  origin: string,
+  e: EventOgInput
+): Promise<Uint8Array<ArrayBuffer>> => {
   await ensureWasm()
   const fonts = await loadFonts(env, origin)
   const vdom = buildVDom(e)
   // biome-ignore lint/suspicious/noExplicitAny: satori VDom type accepts loose object trees
   const svg = await satori(vdom as any, { width: 1200, height: 630, fonts })
-  return new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng()
+  // asPng() の型は Uint8Array<ArrayBufferLike> で Hono の body が受け付けないため詰め替える
+  return new Uint8Array(new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng())
 }
