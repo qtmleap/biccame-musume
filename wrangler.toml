@@ -68,6 +68,8 @@ run_worker_first = ["/*"]
 
 [vars]
 ENVIRONMENT = "local"
+# ローカル開発で 1 日 1 回制限を迂回する。E2E は vite.config.ts 側で false に上書きする
+VOTE_LIMIT_BYPASS = "true"
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
 CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
 FIREBASE_PROJECT_ID = "biccame-musume"

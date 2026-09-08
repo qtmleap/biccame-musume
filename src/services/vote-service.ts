@@ -34,7 +34,7 @@ const claimVotes = async (env: Bindings, characterIds: string[], ip: string): Pr
       characterIds,
       ip,
       dateKey: getJSTDateKey(),
-      bypassLimit: env.ENVIRONMENT === 'local'
+      bypassLimit: env.VOTE_LIMIT_BYPASS === 'true'
     })
   } catch (error) {
     console.error('[vote] claimVotes failed, allowing vote', error)
