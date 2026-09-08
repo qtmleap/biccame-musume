@@ -12,8 +12,6 @@ import type { VoteCounterDO } from '@/durable-objects/vote-counter'
 export type Bindings = VerifyFirebaseAuthEnv & {
   /** 環境名 (prod, dev, local) */
   ENVIRONMENT?: string
-  /** 投票データと制限チェックを保存するKVストア */
-  VOTE_LIMITER: KVNamespace
   /** ページビュー統計の atomic 集計を行う Durable Object */
   STATS: DurableObjectNamespace<StatsDO>
   /** ユーザーごとの WebSocket Hibernation 接続を保持する Durable Object */

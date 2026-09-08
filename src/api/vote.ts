@@ -1,10 +1,9 @@
 import { type RateLimitKeyFunc, rateLimit } from '@elithrar/workers-hono-rate-limit'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import dayjs from 'dayjs'
 import type { Context, Next } from 'hono'
+import { HTTPException } from 'hono/http-exception'
 import { getPrisma } from '@/lib/prisma'
 import { ipCheck } from '@/middleware/ip-check'
-import { voteLimit } from '@/middleware/vote-limit'
 import {
   BulkVoteRequestSchema,
   BulkVoteResponseSchema,
@@ -16,7 +15,7 @@ import { pushEarnedBadges } from '@/services/badge-push'
 import { bulkVote, getAllVoteCounts, vote } from '@/services/vote-service'
 import type { Bindings, Variables } from '@/types/bindings'
 import { getJwtPayload, verifyTokenOptional } from '@/utils/token'
-import { getNextJSTDate } from '@/utils/vote'
+import { getNextJSTDate, getNextJSTDateKey } from '@/utils/vote'
 
 const getKey: RateLimitKeyFunc = (c: Context): string => {
   // 匿名でも一括投票するため、Authorization が無ければ
@@ -120,16 +119,6 @@ routes.openapi(
     const votedCount = results.filter((r) => r.status === 'voted').length
     const skippedCount = results.filter((r) => r.status === 'skipped').length
 
-    // Phase A: VoteCounterDO への dual-write。 D1 書き込みが成功した投票だけ
-    // in-memory カウンタに +1 する。 fire-and-forget で発火し、 DO 障害が
-    // ユーザー応答を汚さないよう waitUntil に逃がす。
-    const votedIds = results.filter((r) => r.status === 'voted').map((r) => r.characterId)
-    if (votedIds.length > 0) {
-      const yearKey = String(dayjs().year())
-      const stub = c.env.VOTE_COUNTER.get(c.env.VOTE_COUNTER.idFromName(yearKey))
-      c.executionCtx.waitUntil(stub.recordVotes({ characterIds: votedIds }))
-    }
-
     // 投票成功時のみ、最後に投票したキャラ ID で 1 回だけバッジ評価
     // (vote 系バッジは user-level なのでキャラ単位では評価しない)
     // 重いので waitUntil でバックグラウンド実行、レスポンスは即返す
@@ -165,7 +154,7 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/:characterId',
-    middleware: [ipCheck, voteLimit, verifyTokenOptional],
+    middleware: [ipCheck, verifyTokenOptional],
     request: {
       params: z.object({
         characterId: z.string().nonempty()
@@ -216,14 +205,15 @@ routes.openapi(
         return undefined
       }
     })()
-    await vote(c.env, characterId, c.get('CLIENT_IP'), userId)
-
-    // Phase A: VoteCounterDO への dual-write。 D1 書き込み成功時のみ
-    // in-memory カウンタに +1 する。
-    {
-      const yearKey = String(dayjs().year())
-      const stub = c.env.VOTE_COUNTER.get(c.env.VOTE_COUNTER.idFromName(yearKey))
-      c.executionCtx.waitUntil(stub.recordVotes({ characterIds: [characterId] }))
+    const { status } = await vote(c.env, characterId, c.get('CLIENT_IP'), userId)
+    if (status === 'skipped') {
+      throw new HTTPException(400, {
+        message: JSON.stringify({
+          success: false,
+          message: '本日の投票は完了しています。明日また応援してください！',
+          nextVoteDate: getNextJSTDateKey()
+        })
+      })
     }
 
     // バッジ評価は waitUntil でバックグラウンド実行、レスポンスは即返す
