@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { Prisma, type PrismaClient } from '@prisma/client'
+import { Prisma, type PrismaClient } from '@/generated/prisma/client'
 import { type EvaluatorContext, evaluateAndAwardBadges } from '../../src/services/badge'
 
 /**

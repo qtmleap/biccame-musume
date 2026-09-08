@@ -1,4 +1,4 @@
-import type { Badge } from '@prisma/client'
+import type { Badge } from '@/generated/prisma/client'
 import type { Bindings } from '@/types/bindings'
 
 /**

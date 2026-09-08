@@ -1,7 +1,7 @@
-import type { PrismaClient } from '@prisma/client'
 import { z } from 'zod'
 import type { BadgeArea } from '@/data/badges/area-mapping'
 import type { BadgeConditionMeta } from '@/data/badges/registry'
+import type { PrismaClient } from '@/generated/prisma/client'
 import { StoreKeySchema } from '@/schemas/store.dto'
 import type { Bindings } from '@/types/bindings'
 

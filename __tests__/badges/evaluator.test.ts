@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import type { Badge, PrismaClient } from '@prisma/client'
+import type { Badge, PrismaClient } from '@/generated/prisma/client'
 import { storeKeyToBadgeArea } from '../../src/data/badges/area-mapping'
 import type { BadgeConditionMeta, BadgeSubCategory } from '../../src/data/badges/registry'
 import { ACTIVE_PHYSICAL_STORE_KEYS, PHYSICAL_STORE_KEYS } from '../../src/data/badges/store-exclusion'

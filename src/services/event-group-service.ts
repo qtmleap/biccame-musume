@@ -1,6 +1,6 @@
-import type { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
+import type { Prisma } from '@/generated/prisma/client'
 import { getPrisma } from '@/lib/prisma'
 import type { EventGroup, EventGroupDetail, EventGroupRequest } from '@/schemas/event-group.dto'
 import type { Bindings } from '@/types/bindings'

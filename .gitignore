@@ -265,3 +265,6 @@ worker-configuration.d.ts
 
 # Playwright MCP artifacts (snapshots, console logs)
 .playwright-mcp/
+
+# Prisma Client (regenerated via `bun run generate`)
+src/generated/prisma/

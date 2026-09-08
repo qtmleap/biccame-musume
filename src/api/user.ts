@@ -1,7 +1,7 @@
 import { getFirebaseToken } from '@hono/firebase-auth'
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
-import type { User } from '@prisma/client'
 import { HTTPException } from 'hono/http-exception'
+import type { User } from '@/generated/prisma/client'
 import { ErrorResponseSchema } from '@/schemas/activity.dto'
 import { UserResponseSchema } from '@/schemas/user.dto'
 import { getUserById } from '@/services/user-service'
