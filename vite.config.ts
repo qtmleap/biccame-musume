@@ -55,6 +55,10 @@ export default defineConfig(({ mode }) => {
       react(),
       cloudflare({
         configPath: './wrangler.toml',
+        // E2E は投票の 1 日 1 回制限そのものを検証するため bypass を落とす。
+        // ENVIRONMENT を変えると CSRF の localhost 許可まで外れるので触らない
+        config:
+          process.env.E2E === '1' ? (current) => ({ vars: { ...current.vars, VOTE_LIMIT_BYPASS: 'false' } }) : undefined
       }),
       tailwindcss(),
       intlayer(),
