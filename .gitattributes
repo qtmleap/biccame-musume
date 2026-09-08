@@ -50,3 +50,7 @@ poetry.lock       linguist-generated
 Cargo.lock        linguist-generated
 Package.resolved  linguist-generated
 *.gen.ts          linguist-generated
+
+# スクレイピング結果の生 HTML。CRLF のまま保持しないと改行正規化で毎回全行差分になる
+# (__tests__/calendar_birthdays.test.ts のフィクスチャなので追跡は必要)
+.vscode/archive/html_cache/*.html -text
