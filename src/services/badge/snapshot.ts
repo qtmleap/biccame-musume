@@ -1,4 +1,4 @@
-import type { Badge } from '@prisma/client'
+import type { Badge } from '@/generated/prisma/client'
 import { z } from 'zod'
 import type { BadgeArea } from '@/data/badges/area-mapping'
 import { storeKeyToBadgeArea } from '@/data/badges/area-mapping'

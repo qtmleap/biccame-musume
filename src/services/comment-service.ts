@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@prisma/client'
+import type { PrismaClient } from '@/generated/prisma/client'
 import dayjs from 'dayjs'
 import type { CommentResponse } from '@/schemas/comment.dto'
 

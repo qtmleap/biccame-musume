@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '@/generated/prisma/client'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
 import { getPrisma } from '@/lib/prisma'

@@ -1,5 +1,5 @@
 import { z } from '@hono/zod-openapi'
-import type { Badge as PrismaBadge } from '@prisma/client'
+import type { Badge as PrismaBadge } from '@/generated/prisma/client'
 import { StoreKeySchema } from '@/schemas/store.dto'
 
 export const BadgeCategorySchema = z.enum([

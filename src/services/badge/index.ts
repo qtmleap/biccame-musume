@@ -1,5 +1,5 @@
-import type { Badge, PrismaClient } from '@prisma/client'
-import { Prisma } from '@prisma/client'
+import type { Badge, PrismaClient } from '@/generated/prisma/client'
+import { Prisma } from '@/generated/prisma/client'
 import type { BadgeArea } from '@/data/badges/area-mapping'
 import { storeKeyToBadgeArea } from '@/data/badges/area-mapping'
 import type { BadgeSubCategory } from '@/data/badges/registry'
