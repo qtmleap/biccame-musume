@@ -17,15 +17,9 @@ type DateFieldProps<T extends FieldValues> = {
 /**
  * 日付入力フィールドコンポーネント
  *
- * 暫定対応: `<input type="date">` の DOM value は文字列で、未入力時に
- * `''` を返す。Zod 側で optional 日付フィールドは undefined を期待する
- * ため、フィールド境界で空文字を undefined に寄せる。
- *
- * NOTE: RHF の公式ガイダンスは defaultValue として undefined ではなく
- * `''` を使うことを推奨している。本来はフォーム値の型を string とし、
- * payload 変換層で `''` → undefined に正規化するのが筋だが、ここでは
- * 既存スキーマを温存したまま動作を直す暫定処置として Controller で
- * wrap している。
+ * 未入力は空文字で表す。undefined を書き戻すと react-hook-form が
+ * マウント時の初期値をフォールバックとして返し、クリアが効かなくなる。
+ * 送信直前に toEventPayload で空文字を undefined へ畳む。
  */
 export const DateField = <T extends FieldValues>({
   id,
@@ -39,8 +33,7 @@ export const DateField = <T extends FieldValues>({
   const { field } = useController({ name, control })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    field.onChange(value === '' ? undefined : value)
+    field.onChange(e.target.value)
   }
 
   return (
@@ -53,7 +46,7 @@ export const DateField = <T extends FieldValues>({
         <Input
           id={id}
           type='date'
-          value={(field.value as string | undefined) ?? ''}
+          value={typeof field.value === 'string' ? field.value : ''}
           onChange={handleChange}
           onBlur={field.onBlur}
           name={field.name}
@@ -65,7 +58,7 @@ export const DateField = <T extends FieldValues>({
             type='button'
             variant='ghost'
             size='icon'
-            onClick={() => field.onChange(undefined)}
+            onClick={() => field.onChange('')}
             title={`${label}をクリア`}
           >
             <X className='size-4' />

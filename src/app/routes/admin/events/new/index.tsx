@@ -22,8 +22,8 @@ const NewEventContent = () => {
     isCopyMode && copySource ? toCopyFormValues(copySource, newUuid) : toFormValuesFromQuery(search, newUuid)
 
   const handleSuccess = () => {
-    router.history.replace('/admin/events')
-    router.navigate({ to: '/admin/events/$uuid/edit', params: { uuid: newUuid } })
+    // 作成画面を履歴に残すとブラウザバックで送信済みフォームに戻るため置き換える
+    router.navigate({ to: '/admin/events', replace: true })
   }
 
   const headerTitle = isCopyMode ? ADMIN_LABELS.eventCopy : ADMIN_LABELS.eventNew

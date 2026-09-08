@@ -15,7 +15,7 @@ import { Separator } from '@/components/ui/separator'
 import { useCharacters } from '@/hooks/use-characters'
 import { useEventGroups } from '@/hooks/use-event-groups'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/use-events'
-import { buildInitialValues, toEventPayload } from '@/lib/event-form'
+import { buildInitialValues, EventFormSchema, type EventFormValues, toEventPayload } from '@/lib/event-form'
 import {
   ADMIN_LABELS,
   CHARACTER_NAME_LABELS,
@@ -23,13 +23,7 @@ import {
   SPECIAL_CHARACTER_LABELS,
   STORE_NAME_LABELS
 } from '@/locales/app.content'
-import {
-  type Event,
-  EventCategorySchema,
-  type EventRequest,
-  EventRequestSchema,
-  SpecialCharacterSchema
-} from '@/schemas/event.dto'
+import { type Event, EventCategorySchema, type EventRequest, SpecialCharacterSchema } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 
 const NO_GROUP_VALUE = '__none__'
@@ -41,7 +35,7 @@ export const EventForm = ({
   isEditMode = false,
   mode
 }: {
-  defaultValues?: DefaultValues<EventRequest>
+  defaultValues?: DefaultValues<EventFormValues>
   onSuccess?: () => void
   isEditMode?: boolean
   mode?: 'create' | 'edit'
@@ -72,8 +66,8 @@ export const EventForm = ({
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm<EventRequest>({
-    resolver: zodResolver(EventRequestSchema),
+  } = useForm<EventFormValues>({
+    resolver: zodResolver(EventFormSchema),
     defaultValues: buildInitialValues(defaultValues),
     mode: 'onBlur'
   })
@@ -121,8 +115,8 @@ export const EventForm = ({
     setIsSubmitted(false)
   }
 
-  const handleConfirm = (data: EventRequest) => {
-    setConfirmedData(data)
+  const handleConfirm = (data: EventFormValues) => {
+    setConfirmedData(toEventPayload(data, { isEditMode, fallbackUuid: defaultValues?.uuid }))
     setIsConfirming(true)
   }
 
@@ -136,16 +130,14 @@ export const EventForm = ({
 
     setIsSubmitted(true)
 
-    const payload = toEventPayload(confirmedData, { isEditMode, fallbackUuid: defaultValues?.uuid })
-
     try {
       if (isEditMode && defaultValues?.uuid) {
         await updateEvent.mutateAsync({
           id: defaultValues.uuid,
-          data: payload
+          data: confirmedData
         })
       } else {
-        await createEvent.mutateAsync(payload)
+        await createEvent.mutateAsync(confirmedData)
       }
       // 先に親に成功を伝えて navigate を走らせる。handleReset は遷移後の表示には不要。
       onSuccess?.()
@@ -288,8 +280,8 @@ export const EventForm = ({
             control={control}
             render={({ field }) => (
               <Select
-                value={field.value ?? ''}
-                onValueChange={(value) => field.onChange(value === NO_GROUP_VALUE ? undefined : value)}
+                value={field.value}
+                onValueChange={(value) => field.onChange(value === NO_GROUP_VALUE ? '' : value)}
               >
                 <SelectTrigger id='group-trigger' className='w-full'>
                   <SelectValue placeholder='グループを選択' />
@@ -318,8 +310,8 @@ export const EventForm = ({
             control={control}
             render={({ field }) => (
               <Select
-                value={field.value ?? ''}
-                onValueChange={(value) => field.onChange(value === SAME_AS_STORE_VALUE ? undefined : value)}
+                value={field.value}
+                onValueChange={(value) => field.onChange(value === SAME_AS_STORE_VALUE ? '' : value)}
               >
                 <SelectTrigger id='character-trigger' className='w-full'>
                   <SelectValue placeholder='開催店舗と同じ' />

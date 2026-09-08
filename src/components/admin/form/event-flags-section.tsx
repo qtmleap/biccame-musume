@@ -1,9 +1,9 @@
 import { type Control, Controller } from 'react-hook-form'
 import { Checkbox } from '@/components/ui/checkbox'
-import type { EventRequest } from '@/schemas/event.dto'
+import type { EventFormValues } from '@/lib/event-form'
 
 type EventFlagsSectionProps = {
-  control: Control<EventRequest>
+  control: Control<EventFormValues>
 }
 
 /**
