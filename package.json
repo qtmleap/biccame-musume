@@ -17,7 +17,7 @@
     "generate": "prisma generate",
     "dev:e2e": "E2E=1 vite --host --port 15300",
     "e2e": "playwright test",
-    "deploy": "wrangler deploy --keep-vars --env=${CLOUDFLARE_ENV:-production}",
+    "deploy": "wrangler deploy --env=${CLOUDFLARE_ENV:-production}",
     "badges:seed": "bun --preload ./scripts/virtual-characters-plugin.ts scripts/seed-badges.ts"
   },
   "dependencies": {
