@@ -2,96 +2,33 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Run Integration Workflow",
+      "label": "start-agents",
       "type": "shell",
-      "command": "act",
-      "args": ["push", "-W", ".github/workflows/integration.yaml"],
-      "problemMatcher": [],
-      "group": {
-        "kind": "test",
-        "isDefault": true
+      // Open the tmux session (orchestrator / implementer / codex) as soon as the
+      // folder opens. VS Code has no per-task property for terminal location, so the
+      // editor-area placement comes from "terminal.integrated.defaultLocation" in
+      // settings.json (microsoft/vscode#212070).
+      //
+      // Guarded because this file is copied into every project: repositories without
+      // .devcontainer/start-agents.sh must not get a failing task on open.
+      "command": "[ -x .devcontainer/start-agents.sh ] && exec .devcontainer/start-agents.sh || true",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
       },
       "presentation": {
         "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Run Deployment Workflow",
-      "type": "shell",
-      "command": "${workspaceFolder}/.vscode/scripts/deploy.sh",
-      "problemMatcher": [],
-      "group": "build",
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Sync D1: Production → Local",
-      "type": "shell",
-      "command": "${workspaceFolder}/.vscode/scripts/sync_d1.sh",
-      "args": ["local"],
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Sync D1: Production → Staging",
-      "type": "shell",
-      "command": "${workspaceFolder}/.vscode/scripts/sync_d1.sh",
-      "args": ["staging"],
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Check D1 Schema: Production vs Local",
-      "type": "shell",
-      "command": "${workspaceFolder}/.vscode/scripts/check_d1_schema.sh",
-      "args": ["local"],
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Check D1 Schema: Production vs Staging",
-      "type": "shell",
-      "command": "${workspaceFolder}/.vscode/scripts/check_d1_schema.sh",
-      "args": ["staging"],
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Generate Characters JSON",
-      "type": "shell",
-      "command": "bun",
-      "args": ["${workspaceFolder}/.vscode/scripts/parse_store_info.ts"],
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "Fetch HTML Cache",
-      "type": "shell",
-      "command": "bun",
-      "args": ["${workspaceFolder}/.vscode/scripts/fetch_html.ts"],
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
+        "panel": "dedicated",
+        // This terminal owns tmux: never auto-close it, and do not echo the command.
+        "echo": false,
+        "close": false,
+        "clear": true,
+        // Show it without stealing focus from the editor.
+        "focus": false
+      },
+      "problemMatcher": []
     }
   ]
 }
