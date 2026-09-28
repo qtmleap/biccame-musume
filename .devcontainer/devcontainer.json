@@ -1,6 +1,8 @@
 {
   "name": "Biccame Musume",
-  "dockerComposeFile": ["compose.yaml"],
+  "dockerComposeFile": [
+    "compose.yaml"
+  ],
   "service": "app",
   "workspaceFolder": "/home/vscode/app",
   "shutdownAction": "stopCompose",
@@ -28,7 +30,7 @@
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/shyim/devcontainers-features/bun:0": {},
     "ghcr.io/devcontainers/features/node:1.5.0": {
-      "version": "26.5.0"
+      "version": "26.10.0"
     },
     "ghcr.io/stu-bell/devcontainer-features/claude-code:0": {
       "version": "latest"
