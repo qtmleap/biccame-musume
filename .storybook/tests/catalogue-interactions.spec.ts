@@ -14,13 +14,10 @@ test('interaction: mobile month dots and desktop tabs update the actual selectio
     ['calendar-month-tabs', 1024]
   ] as const) {
     await open(page, `components-calendar-calendar-controls--${id}`, width)
-    const first = page.getByRole('button', { name: id === 'calendar-month-dots' ? '1月に移動' : '1月', exact: true })
+    const first = page.getByRole('button', { name: '1月に移動', exact: true })
     await first.click()
-    if (id === 'calendar-month-dots') await expect(first).toHaveAttribute('aria-pressed', 'true')
-    else await expect(first).toHaveClass(/bg-brand/)
-    await expect(
-      page.getByRole('button', { name: id === 'calendar-month-dots' ? '10月に移動' : '10月', exact: true })
-    ).not.toHaveClass(/bg-brand/)
+    await expect(first).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.getByRole('button', { name: '10月に移動', exact: true })).not.toHaveClass(/bg-brand/)
   }
 })
 test('interaction: favorite mutation invalidates the real query and a fresh story restores fixture state', async ({
@@ -117,4 +114,39 @@ test('interaction: transient vote effect creates and then removes actual heart p
   await page.getByRole('button', { name: 'アニメーションを再生' }).click()
   await expect(page.getByTestId('production-component').locator('svg')).toHaveCount(5)
   await expect(page.getByTestId('production-component').locator('svg')).toHaveCount(0)
+})
+test('interaction: controlled category and activity fixtures retain checkbox changes', async ({ page }) => {
+  for (const [id, label] of [
+    ['event-category-filter', 'アクキー'],
+    ['event-user-activity-filter', '興味あり']
+  ] as const) {
+    await open(page, `components-events-${id}--${id}`)
+    const checkbox = page.getByRole('checkbox', { name: label, exact: true })
+    const before = await checkbox.isChecked()
+    await checkbox.click()
+    if (before) await expect(checkbox).not.toBeChecked()
+    else await expect(checkbox).toBeChecked()
+    await checkbox.click()
+    if (before) await expect(checkbox).toBeChecked()
+    else await expect(checkbox).not.toBeChecked()
+  }
+})
+test('interaction: isolated Gantt header Today restores the real month layout', async ({ page }) => {
+  await open(page, 'components-events-gantt-gantt-header--gantt-header', 1280)
+  await page.getByRole('button', { name: '26/11', exact: true }).click()
+  await expect(page.getByRole('button', { name: '26/11', exact: true })).toHaveClass(/bg-brand/)
+  await page.getByRole('button', { name: '今日の位置へ', exact: true }).click()
+  await expect(page.getByRole('button', { name: '26/10', exact: true })).toHaveClass(/bg-brand/)
+})
+test('interaction: production map markers update the synthetic camera without remount loops', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (error) => errors.push(error.message))
+  await open(page, 'pages-production--location', 1280)
+  const map = page.getByTestId('maps-adapter')
+  const camera = map.locator('p').first()
+  const before = await camera.textContent()
+  await map.getByRole('button').first().click()
+  await expect(camera).not.toHaveText(before ?? '')
+  await expect(map).toBeVisible()
+  expect(errors).toEqual([])
 })

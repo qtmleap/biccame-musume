@@ -1,3 +1,4 @@
+import { RouteResponseSchema } from '../../src/schemas/route.dto'
 import { routeResult } from '../../src/stories/catalogue-fixtures'
 import { runtime } from './runtime'
 
@@ -17,7 +18,7 @@ export const installNetworkBoundary = () => {
       )
     if (url.pathname === '/api/directions') {
       runtime.calls.push('directions')
-      return new Response(JSON.stringify({ legs: routeResult.legs, degraded: false }), {
+      return new Response(JSON.stringify(RouteResponseSchema.parse({ status: 'estimated', legs: routeResult.legs })), {
         headers: { 'content-type': 'application/json' }
       })
     }
