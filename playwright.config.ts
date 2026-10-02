@@ -14,7 +14,9 @@ export default defineConfig({
     'events-responsive-view.spec.ts',
     'card-surface-layout.spec.ts',
     'calendar-responsive-controls.spec.ts',
-    'character-detail-layout.spec.ts'
+    'character-detail-layout.spec.ts',
+    '**/location-missing-coordinate.spec.ts',
+    '**/map-cluster-responsive.spec.ts'
   ],
   timeout: 30000,
   retries: 1,
