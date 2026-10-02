@@ -1,5 +1,6 @@
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
+import { z } from 'zod'
 import type { Bindings, Variables } from '@/types/bindings'
 
 /**
@@ -10,7 +11,7 @@ import type { Bindings, Variables } from '@/types/bindings'
 const getClientIp = (c: Context<{ Bindings: Bindings; Variables: Variables }>): string => {
   const ip = c.req.header('CF-Connecting-IP')
   if (ip) {
-    return ip
+    return z.union([z.ipv4(), z.ipv6()]).safeParse(ip).success ? ip : 'unknown'
   }
   return c.env.ENVIRONMENT === 'local' ? '127.0.0.1' : 'unknown'
 }
@@ -23,7 +24,7 @@ export const ipCheck = async (c: Context<{ Bindings: Bindings; Variables: Variab
   const ip = getClientIp(c)
 
   if (ip === 'unknown') {
-    throw new HTTPException(403, { message: 'Forbidden' })
+    throw new HTTPException(403, { message: '接続元のIPアドレスを確認できません。' })
   }
 
   c.set('CLIENT_IP', ip)
