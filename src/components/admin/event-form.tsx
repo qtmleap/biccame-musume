@@ -53,12 +53,17 @@ export const EventForm = ({
 
   const storeKeys = Array.from(
     new Set(characters.filter((c) => c.store?.address && c.store.address.trim() !== '').map((c) => c.id))
-  ).sort()
+  ).sort((a, b) => (STORE_NAME_LABELS[a as StoreKey] ?? a).localeCompare(STORE_NAME_LABELS[b as StoreKey] ?? b, 'ja'))
 
   // 閉店店舗の娘のイベントを別の娘が担当することがあるため、店舗の有無で絞らない
   const characterKeys = Array.from(
     new Set(characters.filter((c) => c.character?.is_biccame_musume === true).map((c) => c.id))
-  ).sort() as StoreKey[]
+  ).sort((a, b) =>
+    (CHARACTER_NAME_LABELS[a as StoreKey] ?? STORE_NAME_LABELS[a as StoreKey] ?? a).localeCompare(
+      CHARACTER_NAME_LABELS[b as StoreKey] ?? STORE_NAME_LABELS[b as StoreKey] ?? b,
+      'ja'
+    )
+  ) as StoreKey[]
 
   const {
     register,
