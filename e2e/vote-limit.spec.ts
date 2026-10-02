@@ -76,3 +76,31 @@ test('bulk は投票済みのぶんだけ skipped にして残りを通す', asy
     { characterId: 'akiba', status: 'voted' }
   ])
 })
+
+test('不明な投票対象は拒否され、一括投票の有効な対象も確保しない', async ({ request }) => {
+  const headers = buildHeaders(uniqueIp())
+  const unknown = await request.post('/api/votes/unknown-a03', { headers })
+  expect(unknown.status()).toBe(400)
+  const mixed = await request.post('/api/votes/bulk', {
+    headers,
+    data: { characterIds: ['sapporo', 'unknown-a03'] }
+  })
+  expect(mixed.status()).toBe(400)
+  const valid = await request.post('/api/votes/sapporo', { headers })
+  expect(valid.status()).toBe(200)
+})
+
+test('Authorization を変えても同一 IP の 50 件制限を共有する', async ({ request }) => {
+  const headers = buildHeaders(uniqueIp())
+  // 不明な対象で書込みを避けつつ、実際のレート制限バインディングを検証する。
+  for (let i = 0; i < 50; i += 1) {
+    const response = await request.post('/api/votes/unknown-a03', {
+      headers: { ...headers, Authorization: `Bearer local-test-${i}` }
+    })
+    expect(response.status()).toBe(400)
+  }
+  const exhausted = await request.post('/api/votes/unknown-a03', {
+    headers: { ...headers, Authorization: 'Bearer local-test-next' }
+  })
+  expect(exhausted.status()).toBe(429)
+})
