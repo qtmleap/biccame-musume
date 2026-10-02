@@ -1,0 +1,227 @@
+import { mkdir, writeFile } from 'node:fs/promises'
+import { resolve } from 'node:path'
+import { expect, type Page, test } from '@playwright/test'
+
+const phase = process.env.B02_PHASE ?? 'after'
+const scratch = resolve('.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b02', phase)
+const widths = [320, 375, 430, 768, 1024, 1280, 1440]
+const events = ['limited_card', 'regular_card', 'ackey', 'other'].flatMap((category, c) =>
+  ['ongoing', 'upcoming', 'last_day', 'ended'].map((status, i) => ({
+    uuid: `550e8400-e29b-41d4-a716-${String(c * 4 + i).padStart(12, '0')}`,
+    category,
+    title: `${category} 秋の記念プレゼント ${status}`,
+    stores: category === 'regular_card' ? [['sapporo'], ['akiba'], ['shinjyuku'], ['nagoyagate']][i] : ['sapporo'],
+    startDate: status === 'upcoming' ? '2026-10-24' : '2026-10-01',
+    endDate: status === 'last_day' ? '2026-10-20' : status === 'ended' ? '2026-10-18' : '2026-11-06',
+    isVerified: true,
+    isPreliminary: false,
+    conditions: [],
+    status,
+    daysUntil: 0,
+    interestedCount: 0,
+    completedCount: 0,
+    createdAt: '2026-10-01',
+    updatedAt: '2026-10-01'
+  }))
+)
+async function install(page: Page) {
+  await page.clock.setFixedTime(new Date('2026-10-19T16:00:00Z')) // October 20 JST, October 19 UTC
+  await page.route('**/*', (route) => {
+    const url = new URL(route.request().url())
+    if (url.origin !== 'http://127.0.0.1:15322') return route.abort()
+    if (url.pathname === '/api/events') return route.fulfill({ json: events })
+    if (url.pathname === '/characters.json')
+      return route.fulfill({
+        json: [
+          {
+            id: 'sapporo',
+            prefecture: '北海道',
+            character: { name: '札幌娘', description: 'fixture', images: ['fixture.png'], is_biccame_musume: true },
+            store: { name: '札幌店', access: [] }
+          }
+        ]
+      })
+    if (url.pathname === '/api/event-groups') return route.fulfill({ json: [] })
+    if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/images/')) return route.abort()
+    return route.continue()
+  })
+}
+async function themeCheck(page: Page, theme: string) {
+  const actual = await page.evaluate(() => {
+    const ctx = document.createElement('canvas').getContext('2d')!
+    ctx.fillStyle = getComputedStyle(document.body).backgroundColor
+    ctx.fillRect(0, 0, 1, 1)
+    return {
+      dark: document.documentElement.classList.contains('dark'),
+      rgb: [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3)
+    }
+  })
+  expect(actual).toEqual({ dark: theme === 'dark', rgb: theme === 'dark' ? [9, 9, 11] : [252, 231, 243] })
+  return actual
+}
+test.beforeEach(async ({ page }) => install(page))
+for (const width of widths)
+  test(`responsive choice ${width}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto('/events/')
+    await expect(page.getByRole('heading', { name: 'イベント一覧', exact: true })).toBeVisible()
+    await expect(page.getByRole('region', { name: 'ガントチャートスクロールエリア' })).toHaveCount(width < 768 ? 0 : 1)
+    const list = page.getByRole('button', { name: '一覧', exact: true }),
+      schedule = page.getByRole('button', { name: '日程', exact: true })
+    await expect(list).toHaveAttribute('aria-pressed', width < 768 ? 'true' : 'false')
+    await expect(schedule).toHaveAttribute('aria-pressed', width < 768 ? 'false' : 'true')
+    expect(await page.evaluate(() => localStorage.getItem('event-view-mode'))).toBeNull()
+    await page.setViewportSize({ width: width < 768 ? 1280 : 375, height: 900 })
+    await expect(list).toHaveAttribute('aria-pressed', width < 768 ? 'false' : 'true')
+    await schedule.click()
+    await expect(schedule).toHaveAttribute('aria-pressed', 'true')
+    await page.reload()
+    await expect(schedule).toHaveAttribute('aria-pressed', 'true')
+    await page.setViewportSize({ width: 320, height: 900 })
+    await expect(schedule).toHaveAttribute('aria-pressed', 'true')
+    await list.click()
+    await page.reload()
+    await page.setViewportSize({ width: 1440, height: 900 })
+    await expect(list).toHaveAttribute('aria-pressed', 'true')
+    expect(new URL(page.url()).searchParams.has('view')).toBe(false)
+  })
+for (const saved of ['grid', 'gantt', 'invalid'])
+  test(`saved ${saved}`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 900 })
+    await page.addInitScript((value) => localStorage.setItem('event-view-mode', JSON.stringify(value)), saved)
+    await page.goto('/events/')
+    await expect(page.getByRole('button', { name: saved === 'gantt' ? '日程' : '一覧', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    )
+  })
+test('today position scrolls timetable and returns current JST month', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 900 })
+  await page.addInitScript(() => localStorage.setItem('event-view-mode', JSON.stringify('gantt')))
+  await page.goto('/events/')
+  const region = page.getByRole('region', { name: 'ガントチャートスクロールエリア' })
+  await expect(region).toBeVisible()
+  await region.evaluate((e) => {
+    e.scrollLeft = 0
+  })
+  await page.getByRole('button', { name: '今日の位置へ', exact: true }).click()
+  await expect.poll(() => region.evaluate((e) => e.scrollLeft)).toBe(608)
+  await page.getByRole('button', { name: '26/11', exact: true }).click()
+  await page.getByRole('button', { name: '今日の位置へ', exact: true }).click()
+  await expect.poll(() => region.evaluate((e) => e.scrollLeft)).toBe(608)
+  await expect(page.getByText('左右にスクロールして日付を確認できます', { exact: true })).toBeVisible()
+})
+for (const theme of ['light', 'dark'])
+  for (const width of widths)
+    test(`visual ${theme} ${width}`, async ({ page }) => {
+      await mkdir(scratch, { recursive: true })
+      await page.setViewportSize({ width, height: 900 })
+      await page.addInitScript(() => localStorage.setItem('event-view-mode', JSON.stringify('gantt')))
+      await page.goto(`/events/?theme=${theme}&status=ongoing,upcoming,ended`)
+      await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' })
+      await expect(page.getByRole('heading', { name: 'イベント一覧', exact: true })).toBeVisible()
+      await page.evaluate(() => document.fonts.ready)
+      // The initial scroll schedules a rAF and a 150ms label fade; settle that queued work before the paint guard.
+      await page.waitForTimeout(200)
+      await expect
+        .poll(() =>
+          page
+            .locator('section .absolute.top-1 > div')
+            .evaluateAll((elements) => elements.every((element) => getComputedStyle(element).opacity === '1'))
+        )
+        .toBe(true)
+      const verified = await themeCheck(page, theme)
+      await page.screenshot({ path: resolve(scratch, `${theme}-${width}.png`), fullPage: true, animations: 'disabled' })
+      const evidence = await page.evaluate(() => {
+        const rgb = (color: string) => {
+          const ctx = document.createElement('canvas').getContext('2d')!
+          ctx.fillStyle = color
+          ctx.fillRect(0, 0, 1, 1)
+          return [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3)
+        }
+        const lum = (color: number[]) =>
+          color
+            .map((v) => v / 255)
+            .map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
+            .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0)
+        const bars = [...document.querySelectorAll('section .absolute.top-1')].map((bar) => {
+          const text = bar.querySelector('span')!
+          const bg = getComputedStyle(bar).backgroundColor,
+            fg = getComputedStyle(text).color
+          const a = lum(rgb(bg)),
+            b = lum(rgb(fg))
+          return {
+            text: bar.textContent,
+            background: bg,
+            labelOpacity: getComputedStyle(bar.firstElementChild!).opacity,
+            color: fg,
+            contrast: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
+            font: parseFloat(getComputedStyle(text).fontSize),
+            labels: [...bar.querySelectorAll('div span')].map((label) => ({
+              text: label.textContent,
+              color: getComputedStyle(label).color,
+              font: parseFloat(getComputedStyle(label).fontSize)
+            })),
+            rowHeight: bar.parentElement!.getBoundingClientRect().height
+          }
+        })
+        const region = document.querySelector('section')!
+        return {
+          bars,
+          scrollWidth: document.documentElement.scrollWidth,
+          viewport: innerWidth,
+          internalWidth: region.scrollWidth,
+          internalClient: region.clientWidth
+        }
+      })
+      await themeCheck(page, theme)
+      await writeFile(resolve(scratch, `${theme}-${width}.json`), JSON.stringify({ verified, ...evidence }, null, 2))
+      for (const bar of evidence.bars) expect(bar.labelOpacity).toBe('1')
+      if (phase === 'before') return
+      expect(evidence.scrollWidth).toBeLessThanOrEqual(width)
+      expect(evidence.internalWidth).toBeGreaterThan(evidence.internalClient)
+      expect(evidence.bars).toHaveLength(16)
+      for (const bar of evidence.bars) {
+        expect(bar.contrast).toBeGreaterThanOrEqual(4.5)
+        expect(bar.rowHeight).toBeGreaterThanOrEqual(32)
+        expect(bar.font).toBeGreaterThanOrEqual(13)
+        for (const label of bar.labels) {
+          expect(label.color).toBe(bar.color)
+          expect(label.font).toBeGreaterThanOrEqual(13)
+        }
+        expect(bar.text).toMatch(/限定名刺|通年名刺|アクキー|その他/)
+        expect(bar.text).toMatch(/開催中|開催前|最終日|終了/)
+      }
+    })
+
+for (const theme of ['light', 'dark'])
+  test(`hover preserves opaque readable bands ${theme}`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 900 })
+    await page.addInitScript(() => localStorage.setItem('event-view-mode', JSON.stringify('gantt')))
+    await page.goto(`/events/?theme=${theme}&status=ongoing,upcoming,ended`)
+    await expect(page.getByRole('heading', { name: 'イベント一覧', exact: true })).toBeVisible()
+    await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' })
+    await themeCheck(page, theme)
+    const links = page.locator('section .absolute.top-1 > a')
+    await expect(links).toHaveCount(16)
+    const evidence = []
+    for (const link of await links.all()) {
+      await link.hover()
+      const measured = await link.evaluate((el) => {
+        const bar = el.parentElement
+        if (!bar) throw new Error('Missing band')
+        return {
+          overlay: getComputedStyle(el).backgroundColor,
+          outline: getComputedStyle(el).outlineStyle,
+          background: getComputedStyle(bar).backgroundColor,
+          colors: [...bar.querySelectorAll('div span')].map((span) => getComputedStyle(span).color)
+        }
+      })
+      expect(measured.overlay).toBe('rgba(0, 0, 0, 0)')
+      expect(measured.outline).toBe('solid')
+      for (const color of measured.colors) expect(color).toBe('rgb(24, 24, 27)')
+      evidence.push(measured)
+    }
+    await mkdir(scratch, { recursive: true })
+    await writeFile(resolve(scratch, `${theme}-hover.json`), JSON.stringify(evidence, null, 2))
+  })
