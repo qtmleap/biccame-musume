@@ -103,4 +103,5 @@ test('Authorization を変えても同一 IP の 50 件制限を共有する', a
     headers: { ...headers, Authorization: 'Bearer local-test-next' }
   })
   expect(exhausted.status()).toBe(429)
+  expect(await exhausted.json()).toEqual({ message: '投票のリクエストが多すぎます。時間をおいて再度お試しください。' })
 })

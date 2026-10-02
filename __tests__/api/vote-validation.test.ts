@@ -126,7 +126,10 @@ test('failed whitelist loads retry and cached sets cannot be poisoned', async ()
 for (const ip of ['not-an-ip', '203.0.113.1, 203.0.113.2', '']) {
   test(`invalid production IP rejected before limiter: ${ip}`, async () => {
     const f = fixture()
-    expect((await f.post('sapporo', undefined, { 'CF-Connecting-IP': ip })).status).toBe(403)
+    const response = await f.post('sapporo', undefined, { 'CF-Connecting-IP': ip })
+    expect(response.status).toBe(403)
+    const body: unknown = await response.json()
+    expect(body).toEqual({ message: '接続元のIPアドレスを確認できませんでした。再度お試しください。' })
     expect(f.limit).not.toHaveBeenCalled()
     noWrites(f)
   })
@@ -146,7 +149,10 @@ test('public GET does not require an IP or consume mutation limit', async () => 
 test('exhausted limiter rejects before claim or DB', async () => {
   const f = fixture()
   f.limit.mockImplementation(async () => ({ success: false }))
-  expect((await f.post('sapporo')).status).toBe(429)
+  const response = await f.post('sapporo')
+  expect(response.status).toBe(429)
+  const body: unknown = await response.json()
+  expect(body).toEqual({ message: '投票のリクエストが多すぎます。時間をおいて再度お試しください。' })
   noWrites(f)
 })
 

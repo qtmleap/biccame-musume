@@ -24,7 +24,7 @@ export const ipCheck = async (c: Context<{ Bindings: Bindings; Variables: Variab
   const ip = getClientIp(c)
 
   if (!z.union([z.ipv4(), z.ipv6()]).safeParse(ip).success) {
-    throw new HTTPException(403, { message: 'Forbidden' })
+    throw new HTTPException(403, { message: '接続元のIPアドレスを確認できませんでした。再度お試しください。' })
   }
 
   c.set('CLIENT_IP', ip)

@@ -23,7 +23,17 @@ const getKey: RateLimitKeyFunc = (c: Context): string => {
 }
 
 const rateLimiter = async (c: Context, next: Next) => {
-  return await rateLimit(c.env.RATE_LIMITER, getKey)(c, next)
+  try {
+    return await rateLimit(c.env.RATE_LIMITER, getKey)(c, next)
+  } catch (error) {
+    if (error instanceof HTTPException && error.status === 429) {
+      throw new HTTPException(429, {
+        message: '投票のリクエストが多すぎます。時間をおいて再度お試しください。',
+        cause: error
+      })
+    }
+    throw error
+  }
 }
 
 const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
