@@ -150,7 +150,7 @@ for (const action of ['add', 'remove']) {
       await page.getByRole('combobox').first().click()
       await page.getByRole('option', { name: '店舗C', exact: true }).click()
     } else {
-      await page.getByRole('button', { name: '', exact: true }).first().click()
+      await page.getByRole('button', { name: '店舗Aをルートから削除', exact: true }).click()
     }
     await resolveRequest(page, 0)
     await expect(page.getByRole('heading', { name: 'ルート案内' })).toHaveCount(0)

@@ -27,21 +27,27 @@ export const SelectedStoreList = ({ stores, onRemove, onChangeStation, onClearAl
       </div>
       <div className='space-y-2'>
         {stores.map((store, index) => (
-          <div key={store.id} className='flex items-center justify-between gap-2 py-2'>
-            <div className='flex items-center gap-2'>
+          <div
+            key={store.id}
+            className='flex min-w-0 flex-col gap-2 py-2 sm:flex-row sm:items-center sm:justify-between'
+          >
+            <div className='flex min-w-0 items-center gap-2'>
               <span className='flex size-6 shrink-0 items-center justify-center rounded-full border text-xs'>
                 {index + 1}
               </span>
-              <span className='text-sm font-medium'>{store.name}</span>
+              <span className='min-w-0 break-words text-sm font-medium'>{store.name}</span>
             </div>
-            <div className='flex items-center gap-2'>
+            <div className='flex min-w-0 items-center gap-2 sm:shrink-0'>
               <Select
                 value={store.station}
                 onValueChange={(v) => onChangeStation(store.id, v)}
                 disabled={store.stations.length === 1}
               >
-                <SelectTrigger aria-label={`${store.name}の利用駅`} className='h-9 w-auto min-w-[120px]'>
-                  <SelectValue />
+                <SelectTrigger
+                  aria-label={`${store.name}の利用駅`}
+                  className='h-9 min-w-0 flex-1 sm:w-auto sm:min-w-[120px]'
+                >
+                  <SelectValue placeholder='利用駅を選択' />
                 </SelectTrigger>
                 <SelectContent>
                   {store.stations.map((station) => (
@@ -54,7 +60,7 @@ export const SelectedStoreList = ({ stores, onRemove, onChangeStation, onClearAl
               <Button
                 variant='ghost'
                 size='icon'
-                className='size-9 border border-transparent'
+                className='size-9 shrink-0 border border-transparent'
                 onClick={() => onRemove(store.id)}
                 aria-label={`${store.name}をルートから削除`}
               >

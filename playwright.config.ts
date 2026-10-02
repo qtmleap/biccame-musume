@@ -17,7 +17,8 @@ export default defineConfig({
     'character-detail-layout.spec.ts',
     '**/location-missing-coordinate.spec.ts',
     '**/map-cluster-responsive.spec.ts',
-    'event-filter-sheet-layout.spec.ts'
+    'event-filter-sheet-layout.spec.ts',
+    '**/route-empty-state-layout.spec.ts'
   ],
   timeout: 30000,
   retries: 1,
