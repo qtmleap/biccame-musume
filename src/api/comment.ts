@@ -97,6 +97,10 @@ routes.openapi(
           }
         },
         description: 'レート制限エラー'
+      },
+      503: {
+        content: { 'application/json': { schema: z.object({ message: z.string().nonempty() }) } },
+        description: 'キャラクター情報を取得できません'
       }
     },
     middleware: [verifyTokenOptional] as const,
