@@ -1,6 +1,8 @@
 import dayjs, { type Dayjs } from 'dayjs'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useJstDate } from '@/hooks/use-jst-date'
 import type { Event, EventStatus } from '@/schemas/event.dto'
+import { calculateEventStatus } from '@/utils/event-status'
 
 export type EventBar = {
   event: Event
@@ -33,10 +35,11 @@ type GanttLayout = {
 }
 
 export const useGanttLayout = (events: Event[]): GanttLayout => {
+  const dateKey = useJstDate()
   const [monthOffset, setMonthOffset] = useState(0)
 
   const { dates, chartStartDate, chartEndDate, actualMonthEnd } = useMemo(() => {
-    const today = dayjs().startOf('day')
+    const today = dayjs(dateKey).startOf('day')
     const chartStart = today.add(monthOffset, 'month').startOf('month')
     const monthEnd = chartStart.endOf('month')
     const allDates: Dayjs[] = []
@@ -50,7 +53,7 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
       chartEndDate: chartEnd,
       actualMonthEnd: monthEnd
     }
-  }, [monthOffset])
+  }, [monthOffset, dateKey])
 
   const categoryOrder: Record<Event['category'], number> = useMemo(
     () => ({
@@ -62,7 +65,7 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
     []
   )
 
-  const today = dayjs().startOf('day')
+  const today = dayjs(dateKey).startOf('day')
   const todayOffset = today.diff(chartStartDate, 'day')
 
   const eventBars = useMemo(() => {
@@ -101,7 +104,7 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
     return sortedEvents
       .map((event) => {
         const eventStart = dayjs(event.startDate).startOf('day')
-        const currentTime = dayjs().startOf('day')
+        const currentTime = dayjs(dateKey).startOf('day')
         let eventEnd: Dayjs
         if (event.endDate) {
           eventEnd = dayjs(event.endDate).startOf('day')
@@ -116,12 +119,7 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
         const startOffset = eventStart.diff(chartStartDate, 'day')
         const duration = eventEnd.diff(eventStart, 'day') + 1
 
-        const isPastEndDate = event.endDate ? currentTime.isAfter(dayjs(event.endDate).startOf('day')) : false
-        const status: EventStatus = (() => {
-          if (event.endedAt != null || isPastEndDate) return 'ended'
-          if (currentTime.isBefore(eventStart)) return 'upcoming'
-          return 'ongoing'
-        })()
+        const { status } = calculateEventStatus(event, `${dateKey}T00:00:00+09:00`)
 
         if (eventEnd.isBefore(chartStartDate) || eventStart.isAfter(chartEndDate)) {
           return null
@@ -141,7 +139,7 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
         }
       })
       .filter((bar) => bar !== null) as EventBar[]
-  }, [events, chartStartDate, chartEndDate, categoryOrder])
+  }, [events, chartStartDate, chartEndDate, categoryOrder, dateKey])
 
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [scrollLeft, setScrollLeft] = useState(0)

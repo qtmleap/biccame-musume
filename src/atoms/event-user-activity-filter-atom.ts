@@ -1,13 +1,14 @@
-import { atomWithStorage } from 'jotai/utils'
+import { atom } from 'jotai'
 
 /**
- * イベント一覧ページのユーザーアクティビティフィルタ
+ * URLを持たないイベント一覧用のユーザーアクティビティフィルタ
  * 興味のあるイベント・達成済みイベントを非表示にする
+ * イベントルートはURL条件を使い、旧localStorageを読み込まない。
  */
-export const eventUserActivityFilterAtom = atomWithStorage<{
+export const eventUserActivityFilterAtom = atom<{
   hideInterested: boolean
   hideCompleted: boolean
-}>('event-user-activity-filter', {
+}>({
   hideInterested: false,
   hideCompleted: false
 })

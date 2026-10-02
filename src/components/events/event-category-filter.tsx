@@ -1,5 +1,4 @@
-import { useAtom } from 'jotai'
-import { categoryFilterAtom } from '@/atoms/category-filter-atom'
+import { useId } from 'react'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Checkbox } from '@/components/ui/checkbox'
 import { EVENT_CATEGORY_LABELS, FILTER_LABELS } from '@/locales/app.content'
@@ -21,37 +20,39 @@ const CATEGORY_CHECKBOX_COLORS: Record<Event['category'], string> = {
 /**
  * イベントカテゴリフィルター
  */
-export const EventCategoryFilter = () => {
-  const [categoryFilter, setCategoryFilter] = useAtom(categoryFilterAtom)
+type EventCategoryFilterProps = {
+  value: Set<Event['category']>
+  onChange: (value: Set<Event['category']>) => void
+}
 
+export const EventCategoryFilter = ({ value: categoryFilter, onChange }: EventCategoryFilterProps) => {
+  const id = useId()
   /**
    * カテゴリフィルターのトグル
    */
   const toggleCategory = (category: Event['category']) => {
-    setCategoryFilter((prev: Set<Event['category']>) => {
-      const next = new Set(prev)
-      if (next.has(category)) {
-        next.delete(category)
-      } else {
-        next.add(category)
-      }
-      return next
-    })
+    const next = new Set(categoryFilter)
+    if (next.has(category)) {
+      next.delete(category)
+    } else {
+      next.add(category)
+    }
+    onChange(next)
   }
 
   return (
-    <div className='w-full'>
+    <div className='w-full text-foreground'>
       <FilterHeader label={FILTER_LABELS.category} />
       <div className='flex flex-wrap gap-4 text-sm'>
         {EventCategorySchema.options.map((category) => (
           <div key={category} className='flex items-center gap-2'>
             <Checkbox
-              id={`category-${category}`}
+              id={`${id}-category-${category}`}
               checked={categoryFilter.has(category)}
               onCheckedChange={() => toggleCategory(category)}
               className={CATEGORY_CHECKBOX_COLORS[category]}
             />
-            <label htmlFor={`category-${category}`} className='cursor-pointer'>
+            <label htmlFor={`${id}-category-${category}`} className='cursor-pointer'>
               {EVENT_CATEGORY_LABELS[category]}
             </label>
           </div>

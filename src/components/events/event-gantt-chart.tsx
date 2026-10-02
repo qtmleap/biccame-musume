@@ -13,8 +13,15 @@ export const EventGanttChart = ({ events }: EventGanttChartProps) => {
 
   return (
     <TooltipProvider>
-      <div className='relative'>
-        <GanttHeader monthOffset={layout.monthOffset} onMonthSelect={layout.setMonthOffset} />
+      <div className='relative min-w-0 max-w-full'>
+        <GanttHeader
+          monthOffset={layout.monthOffset}
+          onMonthSelect={layout.setMonthOffset}
+          onToday={() => {
+            if (layout.monthOffset !== 0) layout.setMonthOffset(0)
+            else layout.scrollContainerRef.current?.scrollTo({ left: layout.todayOffset * 32, behavior: 'auto' })
+          }}
+        />
         <GanttTimeline
           eventBars={layout.eventBars}
           dates={layout.dates}

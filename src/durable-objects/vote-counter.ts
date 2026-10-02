@@ -1,8 +1,9 @@
 import { DurableObject } from 'cloudflare:workers'
+import dayjs from 'dayjs'
 import type { Bindings } from '@/types/bindings'
 
 // alarm() で snapshot を永続化するインターバル。
-// in-memory increment は O(1) で即返却、 永続化はバッチに寄せる。
+// in-memory increment は O(1)、変更があるときだけ保存を予約する。
 const ALARM_INTERVAL_MS = 5_000
 
 // daily_voted を保持する日数。当日の判定には前日ぶんがあれば足りる。
@@ -37,13 +38,15 @@ export type ClaimVotesResult = {
  * 投票済み判定は daily_voted テーブルの `INSERT OR IGNORE` で行う。
  * SQL exec は同期のため DO 内に await 境界が生まれず、 DO が単一スレッドである
  * 以上「判定 → カウンタ +1」は原子的になる (KV 実装にあった TOCTOU の解消)。
- * カウンタは in-memory に持ち、 alarm() で {@link ALARM_INTERVAL_MS} ごとに
- * storage へバッチ永続化する。 D1 voteCount からの dual-write 移行中は
+ * カウンタは in-memory に持ち、変更後 {@link ALARM_INTERVAL_MS} の alarm() で
+ * storage へバッチ永続化する。変更が無いときは alarm を予約しない。 D1 voteCount からの dual-write 移行中は
  * read 側は D1 のままで、本 DO のカウンタは書き込み観察用 (Phase A)。
  */
 export class VoteCounterDO extends DurableObject<Bindings> {
   private counts = new Map<string, number>()
   private dirty = false
+  private revision = 0
+  private schedulingFlush?: Promise<void>
   private lastPrunedDateKey = ''
 
   constructor(ctx: DurableObjectState, env: Bindings) {
@@ -61,10 +64,6 @@ export class VoteCounterDO extends DurableObject<Bindings> {
       if (stored) {
         this.counts = new Map(Object.entries(stored.counts))
       }
-      const existingAlarm = await ctx.storage.getAlarm()
-      if (existingAlarm === null) {
-        await ctx.storage.setAlarm(Date.now() + ALARM_INTERVAL_MS)
-      }
     })
   }
 
@@ -75,6 +74,7 @@ export class VoteCounterDO extends DurableObject<Bindings> {
   async claimVotes(input: ClaimVotesInput): Promise<ClaimVotesResult> {
     const voted: string[] = []
     const skipped: string[] = []
+    this.pruneOldVoted(input.dateKey)
 
     for (const characterId of input.characterIds) {
       const cursor = this.ctx.storage.sql.exec(
@@ -96,7 +96,9 @@ export class VoteCounterDO extends DurableObject<Bindings> {
     }
     if (voted.length > 0) {
       this.dirty = true
+      this.revision += 1
     }
+    if (this.dirty) await this.scheduleFlush()
 
     return { voted, skipped }
   }
@@ -105,6 +107,7 @@ export class VoteCounterDO extends DurableObject<Bindings> {
    * D1 への永続化が失敗したときの補償。確保を取り消してその日の再投票を許す。
    */
   async releaseVotes(input: { characterIds: string[]; ip: string; dateKey: string }): Promise<void> {
+    const changed: string[] = []
     for (const characterId of input.characterIds) {
       this.ctx.storage.sql.exec(
         'DELETE FROM daily_voted WHERE date_key = ? AND ip = ? AND character_id = ?',
@@ -115,11 +118,14 @@ export class VoteCounterDO extends DurableObject<Bindings> {
       const current = this.counts.get(characterId)
       if (current !== undefined && current > 0) {
         this.counts.set(characterId, current - 1)
+        changed.push(characterId)
       }
     }
-    if (input.characterIds.length > 0) {
+    if (changed.length > 0) {
       this.dirty = true
+      this.revision += 1
     }
+    if (this.dirty) await this.scheduleFlush()
   }
 
   /**
@@ -133,26 +139,39 @@ export class VoteCounterDO extends DurableObject<Bindings> {
   }
 
   override async alarm(): Promise<void> {
-    if (this.dirty) {
-      const payload: Snapshot = {
-        counts: Object.fromEntries(this.counts)
-      }
-      await this.ctx.storage.put('snapshot', payload)
-      this.dirty = false
+    if (!this.dirty) return
+    const revision = this.revision
+    const payload: Snapshot = {
+      counts: Object.fromEntries(this.counts)
     }
-    this.pruneOldVoted()
-    await this.ctx.storage.setAlarm(Date.now() + ALARM_INTERVAL_MS)
+    // 失敗は throw し、Cloudflare の alarm retry に任せる。dirty は残す。
+    await this.ctx.storage.put('snapshot', payload)
+    this.dirty = this.revision !== revision
+    if (this.dirty) await this.scheduleFlush()
+  }
+
+  private scheduleFlush(): Promise<void> {
+    // 同時に来た変更は同じ予約を待ち、既存の alarm の時刻を延長しない。
+    if (this.schedulingFlush) return this.schedulingFlush
+    this.schedulingFlush = (async () => {
+      const existingAlarm = await this.ctx.storage.getAlarm()
+      if (existingAlarm === null) {
+        await this.ctx.storage.setAlarm(Date.now() + ALARM_INTERVAL_MS)
+      }
+    })().finally(() => {
+      this.schedulingFlush = undefined
+    })
+    return this.schedulingFlush
   }
 
   /**
-   * DO storage には KV の expirationTtl が無いため、日付が変わった最初の
-   * alarm で古い行をまとめて捨てる。
+   * JST の claim 日付が進んだ最初の要求で古い行を捨てる。
+   * 処理中の日付変更や遅れて来た要求でも、確保時の日付を使う。
    */
-  private pruneOldVoted(): void {
-    const today = new Date().toISOString().slice(0, 10)
-    if (today === this.lastPrunedDateKey) return
-    const threshold = new Date(Date.now() - VOTED_RETENTION_DAYS * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+  private pruneOldVoted(dateKey: string): void {
+    if (dateKey <= this.lastPrunedDateKey) return
+    const threshold = dayjs(dateKey).subtract(VOTED_RETENTION_DAYS, 'day').format('YYYY-MM-DD')
     this.ctx.storage.sql.exec('DELETE FROM daily_voted WHERE date_key < ?', threshold)
-    this.lastPrunedDateKey = today
+    this.lastPrunedDateKey = dateKey
   }
 }

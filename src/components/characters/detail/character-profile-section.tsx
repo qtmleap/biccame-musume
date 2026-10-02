@@ -19,8 +19,11 @@ type CharacterProfileSectionProps = {
 
 export const CharacterProfileSection = ({ character }: CharacterProfileSectionProps) => {
   return (
-    <>
-      <div className='mb-4 flex items-end justify-between gap-4'>
+    <section
+      className='rounded-xl border border-card-border bg-card p-4 text-foreground md:p-6'
+      aria-label='プロフィール'
+    >
+      <div className='mb-4 flex flex-wrap items-center justify-between gap-4'>
         <motion.div
           key={`avatar-${character.id}`}
           variants={SCALE_IN}
@@ -28,17 +31,17 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
           animate='animate'
           transition={{ duration: DURATION.normal }}
         >
-          <Avatar className='h-21.25 w-21.25 border border-card-border'>
+          <Avatar className='h-28 w-28 shrink-0 border border-card-border bg-white md:h-36 md:w-36'>
             <AvatarImage
               src={character.character?.image_url}
               alt={character.character?.name || ''}
-              className='object-cover scale-150 translate-y-4'
+              className='object-contain'
             />
             <AvatarFallback className='text-4xl'>{character.character?.name?.[0] || '?'}</AvatarFallback>
           </Avatar>
         </motion.div>
 
-        <div className='flex items-center gap-2'>
+        <div className='flex flex-wrap items-center gap-2'>
           {/* ログイン必須（左） */}
           <CharacterFavoriteButton
             characterId={character.id}
@@ -67,18 +70,22 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
         initial='initial'
         animate='animate'
         transition={{ duration: DURATION.normal, delay: 0.2 }}
-        className='mb-6'
+        className='min-w-0 [&>a]:text-[color:var(--link-foreground)]'
       >
-        <h1 className='text-2xl font-bold text-foreground'>{getDisplayName(character.character?.name || '')}</h1>
+        <h1 className='text-2xl font-bold text-foreground break-words'>
+          {getDisplayName(character.character?.name || '')}
+        </h1>
         <CharacterTwitterLink twitterId={character.character?.twitter_id} />
-        <p className='text-sm text-muted-foreground mt-3 leading-relaxed'>{character.character?.description}</p>
+        <p className='text-base text-muted-foreground mt-3 leading-relaxed break-words'>
+          {character.character?.description}
+        </p>
 
         {character.character?.is_biccame_musume && (
           <a
             href={`https://biccame.jp/profile/${character.id}.html`}
             target='_blank'
             rel='noopener noreferrer'
-            className='inline-flex items-center gap-1 text-sm text-brand hover:text-brand/80 hover:underline mt-3'
+            className='inline-flex items-center gap-1 text-sm text-[color:var(--link-foreground)] hover:underline mt-3'
           >
             <ExternalLink className='h-3.5 w-3.5' />
             公式プロフィール
@@ -94,12 +101,16 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
           )}
           {character.character?.birthday && <span>{dayjs(character.character.birthday).format('M月D日')}生まれ</span>}
           {character.coordinates && (
-            <Link to='/location' search={{ id: character.id }} className='text-brand hover:underline'>
+            <Link
+              to='/location'
+              search={{ id: character.id }}
+              className='text-[color:var(--link-foreground)] hover:underline'
+            >
               地図で見る
             </Link>
           )}
         </div>
       </motion.div>
-    </>
+    </section>
   )
 }

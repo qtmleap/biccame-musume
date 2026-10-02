@@ -1,11 +1,13 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { getRedirectResult, onAuthStateChanged } from 'firebase/auth'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useStore } from 'jotai'
 import { type ReactNode, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
-import { backendSessionReadyAtom, userAtom } from '@/atoms/auth-atom'
+import { backendSessionGenerationAtom, backendSessionStateAtom, userAtom } from '@/atoms/auth-atom'
+import { useAuth } from '@/hooks/use-auth'
 import { auth } from '@/lib/firebase'
+import { clearUserQueries } from '@/lib/user-query-keys'
 import { AUTH_LABELS } from '@/locales/app.content'
-import { client } from '@/utils/client'
 
 interface AuthProviderProps {
   children: ReactNode
@@ -17,8 +19,11 @@ interface AuthProviderProps {
  * アプリのルートで使用する
  */
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const queryClient = useQueryClient()
   const setUser = useSetAtom(userAtom)
-  const setBackendSessionReady = useSetAtom(backendSessionReadyAtom)
+  const store = useStore()
+  const { retryBackendSession } = useAuth()
+  const setBackendSessionState = useSetAtom(backendSessionStateAtom)
   const redirectResultChecked = useRef(false)
 
   useEffect(() => {
@@ -53,34 +58,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     handleRedirectResult()
 
+    // Ignore stale callbacks after an account replacement or effect cleanup.
+    let generation = 0
     // 認証状態の監視
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       console.info('Auth state changed:', user ? `${user.uid} (${user.email})` : 'Not authenticated')
 
-      // Firebase Auth の user は即座に反映する (Login ボタン等の表示切替はこれで動く)。
-      // backend session Cookie は非同期で確立するので、 useSuspenseQuery を守るのは
-      // backendSessionReadyAtom (BackendSessionGate) 側で行う。
+      const currentGeneration = ++generation
+      store.set(backendSessionGenerationAtom, store.get(backendSessionGenerationAtom) + 1)
+      setBackendSessionState({ status: user ? 'pending' : 'idle' })
       setUser(user)
+      await clearUserQueries(queryClient)
+      if (user === null || currentGeneration !== generation) return
 
-      if (user === null) {
-        setBackendSessionReady(false)
-        return
-      }
-
-      try {
-        const token = await user.getIdToken()
-        console.info('ID token obtained')
-        await client.authenticate(undefined, { headers: { Authorization: `Bearer ${token}` } })
-        console.info('Backend session established')
-        setBackendSessionReady(true)
-      } catch (error) {
-        console.error('Failed to authenticate with backend:', error)
-        setBackendSessionReady(false)
-      }
+      await retryBackendSession()
     })
 
-    return () => unsubscribe()
-  }, [setUser, setBackendSessionReady])
+    return () => {
+      generation++
+      store.set(backendSessionGenerationAtom, store.get(backendSessionGenerationAtom) + 1)
+      unsubscribe()
+    }
+  }, [queryClient, setUser, setBackendSessionState, store, retryBackendSession])
 
   return <>{children}</>
 }

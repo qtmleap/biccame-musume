@@ -4,7 +4,7 @@ import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/se
 import { getEventsStats } from '@/services/me-service'
 import type { Bindings } from '@/types/bindings'
 import { Twitter } from '@/utils/twitter'
-import { EventDetailSchema, EventRequestSchema, EventSchema } from '../schemas/event.dto'
+import { EventDetailSchema, EventRequestSchema, EventSchema, EventStatsRequestSchema } from '../schemas/event.dto'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
@@ -104,8 +104,8 @@ routes.openapi(
   }),
   async (c) => {
     const body = c.req.valid('json')
-    const event = await createEvent(c.env, body)
-    if (body.shouldTweet !== false) {
+    const { event, created } = await createEvent(c.env, body)
+    if (created && body.shouldTweet !== false) {
       try {
         await new Twitter(c.env).tweetEventCreated(event)
       } catch (error) {
@@ -211,9 +211,7 @@ routes.openapi(
       body: {
         content: {
           'application/json': {
-            schema: z.object({
-              eventIds: z.array(z.string().nonempty())
-            })
+            schema: EventStatsRequestSchema
           }
         }
       }
