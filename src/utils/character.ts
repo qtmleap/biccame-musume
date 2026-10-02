@@ -55,8 +55,17 @@ export const getDaysFromBirthday = (dateStr: string | undefined | null, nowIso =
   if (!dateStr) return Number.MAX_SAFE_INTEGER
   const birthday = parseDate(dateStr)
   if (!birthday) return Number.MAX_SAFE_INTEGER
+  // 誕生日は年から始まる数値形式に限定し、曖昧な地域形式は受け付けない。
+  const dateParts =
+    /^(\d{4})([-/])(\d{1,2})\2(\d{1,2})(?:[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.\d{1,3})?)?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)?)?$/.exec(
+      dateStr
+    )
+  if (!dateParts || Number(dateParts[5]) > 23 || Number(dateParts[6]) > 59 || Number(dateParts[7]) > 59) {
+    return Number.MAX_SAFE_INTEGER
+  }
   // dayjsが存在しない日付を翌月・翌年へ繰り上げる場合も未登録と同じ扱いにする。
-  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr) && birthday.format('YYYY-MM-DD') !== dateStr) {
+  const calendarDate = `${dateParts[1]}-${dateParts[3].padStart(2, '0')}-${dateParts[4].padStart(2, '0')}`
+  if (dayjs.utc(calendarDate).format('YYYY-MM-DD') !== calendarDate) {
     return Number.MAX_SAFE_INTEGER
   }
 
