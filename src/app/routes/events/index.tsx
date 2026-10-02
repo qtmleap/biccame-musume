@@ -175,6 +175,11 @@ const EventsContent = () => {
     setPage(1)
   }, [setPage, categoryFilter, storeFilter, regionFilter, statusFilter, activityFilter])
 
+  const effectivePage = Math.min(Math.max(1, page), Math.max(1, Math.ceil(activeEvents.length / PER_PAGE)))
+  useEffect(() => {
+    if (page !== effectivePage) setPage(effectivePage)
+  }, [page, effectivePage, setPage])
+
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
       <EventGroupBanner />
@@ -273,21 +278,18 @@ const EventsContent = () => {
         </div>
 
         {/* イベント表示 */}
-        {viewMode === 'gantt' ? (
+        {activeEvents.length === 0 ? (
+          <div className='text-center py-12 text-muted-foreground'>
+            <Gift className='size-12 mx-auto mb-4 opacity-30' />
+            <p>条件に一致するイベントはありません</p>
+            <Button variant='outline' className='mt-4' onClick={handleResetFilters}>
+              条件を解除
+            </Button>
+          </div>
+        ) : viewMode === 'gantt' ? (
           <EventGanttChart events={activeEvents} />
         ) : (
-          <PaginatedEventGrid
-            events={activeEvents}
-            perPage={PER_PAGE}
-            page={page}
-            onPageChange={setPage}
-            emptyState={
-              <div className='text-center py-12 text-muted-foreground'>
-                <Gift className='size-12 mx-auto mb-4 opacity-30' />
-                <p>開催中・開催予定のイベントはありません</p>
-              </div>
-            }
-          />
+          <PaginatedEventGrid events={activeEvents} perPage={PER_PAGE} page={effectivePage} onPageChange={setPage} />
         )}
       </div>
     </div>
