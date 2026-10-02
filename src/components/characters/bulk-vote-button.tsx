@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
 import { Heart } from 'lucide-react'
 import { motion } from 'motion/react'
@@ -8,8 +7,10 @@ import { lastVoteTimesAtom } from '@/atoms/vote-atom'
 import { VoteBurst } from '@/components/characters/vote-burst'
 import { Button } from '@/components/ui/button'
 import { useBulkVote } from '@/hooks/use-bulk-vote'
+import { useJstDate } from '@/hooks/use-jst-date'
 import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
+import { getJstDateKey } from '@/utils/jst-date'
 
 type BulkVoteButtonProps = {
   characterIds: string[]
@@ -34,6 +35,8 @@ export const BulkVoteButton = ({
   const lastVoteTimes = useAtomValue(lastVoteTimesAtom)
   const [burstKey, setBurstKey] = useState<number | null>(null)
 
+  const dateKey = useJstDate()
+
   // ローカル localStorage 上で全員投票済みかどうか
   const allVotedToday = useMemo(() => {
     if (characterIds.length === 0) return true
@@ -41,10 +44,9 @@ export const BulkVoteButton = ({
     return characterIds.every((id) => {
       const last = lastVoteTimes[id]
       if (!last) return false
-      const nextDay = dayjs(last).add(1, 'day').startOf('day')
-      return dayjs().isBefore(nextDay)
+      return getJstDateKey(last) === dateKey
     })
-  }, [characterIds, lastVoteTimes])
+  }, [characterIds, lastVoteTimes, dateKey])
 
   useEffect(() => {
     if (!isSuccess || !data) return
