@@ -11,6 +11,16 @@ test('route_200_with_error_screen_fails', async ({ page }) => {
   await expect(assertHealthyScreen(page, 'イベント一覧')).rejects.toThrow()
 })
 
+test('delayed_ready_with_error_screen_fails', async ({ page }) => {
+  await page.setContent('<body></body>')
+  await page.addScriptTag({
+    content: `setTimeout(() => {
+      document.body.innerHTML = '<h1>イベント一覧</h1><h1>エラーが発生しました</h1>'
+    }, 100)`
+  })
+  await expect(assertHealthyScreen(page, 'イベント一覧')).rejects.toThrow(/toHaveCount/)
+})
+
 test('visual_change_fails_instead_of_overwriting', async ({ page }, info) => {
   await page.setContent('<body style="background:rgb(0,0,255)"><h1>Disposable comparator fixture</h1></body>')
   const baseline = info.snapshotPath('disposable.png')

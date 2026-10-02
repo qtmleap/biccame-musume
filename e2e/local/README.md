@@ -7,3 +7,6 @@ The app regression entrypoint is `bun run e2e`. It migrates and seeds a disposab
 CI runs local behavior/auth checks and uploads pending candidate artifacts. It compares approved application screenshots when they exist and explicitly records pending approval otherwise. Changed-behavior staging logout-cookie, UTC/JST, map-missing-coordinate, keyboard and light/dark contrast checks remain pending until a separately authorized deployment to the configured `https://dev.biccame-musume.com`. Local fixtures do not prove staging behavior.
 
 Dedicated component harnesses run through their named `e2e:*` scripts and own Vite caches. They are excluded from default app discovery. Storybook scripts/dependencies remain intact.
+# Local regression entrypoints
+
+`bun run e2e:vote-limit` runs all existing A03 vote checks separately with the production vote route, actual SQLite VoteCounterDO, native 50/60s rate limiter, migrated/seeded disposable D1, and synthetic character assets on localhost:15302. Its runner creates and removes its own state directory each run; it requires no frontend, Firebase login or remote binding. The default UI discovery remains restricted to the route/sticky/candidate/auth suite.
