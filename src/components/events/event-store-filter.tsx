@@ -32,13 +32,13 @@ export const EventStoreFilter = ({ value, onChange }: EventStoreFilterProps) => 
   }
 
   return (
-    <div className='w-full'>
+    <div className='w-full text-foreground'>
       <FilterHeader label={FILTER_LABELS.store} />
       <Select value={value ?? ALL_VALUE} onValueChange={handleChange}>
-        <SelectTrigger size='sm' className='w-full'>
+        <SelectTrigger size='sm' className='w-full text-foreground'>
           <SelectValue placeholder={FILTER_LABELS.storeAll} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className='text-foreground'>
           <SelectItem value={ALL_VALUE}>{FILTER_LABELS.storeAll}</SelectItem>
           {storeOptions.map((option) => (
             <SelectItem key={option.value} value={option.value}>

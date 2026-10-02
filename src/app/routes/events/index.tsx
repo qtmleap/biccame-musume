@@ -21,6 +21,7 @@ import { Toggle } from '@/components/ui/toggle'
 import { charactersQueryKey } from '@/hooks/use-characters'
 import { useJstDate } from '@/hooks/use-jst-date'
 import { useUserActivity } from '@/hooks/use-user-activity'
+import { EVENT_CATEGORY_LABELS, EVENT_STATUS_LABELS, REGION_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { EventCategorySchema } from '@/schemas/event.dto'
 import {
   DEFAULT_EVENT_CATEGORY,
@@ -192,6 +193,23 @@ const EventsContent = () => {
     completedEvents
   ])
 
+  const filterSummary = [
+    categoryFilter.size === EventCategorySchema.options.length
+      ? 'すべての種別'
+      : categoryFilter.size === 0
+        ? '種別の選択なし'
+        : [...categoryFilter].map((category) => EVENT_CATEGORY_LABELS[category]).join('・'),
+    EVENT_FILTER_STATUSES.filter((status) => statusFilter[status])
+      .map((status) => EVENT_STATUS_LABELS[status])
+      .join('・') || '開催状況の選択なし',
+    REGION_LABELS[regionFilter],
+    storeFilter === null ? 'すべての店舗' : STORE_NAME_LABELS[storeFilter],
+    activityFilter.hideInterested ? '興味ありを非表示' : null,
+    activityFilter.hideCompleted ? '達成済みを非表示' : null
+  ]
+    .filter(Boolean)
+    .join(' / ')
+
   const totalPages = Math.max(1, Math.ceil(activeEvents.length / PER_PAGE))
   const effectivePage = Math.min(Math.max(1, page), totalPages)
   useEffect(() => {
@@ -202,7 +220,7 @@ const EventsContent = () => {
   }, [page, effectivePage, totalPages, navigate])
 
   return (
-    <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
+    <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl text-foreground'>
       <EventGroupBanner />
       <div className='flex flex-col gap-2 mt-3'>
         {/* ヘッダーとボタン群 */}
@@ -224,12 +242,15 @@ const EventsContent = () => {
                   )}
                 </Button>
               </SheetTrigger>
-              <SheetContent side='bottom' className='h-auto max-h-[85vh] flex flex-col'>
-                <SheetHeader>
+              <SheetContent
+                side='bottom'
+                className='h-auto max-h-[85dvh] flex flex-col text-foreground [&_label]:text-foreground'
+              >
+                <SheetHeader className='shrink-0'>
                   <SheetTitle>フィルター</SheetTitle>
                   <SheetDescription>イベントの絞り込み条件を選択してください</SheetDescription>
                 </SheetHeader>
-                <div className='flex-1 overflow-y-auto px-4'>
+                <div className='min-h-0 flex-1 overflow-y-auto px-4'>
                   <div className='space-y-6 pb-4'>
                     <EventCategoryFilter value={categoryFilter} onChange={setCategoryFilter} />
                     <EventStatusFilter value={statusFilter} onChange={setStatusFilter} />
@@ -238,7 +259,14 @@ const EventsContent = () => {
                     <EventStoreFilter value={storeFilter} onChange={setStoreFilter} />
                   </div>
                 </div>
-                <div className='border-t border-card px-4 py-3'>
+                <div className='shrink-0 border-t border-card-border bg-background px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] space-y-2'>
+                  <p role='status' className='text-sm'>
+                    <span className='font-semibold'>{activeEvents.length}件</span>
+                    <span className='block text-foreground'>{filterSummary}</span>
+                  </p>
+                  <Button className='w-full' onClick={() => setFilterSheetOpen(false)}>
+                    {activeEvents.length}件を表示
+                  </Button>
                   <Button
                     variant='outline'
                     size='sm'
@@ -281,7 +309,7 @@ const EventsContent = () => {
         </div>
 
         {/* デスクトップ: インラインフィルター */}
-        <div className='hidden md:flex md:flex-col md:gap-2'>
+        <div className='hidden md:flex md:flex-col md:gap-2 [&_label]:text-foreground'>
           {/* 種別フィルターと店舗フィルター */}
           <div className='flex items-start gap-4'>
             <div className='flex-1'>
@@ -312,6 +340,11 @@ const EventsContent = () => {
           {/* 地域フィルター */}
           <RegionFilterControl value={regionFilter} onChange={setRegionFilter} />
         </div>
+
+        <p role='status' className='text-sm text-foreground'>
+          <span className='font-semibold'>{activeEvents.length}件</span>
+          <span className='block text-foreground'>適用中: {filterSummary}</span>
+        </p>
 
         {/* イベント表示 */}
         {activeEvents.length === 0 ? (

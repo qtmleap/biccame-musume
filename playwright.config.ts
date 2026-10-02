@@ -16,7 +16,8 @@ export default defineConfig({
     'calendar-responsive-controls.spec.ts',
     'character-detail-layout.spec.ts',
     '**/location-missing-coordinate.spec.ts',
-    '**/map-cluster-responsive.spec.ts'
+    '**/map-cluster-responsive.spec.ts',
+    'event-filter-sheet-layout.spec.ts'
   ],
   timeout: 30000,
   retries: 1,
