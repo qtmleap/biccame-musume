@@ -1,5 +1,6 @@
 import type { Context, Next } from 'hono'
 import { HTTPException } from 'hono/http-exception'
+import { z } from 'zod'
 import type { Bindings, Variables } from '@/types/bindings'
 
 /**
@@ -17,12 +18,12 @@ const getClientIp = (c: Context<{ Bindings: Bindings; Variables: Variables }>): 
 
 /**
  * IPアドレスチェックMiddleware
- * クライアントIPを取得してContextに保存し、unknownの場合は403を返す
+ * クライアントIPを取得してContextに保存し、不正なアドレスの場合は403を返す
  */
 export const ipCheck = async (c: Context<{ Bindings: Bindings; Variables: Variables }>, next: Next) => {
   const ip = getClientIp(c)
 
-  if (ip === 'unknown') {
+  if (!z.union([z.ipv4(), z.ipv6()]).safeParse(ip).success) {
     throw new HTTPException(403, { message: 'Forbidden' })
   }
 
