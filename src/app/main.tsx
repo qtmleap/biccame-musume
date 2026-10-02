@@ -16,6 +16,7 @@ import { setUpdateServiceWorker, showUpdatePrompt, UpdatePrompt } from '@/compon
 import { Toaster } from '@/components/ui/sonner'
 import { usePushStream } from '@/hooks/use-push-stream'
 import { clearAllCaches } from '@/lib/pwa-cache'
+import { deserializePublicQueryCache, shouldPersistQuery } from '@/lib/user-query-keys'
 import { client } from '@/utils/client'
 // フォントのインポート
 import '@fontsource/noto-sans-jp/400.css'
@@ -127,7 +128,7 @@ const persister = createAsyncStoragePersister({
   throttleTime: 3000, // 3秒間隔で保存(LocalStorage書き込み負荷を軽減)
   key: 'REACT_QUERY_OFFLINE_CACHE',
   serialize: JSON.stringify,
-  deserialize: JSON.parse
+  deserialize: deserializePublicQueryCache
 })
 
 /**
@@ -188,10 +189,7 @@ if (!rootElement.innerHTML) {
           persister: persister,
           maxAge: 1000 * 60 * 60 * 24 * 7, // 7日間LocalStorageに保持
           dehydrateOptions: {
-            shouldDehydrateQuery: (query) => {
-              // 成功したクエリのみをキャッシュ対象にする
-              return query.state.status === 'success'
-            }
+            shouldDehydrateQuery: shouldPersistQuery
           }
         }}
       >

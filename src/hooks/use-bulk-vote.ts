@@ -2,12 +2,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useSetAtom } from 'jotai'
 import { lastVoteTimesAtom } from '@/atoms/vote-atom'
+import { useAuth } from '@/hooks/use-auth'
+import { userQueryKeys } from '@/lib/user-query-keys'
 import type { BulkVoteResponse } from '@/schemas/vote.dto'
 import { client } from '@/utils/client'
 
 /**
  * サーバー側でバッジ評価が waitUntil 実行されるため、
- * 完了を待ってから ['me', 'badges'] を invalidate するための遅延 (ms)
+ * 完了を待ってから ユーザー別の獲得バッジを invalidate するための遅延 (ms)
  */
 const BADGE_REFETCH_DELAY_MS = 2500
 
@@ -17,6 +19,7 @@ const BADGE_REFETCH_DELAY_MS = 2500
  */
 export const useBulkVote = () => {
   const queryClient = useQueryClient()
+  const { user } = useAuth()
   const setLastVoteTimes = useSetAtom(lastVoteTimesAtom)
 
   return useMutation({
@@ -35,7 +38,7 @@ export const useBulkVote = () => {
       queryClient.invalidateQueries({ queryKey: ['ranking'] })
       // バッジ評価はサーバー側で waitUntil 実行されるため、少し遅らせて再取得
       setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+        queryClient.invalidateQueries({ queryKey: userQueryKeys.badges(user === null ? '' : user.uid) })
       }, BADGE_REFETCH_DELAY_MS)
     }
   })
