@@ -87,15 +87,18 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
               )}
             />
           )}
-          <div className='flex items-center justify-between gap-2'>
-            <div className='flex items-center gap-2 flex-1 min-w-0'>
+          <div data-event-heading className='grid grid-cols-[auto_1fr] items-center gap-2'>
+            <div className='contents'>
               <div className={`shrink-0 p-2 rounded-lg ${CATEGORY_WITH_ICON[event.category].className}`}>
                 {CATEGORY_WITH_ICON[event.category].icon}
               </div>
-              <p className='text-base font-semibold text-foreground truncate'>{event.title}</p>
+              <p className='col-span-2 order-3 text-base leading-6 font-semibold text-foreground line-clamp-2 break-words'>
+                {event.title}
+              </p>
             </div>
             <div
-              className={`shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
+              data-status-badge
+              className={`order-2 justify-self-end shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
                 status === 'ended'
                   ? 'bg-status-ended text-status-ended-foreground'
                   : status === 'last_day'
@@ -113,7 +116,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
             </div>
           </div>
           <div className='flex-1 min-w-0'>
-            <div className='flex flex-col gap-1 text-xs text-muted-foreground'>
+            <div className='flex flex-col gap-1 text-[13px] leading-5 text-muted-foreground'>
               <span className='flex items-center gap-1'>
                 <Calendar className='size-3' />
                 {startDate.format('M月D日')}
