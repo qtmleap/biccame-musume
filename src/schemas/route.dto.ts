@@ -5,10 +5,10 @@ import { z } from '@hono/zod-openapi'
  */
 export const LegSchema = z
   .object({
-    from: z.string().nonempty().openapi({ description: '出発店舗名' }),
-    to: z.string().nonempty().openapi({ description: '到着店舗名' }),
-    fromStation: z.string().nonempty().openapi({ description: '出発駅名' }),
-    toStation: z.string().nonempty().openapi({ description: '到着駅名' })
+    from: z.string().nonempty().max(100).openapi({ description: '出発店舗名' }),
+    to: z.string().nonempty().max(100).openapi({ description: '到着店舗名' }),
+    fromStation: z.string().nonempty().max(100).openapi({ description: '出発駅名' }),
+    toStation: z.string().nonempty().max(100).openapi({ description: '到着駅名' })
   })
   .openapi('Leg')
 
@@ -58,5 +58,24 @@ export const RouteResponseSchema = z
     degraded: z.boolean().optional().openapi({ description: 'LLM failure fallback indicator' })
   })
   .openapi('RouteResponse')
+
+/** APIの参考情報なしフォールバックも含む応答契約。AIの検証には通常応答のみを使用する。 */
+export const RouteEndpointResponseSchema = z
+  .union([
+    RouteResponseSchema,
+    z
+      .object({
+        legs: z.array(
+          LegSchema.extend({
+            routes: z.array(RouteSegmentSchema).length(0),
+            duration: z.literal(0),
+            transfers: z.literal(0)
+          })
+        ),
+        degraded: z.literal(true)
+      })
+      .openapi('DegradedRouteResponse')
+  ])
+  .openapi('RouteEndpointResponse')
 
 export type Leg = z.infer<typeof LegSchema>
