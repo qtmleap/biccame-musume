@@ -190,6 +190,20 @@
       "reason": ""
     },
     {
+      "file": "src/components/auth/auth-provider.tsx",
+      "name": "AuthProvider",
+      "kind": "component",
+      "storyIds": ["components-auth-auth-provider--auth-provider"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/auth/backend-session-gate.tsx",
+      "name": "BackendSessionGate",
+      "kind": "component",
+      "storyIds": ["components-auth-backend-session-gate--backend-session-gate"],
+      "reason": ""
+    },
+    {
       "file": "src/components/auth/email-auth-tabs.tsx",
       "name": "EmailAuthTabs",
       "kind": "component",
@@ -215,20 +229,6 @@
       "name": "SocialLoginButtons",
       "kind": "component",
       "storyIds": ["components-auth-social-login-buttons--social-login-buttons"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/auth/auth-provider.tsx",
-      "name": "AuthProvider",
-      "kind": "component",
-      "storyIds": ["components-auth-auth-provider--auth-provider"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/auth/backend-session-gate.tsx",
-      "name": "BackendSessionGate",
-      "kind": "component",
-      "storyIds": ["components-auth-backend-session-gate--backend-session-gate"],
       "reason": ""
     },
     {
@@ -288,10 +288,31 @@
       "reason": ""
     },
     {
+      "file": "src/components/character-list-card.tsx",
+      "name": "CharacterListCard",
+      "kind": "component",
+      "storyIds": ["components-character-list-card--character-list-card"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/bulk-vote-button.tsx",
+      "name": "BulkVoteButton",
+      "kind": "component",
+      "storyIds": ["components-characters-bulk-vote-button--bulk-vote-button"],
+      "reason": ""
+    },
+    {
       "file": "src/components/characters/character-competition-level.tsx",
       "name": "CharacterCompetitionLevel",
       "kind": "component",
       "storyIds": ["components-characters-character-competition-level--character-competition-level"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-detail-content.tsx",
+      "name": "CharacterDetailContent",
+      "kind": "component",
+      "storyIds": ["components-characters-character-detail-content--character-detail-content"],
       "reason": ""
     },
     {
@@ -323,6 +344,13 @@
       "reason": ""
     },
     {
+      "file": "src/components/characters/character-sort-control.tsx",
+      "name": "CharacterSortControl",
+      "kind": "component",
+      "storyIds": ["components-characters-character-sort-control--character-sort-control"],
+      "reason": ""
+    },
+    {
       "file": "src/components/characters/character-twitter-link.tsx",
       "name": "CharacterTwitterLink",
       "kind": "component",
@@ -334,6 +362,20 @@
       "name": "CharacterVisitButton",
       "kind": "component",
       "storyIds": ["components-characters-character-visit-button--character-visit-button"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-vote-button.tsx",
+      "name": "CharacterVoteButton",
+      "kind": "component",
+      "storyIds": ["components-characters-character-vote-button--character-vote-button"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/detail/character-profile-section.tsx",
+      "name": "CharacterProfileSection",
+      "kind": "component",
+      "storyIds": ["components-characters-detail-character-profile-section--character-profile-section"],
       "reason": ""
     },
     {
@@ -386,13 +428,6 @@
       "reason": ""
     },
     {
-      "file": "src/components/characters/detail/character-profile-section.tsx",
-      "name": "CharacterProfileSection",
-      "kind": "component",
-      "storyIds": ["components-characters-detail-character-profile-section--character-profile-section"],
-      "reason": ""
-    },
-    {
       "file": "src/components/characters/detail/store-info-section.tsx",
       "name": "StoreInfoSection",
       "kind": "component",
@@ -407,31 +442,10 @@
       "reason": ""
     },
     {
-      "file": "src/components/characters/vote-burst.tsx",
-      "name": "VoteBurst",
+      "file": "src/components/characters/nearby-characters-list.tsx",
+      "name": "NearbyCharactersList",
       "kind": "component",
-      "storyIds": ["components-characters-vote-burst--vote-burst"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/bulk-vote-button.tsx",
-      "name": "BulkVoteButton",
-      "kind": "component",
-      "storyIds": ["components-characters-bulk-vote-button--bulk-vote-button"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-vote-button.tsx",
-      "name": "CharacterVoteButton",
-      "kind": "component",
-      "storyIds": ["components-characters-character-vote-button--character-vote-button"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-sort-control.tsx",
-      "name": "CharacterSortControl",
-      "kind": "component",
-      "storyIds": ["components-characters-character-sort-control--character-sort-control"],
+      "storyIds": ["components-characters-nearby-characters-list--nearby-characters-list"],
       "reason": ""
     },
     {
@@ -442,17 +456,10 @@
       "reason": ""
     },
     {
-      "file": "src/components/characters/character-detail-content.tsx",
-      "name": "CharacterDetailContent",
+      "file": "src/components/characters/vote-burst.tsx",
+      "name": "VoteBurst",
       "kind": "component",
-      "storyIds": ["components-characters-character-detail-content--character-detail-content"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/nearby-characters-list.tsx",
-      "name": "NearbyCharactersList",
-      "kind": "component",
-      "storyIds": ["components-characters-nearby-characters-list--nearby-characters-list"],
+      "storyIds": ["components-characters-vote-burst--vote-burst"],
       "reason": ""
     },
     {
@@ -494,6 +501,13 @@
       "reason": ""
     },
     {
+      "file": "src/components/common/header.tsx",
+      "name": "Header",
+      "kind": "component",
+      "storyIds": ["components-common-header--header"],
+      "reason": ""
+    },
+    {
       "file": "src/components/common/loading-fallback.tsx",
       "name": "LoadingFallback",
       "kind": "component",
@@ -512,13 +526,6 @@
       "name": "PageViewCounter",
       "kind": "component",
       "storyIds": ["components-common-page-view-counter--page-view-counter"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/common/header.tsx",
-      "name": "Header",
-      "kind": "component",
-      "storyIds": ["components-common-header--header"],
       "reason": ""
     },
     {
@@ -557,6 +564,13 @@
       "reason": ""
     },
     {
+      "file": "src/components/events/event-category-filter.tsx",
+      "name": "EventCategoryFilter",
+      "kind": "component",
+      "storyIds": ["components-events-event-category-filter--event-category-filter"],
+      "reason": ""
+    },
+    {
       "file": "src/components/events/event-character-badge.tsx",
       "name": "EventCharacterBadge",
       "kind": "component",
@@ -582,6 +596,20 @@
       "name": "EventDetailInfo",
       "kind": "component",
       "storyIds": ["components-events-event-detail-info--event-detail-info"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-gantt-chart.tsx",
+      "name": "EventGanttChart",
+      "kind": "component",
+      "storyIds": ["components-events-event-gantt-chart--event-gantt-chart"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-grid-item.tsx",
+      "name": "EventGridItem",
+      "kind": "component",
+      "storyIds": ["components-events-event-grid-item--event-grid-item"],
       "reason": ""
     },
     {
@@ -620,6 +648,34 @@
       "reason": ""
     },
     {
+      "file": "src/components/events/event-status-filter.tsx",
+      "name": "StatusFilter",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/events/event-status-filter.tsx",
+      "name": "EventStatusFilter",
+      "kind": "component",
+      "storyIds": ["components-events-event-status-filter--event-status-filter"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-store-filter.tsx",
+      "name": "EventStoreFilter",
+      "kind": "component",
+      "storyIds": ["components-events-event-store-filter--event-store-filter"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-user-activity-filter.tsx",
+      "name": "EventUserActivityFilter",
+      "kind": "component",
+      "storyIds": ["components-events-event-user-activity-filter--event-user-activity-filter"],
+      "reason": ""
+    },
+    {
       "file": "src/components/events/gantt/gantt-header.tsx",
       "name": "GanttHeader",
       "kind": "component",
@@ -653,48 +709,6 @@
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/events/recent-events-list.tsx",
-      "name": "RecentEventsList",
-      "kind": "component",
-      "storyIds": ["components-events-recent-events-list--recent-events-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/upcoming-event-list-item.tsx",
-      "name": "UpcomingEventListItem",
-      "kind": "component",
-      "storyIds": ["components-events-upcoming-event-list-item--upcoming-event-list-item"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/upcoming-event-list.tsx",
-      "name": "UpcomingEventList",
-      "kind": "component",
-      "storyIds": ["components-events-upcoming-event-list--upcoming-event-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-gantt-chart.tsx",
-      "name": "EventGanttChart",
-      "kind": "component",
-      "storyIds": ["components-events-event-gantt-chart--event-gantt-chart"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-grid-item.tsx",
-      "name": "EventGridItem",
-      "kind": "component",
-      "storyIds": ["components-events-event-grid-item--event-grid-item"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-user-activity-filter.tsx",
-      "name": "EventUserActivityFilter",
-      "kind": "component",
-      "storyIds": ["components-events-event-user-activity-filter--event-user-activity-filter"],
-      "reason": ""
     },
     {
       "file": "src/components/events/gantt-chart-parts.tsx",
@@ -739,31 +753,24 @@
       "reason": ""
     },
     {
-      "file": "src/components/events/event-category-filter.tsx",
-      "name": "EventCategoryFilter",
+      "file": "src/components/events/recent-events-list.tsx",
+      "name": "RecentEventsList",
       "kind": "component",
-      "storyIds": ["components-events-event-category-filter--event-category-filter"],
+      "storyIds": ["components-events-recent-events-list--recent-events-list"],
       "reason": ""
     },
     {
-      "file": "src/components/events/event-status-filter.tsx",
-      "name": "StatusFilter",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/events/event-status-filter.tsx",
-      "name": "EventStatusFilter",
+      "file": "src/components/events/upcoming-event-list-item.tsx",
+      "name": "UpcomingEventListItem",
       "kind": "component",
-      "storyIds": ["components-events-event-status-filter--event-status-filter"],
+      "storyIds": ["components-events-upcoming-event-list-item--upcoming-event-list-item"],
       "reason": ""
     },
     {
-      "file": "src/components/events/event-store-filter.tsx",
-      "name": "EventStoreFilter",
+      "file": "src/components/events/upcoming-event-list.tsx",
+      "name": "UpcomingEventList",
       "kind": "component",
-      "storyIds": ["components-events-event-store-filter--event-store-filter"],
+      "storyIds": ["components-events-upcoming-event-list--upcoming-event-list"],
       "reason": ""
     },
     {
@@ -778,20 +785,6 @@
       "name": "EventGroupList",
       "kind": "component",
       "storyIds": ["components-home-event-group-list--event-group-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/home/line-sticker-list-item.tsx",
-      "name": "LineStickerListItem",
-      "kind": "component",
-      "storyIds": ["components-home-line-sticker-list-item--line-sticker-list-item"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/home/line-sticker-list.tsx",
-      "name": "LineStickerList",
-      "kind": "component",
-      "storyIds": ["components-home-line-sticker-list--line-sticker-list"],
       "reason": ""
     },
     {
@@ -813,6 +806,20 @@
       "name": "HomeHeader",
       "kind": "component",
       "storyIds": ["components-home-home-header--home-header"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/home/line-sticker-list-item.tsx",
+      "name": "LineStickerListItem",
+      "kind": "component",
+      "storyIds": ["components-home-line-sticker-list-item--line-sticker-list-item"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/home/line-sticker-list.tsx",
+      "name": "LineStickerList",
+      "kind": "component",
+      "storyIds": ["components-home-line-sticker-list--line-sticker-list"],
       "reason": ""
     },
     {
@@ -914,17 +921,17 @@
       "reason": ""
     },
     {
-      "file": "src/components/ranking/ranking-vote-badge.tsx",
-      "name": "RankingVoteBadge",
-      "kind": "component",
-      "storyIds": ["components-ranking-ranking-vote-badge--ranking-vote-badge"],
-      "reason": ""
-    },
-    {
       "file": "src/components/ranking/ranking-row.tsx",
       "name": "RankingRow",
       "kind": "component",
       "storyIds": ["components-ranking-ranking-row--ranking-row"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ranking/ranking-vote-badge.tsx",
+      "name": "RankingVoteBadge",
+      "kind": "component",
+      "storyIds": ["components-ranking-ranking-vote-badge--ranking-vote-badge"],
       "reason": ""
     },
     {
@@ -991,6 +998,20 @@
       "reason": ""
     },
     {
+      "file": "src/components/route/selected-store-list.tsx",
+      "name": "SelectedStoreList",
+      "kind": "component",
+      "storyIds": ["components-route-selected-store-list--selected-store-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/route/store-select.tsx",
+      "name": "StoreSelect",
+      "kind": "component",
+      "storyIds": ["components-route-store-select--store-select"],
+      "reason": ""
+    },
+    {
       "file": "src/components/route/types.ts",
       "name": "AvailableStore",
       "kind": "type",
@@ -1033,17 +1054,17 @@
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "src/components/route/selected-store-list.tsx",
-      "name": "SelectedStoreList",
+      "file": "src/components/selected-store-info.tsx",
+      "name": "SelectedStoreInfo",
       "kind": "component",
-      "storyIds": ["components-route-selected-store-list--selected-store-list"],
+      "storyIds": ["components-selected-store-info--selected-store-info"],
       "reason": ""
     },
     {
-      "file": "src/components/route/store-select.tsx",
-      "name": "StoreSelect",
+      "file": "src/components/store-list-item.tsx",
+      "name": "StoreListItem",
       "kind": "component",
-      "storyIds": ["components-route-store-select--store-select"],
+      "storyIds": ["components-store-list-item--store-list-item"],
       "reason": ""
     },
     {
@@ -1957,24 +1978,10 @@
       "reason": ""
     },
     {
-      "file": "src/components/character-list-card.tsx",
-      "name": "CharacterListCard",
-      "kind": "component",
-      "storyIds": ["components-character-list-card--character-list-card"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/selected-store-info.tsx",
-      "name": "SelectedStoreInfo",
-      "kind": "component",
-      "storyIds": ["components-selected-store-info--selected-store-info"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/store-list-item.tsx",
-      "name": "StoreListItem",
-      "kind": "component",
-      "storyIds": ["components-store-list-item--store-list-item"],
+      "file": "src/app/routes/__root.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--rootlayout"],
       "reason": ""
     },
     {
@@ -1982,13 +1989,6 @@
       "name": "Route",
       "kind": "route",
       "storyIds": ["pages-production--about"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--admin-layout"],
       "reason": ""
     },
     {
@@ -2083,6 +2083,13 @@
       "reason": ""
     },
     {
+      "file": "src/app/routes/admin.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--admin-layout"],
+      "reason": ""
+    },
+    {
       "file": "src/app/routes/badges/index.tsx",
       "name": "Route",
       "kind": "route",
@@ -2174,6 +2181,13 @@
       "reason": ""
     },
     {
+      "file": "src/app/routes/me/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--me"],
+      "reason": ""
+    },
+    {
       "file": "src/app/routes/me/interested/index.tsx",
       "name": "Route",
       "kind": "route",
@@ -2188,13 +2202,6 @@
       "reason": ""
     },
     {
-      "file": "src/app/routes/me/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--me"],
-      "reason": ""
-    },
-    {
       "file": "src/app/routes/ranking/index.tsx",
       "name": "Route",
       "kind": "route",
@@ -2206,13 +2213,6 @@
       "name": "Route",
       "kind": "route",
       "storyIds": ["pages-production--route"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/__root.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--rootlayout"],
       "reason": ""
     }
   ]
