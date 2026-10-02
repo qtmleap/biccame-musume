@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Loader2, MapPin, Route as RouteIcon } from 'lucide-react'
-import { Suspense, useCallback, useMemo, useState } from 'react'
-import { toast } from 'sonner'
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import {
   type AvailableStore,
@@ -14,7 +13,7 @@ import {
 } from '@/components/route'
 import { Button } from '@/components/ui/button'
 import { useCharacters } from '@/hooks/use-characters'
-import { solveTsp } from '@/utils/tsp'
+import { calcGreatCircleKm, solveTsp } from '@/utils/tsp'
 
 export const Route = createFileRoute('/route/')({
   component: RouteComponent
@@ -24,16 +23,7 @@ export const Route = createFileRoute('/route/')({
 const KYOTO_STATION = { lat: 34.9856, lng: 135.7588 }
 
 /**
- * 2点間のユークリッド距離を計算
- */
-const calcDistance = (p1: { lat: number; lng: number }, p2: { lat: number; lng: number }) => {
-  const dx = p2.lat - p1.lat
-  const dy = p2.lng - p1.lng
-  return Math.sqrt(dx * dx + dy * dy)
-}
-
-/**
- * 店舗選択と最短ルート計算のメインコンポーネント
+ * 店舗選択と訪問順計算のメインコンポーネント
  */
 const RouteCalculator = () => {
   const { data: characters } = useCharacters()
@@ -42,6 +32,22 @@ const RouteCalculator = () => {
   const [isCalculating, setIsCalculating] = useState(false)
 
   const { getDirections, calcTotalDuration } = useDirections()
+  const requestGeneration = useRef(0)
+  const pendingRequest = useRef<AbortController | null>(null)
+
+  const cancelRequest = useCallback(() => {
+    requestGeneration.current += 1
+    pendingRequest.current?.abort()
+    pendingRequest.current = null
+  }, [])
+
+  const invalidateResult = useCallback(() => {
+    cancelRequest()
+    setResult(null)
+    setIsCalculating(false)
+  }, [cancelRequest])
+
+  useEffect(() => cancelRequest, [cancelRequest])
 
   // 座標を持つ店舗のみフィルタリング（京都駅から近い順）
   const availableStores = useMemo<AvailableStore[]>(
@@ -62,7 +68,7 @@ const RouteCalculator = () => {
           }
         })
         .filter((s) => s.stations.length > 0)
-        .sort((a, b) => calcDistance(KYOTO_STATION, a) - calcDistance(KYOTO_STATION, b)),
+        .sort((a, b) => calcGreatCircleKm(KYOTO_STATION, a) - calcGreatCircleKm(KYOTO_STATION, b)),
     [characters]
   )
 
@@ -87,62 +93,77 @@ const RouteCalculator = () => {
             station: store.stations[0]
           }
         ])
-        setResult(null)
+        invalidateResult()
       }
     },
-    [availableStores, selectedStores.length]
+    [availableStores, selectedStores.length, invalidateResult]
   )
 
   /**
    * 店舗を削除
    */
-  const handleRemoveStore = useCallback((storeId: string) => {
-    setSelectedStores((prev) => prev.filter((s) => s.id !== storeId))
-    setResult(null)
-  }, [])
+  const handleRemoveStore = useCallback(
+    (storeId: string) => {
+      setSelectedStores((prev) => prev.filter((s) => s.id !== storeId))
+      invalidateResult()
+    },
+    [invalidateResult]
+  )
 
   /**
    * 駅を変更
    */
-  const handleChangeStation = useCallback((storeId: string, station: string) => {
-    setSelectedStores((prev) => prev.map((s) => (s.id === storeId ? { ...s, station } : s)))
-    setResult(null)
-  }, [])
+  const handleChangeStation = useCallback(
+    (storeId: string, station: string) => {
+      setSelectedStores((prev) => prev.map((s) => (s.id === storeId ? { ...s, station } : s)))
+      invalidateResult()
+    },
+    [invalidateResult]
+  )
 
   /**
    * 全店舗をクリア
    */
   const handleClearAll = useCallback(() => {
     setSelectedStores([])
-    setResult(null)
-  }, [])
+    invalidateResult()
+  }, [invalidateResult])
 
   /**
-   * 最短ルートを計算してAPIで詳細を取得
+   * 訪問順を計算してAPIで詳細を取得
    */
   const handleCalculate = useCallback(async () => {
     if (selectedStores.length < 2) return
 
+    cancelRequest()
+    const generation = requestGeneration.current
+    const controller = new AbortController()
+    pendingRequest.current = controller
     setIsCalculating(true)
 
-    // TSPで最短ルートを計算
-    const tspResult = solveTsp(selectedStores)
-
-    // APIで経路情報を取得
-    const { legs, degraded } = await getDirections(tspResult.route)
-
-    if (degraded) {
-      toast.warning('経路情報の取得に問題が発生しました。表示中の所要時間は概算です。')
+    try {
+      // TSPで訪問順を計算
+      const tspResult = solveTsp(selectedStores)
+      const directions = await getDirections(tspResult.route, controller.signal)
+      // 通信が中止に対応しない場合も、古い入力の結果は反映しない。
+      if (generation !== requestGeneration.current) return
+      setResult({
+        route: tspResult.route,
+        totalDistance: tspResult.totalDistance,
+        ...directions,
+        totalDuration: directions.status === 'estimated' ? calcTotalDuration(directions.legs) : undefined
+      })
+    } catch (error) {
+      if (!controller.signal.aborted && !(error instanceof Error && error.name === 'AbortError')) {
+        console.error('Route calculation error:', error)
+      }
+    } finally {
+      if (generation === requestGeneration.current) {
+        pendingRequest.current = null
+        setIsCalculating(false)
+      }
     }
-
-    setResult({
-      route: tspResult.route,
-      totalDistance: tspResult.totalDistance,
-      legs,
-      totalDuration: calcTotalDuration(legs)
-    })
-    setIsCalculating(false)
-  }, [selectedStores, getDirections, calcTotalDuration])
+  }, [selectedStores, getDirections, calcTotalDuration, cancelRequest])
 
   // 駅が指定されていない店舗があるかチェック
   const hasInvalidStation = useMemo(
@@ -181,7 +202,7 @@ const RouteCalculator = () => {
           ) : (
             <>
               <MapPin className='size-4' />
-              最短ルートを探索
+              訪問順を計算
             </>
           )}
         </Button>
