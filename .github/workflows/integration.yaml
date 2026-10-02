@@ -2,6 +2,45 @@ name: Continuous Integration
 on:
   push:
 jobs:
+  ui-regression:
+    name: Local UI and authentication regression
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bun run generate
+      - run: bunx playwright install --with-deps chromium
+      - name: Assert route, sticky, visual guard and real local authentication
+        run: |
+          bun run e2e:regression
+          bash e2e/local/run.sh e2e/routes.test.ts e2e/sticky-check.spec.ts e2e/local-auth.spec.ts
+      - name: Capture pending candidates with separate stability comparators
+        run: bun run e2e:candidates
+      - name: Compare human-approved baselines
+        if: hashFiles('e2e/approved/*.png') != ''
+        run: bash e2e/local/run.sh e2e/visual-check.spec.ts
+      - name: Record pending baseline review
+        if: hashFiles('e2e/approved/*.png') == ''
+        run: echo '::notice::Visual candidates await human review. No approved visual baseline exists; production visual regression approval is pending.'
+      - name: Build review gallery
+        if: always()
+        run: bun e2e/local/gallery.ts
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: ui-candidates-pending-human-approval
+          include-hidden-files: true
+          path: |
+            .cache/a15/candidates
+            .cache/a15/gallery.html
+            test-results
+            playwright-report
   commitlint:
     name: CommitLint
     if: github.event.action != 'closed' || github.event.pull_request.merged != true

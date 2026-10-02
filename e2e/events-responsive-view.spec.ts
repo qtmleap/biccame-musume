@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { expect, type Page, test } from '@playwright/test'
+import { paintEvidence } from './local/support'
 
 const phase = process.env.B02_PHASE ?? 'after'
 const scratch = resolve('.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b02', phase)
@@ -131,6 +132,8 @@ for (const theme of ['light', 'dark'])
         )
         .toBe(true)
       const verified = await themeCheck(page, theme)
+      const exactFonts = await paintEvidence(page, theme)
+      await writeFile(resolve(scratch, `${theme}-${width}-exact-fonts.json`), JSON.stringify(exactFonts, null, 2))
       await page.screenshot({ path: resolve(scratch, `${theme}-${width}.png`), fullPage: true, animations: 'disabled' })
       const evidence = await page.evaluate(() => {
         const rgb = (color: string) => {

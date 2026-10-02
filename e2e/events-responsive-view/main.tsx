@@ -4,7 +4,7 @@ import { Provider } from 'jotai'
 import { createRoot } from 'react-dom/client'
 import { Route as EventsRoute } from '@/app/routes/events/index'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import '@/index.css'
+import './styles.css'
 
 document.documentElement.classList.toggle('dark', new URLSearchParams(location.search).get('theme') === 'dark')
 const root = createRootRoute({ component: Outlet })

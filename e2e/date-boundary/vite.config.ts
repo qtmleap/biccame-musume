@@ -5,6 +5,8 @@ import { defineConfig } from 'vite'
 // 日付境界の実コンポーネントを、Worker・外部サービスなしで検証する。
 export default defineConfig({
   plugins: [react()],
+  cacheDir: resolve(import.meta.dirname, '../../.cache/date-boundary/vite'),
+  optimizeDeps: { entries: ['e2e/date-boundary/index.html'] },
   resolve: { alias: { '@': resolve(import.meta.dirname, '../../src') } },
   define: {
     'import.meta.env.DEV': 'false',

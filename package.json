@@ -15,8 +15,8 @@
     "migrate:new": "DATABASE_URL=file:./shadow.db prisma migrate dev --create-only --config ./prisma/prisma.config.ts",
     "migrate:status": "wrangler d1 migrations list DB --local",
     "generate": "prisma generate",
-    "dev:e2e": "E2E=1 vite --host --port 15300",
-    "e2e": "playwright test",
+    "dev:e2e": "env -u CLOUDFLARE_ENV CLOUDFLARE_VITE_FORCE_LOCAL=true E2E=1 vite --config e2e/local/vite.config.ts",
+    "e2e": "bash e2e/local/run.sh",
     "e2e:map-cluster": "playwright test --config e2e/map-cluster.playwright.config.ts",
     "e2e:location": "playwright test --config e2e/location.playwright.config.ts",
     "deploy": "wrangler deploy --env=${CLOUDFLARE_ENV:-production}",
@@ -32,7 +32,16 @@
     "build-storybook": "STORYBOOK_CATALOGUE_VERIFY=1 storybook build -o .storybook/.artifacts/build && bun .storybook/catalogue/verify-built.ts",
     "test:storybook": "bun run check:storybook && bun run build-storybook && STORYBOOK_CATALOGUE_BUILT=1 playwright test --config .storybook/playwright.config.ts",
     "storybook:inventory": "bun .storybook/catalogue/build-manifest.ts",
-    "check:storybook": "tsc --noEmit -p .storybook/tsconfig.json && bun test ./.storybook/tests/catalogue.test.ts"
+    "check:storybook": "tsc --noEmit -p .storybook/tsconfig.json && bun test ./.storybook/tests/catalogue.test.ts",
+    "e2e:candidates": "A15_CANDIDATES=1 bash e2e/local/run.sh e2e/visual-check.spec.ts",
+    "e2e:regression": "playwright test --config e2e/regression/playwright.config.ts",
+    "e2e:date-boundary": "playwright test --config e2e/date-boundary/playwright.config.ts",
+    "e2e:event-state": "playwright test --config e2e/event-state/playwright.config.ts",
+    "e2e:route-result": "playwright test --config e2e/route-result.config.ts",
+    "e2e:accessibility-controls": "playwright test --config e2e/accessibility-controls/playwright.config.ts",
+    "e2e:event-filter-sheet": "playwright test --config e2e/event-filter-sheet-layout/playwright.config.ts",
+    "e2e:route-empty-state": "playwright test --config e2e/route-empty-state.config.ts",
+    "e2e:auth-fixture": "playwright test --config e2e/auth-fixture.playwright.config.ts"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "~1.54.0",

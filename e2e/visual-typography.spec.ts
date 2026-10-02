@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { expect, type Page, test } from '@playwright/test'
+import { paintEvidence } from './local/support'
 import { events } from './visual-typography/fixtures'
 
 const phase = process.env.B01_PHASE ?? 'after'
@@ -59,6 +60,7 @@ for (const theme of ['light', 'dark']) {
       // Guard rejection is checked for both requested themes and before-mode cannot bypass it.
       await expect(assertRequestedTheme(page, theme === 'dark' ? 'light' : 'dark')).rejects.toThrow()
       const verifiedTheme = await assertRequestedTheme(page, theme)
+      const exactFonts = await paintEvidence(page, theme)
       await page.screenshot({ path: resolve(scratch, `${theme}-${width}.png`), fullPage: true, animations: 'disabled' })
       const evidence = await page.evaluate(() => {
         const box = (element: Element) => {
@@ -157,7 +159,13 @@ for (const theme of ['light', 'dark']) {
       await writeFile(
         resolve(scratch, `${theme}-${width}.json`),
         JSON.stringify(
-          { ...evidence, requestedTheme: theme, verifiedTheme, measuredTheme: await assertRequestedTheme(page, theme) },
+          {
+            exactFonts,
+            ...evidence,
+            requestedTheme: theme,
+            verifiedTheme,
+            measuredTheme: await assertRequestedTheme(page, theme)
+          },
           null,
           2
         )
