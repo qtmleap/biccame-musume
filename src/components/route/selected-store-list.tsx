@@ -40,7 +40,7 @@ export const SelectedStoreList = ({ stores, onRemove, onChangeStation, onClearAl
                 onValueChange={(v) => onChangeStation(store.id, v)}
                 disabled={store.stations.length === 1}
               >
-                <SelectTrigger className='h-9 w-auto min-w-[120px]'>
+                <SelectTrigger aria-label={`${store.name}の利用駅`} className='h-9 w-auto min-w-[120px]'>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -56,6 +56,7 @@ export const SelectedStoreList = ({ stores, onRemove, onChangeStation, onClearAl
                 size='icon'
                 className='size-9 border border-transparent'
                 onClick={() => onRemove(store.id)}
+                aria-label={`${store.name}をルートから削除`}
               >
                 <Trash2 className='size-4' />
               </Button>

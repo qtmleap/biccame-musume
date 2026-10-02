@@ -196,6 +196,7 @@ const EventsContent = () => {
                 <Button
                   size='sm'
                   variant='ghost'
+                  aria-label='イベントを絞り込む'
                   className='md:hidden relative h-9 w-9 p-0 text-muted-foreground hover:text-foreground'
                 >
                   <Filter className='size-4' />
@@ -237,6 +238,7 @@ const EventsContent = () => {
             {/* 表示切り替えボタン */}
             <Toggle
               size='sm'
+              aria-label={viewMode === 'grid' ? '日程表示' : '一覧表示'}
               pressed={viewMode === 'grid'}
               onPressedChange={(pressed) => setViewMode(pressed ? 'grid' : 'gantt')}
               className='h-9 w-9 p-0 text-muted-foreground hover:text-foreground'

@@ -1,12 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import { Award, Cake, Gift, MapPin, Menu, Trophy, Users, X } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
-import { useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useEffect, useState } from 'react'
 import { LoginButton } from '@/components/auth/login-button'
 import { Button } from '@/components/ui/button'
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { useAuth } from '@/hooks/use-auth'
-import { DURATION } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { NAVIGATION_LABELS } from '@/locales/app.content'
 
@@ -35,19 +33,16 @@ export const Header = ({ className }: HeaderProps) => {
 
   const visibleLinks = navLinks.filter((link) => !link.requiresAuth || isAuthenticated)
 
-  /**
-   * メニュートグル
-   */
-  const toggleMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen)
-  }
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 768px)')
+    const closeOnDesktop = () => {
+      if (desktop.matches) setMobileMenuOpen(false)
+    }
+    desktop.addEventListener('change', closeOnDesktop)
+    return () => desktop.removeEventListener('change', closeOnDesktop)
+  }, [])
 
-  /**
-   * メニューを閉じる
-   */
-  const closeMenu = () => {
-    setMobileMenuOpen(false)
-  }
+  const closeMenu = () => setMobileMenuOpen(false)
 
   return (
     <header
@@ -84,109 +79,53 @@ export const Header = ({ className }: HeaderProps) => {
 
           {/* モバイル: メニュー */}
           <div className='md:hidden flex items-center'>
-            <Button
-              variant='ghost'
-              size='icon'
-              className='h-12 w-12 flex items-center justify-center border border-transparent'
-              onClick={toggleMenu}
-              aria-label={mobileMenuOpen ? NAVIGATION_LABELS.closeMenu : NAVIGATION_LABELS.openMenu}
-            >
-              <div className='relative w-6 h-6 flex items-center justify-center'>
-                <motion.div
-                  initial={false}
-                  animate={{
-                    opacity: mobileMenuOpen ? 0 : 1,
-                    rotate: mobileMenuOpen ? 90 : 0,
-                    scale: mobileMenuOpen ? 0.5 : 1
-                  }}
-                  transition={{ duration: DURATION.fast }}
-                  className='absolute'
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant='ghost'
+                  size='icon'
+                  className='h-12 w-12 flex items-center justify-center border border-transparent'
+                  aria-label={NAVIGATION_LABELS.openMenu}
                 >
-                  <Menu />
-                </motion.div>
-                <motion.div
-                  initial={false}
-                  animate={{
-                    opacity: mobileMenuOpen ? 1 : 0,
-                    rotate: mobileMenuOpen ? 0 : -90,
-                    scale: mobileMenuOpen ? 1 : 0.5
-                  }}
-                  transition={{ duration: DURATION.fast }}
-                  className='absolute'
-                >
-                  <X />
-                </motion.div>
-              </div>
-            </Button>
+                  <Menu aria-hidden='true' />
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                aria-describedby={undefined}
+                side='top'
+                showCloseButton={false}
+                className='max-h-[100dvh] overflow-y-auto'
+              >
+                <SheetTitle className='sr-only'>メニュー</SheetTitle>
+                <SheetClose asChild>
+                  <Button variant='ghost' size='icon' className='self-end m-2' aria-label={NAVIGATION_LABELS.closeMenu}>
+                    <X aria-hidden='true' />
+                  </Button>
+                </SheetClose>
+                <nav aria-label='メインナビゲーション' className='px-4 pb-4'>
+                  <div className='flex flex-col gap-1'>
+                    {visibleLinks.map((link) => {
+                      const Icon = link.icon
+                      return (
+                        <Link
+                          key={link.to}
+                          to={link.to}
+                          onClick={closeMenu}
+                          className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
+                        >
+                          <Icon className='w-6 h-6' aria-hidden='true' />
+                          {link.label}
+                        </Link>
+                      )
+                    })}
+                    <LoginButton variant='menu' onClose={closeMenu} />
+                  </div>
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>
-
-      {/* モバイルナビゲーション(オーバーレイ) */}
-      {typeof document !== 'undefined' &&
-        createPortal(
-          <AnimatePresence>
-            {mobileMenuOpen && (
-              <>
-                {/* 背景オーバーレイ */}
-                <motion.button
-                  type='button'
-                  className='fixed inset-0 backdrop-blur-xs md:hidden z-40'
-                  onClick={closeMenu}
-                  aria-label={NAVIGATION_LABELS.closeMenu}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: DURATION.fast }}
-                />
-
-                {/* メニュー本体 */}
-                <motion.nav
-                  className='fixed top-12 left-0 right-0 md:hidden bg-background border-b border-border shadow-lg z-50'
-                  initial={{ y: -16, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -16, opacity: 0 }}
-                  transition={{ duration: DURATION.fast, ease: 'easeOut' }}
-                >
-                  <div className='mx-auto px-4 py-4'>
-                    <div className='flex flex-col gap-1'>
-                      {visibleLinks.map((link, index) => {
-                        const Icon = link.icon
-                        return (
-                          <motion.div
-                            key={link.to}
-                            initial={{ x: -16, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            exit={{ x: -16, opacity: 0 }}
-                            transition={{ duration: DURATION.fast, delay: index * 0.05, ease: 'easeOut' }}
-                          >
-                            <Link
-                              to={link.to}
-                              onClick={closeMenu}
-                              className='flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200 text-muted-foreground hover:text-foreground hover:bg-muted'
-                            >
-                              <Icon className='w-6 h-6' />
-                              {link.label}
-                            </Link>
-                          </motion.div>
-                        )
-                      })}
-                      <motion.div
-                        initial={{ x: -16, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: -16, opacity: 0 }}
-                        transition={{ duration: DURATION.fast, delay: visibleLinks.length * 0.05, ease: 'easeOut' }}
-                      >
-                        <LoginButton variant='menu' onClose={closeMenu} />
-                      </motion.div>
-                    </div>
-                  </div>
-                </motion.nav>
-              </>
-            )}
-          </AnimatePresence>,
-          document.body
-        )}
     </header>
   )
 }
