@@ -59,6 +59,8 @@ const router = createRouter({
   routeTree: root.addChildren(destinations),
   history: createMemoryHistory({ initialEntries: ['/events'] })
 })
+// Keep the requested fixture theme across document reloads as well as initial rendering.
+document.documentElement.classList.toggle('dark', new URLSearchParams(location.search).get('theme') === 'dark')
 const container = document.getElementById('root')
 if (!container) throw new Error('Missing test root')
 createRoot(container).render(
