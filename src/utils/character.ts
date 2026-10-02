@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { prefectureToRegion, type RegionType } from '@/atoms/filter-atom'
 import type { StoreData } from '@/schemas/store.dto'
+import { getJstDateKey } from '@/utils/jst-date'
 
 /**
  * 名前がスラッシュで区切られている場合、最初の部分のみ返す
@@ -47,25 +48,28 @@ export const getBirthdayCharacters = (characters: StoreData[], devCharacterId?: 
 }
 
 /**
- * 誕生日が近い順にソートするための日数計算（絶対値）
- * 今日を基準に、今年と来年の誕生日のうち、より近い方の日数を返す
+ * JSTの日付を基準に、次の誕生日までの非負日数を返す
+ * 2月29日は非うるう年では2月28日として扱う
  */
-export const getDaysFromBirthday = (dateStr: string | undefined | null): number => {
+export const getDaysFromBirthday = (dateStr: string | undefined | null, nowIso = dayjs().toISOString()): number => {
   if (!dateStr) return Number.MAX_SAFE_INTEGER
   const birthday = parseDate(dateStr)
   if (!birthday) return Number.MAX_SAFE_INTEGER
+  // dayjsが存在しない日付を翌月・翌年へ繰り上げる場合も未登録と同じ扱いにする。
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr) && birthday.format('YYYY-MM-DD') !== dateStr) {
+    return Number.MAX_SAFE_INTEGER
+  }
 
-  const currentTime = dayjs()
-  const thisYear = currentTime.year()
-  const birthdayThisYear = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
-  const birthdayNextYear = birthdayThisYear.add(1, 'year')
+  const today = dayjs.utc(getJstDateKey(nowIso))
+  if (!today.isValid()) return Number.MAX_SAFE_INTEGER
+  let birthdayMonth = today.startOf('year').month(birthday.month())
+  let nextBirthday = birthdayMonth.date(Math.min(birthday.date(), birthdayMonth.daysInMonth()))
+  if (nextBirthday.isBefore(today)) {
+    birthdayMonth = today.add(1, 'year').startOf('year').month(birthday.month())
+    nextBirthday = birthdayMonth.date(Math.min(birthday.date(), birthdayMonth.daysInMonth()))
+  }
 
-  // 今年の誕生日と来年の誕生日、両方との差の絶対値を計算
-  const diffThisYear = Math.abs(birthdayThisYear.diff(currentTime, 'day'))
-  const diffNextYear = Math.abs(birthdayNextYear.diff(currentTime, 'day'))
-
-  // より近い方を返す
-  return Math.min(diffThisYear, diffNextYear)
+  return nextBirthday.diff(today, 'day')
 }
 
 /**
