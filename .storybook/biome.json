@@ -1,0 +1,65 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "plugins": [
+    "../biome-plugins/no-let.grit",
+    "../biome-plugins/no-new-date.grit",
+    "../biome-plugins/no-nullish-coalescing.grit",
+    "../biome-plugins/no-or-fallback.grit",
+    "../biome-plugins/no-type-assertion.grit",
+    "../biome-plugins/no-while-loop.grit",
+    "../biome-plugins/no-bare-z-string.grit",
+    "../biome-plugins/no-tri-state-z-array.grit",
+    "../biome-plugins/no-tri-state-z-boolean.grit",
+    "../biome-plugins/prefer-z-nonempty.grit",
+    "../biome-plugins/prefer-z-safe-parse.grit",
+    "../biome-plugins/prefer-z-url.grit",
+    "../biome-plugins/prefer-z-uuid.grit"
+  ],
+  "files": {
+    "includes": ["**", "!**/.artifacts", "!**/.cache"]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "correctness": {},
+      "a11y": {}
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "includes": ["**"],
+    "attributePosition": "auto",
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 120
+  },
+  "javascript": {
+    "formatter": {
+      "enabled": true,
+      "arrowParentheses": "always",
+      "bracketSameLine": false,
+      "bracketSpacing": true,
+      "jsxQuoteStyle": "single",
+      "quoteStyle": "single",
+      "quoteProperties": "asNeeded",
+      "semicolons": "asNeeded",
+      "trailingCommas": "none"
+    }
+  },
+  "json": {
+    "formatter": {
+      "trailingCommas": "none"
+    }
+  },
+  "root": false
+}
