@@ -1,4 +1,5 @@
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 import { toast } from 'sonner'
 import type { Event, EventDetail, EventRequest } from '@/schemas/event.dto'
 import { client } from '@/utils/client'
@@ -36,15 +37,15 @@ export const useEvent = (eventId: string) => {
  * 新規作成と編集を統合した画面で使用
  */
 export const useEventOrNull = (eventId: string) => {
-  return useSuspenseQuery({
-    queryKey: ['events', eventId || '__none__'],
+  return useQuery({
+    queryKey: ['events', 'optional', eventId],
     queryFn: async () => {
       if (!eventId) return null
       try {
         return await client.getEvent({ params: { id: eventId } })
-      } catch (_error) {
-        // 404の場合はnullを返す（新規作成モード）
-        return null
+      } catch (error) {
+        if (isAxiosError(error) && error.response?.status === 404) return null
+        throw error
       }
     },
     staleTime: 0,
