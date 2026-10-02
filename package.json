@@ -20,7 +20,8 @@
     "deploy": "wrangler deploy --env=${CLOUDFLARE_ENV:-production}",
     "badges:seed": "bun --preload ./scripts/virtual-characters-plugin.ts scripts/seed-badges.ts",
     "e2e:navigation-filter-sharing": "playwright test --config e2e/navigation-filter-sharing/playwright.config.ts",
-    "e2e:visual-typography": "playwright test --config e2e/visual-typography/playwright.config.ts"
+    "e2e:visual-typography": "playwright test --config e2e/visual-typography/playwright.config.ts",
+    "e2e:character-search-layout": "playwright test --config e2e/character-search-layout/playwright.config.ts"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "~1.54.0",

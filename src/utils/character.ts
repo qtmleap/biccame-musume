@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import jaconv from 'jaconv'
 import { prefectureToRegion, type RegionType } from '@/atoms/filter-atom'
 import type { StoreData } from '@/schemas/store.dto'
 import { getJstDateKey } from '@/utils/jst-date'
@@ -104,15 +105,23 @@ export const categorizeCharacters = (characters: StoreData[]) => {
 /**
  * キャラクターを地域でフィルタリング
  */
-export const filterCharactersByRegion = (characters: StoreData[], region: RegionType): StoreData[] => {
-  if (region === 'all') return characters
+const normalizeCharacterSearch = (value: string): string =>
+  jaconv.toKatakana(jaconv.toZen(value)).toLowerCase().replace(/\s/g, '')
 
+export const filterCharactersByRegion = (characters: StoreData[], region: RegionType, query = ''): StoreData[] => {
+  const normalizedQuery = normalizeCharacterSearch(query)
   return characters.filter((character) => {
-    // 都道府県フィールドから地域を判定
-    const prefecture = character.prefecture
-    if (!prefecture) return false
-    const characterRegion = prefectureToRegion[prefecture]
-    return characterRegion === region
+    const matchesRegion =
+      region === 'all' || (character.prefecture && prefectureToRegion[character.prefecture] === region)
+    const searchTerms = [
+      character.character?.name,
+      ...(character.character.aliases ? character.character.aliases : []),
+      character.store?.name
+    ]
+    return (
+      Boolean(matchesRegion) &&
+      (!normalizedQuery || searchTerms.some((term) => term && normalizeCharacterSearch(term).includes(normalizedQuery)))
+    )
   })
 }
 
