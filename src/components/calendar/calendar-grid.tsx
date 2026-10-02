@@ -123,7 +123,7 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                 style={hasEvents ? { filter: STICKER_SHADOW_SM } : undefined}
                 aria-label={`${year}年${month}月${day}日${isHoliday ? `(${holidayName})` : ''}${hasEvents ? `(イベント${dayEvents.length}件)` : ''}`}
                 className={cn(
-                  'min-h-20 p-1.5 rounded-xl text-left',
+                  'min-h-24 min-w-0 p-1.5 rounded-xl text-left text-foreground',
                   isToday ? 'bg-calendar-today border-2 border-calendar-today-border' : 'bg-card',
                   hasEvents && 'cursor-pointer'
                 )}
@@ -150,18 +150,27 @@ export const CalendarGrid = ({ year, month, events, onDayClick }: CalendarGridPr
                   )}
                   {/* アイコン */}
                   {hasEvents && (
-                    <div className='flex-1 flex flex-wrap items-center justify-center gap-1 py-1'>
+                    <div className='flex-1 flex flex-col items-center gap-2 py-2'>
                       {dayEvents.map((event) => (
-                        <Avatar key={`${event.character.id}-${event.type}`} className='w-8 h-8'>
-                          <AvatarImage
-                            src={event.character.character?.image_url}
-                            alt={event.character.character?.name || ''}
-                            className='object-cover object-top scale-150 translate-y-2'
-                          />
-                          <AvatarFallback className='text-xs bg-muted'>
-                            {event.character.character?.name?.slice(0, 1) || '?'}
-                          </AvatarFallback>
-                        </Avatar>
+                        <div
+                          key={`${event.character.id}-${event.type}`}
+                          className='flex flex-col items-center gap-1 w-full min-w-0'
+                        >
+                          <Avatar className='w-12 h-12 shrink-0'>
+                            <AvatarImage
+                              src={event.character.character?.image_url}
+                              alt={event.character.character.name}
+                              className='object-cover object-top scale-150 translate-y-2'
+                            />
+                            <AvatarFallback className='text-sm bg-muted text-foreground'>
+                              {event.character.character?.name?.slice(0, 1) || '?'}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className='text-sm leading-5 font-medium text-foreground break-words text-center w-full'>
+                            {event.character.character?.name ||
+                              event.character.store?.name?.replace(/^ビックカメラ/, '')}
+                          </span>
+                        </div>
                       ))}
                     </div>
                   )}
