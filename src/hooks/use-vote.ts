@@ -1,4 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useAuth } from '@/hooks/use-auth'
+import { userQueryKeys } from '@/lib/user-query-keys'
 import type { VoteResponse } from '@/schemas/vote.dto'
 import { client } from '@/utils/client'
 
@@ -16,13 +18,14 @@ const submitVote = async (characterId: string): Promise<VoteResponse> => {
  */
 export const useVote = (characterId: string) => {
   const queryClient = useQueryClient()
+  const { user } = useAuth()
   return useMutation({
     mutationFn: () => submitVote(characterId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ranking'] })
       // バッジ評価はサーバー側で waitUntil 実行されるため、少し遅らせて再取得
       setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+        queryClient.invalidateQueries({ queryKey: userQueryKeys.badges(user === null ? '' : user.uid) })
       }, BADGE_REFETCH_DELAY_MS)
     }
   })

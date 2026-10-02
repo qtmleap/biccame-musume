@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { useAuth } from '@/hooks/use-auth'
+import { userQueryKeys } from '@/lib/user-query-keys'
 import { client } from '@/utils/client'
-
-const queryKey = ['me', 'favorites']
 
 /**
  * お気に入りキャラクター取得・操作カスタムフック
@@ -10,9 +10,12 @@ const queryKey = ['me', 'favorites']
  */
 export const useFavorites = () => {
   const queryClient = useQueryClient()
+  const { user } = useAuth()
+  const queryKey = userQueryKeys.favorites(user === null ? '' : user.uid)
 
   const { data } = useSuspenseQuery({
     queryKey,
+    meta: { persist: false },
     queryFn: () => client.getFavoriteCharacters()
   })
 

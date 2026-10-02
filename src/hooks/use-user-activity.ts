@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@/hooks/use-auth'
+import { userQueryKeys } from '@/lib/user-query-keys'
 import { client } from '@/utils/client'
 
 const BADGE_REFETCH_DELAY_MS = 2500
@@ -18,12 +19,13 @@ const EMPTY_ACTIVITY = {
  * ユーザーアクティビティを取得・操作するカスタムフック
  */
 export const useUserActivity = () => {
-  const queryKey = ['user_activities']
   const queryClient = useQueryClient()
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
+  const queryKey = userQueryKeys.activities(user === null ? '' : user.uid)
 
   const { data } = useQuery({
-    queryKey: queryKey,
+    queryKey,
+    meta: { persist: false },
     queryFn: async () => {
       return client.getUserActivities()
     },
@@ -45,7 +47,7 @@ export const useUserActivity = () => {
       invalidate()
       // バッジ評価はサーバー側で waitUntil 実行されるため、少し遅らせて再取得
       setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+        queryClient.invalidateQueries({ queryKey: userQueryKeys.badges(user === null ? '' : user.uid) })
       }, BADGE_REFETCH_DELAY_MS)
     }
   })
@@ -81,7 +83,7 @@ export const useUserActivity = () => {
       invalidate()
       // バッジ評価はサーバー側で waitUntil 実行されるため、少し遅らせて再取得
       setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+        queryClient.invalidateQueries({ queryKey: userQueryKeys.badges(user === null ? '' : user.uid) })
       }, BADGE_REFETCH_DELAY_MS)
     }
   })
