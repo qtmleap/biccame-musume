@@ -7,6 +7,7 @@ import { StoreList } from '@/components/location/store-list'
 import { SelectedStoreInfo } from '@/components/selected-store-info'
 import { useCharacters } from '@/hooks/use-characters'
 import type { StoreData } from '@/schemas/store.dto'
+import { getStorePosition } from '@/utils/store-position'
 
 /**
  * 検索パラメータのスキーマ
@@ -14,16 +15,6 @@ import type { StoreData } from '@/schemas/store.dto'
 const SearchParamsSchema = z.object({
   id: z.string().optional()
 })
-
-/**
- * キャラクターから座標を取得する関数
- */
-const getPosition = (character: StoreData): google.maps.LatLngLiteral => {
-  if (character.coordinates) {
-    return { lat: character.coordinates.latitude, lng: character.coordinates.longitude }
-  }
-  return { lat: 35.6812, lng: 139.7671 }
-}
 
 /**
  * マップ内部コンポーネント（useMapはAPIProviderの子から呼ぶ必要がある）
@@ -43,11 +34,12 @@ const LocationMapInner = ({
 }) => {
   const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral | null>(null)
   const map = useMap()
+  const selectedPosition = selectedCharacter ? getStorePosition(selectedCharacter) : null
 
   const moveToCharacter = useCallback(
     (character: StoreData) => {
-      const pos = getPosition(character)
-      if (map) {
+      const pos = getStorePosition(character)
+      if (map && pos) {
         map.panTo(pos)
         map.setZoom(17)
       }
@@ -69,8 +61,8 @@ const LocationMapInner = ({
   return (
     <>
       <GoogleMap
-        defaultCenter={selectedCharacter ? getPosition(selectedCharacter) : { lat: 35.6812, lng: 139.7671 }}
-        defaultZoom={selectedCharacter ? 17 : 5}
+        defaultCenter={selectedPosition ?? { lat: 35.6812, lng: 139.7671 }}
+        defaultZoom={selectedPosition ? 17 : 5}
         mapId='biccamera-stores-map'
         gestureHandling='greedy'
         mapTypeControl={false}
@@ -85,7 +77,8 @@ const LocationMapInner = ({
         }}
       >
         {characters.map((character) => {
-          const position = getPosition(character)
+          const position = getStorePosition(character)
+          if (!position) return null
           return (
             <AdvancedMarker key={character.id} position={position} onClick={() => handleMarkerClick(character)}>
               <Pin background='#e50012' borderColor='#fef2f4' glyphColor='#fef2f4' />
