@@ -76,15 +76,22 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
           {tape && (
             <div aria-hidden className={cn('absolute rounded-sm', tape.position, tape.size, tape.color, tape.angle)} />
           )}
-          <div className='mb-2 flex items-start justify-between gap-3'>
+          <div data-event-heading className='mb-2'>
             <div className='flex-1 min-w-0'>
               <div className='mb-1.5 flex flex-wrap items-center gap-1.5'>
+                {!compact && (
+                  <span data-status-badge className='ml-auto order-last'>
+                    {STATUS_BADGE[event.status]()}
+                  </span>
+                )}
                 {CATEGORY_BADGE[event.category](EVENT_CATEGORY_LABELS[event.category])}
                 <EventCharacterBadge event={event} />
               </div>
-              <h3 className='text-base font-semibold text-foreground line-clamp-2'>{event.title}</h3>
-              <div className='mt-1 flex flex-col gap-1 text-xs text-muted-foreground'>
-                <span className='flex items-center gap-1'>
+              <h3 className='text-base leading-6 font-semibold text-foreground line-clamp-2 break-words'>
+                {event.title}
+              </h3>
+              <div className='mt-1 flex flex-col gap-1 text-[13px] leading-5 text-muted-foreground'>
+                <span className='flex flex-wrap items-center gap-1'>
                   <Calendar className='size-3.5' />
                   <span>{dayjs(event.startDate).format('YYYY/MM/DD')}</span>
                   {event.endDate ? (
@@ -98,7 +105,7 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
                 </span>
                 <div className='flex flex-wrap items-center gap-2'>
                   {event.stores && event.stores.length > 0 && (
-                    <span className='flex items-center gap-1'>
+                    <span className='flex flex-wrap items-center gap-1'>
                       <Store className='size-3.5' />
                       {event.stores.length === 1
                         ? STORE_NAME_LABELS[event.stores[0] as StoreKey]
@@ -106,7 +113,7 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
                     </span>
                   )}
                   {event.limitedQuantity && !event.conditions.some((c) => c.type === 'everyone') && (
-                    <span className='flex items-center gap-1'>
+                    <span className='flex flex-wrap items-center gap-1'>
                       <Package className='size-3.5' />
                       限定{event.limitedQuantity}個
                     </span>
@@ -114,7 +121,6 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
                 </div>
               </div>
             </div>
-            {!compact && STATUS_BADGE[event.status]()}
           </div>
 
           {!compact &&

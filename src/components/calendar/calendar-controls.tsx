@@ -25,7 +25,13 @@ export const CalendarHeader = ({ year, month, onPrevMonth, onNextMonth, onCurren
       transition={{ duration: DURATION.fast * 2, ease: EASE_OUT }}
       className='flex items-center justify-between pb-2 md:pb-4'
     >
-      <Button variant='ghost' size='icon' onClick={onPrevMonth} className='rounded-full border border-transparent'>
+      <Button
+        variant='ghost'
+        size='icon'
+        onClick={onPrevMonth}
+        aria-label='前の月'
+        className='rounded-full border border-transparent'
+      >
         <ChevronLeft className='h-5 w-5' />
       </Button>
       <button
@@ -35,7 +41,13 @@ export const CalendarHeader = ({ year, month, onPrevMonth, onNextMonth, onCurren
       >
         {year}年{month}月
       </button>
-      <Button variant='ghost' size='icon' onClick={onNextMonth} className='rounded-full border border-transparent'>
+      <Button
+        variant='ghost'
+        size='icon'
+        onClick={onNextMonth}
+        aria-label='次の月'
+        className='rounded-full border border-transparent'
+      >
         <ChevronRight className='h-5 w-5' />
       </Button>
     </motion.div>
@@ -66,6 +78,7 @@ export const CalendarMonthTabs = ({ selectedMonth, onSelectMonth }: CalendarMont
             <Button
               variant='secondary'
               onClick={() => onSelectMonth(month)}
+              aria-pressed={isSelected}
               size='sm'
               className={cn(
                 'shrink-0 rounded-full px-4 text-sm border',
