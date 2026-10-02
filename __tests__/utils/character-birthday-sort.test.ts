@@ -67,6 +67,18 @@ test('unsupported date formats and invalid timestamp clock fields receive the se
   }
 })
 
+test.each(['2016/10/2T12:00:00+00:00', '2016-10-2T12:00:00Z', '2016/10/02T12:00:00Z'])(
+  'supported numeric birthday and timestamp combination %s retains the calendar date',
+  (birthday) => {
+    expect(getDaysFromBirthday(birthday, '2026-10-02T03:00:00.000Z')).toBe(0)
+  }
+)
+
+test('timestamp offset does not move the numeric birthday calendar date', () => {
+  expect(getDaysFromBirthday('2016-10-03T00:00:00+09:00', '2026-10-02T03:00:00.000Z')).toBe(1)
+  expect(getDaysFromBirthday('2016-10-01T23:00:00-09:00', '2026-10-02T03:00:00.000Z')).toBe(364)
+})
+
 test('existing callers can omit the explicit instant and still use JST', () => {
   setSystemTime(dayjs('2026-10-01T15:00:00.000Z').toDate())
   expect(getDaysFromBirthday('2016-10-02')).toBe(0)
