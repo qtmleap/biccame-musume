@@ -1,6 +1,8 @@
 import dayjs from 'dayjs'
+import jaconv from 'jaconv'
 import { prefectureToRegion, type RegionType } from '@/atoms/filter-atom'
 import type { StoreData } from '@/schemas/store.dto'
+import { getJstDateKey } from '@/utils/jst-date'
 
 /**
  * 名前がスラッシュで区切られている場合、最初の部分のみ返す
@@ -47,25 +49,36 @@ export const getBirthdayCharacters = (characters: StoreData[], devCharacterId?: 
 }
 
 /**
- * 誕生日が近い順にソートするための日数計算（絶対値）
- * 今日を基準に、今年と来年の誕生日のうち、より近い方の日数を返す
+ * JSTの日付を基準に、次の誕生日までの非負日数を返す
+ * 2月29日は非うるう年では2月28日として扱う
  */
-export const getDaysFromBirthday = (dateStr: string | undefined | null): number => {
+export const getDaysFromBirthday = (dateStr: string | undefined | null, nowIso = dayjs().toISOString()): number => {
   if (!dateStr) return Number.MAX_SAFE_INTEGER
-  const birthday = parseDate(dateStr)
-  if (!birthday) return Number.MAX_SAFE_INTEGER
+  // 誕生日は年から始まる数値形式に限定し、曖昧な地域形式は受け付けない。
+  const dateParts =
+    /^(\d{4})([-/])(\d{1,2})\2(\d{1,2})(?:[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.\d{1,3})?)?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)?)?$/.exec(
+      dateStr
+    )
+  if (!dateParts || Number(dateParts[5]) > 23 || Number(dateParts[6]) > 59 || Number(dateParts[7]) > 59) {
+    return Number.MAX_SAFE_INTEGER
+  }
+  // dayjsが存在しない日付を翌月・翌年へ繰り上げる場合も未登録と同じ扱いにする。
+  const calendarDate = `${dateParts[1]}-${dateParts[3].padStart(2, '0')}-${dateParts[4].padStart(2, '0')}`
+  const birthday = dayjs.utc(calendarDate)
+  if (birthday.format('YYYY-MM-DD') !== calendarDate) {
+    return Number.MAX_SAFE_INTEGER
+  }
 
-  const currentTime = dayjs()
-  const thisYear = currentTime.year()
-  const birthdayThisYear = dayjs().year(thisYear).month(birthday.month()).date(birthday.date())
-  const birthdayNextYear = birthdayThisYear.add(1, 'year')
+  const today = dayjs.utc(getJstDateKey(nowIso))
+  if (!today.isValid()) return Number.MAX_SAFE_INTEGER
+  let birthdayMonth = today.startOf('year').month(birthday.month())
+  let nextBirthday = birthdayMonth.date(Math.min(birthday.date(), birthdayMonth.daysInMonth()))
+  if (nextBirthday.isBefore(today)) {
+    birthdayMonth = today.add(1, 'year').startOf('year').month(birthday.month())
+    nextBirthday = birthdayMonth.date(Math.min(birthday.date(), birthdayMonth.daysInMonth()))
+  }
 
-  // 今年の誕生日と来年の誕生日、両方との差の絶対値を計算
-  const diffThisYear = Math.abs(birthdayThisYear.diff(currentTime, 'day'))
-  const diffNextYear = Math.abs(birthdayNextYear.diff(currentTime, 'day'))
-
-  // より近い方を返す
-  return Math.min(diffThisYear, diffNextYear)
+  return nextBirthday.diff(today, 'day')
 }
 
 /**
@@ -92,15 +105,23 @@ export const categorizeCharacters = (characters: StoreData[]) => {
 /**
  * キャラクターを地域でフィルタリング
  */
-export const filterCharactersByRegion = (characters: StoreData[], region: RegionType): StoreData[] => {
-  if (region === 'all') return characters
+const normalizeCharacterSearch = (value: string): string =>
+  jaconv.toKatakana(jaconv.toZen(value)).toLowerCase().replace(/\s/g, '')
 
+export const filterCharactersByRegion = (characters: StoreData[], region: RegionType, query = ''): StoreData[] => {
+  const normalizedQuery = normalizeCharacterSearch(query)
   return characters.filter((character) => {
-    // 都道府県フィールドから地域を判定
-    const prefecture = character.prefecture
-    if (!prefecture) return false
-    const characterRegion = prefectureToRegion[prefecture]
-    return characterRegion === region
+    const matchesRegion =
+      region === 'all' || (character.prefecture && prefectureToRegion[character.prefecture] === region)
+    const searchTerms = [
+      character.character?.name,
+      ...(character.character.aliases ? character.character.aliases : []),
+      character.store?.name
+    ]
+    return (
+      Boolean(matchesRegion) &&
+      (!normalizedQuery || searchTerms.some((term) => term && normalizeCharacterSearch(term).includes(normalizedQuery)))
+    )
   })
 }
 

@@ -218,36 +218,30 @@ export const getEventsStats = async (
   env: Bindings,
   eventIds: string[]
 ): Promise<Record<string, { interestedCount: number; completedCount: number }>> => {
-  if (eventIds.length === 0) return {}
+  const uniqueIds = [...new Set(eventIds)]
+  if (uniqueIds.length === 0) return {}
 
   const prisma = getPrisma(env)
-
-  const [interestedCounts, completedCounts] = await Promise.all([
-    prisma.userEvent.groupBy({
-      by: ['eventId'],
-      where: { eventId: { in: eventIds }, status: 'interested' },
-      _count: { eventId: true }
-    }),
-    prisma.userEvent.groupBy({
-      by: ['eventId'],
-      where: { eventId: { in: eventIds }, status: 'completed' },
-      _count: { eventId: true }
-    })
-  ])
-
   const result: Record<string, { interestedCount: number; completedCount: number }> = {}
+  for (const id of uniqueIds) result[id] = { interestedCount: 0, completedCount: 0 }
 
-  for (const id of eventIds) {
-    result[id] = { interestedCount: 0, completedCount: 0 }
+  // Event groups can contain more IDs than the public API accepts; keep each DB query bounded.
+  for (let start = 0; start < uniqueIds.length; start += 50) {
+    const batch = uniqueIds.slice(start, start + 50)
+    const [interestedCounts, completedCounts] = await Promise.all([
+      prisma.userEvent.groupBy({
+        by: ['eventId'],
+        where: { eventId: { in: batch }, status: 'interested' },
+        _count: { eventId: true }
+      }),
+      prisma.userEvent.groupBy({
+        by: ['eventId'],
+        where: { eventId: { in: batch }, status: 'completed' },
+        _count: { eventId: true }
+      })
+    ])
+    for (const item of interestedCounts) result[item.eventId].interestedCount = item._count.eventId
+    for (const item of completedCounts) result[item.eventId].completedCount = item._count.eventId
   }
-
-  for (const item of interestedCounts) {
-    result[item.eventId].interestedCount = item._count.eventId
-  }
-
-  for (const item of completedCounts) {
-    result[item.eventId].completedCount = item._count.eventId
-  }
-
   return result
 }
