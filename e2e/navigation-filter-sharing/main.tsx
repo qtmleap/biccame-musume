@@ -7,14 +7,14 @@ import { Route as CharactersRoute } from '@/app/routes/characters/index'
 import { Route as EventsRoute } from '@/app/routes/events/index'
 import { Route as HomeRoute } from '@/app/routes/index'
 import { Route as LocationRoute } from '@/app/routes/location/index'
-import { backendSessionReadyAtom, userAtom } from '@/atoms/auth-atom'
+import { backendSessionStateAtom, userAtom } from '@/atoms/auth-atom'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import '@/index.css'
 
 // Synthetic signed-in presentation fixture only; no Firebase login or real account.
 const store = createStore()
 store.set(userAtom, { uid: 'synthetic-a14', displayName: 'テスト利用者' } as User)
-store.set(backendSessionReadyAtom, true)
+store.set(backendSessionStateAtom, { status: 'ready', uid: 'synthetic-a14' })
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
 const root = createRootRoute({
   component: () => (
