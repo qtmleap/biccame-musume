@@ -57,3 +57,36 @@ for (const mode of ['grid', 'gantt'])
     await expect(page.getByText('条件に一致するイベントはありません')).toHaveCount(0)
     await expect(page.getByText('イベント1', { exact: true }).first()).toBeVisible()
   })
+
+const manyEvents = [
+  ...events,
+  ...Array.from({ length: 47 }, (_, i) => ({
+    ...events[0],
+    uuid: `550e8400-e29b-41d4-a716-${String(i + 13).padStart(12, '0')}`,
+    title: `イベント${i + 14}`,
+    category: 'other'
+  }))
+]
+
+test('filter_change_resets_page_before_clamping', async ({ page }) => {
+  await page.route('**/api/events', (route) => route.fulfill({ json: manyEvents }))
+  await page.goto('/e2e/event-state/index.html')
+  await expect(page.getByText('全 60 件中 1–12 件を表示')).toBeVisible()
+  await page.getByRole('link', { name: '5', exact: true }).click()
+  await expect(page.getByLabel('所有ページ', { exact: true })).toHaveText('5')
+  await page.locator('#category-other').last().click()
+  await expect(page.getByText('全 13 件中 1–12 件を表示')).toBeVisible()
+  await expect(page.getByLabel('所有ページ', { exact: true })).toHaveText('1')
+})
+
+test('refetch_only_clamps_page_to_last_remaining_page', async ({ page }) => {
+  await page.route('**/api/events', (route) => route.fulfill({ json: manyEvents }))
+  await page.goto('/e2e/event-state/index.html')
+  await expect(page.getByText('全 60 件中 1–12 件を表示')).toBeVisible()
+  await page.getByRole('link', { name: '5', exact: true }).click()
+  await expect(page.getByLabel('所有ページ', { exact: true })).toHaveText('5')
+  await page.route('**/api/events', (route) => route.fulfill({ json: events }))
+  await page.getByRole('button', { name: '一覧再取得' }).click()
+  await expect(page.getByText('全 13 件中 13–13 件を表示')).toBeVisible()
+  await expect(page.getByLabel('所有ページ', { exact: true })).toHaveText('2')
+})
