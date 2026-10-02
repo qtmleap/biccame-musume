@@ -175,10 +175,12 @@ const EventsContent = () => {
     setPage(1)
   }, [setPage, categoryFilter, storeFilter, regionFilter, statusFilter, activityFilter])
 
-  const effectivePage = Math.min(Math.max(1, page), Math.max(1, Math.ceil(activeEvents.length / PER_PAGE)))
+  const totalPages = Math.max(1, Math.ceil(activeEvents.length / PER_PAGE))
+  const effectivePage = Math.min(Math.max(1, page), totalPages)
   useEffect(() => {
-    if (page !== effectivePage) setPage(effectivePage)
-  }, [page, effectivePage, setPage])
+    // Clamp the current owner so a filter reset queued above is preserved.
+    if (page !== effectivePage) setPage((currentPage) => Math.min(Math.max(1, currentPage), totalPages))
+  }, [page, effectivePage, totalPages, setPage])
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
