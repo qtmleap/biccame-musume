@@ -51,7 +51,7 @@ test('events_owner_page_clamps_when_refetch_shrinks', async ({ page }) => {
 for (const mode of ['grid', 'gantt'])
   test(`filtered_empty_state_offers_reset_${mode}`, async ({ page }) => {
     await page.addInitScript((viewMode) => localStorage.setItem('event-view-mode', JSON.stringify(viewMode)), mode)
-    await page.goto('/e2e/event-state/index.html?path=/events/?store=missing')
+    await page.goto('/e2e/event-state/index.html?path=/events/?store=abeno')
     await expect(page.getByText('条件に一致するイベントはありません')).toBeVisible()
     await page.getByRole('button', { name: '条件を解除', exact: true }).click()
     await expect(page.getByText('条件に一致するイベントはありません')).toHaveCount(0)
@@ -74,7 +74,7 @@ test('filter_change_resets_page_before_clamping', async ({ page }) => {
   await expect(page.getByText('全 60 件中 1–12 件を表示')).toBeVisible()
   await page.getByRole('link', { name: '5', exact: true }).click()
   await expect(page.getByLabel('所有ページ', { exact: true })).toHaveText('5')
-  await page.locator('#category-other').last().click()
+  await page.getByRole('checkbox', { name: 'その他', exact: true }).click()
   await expect(page.getByText('全 13 件中 1–12 件を表示')).toBeVisible()
   await expect(page.getByLabel('所有ページ', { exact: true })).toHaveText('1')
 })

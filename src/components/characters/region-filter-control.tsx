@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai'
 import { motion } from 'motion/react'
 import { RadioGroup } from 'radix-ui'
-import { regionFilterAtom } from '@/atoms/filter-atom'
+import { type RegionType, regionFilterAtom } from '@/atoms/filter-atom'
 import { FilterHeader } from '@/components/common/filter-header'
 import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
@@ -11,9 +11,22 @@ import { RegionSchema } from '@/schemas/store.dto'
 /**
  * 地域フィルター制御コンポーネント
  */
-export const RegionFilterControl = () => {
-  const [region, setRegion] = useAtom(regionFilterAtom)
+type RegionFilterControlProps = {
+  value: RegionType
+  onChange: (value: RegionType) => void
+}
 
+export const RegionFilterControl = (props: RegionFilterControlProps | Record<string, never>) => {
+  if ('value' in props) return <ControlledRegionFilter value={props.value} onChange={props.onChange} />
+  return <CharacterRegionFilter />
+}
+
+const CharacterRegionFilter = () => {
+  const [region, setRegion] = useAtom(regionFilterAtom)
+  return <ControlledRegionFilter value={region} onChange={setRegion} />
+}
+
+const ControlledRegionFilter = ({ value: region, onChange: setRegion }: RegionFilterControlProps) => {
   const regionOptions = RegionSchema.options.map((value) => ({
     value,
     label: REGION_LABELS[value]
