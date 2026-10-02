@@ -40,6 +40,8 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   AI: Ai
   /** コメント投稿レート制限用バインディング */
   COMMENT_RATE_LIMITER: RateLimitBinding
+  /** 経路検索レート制限用バインディング（IPごと10件/60秒） */
+  DIRECTIONS_RATE_LIMITER: RateLimitBinding
   /** JWT秘密鍵 */
   JWT_SECRET_KEY: string
   /** 静的アセット配信バインディング */
