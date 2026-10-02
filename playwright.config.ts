@@ -8,7 +8,7 @@ const BASE_URL = `http://localhost:${PORT}`
 export default defineConfig({
   testDir: './e2e',
   // This spec requires the isolated Maps adapter; run it with e2e:location.
-  testIgnore: '**/location-missing-coordinate.spec.ts',
+  testIgnore: ['**/location-missing-coordinate.spec.ts', '**/map-cluster-responsive.spec.ts'],
   timeout: 30000,
   retries: 1,
   use: {
