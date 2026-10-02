@@ -2,18 +2,27 @@ import { z } from '@hono/zod-openapi'
 import { BadgeSchema } from './badge.dto'
 
 /**
- * 投票レスポンス（成功・エラー共通）
+ * 投票成功レスポンス
  */
 export const VoteResponseSchema = z
   .object({
     success: z.boolean().openapi({ example: true }),
-    message: z.string().nonempty('メッセージは必須です').openapi({ example: '投票ありがとうございます！' }),
+    message: z.string().nonempty().nonempty('メッセージは必須です').openapi({ example: '投票ありがとうございます！' }),
     nextVoteDate: z.string().nonempty('次回投票日は必須です').openapi({ example: '2025-12-23' }),
     newBadges: z.array(BadgeSchema).default([]).openapi({ description: '今回新たに獲得したバッジの一覧' })
   })
   .openapi('VoteResponse')
 
 export type VoteResponse = z.infer<typeof VoteResponseSchema>
+
+/** HTTPException とリクエストスキーマ検証のエラー応答 */
+export const VoteErrorSchema = z.union([
+  z.object({ message: z.string().nonempty() }),
+  z.object({
+    success: z.literal(false),
+    error: z.object({ name: z.string().nonempty(), issues: z.array(z.unknown()) })
+  })
+])
 
 /**
  * 投票カウント項目

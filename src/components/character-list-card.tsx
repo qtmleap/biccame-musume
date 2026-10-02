@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { prefectureToRegion } from '@/atoms/filter-atom'
 import { CharacterFollowButton } from '@/components/characters/character-follow-button'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -7,6 +8,7 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
+import { REGION_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
 
@@ -73,7 +75,7 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
             className='absolute inset-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
           />
 
-          <div className='relative flex items-center gap-3 pointer-events-none [&_*]:pointer-events-none [&_button]:pointer-events-auto [&_a]:pointer-events-auto'>
+          <div className='relative flex items-start gap-3 pointer-events-none [&_*]:pointer-events-none [&_button]:pointer-events-auto [&_a]:pointer-events-auto'>
             <Avatar className='h-14 w-14 border-2 border-card-border shrink-0'>
               <AvatarImage
                 src={character.character?.image_url}
@@ -88,7 +90,19 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
               <h3 className='font-bold truncate text-foreground text-sm md:text-base'>
                 {getDisplayName(character.character?.name || '')}
               </h3>
-              <div className='flex justify-end gap-2'>
+              <p
+                data-character-store
+                className='text-sm leading-5 h-10 line-clamp-2 break-words text-foreground'
+                title={character.store?.name}
+              >
+                {character.store?.name ? character.store.name : '店舗情報未登録'}
+              </p>
+              <p data-character-region className='text-xs leading-5 h-5 truncate text-foreground'>
+                {character.prefecture
+                  ? `${prefectureToRegion[character.prefecture] ? REGION_LABELS[prefectureToRegion[character.prefecture]] : '地域未登録'}・${character.prefecture}`
+                  : '地域未登録'}
+              </p>
+              <div className='flex justify-end gap-2 mt-1'>
                 <CharacterFollowButton twitterId={character.character?.twitter_id} iconOnly />
                 <CharacterVoteButton
                   characterId={character.id}
