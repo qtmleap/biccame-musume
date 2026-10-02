@@ -1,7 +1,10 @@
 import { useSuspenseQueries } from '@tanstack/react-query'
+import { useAuth } from '@/hooks/use-auth'
+import { userQueryKeys } from '@/lib/user-query-keys'
 import { client } from '@/utils/client'
 
 export const useBadges = () => {
+  const { user } = useAuth()
   const [badgesQuery, myBadgesQuery] = useSuspenseQueries({
     queries: [
       {
@@ -13,7 +16,8 @@ export const useBadges = () => {
         refetchOnMount: 'always' as const
       },
       {
-        queryKey: ['me', 'badges'],
+        queryKey: userQueryKeys.badges(user === null ? '' : user.uid),
+        meta: { persist: false },
         queryFn: () => client.getMyBadges(),
         refetchOnMount: 'always' as const
       }
