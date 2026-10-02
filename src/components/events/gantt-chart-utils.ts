@@ -1,4 +1,3 @@
-import { CATEGORY_BG_COLOR } from '@/locales/component'
 import type { Event, EventStatus } from '@/schemas/event.dto'
 
 /**
@@ -6,9 +5,14 @@ import type { Event, EventStatus } from '@/schemas/event.dto'
  */
 export const getCategoryColor = (category: Event['category'], status: EventStatus): string => {
   if (status === 'ended') {
-    return 'bg-muted-foreground/60'
+    return 'bg-[var(--gantt-ended)] text-[var(--gantt-foreground)]'
   }
-  return CATEGORY_BG_COLOR[category]
+  return {
+    limited_card: 'bg-[var(--gantt-limited-card)] text-[var(--gantt-foreground)]',
+    regular_card: 'bg-[var(--gantt-regular-card)] text-[var(--gantt-foreground)]',
+    ackey: 'bg-[var(--gantt-ackey)] text-[var(--gantt-foreground)]',
+    other: 'bg-[var(--gantt-other)] text-[var(--gantt-foreground)]'
+  }[category]
 }
 
 /**

@@ -14,7 +14,33 @@ const NewEventContent = () => {
   const router = useRouter()
   const search = useSearch({ from: '/admin/events/new/' })
   const [newUuid] = useState(() => uuidv4())
-  const { data: copySource } = useEventOrNull(search.from ?? '')
+  const { data: copySource, isPending, isError, refetch } = useEventOrNull(search.from ?? '')
+
+  if (isPending) return <LoadingFallback />
+  if (isError) {
+    return (
+      <div className='mx-auto max-w-6xl px-4 py-12 text-center' role='alert'>
+        <p>コピー元イベントの取得に失敗しました</p>
+        <Button className='mt-4' variant='outline' onClick={() => refetch()}>
+          再試行
+        </Button>
+      </div>
+    )
+  }
+  if (search.from && copySource === null) {
+    return (
+      <div className='mx-auto max-w-6xl px-4 py-12 text-center' role='status'>
+        <p>コピー元イベントが見つかりません</p>
+        <Button
+          className='mt-4'
+          variant='outline'
+          onClick={() => router.navigate({ to: '/admin/events/new', search: {} })}
+        >
+          新規登録へ
+        </Button>
+      </div>
+    )
+  }
 
   const isCopyMode = search.from !== undefined && copySource !== null
 
