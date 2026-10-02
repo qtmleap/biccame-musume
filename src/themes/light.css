@@ -43,6 +43,9 @@
   /* Page background */
   --page-bg: var(--color-pink-100);
 
+  /* Text links on page/card surfaces; preserve the corporate brand fill. */
+  --link-foreground: var(--color-red-700);
+
   /* Brand (corporate red) */
   --brand: var(--color-red-600);
   --brand-foreground: var(--color-zinc-50);

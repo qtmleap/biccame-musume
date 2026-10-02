@@ -1,13 +1,13 @@
-import { atomWithStorage } from 'jotai/utils'
+import { atom } from 'jotai'
 import type { Region } from '@/schemas/store.dto'
 
 export type RegionType = Region
 
 /**
- * 地域フィルターを保存するatom
- * localStorageに永続化される
+ * キャラクター一覧専用の地域フィルター。
+ * 初訪問は全国を表示し、イベント検索のURL条件とは共有しない。
  */
-export const regionFilterAtom = atomWithStorage<RegionType>('biccame-region-filter', 'all')
+export const regionFilterAtom = atom<RegionType>('all')
 
 /**
  * 都道府県から地域へのマッピング
