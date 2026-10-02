@@ -3,7 +3,7 @@ import { createRootRoute, createRouter, Outlet, RouterProvider } from '@tanstack
 import { createRoot } from 'react-dom/client'
 import { Route as LocationRoute } from '@/app/routes/location'
 import type { StoreData } from '@/schemas/store.dto'
-import '@/index.css'
+import '../map-cluster-harness/styles.css'
 
 const invalid = [
   undefined,
