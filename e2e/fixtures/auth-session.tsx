@@ -2,6 +2,7 @@ import { dehydrate, QueryClient, QueryClientProvider } from '@tanstack/react-que
 import { Suspense, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { AuthProvider } from '@/components/auth/auth-provider'
+import { BackendSessionGate } from '@/components/auth/backend-session-gate'
 import { useAuth } from '@/hooks/use-auth'
 import { useBadges } from '@/hooks/use-badges'
 import { useBulkVote } from '@/hooks/use-bulk-vote'
@@ -94,10 +95,10 @@ const App = () => {
         操作を閉じる
       </button>
       {showOperations && <MutationProbe />}
-      {isAuthenticated && (
-        <Suspense fallback={<p>読み込み中</p>}>
-          <PrivateData />
-        </Suspense>
+      {user !== null && (
+        <BackendSessionGate>
+          <Suspense fallback={<p>読み込み中</p>}>{isAuthenticated && <PrivateData />}</Suspense>
+        </BackendSessionGate>
       )}
     </>
   )
