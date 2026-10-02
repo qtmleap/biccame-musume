@@ -64,6 +64,14 @@
   --status-ended: var(--color-zinc-800);
   --status-ended-foreground: var(--color-zinc-400);
 
+  /* Timetable: pale bands and dark text in both themes. */
+  --gantt-limited-card: #e9d5ff;
+  --gantt-regular-card: #bfdbfe;
+  --gantt-ackey: #fde68a;
+  --gantt-other: #fecdd3;
+  --gantt-ended: #e4e4e7;
+  --gantt-foreground: #18181b;
+
   /* Category badges (event type) */
   --category-limited-card: var(--color-purple-900);
   --category-limited-card-foreground: var(--color-purple-200);

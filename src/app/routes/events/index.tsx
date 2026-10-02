@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { Calendar, Filter, Gift, LayoutGrid, X } from 'lucide-react'
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
+import { Suspense, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { eventViewModeAtom } from '@/atoms/event-view-mode-atom'
 import { prefectureToRegion } from '@/atoms/filter-atom'
 import { RegionFilterControl } from '@/components/characters/region-filter-control'
@@ -32,6 +32,13 @@ import { client } from '@/utils/client'
 import { calculateEventStatus } from '@/utils/event-status'
 
 const PER_PAGE = 12
+const desktopQuery = '(min-width: 768px)'
+const subscribeViewport = (onChange: () => void) => {
+  const media = window.matchMedia(desktopQuery)
+  media.addEventListener('change', onChange)
+  return () => media.removeEventListener('change', onChange)
+}
+const isDesktopViewport = () => window.matchMedia(desktopQuery).matches
 
 /**
  * イベント一覧のコンテンツ
@@ -59,7 +66,9 @@ const EventsContent = () => {
   const events = eventsQuery.data
   const characters = charactersQuery.data
 
-  const [viewMode, setViewMode] = useAtom(eventViewModeAtom)
+  const [savedViewMode, setViewMode] = useAtom(eventViewModeAtom)
+  const isDesktop = useSyncExternalStore(subscribeViewport, isDesktopViewport, () => true)
+  const viewMode = savedViewMode === null ? (isDesktop ? 'gantt' : 'grid') : savedViewMode
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
   const categoryFilter = useMemo(
     () => new Set(EventCategorySchema.options.filter((category) => search.category.split(',').includes(category))),
@@ -197,7 +206,7 @@ const EventsContent = () => {
       <EventGroupBanner />
       <div className='flex flex-col gap-2 mt-3'>
         {/* ヘッダーとボタン群 */}
-        <div className='flex items-center justify-between gap-4'>
+        <div className='flex flex-wrap items-center justify-between gap-2'>
           <h1 className='text-2xl font-bold text-foreground'>イベント一覧</h1>
           <div className='flex items-center gap-2'>
             {/* モバイル: フィルターボタン */}
@@ -245,16 +254,29 @@ const EventsContent = () => {
               </SheetContent>
             </Sheet>
 
-            {/* 表示切り替えボタン */}
-            <Button
-              size='sm'
-              variant='ghost'
-              aria-label={viewMode === 'grid' ? '日程表示' : '一覧表示'}
-              onClick={() => setViewMode(viewMode === 'grid' ? 'gantt' : 'grid')}
-              className='h-9 w-9 p-0 text-muted-foreground hover:text-foreground'
-            >
-              {viewMode === 'grid' ? <Calendar className='size-4' /> : <LayoutGrid className='size-4' />}
-            </Button>
+            {/* 表示選択は画面幅が変わっても維持する。 */}
+            <fieldset className='flex gap-1' aria-label='イベントの表示方法'>
+              <Button
+                size='sm'
+                variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
+                aria-pressed={viewMode === 'grid'}
+                onClick={() => setViewMode('grid')}
+                className='h-9 gap-1 px-2'
+              >
+                <LayoutGrid className='size-4' aria-hidden />
+                一覧
+              </Button>
+              <Button
+                size='sm'
+                variant={viewMode === 'gantt' ? 'secondary' : 'ghost'}
+                aria-pressed={viewMode === 'gantt'}
+                onClick={() => setViewMode('gantt')}
+                className='h-9 gap-1 px-2'
+              >
+                <Calendar className='size-4' aria-hidden />
+                日程
+              </Button>
+            </fieldset>
           </div>
         </div>
 
