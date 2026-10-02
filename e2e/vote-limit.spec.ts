@@ -6,8 +6,8 @@ import { expect, test } from '@playwright/test'
  * DO クラスは bun が `cloudflare:workers` を解決できずユニットテストできないため、
  * 実際に INSERT OR IGNORE が効いているかはここでしか確認できない。
  *
- * 前提: playwright.config.ts が E2E=1 で dev を起動し VOTE_LIMIT_BYPASS を false にする。
- * DO storage は実行をまたいで残るので、テストごとに別 IP を使って冪等にする。
+ * 実行: bun run e2e:vote-limit (専用 localhost Worker / 毎回破棄する D1・DO)。
+ * VOTE_LIMIT_BYPASS=false。テストごとに別 IP を使って制限を独立して検証する。
  */
 
 const CHARACTER_ID = 'sapporo'
@@ -20,7 +20,7 @@ const uniqueIp = (): string => {
   return `100.${b}.${c}.${d}`
 }
 
-// Origin は playwright.config.ts の extraHTTPHeaders で付与される
+// Origin は vote-local/playwright.config.ts の extraHTTPHeaders で付与される
 const buildHeaders = (ip: string) => ({
   'CF-Connecting-IP': ip,
   'Content-Type': 'application/json'

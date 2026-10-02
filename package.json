@@ -41,7 +41,8 @@
     "e2e:accessibility-controls": "playwright test --config e2e/accessibility-controls/playwright.config.ts",
     "e2e:event-filter-sheet": "playwright test --config e2e/event-filter-sheet-layout/playwright.config.ts",
     "e2e:route-empty-state": "playwright test --config e2e/route-empty-state.config.ts",
-    "e2e:auth-fixture": "playwright test --config e2e/auth-fixture.playwright.config.ts"
+    "e2e:auth-fixture": "playwright test --config e2e/auth-fixture.playwright.config.ts",
+    "e2e:vote-limit": "bash e2e/vote-local/run.sh"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "~1.54.0",

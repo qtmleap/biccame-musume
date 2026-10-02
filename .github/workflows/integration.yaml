@@ -19,6 +19,7 @@ jobs:
       - name: Assert route, sticky, visual guard and real local authentication
         run: |
           bun run e2e:regression
+          bun run e2e:vote-limit
           bash e2e/local/run.sh e2e/routes.test.ts e2e/sticky-check.spec.ts e2e/local-auth.spec.ts
       - name: Capture pending candidates with separate stability comparators
         run: bun run e2e:candidates

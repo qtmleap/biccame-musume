@@ -5,13 +5,13 @@ export async function assertHealthyScreen(
   heading: string,
   role: 'heading' | 'button' | 'text' = 'heading'
 ) {
-  await expect(page.getByRole('heading', { name: 'エラーが発生しました', exact: true })).toHaveCount(0)
   await expect(
     (role === 'text'
       ? page.getByText(heading, { exact: true })
       : page.getByRole(role, { name: heading, exact: true })
     ).first()
   ).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'エラーが発生しました', exact: true })).toHaveCount(0)
 }
 
 export async function assertStickyPosition(header: Locator, top: number) {
