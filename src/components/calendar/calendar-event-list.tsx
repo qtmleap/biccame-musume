@@ -127,12 +127,12 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                           whileTap={{ scale: 0.97 }}
                           transition={STICKER_HOVER_TRANSITION}
                           className={cn(
-                            'flex items-center gap-3 p-2 rounded-xl border-card',
+                            'flex items-center gap-2 p-2 rounded-xl border-card',
                             isCharacter ? 'bg-action-interest/15' : 'bg-info/15'
                           )}
                         >
                           {/* キャラクター画像 */}
-                          <Avatar className='w-10 h-10'>
+                          <Avatar className='w-10 h-10 shrink-0'>
                             <AvatarImage
                               src={event.character.character?.image_url}
                               alt={event.character.character?.name || ''}
@@ -147,7 +147,7 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                               {event.character.character?.name}
                             </p>
                             <p className='text-[13px] leading-5 text-muted-foreground line-clamp-2 break-words'>
-                              {event.character.store?.name}
+                              {event.character.store?.name?.replace(/^ビックカメラ/, '')}
                             </p>
                           </div>
 
