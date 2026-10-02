@@ -61,8 +61,8 @@ export const CalendarEventDrawerContent = ({ events }: CalendarEventDrawerConten
                   <AvatarFallback>{event.character.character?.name?.slice(0, 1) || '?'}</AvatarFallback>
                 </Avatar>
                 <div className='flex-1 min-w-0'>
-                  <p className='font-medium truncate'>{event.character.character?.name}</p>
-                  <p className='text-sm text-muted-foreground truncate'>{event.character.store?.name}</p>
+                  <p className='font-medium text-foreground break-words'>{event.character.character?.name}</p>
+                  <p className='text-sm text-muted-foreground break-words'>{event.character.store?.name}</p>
                   <Badge variant='secondary' className='mt-1'>
                     {isCharacter ? <Cake className='w-3 h-3' /> : <Store className='w-3 h-3' />}
                     {event.years}
