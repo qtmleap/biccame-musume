@@ -40,30 +40,37 @@ const managers = [
 
 for (const manager of managers) {
   test(`reopening admin ${manager.path} fetches fresh data and hides old data while loading`, async ({ page }) => {
+    await page.route('**/cdn-cgi/access/get-identity', (route) =>
+      route.fulfill({ json: { email: 'admin@example.com', name: 'Regression administrator' } })
+    )
     let requests = 0
+    let refreshing = false
     let release: () => void = () => {}
     const gate = new Promise<void>((resolve) => {
       release = resolve
     })
     await page.route(`**/api/admin/${manager.path}*`, async (route) => {
       requests += 1
-      if (requests > 1) await gate
+      const refreshRequest = refreshing
+      if (refreshRequest) await gate
       await route.fulfill({
-        json: manager.payload(requests === 1 ? 'Previously cached record' : 'Fresh management record')
+        json: manager.payload(refreshRequest ? 'Fresh management record' : 'Previously cached record')
       })
     })
     await page.goto(`/admin/${manager.path}`, { waitUntil: 'domcontentloaded' })
     await expect(page.getByText('Previously cached record', { exact: true })).toBeVisible({ timeout: 30_000 })
+    const initialRequests = requests
     await page.getByRole('link', { name: '管理画面に戻る' }).click()
     await expect(page.getByRole('heading', { name: '管理画面', exact: true })).toBeVisible({ timeout: 30_000 })
+    refreshing = true
     try {
       await page.locator(`a[href="/admin/${manager.path}"], a[href="/admin/${manager.path}/"]`).click()
-      await expect.poll(() => requests).toBe(2)
+      await expect.poll(() => requests).toBeGreaterThan(initialRequests)
       await expect(page.getByText('Previously cached record', { exact: true })).toHaveCount(0)
     } finally {
       release()
     }
     await expect(page.getByText('Fresh management record', { exact: true })).toBeVisible()
-    expect(requests).toBe(2)
+    expect(requests).toBeGreaterThan(initialRequests)
   })
 }

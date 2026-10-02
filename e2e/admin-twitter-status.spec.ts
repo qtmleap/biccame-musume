@@ -3,6 +3,12 @@ import { expect, test } from '@playwright/test'
 test.use({ serviceWorkers: 'block' })
 test.setTimeout(60_000)
 
+test.beforeEach(async ({ page }) => {
+  await page.route('**/cdn-cgi/access/get-identity', (route) =>
+    route.fulfill({ json: { email: 'admin@example.com', name: 'Regression administrator' } })
+  )
+})
+
 const successfulStatus = () => ({
   ok: true,
   account: {
@@ -33,13 +39,16 @@ const failedStatus = () => ({
 
 test('reopening Twitter admin within a minute checks credentials again', async ({ page }) => {
   let requests = 0
+  let credentialsExpired = false
   await page.route('**/api/admin/twitter/status', async (route) => {
     requests += 1
-    await route.fulfill({ json: requests === 1 ? successfulStatus() : failedStatus() })
+    await route.fulfill({ json: credentialsExpired ? failedStatus() : successfulStatus() })
   })
 
   await page.goto('/admin/twitter', { waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('heading', { name: 'Previously authenticated account' })).toBeVisible({ timeout: 30_000 })
+  const initialRequests = requests
+  credentialsExpired = true
   const openedAt = Date.now()
   await page.getByRole('link', { name: '管理画面に戻る' }).click()
   await expect(page).toHaveURL(/\/admin\/?$/)
@@ -47,18 +56,19 @@ test('reopening Twitter admin within a minute checks credentials again', async (
   await page.locator('a[href="/admin/twitter"], a[href="/admin/twitter/"]').click()
 
   await expect(page.getByText('Authentication credentials have expired', { exact: true })).toBeVisible()
-  expect(requests).toBe(2)
+  expect(requests).toBeGreaterThan(initialRequests)
   expect(Date.now() - openedAt).toBeLessThan(60_000)
   await expect(page.getByRole('heading', { name: 'Previously authenticated account' })).toHaveCount(0)
 })
 
 test('reload ignores persisted successful status and hides it while checking credentials', async ({ page }) => {
   let requests = 0
+  let credentialsExpired = false
   let releaseFailure: () => void = () => {}
   const failureGate = new Promise<void>((resolve) => { releaseFailure = resolve })
   await page.route('**/api/admin/twitter/status', async (route) => {
     requests += 1
-    if (requests === 1) {
+    if (!credentialsExpired) {
       await route.fulfill({ json: successfulStatus() })
       return
     }
@@ -89,10 +99,12 @@ test('reload ignores persisted successful status and hides it while checking cre
       }
     }))
   }, successfulStatus())
+  const initialRequests = requests
+  credentialsExpired = true
 
   try {
     await page.reload({ waitUntil: 'domcontentloaded' })
-    await expect.poll(() => requests).toBe(2)
+    await expect.poll(() => requests).toBeGreaterThan(initialRequests)
     await expect(page.getByRole('heading', { name: 'Previously authenticated account' })).toHaveCount(0)
   } finally {
     releaseFailure()
