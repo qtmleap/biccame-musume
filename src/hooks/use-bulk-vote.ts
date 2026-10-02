@@ -1,7 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useSetAtom } from 'jotai'
 import { lastVoteTimesAtom } from '@/atoms/vote-atom'
+import { isCurrentAccountMutation, useAccountMutation } from '@/hooks/use-account-mutation'
 import { useAuth } from '@/hooks/use-auth'
 import { userQueryKeys } from '@/lib/user-query-keys'
 import type { BulkVoteResponse } from '@/schemas/vote.dto'
@@ -22,9 +23,9 @@ export const useBulkVote = () => {
   const { user } = useAuth()
   const setLastVoteTimes = useSetAtom(lastVoteTimesAtom)
 
-  return useMutation({
+  return useAccountMutation('bulk-vote', {
     mutationFn: (characterIds: string[]): Promise<BulkVoteResponse> => client.createBulkVote({ characterIds }),
-    onSuccess: (data) => {
+    onSuccess: (data, _variables, _result, context) => {
       const now = dayjs().toISOString()
       setLastVoteTimes((prev) => {
         const next = { ...prev }
@@ -38,6 +39,7 @@ export const useBulkVote = () => {
       queryClient.invalidateQueries({ queryKey: ['ranking'] })
       // バッジ評価はサーバー側で waitUntil 実行されるため、少し遅らせて再取得
       setTimeout(() => {
+        if (!isCurrentAccountMutation(context)) return
         queryClient.invalidateQueries({ queryKey: userQueryKeys.badges(user === null ? '' : user.uid) })
       }, BADGE_REFETCH_DELAY_MS)
     }

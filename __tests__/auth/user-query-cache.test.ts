@@ -1,7 +1,13 @@
 import { expect, test } from 'bun:test'
 import { dehydrate, hydrate, QueryClient } from '@tanstack/react-query'
 import { serializeSessionOperation } from '@/lib/auth-session'
-import { clearUserQueries, deserializePublicQueryCache, shouldPersistQuery, userQueryKeys } from '@/lib/user-query-keys'
+import {
+  clearUserQueries,
+  deserializePublicQueryCache,
+  publicCacheDehydrateOptions,
+  shouldPersistQuery,
+  userQueryKeys
+} from '@/lib/user-query-keys'
 
 const persisted = (client: QueryClient) =>
   JSON.stringify({ timestamp: Date.now(), buster: '', clientState: dehydrate(client) })
@@ -87,4 +93,23 @@ test('failed session operations leave subsequent logout retry available', async 
     })
   ).rejects.toThrow('unavailable')
   expect(await serializeSessionOperation(async () => 'expired')).toBe('expired')
+})
+
+test('production dehydration excludes paused mutations and their private variables', async () => {
+  const { onlineManager } = await import('@tanstack/react-query')
+  const client = new QueryClient()
+  onlineManager.setOnline(false)
+  const mutation = client.getMutationCache().build(client, { mutationFn: async (secret: string) => secret })
+  const finished = mutation.execute('private-account-a-input')
+  try {
+    expect(mutation.state.isPaused).toBe(true)
+    const dehydrated = dehydrate(client, publicCacheDehydrateOptions)
+    expect(dehydrated.mutations).toHaveLength(0)
+    expect(JSON.stringify(dehydrated)).not.toContain('private-account-a-input')
+  } finally {
+    onlineManager.setOnline(true)
+    await mutation.continue()
+    await finished
+    client.clear()
+  }
 })
