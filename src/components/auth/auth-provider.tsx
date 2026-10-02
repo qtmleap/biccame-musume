@@ -1,14 +1,13 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { getRedirectResult, onAuthStateChanged } from 'firebase/auth'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useStore } from 'jotai'
 import { type ReactNode, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
-import { backendSessionReadyAtom, userAtom } from '@/atoms/auth-atom'
-import { serializeSessionOperation } from '@/lib/auth-session'
+import { backendSessionGenerationAtom, backendSessionStateAtom, userAtom } from '@/atoms/auth-atom'
+import { useAuth } from '@/hooks/use-auth'
 import { auth } from '@/lib/firebase'
 import { clearUserQueries } from '@/lib/user-query-keys'
 import { AUTH_LABELS } from '@/locales/app.content'
-import { client } from '@/utils/client'
 
 interface AuthProviderProps {
   children: ReactNode
@@ -22,7 +21,9 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const queryClient = useQueryClient()
   const setUser = useSetAtom(userAtom)
-  const setBackendSessionReady = useSetAtom(backendSessionReadyAtom)
+  const store = useStore()
+  const { retryBackendSession } = useAuth()
+  const setBackendSessionState = useSetAtom(backendSessionStateAtom)
   const redirectResultChecked = useRef(false)
 
   useEffect(() => {
@@ -64,34 +65,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       console.info('Auth state changed:', user ? `${user.uid} (${user.email})` : 'Not authenticated')
 
       const currentGeneration = ++generation
-      setBackendSessionReady(false)
+      store.set(backendSessionGenerationAtom, store.get(backendSessionGenerationAtom) + 1)
+      setBackendSessionState({ status: user ? 'pending' : 'idle' })
       setUser(user)
       await clearUserQueries(queryClient)
       if (user === null || currentGeneration !== generation) return
 
-      try {
-        const established = await serializeSessionOperation(async () => {
-          if (currentGeneration !== generation || auth.currentUser?.uid !== user.uid) return false
-          const token = await user.getIdToken()
-          if (currentGeneration !== generation || auth.currentUser?.uid !== user.uid) return false
-          const response = await client.authenticate(undefined, { headers: { Authorization: `Bearer ${token}` } })
-          if (!response.success) throw new Error('セッションを確立できませんでした')
-          return true
-        })
-        if (currentGeneration === generation && auth.currentUser?.uid === user.uid) {
-          setBackendSessionReady(established)
-        }
-      } catch (error) {
-        console.error('Failed to authenticate with backend:', error)
-        if (currentGeneration === generation) setBackendSessionReady(false)
-      }
+      await retryBackendSession()
     })
 
     return () => {
       generation++
+      store.set(backendSessionGenerationAtom, store.get(backendSessionGenerationAtom) + 1)
       unsubscribe()
     }
-  }, [queryClient, setUser, setBackendSessionReady])
+  }, [queryClient, setUser, setBackendSessionState, store, retryBackendSession])
 
   return <>{children}</>
 }

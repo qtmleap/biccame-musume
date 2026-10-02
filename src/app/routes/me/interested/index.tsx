@@ -9,7 +9,7 @@ import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { Button } from '@/components/ui/button'
 import { useEvents } from '@/hooks/use-events'
 import { useUserActivity } from '@/hooks/use-user-activity'
-import { auth } from '@/lib/firebase'
+import { requireFirebaseUser } from '@/lib/require-firebase-user'
 import { MY_PAGE_LABELS } from '@/locales/app.content'
 
 /**
@@ -105,20 +105,5 @@ const RouteComponent = () => (
 
 export const Route = createFileRoute('/me/interested/')({
   component: RouteComponent,
-  beforeLoad: async () => {
-    return new Promise((resolve) => {
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        unsubscribe()
-        if (!user) {
-          throw new Error('Unauthorized')
-        }
-        resolve(undefined)
-      })
-    })
-  },
-  onError: ({ error, navigate }) => {
-    if (error.message === 'Unauthorized') {
-      navigate({ to: '/' })
-    }
-  }
+  beforeLoad: requireFirebaseUser
 })
