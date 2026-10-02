@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { atom, useAtomValue } from 'jotai'
+import { atom, useAtom, useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { categoryFilterAtom } from '@/atoms/category-filter-atom'
 import { EventCategoryFilter } from '@/components/events/event-category-filter'
@@ -14,14 +14,14 @@ import { events } from './fixtures'
 const statusAtom = atom({ upcoming: true, ongoing: true, ended: false })
 function FilterPreview() {
   const [open, setOpen] = useState(true)
-  const categories = useAtomValue(categoryFilterAtom)
+  const [categories, setCategories] = useAtom(categoryFilterAtom)
   const statuses = useAtomValue(statusAtom)
   const visible = events.filter(
     (e) => categories.has(e.category) && statuses[e.status === 'last_day' ? 'ongoing' : e.status]
   )
   const controls = (
     <div className='space-y-5'>
-      <EventCategoryFilter />
+      <EventCategoryFilter value={categories} onChange={setCategories} />
       <EventStatusFilter statusFilterAtom={statusAtom} />
     </div>
   )

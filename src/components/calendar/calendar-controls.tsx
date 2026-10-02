@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion } from 'motion/react'
+import { useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { DURATION, EASE_OUT, FADE_IN_DOWN } from '@/lib/motion'
 import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
@@ -25,17 +26,29 @@ export const CalendarHeader = ({ year, month, onPrevMonth, onNextMonth, onCurren
       transition={{ duration: DURATION.fast * 2, ease: EASE_OUT }}
       className='flex items-center justify-between pb-2 md:pb-4'
     >
-      <Button variant='ghost' size='icon' onClick={onPrevMonth} className='rounded-full border border-transparent'>
+      <Button
+        variant='ghost'
+        size='icon'
+        onClick={onPrevMonth}
+        aria-label='前の月'
+        className='rounded-full border border-transparent text-foreground'
+      >
         <ChevronLeft className='h-5 w-5' />
       </Button>
       <button
         type='button'
         onClick={onCurrentMonth}
-        className='font-display text-2xl md:text-4xl font-bold tracking-tight text-center tabular-nums hover:text-primary transition-colors'
+        className='text-foreground font-display text-2xl md:text-4xl font-bold tracking-tight text-center tabular-nums hover:text-primary transition-colors'
       >
         {year}年{month}月
       </button>
-      <Button variant='ghost' size='icon' onClick={onNextMonth} className='rounded-full border border-transparent'>
+      <Button
+        variant='ghost'
+        size='icon'
+        onClick={onNextMonth}
+        aria-label='次の月'
+        className='rounded-full border border-transparent text-foreground'
+      >
         <ChevronRight className='h-5 w-5' />
       </Button>
     </motion.div>
@@ -47,73 +60,73 @@ type CalendarMonthTabsProps = {
   onSelectMonth: (month: number) => void
 }
 
-/**
- * カレンダー月選択タブ（デスクトップ用）
- */
-export const CalendarMonthTabs = ({ selectedMonth, onSelectMonth }: CalendarMonthTabsProps) => {
+/** 数字付き月選択。内容が収まるときだけ中央に配置し、狭い幅では左端からスクロールする。 */
+const CalendarMonthSelector = ({
+  selectedMonth,
+  onSelectMonth,
+  className
+}: CalendarMonthTabsProps & { className: string }) => {
+  const scrollerRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const scroller = scrollerRef.current
+    if (!scroller) return
+    const revealSelected = () => {
+      const selected = scroller.querySelector<HTMLElement>(`[aria-label="${selectedMonth}月に移動"]`)
+      if (!selected || scroller.clientWidth === 0) return
+      const viewport = scroller.getBoundingClientRect()
+      const target = selected.getBoundingClientRect()
+      if (target.left < viewport.left) scroller.scrollLeft += target.left - viewport.left - 4
+      else if (target.right > viewport.right) scroller.scrollLeft += target.right - viewport.right + 4
+    }
+    revealSelected()
+    const observer = new ResizeObserver(revealSelected)
+    observer.observe(scroller)
+    return () => observer.disconnect()
+  }, [selectedMonth])
+
   return (
-    <div className='hidden md:flex gap-2 overflow-x-auto py-3 md:py-4 justify-center'>
-      {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => {
-        const isSelected = selectedMonth === month
-        return (
-          <motion.div
-            key={month}
-            style={{ filter: STICKER_SHADOW_SM }}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            transition={STICKER_HOVER_TRANSITION}
-          >
-            <Button
-              variant='secondary'
-              onClick={() => onSelectMonth(month)}
-              size='sm'
-              className={cn(
-                'shrink-0 rounded-full px-4 text-sm border',
-                isSelected
-                  ? 'bg-brand font-bold text-brand-foreground border-brand hover:bg-brand/90 hover:text-brand-foreground'
-                  : 'bg-button-surface text-foreground border-card-border hover:bg-button-surface-hover'
-              )}
+    <div ref={scrollerRef} className={cn('overflow-x-auto py-3 md:py-4', className)}>
+      <div className='flex w-max mx-auto gap-1.5 px-1'>
+        {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => {
+          const isSelected = selectedMonth === month
+          return (
+            <motion.div
+              key={month}
+              className='shrink-0'
+              style={{ filter: STICKER_SHADOW_SM }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              transition={STICKER_HOVER_TRANSITION}
             >
-              {month}月
-            </Button>
-          </motion.div>
-        )
-      })}
+              <Button
+                variant='secondary'
+                onClick={() => onSelectMonth(month)}
+                aria-label={`${month}月に移動`}
+                aria-pressed={isSelected}
+                size='sm'
+                className={cn(
+                  'min-w-11 min-h-11 rounded-full px-3 text-sm border',
+                  isSelected
+                    ? 'bg-brand font-bold text-brand-foreground border-brand hover:bg-brand/90 hover:text-brand-foreground'
+                    : 'bg-button-surface text-foreground border-card-border hover:bg-button-surface-hover'
+                )}
+              >
+                {month}月
+              </Button>
+            </motion.div>
+          )
+        })}
+      </div>
     </div>
   )
 }
 
-type CalendarMonthDotsProps = {
-  selectedMonth: number
-  onSelectMonth: (month: number) => void
-}
+/** デスクトップ用の月選択。 */
+export const CalendarMonthTabs = (props: CalendarMonthTabsProps) => (
+  <CalendarMonthSelector {...props} className='hidden md:block' />
+)
 
-/**
- * カレンダー月選択ドット（モバイル用）
- */
-export const CalendarMonthDots = ({ selectedMonth, onSelectMonth }: CalendarMonthDotsProps) => {
-  return (
-    <div className='flex justify-center md:hidden py-2'>
-      {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-        <button
-          key={month}
-          type='button'
-          onClick={() => onSelectMonth(month)}
-          className='inline-flex items-center justify-center w-9 h-11 group'
-          aria-label={`${month}月に移動`}
-          aria-pressed={selectedMonth === month}
-        >
-          <span
-            aria-hidden='true'
-            className={cn(
-              'block w-2.5 h-2.5 rounded-full transition-all',
-              selectedMonth === month
-                ? 'bg-primary scale-125'
-                : 'bg-muted-foreground/30 group-hover:bg-muted-foreground/50'
-            )}
-          />
-        </button>
-      ))}
-    </div>
-  )
-}
+/** モバイル用の月選択。既存の呼び出し名を維持しつつ数字を表示する。 */
+export const CalendarMonthDots = (props: CalendarMonthTabsProps) => (
+  <CalendarMonthSelector {...props} className='md:hidden' />
+)

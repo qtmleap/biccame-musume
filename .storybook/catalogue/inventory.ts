@@ -2,13 +2,15 @@ import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import ts from 'typescript'
 export const sourceFiles = (dir: string): string[] =>
-  readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
-    entry.isDirectory()
-      ? sourceFiles(join(dir, entry.name))
-      : /\.(tsx?|jsx?)$/.test(entry.name)
-        ? [join(dir, entry.name)]
-        : []
-  )
+  readdirSync(dir, { withFileTypes: true })
+    .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+    .flatMap((entry) =>
+      entry.isDirectory()
+        ? sourceFiles(join(dir, entry.name))
+        : /\.(tsx?|jsx?)$/.test(entry.name)
+          ? [join(dir, entry.name)]
+          : []
+    )
 export const inventory = () =>
   [...sourceFiles('src/components'), ...sourceFiles('src/app/routes')].map((file) => {
     const ast = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true)

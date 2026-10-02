@@ -2,6 +2,7 @@ import { MapPin } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
+import { getStorePosition } from '@/utils/store-position'
 
 type StoreListItemProps = {
   character: StoreData
@@ -12,6 +13,7 @@ type StoreListItemProps = {
  * 店舗一覧用のコンパクトな表示コンポーネント
  */
 export const StoreListItem = ({ character, distance }: StoreListItemProps) => {
+  const position = getStorePosition(character)
   const imageUrl = character.character?.image_url
 
   return (
@@ -29,7 +31,8 @@ export const StoreListItem = ({ character, distance }: StoreListItemProps) => {
         <h3 className='font-semibold text-sm text-foreground truncate'>
           {getDisplayName(character.character?.name || '')}
         </h3>
-        {distance !== undefined && (
+        {!position && <p className='text-xs text-muted-foreground mt-0.5'>地図位置未登録</p>}
+        {position && distance !== undefined && (
           <div className='flex items-center gap-1 mt-0.5'>
             <MapPin className='w-3 h-3 text-muted-foreground' />
             <span className='text-xs text-muted-foreground'>

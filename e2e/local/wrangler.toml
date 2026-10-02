@@ -1,0 +1,19 @@
+name = "a15-local-only"
+main = "worker.ts"
+compatibility_date = "2026-05-11"
+compatibility_flags = ["nodejs_compat"]
+[[d1_databases]]
+binding = "DB"
+database_name = "a15-disposable"
+database_id = "00000000-0000-0000-0000-000000000015"
+migrations_dir = "../../prisma/migrations"
+migrations_pattern = "../../prisma/migrations/*/migration.sql"
+[[kv_namespaces]]
+binding = "PUBLIC_JWK_CACHE_KV"
+id = "a15-disposable-kv"
+[vars]
+ENVIRONMENT = "local"
+FIREBASE_PROJECT_ID = "demo-ui-ux"
+PUBLIC_JWK_CACHE_KEY = "a15-local-jwk"
+JWT_SECRET_KEY = "disposable-test-only-a15-never-deploy-2026"
+ORIGIN_ALLOWLIST = "http://127.0.0.1:15300"

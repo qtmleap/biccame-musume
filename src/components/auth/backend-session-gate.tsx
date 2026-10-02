@@ -1,7 +1,9 @@
 import { useAtomValue } from 'jotai'
 import type { ReactNode } from 'react'
-import { backendSessionReadyAtom, userAtom } from '@/atoms/auth-atom'
+import { userAtom } from '@/atoms/auth-atom'
 import { LoadingFallback } from '@/components/common/loading-fallback'
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/hooks/use-auth'
 
 interface BackendSessionGateProps {
   children: ReactNode
@@ -17,7 +19,16 @@ interface BackendSessionGateProps {
  */
 export const BackendSessionGate = ({ children }: BackendSessionGateProps) => {
   const user = useAtomValue(userAtom)
-  const backendSessionReady = useAtomValue(backendSessionReadyAtom)
+  const { backendSessionReady, backendSessionState, retryBackendSession } = useAuth()
+
+  if (user && backendSessionState.status === 'error') {
+    return (
+      <div role='alert' className='mx-auto max-w-6xl p-4 space-y-3'>
+        <p>{backendSessionState.message}</p>
+        <Button onClick={() => void retryBackendSession()}>再試行</Button>
+      </div>
+    )
+  }
 
   if (user === null || !backendSessionReady) {
     return <LoadingFallback />

@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { RankingVoteBadge } from '@/components/ranking/ranking-vote-badge'
 import { DURATION } from '@/lib/motion'
-import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_DENSE } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { type CardProps, getBarClass } from './ranking-list-helpers'
 
@@ -21,7 +21,7 @@ const ROW_TAPES: ({ side: 'left' | 'right'; color: string; angle: string } | nul
  */
 export const RankingRow = ({ character, rank, index, maxVote, rotation }: CardProps) => {
   const percent = maxVote > 0 ? Math.max(4, Math.round((character.voteCount / maxVote) * 100)) : 0
-  const rotationDeg = getStickerRotation(index, rotation)
+  const rotationDeg = getStickerRotation(index, rotation, 'dense')
   const tape = ROW_TAPES[index % ROW_TAPES.length]
 
   return (
@@ -29,15 +29,10 @@ export const RankingRow = ({ character, rank, index, maxVote, rotation }: CardPr
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: DURATION.normal, delay: index * 0.03 }}
-      style={{ filter: STICKER_SHADOW_SM }}
+      style={{ filter: STICKER_SHADOW_DENSE }}
     >
-      <motion.div
-        style={{ rotate: rotationDeg }}
-        whileHover={{ scale: 1.03, rotate: 0 }}
-        whileTap={{ scale: 0.98 }}
-        transition={STICKER_HOVER_TRANSITION}
-      >
-        <div className='relative bg-card rounded-xl border border-zinc-200 dark:border-card-border p-3 flex items-center gap-3'>
+      <motion.div style={{ rotate: rotationDeg }} whileTap={{ scale: 0.98 }} transition={STICKER_HOVER_TRANSITION}>
+        <div className='relative bg-card rounded-xl border border-zinc-200 dark:border-card-border hover:border-brand/40 focus-within:border-brand/40 p-3 flex items-center gap-3'>
           {tape && (
             <div
               aria-hidden

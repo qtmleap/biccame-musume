@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import type { ZodType } from 'zod'
+import type { RouteResult } from '@/components/route/types'
 import { BadgeSchema } from '@/schemas/badge.dto'
 import { CommentResponseSchema } from '@/schemas/comment.dto'
 import { EventGroupDetailSchema } from '@/schemas/event-group.dto'
@@ -100,16 +101,17 @@ export const group = parseFixture(EventGroupDetailSchema, {
 export const rankedCharacters = characters.map((c, index) => ({ ...c, voteCount: [120, 80, 25][index] }))
 export const stores = characters.map((c, index) => ({
   id: c.id,
-  name: c.store.name,
+  name: c.store.name ?? c.character.name,
   lat: c.coordinates.latitude,
   lng: c.coordinates.longitude,
   stations: ['天王寺駅', '大阪駅'],
   station: index === 0 ? '天王寺駅' : '大阪駅'
 }))
 export const routeResult = {
+  status: 'estimated',
   route: stores,
   totalDistance: 14.2,
-  totalDuration: '45分',
+  totalDuration: '25分',
   legs: [
     {
       from: stores[0].name,
@@ -121,7 +123,7 @@ export const routeResult = {
       routes: [{ operator: 'JR', line: '大阪環状線', from: '天王寺駅', to: '大阪駅', duration: 25 }]
     }
   ]
-}
+} satisfies RouteResult
 export const calendarEvents = [
   { date: '2026-10-02', character: characters[2], type: 'character' as const, years: 10 },
   { date: '2026-10-02', character: characters[0], type: 'store' as const, years: 15 }

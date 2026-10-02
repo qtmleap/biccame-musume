@@ -99,8 +99,13 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                   aria-label={`${month}月${group.day}日のイベントを開く`}
                   className='flex flex-col items-center justify-center min-w-11 min-h-11 shrink-0 transition-opacity cursor-pointer hover:opacity-70'
                 >
-                  <span className='text-xs text-muted-foreground uppercase'>{group.dayOfWeek}</span>
-                  <span className={cn('text-xl font-bold tabular-nums', group.isSunday && 'text-calendar-sunday')}>
+                  <span className='text-[13px] leading-5 text-muted-foreground uppercase'>{group.dayOfWeek}</span>
+                  <span
+                    className={cn(
+                      'text-xl font-bold tabular-nums text-foreground',
+                      group.isSunday && 'text-calendar-sunday'
+                    )}
+                  >
                     {group.day}
                   </span>
                 </button>
@@ -122,12 +127,12 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
                           whileTap={{ scale: 0.97 }}
                           transition={STICKER_HOVER_TRANSITION}
                           className={cn(
-                            'flex items-center gap-3 p-2 rounded-xl border-card',
+                            'flex items-center gap-2 p-2 rounded-xl border-card',
                             isCharacter ? 'bg-action-interest/15' : 'bg-info/15'
                           )}
                         >
                           {/* キャラクター画像 */}
-                          <Avatar className='w-10 h-10'>
+                          <Avatar className='w-10 h-10 shrink-0'>
                             <AvatarImage
                               src={event.character.character?.image_url}
                               alt={event.character.character?.name || ''}
@@ -138,8 +143,12 @@ export const CalendarEventList = ({ year, month, events, onDayClick }: CalendarE
 
                           {/* 情報 */}
                           <div className='flex-1 min-w-0'>
-                            <p className='text-sm font-medium truncate'>{event.character.character?.name}</p>
-                            <p className='text-xs text-muted-foreground truncate'>{event.character.store?.name}</p>
+                            <p className='text-sm font-medium text-foreground line-clamp-2 break-words'>
+                              {event.character.character?.name}
+                            </p>
+                            <p className='text-[13px] leading-5 text-muted-foreground line-clamp-2 break-words'>
+                              {event.character.store?.name?.replace(/^ビックカメラ/, '')}
+                            </p>
                           </div>
 
                           {/* バッジ */}

@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { useAuth } from '@/hooks/use-auth'
-import { client } from '@/utils/client'
+import { userQueryKeys } from '@/lib/user-query-keys'
 
 type PushedBadge = {
   code: string
@@ -43,14 +43,6 @@ export const usePushStream = (): void => {
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null
     let reconnectDelay = RECONNECT_INITIAL_MS
     let cancelled = false
-    // session Cookie は auth-provider が並列に発行しているため、
-    // Firebase Auth state だけで WS を張ると Cookie 到着前に 401 で
-    // ハンドシェイクが失敗する。 初回 connect の前に同じ
-    // /api/auth エンドポイントを叩いて Cookie の確立を保証する。
-    // 一度成立すれば maxAge 5 日のため、 再接続時はスキップする。
-    // Biome noLet を避けるため mutable フラグはオブジェクトで持つ。
-    const sessionState = { ensured: false }
-
     const clearTimers = () => {
       if (pingTimer !== null) {
         clearInterval(pingTimer)
@@ -81,31 +73,12 @@ export const usePushStream = (): void => {
         toast.success(`バッジ獲得: ${parsed.badge.name}`, {
           description: parsed.badge.description
         })
-        queryClient.invalidateQueries({ queryKey: ['me', 'badges'] })
+        queryClient.invalidateQueries({ queryKey: userQueryKeys.badges(user.uid) })
       }
     }
 
-    const ensureSession = async (): Promise<boolean> => {
-      if (sessionState.ensured) return true
-      try {
-        const idToken = await user.getIdToken()
-        await client.authenticate(undefined, { headers: { Authorization: `Bearer ${idToken}` } })
-        sessionState.ensured = true
-        return true
-      } catch (err) {
-        console.warn('[push-stream] session establish failed:', err)
-        return false
-      }
-    }
-
-    const connect = async () => {
+    const connect = () => {
       if (cancelled) return
-      const ok = await ensureSession()
-      if (cancelled) return
-      if (!ok) {
-        scheduleReconnect()
-        return
-      }
       try {
         ws = new WebSocket(buildWsUrl())
       } catch (err) {
@@ -114,10 +87,7 @@ export const usePushStream = (): void => {
         return
       }
 
-      let opened = false
-
       ws.onopen = () => {
-        opened = true
         reconnectDelay = RECONNECT_INITIAL_MS
         try {
           ws?.send('sync')
@@ -148,12 +118,6 @@ export const usePushStream = (): void => {
         if (pingTimer !== null) {
           clearInterval(pingTimer)
           pingTimer = null
-        }
-        // onopen が一度も来なかった = upgrade 拒否 (401/426 等)。
-        // session cookie が expire している可能性があるため、
-        // 次回接続前に /api/auth を叩き直すようフラグをリセットする。
-        if (!opened) {
-          sessionState.ensured = false
         }
         scheduleReconnect()
       }

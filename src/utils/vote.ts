@@ -1,36 +1,14 @@
 import dayjs from 'dayjs'
-import timezone from 'dayjs/plugin/timezone'
-import utc from 'dayjs/plugin/utc'
+import { getJstDateKey, getJstYear, getNextJstMidnight } from '@/utils/jst-date'
 
-dayjs.extend(utc)
-dayjs.extend(timezone)
+/** JST の次の日付（明日0時）を取得する互換ラッパー */
+export const getNextJSTDate = (nowIso = dayjs().toISOString()): string => getNextJstMidnight(nowIso)
 
-const JST = 'Asia/Tokyo'
+/** JST の翌日を YYYY-MM-DD で返す。投票済みエラーのレスポンス用 */
+export const getNextJSTDateKey = (nowIso = dayjs().toISOString()): string => getJstDateKey(getNextJstMidnight(nowIso))
 
-/**
- * JST の次の日付（明日0時）を取得
- */
-export const getNextJSTDate = (): string => {
-  return dayjs().tz(JST).add(1, 'day').startOf('day').toISOString()
-}
+/** JST 基準の日付キー。投票の 1 日 1 回制限の境界に使う */
+export const getJSTDateKey = (nowIso = dayjs().toISOString()): string => getJstDateKey(nowIso)
 
-/**
- * JST の翌日を YYYY-MM-DD で返す。投票済みエラーのレスポンス用
- */
-export const getNextJSTDateKey = (): string => {
-  return dayjs().tz(JST).add(1, 'day').format('YYYY-MM-DD')
-}
-
-/**
- * JST 基準の日付キー（YYYY-MM-DD）。投票の 1 日 1 回制限の境界に使う
- */
-export const getJSTDateKey = (): string => {
-  return dayjs().tz(JST).format('YYYY-MM-DD')
-}
-
-/**
- * JST 基準の年。集計スコープが UTC 年だと元日の 0〜9 時が前年に入る
- */
-export const getJSTYear = (): number => {
-  return dayjs().tz(JST).year()
-}
+/** JST 基準の集計年度 */
+export const getJSTYear = (nowIso = dayjs().toISOString()): number => getJstYear(nowIso)
