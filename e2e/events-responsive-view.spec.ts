@@ -225,3 +225,61 @@ for (const theme of ['light', 'dark'])
     await mkdir(scratch, { recursive: true })
     await writeFile(resolve(scratch, `${theme}-hover.json`), JSON.stringify(evidence, null, 2))
   })
+
+for (const theme of ['light', 'dark'])
+  for (const width of [375, 1280])
+    for (const selected of ['grid', 'gantt'])
+      test(`view control contrast ${theme} ${width} ${selected}`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 })
+        await page.addInitScript((mode) => localStorage.setItem('event-view-mode', JSON.stringify(mode)), selected)
+        await page.goto(`/events/?theme=${theme}`)
+        await expect(page.getByRole('heading', { name: 'イベント一覧', exact: true })).toBeVisible()
+        await themeCheck(page, theme)
+        await page.mouse.move(0, 0)
+        const measurements = []
+        for (const [label, mode] of [
+          ['一覧', 'grid'],
+          ['日程', 'gantt']
+        ]) {
+          const button = page.getByRole('button', { name: label, exact: true })
+          await expect(button).toHaveAttribute('aria-pressed', String(selected === mode))
+          const measured = await button.evaluate((element) => {
+            const ctx = document.createElement('canvas').getContext('2d')
+            if (!ctx) throw new Error('Missing color measurement context')
+            const ancestors: Element[] = []
+            for (let parent: Element | null = element; parent; parent = parent.parentElement) ancestors.push(parent)
+            // Composite every transparent/alpha ancestor background in actual paint order.
+            ctx.fillStyle = '#fff'
+            ctx.fillRect(0, 0, 1, 1)
+            for (const ancestor of ancestors.reverse()) {
+              ctx.fillStyle = getComputedStyle(ancestor).backgroundColor
+              ctx.fillRect(0, 0, 1, 1)
+            }
+            const backgroundRGB = [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3)
+            const color = getComputedStyle(element).color
+            ctx.fillStyle = color
+            ctx.fillRect(0, 0, 1, 1)
+            const foregroundRGB = [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3)
+            const luminance = (rgb: number[]) =>
+              rgb
+                .map((v) => v / 255)
+                .map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
+                .reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0)
+            const fg = luminance(foregroundRGB),
+              bg = luminance(backgroundRGB)
+            return {
+              label: element.textContent?.trim(),
+              color,
+              foregroundRGB,
+              backgroundRGB,
+              contrast: (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05)
+            }
+          })
+          measurements.push(measured)
+          expect(measured.contrast, `${theme} ${selected} ${label}`).toBeGreaterThanOrEqual(4.5)
+        }
+        await themeCheck(page, theme)
+        const folder = resolve(scratch, 'controls-review-fix')
+        await mkdir(folder, { recursive: true })
+        await writeFile(resolve(folder, `${theme}-${width}-${selected}.json`), JSON.stringify(measurements, null, 2))
+      })
