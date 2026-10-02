@@ -94,10 +94,17 @@ const LocationMapInner = ({
     const observer = new ResizeObserver(measure)
     for (const element of [container, controlsRef.current, selectedPanel, panel, header])
       if (element) observer.observe(element)
+    // SheetのtransformはResizeObserverの対象外なので、移動完了時も実際の矩形を測る。
+    const onMotionSettled = (event: Event) => {
+      if (event.target === panel) measure()
+    }
+    const motionEvents = ['animationend', 'animationcancel', 'transitionend', 'transitioncancel']
+    for (const name of motionEvents) panel?.addEventListener(name, onMotionSettled)
     window.addEventListener('resize', measure)
     measure()
     return () => {
       observer.disconnect()
+      for (const name of motionEvents) panel?.removeEventListener(name, onMotionSettled)
       window.removeEventListener('resize', measure)
     }
   }, [panel, isDesktop, selectedPanel])
