@@ -43,6 +43,10 @@ type Stub = {
 const buildEnv = (stub: Stub): Bindings =>
   ({
     ENVIRONMENT: 'production',
+    ASSETS: {
+      fetch: async () =>
+        Response.json(['sapporo', 'akiba'].map((id) => ({ id, character: { is_biccame_musume: true } })))
+    },
     VOTE_COUNTER: {
       idFromName: (name: string) => name,
       get: () => stub
