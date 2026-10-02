@@ -1,3 +1,5 @@
+import type { RouteResponse } from '@/schemas/route.dto'
+
 /**
  * ルート計算で使用する型定義
  */
@@ -55,6 +57,4 @@ export type DirectionsLeg = {
 export type RouteResult = {
   route: SelectedStore[]
   totalDistance: number
-  legs: DirectionsLeg[]
-  totalDuration: string
-}
+} & (RouteResponse & { totalDuration?: string })

@@ -144,17 +144,36 @@ describe('directions resource limits', () => {
     expect(quotaKeys).toEqual(['directions:2001:db8::1'])
   })
   test('identical_route_reuses_cache and expires after ten minutes', async () => {
-    expect(RouteEndpointResponseSchema.parse(await (await request()).json())).toEqual(answer)
-    expect(RouteEndpointResponseSchema.parse(await (await request()).json())).toEqual(answer)
+    expect(RouteEndpointResponseSchema.parse(await (await request()).json())).toEqual({
+      status: 'estimated',
+      ...answer
+    })
+    expect(RouteEndpointResponseSchema.parse(await (await request()).json())).toEqual({
+      status: 'estimated',
+      ...answer
+    })
     expect(aiCalls).toBe(1)
     now = 600000
     await request()
     expect(aiCalls).toBe(2)
   })
+  test('legacy A04 cache payload is regenerated under the status contract', async () => {
+    await request()
+    const key = [...entries.keys()][0]
+    entries.set(key, { response: new Response(JSON.stringify(answer)), expires: 600000 })
+    expect(RouteEndpointResponseSchema.parse(await (await request()).json())).toEqual({
+      status: 'estimated',
+      ...answer
+    })
+    expect(aiCalls).toBe(2)
+  })
   test('normalizes outer whitespace and Unicode without leaking caller labels', async () => {
     const padded = { ...leg, from: ' 店舗A ', fromStation: ' 東京 ' }
     await request({ legs: [padded] })
-    expect(RouteEndpointResponseSchema.parse(await (await request()).json())).toEqual(answer)
+    expect(RouteEndpointResponseSchema.parse(await (await request()).json())).toEqual({
+      status: 'estimated',
+      ...answer
+    })
     expect(aiCalls).toBe(1)
     aiResult = { legs: [{ ...answer.legs[0], from: 'ガ' }] }
     await request({ legs: [{ ...leg, from: 'ガ' }] })
@@ -166,9 +185,14 @@ describe('directions resource limits', () => {
     for (const field of ['from', 'to', 'fromStation', 'toStation'])
       await request({ legs: [{ ...leg, [field]: '別名' }] })
     const second = { ...leg, from: '店舗C' }
+    aiResult = { legs: [answer.legs[0], { ...answer.legs[0], ...second }] }
     await request({ legs: [leg, second] })
+    await request({ legs: [leg, second] })
+    aiResult = { legs: [{ ...answer.legs[0], ...second }, answer.legs[0]] }
+    await request({ legs: [second, leg] })
     await request({ legs: [second, leg] })
     expect(aiCalls).toBe(7)
+    expect(entries.size).toBe(3)
   })
   test('cache hit still consumes quota and cannot bypass denial', async () => {
     await request()
@@ -181,8 +205,8 @@ describe('directions resource limits', () => {
     test(`degraded ${mode} results are not cached`, async () => {
       aiResult = mode === 'invalid' ? { invalid: true } : { ...answer, degraded: true }
       aiThrows = mode === 'throw'
-      expect(RouteEndpointResponseSchema.parse(await (await request()).json()).degraded).toBe(true)
-      expect(RouteEndpointResponseSchema.parse(await (await request()).json()).degraded).toBe(true)
+      expect(RouteEndpointResponseSchema.parse(await (await request()).json()).status).toBe('unavailable')
+      expect(RouteEndpointResponseSchema.parse(await (await request()).json()).status).toBe('unavailable')
       expect(aiCalls).toBe(2)
       expect(entries.size).toBe(0)
     })
@@ -196,15 +220,14 @@ describe('directions resource limits', () => {
   })
 })
 
-test('OpenAPI documents degraded empty routes and Japanese error response shapes', () => {
+test('OpenAPI documents status union and Japanese error response shapes', () => {
   const document = app.getOpenAPI31Document({ openapi: '3.1.0', info: { title: 'test', version: '1' } })
   const responses = document.paths?.['/api/directions']?.post?.responses
   expect(responses).toHaveProperty('400')
   expect(responses).toHaveProperty('403')
   expect(responses).toHaveProperty('413')
   expect(responses).toHaveProperty('429')
-  expect(document.components?.schemas?.RouteEndpointResponse).toHaveProperty('anyOf')
-  expect(document.components?.schemas?.DegradedRouteResponse).toHaveProperty('properties.degraded')
+  expect(document.components?.schemas?.RouteResponse).toHaveProperty('oneOf')
 })
 
 test('five legs and 100-character names remain accepted', async () => {

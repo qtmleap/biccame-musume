@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
 import { ipCheck } from '@/middleware/ip-check'
-import { type Leg, RouteEndpointResponseSchema, RouteRequestSchema, RouteResponseSchema } from '@/schemas/route.dto'
+import { GeneratedRouteSchema, type Leg, RouteRequestSchema, RouteResponseSchema } from '@/schemas/route.dto'
 import type { Bindings, Variables } from '@/types/bindings'
 
 const app = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>({
@@ -101,69 +101,19 @@ const buildPrompt = (legs: Leg[]) => {
   ].join('\n')
 }
 
-/**
- * モックデータ（ローカル開発用）
- */
-const mockLegs = [
-  {
-    from: 'たかつきたん',
-    to: 'なんばたん',
-    fromStation: '高槻',
-    toStation: 'なんば',
-    routes: [
-      {
-        operator: 'JR西日本',
-        line: 'JR京都線',
-        from: '高槻',
-        to: '大阪',
-        duration: 30
-      },
-      {
-        operator: '大阪メトロ',
-        line: '御堂筋線',
-        from: '大阪',
-        to: 'なんば',
-        duration: 10
-      }
-    ],
-    duration: 40,
-    transfers: 1
-  },
-  {
-    from: 'なんばたん',
-    to: 'あべのたん',
-    fromStation: 'なんば',
-    toStation: '天王寺',
-    routes: [
-      {
-        operator: '大阪メトロ',
-        line: '御堂筋線',
-        from: 'なんば',
-        to: '天王寺',
-        duration: 10
-      }
-    ],
-    duration: 10,
-    transfers: 0
-  },
-  {
-    from: 'あべのたん',
-    to: '八尾たん',
-    fromStation: '天王寺',
-    toStation: '近鉄八尾',
-    routes: [
-      {
-        operator: '近鉄',
-        line: '奈良線',
-        from: '天王寺',
-        to: '近鉄八尾',
-        duration: 20
-      }
-    ],
-    duration: 20,
-    transfers: 0
-  }
-]
+const matchesRequest = (generated: z.infer<typeof GeneratedRouteSchema>, legs: Leg[]) =>
+  generated.legs.length === legs.length &&
+  generated.legs.every(
+    (leg, i) =>
+      (['from', 'to', 'fromStation', 'toStation'] as const).every(
+        (field) => leg[field].trim().normalize('NFC') === legs[i][field]
+      ) &&
+      leg.routes[0].from.trim().normalize('NFC') === legs[i].fromStation &&
+      leg.routes[leg.routes.length - 1].to.trim().normalize('NFC') === legs[i].toStation &&
+      leg.routes.every(
+        (segment, j) => j === 0 || leg.routes[j - 1].to.trim().normalize('NFC') === segment.from.trim().normalize('NFC')
+      )
+  )
 
 /**
  * POST /api/directions - 経路情報をLLMで生成
@@ -192,7 +142,7 @@ app.openapi(
       200: {
         content: {
           'application/json': {
-            schema: RouteEndpointResponseSchema
+            schema: RouteResponseSchema
           }
         },
         description: '経路情報生成成功'
@@ -212,14 +162,7 @@ app.openapi(
       })
     }
 
-    if (legs.length === 0) {
-      return c.json({ legs: [] }, 200)
-    }
-
-    // ローカル環境ではモックを返す（Workers AIはローカルで動作しない）
-    if (!c.env.AI) {
-      return c.json({ legs: mockLegs }, 200)
-    }
+    if (!c.env.AI) return c.json({ status: 'unavailable' as const, reason: 'generation_failed' as const }, 200)
 
     let cachedRoute: Awaited<ReturnType<typeof routeCache>>
     try {
@@ -227,7 +170,8 @@ app.openapi(
       const hit = await cachedRoute?.cache.match(cachedRoute.key)
       if (hit) {
         const result = RouteResponseSchema.safeParse(await hit.json())
-        if (result.success && !result.data.degraded) return c.json(result.data, 200)
+        if (result.success && result.data.status === 'estimated' && matchesRequest(result.data, legs))
+          return c.json(result.data, 200)
       }
     } catch {
       // Cache outages must not prevent route generation.
@@ -283,33 +227,15 @@ app.openapi(
         }
       })
 
-      const result = RouteResponseSchema.safeParse(response.response)
-
-      if (!result.success) {
-        console.error('[Routes API] Validation failed:', result.error.issues)
-        console.error('[Routes API] Invalid LLM response structure:', response.response)
-        // フォールバック: 元のリクエストに推測値を追加
-        const fallbackLegs = legs.map((leg) => ({
-          ...leg,
-          routes: [],
-          duration: 0,
-          transfers: 0
-        }))
-        return c.json({ legs: fallbackLegs, degraded: true }, 200)
+      const result = GeneratedRouteSchema.safeParse(response.response)
+      if (!result.success || !matchesRequest(result.data, legs)) {
+        return c.json({ status: 'unavailable' as const, reason: 'generation_failed' as const }, 200)
       }
-
-      console.log('[Routes API] Validation success, returning data')
-      // Cache only validated, non-degraded results for the requested endpoints.
-      // Count/identity mismatches remain uncached for the later AI correctness task.
-      const matchesRequest =
-        result.data.legs.length === legs.length &&
-        result.data.legs.every((leg, i) =>
-          (['from', 'to', 'fromStation', 'toStation'] as const).every(
-            (field) => leg[field].trim().normalize('NFC') === legs[i][field]
-          )
-        )
-      if (cachedRoute && !result.data.degraded && matchesRequest) {
-        const canonical = { ...result.data, legs: result.data.legs.map((leg, i) => ({ ...leg, ...legs[i] })) }
+      const canonical = {
+        status: 'estimated' as const,
+        legs: result.data.legs.map((leg, i) => ({ ...leg, ...legs[i] }))
+      }
+      if (cachedRoute) {
         try {
           await cachedRoute.cache.put(
             cachedRoute.key,
@@ -320,19 +246,11 @@ app.openapi(
         } catch {
           // Returning a successful result takes precedence over caching it.
         }
-        return c.json(canonical, 200)
       }
-      return c.json(result.data, 200)
+      return c.json(canonical, 200)
     } catch (error) {
       console.error('Workers AI error:', error)
-      // エラー時もフォールバック
-      const fallbackLegs = legs.map((leg) => ({
-        ...leg,
-        routes: [],
-        duration: 0,
-        transfers: 0
-      }))
-      return c.json({ legs: fallbackLegs, degraded: true }, 200)
+      return c.json({ status: 'unavailable' as const, reason: 'generation_failed' as const }, 200)
     }
   }
 )
