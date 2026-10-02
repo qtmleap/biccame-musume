@@ -1,6 +1,5 @@
-import { useAtom } from 'jotai'
 import { EyeOff } from 'lucide-react'
-import { eventUserActivityFilterAtom } from '@/atoms/event-user-activity-filter-atom'
+import { useId } from 'react'
 import { FilterHeader } from '@/components/common/filter-header'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
@@ -10,8 +9,16 @@ import { useAuth } from '@/hooks/use-auth'
  * イベントユーザーアクティビティフィルタコンポーネント
  * 興味のあるイベント・達成済みイベントを非表示にする
  */
-export const EventUserActivityFilter = () => {
-  const [activityFilter, setActivityFilter] = useAtom(eventUserActivityFilterAtom)
+type EventUserActivityFilterProps = {
+  value: { hideInterested: boolean; hideCompleted: boolean }
+  onChange: (value: { hideInterested: boolean; hideCompleted: boolean }) => void
+}
+
+export const EventUserActivityFilter = ({
+  value: activityFilter,
+  onChange: setActivityFilter
+}: EventUserActivityFilterProps) => {
+  const id = useId()
   const { isAuthenticated } = useAuth()
 
   // 未ログイン時は非表示
@@ -23,23 +30,23 @@ export const EventUserActivityFilter = () => {
       <div className='flex items-center gap-4'>
         <div className='flex items-center gap-2'>
           <Checkbox
-            id='activity-interested'
+            id={`${id}-activity-interested`}
             checked={activityFilter.hideInterested}
             onCheckedChange={(checked) => setActivityFilter({ ...activityFilter, hideInterested: checked === true })}
             className='border-card data-[state=checked]:bg-action-interest data-[state=checked]:border-action-interest'
           />
-          <Label htmlFor='activity-interested' className='text-muted-foreground cursor-pointer'>
+          <Label htmlFor={`${id}-activity-interested`} className='text-muted-foreground cursor-pointer'>
             興味あり
           </Label>
         </div>
         <div className='flex items-center gap-2'>
           <Checkbox
-            id='activity-completed'
+            id={`${id}-activity-completed`}
             checked={activityFilter.hideCompleted}
             onCheckedChange={(checked) => setActivityFilter({ ...activityFilter, hideCompleted: checked === true })}
             className='border-card data-[state=checked]:bg-action-award data-[state=checked]:border-action-award'
           />
-          <Label htmlFor='activity-completed' className='text-muted-foreground cursor-pointer'>
+          <Label htmlFor={`${id}-activity-completed`} className='text-muted-foreground cursor-pointer'>
             達成済み
           </Label>
         </div>
