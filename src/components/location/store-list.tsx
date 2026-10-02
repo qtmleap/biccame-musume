@@ -1,171 +1,127 @@
-import { List } from 'lucide-react'
+import { List, X } from 'lucide-react'
 import { useMemo } from 'react'
 import { StoreListItem } from '@/components/store-list-item'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer'
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import type { StoreData } from '@/schemas/store.dto'
 import { calculateDistance } from '@/utils/distance'
+import { getStorePosition } from '@/utils/store-position'
 
-type StoreListDialogProps = {
+type StoreListProps = {
   characters: StoreData[]
   isOpen: boolean
   onOpenChange: (open: boolean) => void
   onCharacterSelect: (character: StoreData) => void
   mapCenter: google.maps.LatLngLiteral | null
+  onPanelChange?: (element: HTMLElement | null) => void
 }
 
-/**
- * 店舗一覧ダイアログ（デスクトップ）
- */
-const StoreListDesktopDialog = ({
+/** 地図を操作できる一覧パネル。未登録店舗も一覧に残す。 */
+export const StoreList = ({
   characters,
   isOpen,
   onOpenChange,
   onCharacterSelect,
-  mapCenter
-}: StoreListDialogProps) => {
-  // 地図の中心位置からの距離順にソート（距離も計算）
-  const sortedCharactersWithDistance = useMemo(() => {
-    if (!mapCenter) return characters.map((c) => ({ character: c, distance: undefined }))
-
-    return [...characters]
-      .map((character) => {
-        const coords = character.coordinates
-        if (!coords) return { character, distance: undefined }
-
-        const distance = calculateDistance(mapCenter.lat, mapCenter.lng, coords.latitude, coords.longitude)
-        return { character, distance }
-      })
-      .sort((a, b) => {
-        if (a.distance === undefined) return 1
-        if (b.distance === undefined) return -1
-        return a.distance - b.distance
-      })
-  }, [characters, mapCenter])
-
-  return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <button
-          type='button'
-          className='absolute bottom-4 left-4 bg-card rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-muted/30 transition-colors'
-        >
-          <div className='flex items-center gap-2'>
-            <List className='w-4 h-4' />
-            <span className='font-medium text-sm text-foreground'>店舗一覧</span>
-          </div>
-        </button>
-      </DialogTrigger>
-      <DialogContent className='max-w-3xl!' aria-describedby={undefined}>
-        <DialogHeader>
-          <DialogTitle>店舗一覧{mapCenter && '（近い順）'}</DialogTitle>
-        </DialogHeader>
-        <div className='overflow-y-auto max-h-[60vh] p-4 custom-scrollbar'>
-          <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
-            {sortedCharactersWithDistance.map(({ character, distance }) => (
-              <button
-                key={character.id}
-                type='button'
-                onClick={() => onCharacterSelect(character)}
-                className='cursor-pointer w-full text-left rounded-lg border-card hover:border-card hover:bg-muted/30 transition-colors'
-              >
-                <StoreListItem character={character} distance={distance} />
-              </button>
-            ))}
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-/**
- * 店舗一覧ドロワー（モバイル）
- */
-const StoreListMobileDrawer = ({
-  characters,
-  isOpen,
-  onOpenChange,
-  onCharacterSelect,
-  mapCenter
-}: StoreListDialogProps) => {
-  // 地図の中心位置からの距離順にソート（距離も計算）
-  const sortedCharactersWithDistance = useMemo(() => {
-    if (!mapCenter) return characters.map((c) => ({ character: c, distance: undefined }))
-
-    return [...characters]
-      .map((character) => {
-        const coords = character.coordinates
-        if (!coords) return { character, distance: undefined }
-
-        const distance = calculateDistance(mapCenter.lat, mapCenter.lng, coords.latitude, coords.longitude)
-        return { character, distance }
-      })
-      .sort((a, b) => {
-        if (a.distance === undefined) return 1
-        if (b.distance === undefined) return -1
-        return a.distance - b.distance
-      })
-  }, [characters, mapCenter])
-
-  return (
-    <Drawer open={isOpen} onOpenChange={onOpenChange}>
-      <DrawerTrigger asChild>
-        <button
-          type='button'
-          className='absolute bottom-4 left-4 bg-card rounded-lg shadow-lg px-4 py-2 z-10 hover:bg-muted/30 transition-colors'
-        >
-          <div className='flex items-center gap-2'>
-            <List className='w-4 h-4' />
-            <span className='font-medium text-sm text-foreground'>店舗一覧</span>
-          </div>
-        </button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className='py-2 px-4'>
-          <DrawerTitle className='text-sm font-medium'>店舗一覧{mapCenter && '（近い順）'}</DrawerTitle>
-        </DrawerHeader>
-        <div className='overflow-y-auto max-h-[60vh] custom-scrollbar px-2'>
-          <div className='grid grid-cols-2 [&>*:nth-child(4n+1)]:bg-muted/30 [&>*:nth-child(4n+2)]:bg-muted/30 [&>*:nth-child(odd)]:border-r [&>*:nth-child(odd)]:border-card'>
-            {sortedCharactersWithDistance.map(({ character, distance }) => (
-              <button
-                key={character.id}
-                type='button'
-                onClick={() => onCharacterSelect(character)}
-                className='cursor-pointer w-full text-left hover:bg-muted/50 transition-colors'
-              >
-                <StoreListItem character={character} distance={distance} />
-              </button>
-            ))}
-          </div>
-        </div>
-      </DrawerContent>
-    </Drawer>
-  )
-}
-
-/**
- * 店舗一覧コンポーネント（レスポンシブ）
- */
-export const StoreList = ({ characters, isOpen, onOpenChange, onCharacterSelect, mapCenter }: StoreListDialogProps) => {
+  mapCenter,
+  onPanelChange
+}: StoreListProps) => {
   const isDesktop = useMediaQuery('(min-width: 768px)')
-
-  return isDesktop ? (
-    <StoreListDesktopDialog
-      characters={characters}
-      isOpen={isOpen}
-      onOpenChange={onOpenChange}
-      onCharacterSelect={onCharacterSelect}
-      mapCenter={mapCenter}
-    />
-  ) : (
-    <StoreListMobileDrawer
-      characters={characters}
-      isOpen={isOpen}
-      onOpenChange={onOpenChange}
-      onCharacterSelect={onCharacterSelect}
-      mapCenter={mapCenter}
-    />
+  const rows = useMemo(
+    () =>
+      characters
+        .map((character) => {
+          const position = getStorePosition(character)
+          return {
+            character,
+            distance:
+              mapCenter && position
+                ? calculateDistance(mapCenter.lat, mapCenter.lng, position.lat, position.lng)
+                : undefined
+          }
+        })
+        .sort((a, b) => {
+          if (a.distance === undefined) return b.distance === undefined ? 0 : 1
+          if (b.distance === undefined) return -1
+          return a.distance - b.distance
+        }),
+    [characters, mapCenter]
+  )
+  const content = (
+    <div className='overflow-y-auto min-h-0 p-2'>
+      {rows.map(({ character, distance }) => (
+        <button
+          key={character.id}
+          type='button'
+          onClick={() => onCharacterSelect(character)}
+          className='block w-full text-left rounded-lg hover:bg-muted focus-visible:outline-2 focus-visible:outline-primary'
+        >
+          <StoreListItem character={character} distance={distance} />
+        </button>
+      ))}
+    </div>
+  )
+  const trigger = (
+    <button
+      type='button'
+      aria-expanded={isOpen}
+      className='absolute bottom-4 left-4 z-10 flex min-h-11 items-center gap-2 rounded-lg border bg-card px-4 text-sm font-medium text-foreground shadow-lg'
+      onClick={isDesktop ? () => onOpenChange(!isOpen) : undefined}
+    >
+      <List aria-hidden='true' className='size-4' />
+      店舗一覧
+    </button>
+  )
+  if (isDesktop)
+    return (
+      <>
+        {trigger}
+        {isOpen && (
+          <section
+            ref={onPanelChange}
+            aria-label='店舗一覧'
+            className='absolute top-24 bottom-20 left-4 z-10 flex w-72 flex-col rounded-lg border bg-card text-foreground shadow-lg'
+          >
+            <div className='flex items-center justify-between px-3 py-2 border-b'>
+              <h2 className='text-sm font-semibold'>店舗一覧{mapCenter && '（近い順）'}</h2>
+              <button
+                type='button'
+                aria-label='店舗一覧を閉じる'
+                className='flex size-11 items-center justify-center'
+                onClick={() => onOpenChange(false)}
+              >
+                <X aria-hidden='true' className='size-4' />
+              </button>
+            </div>
+            {content}
+          </section>
+        )}
+      </>
+    )
+  return (
+    <Sheet open={isOpen} onOpenChange={onOpenChange} modal={false}>
+      <SheetTrigger asChild>{trigger}</SheetTrigger>
+      <SheetContent
+        ref={onPanelChange}
+        side='bottom'
+        showCloseButton={false}
+        aria-describedby={undefined}
+        onInteractOutside={(event) => event.preventDefault()}
+        onOpenAutoFocus={(event) => event.preventDefault()}
+        className='max-h-[38dvh] gap-0 bg-card text-foreground'
+      >
+        <div className='flex items-center justify-between px-4 py-2 border-b'>
+          <SheetTitle className='text-sm'>店舗一覧{mapCenter && '（近い順）'}</SheetTitle>
+          <button
+            type='button'
+            aria-label='店舗一覧を閉じる'
+            className='flex size-11 items-center justify-center'
+            onClick={() => onOpenChange(false)}
+          >
+            <X aria-hidden='true' className='size-4' />
+          </button>
+        </div>
+        {content}
+      </SheetContent>
+    </Sheet>
   )
 }
