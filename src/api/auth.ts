@@ -84,4 +84,22 @@ routes.openapi(
   }
 )
 
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/logout',
+    responses: { 200: { description: 'ログアウト成功' } }
+  }),
+  (c) => {
+    setCookie(c, 'session', '', {
+      maxAge: 0,
+      httpOnly: true,
+      secure: c.env.ENVIRONMENT !== 'local',
+      sameSite: 'Lax',
+      path: '/'
+    })
+    return c.json({ success: true })
+  }
+)
+
 export default routes

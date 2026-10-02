@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import {
   createUserWithEmailAndPassword,
   GithubAuthProvider,
@@ -8,10 +9,13 @@ import {
   signOut,
   TwitterAuthProvider
 } from 'firebase/auth'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 import { backendSessionReadyAtom, userAtom } from '@/atoms/auth-atom'
+import { serializeSessionOperation } from '@/lib/auth-session'
 import { auth } from '@/lib/firebase'
+import { clearUserQueries, deserializePublicQueryCache } from '@/lib/user-query-keys'
+import { client } from '@/utils/client'
 
 /**
  * Firebase Authentication用カスタムフック
@@ -20,6 +24,8 @@ import { auth } from '@/lib/firebase'
  */
 export const useAuth = () => {
   const user = useAtomValue(userAtom)
+  const queryClient = useQueryClient()
+  const setBackendSessionReady = useSetAtom(backendSessionReadyAtom)
   const backendSessionReady = useAtomValue(backendSessionReadyAtom)
 
   /**
@@ -91,13 +97,27 @@ export const useAuth = () => {
    */
   const logout = useCallback(async () => {
     try {
-      await signOut(auth)
+      await serializeSessionOperation(async () => {
+        const response = await client.logout(undefined)
+        if (!response.success) throw new Error('セッションを失効できませんでした')
+        await signOut(auth)
+      })
+      setBackendSessionReady(false)
+      await clearUserQueries(queryClient)
+      const stored = localStorage.getItem('REACT_QUERY_OFFLINE_CACHE')
+      if (stored) {
+        try {
+          localStorage.setItem('REACT_QUERY_OFFLINE_CACHE', JSON.stringify(deserializePublicQueryCache(stored)))
+        } catch {
+          localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
+        }
+      }
       window.location.href = '/'
     } catch (error) {
       console.error('Logout failed:', error)
       throw error
     }
-  }, [])
+  }, [queryClient, setBackendSessionReady])
 
   return {
     user,
