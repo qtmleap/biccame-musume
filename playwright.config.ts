@@ -13,7 +13,8 @@ export default defineConfig({
     'character-search-layout.spec.ts',
     'events-responsive-view.spec.ts',
     'card-surface-layout.spec.ts',
-    'calendar-responsive-controls.spec.ts'
+    'calendar-responsive-controls.spec.ts',
+    'character-detail-layout.spec.ts'
   ],
   timeout: 30000,
   retries: 1,
