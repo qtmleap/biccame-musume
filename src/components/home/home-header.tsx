@@ -27,7 +27,7 @@ export const HomeHeader = () => {
           initial='initial'
           animate={{ opacity: 0.8 }}
           transition={{ duration: DURATION.slow * 0.75, delay: 0.3, ease: EASE_OUT }}
-          className='text-white/80 text-xs md:text-sm mb-4'
+          className='text-white/80 text-[13px] md:text-sm mb-4'
         >
           推し活を全力サポート - イベント追跡から店舗巡りまで
         </motion.p>
