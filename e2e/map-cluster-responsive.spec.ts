@@ -276,3 +276,113 @@ for (const width of widths)
     await expect(page.getByRole('link', { name: /位置未登録店舗/ })).toContainText('地図位置未登録')
     expect(await camera(page)).toEqual(previous)
   })
+
+test('production animated Sheet updates bounds and selected camera after settlement', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 })
+  await page.goto('/location/')
+  await expect(page.getByRole('button', { name: '3店舗を拡大', exact: true })).toBeVisible()
+  // Restore real CSS animations only for this behavior assertion, keeping capture controls intact.
+  const removed = await page.evaluate(() => {
+    const visit = (rules: CSSRuleList): number =>
+      Array.from(rules).reduce((count, rule) => {
+        if (rule instanceof CSSStyleRule && rule.style.getPropertyValue('animation').includes('none')) {
+          rule.style.removeProperty('animation')
+          rule.style.removeProperty('transition')
+          return count + 1
+        }
+        return count + ('cssRules' in rule && rule.cssRules instanceof CSSRuleList ? visit(rule.cssRules) : 0)
+      }, 0)
+    return Array.from(document.styleSheets).reduce((count, sheet) => count + visit(sheet.cssRules), 0)
+  })
+  expect(removed).toBeGreaterThan(0)
+  const settle = async (label: string) => {
+    const result = await page.locator('[data-slot=sheet-content]').evaluate(async (element, label) => {
+      const style = getComputedStyle(element)
+      const initial = { transform: style.transform, animation: style.animationName, duration: style.animationDuration }
+      const animations = element.getAnimations()
+      const states = animations.map((animation) => ({
+        playState: animation.playState,
+        duration: animation.effect?.getTiming().duration
+      }))
+      await Promise.all(animations.map((animation) => animation.finished))
+      const map = document.querySelector('[data-testid=map]')
+      if (!map) throw new Error('Map fixture missing')
+      const mapBox = map.getBoundingClientRect()
+      const sheetBox = element.getBoundingClientRect()
+      return {
+        label,
+        initial,
+        states,
+        finalTransform: getComputedStyle(element).transform,
+        height: sheetBox.height,
+        expectedBottom: mapBox.bottom - sheetBox.top + 24
+      }
+    }, label)
+    expect(result.initial.animation).toBe('enter')
+    expect(result.initial.duration).toBe('0.5s')
+    expect(result.initial.transform).not.toBe('none')
+    expect(result.states.some((state) => state.playState === 'running' && state.duration === 500)).toBe(true)
+    expect(result.finalTransform).toBe('none')
+    expect(result.height).toBeGreaterThan(300)
+    return result
+  }
+  await page.getByRole('button', { name: '店舗一覧', exact: true }).click()
+  const opening = await settle('opening')
+  writeFileSync(
+    '.cache/b06/animated-sheet-opening.json',
+    JSON.stringify({ removed, opening, geometry: await geometry(page) }, null, 2)
+  )
+  await expect.poll(async () => (await geometry(page)).padding.bottom).toBe(opening.expectedBottom)
+  const evidence = [{ ...opening, geometry: await geometry(page) }]
+  // Nonmodal controls remain usable outside the settled Sheet.
+  await page.getByRole('combobox', { name: '地域' }).focus()
+  await expect(page.getByRole('combobox', { name: '地域' })).toBeFocused()
+  await page.getByRole('button', { name: '全店舗を表示', exact: true }).click()
+  await expect.poll(async () => (await geometry(page)).padding.bottom).toBe(opening.expectedBottom)
+  await page.getByRole('button', { name: '店舗一覧を閉じる' }).click()
+  await expect(page.locator('[data-slot=sheet-content]')).toHaveCount(0)
+  await expect.poll(async () => (await geometry(page)).padding.bottom).toBe(24)
+  // A new opening after exit must recompute bounds again.
+  await page.getByRole('button', { name: '店舗一覧', exact: true }).click()
+  const repeated = await settle('repeated opening')
+  await expect.poll(async () => (await geometry(page)).padding.bottom).toBe(repeated.expectedBottom)
+  evidence.push({ ...repeated, geometry: await geometry(page) })
+  await page
+    .getByRole('button', { name: /東京店舗A/ })
+    .filter({ has: page.locator('h3') })
+    .click()
+  await expect(page.locator('[data-slot=sheet-content]')).toHaveCount(0)
+  await expect(page.getByRole('link', { name: /東京店舗A/ })).toBeVisible()
+  const closedOffset = (await geometry(page)).offset
+  await page.getByRole('button', { name: '店舗一覧', exact: true }).click()
+  const selected = await settle('selected opening')
+  const topPadding = await page.getByTestId('map').evaluate((element) => {
+    const controls = document.querySelector('select[aria-label="地域"]')?.closest('div')
+    if (!controls) throw new Error('Region toolbar fixture missing')
+    return controls.getBoundingClientRect().bottom - element.getBoundingClientRect().top + 24
+  })
+  const selectedOffset = { x: 0, y: (selected.expectedBottom - topPadding) / 2 }
+  await expect.poll(async () => (await geometry(page)).offset).toEqual(selectedOffset)
+  evidence.push({ ...selected, geometry: await geometry(page) })
+  // Resize uses current physical Sheet height, not its earlier animation position.
+  await page.setViewportSize({ width: 320, height: 1000 })
+  await expect
+    .poll(async () => page.getByTestId('map').evaluate((element) => element.getBoundingClientRect().bottom))
+    .toBe(1000)
+  const resizedBottom = await page.locator('[data-slot=sheet-content]').evaluate((element) => {
+    const map = document.querySelector('[data-testid=map]')
+    if (!map) throw new Error('Map fixture missing')
+    return map.getBoundingClientRect().bottom - element.getBoundingClientRect().top + 24
+  })
+  await expect.poll(async () => (await geometry(page)).offset.y).toBe((resizedBottom - topPadding) / 2)
+  await page.getByRole('button', { name: '店舗一覧を閉じる' }).click()
+  await expect(page.locator('[data-slot=sheet-content]')).toHaveCount(0)
+  await expect.poll(async () => (await geometry(page)).offset).toEqual(closedOffset)
+  await page.getByRole('button', { name: '店舗一覧', exact: true }).click()
+  const selectedRepeated = await settle('selected repeated opening')
+  await expect
+    .poll(async () => (await geometry(page)).offset.y)
+    .toBe((selectedRepeated.expectedBottom - topPadding) / 2)
+  evidence.push({ ...selectedRepeated, geometry: await geometry(page) })
+  writeFileSync('.cache/b06/animated-sheet-green.json', JSON.stringify({ removed, evidence }, null, 2))
+})
