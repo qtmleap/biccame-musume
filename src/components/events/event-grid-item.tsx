@@ -4,8 +4,7 @@ import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { EventCharacterBadge } from '@/components/events/event-character-badge'
 import { Badge } from '@/components/ui/badge'
-import { useMediaQuery } from '@/hooks/use-media-query'
-import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_DENSE, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { EVENT_CATEGORY_LABELS, EVENT_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { CATEGORY_BADGE, STATUS_BADGE } from '@/locales/component'
@@ -48,8 +47,7 @@ const getEndingSoonBackground = (event: Event): string | undefined => {
  * イベントグリッドアイテム
  */
 export const EventGridItem = ({ event, index = 0, compact = false }: EventGridItemProps) => {
-  const isMultiColumn = useMediaQuery('(min-width: 640px)')
-  const rotationDeg = isMultiColumn ? getStickerRotation(index) : 0
+  const rotationDeg = getStickerRotation(index, undefined, 'dense')
   const tape = STICKER_TAPES[index % STICKER_TAPES.length]
 
   const isEnded = event.status === 'ended'
@@ -57,11 +55,10 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
   const dimEnded = isEnded && !compact
 
   return (
-    <motion.div className='h-full' style={{ filter: STICKER_SHADOW_SM }}>
+    <motion.div className='h-full' style={{ filter: STICKER_SHADOW_DENSE }}>
       <motion.div
         className='h-full'
         style={{ rotate: rotationDeg }}
-        whileHover={{ scale: 1.04, rotate: 0 }}
         whileTap={{ scale: 0.97 }}
         transition={STICKER_HOVER_TRANSITION}
       >
@@ -69,7 +66,7 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
           to='/events/$uuid'
           params={{ uuid: event.uuid }}
           className={cn(
-            'relative block rounded-xl p-4 border border-zinc-200 dark:border-card-border h-full',
+            'relative block rounded-xl p-3 border border-zinc-200 dark:border-card-border hover:border-brand/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand h-full',
             dimEnded ? 'opacity-50 grayscale bg-card' : endingSoonBg || 'bg-card'
           )}
         >
@@ -87,7 +84,7 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
                 {CATEGORY_BADGE[event.category](EVENT_CATEGORY_LABELS[event.category])}
                 <EventCharacterBadge event={event} />
               </div>
-              <h3 className='text-base leading-6 font-semibold text-foreground line-clamp-2 break-words'>
+              <h3 className='text-base leading-6 min-h-12 font-semibold text-foreground line-clamp-2 break-words'>
                 {event.title}
               </h3>
               <div className='mt-1 flex flex-col gap-1 text-[13px] leading-5 text-muted-foreground'>

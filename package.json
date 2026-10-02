@@ -22,7 +22,8 @@
     "e2e:navigation-filter-sharing": "playwright test --config e2e/navigation-filter-sharing/playwright.config.ts",
     "e2e:events-responsive-view": "playwright test --config e2e/events-responsive-view/playwright.config.ts",
     "e2e:visual-typography": "playwright test --config e2e/visual-typography/playwright.config.ts",
-    "e2e:character-search-layout": "playwright test --config e2e/character-search-layout/playwright.config.ts"
+    "e2e:character-search-layout": "playwright test --config e2e/character-search-layout/playwright.config.ts",
+    "e2e:card-surface-layout": "playwright test --config e2e/card-surface-layout/playwright.config.ts"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "~1.54.0",
