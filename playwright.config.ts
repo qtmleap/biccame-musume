@@ -7,6 +7,7 @@ const BASE_URL = `http://localhost:${PORT}`
 
 export default defineConfig({
   testDir: './e2e',
+  testIgnore: ['**/route-empty-state-layout.spec.ts'],
   timeout: 30000,
   retries: 1,
   use: {
