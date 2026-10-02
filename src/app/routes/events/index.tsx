@@ -236,15 +236,15 @@ const EventsContent = () => {
             </Sheet>
 
             {/* 表示切り替えボタン */}
-            <Toggle
+            <Button
               size='sm'
+              variant='ghost'
               aria-label={viewMode === 'grid' ? '日程表示' : '一覧表示'}
-              pressed={viewMode === 'grid'}
-              onPressedChange={(pressed) => setViewMode(pressed ? 'grid' : 'gantt')}
+              onClick={() => setViewMode(viewMode === 'grid' ? 'gantt' : 'grid')}
               className='h-9 w-9 p-0 text-muted-foreground hover:text-foreground'
             >
-              {viewMode === 'grid' ? <LayoutGrid className='size-4' /> : <Calendar className='size-4' />}
-            </Toggle>
+              {viewMode === 'grid' ? <Calendar className='size-4' /> : <LayoutGrid className='size-4' />}
+            </Button>
           </div>
         </div>
 
