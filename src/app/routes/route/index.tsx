@@ -133,7 +133,12 @@ const RouteCalculator = () => {
    * 訪問順を計算してAPIで詳細を取得
    */
   const handleCalculate = useCallback(async () => {
-    if (selectedStores.length < 2) return
+    if (
+      selectedStores.length < 2 ||
+      selectedStores.length > 5 ||
+      selectedStores.some((store) => !store.station?.trim())
+    )
+      return
 
     cancelRequest()
     const generation = requestGeneration.current
@@ -171,14 +176,38 @@ const RouteCalculator = () => {
     [selectedStores]
   )
 
+  const inputExplanation =
+    selectedStores.length === 0
+      ? 'まず店舗を2〜5件選択してください。'
+      : selectedStores.length === 1
+        ? 'あと1店舗選択してください（現在1件）。'
+        : hasInvalidStation
+          ? '利用駅が未設定の店舗があります。各店舗の利用駅を確認してください。'
+          : isCalculating
+            ? '訪問順を計算しています。'
+            : '利用駅を確認したら、訪問順を計算できます。'
+
   return (
-    <div className='mx-auto max-w-6xl space-y-6 px-4 py-2 md:py-4 md:px-8'>
+    <div className='mx-auto max-w-3xl space-y-6 px-4 py-2 text-foreground md:py-4 md:px-8'>
       <h1 className='flex items-center gap-2 text-xl font-bold'>
         <RouteIcon className='size-5' />
         ルート計算
       </h1>
 
-      <div className='space-y-4'>
+      <section aria-label='ルート計算の入力' className='space-y-4'>
+        <ol aria-label='ルート計算の手順' className='grid gap-3 rounded-lg border bg-card p-4 text-sm sm:grid-cols-3'>
+          {['店舗を2〜5件選択', '利用駅を確認', '訪問順を計算'].map((step, index) => (
+            <li key={step} className='flex items-start gap-2'>
+              <span
+                className='flex size-6 shrink-0 items-center justify-center rounded-full border text-xs'
+                aria-hidden='true'
+              >
+                {index + 1}
+              </span>
+              <span className='pt-0.5 font-medium'>{step}</span>
+            </li>
+          ))}
+        </ol>
         <StoreSelect stores={unselectedStores} onSelect={handleAddStore} disabled={selectedStores.length >= 5} />
 
         <SelectedStoreList
@@ -188,7 +217,11 @@ const RouteCalculator = () => {
           onClearAll={handleClearAll}
         />
 
+        <p id='route-input-explanation' role='status' className='text-sm'>
+          {inputExplanation}
+        </p>
         <Button
+          aria-describedby='route-input-explanation route-reference-explanation'
           variant='outline'
           className='w-full'
           disabled={selectedStores.length < 2 || isCalculating || hasInvalidStation}
@@ -206,7 +239,10 @@ const RouteCalculator = () => {
             </>
           )}
         </Button>
-      </div>
+        <p id='route-reference-explanation' className='text-sm text-muted-foreground'>
+          店舗間の直線距離を基準に訪問順を計算します。計算時に取得するAIによる参考経路は、交通機関での最短経路を保証するものではありません。外部経路検索で確認してください。
+        </p>
+      </section>
 
       {result && <RouteResultCard result={result} />}
     </div>
