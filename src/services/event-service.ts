@@ -13,60 +13,15 @@ import {
   type EventDetail,
   type EventRequest,
   EventSchema,
-  type EventStatus,
-  EventStatusSchema,
   type ReferenceUrlType
 } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
 import type { Bindings } from '@/types/bindings'
+import { calculateEventStatus } from '@/utils/event-status'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.tz.setDefault('Asia/Tokyo')
-
-/**
- * イベントのステータスと残り日数を計算
- * @param event - イベントの日付情報
- * @returns ステータス（upcoming/ongoing/last_day/ended）と残り日数
- */
-const calculateEventStatus = (event: {
-  startDate: Date
-  endDate: Date | null
-  endedAt: Date | null
-}): { status: EventStatus; daysUntil: number } => {
-  const now = dayjs().tz('Asia/Tokyo').startOf('day')
-  const startDate = dayjs(event.startDate).tz('Asia/Tokyo').startOf('day')
-  const endDate = event.endDate ? dayjs(event.endDate).tz('Asia/Tokyo').startOf('day') : null
-  const endedAt = event.endedAt ? dayjs(event.endedAt).tz('Asia/Tokyo') : null
-
-  // 実際の終了日時が設定されている場合は終了
-  if (endedAt) {
-    return { status: EventStatusSchema.enum.ended, daysUntil: 0 }
-  }
-
-  // 開始前
-  if (now.isBefore(startDate)) {
-    return { status: EventStatusSchema.enum.upcoming, daysUntil: startDate.diff(now, 'day') }
-  }
-
-  // 終了日が設定されていて、終了日を過ぎている場合
-  if (endDate && now.isAfter(endDate, 'day')) {
-    return { status: EventStatusSchema.enum.ended, daysUntil: 0 }
-  }
-
-  // 終了日当日は最終日
-  if (endDate && now.isSame(endDate, 'day')) {
-    return { status: EventStatusSchema.enum.last_day, daysUntil: 0 }
-  }
-
-  // 開催中
-  if (endDate) {
-    return { status: EventStatusSchema.enum.ongoing, daysUntil: endDate.diff(now, 'day') }
-  }
-
-  // 終了日未定で開催中
-  return { status: EventStatusSchema.enum.ongoing, daysUntil: 0 }
-}
 
 /**
  * PrismaのイベントモデルをAPIレスポンス用のEvent型に変換
@@ -119,7 +74,7 @@ export type EventListPayload = Prisma.EventGetPayload<{ select: typeof EVENT_LIS
 type EventDetailPayload = Prisma.EventGetPayload<{ select: typeof EVENT_DETAIL_SELECT }>
 
 export const transform = (event: EventListPayload, interestedCount = 0, completedCount = 0): Event => {
-  const { status, daysUntil } = calculateEventStatus(event)
+  const { status, daysUntil } = calculateEventStatus(event, dayjs().toISOString())
   return {
     uuid: event.id,
     category: event.category as EventCategory,
