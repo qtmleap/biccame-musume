@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { HTTPException } from 'hono/http-exception'
-import type { Prisma } from '@/generated/prisma/client'
+import { Prisma } from '@/generated/prisma/client'
 import { getPrisma } from '@/lib/prisma'
 import type { CommentResponse } from '@/schemas/comment.dto'
 import {
@@ -213,9 +213,12 @@ const toStoresCreate = (data: EventRequest) => data.stores.map((storeKey) => ({ 
  * 同一UUIDが存在する場合は既存イベントを返す（冪等性保証）
  * @param env - Cloudflare Workers環境変数
  * @param data - イベント作成リクエストデータ
- * @returns 作成されたイベント情報
+ * @returns イベント情報と、この呼び出しで新規作成したかどうか
  */
-export const createEvent = async (env: Bindings, data: EventRequest): Promise<EventDetail> => {
+export const createEvent = async (
+  env: Bindings,
+  data: EventRequest
+): Promise<{ event: EventDetail; created: boolean }> => {
   const prisma = getPrisma(env)
 
   const existingEvent = await prisma.event.findUnique({
@@ -224,28 +227,39 @@ export const createEvent = async (env: Bindings, data: EventRequest): Promise<Ev
   })
 
   if (existingEvent) {
-    console.log('Event already exists with id:', data.uuid)
-    return transformDetail(existingEvent)
+    return { event: transformDetail(existingEvent), created: false }
   }
 
-  const event = await prisma.event.create({
-    data: {
-      id: data.uuid,
-      category: data.category,
-      title: data.title,
-      limitedQuantity: data.limitedQuantity,
-      ...toEventDates(data),
-      isVerified: data.isVerified ?? false,
-      isPreliminary: data.isPreliminary ?? false,
-      groupId: data.groupId ?? null,
-      characterId: data.characterId ?? null,
-      conditions: { create: toConditionsCreate(data, false) },
-      referenceUrls: { create: toReferenceUrlsCreate(data, false) },
-      stores: { create: toStoresCreate(data) }
-    },
-    select: EVENT_DETAIL_SELECT
-  })
-  return transformDetail(event)
+  try {
+    const event = await prisma.event.create({
+      data: {
+        id: data.uuid,
+        category: data.category,
+        title: data.title,
+        limitedQuantity: data.limitedQuantity,
+        ...toEventDates(data),
+        isVerified: data.isVerified ?? false,
+        isPreliminary: data.isPreliminary ?? false,
+        groupId: data.groupId ?? null,
+        characterId: data.characterId ?? null,
+        conditions: { create: toConditionsCreate(data, false) },
+        referenceUrls: { create: toReferenceUrlsCreate(data, false) },
+        stores: { create: toStoresCreate(data) }
+      },
+      select: EVENT_DETAIL_SELECT
+    })
+    return { event: transformDetail(event), created: true }
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      // Another request may have inserted this UUID after the initial lookup.
+      const existingEvent = await prisma.event.findUnique({
+        where: { id: data.uuid },
+        select: EVENT_DETAIL_SELECT
+      })
+      if (existingEvent) return { event: transformDetail(existingEvent), created: false }
+    }
+    throw error
+  }
 }
 
 /**
