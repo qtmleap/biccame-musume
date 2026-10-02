@@ -41,7 +41,7 @@ export const EventCategoryFilter = ({ value: categoryFilter, onChange }: EventCa
   }
 
   return (
-    <div className='w-full'>
+    <div className='w-full text-foreground'>
       <FilterHeader label={FILTER_LABELS.category} />
       <div className='flex flex-wrap gap-4 text-sm'>
         {EventCategorySchema.options.map((category) => (
