@@ -4,7 +4,7 @@ import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/se
 import { getEventsStats } from '@/services/me-service'
 import type { Bindings } from '@/types/bindings'
 import { Twitter } from '@/utils/twitter'
-import { EventDetailSchema, EventRequestSchema, EventSchema } from '../schemas/event.dto'
+import { EventDetailSchema, EventRequestSchema, EventSchema, EventStatsRequestSchema } from '../schemas/event.dto'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
@@ -211,9 +211,7 @@ routes.openapi(
       body: {
         content: {
           'application/json': {
-            schema: z.object({
-              eventIds: z.array(z.string().nonempty())
-            })
+            schema: EventStatsRequestSchema
           }
         }
       }
