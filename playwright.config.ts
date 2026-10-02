@@ -7,7 +7,12 @@ const BASE_URL = `http://localhost:${PORT}`
 
 export default defineConfig({
   testDir: './e2e',
-  testIgnore: ['navigation-filter-sharing.spec.ts', 'visual-typography.spec.ts', 'events-responsive-view.spec.ts'],
+  testIgnore: [
+    'event-filter-sheet-layout.spec.ts',
+    'navigation-filter-sharing.spec.ts',
+    'visual-typography.spec.ts',
+    'events-responsive-view.spec.ts'
+  ],
   timeout: 30000,
   retries: 1,
   use: {

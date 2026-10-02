@@ -43,7 +43,7 @@ const AtomStatusFilter = ({
 const ControlledStatusFilter = ({ value: statusFilter, onChange: setStatusFilter }: ControlledStatusFilterProps) => {
   const id = useId()
   return (
-    <div className='w-full'>
+    <div className='w-full text-foreground'>
       <FilterHeader label={FILTER_LABELS.status} />
       <div className='flex items-center gap-4'>
         <div className='flex items-center gap-2'>
@@ -53,7 +53,7 @@ const ControlledStatusFilter = ({ value: statusFilter, onChange: setStatusFilter
             onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, upcoming: checked === true })}
             className='border-card data-[state=checked]:bg-status-upcoming-foreground data-[state=checked]:border-status-upcoming-foreground'
           />
-          <Label htmlFor={`${id}-status-upcoming`} className='text-muted-foreground cursor-pointer'>
+          <Label htmlFor={`${id}-status-upcoming`} className='text-foreground cursor-pointer'>
             {EVENT_STATUS_LABELS.upcoming}
           </Label>
         </div>
@@ -64,7 +64,7 @@ const ControlledStatusFilter = ({ value: statusFilter, onChange: setStatusFilter
             onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, ongoing: checked === true })}
             className='border-card data-[state=checked]:bg-success data-[state=checked]:border-success'
           />
-          <Label htmlFor={`${id}-status-ongoing`} className='text-muted-foreground cursor-pointer'>
+          <Label htmlFor={`${id}-status-ongoing`} className='text-foreground cursor-pointer'>
             {EVENT_STATUS_LABELS.ongoing}
           </Label>
         </div>
@@ -75,7 +75,7 @@ const ControlledStatusFilter = ({ value: statusFilter, onChange: setStatusFilter
             onCheckedChange={(checked) => setStatusFilter({ ...statusFilter, ended: checked === true })}
             className='border-card data-[state=checked]:bg-muted-foreground data-[state=checked]:border-muted-foreground'
           />
-          <Label htmlFor={`${id}-status-ended`} className='text-muted-foreground cursor-pointer'>
+          <Label htmlFor={`${id}-status-ended`} className='text-foreground cursor-pointer'>
             {EVENT_STATUS_LABELS.ended}
           </Label>
         </div>
