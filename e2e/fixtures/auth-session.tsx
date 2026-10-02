@@ -4,9 +4,11 @@ import { createRoot } from 'react-dom/client'
 import { AuthProvider } from '@/components/auth/auth-provider'
 import { useAuth } from '@/hooks/use-auth'
 import { useBadges } from '@/hooks/use-badges'
+import { useBulkVote } from '@/hooks/use-bulk-vote'
 import { useFavorites } from '@/hooks/use-favorites'
 import { useUserActivity } from '@/hooks/use-user-activity'
-import { deserializePublicQueryCache, shouldPersistQuery } from '@/lib/user-query-keys'
+import { useVote } from '@/hooks/use-vote'
+import { deserializePublicQueryCache, publicCacheDehydrateOptions } from '@/lib/user-query-keys'
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 300000 } } })
 const stored = localStorage.getItem('REACT_QUERY_OFFLINE_CACHE')
@@ -33,13 +35,45 @@ queryClient.getQueryCache().subscribe(() => {
     JSON.stringify({
       timestamp: Date.now(),
       buster: '',
-      clientState: dehydrate(queryClient, { shouldDehydrateQuery: shouldPersistQuery })
+      clientState: dehydrate(queryClient, publicCacheDehydrateOptions)
     })
   )
 })
+// Kept mounted across account changes, matching activity/vote controls on public pages.
+const MutationProbe = () => {
+  const activity = useUserActivity()
+  const vote = useVote('private-account-a-vote')
+  const bulk = useBulkVote()
+  const [completion, setCompletion] = useState('未完了')
+  return (
+    <>
+      <button type='button' onClick={() => activity.addVisitedStore('akiba')}>
+        活動を追加
+      </button>
+      <p data-testid='activity-pending'>{String(activity.isAddVisitedStorePending)}</p>
+      <button type='button' onClick={() => vote.mutate()}>
+        投票を追加
+      </button>
+      <p data-testid='vote-state'>
+        {JSON.stringify({ status: vote.status, data: vote.data, variables: vote.variables })}
+      </p>
+      <button
+        type='button'
+        onClick={() => bulk.mutate(['private-account-a-bulk'], { onSuccess: () => setCompletion('完了') })}
+      >
+        一括投票を追加
+      </button>
+      <p data-testid='bulk-completion'>{completion}</p>
+      <p data-testid='bulk-state'>
+        {JSON.stringify({ status: bulk.status, data: bulk.data, variables: bulk.variables })}
+      </p>
+    </>
+  )
+}
 const App = () => {
   const { user, isAuthenticated, loginWithEmail, logout } = useAuth()
   const [error, setError] = useState('')
+  const [showOperations, setShowOperations] = useState(true)
   return (
     <>
       <p data-testid='current-user'>{user === null ? '未ログイン' : user.uid}</p>
@@ -56,6 +90,10 @@ const App = () => {
         ログアウト
       </button>
       <p role='status'>{error}</p>
+      <button type='button' onClick={() => setShowOperations(false)}>
+        操作を閉じる
+      </button>
+      {showOperations && <MutationProbe />}
       {isAuthenticated && (
         <Suspense fallback={<p>読み込み中</p>}>
           <PrivateData />

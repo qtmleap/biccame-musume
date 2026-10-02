@@ -16,7 +16,7 @@ import { setUpdateServiceWorker, showUpdatePrompt, UpdatePrompt } from '@/compon
 import { Toaster } from '@/components/ui/sonner'
 import { usePushStream } from '@/hooks/use-push-stream'
 import { clearAllCaches } from '@/lib/pwa-cache'
-import { deserializePublicQueryCache, shouldPersistQuery } from '@/lib/user-query-keys'
+import { deserializePublicQueryCache, publicCacheDehydrateOptions } from '@/lib/user-query-keys'
 import { client } from '@/utils/client'
 // フォントのインポート
 import '@fontsource/noto-sans-jp/400.css'
@@ -188,9 +188,7 @@ if (!rootElement.innerHTML) {
         persistOptions={{
           persister: persister,
           maxAge: 1000 * 60 * 60 * 24 * 7, // 7日間LocalStorageに保持
-          dehydrateOptions: {
-            shouldDehydrateQuery: shouldPersistQuery
-          }
+          dehydrateOptions: publicCacheDehydrateOptions
         }}
       >
         <PushStreamBridge />

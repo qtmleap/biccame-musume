@@ -1,5 +1,6 @@
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { useAccountMutation } from '@/hooks/use-account-mutation'
 import { useAuth } from '@/hooks/use-auth'
 import { userQueryKeys } from '@/lib/user-query-keys'
 import type { CreateSpecialBadgeBody, UpdateBadgeBody } from '@/schemas/badge.dto'
@@ -19,7 +20,7 @@ export const useAllBadges = () => {
 export const useCreateSpecialBadge = () => {
   const queryClient = useQueryClient()
   const { user } = useAuth()
-  return useMutation({
+  return useAccountMutation('create-special-badge', {
     mutationFn: (body: CreateSpecialBadgeBody) => client.createSpecialBadge(body),
     onSuccess: () => {
       toast.success('バッジを作成しました')
@@ -38,7 +39,7 @@ export const useCreateSpecialBadge = () => {
 export const useUpdateBadge = () => {
   const queryClient = useQueryClient()
   const { user } = useAuth()
-  return useMutation({
+  return useAccountMutation('update-badge', {
     mutationFn: ({ code, body }: { code: string; body: UpdateBadgeBody }) =>
       client.updateBadge(body, { params: { code } }),
     onSuccess: () => {
@@ -58,7 +59,7 @@ export const useUpdateBadge = () => {
 export const useDeleteBadge = () => {
   const queryClient = useQueryClient()
   const { user } = useAuth()
-  return useMutation({
+  return useAccountMutation('delete-badge', {
     mutationFn: (code: string) => client.deleteBadge(undefined, { params: { code } }),
     onSuccess: () => {
       toast.success('バッジを削除しました')
@@ -78,7 +79,7 @@ export const useDeleteBadge = () => {
 export const useRecalculateBadges = () => {
   const queryClient = useQueryClient()
   const { user } = useAuth()
-  return useMutation({
+  return useAccountMutation('recalculate-badges', {
     mutationFn: () => client.recalculateBadges({}),
     onSuccess: (data) => {
       toast.success(`再評価をバックグラウンドで開始しました (対象 ${data.processedUsers}人)`)

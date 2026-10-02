@@ -5,7 +5,7 @@ import authRoutes from '@/api/auth'
 import type { Bindings, Variables } from '@/types/bindings'
 import { verifyToken } from '@/utils/token'
 
-const env = { ENVIRONMENT: 'local', JWT_SECRET_KEY: 'test-only-session-secret' } as Bindings
+const env = { ENVIRONMENT: 'local', JWT_SECRET_KEY: 'test-only-session-secret' }
 const app = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
 app.route('/api/auth', authRoutes)
 app.get('/api/protected', verifyToken, (c) => c.json({ uid: c.get('jwtPayload').uid }))
@@ -29,7 +29,8 @@ test('logout_then_protected_api_returns_401', async () => {
   expect(response.status).toBe(200)
   const body: unknown = await response.json()
   expect(body).toEqual({ success: true })
-  const expiredCookie = response.headers.get('Set-Cookie') ?? ''
+  const expiredCookie = response.headers.get('Set-Cookie')
+  if (expiredCookie === null) throw new Error('Logout response must expire the session Cookie')
   expect(expiredCookie).toContain('session=')
   expect(expiredCookie).toContain('Path=/')
   expect(expiredCookie).toContain('Max-Age=0')

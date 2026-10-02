@@ -16,6 +16,11 @@ export const shouldPersistQuery = (query: {
   state: { status: string }
 }): boolean => query.state.status === 'success' && query.meta?.persist !== false && !isUserQueryKey(query.queryKey)
 
+export const publicCacheDehydrateOptions = {
+  shouldDehydrateQuery: shouldPersistQuery,
+  shouldDehydrateMutation: () => false
+}
+
 // Filter before hydration, including cache entries saved by older app versions.
 export const deserializePublicQueryCache = (serialized: string): PersistedClient => {
   const persisted: PersistedClient = JSON.parse(serialized)

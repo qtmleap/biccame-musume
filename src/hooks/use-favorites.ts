@@ -1,4 +1,5 @@
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { useAccountMutation } from '@/hooks/use-account-mutation'
 import { useAuth } from '@/hooks/use-auth'
 import { userQueryKeys } from '@/lib/user-query-keys'
 import { client } from '@/utils/client'
@@ -21,12 +22,12 @@ export const useFavorites = () => {
 
   const invalidate = () => queryClient.invalidateQueries({ queryKey })
 
-  const addFavorite = useMutation({
+  const addFavorite = useAccountMutation('add-favorite', {
     mutationFn: (characterId: string) => client.addFavoriteCharacter(undefined, { params: { characterId } }),
     onSuccess: invalidate
   })
 
-  const removeFavorite = useMutation({
+  const removeFavorite = useAccountMutation('remove-favorite', {
     mutationFn: (characterId: string) => client.removeFavoriteCharacter(undefined, { params: { characterId } }),
     onSuccess: invalidate
   })

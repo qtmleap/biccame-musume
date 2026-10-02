@@ -1,4 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { isCurrentAccountMutation, useAccountMutation } from '@/hooks/use-account-mutation'
 import { useAuth } from '@/hooks/use-auth'
 import { userQueryKeys } from '@/lib/user-query-keys'
 import { client } from '@/utils/client'
@@ -39,20 +40,21 @@ export const useUserActivity = () => {
   }
 
   // 訪問済み店舗
-  const addVisitedStore = useMutation({
+  const addVisitedStore = useAccountMutation('add-visited-store', {
     mutationFn: async (storeKey: string) => {
       return client.updateUserStore({ status: 'visited' }, { params: { storeKey } })
     },
-    onSuccess: () => {
+    onSuccess: (_data, _variables, _result, context) => {
       invalidate()
       // バッジ評価はサーバー側で waitUntil 実行されるため、少し遅らせて再取得
       setTimeout(() => {
+        if (!isCurrentAccountMutation(context)) return
         queryClient.invalidateQueries({ queryKey: userQueryKeys.badges(user === null ? '' : user.uid) })
       }, BADGE_REFETCH_DELAY_MS)
     }
   })
 
-  const removeVisitedStore = useMutation({
+  const removeVisitedStore = useAccountMutation('remove-visited-store', {
     mutationFn: async (storeKey: string) => {
       return client.deleteUserStore(undefined, { params: { storeKey } })
     },
@@ -60,14 +62,14 @@ export const useUserActivity = () => {
   })
 
   // 興味のあるイベント
-  const addInterestedEvent = useMutation({
+  const addInterestedEvent = useAccountMutation('add-interested-event', {
     mutationFn: async (eventId: string) => {
       return client.updateUserEvent({ status: 'interested' }, { params: { eventId } })
     },
     onSuccess: invalidate
   })
 
-  const removeInterestedEvent = useMutation({
+  const removeInterestedEvent = useAccountMutation('remove-interested-event', {
     mutationFn: async (eventId: string) => {
       return client.deleteUserEvent(undefined, { params: { eventId }, queries: { status: 'interested' } })
     },
@@ -75,20 +77,21 @@ export const useUserActivity = () => {
   })
 
   // 達成済みイベント
-  const addCompletedEvent = useMutation({
+  const addCompletedEvent = useAccountMutation('add-completed-event', {
     mutationFn: async (eventId: string) => {
       return client.updateUserEvent({ status: 'completed' }, { params: { eventId } })
     },
-    onSuccess: () => {
+    onSuccess: (_data, _variables, _result, context) => {
       invalidate()
       // バッジ評価はサーバー側で waitUntil 実行されるため、少し遅らせて再取得
       setTimeout(() => {
+        if (!isCurrentAccountMutation(context)) return
         queryClient.invalidateQueries({ queryKey: userQueryKeys.badges(user === null ? '' : user.uid) })
       }, BADGE_REFETCH_DELAY_MS)
     }
   })
 
-  const removeCompletedEvent = useMutation({
+  const removeCompletedEvent = useAccountMutation('remove-completed-event', {
     mutationFn: async (eventId: string) => {
       return client.deleteUserEvent(undefined, { params: { eventId }, queries: { status: 'completed' } })
     },
