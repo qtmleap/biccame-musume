@@ -1,3 +1,4 @@
+import { realpathSync } from 'node:fs'
 import { resolve } from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
@@ -28,5 +29,10 @@ export default defineConfig({
     __AUTH_DOMAIN__: JSON.stringify('localhost')
   },
   optimizeDeps: { entries: ['e2e/events-responsive-view/index.html'] },
-  server: { host: '127.0.0.1', port: 15322, strictPort: true }
+  server: {
+    fs: { allow: [resolve(import.meta.dirname, '../..'), realpathSync('node_modules')] },
+    host: '127.0.0.1',
+    port: 15322,
+    strictPort: true
+  }
 })

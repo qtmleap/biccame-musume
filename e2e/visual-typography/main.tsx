@@ -18,7 +18,7 @@ import { EventList } from '@/components/home/event-list'
 import { HomeHeader } from '@/components/home/home-header'
 import { StoreDataSchema } from '@/schemas/store.dto'
 import { events } from './fixtures'
-import '@/index.css'
+import './styles.css'
 
 const character = StoreDataSchema.parse({
   id: 'nagoyagate',
