@@ -148,7 +148,7 @@ export const EventList = () => {
         >
           <Link
             to='/events'
-            className='text-sm text-muted-foreground hover:text-foreground font-semibold hover:underline transition-colors'
+            className='text-sm text-[color:var(--link-foreground)] font-semibold underline underline-offset-4 hover:decoration-2 transition-colors'
           >
             イベント一覧
           </Link>
