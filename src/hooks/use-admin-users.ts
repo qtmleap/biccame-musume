@@ -8,6 +8,10 @@ export const useAdminUsers = () => {
   return useSuspenseQuery({
     queryKey: ['admin', 'users'],
     queryFn: () => client.getAdminUsers(),
-    staleTime: 0
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: 'always',
+    meta: { persist: false },
+    networkMode: 'always'
   })
 }

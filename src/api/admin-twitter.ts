@@ -24,6 +24,7 @@ routes.openapi(
     tags: ['admin-twitter']
   }),
   async (c) => {
+    c.header('Cache-Control', 'no-store')
     const fetchedAt = new Date().toISOString()
     try {
       const account = await new Twitter(c.env).getOwnAccount()
