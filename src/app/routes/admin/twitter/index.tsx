@@ -63,7 +63,7 @@ const StatusBadge = ({ ok, fetchedAt }: { ok: boolean; fetchedAt: string }) => (
 
 const TwitterStatusContent = () => {
   const queryClient = useQueryClient()
-  const { data } = useAdminTwitterStatus()
+  const { data, isFetching, error } = useAdminTwitterStatus()
   const [isRefetching, setIsRefetching] = useState(false)
 
   const refetch = async () => {
@@ -74,6 +74,9 @@ const TwitterStatusContent = () => {
       setIsRefetching(false)
     }
   }
+
+  if (isFetching) return <LoadingFallback />
+  if (error) throw error
 
   return (
     <div className='min-h-screen bg-page-bg'>

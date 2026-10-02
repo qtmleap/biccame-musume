@@ -6,7 +6,11 @@ export const useAllComments = (includeDeleted: boolean) => {
   return useSuspenseQuery({
     queryKey: ['comments', 'admin', 'all', { includeDeleted }],
     queryFn: () => client.getAdminComments({ queries: { includeDeleted: includeDeleted ? '1' : '0' } }),
-    staleTime: 0
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: 'always',
+    meta: { persist: false },
+    networkMode: 'always'
   })
 }
 

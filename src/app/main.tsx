@@ -189,8 +189,12 @@ if (!rootElement.innerHTML) {
           maxAge: 1000 * 60 * 60 * 24 * 7, // 7日間LocalStorageに保持
           dehydrateOptions: {
             shouldDehydrateQuery: (query) => {
-              // 成功したクエリのみをキャッシュ対象にする
-              return query.state.status === 'success'
+              // 旧形式で保存された管理データも再保存しない。
+              const [scope, resource] = query.queryKey
+              const isLiveAdminQuery =
+                (scope === 'admin' && (resource === 'twitter' || resource === 'users')) ||
+                (scope === 'comments' && resource === 'admin')
+              return query.state.status === 'success' && query.meta?.persist !== false && !isLiveAdminQuery
             }
           }
         }}
