@@ -63,3 +63,16 @@ describe('ClientTransaction', () => {
     expect(post).not.toBe(get)
   })
 })
+
+// Captured from X's native sign.o generator in Chromium with RTC disabled,
+// matching Cloudflare Workers, and a fixed timestamp and random byte.
+test('current x-web assets match the native X generator byte for byte', async () => {
+  spyOn(Math, 'random').mockReturnValue(0.5)
+  const tx = ClientTransaction.create({
+    homePageHtml: readFileSync(resolve(fixtureDir, 'x-web-home.html'), 'utf8'),
+    ondemandFileText: readFileSync(resolve(fixtureDir, 'x-web-sign.js'), 'utf8')
+  })
+  expect(await tx.generateTransactionId('GET', '/i/api/graphql/test/Test', 1_700_000_000_000)).toBe(
+    'gARMwg5e+JFOvnM1sC+kcsC3oVQaD2Oo7qigITAc/z4cvThEGg5Ei8OAaRmhA/iPbRANhIElp9rZbwoVr/tz+nJbBfEhgw'
+  )
+})

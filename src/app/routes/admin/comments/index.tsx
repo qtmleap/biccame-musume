@@ -155,7 +155,10 @@ const CommentRow = ({ comment, index }: { comment: AdminComment; index: number }
 const CommentsContent = () => {
   const [includeDeleted, setIncludeDeleted] = useState(false)
   const [page, setPage] = useState(1)
-  const { data } = useAllComments(includeDeleted)
+  const { data, isFetching, error } = useAllComments(includeDeleted)
+
+  if (isFetching) return <LoadingFallback />
+  if (error) throw error
   const comments = data.comments
 
   const totalCount = comments.length

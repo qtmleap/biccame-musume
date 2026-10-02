@@ -61,7 +61,10 @@ const UserCard = ({ user, index }: { user: AdminUser; index: number }) => {
 }
 
 const UsersContent = () => {
-  const { data } = useAdminUsers()
+  const { data, isFetching, error } = useAdminUsers()
+
+  if (isFetching) return <LoadingFallback />
+  if (error) throw error
   const users = data.users
 
   return (
