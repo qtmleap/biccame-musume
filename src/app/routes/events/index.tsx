@@ -24,8 +24,10 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Toggle } from '@/components/ui/toggle'
 import { charactersQueryKey } from '@/hooks/use-characters'
+import { useJstDate } from '@/hooks/use-jst-date'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { client } from '@/utils/client'
+import { calculateEventStatus } from '@/utils/event-status'
 
 const PER_PAGE = 12
 
@@ -51,6 +53,7 @@ const EventsContent = () => {
     ]
   })
 
+  const dateKey = useJstDate()
   const events = eventsQuery.data
   const characters = charactersQuery.data
 
@@ -115,8 +118,8 @@ const EventsContent = () => {
 
   // 開催中・開催予定のイベントをフィルタリング
   const activeEvents = useMemo(() => {
-    const currentTime = dayjs()
     return events
+      .map((event) => ({ ...event, ...calculateEventStatus(event, `${dateKey}T00:00:00+09:00`) }))
       .filter((event) => {
         // カテゴリフィルター
         if (!categoryFilter.has(event.category)) return false
@@ -139,19 +142,8 @@ const EventsContent = () => {
           if (!hasMatchingStore) return false
         }
 
-        const startDate = dayjs(event.startDate)
-        const endDate = event.endDate ? dayjs(event.endDate) : null
-
-        // ステータスを計算
-        const status = (() => {
-          if (event.endedAt != null) return 'ended'
-          if (endDate && currentTime.isAfter(endDate)) return 'ended'
-          if (currentTime.isBefore(startDate)) return 'upcoming'
-          return 'ongoing'
-        })()
-
-        // ステータスフィルタを適用（last_dayはongoingとして扱う）
-        const filterStatus = event.status === 'last_day' ? 'ongoing' : status
+        // ステータスフィルタを適用（当日のlast_dayはongoingとして扱う）
+        const filterStatus = event.status === 'last_day' ? 'ongoing' : event.status
         if (!statusFilter[filterStatus]) return false
 
         // ユーザーアクティビティフィルタを適用（選択されているものを非表示）
@@ -166,6 +158,7 @@ const EventsContent = () => {
       .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
   }, [
     events,
+    dateKey,
     categoryFilter,
     storeFilter,
     regionFilter,
@@ -182,6 +175,13 @@ const EventsContent = () => {
     setPage(1)
   }, [setPage, categoryFilter, storeFilter, regionFilter, statusFilter, activityFilter])
 
+  const totalPages = Math.max(1, Math.ceil(activeEvents.length / PER_PAGE))
+  const effectivePage = Math.min(Math.max(1, page), totalPages)
+  useEffect(() => {
+    // Clamp the current owner so a filter reset queued above is preserved.
+    if (page !== effectivePage) setPage((currentPage) => Math.min(Math.max(1, currentPage), totalPages))
+  }, [page, effectivePage, totalPages, setPage])
+
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
       <EventGroupBanner />
@@ -196,6 +196,7 @@ const EventsContent = () => {
                 <Button
                   size='sm'
                   variant='ghost'
+                  aria-label='イベントを絞り込む'
                   className='md:hidden relative h-9 w-9 p-0 text-muted-foreground hover:text-foreground'
                 >
                   <Filter className='size-4' />
@@ -235,14 +236,15 @@ const EventsContent = () => {
             </Sheet>
 
             {/* 表示切り替えボタン */}
-            <Toggle
+            <Button
               size='sm'
-              pressed={viewMode === 'grid'}
-              onPressedChange={(pressed) => setViewMode(pressed ? 'grid' : 'gantt')}
+              variant='ghost'
+              aria-label={viewMode === 'grid' ? '日程表示' : '一覧表示'}
+              onClick={() => setViewMode(viewMode === 'grid' ? 'gantt' : 'grid')}
               className='h-9 w-9 p-0 text-muted-foreground hover:text-foreground'
             >
-              {viewMode === 'grid' ? <LayoutGrid className='size-4' /> : <Calendar className='size-4' />}
-            </Toggle>
+              {viewMode === 'grid' ? <Calendar className='size-4' /> : <LayoutGrid className='size-4' />}
+            </Button>
           </div>
         </div>
 
@@ -280,21 +282,18 @@ const EventsContent = () => {
         </div>
 
         {/* イベント表示 */}
-        {viewMode === 'gantt' ? (
+        {activeEvents.length === 0 ? (
+          <div className='text-center py-12 text-muted-foreground'>
+            <Gift className='size-12 mx-auto mb-4 opacity-30' />
+            <p>条件に一致するイベントはありません</p>
+            <Button variant='outline' className='mt-4' onClick={handleResetFilters}>
+              条件を解除
+            </Button>
+          </div>
+        ) : viewMode === 'gantt' ? (
           <EventGanttChart events={activeEvents} />
         ) : (
-          <PaginatedEventGrid
-            events={activeEvents}
-            perPage={PER_PAGE}
-            page={page}
-            onPageChange={setPage}
-            emptyState={
-              <div className='text-center py-12 text-muted-foreground'>
-                <Gift className='size-12 mx-auto mb-4 opacity-30' />
-                <p>開催中・開催予定のイベントはありません</p>
-              </div>
-            }
-          />
+          <PaginatedEventGrid events={activeEvents} perPage={PER_PAGE} page={effectivePage} onPageChange={setPage} />
         )}
       </div>
     </div>

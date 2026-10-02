@@ -1,8 +1,8 @@
 import { useAtom } from 'jotai'
 import { motion } from 'motion/react'
+import { RadioGroup } from 'radix-ui'
 import { regionFilterAtom } from '@/atoms/filter-atom'
 import { FilterHeader } from '@/components/common/filter-header'
-import { Button } from '@/components/ui/button'
 import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { FILTER_LABELS, REGION_LABELS } from '@/locales/app.content'
@@ -20,7 +20,15 @@ export const RegionFilterControl = () => {
   }))
 
   const regionButtons = (
-    <div className='grid grid-cols-3 sm:grid-cols-6 gap-2 py-1'>
+    <RadioGroup.Root
+      value={region}
+      onValueChange={(value) => {
+        const result = RegionSchema.safeParse(value)
+        if (result.success) setRegion(result.data)
+      }}
+      aria-label={FILTER_LABELS.region}
+      className='grid grid-cols-3 sm:grid-cols-6 gap-2 py-1'
+    >
       {regionOptions.map((option) => {
         const isSelected = region === option.value
 
@@ -33,23 +41,21 @@ export const RegionFilterControl = () => {
             whileTap={{ scale: 0.96 }}
             transition={STICKER_HOVER_TRANSITION}
           >
-            <Button
-              variant='secondary'
-              size='sm'
-              onClick={() => setRegion(option.value)}
+            <RadioGroup.Item
+              value={option.value}
               className={cn(
-                'w-full text-sm rounded-full border',
+                'inline-flex h-8 items-center justify-center px-3 w-full text-sm font-medium rounded-full border transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
                 isSelected
                   ? 'bg-brand text-brand-foreground border-brand hover:bg-brand/90'
                   : 'bg-button-surface text-foreground border-card-border hover:bg-button-surface-hover'
               )}
             >
               {option.label}
-            </Button>
+            </RadioGroup.Item>
           </motion.div>
         )
       })}
-    </div>
+    </RadioGroup.Root>
   )
 
   return (
