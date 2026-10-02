@@ -29,7 +29,7 @@ export const StoreName = ({ name, storeId }: { name?: string; storeId?: number }
           href={`https://www.biccamera.com/bc/i/shop/shoplist/shop${storeId.toString().padStart(3, '0')}.jsp`}
           target='_blank'
           rel='noopener noreferrer'
-          className='text-sm text-brand hover:underline'
+          className='text-sm text-[color:var(--link-foreground)] underline underline-offset-4 hover:decoration-2'
         >
           {name}
         </a>
@@ -54,7 +54,10 @@ export const StorePhone = ({ phone }: { phone?: string }) => {
   if (!phone) return null
   return (
     <InfoItem icon={Phone} label={CHARACTER_DETAIL_LABELS.phone}>
-      <a href={`tel:${phone}`} className='text-sm text-brand hover:underline'>
+      <a
+        href={`tel:${phone}`}
+        className='text-sm text-[color:var(--link-foreground)] underline underline-offset-4 hover:decoration-2'
+      >
         {phone}
       </a>
     </InfoItem>

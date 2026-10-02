@@ -1,6 +1,7 @@
 import dayjs, { type Dayjs } from 'dayjs'
 import { motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
+import { useJstDate } from '@/hooks/use-jst-date'
 import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 
@@ -14,10 +15,11 @@ type MonthSelectorProps = {
  * 前後2ヶ月と今月の5つのボタンを表示
  */
 export const GanttMonthSelector = ({ monthOffset, onSelect }: MonthSelectorProps) => {
+  const dateKey = useJstDate()
   return (
     <div className='grid grid-cols-5 gap-1 md:gap-2 mb-4 py-1'>
       {[-2, -1, 0, 1, 2].map((offset) => {
-        const monthDate = dayjs().add(offset, 'month')
+        const monthDate = dayjs(dateKey).add(offset, 'month')
         const isSelected = monthOffset === offset
         return (
           <motion.div

@@ -3,9 +3,8 @@ import dayjs from 'dayjs'
 import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { EventCharacterBadge } from '@/components/events/event-character-badge'
-import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
-import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_DENSE } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { DATE_LABELS, EVENT_LIST_ITEM_LABELS, EVENT_STATUS_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { CATEGORY_WITH_ICON } from '@/locales/component'
@@ -45,8 +44,7 @@ const getDaysLabel = (days: number, status: EventStatus) => {
  * イベント一覧の各アイテム
  */
 export const EventListItem = ({ event, index }: EventListItemProps) => {
-  const isMultiColumn = useMediaQuery('(min-width: 768px)')
-  const rotationDeg = isMultiColumn ? getStickerRotation(index) : 0
+  const rotationDeg = getStickerRotation(index, undefined, 'dense')
   const tape = TAPES[index % TAPES.length]
 
   const startDate = dayjs(event.startDate)
@@ -59,12 +57,11 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: DURATION.normal, delay: index * 0.1, ease: 'easeOut' }}
       className='h-full'
-      style={{ filter: STICKER_SHADOW_SM }}
+      style={{ filter: STICKER_SHADOW_DENSE }}
     >
       <motion.div
         className='h-full'
         style={{ rotate: rotationDeg }}
-        whileHover={{ scale: 1.04, rotate: 0 }}
         whileTap={{ scale: 0.97 }}
         transition={STICKER_HOVER_TRANSITION}
       >
@@ -72,7 +69,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
           to='/events/$uuid'
           params={{ uuid: event.uuid }}
           className={cn(
-            'relative flex flex-col gap-3 bg-card rounded-xl p-3 border border-zinc-200 dark:border-card-border h-full',
+            'relative flex flex-col gap-3 bg-card rounded-xl p-3 border border-zinc-200 dark:border-card-border hover:border-brand/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand h-full',
             status === 'ended' && 'opacity-60'
           )}
         >
@@ -87,15 +84,18 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
               )}
             />
           )}
-          <div className='flex items-center justify-between gap-2'>
-            <div className='flex items-center gap-2 flex-1 min-w-0'>
+          <div data-event-heading className='grid grid-cols-[auto_1fr] items-center gap-2'>
+            <div className='contents'>
               <div className={`shrink-0 p-2 rounded-lg ${CATEGORY_WITH_ICON[event.category].className}`}>
                 {CATEGORY_WITH_ICON[event.category].icon}
               </div>
-              <p className='text-base font-semibold text-foreground truncate'>{event.title}</p>
+              <p className='col-span-2 order-3 text-base leading-6 min-h-12 font-semibold text-foreground line-clamp-2 break-words'>
+                {event.title}
+              </p>
             </div>
             <div
-              className={`shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
+              data-status-badge
+              className={`order-2 justify-self-end shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
                 status === 'ended'
                   ? 'bg-status-ended text-status-ended-foreground'
                   : status === 'last_day'
@@ -113,7 +113,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
             </div>
           </div>
           <div className='flex-1 min-w-0'>
-            <div className='flex flex-col gap-1 text-xs text-muted-foreground'>
+            <div className='flex flex-col gap-1 text-[13px] leading-5 text-muted-foreground'>
               <span className='flex items-center gap-1'>
                 <Calendar className='size-3' />
                 {startDate.format('M月D日')}

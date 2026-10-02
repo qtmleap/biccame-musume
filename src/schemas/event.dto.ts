@@ -167,7 +167,10 @@ export type EventDetail = z.infer<typeof EventDetailSchema>
  * イベント統計リクエストスキーマ
  */
 export const EventStatsRequestSchema = z.object({
-  eventIds: z.array(z.string().nonempty('イベントIDは必須です')).nonempty('イベントIDを最低 1 つ指定してください')
+  eventIds: z
+    .array(z.string().nonempty('イベントIDは必須です').max(100))
+    .transform((ids) => [...new Set(ids)])
+    .pipe(z.array(z.string()).max(50, 'イベントIDは最大50件まで指定できます'))
 })
 
 /**
