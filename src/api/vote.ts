@@ -8,6 +8,7 @@ import {
   BulkVoteRequestSchema,
   BulkVoteResponseSchema,
   VoteCountListSchema,
+  VoteErrorSchema,
   VoteResponseSchema
 } from '@/schemas/vote.dto'
 import { evaluateOnVote } from '@/services/badge'
@@ -18,18 +19,24 @@ import { getJwtPayload, verifyTokenOptional } from '@/utils/token'
 import { getNextJSTDate, getNextJSTDateKey } from '@/utils/vote'
 
 const getKey: RateLimitKeyFunc = (c: Context): string => {
-  // 匿名でも一括投票するため、Authorization が無ければ
-  // CF-Connecting-IP をフォールバックキーにする（偽装可能な X-Real-IP は使用しない）
-  return c.req.header('Authorization') || c.req.header('CF-Connecting-IP') || 'anonymous'
+  return `vote:${c.get('CLIENT_IP')}`
 }
 
 const rateLimiter = async (c: Context, next: Next) => {
-  return await rateLimit(c.env.RATE_LIMITER, getKey)(c, next)
+  try {
+    return await rateLimit(c.env.RATE_LIMITER, getKey)(c, next)
+  } catch (error) {
+    if (error instanceof HTTPException && error.status === 429) {
+      throw new HTTPException(429, {
+        message: '投票のリクエストが多すぎます。時間をおいて再度お試しください。',
+        cause: error
+      })
+    }
+    throw error
+  }
 }
 
 const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
-
-routes.use('*', rateLimiter)
 
 /**
  * 全キャラクターの投票カウント取得（D1から取得）
@@ -76,7 +83,7 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/bulk',
-    middleware: [ipCheck, verifyTokenOptional],
+    middleware: [ipCheck, rateLimiter, verifyTokenOptional],
     request: {
       body: {
         content: {
@@ -98,10 +105,16 @@ routes.openapi(
       400: {
         content: {
           'application/json': {
-            schema: BulkVoteResponseSchema
+            schema: VoteErrorSchema
           }
         },
         description: 'バリデーションエラー'
+      },
+      403: { content: { 'application/json': { schema: VoteErrorSchema } }, description: 'IPアドレス検証エラー' },
+      429: { content: { 'application/json': { schema: VoteErrorSchema } }, description: 'レート制限エラー' },
+      503: {
+        content: { 'application/json': { schema: VoteErrorSchema } },
+        description: 'キャラクター情報を取得できません'
       }
     },
     tags: ['votes']
@@ -115,7 +128,7 @@ routes.openapi(
         return undefined
       }
     })()
-    const results = await bulkVote(c.env, characterIds, c.get('CLIENT_IP'), userId)
+    const results = await bulkVote(c.env, characterIds, c.get('CLIENT_IP'), userId, c.req.url)
     const votedCount = results.filter((r) => r.status === 'voted').length
     const skippedCount = results.filter((r) => r.status === 'skipped').length
 
@@ -135,14 +148,17 @@ routes.openapi(
       )
     }
 
-    return c.json({
-      success: true,
-      results,
-      votedCount,
-      skippedCount,
-      nextVoteDate: getNextJSTDate(),
-      newBadges: []
-    })
+    return c.json(
+      {
+        success: true,
+        results,
+        votedCount,
+        skippedCount,
+        nextVoteDate: getNextJSTDate(),
+        newBadges: []
+      },
+      200
+    )
   }
 )
 
@@ -154,7 +170,7 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/:characterId',
-    middleware: [ipCheck, verifyTokenOptional],
+    middleware: [ipCheck, rateLimiter, verifyTokenOptional],
     request: {
       params: z.object({
         characterId: z.string().nonempty()
@@ -172,15 +188,20 @@ routes.openapi(
       400: {
         content: {
           'application/json': {
-            schema: VoteResponseSchema
+            schema: VoteErrorSchema
           }
         },
         description: 'バリデーションエラーまたは投票済み'
       },
+      403: { content: { 'application/json': { schema: VoteErrorSchema } }, description: 'IPアドレス検証エラー' },
+      503: {
+        content: { 'application/json': { schema: VoteErrorSchema } },
+        description: 'キャラクター情報を取得できません'
+      },
       429: {
         content: {
           'application/json': {
-            schema: VoteResponseSchema
+            schema: VoteErrorSchema
           }
         },
         description: 'レート制限エラー'
@@ -188,7 +209,7 @@ routes.openapi(
       500: {
         content: {
           'application/json': {
-            schema: VoteResponseSchema
+            schema: VoteErrorSchema
           }
         },
         description: 'サーバーエラー'
@@ -205,7 +226,7 @@ routes.openapi(
         return undefined
       }
     })()
-    const { status } = await vote(c.env, characterId, c.get('CLIENT_IP'), userId)
+    const { status } = await vote(c.env, characterId, c.get('CLIENT_IP'), userId, c.req.url)
     if (status === 'skipped') {
       throw new HTTPException(400, {
         message: JSON.stringify({
@@ -226,12 +247,15 @@ routes.openapi(
       )
     }
 
-    return c.json({
-      success: true,
-      message: '投票ありがとうございます！',
-      nextVoteDate: getNextJSTDate(),
-      newBadges: []
-    })
+    return c.json(
+      {
+        success: true,
+        message: '投票ありがとうございます！',
+        nextVoteDate: getNextJSTDate(),
+        newBadges: []
+      },
+      200
+    )
   }
 )
 

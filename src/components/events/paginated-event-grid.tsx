@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { EventGridItem } from '@/components/events/event-grid-item'
 import {
   Pagination,
@@ -41,19 +41,23 @@ export const PaginatedEventGrid = ({
   emptyState,
   compact = false
 }: PaginatedEventGridProps) => {
-  const totalPages = Math.ceil(events.length / perPage)
+  const totalPages = Math.max(1, Math.ceil(events.length / perPage))
+  const effectivePage = Math.min(Math.max(1, page), totalPages)
+  useEffect(() => {
+    if (page !== effectivePage) onPageChange(effectivePage)
+  }, [page, effectivePage, onPageChange])
 
   const paginatedEvents = useMemo(() => {
-    const start = (page - 1) * perPage
+    const start = (effectivePage - 1) * perPage
     return events.slice(start, start + perPage)
-  }, [events, page, perPage])
+  }, [events, effectivePage, perPage])
 
   if (events.length === 0) {
     return <>{emptyState}</>
   }
 
-  const start = (page - 1) * perPage + 1
-  const end = Math.min(page * perPage, events.length)
+  const start = (effectivePage - 1) * perPage + 1
+  const end = Math.min(effectivePage * perPage, events.length)
 
   return (
     <>
@@ -76,15 +80,15 @@ export const PaginatedEventGrid = ({
                   href='#'
                   onClick={(e) => {
                     e.preventDefault()
-                    if (page > 1) onPageChange(page - 1)
+                    if (effectivePage > 1) onPageChange(effectivePage - 1)
                   }}
-                  className={page === 1 ? 'pointer-events-none opacity-50' : ''}
+                  className={effectivePage === 1 ? 'pointer-events-none opacity-50' : ''}
                 />
               </PaginationItem>
 
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => {
                 // 最初と最後のページ、現在のページの前後1ページを表示
-                if (p === 1 || p === totalPages || (p >= page - 1 && p <= page + 1)) {
+                if (p === 1 || p === totalPages || (p >= effectivePage - 1 && p <= effectivePage + 1)) {
                   return (
                     <PaginationItem key={p}>
                       <PaginationLink
@@ -94,7 +98,7 @@ export const PaginatedEventGrid = ({
                           e.preventDefault()
                           onPageChange(p)
                         }}
-                        isActive={page === p}
+                        isActive={effectivePage === p}
                       >
                         {p}
                       </PaginationLink>
@@ -102,7 +106,7 @@ export const PaginatedEventGrid = ({
                   )
                 }
                 // 省略記号を表示
-                if (p === page - 2 || p === page + 2) {
+                if (p === effectivePage - 2 || p === effectivePage + 2) {
                   return (
                     <PaginationItem key={p}>
                       <PaginationEllipsis />
@@ -118,9 +122,9 @@ export const PaginatedEventGrid = ({
                   href='#'
                   onClick={(e) => {
                     e.preventDefault()
-                    if (page < totalPages) onPageChange(page + 1)
+                    if (effectivePage < totalPages) onPageChange(effectivePage + 1)
                   }}
-                  className={page === totalPages ? 'pointer-events-none opacity-50' : ''}
+                  className={effectivePage === totalPages ? 'pointer-events-none opacity-50' : ''}
                 />
               </PaginationItem>
             </PaginationContent>
