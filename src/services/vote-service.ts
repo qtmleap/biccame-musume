@@ -1,9 +1,11 @@
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
+import { HTTPException } from 'hono/http-exception'
 import type { ClaimVotesResult } from '@/durable-objects/vote-counter'
 import { getPrisma } from '@/lib/prisma'
 import type { Bindings } from '@/types/bindings'
+import { loadBiccameMusumeIdSet } from '@/utils/character-whitelist'
 import { getJSTDateKey, getJSTYear } from '@/utils/vote'
 
 dayjs.extend(utc)
@@ -15,6 +17,13 @@ dayjs.extend(timezone)
 export type BulkVoteResult = {
   characterId: string
   status: 'voted' | 'skipped'
+}
+
+const validateCharacterIds = async (env: Bindings, characterIds: string[], baseUrl: string): Promise<void> => {
+  const validIds = await loadBiccameMusumeIdSet(env.ASSETS, baseUrl)
+  if (characterIds.some((id) => !validIds.has(id))) {
+    throw new HTTPException(400, { message: '投票対象のキャラクターが見つかりません。' })
+  }
 }
 
 const getVoteCounterStub = (env: Bindings) => {
@@ -83,14 +92,17 @@ export const getAllVoteCounts = async (
  * @param characterId キャラクターID
  * @param ip IPアドレス
  * @param userId ログインユーザーのFirebase Auth UID（任意）
+ * @param assetsBaseUrl ASSETS の取得元 URL（API 呼出し時はリクエスト URL）
  * @returns 投票結果
  */
 export const vote = async (
   env: Bindings,
   characterId: string,
   ip: string,
-  userId?: string
+  userId?: string,
+  assetsBaseUrl = 'https://biccame-musume.com'
 ): Promise<{ status: 'voted' | 'skipped' }> => {
+  await validateCharacterIds(env, [characterId], assetsBaseUrl)
   const { voted } = await claimVotes(env, [characterId], ip)
   if (voted.length === 0) return { status: 'skipped' }
 
@@ -125,16 +137,19 @@ export const vote = async (
  * @param characterIds 投票対象のキャラクターIDの配列
  * @param ip 投票者のIPアドレス
  * @param userId ログインユーザーのFirebase Auth UID（任意）
+ * @param assetsBaseUrl ASSETS の取得元 URL（API 呼出し時はリクエスト URL）
  * @returns キャラクター毎の投票結果
  */
 export const bulkVote = async (
   env: Bindings,
   characterIds: string[],
   ip: string,
-  userId?: string
+  userId?: string,
+  assetsBaseUrl = 'https://biccame-musume.com'
 ): Promise<BulkVoteResult[]> => {
   const uniqueIds = Array.from(new Set(characterIds))
   if (uniqueIds.length === 0) return []
+  await validateCharacterIds(env, uniqueIds, assetsBaseUrl)
 
   // 判定とカウンタ加算は DO 側で原子的に済むので、KV 時代の N 並列 read/write が 1 往復になる
   const { voted } = await claimVotes(env, uniqueIds, ip)
