@@ -38,7 +38,7 @@ function bootstrapUrls(html: string): string[] {
   return urls
 }
 async function read(url: string): Promise<string> {
-  const response = await fetch(url, { headers: HEADERS, redirect: 'error' })
+  const response = await fetch(url, { headers: HEADERS, redirect: 'manual' })
   if (!response.ok) throw new Error(`Failed to fetch transaction input ${url}: ${response.status}`)
   return response.text()
 }
