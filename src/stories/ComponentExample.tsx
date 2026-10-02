@@ -14,6 +14,8 @@ import { CalendarEventDrawerContent } from '@/components/calendar/calendar-event
 import { CharacterFavoriteButton } from '@/components/characters/character-favorite-button'
 import { CharacterFollowButton } from '@/components/characters/character-follow-button'
 import { ErrorBoundary } from '@/components/common/error-boundary'
+import { EventCategoryFilter } from '@/components/events/event-category-filter'
+import { EventUserActivityFilter } from '@/components/events/event-user-activity-filter'
 import { GanttHeader } from '@/components/events/gantt/gantt-header'
 import { GanttRow } from '@/components/events/gantt/gantt-row'
 import { GanttTimeline } from '@/components/events/gantt/gantt-timeline'
@@ -24,6 +26,7 @@ import { Button } from '@/components/ui/button'
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
 import { Toaster } from '@/components/ui/sonner'
 import { DEFAULT_VALUES, type EventFormValues, toFormValues } from '@/lib/event-form'
+import { EventCategorySchema } from '@/schemas/event.dto'
 import { runtime } from '../../.storybook/catalogue/runtime'
 import {
   badge,
@@ -78,6 +81,8 @@ export const ComponentExample = ({
   const [page, setPage] = useState(1)
   const [selectedStores, setSelectedStores] = useState(stores)
   const [value, setValue] = useState<string | null>('abeno')
+  const [categories, setCategories] = useState(() => new Set(EventCategorySchema.options))
+  const [activity, setActivity] = useState({ hideInterested: false, hideCompleted: false })
   const [loading, setLoading] = useState(false)
   const [trigger, setTrigger] = useState(1)
   const action = (..._args: unknown[]) => setMessage('Storybook内で操作を確認しました（送信なし）')
@@ -307,8 +312,18 @@ export const ComponentExample = ({
       />
     )
   if (exportName === 'EventFlagsSection') content = <EventFlagsSection control={form.control} />
+  if (exportName === 'EventCategoryFilter')
+    content = <EventCategoryFilter value={categories} onChange={setCategories} />
+  if (exportName === 'EventUserActivityFilter')
+    content = <EventUserActivityFilter value={activity} onChange={setActivity} />
   if (exportName === 'GanttHeader')
-    content = <GanttHeader monthOffset={layout.monthOffset} onMonthSelect={layout.setMonthOffset} />
+    content = (
+      <GanttHeader
+        monthOffset={layout.monthOffset}
+        onMonthSelect={layout.setMonthOffset}
+        onToday={() => layout.setMonthOffset(0)}
+      />
+    )
   if (exportName === 'GanttMonthSelector')
     content = <GanttMonthSelector monthOffset={layout.monthOffset} onSelect={layout.setMonthOffset} />
   if (exportName === 'GanttDateHeader')

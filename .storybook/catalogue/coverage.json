@@ -1,6 +1,1080 @@
 {
   "entries": [
     {
+      "file": "src/components/admin/access-gate.tsx",
+      "name": "AccessGate",
+      "kind": "component",
+      "storyIds": ["components-admin-access-gate--access-gate"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/badges/badge-card.tsx",
+      "name": "BadgeCard",
+      "kind": "component",
+      "storyIds": ["components-admin-badges-badge-card--badge-card"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/badges/badge-display-constants.ts",
+      "name": "RARITY_CHIP",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/admin/badges/badge-display-constants.ts",
+      "name": "RARITY_ICON_BG",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/admin/badges/badge-display-constants.ts",
+      "name": "ICON_NAMES",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/admin/badges/badge-display-constants.ts",
+      "name": "ACCENT_DOT",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/admin/badges/badge-display-constants.ts",
+      "name": "ACCENT_TEXT",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/admin/badges/badge-display-constants.ts",
+      "name": "CATEGORY_ORDER",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/admin/badges/category-section.tsx",
+      "name": "CategorySection",
+      "kind": "component",
+      "storyIds": ["components-admin-badges-category-section--category-section"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/badges/create-badge-dialog.tsx",
+      "name": "CreateBadgeDialog",
+      "kind": "component",
+      "storyIds": ["components-admin-badges-create-badge-dialog--create-badge-dialog"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/badges/edit-badge-dialog.tsx",
+      "name": "EditBadgeDialog",
+      "kind": "component",
+      "storyIds": ["components-admin-badges-edit-badge-dialog--edit-badge-dialog"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/badges/recalculate-badges-button.tsx",
+      "name": "RecalculateBadgesButton",
+      "kind": "component",
+      "storyIds": ["components-admin-badges-recalculate-badges-button--recalculate-badges-button"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/badges/stat-card.tsx",
+      "name": "StatCard",
+      "kind": "component",
+      "storyIds": ["components-admin-badges-stat-card--stat-card"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/event-card.tsx",
+      "name": "EventCard",
+      "kind": "component",
+      "storyIds": ["components-admin-event-card--event-card"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/event-confirmation.tsx",
+      "name": "EventConfirmation",
+      "kind": "component",
+      "storyIds": ["components-admin-event-confirmation--event-confirmation"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/event-form.tsx",
+      "name": "EventForm",
+      "kind": "component",
+      "storyIds": ["components-admin-event-form--event-form"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/event-group-event-manager.tsx",
+      "name": "EventGroupEventManager",
+      "kind": "component",
+      "storyIds": ["components-admin-event-group-event-manager--event-group-event-manager"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/event-group-form.tsx",
+      "name": "toGroupFormValues",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/admin/event-group-form.tsx",
+      "name": "toCopyGroupFormValues",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/admin/event-group-form.tsx",
+      "name": "EventGroupForm",
+      "kind": "component",
+      "storyIds": ["components-admin-event-group-form--event-group-form"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/event-group-list.tsx",
+      "name": "EventGroupList",
+      "kind": "component",
+      "storyIds": ["components-admin-event-group-list--event-group-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/event-list-pagination.tsx",
+      "name": "EventListPagination",
+      "kind": "component",
+      "storyIds": ["components-admin-event-list-pagination--event-list-pagination"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/event-list.tsx",
+      "name": "EventList",
+      "kind": "component",
+      "storyIds": ["components-admin-event-list--event-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/form/conditions-section.tsx",
+      "name": "ConditionsSection",
+      "kind": "component",
+      "storyIds": ["components-admin-form-conditions-section--conditions-section"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/form/date-field.tsx",
+      "name": "DateField",
+      "kind": "component",
+      "storyIds": ["components-admin-form-date-field--date-field"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/form/event-flags-section.tsx",
+      "name": "EventFlagsSection",
+      "kind": "component",
+      "storyIds": ["components-admin-form-event-flags-section--event-flags-section"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/admin/form/reference-urls-section.tsx",
+      "name": "ReferenceUrlsSection",
+      "kind": "component",
+      "storyIds": ["components-admin-form-reference-urls-section--reference-urls-section"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/auth/email-auth-tabs.tsx",
+      "name": "EmailAuthTabs",
+      "kind": "component",
+      "storyIds": ["components-auth-email-auth-tabs--email-auth-tabs"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/auth/login-button.tsx",
+      "name": "LoginButton",
+      "kind": "component",
+      "storyIds": ["components-auth-login-button--login-button"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/auth/login-dialog.tsx",
+      "name": "LoginDialog",
+      "kind": "component",
+      "storyIds": ["components-auth-login-dialog--login-dialog"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/auth/social-login-buttons.tsx",
+      "name": "SocialLoginButtons",
+      "kind": "component",
+      "storyIds": ["components-auth-social-login-buttons--social-login-buttons"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/auth/auth-provider.tsx",
+      "name": "AuthProvider",
+      "kind": "component",
+      "storyIds": ["components-auth-auth-provider--auth-provider"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/auth/backend-session-gate.tsx",
+      "name": "BackendSessionGate",
+      "kind": "component",
+      "storyIds": ["components-auth-backend-session-gate--backend-session-gate"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/badges/badge-card.tsx",
+      "name": "BadgeCard",
+      "kind": "component",
+      "storyIds": ["components-badges-badge-card--badge-card"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/badges/badge-grid.tsx",
+      "name": "BadgeGrid",
+      "kind": "component",
+      "storyIds": ["components-badges-badge-grid--badge-grid"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/calendar/calendar-controls.tsx",
+      "name": "CalendarHeader",
+      "kind": "component",
+      "storyIds": ["components-calendar-calendar-controls--calendar-header"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/calendar/calendar-controls.tsx",
+      "name": "CalendarMonthTabs",
+      "kind": "component",
+      "storyIds": ["components-calendar-calendar-controls--calendar-month-tabs"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/calendar/calendar-controls.tsx",
+      "name": "CalendarMonthDots",
+      "kind": "component",
+      "storyIds": ["components-calendar-calendar-controls--calendar-month-dots"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/calendar/calendar-event-drawer-content.tsx",
+      "name": "CalendarEventDrawerContent",
+      "kind": "component",
+      "storyIds": ["components-calendar-calendar-event-drawer-content--calendar-event-drawer-content"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/calendar/calendar-event-list.tsx",
+      "name": "CalendarEventList",
+      "kind": "component",
+      "storyIds": ["components-calendar-calendar-event-list--calendar-event-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/calendar/calendar-grid.tsx",
+      "name": "CalendarGrid",
+      "kind": "component",
+      "storyIds": ["components-calendar-calendar-grid--calendar-grid"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-competition-level.tsx",
+      "name": "CharacterCompetitionLevel",
+      "kind": "component",
+      "storyIds": ["components-characters-character-competition-level--character-competition-level"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-favorite-button.tsx",
+      "name": "CharacterFavoriteButton",
+      "kind": "component",
+      "storyIds": ["components-characters-character-favorite-button--character-favorite-button"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-follow-button.tsx",
+      "name": "CharacterFollowButton",
+      "kind": "component",
+      "storyIds": ["components-characters-character-follow-button--character-follow-button"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-list.tsx",
+      "name": "CharacterList",
+      "kind": "component",
+      "storyIds": ["components-characters-character-list--character-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-ongoing-events.tsx",
+      "name": "CharacterOngoingEvents",
+      "kind": "component",
+      "storyIds": ["components-characters-character-ongoing-events--character-ongoing-events"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-twitter-link.tsx",
+      "name": "CharacterTwitterLink",
+      "kind": "component",
+      "storyIds": ["components-characters-character-twitter-link--character-twitter-link"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-visit-button.tsx",
+      "name": "CharacterVisitButton",
+      "kind": "component",
+      "storyIds": ["components-characters-character-visit-button--character-visit-button"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/detail/store-info-items.tsx",
+      "name": "InfoItem",
+      "kind": "component",
+      "storyIds": ["components-characters-detail-store-info-items--info-item"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/detail/store-info-items.tsx",
+      "name": "StoreName",
+      "kind": "component",
+      "storyIds": ["components-characters-detail-store-info-items--store-name"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/detail/store-info-items.tsx",
+      "name": "StoreAddress",
+      "kind": "component",
+      "storyIds": ["components-characters-detail-store-info-items--store-address"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/detail/store-info-items.tsx",
+      "name": "StorePhone",
+      "kind": "component",
+      "storyIds": ["components-characters-detail-store-info-items--store-phone"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/detail/store-info-items.tsx",
+      "name": "StoreHours",
+      "kind": "component",
+      "storyIds": ["components-characters-detail-store-info-items--store-hours"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/detail/store-info-items.tsx",
+      "name": "StoreAccess",
+      "kind": "component",
+      "storyIds": ["components-characters-detail-store-info-items--store-access"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/detail/store-info-items.tsx",
+      "name": "StoreBirthday",
+      "kind": "component",
+      "storyIds": ["components-characters-detail-store-info-items--store-birthday"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/detail/character-profile-section.tsx",
+      "name": "CharacterProfileSection",
+      "kind": "component",
+      "storyIds": ["components-characters-detail-character-profile-section--character-profile-section"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/detail/store-info-section.tsx",
+      "name": "StoreInfoSection",
+      "kind": "component",
+      "storyIds": ["components-characters-detail-store-info-section--store-info-section"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/favorite-burst.tsx",
+      "name": "FavoriteBurst",
+      "kind": "component",
+      "storyIds": ["components-characters-favorite-burst--favorite-burst"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/vote-burst.tsx",
+      "name": "VoteBurst",
+      "kind": "component",
+      "storyIds": ["components-characters-vote-burst--vote-burst"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/bulk-vote-button.tsx",
+      "name": "BulkVoteButton",
+      "kind": "component",
+      "storyIds": ["components-characters-bulk-vote-button--bulk-vote-button"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-vote-button.tsx",
+      "name": "CharacterVoteButton",
+      "kind": "component",
+      "storyIds": ["components-characters-character-vote-button--character-vote-button"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-sort-control.tsx",
+      "name": "CharacterSortControl",
+      "kind": "component",
+      "storyIds": ["components-characters-character-sort-control--character-sort-control"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/region-filter-control.tsx",
+      "name": "RegionFilterControl",
+      "kind": "component",
+      "storyIds": ["components-characters-region-filter-control--region-filter-control"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/character-detail-content.tsx",
+      "name": "CharacterDetailContent",
+      "kind": "component",
+      "storyIds": ["components-characters-character-detail-content--character-detail-content"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/characters/nearby-characters-list.tsx",
+      "name": "NearbyCharactersList",
+      "kind": "component",
+      "storyIds": ["components-characters-nearby-characters-list--nearby-characters-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/common/breadcrumb.tsx",
+      "name": "AppBreadcrumb",
+      "kind": "component",
+      "storyIds": ["components-common-breadcrumb--app-breadcrumb"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/common/error-boundary.tsx",
+      "name": "ErrorBoundary",
+      "kind": "component",
+      "storyIds": [
+        "components-common-error-boundary--error-boundary",
+        "components-common-error-boundary--caught-error"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "src/components/common/error-fallback.tsx",
+      "name": "ErrorFallback",
+      "kind": "component",
+      "storyIds": ["components-common-error-fallback--error-fallback"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/common/filter-header.tsx",
+      "name": "FilterHeader",
+      "kind": "component",
+      "storyIds": ["components-common-filter-header--filter-header"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/common/footer.tsx",
+      "name": "Footer",
+      "kind": "component",
+      "storyIds": ["components-common-footer--footer"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/common/loading-fallback.tsx",
+      "name": "LoadingFallback",
+      "kind": "component",
+      "storyIds": ["components-common-loading-fallback--loading-fallback"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/common/not-found.tsx",
+      "name": "NotFound",
+      "kind": "component",
+      "storyIds": ["components-common-not-found--not-found"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/common/page-view-counter.tsx",
+      "name": "PageViewCounter",
+      "kind": "component",
+      "storyIds": ["components-common-page-view-counter--page-view-counter"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/common/header.tsx",
+      "name": "Header",
+      "kind": "component",
+      "storyIds": ["components-common-header--header"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/comments/comment-form-dialog.tsx",
+      "name": "CommentFormDialog",
+      "kind": "component",
+      "storyIds": ["components-events-comments-comment-form-dialog--comment-form-dialog"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/comments/comment-form.tsx",
+      "name": "CommentForm",
+      "kind": "component",
+      "storyIds": ["components-events-comments-comment-form--comment-form"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/comments/comment-item.tsx",
+      "name": "CommentItem",
+      "kind": "component",
+      "storyIds": ["components-events-comments-comment-item--comment-item"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/comments/comment-list.tsx",
+      "name": "CommentList",
+      "kind": "component",
+      "storyIds": ["components-events-comments-comment-list--comment-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/comments/comment-section.tsx",
+      "name": "CommentSection",
+      "kind": "component",
+      "storyIds": ["components-events-comments-comment-section--comment-section"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-character-badge.tsx",
+      "name": "EventCharacterBadge",
+      "kind": "component",
+      "storyIds": ["components-events-event-character-badge--event-character-badge"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-detail-header.tsx",
+      "name": "EventDetailHeader",
+      "kind": "component",
+      "storyIds": ["components-events-event-detail-header--event-detail-header"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-detail-info.tsx",
+      "name": "EventDetailInfoProps",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/events/event-detail-info.tsx",
+      "name": "EventDetailInfo",
+      "kind": "component",
+      "storyIds": ["components-events-event-detail-info--event-detail-info"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-group-banner.tsx",
+      "name": "EventGroupBanner",
+      "kind": "component",
+      "storyIds": ["components-events-event-group-banner--event-group-banner"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-share-button.tsx",
+      "name": "EventShareButton",
+      "kind": "component",
+      "storyIds": ["components-events-event-share-button--event-share-button"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-stats-animations.tsx",
+      "name": "HeartBurstOverlay",
+      "kind": "component",
+      "storyIds": ["components-events-event-stats-animations--heart-burst-overlay"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-stats-animations.tsx",
+      "name": "FireworkBurstOverlay",
+      "kind": "component",
+      "storyIds": ["components-events-event-stats-animations--firework-burst-overlay"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-stats-badges.tsx",
+      "name": "EventStatsBadges",
+      "kind": "component",
+      "storyIds": ["components-events-event-stats-badges--event-stats-badges"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/gantt/gantt-header.tsx",
+      "name": "GanttHeader",
+      "kind": "component",
+      "storyIds": ["components-events-gantt-gantt-header--gantt-header"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/gantt/gantt-row.tsx",
+      "name": "GanttRow",
+      "kind": "component",
+      "storyIds": ["components-events-gantt-gantt-row--gantt-row"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/gantt/gantt-timeline.tsx",
+      "name": "GanttTimeline",
+      "kind": "component",
+      "storyIds": ["components-events-gantt-gantt-timeline--gantt-timeline"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/gantt/use-gantt-layout.ts",
+      "name": "EventBar",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/events/gantt/use-gantt-layout.ts",
+      "name": "useGanttLayout",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/events/recent-events-list.tsx",
+      "name": "RecentEventsList",
+      "kind": "component",
+      "storyIds": ["components-events-recent-events-list--recent-events-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/upcoming-event-list-item.tsx",
+      "name": "UpcomingEventListItem",
+      "kind": "component",
+      "storyIds": ["components-events-upcoming-event-list-item--upcoming-event-list-item"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/upcoming-event-list.tsx",
+      "name": "UpcomingEventList",
+      "kind": "component",
+      "storyIds": ["components-events-upcoming-event-list--upcoming-event-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-gantt-chart.tsx",
+      "name": "EventGanttChart",
+      "kind": "component",
+      "storyIds": ["components-events-event-gantt-chart--event-gantt-chart"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-grid-item.tsx",
+      "name": "EventGridItem",
+      "kind": "component",
+      "storyIds": ["components-events-event-grid-item--event-grid-item"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-user-activity-filter.tsx",
+      "name": "EventUserActivityFilter",
+      "kind": "component",
+      "storyIds": ["components-events-event-user-activity-filter--event-user-activity-filter"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/gantt-chart-parts.tsx",
+      "name": "GanttMonthSelector",
+      "kind": "component",
+      "storyIds": ["components-events-gantt-chart-parts--gantt-month-selector"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/gantt-chart-parts.tsx",
+      "name": "GanttDateHeader",
+      "kind": "component",
+      "storyIds": ["components-events-gantt-chart-parts--gantt-date-header"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/gantt-chart-parts.tsx",
+      "name": "GanttGridCell",
+      "kind": "component",
+      "storyIds": ["components-events-gantt-chart-parts--gantt-grid-cell"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/gantt-chart-utils.ts",
+      "name": "getCategoryColor",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/events/gantt-chart-utils.ts",
+      "name": "hideScrollbarStyle",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/events/paginated-event-grid.tsx",
+      "name": "PaginatedEventGrid",
+      "kind": "component",
+      "storyIds": ["components-events-paginated-event-grid--paginated-event-grid"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-category-filter.tsx",
+      "name": "EventCategoryFilter",
+      "kind": "component",
+      "storyIds": ["components-events-event-category-filter--event-category-filter"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-status-filter.tsx",
+      "name": "StatusFilter",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/events/event-status-filter.tsx",
+      "name": "EventStatusFilter",
+      "kind": "component",
+      "storyIds": ["components-events-event-status-filter--event-status-filter"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/events/event-store-filter.tsx",
+      "name": "EventStoreFilter",
+      "kind": "component",
+      "storyIds": ["components-events-event-store-filter--event-store-filter"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/home/birthday-hero-section.tsx",
+      "name": "BirthdayHeroSection",
+      "kind": "component",
+      "storyIds": ["components-home-birthday-hero-section--birthday-hero-section"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/home/event-group-list.tsx",
+      "name": "EventGroupList",
+      "kind": "component",
+      "storyIds": ["components-home-event-group-list--event-group-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/home/line-sticker-list-item.tsx",
+      "name": "LineStickerListItem",
+      "kind": "component",
+      "storyIds": ["components-home-line-sticker-list-item--line-sticker-list-item"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/home/line-sticker-list.tsx",
+      "name": "LineStickerList",
+      "kind": "component",
+      "storyIds": ["components-home-line-sticker-list--line-sticker-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/home/event-list-item.tsx",
+      "name": "EventListItem",
+      "kind": "component",
+      "storyIds": ["components-home-event-list-item--event-list-item"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/home/event-list.tsx",
+      "name": "EventList",
+      "kind": "component",
+      "storyIds": ["components-home-event-list--event-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/home/home-header.tsx",
+      "name": "HomeHeader",
+      "kind": "component",
+      "storyIds": ["components-home-home-header--home-header"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/location/store-list.tsx",
+      "name": "StoreList",
+      "kind": "component",
+      "storyIds": ["components-location-store-list--store-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/pwa/install-prompt-ios.tsx",
+      "name": "IosInstallPrompt",
+      "kind": "component",
+      "storyIds": ["components-pwa-install-prompt-ios--ios-install-prompt"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/pwa/update-overlay.tsx",
+      "name": "UpdateOverlayStatus",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/pwa/update-overlay.tsx",
+      "name": "UpdateOverlay",
+      "kind": "component",
+      "storyIds": ["components-pwa-update-overlay--update-overlay"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/pwa/update-prompt.tsx",
+      "name": "setUpdateServiceWorker",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/pwa/update-prompt.tsx",
+      "name": "showUpdatePrompt",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/pwa/update-prompt.tsx",
+      "name": "UpdatePrompt",
+      "kind": "component",
+      "storyIds": ["components-pwa-update-prompt--update-prompt"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ranking/ranking-empty-vote-info.tsx",
+      "name": "RankingEmptyVoteInfo",
+      "kind": "component",
+      "storyIds": ["components-ranking-ranking-empty-vote-info--ranking-empty-vote-info"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ranking/ranking-list-helpers.ts",
+      "name": "CharacterWithVotes",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/ranking/ranking-list-helpers.ts",
+      "name": "CardProps",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/ranking/ranking-list-helpers.ts",
+      "name": "calculateRanks",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/ranking/ranking-list-helpers.ts",
+      "name": "getBarClass",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/ranking/ranking-list.tsx",
+      "name": "RankingList",
+      "kind": "component",
+      "storyIds": ["components-ranking-ranking-list--ranking-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ranking/ranking-podium.tsx",
+      "name": "Podium",
+      "kind": "component",
+      "storyIds": ["components-ranking-ranking-podium--podium"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ranking/ranking-vote-badge.tsx",
+      "name": "RankingVoteBadge",
+      "kind": "component",
+      "storyIds": ["components-ranking-ranking-vote-badge--ranking-vote-badge"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ranking/ranking-row.tsx",
+      "name": "RankingRow",
+      "kind": "component",
+      "storyIds": ["components-ranking-ranking-row--ranking-row"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/route/index.ts",
+      "name": "RouteResultCard",
+      "kind": "component",
+      "storyIds": ["components-route-route-result--route-result-card"],
+      "reason": "Barrel re-export; same actual component as src/components/route/route-result.tsx."
+    },
+    {
+      "file": "src/components/route/index.ts",
+      "name": "SelectedStoreList",
+      "kind": "component",
+      "storyIds": ["components-route-selected-store-list--selected-store-list"],
+      "reason": "Barrel re-export; same actual component as src/components/route/selected-store-list.tsx."
+    },
+    {
+      "file": "src/components/route/index.ts",
+      "name": "StoreSelect",
+      "kind": "component",
+      "storyIds": ["components-route-store-select--store-select"],
+      "reason": "Barrel re-export; same actual component as src/components/route/store-select.tsx."
+    },
+    {
+      "file": "src/components/route/index.ts",
+      "name": "AvailableStore",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/route/index.ts",
+      "name": "DirectionsLeg",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/route/index.ts",
+      "name": "RouteResult",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/route/index.ts",
+      "name": "SelectedStore",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/route/index.ts",
+      "name": "useDirections",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/route/route-result.tsx",
+      "name": "RouteResultCard",
+      "kind": "component",
+      "storyIds": ["components-route-route-result--route-result-card"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/route/types.ts",
+      "name": "AvailableStore",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/route/types.ts",
+      "name": "SelectedStore",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/route/types.ts",
+      "name": "RouteSegment",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/route/types.ts",
+      "name": "DirectionsLeg",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/route/types.ts",
+      "name": "RouteResult",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/route/use-directions.ts",
+      "name": "useDirections",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/route/selected-store-list.tsx",
+      "name": "SelectedStoreList",
+      "kind": "component",
+      "storyIds": ["components-route-selected-store-list--selected-store-list"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/route/store-select.tsx",
+      "name": "StoreSelect",
+      "kind": "component",
+      "storyIds": ["components-route-store-select--store-select"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/accordion.tsx",
+      "name": "Accordion",
+      "kind": "component",
+      "storyIds": ["ui-primitives--accordion"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/accordion.tsx",
+      "name": "AccordionItem",
+      "kind": "component",
+      "storyIds": ["ui-primitives--accordion"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/accordion.tsx",
+      "name": "AccordionTrigger",
+      "kind": "component",
+      "storyIds": ["ui-primitives--accordion"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/accordion.tsx",
+      "name": "AccordionContent",
+      "kind": "component",
+      "storyIds": ["ui-primitives--accordion"],
+      "reason": ""
+    },
+    {
       "file": "src/components/ui/alert-dialog.tsx",
       "name": "AlertDialog",
       "kind": "component",
@@ -85,342 +1159,6 @@
       "reason": ""
     },
     {
-      "file": "src/components/ui/pagination.tsx",
-      "name": "Pagination",
-      "kind": "component",
-      "storyIds": ["ui-primitives--pagination"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/pagination.tsx",
-      "name": "PaginationContent",
-      "kind": "component",
-      "storyIds": ["ui-primitives--pagination"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/pagination.tsx",
-      "name": "PaginationLink",
-      "kind": "component",
-      "storyIds": ["ui-primitives--pagination"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/pagination.tsx",
-      "name": "PaginationItem",
-      "kind": "component",
-      "storyIds": ["ui-primitives--pagination"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/pagination.tsx",
-      "name": "PaginationPrevious",
-      "kind": "component",
-      "storyIds": ["ui-primitives--pagination"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/pagination.tsx",
-      "name": "PaginationNext",
-      "kind": "component",
-      "storyIds": ["ui-primitives--pagination"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/pagination.tsx",
-      "name": "PaginationEllipsis",
-      "kind": "component",
-      "storyIds": ["ui-primitives--pagination"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/tabs.tsx",
-      "name": "Tabs",
-      "kind": "component",
-      "storyIds": ["ui-primitives--tabs"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/tabs.tsx",
-      "name": "TabsList",
-      "kind": "component",
-      "storyIds": ["ui-primitives--tabs"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/tabs.tsx",
-      "name": "TabsTrigger",
-      "kind": "component",
-      "storyIds": ["ui-primitives--tabs"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/tabs.tsx",
-      "name": "TabsContent",
-      "kind": "component",
-      "storyIds": ["ui-primitives--tabs"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/tabs.tsx",
-      "name": "tabsListVariants",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/ui/popover.tsx",
-      "name": "Popover",
-      "kind": "component",
-      "storyIds": ["ui-primitives--popover"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/popover.tsx",
-      "name": "PopoverTrigger",
-      "kind": "component",
-      "storyIds": ["ui-primitives--popover"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/popover.tsx",
-      "name": "PopoverContent",
-      "kind": "component",
-      "storyIds": ["ui-primitives--popover"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/popover.tsx",
-      "name": "PopoverAnchor",
-      "kind": "component",
-      "storyIds": ["ui-primitives--popover"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/popover.tsx",
-      "name": "PopoverHeader",
-      "kind": "component",
-      "storyIds": ["ui-primitives--popover"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/popover.tsx",
-      "name": "PopoverTitle",
-      "kind": "component",
-      "storyIds": ["ui-primitives--popover"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/popover.tsx",
-      "name": "PopoverDescription",
-      "kind": "component",
-      "storyIds": ["ui-primitives--popover"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/progress.tsx",
-      "name": "Progress",
-      "kind": "component",
-      "storyIds": ["ui-primitives--progress"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/sheet.tsx",
-      "name": "Sheet",
-      "kind": "component",
-      "storyIds": ["ui-primitives--sheet"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/sheet.tsx",
-      "name": "SheetTrigger",
-      "kind": "component",
-      "storyIds": ["ui-primitives--sheet"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/sheet.tsx",
-      "name": "SheetClose",
-      "kind": "component",
-      "storyIds": ["ui-primitives--sheet"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/sheet.tsx",
-      "name": "SheetContent",
-      "kind": "component",
-      "storyIds": ["ui-primitives--sheet"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/sheet.tsx",
-      "name": "SheetHeader",
-      "kind": "component",
-      "storyIds": ["ui-primitives--sheet"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/sheet.tsx",
-      "name": "SheetFooter",
-      "kind": "component",
-      "storyIds": ["ui-primitives--sheet"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/sheet.tsx",
-      "name": "SheetTitle",
-      "kind": "component",
-      "storyIds": ["ui-primitives--sheet"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/sheet.tsx",
-      "name": "SheetDescription",
-      "kind": "component",
-      "storyIds": ["ui-primitives--sheet"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/label.tsx",
-      "name": "Label",
-      "kind": "component",
-      "storyIds": ["ui-primitives--label"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/sonner.tsx",
-      "name": "Toaster",
-      "kind": "component",
-      "storyIds": ["ui-primitives--sonner"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/accordion.tsx",
-      "name": "Accordion",
-      "kind": "component",
-      "storyIds": ["ui-primitives--accordion"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/accordion.tsx",
-      "name": "AccordionItem",
-      "kind": "component",
-      "storyIds": ["ui-primitives--accordion"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/accordion.tsx",
-      "name": "AccordionTrigger",
-      "kind": "component",
-      "storyIds": ["ui-primitives--accordion"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/accordion.tsx",
-      "name": "AccordionContent",
-      "kind": "component",
-      "storyIds": ["ui-primitives--accordion"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/drawer.tsx",
-      "name": "Drawer",
-      "kind": "component",
-      "storyIds": ["ui-primitives--drawer"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/drawer.tsx",
-      "name": "DrawerPortal",
-      "kind": "component",
-      "storyIds": ["ui-primitives--drawer"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/drawer.tsx",
-      "name": "DrawerOverlay",
-      "kind": "component",
-      "storyIds": ["ui-primitives--drawer"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/drawer.tsx",
-      "name": "DrawerTrigger",
-      "kind": "component",
-      "storyIds": ["ui-primitives--drawer"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/drawer.tsx",
-      "name": "DrawerClose",
-      "kind": "component",
-      "storyIds": ["ui-primitives--drawer"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/drawer.tsx",
-      "name": "DrawerContent",
-      "kind": "component",
-      "storyIds": ["ui-primitives--drawer"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/drawer.tsx",
-      "name": "DrawerHeader",
-      "kind": "component",
-      "storyIds": ["ui-primitives--drawer"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/drawer.tsx",
-      "name": "DrawerFooter",
-      "kind": "component",
-      "storyIds": ["ui-primitives--drawer"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/drawer.tsx",
-      "name": "DrawerTitle",
-      "kind": "component",
-      "storyIds": ["ui-primitives--drawer"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/drawer.tsx",
-      "name": "DrawerDescription",
-      "kind": "component",
-      "storyIds": ["ui-primitives--drawer"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/tooltip.tsx",
-      "name": "Tooltip",
-      "kind": "component",
-      "storyIds": ["ui-primitives--tooltip"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/tooltip.tsx",
-      "name": "TooltipTrigger",
-      "kind": "component",
-      "storyIds": ["ui-primitives--tooltip"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/tooltip.tsx",
-      "name": "TooltipContent",
-      "kind": "component",
-      "storyIds": ["ui-primitives--tooltip"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/tooltip.tsx",
-      "name": "TooltipProvider",
-      "kind": "component",
-      "storyIds": ["ui-primitives--tooltip"],
-      "reason": ""
-    },
-    {
       "file": "src/components/ui/alert.tsx",
       "name": "Alert",
       "kind": "component",
@@ -440,6 +1178,62 @@
       "kind": "component",
       "storyIds": ["ui-primitives--alert"],
       "reason": ""
+    },
+    {
+      "file": "src/components/ui/avatar.tsx",
+      "name": "Avatar",
+      "kind": "component",
+      "storyIds": ["ui-primitives--avatar"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/avatar.tsx",
+      "name": "AvatarImage",
+      "kind": "component",
+      "storyIds": ["ui-primitives--avatar"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/avatar.tsx",
+      "name": "AvatarFallback",
+      "kind": "component",
+      "storyIds": ["ui-primitives--avatar"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/avatar.tsx",
+      "name": "AvatarBadge",
+      "kind": "component",
+      "storyIds": ["ui-primitives--avatar"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/avatar.tsx",
+      "name": "AvatarGroup",
+      "kind": "component",
+      "storyIds": ["ui-primitives--avatar"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/avatar.tsx",
+      "name": "AvatarGroupCount",
+      "kind": "component",
+      "storyIds": ["ui-primitives--avatar"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/badge.tsx",
+      "name": "Badge",
+      "kind": "component",
+      "storyIds": ["ui-primitives--badge"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/badge.tsx",
+      "name": "badgeVariants",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
       "file": "src/components/ui/breadcrumb.tsx",
@@ -488,6 +1282,69 @@
       "name": "BreadcrumbEllipsis",
       "kind": "component",
       "storyIds": ["ui-primitives--breadcrumb"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/button.tsx",
+      "name": "Button",
+      "kind": "component",
+      "storyIds": ["ui-primitives--button"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/button.tsx",
+      "name": "buttonVariants",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "src/components/ui/carousel.tsx",
+      "name": "CarouselApi",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "src/components/ui/carousel.tsx",
+      "name": "Carousel",
+      "kind": "component",
+      "storyIds": ["ui-primitives--carousel"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/carousel.tsx",
+      "name": "CarouselContent",
+      "kind": "component",
+      "storyIds": ["ui-primitives--carousel"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/carousel.tsx",
+      "name": "CarouselItem",
+      "kind": "component",
+      "storyIds": ["ui-primitives--carousel"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/carousel.tsx",
+      "name": "CarouselPrevious",
+      "kind": "component",
+      "storyIds": ["ui-primitives--carousel"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/carousel.tsx",
+      "name": "CarouselNext",
+      "kind": "component",
+      "storyIds": ["ui-primitives--carousel"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/checkbox.tsx",
+      "name": "Checkbox",
+      "kind": "component",
+      "storyIds": ["ui-primitives--checkbox"],
       "reason": ""
     },
     {
@@ -551,48 +1408,6 @@
       "name": "CommandSeparator",
       "kind": "component",
       "storyIds": ["ui-primitives--command"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/avatar.tsx",
-      "name": "Avatar",
-      "kind": "component",
-      "storyIds": ["ui-primitives--avatar"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/avatar.tsx",
-      "name": "AvatarImage",
-      "kind": "component",
-      "storyIds": ["ui-primitives--avatar"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/avatar.tsx",
-      "name": "AvatarFallback",
-      "kind": "component",
-      "storyIds": ["ui-primitives--avatar"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/avatar.tsx",
-      "name": "AvatarBadge",
-      "kind": "component",
-      "storyIds": ["ui-primitives--avatar"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/avatar.tsx",
-      "name": "AvatarGroup",
-      "kind": "component",
-      "storyIds": ["ui-primitives--avatar"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/avatar.tsx",
-      "name": "AvatarGroupCount",
-      "kind": "component",
-      "storyIds": ["ui-primitives--avatar"],
       "reason": ""
     },
     {
@@ -666,59 +1481,248 @@
       "reason": ""
     },
     {
-      "file": "src/components/ui/badge.tsx",
-      "name": "Badge",
+      "file": "src/components/ui/drawer.tsx",
+      "name": "Drawer",
       "kind": "component",
-      "storyIds": ["ui-primitives--badge"],
+      "storyIds": ["ui-primitives--drawer"],
       "reason": ""
     },
     {
-      "file": "src/components/ui/badge.tsx",
-      "name": "badgeVariants",
+      "file": "src/components/ui/drawer.tsx",
+      "name": "DrawerPortal",
+      "kind": "component",
+      "storyIds": ["ui-primitives--drawer"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/drawer.tsx",
+      "name": "DrawerOverlay",
+      "kind": "component",
+      "storyIds": ["ui-primitives--drawer"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/drawer.tsx",
+      "name": "DrawerTrigger",
+      "kind": "component",
+      "storyIds": ["ui-primitives--drawer"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/drawer.tsx",
+      "name": "DrawerClose",
+      "kind": "component",
+      "storyIds": ["ui-primitives--drawer"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/drawer.tsx",
+      "name": "DrawerContent",
+      "kind": "component",
+      "storyIds": ["ui-primitives--drawer"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/drawer.tsx",
+      "name": "DrawerHeader",
+      "kind": "component",
+      "storyIds": ["ui-primitives--drawer"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/drawer.tsx",
+      "name": "DrawerFooter",
+      "kind": "component",
+      "storyIds": ["ui-primitives--drawer"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/drawer.tsx",
+      "name": "DrawerTitle",
+      "kind": "component",
+      "storyIds": ["ui-primitives--drawer"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/drawer.tsx",
+      "name": "DrawerDescription",
+      "kind": "component",
+      "storyIds": ["ui-primitives--drawer"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/form.tsx",
+      "name": "useFormField",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "src/components/ui/separator.tsx",
-      "name": "Separator",
+      "file": "src/components/ui/form.tsx",
+      "name": "Form",
       "kind": "component",
-      "storyIds": ["ui-primitives--separator"],
+      "storyIds": ["ui-primitives--form"],
       "reason": ""
     },
     {
-      "file": "src/components/ui/button.tsx",
-      "name": "Button",
+      "file": "src/components/ui/form.tsx",
+      "name": "FormItem",
       "kind": "component",
-      "storyIds": ["ui-primitives--button"],
+      "storyIds": ["ui-primitives--form"],
       "reason": ""
     },
     {
-      "file": "src/components/ui/button.tsx",
-      "name": "buttonVariants",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/ui/toggle.tsx",
-      "name": "Toggle",
+      "file": "src/components/ui/form.tsx",
+      "name": "FormLabel",
       "kind": "component",
-      "storyIds": ["ui-primitives--toggle"],
+      "storyIds": ["ui-primitives--form"],
       "reason": ""
     },
     {
-      "file": "src/components/ui/toggle.tsx",
-      "name": "toggleVariants",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+      "file": "src/components/ui/form.tsx",
+      "name": "FormControl",
+      "kind": "component",
+      "storyIds": ["ui-primitives--form"],
+      "reason": ""
     },
     {
-      "file": "src/components/ui/checkbox.tsx",
-      "name": "Checkbox",
+      "file": "src/components/ui/form.tsx",
+      "name": "FormDescription",
       "kind": "component",
-      "storyIds": ["ui-primitives--checkbox"],
+      "storyIds": ["ui-primitives--form"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/form.tsx",
+      "name": "FormMessage",
+      "kind": "component",
+      "storyIds": ["ui-primitives--form"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/form.tsx",
+      "name": "FormField",
+      "kind": "component",
+      "storyIds": ["ui-primitives--form"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/input.tsx",
+      "name": "Input",
+      "kind": "component",
+      "storyIds": ["ui-primitives--input"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/label.tsx",
+      "name": "Label",
+      "kind": "component",
+      "storyIds": ["ui-primitives--label"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/pagination.tsx",
+      "name": "Pagination",
+      "kind": "component",
+      "storyIds": ["ui-primitives--pagination"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/pagination.tsx",
+      "name": "PaginationContent",
+      "kind": "component",
+      "storyIds": ["ui-primitives--pagination"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/pagination.tsx",
+      "name": "PaginationLink",
+      "kind": "component",
+      "storyIds": ["ui-primitives--pagination"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/pagination.tsx",
+      "name": "PaginationItem",
+      "kind": "component",
+      "storyIds": ["ui-primitives--pagination"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/pagination.tsx",
+      "name": "PaginationPrevious",
+      "kind": "component",
+      "storyIds": ["ui-primitives--pagination"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/pagination.tsx",
+      "name": "PaginationNext",
+      "kind": "component",
+      "storyIds": ["ui-primitives--pagination"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/pagination.tsx",
+      "name": "PaginationEllipsis",
+      "kind": "component",
+      "storyIds": ["ui-primitives--pagination"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/popover.tsx",
+      "name": "Popover",
+      "kind": "component",
+      "storyIds": ["ui-primitives--popover"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/popover.tsx",
+      "name": "PopoverTrigger",
+      "kind": "component",
+      "storyIds": ["ui-primitives--popover"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/popover.tsx",
+      "name": "PopoverContent",
+      "kind": "component",
+      "storyIds": ["ui-primitives--popover"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/popover.tsx",
+      "name": "PopoverAnchor",
+      "kind": "component",
+      "storyIds": ["ui-primitives--popover"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/popover.tsx",
+      "name": "PopoverHeader",
+      "kind": "component",
+      "storyIds": ["ui-primitives--popover"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/popover.tsx",
+      "name": "PopoverTitle",
+      "kind": "component",
+      "storyIds": ["ui-primitives--popover"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/popover.tsx",
+      "name": "PopoverDescription",
+      "kind": "component",
+      "storyIds": ["ui-primitives--popover"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/progress.tsx",
+      "name": "Progress",
+      "kind": "component",
+      "storyIds": ["ui-primitives--progress"],
       "reason": ""
     },
     {
@@ -792,17 +1796,66 @@
       "reason": ""
     },
     {
-      "file": "src/components/ui/textarea.tsx",
-      "name": "Textarea",
+      "file": "src/components/ui/separator.tsx",
+      "name": "Separator",
       "kind": "component",
-      "storyIds": ["ui-primitives--textarea"],
+      "storyIds": ["ui-primitives--separator"],
       "reason": ""
     },
     {
-      "file": "src/components/ui/input.tsx",
-      "name": "Input",
+      "file": "src/components/ui/sheet.tsx",
+      "name": "Sheet",
       "kind": "component",
-      "storyIds": ["ui-primitives--input"],
+      "storyIds": ["ui-primitives--sheet"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/sheet.tsx",
+      "name": "SheetTrigger",
+      "kind": "component",
+      "storyIds": ["ui-primitives--sheet"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/sheet.tsx",
+      "name": "SheetClose",
+      "kind": "component",
+      "storyIds": ["ui-primitives--sheet"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/sheet.tsx",
+      "name": "SheetContent",
+      "kind": "component",
+      "storyIds": ["ui-primitives--sheet"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/sheet.tsx",
+      "name": "SheetHeader",
+      "kind": "component",
+      "storyIds": ["ui-primitives--sheet"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/sheet.tsx",
+      "name": "SheetFooter",
+      "kind": "component",
+      "storyIds": ["ui-primitives--sheet"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/sheet.tsx",
+      "name": "SheetTitle",
+      "kind": "component",
+      "storyIds": ["ui-primitives--sheet"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/sheet.tsx",
+      "name": "SheetDescription",
+      "kind": "component",
+      "storyIds": ["ui-primitives--sheet"],
       "reason": ""
     },
     {
@@ -813,612 +1866,94 @@
       "reason": ""
     },
     {
-      "file": "src/components/ui/form.tsx",
-      "name": "useFormField",
+      "file": "src/components/ui/sonner.tsx",
+      "name": "Toaster",
+      "kind": "component",
+      "storyIds": ["ui-primitives--sonner"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/tabs.tsx",
+      "name": "Tabs",
+      "kind": "component",
+      "storyIds": ["ui-primitives--tabs"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/tabs.tsx",
+      "name": "TabsList",
+      "kind": "component",
+      "storyIds": ["ui-primitives--tabs"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/tabs.tsx",
+      "name": "TabsTrigger",
+      "kind": "component",
+      "storyIds": ["ui-primitives--tabs"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/tabs.tsx",
+      "name": "TabsContent",
+      "kind": "component",
+      "storyIds": ["ui-primitives--tabs"],
+      "reason": ""
+    },
+    {
+      "file": "src/components/ui/tabs.tsx",
+      "name": "tabsListVariants",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "src/components/ui/form.tsx",
-      "name": "Form",
+      "file": "src/components/ui/textarea.tsx",
+      "name": "Textarea",
       "kind": "component",
-      "storyIds": ["ui-primitives--form"],
+      "storyIds": ["ui-primitives--textarea"],
       "reason": ""
     },
     {
-      "file": "src/components/ui/form.tsx",
-      "name": "FormItem",
+      "file": "src/components/ui/toggle.tsx",
+      "name": "Toggle",
       "kind": "component",
-      "storyIds": ["ui-primitives--form"],
+      "storyIds": ["ui-primitives--toggle"],
       "reason": ""
     },
     {
-      "file": "src/components/ui/form.tsx",
-      "name": "FormLabel",
-      "kind": "component",
-      "storyIds": ["ui-primitives--form"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/form.tsx",
-      "name": "FormControl",
-      "kind": "component",
-      "storyIds": ["ui-primitives--form"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/form.tsx",
-      "name": "FormDescription",
-      "kind": "component",
-      "storyIds": ["ui-primitives--form"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/form.tsx",
-      "name": "FormMessage",
-      "kind": "component",
-      "storyIds": ["ui-primitives--form"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/form.tsx",
-      "name": "FormField",
-      "kind": "component",
-      "storyIds": ["ui-primitives--form"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/carousel.tsx",
-      "name": "CarouselApi",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/ui/carousel.tsx",
-      "name": "Carousel",
-      "kind": "component",
-      "storyIds": ["ui-primitives--carousel"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/carousel.tsx",
-      "name": "CarouselContent",
-      "kind": "component",
-      "storyIds": ["ui-primitives--carousel"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/carousel.tsx",
-      "name": "CarouselItem",
-      "kind": "component",
-      "storyIds": ["ui-primitives--carousel"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/carousel.tsx",
-      "name": "CarouselPrevious",
-      "kind": "component",
-      "storyIds": ["ui-primitives--carousel"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ui/carousel.tsx",
-      "name": "CarouselNext",
-      "kind": "component",
-      "storyIds": ["ui-primitives--carousel"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/home/birthday-hero-section.tsx",
-      "name": "BirthdayHeroSection",
-      "kind": "component",
-      "storyIds": ["components-home-birthday-hero-section--birthday-hero-section"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/home/event-group-list.tsx",
-      "name": "EventGroupList",
-      "kind": "component",
-      "storyIds": ["components-home-event-group-list--event-group-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/home/event-list.tsx",
-      "name": "EventList",
-      "kind": "component",
-      "storyIds": ["components-home-event-list--event-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/home/home-header.tsx",
-      "name": "HomeHeader",
-      "kind": "component",
-      "storyIds": ["components-home-home-header--home-header"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/home/event-list-item.tsx",
-      "name": "EventListItem",
-      "kind": "component",
-      "storyIds": ["components-home-event-list-item--event-list-item"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/home/line-sticker-list.tsx",
-      "name": "LineStickerList",
-      "kind": "component",
-      "storyIds": ["components-home-line-sticker-list--line-sticker-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/home/line-sticker-list-item.tsx",
-      "name": "LineStickerListItem",
-      "kind": "component",
-      "storyIds": ["components-home-line-sticker-list-item--line-sticker-list-item"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ranking/ranking-vote-badge.tsx",
-      "name": "RankingVoteBadge",
-      "kind": "component",
-      "storyIds": ["components-ranking-ranking-vote-badge--ranking-vote-badge"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ranking/ranking-empty-vote-info.tsx",
-      "name": "RankingEmptyVoteInfo",
-      "kind": "component",
-      "storyIds": ["components-ranking-ranking-empty-vote-info--ranking-empty-vote-info"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/ranking/ranking-list-helpers.ts",
-      "name": "CharacterWithVotes",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/ranking/ranking-list-helpers.ts",
-      "name": "CardProps",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/ranking/ranking-list-helpers.ts",
-      "name": "calculateRanks",
+      "file": "src/components/ui/toggle.tsx",
+      "name": "toggleVariants",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "src/components/ranking/ranking-list-helpers.ts",
-      "name": "getBarClass",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/ranking/ranking-podium.tsx",
-      "name": "Podium",
+      "file": "src/components/ui/tooltip.tsx",
+      "name": "Tooltip",
       "kind": "component",
-      "storyIds": ["components-ranking-ranking-podium--podium"],
+      "storyIds": ["ui-primitives--tooltip"],
       "reason": ""
     },
     {
-      "file": "src/components/ranking/ranking-row.tsx",
-      "name": "RankingRow",
+      "file": "src/components/ui/tooltip.tsx",
+      "name": "TooltipTrigger",
       "kind": "component",
-      "storyIds": ["components-ranking-ranking-row--ranking-row"],
+      "storyIds": ["ui-primitives--tooltip"],
       "reason": ""
     },
     {
-      "file": "src/components/ranking/ranking-list.tsx",
-      "name": "RankingList",
+      "file": "src/components/ui/tooltip.tsx",
+      "name": "TooltipContent",
       "kind": "component",
-      "storyIds": ["components-ranking-ranking-list--ranking-list"],
+      "storyIds": ["ui-primitives--tooltip"],
       "reason": ""
     },
     {
-      "file": "src/components/calendar/calendar-event-drawer-content.tsx",
-      "name": "CalendarEventDrawerContent",
+      "file": "src/components/ui/tooltip.tsx",
+      "name": "TooltipProvider",
       "kind": "component",
-      "storyIds": ["components-calendar-calendar-event-drawer-content--calendar-event-drawer-content"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/calendar/calendar-event-list.tsx",
-      "name": "CalendarEventList",
-      "kind": "component",
-      "storyIds": ["components-calendar-calendar-event-list--calendar-event-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/calendar/calendar-grid.tsx",
-      "name": "CalendarGrid",
-      "kind": "component",
-      "storyIds": ["components-calendar-calendar-grid--calendar-grid"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/calendar/calendar-controls.tsx",
-      "name": "CalendarHeader",
-      "kind": "component",
-      "storyIds": ["components-calendar-calendar-controls--calendar-header"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/calendar/calendar-controls.tsx",
-      "name": "CalendarMonthTabs",
-      "kind": "component",
-      "storyIds": ["components-calendar-calendar-controls--calendar-month-tabs"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/calendar/calendar-controls.tsx",
-      "name": "CalendarMonthDots",
-      "kind": "component",
-      "storyIds": ["components-calendar-calendar-controls--calendar-month-dots"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/route/selected-store-list.tsx",
-      "name": "SelectedStoreList",
-      "kind": "component",
-      "storyIds": ["components-route-selected-store-list--selected-store-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/route/use-directions.ts",
-      "name": "useDirections",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/route/types.ts",
-      "name": "AvailableStore",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/route/types.ts",
-      "name": "SelectedStore",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/route/types.ts",
-      "name": "RouteSegment",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/route/types.ts",
-      "name": "DirectionsLeg",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/route/types.ts",
-      "name": "RouteResult",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/route/route-result.tsx",
-      "name": "RouteResultCard",
-      "kind": "component",
-      "storyIds": ["components-route-route-result--route-result-card"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/route/index.ts",
-      "name": "RouteResultCard",
-      "kind": "component",
-      "storyIds": ["components-route-route-result--route-result-card"],
-      "reason": "Barrel re-export; same actual component as src/components/route/route-result.tsx."
-    },
-    {
-      "file": "src/components/route/index.ts",
-      "name": "SelectedStoreList",
-      "kind": "component",
-      "storyIds": ["components-route-selected-store-list--selected-store-list"],
-      "reason": "Barrel re-export; same actual component as src/components/route/selected-store-list.tsx."
-    },
-    {
-      "file": "src/components/route/index.ts",
-      "name": "StoreSelect",
-      "kind": "component",
-      "storyIds": ["components-route-store-select--store-select"],
-      "reason": "Barrel re-export; same actual component as src/components/route/store-select.tsx."
-    },
-    {
-      "file": "src/components/route/index.ts",
-      "name": "AvailableStore",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/route/index.ts",
-      "name": "DirectionsLeg",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/route/index.ts",
-      "name": "RouteResult",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/route/index.ts",
-      "name": "SelectedStore",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/route/index.ts",
-      "name": "useDirections",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/route/store-select.tsx",
-      "name": "StoreSelect",
-      "kind": "component",
-      "storyIds": ["components-route-store-select--store-select"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/auth/social-login-buttons.tsx",
-      "name": "SocialLoginButtons",
-      "kind": "component",
-      "storyIds": ["components-auth-social-login-buttons--social-login-buttons"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/auth/backend-session-gate.tsx",
-      "name": "BackendSessionGate",
-      "kind": "component",
-      "storyIds": ["components-auth-backend-session-gate--backend-session-gate"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/auth/login-dialog.tsx",
-      "name": "LoginDialog",
-      "kind": "component",
-      "storyIds": ["components-auth-login-dialog--login-dialog"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/auth/auth-provider.tsx",
-      "name": "AuthProvider",
-      "kind": "component",
-      "storyIds": ["components-auth-auth-provider--auth-provider"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/auth/email-auth-tabs.tsx",
-      "name": "EmailAuthTabs",
-      "kind": "component",
-      "storyIds": ["components-auth-email-auth-tabs--email-auth-tabs"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/auth/login-button.tsx",
-      "name": "LoginButton",
-      "kind": "component",
-      "storyIds": ["components-auth-login-button--login-button"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/location/store-list.tsx",
-      "name": "StoreList",
-      "kind": "component",
-      "storyIds": ["components-location-store-list--store-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/form/date-field.tsx",
-      "name": "DateField",
-      "kind": "component",
-      "storyIds": ["components-admin-form-date-field--date-field"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/form/event-flags-section.tsx",
-      "name": "EventFlagsSection",
-      "kind": "component",
-      "storyIds": ["components-admin-form-event-flags-section--event-flags-section"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/form/conditions-section.tsx",
-      "name": "ConditionsSection",
-      "kind": "component",
-      "storyIds": ["components-admin-form-conditions-section--conditions-section"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/form/reference-urls-section.tsx",
-      "name": "ReferenceUrlsSection",
-      "kind": "component",
-      "storyIds": ["components-admin-form-reference-urls-section--reference-urls-section"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/event-confirmation.tsx",
-      "name": "EventConfirmation",
-      "kind": "component",
-      "storyIds": ["components-admin-event-confirmation--event-confirmation"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/event-card.tsx",
-      "name": "EventCard",
-      "kind": "component",
-      "storyIds": ["components-admin-event-card--event-card"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/event-group-list.tsx",
-      "name": "EventGroupList",
-      "kind": "component",
-      "storyIds": ["components-admin-event-group-list--event-group-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/event-list.tsx",
-      "name": "EventList",
-      "kind": "component",
-      "storyIds": ["components-admin-event-list--event-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/event-list-pagination.tsx",
-      "name": "EventListPagination",
-      "kind": "component",
-      "storyIds": ["components-admin-event-list-pagination--event-list-pagination"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/event-group-form.tsx",
-      "name": "toGroupFormValues",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/admin/event-group-form.tsx",
-      "name": "toCopyGroupFormValues",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/admin/event-group-form.tsx",
-      "name": "EventGroupForm",
-      "kind": "component",
-      "storyIds": ["components-admin-event-group-form--event-group-form"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/access-gate.tsx",
-      "name": "AccessGate",
-      "kind": "component",
-      "storyIds": ["components-admin-access-gate--access-gate"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/event-group-event-manager.tsx",
-      "name": "EventGroupEventManager",
-      "kind": "component",
-      "storyIds": ["components-admin-event-group-event-manager--event-group-event-manager"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/badges/badge-display-constants.ts",
-      "name": "RARITY_CHIP",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/admin/badges/badge-display-constants.ts",
-      "name": "RARITY_ICON_BG",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/admin/badges/badge-display-constants.ts",
-      "name": "ICON_NAMES",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/admin/badges/badge-display-constants.ts",
-      "name": "ACCENT_DOT",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/admin/badges/badge-display-constants.ts",
-      "name": "ACCENT_TEXT",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/admin/badges/badge-display-constants.ts",
-      "name": "CATEGORY_ORDER",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/admin/badges/badge-card.tsx",
-      "name": "BadgeCard",
-      "kind": "component",
-      "storyIds": ["components-admin-badges-badge-card--badge-card"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/badges/create-badge-dialog.tsx",
-      "name": "CreateBadgeDialog",
-      "kind": "component",
-      "storyIds": ["components-admin-badges-create-badge-dialog--create-badge-dialog"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/badges/edit-badge-dialog.tsx",
-      "name": "EditBadgeDialog",
-      "kind": "component",
-      "storyIds": ["components-admin-badges-edit-badge-dialog--edit-badge-dialog"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/badges/recalculate-badges-button.tsx",
-      "name": "RecalculateBadgesButton",
-      "kind": "component",
-      "storyIds": ["components-admin-badges-recalculate-badges-button--recalculate-badges-button"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/badges/stat-card.tsx",
-      "name": "StatCard",
-      "kind": "component",
-      "storyIds": ["components-admin-badges-stat-card--stat-card"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/badges/category-section.tsx",
-      "name": "CategorySection",
-      "kind": "component",
-      "storyIds": ["components-admin-badges-category-section--category-section"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/admin/event-form.tsx",
-      "name": "EventForm",
-      "kind": "component",
-      "storyIds": ["components-admin-event-form--event-form"],
+      "storyIds": ["ui-primitives--tooltip"],
       "reason": ""
     },
     {
@@ -1436,520 +1971,6 @@
       "reason": ""
     },
     {
-      "file": "src/components/common/error-boundary.tsx",
-      "name": "ErrorBoundary",
-      "kind": "component",
-      "storyIds": [
-        "components-common-error-boundary--error-boundary",
-        "components-common-error-boundary--caught-error"
-      ],
-      "reason": ""
-    },
-    {
-      "file": "src/components/common/loading-fallback.tsx",
-      "name": "LoadingFallback",
-      "kind": "component",
-      "storyIds": ["components-common-loading-fallback--loading-fallback"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/common/footer.tsx",
-      "name": "Footer",
-      "kind": "component",
-      "storyIds": ["components-common-footer--footer"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/common/breadcrumb.tsx",
-      "name": "AppBreadcrumb",
-      "kind": "component",
-      "storyIds": ["components-common-breadcrumb--app-breadcrumb"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/common/error-fallback.tsx",
-      "name": "ErrorFallback",
-      "kind": "component",
-      "storyIds": ["components-common-error-fallback--error-fallback"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/common/header.tsx",
-      "name": "Header",
-      "kind": "component",
-      "storyIds": ["components-common-header--header"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/common/page-view-counter.tsx",
-      "name": "PageViewCounter",
-      "kind": "component",
-      "storyIds": ["components-common-page-view-counter--page-view-counter"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/common/not-found.tsx",
-      "name": "NotFound",
-      "kind": "component",
-      "storyIds": ["components-common-not-found--not-found"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/common/filter-header.tsx",
-      "name": "FilterHeader",
-      "kind": "component",
-      "storyIds": ["components-common-filter-header--filter-header"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/pwa/install-prompt-ios.tsx",
-      "name": "IosInstallPrompt",
-      "kind": "component",
-      "storyIds": ["components-pwa-install-prompt-ios--ios-install-prompt"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/pwa/update-prompt.tsx",
-      "name": "setUpdateServiceWorker",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/pwa/update-prompt.tsx",
-      "name": "showUpdatePrompt",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/pwa/update-prompt.tsx",
-      "name": "UpdatePrompt",
-      "kind": "component",
-      "storyIds": ["components-pwa-update-prompt--update-prompt"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/pwa/update-overlay.tsx",
-      "name": "UpdateOverlayStatus",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/pwa/update-overlay.tsx",
-      "name": "UpdateOverlay",
-      "kind": "component",
-      "storyIds": ["components-pwa-update-overlay--update-overlay"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-detail-info.tsx",
-      "name": "EventDetailInfoProps",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/events/event-detail-info.tsx",
-      "name": "EventDetailInfo",
-      "kind": "component",
-      "storyIds": ["components-events-event-detail-info--event-detail-info"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/comments/comment-section.tsx",
-      "name": "CommentSection",
-      "kind": "component",
-      "storyIds": ["components-events-comments-comment-section--comment-section"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/comments/comment-list.tsx",
-      "name": "CommentList",
-      "kind": "component",
-      "storyIds": ["components-events-comments-comment-list--comment-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/comments/comment-item.tsx",
-      "name": "CommentItem",
-      "kind": "component",
-      "storyIds": ["components-events-comments-comment-item--comment-item"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/comments/comment-form.tsx",
-      "name": "CommentForm",
-      "kind": "component",
-      "storyIds": ["components-events-comments-comment-form--comment-form"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/comments/comment-form-dialog.tsx",
-      "name": "CommentFormDialog",
-      "kind": "component",
-      "storyIds": ["components-events-comments-comment-form-dialog--comment-form-dialog"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-grid-item.tsx",
-      "name": "EventGridItem",
-      "kind": "component",
-      "storyIds": ["components-events-event-grid-item--event-grid-item"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-status-filter.tsx",
-      "name": "EventStatusFilter",
-      "kind": "component",
-      "storyIds": ["components-events-event-status-filter--event-status-filter"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-user-activity-filter.tsx",
-      "name": "EventUserActivityFilter",
-      "kind": "component",
-      "storyIds": ["components-events-event-user-activity-filter--event-user-activity-filter"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/upcoming-event-list-item.tsx",
-      "name": "UpcomingEventListItem",
-      "kind": "component",
-      "storyIds": ["components-events-upcoming-event-list-item--upcoming-event-list-item"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-gantt-chart.tsx",
-      "name": "EventGanttChart",
-      "kind": "component",
-      "storyIds": ["components-events-event-gantt-chart--event-gantt-chart"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/paginated-event-grid.tsx",
-      "name": "PaginatedEventGrid",
-      "kind": "component",
-      "storyIds": ["components-events-paginated-event-grid--paginated-event-grid"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-category-filter.tsx",
-      "name": "EventCategoryFilter",
-      "kind": "component",
-      "storyIds": ["components-events-event-category-filter--event-category-filter"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/upcoming-event-list.tsx",
-      "name": "UpcomingEventList",
-      "kind": "component",
-      "storyIds": ["components-events-upcoming-event-list--upcoming-event-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-share-button.tsx",
-      "name": "EventShareButton",
-      "kind": "component",
-      "storyIds": ["components-events-event-share-button--event-share-button"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-stats-animations.tsx",
-      "name": "HeartBurstOverlay",
-      "kind": "component",
-      "storyIds": ["components-events-event-stats-animations--heart-burst-overlay"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-stats-animations.tsx",
-      "name": "FireworkBurstOverlay",
-      "kind": "component",
-      "storyIds": ["components-events-event-stats-animations--firework-burst-overlay"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/gantt-chart-parts.tsx",
-      "name": "GanttMonthSelector",
-      "kind": "component",
-      "storyIds": ["components-events-gantt-chart-parts--gantt-month-selector"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/gantt-chart-parts.tsx",
-      "name": "GanttDateHeader",
-      "kind": "component",
-      "storyIds": ["components-events-gantt-chart-parts--gantt-date-header"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/gantt-chart-parts.tsx",
-      "name": "GanttGridCell",
-      "kind": "component",
-      "storyIds": ["components-events-gantt-chart-parts--gantt-grid-cell"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-group-banner.tsx",
-      "name": "EventGroupBanner",
-      "kind": "component",
-      "storyIds": ["components-events-event-group-banner--event-group-banner"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-stats-badges.tsx",
-      "name": "EventStatsBadges",
-      "kind": "component",
-      "storyIds": ["components-events-event-stats-badges--event-stats-badges"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/gantt/gantt-header.tsx",
-      "name": "GanttHeader",
-      "kind": "component",
-      "storyIds": ["components-events-gantt-gantt-header--gantt-header"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/gantt/gantt-row.tsx",
-      "name": "GanttRow",
-      "kind": "component",
-      "storyIds": ["components-events-gantt-gantt-row--gantt-row"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/gantt/gantt-timeline.tsx",
-      "name": "GanttTimeline",
-      "kind": "component",
-      "storyIds": ["components-events-gantt-gantt-timeline--gantt-timeline"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/gantt/use-gantt-layout.ts",
-      "name": "EventBar",
-      "kind": "type",
-      "storyIds": [],
-      "reason": "Type-only contract, not a React renderable."
-    },
-    {
-      "file": "src/components/events/gantt/use-gantt-layout.ts",
-      "name": "useGanttLayout",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/events/gantt-chart-utils.ts",
-      "name": "getCategoryColor",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/events/gantt-chart-utils.ts",
-      "name": "hideScrollbarStyle",
-      "kind": "support",
-      "storyIds": [],
-      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
-    },
-    {
-      "file": "src/components/events/event-character-badge.tsx",
-      "name": "EventCharacterBadge",
-      "kind": "component",
-      "storyIds": ["components-events-event-character-badge--event-character-badge"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/recent-events-list.tsx",
-      "name": "RecentEventsList",
-      "kind": "component",
-      "storyIds": ["components-events-recent-events-list--recent-events-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-store-filter.tsx",
-      "name": "EventStoreFilter",
-      "kind": "component",
-      "storyIds": ["components-events-event-store-filter--event-store-filter"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/events/event-detail-header.tsx",
-      "name": "EventDetailHeader",
-      "kind": "component",
-      "storyIds": ["components-events-event-detail-header--event-detail-header"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-vote-button.tsx",
-      "name": "CharacterVoteButton",
-      "kind": "component",
-      "storyIds": ["components-characters-character-vote-button--character-vote-button"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-favorite-button.tsx",
-      "name": "CharacterFavoriteButton",
-      "kind": "component",
-      "storyIds": ["components-characters-character-favorite-button--character-favorite-button"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/bulk-vote-button.tsx",
-      "name": "BulkVoteButton",
-      "kind": "component",
-      "storyIds": ["components-characters-bulk-vote-button--bulk-vote-button"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-competition-level.tsx",
-      "name": "CharacterCompetitionLevel",
-      "kind": "component",
-      "storyIds": ["components-characters-character-competition-level--character-competition-level"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-detail-content.tsx",
-      "name": "CharacterDetailContent",
-      "kind": "component",
-      "storyIds": ["components-characters-character-detail-content--character-detail-content"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-sort-control.tsx",
-      "name": "CharacterSortControl",
-      "kind": "component",
-      "storyIds": ["components-characters-character-sort-control--character-sort-control"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-list.tsx",
-      "name": "CharacterList",
-      "kind": "component",
-      "storyIds": ["components-characters-character-list--character-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/vote-burst.tsx",
-      "name": "VoteBurst",
-      "kind": "component",
-      "storyIds": ["components-characters-vote-burst--vote-burst"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/nearby-characters-list.tsx",
-      "name": "NearbyCharactersList",
-      "kind": "component",
-      "storyIds": ["components-characters-nearby-characters-list--nearby-characters-list"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/favorite-burst.tsx",
-      "name": "FavoriteBurst",
-      "kind": "component",
-      "storyIds": ["components-characters-favorite-burst--favorite-burst"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-ongoing-events.tsx",
-      "name": "CharacterOngoingEvents",
-      "kind": "component",
-      "storyIds": ["components-characters-character-ongoing-events--character-ongoing-events"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/detail/store-info-section.tsx",
-      "name": "StoreInfoSection",
-      "kind": "component",
-      "storyIds": ["components-characters-detail-store-info-section--store-info-section"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/detail/character-profile-section.tsx",
-      "name": "CharacterProfileSection",
-      "kind": "component",
-      "storyIds": ["components-characters-detail-character-profile-section--character-profile-section"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/detail/store-info-items.tsx",
-      "name": "InfoItem",
-      "kind": "component",
-      "storyIds": ["components-characters-detail-store-info-items--info-item"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/detail/store-info-items.tsx",
-      "name": "StoreName",
-      "kind": "component",
-      "storyIds": ["components-characters-detail-store-info-items--store-name"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/detail/store-info-items.tsx",
-      "name": "StoreAddress",
-      "kind": "component",
-      "storyIds": ["components-characters-detail-store-info-items--store-address"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/detail/store-info-items.tsx",
-      "name": "StorePhone",
-      "kind": "component",
-      "storyIds": ["components-characters-detail-store-info-items--store-phone"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/detail/store-info-items.tsx",
-      "name": "StoreHours",
-      "kind": "component",
-      "storyIds": ["components-characters-detail-store-info-items--store-hours"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/detail/store-info-items.tsx",
-      "name": "StoreAccess",
-      "kind": "component",
-      "storyIds": ["components-characters-detail-store-info-items--store-access"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/detail/store-info-items.tsx",
-      "name": "StoreBirthday",
-      "kind": "component",
-      "storyIds": ["components-characters-detail-store-info-items--store-birthday"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-visit-button.tsx",
-      "name": "CharacterVisitButton",
-      "kind": "component",
-      "storyIds": ["components-characters-character-visit-button--character-visit-button"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-twitter-link.tsx",
-      "name": "CharacterTwitterLink",
-      "kind": "component",
-      "storyIds": ["components-characters-character-twitter-link--character-twitter-link"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/character-follow-button.tsx",
-      "name": "CharacterFollowButton",
-      "kind": "component",
-      "storyIds": ["components-characters-character-follow-button--character-follow-button"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/characters/region-filter-control.tsx",
-      "name": "RegionFilterControl",
-      "kind": "component",
-      "storyIds": ["components-characters-region-filter-control--region-filter-control"],
-      "reason": ""
-    },
-    {
       "file": "src/components/store-list-item.tsx",
       "name": "StoreListItem",
       "kind": "component",
@@ -1957,143 +1978,17 @@
       "reason": ""
     },
     {
-      "file": "src/components/badges/badge-grid.tsx",
-      "name": "BadgeGrid",
-      "kind": "component",
-      "storyIds": ["components-badges-badge-grid--badge-grid"],
-      "reason": ""
-    },
-    {
-      "file": "src/components/badges/badge-card.tsx",
-      "name": "BadgeCard",
-      "kind": "component",
-      "storyIds": ["components-badges-badge-card--badge-card"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/index.tsx",
+      "file": "src/app/routes/about/index.tsx",
       "name": "Route",
       "kind": "route",
-      "storyIds": ["pages-production--home"],
+      "storyIds": ["pages-production--about"],
       "reason": ""
     },
     {
-      "file": "src/app/routes/__root.tsx",
+      "file": "src/app/routes/admin.tsx",
       "name": "Route",
       "kind": "route",
-      "storyIds": ["pages-production--rootlayout"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/ranking/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--ranking"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/contact/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--contact"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/calendar/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--calendar"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/route/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--route"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/location/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--location"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--admin"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin/comments/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--admincomments"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin/twitter/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--admintwitter"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin/users/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--adminusers"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin/event-groups/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--adminevent-groups"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin/event-groups/$uuid/edit/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--adminevent-groupsuuidedit"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin/event-groups/new/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--adminevent-groupsnew"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin/events/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--adminevents"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin/events/$uuid/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--admineventsuuid"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin/events/$uuid/edit/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--admineventsuuidedit"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin/events/new/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--admineventsnew"],
+      "storyIds": ["pages-production--admin-layout"],
       "reason": ""
     },
     {
@@ -2111,10 +2006,157 @@
       "reason": ""
     },
     {
-      "file": "src/app/routes/about/index.tsx",
+      "file": "src/app/routes/admin/comments/index.tsx",
       "name": "Route",
       "kind": "route",
-      "storyIds": ["pages-production--about"],
+      "storyIds": ["pages-production--admincomments"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/admin/event-groups/$uuid/edit/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--adminevent-groupsuuidedit"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/admin/event-groups/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--adminevent-groups"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/admin/event-groups/new/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--adminevent-groupsnew"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/admin/events/$uuid/edit/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--admineventsuuidedit"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/admin/events/$uuid/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--admineventsuuid"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/admin/events/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--adminevents"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/admin/events/new/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--admineventsnew"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/admin/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--admin"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/admin/twitter/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--admintwitter"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/admin/users/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--adminusers"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/badges/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--badges"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/calendar/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--calendar"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/characters/$id/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--charactersid"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/characters/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--characters"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/contact/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--contact"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/events/$uuid/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--eventsuuid"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/events/group/$id/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--eventsgroupid"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/events/groups/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--eventsgroups"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/events/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--events"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--home"],
+      "reason": ""
+    },
+    {
+      "file": "src/app/routes/location/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": ["pages-production--location"],
       "reason": ""
     },
     {
@@ -2122,20 +2164,6 @@
       "name": "Route",
       "kind": "route",
       "storyIds": ["pages-production--mecompleted"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/me/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--me"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/me/visited/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--mevisited"],
       "reason": ""
     },
     {
@@ -2153,59 +2181,38 @@
       "reason": ""
     },
     {
-      "file": "src/app/routes/events/index.tsx",
+      "file": "src/app/routes/me/visited/index.tsx",
       "name": "Route",
       "kind": "route",
-      "storyIds": ["pages-production--events"],
+      "storyIds": ["pages-production--mevisited"],
       "reason": ""
     },
     {
-      "file": "src/app/routes/events/group/$id/index.tsx",
+      "file": "src/app/routes/me/index.tsx",
       "name": "Route",
       "kind": "route",
-      "storyIds": ["pages-production--eventsgroupid"],
+      "storyIds": ["pages-production--me"],
       "reason": ""
     },
     {
-      "file": "src/app/routes/events/$uuid/index.tsx",
+      "file": "src/app/routes/ranking/index.tsx",
       "name": "Route",
       "kind": "route",
-      "storyIds": ["pages-production--eventsuuid"],
+      "storyIds": ["pages-production--ranking"],
       "reason": ""
     },
     {
-      "file": "src/app/routes/events/groups/index.tsx",
+      "file": "src/app/routes/route/index.tsx",
       "name": "Route",
       "kind": "route",
-      "storyIds": ["pages-production--eventsgroups"],
+      "storyIds": ["pages-production--route"],
       "reason": ""
     },
     {
-      "file": "src/app/routes/characters/index.tsx",
+      "file": "src/app/routes/__root.tsx",
       "name": "Route",
       "kind": "route",
-      "storyIds": ["pages-production--characters"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/characters/$id/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--charactersid"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/badges/index.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--badges"],
-      "reason": ""
-    },
-    {
-      "file": "src/app/routes/admin.tsx",
-      "name": "Route",
-      "kind": "route",
-      "storyIds": ["pages-production--admin-layout"],
+      "storyIds": ["pages-production--rootlayout"],
       "reason": ""
     }
   ]
