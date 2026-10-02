@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { PageViewCounter } from '@/components/common/page-view-counter'
@@ -30,6 +31,23 @@ export const HomeHeader = () => {
         >
           推し活を全力サポート - イベント追跡から店舗巡りまで
         </motion.p>
+        <nav aria-label='主な探し方' className='flex flex-wrap justify-center gap-2 mb-4'>
+          {(
+            [
+              { to: '/characters', label: '娘を探す' },
+              { to: '/events', label: 'イベントを探す' },
+              { to: '/location', label: '店舗マップ' }
+            ] as const
+          ).map(({ to, label }) => (
+            <Link
+              key={to}
+              to={to}
+              className='inline-flex min-h-11 items-center rounded-full bg-card px-4 py-2 text-sm font-semibold text-foreground hover:bg-button-surface-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
         <motion.div
           variants={FADE_IN}
           initial='initial'

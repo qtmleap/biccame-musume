@@ -1,6 +1,7 @@
-import { atomWithStorage } from 'jotai/utils'
+import { atom } from 'jotai'
 
 /**
- * イベント一覧のページネーション状態を管理するatom
+ * URLを持たない一覧用のページ状態。イベントルートはsearch.pageを使用する。
+ * 過去の永続ページをURLなしの初訪問へ引き継がない。
  */
-export const eventPageAtom = atomWithStorage('event-page', 1)
+export const eventPageAtom = atom(1)

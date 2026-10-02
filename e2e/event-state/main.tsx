@@ -5,21 +5,21 @@ import {
   createRoute,
   createRouter,
   Outlet,
-  RouterProvider
+  RouterProvider,
+  useSearch
 } from '@tanstack/react-router'
-import { Provider, useAtomValue } from 'jotai'
+import { Provider } from 'jotai'
 import { Suspense, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Route as NewEventRoute } from '@/app/routes/admin/events/new/index'
 import { Route as EventsRoute } from '@/app/routes/events/index'
-import { eventPageAtom } from '@/atoms/event-page-atom'
 import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { useEvent, useEventOrNull } from '@/hooks/use-events'
 import type { Event } from '@/schemas/event.dto'
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-const PageState = () => <output aria-label='所有ページ'>{useAtomValue(eventPageAtom)}</output>
+const PageState = () => <output aria-label='所有ページ'>{String(useSearch({ strict: false }).page ?? 1)}</output>
 const GridFixture = () => {
   const [page, setPage] = useState(2)
   const [events, setEvents] = useState<Event[]>(queryClient.getQueryData(['events']) ?? [])
