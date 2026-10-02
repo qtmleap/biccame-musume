@@ -25,8 +25,8 @@ import { useCharacters } from '@/hooks/use-characters'
 import { useEvents } from '@/hooks/use-events'
 import { useFavorites } from '@/hooks/use-favorites'
 import { useUserActivity } from '@/hooks/use-user-activity'
-import { auth } from '@/lib/firebase'
 import { DURATION } from '@/lib/motion'
+import { requireFirebaseUser } from '@/lib/require-firebase-user'
 import { MY_PAGE_LABELS } from '@/locales/app.content'
 import type { Event } from '@/schemas/event.dto'
 
@@ -260,20 +260,5 @@ const RouteComponent = () => (
 
 export const Route = createFileRoute('/me/')({
   component: RouteComponent,
-  beforeLoad: async () => {
-    return new Promise((resolve) => {
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        unsubscribe()
-        if (!user) {
-          throw new Error('Unauthorized')
-        }
-        resolve(undefined)
-      })
-    })
-  },
-  onError: ({ error, navigate }) => {
-    if (error.message === 'Unauthorized') {
-      navigate({ to: '/' })
-    }
-  }
+  beforeLoad: requireFirebaseUser
 })
