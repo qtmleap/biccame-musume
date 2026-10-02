@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import dayjs from 'dayjs'
 import { keyBy, orderBy } from 'lodash-es'
+import { useJstDate } from '@/hooks/use-jst-date'
 import type { StoreData } from '@/schemas/store.dto'
 import { client } from '@/utils/client'
 
@@ -12,7 +12,8 @@ export type CharacterWithVotes = StoreData & {
  * 投票ランキング取得用のカスタムフック
  */
 export const useVoteRanking = () => {
-  const targetYear = dayjs().year()
+  const dateKey = useJstDate()
+  const targetYear = Number(dateKey.slice(0, 4))
 
   return useSuspenseQuery({
     queryKey: ['ranking', targetYear],
