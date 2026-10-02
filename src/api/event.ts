@@ -104,8 +104,8 @@ routes.openapi(
   }),
   async (c) => {
     const body = c.req.valid('json')
-    const event = await createEvent(c.env, body)
-    if (body.shouldTweet !== false) {
+    const { event, created } = await createEvent(c.env, body)
+    if (created && body.shouldTweet !== false) {
       try {
         await new Twitter(c.env).tweetEventCreated(event)
       } catch (error) {
