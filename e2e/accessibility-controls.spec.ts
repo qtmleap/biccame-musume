@@ -95,8 +95,15 @@ test('event_controls_have_exact_action_names', async ({ page }) => {
   await expect(page.getByRole('dialog', { name: 'フィルター', exact: true })).toBeVisible()
   await page.keyboard.press('Escape')
   await expect(filter).toBeFocused()
-  await page.getByRole('button', { name: '日程表示', exact: true }).click()
-  await page.getByRole('button', { name: '一覧表示', exact: true }).click()
+  const scheduleAction = page.getByRole('button', { name: '日程表示', exact: true })
+  // A next-action command must not announce that the opposite view is pressed.
+  await expect(scheduleAction).not.toHaveAttribute('aria-pressed', 'true')
+  await scheduleAction.click()
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('event-view-mode'))).toBe(JSON.stringify('gantt'))
+  const listAction = page.getByRole('button', { name: '一覧表示', exact: true })
+  await expect(listAction).not.toHaveAttribute('aria-pressed', 'true')
+  await listAction.click()
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('event-view-mode'))).toBe(JSON.stringify('grid'))
   await expect(page.getByRole('button', { name: '日程表示', exact: true })).toBeVisible()
 })
 
