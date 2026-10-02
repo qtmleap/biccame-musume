@@ -6,6 +6,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from 
 import { useMediaQuery } from '@/hooks/use-media-query'
 import type { StoreData } from '@/schemas/store.dto'
 import { calculateDistance } from '@/utils/distance'
+import { getStorePosition } from '@/utils/store-position'
 
 type StoreListDialogProps = {
   characters: StoreData[]
@@ -31,10 +32,10 @@ const StoreListDesktopDialog = ({
 
     return [...characters]
       .map((character) => {
-        const coords = character.coordinates
-        if (!coords) return { character, distance: undefined }
+        const position = getStorePosition(character)
+        if (!position) return { character, distance: undefined }
 
-        const distance = calculateDistance(mapCenter.lat, mapCenter.lng, coords.latitude, coords.longitude)
+        const distance = calculateDistance(mapCenter.lat, mapCenter.lng, position.lat, position.lng)
         return { character, distance }
       })
       .sort((a, b) => {
@@ -96,10 +97,10 @@ const StoreListMobileDrawer = ({
 
     return [...characters]
       .map((character) => {
-        const coords = character.coordinates
-        if (!coords) return { character, distance: undefined }
+        const position = getStorePosition(character)
+        if (!position) return { character, distance: undefined }
 
-        const distance = calculateDistance(mapCenter.lat, mapCenter.lng, coords.latitude, coords.longitude)
+        const distance = calculateDistance(mapCenter.lat, mapCenter.lng, position.lat, position.lng)
         return { character, distance }
       })
       .sort((a, b) => {
