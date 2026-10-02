@@ -1,9 +1,12 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { getRedirectResult, onAuthStateChanged } from 'firebase/auth'
 import { useSetAtom } from 'jotai'
 import { type ReactNode, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import { backendSessionReadyAtom, userAtom } from '@/atoms/auth-atom'
+import { serializeSessionOperation } from '@/lib/auth-session'
 import { auth } from '@/lib/firebase'
+import { clearUserQueries } from '@/lib/user-query-keys'
 import { AUTH_LABELS } from '@/locales/app.content'
 import { client } from '@/utils/client'
 
@@ -17,6 +20,7 @@ interface AuthProviderProps {
  * アプリのルートで使用する
  */
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const queryClient = useQueryClient()
   const setUser = useSetAtom(userAtom)
   const setBackendSessionReady = useSetAtom(backendSessionReadyAtom)
   const redirectResultChecked = useRef(false)
@@ -53,34 +57,41 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     handleRedirectResult()
 
+    // Ignore stale callbacks after an account replacement or effect cleanup.
+    let generation = 0
     // 認証状態の監視
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       console.info('Auth state changed:', user ? `${user.uid} (${user.email})` : 'Not authenticated')
 
-      // Firebase Auth の user は即座に反映する (Login ボタン等の表示切替はこれで動く)。
-      // backend session Cookie は非同期で確立するので、 useSuspenseQuery を守るのは
-      // backendSessionReadyAtom (BackendSessionGate) 側で行う。
+      const currentGeneration = ++generation
+      setBackendSessionReady(false)
       setUser(user)
-
-      if (user === null) {
-        setBackendSessionReady(false)
-        return
-      }
+      await clearUserQueries(queryClient)
+      if (user === null || currentGeneration !== generation) return
 
       try {
-        const token = await user.getIdToken()
-        console.info('ID token obtained')
-        await client.authenticate(undefined, { headers: { Authorization: `Bearer ${token}` } })
-        console.info('Backend session established')
-        setBackendSessionReady(true)
+        const established = await serializeSessionOperation(async () => {
+          if (currentGeneration !== generation || auth.currentUser?.uid !== user.uid) return false
+          const token = await user.getIdToken()
+          if (currentGeneration !== generation || auth.currentUser?.uid !== user.uid) return false
+          const response = await client.authenticate(undefined, { headers: { Authorization: `Bearer ${token}` } })
+          if (!response.success) throw new Error('セッションを確立できませんでした')
+          return true
+        })
+        if (currentGeneration === generation && auth.currentUser?.uid === user.uid) {
+          setBackendSessionReady(established)
+        }
       } catch (error) {
         console.error('Failed to authenticate with backend:', error)
-        setBackendSessionReady(false)
+        if (currentGeneration === generation) setBackendSessionReady(false)
       }
     })
 
-    return () => unsubscribe()
-  }, [setUser, setBackendSessionReady])
+    return () => {
+      generation++
+      unsubscribe()
+    }
+  }, [queryClient, setUser, setBackendSessionReady])
 
   return <>{children}</>
 }
