@@ -3,9 +3,14 @@ import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   testDir: '.',
-  testMatch: 'route-result.spec.ts',
+  testMatch: ['route-result.spec.ts', 'route-race.spec.ts'],
   retries: 0,
-  use: { baseURL: 'http://localhost:15300', headless: true, serviceWorkers: 'block' },
+  use: {
+    baseURL: 'http://localhost:15300',
+    headless: true,
+    serviceWorkers: 'block',
+    launchOptions: { args: ['--disable-features=LocalNetworkAccessChecks'] }
+  },
   webServer: {
     cwd: fileURLToPath(new URL('..', import.meta.url)),
     command: 'CLOUDFLARE_VITE_FORCE_LOCAL=true bun vite --config e2e/route-result.vite.config.ts',
