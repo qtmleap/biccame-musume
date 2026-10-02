@@ -255,7 +255,7 @@ const EventsContent = () => {
             </Sheet>
 
             {/* 表示選択は画面幅が変わっても維持する。 */}
-            <fieldset className='flex gap-1' aria-label='イベントの表示方法'>
+            <fieldset className='flex gap-1 text-foreground' aria-label='イベントの表示方法'>
               <Button
                 size='sm'
                 variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
