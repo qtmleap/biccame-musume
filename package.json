@@ -20,6 +20,7 @@
     "deploy": "wrangler deploy --env=${CLOUDFLARE_ENV:-production}",
     "badges:seed": "bun --preload ./scripts/virtual-characters-plugin.ts scripts/seed-badges.ts",
     "e2e:navigation-filter-sharing": "playwright test --config e2e/navigation-filter-sharing/playwright.config.ts",
+    "e2e:events-responsive-view": "playwright test --config e2e/events-responsive-view/playwright.config.ts",
     "e2e:visual-typography": "playwright test --config e2e/visual-typography/playwright.config.ts",
     "e2e:character-search-layout": "playwright test --config e2e/character-search-layout/playwright.config.ts"
   },

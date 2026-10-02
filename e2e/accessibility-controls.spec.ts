@@ -95,16 +95,16 @@ test('event_controls_have_exact_action_names', async ({ page }) => {
   await expect(page.getByRole('dialog', { name: 'フィルター', exact: true })).toBeVisible()
   await page.keyboard.press('Escape')
   await expect(filter).toBeFocused()
-  const scheduleAction = page.getByRole('button', { name: '日程表示', exact: true })
-  // A next-action command must not announce that the opposite view is pressed.
+  const scheduleAction = page.getByRole('button', { name: '日程', exact: true })
+  // Static view selectors expose the current selection.
   await expect(scheduleAction).not.toHaveAttribute('aria-pressed', 'true')
   await scheduleAction.click()
   await expect.poll(() => page.evaluate(() => localStorage.getItem('event-view-mode'))).toBe(JSON.stringify('gantt'))
-  const listAction = page.getByRole('button', { name: '一覧表示', exact: true })
+  const listAction = page.getByRole('button', { name: '一覧', exact: true })
   await expect(listAction).not.toHaveAttribute('aria-pressed', 'true')
   await listAction.click()
   await expect.poll(() => page.evaluate(() => localStorage.getItem('event-view-mode'))).toBe(JSON.stringify('grid'))
-  await expect(page.getByRole('button', { name: '日程表示', exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: '日程', exact: true })).toBeVisible()
 })
 
 test('mobile_region_and_month_expose_selected_state', async ({ page }) => {

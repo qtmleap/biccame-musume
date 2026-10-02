@@ -71,6 +71,9 @@ export const GanttTimeline = ({
         <section
           ref={scrollContainerRef}
           aria-label={GANTT_CHART_LABELS.ariaLabel}
+          aria-describedby='gantt-scroll-hint'
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard users need to scroll the named timetable region.
+          tabIndex={0}
           className={`gantt-scroll-container overflow-x-auto ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
           style={{
             scrollbarWidth: 'none',
@@ -104,11 +107,6 @@ export const GanttTimeline = ({
             )}
           </div>
         </section>
-        {/* モバイル: 右端フェードで横スクロール可能を示唆 */}
-        <div
-          aria-hidden='true'
-          className='pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent md:hidden'
-        />
       </div>
     </>
   )
