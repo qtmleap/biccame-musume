@@ -165,3 +165,32 @@ test('preserves an empty migration POST through an official 307 redirect', async
     { method: 'POST', body: '' }
   ])
 })
+
+test('acquires signer assets using Worker-supported redirect handling', async () => {
+  spyOn(globalThis, 'fetch').mockImplementation(
+    Object.assign(
+      async (_input: string | URL | Request, init?: RequestInit) => {
+        if (init?.redirect === 'error') throw new Error('Workers does not support redirect: error')
+        return new Response('legacy signer')
+      },
+      { preconnect: () => {} }
+    )
+  )
+  expect(await fetchOnDemandFileText(',1:"ondemand.s",1:"abc"')).toBe('legacy signer')
+})
+
+test('rejects asset redirects without following their destinations', async () => {
+  const requests: string[] = []
+  spyOn(globalThis, 'fetch').mockImplementation(
+    Object.assign(
+      async (input: string | URL | Request, init?: RequestInit) => {
+        requests.push(String(input))
+        if (init?.redirect !== 'manual') throw new Error('Redirects must be inspected before following')
+        return new Response('', { status: 302, headers: { location: 'https://evil.example/signer.js' } })
+      },
+      { preconnect: () => {} }
+    )
+  )
+  await expect(fetchOnDemandFileText(',1:"ondemand.s",1:"abc"')).rejects.toThrow('302')
+  expect(requests).toEqual(['https://abs.twimg.com/responsive-web/client-web/ondemand.s.abca.js'])
+})
