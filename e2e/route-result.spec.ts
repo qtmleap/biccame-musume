@@ -17,7 +17,8 @@ const estimated = {
 }
 for (const mode of ['unavailable', 'http-error', 'invalid', 'estimated']) {
   test(mode === 'unavailable' ? 'failed_route_has_no_zero_minute_label' : `route result: ${mode}`, async ({ page }) => {
-    page.on('pageerror', (error) => console.error('HARNESS PAGE ERROR:', error.message))
+    const errors: string[] = []
+    page.on('pageerror', (error) => errors.push(error.message))
     await page.route('**/*', async (route) => {
       const url = new URL(route.request().url())
       if (url.origin !== 'http://localhost:15300') return route.abort()
@@ -67,5 +68,6 @@ for (const mode of ['unavailable', 'http-error', 'invalid', 'estimated']) {
       await expect(page.getByText('0分', { exact: true })).toHaveCount(0)
       await expect(page.getByText(/概算/)).toHaveCount(0)
     }
+    expect(errors).toEqual([])
   })
 }

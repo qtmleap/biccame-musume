@@ -19,7 +19,7 @@ export const useDirections = () => {
   /**
    * APIを呼び出して経路情報を取得
    */
-  const getDirections = useCallback(async (route: SelectedStore[]): Promise<RouteResponse> => {
+  const getDirections = useCallback(async (route: SelectedStore[], signal?: AbortSignal): Promise<RouteResponse> => {
     // 区間データを作成
     const legs: LegRequest[] = []
     for (const [i, store] of route.entries()) {
@@ -40,7 +40,8 @@ export const useDirections = () => {
       const response = await fetch('/api/directions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ legs })
+        body: JSON.stringify({ legs }),
+        signal
       })
 
       if (!response.ok) {
@@ -50,6 +51,7 @@ export const useDirections = () => {
       const result = RouteResponseSchema.safeParse(await response.json())
       return result.success ? result.data : { status: 'unavailable', reason: 'generation_failed' }
     } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') throw error
       console.error('Route API error:', error)
       return { status: 'unavailable', reason: 'generation_failed' }
     }
