@@ -214,3 +214,12 @@ for (const kind of ['single', 'bulk'] as const) {
     ])
   })
 }
+
+test('D1 counts remain authoritative when the observational DO is unavailable', async () => {
+  const env = buildEnv(buildStub([]))
+  env.VOTE_COUNTER.get = () => {
+    throw new Error('DO unavailable after restart')
+  }
+  expect(await getAllVoteCounts(env, 2026)).toEqual([{ key: 'sapporo', count: 1 }])
+  expect(state.readYear).toBe(2026)
+})
