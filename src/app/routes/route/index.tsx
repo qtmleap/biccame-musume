@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Loader2, MapPin, Route as RouteIcon } from 'lucide-react'
 import { Suspense, useCallback, useMemo, useState } from 'react'
-import { toast } from 'sonner'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import {
   type AvailableStore,
@@ -14,7 +13,7 @@ import {
 } from '@/components/route'
 import { Button } from '@/components/ui/button'
 import { useCharacters } from '@/hooks/use-characters'
-import { solveTsp } from '@/utils/tsp'
+import { calcGreatCircleKm, solveTsp } from '@/utils/tsp'
 
 export const Route = createFileRoute('/route/')({
   component: RouteComponent
@@ -24,16 +23,7 @@ export const Route = createFileRoute('/route/')({
 const KYOTO_STATION = { lat: 34.9856, lng: 135.7588 }
 
 /**
- * 2点間のユークリッド距離を計算
- */
-const calcDistance = (p1: { lat: number; lng: number }, p2: { lat: number; lng: number }) => {
-  const dx = p2.lat - p1.lat
-  const dy = p2.lng - p1.lng
-  return Math.sqrt(dx * dx + dy * dy)
-}
-
-/**
- * 店舗選択と最短ルート計算のメインコンポーネント
+ * 店舗選択と訪問順計算のメインコンポーネント
  */
 const RouteCalculator = () => {
   const { data: characters } = useCharacters()
@@ -62,7 +52,7 @@ const RouteCalculator = () => {
           }
         })
         .filter((s) => s.stations.length > 0)
-        .sort((a, b) => calcDistance(KYOTO_STATION, a) - calcDistance(KYOTO_STATION, b)),
+        .sort((a, b) => calcGreatCircleKm(KYOTO_STATION, a) - calcGreatCircleKm(KYOTO_STATION, b)),
     [characters]
   )
 
@@ -118,28 +108,23 @@ const RouteCalculator = () => {
   }, [])
 
   /**
-   * 最短ルートを計算してAPIで詳細を取得
+   * 訪問順を計算してAPIで詳細を取得
    */
   const handleCalculate = useCallback(async () => {
     if (selectedStores.length < 2) return
 
     setIsCalculating(true)
 
-    // TSPで最短ルートを計算
+    // TSPで訪問順を計算
     const tspResult = solveTsp(selectedStores)
 
     // APIで経路情報を取得
-    const { legs, degraded } = await getDirections(tspResult.route)
-
-    if (degraded) {
-      toast.warning('経路情報の取得に問題が発生しました。表示中の所要時間は概算です。')
-    }
-
+    const directions = await getDirections(tspResult.route)
     setResult({
       route: tspResult.route,
       totalDistance: tspResult.totalDistance,
-      legs,
-      totalDuration: calcTotalDuration(legs)
+      ...directions,
+      totalDuration: directions.status === 'estimated' ? calcTotalDuration(directions.legs) : undefined
     })
     setIsCalculating(false)
   }, [selectedStores, getDirections, calcTotalDuration])
@@ -181,7 +166,7 @@ const RouteCalculator = () => {
           ) : (
             <>
               <MapPin className='size-4' />
-              最短ルートを探索
+              訪問順を計算
             </>
           )}
         </Button>
