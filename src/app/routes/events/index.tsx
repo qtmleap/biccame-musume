@@ -24,8 +24,10 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Toggle } from '@/components/ui/toggle'
 import { charactersQueryKey } from '@/hooks/use-characters'
+import { useJstDate } from '@/hooks/use-jst-date'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { client } from '@/utils/client'
+import { calculateEventStatus } from '@/utils/event-status'
 
 const PER_PAGE = 12
 
@@ -51,6 +53,7 @@ const EventsContent = () => {
     ]
   })
 
+  const dateKey = useJstDate()
   const events = eventsQuery.data
   const characters = charactersQuery.data
 
@@ -115,8 +118,8 @@ const EventsContent = () => {
 
   // 開催中・開催予定のイベントをフィルタリング
   const activeEvents = useMemo(() => {
-    const currentTime = dayjs()
     return events
+      .map((event) => ({ ...event, ...calculateEventStatus(event, `${dateKey}T00:00:00+09:00`) }))
       .filter((event) => {
         // カテゴリフィルター
         if (!categoryFilter.has(event.category)) return false
@@ -139,19 +142,8 @@ const EventsContent = () => {
           if (!hasMatchingStore) return false
         }
 
-        const startDate = dayjs(event.startDate)
-        const endDate = event.endDate ? dayjs(event.endDate) : null
-
-        // ステータスを計算
-        const status = (() => {
-          if (event.endedAt != null) return 'ended'
-          if (endDate && currentTime.isAfter(endDate)) return 'ended'
-          if (currentTime.isBefore(startDate)) return 'upcoming'
-          return 'ongoing'
-        })()
-
-        // ステータスフィルタを適用（last_dayはongoingとして扱う）
-        const filterStatus = event.status === 'last_day' ? 'ongoing' : status
+        // ステータスフィルタを適用（当日のlast_dayはongoingとして扱う）
+        const filterStatus = event.status === 'last_day' ? 'ongoing' : event.status
         if (!statusFilter[filterStatus]) return false
 
         // ユーザーアクティビティフィルタを適用（選択されているものを非表示）
@@ -166,6 +158,7 @@ const EventsContent = () => {
       .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
   }, [
     events,
+    dateKey,
     categoryFilter,
     storeFilter,
     regionFilter,
