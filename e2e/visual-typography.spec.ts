@@ -1,11 +1,40 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
-import { expect, test } from '@playwright/test'
+import { expect, type Page, test } from '@playwright/test'
 import { events } from './visual-typography/fixtures'
 
 const phase = process.env.B01_PHASE ?? 'after'
-const scratch = resolve('.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b01', phase)
+const scratch = resolve(
+  '.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b01',
+  process.env.B01_ARTIFACT_DIR ?? phase
+)
 const widths = [320, 375, 430, 768, 1024, 1280, 1440]
+
+const assertRequestedTheme = async (page: Page, theme: string) => {
+  const actual = await page.evaluate(() => {
+    const canvas = document.createElement('canvas').getContext('2d')
+    if (!canvas) throw new Error('Canvas unavailable for theme measurement')
+    const rgb = (element: Element) => {
+      canvas.fillStyle = getComputedStyle(element).backgroundColor
+      canvas.fillRect(0, 0, 1, 1)
+      return [...canvas.getImageData(0, 0, 1, 1).data].slice(0, 3)
+    }
+    const navigation = document.querySelector('header nav a')
+    if (!navigation) throw new Error('Navigation fixture not ready')
+    return {
+      dark: document.documentElement.classList.contains('dark'),
+      pageRGB: rgb(document.body),
+      navRGB: rgb(navigation)
+    }
+  })
+  expect(actual).toEqual(
+    theme === 'dark'
+      ? { dark: true, pageRGB: [9, 9, 11], navRGB: [24, 24, 27] }
+      : { dark: false, pageRGB: [252, 231, 243], navRGB: [255, 255, 255] }
+  )
+  return actual
+}
+
 for (const theme of ['light', 'dark']) {
   for (const width of widths) {
     test(`${theme}_${width}_readability`, async ({ page }) => {
@@ -20,14 +49,16 @@ for (const theme of ['light', 'dark']) {
         if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/images/')) return route.abort()
         return route.continue()
       })
-      await page.goto('/e2e/visual-typography/index.html')
-      await page.evaluate((theme) => document.documentElement.classList.toggle('dark', theme === 'dark'), theme)
+      await page.goto(`/e2e/visual-typography/index.html?theme=${theme}`)
       await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' })
       await expect(page.locator('[data-section=home] a').first()).toBeVisible()
       await page.evaluate(() => document.fonts.ready)
       await expect(page.locator('[data-section=grid] h3')).toHaveCount(4)
       // Motion settles its entrance opacity; CSS transition disabling does not freeze JS motion.
       await expect(page.locator('[data-section=home] a').first().locator('..').locator('..')).toHaveCSS('opacity', '1')
+      // Guard rejection is checked for both requested themes and before-mode cannot bypass it.
+      await expect(assertRequestedTheme(page, theme === 'dark' ? 'light' : 'dark')).rejects.toThrow()
+      const verifiedTheme = await assertRequestedTheme(page, theme)
       await page.screenshot({ path: resolve(scratch, `${theme}-${width}.png`), fullPage: true, animations: 'disabled' })
       const evidence = await page.evaluate(() => {
         const box = (element: Element) => {
@@ -123,7 +154,14 @@ for (const theme of ['light', 'dark']) {
           })
         return { titles, supplements, links, scrollWidth: document.documentElement.scrollWidth, viewport: innerWidth }
       })
-      await writeFile(resolve(scratch, `${theme}-${width}.json`), JSON.stringify(evidence, null, 2))
+      await writeFile(
+        resolve(scratch, `${theme}-${width}.json`),
+        JSON.stringify(
+          { ...evidence, requestedTheme: theme, verifiedTheme, measuredTheme: await assertRequestedTheme(page, theme) },
+          null,
+          2
+        )
+      )
       if (phase === 'before') return
       expect(evidence.scrollWidth).toBeLessThanOrEqual(width)
       for (const item of evidence.supplements) expect(item.font).toBeGreaterThanOrEqual(13)
