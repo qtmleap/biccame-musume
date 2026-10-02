@@ -8,9 +8,11 @@ import { lastVoteTimesAtom } from '@/atoms/vote-atom'
 import { VoteBurst } from '@/components/characters/vote-burst'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { useJstDate } from '@/hooks/use-jst-date'
 import { useVote } from '@/hooks/use-vote'
 import { cn } from '@/lib/utils'
 import { VOTE_LABELS } from '@/locales/app.content'
+import { getJstDateKey } from '@/utils/jst-date'
 
 type CharacterVoteButtonProps = {
   characterId: string
@@ -36,18 +38,16 @@ export const CharacterVoteButton = ({
   const [lastVoteTimes, setLastVoteTimes] = useAtom(lastVoteTimesAtom)
   const [burstKey, setBurstKey] = useState<number | null>(null)
 
+  const dateKey = useJstDate()
+
   // 今日既に投票済みかチェック
   const hasVotedToday = useMemo(() => {
     if (import.meta.env.DEV) return false
     const lastVoteTime = lastVoteTimes[characterId]
     if (!lastVoteTime) return false
 
-    const lastVote = dayjs(lastVoteTime)
-    const currentTime = dayjs()
-    // 最後の投票から翌日（次の日の0時）になっているかチェック
-    const nextDay = lastVote.add(1, 'day').startOf('day')
-    return currentTime.isBefore(nextDay)
-  }, [lastVoteTimes, characterId])
+    return getJstDateKey(lastVoteTime) === dateKey
+  }, [lastVoteTimes, characterId, dateKey])
 
   // 投票成功時に最後の投票時間を記録 + バースト発火
   useEffect(() => {
