@@ -100,7 +100,7 @@ test('last_day_becomes_ended_after_midnight', async ({ page }) => {
   await expect(page.getByRole('heading', { name: event.title })).toBeVisible()
   await page.clock.runFor(1001)
   await expect(page.getByRole('heading', { name: event.title })).toHaveCount(0)
-  await page.locator('#status-ended').last().click()
+  await page.getByRole('checkbox', { name: '終了', exact: true }).last().click()
   await expect(page.getByRole('heading', { name: event.title })).toBeVisible()
 })
 
