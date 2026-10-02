@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { type RouteResponse, RouteResponseSchema } from '@/schemas/route.dto'
 import type { DirectionsLeg, SelectedStore } from './types'
 
 /**
@@ -18,51 +19,41 @@ export const useDirections = () => {
   /**
    * APIを呼び出して経路情報を取得
    */
-  const getDirections = useCallback(
-    async (route: SelectedStore[]): Promise<{ legs: DirectionsLeg[]; degraded: boolean }> => {
-      // 区間データを作成
-      const legs: LegRequest[] = []
-      for (const [i, store] of route.entries()) {
-        const nextStore = route[i + 1]
-        if (nextStore) {
-          legs.push({
-            from: store.name,
-            to: nextStore.name,
-            fromStation: store.station,
-            toStation: nextStore.station
-          })
-        }
-      }
-
-      if (legs.length === 0) return { legs: [], degraded: false }
-
-      try {
-        const response = await fetch('/api/directions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ legs })
+  const getDirections = useCallback(async (route: SelectedStore[]): Promise<RouteResponse> => {
+    // 区間データを作成
+    const legs: LegRequest[] = []
+    for (const [i, store] of route.entries()) {
+      const nextStore = route[i + 1]
+      if (nextStore) {
+        legs.push({
+          from: store.name,
+          to: nextStore.name,
+          fromStation: store.station,
+          toStation: nextStore.station
         })
-
-        if (!response.ok) {
-          throw new Error('API request failed')
-        }
-
-        const data = (await response.json()) as { legs: DirectionsLeg[]; degraded?: boolean }
-        return { legs: data.legs, degraded: data.degraded ?? false }
-      } catch (error) {
-        console.error('Route API error:', error)
-        // エラー時はフォールバック
-        const fallbackLegs = legs.map((leg) => ({
-          ...leg,
-          routes: [],
-          duration: 0,
-          transfers: 0
-        }))
-        return { legs: fallbackLegs, degraded: true }
       }
-    },
-    []
-  )
+    }
+
+    if (legs.length === 0) return { status: 'unavailable', reason: 'generation_failed' }
+
+    try {
+      const response = await fetch('/api/directions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ legs })
+      })
+
+      if (!response.ok) {
+        throw new Error('API request failed')
+      }
+
+      const result = RouteResponseSchema.safeParse(await response.json())
+      return result.success ? result.data : { status: 'unavailable', reason: 'generation_failed' }
+    } catch (error) {
+      console.error('Route API error:', error)
+      return { status: 'unavailable', reason: 'generation_failed' }
+    }
+  }, [])
 
   /**
    * 総所要時間を計算
