@@ -13,7 +13,7 @@ type Props = {
 export const StoreSelect = ({ stores, onSelect, disabled }: Props) => {
   return (
     <Select onValueChange={onSelect} value='' disabled={disabled}>
-      <SelectTrigger className='w-full'>
+      <SelectTrigger aria-label='店舗を追加' className='w-full'>
         <SelectValue placeholder={disabled ? '最大5店舗まで' : '店舗を追加...'} />
       </SelectTrigger>
       <SelectContent>

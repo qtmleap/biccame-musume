@@ -4,8 +4,7 @@ import { Calendar, Package, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { EventCharacterBadge } from '@/components/events/event-character-badge'
 import { Badge } from '@/components/ui/badge'
-import { useMediaQuery } from '@/hooks/use-media-query'
-import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_DENSE, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
 import { EVENT_CATEGORY_LABELS, EVENT_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { CATEGORY_BADGE, STATUS_BADGE } from '@/locales/component'
@@ -48,8 +47,7 @@ const getEndingSoonBackground = (event: Event): string | undefined => {
  * イベントグリッドアイテム
  */
 export const EventGridItem = ({ event, index = 0, compact = false }: EventGridItemProps) => {
-  const isMultiColumn = useMediaQuery('(min-width: 640px)')
-  const rotationDeg = isMultiColumn ? getStickerRotation(index) : 0
+  const rotationDeg = getStickerRotation(index, undefined, 'dense')
   const tape = STICKER_TAPES[index % STICKER_TAPES.length]
 
   const isEnded = event.status === 'ended'
@@ -57,11 +55,10 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
   const dimEnded = isEnded && !compact
 
   return (
-    <motion.div className='h-full' style={{ filter: STICKER_SHADOW_SM }}>
+    <motion.div className='h-full' style={{ filter: STICKER_SHADOW_DENSE }}>
       <motion.div
         className='h-full'
         style={{ rotate: rotationDeg }}
-        whileHover={{ scale: 1.04, rotate: 0 }}
         whileTap={{ scale: 0.97 }}
         transition={STICKER_HOVER_TRANSITION}
       >
@@ -69,22 +66,29 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
           to='/events/$uuid'
           params={{ uuid: event.uuid }}
           className={cn(
-            'relative block rounded-xl p-4 border border-zinc-200 dark:border-card-border h-full',
+            'relative block rounded-xl p-2.5 md:p-3 border border-zinc-200 dark:border-card-border hover:border-brand/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand h-full',
             dimEnded ? 'opacity-50 grayscale bg-card' : endingSoonBg || 'bg-card'
           )}
         >
           {tape && (
             <div aria-hidden className={cn('absolute rounded-sm', tape.position, tape.size, tape.color, tape.angle)} />
           )}
-          <div className='mb-2 flex items-start justify-between gap-3'>
+          <div data-event-heading className='mb-1 md:mb-2'>
             <div className='flex-1 min-w-0'>
-              <div className='mb-1.5 flex flex-wrap items-center gap-1.5'>
+              <div className='mb-1 md:mb-1.5 flex flex-wrap items-center gap-1.5'>
+                {!compact && (
+                  <span data-status-badge className='ml-auto order-last'>
+                    {STATUS_BADGE[event.status]()}
+                  </span>
+                )}
                 {CATEGORY_BADGE[event.category](EVENT_CATEGORY_LABELS[event.category])}
                 <EventCharacterBadge event={event} />
               </div>
-              <h3 className='text-base font-semibold text-foreground line-clamp-2'>{event.title}</h3>
-              <div className='mt-1 flex flex-col gap-1 text-xs text-muted-foreground'>
-                <span className='flex items-center gap-1'>
+              <h3 className='text-sm leading-5 md:text-base md:leading-6 font-semibold text-foreground line-clamp-2 break-words'>
+                {event.title}
+              </h3>
+              <div className='mt-1 flex flex-col gap-1 text-[13px] leading-5 text-muted-foreground'>
+                <span className='flex flex-wrap items-center gap-1'>
                   <Calendar className='size-3.5' />
                   <span>{dayjs(event.startDate).format('YYYY/MM/DD')}</span>
                   {event.endDate ? (
@@ -98,7 +102,7 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
                 </span>
                 <div className='flex flex-wrap items-center gap-2'>
                   {event.stores && event.stores.length > 0 && (
-                    <span className='flex items-center gap-1'>
+                    <span className='flex flex-wrap items-center gap-1'>
                       <Store className='size-3.5' />
                       {event.stores.length === 1
                         ? STORE_NAME_LABELS[event.stores[0] as StoreKey]
@@ -106,7 +110,7 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
                     </span>
                   )}
                   {event.limitedQuantity && !event.conditions.some((c) => c.type === 'everyone') && (
-                    <span className='flex items-center gap-1'>
+                    <span className='flex flex-wrap items-center gap-1'>
                       <Package className='size-3.5' />
                       限定{event.limitedQuantity}個
                     </span>
@@ -114,12 +118,11 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
                 </div>
               </div>
             </div>
-            {!compact && STATUS_BADGE[event.status]()}
           </div>
 
           {!compact &&
             event.conditions.some((c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery') && (
-              <div className='mt-2 flex flex-wrap gap-1'>
+              <div className='mt-1 md:mt-2 flex flex-wrap gap-1'>
                 {event.conditions.map((condition) => {
                   if (condition.type === 'everyone') return null
                   return (

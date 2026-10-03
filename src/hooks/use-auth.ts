@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import {
   createUserWithEmailAndPassword,
   GithubAuthProvider,
@@ -8,10 +9,18 @@ import {
   signOut,
   TwitterAuthProvider
 } from 'firebase/auth'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom, useStore } from 'jotai'
 import { useCallback } from 'react'
-import { backendSessionReadyAtom, userAtom } from '@/atoms/auth-atom'
+import {
+  backendSessionGenerationAtom,
+  backendSessionReadyAtom,
+  backendSessionStateAtom,
+  userAtom
+} from '@/atoms/auth-atom'
+import { establishBackendSession, serializeSessionOperation } from '@/lib/auth-session'
 import { auth } from '@/lib/firebase'
+import { clearUserQueries, deserializePublicQueryCache } from '@/lib/user-query-keys'
+import { client } from '@/utils/client'
 
 /**
  * Firebase Authentication用カスタムフック
@@ -20,7 +29,34 @@ import { auth } from '@/lib/firebase'
  */
 export const useAuth = () => {
   const user = useAtomValue(userAtom)
+  const queryClient = useQueryClient()
+  const store = useStore()
+  const setBackendSessionState = useSetAtom(backendSessionStateAtom)
+  const backendSessionState = useAtomValue(backendSessionStateAtom)
   const backendSessionReady = useAtomValue(backendSessionReadyAtom)
+
+  const retryBackendSession = useCallback(async () => {
+    const currentUser = store.get(userAtom)
+    if (!currentUser || auth.currentUser?.uid !== currentUser.uid) return
+    const generation = store.get(backendSessionGenerationAtom) + 1
+    store.set(backendSessionGenerationAtom, generation)
+    store.set(backendSessionStateAtom, { status: 'pending' })
+    const isCurrent = () =>
+      store.get(backendSessionGenerationAtom) === generation &&
+      store.get(userAtom)?.uid === currentUser.uid &&
+      auth.currentUser?.uid === currentUser.uid
+    try {
+      await establishBackendSession()
+      if (isCurrent()) store.set(backendSessionStateAtom, { status: 'ready', uid: currentUser.uid })
+    } catch (error) {
+      console.error('Failed to authenticate with backend:', error)
+      if (isCurrent())
+        store.set(backendSessionStateAtom, {
+          status: 'error',
+          message: '認証に失敗しました。時間をおいて再試行してください。'
+        })
+    }
+  }, [store])
 
   /**
    * メールアドレスでログイン（開発環境用）
@@ -91,13 +127,27 @@ export const useAuth = () => {
    */
   const logout = useCallback(async () => {
     try {
-      await signOut(auth)
+      await serializeSessionOperation(async () => {
+        const response = await client.logout(undefined)
+        if (!response.success) throw new Error('セッションを失効できませんでした')
+        await signOut(auth)
+      })
+      setBackendSessionState({ status: 'idle' })
+      await clearUserQueries(queryClient)
+      const stored = localStorage.getItem('REACT_QUERY_OFFLINE_CACHE')
+      if (stored) {
+        try {
+          localStorage.setItem('REACT_QUERY_OFFLINE_CACHE', JSON.stringify(deserializePublicQueryCache(stored)))
+        } catch {
+          localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
+        }
+      }
       window.location.href = '/'
     } catch (error) {
       console.error('Logout failed:', error)
       throw error
     }
-  }, [])
+  }, [queryClient, setBackendSessionState])
 
   return {
     user,
@@ -107,6 +157,8 @@ export const useAuth = () => {
     // Firebase Auth 単体の完了状態 (backend session の有無は問わない)
     isFirebaseAuthenticated: !!user,
     backendSessionReady,
+    backendSessionState,
+    retryBackendSession,
     loginWithTwitter,
     loginWithGoogle,
     loginWithGithub,

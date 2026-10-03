@@ -19,10 +19,10 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
   const router = useRouter()
 
   return (
-    <div className='min-h-screen bg-page-bg'>
+    <div className='min-h-screen bg-page-bg text-foreground'>
       <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
-        <div className='md:grid md:grid-cols-[1fr_auto_320px] md:gap-6'>
-          <div className='max-w-2xl'>
+        <div className='md:grid md:grid-cols-[minmax(0,1fr)_auto_224px] lg:grid-cols-[minmax(0,1fr)_auto_320px] md:gap-6'>
+          <div className='min-w-0 max-w-2xl'>
             <AppBreadcrumb
               items={[
                 { label: 'ホーム', to: '/' },
@@ -54,7 +54,7 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
 
           <Separator orientation='vertical' className='hidden md:block bg-separator' />
 
-          <div className='hidden md:block pt-4'>
+          <div className='hidden min-w-0 md:block pt-4'>
             <div className='sticky top-4'>
               <NearbyCharactersList currentCharacter={character} />
             </div>

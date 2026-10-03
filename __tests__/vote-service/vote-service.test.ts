@@ -8,14 +8,16 @@
  *       本ファイルは vote-service に特化させる。
  */
 
-import { beforeEach, describe, expect, mock, test } from 'bun:test'
+import { afterEach, beforeEach, describe, expect, mock, setSystemTime, test } from 'bun:test'
 import type { Bindings } from '../../src/types/bindings'
 
 const state = {
   transactionCalls: 0,
   failTransaction: false,
   releasedIds: [] as string[],
-  claimedIds: [] as string[]
+  claimedIds: [] as string[],
+  readYear: 0,
+  writeYear: 0
 }
 
 const prismaMock = {
@@ -24,7 +26,16 @@ const prismaMock = {
     if (state.failTransaction) throw new Error('D1 unavailable')
     return ops
   },
-  voteCount: { upsert: (args: unknown) => args },
+  voteCount: {
+    findMany: async (args: { where: { year: number } }) => {
+      state.readYear = args.where.year
+      return [{ characterId: 'sapporo', count: 1 }]
+    },
+    upsert: (args: { create: { year: number } }) => {
+      state.writeYear = args.create.year
+      return args
+    }
+  },
   vote: { create: (args: unknown) => args, createMany: (args: unknown) => args }
 }
 
@@ -33,7 +44,7 @@ mock.module('@/lib/prisma', () => ({
 }))
 
 // mock を仕掛けた後に動的 import (静的 import だと mock 適用前に解決される)
-const { vote, bulkVote } = await import('../../src/services/vote-service')
+const { vote, bulkVote, getAllVoteCounts } = await import('../../src/services/vote-service')
 
 type Stub = {
   claimVotes: (input: { characterIds: string[] }) => Promise<{ voted: string[]; skipped: string[] }>
@@ -43,6 +54,10 @@ type Stub = {
 const buildEnv = (stub: Stub): Bindings =>
   ({
     ENVIRONMENT: 'production',
+    ASSETS: {
+      fetch: async () =>
+        Response.json(['sapporo', 'akiba'].map((id) => ({ id, character: { is_biccame_musume: true } })))
+    },
     VOTE_COUNTER: {
       idFromName: (name: string) => name,
       get: () => stub
@@ -62,6 +77,8 @@ const buildStub = (alreadyVoted: string[]): Stub => ({
     state.releasedIds = input.characterIds
   }
 })
+
+afterEach(() => setSystemTime())
 
 beforeEach(() => {
   state.transactionCalls = 0
@@ -139,4 +156,70 @@ describe('bulkVote', () => {
     await promise.catch(() => undefined)
     expect(state.releasedIds).toEqual(['sapporo', 'akiba'])
   })
+})
+
+for (const kind of ['single', 'bulk'] as const) {
+  const submit = (env: Bindings) =>
+    kind === 'single' ? vote(env, 'sapporo', '203.0.113.1') : bulkVote(env, ['sapporo', 'akiba'], '203.0.113.1')
+
+  test(`new_year_read_and_write_same_year (${kind})`, async () => {
+    setSystemTime(new Date('2026-12-31T15:00:00.000Z'))
+    const env = buildEnv(buildStub([]))
+    expect(await getAllVoteCounts(env)).toEqual([{ key: 'sapporo', count: 1 }])
+    await submit(env)
+    expect(state.readYear).toBe(2027)
+    expect(state.writeYear).toBe(2027)
+  })
+
+  test(`release_uses_original_context (${kind})`, async () => {
+    setSystemTime(new Date('2026-12-31T14:59:59.999Z'))
+    const claims: unknown[] = []
+    const releases: unknown[] = []
+    const names: string[] = []
+    const env = buildEnv({
+      claimVotes: async (input) => {
+        claims.push(input)
+        setSystemTime(new Date('2026-12-31T15:00:00.000Z'))
+        return { voted: input.characterIds, skipped: [] }
+      },
+      releaseVotes: async (input) => {
+        releases.push(input)
+      }
+    })
+    const stub = env.VOTE_COUNTER.get(env.VOTE_COUNTER.idFromName('fixture'))
+    const originalIdFromName = env.VOTE_COUNTER.idFromName
+    env.VOTE_COUNTER.idFromName = (name: string) => {
+      names.push(name)
+      return originalIdFromName(name)
+    }
+    env.VOTE_COUNTER.get = (() => stub) as typeof env.VOTE_COUNTER.get
+    state.failTransaction = true
+    await expect(submit(env)).rejects.toThrow('D1 unavailable')
+    expect(names).toEqual(['2026'])
+    expect(state.writeYear).toBe(2026)
+    expect(claims).toEqual([
+      {
+        characterIds: kind === 'single' ? ['sapporo'] : ['sapporo', 'akiba'],
+        ip: '203.0.113.1',
+        dateKey: '2026-12-31',
+        bypassLimit: false
+      }
+    ])
+    expect(releases).toEqual([
+      {
+        characterIds: kind === 'single' ? ['sapporo'] : ['sapporo', 'akiba'],
+        ip: '203.0.113.1',
+        dateKey: '2026-12-31'
+      }
+    ])
+  })
+}
+
+test('D1 counts remain authoritative when the observational DO is unavailable', async () => {
+  const env = buildEnv(buildStub([]))
+  env.VOTE_COUNTER.get = () => {
+    throw new Error('DO unavailable after restart')
+  }
+  expect(await getAllVoteCounts(env, 2026)).toEqual([{ key: 'sapporo', count: 1 }])
+  expect(state.readYear).toBe(2026)
 })

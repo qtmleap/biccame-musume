@@ -1,8 +1,10 @@
-import { atomWithStorage } from 'jotai/utils'
+import { atomWithStorage, createJSONStorage, unstable_withStorageValidator } from 'jotai/utils'
 
-/**
- * イベント一覧の表示モード
- * gantt: ガントチャート表示
- * grid: グリッド表示
- */
-export const eventViewModeAtom = atomWithStorage<'gantt' | 'grid'>('event-view-mode', 'gantt')
+export type EventViewMode = 'gantt' | 'grid'
+// null は未選択。画面幅による初期表示をユーザーの選択として保存しない。
+const storage = unstable_withStorageValidator(
+  (value: unknown): value is EventViewMode | null => value === null || value === 'grid' || value === 'gantt'
+)(createJSONStorage<unknown>())
+export const eventViewModeAtom = atomWithStorage<EventViewMode | null>('event-view-mode', null, storage, {
+  getOnInit: true
+})
