@@ -182,13 +182,18 @@ Phase 1の補足:
 Phase 2の実装・検証記録:
 
 - 移植元固定SHA: `538fe1b05dd631ebe38e76b894a0949d840709e7`。店舗対応は40件（型定義行を件数に含めない）。
-- 同名継承を採用: production=`musume-workers`、staging=`musume-workers-staging`。全環境cron空・`TL_NOTIFICATIONS_ENABLED=false`を維持。旧自動deployは未停止で、こちらからのデプロイも未実施。
+- 同名継承を採用: production=`musume-workers`、staging=`musume-workers-staging`。全環境cron空・`TL_NOTIFICATIONS_ENABLED=false`を維持。旧repoのdeployment workflow（ID `321445935`）は本番切替承認後に`disabled_manually`を確認。CF側の旧cron停止・こちらからのデプロイは未実施。
 - private `@qtmleap/x-transaction@0.1.0` と `@qtmleap/zodios@11` を維持。実際のtarball読込とfrozen install成功。CIにpackages:readを追加したが、private package側の本体repo Actions accessは未確認。
 - OpenAI互換Responses、既存base URL/modelとtimeout/maxRetriesを維持。キーの読み替えやprocess.env fallbackは追加しない。
 - 安全性変更: X/API/AIの内部エラーを外部へ出さない。Discordの429/非2xxを明示的な失敗とし、旧無制限再帰を廃止。ネットワーク/timeoutは`delivery_unknown`として自動再送しない。本文・通知導線・allowed_mentionsの旧契約は維持。
 - 架空入力で旧ソースを直接実行し、40店舗対応・AIリクエスト本文・2候補のDiscord payloadが移植後と一致することを確認。実TL/実AI/実Discordを呼んだ比較ではない。
 - テスト604件成功・1件build専用skip、型・Knip・production app生成設定・production/staging bot bundle・RPC成功。Biomeはエラーなし、移植元由来のschema/構文の警告あり。
-- 未完了のゲート: 旧自動deploy停止、旧cron停止・反映確認、既存secret保持確認、実TL切替と初回/継続観測。これが完了するまでPhase 3へ進めない。
+- 未完了のゲート: CF側の旧cron停止・反映確認、既存secret保持確認、実TL切替と初回/継続観測。これが完了するまでPhase 3へ進めない。
+- 本番切替の操作はユーザー承認済み。旧repoの自動deploy停止とアクティブrunなしを確認した。認証付きCF操作はユーザー実行待ちで、成功した扱いにしない。
+- `scripts/inspect-bot-cutover.ts`: accountの誤指定を拒否し、cron・binding名・切戻しversion IDだけを`.cache/bot-cutover-inspection.json`へ保存。値は保存しない。
+- `scripts/stop-old-bot.ts`: 5分以内のinspection、全binding名、100%単一version、既知の旧cron、旧workflow停止、アクティブrunなしを前提にする。直前のdeployment/cronドリフトを再確認し、cronだけを空にする。操作前に`stop_requested`を記録して応答喪失時の誤再試行を防ぐ。空cronの再取得成功後に`old_cron_removed`へ遷移する。
+- 最大15分のcron伝播と、既に開始済みの最大15分scheduled実行の終了を考慮し、確認後30分の保守的な待機ゲートを置く。時刻経過だけを実通知の成功確認として扱わない。
+- ロールバック時は保存済み旧version/cronを用いる。新処理停止と反映を確認してから旧処理を戻し、旧workflowの再有効化は担当の切戻しが確定した後だけ行う。
 
 ### Phase 3: appからのイベント告知・日次処理を移設
 
