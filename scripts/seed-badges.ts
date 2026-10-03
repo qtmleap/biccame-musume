@@ -19,7 +19,7 @@
  */
 
 import { $ } from 'bun'
-import { BADGE_REGISTRY } from '../src/data/badges/registry'
+import { BADGE_REGISTRY } from '../workers/app/src/data/badges/registry'
 
 type TargetEnv = 'local-staging' | 'remote-staging' | 'remote-production'
 
@@ -27,7 +27,7 @@ function getWranglerArgs(env: TargetEnv): string[] {
   const envName = env === 'remote-production' ? 'production' : 'staging'
   const dbName = env === 'remote-production' ? 'biccame-musume-prod' : 'biccame-musume-dev'
   const locationFlag = env === 'local-staging' ? '--local' : '--remote'
-  return [dbName, locationFlag, `--env=${envName}`]
+  return [dbName, locationFlag, `--env=${envName}`, ...(env === 'local-staging' ? ['--persist-to=.wrangler/state'] : [])]
 }
 
 function escapeSql(value: string): string {
@@ -35,11 +35,11 @@ function escapeSql(value: string): string {
 }
 
 async function execSql(args: string[], sql: string): Promise<void> {
-  await $`bun wrangler d1 execute ${args} --command ${sql}`.quiet()
+  await $`bun wrangler --config workers/app/wrangler.toml d1 execute ${args} --command ${sql}`.quiet()
 }
 
 async function execSqlFile(args: string[], file: string): Promise<void> {
-  await $`bun wrangler d1 execute ${args} --file=${file}`.quiet()
+  await $`bun wrangler --config workers/app/wrangler.toml d1 execute ${args} --file=${file}`.quiet()
 }
 
 async function main(): Promise<void> {
@@ -55,7 +55,7 @@ async function main(): Promise<void> {
   // Fetch existing badge codes from the DB to compute insert vs update counts.
   let existingCodes = new Set<string>()
   try {
-    const result = await $`bun wrangler d1 execute ${args} --json --command "SELECT code FROM badges;"`.quiet()
+    const result = await $`bun wrangler --config workers/app/wrangler.toml d1 execute ${args} --json --command "SELECT code FROM badges;"`.quiet()
     const parsed = JSON.parse(result.stdout.toString()) as Array<{ results?: Array<{ code?: string }> }>
     existingCodes = new Set(
       (parsed[0]?.results ?? []).map((r) => r.code).filter((c): c is string => typeof c === 'string')

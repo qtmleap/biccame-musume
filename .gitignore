@@ -126,10 +126,7 @@ web_modules/
 
 # dotenv environment variable files
 .env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+.env.*
 !.env.example
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -220,6 +217,7 @@ $RECYCLE.BIN/
 
 # Cloudflare/Wrangler
 .dev.vars
+.dev.vars.*
 !.dev.vars.example
 .wrangler/
 # Local helper scripts that source .env (kept out of source tree)
@@ -252,12 +250,12 @@ backups/
 cookie.txt
 
 # Build-time generated OG images (regenerated via `bun run og:generate`)
-public/og/
+workers/app/public/og/
 
 # Build-time downloaded character / stampcamera images
 # (regenerated via `bun run images:download`)
-public/images/characters/
-public/images/stamps/
+workers/app/public/images/characters/
+workers/app/public/images/stamps/
 
 # Build-time download cache (stampcamera package zips, etc.)
 .cache/
@@ -267,7 +265,14 @@ worker-configuration.d.ts
 .playwright-mcp/
 
 # Prisma Client (regenerated via `bun run generate`)
-src/generated/prisma/
+workers/app/src/generated/prisma/
 
 # Local Codex configuration, credentials, and session state.
 /.codex/
+
+# Local migration verification screenshots
+screenshots/
+
+# Storybook generated builds and browser-test artifacts
+storybook-static/
+.storybook/.artifacts/

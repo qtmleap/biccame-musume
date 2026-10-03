@@ -10,7 +10,7 @@ export default defineConfig({
   cacheDir: resolve(import.meta.dirname, '../../.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b07/vite-cache'),
   resolve: {
     alias: {
-      '@': resolve(import.meta.dirname, '../../src')
+      '@': resolve(import.meta.dirname, '../../workers/app/src')
     }
   },
   define: {

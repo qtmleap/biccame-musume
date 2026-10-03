@@ -1,7 +1,7 @@
 import { expect, test } from 'bun:test'
 import type { User } from 'firebase/auth'
 import { createStore } from 'jotai'
-import * as authAtoms from '../../src/atoms/auth-atom'
+import * as authAtoms from '../../workers/app/src/atoms/auth-atom'
 
 const stateAtom = authAtoms.backendSessionStateAtom
 

@@ -4,7 +4,7 @@ import * as prismaModule from '@/lib/prisma'
 import { EventDetailSchema } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
 import { Twitter } from '@/utils/twitter'
-import routes from '../../src/api/event'
+import routes from '../../workers/app/src/api/event'
 import { eventRequest, makeEventPrisma } from '../fixtures/event-announcement'
 
 let prisma: ReturnType<typeof makeEventPrisma>

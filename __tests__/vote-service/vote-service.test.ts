@@ -9,7 +9,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, mock, setSystemTime, test } from 'bun:test'
-import type { Bindings } from '../../src/types/bindings'
+import type { Bindings } from '../../workers/app/src/types/bindings'
 
 const state = {
   transactionCalls: 0,
@@ -44,7 +44,7 @@ mock.module('@/lib/prisma', () => ({
 }))
 
 // mock を仕掛けた後に動的 import (静的 import だと mock 適用前に解決される)
-const { vote, bulkVote, getAllVoteCounts } = await import('../../src/services/vote-service')
+const { vote, bulkVote, getAllVoteCounts } = await import('../../workers/app/src/services/vote-service')
 
 type Stub = {
   claimVotes: (input: { characterIds: string[] }) => Promise<{ voted: string[]; skipped: string[] }>

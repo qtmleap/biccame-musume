@@ -30,7 +30,7 @@ export const prepare = async (page: Page, failLogout = false) => {
   await page.route('**/*', async (route) => {
     const url = new URL(route.request().url())
     if (url.host !== 'localhost:15300') return route.abort()
-    if (url.pathname === '/src/lib/firebase.ts') {
+    if (['/src/lib/firebase.ts', '/workers/app/src/lib/firebase.ts'].includes(url.pathname)) {
       return route.fulfill({
         contentType: 'text/javascript',
         body: "export { auth } from '/node_modules/.vite/deps/firebase_auth.js';"

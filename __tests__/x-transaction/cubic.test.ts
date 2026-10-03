@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { Cubic } from '../../src/lib/x-transaction/cubic'
+import { Cubic } from '../../workers/app/src/lib/x-transaction/cubic'
 
 describe('Cubic.getValue', () => {
   test('linear curve [0,0,1,1] is identity', () => {

@@ -1,7 +1,7 @@
 import { afterEach, expect, setSystemTime, test } from 'bun:test'
 import dayjs from 'dayjs'
-import { type EventListPayload, transform } from '../../src/services/event-service'
-import { calculateEventStatus } from '../../src/utils/event-status'
+import { type EventListPayload, transform } from '../../workers/app/src/services/event-service'
+import { calculateEventStatus } from '../../workers/app/src/utils/event-status'
 
 const fixture: EventListPayload = {
   id: '550e8400-e29b-41d4-a716-446655440000',

@@ -19,7 +19,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: '@/hooks/use-auth', replacement: resolve(import.meta.dirname, 'auth-adapter.ts') },
-      { find: '@', replacement: resolve(import.meta.dirname, '../../src') }
+      { find: '@', replacement: resolve(import.meta.dirname, '../../workers/app/src') }
     ]
   },
   define: {

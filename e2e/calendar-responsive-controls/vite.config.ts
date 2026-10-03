@@ -18,7 +18,7 @@ export default defineConfig({
     }
   ],
   cacheDir: resolve(import.meta.dirname, '../../.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b03/vite-cache'),
-  resolve: { alias: { '@': resolve(import.meta.dirname, '../../src') } },
+  resolve: { alias: { '@': resolve(import.meta.dirname, '../../workers/app/src') } },
   define: { 'import.meta.env.DEV': 'false', __AUTH_DOMAIN__: JSON.stringify('localhost') },
   optimizeDeps: { entries: ['e2e/calendar-responsive-controls/index.html'] },
   server: {

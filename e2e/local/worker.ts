@@ -1,9 +1,9 @@
 import { Hono } from 'hono'
 import { csrf } from 'hono/csrf'
-import auth from '../../src/api/auth'
-import { isAllowedOrigin } from '../../src/lib/allowed-origin'
-import type { Bindings, Variables } from '../../src/types/bindings'
-import { getToken, verifyToken } from '../../src/utils/token'
+import auth from '../../workers/app/src/api/auth'
+import { isAllowedOrigin } from '../../workers/app/src/lib/allowed-origin'
+import type { Bindings, Variables } from '../../workers/app/src/types/bindings'
+import { getToken, verifyToken } from '../../workers/app/src/utils/token'
 
 // Only the real auth/session boundary is exposed. No AI, remote KV, DO or mutations exist here.
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()

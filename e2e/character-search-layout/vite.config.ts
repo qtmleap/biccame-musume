@@ -26,7 +26,7 @@ export default defineConfig({
             )
           }
         : {}),
-      '@': resolve(import.meta.dirname, '../../src')
+      '@': resolve(import.meta.dirname, '../../workers/app/src')
     }
   },
   define: {

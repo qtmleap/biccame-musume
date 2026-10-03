@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, mock, spyOn, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { ClientTransaction } from '../../src/lib/x-transaction/transaction'
+import { ClientTransaction } from '../../workers/app/src/lib/x-transaction/transaction'
 
 const fixtureDir = resolve(import.meta.dir, 'fixtures')
 const homePageHtml = readFileSync(resolve(fixtureDir, 'x-home.html'), 'utf-8')

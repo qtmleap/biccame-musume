@@ -1,9 +1,9 @@
 /**
- * Smoke test for src/lib/x-transaction.
+ * Smoke test for workers/app/src/lib/x-transaction.
  * Fetches the X home page and current signer module and generates a sample
  * x-client-transaction-id. Exits non-zero on any error.
  */
-import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '../src/lib/x-transaction'
+import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '../workers/app/src/lib/x-transaction'
 
 const homePageHtml = await fetchHomePageHtml()
 console.log(`home page html: ${homePageHtml.length} bytes`)

@@ -1,6 +1,6 @@
 import { Database } from 'bun:sqlite'
 import { afterEach, beforeEach, expect, mock, setSystemTime, test } from 'bun:test'
-import type { Bindings } from '../../src/types/bindings'
+import type { Bindings } from '../../workers/app/src/types/bindings'
 
 // Only the platform base class/storage boundary is replaced; claims execute real SQLite.
 mock.module('cloudflare:workers', () => ({
@@ -11,7 +11,7 @@ mock.module('cloudflare:workers', () => ({
     ) {}
   }
 }))
-const { VoteCounterDO } = await import('../../src/durable-objects/vote-counter')
+const { VoteCounterDO } = await import('../../workers/app/src/durable-objects/vote-counter')
 
 class LocalStorage {
   db = new Database(':memory:')

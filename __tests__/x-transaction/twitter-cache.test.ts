@@ -1,6 +1,6 @@
 import { afterEach, expect, spyOn, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
-import { Twitter } from '../../src/utils/twitter'
+import { Twitter } from '../../workers/app/src/utils/twitter'
 
 const home = readFileSync(`${import.meta.dir}/fixtures/x-home.html`, 'utf8')
 const signer = readFileSync(`${import.meta.dir}/fixtures/ondemand.s.js`, 'utf8')

@@ -186,7 +186,7 @@ for (const width of widths)
             source: execFileSync('git', ['rev-parse', 'HEAD']).toString().trim(),
             routeSHA: createHash('sha256')
               .update(
-                readFileSync(mode === 'before' ? '.cache/b06/base-location.tsx' : 'src/app/routes/location/index.tsx')
+                readFileSync(mode === 'before' ? '.cache/b06/base-location.tsx' : 'workers/app/src/app/routes/location/index.tsx')
               )
               .digest('hex'),
             baseline: mode === 'before' ? 'e597885f26769570a8588709db4c51e43e603a2b' : undefined

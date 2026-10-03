@@ -7,7 +7,7 @@ const phase = process.env.B09_PHASE ?? 'after'
 const artifactDir = `.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b09/${phase}`
 const identity = {
   head: execFileSync('git', ['rev-parse', 'HEAD']).toString().trim(),
-  sourceHash: createHash('sha256').update(readFileSync('src/app/routes/route/index.tsx')).digest('hex'),
+  sourceHash: createHash('sha256').update(readFileSync('workers/app/src/app/routes/route/index.tsx')).digest('hex'),
   specHash: createHash('sha256').update(readFileSync('e2e/route-empty-state-layout.spec.ts')).digest('hex'),
   fixture: ['a', 'b', 'c', 'd', 'e', 'f'],
   sort: 'distance from Kyoto'

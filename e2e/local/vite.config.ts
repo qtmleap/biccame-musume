@@ -15,7 +15,7 @@ export default defineConfig({
       },
       load(id) {
         if (id === '\0characters')
-          return `export default ${readFileSync(resolve(import.meta.dirname, '../../public/characters.json'), 'utf8')}`
+          return `export default ${readFileSync(resolve(import.meta.dirname, '../../workers/app/public/characters.json'), 'utf8')}`
       },
       configureServer(server) {
         server.middlewares.use((req, _res, next) => {
@@ -33,7 +33,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: '@/lib/firebase', replacement: resolve(import.meta.dirname, 'firebase.ts') },
-      { find: '@', replacement: resolve(import.meta.dirname, '../../src') }
+      { find: '@', replacement: resolve(import.meta.dirname, '../../workers/app/src') }
     ]
   },
   define: {

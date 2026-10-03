@@ -1,0 +1,13 @@
+{
+  "name": "@biccame/app",
+  "version": "0.35.5",
+  "private": true,
+  "type": "module",
+  "dependencies": { "@biccame/shared": "workspace:*" },
+  "scripts": {
+    "dev": "bun run --cwd ../.. dev",
+    "build": "bun run --cwd ../.. build",
+    "typecheck": "bun run --cwd ../.. typecheck",
+    "deploy": "bun run --cwd ../.. deploy"
+  }
+}
