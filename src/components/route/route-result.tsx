@@ -15,20 +15,24 @@ export const RouteResultCard = ({ result }: Props) => {
 
       <div className='grid grid-cols-2 gap-4'>
         <div className='bg-primary/10 text-primary rounded-lg p-4 text-center'>
-          <div className='text-sm'>総移動距離</div>
-          <div className='text-xl font-bold'>{(result.totalDistance * 111).toFixed(1)} km</div>
+          <div className='text-sm'>店舗間の直線距離</div>
+          <div className='text-xl font-bold'>{result.totalDistance.toFixed(1)} km</div>
         </div>
         <div className='bg-primary/10 text-primary rounded-lg p-4 text-center'>
           <div className='text-sm'>総所要時間</div>
-          <div className='text-xl font-bold'>{result.totalDuration}</div>
+          <div className='text-xl font-bold'>
+            {result.status === 'estimated' ? result.totalDuration : '所要時間を取得できませんでした'}
+          </div>
         </div>
       </div>
 
+      {result.status === 'estimated' && <p className='text-sm'>AIによる参考経路</p>}
+      <p className='text-sm text-muted-foreground'>交通機関での最短経路を保証するものではありません。</p>
       <div className='space-y-2'>
-        <div className='font-medium'>最短ルート順序</div>
+        <div className='font-medium'>直線距離を基準にした訪問順</div>
         <div>
           {result.route.map((store, index) => {
-            const leg = result.legs[index]
+            const leg = result.status === 'estimated' ? result.legs[index] : undefined
 
             return (
               <div key={store.id}>
@@ -40,6 +44,16 @@ export const RouteResultCard = ({ result }: Props) => {
                   <span className='font-medium'>{store.name}</span>
                 </div>
 
+                {result.route[index + 1] && (
+                  <a
+                    className='text-sm underline'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    href={`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(store.station)}&destination=${encodeURIComponent(result.route[index + 1].station)}&travelmode=transit`}
+                  >
+                    外部経路検索で確認
+                  </a>
+                )}
                 {/* 経路情報 */}
                 {leg && leg.routes.length > 0 && (
                   <div className='ml-3 flex gap-6'>

@@ -5,10 +5,10 @@ import { z } from '@hono/zod-openapi'
  */
 export const LegSchema = z
   .object({
-    from: z.string().nonempty().openapi({ description: '出発店舗名' }),
-    to: z.string().nonempty().openapi({ description: '到着店舗名' }),
-    fromStation: z.string().nonempty().openapi({ description: '出発駅名' }),
-    toStation: z.string().nonempty().openapi({ description: '到着駅名' })
+    from: z.string().nonempty().max(100).openapi({ description: '出発店舗名' }),
+    to: z.string().nonempty().max(100).openapi({ description: '到着店舗名' }),
+    fromStation: z.string().nonempty().max(100).openapi({ description: '出発駅名' }),
+    toStation: z.string().nonempty().max(100).openapi({ description: '到着駅名' })
   })
   .openapi('Leg')
 
@@ -30,7 +30,7 @@ export const RouteSegmentSchema = z
     line: z.string().nonempty().openapi({ description: '路線名（例: 京都線、御堂筋線）' }),
     from: z.string().nonempty().openapi({ description: '乗車駅' }),
     to: z.string().nonempty().openapi({ description: '下車駅' }),
-    duration: z.number().openapi({ description: '所要時間（分）' })
+    duration: z.number().nonnegative().openapi({ description: '所要時間（分）' })
   })
   .openapi('RouteSegment')
 
@@ -44,19 +44,24 @@ export const LegResponseSchema = z
     fromStation: z.string().nonempty().openapi({ description: '出発駅名' }),
     toStation: z.string().nonempty().openapi({ description: '到着駅名' }),
     routes: z.array(RouteSegmentSchema).nonempty().openapi({ description: '利用する路線区間の配列' }),
-    duration: z.number().openapi({ description: '総所要時間（分）' }),
-    transfers: z.number().openapi({ description: '乗り換え回数' })
+    duration: z.number().nonnegative().openapi({ description: '総所要時間（分）' }),
+    transfers: z.number().int().nonnegative().openapi({ description: '乗り換え回数' })
   })
   .openapi('LegResponse')
 
-/**
- * LLMからの応答スキーマ
- */
+/** AIの生成内容。公開応答のstatusはサーバーで付与する。 */
+export const GeneratedRouteSchema = z.object({
+  legs: z.array(LegResponseSchema).nonempty().max(5),
+  degraded: z.literal(false).optional()
+})
+
 export const RouteResponseSchema = z
-  .object({
-    legs: z.array(LegResponseSchema).openapi({ description: '経路情報の配列' }),
-    degraded: z.boolean().optional().openapi({ description: 'LLM failure fallback indicator' })
-  })
+  .discriminatedUnion('status', [
+    z.object({ status: z.literal('estimated'), legs: z.array(LegResponseSchema).nonempty().max(5) }),
+    z.object({ status: z.literal('unavailable'), reason: z.literal('generation_failed') })
+  ])
   .openapi('RouteResponse')
 
+export const RouteEndpointResponseSchema = RouteResponseSchema
+export type RouteResponse = z.infer<typeof RouteResponseSchema>
 export type Leg = z.infer<typeof LegSchema>

@@ -6,8 +6,8 @@ import { expect, test } from '@playwright/test'
  * DO クラスは bun が `cloudflare:workers` を解決できずユニットテストできないため、
  * 実際に INSERT OR IGNORE が効いているかはここでしか確認できない。
  *
- * 前提: playwright.config.ts が E2E=1 で dev を起動し VOTE_LIMIT_BYPASS を false にする。
- * DO storage は実行をまたいで残るので、テストごとに別 IP を使って冪等にする。
+ * 実行: bun run e2e:vote-limit (専用 localhost Worker / 毎回破棄する D1・DO)。
+ * VOTE_LIMIT_BYPASS=false。テストごとに別 IP を使って制限を独立して検証する。
  */
 
 const CHARACTER_ID = 'sapporo'
@@ -20,7 +20,7 @@ const uniqueIp = (): string => {
   return `100.${b}.${c}.${d}`
 }
 
-// Origin は playwright.config.ts の extraHTTPHeaders で付与される
+// Origin は vote-local/playwright.config.ts の extraHTTPHeaders で付与される
 const buildHeaders = (ip: string) => ({
   'CF-Connecting-IP': ip,
   'Content-Type': 'application/json'
@@ -75,4 +75,33 @@ test('bulk は投票済みのぶんだけ skipped にして残りを通す', asy
     { characterId: 'sapporo', status: 'skipped' },
     { characterId: 'akiba', status: 'voted' }
   ])
+})
+
+test('不明な投票対象は拒否され、一括投票の有効な対象も確保しない', async ({ request }) => {
+  const headers = buildHeaders(uniqueIp())
+  const unknown = await request.post('/api/votes/unknown-a03', { headers })
+  expect(unknown.status()).toBe(400)
+  const mixed = await request.post('/api/votes/bulk', {
+    headers,
+    data: { characterIds: ['sapporo', 'unknown-a03'] }
+  })
+  expect(mixed.status()).toBe(400)
+  const valid = await request.post('/api/votes/sapporo', { headers })
+  expect(valid.status()).toBe(200)
+})
+
+test('Authorization を変えても同一 IP の 50 件制限を共有する', async ({ request }) => {
+  const headers = buildHeaders(uniqueIp())
+  // 不明な対象で書込みを避けつつ、実際のレート制限バインディングを検証する。
+  for (let i = 0; i < 50; i += 1) {
+    const response = await request.post('/api/votes/unknown-a03', {
+      headers: { ...headers, Authorization: `Bearer local-test-${i}` }
+    })
+    expect(response.status()).toBe(400)
+  }
+  const exhausted = await request.post('/api/votes/unknown-a03', {
+    headers: { ...headers, Authorization: 'Bearer local-test-next' }
+  })
+  expect(exhausted.status()).toBe(429)
+  expect(await exhausted.json()).toEqual({ message: '投票のリクエストが多すぎます。時間をおいて再度お試しください。' })
 })

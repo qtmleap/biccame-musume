@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '@/lib/x-transaction'
+import { ClientTransaction, fetchTransactionInputs } from '@/lib/x-transaction'
 import type { Event, EventDetail } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
 import {
@@ -23,30 +23,33 @@ const BOT_SCREEN_NAME = '_biccame_musume'
 const X_BEARER =
   'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'
 
-const HOME_PAGE_CACHE_KEY = 'https://x-transaction-cache.local/home-page'
-const ONDEMAND_CACHE_KEY = 'https://x-transaction-cache.local/ondemand'
+const TRANSACTION_CACHE_KEY = 'https://x-transaction-cache.local/inputs-v2'
 const CACHE_TTL_SECONDS = 60 * 30
 
-/**
- * Cached fetch of the X home page + ondemand.s file. Re-fetched at most every
- * `CACHE_TTL_SECONDS` to keep CPU/bandwidth bounded — the underlying key/animation
- * material rotates infrequently.
- */
+/** Cache a coherent, validated HTML/signer snapshot for 30 minutes. */
 const getCachedTransactionInputs = async (): Promise<{ homePageHtml: string; ondemandFileText: string }> => {
   const cache = await caches.open('x-transaction')
-  const cachedHome = await cache.match(HOME_PAGE_CACHE_KEY)
-  const cachedOndemand = await cache.match(ONDEMAND_CACHE_KEY)
-  if (cachedHome && cachedOndemand) {
-    return { homePageHtml: await cachedHome.text(), ondemandFileText: await cachedOndemand.text() }
+  const cached = await cache.match(TRANSACTION_CACHE_KEY)
+  if (cached) {
+    try {
+      const inputs = await cached.json<{ homePageHtml: string; ondemandFileText: string }>()
+      if (typeof inputs.homePageHtml === 'string' && typeof inputs.ondemandFileText === 'string') {
+        ClientTransaction.create(inputs)
+        return inputs
+      }
+    } catch {
+      // Corrupt or obsolete cached inputs are replaced by fresh validated material.
+    }
   }
-  const homePageHtml = await fetchHomePageHtml()
-  const ondemandFileText = await fetchOnDemandFileText(homePageHtml)
-  const cacheControl = `max-age=${CACHE_TTL_SECONDS}`
-  await Promise.all([
-    cache.put(HOME_PAGE_CACHE_KEY, new Response(homePageHtml, { headers: { 'cache-control': cacheControl } })),
-    cache.put(ONDEMAND_CACHE_KEY, new Response(ondemandFileText, { headers: { 'cache-control': cacheControl } }))
-  ])
-  return { homePageHtml, ondemandFileText }
+  const inputs = await fetchTransactionInputs()
+  ClientTransaction.create(inputs)
+  await cache.put(
+    TRANSACTION_CACHE_KEY,
+    new Response(JSON.stringify(inputs), {
+      headers: { 'cache-control': `max-age=${CACHE_TTL_SECONDS}`, 'content-type': 'application/json' }
+    })
+  )
+  return inputs
 }
 
 type TweetOptions = { quoteTweetId?: string; replyToTweetId?: string }

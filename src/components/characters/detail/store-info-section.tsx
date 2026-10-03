@@ -27,7 +27,7 @@ export const StoreInfoSection = ({ character }: StoreInfoSectionProps) => {
       transition={{ duration: DURATION.normal, delay: 0.4 }}
       className='space-y-3'
     >
-      <div className='flex items-center gap-2'>
+      <div className='flex flex-wrap items-center gap-2'>
         <h2 className='text-xl font-bold text-foreground'>店舗情報</h2>
         {visited && (
           <Badge className='bg-brand/10 text-brand hover:bg-brand/10 border-transparent gap-1'>
@@ -36,7 +36,7 @@ export const StoreInfoSection = ({ character }: StoreInfoSectionProps) => {
           </Badge>
         )}
       </div>
-      <div className='space-y-3'>
+      <div className='space-y-3 leading-relaxed wrap-anywhere'>
         <StoreName name={character.store.name} storeId={character.store.store_id} />
         <StoreAddress address={character.store.address} postalCode={character.postal_code} />
         <StorePhone phone={character.store.phone} />

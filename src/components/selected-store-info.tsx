@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
+import { getStorePosition } from '@/utils/store-position'
 
 type SelectedStoreInfoProps = {
   character: StoreData
@@ -28,6 +29,8 @@ export const SelectedStoreInfo = ({ character }: SelectedStoreInfoProps) => {
         <div>
           <h3 className='text-sm font-semibold text-foreground'>{getDisplayName(character.character?.name || '')}</h3>
         </div>
+
+        {!getStorePosition(character) && <p className='text-xs text-muted-foreground'>地図位置未登録</p>}
 
         {/* 住所情報 */}
         {character.store?.address && (

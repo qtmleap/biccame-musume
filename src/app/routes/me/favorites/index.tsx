@@ -10,7 +10,7 @@ import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
 import { useCharacters } from '@/hooks/use-characters'
 import { useFavorites } from '@/hooks/use-favorites'
-import { auth } from '@/lib/firebase'
+import { requireFirebaseUser } from '@/lib/require-firebase-user'
 
 /**
  * お気に入りキャラクター一覧コンテンツ
@@ -81,20 +81,5 @@ const RouteComponent = () => (
 
 export const Route = createFileRoute('/me/favorites/')({
   component: RouteComponent,
-  beforeLoad: async () => {
-    return new Promise((resolve) => {
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        unsubscribe()
-        if (!user) {
-          throw new Error('Unauthorized')
-        }
-        resolve(undefined)
-      })
-    })
-  },
-  onError: ({ error, navigate }) => {
-    if (error.message === 'Unauthorized') {
-      navigate({ to: '/' })
-    }
-  }
+  beforeLoad: requireFirebaseUser
 })

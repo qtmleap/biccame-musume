@@ -1,19 +1,20 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { prefectureToRegion } from '@/atoms/filter-atom'
 import { CharacterFollowButton } from '@/components/characters/character-follow-button'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
-import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
+import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_DENSE } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
+import { REGION_LABELS } from '@/locales/app.content'
 import type { StoreData } from '@/schemas/store.dto'
 import { getDisplayName } from '@/utils/character'
 
 type CharacterListCardProps = {
   character: StoreData
   index?: number
-  /** 紙の傾き（degrees）。未指定なら index 巡回、0 で傾きなし。 */
+  /** 紙の傾き（degrees）。未指定なら密な一覧の基準として水平に揃える。 */
   rotation?: number
 }
 
@@ -30,9 +31,7 @@ const TAPES: ({ side: 'left' | 'right'; color: string; angle: string } | null)[]
  * ビッカメ娘一覧表示用コンパクトカードコンポーネント（ステッカー風）
  */
 export const CharacterListCard = ({ character, index = 0, rotation }: CharacterListCardProps) => {
-  // 1列レイアウトでは交互傾きが不自然なので無効化（rotation 明示時はそれを尊重）
-  const isMultiColumn = useMediaQuery('(min-width: 640px)')
-  const rotationDeg = rotation ?? (isMultiColumn ? getStickerRotation(index) : 0)
+  const rotationDeg = getStickerRotation(index, rotation, 'dense')
   const tape = TAPES[index % TAPES.length]
 
   return (
@@ -44,16 +43,15 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: DURATION.normal, ease: 'easeOut' }}
       className='h-full'
-      style={{ filter: STICKER_SHADOW_SM }}
+      style={{ filter: STICKER_SHADOW_DENSE }}
     >
       <motion.div
         className='h-full'
         style={{ rotate: rotationDeg }}
-        whileHover={{ scale: 1.04, rotate: 0 }}
         whileTap={{ scale: 0.97 }}
         transition={STICKER_HOVER_TRANSITION}
       >
-        <div className='relative h-full bg-card rounded-xl border border-zinc-200 dark:border-card-border p-3'>
+        <div className='relative h-full bg-card rounded-xl border border-zinc-200 dark:border-card-border hover:border-brand/40 focus-within:border-brand/40 p-3'>
           {tape && (
             <div
               aria-hidden
@@ -73,7 +71,7 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
             className='absolute inset-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
           />
 
-          <div className='relative flex items-center gap-3 pointer-events-none [&_*]:pointer-events-none [&_button]:pointer-events-auto [&_a]:pointer-events-auto'>
+          <div className='relative flex items-start gap-3 pointer-events-none [&_*]:pointer-events-none [&_button]:pointer-events-auto [&_a]:pointer-events-auto'>
             <Avatar className='h-14 w-14 border-2 border-card-border shrink-0'>
               <AvatarImage
                 src={character.character?.image_url}
@@ -88,7 +86,12 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
               <h3 className='font-bold truncate text-foreground text-sm md:text-base'>
                 {getDisplayName(character.character?.name || '')}
               </h3>
-              <div className='flex justify-end gap-2'>
+              <p data-character-region className='text-xs leading-5 h-5 truncate text-foreground'>
+                {character.prefecture
+                  ? `${prefectureToRegion[character.prefecture] ? REGION_LABELS[prefectureToRegion[character.prefecture]] : '地域未登録'}・${character.prefecture}`
+                  : '地域未登録'}
+              </p>
+              <div className='flex justify-end gap-2 mt-1'>
                 <CharacterFollowButton twitterId={character.character?.twitter_id} iconOnly />
                 <CharacterVoteButton
                   characterId={character.id}

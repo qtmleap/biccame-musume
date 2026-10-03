@@ -7,8 +7,8 @@ import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { LoadingFallback } from '@/components/common/loading-fallback'
 import { Button } from '@/components/ui/button'
 import { useBadges } from '@/hooks/use-badges'
-import { auth } from '@/lib/firebase'
 import { DURATION } from '@/lib/motion'
+import { requireFirebaseUser } from '@/lib/require-firebase-user'
 
 const BadgesContent = () => {
   const { badges, earnedMap } = useBadges()
@@ -67,20 +67,5 @@ const RouteComponent = () => (
 
 export const Route = createFileRoute('/badges/')({
   component: RouteComponent,
-  beforeLoad: async () => {
-    return new Promise((resolve) => {
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        unsubscribe()
-        if (!user) {
-          throw new Error('Unauthorized')
-        }
-        resolve(undefined)
-      })
-    })
-  },
-  onError: ({ error, navigate }) => {
-    if (error.message === 'Unauthorized') {
-      navigate({ to: '/' })
-    }
-  }
+  beforeLoad: requireFirebaseUser
 })

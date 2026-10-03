@@ -1,12 +1,13 @@
-type Point = { lat: number; lng: number }
+export type Point = { lat: number; lng: number }
 
-/**
- * 2点間のユークリッド距離を計算
- */
-const calcDistance = (p1: Point, p2: Point): number => {
-  const dx = p2.lat - p1.lat
-  const dy = p2.lng - p1.lng
-  return Math.sqrt(dx * dx + dy * dy)
+/** 球面上の2点間の直線距離（km）。交通経路の距離ではない。 */
+export const calcGreatCircleKm = (a: Point, b: Point): number => {
+  const radians = Math.PI / 180
+  const latDelta = (b.lat - a.lat) * radians
+  const lngDelta = (b.lng - a.lng) * radians
+  const haversine =
+    Math.sin(latDelta / 2) ** 2 + Math.cos(a.lat * radians) * Math.cos(b.lat * radians) * Math.sin(lngDelta / 2) ** 2
+  return 6371 * 2 * Math.asin(Math.sqrt(Math.min(1, Math.max(0, haversine))))
 }
 
 /**
@@ -15,7 +16,7 @@ const calcDistance = (p1: Point, p2: Point): number => {
 const buildDistanceMatrix = (points: Point[]): number[][] => {
   const n = points.length
   return Array.from({ length: n }, (_, i) =>
-    Array.from({ length: n }, (_, j) => (i === j ? 0 : calcDistance(points[i], points[j])))
+    Array.from({ length: n }, (_, j) => (i === j ? 0 : calcGreatCircleKm(points[i], points[j])))
   )
 }
 

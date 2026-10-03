@@ -85,7 +85,7 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
                 <Link
                   to='/characters/$id'
                   params={{ id: char.id }}
-                  className='font-bold text-base text-foreground hover:underline truncate'
+                  className='font-bold text-base text-foreground hover:underline break-words'
                 >
                   {getDisplayName(char.character?.name || '')}
                 </Link>

@@ -8,6 +8,9 @@ export const STICKER_SHADOW = 'drop-shadow(0 6px 8px rgba(0,0,0,0.12))'
 /** 紙のドロップシャドウ（コンパクトな行用） */
 export const STICKER_SHADOW_SM = 'drop-shadow(0 3px 5px rgba(0,0,0,0.10))'
 
+/** 比較を優先する密な一覧用。表彰台などの演出用の影は別に保つ。 */
+export const STICKER_SHADOW_DENSE = 'drop-shadow(0 2px 3px rgba(0,0,0,0.08))'
+
 /** index ベースの巡回回転値（degrees） */
 export const STICKER_ROTATIONS_DEG = [1.5, -2, 1, -1.5, 2, -1]
 
@@ -15,8 +18,9 @@ export const STICKER_ROTATIONS_DEG = [1.5, -2, 1, -1.5, 2, -1]
  * index に対する既定の回転値を返す。
  * override が渡されればそれを優先（0 を渡せば傾きなし）。
  */
-export const getStickerRotation = (index: number, override?: number) => {
-  return override ?? STICKER_ROTATIONS_DEG[index % STICKER_ROTATIONS_DEG.length]
+export const getStickerRotation = (index: number, override?: number, role: 'decorative' | 'dense' = 'decorative') => {
+  // 密な一覧は水平に揃える。既存の装飾と明示的な回転指定は維持する。
+  return override ?? (role === 'dense' ? 0 : STICKER_ROTATIONS_DEG[index % STICKER_ROTATIONS_DEG.length])
 }
 
 /** ステッカーカードの spring ホバー / タップトランジション */
