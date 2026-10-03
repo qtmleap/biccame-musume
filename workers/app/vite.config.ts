@@ -79,7 +79,7 @@ export default defineConfig(({ mode, command }) => {
         auxiliaryWorkers: [
           {
             configPath: resolve(repoRoot, 'workers/bot/wrangler.toml'),
-            config: command === 'serve' ? { name: 'biccame-musume-bot-skeleton' } : undefined
+            config: command === 'serve' ? { name: 'musume-workers' } : undefined
           }
         ],
         // configPath は migration の出力パスにも使われるため、canonical な app 設定を維持する。
@@ -89,7 +89,7 @@ export default defineConfig(({ mode, command }) => {
             ? {
                 services: [
                   ...(current.services ? current.services : []),
-                  { binding: 'BOT', service: 'biccame-musume-bot-skeleton', entrypoint: 'BotService' }
+                  { binding: 'BOT', service: 'musume-workers', entrypoint: 'BotService' }
                 ]
               }
             : {}),

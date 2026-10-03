@@ -1,6 +1,11 @@
 name: Continuous Integration
 on:
   push:
+permissions:
+  contents: read
+  packages: read
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   ui-regression:
     name: Local UI and authentication regression

@@ -1,7 +1,7 @@
 # Bot Worker 統合計画
 
 作成日: 2026-10-03  
-状態: Phase 1の骨格・共通契約を実装済み。TL・投稿機能の移植と本番切替は未実施。
+状態: Phase 1完了、Phase 2のTL実装・mock/dry-run比較完了。本番TL切替・安定観測は未実施のためPhase 3は未開始。
 
 ## 1. 目的と対象
 
@@ -172,12 +172,23 @@ Phase 1の補足:
 
 ### Phase 2: TL調査・AI解析・Discord候補通知
 
-- [ ] 別repoの現行実装を再確認して段階的に移植する。
-- [ ] 現行の署名・リスト・店舗対応・抽出契約・Discord作成ボタンを維持し、移植前後を比較する。
-- [ ] 現行の取得窓・UUID規則・失敗時の契約をテストする。永続送信管理がないという保証範囲を明記する。
-- [ ] 同一tweetから複数候補、未知店舗、AI不正応答、429、署名失敗、Discord失敗をmockで検証する。
-- [ ] 本番cronを有効にせず、dry-runで既存との出力差を確認する。
+- [x] 別repoの現行実装を再確認して段階的に移植する。
+- [x] 現行の署名・リスト・店舗対応・抽出契約・Discord作成ボタンを維持し、移植前後を比較する。
+- [x] 現行の取得窓・UUID規則・失敗時の契約をテストする。永続送信管理がないという保証範囲を明記する。
+- [x] 同一tweetから複数候補、未知店舗、AI不正応答、429、署名失敗、Discord失敗をmockで検証する。
+- [x] 本番cronを有効にせず、dry-runで既存との出力差を確認する。
 - [ ] Phase 4の検証・切替手順をTLだけに適用し、別途承認を得て本番へ切り替える。初回・継続実行の観測に問題がないことを、投稿移設の開始条件にする。
+
+Phase 2の実装・検証記録:
+
+- 移植元固定SHA: `538fe1b05dd631ebe38e76b894a0949d840709e7`。店舗対応は40件（型定義行を件数に含めない）。
+- 同名継承を採用: production=`musume-workers`、staging=`musume-workers-staging`。全環境cron空・`TL_NOTIFICATIONS_ENABLED=false`を維持。旧自動deployは未停止で、こちらからのデプロイも未実施。
+- private `@qtmleap/x-transaction@0.1.0` と `@qtmleap/zodios@11` を維持。実際のtarball読込とfrozen install成功。CIにpackages:readを追加したが、private package側の本体repo Actions accessは未確認。
+- OpenAI互換Responses、既存base URL/modelとtimeout/maxRetriesを維持。キーの読み替えやprocess.env fallbackは追加しない。
+- 安全性変更: X/API/AIの内部エラーを外部へ出さない。Discordの429/非2xxを明示的な失敗とし、旧無制限再帰を廃止。ネットワーク/timeoutは`delivery_unknown`として自動再送しない。本文・通知導線・allowed_mentionsの旧契約は維持。
+- 架空入力で旧ソースを直接実行し、40店舗対応・AIリクエスト本文・2候補のDiscord payloadが移植後と一致することを確認。実TL/実AI/実Discordを呼んだ比較ではない。
+- テスト604件成功・1件build専用skip、型・Knip・production app生成設定・production/staging bot bundle・RPC成功。Biomeはエラーなし、移植元由来のschema/構文の警告あり。
+- 未完了のゲート: 旧自動deploy停止、旧cron停止・反映確認、既存secret保持確認、実TL切替と初回/継続観測。これが完了するまでPhase 3へ進めない。
 
 ### Phase 3: appからのイベント告知・日次処理を移設
 

@@ -18,7 +18,11 @@ const configSchema = z.object({
   triggers: z.object({ crons: z.array(z.string().nonempty()).length(0) }),
   services: z.array(z.unknown()).length(0),
   d1_databases: z.array(z.unknown()).length(0),
-  vars: z.record(z.string().nonempty(), z.unknown()).refine((vars) => Object.keys(vars).length === 0)
+  vars: z.strictObject({
+    OPENAI_BASE_URL: z.literal('https://ai.qleap.jp/v1'),
+    OPENAI_MODEL: z.literal('codex,gpt-5.6-luna'),
+    TL_NOTIFICATIONS_ENABLED: z.literal('false')
+  })
 })
 const parsed = configSchema.safeParse(JSON.parse(readFileSync(configPath, 'utf8')))
 if (!parsed.success) throw new Error('Invalid skeleton build configuration')
@@ -81,7 +85,7 @@ try {
   })
   assert.equal(response.status, 200)
   assert.deepEqual(await response.json(), {
-    requestId: 'rpc-test', service: 'bot', phase: 'skeleton', notificationsEnabled: false
+    requestId: 'rpc-test', service: 'bot', phase: 'timeline', notificationsEnabled: false
   })
   for (const input of [{ requestId: '' }, { requestId: 'test', secret: 'not-a-secret' }, {}]) {
     const rejected = await mf.dispatchFetch('http://localhost/ping', { method: 'POST', body: JSON.stringify(input) })

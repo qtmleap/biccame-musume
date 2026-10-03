@@ -14,7 +14,7 @@ test('ping preserves correlation and advertises disabled notifications', () => {
   expect(pingBot({ requestId: 'test' })).toEqual({
     requestId: 'test',
     service: 'bot',
-    phase: 'skeleton',
+    phase: 'timeline',
     notificationsEnabled: false
   })
   expect(
@@ -50,6 +50,11 @@ test('scheduled dispatch distinguishes overlapping midnight crons without execut
 test('all skeleton environments disable cron and public endpoints without DB or secrets', () => {
   const environment = z.object({
     name: z.string().nonempty(),
+    vars: z.strictObject({
+      OPENAI_BASE_URL: z.literal('https://ai.qleap.jp/v1'),
+      OPENAI_MODEL: z.literal('codex,gpt-5.6-luna'),
+      TL_NOTIFICATIONS_ENABLED: z.literal('false')
+    }),
     triggers: z.object({ crons: z.array(z.string().nonempty()).length(0) })
   })
   const parsed = environment
@@ -63,7 +68,8 @@ test('all skeleton environments disable cron and public endpoints without DB or 
   expect(Object.keys(parsed.data.env).sort()).toEqual(['production', 'staging'])
   const raw = Bun.TOML.parse(readFileSync(resolve(root, 'workers/bot/wrangler.toml'), 'utf8'))
   expect(raw).not.toHaveProperty('d1_databases')
-  expect(raw).not.toHaveProperty('vars')
+  expect(Object.keys(parsed.data.vars)).toEqual(['OPENAI_BASE_URL', 'OPENAI_MODEL', 'TL_NOTIFICATIONS_ENABLED'])
+  expect(parsed.data.vars.TL_NOTIFICATIONS_ENABLED).toBe('false')
   const appSource = readFileSync(resolve(root, 'workers/app/wrangler.toml'), 'utf8')
   expect(appSource).not.toContain('BotService')
   expect(appSource).not.toContain('bot-skeleton')
@@ -84,7 +90,8 @@ describe('bot deployment output validation', () => {
     const directory = resolve(temporary, 'workers/bot/.wrangler/deploy')
     const output = resolve(temporary, 'workers/bot/dist/bot/wrangler.json')
     const config = {
-      name: 'biccame-musume-bot-skeleton-staging',
+      name: 'musume-workers-staging',
+      vars: { TL_NOTIFICATIONS_ENABLED: 'false' },
       configPath: resolve(temporary, 'workers/bot/wrangler.toml'),
       triggers: { crons: [] }
     }

@@ -6,7 +6,8 @@ const pointerSchema = z.object({ configPath: z.string().nonempty() })
 const configSchema = z.object({
   name: z.string().nonempty(),
   configPath: z.string().nonempty(),
-  triggers: z.object({ crons: z.array(z.string().nonempty()).length(0) })
+  triggers: z.object({ crons: z.array(z.string().nonempty()).length(0) }),
+  vars: z.object({ TL_NOTIFICATIONS_ENABLED: z.literal('false') })
 })
 
 export const getBotDeploymentConfigPath = (root: string, environment: string): string => {
@@ -20,7 +21,8 @@ export const getBotDeploymentConfigPath = (root: string, environment: string): s
   const config = configSchema.safeParse(JSON.parse(readFileSync(output, 'utf8')))
   if (!config.success) throw new Error('Invalid or active bot deployment output; rebuild the skeleton')
   if (config.data.configPath !== resolve(root, 'workers/bot/wrangler.toml')) throw new Error('Unexpected bot config path')
-  if (config.data.name !== `biccame-musume-bot-skeleton-${environment}`) throw new Error('Bot build environment mismatch')
+  const expectedName = environment === 'production' ? 'musume-workers' : 'musume-workers-staging'
+  if (config.data.name !== expectedName) throw new Error('Bot build environment mismatch')
   return output
 }
 

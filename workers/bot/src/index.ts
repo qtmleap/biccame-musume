@@ -1,9 +1,9 @@
 import { WorkerEntrypoint } from 'cloudflare:workers'
 import type { BotPingRequest, BotPingResponse, BotRpc } from '@biccame/shared/bot'
-import { handleBotScheduled } from './scheduled'
+import { type BotBindings, handleBotScheduled } from './scheduled'
 import { pingBot } from './service'
 
-export class BotService extends WorkerEntrypoint implements BotRpc {
+export class BotService extends WorkerEntrypoint<BotBindings> implements BotRpc {
   async ping(input: BotPingRequest): Promise<BotPingResponse> {
     return pingBot(input)
   }
@@ -11,5 +11,5 @@ export class BotService extends WorkerEntrypoint implements BotRpc {
 
 export default {
   fetch: () => new Response('Not found', { status: 404 }),
-  scheduled: (controller: ScheduledController) => handleBotScheduled(controller)
-} satisfies ExportedHandler
+  scheduled: (controller, env, ctx) => ctx.waitUntil(handleBotScheduled(controller, env))
+} satisfies ExportedHandler<BotBindings>
