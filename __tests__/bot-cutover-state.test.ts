@@ -35,6 +35,7 @@ test('cutover plan preserves an explicit rollback target and the original cron',
 test('stale, future, incomplete, gradual and unexpected cron inspections are rejected', () => {
   expect(() => planTimelineCutover(inspection, now + 5 * 60 * 1000 + 1)).toThrow('stale')
   expect(() => planTimelineCutover(inspection, now - 1)).toThrow('stale')
+  expect(() => planTimelineCutover(inspection, Number.NaN)).toThrow('stale')
   expect(() => planTimelineCutover({ ...inspection, missingBindings: ['OPENAI_API_KEY'] }, now)).toThrow('missing')
   expect(() =>
     planTimelineCutover(
