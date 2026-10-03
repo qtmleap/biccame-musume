@@ -36,5 +36,9 @@ export const EventSearchSchema = z.looseObject({
     .default(1)
     .catch(1),
   hideInterested: activityFlag,
-  hideCompleted: activityFlag
+  hideCompleted: activityFlag,
+  hideOldEvents: z
+    .union([z.boolean(), z.enum(['true', 'false']).transform((value) => value === 'true')])
+    .default(true)
+    .catch(true)
 })

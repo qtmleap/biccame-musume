@@ -20,8 +20,8 @@ const assertRequestedTheme = async (page: Page, theme: string) => {
       canvas.fillRect(0, 0, 1, 1)
       return [...canvas.getImageData(0, 0, 1, 1).data].slice(0, 3)
     }
-    const navigation = document.querySelector('header nav a')
-    if (!navigation) throw new Error('Navigation fixture not ready')
+    const navigation = document.querySelector('[data-section=home] a')
+    if (!navigation) throw new Error('Home card fixture not ready')
     return {
       dark: document.documentElement.classList.contains('dark'),
       pageRGB: rgb(document.body),
@@ -175,10 +175,10 @@ for (const theme of ['light', 'dark']) {
       for (const item of evidence.supplements) expect(item.font).toBeGreaterThanOrEqual(13)
       for (const link of evidence.links) expect(link.contrast).toBeGreaterThanOrEqual(4.5)
       for (const { title, badge, sharedOffsetParent, prefixBottom } of evidence.titles) {
-        expect(title.font).toBe(16)
+        expect(title.font).toBe(width < 768 ? 14 : 16)
         expect(title.clamp).toBe('2')
         expect(title.layoutHeight).toBeLessThanOrEqual(title.lineHeight * 2 + 1)
-        expect(title.width).toBeGreaterThanOrEqual(180)
+        expect(title.width).toBeGreaterThanOrEqual(120)
         if (width <= 430) expect(prefixBottom).toBeLessThanOrEqual(title.y + title.height + 1)
         if (badge) {
           expect(sharedOffsetParent).toBe(true)

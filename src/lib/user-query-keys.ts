@@ -8,8 +8,7 @@ export const userQueryKeys = {
 }
 
 const isLiveAdminQueryKey = (key: QueryKey): boolean =>
-  (key[0] === 'admin' && (key[1] === 'twitter' || key[1] === 'users')) ||
-  (key[0] === 'comments' && key[1] === 'admin')
+  (key[0] === 'admin' && (key[1] === 'twitter' || key[1] === 'users')) || (key[0] === 'comments' && key[1] === 'admin')
 
 export const isUserQueryKey = (key: QueryKey): boolean =>
   key[0] === 'user' || key[0] === 'me' || key[0] === 'user_activities'
@@ -18,7 +17,11 @@ export const shouldPersistQuery = (query: {
   queryKey: QueryKey
   meta?: Record<string, unknown>
   state: { status: string }
-}): boolean => query.state.status === 'success' && query.meta?.persist !== false && !isUserQueryKey(query.queryKey) && !isLiveAdminQueryKey(query.queryKey)
+}): boolean =>
+  query.state.status === 'success' &&
+  query.meta?.persist !== false &&
+  !isUserQueryKey(query.queryKey) &&
+  !isLiveAdminQueryKey(query.queryKey)
 
 export const publicCacheDehydrateOptions = {
   shouldDehydrateQuery: shouldPersistQuery,

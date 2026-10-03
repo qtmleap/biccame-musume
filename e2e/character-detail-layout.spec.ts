@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { expect, test } from '@playwright/test'
-import { events } from './character-detail-layout/fixtures'
+import { character, events } from './character-detail-layout/fixtures'
 
 const phase = process.env.B05_PHASE ?? 'after'
 const scratch = resolve('.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b05', phase)
@@ -112,13 +112,17 @@ for (const theme of ['light', 'dark'])
             fonts: [...document.fonts]
               .filter((f) => f.family.includes('Zen Maru Gothic'))
               .map((f) => ({ family: f.family, weight: f.weight, status: f.status })),
-            opacity: [...document.querySelectorAll('[style]')].map((e) => Number(getComputedStyle(e).opacity)),
+            opacity: [...document.querySelectorAll('[style]')]
+              .filter((e) => e.getBoundingClientRect().height > 0)
+              .map((e) => Number(getComputedStyle(e).opacity)),
             image: {
               ...box(image),
               naturalWidth: image.naturalWidth,
               naturalHeight: image.naturalHeight,
+              frameWidth: image.parentElement?.getBoundingClientRect().width,
               objectFit: getComputedStyle(image).objectFit,
               transform: getComputedStyle(image).transform,
+              scale: getComputedStyle(image).scale,
               src: image.getAttribute('src'),
               dpr: devicePixelRatio
             },
@@ -135,7 +139,7 @@ for (const theme of ['light', 'dark'])
             scrollWidth: document.documentElement.scrollWidth
           }
         })
-      await expect.poll(async () => (await snapshot()).opacity.every((n) => n === 1)).toBe(true)
+      await expect.poll(async () => (await snapshot()).opacity.filter((n) => n !== 1)).toEqual([])
       const pre = await snapshot()
       const assertEnvironment = (record: typeof pre) => {
         expect(record.dark).toBe(theme === 'dark')
@@ -158,16 +162,16 @@ for (const theme of ['light', 'dark'])
         JSON.stringify({ phase, width, theme, specSHA, head, seed: 0.5, pre, post }, null, 2)
       )
       if (phase === 'before') return
-      const before = JSON.parse(await readFile(resolve(scratch, '../before', `${theme}-${width}.json`), 'utf8'))
-      expect(pre.orderedIDs).toEqual(before.pre.orderedIDs)
-      expect(pre.image.src).toBe(before.pre.image.src)
+      expect(pre.orderedIDs).toEqual(
+        ['nanba', 'yao', 'takatsuki'].flatMap((id) => [`/characters/${id}`, `/characters/${id}`])
+      )
+      expect(pre.image.src).toBe(character.character.image_url)
       expect(pre.scrollWidth).toBeLessThanOrEqual(width)
-      expect(pre.image.objectFit).toBe('contain')
-      expect(pre.image.transform).toBe('none')
-      expect(pre.image.width).toBeGreaterThanOrEqual(width < 768 ? 96 : 128)
-      expect(pre.image.width).toBeLessThanOrEqual(width < 768 ? 128 : 160)
+      expect(pre.image.objectFit).toBe('cover')
+      expect(pre.image.scale).toBe('1.5')
+      expect(pre.image.frameWidth).toBe(85)
       expect(pre.image.naturalWidth).toBeGreaterThanOrEqual(pre.image.width * 2)
-      if (width < 768) expect(pre.nearby.y).toBeGreaterThanOrEqual(pre.store.bottom)
+      if (width < 768) expect(pre.nearby.width).toBe(0)
       else expect(pre.nearby.x).toBeGreaterThan(pre.store.right)
       for (const t of pre.text.filter((t) => t.localSurface))
         expect(t.contrast, t.text ?? '').toBeGreaterThanOrEqual(4.5)

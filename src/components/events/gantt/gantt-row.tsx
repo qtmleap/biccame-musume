@@ -51,7 +51,8 @@ export const GanttRow = ({
                 <span className='text-sm font-medium whitespace-nowrap'>{event.title}</span>
                 <span className='flex items-center gap-1.5 text-[13px] whitespace-nowrap'>
                   <span>
-                    {EVENT_CATEGORY_LABELS[event.category]}・{EVENT_STATUS_LABELS[status]}
+                    {EVENT_CATEGORY_LABELS[event.category]}
+                    {status !== 'ongoing' && `・${EVENT_STATUS_LABELS[status]}`}
                   </span>
                   {event.stores?.[0] && (
                     <span>({appContent.content.store_name[event.stores[0]] || event.stores[0]})</span>
@@ -82,7 +83,8 @@ export const GanttRow = ({
           <TooltipContent side='top' className='max-w-xs'>
             <p className='font-medium'>{event.title}</p>
             <p>
-              {EVENT_CATEGORY_LABELS[event.category]}・{EVENT_STATUS_LABELS[status]}
+              {EVENT_CATEGORY_LABELS[event.category]}
+              {status !== 'ongoing' && `・${EVENT_STATUS_LABELS[status]}`}
             </p>
             {event.stores && event.stores.length > 0 && (
               <p className='text-xs text-muted-foreground'>

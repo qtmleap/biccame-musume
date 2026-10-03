@@ -114,14 +114,22 @@ test('production dehydration excludes paused mutations and their private variabl
   }
 })
 
- test('live admin queries stay excluded alongside private user cache during save and restore', () => {
+test('live admin queries stay excluded alongside private user cache during save and restore', () => {
   const client = new QueryClient()
-  for (const key of [['admin', 'twitter'], ['admin', 'users'], ['comments', 'admin']]) {
+  for (const key of [
+    ['admin', 'twitter'],
+    ['admin', 'users'],
+    ['comments', 'admin']
+  ]) {
     client.setQueryData(key, 'live-admin')
   }
   client.setQueryData(userQueryKeys.favorites('a'), 'private-user')
   client.setQueryData(['characters'], 'public')
-  expect(dehydrate(client, publicCacheDehydrateOptions).queries.map((query) => query.queryKey)).toEqual([['characters']])
-  expect(deserializePublicQueryCache(persisted(client)).clientState.queries.map((query) => query.queryKey)).toEqual([['characters']])
+  expect(dehydrate(client, publicCacheDehydrateOptions).queries.map((query) => query.queryKey)).toEqual([
+    ['characters']
+  ])
+  expect(deserializePublicQueryCache(persisted(client)).clientState.queries.map((query) => query.queryKey)).toEqual([
+    ['characters']
+  ])
   client.clear()
 })

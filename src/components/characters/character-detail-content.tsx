@@ -8,6 +8,7 @@ import { StoreInfoSection } from '@/components/characters/detail/store-info-sect
 import { NearbyCharactersList } from '@/components/characters/nearby-characters-list'
 import { AppBreadcrumb } from '@/components/common/breadcrumb'
 import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 import type { StoreData, StoreKey } from '@/schemas/store.dto'
 
 type CharacterDetailContentProps = {
@@ -19,9 +20,9 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
 
   return (
     <div className='min-h-screen bg-page-bg text-foreground'>
-      <div className='mx-auto max-w-6xl px-4 py-4 md:px-8 md:py-6'>
-        <div className='grid gap-6 md:grid-cols-[minmax(0,1fr)_224px] lg:grid-cols-[minmax(0,1fr)_280px] md:items-start'>
-          <div className='min-w-0 space-y-6'>
+      <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl'>
+        <div className='md:grid md:grid-cols-[minmax(0,1fr)_auto_224px] lg:grid-cols-[minmax(0,1fr)_auto_320px] md:gap-6'>
+          <div className='min-w-0 max-w-2xl'>
             <AppBreadcrumb
               items={[
                 { label: 'ホーム', to: '/' },
@@ -42,22 +43,22 @@ export const CharacterDetailContent = ({ character }: CharacterDetailContentProp
             </div>
 
             <CharacterProfileSection character={character} />
-            <div className='space-y-6 [&>div]:mb-0 [&>div]:rounded-xl [&>div]:border [&>div]:border-card-border [&>div]:bg-card [&>div]:p-4 md:[&>div]:p-6 [&_a.text-brand]:text-[color:var(--link-foreground)]'>
-              <Suspense fallback={null}>
-                <CharacterOngoingEvents storeKey={character.id as StoreKey} />
-              </Suspense>
-              <Suspense fallback={null}>
-                <CharacterCompetitionLevel storeKey={character.id as StoreKey} />
-              </Suspense>
-            </div>
+            <Suspense fallback={null}>
+              <CharacterOngoingEvents storeKey={character.id as StoreKey} />
+            </Suspense>
+            <Suspense fallback={null}>
+              <CharacterCompetitionLevel storeKey={character.id as StoreKey} />
+            </Suspense>
             <StoreInfoSection character={character} />
           </div>
 
-          <aside className='min-w-0' aria-label='近くのビッカメ娘'>
-            <div className='md:sticky md:top-4'>
+          <Separator orientation='vertical' className='hidden md:block bg-separator' />
+
+          <div className='hidden min-w-0 md:block pt-4'>
+            <div className='sticky top-4'>
               <NearbyCharactersList currentCharacter={character} />
             </div>
-          </aside>
+          </div>
         </div>
       </div>
     </div>

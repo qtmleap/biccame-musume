@@ -175,14 +175,14 @@ const LocationMapInner = ({
       </GoogleMap>
       <div
         ref={controlsRef}
-        className='absolute top-4 left-4 right-4 z-10 flex flex-wrap items-center gap-2 rounded-lg border bg-card p-2 text-sm text-foreground shadow-lg md:right-auto'
+        className='absolute top-4 left-4 right-4 z-10 flex flex-wrap items-center gap-2 rounded-lg bg-card p-2 text-sm text-foreground shadow-lg md:right-auto'
       >
         <label className='flex items-center gap-2'>
           地域
           <select
             aria-label='地域'
             value={region}
-            className='min-h-11 max-w-44 rounded-md border bg-background px-2 text-foreground'
+            className='min-h-11 max-w-44 rounded-md border-0 bg-muted px-2 text-foreground focus-visible:outline-2 focus-visible:outline-primary'
             onChange={(event) => {
               const next = event.target.value
               setRegion(next)
@@ -203,7 +203,7 @@ const LocationMapInner = ({
         </label>
         <button
           type='button'
-          className='min-h-11 rounded-md border bg-background px-3 text-foreground hover:bg-muted'
+          className='min-h-11 rounded-md bg-muted px-3 text-foreground hover:bg-muted/70 focus-visible:outline-2 focus-visible:outline-primary'
           disabled={!getStoreBounds(characters)}
           onClick={() => {
             setRegion('all')
@@ -216,7 +216,7 @@ const LocationMapInner = ({
       {selectedCharacter && (
         <div
           ref={setSelectedPanel}
-          className='absolute bottom-20 left-4 right-4 z-10 rounded-lg border bg-card p-3 text-foreground shadow-lg md:bottom-4 md:left-[20rem] md:max-w-md'
+          className='absolute bottom-20 left-4 right-4 z-10 rounded-lg bg-card p-3 text-foreground shadow-lg md:bottom-4 md:left-[20rem] md:max-w-md'
         >
           <SelectedStoreInfo character={selectedCharacter} />
         </div>

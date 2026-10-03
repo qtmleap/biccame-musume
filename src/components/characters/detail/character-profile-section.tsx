@@ -19,11 +19,8 @@ type CharacterProfileSectionProps = {
 
 export const CharacterProfileSection = ({ character }: CharacterProfileSectionProps) => {
   return (
-    <section
-      className='rounded-xl border border-card-border bg-card p-4 text-foreground md:p-6'
-      aria-label='プロフィール'
-    >
-      <div className='mb-4 flex flex-wrap items-center justify-between gap-4'>
+    <>
+      <div className='mb-4 flex flex-wrap items-end justify-between gap-4'>
         <motion.div
           key={`avatar-${character.id}`}
           variants={SCALE_IN}
@@ -31,11 +28,11 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
           animate='animate'
           transition={{ duration: DURATION.normal }}
         >
-          <Avatar className='h-28 w-28 shrink-0 border border-card-border bg-white md:h-36 md:w-36'>
+          <Avatar className='h-21.25 w-21.25 shrink-0 border border-card-border'>
             <AvatarImage
               src={character.character?.image_url}
               alt={character.character?.name || ''}
-              className='object-contain'
+              className='object-cover scale-150 translate-y-4'
             />
             <AvatarFallback className='text-4xl'>{character.character?.name?.[0] || '?'}</AvatarFallback>
           </Avatar>
@@ -70,13 +67,13 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
         initial='initial'
         animate='animate'
         transition={{ duration: DURATION.normal, delay: 0.2 }}
-        className='min-w-0 [&>a]:text-[color:var(--link-foreground)]'
+        className='mb-6 min-w-0 [&>a]:text-[color:var(--link-foreground)]'
       >
         <h1 className='text-2xl font-bold text-foreground break-words'>
           {getDisplayName(character.character?.name || '')}
         </h1>
         <CharacterTwitterLink twitterId={character.character?.twitter_id} />
-        <p className='text-base text-muted-foreground mt-3 leading-relaxed break-words'>
+        <p className='text-sm text-muted-foreground mt-3 leading-relaxed break-words'>
           {character.character?.description}
         </p>
 
@@ -111,6 +108,6 @@ export const CharacterProfileSection = ({ character }: CharacterProfileSectionPr
           )}
         </div>
       </motion.div>
-    </section>
+    </>
   )
 }

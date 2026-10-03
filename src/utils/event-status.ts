@@ -8,6 +8,12 @@ type EventDates = {
   endedAt?: string | Date | null
 }
 
+/** 開始日の1か月後から非表示対象。JSTの日付で比較し、月末は翌月末に丸める。 */
+export const hasEventStartedOneMonthAgo = (startDate: string | Date, dateKey: string): boolean => {
+  const start = dayjs.utc(getJstDateKey(dayjs(startDate).toISOString()))
+  return !dayjs.utc(dateKey).isBefore(start.add(1, 'month'))
+}
+
 /** 日付単位の開催状況をサーバーとUIで共通計算する。終了日はJST終日有効。 */
 export const calculateEventStatus = (event: EventDates, nowIso: string): { status: EventStatus; daysUntil: number } => {
   const now = dayjs.utc(getJstDateKey(nowIso))

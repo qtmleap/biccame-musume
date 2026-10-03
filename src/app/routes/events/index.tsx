@@ -8,6 +8,7 @@ import { eventViewModeAtom } from '@/atoms/event-view-mode-atom'
 import { prefectureToRegion } from '@/atoms/filter-atom'
 import { RegionFilterControl } from '@/components/characters/region-filter-control'
 import { LoadingFallback } from '@/components/common/loading-fallback'
+import { EventAgeFilter } from '@/components/events/event-age-filter'
 import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { EventGroupBanner } from '@/components/events/event-group-banner'
@@ -30,7 +31,7 @@ import {
   EventSearchSchema
 } from '@/schemas/event-search'
 import { client } from '@/utils/client'
-import { calculateEventStatus } from '@/utils/event-status'
+import { calculateEventStatus, hasEventStartedOneMonthAgo } from '@/utils/event-status'
 
 const PER_PAGE = 12
 const desktopQuery = '(min-width: 768px)'
@@ -116,6 +117,7 @@ const EventsContent = () => {
     EVENT_FILTER_STATUSES.some((status) => statusFilter[status] !== (status !== 'ended')) ||
     activityFilter.hideInterested ||
     activityFilter.hideCompleted ||
+    !search.hideOldEvents ||
     categoryFilter.size !== EventCategorySchema.options.length ||
     storeFilter !== null
 
@@ -126,7 +128,8 @@ const EventsContent = () => {
       region: 'all',
       store: undefined,
       hideInterested: false,
-      hideCompleted: false
+      hideCompleted: false,
+      hideOldEvents: true
     })
   const { interestedEvents, completedEvents } = useUserActivity()
   // 店舗キー(id)から都道府県を取得するマップ
@@ -145,6 +148,7 @@ const EventsContent = () => {
     return events
       .map((event) => ({ ...event, ...calculateEventStatus(event, `${dateKey}T00:00:00+09:00`) }))
       .filter((event) => {
+        if (search.hideOldEvents && hasEventStartedOneMonthAgo(event.startDate, dateKey)) return false
         // カテゴリフィルター
         if (!categoryFilter.has(event.category)) return false
 
@@ -183,6 +187,7 @@ const EventsContent = () => {
   }, [
     events,
     dateKey,
+    search.hideOldEvents,
     categoryFilter,
     storeFilter,
     regionFilter,
@@ -205,7 +210,8 @@ const EventsContent = () => {
     REGION_LABELS[regionFilter],
     storeFilter === null ? 'すべての店舗' : STORE_NAME_LABELS[storeFilter],
     activityFilter.hideInterested ? '興味ありを非表示' : null,
-    activityFilter.hideCompleted ? '達成済みを非表示' : null
+    activityFilter.hideCompleted ? '達成済みを非表示' : null,
+    search.hideOldEvents ? '開始から1か月以上を非表示' : null
   ]
     .filter(Boolean)
     .join(' / ')
@@ -257,6 +263,10 @@ const EventsContent = () => {
                     <EventUserActivityFilter value={activityFilter} onChange={setActivityFilter} />
                     <RegionFilterControl value={regionFilter} onChange={setRegionFilter} />
                     <EventStoreFilter value={storeFilter} onChange={setStoreFilter} />
+                    <EventAgeFilter
+                      value={search.hideOldEvents}
+                      onChange={(hideOldEvents) => updateFilters({ hideOldEvents })}
+                    />
                   </div>
                 </div>
                 <div className='shrink-0 border-t border-card-border bg-background px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] space-y-2'>
@@ -339,6 +349,7 @@ const EventsContent = () => {
 
           {/* 地域フィルター */}
           <RegionFilterControl value={regionFilter} onChange={setRegionFilter} />
+          <EventAgeFilter value={search.hideOldEvents} onChange={(hideOldEvents) => updateFilters({ hideOldEvents })} />
         </div>
 
         <p role='status' className='text-sm text-foreground'>

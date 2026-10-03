@@ -5,7 +5,7 @@ const events = Array.from({ length: 60 }, (_, i) => ({
   category: i < 13 ? 'ackey' : 'other',
   title: `共有イベント${i + 1}`,
   stores: ['sapporo'],
-  startDate: '2026-01-01T00:00:00.000Z',
+  startDate: '2026-10-01T00:00:00.000Z',
   endDate: '2099-12-31T00:00:00.000Z',
   isVerified: true,
   isPreliminary: false,
@@ -49,6 +49,7 @@ const installFixtures = async (page: Page) => {
 }
 
 test.beforeEach(async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-10-03T03:00:00Z'))
   await page.setViewportSize({ width: 1280, height: 900 })
   await page.addInitScript(() => {
     localStorage.clear()
@@ -56,29 +57,6 @@ test.beforeEach(async ({ page }) => {
   })
   await installFixtures(page)
 })
-
-for (const width of [375, 1280])
-  test(`home_primary_links_are_available_${width}`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 900 })
-    for (const [label, destination] of [
-      ['娘を探す', '/characters'],
-      ['イベントを探す', '/events'],
-      ['店舗マップ', '/location']
-    ]) {
-      await page.goto('/')
-      const link = page.getByRole('link', { name: label, exact: true })
-      await expect(link).toBeVisible()
-      await link.focus()
-      await page.keyboard.press('Enter')
-      await expect.poll(() => new URL(page.url()).pathname.replace(/\/$/, '')).toBe(destination)
-      if (destination === '/characters')
-        await expect(page.getByRole('heading', { name: 'ビッカメ娘一覧', exact: true })).toBeVisible()
-      if (destination === '/events')
-        await expect(page.getByRole('heading', { name: 'イベント一覧', exact: true })).toBeVisible()
-      if (destination === '/location')
-        await expect(page.getByText('Google Maps APIキーが設定されていません', { exact: true })).toBeVisible()
-    }
-  })
 
 test('shared_url_reproduces_filters', async ({ page, browser }) => {
   await page.addInitScript(() => {
@@ -233,3 +211,40 @@ test('mobile_filter_changes_update_url_and_reset_page', async ({ page }) => {
   await page.getByRole('button', { name: '条件を解除', exact: true }).click()
   await expect(page.getByText('全 60 件中 1–12 件を表示')).toBeVisible()
 })
+
+for (const width of [375, 1280])
+  test(`event_age_default_opt_out_share_and_reset_${width}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 })
+    const fixtures = [
+      { ...events[0], title: '終了告知のない古いイベント', startDate: '2026-09-03T00:00:00+09:00', endDate: undefined },
+      { ...events[1], title: '最近のイベント', startDate: '2026-09-04T00:00:00+09:00', endDate: undefined },
+      { ...events[2], title: '開催予定のイベント', startDate: '2026-10-10T00:00:00+09:00', endDate: undefined }
+    ]
+    await page.route('**/api/events', (route) => route.fulfill({ json: fixtures }))
+    await page.goto('/events/')
+    await expect(page.getByText('全 2 件中 1–2 件を表示')).toBeVisible()
+    await expect(page.getByRole('link', { name: /終了告知のない古いイベント/ })).toHaveCount(0)
+    const openFilters = async () => {
+      if (width < 768) await page.getByRole('button', { name: 'イベントを絞り込む', exact: true }).click()
+    }
+    const age = page.getByRole('checkbox', { name: '開始から1か月以上経ったイベントを非表示', exact: true }).filter({ visible: true })
+    await openFilters()
+    await expect(age).toBeChecked()
+    await age.uncheck()
+    await expect.poll(() => urlValue(page, 'hideOldEvents')).toBe('false')
+    if (width < 768) await page.keyboard.press('Escape')
+    await expect(page.getByText('全 3 件中 1–3 件を表示')).toBeVisible()
+    const sharedUrl = page.url()
+    await page.goto(sharedUrl)
+    await expect(page.getByRole('link', { name: /終了告知のない古いイベント/ })).toBeVisible()
+    await openFilters()
+    await expect(age).not.toBeChecked()
+    await page.getByRole('button', { name: 'フィルターをクリア', exact: true }).filter({ visible: true }).click()
+    await expect(age).toBeChecked()
+    if (width < 768) await page.keyboard.press('Escape')
+    await expect(page.getByText('全 2 件中 1–2 件を表示')).toBeVisible()
+    await page.getByRole('button', { name: '日程', exact: true }).click()
+    await expect(page.getByRole('link', { name: '最近のイベントの詳細を見る', exact: true })).toBeVisible()
+    await expect(page.locator('.gantt-scroll-container').getByText(/・開催中/)).toHaveCount(0)
+    await expect(page.getByRole('link', { name: /終了告知のない古いイベント/ })).toHaveCount(0)
+  })

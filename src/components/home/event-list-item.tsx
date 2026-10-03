@@ -69,7 +69,7 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
           to='/events/$uuid'
           params={{ uuid: event.uuid }}
           className={cn(
-            'relative flex flex-col gap-3 bg-card rounded-xl p-3 border border-zinc-200 dark:border-card-border hover:border-brand/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand h-full',
+            'relative flex flex-col gap-1.5 md:gap-2 bg-card rounded-xl p-2.5 md:p-3 border border-zinc-200 dark:border-card-border hover:border-brand/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand h-full',
             status === 'ended' && 'opacity-60'
           )}
         >
@@ -84,18 +84,18 @@ export const EventListItem = ({ event, index }: EventListItemProps) => {
               )}
             />
           )}
-          <div data-event-heading className='grid grid-cols-[auto_1fr] items-center gap-2'>
-            <div className='contents'>
+          <div data-event-heading className='flex items-start justify-between gap-2'>
+            <div className='flex flex-1 min-w-0 items-center gap-2'>
               <div className={`shrink-0 p-2 rounded-lg ${CATEGORY_WITH_ICON[event.category].className}`}>
                 {CATEGORY_WITH_ICON[event.category].icon}
               </div>
-              <p className='col-span-2 order-3 text-base leading-6 min-h-12 font-semibold text-foreground line-clamp-2 break-words'>
+              <p className='text-sm leading-5 md:text-base md:leading-6 font-semibold text-foreground line-clamp-2 break-words'>
                 {event.title}
               </p>
             </div>
             <div
               data-status-badge
-              className={`order-2 justify-self-end shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
+              className={`shrink-0 text-xs font-bold px-2 py-1 rounded whitespace-nowrap ${
                 status === 'ended'
                   ? 'bg-status-ended text-status-ended-foreground'
                   : status === 'last_day'

@@ -59,7 +59,7 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
   }
 
   return (
-    <div className='rounded-xl border border-card-border bg-card p-4 text-foreground'>
+    <div className='bg-page-bg rounded-lg'>
       <h2 className='text-lg font-bold text-foreground mb-4'>近くのビッカメ娘</h2>
       <div className='flex flex-col divide-y divide-separator'>
         {nearbyCharacters.map((char, index) => (
@@ -71,11 +71,11 @@ export const NearbyCharactersList = ({ currentCharacter }: NearbyCharactersListP
             className='flex items-start gap-3 py-3 first:pt-0'
           >
             <Link to='/characters/$id' params={{ id: char.id }}>
-              <Avatar className='h-14 w-14 border border-card-border bg-white'>
+              <Avatar className='h-14 w-14 border border-card-border'>
                 <AvatarImage
                   src={char.character?.image_url}
                   alt={char.character?.name || ''}
-                  className='object-contain'
+                  className='object-cover scale-125'
                 />
                 <AvatarFallback className='text-sm'>{char.character?.name?.[0] || '?'}</AvatarFallback>
               </Avatar>

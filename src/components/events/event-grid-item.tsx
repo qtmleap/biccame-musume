@@ -66,16 +66,16 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
           to='/events/$uuid'
           params={{ uuid: event.uuid }}
           className={cn(
-            'relative block rounded-xl p-3 border border-zinc-200 dark:border-card-border hover:border-brand/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand h-full',
+            'relative block rounded-xl p-2.5 md:p-3 border border-zinc-200 dark:border-card-border hover:border-brand/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand h-full',
             dimEnded ? 'opacity-50 grayscale bg-card' : endingSoonBg || 'bg-card'
           )}
         >
           {tape && (
             <div aria-hidden className={cn('absolute rounded-sm', tape.position, tape.size, tape.color, tape.angle)} />
           )}
-          <div data-event-heading className='mb-2'>
+          <div data-event-heading className='mb-1 md:mb-2'>
             <div className='flex-1 min-w-0'>
-              <div className='mb-1.5 flex flex-wrap items-center gap-1.5'>
+              <div className='mb-1 md:mb-1.5 flex flex-wrap items-center gap-1.5'>
                 {!compact && (
                   <span data-status-badge className='ml-auto order-last'>
                     {STATUS_BADGE[event.status]()}
@@ -84,7 +84,7 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
                 {CATEGORY_BADGE[event.category](EVENT_CATEGORY_LABELS[event.category])}
                 <EventCharacterBadge event={event} />
               </div>
-              <h3 className='text-base leading-6 min-h-12 font-semibold text-foreground line-clamp-2 break-words'>
+              <h3 className='text-sm leading-5 md:text-base md:leading-6 font-semibold text-foreground line-clamp-2 break-words'>
                 {event.title}
               </h3>
               <div className='mt-1 flex flex-col gap-1 text-[13px] leading-5 text-muted-foreground'>
@@ -122,7 +122,7 @@ export const EventGridItem = ({ event, index = 0, compact = false }: EventGridIt
 
           {!compact &&
             event.conditions.some((c) => c.type === 'purchase' || c.type === 'first_come' || c.type === 'lottery') && (
-              <div className='mt-2 flex flex-wrap gap-1'>
+              <div className='mt-1 md:mt-2 flex flex-wrap gap-1'>
                 {event.conditions.map((condition) => {
                   if (condition.type === 'everyone') return null
                   return (

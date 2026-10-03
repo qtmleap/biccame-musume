@@ -86,13 +86,6 @@ export const CharacterListCard = ({ character, index = 0, rotation }: CharacterL
               <h3 className='font-bold truncate text-foreground text-sm md:text-base'>
                 {getDisplayName(character.character?.name || '')}
               </h3>
-              <p
-                data-character-store
-                className='text-sm leading-5 h-10 line-clamp-2 break-words text-foreground'
-                title={character.store?.name}
-              >
-                {character.store?.name ? character.store.name : '店舗情報未登録'}
-              </p>
               <p data-character-region className='text-xs leading-5 h-5 truncate text-foreground'>
                 {character.prefecture
                   ? `${prefectureToRegion[character.prefecture] ? REGION_LABELS[prefectureToRegion[character.prefecture]] : '地域未登録'}・${character.prefecture}`

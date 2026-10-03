@@ -64,7 +64,7 @@ export const StoreList = ({
     <button
       type='button'
       aria-expanded={isOpen}
-      className='absolute bottom-4 left-4 z-10 flex min-h-11 items-center gap-2 rounded-lg border bg-card px-4 text-sm font-medium text-foreground shadow-lg'
+      className='absolute bottom-4 left-4 z-10 flex min-h-11 items-center gap-2 rounded-lg bg-card px-4 text-sm font-medium text-foreground shadow-lg'
       onClick={isDesktop ? () => onOpenChange(!isOpen) : undefined}
     >
       <List aria-hidden='true' className='size-4' />
@@ -79,9 +79,9 @@ export const StoreList = ({
           <section
             ref={onPanelChange}
             aria-label='店舗一覧'
-            className='absolute top-24 bottom-20 left-4 z-10 flex w-72 flex-col rounded-lg border bg-card text-foreground shadow-lg'
+            className='absolute top-24 bottom-20 left-4 z-10 flex w-72 flex-col rounded-lg bg-card text-foreground shadow-lg'
           >
-            <div className='flex items-center justify-between px-3 py-2 border-b'>
+            <div className='flex items-center justify-between px-3 py-2'>
               <h2 className='text-sm font-semibold'>店舗一覧{mapCenter && '（近い順）'}</h2>
               <button
                 type='button'
@@ -107,9 +107,9 @@ export const StoreList = ({
         aria-describedby={undefined}
         onInteractOutside={(event) => event.preventDefault()}
         onOpenAutoFocus={(event) => event.preventDefault()}
-        className='max-h-[38dvh] gap-0 bg-card text-foreground'
+        className='max-h-[38dvh] gap-0 rounded-t-xl border-0 bg-card text-foreground'
       >
-        <div className='flex items-center justify-between px-4 py-2 border-b'>
+        <div className='flex items-center justify-between px-4 py-2'>
           <SheetTitle className='text-sm'>店舗一覧{mapCenter && '（近い順）'}</SheetTitle>
           <button
             type='button'
