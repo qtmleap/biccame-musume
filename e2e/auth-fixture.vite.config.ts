@@ -6,7 +6,7 @@ import local from './local/vite.config.ts'
 export default defineConfig({
   ...local,
   cacheDir: resolve(import.meta.dirname, '../.cache/auth-fixture/vite'),
-  resolve: { alias: { '@': resolve(import.meta.dirname, '../src') } },
+  resolve: { alias: { '@': resolve(import.meta.dirname, '../workers/app/src') } },
   optimizeDeps: { entries: ['e2e/fixtures/auth-session.html', 'e2e/local/index.html'] },
   server: { ...local.server, proxy: {} }
 })

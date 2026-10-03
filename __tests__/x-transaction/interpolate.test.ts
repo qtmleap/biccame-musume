@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { interpolate } from '../../src/lib/x-transaction/interpolate'
+import { interpolate } from '../../workers/app/src/lib/x-transaction/interpolate'
 
 describe('interpolate', () => {
   test('f=0 returns from', () => {

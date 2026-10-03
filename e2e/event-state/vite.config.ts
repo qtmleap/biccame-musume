@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   cacheDir: resolve(import.meta.dirname, '../../.cache/event-state/vite'),
   optimizeDeps: { entries: ['e2e/event-state/index.html'] },
-  resolve: { alias: { '@': resolve(import.meta.dirname, '../../src') } },
+  resolve: { alias: { '@': resolve(import.meta.dirname, '../../workers/app/src') } },
   define: {
     'import.meta.env.DEV': 'false',
     __AUTH_DOMAIN__: JSON.stringify('localhost')

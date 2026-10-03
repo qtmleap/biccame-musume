@@ -1,2 +1,2 @@
-@import "../src/index.css";
-@source "../src";
+@import "../workers/app/src/index.css";
+@source "../workers/app/src";

@@ -12,7 +12,7 @@ export const sourceFiles = (dir: string): string[] =>
           : []
     )
 export const inventory = () =>
-  [...sourceFiles('src/components'), ...sourceFiles('src/app/routes')].map((file) => {
+  [...sourceFiles('workers/app/src/components'), ...sourceFiles('workers/app/src/app/routes')].map((file) => {
     const ast = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true)
     const localKinds = new Map<string, string>()
     const exports = new Set<string>()
@@ -55,7 +55,7 @@ export const inventory = () =>
       exports: [...exports].map((name) => ({
         name,
         kind:
-          file.startsWith('src/app/routes/') && name === 'Route'
+          file.startsWith('workers/app/src/app/routes/') && name === 'Route'
             ? 'route'
             : localKinds.get(name) === 'type'
               ? 'type'

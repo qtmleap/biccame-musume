@@ -21,7 +21,7 @@ export default defineConfig({
     }
   ],
   cacheDir: resolve(import.meta.dirname, '../../.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/a14/vite-cache'),
-  resolve: { alias: { '@': resolve(import.meta.dirname, '../../src') } },
+  resolve: { alias: { '@': resolve(import.meta.dirname, '../../workers/app/src') } },
   define: {
     'import.meta.env.DEV': 'false',
     'import.meta.env.VITE_GOOGLE_MAPS_API_KEY': JSON.stringify(''),

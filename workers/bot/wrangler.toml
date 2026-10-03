@@ -1,0 +1,22 @@
+# Phase 1専用の仮名。旧TL Workerの名前を引き継ぐ判断はPhase 2で行う。
+name = "biccame-musume-bot-skeleton"
+main = "src/index.ts"
+compatibility_date = "2026-05-11"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+preview_urls = false
+
+[triggers]
+crons = []
+
+[env.staging]
+name = "biccame-musume-bot-skeleton-staging"
+
+[env.staging.triggers]
+crons = []
+
+[env.production]
+name = "biccame-musume-bot-skeleton-production"
+
+[env.production.triggers]
+crons = []

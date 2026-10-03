@@ -1,0 +1,261 @@
+name = "biccame-musume"
+compatibility_date = "2026-05-11"
+compatibility_flags = ["nodejs_compat", "enable_nodejs_http_modules"]
+main = "src/index.ts"
+keep_vars = true
+
+# X連携監視の通知先は [vars] ではなく secret に登録する（URLに認証情報を含む）。
+# 例: bunx wrangler secret put DISCORD_WEBHOOK_URL --env production
+# TWITTER_AUTH_TOKEN / TWITTER_CSRF_TOKEN も同様に secret で管理する。
+
+# Top-level bindings for local dev (vite dev / miniflare).
+# Production/staging deployments use [env.*] sections below.
+[[kv_namespaces]]
+binding = "BICCAME_MUSUME_EVENTS"
+id = "6f3b7b710eb646a0aef7ab524609bb67"
+
+[[kv_namespaces]]
+binding = "PUBLIC_JWK_CACHE_KV"
+id = "e4d041b77a2b4575bed33650b13a43b2"
+
+[[durable_objects.bindings]]
+name = "STATS"
+class_name = "StatsDO"
+
+[[durable_objects.bindings]]
+name = "USER_PUSH"
+class_name = "UserPushDO"
+
+[[durable_objects.bindings]]
+name = "VOTE_COUNTER"
+class_name = "VoteCounterDO"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["StatsDO"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["UserPushDO"]
+
+[[migrations]]
+tag = "v3"
+new_sqlite_classes = ["VoteCounterDO"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "biccame-musume-dev"
+database_id = "be540dec-d75d-46c9-b573-33cb68697778"
+migrations_dir = "../../prisma/migrations"
+# Prisma は <timestamp>/migration.sql 形式で出力するため、wrangler 既定の *.sql では検出されない
+migrations_pattern = "../../prisma/migrations/*/migration.sql"
+
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 50, period = 60 }
+
+[[ratelimits]]
+name = "COMMENT_RATE_LIMITER"
+namespace_id = "1002"
+simple = { limit = 5, period = 60 }
+
+[[ratelimits]]
+name = "DIRECTIONS_RATE_LIMITER"
+namespace_id = "1003"
+simple = { limit = 10, period = 60 }
+
+[ai]
+binding = "AI"
+# AI バインディングはローカル dev でも常にリモートを叩くため明示する (未指定だと毎回警告が出る)
+remote = true
+
+[assets]
+not_found_handling = "single-page-application"
+binding = "ASSETS"
+run_worker_first = ["/*"]
+
+[vars]
+ENVIRONMENT = "local"
+# ローカル開発で 1 日 1 回制限を迂回する。E2E は vite.config.ts 側で false に上書きする
+VOTE_LIMIT_BYPASS = "true"
+CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
+CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
+FIREBASE_PROJECT_ID = "biccame-musume"
+PUBLIC_JWK_CACHE_KEY = "firebase-public-jwk-cache"
+# CSRF 許可オリジン。カンマ区切りの絶対オリジン (例: "https://biccame.example,https://www.biccame.example")
+ORIGIN_ALLOWLIST = ""
+
+[env.staging]
+name = "biccame-musume-dev"
+workers_dev = true
+preview_urls = true
+routes = [{ pattern = "dev.biccame-musume.com", custom_domain = true }]
+
+[env.staging.assets]
+directory = "dist"
+not_found_handling = "single-page-application"
+binding = "ASSETS"
+run_worker_first = ["/*"]
+
+[[env.staging.kv_namespaces]]
+binding = "BICCAME_MUSUME_EVENTS"
+id = "ff75aa8a92354e14936c24304505866a"
+
+[[env.staging.kv_namespaces]]
+binding = "PUBLIC_JWK_CACHE_KV"
+id = "3805176f4bed4099868cddf4d24d46e3"
+
+[[env.staging.durable_objects.bindings]]
+name = "STATS"
+class_name = "StatsDO"
+
+[[env.staging.durable_objects.bindings]]
+name = "USER_PUSH"
+class_name = "UserPushDO"
+
+[[env.staging.durable_objects.bindings]]
+name = "VOTE_COUNTER"
+class_name = "VoteCounterDO"
+
+[[env.staging.migrations]]
+tag = "v1"
+new_sqlite_classes = ["StatsDO"]
+
+[[env.staging.migrations]]
+tag = "v2"
+new_sqlite_classes = ["UserPushDO"]
+
+[[env.staging.migrations]]
+tag = "v3"
+new_sqlite_classes = ["VoteCounterDO"]
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "biccame-musume-dev"
+database_id = "be540dec-d75d-46c9-b573-33cb68697778"
+migrations_dir = "../../prisma/migrations"
+# Prisma は <timestamp>/migration.sql 形式で出力するため、wrangler 既定の *.sql では検出されない
+migrations_pattern = "../../prisma/migrations/*/migration.sql"
+
+[[env.staging.ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 50, period = 60 }
+
+[[env.staging.ratelimits]]
+name = "COMMENT_RATE_LIMITER"
+namespace_id = "1002"
+simple = { limit = 5, period = 60 }
+
+[[env.staging.ratelimits]]
+name = "DIRECTIONS_RATE_LIMITER"
+namespace_id = "1004"
+simple = { limit = 10, period = 60 }
+
+[env.staging.ai]
+binding = "AI"
+
+[env.staging.vars]
+ENVIRONMENT = "dev"
+# vars は環境に継承されないため、迂回しないことを明示する
+VOTE_LIMIT_BYPASS = "false"
+CF_ACCESS_AUD = "995cb37056207392cb90c93562f05361eaaa4dca46ba1f5bda4175cf7a4b860c"
+CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
+FIREBASE_PROJECT_ID = "biccame-musume"
+PUBLIC_JWK_CACHE_KEY = "firebase-public-jwk-cache"
+# CSRF 許可オリジン。カンマ区切りの絶対オリジン
+ORIGIN_ALLOWLIST = "https://dev.biccame-musume.com"
+
+[env.staging.observability]
+enabled = true
+head_sampling_rate = 1
+
+[env.production]
+name = "biccame-musume-prod"
+workers_dev = false
+preview_urls = false
+routes = [{ pattern = "biccame-musume.com", custom_domain = true }]
+
+[env.production.assets]
+directory = "dist"
+not_found_handling = "single-page-application"
+binding = "ASSETS"
+run_worker_first = ["/*"]
+
+[[env.production.kv_namespaces]]
+binding = "BICCAME_MUSUME_EVENTS"
+id = "ef49185c58d04a0790e7c68394d78089"
+
+[[env.production.kv_namespaces]]
+binding = "PUBLIC_JWK_CACHE_KV"
+id = "dc0381c80cc8476aa62100d7cb987e95"
+
+[[env.production.durable_objects.bindings]]
+name = "STATS"
+class_name = "StatsDO"
+
+[[env.production.durable_objects.bindings]]
+name = "USER_PUSH"
+class_name = "UserPushDO"
+
+[[env.production.durable_objects.bindings]]
+name = "VOTE_COUNTER"
+class_name = "VoteCounterDO"
+
+[[env.production.migrations]]
+tag = "v1"
+new_sqlite_classes = ["StatsDO"]
+
+[[env.production.migrations]]
+tag = "v2"
+new_sqlite_classes = ["UserPushDO"]
+
+[[env.production.migrations]]
+tag = "v3"
+new_sqlite_classes = ["VoteCounterDO"]
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "biccame-musume-prod"
+database_id = "9812433b-cfc6-46c6-8a0e-90a144b7304b"
+migrations_dir = "../../prisma/migrations"
+# Prisma は <timestamp>/migration.sql 形式で出力するため、wrangler 既定の *.sql では検出されない
+migrations_pattern = "../../prisma/migrations/*/migration.sql"
+
+[[env.production.ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 50, period = 60 }
+
+[[env.production.ratelimits]]
+name = "COMMENT_RATE_LIMITER"
+namespace_id = "1002"
+simple = { limit = 5, period = 60 }
+
+[[env.production.ratelimits]]
+name = "DIRECTIONS_RATE_LIMITER"
+namespace_id = "1005"
+simple = { limit = 10, period = 60 }
+
+[env.production.ai]
+binding = "AI"
+
+[env.production.vars]
+ENVIRONMENT = "prod"
+# vars は環境に継承されないため、迂回しないことを明示する
+VOTE_LIMIT_BYPASS = "false"
+CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
+CF_ACCESS_TEAM_DOMAIN = "tkgstrator.cloudflareaccess.com"
+FIREBASE_PROJECT_ID = "biccame-musume"
+PUBLIC_JWK_CACHE_KEY = "firebase-public-jwk-cache"
+# CSRF 許可オリジン。カンマ区切りの絶対オリジン
+ORIGIN_ALLOWLIST = "https://biccame-musume.com"
+
+[env.production.observability]
+enabled = true
+head_sampling_rate = 1
+
+# 0:00 UTC = 9:00 JST 毎日。当日開始のイベントを 1 ツイートにまとめて告知する。
+[env.production.triggers]
+crons = ["0 0 * * *"]

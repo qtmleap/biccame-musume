@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('../../src', import.meta.url)),
+      '@': fileURLToPath(new URL('../../workers/app/src', import.meta.url)),
       '@vis.gl/react-google-maps': fileURLToPath(new URL('./maps-adapter.tsx', import.meta.url))
     }
   },

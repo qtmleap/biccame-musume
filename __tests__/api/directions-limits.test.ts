@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
 import { OpenAPIHono, z } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
 import directions from '@/api/direction'
-import { RouteEndpointResponseSchema } from '@/schemas/route.dto'
+import { RouteResponseSchema } from '@/schemas/route.dto'
 import type { Bindings, Variables } from '@/types/bindings'
 
 const leg = { from: '店舗A', to: '店舗B', fromStation: '東京', toStation: '大阪' }
@@ -144,11 +144,11 @@ describe('directions resource limits', () => {
     expect(quotaKeys).toEqual(['directions:2001:db8::1'])
   })
   test('identical_route_reuses_cache and expires after ten minutes', async () => {
-    expect(RouteEndpointResponseSchema.parse(await (await request()).json())).toEqual({
+    expect(RouteResponseSchema.parse(await (await request()).json())).toEqual({
       status: 'estimated',
       ...answer
     })
-    expect(RouteEndpointResponseSchema.parse(await (await request()).json())).toEqual({
+    expect(RouteResponseSchema.parse(await (await request()).json())).toEqual({
       status: 'estimated',
       ...answer
     })
@@ -161,7 +161,7 @@ describe('directions resource limits', () => {
     await request()
     const key = [...entries.keys()][0]
     entries.set(key, { response: new Response(JSON.stringify(answer)), expires: 600000 })
-    expect(RouteEndpointResponseSchema.parse(await (await request()).json())).toEqual({
+    expect(RouteResponseSchema.parse(await (await request()).json())).toEqual({
       status: 'estimated',
       ...answer
     })
@@ -170,7 +170,7 @@ describe('directions resource limits', () => {
   test('normalizes outer whitespace and Unicode without leaking caller labels', async () => {
     const padded = { ...leg, from: ' 店舗A ', fromStation: ' 東京 ' }
     await request({ legs: [padded] })
-    expect(RouteEndpointResponseSchema.parse(await (await request()).json())).toEqual({
+    expect(RouteResponseSchema.parse(await (await request()).json())).toEqual({
       status: 'estimated',
       ...answer
     })
@@ -205,8 +205,8 @@ describe('directions resource limits', () => {
     test(`degraded ${mode} results are not cached`, async () => {
       aiResult = mode === 'invalid' ? { invalid: true } : { ...answer, degraded: true }
       aiThrows = mode === 'throw'
-      expect(RouteEndpointResponseSchema.parse(await (await request()).json()).status).toBe('unavailable')
-      expect(RouteEndpointResponseSchema.parse(await (await request()).json()).status).toBe('unavailable')
+      expect(RouteResponseSchema.parse(await (await request()).json()).status).toBe('unavailable')
+      expect(RouteResponseSchema.parse(await (await request()).json()).status).toBe('unavailable')
       expect(aiCalls).toBe(2)
       expect(entries.size).toBe(0)
     })

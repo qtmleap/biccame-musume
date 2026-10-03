@@ -6,7 +6,7 @@
  */
 
 import { beforeEach, describe, expect, mock, test } from 'bun:test'
-import type { Bindings } from '../../src/types/bindings'
+import type { Bindings } from '../../workers/app/src/types/bindings'
 
 let findUniqueCalls = 0
 let createCalls = 0
@@ -40,7 +40,7 @@ mock.module('@/lib/prisma', () => ({
   getPrisma: () => prismaMock
 }))
 
-const { createEventGroup } = await import('../../src/services/event-group-service')
+const { createEventGroup } = await import('../../workers/app/src/services/event-group-service')
 
 const env = {} as Bindings
 

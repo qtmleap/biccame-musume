@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test'
-import { EventSearchSchema } from '../src/schemas/event-search'
-import * as eventStatus from '../src/utils/event-status'
+import { EventSearchSchema } from '../workers/app/src/schemas/event-search'
+import * as eventStatus from '../workers/app/src/utils/event-status'
 
 test('old events are hidden by default, while an explicit opt-out survives URL parsing', () => {
   for (const [input, expected] of [

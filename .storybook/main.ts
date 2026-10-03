@@ -3,10 +3,10 @@ import type { StorybookConfig } from '@storybook/react-vite'
 import tailwindcss from '@tailwindcss/vite'
 
 const config: StorybookConfig = {
-  stories: ['../src/stories/**/*.stories.tsx'],
+  stories: ['../workers/app/src/stories/**/*.stories.tsx'],
   addons: ['@storybook/addon-docs'],
   framework: { name: '@storybook/react-vite', options: { builder: { viteConfigPath: '.storybook/vite.config.ts' } } },
-  staticDirs: ['../public'],
+  staticDirs: ['../workers/app/public'],
   core: { disableTelemetry: true },
   async viteFinal(config) {
     config.plugins = [...(config.plugins ?? []), tailwindcss()]
@@ -18,9 +18,9 @@ const config: StorybookConfig = {
         { find: '@/lib/firebase', replacement: resolve(import.meta.dirname, 'mocks/firebase.ts') },
         { find: 'firebase/auth', replacement: resolve(import.meta.dirname, 'mocks/firebase.ts') },
         { find: '@vis.gl/react-google-maps', replacement: resolve(import.meta.dirname, 'mocks/maps.tsx') },
-        { find: 'virtual:public-characters', replacement: resolve(import.meta.dirname, '../public/characters.json') },
+        { find: 'virtual:public-characters', replacement: resolve(import.meta.dirname, '../workers/app/public/characters.json') },
         { find: '@/atoms/vote-atom', replacement: resolve(import.meta.dirname, 'mocks/vote-atom.ts') },
-        { find: '@', replacement: resolve(import.meta.dirname, '../src') }
+        { find: '@', replacement: resolve(import.meta.dirname, '../workers/app/src') }
       ]
     }
     config.cacheDir = resolve(

@@ -3,7 +3,7 @@ import {
   fetchOnDemandFileText,
   fetchTransactionInputs,
   getOndemandFileUrl
-} from '../../src/lib/x-transaction/discovery'
+} from '../../workers/app/src/lib/x-transaction/discovery'
 
 const root =
   '<meta name="twitter-site-verification" content="key"><script type="module" src="https://abs.twimg.com/x-web/x-web/entry-client-logged-out-abc.js"></script>'

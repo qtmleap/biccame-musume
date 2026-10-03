@@ -158,7 +158,7 @@ for (const theme of ['light', 'dark'])
             phase,
             fixtureHash: sha(JSON.stringify(events)),
             specHash: sha(await readFile('e2e/event-filter-sheet-layout.spec.ts', 'utf8')),
-            sourceHash: sha(await readFile('src/app/routes/events/index.tsx', 'utf8')),
+            sourceHash: sha(await readFile('workers/app/src/app/routes/events/index.tsx', 'utf8')),
             pre,
             immediatePostOpacity,
             post

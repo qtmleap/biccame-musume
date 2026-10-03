@@ -1,9 +1,9 @@
 import { Hono } from 'hono'
 import { csrf } from 'hono/csrf'
 import { HTTPException } from 'hono/http-exception'
-import votes from '../../src/api/vote'
-import { isAllowedOrigin } from '../../src/lib/allowed-origin'
-import type { Bindings, Variables } from '../../src/types/bindings'
+import votes from '../../workers/app/src/api/vote'
+import { isAllowedOrigin } from '../../workers/app/src/lib/allowed-origin'
+import type { Bindings, Variables } from '../../workers/app/src/types/bindings'
 
 // The production vote route and SQL Durable Object run only against disposable local bindings.
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
@@ -16,5 +16,5 @@ app.onError((error, c) => {
 app.route('/api/votes', votes)
 app.get('/health', (c) => c.json({ environment: c.env.ENVIRONMENT, bypass: c.env.VOTE_LIMIT_BYPASS }))
 
-export { VoteCounterDO } from '../../src/durable-objects/vote-counter'
+export { VoteCounterDO } from '../../workers/app/src/durable-objects/vote-counter'
 export default app

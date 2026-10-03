@@ -1,5 +1,5 @@
 import { afterEach, expect, setSystemTime, test } from 'bun:test'
-import { getJstDateKey, getJstYear, getNextJstMidnight } from '../../src/utils/jst-date'
+import { getJstDateKey, getJstYear, getNextJstMidnight } from '../../workers/app/src/utils/jst-date'
 
 afterEach(() => setSystemTime())
 

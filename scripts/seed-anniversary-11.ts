@@ -16,9 +16,9 @@
 
 import { $ } from 'bun'
 import { v5 as uuidv5 } from 'uuid'
-import { PHYSICAL_STORE_KEYS } from '../src/data/badges/store-exclusion'
-import { STORE_NAME_LABELS } from '../src/locales/app.content'
-import type { StoreKey } from '../src/schemas/store.dto'
+import { PHYSICAL_STORE_KEYS } from '../workers/app/src/data/badges/store-exclusion'
+import { STORE_NAME_LABELS } from '../workers/app/src/locales/app.content'
+import type { StoreKey } from '../workers/app/src/schemas/store.dto'
 
 type TargetEnv = 'local-staging' | 'remote-staging' | 'remote-production'
 
@@ -61,7 +61,7 @@ const getWranglerArgs = (env: TargetEnv): string[] => {
   const envName = env === 'remote-production' ? 'production' : 'staging'
   const dbName = env === 'remote-production' ? 'biccame-musume-prod' : 'biccame-musume-dev'
   const locationFlag = env === 'local-staging' ? '--local' : '--remote'
-  return [dbName, locationFlag, `--env=${envName}`]
+  return [dbName, locationFlag, `--env=${envName}`, ...(env === 'local-staging' ? ['--persist-to=.wrangler/state'] : [])]
 }
 
 const escapeSql = (value: string): string => value.replace(/'/g, "''")
@@ -141,7 +141,7 @@ const main = async (): Promise<void> => {
 
   const args = getWranglerArgs(targetEnv)
   try {
-    await $`bun wrangler d1 execute ${args} --file=${tmpFile}`
+    await $`bun wrangler --config workers/app/wrangler.toml d1 execute ${args} --file=${tmpFile}`
     console.log('✓ Seed completed')
   } catch (err) {
     console.error('✗ Seed failed:', err)
