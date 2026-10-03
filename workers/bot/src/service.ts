@@ -6,7 +6,7 @@ export const pingBot = (input: unknown): BotPingResponse => {
   const result = botPingResponseSchema.safeParse({
     requestId: parsed.data.requestId,
     service: 'bot',
-    phase: 'skeleton',
+    phase: 'timeline',
     notificationsEnabled: false
   })
   if (!result.success) throw new Error('Invalid bot ping response')

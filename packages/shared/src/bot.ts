@@ -4,7 +4,7 @@ export const botPingRequestSchema = z.strictObject({ requestId: z.string().nonem
 export const botPingResponseSchema = z.strictObject({
   requestId: z.string().nonempty().max(128),
   service: z.literal('bot'),
-  phase: z.literal('skeleton'),
+  phase: z.literal('timeline'),
   notificationsEnabled: z.literal(false)
 })
 
