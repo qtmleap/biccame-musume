@@ -1,5 +1,6 @@
 import { afterEach, expect, mock, spyOn, test } from 'bun:test'
 import { v5 as uuidv5 } from 'uuid'
+import { z } from 'zod'
 import { handleBotScheduled } from '../workers/bot/src/scheduled'
 import { Client } from '../workers/bot/src/timeline/client'
 import { characters } from '../workers/bot/src/timeline/data/characters'
@@ -205,6 +206,28 @@ test('candidate UUIDs use the legacy namespace and distribution-filtered indices
     })
     expect(payload.components?.[0].components.map((button) => button.label)).toEqual(['ツイートを見る', '作成'])
     expect(payload).not.toHaveProperty('allowed_mentions')
+  }
+})
+
+test('all 40 legacy store mappings match canonical public data before shared extraction', async () => {
+  const parsed = z
+    .array(
+      z.object({
+        id: z.string().nonempty(),
+        character: z.object({
+          name: z.string().max(1000).optional(),
+          twitter_id: z.string().max(1000).optional()
+        })
+      })
+    )
+    .safeParse(await Bun.file(new URL('../workers/app/public/characters.json', import.meta.url)).json())
+  if (!parsed.success) throw new Error('Invalid canonical character data')
+  expect(characters).toHaveLength(40)
+  for (const legacy of characters) {
+    const canonical = parsed.data.find((character) => character.id === legacy.id)
+    expect(canonical).toBeDefined()
+    expect(canonical?.character.name).toBe(legacy.name)
+    expect(canonical?.character.twitter_id).toBe(legacy.twitter_id)
   }
 })
 

@@ -16,7 +16,7 @@ export const planTimelineCutover = (input: unknown, now: number) => {
   if (!parsed.success) throw new Error('Invalid cutover inspection; rerun read-only inspection')
   const inspection = parsed.data
   const age = now - Date.parse(inspection.inspectedAt)
-  if (age < 0 || age > 5 * 60 * 1000) throw new Error('Cutover inspection is stale; rerun read-only inspection')
+  if (!Number.isFinite(now) || age < 0 || age > 5 * 60 * 1000) throw new Error('Cutover inspection is stale; rerun read-only inspection')
   if (inspection.missingBindings.length) throw new Error('Required bot bindings are missing; do not cut over')
   const latest = inspection.deployments[0]
   if (latest.versions.length !== 1 || latest.versions[0].percentage !== 100) {
