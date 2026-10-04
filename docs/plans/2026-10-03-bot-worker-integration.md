@@ -221,9 +221,17 @@ Phase 3のコード実装・検証記録:
 
 ### Phase 4: 全体検証・本番切替
 
-- [ ] app/bot/sharedの単体テスト、型チェック、Knip、app/bot bundle、Storybook、RPC結合テストを成功させる。
-- [ ] production/stagingそれぞれの生成設定を検証し、cron・Service Binding・DB・DO migration・環境名の混線がないことを確認する。
-- [ ] 既存サーバーで主要7画面、イベント登録導線、画像・スタイル・API/console、管理画面の連携状態を確認する。画面確認だけでは実通知の正常性を保証しない。
+- [x] app/bot/sharedの単体テスト、型チェック、Knip、app/bot bundle、Storybook、RPC結合テストを成功させる。
+- [x] production/stagingそれぞれの生成設定を検証し、cron・Service Binding・DB・DO migration・環境名の混線がないことを確認する。
+- [ ] 既存サーバーで主要7画面、イベント登録導線、画像・スタイル・API/console、管理画面の連携状態を確認する。画面確認だけでは実通知の正常性を保証しない。2026-10-04時点で既存devサーバー（5173/15175）が起動しておらず、新規起動禁止のため未実施。UIの変更はない。
+
+Phase 4のオフライン検証記録（2026-10-04, `69a23c7a` + CIテスト入口修正）:
+
+- Biome（CI同範囲）エラーなし。移植元由来を含む既存警告は残る。型、Knip、canonical店舗データ確認が成功。
+- 単体658件成功・1件build専用skip。通常`bun test`対象外だった共通transportの安全性テスト12件を`bun run test`とCIへ追加して成功。
+- staging/productionそれぞれで、既定のapp/bot build（botへの依存なし）と、明示RPC build（app→`BotService`、bot→`AppBotReadService`）の生成設定テスト、bot疎通・日次RPC結合が成功。
+- Storybook build 316 exports / 203 stories、カタログ検査2件成功。
+- 実X/実Discord/実AI、本番cron・secret・デプロイは未検証。Cloudflare認証による事前確認から実行する。
 - [ ] 未検証の実認証・実通知事項を明記し、本番変更は別途承認を得る。
 - [ ] 旧TL Workerのcronを明示的に空配列にし、旧repoの自動デプロイが復活させないようにする。
 - [ ] cron変更の反映時間（最大15分）を考慮し、旧処理が止まったことを確認して新処理を有効化する。同名継承の場合も、cron停止と旧repoのデプロイ停止を確認してコード・設定を更新する。切替窓を記録し、補完する場合は送信結果を照合して二重通知を避ける。初期移植では永続履歴がないため、履歴がある前提で自動再走査しない。
