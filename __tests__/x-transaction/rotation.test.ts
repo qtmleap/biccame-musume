@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { convertRotationToMatrix } from '../../workers/app/src/lib/x-transaction/rotation'
+import { convertRotationToMatrix } from '@biccame/shared/x/transaction/rotation'
 
 describe('convertRotationToMatrix', () => {
   test('0 degrees -> identity-like [cos,−sin,sin,cos] = [1,0,0,1]', () => {

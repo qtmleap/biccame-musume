@@ -44,7 +44,9 @@ const runDaily = async (env: BotBindings, scheduledAt: string): Promise<void> =>
   }
   await runBotDaily(env, scheduledAt, transport, {
     app: env.APP,
-    notifyHealthFailure: (error, time) => notifyBotHealthFailure(env, error, time)
+    notifyHealthFailure: async (error, time) => {
+      await notifyBotHealthFailure(env, error, time)
+    }
   })
 }
 

@@ -2,20 +2,13 @@ import { announcementSchema, deliveryResultSchema } from '@biccame/shared/bot'
 import type { EventDetail } from '@/schemas/event.dto'
 import type { Bindings } from '@/types/bindings'
 import { buildEventCreatedText, buildEventUpdatedText, getQuoteTweetId } from '@/utils/tweet-text'
-import { Twitter } from '@/utils/twitter'
 
 // 移設の担当フラグで片方だけを実行する。bot失敗時にappから再送しない。
 export const announceSavedEvent = async (
-  env: Bindings,
+  env: Pick<Bindings, 'BOT'>,
   event: EventDetail,
   purpose: 'created' | 'updated'
 ): Promise<void> => {
-  if (env.X_POSTING_OWNER !== 'bot') {
-    const twitter = new Twitter(env)
-    if (purpose === 'created') await twitter.tweetEventCreated(event)
-    else await twitter.tweetEventUpdated(event)
-    return
-  }
   if (!env.BOT) throw new Error('Event announcement failed: bot binding unavailable')
   const parsed = announcementSchema.safeParse({
     eventUUID: event.uuid,

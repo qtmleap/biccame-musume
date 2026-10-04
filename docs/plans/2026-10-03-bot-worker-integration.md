@@ -1,7 +1,7 @@
 # Bot Worker 統合計画
 
 作成日: 2026-10-03  
-状態: Phase 1完了、Phase 2のTL実装・mock/dry-run比較完了。本番TL切替・安定観測は未実施のためPhase 3は未開始。
+状態: Phase 1〜3の実装・本番TL安定観測完了。Phase 3の本番担当切替は投稿切替PRのproduction deployとその後の観測待ち。
 
 ## 1. 目的と対象
 
@@ -177,7 +177,7 @@ Phase 1の補足:
 - [x] 現行の取得窓・UUID規則・失敗時の契約をテストする。永続送信管理がないという保証範囲を明記する。
 - [x] 同一tweetから複数候補、未知店舗、AI不正応答、429、署名失敗、Discord失敗をmockで検証する。
 - [x] 本番cronを有効にせず、dry-runで既存との出力差を確認する。
-- [ ] Phase 4の検証・切替手順をTLだけに適用し、別途承認を得て本番へ切り替える。初回・継続実行の観測に問題がないことを、投稿移設の開始条件にする。
+- [x] Phase 4の検証・切替手順をTLだけに適用し、別途承認を得て本番へ切り替える。初回・継続実行の観測に問題がないことを、投稿移設の開始条件にする。2026-10-04 03:20/03:25 UTCの2回で検索成功・失敗ログなし。候補0件のため実AI/Discord送信は未発生。
 
 Phase 2の実装・検証記録:
 
@@ -204,7 +204,7 @@ Phase 2の実装・検証記録:
 - [x] 作成・更新時の保存／告知契約を維持する。関連PRの重複防止仕様を取り違えない。
 - [x] 日次開始／終了の対象日・本文・スレッド、アカウント確認、監視通知をbotへ移す。
 - [x] appのバッジcronは独立して維持する。
-- [ ] botに集約後、appに不要となるX実装・secret・依存だけを参照確認して削除する。本番の担当切替・安定観測後に行う。
+- [x] botに集約後、appに不要となるX実装・secret型・依存だけを参照確認して削除する。appはBOT RPCだけを使う。本番appの旧secret値は切替観測後に削除する。
 
 Phase 3のコード実装・検証記録:
 
@@ -224,6 +224,14 @@ Phase 3のコード実装・検証記録:
 - [x] app/bot/sharedの単体テスト、型チェック、Knip、app/bot bundle、Storybook、RPC結合テストを成功させる。
 - [x] production/stagingそれぞれの生成設定を検証し、cron・Service Binding・DB・DO migration・環境名の混線がないことを確認する。
 - [x] 主要7画面と管理連携状態のブラウザ表示を確認する。既存devサーバーが停止中のため、新規サーバーを立てず検証済みVite成果物をPlaywright routeで直接供給した。home・characters・character detail・events・calendar・location・admin・admin twitterの8画面が描画し、JS例外なし。API/Access identity/画像は架空データ・mockで、Google MapsとFirebaseの外部通信は遮断した。実地図描画・実認証・実通知の成功とは扱わない。
+
+本番切替の追加記録:
+
+- TL修正候補デプロイ後、Worker設定でlogsだけでなく親`observability.enabled`がfalseだったため記録がなかった。設定を有効化し、Wranglerにも再発防止を追加。版`b12330e7`は同じscript etag。
+- 投稿を行わない`postingSessionStatus` RPCで、本番botのCookieが期待する投稿用アカウントの認証済みセッションと一致することを確認した。公開プロフィール読取も成功。
+- app側からX直投稿、X認証情報型、X日次処理、旧監視Webhook、app内署名互換層を削除した。appは環境別`BOT` named entrypoint、botは環境別`APP` named read entrypointを持つ。
+- staging botは通知無効・cronなしで先行デプロイ済み。production botは投稿無効・認証読取だけ有効で先行デプロイ済み。deployment workflowはapp → bot RPC検証 → bot deployの順にし、production以外の有効化を拒否する。
+- 本番`DISCORD_WEBHOOK_URL`は旧app/botとも未登録で、日次監視失敗時はDiscord通知されず安全な失敗ログと投稿停止になる。既存運用の制約として保持する。
 
 Phase 4のオフライン検証記録（2026-10-04, `69a23c7a` + CIテスト入口修正）:
 

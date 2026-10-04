@@ -5,10 +5,10 @@ export const notifyBotHealthFailure = async (
   env: { DISCORD_WEBHOOK_URL?: string },
   error: unknown,
   scheduledAt: string
-): Promise<void> => {
+): Promise<'sent' | 'unconfigured' | 'invalid_config' | 'failed'> => {
   if (!env.DISCORD_WEBHOOK_URL?.trim()) {
     console.error('bot health: webhook unconfigured')
-    return
+    return 'unconfigured'
   }
   const failure = normalizeTwitterHealthError(error)
   let url: URL
@@ -27,7 +27,7 @@ export const notifyBotHealthFailure = async (
       throw new Error('Invalid webhook')
   } catch {
     console.error('bot health: invalid webhook configuration')
-    return
+    return 'invalid_config'
   }
   try {
     const response = await fetch(url, {
@@ -47,8 +47,13 @@ export const notifyBotHealthFailure = async (
       })
     })
     await response.body?.cancel()
-    if (!response.ok) console.error('bot health: webhook rejected', { status: response.status })
+    if (!response.ok) {
+      console.error('bot health: webhook rejected', { status: response.status })
+      return 'failed'
+    }
+    return 'sent'
   } catch {
     console.error('bot health: webhook network failure')
+    return 'failed'
   }
 }
