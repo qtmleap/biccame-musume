@@ -1,4 +1,4 @@
-import { chromium } from 'playwright'
+import { chromium } from '@playwright/test'
 
 const URL = 'https://dev.biccame-musume.com/events/503add7e-96ab-4172-8065-69e9caf68493'
 
