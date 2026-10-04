@@ -43,7 +43,8 @@
     },
     "workers/app": {
       "entry": [
-        "src/stories/**/*.stories.tsx"
+        "src/stories/**/*.stories.tsx",
+        "src/lib/harfbuzz-workers.ts"
       ],
       "project": [
         "src/**/*.{ts,tsx}"
