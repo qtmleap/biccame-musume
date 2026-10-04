@@ -23,7 +23,7 @@ if (import.meta.main) {
     }
     return { stdout, stderr }
   }
-  const revision = (await run(['git', 'rev-parse', 'b2bf42709e5881c04046c2eb79f7d21f39e00e6e^{commit}'])).stdout.trim()
+  const revision = (await run(['git', 'rev-parse', 'c5b3e9020a9985d91dadea5f3c44ec01bf706d1e^{commit}'])).stdout.trim()
   if (!/^[a-f0-9]{40}$/.test(revision)) throw new Error('Invalid phase 2 source revision')
   const output = resolve(root, `.cache/bot-phase2-deployment-${revision}.json`)
   if (existsSync(output)) throw new Error('A phase 2 build manifest already exists; do not overwrite it')
