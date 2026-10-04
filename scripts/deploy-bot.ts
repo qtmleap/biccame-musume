@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { z } from 'zod'
+import { wranglerDeployEnvironment } from './deploy-worker-env'
 
 const pointerSchema = z.object({ configPath: z.string().nonempty() })
 const configSchema = z.object({
@@ -36,7 +37,7 @@ if (import.meta.main) {
   const allowActive = process.argv.includes('--allow-active-production')
   const root = resolve(import.meta.dir, '..')
   const child = Bun.spawn(['bunx', 'wrangler', 'deploy', '--config', getBotDeploymentConfigPath(root, environment, allowActive)], {
-    cwd: root, stdin: 'inherit', stdout: 'inherit', stderr: 'inherit'
+    cwd: root, env: wranglerDeployEnvironment(process.env), stdin: 'inherit', stdout: 'inherit', stderr: 'inherit'
   })
   process.exit(await child.exited)
 }
