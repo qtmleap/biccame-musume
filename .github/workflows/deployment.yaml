@@ -115,7 +115,7 @@ jobs:
           CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}
       - name: Deploy bot after app
         if: env.ACT != 'true'
-        run: bun run deploy:bot --env="${CLOUDFLARE_ENV}" ${BOT_ACTIVATION}
+        run: bun scripts/deploy-bot.ts --env="${CLOUDFLARE_ENV}" ${BOT_ACTIVATION}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}
