@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { interpolate } from '../../src/lib/x-transaction/interpolate'
+import { interpolate } from '@biccame/shared/x/transaction/interpolate'
 
 describe('interpolate', () => {
   test('f=0 returns from', () => {

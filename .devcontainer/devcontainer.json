@@ -6,6 +6,9 @@
   "shutdownAction": "stopCompose",
   "remoteUser": "vscode",
   "remoteEnv": {
+    "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}",
+    "CODEX_HOME": "${containerWorkspaceFolder}/.codex",
+    "CLAUDE_CODE_AUTO_MODE_SERVER": "0",
     "ANTHROPIC_BASE_URL": "${localEnv:ANTHROPIC_BASE_URL}",
     "ANTHROPIC_AUTH_TOKEN": "${localEnv:ANTHROPIC_AUTH_TOKEN}",
     "CLOUDFLARE_ACCOUNT_ID": "${localEnv:CLOUDFLARE_ACCOUNT_ID}",
@@ -13,6 +16,7 @@
     "WAKATIME_API_KEY": "${localEnv:WAKATIME_API_KEY}"
   },
   "containerEnv": {
+    "CLAUDE_CODE_AUTO_MODE_SERVER": "0",
     "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
   },
   "mounts": [
@@ -32,6 +36,9 @@
     },
     "ghcr.io/stu-bell/devcontainer-features/claude-code:0": {
       "version": "latest"
+    },
+    "ghcr.io/thamaji/devcontainer-features/codex-cli:1": {
+      "VERSION": "latest"
     },
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
       "moby": false,

@@ -1,10 +1,10 @@
-import { type IntlayerConfig, Locales } from 'intlayer'
+import config from './workers/app/intlayer.config'
 
-const config: IntlayerConfig = {
-  internationalization: {
-    locales: [Locales.ENGLISH, Locales.JAPANESE],
-    defaultLocale: Locales.JAPANESE
+// Intlayer の設定ローダーは cwd 基準。ルートコマンドでは app の探索先だけを補正する。
+export default {
+  ...config,
+  content: {
+    ...config.content,
+    contentDir: ['workers/app/src']
   }
 }
-
-export default config

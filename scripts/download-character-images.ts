@@ -12,8 +12,8 @@
  * ので、容量が PNG 比で 30〜50% 程度に縮む。元の寸法は保持する。
  *
  * Output:
- *   public/images/characters/{key}.webp        — biccame.jp 由来 (相対パスを保つ)
- *   public/images/stamps/{packageId}-{NNN}.webp — stampcamera 由来 (キャラ非依存で重複排除)
+ *   workers/app/public/images/characters/{key}.webp        — biccame.jp 由来 (相対パスを保つ)
+ *   workers/app/public/images/stamps/{packageId}-{NNN}.webp — stampcamera 由来 (キャラ非依存で重複排除)
  *
  * Run via:
  *   bun run scripts/download-character-images.ts
@@ -27,13 +27,13 @@ import { existsSync } from 'node:fs'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import sharp from 'sharp'
-import { STAMPCAMERA_POSES } from '../src/lib/stampcamera-map'
+import { STAMPCAMERA_POSES } from '../workers/app/src/lib/stampcamera-map'
 
 // stampcamera.com の証明書が期限切れの間バイパスする。スクリプト内のみ。
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const ROOT = resolve(import.meta.dir, '..')
-const PUBLIC_DIR = resolve(ROOT, 'public')
+const PUBLIC_DIR = resolve(ROOT, 'workers/app/public')
 const CHARACTERS_JSON = resolve(PUBLIC_DIR, 'characters.json')
 const BICCAME_OUT_DIR = resolve(PUBLIC_DIR, 'images/characters')
 const STAMPS_OUT_DIR = resolve(PUBLIC_DIR, 'images/stamps')

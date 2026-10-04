@@ -1,0 +1,107 @@
+import { useAtom } from 'jotai'
+import { ArrowUpDown, ChevronDown, ChevronUp } from 'lucide-react'
+import { motion } from 'motion/react'
+import { useId, useRef, useState } from 'react'
+import { type SortType, sortTypeAtom } from '@/atoms/sort-atom'
+import { Button } from '@/components/ui/button'
+import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
+import { cn } from '@/lib/utils'
+import { SORT_LABELS } from '@/locales/app.content'
+
+type CharacterSortControlProps = {
+  onRandomize: () => void
+}
+
+/**
+ * キャラクターソート制御コンポーネント
+ */
+export const CharacterSortControl = ({ onRandomize }: CharacterSortControlProps) => {
+  const [sortType, setSortType] = useAtom(sortTypeAtom)
+  const [isOpen, setIsOpen] = useState(false)
+  const optionsId = useId()
+  const toggleRef = useRef<HTMLButtonElement>(null)
+
+  const handleSortChange = (value: SortType) => {
+    setSortType(value)
+    // ランダムの場合は毎回カウンターをインクリメント
+    if (value === 'random') {
+      onRandomize()
+    }
+    // モバイルでは選択後に閉じる
+    setIsOpen(false)
+    if (window.matchMedia('(max-width: 639px)').matches) toggleRef.current?.focus()
+  }
+
+  const sortOptions: { value: SortType; label: string }[] = [
+    { value: 'random', label: SORT_LABELS.random },
+    { value: 'character_birthday', label: SORT_LABELS.characterBirthday },
+    { value: 'store_birthday', label: SORT_LABELS.storeBirthday },
+    { value: 'upcoming_birthday', label: SORT_LABELS.upcomingBirthday }
+  ]
+
+  const currentOption = sortOptions.find((opt) => opt.value === sortType)
+
+  return (
+    <div className='w-full'>
+      {/* モバイル用ヘッダー（タップで開閉） */}
+      <button
+        ref={toggleRef}
+        aria-expanded={isOpen}
+        aria-controls={optionsId}
+        type='button'
+        onClick={() => setIsOpen(!isOpen)}
+        className='flex items-center justify-between w-full sm:hidden mb-3'
+      >
+        <div className='flex items-center gap-2'>
+          <ArrowUpDown className='h-4 w-4 text-muted-foreground' />
+          <span className='text-sm font-medium text-muted-foreground'>並び替え: {currentOption?.label}</span>
+        </div>
+        {isOpen ? (
+          <ChevronUp className='h-4 w-4 text-muted-foreground' />
+        ) : (
+          <ChevronDown className='h-4 w-4 text-muted-foreground' />
+        )}
+      </button>
+
+      {/* デスクトップ用ヘッダー */}
+      <div className='hidden sm:flex items-center gap-2 mb-3'>
+        <ArrowUpDown className='h-4 w-4 text-muted-foreground' />
+        <span className='text-sm font-medium text-muted-foreground'>並び替え</span>
+      </div>
+
+      {/* ボタングリッド（モバイルでは開閉可能） */}
+      <div id={optionsId} className={cn(isOpen ? 'block' : 'hidden', 'sm:block')}>
+        <div className='grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 sm:mt-0 py-1'>
+          {sortOptions.map((option) => {
+            const isSelected = sortType === option.value
+
+            return (
+              <motion.div
+                key={option.value}
+                className='w-full'
+                style={{ filter: STICKER_SHADOW_SM }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                transition={STICKER_HOVER_TRANSITION}
+              >
+                <Button
+                  variant='secondary'
+                  size='sm'
+                  onClick={() => handleSortChange(option.value)}
+                  className={cn(
+                    'w-full text-sm rounded-full border',
+                    isSelected
+                      ? 'bg-brand text-brand-foreground border-brand hover:bg-brand/90'
+                      : 'bg-button-surface text-foreground border-card-border hover:bg-button-surface-hover'
+                  )}
+                >
+                  {option.label}
+                </Button>
+              </motion.div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}

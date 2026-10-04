@@ -1,0 +1,71 @@
+import { useCallback } from 'react'
+import { type RouteResponse, RouteResponseSchema } from '@/schemas/route.dto'
+import type { DirectionsLeg, SelectedStore } from './types'
+
+/**
+ * APIリクエスト用の区間データ
+ */
+type LegRequest = {
+  from: string
+  to: string
+  fromStation: string
+  toStation: string
+}
+
+/**
+ * 経路情報を取得するカスタムフック
+ */
+export const useDirections = () => {
+  /**
+   * APIを呼び出して経路情報を取得
+   */
+  const getDirections = useCallback(async (route: SelectedStore[], signal?: AbortSignal): Promise<RouteResponse> => {
+    // 区間データを作成
+    const legs: LegRequest[] = []
+    for (const [i, store] of route.entries()) {
+      const nextStore = route[i + 1]
+      if (nextStore) {
+        legs.push({
+          from: store.name,
+          to: nextStore.name,
+          fromStation: store.station,
+          toStation: nextStore.station
+        })
+      }
+    }
+
+    if (legs.length === 0) return { status: 'unavailable', reason: 'generation_failed' }
+
+    try {
+      const response = await fetch('/api/directions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ legs }),
+        signal
+      })
+
+      if (!response.ok) {
+        throw new Error('API request failed')
+      }
+
+      const result = RouteResponseSchema.safeParse(await response.json())
+      return result.success ? result.data : { status: 'unavailable', reason: 'generation_failed' }
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') throw error
+      console.error('Route API error:', error)
+      return { status: 'unavailable', reason: 'generation_failed' }
+    }
+  }, [])
+
+  /**
+   * 総所要時間を計算
+   */
+  const calcTotalDuration = useCallback((legs: DirectionsLeg[]): string => {
+    const totalMinutes = legs.reduce((sum, leg) => sum + leg.duration, 0)
+    const hours = Math.floor(totalMinutes / 60)
+    const mins = totalMinutes % 60
+    return hours > 0 ? `${hours}時間${mins}分` : `${mins}分`
+  }, [])
+
+  return { getDirections, calcTotalDuration }
+}

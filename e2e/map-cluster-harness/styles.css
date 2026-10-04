@@ -1,0 +1,3 @@
+@import '../../workers/app/src/index.css';
+@source '../../workers/app/src';
+*, *::before, *::after { animation: none !important; transition: none !important; }

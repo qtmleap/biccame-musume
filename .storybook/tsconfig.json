@@ -1,0 +1,5 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["./**/*.ts", "./**/*.tsx", "../workers/app/src/**/*.ts", "../workers/app/src/**/*.tsx"],
+  "exclude": ["./.cache", "./.artifacts", "../workers/app/src/components/ui/**/*.tsx"]
+}

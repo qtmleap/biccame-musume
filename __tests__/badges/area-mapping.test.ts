@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
-import { type BadgeArea, storeKeyToBadgeArea } from '../../src/data/badges/area-mapping'
-import { EXCLUDED_STORE_KEYS, PHYSICAL_STORE_KEYS } from '../../src/data/badges/store-exclusion'
-import { StoreKeySchema } from '../../src/schemas/store.dto'
+import { type BadgeArea, storeKeyToBadgeArea } from '../../workers/app/src/data/badges/area-mapping'
+import { EXCLUDED_STORE_KEYS, PHYSICAL_STORE_KEYS } from '../../workers/app/src/data/badges/store-exclusion'
+import { StoreKeySchema } from '../../workers/app/src/schemas/store.dto'
 
 const ALL_STORE_KEYS = StoreKeySchema.options
 

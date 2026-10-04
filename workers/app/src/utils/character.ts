@@ -1,0 +1,166 @@
+import dayjs from 'dayjs'
+import jaconv from 'jaconv'
+import { prefectureToRegion, type RegionType } from '@/atoms/filter-atom'
+import type { StoreData } from '@/schemas/store.dto'
+import { getJstDateKey } from '@/utils/jst-date'
+
+/**
+ * 名前がスラッシュで区切られている場合、最初の部分のみ返す
+ */
+export const getDisplayName = (name: string) => {
+  return name.split('/')[0].trim()
+}
+
+/**
+ * 日付文字列を解析してdayjsオブジェクトに変換
+ */
+export const parseDate = (dateStr: string | undefined): dayjs.Dayjs | null => {
+  if (!dateStr) return null
+  const parsed = dayjs(dateStr)
+  if (!parsed.isValid()) return null
+  return parsed
+}
+
+/**
+ * 今日が誕生日かどうかを判定
+ */
+export const isBirthdayToday = (dateStr: string | undefined): boolean => {
+  const birthday = parseDate(dateStr)
+  if (!birthday) return false
+
+  const currentTime = dayjs()
+  return birthday.month() === currentTime.month() && birthday.date() === currentTime.date()
+}
+
+/**
+ * 今日が誕生日のキャラクターを取得
+ * 開発環境では指定されたキャラクターID（アンダーバー区切りで複数指定可）を使用
+ */
+export const getBirthdayCharacters = (characters: StoreData[], devCharacterId?: string): StoreData[] => {
+  if (import.meta.env.DEV && devCharacterId) {
+    const ids = devCharacterId.split('_')
+    return characters.filter((c) => ids.includes(c.id))
+  }
+  if (import.meta.env.DEV) {
+    const kyoto = characters.find((character) => character.id === 'kyoto')
+    return kyoto ? [kyoto] : []
+  }
+  return characters.filter((character) => isBirthdayToday(character.character?.birthday))
+}
+
+/**
+ * JSTの日付を基準に、次の誕生日までの非負日数を返す
+ * 2月29日は非うるう年では2月28日として扱う
+ */
+export const getDaysFromBirthday = (dateStr: string | undefined | null, nowIso = dayjs().toISOString()): number => {
+  if (!dateStr) return Number.MAX_SAFE_INTEGER
+  // 誕生日は年から始まる数値形式に限定し、曖昧な地域形式は受け付けない。
+  const dateParts =
+    /^(\d{4})([-/])(\d{1,2})\2(\d{1,2})(?:[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.\d{1,3})?)?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)?)?$/.exec(
+      dateStr
+    )
+  if (!dateParts || Number(dateParts[5]) > 23 || Number(dateParts[6]) > 59 || Number(dateParts[7]) > 59) {
+    return Number.MAX_SAFE_INTEGER
+  }
+  // dayjsが存在しない日付を翌月・翌年へ繰り上げる場合も未登録と同じ扱いにする。
+  const calendarDate = `${dateParts[1]}-${dateParts[3].padStart(2, '0')}-${dateParts[4].padStart(2, '0')}`
+  const birthday = dayjs.utc(calendarDate)
+  if (birthday.format('YYYY-MM-DD') !== calendarDate) {
+    return Number.MAX_SAFE_INTEGER
+  }
+
+  const today = dayjs.utc(getJstDateKey(nowIso))
+  if (!today.isValid()) return Number.MAX_SAFE_INTEGER
+  let birthdayMonth = today.startOf('year').month(birthday.month())
+  let nextBirthday = birthdayMonth.date(Math.min(birthday.date(), birthdayMonth.daysInMonth()))
+  if (nextBirthday.isBefore(today)) {
+    birthdayMonth = today.add(1, 'year').startOf('year').month(birthday.month())
+    nextBirthday = birthdayMonth.date(Math.min(birthday.date(), birthdayMonth.daysInMonth()))
+  }
+
+  return nextBirthday.diff(today, 'day')
+}
+
+/**
+ * Fisher-Yatesアルゴリズムを使用した配列のシャッフル
+ */
+const shuffleArray = <T>(array: T[]): T[] => {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
+
+/**
+ * キャラクターを娘と娘以外に分類
+ */
+export const categorizeCharacters = (characters: StoreData[]) => {
+  const musume = characters.filter((c) => c.character?.is_biccame_musume !== false)
+  const others = characters.filter((c) => c.character?.is_biccame_musume === false)
+  return { musume, others }
+}
+
+/**
+ * キャラクターを地域でフィルタリング
+ */
+const normalizeCharacterSearch = (value: string): string =>
+  jaconv.toKatakana(jaconv.toZen(value)).toLowerCase().replace(/\s/g, '')
+
+export const filterCharactersByRegion = (characters: StoreData[], region: RegionType, query = ''): StoreData[] => {
+  const normalizedQuery = normalizeCharacterSearch(query)
+  return characters.filter((character) => {
+    const matchesRegion =
+      region === 'all' || (character.prefecture && prefectureToRegion[character.prefecture] === region)
+    const searchTerms = [
+      character.character?.name,
+      ...(character.character.aliases ? character.character.aliases : []),
+      character.store?.name
+    ]
+    return (
+      Boolean(matchesRegion) &&
+      (!normalizedQuery || searchTerms.some((term) => term && normalizeCharacterSearch(term).includes(normalizedQuery)))
+    )
+  })
+}
+
+/**
+ * キャラクターをソートする
+ */
+export const sortCharacters = (
+  characters: StoreData[],
+  sortType: 'character_birthday' | 'store_birthday' | 'upcoming_birthday' | 'random'
+): StoreData[] => {
+  if (sortType === 'random') {
+    return shuffleArray(characters)
+  }
+
+  return [...characters].sort((a, b) => {
+    if (sortType === 'character_birthday') {
+      const dateA = parseDate(a.character?.birthday)
+      const dateB = parseDate(b.character?.birthday)
+      if (!dateA && !dateB) return 0
+      if (!dateA) return 1
+      if (!dateB) return -1
+      return dateA.valueOf() - dateB.valueOf()
+    }
+
+    if (sortType === 'store_birthday') {
+      const dateA = parseDate(a.store?.birthday)
+      const dateB = parseDate(b.store?.birthday)
+      if (!dateA && !dateB) return 0
+      if (!dateA) return 1
+      if (!dateB) return -1
+      return dateA.valueOf() - dateB.valueOf()
+    }
+
+    if (sortType === 'upcoming_birthday') {
+      const daysA = getDaysFromBirthday(a.character?.birthday)
+      const daysB = getDaysFromBirthday(b.character?.birthday)
+      return daysA - daysB
+    }
+
+    return 0
+  })
+}
