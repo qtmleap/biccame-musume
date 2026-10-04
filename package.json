@@ -49,6 +49,7 @@
     "test:bot-rpc": "node --experimental-strip-types scripts/test-bot-rpc.ts && node --experimental-strip-types scripts/test-bot-daily-rpc.ts",
     "check:bot-stores": "bun scripts/generate-bot-stores.ts --check",
     "test:og-render": "bun scripts/test-og-render.ts",
+    "preview:announcement": "bun --preload ./scripts/virtual-characters-plugin.ts scripts/preview-announcement.ts",
     "typecheck": "tsc --noEmit && tsc --noEmit -p workers/bot/tsconfig.json",
     "test": "bun test && bun test ./packages/shared/src/x/transport.test.ts",
     "test:app-build": "BICCAME_VERIFY_BUILD=1 bun test __tests__/app-build-config.test.ts"
