@@ -6,7 +6,11 @@ import {
   formatPeriod,
   groupRows,
   type ImageEvent,
-  splitTitle
+  sinceLabel,
+  splitByPhase,
+  splitTitle,
+  takeRows,
+  untilLabel
 } from '../../workers/app/src/images/format'
 
 const jst = (day: string) => dayjs(`${day}T00:00:00+09:00`).toDate()
@@ -106,4 +110,42 @@ test('titles_break_at_natural_points', () => {
     expect(lines.join('')).toBe(title)
     expect(lines.every((line) => [...line].length <= 13)).toBe(true)
   }
+})
+
+test('events_are_split_into_starting_ongoing_and_ending', () => {
+  const starting = event({ title: '今日から', startDate: jst('2026-02-14'), endDate: jst('2026-02-28') })
+  const oneDay = event({ title: '今日だけ', startDate: jst('2026-02-14'), endDate: jst('2026-02-14') })
+  const ending = event({ title: '今日まで', startDate: jst('2026-02-01'), endDate: jst('2026-02-14') })
+  const later = event({ title: '月末まで', startDate: jst('2026-02-01'), endDate: jst('2026-02-28') })
+  const sooner = event({ title: '来週まで', startDate: jst('2026-02-01'), endDate: jst('2026-02-20') })
+  const open = event({ title: '終了日未定', startDate: jst('2026-01-01'), endDate: undefined })
+  const stopped = event({
+    title: '早期終了',
+    startDate: jst('2026-02-01'),
+    endDate: undefined,
+    endedAt: jst('2026-02-10')
+  })
+  const future = event({ title: '来月', startDate: jst('2026-03-01'), endDate: jst('2026-03-31') })
+  const phases = splitByPhase(
+    [starting, oneDay, ending, later, sooner, open, stopped, future],
+    '2026-02-14',
+    '2026-02-14'
+  )
+  const titles = (list: ImageEvent[]) => list.map((item) => item.title)
+  expect(titles(phases.starting)).toEqual(['今日から', '今日だけ'])
+  expect(titles(phases.ongoing)).toEqual(['来週まで', '月末まで', '終了日未定'])
+  expect(titles(phases.ending)).toEqual(['今日だけ', '今日まで'])
+})
+
+test('weekly_rows_respect_day_and_total_limits', () => {
+  expect(takeRows([[1, 2, 3, 4], [5], [6, 7, 8]], 3, 5)).toEqual({ shown: [[1, 2, 3], [5], [6]], hidden: 3 })
+  expect(takeRows([[1], [2]], 3, 7)).toEqual({ shown: [[1], [2]], hidden: 0 })
+})
+
+test('dates_outside_the_reference_year_carry_the_year', () => {
+  const reference = jst('2026-06-26')
+  expect(untilLabel({ endDate: jst('2026-07-26') }, reference)).toBe('7/26(日)まで')
+  expect(untilLabel({ endDate: jst('2027-04-25') }, reference)).toBe('2027/4/25(日)まで')
+  expect(untilLabel({ endDate: undefined }, reference)).toBe('終了日未定')
+  expect(sinceLabel({ startDate: jst('2025-12-20') }, reference)).toBe('2025/12/20(土)から')
 })

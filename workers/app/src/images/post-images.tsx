@@ -1,7 +1,7 @@
 /** @jsxImportSource satori/jsx */
 import type { JSXNode } from 'satori/jsx'
 import type { StoreKey } from '@/schemas/store.dto'
-import { type EventRow, formatLongDay, splitTitle } from './format'
+import { type EventRow, formatLongDay, type Phase, splitTitle, takeRows } from './format'
 
 /**
  * X・Discordへ投稿する画像の部品。satoriのJSXで組み、PNGへの変換は呼び出し側が行う。
@@ -31,12 +31,14 @@ const Footer = ({ hashtag }: { hashtag: string }) => (
 const Frame = ({
   width,
   height,
+  minHeight,
   hashtag,
   padding = '64px 72px 48px',
   children
 }: {
   width: number
   height?: number
+  minHeight?: number
   hashtag: string
   padding?: string
   children: JSXNode
@@ -45,6 +47,7 @@ const Frame = ({
     style={{
       width,
       ...(height ? { height } : {}),
+      ...(minHeight ? { minHeight } : {}),
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
@@ -215,24 +218,34 @@ export const EventAddedImage = ({ row, portraits }: { row: EventRow; portraits: 
   </Frame>
 )
 
-const RowLine = ({ row, portraits, size }: { row: EventRow; portraits: Portraits; size: 'large' | 'compact' }) => {
-  const large = size === 'large'
+const ROW_SIZES = {
+  // 日次: 配布条件まで載せる
+  large: { portrait: 104, title: 38, sub: 26, note: 24, gap: 24 },
+  // 週次: 期間は2行目の右端に寄せて2行に収める
+  medium: { portrait: 80, title: 34, sub: 24, note: 24, gap: 18 }
+} as const
+type RowSize = keyof typeof ROW_SIZES
+
+const RowLine = ({ row, portraits, size }: { row: EventRow; portraits: Portraits; size: RowSize }) => {
+  const scale = ROW_SIZES[size]
   const stores = `${row.stores.join('・')}${row.otherStoreCount > 0 ? ` ほか${row.otherStoreCount}店舗` : ''}`
+  const note = <div style={{ fontSize: scale.note, fontWeight: 700, color: COLOR.ink, flexShrink: 0 }}>{row.note}</div>
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: large ? 28 : 18 }}>
-      <PortraitStack keys={row.portraits} portraits={portraits} size={large ? 104 : 64} />
-      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, gap: large ? 8 : 4 }}>
-        <Title size={large ? 38 : 28}>{row.title}</Title>
-        <div style={{ display: 'flex', gap: 14, fontSize: large ? 26 : 21, fontWeight: 500, color: COLOR.sub }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 26 }}>
+      <PortraitStack keys={row.portraits} portraits={portraits} size={scale.portrait} />
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, gap: 6 }}>
+        <Title size={scale.title}>{row.title}</Title>
+        <div style={{ display: 'flex', gap: 14, fontSize: scale.sub, fontWeight: 500, color: COLOR.sub }}>
           {row.category ? (
             <div style={{ color: COLOR.deep, fontWeight: 700, flexShrink: 0 }}>{row.category}</div>
           ) : null}
-          <div style={{ display: 'block', lineClamp: 1 }}>{stores}</div>
+          <div style={{ display: 'block', lineClamp: 1, flex: 1 }}>{stores}</div>
           {row.character ? <div style={{ color: COLOR.deep, flexShrink: 0 }}>{`対象 ${row.character}`}</div> : null}
+          {size === 'medium' ? note : null}
         </div>
-        {large ? (
+        {size === 'large' ? (
           <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 700, color: COLOR.ink, flexShrink: 0 }}>{row.note}</div>
+            {note}
             <Chips items={row.conditions} size={20} />
           </div>
         ) : null}
@@ -251,106 +264,108 @@ const SectionHeading = ({ label, count }: { label: string; count: number }) => (
       paddingBottom: 10
     }}
   >
-    <div style={{ fontSize: 34, fontWeight: 700, color: COLOR.red }}>{label}</div>
-    <div style={{ fontSize: 24, fontWeight: 500, color: COLOR.muted }}>{`${count} 件`}</div>
+    <div style={{ fontSize: 40, fontWeight: 700, color: COLOR.red }}>{label}</div>
+    <div style={{ fontSize: 26, fontWeight: 500, color: COLOR.muted }}>{`${count} 件`}</div>
   </div>
 )
 
-const RowList = ({
-  rows,
-  portraits,
-  size,
-  limit
-}: {
-  rows: EventRow[]
-  portraits: Portraits
-  size: 'large' | 'compact'
-  limit: number
-}) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: size === 'large' ? 24 : 16 }}>
-    {rows.slice(0, limit).map((row) => (
-      <RowLine row={row} portraits={portraits} size={size} />
-    ))}
-    {rows.length > limit ? (
-      <div
-        style={{ fontSize: 24, fontWeight: 700, color: COLOR.muted }}
-      >{`ほか ${rows.length - limit} 件はサイトで`}</div>
-    ) : null}
+const MoreLine = ({ count }: { count: number }) =>
+  count > 0 ? (
+    <div style={{ fontSize: 26, fontWeight: 700, color: COLOR.muted }}>{`ほか ${count} 件はサイトで`}</div>
+  ) : null
+
+const Heading = ({ eyebrow, title }: { eyebrow: string; title: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+    <div style={{ fontSize: 28, fontWeight: 700, color: COLOR.red, letterSpacing: '0.05em' }}>{eyebrow}</div>
+    <div style={{ fontSize: 58, fontWeight: 700, color: COLOR.ink }}>{title}</div>
   </div>
 )
 
-/** 毎朝9時の日次告知に添える画像。今日から・今日までのイベントを並べる */
+// X は単体画像を 16:9〜3:4 の範囲なら切らずに表示する。幅1200pxで高さ675〜1600pxに収める
+const MIN_HEIGHT = 675
+export const MAX_POST_IMAGE_HEIGHT = 1600
+const DAILY_ROWS = 6
+const WEEKLY_ROWS = 7
+const WEEKLY_ROWS_PER_DAY = 3
+
+const DAILY_LABEL: Record<Phase, string> = { starting: '今日から', ongoing: '開催中', ending: '今日まで' }
+const WEEKLY_LABEL: Record<Phase, string> = { starting: '今週はじまる', ongoing: '開催中', ending: '今週おわる' }
+
+/** 毎朝9時の日次告知。はじまる・開催中・おわるの3枚に分け、各スレッドの先頭に添える */
 export const DailyImage = ({
   date,
-  starting,
-  ending,
+  kind,
+  rows,
   portraits
 }: {
   date: Date
-  starting: EventRow[]
-  ending: EventRow[]
+  kind: Phase
+  rows: EventRow[]
   portraits: Portraits
 }) => (
-  <Frame width={1200} hashtag='#ビッカメ娘 今日のイベント'>
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 36 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <div style={{ fontSize: 28, fontWeight: 700, color: COLOR.red, letterSpacing: '0.05em' }}>今日のイベント</div>
-        <div style={{ fontSize: 60, fontWeight: 700, color: COLOR.ink }}>{formatLongDay(date)}</div>
+  <Frame width={1200} minHeight={MIN_HEIGHT} hashtag='#ビッカメ娘 今日のイベント'>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <Heading eyebrow='今日のイベント' title={formatLongDay(date)} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <SectionHeading label={DAILY_LABEL[kind]} count={rows.length} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: ROW_SIZES.large.gap }}>
+          {rows.slice(0, DAILY_ROWS).map((row) => (
+            <RowLine row={row} portraits={portraits} size='large' />
+          ))}
+          <MoreLine count={rows.length - DAILY_ROWS} />
+        </div>
       </div>
-      {starting.length > 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-          <SectionHeading label='今日から' count={starting.length} />
-          <RowList rows={starting} portraits={portraits} size='large' limit={3} />
-        </div>
-      ) : null}
-      {ending.length > 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-          <SectionHeading label='今日まで' count={ending.length} />
-          <RowList rows={ending} portraits={portraits} size='large' limit={3} />
-        </div>
-      ) : null}
     </div>
   </Frame>
 )
 
-export type WeekDay = { label: string; holiday: boolean; starting: EventRow[]; ending: EventRow[] }
+/** label が null の区切りは日付見出しを出さない（開催中の一覧） */
+export type WeekDay = { label: string | null; holiday: boolean; rows: EventRow[] }
 
-const WeekColumn = ({
-  title,
+/** 金曜に投稿する、向こう1週間の予定。はじまる・開催中・おわるの3枚に分ける */
+export const WeeklyImage = ({
+  range,
+  kind,
   days,
-  pick,
   portraits
 }: {
-  title: string
+  range: string
+  kind: Phase
   days: WeekDay[]
-  pick: (day: WeekDay) => EventRow[]
   portraits: Portraits
-}) => (
-  <div style={{ display: 'flex', flexDirection: 'column', flex: 1, gap: 18 }}>
-    <SectionHeading label={title} count={days.reduce((sum, day) => sum + pick(day).length, 0)} />
-    {days
-      .filter((day) => pick(day).length > 0)
-      .map((day) => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ fontSize: 26, fontWeight: 700, color: day.holiday ? COLOR.red : COLOR.ink }}>{day.label}</div>
-          <RowList rows={pick(day)} portraits={portraits} size='compact' limit={3} />
+}) => {
+  const plan = takeRows(
+    days.map((day) => day.rows),
+    // 開催中は日付で分けないので、1区切りで上限まで並べる
+    kind === 'ongoing' ? WEEKLY_ROWS : WEEKLY_ROWS_PER_DAY,
+    WEEKLY_ROWS
+  )
+  const total = days.reduce((sum, day) => sum + day.rows.length, 0)
+  return (
+    <Frame width={1200} minHeight={MIN_HEIGHT} hashtag='#ビッカメ娘 今週のイベント'>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+        <Heading eyebrow='今週のイベント' title={range} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          <SectionHeading label={WEEKLY_LABEL[kind]} count={total} />
+          {days.map((day, index) =>
+            plan.shown[index].length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {day.label ? (
+                  <div style={{ fontSize: 26, fontWeight: 700, color: day.holiday ? COLOR.red : COLOR.ink }}>
+                    {day.label}
+                  </div>
+                ) : null}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: ROW_SIZES.medium.gap }}>
+                  {plan.shown[index].map((row) => (
+                    <RowLine row={row} portraits={portraits} size='medium' />
+                  ))}
+                </div>
+              </div>
+            ) : null
+          )}
+          <MoreLine count={plan.hidden} />
         </div>
-      ))}
-  </div>
-)
-
-/** 金曜に投稿する、向こう1週間のイベント予定 */
-export const WeeklyImage = ({ range, days, portraits }: { range: string; days: WeekDay[]; portraits: Portraits }) => (
-  <Frame width={1200} hashtag='#ビッカメ娘 今週のイベント' padding='64px 56px 48px'>
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 36 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <div style={{ fontSize: 28, fontWeight: 700, color: COLOR.red, letterSpacing: '0.05em' }}>今週のイベント</div>
-        <div style={{ fontSize: 56, fontWeight: 700, color: COLOR.ink }}>{range}</div>
       </div>
-      <div style={{ display: 'flex', gap: 40 }}>
-        <WeekColumn title='はじまる' days={days} pick={(day) => day.starting} portraits={portraits} />
-        <WeekColumn title='おわる' days={days} pick={(day) => day.ending} portraits={portraits} />
-      </div>
-    </div>
-  </Frame>
-)
+    </Frame>
+  )
+}
