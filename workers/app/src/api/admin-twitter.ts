@@ -1,0 +1,40 @@
+import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
+import { AdminTwitterStatusResponseSchema } from '@/schemas/admin-twitter.dto'
+import { readPostingAccount } from '@/services/bot-account'
+import type { Bindings } from '@/types/bindings'
+
+const routes = new OpenAPIHono<{ Bindings: Bindings }>()
+
+// GET /api/admin/twitter/status — 投稿用アカウントのヘルスチェック
+// 認証は src/api/admin/index.ts で `/admin/*` 全体に CFAuth を適用
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/admin/twitter/status',
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: AdminTwitterStatusResponseSchema
+          }
+        },
+        description: '投稿用 X アカウントの取得結果（成功・失敗いずれも 200）'
+      }
+    },
+    tags: ['admin-twitter']
+  }),
+  async (c) => {
+    c.header('Cache-Control', 'no-store')
+    const fetchedAt = new Date().toISOString()
+    try {
+      const account = await readPostingAccount(c.env)
+      return c.json({ ok: true, account, error: null, fetchedAt }, 200)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      console.error('[admin-twitter] status check failed:', message)
+      return c.json({ ok: false, account: null, error: message, fetchedAt }, 200)
+    }
+  }
+)
+
+export default routes

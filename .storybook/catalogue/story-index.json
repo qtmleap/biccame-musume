@@ -1,0 +1,4815 @@
+{
+  "v": 5,
+  "entries": {
+    "review-calendar--docs": {
+      "id": "review-calendar--docs",
+      "title": "Review/Calendar",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/Calendar.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "review-calendar--current": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-calendar--current",
+      "name": "Current",
+      "title": "Review/Calendar",
+      "importPath": "./workers/app/src/stories/Calendar.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Current"
+    },
+    "review-calendar--boundary-768": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-calendar--boundary-768",
+      "name": "Boundary 768",
+      "title": "Review/Calendar",
+      "importPath": "./workers/app/src/stories/Calendar.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Boundary768"
+    },
+    "review-calendar--narrow-320": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-calendar--narrow-320",
+      "name": "Narrow 320",
+      "title": "Review/Calendar",
+      "importPath": "./workers/app/src/stories/Calendar.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Narrow320"
+    },
+    "review-calendar--proposed-month-labels": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-calendar--proposed-month-labels",
+      "name": "Proposed Month Labels",
+      "title": "Review/Calendar",
+      "importPath": "./workers/app/src/stories/Calendar.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "ProposedMonthLabels"
+    },
+    "review-calendar--empty": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-calendar--empty",
+      "name": "Empty",
+      "title": "Review/Calendar",
+      "importPath": "./workers/app/src/stories/Calendar.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Empty"
+    },
+    "review-characters--docs": {
+      "id": "review-characters--docs",
+      "title": "Review/Characters",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/Characters.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "review-characters--current-cards": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-characters--current-cards",
+      "name": "Current Cards",
+      "title": "Review/Characters",
+      "importPath": "./workers/app/src/stories/Characters.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CurrentCards"
+    },
+    "review-characters--proposed-store-labels": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-characters--proposed-store-labels",
+      "name": "Proposed Store Labels",
+      "title": "Review/Characters",
+      "importPath": "./workers/app/src/stories/Characters.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "ProposedStoreLabels"
+    },
+    "review-characters--current-profile": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-characters--current-profile",
+      "name": "Current Profile",
+      "title": "Review/Characters",
+      "importPath": "./workers/app/src/stories/Characters.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CurrentProfile"
+    },
+    "review-events--docs": {
+      "id": "review-events--docs",
+      "title": "Review/Events",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/Events.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "review-events--cards": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-events--cards",
+      "name": "Cards",
+      "title": "Review/Events",
+      "importPath": "./workers/app/src/stories/Events.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Cards"
+    },
+    "review-events--home-long-titles": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-events--home-long-titles",
+      "name": "Home Long Titles",
+      "title": "Review/Events",
+      "importPath": "./workers/app/src/stories/Events.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "HomeLongTitles"
+    },
+    "review-events--gantt": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-events--gantt",
+      "name": "Gantt",
+      "title": "Review/Events",
+      "importPath": "./workers/app/src/stories/Events.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Gantt"
+    },
+    "review-events--proposed-filter": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-events--proposed-filter",
+      "name": "Proposed Filter",
+      "title": "Review/Events",
+      "importPath": "./workers/app/src/stories/Events.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "ProposedFilter"
+    },
+    "review-events--empty": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-events--empty",
+      "name": "Empty",
+      "title": "Review/Events",
+      "importPath": "./workers/app/src/stories/Events.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Empty"
+    },
+    "review-events--loading": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-events--loading",
+      "name": "Loading",
+      "title": "Review/Events",
+      "importPath": "./workers/app/src/stories/Events.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Loading"
+    },
+    "review-events--failed-to-load": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-events--failed-to-load",
+      "name": "Failed To Load",
+      "title": "Review/Events",
+      "importPath": "./workers/app/src/stories/Events.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "FailedToLoad"
+    },
+    "pages-production--docs": {
+      "id": "pages-production--docs",
+      "title": "Pages/Production",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "pages-production--home": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--home",
+      "name": "Home",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Home"
+    },
+    "pages-production--rootlayout": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--rootlayout",
+      "name": "Rootlayout",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Rootlayout"
+    },
+    "pages-production--ranking": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--ranking",
+      "name": "Ranking",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Ranking"
+    },
+    "pages-production--contact": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--contact",
+      "name": "Contact",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Contact"
+    },
+    "pages-production--calendar": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--calendar",
+      "name": "Calendar",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Calendar"
+    },
+    "pages-production--route": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--route",
+      "name": "Route",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Route"
+    },
+    "pages-production--location": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--location",
+      "name": "Location",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Location"
+    },
+    "pages-production--admin": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--admin",
+      "name": "Admin",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Admin"
+    },
+    "pages-production--admincomments": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--admincomments",
+      "name": "Admincomments",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Admincomments"
+    },
+    "pages-production--admintwitter": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--admintwitter",
+      "name": "Admintwitter",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Admintwitter"
+    },
+    "pages-production--adminusers": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--adminusers",
+      "name": "Adminusers",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Adminusers"
+    },
+    "pages-production--adminevent-groups": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--adminevent-groups",
+      "name": "Adminevent Groups",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "AdmineventGroups"
+    },
+    "pages-production--adminevent-groupsuuidedit": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--adminevent-groupsuuidedit",
+      "name": "Adminevent Groupsuuidedit",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "AdmineventGroupsuuidedit"
+    },
+    "pages-production--adminevent-groupsnew": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--adminevent-groupsnew",
+      "name": "Adminevent Groupsnew",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "AdmineventGroupsnew"
+    },
+    "pages-production--adminevents": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--adminevents",
+      "name": "Adminevents",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Adminevents"
+    },
+    "pages-production--admineventsuuid": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--admineventsuuid",
+      "name": "Admineventsuuid",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Admineventsuuid"
+    },
+    "pages-production--admineventsuuidedit": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--admineventsuuidedit",
+      "name": "Admineventsuuidedit",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Admineventsuuidedit"
+    },
+    "pages-production--admineventsnew": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--admineventsnew",
+      "name": "Admineventsnew",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Admineventsnew"
+    },
+    "pages-production--adminbadges": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--adminbadges",
+      "name": "Adminbadges",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Adminbadges"
+    },
+    "pages-production--adminbadgesranking": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--adminbadgesranking",
+      "name": "Adminbadgesranking",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Adminbadgesranking"
+    },
+    "pages-production--about": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--about",
+      "name": "About",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "About"
+    },
+    "pages-production--mecompleted": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--mecompleted",
+      "name": "Mecompleted",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Mecompleted"
+    },
+    "pages-production--me": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--me",
+      "name": "Me",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Me"
+    },
+    "pages-production--mevisited": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--mevisited",
+      "name": "Mevisited",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Mevisited"
+    },
+    "pages-production--mefavorites": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--mefavorites",
+      "name": "Mefavorites",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Mefavorites"
+    },
+    "pages-production--meinterested": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--meinterested",
+      "name": "Meinterested",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Meinterested"
+    },
+    "pages-production--events": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--events",
+      "name": "Events",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Events"
+    },
+    "pages-production--eventsgroupid": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--eventsgroupid",
+      "name": "Eventsgroupid",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Eventsgroupid"
+    },
+    "pages-production--eventsuuid": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--eventsuuid",
+      "name": "Eventsuuid",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Eventsuuid"
+    },
+    "pages-production--eventsgroups": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--eventsgroups",
+      "name": "Eventsgroups",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Eventsgroups"
+    },
+    "pages-production--characters": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--characters",
+      "name": "Characters",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Characters"
+    },
+    "pages-production--charactersid": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--charactersid",
+      "name": "Charactersid",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Charactersid"
+    },
+    "pages-production--badges": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--badges",
+      "name": "Badges",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Badges"
+    },
+    "pages-production--admin-layout": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--admin-layout",
+      "name": "Admin Layout",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "AdminLayout"
+    },
+    "pages-production--eventsempty": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--eventsempty",
+      "name": "Eventsempty",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Eventsempty"
+    },
+    "pages-production--eventsloading": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--eventsloading",
+      "name": "Eventsloading",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Eventsloading"
+    },
+    "pages-production--eventserror": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--eventserror",
+      "name": "Eventserror",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Eventserror"
+    },
+    "pages-production--adminsignedout": {
+      "type": "story",
+      "subtype": "story",
+      "id": "pages-production--adminsignedout",
+      "name": "Adminsignedout",
+      "title": "Pages/Production",
+      "importPath": "./workers/app/src/stories/Pages.stories.tsx",
+      "componentPath": "./workers/app/src/stories/PageExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Adminsignedout"
+    },
+    "review-route--docs": {
+      "id": "review-route--docs",
+      "title": "Review/Route",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/Route.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "review-route--empty": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-route--empty",
+      "name": "Empty",
+      "title": "Review/Route",
+      "importPath": "./workers/app/src/stories/Route.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Empty"
+    },
+    "review-route--one-store": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-route--one-store",
+      "name": "One Store",
+      "title": "Review/Route",
+      "importPath": "./workers/app/src/stories/Route.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "OneStore"
+    },
+    "review-route--ready": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-route--ready",
+      "name": "Ready",
+      "title": "Review/Route",
+      "importPath": "./workers/app/src/stories/Route.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Ready"
+    },
+    "review-route--without-guidance": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-route--without-guidance",
+      "name": "Without Guidance",
+      "title": "Review/Route",
+      "importPath": "./workers/app/src/stories/Route.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "WithoutGuidance"
+    },
+    "ui-primitives--docs": {
+      "id": "ui-primitives--docs",
+      "title": "UI/Primitives",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "ui-primitives--alert-dialog": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--alert-dialog",
+      "name": "Alert Dialog",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "AlertDialog"
+    },
+    "ui-primitives--pagination": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--pagination",
+      "name": "Pagination",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Pagination"
+    },
+    "ui-primitives--tabs": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--tabs",
+      "name": "Tabs",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Tabs"
+    },
+    "ui-primitives--popover": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--popover",
+      "name": "Popover",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Popover"
+    },
+    "ui-primitives--progress": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--progress",
+      "name": "Progress",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Progress"
+    },
+    "ui-primitives--sheet": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--sheet",
+      "name": "Sheet",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Sheet"
+    },
+    "ui-primitives--label": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--label",
+      "name": "Label",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Label"
+    },
+    "ui-primitives--sonner": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--sonner",
+      "name": "Sonner",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Sonner"
+    },
+    "ui-primitives--accordion": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--accordion",
+      "name": "Accordion",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Accordion"
+    },
+    "ui-primitives--drawer": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--drawer",
+      "name": "Drawer",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Drawer"
+    },
+    "ui-primitives--tooltip": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--tooltip",
+      "name": "Tooltip",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Tooltip"
+    },
+    "ui-primitives--alert": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--alert",
+      "name": "Alert",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Alert"
+    },
+    "ui-primitives--breadcrumb": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--breadcrumb",
+      "name": "Breadcrumb",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Breadcrumb"
+    },
+    "ui-primitives--command": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--command",
+      "name": "Command",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Command"
+    },
+    "ui-primitives--avatar": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--avatar",
+      "name": "Avatar",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Avatar"
+    },
+    "ui-primitives--dialog": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--dialog",
+      "name": "Dialog",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Dialog"
+    },
+    "ui-primitives--badge": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--badge",
+      "name": "Badge",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Badge"
+    },
+    "ui-primitives--separator": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--separator",
+      "name": "Separator",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Separator"
+    },
+    "ui-primitives--button": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--button",
+      "name": "Button",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Button"
+    },
+    "ui-primitives--toggle": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--toggle",
+      "name": "Toggle",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Toggle"
+    },
+    "ui-primitives--checkbox": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--checkbox",
+      "name": "Checkbox",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Checkbox"
+    },
+    "ui-primitives--select": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--select",
+      "name": "Select",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Select"
+    },
+    "ui-primitives--textarea": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--textarea",
+      "name": "Textarea",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Textarea"
+    },
+    "ui-primitives--input": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--input",
+      "name": "Input",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Input"
+    },
+    "ui-primitives--skeleton": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--skeleton",
+      "name": "Skeleton",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Skeleton"
+    },
+    "ui-primitives--form": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--form",
+      "name": "Form",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Form"
+    },
+    "ui-primitives--carousel": {
+      "type": "story",
+      "subtype": "story",
+      "id": "ui-primitives--carousel",
+      "name": "Carousel",
+      "title": "UI/Primitives",
+      "importPath": "./workers/app/src/stories/UI.stories.tsx",
+      "componentPath": "./workers/app/src/stories/UIExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Carousel"
+    },
+    "components-admin-access-gate--docs": {
+      "id": "components-admin-access-gate--docs",
+      "title": "Components/admin/access-gate",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/access-gate.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-access-gate--access-gate": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-access-gate--access-gate",
+      "name": "Access Gate",
+      "title": "Components/admin/access-gate",
+      "importPath": "./workers/app/src/stories/catalogue/admin/access-gate.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "AccessGate"
+    },
+    "components-admin-badges-badge-card--docs": {
+      "id": "components-admin-badges-badge-card--docs",
+      "title": "Components/admin/badges/badge-card",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/badge-card.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-badges-badge-card--badge-card": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-badges-badge-card--badge-card",
+      "name": "Badge Card",
+      "title": "Components/admin/badges/badge-card",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/badge-card.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "BadgeCard"
+    },
+    "components-admin-badges-category-section--docs": {
+      "id": "components-admin-badges-category-section--docs",
+      "title": "Components/admin/badges/category-section",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/category-section.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-badges-category-section--category-section": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-badges-category-section--category-section",
+      "name": "Category Section",
+      "title": "Components/admin/badges/category-section",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/category-section.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CategorySection"
+    },
+    "components-admin-badges-create-badge-dialog--docs": {
+      "id": "components-admin-badges-create-badge-dialog--docs",
+      "title": "Components/admin/badges/create-badge-dialog",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/create-badge-dialog.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-badges-create-badge-dialog--create-badge-dialog": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-badges-create-badge-dialog--create-badge-dialog",
+      "name": "Create Badge Dialog",
+      "title": "Components/admin/badges/create-badge-dialog",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/create-badge-dialog.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CreateBadgeDialog"
+    },
+    "components-admin-badges-edit-badge-dialog--docs": {
+      "id": "components-admin-badges-edit-badge-dialog--docs",
+      "title": "Components/admin/badges/edit-badge-dialog",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/edit-badge-dialog.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-badges-edit-badge-dialog--edit-badge-dialog": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-badges-edit-badge-dialog--edit-badge-dialog",
+      "name": "Edit Badge Dialog",
+      "title": "Components/admin/badges/edit-badge-dialog",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/edit-badge-dialog.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EditBadgeDialog"
+    },
+    "components-admin-badges-recalculate-badges-button--docs": {
+      "id": "components-admin-badges-recalculate-badges-button--docs",
+      "title": "Components/admin/badges/recalculate-badges-button",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/recalculate-badges-button.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-badges-recalculate-badges-button--recalculate-badges-button": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-badges-recalculate-badges-button--recalculate-badges-button",
+      "name": "Recalculate Badges Button",
+      "title": "Components/admin/badges/recalculate-badges-button",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/recalculate-badges-button.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "RecalculateBadgesButton"
+    },
+    "components-admin-badges-stat-card--docs": {
+      "id": "components-admin-badges-stat-card--docs",
+      "title": "Components/admin/badges/stat-card",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/stat-card.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-badges-stat-card--stat-card": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-badges-stat-card--stat-card",
+      "name": "Stat Card",
+      "title": "Components/admin/badges/stat-card",
+      "importPath": "./workers/app/src/stories/catalogue/admin/badges/stat-card.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "StatCard"
+    },
+    "components-admin-event-card--docs": {
+      "id": "components-admin-event-card--docs",
+      "title": "Components/admin/event-card",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-card.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-event-card--event-card": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-event-card--event-card",
+      "name": "Event Card",
+      "title": "Components/admin/event-card",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-card.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventCard"
+    },
+    "components-admin-event-confirmation--docs": {
+      "id": "components-admin-event-confirmation--docs",
+      "title": "Components/admin/event-confirmation",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-confirmation.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-event-confirmation--event-confirmation": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-event-confirmation--event-confirmation",
+      "name": "Event Confirmation",
+      "title": "Components/admin/event-confirmation",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-confirmation.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventConfirmation"
+    },
+    "components-admin-event-form--docs": {
+      "id": "components-admin-event-form--docs",
+      "title": "Components/admin/event-form",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-form.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-event-form--event-form": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-event-form--event-form",
+      "name": "Event Form",
+      "title": "Components/admin/event-form",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-form.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventForm"
+    },
+    "components-admin-event-group-event-manager--docs": {
+      "id": "components-admin-event-group-event-manager--docs",
+      "title": "Components/admin/event-group-event-manager",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-group-event-manager.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-event-group-event-manager--event-group-event-manager": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-event-group-event-manager--event-group-event-manager",
+      "name": "Event Group Event Manager",
+      "title": "Components/admin/event-group-event-manager",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-group-event-manager.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventGroupEventManager"
+    },
+    "components-admin-event-group-form--docs": {
+      "id": "components-admin-event-group-form--docs",
+      "title": "Components/admin/event-group-form",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-group-form.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-event-group-form--event-group-form": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-event-group-form--event-group-form",
+      "name": "Event Group Form",
+      "title": "Components/admin/event-group-form",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-group-form.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventGroupForm"
+    },
+    "components-admin-event-group-list--docs": {
+      "id": "components-admin-event-group-list--docs",
+      "title": "Components/admin/event-group-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-group-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-event-group-list--event-group-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-event-group-list--event-group-list",
+      "name": "Event Group List",
+      "title": "Components/admin/event-group-list",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-group-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventGroupList"
+    },
+    "components-admin-event-list-pagination--docs": {
+      "id": "components-admin-event-list-pagination--docs",
+      "title": "Components/admin/event-list-pagination",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-list-pagination.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-event-list-pagination--event-list-pagination": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-event-list-pagination--event-list-pagination",
+      "name": "Event List Pagination",
+      "title": "Components/admin/event-list-pagination",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-list-pagination.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventListPagination"
+    },
+    "components-admin-event-list--docs": {
+      "id": "components-admin-event-list--docs",
+      "title": "Components/admin/event-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-event-list--event-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-event-list--event-list",
+      "name": "Event List",
+      "title": "Components/admin/event-list",
+      "importPath": "./workers/app/src/stories/catalogue/admin/event-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventList"
+    },
+    "components-admin-form-conditions-section--docs": {
+      "id": "components-admin-form-conditions-section--docs",
+      "title": "Components/admin/form/conditions-section",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/form/conditions-section.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-form-conditions-section--conditions-section": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-form-conditions-section--conditions-section",
+      "name": "Conditions Section",
+      "title": "Components/admin/form/conditions-section",
+      "importPath": "./workers/app/src/stories/catalogue/admin/form/conditions-section.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "ConditionsSection"
+    },
+    "components-admin-form-date-field--docs": {
+      "id": "components-admin-form-date-field--docs",
+      "title": "Components/admin/form/date-field",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/form/date-field.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-form-date-field--date-field": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-form-date-field--date-field",
+      "name": "Date Field",
+      "title": "Components/admin/form/date-field",
+      "importPath": "./workers/app/src/stories/catalogue/admin/form/date-field.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "DateField"
+    },
+    "components-admin-form-event-flags-section--docs": {
+      "id": "components-admin-form-event-flags-section--docs",
+      "title": "Components/admin/form/event-flags-section",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/form/event-flags-section.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-form-event-flags-section--event-flags-section": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-form-event-flags-section--event-flags-section",
+      "name": "Event Flags Section",
+      "title": "Components/admin/form/event-flags-section",
+      "importPath": "./workers/app/src/stories/catalogue/admin/form/event-flags-section.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventFlagsSection"
+    },
+    "components-admin-form-reference-urls-section--docs": {
+      "id": "components-admin-form-reference-urls-section--docs",
+      "title": "Components/admin/form/reference-urls-section",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/admin/form/reference-urls-section.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-admin-form-reference-urls-section--reference-urls-section": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-admin-form-reference-urls-section--reference-urls-section",
+      "name": "Reference Urls Section",
+      "title": "Components/admin/form/reference-urls-section",
+      "importPath": "./workers/app/src/stories/catalogue/admin/form/reference-urls-section.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "ReferenceUrlsSection"
+    },
+    "components-auth-auth-provider--docs": {
+      "id": "components-auth-auth-provider--docs",
+      "title": "Components/auth/auth-provider",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/auth/auth-provider.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-auth-auth-provider--auth-provider": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-auth-auth-provider--auth-provider",
+      "name": "Auth Provider",
+      "title": "Components/auth/auth-provider",
+      "importPath": "./workers/app/src/stories/catalogue/auth/auth-provider.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "AuthProvider"
+    },
+    "components-auth-backend-session-gate--docs": {
+      "id": "components-auth-backend-session-gate--docs",
+      "title": "Components/auth/backend-session-gate",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/auth/backend-session-gate.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-auth-backend-session-gate--backend-session-gate": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-auth-backend-session-gate--backend-session-gate",
+      "name": "Backend Session Gate",
+      "title": "Components/auth/backend-session-gate",
+      "importPath": "./workers/app/src/stories/catalogue/auth/backend-session-gate.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "BackendSessionGate"
+    },
+    "components-auth-email-auth-tabs--docs": {
+      "id": "components-auth-email-auth-tabs--docs",
+      "title": "Components/auth/email-auth-tabs",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/auth/email-auth-tabs.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-auth-email-auth-tabs--email-auth-tabs": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-auth-email-auth-tabs--email-auth-tabs",
+      "name": "Email Auth Tabs",
+      "title": "Components/auth/email-auth-tabs",
+      "importPath": "./workers/app/src/stories/catalogue/auth/email-auth-tabs.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EmailAuthTabs"
+    },
+    "components-auth-login-button--docs": {
+      "id": "components-auth-login-button--docs",
+      "title": "Components/auth/login-button",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/auth/login-button.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-auth-login-button--login-button": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-auth-login-button--login-button",
+      "name": "Login Button",
+      "title": "Components/auth/login-button",
+      "importPath": "./workers/app/src/stories/catalogue/auth/login-button.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "LoginButton"
+    },
+    "components-auth-login-dialog--docs": {
+      "id": "components-auth-login-dialog--docs",
+      "title": "Components/auth/login-dialog",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/auth/login-dialog.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-auth-login-dialog--login-dialog": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-auth-login-dialog--login-dialog",
+      "name": "Login Dialog",
+      "title": "Components/auth/login-dialog",
+      "importPath": "./workers/app/src/stories/catalogue/auth/login-dialog.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "LoginDialog"
+    },
+    "components-auth-social-login-buttons--docs": {
+      "id": "components-auth-social-login-buttons--docs",
+      "title": "Components/auth/social-login-buttons",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/auth/social-login-buttons.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-auth-social-login-buttons--social-login-buttons": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-auth-social-login-buttons--social-login-buttons",
+      "name": "Social Login Buttons",
+      "title": "Components/auth/social-login-buttons",
+      "importPath": "./workers/app/src/stories/catalogue/auth/social-login-buttons.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "SocialLoginButtons"
+    },
+    "components-badges-badge-card--docs": {
+      "id": "components-badges-badge-card--docs",
+      "title": "Components/badges/badge-card",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/badges/badge-card.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-badges-badge-card--badge-card": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-badges-badge-card--badge-card",
+      "name": "Badge Card",
+      "title": "Components/badges/badge-card",
+      "importPath": "./workers/app/src/stories/catalogue/badges/badge-card.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "BadgeCard"
+    },
+    "components-badges-badge-grid--docs": {
+      "id": "components-badges-badge-grid--docs",
+      "title": "Components/badges/badge-grid",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/badges/badge-grid.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-badges-badge-grid--badge-grid": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-badges-badge-grid--badge-grid",
+      "name": "Badge Grid",
+      "title": "Components/badges/badge-grid",
+      "importPath": "./workers/app/src/stories/catalogue/badges/badge-grid.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "BadgeGrid"
+    },
+    "components-calendar-calendar-controls--docs": {
+      "id": "components-calendar-calendar-controls--docs",
+      "title": "Components/calendar/calendar-controls",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/calendar/calendar-controls.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-calendar-calendar-controls--calendar-header": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-calendar-calendar-controls--calendar-header",
+      "name": "Calendar Header",
+      "title": "Components/calendar/calendar-controls",
+      "importPath": "./workers/app/src/stories/catalogue/calendar/calendar-controls.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CalendarHeader"
+    },
+    "components-calendar-calendar-controls--calendar-month-tabs": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-calendar-calendar-controls--calendar-month-tabs",
+      "name": "Calendar Month Tabs",
+      "title": "Components/calendar/calendar-controls",
+      "importPath": "./workers/app/src/stories/catalogue/calendar/calendar-controls.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CalendarMonthTabs"
+    },
+    "components-calendar-calendar-controls--calendar-month-dots": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-calendar-calendar-controls--calendar-month-dots",
+      "name": "Calendar Month Dots",
+      "title": "Components/calendar/calendar-controls",
+      "importPath": "./workers/app/src/stories/catalogue/calendar/calendar-controls.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CalendarMonthDots"
+    },
+    "components-calendar-calendar-event-drawer-content--docs": {
+      "id": "components-calendar-calendar-event-drawer-content--docs",
+      "title": "Components/calendar/calendar-event-drawer-content",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/calendar/calendar-event-drawer-content.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-calendar-calendar-event-drawer-content--calendar-event-drawer-content": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-calendar-calendar-event-drawer-content--calendar-event-drawer-content",
+      "name": "Calendar Event Drawer Content",
+      "title": "Components/calendar/calendar-event-drawer-content",
+      "importPath": "./workers/app/src/stories/catalogue/calendar/calendar-event-drawer-content.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CalendarEventDrawerContent"
+    },
+    "components-calendar-calendar-event-list--docs": {
+      "id": "components-calendar-calendar-event-list--docs",
+      "title": "Components/calendar/calendar-event-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/calendar/calendar-event-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-calendar-calendar-event-list--calendar-event-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-calendar-calendar-event-list--calendar-event-list",
+      "name": "Calendar Event List",
+      "title": "Components/calendar/calendar-event-list",
+      "importPath": "./workers/app/src/stories/catalogue/calendar/calendar-event-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CalendarEventList"
+    },
+    "components-calendar-calendar-grid--docs": {
+      "id": "components-calendar-calendar-grid--docs",
+      "title": "Components/calendar/calendar-grid",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/calendar/calendar-grid.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-calendar-calendar-grid--calendar-grid": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-calendar-calendar-grid--calendar-grid",
+      "name": "Calendar Grid",
+      "title": "Components/calendar/calendar-grid",
+      "importPath": "./workers/app/src/stories/catalogue/calendar/calendar-grid.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CalendarGrid"
+    },
+    "components-character-list-card--docs": {
+      "id": "components-character-list-card--docs",
+      "title": "Components/character-list-card",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/character-list-card.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-character-list-card--character-list-card": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-character-list-card--character-list-card",
+      "name": "Character List Card",
+      "title": "Components/character-list-card",
+      "importPath": "./workers/app/src/stories/catalogue/character-list-card.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterListCard"
+    },
+    "components-characters-bulk-vote-button--docs": {
+      "id": "components-characters-bulk-vote-button--docs",
+      "title": "Components/characters/bulk-vote-button",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/bulk-vote-button.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-bulk-vote-button--bulk-vote-button": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-bulk-vote-button--bulk-vote-button",
+      "name": "Bulk Vote Button",
+      "title": "Components/characters/bulk-vote-button",
+      "importPath": "./workers/app/src/stories/catalogue/characters/bulk-vote-button.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "BulkVoteButton"
+    },
+    "components-characters-character-competition-level--docs": {
+      "id": "components-characters-character-competition-level--docs",
+      "title": "Components/characters/character-competition-level",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-competition-level.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-character-competition-level--character-competition-level": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-character-competition-level--character-competition-level",
+      "name": "Character Competition Level",
+      "title": "Components/characters/character-competition-level",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-competition-level.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterCompetitionLevel"
+    },
+    "components-characters-character-detail-content--docs": {
+      "id": "components-characters-character-detail-content--docs",
+      "title": "Components/characters/character-detail-content",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-detail-content.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-character-detail-content--character-detail-content": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-character-detail-content--character-detail-content",
+      "name": "Character Detail Content",
+      "title": "Components/characters/character-detail-content",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-detail-content.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterDetailContent"
+    },
+    "components-characters-character-favorite-button--docs": {
+      "id": "components-characters-character-favorite-button--docs",
+      "title": "Components/characters/character-favorite-button",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-favorite-button.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-character-favorite-button--character-favorite-button": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-character-favorite-button--character-favorite-button",
+      "name": "Character Favorite Button",
+      "title": "Components/characters/character-favorite-button",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-favorite-button.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterFavoriteButton"
+    },
+    "components-characters-character-follow-button--docs": {
+      "id": "components-characters-character-follow-button--docs",
+      "title": "Components/characters/character-follow-button",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-follow-button.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-character-follow-button--character-follow-button": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-character-follow-button--character-follow-button",
+      "name": "Character Follow Button",
+      "title": "Components/characters/character-follow-button",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-follow-button.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterFollowButton"
+    },
+    "components-characters-character-list--docs": {
+      "id": "components-characters-character-list--docs",
+      "title": "Components/characters/character-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-character-list--character-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-character-list--character-list",
+      "name": "Character List",
+      "title": "Components/characters/character-list",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterList"
+    },
+    "components-characters-character-ongoing-events--docs": {
+      "id": "components-characters-character-ongoing-events--docs",
+      "title": "Components/characters/character-ongoing-events",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-ongoing-events.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-character-ongoing-events--character-ongoing-events": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-character-ongoing-events--character-ongoing-events",
+      "name": "Character Ongoing Events",
+      "title": "Components/characters/character-ongoing-events",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-ongoing-events.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterOngoingEvents"
+    },
+    "components-characters-character-sort-control--docs": {
+      "id": "components-characters-character-sort-control--docs",
+      "title": "Components/characters/character-sort-control",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-sort-control.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-character-sort-control--character-sort-control": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-character-sort-control--character-sort-control",
+      "name": "Character Sort Control",
+      "title": "Components/characters/character-sort-control",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-sort-control.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterSortControl"
+    },
+    "components-characters-character-twitter-link--docs": {
+      "id": "components-characters-character-twitter-link--docs",
+      "title": "Components/characters/character-twitter-link",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-twitter-link.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-character-twitter-link--character-twitter-link": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-character-twitter-link--character-twitter-link",
+      "name": "Character Twitter Link",
+      "title": "Components/characters/character-twitter-link",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-twitter-link.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterTwitterLink"
+    },
+    "components-characters-character-visit-button--docs": {
+      "id": "components-characters-character-visit-button--docs",
+      "title": "Components/characters/character-visit-button",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-visit-button.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-character-visit-button--character-visit-button": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-character-visit-button--character-visit-button",
+      "name": "Character Visit Button",
+      "title": "Components/characters/character-visit-button",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-visit-button.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterVisitButton"
+    },
+    "components-characters-character-vote-button--docs": {
+      "id": "components-characters-character-vote-button--docs",
+      "title": "Components/characters/character-vote-button",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-vote-button.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-character-vote-button--character-vote-button": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-character-vote-button--character-vote-button",
+      "name": "Character Vote Button",
+      "title": "Components/characters/character-vote-button",
+      "importPath": "./workers/app/src/stories/catalogue/characters/character-vote-button.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterVoteButton"
+    },
+    "components-characters-detail-character-profile-section--docs": {
+      "id": "components-characters-detail-character-profile-section--docs",
+      "title": "Components/characters/detail/character-profile-section",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/character-profile-section.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-detail-character-profile-section--character-profile-section": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-detail-character-profile-section--character-profile-section",
+      "name": "Character Profile Section",
+      "title": "Components/characters/detail/character-profile-section",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/character-profile-section.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CharacterProfileSection"
+    },
+    "components-characters-detail-store-info-items--docs": {
+      "id": "components-characters-detail-store-info-items--docs",
+      "title": "Components/characters/detail/store-info-items",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/store-info-items.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-detail-store-info-items--info-item": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-detail-store-info-items--info-item",
+      "name": "Info Item",
+      "title": "Components/characters/detail/store-info-items",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/store-info-items.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "InfoItem"
+    },
+    "components-characters-detail-store-info-items--store-name": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-detail-store-info-items--store-name",
+      "name": "Store Name",
+      "title": "Components/characters/detail/store-info-items",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/store-info-items.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "StoreName"
+    },
+    "components-characters-detail-store-info-items--store-address": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-detail-store-info-items--store-address",
+      "name": "Store Address",
+      "title": "Components/characters/detail/store-info-items",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/store-info-items.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "StoreAddress"
+    },
+    "components-characters-detail-store-info-items--store-phone": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-detail-store-info-items--store-phone",
+      "name": "Store Phone",
+      "title": "Components/characters/detail/store-info-items",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/store-info-items.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "StorePhone"
+    },
+    "components-characters-detail-store-info-items--store-hours": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-detail-store-info-items--store-hours",
+      "name": "Store Hours",
+      "title": "Components/characters/detail/store-info-items",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/store-info-items.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "StoreHours"
+    },
+    "components-characters-detail-store-info-items--store-access": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-detail-store-info-items--store-access",
+      "name": "Store Access",
+      "title": "Components/characters/detail/store-info-items",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/store-info-items.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "StoreAccess"
+    },
+    "components-characters-detail-store-info-items--store-birthday": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-detail-store-info-items--store-birthday",
+      "name": "Store Birthday",
+      "title": "Components/characters/detail/store-info-items",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/store-info-items.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "StoreBirthday"
+    },
+    "components-characters-detail-store-info-section--docs": {
+      "id": "components-characters-detail-store-info-section--docs",
+      "title": "Components/characters/detail/store-info-section",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/store-info-section.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-detail-store-info-section--store-info-section": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-detail-store-info-section--store-info-section",
+      "name": "Store Info Section",
+      "title": "Components/characters/detail/store-info-section",
+      "importPath": "./workers/app/src/stories/catalogue/characters/detail/store-info-section.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "StoreInfoSection"
+    },
+    "components-characters-favorite-burst--docs": {
+      "id": "components-characters-favorite-burst--docs",
+      "title": "Components/characters/favorite-burst",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/favorite-burst.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-favorite-burst--favorite-burst": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-favorite-burst--favorite-burst",
+      "name": "Favorite Burst",
+      "title": "Components/characters/favorite-burst",
+      "importPath": "./workers/app/src/stories/catalogue/characters/favorite-burst.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "FavoriteBurst"
+    },
+    "components-characters-nearby-characters-list--docs": {
+      "id": "components-characters-nearby-characters-list--docs",
+      "title": "Components/characters/nearby-characters-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/nearby-characters-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-nearby-characters-list--nearby-characters-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-nearby-characters-list--nearby-characters-list",
+      "name": "Nearby Characters List",
+      "title": "Components/characters/nearby-characters-list",
+      "importPath": "./workers/app/src/stories/catalogue/characters/nearby-characters-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "NearbyCharactersList"
+    },
+    "components-characters-region-filter-control--docs": {
+      "id": "components-characters-region-filter-control--docs",
+      "title": "Components/characters/region-filter-control",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/region-filter-control.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-region-filter-control--region-filter-control": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-region-filter-control--region-filter-control",
+      "name": "Region Filter Control",
+      "title": "Components/characters/region-filter-control",
+      "importPath": "./workers/app/src/stories/catalogue/characters/region-filter-control.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "RegionFilterControl"
+    },
+    "components-characters-vote-burst--docs": {
+      "id": "components-characters-vote-burst--docs",
+      "title": "Components/characters/vote-burst",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/characters/vote-burst.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-characters-vote-burst--vote-burst": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-characters-vote-burst--vote-burst",
+      "name": "Vote Burst",
+      "title": "Components/characters/vote-burst",
+      "importPath": "./workers/app/src/stories/catalogue/characters/vote-burst.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "VoteBurst"
+    },
+    "components-common-breadcrumb--docs": {
+      "id": "components-common-breadcrumb--docs",
+      "title": "Components/common/breadcrumb",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/common/breadcrumb.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-common-breadcrumb--app-breadcrumb": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-common-breadcrumb--app-breadcrumb",
+      "name": "App Breadcrumb",
+      "title": "Components/common/breadcrumb",
+      "importPath": "./workers/app/src/stories/catalogue/common/breadcrumb.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "AppBreadcrumb"
+    },
+    "components-common-error-boundary--docs": {
+      "id": "components-common-error-boundary--docs",
+      "title": "Components/common/error-boundary",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/common/error-boundary.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-common-error-boundary--error-boundary": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-common-error-boundary--error-boundary",
+      "name": "Error Boundary",
+      "title": "Components/common/error-boundary",
+      "importPath": "./workers/app/src/stories/catalogue/common/error-boundary.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "ErrorBoundary"
+    },
+    "components-common-error-boundary--caught-error": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-common-error-boundary--caught-error",
+      "name": "Caught Error",
+      "title": "Components/common/error-boundary",
+      "importPath": "./workers/app/src/stories/catalogue/common/error-boundary.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CaughtError"
+    },
+    "components-common-error-fallback--docs": {
+      "id": "components-common-error-fallback--docs",
+      "title": "Components/common/error-fallback",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/common/error-fallback.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-common-error-fallback--error-fallback": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-common-error-fallback--error-fallback",
+      "name": "Error Fallback",
+      "title": "Components/common/error-fallback",
+      "importPath": "./workers/app/src/stories/catalogue/common/error-fallback.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "ErrorFallback"
+    },
+    "components-common-filter-header--docs": {
+      "id": "components-common-filter-header--docs",
+      "title": "Components/common/filter-header",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/common/filter-header.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-common-filter-header--filter-header": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-common-filter-header--filter-header",
+      "name": "Filter Header",
+      "title": "Components/common/filter-header",
+      "importPath": "./workers/app/src/stories/catalogue/common/filter-header.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "FilterHeader"
+    },
+    "components-common-footer--docs": {
+      "id": "components-common-footer--docs",
+      "title": "Components/common/footer",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/common/footer.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-common-footer--footer": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-common-footer--footer",
+      "name": "Footer",
+      "title": "Components/common/footer",
+      "importPath": "./workers/app/src/stories/catalogue/common/footer.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Footer"
+    },
+    "components-common-header--docs": {
+      "id": "components-common-header--docs",
+      "title": "Components/common/header",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/common/header.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-common-header--header": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-common-header--header",
+      "name": "Header",
+      "title": "Components/common/header",
+      "importPath": "./workers/app/src/stories/catalogue/common/header.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Header"
+    },
+    "components-common-loading-fallback--docs": {
+      "id": "components-common-loading-fallback--docs",
+      "title": "Components/common/loading-fallback",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/common/loading-fallback.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-common-loading-fallback--loading-fallback": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-common-loading-fallback--loading-fallback",
+      "name": "Loading Fallback",
+      "title": "Components/common/loading-fallback",
+      "importPath": "./workers/app/src/stories/catalogue/common/loading-fallback.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "LoadingFallback"
+    },
+    "components-common-not-found--docs": {
+      "id": "components-common-not-found--docs",
+      "title": "Components/common/not-found",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/common/not-found.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-common-not-found--not-found": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-common-not-found--not-found",
+      "name": "Not Found",
+      "title": "Components/common/not-found",
+      "importPath": "./workers/app/src/stories/catalogue/common/not-found.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "NotFound"
+    },
+    "components-common-page-view-counter--docs": {
+      "id": "components-common-page-view-counter--docs",
+      "title": "Components/common/page-view-counter",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/common/page-view-counter.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-common-page-view-counter--page-view-counter": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-common-page-view-counter--page-view-counter",
+      "name": "Page View Counter",
+      "title": "Components/common/page-view-counter",
+      "importPath": "./workers/app/src/stories/catalogue/common/page-view-counter.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "PageViewCounter"
+    },
+    "components-events-comments-comment-form-dialog--docs": {
+      "id": "components-events-comments-comment-form-dialog--docs",
+      "title": "Components/events/comments/comment-form-dialog",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/comments/comment-form-dialog.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-comments-comment-form-dialog--comment-form-dialog": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-comments-comment-form-dialog--comment-form-dialog",
+      "name": "Comment Form Dialog",
+      "title": "Components/events/comments/comment-form-dialog",
+      "importPath": "./workers/app/src/stories/catalogue/events/comments/comment-form-dialog.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CommentFormDialog"
+    },
+    "components-events-comments-comment-form--docs": {
+      "id": "components-events-comments-comment-form--docs",
+      "title": "Components/events/comments/comment-form",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/comments/comment-form.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-comments-comment-form--comment-form": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-comments-comment-form--comment-form",
+      "name": "Comment Form",
+      "title": "Components/events/comments/comment-form",
+      "importPath": "./workers/app/src/stories/catalogue/events/comments/comment-form.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CommentForm"
+    },
+    "components-events-comments-comment-item--docs": {
+      "id": "components-events-comments-comment-item--docs",
+      "title": "Components/events/comments/comment-item",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/comments/comment-item.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-comments-comment-item--comment-item": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-comments-comment-item--comment-item",
+      "name": "Comment Item",
+      "title": "Components/events/comments/comment-item",
+      "importPath": "./workers/app/src/stories/catalogue/events/comments/comment-item.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CommentItem"
+    },
+    "components-events-comments-comment-list--docs": {
+      "id": "components-events-comments-comment-list--docs",
+      "title": "Components/events/comments/comment-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/comments/comment-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-comments-comment-list--comment-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-comments-comment-list--comment-list",
+      "name": "Comment List",
+      "title": "Components/events/comments/comment-list",
+      "importPath": "./workers/app/src/stories/catalogue/events/comments/comment-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CommentList"
+    },
+    "components-events-comments-comment-section--docs": {
+      "id": "components-events-comments-comment-section--docs",
+      "title": "Components/events/comments/comment-section",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/comments/comment-section.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-comments-comment-section--comment-section": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-comments-comment-section--comment-section",
+      "name": "Comment Section",
+      "title": "Components/events/comments/comment-section",
+      "importPath": "./workers/app/src/stories/catalogue/events/comments/comment-section.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "CommentSection"
+    },
+    "components-events-event-age-filter--docs": {
+      "id": "components-events-event-age-filter--docs",
+      "title": "Components/events/event-age-filter",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-age-filter.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-age-filter--event-age-filter": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-age-filter--event-age-filter",
+      "name": "Event Age Filter",
+      "title": "Components/events/event-age-filter",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-age-filter.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventAgeFilter"
+    },
+    "components-events-event-category-filter--docs": {
+      "id": "components-events-event-category-filter--docs",
+      "title": "Components/events/event-category-filter",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-category-filter.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-category-filter--event-category-filter": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-category-filter--event-category-filter",
+      "name": "Event Category Filter",
+      "title": "Components/events/event-category-filter",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-category-filter.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventCategoryFilter"
+    },
+    "components-events-event-character-badge--docs": {
+      "id": "components-events-event-character-badge--docs",
+      "title": "Components/events/event-character-badge",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-character-badge.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-character-badge--event-character-badge": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-character-badge--event-character-badge",
+      "name": "Event Character Badge",
+      "title": "Components/events/event-character-badge",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-character-badge.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventCharacterBadge"
+    },
+    "components-events-event-detail-header--docs": {
+      "id": "components-events-event-detail-header--docs",
+      "title": "Components/events/event-detail-header",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-detail-header.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-detail-header--event-detail-header": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-detail-header--event-detail-header",
+      "name": "Event Detail Header",
+      "title": "Components/events/event-detail-header",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-detail-header.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventDetailHeader"
+    },
+    "components-events-event-detail-info--docs": {
+      "id": "components-events-event-detail-info--docs",
+      "title": "Components/events/event-detail-info",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-detail-info.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-detail-info--event-detail-info": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-detail-info--event-detail-info",
+      "name": "Event Detail Info",
+      "title": "Components/events/event-detail-info",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-detail-info.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventDetailInfo"
+    },
+    "components-events-event-gantt-chart--docs": {
+      "id": "components-events-event-gantt-chart--docs",
+      "title": "Components/events/event-gantt-chart",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-gantt-chart.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-gantt-chart--event-gantt-chart": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-gantt-chart--event-gantt-chart",
+      "name": "Event Gantt Chart",
+      "title": "Components/events/event-gantt-chart",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-gantt-chart.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventGanttChart"
+    },
+    "components-events-event-grid-item--docs": {
+      "id": "components-events-event-grid-item--docs",
+      "title": "Components/events/event-grid-item",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-grid-item.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-grid-item--event-grid-item": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-grid-item--event-grid-item",
+      "name": "Event Grid Item",
+      "title": "Components/events/event-grid-item",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-grid-item.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventGridItem"
+    },
+    "components-events-event-group-banner--docs": {
+      "id": "components-events-event-group-banner--docs",
+      "title": "Components/events/event-group-banner",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-group-banner.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-group-banner--event-group-banner": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-group-banner--event-group-banner",
+      "name": "Event Group Banner",
+      "title": "Components/events/event-group-banner",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-group-banner.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventGroupBanner"
+    },
+    "components-events-event-share-button--docs": {
+      "id": "components-events-event-share-button--docs",
+      "title": "Components/events/event-share-button",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-share-button.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-share-button--event-share-button": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-share-button--event-share-button",
+      "name": "Event Share Button",
+      "title": "Components/events/event-share-button",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-share-button.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventShareButton"
+    },
+    "components-events-event-stats-animations--docs": {
+      "id": "components-events-event-stats-animations--docs",
+      "title": "Components/events/event-stats-animations",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-stats-animations.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-stats-animations--heart-burst-overlay": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-stats-animations--heart-burst-overlay",
+      "name": "Heart Burst Overlay",
+      "title": "Components/events/event-stats-animations",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-stats-animations.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "HeartBurstOverlay"
+    },
+    "components-events-event-stats-animations--firework-burst-overlay": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-stats-animations--firework-burst-overlay",
+      "name": "Firework Burst Overlay",
+      "title": "Components/events/event-stats-animations",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-stats-animations.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "FireworkBurstOverlay"
+    },
+    "components-events-event-stats-badges--docs": {
+      "id": "components-events-event-stats-badges--docs",
+      "title": "Components/events/event-stats-badges",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-stats-badges.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-stats-badges--event-stats-badges": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-stats-badges--event-stats-badges",
+      "name": "Event Stats Badges",
+      "title": "Components/events/event-stats-badges",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-stats-badges.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventStatsBadges"
+    },
+    "components-events-event-status-filter--docs": {
+      "id": "components-events-event-status-filter--docs",
+      "title": "Components/events/event-status-filter",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-status-filter.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-status-filter--event-status-filter": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-status-filter--event-status-filter",
+      "name": "Event Status Filter",
+      "title": "Components/events/event-status-filter",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-status-filter.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventStatusFilter"
+    },
+    "components-events-event-store-filter--docs": {
+      "id": "components-events-event-store-filter--docs",
+      "title": "Components/events/event-store-filter",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-store-filter.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-store-filter--event-store-filter": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-store-filter--event-store-filter",
+      "name": "Event Store Filter",
+      "title": "Components/events/event-store-filter",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-store-filter.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventStoreFilter"
+    },
+    "components-events-event-user-activity-filter--docs": {
+      "id": "components-events-event-user-activity-filter--docs",
+      "title": "Components/events/event-user-activity-filter",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-user-activity-filter.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-event-user-activity-filter--event-user-activity-filter": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-event-user-activity-filter--event-user-activity-filter",
+      "name": "Event User Activity Filter",
+      "title": "Components/events/event-user-activity-filter",
+      "importPath": "./workers/app/src/stories/catalogue/events/event-user-activity-filter.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventUserActivityFilter"
+    },
+    "components-events-gantt-chart-parts--docs": {
+      "id": "components-events-gantt-chart-parts--docs",
+      "title": "Components/events/gantt-chart-parts",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/gantt-chart-parts.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-gantt-chart-parts--gantt-month-selector": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-gantt-chart-parts--gantt-month-selector",
+      "name": "Gantt Month Selector",
+      "title": "Components/events/gantt-chart-parts",
+      "importPath": "./workers/app/src/stories/catalogue/events/gantt-chart-parts.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "GanttMonthSelector"
+    },
+    "components-events-gantt-chart-parts--gantt-date-header": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-gantt-chart-parts--gantt-date-header",
+      "name": "Gantt Date Header",
+      "title": "Components/events/gantt-chart-parts",
+      "importPath": "./workers/app/src/stories/catalogue/events/gantt-chart-parts.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "GanttDateHeader"
+    },
+    "components-events-gantt-chart-parts--gantt-grid-cell": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-gantt-chart-parts--gantt-grid-cell",
+      "name": "Gantt Grid Cell",
+      "title": "Components/events/gantt-chart-parts",
+      "importPath": "./workers/app/src/stories/catalogue/events/gantt-chart-parts.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "GanttGridCell"
+    },
+    "components-events-gantt-gantt-header--docs": {
+      "id": "components-events-gantt-gantt-header--docs",
+      "title": "Components/events/gantt/gantt-header",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/gantt/gantt-header.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-gantt-gantt-header--gantt-header": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-gantt-gantt-header--gantt-header",
+      "name": "Gantt Header",
+      "title": "Components/events/gantt/gantt-header",
+      "importPath": "./workers/app/src/stories/catalogue/events/gantt/gantt-header.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "GanttHeader"
+    },
+    "components-events-gantt-gantt-row--docs": {
+      "id": "components-events-gantt-gantt-row--docs",
+      "title": "Components/events/gantt/gantt-row",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/gantt/gantt-row.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-gantt-gantt-row--gantt-row": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-gantt-gantt-row--gantt-row",
+      "name": "Gantt Row",
+      "title": "Components/events/gantt/gantt-row",
+      "importPath": "./workers/app/src/stories/catalogue/events/gantt/gantt-row.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "GanttRow"
+    },
+    "components-events-gantt-gantt-timeline--docs": {
+      "id": "components-events-gantt-gantt-timeline--docs",
+      "title": "Components/events/gantt/gantt-timeline",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/gantt/gantt-timeline.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-gantt-gantt-timeline--gantt-timeline": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-gantt-gantt-timeline--gantt-timeline",
+      "name": "Gantt Timeline",
+      "title": "Components/events/gantt/gantt-timeline",
+      "importPath": "./workers/app/src/stories/catalogue/events/gantt/gantt-timeline.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "GanttTimeline"
+    },
+    "components-events-paginated-event-grid--docs": {
+      "id": "components-events-paginated-event-grid--docs",
+      "title": "Components/events/paginated-event-grid",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/paginated-event-grid.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-paginated-event-grid--paginated-event-grid": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-paginated-event-grid--paginated-event-grid",
+      "name": "Paginated Event Grid",
+      "title": "Components/events/paginated-event-grid",
+      "importPath": "./workers/app/src/stories/catalogue/events/paginated-event-grid.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "PaginatedEventGrid"
+    },
+    "components-events-recent-events-list--docs": {
+      "id": "components-events-recent-events-list--docs",
+      "title": "Components/events/recent-events-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/recent-events-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-recent-events-list--recent-events-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-recent-events-list--recent-events-list",
+      "name": "Recent Events List",
+      "title": "Components/events/recent-events-list",
+      "importPath": "./workers/app/src/stories/catalogue/events/recent-events-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "RecentEventsList"
+    },
+    "components-events-upcoming-event-list-item--docs": {
+      "id": "components-events-upcoming-event-list-item--docs",
+      "title": "Components/events/upcoming-event-list-item",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/upcoming-event-list-item.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-upcoming-event-list-item--upcoming-event-list-item": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-upcoming-event-list-item--upcoming-event-list-item",
+      "name": "Upcoming Event List Item",
+      "title": "Components/events/upcoming-event-list-item",
+      "importPath": "./workers/app/src/stories/catalogue/events/upcoming-event-list-item.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "UpcomingEventListItem"
+    },
+    "components-events-upcoming-event-list--docs": {
+      "id": "components-events-upcoming-event-list--docs",
+      "title": "Components/events/upcoming-event-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/events/upcoming-event-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-events-upcoming-event-list--upcoming-event-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-events-upcoming-event-list--upcoming-event-list",
+      "name": "Upcoming Event List",
+      "title": "Components/events/upcoming-event-list",
+      "importPath": "./workers/app/src/stories/catalogue/events/upcoming-event-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "UpcomingEventList"
+    },
+    "components-home-birthday-hero-section--docs": {
+      "id": "components-home-birthday-hero-section--docs",
+      "title": "Components/home/birthday-hero-section",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/home/birthday-hero-section.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-home-birthday-hero-section--birthday-hero-section": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-home-birthday-hero-section--birthday-hero-section",
+      "name": "Birthday Hero Section",
+      "title": "Components/home/birthday-hero-section",
+      "importPath": "./workers/app/src/stories/catalogue/home/birthday-hero-section.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "BirthdayHeroSection"
+    },
+    "components-home-event-group-list--docs": {
+      "id": "components-home-event-group-list--docs",
+      "title": "Components/home/event-group-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/home/event-group-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-home-event-group-list--event-group-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-home-event-group-list--event-group-list",
+      "name": "Event Group List",
+      "title": "Components/home/event-group-list",
+      "importPath": "./workers/app/src/stories/catalogue/home/event-group-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventGroupList"
+    },
+    "components-home-event-list-item--docs": {
+      "id": "components-home-event-list-item--docs",
+      "title": "Components/home/event-list-item",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/home/event-list-item.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-home-event-list-item--event-list-item": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-home-event-list-item--event-list-item",
+      "name": "Event List Item",
+      "title": "Components/home/event-list-item",
+      "importPath": "./workers/app/src/stories/catalogue/home/event-list-item.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventListItem"
+    },
+    "components-home-event-list--docs": {
+      "id": "components-home-event-list--docs",
+      "title": "Components/home/event-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/home/event-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-home-event-list--event-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-home-event-list--event-list",
+      "name": "Event List",
+      "title": "Components/home/event-list",
+      "importPath": "./workers/app/src/stories/catalogue/home/event-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "EventList"
+    },
+    "components-home-home-header--docs": {
+      "id": "components-home-home-header--docs",
+      "title": "Components/home/home-header",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/home/home-header.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-home-home-header--home-header": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-home-home-header--home-header",
+      "name": "Home Header",
+      "title": "Components/home/home-header",
+      "importPath": "./workers/app/src/stories/catalogue/home/home-header.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "HomeHeader"
+    },
+    "components-home-line-sticker-list-item--docs": {
+      "id": "components-home-line-sticker-list-item--docs",
+      "title": "Components/home/line-sticker-list-item",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/home/line-sticker-list-item.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-home-line-sticker-list-item--line-sticker-list-item": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-home-line-sticker-list-item--line-sticker-list-item",
+      "name": "Line Sticker List Item",
+      "title": "Components/home/line-sticker-list-item",
+      "importPath": "./workers/app/src/stories/catalogue/home/line-sticker-list-item.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "LineStickerListItem"
+    },
+    "components-home-line-sticker-list--docs": {
+      "id": "components-home-line-sticker-list--docs",
+      "title": "Components/home/line-sticker-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/home/line-sticker-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-home-line-sticker-list--line-sticker-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-home-line-sticker-list--line-sticker-list",
+      "name": "Line Sticker List",
+      "title": "Components/home/line-sticker-list",
+      "importPath": "./workers/app/src/stories/catalogue/home/line-sticker-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "LineStickerList"
+    },
+    "components-location-store-list--docs": {
+      "id": "components-location-store-list--docs",
+      "title": "Components/location/store-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/location/store-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-location-store-list--store-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-location-store-list--store-list",
+      "name": "Store List",
+      "title": "Components/location/store-list",
+      "importPath": "./workers/app/src/stories/catalogue/location/store-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "StoreList"
+    },
+    "components-pwa-install-prompt-ios--docs": {
+      "id": "components-pwa-install-prompt-ios--docs",
+      "title": "Components/pwa/install-prompt-ios",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/pwa/install-prompt-ios.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-pwa-install-prompt-ios--ios-install-prompt": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-pwa-install-prompt-ios--ios-install-prompt",
+      "name": "Ios Install Prompt",
+      "title": "Components/pwa/install-prompt-ios",
+      "importPath": "./workers/app/src/stories/catalogue/pwa/install-prompt-ios.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "IosInstallPrompt"
+    },
+    "components-pwa-update-overlay--docs": {
+      "id": "components-pwa-update-overlay--docs",
+      "title": "Components/pwa/update-overlay",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/pwa/update-overlay.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-pwa-update-overlay--update-overlay": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-pwa-update-overlay--update-overlay",
+      "name": "Update Overlay",
+      "title": "Components/pwa/update-overlay",
+      "importPath": "./workers/app/src/stories/catalogue/pwa/update-overlay.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "UpdateOverlay"
+    },
+    "components-pwa-update-prompt--docs": {
+      "id": "components-pwa-update-prompt--docs",
+      "title": "Components/pwa/update-prompt",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/pwa/update-prompt.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-pwa-update-prompt--update-prompt": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-pwa-update-prompt--update-prompt",
+      "name": "Update Prompt",
+      "title": "Components/pwa/update-prompt",
+      "importPath": "./workers/app/src/stories/catalogue/pwa/update-prompt.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "UpdatePrompt"
+    },
+    "components-ranking-ranking-empty-vote-info--docs": {
+      "id": "components-ranking-ranking-empty-vote-info--docs",
+      "title": "Components/ranking/ranking-empty-vote-info",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/ranking/ranking-empty-vote-info.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-ranking-ranking-empty-vote-info--ranking-empty-vote-info": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-ranking-ranking-empty-vote-info--ranking-empty-vote-info",
+      "name": "Ranking Empty Vote Info",
+      "title": "Components/ranking/ranking-empty-vote-info",
+      "importPath": "./workers/app/src/stories/catalogue/ranking/ranking-empty-vote-info.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "RankingEmptyVoteInfo"
+    },
+    "components-ranking-ranking-list--docs": {
+      "id": "components-ranking-ranking-list--docs",
+      "title": "Components/ranking/ranking-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/ranking/ranking-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-ranking-ranking-list--ranking-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-ranking-ranking-list--ranking-list",
+      "name": "Ranking List",
+      "title": "Components/ranking/ranking-list",
+      "importPath": "./workers/app/src/stories/catalogue/ranking/ranking-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "RankingList"
+    },
+    "components-ranking-ranking-podium--docs": {
+      "id": "components-ranking-ranking-podium--docs",
+      "title": "Components/ranking/ranking-podium",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/ranking/ranking-podium.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-ranking-ranking-podium--podium": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-ranking-ranking-podium--podium",
+      "name": "Podium",
+      "title": "Components/ranking/ranking-podium",
+      "importPath": "./workers/app/src/stories/catalogue/ranking/ranking-podium.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Podium"
+    },
+    "components-ranking-ranking-row--docs": {
+      "id": "components-ranking-ranking-row--docs",
+      "title": "Components/ranking/ranking-row",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/ranking/ranking-row.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-ranking-ranking-row--ranking-row": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-ranking-ranking-row--ranking-row",
+      "name": "Ranking Row",
+      "title": "Components/ranking/ranking-row",
+      "importPath": "./workers/app/src/stories/catalogue/ranking/ranking-row.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "RankingRow"
+    },
+    "components-ranking-ranking-vote-badge--docs": {
+      "id": "components-ranking-ranking-vote-badge--docs",
+      "title": "Components/ranking/ranking-vote-badge",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/ranking/ranking-vote-badge.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-ranking-ranking-vote-badge--ranking-vote-badge": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-ranking-ranking-vote-badge--ranking-vote-badge",
+      "name": "Ranking Vote Badge",
+      "title": "Components/ranking/ranking-vote-badge",
+      "importPath": "./workers/app/src/stories/catalogue/ranking/ranking-vote-badge.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "RankingVoteBadge"
+    },
+    "components-route-route-result--docs": {
+      "id": "components-route-route-result--docs",
+      "title": "Components/route/route-result",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/route/route-result.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-route-route-result--route-result-card": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-route-route-result--route-result-card",
+      "name": "Route Result Card",
+      "title": "Components/route/route-result",
+      "importPath": "./workers/app/src/stories/catalogue/route/route-result.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "RouteResultCard"
+    },
+    "components-route-selected-store-list--docs": {
+      "id": "components-route-selected-store-list--docs",
+      "title": "Components/route/selected-store-list",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/route/selected-store-list.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-route-selected-store-list--selected-store-list": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-route-selected-store-list--selected-store-list",
+      "name": "Selected Store List",
+      "title": "Components/route/selected-store-list",
+      "importPath": "./workers/app/src/stories/catalogue/route/selected-store-list.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "SelectedStoreList"
+    },
+    "components-route-store-select--docs": {
+      "id": "components-route-store-select--docs",
+      "title": "Components/route/store-select",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/route/store-select.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-route-store-select--store-select": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-route-store-select--store-select",
+      "name": "Store Select",
+      "title": "Components/route/store-select",
+      "importPath": "./workers/app/src/stories/catalogue/route/store-select.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "StoreSelect"
+    },
+    "components-selected-store-info--docs": {
+      "id": "components-selected-store-info--docs",
+      "title": "Components/selected-store-info",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/selected-store-info.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-selected-store-info--selected-store-info": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-selected-store-info--selected-store-info",
+      "name": "Selected Store Info",
+      "title": "Components/selected-store-info",
+      "importPath": "./workers/app/src/stories/catalogue/selected-store-info.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "SelectedStoreInfo"
+    },
+    "components-store-list-item--docs": {
+      "id": "components-store-list-item--docs",
+      "title": "Components/store-list-item",
+      "name": "Docs",
+      "importPath": "./workers/app/src/stories/catalogue/store-list-item.stories.tsx",
+      "type": "docs",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "storiesImports": []
+    },
+    "components-store-list-item--store-list-item": {
+      "type": "story",
+      "subtype": "story",
+      "id": "components-store-list-item--store-list-item",
+      "name": "Store List Item",
+      "title": "Components/store-list-item",
+      "importPath": "./workers/app/src/stories/catalogue/store-list-item.stories.tsx",
+      "componentPath": "./workers/app/src/stories/ComponentExample.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "StoreListItem"
+    }
+  }
+}

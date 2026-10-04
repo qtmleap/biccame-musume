@@ -1,0 +1,2073 @@
+[
+  {
+    "route": "/",
+    "width": 320,
+    "result": {
+      "url": "https://biccame-musume.com/",
+      "width": 320,
+      "rootWidth": 320,
+      "height": 4650,
+      "scrollY": 0,
+      "main": "ビッカメ娘を\nもっと身近に、もっと楽しく\n\n推し活を全力サポート - イベント追跡から店舗巡りまで\n\n本日\n249\n合計\n63,466\n開催中のイベントグループ\nいこまい名古屋秋祭り\n\n2\n件\n\n～Flower Fairyland～\n\n0\n件\n\n美味しいもの食べ隊\n\n9\n件\n\nイベントグループ一覧\n直近の誕生日\n\n岡山たん\n\n10月5日\n\n3日後\n\nたかつきたん\n\n10月6日\n\n4日後\n\n新東たん\n\n10月19日\n\n17日後\n\n本店たん\n\n10月21日\n\n19日後\n\n立川たん\n\n10月25日\n\n",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 49,
+        "top": 0,
+        "right": 320,
+        "bottom": 49,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": [
+        {
+          "text": "川崎たんアクリルスタンド",
+          "font": "16px",
+          "width": 162
+        },
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "16px",
+          "width": 174
+        },
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "16px",
+          "width": 174
+        },
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "16px",
+          "width": 174
+        },
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "16px",
+          "width": 174
+        },
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "16px",
+          "width": 174
+        },
+        {
+          "text": "擬人化10周年アクリルスタンド",
+          "font": "16px",
+          "width": 168
+        }
+      ]
+    }
+  },
+  {
+    "route": "/characters",
+    "width": 320,
+    "result": {
+      "url": "https://biccame-musume.com/characters",
+      "width": 320,
+      "rootWidth": 320,
+      "height": 6178,
+      "scrollY": 0,
+      "main": "ビッカメ娘一覧\n地域で絞り込み\n全国\n北海道\n関東\n中部\n関西\n九州\n並び替え: ランダム\nランダム\n誕生日順\n開店日順\n誕生日が近い順\nビッカメ娘\n横西たん\nアキバたん\n鹿児島たん\n新宿西口たん\nふなたん\nせいせきたん\n新横たん\nプロスタたん\n岡山たん\n千葉たん\n大宮たん\nくまもとたん\nあいタワたん\n天神2号たん\nカメ館たん\nしぶとーたん\nみっけたん\nなごやたん\n池西たん\nパソ館たん\nさがみたん\n川崎たん\n京都たん\n本店たん\nあべのたん\n調布たん\n広島たん\nたかさきたん\n所沢たん\n町田たん\n天",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 49,
+        "top": 0,
+        "right": 320,
+        "bottom": 49,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/events",
+    "width": 320,
+    "result": {
+      "url": "https://biccame-musume.com/events",
+      "width": 320,
+      "rootWidth": 320,
+      "height": 3446,
+      "scrollY": 0,
+      "main": "開催中のイベントグループ（18 件）\n\nいこまい名古屋秋祭り ほか\n\nイベント一覧\n26/08\n26/09\n26/10\n26/11\n26/12\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n1\n2\n3\n4\n5\n6\n7\n通常名刺\n(ラゾーナ川崎店)\n通常名刺の詳細を見る\nお正月限定名刺配布開始\n(池袋西口店)\nお正月限定名刺配布開始の詳細を見る\nびたみんちゃん名刺\n(ラゾーナ川",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 49,
+        "top": 0,
+        "right": 320,
+        "bottom": 49,
+        "left": 0
+      },
+      "overflows": [
+        {
+          "tag": "DIV",
+          "text": "123456789101112131415161718192021222324252627282930311234567",
+          "class": "min-w-max",
+          "rect": {
+            "x": -16,
+            "y": 253,
+            "width": 1216,
+            "height": 24,
+            "top": 253,
+            "right": 1200,
+            "bottom": 277,
+            "left": -16
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "123456789101112131415161718192021222324252627282930311234567",
+          "class": "flex h-6",
+          "rect": {
+            "x": -16,
+            "y": 253,
+            "width": 1216,
+            "height": 24,
+            "top": 253,
+            "right": 1200,
+            "bottom": 277,
+            "left": -16
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "1",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": -16,
+            "y": 253,
+            "width": 32,
+            "height": 24,
+            "top": 253,
+            "right": 16,
+            "bottom": 277,
+            "left": -16
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "11",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-calendar-sunday",
+          "rect": {
+            "x": 304,
+            "y": 253,
+            "width": 32,
+            "height": 24,
+            "top": 253,
+            "right": 336,
+            "bottom": 277,
+            "left": 304
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "12",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 336,
+            "y": 253,
+            "width": 32,
+            "height": 24,
+            "top": 253,
+            "right": 368,
+            "bottom": 277,
+            "left": 336
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "13",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 368,
+            "y": 253,
+            "width": 32,
+            "height": 24,
+            "top": 253,
+            "right": 400,
+            "bottom": 277,
+            "left": 368
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "14",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 400,
+            "y": 253,
+            "width": 32,
+            "height": 24,
+            "top": 253,
+            "right": 432,
+            "bottom": 277,
+            "left": 400
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "15",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 432,
+            "y": 253,
+            "width": 32,
+            "height": 24,
+            "top": 253,
+            "right": 464,
+            "bottom": 277,
+            "left": 432
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "16",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 464,
+            "y": 253,
+            "width": 32,
+            "height": 24,
+            "top": 253,
+            "right": 496,
+            "bottom": 277,
+            "left": 464
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "17",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-calendar-saturday",
+          "rect": {
+            "x": 496,
+            "y": 253,
+            "width": 32,
+            "height": 24,
+            "top": 253,
+            "right": 528,
+            "bottom": 277,
+            "left": 496
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "18",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-calendar-sunday",
+          "rect": {
+            "x": 528,
+            "y": 253,
+            "width": 32,
+            "height": 24,
+            "top": 253,
+            "right": 560,
+            "bottom": 277,
+            "left": 528
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "19",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 560,
+            "y": 253,
+            "width": 32,
+            "height": 24,
+            "top": 253,
+            "right": 592,
+            "bottom": 277,
+            "left": 560
+          }
+        }
+      ],
+      "truncated": [
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "12px",
+          "width": 116
+        },
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "12px",
+          "width": 92
+        }
+      ]
+    }
+  },
+  {
+    "route": "/calendar",
+    "width": 320,
+    "result": {
+      "url": "https://biccame-musume.com/calendar",
+      "width": 320,
+      "rootWidth": 320,
+      "height": 748,
+      "scrollY": 0,
+      "main": "2026年10月\n月\n5\n\n岡山たん\n\nビックカメラ岡山駅前店\n\n10歳\n火\n6\n\nたかつきたん\n\nビックカメラ高槻阪急スクエア店\n\n3歳\n月\n19\n\n新東たん\n\nビックカメラ新宿東口駅前店\n\n6歳\n水\n21\n\n本店たん\n\nビックカメラ池袋本店\n\n11歳\n日\n25\n\n立川たん\n\nビックカメラ立川店\n\n10歳\n\n天神2号たん\n\nビックカメラ天神2号館\n\n9歳\n爆誕記念日\n店舗記念日\n祝日",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 49,
+        "top": 0,
+        "right": 320,
+        "bottom": 49,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": [
+        {
+          "text": "ビックカメラ岡山駅前店",
+          "font": "12px",
+          "width": 93
+        },
+        {
+          "text": "ビックカメラ高槻阪急スクエア店",
+          "font": "12px",
+          "width": 98
+        },
+        {
+          "text": "ビックカメラ新宿東口駅前店",
+          "font": "12px",
+          "width": 98
+        },
+        {
+          "text": "ビックカメラ池袋本店",
+          "font": "12px",
+          "width": 94
+        },
+        {
+          "text": "ビックカメラ立川店",
+          "font": "12px",
+          "width": 93
+        },
+        {
+          "text": "ビックカメラ天神2号館",
+          "font": "12px",
+          "width": 98
+        }
+      ]
+    }
+  },
+  {
+    "route": "/characters/abeno",
+    "width": 320,
+    "result": {
+      "url": "https://biccame-musume.com/characters/abeno",
+      "width": 320,
+      "rootWidth": 320,
+      "height": 1864,
+      "scrollY": 0,
+      "main": "ホーム\nビッカメ娘\nあべのたん\n戻る\nあべのたん\n@bic_abeno\n\nビックカメラあべのキューズモール店の擬人化キャラクター。たこ焼きの髪飾り・タコのぬいぐるみ(？)が特徴。青い腕輪はお店のロゴから。\n\n公式プロフィール\n大阪府\n9月7日生まれ\n地図で見る\n直近のイベント\n\n通常名刺\n\n2025/02/28〜なくなり次第\n\n開催中\n\n通常名刺\n\n2026/01/31〜なくなり次第\n\n開催中\n\nビッカメ娘11周年記念名刺\n\n2026/04/30〜なくなり次第\n\n開催中\n\n限定名刺\n\n2026/",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 49,
+        "top": 0,
+        "right": 320,
+        "bottom": 49,
+        "left": 0
+      },
+      "overflows": [
+        {
+          "tag": "IMG",
+          "text": "",
+          "class": "aspect-square size-full object-cover scale-150 translate-y-4",
+          "rect": {
+            "x": -3.75,
+            "y": 121.25,
+            "width": 124.5,
+            "height": 124.5,
+            "top": 121.25,
+            "right": 120.75,
+            "bottom": 245.75,
+            "left": -3.75
+          }
+        }
+      ],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/location",
+    "width": 320,
+    "result": {
+      "url": "https://biccame-musume.com/location",
+      "width": 320,
+      "rootWidth": 320,
+      "height": 740,
+      "scrollY": 0,
+      "main": "Keyboard shortcuts\nMap Data\nTerms\n店舗一覧",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 49,
+        "top": 0,
+        "right": 320,
+        "bottom": 49,
+        "left": 0
+      },
+      "overflows": [
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -204,
+            "y": 180,
+            "width": 256,
+            "height": 256,
+            "top": 180,
+            "right": 52,
+            "bottom": 436,
+            "left": -204
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -204,
+            "y": 180,
+            "width": 256,
+            "height": 256,
+            "top": 180,
+            "right": 52,
+            "bottom": 436,
+            "left": -204
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -204,
+            "y": -76,
+            "width": 256,
+            "height": 256,
+            "top": -76,
+            "right": 52,
+            "bottom": 180,
+            "left": -204
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -204,
+            "y": -76,
+            "width": 256,
+            "height": 256,
+            "top": -76,
+            "right": 52,
+            "bottom": 180,
+            "left": -204
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": 308,
+            "y": -76,
+            "width": 256,
+            "height": 256,
+            "top": -76,
+            "right": 564,
+            "bottom": 180,
+            "left": 308
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": 308,
+            "y": -76,
+            "width": 256,
+            "height": 256,
+            "top": -76,
+            "right": 564,
+            "bottom": 180,
+            "left": 308
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": 308,
+            "y": 180,
+            "width": 256,
+            "height": 256,
+            "top": 180,
+            "right": 564,
+            "bottom": 436,
+            "left": 308
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": 308,
+            "y": 180,
+            "width": 256,
+            "height": 256,
+            "top": 180,
+            "right": 564,
+            "bottom": 436,
+            "left": 308
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": 308,
+            "y": 436,
+            "width": 256,
+            "height": 256,
+            "top": 436,
+            "right": 564,
+            "bottom": 692,
+            "left": 308
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": 308,
+            "y": 436,
+            "width": 256,
+            "height": 256,
+            "top": 436,
+            "right": 564,
+            "bottom": 692,
+            "left": 308
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -204,
+            "y": 436,
+            "width": 256,
+            "height": 256,
+            "top": 436,
+            "right": 52,
+            "bottom": 692,
+            "left": -204
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -204,
+            "y": 436,
+            "width": 256,
+            "height": 256,
+            "top": 436,
+            "right": 52,
+            "bottom": 692,
+            "left": -204
+          }
+        }
+      ],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/characters",
+    "width": 430,
+    "result": {
+      "url": "https://biccame-musume.com/characters",
+      "width": 430,
+      "rootWidth": 430,
+      "height": 6150,
+      "scrollY": 0,
+      "main": "ビッカメ娘一覧\n地域で絞り込み\n全国\n北海道\n関東\n中部\n関西\n九州\n並び替え: ランダム\nランダム\n誕生日順\n開店日順\n誕生日が近い順\nビッカメ娘\nせいせきたん\n浦和たん\nにいがたたん\nたまプラたん\nフォトたん\n新横たん\nさっぽろたん\n柏たん\nさがみたん\nたかさきたん\nパソ館たん\n所沢たん\nしんじゅくたん\n天神2号たん\n本店たん\n池西たん\n調布たん\nカメ館たん\nふなたん\n大宮たん\n水戸たん\n天神1号たん\nふなとーたん\n岡山たん\n広島たん\n立川たん\nしぶハチたん\n京都たん\n新東たん\nなごやたん\n",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 430,
+        "height": 49,
+        "top": 0,
+        "right": 430,
+        "bottom": 49,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/events",
+    "width": 430,
+    "result": {
+      "url": "https://biccame-musume.com/events",
+      "width": 430,
+      "rootWidth": 430,
+      "height": 3398,
+      "scrollY": 0,
+      "main": "開催中のイベントグループ（18 件）\n\nいこまい名古屋秋祭り ほか\n\nイベント一覧\n26/08\n26/09\n26/10\n26/11\n26/12\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n1\n2\n3\n4\n5\n6\n7\n通常名刺\n(ラゾーナ川崎店)\n通常名刺の詳細を見る\nお正月限定名刺配布開始\n(池袋西口店)\nお正月限定名刺配布開始の詳細を見る\nびたみんちゃん名刺\n(ラゾーナ川",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 430,
+        "height": 49,
+        "top": 0,
+        "right": 430,
+        "bottom": 49,
+        "left": 0
+      },
+      "overflows": [
+        {
+          "tag": "DIV",
+          "text": "123456789101112131415161718192021222324252627282930311234567",
+          "class": "min-w-max",
+          "rect": {
+            "x": -16,
+            "y": 233,
+            "width": 1216,
+            "height": 24,
+            "top": 233,
+            "right": 1200,
+            "bottom": 257,
+            "left": -16
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "123456789101112131415161718192021222324252627282930311234567",
+          "class": "flex h-6",
+          "rect": {
+            "x": -16,
+            "y": 233,
+            "width": 1216,
+            "height": 24,
+            "top": 233,
+            "right": 1200,
+            "bottom": 257,
+            "left": -16
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "1",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": -16,
+            "y": 233,
+            "width": 32,
+            "height": 24,
+            "top": 233,
+            "right": 16,
+            "bottom": 257,
+            "left": -16
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "15",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 432,
+            "y": 233,
+            "width": 32,
+            "height": 24,
+            "top": 233,
+            "right": 464,
+            "bottom": 257,
+            "left": 432
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "16",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 464,
+            "y": 233,
+            "width": 32,
+            "height": 24,
+            "top": 233,
+            "right": 496,
+            "bottom": 257,
+            "left": 464
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "17",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-calendar-saturday",
+          "rect": {
+            "x": 496,
+            "y": 233,
+            "width": 32,
+            "height": 24,
+            "top": 233,
+            "right": 528,
+            "bottom": 257,
+            "left": 496
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "18",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-calendar-sunday",
+          "rect": {
+            "x": 528,
+            "y": 233,
+            "width": 32,
+            "height": 24,
+            "top": 233,
+            "right": 560,
+            "bottom": 257,
+            "left": 528
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "19",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 560,
+            "y": 233,
+            "width": 32,
+            "height": 24,
+            "top": 233,
+            "right": 592,
+            "bottom": 257,
+            "left": 560
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "20",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 592,
+            "y": 233,
+            "width": 32,
+            "height": 24,
+            "top": 233,
+            "right": 624,
+            "bottom": 257,
+            "left": 592
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "21",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 624,
+            "y": 233,
+            "width": 32,
+            "height": 24,
+            "top": 233,
+            "right": 656,
+            "bottom": 257,
+            "left": 624
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "22",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 656,
+            "y": 233,
+            "width": 32,
+            "height": 24,
+            "top": 233,
+            "right": 688,
+            "bottom": 257,
+            "left": 656
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "23",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 688,
+            "y": 233,
+            "width": 32,
+            "height": 24,
+            "top": 233,
+            "right": 720,
+            "bottom": 257,
+            "left": 688
+          }
+        }
+      ],
+      "truncated": [
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "12px",
+          "width": 116
+        },
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "12px",
+          "width": 92
+        }
+      ]
+    }
+  },
+  {
+    "route": "/calendar",
+    "width": 430,
+    "result": {
+      "url": "https://biccame-musume.com/calendar",
+      "width": 430,
+      "rootWidth": 430,
+      "height": 932,
+      "scrollY": 0,
+      "main": "2026年10月\n月\n5\n\n岡山たん\n\nビックカメラ岡山駅前店\n\n10歳\n火\n6\n\nたかつきたん\n\nビックカメラ高槻阪急スクエア店\n\n3歳\n月\n19\n\n新東たん\n\nビックカメラ新宿東口駅前店\n\n6歳\n水\n21\n\n本店たん\n\nビックカメラ池袋本店\n\n11歳\n日\n25\n\n立川たん\n\nビックカメラ立川店\n\n10歳\n\n天神2号たん\n\nビックカメラ天神2号館\n\n9歳\n爆誕記念日\n店舗記念日\n祝日",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 430,
+        "height": 49,
+        "top": 0,
+        "right": 430,
+        "bottom": 49,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/characters/abeno",
+    "width": 430,
+    "result": {
+      "url": "https://biccame-musume.com/characters/abeno",
+      "width": 430,
+      "rootWidth": 430,
+      "height": 1793,
+      "scrollY": 0,
+      "main": "ホーム\nビッカメ娘\nあべのたん\n戻る\nあべのたん\n@bic_abeno\n\nビックカメラあべのキューズモール店の擬人化キャラクター。たこ焼きの髪飾り・タコのぬいぐるみ(？)が特徴。青い腕輪はお店のロゴから。\n\n公式プロフィール\n大阪府\n9月7日生まれ\n地図で見る\n直近のイベント\n\n通常名刺\n\n2025/02/28〜なくなり次第\n\n開催中\n\n通常名刺\n\n2026/01/31〜なくなり次第\n\n開催中\n\nビッカメ娘11周年記念名刺\n\n2026/04/30〜なくなり次第\n\n開催中\n\n限定名刺\n\n2026/",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 430,
+        "height": 49,
+        "top": 0,
+        "right": 430,
+        "bottom": 49,
+        "left": 0
+      },
+      "overflows": [
+        {
+          "tag": "IMG",
+          "text": "",
+          "class": "aspect-square size-full object-cover scale-150 translate-y-4",
+          "rect": {
+            "x": -3.75,
+            "y": 121.25,
+            "width": 124.5,
+            "height": 124.5,
+            "top": 121.25,
+            "right": 120.75,
+            "bottom": 245.75,
+            "left": -3.75
+          }
+        }
+      ],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/",
+    "width": 768,
+    "result": {
+      "url": "https://biccame-musume.com/",
+      "width": 768,
+      "rootWidth": 768,
+      "height": 2812,
+      "scrollY": 0,
+      "main": "ビッカメ娘をもっと身近に、もっと楽しく\n\n推し活を全力サポート - イベント追跡から店舗巡りまで\n\n本日\n249\n合計\n63,466\n開催中のイベントグループ\nいこまい名古屋秋祭り\n\n2\n件\n\n～Flower Fairyland～\n\n0\n件\n\n美味しいもの食べ隊\n\n9\n件\n\nイベントグループ一覧\n直近の誕生日\n\n岡山たん\n\n10月5日\n\n3日後\n\nたかつきたん\n\n10月6日\n\n4日後\n\n新東たん\n\n10月19日\n\n17日後\n\n本店たん\n\n10月21日\n\n19日後\n\n立川たん\n\n10月25日\n\n2",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 768,
+        "height": 57,
+        "top": 0,
+        "right": 768,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/characters",
+    "width": 768,
+    "result": {
+      "url": "https://biccame-musume.com/characters",
+      "width": 768,
+      "rootWidth": 768,
+      "height": 3586,
+      "scrollY": 0,
+      "main": "ビッカメ娘一覧\n地域で絞り込み\n全国\n北海道\n関東\n中部\n関西\n九州\n並び替え\nランダム\n誕生日順\n開店日順\n誕生日が近い順\nビッカメ娘\nしんじゅくたん\nはまたん\n鹿児島たん\nたかつきたん\nふなとーたん\nプロスタたん\nアキバたん\nなごやたん\nせいせきたん\n京都たん\n天神2号たん\nさっぽろたん\nふなたん\n新宿西口たん\n池西たん\nさがみたん\n川崎たん\n藤沢たん\nしぶとーたん\n八王子たん\n八尾たん\n新横たん\nにいがたたん\n水戸たん\n横西たん\nパソ館たん\nカメ館たん\nあいタワたん\nみっけたん\n柏たん\n岡",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 768,
+        "height": 57,
+        "top": 0,
+        "right": 768,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/events",
+    "width": 768,
+    "result": {
+      "url": "https://biccame-musume.com/events",
+      "width": 768,
+      "rootWidth": 768,
+      "height": 3630,
+      "scrollY": 0,
+      "main": "開催中のイベントグループ（18 件）\n\nいこまい名古屋秋祭り ほか\n\nイベント一覧\n種別で絞り込み\n限定名刺\n通年名刺\nアクキー\nその他\n店舗で絞り込み\nすべての店舗\n開催状況で絞り込み\n開催前\n開催中\n終了\n地域で絞り込み\n全国\n北海道\n関東\n中部\n関西\n九州\n26/08\n26/09\n26/10\n26/11\n26/12\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n1\n2\n",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 768,
+        "height": 57,
+        "top": 0,
+        "right": 768,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [
+        {
+          "tag": "DIV",
+          "text": "123456789101112131415161718192021222324252627282930311234567",
+          "class": "min-w-max",
+          "rect": {
+            "x": 0,
+            "y": 457,
+            "width": 1216,
+            "height": 24,
+            "top": 457,
+            "right": 1216,
+            "bottom": 481,
+            "left": 0
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "123456789101112131415161718192021222324252627282930311234567",
+          "class": "flex h-6",
+          "rect": {
+            "x": 0,
+            "y": 457,
+            "width": 1216,
+            "height": 24,
+            "top": 457,
+            "right": 1216,
+            "bottom": 481,
+            "left": 0
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "25",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-calendar-sunday",
+          "rect": {
+            "x": 768,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 800,
+            "bottom": 481,
+            "left": 768
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "26",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 800,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 832,
+            "bottom": 481,
+            "left": 800
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "27",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 832,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 864,
+            "bottom": 481,
+            "left": 832
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "28",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 864,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 896,
+            "bottom": 481,
+            "left": 864
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "29",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 896,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 928,
+            "bottom": 481,
+            "left": 896
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "30",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-muted-foreground",
+          "rect": {
+            "x": 928,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 960,
+            "bottom": 481,
+            "left": 928
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "31",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold text-calendar-saturday",
+          "rect": {
+            "x": 960,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 992,
+            "bottom": 481,
+            "left": 960
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "1",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold bg-muted text-muted-foreground",
+          "rect": {
+            "x": 992,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 1024,
+            "bottom": 481,
+            "left": 992
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "2",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold bg-muted text-muted-foreground",
+          "rect": {
+            "x": 1024,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 1056,
+            "bottom": 481,
+            "left": 1024
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "3",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold bg-muted text-muted-foreground",
+          "rect": {
+            "x": 1056,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 1088,
+            "bottom": 481,
+            "left": 1056
+          }
+        }
+      ],
+      "truncated": [
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "12px",
+          "width": 116
+        },
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "12px",
+          "width": 92
+        }
+      ]
+    }
+  },
+  {
+    "route": "/calendar",
+    "width": 768,
+    "result": {
+      "url": "https://biccame-musume.com/calendar",
+      "width": 768,
+      "rootWidth": 768,
+      "height": 1024,
+      "scrollY": 0,
+      "main": "2026年10月\n1月\n2月\n3月\n4月\n5月\n6月\n7月\n8月\n9月\n10月\n11月\n12月\n月\n5\n\n岡山たん\n\nビックカメラ岡山駅前店\n\n10歳\n火\n6\n\nたかつきたん\n\nビックカメラ高槻阪急スクエア店\n\n3歳\n月\n19\n\n新東たん\n\nビックカメラ新宿東口駅前店\n\n6歳\n水\n21\n\n本店たん\n\nビックカメラ池袋本店\n\n11歳\n日\n25\n\n立川たん\n\nビックカメラ立川店\n\n10歳\n\n天神2号たん\n\nビックカメラ天神2号館\n\n9歳\n爆誕記念日\n店舗記念日\n祝日",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 768,
+        "height": 57,
+        "top": 0,
+        "right": 768,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/characters",
+    "width": 1024,
+    "result": {
+      "url": "https://biccame-musume.com/characters",
+      "width": 1024,
+      "rootWidth": 1024,
+      "height": 2464,
+      "scrollY": 0,
+      "main": "ビッカメ娘一覧\n地域で絞り込み\n全国\n北海道\n関東\n中部\n関西\n九州\n並び替え\nランダム\n誕生日順\n開店日順\n誕生日が近い順\nビッカメ娘\n有楽町たん\nフォトたん\nたまプラたん\n柏たん\n千葉たん\nなごやげーとたん\n横西たん\nプロスタたん\nさっぽろたん\n広島たん\n浦和たん\nふなとーたん\nくまもとたん\nみっけたん\nたかさきたん\nしんじゅくたん\n町田たん\n調布たん\nしぶとーたん\nなごやたん\n天神2号たん\nしぶハチたん\n天神1号たん\n八王子たん\n藤沢たん\n水戸たん\n八尾たん\nアキバたん\nふなたん\n所沢たん",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 57,
+        "top": 0,
+        "right": 1024,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/events",
+    "width": 1024,
+    "result": {
+      "url": "https://biccame-musume.com/events",
+      "width": 1024,
+      "rootWidth": 1024,
+      "height": 3630,
+      "scrollY": 0,
+      "main": "開催中のイベントグループ（18 件）\n\nいこまい名古屋秋祭り ほか\n\nイベント一覧\n種別で絞り込み\n限定名刺\n通年名刺\nアクキー\nその他\n店舗で絞り込み\nすべての店舗\n開催状況で絞り込み\n開催前\n開催中\n終了\n地域で絞り込み\n全国\n北海道\n関東\n中部\n関西\n九州\n26/08\n26/09\n26/10\n26/11\n26/12\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n1\n2\n",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 57,
+        "top": 0,
+        "right": 1024,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [
+        {
+          "tag": "DIV",
+          "text": "123456789101112131415161718192021222324252627282930311234567",
+          "class": "min-w-max",
+          "rect": {
+            "x": 0,
+            "y": 457,
+            "width": 1216,
+            "height": 24,
+            "top": 457,
+            "right": 1216,
+            "bottom": 481,
+            "left": 0
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "123456789101112131415161718192021222324252627282930311234567",
+          "class": "flex h-6",
+          "rect": {
+            "x": 0,
+            "y": 457,
+            "width": 1216,
+            "height": 24,
+            "top": 457,
+            "right": 1216,
+            "bottom": 481,
+            "left": 0
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "2",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold bg-muted text-muted-foreground",
+          "rect": {
+            "x": 1024,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 1056,
+            "bottom": 481,
+            "left": 1024
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "3",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold bg-muted text-muted-foreground",
+          "rect": {
+            "x": 1056,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 1088,
+            "bottom": 481,
+            "left": 1056
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "4",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold bg-muted text-muted-foreground",
+          "rect": {
+            "x": 1088,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 1120,
+            "bottom": 481,
+            "left": 1088
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "5",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold bg-muted text-muted-foreground",
+          "rect": {
+            "x": 1120,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 1152,
+            "bottom": 481,
+            "left": 1120
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "6",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold bg-muted text-muted-foreground",
+          "rect": {
+            "x": 1152,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 1184,
+            "bottom": 481,
+            "left": 1152
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "7",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 flex items-center justify-center text-xs font-semibold bg-muted text-muted-foreground",
+          "rect": {
+            "x": 1184,
+            "y": 457,
+            "width": 32,
+            "height": 24,
+            "top": 457,
+            "right": 1216,
+            "bottom": 481,
+            "left": 1184
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "通常名刺(ラゾーナ川崎店)通常名刺の詳細を見るお正月限定名刺配布開始(池袋西口店)お正月限定名刺配布開始の詳細を見るびた",
+          "class": "min-w-max",
+          "rect": {
+            "x": 0,
+            "y": 481,
+            "width": 1216,
+            "height": 3040,
+            "top": 481,
+            "right": 1216,
+            "bottom": 3521,
+            "left": 0
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "通常名刺(ラゾーナ川崎店)通常名刺の詳細を見るお正月限定名刺配布開始(池袋西口店)お正月限定名刺配布開始の詳細を見るびた",
+          "class": "",
+          "rect": {
+            "x": 0,
+            "y": 481,
+            "width": 1216,
+            "height": 3040,
+            "top": 481,
+            "right": 1216,
+            "bottom": 3521,
+            "left": 0
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "通常名刺(ラゾーナ川崎店)通常名刺の詳細を見る",
+          "class": "relative flex h-8",
+          "rect": {
+            "x": 0,
+            "y": 481,
+            "width": 1216,
+            "height": 32,
+            "top": 481,
+            "right": 1216,
+            "bottom": 513,
+            "left": 0
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "w-8 shrink-0 border-r border-card-border last:border-r-0 bg-muted/50",
+          "rect": {
+            "x": 1024,
+            "y": 481,
+            "width": 32,
+            "height": 32,
+            "top": 481,
+            "right": 1056,
+            "bottom": 513,
+            "left": 1024
+          }
+        }
+      ],
+      "truncated": [
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "12px",
+          "width": 116
+        },
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "12px",
+          "width": 92
+        }
+      ]
+    }
+  },
+  {
+    "route": "/characters/abeno",
+    "width": 1024,
+    "result": {
+      "url": "https://biccame-musume.com/characters/abeno",
+      "width": 1024,
+      "rootWidth": 1024,
+      "height": 1775,
+      "scrollY": 0,
+      "main": "ホーム\nビッカメ娘\nあべのたん\n戻る\nあべのたん\n@bic_abeno\n\nビックカメラあべのキューズモール店の擬人化キャラクター。たこ焼きの髪飾り・タコのぬいぐるみ(？)が特徴。青い腕輪はお店のロゴから。\n\n公式プロフィール\n大阪府\n9月7日生まれ\n地図で見る\n直近のイベント\n\n通常名刺\n\n2025/02/28〜なくなり次第\n\n開催中\n\n通常名刺\n\n2026/01/31〜なくなり次第\n\n開催中\n\nビッカメ娘11周年記念名刺\n\n2026/04/30〜なくなり次第\n\n開催中\n\n限定名刺\n\n2026/",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 57,
+        "top": 0,
+        "right": 1024,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/ranking",
+    "width": 1024,
+    "result": {
+      "url": "https://biccame-musume.com/ranking",
+      "width": 1024,
+      "rootWidth": 1024,
+      "height": 3085,
+      "scrollY": 0,
+      "main": "総選挙\nビッカメ娘全員に投票\n2\nさっぽろたん\n578\n★\n1\n新東たん\nCHAMPION\n679\n3\n岡山たん\n566\n4\nなんばたん\n541\n5\nしぶとーたん\n517\n6\n八尾たん\n508\n7\nあべのたん\n489\n8\nパソ館たん\n388\n9\n川崎たん\n378\n10\n藤沢たん\n372\n11\n天神2号たん\n365\n12\nしぶハチたん\n363\n13\nくまもとたん\n362\n13\n大宮たん\n362\n15\nたかつきたん\n353\n16\n京都たん\n351\n17\nなごやげーとたん\n349\n18\n広島たん\n34",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 57,
+        "top": 0,
+        "right": 1024,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/",
+    "width": 1440,
+    "result": {
+      "url": "https://biccame-musume.com/",
+      "width": 1440,
+      "rootWidth": 1440,
+      "height": 2164,
+      "scrollY": 0,
+      "main": "ビッカメ娘をもっと身近に、もっと楽しく\n\n推し活を全力サポート - イベント追跡から店舗巡りまで\n\n本日\n249\n合計\n63,466\n開催中のイベントグループ\nいこまい名古屋秋祭り\n\n2\n件\n\n～Flower Fairyland～\n\n0\n件\n\n美味しいもの食べ隊\n\n9\n件\n\nイベントグループ一覧\n直近の誕生日\n\n岡山たん\n\n10月5日\n\n3日後\n\nたかつきたん\n\n10月6日\n\n4日後\n\n新東たん\n\n10月19日\n\n17日後\n\n本店たん\n\n10月21日\n\n19日後\n\n立川たん\n\n10月25日\n\n2",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 57,
+        "top": 0,
+        "right": 1440,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/characters",
+    "width": 1440,
+    "result": {
+      "url": "https://biccame-musume.com/characters",
+      "width": 1440,
+      "rootWidth": 1440,
+      "height": 2048,
+      "scrollY": 0,
+      "main": "ビッカメ娘一覧\n地域で絞り込み\n全国\n北海道\n関東\n中部\n関西\n九州\n並び替え\nランダム\n誕生日順\n開店日順\n誕生日が近い順\nビッカメ娘\n本店たん\nフォトたん\nなごやげーとたん\nたかさきたん\nふなとーたん\nアキバたん\nパソ館たん\n新東たん\nプロスタたん\nせいせきたん\n藤沢たん\n新横たん\n有楽町たん\nみっけたん\nさっぽろたん\nふなたん\n天神1号たん\nなんばたん\nなごやたん\n川崎たん\n水戸たん\n天神2号たん\n横西たん\n広島たん\nたまプラたん\nカメ館たん\n池西たん\nあべのたん\n調布たん\n八王子たん\nた",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 57,
+        "top": 0,
+        "right": 1440,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/events",
+    "width": 1440,
+    "result": {
+      "url": "https://biccame-musume.com/events",
+      "width": 1440,
+      "rootWidth": 1440,
+      "height": 3630,
+      "scrollY": 0,
+      "main": "開催中のイベントグループ（18 件）\n\nいこまい名古屋秋祭り ほか\n\nイベント一覧\n種別で絞り込み\n限定名刺\n通年名刺\nアクキー\nその他\n店舗で絞り込み\nすべての店舗\n開催状況で絞り込み\n開催前\n開催中\n終了\n地域で絞り込み\n全国\n北海道\n関東\n中部\n関西\n九州\n26/08\n26/09\n26/10\n26/11\n26/12\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n1\n2\n",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 57,
+        "top": 0,
+        "right": 1440,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [
+        {
+          "tag": "DIV",
+          "text": "缶バッジで繋ぐビッカメ娘旅(有楽町店)",
+          "class": "absolute inset-y-0 flex items-center gap-1.5 px-2 transition-opacity duration-150 opacity-100",
+          "rect": {
+            "x": 1296,
+            "y": 3429,
+            "width": 211.96875,
+            "height": 24,
+            "top": 3429,
+            "right": 1507.96875,
+            "bottom": 3453,
+            "left": 1296
+          }
+        },
+        {
+          "tag": "SPAN",
+          "text": "(有楽町店)",
+          "class": "text-xs text-white/70 shrink-0",
+          "rect": {
+            "x": 1426.078125,
+            "y": 3433,
+            "width": 55.890625,
+            "height": 16,
+            "top": 3433,
+            "right": 1481.96875,
+            "bottom": 3449,
+            "left": 1426.078125
+          }
+        },
+        {
+          "tag": "svg",
+          "text": "",
+          "class": {},
+          "rect": {
+            "x": 1487.96875,
+            "y": 3435,
+            "width": 12,
+            "height": 12,
+            "top": 3435,
+            "right": 1499.96875,
+            "bottom": 3447,
+            "left": 1487.96875
+          }
+        },
+        {
+          "tag": "path",
+          "text": "",
+          "class": {},
+          "rect": {
+            "x": 1495.46875,
+            "y": 3436.5,
+            "width": 3,
+            "height": 3,
+            "top": 3436.5,
+            "right": 1498.46875,
+            "bottom": 3439.5,
+            "left": 1495.46875
+          }
+        },
+        {
+          "tag": "path",
+          "text": "",
+          "class": {},
+          "rect": {
+            "x": 1492.96875,
+            "y": 3436.5,
+            "width": 5.5,
+            "height": 5.5,
+            "top": 3436.5,
+            "right": 1498.46875,
+            "bottom": 3442,
+            "left": 1492.96875
+          }
+        },
+        {
+          "tag": "path",
+          "text": "",
+          "class": {},
+          "rect": {
+            "x": 1489.46875,
+            "y": 3438,
+            "width": 7.5,
+            "height": 7.5,
+            "top": 3438,
+            "right": 1496.96875,
+            "bottom": 3445.5,
+            "left": 1489.46875
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "缶バッジで繋ぐビッカメ娘旅(AKIBA)",
+          "class": "absolute inset-y-0 flex items-center gap-1.5 px-2 transition-opacity duration-150 opacity-100",
+          "rect": {
+            "x": 1296,
+            "y": 3461,
+            "width": 237.15625,
+            "height": 24,
+            "top": 3461,
+            "right": 1533.15625,
+            "bottom": 3485,
+            "left": 1296
+          }
+        },
+        {
+          "tag": "SPAN",
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "class": "text-xs text-white font-medium truncate",
+          "rect": {
+            "x": 1304,
+            "y": 3465,
+            "width": 156.015625,
+            "height": 16,
+            "top": 3465,
+            "right": 1460.015625,
+            "bottom": 3481,
+            "left": 1304
+          }
+        },
+        {
+          "tag": "SPAN",
+          "text": "(AKIBA)",
+          "class": "text-xs text-white/70 shrink-0",
+          "rect": {
+            "x": 1466.015625,
+            "y": 3465,
+            "width": 41.140625,
+            "height": 16,
+            "top": 3465,
+            "right": 1507.15625,
+            "bottom": 3481,
+            "left": 1466.015625
+          }
+        },
+        {
+          "tag": "svg",
+          "text": "",
+          "class": {},
+          "rect": {
+            "x": 1513.15625,
+            "y": 3467,
+            "width": 12,
+            "height": 12,
+            "top": 3467,
+            "right": 1525.15625,
+            "bottom": 3479,
+            "left": 1513.15625
+          }
+        },
+        {
+          "tag": "path",
+          "text": "",
+          "class": {},
+          "rect": {
+            "x": 1520.65625,
+            "y": 3468.5,
+            "width": 3,
+            "height": 3,
+            "top": 3468.5,
+            "right": 1523.65625,
+            "bottom": 3471.5,
+            "left": 1520.65625
+          }
+        },
+        {
+          "tag": "path",
+          "text": "",
+          "class": {},
+          "rect": {
+            "x": 1518.15625,
+            "y": 3468.5,
+            "width": 5.5,
+            "height": 5.5,
+            "top": 3468.5,
+            "right": 1523.65625,
+            "bottom": 3474,
+            "left": 1518.15625
+          }
+        }
+      ],
+      "truncated": [
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "12px",
+          "width": 116
+        },
+        {
+          "text": "缶バッジで繋ぐビッカメ娘旅",
+          "font": "12px",
+          "width": 92
+        }
+      ]
+    }
+  },
+  {
+    "route": "/calendar",
+    "width": 1440,
+    "result": {
+      "url": "https://biccame-musume.com/calendar",
+      "width": 1440,
+      "rootWidth": 1440,
+      "height": 900,
+      "scrollY": 0,
+      "main": "2026年10月\n1月\n2月\n3月\n4月\n5月\n6月\n7月\n8月\n9月\n10月\n11月\n12月\n日\n月\n火\n水\n木\n金\n土\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\nスポーツの日\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n爆誕記念日\n店舗記念日\n祝日",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 57,
+        "top": 0,
+        "right": 1440,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/characters/abeno",
+    "width": 1440,
+    "result": {
+      "url": "https://biccame-musume.com/characters/abeno",
+      "width": 1440,
+      "rootWidth": 1440,
+      "height": 1775,
+      "scrollY": 0,
+      "main": "ホーム\nビッカメ娘\nあべのたん\n戻る\nあべのたん\n@bic_abeno\n\nビックカメラあべのキューズモール店の擬人化キャラクター。たこ焼きの髪飾り・タコのぬいぐるみ(？)が特徴。青い腕輪はお店のロゴから。\n\n公式プロフィール\n大阪府\n9月7日生まれ\n地図で見る\n直近のイベント\n\n通常名刺\n\n2025/02/28〜なくなり次第\n\n開催中\n\n通常名刺\n\n2026/01/31〜なくなり次第\n\n開催中\n\nビッカメ娘11周年記念名刺\n\n2026/04/30〜なくなり次第\n\n開催中\n\n限定名刺\n\n2026/",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 57,
+        "top": 0,
+        "right": 1440,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/location",
+    "width": 1440,
+    "result": {
+      "url": "https://biccame-musume.com/location",
+      "width": 1440,
+      "rootWidth": 1440,
+      "height": 900,
+      "scrollY": 0,
+      "main": "Keyboard shortcuts\nMap data ©2026 Google, TMap Mobility\nTerms\n店舗一覧",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 57,
+        "top": 0,
+        "right": 1440,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -156,
+            "y": 790,
+            "width": 256,
+            "height": 256,
+            "top": 790,
+            "right": 100,
+            "bottom": 1046,
+            "left": -156
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -156,
+            "y": 790,
+            "width": 256,
+            "height": 256,
+            "top": 790,
+            "right": 100,
+            "bottom": 1046,
+            "left": -156
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -156,
+            "y": 534,
+            "width": 256,
+            "height": 256,
+            "top": 534,
+            "right": 100,
+            "bottom": 790,
+            "left": -156
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -156,
+            "y": 534,
+            "width": 256,
+            "height": 256,
+            "top": 534,
+            "right": 100,
+            "bottom": 790,
+            "left": -156
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -156,
+            "y": 278,
+            "width": 256,
+            "height": 256,
+            "top": 278,
+            "right": 100,
+            "bottom": 534,
+            "left": -156
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -156,
+            "y": 278,
+            "width": 256,
+            "height": 256,
+            "top": 278,
+            "right": 100,
+            "bottom": 534,
+            "left": -156
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -156,
+            "y": 22,
+            "width": 256,
+            "height": 256,
+            "top": 22,
+            "right": 100,
+            "bottom": 278,
+            "left": -156
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": -156,
+            "y": 22,
+            "width": 256,
+            "height": 256,
+            "top": 22,
+            "right": 100,
+            "bottom": 278,
+            "left": -156
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": 1380,
+            "y": 22,
+            "width": 256,
+            "height": 256,
+            "top": 22,
+            "right": 1636,
+            "bottom": 278,
+            "left": 1380
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": 1380,
+            "y": 22,
+            "width": 256,
+            "height": 256,
+            "top": 22,
+            "right": 1636,
+            "bottom": 278,
+            "left": 1380
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": 1380,
+            "y": 278,
+            "width": 256,
+            "height": 256,
+            "top": 278,
+            "right": 1636,
+            "bottom": 534,
+            "left": 1380
+          }
+        },
+        {
+          "tag": "DIV",
+          "text": "",
+          "class": "",
+          "rect": {
+            "x": 1380,
+            "y": 278,
+            "width": 256,
+            "height": 256,
+            "top": 278,
+            "right": 1636,
+            "bottom": 534,
+            "left": 1380
+          }
+        }
+      ],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/ranking",
+    "width": 1440,
+    "result": {
+      "url": "https://biccame-musume.com/ranking",
+      "width": 1440,
+      "rootWidth": 1440,
+      "height": 2301,
+      "scrollY": 0,
+      "main": "総選挙\nビッカメ娘全員に投票\n2\nさっぽろたん\n578\n★\n1\n新東たん\nCHAMPION\n679\n3\n岡山たん\n566\n4\nなんばたん\n541\n5\nしぶとーたん\n517\n6\n八尾たん\n508\n7\nあべのたん\n489\n8\nパソ館たん\n388\n9\n川崎たん\n378\n10\n藤沢たん\n372\n11\n天神2号たん\n365\n12\nしぶハチたん\n363\n13\nくまもとたん\n362\n13\n大宮たん\n362\n15\nたかつきたん\n353\n16\n京都たん\n351\n17\nなごやげーとたん\n349\n18\n広島たん\n34",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 57,
+        "top": 0,
+        "right": 1440,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  },
+  {
+    "route": "/route",
+    "width": 1440,
+    "result": {
+      "url": "https://biccame-musume.com/route",
+      "width": 1440,
+      "rootWidth": 1440,
+      "height": 900,
+      "scrollY": 0,
+      "main": "ルート計算\n店舗を追加...\n最短ルートを探索",
+      "version": "v0.35.4 (4dfd2d4)",
+      "headerRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 57,
+        "top": 0,
+        "right": 1440,
+        "bottom": 57,
+        "left": 0
+      },
+      "overflows": [],
+      "truncated": []
+    }
+  }
+]

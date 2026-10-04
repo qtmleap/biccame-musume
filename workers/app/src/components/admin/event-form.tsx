@@ -1,0 +1,395 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FileText, FolderTree, Package, Store, UserRound } from 'lucide-react'
+import { useCallback, useState } from 'react'
+import { Controller, type DefaultValues, useFieldArray, useForm, useWatch } from 'react-hook-form'
+import { EventConfirmation } from '@/components/admin/event-confirmation'
+import { ConditionsSection } from '@/components/admin/form/conditions-section'
+import { DateField } from '@/components/admin/form/date-field'
+import { EventFlagsSection } from '@/components/admin/form/event-flags-section'
+import { ReferenceUrlsSection } from '@/components/admin/form/reference-urls-section'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
+import { useCharacters } from '@/hooks/use-characters'
+import { useEventGroups } from '@/hooks/use-event-groups'
+import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/use-events'
+import { buildInitialValues, EventFormSchema, type EventFormValues, toEventPayload } from '@/lib/event-form'
+import {
+  ADMIN_LABELS,
+  CHARACTER_NAME_LABELS,
+  EVENT_CATEGORY_LABELS,
+  SPECIAL_CHARACTER_LABELS,
+  STORE_NAME_LABELS
+} from '@/locales/app.content'
+import { type Event, EventCategorySchema, type EventRequest, SpecialCharacterSchema } from '@/schemas/event.dto'
+import type { StoreKey } from '@/schemas/store.dto'
+
+const NO_GROUP_VALUE = '__none__'
+const SAME_AS_STORE_VALUE = '__same_as_store__'
+
+export const EventForm = ({
+  defaultValues,
+  onSuccess,
+  isEditMode = false,
+  mode
+}: {
+  defaultValues?: DefaultValues<EventFormValues>
+  onSuccess?: () => void
+  isEditMode?: boolean
+  mode?: 'create' | 'edit'
+}) => {
+  const formMode = mode || (isEditMode ? 'edit' : 'create')
+  const createEvent = useCreateEvent()
+  const updateEvent = useUpdateEvent()
+  const { data: characters } = useCharacters()
+  const { data: eventGroups } = useEventGroups()
+
+  const [duplicateWarnings, setDuplicateWarnings] = useState<Record<number, Event | null>>({})
+  const [isConfirming, setIsConfirming] = useState(false)
+  const [confirmedData, setConfirmedData] = useState<EventRequest | null>(null)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const storeKeys = Array.from(
+    new Set(characters.filter((c) => c.store?.address && c.store.address.trim() !== '').map((c) => c.id))
+  ).sort((a, b) => (STORE_NAME_LABELS[a as StoreKey] ?? a).localeCompare(STORE_NAME_LABELS[b as StoreKey] ?? b, 'ja'))
+
+  // 閉店店舗の娘のイベントを別の娘が担当することがあるため、店舗の有無で絞らない
+  const characterKeys = Array.from(
+    new Set(characters.filter((c) => c.character?.is_biccame_musume === true).map((c) => c.id))
+  ).sort((a, b) =>
+    (CHARACTER_NAME_LABELS[a as StoreKey] ?? STORE_NAME_LABELS[a as StoreKey] ?? a).localeCompare(
+      CHARACTER_NAME_LABELS[b as StoreKey] ?? STORE_NAME_LABELS[b as StoreKey] ?? b,
+      'ja'
+    )
+  ) as StoreKey[]
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<EventFormValues>({
+    resolver: zodResolver(EventFormSchema),
+    defaultValues: buildInitialValues(defaultValues),
+    mode: 'onBlur'
+  })
+
+  const { fields, remove, append } = useFieldArray({
+    control,
+    name: 'conditions'
+  })
+
+  const {
+    fields: referenceUrlFields,
+    append: appendReferenceUrl,
+    remove: removeReferenceUrl
+  } = useFieldArray({
+    control,
+    name: 'referenceUrls'
+  })
+
+  const referenceUrls = useWatch({ control, name: 'referenceUrls' }) || []
+
+  const checkUrlDuplicate = useCallback(
+    async (index: number, url: string) => {
+      if (!url?.startsWith('http')) {
+        setDuplicateWarnings((prev) => ({ ...prev, [index]: null }))
+        return
+      }
+
+      try {
+        const result = await checkDuplicateUrl(url, defaultValues?.uuid)
+        setDuplicateWarnings((prev) => ({
+          ...prev,
+          [index]: result.exists ? (result.event ?? null) : null
+        }))
+      } catch {
+        setDuplicateWarnings((prev) => ({ ...prev, [index]: null }))
+      }
+    },
+    [defaultValues?.uuid]
+  )
+
+  const handleReset = () => {
+    reset(buildInitialValues(defaultValues))
+    setIsConfirming(false)
+    setConfirmedData(null)
+    setIsSubmitted(false)
+  }
+
+  const handleConfirm = (data: EventFormValues) => {
+    setConfirmedData(toEventPayload(data, { isEditMode, fallbackUuid: defaultValues?.uuid }))
+    setIsConfirming(true)
+  }
+
+  const handleBack = () => {
+    setIsConfirming(false)
+  }
+
+  const onSubmit = async () => {
+    if (!confirmedData) return
+    if (isSubmitted) return
+
+    setIsSubmitted(true)
+
+    try {
+      if (isEditMode && defaultValues?.uuid) {
+        await updateEvent.mutateAsync({
+          id: defaultValues.uuid,
+          data: confirmedData
+        })
+      } else {
+        await createEvent.mutateAsync(confirmedData)
+      }
+      // 先に親に成功を伝えて navigate を走らせる。handleReset は遷移後の表示には不要。
+      onSuccess?.()
+      handleReset()
+    } catch (_error) {
+      setIsSubmitted(false)
+    }
+  }
+
+  if (isConfirming && confirmedData) {
+    const isMutating = createEvent.isPending || updateEvent.isPending
+    return (
+      <EventConfirmation
+        data={confirmedData}
+        isSubmitting={isMutating}
+        onBack={handleBack}
+        onSubmit={onSubmit}
+        mode={formMode}
+      />
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit(handleConfirm)} className='space-y-5'>
+      <Badge variant={formMode === 'edit' ? 'secondary' : 'default'}>
+        {formMode === 'edit' ? ADMIN_LABELS.eventEdit : ADMIN_LABELS.eventNew}
+      </Badge>
+
+      {/* イベント名 */}
+      <div>
+        <label htmlFor='event-title' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+          <FileText className='size-4' />
+          イベント名
+        </label>
+        <Input
+          id='event-title'
+          type='text'
+          placeholder='例: 新春アクキープレゼント'
+          {...register('title')}
+          className='w-full'
+        />
+        {errors.title && <p className='mt-1 text-xs text-destructive'>{errors.title.message}</p>}
+      </div>
+
+      {/* 日付設定 */}
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+        <DateField
+          id='start-date'
+          label={ADMIN_LABELS.startDate}
+          control={control}
+          name='startDate'
+          error={errors.startDate?.message}
+        />
+        <DateField id='end-date' label='終了日（任意）' control={control} name='endDate' clearable />
+      </div>
+
+      {/* 実際の終了日 */}
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+        <DateField
+          id='actual-end-date'
+          label='実際の終了日（配布終了時に設定）'
+          control={control}
+          name='endedAt'
+          clearable
+          hint={ADMIN_LABELS.endDateHint}
+        />
+      </div>
+
+      <Separator />
+
+      {/* イベント種別・開催店舗 */}
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+        <div>
+          <label htmlFor='category-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+            <Package className='size-4' />
+            イベント種別
+          </label>
+          <Controller
+            name='category'
+            control={control}
+            render={({ field }) => {
+              return (
+                <Select value={field.value ?? ''} onValueChange={field.onChange}>
+                  <SelectTrigger id='category-trigger' className='w-full'>
+                    <SelectValue placeholder={ADMIN_LABELS.selectCategory} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {EventCategorySchema.options.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {EVENT_CATEGORY_LABELS[cat]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )
+            }}
+          />
+          {errors.category && <p className='mt-1 text-xs text-destructive'>{errors.category.message}</p>}
+        </div>
+
+        <div>
+          <label htmlFor='store-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+            <Store className='size-4' />
+            開催店舗
+          </label>
+          <Controller
+            name='stores'
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={(field.value?.[0] as string) ?? ''}
+                onValueChange={(value) => field.onChange([value as StoreKey])}
+              >
+                <SelectTrigger id='store-trigger' className='w-full'>
+                  <SelectValue placeholder='店舗を選択' />
+                </SelectTrigger>
+                <SelectContent>
+                  {storeKeys.map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {STORE_NAME_LABELS[key as StoreKey] ?? key}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.stores && <p className='mt-1 text-xs text-destructive'>{errors.stores.message}</p>}
+        </div>
+      </div>
+
+      {/* 所属グループ・対象ビッカメ娘 */}
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+        <div>
+          <label htmlFor='group-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+            <FolderTree className='size-4' />
+            所属グループ（任意）
+          </label>
+          <Controller
+            name='groupId'
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value}
+                onValueChange={(value) => field.onChange(value === NO_GROUP_VALUE ? '' : value)}
+              >
+                <SelectTrigger id='group-trigger' className='w-full'>
+                  <SelectValue placeholder='グループを選択' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={NO_GROUP_VALUE}>なし</SelectItem>
+                  {eventGroups.map((group) => (
+                    <SelectItem key={group.uuid} value={group.uuid}>
+                      {group.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.groupId && <p className='mt-1 text-xs text-destructive'>{errors.groupId.message}</p>}
+        </div>
+
+        <div>
+          <label htmlFor='character-trigger' className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+            <UserRound className='size-4' />
+            対象ビッカメ娘（任意）
+          </label>
+          <Controller
+            name='characterId'
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value}
+                onValueChange={(value) => field.onChange(value === SAME_AS_STORE_VALUE ? '' : value)}
+              >
+                <SelectTrigger id='character-trigger' className='w-full'>
+                  <SelectValue placeholder='開催店舗と同じ' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={SAME_AS_STORE_VALUE}>開催店舗と同じ</SelectItem>
+                  {SpecialCharacterSchema.options.map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {SPECIAL_CHARACTER_LABELS[key]}
+                    </SelectItem>
+                  ))}
+                  {characterKeys.map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {CHARACTER_NAME_LABELS[key] ?? STORE_NAME_LABELS[key] ?? key}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.characterId && <p className='mt-1 text-xs text-destructive'>{errors.characterId.message}</p>}
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* 配布条件 */}
+      <ConditionsSection
+        fields={fields}
+        register={register}
+        remove={remove}
+        append={append}
+        error={errors.conditions?.message}
+      />
+
+      <Separator />
+
+      {/* 参考URL */}
+      <ReferenceUrlsSection
+        fields={referenceUrlFields}
+        register={register}
+        append={appendReferenceUrl}
+        remove={removeReferenceUrl}
+        referenceUrls={referenceUrls}
+        duplicateWarnings={duplicateWarnings}
+        onCheckDuplicate={checkUrlDuplicate}
+        onClearWarning={(index) =>
+          setDuplicateWarnings((prev) => {
+            const next = { ...prev }
+            delete next[index]
+            return next
+          })
+        }
+        error={errors.referenceUrls?.message}
+      />
+
+      <Separator />
+
+      <EventFlagsSection control={control} />
+
+      {/* ボタン */}
+      <div className='flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
+        <Button type='button' variant='outline' onClick={handleReset} disabled={isSubmitted} className='sm:w-32'>
+          クリア
+        </Button>
+        <Button
+          type='submit'
+          className='bg-brand hover:bg-brand/90 text-brand-foreground sm:w-48'
+          disabled={isSubmitted}
+        >
+          {isSubmitted ? '送信中…' : '確認する'}
+        </Button>
+      </div>
+    </form>
+  )
+}

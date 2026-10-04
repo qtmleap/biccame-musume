@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import type { EventDetail } from '../../src/schemas/event.dto'
+import type { EventDetail } from '../../workers/app/src/schemas/event.dto'
 import {
   buildDailySummaryTweets,
   buildEndingTodaySummaryTweets,
@@ -8,7 +8,7 @@ import {
   getQuoteTweetId,
   TWEET_WEIGHT_LIMIT,
   weightedLength
-} from '../../src/utils/tweet-text'
+} from '../../workers/app/src/utils/tweet-text'
 
 const TWEET_LIMIT = TWEET_WEIGHT_LIMIT
 
