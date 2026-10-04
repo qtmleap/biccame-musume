@@ -7,18 +7,24 @@ import satori from 'satori'
 import sharp from 'sharp'
 import { z } from 'zod'
 import {
+  type EventRow,
   eventRow,
   formatDay,
   groupRows,
   type ImageEvent,
   isSaturday,
   isSunday,
-  jstDayKey
+  jstDayKey,
+  type Phase,
+  sinceLabel,
+  splitByPhase,
+  untilLabel
 } from '../workers/app/src/images/format'
 import {
   DailyImage,
   EventAddedImage,
   EventOgImage,
+  MAX_POST_IMAGE_HEIGHT,
   type Portraits,
   type WeekDay,
   WeeklyImage
@@ -78,8 +84,6 @@ const isHoliday = (date: Date) => {
   const [year, month, day] = jstDayKey(date).split('-').map(Number)
   return getHolidayName(year, month, day) !== null
 }
-const startsOn = (event: ImageEvent, day: string) => jstDayKey(event.startDate) === day
-const endsOn = (event: ImageEvent, day: string) => event.endDate !== undefined && jstDayKey(event.endDate) === day
 
 const events = await loadEvents()
 const pick = (prefix: string) => {
@@ -88,42 +92,77 @@ const pick = (prefix: string) => {
   return event
 }
 
+const phaseRows = (phases: Record<Phase, ImageEvent[]>, reference: Date): Record<Phase, EventRow[]> => ({
+  starting: groupRows(phases.starting, (event) => untilLabel(event, reference)),
+  ongoing: groupRows(phases.ongoing, (event) => untilLabel(event, reference)),
+  ending: groupRows(phases.ending, (event) => sinceLabel(event, reference))
+})
+
 // 1. 日次: 開始・終了のどちらも複数ある日
 const dailyDate = at('2026-02-14T00:00:00+09:00')
-const dailyKey = jstDayKey(dailyDate)
-const dailyStarting = groupRows(
-  events.filter((event) => startsOn(event, dailyKey)),
-  (event) => (event.endDate ? `${formatDay(event.endDate)}まで` : '終了日未定')
-)
-const dailyEnding = groupRows(
-  events.filter((event) => endsOn(event, dailyKey)),
-  (event) => `${formatDay(event.startDate)}から`
-)
+const daily = phaseRows(splitByPhase(events, jstDayKey(dailyDate), jstDayKey(dailyDate)), dailyDate)
 
 // 2. OG と 3. 追加時: 調布店で配布される、せいせきたんの缶バッジ（店舗と対象の娘が異なる例）
 const featured = eventRow(pick('16e89d75'))
 
 // 4. 週次: 金曜から7日間
 const weekStart = at('2026-06-26T00:00:00+09:00')
-const weekDays: WeekDay[] = Array.from({ length: 7 }, (_, offset) => {
-  const date = new Date(weekStart.getTime() + offset * 86_400_000)
-  const key = jstDayKey(date)
-  return {
+const weekDates = Array.from({ length: 7 }, (_, offset) => new Date(weekStart.getTime() + offset * 86_400_000))
+const weekEnd = weekDates[6]
+const week = splitByPhase(events, jstDayKey(weekStart), jstDayKey(weekEnd))
+const byDay = (list: ImageEvent[], dateOf: (event: ImageEvent) => Date | undefined, note: (event: ImageEvent) => string): WeekDay[] =>
+  weekDates.map((date) => ({
     label: formatDay(date),
     holiday: isSaturday(date) || isSunday(date) || isHoliday(date),
-    starting: groupRows(
-      events.filter((event) => startsOn(event, key)),
-      (event) => (event.endDate ? `${formatDay(event.endDate)}まで` : '終了日未定')
-    ),
-    ending: groupRows(
-      events.filter((event) => endsOn(event, key)),
-      (event) => `${formatDay(event.startDate)}から`
+    rows: groupRows(
+      list.filter((event) => {
+        const day = dateOf(event)
+        return day !== undefined && jstDayKey(day) === jstDayKey(date)
+      }),
+      note
     )
-  }
-})
-const weekEnd = new Date(weekStart.getTime() + 6 * 86_400_000)
+  }))
+const weekly: Record<Phase, WeekDay[]> = {
+  starting: byDay(week.starting, (event) => event.startDate, (event) => untilLabel(event, weekStart)),
+  ongoing: [{ label: null, holiday: false, rows: groupRows(week.ongoing, (event) => untilLabel(event, weekStart)) }],
+  ending: byDay(week.ending, (event) => event.endDate, (event) => sinceLabel(event, weekStart))
+}
+const weekRange = `${formatDay(weekStart)}〜${formatDay(weekEnd)}`
 
-const allRows = [featured, ...dailyStarting, ...dailyEnding, ...weekDays.flatMap((day) => [...day.starting, ...day.ending])]
+const phases: Phase[] = ['starting', 'ongoing', 'ending']
+
+// 高さの上限を確かめる最悪ケース: 長い題名・店舗名・対象の娘・多数の店舗を、全日・全区分に詰める
+const longest = groupRows(
+  [
+    {
+      ...pick('16e89d75'),
+      title: 'スマホ用カードケース+擬人化10周年記念アクキー・デカ立川たんアクキー',
+      stores: ['nagoyagate', 'abeno', 'ikenishi', 'kumamoto']
+    }
+  ],
+  () => '店舗により異なる'
+)[0]
+const crowded = Array.from({ length: 12 }, () => longest)
+const worstCases = [
+  <DailyImage date={dailyDate} kind='ongoing' rows={crowded} portraits={{}} />,
+  <WeeklyImage
+    range={weekRange}
+    kind='starting'
+    days={weekDates.map((date) => ({ label: formatDay(date), holiday: true, rows: crowded }))}
+    portraits={{}}
+  />,
+  // 日付見出しが最も多くなる、毎日1件ずつのケース
+  <WeeklyImage
+    range={weekRange}
+    kind='ending'
+    days={weekDates.map((date) => ({ label: formatDay(date), holiday: false, rows: [longest] }))}
+    portraits={{}}
+  />
+]
+const allRows = [
+  featured,
+  ...phases.flatMap((phase) => [...daily[phase], ...weekly[phase].flatMap((day) => day.rows)])
+]
 const portraits = await loadPortraits(allRows.flatMap((row) => row.portraits))
 const fonts = [
   { name: 'Zen Maru Gothic', data: await readFile(font(500)), weight: 500 as const, style: 'normal' as const },
@@ -131,20 +170,35 @@ const fonts = [
 ]
 
 const samples = [
-  ['1-daily', <DailyImage date={dailyDate} starting={dailyStarting} ending={dailyEnding} portraits={portraits} />],
-  ['2-og', <EventOgImage row={featured} portraits={portraits} />],
-  ['3-added', <EventAddedImage row={featured} portraits={portraits} />],
-  [
-    '4-weekly',
-    <WeeklyImage range={`${formatDay(weekStart)}〜${formatDay(weekEnd)}`} days={weekDays} portraits={portraits} />
-  ]
-] as const
+  ...phases.map(
+    (phase, index) =>
+      [
+        `1${'abc'[index]}-daily-${phase}`,
+        <DailyImage date={dailyDate} kind={phase} rows={daily[phase]} portraits={portraits} />
+      ] as const
+  ),
+  ['2-og', <EventOgImage row={featured} portraits={portraits} />] as const,
+  ['3-added', <EventAddedImage row={featured} portraits={portraits} />] as const,
+  ...phases.map(
+    (phase, index) =>
+      [
+        `4${'abc'[index]}-weekly-${phase}`,
+        <WeeklyImage range={weekRange} kind={phase} days={weekly[phase]} portraits={portraits} />
+      ] as const
+  )
+]
 
+// 高さを指定しない画像は内容に合わせて伸ばす。X で切られない 3:4 を超えたら止める
+const render = async (element: Parameters<typeof satori>[0]) => {
+  const png = new Resvg(await satori(element, { width: 1200, fonts }), { fitTo: { mode: 'width', value: 1200 } }).render()
+  if (png.height > MAX_POST_IMAGE_HEIGHT) throw new Error(`Image is ${png.height}px tall (max ${MAX_POST_IMAGE_HEIGHT})`)
+  return png
+}
+
+for (const element of worstCases) console.log(`worst case fits: ${(await render(element)).height}px`)
 await mkdir(outDir, { recursive: true })
 for (const [name, element] of samples) {
-  // 高さを指定しない画像は内容に合わせて伸ばす
-  const svg = await satori(element, { width: 1200, fonts })
-  const png = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render()
+  const png = await render(element)
   await writeFile(resolve(outDir, `${name}.png`), png.asPng())
   console.log(`${name}.png ${png.width}x${png.height}`)
 }

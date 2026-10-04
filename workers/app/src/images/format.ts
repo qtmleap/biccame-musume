@@ -10,7 +10,16 @@ dayjs.extend(utc)
 /** 投稿画像に載せるイベントの項目 */
 export type ImageEvent = Pick<
   Event,
-  'uuid' | 'title' | 'category' | 'stores' | 'characterId' | 'startDate' | 'endDate' | 'conditions' | 'limitedQuantity'
+  | 'uuid'
+  | 'title'
+  | 'category'
+  | 'stores'
+  | 'characterId'
+  | 'startDate'
+  | 'endDate'
+  | 'endedAt'
+  | 'conditions'
+  | 'limitedQuantity'
 > & { groupId?: string }
 
 /** 画像1行ぶん（同じグループの店舗違いをまとめたもの） */
@@ -48,6 +57,16 @@ export const formatPeriod = (start: Date, end: Date | undefined): string => {
   if (jst(start).isSame(jst(end), 'day')) return formatDay(start)
   return `${formatDay(start)}〜${formatDay(end, jst(start).year() !== jst(end).year())}`
 }
+
+const sameYear = (a: Date, b: Date) => jst(a).year() === jst(b).year()
+
+/** 「7/26(日)まで」。基準日（画像の日付）と年が違えば年を付ける */
+export const untilLabel = (event: Pick<ImageEvent, 'endDate'>, reference: Date): string =>
+  event.endDate ? `${formatDay(event.endDate, !sameYear(event.endDate, reference))}まで` : '終了日未定'
+
+/** 「2/1(日)から」。基準日と年が違えば年を付ける */
+export const sinceLabel = (event: Pick<ImageEvent, 'startDate'>, reference: Date): string =>
+  `${formatDay(event.startDate, !sameYear(event.startDate, reference))}から`
 
 /** 2026年10月5日(月) の形 */
 export const formatLongDay = (date: Date): string => {
@@ -191,4 +210,44 @@ export const splitTitle = (title: string, perLine: number): string[] => {
   // 自然な区切りが無ければ1行目を目一杯使う
   const index = candidates.length > 0 ? candidates[0].index : Math.min(perLine, Math.ceil(middle))
   return [chars.slice(0, index).join('').trimEnd(), chars.slice(index).join('').trimStart()]
+}
+
+/**
+ * 日ごとの行を、1日あたり perGroup 件・全体で total 件まで先頭から採る。
+ * 画像の高さを上限に収めるためで、採れなかった件数は「ほか N 件」に回す。
+ */
+export const takeRows = <T>(groups: T[][], perGroup: number, total: number): { shown: T[][]; hidden: number } => {
+  let left = total
+  const shown = groups.map((rows) => {
+    const taken = rows.slice(0, Math.min(perGroup, left))
+    left -= taken.length
+    return taken
+  })
+  const count = (lists: T[][]) => lists.reduce((sum, rows) => sum + rows.length, 0)
+  return { shown, hidden: count(groups) - count(shown) }
+}
+
+export type Phase = 'starting' | 'ongoing' | 'ending'
+
+/**
+ * JSTの日付キーで表した期間 [from, to] に対して、イベントを「はじまる・開催中・おわる」に振り分ける。
+ * 開催中は期間より前に始まり、期間の後も続くもの（終了日未定を含む）。早めに終了したもの（endedAt）は除く。
+ * 開催中は終了日の近い順に並べ、終了日未定は最後に回す。
+ */
+export const splitByPhase = (events: ImageEvent[], from: string, to: string): Record<Phase, ImageEvent[]> => {
+  const inRange = (key: string) => key >= from && key <= to
+  const lastDay = (event: ImageEvent) => (event.endDate ? jstDayKey(event.endDate) : null)
+  const order = (event: ImageEvent) => (event.endDate ? event.endDate.getTime() : Number.POSITIVE_INFINITY)
+  const ongoing = events.filter((event) => {
+    const last = lastDay(event)
+    return !event.endedAt && jstDayKey(event.startDate) < from && (last === null || last > to)
+  })
+  return {
+    starting: events.filter((event) => inRange(jstDayKey(event.startDate))),
+    ongoing: [...ongoing].sort((a, b) => order(a) - order(b)),
+    ending: events.filter((event) => {
+      const last = lastDay(event)
+      return last !== null && inRange(last)
+    })
+  }
 }
