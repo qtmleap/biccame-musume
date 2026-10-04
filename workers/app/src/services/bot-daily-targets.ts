@@ -11,7 +11,6 @@ export const readBotDailyTargets = async (
 ): Promise<DailyTargetsResult> => {
   const parsed = dailyRequestSchema.safeParse(input)
   if (!parsed.success) return { ok: false, kind: 'unavailable' }
-  if (env.X_POSTING_OWNER !== 'bot') return { ok: false, kind: 'disabled' }
   try {
     const scheduled = new Date(parsed.data.scheduledAt)
     const [starting, ending] = await Promise.all([

@@ -15,24 +15,26 @@ const configSchema = z.object({
   name: z.string().nonempty(),
   compatibility_date: z.string().nonempty(),
   compatibility_flags: z.array(z.string().nonempty()),
-  triggers: z.object({ crons: z.array(z.string().nonempty()).length(0) }),
+  triggers: z.object({ crons: z.array(z.string().nonempty()) }),
   services: z.array(z.object({ binding: z.string().nonempty(), service: z.string().nonempty(), entrypoint: z.string().nonempty() })),
   d1_databases: z.array(z.unknown()).length(0),
   vars: z.strictObject({
     OPENAI_BASE_URL: z.literal('https://ai.qleap.jp/v1'),
     OPENAI_MODEL: z.literal('codex,gpt-5.6-luna'),
-    TL_NOTIFICATIONS_ENABLED: z.literal('false'),
-    X_POSTING_ENABLED: z.literal('false'),
-    X_ACCOUNT_READ_ENABLED: z.literal('false')
+    TL_NOTIFICATIONS_ENABLED: z.enum(['true', 'false']),
+    X_POSTING_ENABLED: z.enum(['true', 'false']),
+    X_ACCOUNT_READ_ENABLED: z.enum(['true', 'false'])
   })
 })
 const parsed = configSchema.safeParse(JSON.parse(readFileSync(configPath, 'utf8')))
 if (!parsed.success) throw new Error('Invalid skeleton build configuration')
 const config = parsed.data
-if (process.env.BICCAME_BOT_RPC !== '1') assert.deepEqual(config.services, [])
-else {
-  const { botAppBinding } = await import('./worker-bindings.ts')
-  assert.deepEqual(config.services, [botAppBinding(process.env.CLOUDFLARE_ENV)])
+const { botAppBinding } = await import('./worker-bindings.ts')
+assert.deepEqual(config.services, process.env.BICCAME_BOT_BOOTSTRAP === '1' ? [] : [botAppBinding(process.env.CLOUDFLARE_ENV)])
+const enabled = process.env.CLOUDFLARE_ENV === 'production'
+assert.deepEqual(config.triggers.crons, enabled ? ['*/5 0-12 * * *', '0 0 * * *'] : [])
+for (const key of ['TL_NOTIFICATIONS_ENABLED', 'X_POSTING_ENABLED', 'X_ACCOUNT_READ_ENABLED'] as const) {
+  assert.equal(config.vars[key], enabled ? 'true' : 'false')
 }
 const dev: DevConfig = {
   outboundService: {

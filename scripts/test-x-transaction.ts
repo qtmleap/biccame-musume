@@ -3,7 +3,7 @@
  * Fetches the X home page and current signer module and generates a sample
  * x-client-transaction-id. Exits non-zero on any error.
  */
-import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '../workers/app/src/lib/x-transaction'
+import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '@biccame/shared/x/transaction'
 
 const homePageHtml = await fetchHomePageHtml()
 console.log(`home page html: ${homePageHtml.length} bytes`)

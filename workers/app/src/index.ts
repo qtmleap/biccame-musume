@@ -23,7 +23,6 @@ import votes from './api/vote'
 import { isAllowedOrigin } from './lib/allowed-origin'
 import { rewriteIndexHtml } from './middleware/og-rewrite'
 import { runBadgeCron } from './services/badge-cron'
-import { runDailyCron } from './services/daily-cron'
 import type { Bindings, Variables } from './types/bindings'
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
@@ -237,7 +236,7 @@ const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, 
     return
   }
   const scheduledAt = new Date(event.scheduledTime)
-  ctx.waitUntil(env.X_POSTING_OWNER === 'bot' ? runBadgeCron(env, scheduledAt) : runDailyCron(env, scheduledAt))
+  ctx.waitUntil(runBadgeCron(env, scheduledAt))
 }
 
 export { StatsDO } from './durable-objects/stats'

@@ -75,9 +75,13 @@ not_found_handling = "single-page-application"
 binding = "ASSETS"
 run_worker_first = ["/*"]
 
+[[services]]
+binding = "BOT"
+service = "musume-workers"
+entrypoint = "BotService"
+
 [vars]
 ENVIRONMENT = "local"
-X_POSTING_OWNER = "app"
 # ローカル開発で 1 日 1 回制限を迂回する。E2E は vite.config.ts 側で false に上書きする
 VOTE_LIMIT_BYPASS = "true"
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"
@@ -157,9 +161,13 @@ simple = { limit = 10, period = 60 }
 [env.staging.ai]
 binding = "AI"
 
+[[env.staging.services]]
+binding = "BOT"
+service = "musume-workers-staging"
+entrypoint = "BotService"
+
 [env.staging.vars]
 ENVIRONMENT = "dev"
-X_POSTING_OWNER = "app"
 # vars は環境に継承されないため、迂回しないことを明示する
 VOTE_LIMIT_BYPASS = "false"
 CF_ACCESS_AUD = "995cb37056207392cb90c93562f05361eaaa4dca46ba1f5bda4175cf7a4b860c"
@@ -243,9 +251,13 @@ simple = { limit = 10, period = 60 }
 [env.production.ai]
 binding = "AI"
 
+[[env.production.services]]
+binding = "BOT"
+service = "musume-workers"
+entrypoint = "BotService"
+
 [env.production.vars]
 ENVIRONMENT = "prod"
-X_POSTING_OWNER = "app"
 # vars は環境に継承されないため、迂回しないことを明示する
 VOTE_LIMIT_BYPASS = "false"
 CF_ACCESS_AUD = "35f179c635cc0393185304d0d7cbaf64a720bc164479a0df06f5567b7375b3d1"

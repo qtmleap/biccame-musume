@@ -10,7 +10,7 @@ import { intlayer } from 'vite-intlayer' // Add the plugin to the Vite plugin li
 import { VitePWA } from 'vite-plugin-pwa'
 import sitemap from 'vite-plugin-sitemap'
 import { linkLocalEnvironmentFiles, localEnvironmentFiles } from './local-env'
-import { appBotBinding, botAppBinding } from '../../scripts/worker-bindings'
+import { appBotBinding } from '../../scripts/worker-bindings'
 
 const appRoot = import.meta.dirname
 const repoRoot = resolve(appRoot, '../..')
@@ -80,25 +80,13 @@ export default defineConfig(({ mode, command }) => {
         auxiliaryWorkers: [
           {
             configPath: resolve(repoRoot, 'workers/bot/wrangler.toml'),
-            config: command === 'serve' || process.env.BICCAME_BOT_RPC === '1'
-              ? {
-                  ...(command === 'serve' ? { name: 'musume-workers' } : {}),
-                  services: [botAppBinding(process.env.CLOUDFLARE_ENV)]
-                }
-              : undefined
+            config: command === 'serve' ? { name: 'musume-workers' } : undefined
           }
         ],
         // configPath は migration の出力パスにも使われるため、canonical な app 設定を維持する。
         // E2E は投票制限を検証する。ENVIRONMENT は localhost の CSRF 許可のため維持する。
         config: (current) => ({
-          ...(command === 'serve' || process.env.BICCAME_BOT_RPC === '1'
-            ? {
-                services: [
-                  ...(current.services ? current.services : []),
-                  appBotBinding(process.env.CLOUDFLARE_ENV, command === 'serve')
-                ]
-              }
-            : {}),
+          ...(command === 'serve' ? { services: [appBotBinding(process.env.CLOUDFLARE_ENV, true)] } : {}),
           ...(process.env.E2E === '1' ? { vars: { ...current.vars, VOTE_LIMIT_BYPASS: 'false' } } : {})
         })
       }),

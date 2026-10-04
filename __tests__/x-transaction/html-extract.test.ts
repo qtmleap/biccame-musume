@@ -3,7 +3,7 @@ import {
   extractLoadingXAnimPaths,
   extractOnDemandFileUrl,
   extractTwitterSiteVerification
-} from '../../workers/app/src/lib/x-transaction/html-extract'
+} from '@biccame/shared/x/transaction/html-extract'
 
 describe('extractTwitterSiteVerification', () => {
   test('extracts content from meta tag (name then content)', () => {

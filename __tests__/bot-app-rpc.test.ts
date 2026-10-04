@@ -40,7 +40,7 @@ const makeBot = () =>
     accountStatus: mock(async () => ({ ok: false as const, kind: 'disabled' as const })),
     postingSessionStatus: mock(async () => ({ ok: false as const, kind: 'disabled' as const }))
   }) satisfies BotRpc
-const env = (bot: BotRpc) => ({ X_POSTING_OWNER: 'bot', BOT: bot }) as Bindings
+const env = (bot: BotRpc) => ({ BOT: bot }) as unknown as Bindings
 
 test('app announcement passes only purpose/UUID/revision/rendered text and no Prisma model or Date', async () => {
   const bot = makeBot()
@@ -74,14 +74,10 @@ test('RPC exception details do not escape and are treated as delivery unknown', 
   expect(bot.announce).toHaveBeenCalledTimes(1)
 })
 
-test('app-owned daily reads are disabled; bot-owned reads reuse existing JST services and text builders', async () => {
+test('daily reads reuse existing JST services and text builders without holding X credentials', async () => {
   const starting = mock(async () => [event])
   const ending = mock(async () => [event])
   const scheduledAt = '2026-10-03T00:00:00Z'
-  expect(
-    await readBotDailyTargets({ X_POSTING_OWNER: 'app' } as Bindings, { scheduledAt }, { starting, ending })
-  ).toEqual({ ok: false, kind: 'disabled' })
-  expect(starting).not.toHaveBeenCalled()
   const bindings = env(makeBot())
   const result = await readBotDailyTargets(bindings, { scheduledAt }, { starting, ending })
   expect(starting).toHaveBeenCalledWith(bindings, new Date(scheduledAt))
@@ -123,7 +119,7 @@ test('profile RPC is read-only and reports a fixed failure rather than internal 
 test('badge-only cron invokes its own task and does not require bot availability', async () => {
   const run = mock(async () => {})
   const time = new Date('2026-10-03T00:00:00Z')
-  const bindings = { X_POSTING_OWNER: 'bot' } as Bindings
+  const bindings = {} as Bindings
   await runBadgeCron(bindings, time, run)
   expect(run).toHaveBeenCalledWith(bindings, time)
 })
