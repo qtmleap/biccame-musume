@@ -13,8 +13,6 @@ import type { VoteCounterDO } from '@/durable-objects/vote-counter'
 export type Bindings = VerifyFirebaseAuthEnv & {
   /** 環境名 (prod, dev, local) */
   ENVIRONMENT?: string
-  /** X投稿の担当。botへの本番移設まではappを維持する */
-  X_POSTING_OWNER?: 'app' | 'bot'
   /** 非公開のbot向けService Binding */
   BOT?: BotRpc
   /** "true" のとき投票の 1 日 1 回制限を迂回する（ローカル開発用） */
@@ -37,12 +35,6 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   RATE_LIMITER: RateLimitBinding
   /** FirebaseプロジェクトID */
   FIREBASE_PROJECT_ID: string
-  /** X (Twitter) Web セッションの auth_token cookie (@_biccame_musume) */
-  TWITTER_AUTH_TOKEN: string
-  /** X (Twitter) Web セッションの ct0 (CSRF) cookie (@_biccame_musume) */
-  TWITTER_CSRF_TOKEN: string
-  /** X連携監視の通知先。Webhook URL は Workers secret として登録する。 */
-  DISCORD_WEBHOOK_URL?: string
   /** Workers AI */
   AI: Ai
   /** コメント投稿レート制限用バインディング */

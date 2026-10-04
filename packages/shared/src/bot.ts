@@ -82,10 +82,31 @@ export const dailyTargetsResultSchema = z.discriminatedUnion('ok', [
 ])
 export type DailyTargetsResult = z.infer<typeof dailyTargetsResultSchema>
 
+export const postingSessionResultSchema = z.discriminatedUnion('ok', [
+  z.strictObject({ ok: z.literal(true) }),
+  z.strictObject({
+    ok: z.literal(false),
+    kind: z.enum([
+      'disabled',
+      'configuration',
+      'authentication',
+      'authorization',
+      'account_mismatch',
+      'signature',
+      'rate_limit',
+      'network',
+      'upstream',
+      'unexpected_response'
+    ])
+  })
+])
+export type PostingSessionResult = z.infer<typeof postingSessionResultSchema>
+
 export interface BotRpc {
   ping(input: BotPingRequest): Promise<BotPingResponse>
   announce(input: Announcement): Promise<DeliveryResult>
   accountStatus(): Promise<AccountResult>
+  postingSessionStatus(): Promise<PostingSessionResult>
 }
 export interface AppBotReadRpc {
   dailyTargets(input: DailyRequest): Promise<DailyTargetsResult>

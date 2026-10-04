@@ -58,7 +58,7 @@ test.skipIf(process.env.BICCAME_VERIFY_BUILD !== '1')(
     expect(output.data.configPath).toBe(resolve(app, 'wrangler.toml'))
     expect(output.data.userConfigPath).toBe(resolve(app, 'wrangler.toml'))
     expect(output.data.name).toBe(expected.name)
-    expect(output.data.services).toEqual(process.env.BICCAME_BOT_RPC === '1' ? [appBotBinding(environment)] : [])
+    expect(output.data.services).toEqual([appBotBinding(environment)])
     expect(output.data.kv_namespaces).toEqual(expected.kv_namespaces)
     expect(output.data.durable_objects).toEqual(expected.durable_objects)
     expect(output.data.triggers.crons).toEqual(expected.triggers.crons)

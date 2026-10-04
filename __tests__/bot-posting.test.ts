@@ -1,7 +1,13 @@
 import { expect, mock, spyOn, test } from 'bun:test'
 import type { Announcement, DailyTargetsResult } from '@biccame/shared/bot'
 import { TwitterTransportError } from '@biccame/shared/x/transport'
-import { type PostingTransport, postAnnouncement, readBotAccount, runBotDaily } from '../workers/bot/src/posting'
+import {
+  type PostingTransport,
+  postAnnouncement,
+  readBotAccount,
+  runBotDaily,
+  verifyPostingSession
+} from '../workers/bot/src/posting'
 
 const request: Announcement = {
   eventUUID: '550e8400-e29b-41d4-a716-446655440000',
@@ -116,6 +122,22 @@ test('profile lookup stays distinct from authenticated-session verification', as
     ok: false,
     kind: 'unexpected_response'
   })
+})
+
+test('posting-session probe is readonly and returns no actor identity or secret details', async () => {
+  const transport = makeTransport()
+  expect(await verifyPostingSession({}, transport)).toEqual({ ok: false, kind: 'disabled' })
+  expect(transport.checkAuthenticatedSession).not.toHaveBeenCalled()
+  expect(await verifyPostingSession({ X_ACCOUNT_READ_ENABLED: 'true' }, transport)).toEqual({ ok: true })
+  transport.checkAuthenticatedSession.mockRejectedValueOnce(
+    Object.assign(new Error('secret-private-name'), { kind: 'account_mismatch' })
+  )
+  expect(await verifyPostingSession({ X_ACCOUNT_READ_ENABLED: 'true' }, transport)).toEqual({
+    ok: false,
+    kind: 'account_mismatch'
+  })
+  expect(transport.tweet).not.toHaveBeenCalled()
+  expect(transport.getOwnAccount).not.toHaveBeenCalled()
 })
 
 test('daily checks auth before reading targets and preserves two separate reply threads', async () => {
