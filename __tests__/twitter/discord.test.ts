@@ -1,6 +1,6 @@
 import { afterEach, expect, spyOn, test } from 'bun:test'
-import { notifyBotHealthFailure } from '../../workers/bot/src/health-notification'
 import { TwitterHealthError } from '@biccame/shared/x/health'
+import { notifyBotHealthFailure } from '../../workers/bot/src/health-notification'
 
 const webhook = 'https://discord.com/api/webhooks/123456/fixture-webhook-token'
 const env = { DISCORD_WEBHOOK_URL: webhook } as never
