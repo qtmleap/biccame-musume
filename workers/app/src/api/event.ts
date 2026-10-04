@@ -1,9 +1,9 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { CFAuth } from '@/middleware/cloudflare-access'
+import { announceSavedEvent } from '@/services/bot-announcement'
 import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/services/event-service'
 import { getEventsStats } from '@/services/me-service'
 import type { Bindings } from '@/types/bindings'
-import { Twitter } from '@/utils/twitter'
 import { EventDetailSchema, EventRequestSchema, EventSchema, EventStatsRequestSchema } from '../schemas/event.dto'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
@@ -107,9 +107,9 @@ routes.openapi(
     const { event, created } = await createEvent(c.env, body)
     if (created && body.shouldTweet !== false) {
       try {
-        await new Twitter(c.env).tweetEventCreated(event)
-      } catch (error) {
-        console.error('Failed to tweet event creation:', error)
+        await announceSavedEvent(c.env, event, 'created')
+      } catch {
+        console.error('Failed to tweet event creation')
       }
     }
     return c.json(event, 201)
@@ -161,9 +161,9 @@ routes.openapi(
     const event = await updateEvent(c.env, { ...body, uuid: id })
     if (body.shouldTweet !== false) {
       try {
-        await new Twitter(c.env).tweetEventUpdated(event)
-      } catch (error) {
-        console.error('Failed to tweet event update:', error)
+        await announceSavedEvent(c.env, event, 'updated')
+      } catch {
+        console.error('Failed to tweet event update')
       }
     }
     return c.json(event, 200)

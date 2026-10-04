@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { z } from 'zod'
 import { getAppDeploymentConfigPath } from '../scripts/deploy-app'
+import { appBotBinding } from '../scripts/worker-bindings'
 
 const root = resolve(import.meta.dir, '..')
 const app = resolve(root, 'workers/app')
@@ -36,8 +37,10 @@ const sourceSchema = worker.extend({ env: z.record(z.string().nonempty(), worker
 const outputSchema = worker.extend({
   configPath: z.string().nonempty(),
   userConfigPath: z.string().nonempty(),
-  // Phase 1の未デプロイbotに既存appのデプロイを依存させない。
-  services: z.array(z.unknown()).length(0)
+  // RPC buildは明示opt-in。本番切替前の既定buildにはbot依存を追加しない。
+  services: z.array(
+    z.object({ binding: z.string().nonempty(), service: z.string().nonempty(), entrypoint: z.string().nonempty() })
+  )
 })
 
 // Fresh checkout の単体テストでは build を要求しない。CI と明示的な build 検証でのみ実行する。
@@ -55,6 +58,7 @@ test.skipIf(process.env.BICCAME_VERIFY_BUILD !== '1')(
     expect(output.data.configPath).toBe(resolve(app, 'wrangler.toml'))
     expect(output.data.userConfigPath).toBe(resolve(app, 'wrangler.toml'))
     expect(output.data.name).toBe(expected.name)
+    expect(output.data.services).toEqual(process.env.BICCAME_BOT_RPC === '1' ? [appBotBinding(environment)] : [])
     expect(output.data.kv_namespaces).toEqual(expected.kv_namespaces)
     expect(output.data.durable_objects).toEqual(expected.durable_objects)
     expect(output.data.triggers.crons).toEqual(expected.triggers.crons)

@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@biccame/shared": "workspace:*",
-    "@qtmleap/x-transaction": "0.1.0",
     "@qtmleap/zodios": "^11.0.0",
     "dayjs": "^1.11.23",
     "lodash-es": "^4.18.1",

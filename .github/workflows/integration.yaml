@@ -261,7 +261,12 @@ jobs:
           bun tsc -b
           CLOUDFLARE_ENV=production bun vite build --mode production
           CLOUDFLARE_ENV=production bun run test:app-build
+          bun run check:bot-stores
           CLOUDFLARE_ENV=production bun run build:bot
           bun run test:bot-rpc
+          BICCAME_BOT_RPC=1 CLOUDFLARE_ENV=production bun vite build --mode production
+          BICCAME_BOT_RPC=1 CLOUDFLARE_ENV=production bun run test:app-build
+          BICCAME_BOT_RPC=1 CLOUDFLARE_ENV=production bun run build:bot
+          BICCAME_BOT_RPC=1 CLOUDFLARE_ENV=production bun run test:bot-rpc
         env:
           CLOUDFLARE_ENV: production

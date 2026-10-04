@@ -1,4 +1,4 @@
-import { DEFAULT_USER_AGENT, Transaction } from '@qtmleap/x-transaction'
+import { ClientTransaction, fetchTransactionInputs } from '@biccame/shared/x/transaction'
 import { makeApi, Zodios, type ZodiosInstance, ZodiosResponseError } from '@qtmleap/zodios'
 import type { Dayjs } from 'dayjs'
 import { FeaturesSchema } from './schemas/feature.dto'
@@ -26,10 +26,13 @@ type TwitterCredentials = {
 }
 
 type SearchTimelineParams = { since: Dayjs; until: Dayjs; cursor?: string }
-type Signer = Pick<Transaction, 'generateTransactionId'>
+
+import { DEFAULT_USER_AGENT } from '@biccame/shared/x/transaction/discovery'
+
+type Signer = Pick<ClientTransaction, 'generateTransactionId'>
 let cachedTransaction: Signer | undefined
 const createTransaction = async (): Promise<Signer> => {
-  if (!cachedTransaction) cachedTransaction = await Transaction.create()
+  if (!cachedTransaction) cachedTransaction = ClientTransaction.create(await fetchTransactionInputs())
   return cachedTransaction
 }
 

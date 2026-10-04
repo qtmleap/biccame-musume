@@ -264,6 +264,18 @@ test.each([429, 403, 500])('Discord rejection %i never recurses or logs the body
   expect(fetch).toHaveBeenCalledTimes(1)
 })
 
+test('Discord redirect is neither followed nor treated as sent', async () => {
+  const fetch = mockFetch(async (_input, init) => {
+    expect(init?.redirect).toBe('manual')
+    return new Response(null, { status: 307, headers: { location: 'https://private.invalid/' } })
+  })
+  await expect(sendCandidate(env, buildCandidatePayload(tweet, extraction, 'abeno', 0))).rejects.toMatchObject({
+    kind: 'discord_rejected',
+    status: 307
+  })
+  expect(fetch).toHaveBeenCalledTimes(1)
+})
+
 test('Discord network/timeout ambiguity is not automatically resent', async () => {
   const fetch = mockFetch(async () => {
     throw new Error('private network details')

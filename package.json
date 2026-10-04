@@ -46,7 +46,8 @@
     "build": "vite build",
     "build:bot": "vite build --config workers/bot/vite.config.ts",
     "deploy:bot": "bun scripts/deploy-bot.ts",
-    "test:bot-rpc": "node --experimental-strip-types scripts/test-bot-rpc.ts",
+    "test:bot-rpc": "node --experimental-strip-types scripts/test-bot-rpc.ts && node --experimental-strip-types scripts/test-bot-daily-rpc.ts",
+    "check:bot-stores": "bun scripts/generate-bot-stores.ts --check",
     "typecheck": "tsc --noEmit && tsc --noEmit -p workers/bot/tsconfig.json",
     "test": "bun test",
     "test:app-build": "BICCAME_VERIFY_BUILD=1 bun test __tests__/app-build-config.test.ts"

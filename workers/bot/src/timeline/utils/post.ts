@@ -167,7 +167,7 @@ export const sendCandidate = async (env: Bindings, payload: DiscordWebhookPayloa
   try {
     response = await fetch(`https://discord.com/api/v10/channels/${env.DISCORD_CHANNEL_ID}/messages`, {
       method: 'POST',
-      redirect: 'error',
+      redirect: 'manual',
       signal: AbortSignal.timeout(15000),
       headers: { 'Content-Type': 'application/json', Authorization: `Bot ${env.DISCORD_TOKEN}` },
       body: JSON.stringify(payload)
