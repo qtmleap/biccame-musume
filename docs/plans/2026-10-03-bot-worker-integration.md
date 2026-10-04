@@ -199,12 +199,25 @@ Phase 2の実装・検証記録:
 
 ユーザー承認により、認証待ちの間はコード・テスト・コミットのみ先行する。本番反映はTL切替が安定した後に限定する。TLの切替にはPhase 2の固定コミット`cfcaef85`から分離ビルドした成果物だけを使用し、Phase 3のコードを同時リリースしない。
 
-- [ ] shared X基盤・店舗対応を比較テスト付きで抽出し、署名実装の重複を解消する。
-- [ ] 告知RPC、管理画面X確認RPC、日次対象の読み取りRPCを実装する。
-- [ ] 作成・更新時の保存／告知契約を維持する。関連PRの重複防止仕様を取り違えない。
-- [ ] 日次開始／終了の対象日・本文・スレッド、アカウント確認、監視通知をbotへ移す。
-- [ ] appのバッジcronは独立して維持する。
-- [ ] botに集約後、appに不要となるX実装・secret・依存だけを参照確認して削除する。
+- [x] shared X基盤・店舗対応を比較テスト付きで抽出し、署名実装の重複を解消する。
+- [x] 告知RPC、管理画面X確認RPC、日次対象の読み取りRPCを実装する。
+- [x] 作成・更新時の保存／告知契約を維持する。関連PRの重複防止仕様を取り違えない。
+- [x] 日次開始／終了の対象日・本文・スレッド、アカウント確認、監視通知をbotへ移す。
+- [x] appのバッジcronは独立して維持する。
+- [ ] botに集約後、appに不要となるX実装・secret・依存だけを参照確認して削除する。本番の担当切替・安定観測後に行う。
+
+Phase 3のコード実装・検証記録:
+
+- `X_POSTING_OWNER`はstaging/production/localとも`app`のまま。botの`X_POSTING_ENABLED`/`X_ACCOUNT_READ_ENABLED`も全環境`false`。双方向Service Bindingは`BICCAME_BOT_RPC=1`の明示buildだけに入れ、既存のapp/bot deployへ未作成の依存を加えない。
+- appは保存後、担当がbotのときだけ`BOT.announce`を1回呼ぶ。RPC失敗・成功不明・bot無効時もappから直接投稿へfallbackしない。イベントの保存とHTTP応答は維持し、UUID再送・同時作成・`shouldTweet=false`の既存抑止を担当切替後もテストした。
+- RPC契約はsharedの明示スキーマ。日時はISO文字列、イベントはUUID・更新版・用途・生成済み本文だけを渡す。Prismaモデル・内部例外を渡さない。
+- botは告知前と日次処理前に、Cookie認証主体を確認する。公開プロフィール取得はadmin表示専用で、認証主体確認とは区別する。成功不明な投稿・スレッド途中は自動再送しない。
+- appの`AppBotReadService.dailyTargets`は既存の開始/終了取得とJST境界・本文builderを再利用する。botの日次は実際の生成bundleでscheduled → named app RPC → 2本の独立スレッドまで外部通信なしで検証した。認証失敗時はtarget読み取り・投稿を行わない。
+- 担当が`bot`の場合、appの日次cronはバッジ再評価だけを独立して実行し、X投稿を行わない。未知のapp cronは副作用なしでskipする。
+- TLのprivate signerをsharedの自前signerへ統一。旧`@qtmleap/x-transaction@0.1.0`との固定時刻・乱数比較で4/4 byte一致を確認し、golden fixtureとして保持。botからprivate signer依存を削除した。
+- 40店舗の通知範囲は維持し、名称/Xアカウントはcanonicalな公開JSONから生成。公開JSONで追加の4店舗が対象になる変更は行わない。`check:bot-stores`で生成済みデータの陳腐化を検出する。
+- Workerdは`fetch`の`redirect: 'error'`を拒否するため`manual`へ変更。3xxは成功・認証済みとして扱わない。同じ修正だけをPhase 2へ`b2bf4270`として分離し、Phase 3を混ぜない切替候補を作成した。
+- 検証: 658件成功・1件build専用skip、型・Knip、production/stagingの通常build、明示RPC buildの双方向binding、生成済みbot RPC/日次結合、Phase 2候補の隔離build/RPC/TL→Discord結合が成功。実X・実Discord・実AIへの通信は行っていない。
 
 ### Phase 4: 全体検証・本番切替
 

@@ -47,12 +47,18 @@ test('checks Cookie-authenticated settings instead of the fixed public profile',
   const [url, init] = fetch.mock.calls[0]
   expect(url).toBe(endpoint)
   expect(init?.method).toBe('GET')
-  expect(init?.redirect).toBe('error')
+  expect(init?.redirect).toBe('manual')
   const headers = new Headers(init?.headers)
   expect(headers.get('cookie')).toBe('auth_token=fixture-auth; ct0=fixture-csrf')
   expect(headers.get('x-csrf-token')).toBe('fixture-csrf')
   expect(headers.get('x-client-transaction-id')).toBeTruthy()
   expect(init?.signal).toBeDefined()
+})
+
+test('treats an unfollowed redirect as an unverified identity', async () => {
+  const fetch = respond({ screen_name: '_biccame_musume' }, 302)
+  await expectFailure('unexpected_response')
+  expect(fetch).toHaveBeenCalledTimes(1)
 })
 
 test('does not cache the authenticated settings result', async () => {

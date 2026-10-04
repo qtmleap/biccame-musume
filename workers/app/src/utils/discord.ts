@@ -37,7 +37,7 @@ export const notifyTwitterHealthFailure = async (
   try {
     const response = await fetch(url, {
       method: 'POST',
-      redirect: 'error',
+      redirect: 'manual',
       signal: AbortSignal.timeout(15000),
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({

@@ -14,12 +14,10 @@ test('ping preserves correlation and advertises disabled notifications', () => {
   expect(pingBot({ requestId: 'test' })).toEqual({
     requestId: 'test',
     service: 'bot',
-    phase: 'timeline',
+    phase: 'posting',
     notificationsEnabled: false
   })
-  expect(
-    botPingResponseSchema.safeParse({ ...pingBot({ requestId: 'test' }), notificationsEnabled: true }).success
-  ).toBe(false)
+  expect(botPingResponseSchema.safeParse({ ...pingBot({ requestId: 'test' }), service: 'invalid' }).success).toBe(false)
 })
 
 test.each([{}, { requestId: '' }, { requestId: 'a'.repeat(129) }, { requestId: 'test', extra: true }, null])(
@@ -53,7 +51,9 @@ test('all skeleton environments disable cron and public endpoints without DB or 
     vars: z.strictObject({
       OPENAI_BASE_URL: z.literal('https://ai.qleap.jp/v1'),
       OPENAI_MODEL: z.literal('codex,gpt-5.6-luna'),
-      TL_NOTIFICATIONS_ENABLED: z.literal('false')
+      TL_NOTIFICATIONS_ENABLED: z.literal('false'),
+      X_POSTING_ENABLED: z.literal('false'),
+      X_ACCOUNT_READ_ENABLED: z.literal('false')
     }),
     triggers: z.object({ crons: z.array(z.string().nonempty()).length(0) })
   })
@@ -68,7 +68,13 @@ test('all skeleton environments disable cron and public endpoints without DB or 
   expect(Object.keys(parsed.data.env).sort()).toEqual(['production', 'staging'])
   const raw = Bun.TOML.parse(readFileSync(resolve(root, 'workers/bot/wrangler.toml'), 'utf8'))
   expect(raw).not.toHaveProperty('d1_databases')
-  expect(Object.keys(parsed.data.vars)).toEqual(['OPENAI_BASE_URL', 'OPENAI_MODEL', 'TL_NOTIFICATIONS_ENABLED'])
+  expect(Object.keys(parsed.data.vars)).toEqual([
+    'OPENAI_BASE_URL',
+    'OPENAI_MODEL',
+    'TL_NOTIFICATIONS_ENABLED',
+    'X_POSTING_ENABLED',
+    'X_ACCOUNT_READ_ENABLED'
+  ])
   expect(parsed.data.vars.TL_NOTIFICATIONS_ENABLED).toBe('false')
   const appSource = readFileSync(resolve(root, 'workers/app/wrangler.toml'), 'utf8')
   expect(appSource).not.toContain('BotService')

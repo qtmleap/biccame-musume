@@ -1,5 +1,4 @@
-import { getPrisma } from '@/lib/prisma'
-import { evaluateAllUsersBadges } from '@/services/badge'
+import { reevaluateRecentBadges } from '@/services/badge-cron'
 import { getEventsEndingToday, getEventsStartingToday } from '@/services/event-service'
 import type { Bindings } from '@/types/bindings'
 import { notifyTwitterHealthFailure } from '@/utils/discord'
@@ -19,15 +18,7 @@ const defaultDependencies = (env: Bindings, scheduledAt: Date): DailyCronDepende
   startingToday: getEventsStartingToday,
   endingToday: getEventsEndingToday,
   notify: notifyTwitterHealthFailure,
-  reevaluateBadges: async () => {
-    const prisma = getPrisma(env)
-    // 直近25時間でstores/eventsを更新したユーザーだけを評価する。
-    const since = new Date(scheduledAt.getTime() - 25 * 60 * 60 * 1000)
-    const { processedUsers, totalAwarded } = await evaluateAllUsersBadges(env, prisma, 25, { since })
-    console.log(
-      `[Cron] Badge re-evaluation: users=${processedUsers} newly_awarded=${totalAwarded} since=${since.toISOString()}`
-    )
-  }
+  reevaluateBadges: () => reevaluateRecentBadges(env, scheduledAt)
 })
 
 export const runDailyCron = async (

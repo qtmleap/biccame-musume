@@ -113,7 +113,6 @@
       "name": "@biccame/bot",
       "dependencies": {
         "@biccame/shared": "workspace:*",
-        "@qtmleap/x-transaction": "0.1.0",
         "@qtmleap/zodios": "^11.0.0",
         "dayjs": "^1.11.23",
         "lodash-es": "^4.18.1",
@@ -829,8 +828,6 @@
     "@protobufjs/pool": ["@protobufjs/pool@1.1.0", "", {}, "sha512-0kELaGSIDBKvcgS4zkjz1PeddatrjYcmMWOlAuAPwAeccUrPHdUqo/J6LiymHHEiJT5NrF1UVwxY14f+fy4WQw=="],
 
     "@protobufjs/utf8": ["@protobufjs/utf8@1.1.0", "", {}, "sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw=="],
-
-    "@qtmleap/x-transaction": ["@qtmleap/x-transaction@0.1.0", "https://npm.pkg.github.com/download/@qtmleap/x-transaction/0.1.0/4a259fe351cdb4e90567586fc547fb9ac0492ce5", {}, "sha512-xR81NfHOfrA2hQCCiV9ysNIrgOZwA1VW/h3tdNn3uPNvlC2eQb+cNP1pyp4cZTCF/n+dcwibiq1ArInPVLV7Rg=="],
 
     "@qtmleap/zodios": ["@qtmleap/zodios@11.0.0", "https://npm.pkg.github.com/download/@qtmleap/zodios/11.0.0/3802736e2a9e99bb7b61b9827ae6af9de90843f3", { "peerDependencies": { "zod": "^4.0.0" } }, "sha512-F72y02iWyVlLiOFArM9wBgi4TY6FIZsGxnNKSbDurFv11qOh7l2nWRPbHhACWfSMOblharVpJQBxWTXkF859Iw=="],
 

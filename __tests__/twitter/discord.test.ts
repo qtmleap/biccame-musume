@@ -28,7 +28,7 @@ test('sends only safe monitoring data and disables mentions', async () => {
   const [url, init] = fetch.mock.calls[0]
   expect(String(url)).toBe(webhook)
   expect(init?.method).toBe('POST')
-  expect(init?.redirect).toBe('error')
+  expect(init?.redirect).toBe('manual')
   expect(init?.signal).toBeDefined()
   const body = JSON.parse(String(init?.body))
   expect(body.allowed_mentions).toEqual({ parse: [] })
@@ -71,6 +71,12 @@ test('reports HTTP delivery failure without reading its body', async () => {
   expect(logged).toContain('429')
   expect(logged).not.toContain('sensitive upstream detail')
   expect(logged).not.toContain('fixture-webhook-token')
+})
+
+test('does not follow or treat a manual redirect as successful delivery', async () => {
+  const { fetch } = intercept(307)
+  expect(await notifyTwitterHealthFailure(env, failure, now)).toBe('failed')
+  expect(fetch).toHaveBeenCalledTimes(1)
 })
 
 test('reports network delivery failure without leaking the thrown URL', async () => {

@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { AdminTwitterStatusResponseSchema } from '@/schemas/admin-twitter.dto'
+import { readPostingAccount } from '@/services/bot-account'
 import type { Bindings } from '@/types/bindings'
-import { Twitter } from '@/utils/twitter'
 
 const routes = new OpenAPIHono<{ Bindings: Bindings }>()
 
@@ -27,7 +27,7 @@ routes.openapi(
     c.header('Cache-Control', 'no-store')
     const fetchedAt = new Date().toISOString()
     try {
-      const account = await new Twitter(c.env).getOwnAccount()
+      const account = await readPostingAccount(c.env)
       return c.json({ ok: true, account, error: null, fetchedAt }, 200)
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err)

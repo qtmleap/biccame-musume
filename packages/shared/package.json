@@ -2,6 +2,16 @@
   "name": "@biccame/shared",
   "private": true,
   "type": "module",
-  "exports": { "./bot": "./src/bot.ts" },
+  "exports": {
+    "./bot": "./src/bot.ts",
+    "./stores": "./src/stores.ts",
+    "./twitter": "./src/x/transport.ts",
+    "./twitter-health": "./src/x/health.ts",
+    "./x-transaction": "./src/x/transaction/index.ts",
+    "./x/health": "./src/x/health.ts",
+    "./x/transport": "./src/x/transport.ts",
+    "./x/transaction": "./src/x/transaction/index.ts",
+    "./x/transaction/*": "./src/x/transaction/*.ts"
+  },
   "dependencies": { "zod": "^4.4.3" }
 }

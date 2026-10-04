@@ -22,6 +22,7 @@ import version from './api/version'
 import votes from './api/vote'
 import { isAllowedOrigin } from './lib/allowed-origin'
 import { rewriteIndexHtml } from './middleware/og-rewrite'
+import { runBadgeCron } from './services/badge-cron'
 import { runDailyCron } from './services/daily-cron'
 import type { Bindings, Variables } from './types/bindings'
 
@@ -231,11 +232,17 @@ app.use('*', async (c, next) => {
 })
 
 const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, ctx) => {
-  ctx.waitUntil(runDailyCron(env, new Date(event.scheduledTime)))
+  if (event.cron !== '0 0 * * *') {
+    console.warn('[Cron] Unknown app cron; skipped')
+    return
+  }
+  const scheduledAt = new Date(event.scheduledTime)
+  ctx.waitUntil(env.X_POSTING_OWNER === 'bot' ? runBadgeCron(env, scheduledAt) : runDailyCron(env, scheduledAt))
 }
 
 export { StatsDO } from './durable-objects/stats'
 export { UserPushDO } from './durable-objects/user-push'
 export { VoteCounterDO } from './durable-objects/vote-counter'
+export { AppBotReadService } from './rpc/bot-read'
 
 export default { fetch: app.fetch, scheduled }

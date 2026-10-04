@@ -13,7 +13,9 @@ import type { VoteCounterDO } from '@/durable-objects/vote-counter'
 export type Bindings = VerifyFirebaseAuthEnv & {
   /** 環境名 (prod, dev, local) */
   ENVIRONMENT?: string
-  /** Phase 1ではローカル開発だけに接続する無副作用RPC */
+  /** X投稿の担当。botへの本番移設まではappを維持する */
+  X_POSTING_OWNER?: 'app' | 'bot'
+  /** 非公開のbot向けService Binding */
   BOT?: BotRpc
   /** "true" のとき投票の 1 日 1 回制限を迂回する（ローカル開発用） */
   VOTE_LIMIT_BYPASS?: string

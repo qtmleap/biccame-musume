@@ -1,0 +1,38 @@
+[
+  {
+    "html": "x-home.html",
+    "script": "ondemand.s.js",
+    "method": "GET",
+    "path": "/i/api/graphql/rkp6b4vtR9u7v3naGoOzUQ/SearchTimeline",
+    "nowMs": 1700000000000,
+    "random": 0.5,
+    "transactionId": "gNYe9riBcG7136abVXdOASSX9+Sx1zTawtncogFHQh9q+XVhEgaVgYXulHIGHEtzlBANhIFtSiph8ZAhs1QxyVr8y8algw"
+  },
+  {
+    "html": "x-home.html",
+    "script": "ondemand.s.js",
+    "method": "POST",
+    "path": "/i/api/graphql/oB-5XsHNAbjvARJEc8CZFw/CreateTweet",
+    "nowMs": 1700000000000,
+    "random": 0.5,
+    "transactionId": "gNYe9riBcG7136abVXdOASSX9+Sx1zTawtncogFHQh9q+XVhEgaVgYXulHIGHEtzlBANhIG83jblYsxDuN0Xc7b6yeGFgw"
+  },
+  {
+    "html": "x-web-home.html",
+    "script": "x-web-sign.js",
+    "method": "GET",
+    "path": "/i/api/graphql/rkp6b4vtR9u7v3naGoOzUQ/SearchTimeline",
+    "nowMs": 1700000000000,
+    "random": 0.5,
+    "transactionId": "gARMwg5e+JFOvnM1sC+kcsC3oVQaD2Oo7qigITAc/z4cvThEGg5Ei8OAaRmhA/iPbRANhIEHRdFHOTTedmm4S7UO7M10gw"
+  },
+  {
+    "html": "x-web-home.html",
+    "script": "x-web-sign.js",
+    "method": "POST",
+    "path": "/i/api/graphql/oB-5XsHNAbjvARJEc8CZFw/CreateTweet",
+    "nowMs": 1700000000000,
+    "random": 0.5,
+    "transactionId": "gARMwg5e+JFOvnM1sC+kcsC3oVQaD2Oo7qigITAc/z4cvThEGg5Ei8OAaRmhA/iPbRANhIEBftLFkWVMnj0Im/aCsjBHgw"
+  }
+]
