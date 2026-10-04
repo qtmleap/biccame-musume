@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { assertReplacementReady, timelineCron } from './bot-cutover-state'
 
 // 旧cron停止と待機を確認済みの、Phase 2隔離候補だけをTL通知有効で同名Workerへデプロイする。
-export const approvedPhase2Sha = 'b2bf42709e5881c04046c2eb79f7d21f39e00e6e'
+export const approvedPhase2Sha = 'c5b3e9020a9985d91dadea5f3c44ec01bf706d1e'
 const manifestSchema = z.object({
   sourceSha: z.literal(approvedPhase2Sha), configPath: z.string().nonempty(),
   bundleSha256: z.string().regex(/^[a-f0-9]{64}$/)
@@ -36,7 +36,7 @@ export const planTimelineEnable = (
 
 if (import.meta.main) {
   const root = resolve(import.meta.dirname, '..')
-  const checkpointPath = resolve(root, '.cache/bot-cutover-checkpoint.json')
+  const checkpointPath = resolve(root, `.cache/bot-replacement-checkpoint-${approvedPhase2Sha}.json`)
   const checkpoint = JSON.parse(readFileSync(checkpointPath, 'utf8'))
   const manifestPath = resolve(root, `.cache/bot-phase2-deployment-${approvedPhase2Sha}.json`)
   const plan = planTimelineEnable(
@@ -44,7 +44,7 @@ if (import.meta.main) {
     (path) => readFileSync(path, 'utf8'), (path) => readFileSync(path), Date.now()
   )
   const dryRun = process.argv.includes('--dry-run')
-  const enabledPath = resolve(root, '.cache/bot-timeline-enabled.json')
+  const enabledPath = resolve(root, `.cache/bot-timeline-enabled-${approvedPhase2Sha}.json`)
   if (!dryRun && existsSync(enabledPath)) throw new Error('Timeline enablement already recorded; do not deploy twice')
   if (!dryRun) writeFileSync(enabledPath, JSON.stringify({ stage: 'enable_requested', requestedAt: new Date().toISOString() }), { flag: 'wx' })
   const child = Bun.spawn(['bunx', ...plan.args, ...(dryRun ? ['--dry-run'] : [])], {

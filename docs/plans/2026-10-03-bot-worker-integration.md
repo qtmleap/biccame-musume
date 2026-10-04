@@ -223,7 +223,7 @@ Phase 3のコード実装・検証記録:
 
 - [x] app/bot/sharedの単体テスト、型チェック、Knip、app/bot bundle、Storybook、RPC結合テストを成功させる。
 - [x] production/stagingそれぞれの生成設定を検証し、cron・Service Binding・DB・DO migration・環境名の混線がないことを確認する。
-- [ ] 既存サーバーで主要7画面、イベント登録導線、画像・スタイル・API/console、管理画面の連携状態を確認する。画面確認だけでは実通知の正常性を保証しない。2026-10-04時点で既存devサーバー（5173/15175）が起動しておらず、新規起動禁止のため未実施。UIの変更はない。
+- [x] 主要7画面と管理連携状態のブラウザ表示を確認する。既存devサーバーが停止中のため、新規サーバーを立てず検証済みVite成果物をPlaywright routeで直接供給した。home・characters・character detail・events・calendar・location・admin・admin twitterの8画面が描画し、JS例外なし。API/Access identity/画像は架空データ・mockで、Google MapsとFirebaseの外部通信は遮断した。実地図描画・実認証・実通知の成功とは扱わない。
 
 Phase 4のオフライン検証記録（2026-10-04, `69a23c7a` + CIテスト入口修正）:
 
@@ -231,7 +231,11 @@ Phase 4のオフライン検証記録（2026-10-04, `69a23c7a` + CIテスト入�
 - 単体658件成功・1件build専用skip。通常`bun test`対象外だった共通transportの安全性テスト12件を`bun run test`とCIへ追加して成功。
 - staging/productionそれぞれで、既定のapp/bot build（botへの依存なし）と、明示RPC build（app→`BotService`、bot→`AppBotReadService`）の生成設定テスト、bot疎通・日次RPC結合が成功。
 - Storybook build 316 exports / 203 stories、カタログ検査2件成功。
-- 実X/実Discord/実AI、本番cron・secret・デプロイは未検証。Cloudflare認証による事前確認から実行する。
+- 2026-10-04 01:30 UTC: 認証は既存shell envから利用できた。旧cron停止・空cron再取得・全secret名・旧version `92cbdc1e-644a-4b10-98b8-32812b95079c`を確認。30分の伝播/実行中処理待ちを実施した。
+- 02:01 UTC: Phase 2候補`b2bf4270`を同名Workerへデプロイ（version `e56d5049-16de-4a73-820e-a544ad42b84c`）。secret名保持を確認した。02:05/02:10の実行は`signature`失敗で、成功とは扱わない。検索・AI・Discordへ進んでいない。
+- 02:09 UTC: 新TL cronを再停止。旧private packageの取得処理が現在のX homepageで`ondemand.s` URLを発見できないことを公開アセットの読み取りだけで再現した。
+- 修正候補`c5b3e902`は署名アルゴリズム/通知契約を維持したまま公開アセット取得だけを修正した独立Phase 2版。現在の公開アセットで旧constructorによる94文字の署名生成、隔離型/単体/bundle/RPC、Workerd上のTL→AI→Discord mock結合が成功。再停止後30分の待機終了は02:39:25 UTC。
+- 本番TLの正常な取得・継続観測と、Phase 3の本番反映は未完了。
 - [ ] 未検証の実認証・実通知事項を明記し、本番変更は別途承認を得る。
 - [ ] 旧TL Workerのcronを明示的に空配列にし、旧repoの自動デプロイが復活させないようにする。
 - [ ] cron変更の反映時間（最大15分）を考慮し、旧処理が止まったことを確認して新処理を有効化する。同名継承の場合も、cron停止と旧repoのデプロイ停止を確認してコード・設定を更新する。切替窓を記録し、補完する場合は送信結果を照合して二重通知を避ける。初期移植では永続履歴がないため、履歴がある前提で自動再走査しない。
