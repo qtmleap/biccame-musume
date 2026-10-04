@@ -5,9 +5,10 @@ import type {
   BotPingRequest,
   BotPingResponse,
   BotRpc,
-  DeliveryResult
+  DeliveryResult,
+  PostingSessionResult
 } from '@biccame/shared/bot'
-import { postAnnouncement, readBotAccount } from './posting'
+import { postAnnouncement, readBotAccount, verifyPostingSession } from './posting'
 import { createPostingTransport } from './posting-transport'
 import { type BotBindings, handleBotScheduled } from './scheduled'
 import { pingBot } from './service'
@@ -21,6 +22,12 @@ export class BotService extends WorkerEntrypoint<BotBindings> implements BotRpc 
     const transport = createPostingTransport(this.env)
     if (!transport) return { status: 'failed', kind: 'configuration' }
     return postAnnouncement(this.env, input, transport)
+  }
+  async postingSessionStatus(): Promise<PostingSessionResult> {
+    if (this.env.X_ACCOUNT_READ_ENABLED !== 'true') return { ok: false, kind: 'disabled' }
+    const transport = createPostingTransport(this.env)
+    if (!transport) return { ok: false, kind: 'configuration' }
+    return verifyPostingSession(this.env, transport)
   }
   async accountStatus(): Promise<AccountResult> {
     if (this.env.X_ACCOUNT_READ_ENABLED !== 'true') return { ok: false, kind: 'disabled' }

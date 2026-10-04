@@ -6,7 +6,9 @@ import {
   type DeliveryResult,
   dailyRequestSchema,
   dailyTargetsResultSchema,
-  deliveryResultSchema
+  deliveryResultSchema,
+  type PostingSessionResult,
+  postingSessionResultSchema
 } from '@biccame/shared/bot'
 import { z } from 'zod'
 
@@ -88,6 +90,29 @@ export const readBotAccount = async (env: PostingFlags, transport: PostingTransp
     return parsed.success ? parsed.data : { ok: false, kind: 'unexpected_response' }
   } catch {
     return { ok: false, kind: 'unexpected_response' }
+  }
+}
+
+export const verifyPostingSession = async (
+  env: PostingFlags,
+  transport: PostingTransport
+): Promise<PostingSessionResult> => {
+  if (env.X_ACCOUNT_READ_ENABLED !== 'true') return { ok: false, kind: 'disabled' }
+  try {
+    await transport.checkAuthenticatedSession()
+    return { ok: true }
+  } catch (error) {
+    const kind = z.object({ kind: z.string().nonempty() }).safeParse(error)
+    const parsed = postingSessionResultSchema.safeParse({
+      ok: false,
+      kind:
+        kind.success && kind.data.kind === 'missing_credentials'
+          ? 'configuration'
+          : kind.success
+            ? kind.data.kind
+            : 'unexpected_response'
+    })
+    return parsed.success ? parsed.data : { ok: false, kind: 'unexpected_response' }
   }
 }
 

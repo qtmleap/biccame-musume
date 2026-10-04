@@ -97,6 +97,7 @@ const makeBot = () =>
       notificationsEnabled: false
     }),
     accountStatus: async () => ({ ok: false, kind: 'disabled' }),
+    postingSessionStatus: async () => ({ ok: false, kind: 'disabled' }),
     announce: mock(async (): Promise<DeliveryResult> => ({ status: 'sent', tweetId: '12345' }))
   }) satisfies BotRpc
 

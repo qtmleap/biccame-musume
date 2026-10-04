@@ -37,7 +37,8 @@ const makeBot = () =>
       notificationsEnabled: false
     })),
     announce: mock(async (): Promise<DeliveryResult> => ({ status: 'sent', tweetId: '12345' })),
-    accountStatus: mock(async () => ({ ok: false as const, kind: 'disabled' as const }))
+    accountStatus: mock(async () => ({ ok: false as const, kind: 'disabled' as const })),
+    postingSessionStatus: mock(async () => ({ ok: false as const, kind: 'disabled' as const }))
   }) satisfies BotRpc
 const env = (bot: BotRpc) => ({ X_POSTING_OWNER: 'bot', BOT: bot }) as Bindings
 
