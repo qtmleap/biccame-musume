@@ -1,6 +1,6 @@
 {
   "include": ["**/*.ts", "**/*.tsx", ".intlayer/**/*.ts", ".vscode/scripts/fetch_html.ts"],
-  "exclude": ["src/components/ui/**/*.tsx", "scripts/**/*.ts"],
+  "exclude": ["workers/app/src/components/ui/**/*.tsx", "scripts/**/*.ts"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
@@ -25,7 +25,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./workers/app/src/*"]
     }
   }
 }

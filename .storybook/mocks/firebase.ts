@@ -55,7 +55,7 @@ const signIn = async () => {
   return { user: fixtureUser }
 }
 export const signInWithEmailAndPassword = async (_auth: unknown, _email: string, _password: string) => signIn()
-export const createUserWithEmailAndPassword = signInWithEmailAndPassword
+export const createUserWithEmailAndPassword = async (_auth: unknown, _email: string, _password: string) => signIn()
 export const signInWithRedirect = async (_auth: unknown, _provider: unknown) => signIn()
 export class TwitterAuthProvider {}
 export class GoogleAuthProvider {}

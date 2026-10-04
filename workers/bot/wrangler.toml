@@ -1,0 +1,60 @@
+# 旧TL Workerの名前を継承する。旧repoの自動deploy停止・切替確認前にdeployしない。
+name = "musume-workers"
+main = "src/index.ts"
+compatibility_date = "2026-05-11"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+preview_urls = false
+keep_vars = true
+
+[vars]
+OPENAI_BASE_URL = "https://ai.qleap.jp/v1"
+OPENAI_MODEL = "codex,gpt-5.6-luna"
+TL_NOTIFICATIONS_ENABLED = "false"
+X_POSTING_ENABLED = "false"
+X_ACCOUNT_READ_ENABLED = "false"
+
+[triggers]
+crons = []
+
+[env.staging]
+name = "musume-workers-staging"
+
+[env.staging.vars]
+OPENAI_BASE_URL = "https://ai.qleap.jp/v1"
+OPENAI_MODEL = "codex,gpt-5.6-luna"
+TL_NOTIFICATIONS_ENABLED = "false"
+X_POSTING_ENABLED = "false"
+X_ACCOUNT_READ_ENABLED = "false"
+
+[env.staging.triggers]
+crons = []
+
+[env.production]
+name = "musume-workers"
+
+[env.production.vars]
+OPENAI_BASE_URL = "https://ai.qleap.jp/v1"
+OPENAI_MODEL = "codex,gpt-5.6-luna"
+TL_NOTIFICATIONS_ENABLED = "false"
+X_POSTING_ENABLED = "false"
+X_ACCOUNT_READ_ENABLED = "false"
+
+[env.production.triggers]
+crons = []
+
+[env.production.observability]
+enabled = true
+head_sampling_rate = 1
+
+[env.production.observability.logs]
+enabled = true
+invocation_logs = true
+
+[env.staging.observability]
+enabled = true
+head_sampling_rate = 1
+
+[env.staging.observability.logs]
+enabled = true
+invocation_logs = true

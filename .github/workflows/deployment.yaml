@@ -6,6 +6,12 @@ on:
       - master
     types: [closed]
 
+permissions:
+  contents: read
+  packages: read
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   deploy:
     name: Deploy Workers
@@ -34,14 +40,14 @@ jobs:
         uses: actions/cache@v5
         with:
           path: |
-            public/images/characters
-            public/images/stamps
+            workers/app/public/images/characters
+            workers/app/public/images/stamps
           key: >-
             ${{ runner.os }}-character-images-${{
               hashFiles(
                 'scripts/download-character-images.ts',
                 'scripts/stampcamera-map.ts',
-                'public/characters.json'
+                'workers/app/public/characters.json'
               )
             }}
       # OG 画像の生成結果を再利用するキャッシュ。生成ロジック (script / map / characters.json)
@@ -51,13 +57,13 @@ jobs:
         uses: actions/cache@v5
         with:
           path: |
-            public/og/characters
+            workers/app/public/og/characters
           key: >-
             ${{ runner.os }}-og-${{
               hashFiles(
                 'scripts/generate-og-images.ts',
                 'scripts/stampcamera-map.ts',
-                'public/characters.json'
+                'workers/app/public/characters.json'
               )
             }}
       - name: Install dependencies
@@ -66,11 +72,12 @@ jobs:
         run: bun run generate
       - name: Build Workers
         run: |
-          bunx rimraf dist
+          bunx rimraf workers/app/dist
           bun run scripts/download-character-images.ts
           bun run scripts/generate-og-images.ts
           bun tsc -b
           bun vite build --mode "${CLOUDFLARE_ENV}"
+          bun run test:app-build
         env:
           CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}
           VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
@@ -78,7 +85,7 @@ jobs:
       # デプロイより先に流すのは、新カラムを参照する Worker が旧スキーマに当たらないようにするため。
       - name: Apply D1 migrations
         if: env.ACT != 'true'
-        run: bunx wrangler d1 migrations apply DB --env="${CLOUDFLARE_ENV}" --remote
+        run: bunx wrangler --config workers/app/wrangler.toml d1 migrations apply DB --env="${CLOUDFLARE_ENV}" --remote
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}

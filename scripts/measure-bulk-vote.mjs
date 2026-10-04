@@ -14,7 +14,7 @@ import { readFileSync } from 'node:fs'
 
 const BASE = process.env.BASE_URL ?? 'http://localhost:15175'
 
-const characters = JSON.parse(readFileSync('./public/characters.json', 'utf-8'))
+const characters = JSON.parse(readFileSync('./workers/app/public/characters.json', 'utf-8'))
 const ALL = characters
   .filter((c) => c.character?.is_biccame_musume === true)
   .map((c) => c.id)

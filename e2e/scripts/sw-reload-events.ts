@@ -1,7 +1,7 @@
 import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { chromium, type ConsoleMessage, type Request, type Response } from 'playwright'
+import { chromium, type ConsoleMessage, type Request, type Response } from '@playwright/test'
 
 const URL = 'https://biccame-musume.com/events'
 const RELOADS = Number(process.env.RELOADS ?? 20)

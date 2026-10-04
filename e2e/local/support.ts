@@ -16,7 +16,7 @@ export const screens = [
 ] as const
 export const fixtureHash = createHash('sha256')
   .update(JSON.stringify(events))
-  .update(readFileSync('public/characters.json'))
+  .update(readFileSync('workers/app/public/characters.json'))
   .digest('hex')
 export async function prepare(page: Page, theme = 'light') {
   await page.clock.setFixedTime(Date.parse('2026-10-02T00:00:00Z'))
@@ -39,7 +39,7 @@ export async function prepare(page: Page, theme = 'light') {
     if (url.pathname === '/api/votes') return route.fulfill({ json: [{ key: 'nagoyagate', count: 42 }] })
     if (url.pathname === '/api/stats') return route.fulfill({ json: { today: 0, total: 0 } })
     if (url.pathname === '/characters.json')
-      return route.fulfill({ contentType: 'application/json', body: readFileSync('public/characters.json', 'utf8') })
+      return route.fulfill({ contentType: 'application/json', body: readFileSync('workers/app/public/characters.json', 'utf8') })
     if (url.pathname.startsWith('/api/'))
       return route.fulfill({ status: 503, json: { message: 'Unstubbed API blocked by local test' } })
     if (url.pathname.startsWith('/images/characters/'))

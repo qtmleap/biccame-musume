@@ -7,7 +7,7 @@ export default defineConfig({
   cacheDir: '.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b09/vite-cache',
   plugins: [react(), tailwindcss()],
   optimizeDeps: { entries: ['e2e/route-empty-state-harness.tsx'] },
-  resolve: { alias: { '@': fileURLToPath(new URL('../src', import.meta.url)) } },
+  resolve: { alias: { '@': fileURLToPath(new URL('../workers/app/src', import.meta.url)) } },
   server: {
     host: '127.0.0.1',
     port: 15409,

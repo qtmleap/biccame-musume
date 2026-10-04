@@ -11,7 +11,7 @@ plugin({
   name: 'virtual-public-characters',
   setup(build) {
     build.module('virtual:public-characters', () => {
-      const raw = readFileSync(resolve(import.meta.dir, '../public/characters.json'), 'utf-8')
+      const raw = readFileSync(resolve(import.meta.dir, '../workers/app/public/characters.json'), 'utf-8')
       return { exports: { default: JSON.parse(raw) }, loader: 'object' }
     })
   }

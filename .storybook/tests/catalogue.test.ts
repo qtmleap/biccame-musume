@@ -18,7 +18,7 @@ test('every production route/component export has a catalogued meaningful story;
 test('source traversal preserves every real source file in stable order across opposite creation orders', () => {
   const temporary = mkdtempSync(join(tmpdir(), 'storybook-inventory-order-'))
   try {
-    const files = [...sourceFiles('src/components'), ...sourceFiles('src/app/routes')]
+    const files = [...sourceFiles('workers/app/src/components'), ...sourceFiles('workers/app/src/app/routes')]
     const forward = join(temporary, 'forward')
     const reverse = join(temporary, 'reverse')
     for (const [root, ordered] of [
@@ -31,7 +31,7 @@ test('source traversal preserves every real source file in stable order across o
         writeFileSync(target, readFileSync(file))
       }
     const copiedFiles = (root: string) =>
-      [...sourceFiles(join(root, 'src/components')), ...sourceFiles(join(root, 'src/app/routes'))].map((file) =>
+      [...sourceFiles(join(root, 'workers/app/src/components')), ...sourceFiles(join(root, 'workers/app/src/app/routes'))].map((file) =>
         relative(root, file)
       )
     const first = copiedFiles(forward)

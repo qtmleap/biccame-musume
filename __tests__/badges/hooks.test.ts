@@ -7,7 +7,7 @@ import {
   evaluateOnEventComplete,
   evaluateOnVisit,
   evaluateOnVote
-} from '../../src/services/badge'
+} from '../../workers/app/src/services/badge'
 
 // ---------------------------------------------------------------------------
 // Helpers

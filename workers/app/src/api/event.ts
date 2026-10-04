@@ -1,0 +1,244 @@
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { CFAuth } from '@/middleware/cloudflare-access'
+import { announceSavedEvent } from '@/services/bot-announcement'
+import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@/services/event-service'
+import { getEventsStats } from '@/services/me-service'
+import type { Bindings } from '@/types/bindings'
+import { EventDetailSchema, EventRequestSchema, EventSchema, EventStatsRequestSchema } from '../schemas/event.dto'
+
+const routes = new OpenAPIHono<{ Bindings: Bindings }>()
+
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/',
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: z.array(EventSchema)
+          }
+        },
+        description: 'イベント一覧取得成功'
+      }
+    },
+    tags: ['events']
+  }),
+  async (c) => {
+    return c.json(await getEvents(c.env))
+  }
+)
+
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/:id',
+    request: {
+      params: z.object({
+        id: z.string().nonempty()
+      })
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: EventDetailSchema
+          }
+        },
+        description: 'イベント詳細取得成功'
+      },
+      404: {
+        content: {
+          'application/json': {
+            schema: z.object({
+              error: z.string().nonempty()
+            })
+          }
+        },
+        description: 'バリデーションエラー'
+      }
+    },
+    tags: ['events']
+  }),
+  async (c) => {
+    const { id } = c.req.valid('param')
+    return c.json(await getEvent(c.env, id), 200)
+  }
+)
+
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/',
+    middleware: [CFAuth],
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: EventRequestSchema
+          }
+        }
+      }
+    },
+    responses: {
+      201: {
+        content: {
+          'application/json': {
+            schema: EventDetailSchema
+          }
+        },
+        description: 'イベント作成成功'
+      },
+      400: {
+        content: {
+          'application/json': {
+            schema: z.object({
+              error: z.string().nonempty()
+            })
+          }
+        },
+        description: 'バリデーションエラー'
+      }
+    },
+    tags: ['events']
+  }),
+  async (c) => {
+    const body = c.req.valid('json')
+    const { event, created } = await createEvent(c.env, body)
+    if (created && body.shouldTweet !== false) {
+      try {
+        await announceSavedEvent(c.env, event, 'created')
+      } catch {
+        console.error('Failed to tweet event creation')
+      }
+    }
+    return c.json(event, 201)
+  }
+)
+
+routes.openapi(
+  createRoute({
+    method: 'put',
+    path: '/:id',
+    middleware: [CFAuth],
+    request: {
+      params: z.object({
+        id: z.string().nonempty()
+      }),
+      body: {
+        content: {
+          'application/json': {
+            schema: EventRequestSchema
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: EventDetailSchema
+          }
+        },
+        description: 'イベント更新成功'
+      },
+      404: {
+        content: {
+          'application/json': {
+            schema: z.object({
+              error: z.string().nonempty()
+            })
+          }
+        },
+        description: 'イベントが見つかりません'
+      }
+    },
+    tags: ['events']
+  }),
+  async (c) => {
+    const { id } = c.req.valid('param')
+    const body = c.req.valid('json')
+    const event = await updateEvent(c.env, { ...body, uuid: id })
+    if (body.shouldTweet !== false) {
+      try {
+        await announceSavedEvent(c.env, event, 'updated')
+      } catch {
+        console.error('Failed to tweet event update')
+      }
+    }
+    return c.json(event, 200)
+  }
+)
+
+routes.openapi(
+  createRoute({
+    method: 'delete',
+    path: '/:id',
+    middleware: [CFAuth],
+    request: {
+      params: z.object({
+        id: z.string().nonempty()
+      })
+    },
+    responses: {
+      204: {
+        description: 'イベント削除成功'
+      },
+      404: {
+        content: {
+          'application/json': {
+            schema: z.object({
+              error: z.string().nonempty()
+            })
+          }
+        },
+        description: 'イベントが見つかりません'
+      }
+    },
+    tags: ['events']
+  }),
+  async (c) => {
+    const { id } = c.req.valid('param')
+    return c.body(await deleteEvent(c.env, id), 204)
+  }
+)
+
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/stats',
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: EventStatsRequestSchema
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: z.record(
+              z.string().nonempty(),
+              z.object({
+                interestedCount: z.number(),
+                completedCount: z.number()
+              })
+            )
+          }
+        },
+        description: '複数イベント統計取得成功'
+      }
+    },
+    tags: ['events']
+  }),
+  async (c) => {
+    const { eventIds } = c.req.valid('json')
+    const stats = await getEventsStats(c.env, eventIds)
+    return c.json(stats)
+  }
+)
+
+export default routes
