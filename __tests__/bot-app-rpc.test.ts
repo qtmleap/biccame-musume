@@ -1,4 +1,4 @@
-import { expect, mock, test } from 'bun:test'
+import { expect, mock, spyOn, test } from 'bun:test'
 import type { BotRpc, DailyTargetsResult, DeliveryResult } from '@biccame/shared/bot'
 import { z } from 'zod'
 import { EventDetailSchema } from '../workers/app/src/schemas/event.dto'
@@ -93,19 +93,42 @@ test('daily reads reuse existing JST services and text builders without holding 
   expect(JSON.stringify(result)).not.toContain('createdAt')
 })
 
+test('days without starting or ending events return empty threads instead of unavailable', async () => {
+  const empty = mock(async () => [])
+  const scheduledAt = '2026-10-04T00:00:00Z'
+  expect(await readBotDailyTargets(env(makeBot()), { scheduledAt }, { starting: empty, ending: empty })).toEqual({
+    ok: true,
+    targets: { scheduledAt, starting: { eventUUIDs: [], texts: [] }, ending: { eventUUIDs: [], texts: [] } }
+  })
+  const one = mock(async () => [event])
+  const mixed = await readBotDailyTargets(env(makeBot()), { scheduledAt }, { starting: one, ending: empty })
+  expect(mixed.ok && mixed.targets.starting.texts.length).toBeGreaterThan(0)
+  expect(mixed.ok && mixed.targets.ending.texts).toEqual([])
+})
+
 test('invalid date or DB failures return a fixed contract without raw errors', async () => {
   const starting = mock(async () => {
     throw new Error('private-db-error')
   })
   const ending = mock(async () => [])
-  expect(await readBotDailyTargets(env(makeBot()), { scheduledAt: new Date() }, { starting, ending })).toEqual({
-    ok: false,
-    kind: 'unavailable'
-  })
-  expect(starting).not.toHaveBeenCalled()
-  expect(
-    await readBotDailyTargets(env(makeBot()), { scheduledAt: '2026-10-03T00:00:00Z' }, { starting, ending })
-  ).toEqual({ ok: false, kind: 'unavailable' })
+  const errors = spyOn(console, 'error').mockImplementation(() => {})
+  try {
+    expect(await readBotDailyTargets(env(makeBot()), { scheduledAt: new Date() }, { starting, ending })).toEqual({
+      ok: false,
+      kind: 'unavailable'
+    })
+    expect(starting).not.toHaveBeenCalled()
+    expect(
+      await readBotDailyTargets(env(makeBot()), { scheduledAt: '2026-10-03T00:00:00Z' }, { starting, ending })
+    ).toEqual({ ok: false, kind: 'unavailable' })
+    expect(errors.mock.calls).toEqual([
+      ['[bot-read] daily targets unavailable', { stage: 'request' }],
+      ['[bot-read] daily targets unavailable', { stage: 'query', errorName: 'Error' }]
+    ])
+    expect(JSON.stringify(errors.mock.calls)).not.toContain('private-db-error')
+  } finally {
+    errors.mockRestore()
+  }
 })
 
 test('profile RPC is read-only and reports a fixed failure rather than internal exceptions', async () => {
