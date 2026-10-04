@@ -43,9 +43,17 @@ X_ACCOUNT_READ_ENABLED = "false"
 [env.production.triggers]
 crons = []
 
+[env.production.observability]
+enabled = true
+head_sampling_rate = 1
+
 [env.production.observability.logs]
 enabled = true
 invocation_logs = true
+
+[env.staging.observability]
+enabled = true
+head_sampling_rate = 1
 
 [env.staging.observability.logs]
 enabled = true

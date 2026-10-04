@@ -61,7 +61,12 @@ test('all skeleton environments disable cron and public endpoints without DB or 
     .extend({
       workers_dev: z.literal(false),
       preview_urls: z.literal(false),
-      env: z.record(z.string().nonempty(), environment)
+      env: z.record(
+        z.string().nonempty(),
+        environment.extend({
+          observability: z.object({ enabled: z.literal(true), head_sampling_rate: z.literal(1) })
+        })
+      )
     })
     .safeParse(Bun.TOML.parse(readFileSync(resolve(root, 'workers/bot/wrangler.toml'), 'utf8')))
   if (!parsed.success) throw new Error(parsed.error.message)
