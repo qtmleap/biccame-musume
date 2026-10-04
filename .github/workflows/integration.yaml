@@ -152,7 +152,7 @@ jobs:
         run: bun run generate
       - name: Test
         run: |
-          bun test
+          bun run test
   knip:
     name: Knip
     runs-on: ubuntu-latest
