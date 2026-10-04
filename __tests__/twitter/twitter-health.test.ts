@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, spyOn, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
-import { Twitter } from '../../workers/app/src/utils/twitter'
-import { TwitterHealthError } from '../../workers/app/src/utils/twitter-health'
+import { TwitterHealthError } from '@biccame/shared/x/health'
+import { TwitterTransport as Twitter } from '@biccame/shared/x/transport'
 
 const homePageHtml = readFileSync(`${import.meta.dir}/../x-transaction/fixtures/x-home.html`, 'utf8')
 const ondemandFileText = readFileSync(`${import.meta.dir}/../x-transaction/fixtures/ondemand.s.js`, 'utf8')

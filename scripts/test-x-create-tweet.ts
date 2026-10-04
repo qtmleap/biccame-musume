@@ -4,7 +4,7 @@
  * a one-line test tweet.
  */
 import { readFileSync } from 'node:fs'
-import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '../workers/app/src/lib/x-transaction'
+import { ClientTransaction, fetchHomePageHtml, fetchOnDemandFileText } from '@biccame/shared/x/transaction'
 
 const cookieHeader = (() => {
   const lines = readFileSync('cookie.txt', 'utf-8').split('\n')

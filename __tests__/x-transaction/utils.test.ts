@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { base64Encode, floatToHex, isOdd, jsRound, sha256 } from '../../workers/app/src/lib/x-transaction/utils'
+import { base64Encode, floatToHex, isOdd, jsRound, sha256 } from '@biccame/shared/x/transaction/utils'
 
 describe('jsRound', () => {
   test('rounds .5 up (JS-style, not banker)', () => {

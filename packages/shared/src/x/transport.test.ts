@@ -1,9 +1,5 @@
 import { afterEach, beforeEach, expect, spyOn, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
-import { ClientTransaction as AppTransaction } from '../../../../workers/app/src/lib/x-transaction/transaction'
-import { TwitterHealthError as AppHealthError } from '../../../../workers/app/src/utils/twitter-health'
-import { TwitterHealthError } from './health'
-import { ClientTransaction } from './transaction'
 import { buildCreateTweetBody, TwitterTransport, TwitterTransportError } from './transport'
 
 const homePageHtml = readFileSync(
@@ -33,11 +29,6 @@ afterEach(() => {
 
 const mockFetch = (handler: (...args: Parameters<typeof fetch>) => Promise<Response>) =>
   spyOn(globalThis, 'fetch').mockImplementation(Object.assign(handler, { preconnect: () => {} }))
-
-test('compatibility reexports preserve transaction and health error identities', () => {
-  expect(AppTransaction).toBe(ClientTransaction)
-  expect(AppHealthError).toBe(TwitterHealthError)
-})
 
 test('shared body builder preserves quoted/reply tweet contract', () => {
   const body = JSON.parse(buildCreateTweetBody('synthetic post', { quoteTweetId: '123', replyToTweetId: '456' }))

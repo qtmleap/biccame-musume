@@ -4,8 +4,10 @@ TL取得・OpenAI互換Responses解析・Discord候補通知と、X告知・日�
 TLの移植元は `qtmleap/biccame-musume-workers@538fe1b05dd631ebe38e76b894a0949d840709e7`。
 40店舗の通知範囲・5分窓・UUID・作成ボタンを維持しています。
 
-現在は本番切替前です。全環境のcronは空で、`TL_NOTIFICATIONS_ENABLED`、`X_POSTING_ENABLED`、
-`X_ACCOUNT_READ_ENABLED` はfalseです。appの`X_POSTING_OWNER`も`app`です。
+production botがTL通知・X告知・日次処理を担当します。cronは `*/5 0-12 * * *` と `0 0 * * *`。
+localとstagingのcronは空で、`TL_NOTIFICATIONS_ENABLED`、`X_POSTING_ENABLED`、`X_ACCOUNT_READ_ENABLED` はfalseです。
+appはX認証情報・X直投稿・日次X処理を持たず、保存後の告知と管理画面確認を`BOT` Service Binding経由で依頼します。
+appの日次cronはバッジ再評価だけを独立実行します。
 HTTPは404だけで、ブラウザや公開管理APIからbotを直接呼びません。
 
 ## RPC
@@ -13,6 +15,7 @@ HTTPは404だけで、ブラウザや公開管理APIからbotを直接呼びま�
 - `BotService.ping`: 無副作用の疎通。
 - `BotService.announce`: appが保存済みイベントの用途・UUID・更新版・生成済み本文を渡す。認証主体確認後に1回だけ投稿する。
 - `BotService.accountStatus`: 管理画面向けの公開プロフィール読み取り。日次の認証主体確認とは別契約。
+- `BotService.postingSessionStatus`: 投稿しない認証主体確認。成功/固定分類だけを返し、アカウント名・secretを返さない。
 - `AppBotReadService.dailyTargets`: appが既存のJST境界と本文builderで日次スレッド本文を返す読み取り専用RPC。
 
 担当が`bot`のとき、app側はbot失敗・成功不明・無効でも直接投稿へfallbackしません。
@@ -24,7 +27,7 @@ botは成功不明の投稿やスレッドを自動再送しません。appは�
 - `bun run typecheck`: app/botの型検証。
 - `bun test`: 架空データ・mock外部通信で単体テスト。
 - `bun run test:bot-rpc`: 生成bundleをMiniflareで動かし、named BotServiceと、本物のscheduled → named AppBotReadService → Xスレッドを検証。外部通信は禁止。
-- `BICCAME_BOT_RPC=1 CLOUDFLARE_ENV=<env> bun run build` / `build:bot`: 本番切替用の双方向Service Bindingを明示的に生成。既定buildにはbot依存を入れません。
+- `CLOUDFLARE_ENV=<env> bun run build` / `build:bot`: 環境別のapp→`BotService`、bot→`AppBotReadService`を生成。初回だけ`BICCAME_BOT_BOOTSTRAP=1`でbotのapp依存を外せます。
 - `bun run check:bot-stores`: canonicalな公開JSONから生成した40店舗の対応が最新か確認。
 - `bun scripts/compare-x-signers.ts --legacy-module=<旧0.1.0>`: 旧private signerと共通signerの固定時刻・乱数比較。
 - `bun scripts/build-bot-phase2.ts`: Phase 3を混ぜず、Workers互換修正済みPhase 2候補を隔離ビルド・テストする。
@@ -47,9 +50,6 @@ API本文・tweet本文・認証情報を失敗ログに含めません。Discor
 ## デプロイ
 
 同名Workerを継承します: production=`musume-workers`、staging=`musume-workers-staging`。
-旧repoの自動デプロイ停止、旧cron停止と反映確認、登録済みsecretの保持確認、切替窓の記録が先です。
-このrepoのCIはbundle/RPC検証だけで、botを自動デプロイしません。
-
-承認済みの停止状態デプロイに限り、同じ環境でビルドして `bun run deploy:bot --env=staging` または
-`--env=production` を明示します。入口は生成Wrangler設定と環境名・空cron・無効通知フラグを検証します。
-本番有効化と実通知検証は別途承認・運用確認が必要です。旧Worker/repoは直後に削除・archiveしません。
+旧repoの自動デプロイは停止済みです。このrepoのdeployment workflowが、app → bot RPC検証 → botの順にデプロイします。
+stagingは通知無効・cronなしのみ許可します。productionの有効設定は`--allow-active-production`を明示した入口だけが受け付けます。
+appの`BOT`は同じ環境のbotを、botの`APP`は同じ環境のappを参照します。旧Worker/repoは直後に削除・archiveしません。

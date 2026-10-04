@@ -45,17 +45,17 @@ test('scheduled dispatch distinguishes overlapping midnight crons without execut
   }
 })
 
-test('all skeleton environments disable cron and public endpoints without DB or secrets', () => {
+test('only production enables cron while local/staging stay disabled and bot has no DB', () => {
   const environment = z.object({
     name: z.string().nonempty(),
     vars: z.strictObject({
       OPENAI_BASE_URL: z.literal('https://ai.qleap.jp/v1'),
       OPENAI_MODEL: z.literal('codex,gpt-5.6-luna'),
-      TL_NOTIFICATIONS_ENABLED: z.literal('false'),
-      X_POSTING_ENABLED: z.literal('false'),
-      X_ACCOUNT_READ_ENABLED: z.literal('false')
+      TL_NOTIFICATIONS_ENABLED: z.enum(['true', 'false']),
+      X_POSTING_ENABLED: z.enum(['true', 'false']),
+      X_ACCOUNT_READ_ENABLED: z.enum(['true', 'false'])
     }),
-    triggers: z.object({ crons: z.array(z.string().nonempty()).length(0) })
+    triggers: z.object({ crons: z.array(z.string().nonempty()) })
   })
   const parsed = environment
     .extend({
@@ -81,9 +81,14 @@ test('all skeleton environments disable cron and public endpoints without DB or 
     'X_ACCOUNT_READ_ENABLED'
   ])
   expect(parsed.data.vars.TL_NOTIFICATIONS_ENABLED).toBe('false')
-  const appSource = readFileSync(resolve(root, 'workers/app/wrangler.toml'), 'utf8')
-  expect(appSource).not.toContain('BotService')
-  expect(appSource).not.toContain('bot-skeleton')
+  expect(parsed.data.triggers.crons).toEqual([])
+  expect(parsed.data.env.staging.triggers.crons).toEqual([])
+  expect(parsed.data.env.staging.vars.TL_NOTIFICATIONS_ENABLED).toBe('false')
+  expect(parsed.data.env.staging.vars.X_POSTING_ENABLED).toBe('false')
+  expect(parsed.data.env.production.triggers.crons).toEqual(['*/5 0-12 * * *', '0 0 * * *'])
+  expect(parsed.data.env.production.vars.TL_NOTIFICATIONS_ENABLED).toBe('true')
+  expect(parsed.data.env.production.vars.X_POSTING_ENABLED).toBe('true')
+  expect(parsed.data.env.production.vars.X_ACCOUNT_READ_ENABLED).toBe('true')
 })
 
 describe('bot deployment output validation', () => {
