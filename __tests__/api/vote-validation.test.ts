@@ -1,7 +1,7 @@
 import { beforeEach, expect, mock, test } from 'bun:test'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
-import type { Bindings } from '../../src/types/bindings'
+import type { Bindings } from '../../workers/app/src/types/bindings'
 
 const db = {
   $transaction: mock(async (ops: unknown[]) => ops),
@@ -10,9 +10,9 @@ const db = {
 }
 const getPrisma = mock(() => db)
 mock.module('@/lib/prisma', () => ({ getPrisma }))
-const { default: routes } = await import('../../src/api/vote')
-const { vote, bulkVote } = await import('../../src/services/vote-service')
-const { loadBiccameMusumeIdSet } = await import('../../src/utils/character-whitelist')
+const { default: routes } = await import('../../workers/app/src/api/vote')
+const { vote, bulkVote } = await import('../../workers/app/src/services/vote-service')
+const { loadBiccameMusumeIdSet } = await import('../../workers/app/src/utils/character-whitelist')
 const characters = [
   { id: 'sapporo', character: { is_biccame_musume: true } },
   { id: 'akiba', character: { is_biccame_musume: true } },

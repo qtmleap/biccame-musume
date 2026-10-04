@@ -4,7 +4,7 @@ import { storyNameFromExport, toId } from 'storybook/internal/csf'
 import ts from 'typescript'
 import { inventory, sourceFiles } from './inventory'
 
-const stories = sourceFiles('src/stories').filter((file) => file.endsWith('.stories.tsx'))
+const stories = sourceFiles('workers/app/src/stories').filter((file) => file.endsWith('.stories.tsx'))
 const mapping = new Map<string, string[]>()
 for (const file of stories) {
   const source = readFileSync(file, 'utf8')

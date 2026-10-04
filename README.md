@@ -162,7 +162,7 @@ source .env && wrangler d1 migrations apply DB --env=production --remote
 直接書かれている。ローカルで再現する場合は同じ順序で実行する。
 
 ```zsh
-bunx rimraf dist
+bunx rimraf workers/app/dist
 bun run scripts/download-character-images.ts
 bun run scripts/generate-og-images.ts
 bun tsc -b
@@ -188,19 +188,33 @@ bunx biome check --write .
 ### プロジェクト構成
 
 ```
-src/
-├── app/              # アプリケーションルート
-│   └── routes/      # ルーティング定義
-├── components/       # Reactコンポーネント
-│   ├── ui/          # Shadcn UIコンポーネント（編集不可）
-│   └── **/*.tsx     # カスタムコンポーネント
-├── schemas/         # Zodスキーマ定義
-│   └── **/*.dto.ts  # DTOスキーマ
-├── utils/           # ユーティリティ関数
-│   └── client.ts    # Zodios APIクライアント
-└── __tests__/       # テストコード
-    └── **/*.test.ts # テストファイル
+workers/
+├── app/                  # UI・API・既存日次処理を配信する Worker
+│   ├── src/              # React・Hono・型・サービス
+│   ├── public/           # 静的資産とキャラクター情報
+│   ├── index.html
+│   ├── vite.config.ts
+│   ├── wrangler.toml
+│   └── package.json
+└── bot/                  # 後段で自動処理を移行（現在は役割説明のみ）
+prisma/                   # 共有スキーマ・マイグレーション
+__tests__/                # Bun テスト
+scripts/                  # 画像生成・DB seed
+.storybook/               # UI カタログ・検証
 ```
+
+依存と共通ツールはルートの Bun workspace で管理します。`bun run dev`、
+`bun run build`、`bun run generate`、`bun run deploy` は引き続きルートから実行できます。
+本体のビルド出力は `workers/app/dist/` です。Vite のルート設定ファイルは app 設定を再公開します。
+
+Prisma はルート `prisma/` を使用し、Client は `workers/app/src/generated/prisma/` に生成します。
+ローカル D1/KV/DO の状態は従来どおりルート `.wrangler/state/` に保存します。
+環境ファイルもルートに維持します。ローカル開発時のみ app からルートへ相対 symlink を作成し、
+内容のコピーや既存ファイルの上書きは行いません。Wrangler の canonical 設定パスは app のままです。
+
+Wrangler CLI を直接使う場合は `--config workers/app/wrangler.toml` を指定します。
+ローカル DB コマンドには `--persist-to .wrangler/state` も指定してください。
+ビルド済み本体のデプロイは生成済み設定を使う `bun run deploy` を使用します。
 
 ### GitHub設定
 
@@ -227,13 +241,13 @@ PR Agentを使用する場合、リポジトリのSecretsに以下を設定し�
 - 非同期処理は`async/await`を使用
 - 日付処理は`dayjs`を使用（`Date`は使用しない）
 - アイコンは`lucide-react`または`@shadcn/ui/icons`を使用
-- API通信は`src/utils/client.ts`で定義された`Zodios`クライアントを使用
+- API通信は`workers/app/src/utils/client.ts`で定義された`Zodios`クライアントを使用
 - 型定義とバリデーションにはZodを使用
 - `any`型の使用を避ける
 
 ### 注意事項
 
-- `index.css`と`src/components/ui/**/*.tsx`は直接編集しない
+- `index.css`と`workers/app/src/components/ui/**/*.tsx`は直接編集しない
 - Shadcn UIコンポーネントのスタイル変更は`className`で対応
 - 条件付き`className`は`cn`ユーティリティを使用
 - モジュールインポートには`@`エイリアスを使用

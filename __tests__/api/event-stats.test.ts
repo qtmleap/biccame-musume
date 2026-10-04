@@ -3,8 +3,8 @@ import { OpenAPIHono } from '@hono/zod-openapi'
 import type { PrismaClient } from '@/generated/prisma/client'
 import * as prismaModule from '@/lib/prisma'
 import type { Bindings } from '@/types/bindings'
-import routes from '../../src/api/event'
-import { getEventsStats } from '../../src/services/me-service'
+import routes from '../../workers/app/src/api/event'
+import { getEventsStats } from '../../workers/app/src/services/me-service'
 
 const groupBy = mock(async (input: { where: { eventId: { in: string[] }; status: string } }) =>
   input.where.eventId.in.map((eventId) => ({ eventId, _count: { eventId: 2 } }))

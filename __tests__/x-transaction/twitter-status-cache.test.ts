@@ -1,6 +1,6 @@
 import { afterEach, expect, mock, spyOn, test } from 'bun:test'
-import routes from '../../src/api/admin-twitter'
-import { Twitter } from '../../src/utils/twitter'
+import routes from '../../workers/app/src/api/admin-twitter'
+import { Twitter } from '../../workers/app/src/utils/twitter'
 
 afterEach(() => mock.restore())
 

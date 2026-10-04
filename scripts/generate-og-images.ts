@@ -1,14 +1,14 @@
 /**
  * Generate per-character OG images at build time.
  *
- * Reads public/characters.json, loads each character's SD portrait from the
+ * Reads workers/app/public/characters.json, loads each character's SD portrait from the
  * locally cached image folders (populated by download-character-images.ts),
  * composes a 1200x630 OG card with satori, rasterizes it with resvg, and writes
- * the PNG to public/og/characters/{id}.png.
+ * the PNG to workers/app/public/og/characters/{id}.png.
  *
  * Image source priority:
- *   1. STAMPCAMERA_POSES に登録があれば public/images/stamps/ から透過 SD 画像
- *   2. fall back to biccame.jp 由来の public/images/characters/ 配下
+ *   1. STAMPCAMERA_POSES に登録があれば workers/app/public/images/stamps/ から透過 SD 画像
+ *   2. fall back to biccame.jp 由来の workers/app/public/images/characters/ 配下
  *
  * Run via:
  *   bun run scripts/generate-og-images.ts
@@ -23,10 +23,10 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import satori from 'satori'
 import sharp from 'sharp'
-import { getCanonicalPose, type StampcameraEntry } from '../src/lib/stampcamera-map'
+import { getCanonicalPose, type StampcameraEntry } from '../workers/app/src/lib/stampcamera-map'
 
 const ROOT = resolve(import.meta.dir, '..')
-const PUBLIC_DIR = resolve(ROOT, 'public')
+const PUBLIC_DIR = resolve(ROOT, 'workers/app/public')
 const OUT_DIR = resolve(PUBLIC_DIR, 'og/characters')
 const CHARACTERS_JSON = resolve(PUBLIC_DIR, 'characters.json')
 const BICCAME_LOCAL_DIR = resolve(PUBLIC_DIR, 'images/characters')

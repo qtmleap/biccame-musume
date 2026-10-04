@@ -1,6 +1,11 @@
 name: Continuous Integration
 on:
   push:
+permissions:
+  contents: read
+  packages: read
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   ui-regression:
     name: Local UI and authentication regression
@@ -92,7 +97,7 @@ jobs:
         run: bun install --frozen-lockfile --ignore-scripts
       - name: Check
         run: |
-          bun biome check src __tests__
+          bun biome check workers/app/src workers/bot/src packages/shared/src __tests__
   migrations:
     name: Migrations
     runs-on: ubuntu-latest
@@ -147,7 +152,7 @@ jobs:
         run: bun run generate
       - name: Test
         run: |
-          bun test
+          bun run test
   knip:
     name: Knip
     runs-on: ubuntu-latest
@@ -196,7 +201,7 @@ jobs:
         run: bun run generate
       - name: Test
         run: |
-          bun tsc --noEmit
+          bun run typecheck
   build:
     name: Vite Build (production)
     runs-on: ubuntu-latest
@@ -221,27 +226,27 @@ jobs:
         uses: actions/cache@v5
         with:
           path: |
-            public/images/characters
-            public/images/stamps
+            workers/app/public/images/characters
+            workers/app/public/images/stamps
           key: >-
             ${{ runner.os }}-character-images-${{
               hashFiles(
                 'scripts/download-character-images.ts',
                 'scripts/stampcamera-map.ts',
-                'public/characters.json'
+                'workers/app/public/characters.json'
               )
             }}
       - name: Cache OG images
         uses: actions/cache@v5
         with:
           path: |
-            public/og/characters
+            workers/app/public/og/characters
           key: >-
             ${{ runner.os }}-og-${{
               hashFiles(
                 'scripts/generate-og-images.ts',
                 'scripts/stampcamera-map.ts',
-                'public/characters.json'
+                'workers/app/public/characters.json'
               )
             }}
       - name: Install dependencies
@@ -250,10 +255,18 @@ jobs:
         run: bun run generate
       - name: Build
         run: |
-          bunx rimraf dist
+          bunx rimraf workers/app/dist
           bun run scripts/download-character-images.ts
           bun run scripts/generate-og-images.ts
           bun tsc -b
-          bun vite build --mode production
+          CLOUDFLARE_ENV=production bun vite build --mode production
+          CLOUDFLARE_ENV=production bun run test:app-build
+          bun run check:bot-stores
+          CLOUDFLARE_ENV=production bun run build:bot
+          bun run test:bot-rpc
+          BICCAME_BOT_RPC=1 CLOUDFLARE_ENV=production bun vite build --mode production
+          BICCAME_BOT_RPC=1 CLOUDFLARE_ENV=production bun run test:app-build
+          BICCAME_BOT_RPC=1 CLOUDFLARE_ENV=production bun run build:bot
+          BICCAME_BOT_RPC=1 CLOUDFLARE_ENV=production bun run test:bot-rpc
         env:
           CLOUDFLARE_ENV: production

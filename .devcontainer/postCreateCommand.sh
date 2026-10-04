@@ -2,10 +2,7 @@
 
 sudo chown -R $(whoami):$(whoami) \
   node_modules \
-  workers/api/node_modules \
-  workers/app/node_modules \
-  workers/db/node_modules \
-  packages/shared/node_modules 2>/dev/null || true
+  workers/app/node_modules 2>/dev/null || true
 
 # Silence direnv output.
 # In direnv 2.36+, DIRENV_LOG_FORMAT env var is ignored unless direnv.toml exists.
@@ -24,10 +21,9 @@ if [ -f package.json ]; then
     bun install --ignore-scripts
   fi
 
-  # Generate Prisma client if the DB worker exists. Runs before the first
-  # `bun typecheck` so imports of `@app/db` resolve to real generated types.
-  if [ -f workers/db/prisma/schema.prisma ]; then
-    bun run --cwd workers/db generate
+  # Generate the app client from the shared root schema.
+  if [ -f prisma/schema.prisma ]; then
+    bun run generate
   fi
 fi
 

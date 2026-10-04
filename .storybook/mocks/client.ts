@@ -1,8 +1,8 @@
-import { badges, characters, comments, eventDetail, events, group, now } from '../../src/stories/catalogue-fixtures'
-import { client as transport } from '../../src/utils/client/index'
+import { badges, characters, comments, eventDetail, events, group, now } from '../../workers/app/src/stories/catalogue-fixtures'
+import { client as transport } from '../../workers/app/src/utils/client/index'
 import { runtime } from '../catalogue/runtime'
 
-export { VersionResponseSchema } from '../../src/utils/client/version'
+export { VersionResponseSchema } from '../../workers/app/src/utils/client/version'
 
 const initialActivities = () => ({
   stores: ['abeno'],

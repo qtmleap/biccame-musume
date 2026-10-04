@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { assignRanks, computeMyRank, type LeaderboardEntry } from '../../src/lib/leaderboard'
+import { assignRanks, computeMyRank, type LeaderboardEntry } from '../../workers/app/src/lib/leaderboard'
 
 // ---------------------------------------------------------------------------
 // Fixtures

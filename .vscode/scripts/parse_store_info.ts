@@ -15,7 +15,7 @@ import { extractPrefecture } from './lib/prefecture'
 import { type CalendarBirthday, parseCalendarHtml } from './parsers/calendar'
 
 const CACHE_DIR = join(import.meta.dir, '../archive/html_cache')
-const OUTPUT_FILE = join(import.meta.dir, '../../public/characters.json')
+const OUTPUT_FILE = join(import.meta.dir, '../../workers/app/public/characters.json')
 
 /**
  * 擬人化記念日はカレンダーの「擬人化N周年」表記から逆算するため、
