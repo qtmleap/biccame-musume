@@ -6,13 +6,26 @@ import { Miniflare } from 'miniflare'
 
 // 本番と同じsatori standalone + resvg WASMをworkerdで実行し、イベントOG画像がPNGになることを検証する。
 const root = resolve(import.meta.dirname, '..')
+// 開催店舗の表示パターン: 店舗の娘が対象 / 別の娘が対象 / 並べきれない複数店舗 / 店舗が折り返す最長の組み合わせ
+const cases = {
+  single: { title: 'スマホ用カードケース+擬人化10周年記念アクキー', stores: ['chofu'], limitedQuantity: 100 },
+  character: { title: 'ビッカメ娘11周年記念名刺', stores: ['chofu'], characterId: 'seiseki', limitedQuantity: null },
+  many: { title: '8がつく店舗コラボ名刺', stores: ['hachioji', 'shibuhachi', 'yao', 'nagoya'], limitedQuantity: 50 },
+  wrap: {
+    title: 'スマホ用カードケース+擬人化10周年記念アクキー・デカ立川たんアクキー', stores: ['nagoyagate', 'abeno', 'ikenishi'],
+    characterId: 'seiseki', limitedQuantity: 1000
+  }
+}
 const entry = `
 import { renderEventOgImage } from './workers/app/src/utils/og-event-image.ts'
+import { eventOgPlace } from './workers/app/src/utils/og-event-place.ts'
+const cases = ${JSON.stringify(cases)}
 export default {
   async fetch(request, env) {
+    const event = cases[new URL(request.url).searchParams.get('case')]
     const png = await renderEventOgImage(env, new URL(request.url).origin, {
-      title: 'テスト用の限定名刺イベント', startDate: new Date('2026-10-04T00:00:00Z'),
-      endDate: new Date('2026-10-12T00:00:00Z'), limitedQuantity: 100, storeCount: 3
+      title: event.title, startDate: new Date('2026-10-04T00:00:00Z'),
+      endDate: new Date('2026-10-12T00:00:00Z'), limitedQuantity: event.limitedQuantity, place: eventOgPlace(event)
     })
     return new Response(png, { headers: { 'content-type': 'image/png' } })
   }
@@ -63,13 +76,15 @@ const mf = new Miniflare({ workers: [{
   }
 }] })
 try {
-  const response = await mf.dispatchFetch('http://localhost/og/events/test.png')
-  const body = new Uint8Array(await response.arrayBuffer())
-  assert.equal(response.status, 200, new TextDecoder().decode(body.slice(0, 300)))
-  assert.deepEqual([...body.slice(0, 8)], [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
-  const width = new DataView(body.buffer).getUint32(16)
-  const height = new DataView(body.buffer).getUint32(20)
-  assert.deepEqual([width, height], [1200, 630])
-  if (process.argv.includes('--write')) await Bun.write(resolve(root, '.cache/og-render-sample.png'), body)
-  console.log(`OG render passed in workerd: ${width}x${height}, ${body.length} bytes`)
+  for (const name of Object.keys(cases)) {
+    const response = await mf.dispatchFetch(`http://localhost/og/events/test.png?case=${name}`)
+    const body = new Uint8Array(await response.arrayBuffer())
+    assert.equal(response.status, 200, new TextDecoder().decode(body.slice(0, 300)))
+    assert.deepEqual([...body.slice(0, 8)], [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
+    const width = new DataView(body.buffer).getUint32(16)
+    const height = new DataView(body.buffer).getUint32(20)
+    assert.deepEqual([width, height], [1200, 630])
+    if (process.argv.includes('--write')) await Bun.write(resolve(root, `.cache/og-render-${name}.png`), body)
+    console.log(`OG render passed in workerd (${name}): ${width}x${height}, ${body.length} bytes`)
+  }
 } finally { await mf.dispose() }

@@ -14,6 +14,7 @@ import satori, { init as initSatori } from 'satori/standalone'
 // biome-ignore lint/correctness/noNodejsModules: vite-plugin-cloudflare resolves this to a WebAssembly.Module at build time
 import yogaWasmModule from 'satori/yoga.wasm'
 import type { Bindings } from '@/types/bindings'
+import type { EventOgPlace } from '@/utils/og-event-place'
 
 let wasmReady: Promise<void> | null = null
 const ensureWasm = (): Promise<void> => {
@@ -56,20 +57,51 @@ export type EventOgInput = {
   startDate: Date
   endDate: Date | null
   limitedQuantity: number | null
-  storeCount: number
+  place: EventOgPlace
 }
+
+// 開催店舗・対象の娘。X のカードは縮小表示されるため、題名に次ぐ大きさにする
+const pill = (value: string, filled: boolean) => ({
+  type: 'div',
+  props: {
+    style: {
+      fontSize: '36px',
+      fontWeight: 700,
+      padding: '6px 24px',
+      borderRadius: '999px',
+      border: '3px solid #dc2626',
+      background: filled ? '#dc2626' : '#ffffff',
+      color: filled ? '#ffffff' : '#b91c1c'
+    },
+    children: value
+  }
+})
+
+const caption = (text: string) => ({
+  type: 'div',
+  props: { style: { fontSize: '26px', fontWeight: 700, color: '#b91c1c' }, children: text }
+})
+
+// 折り返しても見出しだけが行末に残らないよう、見出しと最初の値をひとまとめにする
+const captioned = (text: string, first: ReturnType<typeof pill>) => ({
+  type: 'div',
+  props: { style: { display: 'flex', alignItems: 'center', gap: '12px' }, children: [caption(text), first] }
+})
 
 const buildVDom = (e: EventOgInput) => {
   const range = e.endDate
     ? `${formatJstDate(e.startDate)} 〜 ${formatJstDate(e.endDate)}`
     : `${formatJstDate(e.startDate)} 〜`
-  const meta = [
-    range,
-    e.limitedQuantity ? `限定 ${e.limitedQuantity} 体` : null,
-    e.storeCount > 0 ? `開催店舗 ${e.storeCount} 店` : null
-  ]
+  const meta = [range, e.limitedQuantity ? `限定 ${e.limitedQuantity} 体` : null]
     .filter((v): v is string => Boolean(v))
     .join('  ・  ')
+  const [firstStore, ...otherStores] = e.place.stores.map((store) => pill(store, true))
+  const place = [
+    ...(firstStore ? [captioned('開催店舗', firstStore)] : []),
+    ...otherStores,
+    ...(e.place.otherStoreCount > 0 ? [caption(`ほか ${e.place.otherStoreCount} 店舗`)] : []),
+    ...(e.place.character ? [captioned('対象', pill(e.place.character, false))] : [])
+  ]
 
   return {
     type: 'div',
@@ -82,7 +114,7 @@ const buildVDom = (e: EventOgInput) => {
         background: 'linear-gradient(135deg, #fff5f5 0%, #ffe4e4 50%, #ffd0d0 100%)',
         fontFamily: 'Zen Maru Gothic',
         position: 'relative',
-        padding: '88px 80px 64px 80px',
+        padding: '72px 80px 64px 80px',
         justifyContent: 'space-between'
       },
       children: [
@@ -101,13 +133,13 @@ const buildVDom = (e: EventOgInput) => {
                 type: 'div',
                 props: {
                   style: {
-                    fontSize: '32px',
-                    color: '#dc2626',
-                    fontWeight: 700,
-                    marginBottom: '24px',
-                    letterSpacing: '0.05em'
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    gap: '14px 16px',
+                    marginBottom: '36px'
                   },
-                  children: '#ビッカメ娘 イベント'
+                  children: place
                 }
               },
               {
@@ -118,9 +150,10 @@ const buildVDom = (e: EventOgInput) => {
                     color: '#1a1a1a',
                     fontWeight: 700,
                     lineHeight: 1.15,
-                    marginBottom: '40px',
-                    display: '-webkit-box',
-                    overflow: 'hidden'
+                    marginBottom: '28px',
+                    // satori は display: block のときだけ lineClamp を効かせる
+                    display: 'block',
+                    lineClamp: 2
                   },
                   children: e.title
                 }
@@ -138,8 +171,14 @@ const buildVDom = (e: EventOgInput) => {
         {
           type: 'div',
           props: {
-            style: { fontSize: '24px', color: '#1a1a1a', fontWeight: 700 },
-            children: 'ビッカメ娘 推し活応援プロジェクト'
+            style: { display: 'flex', justifyContent: 'space-between', fontSize: '24px', fontWeight: 700 },
+            children: [
+              { type: 'div', props: { style: { color: '#1a1a1a' }, children: 'ビッカメ娘 推し活応援プロジェクト' } },
+              {
+                type: 'div',
+                props: { style: { color: '#dc2626', letterSpacing: '0.05em' }, children: '#ビッカメ娘 イベント' }
+              }
+            ]
           }
         }
       ]
