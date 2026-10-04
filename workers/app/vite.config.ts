@@ -163,9 +163,11 @@ export default defineConfig(({ mode, command }) => {
       }
     },
     resolve: {
-      alias: {
-        '@': resolve(import.meta.dirname, './src')
-      },
+      alias: [
+        // satoriのharfbuzzはfs/XMLHttpRequestでWASMを探すため、同梱WASMを渡すWorkers版へ置換する。
+        { find: /^harfbuzzjs$/, replacement: resolve(import.meta.dirname, './src/lib/harfbuzz-workers.ts') },
+        { find: '@', replacement: resolve(import.meta.dirname, './src') }
+      ],
     },
     define: {
       global: 'globalThis',

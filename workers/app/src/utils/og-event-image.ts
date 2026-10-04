@@ -8,13 +8,24 @@
 import { initWasm, Resvg } from '@resvg/resvg-wasm'
 // biome-ignore lint/correctness/noNodejsModules: vite-plugin-cloudflare resolves this to a WebAssembly.Module at build time
 import resvgWasmModule from '@resvg/resvg-wasm/index_bg.wasm'
-import satori from 'satori'
+// 既定のsatoriはyogaのWASMを実行時コード生成で組み立て、Workersでは初期化に失敗する。
+// standalone版へ、ビルド時にWebAssembly.Moduleとして同梱したyogaを渡す。
+import satori, { init as initSatori } from 'satori/standalone'
+// biome-ignore lint/correctness/noNodejsModules: vite-plugin-cloudflare resolves this to a WebAssembly.Module at build time
+import yogaWasmModule from 'satori/yoga.wasm'
 import type { Bindings } from '@/types/bindings'
 
 let wasmReady: Promise<void> | null = null
 const ensureWasm = (): Promise<void> => {
   if (!wasmReady) {
-    wasmReady = initWasm(resvgWasmModule as WebAssembly.Module)
+    wasmReady = Promise.all([
+      initWasm(resvgWasmModule as WebAssembly.Module),
+      initSatori(yogaWasmModule as WebAssembly.Module)
+    ]).then(() => undefined)
+    // 一時的な失敗でisolate全体を壊れたままにしない。
+    wasmReady.catch(() => {
+      wasmReady = null
+    })
   }
   return wasmReady
 }
@@ -25,8 +36,8 @@ let cachedFonts: FontEntry[] | null = null
 const loadFonts = async (env: Bindings, origin: string): Promise<FontEntry[]> => {
   if (cachedFonts) return cachedFonts
   const [reg, bold] = await Promise.all([
-    env.ASSETS.fetch(new Request(`${origin}/fonts/zen-maru-gothic-500.woff2`)).then((r) => r.arrayBuffer()),
-    env.ASSETS.fetch(new Request(`${origin}/fonts/zen-maru-gothic-700.woff2`)).then((r) => r.arrayBuffer())
+    env.ASSETS.fetch(new Request(`${origin}/fonts/zen-maru-gothic-500.woff`)).then((r) => r.arrayBuffer()),
+    env.ASSETS.fetch(new Request(`${origin}/fonts/zen-maru-gothic-700.woff`)).then((r) => r.arrayBuffer())
   ])
   cachedFonts = [
     { name: 'Zen Maru Gothic', data: reg, weight: 500, style: 'normal' },
