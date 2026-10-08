@@ -44,6 +44,35 @@ const object = (value: unknown): JsonObject => {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Unsupported payload')
   return value as JsonObject
 }
+// Only the observed empty native List dependency failure is safe to request again on explicit resume.
+const isListDependencyError = (response: unknown): boolean => {
+  const onlyKeys = (value: JsonObject, keys: string[]) =>
+    Object.keys(value).length === keys.length && keys.every((key) => Object.hasOwn(value, key))
+  try {
+    const root = object(response)
+    if (!onlyKeys(root, ['data', 'errors']) || !Array.isArray(root.errors) || root.errors.length !== 1) return false
+    const data = object(root.data)
+    const list = object(data.list)
+    if (
+      !onlyKeys(data, ['list']) ||
+      !onlyKeys(list, ['tweets_timeline']) ||
+      Object.keys(object(list.tweets_timeline)).length !== 0
+    )
+      return false
+    const error = object(root.errors[0])
+    const extensions = object(error.extensions)
+    return (
+      [error, extensions].every(
+        (value) => value.kind === 'Operational' && value.name === 'DependencyError' && value.source === 'Server'
+      ) &&
+      Array.isArray(error.path) &&
+      error.path.length === 3 &&
+      error.path.every((part, index) => part === ['list', 'tweets_timeline', 'timeline'][index])
+    )
+  } catch {
+    return false
+  }
+}
 const string = (value: unknown, allowEmpty = false): string => {
   if (typeof value !== 'string' || (!value && !allowEmpty)) throw new Error('Unsupported payload')
   return value
@@ -424,6 +453,7 @@ export const runArchive = async (options: {
         throw new ArchiveFailure('corrupt_journal')
       pages++
       locations.push(location)
+      if (source === 'list' && isListDependencyError(envelope.response)) return 'list_dependency'
       let parsed: ReturnType<typeof parseArchivePage>
       try {
         parsed = parseArchivePage(envelope.response, source)
@@ -612,7 +642,10 @@ export const runArchive = async (options: {
       }
       const location = `pages/${String(pages + 1).padStart(6, '0')}.json`
       await atomic(join(out, location), JSON.stringify(envelope))
-      processPage(envelope, location)
+      if (processPage(envelope, location) === 'list_dependency') {
+        reason = 'request_failed'
+        requestFailure = { kind: 'list_dependency' }
+      }
       await save()
     }
     reason ??= 'budget'

@@ -99,6 +99,8 @@ list IDと期間の既定値・JST境界・終了コードはSearch版と共通�
 
 明示的Bottom終了または次cursorなしでのみ `list_exhausted` とし、`coverageVerified:false` のままです。空ページ・cursor置換ペア・既知IDだけの会話でも、新しいcursorがあれば継続します。cursor循環・予算終了・429・未知形式・取得不可tweet/tombstone/ShowMoreは未完了として生応答を残します。会話の展開取得は行いません。`--seed-from` は非対応で、Search版のcacheと相互resumeできません。
 
+HTTP-200で投稿を含まない空のList応答と、観測済みの単一 `Operational / DependencyError / Server` エラーが返った場合は、`request_failed` / `list_dependency` としてその実行を停止します。自動retryはせず、明示的な `--resume` で失敗した同じcursorを再取得します。失敗応答もjournalの1ページとして残し、回復応答を次の連番へ追記します。scope・保存済み生応答は書き換えません。再開ごとに同じ障害が続く場合も1回で停止します。投稿を含む部分応答・認証エラー・別形式のエラー・Search版にはこの扱いを適用しません。
+
 固定endpointは `/i/api/graphql/1LE3u14FJjPZUHKFGzos2g/ListLatestTweetsTimeline` です。X側のquery IDや応答形式が変わる場合は更新・検証が必要です。endpointと取得元固有の終了policyもscope fingerprintに含め、変更前のjournalへ異なる取得元を混在させません。
 
 ## デプロイ

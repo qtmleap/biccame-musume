@@ -58,6 +58,20 @@ const searchPage = () => ({
     }
   }
 })
+const dependencyError = () => ({
+  data: { list: { tweets_timeline: {} } },
+  errors: [
+    {
+      extensions: { kind: 'Operational', name: 'DependencyError', source: 'Server' },
+      kind: 'Operational',
+      locations: [{ column: 7, line: 4 }],
+      message: 'Dependency: Unspecified',
+      name: 'DependencyError',
+      path: ['list', 'tweets_timeline', 'timeline'],
+      source: 'Server'
+    }
+  ]
+})
 const replacementCursors = (cursor: string) =>
   listInstructions(
     ['Top', 'Bottom'].map((cursorType) => {
@@ -386,6 +400,209 @@ test('List saves unsupported raw bodies before parsing and preserves partial dat
   })
   expect(JSON.parse(await readFile(join(out, 'checkpoint.json'), 'utf8')).nextCursor).toBe('preserved-cursor')
   expect((await rows(out)).map((row) => row.id)).toEqual(['1'])
+})
+
+test('List DependencyError stops the run without retrying and preserves its failed request cursor', async () => {
+  for (const withPriorPage of [false, true]) {
+    const out = await output()
+    const responses = withPriorPage ? [page([tweet('1')], 'failed-cursor'), dependencyError()] : [dependencyError()]
+    let calls = 0
+    const result = await runArchive({
+      source: 'list',
+      scope,
+      out,
+      delayMs: 0,
+      search: async ({ cursor }) => {
+        expect(cursor).toBe(calls ? 'failed-cursor' : undefined)
+        return responses[calls++]
+      }
+    })
+    expect(result).toMatchObject({
+      complete: false,
+      reason: 'request_failed',
+      pages: responses.length,
+      posts: withPriorPage ? 1 : 0,
+      requestFailure: { kind: 'list_dependency' }
+    })
+    expect(result.requestFailure).not.toHaveProperty('status')
+    expect(calls).toBe(responses.length)
+    expect(JSON.parse(await readFile(join(out, 'checkpoint.json'), 'utf8')).nextCursor).toBe(
+      withPriorPage ? 'failed-cursor' : undefined
+    )
+    expect(
+      JSON.parse(await readFile(join(out, 'pages', `${String(responses.length).padStart(6, '0')}.json`), 'utf8'))
+        .response
+    ).toEqual(dependencyError())
+    expect((await rows(out)).map((row) => row.id)).toEqual(withPriorPage ? ['1'] : [])
+    expect(await readFile(join(out, 'manifest.json'), 'utf8')).not.toContain('Dependency: Unspecified')
+  }
+})
+
+test('List resume appends recovery at the same cursor and replays the recovered chain without rewriting journal bytes', async () => {
+  const out = await output()
+  let initialCalls = 0
+  await runArchive({
+    source: 'list',
+    scope,
+    out,
+    delayMs: 0,
+    search: async () => (initialCalls++ === 0 ? page([tweet('1')], 'failed-cursor') : dependencyError())
+  })
+  const originalFiles = ['scope.json', 'pages/000001.json', 'pages/000002.json']
+  const originalBytes = await Promise.all(originalFiles.map((path) => readFile(join(out, path), 'utf8')))
+  let resumedCalls = 0
+  const recovered = await runArchive({
+    source: 'list',
+    scope,
+    out,
+    resume: true,
+    maxRequests: 1,
+    delayMs: 0,
+    search: async ({ cursor }) => {
+      resumedCalls++
+      expect(cursor).toBe('failed-cursor')
+      return page([tweet('1'), tweet('2')], 'recovered-cursor')
+    }
+  })
+  expect(recovered).toMatchObject({ complete: false, reason: 'budget', pages: 3, posts: 2 })
+  expect(recovered.requestFailure).toBeUndefined()
+  expect(JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8')).requestFailure).toBeUndefined()
+  expect(resumedCalls).toBe(1)
+  expect(await Promise.all(originalFiles.map((path) => readFile(join(out, path), 'utf8')))).toEqual(originalBytes)
+  const recoveryEnvelope = JSON.parse(await readFile(join(out, 'pages', '000003.json'), 'utf8'))
+  expect(recoveryEnvelope).toMatchObject({ index: 3, requestCursor: 'failed-cursor' })
+  expect(recoveryEnvelope.scopeFingerprint).toBe(JSON.parse(originalBytes[1]).scopeFingerprint)
+  expect((await rows(out)).map((row) => row.id)).toEqual(['1', '2'])
+  const continued = await runArchive({
+    source: 'list',
+    scope,
+    out,
+    resume: true,
+    delayMs: 0,
+    search: async ({ cursor }) => {
+      expect(cursor).toBe('recovered-cursor')
+      return page([tweet('3')])
+    }
+  })
+  expect(continued).toMatchObject({ complete: true, reason: 'list_exhausted', pages: 4, posts: 3 })
+  expect((await rows(out)).map((row) => row.id)).toEqual(['1', '2', '3'])
+  expect(await Promise.all(originalFiles.map((path) => readFile(join(out, path), 'utf8')))).toEqual(originalBytes)
+})
+
+test('each explicit List resume appends one repeated DependencyError and stops before another request', async () => {
+  const out = await output()
+  await runArchive({
+    source: 'list',
+    scope,
+    out,
+    maxPages: 1,
+    delayMs: 0,
+    search: async () => page([tweet('1')], 'failed-cursor')
+  })
+  for (const index of [2, 3, 4]) {
+    let calls = 0
+    const result = await runArchive({
+      source: 'list',
+      scope,
+      out,
+      resume: true,
+      maxRequests: 1,
+      delayMs: 0,
+      search: async ({ cursor }) => {
+        calls++
+        expect(cursor).toBe('failed-cursor')
+        return dependencyError()
+      }
+    })
+    expect(result).toMatchObject({ complete: false, reason: 'request_failed', pages: index, posts: 1 })
+    expect(calls).toBe(1)
+    expect(JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8')).requestsThisRun).toBe(1)
+    expect(
+      JSON.parse(await readFile(join(out, 'pages', `${String(index).padStart(6, '0')}.json`), 'utf8'))
+    ).toMatchObject({ index, requestCursor: 'failed-cursor', response: dependencyError() })
+    expect((await rows(out)).map((row) => row.id)).toEqual(['1'])
+  }
+  expect(
+    await runArchive({
+      source: 'list',
+      scope,
+      out,
+      resume: true,
+      delayMs: 0,
+      search: async () => page([tweet('2')], 'failed-cursor')
+    })
+  ).toMatchObject({ complete: false, reason: 'repeated_cursor', pages: 5, posts: 2 })
+})
+
+test('authorization, mixed, partial and Search GraphQL errors remain unsupported and cannot make resumed requests', async () => {
+  const error = dependencyError().errors[0]
+  const cases = [
+    { source: 'list' as const, response: { ...dependencyError(), errors: [{ ...error, name: 'AuthorizationError' }] } },
+    {
+      source: 'list' as const,
+      response: {
+        ...dependencyError(),
+        errors: [{ ...error, extensions: { ...error.extensions, name: 'UnknownError' } }]
+      }
+    },
+    { source: 'list' as const, response: { ...dependencyError(), errors: [{ ...error, path: ['list', 'other'] }] } },
+    { source: 'list' as const, response: { ...dependencyError(), errors: [] } },
+    { source: 'list' as const, response: { data: dependencyError().data } },
+    { source: 'list' as const, response: { ...dependencyError(), errors: [{ ...error, kind: 'Authorization' }] } },
+    { source: 'list' as const, response: { ...dependencyError(), errors: [{ ...error, source: 'Client' }] } },
+    {
+      source: 'list' as const,
+      response: {
+        ...dependencyError(),
+        errors: [{ ...error, extensions: { ...error.extensions, kind: 'Authorization' } }]
+      }
+    },
+    {
+      source: 'list' as const,
+      response: { ...dependencyError(), errors: [{ ...error, extensions: { ...error.extensions, source: 'Client' } }] }
+    },
+    { source: 'list' as const, response: { ...dependencyError(), errors: [error, { name: 'AuthorizationError' }] } },
+    { source: 'list' as const, response: { ...page([tweet('1')], 'next'), errors: [error] } },
+    {
+      source: 'list' as const,
+      response: { ...dependencyError(), data: { list: { tweets_timeline: { unknown: true } } } }
+    },
+    { source: 'list' as const, response: { ...dependencyError(), data: null } },
+    { source: 'list' as const, response: { ...dependencyError(), unexpected: true } },
+    {
+      source: 'list' as const,
+      response: { ...dependencyError(), data: { ...dependencyError().data, unexpected: true } }
+    },
+    {
+      source: 'list' as const,
+      response: { ...dependencyError(), data: { list: { ...dependencyError().data.list, unexpected: true } } }
+    },
+    { source: 'search' as const, response: dependencyError() }
+  ]
+  for (const { source, response } of cases) {
+    const out = await output()
+    expect(await runArchive({ source, scope, out, delayMs: 0, search: async () => response })).toMatchObject({
+      complete: false,
+      reason: 'unsupported_payload',
+      pages: 1,
+      posts: 0
+    })
+    let calls = 0
+    expect(
+      await runArchive({
+        source,
+        scope,
+        out,
+        resume: true,
+        delayMs: 0,
+        search: async () => {
+          calls++
+          return page([])
+        }
+      })
+    ).toMatchObject({ complete: false, reason: 'unsupported_payload', pages: 1, posts: 0 })
+    expect(calls).toBe(0)
+  }
 })
 
 test('List mode refuses Search-only seed imports before accessing the seed path', async () => {
