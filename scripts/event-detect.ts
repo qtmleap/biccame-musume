@@ -26,9 +26,11 @@ import {
 } from './lib/event-detect/extract'
 import { fetchGoldEvents } from './lib/event-detect/gold'
 import { endpointFromEnv, JUDGE_MODEL, judgeTargets, runJudge } from './lib/event-detect/judge'
+import { createViewerHandler } from './lib/event-detect/serve'
 import {
   convertArchive,
   convertArchivePages,
+  loadViewerApi,
   readArchiveState,
   readCharacterNames,
   readGold,
@@ -44,7 +46,7 @@ import {
 //   prepare: list-timeline アーカイブを軽量 JSONL に変換し、公開 API から正解イベントを取得する
 //   report : 機械フィルタのファネルと取りこぼしを標準出力に出す
 
-const help = `Usage: bun scripts/event-detect.ts <prepare|report|eval|judge> [options]
+const help = `Usage: bun scripts/event-detect.ts <prepare|report|eval|judge|serve> [options]
   prepare --archive PATH  list-timeline の posts.jsonl (default: .cache/list-timeline/year/posts.jsonl)
           --pages         posts.jsonl ではなく同じアーカイブの pages/*.json から読む（取得中でも最新）
           --skip-posts    投稿の変換を省き、正解データだけ取り直す
@@ -66,6 +68,8 @@ const help = `Usage: bun scripts/event-detect.ts <prepare|report|eval|judge> [op
           --concurrency N 同時リクエスト数 (default: 16)
           --limit N       判定する件数の上限（試運転用）
           環境変数 ANTHROPIC_BASE_URL / ANTHROPIC_AUTH_TOKEN が必要
+  serve   ビューワの API をローカル専用（127.0.0.1）で配信する。画面は dev サーバーの /admin/event-detect が /__event-detect 経由で呼ぶ
+          --port N        待ち受けポート (default: 15176)
 Common: --dir PATH (default: .cache/event-detect) --origin URL (default: https://biccame-musume.com)`
 
 const root = resolve(import.meta.dir, '..')
@@ -91,6 +95,7 @@ const { positionals, values } = parseArgs({
     'eval-from': { type: 'string' },
     'eval-until': { type: 'string' },
     limit: { type: 'string' },
+    port: { type: 'string', default: '15176' },
     help: { type: 'boolean', default: false }
   }
 })
@@ -457,6 +462,21 @@ const emulate = async () => {
   )
 }
 
+const serve = () => {
+  const port = Number(values.port)
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('--port must be an integer in 1..65535')
+  // 外部に公開しない（127.0.0.1 のみ）。ラベルの書き戻しは loadViewerApi が dir/labels.json に行う
+  Bun.serve({
+    hostname: '127.0.0.1',
+    port,
+    fetch: createViewerHandler({
+      dir,
+      loadApi: () => loadViewerApi({ dir, charactersPath: paths.characters, now: () => dayjs().toISOString() })
+    })
+  })
+  console.log(`listening on http://127.0.0.1:${port} (data: ${dir})`)
+}
+
 if (values.help || positionals.length !== 1) console.log(help)
 else if (positionals[0] === 'prepare') await prepare()
 else if (positionals[0] === 'report') await report()
@@ -464,4 +484,5 @@ else if (positionals[0] === 'eval') await evaluate()
 else if (positionals[0] === 'judge') await judge()
 else if (positionals[0] === 'extract') await extract()
 else if (positionals[0] === 'emulate') await emulate()
+else if (positionals[0] === 'serve') serve()
 else console.log(help)

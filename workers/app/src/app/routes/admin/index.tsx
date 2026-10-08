@@ -61,8 +61,8 @@ const MENU_ITEMS = [
 ] as const
 
 /**
- * dev サーバーでだけ使えるページ。イベント自動検出は .cache の手元データを vite のミドルウェアが配信する
- * （scripts/lib/event-detect/vite-plugin.ts）ので、本番では開けない。
+ * dev サーバーでだけ使えるページ。イベント自動検出は .cache の手元データをローカルの別プロセスが配信する
+ * （bun run event-detect serve）ので、本番では開けない。
  */
 const DEV_MENU_ITEMS = [
   {

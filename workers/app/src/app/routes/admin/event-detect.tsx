@@ -40,8 +40,8 @@ const ViewerSkeleton = () => (
 
 /**
  * イベント自動検出のビューワ。X の告知から検出したイベントと登録済みイベントを突き合わせて目視で確かめる。
- * データは .cache/event-detect の手元ファイルで、API は dev サーバーのミドルウェアが配信する
- * （scripts/lib/event-detect/vite-plugin.ts）。本番には無い。
+ * データは .cache/event-detect の手元ファイルで、API はローカルの別プロセスが配信し、dev サーバーが中継する
+ * （bun run event-detect serve）。本番には無い。
  */
 const EventDetectLayout = () => {
   const pathname = useRouterState({ select: (state) => state.location.pathname })

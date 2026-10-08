@@ -23,7 +23,7 @@ import {
   type Summary
 } from './schema'
 
-// ローカルビューワの API。dev サーバー（vite-plugin.ts）から切り離してテストできるよう、
+// ローカルビューワの API。配信側（scripts/lib/event-detect/serve.ts）から切り離してテストできるよう、
 // Request → Response の関数として組み立てる。パスは VIEWER_BASE を除いた /api/... で受ける。
 
 export type ApiContext = {

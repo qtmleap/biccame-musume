@@ -15,27 +15,27 @@ import { makeApi } from '@zodios/core'
 import { z } from 'zod'
 
 /**
- * イベント検出ビューワの API（workers/app/src/api/admin-event-detect.ts。形は packages/shared の viewer.ts）。
- * 読むのは D1 の event_detect_* で、bun run event-detect export で入れる。
+ * イベント検出ビューワの API。ローカルで `bun run event-detect serve` が配信し、vite の dev 中継（/__event-detect）経由で呼ぶ。
+ * 形は packages/shared の viewer.ts。本番の Worker には無いので、画面側も dev 専用として扱う。
  */
 export const eventDetectEndpoints = makeApi([
   {
     method: 'get',
-    path: '/api/admin/event-detect/summary',
+    path: '/__event-detect/api/summary',
     alias: 'getEventDetectSummary',
     description: 'ファネル・正解データの概況',
     response: SummarySchema
   },
   {
     method: 'get',
-    path: '/api/admin/event-detect/accounts',
+    path: '/__event-detect/api/accounts',
     alias: 'getEventDetectAccounts',
     description: '店舗アカウント別の件数',
     response: AccountsResponseSchema
   },
   {
     method: 'get',
-    path: '/api/admin/event-detect/posts',
+    path: '/__event-detect/api/posts',
     alias: 'getEventDetectPosts',
     description: '投稿一覧',
     parameters: [
@@ -53,43 +53,43 @@ export const eventDetectEndpoints = makeApi([
   },
   {
     method: 'get',
-    path: '/api/admin/event-detect/events',
+    path: '/__event-detect/api/events',
     alias: 'getEventDetectEvents',
     description: 'D1 イベント一覧',
     response: EventsResponseSchema
   },
   {
     method: 'get',
-    path: '/api/admin/event-detect/events/:id',
+    path: '/__event-detect/api/events/:id',
     alias: 'getEventDetectEvent',
     description: 'D1 イベント詳細と関連投稿',
     response: EventDetailResponseSchema
   },
   {
     method: 'get',
-    path: '/api/admin/event-detect/gaps',
+    path: '/__event-detect/api/gaps',
     alias: 'getEventDetectGaps',
     description: '登録漏れ候補',
     response: GapsResponseSchema
   },
   {
     method: 'get',
-    path: '/api/admin/event-detect/keywords',
+    path: '/__event-detect/api/keywords',
     alias: 'getEventDetectKeywords',
     description: 'キーワード・除外語の統計',
     response: KeywordsResponseSchema
   },
   {
     method: 'post',
-    path: '/api/admin/event-detect/keywords',
+    path: '/__event-detect/api/keywords',
     alias: 'setEventDetectKeywords',
-    description: '無効にするキーワード・除外語を渡して統計を取り直す（サーバーは状態を持たない）',
+    description: '無効にするキーワード・除外語を設定（サーバーの再起動で戻る）',
     parameters: [{ name: 'body', type: 'Body', schema: KeywordsRequestSchema }],
     response: KeywordsResponseSchema
   },
   {
     method: 'put',
-    path: '/api/admin/event-detect/labels/:id',
+    path: '/__event-detect/api/labels/:id',
     alias: 'setEventDetectLabel',
     description: '投稿に手動ラベルを付ける',
     parameters: [{ name: 'body', type: 'Body', schema: LabelRequestSchema }],
@@ -97,7 +97,7 @@ export const eventDetectEndpoints = makeApi([
   },
   {
     method: 'delete',
-    path: '/api/admin/event-detect/labels/:id',
+    path: '/__event-detect/api/labels/:id',
     alias: 'deleteEventDetectLabel',
     description: '投稿の手動ラベルを外す',
     response: LabelResponseSchema
