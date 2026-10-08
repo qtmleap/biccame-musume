@@ -41,7 +41,10 @@ Usage: bun --no-env-file --env-file=/explicit/path/.dev.vars scripts/archive-lis
   --resume         Use saved List scope and continue from journal; explicit dates/list must match
   --max-pages N    ListLatestTweetsTimeline calls this run (default: 1000)
   --max-requests N ListLatestTweetsTimeline calls this run (default: 1000)
-  --delay-ms N     Delay between requests (default: 2500)
+  --delay-ms N     Minimum request-start interval, including processing (default: 2000)
+  --retry-delay-ms N     Initial transient retry delay (default: 5000)
+  --max-retry-delay-ms N Exponential retry delay cap (default: 60000)
+  --no-retry       Stop on transient failures; resume manually
   --dry-run        Print resolved scope/endpoint; no credentials required, no network
   --help           Print this help
 Environment: TWITTER_AUTH_TOKEN, TWITTER_CSRF_TOKEN; optional TWITTER_BEARER_TOKEN.
@@ -65,6 +68,13 @@ export const runArchiveCli = async (source: ArchiveSource = 'search') => {
           'max-pages': { type: 'string' },
           'max-requests': { type: 'string' },
           'delay-ms': { type: 'string' },
+          ...(source === 'list'
+            ? {
+                'retry-delay-ms': { type: 'string' as const },
+                'max-retry-delay-ms': { type: 'string' as const },
+                'no-retry': { type: 'boolean' as const }
+              }
+            : {}),
           resume: { type: 'boolean' },
           'dry-run': { type: 'boolean' },
           help: { type: 'boolean' }
@@ -88,11 +98,8 @@ export const runArchiveCli = async (source: ArchiveSource = 'search') => {
     const raw = value(key)
     if (raw !== undefined && !/^\d+$/.test(raw)) throw new ArchiveFailure('invalid_params')
     const result = raw === undefined ? fallback : Number(raw)
-    if (
-      !Number.isSafeInteger(result) ||
-      result < (key === 'delay-ms' ? 0 : 1) ||
-      (key === 'delay-ms' && result > 2147483647)
-    )
+    const isDelay = key.endsWith('delay-ms')
+    if (!Number.isSafeInteger(result) || result < (isDelay ? 0 : 1) || (isDelay && result > 2147483647))
       throw new ArchiveFailure('invalid_params')
     return result
   }
@@ -148,7 +155,21 @@ export const runArchiveCli = async (source: ArchiveSource = 'search') => {
   }
   const maxPages = number('max-pages', 1000)
   const maxRequests = number('max-requests', 1000)
-  const delayMs = number('delay-ms', source === 'list' ? 2500 : 1500)
+  const delayMs = number('delay-ms', source === 'list' ? 2000 : 1500)
+  const retryOptions =
+    source === 'list'
+      ? {
+          retry: !flags.has('no-retry'),
+          retryDelayMs: number('retry-delay-ms', 5000),
+          maxRetryDelayMs: number('max-retry-delay-ms', 60000)
+        }
+      : {}
+  if (
+    retryOptions.retryDelayMs !== undefined &&
+    retryOptions.maxRetryDelayMs !== undefined &&
+    retryOptions.maxRetryDelayMs < retryOptions.retryDelayMs
+  )
+    throw new ArchiveFailure('invalid_params')
   const window = archiveQueryWindow(scope)
   if (flags.has('dry-run')) {
     console.log(
@@ -165,6 +186,7 @@ export const runArchiveCli = async (source: ArchiveSource = 'search') => {
                 coverageVerified: false
               }
             : {}),
+          ...retryOptions,
           query:
             source === 'list'
               ? `list:${scope.listId}`
@@ -205,6 +227,7 @@ export const runArchiveCli = async (source: ArchiveSource = 'search') => {
       maxPages,
       maxRequests,
       delayMs,
+      ...retryOptions,
       search: source === 'list' ? client.listRaw : client.searchRaw,
       onProgress: progress.update
     })

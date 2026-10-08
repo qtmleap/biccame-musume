@@ -85,7 +85,7 @@ stderr進捗は新queryが返した最古のJST日付（範囲外の余分な取
 
 ### ネイティブListタイムラインの保存
 
-`archive:list-timeline` は同じ保存・再開・署名・進捗処理で `ListLatestTweetsTimeline` を取得します。`--help` / `--dry-run` も通信不要です。標準出力先は `.cache/list-timeline/<実行時刻>`、間隔2500ms、1回の取得はcount20、各実行の上限は1000ページ/1000リクエストです。上限を増やす場合は両方を指定します。
+`archive:list-timeline` は同じ保存・再開・署名・進捗処理で `ListLatestTweetsTimeline` を取得します。`--help` / `--dry-run` も通信不要です。標準出力先は `.cache/list-timeline/<実行時刻>`、1回の取得はcount20、各実行の上限は1000ページ/1000リクエストです。List版の `--delay-ms` はリクエスト開始同士の最小間隔で、標準2000msです。取得・解析・保存の処理時間を含め、800ms処理した場合は残り1200ms、処理に2秒以上かかった場合は追加で待ちません。各実行の最初のリクエストは直ちに開始します。上限を増やす場合は両方を指定します。
 
 ```sh
 bun --no-env-file run archive:list-timeline --dry-run
@@ -99,7 +99,11 @@ list IDと期間の既定値・JST境界・終了コードはSearch版と共通�
 
 明示的Bottom終了または次cursorなしでのみ `list_exhausted` とし、`coverageVerified:false` のままです。空ページ・cursor置換ペア・既知IDだけの会話でも、新しいcursorがあれば継続します。cursor循環・予算終了・429・未知形式・取得不可tweet/tombstone/ShowMoreは未完了として生応答を残します。会話の展開取得は行いません。`--seed-from` は非対応で、Search版のcacheと相互resumeできません。
 
-HTTP-200で投稿を含まない空のList応答と、観測済みの単一 `Operational / DependencyError / Server` エラーが返った場合は、`request_failed` / `list_dependency` としてその実行を停止します。自動retryはせず、明示的な `--resume` で失敗した同じcursorを再取得します。失敗応答もjournalの1ページとして残し、回復応答を次の連番へ追記します。scope・保存済み生応答は書き換えません。再開ごとに同じ障害が続く場合も1回で停止します。投稿を含む部分応答・認証エラー・別形式のエラー・Search版にはこの扱いを適用しません。
+List版は既定で一時障害を同じcursorから自動retryします。対象は投稿を含まない観測済みの単一 `Operational / DependencyError / Server`、確認できた通信/timeout障害、HTTP 408/429/500/502/503/504です。初期間隔5000msを失敗ごとに倍増して60000msまで待ち、正常な応答で戻します。retry待機は通常の間隔の残り時間との大きい方を使い、合算しません。処理時間でretry待機自体を短縮しません。429は最低60秒待ち、検証済みの `Retry-After` / `x-rate-limit-reset` がより長い待機を指示する場合は最大24時間まで優先します。他の対象HTTPエラーは `Retry-After` だけを使い、quotaの窓を表す `x-rate-limit-reset` は使いません。進捗は `retrying`・試行番号・予定待機秒数・固定分類を表示し、残り秒数のcountdownではありません。
+
+`--retry-delay-ms` / `--max-retry-delay-ms` はList版だけで使え、0以上の整数かつ上限が初期間隔以上である必要があります。`--no-retry` は一時障害で停止して手動resumeする従来の動作です。retryの回数自体に別上限は設けず、全リクエスト試行を `--max-pages` / `--max-requests` の予算に含めます。予算終了時は最後の固定分類を残して `budget` で停止します。`retriesThisRun` はその実行で実際に行った再試行回数です。HTTP-200の失敗応答もjournalに残し、回復応答を次の連番へ追記します。scope・保存済み生応答を書き換えず、`--resume` で失敗ページを含むcursorチェーンを再構築します。
+
+設定/署名の不具合・認証エラー・部分応答・未知形式・cursor循環は自動retryしません。署名初期化中に確認できた通信障害だけは対象です。Search版の停止方針と保存scopeは共通処理の変更後も維持します。
 
 固定endpointは `/i/api/graphql/1LE3u14FJjPZUHKFGzos2g/ListLatestTweetsTimeline` です。X側のquery IDや応答形式が変わる場合は更新・検証が必要です。endpointと取得元固有の終了policyもscope fingerprintに含め、変更前のjournalへ異なる取得元を混在させません。
 

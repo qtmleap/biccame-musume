@@ -298,15 +298,18 @@ export type ArchiveResult = {
   coverageVerified: false
   queryOldestTimestamp?: string
   topLevelOldestTimestamp?: string
+  retriesThisRun?: number
   requestFailure?: { kind: string; status?: number }
 }
 export type ArchiveAccount = { key: string; authorId?: string; screenName: string; posts: number }
+export type ArchiveRetry = { attempt: number; delayMs: number; kind: string }
 export type ArchiveProgress = {
   date: string
   pages: number
   seedPages: number
   posts: number
-  status: 'running' | Reason
+  status: 'running' | 'retrying' | Reason
+  retry?: ArchiveRetry
   accounts: ArchiveAccount[]
 }
 type Envelope = {
@@ -333,6 +336,11 @@ export const runArchive = async (options: {
   maxPages?: number
   maxRequests?: number
   delayMs?: number
+  retry?: boolean
+  retryDelayMs?: number
+  maxRetryDelayMs?: number
+  sleep?: (milliseconds: number) => Promise<void>
+  nowMs?: () => number
   onProgress?: (snapshot: ArchiveProgress) => void | Promise<void>
   search: (params: { cursor?: string; listId: string; since: Dayjs; until: Dayjs }) => Promise<unknown>
 }): Promise<ArchiveResult> => {
@@ -340,7 +348,13 @@ export const runArchive = async (options: {
   const source = options.source ?? 'search'
   const maxPages = options.maxPages ?? 1000
   const maxRequests = options.maxRequests ?? 1000
-  const delayMs = options.delayMs ?? (source === 'list' ? 2500 : 1500)
+  const delayMs = options.delayMs ?? (source === 'list' ? 2000 : 1500)
+  const nowMs = options.nowMs ?? (() => performance.now())
+  const retry = source === 'list' && options.retry !== false
+  const retryDelayMs = options.retryDelayMs ?? 5000
+  const maxRetryDelayMs = options.maxRetryDelayMs ?? 60000
+  const sleep =
+    options.sleep ?? ((milliseconds: number) => new Promise<void>((resolve) => setTimeout(resolve, milliseconds)))
   for (const value of [maxPages, maxRequests])
     if (!Number.isSafeInteger(value) || value < 1) throw new ArchiveFailure('invalid_params')
   if (
@@ -349,6 +363,14 @@ export const runArchive = async (options: {
     delayMs > 2147483647 ||
     (options.resume && options.seedFrom) ||
     (source === 'list' && options.seedFrom)
+  )
+    throw new ArchiveFailure('invalid_params')
+  if (
+    source === 'list' &&
+    (![retryDelayMs, maxRetryDelayMs].every(
+      (value) => Number.isSafeInteger(value) && value >= 0 && value <= 2147483647
+    ) ||
+      maxRetryDelayMs < retryDelayMs)
   )
     throw new ArchiveFailure('invalid_params')
   if (options.seedFrom) await assertSeedPathsDisjoint(options.seedFrom, out)
@@ -430,6 +452,30 @@ export const runArchive = async (options: {
     const exhausted = () => reason === 'search_exhausted' || reason === 'list_exhausted'
     let outsideWindow = 0
     let requestFailure: { kind: string; status?: number } | undefined
+    let retriesThisRun = 0
+    let consecutiveFailures = 0
+    let backoffMs = retryDelayMs
+    let pendingRetry: ArchiveRetry | undefined
+    let lastListDispatchStart: number | undefined
+    const remainingListInterval = () =>
+      lastListDispatchStart === undefined ? 0 : Math.max(0, delayMs - (nowMs() - lastListDispatchStart))
+    const scheduleRetry = (hint?: number) => {
+      if (!retry) {
+        reason = 'request_failed'
+        return
+      }
+      if (requests >= maxPages || requests >= maxRequests) {
+        reason = 'budget'
+        return
+      }
+      consecutiveFailures++
+      pendingRetry = {
+        attempt: consecutiveFailures,
+        delayMs: Math.max(backoffMs, hint ?? 0, requestFailure?.status === 429 ? 60000 : 0, remainingListInterval()),
+        kind: requestFailure?.kind ?? 'unknown'
+      }
+      backoffMs = Math.min(maxRetryDelayMs, backoffMs * 2)
+    }
     const cursors = new Set<string>()
     if (seed)
       for (const file of seed.files.filter((file) => file.name.startsWith('pages/'))) {
@@ -531,7 +577,8 @@ export const runArchive = async (options: {
             pages,
             seedPages: seed?.pages ?? 0,
             posts: rows.size,
-            status: reason ?? 'running',
+            status: reason ?? (pendingRetry ? 'retrying' : 'running'),
+            ...(pendingRetry ? { retry: { ...pendingRetry } } : {}),
             accounts: accounts()
           })
         ).catch(() => {})
@@ -587,7 +634,9 @@ export const runArchive = async (options: {
             minTimestamp,
             maxTimestamp,
             queryOldestTimestamp,
-            ...(source === 'list' ? { topLevelOldestTimestamp } : {}),
+            ...(source === 'list'
+              ? { topLevelOldestTimestamp, retriesThisRun, ...(pendingRetry ? { retry: pendingRetry } : {}) }
+              : {}),
             seedMatchedByQuery: seedMatched.size,
             seedOnlyPosts: seedIds.size - seedMatched.size,
             requestFailure,
@@ -605,18 +654,28 @@ export const runArchive = async (options: {
     await save(true)
     while (!reason && requests < maxPages && requests < maxRequests) {
       emit()
-      if (requests > 0 || pages > 0) await new Promise((resolve) => setTimeout(resolve, delayMs))
+      if (pendingRetry) {
+        await sleep(pendingRetry.delayMs)
+        retriesThisRun++
+        pendingRetry = undefined
+      } else if (source === 'list') {
+        const remaining = remainingListInterval()
+        if (remaining > 0) await sleep(remaining)
+      } else if (requests > 0 || pages > 0) await sleep(delayMs)
       requests++
       let response: unknown
       try {
+        if (source === 'list') lastListDispatchStart = nowMs()
         response = await options.search({ ...archiveQueryWindow(scope), listId: scope.listId, cursor: nextCursor })
       } catch (error) {
-        reason = 'request_failed'
         requestFailure = { kind: 'unknown' }
+        let retryable = false
+        let retryAfterMs: number | undefined
         if (error && typeof error === 'object') {
           try {
             const kind = Object.getOwnPropertyDescriptor(error, 'kind')?.value
-            const status = Object.getOwnPropertyDescriptor(error, 'status')?.value
+            const statusDescriptor = Object.getOwnPropertyDescriptor(error, 'status')
+            const status = statusDescriptor?.value
             requestFailure = {
               kind:
                 typeof kind === 'string' && ['configuration', 'signature', 'rate_limited', 'timeline'].includes(kind)
@@ -626,10 +685,25 @@ export const runArchive = async (options: {
                 ? { status }
                 : {})
             }
+            const transient = Object.getOwnPropertyDescriptor(error, 'transient')?.value === true
+            const statusIsData = !statusDescriptor || Object.hasOwn(statusDescriptor, 'value')
+            retryable =
+              statusIsData &&
+              (((kind === 'timeline' || kind === 'rate_limited') && [408, 429, 500, 502, 503, 504].includes(status)) ||
+                ((kind === 'timeline' || kind === 'signature') && status === undefined && transient))
+            const hint = Object.getOwnPropertyDescriptor(error, 'retryAfterMs')?.value
+            if (typeof hint === 'number' && Number.isSafeInteger(hint) && hint > 0 && hint <= 86400000)
+              retryAfterMs = hint
           } catch {
             /* Error getters/proxies are not a diagnostic source. */
           }
         }
+        if (retry && retryable) {
+          scheduleRetry(retryAfterMs)
+          await save()
+          continue
+        }
+        reason = 'request_failed'
         break
       }
       const envelope: Envelope = {
@@ -643,8 +717,12 @@ export const runArchive = async (options: {
       const location = `pages/${String(pages + 1).padStart(6, '0')}.json`
       await atomic(join(out, location), JSON.stringify(envelope))
       if (processPage(envelope, location) === 'list_dependency') {
-        reason = 'request_failed'
         requestFailure = { kind: 'list_dependency' }
+        scheduleRetry()
+      } else if (source === 'list') {
+        requestFailure = undefined
+        backoffMs = retryDelayMs
+        consecutiveFailures = 0
       }
       await save()
     }
@@ -661,7 +739,7 @@ export const runArchive = async (options: {
       terminalReason,
       coverageVerified: false,
       queryOldestTimestamp,
-      ...(source === 'list' ? { topLevelOldestTimestamp } : {}),
+      ...(source === 'list' ? { topLevelOldestTimestamp, retriesThisRun } : {}),
       requestFailure
     }
   } finally {

@@ -130,3 +130,23 @@ test('identical progress does not repeat redirected log lines', () => {
   renderer.finish()
   expect(output).toHaveLength(1)
 })
+
+test('retry progress uses one CR row with attempt, scheduled wait and fixed failure kind', () => {
+  for (const columns of [200, 36]) {
+    const output: string[] = []
+    const renderer = createRenderer((value) => output.push(value), true, columns)
+    const retrySnapshot = {
+      ...snapshot,
+      status: 'retrying' as const,
+      retry: { attempt: 2, delayMs: 10000, kind: 'list_dependency' }
+    }
+    renderer.update(retrySnapshot)
+    renderer.update(retrySnapshot)
+    expect(output).toHaveLength(1)
+    expect(output[0].startsWith('\r\x1b[2K')).toBe(true)
+    expect(output[0]).toContain('retrying')
+    expect(output[0]).toContain('#2')
+    expect(output[0]).toContain('10s')
+    expect(output[0]).toContain('list_dependency')
+  }
+})

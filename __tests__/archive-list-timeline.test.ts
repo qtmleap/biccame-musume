@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { parseArchivePage, runArchive } from '../scripts/lib/post-archive'
 import { Client } from '../workers/bot/src/timeline/client'
-import { TimelineFailure } from '../workers/bot/src/timeline/utils/failure'
+import { retryAfterMilliseconds, TimelineFailure } from '../workers/bot/src/timeline/utils/failure'
 
 const scope = {
   listId: '2019028800869413128',
@@ -99,6 +99,11 @@ const rows = async (out: string): Promise<Record<string, unknown>[]> => {
         .split('\n')
         .map((line) => JSON.parse(line))
     : []
+}
+const captureTimelineFailure = async (request: Promise<unknown>) => {
+  const failure = await request.catch((error: unknown) => error)
+  if (!(failure instanceof TimelineFailure)) throw new Error('Expected a safe TimelineFailure')
+  return failure
 }
 
 test('native List conversations retain reply, visibility and retweet metadata', () => {
@@ -389,7 +394,8 @@ test('List saves unsupported raw bodies before parsing and preserves partial dat
     search: async () => {
       if (calls++) throw new TimelineFailure('rate_limited', 429)
       return page([tweet('1')], 'preserved-cursor')
-    }
+    },
+    retry: false
   }
   expect(await runArchive(options)).toMatchObject({
     complete: false,
@@ -409,6 +415,7 @@ test('List DependencyError stops the run without retrying and preserves its fail
     let calls = 0
     const result = await runArchive({
       source: 'list',
+      retry: false,
       scope,
       out,
       delayMs: 0,
@@ -445,6 +452,7 @@ test('List resume appends recovery at the same cursor and replays the recovered 
     source: 'list',
     scope,
     out,
+    retry: false,
     delayMs: 0,
     search: async () => (initialCalls++ === 0 ? page([tweet('1')], 'failed-cursor') : dependencyError())
   })
@@ -507,6 +515,7 @@ test('each explicit List resume appends one repeated DependencyError and stops b
       out,
       resume: true,
       maxRequests: 1,
+      retry: false,
       delayMs: 0,
       search: async ({ cursor }) => {
         calls++
@@ -605,6 +614,585 @@ test('authorization, mixed, partial and Search GraphQL errors remain unsupported
   }
 })
 
+test('default List retries preserve dependency journals and replace normal delay with exponential backoff', async () => {
+  const out = await output()
+  const waits: number[] = []
+  let index = 0
+  let firstFailureBytes = ''
+  const result = await runArchive({
+    source: 'list',
+    scope,
+    out,
+    delayMs: 7,
+    nowMs: () => 0,
+    sleep: async (milliseconds) => {
+      waits.push(milliseconds)
+    },
+    search: async ({ cursor }) => {
+      expect(cursor).toBe(index ? 'same-cursor' : undefined)
+      if (index === 2) firstFailureBytes = await readFile(join(out, 'pages', '000002.json'), 'utf8')
+      return [page([tweet('1')], 'same-cursor'), dependencyError(), dependencyError(), page([tweet('2')])][index++]
+    }
+  })
+  expect(result).toMatchObject({ complete: true, reason: 'list_exhausted', pages: 4, posts: 2, retriesThisRun: 2 })
+  expect(waits).toEqual([7, 5000, 10000])
+  expect(await readFile(join(out, 'pages', '000002.json'), 'utf8')).toBe(firstFailureBytes)
+  expect(JSON.parse(await readFile(join(out, 'pages', '000003.json'), 'utf8')).requestCursor).toBe('same-cursor')
+  expect(result.requestFailure).toBeUndefined()
+  expect(JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8'))).toMatchObject({
+    requestsThisRun: 4,
+    retriesThisRun: 2
+  })
+})
+
+test('List retries network, 503 and 429 hints while success resets backoff and clears safe failure metadata', async () => {
+  const out = await output()
+  const waits: number[] = []
+  const retrySnapshots: unknown[] = []
+  let index = 0
+  const result = await runArchive({
+    source: 'list',
+    scope,
+    out,
+    delayMs: 7,
+    nowMs: () => 0,
+    sleep: async (milliseconds) => {
+      waits.push(milliseconds)
+    },
+    onProgress: (snapshot) => {
+      if (snapshot.status === 'retrying') retrySnapshots.push(snapshot)
+    },
+    search: async ({ cursor }) => {
+      expect(cursor).toBe(index < 3 ? undefined : 'next')
+      switch (index++) {
+        case 0:
+          throw new TimelineFailure('timeline', undefined, undefined, true)
+        case 1:
+          throw new TimelineFailure('timeline', 503)
+        case 2:
+          return page([tweet('1')], 'next')
+        case 3:
+          throw new TimelineFailure('timeline', 503)
+        case 4:
+          throw new TimelineFailure('rate_limited', 429, 125000)
+        default:
+          return page([tweet('2')])
+      }
+    }
+  })
+  expect(result).toMatchObject({ complete: true, pages: 2, posts: 2, retriesThisRun: 4 })
+  expect(waits).toEqual([5000, 10000, 7, 5000, 125000])
+  expect(retrySnapshots).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({ status: 'retrying', retry: { attempt: 1, delayMs: 5000, kind: 'timeline' } }),
+      expect.objectContaining({ status: 'retrying', retry: { attempt: 2, delayMs: 125000, kind: 'rate_limited' } })
+    ])
+  )
+  expect(result.requestFailure).toBeUndefined()
+  expect(JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8')).requestFailure).toBeUndefined()
+})
+
+test('List retries have no arbitrary attempt cap and clamp exponential delay at sixty seconds', async () => {
+  const out = await output()
+  const waits: number[] = []
+  let attempts = 0
+  expect(
+    await runArchive({
+      source: 'list',
+      scope,
+      out,
+      delayMs: 0,
+      maxRequests: 20,
+      sleep: async (milliseconds) => {
+        waits.push(milliseconds)
+      },
+      search: async () => {
+        if (attempts++ < 12) throw new TimelineFailure('timeline', 502)
+        return page([tweet('1')])
+      }
+    })
+  ).toMatchObject({ complete: true, pages: 1, posts: 1, retriesThisRun: 12 })
+  expect(attempts).toBe(13)
+  expect(waits).toEqual([5000, 10000, 20000, 40000, ...Array(8).fill(60000)])
+})
+
+test('all List failure attempts consume the tighter request budget without a final backoff wait', async () => {
+  for (const response of ['network', 'dependency', 'rate_limit'] as const) {
+    const out = await output()
+    const waits: number[] = []
+    let attempts = 0
+    const result = await runArchive({
+      source: 'list',
+      scope,
+      out,
+      delayMs: 0,
+      maxPages: 3,
+      maxRequests: 4,
+      sleep: async (milliseconds) => {
+        waits.push(milliseconds)
+      },
+      search: async () => {
+        attempts++
+        if (response === 'network') throw new TimelineFailure('timeline', undefined, undefined, true)
+        if (response === 'rate_limit') throw new TimelineFailure('rate_limited', 429)
+        return dependencyError()
+      }
+    })
+    expect(result).toMatchObject({
+      complete: false,
+      reason: 'budget',
+      pages: response === 'dependency' ? 3 : 0,
+      retriesThisRun: 2
+    })
+    expect(attempts).toBe(3)
+    expect(waits).toEqual(response === 'rate_limit' ? [60000, 60000] : [5000, 10000])
+    expect(JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8')).requestsThisRun).toBe(3)
+  }
+})
+
+test('List retries only the allowed transport statuses and opt-out, fatal errors and Search stop immediately', async () => {
+  for (const status of [408, 500, 502, 503, 504]) {
+    const out = await output()
+    let attempts = 0
+    expect(
+      await runArchive({
+        source: 'list',
+        scope,
+        out,
+        delayMs: 0,
+        sleep: async () => {},
+        search: async () => {
+          if (!attempts++) throw new TimelineFailure('timeline', status)
+          return page([])
+        }
+      })
+    ).toMatchObject({ complete: true, retriesThisRun: 1 })
+    expect(attempts).toBe(2)
+  }
+  let getterReads = 0
+  const unsafeError = Object.defineProperty({ kind: 'timeline' }, 'status', {
+    get: () => {
+      getterReads++
+      return 503
+    }
+  })
+  const failures = [
+    new TimelineFailure('timeline'),
+    new TimelineFailure('configuration'),
+    new TimelineFailure('signature'),
+    new TimelineFailure('timeline', 401),
+    new TimelineFailure('timeline', 403),
+    new TimelineFailure('timeline', 404),
+    new TimelineFailure('timeline', 501),
+    new Error('secret-body'),
+    unsafeError
+  ]
+  for (const failure of failures) {
+    const out = await output()
+    let attempts = 0
+    const waits: number[] = []
+    expect(
+      await runArchive({
+        source: 'list',
+        scope,
+        out,
+        delayMs: 0,
+        sleep: async (milliseconds) => {
+          waits.push(milliseconds)
+        },
+        search: async () => {
+          attempts++
+          throw failure
+        }
+      })
+    ).toMatchObject({ complete: false, reason: 'request_failed' })
+    expect(attempts).toBe(1)
+    expect(waits).toEqual([])
+    expect(await readFile(join(out, 'manifest.json'), 'utf8')).not.toContain('secret-body')
+  }
+  expect(getterReads).toBe(0)
+  for (const source of ['list', 'search'] as const) {
+    const out = await output()
+    let attempts = 0
+    expect(
+      await runArchive({
+        source,
+        scope,
+        out,
+        retry: false,
+        delayMs: 0,
+        sleep: async () => {},
+        search: async () => {
+          attempts++
+          throw new TimelineFailure('timeline', 503)
+        }
+      })
+    ).toMatchObject({ complete: false, reason: 'request_failed' })
+    expect(attempts).toBe(1)
+  }
+})
+
+test('List client distinguishes verified transport failures from validation and programming errors', async () => {
+  const failures = [
+    { cause: new TypeError('fetch failed'), transient: true },
+    { cause: new TypeError('fetch failed', { cause: { code: 'ECONNRESET' } }), transient: true },
+    { cause: new TypeError('fetch failed', { cause: { code: 'CERT_HAS_EXPIRED' } }), transient: false },
+    { cause: Object.assign(new TypeError('fetch failed'), { code: 'CERT_HAS_EXPIRED' }), transient: false },
+    { cause: new DOMException('aborted', 'AbortError'), transient: true },
+    { cause: new DOMException('timed out', 'TimeoutError'), transient: true },
+    { cause: Object.assign(new Error('socket closed'), { code: 'ECONNRESET' }), transient: true },
+    {
+      cause: new Error('transport failed', {
+        cause: Object.assign(new Error('socket'), { code: 'FailedToOpenSocket' })
+      }),
+      transient: true
+    },
+    { cause: new SyntaxError('Unexpected token in JSON'), transient: false },
+    { cause: new TypeError('Cannot read properties of undefined'), transient: false },
+    { cause: new Error('ordinary bug'), transient: false }
+  ]
+  for (const { cause, transient } of failures) {
+    const fetchSpy = spyOn(globalThis, 'fetch').mockImplementation(
+      Object.assign(
+        async () => {
+          throw cause
+        },
+        { preconnect: () => {} }
+      )
+    )
+    try {
+      const client = new Client(
+        { TWITTER_BEARER_TOKEN: 'test', TWITTER_AUTH_TOKEN: 'test', TWITTER_CSRF_TOKEN: 'test' },
+        async () => ({ generateTransactionId: async () => 'signed' })
+      )
+      const failure = await captureTimelineFailure(client.listRaw({ listId: '123' }))
+      expect(failure).toMatchObject({ kind: 'timeline' })
+      expect(failure.transient === true).toBe(transient)
+      const invalid = await captureTimelineFailure(client.listRaw({ listId: 'not-numeric' }))
+      expect(invalid.transient === true).toBe(false)
+    } finally {
+      fetchSpy.mockRestore()
+    }
+  }
+})
+
+test('List TLS causes and opaque transport descriptors stop after one request without a retry wait', async () => {
+  let getterReads = 0
+  const failures = [
+    new TypeError('fetch failed', { cause: { code: 'CERT_HAS_EXPIRED' } }),
+    Object.defineProperty(new TypeError('fetch failed'), 'cause', {
+      get: () => {
+        getterReads++
+        throw new Error('secret-getter')
+      }
+    }),
+    new Proxy(new TypeError('fetch failed'), {
+      getOwnPropertyDescriptor: () => {
+        throw new Error('secret-proxy')
+      }
+    })
+  ]
+  for (const cause of failures) {
+    let requests = 0
+    const waits: number[] = []
+    const fetchSpy = spyOn(globalThis, 'fetch').mockImplementation(
+      Object.assign(
+        async () => {
+          requests++
+          throw cause
+        },
+        { preconnect: () => {} }
+      )
+    )
+    try {
+      const client = new Client(
+        { TWITTER_BEARER_TOKEN: 'test', TWITTER_AUTH_TOKEN: 'test', TWITTER_CSRF_TOKEN: 'test' },
+        async () => ({ generateTransactionId: async () => 'signed' })
+      )
+      const out = await output()
+      expect(
+        await runArchive({
+          source: 'list',
+          scope,
+          out,
+          maxRequests: 2,
+          delayMs: 0,
+          sleep: async (milliseconds) => {
+            waits.push(milliseconds)
+          },
+          search: client.listRaw
+        })
+      ).toMatchObject({ complete: false, reason: 'request_failed', pages: 0, retriesThisRun: 0 })
+      expect(requests).toBe(1)
+      expect(waits).toEqual([])
+    } finally {
+      fetchSpy.mockRestore()
+    }
+  }
+  expect(getterReads).toBe(0)
+})
+
+test('List client carries only validated bounded retry headers in safe errors', async () => {
+  const now = Date.parse('2026-10-08T04:00:00Z')
+  const clock = spyOn(Date, 'now').mockReturnValue(now)
+  const cases: { headers: Record<string, string>; minimum: number | undefined }[] = [
+    { headers: { 'retry-after': '120' }, minimum: 120000 },
+    { headers: { 'retry-after': 'Thu, 08 Oct 2026 04:01:30 GMT' }, minimum: 90000 },
+    { headers: { 'x-rate-limit-reset': String((now + 180000) / 1000) }, minimum: 180000 },
+    { headers: { 'retry-after': '120', 'x-rate-limit-reset': String((now + 180000) / 1000) }, minimum: 180000 },
+    { headers: { 'retry-after': '864000' }, minimum: 86400000 },
+    { headers: { 'retry-after': '0' }, minimum: undefined },
+    { headers: { 'retry-after': 'not-a-date' }, minimum: undefined },
+    { headers: { 'retry-after': '-1' }, minimum: undefined },
+    { headers: { 'retry-after': '99999999999999999999' }, minimum: undefined }
+  ]
+  try {
+    for (const { headers, minimum } of cases) {
+      const fetchSpy = spyOn(globalThis, 'fetch').mockImplementation(
+        Object.assign(async () => new Response('secret-response-body', { status: 429, headers }), {
+          preconnect: () => {}
+        })
+      )
+      try {
+        const client = new Client(
+          { TWITTER_BEARER_TOKEN: 'test', TWITTER_AUTH_TOKEN: 'test', TWITTER_CSRF_TOKEN: 'test' },
+          async () => ({ generateTransactionId: async () => 'signed' })
+        )
+        const failure = await captureTimelineFailure(client.listRaw({ listId: '123' }))
+        expect(failure).toMatchObject({ kind: 'rate_limited', status: 429 })
+        const retryAfterMs = failure.retryAfterMs
+        if (minimum === undefined) expect(retryAfterMs).toBeUndefined()
+        else {
+          expect(retryAfterMs).toBeGreaterThanOrEqual(minimum)
+          expect(retryAfterMs).toBeLessThanOrEqual(minimum + 5000)
+        }
+        expect(String(failure)).not.toContain('secret-response-body')
+      } finally {
+        fetchSpy.mockRestore()
+      }
+    }
+    expect(
+      retryAfterMilliseconds(
+        {
+          get: () => {
+            throw new Error('secret-header-getter')
+          }
+        },
+        now
+      )
+    ).toBeUndefined()
+  } finally {
+    clock.mockRestore()
+  }
+})
+
+test('List normal pacing includes response processing and save time in a two-second start interval', async () => {
+  for (const processingMs of [700, 2500]) {
+    const out = await output()
+    let clock = 100000
+    const starts: number[] = []
+    const waits: number[] = []
+    const saved = new Set<number>()
+    const result = await runArchive({
+      source: 'list',
+      scope,
+      out,
+      nowMs: () => clock,
+      sleep: async (milliseconds) => {
+        waits.push(milliseconds)
+        clock += milliseconds
+      },
+      onProgress: (snapshot) => {
+        if (snapshot.pages > 0 && !saved.has(snapshot.pages)) {
+          saved.add(snapshot.pages)
+          clock += 100
+        }
+      },
+      search: async () => {
+        starts.push(clock)
+        clock += processingMs
+        return page([tweet(String(starts.length))], starts.length < 3 ? `next-${starts.length}` : undefined)
+      }
+    })
+    expect(result).toMatchObject({ complete: true, pages: 3, posts: 3 })
+    expect(starts).toEqual(processingMs === 700 ? [100000, 102000, 104000] : [100000, 102600, 105200])
+    expect(waits).toEqual(processingMs === 700 ? [1200, 1200] : [])
+  }
+  const out = await output()
+  let clock = 0
+  const starts: number[] = []
+  const waits: number[] = []
+  expect(
+    await runArchive({
+      source: 'list',
+      scope,
+      out,
+      nowMs: () => clock,
+      sleep: async (milliseconds) => {
+        waits.push(milliseconds)
+        clock += milliseconds
+      },
+      search: async () => {
+        starts.push(clock)
+        if (starts.length === 1) {
+          clock += 9000
+          return dependencyError()
+        }
+        return page([tweet('1')])
+      }
+    })
+  ).toMatchObject({ complete: true, pages: 2, retriesThisRun: 1 })
+  expect(starts).toEqual([0, 14000])
+  expect(waits).toEqual([5000])
+})
+
+test('List client uses quota reset guidance only for 429 while retaining Retry-After on 503', async () => {
+  const now = Date.parse('2026-10-08T04:00:00Z')
+  const clock = spyOn(Date, 'now').mockReturnValue(now)
+  try {
+    for (const status of [429, 503]) {
+      for (const withRetryAfter of [false, true]) {
+        const headers: Record<string, string> = { 'x-rate-limit-reset': String((now + 900000) / 1000) }
+        if (withRetryAfter) headers['retry-after'] = '30'
+        const fetchSpy = spyOn(globalThis, 'fetch').mockImplementation(
+          Object.assign(async () => new Response('unlogged-error-body', { status, headers }), { preconnect: () => {} })
+        )
+        try {
+          const client = new Client(
+            { TWITTER_BEARER_TOKEN: 'test', TWITTER_AUTH_TOKEN: 'test', TWITTER_CSRF_TOKEN: 'test' },
+            async () => ({ generateTransactionId: async () => 'signed' })
+          )
+          const failure = await captureTimelineFailure(client.listRaw({ listId: '123' }))
+          expect(failure.retryAfterMs).toBe(status === 429 ? 901000 : withRetryAfter ? 31000 : undefined)
+        } finally {
+          fetchSpy.mockRestore()
+        }
+      }
+    }
+  } finally {
+    clock.mockRestore()
+  }
+})
+
+test('List retry wait also honors a longer configured request-start interval', async () => {
+  const out = await output()
+  let clock = 0
+  const starts: number[] = []
+  const waits: number[] = []
+  expect(
+    await runArchive({
+      source: 'list',
+      scope,
+      out,
+      delayMs: 10000,
+      nowMs: () => clock,
+      sleep: async (milliseconds) => {
+        waits.push(milliseconds)
+        clock += milliseconds
+      },
+      search: async () => {
+        starts.push(clock)
+        if (starts.length === 1) {
+          clock += 800
+          return dependencyError()
+        }
+        return page([tweet('1')])
+      }
+    })
+  ).toMatchObject({ complete: true, pages: 2, retriesThisRun: 1 })
+  expect(starts).toEqual([0, 10000])
+  expect(waits).toEqual([9200])
+})
+
+test('List retries transient signer discovery but signature computation faults stay fatal', async () => {
+  const fetchSpy = spyOn(globalThis, 'fetch').mockImplementation(
+    Object.assign(async () => Response.json(page([])), { preconnect: () => {} })
+  )
+  try {
+    for (const cause of [new TypeError('fetch failed'), new Error('Failed to fetch transaction homepage: 503')]) {
+      let signerAttempts = 0
+      const client = new Client(
+        { TWITTER_BEARER_TOKEN: 'test', TWITTER_AUTH_TOKEN: 'test', TWITTER_CSRF_TOKEN: 'test' },
+        async () => {
+          if (!signerAttempts++) throw cause
+          return { generateTransactionId: async () => 'signed' }
+        }
+      )
+      const out = await output()
+      expect(
+        await runArchive({ source: 'list', scope, out, delayMs: 0, sleep: async () => {}, search: client.listRaw })
+      ).toMatchObject({ complete: true, retriesThisRun: 1, pages: 1 })
+      expect(signerAttempts).toBe(2)
+    }
+    const client = new Client(
+      { TWITTER_BEARER_TOKEN: 'test', TWITTER_AUTH_TOKEN: 'test', TWITTER_CSRF_TOKEN: 'test' },
+      async () => ({
+        generateTransactionId: async () => {
+          throw new TypeError('fetch failed')
+        }
+      })
+    )
+    const failure = await captureTimelineFailure(client.listRaw({ listId: '123' }))
+    expect(failure).toMatchObject({ kind: 'signature' })
+    expect(failure.transient === true).toBe(false)
+  } finally {
+    fetchSpy.mockRestore()
+  }
+})
+
+test('zero backoff stays finite and a later unsupported body clears the previous HTTP failure', async () => {
+  const out = await output()
+  const waits: number[] = []
+  let attempts = 0
+  const result = await runArchive({
+    source: 'list',
+    scope,
+    out,
+    delayMs: 0,
+    retryDelayMs: 0,
+    maxRetryDelayMs: 0,
+    maxRequests: 20,
+    sleep: async (milliseconds) => {
+      waits.push(milliseconds)
+    },
+    search: async () => {
+      if (attempts++ < 12) throw new TimelineFailure('timeline', 503)
+      return { unknown: 'unsupported HTTP-200 body' }
+    }
+  })
+  expect(result).toMatchObject({ complete: false, reason: 'unsupported_payload', pages: 1, retriesThisRun: 12 })
+  expect(waits).toEqual(Array(12).fill(0))
+  expect(result.requestFailure).toBeUndefined()
+  expect(JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8')).requestFailure).toBeUndefined()
+})
+
+test('List dry-run exposes default retry controls and rejects invalid delays or Search retry flags', () => {
+  const run = (script: string, flags: string[]) =>
+    spawnSync(process.execPath, ['--no-env-file', script, '--dry-run', ...flags], {
+      cwd: process.cwd(),
+      env: { PATH: process.env.PATH },
+      encoding: 'utf8'
+    })
+  const listScript = 'scripts/archive-list-timeline.ts'
+  expect(run(listScript, []).status).toBe(0)
+  expect(JSON.parse(run(listScript, []).stdout)).toMatchObject({
+    retry: true,
+    retryDelayMs: 5000,
+    maxRetryDelayMs: 60000
+  })
+  expect(
+    JSON.parse(run(listScript, ['--no-retry', '--retry-delay-ms', '0', '--max-retry-delay-ms', '0']).stdout)
+  ).toMatchObject({ retry: false, retryDelayMs: 0, maxRetryDelayMs: 0 })
+  for (const flags of [
+    ['--retry-delay-ms', '-1'],
+    ['--retry-delay-ms', '2147483648'],
+    ['--retry-delay-ms', '60001', '--max-retry-delay-ms', '60000']
+  ])
+    expect(run(listScript, flags).status).toBe(1)
+  for (const flags of [['--no-retry'], ['--retry-delay-ms', '1'], ['--max-retry-delay-ms', '2']])
+    expect(run('scripts/archive-list-posts.ts', flags).status).toBe(1)
+})
+
 test('List mode refuses Search-only seed imports before accessing the seed path', async () => {
   const out = await output()
   const options = {
@@ -642,7 +1230,7 @@ test('List dry-run resolves separate output and endpoint without reading credent
     from: '2025-12-31T15:00:00.000Z',
     until: '2026-01-01T15:00:00.000Z',
     endpoint,
-    delayMs: 2500,
+    delayMs: 2000,
     maxPages: 1000,
     maxRequests: 1000,
     coverageVerified: false

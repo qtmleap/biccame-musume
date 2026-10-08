@@ -23,7 +23,10 @@ export const createArchiveProgressRenderer = (options: {
     update: (snapshot: ArchiveProgress) => {
       if (!enabled) return
       const core = `${snapshot.date} ${snapshot.posts}p ${snapshot.pages}pg ${snapshot.seedPages}seed`
-      const summary = `${core} ${snapshot.accounts.length}a ${snapshot.status}`
+      const retryLabel = snapshot.retry
+        ? `retrying #${snapshot.retry.attempt} ${snapshot.retry.delayMs / 1000}s ${snapshot.retry.kind}`
+        : undefined
+      const summary = `${core} ${snapshot.accounts.length}a ${retryLabel ?? snapshot.status}`
       const handles = snapshot.accounts.slice(0, 5).map((account) => {
         const handle = account.screenName.replace(/[^A-Za-z0-9_]/g, '').slice(0, 20) || '?'
         return ` @${handle}:${account.posts}`
@@ -31,7 +34,7 @@ export const createArchiveProgressRenderer = (options: {
       const rawWidth = options.columns?.()
       const width = rawWidth && Number.isFinite(rawWidth) && rawWidth > 0 ? Math.floor(rawWidth) : 80
       const limit = Math.max(0, width - 1)
-      let row = overwrite && summary.length > limit ? core : summary
+      let row = overwrite && summary.length > limit ? (retryLabel ?? core) : summary
       for (const handle of handles) {
         if (overwrite && row.length + handle.length > limit) break
         row += handle

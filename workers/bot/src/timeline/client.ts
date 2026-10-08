@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { FeaturesSchema } from './schemas/feature.dto'
 import { type Post, PostSchema } from './schemas/response.dto'
 import { ListVariablesSchema, SearchVariablesSchema } from './schemas/variables.dto'
-import { TimelineFailure } from './utils/failure'
+import { isTransientTransportError, retryAfterMilliseconds, TimelineFailure } from './utils/failure'
 
 export const LIST_TIMELINE_ENDPOINT = '/i/api/graphql/1LE3u14FJjPZUHKFGzos2g/ListLatestTweetsTimeline'
 
@@ -83,8 +83,19 @@ export class Client {
     this.client.use({
       name: 'onTransaction',
       request: async (_api, config) => {
+        let signer: Signer
         try {
-          const signer = await createSigner()
+          signer = await createSigner()
+        } catch (error) {
+          const message = error instanceof Error ? Object.getOwnPropertyDescriptor(error, 'message')?.value : undefined
+          const transient =
+            isTransientTransportError(error) ||
+            (typeof message === 'string' &&
+              /^Failed to fetch transaction (homepage|input): (408|429|500|502|503|504)$/.test(message))
+          if (!transient) cachedTransaction = undefined
+          throw new TimelineFailure('signature', undefined, undefined, transient)
+        }
+        try {
           const transactionId = await signer.generateTransactionId(
             config.method ? config.method.toUpperCase() : 'GET',
             config.url ? config.url : '/'
@@ -99,10 +110,19 @@ export class Client {
     this.client.use({
       name: 'onError',
       error: async (_api, _config, error) => {
-        cachedTransaction = undefined
         if (error instanceof TimelineFailure) throw error
         const status = error instanceof ZodiosResponseError ? error.response.status : undefined
-        throw new TimelineFailure(status === 429 ? 'rate_limited' : 'timeline', status)
+        const transient = isTransientTransportError(error)
+        if (
+          !transient &&
+          !(status === 408 || status === 429 || (status !== undefined && status >= 500 && status <= 599))
+        )
+          cachedTransaction = undefined
+        const retryAfterMs =
+          error instanceof ZodiosResponseError
+            ? retryAfterMilliseconds(error.response.headers, Date.now(), status === 429)
+            : undefined
+        throw new TimelineFailure(status === 429 ? 'rate_limited' : 'timeline', status, retryAfterMs, transient)
       }
     })
   }
