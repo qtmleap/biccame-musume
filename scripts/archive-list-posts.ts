@@ -39,7 +39,7 @@ Usage: bun --no-env-file --env-file=/explicit/path/.dev.vars scripts/archive-lis
   --date-window    Keep the captured lower date (new output defaults to one year)
   --until YYYY-MM-DD Exclusive local JST filter; default: captured run start instant
   --out PATH       Directory under .cache (default: .cache/list-timeline/<run timestamp>)
-  --verify-journal Verify every saved raw page and rebuild an incompatible derived index
+  --verify-journal Check journal inventory and changed pages; rebuild an incompatible index
   --resume         Resume saved List capture; --from/--date-window retain its lower bound
   --max-pages N    ListLatestTweetsTimeline calls this run (default: 1000)
   --max-requests N ListLatestTweetsTimeline calls this run (default: 1000)
