@@ -271,6 +271,11 @@ mark {
   padding: 0 1px;
 }
 
+mark.exclude {
+  background: var(--drop-bg);
+  color: var(--drop);
+}
+
 .labels {
   display: flex;
   gap: 4px;

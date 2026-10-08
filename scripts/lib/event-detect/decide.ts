@@ -75,7 +75,11 @@ export const baseQuestions = (): Record<string, ClefQuestion> => ({
 /**
  * 店舗の候補。投稿者の店舗に加え、本文にキャラ名・店舗名が出る店舗を足す。
  */
-export const storeCandidates = (post: DetectPost, accounts: readonly StoreAccount[], storeNames: Map<string, string[]>) => {
+export const storeCandidates = (
+  post: DetectPost,
+  accounts: readonly StoreAccount[],
+  storeNames: Map<string, string[]>
+) => {
   const text = normalizeText(post.text)
   const own = accounts.filter((account) => account.screenName.toLowerCase() === post.screenName.toLowerCase())
   const mentioned = [...storeNames.entries()]
@@ -224,7 +228,8 @@ export const callClef = async (endpoint: string, request: ClefRequest, retries =
   if (!(response instanceof Response)) return retry(`Clef request failed: ${String(response)}`)
   const body = await response.text()
   if (!response.ok) {
-    if (response.status >= 500 || response.status === 429) return retry(`Clef ${response.status}: ${body.slice(0, 300)}`)
+    if (response.status >= 500 || response.status === 429)
+      return retry(`Clef ${response.status}: ${body.slice(0, 300)}`)
     throw new Error(`Clef ${response.status}: ${body.slice(0, 300)}`)
   }
   const parsed = ClefResponseSchema.safeParse(JSON.parse(body))

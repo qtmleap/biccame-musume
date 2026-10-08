@@ -4,6 +4,7 @@ import {
   analyze,
   coverageGaps,
   eventSummaries,
+  excludeStats,
   funnel,
   keywordStats,
   missingGold,
@@ -29,6 +30,7 @@ export type ApiContext = {
   posts: Parameters<typeof analyze>[0]['posts']
   events: readonly GoldEvent[]
   accounts: readonly StoreAccount[]
+  characterNames: readonly string[]
   source: { archive: string; from: string; until: string; complete: boolean; pages: number; goldFetchedAt: string }
   labels: Labels
   saveLabels: (labels: Labels) => Promise<void>
@@ -37,7 +39,12 @@ export type ApiContext = {
 
 export const createApi = (context: ApiContext) => {
   const state = {
-    analysis: analyze({ posts: context.posts, events: context.events, accounts: context.accounts }),
+    analysis: analyze({
+      posts: context.posts,
+      events: context.events,
+      accounts: context.accounts,
+      characterNames: context.characterNames
+    }),
     labels: context.labels
   }
   const range = { from: Date.parse(context.source.from), until: Date.parse(context.source.until) }
@@ -59,6 +66,8 @@ export const createApi = (context: ApiContext) => {
     media: row.post.media,
     ...(row.reason ? { reason: row.reason } : {}),
     hits: row.hits,
+    excludeHits: row.excludeHits,
+    rescueHits: row.rescueHits,
     strong: row.strong,
     gold: row.gold.map((ref) => ({ eventId: ref.eventId, type: ref.type, title: titleOf(ref.eventId) })),
     cluster: row.cluster,
@@ -151,13 +160,14 @@ export const createApi = (context: ApiContext) => {
       .sort((a, b) => b.passed - a.passed)
   }
 
+  const keywords = () => ({ keywords: keywordStats(state.analysis), excludes: excludeStats(state.analysis) })
+
   const handle = async (request: Request): Promise<Response> => {
     const url = new URL(request.url)
     const path = url.pathname
     if (request.method === 'GET' && path === '/api/summary') return Response.json(summary())
     if (request.method === 'GET' && path === '/api/accounts') return Response.json({ accounts: accounts() })
-    if (request.method === 'GET' && path === '/api/keywords')
-      return Response.json({ keywords: keywordStats(state.analysis) })
+    if (request.method === 'GET' && path === '/api/keywords') return Response.json(keywords())
     if (request.method === 'POST' && path === '/api/keywords') {
       const body = KeywordsRequestSchema.safeParse(await readJson(request))
       if (!body.success) return badRequest(body.error.message)
@@ -165,9 +175,11 @@ export const createApi = (context: ApiContext) => {
         posts: context.posts,
         events: context.events,
         accounts: context.accounts,
-        disabled: body.data.disabled
+        characterNames: context.characterNames,
+        disabled: body.data.disabled,
+        disabledExcludes: body.data.disabledExcludes
       })
-      return Response.json({ keywords: keywordStats(state.analysis) })
+      return Response.json(keywords())
     }
     if (request.method === 'GET' && path === '/api/posts') {
       const query = PostQuerySchema.safeParse(Object.fromEntries(url.searchParams))
@@ -230,7 +242,7 @@ const scopeFilter = (scope: PostQuery['scope'], labels: Labels) => (row: PostRow
     case 'unlabeled':
       return row.reason === undefined && row.gold.length === 0 && labels[row.post.id] === undefined
     case 'strong':
-      return row.strong
+      return row.reason === undefined && row.strong
   }
 }
 

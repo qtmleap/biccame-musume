@@ -5,6 +5,7 @@ import {
   coverageGaps,
   eventSummaries,
   eventWindow,
+  excludeStats,
   funnel,
   keywordStats,
   missingGold,
@@ -16,6 +17,8 @@ const accounts = [
   { storeId: 'example', name: '例たん', screenName: 'Bic_Example' },
   { storeId: 'other', name: '他たん', screenName: 'bic_other' }
 ]
+
+const characterNames = ['例たん', '他たん']
 
 const post = (id: string, text: string, overrides: Partial<DetectPost> = {}): DetectPost => ({
   id,
@@ -75,7 +78,7 @@ describe('analyze', () => {
     post('5', '名刺の配布は終了しました', { createdAt: '2026-06-25T01:00:00.000Z' }),
     post('6', '12/1からクリスマス名刺を配布します', { createdAt: '2025-11-20T01:00:00.000Z' })
   ]
-  const analysis = analyze({ posts, events: [event()], accounts })
+  const analysis = analyze({ posts, events: [event()], accounts, characterNames })
 
   test('段階ごとに除外が積み上がり、正解の残存を数える', () => {
     const stages = funnel(analysis)
@@ -85,6 +88,7 @@ describe('analyze', () => {
       ['reply_to_other', 5, 1],
       ['non_store_account', 5, 1],
       ['no_keyword', 4, 1],
+      ['excluded_keyword', 4, 1],
       ['unique', 3, 1],
       ['strong', 3, 1]
     ])
@@ -96,7 +100,7 @@ describe('analyze', () => {
 
   test('他店舗のイベントに使われたアカウントはその店舗の担当にも数える', () => {
     const shared = event({ stores: ['example', 'third'] })
-    const result = analyze({ posts, events: [shared], accounts })
+    const result = analyze({ posts, events: [shared], accounts, characterNames })
     expect(result.accountStores.get('bic_example')).toEqual(new Set(['example', 'third']))
   })
 
@@ -111,7 +115,7 @@ describe('analyze', () => {
 
   test('終了の参考 URL が無く、開始後に終了報告がある場合に終了の登録漏れ候補にする', () => {
     expect(eventSummaries(analysis)[0]).toMatchObject({ archived: 1, related: 2, endCandidate: true })
-    const ended = analyze({ posts, events: [event({ endedAt: '2026-06-25T00:00:00.000Z' })], accounts })
+    const ended = analyze({ posts, events: [event({ endedAt: '2026-06-25T00:00:00.000Z' })], accounts, characterNames })
     expect(eventSummaries(ended)[0].endCandidate).toBe(false)
   })
 
@@ -119,18 +123,40 @@ describe('analyze', () => {
     const outside = event({
       referenceUrls: [{ type: 'end', url: 'https://x.com/bic_example/status/2108126811892957663' }]
     })
-    const result = analyze({ posts, events: [outside], accounts })
+    const result = analyze({ posts, events: [outside], accounts, characterNames })
     expect(missingGold(result, { from: Date.parse('2026-01-01'), until: Date.parse('2026-12-31') })).toEqual([
       { id: '2108126811892957663', refs: [expect.objectContaining({ type: 'end' })], inRange: true }
     ])
   })
 
   test('語を無効にすると判定と単独件数に反映される', () => {
-    const disabled = analyze({ posts, events: [event()], accounts, disabled: ['配布'] })
+    const disabled = analyze({ posts, events: [event()], accounts, characterNames, disabled: ['配布'] })
     const stat = keywordStats(disabled).find((entry) => entry.keyword === '名刺')
     // 投稿 5 は「終了」にも当たるので、名刺だけで通過しているのは 1・4・6
     expect(stat).toMatchObject({ disabled: false, posts: 4, onlyPosts: 3 })
     expect(disabled.rowById.get('1')?.hits.map((hit) => hit.keyword)).toEqual(['名刺'])
+  })
+
+  test('除外語で落ちた投稿は段に数え、除外語ごとの寄与を返す', () => {
+    const extra = [
+      post('7', '新製品の体験会でステッカー配布', { createdAt: '2026-06-02T01:00:00.000Z' }),
+      post('8', '体験会で例たんのステッカー配布', { createdAt: '2026-06-03T01:00:00.000Z' })
+    ]
+    const result = analyze({ posts: [...posts, ...extra], events: [event()], accounts, characterNames })
+    expect(result.rowById.get('7')?.reason).toBe('excluded_keyword')
+    expect(result.rowById.get('8')?.reason).toBeUndefined()
+    // キーワードを通過した 6 件（1・4・5・6・7・8）から 7 だけが落ちる
+    expect(funnel(result).find((stage) => stage.key === 'excluded_keyword')?.posts).toBe(5)
+    const stat = excludeStats(result).find((entry) => entry.keyword === '体験会')
+    expect(stat).toMatchObject({ posts: 1, onlyPosts: 0, droppedGold: 0 })
+    const disabled = analyze({
+      posts: [...posts, ...extra],
+      events: [event()],
+      accounts,
+      characterNames,
+      disabledExcludes: ['製品', '新製品', '体験会']
+    })
+    expect(disabled.rowById.get('7')?.reason).toBeUndefined()
   })
 
   test('終了日の無いイベントは開始から 120 日後まで期間に含める', () => {

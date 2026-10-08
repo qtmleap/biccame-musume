@@ -42,7 +42,12 @@ const event: GoldEvent = {
 }
 
 test('keyword-dropped gold posts are evaluated once as gold instead of negative samples', () => {
-  const analysis = analyze({ posts: [post, { ...post, id: '2' }], events: [event], accounts })
+  const analysis = analyze({
+    posts: [post, { ...post, id: '2' }],
+    events: [event],
+    accounts,
+    characterNames: ['例たん']
+  })
   const samples = buildEvalSet(analysis, { passed: 10, dropped: 10, seed: 1 })
   expect(samples.map(({ row, kind }) => [row.post.id, kind])).toEqual([
     ['1', 'gold'],
@@ -52,7 +57,7 @@ test('keyword-dropped gold posts are evaluated once as gold instead of negative 
 
 test('an interrupted decision cache is replaced and the completed result is reused', async () => {
   const cacheDir = await directory()
-  const analysis = analyze({ posts: [post], events: [event], accounts })
+  const analysis = analyze({ posts: [post], events: [event], accounts, characterNames: ['例たん'] })
   const row = analysis.rows[0]
   const { request } = buildRequest(row, analysis, accounts, storeNames)
   const path = join(cacheDir, `${cacheKey('clef', request)}.json`)

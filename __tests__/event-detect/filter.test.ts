@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import {
+  buildRescueTerms,
   classifyPost,
   dedupKey,
   hasDateExpression,
@@ -9,6 +10,8 @@ import {
 } from '@biccame/shared/event-detect/filter'
 
 const stores = new Set(['bic_example', 'bic_other'])
+
+const options = { storeAccounts: stores, rescueTerms: buildRescueTerms(['例たん', 'ビックカメラ']) }
 
 const post = (overrides: Partial<Parameters<typeof classifyPost>[0]> = {}) => ({
   kind: 'original' as const,
@@ -41,46 +44,96 @@ describe('structuralDropReason', () => {
 
 describe('classifyPost', () => {
   test('配布の語を含む店舗の投稿は通過する', () => {
-    const verdict = classifyPost(post(), { storeAccounts: stores })
+    const verdict = classifyPost(post(), options)
     expect(verdict.reason).toBeUndefined()
     expect(verdict.hits.map((hit) => hit.keyword)).toEqual(['名刺', '配布'])
     expect(verdict.strong).toBe(true)
   })
 
   test('配布の語が無ければ no_keyword で除外する', () => {
-    expect(classifyPost(post({ text: 'おはようございます☀️' }), { storeAccounts: stores }).reason).toBe('no_keyword')
+    expect(classifyPost(post({ text: 'おはようございます☀️' }), options).reason).toBe('no_keyword')
   })
 
   test('構造の除外理由はキーワードより優先する', () => {
-    const verdict = classifyPost(post({ kind: 'retweet' }), { storeAccounts: stores })
+    const verdict = classifyPost(post({ kind: 'retweet' }), options)
     expect(verdict.reason).toBe('retweet')
     expect(verdict.strong).toBe(false)
   })
 
   test('無効にした語は数えない', () => {
     const verdict = classifyPost(post({ text: '名刺の写真です' }), {
-      storeAccounts: stores,
+      ...options,
       disabled: new Set(['名刺'])
     })
     expect(verdict.reason).toBe('no_keyword')
   })
 
   test('景品名だけで配布方法も日付も無ければ強シグナルにしない', () => {
-    const verdict = classifyPost(post({ text: '名刺かわいい' }), { storeAccounts: stores })
+    const verdict = classifyPost(post({ text: '名刺かわいい' }), options)
     expect(verdict.reason).toBeUndefined()
     expect(verdict.strong).toBe(false)
   })
 
   test('購入条件と日付があれば配布の語が無くても強シグナルになる', () => {
-    const verdict = classifyPost(post({ text: '9/5(土)から税込3,000円以上でアクスタをプレゼント' }), {
-      storeAccounts: stores
-    })
+    const verdict = classifyPost(post({ text: '9/5(土)から税込3,000円以上でアクスタをプレゼント' }), options)
     expect(verdict.strong).toBe(true)
   })
 
   test('完配・品切れなど終了の語を拾う', () => {
-    const verdict = classifyPost(post({ text: 'マーメイドアクキー・・・完配しました！' }), { storeAccounts: stores })
+    const verdict = classifyPost(post({ text: 'マーメイドアクキー・・・完配しました！' }), options)
     expect(verdict.hits.map((hit) => hit.group)).toEqual(['item', 'end'])
+  })
+})
+
+describe('除外語', () => {
+  test('除外語を含み救済語を含まない投稿は excluded_keyword で除外する', () => {
+    const verdict = classifyPost(
+      post({ text: 'ポケモンカード拡張パック、抽選販売の当選者はレシートをお持ちください。配布終了' }),
+      options
+    )
+    expect(verdict.reason).toBe('excluded_keyword')
+    expect(verdict.excludeHits.map((hit) => hit.keyword)).toEqual([
+      '抽選販売',
+      '当選',
+      'ポケモン',
+      '拡張パック',
+      '抽選'
+    ])
+  })
+
+  test('救済語（名刺・アクスタ等）があれば除外語があっても通過する', () => {
+    const verdict = classifyPost(post({ text: '仲良しフェア開催！アクスタを配布します' }), options)
+    expect(verdict.reason).toBeUndefined()
+    expect(verdict.rescueHits).toEqual(['アクスタ'])
+  })
+
+  test('キャラクター名（○○たん）も救済語になる', () => {
+    const verdict = classifyPost(post({ text: '例たんサンキューカード、抽選会のあとに配布します' }), options)
+    expect(verdict.reason).toBeUndefined()
+    expect(verdict.rescueHits).toEqual(['例たん'])
+  })
+
+  test('「たん」で終わらない名前は救済語にしない', () => {
+    expect(buildRescueTerms(['例たん', 'ビックカメラ', 'ナイセン'])).toContain('例たん')
+    expect(buildRescueTerms(['ビックカメラ'])).not.toContain('ビックカメラ')
+  })
+
+  test('キーワードが無ければ除外語より no_keyword を優先する', () => {
+    expect(classifyPost(post({ text: '新製品が発売されました' }), options).reason).toBe('no_keyword')
+  })
+
+  test('強シグナルは除外語の判定より前に決まる', () => {
+    const verdict = classifyPost(post({ text: '10/1から体験会で先着100名にステッカーを配布' }), options)
+    expect(verdict.reason).toBe('excluded_keyword')
+    expect(verdict.strong).toBe(true)
+  })
+
+  test('無効にした除外語では除外しない', () => {
+    const verdict = classifyPost(post({ text: '週末はステッカーを配布' }), {
+      ...options,
+      disabledExcludes: new Set(['週末'])
+    })
+    expect(verdict.reason).toBeUndefined()
   })
 })
 

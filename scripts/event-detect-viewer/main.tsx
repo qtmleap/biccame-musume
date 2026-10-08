@@ -13,6 +13,7 @@ import type {
 import { api, type PostFilter } from './client'
 import {
   ErrorMessage,
+  EXCLUDE_GROUP_LABELS,
   formatDate,
   formatNumber,
   GROUP_LABELS,
@@ -57,7 +58,7 @@ const useLoad = <T,>(load: () => Promise<T>, deps: readonly unknown[]) => {
 /** 空文字はフィルタ未指定として扱う */
 const optional = (value: string) => (value === '' ? undefined : value)
 
-const REASONS = ['retweet', 'reply_to_other', 'non_store_account', 'no_keyword'] as const
+const REASONS = ['retweet', 'reply_to_other', 'non_store_account', 'no_keyword', 'excluded_keyword'] as const
 
 const replacePost = (posts: PostView[], next: PostView) => posts.map((post) => (post.id === next.id ? next : post))
 
@@ -549,23 +550,26 @@ const KeywordsView = () => {
   if (keywords.error) return <ErrorMessage error={keywords.error} />
   if (!keywords.data) return <p className='muted'>読み込み中…</p>
   const data: z.infer<typeof KeywordsResponseSchema> = keywords.data
-  const toggle = async (keyword: string) => {
+  const disabledOf = (stats: { keyword: string; disabled: boolean }[], toggled?: string) =>
+    stats.filter((stat) => (stat.keyword === toggled ? !stat.disabled : stat.disabled)).map((stat) => stat.keyword)
+  const save = async (disabled: string[], disabledExcludes: string[]) => {
     setBusy(true)
-    const disabled = data.keywords
-      .filter((stat) => (stat.keyword === keyword ? !stat.disabled : stat.disabled))
-      .map((stat) => stat.keyword)
     try {
-      keywords.setData(await api.setDisabledKeywords(disabled))
+      keywords.setData(await api.setDisabledKeywords(disabled, disabledExcludes))
     } finally {
       setBusy(false)
     }
   }
+  const toggleKeyword = (keyword: string) => save(disabledOf(data.keywords, keyword), disabledOf(data.excludes))
+  const toggleExclude = (keyword: string) => save(disabledOf(data.keywords), disabledOf(data.excludes, keyword))
+  const excludes = [...data.excludes].sort((a, b) => b.posts - a.posts)
   return (
     <>
       <p className='note'>
         チェックを外した語はサーバー上の判定から一時的に外れる（再起動で戻る）。ファネル・投稿一覧にもそのまま反映される。
-        単独件数は「この語以外に当たる語が無い」投稿の数で、外したときに落ちる件数。
       </p>
+      <h2>キーワード（含む投稿を通す）</h2>
+      <p className='note'>単独件数は「この語以外に当たる語が無い」投稿の数で、外したときに落ちる件数。</p>
       <table>
         <thead>
           <tr>
@@ -582,7 +586,12 @@ const KeywordsView = () => {
           {data.keywords.map((stat) => (
             <tr key={stat.keyword} className={stat.disabled ? 'disabled' : undefined}>
               <td>
-                <input type='checkbox' checked={!stat.disabled} disabled={busy} onChange={() => toggle(stat.keyword)} />
+                <input
+                  type='checkbox'
+                  checked={!stat.disabled}
+                  disabled={busy}
+                  onChange={() => toggleKeyword(stat.keyword)}
+                />
               </td>
               <td>{stat.keyword}</td>
               <td>{GROUP_LABELS[stat.group]}</td>
@@ -590,6 +599,47 @@ const KeywordsView = () => {
               <td className='num'>{formatNumber(stat.gold)}</td>
               <td className='num'>{formatNumber(stat.onlyPosts)}</td>
               <td className='num'>{formatNumber(stat.onlyGold)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h2>除外語（救済語が無ければ落とす）</h2>
+      <p className='note'>
+        救済語はビッカメ娘・ビッ旅・名刺・アクキー・アクスタ・缶バッジ・ノベルティとキャラクター名（○○たん）。
+        投稿はキーワードを通過し、この語を含み、救済語を含まない件数。単独はこの語だけで落ちている件数（外すと通過に戻る）。
+        「正解が落ちる」は 0 であるべき。
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>有効</th>
+            <th>語</th>
+            <th>分類</th>
+            <th className='num'>投稿</th>
+            <th className='num'>単独</th>
+            <th className='num'>含む正解</th>
+            <th className='num'>救済された正解</th>
+            <th className='num'>正解が落ちる</th>
+          </tr>
+        </thead>
+        <tbody>
+          {excludes.map((stat) => (
+            <tr key={stat.keyword} className={stat.disabled ? 'disabled' : undefined}>
+              <td>
+                <input
+                  type='checkbox'
+                  checked={!stat.disabled}
+                  disabled={busy}
+                  onChange={() => toggleExclude(stat.keyword)}
+                />
+              </td>
+              <td>{stat.keyword}</td>
+              <td>{EXCLUDE_GROUP_LABELS[stat.group]}</td>
+              <td className='num'>{formatNumber(stat.posts)}</td>
+              <td className='num'>{formatNumber(stat.onlyPosts)}</td>
+              <td className='num'>{formatNumber(stat.gold)}</td>
+              <td className='num'>{formatNumber(stat.rescuedGold)}</td>
+              <td className='num'>{formatNumber(stat.droppedGold)}</td>
             </tr>
           ))}
         </tbody>

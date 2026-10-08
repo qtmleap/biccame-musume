@@ -111,7 +111,12 @@ export const runDecisions = async (options: {
         const item = queue[state.next]
         state.next += 1
         if (!item) return
-        const { request, endedCandidates } = buildRequest(item.entry.row, options.analysis, options.accounts, options.storeNames)
+        const { request, endedCandidates } = buildRequest(
+          item.entry.row,
+          options.analysis,
+          options.accounts,
+          options.storeNames
+        )
         const path = resolve(options.cacheDir, `${cacheKey(model, request)}.json`)
         const cached = await readFile(path, 'utf8')
           .then((text) => JSON.parse(text))
@@ -237,7 +242,16 @@ export const scoreModel = (
     model,
     calls: mine.length,
     inputTokens: mine.reduce((sum, d) => sum + (d.response.usage ? d.response.usage.input_tokens : 0), 0),
-    latency: { p50: percentile(mine.map((d) => d.elapsedMs), 0.5), p95: percentile(mine.map((d) => d.elapsedMs), 0.95) },
+    latency: {
+      p50: percentile(
+        mine.map((d) => d.elapsedMs),
+        0.5
+      ),
+      p95: percentile(
+        mine.map((d) => d.elapsedMs),
+        0.95
+      )
+    },
     isEvent: { threshold, goldRecall: tally(), negativePassedRate: tally(), negativeDroppedRate: tally() },
     status: { ...tally(), confusion: {} },
     category: tally(),
@@ -277,11 +291,19 @@ export const scoreModel = (
 
     // 種別: 紐づくイベントのカテゴリのどれかに一致
     const category = choiceOf(answers.category)
-    if (category) add(report.category, events.some((event) => CATEGORY_GOLD[event.category] === category))
+    if (category)
+      add(
+        report.category,
+        events.some((event) => CATEGORY_GOLD[event.category] === category)
+      )
 
     // 店舗: 選んだ店舗が紐づくイベントの店舗に含まれる
     const store = choiceOf(answers.store)
-    if (store) add(report.store, events.some((event) => event.stores.includes(store)))
+    if (store)
+      add(
+        report.store,
+        events.some((event) => event.stores.includes(store))
+      )
 
     // 日付・数量は告知・開始の正解だけで評価する（終了報告は開始日を書かないことが多い）
     const announceEvents = refs
@@ -299,10 +321,15 @@ export const scoreModel = (
       if (withEnd.length > 0)
         scoreValue(report.endDate, answers.end_date, keysOf(answers.end_date), (key) => {
           const date = keyToDate(key)
-          return date !== undefined && withEnd.some((event) => event.endDate !== undefined && sameOrPrevDay(date, event.endDate))
+          return (
+            date !== undefined &&
+            withEnd.some((event) => event.endDate !== undefined && sameOrPrevDay(date, event.endDate))
+          )
         })
       const withQuantity = announceEvents
-        .map((event) => (event.limitedQuantity ? event.limitedQuantity : event.conditions.find((c) => c.quantity)?.quantity))
+        .map((event) =>
+          event.limitedQuantity ? event.limitedQuantity : event.conditions.find((c) => c.quantity)?.quantity
+        )
         .filter((q): q is number => q !== undefined)
       if (withQuantity.length > 0)
         scoreValue(report.quantity, answers.quantity, keysOf(answers.quantity), (key) => {

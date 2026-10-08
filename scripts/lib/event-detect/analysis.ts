@@ -1,10 +1,14 @@
 import {
+  buildRescueTerms,
   classifyPost,
   DROP_REASONS,
   type DropReason,
   dedupKey,
+  EXCLUDE_KEYWORDS,
+  type ExcludeHit,
   KEYWORDS,
   type KeywordHit,
+  matchExcludes,
   matchKeywords,
   normalizeText
 } from '@biccame/shared/event-detect/filter'
@@ -23,8 +27,13 @@ export type PostRow = {
   normalized: string
   /** 無効化を無視して当たる語。キーワードの寄与を測るのに使う */
   allKeywords: Set<string>
+  /** 無効化を無視して当たる除外語 */
+  allExcludes: Set<string>
   reason: DropReason | undefined
   hits: KeywordHit[]
+  excludeHits: ExcludeHit[]
+  rescueHits: string[]
+  /** キーワードを通過した時点の強シグナル。除外語で落ちた投稿でも true になりうる */
   strong: boolean
   gold: GoldRef[]
   /** 同じ文面の投稿群。代表 ID と件数 */
@@ -46,6 +55,7 @@ export type Analysis = {
   /** アカウント（小文字） → 通過した投稿 */
   passedByAccount: Map<string, PostRow[]>
   disabled: Set<string>
+  disabledExcludes: Set<string>
 }
 
 const push = <K, V>(map: Map<K, V[]>, key: K, value: V) => {
@@ -113,9 +123,14 @@ export const analyze = (input: {
   posts: readonly DetectPost[]
   events: readonly GoldEvent[]
   accounts: readonly StoreAccount[]
+  /** 救済語に使うキャラクター名（characters.json の character.name） */
+  characterNames: readonly string[]
   disabled?: Iterable<string>
+  disabledExcludes?: Iterable<string>
 }): Analysis => {
   const disabled = new Set(input.disabled)
+  const disabledExcludes = new Set(input.disabledExcludes)
+  const rescueTerms = buildRescueTerms(input.characterNames)
   const events = [...input.events]
   const eventById = new Map(events.map((event) => [event.uuid, event]))
   const goldIndex = buildGoldIndex(events)
@@ -131,7 +146,7 @@ export const analyze = (input: {
 
   const clusters = new Map<string, string[]>()
   const rows: PostRow[] = input.posts.map((post) => {
-    const verdict = classifyPost(post, { storeAccounts: storeAccountSet, disabled })
+    const verdict = classifyPost(post, { storeAccounts: storeAccountSet, rescueTerms, disabled, disabledExcludes })
     const time = Date.parse(post.createdAt)
     const nearbyEvents = valuesOf(accountStores, post.screenName.toLowerCase()).flatMap((store) =>
       valuesOf(windowsByStore, store)
@@ -146,6 +161,7 @@ export const analyze = (input: {
       time,
       normalized,
       allKeywords: new Set(matchKeywords(normalized).map((hit) => hit.keyword)),
+      allExcludes: new Set(matchExcludes(normalized).map((hit) => hit.keyword)),
       ...verdict,
       gold: gold ? gold : [],
       cluster: { id: post.id, size: 1 },
@@ -161,7 +177,18 @@ export const analyze = (input: {
   }
   const passedByAccount = new Map<string, PostRow[]>()
   for (const row of rows) if (row.reason === undefined) push(passedByAccount, row.post.screenName.toLowerCase(), row)
-  return { rows, rowById, events, eventById, storeAccounts, accountStores, goldIndex, passedByAccount, disabled }
+  return {
+    rows,
+    rowById,
+    events,
+    eventById,
+    storeAccounts,
+    accountStores,
+    goldIndex,
+    passedByAccount,
+    disabled,
+    disabledExcludes
+  }
 }
 
 const REFERENCE_TYPES: readonly ReferenceType[] = ['announce', 'start', 'end']
@@ -193,7 +220,8 @@ export const funnel = (analysis: Analysis): FunnelStage[] => {
     retweet: 'リツイートを除外',
     reply_to_other: '他アカウント宛てリプライを除外',
     non_store_account: '店舗アカウント以外を除外',
-    no_keyword: 'キーワードを含まないものを除外'
+    no_keyword: 'キーワードを含まないものを除外',
+    excluded_keyword: '除外語を含むもの（救済語なし）を除外'
   }
   const stages: FunnelStage[] = [
     { key: 'all', label: '全件', posts: analysis.rows.length, ...countGold(analysis.rows) }
@@ -242,11 +270,15 @@ export type KeywordStat = {
   onlyGold: number
 }
 
+/** 構造（RT・他者宛てリプライ・店舗外）で落ちていない投稿 */
+const structurallyPassed = (row: PostRow) =>
+  row.reason === undefined || row.reason === 'no_keyword' || row.reason === 'excluded_keyword'
+
 /**
  * キーワードごとの寄与。構造で落ちた投稿は数えない。
  */
 export const keywordStats = (analysis: Analysis): KeywordStat[] => {
-  const candidates = analysis.rows.filter((row) => row.reason === undefined || row.reason === 'no_keyword')
+  const candidates = analysis.rows.filter(structurallyPassed)
   return KEYWORDS.map(({ keyword, group }) => {
     const matched = candidates.filter((row) => row.allKeywords.has(keyword))
     const only = matched.filter((row) =>
@@ -260,6 +292,46 @@ export const keywordStats = (analysis: Analysis): KeywordStat[] => {
       gold: matched.filter((row) => row.gold.length > 0).length,
       onlyPosts: only.length,
       onlyGold: only.filter((row) => row.gold.length > 0).length
+    }
+  })
+}
+
+export type ExcludeStat = {
+  keyword: string
+  group: ExcludeHit['group']
+  disabled: boolean
+  /** キーワードを通過し、この語を含み、救済語を含まない投稿（＝この語で除外されうる） */
+  posts: number
+  /** この語を含む正解。救済語で守られたものも含む */
+  gold: number
+  /** この語を含むが救済語で残った正解 */
+  rescuedGold: number
+  /** 他の除外語を含まず、この語だけで除外されている投稿（外すと通過に戻る） */
+  onlyPosts: number
+  /** posts のうち正解（救済語なしで落ちる正解。0 であるべき） */
+  droppedGold: number
+}
+
+/**
+ * 除外語ごとの寄与。キーワードを通過した投稿（通過・除外語で除外）だけを数える。
+ */
+export const excludeStats = (analysis: Analysis): ExcludeStat[] => {
+  const candidates = analysis.rows.filter((row) => row.reason === undefined || row.reason === 'excluded_keyword')
+  return EXCLUDE_KEYWORDS.map(({ keyword, group }) => {
+    const matched = candidates.filter((row) => row.allExcludes.has(keyword))
+    const unrescued = matched.filter((row) => row.rescueHits.length === 0)
+    const only = unrescued.filter((row) =>
+      [...row.allExcludes].every((other) => other === keyword || analysis.disabledExcludes.has(other))
+    )
+    return {
+      keyword,
+      group,
+      disabled: analysis.disabledExcludes.has(keyword),
+      posts: unrescued.length,
+      gold: matched.filter((row) => row.gold.length > 0).length,
+      rescuedGold: matched.filter((row) => row.gold.length > 0 && row.rescueHits.length > 0).length,
+      onlyPosts: only.length,
+      droppedGold: unrescued.filter((row) => row.gold.length > 0).length
     }
   })
 }

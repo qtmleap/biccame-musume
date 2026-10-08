@@ -47,8 +47,8 @@ export const api = {
   event: (id: string) => request(EventDetailResponseSchema, `/api/events/${id}`),
   gaps: () => request(GapsResponseSchema, '/api/gaps'),
   keywords: () => request(KeywordsResponseSchema, '/api/keywords'),
-  setDisabledKeywords: (disabled: string[]) =>
-    request(KeywordsResponseSchema, '/api/keywords', json('POST', { disabled })),
+  setDisabledKeywords: (disabled: string[], disabledExcludes: string[]) =>
+    request(KeywordsResponseSchema, '/api/keywords', json('POST', { disabled, disabledExcludes })),
   setLabel: (id: string, label: LabelRequest) => request(LabelResponseSchema, `/api/labels/${id}`, json('PUT', label)),
   deleteLabel: (id: string) => request(LabelResponseSchema, `/api/labels/${id}`, { method: 'DELETE' })
 }

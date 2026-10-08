@@ -25,7 +25,8 @@ export const LabelResponseSchema = z.object({ label: LabelSchema.nullable() })
 
 const ReferenceTypeSchema = z.enum(['announce', 'start', 'end'])
 const KeywordGroupSchema = z.enum(['item', 'give', 'condition', 'end', 'start'])
-const DropReasonSchema = z.enum(['retweet', 'reply_to_other', 'non_store_account', 'no_keyword'])
+const DropReasonSchema = z.enum(['retweet', 'reply_to_other', 'non_store_account', 'no_keyword', 'excluded_keyword'])
+const ExcludeGroupSchema = z.enum(['sales', 'games', 'appliances', 'promotion'])
 
 export const PostViewSchema = z.object({
   id: z.string().nonempty(),
@@ -45,6 +46,8 @@ export const PostViewSchema = z.object({
   media: z.array(z.url()),
   reason: DropReasonSchema.optional(),
   hits: z.array(z.object({ keyword: z.string().nonempty(), group: KeywordGroupSchema })),
+  excludeHits: z.array(z.object({ keyword: z.string().nonempty(), group: ExcludeGroupSchema })),
+  rescueHits: z.array(z.string().nonempty()),
   strong: z.boolean(),
   gold: z.array(z.object({ eventId: z.uuid(), type: ReferenceTypeSchema, title: z.string().nonempty() })),
   cluster: z.object({ id: z.string().nonempty(), size: z.number().int().positive() }),
@@ -110,9 +113,26 @@ export const KeywordStatSchema = z.object({
   onlyGold: z.number().int().nonnegative()
 })
 
-export const KeywordsResponseSchema = z.object({ keywords: z.array(KeywordStatSchema) })
+export const ExcludeStatSchema = z.object({
+  keyword: z.string().nonempty(),
+  group: ExcludeGroupSchema,
+  disabled: z.boolean(),
+  posts: z.number().int().nonnegative(),
+  gold: z.number().int().nonnegative(),
+  rescuedGold: z.number().int().nonnegative(),
+  onlyPosts: z.number().int().nonnegative(),
+  droppedGold: z.number().int().nonnegative()
+})
 
-export const KeywordsRequestSchema = z.object({ disabled: z.array(z.string().nonempty()) })
+export const KeywordsResponseSchema = z.object({
+  keywords: z.array(KeywordStatSchema),
+  excludes: z.array(ExcludeStatSchema)
+})
+
+export const KeywordsRequestSchema = z.object({
+  disabled: z.array(z.string().nonempty()),
+  disabledExcludes: z.array(z.string().nonempty()).default([])
+})
 
 export const POST_SCOPES = ['passed', 'dropped', 'all', 'gold', 'gold_dropped', 'unlabeled', 'strong'] as const
 

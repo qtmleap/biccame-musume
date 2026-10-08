@@ -45,6 +45,7 @@ const setup = () => {
     ],
     events: [event],
     accounts: [{ storeId: 'example', name: '例たん', screenName: 'bic_example' }],
+    characterNames: ['例たん'],
     source: {
       archive: '/tmp/posts.jsonl',
       from: '2025-10-07T15:00:00.000Z',

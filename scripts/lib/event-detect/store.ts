@@ -1,9 +1,10 @@
 import { randomUUID } from 'node:crypto'
 import { createReadStream, existsSync } from 'node:fs'
-import { mkdir, readFile, rename, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, readFile, rename, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { type DetectPost, DetectPostSchema } from '@biccame/shared/event-detect/post'
 import { z } from 'zod'
+import { parseArchivePage } from '../post-archive'
 import type { StoreAccount } from './analysis'
 import { type ApiContext, createApi } from './api'
 import { type GoldEvent, GoldEventSchema } from './gold'
@@ -41,20 +42,24 @@ export async function* readJsonLines(path: string): AsyncGenerator<string> {
 /**
  * アーカイブの JSONL を 1 行ずつ変換する。1GB 近くあるので全体を読み込まない。
  */
-export const convertArchive = async (
-  archivePath: string,
+type Conversion = { lines: number; posts: number; skipped: Record<string, number> }
+
+/**
+ * アーカイブのレコードを 1 件ずつ変換し、投稿 ID で重複を除いて書き出す。
+ */
+const convertRecords = async (
+  records: AsyncIterable<unknown>,
   outPath: string,
   onProgress?: (lines: number) => void
-): Promise<{ lines: number; posts: number; skipped: Record<string, number> }> => {
+): Promise<Conversion> => {
   const seen = new Set<string>()
   const output: string[] = []
   const skipped: Record<string, number> = {}
   const state = { lines: 0 }
-  for await (const line of readJsonLines(archivePath)) {
-    if (!line.trim()) continue
+  for await (const record of records) {
     state.lines += 1
     if (onProgress && state.lines % 10_000 === 0) onProgress(state.lines)
-    const result = fromArchiveRecord(parseLine(line))
+    const result = fromArchiveRecord(record)
     if ('skipped' in result) {
       increment(skipped, result.skipped)
       continue
@@ -68,6 +73,67 @@ export const convertArchive = async (
   }
   await writeAtomic(outPath, `${output.join('\n')}\n`)
   return { lines: state.lines, posts: output.length, skipped }
+}
+
+async function* archiveLines(archivePath: string): AsyncGenerator<unknown> {
+  for await (const line of readJsonLines(archivePath)) if (line.trim()) yield parseLine(line)
+}
+
+/**
+ * アーカイブの JSONL を 1 行ずつ変換する。1GB 近くあるので全体を読み込まない。
+ */
+export const convertArchive = (archivePath: string, outPath: string, onProgress?: (lines: number) => void) =>
+  convertRecords(archiveLines(archivePath), outPath, onProgress)
+
+/**
+ * ページの番号順に並べたファイル名（000001.json …）。
+ */
+const pageNames = async (pagesDir: string) =>
+  (await readdir(pagesDir)).filter((name) => /^\d{6}\.json$/.test(name)).sort()
+
+async function* pageRecords(pagesDir: string, onPageError: (name: string) => void): AsyncGenerator<unknown> {
+  for (const name of await pageNames(pagesDir)) {
+    const envelope = await readFile(resolve(pagesDir, name), 'utf8').then(parseLine, () => undefined)
+    const response = PageEnvelopeSchema.safeParse(envelope)
+    if (!response.success) {
+      onPageError(name)
+      continue
+    }
+    // 取得スクリプトと同じパーサで投稿に戻す。失敗したページ（エラー応答など）は数えて飛ばす
+    const parsed = (() => {
+      try {
+        return parseArchivePage(response.data.response, 'list')
+      } catch {
+        return undefined
+      }
+    })()
+    if (!parsed) {
+      onPageError(name)
+      continue
+    }
+    for (const post of parsed.posts) yield post
+  }
+}
+
+const PageEnvelopeSchema = z.object({ version: z.literal(2), response: z.unknown() })
+
+/**
+ * list-timeline アーカイブのページ（pages/*.json）から直接変換する。posts.jsonl は取得の最後にしか
+ * 書き直されないので、取得中のアーカイブはページの方が新しい。読むだけで取得中のジョブには触れない。
+ */
+export const convertArchivePages = async (
+  pagesDir: string,
+  outPath: string,
+  onProgress?: (lines: number) => void
+): Promise<Conversion & { pages: number; badPages: number }> => {
+  const bad: string[] = []
+  const pages = (await pageNames(pagesDir)).length
+  const result = await convertRecords(
+    pageRecords(pagesDir, (name) => bad.push(name)),
+    outPath,
+    onProgress
+  )
+  return { ...result, pages, badPages: bad.length }
 }
 
 const increment = (counts: Record<string, number>, key: string) => {
@@ -185,6 +251,10 @@ export const readStoreNames = async (path: string): Promise<Map<string, string[]
   )
 }
 
+/** キャラクター名（救済語に使う）。characters.json の全キャラクター */
+export const readCharacterNames = async (path: string): Promise<string[]> =>
+  [...(await readStoreNames(path)).values()].map((names) => names[0])
+
 const LabelsFileSchema = z.record(z.string().regex(/^\d+$/), LabelSchema)
 
 export const readLabels = async (path: string): Promise<Labels> => {
@@ -201,10 +271,11 @@ export const writeLabels = (path: string, labels: Labels) => writeAtomic(path, `
  */
 export const loadViewerApi = async (options: { dir: string; charactersPath: string; now: ApiContext['now'] }) => {
   const labelsPath = resolve(options.dir, 'labels.json')
-  const [posts, gold, accounts, labels, meta] = await Promise.all([
+  const [posts, gold, accounts, characterNames, labels, meta] = await Promise.all([
     readPosts(resolve(options.dir, 'posts.jsonl')),
     readGold(resolve(options.dir, 'gold.json')),
     readStoreAccounts(options.charactersPath),
+    readCharacterNames(options.charactersPath),
     readLabels(labelsPath),
     readMeta(resolve(options.dir, 'meta.json'))
   ])
@@ -212,6 +283,7 @@ export const loadViewerApi = async (options: { dir: string; charactersPath: stri
     posts,
     events: gold.events,
     accounts,
+    characterNames,
     source: {
       archive: meta.archive,
       from: meta.from,

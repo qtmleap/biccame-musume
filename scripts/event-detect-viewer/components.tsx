@@ -8,7 +8,8 @@ export const REASON_LABELS: Record<NonNullable<PostView['reason']>, string> = {
   retweet: 'RT',
   reply_to_other: '他者宛てリプライ',
   non_store_account: '店舗外アカウント',
-  no_keyword: 'キーワードなし'
+  no_keyword: 'キーワードなし',
+  excluded_keyword: '除外語'
 }
 
 export const TYPE_LABELS: Record<'announce' | 'start' | 'ongoing' | 'end', string> = {
@@ -16,6 +17,13 @@ export const TYPE_LABELS: Record<'announce' | 'start' | 'ongoing' | 'end', strin
   start: '開始',
   ongoing: '継続中',
   end: '終了'
+}
+
+export const EXCLUDE_GROUP_LABELS: Record<PostView['excludeHits'][number]['group'], string> = {
+  sales: '商品の販売・予約',
+  games: 'トレカ・ゲーム',
+  appliances: '家電・売場',
+  promotion: '販促・体験'
 }
 
 export const GROUP_LABELS: Record<PostView['hits'][number]['group'], string> = {
@@ -55,21 +63,42 @@ const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\
 /**
  * 判定に当たった語を強調する。NFKC 正規化後の語で照合するので、全角の表記は強調されないことがある。
  */
-export const Highlight = ({ text, keywords }: { text: string; keywords: readonly string[] }) => {
-  if (keywords.length === 0) return <>{text}</>
+export const Highlight = ({
+  text,
+  keywords,
+  excludes = []
+}: {
+  text: string
+  keywords: readonly string[]
+  /** 除外語。キーワードとは別の色で強調する */
+  excludes?: readonly string[]
+}) => {
+  const all = [...keywords, ...excludes]
+  if (all.length === 0) return <>{text}</>
   const pattern = new RegExp(
-    `(${[...keywords]
+    `(${[...all]
       .sort((a, b) => b.length - a.length)
       .map(escapeRegExp)
       .join('|')})`,
     'g'
   )
-  const set = new Set(keywords)
+  const keywordSet = new Set(keywords)
+  const excludeSet = new Set(excludes)
   return (
     <>
       {text.split(pattern).map((part, index) =>
-        // biome-ignore lint/suspicious/noArrayIndexKey: 分割結果は順序で一意
-        set.has(part) ? <mark key={index}>{part}</mark> : <span key={index}>{part}</span>
+        keywordSet.has(part) ? (
+          // biome-ignore lint/suspicious/noArrayIndexKey: 分割結果は順序で一意
+          <mark key={index}>{part}</mark>
+        ) : excludeSet.has(part) ? (
+          // biome-ignore lint/suspicious/noArrayIndexKey: 分割結果は順序で一意
+          <mark key={index} className='exclude'>
+            {part}
+          </mark>
+        ) : (
+          // biome-ignore lint/suspicious/noArrayIndexKey: 分割結果は順序で一意
+          <span key={index}>{part}</span>
+        )
       )}
     </>
   )
@@ -169,7 +198,7 @@ export const PostItem = ({
           </a>
         </div>
         <div className='body'>
-          <Highlight text={post.text} keywords={keywords} />
+          <Highlight text={post.text} keywords={keywords} excludes={post.excludeHits.map((hit) => hit.keyword)} />
         </div>
         {post.quoted && (
           <div className='quoted'>
@@ -212,6 +241,12 @@ export const PostItem = ({
         )}
         {post.hits.length > 0 && (
           <div className='muted'>{post.hits.map((hit) => `${hit.keyword}(${GROUP_LABELS[hit.group]})`).join(' ')}</div>
+        )}
+        {post.excludeHits.length > 0 && (
+          <div className='muted'>
+            除外語: {post.excludeHits.map((hit) => hit.keyword).join(' ')}
+            {post.rescueHits.length > 0 ? ` / 救済語: ${post.rescueHits.join(' ')}` : ''}
+          </div>
         )}
         <LabelEditor post={post} onChange={onChange} />
         {extra}
