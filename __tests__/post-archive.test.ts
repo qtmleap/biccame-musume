@@ -382,7 +382,7 @@ test('malformed tweet timestamps cannot produce a successful empty archive', asy
   ).toMatchObject({ complete: false, reason: 'unsupported_payload' })
 })
 
-test('calendar-day slices progress independently and resume after a terminal day', async () => {
+test('single range follows date boundaries with one cursor chain across resume', async () => {
   const out = await output()
   const twoDays = { ...scope, from: '2026-10-06T15:00:00.000Z' }
   const first = await runArchive({
@@ -390,32 +390,27 @@ test('calendar-day slices progress independently and resume after a terminal day
     out,
     maxPages: 1,
     delayMs: 0,
-    search: async ({ since, until, cursor }) => {
-      expect(cursor).toBeUndefined()
+    search: async ({ since, until }) => {
       expect(since.format('YYYY-MM-DD')).toBe('2026-10-06')
-      expect(until.add(1, 'day').format('YYYY-MM-DD')).toBe('2026-10-09')
-      return page([rawTweet('1', '2026-10-07T00:00:00Z'), rawTweet('2', '2026-10-08T00:00:00Z')])
+      expect(until.add(1, 'day').format('YYYY-MM-DD')).toBe('2026-10-10')
+      return page([rawTweet('1', '2026-10-07T00:00:00Z'), rawTweet('2', '2026-10-08T00:00:00Z')], 'next')
     }
   })
-  expect(first).toMatchObject({ complete: false, reason: 'budget', pages: 1, posts: 1 })
-  const partial = JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8'))
-  expect(partial.days.map((day: { complete: boolean }) => day.complete)).toEqual([true, false])
+  expect(first).toMatchObject({ complete: false, reason: 'budget', pages: 1, posts: 2 })
   const second = await runArchive({
     scope: twoDays,
     out,
     resume: true,
     delayMs: 0,
     search: async ({ since, until, cursor }) => {
-      expect(cursor).toBeUndefined()
-      expect(since.format('YYYY-MM-DD')).toBe('2026-10-07')
+      expect(cursor).toBe('next')
+      expect(since.format('YYYY-MM-DD')).toBe('2026-10-06')
       expect(until.add(1, 'day').format('YYYY-MM-DD')).toBe('2026-10-10')
-      return page([rawTweet('1', '2026-10-07T00:00:00Z'), rawTweet('2', '2026-10-08T00:00:00Z')])
+      return page([rawTweet('1', '2026-10-07T00:00:00Z'), rawTweet('3', '2026-10-08T01:00:00Z')])
     }
   })
-  expect(second).toMatchObject({ complete: true, pages: 2, posts: 2 })
-  expect((await rows(out)).map((item) => item.id)).toEqual(['1', '2'])
-  const final = JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8'))
-  expect(final.days.map((day: { complete: boolean }) => day.complete)).toEqual([true, true])
+  expect(second).toMatchObject({ complete: true, pages: 2, posts: 3, coverageVerified: false })
+  expect((await rows(out)).map((item) => item.id).sort()).toEqual(['1', '2', '3'])
 })
 
 test('explicit Bottom termination ends a day despite a remaining cursor', async () => {
@@ -438,7 +433,7 @@ test('resume rejects a missing journal page rather than trusting derived complet
   await expect(runArchive({ scope, out, resume: true, search: async () => page([]) })).rejects.toThrow()
 })
 
-test('CLI dry run resolves daily query without authentication and rejects invalid options', () => {
+test('CLI dry run resolves one range query without authentication and rejects invalid options', () => {
   const result = spawnSync(
     process.execPath,
     ['--no-env-file', 'scripts/archive-list-posts.ts', '--dry-run', '--from', '2026-10-07', '--until', '2026-10-08'],
@@ -448,8 +443,7 @@ test('CLI dry run resolves daily query without authentication and rejects invali
   expect(JSON.parse(result.stdout)).toMatchObject({
     from: '2026-10-06T15:00:00.000Z',
     until: '2026-10-07T15:00:00.000Z',
-    daySlices: 1,
-    firstQuery: 'list:2019028800869413128 since:2026-10-06 until:2026-10-09'
+    query: 'list:2019028800869413128 since:2026-10-06 until:2026-10-09'
   })
   for (const options of [
     ['--from', '2026-02-30'],
@@ -466,7 +460,7 @@ test('CLI dry run resolves daily query without authentication and rejects invali
   }
 })
 
-test('three strict continuation replacement pairs finish a day with an empirical terminal reason', async () => {
+test('three strict continuation replacement pairs finish a range with an empirical terminal reason', async () => {
   const out = await output()
   let index = 0
   const result = await runArchive({
@@ -481,42 +475,36 @@ test('three strict continuation replacement pairs finish a day with an empirical
   })
   expect(result).toMatchObject({ complete: true, reason: 'search_exhausted', pages: 4, posts: 1 })
   const manifest = JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8'))
-  expect(manifest.days[0]).toMatchObject({
+  expect(manifest).toMatchObject({
     terminalReason: 'confirmed_cursor_only',
-    inWindowPosts: 1,
+    posts: 1,
     minTimestamp: '2026-10-07T23:00:00.000Z',
     maxTimestamp: '2026-10-07T23:00:00.000Z'
   })
   expect(manifest.exhaustionPolicy).toMatchObject({ version: 1, consecutiveReplacementPairs: 3 })
 })
 
-test('cursor-only confirmation reconstructs across resume and advances to the next day', async () => {
+test('cursor-only confirmation reconstructs across resume and ends the fixed range', async () => {
   const out = await output()
-  const twoDays = { ...scope, from: '2026-10-06T15:00:00.000Z' }
+  const range = { ...scope, from: '2026-10-06T15:00:00.000Z' }
   let index = 0
-  const search = async () => {
-    index++
-    return index === 1 ? page([rawTweet('1', '2026-10-07T00:00:00Z')], 'start') : replacementCursors(`cursor-${index}`)
-  }
-  expect(await runArchive({ scope: twoDays, out, maxPages: 3, delayMs: 0, search })).toMatchObject({
+  const search = async () =>
+    ++index === 1 ? page([rawTweet('1', '2026-10-07T00:00:00Z')], 'start') : replacementCursors(`cursor-${index}`)
+  expect(await runArchive({ scope: range, out, maxPages: 3, delayMs: 0, search })).toMatchObject({
     complete: false,
     pages: 3
   })
   const result = await runArchive({
-    scope: twoDays,
+    scope: range,
     out,
     resume: true,
     delayMs: 0,
-    search: async ({ cursor, since }) => {
-      if (cursor) {
-        expect(cursor).toBe('cursor-3')
-        return replacementCursors('cursor-4')
-      }
-      expect(since.format('YYYY-MM-DD')).toBe('2026-10-07')
-      return page([rawTweet('2')])
+    search: async ({ cursor }) => {
+      expect(cursor).toBe('cursor-3')
+      return replacementCursors('cursor-4')
     }
   })
-  expect(result).toMatchObject({ complete: true, pages: 5, posts: 2 })
+  expect(result).toMatchObject({ complete: true, pages: 4, posts: 1, coverageVerified: false })
 })
 
 test('tweets and empty AddEntries reset replacement-only confirmation', async () => {
@@ -710,22 +698,21 @@ test('module responses reset confirmation and unknown extra instructions fail cl
 
 type ProgressSnapshot = {
   date: string
-  completedDays: number
-  totalDays: number
+  seedPages: number
   pages: number
   posts: number
   status: string
   accounts: { key: string; authorId?: string; screenName: string; posts: number }[]
 }
 
-test('progress snapshots announce next JST day before its request and only report saved journal counts', async () => {
+test('progress reports the oldest in-scope new-query date and only durable counts', async () => {
   const out = await output()
-  const twoDays = { ...scope, from: '2026-10-06T15:00:00.000Z' }
+  const range = { ...scope, from: '2026-10-06T15:00:00.000Z' }
   const snapshots: ProgressSnapshot[] = []
   const durability: boolean[] = []
   let index = 0
   const options = {
-    scope: twoDays,
+    scope: range,
     out,
     delayMs: 0,
     onProgress: (value: ProgressSnapshot) => {
@@ -734,29 +721,19 @@ test('progress snapshots announce next JST day before its request and only repor
       durability.push(persisted.pages === value.pages && persisted.posts === value.posts)
     },
     search: async () => {
-      expect(snapshots.at(-1)).toMatchObject({
-        date: index ? '2026-10-08' : '2026-10-07',
-        completedDays: index,
-        pages: index,
-        posts: index
-      })
+      expect(snapshots.at(-1)).toMatchObject({ date: index ? '2026-10-08' : '-', pages: index, posts: index })
       index++
-      return page([rawTweet(String(index), index === 1 ? '2026-10-07T00:00:00Z' : '2026-10-08T00:00:00Z')])
+      return page(
+        [rawTweet(String(index), index === 1 ? '2026-10-08T00:00:00Z' : '2026-10-07T00:00:00Z')],
+        index === 1 ? 'next' : undefined
+      )
     }
   }
   expect(await runArchive(options)).toMatchObject({ complete: true, pages: 2, posts: 2 })
-  expect(snapshots[0]).toMatchObject({
-    date: '2026-10-07',
-    completedDays: 0,
-    totalDays: 2,
-    pages: 0,
-    posts: 0,
-    status: 'running'
-  })
+  expect(snapshots[0]).toMatchObject({ date: '-', seedPages: 0, pages: 0, posts: 0, status: 'running' })
   expect(snapshots.at(-1)).toMatchObject({
-    date: '2026-10-08',
-    completedDays: 2,
-    totalDays: 2,
+    date: '2026-10-07',
+    seedPages: 0,
     pages: 2,
     posts: 2,
     status: 'search_exhausted'
@@ -905,7 +882,7 @@ test('asynchronous display failures cannot prevent collection and progress leave
   expect(await readFile(join(out, 'scope.json'), 'utf8')).toBe(persistedScope)
 })
 
-test('request failure after advancing a day reports the attempted day rather than the prior saved page', async () => {
+test('request failure preserves the oldest observed query date', async () => {
   const out = await output()
   const snapshots: ProgressSnapshot[] = []
   let index = 0
@@ -918,13 +895,13 @@ test('request failure after advancing a day reports the attempted day rather tha
     },
     search: async () => {
       if (index++) throw new Error('Network failure')
-      return page([rawTweet('1', '2026-10-07T00:00:00Z')])
+      return page([rawTweet('1', '2026-10-07T00:00:00Z')], 'next')
     }
   }
   await runArchive(options)
   expect(snapshots.at(-1)).toMatchObject({
-    date: '2026-10-08',
-    completedDays: 1,
+    date: '2026-10-07',
+    seedPages: 0,
     pages: 1,
     posts: 1,
     status: 'request_failed'

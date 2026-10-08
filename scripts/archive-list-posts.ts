@@ -1,4 +1,5 @@
-import { isAbsolute, relative, resolve } from 'node:path'
+import { lstat, realpath } from 'node:fs/promises'
+import { relative, resolve } from 'node:path'
 import { parseArgs } from 'node:util'
 import { X_BEARER } from '@biccame/shared/x/transport'
 import { Client } from '../workers/bot/src/timeline/client'
@@ -8,11 +9,11 @@ import {
   ArchiveFailure,
   archiveDiagnostic,
   archiveQueryWindow,
-  archiveSlices,
   readArchiveScope,
   resolveArchiveScope,
   runArchive
 } from './lib/post-archive'
+import { assertSeedPathsDisjoint, isPathWithin, readLegacySeedScope } from './lib/post-archive-seed'
 
 const help = `Archive accessible X list search posts without event filtering or external writes.
 Usage: bun --no-env-file --env-file=/explicit/path/.dev.vars scripts/archive-list-posts.ts [options]
@@ -20,6 +21,7 @@ Usage: bun --no-env-file --env-file=/explicit/path/.dev.vars scripts/archive-lis
   --from YYYY-MM-DD Default: JST calendar date one year before run start
   --until YYYY-MM-DD Exclusive JST midnight; default: captured run start instant
   --out PATH       Directory under .cache (default: .cache/list-posts/<run timestamp>)
+  --seed-from PATH Copy schema2 raw journal into NEW output; inherit exact saved scope
   --resume         Use saved scope and continue from journal; explicit dates/list must match
   --max-pages N    SearchTimeline calls this run (default: 1000)
   --max-requests N SearchTimeline calls this run (default: 1000)
@@ -42,6 +44,7 @@ const main = async () => {
           from: { type: 'string' },
           until: { type: 'string' },
           out: { type: 'string' },
+          'seed-from': { type: 'string' },
           'max-pages': { type: 'string' },
           'max-requests': { type: 'string' },
           'delay-ms': { type: 'string' },
@@ -76,13 +79,37 @@ const main = async () => {
     return result
   }
   const cache = resolve('.cache')
-  const out = resolve(value('out') ?? `.cache/list-posts/${started.toISOString().replaceAll(':', '-')}`)
-  const descendant = relative(cache, out)
-  if (!descendant || descendant.startsWith('..') || isAbsolute(descendant)) throw new ArchiveFailure('invalid_params')
-  const options = { listId: value('list-id'), from: value('from'), until: value('until') }
+  const safePath = async (path: string) => {
+    const descendant = relative(cache, path)
+    if (!descendant || !isPathWithin(cache, path)) throw new ArchiveFailure('invalid_params')
+    let current = cache
+    for (const component of ['', ...descendant.split('/')]) {
+      if (component) current = resolve(current, component)
+      const stat = await lstat(current).catch((error: NodeJS.ErrnoException) => {
+        if (error.code !== 'ENOENT') throw error
+        return undefined
+      })
+      if (stat?.isSymbolicLink()) throw new ArchiveFailure('invalid_params')
+      if (stat) {
+        const actual = await realpath(current)
+        if (!isPathWithin(await realpath('.'), actual)) throw new ArchiveFailure('invalid_params')
+      }
+    }
+    return path
+  }
+  const out = await safePath(resolve(value('out') ?? `.cache/list-posts/${started.toISOString().replaceAll(':', '-')}`))
+  const rawSeedFrom = value('seed-from')
+  const seedFrom = rawSeedFrom === undefined ? undefined : await safePath(resolve(rawSeedFrom))
   const resume = flags.has('resume')
-  const scope = resume ? await readArchiveScope(out) : resolveArchiveScope(options, started)
-  if (resume) {
+  if (resume && seedFrom) throw new ArchiveFailure('invalid_params')
+  if (seedFrom) await assertSeedPathsDisjoint(seedFrom, out)
+  const options = { listId: value('list-id'), from: value('from'), until: value('until') }
+  const scope = seedFrom
+    ? await readLegacySeedScope(seedFrom)
+    : resume
+      ? await readArchiveScope(out)
+      : resolveArchiveScope(options, started)
+  if (resume || seedFrom) {
     const explicit = resolveArchiveScope(
       {
         listId: options.listId ?? scope.listId,
@@ -101,16 +128,15 @@ const main = async () => {
   const maxPages = number('max-pages', 1000)
   const maxRequests = number('max-requests', 1000)
   const delayMs = number('delay-ms', 1500)
-  const slices = archiveSlices(scope)
-  const window = archiveQueryWindow(slices[0])
+  const window = archiveQueryWindow(scope)
   if (flags.has('dry-run')) {
     console.log(
       JSON.stringify(
         {
           ...scope,
           out,
-          daySlices: slices.length,
-          firstQuery: `list:${scope.listId} since:${window.since.format('YYYY-MM-DD')} until:${window.until.add(1, 'day').format('YYYY-MM-DD')}`,
+          seedFrom,
+          query: `list:${scope.listId} since:${window.since.format('YYYY-MM-DD')} until:${window.until.add(1, 'day').format('YYYY-MM-DD')}`,
           maxPages,
           maxRequests,
           delayMs
@@ -142,6 +168,7 @@ const main = async () => {
       scope,
       out,
       resume,
+      seedFrom,
       maxPages,
       maxRequests,
       delayMs,

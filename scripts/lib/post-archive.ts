@@ -3,6 +3,12 @@ import { mkdir, open, readdir, readFile, rename, rm, writeFile } from 'node:fs/p
 import { join } from 'node:path'
 import type { Dayjs } from 'dayjs'
 import { dayjs } from '../../workers/bot/src/timeline/utils/dayjs'
+import {
+  assertSeedPathsDisjoint,
+  prepareSeedSnapshot,
+  type SeedDescriptor,
+  verifySeedSnapshot
+} from './post-archive-seed'
 
 export type ArchiveScope = { listId: string; from: string; until: string }
 export type ScopeOptions = { listId?: string; from?: string; until?: string }
@@ -62,16 +68,17 @@ export const archiveQueryWindow = (scope: ArchiveScope) => ({
   since: dayjs(scope.from).startOf('day').subtract(1, 'day'),
   until: dayjs(scope.until).subtract(1, 'millisecond').startOf('day').add(1, 'day')
 })
-const scopeRecord = (scope: ArchiveScope) => {
+const scopeRecord = (scope: ArchiveScope, seed?: SeedDescriptor) => {
   const window = archiveQueryWindow(scope)
   return {
-    schema: 2,
+    schema: 3,
     queryVersion: 1,
-    queryMode: 'jst_calendar_days',
+    queryMode: 'single_range',
     product: 'Latest',
     count: 20,
     exhaustionPolicy,
     ...scope,
+    ...(seed ? { seed } : {}),
     query: `list:${scope.listId} since:${window.since.format('YYYY-MM-DD')} until:${window.until.add(1, 'day').format('YYYY-MM-DD')}`
   }
 }
@@ -214,44 +221,47 @@ type Reason =
   | 'unsupported_payload'
   | 'repeated_cursor'
   | 'non_advancing'
-export type ArchiveResult = { complete: boolean; reason: Reason; pages: number; posts: number }
+export type ArchiveResult = {
+  complete: boolean
+  reason: Reason
+  pages: number
+  posts: number
+  seedPages: number
+  seedMatchedByQuery: number
+  seedOnlyPosts: number
+  terminalReason?: string
+  coverageVerified: false
+  queryOldestTimestamp?: string
+  requestFailure?: { kind: string; status?: number }
+}
 export type ArchiveAccount = { key: string; authorId?: string; screenName: string; posts: number }
 export type ArchiveProgress = {
   date: string
-  completedDays: number
-  totalDays: number
   pages: number
+  seedPages: number
   posts: number
   status: 'running' | Reason
   accounts: ArchiveAccount[]
 }
-export const archiveSlices = (scope: ArchiveScope): ArchiveScope[] => {
-  const slices: ArchiveScope[] = []
-  let from = scope.from
-  while (from < scope.until) {
-    const next = dayjs(from).startOf('day').add(1, 'day').toISOString()
-    const until = next < scope.until ? next : scope.until
-    slices.push({ ...scope, from, until })
-    from = until
-  }
-  return slices
-}
-const queryFor = (scope: ArchiveScope) => {
-  const window = archiveQueryWindow(scope)
-  return `list:${scope.listId} since:${window.since.format('YYYY-MM-DD')} until:${window.until.add(1, 'day').format('YYYY-MM-DD')}`
-}
 type Envelope = {
-  version: number
+  version: 2
   scopeFingerprint: string
   index: number
-  sliceIndex: number
   query: string
   requestCursor?: string
   response: unknown
 }
+type RowIndex = {
+  id: string
+  createdAt: string
+  author: { id?: string; screenName: string }
+  location: string
+  position: number
+}
 export const runArchive = async (options: {
   scope: ArchiveScope
   out: string
+  seedFrom?: string
   resume?: boolean
   maxPages?: number
   maxRequests?: number
@@ -265,29 +275,44 @@ export const runArchive = async (options: {
   const delayMs = options.delayMs ?? 1500
   for (const value of [maxPages, maxRequests])
     if (!Number.isSafeInteger(value) || value < 1) throw new ArchiveFailure('invalid_params')
-  if (!Number.isSafeInteger(delayMs) || delayMs < 0 || delayMs > 2147483647) throw new ArchiveFailure('invalid_params')
+  if (!Number.isSafeInteger(delayMs) || delayMs < 0 || delayMs > 2147483647 || (options.resume && options.seedFrom))
+    throw new ArchiveFailure('invalid_params')
+  if (options.seedFrom) await assertSeedPathsDisjoint(options.seedFrom, out)
   await mkdir(out, { recursive: true, mode: 0o700 })
   const lock = await open(join(out, '.lock'), 'wx', 0o600).catch(() => {
     throw new ArchiveFailure('locked')
   })
   try {
-    const record = scopeRecord(scope)
-    const fingerprint = hash(record)
+    let seed: SeedDescriptor | undefined
     if (options.resume) {
       const persisted = await readFile(join(out, 'scope.json'), 'utf8').catch(() => {
         throw new ArchiveFailure('missing_journal')
       })
-      if (persisted !== JSON.stringify(record)) throw new ArchiveFailure('scope_mismatch')
+      try {
+        seed = object(JSON.parse(persisted)).seed as SeedDescriptor | undefined
+      } catch {
+        throw new ArchiveFailure('corrupt_journal')
+      }
+      if (persisted !== JSON.stringify(scopeRecord(scope, seed))) throw new ArchiveFailure('scope_mismatch')
+      if (seed) await verifySeedSnapshot(join(out, 'seed'), seed, scope)
     } else {
       if ((await readdir(out)).some((name) => name !== '.lock')) throw new ArchiveFailure('output_exists')
-      await atomic(join(out, 'scope.json'), JSON.stringify(record))
+      if (options.seedFrom) seed = await prepareSeedSnapshot(options.seedFrom, out, scope)
+      await atomic(join(out, 'scope.json'), JSON.stringify(scopeRecord(scope, seed)))
     }
+    const record = scopeRecord(scope, seed)
+    const fingerprint = hash(record)
+    const query = record.query
     await mkdir(join(out, 'pages'), { recursive: true, mode: 0o700 })
-    const rows = new Map<string, ArchivedPost>()
+    const rows = new Map<string, RowIndex>()
     const accountCounts = new Map<string, ArchiveAccount>()
-    const accountKey = (post: ArchivedPost) =>
+    const locations: string[] = []
+    const seedIds = new Set<string>()
+    const querySeenIds = new Set<string>()
+    const seedMatched = new Set<string>()
+    const accountKey = (post: Pick<RowIndex, 'author'>) =>
       post.author.id ? `id:${post.author.id}` : `handle:${post.author.screenName.toLowerCase()}`
-    const savePost = (post: ArchivedPost) => {
+    const savePost = (post: ArchivedPost, location: string, position: number) => {
       const previous = rows.get(post.id)
       if (previous) {
         const key = accountKey(previous)
@@ -297,7 +322,13 @@ export const runArchive = async (options: {
           if (!account.posts) accountCounts.delete(key)
         }
       }
-      rows.set(post.id, post)
+      rows.set(post.id, {
+        id: post.id,
+        createdAt: post.createdAt,
+        author: { id: post.author.id, screenName: post.author.screenName },
+        location,
+        position
+      })
       const key = accountKey(post)
       const account = accountCounts.get(key)
       accountCounts.set(key, {
@@ -309,49 +340,43 @@ export const runArchive = async (options: {
     }
     const accounts = () =>
       [...accountCounts.values()]
-        .map((account) => ({ ...account }))
+        .map((value) => ({ ...value }))
         .sort((a, b) => b.posts - a.posts || (a.key < b.key ? -1 : a.key > b.key ? 1 : 0))
-    const dayIds = new Set<string>()
-    const slices = archiveSlices(scope)
-    const days: (ArchiveScope & {
-      complete: boolean
-      pages: number
-      inWindowPosts: number
-      minTimestamp?: string
-      maxTimestamp?: string
-      terminalReason?: string
-    })[] = slices.map((slice) => ({
-      ...slice,
-      complete: false,
-      pages: 0,
-      inWindowPosts: 0
-    }))
-    let sliceIndex = 0
-    let lastPageSlice = 0
-    const seenCursors = new Set<string>()
-    let nextCursor: string | undefined
+    const inScope = (post: ArchivedPost) => post.createdAt >= scope.from && post.createdAt < scope.until
     let pages = 0
     let requests = 0
-    let cursorOnlyStreak = 0
+    let nextCursor: string | undefined
+    let empty = 0
     let reason: Reason | undefined
-    let outsideWindow = 0
+    let terminalReason: string | undefined
+    let queryOldestTimestamp: string | undefined
     let minTimestamp: string | undefined
     let maxTimestamp: string | undefined
-    const processPage = (envelope: Envelope) => {
-      if (!envelope || typeof envelope !== 'object' || Array.isArray(envelope))
-        throw new ArchiveFailure('corrupt_journal')
+    let outsideWindow = 0
+    let requestFailure: { kind: string; status?: number } | undefined
+    const cursors = new Set<string>()
+    if (seed)
+      for (const file of seed.files.filter((file) => file.name.startsWith('pages/'))) {
+        const location = `seed/${file.name}`
+        locations.push(location)
+        const envelope = JSON.parse(await readFile(join(out, location), 'utf8'))
+        for (const [position, post] of parseArchivePage(envelope.response).posts.entries())
+          if (inScope(post)) {
+            seedIds.add(post.id)
+            savePost(post, location, position)
+          }
+      }
+    const processPage = (envelope: Envelope, location: string) => {
       if (
-        envelope.version !== 1 ||
+        envelope?.version !== 2 ||
         envelope.scopeFingerprint !== fingerprint ||
         envelope.index !== pages + 1 ||
-        envelope.sliceIndex !== sliceIndex ||
-        envelope.query !== queryFor(slices[sliceIndex]) ||
+        envelope.query !== query ||
         envelope.requestCursor !== nextCursor
       )
         throw new ArchiveFailure('corrupt_journal')
       pages++
-      lastPageSlice = sliceIndex
-      days[sliceIndex].pages++
+      locations.push(location)
       let parsed: ReturnType<typeof parseArchivePage>
       try {
         parsed = parseArchivePage(envelope.response)
@@ -360,48 +385,38 @@ export const runArchive = async (options: {
         return
       }
       let newIds = 0
-      for (const post of parsed.posts) {
-        const isNew = !dayIds.has(post.id)
-        if (!dayIds.has(post.id)) {
-          dayIds.add(post.id)
+      for (const [position, post] of parsed.posts.entries()) {
+        if (!querySeenIds.has(post.id)) {
+          querySeenIds.add(post.id)
           newIds++
         }
         minTimestamp = minTimestamp && minTimestamp < post.createdAt ? minTimestamp : post.createdAt
         maxTimestamp = maxTimestamp && maxTimestamp > post.createdAt ? maxTimestamp : post.createdAt
-        if (post.createdAt >= slices[sliceIndex].from && post.createdAt < slices[sliceIndex].until) {
-          savePost(post)
-          const day = days[sliceIndex]
-          if (isNew) day.inWindowPosts++
-          day.minTimestamp = day.minTimestamp && day.minTimestamp < post.createdAt ? day.minTimestamp : post.createdAt
-          day.maxTimestamp = day.maxTimestamp && day.maxTimestamp > post.createdAt ? day.maxTimestamp : post.createdAt
+        if (inScope(post)) {
+          savePost(post, location, position)
+          if (seedIds.has(post.id)) seedMatched.add(post.id)
+          queryOldestTimestamp =
+            queryOldestTimestamp && queryOldestTimestamp < post.createdAt ? queryOldestTimestamp : post.createdAt
         } else outsideWindow++
       }
-      cursorOnlyStreak = envelope.requestCursor && parsed.replacementPair ? cursorOnlyStreak + 1 : 0
-      const terminal = !parsed.nextCursor || cursorOnlyStreak >= exhaustionPolicy.consecutiveReplacementPairs
-      if (parsed.nextCursor && seenCursors.has(parsed.nextCursor)) reason = 'repeated_cursor'
-      else if (parsed.nextCursor && days[sliceIndex].pages > 1 && parsed.posts.length > 0 && newIds === 0)
-        reason = 'non_advancing'
-      else if (terminal) {
-        days[sliceIndex].complete = true
-        days[sliceIndex].terminalReason = parsed.terminated
+      empty = envelope.requestCursor && parsed.replacementPair ? empty + 1 : 0
+      if (parsed.nextCursor && cursors.has(parsed.nextCursor)) reason = 'repeated_cursor'
+      else if (parsed.nextCursor && pages > 1 && parsed.posts.length > 0 && newIds === 0) reason = 'non_advancing'
+      else if (!parsed.nextCursor || empty >= 3) {
+        terminalReason = parsed.terminated
           ? 'explicit_bottom'
           : parsed.nextCursor
             ? 'confirmed_cursor_only'
             : 'no_next_cursor'
-        sliceIndex++
-        dayIds.clear()
-        seenCursors.clear()
-        cursorOnlyStreak = 0
-        if (sliceIndex === slices.length) reason = 'search_exhausted'
+        reason = 'search_exhausted'
       }
-      const completedDay = terminal && (!reason || reason === 'search_exhausted')
-      if (!completedDay && parsed.nextCursor) seenCursors.add(parsed.nextCursor)
-      nextCursor = completedDay ? undefined : parsed.nextCursor
+      if (parsed.nextCursor) cursors.add(parsed.nextCursor)
+      nextCursor = reason === 'search_exhausted' ? undefined : parsed.nextCursor
     }
     const names = (await readdir(join(out, 'pages')))
       .filter((name) => name !== '.DS_Store' && !name.endsWith('.tmp'))
       .sort()
-    const previousCheckpoint = await readFile(join(out, 'checkpoint.json'), 'utf8')
+    const previous = await readFile(join(out, 'checkpoint.json'), 'utf8')
       .then((value) => {
         try {
           return object(JSON.parse(value))
@@ -410,7 +425,7 @@ export const runArchive = async (options: {
         }
       })
       .catch(() => undefined)
-    if (previousCheckpoint && typeof previousCheckpoint.pages === 'number' && previousCheckpoint.pages > names.length)
+    if (previous && typeof previous.pages === 'number' && previous.pages > names.length)
       throw new ArchiveFailure('missing_journal')
     for (const [index, name] of names.entries()) {
       if (name !== `${String(index + 1).padStart(6, '0')}.json` || reason) throw new ArchiveFailure('corrupt_journal')
@@ -420,40 +435,54 @@ export const runArchive = async (options: {
       } catch {
         throw new ArchiveFailure('corrupt_journal')
       }
-      processPage(envelope)
+      processPage(envelope, `pages/${name}`)
     }
-    const emitProgress = (dateIndex: number) => {
+    const emit = () => {
       if (!options.onProgress) return
       try {
-        const snapshot: ArchiveProgress = {
-          date: dayjs(slices[Math.min(dateIndex, slices.length - 1)].from).format('YYYY-MM-DD'),
-          completedDays: sliceIndex,
-          totalDays: slices.length,
-          pages,
-          posts: rows.size,
-          status: reason ?? 'running',
-          accounts: accounts()
-        }
-        void Promise.resolve(options.onProgress(snapshot)).catch(() => {})
+        void Promise.resolve(
+          options.onProgress({
+            date: minTimestamp ? dayjs(minTimestamp).format('YYYY-MM-DD') : '-',
+            pages,
+            seedPages: seed?.pages ?? 0,
+            posts: rows.size,
+            status: reason ?? 'running',
+            accounts: accounts()
+          })
+        ).catch(() => {})
       } catch {
-        /* Display failures must not interrupt journal collection. */
+        /* Display-only failure. */
       }
     }
-    const save = async (materializePosts = false, dateIndex = sliceIndex) => {
-      if (materializePosts) {
+    const save = async (materialize = false) => {
+      if (materialize) {
         const path = join(out, 'posts.jsonl')
         const file = await open(`${path}.tmp`, 'w', 0o600)
+        let emitted = 0
         try {
-          for (const row of rows.values()) await file.writeFile(`${JSON.stringify(row)}\n`)
+          for (const location of locations) {
+            const envelope = JSON.parse(await readFile(join(out, location), 'utf8'))
+            let posts: ArchivedPost[]
+            try {
+              posts = parseArchivePage(envelope.response).posts
+            } catch {
+              continue
+            }
+            for (const [position, post] of posts.entries()) {
+              const selected = rows.get(post.id)
+              if (selected?.location === location && selected.position === position) {
+                await file.writeFile(`${JSON.stringify(post)}\n`)
+                emitted++
+              }
+            }
+          }
         } finally {
           await file.close()
         }
+        if (emitted !== rows.size) throw new ArchiveFailure('corrupt_journal')
         await rename(`${path}.tmp`, path)
       }
-      await atomic(
-        join(out, 'checkpoint.json'),
-        JSON.stringify({ scopeFingerprint: fingerprint, pages, sliceIndex, nextCursor })
-      )
+      await atomic(join(out, 'checkpoint.json'), JSON.stringify({ scopeFingerprint: fingerprint, pages, nextCursor }))
       await atomic(
         join(out, 'manifest.json'),
         JSON.stringify(
@@ -462,56 +491,87 @@ export const runArchive = async (options: {
             scopeFingerprint: fingerprint,
             complete: reason === 'search_exhausted',
             reason: reason ?? 'budget',
+            coverageVerified: false,
+            terminalReason,
             pages,
+            seedPages: seed?.pages ?? 0,
             posts: rows.size,
             accounts: accounts(),
-            days,
             requestsThisRun: requests,
             outsideWindow,
             minTimestamp,
             maxTimestamp,
+            queryOldestTimestamp,
+            seedMatchedByQuery: seedMatched.size,
+            seedOnlyPosts: seedIds.size - seedMatched.size,
+            requestFailure,
             coverage:
-              'Accessible SearchTimeline scan ended under the recorded cursor policy; cursor-only confirmation is empirical. Historical completeness and date-operator timezone are not guaranteed.'
+              'One fixed SearchTimeline range ended under the recorded empirical cursor policy. Historical coverage has not been verified; seeded posts may not reappear in the new query.'
           },
           null,
           2
         )
       )
-      emitProgress(dateIndex)
+      emit()
     }
     await save(true)
-    while (!reason && requests < maxRequests && requests < maxPages) {
-      emitProgress(sliceIndex)
+    while (!reason && requests < maxPages && requests < maxRequests) {
+      emit()
       if (requests > 0 || pages > 0) await new Promise((resolve) => setTimeout(resolve, delayMs))
-      let response: unknown
       requests++
+      let response: unknown
       try {
-        response = await options.search({
-          ...archiveQueryWindow(slices[sliceIndex]),
-          listId: scope.listId,
-          cursor: nextCursor
-        })
-      } catch {
+        response = await options.search({ ...archiveQueryWindow(scope), listId: scope.listId, cursor: nextCursor })
+      } catch (error) {
         reason = 'request_failed'
+        requestFailure = { kind: 'unknown' }
+        if (error && typeof error === 'object') {
+          try {
+            const kind = Object.getOwnPropertyDescriptor(error, 'kind')?.value
+            const status = Object.getOwnPropertyDescriptor(error, 'status')?.value
+            requestFailure = {
+              kind:
+                typeof kind === 'string' && ['configuration', 'signature', 'rate_limited', 'timeline'].includes(kind)
+                  ? kind
+                  : 'unknown',
+              ...(typeof status === 'number' && Number.isInteger(status) && status >= 100 && status <= 599
+                ? { status }
+                : {})
+            }
+          } catch {
+            /* Error getters/proxies are not a diagnostic source. */
+          }
+        }
         break
       }
       const envelope: Envelope = {
-        version: 1,
+        version: 2,
         scopeFingerprint: fingerprint,
         index: pages + 1,
-        sliceIndex,
-        query: queryFor(slices[sliceIndex]),
+        query,
         requestCursor: nextCursor,
         response
       }
-      // Journal is authoritative. A crash before derived files are replaced is repaired on resume.
-      await atomic(join(out, 'pages', `${String(pages + 1).padStart(6, '0')}.json`), JSON.stringify(envelope))
-      processPage(envelope)
-      await save(false, lastPageSlice)
+      const location = `pages/${String(pages + 1).padStart(6, '0')}.json`
+      await atomic(join(out, location), JSON.stringify(envelope))
+      processPage(envelope, location)
+      await save()
     }
     reason ??= 'budget'
-    await save(true, reason === 'request_failed' ? sliceIndex : requests ? lastPageSlice : sliceIndex)
-    return { complete: reason === 'search_exhausted', reason, pages, posts: rows.size }
+    await save(true)
+    return {
+      complete: reason === 'search_exhausted',
+      reason,
+      pages,
+      posts: rows.size,
+      seedPages: seed?.pages ?? 0,
+      seedMatchedByQuery: seedMatched.size,
+      seedOnlyPosts: seedIds.size - seedMatched.size,
+      terminalReason,
+      coverageVerified: false,
+      queryOldestTimestamp,
+      requestFailure
+    }
   } finally {
     await lock.close()
     await rm(join(out, '.lock'))

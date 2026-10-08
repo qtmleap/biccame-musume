@@ -22,7 +22,7 @@ export const createArchiveProgressRenderer = (options: {
   return {
     update: (snapshot: ArchiveProgress) => {
       if (!enabled) return
-      const core = `${snapshot.date} ${snapshot.completedDays}/${snapshot.totalDays}d ${snapshot.posts}p ${snapshot.pages}pg`
+      const core = `${snapshot.date} ${snapshot.posts}p ${snapshot.pages}pg ${snapshot.seedPages}seed`
       const summary = `${core} ${snapshot.accounts.length}a ${snapshot.status}`
       const handles = snapshot.accounts.slice(0, 5).map((account) => {
         const handle = account.screenName.replace(/[^A-Za-z0-9_]/g, '').slice(0, 20) || '?'

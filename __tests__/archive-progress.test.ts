@@ -10,8 +10,7 @@ const createRenderer = (write: (value: string) => void, isTTY: boolean, columns 
 }
 const snapshot: Snapshot = {
   date: '2026-10-08',
-  completedDays: 12,
-  totalDays: 366,
+  seedPages: 50,
   pages: 123,
   posts: 456,
   status: 'running',
@@ -33,7 +32,7 @@ test('TTY progress overwrites one row and shows at most five leading account sum
     expect(value.startsWith('\r\x1b[2K')).toBe(true)
     expect(value).not.toContain('\n')
     expect(value).toContain('2026-10-08')
-    expect(value).toContain('12/366')
+    expect(value).toContain('50seed')
     expect(value).toContain('123')
     expect(value).toContain('@bic_0')
     expect(value).toContain('@bic_4')
@@ -53,7 +52,7 @@ test('narrow TTY truncates account summaries before core date and saved counts',
   const row = output[0].replace('\r\x1b[2K', '')
   expect(row.length).toBeLessThan(36)
   expect(row).toContain('2026-10-08')
-  expect(row).toContain('12/366')
+  expect(row).toContain('50seed')
   expect(row).toContain('456')
   expect(row).not.toContain('@bic_0')
 })

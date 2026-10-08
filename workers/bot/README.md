@@ -49,40 +49,39 @@ API本文・tweet本文・認証情報を失敗ログに含めません。Discor
 
 ## リスト投稿のローカル保存
 
-`bun --no-env-file run archive:list-posts --dry-run` で対象期間・クエリ・リクエスト上限を確認します。
-標準リストは `2019028800869413128`、開始は実行日のJST暦日から1年前の午前0時、終了は実行開始の固定時刻です。今日の投稿も対象です。
-`--from` / `--until` は厳密な `YYYY-MM-DD`、JST午前0時です。開始を含み、終了を含みません。未来の終了日は拒否します。
+`bun --no-env-file run archive:list-posts --dry-run` で固定期間とクエリを確認します。標準リストは `2019028800869413128`、開始は実行日のJST暦日から1年前の午前0時、終了は固定した実行開始時刻です。今日の投稿も対象です。
+`--from` / `--until` は厳密な `YYYY-MM-DD` のJST午前0時、開始を含み終了を含みません。未来の終了日は拒否します。
 
 ```sh
 bun --no-env-file --env-file=/absolute/path/.dev.vars scripts/archive-list-posts.ts \
-  --out .cache/list-posts/year --max-pages 10 --max-requests 10
+  --out .cache/list-posts/single-range --max-pages 10
 bun --no-env-file --env-file=/absolute/path/.dev.vars scripts/archive-list-posts.ts \
-  --out .cache/list-posts/year --resume --max-pages 100 --max-requests 100
+  --out .cache/list-posts/single-range --resume --max-pages 100
+# 旧日別cacheの生応答を保存したまま、新しい出力へ引き継ぐ
+bun --no-env-file --env-file=/absolute/path/.dev.vars scripts/archive-list-posts.ts \
+  --seed-from .cache/list-posts/year --out .cache/list-posts/single-range-seeded --max-pages 10
 ```
 
-認証は環境の `TWITTER_AUTH_TOKEN` / `TWITTER_CSRF_TOKEN`。`TWITTER_BEARER_TOKEN` は任意で、未指定なら共有transportの公開bearerを利用します。
-`--no-env-file` はBunの自動dotenv読込を抑止します。明示した `--env-file` は読めます。別workspaceの認証ファイルを自動探索しません。
-`bun --no-env-file run archive:list-posts` として起動側も自動dotenv読込を抑止し、認証はshell環境から渡すか上記の明示ファイル形式を使います。`--help` / `--dry-run` は認証・通信不要です。
+認証は環境の `TWITTER_AUTH_TOKEN` / `TWITTER_CSRF_TOKEN`、任意の `TWITTER_BEARER_TOKEN`（未指定なら共有transportの公開bearer）です。`--no-env-file` は自動dotenv読込を抑止し、明示的な `--env-file` は読めます。別workspaceの認証情報を自動探索しません。`--help` / `--dry-run` は認証・通信不要です。
 
-既存botと同じ署名付きSearchTimelineを使い、Latest/count20を維持します。APIの日付演算子のタイムゾーンは未検証なので、JSTの各暦日DごとにD-1からD+2まで保守的に余分に検索し、保存する正規化行は正確なJST瞬間で絞ります。
-空のAddEntriesにも次cursorがあれば継続し、5ページで打切りません。ツイートの日付順を仮定せずcursorを辿ります。実データで続いたcursor置換だけの応答は、継続リクエストで厳密なTop/Bottom置換ペアが3回連続したとき、その日の検索終了と判定します。途中のtweet・AddEntries・moduleは確認回数をリセットし、エラー・未知形式・cursor循環を終了扱いにしません。
-検索でアクセスできた投稿をキーワード・返信・ハッシュタグで除外せず保存します。LLM、D1、Discord、イベント更新、cron変更は行いません。
+既存botの署名付きSearchTimeline（Latest/count20）で、期間全体の固定クエリを1つ作り、cursorだけを進めます。日別分割・cursorリセットはしません。日付演算子のタイムゾーンは未検証なので、期間の外側だけ開始D-1〜終了D+2まで余分に検索し、正規化行は正確なJST瞬間で絞ります。本文・返信・ハッシュタグで除外せず保存し、LLM/D1/Discord/イベント更新/cron変更は行いません。
 
-出力先は `.cache` 配下だけです。`scope.json` はlist/期間/クエリ仕様の固定scope（schema 2、終了判定policyもfingerprintに含む）、`pages/000001.json` 以降はHTTP-200応答全文・日別slice/query・request cursorの先行保存journalです。
-`posts.jsonl` はID単位で重複を除いた本文・投稿時刻・投稿者・返信先ID・ハッシュタグ・URL・元のtweet metadataです。visibility wrapperと長文noteも保持します。
-`checkpoint.json` と `manifest.json` はページごとに保存する再構築可能な派生ファイルです。JSONLは起動/再開と通常終了時に生成し、強制終了直後はjournalより遅れることがあります。再開すると復元します。manifestに日別完了状態・終了理由・対象期間内の件数/時刻範囲・範囲外件数・最小/最大時刻・完了理由を記録します。秘密情報をscope/ログへ保存しませんが、投稿本文や公開metadataを含むので出力を共有する際は注意してください。
+空AddEntriesにも次cursorがあれば継続します。継続リクエストで厳密なTop/Bottom置換ペアのみが3回連続した場合は経験的な検索終了と判定し、途中のtweet/AddEntries/moduleは確認回数をリセットします。明示的Bottom終了・次cursorなしも終了理由を区別して保存します。未知形式/取得不可tweet/エラー/cursor循環/次cursor付き同一IDのみの非進行は未完了です。日付順や未検証の検索深度上限を仮定せず、最古の投稿が開始時刻より新しいだけで失敗扱いにしません。
+`complete` はcursor走査が終了した意味で、`coverageVerified:false` のままです。全期間・全履歴の網羅性を保証しません。
 
-標準上限は実行ごとに1000 SearchTimeline呼出し、間隔1500ms。`--max-pages` / `--max-requests` の小さい方で停止します。署名初期化の公開GETはこの上限に含みません。
-完了は「保存したpolicyで各日の検索を終了した」意味です。日別terminalReasonは明示的Bottom終了・次cursorなし・3回連続cursor置換確認を区別します。最後の判定は経験的なもので、正式なAPI網羅性や過去の全投稿が保存される保証ではありません。
-上限・認証/ネットワーク/429・未知形式/取得不可tweet・cursor循環・次cursorがある同一IDのみの非進行ページでは未完了を記録し、自動再試行しません。
-終了コードは検索終了0、保存済み未完了2、設定/ファイルエラー1です。
-実行中の進捗はstderrへ表示し、stdoutの最終JSONは維持します。ANSI対応TTYではCRで同じ行を更新し、端末幅を超えないよう上位最大5アカウントを省略します。JSTの対象日、完了日数/総日数、journalに保存済みの範囲内ユニーク投稿数・ページ数、観測アカウント数を表示します。redirect/TERM=dumbでは改行形式です。表示の失敗やstderrの切断は収集を停止しません。
-manifestのaccountsには全観測アカウントを件数降順・identity key順で記録します。安定したauthor IDを優先し、IDがない場合は大文字小文字を区別しないhandle bucketを別に保持します。同じIDのhandle変更はまとめますが、同じhandleを別IDが使う場合やIDなしの投稿は推測して結合しません。件数はtweet IDで重複除外し、範囲外投稿を含みません。
+出力先とseed元は同じCWDの `.cache` 配下で、同一・内包関係・symlinkを拒否します。schema3 `scope.json` は期間/list/query/policy/seed descriptorのfingerprintを固定し、`pages/` は新しい範囲クエリのHTTP-200生応答を先に保存するjournalです。schema2の旧出力をそのままresumeすることはできません。
+`--seed-from` は新規出力専用で、元の正確なfrom/until/listを引き継ぎます。明示したlist/日付が一致しない場合は拒否し、非午前0時の保存終了時刻に日付だけのuntilは一致しません。`--resume` との併用は禁止です。
+旧scope/fingerprint/連番/cursor/日別切替/応答形式/欠けたjournal/lockを読み取りで検証し、元ファイルを変更しません。最後に保存した対応済みのcursor循環/非進行停止ページも生投稿を引き継げますが、その後に続くページは拒否します。生応答とscopeをstagingへ複製し、hashと完了markerを検証してから `seed/` をatomic renameし、新scopeを公開します。旧cursorは引き継がず範囲クエリを最初から始めます。
+旧正規化JSONLではなく全生応答を全期間で再評価します。seedで得たIDと新queryの進行IDは別管理するため、既知のseed投稿が再度現れても非進行扱いにしません。新出力のseedは自己完結し、resume時にhash/markerを再検証します。元cacheの移動・削除に依存しません。
 
-`--resume` は保存済みscopeを使い、明示したlist/日付が違えば拒否します。翌日の再開でも終了時刻を延長しません。journalを検証しJSONL/checkpointを再構築します。旧schema/policyの出力は変更せず再開を拒否するので、新しい出力先を使います。
-同じ出力の同時実行は `.lock` で拒否します。プロセス強制終了後にlockが残った場合は、同じ出力を利用する処理が停止済みと確認してからその `.lock` だけを削除します。
-古いcursorが期限切れ・未知形式・非進行になった場合は、元の出力を残したまま新しい `.cache` ディレクトリを指定し、必要な日付範囲を再収集します。
-未知形式・取得不可tweetを保存したページは再開時も未完了になります。取得元エラーなら元の出力を保持して残りの日付範囲を新しい出力先で収集し、未対応の有効な形式ならparserを修正して検証します。壊れた/欠けたjournalや保存済みの失敗ページ、checkpointを削除・編集して成功扱いにしないでください。元データを保持した新しい収集は後でtweet IDで統合できます。CLI診断は固定分類だけを表示し、SDK本文・認証情報・stackを出しません。
+`posts.jsonl` はtweet IDで重複除外した本文・時刻・投稿者・返信先ID・hashtag・URL・元metadataです。同じIDは最後のjournal metadataを採用します。heapには軽いauthor/timeと最終journal位置だけを保持し、JSONLは各pageを再読してtempへstream後renameします。出力件数がID indexと一致しなければ失敗します。
+`checkpoint.json` / `manifest.json` はページごとに更新し、JSONLは開始/resume/通常終了時に生成します。強制終了直後はJSONLがjournalに遅れる場合があり、resumeで復元します。保存済みの失敗ページや欠けたjournalを削除・編集して成功扱いにしません。未対応形式はparser修正と検証、取得元エラーや期限切れcursorは元出力を残し必要な範囲を別の新出力へ収集します。
+
+manifestには新queryのpages、別集計のseedPages、全ユニーク投稿数、全accountの件数降順/identity key順一覧、最古の範囲内新query時刻、`seedMatchedByQuery` / `seedOnlyPosts`、固定分類のrequestFailureを保存します。安定したauthor IDを優先し、IDなしはcase-insensitive handle bucketを別保持します。同じIDのhandle変更はまとめ、別ID/IDなしを推測で結合しません。
+stderr進捗は新queryが返した最古のJST日付（範囲外の余分な取得も含み、未観測は `-`）、投稿数、新queryページ数、seedページ数、観測account数と上位最大5件です。範囲内最古時刻のcoverage診断とは分け、投稿数は範囲内だけです。日別完了率は表示しません。ANSI対応TTYではCRで同じ行を端末幅内に更新し、redirect/TERM=dumbは改行形式です。表示失敗/切断は収集を止めず、stdoutには最終JSON（完了理由・safe requestFailure・最古時刻・未検証coverage）を返します。
+
+標準上限は実行ごとに1000 SearchTimeline呼出し、間隔1500ms、`--max-pages` / `--max-requests` の小さい方で停止します。署名初期化の公開GETは上限外です。429/認証/ネットワーク失敗は自動retryせず、分類と整数HTTP statusだけを記録しcheckpointからresumeできます。秘密・SDK本文・stackを診断に出しません。投稿本文/公開metadataはcacheに含まれます。
+終了コードは走査終了0、保存済み未完了2、設定/ファイルエラー1です。同時実行は `.lock` で拒否します。強制終了の残存lockは所有処理の停止確認後にそのlockだけを削除します。
 
 ## デプロイ
 
