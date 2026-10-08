@@ -64,6 +64,7 @@ test('all-history List resume recovers older raw rows without changing captured 
     source: 'list' as const,
     out,
     resume: true,
+    verifyJournal: true,
     allHistory: true,
     delayMs: 0,
     onProgress: (value: { status: string; posts: number; accounts: { posts: number }[] }) => {

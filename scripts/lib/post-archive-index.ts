@@ -45,25 +45,31 @@ export class ListArchiveIndex {
   private pageChanged = false
   private db: Database
   private metadata: { key: string; state: ReplayState; count: number; generation: number; output?: { generation: number; stamp: string } }
-  private constructor(readonly out: string, private key: string, db: Database) {
+  private constructor(readonly out: string, private key: string, db: Database, stored: ListArchiveIndex['metadata'] | undefined, verifyJournal: boolean) {
     this.db = db
-    const stored = db.query('SELECT json FROM metadata WHERE id = 1').get() as { json: string } | null
-    this.metadata = stored ? JSON.parse(stored.json) : { key, state: { pages: 0, outsideWindow: 0 }, count: 0, generation: 0 }
-    if (!this.metadata || this.metadata.key !== key || !Number.isSafeInteger(this.metadata.state?.pages) ||
-      this.metadata.state.pages < 0 ||
+    this.metadata = stored ?? { key, state: { pages: 0, outsideWindow: 0 }, count: 0, generation: 0 }
+    if (this.metadata.key !== key) {
+      if (!verifyJournal) throw Object.assign(new Error('Cached index compatibility differs'), { code: 'index_incompatible' })
+      this.reset()
+    }
+    if (!Number.isSafeInteger(this.metadata.state?.pages) || this.metadata.state.pages < 0 ||
       (this.metadata.state.reason !== undefined && !['unsupported_payload', 'repeated_cursor', 'list_exhausted'].includes(this.metadata.state.reason)) ||
       !Number.isSafeInteger(this.metadata.count) || this.metadata.count < 0 ||
       !Number.isSafeInteger(this.metadata.generation) || this.metadata.generation < 0 ||
-      !Number.isSafeInteger(this.metadata.state.outsideWindow) || this.metadata.state.outsideWindow < 0) this.reset()
-    const rows = db.query('SELECT count(*) AS n FROM rows').get() as { n: number }
-    const posts = db.query('SELECT count(*) AS n FROM posts').get() as { n: number }
-    if (rows.n !== this.metadata.count || posts.n !== rows.n) this.reset()
+      !Number.isSafeInteger(this.metadata.state.outsideWindow) || this.metadata.state.outsideWindow < 0)
+      throw Object.assign(new Error('Cached index state is invalid'), { code: 'index_incompatible' })
+    if (!stored || this.metadata.state.pages === 0) this.reset()
+    if (verifyJournal) {
+      const rows = db.query('SELECT count(*) AS n FROM rows').get() as { n: number }
+      const posts = db.query('SELECT count(*) AS n FROM posts').get() as { n: number }
+      if (rows.n !== this.metadata.count || posts.n !== rows.n) this.reset()
+    }
     this.count = this.metadata.count
   }
-  static async open(out: string, key: string) {
+  static async open(out: string, key: string, options: { context: string; lockHeld: boolean; verifyJournal?: boolean }) {
     const { Database } = await import('bun:sqlite')
     const path = join(out, 'resume.sqlite')
-    const connect = () => {
+    const connect = async () => {
       const db = new Database(path, { create: true, strict: true })
       try {
         db.exec(`PRAGMA journal_mode=DELETE; PRAGMA synchronous=FULL;
@@ -74,11 +80,39 @@ export class ListArchiveIndex {
           CREATE TABLE IF NOT EXISTS accounts(key TEXT PRIMARY KEY, json TEXT NOT NULL);
           CREATE TABLE IF NOT EXISTS cursors(value TEXT PRIMARY KEY);
           CREATE TABLE IF NOT EXISTS pages(number INTEGER PRIMARY KEY, name TEXT NOT NULL, stamp TEXT NOT NULL, sha256 TEXT NOT NULL);`)
-        return new ListArchiveIndex(out, key, db)
+        const raw = db.query('SELECT json FROM metadata WHERE id=1').get() as { json: string } | null
+        let stored: ListArchiveIndex['metadata'] | undefined
+        try { stored = raw ? JSON.parse(raw.json) : undefined } catch {
+          throw Object.assign(new Error('Cached index metadata is invalid'), { code: 'index_incompatible' })
+        }
+        const bridgePath = join(out, 'resume-upgrade.json')
+        const contents = await readFile(bridgePath, 'utf8').catch(error => { if (missing(error)) return undefined; throw error })
+        if (contents !== undefined) {
+          let bridge: { version: number; from: string; to: string; context: string; bunVersion: string; schemaVersion: number; oldSourceSha256: { core: string; index: string } }
+          try { bridge = JSON.parse(contents) } catch {
+            throw Object.assign(new Error('Invalid index upgrade bridge'), { code: 'index_incompatible' })
+          }
+          const hex = (value: unknown) => typeof value === 'string' && /^[0-9a-f]{64}$/.test(value)
+          if (!options.lockHeld || !stored || !bridge || bridge.version !== 1 || bridge.schemaVersion !== schema ||
+            bridge.bunVersion !== process.versions.bun || bridge.context !== options.context || bridge.to !== key ||
+            !hex(bridge.from) || !hex(bridge.to) || !hex(bridge.context) || !hex(bridge.oldSourceSha256?.core) ||
+            !hex(bridge.oldSourceSha256?.index) || (stored.key !== bridge.from && stored.key !== bridge.to))
+            throw Object.assign(new Error('Index upgrade bridge does not match this cache'), { code: 'index_incompatible' })
+          if (stored.key === bridge.from && stored.key !== bridge.to) {
+            stored = { ...stored, key }
+            const promoted = stored
+            db.transaction(() => { db.query('UPDATE metadata SET json=? WHERE id=1').run(JSON.stringify(promoted)) })()
+          }
+          // A committed bridge can be cleaned up again after an interrupted unlink.
+          await rm(bridgePath)
+        }
+        return new ListArchiveIndex(out, key, db, stored, options.verifyJournal === true)
       } catch (error) { db.close(); throw error }
     }
-    try { return connect() } catch {
-      // Only the disposable projection is removed. Never touch authoritative raw pages.
+    try { return await connect() } catch (error) {
+      const code = error && typeof error === 'object' && 'code' in error ? error.code : undefined
+      if (code !== 'SQLITE_CORRUPT' && code !== 'SQLITE_NOTADB') throw error
+      // Only proven SQLite corruption permits replacing this disposable projection.
       await rm(path, { force: true })
       return connect()
     }
@@ -120,6 +154,27 @@ export class ListArchiveIndex {
     return (this.db.query('SELECT json FROM accounts').all() as { json: string }[]).map(value => JSON.parse(value.json))
   }
   get state() { return { ...this.metadata.state } }
+  async tail(): Promise<string[]> {
+    const pages = this.metadata.state.pages
+    if (pages > 0) {
+      const name = `${String(pages).padStart(6, '0')}.json`
+      const current = JSON.stringify(await stamp(join(this.out, 'pages', name)))
+      const saved = this.db.query('SELECT name,stamp,sha256 FROM pages WHERE number=?').get(pages) as PageRecord | null
+      if (!saved || saved.name !== name) throw Object.assign(new Error('Invalid cached frontier'), { code: 'corrupt_journal' })
+      if (current !== saved.stamp) {
+        const body = await readFile(join(this.out, 'pages', name))
+        if (digest(body) !== saved.sha256) throw Object.assign(new Error('Changed cached frontier'), { code: 'corrupt_journal' })
+        this.db.query('UPDATE pages SET stamp=? WHERE number=?').run(current, pages)
+      }
+    }
+    const names: string[] = []
+    for (let number = pages + 1; ; number++) {
+      const name = `${String(number).padStart(6, '0')}.json`
+      try { await stamp(join(this.out, 'pages', name)) } catch (error) { if (missing(error)) break; throw error }
+      names.push(name)
+    }
+    return names
+  }
   async validate(names: string[]): Promise<void> {
     if (this.metadata.state.pages > names.length) throw new Error('Missing indexed page')
     const stamps: string[] = new Array(names.length)

@@ -251,7 +251,7 @@ test('missing prefixes and checkpoint ahead stop before requests', async () => {
           calls++
           return page([])
         },
-        { resume: true }
+        { resume: true, verifyJournal: true }
       )
     ).rejects.toMatchObject({
       code: mutation === 'missing' || mutation === 'ahead' ? 'missing_journal' : 'corrupt_journal'
@@ -275,7 +275,7 @@ test('mtime-only changes hash just that page; changed content replays with the n
     return original(...args) as ReturnType<typeof fs.readFile>
   }) as typeof fs.readFile)
   try {
-    await run(out, async () => page([]), { resume: true })
+    await run(out, async () => page([]), { resume: true, verifyJournal: true })
     expect(reads).toEqual([path])
   } finally {
     spy.mockRestore()
@@ -288,7 +288,7 @@ test('mtime-only changes hash just that page; changed content replays with the n
     async () => {
       throw new Error('must not request')
     },
-    { resume: true }
+    { resume: true, verifyJournal: true }
   )
   expect((await lines(out)).map((post) => post.text)).toEqual(['changed', 'shop'])
 })
@@ -302,14 +302,14 @@ test('allHistory policy changes invalidate cached filtering and occurrence times
     async () => {
       throw new Error('must not request')
     },
-    { resume: true, allHistory: true }
+    { resume: true, allHistory: true, verifyJournal: true }
   )
   expect((await lines(out)).map((post) => post.id)).toEqual(['1', '2'])
   expect(JSON.parse(await fs.readFile(join(out, 'manifest.json'), 'utf8'))).toMatchObject({
     outsideWindow: 0,
     minTimestamp: '2020-01-01T00:00:00.000Z'
   })
-  await run(out, async () => page([]), { resume: true, allHistory: false })
+  await run(out, async () => page([]), { resume: true, allHistory: false, verifyJournal: true })
   expect((await lines(out)).map((post) => post.id)).toEqual(['1'])
 })
 
@@ -492,5 +492,233 @@ test('observed empty List over-capacity errors retry the same cursor and reject 
       pages: 1,
       posts: 0
     })
+  }
+})
+
+test('default warm resume checks only its frontier without listing or counting the saved prefix', async () => {
+  const out = await output()
+  let pageNumber = 0
+  await run(
+    out,
+    async () => {
+      pageNumber++
+      return page([tweet(String(pageNumber))], `cursor-${pageNumber}`)
+    },
+    { maxPages: 1000 }
+  )
+  const { Database } = await import('bun:sqlite')
+  const originalQuery = Database.prototype.query
+  const queries: string[] = []
+  const querySpy = spyOn(Database.prototype, 'query').mockImplementation(function (
+    this: InstanceType<typeof Database>,
+    ...args: Parameters<typeof originalQuery>
+  ) {
+    queries.push(String(args[0]))
+    return originalQuery.apply(this, args)
+  } as typeof originalQuery)
+  const originalReadDir = fs.readdir
+  const directories: string[] = []
+  const dirSpy = spyOn(fs, 'readdir').mockImplementation(((...args: Parameters<typeof fs.readdir>) => {
+    directories.push(String(args[0]))
+    return originalReadDir(...args)
+  }) as typeof fs.readdir)
+  const originalLstat = fs.lstat
+  const pageStats: string[] = []
+  const statSpy = spyOn(fs, 'lstat').mockImplementation(((...args: Parameters<typeof fs.lstat>) => {
+    if (String(args[0]).startsWith(join(out, 'pages') + '/')) pageStats.push(String(args[0]))
+    return originalLstat(...args)
+  }) as typeof fs.lstat)
+  try {
+    const result = await run(
+      out,
+      async ({ cursor }) => {
+        expect(cursor).toBe('cursor-1000')
+        throw new Error('stop')
+      },
+      { resume: true }
+    )
+    expect(result).toMatchObject({ pages: 1000, posts: 1000 })
+    expect(directories).not.toContain(join(out, 'pages'))
+    expect(pageStats).toEqual([join(out, 'pages/001000.json'), join(out, 'pages/001001.json')])
+    expect(queries.filter((sql) => /count\s*\(\s*\*|FROM pages ORDER BY/i.test(sql))).toEqual([])
+  } finally {
+    querySpy.mockRestore()
+    dirSpy.mockRestore()
+    statSpy.mockRestore()
+  }
+}, 20000)
+
+const metadata = async (out: string, change?: (value: Record<string, unknown>) => void) => {
+  const { Database } = await import('bun:sqlite')
+  const db = new Database(join(out, 'resume.sqlite'))
+  try {
+    const value = JSON.parse((db.query('SELECT json FROM metadata WHERE id=1').get() as { json: string }).json)
+    if (change) {
+      change(value)
+      db.query('UPDATE metadata SET json=? WHERE id=1').run(JSON.stringify(value))
+    }
+    return value
+  } finally {
+    db.close()
+  }
+}
+const upgrade = async (out: string, from: string, to: string) => {
+  const { createHash } = await import('node:crypto')
+  const checkpoint = JSON.parse(await fs.readFile(join(out, 'checkpoint.json'), 'utf8'))
+  const context = {
+    fingerprint: checkpoint.scopeFingerprint,
+    source: 'list',
+    allHistory: false,
+    from: scope.from,
+    until: scope.until
+  }
+  return {
+    version: 1,
+    from,
+    to,
+    context: createHash('sha256').update(JSON.stringify(context)).digest('hex'),
+    bunVersion: process.versions.bun,
+    schemaVersion: 1,
+    oldSourceSha256: { core: 'a'.repeat(64), index: 'b'.repeat(64) }
+  }
+}
+
+test('an exact upgrade bridge promotes only the cache key and its committed retry is idempotent', async () => {
+  const out = await output()
+  await run(out, async () => page([tweet('1')], 'next'))
+  const before = await metadata(out)
+  const stamp = await fs.stat(join(out, 'posts.jsonl'))
+  const old = '1'.repeat(64)
+  await metadata(out, (value) => {
+    value.key = old
+  })
+  const bridge = await upgrade(out, old, before.key)
+  const bridgePath = join(out, 'resume-upgrade.json')
+  await fs.writeFile(bridgePath, JSON.stringify(bridge))
+  const result = await run(
+    out,
+    async ({ cursor }) => {
+      expect(cursor).toBe('next')
+      throw new Error('stop')
+    },
+    { resume: true }
+  )
+  expect(result).toMatchObject({ pages: 1, posts: 1 })
+  expect(await metadata(out)).toEqual(before)
+  expect((await fs.stat(join(out, 'posts.jsonl'))).mtimeMs).toBe(stamp.mtimeMs)
+  await expect(fs.stat(bridgePath)).rejects.toMatchObject({ code: 'ENOENT' })
+  await fs.writeFile(bridgePath, JSON.stringify(bridge))
+  await run(
+    out,
+    async () => {
+      throw new Error('stop')
+    },
+    { resume: true }
+  )
+  expect(await metadata(out)).toEqual(before)
+  await expect(fs.stat(bridgePath)).rejects.toMatchObject({ code: 'ENOENT' })
+})
+
+test('missing, malformed and mismatched upgrade bridges preserve an incompatible index', async () => {
+  for (const variant of ['absent', 'malformed', 'from', 'to', 'context', 'bun', 'schema'] as const) {
+    const out = await output()
+    await run(out, async () => page([tweet('1')], 'next'))
+    const target = (await metadata(out)).key
+    const old = '1'.repeat(64)
+    await metadata(out, (value) => {
+      value.key = old
+    })
+    const before = await metadata(out)
+    const bridge = await upgrade(out, old, target)
+    if (variant === 'from') bridge.from = '2'.repeat(64)
+    if (variant === 'to') bridge.to = '2'.repeat(64)
+    if (variant === 'context') bridge.context = '2'.repeat(64)
+    if (variant === 'bun') bridge.bunVersion = '0.0.0'
+    if (variant === 'schema') bridge.schemaVersion = 99
+    if (variant !== 'absent')
+      await fs.writeFile(join(out, 'resume-upgrade.json'), variant === 'malformed' ? '{' : JSON.stringify(bridge))
+    let calls = 0
+    await expect(
+      run(
+        out,
+        async () => {
+          calls++
+          return page([])
+        },
+        { resume: true }
+      )
+    ).rejects.toMatchObject({ code: 'index_incompatible' })
+    expect(calls).toBe(0)
+    expect(await metadata(out)).toEqual(before)
+    expect((await lines(out)).map((post) => post.id)).toEqual(['1'])
+  }
+})
+
+test('explicit full verification rebuilds an incompatible key and detects older count and prefix damage', async () => {
+  const out = await output()
+  let calls = 0
+  await run(out, async () => [page([tweet('1')], 'a'), page([tweet('2')], 'b')][calls++], { maxPages: 2 })
+  const correct = await metadata(out)
+  await metadata(out, (value) => {
+    value.key = '1'.repeat(64)
+    value.count = 999
+  })
+  await run(
+    out,
+    async () => {
+      throw new Error('stop')
+    },
+    { resume: true, verifyJournal: true }
+  )
+  expect((await metadata(out)).key).toBe(correct.key)
+  expect((await metadata(out)).count).toBe(2)
+  await fs.rm(join(out, 'pages/000001.json'))
+  await expect(
+    run(
+      out,
+      async () => {
+        throw new Error('must not request')
+      },
+      { resume: true, verifyJournal: true }
+    )
+  ).rejects.toMatchObject({ code: 'missing_journal' })
+})
+
+test('default resume refuses a missing or changed frontier and an indexed terminal with unapplied tail', async () => {
+  for (const variant of ['missing', 'changed', 'terminal', 'ahead'] as const) {
+    const out = await output()
+    await run(out, async () => page([tweet('1')], variant === 'terminal' ? undefined : 'a'))
+    if (variant === 'missing') await fs.rm(join(out, 'pages/000001.json'))
+    if (variant === 'changed') {
+      const envelope = JSON.parse(await fs.readFile(join(out, 'pages/000001.json'), 'utf8'))
+      envelope.response = page([tweet('1', 'changed')], 'a')
+      await fs.writeFile(join(out, 'pages/000001.json'), JSON.stringify(envelope))
+    }
+    if (variant === 'terminal') {
+      const envelope = JSON.parse(await fs.readFile(join(out, 'pages/000001.json'), 'utf8'))
+      await fs.writeFile(
+        join(out, 'pages/000002.json'),
+        JSON.stringify({ ...envelope, index: 2, response: page([tweet('2')]) })
+      )
+    }
+    if (variant === 'ahead') {
+      const checkpoint = JSON.parse(await fs.readFile(join(out, 'checkpoint.json'), 'utf8'))
+      checkpoint.pages = 2
+      await fs.writeFile(join(out, 'checkpoint.json'), JSON.stringify(checkpoint))
+    }
+    let calls = 0
+    await expect(
+      run(
+        out,
+        async () => {
+          calls++
+          return page([])
+        },
+        { resume: true }
+      )
+    ).rejects.toMatchObject({
+      code: variant === 'missing' || variant === 'ahead' ? 'missing_journal' : 'corrupt_journal'
+    })
+    expect(calls).toBe(0)
   }
 })

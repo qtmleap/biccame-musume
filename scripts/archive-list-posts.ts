@@ -39,6 +39,7 @@ Usage: bun --no-env-file --env-file=/explicit/path/.dev.vars scripts/archive-lis
   --date-window    Keep the captured lower date (new output defaults to one year)
   --until YYYY-MM-DD Exclusive local JST filter; default: captured run start instant
   --out PATH       Directory under .cache (default: .cache/list-timeline/<run timestamp>)
+  --verify-journal Verify every saved raw page and rebuild an incompatible derived index
   --resume         Resume saved List capture; --from/--date-window retain its lower bound
   --max-pages N    ListLatestTweetsTimeline calls this run (default: 1000)
   --max-requests N ListLatestTweetsTimeline calls this run (default: 1000)
@@ -76,7 +77,8 @@ export const runArchiveCli = async (source: ArchiveSource = 'search') => {
                 'retry-delay-ms': { type: 'string' as const },
                 'max-retry-delay-ms': { type: 'string' as const },
                 'no-retry': { type: 'boolean' as const },
-                'date-window': { type: 'boolean' as const }
+                'date-window': { type: 'boolean' as const },
+                'verify-journal': { type: 'boolean' as const }
               }
             : {}),
           resume: { type: 'boolean' },
@@ -229,7 +231,7 @@ export const runArchiveCli = async (source: ArchiveSource = 'search') => {
     result = await runArchive({
       scope,
       source,
-      ...(source === 'list' ? { allHistory } : {}),
+      ...(source === 'list' ? { allHistory, verifyJournal: flags.has('verify-journal') } : {}),
       out,
       resume,
       seedFrom,
