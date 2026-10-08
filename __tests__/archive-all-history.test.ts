@@ -58,7 +58,7 @@ test('all-history List resume recovers older raw rows without changing captured 
   const originalLine = (await lines(out))[0]
   const originalScope = await readFile(join(out, 'scope.json'), 'utf8')
   const originalRaw = await readFile(join(out, 'pages', '000001.json'), 'utf8')
-  const progress: { posts: number; accounts: { posts: number }[] }[] = []
+  const progress: { status: string; posts: number; accounts: { posts: number }[] }[] = []
   const options = {
     scope,
     source: 'list' as const,
@@ -66,7 +66,7 @@ test('all-history List resume recovers older raw rows without changing captured 
     resume: true,
     allHistory: true,
     delayMs: 0,
-    onProgress: (value: { posts: number; accounts: { posts: number }[] }) => {
+    onProgress: (value: { status: string; posts: number; accounts: { posts: number }[] }) => {
       progress.push(value)
     },
     search: async ({ cursor }: { cursor?: string }) => {
@@ -87,7 +87,11 @@ test('all-history List resume recovers older raw rows without changing captured 
     effectiveScope: { from: null, until: scope.until }
   })
   expect(manifest.accounts).toEqual([{ key: 'id:42', authorId: '42', screenName: 'bic_test', posts: 3 }])
-  expect(progress[0]).toMatchObject({ posts: 2, accounts: [{ posts: 2 }] })
+  expect(progress[0]).toMatchObject({ status: 'rebuilding', posts: 0 })
+  expect(progress.find((snapshot) => snapshot.status !== 'rebuilding')).toMatchObject({
+    posts: 2,
+    accounts: [{ posts: 2 }]
+  })
   expect(progress.at(-1)).toMatchObject({ posts: 3, accounts: [{ posts: 3 }] })
 })
 
