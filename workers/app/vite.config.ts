@@ -10,6 +10,7 @@ import { intlayer } from 'vite-intlayer' // Add the plugin to the Vite plugin li
 import { VitePWA } from 'vite-plugin-pwa'
 import sitemap from 'vite-plugin-sitemap'
 import { linkLocalEnvironmentFiles, localEnvironmentFiles } from './local-env'
+import { eventDetectViewer } from '../../scripts/lib/event-detect/vite-plugin'
 import { appBotBinding } from '../../scripts/worker-bindings'
 
 const appRoot = import.meta.dirname
@@ -31,6 +32,8 @@ export default defineConfig(({ mode, command }) => {
       proxy: {}
     },
     plugins: [
+      // /__event-detect/ でイベント検出のデバッグビューワを開く（serve のみ）。Worker より先に処理させる
+      eventDetectViewer({ repoRoot, now: () => new Date().toISOString() }),
       {
         name: 'root-local-vars',
         configureServer(server) {
