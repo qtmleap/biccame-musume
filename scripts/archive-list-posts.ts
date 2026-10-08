@@ -35,10 +35,11 @@ Signer discovery makes additional public GET requests outside SearchTimeline bud
 const listHelp = `Archive accessible native X List timeline posts without event filtering or external writes.
 Usage: bun --no-env-file --env-file=/explicit/path/.dev.vars scripts/archive-list-timeline.ts [options]
   --list-id ID      Default: 2019028800869413128
-  --from YYYY-MM-DD Local filter; default: JST date one year before run start
+  --from YYYY-MM-DD Explicit local lower filter; absent means all older captured posts
+  --date-window    Keep the captured lower date (new output defaults to one year)
   --until YYYY-MM-DD Exclusive local JST filter; default: captured run start instant
   --out PATH       Directory under .cache (default: .cache/list-timeline/<run timestamp>)
-  --resume         Use saved List scope and continue from journal; explicit dates/list must match
+  --resume         Resume saved List capture; --from/--date-window retain its lower bound
   --max-pages N    ListLatestTweetsTimeline calls this run (default: 1000)
   --max-requests N ListLatestTweetsTimeline calls this run (default: 1000)
   --delay-ms N     Minimum request-start interval, including processing (default: 2000)
@@ -48,6 +49,8 @@ Usage: bun --no-env-file --env-file=/explicit/path/.dev.vars scripts/archive-lis
   --dry-run        Print resolved scope/endpoint; no credentials required, no network
   --help           Print this help
 Environment: TWITTER_AUTH_TOKEN, TWITTER_CSRF_TOKEN; optional TWITTER_BEARER_TOKEN.
+Default normalization includes all captured older history before the fixed until instant.
+Saved capture dates/fingerprint stay unchanged. --from or --date-window retains a lower bound.
 Dates are filtered locally. Pagination exhaustion does not verify historical coverage.
 --seed-from is unsupported. Signer discovery makes public GET requests outside List budgets.`
 
@@ -72,7 +75,8 @@ export const runArchiveCli = async (source: ArchiveSource = 'search') => {
             ? {
                 'retry-delay-ms': { type: 'string' as const },
                 'max-retry-delay-ms': { type: 'string' as const },
-                'no-retry': { type: 'boolean' as const }
+                'no-retry': { type: 'boolean' as const },
+                'date-window': { type: 'boolean' as const }
               }
             : {}),
           resume: { type: 'boolean' },
@@ -85,6 +89,7 @@ export const runArchiveCli = async (source: ArchiveSource = 'search') => {
     }
   })()
   const flags = new Map(Object.entries(parsed.values))
+  const allHistory = source === 'list' && !flags.has('from') && !flags.has('date-window')
   if (flags.has('help')) {
     console.log(source === 'list' ? listHelp : help)
     return
@@ -183,6 +188,9 @@ export const runArchiveCli = async (source: ArchiveSource = 'search') => {
                 queryMode: 'list_timeline',
                 endpoint: LIST_TIMELINE_ENDPOINT,
                 localDateFilter: true,
+                normalizationMode: allHistory ? 'all_history' : 'date_window',
+                captureScope: scope,
+                effectiveScope: { from: allHistory ? null : scope.from, until: scope.until },
                 coverageVerified: false
               }
             : {}),
@@ -221,6 +229,7 @@ export const runArchiveCli = async (source: ArchiveSource = 'search') => {
     result = await runArchive({
       scope,
       source,
+      ...(source === 'list' ? { allHistory } : {}),
       out,
       resume,
       seedFrom,

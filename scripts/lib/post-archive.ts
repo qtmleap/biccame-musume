@@ -408,6 +408,9 @@ export type ArchiveResult = {
   queryOldestTimestamp?: string
   topLevelOldestTimestamp?: string
   retriesThisRun?: number
+  normalizationMode?: 'all_history' | 'date_window'
+  captureScope?: ArchiveScope
+  effectiveScope?: { from: string | null; until: string }
   requestFailure?: { kind: string; status?: number }
 }
 export type ArchiveAccount = { key: string; authorId?: string; screenName: string; posts: number }
@@ -439,6 +442,7 @@ type RowIndex = {
 export const runArchive = async (options: {
   scope: ArchiveScope
   source?: ArchiveSource
+  allHistory?: boolean
   out: string
   seedFrom?: string
   resume?: boolean
@@ -455,6 +459,16 @@ export const runArchive = async (options: {
 }): Promise<ArchiveResult> => {
   const { scope, out } = options
   const source = options.source ?? 'search'
+  const allHistory = options.allHistory ?? false
+  if (allHistory && source !== 'list') throw new ArchiveFailure('invalid_params')
+  const normalization =
+    source === 'list'
+      ? {
+          normalizationMode: allHistory ? ('all_history' as const) : ('date_window' as const),
+          captureScope: { ...scope },
+          effectiveScope: { from: allHistory ? null : scope.from, until: scope.until }
+        }
+      : {}
   const maxPages = options.maxPages ?? 1000
   const maxRequests = options.maxRequests ?? 1000
   const delayMs = options.delayMs ?? (source === 'list' ? 2000 : 1500)
@@ -547,7 +561,7 @@ export const runArchive = async (options: {
       [...accountCounts.values()]
         .map((value) => ({ ...value }))
         .sort((a, b) => b.posts - a.posts || (a.key < b.key ? -1 : a.key > b.key ? 1 : 0))
-    const inScope = (post: ArchivedPost) => post.createdAt >= scope.from && post.createdAt < scope.until
+    const inScope = (post: ArchivedPost) => (allHistory || post.createdAt >= scope.from) && post.createdAt < scope.until
     let pages = 0
     let requests = 0
     let nextCursor: string | undefined
@@ -730,6 +744,7 @@ export const runArchive = async (options: {
         JSON.stringify(
           {
             ...record,
+            ...normalization,
             scopeFingerprint: fingerprint,
             complete: exhausted(),
             reason: reason ?? 'budget',
@@ -752,7 +767,9 @@ export const runArchive = async (options: {
             requestFailure,
             coverage:
               source === 'list'
-                ? 'Native List pagination ended only at explicit Bottom or no next cursor. Dates were filtered locally. Historical coverage and timeline ordering have not been verified.'
+                ? allHistory
+                  ? 'Native List pagination uses explicit Bottom or no next cursor for exhaustion. All returned posts before the captured upper instant were normalized. Historical coverage and timeline ordering have not been verified.'
+                  : 'Native List pagination uses explicit Bottom or no next cursor for exhaustion. The captured date window was applied locally. Historical coverage and timeline ordering have not been verified.'
                 : 'One fixed SearchTimeline range ended under the recorded empirical cursor policy. Historical coverage has not been verified; seeded posts may not reappear in the new query.'
           },
           null,
@@ -840,6 +857,7 @@ export const runArchive = async (options: {
     reason ??= 'budget'
     await save(true)
     return {
+      ...normalization,
       complete: exhausted(),
       reason,
       pages,

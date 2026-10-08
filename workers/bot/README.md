@@ -95,7 +95,9 @@ bun --no-env-file --env-file=/absolute/path/.dev.vars scripts/archive-list-timel
   --out .cache/list-timeline/year --resume --max-pages 10000 --max-requests 10000
 ```
 
-list IDと期間の既定値・JST境界・終了コードはSearch版と共通です。期間は取得後のローカル絞り込みで、サーバーへ日付検索は送りません。会話module内の親・返信・RTの生metadataも保存し、account集計には範囲内の会話参加者も含みます。進捗日付はトップレベルの単独tweetで観測した最古のJST日付です。会話moduleだけでは日付を更新せず、未観測は `-`、manifestのmin/maxには全投稿を含みます。日付順・1年分への到達を推定しません。
+list ID・終了時刻・JST境界・終了コードはSearch版と共通です。List CLIは既定で古い投稿も含め、正規化時に実行開始時刻 `until` より前の投稿を保存します。サーバーへ日付検索は送りません。会話module内の親・返信・RTの生metadataも保存し、account集計には正規化対象の会話参加者も含みます。進捗日付はトップレベルの単独tweetで観測した最古のJST日付です。会話moduleだけでは日付を更新せず、未観測は `-`、manifestのmin/maxには全投稿を含みます。日付順・全履歴の網羅性を推定しません。
+
+List CLIは `--from` を明示しない場合、既定で取得できた過去の全投稿を正規化します。保存済みの実行開始時刻 `until` は上限として維持し、`--from` または `--date-window` で期間内だけに戻せます。ライブラリAPIの `allHistory` は既定falseで、Searchではtrueを拒否します。resume時は古い生journalも同じ条件で再評価するため、1年以上前の投稿もJSONL・投稿数・account件数へ反映されます。`scope.json`・fingerprint・生journalを書き換えず、manifest/結果に元の `captureScope`、`normalizationMode`、下限nullの `effectiveScope` を記録します。保存された投稿数の増加は全履歴の網羅性を保証するものではありません。
 
 明示的Bottom終了または次cursorなしでのみ `list_exhausted` とし、`coverageVerified:false` のままです。空ページ・cursor置換ペア・既知IDだけの会話でも、新しいcursorがあれば継続します。cursor循環・予算終了・429・未知形式・取得不可tweet/tombstone/ShowMoreは未完了として生応答を残します。会話の展開取得は行いません。`--seed-from` は非対応で、Search版のcacheと相互resumeできません。
 
