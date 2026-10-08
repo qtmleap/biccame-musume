@@ -156,14 +156,23 @@ const isListDeadlineError = (response: unknown): boolean => {
         )
       )
         return false
-      if (
-        ![
+      const fieldBranch =
+        [
           ['legacy', 'retweeted_status_result', 'result'],
           ['core', 'user_results', 'result']
-        ].some((branch) => branch.every((part, index) => path[index + 11] === part)) ||
-        !safeField(path[14])
-      )
-        return false
+        ].some((branch) => branch.every((part, index) => path[index + 11] === part)) && safeField(path[14])
+      const mediaBranch =
+        path.length === 18 &&
+        path[11] === 'legacy' &&
+        (path[12] === 'entities' || path[12] === 'extended_entities') &&
+        path[13] === 'media' &&
+        typeof path[14] === 'number' &&
+        Number.isSafeInteger(path[14]) &&
+        path[14] >= 0 &&
+        path[15] === 'media_results' &&
+        path[16] === 'result' &&
+        path[17] === 'watch_info'
+      if (!fieldBranch && !mediaBranch) return false
       let value: unknown = data
       for (const [index, part] of path.entries()) {
         if (Array.isArray(value)) {

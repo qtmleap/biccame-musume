@@ -1283,6 +1283,162 @@ test('List deadline recovery discards partial IDs, dates and cursor and resumes 
   expect(await readFile(join(out, 'scope.json'), 'utf8')).toBe(scopeBytes)
 })
 
+const mediaWatchDeadlinePage = (
+  branches: ('entities' | 'extended_entities')[] = ['entities', 'extended_entities'],
+  mode: 'absent' | 'null' | 'mixed' = 'absent'
+) => {
+  const response = deadlinePage()
+  const legacyErrors = response.errors
+  const legacy =
+    response.data.list.tweets_timeline.timeline.instructions[0].entries[0].content.itemContent.tweet_results.result
+      .legacy
+  for (const branch of branches) {
+    const entities = Reflect.get(legacy, branch) ?? {}
+    Reflect.set(entities, 'media', [{ media_results: { result: mode === 'null' ? { watch_info: null } : {} } }])
+    Reflect.set(legacy, branch, entities)
+  }
+  const error = response.errors[0]
+  response.errors = branches.map((branch) => ({
+    ...error,
+    path: [...error.path.slice(0, 11), 'legacy', branch, 'media', 0, 'media_results', 'result', 'watch_info']
+  }))
+  if (mode === 'mixed') response.errors.unshift(...legacyErrors)
+  return response
+}
+
+test('List media watch deadlines retry the same cursor immediately and on resume without consuming partial data', async () => {
+  for (const mode of ['absent', 'null', 'mixed'] as const) {
+    for (const branches of [['entities'], ['extended_entities'], ['entities', 'extended_entities']] as const) {
+      const response = mediaWatchDeadlinePage([...branches], mode)
+      const out = await output()
+      let calls = 0
+      const requests: (string | undefined)[] = []
+      expect(
+        await runArchive({
+          source: 'list',
+          scope,
+          out,
+          allHistory: true,
+          delayMs: 0,
+          maxRequests: 3,
+          sleep: async () => {},
+          search: async ({ cursor }) => {
+            requests.push(cursor)
+            return [page([tweet('1')], 'failed-cursor'), response, page([tweet('2')], 'continued-cursor')][calls++]
+          }
+        })
+      ).toMatchObject({ reason: 'budget', posts: 2, pages: 3, retriesThisRun: 1 })
+      expect(requests).toEqual([undefined, 'failed-cursor', 'failed-cursor'])
+      expect((await rows(out)).map((row) => row.id)).toEqual(['1', '2'])
+      const failedBytes = await readFile(join(out, 'pages', '000002.json'), 'utf8')
+      const capturedScope = await readFile(join(out, 'scope.json'), 'utf8')
+      expect(
+        await runArchive({
+          source: 'list',
+          scope,
+          out,
+          allHistory: true,
+          resume: true,
+          delayMs: 0,
+          search: async ({ cursor }) => {
+            expect(cursor).toBe('continued-cursor')
+            return page([tweet('3')])
+          }
+        })
+      ).toMatchObject({ reason: 'list_exhausted', posts: 3 })
+      expect(await readFile(join(out, 'pages', '000002.json'), 'utf8')).toBe(failedBytes)
+      expect(await readFile(join(out, 'scope.json'), 'utf8')).toBe(capturedScope)
+
+      const stopped = await output()
+      expect(
+        await runArchive({
+          source: 'list',
+          scope,
+          out: stopped,
+          delayMs: 0,
+          retry: false,
+          search: async () => response
+        })
+      ).toMatchObject({ reason: 'request_failed', posts: 0, requestFailure: { kind: 'list_deadline' } })
+      expect(
+        await runArchive({
+          source: 'list',
+          scope,
+          out: stopped,
+          resume: true,
+          delayMs: 0,
+          search: async ({ cursor }) => {
+            expect(cursor).toBeUndefined()
+            return page([tweet('4')])
+          }
+        })
+      ).toMatchObject({ reason: 'list_exhausted', posts: 1 })
+    }
+  }
+})
+
+test('List media watch deadline recognition rejects malformed paths and mixed errors', async () => {
+  for (const invalid of [
+    'string',
+    'negative',
+    'fraction',
+    'unsafe',
+    'bounds',
+    'extra',
+    'short',
+    'wrong_field',
+    'wrong_branch',
+    'urls',
+    'non_null',
+    'missing_parent',
+    'empty_media',
+    'missing_media',
+    'object_media',
+    'authorization'
+  ]) {
+    const response = mediaWatchDeadlinePage()
+    const error = response.errors[1]
+    if (invalid === 'string') error.path[14] = '0'
+    if (invalid === 'negative') error.path[14] = -1
+    if (invalid === 'fraction') error.path[14] = 0.5
+    if (invalid === 'unsafe') error.path[14] = Number.MAX_SAFE_INTEGER + 1
+    if (invalid === 'bounds') error.path[14] = 1
+    if (invalid === 'extra') error.path.push('extra')
+    if (invalid === 'short') error.path.pop()
+    if (invalid === 'wrong_field') error.path[17] = 'other'
+    if (invalid === 'wrong_branch') error.path[12] = '__proto__'
+    if (invalid === 'urls') error.path[12] = 'urls'
+    if (invalid === 'authorization') error.name = 'AuthorizationError'
+    const legacy =
+      response.data.list.tweets_timeline.timeline.instructions[0].entries[0].content.itemContent.tweet_results.result
+        .legacy
+    const media = Reflect.get(legacy, 'extended_entities').media[0].media_results
+    if (invalid === 'non_null') Reflect.set(media.result, 'watch_info', {})
+    if (invalid === 'missing_parent') Reflect.deleteProperty(media, 'result')
+    const entities = Reflect.get(legacy, 'extended_entities')
+    if (invalid === 'empty_media') entities.media = []
+    if (invalid === 'missing_media') Reflect.deleteProperty(entities, 'media')
+    if (invalid === 'object_media') entities.media = { 0: { media_results: { result: {} } } }
+    let calls = 0
+    expect(
+      await runArchive({
+        source: 'list',
+        scope,
+        out: await output(),
+        delayMs: 0,
+        search: async () => {
+          calls++
+          return response
+        },
+        sleep: async () => {
+          throw new Error('Invalid deadline retried')
+        }
+      })
+    ).toMatchObject({ reason: 'unsupported_payload', posts: 0, retriesThisRun: 0 })
+    expect(calls).toBe(1)
+  }
+})
+
 test('List deadline attempts obey budgets and no-retry permits a later same-cursor manual resume', async () => {
   const out = await output()
   const waits: number[] = []
