@@ -11,7 +11,10 @@
     "./x/health": "./src/x/health.ts",
     "./x/transport": "./src/x/transport.ts",
     "./x/transaction": "./src/x/transaction/index.ts",
-    "./x/transaction/*": "./src/x/transaction/*.ts"
+    "./x/transaction/*": "./src/x/transaction/*.ts",
+    "./event-detect/clef": "./src/event-detect/clef.ts",
+    "./event-detect/filter": "./src/event-detect/filter.ts",
+    "./event-detect/post": "./src/event-detect/post.ts"
   },
   "dependencies": { "zod": "^4.4.3" }
 }
