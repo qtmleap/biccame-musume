@@ -46,6 +46,7 @@
     "build": "vite build",
     "build:bot": "vite build --config workers/bot/vite.config.ts",
     "deploy:bot": "bun scripts/deploy-bot.ts",
+    "event-detect": "bun scripts/event-detect.ts",
     "test:bot-rpc": "node --experimental-strip-types scripts/test-bot-rpc.ts && node --experimental-strip-types scripts/test-bot-daily-rpc.ts",
     "check:bot-stores": "bun scripts/generate-bot-stores.ts --check",
     "test:og-render": "bun scripts/test-og-render.ts",
