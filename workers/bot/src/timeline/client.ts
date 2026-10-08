@@ -25,7 +25,7 @@ type TwitterCredentials = {
   TWITTER_CSRF_TOKEN: string
 }
 
-type SearchTimelineParams = { since: Dayjs; until: Dayjs; cursor?: string }
+type SearchTimelineParams = { since: Dayjs; until: Dayjs; cursor?: string; listId?: string }
 
 import { DEFAULT_USER_AGENT } from '@biccame/shared/x/transaction/discovery'
 
@@ -38,8 +38,13 @@ const createTransaction = async (): Promise<Signer> => {
 
 export class Client {
   private readonly client: ZodiosInstance<typeof endpoints>
+  private rawClient?: Client
 
-  constructor(credentials: TwitterCredentials, createSigner: () => Promise<Signer> = createTransaction) {
+  constructor(
+    private readonly credentials: TwitterCredentials,
+    private readonly createSigner: () => Promise<Signer> = createTransaction,
+    rawResponse = false
+  ) {
     if (
       ![credentials.TWITTER_BEARER_TOKEN, credentials.TWITTER_AUTH_TOKEN, credentials.TWITTER_CSRF_TOKEN].every(
         (value) => typeof value === 'string' && value.trim()
@@ -47,7 +52,8 @@ export class Client {
     )
       throw new TimelineFailure('configuration')
     this.client = new Zodios('https://x.com', endpoints, {
-      transform: true,
+      transform: rawResponse ? 'request' : true,
+      validate: rawResponse ? 'request' : true,
       fetchOptions: {
         timeout: 30000,
         headers: {
@@ -88,13 +94,19 @@ export class Client {
     })
   }
 
-  search = async ({ since, until, cursor }: SearchTimelineParams): Promise<Post> => {
-    const query = `list:2019028800869413128 since:${since.format('YYYY-MM-DD')} until:${until.add(1, 'day').format('YYYY-MM-DD')}`
+  search = async ({ since, until, cursor, listId = '2019028800869413128' }: SearchTimelineParams): Promise<Post> => {
+    const query = `list:${listId} since:${since.format('YYYY-MM-DD')} until:${until.add(1, 'day').format('YYYY-MM-DD')}`
     try {
       return await this.client.searchTimeline({ queries: { variables: { rawQuery: query, cursor }, features: {} } })
     } catch (error) {
       if (error instanceof TimelineFailure) throw error
       throw new TimelineFailure('timeline')
     }
+  }
+
+  // Same signed request pipeline; archive callers validate only after saving the HTTP-200 body.
+  searchRaw = async (params: SearchTimelineParams): Promise<unknown> => {
+    if (!this.rawClient) this.rawClient = new Client(this.credentials, this.createSigner, true)
+    return this.rawClient.search(params)
   }
 }

@@ -47,6 +47,41 @@ Workersが`redirect: 'error'`を拒否するため`manual`を使い、3xxを成�
 API本文・tweet本文・認証情報を失敗ログに含めません。Discord 429/非2xxは固定分類で失敗させ、無制限の再帰再送を廃止しました。
 候補通知のallowed_mentionsは旧契約を維持し、抑止追加は別変更として扱います。
 
+## リスト投稿のローカル保存
+
+`bun --no-env-file run archive:list-posts --dry-run` で対象期間・クエリ・リクエスト上限を確認します。
+標準リストは `2019028800869413128`、開始は実行日のJST暦日から1年前の午前0時、終了は実行開始の固定時刻です。今日の投稿も対象です。
+`--from` / `--until` は厳密な `YYYY-MM-DD`、JST午前0時です。開始を含み、終了を含みません。未来の終了日は拒否します。
+
+```sh
+bun --no-env-file --env-file=/absolute/path/.dev.vars scripts/archive-list-posts.ts \
+  --out .cache/list-posts/year --max-pages 10 --max-requests 10
+bun --no-env-file --env-file=/absolute/path/.dev.vars scripts/archive-list-posts.ts \
+  --out .cache/list-posts/year --resume --max-pages 100 --max-requests 100
+```
+
+認証は環境の `TWITTER_AUTH_TOKEN` / `TWITTER_CSRF_TOKEN`。`TWITTER_BEARER_TOKEN` は任意で、未指定なら共有transportの公開bearerを利用します。
+`--no-env-file` はBunの自動dotenv読込を抑止します。明示した `--env-file` は読めます。別workspaceの認証ファイルを自動探索しません。
+`bun --no-env-file run archive:list-posts` として起動側も自動dotenv読込を抑止し、認証はshell環境から渡すか上記の明示ファイル形式を使います。`--help` / `--dry-run` は認証・通信不要です。
+
+既存botと同じ署名付きSearchTimelineを使い、Latest/count20を維持します。APIの日付演算子のタイムゾーンは未検証なので、JSTの各暦日DごとにD-1からD+2まで保守的に余分に検索し、保存する正規化行は正確なJST瞬間で絞ります。
+空ページにも次cursorがあれば継続し、5ページで打切りません。ツイートの日付順を仮定せずcursorを辿ります。
+検索でアクセスできた投稿をキーワード・返信・ハッシュタグで除外せず保存します。LLM、D1、Discord、イベント更新、cron変更は行いません。
+
+出力先は `.cache` 配下だけです。`scope.json` はlist/期間/クエリ仕様の固定scope、`pages/000001.json` 以降はHTTP-200応答全文・日別slice/query・request cursorの先行保存journalです。
+`posts.jsonl` はID単位で重複を除いた本文・投稿時刻・投稿者・返信先ID・ハッシュタグ・URL・元のtweet metadataです。visibility wrapperと長文noteも保持します。
+`checkpoint.json` と `manifest.json` はページごとに保存する再構築可能な派生ファイルです。JSONLは起動/再開と通常終了時に生成し、強制終了直後はjournalより遅れることがあります。再開すると復元します。manifestに日別完了状態・範囲外件数・最小/最大時刻・完了理由を記録します。秘密情報をscope/ログへ保存しませんが、投稿本文や公開metadataを含むので出力を共有する際は注意してください。
+
+標準上限は実行ごとに1000 SearchTimeline呼出し、間隔1500ms。`--max-pages` / `--max-requests` の小さい方で停止します。署名初期化の公開GETはこの上限に含みません。
+完了は「アクセス可能な検索cursorを使い切った」意味であり、過去の全投稿が網羅される保証ではありません。
+上限・認証/ネットワーク/429・未知形式/取得不可tweet・cursor循環・同一IDのみの非進行ページでは未完了を記録し、自動再試行しません。
+終了コードは検索終了0、保存済み未完了2、設定/ファイルエラー1です。
+
+`--resume` は保存済みscopeを使い、明示したlist/日付が違えば拒否します。翌日の再開でも終了時刻を延長しません。journalを検証しJSONL/checkpointを再構築します。
+同じ出力の同時実行は `.lock` で拒否します。プロセス強制終了後にlockが残った場合は、同じ出力を利用する処理が停止済みと確認してからその `.lock` だけを削除します。
+古いcursorが期限切れ・未知形式・非進行になった場合は、元の出力を残したまま新しい `.cache` ディレクトリを指定し、必要な日付範囲を再収集します。
+壊れた/欠けたjournalを編集して成功扱いにすることは避けてください。元データを保持した新しい収集は後でtweet IDで統合できます。
+
 ## デプロイ
 
 同名Workerを継承します: production=`musume-workers`、staging=`musume-workers-staging`。

@@ -53,7 +53,8 @@
     "preview:post-images": "bun --preload ./scripts/virtual-characters-plugin.ts scripts/render-post-samples.tsx",
     "typecheck": "tsc --noEmit && tsc --noEmit -p workers/bot/tsconfig.json",
     "test": "bun test && bun test ./packages/shared/src/x/transport.test.ts",
-    "test:app-build": "BICCAME_VERIFY_BUILD=1 bun test __tests__/app-build-config.test.ts"
+    "test:app-build": "BICCAME_VERIFY_BUILD=1 bun test __tests__/app-build-config.test.ts",
+    "archive:list-posts": "bun --no-env-file scripts/archive-list-posts.ts"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "~1.54.0",
