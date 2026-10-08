@@ -3,6 +3,7 @@ import { parseArgs } from 'node:util'
 import { X_BEARER } from '@biccame/shared/x/transport'
 import { Client } from '../workers/bot/src/timeline/client'
 import { dayjs } from '../workers/bot/src/timeline/utils/dayjs'
+import { createArchiveProgressRenderer } from './lib/archive-progress'
 import {
   ArchiveFailure,
   archiveDiagnostic,
@@ -120,12 +121,36 @@ const main = async () => {
     )
     return
   }
-  const client = new Client({
-    TWITTER_AUTH_TOKEN: process.env.TWITTER_AUTH_TOKEN ?? '',
-    TWITTER_CSRF_TOKEN: process.env.TWITTER_CSRF_TOKEN ?? '',
-    TWITTER_BEARER_TOKEN: process.env.TWITTER_BEARER_TOKEN ?? X_BEARER
+  const progress = createArchiveProgressRenderer({
+    write: (value) => {
+      process.stderr.write(value)
+    },
+    isTTY: Boolean(process.stderr.isTTY),
+    ansi: process.env.TERM !== 'dumb',
+    columns: () => process.stderr.columns
   })
-  const result = await runArchive({ scope, out, resume, maxPages, maxRequests, delayMs, search: client.searchRaw })
+  // A broken progress pipe must not stop collection or leave its output locked.
+  process.stderr.on('error', () => progress.disable())
+  let result: Awaited<ReturnType<typeof runArchive>>
+  try {
+    const client = new Client({
+      TWITTER_AUTH_TOKEN: process.env.TWITTER_AUTH_TOKEN ?? '',
+      TWITTER_CSRF_TOKEN: process.env.TWITTER_CSRF_TOKEN ?? '',
+      TWITTER_BEARER_TOKEN: process.env.TWITTER_BEARER_TOKEN ?? X_BEARER
+    })
+    result = await runArchive({
+      scope,
+      out,
+      resume,
+      maxPages,
+      maxRequests,
+      delayMs,
+      search: client.searchRaw,
+      onProgress: progress.update
+    })
+  } finally {
+    progress.finish()
+  }
   console.log(JSON.stringify({ ...result, out }))
   if (!result.complete) process.exitCode = 2
 }

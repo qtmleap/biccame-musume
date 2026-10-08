@@ -76,6 +76,8 @@ bun --no-env-file --env-file=/absolute/path/.dev.vars scripts/archive-list-posts
 完了は「保存したpolicyで各日の検索を終了した」意味です。日別terminalReasonは明示的Bottom終了・次cursorなし・3回連続cursor置換確認を区別します。最後の判定は経験的なもので、正式なAPI網羅性や過去の全投稿が保存される保証ではありません。
 上限・認証/ネットワーク/429・未知形式/取得不可tweet・cursor循環・次cursorがある同一IDのみの非進行ページでは未完了を記録し、自動再試行しません。
 終了コードは検索終了0、保存済み未完了2、設定/ファイルエラー1です。
+実行中の進捗はstderrへ表示し、stdoutの最終JSONは維持します。ANSI対応TTYではCRで同じ行を更新し、端末幅を超えないよう上位最大5アカウントを省略します。JSTの対象日、完了日数/総日数、journalに保存済みの範囲内ユニーク投稿数・ページ数、観測アカウント数を表示します。redirect/TERM=dumbでは改行形式です。表示の失敗やstderrの切断は収集を停止しません。
+manifestのaccountsには全観測アカウントを件数降順・identity key順で記録します。安定したauthor IDを優先し、IDがない場合は大文字小文字を区別しないhandle bucketを別に保持します。同じIDのhandle変更はまとめますが、同じhandleを別IDが使う場合やIDなしの投稿は推測して結合しません。件数はtweet IDで重複除外し、範囲外投稿を含みません。
 
 `--resume` は保存済みscopeを使い、明示したlist/日付が違えば拒否します。翌日の再開でも終了時刻を延長しません。journalを検証しJSONL/checkpointを再構築します。旧schema/policyの出力は変更せず再開を拒否するので、新しい出力先を使います。
 同じ出力の同時実行は `.lock` で拒否します。プロセス強制終了後にlockが残った場合は、同じ出力を利用する処理が停止済みと確認してからその `.lock` だけを削除します。

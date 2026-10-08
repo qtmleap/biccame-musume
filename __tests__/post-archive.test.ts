@@ -1,5 +1,6 @@
 import { afterEach, expect, spyOn, test } from 'bun:test'
 import { spawnSync } from 'node:child_process'
+import { readFileSync } from 'node:fs'
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -704,5 +705,228 @@ test('module responses reset confirmation and unknown extra instructions fail cl
   expect(await runArchive({ scope, out: other, delayMs: 0, search: async () => unknown })).toMatchObject({
     complete: false,
     reason: 'unsupported_payload'
+  })
+})
+
+type ProgressSnapshot = {
+  date: string
+  completedDays: number
+  totalDays: number
+  pages: number
+  posts: number
+  status: string
+  accounts: { key: string; authorId?: string; screenName: string; posts: number }[]
+}
+
+test('progress snapshots announce next JST day before its request and only report saved journal counts', async () => {
+  const out = await output()
+  const twoDays = { ...scope, from: '2026-10-06T15:00:00.000Z' }
+  const snapshots: ProgressSnapshot[] = []
+  const durability: boolean[] = []
+  let index = 0
+  const options = {
+    scope: twoDays,
+    out,
+    delayMs: 0,
+    onProgress: (value: ProgressSnapshot) => {
+      snapshots.push(value)
+      const persisted = JSON.parse(readFileSync(join(out, 'manifest.json'), 'utf8'))
+      durability.push(persisted.pages === value.pages && persisted.posts === value.posts)
+    },
+    search: async () => {
+      expect(snapshots.at(-1)).toMatchObject({
+        date: index ? '2026-10-08' : '2026-10-07',
+        completedDays: index,
+        pages: index,
+        posts: index
+      })
+      index++
+      return page([rawTweet(String(index), index === 1 ? '2026-10-07T00:00:00Z' : '2026-10-08T00:00:00Z')])
+    }
+  }
+  expect(await runArchive(options)).toMatchObject({ complete: true, pages: 2, posts: 2 })
+  expect(snapshots[0]).toMatchObject({
+    date: '2026-10-07',
+    completedDays: 0,
+    totalDays: 2,
+    pages: 0,
+    posts: 0,
+    status: 'running'
+  })
+  expect(snapshots.at(-1)).toMatchObject({
+    date: '2026-10-08',
+    completedDays: 2,
+    totalDays: 2,
+    pages: 2,
+    posts: 2,
+    status: 'search_exhausted'
+  })
+  expect(durability).toHaveLength(snapshots.length)
+  expect(durability.every(Boolean)).toBe(true)
+})
+
+test('account totals dedupe IDs, exclude overfetch and distinguish stable IDs from fallback handles', async () => {
+  const out = await output()
+  const authored = (id: string, authorId: string | undefined, handle: string, createdAt?: string) => {
+    const tweet = rawTweet(id, createdAt)
+    return {
+      ...tweet,
+      core: {
+        user_results: {
+          result: {
+            ...tweet.core.user_results.result,
+            rest_id: authorId,
+            core: { name: '店', screen_name: handle }
+          }
+        }
+      }
+    }
+  }
+  const response = page([
+    authored('1', '42', 'bic_old'),
+    authored('1', '42', 'bic_old'),
+    authored('2', '42', 'bic_new'),
+    authored('3', '99', 'bic_new'),
+    authored('4', undefined, 'BIC_NEW'),
+    authored('5', undefined, 'bic_new'),
+    authored('6', '55', 'outside', '2026-10-07T00:00:00Z')
+  ])
+  const snapshots: ProgressSnapshot[] = []
+  const options = {
+    scope,
+    out,
+    delayMs: 0,
+    search: async () => response,
+    onProgress: (value: ProgressSnapshot) => {
+      snapshots.push(value)
+    }
+  }
+  await runArchive(options)
+  const manifest = JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8'))
+  expect(manifest.accounts).toEqual([
+    { key: 'handle:bic_new', screenName: 'bic_new', posts: 2 },
+    { key: 'id:42', authorId: '42', screenName: 'bic_new', posts: 2 },
+    { key: 'id:99', authorId: '99', screenName: 'bic_new', posts: 1 }
+  ])
+  expect(snapshots.at(-1)).toMatchObject({ posts: 5, accounts: manifest.accounts })
+})
+
+test('resume reconstructs account progress before the next request and callback exceptions are harmless', async () => {
+  const out = await output()
+  await runArchive({ scope, out, maxPages: 1, delayMs: 0, search: async () => page([rawTweet('1')], 'next') })
+  const snapshots: ProgressSnapshot[] = []
+  const options = {
+    scope,
+    out,
+    resume: true,
+    delayMs: 0,
+    onProgress: (value: ProgressSnapshot) => {
+      snapshots.push(value)
+      throw new Error('Broken display callback')
+    },
+    search: async () => {
+      expect(snapshots[0]).toMatchObject({
+        pages: 1,
+        posts: 1,
+        status: 'running',
+        accounts: [{ key: 'id:42', posts: 1 }]
+      })
+      return page([rawTweet('1'), rawTweet('2')])
+    }
+  }
+  expect(await runArchive(options)).toMatchObject({ complete: true, pages: 2, posts: 2 })
+  expect(snapshots.at(-1)).toMatchObject({ posts: 2, accounts: [{ key: 'id:42', posts: 2 }] })
+  expect(snapshots[0]).toMatchObject({ posts: 1, accounts: [{ key: 'id:42', posts: 1 }] })
+})
+
+test('progress final status distinguishes budget and request failure without exposing the cause', async () => {
+  for (const networkFailure of [false, true]) {
+    const out = await output()
+    const snapshots: ProgressSnapshot[] = []
+    const options = {
+      scope,
+      out,
+      maxPages: 1,
+      delayMs: 0,
+      onProgress: (value: ProgressSnapshot) => {
+        snapshots.push(value)
+      },
+      search: async () => {
+        if (networkFailure) throw new Error('secret-cookie')
+        return page([rawTweet('1')], 'next')
+      }
+    }
+    await runArchive(options)
+    expect(snapshots.at(-1)).toMatchObject({ status: networkFailure ? 'request_failed' : 'budget' })
+    expect(JSON.stringify(snapshots)).not.toContain('secret-cookie')
+  }
+})
+
+test('duplicate metadata refresh moves account contribution once and display mutation cannot change accounting', async () => {
+  const out = await output()
+  const refreshed = rawTweet('1')
+  refreshed.core.user_results.result.rest_id = '99'
+  refreshed.core.user_results.result.core.screen_name = 'bic_updated'
+  const other = rawTweet('2')
+  other.core.user_results.result.rest_id = '99'
+  other.core.user_results.result.core.screen_name = 'bic_updated'
+  let index = 0
+  const options = {
+    scope,
+    out,
+    delayMs: 0,
+    search: async () => (index++ === 0 ? page([rawTweet('1')], 'next') : page([refreshed, other])),
+    onProgress: (snapshot: ProgressSnapshot) => {
+      if (snapshot.accounts[0]) snapshot.accounts[0].posts = 999
+      snapshot.accounts.splice(0)
+    }
+  }
+  expect(await runArchive(options)).toMatchObject({ complete: true, posts: 2 })
+  const manifest = JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8'))
+  expect(manifest.accounts).toEqual([{ key: 'id:99', authorId: '99', screenName: 'bic_updated', posts: 2 }])
+})
+
+test('asynchronous display failures cannot prevent collection and progress leaves scope bytes unchanged', async () => {
+  const out = await output()
+  await runArchive({ scope, out, maxPages: 1, delayMs: 0, search: async () => page([rawTweet('1')], 'next') })
+  const persistedScope = await readFile(join(out, 'scope.json'), 'utf8')
+  expect(
+    await runArchive({
+      scope,
+      out,
+      resume: true,
+      delayMs: 0,
+      search: async () => page([rawTweet('2')]),
+      onProgress: async () => {
+        throw new Error('Asynchronous display error')
+      }
+    })
+  ).toMatchObject({ complete: true, posts: 2 })
+  expect(await readFile(join(out, 'scope.json'), 'utf8')).toBe(persistedScope)
+})
+
+test('request failure after advancing a day reports the attempted day rather than the prior saved page', async () => {
+  const out = await output()
+  const snapshots: ProgressSnapshot[] = []
+  let index = 0
+  const options = {
+    scope: { ...scope, from: '2026-10-06T15:00:00.000Z' },
+    out,
+    delayMs: 0,
+    onProgress: (snapshot: ProgressSnapshot) => {
+      snapshots.push(snapshot)
+    },
+    search: async () => {
+      if (index++) throw new Error('Network failure')
+      return page([rawTweet('1', '2026-10-07T00:00:00Z')])
+    }
+  }
+  await runArchive(options)
+  expect(snapshots.at(-1)).toMatchObject({
+    date: '2026-10-08',
+    completedDays: 1,
+    pages: 1,
+    posts: 1,
+    status: 'request_failed'
   })
 })

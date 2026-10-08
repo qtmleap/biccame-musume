@@ -215,6 +215,16 @@ type Reason =
   | 'repeated_cursor'
   | 'non_advancing'
 export type ArchiveResult = { complete: boolean; reason: Reason; pages: number; posts: number }
+export type ArchiveAccount = { key: string; authorId?: string; screenName: string; posts: number }
+export type ArchiveProgress = {
+  date: string
+  completedDays: number
+  totalDays: number
+  pages: number
+  posts: number
+  status: 'running' | Reason
+  accounts: ArchiveAccount[]
+}
 export const archiveSlices = (scope: ArchiveScope): ArchiveScope[] => {
   const slices: ArchiveScope[] = []
   let from = scope.from
@@ -246,6 +256,7 @@ export const runArchive = async (options: {
   maxPages?: number
   maxRequests?: number
   delayMs?: number
+  onProgress?: (snapshot: ArchiveProgress) => void | Promise<void>
   search: (params: { cursor?: string; listId: string; since: Dayjs; until: Dayjs }) => Promise<unknown>
 }): Promise<ArchiveResult> => {
   const { scope, out } = options
@@ -273,6 +284,33 @@ export const runArchive = async (options: {
     }
     await mkdir(join(out, 'pages'), { recursive: true, mode: 0o700 })
     const rows = new Map<string, ArchivedPost>()
+    const accountCounts = new Map<string, ArchiveAccount>()
+    const accountKey = (post: ArchivedPost) =>
+      post.author.id ? `id:${post.author.id}` : `handle:${post.author.screenName.toLowerCase()}`
+    const savePost = (post: ArchivedPost) => {
+      const previous = rows.get(post.id)
+      if (previous) {
+        const key = accountKey(previous)
+        const account = accountCounts.get(key)
+        if (account) {
+          account.posts--
+          if (!account.posts) accountCounts.delete(key)
+        }
+      }
+      rows.set(post.id, post)
+      const key = accountKey(post)
+      const account = accountCounts.get(key)
+      accountCounts.set(key, {
+        key,
+        ...(post.author.id ? { authorId: post.author.id } : {}),
+        screenName: post.author.screenName.toLowerCase(),
+        posts: (account?.posts ?? 0) + 1
+      })
+    }
+    const accounts = () =>
+      [...accountCounts.values()]
+        .map((account) => ({ ...account }))
+        .sort((a, b) => b.posts - a.posts || (a.key < b.key ? -1 : a.key > b.key ? 1 : 0))
     const dayIds = new Set<string>()
     const slices = archiveSlices(scope)
     const days: (ArchiveScope & {
@@ -289,6 +327,7 @@ export const runArchive = async (options: {
       inWindowPosts: 0
     }))
     let sliceIndex = 0
+    let lastPageSlice = 0
     const seenCursors = new Set<string>()
     let nextCursor: string | undefined
     let pages = 0
@@ -311,6 +350,7 @@ export const runArchive = async (options: {
       )
         throw new ArchiveFailure('corrupt_journal')
       pages++
+      lastPageSlice = sliceIndex
       days[sliceIndex].pages++
       let parsed: ReturnType<typeof parseArchivePage>
       try {
@@ -329,7 +369,7 @@ export const runArchive = async (options: {
         minTimestamp = minTimestamp && minTimestamp < post.createdAt ? minTimestamp : post.createdAt
         maxTimestamp = maxTimestamp && maxTimestamp > post.createdAt ? maxTimestamp : post.createdAt
         if (post.createdAt >= slices[sliceIndex].from && post.createdAt < slices[sliceIndex].until) {
-          rows.set(post.id, post)
+          savePost(post)
           const day = days[sliceIndex]
           if (isNew) day.inWindowPosts++
           day.minTimestamp = day.minTimestamp && day.minTimestamp < post.createdAt ? day.minTimestamp : post.createdAt
@@ -382,7 +422,24 @@ export const runArchive = async (options: {
       }
       processPage(envelope)
     }
-    const save = async (materializePosts = false) => {
+    const emitProgress = (dateIndex: number) => {
+      if (!options.onProgress) return
+      try {
+        const snapshot: ArchiveProgress = {
+          date: dayjs(slices[Math.min(dateIndex, slices.length - 1)].from).format('YYYY-MM-DD'),
+          completedDays: sliceIndex,
+          totalDays: slices.length,
+          pages,
+          posts: rows.size,
+          status: reason ?? 'running',
+          accounts: accounts()
+        }
+        void Promise.resolve(options.onProgress(snapshot)).catch(() => {})
+      } catch {
+        /* Display failures must not interrupt journal collection. */
+      }
+    }
+    const save = async (materializePosts = false, dateIndex = sliceIndex) => {
       if (materializePosts) {
         const path = join(out, 'posts.jsonl')
         const file = await open(`${path}.tmp`, 'w', 0o600)
@@ -407,6 +464,7 @@ export const runArchive = async (options: {
             reason: reason ?? 'budget',
             pages,
             posts: rows.size,
+            accounts: accounts(),
             days,
             requestsThisRun: requests,
             outsideWindow,
@@ -419,9 +477,11 @@ export const runArchive = async (options: {
           2
         )
       )
+      emitProgress(dateIndex)
     }
     await save(true)
     while (!reason && requests < maxRequests && requests < maxPages) {
+      emitProgress(sliceIndex)
       if (requests > 0 || pages > 0) await new Promise((resolve) => setTimeout(resolve, delayMs))
       let response: unknown
       requests++
@@ -447,10 +507,10 @@ export const runArchive = async (options: {
       // Journal is authoritative. A crash before derived files are replaced is repaired on resume.
       await atomic(join(out, 'pages', `${String(pages + 1).padStart(6, '0')}.json`), JSON.stringify(envelope))
       processPage(envelope)
-      await save()
+      await save(false, lastPageSlice)
     }
     reason ??= 'budget'
-    await save(true)
+    await save(true, reason === 'request_failed' ? sliceIndex : requests ? lastPageSlice : sliceIndex)
     return { complete: reason === 'search_exhausted', reason, pages, posts: rows.size }
   } finally {
     await lock.close()
