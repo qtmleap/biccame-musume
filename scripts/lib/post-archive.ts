@@ -73,6 +73,115 @@ const isListDependencyError = (response: unknown): boolean => {
     return false
   }
 }
+// Deadline pages are incomplete: retry their cursor without consuming any returned tweet or cursor.
+const isListDeadlineError = (response: unknown): boolean => {
+  const keys = (value: JsonObject, required: string[], optional: string[] = []) =>
+    required.every((key) => Object.hasOwn(value, key)) &&
+    Object.keys(value).every((key) => required.includes(key) || optional.includes(key))
+  const safeField = (value: unknown) =>
+    typeof value === 'string' &&
+    /^[_A-Za-z][_0-9A-Za-z]*$/.test(value) &&
+    !['__proto__', 'constructor', 'prototype'].includes(value)
+  try {
+    const root = object(response)
+    if (
+      !keys(root, ['data', 'errors']) ||
+      !Array.isArray(root.errors) ||
+      !root.errors.length ||
+      root.errors.length > 10000
+    )
+      return false
+    const data = object(root.data)
+    const list = object(data.list)
+    const tweetsTimeline = object(list.tweets_timeline)
+    const timeline = object(tweetsTimeline.timeline)
+    if (
+      !keys(data, ['list']) ||
+      !keys(list, ['tweets_timeline']) ||
+      !keys(tweetsTimeline, ['timeline']) ||
+      !keys(timeline, ['instructions'], ['metadata']) ||
+      !Array.isArray(timeline.instructions) ||
+      !timeline.instructions.length
+    )
+      return false
+    if (timeline.metadata !== undefined) {
+      const metadata = object(timeline.metadata)
+      const scribe = object(metadata.scribeConfig)
+      if (!keys(metadata, ['scribeConfig']) || !keys(scribe, ['page']) || typeof scribe.page !== 'string') return false
+    }
+    if (
+      !timeline.instructions.every((raw) => {
+        const instruction = object(raw)
+        return (
+          keys(instruction, ['type', 'entries']) &&
+          instruction.type === 'TimelineAddEntries' &&
+          Array.isArray(instruction.entries)
+        )
+      })
+    )
+      return false
+    return root.errors.every((raw) => {
+      const error = object(raw)
+      const extensions = object(error.extensions)
+      if (
+        !keys(error, ['kind', 'name', 'source', 'extensions', 'path'], ['message', 'locations']) ||
+        !keys(extensions, ['kind', 'name', 'source']) ||
+        ![error, extensions].every(
+          (value) => value.kind === 'ServiceLevel' && value.name === 'DeadlineExceeded' && value.source === 'Server'
+        ) ||
+        !Array.isArray(error.path) ||
+        error.path.length < 15 ||
+        error.path.length > 32
+      )
+        return false
+      const path = error.path
+      const prefix = [
+        'list',
+        'tweets_timeline',
+        'timeline',
+        'instructions',
+        undefined,
+        'entries',
+        undefined,
+        'content',
+        'itemContent',
+        'tweet_results',
+        'result'
+      ]
+      if (
+        !prefix.every((part, index) =>
+          index === 4 || index === 6
+            ? typeof path[index] === 'number' && Number.isSafeInteger(path[index]) && path[index] >= 0
+            : path[index] === part
+        )
+      )
+        return false
+      if (
+        ![
+          ['legacy', 'retweeted_status_result', 'result'],
+          ['core', 'user_results', 'result']
+        ].some((branch) => branch.every((part, index) => path[index + 11] === part)) ||
+        !safeField(path[14])
+      )
+        return false
+      let value: unknown = data
+      for (const [index, part] of path.entries()) {
+        if (Array.isArray(value)) {
+          if (typeof part !== 'number' || !Number.isSafeInteger(part) || part < 0 || part >= value.length) return false
+          value = value[part]
+        } else {
+          const current = object(value)
+          if (!safeField(part)) return false
+          if (!Object.hasOwn(current, part)) return index === path.length - 1
+          value = current[part]
+        }
+      }
+      return value === null || value === undefined
+    })
+  } catch {
+    return false
+  }
+}
 const string = (value: unknown, allowEmpty = false): string => {
   if (typeof value !== 'string' || (!value && !allowEmpty)) throw new Error('Unsupported payload')
   return value
@@ -500,6 +609,7 @@ export const runArchive = async (options: {
       pages++
       locations.push(location)
       if (source === 'list' && isListDependencyError(envelope.response)) return 'list_dependency'
+      if (source === 'list' && isListDeadlineError(envelope.response)) return 'list_deadline'
       let parsed: ReturnType<typeof parseArchivePage>
       try {
         parsed = parseArchivePage(envelope.response, source)
@@ -716,8 +826,9 @@ export const runArchive = async (options: {
       }
       const location = `pages/${String(pages + 1).padStart(6, '0')}.json`
       await atomic(join(out, location), JSON.stringify(envelope))
-      if (processPage(envelope, location) === 'list_dependency') {
-        requestFailure = { kind: 'list_dependency' }
+      const failure = processPage(envelope, location)
+      if (failure === 'list_dependency' || failure === 'list_deadline') {
+        requestFailure = { kind: failure }
         scheduleRetry()
       } else if (source === 'list') {
         requestFailure = undefined

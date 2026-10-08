@@ -103,7 +103,9 @@ List版は既定で一時障害を同じcursorから自動retryします。対�
 
 `--retry-delay-ms` / `--max-retry-delay-ms` はList版だけで使え、0以上の整数かつ上限が初期間隔以上である必要があります。`--no-retry` は一時障害で停止して手動resumeする従来の動作です。retryの回数自体に別上限は設けず、全リクエスト試行を `--max-pages` / `--max-requests` の予算に含めます。予算終了時は最後の固定分類を残して `budget` で停止します。`retriesThisRun` はその実行で実際に行った再試行回数です。HTTP-200の失敗応答もjournalに残し、回復応答を次の連番へ追記します。scope・保存済み生応答を書き換えず、`--resume` で失敗ページを含むcursorチェーンを再構築します。
 
-設定/署名の不具合・認証エラー・部分応答・未知形式・cursor循環は自動retryしません。署名初期化中に確認できた通信障害だけは対象です。Search版の停止方針と保存scopeは共通処理の変更後も維持します。
+設定/署名の不具合・認証エラー・下記の観測済み形式以外の部分応答・未知形式・cursor循環は自動retryしません。署名初期化中に確認できた通信障害だけは対象です。Search版の停止方針と保存scopeは共通処理の変更後も維持します。
+
+部分応答のうち、Listのtweet配下の未取得metadataを指す `ServiceLevel / DeadlineExceeded / Server` だけで構成された観測済み形式は、`list_deadline` としてページ全体を再取得します。全エラーの取得元・path・実際の配列範囲・欠けた/nullの末端を検証し、異なるエラーや未知の構造が混じる場合は停止します。部分ページは生journalに残し、そのtweet ID・日付・次cursorは使用しません。失敗した同じcursorの回復応答だけを正規化に使い、既存予算・backoff・`--no-retry`・resumeのルールを維持します。全履歴の網羅性を示す扱いにはしません。
 
 固定endpointは `/i/api/graphql/1LE3u14FJjPZUHKFGzos2g/ListLatestTweetsTimeline` です。X側のquery IDや応答形式が変わる場合は更新・検証が必要です。endpointと取得元固有の終了policyもscope fingerprintに含め、変更前のjournalへ異なる取得元を混在させません。
 

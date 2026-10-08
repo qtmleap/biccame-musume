@@ -72,6 +72,49 @@ const dependencyError = () => ({
     }
   ]
 })
+const deadlinePage = () => {
+  const partial = tweet('99')
+  Reflect.set(partial.legacy.retweeted_status_result.result, 'source', null)
+  const old = tweet('98', '2000-01-01T00:00:00Z')
+  const response = page([partial, old], 'discarded-cursor')
+  return {
+    data: {
+      list: {
+        tweets_timeline: {
+          timeline: {
+            ...response.data.list.tweets_timeline.timeline,
+            metadata: { scribeConfig: { page: 'list_tweets' } }
+          }
+        }
+      }
+    },
+    errors: [
+      ['legacy', 'retweeted_status_result', 'result', 'source'],
+      ['core', 'user_results', 'result', 'profile_metadata']
+    ].map((tail, index) => ({
+      kind: 'ServiceLevel',
+      name: 'DeadlineExceeded',
+      source: 'Server',
+      extensions: { kind: 'ServiceLevel', name: 'DeadlineExceeded', source: 'Server' },
+      message: 'sanitized deadline response',
+      locations: [{ line: 4, column: 7 }],
+      path: [
+        'list',
+        'tweets_timeline',
+        'timeline',
+        'instructions',
+        0,
+        'entries',
+        index,
+        'content',
+        'itemContent',
+        'tweet_results',
+        'result',
+        ...tail
+      ]
+    }))
+  }
+}
 const replacementCursors = (cursor: string) =>
   listInstructions(
     ['Top', 'Bottom'].map((cursorType) => {
@@ -1191,6 +1234,225 @@ test('List dry-run exposes default retry controls and rejects invalid delays or 
     expect(run(listScript, flags).status).toBe(1)
   for (const flags of [['--no-retry'], ['--retry-delay-ms', '1'], ['--max-retry-delay-ms', '2']])
     expect(run('scripts/archive-list-posts.ts', flags).status).toBe(1)
+})
+
+test('List deadline recovery discards partial IDs, dates and cursor and resumes the same request without changing saved bytes', async () => {
+  const out = await output()
+  const waits: number[] = []
+  let calls = 0
+  let failureBytes = ''
+  expect(() => parseArchivePage(deadlinePage(), 'list')).toThrow()
+  expect(
+    await runArchive({
+      source: 'list',
+      scope,
+      out,
+      delayMs: 0,
+      maxRequests: 3,
+      sleep: async (milliseconds) => {
+        waits.push(milliseconds)
+      },
+      search: async ({ cursor }) => {
+        expect(cursor).toBe(calls ? 'failed-cursor' : undefined)
+        if (calls === 2) failureBytes = await readFile(join(out, 'pages', '000002.json'), 'utf8')
+        return [page([tweet('1')], 'failed-cursor'), deadlinePage(), page([tweet('2')], 'continued-cursor')][calls++]
+      }
+    })
+  ).toMatchObject({ complete: false, reason: 'budget', pages: 3, posts: 2, retriesThisRun: 1 })
+  expect(waits).toEqual([5000])
+  expect((await rows(out)).map((row) => row.id)).toEqual(['1', '2'])
+  expect(JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8'))).toMatchObject({
+    minTimestamp: '2026-10-07T23:00:00.000Z',
+    queryOldestTimestamp: '2026-10-07T23:00:00.000Z'
+  })
+  const scopeBytes = await readFile(join(out, 'scope.json'), 'utf8')
+  expect(
+    await runArchive({
+      source: 'list',
+      scope,
+      out,
+      resume: true,
+      delayMs: 0,
+      search: async ({ cursor }) => {
+        expect(cursor).toBe('continued-cursor')
+        return page([tweet('3')])
+      }
+    })
+  ).toMatchObject({ complete: true, reason: 'list_exhausted', pages: 4, posts: 3 })
+  expect(await readFile(join(out, 'pages', '000002.json'), 'utf8')).toBe(failureBytes)
+  expect(await readFile(join(out, 'scope.json'), 'utf8')).toBe(scopeBytes)
+})
+
+test('List deadline attempts obey budgets and no-retry permits a later same-cursor manual resume', async () => {
+  const out = await output()
+  const waits: number[] = []
+  expect(
+    await runArchive({
+      source: 'list',
+      scope,
+      out,
+      delayMs: 0,
+      maxRequests: 2,
+      sleep: async (milliseconds) => {
+        waits.push(milliseconds)
+      },
+      search: async () => {
+        const response = deadlinePage()
+        response.data.list.tweets_timeline.timeline.instructions.unshift({ type: 'TimelineAddEntries', entries: [] })
+        for (const error of response.errors) error.path[4] = 1
+        return response
+      }
+    })
+  ).toMatchObject({
+    complete: false,
+    reason: 'budget',
+    pages: 2,
+    posts: 0,
+    retriesThisRun: 1,
+    requestFailure: { kind: 'list_deadline' }
+  })
+  expect(waits).toEqual([5000])
+  const manual = await output()
+  expect(
+    await runArchive({
+      source: 'list',
+      scope,
+      out: manual,
+      delayMs: 0,
+      retry: false,
+      search: async () => deadlinePage()
+    })
+  ).toMatchObject({
+    complete: false,
+    reason: 'request_failed',
+    pages: 1,
+    posts: 0,
+    requestFailure: { kind: 'list_deadline' }
+  })
+  const raw = await readFile(join(manual, 'pages', '000001.json'), 'utf8')
+  expect(
+    await runArchive({
+      source: 'list',
+      scope,
+      out: manual,
+      resume: true,
+      delayMs: 0,
+      search: async ({ cursor }) => {
+        expect(cursor).toBeUndefined()
+        return page([tweet('1')])
+      }
+    })
+  ).toMatchObject({ complete: true, pages: 2, posts: 1 })
+  expect(await readFile(join(manual, 'pages', '000001.json'), 'utf8')).toBe(raw)
+})
+
+test('List deadline recognition rejects ambiguous errors, unsafe paths and other sources without resumed requests', async () => {
+  for (const variant of [
+    'enum',
+    'extension',
+    'missing_extension',
+    'missing_data',
+    'mixed_auth',
+    'empty_errors',
+    'root_extra',
+    'prefix',
+    'fractional_index',
+    'string_index',
+    'out_of_bounds',
+    'wrong_branch',
+    'unsafe_tail',
+    'long_path',
+    'nonnull_leaf',
+    'unknown_instruction',
+    'metadata_extra',
+    'missing_subtree',
+    'search'
+  ]) {
+    const response = deadlinePage()
+    const error = response.errors[0]
+    const timeline = response.data.list.tweets_timeline.timeline
+    switch (variant) {
+      case 'enum':
+        error.kind = 'Operational'
+        break
+      case 'extension':
+        error.extensions.name = 'OtherError'
+        break
+      case 'missing_extension':
+        Reflect.deleteProperty(error, 'extensions')
+        break
+      case 'missing_data':
+        Reflect.deleteProperty(response, 'data')
+        break
+      case 'mixed_auth':
+        response.errors.push({ ...error, name: 'AuthorizationError' })
+        break
+      case 'empty_errors':
+        response.errors.length = 0
+        break
+      case 'root_extra':
+        Reflect.set(response, 'unknown', true)
+        break
+      case 'prefix':
+        error.path[0] = 'search_by_raw_query'
+        break
+      case 'fractional_index':
+        error.path[4] = 0.5
+        break
+      case 'string_index':
+        error.path[4] = '0'
+        break
+      case 'out_of_bounds':
+        error.path[6] = 9999
+        break
+      case 'wrong_branch':
+        error.path[11] = 'note_tweet'
+        break
+      case 'unsafe_tail':
+        error.path[14] = '__proto__'
+        break
+      case 'long_path':
+        error.path.push(...Array(40).fill('extra'))
+        break
+      case 'nonnull_leaf':
+        error.path[14] = 'rest_id'
+        break
+      case 'unknown_instruction':
+        timeline.instructions.push({ type: 'UnknownInstruction', entries: [] })
+        break
+      case 'metadata_extra':
+        Reflect.set(timeline.metadata, 'unknown', true)
+        break
+      case 'missing_subtree':
+        Reflect.set(timeline, 'instructions', [
+          { type: 'TimelineAddEntries', entries: [{ content: {} }, { content: {} }] }
+        ])
+        break
+    }
+    const source = variant === 'search' ? 'search' : 'list'
+    const out = await output()
+    expect(await runArchive({ source, scope, out, delayMs: 0, search: async () => response })).toMatchObject({
+      complete: false,
+      reason: 'unsupported_payload',
+      pages: 1,
+      posts: 0
+    })
+    let calls = 0
+    expect(
+      await runArchive({
+        source,
+        scope,
+        out,
+        resume: true,
+        delayMs: 0,
+        search: async () => {
+          calls++
+          return page([])
+        }
+      })
+    ).toMatchObject({ complete: false, reason: 'unsupported_payload', pages: 1, posts: 0 })
+    expect(calls).toBe(0)
+  }
 })
 
 test('List mode refuses Search-only seed imports before accessing the seed path', async () => {
