@@ -14,7 +14,8 @@
     "./x/transaction/*": "./src/x/transaction/*.ts",
     "./event-detect/clef": "./src/event-detect/clef.ts",
     "./event-detect/filter": "./src/event-detect/filter.ts",
-    "./event-detect/post": "./src/event-detect/post.ts"
+    "./event-detect/post": "./src/event-detect/post.ts",
+    "./event-detect/viewer": "./src/event-detect/viewer.ts"
   },
   "dependencies": { "zod": "^4.4.3" }
 }

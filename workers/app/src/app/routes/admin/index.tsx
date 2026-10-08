@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { DURATION } from '@/lib/motion'
 import { getStickerRotation, STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM } from '@/lib/sticker'
-import { cn } from '@/lib/utils'
 import { ADMIN_LABELS } from '@/locales/app.content'
 
 const MENU_ITEMS = [
@@ -62,12 +61,12 @@ const MENU_ITEMS = [
 ] as const
 
 /**
- * dev サーバーでだけ使えるページ。ルーター外のパスなので Link ではなく通常のリンクで開く。
- * イベント自動検出は .cache の手元データを vite のミドルウェアが配信する（scripts/lib/event-detect/vite-plugin.ts）。
+ * dev サーバーでだけ使えるページ。イベント自動検出は .cache の手元データを vite のミドルウェアが配信する
+ * （scripts/lib/event-detect/vite-plugin.ts）ので、本番では開けない。
  */
 const DEV_MENU_ITEMS = [
   {
-    href: '/__event-detect/',
+    to: '/admin/event-detect',
     icon: ScanSearch,
     title: 'イベント自動検出',
     description: 'X の告知から検出したイベントと登録済みイベントの突き合わせ（ローカルのみ）',
@@ -76,12 +75,8 @@ const DEV_MENU_ITEMS = [
   }
 ] as const
 
-const MENU_LINK_CLASS =
-  'block group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-2xl'
-
 const MenuCard = ({
   to,
-  href,
   icon: Icon,
   title,
   description,
@@ -89,26 +84,16 @@ const MenuCard = ({
   iconText,
   index
 }: {
+  to: string
   icon: React.ElementType
   title: string
   description: string
   iconBg: string
   iconText: string
   index: number
-} & ({ to: string; href?: never } | { to?: never; href: string })) => {
+}) => {
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const rotation = isDesktop ? getStickerRotation(index) : 0
-  const body = (
-    <div className='bg-card border border-card-border rounded-2xl p-5 md:p-6 flex items-center gap-4'>
-      <div className={cn('flex size-12 shrink-0 items-center justify-center rounded-xl md:size-14', iconBg, iconText)}>
-        <Icon className='size-6 md:size-7' />
-      </div>
-      <div className='flex-1 min-w-0'>
-        <h3 className='font-bold text-base md:text-lg text-foreground truncate'>{title}</h3>
-        <p className='mt-0.5 text-sm text-muted-foreground'>{description}</p>
-      </div>
-    </div>
-  )
 
   return (
     <motion.div
@@ -123,15 +108,22 @@ const MenuCard = ({
         whileTap={{ scale: 0.98 }}
         transition={STICKER_HOVER_TRANSITION}
       >
-        {href === undefined ? (
-          <Link to={to} className={MENU_LINK_CLASS}>
-            {body}
-          </Link>
-        ) : (
-          <a href={href} className={MENU_LINK_CLASS}>
-            {body}
-          </a>
-        )}
+        <Link
+          to={to}
+          className='block group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-2xl'
+        >
+          <div className='bg-card border border-card-border rounded-2xl p-5 md:p-6 flex items-center gap-4'>
+            <div
+              className={`flex size-12 shrink-0 items-center justify-center rounded-xl md:size-14 ${iconBg} ${iconText}`}
+            >
+              <Icon className='size-6 md:size-7' />
+            </div>
+            <div className='flex-1 min-w-0'>
+              <h3 className='font-bold text-base md:text-lg text-foreground truncate'>{title}</h3>
+              <p className='mt-0.5 text-sm text-muted-foreground'>{description}</p>
+            </div>
+          </div>
+        </Link>
       </motion.div>
     </motion.div>
   )
@@ -170,9 +162,7 @@ const AdminContent = () => {
             <MenuCard key={item.to} {...item} index={index} />
           ))}
           {import.meta.env.DEV &&
-            DEV_MENU_ITEMS.map((item, index) => (
-              <MenuCard key={item.href} {...item} index={MENU_ITEMS.length + index} />
-            ))}
+            DEV_MENU_ITEMS.map((item, index) => <MenuCard key={item.to} {...item} index={MENU_ITEMS.length + index} />)}
         </div>
       </div>
     </div>

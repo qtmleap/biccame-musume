@@ -1,13 +1,12 @@
-import { existsSync } from 'node:fs'
-import { readFile } from 'node:fs/promises'
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
-import type { Plugin, ViteDevServer } from 'vite'
+import type { Plugin } from 'vite'
 import { VIEWER_BASE } from './schema'
 import { loadViewerApi } from './store'
 
-// bun dev（vite serve）に相乗りしてイベント検出のデバッグビューワを配信する。
-// http://<dev server>/__event-detect/ で開く。build には含めない。
+// bun dev（vite serve）に相乗りして、イベント検出ビューワの API を配信する。build には含めない。
+// 画面は管理画面の /admin/event-detect（workers/app/src/app/routes/admin/event-detect）で、ここは /__event-detect/api/* だけを受ける。
 // データは `bun run event-detect prepare` で .cache/event-detect に用意しておく。初回アクセス時に読み込む。
 
 type Api = Awaited<ReturnType<typeof loadViewerApi>>
@@ -32,7 +31,6 @@ const send = async (res: ServerResponse, response: Response) => {
 
 export const eventDetectViewer = (options: { repoRoot: string; now: () => string }): Plugin => {
   const dir = resolve(options.repoRoot, '.cache/event-detect')
-  const viewerDir = resolve(options.repoRoot, 'scripts/event-detect-viewer')
   const state: { api?: Promise<Api> } = {}
 
   const api = () => {
@@ -50,13 +48,6 @@ export const eventDetectViewer = (options: { repoRoot: string; now: () => string
     return state.api
   }
 
-  const page = async (server: ViteDevServer, url: string) => {
-    const html = await readFile(resolve(viewerDir, 'index.html'), 'utf8')
-    // vite の root は workers/app なので、エントリはファイルシステムの絶対パスで参照させる
-    const entry = `/@fs${resolve(viewerDir, 'main.tsx')}`
-    return server.transformIndexHtml(url, html.replace('./main.tsx', entry))
-  }
-
   return {
     name: 'event-detect-viewer',
     apply: 'serve',
@@ -65,19 +56,15 @@ export const eventDetectViewer = (options: { repoRoot: string; now: () => string
         const url = req.url === undefined ? '' : req.url
         if (url !== VIEWER_BASE && !url.startsWith(`${VIEWER_BASE}/`)) return next()
         const path = url.slice(VIEWER_BASE.length).split('?')[0]
+        // 画面は管理画面のルートが描画する。ここは API だけを受ける
+        if (!path.startsWith('/api/')) return next()
         try {
-          if (path === '' || path === '/') {
-            if (!existsSync(resolve(dir, 'meta.json'))) {
-              res.statusCode = 503
-              res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-              res.end(`データがありません。先に bun run event-detect prepare を実行してください（${dir}）`)
-              return
-            }
-            res.setHeader('Content-Type', 'text/html; charset=utf-8')
-            res.end(await page(server, url))
+          if (!existsSync(resolve(dir, 'meta.json'))) {
+            res.statusCode = 503
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ error: `データがありません。先に bun run event-detect prepare を実行してください（${dir}）` }))
             return
           }
-          if (!path.startsWith('/api/')) return next()
           const request = await toRequest(req, url.slice(VIEWER_BASE.length))
           await send(res, await (await api()).handle(request))
         } catch (error) {
