@@ -4,6 +4,8 @@ import { X_BEARER } from '@biccame/shared/x/transport'
 import { Client } from '../workers/bot/src/timeline/client'
 import { dayjs } from '../workers/bot/src/timeline/utils/dayjs'
 import {
+  ArchiveFailure,
+  archiveDiagnostic,
   archiveQueryWindow,
   archiveSlices,
   readArchiveScope,
@@ -28,23 +30,29 @@ Signer discovery makes additional public GET requests outside SearchTimeline bud
 
 const main = async () => {
   const started = new Date()
-  const parsed = parseArgs({
-    args: process.argv.slice(2),
-    strict: true,
-    allowPositionals: false,
-    options: {
-      'list-id': { type: 'string' },
-      from: { type: 'string' },
-      until: { type: 'string' },
-      out: { type: 'string' },
-      'max-pages': { type: 'string' },
-      'max-requests': { type: 'string' },
-      'delay-ms': { type: 'string' },
-      resume: { type: 'boolean' },
-      'dry-run': { type: 'boolean' },
-      help: { type: 'boolean' }
+  const parsed = (() => {
+    try {
+      return parseArgs({
+        args: process.argv.slice(2),
+        strict: true,
+        allowPositionals: false,
+        options: {
+          'list-id': { type: 'string' },
+          from: { type: 'string' },
+          until: { type: 'string' },
+          out: { type: 'string' },
+          'max-pages': { type: 'string' },
+          'max-requests': { type: 'string' },
+          'delay-ms': { type: 'string' },
+          resume: { type: 'boolean' },
+          'dry-run': { type: 'boolean' },
+          help: { type: 'boolean' }
+        }
+      })
+    } catch {
+      throw new ArchiveFailure('invalid_params')
     }
-  })
+  })()
   const flags = new Map(Object.entries(parsed.values))
   if (flags.has('help')) {
     console.log(help)
@@ -56,17 +64,20 @@ const main = async () => {
   }
   const number = (key: string, fallback: number) => {
     const raw = value(key)
-    if (raw !== undefined && !/^\d+$/.test(raw)) throw new Error('Invalid numeric option')
+    if (raw !== undefined && !/^\d+$/.test(raw)) throw new ArchiveFailure('invalid_params')
     const result = raw === undefined ? fallback : Number(raw)
-    if (!Number.isSafeInteger(result) || result < (key === 'delay-ms' ? 0 : 1))
-      throw new Error('Invalid numeric option')
+    if (
+      !Number.isSafeInteger(result) ||
+      result < (key === 'delay-ms' ? 0 : 1) ||
+      (key === 'delay-ms' && result > 2147483647)
+    )
+      throw new ArchiveFailure('invalid_params')
     return result
   }
   const cache = resolve('.cache')
   const out = resolve(value('out') ?? `.cache/list-posts/${started.toISOString().replaceAll(':', '-')}`)
   const descendant = relative(cache, out)
-  if (!descendant || descendant.startsWith('..') || isAbsolute(descendant))
-    throw new Error('Output must be under .cache')
+  if (!descendant || descendant.startsWith('..') || isAbsolute(descendant)) throw new ArchiveFailure('invalid_params')
   const options = { listId: value('list-id'), from: value('from'), until: value('until') }
   const resume = flags.has('resume')
   const scope = resume ? await readArchiveScope(out) : resolveArchiveScope(options, started)
@@ -84,7 +95,7 @@ const main = async () => {
       (options.from && explicit.from !== scope.from) ||
       (options.until && explicit.until !== scope.until)
     )
-      throw new Error('Resume scope mismatch')
+      throw new ArchiveFailure('scope_mismatch')
   }
   const maxPages = number('max-pages', 1000)
   const maxRequests = number('max-requests', 1000)
@@ -120,10 +131,8 @@ const main = async () => {
 }
 
 if (import.meta.main)
-  main().catch(() => {
+  main().catch((error) => {
     // Never expose SDK response bodies, cookies, request headers or stack traces.
-    console.error(
-      'Archive failed: check options, credentials, output lock and cache integrity. See --help and bot README.'
-    )
+    console.error(archiveDiagnostic(error))
     process.exitCode = 1
   })

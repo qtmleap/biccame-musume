@@ -4,7 +4,14 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-import { archiveQueryWindow, parseArchivePage, resolveArchiveScope, runArchive } from '../scripts/lib/post-archive'
+import {
+  ArchiveFailure,
+  archiveDiagnostic,
+  archiveQueryWindow,
+  parseArchivePage,
+  resolveArchiveScope,
+  runArchive
+} from '../scripts/lib/post-archive'
 import { Client } from '../workers/bot/src/timeline/client'
 import { dayjs } from '../workers/bot/src/timeline/utils/dayjs'
 
@@ -69,6 +76,25 @@ const page = (tweets: unknown[], cursor?: string) =>
       ]
     }
   ])
+const replacementCursors = (cursor: string) =>
+  withInstructions(
+    ['Top', 'Bottom'].map((cursorType) => {
+      const entryId = cursorType === 'Top' ? 'cursor-top-9223372036854775807' : 'cursor-bottom-0'
+      return {
+        type: 'TimelineReplaceEntry',
+        entry_id_to_replace: entryId,
+        entry: {
+          entryId,
+          content: {
+            __typename: 'TimelineTimelineCursor',
+            entryType: 'TimelineTimelineCursor',
+            cursorType,
+            value: cursorType === 'Top' ? 'top' : cursor
+          }
+        }
+      }
+    })
+  )
 const rows = async (out: string): Promise<Record<string, unknown>[]> => {
   const text = await readFile(join(out, 'posts.jsonl'), 'utf8')
   return text.trim()
@@ -437,4 +463,246 @@ test('CLI dry run resolves daily query without authentication and rejects invali
     )
     expect(invalid.status).toBe(1)
   }
+})
+
+test('three strict continuation replacement pairs finish a day with an empirical terminal reason', async () => {
+  const out = await output()
+  let index = 0
+  const result = await runArchive({
+    scope,
+    out,
+    maxPages: 6,
+    delayMs: 0,
+    search: async () => {
+      index++
+      return index === 1 ? page([rawTweet('1')], 'first') : replacementCursors(`cursor-${index}`)
+    }
+  })
+  expect(result).toMatchObject({ complete: true, reason: 'search_exhausted', pages: 4, posts: 1 })
+  const manifest = JSON.parse(await readFile(join(out, 'manifest.json'), 'utf8'))
+  expect(manifest.days[0]).toMatchObject({
+    terminalReason: 'confirmed_cursor_only',
+    inWindowPosts: 1,
+    minTimestamp: '2026-10-07T23:00:00.000Z',
+    maxTimestamp: '2026-10-07T23:00:00.000Z'
+  })
+  expect(manifest.exhaustionPolicy).toMatchObject({ version: 1, consecutiveReplacementPairs: 3 })
+})
+
+test('cursor-only confirmation reconstructs across resume and advances to the next day', async () => {
+  const out = await output()
+  const twoDays = { ...scope, from: '2026-10-06T15:00:00.000Z' }
+  let index = 0
+  const search = async () => {
+    index++
+    return index === 1 ? page([rawTweet('1', '2026-10-07T00:00:00Z')], 'start') : replacementCursors(`cursor-${index}`)
+  }
+  expect(await runArchive({ scope: twoDays, out, maxPages: 3, delayMs: 0, search })).toMatchObject({
+    complete: false,
+    pages: 3
+  })
+  const result = await runArchive({
+    scope: twoDays,
+    out,
+    resume: true,
+    delayMs: 0,
+    search: async ({ cursor, since }) => {
+      if (cursor) {
+        expect(cursor).toBe('cursor-3')
+        return replacementCursors('cursor-4')
+      }
+      expect(since.format('YYYY-MM-DD')).toBe('2026-10-07')
+      return page([rawTweet('2')])
+    }
+  })
+  expect(result).toMatchObject({ complete: true, pages: 5, posts: 2 })
+})
+
+test('tweets and empty AddEntries reset replacement-only confirmation', async () => {
+  const out = await output()
+  const responses = [
+    page([rawTweet('1')], 'a'),
+    replacementCursors('b'),
+    replacementCursors('c'),
+    page([], 'd'),
+    replacementCursors('e'),
+    replacementCursors('f'),
+    page([rawTweet('2')], 'g'),
+    replacementCursors('h'),
+    replacementCursors('i'),
+    page([rawTweet('3')])
+  ]
+  let index = 0
+  const result = await runArchive({ scope, out, delayMs: 0, search: async () => responses[index++] })
+  expect(result).toMatchObject({ complete: true, pages: 10, posts: 3 })
+})
+
+test('repeated cursor and API errors override empty confirmation', async () => {
+  for (const last of [replacementCursors('c'), { errors: [{ message: 'failure' }] }]) {
+    const out = await output()
+    const responses = [page([rawTweet('1')], 'a'), replacementCursors('b'), replacementCursors('c'), last]
+    let index = 0
+    const result = await runArchive({ scope, out, delayMs: 0, search: async () => responses[index++] })
+    expect(result.complete).toBe(false)
+    expect(result.reason).toBe('errors' in last ? 'unsupported_payload' : 'repeated_cursor')
+  }
+})
+
+test('replacement pairs require matching identifiers and an existing continuation request', async () => {
+  const out = await output()
+  let index = 0
+  const result = await runArchive({
+    scope,
+    out,
+    maxPages: 3,
+    delayMs: 0,
+    search: async () => replacementCursors(`cursor-${++index}`)
+  })
+  expect(result).toMatchObject({ complete: false, reason: 'budget', pages: 3 })
+  const other = await output()
+  index = 0
+  const invalidPair = (cursor: string) =>
+    withInstructions(
+      ['Top', 'Bottom'].map((cursorType) => ({
+        type: 'TimelineReplaceEntry',
+        entry_id_to_replace: 'different-entry',
+        entry: {
+          entryId: `cursor-${cursorType}`,
+          content: {
+            cursorType,
+            value: cursor,
+            entryType: 'TimelineTimelineCursor',
+            __typename: 'TimelineTimelineCursor'
+          }
+        }
+      }))
+    )
+  const mismatch = await runArchive({
+    scope,
+    out: other,
+    maxPages: 5,
+    delayMs: 0,
+    search: async () => invalidPair(`cursor-${++index}`)
+  })
+  expect(mismatch).toMatchObject({ complete: false, reason: 'budget', pages: 5 })
+})
+
+test('duplicate terminal page without next cursor completes instead of reporting non-advance', async () => {
+  const out = await output()
+  let index = 0
+  expect(
+    await runArchive({
+      scope,
+      out,
+      delayMs: 0,
+      search: async () => page([rawTweet('1')], index++ === 0 ? 'next' : undefined)
+    })
+  ).toMatchObject({ complete: true, pages: 2, posts: 1 })
+})
+
+test('empty media-only text and author display name remain archiveable', async () => {
+  const out = await output()
+  const tweet = rawTweet('1')
+  tweet.legacy.full_text = ''
+  tweet.core.user_results.result.core.name = ''
+  expect(await runArchive({ scope, out, delayMs: 0, search: async () => page([tweet]) })).toMatchObject({
+    complete: true,
+    posts: 1
+  })
+  expect((await rows(out))[0]).toMatchObject({ text: '', author: { name: '' } })
+})
+
+test('resume ignores known journal directory metadata and repairs scope-before-pages crash', async () => {
+  const out = await output()
+  await runArchive({ scope, out, maxPages: 1, delayMs: 0, search: async () => page([rawTweet('1')], 'next') })
+  await writeFile(join(out, 'pages', '.DS_Store'), 'metadata')
+  await writeFile(join(out, 'pages', '000002.json.tmp'), 'partial')
+  expect(
+    await runArchive({ scope, out, resume: true, delayMs: 0, search: async () => page([rawTweet('2')]) })
+  ).toMatchObject({ complete: true, posts: 2 })
+  const interrupted = await output()
+  await writeFile(join(interrupted, 'scope.json'), await readFile(join(out, 'scope.json')))
+  expect(
+    await runArchive({ scope, out: interrupted, resume: true, delayMs: 0, search: async () => page([]) })
+  ).toMatchObject({ complete: true, pages: 1 })
+})
+
+test('delay rejects timer overflow and CLI exposes only fixed diagnostics', async () => {
+  const out = await output()
+  await expect(runArchive({ scope, out, delayMs: 2147483648, search: async () => page([]) })).rejects.toThrow()
+  const result = spawnSync(
+    process.execPath,
+    ['--no-env-file', 'scripts/archive-list-posts.ts', '--dry-run', '--from', 'secret-token'],
+    { encoding: 'utf8', env: { PATH: process.env.PATH } }
+  )
+  expect(result.status).toBe(1)
+  expect(result.stderr).toContain('[invalid_params]')
+  expect(result.stderr).not.toContain('secret-token')
+})
+
+test('safe diagnostics classify known failures without rendering arbitrary error content', () => {
+  expect(archiveDiagnostic(new ArchiveFailure('locked'))).toContain('[locked]')
+  expect(archiveDiagnostic(new ArchiveFailure('scope_mismatch'))).toContain('[scope_mismatch]')
+  expect(archiveDiagnostic(new ArchiveFailure('missing_journal'))).toContain('[missing_journal]')
+  expect(archiveDiagnostic(new ArchiveFailure('corrupt_journal'))).toContain('[corrupt_journal]')
+  const failure = archiveDiagnostic(new Error('Bearer secret Cookie auth_token=secret'))
+  expect(failure).toContain('[unexpected]')
+  expect(failure).not.toContain('Bearer')
+  expect(failure).not.toContain('auth_token')
+})
+
+test('old exhaustion-policy cache is retained and rejected without a new request', async () => {
+  const out = await output()
+  await runArchive({ scope, out, maxPages: 1, delayMs: 0, search: async () => page([rawTweet('1')], 'next') })
+  const old = JSON.parse(await readFile(join(out, 'scope.json'), 'utf8'))
+  old.schema = 1
+  delete old.exhaustionPolicy
+  await writeFile(join(out, 'scope.json'), JSON.stringify(old))
+  let requested = false
+  await expect(
+    runArchive({
+      scope,
+      out,
+      resume: true,
+      search: async () => {
+        requested = true
+        return page([])
+      }
+    })
+  ).rejects.toMatchObject({ code: 'scope_mismatch' })
+  expect(requested).toBe(false)
+  expect(JSON.parse(await readFile(join(out, 'pages', '000001.json'), 'utf8')).response).toEqual(
+    page([rawTweet('1')], 'next')
+  )
+})
+
+test('module responses reset confirmation and unknown extra instructions fail closed', async () => {
+  const out = await output()
+  const modulePage = withInstructions([
+    ...replacementCursors('d').data.search_by_raw_query.search_timeline.timeline.instructions,
+    { type: 'TimelineAddToModule', moduleItems: [] }
+  ])
+  const responses = [
+    page([rawTweet('1')], 'a'),
+    replacementCursors('b'),
+    replacementCursors('c'),
+    modulePage,
+    replacementCursors('e'),
+    replacementCursors('f'),
+    page([rawTweet('2')])
+  ]
+  let index = 0
+  expect(await runArchive({ scope, out, delayMs: 0, search: async () => responses[index++] })).toMatchObject({
+    complete: true,
+    pages: 7
+  })
+  const other = await output()
+  const unknown = withInstructions([
+    ...replacementCursors('g').data.search_by_raw_query.search_timeline.timeline.instructions,
+    { type: 'UnknownInstruction' }
+  ])
+  expect(await runArchive({ scope, out: other, delayMs: 0, search: async () => unknown })).toMatchObject({
+    complete: false,
+    reason: 'unsupported_payload'
+  })
 })

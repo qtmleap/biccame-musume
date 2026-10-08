@@ -176,7 +176,6 @@ test('archive list override retains signed search and the existing inclusive-unt
     return Response.json(makePage([tweet]))
   })
   const client = new Client(env, async () => ({ generateTransactionId: async () => 'archive-signature' }))
-  // The variable form permits this contract test to run RED before adding the option.
   const params = { since, until, listId: '123456' }
   await client.search(params)
   expect(variables).toMatchObject({
