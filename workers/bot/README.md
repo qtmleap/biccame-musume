@@ -83,6 +83,24 @@ stderr進捗は新queryが返した最古のJST日付（範囲外の余分な取
 標準上限は実行ごとに1000 SearchTimeline呼出し、間隔1500ms、`--max-pages` / `--max-requests` の小さい方で停止します。署名初期化の公開GETは上限外です。429/認証/ネットワーク失敗は自動retryせず、分類と整数HTTP statusだけを記録しcheckpointからresumeできます。秘密・SDK本文・stackを診断に出しません。投稿本文/公開metadataはcacheに含まれます。
 終了コードは走査終了0、保存済み未完了2、設定/ファイルエラー1です。同時実行は `.lock` で拒否します。強制終了の残存lockは所有処理の停止確認後にそのlockだけを削除します。
 
+### ネイティブListタイムラインの保存
+
+`archive:list-timeline` は同じ保存・再開・署名・進捗処理で `ListLatestTweetsTimeline` を取得します。`--help` / `--dry-run` も通信不要です。標準出力先は `.cache/list-timeline/<実行時刻>`、間隔2500ms、1回の取得はcount20、各実行の上限は1000ページ/1000リクエストです。上限を増やす場合は両方を指定します。
+
+```sh
+bun --no-env-file run archive:list-timeline --dry-run
+bun --no-env-file --env-file=/absolute/path/.dev.vars scripts/archive-list-timeline.ts \
+  --out .cache/list-timeline/year --max-pages 10000 --max-requests 10000
+bun --no-env-file --env-file=/absolute/path/.dev.vars scripts/archive-list-timeline.ts \
+  --out .cache/list-timeline/year --resume --max-pages 10000 --max-requests 10000
+```
+
+list IDと期間の既定値・JST境界・終了コードはSearch版と共通です。期間は取得後のローカル絞り込みで、サーバーへ日付検索は送りません。会話module内の親・返信・RTの生metadataも保存し、account集計には範囲内の会話参加者も含みます。進捗日付はトップレベルの単独tweetで観測した最古のJST日付です。会話moduleだけでは日付を更新せず、未観測は `-`、manifestのmin/maxには全投稿を含みます。日付順・1年分への到達を推定しません。
+
+明示的Bottom終了または次cursorなしでのみ `list_exhausted` とし、`coverageVerified:false` のままです。空ページ・cursor置換ペア・既知IDだけの会話でも、新しいcursorがあれば継続します。cursor循環・予算終了・429・未知形式・取得不可tweet/tombstone/ShowMoreは未完了として生応答を残します。会話の展開取得は行いません。`--seed-from` は非対応で、Search版のcacheと相互resumeできません。
+
+固定endpointは `/i/api/graphql/1LE3u14FJjPZUHKFGzos2g/ListLatestTweetsTimeline` です。X側のquery IDや応答形式が変わる場合は更新・検証が必要です。endpointと取得元固有の終了policyもscope fingerprintに含め、変更前のjournalへ異なる取得元を混在させません。
+
 ## デプロイ
 
 同名Workerを継承します: production=`musume-workers`、staging=`musume-workers-staging`。

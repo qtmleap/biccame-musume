@@ -2,11 +2,12 @@ import { lstat, realpath } from 'node:fs/promises'
 import { relative, resolve } from 'node:path'
 import { parseArgs } from 'node:util'
 import { X_BEARER } from '@biccame/shared/x/transport'
-import { Client } from '../workers/bot/src/timeline/client'
+import { Client, LIST_TIMELINE_ENDPOINT } from '../workers/bot/src/timeline/client'
 import { dayjs } from '../workers/bot/src/timeline/utils/dayjs'
 import { createArchiveProgressRenderer } from './lib/archive-progress'
 import {
   ArchiveFailure,
+  type ArchiveSource,
   archiveDiagnostic,
   archiveQueryWindow,
   readArchiveScope,
@@ -31,7 +32,23 @@ Usage: bun --no-env-file --env-file=/explicit/path/.dev.vars scripts/archive-lis
 Environment: TWITTER_AUTH_TOKEN, TWITTER_CSRF_TOKEN; optional TWITTER_BEARER_TOKEN.
 Signer discovery makes additional public GET requests outside SearchTimeline budgets.`
 
-const main = async () => {
+const listHelp = `Archive accessible native X List timeline posts without event filtering or external writes.
+Usage: bun --no-env-file --env-file=/explicit/path/.dev.vars scripts/archive-list-timeline.ts [options]
+  --list-id ID      Default: 2019028800869413128
+  --from YYYY-MM-DD Local filter; default: JST date one year before run start
+  --until YYYY-MM-DD Exclusive local JST filter; default: captured run start instant
+  --out PATH       Directory under .cache (default: .cache/list-timeline/<run timestamp>)
+  --resume         Use saved List scope and continue from journal; explicit dates/list must match
+  --max-pages N    ListLatestTweetsTimeline calls this run (default: 1000)
+  --max-requests N ListLatestTweetsTimeline calls this run (default: 1000)
+  --delay-ms N     Delay between requests (default: 2500)
+  --dry-run        Print resolved scope/endpoint; no credentials required, no network
+  --help           Print this help
+Environment: TWITTER_AUTH_TOKEN, TWITTER_CSRF_TOKEN; optional TWITTER_BEARER_TOKEN.
+Dates are filtered locally. Pagination exhaustion does not verify historical coverage.
+--seed-from is unsupported. Signer discovery makes public GET requests outside List budgets.`
+
+export const runArchiveCli = async (source: ArchiveSource = 'search') => {
   const started = new Date()
   const parsed = (() => {
     try {
@@ -59,9 +76,10 @@ const main = async () => {
   })()
   const flags = new Map(Object.entries(parsed.values))
   if (flags.has('help')) {
-    console.log(help)
+    console.log(source === 'list' ? listHelp : help)
     return
   }
+  if (source === 'list' && flags.has('seed-from')) throw new ArchiveFailure('invalid_params')
   const value = (key: string) => {
     const result = flags.get(key)
     return typeof result === 'string' ? result : undefined
@@ -97,7 +115,10 @@ const main = async () => {
     }
     return path
   }
-  const out = await safePath(resolve(value('out') ?? `.cache/list-posts/${started.toISOString().replaceAll(':', '-')}`))
+  const namespace = source === 'list' ? 'list-timeline' : 'list-posts'
+  const out = await safePath(
+    resolve(value('out') ?? `.cache/${namespace}/${started.toISOString().replaceAll(':', '-')}`)
+  )
   const rawSeedFrom = value('seed-from')
   const seedFrom = rawSeedFrom === undefined ? undefined : await safePath(resolve(rawSeedFrom))
   const resume = flags.has('resume')
@@ -107,7 +128,7 @@ const main = async () => {
   const scope = seedFrom
     ? await readLegacySeedScope(seedFrom)
     : resume
-      ? await readArchiveScope(out)
+      ? await readArchiveScope(out, source)
       : resolveArchiveScope(options, started)
   if (resume || seedFrom) {
     const explicit = resolveArchiveScope(
@@ -127,7 +148,7 @@ const main = async () => {
   }
   const maxPages = number('max-pages', 1000)
   const maxRequests = number('max-requests', 1000)
-  const delayMs = number('delay-ms', 1500)
+  const delayMs = number('delay-ms', source === 'list' ? 2500 : 1500)
   const window = archiveQueryWindow(scope)
   if (flags.has('dry-run')) {
     console.log(
@@ -136,7 +157,18 @@ const main = async () => {
           ...scope,
           out,
           seedFrom,
-          query: `list:${scope.listId} since:${window.since.format('YYYY-MM-DD')} until:${window.until.add(1, 'day').format('YYYY-MM-DD')}`,
+          ...(source === 'list'
+            ? {
+                queryMode: 'list_timeline',
+                endpoint: LIST_TIMELINE_ENDPOINT,
+                localDateFilter: true,
+                coverageVerified: false
+              }
+            : {}),
+          query:
+            source === 'list'
+              ? `list:${scope.listId}`
+              : `list:${scope.listId} since:${window.since.format('YYYY-MM-DD')} until:${window.until.add(1, 'day').format('YYYY-MM-DD')}`,
           maxPages,
           maxRequests,
           delayMs
@@ -166,13 +198,14 @@ const main = async () => {
     })
     result = await runArchive({
       scope,
+      source,
       out,
       resume,
       seedFrom,
       maxPages,
       maxRequests,
       delayMs,
-      search: client.searchRaw,
+      search: source === 'list' ? client.listRaw : client.searchRaw,
       onProgress: progress.update
     })
   } finally {
@@ -183,7 +216,7 @@ const main = async () => {
 }
 
 if (import.meta.main)
-  main().catch((error) => {
+  runArchiveCli().catch((error) => {
     // Never expose SDK response bodies, cookies, request headers or stack traces.
     console.error(archiveDiagnostic(error))
     process.exitCode = 1

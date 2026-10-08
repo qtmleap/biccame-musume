@@ -1,10 +1,13 @@
 import { ClientTransaction, fetchTransactionInputs } from '@biccame/shared/x/transaction'
 import { makeApi, Zodios, type ZodiosInstance, ZodiosResponseError } from '@qtmleap/zodios'
 import type { Dayjs } from 'dayjs'
+import { z } from 'zod'
 import { FeaturesSchema } from './schemas/feature.dto'
 import { type Post, PostSchema } from './schemas/response.dto'
-import { SearchVariablesSchema } from './schemas/variables.dto'
+import { ListVariablesSchema, SearchVariablesSchema } from './schemas/variables.dto'
 import { TimelineFailure } from './utils/failure'
+
+export const LIST_TIMELINE_ENDPOINT = '/i/api/graphql/1LE3u14FJjPZUHKFGzos2g/ListLatestTweetsTimeline'
 
 const endpoints = makeApi([
   {
@@ -16,6 +19,16 @@ const endpoints = makeApi([
       { name: 'features', type: 'Query', schema: FeaturesSchema }
     ],
     response: PostSchema
+  },
+  {
+    method: 'get',
+    path: LIST_TIMELINE_ENDPOINT,
+    alias: 'listLatestTweetsTimeline',
+    parameters: [
+      { name: 'variables', type: 'Query', schema: ListVariablesSchema },
+      { name: 'features', type: 'Query', schema: FeaturesSchema }
+    ],
+    response: z.unknown()
   }
 ])
 
@@ -108,5 +121,15 @@ export class Client {
   searchRaw = async (params: SearchTimelineParams): Promise<unknown> => {
     if (!this.rawClient) this.rawClient = new Client(this.credentials, this.createSigner, true)
     return this.rawClient.search(params)
+  }
+
+  // Native List bodies are journaled before archive parsing; dates are filtered locally.
+  listRaw = async ({ listId, cursor }: { listId: string; cursor?: string }): Promise<unknown> => {
+    try {
+      return await this.client.listLatestTweetsTimeline({ queries: { variables: { listId, cursor }, features: {} } })
+    } catch (error) {
+      if (error instanceof TimelineFailure) throw error
+      throw new TimelineFailure('timeline')
+    }
   }
 }

@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto'
 import { mkdir, open, readdir, readFile, rename, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import type { Dayjs } from 'dayjs'
+import { LIST_TIMELINE_ENDPOINT } from '../../workers/bot/src/timeline/client'
 import { dayjs } from '../../workers/bot/src/timeline/utils/dayjs'
 import {
   assertSeedPathsDisjoint,
@@ -11,6 +12,7 @@ import {
 } from './post-archive-seed'
 
 export type ArchiveScope = { listId: string; from: string; until: string }
+export type ArchiveSource = 'search' | 'list'
 export type ScopeOptions = { listId?: string; from?: string; until?: string }
 type FailureCode =
   | 'invalid_params'
@@ -68,7 +70,18 @@ export const archiveQueryWindow = (scope: ArchiveScope) => ({
   since: dayjs(scope.from).startOf('day').subtract(1, 'day'),
   until: dayjs(scope.until).subtract(1, 'millisecond').startOf('day').add(1, 'day')
 })
-const scopeRecord = (scope: ArchiveScope, seed?: SeedDescriptor) => {
+const scopeRecord = (scope: ArchiveScope, seed?: SeedDescriptor, source: ArchiveSource = 'search') => {
+  if (source === 'list')
+    return {
+      schema: 3,
+      queryVersion: 1,
+      queryMode: 'list_timeline',
+      endpoint: LIST_TIMELINE_ENDPOINT,
+      count: 20,
+      exhaustionPolicy: { version: 1, terminal: 'explicit_bottom_or_no_next_cursor' },
+      ...scope,
+      query: `list:${scope.listId}`
+    }
   const window = archiveQueryWindow(scope)
   return {
     schema: 3,
@@ -87,14 +100,21 @@ const atomic = async (path: string, value: string) => {
   await writeFile(`${path}.tmp`, value, { mode: 0o600 })
   await rename(`${path}.tmp`, path)
 }
-export const readArchiveScope = async (out: string): Promise<ArchiveScope> => {
+export const readArchiveScope = async (out: string, expectedSource?: ArchiveSource): Promise<ArchiveScope> => {
   const contents = await readFile(join(out, 'scope.json'), 'utf8').catch(() => {
     throw new ArchiveFailure('missing_journal')
   })
   try {
     const stored = object(JSON.parse(contents))
+    if (
+      expectedSource &&
+      (stored.queryMode !== (expectedSource === 'list' ? 'list_timeline' : 'single_range') ||
+        (expectedSource === 'list' && stored.endpoint !== LIST_TIMELINE_ENDPOINT))
+    )
+      throw new ArchiveFailure('scope_mismatch')
     return { listId: string(stored.listId), from: string(stored.from), until: string(stored.until) }
-  } catch {
+  } catch (error) {
+    if (error instanceof ArchiveFailure) throw error
     throw new ArchiveFailure('corrupt_journal')
   }
 }
@@ -110,17 +130,22 @@ type ArchivedPost = {
   url: string
   raw: unknown
 }
-export const parseArchivePage = (response: unknown) => {
+export const parseArchivePage = (response: unknown, source: ArchiveSource = 'search') => {
   const posts: ArchivedPost[] = []
   const cursors: string[] = []
   const root = object(response)
   if (root.errors) throw new Error('Unsupported payload')
-  const timeline = object(object(object(object(root.data).search_by_raw_query).search_timeline).timeline)
+  const data = object(root.data)
+  const timeline =
+    source === 'list'
+      ? object(object(object(data.list).tweets_timeline).timeline)
+      : object(object(object(data.search_by_raw_query).search_timeline).timeline)
   if (!Array.isArray(timeline.instructions)) throw new Error('Unsupported payload')
   const instructions = timeline.instructions
   let recognized = false
   let terminated = false
-  const visit = (value: unknown): void => {
+  let topLevelOldestTimestamp: string | undefined
+  const visit = (value: unknown, topLevel = false): void => {
     const entry = object(value)
     const content = object(entry.content ?? entry.item ?? entry)
     if (content.cursorType) {
@@ -144,6 +169,10 @@ export const parseArchivePage = (response: unknown) => {
     if (!/^\d+$/.test(id)) throw new Error('Unsupported tweet ID')
     const created = new Date(string(legacy.created_at))
     if (!Number.isFinite(created.getTime())) throw new Error('Unsupported timestamp')
+    const createdAt = created.toISOString()
+    if (topLevel)
+      topLevelOldestTimestamp =
+        topLevelOldestTimestamp && topLevelOldestTimestamp < createdAt ? topLevelOldestTimestamp : createdAt
     let text = string(legacy.full_text, true)
     if (result.note_tweet) text = string(object(object(object(result.note_tweet).note_tweet_results).result).text)
     const screenName = string(userCore.screen_name)
@@ -152,7 +181,7 @@ export const parseArchivePage = (response: unknown) => {
     if (!Array.isArray(hashtags)) throw new Error('Unsupported hashtags')
     posts.push({
       id,
-      createdAt: created.toISOString(),
+      createdAt,
       text,
       author: {
         ...(typeof user.rest_id === 'string' ? { id: user.rest_id } : {}),
@@ -172,10 +201,10 @@ export const parseArchivePage = (response: unknown) => {
     const instruction = object(raw)
     if (Array.isArray(instruction.entries) && (!instruction.type || instruction.type === 'TimelineAddEntries')) {
       recognized = true
-      for (const entry of instruction.entries) visit(entry)
+      for (const entry of instruction.entries) visit(entry, true)
     } else if (instruction.type === 'TimelineReplaceEntry' && instruction.entry) {
       recognized = true
-      visit(instruction.entry)
+      visit(instruction.entry, true)
     } else if (instruction.type === 'TimelineAddToModule' && Array.isArray(instruction.moduleItems)) {
       recognized = true
       for (const item of instruction.moduleItems) visit(item)
@@ -211,11 +240,18 @@ export const parseArchivePage = (response: unknown) => {
         )
       })
     })
-  return { posts, nextCursor: terminated ? undefined : cursors[0], terminated, replacementPair }
+  return {
+    posts,
+    nextCursor: terminated ? undefined : cursors[0],
+    terminated,
+    replacementPair,
+    topLevelOldestTimestamp
+  }
 }
 
 type Reason =
   | 'search_exhausted'
+  | 'list_exhausted'
   | 'budget'
   | 'request_failed'
   | 'unsupported_payload'
@@ -232,6 +268,7 @@ export type ArchiveResult = {
   terminalReason?: string
   coverageVerified: false
   queryOldestTimestamp?: string
+  topLevelOldestTimestamp?: string
   requestFailure?: { kind: string; status?: number }
 }
 export type ArchiveAccount = { key: string; authorId?: string; screenName: string; posts: number }
@@ -260,6 +297,7 @@ type RowIndex = {
 }
 export const runArchive = async (options: {
   scope: ArchiveScope
+  source?: ArchiveSource
   out: string
   seedFrom?: string
   resume?: boolean
@@ -270,12 +308,19 @@ export const runArchive = async (options: {
   search: (params: { cursor?: string; listId: string; since: Dayjs; until: Dayjs }) => Promise<unknown>
 }): Promise<ArchiveResult> => {
   const { scope, out } = options
+  const source = options.source ?? 'search'
   const maxPages = options.maxPages ?? 1000
   const maxRequests = options.maxRequests ?? 1000
-  const delayMs = options.delayMs ?? 1500
+  const delayMs = options.delayMs ?? (source === 'list' ? 2500 : 1500)
   for (const value of [maxPages, maxRequests])
     if (!Number.isSafeInteger(value) || value < 1) throw new ArchiveFailure('invalid_params')
-  if (!Number.isSafeInteger(delayMs) || delayMs < 0 || delayMs > 2147483647 || (options.resume && options.seedFrom))
+  if (
+    !Number.isSafeInteger(delayMs) ||
+    delayMs < 0 ||
+    delayMs > 2147483647 ||
+    (options.resume && options.seedFrom) ||
+    (source === 'list' && options.seedFrom)
+  )
     throw new ArchiveFailure('invalid_params')
   if (options.seedFrom) await assertSeedPathsDisjoint(options.seedFrom, out)
   await mkdir(out, { recursive: true, mode: 0o700 })
@@ -293,14 +338,14 @@ export const runArchive = async (options: {
       } catch {
         throw new ArchiveFailure('corrupt_journal')
       }
-      if (persisted !== JSON.stringify(scopeRecord(scope, seed))) throw new ArchiveFailure('scope_mismatch')
+      if (persisted !== JSON.stringify(scopeRecord(scope, seed, source))) throw new ArchiveFailure('scope_mismatch')
       if (seed) await verifySeedSnapshot(join(out, 'seed'), seed, scope)
     } else {
       if ((await readdir(out)).some((name) => name !== '.lock')) throw new ArchiveFailure('output_exists')
       if (options.seedFrom) seed = await prepareSeedSnapshot(options.seedFrom, out, scope)
-      await atomic(join(out, 'scope.json'), JSON.stringify(scopeRecord(scope, seed)))
+      await atomic(join(out, 'scope.json'), JSON.stringify(scopeRecord(scope, seed, source)))
     }
-    const record = scopeRecord(scope, seed)
+    const record = scopeRecord(scope, seed, source)
     const fingerprint = hash(record)
     const query = record.query
     await mkdir(join(out, 'pages'), { recursive: true, mode: 0o700 })
@@ -352,6 +397,8 @@ export const runArchive = async (options: {
     let queryOldestTimestamp: string | undefined
     let minTimestamp: string | undefined
     let maxTimestamp: string | undefined
+    let topLevelOldestTimestamp: string | undefined
+    const exhausted = () => reason === 'search_exhausted' || reason === 'list_exhausted'
     let outsideWindow = 0
     let requestFailure: { kind: string; status?: number } | undefined
     const cursors = new Set<string>()
@@ -379,11 +426,16 @@ export const runArchive = async (options: {
       locations.push(location)
       let parsed: ReturnType<typeof parseArchivePage>
       try {
-        parsed = parseArchivePage(envelope.response)
+        parsed = parseArchivePage(envelope.response, source)
       } catch {
         reason = 'unsupported_payload'
         return
       }
+      if (parsed.topLevelOldestTimestamp)
+        topLevelOldestTimestamp =
+          topLevelOldestTimestamp && topLevelOldestTimestamp < parsed.topLevelOldestTimestamp
+            ? topLevelOldestTimestamp
+            : parsed.topLevelOldestTimestamp
       let newIds = 0
       for (const [position, post] of parsed.posts.entries()) {
         if (!querySeenIds.has(post.id)) {
@@ -401,17 +453,18 @@ export const runArchive = async (options: {
       }
       empty = envelope.requestCursor && parsed.replacementPair ? empty + 1 : 0
       if (parsed.nextCursor && cursors.has(parsed.nextCursor)) reason = 'repeated_cursor'
-      else if (parsed.nextCursor && pages > 1 && parsed.posts.length > 0 && newIds === 0) reason = 'non_advancing'
-      else if (!parsed.nextCursor || empty >= 3) {
+      else if (source === 'search' && parsed.nextCursor && pages > 1 && parsed.posts.length > 0 && newIds === 0)
+        reason = 'non_advancing'
+      else if (!parsed.nextCursor || (source === 'search' && empty >= 3)) {
         terminalReason = parsed.terminated
           ? 'explicit_bottom'
           : parsed.nextCursor
             ? 'confirmed_cursor_only'
             : 'no_next_cursor'
-        reason = 'search_exhausted'
+        reason = source === 'list' ? 'list_exhausted' : 'search_exhausted'
       }
       if (parsed.nextCursor) cursors.add(parsed.nextCursor)
-      nextCursor = reason === 'search_exhausted' ? undefined : parsed.nextCursor
+      nextCursor = exhausted() ? undefined : parsed.nextCursor
     }
     const names = (await readdir(join(out, 'pages')))
       .filter((name) => name !== '.DS_Store' && !name.endsWith('.tmp'))
@@ -442,7 +495,9 @@ export const runArchive = async (options: {
       try {
         void Promise.resolve(
           options.onProgress({
-            date: minTimestamp ? dayjs(minTimestamp).format('YYYY-MM-DD') : '-',
+            date: (source === 'list' ? topLevelOldestTimestamp : minTimestamp)
+              ? dayjs(source === 'list' ? topLevelOldestTimestamp : minTimestamp).format('YYYY-MM-DD')
+              : '-',
             pages,
             seedPages: seed?.pages ?? 0,
             posts: rows.size,
@@ -464,7 +519,7 @@ export const runArchive = async (options: {
             const envelope = JSON.parse(await readFile(join(out, location), 'utf8'))
             let posts: ArchivedPost[]
             try {
-              posts = parseArchivePage(envelope.response).posts
+              posts = parseArchivePage(envelope.response, source).posts
             } catch {
               continue
             }
@@ -489,7 +544,7 @@ export const runArchive = async (options: {
           {
             ...record,
             scopeFingerprint: fingerprint,
-            complete: reason === 'search_exhausted',
+            complete: exhausted(),
             reason: reason ?? 'budget',
             coverageVerified: false,
             terminalReason,
@@ -502,11 +557,14 @@ export const runArchive = async (options: {
             minTimestamp,
             maxTimestamp,
             queryOldestTimestamp,
+            ...(source === 'list' ? { topLevelOldestTimestamp } : {}),
             seedMatchedByQuery: seedMatched.size,
             seedOnlyPosts: seedIds.size - seedMatched.size,
             requestFailure,
             coverage:
-              'One fixed SearchTimeline range ended under the recorded empirical cursor policy. Historical coverage has not been verified; seeded posts may not reappear in the new query.'
+              source === 'list'
+                ? 'Native List pagination ended only at explicit Bottom or no next cursor. Dates were filtered locally. Historical coverage and timeline ordering have not been verified.'
+                : 'One fixed SearchTimeline range ended under the recorded empirical cursor policy. Historical coverage has not been verified; seeded posts may not reappear in the new query.'
           },
           null,
           2
@@ -560,7 +618,7 @@ export const runArchive = async (options: {
     reason ??= 'budget'
     await save(true)
     return {
-      complete: reason === 'search_exhausted',
+      complete: exhausted(),
       reason,
       pages,
       posts: rows.size,
@@ -570,6 +628,7 @@ export const runArchive = async (options: {
       terminalReason,
       coverageVerified: false,
       queryOldestTimestamp,
+      ...(source === 'list' ? { topLevelOldestTimestamp } : {}),
       requestFailure
     }
   } finally {
