@@ -4,6 +4,7 @@ import { ExternalLink } from 'lucide-react'
 import { GanttGridCell } from '@/components/events/gantt-chart-parts'
 import { getCategoryColor } from '@/components/events/gantt-chart-utils'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
 import appContent, { EVENT_CATEGORY_LABELS, EVENT_LABELS, EVENT_STATUS_LABELS } from '@/locales/app.content'
 import type { EventBar } from './use-gantt-layout'
 
@@ -68,7 +69,11 @@ export const GanttRow = ({
               <Link
                 to='/events/$uuid'
                 params={{ uuid: event.uuid }}
-                className='absolute inset-0 hover:outline hover:-outline-offset-1 hover:outline-[var(--gantt-foreground)]'
+                className={cn(
+                  // ホバーは枠ではなくバー全体をわずかに暗くする。キーボードのフォーカスだけブランド色のリングを内側に出す
+                  'absolute inset-0 rounded-sm transition-colors duration-150 hover:bg-[var(--gantt-foreground)]/10',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand'
+                )}
                 onClick={(e) => {
                   if (hasDraggedRef.current) {
                     e.preventDefault()

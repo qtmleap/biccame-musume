@@ -213,15 +213,51 @@ for (const theme of ['light', 'dark'])
       const measured = await link.evaluate((el) => {
         const bar = el.parentElement
         if (!bar) throw new Error('Missing band')
+        const ctx = document.createElement('canvas').getContext('2d', { willReadFrequently: true })
+        if (!ctx) throw new Error('Missing color measurement context')
+        // The computed overlay syntax (rgba / oklab / color()) depends on the browser, so paint it over an opaque
+        // backdrop and compare pixels instead of strings.
+        const over = (color: string, backdrop: string) => {
+          ctx.fillStyle = backdrop
+          ctx.fillRect(0, 0, 1, 1)
+          ctx.fillStyle = color
+          ctx.fillRect(0, 0, 1, 1)
+          return [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3)
+        }
+        // Reference: --gantt-foreground at 10%, resolved in the same scope as the link.
+        const reference = document.createElement('div')
+        reference.style.backgroundColor = 'color-mix(in srgb, var(--gantt-foreground) 10%, transparent)'
+        bar.appendChild(reference)
+        const referenceColor = getComputedStyle(reference).backgroundColor
+        reference.remove()
+        const overlay = getComputedStyle(el).backgroundColor
+        const foreground = over(getComputedStyle(bar).getPropertyValue('--gantt-foreground').trim(), '#fff')
+        const overlayOnWhite = over(overlay, '#fff'),
+          overlayOnBlack = over(overlay, '#000')
+        const referenceOnWhite = over(referenceColor, '#fff'),
+          referenceOnBlack = over(referenceColor, '#000')
+        // white - black = 255 * (1 - alpha), independent of the overlay color.
+        const gap = overlayOnWhite.map((v, i) => v - overlayOnBlack[i])
         return {
-          overlay: getComputedStyle(el).backgroundColor,
+          overlay,
+          overlayOnWhite,
+          overlayOnBlack,
+          overlayAlpha: 1 - gap.reduce((sum, v) => sum + v, 0) / gap.length / 255,
+          foreground,
+          referenceDelta: Math.max(
+            ...overlayOnWhite.map((v, i) => Math.abs(v - referenceOnWhite[i])),
+            ...overlayOnBlack.map((v, i) => Math.abs(v - referenceOnBlack[i]))
+          ),
           outline: getComputedStyle(el).outlineStyle,
           background: getComputedStyle(bar).backgroundColor,
           colors: [...bar.querySelectorAll('div span')].map((span) => getComputedStyle(span).color)
         }
       })
-      expect(measured.overlay).toBe('rgba(0, 0, 0, 0)')
-      expect(measured.outline).toBe('solid')
+      // Hover darkens the whole band with --gantt-foreground at 10% alpha, with no outline.
+      expect(measured.foreground).toEqual([24, 24, 27])
+      expect(Math.abs(measured.overlayAlpha - 0.1)).toBeLessThanOrEqual(0.01)
+      expect(measured.referenceDelta).toBeLessThanOrEqual(1)
+      expect(measured.outline).toBe('none')
       for (const color of measured.colors) expect(color).toBe('rgb(24, 24, 27)')
       evidence.push(measured)
     }
