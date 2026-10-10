@@ -60,7 +60,8 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
       limited_card: 0,
       regular_card: 1,
       ackey: 2,
-      other: 3
+      acsta: 3,
+      other: 4
     }),
     []
   )

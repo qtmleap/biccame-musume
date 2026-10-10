@@ -1,4 +1,4 @@
-import { CreditCard, Gift, KeyRound } from 'lucide-react'
+import { CreditCard, Gift, KeyRound, PersonStanding } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import type { EventCategory, EventStatus } from '@/schemas/event.dto'
 
@@ -31,6 +31,7 @@ export const CATEGORY_BADGE = {
     <Badge className='bg-category-regular-card text-category-regular-card-foreground'>{label}</Badge>
   ),
   ackey: (label: string) => <Badge className='bg-category-ackey text-category-ackey-foreground'>{label}</Badge>,
+  acsta: (label: string) => <Badge className='bg-category-acsta text-category-acsta-foreground'>{label}</Badge>,
   other: (label: string) => <Badge className='bg-category-other text-category-other-foreground'>{label}</Badge>
 } satisfies Record<EventCategory, (label: string) => React.ReactNode>
 
@@ -50,6 +51,10 @@ export const CATEGORY_WITH_ICON = {
   ackey: {
     icon: <KeyRound className='size-4' />,
     className: 'bg-category-ackey text-category-ackey-foreground'
+  },
+  acsta: {
+    icon: <PersonStanding className='size-4' />,
+    className: 'bg-category-acsta text-category-acsta-foreground'
   },
   other: {
     icon: <Gift className='size-4' />,

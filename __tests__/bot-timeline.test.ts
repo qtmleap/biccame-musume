@@ -335,6 +335,33 @@ test('Responses API keeps model/prompt/schema contract and normalizes blank valu
   })
 })
 
+test('AI accepts the acsta category and offers it in both the schema enum and the prompt', async () => {
+  const bodies: unknown[] = []
+  mockFetch(async (_input, init) => {
+    bodies.push(JSON.parse(String(init?.body)))
+    return Response.json(
+      aiResponse(JSON.stringify({ events: [{ ...extraction, endDate: '', endAt: '', category: 'acsta' }] }))
+    )
+  })
+  expect(await parseTweet(env, tweet)).toEqual([{ ...extraction, category: 'acsta' }])
+  expect(bodies[0]).toMatchObject({
+    instructions: expect.stringContaining('- acsta: アクリルスタンド'),
+    text: {
+      format: {
+        schema: {
+          properties: {
+            events: {
+              items: {
+                properties: { category: { enum: ['ackey', 'acsta', 'regular_card', 'limited_card', 'other', ''] } }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+})
+
 test.each([
   aiResponse('{}', 'incomplete'),
   aiResponse('', 'completed', true),
