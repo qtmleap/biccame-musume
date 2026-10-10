@@ -8,37 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useEvents } from '@/hooks/use-events'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { DURATION } from '@/lib/motion'
-
-/**
- * 通常名刺（regular_card）の重複を排除し、店舗ごとに最新のものだけを残す
- * @param events フィルタリング済みのイベント一覧
- * @returns 重複排除されたイベント一覧
- */
-const deduplicateRegularCards = (events: ReturnType<typeof useEvents>['data']) => {
-  const regularCardStores = new Set<string>()
-  return events.filter((event) => {
-    if (event.category !== 'regular_card') {
-      return true
-    }
-    // 店舗ごとに1つだけ表示
-    const stores = event.stores || []
-    for (const store of stores) {
-      if (regularCardStores.has(store)) {
-        return false // 既にこの店舗の通常名刺がある
-      }
-      regularCardStores.add(store)
-    }
-    // 店舗がない場合はタイトルで判定
-    if (stores.length === 0) {
-      const key = `no-store-${event.title}`
-      if (regularCardStores.has(key)) {
-        return false
-      }
-      regularCardStores.add(key)
-    }
-    return true
-  })
-}
+import { deduplicateRegularCards } from '@/utils/deduplicate-regular-cards'
 
 /**
  * トップページ用のイベント一覧
@@ -101,7 +71,7 @@ export const EventList = () => {
     ['asc', 'asc', 'asc']
   )
 
-  // 通常名刺は店舗ごとに最新のものだけ表示（開始日でソート済みなので最初に出てきたものが最新）
+  // 通常名刺は店舗・対象の娘ごとに最新のものだけ表示（開始日でソート済みなので最初に出てきたものが最新）
   const upcomingEvents = deduplicateRegularCards(filteredEvents)
 
   if (isLoading) {
