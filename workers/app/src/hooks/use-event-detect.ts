@@ -1,5 +1,14 @@
-import type { KeywordsRequestSchema, LabelRequest, PostQuery, PostView } from '@biccame/shared/event-detect/viewer'
+import type {
+  EmulatedDetailResponse,
+  EmulatedQuery,
+  GapsResponse,
+  KeywordsRequestSchema,
+  LabelRequest,
+  PostQuery,
+  PostView
+} from '@biccame/shared/event-detect/viewer'
 import { type QueryClient, useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 import type { z } from 'zod'
 import { client } from '@/utils/client'
 
@@ -18,20 +27,28 @@ const ROOT = ['admin', 'event-detect'] as const
 const keys = {
   summary: [...ROOT, 'summary'],
   accounts: [...ROOT, 'accounts'],
+  charts: [...ROOT, 'charts'],
   posts: [...ROOT, 'posts'],
   events: [...ROOT, 'events'],
   event: [...ROOT, 'event'],
   gaps: [...ROOT, 'gaps'],
+  emulated: [...ROOT, 'emulated'],
+  emulatedEvent: [...ROOT, 'emulated-event'],
   keywords: [...ROOT, 'keywords']
 } as const
 
 export type PostFilter = Partial<Omit<PostQuery, 'offset' | 'limit'>>
+
+export type EmulatedFilter = Partial<Omit<EmulatedQuery, 'offset' | 'limit'>>
 
 export const useEventDetectSummary = () =>
   useSuspenseQuery({ queryKey: keys.summary, queryFn: () => client.getEventDetectSummary(), ...liveOptions })
 
 export const useEventDetectAccounts = () =>
   useSuspenseQuery({ queryKey: keys.accounts, queryFn: () => client.getEventDetectAccounts(), ...liveOptions })
+
+export const useEventDetectCharts = () =>
+  useSuspenseQuery({ queryKey: keys.charts, queryFn: () => client.getEventDetectCharts(), ...liveOptions })
 
 export const useEventDetectPosts = (filter: PostFilter, offset: number, limit: number) =>
   useSuspenseQuery({
@@ -53,6 +70,25 @@ export const useEventDetectEvent = (id: string) =>
 export const useEventDetectGaps = () =>
   useSuspenseQuery({ queryKey: keys.gaps, queryFn: () => client.getEventDetectGaps(), ...liveOptions })
 
+export const useEventDetectEmulated = (filter: EmulatedFilter, offset: number, limit: number) =>
+  useSuspenseQuery({
+    queryKey: [...keys.emulated, filter, offset, limit],
+    queryFn: () => client.getEventDetectEmulated({ queries: { ...filter, offset, limit } }),
+    ...liveOptions
+  })
+
+/** LLM イベントの詳細。存在しない id は 404 を null にして返す（再試行もエラー表示もしない） */
+export const useEventDetectEmulatedEvent = (id: string) =>
+  useSuspenseQuery({
+    queryKey: [...keys.emulatedEvent, id],
+    queryFn: () =>
+      client.getEventDetectEmulatedEvent({ params: { id } }).catch((error: unknown) => {
+        if (isAxiosError(error) && error.response?.status === 404) return null
+        throw error
+      }),
+    ...liveOptions
+  })
+
 export const useEventDetectKeywords = () =>
   useSuspenseQuery({ queryKey: keys.keywords, queryFn: () => client.getEventDetectKeywords(), ...liveOptions })
 
@@ -71,11 +107,20 @@ const patchLabel = (queryClient: QueryClient, id: string, label: Label) => {
   queryClient.setQueriesData<{ posts: PostView[] }>({ queryKey: keys.event }, (data) =>
     data ? { ...data, posts: data.posts.map(patch) } : data
   )
-  queryClient.setQueriesData<{ gaps: { posts: PostView[] }[] }>({ queryKey: keys.gaps }, (data) =>
-    data ? { gaps: data.gaps.map((gap) => ({ ...gap, posts: gap.posts.map(patch) })) } : data
+  queryClient.setQueriesData<EmulatedDetailResponse | null>({ queryKey: keys.emulatedEvent }, (data) =>
+    data ? { ...data, posts: data.posts.map((entry) => ({ ...entry, post: patch(entry.post) })) } : data
   )
-  queryClient.setQueriesData<{ droppedGold: PostView[] }>({ queryKey: keys.summary }, (data) =>
-    data ? { ...data, droppedGold: data.droppedGold.map(patch) } : data
+  queryClient.setQueriesData<GapsResponse>({ queryKey: keys.gaps }, (data) =>
+    data
+      ? {
+          ...data,
+          events: data.events.map((event) => ({
+            ...event,
+            posts: event.posts.map((entry) => ({ ...entry, post: patch(entry.post) }))
+          })),
+          pending: data.pending.map(patch)
+        }
+      : data
   )
 }
 
@@ -89,7 +134,7 @@ export const useSetEventDetectLabel = () => {
         : client.deleteEventDetectLabel(undefined, { params: { id } }),
     onSuccess: (result, { id }) => {
       patchLabel(queryClient, id, result.label ? result.label : undefined)
-      // ファネルの手動ラベル件数は取り直す
+      // 概況の手動ラベル件数は取り直す
       queryClient.invalidateQueries({ queryKey: keys.summary })
     }
   })

@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { EXCLUDE_GROUP_LABELS, GROUP_LABELS } from '@/components/admin/event-detect/constants'
+import { EXCLUDE_GROUP_LABELS, GROUP_LABELS, RESCUE_KIND_LABELS } from '@/components/admin/event-detect/constants'
 import { formatNumber } from '@/components/admin/event-detect/format'
-import { Note, SectionHeading } from '@/components/admin/event-detect/section'
+import { SectionHeading } from '@/components/admin/event-detect/section'
 import { Td, TdNum, Th, ThNum } from '@/components/admin/event-detect/table-parts'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -40,17 +40,13 @@ const KeywordsPage = () => {
 
   return (
     <div>
-      <Note>
-        チェックを外した語はサーバー上の判定から一時的に外れる（再起動で戻る）。ファネル・投稿一覧にもそのまま反映される。
-      </Note>
       {mutation.isError && (
         <p role='alert' className='mb-3 text-sm text-destructive'>
           保存できませんでした: {mutation.error.message}
         </p>
       )}
 
-      <SectionHeading aside={`${data.keywords.length} 語`}>キーワード（含む投稿を通す）</SectionHeading>
-      <Note>単独件数は「この語以外に当たる語が無い」投稿の数で、外したときに落ちる件数。</Note>
+      <SectionHeading aside={`${data.keywords.length} 語`}>キーワード</SectionHeading>
       <Table>
         <TableHeader>
           <TableRow className='hover:bg-transparent'>
@@ -85,12 +81,7 @@ const KeywordsPage = () => {
         </TableBody>
       </Table>
 
-      <SectionHeading aside={`${excludes.length} 語`}>除外語（救済語が無ければ落とす）</SectionHeading>
-      <Note>
-        救済語はビッカメ娘・ビッ旅・名刺・アクキー・アクスタ・缶バッジ・ノベルティとキャラクター名（○○たん）。
-        投稿はキーワードを通過し、この語を含み、救済語を含まない件数。単独はこの語だけで落ちている件数（外すと通過に戻る）。
-        「正解が落ちる」は 0 であるべき。
-      </Note>
+      <SectionHeading aside={`${excludes.length} 語`}>除外語</SectionHeading>
       <Table>
         <TableHeader>
           <TableRow className='hover:bg-transparent'>
@@ -125,6 +116,30 @@ const KeywordsPage = () => {
               <TdNum className={cn(stat.droppedGold > 0 && 'font-bold text-destructive')}>
                 {formatNumber(stat.droppedGold)}
               </TdNum>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <SectionHeading aside={`${data.rescues.length} 語`}>救済語</SectionHeading>
+      <Table>
+        <TableHeader>
+          <TableRow className='hover:bg-transparent'>
+            <Th>語</Th>
+            <Th>種類</Th>
+            <ThNum>救済した投稿</ThNum>
+            <ThNum>単独</ThNum>
+            <ThNum>救済した正解</ThNum>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.rescues.map((stat) => (
+            <TableRow key={stat.keyword}>
+              <Td>{stat.keyword}</Td>
+              <Td>{RESCUE_KIND_LABELS[stat.kind]}</Td>
+              <TdNum>{formatNumber(stat.posts)}</TdNum>
+              <TdNum>{formatNumber(stat.onlyPosts)}</TdNum>
+              <TdNum>{formatNumber(stat.gold)}</TdNum>
             </TableRow>
           ))}
         </TableBody>

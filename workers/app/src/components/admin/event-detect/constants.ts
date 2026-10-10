@@ -1,4 +1,4 @@
-import type { Label, PostView } from '@biccame/shared/event-detect/viewer'
+import type { Label, PostView, RescueStat } from '@biccame/shared/event-detect/viewer'
 import { EVENT_CATEGORY_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { EventCategorySchema } from '@/schemas/event.dto'
 import { StoreKeySchema } from '@/schemas/store.dto'
@@ -42,6 +42,11 @@ export const EXCLUDE_GROUP_LABELS: Record<PostView['excludeHits'][number]['group
   games: 'トレカ・ゲーム',
   appliances: '家電・売場',
   promotion: '販促・体験'
+}
+
+export const RESCUE_KIND_LABELS: Record<RescueStat['kind'], string> = {
+  keyword: '固定',
+  character: 'キャラクター名'
 }
 
 /** 店舗キーを表示名にする。未知のキーはそのまま出す */

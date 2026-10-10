@@ -22,7 +22,13 @@ const Tag = ({ tone, className, children }: { tone: string; className?: string; 
   </Badge>
 )
 
-/** 投稿の判定結果。通過/除外、強シグナル、正解（除外された正解は警告を足す） */
+/** 確率の判定の表示名。バッジと、投稿画面の絞り込みのチップで使う */
+export const JUDGE_LABELS = { llm: 'LLM', clef: 'Clef' } as const
+
+/** 確率は小数 2 桁で出す（0 は 0.00）。0 でも出すので、値の有無は undefined で見る */
+const probabilityText = (probability: number): string => probability.toFixed(2)
+
+/** 投稿の判定結果。通過/除外、強シグナル、正解（除外された正解は警告を足す）、LLM・Clef の確率 */
 const Verdict = ({ post }: { post: PostView }) => (
   <div className='flex flex-wrap items-center gap-1.5'>
     {post.reason ? (
@@ -32,6 +38,16 @@ const Verdict = ({ post }: { post: PostView }) => (
     )}
     {post.strong && <Tag tone={TONE.info}>強</Tag>}
     {post.reason && post.gold.length > 0 && <Tag tone={TONE.destructive}>除外された正解</Tag>}
+    {post.llm !== undefined && (
+      <Tag tone={TONE.muted} className='font-numeric tabular-nums'>
+        {JUDGE_LABELS.llm} {probabilityText(post.llm)}
+      </Tag>
+    )}
+    {post.clef !== undefined && (
+      <Tag tone={TONE.muted} className='font-numeric tabular-nums'>
+        {JUDGE_LABELS.clef} {probabilityText(post.clef)}
+      </Tag>
+    )}
   </div>
 )
 
@@ -65,13 +81,23 @@ const Words = ({ label, children }: { label: string; children: React.ReactNode }
   </div>
 )
 
-export const PostItem = ({ post, currentEventId }: { post: PostView; currentEventId?: string }) => {
+export const PostItem = ({
+  post,
+  currentEventId,
+  badge
+}: {
+  post: PostView
+  currentEventId?: string
+  /** 投稿日時の前に出す印（イベントの中での状態など） */
+  badge?: React.ReactNode
+}) => {
   const keywords = post.hits.map((hit) => hit.keyword)
   const excludes = post.excludeHits.map((hit) => hit.keyword)
   return (
     <article className='grid gap-4 py-4 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-6'>
       <div className='min-w-0 space-y-2'>
         <div className='flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground'>
+          {badge}
           <time dateTime={post.createdAt} className='font-numeric tabular-nums'>
             {formatDateTime(post.createdAt)}
           </time>
@@ -156,10 +182,18 @@ export const PostItem = ({ post, currentEventId }: { post: PostView; currentEven
 }
 
 /** 投稿の一覧。投稿の間は区切り線だけで分ける */
-export const PostList = ({ posts, currentEventId }: { posts: PostView[]; currentEventId?: string }) => (
+export const PostList = ({
+  posts,
+  currentEventId,
+  badgeOf
+}: {
+  posts: PostView[]
+  currentEventId?: string
+  badgeOf?: (post: PostView) => React.ReactNode
+}) => (
   <div className='divide-y divide-separator border-y border-separator'>
     {posts.map((post) => (
-      <PostItem key={post.id} post={post} currentEventId={currentEventId} />
+      <PostItem key={post.id} post={post} currentEventId={currentEventId} badge={badgeOf?.(post)} />
     ))}
   </div>
 )

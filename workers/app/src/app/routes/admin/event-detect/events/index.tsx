@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { categoryName, storeName } from '@/components/admin/event-detect/constants'
 import { formatDate } from '@/components/admin/event-detect/format'
-import { EmptyState, Note } from '@/components/admin/event-detect/section'
+import { EmptyState } from '@/components/admin/event-detect/section'
 import { SegmentButton } from '@/components/admin/event-detect/segment-button'
 import { Td, TdNum, Th, ThNum } from '@/components/admin/event-detect/table-parts'
 import { Input } from '@/components/ui/input'
@@ -64,10 +64,6 @@ const EventsPage = () => {
         />
         <span className='w-16 text-right text-sm text-muted-foreground tabular-nums'>{events.length} 件</span>
       </div>
-      <Note>
-        終了の登録漏れ候補: 終了の参考 URL
-        も実終了日時も無いが、開始後に担当アカウントが「終了」系の語と景品名を含む投稿をしているイベント。別の景品の終了報告も混ざる。
-      </Note>
       {events.length === 0 ? (
         <EmptyState>条件に合うイベントはありません</EmptyState>
       ) : (

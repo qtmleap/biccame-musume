@@ -7,7 +7,7 @@ export const formatDateTime = (iso: string): string => dayjs(iso).tz(JST).format
 
 export const formatDate = (iso: string | undefined): string => (iso ? dayjs(iso).tz(JST).format('YYYY/MM/DD') : '—')
 
-export const formatNumber = (value: number): string => value.toLocaleString('ja-JP')
+/** YYYY-MM-DD の日付（抽出で本文から拾った日）をそのまま表示用にする。タイムゾーン変換はしない */
+export const formatDay = (day: string | undefined): string => (day ? day.replaceAll('-', '/') : '—')
 
-export const percent = (part: number, whole: number): string =>
-  whole === 0 ? '—' : `${((part / whole) * 100).toFixed(1)}%`
+export const formatNumber = (value: number): string => value.toLocaleString('ja-JP')

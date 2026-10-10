@@ -8,11 +8,6 @@ export const SectionHeading = ({ children, aside }: { children: ReactNode; aside
   </div>
 )
 
-/** 見出しの下に置く説明文 */
-export const Note = ({ children }: { children: ReactNode }) => (
-  <p className='mb-3 text-sm leading-relaxed text-muted-foreground'>{children}</p>
-)
-
 /** 一覧が空のとき */
 export const EmptyState = ({ children }: { children: ReactNode }) => (
   <div className='rounded-lg border border-card-border p-6 text-center text-sm text-muted-foreground'>{children}</div>

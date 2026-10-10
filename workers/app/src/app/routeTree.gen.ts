@@ -38,6 +38,8 @@ import { Route as MeFavoritesIndexRouteImport } from './routes/me/favorites/inde
 import { Route as MeInterestedIndexRouteImport } from './routes/me/interested/index'
 import { Route as MeVisitedIndexRouteImport } from './routes/me/visited/index'
 import { Route as AdminBadgesRankingIndexRouteImport } from './routes/admin/badges/ranking/index'
+import { Route as AdminEventDetectChartsIndexRouteImport } from './routes/admin/event-detect/charts/index'
+import { Route as AdminEventDetectEmulatedIndexRouteImport } from './routes/admin/event-detect/emulated/index'
 import { Route as AdminEventDetectEventsIndexRouteImport } from './routes/admin/event-detect/events/index'
 import { Route as AdminEventDetectGapsIndexRouteImport } from './routes/admin/event-detect/gaps/index'
 import { Route as AdminEventDetectKeywordsIndexRouteImport } from './routes/admin/event-detect/keywords/index'
@@ -46,6 +48,7 @@ import { Route as AdminEventGroupsNewIndexRouteImport } from './routes/admin/eve
 import { Route as AdminEventsUuidIndexRouteImport } from './routes/admin/events/$uuid/index'
 import { Route as AdminEventsNewIndexRouteImport } from './routes/admin/events/new/index'
 import { Route as EventsGroupIdIndexRouteImport } from './routes/events/group/$id/index'
+import { Route as AdminEventDetectEmulatedIdIndexRouteImport } from './routes/admin/event-detect/emulated/$id/index'
 import { Route as AdminEventDetectEventsUuidIndexRouteImport } from './routes/admin/event-detect/events/$uuid/index'
 import { Route as AdminEventGroupsUuidEditIndexRouteImport } from './routes/admin/event-groups/$uuid/edit/index'
 import { Route as AdminEventsUuidEditIndexRouteImport } from './routes/admin/events/$uuid/edit/index'
@@ -195,6 +198,18 @@ const AdminBadgesRankingIndexRoute = AdminBadgesRankingIndexRouteImport.update({
   path: '/badges/ranking/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEventDetectChartsIndexRoute =
+  AdminEventDetectChartsIndexRouteImport.update({
+    id: '/charts/',
+    path: '/charts/',
+    getParentRoute: () => AdminEventDetectRoute,
+  } as any)
+const AdminEventDetectEmulatedIndexRoute =
+  AdminEventDetectEmulatedIndexRouteImport.update({
+    id: '/emulated/',
+    path: '/emulated/',
+    getParentRoute: () => AdminEventDetectRoute,
+  } as any)
 const AdminEventDetectEventsIndexRoute =
   AdminEventDetectEventsIndexRouteImport.update({
     id: '/events/',
@@ -240,6 +255,12 @@ const EventsGroupIdIndexRoute = EventsGroupIdIndexRouteImport.update({
   path: '/events/group/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminEventDetectEmulatedIdIndexRoute =
+  AdminEventDetectEmulatedIdIndexRouteImport.update({
+    id: '/emulated/$id/',
+    path: '/emulated/$id/',
+    getParentRoute: () => AdminEventDetectRoute,
+  } as any)
 const AdminEventDetectEventsUuidIndexRoute =
   AdminEventDetectEventsUuidIndexRouteImport.update({
     id: '/events/$uuid/',
@@ -289,6 +310,8 @@ export interface FileRoutesByFullPath {
   '/me/interested/': typeof MeInterestedIndexRoute
   '/me/visited/': typeof MeVisitedIndexRoute
   '/admin/badges/ranking/': typeof AdminBadgesRankingIndexRoute
+  '/admin/event-detect/charts/': typeof AdminEventDetectChartsIndexRoute
+  '/admin/event-detect/emulated/': typeof AdminEventDetectEmulatedIndexRoute
   '/admin/event-detect/events/': typeof AdminEventDetectEventsIndexRoute
   '/admin/event-detect/gaps/': typeof AdminEventDetectGapsIndexRoute
   '/admin/event-detect/keywords/': typeof AdminEventDetectKeywordsIndexRoute
@@ -297,6 +320,7 @@ export interface FileRoutesByFullPath {
   '/admin/events/$uuid/': typeof AdminEventsUuidIndexRoute
   '/admin/events/new/': typeof AdminEventsNewIndexRoute
   '/events/group/$id/': typeof EventsGroupIdIndexRoute
+  '/admin/event-detect/emulated/$id/': typeof AdminEventDetectEmulatedIdIndexRoute
   '/admin/event-detect/events/$uuid/': typeof AdminEventDetectEventsUuidIndexRoute
   '/admin/event-groups/$uuid/edit/': typeof AdminEventGroupsUuidEditIndexRoute
   '/admin/events/$uuid/edit/': typeof AdminEventsUuidEditIndexRoute
@@ -329,6 +353,8 @@ export interface FileRoutesByTo {
   '/me/interested': typeof MeInterestedIndexRoute
   '/me/visited': typeof MeVisitedIndexRoute
   '/admin/badges/ranking': typeof AdminBadgesRankingIndexRoute
+  '/admin/event-detect/charts': typeof AdminEventDetectChartsIndexRoute
+  '/admin/event-detect/emulated': typeof AdminEventDetectEmulatedIndexRoute
   '/admin/event-detect/events': typeof AdminEventDetectEventsIndexRoute
   '/admin/event-detect/gaps': typeof AdminEventDetectGapsIndexRoute
   '/admin/event-detect/keywords': typeof AdminEventDetectKeywordsIndexRoute
@@ -337,6 +363,7 @@ export interface FileRoutesByTo {
   '/admin/events/$uuid': typeof AdminEventsUuidIndexRoute
   '/admin/events/new': typeof AdminEventsNewIndexRoute
   '/events/group/$id': typeof EventsGroupIdIndexRoute
+  '/admin/event-detect/emulated/$id': typeof AdminEventDetectEmulatedIdIndexRoute
   '/admin/event-detect/events/$uuid': typeof AdminEventDetectEventsUuidIndexRoute
   '/admin/event-groups/$uuid/edit': typeof AdminEventGroupsUuidEditIndexRoute
   '/admin/events/$uuid/edit': typeof AdminEventsUuidEditIndexRoute
@@ -372,6 +399,8 @@ export interface FileRoutesById {
   '/me/interested/': typeof MeInterestedIndexRoute
   '/me/visited/': typeof MeVisitedIndexRoute
   '/admin/badges/ranking/': typeof AdminBadgesRankingIndexRoute
+  '/admin/event-detect/charts/': typeof AdminEventDetectChartsIndexRoute
+  '/admin/event-detect/emulated/': typeof AdminEventDetectEmulatedIndexRoute
   '/admin/event-detect/events/': typeof AdminEventDetectEventsIndexRoute
   '/admin/event-detect/gaps/': typeof AdminEventDetectGapsIndexRoute
   '/admin/event-detect/keywords/': typeof AdminEventDetectKeywordsIndexRoute
@@ -380,6 +409,7 @@ export interface FileRoutesById {
   '/admin/events/$uuid/': typeof AdminEventsUuidIndexRoute
   '/admin/events/new/': typeof AdminEventsNewIndexRoute
   '/events/group/$id/': typeof EventsGroupIdIndexRoute
+  '/admin/event-detect/emulated/$id/': typeof AdminEventDetectEmulatedIdIndexRoute
   '/admin/event-detect/events/$uuid/': typeof AdminEventDetectEventsUuidIndexRoute
   '/admin/event-groups/$uuid/edit/': typeof AdminEventGroupsUuidEditIndexRoute
   '/admin/events/$uuid/edit/': typeof AdminEventsUuidEditIndexRoute
@@ -416,6 +446,8 @@ export interface FileRouteTypes {
     | '/me/interested/'
     | '/me/visited/'
     | '/admin/badges/ranking/'
+    | '/admin/event-detect/charts/'
+    | '/admin/event-detect/emulated/'
     | '/admin/event-detect/events/'
     | '/admin/event-detect/gaps/'
     | '/admin/event-detect/keywords/'
@@ -424,6 +456,7 @@ export interface FileRouteTypes {
     | '/admin/events/$uuid/'
     | '/admin/events/new/'
     | '/events/group/$id/'
+    | '/admin/event-detect/emulated/$id/'
     | '/admin/event-detect/events/$uuid/'
     | '/admin/event-groups/$uuid/edit/'
     | '/admin/events/$uuid/edit/'
@@ -456,6 +489,8 @@ export interface FileRouteTypes {
     | '/me/interested'
     | '/me/visited'
     | '/admin/badges/ranking'
+    | '/admin/event-detect/charts'
+    | '/admin/event-detect/emulated'
     | '/admin/event-detect/events'
     | '/admin/event-detect/gaps'
     | '/admin/event-detect/keywords'
@@ -464,6 +499,7 @@ export interface FileRouteTypes {
     | '/admin/events/$uuid'
     | '/admin/events/new'
     | '/events/group/$id'
+    | '/admin/event-detect/emulated/$id'
     | '/admin/event-detect/events/$uuid'
     | '/admin/event-groups/$uuid/edit'
     | '/admin/events/$uuid/edit'
@@ -498,6 +534,8 @@ export interface FileRouteTypes {
     | '/me/interested/'
     | '/me/visited/'
     | '/admin/badges/ranking/'
+    | '/admin/event-detect/charts/'
+    | '/admin/event-detect/emulated/'
     | '/admin/event-detect/events/'
     | '/admin/event-detect/gaps/'
     | '/admin/event-detect/keywords/'
@@ -506,6 +544,7 @@ export interface FileRouteTypes {
     | '/admin/events/$uuid/'
     | '/admin/events/new/'
     | '/events/group/$id/'
+    | '/admin/event-detect/emulated/$id/'
     | '/admin/event-detect/events/$uuid/'
     | '/admin/event-groups/$uuid/edit/'
     | '/admin/events/$uuid/edit/'
@@ -739,6 +778,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBadgesRankingIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/event-detect/charts/': {
+      id: '/admin/event-detect/charts/'
+      path: '/charts'
+      fullPath: '/admin/event-detect/charts/'
+      preLoaderRoute: typeof AdminEventDetectChartsIndexRouteImport
+      parentRoute: typeof AdminEventDetectRoute
+    }
+    '/admin/event-detect/emulated/': {
+      id: '/admin/event-detect/emulated/'
+      path: '/emulated'
+      fullPath: '/admin/event-detect/emulated/'
+      preLoaderRoute: typeof AdminEventDetectEmulatedIndexRouteImport
+      parentRoute: typeof AdminEventDetectRoute
+    }
     '/admin/event-detect/events/': {
       id: '/admin/event-detect/events/'
       path: '/events'
@@ -795,6 +848,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsGroupIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/event-detect/emulated/$id/': {
+      id: '/admin/event-detect/emulated/$id/'
+      path: '/emulated/$id'
+      fullPath: '/admin/event-detect/emulated/$id/'
+      preLoaderRoute: typeof AdminEventDetectEmulatedIdIndexRouteImport
+      parentRoute: typeof AdminEventDetectRoute
+    }
     '/admin/event-detect/events/$uuid/': {
       id: '/admin/event-detect/events/$uuid/'
       path: '/events/$uuid'
@@ -821,19 +881,25 @@ declare module '@tanstack/react-router' {
 
 interface AdminEventDetectRouteChildren {
   AdminEventDetectIndexRoute: typeof AdminEventDetectIndexRoute
+  AdminEventDetectChartsIndexRoute: typeof AdminEventDetectChartsIndexRoute
+  AdminEventDetectEmulatedIndexRoute: typeof AdminEventDetectEmulatedIndexRoute
   AdminEventDetectEventsIndexRoute: typeof AdminEventDetectEventsIndexRoute
   AdminEventDetectGapsIndexRoute: typeof AdminEventDetectGapsIndexRoute
   AdminEventDetectKeywordsIndexRoute: typeof AdminEventDetectKeywordsIndexRoute
   AdminEventDetectPostsIndexRoute: typeof AdminEventDetectPostsIndexRoute
+  AdminEventDetectEmulatedIdIndexRoute: typeof AdminEventDetectEmulatedIdIndexRoute
   AdminEventDetectEventsUuidIndexRoute: typeof AdminEventDetectEventsUuidIndexRoute
 }
 
 const AdminEventDetectRouteChildren: AdminEventDetectRouteChildren = {
   AdminEventDetectIndexRoute: AdminEventDetectIndexRoute,
+  AdminEventDetectChartsIndexRoute: AdminEventDetectChartsIndexRoute,
+  AdminEventDetectEmulatedIndexRoute: AdminEventDetectEmulatedIndexRoute,
   AdminEventDetectEventsIndexRoute: AdminEventDetectEventsIndexRoute,
   AdminEventDetectGapsIndexRoute: AdminEventDetectGapsIndexRoute,
   AdminEventDetectKeywordsIndexRoute: AdminEventDetectKeywordsIndexRoute,
   AdminEventDetectPostsIndexRoute: AdminEventDetectPostsIndexRoute,
+  AdminEventDetectEmulatedIdIndexRoute: AdminEventDetectEmulatedIdIndexRoute,
   AdminEventDetectEventsUuidIndexRoute: AdminEventDetectEventsUuidIndexRoute,
 }
 

@@ -223,6 +223,9 @@ export default defineConfig(({ mode, command }) => {
       }
     },
     resolve: {
+      // bun のルート node_modules と .bun ストアには別実体の react があり、recharts は後者へ解決される。
+      // 事前バンドルで React が二重に内包され useContext が null になるため、常にルート側へ寄せる（react-is はルートが v17 なので対象外）。
+      dedupe: ['react', 'react-dom'],
       alias: [
         // satoriのharfbuzzはfs/XMLHttpRequestでWASMを探すため、同梱WASMを渡すWorkers版へ置換する。
         { find: /^harfbuzzjs$/, replacement: resolve(import.meta.dirname, './src/lib/harfbuzz-workers.ts') },

@@ -1,13 +1,15 @@
-import { DropReasonSchema, POST_SCOPES } from '@biccame/shared/event-detect/viewer'
+import { DropReasonSchema, POST_SCOPES, PROBABILITY_BIN_COUNT } from '@biccame/shared/event-detect/viewer'
 import { createFileRoute } from '@tanstack/react-router'
+import { X } from 'lucide-react'
 import { type FormEvent, Suspense, useId, useState } from 'react'
 import { REASON_LABELS } from '@/components/admin/event-detect/constants'
 import { FilterField } from '@/components/admin/event-detect/filter-field'
 import { formatNumber } from '@/components/admin/event-detect/format'
 import { ListSkeleton } from '@/components/admin/event-detect/loading'
-import { PostList } from '@/components/admin/event-detect/post-item'
+import { JUDGE_LABELS, PostList } from '@/components/admin/event-detect/post-item'
 import { EmptyState } from '@/components/admin/event-detect/section'
 import { EventListPagination } from '@/components/admin/event-list-pagination'
+import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -34,7 +36,24 @@ const ANY = '__any__'
 const includesDropped = (scope: (typeof POST_SCOPES)[number]) =>
   scope === 'dropped' || scope === 'all' || scope === 'gold_dropped'
 
+/** 確率の区間の表記。0.9–1.0 のように下限と上限を小数 1 桁で出す（チャートの区間と同じ） */
+const binLabel = (bin: number): string =>
+  `${(bin / PROBABILITY_BIN_COUNT).toFixed(1)}–${((bin + 1) / PROBABILITY_BIN_COUNT).toFixed(1)}`
+
 type Search = ReturnType<typeof Route.useSearch>
+
+/** チャートの区間での絞り込み（LLM 0.9–1.0 など）。× で judge と bin を外す */
+const BinChip = ({ judge, bin, onRemove }: { judge: keyof typeof JUDGE_LABELS; bin: number; onRemove: () => void }) => {
+  const label = `${JUDGE_LABELS[judge]} ${binLabel(bin)}`
+  return (
+    <Badge asChild variant='outline' className='font-numeric tabular-nums hover:bg-accent'>
+      <button type='button' aria-label={`${label} の絞り込みを外す`} onClick={onRemove}>
+        {label}
+        <X />
+      </button>
+    </Badge>
+  )
+}
 
 const Filters = ({ search, onChange }: { search: Search; onChange: (patch: Partial<Search>) => void }) => {
   const id = useId()
@@ -146,6 +165,15 @@ const Filters = ({ search, onChange }: { search: Search; onChange: (patch: Parti
           同一文面をまとめる
         </Label>
       </div>
+      {search.judge !== undefined && search.bin !== undefined && (
+        <div className='flex flex-wrap items-center gap-2'>
+          <BinChip
+            judge={search.judge}
+            bin={search.bin}
+            onRemove={() => onChange({ judge: undefined, bin: undefined })}
+          />
+        </div>
+      )}
     </div>
   )
 }
