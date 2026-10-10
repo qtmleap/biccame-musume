@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from 'bun:test'
 import { spawnSync } from 'node:child_process'
-import { mkdtemp, readFile, rm } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { runArchive } from '../scripts/lib/post-archive'
@@ -11,6 +11,7 @@ afterEach(async () => {
   await Promise.all(paths.splice(0).map((path) => rm(path, { recursive: true, force: true })))
 })
 const output = async (cli = false) => {
+  if (cli) await mkdir(resolve('.cache'), { recursive: true })
   const path = await mkdtemp(cli ? resolve('.cache/all-history-test-') : join(tmpdir(), 'all-history-test-'))
   paths.push(path)
   return path

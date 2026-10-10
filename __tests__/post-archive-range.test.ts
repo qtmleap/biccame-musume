@@ -292,6 +292,7 @@ test('streamed normalized rows select last metadata without keeping every raw ro
 })
 
 test('seed CLI inherits fixed nonmidnight scope and rejects mismatches, nesting, aliases and resume combination', async () => {
+  await mkdir(resolve('.cache'), { recursive: true })
   const parent = await mkdtemp(resolve('.cache/archive-seed-cli-'))
   roots.push(parent)
   const source = join(parent, 'source')
