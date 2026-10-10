@@ -68,6 +68,7 @@
   --gantt-limited-card: #e9d5ff;
   --gantt-regular-card: #bfdbfe;
   --gantt-ackey: #fde68a;
+  --gantt-acsta: var(--color-teal-200);
   --gantt-other: #fecdd3;
   --gantt-ended: #e4e4e7;
   --gantt-foreground: #18181b;
@@ -82,6 +83,9 @@
   --category-ackey: var(--color-amber-900);
   --category-ackey-foreground: var(--color-amber-200);
   --category-ackey-solid: var(--color-amber-400);
+  --category-acsta: var(--color-teal-900);
+  --category-acsta-foreground: var(--color-teal-200);
+  --category-acsta-solid: var(--color-teal-500);
   --category-other: var(--color-pink-900);
   --category-other-foreground: var(--color-pink-200);
   --category-other-solid: var(--color-pink-400);

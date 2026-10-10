@@ -2,6 +2,7 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useJstDate } from '@/hooks/use-jst-date'
 import type { Event, EventStatus } from '@/schemas/event.dto'
+import { deduplicateRegularCards } from '@/utils/deduplicate-regular-cards'
 import { calculateEventStatus } from '@/utils/event-status'
 
 export type EventBar = {
@@ -60,7 +61,8 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
       limited_card: 0,
       regular_card: 1,
       ackey: 2,
-      other: 3
+      acsta: 3,
+      other: 4
     }),
     []
   )
@@ -71,29 +73,7 @@ export const useGanttLayout = (events: Event[]): GanttLayout => {
   const eventBars = useMemo(() => {
     const displayDays = 38
 
-    const deduplicatedEvents = (() => {
-      const regularCardStores = new Set<string>()
-      return events.filter((event) => {
-        if (event.category !== 'regular_card') {
-          return true
-        }
-        const stores = event.stores || []
-        for (const store of stores) {
-          if (regularCardStores.has(store)) {
-            return false
-          }
-          regularCardStores.add(store)
-        }
-        if (stores.length === 0) {
-          const key = `no-store-${event.title}`
-          if (regularCardStores.has(key)) {
-            return false
-          }
-          regularCardStores.add(key)
-        }
-        return true
-      })
-    })()
+    const deduplicatedEvents = deduplicateRegularCards(events)
 
     const sortedEvents = [...deduplicatedEvents].sort((a, b) => {
       const startDiff = dayjs(a.startDate).diff(dayjs(b.startDate))

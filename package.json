@@ -46,6 +46,7 @@
     "build": "vite build",
     "build:bot": "vite build --config workers/bot/vite.config.ts",
     "deploy:bot": "bun scripts/deploy-bot.ts",
+    "event-detect": "bun scripts/event-detect.ts",
     "test:bot-rpc": "node --experimental-strip-types scripts/test-bot-rpc.ts && node --experimental-strip-types scripts/test-bot-daily-rpc.ts",
     "check:bot-stores": "bun scripts/generate-bot-stores.ts --check",
     "test:og-render": "bun scripts/test-og-render.ts",
@@ -53,7 +54,9 @@
     "preview:post-images": "bun --preload ./scripts/virtual-characters-plugin.ts scripts/render-post-samples.tsx",
     "typecheck": "tsc --noEmit && tsc --noEmit -p workers/bot/tsconfig.json",
     "test": "bun test && bun test ./packages/shared/src/x/transport.test.ts",
-    "test:app-build": "BICCAME_VERIFY_BUILD=1 bun test __tests__/app-build-config.test.ts"
+    "test:app-build": "BICCAME_VERIFY_BUILD=1 bun test __tests__/app-build-config.test.ts",
+    "archive:list-posts": "bun --no-env-file scripts/archive-list-posts.ts",
+    "archive:list-timeline": "bun --no-env-file scripts/archive-list-timeline.ts"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "~1.54.0",
@@ -103,6 +106,8 @@
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.86.0",
     "react-icons": "^5.7.0",
+    "react-is": "^19.2.8",
+    "recharts": "^3.8.0",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",

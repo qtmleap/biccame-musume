@@ -5,12 +5,33 @@ import type { Event, EventDetail, EventRequest } from '@/schemas/event.dto'
 import { client } from '@/utils/client'
 
 /**
+ * 管理用イベント一覧のクエリキー。 ['events'] の prefix 無効化では届かないため、
+ * イベントの作成・更新・削除では個別に無効化する。
+ */
+const ADMIN_EVENTS_QUERY_KEY = ['admin-events']
+
+/**
  * イベント一覧を取得するフック
  */
 export const useEvents = () => {
   return useSuspenseQuery({
     queryKey: ['events'],
     queryFn: async () => client.getEvents(),
+    staleTime: 0, // 常に最新データを取得
+    refetchOnMount: true, // マウント時に再取得
+    retry: 1, // リトライ回数を1回に制限
+    retryDelay: 1000 // 1秒後にリトライ
+  })
+}
+
+/**
+ * 管理画面向けにイベント一覧を取得するフック（未確認のイベントを含む）
+ * 公開側は useEvents を使うこと
+ */
+export const useAdminEvents = () => {
+  return useSuspenseQuery({
+    queryKey: ADMIN_EVENTS_QUERY_KEY,
+    queryFn: async () => client.getAdminEvents(),
     staleTime: 0, // 常に最新データを取得
     refetchOnMount: true, // マウント時に再取得
     retry: 1, // リトライ回数を1回に制限
@@ -68,6 +89,7 @@ export const useCreateEvent = () => {
       toast.success('イベントを登録しました')
       queryClient.setQueryData(['events', created.uuid], created)
       queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ADMIN_EVENTS_QUERY_KEY })
     },
     onError: (error) => {
       toast.error('イベントの登録に失敗しました')
@@ -89,6 +111,7 @@ export const useDeleteEvent = () => {
     onSuccess: () => {
       // イベント一覧を再取得
       queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ADMIN_EVENTS_QUERY_KEY })
     }
   })
 }
@@ -107,6 +130,7 @@ export const useUpdateEvent = () => {
       toast.success('イベントを更新しました')
       queryClient.setQueryData(['events', updated.uuid], updated)
       queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ADMIN_EVENTS_QUERY_KEY })
     },
     onError: (error) => {
       toast.error('イベントの更新に失敗しました')

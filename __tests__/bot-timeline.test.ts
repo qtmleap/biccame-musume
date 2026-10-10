@@ -167,6 +167,24 @@ test('signed timeline request retains list query, params transform and credentia
   expect(generate).toHaveBeenCalledWith('GET', '/i/api/graphql/rkp6b4vtR9u7v3naGoOzUQ/SearchTimeline')
 })
 
+test('archive list override retains signed search and the existing inclusive-until adapter', async () => {
+  let variables: Record<string, unknown> = {}
+  mockFetch(async (input, init) => {
+    const request = new Request(input, init)
+    expect(request.headers.get('x-client-transaction-id')).toBe('archive-signature')
+    variables = JSON.parse(new URL(request.url).searchParams.get('variables') || '{}')
+    return Response.json(makePage([tweet]))
+  })
+  const client = new Client(env, async () => ({ generateTransactionId: async () => 'archive-signature' }))
+  const params = { since, until, listId: '123456' }
+  await client.search(params)
+  expect(variables).toMatchObject({
+    rawQuery: 'list:123456 since:2026-10-03 until:2026-10-04',
+    count: 20,
+    product: 'Latest'
+  })
+})
+
 test('signature failure does not make an unsigned request or expose its cause', async () => {
   const fetch = mockFetch(async () => {
     throw new Error('unexpected fetch')
@@ -314,6 +332,33 @@ test('Responses API keeps model/prompt/schema contract and normalizes blank valu
     model: 'test-model',
     input: tweet.text,
     text: { format: { type: 'json_schema', strict: true, name: 'tweet_extraction' } }
+  })
+})
+
+test('AI accepts the acsta category and offers it in both the schema enum and the prompt', async () => {
+  const bodies: unknown[] = []
+  mockFetch(async (_input, init) => {
+    bodies.push(JSON.parse(String(init?.body)))
+    return Response.json(
+      aiResponse(JSON.stringify({ events: [{ ...extraction, endDate: '', endAt: '', category: 'acsta' }] }))
+    )
+  })
+  expect(await parseTweet(env, tweet)).toEqual([{ ...extraction, category: 'acsta' }])
+  expect(bodies[0]).toMatchObject({
+    instructions: expect.stringContaining('- acsta: アクリルスタンド'),
+    text: {
+      format: {
+        schema: {
+          properties: {
+            events: {
+              items: {
+                properties: { category: { enum: ['ackey', 'acsta', 'regular_card', 'limited_card', 'other', ''] } }
+              }
+            }
+          }
+        }
+      }
+    }
   })
 })
 

@@ -13,5 +13,6 @@ export const eventListPagesAtom = atom<Record<Event['category'], number>>({
   limited_card: 1,
   regular_card: 1,
   ackey: 1,
+  acsta: 1,
   other: 1
 })

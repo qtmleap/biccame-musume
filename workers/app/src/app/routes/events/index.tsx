@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { Calendar, Filter, Gift, LayoutGrid, X } from 'lucide-react'
 import { Suspense, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
+import { eventListFiltersAtom } from '@/atoms/event-list-filters-atom'
 import { eventViewModeAtom } from '@/atoms/event-view-mode-atom'
 import { prefectureToRegion } from '@/atoms/filter-atom'
 import { RegionFilterControl } from '@/components/characters/region-filter-control'
@@ -19,18 +20,27 @@ import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Toggle } from '@/components/ui/toggle'
+import { useAuth } from '@/hooks/use-auth'
 import { charactersQueryKey } from '@/hooks/use-characters'
 import { useJstDate } from '@/hooks/use-jst-date'
 import { useUserActivity } from '@/hooks/use-user-activity'
 import { EVENT_CATEGORY_LABELS, EVENT_STATUS_LABELS, REGION_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { EventCategorySchema } from '@/schemas/event.dto'
 import {
-  DEFAULT_EVENT_CATEGORY,
-  DEFAULT_EVENT_STATUS,
+  DEFAULT_EVENT_LIST_FILTERS,
   EVENT_FILTER_STATUSES,
+  type EventListFilters,
   EventSearchSchema
 } from '@/schemas/event-search'
+import { StoreKeySchema } from '@/schemas/store.dto'
 import { client } from '@/utils/client'
+import {
+  hasEventListFilterParams,
+  resolveEventListFilters,
+  shouldNormalizeEventListSearch,
+  toEventListFilterSearch,
+  toStoredEventListFilters
+} from '@/utils/event-list-filters'
 import { calculateEventStatus, hasEventStartedOneMonthAgo } from '@/utils/event-status'
 
 const PER_PAGE = 12
@@ -72,29 +82,41 @@ const EventsContent = () => {
   const isDesktop = useSyncExternalStore(subscribeViewport, isDesktopViewport, () => true)
   const viewMode = savedViewMode === null ? (isDesktop ? 'gantt' : 'grid') : savedViewMode
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
-  const categoryFilter = useMemo(
-    () => new Set(EventCategorySchema.options.filter((category) => search.category.split(',').includes(category))),
-    [search.category]
+  // 絞り込みは「URL に絞り込みのパラメータが 1 つでもあれば URL の値だけ、無ければ保存値をまるごと」使う。
+  // 未ログインでは非表示設定を出さないので、保存値の非表示設定も効かせない。
+  const [storedFilters, setStoredFilters] = useAtom(eventListFiltersAtom)
+  const { isAuthenticated } = useAuth()
+  const filters = useMemo(
+    () => resolveEventListFilters(search, storedFilters, isAuthenticated),
+    [search, storedFilters, isAuthenticated]
   )
-  const regionFilter = search.region
+  const categoryFilter = useMemo(
+    () => new Set(EventCategorySchema.options.filter((category) => filters.category.split(',').includes(category))),
+    [filters.category]
+  )
+  const regionFilter = filters.region
   const statusFilter = useMemo(
     () => ({
-      upcoming: search.status.split(',').includes('upcoming'),
-      ongoing: search.status.split(',').includes('ongoing'),
-      ended: search.status.split(',').includes('ended')
+      upcoming: filters.status.split(',').includes('upcoming'),
+      ongoing: filters.status.split(',').includes('ongoing'),
+      ended: filters.status.split(',').includes('ended')
     }),
-    [search.status]
+    [filters.status]
   )
   const activityFilter = useMemo(
-    () => ({ hideInterested: search.hideInterested, hideCompleted: search.hideCompleted }),
-    [search.hideInterested, search.hideCompleted]
+    () => ({ hideInterested: filters.hideInterested, hideCompleted: filters.hideCompleted }),
+    [filters.hideInterested, filters.hideCompleted]
   )
-  const storeFilter = search.store === undefined ? null : search.store
+  const storeFilter = filters.store === undefined ? null : filters.store
+  const hideOldEvents = filters.hideOldEvents
   const page = search.page
 
-  // ユーザー操作は条件変更とページリセットを一回のURL更新にまとめる。
-  const updateFilters = (patch: Partial<typeof search>) => {
-    navigate({ search: (prev) => ({ ...prev, ...patch, page: 1 }) })
+  // 変更後の絞り込み全体を保存と URL の両方へ反映する(次回の復元と URL 共有のため)。
+  // URL に一部だけ書くと、書かれなかった項目が既定へ戻ってしまうので、常に全項目を書く。ページは 1 に戻す。
+  const updateFilters = (patch: Partial<EventListFilters>) => {
+    const next = { ...filters, ...patch }
+    setStoredFilters(toStoredEventListFilters(next, storedFilters, isAuthenticated))
+    navigate({ search: (prev) => ({ ...prev, ...toEventListFilterSearch(next, isAuthenticated), page: 1 }) })
   }
   const setCategoryFilter = (value: typeof categoryFilter) => updateFilters({ category: [...value].join(',') })
   const setRegionFilter = (region: typeof regionFilter) => updateFilters({ region })
@@ -103,7 +125,7 @@ const EventsContent = () => {
   }
   const setActivityFilter = (value: typeof activityFilter) => updateFilters(value)
   const setStoreFilter = (store: string | null) => {
-    const result = EventSearchSchema.shape.store.safeParse(store === null ? undefined : store)
+    const result = StoreKeySchema.safeParse(store)
     updateFilters({ store: result.success ? result.data : undefined })
   }
   const setPage = useCallback(
@@ -117,20 +139,26 @@ const EventsContent = () => {
     EVENT_FILTER_STATUSES.some((status) => statusFilter[status] !== (status !== 'ended')) ||
     activityFilter.hideInterested ||
     activityFilter.hideCompleted ||
-    !search.hideOldEvents ||
+    !hideOldEvents ||
     categoryFilter.size !== EventCategorySchema.options.length ||
     storeFilter !== null
 
-  const handleResetFilters = () =>
-    updateFilters({
-      category: DEFAULT_EVENT_CATEGORY,
-      status: DEFAULT_EVENT_STATUS,
-      region: 'all',
-      store: undefined,
-      hideInterested: false,
-      hideCompleted: false,
-      hideOldEvents: true
+  // クリアは保存値も既定に戻す。URL の非表示設定は未ログインでも既定(false)で上書きする。
+  const handleResetFilters = () => {
+    setStoredFilters(DEFAULT_EVENT_LIST_FILTERS)
+    navigate({ search: (prev) => ({ ...prev, ...toEventListFilterSearch(DEFAULT_EVENT_LIST_FILTERS, true), page: 1 }) })
+  }
+  // URL に絞り込みが無いまま開かれたら、実際に使っている絞り込み(保存値または既定)を URL に書き込む。
+  // 共有した URL が見えている絞り込みを再現できるようにするため。履歴は増やさない。
+  const shouldNormalize = shouldNormalizeEventListSearch(search, storedFilters, isAuthenticated)
+  useEffect(() => {
+    if (!shouldNormalize) return
+    navigate({
+      search: (prev) =>
+        hasEventListFilterParams(prev) ? prev : { ...prev, ...toEventListFilterSearch(filters, isAuthenticated) },
+      replace: true
     })
+  }, [shouldNormalize, filters, isAuthenticated, navigate])
   const { interestedEvents, completedEvents } = useUserActivity()
   // 店舗キー(id)から都道府県を取得するマップ
   const storePrefectureMap = useMemo(() => {
@@ -148,7 +176,7 @@ const EventsContent = () => {
     return events
       .map((event) => ({ ...event, ...calculateEventStatus(event, `${dateKey}T00:00:00+09:00`) }))
       .filter((event) => {
-        if (search.hideOldEvents && hasEventStartedOneMonthAgo(event.startDate, dateKey)) return false
+        if (hideOldEvents && hasEventStartedOneMonthAgo(event.startDate, dateKey)) return false
         // カテゴリフィルター
         if (!categoryFilter.has(event.category)) return false
 
@@ -187,7 +215,7 @@ const EventsContent = () => {
   }, [
     events,
     dateKey,
-    search.hideOldEvents,
+    hideOldEvents,
     categoryFilter,
     storeFilter,
     regionFilter,
@@ -211,7 +239,7 @@ const EventsContent = () => {
     storeFilter === null ? 'すべての店舗' : STORE_NAME_LABELS[storeFilter],
     activityFilter.hideInterested ? '興味ありを非表示' : null,
     activityFilter.hideCompleted ? '達成済みを非表示' : null,
-    search.hideOldEvents ? '開始から1か月以上を非表示' : null
+    hideOldEvents ? '開始から1か月以上を非表示' : null
   ]
     .filter(Boolean)
     .join(' / ')
@@ -264,8 +292,8 @@ const EventsContent = () => {
                     <RegionFilterControl value={regionFilter} onChange={setRegionFilter} />
                     <EventStoreFilter value={storeFilter} onChange={setStoreFilter} />
                     <EventAgeFilter
-                      value={search.hideOldEvents}
-                      onChange={(hideOldEvents) => updateFilters({ hideOldEvents })}
+                      value={hideOldEvents}
+                      onChange={(value) => updateFilters({ hideOldEvents: value })}
                     />
                   </div>
                 </div>
@@ -349,7 +377,7 @@ const EventsContent = () => {
 
           {/* 地域フィルター */}
           <RegionFilterControl value={regionFilter} onChange={setRegionFilter} />
-          <EventAgeFilter value={search.hideOldEvents} onChange={(hideOldEvents) => updateFilters({ hideOldEvents })} />
+          <EventAgeFilter value={hideOldEvents} onChange={(value) => updateFilters({ hideOldEvents: value })} />
         </div>
 
         <p role='status' className='text-sm text-foreground'>
