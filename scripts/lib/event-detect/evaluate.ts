@@ -55,10 +55,14 @@ export const buildEvalSet = (analysis: Analysis, options: { passed: number; drop
   ]
 }
 
+/** 判定の種類。eval の標本の種類に加え、clef コマンドが残す 'event'（エミュレートしたイベントの代表投稿）。
+ * 採点（scoreModel）は gold / negative_* だけを見るので、event は採点に入らない */
+export type DecisionKind = EvalSample['kind'] | 'event'
+
 export type Decision = {
   postId: string
   model: ClefModel
-  kind: EvalSample['kind']
+  kind: DecisionKind
   request: Omit<ClefRequest, 'model'>
   response: ClefResponse
   /** 終了イベントの選択肢キー → イベント ID */
@@ -219,10 +223,12 @@ const STATUS_MATCH: Record<string, ReferenceType[] | undefined> = {
   end: ['end']
 }
 
+// D1 のカテゴリ → Clef の選択肢。acsta は Clef の質問にまだ無い（変えると判定のキャッシュが使えなくなる）ので other（アクスタを含む）に対応させる
 const CATEGORY_GOLD: Record<string, string> = {
   limited_card: 'limited_card',
   regular_card: 'regular_card',
   ackey: 'ackey',
+  acsta: 'other',
   other: 'other'
 }
 

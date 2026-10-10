@@ -79,9 +79,32 @@ describe('classifyPost', () => {
     expect(verdict.strong).toBe(true)
   })
 
-  test('完配・品切れなど終了の語を拾う', () => {
+  test('完配など終了の語を拾う', () => {
     const verdict = classifyPost(post({ text: 'マーメイドアクキー・・・完配しました！' }), options)
     expect(verdict.hits.map((hit) => hit.group)).toEqual(['item', 'end'])
+  })
+
+  test.each(['完売', '品切れ'])('キーワードから外した「%s」だけでは no_keyword になる', (word) => {
+    const verdict = classifyPost(post({ text: `本日は${word}となりました` }), options)
+    expect(verdict.reason).toBe('no_keyword')
+    expect(verdict.hits).toEqual([])
+  })
+
+  test.each([
+    ['擬人化記念日', '今年の擬人化記念日が決まりました'],
+    ['ビッ旅', 'ビッ旅の詳細は後日お知らせします']
+  ])('追加したキーワード「%s」で通過する', (word, text) => {
+    const verdict = classifyPost(post({ text }), options)
+    expect(verdict.reason).toBeUndefined()
+    expect(verdict.hits).toEqual([{ keyword: word, group: 'start' }])
+    expect(verdict.strong).toBe(false)
+  })
+
+  test('爆誕だけではキーワードにならず、救済語としてだけ働く', () => {
+    expect(classifyPost(post({ text: 'ついに爆誕しました！' }), options).reason).toBe('no_keyword')
+    const verdict = classifyPost(post({ text: '爆誕記念のフェアを本日スタート' }), options)
+    expect(verdict.reason).toBeUndefined()
+    expect(verdict.rescueHits).toEqual(['爆誕'])
   })
 })
 
@@ -126,6 +149,33 @@ describe('除外語', () => {
     const verdict = classifyPost(post({ text: '10/1から体験会で先着100名にステッカーを配布' }), options)
     expect(verdict.reason).toBe('excluded_keyword')
     expect(verdict.strong).toBe(true)
+  })
+
+  test.each(['うちわ', 'チラシ', 'お子様', '夏休み', '試飲', '体感', '買得', 'フライデー', '中古', '時計', '取扱い'])(
+    '追加した除外語「%s」を含み救済語を含まない投稿は excluded_keyword で除外する',
+    (word) => {
+      const verdict = classifyPost(post({ text: `10/1から${word}の配布を行います` }), options)
+      expect(verdict.reason).toBe('excluded_keyword')
+      expect(verdict.excludeHits.map((hit) => hit.keyword)).toContain(word)
+      expect(verdict.rescueHits).toEqual([])
+    }
+  )
+
+  test.each([
+    ['名刺', '10/1からうちわ配布、名刺もお渡しします'],
+    ['ビッカメ娘', '10/1からビッカメ娘のうちわ配布を行います']
+  ])('追加した除外語に当たっても救済語「%s」があれば通過する', (rescue, text) => {
+    const verdict = classifyPost(post({ text }), options)
+    expect(verdict.reason).toBeUndefined()
+    expect(verdict.excludeHits.map((hit) => hit.keyword)).toEqual(['うちわ'])
+    expect(verdict.rescueHits).toEqual([rescue])
+  })
+
+  test('ビッ旅は救済語でもあるので、除外語と同じ投稿でも通過する', () => {
+    const verdict = classifyPost(post({ text: 'ビッ旅の詳細は週末にお知らせします' }), options)
+    expect(verdict.reason).toBeUndefined()
+    expect(verdict.excludeHits.map((hit) => hit.keyword)).toEqual(['週末'])
+    expect(verdict.rescueHits).toEqual(['ビッ旅'])
   })
 
   test('無効にした除外語では除外しない', () => {

@@ -33,6 +33,19 @@ export type Mention = {
   state: string
 }
 
+/**
+ * 再確認（Verifier）の結果。choice と probabilities のキーは、その時点の候補のイベント ID か 'new'。
+ * Verifier が返す e0 などの番号はイベントが増えると指す先が変わるので、保存するときに ID へ直す。
+ */
+export type VerifyRecord = {
+  choice: string
+  /** 選ばれた選択肢の確率 */
+  probability: number
+  probabilities: Record<string, number>
+  /** 実際に既存のイベントへ合流させたか。しきい値に届かなかった・new と答えた場合は false */
+  merged: boolean
+}
+
 export type EmulatedEvent = {
   id: string
   store: string
@@ -48,7 +61,8 @@ export type EmulatedEvent = {
   startUnknown: boolean
   firstSeen: number
   lastSeen: number
-  posts: { postId: string; status: ExtractedStatus; index: number }[]
+  /** verify は再確認をした言及だけに付く。再確認が無い・失敗した言及には付かない */
+  posts: { postId: string; status: ExtractedStatus; index: number; verify?: VerifyRecord }[]
 }
 
 export type LinkDecision = {
@@ -95,7 +109,7 @@ const candidatesAt = (events: readonly EmulatedEvent[], time: number) =>
     .sort((a, b) => b.lastSeen - a.lastSeen)
     .slice(0, MAX_CANDIDATES)
 
-const describeEvent = (event: EmulatedEvent) =>
+export const describeEvent = (event: EmulatedEvent) =>
   [
     `${event.item}（${event.category}、状態 ${event.status}）`,
     `開始 ${event.startDate ? event.startDate : event.startUnknown ? '不明' : '未定'}`,
@@ -106,7 +120,7 @@ const describeEvent = (event: EmulatedEvent) =>
     .filter((part) => part !== undefined)
     .join(' / ')
 
-const describeMention = (mention: Mention) => {
+export const describeMention = (mention: Mention) => {
   const event = mention.event
   return [
     `配布物: ${event.item}（${event.category}）`,
@@ -194,7 +208,7 @@ const decideLink = async (
   return { choice: result.value, cached: false, usage: result.usage }
 }
 
-const apply = (event: EmulatedEvent, mention: Mention) => {
+const apply = (event: EmulatedEvent, mention: Mention, verify?: VerifyRecord) => {
   const time = mention.row.time
   const status = mention.event.status
   if (STATUS_RANK[status] >= STATUS_RANK[event.status]) event.status = status
@@ -205,10 +219,10 @@ const apply = (event: EmulatedEvent, mention: Mention) => {
   if (!event.quantity && mention.event.quantity) event.quantity = mention.event.quantity
   if (status === 'end' && !event.endedAt) event.endedAt = jstDate(time)
   event.lastSeen = Math.max(event.lastSeen, time)
-  event.posts.push({ postId: mention.row.post.id, status, index: mention.index })
+  event.posts.push({ postId: mention.row.post.id, status, index: mention.index, ...(verify ? { verify } : {}) })
 }
 
-const create = (mention: Mention, sequence: number): EmulatedEvent => {
+const create = (mention: Mention, sequence: number, verify?: VerifyRecord): EmulatedEvent => {
   const status = mention.event.status
   const event: EmulatedEvent = {
     id: `${mention.store}-${sequence}`,
@@ -221,8 +235,47 @@ const create = (mention: Mention, sequence: number): EmulatedEvent => {
     lastSeen: mention.row.time,
     posts: []
   }
-  apply(event, mention)
+  apply(event, mention, verify)
   return event
+}
+
+/** Verifier が返す選択肢のキー（e0 など）を、その時点の候補のイベント ID にする。new と範囲外はそのまま */
+const idOfKey = (key: string, candidates: readonly EmulatedEvent[]) => {
+  const candidate = key === 'new' ? undefined : candidates[Number(key.slice(1))]
+  return candidate ? candidate.id : key
+}
+
+/**
+ * 再確認が既存のイベントを選んでいればそのイベント（target）と、確率の記録（record）。
+ * 確認に失敗したら Haiku の判断（新規）のままで、記録も無い。
+ */
+const verifyNew = async (
+  verify: { check: Verifier; threshold: number },
+  mention: Mention,
+  candidates: readonly EmulatedEvent[],
+  progress: { verified: number; verifyFailed: number }
+): Promise<{ target: EmulatedEvent | undefined; record: VerifyRecord | undefined }> => {
+  progress.verified += 1
+  const result = await verify.check(mention, candidates).catch(() => undefined)
+  if (!result) {
+    progress.verifyFailed += 1
+    return { target: undefined, record: undefined }
+  }
+  const target =
+    result.choice !== 'new' && result.probability >= verify.threshold
+      ? candidates[Number(result.choice.slice(1))]
+      : undefined
+  return {
+    target,
+    record: {
+      choice: idOfKey(result.choice, candidates),
+      probability: result.probability,
+      probabilities: Object.fromEntries(
+        Object.entries(result.probabilities).map(([key, value]) => [idOfKey(key, candidates), value])
+      ),
+      merged: target !== undefined
+    }
+  }
 }
 
 export type EmulateProgress = {
@@ -236,6 +289,10 @@ export type EmulateProgress = {
   linked: number
   ignored: number
   failed: number
+  /** 再確認（verify）に回した言及と、そこで既存のイベントに合流させた言及 */
+  verified: number
+  merged: number
+  verifyFailed: number
   stats: CallStats
   inputTokens: number
   outputTokens: number
@@ -244,11 +301,22 @@ export type EmulateProgress = {
 /**
  * 店舗ごとにエミュレートする。判断の失敗（API が返らない）はその言及を飛ばして続ける。
  */
+/**
+ * 「新規」と判断された言及を別のモデルで確かめる。候補のうち同じイベントはどれか（なければ new）を
+ * 選ばせ、選んだ候補の番号（e0 など）とその確率を返す。確率が threshold 以上のときだけ合流させる。
+ * probabilities は選択肢ごとの確率で、キーは choice と同じく e0 などの番号か new。
+ */
+export type Verifier = (
+  mention: Mention,
+  candidates: readonly EmulatedEvent[]
+) => Promise<{ choice: string; probability: number; probabilities: Record<string, number>; cached: boolean }>
+
 export const runEmulation = async (options: {
   timelines: Map<string, Mention[]>
   endpoint: JudgeEndpoint
   cacheDir: string
   concurrency: number
+  verify?: { check: Verifier; threshold: number }
   onProgress?: (progress: EmulateProgress) => void
   onError?: (mention: Mention, error: unknown) => void
 }): Promise<{ events: EmulatedEvent[]; progress: EmulateProgress }> => {
@@ -265,6 +333,9 @@ export const runEmulation = async (options: {
     linked: 0,
     ignored: 0,
     failed: 0,
+    verified: 0,
+    merged: 0,
+    verifyFailed: 0,
     stats: emptyStats(),
     inputTokens: 0,
     outputTokens: 0
@@ -295,8 +366,16 @@ export const runEmulation = async (options: {
                     return result.choice
                   }
                 )
-          if (choice === 'new') {
-            events.push(create(mention, events.length + 1))
+          const verified =
+            choice === 'new' && options.verify && candidates.length > 0
+              ? await verifyNew(options.verify, mention, candidates, progress)
+              : undefined
+          if (verified?.target) {
+            apply(verified.target, mention, verified.record)
+            progress.linked += 1
+            progress.merged += 1
+          } else if (choice === 'new') {
+            events.push(create(mention, events.length + 1, verified?.record))
             progress.created += 1
           } else if (choice === 'none') progress.ignored += 1
           else {

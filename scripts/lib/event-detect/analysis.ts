@@ -10,10 +10,13 @@ import {
   type KeywordHit,
   matchExcludes,
   matchKeywords,
-  normalizeText
+  normalizeText,
+  RESCUE_KEYWORDS
 } from '@biccame/shared/event-detect/filter'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
+import { dayjs } from '../../../workers/bot/src/timeline/utils/dayjs'
 import { buildGoldIndex, type GoldEvent, type GoldRef, parseStatusUrl, type ReferenceType, snowflakeTime } from './gold'
+import type { EmulatedRecord } from './store'
 
 // 投稿・正解イベント・店舗アカウントから、ビューワとレポートが使う判定結果を組み立てる。
 
@@ -56,6 +59,8 @@ export type Analysis = {
   passedByAccount: Map<string, PostRow[]>
   disabled: Set<string>
   disabledExcludes: Set<string>
+  /** 救済語の一覧（buildRescueTerms の結果）。救済語ごとの寄与を測るのに使う */
+  rescueTerms: string[]
 }
 
 const push = <K, V>(map: Map<K, V[]>, key: K, value: V) => {
@@ -187,13 +192,14 @@ export const analyze = (input: {
     goldIndex,
     passedByAccount,
     disabled,
-    disabledExcludes
+    disabledExcludes,
+    rescueTerms
   }
 }
 
 const REFERENCE_TYPES: readonly ReferenceType[] = ['announce', 'start', 'end']
 
-export type FunnelStage = {
+export type FilterStage = {
   key: string
   label: string
   posts: number
@@ -215,7 +221,7 @@ const countGold = (rows: readonly PostRow[]) => {
 /**
  * 段階ごとの残存件数。各段階はそれまでの除外理由をすべて適用した後の件数。
  */
-export const funnel = (analysis: Analysis): FunnelStage[] => {
+export const filterStages = (analysis: Analysis): FilterStage[] => {
   const labels: Record<DropReason, string> = {
     retweet: 'リツイートを除外',
     reply_to_other: '他アカウント宛てリプライを除外',
@@ -223,7 +229,7 @@ export const funnel = (analysis: Analysis): FunnelStage[] => {
     no_keyword: 'キーワードを含まないものを除外',
     excluded_keyword: '除外語を含むもの（救済語なし）を除外'
   }
-  const stages: FunnelStage[] = [
+  const stages: FilterStage[] = [
     { key: 'all', label: '全件', posts: analysis.rows.length, ...countGold(analysis.rows) }
   ]
   for (const [index, reason] of DROP_REASONS.entries()) {
@@ -257,6 +263,237 @@ export const missingGold = (analysis: Analysis, range: { from: number; until: nu
 const inRange = (id: string, range: { from: number; until: number }) => {
   const time = snowflakeTime(id)
   return range.from <= time && time < range.until
+}
+
+export type StatCounts = {
+  /** アーカイブの投稿数 */
+  posts: number
+  /** 機械フィルタを通過した投稿。LLM・Clef の判定前なので「候補」 */
+  candidates: number
+  /** 参考 URL が D1 イベントに使われている投稿 */
+  goldPosts: number
+  /** D1 イベント数 */
+  events: number
+}
+
+/**
+ * 判定キャッシュ（.cache/event-detect/ の judge・extract・clef）から読んだ、投稿 ID → イベントである確率（0〜1）。
+ * 判定していない投稿は載らない。llm は Claude Haiku 5.5、clef は精度評価（eval）のサンプルだけ。
+ */
+export type Judgements = { llm: Map<string, number>; clef: Map<string, number> }
+
+/**
+ * 判定の確率がこの値以上なら「イベントと判定した」と数える。eval の is_event（evaluate.ts）と
+ * emulate の isEvent（emulate.ts）の既定のしきい値と同じ。ちょうどこの値のときも含む。
+ */
+export const EVENT_PROBABILITY_THRESHOLD = 0.5
+
+/** 年別の判定の件数。どれもイベント候補（reason が無い投稿）だけを数える */
+type JudgementCounts = {
+  /** LLM（Claude Haiku 5.5）が確率 EVENT_PROBABILITY_THRESHOLD 以上と判定した候補の数 */
+  llm: number
+  /** LLM の判定がある候補の数（確率の大小によらない） */
+  llmJudged: number
+  /** Clef が確率 EVENT_PROBABILITY_THRESHOLD 以上と判定した候補の数 */
+  clef: number
+  /** Clef の判定がある候補の数。eval のサンプルだけなので候補の一部 */
+  clefJudged: number
+}
+
+/**
+ * emulate コマンドが作ったイベントのうち、集計に使う項目。startDate・endDate・endedAt は YYYY-MM-DD、
+ * endDate は告知に書かれた終了予定日、endedAt は終了報告の投稿の日、
+ * firstSeen は最初の言及の投稿時刻（epoch ミリ秒）。
+ */
+export type EmulatedEntry = { store: string; startDate?: string; endDate?: string; endedAt?: string; firstSeen: number }
+
+/**
+ * emulate の結果ファイルを読んだもの。emulatedAt はファイルの更新時刻（ISO）。
+ * events は統計に使う EmulatedEntry の項目に加え、LLM イベントの一覧・詳細に使う項目（言及など）も持つ。
+ */
+export type EmulatedFile = { events: readonly EmulatedRecord[]; emulatedAt: string }
+
+/** emulate が作ったイベントの件数。年別とアカウント別で同じ数え方をする */
+type EmulatedCounts = {
+  /** emulate が作ったイベントの数。開始を見ていないもの（startUnknown）も含む */
+  emulated: number
+  /** そのうち終了まで追えた数。終了報告（endedAt）か告知の終了予定日（endDate）のどちらかがあれば数える。予定日が未来でも数える */
+  emulatedEnded: number
+}
+
+export type YearStat = StatCounts & JudgementCounts & EmulatedCounts & { year: number }
+
+/** 全投稿の最古・最新の投稿日時（ISO）。投稿が 0 件なら null */
+export type PostRange = { oldest: string | null; newest: string | null }
+
+export type AccountStat = StatCounts &
+  EmulatedCounts & {
+    screenName: string
+    /** characters.json でこのアカウントに対応する店舗キー。店舗に対応しないアカウントは null */
+    store: string | null
+  }
+
+const JST_OFFSET = 9 * 3_600_000
+
+/**
+ * 投稿時刻（epoch ミリ秒）から JST の暦年を引く関数。dayjs の tz は 1 回 30µs ほどかかり、124 万行では
+ * 40 秒になるので、JST の日ごとに結果を使い回す。JST は夏時間が無く UTC+9 固定なので、日の切れ目は
+ * 9 時間のずらしで決まる。
+ */
+const jstYearOf = () => {
+  const byDay = new Map<number, number>()
+  return (time: number): number => {
+    const day = Math.floor((time + JST_OFFSET) / DAY)
+    const cached = byDay.get(day)
+    if (cached !== undefined) return cached
+    const year = dayjs(time).year()
+    byDay.set(day, year)
+    return year
+  }
+}
+
+/**
+ * emulate が作ったイベントの年を引く関数。startDate（YYYY-MM-DD の暦日をそのまま JST の日付として読む）の年で、
+ * 無ければ firstSeen の JST 年。年別の統計（postStats）と LLM イベントの一覧で、同じ割り当てを使うための共通の定義。
+ */
+export const emulatedYearOf = (): ((entry: EmulatedEntry) => number) => {
+  const yearOf = jstYearOf()
+  return (entry) => (entry.startDate === undefined ? yearOf(entry.firstSeen) : Number(entry.startDate.slice(0, 4)))
+}
+
+/** 終了の日（YYYY-MM-DD）。終了報告（endedAt）があればその日、無ければ告知の終了予定日（endDate）。どちらも無ければ undefined */
+export const emulatedEndedDay = (entry: EmulatedEntry): string | undefined =>
+  entry.endedAt === undefined ? entry.endDate : entry.endedAt
+
+/** 終了まで追えたか。終了報告（endedAt）か告知の終了予定日（endDate）があれば true（予定日が未来でも true） */
+export const isEmulatedEnded = (entry: EmulatedEntry): boolean => emulatedEndedDay(entry) !== undefined
+
+const emptyCounts = (): StatCounts => ({ posts: 0, candidates: 0, goldPosts: 0, events: 0 })
+
+const emptyEmulatedCounts = (): EmulatedCounts => ({ emulated: 0, emulatedEnded: 0 })
+
+const emptyYearCounts = (): StatCounts & JudgementCounts & EmulatedCounts => ({
+  ...emptyCounts(),
+  llm: 0,
+  llmJudged: 0,
+  clef: 0,
+  clefJudged: 0,
+  ...emptyEmulatedCounts()
+})
+
+/** emulate が作ったイベント 1 件を数える。終了報告（endedAt）か終了予定日（endDate）があれば、終了にも 1 回だけ数える */
+const countEmulated = (counts: EmulatedCounts, entry: EmulatedEntry) => {
+  counts.emulated += 1
+  if (isEmulatedEnded(entry)) counts.emulatedEnded += 1
+}
+
+const countRow = (counts: StatCounts, row: PostRow) => {
+  counts.posts += 1
+  if (row.reason === undefined) counts.candidates += 1
+  if (row.gold.length > 0) counts.goldPosts += 1
+}
+
+/** イベント候補 1 件の判定を数える。判定が無ければ何も足さない */
+const countJudgements = (counts: JudgementCounts, id: string, judgements: Judgements) => {
+  const llm = judgements.llm.get(id)
+  if (llm !== undefined) {
+    counts.llmJudged += 1
+    if (llm >= EVENT_PROBABILITY_THRESHOLD) counts.llm += 1
+  }
+  const clef = judgements.clef.get(id)
+  if (clef !== undefined) {
+    counts.clefJudged += 1
+    if (clef >= EVENT_PROBABILITY_THRESHOLD) counts.clef += 1
+  }
+}
+
+/**
+ * 年別（JST）とアカウント別の件数。全行を 1 回だけ走査する。events は年別が開始日の年、アカウント別が
+ * characters.json でそのアカウントに対応する 1 店舗のイベント。analysis.accountStores は正解データで他店舗の
+ * イベントに使われたアカウントも含み、アカウントと店舗が一対一にならないので、ここでは使わない。
+ * judgements を渡すと、年別にイベント候補の LLM・Clef の判定を数える（アカウント別には持たない）。渡さなければ 0。
+ * emulated（emulate が作ったイベント）を渡すと、年別とアカウント別に作ったイベントと終了まで追えた数を数える。
+ * 年は startDate（YYYY-MM-DD の暦日をそのまま JST の日付として読む）の年で、無ければ firstSeen の JST 年。
+ * アカウント別は、アカウントの店舗（store）のイベントで数え、store が null のアカウントは 0。渡さなければ 0。
+ * range は、同じ走査で選んだ全投稿の最古・最新（アカウントごとの値から選び直さない）。
+ */
+export const postStats = (
+  analysis: Analysis,
+  accounts: readonly StoreAccount[],
+  judgements: Judgements = { llm: new Map(), clef: new Map() },
+  emulated: readonly EmulatedEntry[] = []
+): { years: YearStat[]; accounts: AccountStat[]; range: PostRange } => {
+  const yearOf = jstYearOf()
+  const emulatedYear = emulatedYearOf()
+  const storeOfAccount = new Map(accounts.map((account) => [account.screenName.toLowerCase(), account.storeId]))
+  const byYear = new Map<number, StatCounts & JudgementCounts & EmulatedCounts>()
+  const byAccount = new Map<string, { screenName: string; counts: StatCounts }>()
+  const emulatedByStore = new Map<string, EmulatedCounts>()
+  const bounds: { oldest: PostRow | null; newest: PostRow | null } = { oldest: null, newest: null }
+  const yearCounts = (year: number): StatCounts & JudgementCounts & EmulatedCounts => {
+    const found = byYear.get(year)
+    if (found) return found
+    const created = emptyYearCounts()
+    byYear.set(year, created)
+    return created
+  }
+  const storeEmulatedCounts = (store: string): EmulatedCounts => {
+    const found = emulatedByStore.get(store)
+    if (found) return found
+    const created = emptyEmulatedCounts()
+    emulatedByStore.set(store, created)
+    return created
+  }
+  for (const row of analysis.rows) {
+    const counts = yearCounts(yearOf(row.time))
+    countRow(counts, row)
+    if (row.reason === undefined) countJudgements(counts, row.post.id, judgements)
+    if (bounds.oldest === null || row.time < bounds.oldest.time) bounds.oldest = row
+    if (bounds.newest === null || row.time > bounds.newest.time) bounds.newest = row
+    const key = row.post.screenName.toLowerCase()
+    const entry = byAccount.get(key)
+    if (entry) {
+      countRow(entry.counts, row)
+    } else {
+      const counts = emptyCounts()
+      countRow(counts, row)
+      byAccount.set(key, { screenName: row.post.screenName, counts })
+    }
+  }
+  // 投稿の無い年でも、イベントがあれば行に含める
+  for (const event of analysis.events) yearCounts(yearOf(Date.parse(event.startDate))).events += 1
+  for (const entry of emulated) {
+    countEmulated(yearCounts(emulatedYear(entry)), entry)
+    countEmulated(storeEmulatedCounts(entry.store), entry)
+  }
+
+  const years = [...byYear.entries()].sort(([a], [b]) => a - b).map(([year, counts]) => ({ year, ...counts }))
+  const accountStats = [...byAccount.entries()]
+    .sort(([keyA, a], [keyB, b]) => {
+      const diff = b.counts.posts - a.counts.posts
+      if (diff !== 0) return diff
+      return keyA < keyB ? -1 : 1
+    })
+    .map(([key, entry]) => {
+      const found = storeOfAccount.get(key)
+      const store = found === undefined ? null : found
+      const emulatedCounts = store === null ? undefined : emulatedByStore.get(store)
+      return {
+        screenName: entry.screenName,
+        store,
+        ...entry.counts,
+        events: store === null ? 0 : analysis.events.filter((event) => event.stores.includes(store)).length,
+        ...(emulatedCounts === undefined ? emptyEmulatedCounts() : emulatedCounts)
+      }
+    })
+  return {
+    years,
+    accounts: accountStats,
+    range: {
+      oldest: bounds.oldest === null ? null : bounds.oldest.post.createdAt,
+      newest: bounds.newest === null ? null : bounds.newest.post.createdAt
+    }
+  }
 }
 
 export type KeywordStat = {
@@ -333,6 +570,48 @@ export const excludeStats = (analysis: Analysis): ExcludeStat[] => {
       onlyPosts: only.length,
       droppedGold: unrescued.filter((row) => row.gold.length > 0).length
     }
+  })
+}
+
+export type RescueStat = {
+  keyword: string
+  /** RESCUE_KEYWORDS の固定の語なら keyword、キャラクター名（○○たん）由来なら character */
+  kind: 'keyword' | 'character'
+  /** 通過した投稿のうち、除外語に当たり、この語を含む件数（この語が守っている投稿） */
+  posts: number
+  /** posts のうち、当たった救済語がこの語だけの件数（この語が無ければ除外される） */
+  onlyPosts: number
+  /** posts のうち正解 */
+  gold: number
+}
+
+/**
+ * 救済語ごとの寄与。通過した投稿のうち除外語に当たったものだけを数える（救済語が無ければ
+ * 除外されていたはずの投稿）。除外語の無効化は excludeHits に反映済みなので、そのまま追従する。
+ * 並びは救済した投稿の降順、同数は語の昇順。
+ */
+export const rescueStats = (analysis: Analysis): RescueStat[] => {
+  const fixed = new Set<string>(RESCUE_KEYWORDS)
+  const stats = new Map<string, RescueStat>(
+    analysis.rescueTerms.map((keyword) => [
+      keyword,
+      { keyword, kind: fixed.has(keyword) ? 'keyword' : 'character', posts: 0, onlyPosts: 0, gold: 0 }
+    ])
+  )
+  for (const row of analysis.rows) {
+    if (row.reason !== undefined || row.excludeHits.length === 0) continue
+    for (const term of row.rescueHits) {
+      const stat = stats.get(term)
+      if (!stat) continue
+      stat.posts += 1
+      if (row.rescueHits.length === 1) stat.onlyPosts += 1
+      if (row.gold.length > 0) stat.gold += 1
+    }
+  }
+  return [...stats.values()].sort((a, b) => {
+    const diff = b.posts - a.posts
+    if (diff !== 0) return diff
+    return a.keyword < b.keyword ? -1 : 1
   })
 }
 

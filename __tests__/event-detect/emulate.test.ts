@@ -2,12 +2,14 @@ import { afterEach, describe, expect, spyOn, test } from 'bun:test'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { ClefRequestSchema } from '@biccame/shared/event-detect/clef'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
 import { analyze } from '../../scripts/lib/event-detect/analysis'
-import { buildTimelines, type EmulatedEvent, runEmulation } from '../../scripts/lib/event-detect/emulate'
+import { buildTimelines, type EmulatedEvent, runEmulation, type Verifier } from '../../scripts/lib/event-detect/emulate'
 import { scoreEmulation } from '../../scripts/lib/event-detect/emulate-score'
 import { type ExtractInput, type Extraction, validateExtraction } from '../../scripts/lib/event-detect/extract'
 import type { GoldEvent } from '../../scripts/lib/event-detect/gold'
+import { buildVerifyRequest } from '../../scripts/lib/event-detect/verify'
 
 const accounts = [{ storeId: 'example', name: '例たん', screenName: 'bic_example' }]
 
@@ -175,6 +177,8 @@ describe('runEmulation', () => {
         startUnknown: false
       })
       expect(events[0].posts.map((p) => p.postId)).toEqual(['1', '2', '3'])
+      // 再確認を行わない実行では verify を付けない
+      expect(events[0].posts.filter((p) => 'verify' in p)).toEqual([])
       // 2 回目は保存した判断を使い、API を呼ばない
       fetch.mockImplementation(
         Object.assign(
@@ -195,6 +199,158 @@ describe('runEmulation', () => {
     } finally {
       fetch.mockRestore()
     }
+  })
+})
+
+describe('Clef による再確認', () => {
+  const directories: string[] = []
+  afterEach(async () => {
+    await Promise.all(directories.splice(0).map((path) => rm(path, { recursive: true, force: true })))
+  })
+
+  const run = async (verify: Verifier, threshold: number) => {
+    const cacheDir = await mkdtemp(join(tmpdir(), 'emulate-verify-'))
+    directories.push(cacheDir)
+    const rows = analyze({
+      posts: [
+        post('1', '2026-10-01T01:00:00.000Z', '本日からハロウィン名刺'),
+        post('2', '2026-10-05T01:00:00.000Z', 'ハロウィン名刺 配布中です')
+      ],
+      events: [],
+      accounts,
+      characterNames: ['例たん']
+    }).rows
+    const timelines = buildTimelines(
+      [
+        { row: rows[0], extraction: extraction('1', [card('start')]), state: 's1' },
+        { row: rows[1], extraction: extraction('2', [card('ongoing')]), state: 's2' }
+      ],
+      accounts
+    )
+    // Haiku は 2 件目を「新規」と判断する（候補は 1 件目から作られた e0）
+    const preconnect = globalThis.fetch.preconnect
+    const fetch = spyOn(globalThis, 'fetch').mockImplementation(
+      Object.assign(
+        async () =>
+          Response.json({
+            content: [{ type: 'tool_use', name: 'answer', input: { choice: 'new' } }],
+            usage: { input_tokens: 1, output_tokens: 1 }
+          }),
+        { preconnect }
+      )
+    )
+    try {
+      return await runEmulation({
+        timelines,
+        endpoint: { url: 'http://127.0.0.1/unused', token: 't' },
+        cacheDir,
+        concurrency: 1,
+        verify: { check: verify, threshold }
+      })
+    } finally {
+      fetch.mockRestore()
+    }
+  }
+
+  type Verified = Awaited<ReturnType<Verifier>>
+
+  /** 1 件目のイベント（example-1）を e0 として、選んだ選択肢とその確率を返す Verifier のスタブ */
+  const answer =
+    (choice: string, probability: number, probabilities: Record<string, number>): Verifier =>
+    async () => ({ choice, probability, probabilities, cached: false })
+
+  test('既存のイベントを確率がしきい値以上で選んだら合流させる', async () => {
+    const { events, progress } = await run(answer('e0', 0.8, { e0: 0.8, new: 0.2 }), 0.7)
+    expect(events).toHaveLength(1)
+    expect(events[0].posts.map((entry) => entry.postId)).toEqual(['1', '2'])
+    expect(progress).toMatchObject({ verified: 1, merged: 1, created: 1, verifyFailed: 0 })
+  })
+
+  test('合流した言及には、イベント ID をキーにした確率と merged: true を残す', async () => {
+    const { events } = await run(answer('e0', 0.8, { e0: 0.8, new: 0.2 }), 0.7)
+    const [first, second] = events[0].posts
+    // 候補が無かった 1 件目は再確認の対象外
+    expect(first).not.toHaveProperty('verify')
+    expect(second.verify).toEqual({
+      choice: 'example-1',
+      probability: 0.8,
+      probabilities: { 'example-1': 0.8, new: 0.2 },
+      merged: true
+    })
+  })
+
+  test('しきい値に届かず合流しなかった言及が作った新規イベントの最初の言及に、merged: false を残す', async () => {
+    const { events } = await run(answer('e0', 0.6, { e0: 0.6, new: 0.4 }), 0.7)
+    expect(events).toHaveLength(2)
+    expect(events[0].posts[0]).not.toHaveProperty('verify')
+    expect(events[1].posts).toEqual([
+      {
+        postId: '2',
+        status: 'ongoing',
+        index: 0,
+        verify: { choice: 'example-1', probability: 0.6, probabilities: { 'example-1': 0.6, new: 0.4 }, merged: false }
+      }
+    ])
+  })
+
+  test('new と答えた場合も確率を残す', async () => {
+    const { events } = await run(answer('new', 0.99, { e0: 0.01, new: 0.99 }), 0.7)
+    expect(events).toHaveLength(2)
+    expect(events[1].posts[0].verify).toEqual({
+      choice: 'new',
+      probability: 0.99,
+      probabilities: { 'example-1': 0.01, new: 0.99 },
+      merged: false
+    })
+  })
+
+  test('確認に失敗した言及には verify を付けない', async () => {
+    const failed = await run(async () => {
+      throw new Error('Clef is down')
+    }, 0.7)
+    expect(failed.events).toHaveLength(2)
+    expect(failed.events.flatMap((event) => event.posts).filter((entry) => 'verify' in entry)).toEqual([])
+    expect(failed.progress).toMatchObject({ verified: 1, verifyFailed: 1 })
+  })
+
+  test('確率がしきい値に届かない・new を選んだ・確認に失敗した場合は新規のまま', async () => {
+    const verifiers: Verifier[] = [
+      answer('e0', 0.6, { e0: 0.6, new: 0.4 }),
+      answer('new', 0.99, { e0: 0.01, new: 0.99 }),
+      async (): Promise<Verified> => {
+        throw new Error('Clef is down')
+      }
+    ]
+    for (const verify of verifiers) {
+      const { events, progress } = await run(verify, 0.7)
+      expect(events).toHaveLength(2)
+      expect(progress.merged).toBe(0)
+    }
+  })
+
+  test('確認用のリクエストは候補ごとの選択肢と new を持つ', () => {
+    const rows = analyze({
+      posts: [post('1', '2026-10-01T01:00:00.000Z')],
+      events: [],
+      accounts,
+      characterNames: []
+    }).rows
+    const mention = { store: 'example', row: rows[0], index: 0, event: card('start'), state: 'state' }
+    const candidate = {
+      id: 'example-1',
+      store: 'example',
+      item: 'ハロウィン名刺',
+      category: 'limited_card' as const,
+      status: 'start' as const,
+      startUnknown: false,
+      firstSeen: 0,
+      lastSeen: 0,
+      posts: []
+    }
+    const request = buildVerifyRequest(mention, [candidate])
+    expect(ClefRequestSchema.safeParse({ model: 'clef', ...request }).success).toBe(true)
+    const question = request.questions.same
+    expect(question.type === 'choice' ? Object.keys(question.criteria) : []).toEqual(['e0', 'new'])
   })
 })
 
