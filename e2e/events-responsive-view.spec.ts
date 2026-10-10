@@ -6,6 +6,16 @@ import { paintEvidence } from './local/support'
 const phase = process.env.B02_PHASE ?? 'after'
 const scratch = resolve('.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b02', phase)
 const widths = [320, 375, 430, 768, 1024, 1280, 1440]
+const fixedNow = new Date('2026-10-19T16:00:00Z') // October 20 JST, October 19 UTC
+const todayJst = new Date(fixedNow.getTime() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10)
+const statusLabels = { upcoming: '開催前', ongoing: '開催中', last_day: '最終日', ended: '終了' } as const
+// Same date rule as the app's calculateEventStatus, evaluated on the JST date of the fixed clock.
+function statusOn(event: { startDate: string; endDate: string }): keyof typeof statusLabels {
+  if (todayJst < event.startDate) return 'upcoming'
+  if (todayJst > event.endDate) return 'ended'
+  if (todayJst === event.endDate) return 'last_day'
+  return 'ongoing'
+}
 const events = ['limited_card', 'regular_card', 'ackey', 'other'].flatMap((category, c) =>
   ['ongoing', 'upcoming', 'last_day', 'ended'].map((status, i) => ({
     uuid: `550e8400-e29b-41d4-a716-${String(c * 4 + i).padStart(12, '0')}`,
@@ -26,7 +36,7 @@ const events = ['limited_card', 'regular_card', 'ackey', 'other'].flatMap((categ
   }))
 )
 async function install(page: Page) {
-  await page.clock.setFixedTime(new Date('2026-10-19T16:00:00Z')) // October 20 JST, October 19 UTC
+  await page.clock.setFixedTime(fixedNow)
   await page.route('**/*', (route) => {
     const url = new URL(route.request().url())
     if (url.origin !== 'http://127.0.0.1:15322') return route.abort()
@@ -60,6 +70,19 @@ async function themeCheck(page: Page, theme: string) {
   expect(actual).toEqual({ dark: theme === 'dark', rgb: theme === 'dark' ? [9, 9, 11] : [252, 231, 243] })
   return actual
 }
+// The first page load makes the dev server transform the whole module graph, which takes 10s or more and would eat
+// most of the first test's 15s budget. Pay it once here, waiting for the page to render rather than for a fixed time.
+test.beforeAll(async ({ browser }) => {
+  test.setTimeout(60_000)
+  const page = await browser.newPage()
+  try {
+    await install(page)
+    await page.goto('/events/', { timeout: 50_000 })
+    await expect(page.getByRole('heading', { name: 'イベント一覧', exact: true })).toBeVisible({ timeout: 50_000 })
+  } finally {
+    await page.close()
+  }
+})
 test.beforeEach(async ({ page }) => install(page))
 for (const width of widths)
   test(`responsive choice ${width}`, async ({ page }) => {
@@ -154,6 +177,7 @@ for (const theme of ['light', 'dark'])
           const a = lum(rgb(bg)),
             b = lum(rgb(fg))
           return {
+            title: text.textContent,
             text: bar.textContent,
             background: bg,
             labelOpacity: getComputedStyle(bar.firstElementChild!).opacity,
@@ -192,8 +216,14 @@ for (const theme of ['light', 'dark'])
           expect(label.color).toBe(bar.color)
           expect(label.font).toBeGreaterThanOrEqual(13)
         }
-        expect(bar.text).toMatch(/限定名刺|通年名刺|アクキー|その他/)
-        expect(bar.text).toMatch(/開催中|開催前|最終日|終了/)
+        expect(bar.text).toMatch(/限定名刺|通年名刺|アクキー|アクスタ|その他/)
+        // The schedule bar names the status except while the event is ongoing; match the bar to its fixture event.
+        const event = events.find((candidate) => candidate.title === bar.title)
+        if (!event) throw new Error(`No fixture event for bar "${bar.title}"`)
+        const status = statusOn(event)
+        expect(event.status, `fixture status of "${event.title}"`).toBe(status)
+        const shown = Object.values(statusLabels).filter((label) => bar.text?.includes(label))
+        expect(shown, `status words in "${event.title}"`).toEqual(status === 'ongoing' ? [] : [statusLabels[status]])
       }
     })
 
