@@ -270,6 +270,9 @@ workers/app/src/generated/prisma/
 # Local Codex configuration, credentials, and session state.
 /.codex/
 
+# Local agent scratch output (e2e evidence screenshots / json under .superpowers/sdd/)
+.superpowers/
+
 # Local migration verification screenshots
 screenshots/
 

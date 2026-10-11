@@ -114,6 +114,30 @@ model Event {
   groupId         String?             @map("group_id")
   /// 対象のビッカメ娘（任意）。null のときは開催店舗と同一とみなす
   characterId     String?             @map("character_id")
+  /// LLM が「配布イベントである」と判定した確率（0〜1、任意）。人手登録のイベントは null
+  llmConfidence   Float?              @map("llm_confidence")
+  /// 判定した LLM のモデル名（例: claude-haiku-5-5、任意）
+  llmModel        String?             @map("llm_model")
+  /// LLM に渡した質問（プロンプト）の版（任意）
+  llmVersion      String?             @map("llm_version")
+  /// LLM の判定の元にした X 投稿の ID（任意）
+  llmPostId       String?             @map("llm_post_id")
+  /// LLM の回答の全体（JSON 文字列、任意）
+  llmAnswers      String?             @map("llm_answers")
+  /// LLM が判定した日時（任意）
+  llmJudgedAt     DateTime?           @map("llm_judged_at")
+  /// Clef が `is_event` と判定した確率（0〜1、任意）。人手登録のイベントは null
+  clefConfidence  Float?              @map("clef_confidence")
+  /// 判定した Clef のモデル名: clef, clef-flash（任意）
+  clefModel       String?             @map("clef_model")
+  /// Clef に渡した質問の版（任意）
+  clefVersion     String?             @map("clef_version")
+  /// Clef の判定の元にした X 投稿の ID（任意）
+  clefPostId      String?             @map("clef_post_id")
+  /// Clef の応答 `answers` の全体（JSON 文字列、任意）
+  clefAnswers     String?             @map("clef_answers")
+  /// Clef が判定した日時（任意）
+  clefJudgedAt    DateTime?           @map("clef_judged_at")
   /// 作成日時
   createdAt       DateTime            @default(now()) @map("created_at")
   /// 更新日時

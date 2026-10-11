@@ -6,6 +6,7 @@ import {
   DEFAULT_EVENT_LIST_FILTERS,
   EventSearchSchema
 } from '../../workers/app/src/schemas/event-search'
+import { parseEventListFilterSearch } from '../../workers/app/src/utils/event-list-filters'
 
 describe('イベントのカテゴリ', () => {
   test('アクスタはアクキーの次、その他の前に並ぶ', () => {
@@ -26,11 +27,12 @@ describe('イベントのカテゴリ', () => {
 
   test('公開一覧の絞り込みは既定でアクスタも含み、URL の acsta を受け付ける', () => {
     expect(DEFAULT_EVENT_CATEGORY.split(',')).toContain('acsta')
+    // ルートの search は URL の値をそのまま通すので、受け付けるかどうかは画面側の解釈(parseEventListFilterSearch)で確かめる。
     const selected = EventSearchSchema.safeParse({ category: 'acsta' })
     const unset = EventSearchSchema.safeParse({})
-    expect(selected.success && selected.data.category).toBe('acsta')
+    expect(selected.success && parseEventListFilterSearch(selected.data).category).toBe('acsta')
     // 省略は undefined のまま。既定(全カテゴリ)は合成側で入れる。
-    expect(unset.success && unset.data.category).toBeUndefined()
+    expect(unset.success && parseEventListFilterSearch(unset.data).category).toBeUndefined()
     expect(DEFAULT_EVENT_LIST_FILTERS.category).toBe(DEFAULT_EVENT_CATEGORY)
   })
 })
