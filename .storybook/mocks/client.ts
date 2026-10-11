@@ -23,6 +23,7 @@ type APIResponseFixtures = {
 const responses = {
   getCharacters: () => characters,
   getEvents: () => list(events),
+  getAdminEvents: () => list(events),
   getEvent: () => eventDetail,
   getEventGroups: () => list([group]),
   getEventGroup: () => group,

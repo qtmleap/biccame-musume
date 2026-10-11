@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Award, Bird, Calendar, FolderTree, MessageSquare, Users } from 'lucide-react'
+import { ArrowLeft, Award, Bird, Calendar, FolderTree, MessageSquare, ScanSearch, Users } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Suspense } from 'react'
 import { LoadingFallback } from '@/components/common/loading-fallback'
@@ -57,6 +57,21 @@ const MENU_ITEMS = [
     description: ADMIN_LABELS.twitterManagementDesc,
     iconBg: 'bg-status-ongoing/15',
     iconText: 'text-status-ongoing-foreground'
+  }
+] as const
+
+/**
+ * dev サーバーでだけ使えるページ。イベント自動検出は .cache の手元データをローカルの別プロセスが配信する
+ * （bun run event-detect serve）ので、本番では開けない。
+ */
+const DEV_MENU_ITEMS = [
+  {
+    to: '/admin/event-detect',
+    icon: ScanSearch,
+    title: 'イベント自動検出',
+    description: 'X の告知から検出したイベントと登録済みイベントの突き合わせ（ローカルのみ）',
+    iconBg: 'bg-brand/15',
+    iconText: 'text-brand'
   }
 ] as const
 
@@ -146,6 +161,8 @@ const AdminContent = () => {
           {MENU_ITEMS.map((item, index) => (
             <MenuCard key={item.to} {...item} index={index} />
           ))}
+          {import.meta.env.DEV &&
+            DEV_MENU_ITEMS.map((item, index) => <MenuCard key={item.to} {...item} index={MENU_ITEMS.length + index} />)}
         </div>
       </div>
     </div>

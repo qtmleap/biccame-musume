@@ -5,6 +5,7 @@ import { authEndpoints } from './auth'
 import { badgesEndpoints } from './badges'
 import { charactersEndpoints } from './characters'
 import { commentsEndpoints } from './comments'
+import { eventDetectEndpoints } from './event-detect'
 import { eventGroupsEndpoints } from './event-groups'
 import { eventsEndpoints } from './events'
 import { favoritesEndpoints } from './favorites'
@@ -35,7 +36,8 @@ const api = makeApi([
   ...favoritesEndpoints,
   ...badgesEndpoints,
   ...commentsEndpoints,
-  ...adminEndpoints
+  ...adminEndpoints,
+  ...eventDetectEndpoints
 ])
 
 /**

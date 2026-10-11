@@ -19,6 +19,7 @@ type RecentEventsListProps = {
  */
 const CATEGORY_COLORS: Record<Event['category'], string> = {
   ackey: 'bg-category-ackey text-category-ackey-foreground',
+  acsta: 'bg-category-acsta text-category-acsta-foreground',
   limited_card: 'bg-category-limited-card text-category-limited-card-foreground',
   regular_card: 'bg-category-regular-card text-category-regular-card-foreground',
   other: 'bg-category-other text-category-other-foreground'

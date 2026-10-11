@@ -6,7 +6,7 @@ keep_vars = true
 
 # X連携監視の通知先は [vars] ではなく secret に登録する（URLに認証情報を含む）。
 # 例: bunx wrangler secret put DISCORD_WEBHOOK_URL --env production
-# TWITTER_AUTH_TOKEN / TWITTER_CSRF_TOKEN も同様に secret で管理する。
+# X の投稿・TL取得は bot Worker（workers/bot）が行い、TWITTER_* の secret もそちらにだけ置く。
 
 # Top-level bindings for local dev (vite dev / miniflare).
 # Production/staging deployments use [env.*] sections below.

@@ -13,7 +13,7 @@ export type EventStatus = z.infer<typeof EventStatusSchema>
 /**
  * イベント種別（カテゴリ）
  */
-export const EventCategorySchema = z.enum(['limited_card', 'regular_card', 'ackey', 'other'], {
+export const EventCategorySchema = z.enum(['limited_card', 'regular_card', 'ackey', 'acsta', 'other'], {
   error: 'イベント種別を選択してください'
 })
 

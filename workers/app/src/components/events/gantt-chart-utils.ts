@@ -11,6 +11,7 @@ export const getCategoryColor = (category: Event['category'], status: EventStatu
     limited_card: 'bg-[var(--gantt-limited-card)] text-[var(--gantt-foreground)]',
     regular_card: 'bg-[var(--gantt-regular-card)] text-[var(--gantt-foreground)]',
     ackey: 'bg-[var(--gantt-ackey)] text-[var(--gantt-foreground)]',
+    acsta: 'bg-[var(--gantt-acsta)] text-[var(--gantt-foreground)]',
     other: 'bg-[var(--gantt-other)] text-[var(--gantt-foreground)]'
   }[category]
 }

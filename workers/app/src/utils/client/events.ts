@@ -20,6 +20,13 @@ export const eventsEndpoints = makeApi([
   },
   {
     method: 'get',
+    path: '/api/admin/events',
+    alias: 'getAdminEvents',
+    description: 'イベント一覧を取得（admin、未確認のイベントを含む）',
+    response: z.array(EventSchema)
+  },
+  {
+    method: 'get',
     path: '/api/events/:id',
     alias: 'getEvent',
     description: '単一イベントを取得',

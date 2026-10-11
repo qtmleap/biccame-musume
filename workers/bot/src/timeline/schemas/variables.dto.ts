@@ -12,3 +12,11 @@ export const SearchVariablesSchema = z
     cursor: z.string().optional()
   })
   .transform((v) => JSON.stringify(v))
+
+export const ListVariablesSchema = z
+  .object({
+    listId: z.string().regex(/^\d+$/),
+    count: z.literal(20).default(20),
+    cursor: z.string().nonempty().optional()
+  })
+  .transform((v) => JSON.stringify(v))

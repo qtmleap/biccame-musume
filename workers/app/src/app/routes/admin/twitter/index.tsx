@@ -218,7 +218,9 @@ const TwitterStatusContent = () => {
               </InfoItem>
               <InfoItem icon={Hash} label='確認ポイント'>
                 <ul className='text-sm text-foreground list-disc pl-5 space-y-1 mt-1'>
-                  <li>TWITTER_AUTH_TOKEN / TWITTER_CSRF_TOKEN の cookie が失効していないか</li>
+                  <li>
+                    bot Worker（musume-workers）の TWITTER_AUTH_TOKEN / TWITTER_CSRF_TOKEN の cookie が失効していないか
+                  </li>
                   <li>X_BEARER または USER_BY_SCREEN_NAME_QUERY_ID がローテートしていないか</li>
                   <li>X 内部 API のレスポンス形状が変わっていないか</li>
                 </ul>

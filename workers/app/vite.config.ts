@@ -18,6 +18,22 @@ const version = JSON.parse(readFileSync(resolve(repoRoot, 'package.json'), 'utf-
 const hash = execSync('git rev-parse --short HEAD', { cwd: repoRoot }).toString().trim()
 const buildAt = new Date().toISOString()
 
+// イベント検出ビューワの API は `bun run event-detect serve` が別プロセスで配信する（ローカル専用）。dev サーバーはそこへ中継するだけ。
+// 設定ファイルは素の Node ESM で読まれ、scripts/ の拡張子なし import を解決できないので、ここから scripts/ や @biccame/shared は import しない。
+// EVENT_DETECT_BASE は packages/shared の VIEWER_BASE、ポートは scripts/event-detect.ts の serve --port の既定値と揃える。
+const EVENT_DETECT_BASE = '/__event-detect'
+const EVENT_DETECT_ORIGIN = 'http://127.0.0.1:15176'
+// 中継しないヘッダ。本文は fetch が展開済み・長さも変わりうるので、接続まわりと合わせて外す
+const HOP_BY_HOP_HEADERS = [
+  'host',
+  'connection',
+  'keep-alive',
+  'transfer-encoding',
+  'content-length',
+  'content-encoding',
+  'upgrade'
+]
+
 // https://vite.dev/config/
 export default defineConfig(({ mode, command }) => {
   // Cloudflare の環境選択も Vite と同じルートの環境ディレクトリを使用する。
@@ -31,6 +47,50 @@ export default defineConfig(({ mode, command }) => {
       proxy: {}
     },
     plugins: [
+      {
+        // /__event-detect を bun run event-detect serve へ中継する（serve のみ）。
+        // cloudflare() は run_worker_first = ["/*"] なので configureServer で Worker 向けミドルウェアを直接登録し、
+        // server.proxy より先に全リクエストを奪う。proxy では届かないため、cloudflare() より前にこのミドルウェアを置く。
+        name: 'event-detect-proxy',
+        apply: 'serve',
+        configureServer(server) {
+          server.middlewares.use(async (req, res, next) => {
+            const url = req.url === undefined ? '' : req.url
+            const path = url.split('?')[0]
+            if (path !== EVENT_DETECT_BASE && !path.startsWith(`${EVENT_DETECT_BASE}/`)) return next()
+            try {
+              const method = req.method === undefined ? 'GET' : req.method
+              const chunks: Buffer[] = []
+              for await (const chunk of req) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+              const headers = new Headers()
+              for (const [key, value] of Object.entries(req.headers)) {
+                if (value === undefined || HOP_BY_HOP_HEADERS.includes(key)) continue
+                headers.set(key, Array.isArray(value) ? value.join(', ') : value)
+              }
+              const response = await fetch(`${EVENT_DETECT_ORIGIN}${url}`, {
+                method,
+                headers,
+                redirect: 'manual',
+                ...(method === 'GET' || method === 'HEAD' ? {} : { body: Buffer.concat(chunks) })
+              })
+              res.statusCode = response.status
+              for (const [key, value] of response.headers) {
+                if (!HOP_BY_HOP_HEADERS.includes(key)) res.setHeader(key, value)
+              }
+              res.end(Buffer.from(await response.arrayBuffer()))
+            } catch {
+              // 中継先が起動していない
+              res.statusCode = 502
+              res.setHeader('Content-Type', 'application/json')
+              res.end(
+                JSON.stringify({
+                  error: `イベント検出ビューワの API に接続できません。bun run event-detect serve を起動してください（${EVENT_DETECT_ORIGIN}）`
+                })
+              )
+            }
+          })
+        }
+      },
       {
         name: 'root-local-vars',
         configureServer(server) {
@@ -163,6 +223,9 @@ export default defineConfig(({ mode, command }) => {
       }
     },
     resolve: {
+      // bun のルート node_modules と .bun ストアには別実体の react があり、recharts は後者へ解決される。
+      // 事前バンドルで React が二重に内包され useContext が null になるため、常にルート側へ寄せる（react-is はルートが v17 なので対象外）。
+      dedupe: ['react', 'react-dom'],
       alias: [
         // satoriのharfbuzzはfs/XMLHttpRequestでWASMを探すため、同梱WASMを渡すWorkers版へ置換する。
         { find: /^harfbuzzjs$/, replacement: resolve(import.meta.dirname, './src/lib/harfbuzz-workers.ts') },

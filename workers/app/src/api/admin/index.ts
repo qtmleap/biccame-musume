@@ -3,6 +3,8 @@ import { CFAuth } from '@/middleware/cloudflare-access'
 import type { Bindings } from '@/types/bindings'
 import adminBadges from '../admin-badge'
 import adminComments from '../admin-comment'
+import adminEvents from '../admin-event'
+import adminEventDetect from '../admin-event-detect'
 import adminEventGroups from '../admin-event-group'
 import adminTwitter from '../admin-twitter'
 import adminUsers from '../admin-user'
@@ -22,6 +24,8 @@ admin.use('/admin/*', CFAuth)
 
 admin.route('/', adminBadges)
 admin.route('/', adminComments)
+admin.route('/', adminEvents)
+admin.route('/', adminEventDetect)
 admin.route('/', adminEventGroups)
 admin.route('/', adminUsers)
 admin.route('/', adminTwitter)

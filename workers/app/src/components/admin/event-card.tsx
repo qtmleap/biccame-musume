@@ -13,10 +13,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { STICKER_HOVER_TRANSITION, STICKER_SHADOW_SM, STICKER_TAPES } from '@/lib/sticker'
 import { cn } from '@/lib/utils'
-import { STORE_NAME_LABELS } from '@/locales/app.content'
+import { EVENT_LIST_LABELS, STORE_NAME_LABELS } from '@/locales/app.content'
 import { STATUS_BADGE } from '@/locales/component'
 import type { Event } from '@/schemas/event.dto'
 import type { StoreKey } from '@/schemas/store.dto'
@@ -89,7 +90,10 @@ export const EventCard = ({ event, index, onDelete, isAuthenticated }: EventCard
                 </div>
               </div>
             </div>
-            {STATUS_BADGE[event.status]()}
+            <div className='flex shrink-0 flex-col items-end gap-1'>
+              {STATUS_BADGE[event.status]()}
+              {!event.isVerified && <Badge variant='outline'>{EVENT_LIST_LABELS.verification.unverified}</Badge>}
+            </div>
           </div>
 
           {/* アクション */}

@@ -18,7 +18,7 @@ export const TweetExtractionSchema = z.object({
   endDate: NullableStringSchema,
   endAt: NullableStringSchema,
   category: z
-    .union([z.enum(['ackey', 'regular_card', 'limited_card', 'other']), z.literal(''), z.null()])
+    .union([z.enum(['ackey', 'acsta', 'regular_card', 'limited_card', 'other']), z.literal(''), z.null()])
     .transform((value) => (value === '' ? null : value))
 })
 
@@ -56,7 +56,7 @@ export const parseTweet = async (env: Bindings, tweet: TweetInfo): Promise<Tweet
     '配布イベントが含まれない場合はeventsを空配列にしてください。',
     '',
     '配布イベントの判定基準（isDistributionEvent）:',
-    '- true: ビッカメ娘・店舗の名刺やビッカメ娘のアクリルキーホルダーなどの配布開始・終了の案内',
+    '- true: ビッカメ娘・店舗の名刺やビッカメ娘のアクリルキーホルダー・アクリルスタンドなどの配布開始・終了の案内',
     '- false: 日常のツイート、挨拶、感想、宣伝など配布イベントではない内容。またはビッカメ娘に関連しない内容',
     '',
     'イベントタイプ（eventType）:',
@@ -71,7 +71,8 @@ export const parseTweet = async (env: Bindings, tweet: TweetInfo): Promise<Tweet
     '- 例: 「バレンタイン限定名刺」「爆誕記念アクキー」「通年名刺」など',
     '',
     'カテゴリの判定基準 (配布イベントの場合のみ):',
-    '- ackey: アクリルキーホルダー、アクキーに関する内容',
+    '- ackey: アクリルキーホルダー、アクキーに関する内容（キーホルダーとして持ち歩くもの）',
+    '- acsta: アクリルスタンド、アクスタに関する内容（台座に立てて飾るもの。キーホルダーは ackey）',
     '- limited_card: 期間限定や数量限定の名刺配布',
     '- regular_card: 通年配布の名刺（限定ではない名刺）',
     '- other: 上記に該当しない場合',
@@ -112,7 +113,7 @@ export const parseTweet = async (env: Bindings, tweet: TweetInfo): Promise<Tweet
                     startDate: { type: 'string' },
                     endDate: { type: 'string' },
                     endAt: { type: 'string' },
-                    category: { type: 'string', enum: ['ackey', 'regular_card', 'limited_card', 'other', ''] }
+                    category: { type: 'string', enum: ['ackey', 'acsta', 'regular_card', 'limited_card', 'other', ''] }
                   },
                   required: ['isDistributionEvent', 'eventType', 'title', 'startDate', 'endDate', 'endAt', 'category']
                 }

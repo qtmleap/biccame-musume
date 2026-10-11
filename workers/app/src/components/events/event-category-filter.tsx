@@ -10,6 +10,8 @@ import { type Event, EventCategorySchema } from '@/schemas/event.dto'
 const CATEGORY_CHECKBOX_COLORS: Record<Event['category'], string> = {
   ackey:
     'border-category-ackey-solid data-[state=checked]:bg-category-ackey-solid data-[state=checked]:border-category-ackey-solid',
+  acsta:
+    'border-category-acsta-solid data-[state=checked]:bg-category-acsta-solid data-[state=checked]:border-category-acsta-solid',
   limited_card:
     'border-category-limited-card-solid data-[state=checked]:bg-category-limited-card-solid data-[state=checked]:border-category-limited-card-solid',
   regular_card:

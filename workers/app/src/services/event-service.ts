@@ -155,17 +155,17 @@ export const getEvent = async (env: Bindings, id: string): Promise<EventDetail> 
 }
 
 /**
- * 公開済みイベント一覧を取得
+ * イベント一覧を where 条件つきで取得 (開始日降順)
  * @param env - Cloudflare Workers環境変数
- * @returns イベント一覧（開始日降順）
+ * @param where - 絞り込み条件 (省略時は全件)
  * @throws HTTPException 400 - バリデーションエラーの場合
  */
-export const getEvents = async (env: Bindings): Promise<Event[]> => {
+const listEvents = async (env: Bindings, where?: Prisma.EventWhereInput): Promise<Event[]> => {
   const prisma = getPrisma(env)
 
   const events = (
     await prisma.event.findMany({
-      where: { isVerified: true },
+      where,
       select: EVENT_LIST_SELECT,
       orderBy: { startDate: 'desc' }
     })
@@ -176,6 +176,23 @@ export const getEvents = async (env: Bindings): Promise<Event[]> => {
   }
   return result.data
 }
+
+/**
+ * 公開済みイベント一覧を取得
+ * @param env - Cloudflare Workers環境変数
+ * @returns イベント一覧（開始日降順）
+ * @throws HTTPException 400 - バリデーションエラーの場合
+ */
+export const getEvents = async (env: Bindings): Promise<Event[]> => listEvents(env, { isVerified: true })
+
+/**
+ * 管理画面向けのイベント一覧を取得 (未確認のイベントを含む)
+ * 公開側には使わないこと (公開は getEvents)
+ * @param env - Cloudflare Workers環境変数
+ * @returns 確認済み・未確認の両方のイベント一覧（開始日降順）
+ * @throws HTTPException 400 - バリデーションエラーの場合
+ */
+export const getAdminEvents = async (env: Bindings): Promise<Event[]> => listEvents(env)
 
 /**
  * EventRequest の日付フィールドを Prisma 用の Date / null に変換

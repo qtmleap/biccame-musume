@@ -12,9 +12,13 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import '@/index.css'
 
 // Synthetic signed-in presentation fixture only; no Firebase login or real account.
+// ?anon を付けると未ログインで始まり、「ログイン(テスト)」ボタンで後から確定する(ログインの確定が非同期な状況の再現)。
 const store = createStore()
-store.set(userAtom, { uid: 'synthetic-a14', displayName: 'テスト利用者' } as User)
-store.set(backendSessionStateAtom, { status: 'ready', uid: 'synthetic-a14' })
+const signIn = () => {
+  store.set(userAtom, { uid: 'synthetic-a14', displayName: 'テスト利用者' } as User)
+  store.set(backendSessionStateAtom, { status: 'ready', uid: 'synthetic-a14' })
+}
+if (!new URLSearchParams(location.search).has('anon')) signIn()
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
 const root = createRootRoute({
   component: () => (
@@ -24,6 +28,9 @@ const root = createRootRoute({
         <Link to='/events'>イベント一覧へ</Link>
         <button type='button' onClick={() => queryClient.invalidateQueries({ queryKey: ['events'], exact: true })}>
           一覧再取得
+        </button>
+        <button type='button' onClick={signIn}>
+          ログイン(テスト)
         </button>
       </nav>
       <Outlet />

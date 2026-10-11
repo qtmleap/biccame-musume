@@ -30,6 +30,9 @@ export default defineConfig({
   },
   optimizeDeps: { entries: ['e2e/events-responsive-view/index.html'] },
   server: {
+    // The spec writes its evidence (json, png) under .superpowers while the page is open. Tailwind scans the whole
+    // root, so watching those writes makes it send a full-reload that destroys the page mid-test.
+    watch: { ignored: ['**/.superpowers/**'] },
     fs: { allow: [resolve(import.meta.dirname, '../..'), realpathSync('node_modules')] },
     host: '127.0.0.1',
     port: 15322,

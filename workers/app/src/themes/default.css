@@ -79,6 +79,9 @@
   --color-category-ackey: var(--category-ackey);
   --color-category-ackey-foreground: var(--category-ackey-foreground);
   --color-category-ackey-solid: var(--category-ackey-solid);
+  --color-category-acsta: var(--category-acsta);
+  --color-category-acsta-foreground: var(--category-acsta-foreground);
+  --color-category-acsta-solid: var(--category-acsta-solid);
   --color-category-other: var(--category-other);
   --color-category-other-foreground: var(--category-other-foreground);
   --color-category-other-solid: var(--category-other-solid);

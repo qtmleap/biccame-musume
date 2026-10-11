@@ -3,8 +3,9 @@ import { EventSearchSchema } from '../workers/app/src/schemas/event-search'
 import * as eventStatus from '../workers/app/src/utils/event-status'
 
 test('old events are hidden by default, while an explicit opt-out survives URL parsing', () => {
+  // 省略は undefined のまま(既定の true は合成側で入れる)。不正値は「書かれている」まま既定の true に戻す。
   for (const [input, expected] of [
-    [{}, true],
+    [{}, undefined],
     [{ hideOldEvents: 'false' }, false],
     [{ hideOldEvents: 'invalid' }, true]
   ] as const) {

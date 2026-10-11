@@ -5,7 +5,7 @@ const events = Array.from({ length: 13 }, (_, i) => ({
   category: 'ackey',
   title: `イベント${i + 1}`,
   stores: ['sapporo'],
-  startDate: '2026-01-01T00:00:00.000Z',
+  startDate: '2026-10-01T00:00:00.000Z',
   endDate: '2099-12-31T00:00:00.000Z',
   isVerified: true,
   isPreliminary: false,
@@ -17,7 +17,17 @@ const events = Array.from({ length: 13 }, (_, i) => ({
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z'
 }))
+const characters = [
+  {
+    id: 'sapporo',
+    prefecture: '北海道',
+    character: { name: '札幌娘', description: 'テスト用の娘', images: ['fixture.png'], is_biccame_musume: true },
+    store: { name: '札幌店', access: [] }
+  }
+]
 test.beforeEach(async ({ page }) => {
+  // 既定で「開始から1か月以上のイベントを非表示」なので、日付を固定して fixture が常に一覧に出るようにする。
+  await page.clock.setFixedTime(new Date('2026-10-03T03:00:00Z'))
   await page.addInitScript(() => {
     localStorage.clear()
     localStorage.setItem('event-view-mode', JSON.stringify('grid'))
@@ -27,6 +37,8 @@ test.beforeEach(async ({ page }) => {
     if (url.origin !== 'http://127.0.0.1:15308') return route.abort()
     if (url.pathname === '/api/events') return route.fulfill({ json: events })
     if (url.pathname === '/api/event-groups') return route.fulfill({ json: [] })
+    // この harness の root には public/characters.json が無い(404 で一覧が描画されない)ので、最小の娘一覧を返す。
+    if (url.pathname === '/characters.json') return route.fulfill({ json: characters })
     if (url.pathname.startsWith('/api/')) return route.abort()
     return route.continue()
   })
