@@ -1,8 +1,9 @@
 import { createHash } from 'node:crypto'
-import { mkdir, open, readdir, readFile, rename, rm, writeFile } from 'node:fs/promises'
+import { link, mkdir, open, readdir, readFile, rename, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import type { Dayjs } from 'dayjs'
-import { LIST_TIMELINE_ENDPOINT } from '../../workers/bot/src/timeline/client'
+import type { ListArchiveIndex, ReplayState } from './post-archive-index'
+import { LIST_TIMELINE_ENDPOINT } from '../../workers/bot/src/timeline/endpoint'
 import { dayjs } from '../../workers/bot/src/timeline/utils/dayjs'
 import {
   assertSeedPathsDisjoint,
@@ -15,6 +16,7 @@ export type ArchiveScope = { listId: string; from: string; until: string }
 export type ArchiveSource = 'search' | 'list'
 export type ScopeOptions = { listId?: string; from?: string; until?: string }
 type FailureCode =
+  | 'index_incompatible'
   | 'invalid_params'
   | 'locked'
   | 'scope_mismatch'
@@ -22,6 +24,7 @@ type FailureCode =
   | 'corrupt_journal'
   | 'output_exists'
 const diagnostics: Record<FailureCode, string> = {
+  index_incompatible: 'Cached List index is incompatible. Preserve the output; use an exact approved upgrade bridge or --verify-journal to rebuild explicitly.',
   invalid_params: 'Invalid options, dates or bounds. See --help.',
   locked: 'Output is locked. Confirm its owner has stopped before removing only the lock.',
   scope_mismatch: 'Saved scope or policy differs. Preserve this output and use a new directory.',
@@ -44,13 +47,13 @@ const object = (value: unknown): JsonObject => {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Unsupported payload')
   return value as JsonObject
 }
-// Only the observed empty native List dependency failure is safe to request again on explicit resume.
-const isListDependencyError = (response: unknown): boolean => {
+// Observed empty List failures can retry without adopting partial data or advancing the cursor.
+const isListEmptyFailure = (response: unknown): 'list_dependency' | 'list_over_capacity' | undefined => {
   const onlyKeys = (value: JsonObject, keys: string[]) =>
     Object.keys(value).length === keys.length && keys.every((key) => Object.hasOwn(value, key))
   try {
     const root = object(response)
-    if (!onlyKeys(root, ['data', 'errors']) || !Array.isArray(root.errors) || root.errors.length !== 1) return false
+    if (!onlyKeys(root, ['data', 'errors']) || !Array.isArray(root.errors) || root.errors.length !== 1) return
     const data = object(root.data)
     const list = object(data.list)
     if (
@@ -58,19 +61,24 @@ const isListDependencyError = (response: unknown): boolean => {
       !onlyKeys(list, ['tweets_timeline']) ||
       Object.keys(object(list.tweets_timeline)).length !== 0
     )
-      return false
+      return
     const error = object(root.errors[0])
     const extensions = object(error.extensions)
-    return (
+    const classification = error.kind === 'Operational' && error.name === 'DependencyError'
+      ? 'list_dependency'
+      : error.kind === 'ServiceLevel' && error.name === 'DownstreamOverCapacityError'
+        ? 'list_over_capacity'
+        : undefined
+    return classification && (
       [error, extensions].every(
-        (value) => value.kind === 'Operational' && value.name === 'DependencyError' && value.source === 'Server'
+        (value) => value.kind === error.kind && value.name === error.name && value.source === 'Server'
       ) &&
       Array.isArray(error.path) &&
       error.path.length === 3 &&
       error.path.every((part, index) => part === ['list', 'tweets_timeline', 'timeline'][index])
-    )
+    ) ? classification : undefined
   } catch {
-    return false
+    return
   }
 }
 // Deadline pages are incomplete: retry their cursor without consuming any returned tweet or cursor.
@@ -156,14 +164,23 @@ const isListDeadlineError = (response: unknown): boolean => {
         )
       )
         return false
-      if (
-        ![
+      const fieldBranch =
+        [
           ['legacy', 'retweeted_status_result', 'result'],
           ['core', 'user_results', 'result']
-        ].some((branch) => branch.every((part, index) => path[index + 11] === part)) ||
-        !safeField(path[14])
-      )
-        return false
+        ].some((branch) => branch.every((part, index) => path[index + 11] === part)) && safeField(path[14])
+      const mediaBranch =
+        path.length === 18 &&
+        path[11] === 'legacy' &&
+        (path[12] === 'entities' || path[12] === 'extended_entities') &&
+        path[13] === 'media' &&
+        typeof path[14] === 'number' &&
+        Number.isSafeInteger(path[14]) &&
+        path[14] >= 0 &&
+        path[15] === 'media_results' &&
+        path[16] === 'result' &&
+        path[17] === 'watch_info'
+      if (!fieldBranch && !mediaBranch) return false
       let value: unknown = data
       for (const [index, part] of path.entries()) {
         if (Array.isArray(value)) {
@@ -234,9 +251,15 @@ const scopeRecord = (scope: ArchiveScope, seed?: SeedDescriptor, source: Archive
   }
 }
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex')
-const atomic = async (path: string, value: string) => {
+const atomic = async (path: string, value: string, exclusive = false) => {
   await writeFile(`${path}.tmp`, value, { mode: 0o600 })
-  await rename(`${path}.tmp`, path)
+  if (exclusive) {
+    try { await link(`${path}.tmp`, path) } catch (error) {
+      if (error && typeof error === 'object' && 'code' in error && error.code === 'EEXIST') throw new ArchiveFailure('corrupt_journal')
+      throw error
+    }
+    await rm(`${path}.tmp`)
+  } else await rename(`${path}.tmp`, path)
 }
 export const readArchiveScope = async (out: string, expectedSource?: ArchiveSource): Promise<ArchiveScope> => {
   const contents = await readFile(join(out, 'scope.json'), 'utf8').catch(() => {
@@ -420,7 +443,7 @@ export type ArchiveProgress = {
   pages: number
   seedPages: number
   posts: number
-  status: 'running' | 'retrying' | Reason
+  status: 'running' | 'retrying' | 'rebuilding' | Reason
   retry?: ArchiveRetry
   accounts: ArchiveAccount[]
 }
@@ -432,7 +455,7 @@ type Envelope = {
   requestCursor?: string
   response: unknown
 }
-type RowIndex = {
+export type RowIndex = {
   id: string
   createdAt: string
   author: { id?: string; screenName: string }
@@ -446,6 +469,7 @@ export const runArchive = async (options: {
   out: string
   seedFrom?: string
   resume?: boolean
+  verifyJournal?: boolean
   maxPages?: number
   maxRequests?: number
   delayMs?: number
@@ -460,7 +484,7 @@ export const runArchive = async (options: {
   const { scope, out } = options
   const source = options.source ?? 'search'
   const allHistory = options.allHistory ?? false
-  if (allHistory && source !== 'list') throw new ArchiveFailure('invalid_params')
+  if ((allHistory || options.verifyJournal) && source !== 'list') throw new ArchiveFailure('invalid_params')
   const normalization =
     source === 'list'
       ? {
@@ -501,6 +525,7 @@ export const runArchive = async (options: {
   const lock = await open(join(out, '.lock'), 'wx', 0o600).catch(() => {
     throw new ArchiveFailure('locked')
   })
+  let index: ListArchiveIndex | undefined
   try {
     let seed: SeedDescriptor | undefined
     if (options.resume) {
@@ -523,7 +548,20 @@ export const runArchive = async (options: {
     const fingerprint = hash(record)
     const query = record.query
     await mkdir(join(out, 'pages'), { recursive: true, mode: 0o700 })
-    const rows = new Map<string, RowIndex>()
+    if (source === 'list' && !seed) {
+      const { ListArchiveIndex, archiveIndexKey } = await import('./post-archive-index')
+      const context = { fingerprint, source, allHistory, from: scope.from, until: scope.until }
+      try {
+        index = await ListArchiveIndex.open(out, await archiveIndexKey(context, import.meta.url), {
+          context: hash(context), lockHeld: true, verifyJournal: options.verifyJournal
+        })
+      } catch (error) {
+        if (error && typeof error === 'object' && 'code' in error && error.code === 'index_incompatible')
+          throw new ArchiveFailure('index_incompatible')
+        throw error
+      }
+    }
+    const rows = index?.rows ?? new Map<string, RowIndex>()
     const accountCounts = new Map<string, ArchiveAccount>()
     const locations: string[] = []
     const seedIds = new Set<string>()
@@ -548,6 +586,7 @@ export const runArchive = async (options: {
         location,
         position
       })
+      index?.setPost(post.id, JSON.stringify(post))
       const key = accountKey(post)
       const account = accountCounts.get(key)
       accountCounts.set(key, {
@@ -621,8 +660,9 @@ export const runArchive = async (options: {
       )
         throw new ArchiveFailure('corrupt_journal')
       pages++
-      locations.push(location)
-      if (source === 'list' && isListDependencyError(envelope.response)) return 'list_dependency'
+      if (!index) locations.push(location)
+      const emptyFailure = source === 'list' ? isListEmptyFailure(envelope.response) : undefined
+      if (emptyFailure) return emptyFailure
       if (source === 'list' && isListDeadlineError(envelope.response)) return 'list_deadline'
       let parsed: ReturnType<typeof parseArchivePage>
       try {
@@ -638,7 +678,7 @@ export const runArchive = async (options: {
             : parsed.topLevelOldestTimestamp
       let newIds = 0
       for (const [position, post] of parsed.posts.entries()) {
-        if (!querySeenIds.has(post.id)) {
+        if (source === 'search' && !querySeenIds.has(post.id)) {
           querySeenIds.add(post.id)
           newIds++
         }
@@ -652,7 +692,7 @@ export const runArchive = async (options: {
         } else outsideWindow++
       }
       empty = envelope.requestCursor && parsed.replacementPair ? empty + 1 : 0
-      if (parsed.nextCursor && cursors.has(parsed.nextCursor)) reason = 'repeated_cursor'
+      if (parsed.nextCursor && (index ? index.hasCursor(parsed.nextCursor) : cursors.has(parsed.nextCursor))) reason = 'repeated_cursor'
       else if (source === 'search' && parsed.nextCursor && pages > 1 && parsed.posts.length > 0 && newIds === 0)
         reason = 'non_advancing'
       else if (!parsed.nextCursor || (source === 'search' && empty >= 3)) {
@@ -663,12 +703,12 @@ export const runArchive = async (options: {
             : 'no_next_cursor'
         reason = source === 'list' ? 'list_exhausted' : 'search_exhausted'
       }
-      if (parsed.nextCursor) cursors.add(parsed.nextCursor)
+      if (parsed.nextCursor) {
+        if (index) index.addCursor(parsed.nextCursor)
+        else cursors.add(parsed.nextCursor)
+      }
       nextCursor = exhausted() ? undefined : parsed.nextCursor
     }
-    const names = (await readdir(join(out, 'pages')))
-      .filter((name) => name !== '.DS_Store' && !name.endsWith('.tmp'))
-      .sort()
     const previous = await readFile(join(out, 'checkpoint.json'), 'utf8')
       .then((value) => {
         try {
@@ -678,19 +718,48 @@ export const runArchive = async (options: {
         }
       })
       .catch(() => undefined)
-    if (previous && typeof previous.pages === 'number' && previous.pages > names.length)
-      throw new ArchiveFailure('missing_journal')
-    for (const [index, name] of names.entries()) {
-      if (name !== `${String(index + 1).padStart(6, '0')}.json` || reason) throw new ArchiveFailure('corrupt_journal')
-      let envelope: Envelope
-      try {
-        envelope = JSON.parse(await readFile(join(out, 'pages', name), 'utf8'))
-      } catch {
+    const fullJournal = !index || options.verifyJournal || index.state.pages === 0
+    let names: string[]
+    if (fullJournal) {
+      names = (await readdir(join(out, 'pages'))).filter(name => name !== '.DS_Store' && !name.endsWith('.tmp')).sort()
+      if (previous && typeof previous.pages === 'number' && previous.pages > names.length)
+        throw new ArchiveFailure('missing_journal')
+      for (const [pageIndex, name] of names.entries())
+        if (name !== `${String(pageIndex + 1).padStart(6, '0')}.json`) throw new ArchiveFailure('corrupt_journal')
+    } else {
+      try { names = await index!.tail() } catch (error) {
+        if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') throw new ArchiveFailure('missing_journal')
         throw new ArchiveFailure('corrupt_journal')
       }
-      processPage(envelope, `pages/${name}`)
     }
-    const emit = () => {
+    const replayState = (): ReplayState => ({
+      pages, nextCursor,
+      ...(reason && ['unsupported_payload', 'repeated_cursor', 'list_exhausted'].includes(reason)
+        ? { reason: reason as ReplayState['reason'] } : {}),
+      terminalReason, minTimestamp, maxTimestamp, queryOldestTimestamp, topLevelOldestTimestamp, outsideWindow
+    })
+    if (index) {
+      try { if (fullJournal) await index.validate(names) } catch (error) {
+        if (index.state.pages > names.length || (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT'))
+          throw new ArchiveFailure('missing_journal')
+        throw new ArchiveFailure('corrupt_journal')
+      }
+      const stored = index.state
+      pages = stored.pages
+      nextCursor = stored.nextCursor
+      reason = stored.reason
+      terminalReason = stored.terminalReason
+      minTimestamp = stored.minTimestamp
+      maxTimestamp = stored.maxTimestamp
+      queryOldestTimestamp = stored.queryOldestTimestamp
+      topLevelOldestTimestamp = stored.topLevelOldestTimestamp
+      outsideWindow = stored.outsideWindow
+      for (const account of index.accounts()) accountCounts.set(account.key, account)
+    }
+    const applyPage = async (envelope: Envelope, location: string, body: string) =>
+      index ? index.apply(location.slice('pages/'.length), body, () => processPage(envelope, location), replayState, accounts)
+        : processPage(envelope, location)
+    const emit = (rebuilding = false) => {
       if (!options.onProgress) return
       try {
         void Promise.resolve(
@@ -701,7 +770,7 @@ export const runArchive = async (options: {
             pages,
             seedPages: seed?.pages ?? 0,
             posts: rows.size,
-            status: reason ?? (pendingRetry ? 'retrying' : 'running'),
+            status: reason ?? (rebuilding ? 'rebuilding' : pendingRetry ? 'retrying' : 'running'),
             ...(pendingRetry ? { retry: { ...pendingRetry } } : {}),
             accounts: accounts()
           })
@@ -710,8 +779,29 @@ export const runArchive = async (options: {
         /* Display-only failure. */
       }
     }
+    let lastRebuildProgress = 0
+    const replayNames = fullJournal ? names.slice(pages) : names
+    if (index && replayNames.length) emit(true)
+    for (const name of replayNames) {
+      if (reason) throw new ArchiveFailure('corrupt_journal')
+      let envelope: Envelope
+      let body: string
+      try {
+        body = await readFile(join(out, 'pages', name), 'utf8')
+        envelope = JSON.parse(body)
+      } catch {
+        throw new ArchiveFailure('corrupt_journal')
+      }
+      await applyPage(envelope, `pages/${name}`, body)
+      if (index && performance.now() - lastRebuildProgress >= 1000) {
+        emit(true)
+        lastRebuildProgress = performance.now()
+      }
+    }
+    if (previous && typeof previous.pages === 'number' && previous.pages > pages) throw new ArchiveFailure('missing_journal')
     const save = async (materialize = false) => {
-      if (materialize) {
+      if (materialize && index) await index.materialize()
+      if (materialize && !index) {
         const path = join(out, 'posts.jsonl')
         const file = await open(`${path}.tmp`, 'w', 0o600)
         let emitted = 0
@@ -778,7 +868,7 @@ export const runArchive = async (options: {
       )
       emit()
     }
-    await save(true)
+    await save(!index)
     while (!reason && requests < maxPages && requests < maxRequests) {
       emit()
       if (pendingRetry) {
@@ -842,9 +932,10 @@ export const runArchive = async (options: {
         response
       }
       const location = `pages/${String(pages + 1).padStart(6, '0')}.json`
-      await atomic(join(out, location), JSON.stringify(envelope))
-      const failure = processPage(envelope, location)
-      if (failure === 'list_dependency' || failure === 'list_deadline') {
+      const body = JSON.stringify(envelope)
+      await atomic(join(out, location), body, !!index)
+      const failure = await applyPage(envelope, location, body)
+      if (failure === 'list_dependency' || failure === 'list_over_capacity' || failure === 'list_deadline') {
         requestFailure = { kind: failure }
         scheduleRetry()
       } else if (source === 'list') {
@@ -872,7 +963,10 @@ export const runArchive = async (options: {
       requestFailure
     }
   } finally {
-    await lock.close()
-    await rm(join(out, '.lock'))
+    try {
+      index?.close()
+    } finally {
+      try { await lock.close() } finally { await rm(join(out, '.lock')) }
+    }
   }
 }
