@@ -1,5 +1,10 @@
-import type { z } from 'zod'
-import { DEFAULT_EVENT_LIST_FILTERS, type EventListFilters, type EventSearchSchema } from '@/schemas/event-search'
+import {
+  DEFAULT_EVENT_LIST_FILTERS,
+  type EventListFilterSearch,
+  EventListFilterSearchSchema,
+  type EventListFilters,
+  EventPageSchema
+} from '@/schemas/event-search'
 
 /** 絞り込みを表す URL のパラメータ。page や計測用のパラメータは含めない。 */
 export const EVENT_LIST_FILTER_PARAMS = [
@@ -12,13 +17,28 @@ export const EVENT_LIST_FILTER_PARAMS = [
   'hideOldEvents'
 ] as const
 
-export type EventListFilterSearch = Partial<
-  Pick<z.infer<typeof EventSearchSchema>, (typeof EVENT_LIST_FILTER_PARAMS)[number]>
->
+/**
+ * URL の search から絞り込みの 7 項目を読む
+ * ルートの search は URL の値をそのまま通すので(書き戻しを起こさないため)、ここで解釈する。
+ * 書かれていない項目は undefined のまま、書かれているが不正な値はその項目の既定値に戻す。
+ */
+export const parseEventListFilterSearch = (search: Readonly<Record<string, unknown>>): EventListFilterSearch => {
+  const result = EventListFilterSearchSchema.safeParse(search)
+  return result.success ? result.data : {}
+}
+
+/**
+ * URL の page を読む。正の整数でなければ(省略も不正も) undefined
+ * 呼び出し側は未指定と同じく 1 として扱い、URL には書き戻さない。
+ */
+export const parseEventPage = (value: unknown): number | undefined => {
+  const result = EventPageSchema.safeParse(value)
+  return result.success ? result.data : undefined
+}
 
 /**
  * URL に絞り込みのパラメータが 1 つでもあるか
- * 不正な値が書かれていても「あり」として数える(スキーマが既定値へ戻して返すため undefined にならない)
+ * 不正な値が書かれていても「あり」として数える(parseEventListFilterSearch が既定値へ戻して返すため undefined にならない)
  */
 export const hasEventListFilterParams = (search: EventListFilterSearch) =>
   EVENT_LIST_FILTER_PARAMS.some((key) => search[key] !== undefined)
@@ -75,14 +95,3 @@ export const toStoredEventListFilters = (
   authenticated: boolean
 ): EventListFilters =>
   authenticated ? next : { ...next, hideInterested: stored.hideInterested, hideCompleted: stored.hideCompleted }
-
-/**
- * URL を保存値で補って正規化してよいか
- * URL に絞り込みが無いときだけ行う。ただし未ログインで、保存値に非表示設定があるときは待つ
- * (非表示設定を書かずに正規化すると、ログイン後に保存値の非表示設定が無視されるため)。
- */
-export const shouldNormalizeEventListSearch = (
-  search: EventListFilterSearch,
-  stored: EventListFilters,
-  authenticated: boolean
-) => !hasEventListFilterParams(search) && (authenticated || !(stored.hideInterested || stored.hideCompleted))

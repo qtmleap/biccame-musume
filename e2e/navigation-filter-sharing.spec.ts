@@ -31,7 +31,36 @@ const characters = [
   }
 ]
 const urlValue = (page: Page, key: string) => new URL(page.url()).searchParams.get(key)
+// クエリ文字列そのもの(`?store=chofu` など。無ければ空文字)。キー単位の確認では、足された余計なパラメータを見逃す。
+const urlSearch = (page: Page) => new URL(page.url()).search
 const category = (page: Page, label: string) => page.getByRole('checkbox', { name: label, exact: true })
+
+// 開いただけでは URL を書き換えないことの確認用。URL を別の値へ変える pushState / replaceState の呼び出しを記録する。
+// 読み込みのたびに(ページ自身のスクリプトより先に)入れ直されるので、記録は今開いているドキュメント分になる。
+// `/events/` → `/events` のような末尾スラッシュだけの違いは、ルーター自身の既定の正規化でクエリではないので数えない。
+const trackUrlWrites = (page: Page) =>
+  page.addInitScript(() => {
+    const writes: string[] = []
+    Reflect.set(window, '__urlWrites', writes)
+    const canonical = (href: string) => {
+      const url = new URL(href, location.href)
+      return url.pathname.replace(/\/+$/, '') + url.search + url.hash
+    }
+    for (const method of ['pushState', 'replaceState'] as const) {
+      const original = history[method].bind(history)
+      history[method] = (data, unused, url) => {
+        if (url !== undefined && url !== null && canonical(String(url)) !== canonical(location.href))
+          writes.push(`${method} ${String(url)}`)
+        original(data, unused, url)
+      }
+    }
+  })
+const urlWrites = (page: Page): Promise<string[]> => page.evaluate(() => Reflect.get(window, '__urlWrites'))
+// 画面が出たあとで、URL がクエリごと開いたときのままで、一度も書き換えられていないことを確かめる。
+const expectUrlUntouched = async (page: Page, search: string) => {
+  expect(urlSearch(page)).toBe(search)
+  expect(await urlWrites(page)).toEqual([])
+}
 
 const installFixtures = async (page: Page) => {
   await page.route('**/*', (route) => {
@@ -99,6 +128,7 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('shared_url_reproduces_filters', async ({ page, browser }) => {
+  await trackUrlWrites(page)
   await page.addInitScript(() => {
     localStorage.setItem('biccame-region-filter', JSON.stringify('kyushu'))
     localStorage.setItem('event-list-status-filter', JSON.stringify({ upcoming: false, ongoing: false, ended: true }))
@@ -120,6 +150,11 @@ test('shared_url_reproduces_filters', async ({ page, browser }) => {
   // URL に絞り込みが 1 つでもあれば保存値は一切使わない。URL に無い hideCompleted は保存値(true)ではなく既定(false)になる。
   await expect(category(page, '興味あり')).not.toBeChecked()
   await expect(category(page, '達成済み')).not.toBeChecked()
+  // 共有された URL は、読み込んだだけでは(足されも正されもせず)そのまま残る。
+  await expectUrlUntouched(
+    page,
+    '?category=ackey&status=ongoing&region=hokkaido&store=sapporo&page=2&campaign=test&hideInterested=false'
+  )
   const sharedUrl = page.url()
   const otherContext = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1280, height: 900 } })
   try {
@@ -162,7 +197,8 @@ test('character_region_does_not_change_events', async ({ page }) => {
   await expect(page.getByRole('radio', { name: '関東', exact: true })).toBeChecked()
 })
 
-test('url_less_ignores_old_keys_and_normalizes_url_to_defaults', async ({ page }) => {
+test('url_less_ignores_old_keys_and_leaves_url_untouched', async ({ page }) => {
+  await trackUrlWrites(page)
   await page.addInitScript(() => {
     localStorage.setItem('biccame-region-filter', JSON.stringify('kyushu'))
     localStorage.setItem('event-page', JSON.stringify(5))
@@ -172,17 +208,17 @@ test('url_less_ignores_old_keys_and_normalizes_url_to_defaults', async ({ page }
   await page.goto('/events/')
   await expect(page.getByText('全 60 件中 1–12 件を表示')).toBeVisible()
   await expect(page.getByRole('radio', { name: '全国', exact: true })).toBeChecked()
+  await expect(category(page, '開催中')).toBeChecked()
+  await expect(category(page, '終了')).not.toBeChecked()
   // 旧い非表示設定のキーも読まない(引き継がない)。
   await expect(category(page, '興味あり')).not.toBeChecked()
   await expect(category(page, '達成済み')).not.toBeChecked()
-  // パラメータ無しで開くと、使った値(ここでは既定)が URL に書き込まれる。
-  await expect.poll(() => urlValue(page, 'region')).toBe('all')
-  await expect.poll(() => urlValue(page, 'status')).toBe('upcoming,ongoing')
-  await expect.poll(() => urlValue(page, 'hideOldEvents')).toBe('true')
-  expect(urlValue(page, 'store')).toBeNull()
+  // パラメータ無しで開いても、使った値(ここでは既定)を URL に書き込まない。
+  await expectUrlUntouched(page, '')
 })
 
-test('url_less_uses_saved_filters_as_a_whole_and_writes_them_to_url', async ({ page }) => {
+test('url_less_uses_saved_filters_as_a_whole_and_leaves_url_untouched', async ({ page }) => {
+  await trackUrlWrites(page)
   await page.addInitScript((saved) => localStorage.setItem('event-list-filters', JSON.stringify(saved)), savedFilters)
   await page.goto('/events/')
   await expect(page.getByText('全 12 件中 1–12 件を表示')).toBeVisible()
@@ -191,11 +227,8 @@ test('url_less_uses_saved_filters_as_a_whole_and_writes_them_to_url', async ({ p
   await expect(category(page, '終了')).toBeChecked()
   await expect(category(page, '興味あり')).toBeChecked()
   await expect(category(page, '達成済み')).not.toBeChecked()
-  await expect.poll(() => urlValue(page, 'category')).toBe('ackey')
-  await expect.poll(() => urlValue(page, 'region')).toBe('hokkaido')
-  await expect.poll(() => urlValue(page, 'store')).toBe('sapporo')
-  await expect.poll(() => urlValue(page, 'hideInterested')).toBe('true')
-  await expect.poll(() => urlValue(page, 'hideOldEvents')).toBe('false')
+  // 保存値は画面にだけ効かせ、URL には書き込まない。
+  await expectUrlUntouched(page, '')
 })
 
 test('legacy_activity_key_does_not_mix_into_saved_filters', async ({ page }) => {
@@ -209,7 +242,8 @@ test('legacy_activity_key_does_not_mix_into_saved_filters', async ({ page }) => 
   await expect(category(page, '達成済み')).not.toBeChecked()
 })
 
-test('page_only_and_tracking_only_urls_use_saved_filters', async ({ page }) => {
+test('page_only_and_tracking_only_urls_use_saved_filters_and_stay_as_opened', async ({ page }) => {
+  await trackUrlWrites(page)
   await page.addInitScript(
     (saved) => localStorage.setItem('event-list-filters', JSON.stringify(saved)),
     pagedSavedFilters
@@ -217,11 +251,24 @@ test('page_only_and_tracking_only_urls_use_saved_filters', async ({ page }) => {
   await page.goto('/events/?page=2')
   await expect(page.getByText('全 13 件中 13–13 件を表示')).toBeVisible()
   await expect(page.getByRole('radio', { name: '北海道', exact: true })).toBeChecked()
-  await expect.poll(() => urlValue(page, 'page')).toBe('2')
+  await expectUrlUntouched(page, '?page=2')
   await page.goto('/events/?campaign=test')
+  await expect(page.getByText('全 13 件中 1–12 件を表示')).toBeVisible()
   await expect(page.getByRole('radio', { name: '北海道', exact: true })).toBeChecked()
-  await expect.poll(() => urlValue(page, 'campaign')).toBe('test')
-  await expect.poll(() => urlValue(page, 'region')).toBe('hokkaido')
+  // 知らないパラメータはそのまま残り、保存値も page も足されない。
+  await expectUrlUntouched(page, '?campaign=test')
+})
+
+test('store_only_url_stays_as_opened', async ({ page }) => {
+  await trackUrlWrites(page)
+  await page.goto('/events/?store=chofu')
+  await expect(page.getByText('条件に一致するイベントはありません')).toBeVisible()
+  await expect(page.getByRole('radio', { name: '全国', exact: true })).toBeChecked()
+  await expectUrlUntouched(page, '?store=chofu')
+  await page.goto('/events/?store=sapporo')
+  await expect(page.getByText('全 60 件中 1–12 件を表示')).toBeVisible()
+  // page も、ほかの絞り込みの既定値も足されない。
+  await expectUrlUntouched(page, '?store=sapporo')
 })
 
 test('invalid_only_url_is_an_explicit_url_and_does_not_fall_back_to_saved_filters', async ({ page }) => {
@@ -245,11 +292,16 @@ test('partial_url_fills_missing_items_with_defaults_not_saved_values', async ({ 
 })
 
 for (const malformed of ['-2', '1.5', 'junk', '0', '9007199254740992', 'true'])
-  test(`invalid_search_uses_safe_defaults_${malformed}`, async ({ page }) => {
+  test(`invalid_search_uses_safe_defaults_without_rewriting_url_${malformed}`, async ({ page }) => {
+    await trackUrlWrites(page)
     await page.goto(`/events/?page=${malformed}&category=invalid&status=invalid&region=invalid&store=invalid`)
     await expect(page.getByText('全 60 件中 1–12 件を表示')).toBeVisible()
     await expect(page.getByRole('radio', { name: '全国', exact: true })).toBeChecked()
     await expect(category(page, '開催中')).toBeChecked()
+    // 不正な値は読むときだけ既定として扱い、URL には既定値を書き戻さない。
+    expect(await urlWrites(page)).toEqual([])
+    expect(urlValue(page, 'page')).toBe(malformed)
+    for (const key of ['category', 'status', 'region', 'store']) expect(urlValue(page, key)).toBe('invalid')
   })
 
 test('explicit_store_and_region_are_independent_and_legacy_store_works', async ({ page }) => {
@@ -262,7 +314,8 @@ test('explicit_store_and_region_are_independent_and_legacy_store_works', async (
 })
 
 test('filter_reset_refetch_clamp_and_browser_back_preserve_distinction', async ({ page }) => {
-  await page.goto('/events/?page=5')
+  // 戻った先の URL にも絞り込みが残るよう、絞り込みを明示した URL から始める(URL に無い絞り込みは、戻ったあとは最新の保存値になる)。
+  await page.goto('/events/?page=5&region=all')
   await expect(page.getByText('全 60 件中 49–60 件を表示')).toBeVisible()
   await category(page, 'その他').click()
   await expect(page.getByText('全 13 件中 1–12 件を表示')).toBeVisible()
@@ -312,17 +365,17 @@ test('activity_filter_persists_across_navigation_reload_and_reset', async ({ bro
     await expect(persisted.getByText('全 59 件中 1–12 件を表示')).toBeVisible()
     await expect.poll(() => urlValue(persisted, 'hideInterested')).toBe('true')
     await expect.poll(() => readSaved(persisted)).toContain('"hideInterested":true')
-    // 別ページから戻ると URL の条件は消えるが、保存値で復元し、その値を URL に書き込む。
+    // 別ページから戻ると URL の条件は消えるが、保存値で復元する。復元しただけでは URL に書き込まない。
     await goToCharactersAndBack(persisted)
     await expect(persisted.getByText('全 59 件中 1–12 件を表示')).toBeVisible()
     await expect(category(persisted, '興味あり')).toBeChecked()
-    await expect.poll(() => urlValue(persisted, 'hideInterested')).toBe('true')
+    expect(urlSearch(persisted)).toBe('')
     // リロード(URL なしの再訪)でも保存値が効く。
     await persisted.goto('/events/')
     await expect(persisted.getByText('全 59 件中 1–12 件を表示')).toBeVisible()
     await expect(category(persisted, '興味あり')).toBeChecked()
     await expect(category(persisted, '達成済み')).not.toBeChecked()
-    await expect.poll(() => urlValue(persisted, 'hideInterested')).toBe('true')
+    expect(urlSearch(persisted)).toBe('')
     // 「フィルターをクリア」は保存値も既定に戻す。
     await persisted.getByRole('button', { name: 'フィルターをクリア', exact: true }).filter({ visible: true }).click()
     await expect(persisted.getByText('全 60 件中 1–12 件を表示')).toBeVisible()
@@ -349,10 +402,8 @@ test('filters_persist_across_header_links_and_reload', async ({ browser }) => {
       await expect(category(persisted, '終了')).toBeChecked()
       await expect(persisted.getByRole('radio', { name: '北海道', exact: true })).toBeChecked()
       await expect(persisted.getByRole('combobox').filter({ visible: true })).toContainText('札幌店')
-      // 使っている絞り込みが URL に書かれているので、そのまま共有できる。
-      await expect.poll(() => urlValue(persisted, 'region')).toBe('hokkaido')
-      await expect.poll(() => urlValue(persisted, 'store')).toBe('sapporo')
-      await expect.poll(() => urlValue(persisted, 'status')).toBe('upcoming,ongoing,ended')
+      // 保存値で復元しただけでは URL に書き込まない。
+      expect(urlSearch(persisted)).toBe('')
     }
     await goToCharactersAndBack(persisted)
     await expectRestored()
@@ -415,25 +466,23 @@ test('explicit_url_beats_saved_filters_without_overwriting_them', async ({ brows
   })
 })
 
-test('anonymous_visit_waits_for_login_before_applying_and_writing_saved_hide_flags', async ({ browser }) => {
+test('anonymous_visit_waits_for_login_before_applying_saved_hide_flags_and_never_writes_url', async ({ browser }) => {
   await withPersistentContext(browser, async (persisted) => {
     await persisted.addInitScript((saved) => {
       if (localStorage.getItem('event-list-filters') === null)
         localStorage.setItem('event-list-filters', JSON.stringify(saved))
     }, savedFilters)
     await persisted.goto('/events/?anon=1')
-    // 未ログインでも、非表示設定以外の保存値は効く。非表示設定は出さず、URL にも書き込まない(書くとログイン後も保存値が無視される)。
+    // 未ログインでも、非表示設定以外の保存値は効く。非表示設定は出さない。URL には書き込まない。
     await expect(persisted.getByRole('radio', { name: '北海道', exact: true })).toBeChecked()
     await expect(category(persisted, 'その他')).not.toBeChecked()
     await expect(category(persisted, '興味あり')).toHaveCount(0)
-    expect(urlValue(persisted, 'region')).toBeNull()
-    expect(urlValue(persisted, 'hideInterested')).toBeNull()
-    // ログインが確定すると保存値の非表示設定が効き、使った値を URL に書き込む。
+    expect(urlSearch(persisted)).toBe('?anon=1')
+    // ログインが確定すると保存値の非表示設定が効く。それでも URL は開いたときのまま。
     await persisted.getByRole('button', { name: 'ログイン(テスト)', exact: true }).click()
     await expect(category(persisted, '興味あり')).toBeChecked()
     await expect(persisted.getByText('全 12 件中 1–12 件を表示')).toBeVisible()
-    await expect.poll(() => urlValue(persisted, 'hideInterested')).toBe('true')
-    await expect.poll(() => urlValue(persisted, 'region')).toBe('hokkaido')
+    expect(urlSearch(persisted)).toBe('?anon=1')
   })
 })
 

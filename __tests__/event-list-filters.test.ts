@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
 import { createStore } from 'jotai'
+import { z } from 'zod'
+import { EventCategorySchema } from '../workers/app/src/schemas/event.dto'
 import {
   DEFAULT_EVENT_CATEGORY,
   DEFAULT_EVENT_LIST_FILTERS,
@@ -7,19 +9,23 @@ import {
   type EventListFilters,
   EventSearchSchema
 } from '../workers/app/src/schemas/event-search'
+import { RegionSchema, StoreKeySchema } from '../workers/app/src/schemas/store.dto'
 import {
   hasEventListFilterParams,
+  parseEventListFilterSearch,
+  parseEventPage,
   resolveEventListFilters,
-  shouldNormalizeEventListSearch,
   toEventListFilterSearch,
   toStoredEventListFilters
 } from '../workers/app/src/utils/event-list-filters'
 
-const parseSearch = (input: Record<string, unknown>) => {
+// ルートが渡す search(URL の値をそのまま通したもの)から、画面が読む絞り込みの URL 値を得る。
+const parseRoute = (input: Record<string, unknown>) => {
   const result = EventSearchSchema.safeParse(input)
-  if (!result.success) throw new Error('search should always parse')
+  if (!result.success) throw new Error('route search should always parse')
   return result.data
 }
+const parseSearch = (input: Record<string, unknown>) => parseEventListFilterSearch(parseRoute(input))
 
 // 保存値(既定とは全項目が異なる)。
 const stored: EventListFilters = {
@@ -32,7 +38,45 @@ const stored: EventListFilters = {
   hideOldEvents: false
 }
 
-describe('検索スキーマ', () => {
+describe('ルートの検索スキーマ(URL の値をそのまま通す)', () => {
+  // ルーターは検証後の search が URL と違うと URL に書き戻す。開いただけで URL を変えないよう、何も変えてはいけない。
+  const inputs: Record<string, unknown>[] = [
+    {},
+    { page: 2 },
+    { campaign: 'x', theme: 'dark' },
+    { category: 'ackey', status: 'ongoing', region: 'kanto', store: 'sapporo', page: 3, hideInterested: true },
+    { category: '', status: '' },
+    {
+      category: 'garbage',
+      status: 'garbage',
+      region: 'garbage',
+      store: 'garbage',
+      page: 'junk',
+      hideInterested: 'garbage',
+      hideCompleted: 1,
+      hideOldEvents: 'garbage'
+    },
+    { page: -2 },
+    { page: 1.5 },
+    { page: 0 },
+    { page: 9007199254740992 },
+    { page: true },
+    { store: 123, category: null, status: ['upcoming'], region: false }
+  ]
+
+  test.each(inputs)('入力と同じ値・同じキーで返し、既定値を補わない(%j)', (...args) => {
+    const [input] = args
+    const data = parseRoute(input)
+    expect(data).toEqual(input)
+    expect(Object.keys(data).sort()).toEqual(Object.keys(input).sort())
+  })
+
+  test('省略された項目は持たない(undefined のキーも作らない)', () => {
+    expect(Object.keys(parseRoute({}))).toEqual([])
+  })
+})
+
+describe('絞り込みの URL 値の解釈', () => {
   const filterKeys = [
     'category',
     'status',
@@ -46,7 +90,6 @@ describe('検索スキーマ', () => {
   test('絞り込みの 7 項目は省略時に undefined のまま(既定値を補わない)', () => {
     const data = parseSearch({})
     for (const key of filterKeys) expect(data[key]).toBeUndefined()
-    expect(data.page).toBe(1)
   })
 
   test('正しい値はそのまま読む', () => {
@@ -97,11 +140,137 @@ describe('検索スキーマ', () => {
     })
   })
 
-  test('ページと計測用のパラメータは別扱いで、保持する', () => {
-    const data = parseSearch({ page: '3', campaign: 'x' })
-    expect(data.page).toBe(3)
-    expect(Reflect.get(data, 'campaign')).toBe('x')
-    expect(parseSearch({ page: 'junk' }).page).toBe(1)
+  test('ルーターが JSON として読んだ数値・null・配列・真偽値も、書かれている不正な値として扱う', () => {
+    const data = parseSearch({ store: 123, category: null, status: ['upcoming'], region: false, hideOldEvents: 0 })
+    expect(data).toEqual({
+      category: DEFAULT_EVENT_CATEGORY,
+      status: DEFAULT_EVENT_STATUS,
+      region: 'all',
+      store: '',
+      hideOldEvents: true
+    })
+    expect(hasEventListFilterParams(data)).toBe(true)
+  })
+
+  test('ページと計測用のパラメータは絞り込みに含めない', () => {
+    expect(parseSearch({ page: '3', campaign: 'x' })).toEqual({})
+  })
+})
+
+describe('ページの解釈', () => {
+  test('正の整数は数値でも文字列でも読む', () => {
+    expect(parseEventPage(1)).toBe(1)
+    expect(parseEventPage(3)).toBe(3)
+    expect(parseEventPage('3')).toBe(3)
+    expect(parseEventPage(Number.MAX_SAFE_INTEGER)).toBe(Number.MAX_SAFE_INTEGER)
+  })
+
+  test('省略も不正な値も undefined(呼び出し側は 1 として扱い、URL には書き戻さない)', () => {
+    for (const value of [
+      undefined,
+      null,
+      'junk',
+      '',
+      '0',
+      '007',
+      '-2',
+      '1.5',
+      -2,
+      0,
+      1.5,
+      9007199254740992,
+      true,
+      [],
+      {}
+    ])
+      expect(parseEventPage(value)).toBeUndefined()
+  })
+})
+
+// 変更前のルートは、この検証で値を既定値へ戻してから画面に渡していた。
+// 変更後は URL の値を通したうえで画面側が解釈するので、同じ入力から同じ絞り込み・同じページになることを確かめる。
+describe('変更前の検証と同じ結果になる', () => {
+  const selection = (options: readonly string[]) =>
+    z.string().refine((value) => value === '' || value.split(',').every((item) => options.includes(item)))
+  const urlFlag = z.union([z.boolean(), z.enum(['true', 'false']).transform((value) => value === 'true')])
+  const urlStore = z.union([StoreKeySchema, z.literal('')])
+  const legacySchema = z.looseObject({
+    category: selection(EventCategorySchema.options).optional().catch(DEFAULT_EVENT_CATEGORY),
+    status: selection(['upcoming', 'ongoing', 'ended']).optional().catch(DEFAULT_EVENT_STATUS),
+    region: RegionSchema.optional().catch('all'),
+    store: urlStore.optional().catch(''),
+    page: z
+      .union([
+        z.number(),
+        z
+          .string()
+          .regex(/^[1-9]\d*$/)
+          .transform(Number)
+      ])
+      .pipe(z.number().int().positive().max(Number.MAX_SAFE_INTEGER))
+      .default(1)
+      .catch(1),
+    hideInterested: urlFlag.optional().catch(false),
+    hideCompleted: urlFlag.optional().catch(false),
+    hideOldEvents: urlFlag.optional().catch(true)
+  })
+
+  const inputs: Record<string, unknown>[] = [
+    {},
+    { page: 2 },
+    { page: 'junk' },
+    { campaign: 'x', page: 3 },
+    { category: 'ackey' },
+    { category: 'ackey,other', status: 'ended,upcoming' },
+    { category: '', status: '' },
+    { region: 'kanto' },
+    { region: 'garbage' },
+    { store: 'sapporo' },
+    { store: 'garbage' },
+    { store: '' },
+    { store: 123 },
+    { category: 'garbage' },
+    { status: 'garbage', page: -2 },
+    { category: null, status: ['upcoming'], region: false, store: null },
+    { hideInterested: true },
+    { hideInterested: 'false', hideCompleted: 'true', hideOldEvents: 'false' },
+    { hideInterested: 'garbage', hideCompleted: 1, hideOldEvents: 'garbage' },
+    { hideOldEvents: 0 },
+    { page: 1.5 },
+    { page: 0 },
+    { page: 9007199254740992 },
+    { page: true },
+    { page: '007' },
+    {
+      category: 'ackey',
+      status: 'ongoing',
+      region: 'hokkaido',
+      store: 'sapporo',
+      page: 2,
+      campaign: 'test',
+      hideInterested: 'false'
+    }
+  ]
+  const storedValues: EventListFilters[] = [stored, DEFAULT_EVENT_LIST_FILTERS]
+
+  const legacyParse = (input: Record<string, unknown>) => {
+    const result = legacySchema.safeParse(input)
+    if (!result.success) throw new Error('legacy search should always parse')
+    return result.data
+  }
+
+  test.each(inputs)('絞り込みとページが一致する(%j)', (...args) => {
+    const [input] = args
+    const legacy = legacyParse(input)
+    const route = parseRoute(input)
+    expect(hasEventListFilterParams(parseEventListFilterSearch(route))).toBe(hasEventListFilterParams(legacy))
+    for (const saved of storedValues)
+      for (const authenticated of [true, false])
+        expect(resolveEventListFilters(parseEventListFilterSearch(route), saved, authenticated)).toEqual(
+          resolveEventListFilters(legacy, saved, authenticated)
+        )
+    const page = parseEventPage(route.page)
+    expect(page === undefined ? 1 : page).toBe(legacy.page)
   })
 })
 
@@ -242,19 +411,6 @@ describe('URL への書き込みと保存', () => {
       hideCompleted: true
     })
     expect(toStoredEventListFilters(next, stored, true)).toEqual(next)
-  })
-
-  test('URL の正規化は、パラメータが無いときだけ行う', () => {
-    expect(shouldNormalizeEventListSearch(parseSearch({}), stored, true)).toBe(true)
-    expect(shouldNormalizeEventListSearch(parseSearch({ page: 2 }), stored, true)).toBe(true)
-    expect(shouldNormalizeEventListSearch(parseSearch({ region: 'kanto' }), stored, true)).toBe(false)
-  })
-
-  test('未ログインで保存値に非表示設定があるときは、ログインが確定するまで正規化を待つ', () => {
-    expect(shouldNormalizeEventListSearch(parseSearch({}), stored, false)).toBe(false)
-    expect(
-      shouldNormalizeEventListSearch(parseSearch({}), { ...stored, hideInterested: false, hideCompleted: false }, false)
-    ).toBe(true)
   })
 })
 
