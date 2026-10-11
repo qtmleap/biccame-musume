@@ -554,11 +554,11 @@ describe('selectSeedEvents', () => {
 
   test('APP_UNSUPPORTED_STORES は characters.json とアプリの StoreKeySchema の差と一致している', async () => {
     const root = resolve(import.meta.dir, '../..')
-    const schema = await readFile(join(root, 'workers/app/src/schemas/store.dto.ts'), 'utf8')
+    const schema = await readFile(join(root, 'packages/shared/src/schemas/store.dto.ts'), 'utf8')
     const start = schema.indexOf('export const StoreKeySchema')
     const body = schema.slice(start, schema.indexOf(']', start))
     const enumKeys = new Set([...body.matchAll(/'([a-z0-9]+)'/g)].map((match) => match[1]))
-    const characters = JSON.parse(await readFile(join(root, 'workers/app/public/characters.json'), 'utf8'))
+    const characters = JSON.parse(await readFile(join(root, 'workers/web/public/characters.json'), 'utf8'))
     const ids: string[] = characters.map((character: { id: string }) => character.id)
     expect(enumKeys.size).toBeGreaterThan(40)
     expect(ids.filter((id) => !enumKeys.has(id)).sort()).toEqual([...APP_UNSUPPORTED_STORES].sort())

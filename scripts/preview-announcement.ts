@@ -1,11 +1,11 @@
-import { EventDetailSchema } from '../workers/app/src/schemas/event.dto'
+import { EventDetailSchema } from '@biccame/shared/schemas/event.dto'
 import {
   buildEventCreatedText,
   buildEventUpdatedText,
   getQuoteTweetId,
   TWEET_WEIGHT_LIMIT,
   weightedLength
-} from '../workers/app/src/utils/tweet-text'
+} from '@biccame/shared/domain/tweet-text'
 
 // 公開APIの実イベントから、投稿される本文・引用元・リンクカード画像のURLを表示するだけの確認用。
 // X/Discord/botには一切接続しない（投稿しない）。

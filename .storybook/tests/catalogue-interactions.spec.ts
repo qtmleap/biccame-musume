@@ -8,6 +8,51 @@ const open = async (page: Page, id: string, width = 375) => {
   await page.goto(`/iframe.html?id=${id}&viewMode=story`)
   await expect(page.getByTestId('review-frame')).toBeVisible()
 }
+test('interaction: Bot page load is passive and connection click invokes exactly one POST boundary', async ({
+  page
+}) => {
+  await open(page, 'pages-admin-bot-and-webhooks--bot-settings', 1280)
+  await expect(page.getByText('未確認（接続確認を押してください）', { exact: true })).toBeVisible()
+  await expect(page.getByText('常時有効', { exact: true })).toBeVisible()
+  const connectionCalls = () =>
+    page.evaluate(
+      () =>
+        Reflect.get(window, '__storybookFixture').calls.filter((call: string) => call === 'checkAdminBotConnection')
+          .length
+    )
+  expect(await connectionCalls()).toBe(0)
+  await page.getByRole('button', { name: '接続確認', exact: true }).click()
+  await expect(page.getByText('認証・チャンネルアクセス成功', { exact: true })).toBeVisible()
+  expect(await connectionCalls()).toBe(1)
+  expect(
+    await page.evaluate(() => Reflect.get(window, '__storybookFixture').calls.includes('testAdminBotNotification'))
+  ).toBe(false)
+})
+
+test('interaction: full reload retains last Discord check without an automatic connection probe', async ({ page }) => {
+  await open(page, 'pages-admin-bot-and-webhooks--bot-settings', 1280)
+  await page.getByRole('button', { name: '接続確認', exact: true }).click()
+  await expect(page.getByText('認証・チャンネルアクセス成功', { exact: true })).toBeVisible()
+  const previousCheck = page.getByText('前回の確認', { exact: true }).locator('xpath=following-sibling::dd')
+  const checkedAt = await previousCheck.innerText()
+  expect(checkedAt).not.toBe('未確認')
+  await page.reload()
+  await expect(page.getByText('認証・チャンネルアクセス成功', { exact: true })).toBeVisible()
+  await expect(previousCheck).toHaveText(checkedAt)
+  await expect(page.getByText('synthetic-bot (10001)', { exact: true })).toBeVisible()
+  await expect(page.getByText('synthetic-notifications (10002)', { exact: true })).toBeVisible()
+  expect(
+    await page.evaluate(
+      () =>
+        Reflect.get(window, '__storybookFixture').calls.filter((call: string) => call === 'checkAdminBotConnection')
+          .length
+    )
+  ).toBe(0)
+  expect(
+    await page.evaluate(() => Reflect.get(window, '__storybookFixture').calls.includes('testAdminBotNotification'))
+  ).toBe(false)
+})
+
 test('interaction: mobile month dots and desktop tabs update the actual selection', async ({ page }) => {
   for (const [id, width] of [
     ['calendar-month-dots', 375],
@@ -149,4 +194,70 @@ test('interaction: production map markers update the synthetic camera without re
   await expect(camera).not.toHaveText(before ?? '')
   await expect(map).toBeVisible()
   expect(errors).toEqual([])
+})
+
+test('interaction: Bot model save changes model and does not immediately reread stale KV', async ({ page }) => {
+  await open(page, 'pages-admin-bot-and-webhooks--bot-settings', 1280)
+  const model = page.getByRole('combobox', { name: '判定モデル', exact: true })
+  const save = page.getByRole('button', { name: '保存', exact: true })
+  await expect(model).toContainText('clef')
+  await expect(save).toBeDisabled()
+  const modelAlignment = await model.evaluate((trigger) => {
+    const label = trigger.closest('dd')?.previousElementSibling
+    if (!label) throw new Error('Model label unavailable')
+    const labelRect = label.getBoundingClientRect()
+    const selectRect = trigger.getBoundingClientRect()
+    return Math.abs(labelRect.top + labelRect.height / 2 - selectRect.top - selectRect.height / 2)
+  })
+  expect(modelAlignment).toBeLessThan(1)
+  await expect(page.locator('footer').getByRole('button', { name: '保存', exact: true })).toBeVisible()
+  await expect(model.locator('xpath=ancestor::dd').getByRole('button', { name: '保存', exact: true })).toHaveCount(0)
+  await model.click()
+  await page.getByRole('option', { name: 'clef-flash', exact: true }).click()
+  const reads = await page.evaluate(
+    () => Reflect.get(window, '__storybookFixture').calls.filter((call: string) => call === 'getAdminBotStatus').length
+  )
+  expect(
+    await page.evaluate(
+      () =>
+        Reflect.get(window, '__storybookFixture').calls.filter((call: string) => call === 'saveAdminBotConfiguration')
+          .length
+    )
+  ).toBe(0)
+  await expect(save).toBeEnabled()
+  await save.click()
+  const successToast = page.locator('[data-sonner-toast]').filter({ hasText: '保存しました' })
+  await expect(successToast).toHaveCount(1)
+  await expect(successToast).toBeVisible()
+  await expect(save).toBeDisabled()
+  await expect(page.getByText('保存しました。', { exact: true })).toHaveCount(0)
+  await expect(model).toContainText('clef-flash')
+  expect(
+    await page.evaluate(
+      () =>
+        Reflect.get(window, '__storybookFixture').calls.filter((call: string) => call === 'saveAdminBotConfiguration')
+          .length
+    )
+  ).toBe(1)
+  expect(
+    await page.evaluate(
+      () =>
+        Reflect.get(window, '__storybookFixture').calls.filter((call: string) => call === 'getAdminBotStatus').length
+    )
+  ).toBe(reads)
+  await model.click()
+  await page.getByRole('option', { name: 'clef', exact: true }).click()
+  await page.evaluate(() => {
+    Reflect.get(window, '__storybookFixture').state = 'error'
+  })
+  await page.getByRole('button', { name: '保存', exact: true }).click()
+  await expect(page.locator('[data-sonner-toast]').filter({ hasText: '保存できませんでした' })).toBeVisible()
+  await expect(page.getByRole('button', { name: '保存', exact: true })).toBeEnabled()
+  expect(
+    await page.evaluate(
+      () =>
+        Reflect.get(window, '__storybookFixture').calls.filter((call: string) => call === 'saveAdminBotConfiguration')
+          .length
+    )
+  ).toBe(2)
 })

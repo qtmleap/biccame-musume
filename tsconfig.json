@@ -1,11 +1,24 @@
 {
-  "include": ["**/*.ts", "**/*.tsx", ".intlayer/**/*.ts", ".vscode/scripts/fetch_html.ts"],
-  "exclude": ["workers/app/src/components/ui/**/*.tsx", "scripts/**/*.ts"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".intlayer/**/*.ts",
+    ".vscode/scripts/fetch_html.ts"
+  ],
+  "exclude": [
+    "workers/web/src/app/components/ui/**/*.tsx",
+    "scripts/**/*.ts"
+  ],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
     "module": "ESNext",
-    "lib": ["ES2023", "DOM", "DOM.Iterable", "WebWorker"],
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable",
+      "WebWorker"
+    ],
     "types": [
       "vite/client",
       "vite-plugin-pwa/client",
@@ -25,7 +38,12 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@/*": ["./workers/app/src/*"]
+      "@/*": [
+        "./workers/web/src/app/*"
+      ],
+      "@api/*": [
+        "./workers/web/src/api/*"
+      ]
     }
   }
 }

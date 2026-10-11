@@ -10,7 +10,7 @@ import {
 import { Provider } from 'jotai'
 import { Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Route as EventsRoute } from '@/app/routes/events/index'
+import { Route as EventsRoute } from '@/routes/events/index'
 import { BulkVoteButton } from '@/components/characters/bulk-vote-button'
 import { CharacterVoteButton } from '@/components/characters/character-vote-button'
 import { TooltipProvider } from '@/components/ui/tooltip'

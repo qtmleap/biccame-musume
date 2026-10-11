@@ -10,7 +10,7 @@ import {
 import { Provider } from 'jotai'
 import { useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Route as EventsRoute } from '@/app/routes/events/index'
+import { Route as EventsRoute } from '@/routes/events/index'
 import { CalendarHeader, CalendarMonthDots, CalendarMonthTabs } from '@/components/calendar/calendar-controls'
 import { CharacterSortControl } from '@/components/characters/character-sort-control'
 import { RegionFilterControl } from '@/components/characters/region-filter-control'

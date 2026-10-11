@@ -5,7 +5,7 @@
 
 ## 1. 目的と対象
 
-`qtmleap/biccame-musume-workers` のTL調査・AI解析・Discord通知と、本体のX投稿・連携監視・イベント告知を同じリポジトリで管理する。デプロイ単位は `workers/app` と `workers/bot` に分ける。
+`qtmleap/biccame-musume-workers` のTL調査・AI解析・Discord通知と、本体のX投稿・連携監視・イベント告知を同じリポジトリで管理する。デプロイ単位は `workers/web` と `workers/bot` に分ける。
 
 - app: UI、公開・管理API、イベント登録、D1/Prisma、投票・バッジ評価。
 - bot: TL取得、配布情報の抽出、Discord通知、X投稿、日次開始・終了告知、X認証監視。
@@ -29,7 +29,7 @@ scripts/               # 生成・検証・デプロイの補助
 ```
 
 - ルートはBun workspace。依存の既存バージョンとルートコマンドを維持。
-- 本体のcanonical設定は `workers/app/wrangler.toml`。ビルド出力は `workers/app/dist/`。
+- 本体のcanonical設定は `workers/web/wrangler.toml`。ビルド出力は `workers/web/dist/`。
 - ローカルDBはルート `.wrangler/state`、環境ファイルもルートに保持する。値をソースや生成設定のvarsへコピーしない。
 - Viteビルド後のWorker設定を用いてデプロイする。入力Wrangler設定や古い出力を直接デプロイしない。
 - 移行時の確認: 全体572テスト成功、ビルド専用テストは別途実行して成功、型チェック・Knip・Storybookビルド成功。Storybookは316 exports / 203 stories。

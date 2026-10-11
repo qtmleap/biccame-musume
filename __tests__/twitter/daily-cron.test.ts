@@ -1,6 +1,6 @@
 import { expect, mock, spyOn, test } from 'bun:test'
+import { runBadgeCron } from '@api/services/badge-cron'
 import { TwitterHealthError } from '@biccame/shared/x/health'
-import { runBadgeCron } from '../../workers/app/src/services/badge-cron'
 import { runBotDaily } from '../../workers/bot/src/posting'
 
 const scheduledAt = '2026-10-03T00:00:00Z'

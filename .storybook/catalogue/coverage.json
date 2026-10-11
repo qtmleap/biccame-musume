@@ -1,7 +1,7 @@
 {
   "entries": [
     {
-      "file": "workers/app/src/components/admin/access-gate.tsx",
+      "file": "workers/web/src/app/components/admin/access-gate.tsx",
       "name": "AccessGate",
       "kind": "component",
       "storyIds": [
@@ -10,7 +10,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/badges/badge-card.tsx",
+      "file": "workers/web/src/app/components/admin/badges/badge-card.tsx",
       "name": "BadgeCard",
       "kind": "component",
       "storyIds": [
@@ -19,49 +19,49 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/badges/badge-display-constants.ts",
+      "file": "workers/web/src/app/components/admin/badges/badge-display-constants.ts",
       "name": "RARITY_CHIP",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/admin/badges/badge-display-constants.ts",
+      "file": "workers/web/src/app/components/admin/badges/badge-display-constants.ts",
       "name": "RARITY_ICON_BG",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/admin/badges/badge-display-constants.ts",
+      "file": "workers/web/src/app/components/admin/badges/badge-display-constants.ts",
       "name": "ICON_NAMES",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/admin/badges/badge-display-constants.ts",
+      "file": "workers/web/src/app/components/admin/badges/badge-display-constants.ts",
       "name": "ACCENT_DOT",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/admin/badges/badge-display-constants.ts",
+      "file": "workers/web/src/app/components/admin/badges/badge-display-constants.ts",
       "name": "ACCENT_TEXT",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/admin/badges/badge-display-constants.ts",
+      "file": "workers/web/src/app/components/admin/badges/badge-display-constants.ts",
       "name": "CATEGORY_ORDER",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/admin/badges/category-section.tsx",
+      "file": "workers/web/src/app/components/admin/badges/category-section.tsx",
       "name": "CategorySection",
       "kind": "component",
       "storyIds": [
@@ -70,7 +70,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/badges/create-badge-dialog.tsx",
+      "file": "workers/web/src/app/components/admin/badges/create-badge-dialog.tsx",
       "name": "CreateBadgeDialog",
       "kind": "component",
       "storyIds": [
@@ -79,7 +79,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/badges/edit-badge-dialog.tsx",
+      "file": "workers/web/src/app/components/admin/badges/edit-badge-dialog.tsx",
       "name": "EditBadgeDialog",
       "kind": "component",
       "storyIds": [
@@ -88,7 +88,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/badges/recalculate-badges-button.tsx",
+      "file": "workers/web/src/app/components/admin/badges/recalculate-badges-button.tsx",
       "name": "RecalculateBadgesButton",
       "kind": "component",
       "storyIds": [
@@ -97,7 +97,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/badges/stat-card.tsx",
+      "file": "workers/web/src/app/components/admin/badges/stat-card.tsx",
       "name": "StatCard",
       "kind": "component",
       "storyIds": [
@@ -106,7 +106,43 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/event-card.tsx",
+      "file": "workers/web/src/app/components/admin/bot-action-confirmation.tsx",
+      "name": "BotActionConfirmation",
+      "kind": "component",
+      "storyIds": [
+        "pages-admin-bot-and-webhooks--action-confirmation"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/bot-management.tsx",
+      "name": "BotManagement",
+      "kind": "component",
+      "storyIds": [
+        "pages-admin-bot-and-webhooks--bot-settings"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/bot-settings-layout.tsx",
+      "name": "BotSettingsLayout",
+      "kind": "component",
+      "storyIds": [
+        "pages-admin-bot-and-webhooks--bot-settings"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/bot-settings-layout.tsx",
+      "name": "BotSettingRow",
+      "kind": "component",
+      "storyIds": [
+        "pages-admin-bot-and-webhooks--bot-settings"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-card.tsx",
       "name": "EventCard",
       "kind": "component",
       "storyIds": [
@@ -115,7 +151,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/event-confirmation.tsx",
+      "file": "workers/web/src/app/components/admin/event-confirmation.tsx",
       "name": "EventConfirmation",
       "kind": "component",
       "storyIds": [
@@ -124,7 +160,450 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/event-form.tsx",
+      "file": "workers/web/src/app/components/admin/event-detect/account-sort.ts",
+      "name": "SortableAccount",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/account-sort.ts",
+      "name": "AccountSort",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/account-sort.ts",
+      "name": "DEFAULT_ACCOUNT_SORT_KEY",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/account-sort.ts",
+      "name": "firstSortOrder",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/account-sort.ts",
+      "name": "resolveAccountSort",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/account-sort.ts",
+      "name": "accountSortToSearch",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/account-sort.ts",
+      "name": "nextAccountSort",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/account-sort.ts",
+      "name": "sortAccounts",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/charts.tsx",
+      "name": "CHART_COLOR",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/charts.tsx",
+      "name": "HistogramChart",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--charts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/charts.tsx",
+      "name": "MonthlyChart",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--charts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/charts.tsx",
+      "name": "StoreChart",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--charts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/constants.ts",
+      "name": "TYPE_LABELS",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/constants.ts",
+      "name": "REASON_LABELS",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/constants.ts",
+      "name": "KIND_LABELS",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/constants.ts",
+      "name": "GROUP_LABELS",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/constants.ts",
+      "name": "EXCLUDE_GROUP_LABELS",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/constants.ts",
+      "name": "RESCUE_KIND_LABELS",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/constants.ts",
+      "name": "storeName",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/constants.ts",
+      "name": "categoryName",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/constants.ts",
+      "name": "TONE",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/constants.ts",
+      "name": "GOLD_TONE",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/constants.ts",
+      "name": "NUM",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-parts.tsx",
+      "name": "EMULATED_STATUS_LABELS",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-parts.tsx",
+      "name": "EmulatedStatusBadge",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--emulated-events"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-parts.tsx",
+      "name": "EmulatedVerifyBadge",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--emulated-detail"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-parts.tsx",
+      "name": "StartUnknownBadge",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--statuses"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-parts.tsx",
+      "name": "D1CountBadge",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-sort.ts",
+      "name": "EmulatedSortKey",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-sort.ts",
+      "name": "EmulatedSort",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-sort.ts",
+      "name": "DEFAULT_EMULATED_SORT_KEY",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-sort.ts",
+      "name": "firstEmulatedSortOrder",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-sort.ts",
+      "name": "resolveEmulatedSort",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-sort.ts",
+      "name": "emulatedSortToSearch",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/emulated-sort.ts",
+      "name": "nextEmulatedSort",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/filter-field.tsx",
+      "name": "FilterField",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--posts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/format.ts",
+      "name": "formatDateTime",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/format.ts",
+      "name": "formatDate",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/format.ts",
+      "name": "formatDay",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/format.ts",
+      "name": "formatNumber",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/highlight.tsx",
+      "name": "Highlight",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--posts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/label-editor.tsx",
+      "name": "LabelEditor",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--posts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/loading.tsx",
+      "name": "ListSkeleton",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--loading-list"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/nav.tsx",
+      "name": "EventDetectNav",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--statistics"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/post-item.tsx",
+      "name": "JUDGE_LABELS",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/post-item.tsx",
+      "name": "PostItem",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--posts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/post-item.tsx",
+      "name": "PostList",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--posts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/section.tsx",
+      "name": "SectionHeading",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--loading-list"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/section.tsx",
+      "name": "EmptyState",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--production-layout"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/segment-button.tsx",
+      "name": "SegmentButton",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--posts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/table-parts.tsx",
+      "name": "Th",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/table-parts.tsx",
+      "name": "ThNum",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/table-parts.tsx",
+      "name": "GROUP_EDGE",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/table-parts.tsx",
+      "name": "ThGroup",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/table-parts.tsx",
+      "name": "SortableTh",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/table-parts.tsx",
+      "name": "Td",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-detect/table-parts.tsx",
+      "name": "TdNum",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/event-form.tsx",
       "name": "EventForm",
       "kind": "component",
       "storyIds": [
@@ -133,7 +612,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/event-group-event-manager.tsx",
+      "file": "workers/web/src/app/components/admin/event-group-event-manager.tsx",
       "name": "EventGroupEventManager",
       "kind": "component",
       "storyIds": [
@@ -142,21 +621,21 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/event-group-form.tsx",
+      "file": "workers/web/src/app/components/admin/event-group-form.tsx",
       "name": "toGroupFormValues",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/admin/event-group-form.tsx",
+      "file": "workers/web/src/app/components/admin/event-group-form.tsx",
       "name": "toCopyGroupFormValues",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/admin/event-group-form.tsx",
+      "file": "workers/web/src/app/components/admin/event-group-form.tsx",
       "name": "EventGroupForm",
       "kind": "component",
       "storyIds": [
@@ -165,7 +644,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/event-group-list.tsx",
+      "file": "workers/web/src/app/components/admin/event-group-list.tsx",
       "name": "EventGroupList",
       "kind": "component",
       "storyIds": [
@@ -174,7 +653,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/event-list-pagination.tsx",
+      "file": "workers/web/src/app/components/admin/event-list-pagination.tsx",
       "name": "EventListPagination",
       "kind": "component",
       "storyIds": [
@@ -183,7 +662,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/event-list.tsx",
+      "file": "workers/web/src/app/components/admin/event-list.tsx",
       "name": "EventList",
       "kind": "component",
       "storyIds": [
@@ -192,7 +671,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/form/conditions-section.tsx",
+      "file": "workers/web/src/app/components/admin/form/conditions-section.tsx",
       "name": "ConditionsSection",
       "kind": "component",
       "storyIds": [
@@ -201,7 +680,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/form/date-field.tsx",
+      "file": "workers/web/src/app/components/admin/form/date-field.tsx",
       "name": "DateField",
       "kind": "component",
       "storyIds": [
@@ -210,7 +689,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/form/event-flags-section.tsx",
+      "file": "workers/web/src/app/components/admin/form/event-flags-section.tsx",
       "name": "EventFlagsSection",
       "kind": "component",
       "storyIds": [
@@ -219,7 +698,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/admin/form/reference-urls-section.tsx",
+      "file": "workers/web/src/app/components/admin/form/reference-urls-section.tsx",
       "name": "ReferenceUrlsSection",
       "kind": "component",
       "storyIds": [
@@ -228,7 +707,83 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/auth/auth-provider.tsx",
+      "file": "workers/web/src/app/components/admin/webhook-job-detail.tsx",
+      "name": "WebhookJobDetail",
+      "kind": "component",
+      "storyIds": [
+        "pages-admin-bot-and-webhooks--held-webhook"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/webhook-job-list.tsx",
+      "name": "WebhookJobList",
+      "kind": "component",
+      "storyIds": [
+        "pages-admin-bot-and-webhooks--webhook-history"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/admin/webhook-labels.ts",
+      "name": "webhookPostStatusLabel",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/webhook-labels.ts",
+      "name": "webhookModelLabel",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/webhook-labels.ts",
+      "name": "webhookJobLabel",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/webhook-labels.ts",
+      "name": "webhookNotificationLabel",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/webhook-labels.ts",
+      "name": "detectionScoreLabel",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/webhook-labels.ts",
+      "name": "webhookActionAvailability",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/webhook-labels.ts",
+      "name": "notificationRetryWarning",
+      "kind": "support",
+      "storyIds": [],
+      "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
+    },
+    {
+      "file": "workers/web/src/app/components/admin/webhook-status-badge.tsx",
+      "name": "WebhookStatusBadge",
+      "kind": "component",
+      "storyIds": [
+        "pages-admin-bot-and-webhooks--webhook-history"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/auth/auth-provider.tsx",
       "name": "AuthProvider",
       "kind": "component",
       "storyIds": [
@@ -237,7 +792,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/auth/backend-session-gate.tsx",
+      "file": "workers/web/src/app/components/auth/backend-session-gate.tsx",
       "name": "BackendSessionGate",
       "kind": "component",
       "storyIds": [
@@ -246,7 +801,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/auth/email-auth-tabs.tsx",
+      "file": "workers/web/src/app/components/auth/email-auth-tabs.tsx",
       "name": "EmailAuthTabs",
       "kind": "component",
       "storyIds": [
@@ -255,7 +810,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/auth/login-button.tsx",
+      "file": "workers/web/src/app/components/auth/login-button.tsx",
       "name": "LoginButton",
       "kind": "component",
       "storyIds": [
@@ -264,7 +819,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/auth/login-dialog.tsx",
+      "file": "workers/web/src/app/components/auth/login-dialog.tsx",
       "name": "LoginDialog",
       "kind": "component",
       "storyIds": [
@@ -273,7 +828,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/auth/social-login-buttons.tsx",
+      "file": "workers/web/src/app/components/auth/social-login-buttons.tsx",
       "name": "SocialLoginButtons",
       "kind": "component",
       "storyIds": [
@@ -282,7 +837,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/badges/badge-card.tsx",
+      "file": "workers/web/src/app/components/badges/badge-card.tsx",
       "name": "BadgeCard",
       "kind": "component",
       "storyIds": [
@@ -291,7 +846,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/badges/badge-grid.tsx",
+      "file": "workers/web/src/app/components/badges/badge-grid.tsx",
       "name": "BadgeGrid",
       "kind": "component",
       "storyIds": [
@@ -300,7 +855,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/calendar/calendar-controls.tsx",
+      "file": "workers/web/src/app/components/calendar/calendar-controls.tsx",
       "name": "CalendarHeader",
       "kind": "component",
       "storyIds": [
@@ -309,7 +864,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/calendar/calendar-controls.tsx",
+      "file": "workers/web/src/app/components/calendar/calendar-controls.tsx",
       "name": "CalendarMonthTabs",
       "kind": "component",
       "storyIds": [
@@ -318,7 +873,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/calendar/calendar-controls.tsx",
+      "file": "workers/web/src/app/components/calendar/calendar-controls.tsx",
       "name": "CalendarMonthDots",
       "kind": "component",
       "storyIds": [
@@ -327,7 +882,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/calendar/calendar-event-drawer-content.tsx",
+      "file": "workers/web/src/app/components/calendar/calendar-event-drawer-content.tsx",
       "name": "CalendarEventDrawerContent",
       "kind": "component",
       "storyIds": [
@@ -336,7 +891,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/calendar/calendar-event-list.tsx",
+      "file": "workers/web/src/app/components/calendar/calendar-event-list.tsx",
       "name": "CalendarEventList",
       "kind": "component",
       "storyIds": [
@@ -345,7 +900,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/calendar/calendar-grid.tsx",
+      "file": "workers/web/src/app/components/calendar/calendar-grid.tsx",
       "name": "CalendarGrid",
       "kind": "component",
       "storyIds": [
@@ -354,7 +909,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/character-list-card.tsx",
+      "file": "workers/web/src/app/components/character-list-card.tsx",
       "name": "CharacterListCard",
       "kind": "component",
       "storyIds": [
@@ -363,7 +918,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/bulk-vote-button.tsx",
+      "file": "workers/web/src/app/components/characters/bulk-vote-button.tsx",
       "name": "BulkVoteButton",
       "kind": "component",
       "storyIds": [
@@ -372,7 +927,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/character-competition-level.tsx",
+      "file": "workers/web/src/app/components/characters/character-competition-level.tsx",
       "name": "CharacterCompetitionLevel",
       "kind": "component",
       "storyIds": [
@@ -381,7 +936,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/character-detail-content.tsx",
+      "file": "workers/web/src/app/components/characters/character-detail-content.tsx",
       "name": "CharacterDetailContent",
       "kind": "component",
       "storyIds": [
@@ -390,7 +945,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/character-favorite-button.tsx",
+      "file": "workers/web/src/app/components/characters/character-favorite-button.tsx",
       "name": "CharacterFavoriteButton",
       "kind": "component",
       "storyIds": [
@@ -399,7 +954,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/character-follow-button.tsx",
+      "file": "workers/web/src/app/components/characters/character-follow-button.tsx",
       "name": "CharacterFollowButton",
       "kind": "component",
       "storyIds": [
@@ -408,7 +963,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/character-list.tsx",
+      "file": "workers/web/src/app/components/characters/character-list.tsx",
       "name": "CharacterList",
       "kind": "component",
       "storyIds": [
@@ -417,7 +972,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/character-ongoing-events.tsx",
+      "file": "workers/web/src/app/components/characters/character-ongoing-events.tsx",
       "name": "CharacterOngoingEvents",
       "kind": "component",
       "storyIds": [
@@ -426,7 +981,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/character-sort-control.tsx",
+      "file": "workers/web/src/app/components/characters/character-sort-control.tsx",
       "name": "CharacterSortControl",
       "kind": "component",
       "storyIds": [
@@ -435,7 +990,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/character-twitter-link.tsx",
+      "file": "workers/web/src/app/components/characters/character-twitter-link.tsx",
       "name": "CharacterTwitterLink",
       "kind": "component",
       "storyIds": [
@@ -444,7 +999,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/character-visit-button.tsx",
+      "file": "workers/web/src/app/components/characters/character-visit-button.tsx",
       "name": "CharacterVisitButton",
       "kind": "component",
       "storyIds": [
@@ -453,7 +1008,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/character-vote-button.tsx",
+      "file": "workers/web/src/app/components/characters/character-vote-button.tsx",
       "name": "CharacterVoteButton",
       "kind": "component",
       "storyIds": [
@@ -462,7 +1017,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/detail/character-profile-section.tsx",
+      "file": "workers/web/src/app/components/characters/detail/character-profile-section.tsx",
       "name": "CharacterProfileSection",
       "kind": "component",
       "storyIds": [
@@ -471,7 +1026,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/detail/store-info-items.tsx",
+      "file": "workers/web/src/app/components/characters/detail/store-info-items.tsx",
       "name": "InfoItem",
       "kind": "component",
       "storyIds": [
@@ -480,7 +1035,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/detail/store-info-items.tsx",
+      "file": "workers/web/src/app/components/characters/detail/store-info-items.tsx",
       "name": "StoreName",
       "kind": "component",
       "storyIds": [
@@ -489,7 +1044,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/detail/store-info-items.tsx",
+      "file": "workers/web/src/app/components/characters/detail/store-info-items.tsx",
       "name": "StoreAddress",
       "kind": "component",
       "storyIds": [
@@ -498,7 +1053,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/detail/store-info-items.tsx",
+      "file": "workers/web/src/app/components/characters/detail/store-info-items.tsx",
       "name": "StorePhone",
       "kind": "component",
       "storyIds": [
@@ -507,7 +1062,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/detail/store-info-items.tsx",
+      "file": "workers/web/src/app/components/characters/detail/store-info-items.tsx",
       "name": "StoreHours",
       "kind": "component",
       "storyIds": [
@@ -516,7 +1071,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/detail/store-info-items.tsx",
+      "file": "workers/web/src/app/components/characters/detail/store-info-items.tsx",
       "name": "StoreAccess",
       "kind": "component",
       "storyIds": [
@@ -525,7 +1080,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/detail/store-info-items.tsx",
+      "file": "workers/web/src/app/components/characters/detail/store-info-items.tsx",
       "name": "StoreBirthday",
       "kind": "component",
       "storyIds": [
@@ -534,7 +1089,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/detail/store-info-section.tsx",
+      "file": "workers/web/src/app/components/characters/detail/store-info-section.tsx",
       "name": "StoreInfoSection",
       "kind": "component",
       "storyIds": [
@@ -543,7 +1098,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/favorite-burst.tsx",
+      "file": "workers/web/src/app/components/characters/favorite-burst.tsx",
       "name": "FavoriteBurst",
       "kind": "component",
       "storyIds": [
@@ -552,7 +1107,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/nearby-characters-list.tsx",
+      "file": "workers/web/src/app/components/characters/nearby-characters-list.tsx",
       "name": "NearbyCharactersList",
       "kind": "component",
       "storyIds": [
@@ -561,7 +1116,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/region-filter-control.tsx",
+      "file": "workers/web/src/app/components/characters/region-filter-control.tsx",
       "name": "RegionFilterControl",
       "kind": "component",
       "storyIds": [
@@ -570,7 +1125,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/characters/vote-burst.tsx",
+      "file": "workers/web/src/app/components/characters/vote-burst.tsx",
       "name": "VoteBurst",
       "kind": "component",
       "storyIds": [
@@ -579,7 +1134,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/common/breadcrumb.tsx",
+      "file": "workers/web/src/app/components/common/breadcrumb.tsx",
       "name": "AppBreadcrumb",
       "kind": "component",
       "storyIds": [
@@ -588,7 +1143,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/common/error-boundary.tsx",
+      "file": "workers/web/src/app/components/common/error-boundary.tsx",
       "name": "ErrorBoundary",
       "kind": "component",
       "storyIds": [
@@ -598,7 +1153,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/common/error-fallback.tsx",
+      "file": "workers/web/src/app/components/common/error-fallback.tsx",
       "name": "ErrorFallback",
       "kind": "component",
       "storyIds": [
@@ -607,7 +1162,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/common/filter-header.tsx",
+      "file": "workers/web/src/app/components/common/filter-header.tsx",
       "name": "FilterHeader",
       "kind": "component",
       "storyIds": [
@@ -616,7 +1171,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/common/footer.tsx",
+      "file": "workers/web/src/app/components/common/footer.tsx",
       "name": "Footer",
       "kind": "component",
       "storyIds": [
@@ -625,7 +1180,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/common/header.tsx",
+      "file": "workers/web/src/app/components/common/header.tsx",
       "name": "Header",
       "kind": "component",
       "storyIds": [
@@ -634,7 +1189,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/common/loading-fallback.tsx",
+      "file": "workers/web/src/app/components/common/loading-fallback.tsx",
       "name": "LoadingFallback",
       "kind": "component",
       "storyIds": [
@@ -643,7 +1198,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/common/not-found.tsx",
+      "file": "workers/web/src/app/components/common/not-found.tsx",
       "name": "NotFound",
       "kind": "component",
       "storyIds": [
@@ -652,7 +1207,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/common/page-view-counter.tsx",
+      "file": "workers/web/src/app/components/common/page-view-counter.tsx",
       "name": "PageViewCounter",
       "kind": "component",
       "storyIds": [
@@ -661,7 +1216,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/comments/comment-form-dialog.tsx",
+      "file": "workers/web/src/app/components/events/comments/comment-form-dialog.tsx",
       "name": "CommentFormDialog",
       "kind": "component",
       "storyIds": [
@@ -670,7 +1225,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/comments/comment-form.tsx",
+      "file": "workers/web/src/app/components/events/comments/comment-form.tsx",
       "name": "CommentForm",
       "kind": "component",
       "storyIds": [
@@ -679,7 +1234,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/comments/comment-item.tsx",
+      "file": "workers/web/src/app/components/events/comments/comment-item.tsx",
       "name": "CommentItem",
       "kind": "component",
       "storyIds": [
@@ -688,7 +1243,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/comments/comment-list.tsx",
+      "file": "workers/web/src/app/components/events/comments/comment-list.tsx",
       "name": "CommentList",
       "kind": "component",
       "storyIds": [
@@ -697,7 +1252,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/comments/comment-section.tsx",
+      "file": "workers/web/src/app/components/events/comments/comment-section.tsx",
       "name": "CommentSection",
       "kind": "component",
       "storyIds": [
@@ -706,7 +1261,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-age-filter.tsx",
+      "file": "workers/web/src/app/components/events/event-age-filter.tsx",
       "name": "EventAgeFilter",
       "kind": "component",
       "storyIds": [
@@ -715,7 +1270,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-category-filter.tsx",
+      "file": "workers/web/src/app/components/events/event-category-filter.tsx",
       "name": "EventCategoryFilter",
       "kind": "component",
       "storyIds": [
@@ -724,7 +1279,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-character-badge.tsx",
+      "file": "workers/web/src/app/components/events/event-character-badge.tsx",
       "name": "EventCharacterBadge",
       "kind": "component",
       "storyIds": [
@@ -733,7 +1288,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-detail-header.tsx",
+      "file": "workers/web/src/app/components/events/event-detail-header.tsx",
       "name": "EventDetailHeader",
       "kind": "component",
       "storyIds": [
@@ -742,14 +1297,14 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-detail-info.tsx",
+      "file": "workers/web/src/app/components/events/event-detail-info.tsx",
       "name": "EventDetailInfoProps",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/events/event-detail-info.tsx",
+      "file": "workers/web/src/app/components/events/event-detail-info.tsx",
       "name": "EventDetailInfo",
       "kind": "component",
       "storyIds": [
@@ -758,7 +1313,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-gantt-chart.tsx",
+      "file": "workers/web/src/app/components/events/event-gantt-chart.tsx",
       "name": "EventGanttChart",
       "kind": "component",
       "storyIds": [
@@ -767,7 +1322,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-grid-item.tsx",
+      "file": "workers/web/src/app/components/events/event-grid-item.tsx",
       "name": "EventGridItem",
       "kind": "component",
       "storyIds": [
@@ -776,7 +1331,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-group-banner.tsx",
+      "file": "workers/web/src/app/components/events/event-group-banner.tsx",
       "name": "EventGroupBanner",
       "kind": "component",
       "storyIds": [
@@ -785,7 +1340,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-share-button.tsx",
+      "file": "workers/web/src/app/components/events/event-share-button.tsx",
       "name": "EventShareButton",
       "kind": "component",
       "storyIds": [
@@ -794,7 +1349,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-stats-animations.tsx",
+      "file": "workers/web/src/app/components/events/event-stats-animations.tsx",
       "name": "HeartBurstOverlay",
       "kind": "component",
       "storyIds": [
@@ -803,7 +1358,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-stats-animations.tsx",
+      "file": "workers/web/src/app/components/events/event-stats-animations.tsx",
       "name": "FireworkBurstOverlay",
       "kind": "component",
       "storyIds": [
@@ -812,7 +1367,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-stats-badges.tsx",
+      "file": "workers/web/src/app/components/events/event-stats-badges.tsx",
       "name": "EventStatsBadges",
       "kind": "component",
       "storyIds": [
@@ -821,14 +1376,14 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-status-filter.tsx",
+      "file": "workers/web/src/app/components/events/event-status-filter.tsx",
       "name": "StatusFilter",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/events/event-status-filter.tsx",
+      "file": "workers/web/src/app/components/events/event-status-filter.tsx",
       "name": "EventStatusFilter",
       "kind": "component",
       "storyIds": [
@@ -837,7 +1392,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-store-filter.tsx",
+      "file": "workers/web/src/app/components/events/event-store-filter.tsx",
       "name": "EventStoreFilter",
       "kind": "component",
       "storyIds": [
@@ -846,7 +1401,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/event-user-activity-filter.tsx",
+      "file": "workers/web/src/app/components/events/event-user-activity-filter.tsx",
       "name": "EventUserActivityFilter",
       "kind": "component",
       "storyIds": [
@@ -855,7 +1410,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/gantt/gantt-header.tsx",
+      "file": "workers/web/src/app/components/events/gantt/gantt-header.tsx",
       "name": "GanttHeader",
       "kind": "component",
       "storyIds": [
@@ -864,7 +1419,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/gantt/gantt-row.tsx",
+      "file": "workers/web/src/app/components/events/gantt/gantt-row.tsx",
       "name": "GanttRow",
       "kind": "component",
       "storyIds": [
@@ -873,7 +1428,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/gantt/gantt-timeline.tsx",
+      "file": "workers/web/src/app/components/events/gantt/gantt-timeline.tsx",
       "name": "GanttTimeline",
       "kind": "component",
       "storyIds": [
@@ -882,21 +1437,21 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/gantt/use-gantt-layout.ts",
+      "file": "workers/web/src/app/components/events/gantt/use-gantt-layout.ts",
       "name": "EventBar",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/events/gantt/use-gantt-layout.ts",
+      "file": "workers/web/src/app/components/events/gantt/use-gantt-layout.ts",
       "name": "useGanttLayout",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/events/gantt-chart-parts.tsx",
+      "file": "workers/web/src/app/components/events/gantt-chart-parts.tsx",
       "name": "GanttMonthSelector",
       "kind": "component",
       "storyIds": [
@@ -905,7 +1460,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/gantt-chart-parts.tsx",
+      "file": "workers/web/src/app/components/events/gantt-chart-parts.tsx",
       "name": "GanttDateHeader",
       "kind": "component",
       "storyIds": [
@@ -914,7 +1469,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/gantt-chart-parts.tsx",
+      "file": "workers/web/src/app/components/events/gantt-chart-parts.tsx",
       "name": "GanttGridCell",
       "kind": "component",
       "storyIds": [
@@ -923,21 +1478,21 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/gantt-chart-utils.ts",
+      "file": "workers/web/src/app/components/events/gantt-chart-utils.ts",
       "name": "getCategoryColor",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/events/gantt-chart-utils.ts",
+      "file": "workers/web/src/app/components/events/gantt-chart-utils.ts",
       "name": "hideScrollbarStyle",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/events/paginated-event-grid.tsx",
+      "file": "workers/web/src/app/components/events/paginated-event-grid.tsx",
       "name": "PaginatedEventGrid",
       "kind": "component",
       "storyIds": [
@@ -946,7 +1501,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/recent-events-list.tsx",
+      "file": "workers/web/src/app/components/events/recent-events-list.tsx",
       "name": "RecentEventsList",
       "kind": "component",
       "storyIds": [
@@ -955,7 +1510,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/upcoming-event-list-item.tsx",
+      "file": "workers/web/src/app/components/events/upcoming-event-list-item.tsx",
       "name": "UpcomingEventListItem",
       "kind": "component",
       "storyIds": [
@@ -964,7 +1519,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/events/upcoming-event-list.tsx",
+      "file": "workers/web/src/app/components/events/upcoming-event-list.tsx",
       "name": "UpcomingEventList",
       "kind": "component",
       "storyIds": [
@@ -973,7 +1528,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/home/birthday-hero-section.tsx",
+      "file": "workers/web/src/app/components/home/birthday-hero-section.tsx",
       "name": "BirthdayHeroSection",
       "kind": "component",
       "storyIds": [
@@ -982,7 +1537,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/home/event-group-list.tsx",
+      "file": "workers/web/src/app/components/home/event-group-list.tsx",
       "name": "EventGroupList",
       "kind": "component",
       "storyIds": [
@@ -991,7 +1546,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/home/event-list-item.tsx",
+      "file": "workers/web/src/app/components/home/event-list-item.tsx",
       "name": "EventListItem",
       "kind": "component",
       "storyIds": [
@@ -1000,7 +1555,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/home/event-list.tsx",
+      "file": "workers/web/src/app/components/home/event-list.tsx",
       "name": "EventList",
       "kind": "component",
       "storyIds": [
@@ -1009,7 +1564,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/home/home-header.tsx",
+      "file": "workers/web/src/app/components/home/home-header.tsx",
       "name": "HomeHeader",
       "kind": "component",
       "storyIds": [
@@ -1018,7 +1573,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/home/line-sticker-list-item.tsx",
+      "file": "workers/web/src/app/components/home/line-sticker-list-item.tsx",
       "name": "LineStickerListItem",
       "kind": "component",
       "storyIds": [
@@ -1027,7 +1582,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/home/line-sticker-list.tsx",
+      "file": "workers/web/src/app/components/home/line-sticker-list.tsx",
       "name": "LineStickerList",
       "kind": "component",
       "storyIds": [
@@ -1036,7 +1591,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/location/store-list.tsx",
+      "file": "workers/web/src/app/components/location/store-list.tsx",
       "name": "StoreList",
       "kind": "component",
       "storyIds": [
@@ -1045,7 +1600,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/pwa/install-prompt-ios.tsx",
+      "file": "workers/web/src/app/components/pwa/install-prompt-ios.tsx",
       "name": "IosInstallPrompt",
       "kind": "component",
       "storyIds": [
@@ -1054,14 +1609,14 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/pwa/update-overlay.tsx",
+      "file": "workers/web/src/app/components/pwa/update-overlay.tsx",
       "name": "UpdateOverlayStatus",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/pwa/update-overlay.tsx",
+      "file": "workers/web/src/app/components/pwa/update-overlay.tsx",
       "name": "UpdateOverlay",
       "kind": "component",
       "storyIds": [
@@ -1070,21 +1625,21 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/pwa/update-prompt.tsx",
+      "file": "workers/web/src/app/components/pwa/update-prompt.tsx",
       "name": "setUpdateServiceWorker",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/pwa/update-prompt.tsx",
+      "file": "workers/web/src/app/components/pwa/update-prompt.tsx",
       "name": "showUpdatePrompt",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/pwa/update-prompt.tsx",
+      "file": "workers/web/src/app/components/pwa/update-prompt.tsx",
       "name": "UpdatePrompt",
       "kind": "component",
       "storyIds": [
@@ -1093,7 +1648,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ranking/ranking-empty-vote-info.tsx",
+      "file": "workers/web/src/app/components/ranking/ranking-empty-vote-info.tsx",
       "name": "RankingEmptyVoteInfo",
       "kind": "component",
       "storyIds": [
@@ -1102,35 +1657,35 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ranking/ranking-list-helpers.ts",
+      "file": "workers/web/src/app/components/ranking/ranking-list-helpers.ts",
       "name": "CharacterWithVotes",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/ranking/ranking-list-helpers.ts",
+      "file": "workers/web/src/app/components/ranking/ranking-list-helpers.ts",
       "name": "CardProps",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/ranking/ranking-list-helpers.ts",
+      "file": "workers/web/src/app/components/ranking/ranking-list-helpers.ts",
       "name": "calculateRanks",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/ranking/ranking-list-helpers.ts",
+      "file": "workers/web/src/app/components/ranking/ranking-list-helpers.ts",
       "name": "getBarClass",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/ranking/ranking-list.tsx",
+      "file": "workers/web/src/app/components/ranking/ranking-list.tsx",
       "name": "RankingList",
       "kind": "component",
       "storyIds": [
@@ -1139,7 +1694,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ranking/ranking-podium.tsx",
+      "file": "workers/web/src/app/components/ranking/ranking-podium.tsx",
       "name": "Podium",
       "kind": "component",
       "storyIds": [
@@ -1148,7 +1703,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ranking/ranking-row.tsx",
+      "file": "workers/web/src/app/components/ranking/ranking-row.tsx",
       "name": "RankingRow",
       "kind": "component",
       "storyIds": [
@@ -1157,7 +1712,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ranking/ranking-vote-badge.tsx",
+      "file": "workers/web/src/app/components/ranking/ranking-vote-badge.tsx",
       "name": "RankingVoteBadge",
       "kind": "component",
       "storyIds": [
@@ -1166,62 +1721,62 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/route/index.ts",
+      "file": "workers/web/src/app/components/route/index.ts",
       "name": "RouteResultCard",
       "kind": "component",
       "storyIds": [
         "components-route-route-result--route-result-card"
       ],
-      "reason": "Barrel re-export; same actual component as workers/app/src/components/route/route-result.tsx."
+      "reason": "Barrel re-export; same actual component as workers/web/src/app/components/route/route-result.tsx."
     },
     {
-      "file": "workers/app/src/components/route/index.ts",
+      "file": "workers/web/src/app/components/route/index.ts",
       "name": "SelectedStoreList",
       "kind": "component",
       "storyIds": [
         "components-route-selected-store-list--selected-store-list"
       ],
-      "reason": "Barrel re-export; same actual component as workers/app/src/components/route/selected-store-list.tsx."
+      "reason": "Barrel re-export; same actual component as workers/web/src/app/components/route/selected-store-list.tsx."
     },
     {
-      "file": "workers/app/src/components/route/index.ts",
+      "file": "workers/web/src/app/components/route/index.ts",
       "name": "StoreSelect",
       "kind": "component",
       "storyIds": [
         "components-route-store-select--store-select"
       ],
-      "reason": "Barrel re-export; same actual component as workers/app/src/components/route/store-select.tsx."
+      "reason": "Barrel re-export; same actual component as workers/web/src/app/components/route/store-select.tsx."
     },
     {
-      "file": "workers/app/src/components/route/index.ts",
+      "file": "workers/web/src/app/components/route/index.ts",
       "name": "AvailableStore",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/route/index.ts",
+      "file": "workers/web/src/app/components/route/index.ts",
       "name": "RouteResult",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/route/index.ts",
+      "file": "workers/web/src/app/components/route/index.ts",
       "name": "SelectedStore",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/route/index.ts",
+      "file": "workers/web/src/app/components/route/index.ts",
       "name": "useDirections",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/route/route-result.tsx",
+      "file": "workers/web/src/app/components/route/route-result.tsx",
       "name": "RouteResultCard",
       "kind": "component",
       "storyIds": [
@@ -1230,7 +1785,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/route/selected-store-list.tsx",
+      "file": "workers/web/src/app/components/route/selected-store-list.tsx",
       "name": "SelectedStoreList",
       "kind": "component",
       "storyIds": [
@@ -1239,7 +1794,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/route/store-select.tsx",
+      "file": "workers/web/src/app/components/route/store-select.tsx",
       "name": "StoreSelect",
       "kind": "component",
       "storyIds": [
@@ -1248,49 +1803,49 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/route/types.ts",
+      "file": "workers/web/src/app/components/route/types.ts",
       "name": "AvailableStore",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/route/types.ts",
+      "file": "workers/web/src/app/components/route/types.ts",
       "name": "SelectedStore",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/route/types.ts",
+      "file": "workers/web/src/app/components/route/types.ts",
       "name": "RouteSegment",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/route/types.ts",
+      "file": "workers/web/src/app/components/route/types.ts",
       "name": "DirectionsLeg",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/route/types.ts",
+      "file": "workers/web/src/app/components/route/types.ts",
       "name": "RouteResult",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/route/use-directions.ts",
+      "file": "workers/web/src/app/components/route/use-directions.ts",
       "name": "useDirections",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/selected-store-info.tsx",
+      "file": "workers/web/src/app/components/selected-store-info.tsx",
       "name": "SelectedStoreInfo",
       "kind": "component",
       "storyIds": [
@@ -1299,7 +1854,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/store-list-item.tsx",
+      "file": "workers/web/src/app/components/store-list-item.tsx",
       "name": "StoreListItem",
       "kind": "component",
       "storyIds": [
@@ -1308,7 +1863,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/accordion.tsx",
+      "file": "workers/web/src/app/components/ui/accordion.tsx",
       "name": "Accordion",
       "kind": "component",
       "storyIds": [
@@ -1317,7 +1872,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/accordion.tsx",
+      "file": "workers/web/src/app/components/ui/accordion.tsx",
       "name": "AccordionItem",
       "kind": "component",
       "storyIds": [
@@ -1326,7 +1881,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/accordion.tsx",
+      "file": "workers/web/src/app/components/ui/accordion.tsx",
       "name": "AccordionTrigger",
       "kind": "component",
       "storyIds": [
@@ -1335,7 +1890,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/accordion.tsx",
+      "file": "workers/web/src/app/components/ui/accordion.tsx",
       "name": "AccordionContent",
       "kind": "component",
       "storyIds": [
@@ -1344,7 +1899,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialog",
       "kind": "component",
       "storyIds": [
@@ -1353,7 +1908,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialogAction",
       "kind": "component",
       "storyIds": [
@@ -1362,7 +1917,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialogCancel",
       "kind": "component",
       "storyIds": [
@@ -1371,7 +1926,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialogContent",
       "kind": "component",
       "storyIds": [
@@ -1380,7 +1935,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialogDescription",
       "kind": "component",
       "storyIds": [
@@ -1389,7 +1944,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialogFooter",
       "kind": "component",
       "storyIds": [
@@ -1398,7 +1953,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialogHeader",
       "kind": "component",
       "storyIds": [
@@ -1407,7 +1962,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialogMedia",
       "kind": "component",
       "storyIds": [
@@ -1416,7 +1971,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialogOverlay",
       "kind": "component",
       "storyIds": [
@@ -1425,7 +1980,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialogPortal",
       "kind": "component",
       "storyIds": [
@@ -1434,7 +1989,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialogTitle",
       "kind": "component",
       "storyIds": [
@@ -1443,7 +1998,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert-dialog.tsx",
+      "file": "workers/web/src/app/components/ui/alert-dialog.tsx",
       "name": "AlertDialogTrigger",
       "kind": "component",
       "storyIds": [
@@ -1452,7 +2007,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert.tsx",
+      "file": "workers/web/src/app/components/ui/alert.tsx",
       "name": "Alert",
       "kind": "component",
       "storyIds": [
@@ -1461,7 +2016,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert.tsx",
+      "file": "workers/web/src/app/components/ui/alert.tsx",
       "name": "AlertTitle",
       "kind": "component",
       "storyIds": [
@@ -1470,7 +2025,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/alert.tsx",
+      "file": "workers/web/src/app/components/ui/alert.tsx",
       "name": "AlertDescription",
       "kind": "component",
       "storyIds": [
@@ -1479,7 +2034,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/avatar.tsx",
+      "file": "workers/web/src/app/components/ui/avatar.tsx",
       "name": "Avatar",
       "kind": "component",
       "storyIds": [
@@ -1488,7 +2043,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/avatar.tsx",
+      "file": "workers/web/src/app/components/ui/avatar.tsx",
       "name": "AvatarImage",
       "kind": "component",
       "storyIds": [
@@ -1497,7 +2052,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/avatar.tsx",
+      "file": "workers/web/src/app/components/ui/avatar.tsx",
       "name": "AvatarFallback",
       "kind": "component",
       "storyIds": [
@@ -1506,7 +2061,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/avatar.tsx",
+      "file": "workers/web/src/app/components/ui/avatar.tsx",
       "name": "AvatarBadge",
       "kind": "component",
       "storyIds": [
@@ -1515,7 +2070,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/avatar.tsx",
+      "file": "workers/web/src/app/components/ui/avatar.tsx",
       "name": "AvatarGroup",
       "kind": "component",
       "storyIds": [
@@ -1524,7 +2079,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/avatar.tsx",
+      "file": "workers/web/src/app/components/ui/avatar.tsx",
       "name": "AvatarGroupCount",
       "kind": "component",
       "storyIds": [
@@ -1533,7 +2088,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/badge.tsx",
+      "file": "workers/web/src/app/components/ui/badge.tsx",
       "name": "Badge",
       "kind": "component",
       "storyIds": [
@@ -1542,14 +2097,14 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/badge.tsx",
+      "file": "workers/web/src/app/components/ui/badge.tsx",
       "name": "badgeVariants",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/ui/breadcrumb.tsx",
+      "file": "workers/web/src/app/components/ui/breadcrumb.tsx",
       "name": "Breadcrumb",
       "kind": "component",
       "storyIds": [
@@ -1558,7 +2113,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/breadcrumb.tsx",
+      "file": "workers/web/src/app/components/ui/breadcrumb.tsx",
       "name": "BreadcrumbList",
       "kind": "component",
       "storyIds": [
@@ -1567,7 +2122,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/breadcrumb.tsx",
+      "file": "workers/web/src/app/components/ui/breadcrumb.tsx",
       "name": "BreadcrumbItem",
       "kind": "component",
       "storyIds": [
@@ -1576,7 +2131,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/breadcrumb.tsx",
+      "file": "workers/web/src/app/components/ui/breadcrumb.tsx",
       "name": "BreadcrumbLink",
       "kind": "component",
       "storyIds": [
@@ -1585,7 +2140,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/breadcrumb.tsx",
+      "file": "workers/web/src/app/components/ui/breadcrumb.tsx",
       "name": "BreadcrumbPage",
       "kind": "component",
       "storyIds": [
@@ -1594,7 +2149,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/breadcrumb.tsx",
+      "file": "workers/web/src/app/components/ui/breadcrumb.tsx",
       "name": "BreadcrumbSeparator",
       "kind": "component",
       "storyIds": [
@@ -1603,7 +2158,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/breadcrumb.tsx",
+      "file": "workers/web/src/app/components/ui/breadcrumb.tsx",
       "name": "BreadcrumbEllipsis",
       "kind": "component",
       "storyIds": [
@@ -1612,7 +2167,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/button.tsx",
+      "file": "workers/web/src/app/components/ui/button.tsx",
       "name": "Button",
       "kind": "component",
       "storyIds": [
@@ -1621,21 +2176,21 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/button.tsx",
+      "file": "workers/web/src/app/components/ui/button.tsx",
       "name": "buttonVariants",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/ui/carousel.tsx",
+      "file": "workers/web/src/app/components/ui/carousel.tsx",
       "name": "CarouselApi",
       "kind": "type",
       "storyIds": [],
       "reason": "Type-only contract, not a React renderable."
     },
     {
-      "file": "workers/app/src/components/ui/carousel.tsx",
+      "file": "workers/web/src/app/components/ui/carousel.tsx",
       "name": "Carousel",
       "kind": "component",
       "storyIds": [
@@ -1644,7 +2199,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/carousel.tsx",
+      "file": "workers/web/src/app/components/ui/carousel.tsx",
       "name": "CarouselContent",
       "kind": "component",
       "storyIds": [
@@ -1653,7 +2208,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/carousel.tsx",
+      "file": "workers/web/src/app/components/ui/carousel.tsx",
       "name": "CarouselItem",
       "kind": "component",
       "storyIds": [
@@ -1662,7 +2217,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/carousel.tsx",
+      "file": "workers/web/src/app/components/ui/carousel.tsx",
       "name": "CarouselPrevious",
       "kind": "component",
       "storyIds": [
@@ -1671,7 +2226,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/carousel.tsx",
+      "file": "workers/web/src/app/components/ui/carousel.tsx",
       "name": "CarouselNext",
       "kind": "component",
       "storyIds": [
@@ -1680,7 +2235,68 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/checkbox.tsx",
+      "file": "workers/web/src/app/components/ui/chart.tsx",
+      "name": "ChartConfig",
+      "kind": "type",
+      "storyIds": [],
+      "reason": "Type-only contract, not a React renderable."
+    },
+    {
+      "file": "workers/web/src/app/components/ui/chart.tsx",
+      "name": "ChartContainer",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--charts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/chart.tsx",
+      "name": "ChartTooltip",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--charts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/chart.tsx",
+      "name": "ChartTooltipContent",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--chart-tooltip"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/chart.tsx",
+      "name": "ChartLegend",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--charts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/chart.tsx",
+      "name": "ChartLegendContent",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--charts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/chart.tsx",
+      "name": "ChartStyle",
+      "kind": "component",
+      "storyIds": [
+        "pages-local-event-detection--charts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/checkbox.tsx",
       "name": "Checkbox",
       "kind": "component",
       "storyIds": [
@@ -1689,7 +2305,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/command.tsx",
+      "file": "workers/web/src/app/components/ui/command.tsx",
       "name": "Command",
       "kind": "component",
       "storyIds": [
@@ -1698,7 +2314,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/command.tsx",
+      "file": "workers/web/src/app/components/ui/command.tsx",
       "name": "CommandDialog",
       "kind": "component",
       "storyIds": [
@@ -1707,7 +2323,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/command.tsx",
+      "file": "workers/web/src/app/components/ui/command.tsx",
       "name": "CommandInput",
       "kind": "component",
       "storyIds": [
@@ -1716,7 +2332,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/command.tsx",
+      "file": "workers/web/src/app/components/ui/command.tsx",
       "name": "CommandList",
       "kind": "component",
       "storyIds": [
@@ -1725,7 +2341,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/command.tsx",
+      "file": "workers/web/src/app/components/ui/command.tsx",
       "name": "CommandEmpty",
       "kind": "component",
       "storyIds": [
@@ -1734,7 +2350,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/command.tsx",
+      "file": "workers/web/src/app/components/ui/command.tsx",
       "name": "CommandGroup",
       "kind": "component",
       "storyIds": [
@@ -1743,7 +2359,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/command.tsx",
+      "file": "workers/web/src/app/components/ui/command.tsx",
       "name": "CommandItem",
       "kind": "component",
       "storyIds": [
@@ -1752,7 +2368,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/command.tsx",
+      "file": "workers/web/src/app/components/ui/command.tsx",
       "name": "CommandShortcut",
       "kind": "component",
       "storyIds": [
@@ -1761,7 +2377,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/command.tsx",
+      "file": "workers/web/src/app/components/ui/command.tsx",
       "name": "CommandSeparator",
       "kind": "component",
       "storyIds": [
@@ -1770,7 +2386,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/dialog.tsx",
+      "file": "workers/web/src/app/components/ui/dialog.tsx",
       "name": "Dialog",
       "kind": "component",
       "storyIds": [
@@ -1779,7 +2395,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/dialog.tsx",
+      "file": "workers/web/src/app/components/ui/dialog.tsx",
       "name": "DialogClose",
       "kind": "component",
       "storyIds": [
@@ -1788,7 +2404,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/dialog.tsx",
+      "file": "workers/web/src/app/components/ui/dialog.tsx",
       "name": "DialogContent",
       "kind": "component",
       "storyIds": [
@@ -1797,7 +2413,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/dialog.tsx",
+      "file": "workers/web/src/app/components/ui/dialog.tsx",
       "name": "DialogDescription",
       "kind": "component",
       "storyIds": [
@@ -1806,7 +2422,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/dialog.tsx",
+      "file": "workers/web/src/app/components/ui/dialog.tsx",
       "name": "DialogFooter",
       "kind": "component",
       "storyIds": [
@@ -1815,7 +2431,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/dialog.tsx",
+      "file": "workers/web/src/app/components/ui/dialog.tsx",
       "name": "DialogHeader",
       "kind": "component",
       "storyIds": [
@@ -1824,7 +2440,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/dialog.tsx",
+      "file": "workers/web/src/app/components/ui/dialog.tsx",
       "name": "DialogOverlay",
       "kind": "component",
       "storyIds": [
@@ -1833,7 +2449,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/dialog.tsx",
+      "file": "workers/web/src/app/components/ui/dialog.tsx",
       "name": "DialogPortal",
       "kind": "component",
       "storyIds": [
@@ -1842,7 +2458,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/dialog.tsx",
+      "file": "workers/web/src/app/components/ui/dialog.tsx",
       "name": "DialogTitle",
       "kind": "component",
       "storyIds": [
@@ -1851,7 +2467,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/dialog.tsx",
+      "file": "workers/web/src/app/components/ui/dialog.tsx",
       "name": "DialogTrigger",
       "kind": "component",
       "storyIds": [
@@ -1860,7 +2476,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/drawer.tsx",
+      "file": "workers/web/src/app/components/ui/drawer.tsx",
       "name": "Drawer",
       "kind": "component",
       "storyIds": [
@@ -1869,7 +2485,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/drawer.tsx",
+      "file": "workers/web/src/app/components/ui/drawer.tsx",
       "name": "DrawerPortal",
       "kind": "component",
       "storyIds": [
@@ -1878,7 +2494,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/drawer.tsx",
+      "file": "workers/web/src/app/components/ui/drawer.tsx",
       "name": "DrawerOverlay",
       "kind": "component",
       "storyIds": [
@@ -1887,7 +2503,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/drawer.tsx",
+      "file": "workers/web/src/app/components/ui/drawer.tsx",
       "name": "DrawerTrigger",
       "kind": "component",
       "storyIds": [
@@ -1896,7 +2512,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/drawer.tsx",
+      "file": "workers/web/src/app/components/ui/drawer.tsx",
       "name": "DrawerClose",
       "kind": "component",
       "storyIds": [
@@ -1905,7 +2521,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/drawer.tsx",
+      "file": "workers/web/src/app/components/ui/drawer.tsx",
       "name": "DrawerContent",
       "kind": "component",
       "storyIds": [
@@ -1914,7 +2530,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/drawer.tsx",
+      "file": "workers/web/src/app/components/ui/drawer.tsx",
       "name": "DrawerHeader",
       "kind": "component",
       "storyIds": [
@@ -1923,7 +2539,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/drawer.tsx",
+      "file": "workers/web/src/app/components/ui/drawer.tsx",
       "name": "DrawerFooter",
       "kind": "component",
       "storyIds": [
@@ -1932,7 +2548,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/drawer.tsx",
+      "file": "workers/web/src/app/components/ui/drawer.tsx",
       "name": "DrawerTitle",
       "kind": "component",
       "storyIds": [
@@ -1941,7 +2557,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/drawer.tsx",
+      "file": "workers/web/src/app/components/ui/drawer.tsx",
       "name": "DrawerDescription",
       "kind": "component",
       "storyIds": [
@@ -1950,14 +2566,14 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/form.tsx",
+      "file": "workers/web/src/app/components/ui/form.tsx",
       "name": "useFormField",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/ui/form.tsx",
+      "file": "workers/web/src/app/components/ui/form.tsx",
       "name": "Form",
       "kind": "component",
       "storyIds": [
@@ -1966,7 +2582,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/form.tsx",
+      "file": "workers/web/src/app/components/ui/form.tsx",
       "name": "FormItem",
       "kind": "component",
       "storyIds": [
@@ -1975,7 +2591,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/form.tsx",
+      "file": "workers/web/src/app/components/ui/form.tsx",
       "name": "FormLabel",
       "kind": "component",
       "storyIds": [
@@ -1984,7 +2600,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/form.tsx",
+      "file": "workers/web/src/app/components/ui/form.tsx",
       "name": "FormControl",
       "kind": "component",
       "storyIds": [
@@ -1993,7 +2609,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/form.tsx",
+      "file": "workers/web/src/app/components/ui/form.tsx",
       "name": "FormDescription",
       "kind": "component",
       "storyIds": [
@@ -2002,7 +2618,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/form.tsx",
+      "file": "workers/web/src/app/components/ui/form.tsx",
       "name": "FormMessage",
       "kind": "component",
       "storyIds": [
@@ -2011,7 +2627,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/form.tsx",
+      "file": "workers/web/src/app/components/ui/form.tsx",
       "name": "FormField",
       "kind": "component",
       "storyIds": [
@@ -2020,7 +2636,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/input.tsx",
+      "file": "workers/web/src/app/components/ui/input.tsx",
       "name": "Input",
       "kind": "component",
       "storyIds": [
@@ -2029,7 +2645,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/label.tsx",
+      "file": "workers/web/src/app/components/ui/label.tsx",
       "name": "Label",
       "kind": "component",
       "storyIds": [
@@ -2038,7 +2654,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/pagination.tsx",
+      "file": "workers/web/src/app/components/ui/pagination.tsx",
       "name": "Pagination",
       "kind": "component",
       "storyIds": [
@@ -2047,7 +2663,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/pagination.tsx",
+      "file": "workers/web/src/app/components/ui/pagination.tsx",
       "name": "PaginationContent",
       "kind": "component",
       "storyIds": [
@@ -2056,7 +2672,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/pagination.tsx",
+      "file": "workers/web/src/app/components/ui/pagination.tsx",
       "name": "PaginationLink",
       "kind": "component",
       "storyIds": [
@@ -2065,7 +2681,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/pagination.tsx",
+      "file": "workers/web/src/app/components/ui/pagination.tsx",
       "name": "PaginationItem",
       "kind": "component",
       "storyIds": [
@@ -2074,7 +2690,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/pagination.tsx",
+      "file": "workers/web/src/app/components/ui/pagination.tsx",
       "name": "PaginationPrevious",
       "kind": "component",
       "storyIds": [
@@ -2083,7 +2699,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/pagination.tsx",
+      "file": "workers/web/src/app/components/ui/pagination.tsx",
       "name": "PaginationNext",
       "kind": "component",
       "storyIds": [
@@ -2092,7 +2708,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/pagination.tsx",
+      "file": "workers/web/src/app/components/ui/pagination.tsx",
       "name": "PaginationEllipsis",
       "kind": "component",
       "storyIds": [
@@ -2101,7 +2717,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/popover.tsx",
+      "file": "workers/web/src/app/components/ui/popover.tsx",
       "name": "Popover",
       "kind": "component",
       "storyIds": [
@@ -2110,7 +2726,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/popover.tsx",
+      "file": "workers/web/src/app/components/ui/popover.tsx",
       "name": "PopoverTrigger",
       "kind": "component",
       "storyIds": [
@@ -2119,7 +2735,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/popover.tsx",
+      "file": "workers/web/src/app/components/ui/popover.tsx",
       "name": "PopoverContent",
       "kind": "component",
       "storyIds": [
@@ -2128,7 +2744,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/popover.tsx",
+      "file": "workers/web/src/app/components/ui/popover.tsx",
       "name": "PopoverAnchor",
       "kind": "component",
       "storyIds": [
@@ -2137,7 +2753,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/popover.tsx",
+      "file": "workers/web/src/app/components/ui/popover.tsx",
       "name": "PopoverHeader",
       "kind": "component",
       "storyIds": [
@@ -2146,7 +2762,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/popover.tsx",
+      "file": "workers/web/src/app/components/ui/popover.tsx",
       "name": "PopoverTitle",
       "kind": "component",
       "storyIds": [
@@ -2155,7 +2771,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/popover.tsx",
+      "file": "workers/web/src/app/components/ui/popover.tsx",
       "name": "PopoverDescription",
       "kind": "component",
       "storyIds": [
@@ -2164,7 +2780,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/progress.tsx",
+      "file": "workers/web/src/app/components/ui/progress.tsx",
       "name": "Progress",
       "kind": "component",
       "storyIds": [
@@ -2173,7 +2789,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/select.tsx",
+      "file": "workers/web/src/app/components/ui/select.tsx",
       "name": "Select",
       "kind": "component",
       "storyIds": [
@@ -2182,7 +2798,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/select.tsx",
+      "file": "workers/web/src/app/components/ui/select.tsx",
       "name": "SelectContent",
       "kind": "component",
       "storyIds": [
@@ -2191,7 +2807,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/select.tsx",
+      "file": "workers/web/src/app/components/ui/select.tsx",
       "name": "SelectGroup",
       "kind": "component",
       "storyIds": [
@@ -2200,7 +2816,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/select.tsx",
+      "file": "workers/web/src/app/components/ui/select.tsx",
       "name": "SelectItem",
       "kind": "component",
       "storyIds": [
@@ -2209,7 +2825,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/select.tsx",
+      "file": "workers/web/src/app/components/ui/select.tsx",
       "name": "SelectLabel",
       "kind": "component",
       "storyIds": [
@@ -2218,7 +2834,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/select.tsx",
+      "file": "workers/web/src/app/components/ui/select.tsx",
       "name": "SelectScrollDownButton",
       "kind": "component",
       "storyIds": [
@@ -2227,7 +2843,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/select.tsx",
+      "file": "workers/web/src/app/components/ui/select.tsx",
       "name": "SelectScrollUpButton",
       "kind": "component",
       "storyIds": [
@@ -2236,7 +2852,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/select.tsx",
+      "file": "workers/web/src/app/components/ui/select.tsx",
       "name": "SelectSeparator",
       "kind": "component",
       "storyIds": [
@@ -2245,7 +2861,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/select.tsx",
+      "file": "workers/web/src/app/components/ui/select.tsx",
       "name": "SelectTrigger",
       "kind": "component",
       "storyIds": [
@@ -2254,7 +2870,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/select.tsx",
+      "file": "workers/web/src/app/components/ui/select.tsx",
       "name": "SelectValue",
       "kind": "component",
       "storyIds": [
@@ -2263,7 +2879,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/separator.tsx",
+      "file": "workers/web/src/app/components/ui/separator.tsx",
       "name": "Separator",
       "kind": "component",
       "storyIds": [
@@ -2272,7 +2888,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/sheet.tsx",
+      "file": "workers/web/src/app/components/ui/sheet.tsx",
       "name": "Sheet",
       "kind": "component",
       "storyIds": [
@@ -2281,7 +2897,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/sheet.tsx",
+      "file": "workers/web/src/app/components/ui/sheet.tsx",
       "name": "SheetTrigger",
       "kind": "component",
       "storyIds": [
@@ -2290,7 +2906,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/sheet.tsx",
+      "file": "workers/web/src/app/components/ui/sheet.tsx",
       "name": "SheetClose",
       "kind": "component",
       "storyIds": [
@@ -2299,7 +2915,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/sheet.tsx",
+      "file": "workers/web/src/app/components/ui/sheet.tsx",
       "name": "SheetContent",
       "kind": "component",
       "storyIds": [
@@ -2308,7 +2924,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/sheet.tsx",
+      "file": "workers/web/src/app/components/ui/sheet.tsx",
       "name": "SheetHeader",
       "kind": "component",
       "storyIds": [
@@ -2317,7 +2933,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/sheet.tsx",
+      "file": "workers/web/src/app/components/ui/sheet.tsx",
       "name": "SheetFooter",
       "kind": "component",
       "storyIds": [
@@ -2326,7 +2942,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/sheet.tsx",
+      "file": "workers/web/src/app/components/ui/sheet.tsx",
       "name": "SheetTitle",
       "kind": "component",
       "storyIds": [
@@ -2335,7 +2951,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/sheet.tsx",
+      "file": "workers/web/src/app/components/ui/sheet.tsx",
       "name": "SheetDescription",
       "kind": "component",
       "storyIds": [
@@ -2344,7 +2960,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/skeleton.tsx",
+      "file": "workers/web/src/app/components/ui/skeleton.tsx",
       "name": "Skeleton",
       "kind": "component",
       "storyIds": [
@@ -2353,7 +2969,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/sonner.tsx",
+      "file": "workers/web/src/app/components/ui/sonner.tsx",
       "name": "Toaster",
       "kind": "component",
       "storyIds": [
@@ -2362,7 +2978,79 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/tabs.tsx",
+      "file": "workers/web/src/app/components/ui/table.tsx",
+      "name": "Table",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/table.tsx",
+      "name": "TableHeader",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/table.tsx",
+      "name": "TableBody",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/table.tsx",
+      "name": "TableFooter",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/table.tsx",
+      "name": "TableHead",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/table.tsx",
+      "name": "TableRow",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/table.tsx",
+      "name": "TableCell",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/table.tsx",
+      "name": "TableCaption",
+      "kind": "component",
+      "storyIds": [
+        "components-admin-event-detect-parts--counts-table"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/components/ui/tabs.tsx",
       "name": "Tabs",
       "kind": "component",
       "storyIds": [
@@ -2371,7 +3059,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/tabs.tsx",
+      "file": "workers/web/src/app/components/ui/tabs.tsx",
       "name": "TabsList",
       "kind": "component",
       "storyIds": [
@@ -2380,7 +3068,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/tabs.tsx",
+      "file": "workers/web/src/app/components/ui/tabs.tsx",
       "name": "TabsTrigger",
       "kind": "component",
       "storyIds": [
@@ -2389,7 +3077,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/tabs.tsx",
+      "file": "workers/web/src/app/components/ui/tabs.tsx",
       "name": "TabsContent",
       "kind": "component",
       "storyIds": [
@@ -2398,14 +3086,14 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/tabs.tsx",
+      "file": "workers/web/src/app/components/ui/tabs.tsx",
       "name": "tabsListVariants",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/ui/textarea.tsx",
+      "file": "workers/web/src/app/components/ui/textarea.tsx",
       "name": "Textarea",
       "kind": "component",
       "storyIds": [
@@ -2414,7 +3102,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/toggle.tsx",
+      "file": "workers/web/src/app/components/ui/toggle.tsx",
       "name": "Toggle",
       "kind": "component",
       "storyIds": [
@@ -2423,14 +3111,14 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/toggle.tsx",
+      "file": "workers/web/src/app/components/ui/toggle.tsx",
       "name": "toggleVariants",
       "kind": "support",
       "storyIds": [],
       "reason": "Noncomponent utility/hook/constant; exercised by the relevant production consumer."
     },
     {
-      "file": "workers/app/src/components/ui/tooltip.tsx",
+      "file": "workers/web/src/app/components/ui/tooltip.tsx",
       "name": "Tooltip",
       "kind": "component",
       "storyIds": [
@@ -2439,7 +3127,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/tooltip.tsx",
+      "file": "workers/web/src/app/components/ui/tooltip.tsx",
       "name": "TooltipTrigger",
       "kind": "component",
       "storyIds": [
@@ -2448,7 +3136,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/tooltip.tsx",
+      "file": "workers/web/src/app/components/ui/tooltip.tsx",
       "name": "TooltipContent",
       "kind": "component",
       "storyIds": [
@@ -2457,7 +3145,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/components/ui/tooltip.tsx",
+      "file": "workers/web/src/app/components/ui/tooltip.tsx",
       "name": "TooltipProvider",
       "kind": "component",
       "storyIds": [
@@ -2466,7 +3154,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/__root.tsx",
+      "file": "workers/web/src/app/routes/__root.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2475,7 +3163,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/about/index.tsx",
+      "file": "workers/web/src/app/routes/about/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2484,7 +3172,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/badges/index.tsx",
+      "file": "workers/web/src/app/routes/admin/badges/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2493,7 +3181,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/badges/ranking/index.tsx",
+      "file": "workers/web/src/app/routes/admin/badges/ranking/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2502,7 +3190,16 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/comments/index.tsx",
+      "file": "workers/web/src/app/routes/admin/bot/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-admin-bot-and-webhooks--bot-settings"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/comments/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2511,7 +3208,97 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/event-groups/$uuid/edit/index.tsx",
+      "file": "workers/web/src/app/routes/admin/event-detect/charts/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-local-event-detection--charts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/event-detect/emulated/$id/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-local-event-detection--emulated-detail"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/event-detect/emulated/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-local-event-detection--emulated-events"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/event-detect/events/$uuid/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-local-event-detection--event-detail"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/event-detect/events/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-local-event-detection--events"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/event-detect/gaps/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-local-event-detection--gaps"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/event-detect/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-local-event-detection--statistics"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/event-detect/keywords/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-local-event-detection--keywords"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/event-detect/posts/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-local-event-detection--posts"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/event-detect.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-local-event-detection--production-layout"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/event-groups/$uuid/edit/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2520,7 +3307,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/event-groups/index.tsx",
+      "file": "workers/web/src/app/routes/admin/event-groups/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2529,7 +3316,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/event-groups/new/index.tsx",
+      "file": "workers/web/src/app/routes/admin/event-groups/new/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2538,7 +3325,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/events/$uuid/edit/index.tsx",
+      "file": "workers/web/src/app/routes/admin/events/$uuid/edit/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2547,7 +3334,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/events/$uuid/index.tsx",
+      "file": "workers/web/src/app/routes/admin/events/$uuid/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2556,7 +3343,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/events/index.tsx",
+      "file": "workers/web/src/app/routes/admin/events/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2565,7 +3352,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/events/new/index.tsx",
+      "file": "workers/web/src/app/routes/admin/events/new/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2574,7 +3361,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/index.tsx",
+      "file": "workers/web/src/app/routes/admin/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2583,7 +3370,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/twitter/index.tsx",
+      "file": "workers/web/src/app/routes/admin/twitter/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2592,7 +3379,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin/users/index.tsx",
+      "file": "workers/web/src/app/routes/admin/users/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2601,7 +3388,25 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/admin.tsx",
+      "file": "workers/web/src/app/routes/admin/webhooks/$postId/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-admin-bot-and-webhooks--held-webhook"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin/webhooks/index.tsx",
+      "name": "Route",
+      "kind": "route",
+      "storyIds": [
+        "pages-admin-bot-and-webhooks--webhook-history"
+      ],
+      "reason": ""
+    },
+    {
+      "file": "workers/web/src/app/routes/admin.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2610,7 +3415,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/badges/index.tsx",
+      "file": "workers/web/src/app/routes/badges/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2619,7 +3424,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/calendar/index.tsx",
+      "file": "workers/web/src/app/routes/calendar/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2628,7 +3433,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/characters/$id/index.tsx",
+      "file": "workers/web/src/app/routes/characters/$id/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2637,7 +3442,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/characters/index.tsx",
+      "file": "workers/web/src/app/routes/characters/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2646,7 +3451,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/contact/index.tsx",
+      "file": "workers/web/src/app/routes/contact/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2655,7 +3460,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/events/$uuid/index.tsx",
+      "file": "workers/web/src/app/routes/events/$uuid/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2664,7 +3469,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/events/group/$id/index.tsx",
+      "file": "workers/web/src/app/routes/events/group/$id/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2673,7 +3478,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/events/groups/index.tsx",
+      "file": "workers/web/src/app/routes/events/groups/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2682,7 +3487,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/events/index.tsx",
+      "file": "workers/web/src/app/routes/events/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2691,7 +3496,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/index.tsx",
+      "file": "workers/web/src/app/routes/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2700,7 +3505,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/location/index.tsx",
+      "file": "workers/web/src/app/routes/location/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2709,7 +3514,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/me/completed/index.tsx",
+      "file": "workers/web/src/app/routes/me/completed/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2718,7 +3523,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/me/favorites/index.tsx",
+      "file": "workers/web/src/app/routes/me/favorites/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2727,7 +3532,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/me/index.tsx",
+      "file": "workers/web/src/app/routes/me/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2736,7 +3541,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/me/interested/index.tsx",
+      "file": "workers/web/src/app/routes/me/interested/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2745,7 +3550,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/me/visited/index.tsx",
+      "file": "workers/web/src/app/routes/me/visited/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2754,7 +3559,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/ranking/index.tsx",
+      "file": "workers/web/src/app/routes/ranking/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [
@@ -2763,7 +3568,7 @@
       "reason": ""
     },
     {
-      "file": "workers/app/src/app/routes/route/index.tsx",
+      "file": "workers/web/src/app/routes/route/index.tsx",
       "name": "Route",
       "kind": "route",
       "storyIds": [

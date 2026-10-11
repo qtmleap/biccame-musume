@@ -12,7 +12,7 @@ export default defineConfig({
     alias: {
       ...(process.env.B04_PHASE === 'before'
         ? {
-            '@/app/routes/characters/index': resolve(
+            '@/routes/characters/index': resolve(
               import.meta.dirname,
               '../../.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b04/baseline-source/characters-route.tsx'
             ),
@@ -26,7 +26,7 @@ export default defineConfig({
             )
           }
         : {}),
-      '@': resolve(import.meta.dirname, '../../workers/app/src')
+      '@': resolve(import.meta.dirname, '../../workers/web/src/app')
     }
   },
   define: {

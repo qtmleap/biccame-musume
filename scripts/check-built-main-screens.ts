@@ -5,7 +5,7 @@ import { events } from '../e2e/visual-typography/fixtures'
 
 // devサーバーを起動せず、検証済みVite成果物をPlaywright routeでブラウザへ直接供給する。
 const root = resolve(import.meta.dirname, '..')
-const built = resolve(root, 'workers/app/dist/client')
+const built = resolve(root, 'workers/web/dist/client')
 const output = resolve(root, '.cache/bot-main-screens')
 mkdirSync(output, { recursive: true })
 const mime: Record<string, string> = {
@@ -28,7 +28,7 @@ try {
     if (url.pathname === '/api/admin/twitter/status') return route.fulfill({ json: {
       ok: false, account: null, error: 'Synthetic disabled bot status', fetchedAt: '2026-10-03T00:00:00Z'
     } })
-    if (url.pathname === '/characters.json') return route.fulfill({ contentType: 'application/json', body: readFileSync(resolve(root, 'workers/app/public/characters.json')) })
+    if (url.pathname === '/characters.json') return route.fulfill({ contentType: 'application/json', body: readFileSync(resolve(root, 'workers/web/public/characters.json')) })
     if (url.pathname.startsWith('/api/')) return route.fulfill({ status: 503, json: { message: 'Unstubbed API blocked by offline test' } })
     if (url.pathname.startsWith('/images/characters/')) return route.fulfill({ contentType: 'image/webp', body: readFileSync(resolve(root, 'e2e/character-detail-layout/abeno.webp')) })
     const path = route.request().resourceType() === 'document' ? resolve(built, 'index.html') : resolve(built, `.${decodeURIComponent(url.pathname)}`)

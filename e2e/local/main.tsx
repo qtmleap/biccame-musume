@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { MotionConfig } from 'motion/react'
 import { createRoot } from 'react-dom/client'
-import { routeTree } from '@/app/routeTree.gen'
+import { routeTree } from '@/routeTree.gen'
 import './styles.css'
 
 document.documentElement.classList.toggle(

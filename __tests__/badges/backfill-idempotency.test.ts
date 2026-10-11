@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import { Prisma, type PrismaClient } from '@/generated/prisma/client'
-import { type EvaluatorContext, evaluateAndAwardBadges } from '../../workers/app/src/services/badge'
+import { Prisma, type PrismaClient } from '@api/db/generated/prisma/client'
+import { type EvaluatorContext, evaluateAndAwardBadges } from '@api/services/badge/index'
 
 /**
  * Backfill idempotency tests.

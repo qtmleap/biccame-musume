@@ -1,8 +1,8 @@
 import { expect, test } from 'bun:test'
+import directions from '@api/routes/direction'
+import type { Bindings, Variables } from '@api/types/bindings'
+import { RouteResponseSchema } from '@biccame/shared/schemas/route.dto'
 import { OpenAPIHono } from '@hono/zod-openapi'
-import directions from '@/api/direction'
-import { RouteResponseSchema } from '@/schemas/route.dto'
-import type { Bindings, Variables } from '@/types/bindings'
 
 const leg = { from: '店舗A', to: '店舗B', fromStation: '東京', toStation: '大阪' }
 const answer = {

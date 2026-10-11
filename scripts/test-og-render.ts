@@ -17,8 +17,8 @@ const cases = {
   }
 }
 const entry = `
-import { renderEventOgImage } from './workers/app/src/utils/og-event-image.ts'
-import { eventOgPlace } from './workers/app/src/utils/og-event-place.ts'
+import { renderEventOgImage } from './workers/web/src/api/lib/og-event-image.ts'
+import { eventOgPlace } from './packages/shared/src/domain/og-event-place.ts'
 const cases = ${JSON.stringify(cases)}
 export default {
   async fetch(request, env) {
@@ -36,12 +36,12 @@ const result = await build({
   conditions: ['workerd', 'worker', 'browser'], mainFields: ['module', 'main'],
   // nodejs_compat相当。Node APIは実行時にworkerdが提供する。
   external: ['fs', 'path', 'crypto', 'node:*'],
-  alias: { '@': resolve(root, 'workers/app/src') },
+  alias: { '@': resolve(root, 'workers/web/src/app'), '@api': resolve(root, 'workers/web/src/api') },
   plugins: [{
     name: 'harfbuzz-workers',
     setup(build) {
       // Viteと同じく、bare importだけをWorkers版に置換する（サブパスは実体を参照する）。
-      build.onResolve({ filter: /^harfbuzzjs$/ }, () => ({ path: resolve(root, 'workers/app/src/lib/harfbuzz-workers.ts') }))
+      build.onResolve({ filter: /^harfbuzzjs$/ }, () => ({ path: resolve(root, 'workers/web/src/api/lib/harfbuzz-workers.ts') }))
     }
   }],
   loader: { '.wasm': 'file' }, assetNames: '[name]'
@@ -55,7 +55,7 @@ for (const file of result.outputFiles) {
   } else modules[name] = { type: 'wasm', contents: file.contents }
 }
 const fonts = Object.fromEntries(['500', '700'].map((weight) => [
-  `/fonts/zen-maru-gothic-${weight}.woff`, readFileSync(resolve(root, `workers/app/public/fonts/zen-maru-gothic-${weight}.woff`))
+  `/fonts/zen-maru-gothic-${weight}.woff`, readFileSync(resolve(root, `workers/web/public/fonts/zen-maru-gothic-${weight}.woff`))
 ]))
 const mf = new Miniflare({ workers: [{
   config: {

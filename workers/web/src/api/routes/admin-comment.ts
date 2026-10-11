@@ -1,0 +1,60 @@
+import { getPrisma } from '@api/db/prisma'
+import type { Bindings } from '@api/types/bindings'
+import {
+  type AdminComment,
+  AdminCommentsQuerySchema,
+  AdminCommentsResponseSchema
+} from '@biccame/shared/schemas/admin-comment.dto'
+import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
+
+const routes = new OpenAPIHono<{ Bindings: Bindings }>()
+
+// GET /api/admin/comments — 全コメント一覧（イベント名つき・新しい順）
+// 認証は src/api/admin/index.ts で `/admin/*` 全体に CFAuth を適用
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/admin/comments',
+    request: {
+      query: AdminCommentsQuerySchema
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: AdminCommentsResponseSchema
+          }
+        },
+        description: 'コメント一覧取得成功'
+      }
+    },
+    tags: ['admin-comments']
+  }),
+  async (c) => {
+    const { includeDeleted } = c.req.valid('query')
+    const prisma = getPrisma(c.env)
+
+    const rows = await prisma.eventComment.findMany({
+      where: includeDeleted === '1' ? undefined : { deletedAt: null },
+      orderBy: { createdAt: 'desc' },
+      include: { event: { select: { title: true } } }
+    })
+
+    const comments: AdminComment[] = rows.map((row) => ({
+      id: row.id,
+      eventId: row.eventId,
+      eventTitle: row.event.title,
+      characterId: row.nickname,
+      body: row.body,
+      ipAddress: row.ipAddress,
+      userId: row.userId,
+      deletedAt: row.deletedAt?.toISOString() ?? null,
+      createdAt: row.createdAt.toISOString()
+    }))
+
+    c.header('Cache-Control', 'no-store')
+    return c.json({ comments }, 200)
+  }
+)
+
+export default routes

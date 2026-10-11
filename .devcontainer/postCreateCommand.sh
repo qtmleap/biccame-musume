@@ -2,7 +2,7 @@
 
 sudo chown -R $(whoami):$(whoami) \
   node_modules \
-  workers/app/node_modules 2>/dev/null || true
+  workers/web/node_modules 2>/dev/null || true
 
 # Silence direnv output.
 # In direnv 2.36+, DIRENV_LOG_FORMAT env var is ignored unless direnv.toml exists.

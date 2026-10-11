@@ -672,7 +672,7 @@ export const assertColumns = (checks: readonly ColumnCheck[]) => {
 }
 
 /**
- * characters.json にはあるが、アプリの StoreKeySchema（workers/app/src/schemas/store.dto.ts）に無い店舗キー。
+ * characters.json にはあるが、アプリの StoreKeySchema（packages/shared/src/schemas/store.dto.ts）に無い店舗キー。
  * アプリはイベントの stores を StoreKeySchema で読むので、このキーのイベントを作ると一覧の読み込みが壊れる恐れがある。
  * 一覧が実際の差と合っているかは、テストが store.dto.ts のソースと characters.json を突き合わせて確かめる。
  */

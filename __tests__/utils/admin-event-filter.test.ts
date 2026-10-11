@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
+import { type AdminEventFilter, filterAdminEvents, getListStatus } from '@biccame/shared/domain/admin-event-filter'
+import type { Event } from '@biccame/shared/schemas/event.dto'
 import dayjs from 'dayjs'
-import type { Event } from '../../workers/app/src/schemas/event.dto'
-import { type AdminEventFilter, filterAdminEvents, getListStatus } from '../../workers/app/src/utils/admin-event-filter'
 
 const now = dayjs('2026-06-15T12:00:00+09:00')
 const date = (iso: string) => dayjs(iso).toDate()

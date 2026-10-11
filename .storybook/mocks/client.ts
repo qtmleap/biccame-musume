@@ -1,8 +1,10 @@
-import { badges, characters, comments, eventDetail, events, group, now } from '../../workers/app/src/stories/catalogue-fixtures'
-import { client as transport } from '../../workers/app/src/utils/client/index'
+import { AdminBotConfigurationRequestSchema } from '@biccame/shared/schemas/admin-bot.dto'
+import { adminResponses } from '@/stories/admin-fixtures'
+import { badges, characters, comments, eventDetail, events, group, now } from '@/stories/catalogue-fixtures'
+import { client as transport } from '../../workers/web/src/app/utils/client/index'
 import { runtime } from '../catalogue/runtime'
 
-export { VersionResponseSchema } from '../../workers/app/src/utils/client/version'
+export { VersionResponseSchema } from '@biccame/shared/schemas/version.dto'
 
 const initialActivities = () => ({
   stores: ['abeno'],
@@ -21,6 +23,7 @@ type APIResponseFixtures = {
     : never
 }
 const responses = {
+  ...adminResponses,
   getCharacters: () => characters,
   getEvents: () => list(events),
   getAdminEvents: () => list(events),
@@ -161,6 +164,12 @@ export const client = new Proxy(transport, {
       return Reflect.get(target, key, receiver)
     return async (...args: unknown[]) => {
       runtime.calls.push(key)
+      if (key === 'saveAdminBotConfiguration') {
+        const configuration = AdminBotConfigurationRequestSchema.safeParse(args[0])
+        if (!configuration.success) throw new Error('Invalid synthetic bot configuration')
+        if (runtime.state === 'error') throw new Error('Synthetic configuration save failure')
+        return configuration.data
+      }
       if (key === 'addFavoriteCharacter') {
         const config = args[1] as { params: { characterId: string } }
         favorites = [...favorites, config.params.characterId]

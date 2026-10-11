@@ -1,7 +1,7 @@
 import { beforeEach, expect, mock, test } from 'bun:test'
+import type { Bindings } from '@api/types/bindings'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
-import type { Bindings } from '../../workers/app/src/types/bindings'
 
 const db = {
   $transaction: mock(async (ops: unknown[]) => ops),
@@ -9,10 +9,10 @@ const db = {
   vote: { create: mock((input: unknown) => input), createMany: mock((input: unknown) => input) }
 }
 const getPrisma = mock(() => db)
-mock.module('@/lib/prisma', () => ({ getPrisma }))
-const { default: routes } = await import('../../workers/app/src/api/vote')
-const { vote, bulkVote } = await import('../../workers/app/src/services/vote-service')
-const { loadBiccameMusumeIdSet } = await import('../../workers/app/src/utils/character-whitelist')
+mock.module('@api/db/prisma', () => ({ getPrisma }))
+const { default: routes } = await import('@api/routes/vote')
+const { vote, bulkVote } = await import('@api/services/vote-service')
+const { loadBiccameMusumeIdSet } = await import('@api/lib/character-whitelist')
 const characters = [
   { id: 'sapporo', character: { is_biccame_musume: true } },
   { id: 'akiba', character: { is_biccame_musume: true } },

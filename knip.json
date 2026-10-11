@@ -41,10 +41,10 @@
     "packages/shared": {
       "project": ["src/**/*.ts"]
     },
-    "workers/app": {
+    "workers/web": {
       "entry": [
-        "src/stories/**/*.stories.tsx",
-        "src/lib/harfbuzz-workers.ts"
+        "src/app/stories/**/*.stories.tsx",
+        "src/api/lib/harfbuzz-workers.ts"
       ],
       "project": [
         "src/**/*.{ts,tsx}"

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import storesInfoJson from '../workers/app/public/characters.json'
-import { StoresSchema } from '../workers/app/src/schemas/store.dto'
+import { StoresSchema } from '@biccame/shared/schemas/store.dto'
+import storesInfoJson from '../workers/web/public/characters.json'
 
 /**
  * characters.jsonのパースと検証テスト

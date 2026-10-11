@@ -18,14 +18,14 @@
   ],
   "files": {
     "includes": [
-      "workers/app/src/**/*.{ts,tsx}",
+      "workers/web/src/**/*.{ts,tsx}",
       "workers/bot/src/**/*.ts",
       "packages/shared/src/**/*.ts",
       "!**/node_modules",
-      "!workers/app/src/**/components/ui/*.{ts,tsx}",
-      "!workers/app/src/**/index.css",
-      "!workers/app/src/**/routeTree.gen.ts",
-      "!workers/app/src/generated",
+      "!workers/web/src/**/components/ui/*.{ts,tsx}",
+      "!workers/web/src/**/index.css",
+      "!workers/web/src/**/routeTree.gen.ts",
+      "!workers/web/src/api/db/generated",
       "__tests__/**/*.{ts,tsx}"
     ]
   },

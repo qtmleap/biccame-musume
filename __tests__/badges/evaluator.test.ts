@@ -1,9 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import type { Badge, PrismaClient } from '@/generated/prisma/client'
-import { storeKeyToBadgeArea } from '../../workers/app/src/data/badges/area-mapping'
-import type { BadgeConditionMeta, BadgeSubCategory } from '../../workers/app/src/data/badges/registry'
-import { ACTIVE_PHYSICAL_STORE_KEYS, PHYSICAL_STORE_KEYS } from '../../workers/app/src/data/badges/store-exclusion'
-import type { StoreKey } from '../../workers/app/src/schemas/store.dto'
+import type { Badge, PrismaClient } from '@api/db/generated/prisma/client'
 import {
   type EvaluatorContext,
   evaluateAreaAny,
@@ -20,7 +16,11 @@ import {
   evaluateSpecialMultiStoreClear,
   evaluateVisit,
   evaluateVoteTotal
-} from '../../workers/app/src/services/badge'
+} from '@api/services/badge/index'
+import { storeKeyToBadgeArea } from '@biccame/shared/domain/badges/area-mapping'
+import type { BadgeConditionMeta, BadgeSubCategory } from '@biccame/shared/domain/badges/registry'
+import { ACTIVE_PHYSICAL_STORE_KEYS, PHYSICAL_STORE_KEYS } from '@biccame/shared/domain/badges/store-exclusion'
+import type { StoreKey } from '@biccame/shared/schemas/store.dto'
 
 // ---------------------------------------------------------------------------
 // Helper to build a minimal EvaluatorContext with an injected prisma mock.

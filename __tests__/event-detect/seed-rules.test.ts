@@ -275,7 +275,7 @@ describe('店舗: ビッカメ娘の店舗だけ（characters.json の is_biccam
   })
 
   test('readStoreMarks: 本物の characters.json の印から作る（店舗キーの直書きではない）', async () => {
-    const path = join(import.meta.dir, '../../workers/app/public/characters.json')
+    const path = join(import.meta.dir, '../../workers/web/public/characters.json')
     const marks = await readStoreMarks(path)
     const raw = JSON.parse(await readFile(path, 'utf8'))
     const falseIds = raw

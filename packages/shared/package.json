@@ -14,9 +14,22 @@
     "./x/transaction/*": "./src/x/transaction/*.ts",
     "./event-detect/charts": "./src/event-detect/charts.ts",
     "./event-detect/clef": "./src/event-detect/clef.ts",
+    "./event-detect/decide": "./src/event-detect/decide.ts",
+    "./event-detect/detection": "./src/event-detect/detection.ts",
     "./event-detect/filter": "./src/event-detect/filter.ts",
     "./event-detect/post": "./src/event-detect/post.ts",
-    "./event-detect/viewer": "./src/event-detect/viewer.ts"
+    "./event-detect/viewer": "./src/event-detect/viewer.ts",
+    "./event-detect/webhook": "./src/event-detect/webhook.ts",
+    "./schemas/*": "./src/schemas/*.ts",
+    "./domain/*": "./src/domain/*.ts",
+    "./domain/badges/*": "./src/domain/badges/*.ts"
   },
-  "dependencies": { "zod": "^4.4.3" }
+  "dependencies": {
+    "dayjs": "^1.11.23",
+    "zod": "^4.4.3",
+    "@hono/zod-openapi": "^1.6.1",
+    "lodash-es": "^4.18.1",
+    "jaconv": "^1.1.2",
+    "@holiday-jp/holiday_jp": "^2.5.1"
+  }
 }

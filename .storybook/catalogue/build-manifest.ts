@@ -4,7 +4,7 @@ import { storyNameFromExport, toId } from 'storybook/internal/csf'
 import ts from 'typescript'
 import { inventory, sourceFiles } from './inventory'
 
-const stories = sourceFiles('workers/app/src/stories').filter((file) => file.endsWith('.stories.tsx'))
+const stories = sourceFiles('workers/web/src/app/stories').filter((file) => file.endsWith('.stories.tsx'))
 const mapping = new Map<string, string[]>()
 for (const file of stories) {
   const source = readFileSync(file, 'utf8')
@@ -53,7 +53,10 @@ const entries = inventory().flatMap(({ file, exports }) =>
         )
           for (const e of node.exportClause.elements)
             if (e.name.text === name) {
-              const target = join(dirname(file), node.moduleSpecifier.text) + '.tsx'
+              const target =
+                (node.moduleSpecifier.text.startsWith('@/')
+                  ? join('workers/web/src/app', node.moduleSpecifier.text.slice(2))
+                  : join(dirname(file), node.moduleSpecifier.text)) + '.tsx'
               ids = mapping.get(`${target}#${e.propertyName?.text ?? name}`) ?? []
               reason = `Barrel re-export; same actual component as ${target}.`
             }

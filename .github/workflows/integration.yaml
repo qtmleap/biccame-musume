@@ -97,7 +97,7 @@ jobs:
         run: bun install --frozen-lockfile --ignore-scripts
       - name: Check
         run: |
-          bun biome check workers/app/src workers/bot/src packages/shared/src __tests__
+          bun biome check workers/web/src workers/bot/src packages/shared/src __tests__
   migrations:
     name: Migrations
     runs-on: ubuntu-latest
@@ -226,27 +226,27 @@ jobs:
         uses: actions/cache@v5
         with:
           path: |
-            workers/app/public/images/characters
-            workers/app/public/images/stamps
+            workers/web/public/images/characters
+            workers/web/public/images/stamps
           key: >-
             ${{ runner.os }}-character-images-${{
               hashFiles(
                 'scripts/download-character-images.ts',
                 'scripts/stampcamera-map.ts',
-                'workers/app/public/characters.json'
+                'workers/web/public/characters.json'
               )
             }}
       - name: Cache OG images
         uses: actions/cache@v5
         with:
           path: |
-            workers/app/public/og/characters
+            workers/web/public/og/characters
           key: >-
             ${{ runner.os }}-og-${{
               hashFiles(
                 'scripts/generate-og-images.ts',
                 'scripts/stampcamera-map.ts',
-                'workers/app/public/characters.json'
+                'workers/web/public/characters.json'
               )
             }}
       - name: Install dependencies
@@ -255,17 +255,17 @@ jobs:
         run: bun run generate
       - name: Build
         run: |
-          bunx rimraf workers/app/dist
+          bunx rimraf workers/web/dist
           bun run scripts/download-character-images.ts
           bun run scripts/generate-og-images.ts
           bun tsc -b
-          CLOUDFLARE_ENV=production bun vite build --mode production
+          CLOUDFLARE_ENV=production bun run build --mode production
           CLOUDFLARE_ENV=production bun run test:app-build
           bun run check:bot-stores
           bun run test:og-render
           CLOUDFLARE_ENV=production bun run build:bot
           bun run test:bot-rpc
-          CLOUDFLARE_ENV=staging bun vite build --mode production
+          CLOUDFLARE_ENV=staging bun run build --mode production
           CLOUDFLARE_ENV=staging bun run test:app-build
           CLOUDFLARE_ENV=staging bun run build:bot
           CLOUDFLARE_ENV=staging bun run test:bot-rpc

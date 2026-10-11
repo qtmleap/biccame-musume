@@ -238,7 +238,7 @@ test('all 40 legacy store mappings match canonical public data before shared ext
         })
       })
     )
-    .safeParse(await Bun.file(new URL('../workers/app/public/characters.json', import.meta.url)).json())
+    .safeParse(await Bun.file(new URL('../workers/web/public/characters.json', import.meta.url)).json())
   if (!parsed.success) throw new Error('Invalid canonical character data')
   expect(characters).toHaveLength(40)
   for (const legacy of characters) {

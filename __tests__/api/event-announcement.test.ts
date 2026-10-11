@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, expect, mock, spyOn, test } from 'bun:test'
+import type { PrismaClient } from '@api/db/generated/prisma/client'
+import * as prismaModule from '@api/db/prisma'
+import routes from '@api/routes/event'
+import type { Bindings } from '@api/types/bindings'
 import type { BotRpc, DeliveryResult } from '@biccame/shared/bot'
-import type { PrismaClient } from '@/generated/prisma/client'
-import * as prismaModule from '@/lib/prisma'
-import { EventDetailSchema } from '@/schemas/event.dto'
-import type { Bindings } from '@/types/bindings'
-import routes from '../../workers/app/src/api/event'
+import { EventDetailSchema } from '@biccame/shared/schemas/event.dto'
 import { eventRequest, makeEventPrisma } from '../fixtures/event-announcement'
 
 const makeBot = () =>
@@ -17,6 +17,14 @@ const makeBot = () =>
     }),
     accountStatus: async () => ({ ok: false, kind: 'disabled' }),
     postingSessionStatus: async () => ({ ok: false, kind: 'disabled' }),
+    notifyEventDetection: async () => ({ status: 'failed', kind: 'configuration' }),
+    testDiscordNotification: async () => ({ status: 'failed', kind: 'configuration' }),
+    checkDiscordConnection: async () => {
+      throw new Error('Discord connection is not configured in this test')
+    },
+    discordStatus: async () => {
+      throw new Error('Discord status is not configured in this test')
+    },
     announce: mock(async (): Promise<DeliveryResult> => ({ status: 'sent', tweetId: '12345' }))
   }) satisfies BotRpc
 let prisma: ReturnType<typeof makeEventPrisma>

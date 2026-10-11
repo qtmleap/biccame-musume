@@ -20,7 +20,7 @@ TWITTER_CSRF_TOKEN=<同じセッションのct0>
 DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/<webhook-id>/<webhook-token>
 ```
 
-承認された環境から `bunx wrangler secret put DISCORD_WEBHOOK_URL --config workers/app/wrangler.toml --env production` を実行し、対話入力で登録する。Webhook URLはsecretであり、`[vars]`やコミット対象ファイルには置かない。stagingには既存Cronトリガーがない。
+承認された環境から `bunx wrangler secret put DISCORD_WEBHOOK_URL --config workers/web/wrangler.toml --env production` を実行し、対話入力で登録する。Webhook URLはsecretであり、`[vars]`やコミット対象ファイルには置かない。stagingには既存Cronトリガーがない。
 
 通知先はDiscordのHTTPS Webhookのみ（discord.com / discordapp.com）。通知はメンションを無効化し、時刻・固定の失敗種別・復旧手順だけを送る。Webhook URL、Cookie、API生レスポンス、例外文字列、予期しないアカウント名は送らない。HTTP失敗はステータスだけ、通信失敗は固定メッセージだけを記録する。
 

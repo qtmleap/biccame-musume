@@ -1,0 +1,76 @@
+import type { EventDetail, EventRequest, EventStatus } from '@biccame/shared/schemas/event.dto'
+import type { StoreKey } from '@biccame/shared/schemas/store.dto'
+import dayjs from 'dayjs'
+import { EventDetailInfo } from '@/components/events/event-detail-info'
+import { Button } from '@/components/ui/button'
+import { CONFIRMATION_LABELS } from '@/locales/app.content'
+
+type EventConfirmationProps = {
+  data: EventRequest
+  isSubmitting: boolean
+  onBack: () => void
+  onSubmit: () => void
+  mode?: 'create' | 'edit'
+}
+
+/**
+ * イベント登録内容の確認画面コンポーネント
+ */
+export const EventConfirmation = ({
+  data,
+  isSubmitting,
+  onBack,
+  onSubmit,
+  mode = 'create'
+}: EventConfirmationProps) => {
+  const submitLabel = mode === 'edit' ? '更新する' : CONFIRMATION_LABELS.register
+  const submittingLabel = mode === 'edit' ? '更新中…' : CONFIRMATION_LABELS.registering
+  // EventRequestをEventDetail型に変換
+  const event: EventDetail = {
+    uuid: data.uuid,
+    category: data.category,
+    title: data.title,
+    stores: data.stores as StoreKey[],
+    characterId: data.characterId,
+    startDate: dayjs(data.startDate).toDate(),
+    endDate: data.endDate ? dayjs(data.endDate).toDate() : undefined,
+    endedAt: data.endedAt ? dayjs(data.endedAt).toDate() : undefined,
+    limitedQuantity: data.limitedQuantity,
+    referenceUrls: data.referenceUrls,
+    comments: [],
+    conditions: data.conditions,
+    isVerified: data.isVerified,
+    isPreliminary: data.isPreliminary,
+    status: 'upcoming' as EventStatus,
+    daysUntil: dayjs(data.startDate).diff(dayjs(), 'day'),
+    interestedCount: 0,
+    completedCount: 0,
+    createdAt: dayjs().toDate(),
+    updatedAt: dayjs().toDate()
+  }
+
+  return (
+    <div className='space-y-6'>
+      {/* イベント情報 */}
+      <EventDetailInfo event={event} />
+
+      {/* 投稿通知 */}
+      {data.shouldTweet && <p className='text-base font-medium text-sky-600 text-center'>保存すると投稿されます</p>}
+
+      {/* ボタン */}
+      <div className='flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
+        <Button type='button' onClick={onBack} variant='outline' className='sm:w-32' disabled={isSubmitting}>
+          修正する
+        </Button>
+        <Button
+          type='button'
+          onClick={onSubmit}
+          className='bg-brand hover:bg-brand/90 text-brand-foreground sm:w-48'
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? submittingLabel : submitLabel}
+        </Button>
+      </div>
+    </div>
+  )
+}

@@ -11,7 +11,7 @@ import '@fontsource/m-plus-1-code/400.css'
 import '@fontsource/m-plus-1-code/500.css'
 import '@fontsource/m-plus-1-code/700.css'
 import { createRoot } from 'react-dom/client'
-import { Route } from '@/app/routes/route'
+import { Route } from '@/routes/route'
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity, retry: false } } })
 queryClient.setQueryData(

@@ -1,1 +1,1 @@
-export { default } from './workers/app/vite.config'
+export { default } from './workers/web/vite.config.ts'

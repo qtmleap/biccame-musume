@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import { BADGE_REGISTRY } from '../workers/app/src/data/badges/registry'
-import { ACTIVE_PHYSICAL_STORE_KEYS } from '../workers/app/src/data/badges/store-exclusion'
+import { BADGE_REGISTRY } from '@biccame/shared/domain/badges/registry'
+import { ACTIVE_PHYSICAL_STORE_KEYS } from '@biccame/shared/domain/badges/store-exclusion'
 
 describe('BADGE_REGISTRY size sanity', () => {
   // 以前は registry.ts の module load 時に throw していたが、

@@ -1,0 +1,64 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@plugin "@tailwindcss/typography";
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@import "@/themes/default.css";
+@import "@/themes/light.css";
+@import "@/themes/dark.css";
+
+body {
+  @apply bg-page-bg font-sans;
+}
+
+@layer utilities {
+  .border-card {
+    border-width: var(--card-border-width);
+    border-color: var(--card-border);
+  }
+}
+
+@layer utilities {
+  /* Unify outline buttons + select triggers to theme button-surface tokens.
+     Use CSS outline (drawn inside via negative offset) instead of border-color
+     so 1px frame doesn't eat into content width / overlap with neighbors.
+     Placed in `utilities` layer so it wins over Tailwind utility classes like
+     `bg-transparent` baked into the shadcn primitives. */
+  button[data-variant="outline"][data-slot],
+  [data-slot="select-trigger"],
+  [data-slot="input"] {
+    background-color: var(--button-surface);
+    color: var(--button-surface-foreground);
+    border-color: transparent;
+    outline: 1.5px solid var(--card-border);
+    outline-offset: -1.5px;
+  }
+  button[data-variant="outline"][data-slot]:hover,
+  [data-slot="select-trigger"]:hover {
+    background-color: var(--button-surface-hover);
+  }
+
+}
+
+/* date input の年月日プレースホルダがブラウザ既定で半透明になり読み辛いため、
+   テーマの色で塗り直す。@layer 外 + !important で UA 既定より優先。 */
+input[type="date"]::-webkit-datetime-edit,
+input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-year-field,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field {
+  color: var(--foreground) !important;
+  opacity: 1 !important;
+}
+
+/* Sonner toast の文字色をテーマの popover-foreground で強制する。
+   success / error などの type バリアントでも背景はそのまま、本文だけ確実に黒文字で
+   読めるようにする。ui/sonner.tsx は shadcn 生成物のため触らず、ここで上書き。 */
+[data-sonner-toast] [data-title],
+[data-sonner-toast] [data-description] {
+  color: var(--popover-foreground) !important;
+}

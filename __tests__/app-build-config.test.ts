@@ -3,10 +3,9 @@ import { existsSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { z } from 'zod'
 import { getAppDeploymentConfigPath } from '../scripts/deploy-app'
-import { appBotBinding } from '../scripts/worker-bindings'
 
 const root = resolve(import.meta.dir, '..')
-const app = resolve(root, 'workers/app')
+const app = resolve(root, 'workers/web')
 const database = z.object({
   binding: z.string().nonempty(),
   database_id: z.string().nonempty(),
@@ -16,6 +15,9 @@ const database = z.object({
 })
 const worker = z.object({
   name: z.string().nonempty(),
+  services: z.array(
+    z.object({ binding: z.string().nonempty(), service: z.string().nonempty(), entrypoint: z.string().nonempty() })
+  ),
   d1_databases: z.array(database),
   kv_namespaces: z.array(z.object({ binding: z.string().nonempty(), id: z.string().nonempty() })),
   durable_objects: z.object({
@@ -36,11 +38,43 @@ const worker = z.object({
 const sourceSchema = worker.extend({ env: z.record(z.string().nonempty(), worker) })
 const outputSchema = worker.extend({
   configPath: z.string().nonempty(),
-  userConfigPath: z.string().nonempty(),
-  // RPC buildは明示opt-in。本番切替前の既定buildにはbot依存を追加しない。
-  services: z.array(
-    z.object({ binding: z.string().nonempty(), service: z.string().nonempty(), entrypoint: z.string().nonempty() })
+  userConfigPath: z.string().nonempty()
+})
+
+test('web commands use the canonical config directly or through the root entry point', () => {
+  const schema = z.object({ scripts: z.object({ build: z.string().nonempty(), dev: z.string().nonempty() }) })
+  const manifest = schema.safeParse(JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')))
+  if (!manifest.success) throw new Error(manifest.error.message)
+  expect(manifest.data.scripts.build).toContain('--config workers/web/vite.config.ts')
+  expect(manifest.data.scripts.dev).toBe('vite --host')
+  expect(existsSync(resolve(app, 'vite.config.ts'))).toBe(true)
+  expect(readFileSync(resolve(root, 'vite.config.ts'), 'utf8').trim()).toBe(
+    "export { default } from './workers/web/vite.config.ts'"
   )
+})
+
+test('Vite configs do not create environment links or register custom environment watchers', () => {
+  for (const workspace of ['web', 'bot']) {
+    const config = readFileSync(resolve(root, `workers/${workspace}/vite.config.ts`), 'utf8')
+    for (const removed of [
+      'local-env',
+      'localEnvironment',
+      'linkLocalEnvironmentFiles',
+      'symlinkSync',
+      'root-local-vars',
+      'server.restart'
+    ]) {
+      expect(config).not.toContain(removed)
+    }
+  }
+  for (const removed of [
+    'scripts/worker-bindings.ts',
+    'workers/worker-bindings.ts',
+    'workers/web/local-env.ts',
+    'workers/web/vite-plugins/local-environment.ts'
+  ]) {
+    expect(existsSync(resolve(root, removed))).toBe(false)
+  }
 })
 
 // Fresh checkout の単体テストでは build を要求しない。CI と明示的な build 検証でのみ実行する。
@@ -58,7 +92,7 @@ test.skipIf(process.env.BICCAME_VERIFY_BUILD !== '1')(
     expect(output.data.configPath).toBe(resolve(app, 'wrangler.toml'))
     expect(output.data.userConfigPath).toBe(resolve(app, 'wrangler.toml'))
     expect(output.data.name).toBe(expected.name)
-    expect(output.data.services).toEqual([appBotBinding(environment)])
+    expect(output.data.services).toEqual(expected.services)
     expect(output.data.kv_namespaces).toEqual(expected.kv_namespaces)
     expect(output.data.durable_objects).toEqual(expected.durable_objects)
     expect(output.data.triggers.crons).toEqual(expected.triggers.crons)

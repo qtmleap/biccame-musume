@@ -27,14 +27,35 @@ export const buildBotStores = (input: unknown, selected: unknown) => {
   return output.data
 }
 
+// バッジの閉店判定も canonical JSON から生成し、shared の Vite 依存をなくす。
+const storeStatusSourceSchema = z.array(z.object({
+  id: z.string().nonempty(),
+  character: z.object({ is_biccame_musume: z.boolean().default(false) }),
+  store: z.unknown().optional()
+})).nonempty()
+
+export const buildClosedStoreKeys = (input: unknown) => {
+  const source = storeStatusSourceSchema.safeParse(input)
+  if (!source.success) throw new Error('Invalid canonical store status source')
+  return source.data
+    .filter((item) => item.character.is_biccame_musume && (item.store === undefined || item.store === null))
+    .map((item) => item.id)
+}
+
 if (import.meta.main) {
   const root = resolve(import.meta.dirname, '..')
-  const source = JSON.parse(readFileSync(resolve(root, 'workers/app/public/characters.json'), 'utf8'))
+  const source = JSON.parse(readFileSync(resolve(root, 'workers/web/public/characters.json'), 'utf8'))
   const selected = JSON.parse(readFileSync(resolve(root, 'packages/shared/data/bot-store-ids.json'), 'utf8'))
   const expected = `${JSON.stringify(buildBotStores(source, selected), null, 2)}\n`
   const output = resolve(root, 'packages/shared/src/generated/bot-stores.json')
+  const closedOutput = resolve(root, 'packages/shared/src/generated/closed-store-keys.json')
+  const closedExpected = `${JSON.stringify(buildClosedStoreKeys(source), null, 2)}\n`
   if (process.argv.includes('--check')) {
     if (readFileSync(output, 'utf8') !== expected) throw new Error('Bot store data is stale; run bun scripts/generate-bot-stores.ts')
-  } else writeFileSync(output, expected)
+    if (readFileSync(closedOutput, 'utf8') !== closedExpected) throw new Error('Closed store data is stale; run bun scripts/generate-bot-stores.ts')
+  } else {
+    writeFileSync(output, expected)
+    writeFileSync(closedOutput, closedExpected)
+  }
   console.log('Verified canonical bot store data (fixed notification coverage)')
 }

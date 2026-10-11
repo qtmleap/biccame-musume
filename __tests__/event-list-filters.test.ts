@@ -1,22 +1,22 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
+import { EventCategorySchema } from '@biccame/shared/schemas/event.dto'
+import { RegionSchema, StoreKeySchema } from '@biccame/shared/schemas/store.dto'
 import { createStore } from 'jotai'
 import { z } from 'zod'
-import { EventCategorySchema } from '../workers/app/src/schemas/event.dto'
 import {
   DEFAULT_EVENT_CATEGORY,
   DEFAULT_EVENT_LIST_FILTERS,
   DEFAULT_EVENT_STATUS,
   type EventListFilters,
   EventSearchSchema
-} from '../workers/app/src/schemas/event-search'
-import { RegionSchema, StoreKeySchema } from '../workers/app/src/schemas/store.dto'
+} from '@/schemas/event-search'
 import {
   hasEventListFilterParams,
   parseEventListFilterSearch,
   parseEventPage,
   resolveEventListFilters,
   toStoredEventListFilters
-} from '../workers/app/src/utils/event-list-filters'
+} from '@/utils/event-list-filters'
 
 // ルートが渡す search(URL の値をそのまま通したもの)から、画面が読む絞り込みの URL 値を得る。
 const parseRoute = (input: Record<string, unknown>) => {
@@ -429,7 +429,7 @@ describe('UI 編集後の保存値優先', () => {
   })
 })
 
-type AtomModule = typeof import('../workers/app/src/atoms/event-list-filters-atom')
+type AtomModule = typeof import('@/atoms/event-list-filters-atom')
 
 describe('絞り込みの永続化 atom', () => {
   const key = 'event-list-filters'
@@ -455,7 +455,7 @@ describe('絞り込みの永続化 atom', () => {
   let loads = 0
   const loadAtom = async () => {
     loads += 1
-    const loaded: AtomModule = await import(`../workers/app/src/atoms/event-list-filters-atom?load=${loads}`)
+    const loaded: AtomModule = await import(`../workers/web/src/app/atoms/event-list-filters-atom?load=${loads}`)
     return loaded.eventListFiltersAtom
   }
 

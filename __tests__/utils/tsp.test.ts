@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test'
-import * as tsp from '@/utils/tsp'
+import * as tsp from '@biccame/shared/domain/tsp'
 
 test('great_circle_distance_uses_longitude_scale', () => {
   const result = tsp.solveTsp([
