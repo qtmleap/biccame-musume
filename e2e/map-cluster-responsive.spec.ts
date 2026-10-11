@@ -244,7 +244,12 @@ for (const width of widths)
       const marker = document.querySelector('[title="東京店舗Aを選択"]')!.getBoundingClientRect()
       const header = document.querySelector('header')!.getBoundingClientRect()
       const card = document.querySelector('a[href="/characters/tokyo-a"]')!.getBoundingClientRect()
-      const controls = document.querySelector('select[aria-label="地域"]')!.closest('div')!.getBoundingClientRect()
+      const region = document.querySelector('select[aria-label="地域"]')!.getBoundingClientRect()
+      const showAll = Array.from(document.querySelectorAll('button'))
+        .find((button) => button.textContent?.trim() === '全店舗を表示')!
+        .getBoundingClientRect()
+      // 操作部は枠を持たない2つの部品なので、下端は2つのうち低い方。
+      const controls = { bottom: Math.max(region.bottom, showAll.bottom) }
       return {
         markerTop: marker.top,
         markerBottom: marker.bottom,
@@ -357,9 +362,14 @@ test('production animated Sheet updates bounds and selected camera after settlem
   await page.getByRole('button', { name: '店舗一覧', exact: true }).click()
   const selected = await settle('selected opening')
   const topPadding = await page.getByTestId('map').evaluate((element) => {
-    const controls = document.querySelector('select[aria-label="地域"]')?.closest('div')
-    if (!controls) throw new Error('Region toolbar fixture missing')
-    return controls.getBoundingClientRect().bottom - element.getBoundingClientRect().top + 24
+    const region = document.querySelector('select[aria-label="地域"]')
+    const showAll = Array.from(document.querySelectorAll('button')).find(
+      (button) => button.textContent?.trim() === '全店舗を表示'
+    )
+    if (!region || !showAll) throw new Error('Region toolbar fixture missing')
+    // 操作部は枠を持たない2つの部品なので、下端は2つのうち低い方。
+    const controlsBottom = Math.max(region.getBoundingClientRect().bottom, showAll.getBoundingClientRect().bottom)
+    return controlsBottom - element.getBoundingClientRect().top + 24
   })
   const selectedOffset = { x: 0, y: (selected.expectedBottom - topPadding) / 2 }
   await expect.poll(async () => (await geometry(page)).offset).toEqual(selectedOffset)

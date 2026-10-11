@@ -37,7 +37,12 @@ test('select_missing_coordinate_does_not_pan', async ({ page }) => {
     await page.getByRole('button', { name: '店舗一覧', exact: true }).click()
     const expectedOffset = await page.evaluate(() => {
       const box = document.querySelector('[aria-label="地図"]')!.getBoundingClientRect()
-      const controls = document.querySelector('select[aria-label="地域"]')!.closest('div')!.getBoundingClientRect()
+      const region = document.querySelector('select[aria-label="地域"]')!.getBoundingClientRect()
+      const showAll = Array.from(document.querySelectorAll('button'))
+        .find((button) => button.textContent?.trim() === '全店舗を表示')!
+        .getBoundingClientRect()
+      // 操作部は枠を持たない2つの部品なので、下端は2つのうち低い方。
+      const controls = { bottom: Math.max(region.bottom, showAll.bottom) }
       const list = document
         .querySelector('[aria-label="店舗一覧"], [data-slot="sheet-content"]')!
         .getBoundingClientRect()

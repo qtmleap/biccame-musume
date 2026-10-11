@@ -175,35 +175,32 @@ const LocationMapInner = ({
       </GoogleMap>
       <div
         ref={controlsRef}
-        className='absolute top-4 left-4 right-4 z-10 flex flex-wrap items-center gap-2 rounded-lg bg-card p-2 text-sm text-foreground shadow-lg md:right-auto'
+        className='absolute top-4 left-4 z-10 flex max-w-[calc(100%-2rem)] flex-wrap items-center gap-2'
       >
-        <label className='flex items-center gap-2'>
-          地域
-          <select
-            aria-label='地域'
-            value={region}
-            className='min-h-11 max-w-44 rounded-md border-0 bg-muted px-2 text-foreground focus-visible:outline-2 focus-visible:outline-primary'
-            onChange={(event) => {
-              const next = event.target.value
-              setRegion(next)
-              fit(next === 'all' ? characters : characters.filter((c) => c.region === next))
-            }}
-          >
-            <option value='all'>全国</option>
-            {regions.map((r) => (
-              <option
-                key={r.id}
-                value={r.id}
-                disabled={!characters.some((c) => c.region === r.id && getStorePosition(c))}
-              >
-                {r.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        <select
+          aria-label='地域'
+          value={region}
+          className='min-h-11 max-w-44 rounded-lg border-0 bg-card px-3 text-sm text-foreground shadow-lg hover:bg-muted focus-visible:outline-2 focus-visible:outline-primary'
+          onChange={(event) => {
+            const next = event.target.value
+            setRegion(next)
+            fit(next === 'all' ? characters : characters.filter((c) => c.region === next))
+          }}
+        >
+          <option value='all'>全国</option>
+          {regions.map((r) => (
+            <option
+              key={r.id}
+              value={r.id}
+              disabled={!characters.some((c) => c.region === r.id && getStorePosition(c))}
+            >
+              {r.label}
+            </option>
+          ))}
+        </select>
         <button
           type='button'
-          className='min-h-11 rounded-md bg-muted px-3 text-foreground hover:bg-muted/70 focus-visible:outline-2 focus-visible:outline-primary'
+          className='min-h-11 rounded-lg bg-card px-4 text-sm font-medium text-foreground shadow-lg hover:bg-muted focus-visible:outline-2 focus-visible:outline-primary'
           disabled={!getStoreBounds(characters)}
           onClick={() => {
             setRegion('all')
