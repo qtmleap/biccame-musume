@@ -37,6 +37,19 @@ const tweet = (id: string, createdAt = '2026-10-07T23:00:00Z') => ({
   }
 })
 const item = (result: unknown) => ({ itemContent: { itemType: 'TimelineTweet', tweet_results: { result } } })
+/**
+ * ページ先頭のツイート結果の legacy。instructions は unknown[] で組み立てているので、
+ * たどる途中の値をその都度オブジェクトであることを確かめる。
+ */
+const firstLegacy = (response: { data: { list: { tweets_timeline: { timeline: { instructions: unknown[] } } } } }) => {
+  const path = ['entries', 0, 'content', 'itemContent', 'tweet_results', 'result', 'legacy'] as const
+  const found = path.reduce<unknown>((value, key) => {
+    if (typeof value !== 'object' || value === null) throw new Error(`missing ${String(key)} in the test page`)
+    return Reflect.get(value, key)
+  }, response.data.list.tweets_timeline.timeline.instructions[0])
+  if (typeof found !== 'object' || found === null) throw new Error('legacy is not an object')
+  return found
+}
 const listInstructions = (instructions: unknown[]) => ({
   data: { list: { tweets_timeline: { timeline: { instructions } } } },
   opaque: { preserved: true }
@@ -1289,9 +1302,7 @@ const mediaWatchDeadlinePage = (
 ) => {
   const response = deadlinePage()
   const legacyErrors = response.errors
-  const legacy =
-    response.data.list.tweets_timeline.timeline.instructions[0].entries[0].content.itemContent.tweet_results.result
-      .legacy
+  const legacy = firstLegacy(response)
   for (const branch of branches) {
     const entities = Reflect.get(legacy, branch) ?? {}
     Reflect.set(entities, 'media', [{ media_results: { result: mode === 'null' ? { watch_info: null } : {} } }])
@@ -1409,9 +1420,7 @@ test('List media watch deadline recognition rejects malformed paths and mixed er
     if (invalid === 'wrong_branch') error.path[12] = '__proto__'
     if (invalid === 'urls') error.path[12] = 'urls'
     if (invalid === 'authorization') error.name = 'AuthorizationError'
-    const legacy =
-      response.data.list.tweets_timeline.timeline.instructions[0].entries[0].content.itemContent.tweet_results.result
-        .legacy
+    const legacy = firstLegacy(response)
     const media = Reflect.get(legacy, 'extended_entities').media[0].media_results
     if (invalid === 'non_null') Reflect.set(media.result, 'watch_info', {})
     if (invalid === 'missing_parent') Reflect.deleteProperty(media, 'result')
