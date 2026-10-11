@@ -48,15 +48,17 @@ const pick = <T>(value: T | undefined, fallback: T) => (value === undefined ? fa
 /**
  * URL の search 値と保存値から、実際に使う絞り込みを決める(全か無か)
  * - URL に絞り込みのパラメータが 1 つも無い: 保存値をまるごと使う
- * - 1 つでもある: 保存値は一切使わず、URL の値だけを使う。URL に無い項目は既定値にする
+ * - 未編集の入場で 1 つでもある: URL の値だけを使う。URL に無い項目は既定値にする
+ * - この入場で UI を操作済み: 元の URL に条件があっても、現在の保存値を使う
  * 未ログインでは非表示設定の画面が無いので、保存値の非表示設定は効かせない(URL の明示は効く)。
  */
 export const resolveEventListFilters = (
   search: EventListFilterSearch,
   stored: EventListFilters,
-  authenticated: boolean
+  authenticated: boolean,
+  preferStored = false
 ): EventListFilters => {
-  if (!hasEventListFilterParams(search)) {
+  if (preferStored || !hasEventListFilterParams(search)) {
     return authenticated ? stored : { ...stored, hideInterested: false, hideCompleted: false }
   }
   return {
@@ -70,20 +72,6 @@ export const resolveEventListFilters = (
     hideOldEvents: pick(search.hideOldEvents, DEFAULT_EVENT_LIST_FILTERS.hideOldEvents)
   }
 }
-
-/**
- * 絞り込みを URL に書く search 値へ変換する
- * 未ログインの間は非表示設定を書かない(書くと、ログイン後も「パラメータあり」として保存値が無視されるため)。
- * store は undefined のまま返し、遷移時に URL から消えるようにする。
- */
-export const toEventListFilterSearch = (filters: EventListFilters, authenticated: boolean) => ({
-  category: filters.category,
-  status: filters.status,
-  region: filters.region,
-  store: filters.store,
-  hideOldEvents: filters.hideOldEvents,
-  ...(authenticated ? { hideInterested: filters.hideInterested, hideCompleted: filters.hideCompleted } : {})
-})
 
 /**
  * 変更後の絞り込みから、保存する値を決める

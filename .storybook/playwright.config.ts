@@ -2,7 +2,15 @@ import { resolve } from 'node:path'
 import { defineConfig } from '@playwright/test'
 export default defineConfig({
   testDir: './tests',
-  testMatch: ['review.spec.ts', 'catalogue.spec.ts', 'catalogue-interactions.spec.ts', 'catalogue-visual.spec.ts'],
+  testMatch: [
+    'review.spec.ts',
+    'catalogue.spec.ts',
+    'catalogue-interactions.spec.ts',
+    'catalogue-visual.spec.ts',
+    'form-primitives.spec.ts',
+    'button-colors.spec.ts',
+    'button-borders.spec.ts'
+  ],
   outputDir: './.artifacts/playwright',
   timeout: 30000,
   workers: 2,

@@ -45,6 +45,21 @@
       ],
       "exportName": "Boundary768"
     },
+    "review-calendar--boundary-769": {
+      "type": "story",
+      "subtype": "story",
+      "id": "review-calendar--boundary-769",
+      "name": "Boundary 769",
+      "title": "Review/Calendar",
+      "importPath": "./workers/app/src/stories/Calendar.stories.tsx",
+      "tags": [
+        "dev",
+        "test",
+        "manifest",
+        "autodocs"
+      ],
+      "exportName": "Boundary769"
+    },
     "review-calendar--narrow-320": {
       "type": "story",
       "subtype": "story",
@@ -59,21 +74,6 @@
         "autodocs"
       ],
       "exportName": "Narrow320"
-    },
-    "review-calendar--proposed-month-labels": {
-      "type": "story",
-      "subtype": "story",
-      "id": "review-calendar--proposed-month-labels",
-      "name": "Proposed Month Labels",
-      "title": "Review/Calendar",
-      "importPath": "./workers/app/src/stories/Calendar.stories.tsx",
-      "tags": [
-        "dev",
-        "test",
-        "manifest",
-        "autodocs"
-      ],
-      "exportName": "ProposedMonthLabels"
     },
     "review-calendar--empty": {
       "type": "story",
@@ -118,21 +118,6 @@
         "autodocs"
       ],
       "exportName": "CurrentCards"
-    },
-    "review-characters--proposed-store-labels": {
-      "type": "story",
-      "subtype": "story",
-      "id": "review-characters--proposed-store-labels",
-      "name": "Proposed Store Labels",
-      "title": "Review/Characters",
-      "importPath": "./workers/app/src/stories/Characters.stories.tsx",
-      "tags": [
-        "dev",
-        "test",
-        "manifest",
-        "autodocs"
-      ],
-      "exportName": "ProposedStoreLabels"
     },
     "review-characters--current-profile": {
       "type": "story",

@@ -63,7 +63,12 @@ function RoutePreview({ initialCount = 0, guidance = true }: { initialCount?: nu
             : `あと${Math.max(0, 2 - selected.length)}店舗選択してください。`}
         </p>
       )}
-      <Button disabled={!eligible} aria-describedby={guidance ? 'route-help' : undefined} onClick={() => setDone(true)}>
+      <Button
+        className='bg-brand hover:bg-brand/90 text-brand-foreground'
+        disabled={!eligible}
+        aria-describedby={guidance ? 'route-help' : undefined}
+        onClick={() => setDone(true)}
+      >
         訪問順を計算（モック）
       </Button>
       {done && <p role='status'>モックの確認が完了しました。経路生成・AI通信は行いません。</p>}

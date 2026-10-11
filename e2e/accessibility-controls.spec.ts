@@ -10,6 +10,17 @@ test.beforeEach(async ({ page }) => {
     const url = new URL(route.request().url())
     if (url.origin !== 'http://127.0.0.1:15310') return route.abort()
     if (url.pathname === '/api/events' || url.pathname === '/api/event-groups') return route.fulfill({ json: [] })
+    if (url.pathname === '/characters.json')
+      return route.fulfill({
+        json: [
+          {
+            id: 'sapporo',
+            prefecture: '北海道',
+            character: { name: '札幌娘', description: 'fixture', images: ['fixture.png'], is_biccame_musume: true },
+            store: { name: '札幌店', access: [] }
+          }
+        ]
+      })
     if (url.pathname.startsWith('/api/')) return route.abort()
     return route.continue()
   })
@@ -88,6 +99,8 @@ test('menu_keyboard_navigation_closes_and_restores_focus', async ({ page }) => {
   await expect(trigger).toBeFocused()
 })
 test('event_controls_have_exact_action_names', async ({ page }) => {
+  // 単独実行でも初回のイベントページ変換を待てるようにする。
+  test.setTimeout(30000)
   await page.setViewportSize({ width: 375, height: 812 })
   await page.goto(`${fixture}?path=/events/`)
   const filter = page.getByRole('button', { name: 'イベントを絞り込む', exact: true })
@@ -95,16 +108,16 @@ test('event_controls_have_exact_action_names', async ({ page }) => {
   await expect(page.getByRole('dialog', { name: 'フィルター', exact: true })).toBeVisible()
   await page.keyboard.press('Escape')
   await expect(filter).toBeFocused()
-  const scheduleAction = page.getByRole('button', { name: '日程', exact: true })
-  // Static view selectors expose the current selection.
-  await expect(scheduleAction).not.toHaveAttribute('aria-pressed', 'true')
+  const scheduleAction = page.getByRole('radio', { name: '日程', exact: true })
+  // 表示方法は単一選択の状態を公開する。
+  await expect(scheduleAction).not.toHaveAttribute('aria-checked', 'true')
   await scheduleAction.click()
   await expect.poll(() => page.evaluate(() => localStorage.getItem('event-view-mode'))).toBe(JSON.stringify('gantt'))
-  const listAction = page.getByRole('button', { name: '一覧', exact: true })
-  await expect(listAction).not.toHaveAttribute('aria-pressed', 'true')
+  const listAction = page.getByRole('radio', { name: '一覧', exact: true })
+  await expect(listAction).not.toHaveAttribute('aria-checked', 'true')
   await listAction.click()
   await expect.poll(() => page.evaluate(() => localStorage.getItem('event-view-mode'))).toBe(JSON.stringify('grid'))
-  await expect(page.getByRole('button', { name: '日程', exact: true })).toBeVisible()
+  await expect(page.getByRole('radio', { name: '日程', exact: true })).toBeVisible()
 })
 
 test('mobile_region_and_month_expose_selected_state', async ({ page }) => {

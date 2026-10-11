@@ -1,60 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { atom, useAtom, useAtomValue } from 'jotai'
 import { useState } from 'react'
-import { categoryFilterAtom } from '@/atoms/category-filter-atom'
-import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventGanttChart } from '@/components/events/event-gantt-chart'
 import { EventGridItem } from '@/components/events/event-grid-item'
-import { EventStatusFilter } from '@/components/events/event-status-filter'
 import { EventListItem } from '@/components/home/event-list-item'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { events } from './fixtures'
+import { PageExample } from './PageExample'
 
-const statusAtom = atom({ upcoming: true, ongoing: true, ended: false })
-function FilterPreview() {
-  const [open, setOpen] = useState(true)
-  const [categories, setCategories] = useAtom(categoryFilterAtom)
-  const statuses = useAtomValue(statusAtom)
-  const visible = events.filter(
-    (e) => categories.has(e.category) && statuses[e.status === 'last_day' ? 'ongoing' : e.status]
-  )
-  const controls = (
-    <div className='space-y-5'>
-      <EventCategoryFilter value={categories} onChange={setCategories} />
-      <EventStatusFilter statusFilterAtom={statusAtom} />
-    </div>
-  )
-  return (
-    <section className='mx-auto max-w-5xl space-y-6'>
-      <div className='flex items-center justify-between gap-2'>
-        <h2 className='text-xl font-bold'>イベント一覧（{visible.length}件）</h2>
-        <Button variant='outline' onClick={() => setOpen(true)}>
-          条件を変更
-        </Button>
-      </div>
-      <div className='hidden md:block'>{!open && controls}</div>
-      <div className='grid gap-4 md:grid-cols-2'>
-        {visible.map((e, index) => (
-          <EventGridItem key={e.uuid} event={e} index={index} />
-        ))}
-      </div>
-      {!visible.length && <p role='status'>該当するイベントはありません。条件を変更してください。</p>}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className='max-h-[85vh] overflow-y-auto'>
-          <DialogTitle>イベントを絞り込む（改善案モック）</DialogTitle>
-          {open && controls}
-          <Button onClick={() => setOpen(false)}>{visible.length}件を表示</Button>
-        </DialogContent>
-      </Dialog>
-    </section>
-  )
-}
-function EventsPreview({
+const FilterPreview = () => (
+  <div className='-m-4 md:-m-8'>
+    <PageExample path='/events/' />
+  </div>
+)
+const EventsPreview = ({
   mode = 'grid'
 }: {
   mode?: 'grid' | 'home' | 'gantt' | 'filter' | 'empty' | 'loading' | 'error'
-}) {
+}) => {
   const [retrying, setRetrying] = useState(false)
   if (mode === 'filter') return <FilterPreview />
   if (mode === 'empty')
@@ -76,7 +38,9 @@ function EventsPreview({
     return (
       <div role='alert' className='space-y-4'>
         <p>イベントを取得できませんでした。</p>
-        <Button onClick={() => setRetrying(true)}>再試行（モック）</Button>
+        <Button className='bg-brand hover:bg-brand/90 text-brand-foreground' onClick={() => setRetrying(true)}>
+          再試行（モック）
+        </Button>
       </div>
     )
   if (mode === 'gantt') return <EventGanttChart events={events} />
@@ -100,7 +64,7 @@ const meta = {
     docs: {
       description: {
         component:
-          '#59/#60/#66。カードと日程表は実コンポーネント。フィルター完了導線と取得状態はStorybook限定モックです。'
+          'カードと日程表は実コンポーネント。ProposedFilterは現行イベントページの絞り込みを表示します。取得状態はStorybook限定モックです。'
       }
     }
   }

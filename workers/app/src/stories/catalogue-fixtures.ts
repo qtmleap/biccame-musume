@@ -4,6 +4,7 @@ import type { RouteResult } from '@/components/route/types'
 import { BadgeSchema } from '@/schemas/badge.dto'
 import { CommentResponseSchema } from '@/schemas/comment.dto'
 import { EventGroupDetailSchema } from '@/schemas/event-group.dto'
+import { filterMonthEvents } from '@/utils/calendar'
 import * as reviewFixtures from './fixtures'
 
 const { character, longNameCharacter } = reviewFixtures
@@ -32,7 +33,8 @@ export const characters = [
     ...c.store,
     address: '大阪府大阪市阿倍野区（Storybook合成住所）',
     phone: '06-0000-0000',
-    birthday: '2011-04-26',
+    // カレンダーで店舗周年とキャラクター誕生日を同日に確認するための合成日付。
+    birthday: index === 0 ? '2011-10-02' : '2011-04-26',
     store_id: 1,
     hours: [{ type: 'all' as const, open_time: '10:00', close_time: '21:00' }],
     access: [{ station: '天王寺駅', lines: ['JR線'], description: '徒歩3分' }]
@@ -124,8 +126,5 @@ export const routeResult = {
     }
   ]
 } satisfies RouteResult
-export const calendarEvents = [
-  { date: '2026-10-02', character: characters[2], type: 'character' as const, years: 10 },
-  { date: '2026-10-02', character: characters[0], type: 'store' as const, years: 15 }
-]
+export const calendarEvents = filterMonthEvents(characters, 10, 2026)
 export const date = dayjs('2026-10-02')

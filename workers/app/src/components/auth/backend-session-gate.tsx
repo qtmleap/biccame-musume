@@ -25,7 +25,9 @@ export const BackendSessionGate = ({ children }: BackendSessionGateProps) => {
     return (
       <div role='alert' className='mx-auto max-w-6xl p-4 space-y-3'>
         <p>{backendSessionState.message}</p>
-        <Button onClick={() => void retryBackendSession()}>再試行</Button>
+        <Button className='bg-brand hover:bg-brand/90 text-brand-foreground' onClick={() => void retryBackendSession()}>
+          再試行
+        </Button>
       </div>
     )
   }

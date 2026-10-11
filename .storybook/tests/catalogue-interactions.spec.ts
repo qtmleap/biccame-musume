@@ -101,7 +101,7 @@ test('interaction: production route computes two selected stores through only th
   await add.click()
   await page.getByRole('option', { name: 'あべのたん', exact: true }).click()
   await add.click()
-  await page.getByRole('option', { name: 'たかつきたん（高槻阪急スクエア店）', exact: true }).click()
+  await page.getByRole('option', { name: 'たかつきたん', exact: true }).click()
   const calculate = page.getByRole('button', { name: /ルート.*計算|訪問.*計算|最短ルート/ })
   await calculate.click()
   await expect

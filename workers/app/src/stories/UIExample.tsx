@@ -28,6 +28,7 @@ import * as Tabs from '@/components/ui/tabs'
 import * as Textarea from '@/components/ui/textarea'
 import * as Toggle from '@/components/ui/toggle'
 import * as Tooltip from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
 import { character } from './fixtures'
 export const UIExample = ({ family, disabled = false }: { family: string; disabled?: boolean }) => {
   const [message, setMessage] = useState('')
@@ -35,7 +36,14 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
   const [selected, setSelected] = useState('abeno')
   const [progress, setProgress] = useState(45)
   const [page, setPage] = useState(1)
-  const form = useForm({ defaultValues: { name: '' } })
+  const form = useForm({
+    defaultValues: {
+      name: '',
+      search: '',
+      storeName: 'あべの店',
+      description: '店舗の周年イベントを確認できます。'
+    }
+  })
   const action = () => setMessage('操作を確認しました')
   useEffect(() => {
     if (family === 'sonner') toast.success('Storybookの通知', { id: 'catalogue-toast' })
@@ -71,7 +79,7 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
         return (
           <AlertDialog.AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialog.AlertDialogTrigger asChild>
-              <Button.Button>削除を確認</Button.Button>
+              <Button.Button className='bg-brand hover:bg-brand/90 text-brand-foreground'>削除を確認</Button.Button>
             </AlertDialog.AlertDialogTrigger>
             <AlertDialog.AlertDialogContent>
               <AlertDialog.AlertDialogHeader>
@@ -85,7 +93,12 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
               </AlertDialog.AlertDialogHeader>
               <AlertDialog.AlertDialogFooter>
                 <AlertDialog.AlertDialogCancel>キャンセル</AlertDialog.AlertDialogCancel>
-                <AlertDialog.AlertDialogAction onClick={action}>確認</AlertDialog.AlertDialogAction>
+                <AlertDialog.AlertDialogAction
+                  className='bg-brand! hover:bg-brand/90! text-brand-foreground!'
+                  onClick={action}
+                >
+                  確認
+                </AlertDialog.AlertDialogAction>
               </AlertDialog.AlertDialogFooter>
             </AlertDialog.AlertDialogContent>
           </AlertDialog.AlertDialog>
@@ -135,7 +148,13 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
         return (
           <div className='flex gap-3 flex-wrap'>
             {(['default', 'secondary', 'outline', 'ghost', 'destructive', 'link'] as const).map((variant) => (
-              <Button.Button key={variant} variant={variant} disabled={disabled} onClick={action}>
+              <Button.Button
+                key={variant}
+                variant={variant}
+                className={cn(variant === 'default' && 'bg-brand hover:bg-brand/90 text-brand-foreground')}
+                disabled={disabled}
+                onClick={action}
+              >
                 {variant}
               </Button.Button>
             ))}
@@ -185,7 +204,7 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
         return (
           <Dialog.Dialog open={open} onOpenChange={setOpen}>
             <Dialog.DialogTrigger asChild>
-              <Button.Button>詳細を開く</Button.Button>
+              <Button.Button className='bg-brand hover:bg-brand/90 text-brand-foreground'>詳細を開く</Button.Button>
             </Dialog.DialogTrigger>
             <Dialog.DialogContent>
               <Dialog.DialogHeader>
@@ -195,7 +214,7 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
               <p>あべのたん / あべのキューズモール店</p>
               <Dialog.DialogFooter>
                 <Dialog.DialogClose asChild>
-                  <Button.Button>閉じる</Button.Button>
+                  <Button.Button variant='outline'>閉じる</Button.Button>
                 </Dialog.DialogClose>
               </Dialog.DialogFooter>
             </Dialog.DialogContent>
@@ -205,7 +224,7 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
         return (
           <Drawer.Drawer open={open} onOpenChange={setOpen}>
             <Drawer.DrawerTrigger asChild>
-              <Button.Button>記念日を開く</Button.Button>
+              <Button.Button className='bg-brand hover:bg-brand/90 text-brand-foreground'>記念日を開く</Button.Button>
             </Drawer.DrawerTrigger>
             <Drawer.DrawerContent>
               <Drawer.DrawerHeader>
@@ -215,7 +234,7 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
               <p className='p-4'>きょうとたんのお誕生日</p>
               <Drawer.DrawerFooter>
                 <Drawer.DrawerClose asChild>
-                  <Button.Button>閉じる</Button.Button>
+                  <Button.Button variant='outline'>閉じる</Button.Button>
                 </Drawer.DrawerClose>
               </Drawer.DrawerFooter>
             </Drawer.DrawerContent>
@@ -240,7 +259,7 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
                   </Form.FormItem>
                 )}
               />
-              <Button.Button type='submit' className='mt-4'>
+              <Button.Button type='submit' className='mt-4 bg-brand hover:bg-brand/90 text-brand-foreground'>
                 確認
               </Button.Button>
             </form>
@@ -248,22 +267,45 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
         )
       case 'input':
         return (
-          <div>
-            <Label.Label htmlFor='search'>キャラクター検索</Label.Label>
-            <Input.Input
-              id='search'
-              placeholder='名前を入力'
-              disabled={disabled}
-              onChange={(e) => setMessage(e.target.value)}
+          <Form.Form {...form}>
+            <Form.FormField
+              control={form.control}
+              name='search'
+              render={({ field }) => (
+                <Form.FormItem>
+                  <Form.FormLabel>キャラクター検索</Form.FormLabel>
+                  <Form.FormControl>
+                    <Input.Input
+                      {...field}
+                      placeholder='名前を入力'
+                      disabled={disabled}
+                      onChange={(e) => {
+                        field.onChange(e)
+                        setMessage(e.target.value)
+                      }}
+                    />
+                  </Form.FormControl>
+                </Form.FormItem>
+              )}
             />
-          </div>
+          </Form.Form>
         )
       case 'label':
         return (
-          <div>
-            <Label.Label htmlFor='label-input'>店舗名</Label.Label>
-            <Input.Input id='label-input' defaultValue='あべの店' />
-          </div>
+          <Form.Form {...form}>
+            <Form.FormField
+              control={form.control}
+              name='storeName'
+              render={({ field }) => (
+                <Form.FormItem>
+                  <Form.FormLabel>店舗名</Form.FormLabel>
+                  <Form.FormControl>
+                    <Input.Input {...field} />
+                  </Form.FormControl>
+                </Form.FormItem>
+              )}
+            />
+          </Form.Form>
         )
       case 'pagination':
         return (
@@ -314,7 +356,7 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
               <span>検索条件</span>
             </Popover.PopoverAnchor>
             <Popover.PopoverTrigger asChild>
-              <Button.Button>条件を開く</Button.Button>
+              <Button.Button className='bg-brand hover:bg-brand/90 text-brand-foreground'>条件を開く</Button.Button>
             </Popover.PopoverTrigger>
             <Popover.PopoverContent>
               <Popover.PopoverHeader>
@@ -330,7 +372,10 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
         return (
           <div>
             <Progress.Progress value={progress} />
-            <Button.Button className='mt-4' onClick={() => setProgress((p) => Math.min(100, p + 10))}>
+            <Button.Button
+              className='mt-4 bg-brand hover:bg-brand/90 text-brand-foreground'
+              onClick={() => setProgress((p) => Math.min(100, p + 10))}
+            >
               進捗を増やす
             </Button.Button>
             <p>{progress}%</p>
@@ -378,7 +423,7 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
         return (
           <Sheet.Sheet open={open} onOpenChange={setOpen}>
             <Sheet.SheetTrigger asChild>
-              <Button.Button>条件を開く</Button.Button>
+              <Button.Button className='bg-brand hover:bg-brand/90 text-brand-foreground'>条件を開く</Button.Button>
             </Sheet.SheetTrigger>
             <Sheet.SheetContent>
               <Sheet.SheetHeader>
@@ -391,7 +436,7 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
               </div>
               <Sheet.SheetFooter>
                 <Sheet.SheetClose asChild>
-                  <Button.Button>条件を反映</Button.Button>
+                  <Button.Button className='bg-brand hover:bg-brand/90 text-brand-foreground'>条件を反映</Button.Button>
                 </Sheet.SheetClose>
               </Sheet.SheetFooter>
             </Sheet.SheetContent>
@@ -410,7 +455,10 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
       case 'sonner':
         return (
           <>
-            <Button.Button onClick={() => toast.success('Storybookの通知', { id: 'catalogue-toast' })}>
+            <Button.Button
+              className='bg-brand hover:bg-brand/90 text-brand-foreground'
+              onClick={() => toast.success('Storybookの通知', { id: 'catalogue-toast' })}
+            >
               通知を表示
             </Button.Button>
             <Sonner.Toaster />
@@ -429,15 +477,27 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
         )
       case 'textarea':
         return (
-          <div>
-            <Label.Label htmlFor='description'>イベント紹介</Label.Label>
-            <Textarea.Textarea
-              id='description'
-              defaultValue='店舗の周年イベントを確認できます。'
-              disabled={disabled}
-              onChange={(e) => setMessage(e.target.value)}
+          <Form.Form {...form}>
+            <Form.FormField
+              control={form.control}
+              name='description'
+              render={({ field }) => (
+                <Form.FormItem>
+                  <Form.FormLabel>イベント紹介</Form.FormLabel>
+                  <Form.FormControl>
+                    <Textarea.Textarea
+                      {...field}
+                      disabled={disabled}
+                      onChange={(e) => {
+                        field.onChange(e)
+                        setMessage(e.target.value)
+                      }}
+                    />
+                  </Form.FormControl>
+                </Form.FormItem>
+              )}
             />
-          </div>
+          </Form.Form>
         )
       case 'toggle':
         return (
@@ -450,7 +510,7 @@ export const UIExample = ({ family, disabled = false }: { family: string; disabl
           <Tooltip.TooltipProvider>
             <Tooltip.Tooltip defaultOpen>
               <Tooltip.TooltipTrigger asChild>
-                <Button.Button>応援</Button.Button>
+                <Button.Button className='bg-brand hover:bg-brand/90 text-brand-foreground'>応援</Button.Button>
               </Tooltip.TooltipTrigger>
               <Tooltip.TooltipContent>今日の応援を送る</Tooltip.TooltipContent>
             </Tooltip.Tooltip>
