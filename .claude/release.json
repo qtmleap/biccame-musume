@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "version": {
+    "source": "package.json",
+    "derivedFiles": [],
+    "bumpCommand": null
+  },
+  "branches": {
+    "source": "develop",
+    "target": "master"
+  },
+  "pullRequest": {
+    "titleTemplate": "release: v{version}",
+    "mergeMethod": "merge"
+  },
+  "tag": {
+    "template": "v{version}",
+    "annotated": true
+  },
+  "checks": {
+    "required": [
+      "CommitLint",
+      "Code Check",
+      "Migrations",
+      "Test",
+      "Compile TypeScript",
+      "Vite Build (production)",
+      "Local UI and authentication regression"
+    ]
+  },
+  "workflows": {
+    "releaseFiles": [
+      ".github/workflows/backmerge.yaml",
+      ".github/workflows/deployment.yaml",
+      ".github/workflows/integration.yaml"
+    ],
+    "triggerFingerprint": "sha256:5ed97337e9deb523b515afcf7ca0eeadd4ec6565744e62d91550ffb1ec39fcb3"
+  },
+  "notes": {
+    "mode": "none",
+    "file": null
+  },
+  "artifacts": {
+    "buildCommands": [],
+    "paths": []
+  }
+}
