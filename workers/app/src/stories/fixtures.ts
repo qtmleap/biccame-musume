@@ -25,7 +25,7 @@ export const character = {
 export const longNameCharacter = {
   ...character,
   id: 'takatsuki',
-  character: { ...character.character, name: 'たかつきたん（高槻阪急スクエア店）' },
+  character: { ...character.character, name: 'たかつきたん' },
   store: { ...character.store, name: 'ビックカメラ高槻阪急スクエア店', access: [] }
 }
 
@@ -78,8 +78,4 @@ export const events: Event[] = [
     daysUntil: 0,
     endDate: dayjs('2026-10-02T23:59:59+09:00').toDate()
   }
-]
-export const calendarEvents = [
-  { date: '2026-10-05', character, type: 'character' as const, years: 10 },
-  { date: '2026-10-05', character: longNameCharacter, type: 'store' as const, years: 3 }
 ]

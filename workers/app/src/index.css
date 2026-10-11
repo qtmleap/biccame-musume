@@ -27,7 +27,7 @@ body {
      so 1px frame doesn't eat into content width / overlap with neighbors.
      Placed in `utilities` layer so it wins over Tailwind utility classes like
      `bg-transparent` baked into the shadcn primitives. */
-  [data-slot="button"][data-variant="outline"],
+  button[data-variant="outline"][data-slot],
   [data-slot="select-trigger"],
   [data-slot="input"] {
     background-color: var(--button-surface);
@@ -36,7 +36,7 @@ body {
     outline: 1.5px solid var(--card-border);
     outline-offset: -1.5px;
   }
-  [data-slot="button"][data-variant="outline"]:hover,
+  button[data-variant="outline"][data-slot]:hover,
   [data-slot="select-trigger"]:hover {
     background-color: var(--button-surface-hover);
   }

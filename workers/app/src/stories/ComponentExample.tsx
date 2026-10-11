@@ -380,12 +380,15 @@ export const ComponentExample = ({
         data-production-export={`${source}#${exportName}`}
       >
         {exportName === 'UpdatePrompt' && (
-          <Button className='mb-4' onClick={() => showUpdatePrompt()}>
+          <Button className='mb-4 bg-brand hover:bg-brand/90 text-brand-foreground' onClick={() => showUpdatePrompt()}>
             更新通知を表示
           </Button>
         )}
         {animation && (
-          <Button className='mb-8' onClick={() => setTrigger((n) => n + 1)}>
+          <Button
+            className='mb-8 bg-brand hover:bg-brand/90 text-brand-foreground'
+            onClick={() => setTrigger((n) => n + 1)}
+          >
             アニメーションを再生
           </Button>
         )}

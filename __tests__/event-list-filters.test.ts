@@ -15,7 +15,6 @@ import {
   parseEventListFilterSearch,
   parseEventPage,
   resolveEventListFilters,
-  toEventListFilterSearch,
   toStoredEventListFilters
 } from '../workers/app/src/utils/event-list-filters'
 
@@ -383,24 +382,40 @@ describe('URL と保存値の合成(全か無か)', () => {
   })
 })
 
-describe('URL への書き込みと保存', () => {
-  test('ログイン後は非表示設定も含めて全項目を書く。store が無ければ書かない', () => {
-    expect(toEventListFilterSearch({ ...stored, store: undefined }, true)).toEqual({
-      category: 'ackey',
-      status: 'ended',
-      region: 'kyushu',
-      store: undefined,
-      hideOldEvents: false,
-      hideInterested: true,
-      hideCompleted: true
+describe('UI 編集後の保存値優先', () => {
+  test('未編集のパラメータ付き入場では URL を優先し、編集後は保存値を優先する', () => {
+    const search = parseSearch({ category: 'other', region: 'kanto', page: 3 })
+    expect(resolveEventListFilters(search, stored, true).category).toBe('other')
+    expect(resolveEventListFilters(search, stored, true, true)).toEqual(stored)
+  })
+
+  test('編集済みでも次のパラメータ付き入場は URL の条件を改めて読む', () => {
+    const search = parseSearch({ category: 'other' })
+    expect(resolveEventListFilters(search, stored, true, true)).toEqual(stored)
+    expect(resolveEventListFilters(search, stored, true, false)).toEqual({
+      ...DEFAULT_EVENT_LIST_FILTERS,
+      category: 'other'
     })
   })
 
-  test('未ログインの間は非表示設定を書かない', () => {
-    const search = toEventListFilterSearch(stored, false)
-    expect(Reflect.has(search, 'hideInterested')).toBe(false)
-    expect(Reflect.has(search, 'hideCompleted')).toBe(false)
-    expect(search).toMatchObject({ category: 'ackey', region: 'kyushu', store: 'sapporo' })
+  test('パラメータなしの入場は常にその時点の保存値を使う', () => {
+    const next = { ...stored, category: 'other' }
+    expect(resolveEventListFilters(parseSearch({}), stored, true)).toEqual(stored)
+    expect(resolveEventListFilters(parseSearch({}), next, true)).toEqual(next)
+  })
+
+  test('編集済みの URL が古い条件を含んでもクリア後の既定値が優先される', () => {
+    const search = parseSearch({ category: '', status: '', region: 'kanto', store: 'sapporo' })
+    expect(resolveEventListFilters(search, DEFAULT_EVENT_LIST_FILTERS, true, true)).toEqual(DEFAULT_EVENT_LIST_FILTERS)
+  })
+
+  test('編集済みでも保存済みの非表示設定は未ログインで適用しない', () => {
+    const search = parseSearch({ hideInterested: true })
+    expect(resolveEventListFilters(search, stored, false, true)).toEqual({
+      ...stored,
+      hideInterested: false,
+      hideCompleted: false
+    })
   })
 
   test('未ログインで変更しても、保存済みの非表示設定は残す', () => {
