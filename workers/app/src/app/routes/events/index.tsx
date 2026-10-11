@@ -35,9 +35,9 @@ import {
 import { StoreKeySchema } from '@/schemas/store.dto'
 import { client } from '@/utils/client'
 import {
-  hasEventListFilterParams,
+  parseEventListFilterSearch,
+  parseEventPage,
   resolveEventListFilters,
-  shouldNormalizeEventListSearch,
   toEventListFilterSearch,
   toStoredEventListFilters
 } from '@/utils/event-list-filters'
@@ -84,11 +84,13 @@ const EventsContent = () => {
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
   // 絞り込みは「URL に絞り込みのパラメータが 1 つでもあれば URL の値だけ、無ければ保存値をまるごと」使う。
   // 未ログインでは非表示設定を出さないので、保存値の非表示設定も効かせない。
+  // 開いただけでは URL を書き換えない(使っている絞り込みを URL に書くのは、ユーザーが絞り込みを操作したときだけ)。
   const [storedFilters, setStoredFilters] = useAtom(eventListFiltersAtom)
   const { isAuthenticated } = useAuth()
+  const urlFilters = useMemo(() => parseEventListFilterSearch(search), [search])
   const filters = useMemo(
-    () => resolveEventListFilters(search, storedFilters, isAuthenticated),
-    [search, storedFilters, isAuthenticated]
+    () => resolveEventListFilters(urlFilters, storedFilters, isAuthenticated),
+    [urlFilters, storedFilters, isAuthenticated]
   )
   const categoryFilter = useMemo(
     () => new Set(EventCategorySchema.options.filter((category) => filters.category.split(',').includes(category))),
@@ -109,7 +111,8 @@ const EventsContent = () => {
   )
   const storeFilter = filters.store === undefined ? null : filters.store
   const hideOldEvents = filters.hideOldEvents
-  const page = search.page
+  // URL の page は省略も不正な値も 1 として読み、書き戻さない。
+  const page = parseEventPage(search.page)
 
   // 変更後の絞り込み全体を保存と URL の両方へ反映する(次回の復元と URL 共有のため)。
   // URL に一部だけ書くと、書かれなかった項目が既定へ戻ってしまうので、常に全項目を書く。ページは 1 に戻す。
@@ -148,17 +151,6 @@ const EventsContent = () => {
     setStoredFilters(DEFAULT_EVENT_LIST_FILTERS)
     navigate({ search: (prev) => ({ ...prev, ...toEventListFilterSearch(DEFAULT_EVENT_LIST_FILTERS, true), page: 1 }) })
   }
-  // URL に絞り込みが無いまま開かれたら、実際に使っている絞り込み(保存値または既定)を URL に書き込む。
-  // 共有した URL が見えている絞り込みを再現できるようにするため。履歴は増やさない。
-  const shouldNormalize = shouldNormalizeEventListSearch(search, storedFilters, isAuthenticated)
-  useEffect(() => {
-    if (!shouldNormalize) return
-    navigate({
-      search: (prev) =>
-        hasEventListFilterParams(prev) ? prev : { ...prev, ...toEventListFilterSearch(filters, isAuthenticated) },
-      replace: true
-    })
-  }, [shouldNormalize, filters, isAuthenticated, navigate])
   const { interestedEvents, completedEvents } = useUserActivity()
   // 店舗キー(id)から都道府県を取得するマップ
   const storePrefectureMap = useMemo(() => {
@@ -245,13 +237,19 @@ const EventsContent = () => {
     .join(' / ')
 
   const totalPages = Math.max(1, Math.ceil(activeEvents.length / PER_PAGE))
-  const effectivePage = Math.min(Math.max(1, page), totalPages)
+  const effectivePage = page === undefined ? 1 : Math.min(page, totalPages)
   useEffect(() => {
-    // 再取得で件数だけが減った場合は、現在ページを最後の有効ページへ補正する。
-    if (page !== effectivePage) {
-      navigate({ search: (prev) => ({ ...prev, page: Math.min(prev.page, totalPages) }), replace: true })
-    }
-  }, [page, effectivePage, totalPages, navigate])
+    // 再取得で件数だけが減った場合は、URL に明示された page を最後の有効ページへ補正する。
+    // page が無い・不正な URL は 1 として表示するだけで、何も書かない。
+    if (page === undefined || page <= totalPages) return
+    navigate({
+      search: (prev) => {
+        const current = parseEventPage(prev.page)
+        return current === undefined ? prev : { ...prev, page: Math.min(current, totalPages) }
+      },
+      replace: true
+    })
+  }, [page, totalPages, navigate])
 
   return (
     <div className='mx-auto px-4 py-2 md:py-4 md:px-8 max-w-6xl text-foreground'>

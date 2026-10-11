@@ -1,5 +1,6 @@
 import { expect, test } from 'bun:test'
 import { EventSearchSchema } from '../workers/app/src/schemas/event-search'
+import { parseEventListFilterSearch } from '../workers/app/src/utils/event-list-filters'
 import * as eventStatus from '../workers/app/src/utils/event-status'
 
 test('old events are hidden by default, while an explicit opt-out survives URL parsing', () => {
@@ -11,7 +12,7 @@ test('old events are hidden by default, while an explicit opt-out survives URL p
   ] as const) {
     const result = EventSearchSchema.safeParse(input)
     expect(result.success).toBe(true)
-    if (result.success) expect(result.data.hideOldEvents).toBe(expected)
+    if (result.success) expect(parseEventListFilterSearch(result.data).hideOldEvents).toBe(expected)
   }
 })
 
