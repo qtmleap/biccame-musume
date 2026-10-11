@@ -11,12 +11,12 @@ import {
 import { Provider } from 'jotai'
 import { Suspense, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Route as NewEventRoute } from '@/app/routes/admin/events/new/index'
-import { Route as EventsRoute } from '@/app/routes/events/index'
+import { Route as NewEventRoute } from '@/routes/admin/events/new/index'
+import { Route as EventsRoute } from '@/routes/events/index'
 import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { useEvent, useEventOrNull } from '@/hooks/use-events'
-import type { Event } from '@/schemas/event.dto'
+import type { Event } from '@biccame/shared/schemas/event.dto'
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
 const PageState = () => <output aria-label='所有ページ'>{String(useSearch({ strict: false }).page ?? 1)}</output>

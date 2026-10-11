@@ -192,7 +192,7 @@ const paths = {
   gold: resolve(dir, 'gold.json'),
   meta: resolve(dir, 'meta.json'),
   labels: resolve(dir, 'labels.json'),
-  characters: resolve(root, 'workers/app/public/characters.json')
+  characters: resolve(root, 'workers/web/public/characters.json')
 }
 
 const prepare = async () => {

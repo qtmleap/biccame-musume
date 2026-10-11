@@ -11,7 +11,7 @@ import { loadExistingCache } from './parse_store_info/existing-cache'
 import { validateOutputJson, writeStoresJson } from './parse_store_info/output'
 
 const CACHE_DIR = join(import.meta.dir, '../archive/html_cache')
-const OUTPUT_FILE = join(import.meta.dir, '../../workers/app/public/characters.json')
+const OUTPUT_FILE = join(import.meta.dir, '../../workers/web/public/characters.json')
 
 /**
  * メイン処理

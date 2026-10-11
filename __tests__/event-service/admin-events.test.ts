@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, describe, expect, mock, spyOn, test } from 'bun:test'
-import type { PrismaClient } from '@/generated/prisma/client'
-import * as prismaModule from '@/lib/prisma'
-import { EVENT_LIST_SELECT, getAdminEvents, getEvents } from '@/services/event-service'
-import type { Bindings } from '@/types/bindings'
+import type { PrismaClient } from '@api/db/generated/prisma/client'
+import * as prismaModule from '@api/db/prisma'
+import { EVENT_LIST_SELECT, getAdminEvents, getAdminWebhookEvents, getEvents } from '@api/services/event-service'
+import type { Bindings } from '@api/types/bindings'
+import dayjs from 'dayjs'
 import { eventRow } from '../fixtures/event-announcement'
 
 const env = {} as Bindings
@@ -16,10 +17,10 @@ const unverifiedRow = {
 }
 const rows = [verifiedRow, unverifiedRow]
 
-// where.isVerified だけを解釈する findMany。 渡された引数は呼び出し履歴に残る。
+// 確認状態で絞り込み、渡された引数は呼び出し履歴に残す。
 const makeListPrisma = () => ({
   event: {
-    findMany: mock(async (args: { where?: { isVerified?: boolean } }) =>
+    findMany: mock(async (args: { where?: { isVerified?: boolean; id?: { in: string[] } } }) =>
       rows.filter((row) => args.where?.isVerified === undefined || row.isVerified === args.where.isVerified)
     )
   }
@@ -48,6 +49,25 @@ describe('イベント一覧 — 確認状態', () => {
     expect(events.filter((e) => !e.isVerified).map((e) => e.uuid)).toEqual([unverifiedRow.id])
     expect(prisma.event.findMany).toHaveBeenCalledTimes(1)
     expect(prisma.event.findMany.mock.calls[0]?.[0]?.where).toBeUndefined()
+  })
+
+  test('Webhook由来IDだけをD1のバインド上限以内で取得し開始日降順に統合する', async () => {
+    const registered = Array.from({ length: 129 }, (_, index) => ({
+      ...verifiedRow,
+      id: crypto.randomUUID(),
+      startDate: dayjs('2026-01-01').add(index, 'day').toDate()
+    }))
+    prisma.event.findMany.mockImplementation(async (args) =>
+      registered.filter((row) => args.where?.id?.in.includes(row.id))
+    )
+    const bindings = Object.assign(env, {
+      DB: { prepare: () => ({ all: async () => ({ results: registered.map((row) => ({ id: row.id })) }) }) }
+    })
+    const events = await getAdminWebhookEvents(bindings)
+    expect(events).toHaveLength(129)
+    expect(prisma.event.findMany).toHaveBeenCalledTimes(3)
+    expect(prisma.event.findMany.mock.calls.map(([args]) => args.where?.id?.in.length)).toEqual([50, 50, 29])
+    expect(events.map((event) => event.uuid)).toEqual(registered.toReversed().map((row) => row.id))
   })
 
   test('どちらも同じ select と開始日降順で取得する', async () => {

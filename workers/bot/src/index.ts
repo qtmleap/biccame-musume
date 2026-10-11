@@ -6,14 +6,31 @@ import type {
   BotPingResponse,
   BotRpc,
   DeliveryResult,
+  DiscordDeliveryResult,
+  DiscordStatus,
+  DiscordTestRequest,
+  EventDetectionNotification,
   PostingSessionResult
 } from '@biccame/shared/bot'
+import { checkDiscordConnection, discordStatus, notifyEventDetection, testDiscordNotification } from './discord'
 import { postAnnouncement, readBotAccount, verifyPostingSession } from './posting'
 import { createPostingTransport } from './posting-transport'
 import { type BotBindings, handleBotScheduled } from './scheduled'
 import { pingBot } from './service'
 
 export class BotService extends WorkerEntrypoint<BotBindings> implements BotRpc {
+  async notifyEventDetection(input: EventDetectionNotification): Promise<DiscordDeliveryResult> {
+    return notifyEventDetection(this.env, input)
+  }
+  async discordStatus(): Promise<DiscordStatus> {
+    return discordStatus(this.env)
+  }
+  async checkDiscordConnection(): Promise<DiscordStatus> {
+    return checkDiscordConnection(this.env)
+  }
+  async testDiscordNotification(input: DiscordTestRequest): Promise<DiscordDeliveryResult> {
+    return testDiscordNotification(this.env, input)
+  }
   async ping(input: BotPingRequest): Promise<BotPingResponse> {
     return pingBot(input, this.env.TL_NOTIFICATIONS_ENABLED === 'true' || this.env.X_POSTING_ENABLED === 'true')
   }

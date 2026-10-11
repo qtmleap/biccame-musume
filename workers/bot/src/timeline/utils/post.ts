@@ -2,6 +2,7 @@ import type { Dayjs } from 'dayjs'
 import { uniqBy } from 'lodash-es'
 import { v5 as uuidv5 } from 'uuid'
 import { z } from 'zod'
+import { postDiscordMessage } from '../../discord'
 import { Client } from '../client'
 import { characters } from '../data/characters'
 import type { Post, TweetResultsResult } from '../schemas/response.dto'
@@ -163,16 +164,8 @@ export const buildCandidatePayload = (
 
 export const sendCandidate = async (env: Bindings, payload: DiscordWebhookPayload): Promise<void> => {
   if (!env.DISCORD_TOKEN?.trim() || !/^\d+$/.test(env.DISCORD_CHANNEL_ID)) throw new TimelineFailure('configuration')
-  let response: Response
-  try {
-    response = await fetch(`https://discord.com/api/v10/channels/${env.DISCORD_CHANNEL_ID}/messages`, {
-      method: 'POST',
-      redirect: 'manual',
-      signal: AbortSignal.timeout(15000),
-      headers: { 'Content-Type': 'application/json', Authorization: `Bot ${env.DISCORD_TOKEN}` },
-      body: JSON.stringify(payload)
-    })
-  } catch {
+  const response = await postDiscordMessage(env, payload)
+  if (!response) {
     // 受理後の応答喪失も含むため、無条件に再送しない。
     throw new TimelineFailure('delivery_unknown')
   }

@@ -3,7 +3,7 @@ import { createMemoryHistory, createRootRoute, createRoute, createRouter, Router
 import { Provider } from 'jotai'
 import { MotionConfig } from 'motion/react'
 import { createRoot } from 'react-dom/client'
-import { Route } from '@/app/routes/characters/index'
+import { Route } from '@/routes/characters/index'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import '@/index.css'
 import '@fontsource/noto-sans-jp/400.css'

@@ -32,7 +32,7 @@ if (import.meta.main) {
   const archive = resolve(sourceRoot, 'source.tar')
   await run(['git', 'archive', '--format=tar', `--output=${archive}`, revision,
     'package.json', 'bun.lock', '.npmrc', 'tsconfig.json', 'patches',
-    'workers/bot', 'packages/shared', 'workers/app/package.json', 'workers/app/wrangler.toml',
+    'workers/bot', 'packages/shared', 'workers/web/package.json', 'workers/web/wrangler.toml',
     'bunfig.toml', '__tests__/setup.ts', '__tests__/bot-worker.test.ts', '__tests__/bot-timeline.test.ts',
     'scripts/virtual-characters-plugin.ts', 'scripts/deploy-bot.ts', 'scripts/test-bot-rpc.ts'])
   await run(['tar', '-xf', archive, '-C', sourceRoot])

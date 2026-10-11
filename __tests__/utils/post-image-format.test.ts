@@ -11,7 +11,7 @@ import {
   splitTitle,
   takeRows,
   untilLabel
-} from '../../workers/app/src/images/format'
+} from '@/images/format'
 
 const jst = (day: string) => dayjs(`${day}T00:00:00+09:00`).toDate()
 

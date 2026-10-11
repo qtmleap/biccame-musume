@@ -1,7 +1,7 @@
 import { expect, test } from 'bun:test'
+import routes from '@api/routes/admin-twitter'
+import type { Bindings } from '@api/types/bindings'
 import type { AccountResult, BotRpc } from '@biccame/shared/bot'
-import routes from '../../workers/app/src/api/admin-twitter'
-import type { Bindings } from '../../workers/app/src/types/bindings'
 
 const environment = (result: AccountResult) => {
   const bot: BotRpc = {
@@ -13,6 +13,14 @@ const environment = (result: AccountResult) => {
     }),
     announce: async () => ({ status: 'disabled' }),
     postingSessionStatus: async () => ({ ok: false, kind: 'disabled' }),
+    notifyEventDetection: async () => ({ status: 'failed', kind: 'configuration' }),
+    testDiscordNotification: async () => ({ status: 'failed', kind: 'configuration' }),
+    checkDiscordConnection: async () => {
+      throw new Error('Discord connection is not configured in this test')
+    },
+    discordStatus: async () => {
+      throw new Error('Discord status is not configured in this test')
+    },
     accountStatus: async () => result
   }
   return { BOT: bot } as Bindings

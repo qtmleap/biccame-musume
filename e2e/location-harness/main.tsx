@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRootRoute, createRouter, Outlet, RouterProvider } from '@tanstack/react-router'
 import { createRoot } from 'react-dom/client'
-import { Route as LocationRoute } from '@/app/routes/location'
-import type { StoreData } from '@/schemas/store.dto'
+import { Route as LocationRoute } from '@/routes/location'
+import type { StoreData } from '@biccame/shared/schemas/store.dto'
 import '../map-cluster-harness/styles.css'
 
 const invalid = [

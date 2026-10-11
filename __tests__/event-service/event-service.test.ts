@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, spyOn, test } from 'bun:test'
-import type { PrismaClient } from '@/generated/prisma/client'
-import * as prismaModule from '@/lib/prisma'
-import { createEvent } from '@/services/event-service'
-import type { Bindings } from '@/types/bindings'
+import type { PrismaClient } from '@api/db/generated/prisma/client'
+import * as prismaModule from '@api/db/prisma'
+import { createEvent } from '@api/services/event-service'
+import type { Bindings } from '@api/types/bindings'
 import { eventRequest, eventRow, makeEventPrisma, uniqueError } from '../fixtures/event-announcement'
 
 const env = {} as Bindings

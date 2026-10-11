@@ -4,21 +4,21 @@ import { resolve } from 'node:path'
 import { z } from 'zod'
 
 const root = resolve(import.meta.dirname, '..')
-const source = (file: string) => readFileSync(resolve(root, 'workers/app', file), 'utf8')
+const source = (file: string) => readFileSync(resolve(root, 'workers/web', file), 'utf8')
 
 test('app cannot post directly or retain posting credentials after cutover', () => {
   for (const file of [
-    'src/utils/twitter.ts',
-    'src/utils/twitter-health.ts',
-    'src/utils/discord.ts',
-    'src/services/daily-cron.ts',
-    'src/lib/x-transaction/index.ts'
+    'src/api/lib/twitter.ts',
+    'src/api/lib/twitter-health.ts',
+    'src/api/lib/discord.ts',
+    'src/api/services/daily-cron.ts',
+    'src/api/lib/x-transaction/index.ts'
   ]) {
-    expect(existsSync(resolve(root, 'workers/app', file))).toBe(false)
+    expect(existsSync(resolve(root, 'workers/web', file))).toBe(false)
   }
-  expect(source('src/types/bindings.ts')).not.toContain('TWITTER_AUTH_TOKEN')
-  expect(source('src/types/bindings.ts')).not.toContain('TWITTER_CSRF_TOKEN')
-  expect(source('src/services/bot-announcement.ts')).not.toContain('new Twitter')
+  expect(source('src/api/types/bindings.ts')).not.toContain('TWITTER_AUTH_TOKEN')
+  expect(source('src/api/types/bindings.ts')).not.toContain('TWITTER_CSRF_TOKEN')
+  expect(source('src/api/services/bot-announcement.ts')).not.toContain('new Twitter')
   expect(source('src/index.ts')).toContain('runBadgeCron(env, scheduledAt)')
   expect(source('src/index.ts')).not.toContain('runDailyCron')
 })

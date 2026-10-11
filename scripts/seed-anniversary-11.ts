@@ -16,9 +16,9 @@
 
 import { $ } from 'bun'
 import { v5 as uuidv5 } from 'uuid'
-import { PHYSICAL_STORE_KEYS } from '../workers/app/src/data/badges/store-exclusion'
-import { STORE_NAME_LABELS } from '../workers/app/src/locales/app.content'
-import type { StoreKey } from '../workers/app/src/schemas/store.dto'
+import { PHYSICAL_STORE_KEYS } from '@biccame/shared/domain/badges/store-exclusion'
+import { STORE_NAME_LABELS } from '@biccame/shared/domain/character-names'
+import type { StoreKey } from '@biccame/shared/schemas/store.dto'
 
 type TargetEnv = 'local-staging' | 'remote-staging' | 'remote-production'
 
@@ -141,7 +141,7 @@ const main = async (): Promise<void> => {
 
   const args = getWranglerArgs(targetEnv)
   try {
-    await $`bun wrangler --config workers/app/wrangler.toml d1 execute ${args} --file=${tmpFile}`
+    await $`bun wrangler --config workers/web/wrangler.toml d1 execute ${args} --file=${tmpFile}`
     console.log('✓ Seed completed')
   } catch (err) {
     console.error('✗ Seed failed:', err)

@@ -12,7 +12,7 @@ export default defineConfig({
       ...(process.env.B06_CAPTURE === 'before'
         ? [
             {
-              find: '@/app/routes/location',
+              find: '@/routes/location',
               replacement: fileURLToPath(new URL('../../.cache/b06/base-location.tsx', import.meta.url))
             },
             {
@@ -22,7 +22,7 @@ export default defineConfig({
           ]
         : []),
       { find: '@/hooks/use-auth', replacement: fileURLToPath(new URL('./auth-adapter.ts', import.meta.url)) },
-      { find: '@', replacement: fileURLToPath(new URL('../../workers/app/src', import.meta.url)) },
+      { find: '@', replacement: fileURLToPath(new URL('../../workers/web/src/app', import.meta.url)) },
       {
         find: '@vis.gl/react-google-maps',
         replacement: fileURLToPath(new URL('../location-harness/maps-adapter.tsx', import.meta.url))

@@ -108,7 +108,7 @@ VS Codeでプロジェクトを開き、`Cmd/Ctrl + Shift + P`でコマンドパ
 bun dev
 ```
 
-`http://localhost:15175` で起動します（`vite --host --port 15175`）。
+`http://localhost:15175` で起動します。`workers/web/vite.config.ts` を明示して起動するため、ルートの Vite 設定は不要です。
 bot Worker は dev セッションの auxiliary Worker として接続されるため、追加のサーバーは不要です。
 
 #### イベント作成フォームのテスト
@@ -137,7 +137,7 @@ http://localhost:15175/admin/events/new/?category=limited_card&title=バレン�
 http://localhost:15175/admin/events/new/?from=550e8400-e29b-41d4-a716-446655440000
 ```
 
-**利用可能なパラメータ:**（`workers/app/src/schemas/event.dto.ts` の `EventRequestQuerySchema`）
+**利用可能なパラメータ:**（`packages/shared/src/schemas/event.dto.ts` の `EventRequestQuerySchema`）
 - `category`: イベント種別 (`limited_card` | `regular_card` | `ackey` | `acsta` | `other`)
 - `title`: イベント名（文字列）
 - `stores`: 店舗ID（カンマ区切りで複数指定可能。例: `honten,yuurakuchou,shinjyuku,shibuto,akiba` など）
@@ -146,6 +146,56 @@ http://localhost:15175/admin/events/new/?from=550e8400-e29b-41d4-a716-4466554400
 - `endAt`: 実際の終了日（配布終了時に設定する日。YYYY-MM-DD形式）
 - `referenceUrls`: 告知URL（告知タイプとして登録されます）
 - `from`: コピー元イベントの UUID（指定するとそのイベントの内容をコピーして開く。ほかのパラメータは使われません）
+
+#### X 投稿 Webhook と Bot 管理
+
+`POST /api/webhook` は X の push 通知 JSON を受け取り、店舗・配布キーワード判定を通過した投稿だけを Queue に投入します。
+AI 処理は受信応答後に行い、Clef のイベント確率と必須項目の選択確率がともに閾値以上で、店舗・開始日・配布条件が確定した告知/開始投稿を自動公開します。X への再投稿は行いません。
+スコアは正解率を保証する値ではありません。情報不足、低い確信度、継続/終了報告、既存イベントとの重複候補は保留にし、管理画面で確認します。一般商品のフェアは対象外です。
+
+署名ヘッダーは `Webhook-Signature: t=<UNIX秒>,v1=<64桁hex>`。
+署名対象は UTF-8 の `<UNIX秒>.<送信する生の本文>`、アルゴリズムは HMAC-SHA256、共有シークレットは app Worker の `WEBHOOK_SECRET_KEY` です。
+本文の空白やキー順序を変更すると署名は無効になります。送信時刻の許容差は過去/未来とも 5 分で、JSON 内の `timestamp` は署名には使いません。
+再送時は同じ投稿 ID・本文を使用し、新しい送信時刻で署名を作り直してください。Bearer Token は不要です。
+
+```ts
+import { createHmac } from 'node:crypto'
+
+const timestamp = Math.floor(Date.now() / 1000).toString()
+const body = JSON.stringify(payload)
+const signature = createHmac('sha256', signingSecret)
+  .update(`${timestamp}.${body}`, 'utf8').digest('hex')
+// Content-Type: application/json
+// Webhook-Signature: t=${timestamp},v1=${signature}
+// body は署名に使った文字列をそのまま送信する
+```
+
+本文上限は 64 KiB。`data.type=tweet`、`data.body`、`data.uri=/<account>/status/<id>`、`data.tag=tweet-<id>` が必要です。
+トップレベルの `body`/`tag` があれば data と一致する必要があります。`registration_ids` や icon は保存しません。
+署名不正は 401、本文不正は 400、サイズ超過は 413、受信済み/対象外は 200、Queue 受付成功は 202、受付障害は 503 です。
+5xx は再送可能ですが、4xx は送信内容/設定を修正してください。
+
+環境別設定:
+
+| Worker | 設定 | 用途 |
+|---|---|---|
+| app | `WEBHOOK_SECRET_KEY` (secret) | 受信 HMAC。未設定なら受信を停止 |
+| app | `EVENT_DETECTION_MODEL` | 初期設定: `clef` (既定) / `clef-flash`。管理画面の保存値が優先 |
+| app | `EVENT_DETECTION_THRESHOLD` / `EVENT_DETECTION_CHOICE_THRESHOLD` | 既定 `0.9` |
+| app | `EVENT_DETECTION_IGNORE_THRESHOLD` | 既定 `0.5`、自動登録閾値未満に設定 |
+| bot | `DISCORD_TOKEN` / `DISCORD_CHANNEL_ID` (secret) | 既存 Discord Bot と通知先を再利用。イベント通知は常時有効で X/TL の有効化とは独立 |
+
+Queue は `biccame-event-detection-local` / `-staging` / `-production` と、それぞれの `-dlq` に分離しています。
+リモート環境での Queue 作成、secret 同期、マイグレーション、デプロイは管理者が承認してから行います。
+secret は既存 `scripts/sync-cf-secrets.sh` 経由で環境ごとの正しい Worker に同期し、`TWITTER_*` / `DISCORD_TOKEN` は app に登録しないでください。
+Cloudflare Access の経路保護が Webhook にも適用される場合は `/api/webhook` だけを送信元から到達可能にし、管理画面の保護は維持してください。
+
+`/admin/bot` はシークレットの設定有無、Bot 接続、通知先、AI 閾値を表示します。トークンの値は表示しません。
+ページ表示時はWorker設定の存在・形式だけを検証し、Discord APIには接続しません。右上の「接続確認」で認証・チャンネルアクセスを確認します。必要な設定は`DISCORD_TOKEN`と数字の`DISCORD_CHANNEL_ID`だけで、OAuth用のApplication ID・Client ID・Client Secretは不要です。チャンネルへのアクセス確認と実際の送信成功は区別し、テスト送信は確認付きの明示操作でのみ行います。
+判定モデルは `/admin/bot` の「判定モデル」で `clef` / `clef-flash` を選び、「保存」で変更できます。保存先は環境別の既存 `BICCAME_MUSUME_EVENTS` KV の `settings:event-detection:model` です。KVの反映には最大約60秒かかる場合があります。変更は未判定の投稿に適用され、保存済みのAI判定や通知の再試行では再判定しません。保存値がない場合は `EVENT_DETECTION_MODEL`、未指定なら `clef` を使用します。モデル名はシークレットではありません。
+`/admin/webhooks` は保留/登録/失敗と通知状態を確認する受信履歴です。保留を手動登録・既存イベントへ紐付け・却下できます。
+通知失敗でも登録を巻き戻しません。通信結果不明 (`unknown`) は二重通知の可能性があるため自動再送せず、明示確認後に通知だけを再試行します。
+Discord の nonce は短期間の重複抑止であり、永続的な exactly-once の保証ではありません。
 
 #### マイグレーション
 
@@ -182,8 +232,8 @@ staging / production へは `deployment.yaml` の `Apply D1 migrations` step が
 `CLOUDFLARE_API_TOKEN` が要るので `.env` を読み込むこと。
 
 ```zsh
-source .env && bunx wrangler --config workers/app/wrangler.toml d1 migrations apply DB --env=staging    --remote
-source .env && bunx wrangler --config workers/app/wrangler.toml d1 migrations apply DB --env=production --remote
+source .env && bunx wrangler --config workers/web/wrangler.toml d1 migrations apply DB --env=staging    --remote
+source .env && bunx wrangler --config workers/web/wrangler.toml d1 migrations apply DB --env=production --remote
 ```
 
 #### ビルド
@@ -195,11 +245,11 @@ Prisma Client は gitignore 対象なので、先に `bun run generate` で生�
 
 ```zsh
 bun run generate
-bunx rimraf workers/app/dist
+bunx rimraf workers/web/dist
 bun run scripts/download-character-images.ts
 bun run scripts/generate-og-images.ts
 bun tsc -b
-CLOUDFLARE_ENV=staging bun vite build --mode staging
+CLOUDFLARE_ENV=staging bun run build --mode staging
 CLOUDFLARE_ENV=staging bun run test:app-build
 ```
 
@@ -230,10 +280,10 @@ CI の `Code Check` と同じ対象です。サブモジュール（`biome-plugi
 
 ```zsh
 # チェックのみ
-bun biome check workers/app/src workers/bot/src packages/shared/src __tests__
+bun biome check workers/web/src workers/bot/src packages/shared/src __tests__
 
 # 自動修正
-bun biome check --write workers/app/src workers/bot/src packages/shared/src __tests__
+bun biome check --write workers/web/src workers/bot/src packages/shared/src __tests__
 ```
 
 #### bot Worker と共有パッケージ
@@ -251,8 +301,8 @@ bun run deploy:bot --env=staging  # bot のデプロイ（--env の明示が必�
 
 production の有効な設定（cron・通知・X 投稿）は、`--allow-active-production` を付けた場合だけデプロイできます。
 
-`packages/shared/src/generated/bot-stores.json` は `workers/app/public/characters.json` から生成したファイルです。
-更新が必要なときは `bun scripts/generate-bot-stores.ts` で再生成します。
+`packages/shared/src/generated/bot-stores.json` とバッジ用の `closed-store-keys.json` は `workers/web/public/characters.json` から生成したファイルです。
+更新が必要なときは `bun scripts/generate-bot-stores.ts` で両方を再生成します。`bun run check:bot-stores` は両方の鮮度を確認します。
 
 #### ローカル専用のツール
 
@@ -293,7 +343,7 @@ production の有効な設定（cron・通知・X 投稿）は、`--allow-active
 | master | production | `https://biccame-musume.com` |
 
 順序は D1 migration → バッジの seed → app → bot です。
-bot は app のデプロイ後に、環境ごとの設定で有効化されます（staging は通知無効・cron なし、production は有効）。
+bot は app のデプロイ後に、環境ごとの設定で有効化されます（staging はタイムライン通知・X 投稿無効、cron なし。production は有効）。Discordイベント通知は全環境で常時有効です。
 app の日次 cron はバッジの再評価だけで、X への投稿・日次告知は bot が担います。
 
 Worker のシークレットは `scripts/sync-cf-secrets.sh`、`VITE_` で始まるビルド時の値は `scripts/sync-gh-secrets.sh`（GitHub Actions secrets）で同期します。
@@ -302,7 +352,7 @@ Worker のシークレットは `scripts/sync-cf-secrets.sh`、`VITE_` で始ま
 
 リリースは `.claude/release.json` に従います。
 
-1. 版上げ PR（`chore: bump version to X.Y.Z`）を develop にマージする。版の正はルートの `package.json` で、`workers/app/package.json` の版は使いません。
+1. 版上げ PR（`chore: bump version to X.Y.Z`）を develop にマージする。版の正はルートの `package.json` で、`workers/web/package.json` の版は使いません。
 2. develop → master のリリース PR（タイトルは `release: v{version}`）を**マージコミット**で取り込む。
 3. マージコミットに annotated タグ `v{version}`（メッセージは `release v{version}`）を付ける。GitHub Release は作成しません。
 4. `backmerge.yaml` が develop を master に fast-forward する。
@@ -311,8 +361,11 @@ Worker のシークレットは `scripts/sync-cf-secrets.sh`、`VITE_` で始ま
 
 ```
 workers/
-├── app/                  # UI・API を配信する Worker（日次 cron はバッジ再評価のみ）
-│   ├── src/              # React・Hono・Durable Objects・型・サービス
+├── web/                  # UI・API を配信する Worker（日次 cron はバッジ再評価のみ）
+│   ├── src/
+│   │   ├── app/          # React UI・routes・components・hooks・atoms・辞書
+│   │   ├── api/          # routes・services・db・middleware・rpc・Durable Objects
+│   │   └── index.ts      # Worker エントリーポイント
 │   ├── public/           # 静的資産とキャラクター情報
 │   ├── index.html
 │   ├── vite.config.ts
@@ -320,7 +373,7 @@ workers/
 │   └── package.json
 └── bot/                  # X への投稿・TL 取得・日次告知を担う Worker（workers/bot/README.md）
 packages/
-└── shared/               # app と bot で共有するコード（@biccame/shared）
+└── shared/               # 純粋な DTO・schema・domain 計算と bot 契約（@biccame/shared）
 prisma/                   # 共有スキーマ・マイグレーション
 __tests__/                # Bun テスト
 e2e/                      # Playwright の e2e・レイアウト検証
@@ -336,14 +389,14 @@ patches/                  # 依存パッケージへのパッチ
 
 依存と共通ツールはルートの Bun workspace で管理します。`bun run dev`、
 `bun run build`、`bun run generate`、`bun run deploy` は引き続きルートから実行できます。
-本体のビルド出力は `workers/app/dist/`、bot のビルド出力は `workers/bot/dist/` です。Vite のルート設定ファイルは app 設定を再公開します。
+本体のビルド出力は `workers/web/dist/`、bot のビルド出力は `workers/bot/dist/` です。dev/build は `workers/web/vite.config.ts` を明示して使用し、ルートの Vite 設定ファイルは置きません。
 
-Prisma はルート `prisma/` を使用し、Client は `workers/app/src/generated/prisma/` に生成します。
+Prisma はルート `prisma/` を使用し、Client は `workers/web/src/api/db/generated/prisma/` に生成します。
 ローカル D1/KV/DO の状態は従来どおりルート `.wrangler/state/` に保存します。
-環境ファイルもルートに維持します。ローカル開発時のみ app からルートへ相対 symlink を作成し、
-内容のコピーや既存ファイルの上書きは行いません。Wrangler の canonical 設定パスは app のままです。
+環境ファイルもルートに維持します。ローカル開発時のみ web からルートへ相対 symlink を作成し、
+内容のコピーや既存ファイルの上書きは行いません。Wrangler の canonical 設定パスは `workers/web/wrangler.toml` です。
 
-Wrangler CLI を直接使う場合は `--config workers/app/wrangler.toml` を指定します。
+Wrangler CLI を直接使う場合は `--config workers/web/wrangler.toml` を指定します。
 ローカル DB コマンドには `--persist-to .wrangler/state` も指定してください。
 ビルド済み本体のデプロイは生成済み設定を使う `bun run deploy` を使用します。
 
@@ -372,17 +425,17 @@ Wrangler CLI を直接使う場合は `--config workers/app/wrangler.toml` を�
 - 非同期処理は`async/await`を使用
 - 日付処理は`dayjs`を使用（`Date`は使用しない）
 - アイコンは`lucide-react`を使用（SNS のロゴなど lucide にないものは`react-icons`）
-- API通信は`workers/app/src/utils/client/`で定義された`Zodios`クライアントを使用
+- API通信は`workers/web/src/app/utils/client/`で定義された`Zodios`クライアントを使用
 - 型定義とバリデーションにはZodを使用
 - `any`型の使用を避ける
 
 ### 注意事項
 
-- `index.css`と`workers/app/src/components/ui/**/*.tsx`は直接編集しない
-- 生成物は直接編集しない（`workers/app/src/generated/prisma/`、`workers/app/src/app/routeTree.gen.ts`、`packages/shared/src/generated/bot-stores.json`）
+- `index.css`と`workers/web/src/app/components/ui/**/*.tsx`は直接編集しない
+- 生成物は直接編集しない（`workers/web/src/api/db/generated/prisma/`、`workers/web/src/app/routeTree.gen.ts`、`packages/shared/src/generated/bot-stores.json`）
 - Shadcn UIコンポーネントのスタイル変更は`className`で対応
 - 条件付き`className`は`cn`ユーティリティを使用
-- `@/` エイリアスは `workers/app` の中だけで使える。bot と shared は `@biccame/shared/...` を使用
+- `@/` は `workers/web/src/app/*`、`@api/` は `workers/web/src/api/*` を参照する。UI と API の共通契約は `@biccame/shared/...` を使用
 - コミットメッセージはConventional Commits規約に従う（`.commitlintrc.yaml`。ヘッダは128文字以内）
 
 ### ライセンス

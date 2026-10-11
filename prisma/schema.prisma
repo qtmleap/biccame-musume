@@ -7,7 +7,7 @@
 // Prismaスキーマ for Cloudflare D1
 generator client {
   provider = "prisma-client"
-  output   = "../workers/app/src/generated/prisma"
+  output   = "../workers/web/src/api/db/generated/prisma"
   runtime  = "cloudflare"
 }
 
@@ -157,6 +157,39 @@ model Event {
 
   @@index([groupId])
   @@map("events")
+}
+
+/// X Webhook の受信・判定・通知履歴
+model WebhookEventJob {
+  postId             String    @id @map("post_id")
+  postJson           String    @map("post_json")
+  sourceUrl          String    @map("source_url")
+  eventUUID          String    @unique @map("event_uuid")
+  status             String    @default("queued")
+  reasonsJson        String    @default("[]") @map("reasons_json")
+  resultJson         String?   @map("result_json")
+  candidateJson      String?   @map("candidate_json")
+  answersJson        String?   @map("answers_json")
+  model              String?
+  questionVersion    String?   @map("question_version")
+  confidence         Float?
+  judgedAt           DateTime? @map("judged_at")
+  eventId            String?   @map("event_id")
+  semanticKey        String?   @unique @map("semantic_key")
+  attempts           Int       @default(0)
+  leaseToken         String?   @map("lease_token")
+  leaseUntil         DateTime? @map("lease_until")
+  notificationStatus String    @default("pending") @map("notification_status")
+  notificationId     String?   @map("notification_id")
+  notificationError  String?   @map("notification_error")
+  notificationAttempts Int    @default(0) @map("notification_attempts")
+  lastError          String?   @map("last_error")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@index([notificationStatus])
+  @@map("webhook_event_jobs")
 }
 
 /// イベントコメント（匿名）

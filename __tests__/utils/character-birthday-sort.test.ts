@@ -1,6 +1,6 @@
 import { afterEach, expect, setSystemTime, test } from 'bun:test'
+import { getDaysFromBirthday } from '@biccame/shared/domain/character'
 import dayjs from 'dayjs'
-import { getDaysFromBirthday } from '../../workers/app/src/utils/character'
 
 afterEach(() => setSystemTime())
 

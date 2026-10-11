@@ -19,7 +19,7 @@ import {
   sinceLabel,
   splitByPhase,
   untilLabel
-} from '../workers/app/src/images/format'
+} from '@/images/format'
 import {
   DailyImage,
   EventAddedImage,
@@ -28,16 +28,16 @@ import {
   type Portraits,
   type WeekDay,
   WeeklyImage
-} from '../workers/app/src/images/post-images'
-import { getCanonicalPose } from '../workers/app/src/lib/stampcamera-map'
-import { EventSchema } from '../workers/app/src/schemas/event.dto'
-import type { StoreKey } from '../workers/app/src/schemas/store.dto'
-import { getHolidayName } from '../workers/app/src/utils/holidays'
+} from '@/images/post-images'
+import { getCanonicalPose } from '@/lib/stampcamera-map'
+import { EventSchema } from '@biccame/shared/schemas/event.dto'
+import type { StoreKey } from '@biccame/shared/schemas/store.dto'
+import { getHolidayName } from '@biccame/shared/domain/holidays'
 
 // 本番の公開イベントから4種類の投稿画像を作り、.cache/post-samples/ に PNG で書き出す。
 // X・Discordには投稿しない。--events <json> で手元のイベント一覧を使える。
 const root = resolve(import.meta.dir, '..')
-const publicDir = resolve(root, 'workers/app/public')
+const publicDir = resolve(root, 'workers/web/public')
 const outDir = resolve(root, '.cache/post-samples')
 const font = (weight: number) =>
   resolve(root, `node_modules/@fontsource/zen-maru-gothic/files/zen-maru-gothic-japanese-${weight}-normal.woff`)

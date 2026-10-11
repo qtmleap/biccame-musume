@@ -1,5 +1,5 @@
 /**
- * Smoke test for workers/app/src/lib/x-transaction.
+ * Smoke test for workers/web/src/app/lib/x-transaction.
  * Fetches the X home page and current signer module and generates a sample
  * x-client-transaction-id. Exits non-zero on any error.
  */

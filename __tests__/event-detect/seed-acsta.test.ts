@@ -95,7 +95,7 @@ describe('judgeAcsta / categoryOf（純粋関数）', () => {
 describe('GapCategorySchema の acsta', () => {
   test('acsta を含み、アプリの EventCategorySchema と同じ 5 つ', async () => {
     expect(GapCategorySchema.options).toEqual(['limited_card', 'regular_card', 'ackey', 'acsta', 'other'])
-    const source = await readFile(join(import.meta.dir, '../../workers/app/src/schemas/event.dto.ts'), 'utf8')
+    const source = await readFile(join(import.meta.dir, '../../packages/shared/src/schemas/event.dto.ts'), 'utf8')
     const match = /EventCategorySchema = z\.enum\(\[([^\]]+)\]/.exec(source)
     if (match === null) throw new Error('EventCategorySchema not found')
     const app = [...match[1].matchAll(/'([a-z_]+)'/g)].map((entry) => entry[1])

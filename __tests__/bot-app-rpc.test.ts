@@ -1,17 +1,17 @@
 import { expect, mock, spyOn, test } from 'bun:test'
+import { runBadgeCron } from '@api/services/badge-cron'
+import { readPostingAccount } from '@api/services/bot-account'
+import { announceSavedEvent } from '@api/services/bot-announcement'
+import { readBotDailyTargets } from '@api/services/bot-daily-targets'
+import type { Bindings } from '@api/types/bindings'
 import type { BotRpc, DailyTargetsResult, DeliveryResult } from '@biccame/shared/bot'
-import { z } from 'zod'
-import { EventDetailSchema } from '../workers/app/src/schemas/event.dto'
-import { runBadgeCron } from '../workers/app/src/services/badge-cron'
-import { readPostingAccount } from '../workers/app/src/services/bot-account'
-import { announceSavedEvent } from '../workers/app/src/services/bot-announcement'
-import { readBotDailyTargets } from '../workers/app/src/services/bot-daily-targets'
-import type { Bindings } from '../workers/app/src/types/bindings'
 import {
   buildDailySummaryTweets,
   buildEndingTodaySummaryTweets,
   buildEventCreatedText
-} from '../workers/app/src/utils/tweet-text'
+} from '@biccame/shared/domain/tweet-text'
+import { EventDetailSchema } from '@biccame/shared/schemas/event.dto'
+import { z } from 'zod'
 import { eventRequest } from './fixtures/event-announcement'
 
 const parsedEvent = EventDetailSchema.safeParse({
@@ -38,7 +38,15 @@ const makeBot = () =>
     })),
     announce: mock(async (): Promise<DeliveryResult> => ({ status: 'sent', tweetId: '12345' })),
     accountStatus: mock(async () => ({ ok: false as const, kind: 'disabled' as const })),
-    postingSessionStatus: mock(async () => ({ ok: false as const, kind: 'disabled' as const }))
+    postingSessionStatus: mock(async () => ({ ok: false as const, kind: 'disabled' as const })),
+    notifyEventDetection: async () => ({ status: 'failed', kind: 'configuration' }),
+    testDiscordNotification: async () => ({ status: 'failed', kind: 'configuration' }),
+    checkDiscordConnection: async () => {
+      throw new Error('Discord connection is not configured in this test')
+    },
+    discordStatus: async () => {
+      throw new Error('Discord status is not configured in this test')
+    }
   }) satisfies BotRpc
 const env = (bot: BotRpc) => ({ BOT: bot }) as unknown as Bindings
 

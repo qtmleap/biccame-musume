@@ -26,7 +26,7 @@ test('missing/duplicate IDs and ambiguous Twitter accounts are rejected', () => 
 })
 
 test('committed generated data exactly matches the canonical public JSON and fixed inventory', async () => {
-  const canonical = await Bun.file(new URL('../workers/app/public/characters.json', import.meta.url)).json()
+  const canonical = await Bun.file(new URL('../workers/web/public/characters.json', import.meta.url)).json()
   const inventory = await Bun.file(new URL('../packages/shared/data/bot-store-ids.json', import.meta.url)).json()
   expect(botStores).toEqual(buildBotStores(canonical, inventory))
   expect(botStores).toHaveLength(40)

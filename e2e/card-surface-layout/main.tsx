@@ -3,7 +3,7 @@ import { createMemoryHistory, createRootRoute, createRoute, createRouter, Router
 import { Provider } from 'jotai'
 import { MotionConfig } from 'motion/react'
 import { createRoot } from 'react-dom/client'
-import { Route } from '@/app/routes/characters/index'
+import { Route } from '@/routes/characters/index'
 import { EventGridItem } from '@/components/events/event-grid-item'
 import { EventListItem } from '@/components/home/event-list-item'
 import { RankingList } from '@/components/ranking/ranking-list'

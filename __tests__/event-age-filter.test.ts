@@ -1,7 +1,7 @@
 import { expect, test } from 'bun:test'
-import { EventSearchSchema } from '../workers/app/src/schemas/event-search'
-import { parseEventListFilterSearch } from '../workers/app/src/utils/event-list-filters'
-import * as eventStatus from '../workers/app/src/utils/event-status'
+import * as eventStatus from '@biccame/shared/domain/event-status'
+import { EventSearchSchema } from '@/schemas/event-search'
+import { parseEventListFilterSearch } from '@/utils/event-list-filters'
 
 test('old events are hidden by default, while an explicit opt-out survives URL parsing', () => {
   // 省略は undefined のまま(既定の true は合成側で入れる)。不正値は「書かれている」まま既定の true に戻す。

@@ -1,4 +1,4 @@
-import { EventSchema } from '@/schemas/event.dto'
+import { EventSchema } from '@biccame/shared/schemas/event.dto'
 import { characters } from '../character-search-layout/fixtures'
 
 export { characters }

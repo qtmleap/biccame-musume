@@ -1,4 +1,4 @@
-import { StoreDataSchema } from '@/schemas/store.dto'
+import { StoreDataSchema } from '@biccame/shared/schemas/store.dto'
 export const characters = [
   ['gate', 'なごやげーとたん', '名古屋JRゲートタワー店', '愛知県', ['ゲートちゃん']],
   ['tokyo', 'とうきょうたん', '東京駅前のとても長い店舗名を持つ合成店舗', '東京都', ['東京ちゃん']],

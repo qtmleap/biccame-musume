@@ -16,7 +16,7 @@ import {
 import { PaginatedEventGrid } from '@/components/events/paginated-event-grid'
 import { EventList } from '@/components/home/event-list'
 import { HomeHeader } from '@/components/home/home-header'
-import { StoreDataSchema } from '@/schemas/store.dto'
+import { StoreDataSchema } from '@biccame/shared/schemas/store.dto'
 import { events } from './fixtures'
 import './styles.css'
 

@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, expect, mock, spyOn, test } from 'bun:test'
+import type { PrismaClient } from '@api/db/generated/prisma/client'
+import * as prismaModule from '@api/db/prisma'
+import routes from '@api/routes/event'
+import { getEventsStats } from '@api/services/me-service'
+import type { Bindings } from '@api/types/bindings'
 import { OpenAPIHono } from '@hono/zod-openapi'
-import type { PrismaClient } from '@/generated/prisma/client'
-import * as prismaModule from '@/lib/prisma'
-import type { Bindings } from '@/types/bindings'
-import routes from '../../workers/app/src/api/event'
-import { getEventsStats } from '../../workers/app/src/services/me-service'
 
 const groupBy = mock(async (input: { where: { eventId: { in: string[] }; status: string } }) =>
   input.where.eventId.in.map((eventId) => ({ eventId, _count: { eventId: 2 } }))

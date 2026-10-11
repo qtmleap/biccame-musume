@@ -102,11 +102,100 @@ export const postingSessionResultSchema = z.discriminatedUnion('ok', [
 ])
 export type PostingSessionResult = z.infer<typeof postingSessionResultSchema>
 
+const discordNotificationFields = {
+  requestId: z.uuid(),
+  postId: z.string().regex(/^\d+$/),
+  postUrl: z.url().max(2000),
+  managementUrl: z.url().max(2000),
+  text: z.string().nonempty().max(20000),
+  confidence: z.number().min(0).max(1),
+  reasons: z.array(z.string().nonempty().max(500)).max(20),
+  stores: z.array(z.string().nonempty().max(200)).max(20)
+}
+export const eventDetectionNotificationSchema = z.discriminatedUnion('status', [
+  z.strictObject({ ...discordNotificationFields, status: z.literal('held') }),
+  z.strictObject({
+    ...discordNotificationFields,
+    status: z.literal('registered'),
+    event: z.strictObject({
+      title: z.string().nonempty().max(300),
+      url: z.url().max(2000),
+      category: z.string().nonempty().max(50),
+      startDate: z.string().nonempty().max(100),
+      endDate: z.string().nonempty().max(100).optional(),
+      conditions: z.array(z.string().nonempty().max(300)).max(20)
+    })
+  })
+])
+export type EventDetectionNotification = z.infer<typeof eventDetectionNotificationSchema>
+
+export const discordFailureKindSchema = z.enum([
+  'configuration',
+  'invalid_input',
+  'authentication',
+  'authorization',
+  'rate_limit',
+  'rejected',
+  'upstream',
+  'unexpected_response',
+  'network',
+  'rpc'
+])
+export type DiscordFailureKind = z.infer<typeof discordFailureKindSchema>
+export const discordDeliveryResultSchema = z.discriminatedUnion('status', [
+  z.strictObject({ status: z.literal('sent'), messageId: z.string().regex(/^\d+$/) }),
+  z.strictObject({
+    status: z.literal('failed'),
+    kind: discordFailureKindSchema,
+    statusCode: z.number().int().min(100).max(599).optional(),
+    retryAfterSeconds: z.number().positive().max(86400).optional()
+  }),
+  z.strictObject({ status: z.literal('unknown'), kind: z.literal('delivery_unknown') })
+])
+export type DiscordDeliveryResult = z.infer<typeof discordDeliveryResultSchema>
+export const discordTestRequestSchema = z.strictObject({ requestId: z.uuid() })
+export type DiscordTestRequest = z.infer<typeof discordTestRequestSchema>
+export const discordStatusSchema = z.strictObject({
+  configFingerprint: z
+    .string()
+    .regex(/^[a-f0-9]{64}$/)
+    .nullable(),
+  configured: z.strictObject({ token: z.boolean(), channel: z.boolean() }),
+  settings: z.strictObject({
+    token: z.enum(['missing', 'invalid', 'valid']),
+    channel: z.enum(['missing', 'invalid', 'valid'])
+  }),
+  notificationsEnabled: z.boolean(),
+  xPostingEnabled: z.boolean(),
+  timelineNotificationsEnabled: z.boolean(),
+  connection: z.enum([
+    'unchecked',
+    'unconfigured',
+    'connected',
+    'authentication',
+    'authorization',
+    'rate_limit',
+    'network',
+    'upstream',
+    'unexpected_response'
+  ]),
+  bot: z.strictObject({ id: z.string().regex(/^\d+$/), username: z.string().nonempty().max(200) }).nullable(),
+  channel: z.strictObject({ id: z.string().regex(/^\d+$/), name: z.string().nonempty().max(200) }).nullable(),
+  sendPermission: z.enum(['unknown', 'allowed', 'denied']),
+  errorKind: discordFailureKindSchema.nullable(),
+  fetchedAt: z.iso.datetime()
+})
+export type DiscordStatus = z.infer<typeof discordStatusSchema>
+
 export interface BotRpc {
   ping(input: BotPingRequest): Promise<BotPingResponse>
   announce(input: Announcement): Promise<DeliveryResult>
   accountStatus(): Promise<AccountResult>
   postingSessionStatus(): Promise<PostingSessionResult>
+  notifyEventDetection(input: EventDetectionNotification): Promise<DiscordDeliveryResult>
+  discordStatus(): Promise<DiscordStatus>
+  checkDiscordConnection(): Promise<DiscordStatus>
+  testDiscordNotification(input: DiscordTestRequest): Promise<DiscordDeliveryResult>
 }
 export interface AppBotReadRpc {
   dailyTargets(input: DailyRequest): Promise<DailyTargetsResult>
