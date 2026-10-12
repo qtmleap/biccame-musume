@@ -1,26 +1,33 @@
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { basename, resolve } from 'node:path'
 import { build } from 'esbuild'
 import { Miniflare } from 'miniflare'
 import { z } from 'zod'
-import {
-  buildSummarySnapshot,
-  jstDay,
-  socialEventView,
-  type SocialSummaryKind
-} from '@biccame/shared/domain/social-post'
-import { isSpecialCharacter } from '@biccame/shared/domain/event-character'
+import { isSpecialCharacter, resolveEventCharacter } from '@biccame/shared/domain/event-character'
+import { buildSummarySnapshot, jstDay, socialEventView, type SocialSummaryKind } from '@biccame/shared/domain/social-post'
 import { type Event, EventSchema } from '@biccame/shared/schemas/event.dto'
 import { type StoreKey, StoreKeySchema } from '@biccame/shared/schemas/store.dto'
-import { type SocialImage, type SocialSnapshot, SocialSnapshotSchema } from '@biccame/shared/social'
+import {
+  type SocialEventView,
+  type SocialImage,
+  type SocialRow,
+  type SocialSide,
+  type SocialSnapshot,
+  SocialSnapshotSchema,
+  type SocialSummaryImage
+} from '@biccame/shared/social'
 import dayjs from 'dayjs'
+import { type EventRole, fixtureInputs, type OgRenderInputs, type PostCase } from './lib/og-render-fixtures'
 
 // 本番と同じsatori standalone + resvg WASMをworkerdで実行し、イベントOG画像と投稿画像がPNGになることを検証する。
-// --write を付けると .cache/og-lab/out/prod/ に投稿画像を書き出す（承認済みの試作 .cache/og-lab/out/v2/ と見比べる用）。
+// 既定の入力は scripts/lib/og-render-fixtures.ts の決定的なフィクスチャで、.cache が無い CI でもそのまま動く。
+// --real-data を付けると .cache/og-lab/events.json の実データで描き、承認済みの試作 .cache/og-lab/out/v2/manifest.json と行を突き合わせる（ローカル専用）。
+// --write を付けると投稿画像を .cache/og-lab/out/ に書き出す（フィクスチャは prod-fixtures/、実データは prod/。prod/ は v2 と見比べる用）。
 const root = resolve(import.meta.dirname, '..')
 const write = process.argv.includes('--write')
-const OUT_DIR = resolve(root, '.cache/og-lab/out/prod')
+const realData = process.argv.includes('--real-data')
+const OUT_DIR = resolve(root, realData ? '.cache/og-lab/out/prod' : '.cache/og-lab/out/prod-fixtures')
 const OG_ASSET_DIR = resolve(root, 'workers/web/public')
 const EVENTS_PATH = resolve(root, '.cache/og-lab/events.json')
 const MANIFEST_PATH = resolve(root, '.cache/og-lab/out/v2/manifest.json')
@@ -45,66 +52,76 @@ const cases = {
 }
 
 /* ------------------------------------------------------------------ */
-/* 投稿画像の入力（試作と同じ実データから、本番と同じ組み立てでスナップショットにする）                  */
+/* 投稿画像の入力                                                         */
 /* ------------------------------------------------------------------ */
 
-const loadEvents = (): Event[] => {
-  const parsed = EventSchema.array().safeParse(JSON.parse(readFileSync(EVENTS_PATH, 'utf8')))
-  if (!parsed.success) throw new Error(`Invalid events: ${parsed.error.message}`)
-  return parsed.data.filter((event) => event.isVerified)
-}
-const events = loadEvents()
-const pick = (prefix: string): Event => {
-  const found = events.find((event) => event.uuid.startsWith(prefix))
-  if (found === undefined) throw new Error(`Event ${prefix} is not public`)
-  return found
-}
-
-const dayKey = (value: Date): string => jstDay(value).format('YYYY-MM-DD')
-const endOf = (event: Event): Date | null => {
-  if (event.endedAt !== undefined) return event.endedAt
-  return event.endDate === undefined ? null : event.endDate
-}
-const startsBetween = (from: string, to: string): Event[] =>
-  events.filter((event) => dayKey(event.startDate) >= from && dayKey(event.startDate) <= to)
-const endsBetween = (from: string, to: string): Event[] =>
-  events.filter((event) => {
-    const end = endOf(event)
-    return end !== null && dayKey(end) >= from && dayKey(end) <= to
-  })
-
-/** その日（JST）の朝8時。毎朝は前日の 23:00Z、毎週はその週の月曜の朝。 */
+/** 投稿の予定日時。その日（JST）の朝8時。毎朝は前日の 23:00Z、毎週はその週の月曜の朝。 */
 const scheduledAt = (day: string): string => dayjs(`${day}T08:00:00+09:00`).toISOString()
 
-type PostCase = {
-  /** 出力ファイル名の頭（試作と同じ。例: daily-H2-over）。 */
-  name: string
-  kind: SocialSummaryKind
-  day: string
-  starting: Event[]
-  ending: Event[]
+// 試作と同じ実データ（.cache/og-lab/events.json）から入力を作る。--real-data のときだけ読む。
+const loadRealInputs = (): OgRenderInputs => {
+  if (!existsSync(EVENTS_PATH)) throw new Error(`--real-data needs the local prototype data: ${EVENTS_PATH}`)
+  const parsed = EventSchema.array().safeParse(JSON.parse(readFileSync(EVENTS_PATH, 'utf8')))
+  if (!parsed.success) throw new Error(`Invalid events: ${parsed.error.message}`)
+  const events = parsed.data.filter((event) => event.isVerified)
+  const pick = (prefix: string): Event => {
+    const found = events.find((event) => event.uuid.startsWith(prefix))
+    if (found === undefined) throw new Error(`Event ${prefix} is not public`)
+    return found
+  }
+
+  const dayKey = (value: Date): string => jstDay(value).format('YYYY-MM-DD')
+  const endOf = (event: Event): Date | null => {
+    if (event.endedAt !== undefined) return event.endedAt
+    return event.endDate === undefined ? null : event.endDate
+  }
+  const startsBetween = (from: string, to: string): Event[] =>
+    events.filter((event) => dayKey(event.startDate) >= from && dayKey(event.startDate) <= to)
+  const endsBetween = (from: string, to: string): Event[] =>
+    events.filter((event) => {
+      const end = endOf(event)
+      return end !== null && dayKey(end) >= from && dayKey(end) <= to
+    })
+
+  // 特殊値（secret / other）の行を含む合成。実データの 2026-09-19 は開始11件で、特殊値の行は2枚目にずれるため4件だけ抜き出す。
+  const specialStarting = [
+    pick('bb47e64c'),
+    pick('ef85a18f'),
+    ...startsBetween('2026-09-19', '2026-09-19')
+      .filter((event) => !isSpecialCharacter(resolveEventCharacter(event)))
+      .toSorted((a, b) => a.startDate.getTime() - b.startDate.getTime() || a.uuid.localeCompare(b.uuid))
+      .slice(0, 2)
+  ]
+
+  const daily = (name: string, kind: SocialSummaryKind, day: string, to: string): PostCase => ({
+    name,
+    kind,
+    day,
+    starting: startsBetween(day, to),
+    ending: endsBetween(day, to)
+  })
+  return {
+    eventRoles: [
+      ['single', pick('16e89d75')],
+      ['multi', pick('578807af')],
+      ['secret', pick('bb47e64c')],
+      ['other', pick('ef85a18f')]
+    ],
+    postCases: [
+      daily('daily-H2', 'daily', '2026-04-29', '2026-04-29'),
+      daily('daily-H2-many', 'daily', '2026-07-26', '2026-07-26'),
+      daily('daily-H2-more', 'daily', '2026-02-14', '2026-02-14'),
+      daily('daily-H2-over', 'daily', '2026-08-31', '2026-08-31'),
+      daily('daily-H2-empty', 'daily', '2026-08-22', '2026-08-22'),
+      { ...daily('daily-H2-special', 'daily', '2026-09-19', '2026-09-19'), starting: specialStarting },
+      daily('weekly-H2', 'weekly', '2026-03-09', '2026-03-15'),
+      { ...daily('weekly-H2-special', 'weekly', '2026-09-14', '2026-09-20'), starting: specialStarting }
+    ]
+  }
 }
 
-// 特殊値（secret / other）の行を含む合成。実データの 2026-09-19 は開始11件で、特殊値の行は2枚目にずれるため4件だけ抜き出す。
-const specialStarting = [
-  pick('bb47e64c'),
-  pick('ef85a18f'),
-  ...startsBetween('2026-09-19', '2026-09-19')
-    .filter((event) => !isSpecialCharacter(event.characterId ?? event.stores[0]))
-    .toSorted((a, b) => a.startDate.getTime() - b.startDate.getTime() || a.uuid.localeCompare(b.uuid))
-    .slice(0, 2)
-]
-
-const postCases: PostCase[] = [
-  { name: 'daily-H2', kind: 'daily', day: '2026-04-29', starting: startsBetween('2026-04-29', '2026-04-29'), ending: endsBetween('2026-04-29', '2026-04-29') },
-  { name: 'daily-H2-many', kind: 'daily', day: '2026-07-26', starting: startsBetween('2026-07-26', '2026-07-26'), ending: endsBetween('2026-07-26', '2026-07-26') },
-  { name: 'daily-H2-more', kind: 'daily', day: '2026-02-14', starting: startsBetween('2026-02-14', '2026-02-14'), ending: endsBetween('2026-02-14', '2026-02-14') },
-  { name: 'daily-H2-over', kind: 'daily', day: '2026-08-31', starting: startsBetween('2026-08-31', '2026-08-31'), ending: endsBetween('2026-08-31', '2026-08-31') },
-  { name: 'daily-H2-empty', kind: 'daily', day: '2026-08-22', starting: startsBetween('2026-08-22', '2026-08-22'), ending: endsBetween('2026-08-22', '2026-08-22') },
-  { name: 'daily-H2-special', kind: 'daily', day: '2026-09-19', starting: specialStarting, ending: endsBetween('2026-09-19', '2026-09-19') },
-  { name: 'weekly-H2', kind: 'weekly', day: '2026-03-09', starting: startsBetween('2026-03-09', '2026-03-15'), ending: endsBetween('2026-03-09', '2026-03-15') },
-  { name: 'weekly-H2-special', kind: 'weekly', day: '2026-09-14', starting: specialStarting, ending: endsBetween('2026-09-14', '2026-09-20') }
-]
+const inputs: OgRenderInputs = realData ? loadRealInputs() : fixtureInputs
+console.log(realData ? 'Input: real events (.cache/og-lab/events.json)' : 'Input: deterministic fixtures (scripts/lib/og-render-fixtures.ts)')
 
 type RenderCase = {
   /** 出力ファイル名（拡張子なし）。試作と同じ名前にして見比べる。 */
@@ -126,7 +143,7 @@ const imageEventIds = (image: SocialImage): string[] => {
   return image.type === 'summary' ? image.rows.flatMap((row) => row.eventIds) : []
 }
 
-const summaryCases = postCases.flatMap((post): RenderCase[] => {
+const postSnapshots = inputs.postCases.map((post) => {
   const snapshot = buildSummarySnapshot({
     kind: post.kind,
     scheduledAt: scheduledAt(post.day),
@@ -134,26 +151,23 @@ const summaryCases = postCases.flatMap((post): RenderCase[] => {
     ending: post.ending
   })
   if (snapshot === null) throw new Error(`${post.name}: no snapshot`)
-  // 同じ側の何枚目かを数えて、試作と同じ「-starting-1」のファイル名にする。
-  const counts = new Map<string, number>()
+  return { post, snapshot }
+})
+
+const summaryCases = postSnapshots.flatMap(({ post, snapshot }): RenderCase[] => {
   return snapshot.images.map((image, index) => {
     if (image.type === 'event') throw new Error(`${post.name}: unexpected event image`)
-    const page = (counts.get(image.side) ?? 0) + 1
-    counts.set(image.side, page)
+    // 同じ側の何枚目かを数えて、試作と同じ「-starting-1」のファイル名にする。
+    const page = snapshot.images
+      .slice(0, index + 1)
+      .filter((candidate) => candidate.type !== 'event' && candidate.side === image.side).length
     return { file: `${post.name}-${image.side}-${page}`, snapshot, index, eventIds: imageEventIds(image) }
   })
 })
 
 // 追加・更新: single（店舗と別の娘が対象）/ multi（複数店舗）/ secret / other
 const eventCases = (['created', 'updated'] as const).flatMap((kind) =>
-  (
-    [
-      ['single', pick('16e89d75')],
-      ['multi', pick('578807af')],
-      ['secret', pick('bb47e64c')],
-      ['other', pick('ef85a18f')]
-    ] as const
-  ).map(([role, event]): RenderCase => {
+  inputs.eventRoles.map(([role, event]): RenderCase => {
     const view = socialEventView(event)
     return {
       file: `${kind}-D-${role}`,
@@ -253,7 +267,7 @@ const result = await build({
 })
 const modules: Record<string, { type: 'esm' | 'wasm'; contents: string | Uint8Array }> = {}
 for (const file of result.outputFiles) {
-  const name = file.path.split('/').pop() ?? file.path
+  const name = basename(file.path)
   if (name.endsWith('.js')) {
     // esbuildのfile loaderが出すURL文字列をworkerdのWASM module importへ置き換える。
     modules['index.js'] = { type: 'esm', contents: file.text.replace(/var (\w+) = "\.\/(\w[\w.-]*\.wasm)";/g, 'import $1 from "./$2";') }
@@ -303,6 +317,7 @@ const mf = new Miniflare({ workers: [{
   }
 }] })
 
+
 /* ------------------------------------------------------------------ */
 /* 検証                                                                 */
 /* ------------------------------------------------------------------ */
@@ -323,15 +338,129 @@ const post = (snapshot: SocialSnapshot, index: number): Promise<Response> =>
   })
 
 // 試作の manifest.json の eventsUsed（uuid 先頭8桁）。同名の画像に載るイベントと、並びまで一致するかを調べる。
+// フィクスチャの uuid は試作と無関係なので、突き合わせは --real-data のときだけ。試作が無ければ警告して飛ばす。
 const manifestSchema = z.array(z.object({ file: z.string().nonempty(), eventsUsed: z.array(z.string()) }))
 const loadManifest = (): Map<string, string[]> => {
+  if (!existsSync(MANIFEST_PATH)) {
+    console.warn(`Prototype manifest not found (skipping the row comparison): ${MANIFEST_PATH}`)
+    return new Map()
+  }
   const parsed = manifestSchema.safeParse(JSON.parse(readFileSync(MANIFEST_PATH, 'utf8')))
   if (!parsed.success) throw new Error(`Invalid prototype manifest: ${parsed.error.message}`)
   return new Map(parsed.data.map((entry) => [entry.file.replace(/\.png$/, ''), entry.eventsUsed]))
 }
-const manifest = loadManifest()
+const manifest = realData ? loadManifest() : new Map<string, string[]>()
+
+const summaryImages = (snapshot: SocialSnapshot, side: SocialSide): SocialSummaryImage[] =>
+  snapshot.images.filter((image): image is SocialSummaryImage => image.type === 'summary' && image.side === side)
+const rowsOf = (snapshot: SocialSnapshot, side: SocialSide): SocialRow[] =>
+  summaryImages(snapshot, side).flatMap((image) => image.rows)
+const rowCounts = (snapshot: SocialSnapshot, side: SocialSide): number[] =>
+  summaryImages(snapshot, side).map((image) => image.rows.length)
+const moreOf = (snapshot: SocialSnapshot, side: SocialSide): number[] =>
+  summaryImages(snapshot, side).flatMap((image) => (image.more === undefined ? [] : [image.more]))
+
+// 片側ごとに「表示した行の元イベント ＋ ほか N件 ＝ 入力の件数」で、表示した分と隠れた分に重複や欠けがないことを確かめる。
+const assertCoverage = (item: PostCase, snapshot: SocialSnapshot): void => {
+  const sides: [SocialSide, Event[]][] = [
+    ['starting', item.starting],
+    ['ending', item.ending]
+  ]
+  for (const [side, input] of sides) {
+    const images = summaryImages(snapshot, side)
+    const shown = images.flatMap((image) => image.rows.flatMap((row) => row.eventIds))
+    const hidden = images.flatMap((image) => image.hiddenEventIds)
+    assert.equal(
+      shown.length + moreOf(snapshot, side).reduce((sum, more) => sum + more, 0),
+      input.length,
+      `${item.name} ${side}: shown ${shown.length} + more does not match the input ${input.length}`
+    )
+    assert.deepEqual(
+      [...shown, ...hidden].toSorted(),
+      input.map((event) => event.uuid).toSorted(),
+      `${item.name} ${side}: shown and hidden events differ from the input`
+    )
+  }
+}
+
+// フィクスチャが網羅するケースの形。入力を直した拍子に網羅が崩れても、PNG が描けるだけで通らないよう固定する。
+const fixtureShapes: Record<string, (snapshot: SocialSnapshot) => void> = {
+  // 4行の1枚。店舗違いの同内容は1行（2店舗）、1日のみ、終了日未定、対象の娘が店舗と違う行（終了側）がある。
+  'daily-H2': (snapshot) => {
+    assert.deepEqual(rowCounts(snapshot, 'starting'), [4])
+    assert.ok(rowsOf(snapshot, 'starting').some((row) => row.stores.length === 2 && row.eventIds.length === 2))
+    assert.ok(rowsOf(snapshot, 'starting').some((row) => row.period === '1日のみ'))
+    assert.ok(rowsOf(snapshot, 'starting').some((row) => row.period === '終了日未定'))
+    assert.ok(rowsOf(snapshot, 'ending').some((row) => row.target !== null))
+  },
+  'daily-H2-many': (snapshot) => {
+    assert.deepEqual(rowCounts(snapshot, 'starting'), [4, 2])
+    assert.deepEqual(rowCounts(snapshot, 'ending'), [4, 1])
+    assert.deepEqual([...moreOf(snapshot, 'starting'), ...moreOf(snapshot, 'ending')], [])
+  },
+  // 8行ちょうど（4 + 4）は「ほか N件」が出ない。元イベントは行数より多い（9件）。
+  'daily-H2-more': (snapshot) => {
+    assert.deepEqual(rowCounts(snapshot, 'starting'), [4, 4])
+    assert.deepEqual(moreOf(snapshot, 'starting'), [])
+    assert.deepEqual(
+      summaryImages(snapshot, 'starting').map((image) => image.total),
+      [9, 9]
+    )
+  },
+  // 9行目以降の4行（元イベント6件）は「ほか 6件」。隠れた行数（4）とは違う。
+  'daily-H2-over': (snapshot) => {
+    assert.deepEqual(rowCounts(snapshot, 'starting'), [4, 4])
+    assert.deepEqual(moreOf(snapshot, 'starting'), [6])
+    assert.equal(summaryImages(snapshot, 'starting')[1].total, 14)
+  },
+  'daily-H2-empty': (snapshot) => {
+    assert.ok(snapshot.images.some((image) => image.type === 'empty' && image.side === 'ending'))
+    assert.deepEqual(rowCounts(snapshot, 'starting'), [3])
+    assert.deepEqual(rowCounts(snapshot, 'ending'), [])
+  },
+  'daily-H2-special': (snapshot) => {
+    const avatars = rowsOf(snapshot, 'starting').map((row) => row.avatar)
+    assert.ok(avatars.includes('secret') && avatars.includes('other'))
+  },
+  // 毎週は左端の日付が付く。同じ日付が続く行は先頭だけに残るので、日付のある行と無い行の両方が出る。
+  'weekly-H2': (snapshot) => {
+    for (const side of ['starting', 'ending'] as const) {
+      const dates = rowsOf(snapshot, side).map((row) => row.date)
+      assert.ok(dates.some((date) => date !== null) && dates.some((date) => date === null), `${side}: dates ${dates}`)
+    }
+  },
+  'weekly-H2-special': (snapshot) => {
+    const avatars = rowsOf(snapshot, 'starting').map((row) => row.avatar)
+    assert.ok(avatars.includes('secret') && avatars.includes('other'))
+    assert.equal(snapshot.kind, 'weekly')
+  }
+}
+const eventViewShapes: Record<EventRole, (view: SocialEventView) => void> = {
+  single: (view) => {
+    assert.deepEqual(view.avatars, ['seiseki'])
+    assert.notEqual(view.target, null)
+  },
+  multi: (view) => {
+    assert.equal(view.avatars.length, 3)
+    assert.equal(view.stores.length, 4)
+  },
+  secret: (view) => assert.deepEqual(view.avatars, ['secret']),
+  other: (view) => assert.deepEqual(view.avatars, ['other'])
+}
 
 try {
+  for (const { post: item, snapshot } of postSnapshots) assertCoverage(item, snapshot)
+  console.log(`Coverage holds on every side (${postSnapshots.length} posts): shown rows + "more" = input events`)
+  if (!realData) {
+    for (const { post: item, snapshot } of postSnapshots) {
+      const check = fixtureShapes[item.name]
+      assert.ok(check !== undefined, `${item.name}: no shape check`)
+      check(snapshot)
+    }
+    for (const [role, event] of inputs.eventRoles) eventViewShapes[role](socialEventView(event))
+    console.log('Fixture shapes hold (more / empty / special / repeated dates / merged stores / avatars)')
+  }
+
   for (const name of Object.keys(cases)) {
     const response = await mf.dispatchFetch(`http://localhost/og/events/test.png?case=${name}`)
     const body = await bodyOf(response)
@@ -371,8 +500,10 @@ try {
     }
     console.log(`Social render passed in workerd (${item.file}): 1200x${heightOf(image)}, ${body.length} bytes`)
   }
-  assert.deepEqual(mismatches, [], `rows differ from the approved prototype:\n${mismatches.join('\n')}`)
-  console.log(`Rows match the prototype manifest (${renderCases.filter((item) => manifest.has(item.file)).length} images)`)
+  if (manifest.size > 0) {
+    assert.deepEqual(mismatches, [], `rows differ from the approved prototype:\n${mismatches.join('\n')}`)
+    console.log(`Rows match the prototype manifest (${renderCases.filter((item) => manifest.has(item.file)).length} images)`)
+  }
 
   // index が整数でない・負・範囲外のときは描かずに例外にする。
   const [first] = renderCases

@@ -227,15 +227,21 @@ test('OpenAPI documents status union and Japanese error response shapes', () => 
   expect(responses).toHaveProperty('403')
   expect(responses).toHaveProperty('413')
   expect(responses).toHaveProperty('429')
-  const response = z
-    .object({
-      content: z.object({
-        'application/json': z.object({ schema: z.object({ oneOf: z.array(z.unknown()).length(2) }) })
-      })
-    })
+  // 実行環境によって、200応答のスキーマは直接 oneOf を持つか、components の RouteResponse への $ref になる。どちらでも検証できるよう解決する。
+  const media = z
+    .object({ content: z.object({ 'application/json': z.object({ schema: z.record(z.string(), z.unknown()) }) }) })
     .safeParse(responses?.['200'])
+  if (!media.success) throw new Error(media.error.message)
+  const reference = z
+    .object({ $ref: z.literal('#/components/schemas/RouteResponse') })
+    .safeParse(media.data.content['application/json'].schema)
+  const response = z
+    .object({ oneOf: z.array(z.unknown()).length(2) })
+    .safeParse(
+      reference.success ? document.components?.schemas?.RouteResponse : media.data.content['application/json'].schema
+    )
   if (!response.success) throw new Error(response.error.message)
-  expect(response.data.content['application/json'].schema.oneOf).toMatchObject([
+  expect(response.data.oneOf).toMatchObject([
     {
       type: 'object',
       required: ['status', 'legs'],
