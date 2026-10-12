@@ -1,6 +1,6 @@
 import { afterEach, expect, spyOn, test } from 'bun:test'
+import { notifySocialHealthFailure } from '@api/services/social-health'
 import { TwitterHealthError } from '@biccame/shared/x/health'
-import { notifyBotHealthFailure } from '../../workers/bot/src/health-notification'
 
 const webhook = 'https://discord.com/api/webhooks/123456/fixture-webhook-token'
 const env = { DISCORD_WEBHOOK_URL: webhook } as never
@@ -24,7 +24,7 @@ const intercept = (status = 204) => {
 
 test('sends only safe monitoring data and disables mentions', async () => {
   const { fetch, logs } = intercept()
-  expect(await notifyBotHealthFailure(env, failure, now)).toBe('sent')
+  expect(await notifySocialHealthFailure(env, failure, now)).toBe('sent')
   const [url, init] = fetch.mock.calls[0]
   expect(String(url)).toBe(webhook)
   expect(init?.method).toBe('POST')
@@ -40,7 +40,7 @@ test('sends only safe monitoring data and disables mentions', async () => {
 
 test('reports an unconfigured notification channel without attempting delivery', async () => {
   const { fetch, errors } = intercept()
-  expect(await notifyBotHealthFailure({} as never, failure, now)).toBe('unconfigured')
+  expect(await notifySocialHealthFailure({} as never, failure, now)).toBe('unconfigured')
   expect(fetch).not.toHaveBeenCalled()
   expect(JSON.stringify(errors.mock.calls)).toContain('webhook unconfigured')
 })
@@ -55,7 +55,7 @@ for (const url of [
 ]) {
   test(`rejects invalid webhook configuration ${url.split('/')[2] ?? 'invalid'}`, async () => {
     const { fetch, errors } = intercept()
-    expect(await notifyBotHealthFailure({ DISCORD_WEBHOOK_URL: url } as never, failure, now)).toBe('invalid_config')
+    expect(await notifySocialHealthFailure({ DISCORD_WEBHOOK_URL: url } as never, failure, now)).toBe('invalid_config')
     expect(fetch).not.toHaveBeenCalled()
     expect(JSON.stringify(errors.mock.calls)).not.toContain('secret')
   })
@@ -66,7 +66,7 @@ test('reports HTTP delivery failure without reading its body', async () => {
   fetch.mockImplementation(
     Object.assign(async () => new Response('sensitive upstream detail', { status: 429 }), { preconnect: () => {} })
   )
-  expect(await notifyBotHealthFailure(env, failure, now)).toBe('failed')
+  expect(await notifySocialHealthFailure(env, failure, now)).toBe('failed')
   const logged = JSON.stringify(errors.mock.calls)
   expect(logged).toContain('429')
   expect(logged).not.toContain('sensitive upstream detail')
@@ -75,7 +75,7 @@ test('reports HTTP delivery failure without reading its body', async () => {
 
 test('does not follow or treat a manual redirect as successful delivery', async () => {
   const { fetch } = intercept(307)
-  expect(await notifyBotHealthFailure(env, failure, now)).toBe('failed')
+  expect(await notifySocialHealthFailure(env, failure, now)).toBe('failed')
   expect(fetch).toHaveBeenCalledTimes(1)
 })
 
@@ -89,7 +89,7 @@ test('reports network delivery failure without leaking the thrown URL', async ()
       { preconnect: () => {} }
     )
   )
-  expect(await notifyBotHealthFailure(env, failure, now)).toBe('failed')
+  expect(await notifySocialHealthFailure(env, failure, now)).toBe('failed')
   expect(JSON.stringify(errors.mock.calls)).toContain('webhook network failure')
   expect(JSON.stringify(errors.mock.calls)).not.toContain('fixture-webhook-token')
 })

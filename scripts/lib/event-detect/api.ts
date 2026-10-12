@@ -1,6 +1,6 @@
 import type { ChartsResponse } from '@biccame/shared/event-detect/charts'
 import { normalizeText } from '@biccame/shared/event-detect/filter'
-import { dayjs } from '../../../workers/bot/src/timeline/utils/dayjs'
+import { dayjs } from '../timeline/utils/dayjs'
 import {
   type Analysis,
   analyze,

@@ -46,23 +46,26 @@ jobs:
             ${{ runner.os }}-character-images-${{
               hashFiles(
                 'scripts/download-character-images.ts',
-                'scripts/stampcamera-map.ts',
+                'workers/web/src/app/lib/stampcamera-map.ts',
                 'workers/web/public/characters.json'
               )
             }}
-      # OG 画像の生成結果を再利用するキャッシュ。生成ロジック (script / map / characters.json)
-      # のハッシュを key にしているので、いずれかが変わると key が変わって再生成される。
-      # 変更なしなら scripts/generate-og-images.ts が既存 PNG を検知してスキップする。
+      # OG 画像 (カード + 投稿画像用の丸 Avatar) の生成結果を再利用するキャッシュ。生成ロジック
+      # (script / map / characters.json) のハッシュを key にしているので、いずれかが変わると
+      # key が変わって再生成される。変更なしなら scripts/generate-og-images.ts と
+      # scripts/generate-og-avatars.ts が既存 PNG を検知してスキップする。
       - name: Cache OG images
         uses: actions/cache@v5
         with:
           path: |
             workers/web/public/og/characters
+            workers/web/public/og/avatars
           key: >-
             ${{ runner.os }}-og-${{
               hashFiles(
                 'scripts/generate-og-images.ts',
-                'scripts/stampcamera-map.ts',
+                'scripts/generate-og-avatars.ts',
+                'workers/web/src/app/lib/stampcamera-map.ts',
                 'workers/web/public/characters.json'
               )
             }}
@@ -75,6 +78,7 @@ jobs:
           bunx rimraf workers/web/dist
           bun run scripts/download-character-images.ts
           bun run scripts/generate-og-images.ts
+          bun run scripts/generate-og-avatars.ts
           bun tsc -b
           bun run build --mode "${CLOUDFLARE_ENV}"
           bun run test:app-build
@@ -105,18 +109,3 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}
           NODE_ENV: production
-      - name: Build bot with the deployed app read binding
-        if: env.ACT != 'true'
-        run: |
-          bun run check:bot-stores
-          bun run build:bot
-          bun run test:bot-rpc
-        env:
-          CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}
-      - name: Deploy bot after app
-        if: env.ACT != 'true'
-        run: bun scripts/deploy-bot.ts --env="${CLOUDFLARE_ENV}" ${BOT_ACTIVATION}
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ENV: ${{ github.event.pull_request.base.ref == 'master' && 'production' || 'staging' }}
-          BOT_ACTIVATION: ${{ github.event.pull_request.base.ref == 'master' && '--allow-active-production' || '' }}

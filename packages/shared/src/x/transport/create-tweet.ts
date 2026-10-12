@@ -3,7 +3,7 @@ import { z } from 'zod'
 const CREATE_TWEET_QUERY_ID = 'oB-5XsHNAbjvARJEc8CZFw'
 export const CREATE_TWEET_PATH = `/i/api/graphql/${CREATE_TWEET_QUERY_ID}/CreateTweet`
 
-export type TweetOptions = { quoteTweetId?: string; replyToTweetId?: string }
+export type TweetOptions = { quoteTweetId?: string; replyToTweetId?: string; mediaIds?: string[] }
 
 /**
  * CreateTweet GraphQL のレスポンスのうち、投稿済みツイート ID の取得に使う
@@ -34,7 +34,10 @@ export const buildCreateTweetBody = (text: string, opts: TweetOptions): string =
     variables: {
       tweet_text: text,
       dark_request: false,
-      media: { media_entities: [], possibly_sensitive: false },
+      media: {
+        media_entities: opts.mediaIds ? opts.mediaIds.map((mediaId) => ({ media_id: mediaId, tagged_users: [] })) : [],
+        possibly_sensitive: false
+      },
       semantic_annotation_ids: [],
       ...(opts.quoteTweetId ? { attachment_url: `https://x.com/i/status/${opts.quoteTweetId}` } : {}),
       ...(opts.replyToTweetId

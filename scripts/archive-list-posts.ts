@@ -2,8 +2,8 @@ import { lstat, realpath } from 'node:fs/promises'
 import { relative, resolve } from 'node:path'
 import { parseArgs } from 'node:util'
 import { X_BEARER } from '@biccame/shared/x/transport'
-import { Client, LIST_TIMELINE_ENDPOINT } from '../workers/bot/src/timeline/client'
-import { dayjs } from '../workers/bot/src/timeline/utils/dayjs'
+import { Client, LIST_TIMELINE_ENDPOINT } from './lib/timeline/client'
+import { dayjs } from './lib/timeline/utils/dayjs'
 import { createArchiveProgressRenderer } from './lib/archive-progress'
 import {
   ArchiveFailure,

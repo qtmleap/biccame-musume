@@ -16,8 +16,10 @@
 
 import { $ } from 'bun'
 import { v5 as uuidv5 } from 'uuid'
+import dayjs from 'dayjs'
 import { PHYSICAL_STORE_KEYS } from '@biccame/shared/domain/badges/store-exclusion'
 import { STORE_NAME_LABELS } from '@biccame/shared/domain/character-names'
+import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
 import type { StoreKey } from '@biccame/shared/schemas/store.dto'
 
 type TargetEnv = 'local-staging' | 'remote-staging' | 'remote-production'
@@ -68,7 +70,8 @@ const escapeSql = (value: string): string => value.replace(/'/g, "''")
 
 const storeLabel = (key: StoreKey): string => STORE_NAME_LABELS[key] ?? key
 
-const startDateIso = new Date().toISOString()
+// DateTime 列はアプリ（Prisma の D1 アダプタ）と同じ +00:00 の形式で書く。created_at / updated_at も同じ実行時刻
+const startDateIso = toD1DateTime(dayjs())
 
 const buildSql = (): string => {
   const lines: string[] = []
@@ -87,8 +90,8 @@ const buildSql = (): string => {
         `'${startDateIso}', ` +
         `NULL, ` +
         `${group.sortOrder}, ` +
-        `CURRENT_TIMESTAMP, ` +
-        `CURRENT_TIMESTAMP);`
+        `'${startDateIso}', ` +
+        `'${startDateIso}');`
     )
 
     for (const storeKey of PHYSICAL_STORE_KEYS) {
@@ -107,16 +110,16 @@ const buildSql = (): string => {
           `1, ` +
           `0, ` +
           `'${groupId}', ` +
-          `CURRENT_TIMESTAMP, ` +
-          `CURRENT_TIMESTAMP);`
+          `'${startDateIso}', ` +
+          `'${startDateIso}');`
       )
       lines.push(
         `INSERT OR IGNORE INTO event_stores (id, event_id, store_key, created_at, updated_at) VALUES (` +
           `'${eventStoreId}', ` +
           `'${eventId}', ` +
           `'${escapeSql(storeKey)}', ` +
-          `CURRENT_TIMESTAMP, ` +
-          `CURRENT_TIMESTAMP);`
+          `'${startDateIso}', ` +
+          `'${startDateIso}');`
       )
     }
   }

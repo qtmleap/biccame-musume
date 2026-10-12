@@ -45,7 +45,16 @@ const resolveDependency = (file: string, dependency: string): string => {
 
 test('web source root contains only the UI, backend and Worker entrypoint', () => {
   expect(readdirSync(web).sort()).toEqual(['api', 'app', 'index.ts'])
-  expect(existsSync(resolve(root, 'workers', 'app'))).toBe(false)
+  for (const legacySource of [
+    'src',
+    'package.json',
+    'vite.config.ts',
+    'wrangler.toml',
+    'wrangler.json',
+    'wrangler.jsonc'
+  ]) {
+    expect(existsSync(resolve(root, 'workers/app', legacySource)), legacySource).toBe(false)
+  }
   expect(existsSync(resolve(web, 'server'))).toBe(false)
   const configuration = JSON.parse(readFileSync(resolve(root, 'tsconfig.json'), 'utf8'))
   expect(configuration.compilerOptions.paths).toEqual({

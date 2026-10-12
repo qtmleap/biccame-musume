@@ -3,6 +3,7 @@ import { afterEach, describe, expect, test } from 'bun:test'
 import { readdirSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
 import { GapCategorySchema } from '@biccame/shared/event-detect/viewer'
 import { analyze } from '../../scripts/lib/event-detect/analysis'
@@ -443,7 +444,7 @@ describe('seed --fix: category=other のアクスタを acsta に付け替える
     const after = new Database(world.path, { readonly: true })
     for (const id of acstaIds) {
       const row = categoryOfRow(after, id)
-      expect(row).toEqual({ category: 'acsta', updated_at: NOW })
+      expect(row).toEqual({ category: 'acsta', updated_at: toD1DateTime(NOW) })
       // category と updated_at 以外の events の列、子の行は変わらない
       const now = rowsOf(after, id)
       const was = beforeAcsta[id]
@@ -545,7 +546,7 @@ describe('本番 D1 用の acsta の SQL', () => {
     for (const line of updates)
       expect(line).toMatch(
         new RegExp(
-          `^UPDATE events SET category='acsta', updated_at='${NOW}' WHERE id='[0-9a-f-]{36}' AND category='other';$`
+          `^UPDATE events SET category='acsta', updated_at='${toD1DateTime(NOW).replace('+', '\\+')}' WHERE id='[0-9a-f-]{36}' AND category='other';$`
         )
       )
     // D1 のリモート実行は BEGIN / COMMIT を受け付けない

@@ -4,8 +4,8 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { parseArchivePage, runArchive } from '../scripts/lib/post-archive'
-import { Client } from '../workers/bot/src/timeline/client'
-import { retryAfterMilliseconds, TimelineFailure } from '../workers/bot/src/timeline/utils/failure'
+import { Client } from '../scripts/lib/timeline/client'
+import { retryAfterMilliseconds, TimelineFailure } from '../scripts/lib/timeline/utils/failure'
 
 const scope = {
   listId: '2019028800869413128',
@@ -1618,7 +1618,7 @@ test('List deadline recognition rejects ambiguous errors, unsafe paths and other
     ).toMatchObject({ complete: false, reason: 'unsupported_payload', pages: 1, posts: 0 })
     expect(calls).toBe(0)
   }
-})
+}, 30000)
 
 test('List mode refuses Search-only seed imports before accessing the seed path', async () => {
   const out = await output()

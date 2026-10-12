@@ -227,7 +227,47 @@ test('OpenAPI documents status union and Japanese error response shapes', () => 
   expect(responses).toHaveProperty('403')
   expect(responses).toHaveProperty('413')
   expect(responses).toHaveProperty('429')
-  expect(document.components?.schemas?.RouteResponse).toHaveProperty('oneOf')
+  const response = z
+    .object({
+      content: z.object({
+        'application/json': z.object({ schema: z.object({ oneOf: z.array(z.unknown()).length(2) }) })
+      })
+    })
+    .safeParse(responses?.['200'])
+  if (!response.success) throw new Error(response.error.message)
+  expect(response.data.content['application/json'].schema.oneOf).toMatchObject([
+    {
+      type: 'object',
+      required: ['status', 'legs'],
+      properties: {
+        status: { type: 'string', enum: ['estimated'] },
+        legs: { type: 'array', minItems: 1, maxItems: 5 }
+      }
+    },
+    {
+      type: 'object',
+      required: ['status', 'reason'],
+      properties: {
+        status: { type: 'string', enum: ['unavailable'] },
+        reason: { type: 'string', enum: ['generation_failed'] }
+      }
+    }
+  ])
+  for (const status of ['400', '403', '413', '429']) {
+    const errorResponse = z
+      .object({
+        description: z.string().nonempty(),
+        content: z.object({ 'application/json': z.object({ schema: z.unknown() }) })
+      })
+      .safeParse(responses?.[status])
+    if (!errorResponse.success) throw new Error(errorResponse.error.message)
+    expect(errorResponse.data.description).toMatch(/[ぁ-んァ-ヶ一-龠]/)
+    expect(errorResponse.data.content['application/json'].schema).toMatchObject({
+      type: 'object',
+      required: ['message'],
+      properties: { message: { type: 'string', minLength: 1 } }
+    })
+  }
 })
 
 test('five legs and 100-character names remain accepted', async () => {

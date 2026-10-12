@@ -1,4 +1,5 @@
 import { renderEventOgImage } from '@api/lib/og-event-image'
+import socialImages from '@api/routes/og-social'
 import { getEvent } from '@api/services/event-service'
 import type { Bindings, Variables } from '@api/types/bindings'
 import { eventOgPlace } from '@biccame/shared/domain/og-event-place'
@@ -71,8 +72,8 @@ routes.openapi(
       const fresh = await renderEventOgImage(c.env, new URL(c.req.url).origin, {
         title: event.title,
         startDate: event.startDate,
-        endDate: event.endDate ?? null,
-        limitedQuantity: event.limitedQuantity ?? null,
+        endDate: event.endDate === undefined ? null : event.endDate,
+        limitedQuantity: event.limitedQuantity === undefined ? null : event.limitedQuantity,
         place: eventOgPlace(event)
       })
       await kv.put(cacheKey(id), fresh, {
@@ -88,5 +89,7 @@ routes.openapi(
     })
   }
 )
+
+routes.route('/', socialImages)
 
 export default routes

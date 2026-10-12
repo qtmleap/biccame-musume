@@ -1,5 +1,4 @@
 import { expect, mock, spyOn, test } from 'bun:test'
-import { discordDeliveryResultSchema, discordStatusSchema, type EventDetectionNotification } from '@biccame/shared/bot'
 import {
   buildDetectionNotification,
   checkDiscordConnection,
@@ -7,13 +6,13 @@ import {
   notifyEventDetection,
   postDiscordMessage,
   testDiscordNotification
-} from '../workers/bot/src/discord'
+} from '@api/services/discord'
+import { discordDeliveryResultSchema, discordStatusSchema, type EventDetectionNotification } from '@biccame/shared/bot'
 
 const env = {
   DISCORD_TOKEN: 'synthetic-discord-token',
   DISCORD_CHANNEL_ID: '12345',
-  X_POSTING_ENABLED: 'false',
-  TL_NOTIFICATIONS_ENABLED: 'false'
+  X_POSTING_ENABLED: 'false'
 }
 const notification: EventDetectionNotification = {
   requestId: '550e8400-e29b-41d4-a716-446655440000',
@@ -30,7 +29,7 @@ const notification: EventDetectionNotification = {
 const reply = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status })
 const accepted = mock(async () => reply({ id: '987654321' }))
 
-test('event notifications send without a notification flag independently of disabled X and TL flags', async () => {
+test('event notifications send without a notification flag independently of disabled X posting', async () => {
   const calls: { url: string; init: RequestInit }[] = []
   const result = await notifyEventDetection(env, notification, async (url, init) => {
     calls.push({ url, init })
@@ -158,7 +157,7 @@ test('maximum notification values stay within Discord embed limits', () => {
   for (const field of embed.fields) expect(field.value.length).toBeLessThanOrEqual(1024)
 })
 
-test('explicit test sends independently of disabled X and TL flags', async () => {
+test('explicit test sends independently of disabled X posting', async () => {
   const result = await testDiscordNotification(
     env,
     {

@@ -381,3 +381,41 @@ model UserEvent {
   @@index([status])
   @@map("user_events")
 }
+
+/// チャネルごとの不変スナップショットと公開告知の配信履歴
+model SocialPostJob {
+  id           String  @id
+  channel      String
+  key          String
+  snapshotJson String  @map("snapshot_json")
+  status       String  @default("pending")
+  attempts     Int     @default(0)
+  availableAt  BigInt  @map("available_at")
+  leaseToken   String? @map("lease_token")
+  leaseUntil   BigInt? @map("lease_until")
+  deliveryId   String? @map("delivery_id")
+  lastError    String? @map("last_error")
+  createdAt    BigInt  @map("created_at")
+  updatedAt    BigInt  @map("updated_at")
+
+  @@unique([channel, key])
+  @@index([status, availableAt])
+  @@map("social_post_jobs")
+}
+
+/// 日次・週間通知の全ページを一度だけ確定するmanifest
+model SocialSummaryRun {
+  key          String  @id
+  kind         String
+  scheduledAt  String  @map("scheduled_at")
+  status       String  @default("preparing")
+  manifestJson String  @default("[]") @map("manifest_json")
+  attempts     Int     @default(0)
+  leaseToken   String? @map("lease_token")
+  leaseUntil   BigInt? @map("lease_until")
+  createdAt    BigInt  @map("created_at")
+  updatedAt    BigInt  @map("updated_at")
+
+  @@index([status, leaseUntil])
+  @@map("social_summary_runs")
+}

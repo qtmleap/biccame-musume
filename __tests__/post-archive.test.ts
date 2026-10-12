@@ -13,8 +13,8 @@ import {
   resolveArchiveScope,
   runArchive
 } from '../scripts/lib/post-archive'
-import { Client } from '../workers/bot/src/timeline/client'
-import { dayjs } from '../workers/bot/src/timeline/utils/dayjs'
+import { Client } from '../scripts/lib/timeline/client'
+import { dayjs } from '../scripts/lib/timeline/utils/dayjs'
 
 const api = () => ({ resolveArchiveScope, runArchive })
 type Scope = Parameters<typeof runArchive>[0]['scope']

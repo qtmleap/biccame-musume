@@ -1,5 +1,5 @@
+import { STORE_DISPLAY_NAMES } from '@biccame/shared/domain/badges/store-display-names'
 import { StoreKeySchema } from '@biccame/shared/schemas/store.dto'
-import { STORE_DISPLAY_NAMES } from './badges/store-display-names'
 
 export const STORE_NAME_LABELS = STORE_DISPLAY_NAMES
 export const CHARACTER_NAME_LABELS = {
