@@ -18,6 +18,66 @@ export type TwitterCredentials = { TWITTER_AUTH_TOKEN: string; TWITTER_CSRF_TOKE
 export class TwitterTransport {
   constructor(private env: TwitterCredentials) {}
 
+  /** Cookie認証と既存transaction署名でPNGをアップロードする。 */
+  async uploadImage(png: Uint8Array): Promise<string> {
+    if (!this.env.TWITTER_AUTH_TOKEN.trim() || !this.env.TWITTER_CSRF_TOKEN.trim())
+      throw new TwitterTransportError('missing_credentials')
+    if (png.byteLength === 0 || png.byteLength > 5 * 1024 * 1024) throw new TwitterTransportError('rejected')
+    const path = '/i/media/upload.json'
+    const request = async (form: FormData): Promise<Response> => {
+      const transactionId = await getTransactionId('POST', path)
+      const response = await fetch(`https://upload.x.com${path}`, {
+        method: 'POST',
+        redirect: 'manual',
+        signal: AbortSignal.timeout(15000),
+        headers: {
+          authorization: `Bearer ${X_BEARER}`,
+          cookie: `auth_token=${this.env.TWITTER_AUTH_TOKEN}; ct0=${this.env.TWITTER_CSRF_TOKEN}`,
+          'x-csrf-token': this.env.TWITTER_CSRF_TOKEN,
+          'x-client-transaction-id': transactionId,
+          'x-twitter-auth-type': 'OAuth2Session',
+          'x-twitter-active-user': 'yes',
+          origin: 'https://x.com',
+          referer: 'https://x.com/',
+          'user-agent': BROWSER_USER_AGENT
+        },
+        body: form
+      })
+      if (!response.ok) {
+        await response.body?.cancel()
+        throw new TwitterTransportError(response.status === 429 ? 'rate_limit' : 'rejected', response.status)
+      }
+      return response
+    }
+    const init = new FormData()
+    init.set('command', 'INIT')
+    init.set('total_bytes', String(png.byteLength))
+    init.set('media_type', 'image/png')
+    init.set('media_category', 'tweet_image')
+    const result = z
+      .object({ media_id_string: z.string().regex(/^\d+$/) })
+      .safeParse(await (await request(init)).json())
+    if (!result.success) throw new TwitterTransportError('unexpected_response')
+    const append = new FormData()
+    append.set('command', 'APPEND')
+    append.set('media_id', result.data.media_id_string)
+    append.set('segment_index', '0')
+    append.set('media', new Blob([new Uint8Array(png)], { type: 'image/png' }), 'event.png')
+    await (await request(append)).body?.cancel()
+    const finalize = new FormData()
+    finalize.set('command', 'FINALIZE')
+    finalize.set('media_id', result.data.media_id_string)
+    const ready = z
+      .object({
+        media_id_string: z.string().regex(/^\d+$/),
+        processing_info: z.object({ state: z.string().nonempty() }).optional()
+      })
+      .safeParse(await (await request(finalize)).json())
+    if (!ready.success || (ready.data.processing_info && ready.data.processing_info.state !== 'succeeded'))
+      throw new TwitterTransportError('unexpected_response')
+    return ready.data.media_id_string
+  }
+
   async tweet(text: string, opts: TweetOptions = {}): Promise<string> {
     const { TWITTER_AUTH_TOKEN, TWITTER_CSRF_TOKEN } = this.env
 

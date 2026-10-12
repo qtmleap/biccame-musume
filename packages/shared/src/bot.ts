@@ -167,6 +167,7 @@ export const discordStatusSchema = z.strictObject({
   }),
   notificationsEnabled: z.boolean(),
   xPostingEnabled: z.boolean(),
+  discordPostingEnabled: z.boolean().default(false),
   timelineNotificationsEnabled: z.boolean(),
   connection: z.enum([
     'unchecked',
@@ -186,17 +187,3 @@ export const discordStatusSchema = z.strictObject({
   fetchedAt: z.iso.datetime()
 })
 export type DiscordStatus = z.infer<typeof discordStatusSchema>
-
-export interface BotRpc {
-  ping(input: BotPingRequest): Promise<BotPingResponse>
-  announce(input: Announcement): Promise<DeliveryResult>
-  accountStatus(): Promise<AccountResult>
-  postingSessionStatus(): Promise<PostingSessionResult>
-  notifyEventDetection(input: EventDetectionNotification): Promise<DiscordDeliveryResult>
-  discordStatus(): Promise<DiscordStatus>
-  checkDiscordConnection(): Promise<DiscordStatus>
-  testDiscordNotification(input: DiscordTestRequest): Promise<DiscordDeliveryResult>
-}
-export interface AppBotReadRpc {
-  dailyTargets(input: DailyRequest): Promise<DailyTargetsResult>
-}

@@ -2,7 +2,7 @@ import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@biccame/shared/domain
 import { isSpecialCharacter, resolveEventCharacter } from '@biccame/shared/domain/event-character'
 import type { Event, EventDetail } from '@biccame/shared/schemas/event.dto'
 
-const SITE_BASE = 'https://biccame-musume.com'
+export const SITE_BASE = 'https://biccame-musume.com'
 const TWITTER_URL_WEIGHT = 23
 export const TWEET_WEIGHT_LIMIT = 280
 

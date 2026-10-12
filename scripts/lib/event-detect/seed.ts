@@ -3,9 +3,10 @@ import { randomUUID } from 'node:crypto'
 import { existsSync, realpathSync } from 'node:fs'
 import { mkdir, readFile } from 'node:fs/promises'
 import { dirname, resolve, sep } from 'node:path'
+import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
 import { type DetectPostKind, DetectPostKindSchema } from '@biccame/shared/event-detect/post'
 import { z } from 'zod'
-import { dayjs } from '../../../workers/bot/src/timeline/utils/dayjs'
+import { dayjs } from '../timeline/utils/dayjs'
 import { parseStatusUrl } from './gold'
 import { type CallStats, endpointFromEnv, JUDGE_MODEL, type JudgeEndpoint } from './judge'
 import { GapCategorySchema, GapStatusSchema } from './schema'
@@ -1381,7 +1382,7 @@ const conditionOf = (plan: SeedPlan) =>
     : { type: 'first_come', quantity: plan.limitedQuantity }
 
 export type SeedWriteOptions = {
-  /** INSERT 時刻（ISO、Z 付き）。created_at / updated_at に入れる */
+  /** INSERT 時刻（ISO）。created_at / updated_at に Prisma の形式（+00:00）で入れる */
   now: string
   /** --force: ローカル D1 の既存行との照合を省く */
   force: boolean
@@ -1403,7 +1404,9 @@ export const applySeed = (db: Database, plans: readonly SeedPlan[], options: See
       const clash = plans.find((plan) => local.storeDays.has(storeDayKey(plan.store, plan.startDay)))
       if (clash) throw new Error(`already in local D1: ${clash.store} ${clash.startDay} ${clash.title}`)
     }
-    const stamps = { created_at: options.now, updated_at: options.now }
+    // DateTime 列はアプリ（Prisma の D1 アダプタ）と同じ +00:00 の形式で書く。計画やレポートの値は Z 付きのまま
+    const stamp = toD1DateTime(options.now)
+    const stamps = { created_at: stamp, updated_at: stamp }
     const events = plans.map((plan) => ({ plan, id: newId() }))
     insertRows(
       db,
@@ -1413,9 +1416,9 @@ export const applySeed = (db: Database, plans: readonly SeedPlan[], options: See
         category: plan.category,
         title: plan.title,
         limited_quantity: plan.limitedQuantity,
-        start_date: plan.startDate,
-        end_date: plan.endDate,
-        ended_at: plan.endedAt,
+        start_date: toD1DateTime(plan.startDate),
+        end_date: plan.endDate === null ? null : toD1DateTime(plan.endDate),
+        ended_at: plan.endedAt === null ? null : toD1DateTime(plan.endedAt),
         is_verified: 0,
         is_preliminary: plan.isPreliminary ? 1 : 0,
         group_id: null,

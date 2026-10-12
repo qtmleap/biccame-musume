@@ -208,10 +208,10 @@ describe('seed --fix: 終了が分からないまま止まっているイベン�
       })
     }
     for (const id of untouched) expect(rowsOf(after, id)).toEqual(beforeRows[id])
-    // B: e-b に最後の言及の日が入る
+    // B: e-b に最後の言及の日が入る（D1 には Prisma の形式で書く）
     expect(
       after.query<{ ended_at: string | null }, []>("SELECT ended_at FROM events WHERE id = 'e-b'").get()?.ended_at
-    ).toBe('2026-07-31T15:00:00.000Z')
+    ).toBe('2026-07-31T15:00:00.000+00:00')
     // user_events は変わらない
     expect(after.query('SELECT * FROM user_events').all()).toEqual(beforeAll.user_events)
     // 行数: 削除 2 件

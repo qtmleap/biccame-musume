@@ -3,7 +3,9 @@ import { createHash } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
+import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
 import type { DetectPostKind } from '@biccame/shared/event-detect/post'
+import dayjs from 'dayjs'
 import { z } from 'zod'
 import { parseStatusUrl } from './gold'
 import {
@@ -311,9 +313,15 @@ export type UnmatchedReason =
 
 export type UnmatchedEvent = { event: SnapshotEvent; reason: UnmatchedReason }
 
+/**
+ * 作成時刻は時刻として比べる。D1 の created_at は Prisma の形式（+00:00）に揃えられ、レポートの generatedAt は Z 付きのまま残るため。
+ * 読めない値は元の文字列のまま比べる（手で作った行を取り違えない）。
+ */
+const instantKey = (value: string) => (dayjs(value).isValid() ? toD1DateTime(value) : value)
+
 /** (店舗, 開始日, 題, 作成時刻) の組。作成時刻はレポートの generatedAt と D1 の created_at が一致するはずなので、手で作った行を除く鍵になる */
 const matchKey = (store: string, day: string, title: string, createdAt: string) =>
-  JSON.stringify([store, day, title, createdAt])
+  JSON.stringify([store, day, title, instantKey(createdAt)])
 
 /**
  * is_verified=0 のイベントと emulate のイベントを、レポートで 1 対 1 に結ぶ。
@@ -598,7 +606,7 @@ const untouchedFingerprint = (db: Database, touched: ReadonlySet<string>) => {
 }
 
 export type FixWriteOptions = {
-  /** updated_at に入れる時刻（ISO、Z 付き） */
+  /** updated_at に入れる時刻（ISO）。D1 には Prisma の形式（+00:00）で書く */
   now: string
 }
 
@@ -619,7 +627,8 @@ export const applyFix = (db: Database, plan: FixPlan, options: FixWriteOptions) 
   const write = db.transaction(() => {
     const before = countRows(db)
     const fingerprint = untouchedFingerprint(db, touched)
-    const stamp = options.now
+    // ended_at / updated_at は Prisma の DateTime 列なので、アプリと同じ +00:00 の形式で書く
+    const stamp = toD1DateTime(options.now)
     const setEndedAt = db.prepare(
       'UPDATE events SET ended_at = ?, updated_at = ? WHERE id = ? AND is_verified = 0 AND end_date IS NULL AND ended_at IS NULL'
     )
@@ -665,7 +674,7 @@ export const applyFix = (db: Database, plan: FixPlan, options: FixWriteOptions) 
         expected.event_conditions -= event.children.event_conditions
         continue
       }
-      if (event.endedAt !== null) expectChanges(`ended_at ${event.eventId}`, setEndedAt.run(event.endedAt.iso, stamp, event.eventId).changes, 1)
+      if (event.endedAt !== null) expectChanges(`ended_at ${event.eventId}`, setEndedAt.run(toD1DateTime(event.endedAt.iso), stamp, event.eventId).changes, 1)
       if (event.quantity !== null) {
         expectChanges(`limited_quantity ${event.eventId}`, clearQuantity.run(stamp, event.eventId, event.quantity.from).changes, 1)
         for (const conditionId of event.quantity.conditionIds)
@@ -767,7 +776,7 @@ export const buildAcstaProductionSql = (
     "-- 1 行 1 件。WHERE に category = 'other' があるので、再実行しても変わらない（冪等）",
     ...rows.map(
       (row) =>
-        `UPDATE events SET category='acsta', updated_at='${meta.generatedAt}' WHERE id='${row.id}' AND category='other';`
+        `UPDATE events SET category='acsta', updated_at='${toD1DateTime(meta.generatedAt)}' WHERE id='${row.id}' AND category='other';`
     )
   ].join('\n')}\n`
   return { rows, text }

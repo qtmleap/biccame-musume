@@ -1,5 +1,5 @@
 import type { ChartsResponse } from '@biccame/shared/event-detect/charts'
-import { dayjs } from '../../../workers/bot/src/timeline/utils/dayjs'
+import { dayjs } from '../timeline/utils/dayjs'
 import { type Analysis, type EmulatedEntry, emulatedEndedDay, type Judgements } from './analysis'
 
 // チャート画面（/admin/event-detect/charts）の集計。全行を 1 回だけ走査して、確率のヒストグラムと月別の件数を数える。

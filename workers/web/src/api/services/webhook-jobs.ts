@@ -1,8 +1,12 @@
+import { eventSocialSnapshot } from '@api/services/bot-announcement'
+import { socialInsertStatements } from '@api/services/social-posting'
 import type { Bindings } from '@api/types/bindings'
+import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
+import { calculateEventStatus } from '@biccame/shared/domain/event-status'
 import { ClefResponseSchema } from '@biccame/shared/event-detect/clef'
 import { type DetectPost, DetectPostSchema } from '@biccame/shared/event-detect/post'
 import { GapStatusSchema } from '@biccame/shared/event-detect/viewer'
-import { type EventRequest, EventRequestSchema } from '@biccame/shared/schemas/event.dto'
+import { EventDetailSchema, type EventRequest, EventRequestSchema } from '@biccame/shared/schemas/event.dto'
 import { type WebhookJob, type WebhookJobQuerySchema, WebhookJobSchema } from '@biccame/shared/schemas/webhook.dto'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
@@ -208,12 +212,14 @@ export const validateWebhookEvent = (value: unknown, eventUUID: string): EventRe
 
 /** 判定履歴とイベント・子テーブルをD1の同一トランザクションで確定する。 */
 export const registerWebhookEvent = async (
-  env: Pick<Bindings, 'DB'>,
+  env: Pick<Bindings, 'DB' | 'X_POSTING_ENABLED' | 'DISCORD_POSTING_ENABLED'>,
   job: WebhookJob,
   event: EventRequest,
   token: string
 ) => {
   const now = dayjs().valueOf()
+  // webhook_event_jobs は生SQL専用のミリ秒、イベント系の DateTime 列は Prisma と同じ文字列で保存する。
+  const timestamp = toD1DateTime(now)
   const audit = await env.DB.prepare('SELECT answers_json FROM webhook_event_jobs WHERE post_id=?')
     .bind(job.postId)
     .first<{ answers_json: string | null }>()
@@ -229,9 +235,9 @@ export const registerWebhookEvent = async (
       event.category,
       event.title,
       event.limitedQuantity === undefined ? null : event.limitedQuantity,
-      dayjs(event.startDate).valueOf(),
-      event.endDate === undefined ? null : dayjs(event.endDate).valueOf(),
-      event.endedAt === undefined ? null : dayjs(event.endedAt).valueOf(),
+      toD1DateTime(event.startDate),
+      event.endDate === undefined ? null : toD1DateTime(event.endDate),
+      event.endedAt === undefined ? null : toD1DateTime(event.endedAt),
       event.isPreliminary ? 1 : 0,
       event.groupId === undefined ? null : event.groupId,
       event.characterId === undefined ? null : event.characterId,
@@ -240,9 +246,9 @@ export const registerWebhookEvent = async (
       job.questionVersion,
       job.postId,
       audit.answers_json,
-      job.judgedAt === null ? null : dayjs(job.judgedAt).valueOf(),
-      now,
-      now,
+      job.judgedAt === null ? null : toD1DateTime(job.judgedAt),
+      timestamp,
+      timestamp,
       job.postId,
       token
     )
@@ -257,8 +263,8 @@ export const registerWebhookEvent = async (
         condition.type,
         condition.purchaseAmount === undefined ? null : condition.purchaseAmount,
         condition.quantity === undefined ? null : condition.quantity,
-        now,
-        now,
+        timestamp,
+        timestamp,
         job.postId,
         token,
         event.uuid,
@@ -274,8 +280,8 @@ export const registerWebhookEvent = async (
         event.uuid,
         reference.type,
         reference.url,
-        now,
-        now,
+        timestamp,
+        timestamp,
         job.postId,
         token,
         event.uuid,
@@ -290,14 +296,32 @@ export const registerWebhookEvent = async (
         crypto.randomUUID(),
         event.uuid,
         store,
-        now,
-        now,
+        timestamp,
+        timestamp,
         job.postId,
         token,
         event.uuid,
         job.postId
       )
     )
+  )
+  const detail = EventDetailSchema.safeParse({
+    ...event,
+    createdAt: now,
+    updatedAt: now,
+    ...calculateEventStatus(event, dayjs(now).toISOString()),
+    interestedCount: 0,
+    completedCount: 0,
+    comments: []
+  })
+  if (!detail.success) throw new Error('Invalid registered event snapshot')
+  statements.push(
+    ...socialInsertStatements(env, eventSocialSnapshot(detail.data, 'created'), `WHERE ${guard}`, [
+      job.postId,
+      token,
+      event.uuid,
+      job.postId
+    ])
   )
   statements.push(
     env.DB.prepare(`UPDATE webhook_event_jobs SET status='registered',event_id=?,candidate_json=?,
@@ -321,7 +345,7 @@ export const duplicateWebhookEvents = async (env: Bindings, event: EventRequest,
   const rows = await env.DB.prepare(`SELECT e.id FROM events e WHERE
     EXISTS (SELECT 1 FROM event_reference_urls r WHERE r.event_id=e.id AND r.url=?) OR
     (e.category=? AND e.start_date=? AND EXISTS (SELECT 1 FROM event_stores s WHERE s.event_id=e.id AND s.store_key IN (${placeholders}))) LIMIT 10`)
-    .bind(sourceUrl, event.category, dayjs(event.startDate).valueOf(), ...event.stores)
+    .bind(sourceUrl, event.category, toD1DateTime(event.startDate), ...event.stores)
     .all<{ id: string }>()
   return rows.results.map((row) => row.id)
 }

@@ -1,6 +1,7 @@
 import { expect, spyOn, test } from 'bun:test'
 import { readdir, readFile } from 'node:fs/promises'
 import botRoutes from '@api/routes/admin-bot'
+import * as discordService from '@api/services/discord'
 import * as eventService from '@api/services/event-service'
 import { resolveWebhookJob, retryWebhookJob } from '@api/services/webhook-admin'
 import { EVENT_DETECTION_MODEL_KEY } from '@api/services/webhook-config'
@@ -81,6 +82,12 @@ test('queue registration is idempotent and a notification retry does not rerun A
     if (!parsed.success) throw new Error('Invalid test event')
     return parsed.data
   })
+  const notificationSpy = spyOn(discordService, 'notifyEventDetection').mockImplementation(async (_env, input) => {
+    notified.push(input.postId)
+    if (delivery.mode === 'unknown') throw new Error('synthetic response lost')
+    if (delivery.mode === 'rate_limit') return { status: 'failed', kind: 'rate_limit', retryAfterSeconds: 1 }
+    return { status: 'sent', messageId: '1234567890' }
+  })
   try {
     const environment = await mf.getBindings<Bindings>()
     const env = Object.assign(environment, {
@@ -92,14 +99,6 @@ test('queue registration is idempotent and a notification retry does not rerun A
           aiModels.push(_model)
           if (delivery.mode === 'ai_failure') throw new Error('synthetic AI failure')
           return responseFor(request)
-        }
-      },
-      BOT: {
-        notifyEventDetection: async (input: { postId: string }) => {
-          notified.push(input.postId)
-          if (delivery.mode === 'unknown') throw new Error('synthetic RPC response lost')
-          if (delivery.mode === 'rate_limit') return { status: 'failed', kind: 'rate_limit', retryAfterSeconds: 1 }
-          return { status: 'sent', messageId: '1234567890' }
         }
       }
     })
@@ -251,6 +250,7 @@ test('queue registration is idempotent and a notification retry does not rerun A
       cachedGet.mockRestore()
     }
   } finally {
+    notificationSpy.mockRestore()
     getEventSpy.mockRestore()
     await mf.dispose()
   }

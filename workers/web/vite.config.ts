@@ -18,14 +18,15 @@ const version = JSON.parse(readFileSync(resolve(repoRoot, 'package.json'), 'utf-
 const hash = execSync('git rev-parse --short HEAD', { cwd: repoRoot }).toString().trim()
 const buildAt = dayjs().toISOString()
 
-export default defineConfig(({ mode, command }) => {
+export default defineConfig(({ mode }) => {
   // Cloudflare の環境選択も Vite と同じルートの環境ディレクトリを使用する。
   Object.assign(process.env, loadEnv(mode, repoRoot, ['CLOUDFLARE_', 'WRANGLER_HYPERDRIVE_LOCAL_CONNECTION_STRING_']))
   return {
     root: appRoot,
     envDir: repoRoot,
     server: {
-      allowedHosts: ['host.docker.internal']
+      allowedHosts: ['host.docker.internal'],
+      port: 15175
     },
     plugins: [
       eventDetectProxy(),
@@ -45,16 +46,9 @@ export default defineConfig(({ mode, command }) => {
       cloudflare({
         configPath: resolve(appRoot, 'wrangler.toml'),
         persistState: { path: resolve(repoRoot, '.wrangler/state') },
-        auxiliaryWorkers: [
-          {
-            configPath: resolve(repoRoot, 'workers/bot/wrangler.toml'),
-            config: command === 'serve' ? { name: 'musume-workers' } : undefined
-          }
-        ],
         // configPath は migration の出力パスにも使われるため、canonical な app 設定を維持する。
         // E2E ではローカル環境の投票制限バイパスを無効にする。
         config: (current) => ({
-          ...(command === 'serve' ? { services: [{ binding: 'BOT', service: 'musume-workers', entrypoint: 'BotService' }] } : {}),
           ...(process.env.E2E === '1' ? { vars: { ...current.vars, VOTE_LIMIT_BYPASS: 'false' } } : {})
         })
       }),

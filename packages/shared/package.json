@@ -4,6 +4,7 @@
   "type": "module",
   "exports": {
     "./bot": "./src/bot.ts",
+    "./social": "./src/social.ts",
     "./stores": "./src/stores.ts",
     "./twitter": "./src/x/transport.ts",
     "./twitter-health": "./src/x/health.ts",

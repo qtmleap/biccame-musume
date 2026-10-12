@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Fan site for the "Biccame Musume" characters. Bun workspaces: `workers/web` (UI + API Worker), `workers/bot` (X posting / timeline Worker), `packages/shared`. See `README.md` for setup and commands.
+Fan site for the "Biccame Musume" characters. Bun workspaces: `workers/web` (UI + API + X/Discord posting Worker), `packages/shared`. See `README.md` for setup and commands.
 
 ## Branching
 
@@ -26,8 +26,8 @@ Follow `.claude/release.json`.
 
 ## Deployment side effects
 
-- Merging a PR into `develop` deploys staging (`dev.biccame-musume.com`). Merging into `master` deploys production (`biccame-musume.com`). `.github/workflows/deployment.yaml` runs D1 migrations, badge seed, app, then bot, in that order.
-- Never run production deploys, remote D1 writes (`--remote`, `badges:seed remote-*`), or bot activation (`--allow-active-production`) by hand without explicit approval.
+- Merging a PR into `develop` deploys staging (`dev.biccame-musume.com`). Merging into `master` deploys production (`biccame-musume.com`). `.github/workflows/deployment.yaml` runs D1 migrations, badge seed, web, in that order.
+- Never run production deploys, remote D1 writes (`--remote`, `badges:seed remote-*`) or X/Discord posting by hand without explicit approval.
 
 ## Verify before pushing
 
@@ -37,7 +37,7 @@ CI runs on `push` only. Run the same checks locally:
 bun run generate        # Prisma Client is gitignored; required before typecheck and test
 bun run typecheck
 bun run test            # plain `bun test` skips packages/shared
-bun biome check workers/web/src workers/bot/src packages/shared/src __tests__
+bun biome check workers/web/src packages/shared/src __tests__
 ```
 
 The `biome-plugins` git submodule must be initialized (`git submodule update --init`) or Biome cannot load its rules.
@@ -77,7 +77,7 @@ Enforced by Biome (`biome.json`) and the `biome-plugins` submodule. The plugin r
 
 - Never read or print `.env`, `.dev.vars`, or `.secrets`.
 - Sync secrets only with `scripts/sync-cf-secrets.sh` (Worker secrets) and `scripts/sync-gh-secrets.sh` (`VITE_*` build values to GitHub Actions).
-- `TWITTER_*` secrets live only in the bot Worker, never in the app Worker.
+- `TWITTER_*`, `DISCORD_TOKEN`, and `DISCORD_CHANNEL_ID` secrets live in the web Worker. Local/staging social posting is disabled; never send production test posts or delete the old remote bot Worker without explicit approval.
 
 ## Local-only tools and ports
 

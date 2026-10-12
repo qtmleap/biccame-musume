@@ -19,12 +19,13 @@ const parsedConfig = z
 if (!parsedConfig.success) throw new Error(parsedConfig.error.message)
 const config = parsedConfig.data
 
-test('the root workspace exposes app, bot and shared contracts', () => {
-  expect(manifest.workspaces).toEqual(['workers/web', 'workers/bot', 'packages/shared'])
+test('the root workspace exposes web and shared contracts', () => {
+  expect(manifest.workspaces).toEqual(['workers/web', 'packages/shared'])
   const member = JSON.parse(readFileSync(resolve(app, 'package.json'), 'utf8'))
   expect(member.name).toBe('@biccame/web')
   expect(member.private).toBe(true)
-  expect(existsSync(resolve(root, 'workers/bot/README.md'))).toBe(true)
+  expect(existsSync(resolve(root, 'packages/shared/src/social.ts'))).toBe(true)
+  expect(existsSync(resolve(root, 'workers/bot/package.json'))).toBe(false)
   expect(existsSync(resolve(root, 'src'))).toBe(false)
 })
 

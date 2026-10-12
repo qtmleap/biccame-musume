@@ -1,4 +1,6 @@
+import { notifyEventDetection } from '@api/services/discord'
 import { getEvent } from '@api/services/event-service'
+import { exhaustSocialJob, processSocialJob } from '@api/services/social-posting'
 import { detectionConfiguration } from '@api/services/webhook-config'
 import {
   claimWebhookJob,
@@ -21,6 +23,7 @@ import {
 } from '@biccame/shared/event-detect/detection'
 import { EventRequestSchema } from '@biccame/shared/schemas/event.dto'
 import { type WebhookJob, WebhookQueueMessageSchema } from '@biccame/shared/schemas/webhook.dto'
+import { SocialQueueMessageSchema } from '@biccame/shared/social'
 import { botStores } from '@biccame/shared/stores'
 import dayjs from 'dayjs'
 
@@ -118,16 +121,8 @@ export const notifyWebhookJob = async (env: Bindings, job: WebhookJob, token: st
     .bind(dayjs().valueOf(), job.postId, token)
     .run()
   if (started.meta.changes !== 1) return
-  if (!env.BOT) {
-    await env.DB.prepare(
-      `UPDATE webhook_event_jobs SET notification_status='failed',notification_error='rpc_unavailable',updated_at=? WHERE post_id=? AND lease_token=?`
-    )
-      .bind(dayjs().valueOf(), job.postId, token)
-      .run()
-    return
-  }
   try {
-    const raw = await env.BOT.notifyEventDetection(input)
+    const raw = await notifyEventDetection(env, input)
     const parsed = discordDeliveryResultSchema.safeParse(raw)
     if (!parsed.success) throw new Error('Invalid Discord RPC response')
     const result = parsed.data
@@ -291,6 +286,24 @@ export const processWebhookJob = async (env: Bindings, postId: string): Promise<
 
 export const handleWebhookQueue = async (batch: MessageBatch<unknown>, env: Bindings) => {
   for (const message of batch.messages) {
+    const social = SocialQueueMessageSchema.safeParse(message.body)
+    if (social.success) {
+      try {
+        if (batch.queue.endsWith('-dlq')) {
+          await exhaustSocialJob(env, social.data.jobId)
+          message.ack()
+          continue
+        }
+        const delay = await processSocialJob(env, social.data.jobId)
+        if (delay === null) message.ack()
+        else message.retry({ delaySeconds: delay })
+      } catch {
+        console.error('[social-queue] processing failed')
+        message.retry({ delaySeconds: 60 })
+      }
+      continue
+    }
+
     const parsed = WebhookQueueMessageSchema.safeParse(message.body)
     if (!parsed.success) {
       message.ack()

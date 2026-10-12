@@ -9,49 +9,54 @@
 import type { Bindings } from '@api/types/bindings'
 import type { EventOgPlace } from '@biccame/shared/domain/og-event-place'
 import { initWasm, Resvg } from '@resvg/resvg-wasm'
-// biome-ignore lint/correctness/noNodejsModules: vite-plugin-cloudflare resolves this to a WebAssembly.Module at build time
 import resvgWasmModule from '@resvg/resvg-wasm/index_bg.wasm'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import type { ReactElement, ReactNode } from 'react'
 // 既定のsatoriはyogaのWASMを実行時コード生成で組み立て、Workersでは初期化に失敗する。
 // standalone版へ、ビルド時にWebAssembly.Moduleとして同梱したyogaを渡す。
-import satori, { init as initSatori } from 'satori/standalone'
-// biome-ignore lint/correctness/noNodejsModules: vite-plugin-cloudflare resolves this to a WebAssembly.Module at build time
+import satori, { init } from 'satori/standalone'
 import yogaWasmModule from 'satori/yoga.wasm'
 
-let wasmReady: Promise<void> | null = null
+export type OgFont = { name: string; data: ArrayBuffer; weight: 500 | 700; style: 'normal' }
+const resources: { wasm?: Promise<void>; fonts?: Promise<OgFont[]> } = {}
+
 const ensureWasm = (): Promise<void> => {
-  if (!wasmReady) {
-    wasmReady = Promise.all([
-      initWasm(resvgWasmModule as WebAssembly.Module),
-      initSatori(yogaWasmModule as WebAssembly.Module)
-    ]).then(() => undefined)
-    // 一時的な失敗でisolate全体を壊れたままにしない。
-    wasmReady.catch(() => {
-      wasmReady = null
-    })
+  if (resources.wasm) return resources.wasm
+  const ready = Promise.all([initWasm(resvgWasmModule), init(yogaWasmModule)]).then(() => undefined)
+  resources.wasm = ready
+  // 一時的な失敗を次の描画で再試行する。
+  ready.catch(() => {
+    delete resources.wasm
+  })
+  return ready
+}
+
+const loadFont = async (env: Bindings, origin: string, weight: 500 | 700): Promise<OgFont> => {
+  const response = await env.ASSETS.fetch(new Request(`${origin}/fonts/zen-maru-gothic-${weight}.woff`))
+  if (!response.ok || !response.headers.get('content-type')?.includes('font')) {
+    throw new Error(`OG font asset unavailable: ${weight}`)
   }
-  return wasmReady
+  const data = await response.arrayBuffer()
+  if (data.byteLength === 0) throw new Error(`OG font asset is empty: ${weight}`)
+  return { name: 'Zen Maru Gothic', data, weight, style: 'normal' }
 }
 
-type FontEntry = { name: string; data: ArrayBuffer; weight: 500 | 700; style: 'normal' }
-
-let cachedFonts: FontEntry[] | null = null
-const loadFonts = async (env: Bindings, origin: string): Promise<FontEntry[]> => {
-  if (cachedFonts) return cachedFonts
-  const [reg, bold] = await Promise.all([
-    env.ASSETS.fetch(new Request(`${origin}/fonts/zen-maru-gothic-500.woff`)).then((r) => r.arrayBuffer()),
-    env.ASSETS.fetch(new Request(`${origin}/fonts/zen-maru-gothic-700.woff`)).then((r) => r.arrayBuffer())
-  ])
-  cachedFonts = [
-    { name: 'Zen Maru Gothic', data: reg, weight: 500, style: 'normal' },
-    { name: 'Zen Maru Gothic', data: bold, weight: 700, style: 'normal' }
-  ]
-  return cachedFonts
+/**
+ * satori に渡すものと同じフォントのバッファ。isolate 内で1回だけ読み込み、文字幅の実測（og-text-metrics.ts）も同じ配列を使う。
+ */
+export const loadOgFonts = (env: Bindings, origin: string): Promise<OgFont[]> => {
+  if (resources.fonts) return resources.fonts
+  const fonts = Promise.all([loadFont(env, origin, 500), loadFont(env, origin, 700)])
+  resources.fonts = fonts
+  fonts.catch(() => {
+    delete resources.fonts
+  })
+  return fonts
 }
 
-const formatJstDate = (d: Date): string => {
-  const jst = new Date(d.getTime() + 9 * 60 * 60 * 1000)
-  return `${jst.getUTCFullYear()}/${String(jst.getUTCMonth() + 1).padStart(2, '0')}/${String(jst.getUTCDate()).padStart(2, '0')}`
-}
+dayjs.extend(utc)
+const formatJstDate = (d: Date): string => dayjs.utc(d).utcOffset(540).format('YYYY/MM/DD')
 
 export type EventOgInput = {
   title: string
@@ -89,7 +94,7 @@ const captioned = (text: string, first: ReturnType<typeof pill>) => ({
   props: { style: { display: 'flex', alignItems: 'center', gap: '12px' }, children: [caption(text), first] }
 })
 
-const buildVDom = (e: EventOgInput) => {
+const buildVDom = (e: EventOgInput): ReactElement => {
   const range = e.endDate
     ? `${formatJstDate(e.startDate)} 〜 ${formatJstDate(e.endDate)}`
     : `${formatJstDate(e.startDate)} 〜`
@@ -106,6 +111,7 @@ const buildVDom = (e: EventOgInput) => {
 
   return {
     type: 'div',
+    key: null,
     props: {
       style: {
         width: '1200px',
@@ -187,16 +193,37 @@ const buildVDom = (e: EventOgInput) => {
   }
 }
 
-export const renderEventOgImage = async (
+/** 描画してよい画像の高さ。幅は 1200 固定で、追加・更新と OG は 1200x630、毎朝・毎週は 1200x675。 */
+export const OG_IMAGE_HEIGHTS = [630, 675] as const
+export type OgImageHeight = (typeof OG_IMAGE_HEIGHTS)[number]
+const isOgImageHeight = (height: number): height is OgImageHeight => OG_IMAGE_HEIGHTS.some((item) => item === height)
+
+export const renderOgPng = async (
   env: Bindings,
   origin: string,
-  e: EventOgInput
+  element: ReactNode,
+  height: OgImageHeight
 ): Promise<Uint8Array<ArrayBuffer>> => {
+  // 型で絞っていても、呼び出し側が数値を組み立てたときのために実行時にも確かめる。
+  if (!isOgImageHeight(height)) throw new Error(`OG images must be 1200x630 or 1200x675: ${height}`)
   await ensureWasm()
-  const fonts = await loadFonts(env, origin)
-  const vdom = buildVDom(e)
-  // biome-ignore lint/suspicious/noExplicitAny: satori VDom type accepts loose object trees
-  const svg = await satori(vdom as any, { width: 1200, height: 630, fonts })
-  // asPng() の型は Uint8Array<ArrayBufferLike> で Hono の body が受け付けないため詰め替える
-  return new Uint8Array(new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng())
+  const fonts = await loadOgFonts(env, origin)
+  const svg = await satori(element, { width: 1200, height, fonts })
+  const renderer = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } })
+  try {
+    const image = renderer.render()
+    try {
+      if (image.width !== 1200 || image.height !== height) throw new Error('Unexpected OG image dimensions')
+      const png = new Uint8Array(image.asPng())
+      if (png.byteLength > 5_000_000) throw new Error('OG image exceeds attachment size limit')
+      return png
+    } finally {
+      image.free()
+    }
+  } finally {
+    renderer.free()
+  }
 }
+
+export const renderEventOgImage = (env: Bindings, origin: string, e: EventOgInput): Promise<Uint8Array<ArrayBuffer>> =>
+  renderOgPng(env, origin, buildVDom(e), 630)

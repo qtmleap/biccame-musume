@@ -2,7 +2,7 @@ import { resolve } from 'node:path'
 import { parseArgs } from 'node:util'
 import { ClefModelSchema } from '@biccame/shared/event-detect/clef'
 import { DROP_REASONS } from '@biccame/shared/event-detect/filter'
-import { dayjs } from '../workers/bot/src/timeline/utils/dayjs'
+import { dayjs } from './lib/timeline/utils/dayjs'
 import {
   analyze,
   coverageGaps,

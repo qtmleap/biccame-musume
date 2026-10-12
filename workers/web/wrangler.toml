@@ -5,11 +5,10 @@ main = "src/index.ts"
 keep_vars = true
 
 # X連携監視の通知先は [vars] ではなく secret に登録する（URLに認証情報を含む）。
-# 例: bunx wrangler secret put DISCORD_WEBHOOK_URL --env production
-# X の投稿・TL取得は bot Worker（workers/bot）が行い、TWITTER_* の secret もそちらにだけ置く。
+# 同期は scripts/sync-cf-secrets.sh を承認済みの環境・Worker 指定で実行する。
+# X・Discord 投稿の TWITTER_* / DISCORD_TOKEN / DISCORD_CHANNEL_ID は web Worker の secret に登録する。
 
-# Top-level bindings for local dev (vite dev / miniflare).
-# Production/staging deployments use [env.*] sections below.
+# ローカル開発用の Binding。デプロイは環境別の [env.*] を使用する。
 [[kv_namespaces]]
 binding = "BICCAME_MUSUME_EVENTS"
 id = "6f3b7b710eb646a0aef7ab524609bb67"
@@ -75,11 +74,6 @@ not_found_handling = "single-page-application"
 binding = "ASSETS"
 run_worker_first = ["/*"]
 
-[[services]]
-binding = "BOT"
-service = "musume-workers"
-entrypoint = "BotService"
-
 [[queues.producers]]
 binding = "EVENT_DETECTION_QUEUE"
 queue = "biccame-event-detection-local"
@@ -100,6 +94,11 @@ max_retries = 5
 max_concurrency = 1
 
 [vars]
+# 公開イベント告知のみを制御し、Webhook の Discord 判定通知とは分離する。
+X_POSTING_ENABLED = "false"
+DISCORD_POSTING_ENABLED = "false"
+# 管理画面の X アカウント読み取り。投稿の有効化とは別に制御する。
+X_ACCOUNT_READ_ENABLED = "false"
 EVENT_DETECTION_MODEL = "clef"
 EVENT_DETECTION_THRESHOLD = "0.9"
 EVENT_DETECTION_IGNORE_THRESHOLD = "0.5"
@@ -184,11 +183,6 @@ simple = { limit = 10, period = 60 }
 [env.staging.ai]
 binding = "AI"
 
-[[env.staging.services]]
-binding = "BOT"
-service = "musume-workers-staging"
-entrypoint = "BotService"
-
 [[env.staging.queues.producers]]
 binding = "EVENT_DETECTION_QUEUE"
 queue = "biccame-event-detection-staging"
@@ -209,6 +203,11 @@ max_retries = 5
 max_concurrency = 1
 
 [env.staging.vars]
+# 公開イベント告知のみを制御し、Webhook の Discord 判定通知とは分離する。
+X_POSTING_ENABLED = "false"
+DISCORD_POSTING_ENABLED = "false"
+# 管理画面の X アカウント読み取り。投稿の有効化とは別に制御する。
+X_ACCOUNT_READ_ENABLED = "false"
 EVENT_DETECTION_MODEL = "clef"
 EVENT_DETECTION_THRESHOLD = "0.9"
 EVENT_DETECTION_IGNORE_THRESHOLD = "0.5"
@@ -297,11 +296,6 @@ simple = { limit = 10, period = 60 }
 [env.production.ai]
 binding = "AI"
 
-[[env.production.services]]
-binding = "BOT"
-service = "musume-workers"
-entrypoint = "BotService"
-
 [[env.production.queues.producers]]
 binding = "EVENT_DETECTION_QUEUE"
 queue = "biccame-event-detection-production"
@@ -322,6 +316,11 @@ max_retries = 5
 max_concurrency = 1
 
 [env.production.vars]
+# 公開イベント告知のみを制御し、Webhook の Discord 判定通知とは分離する。
+X_POSTING_ENABLED = "true"
+DISCORD_POSTING_ENABLED = "true"
+# 管理画面の X アカウント読み取り。投稿の有効化とは別に制御する。
+X_ACCOUNT_READ_ENABLED = "true"
 EVENT_DETECTION_MODEL = "clef"
 EVENT_DETECTION_THRESHOLD = "0.9"
 EVENT_DETECTION_IGNORE_THRESHOLD = "0.5"
@@ -340,6 +339,7 @@ ORIGIN_ALLOWLIST = "https://biccame-musume.com"
 enabled = true
 head_sampling_rate = 1
 
-# 0:00 UTC = 9:00 JST 毎日。当日開始のイベントを 1 ツイートにまとめて告知する。
+# 0:00 UTC = 9:00 JST。開始・終了の日次告知、月曜の週間告知、バッジ再評価を実行する。
+# 5 分ごとの処理で Queue 投入に失敗した pending 投稿を回収する。
 [env.production.triggers]
-crons = ["0 0 * * *"]
+crons = ["0 0 * * *", "*/5 * * * *"]

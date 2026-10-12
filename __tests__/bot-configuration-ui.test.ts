@@ -24,6 +24,7 @@ const discordStatus = (setting: DiscordStatus['settings']['token']): DiscordStat
   settings: { token: setting, channel: setting },
   notificationsEnabled: true,
   xPostingEnabled: false,
+  discordPostingEnabled: false,
   timelineNotificationsEnabled: false,
   connection: 'unchecked',
   bot: null,
@@ -78,7 +79,7 @@ const expectNeutral = (markup: string, label: string, text: string) => {
 describe('Bot設定の成功表示', () => {
   test('形式確認済み設定と配置済みQueueは緑色のチェックを表示する', async () => {
     const markup = await renderSettings(discordStatus('valid'), true)
-    for (const label of ['Service Binding', 'Discord Token', '通知先チャンネル設定', '処理Queue']) {
+    for (const label of ['web Worker', 'Discord Token', '通知先チャンネル設定', '処理Queue']) {
       const setting = settingMarkup(markup, label)
       expect(setting).toContain('設定済み')
       expect(setting).not.toContain('形式確認済み')
@@ -90,7 +91,7 @@ describe('Bot設定の成功表示', () => {
     expectNeutral(markup, 'Discord 接続状態', '未確認')
     expectNeutral(markup, '送信権限', '未確認')
     expectNeutral(markup, 'X 投稿', '無効')
-    expectNeutral(markup, 'タイムライン通知', '無効')
+    expectNeutral(markup, 'Discord 公開投稿', '無効')
     expect(markup).toContain('常時有効')
   })
 
@@ -102,12 +103,12 @@ describe('Bot設定の成功表示', () => {
     expectNeutral(markup, '処理Queue', '未設定')
   })
 
-  test('X投稿とタイムラインの有効フラグは設定確認の成功色と区別する', async () => {
+  test('X投稿とDiscord公開投稿の有効フラグは設定確認の成功色と区別する', async () => {
     const markup = await renderSettings(
-      { ...discordStatus('valid'), xPostingEnabled: true, timelineNotificationsEnabled: true },
+      { ...discordStatus('valid'), xPostingEnabled: true, discordPostingEnabled: true },
       true
     )
-    for (const label of ['X 投稿', 'タイムライン通知']) {
+    for (const label of ['X 投稿', 'Discord 公開投稿']) {
       const setting = settingMarkup(markup, label)
       expect(setting).toContain('有効')
       expect(setting).not.toContain('text-status-ongoing-foreground')
@@ -120,7 +121,7 @@ describe('Bot設定の成功表示', () => {
     expectNeutral(markup, '通知先チャンネル設定', '設定を取得できない')
     expectNeutral(markup, 'Discord 接続状態', '設定を取得できない')
     expectNeutral(markup, 'X 投稿', '未確認')
-    expectNeutral(markup, 'タイムライン通知', '未確認')
+    expectNeutral(markup, 'Discord 公開投稿', '未確認')
   })
 
   test('接続や送信権限の失敗は成功色を使わない', async () => {
