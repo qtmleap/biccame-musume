@@ -9,6 +9,8 @@ services:
     environment:
       NODE_ENV: development
       NODE_OPTIONS: "--no-deprecation"
+    ports:
+      - 15175:15175
     tty: true
     stdin_open: true
 

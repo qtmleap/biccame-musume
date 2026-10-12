@@ -1,4 +1,4 @@
-import { StoreDataSchema } from '@/schemas/store.dto'
+import { StoreDataSchema } from '@biccame/shared/schemas/store.dto'
 import { events as sampleEvents } from '../visual-typography/fixtures'
 
 export const character = {

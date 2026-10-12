@@ -1,12 +1,8 @@
 import { describe, expect, test } from 'bun:test'
-import { EVENT_CATEGORY_LABELS } from '../../workers/app/src/locales/app.content'
-import { EventCategorySchema } from '../../workers/app/src/schemas/event.dto'
-import {
-  DEFAULT_EVENT_CATEGORY,
-  DEFAULT_EVENT_LIST_FILTERS,
-  EventSearchSchema
-} from '../../workers/app/src/schemas/event-search'
-import { parseEventListFilterSearch } from '../../workers/app/src/utils/event-list-filters'
+import { EventCategorySchema } from '@biccame/shared/schemas/event.dto'
+import { EVENT_CATEGORY_LABELS } from '@/locales/app.content'
+import { DEFAULT_EVENT_CATEGORY, DEFAULT_EVENT_LIST_FILTERS, EventSearchSchema } from '@/schemas/event-search'
+import { parseEventListFilterSearch } from '@/utils/event-list-filters'
 
 describe('イベントのカテゴリ', () => {
   test('アクスタはアクキーの次、その他の前に並ぶ', () => {

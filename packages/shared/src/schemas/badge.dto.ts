@@ -1,0 +1,274 @@
+import { StoreKeySchema } from '@biccame/shared/schemas/store.dto'
+import { z } from '@hono/zod-openapi'
+
+export const BadgeCategorySchema = z.enum([
+  'store',
+  'area',
+  'milestone',
+  'event',
+  'event_clear_store',
+  'event_clear_area',
+  'conquest',
+  'vote',
+  'special'
+])
+
+export type BadgeCategory = z.infer<typeof BadgeCategorySchema>
+
+export const BadgeSubCategorySchema = z.enum([
+  'visit',
+  'area_any',
+  'area_complete',
+  'count',
+  'event_count',
+  'event_clear_at_store',
+  'event_clear_area_any',
+  'event_clear_area_complete',
+  'event_clear_count',
+  'event_clear_all',
+  'all_areas_any_visit',
+  'all_areas_any_event_clear',
+  'vote_total',
+  'special_multi_store_clear',
+  'special_event_id'
+])
+
+export type BadgeSubCategory = z.infer<typeof BadgeSubCategorySchema>
+
+export const BadgeRaritySchema = z.enum(['common', 'rare', 'epic', 'legendary', 'mythic'])
+
+export type BadgeRarity = z.infer<typeof BadgeRaritySchema>
+
+export const BadgeConditionMetaSchema = z
+  .object({
+    storeKey: z.string().nonempty().optional(),
+    region: z.string().nonempty().optional(),
+    count: z.number().int().positive().optional(),
+    storeKeys: z.array(z.string().nonempty()).optional(),
+    eventId: z.string().nonempty().optional()
+  })
+  .openapi('BadgeConditionMeta')
+
+export type BadgeConditionMeta = z.infer<typeof BadgeConditionMetaSchema>
+
+export const BadgeSchema = z
+  .object({
+    code: z.string().nonempty().openapi({ example: 'store_visit_akiba' }),
+    category: BadgeCategorySchema.openapi({ example: 'store' }),
+    sub_category: BadgeSubCategorySchema.openapi({ example: 'visit' }),
+    // 未取得バッジではネタバレ防止のため name/description/hint は返さない（admin と取得済みのみ含む）
+    name: z.string().nonempty().optional().openapi({ example: 'AKIBA店訪問' }),
+    description: z.string().nonempty().optional().openapi({ example: 'ビックカメラAKIBAを訪問しました' }),
+    hint: z.string().nonempty().optional().openapi({ example: 'ビックカメラAKIBAを訪問するとゲットできます' }),
+    rarity: BadgeRaritySchema.openapi({ example: 'common' }),
+    icon_name: z.string().nonempty().openapi({ example: 'MapPin' }),
+    sort_order: z.number().int().nonnegative().openapi({ example: 1 }),
+    condition_meta: z.string().nonempty().openapi({ description: 'JSON-encoded BadgeConditionMeta' }),
+    is_hidden: z.boolean().openapi({ example: false }),
+    created_at: z.string().nonempty().openapi({ example: '2026-05-06T00:00:00.000Z' }),
+    updated_at: z.string().nonempty().openapi({ example: '2026-05-06T00:00:00.000Z' }),
+    earned_count: z.number().int().nonnegative().optional().openapi({
+      description: '獲得者数 (admin 専用、GET /api/admin/badges のレスポンスにのみ含まれる)',
+      example: 42
+    })
+  })
+  .openapi('Badge')
+
+export type Badge = z.infer<typeof BadgeSchema>
+
+export const MyBadgesResponseSchema = z
+  .object({
+    earned: z.array(
+      z.object({
+        code: z.string().nonempty().openapi({ example: 'store_visit_akiba' }),
+        earnedAt: z.string().nonempty().openapi({ example: '2026-05-06T12:00:00.000Z' })
+      })
+    )
+  })
+  .openapi('MyBadgesResponse')
+
+export const GetBadgesResponseSchema = z
+  .object({
+    badges: z.array(BadgeSchema)
+  })
+  .openapi('GetBadgesResponse')
+
+export const BadgeHolderEntrySchema = z
+  .object({
+    uid: z.string().nonempty().openapi({ example: 'firebase-uid-xyz' }),
+    displayName: z.string().nonempty().nullable().openapi({ example: 'あきばたん' }),
+    thumbnailURL: z.string().nonempty().nullable().optional().openapi({ example: 'https://example.com/avatar.png' }),
+    earnedAt: z.string().nonempty().openapi({ example: '2026-05-06T12:00:00.000Z' })
+  })
+  .openapi('BadgeHolderEntry')
+
+export const BadgeHoldersResponseSchema = z
+  .object({
+    total: z.number().int().nonnegative().openapi({ example: 42 }),
+    holders: z.array(BadgeHolderEntrySchema)
+  })
+  .openapi('BadgeHoldersResponse')
+
+// 公開API用: 個人情報を含まず、獲得人数のみ返す
+export const BadgeHoldersCountResponseSchema = z
+  .object({
+    total: z.number().int().nonnegative().openapi({ example: 42 })
+  })
+  .openapi('BadgeHoldersCountResponse')
+
+export const GetBadgeHoldersParamsSchema = z
+  .object({
+    code: z.string().nonempty().openapi({ example: 'store_visit_akiba' })
+  })
+  .openapi('GetBadgeHoldersParams')
+
+// ---------------------------------------------------------------------------
+// Admin CRUD schemas
+// ---------------------------------------------------------------------------
+
+const SpecialConditionMetaSchema = z.union([
+  z.object({ storeKeys: z.array(StoreKeySchema).min(1) }),
+  z.object({ eventId: z.uuid() })
+])
+
+export const CreateSpecialBadgeBodySchema = z
+  .object({
+    name: z.string().min(1).max(50).openapi({ example: '新宿コラボ達成' }),
+    description: z.string().min(1).max(200).openapi({ example: '新宿 3 店舗すべてでイベントを達成しました' }),
+    hint: z.string().min(1).max(200).openapi({ example: '新宿 3 店舗のイベントをすべて完了するとゲットできます' }),
+    rarity: BadgeRaritySchema.openapi({ example: 'epic' }),
+    icon_name: z.string().min(1).max(40).openapi({ example: 'Star' }),
+    sort_order: z.number().int().nonnegative().default(0).openapi({ example: 0 }),
+    sub_category: z
+      .enum(['special_multi_store_clear', 'special_event_id'])
+      .openapi({ example: 'special_multi_store_clear' }),
+    condition_meta: SpecialConditionMetaSchema
+  })
+  .openapi('CreateSpecialBadgeBody')
+
+export type CreateSpecialBadgeBody = z.infer<typeof CreateSpecialBadgeBodySchema>
+
+export const UpdateBadgeBodySchema = z
+  .object({
+    name: z.string().min(1).max(50).optional().openapi({ example: '新宿コラボ達成' }),
+    description: z
+      .string()
+      .min(1)
+      .max(200)
+      .optional()
+      .openapi({ example: '新宿 3 店舗すべてでイベントを達成しました' }),
+    hint: z
+      .string()
+      .min(1)
+      .max(200)
+      .optional()
+      .openapi({ example: '新宿 3 店舗のイベントをすべて完了するとゲットできます' }),
+    rarity: BadgeRaritySchema.optional().openapi({ example: 'epic' }),
+    icon_name: z.string().min(1).max(40).optional().openapi({ example: 'Star' }),
+    sort_order: z.number().int().nonnegative().optional().openapi({ example: 0 }),
+    is_hidden: z.boolean().optional().openapi({ example: false }),
+    sub_category: z
+      .enum(['special_multi_store_clear', 'special_event_id'])
+      .optional()
+      .openapi({ example: 'special_multi_store_clear' }),
+    condition_meta: SpecialConditionMetaSchema.optional()
+  })
+  .openapi('UpdateBadgeBody')
+
+export type UpdateBadgeBody = z.infer<typeof UpdateBadgeBodySchema>
+
+/**
+ * バッジを返却するミューテーション系エンドポイント共通レスポンス
+ * (POST /api/admin/badges, PATCH /api/admin/badges/:code)
+ */
+export const BadgeMutationResponseSchema = z
+  .object({
+    badge: BadgeSchema
+  })
+  .openapi('BadgeMutationResponse')
+
+export const AdminDeleteBadgeParamsSchema = z
+  .object({
+    code: z.string().nonempty().openapi({ example: 'special_ab12cd34' })
+  })
+  .openapi('AdminDeleteBadgeParams')
+
+export const AdminBadgeParamsSchema = z
+  .object({
+    code: z.string().nonempty().openapi({ example: 'special_ab12cd34' })
+  })
+  .openapi('AdminBadgeParams')
+
+// ---------------------------------------------------------------------------
+// Admin badge ranking (管理画面のバッジ所持数ランキング)
+// ---------------------------------------------------------------------------
+
+export const AdminBadgeRankingQuerySchema = z
+  .object({
+    limit: z.coerce.number().int().min(1).max(200).default(100).openapi({ example: 100 }),
+    offset: z.coerce.number().int().min(0).default(0).openapi({ example: 0 })
+  })
+  .openapi('AdminBadgeRankingQuery')
+
+const RarityBreakdownSchema = z
+  .object({
+    common: z.number().int().nonnegative(),
+    rare: z.number().int().nonnegative(),
+    epic: z.number().int().nonnegative(),
+    legendary: z.number().int().nonnegative(),
+    mythic: z.number().int().nonnegative()
+  })
+  .openapi('BadgeRarityBreakdown')
+
+export const AdminBadgeRankingEntrySchema = z
+  .object({
+    rank: z.number().int().positive().openapi({ example: 1 }),
+    uid: z.string().nonempty().openapi({ example: 'firebase-uid-xyz' }),
+    displayName: z.string().nonempty().nullable().openapi({ example: 'あきばたん' }),
+    thumbnailURL: z.string().nonempty().nullable().optional().openapi({ example: 'https://example.com/a.png' }),
+    createdAt: z.string().nonempty().openapi({ example: '2026-05-06T00:00:00.000Z' }),
+    earnedCount: z.number().int().nonnegative().openapi({ example: 42 }),
+    lastEarnedAt: z.string().nonempty().openapi({ example: '2026-07-01T12:00:00.000Z' }),
+    rarityBreakdown: RarityBreakdownSchema
+  })
+  .openapi('AdminBadgeRankingEntry')
+
+export const AdminBadgeRankingResponseSchema = z
+  .object({
+    total: z.number().int().nonnegative().openapi({ example: 128 }),
+    entries: z.array(AdminBadgeRankingEntrySchema)
+  })
+  .openapi('AdminBadgeRankingResponse')
+
+// ---------------------------------------------------------------------------
+// Admin: 特定ユーザーの獲得バッジ一覧
+// ---------------------------------------------------------------------------
+
+export const AdminUserBadgesParamsSchema = z
+  .object({
+    uid: z.string().nonempty().openapi({ example: 'firebase-uid-xyz' })
+  })
+  .openapi('AdminUserBadgesParams')
+
+export const AdminUserBadgeEntrySchema = z
+  .object({
+    code: z.string().nonempty().openapi({ example: 'store_visit_akiba' }),
+    name: z.string().nonempty().openapi({ example: 'AKIBA店訪問' }),
+    category: BadgeCategorySchema,
+    subCategory: BadgeSubCategorySchema,
+    rarity: BadgeRaritySchema,
+    iconName: z.string().nonempty(),
+    earnedAt: z.string().nonempty().openapi({ example: '2026-05-06T12:00:00.000Z' })
+  })
+  .openapi('AdminUserBadgeEntry')
+
+export const AdminUserBadgesResponseSchema = z
+  .object({
+    user: z.object({
+      uid: z.string().nonempty(),
+      displayName: z.string().nonempty().nullable(),
+      thumbnailURL: z.string().nonempty().nullable().optional()
+    }),
+    badges: z.array(AdminUserBadgeEntrySchema)
+  })
+  .openapi('AdminUserBadgesResponse')

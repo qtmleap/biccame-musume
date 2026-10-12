@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import type { StoreData } from '@/schemas/store.dto'
+import type { StoreData } from '@biccame/shared/schemas/store.dto'
 import { clusterStores, getStoreBounds } from '@/utils/map-layout'
 
 const store = (id: string, latitude: number, longitude: number): StoreData => ({

@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test'
-import { StoreDataSchema } from '@/schemas/store.dto'
-import { filterCharactersByRegion } from '@/utils/character'
+import { filterCharactersByRegion } from '@biccame/shared/domain/character'
+import { StoreDataSchema } from '@biccame/shared/schemas/store.dto'
 
 const characters = [
   StoreDataSchema.parse({

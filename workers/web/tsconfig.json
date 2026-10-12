@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "../../.intlayer/**/*.ts"
+  ],
+  "exclude": [
+    "src/app/components/ui/**/*.tsx"
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "./src/app/*"
+      ],
+      "@api/*": [
+        "./src/api/*"
+      ]
+    }
+  }
+}

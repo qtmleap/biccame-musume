@@ -10,10 +10,10 @@ import { Provider } from 'jotai'
 import MockDate from 'mockdate'
 import { MotionConfig } from 'motion/react'
 import { type ReactNode, Suspense, useEffect, useMemo } from 'react'
-import { AuthProvider } from '../workers/app/src/components/auth/auth-provider'
-import { ErrorBoundary } from '../workers/app/src/components/common/error-boundary'
-import { LoadingFallback } from '../workers/app/src/components/common/loading-fallback'
-import { TooltipProvider } from '../workers/app/src/components/ui/tooltip'
+import { AuthProvider } from '@/components/auth/auth-provider'
+import { ErrorBoundary } from '@/components/common/error-boundary'
+import { LoadingFallback } from '@/components/common/loading-fallback'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { installNetworkBoundary } from './catalogue/network'
 import { configureFixture, type FixtureOptions, runtime } from './catalogue/runtime'
 import { resetClientFixture } from './mocks/client'
@@ -26,7 +26,7 @@ import '@fontsource/zen-maru-gothic/700.css'
 import '@fontsource/m-plus-1-code/400.css'
 import '@fontsource/m-plus-1-code/500.css'
 import '@fontsource/m-plus-1-code/700.css'
-import '../workers/app/src/index.css'
+import '@/index.css'
 
 dayjs.extend(relativeTime)
 dayjs.extend(utc)
@@ -96,7 +96,7 @@ function PreviewFrame({
   )
 }
 
-const widths = [320, 375, 430, 768, 1024, 1280, 1440]
+const widths = [320, 375, 430, 768, 769, 1024, 1280, 1440]
 const preview: Preview = {
   parameters: {
     layout: 'fullscreen',

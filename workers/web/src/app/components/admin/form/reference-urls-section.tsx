@@ -1,0 +1,126 @@
+import type { Event, ReferenceUrlType } from '@biccame/shared/schemas/event.dto'
+import { ReferenceUrlTypeSchema } from '@biccame/shared/schemas/event.dto'
+import { AlertTriangle, Link2, X } from 'lucide-react'
+import type { UseFieldArrayAppend, UseFieldArrayRemove, UseFormRegister } from 'react-hook-form'
+import { v4 as uuidv4 } from 'uuid'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import type { EventFormValues } from '@/lib/event-form'
+import { REFERENCE_URL_TYPE_LABELS } from '@/locales/app.content'
+
+/**
+ * 参照URLフィールドの型
+ */
+type ReferenceUrlField = {
+  id: string
+  uuid: string
+  type: ReferenceUrlType
+  url: string
+}
+
+type Props = {
+  fields: ReferenceUrlField[]
+  register: UseFormRegister<EventFormValues>
+  append: UseFieldArrayAppend<EventFormValues, 'referenceUrls'>
+  remove: UseFieldArrayRemove
+  referenceUrls: EventFormValues['referenceUrls']
+  duplicateWarnings: Record<number, Event | null>
+  onCheckDuplicate: (index: number, url: string) => void
+  onClearWarning: (index: number) => void
+  error?: string
+}
+
+/**
+ * 参考URLセクションコンポーネント
+ * X・公式・その他のURL入力を管理
+ */
+export function ReferenceUrlsSection({
+  fields,
+  register,
+  append,
+  remove,
+  referenceUrls,
+  duplicateWarnings,
+  onCheckDuplicate,
+  onClearWarning,
+  error
+}: Props) {
+  /**
+   * URLタイプが既に追加されているか
+   */
+  const hasType = (type: string) => referenceUrls.some((r) => r.type === type)
+
+  /**
+   * 参照URLを削除
+   */
+  const handleRemove = (index: number) => {
+    remove(index)
+    onClearWarning(index)
+  }
+
+  return (
+    <div>
+      <div className='mb-1.5 flex items-center gap-1.5 text-sm font-medium'>
+        <Link2 className='size-4' />
+        参考URL
+      </div>
+      {error && <p className='mb-2 text-xs text-destructive'>{error}</p>}
+      {/* URLタイプボタン */}
+      <div className='mb-2 flex flex-wrap gap-2'>
+        {ReferenceUrlTypeSchema.options.map((type) => (
+          <Button
+            key={type}
+            type='button'
+            size='sm'
+            variant='outline'
+            onClick={() => append({ uuid: uuidv4(), type, url: '' })}
+            disabled={hasType(type)}
+            className={
+              hasType(type) ? 'border-destructive bg-destructive/10 text-destructive hover:bg-destructive/20' : ''
+            }
+          >
+            {REFERENCE_URL_TYPE_LABELS[type]}
+          </Button>
+        ))}
+      </div>
+      {/* URL入力リスト */}
+      <div className='space-y-1.5'>
+        {fields.map((field, index) => (
+          <div key={field.id}>
+            <div className='flex items-center gap-2'>
+              <span className='shrink-0 truncate text-sm font-medium min-w-[3rem]'>
+                {REFERENCE_URL_TYPE_LABELS[field.type]}
+              </span>
+              <Input
+                type='url'
+                placeholder='https://twitter.com/...'
+                {...register(`referenceUrls.${index}.url`)}
+                onBlur={(e) => onCheckDuplicate(index, e.target.value)}
+                className='flex-1'
+              />
+              <Button
+                type='button'
+                size='icon'
+                variant='ghost'
+                onClick={() => handleRemove(index)}
+                className='shrink-0'
+              >
+                <X className='size-4' />
+              </Button>
+            </div>
+            {/* 重複警告 */}
+            {duplicateWarnings[index] && (
+              <div className='mt-1 ml-12 flex items-start gap-1.5 text-xs text-warning bg-warning/10 rounded px-2 py-1.5'>
+                <AlertTriangle className='size-3.5 shrink-0 mt-0.5' />
+                <div>
+                  <span className='font-medium'>同じURLが設定されているイベントがあります:</span>
+                  <span className='ml-1'>{duplicateWarnings[index]?.title}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}

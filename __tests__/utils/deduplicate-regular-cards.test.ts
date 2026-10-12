@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
+import { deduplicateRegularCards } from '@biccame/shared/domain/deduplicate-regular-cards'
+import type { Event } from '@biccame/shared/schemas/event.dto'
 import dayjs from 'dayjs'
-import type { Event } from '../../workers/app/src/schemas/event.dto'
-import { deduplicateRegularCards } from '../../workers/app/src/utils/deduplicate-regular-cards'
 
 const date = (iso: string) => dayjs(iso).toDate()
 

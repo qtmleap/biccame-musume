@@ -1,11 +1,6 @@
-import { createHash } from 'node:crypto'
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
 import { expect, type Page, test } from '@playwright/test'
+import dayjs from 'dayjs'
 
-const phase = process.env.B08_PHASE ?? 'after'
-const scratch = resolve('.superpowers/sdd/2026-10-02-ui-ux-design-plan/scratch/b08', phase)
-const widths = [320, 375, 430, 768, 1024, 1280, 1440]
 const events = ['limited_card', 'regular_card', 'ackey', 'other'].flatMap((category, c) =>
   Array.from({ length: 4 }, (_, i) => ({
     uuid: `550e8400-e29b-41d4-a716-${String(c * 4 + i).padStart(12, '0')}`,
@@ -25,8 +20,8 @@ const events = ['limited_card', 'regular_card', 'ackey', 'other'].flatMap((categ
     updatedAt: '2026-10-01'
   }))
 )
-async function install(page: Page) {
-  await page.clock.setFixedTime(new Date('2026-10-19T16:00:00Z'))
+const install = async (page: Page) => {
+  await page.clock.setFixedTime(dayjs('2026-10-19T16:00:00Z').toDate())
   await page.addInitScript(() => {
     Math.random = () => 0.5
     localStorage.setItem('event-view-mode', JSON.stringify('grid'))
@@ -51,199 +46,316 @@ async function install(page: Page) {
     return route.continue()
   })
 }
-async function fonts(page: Page) {
-  return page.evaluate(async () => {
-    const faces = []
-    for (const family of ['Noto Sans JP', 'Zen Maru Gothic', 'M PLUS 1 Code'])
+
+const expectThemeAndLabels = async (page: Page, theme: string) => {
+  const evidence = await page.evaluate(async () => {
+    for (const family of ['Noto Sans JP', 'Zen Maru Gothic', 'M PLUS 1 Code']) {
       for (const weight of [400, 500, 700]) {
         await document.fonts.load(`${weight} 14px "${family}"`, 'イベント一覧123')
-        faces.push({ family, weight, loaded: document.fonts.check(`${weight} 14px "${family}"`, 'イベント一覧123') })
+        if (!document.fonts.check(`${weight} 14px "${family}"`, 'イベント一覧123'))
+          throw new Error('Font is not loaded')
       }
-    await document.fonts.ready
-    return faces
-  })
-}
-async function measure(page: Page, theme: string) {
-  const loaded = await fonts(page)
-  for (const face of loaded) expect(face.loaded).toBe(true)
-  const evidence = await page.evaluate(() => {
-    const rgb = (color: string) => {
-      const ctx = document.createElement('canvas').getContext('2d')!
-      ctx.fillStyle = color
-      ctx.fillRect(0, 0, 1, 1)
-      return [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3)
     }
-    const lum = (a: number[]) =>
-      a
-        .map((v) => v / 255)
-        .map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
-        .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0)
-    const root = document.querySelector('[role="dialog"]') ?? document.getElementById('root')!
-    const labels = [...root.querySelectorAll('label, [data-slot="filter-header"]')]
-      .filter((e) => e.getBoundingClientRect().width > 0)
-      .map((e) => {
-        const ctx = document.createElement('canvas').getContext('2d')!
-        ctx.fillStyle = '#fff'
-        ctx.fillRect(0, 0, 1, 1)
-        const ancestors = []
-        for (let p: Element | null = e; p; p = p.parentElement) ancestors.push(p)
-        for (const p of ancestors.reverse()) {
-          ctx.fillStyle = getComputedStyle(p).backgroundColor
-          ctx.fillRect(0, 0, 1, 1)
-        }
-        const bg = lum([...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3)),
-          fg = lum(rgb(getComputedStyle(e).color))
+    const canvas = document.createElement('canvas').getContext('2d')
+    if (!canvas) throw new Error('Canvas is not available')
+    const rgb = (color: string) => {
+      canvas.fillStyle = color
+      canvas.fillRect(0, 0, 1, 1)
+      return [...canvas.getImageData(0, 0, 1, 1).data].slice(0, 3)
+    }
+    const luminance = (color: number[]) =>
+      color
+        .map((value) => value / 255)
+        .map((value) => (value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4))
+        .reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0)
+    const dialog = document.querySelector('[role="dialog"]')
+    if (!dialog) throw new Error('Filter dialog is not visible')
+    const background = luminance(rgb(getComputedStyle(dialog).backgroundColor))
+    return {
+      body: rgb(getComputedStyle(document.body).backgroundColor),
+      font: getComputedStyle(document.body).fontFamily,
+      labels: [...dialog.querySelectorAll('label, [data-slot="filter-header"]')].map((label) => {
+        const foreground = luminance(rgb(getComputedStyle(label).color))
         return {
-          text: e.textContent,
-          color: getComputedStyle(e).color,
-          contrast: (Math.max(bg, fg) + 0.05) / (Math.min(bg, fg) + 0.05)
+          text: label.textContent,
+          contrast: (Math.max(background, foreground) + 0.05) / (Math.min(background, foreground) + 0.05)
         }
       })
-    const opacity = [...root.querySelectorAll('*')]
-      .filter((e) => e.getBoundingClientRect().width > 0)
-      .map((e) => Number(getComputedStyle(e).opacity))
-    return {
-      dark: document.documentElement.classList.contains('dark'),
-      background: rgb(getComputedStyle(document.body).backgroundColor),
-      font: getComputedStyle(document.body).fontFamily,
-      opacity: { min: Math.min(...opacity), belowOne: opacity.filter((v) => v < 1).length },
-      labels,
-      ids: [...document.querySelectorAll('a[href^="/events/"]')].map((e) => e.getAttribute('href')),
-      sheet: document.querySelector('[role="dialog"]')
-        ? {
-            display: getComputedStyle(root).display,
-            position: getComputedStyle(root).position,
-            bottom: root.getBoundingClientRect().bottom
-          }
-        : null,
-      overflow: document.documentElement.scrollWidth,
-      viewport: innerWidth
     }
   })
-  expect(evidence.dark).toBe(theme === 'dark')
-  expect(evidence.background).toEqual(theme === 'dark' ? [9, 9, 11] : [252, 231, 243])
+  expect(evidence.body).toEqual(theme === 'dark' ? [9, 9, 11] : [252, 231, 243])
   expect(evidence.font).toContain('Zen Maru Gothic')
-  if (evidence.sheet) {
-    expect(evidence.sheet.display).toBe('flex')
-    expect(evidence.sheet.position).toBe('fixed')
-    expect(evidence.sheet.bottom).toBe(800)
-  }
-  return { ...evidence, loaded }
+  for (const label of evidence.labels)
+    expect(label.contrast, label.text === null ? 'Filter label' : label.text).toBeGreaterThanOrEqual(4.5)
 }
+
 test.beforeEach(async ({ page }) => install(page))
-for (const theme of ['light', 'dark'])
-  for (const width of widths)
-    test(`visual ${theme} ${width}`, async ({ page }) => {
-      await mkdir(scratch, { recursive: true })
-      await page.setViewportSize({ width, height: 800 })
+for (const theme of ['light', 'dark']) {
+  for (const width of [320, 375, 430, 768, 1024, 1280, 1440]) {
+    test(`dialog layout ${theme} ${width}`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 600 })
       await page.goto(`/events/?theme=${theme}&category=ackey,other&region=hokkaido&status=ongoing`)
-      await expect(page.getByRole('heading', { name: 'イベント一覧', exact: true })).toBeVisible()
+      const trigger = page.getByRole('button', { name: 'イベントを絞り込む' })
+      await expect(trigger).toHaveText('条件を変更')
       await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' })
-      if (width < 768) await page.getByRole('button', { name: 'イベントを絞り込む' }).click()
-      const pre = await measure(page, theme)
-      await page.screenshot({ path: resolve(scratch, `${theme}-${width}.png`), fullPage: true, animations: 'disabled' })
-      const immediatePostOpacity = await page.evaluate(() =>
-        [...(document.querySelector('[role="dialog"]') ?? document.getElementById('root')!).querySelectorAll('*')]
-          .filter((e) => e.getBoundingClientRect().width > 0)
-          .map((e) => Number(getComputedStyle(e).opacity))
+      await page.evaluate(() => document.fonts.ready)
+      const initial = page.url()
+      const viewModes = page.getByRole('radiogroup', { name: 'イベントの表示方法', exact: true })
+      const triggerBox = await trigger.boundingBox()
+      const viewModesBox = await viewModes.boundingBox()
+      if (!triggerBox || !viewModesBox) throw new Error('Event header controls are not visible')
+      expect(triggerBox.height).toBe(36)
+      expect(viewModesBox.height).toBe(triggerBox.height)
+      expect(viewModesBox.y).toBe(triggerBox.y)
+      const segments = await viewModes.getByRole('radio').evaluateAll((elements) =>
+        elements.map((element) => {
+          const rect = element.getBoundingClientRect()
+          const style = getComputedStyle(element)
+          return {
+            x: rect.x,
+            right: rect.right,
+            y: rect.y,
+            height: rect.height,
+            leftRadius: style.borderTopLeftRadius,
+            rightRadius: style.borderTopRightRadius
+          }
+        })
       )
-      const post = await measure(page, theme)
-      expect(post.opacity).toEqual(pre.opacity)
-      expect(post.ids).toEqual(pre.ids)
-      const sha = (s: string) => createHash('sha256').update(s).digest('hex')
-      await writeFile(
-        resolve(scratch, `${theme}-${width}.json`),
-        JSON.stringify(
-          {
-            phase,
-            fixtureHash: sha(JSON.stringify(events)),
-            specHash: sha(await readFile('e2e/event-filter-sheet-layout.spec.ts', 'utf8')),
-            sourceHash: sha(await readFile('workers/app/src/app/routes/events/index.tsx', 'utf8')),
-            pre,
-            immediatePostOpacity,
-            post
-          },
-          null,
-          2
-        )
-      )
-      if (phase === 'before') return
-      const before = JSON.parse(await readFile(resolve(scratch, '../../b08/before', `${theme}-${width}.json`), 'utf8'))
-      expect(pre.ids).toEqual(before.pre.ids)
-      expect(pre.overflow).toBeLessThanOrEqual(width)
-      for (const label of pre.labels) expect(label.contrast, label.text ?? '').toBeGreaterThanOrEqual(4.5)
-      await expect(page.getByRole('status').filter({ hasText: '8件' }).first()).toBeVisible()
-      if (width < 768) await expect(page.getByRole('button', { name: '8件を表示', exact: true })).toBeVisible()
+      expect(segments).toHaveLength(2)
+      expect(segments[0].x).toBe(viewModesBox.x)
+      expect(segments[0].right).toBe(segments[1].x)
+      expect(segments[1].right).toBe(viewModesBox.x + viewModesBox.width)
+      for (const segment of segments) {
+        expect(segment.height).toBe(36)
+        expect(segment.y).toBe(viewModesBox.y)
+      }
+      expect(segments[0].rightRadius).toBe('0px')
+      expect(segments[1].leftRadius).toBe('0px')
+      const radius = await viewModes.evaluate((element) => getComputedStyle(element).borderTopLeftRadius)
+      expect(segments[0].leftRadius).toBe(radius)
+      expect(segments[1].rightRadius).toBe(radius)
+      const outline = await trigger.evaluate((element) => {
+        const style = getComputedStyle(element)
+        return {
+          color: style.outlineColor,
+          width: style.outlineWidth,
+          style: style.outlineStyle,
+          offset: style.outlineOffset
+        }
+      })
+      // DPR 1 の Chromium は指定 1.5px を computed style では 1px に量子化する。
+      expect(await viewModes.evaluate((element) => element.style.outline)).toBe('1.5px solid var(--card-border)')
+      expect(Number.parseFloat(outline.width)).toBeGreaterThan(0)
+      expect(outline.style).toBe('solid')
+      expect(await viewModes.evaluate((element) => element.style.outlineOffset)).toBe('-1.5px')
+      expect(Number.parseFloat(outline.offset)).toBeLessThan(0)
+      expect(
+        await viewModes.evaluate((element) => {
+          const style = getComputedStyle(element)
+          return {
+            color: style.outlineColor,
+            width: style.outlineWidth,
+            style: style.outlineStyle,
+            offset: style.outlineOffset
+          }
+        })
+      ).toEqual(outline)
+      const weights = await viewModes
+        .getByRole('radio')
+        .evaluateAll((elements) => elements.map((element) => getComputedStyle(element).fontWeight))
+      expect(weights[0]).toBe(weights[1])
+      await expect(page.getByRole('status')).toHaveCount(0)
+      await expect(page.getByText('全 8 件中 1–8 件を表示', { exact: true })).toBeVisible()
+      await expect(page.getByRole('dialog')).toHaveCount(0)
+      await expect(page.getByRole('checkbox')).toHaveCount(0)
+      await expect(page.getByRole('radiogroup', { name: '地域で絞り込み', exact: true })).toHaveCount(0)
+      await expect(page.getByRole('combobox')).toHaveCount(1)
+      await expect(page.getByTestId('event-store-toolbar').getByRole('combobox')).toBeVisible()
+      expect(
+        await trigger.evaluate((element) => {
+          const probe = document.createElement('span')
+          probe.style.outlineColor = 'var(--card-border)'
+          document.body.appendChild(probe)
+          const matches = getComputedStyle(element).outlineColor === getComputedStyle(probe).outlineColor
+          probe.remove()
+          return matches
+        })
+      ).toBe(true)
+      await page.screenshot({ path: test.info().outputPath(`header-${theme}-${width}.png`) })
+      await trigger.click()
+      const dialog = page.getByRole('dialog')
+      await expect(dialog).toBeVisible()
+      await expect(dialog.getByRole('combobox')).toHaveCount(0)
+      await expect(page.locator('[role="combobox"]')).toHaveCount(1)
+      await expectThemeAndLabels(page, theme)
+      expect(page.url()).toBe(initial)
+      await expect(page.locator('html')).toHaveClass(theme === 'dark' ? /dark/ : /^$/)
+      await expect(dialog).toHaveCSS('display', 'flex')
+      await expect(dialog).toHaveCSS('position', 'fixed')
+      await expect
+        .poll(async () => {
+          const box = await dialog.boundingBox()
+          return (
+            box !== null && box.x >= 15 && box.y >= 15 && box.x + box.width <= width - 15 && box.y + box.height <= 585
+          )
+        })
+        .toBe(true)
+      const conditions = dialog.getByTestId('event-filter-conditions')
+      const footer = dialog.getByTestId('event-filter-actions')
+      const action = dialog.getByRole('button', { name: '適用', exact: true })
+      await expect(page.locator('[role="status"]')).toHaveCount(0)
+      await expect(footer.getByRole('button')).toHaveCount(2)
+      await expect(footer.locator('p')).toHaveCount(0)
+      await expect(action).toBeVisible()
+      const applyBox = await action.boundingBox()
+      const clearBox = await footer.getByRole('button', { name: 'クリア', exact: true }).boundingBox()
+      if (!applyBox || !clearBox) throw new Error('Filter footer actions are not visible')
+      expect(applyBox.height).toBe(36)
+      expect(clearBox.height).toBe(applyBox.height)
+      expect(clearBox.y).toBe(applyBox.y)
+      expect(clearBox.width).toBe(applyBox.width)
+      expect(clearBox.x).toBeGreaterThan(applyBox.x + applyBox.width)
+      const before = await footer.boundingBox()
+      await conditions.evaluate((element) => {
+        element.scrollTop = element.scrollHeight
+      })
+      await expect(
+        dialog.getByRole('checkbox', { name: '開始から1か月以上経ったイベントを非表示', exact: true })
+      ).toBeInViewport()
+      expect(await footer.boundingBox()).toEqual(before)
+      await expect(action).toBeInViewport()
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width)
+      await page.screenshot({ path: test.info().outputPath(`filter-${theme}-${width}.png`) })
+      await page.keyboard.press('Escape')
+      await expect(dialog).toHaveCount(0)
+      await expect(trigger).toBeFocused()
+      expect(page.url()).toBe(initial)
     })
-test('result action closes with keyboard without changing immediately applied URL', async ({ page }) => {
+  }
+}
+
+test('filter edits reset display page and apply without changing the entry URL', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 800 })
   await page.goto(
     '/events/?page=2&hideInterested=true&hideCompleted=true&region=hokkaido&status=ongoing&store=sapporo&tracking=fixture'
   )
   await expect(page.locator('a[href^="/events/"]')).toHaveCount(4)
+  const incoming = page.url()
   await page.getByRole('button', { name: 'イベントを絞り込む' }).click()
   const dialog = page.getByRole('dialog')
-  await expect(dialog.getByRole('button', { name: '16件を表示', exact: true })).toBeVisible()
+  await expect(page.getByText('全 16 件中 13–16 件を表示', { exact: true })).toBeVisible()
   await dialog.getByRole('checkbox', { name: 'アクキー', exact: true }).click()
-  await expect(dialog.getByRole('button', { name: '12件を表示', exact: true })).toBeVisible()
-  expect(new URL(page.url()).searchParams.get('page')).toBe('1')
-  expect(new URL(page.url()).searchParams.get('category')).not.toContain('ackey')
-  expect(new URL(page.url()).searchParams.get('hideInterested')).toBe('true')
-  expect(new URL(page.url()).searchParams.get('hideCompleted')).toBe('true')
-  expect(new URL(page.url()).searchParams.get('region')).toBe('hokkaido')
-  expect(new URL(page.url()).searchParams.get('status')).toBe('ongoing')
-  expect(new URL(page.url()).searchParams.get('store')).toBe('sapporo')
-  expect(new URL(page.url()).searchParams.get('tracking')).toBe('fixture')
+  await expect(page.getByText('全 12 件中 1–12 件を表示', { exact: true })).toBeVisible()
+  const params = new URL(page.url()).searchParams
+  expect(page.url()).toBe(incoming)
+  expect(params.get('page')).toBe('2')
+  expect(params.get('category')).toBeNull()
+  for (const [key, value] of [
+    ['hideInterested', 'true'],
+    ['hideCompleted', 'true'],
+    ['region', 'hokkaido'],
+    ['status', 'ongoing'],
+    ['store', 'sapporo'],
+    ['tracking', 'fixture']
+  ])
+    expect(params.get(key)).toBe(value)
   const applied = page.url()
-  await dialog.getByRole('button', { name: '12件を表示', exact: true }).focus()
+  await dialog.getByRole('button', { name: '適用', exact: true }).focus()
   await page.keyboard.press('Enter')
   await expect(dialog).toHaveCount(0)
   expect(page.url()).toBe(applied)
   await expect(page.getByRole('button', { name: 'イベントを絞り込む' })).toBeFocused()
-  await expect(page.getByRole('status').filter({ hasText: '12件' })).toContainText('興味ありを非表示')
+  await expect(page.getByRole('status')).toHaveCount(0)
+  await expect(page.getByText('全 12 件中 1–12 件を表示', { exact: true })).toBeVisible()
+  await page.getByRole('button', { name: 'イベントを絞り込む' }).click()
+  await expect(dialog.getByRole('checkbox', { name: 'アクキー', exact: true })).not.toBeChecked()
+  await expect(page.locator('[role="status"]')).toHaveCount(0)
 })
-for (const width of [320, 375, 430])
+for (const width of [320, 375, 430]) {
   test(`last condition scroll, zero change and reset ${width}`, async ({ page }) => {
     await page.setViewportSize({ width, height: 600 })
     await page.goto('/events/?category=&region=all&status=ongoing&hideCompleted=true')
-    await page.getByRole('button', { name: 'イベントを絞り込む' }).click()
-    const dialog = page.getByRole('dialog'),
-      action = dialog.getByRole('button', { name: '0件を表示', exact: true })
+    const trigger = page.getByRole('button', { name: 'イベントを絞り込む' })
+    await trigger.click()
+    const incoming = page.url()
+    const dialog = page.getByRole('dialog')
+    const action = dialog.getByRole('button', { name: '適用', exact: true })
+    await expect(page.getByText('条件に一致するイベントはありません', { exact: true })).toBeVisible()
+    await expect(page.locator('[role="status"]')).toHaveCount(0)
+    await expect(dialog.getByRole('button', { name: 'クリア', exact: true }).locator('svg')).toHaveCount(0)
     await expect(action).toBeEnabled()
-    if (width === 320) {
-      await action.focus()
-      await page.keyboard.press('Enter')
-      await expect(dialog).toHaveCount(0)
-      await expect(page.getByText('条件に一致するイベントはありません')).toBeVisible()
-      await page.getByRole('button', { name: 'イベントを絞り込む' }).click()
-    }
-    const store = dialog.getByRole('combobox')
+    await action.focus()
+    await page.keyboard.press('Enter')
+    await expect(dialog).toHaveCount(0)
+    await expect(page.getByText('条件に一致するイベントはありません')).toBeVisible()
+    const store = page.getByTestId('event-store-toolbar').getByRole('combobox')
     await store.focus()
     await expect(store).toBeInViewport()
-    const storeBox = (await store.boundingBox())!,
-      actionBox = (await action.boundingBox())!
-    expect(storeBox.y + storeBox.height).toBeLessThanOrEqual(actionBox.y)
-    const unobscured = await store.evaluate((e) => {
-      const r = e.getBoundingClientRect()
-      return e.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2))
-    })
-    expect(unobscured).toBe(true)
     await store.press('Space')
     await expect(page.getByRole('option', { name: '札幌店', exact: true })).toBeVisible()
     await page.keyboard.press('End')
     await expect(page.getByRole('option', { name: '札幌店', exact: true })).toBeFocused()
     await page.keyboard.press('Enter')
-    await expect.poll(() => new URL(page.url()).searchParams.get('store')).toBe('sapporo')
+    expect(page.url()).toBe(incoming)
+    await expect
+      .poll(() => page.evaluate(() => localStorage.getItem('event-list-filters')))
+      .toContain('"store":"sapporo"')
+    await trigger.click()
+    await expect(dialog.getByRole('combobox')).toHaveCount(0)
+    const lastCondition = dialog.getByRole('checkbox', { name: '開始から1か月以上経ったイベントを非表示', exact: true })
+    await lastCondition.focus()
+    await expect(lastCondition).toBeInViewport()
+    const lastConditionBox = await lastCondition.boundingBox()
+    const actionBox = await action.boundingBox()
+    if (!lastConditionBox || !actionBox) throw new Error('Filter controls are not visible')
+    expect(lastConditionBox.y + lastConditionBox.height).toBeLessThanOrEqual(actionBox.y)
+    expect(
+      await lastCondition.evaluate((element) => {
+        const rect = element.getBoundingClientRect()
+        return element.contains(document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2))
+      })
+    ).toBe(true)
     await dialog.getByRole('checkbox', { name: 'アクキー', exact: true }).focus()
     await page.keyboard.press('Space')
-    await expect(dialog.getByRole('button', { name: '4件を表示', exact: true })).toBeVisible()
-    await dialog.getByRole('button', { name: 'フィルターをクリア' }).click()
-    await expect(dialog.getByRole('button', { name: '16件を表示', exact: true })).toBeVisible()
-    const url = new URL(page.url())
-    expect(url.searchParams.get('store')).toBeNull()
-    expect(url.searchParams.get('hideCompleted')).toBe('false')
-    await dialog.getByRole('button', { name: '16件を表示', exact: true }).click()
+    await expect(page.getByText('全 4 件中 1–4 件を表示', { exact: true })).toBeVisible()
+    await dialog.getByRole('button', { name: 'クリア' }).click()
+    await expect(page.getByText('全 16 件中 1–12 件を表示', { exact: true })).toBeVisible()
+    expect(new URL(page.url()).searchParams.get('store')).toBeNull()
+    expect(page.url()).toBe(incoming)
+    expect(new URL(page.url()).searchParams.get('hideCompleted')).toBe('true')
+    await dialog.getByRole('button', { name: '適用', exact: true }).click()
     await expect(dialog).toHaveCount(0)
-    await expect(page.getByRole('status')).toContainText('16件')
-    await expect(page.getByRole('status')).toContainText('すべての種別')
+    await expect(page.getByRole('status')).toHaveCount(0)
+    await expect(page.getByText('全 16 件中 1–12 件を表示', { exact: true })).toBeVisible()
+    await trigger.click()
+    await expect(dialog.getByRole('checkbox', { name: 'アクキー', exact: true })).toBeChecked()
+    await expect(dialog.getByRole('checkbox', { name: 'その他', exact: true })).toBeChecked()
+    await expect(dialog.getByRole('button', { name: 'クリア', exact: true })).toBeDisabled()
+    await expect(page.locator('[role="status"]')).toHaveCount(0)
   })
+}
+
+test('resize preserves open dialog and selected conditions without duplicate controls', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 800 })
+  await page.goto('/events/?region=hokkaido&status=ongoing')
+  const trigger = page.getByRole('button', { name: 'イベントを絞り込む' })
+  await trigger.click()
+  const dialog = page.getByRole('dialog')
+  await dialog.getByRole('checkbox', { name: 'アクキー', exact: true }).click()
+  const applied = page.url()
+  await page.setViewportSize({ width: 1440, height: 800 })
+  await expect(dialog).toBeVisible()
+  await expect(page.getByRole('checkbox', { name: 'アクキー', exact: true })).toHaveCount(1)
+  await expect(dialog.getByRole('checkbox', { name: 'アクキー', exact: true })).not.toBeChecked()
+  expect(page.url()).toBe(applied)
+  await dialog.getByRole('button', { name: 'Close', exact: true }).click()
+  await expect(dialog).toHaveCount(0)
+  await expect(trigger).toBeFocused()
+  await expect(page.getByRole('checkbox')).toHaveCount(0)
+  await expect(page.getByRole('radiogroup', { name: '地域で絞り込み', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('combobox')).toHaveCount(1)
+  await expect(page.getByTestId('event-store-toolbar').getByRole('combobox')).toBeVisible()
+  expect(page.url()).toBe(applied)
+  await trigger.click()
+  await expect(dialog.getByRole('checkbox', { name: 'アクキー', exact: true })).not.toBeChecked()
+})

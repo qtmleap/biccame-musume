@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Route } from '@/app/routes/route'
+import { Route } from '@/routes/route'
 
 const queryClient = new QueryClient()
 queryClient.setQueryData(

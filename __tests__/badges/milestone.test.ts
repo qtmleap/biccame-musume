@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'bun:test'
-import type { Badge } from '@/generated/prisma/client'
-import { BADGE_REGISTRY, type BadgeDef } from '../../workers/app/src/data/badges/registry'
-import { ACTIVE_PHYSICAL_STORE_KEYS, CLOSED_STORE_KEYS } from '../../workers/app/src/data/badges/store-exclusion'
-import { evaluateBadgeWithSnapshot, type UserSnapshot } from '../../workers/app/src/services/badge'
+import type { Badge } from '@api/db/generated/prisma/client'
+import { evaluateBadgeWithSnapshot, type UserSnapshot } from '@api/services/badge/index'
+import { BADGE_REGISTRY, type BadgeDef } from '@biccame/shared/domain/badges/registry'
+import { ACTIVE_PHYSICAL_STORE_KEYS, CLOSED_STORE_KEYS } from '@biccame/shared/domain/badges/store-exclusion'
 
 // ---------------------------------------------------------------------------
 // Helpers

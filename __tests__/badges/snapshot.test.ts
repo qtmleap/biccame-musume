@@ -1,16 +1,16 @@
 import { describe, expect, test } from 'bun:test'
-import type { Badge, PrismaClient } from '@/generated/prisma/client'
-import { storeKeyToBadgeArea } from '../../workers/app/src/data/badges/area-mapping'
-import type { BadgeConditionMeta, BadgeSubCategory } from '../../workers/app/src/data/badges/registry'
-import { ACTIVE_PHYSICAL_STORE_KEYS, CLOSED_STORE_KEYS } from '../../workers/app/src/data/badges/store-exclusion'
+import type { Badge, PrismaClient } from '@api/db/generated/prisma/client'
 import {
   type EvaluatorContext,
   evaluateAndAwardBadges,
   evaluateBadgeWithSnapshot,
   getUserSnapshot,
   type UserSnapshot
-} from '../../workers/app/src/services/badge'
-import { safeEvaluate } from '../../workers/app/src/services/badge/snapshot'
+} from '@api/services/badge/index'
+import { safeEvaluate } from '@api/services/badge/snapshot'
+import { storeKeyToBadgeArea } from '@biccame/shared/domain/badges/area-mapping'
+import type { BadgeConditionMeta, BadgeSubCategory } from '@biccame/shared/domain/badges/registry'
+import { ACTIVE_PHYSICAL_STORE_KEYS, CLOSED_STORE_KEYS } from '@biccame/shared/domain/badges/store-exclusion'
 
 // ---------------------------------------------------------------------------
 // Helpers

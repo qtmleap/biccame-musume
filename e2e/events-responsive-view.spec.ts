@@ -90,23 +90,23 @@ for (const width of widths)
     await page.goto('/events/')
     await expect(page.getByRole('heading', { name: 'イベント一覧', exact: true })).toBeVisible()
     await expect(page.getByRole('region', { name: 'ガントチャートスクロールエリア' })).toHaveCount(width < 768 ? 0 : 1)
-    const list = page.getByRole('button', { name: '一覧', exact: true }),
-      schedule = page.getByRole('button', { name: '日程', exact: true })
-    await expect(list).toHaveAttribute('aria-pressed', width < 768 ? 'true' : 'false')
-    await expect(schedule).toHaveAttribute('aria-pressed', width < 768 ? 'false' : 'true')
+    const list = page.getByRole('radio', { name: '一覧', exact: true }),
+      schedule = page.getByRole('radio', { name: '日程', exact: true })
+    await expect(list).toHaveAttribute('aria-checked', width < 768 ? 'true' : 'false')
+    await expect(schedule).toHaveAttribute('aria-checked', width < 768 ? 'false' : 'true')
     expect(await page.evaluate(() => localStorage.getItem('event-view-mode'))).toBeNull()
     await page.setViewportSize({ width: width < 768 ? 1280 : 375, height: 900 })
-    await expect(list).toHaveAttribute('aria-pressed', width < 768 ? 'false' : 'true')
+    await expect(list).toHaveAttribute('aria-checked', width < 768 ? 'false' : 'true')
     await schedule.click()
-    await expect(schedule).toHaveAttribute('aria-pressed', 'true')
+    await expect(schedule).toHaveAttribute('aria-checked', 'true')
     await page.reload()
-    await expect(schedule).toHaveAttribute('aria-pressed', 'true')
+    await expect(schedule).toHaveAttribute('aria-checked', 'true')
     await page.setViewportSize({ width: 320, height: 900 })
-    await expect(schedule).toHaveAttribute('aria-pressed', 'true')
+    await expect(schedule).toHaveAttribute('aria-checked', 'true')
     await list.click()
     await page.reload()
     await page.setViewportSize({ width: 1440, height: 900 })
-    await expect(list).toHaveAttribute('aria-pressed', 'true')
+    await expect(list).toHaveAttribute('aria-checked', 'true')
     expect(new URL(page.url()).searchParams.has('view')).toBe(false)
   })
 for (const saved of ['grid', 'gantt', 'invalid'])
@@ -114,8 +114,8 @@ for (const saved of ['grid', 'gantt', 'invalid'])
     await page.setViewportSize({ width: 375, height: 900 })
     await page.addInitScript((value) => localStorage.setItem('event-view-mode', JSON.stringify(value)), saved)
     await page.goto('/events/')
-    await expect(page.getByRole('button', { name: saved === 'gantt' ? '日程' : '一覧', exact: true })).toHaveAttribute(
-      'aria-pressed',
+    await expect(page.getByRole('radio', { name: saved === 'gantt' ? '日程' : '一覧', exact: true })).toHaveAttribute(
+      'aria-checked',
       'true'
     )
   })
@@ -310,8 +310,8 @@ for (const theme of ['light', 'dark'])
           ['一覧', 'grid'],
           ['日程', 'gantt']
         ]) {
-          const button = page.getByRole('button', { name: label, exact: true })
-          await expect(button).toHaveAttribute('aria-pressed', String(selected === mode))
+          const button = page.getByRole('radio', { name: label, exact: true })
+          await expect(button).toHaveAttribute('aria-checked', String(selected === mode))
           const measured = await button.evaluate((element) => {
             const ctx = document.createElement('canvas').getContext('2d')
             if (!ctx) throw new Error('Missing color measurement context')
@@ -339,6 +339,7 @@ for (const theme of ['light', 'dark'])
             return {
               label: element.textContent?.trim(),
               color,
+              fontWeight: getComputedStyle(element).fontWeight,
               foregroundRGB,
               backgroundRGB,
               contrast: (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05)
@@ -347,6 +348,46 @@ for (const theme of ['light', 'dark'])
           measurements.push(measured)
           expect(measured.contrast, `${theme} ${selected} ${label}`).toBeGreaterThanOrEqual(4.5)
         }
+        expect(measurements[0].backgroundRGB).not.toEqual(measurements[1].backgroundRGB)
+        expect(measurements[0].fontWeight).toBe(measurements[1].fontWeight)
+        const controls = page.getByRole('radiogroup', { name: 'イベントの表示方法', exact: true })
+        await expect(controls).toBeVisible()
+        expect(
+          await controls.evaluate((element) => {
+            const probe = document.createElement('span')
+            probe.style.outlineColor = 'var(--card-border)'
+            document.body.appendChild(probe)
+            const actual = getComputedStyle(element)
+            const matches =
+              actual.outlineColor === getComputedStyle(probe).outlineColor &&
+              Number.parseFloat(actual.outlineWidth) > 0 &&
+              actual.outlineStyle === 'solid' &&
+              Number.parseFloat(actual.outlineOffset) < 0
+            probe.remove()
+            return matches
+          })
+        ).toBe(true)
+        await page.screenshot({ path: test.info().outputPath(`view-toggle-${theme}-${width}-${selected}.png`) })
+        const list = controls.getByRole('radio', { name: '一覧', exact: true })
+        const schedule = controls.getByRole('radio', { name: '日程', exact: true })
+        const initialUrl = page.url()
+        await list.click()
+        await expect(list).toBeChecked()
+        await list.click()
+        await expect(list).toBeChecked()
+        await expect(controls.getByRole('radio', { checked: true })).toHaveCount(1)
+        await list.focus()
+        await page.keyboard.press('ArrowRight')
+        await expect(schedule).toBeFocused()
+        await page.keyboard.press('Space')
+        await expect(schedule).toBeChecked()
+        await expect(list).not.toBeChecked()
+        await expect(controls.getByRole('radio', { checked: true })).toHaveCount(1)
+        expect(await schedule.evaluate((element) => getComputedStyle(element).boxShadow)).not.toBe('none')
+        expect(await page.evaluate(() => localStorage.getItem('event-view-mode'))).toBe(JSON.stringify('gantt'))
+        await page.setViewportSize({ width: width < 768 ? 1440 : 320, height: 900 })
+        await expect(schedule).toBeChecked()
+        expect(page.url()).toBe(initialUrl)
         await themeCheck(page, theme)
         const folder = resolve(scratch, 'controls-review-fix')
         await mkdir(folder, { recursive: true })

@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test'
-import { eventOgPlace } from '../../workers/app/src/utils/og-event-place'
+import { eventOgPlace } from '@biccame/shared/domain/og-event-place'
 
 test('store_character_is_not_repeated', () => {
   expect(eventOgPlace({ stores: ['chofu'] })).toEqual({ stores: ['京王調布店'], otherStoreCount: 0, character: null })

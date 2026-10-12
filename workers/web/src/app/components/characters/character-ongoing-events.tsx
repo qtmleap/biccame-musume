@@ -1,0 +1,99 @@
+import { isEventForCharacter } from '@biccame/shared/domain/event-character'
+import type { Event } from '@biccame/shared/schemas/event.dto'
+import type { StoreKey } from '@biccame/shared/schemas/store.dto'
+import { Link } from '@tanstack/react-router'
+import dayjs from 'dayjs'
+import { Calendar, ChevronRight } from 'lucide-react'
+import { motion } from 'motion/react'
+import { useMemo } from 'react'
+import { Separator } from '@/components/ui/separator'
+import { useEvents } from '@/hooks/use-events'
+import { DURATION } from '@/lib/motion'
+import { EVENT_LABELS } from '@/locales/app.content'
+import { STATUS_BADGE } from '@/locales/component'
+
+type CharacterOngoingEventsProps = {
+  storeKey: StoreKey
+}
+
+type OngoingEventItemProps = {
+  event: Event
+  isLast: boolean
+}
+
+/**
+ * 開催中イベントのリストアイテム
+ */
+const OngoingEventItem = ({ event, isLast }: OngoingEventItemProps) => {
+  return (
+    <>
+      <Link
+        to='/events/$uuid'
+        params={{ uuid: event.uuid }}
+        className='flex items-start gap-3 hover:opacity-70 transition-opacity'
+      >
+        <Calendar className='h-5 w-5 text-muted-foreground/50 shrink-0 mt-0.5' />
+        <div className='min-w-0 flex-1'>
+          <p className='text-sm text-foreground'>{event.title}</p>
+          <p className='text-sm text-muted-foreground'>
+            {dayjs(event.startDate).format('YYYY/MM/DD')}
+            {event.endDate ? `〜${dayjs(event.endDate).format('YYYY/MM/DD')}` : EVENT_LABELS.untilEnd}
+          </p>
+        </div>
+        {STATUS_BADGE[event.status]()}
+      </Link>
+      {!isLast && <Separator className='my-3 bg-separator' />}
+    </>
+  )
+}
+
+/**
+ * キャラクターに関連する直近のイベント一覧
+ */
+export const CharacterOngoingEvents = ({ storeKey }: CharacterOngoingEventsProps) => {
+  const { data: events } = useEvents()
+
+  // 開催中・最終日・開催予定のイベントをフィルタリングし、開始日順にソート
+  const upcomingEvents = useMemo(() => {
+    return events
+      .filter((event) => {
+        // 開催中、最終日、開催予定のみ
+        if (event.status !== 'ongoing' && event.status !== 'last_day' && event.status !== 'upcoming') {
+          return false
+        }
+        // 開催店舗、または対象ビッカメ娘としてこの娘が指定されているか
+        return event.stores.includes(storeKey) || isEventForCharacter(event, storeKey)
+      })
+      .sort((a, b) => dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf())
+  }, [events, storeKey])
+
+  if (upcomingEvents.length === 0) {
+    return null
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: DURATION.normal, delay: 0.3 }}
+      className='space-y-3 mb-6'
+    >
+      <h2 className='text-xl font-bold text-foreground'>直近のイベント</h2>
+      <div className='space-y-3'>
+        {upcomingEvents.map((event, index) => (
+          <OngoingEventItem key={event.uuid} event={event} isLast={index === upcomingEvents.length - 1} />
+        ))}
+      </div>
+      <div className='flex justify-end'>
+        <Link
+          to='/events'
+          search={{ store: storeKey }}
+          className='inline-flex items-center gap-1 text-sm text-brand hover:underline'
+        >
+          もっと見る
+          <ChevronRight className='h-4 w-4' />
+        </Link>
+      </div>
+    </motion.div>
+  )
+}

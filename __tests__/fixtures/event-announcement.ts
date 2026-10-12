@@ -1,6 +1,6 @@
 import { mock } from 'bun:test'
-import { Prisma } from '@/generated/prisma/client'
-import type { EventRequest } from '@/schemas/event.dto'
+import { Prisma } from '@api/db/generated/prisma/client'
+import type { EventRequest } from '@biccame/shared/schemas/event.dto'
 
 export const eventRequest: EventRequest = {
   uuid: '550e8400-e29b-41d4-a716-446655440000',

@@ -1,13 +1,19 @@
 import { resolve } from 'node:path'
 import { cloudflare } from '@cloudflare/vite-plugin'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 
-export default defineConfig({
-  root: import.meta.dirname,
-  envDir: resolve(import.meta.dirname, '../..'),
-  plugins: [cloudflare({
-    configPath: resolve(import.meta.dirname, 'wrangler.toml'),
-    config: process.env.BICCAME_BOT_BOOTSTRAP === '1' ? (current) => { current.services = [] } : undefined
-  })],
-  build: { outDir: resolve(import.meta.dirname, 'dist') }
+const botRoot = import.meta.dirname
+const repoRoot = resolve(botRoot, '../..')
+
+export default defineConfig(({ mode }) => {
+  Object.assign(process.env, loadEnv(mode, repoRoot, ['CLOUDFLARE_', 'WRANGLER_HYPERDRIVE_LOCAL_CONNECTION_STRING_']))
+  return {
+    root: botRoot,
+    envDir: repoRoot,
+    plugins: [cloudflare({
+      configPath: resolve(botRoot, 'wrangler.toml'),
+      config: process.env.BICCAME_BOT_BOOTSTRAP === '1' ? (current) => { current.services = [] } : undefined
+    })],
+    build: { outDir: resolve(botRoot, 'dist') }
+  }
 })

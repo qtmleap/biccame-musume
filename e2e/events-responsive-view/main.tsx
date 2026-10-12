@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRootRoute, createRoute, createRouter, Outlet, RouterProvider } from '@tanstack/react-router'
 import { Provider } from 'jotai'
 import { createRoot } from 'react-dom/client'
-import { Route as EventsRoute } from '@/app/routes/events/index'
+import { Route as EventsRoute } from '@/routes/events/index'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import './styles.css'
 

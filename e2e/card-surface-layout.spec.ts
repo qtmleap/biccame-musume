@@ -186,7 +186,7 @@ for (const theme of ['light', 'dark'])
             sourceDiffSHA256: createHash('sha256')
               .update(
                 execSync(
-                  'git diff -- workers/app/src/lib/sticker.ts workers/app/src/components/character-list-card.tsx workers/app/src/components/home/event-list-item.tsx workers/app/src/components/events/event-grid-item.tsx workers/app/src/components/ranking/ranking-row.tsx'
+                  'git diff -- workers/web/src/app/lib/sticker.ts workers/web/src/app/components/character-list-card.tsx workers/web/src/app/components/home/event-list-item.tsx workers/web/src/app/components/events/event-grid-item.tsx workers/web/src/app/components/ranking/ranking-row.tsx'
                 )
               )
               .digest('hex'),

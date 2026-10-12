@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { getAppDeploymentConfigPath } from '../scripts/deploy-app'
 
 const root = resolve(import.meta.dir, '..')
-const app = resolve(root, 'workers/app')
+const app = resolve(root, 'workers/web')
 const manifest = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'))
 const database = z.object({ migrations_dir: z.string().nonempty() })
 const parsedConfig = z
@@ -20,9 +20,9 @@ if (!parsedConfig.success) throw new Error(parsedConfig.error.message)
 const config = parsedConfig.data
 
 test('the root workspace exposes app, bot and shared contracts', () => {
-  expect(manifest.workspaces).toEqual(['workers/app', 'workers/bot', 'packages/shared'])
+  expect(manifest.workspaces).toEqual(['workers/web', 'workers/bot', 'packages/shared'])
   const member = JSON.parse(readFileSync(resolve(app, 'package.json'), 'utf8'))
-  expect(member.name).toBe('@biccame/app')
+  expect(member.name).toBe('@biccame/web')
   expect(member.private).toBe(true)
   expect(existsSync(resolve(root, 'workers/bot/README.md'))).toBe(true)
   expect(existsSync(resolve(root, 'src'))).toBe(false)
@@ -50,21 +50,21 @@ test('D1 migration directories resolve to the shared root schema in every enviro
 
 test('root migration commands preserve local state while selecting the canonical app config', () => {
   for (const script of ['migrate', 'migrate:status']) {
-    expect(manifest.scripts[script]).toContain('--config workers/app/wrangler.toml')
+    expect(manifest.scripts[script]).toContain('--config workers/web/wrangler.toml')
     expect(manifest.scripts[script]).toContain('--persist-to .wrangler/state')
   }
   expect(manifest.scripts.generate).toContain('--config ./prisma/prisma.config.ts')
   const schema = readFileSync(resolve(root, 'prisma/schema.prisma'), 'utf8')
   const output = /output\s*=\s*"([^"]+)"/.exec(schema)?.[1]
   if (!output) throw new Error('Missing Prisma output')
-  expect(resolve(root, 'prisma', output)).toBe(resolve(app, 'src/generated/prisma'))
+  expect(resolve(root, 'prisma', output)).toBe(resolve(app, 'src/api/db/generated/prisma'))
 })
 
 test('deployment selects the app build rather than stale root output', () => {
   const temporary = mkdtempSync(resolve(tmpdir(), 'biccame-deploy-layout-'))
   try {
-    const pointerDirectory = resolve(temporary, 'workers/app/.wrangler/deploy')
-    const outputDirectory = resolve(temporary, 'workers/app/dist/biccame_musume')
+    const pointerDirectory = resolve(temporary, 'workers/web/.wrangler/deploy')
+    const outputDirectory = resolve(temporary, 'workers/web/dist/biccame_musume')
     mkdirSync(pointerDirectory, { recursive: true })
     mkdirSync(outputDirectory, { recursive: true })
     mkdirSync(resolve(temporary, '.wrangler/deploy'), { recursive: true })

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { type DevConfig, Miniflare } from 'miniflare'
+import { unstable_readConfig } from 'wrangler'
 import { z } from 'zod'
 
 const root = resolve(import.meta.dirname, '..')
@@ -29,8 +30,11 @@ const configSchema = z.object({
 const parsed = configSchema.safeParse(JSON.parse(readFileSync(configPath, 'utf8')))
 if (!parsed.success) throw new Error('Invalid skeleton build configuration')
 const config = parsed.data
-const { botAppBinding } = await import('./worker-bindings.ts')
-assert.deepEqual(config.services, process.env.BICCAME_BOT_BOOTSTRAP === '1' ? [] : [botAppBinding(process.env.CLOUDFLARE_ENV)])
+const source = unstable_readConfig({
+  config: resolve(root, 'workers/bot/wrangler.toml'),
+  env: process.env.CLOUDFLARE_ENV
+})
+assert.deepEqual(config.services, process.env.BICCAME_BOT_BOOTSTRAP === '1' ? [] : source.services)
 const enabled = process.env.CLOUDFLARE_ENV === 'production'
 assert.deepEqual(config.triggers.crons, enabled ? ['*/5 0-12 * * *', '0 0 * * *'] : [])
 for (const key of ['TL_NOTIFICATIONS_ENABLED', 'X_POSTING_ENABLED', 'X_ACCOUNT_READ_ENABLED'] as const) {

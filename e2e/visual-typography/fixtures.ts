@@ -1,4 +1,4 @@
-import { EventSchema } from '@/schemas/event.dto'
+import { EventSchema } from '@biccame/shared/schemas/event.dto'
 export const events = (['ongoing', 'upcoming', 'last_day', 'ended'] as const).map((status, index) =>
   EventSchema.parse({
     uuid: `00000000-0000-4000-8000-00000000000${index}`,

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import type { PrismaClient } from '@/generated/prisma/client'
+import type { PrismaClient } from '@api/db/generated/prisma/client'
 import {
   type EvaluatorContext,
   evaluateAllUsersBadges,
@@ -7,7 +7,7 @@ import {
   evaluateOnEventComplete,
   evaluateOnVisit,
   evaluateOnVote
-} from '../../workers/app/src/services/badge'
+} from '@api/services/badge/index'
 
 // ---------------------------------------------------------------------------
 // Helpers

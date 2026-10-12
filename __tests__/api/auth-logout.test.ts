@@ -1,9 +1,9 @@
 import { expect, test } from 'bun:test'
+import { verifyToken } from '@api/lib/token'
+import authRoutes from '@api/routes/auth'
+import type { Bindings, Variables } from '@api/types/bindings'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { sign } from 'hono/jwt'
-import authRoutes from '@/api/auth'
-import type { Bindings, Variables } from '@/types/bindings'
-import { verifyToken } from '@/utils/token'
 
 const env = { ENVIRONMENT: 'local', JWT_SECRET_KEY: 'test-only-session-secret' }
 const app = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()

@@ -1,5 +1,5 @@
-import { RouteResponseSchema } from '../../workers/app/src/schemas/route.dto'
-import { routeResult } from '../../workers/app/src/stories/catalogue-fixtures'
+import { RouteResponseSchema } from '@biccame/shared/schemas/route.dto'
+import { routeResult } from '@/stories/catalogue-fixtures'
 import { runtime } from './runtime'
 
 const nativeFetch = globalThis.fetch.bind(globalThis)
