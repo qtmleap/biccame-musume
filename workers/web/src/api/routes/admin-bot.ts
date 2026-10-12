@@ -1,3 +1,4 @@
+import { checkDiscordConnection, discordStatus, testDiscordNotification } from '@api/services/discord'
 import { EVENT_DETECTION_MODEL_KEY, webhookConfiguration } from '@api/services/webhook-config'
 import type { Bindings } from '@api/types/bindings'
 import { discordDeliveryResultSchema, discordStatusSchema, discordTestRequestSchema } from '@biccame/shared/bot'
@@ -32,9 +33,8 @@ routes.openapi(
     const webhook = await webhookConfiguration(c.env).catch(() => null)
     if (webhook === null) return c.json({ error: 'configuration_unavailable' as const }, 503)
     const common = { fetchedAt: dayjs().toISOString(), webhook }
-    if (!c.env.BOT) return c.json({ ...common, botConnected: false, discord: null, error: 'rpc_unavailable' }, 200)
     try {
-      const parsed = discordStatusSchema.safeParse(await c.env.BOT.discordStatus())
+      const parsed = discordStatusSchema.safeParse(await discordStatus(c.env))
       if (!parsed.success)
         return c.json({ ...common, botConnected: false, discord: null, error: 'unexpected_response' }, 200)
       return c.json({ ...common, botConnected: true, discord: parsed.data, error: null }, 200)
@@ -64,9 +64,8 @@ routes.openapi(
     const webhook = await webhookConfiguration(c.env).catch(() => null)
     if (webhook === null) return c.json({ error: 'configuration_unavailable' as const }, 503)
     const common = { fetchedAt: dayjs().toISOString(), webhook }
-    if (!c.env.BOT) return c.json({ ...common, botConnected: false, discord: null, error: 'rpc_unavailable' }, 200)
     try {
-      const parsed = discordStatusSchema.safeParse(await c.env.BOT.checkDiscordConnection())
+      const parsed = discordStatusSchema.safeParse(await checkDiscordConnection(c.env))
       if (!parsed.success)
         return c.json({ ...common, botConnected: false, discord: null, error: 'unexpected_response' }, 200)
       return c.json({ ...common, botConnected: true, discord: parsed.data, error: null }, 200)
@@ -90,9 +89,8 @@ routes.openapi(
   }),
   async (c) => {
     c.header('Cache-Control', 'no-store')
-    if (!c.env.BOT) return c.json({ status: 'failed' as const, kind: 'rpc' as const }, 200)
     try {
-      const result = discordDeliveryResultSchema.safeParse(await c.env.BOT.testDiscordNotification(c.req.valid('json')))
+      const result = discordDeliveryResultSchema.safeParse(await testDiscordNotification(c.env, c.req.valid('json')))
       return c.json(
         result.success ? result.data : { status: 'unknown' as const, kind: 'delivery_unknown' as const },
         200

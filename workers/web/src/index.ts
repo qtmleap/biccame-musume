@@ -17,8 +17,11 @@ import version from '@api/routes/version'
 import votes from '@api/routes/vote'
 import webhookX from '@api/routes/webhook-x'
 import { runBadgeCron } from '@api/services/badge-cron'
+import { recoverSocialJobs } from '@api/services/social-posting'
+import { recoverSocialSummaries, runSocialSchedule } from '@api/services/social-schedule'
 import { handleWebhookQueue } from '@api/services/webhook-process'
 import type { Bindings, Variables } from '@api/types/bindings'
+import dayjs from 'dayjs'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { csrf } from 'hono/csrf'
@@ -239,17 +242,31 @@ app.use('*', async (c, next) => {
 })
 
 const scheduled: ExportedHandlerScheduledHandler<Bindings> = async (event, env, ctx) => {
+  if (event.cron === '*/5 * * * *') {
+    ctx.waitUntil(
+      (async () => {
+        try {
+          await recoverSocialSummaries(env)
+        } catch {
+          console.error('[social-summary] recovery failed')
+        }
+        await recoverSocialJobs(env)
+      })()
+    )
+    return
+  }
   if (event.cron !== '0 0 * * *') {
     console.warn('[Cron] Unknown app cron; skipped')
     return
   }
-  const scheduledAt = new Date(event.scheduledTime)
-  ctx.waitUntil(runBadgeCron(env, scheduledAt))
+  const scheduledAt = dayjs(event.scheduledTime)
+  // バッジ評価は外部SNS認証や投稿失敗から独立して実行する。
+  ctx.waitUntil(runBadgeCron(env, scheduledAt.toDate()))
+  ctx.waitUntil(runSocialSchedule(env, scheduledAt.toISOString()))
 }
 
 export { StatsDO } from '@api/durable-objects/stats'
 export { UserPushDO } from '@api/durable-objects/user-push'
 export { VoteCounterDO } from '@api/durable-objects/vote-counter'
-export { AppBotReadService } from '@api/rpc/bot-read'
 
 export default { fetch: app.fetch, scheduled, queue: handleWebhookQueue }

@@ -106,7 +106,7 @@ export const BotManagement = () => {
 
   return (
     <BotSettingsLayout
-      title='Bot 設定・接続状態'
+      title='投稿設定・接続状態'
       description='Discord通知とWebhook自動登録の設定を確認します。シークレットの値は表示しません。'
       actions={
         <>
@@ -146,9 +146,9 @@ export const BotManagement = () => {
       {status.data && (
         <div className='space-y-8'>
           <section>
-            <h2 className='mb-2 text-lg font-semibold md:text-xl'>Bot 接続</h2>
+            <h2 className='mb-2 text-lg font-semibold md:text-xl'>web Worker 投稿設定</h2>
             <dl>
-              <BotSettingRow label='Service Binding'>
+              <BotSettingRow label='web Worker'>
                 <SettingFlag enabled={status.data.botConnected} configured />
               </BotSettingRow>
               <BotSettingRow label='Discord Token'>
@@ -215,16 +215,16 @@ export const BotManagement = () => {
           <section>
             <h2 className='mb-2 text-lg font-semibold md:text-xl'>機能の設定</h2>
             <dl>
-              <BotSettingRow label='Discordイベント通知'>常時有効</BotSettingRow>
+              <BotSettingRow label='Webhook判定通知'>常時有効</BotSettingRow>
               <BotSettingRow label='X 投稿'>
                 {discord ? <SettingFlag enabled={discord.xPostingEnabled} /> : '未確認'}
               </BotSettingRow>
-              <BotSettingRow label='タイムライン通知'>
-                {discord ? <SettingFlag enabled={discord.timelineNotificationsEnabled} /> : '未確認'}
+              <BotSettingRow label='Discord 公開投稿'>
+                {discord ? <SettingFlag enabled={discord.discordPostingEnabled} /> : '未確認'}
               </BotSettingRow>
             </dl>
             <p className='mt-3 text-sm text-muted-foreground'>
-              X投稿とタイムライン通知はWebhook受信とは別機能です。設定の変更はWorkerの設定管理から行います。
+              X・Discord公開投稿はWebhook判定通知とは別機能です。設定の変更はWorkerの設定管理から行います。
               この画面では本番X投稿を有効化しません。
             </p>
           </section>

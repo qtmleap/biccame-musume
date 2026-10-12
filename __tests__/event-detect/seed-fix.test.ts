@@ -4,6 +4,7 @@ import { existsSync, readdirSync } from 'node:fs'
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
 import type { DetectPostKind } from '@biccame/shared/event-detect/post'
 import {
   countRows,
@@ -659,6 +660,45 @@ describe('matchEvents（1 対 1 の対応）', () => {
         .sort()
     ).toEqual(['e-copy', 'e-del-announce'])
   })
+
+  test('D1 の created_at が +00:00 の形式に揃えられていても、Z 付きの generatedAt と同じ時刻なら対応する。読めない値は文字列のまま比べる', async () => {
+    const { db } = await setup()
+    const snapshot = readFixSnapshot(db)
+    db.close()
+    const entries = entriesOf()
+    const emulated = emulatedOf()
+    // 日時を揃えるマイグレーションの後と同じく、D1 側の created_at だけを Prisma の形式にする
+    const normalized = snapshot.events.map((event) => ({ ...event, createdAt: toD1DateTime(event.createdAt) }))
+    expect(normalized.every((event) => event.createdAt.endsWith('+00:00'))).toBe(true)
+    expect(entries.every((entry) => entry.generatedAt.endsWith('Z'))).toBe(true)
+    const ok = matchEvents(normalized, entries, emulated)
+    expect(ok.matched).toHaveLength(MATCHED)
+    expect(ok.unmatched.map(({ reason }) => reason)).toEqual(['no_report_row', 'no_report_row'])
+    // 1 ミリ秒でもずれていれば別の実行の行として対応しない
+    const later = matchEvents(
+      normalized,
+      entries.map((entry) => ({ ...entry, generatedAt: '2026-10-09T13:24:28.131Z' })),
+      emulated
+    )
+    expect(later.matched).toHaveLength(0)
+
+    // 時刻として読めない作成時刻は例外にせず、元の文字列どうしで比べる
+    const unreadable = normalized.map((event) =>
+      event.id === 'e-del-announce' ? { ...event, createdAt: 'not a date' } : event
+    )
+    const twin = entries.find((entry) => entry.emulatedId === 'kashiwa-1')
+    if (twin === undefined) throw new Error('no twin')
+    const withRaw = (generatedAt: string) =>
+      matchEvents(
+        unreadable,
+        entries.map((entry) => (entry === twin ? { ...entry, generatedAt } : entry)),
+        emulated
+      )
+    expect(withRaw('not a date').matched.some(({ event }) => event.id === 'e-del-announce')).toBe(true)
+    expect(withRaw('NOT A DATE').unmatched.find(({ event }) => event.id === 'e-del-announce')?.reason).toBe(
+      'no_report_row'
+    )
+  })
 })
 
 describe('seed --fix --apply', () => {
@@ -704,7 +744,8 @@ describe('seed --fix --apply', () => {
     // ended_at（削除しないイベントだけ）
     const ended = (id: string) =>
       after.query<{ ended_at: string | null }, [string]>('SELECT ended_at FROM events WHERE id = ?').get(id)?.ended_at
-    expect(ended('e-stale-30')).toBe('2026-09-09T15:00:00.000Z')
+    // 推定で入れる ended_at は Prisma の形式で書く。元からあった値は変えない
+    expect(ended('e-stale-30')).toBe('2026-09-09T15:00:00.000+00:00')
     expect(ended('e-stale-29')).toBeNull()
     expect(ended('e-before-start')).toBeNull()
     expect(ended('e-has-ended')).toBe('2026-07-20T00:00:00.000Z')

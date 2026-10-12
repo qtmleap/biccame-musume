@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto'
 import { copyFile, lstat, mkdir, readdir, readFile, realpath, rename, rm, writeFile } from 'node:fs/promises'
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
-import { dayjs } from '../../workers/bot/src/timeline/utils/dayjs'
+import { dayjs } from './timeline/utils/dayjs'
 import { ArchiveFailure, type ArchiveScope, parseArchivePage } from './post-archive'
 
 export type SeedDescriptor = { version: 1; pages: number; files: { name: string; sha256: string }[] }

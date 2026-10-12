@@ -135,3 +135,43 @@ test('public profile failure does not expose API body or internal network errors
   )
   await expect(new TwitterTransport(credentials).getOwnAccount()).rejects.toMatchObject({ kind: 'network' })
 })
+
+test('PNG upload uses signed Cookie requests and attaches the resulting media ID', async () => {
+  const commands: string[] = []
+  const fetch = mockFetch(async (url, init) => {
+    expect(String(url)).toBe('https://upload.x.com/i/media/upload.json')
+    const headers = new Headers(init?.headers)
+    expect(headers.get('x-client-transaction-id')).toBeTruthy()
+    expect(headers.get('x-csrf-token')).toBe(credentials.TWITTER_CSRF_TOKEN)
+    const form = init?.body
+    if (!(form instanceof FormData)) throw new Error('Expected upload form')
+    const command = String(form.get('command'))
+    commands.push(command)
+    if (command === 'APPEND') {
+      const media = form.get('media')
+      expect(media instanceof Blob && media.type).toBe('image/png')
+      return new Response(null, { status: 204 })
+    }
+    return Response.json({ media_id_string: '12345' })
+  })
+  expect(await new TwitterTransport(credentials).uploadImage(new Uint8Array([1, 2, 3]))).toBe('12345')
+  expect(commands).toEqual(['INIT', 'APPEND', 'FINALIZE'])
+  expect(fetch).toHaveBeenCalledTimes(3)
+  expect(JSON.parse(buildCreateTweetBody('image', { mediaIds: ['12345'] })).variables.media.media_entities).toEqual([
+    { media_id: '12345', tagged_users: [] }
+  ])
+})
+
+test('failed or unfinished uploads stop before CreateTweet and never become text-only posts', async () => {
+  const fetch = mockFetch(async () =>
+    Response.json({ media_id_string: '12345', processing_info: { state: 'pending' } })
+  )
+  await expect(new TwitterTransport(credentials).uploadImage(new Uint8Array([1]))).rejects.toMatchObject({
+    kind: 'unexpected_response'
+  })
+  expect(fetch).toHaveBeenCalledTimes(3)
+  fetch.mockImplementation(Object.assign(async () => new Response('{}', { status: 429 }), { preconnect: () => {} }))
+  await expect(new TwitterTransport(credentials).uploadImage(new Uint8Array([1]))).rejects.toMatchObject({
+    kind: 'rate_limit'
+  })
+})

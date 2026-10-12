@@ -183,11 +183,11 @@ const signature = createHmac('sha256', signingSecret)
 | app | `EVENT_DETECTION_MODEL` | 初期設定: `clef` (既定) / `clef-flash`。管理画面の保存値が優先 |
 | app | `EVENT_DETECTION_THRESHOLD` / `EVENT_DETECTION_CHOICE_THRESHOLD` | 既定 `0.9` |
 | app | `EVENT_DETECTION_IGNORE_THRESHOLD` | 既定 `0.5`、自動登録閾値未満に設定 |
-| bot | `DISCORD_TOKEN` / `DISCORD_CHANNEL_ID` (secret) | 既存 Discord Bot と通知先を再利用。イベント通知は常時有効で X/TL の有効化とは独立 |
+| web | `DISCORD_TOKEN` / `DISCORD_CHANNEL_ID` (secret) | 既存 Discord Bot と通知先を再利用。Webhook 判定通知と公開イベント告知は別の履歴で管理 |
 
 Queue は `biccame-event-detection-local` / `-staging` / `-production` と、それぞれの `-dlq` に分離しています。
 リモート環境での Queue 作成、secret 同期、マイグレーション、デプロイは管理者が承認してから行います。
-secret は既存 `scripts/sync-cf-secrets.sh` 経由で環境ごとの正しい Worker に同期し、`TWITTER_*` / `DISCORD_TOKEN` は app に登録しないでください。
+secret は既存 `scripts/sync-cf-secrets.sh` 経由で環境ごとの web Worker に同期してください。`TWITTER_*` / `DISCORD_TOKEN` / `DISCORD_CHANNEL_ID` は web Worker のサーバー専用 secret です。クライアントの `VITE_*` 設定には含めません。
 Cloudflare Access の経路保護が Webhook にも適用される場合は `/api/webhook` だけを送信元から到達可能にし、管理画面の保護は維持してください。
 
 `/admin/bot` はシークレットの設定有無、Bot 接続、通知先、AI 閾値を表示します。トークンの値は表示しません。
@@ -248,10 +248,14 @@ bun run generate
 bunx rimraf workers/web/dist
 bun run scripts/download-character-images.ts
 bun run scripts/generate-og-images.ts
+bun run scripts/generate-og-avatars.ts
 bun tsc -b
 CLOUDFLARE_ENV=staging bun run build --mode staging
 CLOUDFLARE_ENV=staging bun run test:app-build
 ```
+
+`scripts/generate-og-avatars.ts` は投稿画像用の丸 Avatar（直径 320px）を店舗キーごとに `workers/web/public/og/avatars/` へ出力します。
+既存ファイルは再生成せず、`FORCE_OG=1` を付けると作り直します。素材が無いキーと `biccamera`（会社ロゴ）は作らず、描画側が「ビ」の丸印に切り替えます。
 
 手元からデプロイする場合は、同じ `CLOUDFLARE_ENV` でビルドしたあとに `bun run deploy` を実行します。
 `CLOUDFLARE_ENV=staging|production` の明示が必須で、ビルドした環境と食い違うとエラーになります。
@@ -267,7 +271,7 @@ CLOUDFLARE_ENV=staging bun run deploy
 # bun test + packages/shared のテスト
 bun run test
 
-# app / bot の型検査
+# web と共有パッケージの型検査
 bun run typecheck
 ```
 
@@ -280,26 +284,40 @@ CI の `Code Check` と同じ対象です。サブモジュール（`biome-plugi
 
 ```zsh
 # チェックのみ
-bun biome check workers/web/src workers/bot/src packages/shared/src __tests__
+bun biome check workers/web/src packages/shared/src __tests__
 
 # 自動修正
-bun biome check --write workers/web/src workers/bot/src packages/shared/src __tests__
+bun biome check --write workers/web/src packages/shared/src __tests__
 ```
 
-#### bot Worker と共有パッケージ
+#### web Worker の画像付き投稿と共有パッケージ
 
-- `workers/bot`: X への投稿、タイムライン（TL）の取得、日次告知を担う Worker です。
-  app とは Service Binding（RPC）で連携し、`TWITTER_*` のシークレットは bot にだけ置きます。詳細は [`workers/bot/README.md`](workers/bot/README.md)。
-- `packages/shared`（`@biccame/shared`）: app と bot で共有する X との通信、店舗データ、イベント検出のロジックです。
+- `workers/web`: UI/API、Webhook 受信・判定、X/Discord の画像付きイベント告知を担当します。独立 bot Worker や Service Binding は使用しません。
+- `packages/shared`（`@biccame/shared`）: X の通信、店舗データ、イベント検出などの純粋な共通ロジックです。
+
+公開イベントの作成・更新はそれぞれの本文と OG 画像で通知します。非公開イベントと Webhook の保留候補は X へ公開しません。
+毎日 JST 09:00 に当日開始・終了イベント、毎週月曜 JST 09:00 にその週と開催期間が重なるイベントを画像付きで通知します。0 件の区分は送らず、多件数はページ分割します。日次 cron はバッジ再評価も継続します。
+
+5 分ごとの本番 cron で Queue 投入に失敗した pending 投稿を回収します。投稿は既存の環境別 `EVENT_DETECTION_QUEUE` で処理し、D1 に固定スナップショットとチャネル別の結果を保存します。投稿失敗で保存済みイベントを巻き戻しません。画像処理失敗時に本文だけを送るフォールバックはありません。結果不明の送信は自動再送せず、exactly-once を保証しません。Webhook の保留・判定通知は Discord 専用で、通常告知とは独立しています。
+
+`TWITTER_AUTH_TOKEN` / `TWITTER_CSRF_TOKEN`、必要に応じて `TWITTER_BEARER_TOKEN`、`DISCORD_TOKEN` / `DISCORD_CHANNEL_ID`、認証監視用 `DISCORD_WEBHOOK_URL` は web Worker の secret に同期します。既存の X 署名付き通信と Discord Bot API を使い、別の OAuth 方式は追加していません。
+
+`X_POSTING_ENABLED` / `DISCORD_POSTING_ENABLED` は production で `"true"`、local / staging で `"false"` に固定しています。Webhook の Discord 保留・判定通知は、この公開告知フラグとは別の経路です。
+管理画面の X アカウント情報は別の読み取り専用フラグ `X_ACCOUNT_READ_ENABLED` で制御し、production は `"true"`、local / staging は `"false"` です。このフラグは投稿を有効化しません。
+
+旧 bot を CI から外しても、リモート Worker の cron は自動で停止しません。本番切替は管理者の明示承認を得て、次の順で実施します。
+
+1. 新 web の本番投稿を有効化する前に、旧 bot Worker の cron を停止する。
+2. web Worker に必要な secret を同期して展開し、画像付き投稿・Queue・日次/週間処理の稼働を確認する。
+3. 確認後、改めて明示承認を得て旧 Worker を削除する。
+
+この変更では実リモート操作を行わず、CI に旧 Worker の自動削除処理も追加しません。本番投稿・secret 同期・remote migration・deploy はローカル検証に使いません。
 
 ```zsh
-bun run build:bot        # workers/bot/dist に bundle を生成
-bun run test:bot-rpc     # build:bot の bundle を Miniflare で動かして RPC を検証
-bun run check:bot-stores # 店舗データ (bot-stores.json) が最新か確認
-bun run deploy:bot --env=staging  # bot のデプロイ（--env の明示が必須。CI は app のあとに実行）
+bun run build
+bun run test:app-build   # 生成された web Worker の環境別設定を検証
+bun run check:bot-stores # 生成店舗データの鮮度を確認（既存ファイル名を維持）
 ```
-
-production の有効な設定（cron・通知・X 投稿）は、`--allow-active-production` を付けた場合だけデプロイできます。
 
 `packages/shared/src/generated/bot-stores.json` とバッジ用の `closed-store-keys.json` は `workers/web/public/characters.json` から生成したファイルです。
 更新が必要なときは `bun scripts/generate-bot-stores.ts` で両方を再生成します。`bun run check:bot-stores` は両方の鮮度を確認します。
@@ -314,7 +332,7 @@ production の有効な設定（cron・通知・X 投稿）は、`--allow-active
   管理画面のビューワ（`/admin/event-detect`）は `serve`（`127.0.0.1:15176`）の API を使います。
   使い方は `bun scripts/event-detect.ts --help`。
 - `bun run archive:list-posts` / `bun run archive:list-timeline`: X のリストの投稿をローカル（`.cache/`）に保存します。
-  使い方は [`workers/bot/README.md`](workers/bot/README.md) の「リスト投稿のローカル保存」を参照してください。
+  使い方は [`docs/list-post-archive.md`](docs/list-post-archive.md) を参照してください。
 
 #### e2e と Storybook
 
@@ -361,23 +379,22 @@ Worker のシークレットは `scripts/sync-cf-secrets.sh`、`VITE_` で始ま
 
 ```
 workers/
-├── web/                  # UI・API を配信する Worker（日次 cron はバッジ再評価のみ）
-│   ├── src/
-│   │   ├── app/          # React UI・routes・components・hooks・atoms・辞書
-│   │   ├── api/          # routes・services・db・middleware・rpc・Durable Objects
-│   │   └── index.ts      # Worker エントリーポイント
-│   ├── public/           # 静的資産とキャラクター情報
-│   ├── index.html
-│   ├── vite.config.ts
-│   ├── wrangler.toml
-│   └── package.json
-└── bot/                  # X への投稿・TL 取得・日次告知を担う Worker（workers/bot/README.md）
+└── web/                  # UI・API・Webhook・画像付き投稿とバッジ再評価を担う Worker
+    ├── src/
+        ├── app/          # React UI・routes・components・hooks・atoms・辞書
+        ├── api/          # routes・services・db・middleware・rpc・Durable Objects
+        └── index.ts      # Worker エントリーポイント
+    ├── public/           # 静的資産とキャラクター情報
+    ├── index.html
+    ├── vite.config.ts
+    ├── wrangler.toml
+    └── package.json
 packages/
-└── shared/               # 純粋な DTO・schema・domain 計算と bot 契約（@biccame/shared）
+└── shared/               # 純粋な DTO・schema・domain 計算と通信処理（@biccame/shared）
 prisma/                   # 共有スキーマ・マイグレーション
 __tests__/                # Bun テスト
 e2e/                      # Playwright の e2e・レイアウト検証
-scripts/                  # 画像の取得・生成、DB seed、デプロイ、bot の検証、ローカル専用ツール
+scripts/                  # 画像の取得・生成、DB seed、デプロイ、ローカル専用ツール
 docs/                     # 設計メモ・調査・レビューの記録
 biome-plugins/            # Biome の GritQL ルール（git サブモジュール）
 patches/                  # 依存パッケージへのパッチ
@@ -389,12 +406,11 @@ patches/                  # 依存パッケージへのパッチ
 
 依存と共通ツールはルートの Bun workspace で管理します。`bun run dev`、
 `bun run build`、`bun run generate`、`bun run deploy` は引き続きルートから実行できます。
-本体のビルド出力は `workers/web/dist/`、bot のビルド出力は `workers/bot/dist/` です。dev/build は `workers/web/vite.config.ts` を明示して使用し、ルートの Vite 設定ファイルは置きません。
+ビルド出力は `workers/web/dist/` です。build は `workers/web/vite.config.ts` を明示し、dev はルートの再 export 設定から同じ設定を使います。
 
 Prisma はルート `prisma/` を使用し、Client は `workers/web/src/api/db/generated/prisma/` に生成します。
 ローカル D1/KV/DO の状態は従来どおりルート `.wrangler/state/` に保存します。
-環境ファイルもルートに維持します。ローカル開発時のみ web からルートへ相対 symlink を作成し、
-内容のコピーや既存ファイルの上書きは行いません。Wrangler の canonical 設定パスは `workers/web/wrangler.toml` です。
+環境ファイルもルートに維持します。Vite の `envDir` でルートを指定し、symlink や内容のコピーは作成しません。Wrangler の canonical 設定パスは `workers/web/wrangler.toml` です。
 
 Wrangler CLI を直接使う場合は `--config workers/web/wrangler.toml` を指定します。
 ローカル DB コマンドには `--persist-to .wrangler/state` も指定してください。

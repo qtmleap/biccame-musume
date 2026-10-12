@@ -24,6 +24,7 @@ const passiveDiscord: DiscordStatus = {
   settings: { token: 'valid', channel: 'valid' },
   notificationsEnabled: true,
   xPostingEnabled: false,
+  discordPostingEnabled: false,
   timelineNotificationsEnabled: false,
   connection: 'unchecked',
   bot: null,
@@ -75,7 +76,12 @@ afterEach(() => {
 test('reload restores last connection result and time while retaining current passive flags', () => {
   saveDiscordConnection(checked())
   const current = {
-    ...passive({ ...passiveDiscord, xPostingEnabled: true, timelineNotificationsEnabled: true }),
+    ...passive({
+      ...passiveDiscord,
+      xPostingEnabled: true,
+      discordPostingEnabled: true,
+      timelineNotificationsEnabled: true
+    }),
     webhook: { ...passive().webhook, model: 'clef-flash' as const }
   }
   const reloaded = restoreDiscordConnection(current)
@@ -84,6 +90,7 @@ test('reload restores last connection result and time while retaining current pa
   expect(reloaded.discord?.channel).toEqual({ id: '456', name: 'synthetic-channel' })
   expect(reloaded.discord?.fetchedAt).toBe(timestamp)
   expect(reloaded.discord?.xPostingEnabled).toBe(true)
+  expect(reloaded.discord?.discordPostingEnabled).toBe(true)
   expect(reloaded.discord?.timelineNotificationsEnabled).toBe(true)
   expect(reloaded.discord?.settings).toBe(current.discord?.settings)
   expect(reloaded.discord?.configured).toBe(current.discord?.configured)
@@ -94,6 +101,7 @@ test('reload restores last connection result and time while retaining current pa
   expect(saved).not.toContain('webhook')
   expect(saved).not.toContain('secretConfigured')
   expect(saved).not.toContain('xPostingEnabled')
+  expect(saved).not.toContain('discordPostingEnabled')
   expect(saved).not.toContain('configured')
 })
 

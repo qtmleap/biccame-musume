@@ -1,7 +1,7 @@
 import type { StatsDO } from '@api/durable-objects/stats'
 import type { UserPushDO } from '@api/durable-objects/user-push'
 import type { VoteCounterDO } from '@api/durable-objects/vote-counter'
-import type { BotRpc } from '@biccame/shared/bot'
+import type { SocialQueueMessage } from '@biccame/shared/social'
 import type { RateLimitBinding } from '@elithrar/workers-hono-rate-limit'
 import type { VerifyFirebaseAuthEnv } from '@hono/firebase-auth'
 import type { JwtVariables } from 'hono/jwt'
@@ -13,8 +13,15 @@ import type { JWTPayload } from 'hono/utils/jwt/types'
 export type Bindings = VerifyFirebaseAuthEnv & {
   /** 環境名 (prod, dev, local) */
   ENVIRONMENT?: string
-  /** 非公開のbot向けService Binding */
-  BOT?: BotRpc
+  /** 投稿は本番で明示的に有効化する */
+  X_POSTING_ENABLED?: string
+  X_ACCOUNT_READ_ENABLED?: string
+  DISCORD_POSTING_ENABLED?: string
+  TWITTER_AUTH_TOKEN?: string
+  TWITTER_CSRF_TOKEN?: string
+  DISCORD_TOKEN?: string
+  DISCORD_CHANNEL_ID?: string
+  DISCORD_WEBHOOK_URL?: string
   /** "true" のとき投票の 1 日 1 回制限を迂回する（ローカル開発用） */
   VOTE_LIMIT_BYPASS?: string
   /** ページビュー統計の atomic 集計を行う Durable Object */
@@ -39,7 +46,7 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   AI: Ai
   /** X Webhook の生本文署名用シークレット */
   WEBHOOK_SECRET_KEY?: string
-  EVENT_DETECTION_QUEUE?: Queue<{ postId: string }>
+  EVENT_DETECTION_QUEUE?: Queue<{ postId: string } | SocialQueueMessage>
   EVENT_DETECTION_MODEL?: string
   EVENT_DETECTION_THRESHOLD?: string
   EVENT_DETECTION_IGNORE_THRESHOLD?: string

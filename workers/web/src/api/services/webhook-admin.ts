@@ -6,6 +6,7 @@ import {
   validateWebhookEvent
 } from '@api/services/webhook-jobs'
 import type { Bindings } from '@api/types/bindings'
+import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
 import type { WebhookResolveSchema, WebhookRetrySchema } from '@biccame/shared/schemas/webhook.dto'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
@@ -86,8 +87,8 @@ export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.
                 crypto.randomUUID(),
                 input.eventId,
                 job.sourceUrl,
-                now,
-                now,
+                toD1DateTime(now),
+                toD1DateTime(now),
                 input.eventId,
                 job.sourceUrl,
                 postId,

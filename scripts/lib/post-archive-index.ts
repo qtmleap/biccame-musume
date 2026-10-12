@@ -32,8 +32,8 @@ export async function archiveIndexKey(context: unknown, sourceUrl: string) {
   // Read the actual executing modules: fixes to normalization invalidate cached JSON automatically.
   const urls = new Set([sourceUrl, import.meta.url])
   if (new URL(sourceUrl).pathname.endsWith('.ts')) {
-    urls.add(new URL('../../workers/bot/src/timeline/utils/dayjs.ts', sourceUrl).href)
-    urls.add(new URL('../../workers/bot/src/timeline/endpoint.ts', sourceUrl).href)
+    urls.add(new URL('./timeline/utils/dayjs.ts', sourceUrl).href)
+    urls.add(new URL('./timeline/endpoint.ts', sourceUrl).href)
   }
   const hash = createHash('sha256').update(JSON.stringify({ schema, context, bun: process.versions.bun }))
   for (const url of urls) hash.update(await readFile(new URL(url)))

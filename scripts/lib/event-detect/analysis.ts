@@ -14,7 +14,7 @@ import {
   RESCUE_KEYWORDS
 } from '@biccame/shared/event-detect/filter'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
-import { dayjs } from '../../../workers/bot/src/timeline/utils/dayjs'
+import { dayjs } from '../timeline/utils/dayjs'
 import { buildGoldIndex, type GoldEvent, type GoldRef, parseStatusUrl, type ReferenceType, snowflakeTime } from './gold'
 import type { EmulatedRecord } from './store'
 

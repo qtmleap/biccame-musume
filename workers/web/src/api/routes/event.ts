@@ -1,6 +1,13 @@
 import { CFAuth } from '@api/middleware/cloudflare-access'
 import { announceSavedEvent } from '@api/services/bot-announcement'
-import { createEvent, deleteEvent, getEvent, getEvents, updateEvent } from '@api/services/event-service'
+import {
+  createEvent,
+  deleteEvent,
+  getEvent,
+  getEvents,
+  updateEvent,
+  usesAtomicEventSave
+} from '@api/services/event-service'
 import { getEventsStats } from '@api/services/me-service'
 import type { Bindings } from '@api/types/bindings'
 import {
@@ -110,7 +117,7 @@ routes.openapi(
   async (c) => {
     const body = c.req.valid('json')
     const { event, created } = await createEvent(c.env, body)
-    if (created && body.shouldTweet !== false) {
+    if (created && body.shouldTweet !== false && !usesAtomicEventSave(c.env, body)) {
       try {
         await announceSavedEvent(c.env, event, 'created')
       } catch {
@@ -164,7 +171,7 @@ routes.openapi(
     const { id } = c.req.valid('param')
     const body = c.req.valid('json')
     const event = await updateEvent(c.env, { ...body, uuid: id })
-    if (body.shouldTweet !== false) {
+    if (body.shouldTweet !== false && !usesAtomicEventSave(c.env, body)) {
       try {
         await announceSavedEvent(c.env, event, 'updated')
       } catch {

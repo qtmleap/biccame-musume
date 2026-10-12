@@ -1,30 +1,30 @@
+import { saveSocialSnapshot } from '@api/services/social-posting'
 import type { Bindings } from '@api/types/bindings'
-import { announcementSchema, deliveryResultSchema } from '@biccame/shared/bot'
+import { socialEventView } from '@biccame/shared/domain/social-post'
 import { buildEventCreatedText, buildEventUpdatedText, getQuoteTweetId } from '@biccame/shared/domain/tweet-text'
 import type { EventDetail } from '@biccame/shared/schemas/event.dto'
+import type { SocialSnapshot } from '@biccame/shared/social'
 
-// 移設の担当フラグで片方だけを実行する。bot失敗時にappから再送しない。
+export const eventSocialSnapshot = (event: EventDetail, purpose: 'created' | 'updated'): SocialSnapshot => {
+  return {
+    kind: purpose,
+    key: `${purpose}:${event.uuid}:${purpose === 'created' ? 'initial' : event.updatedAt.toISOString()}`,
+    scheduledAt: event.updatedAt.toISOString(),
+    images: [{ type: 'event', event: socialEventView(event) }],
+    text:
+      purpose === 'created'
+        ? buildEventCreatedText({ ...event, title: event.title.slice(0, 40) })
+        : buildEventUpdatedText({ ...event, title: event.title.slice(0, 40) }),
+    quoteTweetId: getQuoteTweetId(event.referenceUrls, purpose === 'created' ? 'create' : 'update')
+  }
+}
+
+/** 保存済みの公開イベントのみ、不変スナップショットを両チャネルへ予約する。 */
 export const announceSavedEvent = async (
-  env: Pick<Bindings, 'BOT'>,
+  env: Bindings,
   event: EventDetail,
   purpose: 'created' | 'updated'
 ): Promise<void> => {
-  if (!env.BOT) throw new Error('Event announcement failed: bot binding unavailable')
-  const parsed = announcementSchema.safeParse({
-    eventUUID: event.uuid,
-    revision: event.updatedAt.toISOString(),
-    purpose,
-    text: purpose === 'created' ? buildEventCreatedText(event) : buildEventUpdatedText(event),
-    quoteTweetId: getQuoteTweetId(event.referenceUrls, purpose === 'created' ? 'create' : 'update')
-  })
-  if (!parsed.success) throw new Error('Event announcement failed: invalid contract')
-  let result: unknown
-  try {
-    result = await env.BOT.announce(parsed.data)
-  } catch {
-    throw new Error('Event announcement outcome unknown: RPC failure')
-  }
-  const response = deliveryResultSchema.safeParse(result)
-  if (!response.success) throw new Error('Event announcement outcome unknown: invalid RPC response')
-  if (response.data.status !== 'sent') throw new Error(`Event announcement not sent: ${response.data.status}`)
+  if (!event.isVerified) return
+  await saveSocialSnapshot(env, eventSocialSnapshot(event, purpose))
 }

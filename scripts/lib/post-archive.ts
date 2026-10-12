@@ -3,8 +3,8 @@ import { link, mkdir, open, readdir, readFile, rename, rm, writeFile } from 'nod
 import { join } from 'node:path'
 import type { Dayjs } from 'dayjs'
 import type { ListArchiveIndex, ReplayState } from './post-archive-index'
-import { LIST_TIMELINE_ENDPOINT } from '../../workers/bot/src/timeline/endpoint'
-import { dayjs } from '../../workers/bot/src/timeline/utils/dayjs'
+import { LIST_TIMELINE_ENDPOINT } from './timeline/endpoint'
+import { dayjs } from './timeline/utils/dayjs'
 import {
   assertSeedPathsDisjoint,
   prepareSeedSnapshot,

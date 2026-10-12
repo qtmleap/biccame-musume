@@ -921,19 +921,20 @@ describe('applySeed', () => {
       >("SELECT * FROM events WHERE id != 'existing-1' ORDER BY start_date")
       .all()
     expect(created).toHaveLength(2)
+    // 計画の値は Z 付きのまま、D1 の DateTime 列にはアプリ（Prisma の D1 アダプタ）と同じ +00:00 の形式で書く
     expect(created[0]).toMatchObject({
       category: 'limited_card',
       title: '夏名刺',
       limited_quantity: 100,
-      start_date: '2026-06-30T15:00:00.000Z',
-      end_date: '2026-07-30T15:00:00.000Z',
-      ended_at: '2026-07-20T15:00:00.000Z',
+      start_date: '2026-06-30T15:00:00.000+00:00',
+      end_date: '2026-07-30T15:00:00.000+00:00',
+      ended_at: '2026-07-20T15:00:00.000+00:00',
       is_verified: 0,
       is_preliminary: 0,
       group_id: null,
       character_id: null,
-      created_at: NOW,
-      updated_at: NOW
+      created_at: '2026-10-09T03:00:00.000+00:00',
+      updated_at: '2026-10-09T03:00:00.000+00:00'
     })
     expect(created[1]).toMatchObject({
       category: 'ackey',
@@ -945,7 +946,7 @@ describe('applySeed', () => {
       is_preliminary: 1
     })
     for (const row of created) {
-      expect(row.start_date).toMatch(/^\d{4}-\d{2}-\d{2}T15:00:00\.000Z$/)
+      expect(row.start_date).toMatch(/^\d{4}-\d{2}-\d{2}T15:00:00\.000\+00:00$/)
       expect(row.id).toMatch(/^id-\d+$/)
     }
 
@@ -1362,14 +1363,14 @@ describe('runSeed', () => {
       )
       .all()
     expect(rows).toEqual([
-      { title: '夏名刺', is_verified: 0, is_preliminary: 0, start_date: '2026-06-30T15:00:00.000Z' },
+      { title: '夏名刺', is_verified: 0, is_preliminary: 0, start_date: '2026-06-30T15:00:00.000+00:00' },
       {
         title: '擬人化記念アクリルキーホルダー',
         is_verified: 0,
         is_preliminary: 0,
-        start_date: '2026-07-31T15:00:00.000Z'
+        start_date: '2026-07-31T15:00:00.000+00:00'
       },
-      { title: 'ハロウィン名刺', is_verified: 0, is_preliminary: 1, start_date: '2026-10-24T15:00:00.000Z' }
+      { title: 'ハロウィン名刺', is_verified: 0, is_preliminary: 1, start_date: '2026-10-24T15:00:00.000+00:00' }
     ])
     // 既存の人が検証した行はそのまま
     const existing = written.query('SELECT * FROM events WHERE id = ?').get('existing-1')
@@ -1731,9 +1732,9 @@ describe('配布数の下限（MIN_LIMITED_QUANTITY）', () => {
       )
       .all()
     expect(rows.map((row) => [row.start_date, row.limited_quantity, row.type, row.quantity])).toEqual([
-      ['2026-06-30T15:00:00.000Z', null, 'everyone', null], // 9
-      ['2026-07-01T15:00:00.000Z', 10, 'first_come', 10], // 10
-      ['2026-07-02T15:00:00.000Z', null, 'everyone', null] // 1
+      ['2026-06-30T15:00:00.000+00:00', null, 'everyone', null], // 9
+      ['2026-07-01T15:00:00.000+00:00', 10, 'first_come', 10], // 10
+      ['2026-07-02T15:00:00.000+00:00', null, 'everyone', null] // 1
     ])
     db.close()
   })

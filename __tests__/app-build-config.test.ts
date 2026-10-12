@@ -15,9 +15,7 @@ const database = z.object({
 })
 const worker = z.object({
   name: z.string().nonempty(),
-  services: z.array(
-    z.object({ binding: z.string().nonempty(), service: z.string().nonempty(), entrypoint: z.string().nonempty() })
-  ),
+  services: z.array(z.never()).default([]),
   d1_databases: z.array(database),
   kv_namespaces: z.array(z.object({ binding: z.string().nonempty(), id: z.string().nonempty() })),
   durable_objects: z.object({
@@ -33,6 +31,17 @@ const worker = z.object({
     })
   ),
   migrations: z.array(z.object({ tag: z.string().nonempty() })),
+  vars: z.object({
+    X_POSTING_ENABLED: z.enum(['true', 'false']),
+    DISCORD_POSTING_ENABLED: z.enum(['true', 'false']),
+    X_ACCOUNT_READ_ENABLED: z.enum(['true', 'false'])
+  }),
+  queues: z.object({
+    producers: z.array(z.object({ binding: z.string().nonempty(), queue: z.string().nonempty() })),
+    consumers: z.array(
+      z.object({ queue: z.string().nonempty(), max_batch_size: z.number(), max_concurrency: z.number() })
+    )
+  }),
   triggers: z.object({ crons: z.array(z.string().nonempty()).default([]) }).default({ crons: [] })
 })
 const sourceSchema = worker.extend({ env: z.record(z.string().nonempty(), worker) })
@@ -54,7 +63,7 @@ test('web commands use the canonical config directly or through the root entry p
 })
 
 test('Vite configs do not create environment links or register custom environment watchers', () => {
-  for (const workspace of ['web', 'bot']) {
+  for (const workspace of ['web']) {
     const config = readFileSync(resolve(root, `workers/${workspace}/vite.config.ts`), 'utf8')
     for (const removed of [
       'local-env',
@@ -62,7 +71,10 @@ test('Vite configs do not create environment links or register custom environmen
       'linkLocalEnvironmentFiles',
       'symlinkSync',
       'root-local-vars',
-      'server.restart'
+      'server.restart',
+      'auxiliaryWorkers',
+      'BotService',
+      'workers/bot'
     ]) {
       expect(config).not.toContain(removed)
     }
@@ -75,6 +87,45 @@ test('Vite configs do not create environment links or register custom environmen
   ]) {
     expect(existsSync(resolve(root, removed))).toBe(false)
   }
+})
+
+test('web owns the environment-isolated Queue and production daily cron without bot bindings', () => {
+  const source = sourceSchema.safeParse(Bun.TOML.parse(readFileSync(resolve(app, 'wrangler.toml'), 'utf8')))
+  if (!source.success) throw new Error(source.error.message)
+  const staging = source.data.env.staging
+  const production = source.data.env.production
+  if (!staging || !production) throw new Error('Missing Worker environments')
+  for (const [config, suffix] of [
+    [source.data, 'local'],
+    [staging, 'staging'],
+    [production, 'production']
+  ] as const) {
+    expect(config.services).toEqual([])
+    expect(config.vars.X_POSTING_ENABLED).toBe(suffix === 'production' ? 'true' : 'false')
+    expect(config.vars.DISCORD_POSTING_ENABLED).toBe(suffix === 'production' ? 'true' : 'false')
+    expect(config.vars.X_ACCOUNT_READ_ENABLED).toBe(suffix === 'production' ? 'true' : 'false')
+    expect(config.queues.producers).toEqual([
+      { binding: 'EVENT_DETECTION_QUEUE', queue: `biccame-event-detection-${suffix}` }
+    ])
+    expect(config.queues.consumers.map(({ queue }) => queue)).toEqual([
+      `biccame-event-detection-${suffix}`,
+      `biccame-event-detection-${suffix}-dlq`
+    ])
+    expect(
+      config.queues.consumers.every(
+        ({ max_batch_size, max_concurrency }) => max_batch_size === 1 && max_concurrency === 1
+      )
+    ).toBe(true)
+  }
+  expect(source.data.triggers.crons).toEqual([])
+  expect(staging.triggers.crons).toEqual([])
+  expect(production.triggers.crons).toEqual(['0 0 * * *', '*/5 * * * *'])
+  const manifest = z
+    .object({ workspaces: z.array(z.string().nonempty()) })
+    .safeParse(JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')))
+  if (!manifest.success) throw new Error(manifest.error.message)
+  expect(manifest.data.workspaces).toEqual(['workers/web', 'packages/shared'])
+  expect(existsSync(resolve(root, 'workers/bot/wrangler.toml'))).toBe(false)
 })
 
 // Fresh checkout の単体テストでは build を要求しない。CI と明示的な build 検証でのみ実行する。
@@ -93,6 +144,8 @@ test.skipIf(process.env.BICCAME_VERIFY_BUILD !== '1')(
     expect(output.data.userConfigPath).toBe(resolve(app, 'wrangler.toml'))
     expect(output.data.name).toBe(expected.name)
     expect(output.data.services).toEqual(expected.services)
+    expect(output.data.queues).toEqual(expected.queues)
+    expect(output.data.vars).toEqual(expected.vars)
     expect(output.data.kv_namespaces).toEqual(expected.kv_namespaces)
     expect(output.data.durable_objects).toEqual(expected.durable_objects)
     expect(output.data.triggers.crons).toEqual(expected.triggers.crons)
