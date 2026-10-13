@@ -1,5 +1,6 @@
 import type { Bindings } from '@api/types/bindings'
 import { ClefModelSchema } from '@biccame/shared/event-detect/clef'
+import { FieldThresholdsSchema, resolveFieldThresholds } from '@biccame/shared/event-detect/detection'
 import { z } from 'zod'
 
 const ProbabilitySchema = z.coerce.number().min(0).max(1)
@@ -13,9 +14,23 @@ const ConfigSchema = z
   .refine((value) => value.ignoreThreshold < value.eventThreshold)
 
 export const EVENT_DETECTION_MODEL_KEY = 'settings:event-detection:model'
+/** 項目別しきい値（9項目すべての有効値の JSON）の保存先。モデルのキーとは別に持つ。 */
+export const EVENT_DETECTION_FIELD_THRESHOLDS_KEY = 'settings:event-detection:field-thresholds'
+
+/** 不正な JSON は例外にせず undefined（スキーマ違反と同じ扱い）にする。 */
+const parseJson = (text: string): unknown => {
+  try {
+    return JSON.parse(text)
+  } catch {
+    return undefined
+  }
+}
 
 export const detectionConfiguration = async (env: Bindings) => {
-  const stored = await env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_MODEL_KEY, 'text')
+  const [stored, storedThresholds] = await Promise.all([
+    env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_MODEL_KEY, 'text'),
+    env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_FIELD_THRESHOLDS_KEY, 'text')
+  ])
   const model = ClefModelSchema.safeParse(stored)
   if (stored !== null && !model.success) {
     console.warn('Invalid stored event detection model; using environment configuration')
@@ -27,7 +42,14 @@ export const detectionConfiguration = async (env: Bindings) => {
     choiceThreshold: env.EVENT_DETECTION_CHOICE_THRESHOLD
   })
   if (!parsed.success) throw new Error('Invalid event detection configuration')
-  return parsed.data
+  // 未保存なら既定値（共通値 choiceThreshold から決まる）。保存値が壊れていても保存内容は出さず、既定値に戻す。
+  const thresholds =
+    storedThresholds === null ? undefined : FieldThresholdsSchema.safeParse(parseJson(storedThresholds))
+  if (thresholds !== undefined && !thresholds.success) {
+    console.warn('Invalid stored event detection field thresholds; using defaults')
+  }
+  const fieldThresholds = thresholds?.success ? thresholds.data : resolveFieldThresholds(parsed.data.choiceThreshold)
+  return { ...parsed.data, fieldThresholds }
 }
 
 export const webhookConfiguration = async (env: Bindings) => ({

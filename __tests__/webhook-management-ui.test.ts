@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import type { ClefAnswer } from '@biccame/shared/event-detect/clef'
+import type { FieldThresholds } from '@biccame/shared/event-detect/detection'
 import type { AdminBotStatus } from '@biccame/shared/schemas/admin-bot.dto'
 import type { EventRequest } from '@biccame/shared/schemas/event.dto'
 import { StoreDataSchema } from '@biccame/shared/schemas/store.dto'
@@ -72,7 +73,19 @@ const listJob: WebhookJob = {
   judgedAt: null
 }
 
-const botStatus = (choiceThreshold: number): AdminBotStatus => ({
+const uniformThresholds = (value: number): FieldThresholds => ({
+  single_event: value,
+  status: value,
+  category: value,
+  store: value,
+  start_date: value,
+  end_date: value,
+  quantity: value,
+  condition: value,
+  purchase_amount: value
+})
+// 共通値と9項目すべてを同じしきい値にした設定。項目別の差は fieldThresholds で上書きして付ける。
+const botStatus = (choiceThreshold: number, fieldThresholds: Partial<FieldThresholds> = {}): AdminBotStatus => ({
   fetchedAt: '2026-10-05T03:00:00.000Z',
   botConnected: true,
   discord: null,
@@ -82,16 +95,18 @@ const botStatus = (choiceThreshold: number): AdminBotStatus => ({
     model: 'clef',
     eventThreshold: 0.9,
     ignoreThreshold: 0.5,
-    choiceThreshold
+    choiceThreshold,
+    fieldThresholds: { ...uniformThresholds(choiceThreshold), ...fieldThresholds }
   },
   error: null
 })
 
-const renderList = async (jobs: WebhookJob[], choiceThreshold?: number) => {
+const renderList = async (jobs: WebhookJob[], choiceThreshold?: number, fieldThresholds?: Partial<FieldThresholds>) => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   queryClient.setQueryData([...ADMIN_WEBHOOK_QUERY_KEY, 'list', null], { jobs, nextCursor: null })
   queryClient.setQueryData(charactersQueryKey, characters)
-  if (choiceThreshold !== undefined) queryClient.setQueryData(ADMIN_BOT_QUERY_KEY, botStatus(choiceThreshold))
+  if (choiceThreshold !== undefined)
+    queryClient.setQueryData(ADMIN_BOT_QUERY_KEY, botStatus(choiceThreshold, fieldThresholds))
   const routeTree = createRootRoute({ component: WebhookJobList })
   const router = createRouter({ routeTree, history: createMemoryHistory({ initialEntries: ['/'] }) })
   try {
@@ -104,11 +119,12 @@ const renderList = async (jobs: WebhookJob[], choiceThreshold?: number) => {
   }
 }
 
-const renderDetail = async (job: WebhookJob, choiceThreshold?: number) => {
+const renderDetail = async (job: WebhookJob, choiceThreshold?: number, fieldThresholds?: Partial<FieldThresholds>) => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   queryClient.setQueryData([...ADMIN_WEBHOOK_QUERY_KEY, job.postId], job)
   queryClient.setQueryData(charactersQueryKey, characters)
-  if (choiceThreshold !== undefined) queryClient.setQueryData(ADMIN_BOT_QUERY_KEY, botStatus(choiceThreshold))
+  if (choiceThreshold !== undefined)
+    queryClient.setQueryData(ADMIN_BOT_QUERY_KEY, botStatus(choiceThreshold, fieldThresholds))
   const routeTree = createRootRoute({ component: () => createElement(WebhookJobDetail, { postId: job.postId }) })
   const router = createRouter({ routeTree, history: createMemoryHistory({ initialEntries: ['/'] }) })
   try {
@@ -146,7 +162,7 @@ describe('Webhook管理画面の判定・通知表示', () => {
       '精度',
       'ステータス',
       'イベント名',
-      '詳細'
+      '<span class="sr-only">詳細</span>'
     ])
     expect([...markup.matchAll(/<td\b/g)]).toHaveLength(8)
     expect(markup).toContain('@synthetic_account')
@@ -155,7 +171,8 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(dateCell?.[0]).toContain('tabular-nums')
     expect(dateCell?.[0]).not.toContain('text-xs')
     expect(markup).not.toContain('2026/10/05')
-    expect(markup).toContain('継続 99%')
+    expect(statusCell(markup)).toContain('>継続</td>')
+    expect(markup).not.toContain('99%')
     expect(markup).toContain('72.0%')
     expect(markup).toContain('clef-flash')
     expect([...markup.matchAll(/\d+\.\d%/g)]).toHaveLength(1)
@@ -187,20 +204,24 @@ describe('Webhook管理画面の判定・通知表示', () => {
   })
 
   test.each([
-    ['announce', 0.7499, '告知 75%'],
-    ['start', 1, '開始 100%'],
-    ['ongoing', 0.99, '継続 99%'],
-    ['end', 0, '終了 0%'],
+    ['announce', 0.7499, '告知'],
+    ['start', 1, '開始'],
+    ['ongoing', 0.99, '継続'],
+    ['end', 0, '終了'],
     [null, null, '—']
-  ] as const)('投稿状態%sを処理状態から推測せず確率付きで表示する', async (postStatus, probability, label) => {
-    const markup = await renderList([
-      { ...listJob, postStatus, postStatusProbability: probability, model: 'clef', confidence: 0 }
-    ])
-    expect(markup).toContain(`>${label}</td>`)
-    expect(markup).toContain('0.0%')
-    expect(markup).toContain('clef')
-    expect(markup).not.toContain('clef-flash')
-  })
+  ] as const)(
+    '投稿状態%sを処理状態から推測せず確率を付けずラベルだけで表示する',
+    async (postStatus, probability, label) => {
+      const markup = await renderList([
+        { ...listJob, postStatus, postStatusProbability: probability, model: 'clef', confidence: 0 }
+      ])
+      expect(statusCell(markup)).toContain(`>${label}</td>`)
+      expect(statusCell(markup)).not.toMatch(/\d%/)
+      expect(markup).toContain('0.0%')
+      expect(markup).toContain('clef')
+      expect(markup).not.toContain('clef-flash')
+    }
+  )
 
   test.each(['announce', 'start', 'ongoing', 'end', null] as const)(
     '対象外判定はAIの投稿状態%sより却下を優先する',
@@ -244,6 +265,17 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(markup).not.toContain('一致:')
   })
 
+  // td に font-mono を付けると行の基線が等幅フォントで決まり、日本語フォントの隣のセルより数字が上にずれる。
+  // span の行高を 0 にして、等幅フォントの余白が行ボックスを広げ、基線を1px動かすのも防ぐ。
+  test('受信履歴の精度は、td ではなく内側の span が font-mono と tabular-nums を持つ', async () => {
+    const markup = await renderList([listJob])
+    const precisionCell = [...markup.matchAll(/<td\b([^>]*)>(.*?)<\/td>/g)][4]
+    expect(precisionCell?.[1]).toContain('text-right')
+    expect(precisionCell?.[1]).not.toContain('font-mono')
+    expect(precisionCell?.[1]).not.toContain('tabular-nums')
+    expect(precisionCell?.[2]).toBe('<span class="font-mono tabular-nums leading-[0]">72.0%</span>')
+  })
+
   test('未判定とイベント未紐付けには確率やリンクを捏造しない', async () => {
     const markup = await renderList([
       {
@@ -268,17 +300,18 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(markup).not.toContain(listJob.eventUUID)
   })
 
-  test('確率がしきい値未満の投稿状態は薄く表示し、理由をtitleに出す', async () => {
+  test('確率が0.75でも一覧は「告知」だけを出し、しきい値未満なら薄い文字色と理由のtitleが付く', async () => {
     const tentative = { ...listJob, postStatus: 'announce', postStatusProbability: 0.7499 } as const
     const markup = await renderList([tentative], 0.9)
-    expect(statusCell(markup)).toContain('>告知 75%</td>')
+    expect(statusCell(markup)).toContain('>告知</td>')
+    expect(statusCell(markup)).not.toMatch(/\d%</)
     expect(statusCell(markup)).toContain('text-muted-foreground')
     expect(statusCell(markup)).toContain('title="確信度がしきい値(90%)未満のため未確定"')
   })
 
   test('しきい値は設定値から取り、ちょうど届く確率は確定として通常表示する', async () => {
     const markup = await renderList([{ ...listJob, postStatus: 'announce', postStatusProbability: 0.8 }], 0.8)
-    expect(statusCell(markup)).toContain('>告知 80%</td>')
+    expect(statusCell(markup)).toContain('>告知</td>')
     expect(statusCell(markup)).not.toContain('text-muted-foreground')
     expect(statusCell(markup)).not.toContain('title=')
     const lower = await renderList([{ ...listJob, postStatus: 'announce', postStatusProbability: 0.79 }], 0.8)
@@ -288,7 +321,7 @@ describe('Webhook管理画面の判定・通知表示', () => {
   test('しきい値を取得できない間と、対象外・未判定の行は通常の見た目にする', async () => {
     const low = { ...listJob, postStatus: 'announce', postStatusProbability: 0.3 } as const
     const loading = await renderList([low])
-    expect(statusCell(loading)).toContain('>告知 30%</td>')
+    expect(statusCell(loading)).toContain('>告知</td>')
     expect(statusCell(loading)).not.toContain('text-muted-foreground')
     expect(statusCell(loading)).not.toContain('title=')
     const ignored = await renderList([{ ...low, status: 'ignored' }], 0.9)
@@ -309,10 +342,11 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(webhookPostStatusIsTentative({ postStatus: 'announce', postStatusProbability: null }, 0.9)).toBe(false)
   })
 
-  test('投稿状態ラベルは確率が無ければラベルだけ、対象外は却下を優先する', () => {
+  test('投稿状態ラベルは確率があってもラベルだけ、対象外は却下を優先する', () => {
     expect(webhookPostStatusLabel({ status: 'held', postStatus: 'announce', postStatusProbability: 0.7499 })).toBe(
-      '告知 75%'
+      '告知'
     )
+    expect(webhookPostStatusLabel({ status: 'held', postStatus: 'end', postStatusProbability: 0 })).toBe('終了')
     expect(webhookPostStatusLabel({ status: 'held', postStatus: 'start', postStatusProbability: null })).toBe('開始')
     expect(webhookPostStatusLabel({ status: 'held', postStatus: null, postStatusProbability: null })).toBe('—')
     expect(webhookPostStatusLabel({ status: 'ignored', postStatus: 'end', postStatusProbability: 1 })).toBe('却下')
@@ -476,13 +510,53 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(rows).toHaveLength(5)
     for (const row of rows) {
       const cells = [...row.matchAll(/<td\b[^>]*>(.*?)<\/td>/g)].map((match) => match[1])
-      expect(cells[3]).toBe('—')
+      // しきい値の列は mono の span の中に—を置く（td は右寄せのまま、基線は sans で決まる）。
+      expect(cells[3]).toBe('<span class="font-mono tabular-nums leading-[0]">—</span>')
       expect(cells[4]).toBe('—')
-      const probability = row.match(/<td\b[^>]*class="([^"]*)"[^>]*>[\d.]+%<\/td>/)?.[1]
-      expect(probability?.split(' ')).toEqual(expect.arrayContaining(['text-right', 'font-mono', 'tabular-nums']))
+      const probability = row.match(/<td\b[^>]*class="([^"]*)"[^>]*><span\b[^>]*>[\d.]+%<\/span><\/td>/)?.[1]
+      expect(probability?.split(' ')).toEqual(expect.arrayContaining(['text-right']))
     }
     expect(loading).not.toContain('data-slot="badge"')
     expect(loading).not.toContain('bg-warning/10')
+  })
+
+  // td に font-mono を付けると行の基線が等幅フォントで決まり、日本語フォントの隣のセルより数字が上にずれる。
+  // span の行高を 0 にして、等幅フォントの余白が行ボックスを広げ、基線を1px動かすのも防ぐ。
+  test('回答表の確率としきい値は、td ではなく内側の span が font-mono と tabular-nums を持つ', () => {
+    for (const thresholds of [answerThresholds, undefined]) {
+      const markup = renderToStaticMarkup(createElement(WebhookAnswerTable, { answers: shintouAnswers, thresholds }))
+      for (const row of answerRows(markup)) {
+        const cells = [...row.matchAll(/<td\b([^>]*)>(.*?)<\/td>/g)]
+        for (const index of [2, 3]) {
+          const attributes = cells[index]?.[1]
+          const content = cells[index]?.[2]
+          expect(attributes).toContain('text-right')
+          expect(attributes).not.toContain('font-mono')
+          expect(attributes).not.toContain('tabular-nums')
+          expect(content).toMatch(/^<span class="font-mono tabular-nums leading-\[0\]">[^<]+<\/span>$/)
+        }
+      }
+    }
+  })
+
+  // 外側の等幅 span は行高 0、内側の sans の span だけ行高 20px にして、行ボックスと基線を sans で決める。
+  // そうしないと等幅フォントの余白で行ボックスが 22px に広がり、次点が隣のセルより 1px 上にずれる。
+  test('回答表の次点は、外側の等幅spanの行高を0、内側のsansのspanの行高を20pxにして基線を揃える', () => {
+    const markup = renderToStaticMarkup(
+      createElement(WebhookAnswerTable, { answers: shintouAnswers, thresholds: answerThresholds })
+    )
+    const alternativeCells = answerRows(markup).flatMap((row) => {
+      const cell = [...row.matchAll(/<td\b[^>]*>(.*?)<\/td>/g)][5]?.[1]
+      return cell === undefined || cell === '—' ? [] : [cell]
+    })
+    expect(alternativeCells).toHaveLength(5)
+    const alternative =
+      '<span class="font-mono tabular-nums leading-\\[0\\]"><span class="font-sans leading-5">[^<]+</span> [\\d.]+%</span>'
+    for (const cell of alternativeCells) {
+      expect(cell).toMatch(new RegExp(`^<div class="flex items-center gap-4">(${alternative})+</div>$`))
+    }
+    // 次点が2件ある行（status・category）は、gap-4 の flex の中に2つ並ぶ。
+    expect(alternativeCells.filter((cell) => cell.split('font-sans').length === 3)).toHaveLength(2)
   })
 
   test('回答表の全セルは上下中央に揃え、中身にinline-flexを使わずブロックのflexを使う', () => {
@@ -582,6 +656,21 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(rows[0]?.match(/<td\b[^>]*>.*?<\/td>/)?.[0]).not.toContain('/admin/webhooks/')
   })
 
+  test('詳細列の見出しは sr-only の「詳細」で視覚的に隠し、各行には「詳細」リンクが残る', async () => {
+    const jobs = [listJob, { ...listJob, postId: '1000000000000000002' }]
+    const markup = await renderList(jobs)
+    const headings = [...markup.matchAll(/<th\b([^>]*)>(.*?)<\/th>/g)]
+    expect(headings).toHaveLength(8)
+    // 見出しの文字は sr-only の span に入り、th 自身は表示用の文字を持たない（列の幅用の whitespace-nowrap は維持）。
+    expect(headings.at(-1)?.[2]).toBe('<span class="sr-only">詳細</span>')
+    expect(headings.at(-1)?.[1]).toContain('whitespace-nowrap')
+    // sr-only でない「詳細」は、各行のリンクだけ。
+    expect(markup.match(/<th\b[^>]*>[^<]*詳細/g)).toBeNull()
+    const links = [...markup.matchAll(/<a\b[^>]*href="\/admin\/webhooks\/[^"]*"[^>]*>(.*?)<\/a>/g)]
+    expect(links).toHaveLength(jobs.length)
+    for (const link of links) expect(link[1]).toMatch(/^詳細<svg/)
+  })
+
   test('登録済みアカウントの詳細リンクはキャラクター名で行を識別する', async () => {
     const markup = await renderList([{ ...listJob, post: { ...listJob.post, screenName: 'BIC_ABENO' } }])
     expect(markup).toContain('aria-label="あべのたんの判定詳細"')
@@ -640,7 +729,7 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(markup).toContain('bg-muted/40')
     expect(markup).toContain('text-muted-foreground')
     expect(markup).not.toContain('bg-status-ongoing')
-    expect(webhookActionAvailability('held', 'skipped').canRetryNotification).toBe(false)
+    expect(webhookActionAvailability('held', 'skipped', []).canRetryNotification).toBe(false)
   })
 
   test('未判定と低スコアを区別する', () => {
@@ -655,7 +744,7 @@ describe('Webhook管理画面の判定・通知表示', () => {
   })
 
   test('登録後の通知失敗では判定・登録の再実行を許可しない', () => {
-    expect(webhookActionAvailability('registered', 'failed')).toEqual({
+    expect(webhookActionAvailability('registered', 'failed', [])).toEqual({
       canResolve: false,
       canRetryProcessing: false,
       canRejudge: false,
@@ -664,14 +753,110 @@ describe('Webhook管理画面の判定・通知表示', () => {
   })
 
   test('保留の解決と失敗した判定の再実行を区別する', () => {
-    expect(webhookActionAvailability('held', 'sent').canResolve).toBe(true)
-    expect(webhookActionAvailability('failed', 'pending').canRetryProcessing).toBe(true)
-    expect(webhookActionAvailability('processing', 'unknown').canRetryNotification).toBe(false)
-    expect(webhookActionAvailability('ignored', 'sent').canResolve).toBe(false)
+    expect(webhookActionAvailability('held', 'sent', []).canResolve).toBe(true)
+    expect(webhookActionAvailability('failed', 'pending', []).canRetryProcessing).toBe(true)
+    expect(webhookActionAvailability('processing', 'unknown', []).canRetryNotification).toBe(false)
+    expect(webhookActionAvailability('ignored', 'sent', []).canResolve).toBe(false)
+    // 対象外は解決の対象ではないが、人が却下していなければ再判定はできる。
+    expect(webhookActionAvailability('ignored', 'skipped', ['not_distribution_event']).canRejudge).toBe(true)
+    expect(webhookActionAvailability('ignored', 'skipped', ['manually_rejected']).canRejudge).toBe(false)
   })
 
   test('結果不明の再送は重複の危険を明示する', () => {
     expect(notificationRetryWarning('unknown')).toContain('重複')
     expect(notificationRetryWarning('failed')).toContain('AI判定は繰り返しません')
+  })
+})
+
+const anchorsOf = (markup: string) => [...markup.matchAll(/<a\b[^>]*>.*?<\/a>/g)].map((match) => match[0])
+// ボタンは button か、asChild の Link（a）で出る。どちらも data-slot と data-variant を持つ。
+const outlineTags = (markup: string) =>
+  [...markup.matchAll(/<(?:button|a)\b[^>]*data-variant="outline"[^>]*>/g)].map((match) => match[0])
+
+describe('受信詳細・受信履歴の戻り先', () => {
+  test('受信詳細の左上は受信履歴（/admin/webhooks）に戻り、管理画面に戻るリンクは出さない', async () => {
+    const markup = await renderDetail(listJob, 0.9)
+    const back = anchorsOf(markup).find((anchor) => anchor.includes('受信履歴に戻る'))
+    expect(back).toBeDefined()
+    expect(back).toContain('href="/admin/webhooks"')
+    expect(markup).not.toContain('管理画面に戻る')
+    expect(markup).not.toContain('href="/admin"')
+  })
+
+  test('受信詳細の右上に受信履歴ボタンは無く、更新ボタンだけが残る', async () => {
+    const markup = await renderDetail(listJob, 0.9)
+    // 受信履歴（/admin/webhooks）へのリンクは、左上の戻るリンク1つだけ。
+    expect(anchorsOf(markup).filter((anchor) => anchor.includes('href="/admin/webhooks"'))).toHaveLength(1)
+    expect(markup).not.toMatch(/<\/svg>受信履歴<\/a>/)
+    const header = markup.slice(markup.indexOf('<header'), markup.indexOf('</header>'))
+    expect(header).toContain('更新')
+    expect(header).not.toContain('受信履歴')
+  })
+
+  test('受信履歴（一覧）の戻り先は従来どおり管理画面（/admin）', async () => {
+    const markup = await renderList([listJob], 0.9)
+    const back = anchorsOf(markup).find((anchor) => anchor.includes('管理画面に戻る'))
+    expect(back).toBeDefined()
+    expect(back).toContain('href="/admin"')
+    expect(markup).not.toContain('受信履歴に戻る')
+  })
+})
+
+describe('管理画面の outline ボタンの枠線', () => {
+  test('受信詳細の outline ボタンはすべて枠線に border-card-border を指定する', async () => {
+    const tags = outlineTags(await renderDetail(listJob, 0.9))
+    // 更新・既存へ紐付け・対象外にする・失敗した処理を再実行・AI で判定し直す・通知を再送。
+    expect(tags).toHaveLength(6)
+    for (const tag of tags) expect(tag).toContain('border-card-border')
+  })
+
+  test('受信履歴の outline ボタンはすべて枠線に border-card-border を指定する', async () => {
+    const tags = outlineTags(await renderList([listJob], 0.9))
+    // 更新・bot 設定・前へ・次へ。
+    expect(tags).toHaveLength(4)
+    for (const tag of tags) expect(tag).toContain('border-card-border')
+  })
+})
+
+describe('項目別のしきい値の反映', () => {
+  const announce = (probability: number): WebhookJob => ({
+    ...listJob,
+    postStatus: 'announce',
+    postStatusProbability: probability
+  })
+
+  test('受信履歴の未確定は status の項目別しきい値（共通値ではない）で決まる', async () => {
+    // 共通値 90% でも、status が 80% なら 0.85 は確定として通常表示する。
+    const confirmed = await renderList([announce(0.85)], 0.9, { status: 0.8 })
+    expect(statusCell(confirmed)).toContain('>告知</td>')
+    expect(statusCell(confirmed)).not.toContain('text-muted-foreground')
+    expect(statusCell(confirmed)).not.toContain('title=')
+    // status を 90% にすると、同じ 0.85 が未確定になり、理由に status のしきい値を出す。
+    const tentative = await renderList([announce(0.85)], 0.9, { status: 0.9 })
+    expect(statusCell(tentative)).toContain('text-muted-foreground')
+    expect(statusCell(tentative)).toContain('title="確信度がしきい値(90%)未満のため未確定"')
+    const below = await renderList([announce(0.79)], 0.9, { status: 0.8 })
+    expect(statusCell(below)).toContain('title="確信度がしきい値(80%)未満のため未確定"')
+    // 他の項目のしきい値は一覧の未確定に影響しない。
+    const other = await renderList([announce(0.85)], 0.9, { status: 0.8, category: 0.99 })
+    expect(statusCell(other)).not.toContain('title=')
+  })
+
+  test('受信詳細の回答表は項目別のしきい値と確定を出す（状態 80%、配布物 90%）', async () => {
+    const answers: Record<string, ClefAnswer> = {
+      status: { type: 'choice', choice: 'announce', probabilities: { announce: 0.8536, start: 0.1 } },
+      category: { type: 'choice', choice: 'other', probabilities: { other: 0.85, none: 0.1 } }
+    }
+    const markup = await renderDetail({ ...listJob, answers }, 0.9, { status: 0.8 })
+    const rows = answerRows(markup)
+    const cells = (key: string) => {
+      const row = rows.find((entry) => entry.includes(`>${key}</td>`))
+      if (row === undefined) throw new Error(`Missing row ${key}`)
+      return [...row.matchAll(/<td\b[^>]*>(.*?)<\/td>/g)].map((match) => match[1])
+    }
+    expect(cells('状態')[3]).toBe('<span class="font-mono tabular-nums leading-[0]">80.0%</span>')
+    expect(cells('状態')[4]).toContain('確定')
+    expect(cells('配布物')[3]).toBe('<span class="font-mono tabular-nums leading-[0]">90.0%</span>')
+    expect(cells('配布物')[4]).toContain('未確定')
   })
 })

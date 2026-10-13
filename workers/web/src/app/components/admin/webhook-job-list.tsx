@@ -49,12 +49,13 @@ export const WebhookJobList = () => {
   const jobs = useAdminWebhookJobs(cursor)
   const { data: characters } = useCharacters()
   const { data: botStatus } = useAdminBotStatus()
+  // 一覧の未確定は投稿状態（status）の確信度なので、status の項目別しきい値で見る。
   // しきい値を取得できるまで（読み込み中・エラー）は通常の見た目にする。
-  const choiceThreshold = botStatus?.webhook.choiceThreshold
+  const statusThreshold = botStatus?.webhook.fieldThresholds.status
 
   const isTentative = (job: WebhookJob) =>
-    choiceThreshold !== undefined && job.status !== 'ignored' && webhookPostStatusIsTentative(job, choiceThreshold)
-  const tentativeReason = choiceThreshold === undefined ? undefined : webhookPostStatusTentativeReason(choiceThreshold)
+    statusThreshold !== undefined && job.status !== 'ignored' && webhookPostStatusIsTentative(job, statusThreshold)
+  const tentativeReason = statusThreshold === undefined ? undefined : webhookPostStatusTentativeReason(statusThreshold)
 
   const nextPage = () => {
     const nextCursor = jobs.data?.nextCursor
@@ -76,11 +77,16 @@ export const WebhookJobList = () => {
       description='X投稿の日時、配布状態、判定精度と関連イベントを確認できます。'
       actions={
         <>
-          <Button variant='outline' onClick={() => jobs.refetch()} disabled={jobs.isFetching}>
+          <Button
+            variant='outline'
+            className='border-card-border'
+            onClick={() => jobs.refetch()}
+            disabled={jobs.isFetching}
+          >
             <RefreshCw className={cn('size-4', jobs.isFetching && 'animate-spin')} />
             更新
           </Button>
-          <Button variant='outline' onClick={() => navigate({ to: '/admin/bot' })}>
+          <Button variant='outline' className='border-card-border' onClick={() => navigate({ to: '/admin/bot' })}>
             <Bot className='size-4' />
             Bot設定
           </Button>
@@ -102,7 +108,10 @@ export const WebhookJobList = () => {
               <TableHead className='text-right whitespace-nowrap'>精度</TableHead>
               <TableHead>ステータス</TableHead>
               <TableHead>イベント名</TableHead>
-              <TableHead className='whitespace-nowrap'>詳細</TableHead>
+              {/* 各行に「詳細」リンクがあるので、見出しは視覚的に隠してスクリーンリーダー向けにだけ残す。 */}
+              <TableHead className='whitespace-nowrap'>
+                <span className='sr-only'>詳細</span>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -133,8 +142,16 @@ export const WebhookJobList = () => {
                   </TableCell>
                   <TableCell className='whitespace-nowrap'>{webhookKeywordLabel(job.post)}</TableCell>
                   <TableCell className='whitespace-nowrap'>{webhookModelLabel(job.model)}</TableCell>
-                  <TableCell className={cn('text-right', job.confidence !== null && 'font-mono tabular-nums')}>
-                    {detectionScoreLabel(job.confidence)}
+                  {/*
+                    td に font-mono を付けると行の基線が等幅フォントで決まり、隣のセルとずれる。等幅は内側の span にだけ付ける。
+                    span の行高は 0 にして、等幅フォントの上下の余白が行ボックスを広げ、基線を動かさないようにする。
+                  */}
+                  <TableCell className='text-right'>
+                    {job.confidence === null ? (
+                      '—'
+                    ) : (
+                      <span className='font-mono tabular-nums leading-[0]'>{detectionScoreLabel(job.confidence)}</span>
+                    )}
                   </TableCell>
                   <TableCell
                     className={cn('whitespace-nowrap', isTentative(job) && 'text-muted-foreground')}
@@ -167,11 +184,21 @@ export const WebhookJobList = () => {
       <div className='mt-5 flex items-center justify-between gap-4'>
         <p className='text-sm text-muted-foreground'>{previousCursors.length + 1} ページ</p>
         <div className='flex items-center gap-2'>
-          <Button variant='outline' onClick={previousPage} disabled={previousCursors.length === 0 || jobs.isFetching}>
+          <Button
+            variant='outline'
+            className='border-card-border'
+            onClick={previousPage}
+            disabled={previousCursors.length === 0 || jobs.isFetching}
+          >
             <ChevronLeft className='size-4' />
             前へ
           </Button>
-          <Button variant='outline' onClick={nextPage} disabled={!jobs.data?.nextCursor || jobs.isFetching}>
+          <Button
+            variant='outline'
+            className='border-card-border'
+            onClick={nextPage}
+            disabled={!jobs.data?.nextCursor || jobs.isFetching}
+          >
             次へ
             <ChevronRight className='size-4' />
           </Button>

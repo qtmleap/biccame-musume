@@ -1,5 +1,5 @@
 import { ClefModelSchema, ClefResponseSchema } from '@biccame/shared/event-detect/clef'
-import { DetectionDraftSchema } from '@biccame/shared/event-detect/detection'
+import { DetectionDraftSchema, FieldThresholdsSchema } from '@biccame/shared/event-detect/detection'
 import { DetectPostSchema } from '@biccame/shared/event-detect/post'
 import { GapStatusSchema } from '@biccame/shared/event-detect/viewer'
 import { EventRequestSchema } from '@biccame/shared/schemas/event.dto'
@@ -65,5 +65,8 @@ export const WebhookConfigurationSchema = z.object({
   model: ClefModelSchema,
   eventThreshold: z.number(),
   ignoreThreshold: z.number(),
-  choiceThreshold: z.number()
+  /** 選択肢項目の共通値（環境変数）。項目別の既定値の元になる。 */
+  choiceThreshold: z.number(),
+  /** 項目別の有効なしきい値（保存値、無ければ既定値）。判定が実際に使う値。 */
+  fieldThresholds: FieldThresholdsSchema
 })

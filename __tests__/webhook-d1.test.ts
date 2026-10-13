@@ -1,7 +1,7 @@
 import { expect, test } from 'bun:test'
 import { readdir, readFile } from 'node:fs/promises'
 import adminWebhookRoutes from '@api/routes/admin-webhook'
-import { rejudgeWebhookJob } from '@api/services/webhook-admin'
+import { rejudgeWebhookJob, resolveWebhookJob } from '@api/services/webhook-admin'
 import {
   claimWebhookJob,
   getWebhookJob,
@@ -316,8 +316,22 @@ const withRejudgeEnv = async (run: (env: Bindings, sent: string[]) => Promise<vo
 
 const rejudgePostId = (index: number) => `210922172177357${String(index).padStart(4, '0')}`
 
-type RejudgeSeed = { status: string; notificationStatus: string; leaseUntil: number | null }
-const heldSeed: RejudgeSeed = { status: 'held', notificationStatus: 'failed', leaseUntil: null }
+type RejudgeSeed = { status: string; notificationStatus: string; leaseUntil: number | null; reasons: string[] }
+const heldSeed: RejudgeSeed = {
+  status: 'held',
+  notificationStatus: 'failed',
+  leaseUntil: null,
+  reasons: ['needs_review']
+}
+// AI が自動で対象外にしたジョブ。対象外のジョブは通知を送らないため notification_status は skipped。
+const ignoredSeed: RejudgeSeed = {
+  status: 'ignored',
+  notificationStatus: 'skipped',
+  leaseUntil: null,
+  reasons: ['not_distribution_event']
+}
+// 管理画面で人が却下したジョブ。resolveWebhookJob の reject が書く reasons と同じ。
+const rejectedSeed: RejudgeSeed = { ...ignoredSeed, reasons: ['manually_rejected'] }
 
 /** 保存済みの判定結果・回答・エラーをすべて埋めたジョブを作る。消えるべき列が最初から null だと検証にならない。 */
 const seedRejudgeJob = async (env: Bindings, index: number, seed: RejudgeSeed) => {
@@ -341,7 +355,7 @@ const seedRejudgeJob = async (env: Bindings, index: number, seed: RejudgeSeed) =
       '{"answers":{"is_event":{"type":"noul","noul":0.72}}}',
       '{"is_event":{"type":"noul","noul":0.72}}',
       JSON.stringify(event),
-      '["needs_review"]',
+      JSON.stringify(seed.reasons),
       0.72,
       'clef-flash',
       'old-v1',
@@ -439,19 +453,94 @@ test('rejudge resets a held job to queued, clears stored judgement and enqueues 
   })
 }, 60000)
 
-test('rejudge rejects every non-held status with 409 and changes nothing', async () => {
+test('rejudge rejects every status other than held and ignored with 409 and changes nothing', async () => {
   await withRejudgeEnv(async (env, sent) => {
-    const statuses = ['registered', 'ignored', 'failed', 'queued', 'processing']
+    const statuses = ['registered', 'failed', 'queued', 'processing']
     for (const [index, status] of statuses.entries()) {
       const postId = await seedRejudgeJob(env, index + 1, { ...heldSeed, status })
       const before = await rawRejudgeRow(env, postId)
       expect(await conflictOf(rejudgeWebhookJob(env, postId))).toEqual({
         status: 409,
-        message: 'Only held jobs can be re-judged'
+        message: 'Only held or ignored jobs can be re-judged'
       })
       expect(await rawRejudgeRow(env, postId)).toEqual(before)
     }
     expect(sent).toEqual([])
+  })
+}, 60000)
+
+test('rejudge resets an ignored job (not manually rejected) to queued, clears the judgement and enqueues it once', async () => {
+  await withRejudgeEnv(async (env, sent) => {
+    const postId = await seedRejudgeJob(env, 1, ignoredSeed)
+    const job = await rejudgeWebhookJob(env, postId)
+    expect(job).toMatchObject({
+      postId,
+      status: 'queued',
+      reasons: [],
+      candidate: null,
+      confidence: null,
+      model: null,
+      questionVersion: null,
+      answers: null,
+      judgedAt: null,
+      notificationStatus: 'pending',
+      notificationError: null,
+      lastError: null
+    })
+    expect(await rawRejudgeRow(env, postId)).toMatchObject({
+      status: 'queued',
+      result_json: null,
+      answers_json: null,
+      candidate_json: null,
+      reasons_json: '[]',
+      semantic_key: null,
+      notification_status: 'pending',
+      notification_error: null,
+      last_error: null,
+      lease_token: null,
+      lease_until: null,
+      attempts: 3,
+      notification_attempts: 2
+    })
+    expect(sent).toEqual([postId])
+    // 再判定のあとは処理待ちなので、処理に進められる。
+    expect(await claimWebhookJob(env, postId)).toEqual(expect.any(String))
+  })
+}, 60000)
+
+test('rejudge rejects a manually rejected ignored job with 409 and changes nothing', async () => {
+  await withRejudgeEnv(async (env, sent) => {
+    const postId = await seedRejudgeJob(env, 1, rejectedSeed)
+    const before = await rawRejudgeRow(env, postId)
+    expect(await conflictOf(rejudgeWebhookJob(env, postId))).toEqual({
+      status: 409,
+      message: 'Manually rejected jobs cannot be re-judged'
+    })
+    expect(await rawRejudgeRow(env, postId)).toEqual(before)
+    expect(sent).toEqual([])
+  })
+}, 60000)
+
+test('rejudge refuses a job rejected through resolveWebhookJob, so the guard follows the real reject path', async () => {
+  await withRejudgeEnv(async (env, sent) => {
+    const postId = await seedRejudgeJob(env, 1, heldSeed)
+    await resolveWebhookJob(env, postId, { action: 'reject' })
+    expect(await rawRejudgeRow(env, postId)).toMatchObject({
+      status: 'ignored',
+      reasons_json: '["manually_rejected"]'
+    })
+    const before = await rawRejudgeRow(env, postId)
+    expect((await conflictOf(rejudgeWebhookJob(env, postId))).status).toBe(409)
+    expect(await rawRejudgeRow(env, postId)).toEqual(before)
+    expect(sent).toEqual([])
+  })
+}, 60000)
+
+test('rejudge matches the manually_rejected reason exactly, not as a substring of another reason', async () => {
+  await withRejudgeEnv(async (env, sent) => {
+    const postId = await seedRejudgeJob(env, 1, { ...ignoredSeed, reasons: ['possible_duplicate:manually_rejected_x'] })
+    expect((await rejudgeWebhookJob(env, postId)).status).toBe('queued')
+    expect(sent).toEqual([postId])
   })
 }, 60000)
 
@@ -525,12 +614,20 @@ test('rejudge route accepts a bodyless POST and maps errors to 404, 409 and 400'
     expect(body.success).toBe(true)
     expect(body.success ? body.data : null).toMatchObject({ postId, status: 'queued', notificationStatus: 'pending' })
     expect(sent).toEqual([postId])
-    // 保留でなくなったジョブ、存在しないジョブ、形式の違う ID は再実行できない。
+    // 保留でも対象外でもなくなったジョブ、存在しないジョブ、形式の違う ID は再実行できない。
     const again = await request(postId)
     expect(again.status).toBe(409)
-    expect(await again.text()).toBe('Only held jobs can be re-judged')
+    expect(await again.text()).toBe('Only held or ignored jobs can be re-judged')
     expect((await request('9999')).status).toBe(404)
     expect((await request('not-a-post-id')).status).toBe(400)
     expect(sent).toEqual([postId])
+    // AI が対象外にしたジョブは再実行できるが、人が却下したジョブは 409。
+    const ignoredId = await seedRejudgeJob(env, 2, ignoredSeed)
+    expect((await request(ignoredId)).status).toBe(200)
+    const rejectedId = await seedRejudgeJob(env, 3, rejectedSeed)
+    const rejected = await request(rejectedId)
+    expect(rejected.status).toBe(409)
+    expect(await rejected.text()).toBe('Manually rejected jobs cannot be re-judged')
+    expect(sent).toEqual([postId, ignoredId])
   })
 }, 60000)

@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describeAnswers, reasonLabel } from './answer-view'
 import type { ClefAnswer, ClefRequest } from './clef'
-import { createDetectionRequest, evaluateDetection } from './detection'
+import { createDetectionRequest, evaluateDetection, FIELD_THRESHOLD_KEYS, thresholdOf } from './detection'
 import { DROP_REASONS } from './filter'
 import type { DetectPost } from './post'
 
@@ -59,6 +59,20 @@ describe('describeAnswers', () => {
     ])
   })
 
+  test('store を質問しない投稿の回答（店舗の行が無い）でも、他の行は固定の順で並ぶ', () => {
+    const { store: _store, ...withoutStore } = shintouAnswers
+    expect(describeAnswers(withoutStore, thresholds).map((row) => row.key)).toEqual([
+      'is_event',
+      'status',
+      'category',
+      'single_event',
+      'start_date',
+      'end_date',
+      'quantity',
+      'condition'
+    ])
+  })
+
   test('選択肢は日本語に直す（日付・数量・配布条件・店舗・none）', () => {
     expect(rowOf('status').answer).toBe('告知')
     expect(rowOf('category').answer).toBe('アクスタ')
@@ -69,22 +83,55 @@ describe('describeAnswers', () => {
     expect(rowOf('condition').answer).toBe('購入者に配布')
   })
 
-  test('確率は選ばれた回答のもので、noul は肯定の確率を返す', () => {
+  test('確率は表示した回答のもの。noul は P(はい) が 0.5 以上なら「はい」とその確率、反対の「いいえ」を次点に出す', () => {
     expect(rowOf('status').probability).toBe(0.7499)
     expect(rowOf('category').probability).toBe(0.4544)
-    expect(rowOf('is_event').probability).toBe(0.7224)
-    expect(rowOf('single_event').probability).toBe(0.9149)
-    expect(rowOf('is_event').alternatives).toEqual([])
+    expect(rowOf('is_event')).toMatchObject({ answer: 'はい', probability: 0.7224 })
+    expect(rowOf('single_event')).toMatchObject({ answer: 'はい', probability: 0.9149 })
+    // 1 - 0.7224 は浮動小数点では 0.27759999999999996 になるため、4桁に丸めた値で比べる。
+    expect(rowOf('is_event').alternatives).toEqual([{ answer: 'いいえ', probability: 0.2776 }])
+    expect(rowOf('single_event').alternatives).toEqual([{ answer: 'いいえ', probability: 0.0851 }])
   })
 
-  test('しきい値以上だけが確定になり、is_event だけがイベント用のしきい値を使う', () => {
+  test('noul は P(はい) が 0.5 未満なら「いいえ」とその確率を出し、P(はい) を次点に残す', () => {
+    const [row] = describeAnswers({ is_event: { type: 'noul', noul: 0.186 } }, thresholds)
+    expect(row).toMatchObject({
+      key: 'is_event',
+      answer: 'いいえ',
+      probability: 0.814,
+      threshold: 0.9,
+      confirmed: false,
+      alternatives: [{ answer: 'はい', probability: 0.186 }]
+    })
+  })
+
+  test('noul のちょうど 0.5 は「はい」', () => {
+    const [row] = describeAnswers({ single_event: { type: 'noul', noul: 0.5 } }, thresholds)
+    expect(row).toMatchObject({
+      answer: 'はい',
+      probability: 0.5,
+      alternatives: [{ answer: 'いいえ', probability: 0.5 }]
+    })
+  })
+
+  test('noul の確定は表示した回答ではなく P(はい) をしきい値と比べる（evaluateDetection と揃える）', () => {
+    const low = describeAnswers({ is_event: { type: 'noul', noul: 0.05 } }, thresholds)
+    // 「いいえ 95%」でも、P(はい) が 0.05 でしきい値 0.9 を下回るので確定ではない。
+    expect(low[0]).toMatchObject({ answer: 'いいえ', probability: 0.95, confirmed: false })
+    const exact = describeAnswers({ is_event: { type: 'noul', noul: 0.9 } }, thresholds)
+    expect(exact[0]).toMatchObject({ answer: 'はい', probability: 0.9, confirmed: true })
+  })
+
+  test('しきい値以上と、最有力が none の終了日だけが確定になり、is_event だけがイベント用のしきい値を使う', () => {
+    // end_date は none 0.541 でしきい値未満だが、最有力が none（終了日の記載なし）なので確定。
     expect(rows.filter((row) => row.confirmed).map((row) => row.key)).toEqual([
       'single_event',
       'start_date',
+      'end_date',
       'quantity',
       'condition'
     ])
-    for (const key of ['status', 'category', 'store', 'end_date', 'is_event']) expect(rowOf(key).confirmed).toBe(false)
+    for (const key of ['status', 'category', 'store', 'is_event']) expect(rowOf(key).confirmed).toBe(false)
     expect(rowOf('is_event').threshold).toBe(0.9)
     const split = describeAnswers(shintouAnswers, { eventThreshold: 0.7, fieldThreshold: 0.95, ignoreThreshold: 0.5 })
     expect(split.find((row) => row.key === 'is_event')).toMatchObject({ threshold: 0.7, confirmed: true })
@@ -92,9 +139,48 @@ describe('describeAnswers', () => {
     expect(split.find((row) => row.key === 'quantity')).toMatchObject({ threshold: 0.95, confirmed: true })
   })
 
+  test('終了日は最有力が none（0.7348）ならしきい値未満でも確定、最有力が日付（0.6）なら未確定', () => {
+    const none = describeAnswers({ end_date: choice('none', { none: 0.7348, d20261019: 0.2652 }) }, thresholds)
+    expect(none[0]).toMatchObject({
+      key: 'end_date',
+      answer: 'なし',
+      probability: 0.7348,
+      threshold: 0.9,
+      confirmed: true,
+      alternatives: [{ answer: '2026-10-19', probability: 0.2652 }]
+    })
+    const date = describeAnswers({ end_date: choice('d20261019', { d20261019: 0.6, none: 0.4 }) }, thresholds)
+    expect(date[0]).toMatchObject({ answer: '2026-10-19', probability: 0.6, confirmed: false })
+    const confident = describeAnswers({ end_date: choice('d20261019', { d20261019: 0.95, none: 0.05 }) }, thresholds)
+    expect(confident[0]).toMatchObject({ confirmed: true })
+  })
+
+  test('none を確定扱いにするのは終了日だけで、他の項目の none はしきい値で判定する', () => {
+    const rowsOfNone = describeAnswers(
+      {
+        start_date: choice('none', { none: 0.7, d20261019: 0.3 }),
+        quantity: choice('none', { none: 0.7, q60: 0.3 }),
+        store: choice('none', { none: 0.7, shintou: 0.3 }),
+        end_date: choice('none', { none: 0.7, d20261019: 0.3 })
+      },
+      thresholds
+    )
+    expect(rowsOfNone.map((row) => [row.key, row.confirmed])).toEqual([
+      ['store', false],
+      ['start_date', false],
+      ['end_date', true],
+      ['quantity', false]
+    ])
+  })
+
   test('しきい値ちょうどは確定（evaluateDetection の >= と揃える）', () => {
-    const [row] = describeAnswers({ status: choice('announce', { announce: 0.9 }) }, thresholds)
+    const [row] = describeAnswers({ category: choice('other', { other: 0.9 }) }, thresholds)
     expect(row).toMatchObject({ probability: 0.9, threshold: 0.9, confirmed: true })
+    // status の既定のしきい値は 0.8。ちょうどでも確定、わずかに下回れば未確定。
+    const [exact] = describeAnswers({ status: choice('announce', { announce: 0.8 }) }, thresholds)
+    expect(exact).toMatchObject({ probability: 0.8, threshold: 0.8, confirmed: true })
+    const [below] = describeAnswers({ status: choice('announce', { announce: 0.7999 }) }, thresholds)
+    expect(below).toMatchObject({ threshold: 0.8, confirmed: false })
   })
 
   test('次点は選ばれた回答を除いて確率の降順に最大2件', () => {
@@ -198,6 +284,8 @@ describe('reasonLabel', () => {
     category_unconfirmed: '配布物を確定できない',
     store_unconfirmed: '店舗を確定できない',
     store_inferred_from_account: '店舗は投稿アカウントから補完',
+    title_generated: 'タイトルは AI が作成',
+    title_fallback: 'タイトルは定型（AI の作成に失敗）',
     start_date_unconfirmed: '開始日を確定できない',
     end_date_unconfirmed: '終了日を確定できない',
     purchase_amount_unconfirmed: '購入額を確定できない',
@@ -308,7 +396,15 @@ describe('reasonLabel', () => {
       condition: choice('first_come', { first_come: 0.99 }),
       quantity: choice('q100', { q100: 0.99 })
     })
-    for (const reason of ['invalid_event_candidate', 'manually_linked', 'manually_rejected']) seen.add(reason)
+    // タイトルの理由は webhook-process.ts が付ける（evaluateDetection は出さない）。
+    for (const reason of [
+      'invalid_event_candidate',
+      'manually_linked',
+      'manually_rejected',
+      'title_generated',
+      'title_fallback'
+    ])
+      seen.add(reason)
     // 上の入力で evaluateDetection の全ての理由を実際に出させたことを確かめる。
     for (const reason of [
       'unmodeled_distribution_condition',
@@ -332,6 +428,67 @@ describe('reasonLabel', () => {
     for (const reason of seen) {
       expect(Object.hasOwn(labels, reason), `${reason} がテストの対応表にない`).toBe(true)
       expect(reasonLabel(reason), reason).toBe(labels[reason])
+    }
+  })
+})
+
+describe('describeAnswers with per-field thresholds', () => {
+  // 新東たんの実投稿に近い回答（status は announce 0.8536 で、共通値 0.9 には届かない）。
+  const near: Record<string, ClefAnswer> = {
+    is_event: { type: 'noul', noul: 0.9641 },
+    status: choice('announce', { announce: 0.8536, start: 0.1 }),
+    category: choice('other', { other: 0.97 }),
+    single_event: { type: 'noul', noul: 0.9339 },
+    start_date: choice('d20261019', { d20261019: 0.9787 }),
+    end_date: choice('none', { none: 0.9976 }),
+    quantity: choice('q60', { q60: 0.965 }),
+    condition: choice('purchase', { purchase: 0.9865 }),
+    purchase_amount: choice('p5000', { p5000: 0.9719 })
+  }
+  const rowsOf = (value: Parameters<typeof describeAnswers>[1]) => describeAnswers(near, value)
+  const find = (rows: ReturnType<typeof describeAnswers>, key: string) => {
+    const row = rows.find((entry) => entry.key === key)
+    if (row === undefined) throw new Error(`Missing row ${key}`)
+    return row
+  }
+
+  test('status の行のしきい値は 0.8 で announce 0.8536 は確定、category の行は 0.9', () => {
+    const rows = rowsOf(thresholds)
+    expect(find(rows, 'status')).toMatchObject({ threshold: 0.8, probability: 0.8536, confirmed: true })
+    expect(find(rows, 'category')).toMatchObject({ threshold: 0.9, confirmed: true })
+    expect(find(rows, 'is_event')).toMatchObject({ threshold: 0.9, confirmed: true })
+  })
+
+  test('fieldThresholds の上書きが各行の threshold と confirmed に出る', () => {
+    const rows = rowsOf({ ...thresholds, fieldThresholds: { status: 0.9, category: 0.98, start_date: 0.5 } })
+    expect(find(rows, 'status')).toMatchObject({ threshold: 0.9, confirmed: false })
+    expect(find(rows, 'category')).toMatchObject({ threshold: 0.98, confirmed: false })
+    expect(find(rows, 'start_date')).toMatchObject({ threshold: 0.5, confirmed: true })
+    // 上書きの無い項目は既定値のまま。
+    expect(find(rows, 'quantity')).toMatchObject({ threshold: 0.9, confirmed: true })
+  })
+
+  test('single_event（noul）の行も項目別のしきい値で確定を決める', () => {
+    const rows = rowsOf({ ...thresholds, fieldThresholds: { single_event: 0.95 } })
+    expect(find(rows, 'single_event')).toMatchObject({ threshold: 0.95, confirmed: false })
+    expect(find(rowsOf(thresholds), 'single_event')).toMatchObject({ threshold: 0.9, confirmed: true })
+  })
+
+  test('is_event は fieldThresholds に左右されず eventThreshold を使う', () => {
+    const rows = rowsOf({ ...thresholds, eventThreshold: 0.97, fieldThresholds: { status: 0.1, category: 0.1 } })
+    expect(find(rows, 'is_event')).toMatchObject({ threshold: 0.97, confirmed: false })
+  })
+
+  test('どの行のしきい値も thresholdOf（判定と同じ関数）で引いた値と一致する', () => {
+    const value = { ...thresholds, fieldThresholds: { status: 0.55, store: 0.66 } }
+    for (const row of rowsOf(value)) expect(row.threshold, row.key).toBe(thresholdOf(value, row.key))
+    // 未知の質問は共通値。
+    const [unknown] = describeAnswers({ future_question: choice('x', { x: 0.95 }) }, value)
+    expect(unknown).toMatchObject({ threshold: 0.9, confirmed: true })
+    // 9項目すべてが上書きを受ける。
+    const all = Object.fromEntries(FIELD_THRESHOLD_KEYS.map((key, index) => [key, 0.5 + index / 100]))
+    for (const row of describeAnswers(near, { ...thresholds, fieldThresholds: all })) {
+      if (row.key !== 'is_event') expect(row.threshold, row.key).toBe(all[row.key])
     }
   })
 })

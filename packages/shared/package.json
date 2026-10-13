@@ -20,6 +20,7 @@
     "./event-detect/detection": "./src/event-detect/detection.ts",
     "./event-detect/filter": "./src/event-detect/filter.ts",
     "./event-detect/post": "./src/event-detect/post.ts",
+    "./event-detect/title": "./src/event-detect/title.ts",
     "./event-detect/viewer": "./src/event-detect/viewer.ts",
     "./event-detect/webhook": "./src/event-detect/webhook.ts",
     "./schemas/*": "./src/schemas/*.ts",

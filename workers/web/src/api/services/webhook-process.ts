@@ -11,6 +11,7 @@ import {
   storedJson,
   validateWebhookEvent
 } from '@api/services/webhook-jobs'
+import { generateEventTitle, type TitleFetcher } from '@api/services/webhook-title'
 import type { Bindings } from '@api/types/bindings'
 import { discordDeliveryResultSchema, type EventDetectionNotification } from '@biccame/shared/bot'
 import { ClefResponseSchema } from '@biccame/shared/event-detect/clef'
@@ -155,7 +156,12 @@ export const notifyWebhookJob = async (env: Bindings, job: WebhookJob, token: st
   }
 }
 
-export const processWebhookJob = async (env: Bindings, postId: string): Promise<number | null> => {
+/** titleFetcher はタイトル生成の通信の差し替え口（テスト用。省略すると fetch） */
+export const processWebhookJob = async (
+  env: Bindings,
+  postId: string,
+  options: { titleFetcher?: TitleFetcher } = {}
+): Promise<number | null> => {
   const token = await claimWebhookJob(env, postId)
   if (token === null) {
     const job = await getWebhookJob(env, postId)
@@ -191,7 +197,8 @@ export const processWebhookJob = async (env: Bindings, postId: string): Promise<
             const decision = evaluateDetection(job.post, request, response.data, {
               eventThreshold: configuration.eventThreshold,
               fieldThreshold: configuration.choiceThreshold,
-              ignoreThreshold: configuration.ignoreThreshold
+              ignoreThreshold: configuration.ignoreThreshold,
+              fieldThresholds: configuration.fieldThresholds
             })
             await env.DB.prepare(
               `UPDATE webhook_event_jobs SET result_json=?,answers_json=?,model=?,question_version=?,confidence=?,judged_at=?,updated_at=? WHERE post_id=? AND lease_token=?`
@@ -218,50 +225,76 @@ export const processWebhookJob = async (env: Bindings, postId: string): Promise<
     const candidate =
       result.status === 'ignored' || !result.candidate ? null : eventCandidate(result.candidate, job.eventUUID)
     const duplicates = candidate === null ? [] : await duplicateWebhookEvents(env, candidate, job.sourceUrl)
-    const reasons = [
+    const baseReasons = [
       ...result.reasons,
       ...(result.status === 'register' && candidate === null ? ['invalid_event_candidate'] : []),
       ...duplicates.map((id) => `possible_duplicate:${id}`)
     ]
     const canRegister = result.status === 'register' && candidate !== null && duplicates.length === 0
+    // 同じ店舗・種別・開始日の別投稿が登録済みなら保留にする。タイトルを付ける（LLM を呼ぶ）前に判定して、保留になる投稿では呼ばない。
+    const semantic =
+      canRegister && candidate !== null
+        ? JSON.stringify([candidate.stores.slice().sort(), candidate.category, candidate.startDate])
+        : null
+    const existing =
+      semantic === null
+        ? null
+        : await env.DB.prepare('SELECT post_id AS postId FROM webhook_event_jobs WHERE semantic_key=?')
+            .bind(semantic)
+            .first<{ postId: string }>()
+    const duplicatePostId = existing !== null && existing.postId !== postId ? existing.postId : null
+    const registering = canRegister && candidate !== null && semantic !== null && duplicatePostId === null
+    // 登録に進む投稿は、タイトルの通信（最大 20 秒）より前に同じイベントの枠を押さえる（同じイベントの別投稿が同時に登録に進まないように）。
+    if (registering && semantic !== null) {
+      await env.DB.prepare('UPDATE webhook_event_jobs SET semantic_key=? WHERE post_id=? AND lease_token=?')
+        .bind(semantic, postId, token)
+        .run()
+    }
+    // 自動登録する（Clef を通って登録になる）ときだけ、イベントのタイトルを Claude に付けさせる。失敗・未設定なら今の形のタイトルのまま登録する。
+    const titled =
+      registering && candidate !== null
+        ? await generateEventTitle(
+            env,
+            {
+              category: candidate.category,
+              startDay: candidate.startDate.slice(0, 10),
+              stores: candidate.stores,
+              body: job.post.text
+            },
+            options.titleFetcher === undefined ? {} : { fetcher: options.titleFetcher }
+          )
+        : null
+    const registered = candidate !== null && titled?.ok ? { ...candidate, title: titled.title } : candidate
+    const reasons = [...baseReasons, ...(titled === null ? [] : [titled.ok ? 'title_generated' : 'title_fallback'])]
     await env.DB.prepare(
       `UPDATE webhook_event_jobs SET candidate_json=?,reasons_json=?,updated_at=? WHERE post_id=? AND lease_token=?`
     )
       .bind(
-        candidate === null ? null : JSON.stringify(candidate),
+        registered === null ? null : JSON.stringify(registered),
         JSON.stringify(reasons),
         dayjs().valueOf(),
         postId,
         token
       )
       .run()
-    if (canRegister && candidate !== null) {
-      const semantic = JSON.stringify([candidate.stores.slice().sort(), candidate.category, candidate.startDate])
-      const existing = await env.DB.prepare('SELECT post_id AS postId FROM webhook_event_jobs WHERE semantic_key=?')
-        .bind(semantic)
-        .first<{ postId: string }>()
-      if (existing !== null && existing.postId !== postId) {
-        await env.DB.prepare(
-          `UPDATE webhook_event_jobs SET status='held',reasons_json=?,updated_at=? WHERE post_id=? AND lease_token=?`
-        )
-          .bind(
-            JSON.stringify([...reasons, `possible_duplicate_post:${existing.postId}`]),
-            dayjs().valueOf(),
-            postId,
-            token
-          )
-          .run()
-      } else {
-        await env.DB.prepare('UPDATE webhook_event_jobs SET semantic_key=? WHERE post_id=? AND lease_token=?')
-          .bind(semantic, postId, token)
-          .run()
-        await registerWebhookEvent(
-          env,
-          await getWebhookJob(env, postId),
-          validateWebhookEvent(candidate, job.eventUUID),
+    if (registering && registered !== null) {
+      await registerWebhookEvent(
+        env,
+        await getWebhookJob(env, postId),
+        validateWebhookEvent(registered, job.eventUUID),
+        token
+      )
+    } else if (duplicatePostId !== null) {
+      await env.DB.prepare(
+        `UPDATE webhook_event_jobs SET status='held',reasons_json=?,updated_at=? WHERE post_id=? AND lease_token=?`
+      )
+        .bind(
+          JSON.stringify([...reasons, `possible_duplicate_post:${duplicatePostId}`]),
+          dayjs().valueOf(),
+          postId,
           token
         )
-      }
+        .run()
     } else {
       const status = result.status === 'ignored' ? 'ignored' : 'held'
       await env.DB.prepare(

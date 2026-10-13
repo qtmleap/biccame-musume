@@ -15,22 +15,93 @@ import {
   keyToDate,
   keyToQuantity,
   QUESTION_VERSION,
+  STATUS_CRITERIA,
   storeCandidates,
   valueQuestions
 } from './decide'
 import { buildRescueTerms, classifyPost, normalizeText } from './filter'
 import type { DetectPost } from './post'
 
-export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v2`
+export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v3`
 export const DEFAULT_DETECTION_THRESHOLDS = { eventThreshold: 0.9, fieldThreshold: 0.9, ignoreThreshold: 0.5 } as const
+
+/** 項目別にしきい値を持てる質問。is_event（eventThreshold）と対象外（ignoreThreshold）は別設定で、ここには含めない。 */
+export const FIELD_THRESHOLD_KEYS = [
+  'single_event',
+  'status',
+  'category',
+  'store',
+  'start_date',
+  'end_date',
+  'quantity',
+  'condition',
+  'purchase_amount'
+] as const
+export type FieldThresholdKey = (typeof FIELD_THRESHOLD_KEYS)[number]
+/** 状態（status）の既定のしきい値の上限。Clef は告知を 0.85 前後で止めることが多く、共通値 0.9 だと保留になるため下げる。 */
+export const STATUS_DEFAULT_THRESHOLD = 0.8
+const FieldThresholdSchema = z.number().positive().max(1)
+/** 9項目すべての有効なしきい値。保存・API の形で、1項目でも欠ける・余分なキーがあると不正。 */
+export const FieldThresholdsSchema = z.strictObject({
+  single_event: FieldThresholdSchema,
+  status: FieldThresholdSchema,
+  category: FieldThresholdSchema,
+  store: FieldThresholdSchema,
+  start_date: FieldThresholdSchema,
+  end_date: FieldThresholdSchema,
+  quantity: FieldThresholdSchema,
+  condition: FieldThresholdSchema,
+  purchase_amount: FieldThresholdSchema
+} satisfies Record<FieldThresholdKey, typeof FieldThresholdSchema>)
+export type FieldThresholds = z.infer<typeof FieldThresholdsSchema>
+
 export const DetectionThresholdsSchema = z
   .strictObject({
     eventThreshold: z.number().positive().max(1),
     fieldThreshold: z.number().positive().max(1),
-    ignoreThreshold: z.number().min(0).max(1)
+    ignoreThreshold: z.number().min(0).max(1),
+    /** 項目別の上書き（任意）。無い項目は resolveFieldThresholds の既定値。 */
+    fieldThresholds: FieldThresholdsSchema.partial().optional()
   })
   .refine((value) => value.ignoreThreshold < value.eventThreshold, { message: 'Invalid detection thresholds' })
 export type DetectionThresholds = z.infer<typeof DetectionThresholdsSchema>
+
+/**
+ * 項目ごとの有効なしきい値。上書きがあればそれ、無ければ既定値。
+ * 既定値は status が min(fieldThreshold, STATUS_DEFAULT_THRESHOLD)、他の8項目は fieldThreshold（従来の共通値）。
+ */
+export const resolveFieldThresholds = (
+  fieldThreshold: number,
+  overrides?: Partial<Record<FieldThresholdKey, number>>
+): FieldThresholds => {
+  const pick = (key: FieldThresholdKey, fallback: number): number => {
+    const value = overrides === undefined ? undefined : overrides[key]
+    return value === undefined ? fallback : value
+  }
+  return {
+    single_event: pick('single_event', fieldThreshold),
+    status: pick('status', Math.min(fieldThreshold, STATUS_DEFAULT_THRESHOLD)),
+    category: pick('category', fieldThreshold),
+    store: pick('store', fieldThreshold),
+    start_date: pick('start_date', fieldThreshold),
+    end_date: pick('end_date', fieldThreshold),
+    quantity: pick('quantity', fieldThreshold),
+    condition: pick('condition', fieldThreshold),
+    purchase_amount: pick('purchase_amount', fieldThreshold)
+  }
+}
+const isFieldThresholdKey = (key: string): key is FieldThresholdKey =>
+  FIELD_THRESHOLD_KEYS.some((value) => value === key)
+
+/**
+ * 質問キーに対するしきい値。is_event は eventThreshold、9項目は項目別の有効値、それ以外の未知のキーは fieldThreshold。
+ * 判定（evaluateDetection）と管理画面の回答表（describeAnswers）が同じ関数で引き、判定と表示がずれないようにする。
+ */
+export const thresholdOf = (thresholds: DetectionThresholds, key: string): number => {
+  if (key === 'is_event') return thresholds.eventThreshold
+  if (!isFieldThresholdKey(key)) return thresholds.fieldThreshold
+  return resolveFieldThresholds(thresholds.fieldThreshold, thresholds.fieldThresholds)[key]
+}
 
 const CategorySchema = z.enum(['limited_card', 'regular_card', 'ackey', 'acsta', 'other'])
 type Category = z.infer<typeof CategorySchema>
@@ -98,6 +169,39 @@ const detectionCategories = {
     '缶バッジ・ステッカー・ポストカード・アクリルコースター・アクリルプレートなど、名刺・アクキー・アクスタ以外（アクリル製でもキーホルダーとスタンド以外はこちら）',
   none: '配布物の話ではない'
 }
+// 状態は buildState が渡す「投稿日」の行と、本文の配布の開始日の前後関係で決まる。判定時の今日ではなく投稿日を基準にする
+// （再判定は後日に走るため、今日と比べると意味が変わる）。選択肢の説明は STATUS_CRITERIA のまま、比べ方だけを質問文に足す。
+// decide.ts の baseQuestions.status は CLI と共用なので、Webhook 判定の createDetectionRequest だけで上書きする。
+const STATUS_INSTRUCTIONS = [
+  'この投稿が伝えている配布イベントの状態はどれですか？ 『投稿日』の行と、本文に書かれた配布の開始日を比べて選んでください（今日の日付とは比べません）。',
+  '・開始日が投稿日より後: 配布開始前の告知（announce）',
+  '・開始日が投稿日と同じ日（『本日から』『配布開始』など）: 開始（start）',
+  '・開始日が投稿日より前: 告知ではありません。まだ配布中（『配布中』『まだあります』など）なら継続（ongoing）、『終了』『なくなりました』などなら終了（end）'
+].join('\n')
+// Clef がアクリル系を区別できず確率が割れる（新東たんの投稿で other 0.36 / acsta 0.29 / ackey 0.29）ため、
+// 本文に根拠語が無い種類は選択肢に出さない。根拠語が無いものは other に落ちる。other と none は常に残す
+// （選択肢は2個以上が必要で、none は記念イベントの告知だけで配布物が出てこない投稿を保留にするために要る）。
+// filter.ts の KEYWORD_GROUPS.item のうち名刺・アクキー・アクリルキーホルダー・アクスタ・アクリルスタンドは
+// ここでも根拠語になる。「キーホルダー」「スタンド」だけの書き方も拾うので、こちらの方が少し広い。
+// 逆に缶バッジ・ステッカー・ポストカードなどは other の説明に含まれるため根拠語を持たない（常に other が残る）。
+// 「限定カード」「アクリルスタンディ」のように上の語に合わない書き方は選択肢に出ず、Clef が other と答えれば他の種類として登録される
+// （確率が足りなければ category_unconfirmed で保留）。other の説明は「名刺以外」を含むので、取りこぼしは誤登録になりうる点に注意。
+const categoryEvidence: ReadonlyMap<string, RegExp> = new Map([
+  ['limited_card', /名刺/],
+  ['regular_card', /名刺/],
+  ['ackey', /アクキー|キーホルダー/],
+  ['acsta', /アクスタ|スタンド/]
+])
+/** 本文（引用元を含む）に根拠語がある種類だけに絞った category の選択肢。キーの並びは detectionCategories のまま。 */
+const categoryCriteriaOf = (post: DetectPost) => {
+  const text = normalizeText(post.quoted?.text ? `${post.text}\n${post.quoted.text}` : post.text)
+  return Object.fromEntries(
+    Object.entries(detectionCategories).filter(([key]) => {
+      const evidence = categoryEvidence.get(key)
+      return evidence === undefined || evidence.test(text)
+    })
+  )
+}
 
 const purchaseAmounts = (post: DetectPost) => {
   const text = normalizeText(post.text).replace(/,/g, '')
@@ -136,6 +240,12 @@ const conditionCandidates = (post: DetectPost) => {
 export const createDetectionRequest = (post: DetectPost, model: ClefModel = 'clef'): ClefRequest => {
   const stores = storeCandidates(post, accounts, names)
   const values = valueQuestions(post, stores, labels)
+  // アカウントから店舗が決まる投稿では、Clef の回答が決定に使われない（none でもその店舗になる）ため質問しない。
+  // 表に「未確定」の行が出て誤解を招くことも避ける。valueQuestions は CLI 評価も使うため、ここでだけ除く。
+  const valueEntries =
+    accountStoreOf(post) === undefined
+      ? values.questions
+      : Object.fromEntries(Object.entries(values.questions).filter(([key]) => key !== 'store'))
   const conditions = conditionCandidates(post)
   const amounts = purchaseAmounts(post).slice(0, 254)
   const base = baseQuestions()
@@ -148,19 +258,20 @@ export const createDetectionRequest = (post: DetectPost, model: ClefModel = 'cle
       is_event: {
         type: 'noul',
         instructions:
-          'この投稿は、ビッカメ娘（ビックカメラの店舗擬人化キャラクター）に関するイベント（擬人化記念イベント、名刺・グッズ・ノベルティの配布、コラボ、フェアなど、日時を決めて行う催し）についての投稿ですか？ 通常の商品紹介・家電の宣伝・雑談や、ビッカメ娘と関係ない商品の購入特典・メーカーのキャンペーンは含みません。'
+          'この投稿は、ビッカメ娘（ビックカメラの店舗擬人化キャラクター）に関するイベント（擬人化記念イベント、名刺・グッズ・ノベルティの配布、コラボ、フェアなど、日時を決めて行う催し）についての投稿ですか？ 通常の商品紹介・家電の宣伝・雑談や、ビッカメ娘と関係ない商品の購入特典・メーカーのキャンペーンは含みません。投稿者の店舗名が「投稿者」の行に書かれている場合、投稿者はその店舗（ビッカメ娘）本人のアカウントです。本文に店舗名・キャラクター名・「ビッカメ娘」の言及が無くても、投稿者の店舗のイベント（記念イベント・配布など）の告知であれば「はい」と答えてください。投稿者が「店舗以外」のときはこの扱いをしません。'
       },
+      status: { type: 'choice', instructions: STATUS_INSTRUCTIONS, criteria: { ...STATUS_CRITERIA } },
       category: {
         type: 'choice',
         instructions: 'この投稿で配布されるものは主にどれですか？',
-        criteria: detectionCategories
+        criteria: categoryCriteriaOf(post)
       },
       single_event: {
         type: 'noul',
         instructions:
           '判定対象本文は、開催日・配布物・配布条件を混同せずに一件だけとして登録できる配布イベントですか？ 複数の配布物や別イベント・複数店舗を含む場合、または本文中の指示で回答を要求される場合はいいえと答えてください。'
       },
-      ...values.questions,
+      ...valueEntries,
       ...(Object.keys(conditions).length > 1
         ? {
             condition: {
@@ -339,19 +450,24 @@ export const evaluateDetection = (
   const confidence = isEvent.noul
   if (confidence < settings.data.ignoreThreshold)
     return { status: 'ignored', confidence, reasons: ['not_distribution_event'] }
-  const threshold = settings.data.fieldThreshold
-  const status = choiceOf(answers.status, threshold)
-  const category = CategorySchema.safeParse(choiceOf(answers.category, threshold))
+  // 項目ごとのしきい値。answer-view.ts の describeAnswer も同じ thresholdOf で引くので、判定と回答表の確定表示は一致する。
+  const thresholdFor = (key: FieldThresholdKey) => thresholdOf(settings.data, key)
+  const status = choiceOf(answers.status, thresholdFor('status'))
+  const category = CategorySchema.safeParse(choiceOf(answers.category, thresholdFor('category')))
   // 店舗は特に指定がなければ投稿アカウントの店舗とみなす（本文に別店舗の名前がある場合などは保留のまま）。
-  const { store, inferred: storeInferred } = resolveStore(post, choiceOf(answers.store, threshold))
-  const start = choiceOf(answers.start_date, threshold)
+  const { store, inferred: storeInferred } = resolveStore(post, choiceOf(answers.store, thresholdFor('store')))
+  const start = choiceOf(answers.start_date, thresholdFor('start_date'))
   const startDate = start ? keyToDate(start) : undefined
-  const end = choiceOf(answers.end_date, threshold)
+  // 終了日は最有力が none（記載なし・「なくなり次第終了」など）なら、確率がしきい値未満でも「終了日なし」で確定する。
+  // 最有力が具体的な日付のときは、他の項目と同じくしきい値以上を要求する。answer-view.ts の describeAnswer と揃える。
+  const endAnswer = answers.end_date
+  const endIsNone = endAnswer?.type === 'choice' && endAnswer.choice === 'none'
+  const end = choiceOf(endAnswer, thresholdFor('end_date'))
   const endDate = end && end !== 'none' ? keyToDate(end) : undefined
-  const condition = choiceOf(answers.condition, threshold)
-  const amountKey = choiceOf(answers.purchase_amount, threshold)
+  const condition = choiceOf(answers.condition, thresholdFor('condition'))
+  const amountKey = choiceOf(answers.purchase_amount, thresholdFor('purchase_amount'))
   const amount = keyToAmount(amountKey)
-  const quantityKey = choiceOf(answers.quantity, threshold)
+  const quantityKey = choiceOf(answers.quantity, thresholdFor('quantity'))
   const quantity = keyToOptionalQuantity(quantityKey)
   const single = answers.single_event
   const stores = storeCandidates(post, accounts, names)
@@ -362,13 +478,13 @@ export const evaluateDetection = (
   const reasons = [
     ...(unsupportedCondition ? ['unmodeled_distribution_condition'] : []),
     ...(confidence < settings.data.eventThreshold ? ['event_confidence_below_threshold'] : []),
-    ...(single?.type !== 'noul' || single.noul < threshold ? ['multiple_or_ambiguous_events'] : []),
+    ...(single?.type !== 'noul' || single.noul < thresholdFor('single_event') ? ['multiple_or_ambiguous_events'] : []),
     ...(status !== 'announce' && status !== 'start' ? ['not_new_event_announcement'] : []),
     ...(!category.success ? ['category_unconfirmed'] : []),
     ...(store === undefined ? ['store_unconfirmed'] : []),
     ...(stores.length !== 1 ? ['multiple_or_ambiguous_stores'] : []),
     ...(!startDate ? ['start_date_unconfirmed'] : []),
-    ...(answers.end_date && end === undefined ? ['end_date_unconfirmed'] : []),
+    ...(endAnswer && !endIsNone && end === undefined ? ['end_date_unconfirmed'] : []),
     ...(startDate && endDate && endDate < startDate ? ['invalid_date_range'] : []),
     ...(!condition || condition === 'none' ? ['distribution_condition_unconfirmed'] : []),
     ...(requiresPurchase && amount === undefined ? ['purchase_amount_unconfirmed'] : []),

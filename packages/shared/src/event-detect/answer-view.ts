@@ -1,7 +1,7 @@
 import { botStores } from '../stores'
 import type { ClefAnswer } from './clef'
 import { keyToDate, keyToQuantity } from './decide'
-import type { DetectionThresholds } from './detection'
+import { type DetectionThresholds, thresholdOf } from './detection'
 
 // 保存済みの Clef 回答を、管理画面で読める形に変換する。
 // 質問の再生成（createDetectionRequest）には依存しない。質問の版が変わると保存済みの回答と食い違うため、
@@ -12,11 +12,11 @@ export type AnswerRow = {
   key: string
   label: string
   answer: string
-  /** 選ばれた回答の確率。noul は肯定の確率。確率を持たない回答（score など）は null */
+  /** 表示した回答の確率（noul は、はいなら肯定の確率、いいえなら1から引いた確率）。確率を持たない回答（score など）は null */
   probability: number | null
   threshold: number
   confirmed: boolean
-  /** 次点まで最大2件（確率の降順、選ばれた回答は除く） */
+  /** 次点まで最大2件（確率の降順、選ばれた回答は除く）。noul は反対の回答1件 */
   alternatives: AnswerAlternative[]
 }
 
@@ -61,10 +61,19 @@ const CONDITION_LABELS: ReadonlyMap<string, string> = new Map([
 const storeNames: ReadonlyMap<string, string> = new Map(botStores.map((store) => [store.id, store.name]))
 const yenFormat = new Intl.NumberFormat('en-US')
 
+const YES_LABEL = 'はい'
+const NO_LABEL = 'いいえ'
+
+// 1 - 0.7224 が 0.27759999999999996 になるような浮動小数点ノイズを表示値に出さないため、確率は4桁に丸める。
+const roundProbability = (value: number): number => Math.round(value * 10000) / 10000
+
 const lookup = (labels: ReadonlyMap<string, string>, value: string): string => {
   const label = labels.get(value)
   return label === undefined ? value : label
 }
+
+/** 質問キーの日本語名（回答表の「質問」列と同じ）。知らないキーはキーのまま返す。 */
+export const questionLabel = (key: string): string => lookup(QUESTION_LABELS, key)
 
 const dateLabel = (value: string): string => {
   if (value === 'none') return 'なし'
@@ -106,18 +115,24 @@ const choiceLabel = (key: string, value: string): string => {
 }
 
 const describeAnswer = (key: string, answer: ClefAnswer, thresholds: DetectionThresholds): AnswerRow => {
-  const label = lookup(QUESTION_LABELS, key)
-  // ビッカメ娘のイベントか（is_event）だけがイベント用のしきい値、それ以外（単一イベントか・全ての選択肢）は項目用のしきい値。
-  const threshold = key === 'is_event' ? thresholds.eventThreshold : thresholds.fieldThreshold
+  const label = questionLabel(key)
+  // しきい値は evaluateDetection と同じ thresholdOf で引く（is_event はイベント用、9項目は項目別、未知のキーは共通値）。
+  // 回答表の確定表示と実際の判定がずれないよう、ここで別の規則を持たない。
+  const threshold = thresholdOf(thresholds, key)
   if (answer.type === 'noul') {
+    // noul は肯定の確率 P(はい)。0.5 以上なら「はい」、未満なら「いいえ」を回答として出し、反対の回答を次点に出す。
+    const yes = answer.noul
+    const no = roundProbability(1 - yes)
+    const isYes = yes >= 0.5
     return {
       key,
       label,
-      answer: 'はい',
-      probability: answer.noul,
+      answer: isYes ? YES_LABEL : NO_LABEL,
+      probability: isYes ? yes : no,
       threshold,
-      confirmed: answer.noul >= threshold,
-      alternatives: []
+      // 確定は表示した回答ではなく P(はい) をしきい値と比べる（evaluateDetection と同じ）。
+      confirmed: yes >= threshold,
+      alternatives: [{ answer: isYes ? NO_LABEL : YES_LABEL, probability: isYes ? no : yes }]
     }
   }
   if (answer.type === 'score') {
@@ -144,14 +159,15 @@ const describeAnswer = (key: string, answer: ClefAnswer, thresholds: DetectionTh
     answer: choiceLabel(key, answer.choice),
     probability,
     threshold,
-    confirmed: probability !== null && probability >= threshold,
+    // 終了日の最有力が none（記載なし）なら、確率がしきい値未満でも確定扱い。evaluateDetection の終了日の扱いと揃える。
+    confirmed: (key === 'end_date' && answer.choice === 'none') || (probability !== null && probability >= threshold),
     alternatives
   }
 }
 
 /**
  * 質問ごとの回答・確率・しきい値との比較を、固定の順（既知の質問、その後に未知のキー）で返す。
- * 確定の判定は evaluateDetection と同じく「確率がしきい値以上」。
+ * 確定の判定は evaluateDetection と同じく「確率がしきい値以上」。ただし終了日の最有力が none なら、しきい値未満でも確定。
  */
 export const describeAnswers = (answers: Record<string, ClefAnswer>, thresholds: DetectionThresholds): AnswerRow[] => {
   const known = [...QUESTION_LABELS.keys()].filter((key) => Object.hasOwn(answers, key))
@@ -188,6 +204,9 @@ const REASON_LABELS: ReadonlyMap<string, string> = new Map([
   ['invalid_event_candidate', '登録候補が不正'],
   // 情報用。店舗を投稿アカウントから補って登録候補にしたことを示す（登録可否には影響しない）。
   ['store_inferred_from_account', '店舗は投稿アカウントから補完'],
+  // 情報用。自動登録するイベントのタイトルを AI が作れたか、作れず定型のまま登録したか（webhook-process.ts。登録可否には影響しない）。
+  ['title_generated', 'タイトルは AI が作成'],
+  ['title_fallback', 'タイトルは定型（AI の作成に失敗）'],
   // 管理画面での手動解決（webhook-admin.ts）
   ['manually_linked', '手動で紐付け'],
   ['manually_rejected', '手動で却下']

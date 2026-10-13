@@ -22,12 +22,14 @@ type PostStatusFields = Pick<WebhookJob, 'postStatus' | 'postStatusProbability'>
 
 const percentLabel = (probability: number): string => `${Math.round(probability * 100)}%`
 
-/** 投稿状態を「告知 75%」のようにラベルと確率で表す。対象外判定は却下を優先する。 */
+/**
+ * 投稿状態を「告知」のようにラベルだけで表す。確率は付けない（未確定は一覧で薄い文字色とツールチップが示し、確率は詳細で見る）。
+ * 対象外判定は却下を優先する。
+ */
 export const webhookPostStatusLabel = (job: Pick<WebhookJob, 'status'> & PostStatusFields): string => {
   if (job.status === 'ignored') return '却下'
   if (job.postStatus === null) return '—'
-  const label = POST_STATUS_LABELS[job.postStatus]
-  return job.postStatusProbability === null ? label : `${label} ${percentLabel(job.postStatusProbability)}`
+  return POST_STATUS_LABELS[job.postStatus]
 }
 
 /** 投稿状態の確信度がしきい値に届かず、確定扱いにできない。 */
@@ -72,14 +74,72 @@ export const webhookNotificationLabel = (status: string): string => {
 export const detectionScoreLabel = (score: number | null): string =>
   score === null ? '—' : `${(score * 100).toFixed(1)}%`
 
-export const webhookActionAvailability = (status: string, notificationStatus: string) => ({
+/**
+ * 再判定できるのは保留と、人が却下していない対象外のジョブ。人の却下（reasons に manually_rejected）は再判定で上書きしない。
+ * サーバー側の rejudgeWebhookJob（webhook-admin.ts）と同じ規則。
+ */
+const canRejudgeJob = (status: string, reasons: readonly string[]): boolean =>
+  status === 'held' || (status === 'ignored' && !reasons.includes('manually_rejected'))
+
+export const webhookActionAvailability = (status: string, notificationStatus: string, reasons: readonly string[]) => ({
   canResolve: status === 'held',
   canRetryProcessing: status === 'failed',
-  canRejudge: status === 'held',
+  canRejudge: canRejudgeJob(status, reasons),
   canRetryNotification:
     (status === 'held' || status === 'registered') &&
     (notificationStatus === 'failed' || notificationStatus === 'unknown')
 })
+
+/** キューの判定結果を待っている状態。回答はまだ無い（再判定直後は answers も空になる）。 */
+export const isWebhookJobJudging = (status: string): boolean => status === 'queued' || status === 'processing'
+
+/**
+ * 結果がまだ動いている最中のジョブ。判定待ち（queued / processing）か、判定後の Discord 通知待ち（pending）。
+ * failed と、通知が sent / skipped / failed / unknown に着いたものは終端とみなす。
+ */
+export const isWebhookJobInProgress = (status: string, notificationStatus: string): boolean =>
+  isWebhookJobJudging(status) || ((status === 'held' || status === 'registered') && notificationStatus === 'pending')
+
+/** 進行中の詳細を再取得する間隔(ms)。 */
+export const WEBHOOK_JOB_POLL_INTERVAL_MS = 2000
+/** 進行中が続いたときに、再取得を諦めるまでの時間(ms)。キュー停止や通知の長期リトライで張り付かないための上限。 */
+export const WEBHOOK_JOB_POLL_TIMEOUT_MS = 3 * 60 * 1000
+
+/** 進行中の起点。phase は現在が判定待ちか通知待ちか、startedAt は進行中になって最初に見た時刻(ms)。 */
+export type WebhookJobPollWindow = { phase: 'judging' | 'notifying'; startedAt: number }
+
+export type WebhookJobPoll = {
+  /** 次回に引き継ぐ起点。進行中でなければ null。 */
+  window: WebhookJobPollWindow | null
+  /** 再取得の間隔(ms)。false なら止める。 */
+  interval: number | false
+}
+
+/**
+ * 詳細の再取得間隔と、次回に引き継ぐ起点を決める純関数。
+ * - データが無い・進行中でなければ起点を捨てて止める（次の進行中でまた新しく3分数える）。
+ * - 進行中が続く間は起点を保ち、起点から3分未満だけ2秒間隔にする。判定待ち → 通知待ちへ進んでも数え直さない（合計で3分）。
+ * - 例外として、通知待ちから判定待ちへ戻ったとき（通知待ちが3分で打ち切られた後の再判定など）は今の時刻から数え直す。
+ *   通知待ちのまま再判定しても「進行中でなくなる」瞬間が無く、起点が残り続けて二度と再取得されなくなるため。
+ */
+export const webhookJobPoll = (
+  previous: WebhookJobPollWindow | null,
+  job: { status: string; notificationStatus: string } | undefined,
+  now: number
+): WebhookJobPoll => {
+  if (job === undefined || !isWebhookJobInProgress(job.status, job.notificationStatus)) {
+    return { window: null, interval: false }
+  }
+  const phase: WebhookJobPollWindow['phase'] = isWebhookJobJudging(job.status) ? 'judging' : 'notifying'
+  const restarted = previous === null || (previous.phase === 'notifying' && phase === 'judging')
+  const pollWindow: WebhookJobPollWindow = restarted
+    ? { phase, startedAt: now }
+    : { phase, startedAt: previous.startedAt }
+  return {
+    window: pollWindow,
+    interval: now - pollWindow.startedAt < WEBHOOK_JOB_POLL_TIMEOUT_MS ? WEBHOOK_JOB_POLL_INTERVAL_MS : false
+  }
+}
 
 export const notificationRetryWarning = (status: string): string =>
   status === 'unknown'

@@ -43,7 +43,18 @@ const passive = (discord: DiscordStatus | null = passiveDiscord): AdminBotStatus
     model: 'clef',
     eventThreshold: 0.9,
     ignoreThreshold: 0.95,
-    choiceThreshold: 0.95
+    choiceThreshold: 0.95,
+    fieldThresholds: {
+      single_event: 0.95,
+      status: 0.8,
+      category: 0.95,
+      store: 0.95,
+      start_date: 0.95,
+      end_date: 0.95,
+      quantity: 0.95,
+      condition: 0.95,
+      purchase_amount: 0.95
+    }
   },
   error: null
 })

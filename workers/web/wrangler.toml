@@ -6,7 +6,7 @@ keep_vars = true
 
 # X連携監視の通知先は [vars] ではなく secret に登録する（URLに認証情報を含む）。
 # 同期は scripts/sync-cf-secrets.sh を承認済みの環境・Worker 指定で実行する。
-# X・Discord 投稿の TWITTER_* / DISCORD_TOKEN / DISCORD_CHANNEL_ID は web Worker の secret に登録する。
+# X・Discord 投稿の TWITTER_* / DISCORD_TOKEN / DISCORD_CHANNEL_ID と、イベントのタイトル生成の ANTHROPIC_BASE_URL / ANTHROPIC_AUTH_TOKEN は web Worker の secret に登録する。
 
 # ローカル開発用の Binding。デプロイは環境別の [env.*] を使用する。
 [[kv_namespaces]]

@@ -1,13 +1,21 @@
 import type { DiscordDeliveryResult, DiscordStatus } from '@biccame/shared/bot'
+import { questionLabel } from '@biccame/shared/event-detect/answer-view'
 import { type ClefModel, ClefModelSchema } from '@biccame/shared/event-detect/clef'
+import { FIELD_THRESHOLD_KEYS, type FieldThresholdKey } from '@biccame/shared/event-detect/detection'
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { CheckCircle2, Inbox, RefreshCw, Send, XCircle } from 'lucide-react'
 import { useState } from 'react'
 import { BotActionConfirmation } from '@/components/admin/bot-action-confirmation'
 import { BotSettingRow, BotSettingsLayout } from '@/components/admin/bot-settings-layout'
+import {
+  botConfigurationForm,
+  type FieldThresholdDrafts,
+  fieldThresholdInputValue
+} from '@/components/admin/field-threshold-form'
 import { detectionScoreLabel } from '@/components/admin/webhook-labels'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import {
   useAdminBotConfiguration,
@@ -78,14 +86,67 @@ const TestResult = ({ result }: { result: DiscordDeliveryResult }) => {
   return <p className='text-sm text-destructive'>テスト送信失敗: {result.kind}</p>
 }
 
+/** 項目別しきい値の編集行。%で入力し、不正なときは行ごとにエラーを出す。 */
+const FieldThresholdRow = ({
+  fieldKey,
+  value,
+  error,
+  disabled,
+  onChange
+}: {
+  fieldKey: FieldThresholdKey
+  value: string
+  error: string | undefined
+  disabled: boolean
+  onChange: (value: string) => void
+}) => {
+  const label = questionLabel(fieldKey)
+  const errorId = `field-threshold-${fieldKey}-error`
+  return (
+    <BotSettingRow label={label} className='sm:items-center'>
+      <div className='flex items-center gap-2'>
+        <Input
+          type='text'
+          inputMode='decimal'
+          autoComplete='off'
+          aria-label={`${label}の閾値（%）`}
+          aria-invalid={error !== undefined}
+          aria-describedby={error === undefined ? undefined : errorId}
+          value={value}
+          disabled={disabled}
+          onChange={(event) => onChange(event.target.value)}
+          className='h-9 w-24 text-right font-mono tabular-nums md:h-10 md:w-28 md:text-base'
+        />
+        <span aria-hidden='true' className='text-muted-foreground md:text-base'>
+          %
+        </span>
+      </div>
+      {error !== undefined && (
+        <p id={errorId} role='alert' className='mt-1 text-sm font-normal text-destructive'>
+          {error}
+        </p>
+      )}
+    </BotSettingRow>
+  )
+}
+
 export const BotManagement = () => {
   const status = useAdminBotStatus()
   const test = useAdminBotTest()
   const connection = useAdminBotConnection()
   const configuration = useAdminBotConfiguration()
   const [selectedModel, setSelectedModel] = useState<ClefModel | null>(null)
+  // 編集中の項目別しきい値（%の入力文字列）。編集していない項目は保存済みの値を出す。
+  const [drafts, setDrafts] = useState<FieldThresholdDrafts>({})
   const [confirmOpen, setConfirmOpen] = useState(false)
-  const currentModel = status.data?.webhook.model
+  const savedThresholds = status.data?.webhook.fieldThresholds
+  const form = botConfigurationForm({
+    savedModel: status.data?.webhook.model,
+    selectedModel,
+    savedThresholds,
+    drafts,
+    busy: configuration.isPending || status.isFetching || connection.isPending || test.isPending
+  })
   const discord = status.data?.discord
   const canTest =
     status.data?.botConnected === true &&
@@ -112,6 +173,7 @@ export const BotManagement = () => {
         <>
           <Button
             variant='outline'
+            className='border-card-border'
             onClick={() => connection.mutate()}
             disabled={status.isFetching || connection.isPending || test.isPending}
           >
@@ -268,10 +330,27 @@ export const BotManagement = () => {
                 {detectionScoreLabel(status.data.webhook.ignoreThreshold)}
               </BotSettingRow>
             </dl>
+            <h3 className='mt-6 mb-1 text-base font-semibold md:text-lg'>項目別の選択閾値</h3>
+            <dl>
+              {FIELD_THRESHOLD_KEYS.map((key) => (
+                <FieldThresholdRow
+                  key={key}
+                  fieldKey={key}
+                  value={savedThresholds === undefined ? '' : fieldThresholdInputValue(savedThresholds, drafts, key)}
+                  error={form.errors[key]}
+                  disabled={configuration.isPending}
+                  onChange={(value) => {
+                    setDrafts((current) => ({ ...current, [key]: value }))
+                    configuration.reset()
+                  }}
+                />
+              ))}
+            </dl>
             <p className='mt-3 text-sm leading-relaxed text-muted-foreground'>
               判定スコアは正解率を保証しません。必須情報が不足する投稿は、スコアが高くても保留になります。
+              しきい値を変えても、過去の判定結果は変わりません。反映するには「AI で判定し直す」を実行してください。
             </p>
-            <Button variant='outline' asChild className='mt-4'>
+            <Button variant='outline' asChild className='mt-4 border-card-border'>
               <Link to='/admin/webhooks'>
                 <Inbox className='size-4' />
                 受信履歴
@@ -283,18 +362,11 @@ export const BotManagement = () => {
       <footer className='mt-8 flex justify-end border-t pt-4'>
         <Button
           className='bg-brand text-brand-foreground hover:bg-brand/90'
-          disabled={
-            currentModel === undefined ||
-            selectedModel === null ||
-            selectedModel === currentModel ||
-            configuration.isPending ||
-            status.isFetching ||
-            connection.isPending ||
-            test.isPending
-          }
+          disabled={!form.canSave}
           onClick={() => {
-            if (selectedModel !== null && selectedModel !== currentModel) {
-              configuration.mutate({ model: selectedModel })
+            if (form.request !== null) {
+              // 保存後は status キャッシュが保存値に更新されるので、編集中の入力は捨てて保存済みの値を出す。
+              configuration.mutate(form.request, { onSuccess: () => setDrafts({}) })
             }
           }}
         >

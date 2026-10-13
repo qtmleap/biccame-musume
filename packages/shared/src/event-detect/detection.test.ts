@@ -2,15 +2,21 @@ import { describe, expect, test } from 'bun:test'
 import dayjs from 'dayjs'
 import type { ClefAnswer, ClefRequest, ClefResponse } from './clef'
 import { ClefRequestSchema } from './clef'
-import { baseQuestions, dateCandidates, QUESTION_VERSION } from './decide'
+import { baseQuestions, dateCandidates, QUESTION_VERSION, STATUS_CRITERIA } from './decide'
 import {
   buildDetectionDraft,
   createDetectionRequest,
+  DEFAULT_DETECTION_THRESHOLDS,
   DETECTION_VERSION,
   DetectionDraftSchema,
   DetectionThresholdsSchema,
   evaluateDetection,
-  filterWebhookPost
+  FIELD_THRESHOLD_KEYS,
+  FieldThresholdsSchema,
+  filterWebhookPost,
+  resolveFieldThresholds,
+  STATUS_DEFAULT_THRESHOLD,
+  thresholdOf
 } from './detection'
 import type { DetectPost } from './post'
 import { normalizeWebhookPayload } from './webhook'
@@ -139,9 +145,8 @@ describe('Detection gate', () => {
     const request = createDetectionRequest(post())
     expect(request.model).toBe('clef')
     expect(ClefRequestSchema.safeParse(request).success).toBe(true)
-    expect(
-      request.questions.category?.type === 'choice' ? request.questions.category.criteria.acsta : undefined
-    ).toBeTruthy()
+    // category は本文に根拠語がある種類だけが選択肢に出る（この本文は「名刺」のみ）。
+    expect(Object.keys(categoryCriteria(request))).toEqual(['limited_card', 'regular_card', 'other', 'none'])
   })
   test('既知店舗・キーワードを先に判定できる', () => {
     expect(filterWebhookPost(post()).reason).toBeUndefined()
@@ -360,6 +365,9 @@ const shintouPost = post(
   '【擬人化６周年イベント】10/19(月)から、1,000円以上お買い上げの方にアクリルコースターをプレゼント！数量限定100個',
   { screenName: 'Bic_shintoueki', createdAt: '2026-10-16T01:00:00.000Z' }
 )
+const shintouPostText =
+  '🎃新東たん擬人化６周年イベント🎃\n日付：10月19日（月）～なくなり次第終了\n枚数：限定60枚\n※5,000円以上お買い物でお一人様一枚まで\nアクリルコースタープレゼント🎁'
+const shintouOverrides = { screenName: 'Bic_shintoueki', createdAt: '2026-10-16T01:00:00.000Z' }
 const shintouAnswers = (request: ClefRequest): Record<string, ClefAnswer> => ({
   ...response(request).answers,
   status: choice('announce', { announce: 0.7499, start: 0.2 }),
@@ -373,11 +381,14 @@ const shintouAnswers = (request: ClefRequest): Record<string, ClefAnswer> => ({
 })
 
 describe('Detection version and category criteria', () => {
-  test('カテゴリ説明の変更に合わせて判定の版を上げる', () => {
-    expect(DETECTION_VERSION.endsWith('-webhook-v2')).toBe(true)
+  test('質問文の変更に合わせて判定の版を上げる', () => {
+    expect(DETECTION_VERSION.endsWith('-webhook-v3')).toBe(true)
   })
   test('コースターはotherに入れ、アクキー・アクスタの定義には含めない', () => {
-    const criteria = categoryCriteria(createDetectionRequest(shintouPost))
+    // アクキー・アクスタに言及する本文では、両方の選択肢が出る。
+    const criteria = categoryCriteria(
+      createDetectionRequest(post('名刺・アクキー・アクスタではなくアクリルコースターを配布'))
+    )
     expect(criteria.other).toContain('アクリルコースター')
     expect(criteria.other).toContain('アクリルプレート')
     for (const key of ['ackey', 'acsta']) {
@@ -428,13 +439,29 @@ describe('Webhook is_event question', () => {
     expect(QUESTION_VERSION).toBe('v2')
     const webhook = createDetectionRequest(post())
     expect(instructionsOf(webhook.questions, 'is_event')).not.toBe(instructionsOf(base, 'is_event'))
-    // is_event 以外の共通質問（状態）は Webhook でも同じ。
-    expect(webhook.questions.status).toEqual(base.status)
+    // 状態の質問文は Webhook だけが上書きする。CLI 共用の baseQuestions は従来のまま。
+    expect(base.status).toEqual({
+      type: 'choice',
+      instructions: 'この投稿が伝えている配布イベントの状態はどれですか？',
+      criteria: { ...STATUS_CRITERIA }
+    })
+    expect(webhook.questions.status).not.toEqual(base.status)
   })
 })
 
 describe('Store resolution from the posting account', () => {
-  test('店舗の回答がnoneやしきい値未満でも、アカウントの店舗なら store_unconfirmed を付けない', () => {
+  test('アカウントから店舗が決まる投稿は store を質問せず、回答が無くても店舗を補って登録候補にする', () => {
+    const value = post()
+    const request = createDetectionRequest(value)
+    expect(Object.hasOwn(request.questions, 'store')).toBe(false)
+    const result = evaluateDetection(value, request, response(request))
+    expect(result).toMatchObject({
+      status: 'register',
+      reasons: ['store_inferred_from_account'],
+      candidate: { stores: ['abeno'], title: 'あべのたん 限定名刺配布' }
+    })
+  })
+  test('旧版が保存した store 回答（none・しきい値未満）が混ざっていても、アカウントの店舗なら store_unconfirmed を付けない', () => {
     const value = post()
     const request = createDetectionRequest(value)
     for (const store of [choice('none', { none: 0.61, abeno: 0.39 }), choice('none', { none: 0.99 })]) {
@@ -459,10 +486,14 @@ describe('Store resolution from the posting account', () => {
     expect(result.candidate.title).toBe('あべのたん 限定名刺配布')
     expect(result.reasons).toEqual(['store_inferred_from_account'])
   })
-  test('しきい値以上で既知の店舗が選ばれていれば従来どおりそれを使い、補完の理由は足さない', () => {
+  test('旧版が保存した store 回答がしきい値以上で既知の店舗なら従来どおりそれを使い、補完の理由は足さない', () => {
     const value = post()
     const request = createDetectionRequest(value)
-    const result = evaluateDetection(value, request, response(request))
+    const result = evaluateDetection(
+      value,
+      request,
+      response(request, { store: choice('abeno', { abeno: 0.99, none: 0.01 }) })
+    )
     expect(result).toMatchObject({ status: 'register', reasons: [], candidate: { stores: ['abeno'] } })
     // しきい値ちょうども確定として扱い、補完にしない。
     const exact = evaluateDetection(
@@ -530,6 +561,7 @@ describe('Store resolution from the posting account', () => {
 
 describe('Store fallback safety against other store mentions', () => {
   const core = '限定名刺を2026年11月3日から先着100枚配布します'
+  // store は店舗を補えない投稿（他店の言及あり）でだけ質問される。補える投稿では余分な回答として無視される。
   const decide = (text: string, screenName = 'bic_abeno', overrides: Record<string, ClefAnswer> = {}) => {
     const value = post(text, { screenName })
     const request = createDetectionRequest(value)
@@ -599,7 +631,7 @@ describe('Store fallback safety against other store mentions', () => {
     expect(result.status).toBe('held')
     expect(result.reasons).toContain('store_unconfirmed')
   })
-  test('新東たんの実投稿（他店の言及なし）は store が none 0.61 でも補完が効く', () => {
+  test('新東たんの実投稿（他店の言及なし）は store を質問せず、アカウントの店舗で登録候補になる', () => {
     const value = post(
       '🎃新東たん擬人化６周年イベント🎃\n10/19(月)から、5,000円以上お買い物でアクリルコースタープレゼント！\n※数量限定60個 ※お一人様一枚まで',
       { screenName: 'Bic_shintoueki', createdAt: '2026-10-16T01:00:00.000Z' }
@@ -609,7 +641,6 @@ describe('Store fallback safety against other store mentions', () => {
       value,
       request,
       response(request, {
-        store: choice('none', { none: 0.61, shintou: 0.39 }),
         category: choice('other', { other: 0.99 }),
         start_date: choice('d20261019', { d20261019: 0.99 }),
         condition: choice('purchase', { purchase: 0.99 }),
@@ -687,9 +718,11 @@ describe('Purchase amount candidates', () => {
 
 describe('Detection draft', () => {
   test('カテゴリが僅差（0.45 / 0.43）の時はカテゴリを採用せず、タイトルを「店舗名 配布」にする', () => {
-    const request = createDetectionRequest(shintouPost)
+    // アクスタ・アクキーに言及する本文では category の選択肢が3つ残り、確率が割れうる。
+    const split = { ...shintouPost, text: `${shintouPost.text}（アクスタ・アクキーではありません）` }
+    const request = createDetectionRequest(split)
     const answers = shintouAnswers(request)
-    const draft = buildDetectionDraft(shintouPost, answers)
+    const draft = buildDetectionDraft(split, answers)
     expect(draft).toEqual({
       title: '新東たん 配布',
       stores: ['shintou'],
@@ -700,7 +733,7 @@ describe('Detection draft', () => {
     expect(draft.category).toBeUndefined()
     expect(DetectionDraftSchema.safeParse(draft).success).toBe(true)
     // 同じ回答は登録候補にならず保留のまま。下書きは判定結果を変えない。
-    expect(evaluateDetection(shintouPost, request, { answers })).toMatchObject({ status: 'held' })
+    expect(evaluateDetection(split, request, { answers })).toMatchObject({ status: 'held' })
   })
   test('カテゴリは最有力候補の確率が0.5以上の時だけ採用し、タイトルにカテゴリ名を含める', () => {
     const answers = shintouAnswers(createDetectionRequest(shintouPost))
@@ -784,5 +817,631 @@ describe('Detection draft', () => {
     expect(conditionsOf('lottery')).toEqual([{ type: 'lottery', quantity: 100 }])
     expect(conditionsOf('everyone')).toEqual([{ type: 'everyone' }])
     expect(conditionsOf('none')).toEqual([])
+  })
+})
+
+const choiceQuestionOf = (request: ClefRequest, key: string) => {
+  const question = request.questions[key]
+  if (question?.type !== 'choice') throw new Error(`Missing choice question ${key}`)
+  return question
+}
+
+describe('Webhook question wording', () => {
+  const shintouText =
+    '🎃新東たん擬人化６周年イベント🎃\n日付：10月19日（月）～なくなり次第終了\n枚数：限定60枚\n※5,000円以上お買い物でお一人様一枚まで\nアクリルコースタープレゼント🎁'
+  const request = createDetectionRequest(
+    post(shintouText, { screenName: 'Bic_shintoueki', createdAt: '2026-10-16T01:00:00.000Z' })
+  )
+
+  test('is_event は「投稿者」行の店舗を投稿者本人の店舗とみなし、除外条項と店舗以外の扱いを残す', () => {
+    const question = request.questions.is_event
+    if (question?.type !== 'noul') throw new Error('Missing is_event question')
+    expect(question.instructions).toContain('「投稿者」の行')
+    expect(question.instructions).toContain('本人のアカウント')
+    expect(question.instructions).toContain('「ビッカメ娘」の言及が無くても')
+    expect(question.instructions).toContain('「店舗以外」のときはこの扱いをしません')
+    // 既存の除外条項は残す。
+    expect(question.instructions).toContain('通常の商品紹介・家電の宣伝・雑談')
+    expect(question.instructions).toContain('ビッカメ娘と関係ない商品の購入特典・メーカーのキャンペーン')
+  })
+
+  test('store は本文の記載を優先し、無ければ投稿者の店舗を選ばせる。none は投稿者の店舗にならない場合に限る', () => {
+    // 本文に別の店舗のキャラ名があり、アカウントだけでは店舗が決まらない投稿では store を質問する。
+    const question = choiceQuestionOf(
+      createDetectionRequest(
+        post('新東たん擬人化６周年イベント。あべのたんでも10月19日（月）から限定名刺', {
+          screenName: 'Bic_shintoueki',
+          createdAt: '2026-10-16T01:00:00.000Z'
+        })
+      ),
+      'store'
+    )
+    expect(question.instructions).toContain('本文に店舗の記載があればその店舗')
+    expect(question.instructions).toContain('記載が無ければ投稿者の店舗')
+    expect(question.criteria.none).toContain('複数の店舗')
+    expect(question.criteria.none).toContain('投稿者が店舗以外')
+    expect(question.criteria.none).not.toBe('どの店舗でもない・わからない')
+    expect(question.criteria.shintou).toBe('新東たん')
+  })
+
+  test('end_date は start_date と別に組み立て、「なくなり次第終了」を終了日の記載なしとして扱わせる', () => {
+    const end = choiceQuestionOf(request, 'end_date')
+    expect(end.instructions).toContain('なくなり次第終了')
+    expect(end.instructions).toContain('無くなり次第終了')
+    expect(end.instructions).toContain('終了日の記載なし')
+    expect(end.instructions).toContain('開始日を終了日として選ばないでください')
+    expect(end.criteria.none).toBe('終了日の記載なし（『なくなり次第終了』など日付で終わりが決まらない場合を含む）')
+    // 日付の選択肢は start_date と同じ。none の説明だけが違う。
+    const start = choiceQuestionOf(request, 'start_date')
+    const { none: endNone, ...endDates } = end.criteria
+    const { none: startNone, ...startDates } = start.criteria
+    expect(endDates).toEqual(startDates)
+    expect(Object.keys(endDates)).toEqual(['d20261019'])
+    expect(endNone).not.toBe(startNone)
+  })
+
+  test('start_date の質問文と none の説明は従来のまま', () => {
+    const start = choiceQuestionOf(request, 'start_date')
+    expect(start.instructions).toBe('配布の開始日はどれですか？')
+    expect(start.criteria.none).toBe('本文に書かれていない')
+    expect(ClefRequestSchema.safeParse(request).success).toBe(true)
+  })
+})
+
+describe('End date none confirmation', () => {
+  // 新東たんの実投稿に近い入力。本文に店舗名・「ビッカメ娘」は無く、終了日は「なくなり次第終了」。
+  const value = post(
+    '🎃新東たん擬人化６周年イベント🎃\n日付：10月19日（月）～なくなり次第終了\n枚数：限定60枚\n※5,000円以上お買い物でお一人様一枚まで\nアクリルコースタープレゼント🎁',
+    { screenName: 'Bic_shintoueki', createdAt: '2026-10-16T01:00:00.000Z' }
+  )
+  const request = createDetectionRequest(value)
+  const answersOf = (endDate: ClefAnswer) =>
+    response(request, {
+      is_event: { type: 'noul', noul: 0.95 },
+      category: choice('other', { other: 0.99 }),
+      start_date: choice('d20261019', { d20261019: 0.99 }),
+      end_date: endDate,
+      condition: choice('purchase', { purchase: 0.99 }),
+      purchase_amount: choice('p5000', { p5000: 0.99 }),
+      quantity: choice('q60', { q60: 0.99 })
+    })
+
+  test('最有力が none（0.7348）ならしきい値未満でも終了日なしで確定し、end_date_unconfirmed を付けずに登録する', () => {
+    const result = evaluateDetection(value, request, answersOf(choice('none', { none: 0.7348, d20261019: 0.2652 })))
+    expect(result.status).toBe('register')
+    expect(result.reasons).not.toContain('end_date_unconfirmed')
+    expect(result.reasons).toEqual(['store_inferred_from_account'])
+    if (result.status !== 'register') throw new Error('Expected candidate')
+    expect(result.candidate).not.toHaveProperty('endDate')
+    expect(result.candidate.limitedQuantity).toBe(60)
+  })
+
+  test('none が過半数に届かなくても、最有力ならしきい値未満で確定する', () => {
+    const result = evaluateDetection(value, request, answersOf(choice('none', { none: 0.4, d20261019: 0.35 })))
+    expect(result.status).toBe('register')
+    expect(result.reasons).not.toContain('end_date_unconfirmed')
+  })
+
+  test('最有力が日付で確率がしきい値未満（0.6）なら従来どおり end_date_unconfirmed で保留する', () => {
+    const result = evaluateDetection(value, request, answersOf(choice('d20261019', { d20261019: 0.6, none: 0.3 })))
+    expect(result).toMatchObject({ status: 'held', reasons: ['end_date_unconfirmed'] })
+  })
+
+  test('最有力が日付でしきい値以上（0.95）なら終了日が入る', () => {
+    const result = evaluateDetection(value, request, answersOf(choice('d20261019', { d20261019: 0.95, none: 0.04 })))
+    expect(result.status).toBe('register')
+    if (result.status !== 'register') throw new Error('Expected candidate')
+    expect(result.candidate.endDate).toBe('2026-10-19')
+  })
+
+  test('下書きは最有力が none なら終了日を入れず、判定とは独立に動く', () => {
+    const answers = answersOf(choice('none', { none: 0.7348, d20261019: 0.2652 })).answers
+    const draft = buildDetectionDraft(value, answers)
+    expect(draft.endDate).toBeUndefined()
+    expect(draft.startDate).toBe('2026-10-19')
+    expect(DetectionDraftSchema.safeParse(draft).success).toBe(true)
+  })
+})
+
+describe('Store question is omitted when the account decides the store', () => {
+  const shintou = post(shintouPostText, shintouOverrides)
+  const askedKeys = (value: DetectPost) => Object.keys(createDetectionRequest(value).questions)
+
+  test('新東たんの投稿は store を質問せず、他の質問は従来どおり出す', () => {
+    const request = createDetectionRequest(shintou)
+    expect(Object.hasOwn(request.questions, 'store')).toBe(false)
+    for (const key of [
+      'is_event',
+      'status',
+      'category',
+      'single_event',
+      'start_date',
+      'end_date',
+      'quantity',
+      'condition',
+      'purchase_amount'
+    ])
+      expect(Object.hasOwn(request.questions, key), key).toBe(true)
+    // store を除いても、他の質問の並びは変えない。
+    expect(askedKeys(shintou)).toEqual([
+      'is_event',
+      'status',
+      'category',
+      'single_event',
+      'start_date',
+      'end_date',
+      'quantity',
+      'condition',
+      'purchase_amount'
+    ])
+    expect(ClefRequestSchema.safeParse(request).success).toBe(true)
+  })
+
+  test('store 無しの応答でも、アカウントの店舗で登録候補になり、理由は補完だけ', () => {
+    const request = createDetectionRequest(shintou)
+    const result = evaluateDetection(
+      shintou,
+      request,
+      response(request, {
+        is_event: { type: 'noul', noul: 0.95 },
+        category: choice('other', { other: 0.99 }),
+        start_date: choice('d20261019', { d20261019: 0.99 }),
+        end_date: choice('none', { none: 0.7348, d20261019: 0.2652 }),
+        condition: choice('purchase', { purchase: 0.99 }),
+        purchase_amount: choice('p5000', { p5000: 0.99 }),
+        quantity: choice('q60', { q60: 0.99 })
+      })
+    )
+    expect(result.status).toBe('register')
+    expect(result.reasons).toEqual(['store_inferred_from_account'])
+    if (result.status !== 'register') throw new Error('Expected candidate')
+    expect(result.candidate.stores).toEqual(['shintou'])
+    expect(result.candidate.title).toBe('新東たん ノベルティ配布')
+  })
+
+  test('store 無しの回答でも、判定済みの下書きは同じ店舗で作れる', () => {
+    const request = createDetectionRequest(shintou)
+    const answers = {
+      ...response(request).answers,
+      category: choice('other', { other: 0.62, acsta: 0.2 })
+    }
+    expect(Object.hasOwn(answers, 'store')).toBe(false)
+    expect(buildDetectionDraft(shintou, answers)).toMatchObject({
+      stores: ['shintou'],
+      title: '新東たん ノベルティ配布'
+    })
+  })
+
+  test('リクエストに無い store の回答は無視する（旧版が保存した回答が混ざっても投げない）', () => {
+    const request = createDetectionRequest(shintou)
+    const stale = response(request, { store: choice('none', { none: 0.5998, shintou: 0.4002 }) })
+    expect(() => evaluateDetection(shintou, request, stale)).not.toThrow()
+  })
+
+  test.each([
+    [
+      '店舗以外のアカウントが店舗名を書いた投稿',
+      post('あべのたん限定名刺 2026年11月3日から', { screenName: 'untrusted' })
+    ],
+    ['本文に他店舗のキャラ名がある店舗アカウントの投稿', post('あべのたん・アキバたん 限定名刺 2026年11月3日から')],
+    [
+      '本文に他の実店舗名がある店舗アカウントの投稿',
+      post('ビックカメラ秋葉原店でも同時開催 限定名刺 2026年11月3日から')
+    ],
+    [
+      '引用元に他の実店舗名がある店舗アカウントの投稿',
+      post('限定名刺 2026年11月3日から', {
+        quoted: { id: '1', screenName: 'someone', text: 'ビックカメラ秋葉原店でも開催' }
+      })
+    ],
+    [
+      '別の店舗のキャラ名が本文にある店舗アカウントの投稿',
+      post('あべのたんでも同時開催 限定名刺 2026年11月3日から', { screenName: 'Bic_shintoueki' })
+    ]
+  ])('%sは従来どおり store を質問する', (_label, value) => {
+    const request = createDetectionRequest(value)
+    expect(request.questions.store?.type).toBe('choice')
+    expect(askedKeys(value)).toContain('store')
+  })
+
+  test('store を質問する投稿で回答が欠けていれば、従来どおり不完全な応答として投げる', () => {
+    const value = post('あべのたん・アキバたん 限定名刺 2026年11月3日から先着100枚')
+    const request = createDetectionRequest(value)
+    const { store: _store, ...withoutStore } = response(request).answers
+    expect(() => evaluateDetection(value, request, { answers: withoutStore })).toThrow('Incomplete detection response')
+  })
+})
+
+describe('Category criteria are narrowed to kinds with evidence in the text', () => {
+  // 新東たんの投稿は本文に名刺・アクキー・アクスタのどの語も無く「アクリルコースター」だけが書かれている。
+  const keysOf = (text: string, overrides: Partial<DetectPost> = {}) =>
+    Object.keys(categoryCriteria(createDetectionRequest(post(text, overrides))))
+
+  test('新東たん近似の投稿は other と none だけが残る', () => {
+    expect(keysOf(shintouPostText, shintouOverrides)).toEqual(['other', 'none'])
+  })
+  test('「名刺」があれば限定名刺と通常名刺が残る', () => {
+    expect(keysOf('新東たん限定名刺を配布')).toEqual(['limited_card', 'regular_card', 'other', 'none'])
+  })
+  test.each([
+    ['アクキー', ['ackey']],
+    ['アクリルキーホルダー', ['ackey']],
+    ['キーホルダー', ['ackey']],
+    ['アクスタ', ['acsta']],
+    ['アクリルスタンド', ['acsta']],
+    ['スタンド', ['acsta']]
+  ])('「%s」があれば対応する種類が残る', (word, kept) => {
+    expect(keysOf(`${word}をプレゼント`)).toEqual([...kept, 'other', 'none'])
+  })
+  test('複数の語があれば複数残り、キーの並びは元の定義のまま', () => {
+    expect(keysOf('アクスタとアクキーと名刺を配布')).toEqual([
+      'limited_card',
+      'regular_card',
+      'ackey',
+      'acsta',
+      'other',
+      'none'
+    ])
+  })
+  test('引用元の本文にある語も拾う', () => {
+    expect(keysOf('こちらを配布', { quoted: { id: '1', screenName: 'someone', text: '限定アクスタ' } })).toEqual([
+      'acsta',
+      'other',
+      'none'
+    ])
+    // 引用元だけでなく本文の語も従来どおり拾う。
+    expect(keysOf('名刺を配布', { quoted: { id: '1', screenName: 'someone', text: '限定アクスタ' } })).toEqual([
+      'limited_card',
+      'regular_card',
+      'acsta',
+      'other',
+      'none'
+    ])
+  })
+  test('全角・半角の表記ゆれは正規化してから探す（ｱｸｽﾀ）', () => {
+    expect(keysOf('ｱｸｽﾀを配布')).toEqual(['acsta', 'other', 'none'])
+  })
+  test('各選択肢の説明文は絞り込みで変えない', () => {
+    const criteria = categoryCriteria(createDetectionRequest(post('名刺・アクキー・アクスタを配布')))
+    expect(criteria.limited_card).toBe('期間限定・数量限定・記念の名刺')
+    expect(criteria.regular_card).toBe('通年配布の通常名刺')
+    expect(criteria.none).toBe('配布物の話ではない')
+  })
+  test('category の質問文と他の質問は変えない', () => {
+    const request = createDetectionRequest(shintouPost)
+    const question = request.questions.category
+    if (question?.type !== 'choice') throw new Error('Missing category question')
+    expect(question.instructions).toBe('この投稿で配布されるものは主にどれですか？')
+    expect(choiceQuestionOf(request, 'status').criteria).toEqual({ ...STATUS_CRITERIA })
+    expect(ClefRequestSchema.safeParse(request).success).toBe(true)
+  })
+
+  test('絞り込んだ category に other が高確率で返れば、category_unconfirmed なしで other の登録候補になる', () => {
+    const value = post(shintouPostText, shintouOverrides)
+    const request = createDetectionRequest(value)
+    const result = evaluateDetection(
+      value,
+      request,
+      response(request, {
+        is_event: { type: 'noul', noul: 0.95 },
+        category: choice('other', { other: 0.95, none: 0.03 }),
+        start_date: choice('d20261019', { d20261019: 0.99 }),
+        end_date: choice('none', { none: 0.7348, d20261019: 0.2652 }),
+        condition: choice('purchase', { purchase: 0.99 }),
+        purchase_amount: choice('p5000', { p5000: 0.99 }),
+        quantity: choice('q60', { q60: 0.99 })
+      })
+    )
+    expect(result.reasons).not.toContain('category_unconfirmed')
+    expect(result.status).toBe('register')
+    if (result.status !== 'register') throw new Error('Expected candidate')
+    expect(result.candidate.category).toBe('other')
+    expect(result.candidate.title).toBe('新東たん ノベルティ配布')
+  })
+  test('リクエストに無い種類（本文に根拠語が無い acsta）を答えた応答は、不正な選択として投げる', () => {
+    const value = post(shintouPostText, shintouOverrides)
+    const request = createDetectionRequest(value)
+    expect(() =>
+      evaluateDetection(value, request, response(request, { category: choice('acsta', { acsta: 0.95, other: 0.03 }) }))
+    ).toThrow('Invalid detection choice')
+  })
+  test('旧版が保存した全選択肢の category 回答も、下書きと表示でそのまま扱える', () => {
+    const value = post(shintouPostText, shintouOverrides)
+    const answers = { category: choice('acsta', { acsta: 0.62, ackey: 0.2, other: 0.1 }) }
+    expect(buildDetectionDraft(value, answers)).toMatchObject({
+      category: 'acsta',
+      title: '新東たん アクリルスタンド配布'
+    })
+  })
+  test('「限定カード」だけの書き方は根拠語が無く、限定名刺は選択肢に出ない（other に落ちる）', () => {
+    expect(keysOf('限定カードを配布')).toEqual(['other', 'none'])
+  })
+})
+
+describe('Webhook status question compares the post date with the start date', () => {
+  const request = createDetectionRequest(post(shintouPostText, shintouOverrides))
+  const status = choiceQuestionOf(request, 'status')
+
+  test('質問文は「投稿日」の行と配布の「開始日」を比べる手順と、告知・開始・継続・終了の対応を示す', () => {
+    for (const word of ['投稿日', '開始日', '告知', '開始', '継続', '終了'])
+      expect(status.instructions, word).toContain(word)
+    // 比べる相手は今日の日付ではなく投稿日。
+    expect(status.instructions).toContain('今日の日付とは比べません')
+    // 開始日と投稿日の前後ごとに、選ぶ状態を明記する。
+    expect(status.instructions).toContain('開始日が投稿日より後: 配布開始前の告知（announce）')
+    expect(status.instructions).toContain('開始日が投稿日と同じ日')
+    expect(status.instructions).toContain('開始（start）')
+    expect(status.instructions).toContain('開始日が投稿日より前: 告知ではありません')
+    expect(status.instructions).toContain('継続（ongoing）')
+    expect(status.instructions).toContain('終了（end）')
+  })
+  test('選択肢は従来どおり（announce / start / ongoing / end / none）で、説明も STATUS_CRITERIA のまま', () => {
+    expect(Object.keys(status.criteria)).toEqual(['announce', 'start', 'ongoing', 'end', 'none'])
+    expect(status.criteria).toEqual({ ...STATUS_CRITERIA })
+  })
+  test('質問の位置と、状態の質問文以外の共通質問は変えない', () => {
+    expect(Object.keys(request.questions).slice(0, 4)).toEqual(['is_event', 'status', 'category', 'single_event'])
+    expect(ClefRequestSchema.safeParse(request).success).toBe(true)
+  })
+  test('どの投稿でも同じ質問文になり、投稿日は buildState が渡す「投稿日」の行から読ませる', () => {
+    const other = choiceQuestionOf(createDetectionRequest(post()), 'status')
+    expect(other.instructions).toBe(status.instructions)
+    expect(request.state).toContain('投稿日: 2026-10-16（金）')
+  })
+  test('CLI 共用の baseQuestions の状態の質問文は従来のまま', () => {
+    const base = baseQuestions().status
+    if (base?.type !== 'choice') throw new Error('Missing base status question')
+    expect(base.instructions).toBe('この投稿が伝えている配布イベントの状態はどれですか？')
+    expect(base.instructions).not.toContain('投稿日')
+  })
+})
+
+describe('Field thresholds', () => {
+  test('対象は9項目で、is_event と対象外は含まない', () => {
+    expect([...FIELD_THRESHOLD_KEYS]).toEqual([
+      'single_event',
+      'status',
+      'category',
+      'store',
+      'start_date',
+      'end_date',
+      'quantity',
+      'condition',
+      'purchase_amount'
+    ])
+    expect(STATUS_DEFAULT_THRESHOLD).toBe(0.8)
+  })
+
+  describe('resolveFieldThresholds', () => {
+    test('overrides なしは status が min(共通値, 0.8)、他の8項目は共通値', () => {
+      const result = resolveFieldThresholds(0.9)
+      expect(result.status).toBe(0.8)
+      for (const key of FIELD_THRESHOLD_KEYS) if (key !== 'status') expect(result[key], key).toBe(0.9)
+      expect(Object.keys(result).sort()).toEqual([...FIELD_THRESHOLD_KEYS].sort())
+      expect(FieldThresholdsSchema.safeParse(result).success).toBe(true)
+    })
+
+    test('共通値が 0.8 未満なら status も共通値に揃う（0.7 なら 0.7）', () => {
+      const result = resolveFieldThresholds(0.7)
+      for (const key of FIELD_THRESHOLD_KEYS) expect(result[key], key).toBe(0.7)
+      expect(resolveFieldThresholds(0.8).status).toBe(0.8)
+    })
+
+    test('共通値が変わると status 以外の既定値が追従する', () => {
+      const result = resolveFieldThresholds(0.95)
+      expect(result.status).toBe(0.8)
+      expect(result.category).toBe(0.95)
+      expect(result.purchase_amount).toBe(0.95)
+    })
+
+    test('overrides のある項目はその値、無い項目は既定値', () => {
+      const result = resolveFieldThresholds(0.9, { status: 0.6, start_date: 0.99 })
+      expect(result.status).toBe(0.6)
+      expect(result.start_date).toBe(0.99)
+      expect(result.category).toBe(0.9)
+      expect(resolveFieldThresholds(0.9, {})).toEqual(resolveFieldThresholds(0.9))
+    })
+  })
+
+  describe('thresholdOf', () => {
+    const base = { eventThreshold: 0.93, fieldThreshold: 0.91, ignoreThreshold: 0.5 }
+
+    test('is_event は eventThreshold', () => {
+      expect(thresholdOf(base, 'is_event')).toBe(0.93)
+      expect(thresholdOf({ ...base, fieldThresholds: { status: 0.1 } }, 'is_event')).toBe(0.93)
+    })
+
+    test('9項目は項目別の有効値（上書きがあればそれ、無ければ既定値）', () => {
+      expect(thresholdOf(base, 'status')).toBe(0.8)
+      for (const key of FIELD_THRESHOLD_KEYS) if (key !== 'status') expect(thresholdOf(base, key), key).toBe(0.91)
+      const overridden = { ...base, fieldThresholds: { status: 0.55, end_date: 0.66 } }
+      expect(thresholdOf(overridden, 'status')).toBe(0.55)
+      expect(thresholdOf(overridden, 'end_date')).toBe(0.66)
+      expect(thresholdOf(overridden, 'store')).toBe(0.91)
+    })
+
+    test('未知のキーは共通値（fieldThreshold）', () => {
+      expect(thresholdOf(base, 'future_question')).toBe(0.91)
+      expect(thresholdOf({ ...base, fieldThresholds: { status: 0.1 } }, 'future_question')).toBe(0.91)
+    })
+  })
+
+  describe('DetectionThresholdsSchema', () => {
+    const base = { eventThreshold: 0.9, fieldThreshold: 0.9, ignoreThreshold: 0.5 }
+
+    test('fieldThresholds は任意で、3値だけの呼び出しもそのまま通る', () => {
+      expect(DetectionThresholdsSchema.safeParse(base).success).toBe(true)
+      expect(DetectionThresholdsSchema.safeParse(DEFAULT_DETECTION_THRESHOLDS).success).toBe(true)
+      expect(DetectionThresholdsSchema.safeParse({ ...base, fieldThresholds: { status: 0.5 } }).success).toBe(true)
+    })
+
+    test('範囲外・未知のキーは不正', () => {
+      for (const fieldThresholds of [{ status: 0 }, { status: 1.1 }, { unknown: 0.5 }, { status: Number.NaN }]) {
+        expect(DetectionThresholdsSchema.safeParse({ ...base, fieldThresholds }).success).toBe(false)
+      }
+    })
+  })
+
+  describe('FieldThresholdsSchema', () => {
+    const full = resolveFieldThresholds(0.9)
+
+    test('9項目すべて必須で、範囲は 0 を含まず 1 以下', () => {
+      expect(FieldThresholdsSchema.safeParse(full).success).toBe(true)
+      expect(FieldThresholdsSchema.safeParse({ ...full, status: 1 }).success).toBe(true)
+      expect(FieldThresholdsSchema.safeParse({ ...full, status: 0 }).success).toBe(false)
+      expect(FieldThresholdsSchema.safeParse({ ...full, status: 1.1 }).success).toBe(false)
+      expect(FieldThresholdsSchema.safeParse({ ...full, status: '0.9' }).success).toBe(false)
+      const { status: _status, ...missing } = full
+      expect(FieldThresholdsSchema.safeParse(missing).success).toBe(false)
+      expect(FieldThresholdsSchema.safeParse({ ...full, extra: 0.9 }).success).toBe(false)
+    })
+  })
+
+  describe('evaluateDetection', () => {
+    // 新東たんの実投稿に近い回答。store は質問されない（アカウントの店舗から補う）。
+    const shintou = post(shintouPostText, shintouOverrides)
+    const request = createDetectionRequest(shintou)
+    const answersWith = (overrides: Record<string, ClefAnswer> = {}) =>
+      response(request, {
+        is_event: { type: 'noul', noul: 0.9641 },
+        status: choice('announce', { announce: 0.8536, start: 0.1 }),
+        category: choice('other', { other: 0.97 }),
+        single_event: { type: 'noul', noul: 0.9339 },
+        start_date: choice('d20261019', { d20261019: 0.9787 }),
+        end_date: choice('none', { none: 0.9976 }),
+        quantity: choice('q60', { q60: 0.965 }),
+        condition: choice('purchase', { purchase: 0.9865 }),
+        purchase_amount: choice('p5000', { p5000: 0.9719 }),
+        ...overrides
+      })
+    const evaluate = (
+      overrides: Record<string, ClefAnswer> = {},
+      fieldThresholds?: Partial<Record<(typeof FIELD_THRESHOLD_KEYS)[number], number>>
+    ) =>
+      evaluateDetection(shintou, request, answersWith(overrides), {
+        ...DEFAULT_DETECTION_THRESHOLDS,
+        ...(fieldThresholds === undefined ? {} : { fieldThresholds })
+      })
+
+    test('既定値のままでも status announce 0.8536 は通り、登録される（category は other）', () => {
+      const result = evaluate()
+      expect(result.status).toBe('register')
+      expect(result.reasons).toEqual(['store_inferred_from_account'])
+      if (result.status !== 'register') throw new Error('Expected candidate')
+      expect(result.candidate.category).toBe('other')
+      expect(result.candidate.stores).toEqual(['shintou'])
+    })
+
+    test('status は 0.8 未満なら not_new_event_announcement で保留、ちょうど 0.8 は通る', () => {
+      expect(evaluate({ status: choice('announce', { announce: 0.79, start: 0.1 }) })).toMatchObject({
+        status: 'held',
+        reasons: ['not_new_event_announcement']
+      })
+      expect(evaluate({ status: choice('announce', { announce: 0.8, start: 0.1 }) }).status).toBe('register')
+    })
+
+    test('status を 0.5 に下げれば 0.6 でも通り、0.9 に上げれば 0.8536 でも保留になる', () => {
+      const low = { status: choice('announce', { announce: 0.6, start: 0.3 }) }
+      expect(evaluate(low).status).toBe('held')
+      expect(evaluate(low, { status: 0.5 }).status).toBe('register')
+      expect(evaluate({}, { status: 0.9 })).toMatchObject({ status: 'held', reasons: ['not_new_event_announcement'] })
+    })
+
+    test('start_date を 0.99 にすると 0.9787 は start_date_unconfirmed で保留する', () => {
+      expect(evaluate({}, { start_date: 0.99 })).toMatchObject({ status: 'held', reasons: ['start_date_unconfirmed'] })
+    })
+
+    test('category・single_event・quantity・condition・purchase_amount も項目ごとの値で効く', () => {
+      expect(evaluate({}, { category: 0.98 })).toMatchObject({ status: 'held', reasons: ['category_unconfirmed'] })
+      expect(evaluate({}, { single_event: 0.95 })).toMatchObject({
+        status: 'held',
+        reasons: ['multiple_or_ambiguous_events']
+      })
+      expect(evaluate({}, { quantity: 0.97 })).toMatchObject({ status: 'held', reasons: ['quantity_unconfirmed'] })
+      expect(evaluate({}, { condition: 0.99 })).toMatchObject({
+        status: 'held',
+        reasons: ['distribution_condition_unconfirmed']
+      })
+      expect(evaluate({}, { purchase_amount: 0.98 })).toMatchObject({
+        status: 'held',
+        reasons: ['purchase_amount_unconfirmed']
+      })
+    })
+
+    test('下げた項目だけが通り、他の項目は既定値のまま判定される', () => {
+      const answers = { category: choice('other', { other: 0.7 }), start_date: choice('d20261019', { d20261019: 0.7 }) }
+      expect(evaluate(answers).status).toBe('held')
+      expect(evaluate(answers, { category: 0.7 })).toMatchObject({
+        status: 'held',
+        reasons: ['start_date_unconfirmed']
+      })
+      expect(evaluate(answers, { category: 0.7, start_date: 0.7 }).status).toBe('register')
+    })
+
+    test('end_date: none が最有力なら項目別のしきい値に関わらず確定し、日付が最有力ならしきい値を要求する', () => {
+      const none = { end_date: choice('none', { none: 0.6, d20261019: 0.3 }) }
+      expect(evaluate(none).status).toBe('register')
+      expect(evaluate(none, { end_date: 0.99 }).status).toBe('register')
+      const date = { end_date: choice('d20261019', { d20261019: 0.95, none: 0.04 }) }
+      expect(evaluate(date).status).toBe('register')
+      expect(evaluate(date, { end_date: 0.99 })).toMatchObject({ status: 'held', reasons: ['end_date_unconfirmed'] })
+      const low = { end_date: choice('d20261019', { d20261019: 0.6, none: 0.3 }) }
+      expect(evaluate(low).status).toBe('held')
+      expect(evaluate(low, { end_date: 0.5 }).status).toBe('register')
+    })
+
+    test('store は項目別のしきい値で回答を採用するか決める（補完できない投稿では届かなければ保留）', () => {
+      // 本文に他店の名前があり、アカウントから店舗を補えない投稿。store は質問され、回答だけが店舗の根拠になる。
+      const value = post('ビックカメラ秋葉原店で限定名刺を2026年11月3日から先着100枚配布します')
+      const asked = createDetectionRequest(value)
+      const run = (fieldThresholds?: { store: number }) =>
+        evaluateDetection(value, asked, response(asked, { store: choice('abeno', { abeno: 0.99 }) }), {
+          ...DEFAULT_DETECTION_THRESHOLDS,
+          ...(fieldThresholds === undefined ? {} : { fieldThresholds })
+        })
+      expect(run()).toMatchObject({ status: 'register', reasons: [] })
+      expect(run({ store: 0.995 })).toMatchObject({ status: 'held', reasons: ['store_unconfirmed'] })
+    })
+
+    test('is_event は fieldThresholds を下げても eventThreshold のまま判定する', () => {
+      const all = Object.fromEntries(FIELD_THRESHOLD_KEYS.map((key) => [key, 0.1]))
+      expect(
+        evaluateDetection(shintou, request, answersWith({ is_event: { type: 'noul', noul: 0.8 } }), {
+          ...DEFAULT_DETECTION_THRESHOLDS,
+          fieldThresholds: all
+        })
+      ).toMatchObject({ status: 'held', reasons: ['event_confidence_below_threshold'] })
+    })
+
+    test('共通値 fieldThreshold を上げても status の既定値は 0.8 のまま、他の項目は追従する', () => {
+      const answers = answersWith({ category: choice('other', { other: 0.92 }) })
+      expect(evaluateDetection(shintou, request, answers, DEFAULT_DETECTION_THRESHOLDS).status).toBe('register')
+      // 共通値 0.93 では category 0.92 が届かない。一方 status 0.8536 は既定値 0.8 のままなので通る。
+      const strict = { ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.93 }
+      expect(evaluateDetection(shintou, request, answers, strict)).toMatchObject({
+        status: 'held',
+        reasons: ['category_unconfirmed']
+      })
+    })
+
+    test('不正な fieldThresholds は検証で投げる', () => {
+      expect(() =>
+        evaluateDetection(shintou, request, answersWith(), {
+          ...DEFAULT_DETECTION_THRESHOLDS,
+          fieldThresholds: { status: 0 }
+        })
+      ).toThrow('Invalid detection thresholds')
+    })
+  })
+
+  test('下書きは最有力候補（argmax）で作り、項目別のしきい値に影響されない', () => {
+    const shintou = post(shintouPostText, shintouOverrides)
+    const request = createDetectionRequest(shintou)
+    const answers = {
+      ...response(request).answers,
+      status: choice('announce', { announce: 0.3, start: 0.2 }),
+      category: choice('other', { other: 0.62, acsta: 0.2 })
+    }
+    expect(buildDetectionDraft(shintou, answers)).toMatchObject({ category: 'other', stores: ['shintou'] })
   })
 })

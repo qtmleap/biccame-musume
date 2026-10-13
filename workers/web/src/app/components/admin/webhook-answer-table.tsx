@@ -7,7 +7,9 @@ import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
-const NUMERIC = 'text-right font-mono tabular-nums'
+// td に font-mono を付けると行の基線が等幅フォントで決まり、隣のセルとずれる。等幅は内側の span にだけ付ける。
+// span の行高は 0 にして、等幅フォントの上下の余白が行ボックスを広げ、基線を動かさないようにする。
+const MONO = 'font-mono tabular-nums leading-[0]'
 
 /**
  * Clef が質問ごとに返した回答と確率を表で見せる。
@@ -42,9 +44,11 @@ export const WebhookAnswerTable = ({
               <TableRow key={row.key} className={cn(thresholds !== undefined && !row.confirmed && 'bg-warning/10')}>
                 <TableCell className='font-medium'>{row.label}</TableCell>
                 <TableCell>{row.answer}</TableCell>
-                <TableCell className={NUMERIC}>{detectionScoreLabel(row.probability)}</TableCell>
-                <TableCell className={cn(NUMERIC, thresholds === undefined && 'text-muted-foreground')}>
-                  {thresholds === undefined ? '—' : detectionScoreLabel(row.threshold)}
+                <TableCell className='text-right'>
+                  <span className={MONO}>{detectionScoreLabel(row.probability)}</span>
+                </TableCell>
+                <TableCell className={cn('text-right', thresholds === undefined && 'text-muted-foreground')}>
+                  <span className={MONO}>{thresholds === undefined ? '—' : detectionScoreLabel(row.threshold)}</span>
                 </TableCell>
                 <TableCell>
                   {thresholds === undefined ? (
@@ -61,10 +65,12 @@ export const WebhookAnswerTable = ({
                   {row.alternatives.length === 0 ? (
                     '—'
                   ) : (
+                    // 外側の等幅 span は行高 0、内側の sans の span だけ行高 20px にして、行ボックスと基線を sans で決める。
+                    // 等幅フォントの余白が行ボックスを広げたり基線を動かしたりして、隣のセルから上下にずれるのを防ぐ。
                     <div className='flex items-center gap-4'>
                       {row.alternatives.map((alternative) => (
-                        <span key={alternative.answer} className='font-mono tabular-nums'>
-                          <span className='font-sans'>{alternative.answer}</span>{' '}
+                        <span key={alternative.answer} className={MONO}>
+                          <span className='font-sans leading-5'>{alternative.answer}</span>{' '}
                           {detectionScoreLabel(alternative.probability)}
                         </span>
                       ))}
