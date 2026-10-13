@@ -13,6 +13,7 @@
     "./x/transport": "./src/x/transport.ts",
     "./x/transaction": "./src/x/transaction/index.ts",
     "./x/transaction/*": "./src/x/transaction/*.ts",
+    "./event-detect/answer-view": "./src/event-detect/answer-view.ts",
     "./event-detect/charts": "./src/event-detect/charts.ts",
     "./event-detect/clef": "./src/event-detect/clef.ts",
     "./event-detect/decide": "./src/event-detect/decide.ts",

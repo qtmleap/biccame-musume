@@ -44,6 +44,28 @@ export const retryWebhookJob = async (env: Bindings, postId: string, input: z.in
   return getWebhookJob(env, postId)
 }
 
+/**
+ * 保留ジョブを再判定に戻す。保存済みの判定結果と回答を消して queued に戻し、キューへ積み直す。
+ * 処理側は result_json があると Clef を呼ばず再利用するため、消さないと質問の修正が反映されない。
+ * 通知はやり直しになるため、Discord へ再度通知される場合がある。
+ */
+export const rejudgeWebhookJob = async (env: Bindings, postId: string) => {
+  const job = await getWebhookJob(env, postId)
+  if (job.status !== 'held') throw new HTTPException(409, { message: 'Only held jobs can be re-judged' })
+  const now = dayjs().valueOf()
+  const result = await env.DB.prepare(`UPDATE webhook_event_jobs SET status='queued',result_json=NULL,answers_json=NULL,
+    candidate_json=NULL,reasons_json='[]',confidence=NULL,model=NULL,question_version=NULL,judged_at=NULL,
+    semantic_key=NULL,notification_status='pending',notification_error=NULL,last_error=NULL,lease_token=NULL,
+    lease_until=NULL,updated_at=?
+    WHERE post_id=? AND status='held' AND (lease_until IS NULL OR lease_until<?)
+      AND attempts=? AND notification_attempts=?`)
+    .bind(now, postId, now, job.attempts, job.notificationAttempts)
+    .run()
+  if (result.meta.changes !== 1) throw new HTTPException(409, { message: 'Job is being processed' })
+  await enqueueWebhookJob(env, postId)
+  return getWebhookJob(env, postId)
+}
+
 export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.infer<typeof WebhookResolveSchema>) => {
   const job = await getWebhookJob(env, postId)
   if (job.status !== 'held') throw new HTTPException(409, { message: 'Only held jobs can be resolved' })

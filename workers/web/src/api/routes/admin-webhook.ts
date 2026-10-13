@@ -1,4 +1,4 @@
-import { resolveWebhookJob, retryWebhookJob } from '@api/services/webhook-admin'
+import { rejudgeWebhookJob, resolveWebhookJob, retryWebhookJob } from '@api/services/webhook-admin'
 import { getWebhookJob, listWebhookJobs } from '@api/services/webhook-jobs'
 import type { Bindings } from '@api/types/bindings'
 import {
@@ -50,6 +50,16 @@ routes.openapi(
     tags: ['admin-webhook']
   }),
   async (c) => c.json(await retryWebhookJob(c.env, c.req.valid('param').postId, c.req.valid('json')), 200)
+)
+routes.openapi(
+  createRoute({
+    method: 'post',
+    path: '/admin/webhook/jobs/{postId}/rejudge',
+    request: { params },
+    responses: jobResponse,
+    tags: ['admin-webhook']
+  }),
+  async (c) => c.json(await rejudgeWebhookJob(c.env, c.req.valid('param').postId), 200)
 )
 routes.openapi(
   createRoute({

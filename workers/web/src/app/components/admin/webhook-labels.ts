@@ -18,8 +18,25 @@ export const webhookKeywordLabel = (post: WebhookJob['post']): string => {
 
 const POST_STATUS_LABELS = { announce: '告知', start: '開始', ongoing: '継続', end: '終了' } as const
 
-export const webhookPostStatusLabel = (job: Pick<WebhookJob, 'status' | 'postStatus'>): string =>
-  job.status === 'ignored' ? '却下' : job.postStatus === null ? '—' : POST_STATUS_LABELS[job.postStatus]
+type PostStatusFields = Pick<WebhookJob, 'postStatus' | 'postStatusProbability'>
+
+const percentLabel = (probability: number): string => `${Math.round(probability * 100)}%`
+
+/** 投稿状態を「告知 75%」のようにラベルと確率で表す。対象外判定は却下を優先する。 */
+export const webhookPostStatusLabel = (job: Pick<WebhookJob, 'status'> & PostStatusFields): string => {
+  if (job.status === 'ignored') return '却下'
+  if (job.postStatus === null) return '—'
+  const label = POST_STATUS_LABELS[job.postStatus]
+  return job.postStatusProbability === null ? label : `${label} ${percentLabel(job.postStatusProbability)}`
+}
+
+/** 投稿状態の確信度がしきい値に届かず、確定扱いにできない。 */
+export const webhookPostStatusIsTentative = (job: PostStatusFields, threshold: number): boolean =>
+  job.postStatus !== null && job.postStatusProbability !== null && job.postStatusProbability < threshold
+
+/** 未確定の理由。しきい値は設定値から表示する。 */
+export const webhookPostStatusTentativeReason = (threshold: number): string =>
+  `確信度がしきい値(${percentLabel(threshold)})未満のため未確定`
 
 export const webhookModelLabel = (model: WebhookJob['model']): string => (model === null ? '—' : model)
 
@@ -58,6 +75,7 @@ export const detectionScoreLabel = (score: number | null): string =>
 export const webhookActionAvailability = (status: string, notificationStatus: string) => ({
   canResolve: status === 'held',
   canRetryProcessing: status === 'failed',
+  canRejudge: status === 'held',
   canRetryNotification:
     (status === 'held' || status === 'registered') &&
     (notificationStatus === 'failed' || notificationStatus === 'unknown')

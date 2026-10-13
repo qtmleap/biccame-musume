@@ -1,3 +1,5 @@
+import { reasonLabel } from '@biccame/shared/event-detect/answer-view'
+import type { DetectionThresholds } from '@biccame/shared/event-detect/detection'
 import type { EventRequest } from '@biccame/shared/schemas/event.dto'
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
@@ -7,6 +9,8 @@ import { z } from 'zod'
 import { BotActionConfirmation } from '@/components/admin/bot-action-confirmation'
 import { BotSettingRow, BotSettingsLayout } from '@/components/admin/bot-settings-layout'
 import { EventForm } from '@/components/admin/event-form'
+import { WebhookAnswerTable } from '@/components/admin/webhook-answer-table'
+import { webhookResolveDefaultValues } from '@/components/admin/webhook-form-defaults'
 import {
   detectionScoreLabel,
   notificationRetryWarning,
@@ -23,33 +27,52 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { useAdminWebhookJob, useResolveAdminWebhookJob, useRetryAdminWebhookJob } from '@/hooks/use-admin-webhooks'
+import { useAdminBotStatus } from '@/hooks/use-admin-bot'
+import {
+  useAdminWebhookJob,
+  useRejudgeAdminWebhookJob,
+  useResolveAdminWebhookJob,
+  useRetryAdminWebhookJob
+} from '@/hooks/use-admin-webhooks'
 import { cn } from '@/lib/utils'
 
-type ConfirmAction = 'processing' | 'notification' | 'reject'
+type ConfirmAction = 'processing' | 'notification' | 'reject' | 'rejudge'
 
 const CONFIRM_TITLES: Record<ConfirmAction, string> = {
   processing: '投稿の判定を再試行しますか？',
   notification: 'Discord通知を再送しますか？',
-  reject: 'この投稿を対象外にしますか？'
+  reject: 'この投稿を対象外にしますか？',
+  rejudge: '投稿を再判定しますか？'
 }
 
 export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   const jobQuery = useAdminWebhookJob(postId)
+  const { data: botStatus } = useAdminBotStatus()
+  // しきい値は現在の設定。取得できるまで（読み込み中・エラー）は undefined のままにして、表は '—' を出す。
+  const thresholds: DetectionThresholds | undefined =
+    botStatus === undefined
+      ? undefined
+      : {
+          eventThreshold: botStatus.webhook.eventThreshold,
+          fieldThreshold: botStatus.webhook.choiceThreshold,
+          ignoreThreshold: botStatus.webhook.ignoreThreshold
+        }
   const retry = useRetryAdminWebhookJob()
   const resolve = useResolveAdminWebhookJob()
+  const rejudge = useRejudgeAdminWebhookJob()
   const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [linkOpen, setLinkOpen] = useState(false)
   const [linkEventId, setLinkEventId] = useState('')
   const [linkError, setLinkError] = useState(false)
   const job = jobQuery.data
-  const isPending = retry.isPending || resolve.isPending
+  const isPending = retry.isPending || resolve.isPending || rejudge.isPending
   const availability = job
     ? webhookActionAvailability(job.status, job.notificationStatus)
     : {
         canResolve: false,
         canRetryProcessing: false,
+        canRejudge: false,
         canRetryNotification: false
       }
 
@@ -58,6 +81,8 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
     try {
       if (confirmAction === 'reject') {
         await resolve.mutateAsync({ postId, data: { action: 'reject' } })
+      } else if (confirmAction === 'rejudge') {
+        await rejudge.mutateAsync({ postId })
       } else {
         await retry.mutateAsync({
           postId,
@@ -97,7 +122,9 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
       ? notificationRetryWarning(job.notificationStatus)
       : confirmAction === 'reject'
         ? 'この投稿はイベント登録せず、対象外として保存します。既存イベントは変更しません。'
-        : '失敗した投稿の判定を再試行します。AI呼び出しが発生する場合があります。'
+        : confirmAction === 'rejudge'
+          ? '現在の質問とモデルで判定をやり直します。保存済みの回答と判定結果は上書きされ、Discord にも再度通知される場合があります。'
+          : '失敗した投稿の判定を再試行します。AI呼び出しが発生する場合があります。'
 
   return (
     <BotSettingsLayout
@@ -155,6 +182,14 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
         </Button>
         <Button
           variant='outline'
+          onClick={() => setConfirmAction('rejudge')}
+          disabled={!availability.canRejudge || isPending}
+        >
+          <RefreshCw className='size-4' />
+          再判定
+        </Button>
+        <Button
+          variant='outline'
           onClick={() => setConfirmAction('notification')}
           disabled={!availability.canRetryNotification || isPending}
         >
@@ -181,6 +216,14 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
             </p>
           </section>
           <section>
+            <h2 className='mb-2 text-lg font-semibold md:text-xl'>Clef の回答</h2>
+            {job.answers === null ? (
+              <p className='text-sm text-muted-foreground'>回答の記録なし</p>
+            ) : (
+              <WebhookAnswerTable answers={job.answers} thresholds={thresholds} />
+            )}
+          </section>
+          <section>
             <h2 className='mb-2 text-lg font-semibold md:text-xl'>判定・イベント登録</h2>
             <dl>
               <BotSettingRow label='判定状態'>
@@ -195,8 +238,8 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
                 {job.reasons.length > 0 ? (
                   <ul className='space-y-1'>
                     {job.reasons.map((reason) => (
-                      <li key={reason} className='break-words'>
-                        {reason}
+                      <li key={reason} className='break-words' title={reason}>
+                        {reasonLabel(reason)}
                       </li>
                     ))}
                   </ul>
@@ -248,20 +291,15 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
               <p className='mb-5 text-sm text-muted-foreground'>
                 元投稿を確認し、必要な情報を入力してください。この操作ではXに投稿しません。
               </p>
+              {!job.candidate && job.draft !== null && (
+                <p className='mb-5 text-sm text-muted-foreground'>
+                  AIが確定できなかった項目は空欄です。下書きの値は元投稿と照合してください。
+                </p>
+              )}
               <EventForm
                 key={job.postId}
                 allowTweet={false}
-                defaultValues={
-                  job.candidate
-                    ? { ...job.candidate, shouldTweet: false }
-                    : {
-                        uuid: job.eventUUID,
-                        isVerified: true,
-                        isPreliminary: false,
-                        shouldTweet: false,
-                        referenceUrls: [{ uuid: crypto.randomUUID(), type: 'announce', url: job.sourceUrl }]
-                      }
-                }
+                defaultValues={webhookResolveDefaultValues(job)}
                 onSubmitPayload={register}
               />
             </section>

@@ -48,6 +48,19 @@ export const useRetryAdminWebhookJob = () => {
   })
 }
 
+export const useRejudgeAdminWebhookJob = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ postId }: { postId: string }) => client.rejudgeAdminWebhookJob(undefined, { params: { postId } }),
+    retry: false,
+    onSuccess: async () => {
+      toast.success('再判定を受け付けました')
+      await queryClient.invalidateQueries({ queryKey: ADMIN_WEBHOOK_QUERY_KEY })
+    },
+    onError: () => toast.error('再判定を受け付けられませんでした')
+  })
+}
+
 export const useResolveAdminWebhookJob = () => {
   const queryClient = useQueryClient()
   return useMutation({
