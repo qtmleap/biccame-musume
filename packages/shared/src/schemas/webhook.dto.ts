@@ -1,4 +1,5 @@
-import { ClefModelSchema } from '@biccame/shared/event-detect/clef'
+import { ClefModelSchema, ClefResponseSchema } from '@biccame/shared/event-detect/clef'
+import { DetectionDraftSchema, FieldThresholdsSchema } from '@biccame/shared/event-detect/detection'
 import { DetectPostSchema } from '@biccame/shared/event-detect/post'
 import { GapStatusSchema } from '@biccame/shared/event-detect/viewer'
 import { EventRequestSchema } from '@biccame/shared/schemas/event.dto'
@@ -23,6 +24,12 @@ export const WebhookJobSchema = z.object({
   eventId: z.uuid().nullable(),
   eventTitle: z.string().nonempty().nullable(),
   postStatus: GapStatusSchema.nullable(),
+  // Clef が質問ごとに返した保存済みの回答。未判定・壊れている場合は null。
+  answers: ClefResponseSchema.shape.answers.nullable(),
+  // 投稿状態として選ばれた選択肢の確率。postStatus が無い時は必ず null。
+  postStatusProbability: z.number().min(0).max(1).nullable(),
+  // 保留ジョブだけに付く、しきい値を適用しないAIの下書き（未登録）。
+  draft: DetectionDraftSchema.nullable(),
   attempts: z.number().int().nonnegative(),
   notificationStatus: WebhookNotificationStatusSchema,
   notificationId: z.string().nonempty().nullable(),
@@ -58,5 +65,8 @@ export const WebhookConfigurationSchema = z.object({
   model: ClefModelSchema,
   eventThreshold: z.number(),
   ignoreThreshold: z.number(),
-  choiceThreshold: z.number()
+  /** 選択肢項目の共通値（環境変数）。項目別の既定値の元になる。 */
+  choiceThreshold: z.number(),
+  /** 項目別の有効なしきい値（保存値、無ければ既定値）。判定が実際に使う値。 */
+  fieldThresholds: FieldThresholdsSchema
 })

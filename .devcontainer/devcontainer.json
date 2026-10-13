@@ -46,6 +46,7 @@
     },
     "ghcr.io/dhoeric/features/act:1": {},
     "ghcr.io/devcontainers-community/features/direnv:1": {},
+    "ghcr.io/tkgstrator/commitguard:1": {},
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
       "packages": "git-filter-repo"
     }

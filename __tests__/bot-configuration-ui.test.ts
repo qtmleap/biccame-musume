@@ -1,5 +1,7 @@
 import { describe, expect, spyOn, test } from 'bun:test'
 import type { DiscordStatus } from '@biccame/shared/bot'
+import { questionLabel } from '@biccame/shared/event-detect/answer-view'
+import { FIELD_THRESHOLD_KEYS, type FieldThresholds } from '@biccame/shared/event-detect/detection'
 import type { AdminBotStatus } from '@biccame/shared/schemas/admin-bot.dto'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createMemoryHistory, createRootRoute, createRouter, RouterProvider } from '@tanstack/react-router'
@@ -17,6 +19,18 @@ import {
 import { client } from '@/utils/client'
 
 const fetchedAt = '2026-10-14T00:00:00.000Z'
+// 項目ごとに値を変えて、行の取り違えを検出できるようにする（status だけ共通値より低い既定値）。
+const savedThresholds: FieldThresholds = {
+  single_event: 0.9,
+  status: 0.8,
+  category: 0.91,
+  store: 0.92,
+  start_date: 0.93,
+  end_date: 0.94,
+  quantity: 0.95,
+  condition: 0.96,
+  purchase_amount: 0.825
+}
 
 const discordStatus = (setting: DiscordStatus['settings']['token']): DiscordStatus => ({
   configFingerprint: setting === 'valid' ? 'a'.repeat(64) : null,
@@ -46,7 +60,8 @@ const renderSettings = async (discord: DiscordStatus | null, configured: boolean
       model: 'clef',
       eventThreshold: 0.9,
       ignoreThreshold: 0.1,
-      choiceThreshold: 0.8
+      choiceThreshold: 0.8,
+      fieldThresholds: savedThresholds
     },
     error: null
   }
@@ -181,6 +196,88 @@ test('model selection stays in its row and unchanged save stays disabled in the 
   expect(markup).not.toContain('保存しました')
 })
 
+describe('項目別のしきい値', () => {
+  const percentOf = (value: number) => String(Math.round(value * 1000) / 10)
+
+  test('9項目が、回答表の質問名と同じラベルで、保存済みの値を%で入力欄に出す', async () => {
+    const markup = await renderSettings(discordStatus('valid'), true)
+    expect(FIELD_THRESHOLD_KEYS).toHaveLength(9)
+    expect(markup.match(/data-slot="input"/g)).toHaveLength(9)
+    expect([...markup.matchAll(/<dt[^>]*>(.*?)<\/dt>/g)].map((match) => match[1])).toEqual(
+      expect.arrayContaining([
+        '単一イベントか',
+        '状態',
+        '配布物',
+        '店舗',
+        '開始日',
+        '終了日',
+        '配布数',
+        '配布条件',
+        '購入額'
+      ])
+    )
+    for (const key of FIELD_THRESHOLD_KEYS) {
+      const label = questionLabel(key)
+      const row = settingMarkup(markup, label)
+      expect(row, key).toContain(`aria-label="${label}の閾値（%）"`)
+      expect(row, key).toContain(`value="${percentOf(savedThresholds[key])}"`)
+      expect(row, key).toContain('inputMode="decimal"')
+      // 数値は右寄せの mono、デスクトップで一段大きく、行の中身は上下中央。
+      expect(row, key).toContain('text-right font-mono tabular-nums')
+      expect(row, key).toContain('md:h-10')
+      expect(row, key).toContain('md:text-base')
+      expect(row, key).toContain('flex items-center')
+      expect(row, key).not.toContain('aria-invalid="true"')
+      expect(row, key).not.toContain('role="alert"')
+    }
+    // 状態は共通値より低い 80%、購入額は 82.5% のように、行ごとに別の値が入る。
+    expect(settingMarkup(markup, '状態')).toContain('value="80"')
+    expect(settingMarkup(markup, '購入額')).toContain('value="82.5"')
+  })
+
+  test('共通値（環境変数由来）の行は表示のまま残し、入力欄にしない', async () => {
+    const markup = await renderSettings(discordStatus('valid'), true)
+    const common = settingMarkup(markup, '必須項目の選択閾値')
+    expect(common).toContain('80.0%')
+    expect(common).not.toContain('<input')
+    expect(settingMarkup(markup, 'イベント判定の登録閾値')).toContain('90.0%')
+    expect(settingMarkup(markup, '対象外判定の閾値')).toContain('10.0%')
+  })
+
+  test('注意書きに、過去の判定結果は変わらず再判定が必要であることを出す', async () => {
+    const markup = await renderSettings(discordStatus('valid'), true)
+    expect(markup).toContain(
+      'しきい値を変えても、過去の判定結果は変わりません。反映するには「AI で判定し直す」を実行してください。'
+    )
+  })
+
+  test('変更前は保存が無効で、ボタンは常に同じフッターに出ている', async () => {
+    const markup = await renderSettings(discordStatus('valid'), true)
+    expect(markup).toMatch(/<footer[^>]*><button[^>]*disabled=""[^>]*>保存<\/button><\/footer>/)
+  })
+
+  test('outline のボタンは枠線に共通テーマ色（border-card-border）を指定する', async () => {
+    const markup = await renderSettings(discordStatus('valid'), true)
+    const outlined = [...markup.matchAll(/<(?:button|a)\b[^>]*data-variant="outline"[^>]*>/g)].map((match) => match[0])
+    // 接続確認（button）と受信履歴（asChild の a）。
+    expect(outlined).toHaveLength(2)
+    for (const tag of outlined) expect(tag).toContain('border-card-border')
+  })
+
+  test('左上の戻るリンクは従来どおり管理画面（/admin）を指す', async () => {
+    const markup = await renderSettings(discordStatus('valid'), true)
+    const anchors = [...markup.matchAll(/<a\b[^>]*>.*?<\/a>/g)].map((match) => match[0])
+    const back = anchors.find((anchor) => anchor.includes('管理画面に戻る'))
+    expect(back).toBeDefined()
+    expect(back).toContain('href="/admin"')
+    expect(markup).not.toContain('受信履歴に戻る')
+    // 下の「受信履歴」ボタンは受信履歴（/admin/webhooks）への入口として残る。
+    const history = anchors.find((anchor) => anchor.includes('受信履歴'))
+    expect(history).toBeDefined()
+    expect(history).toContain('href="/admin/webhooks"')
+  })
+})
+
 test('save stays visible and disabled before settings have loaded', async () => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   const routeTree = createRootRoute({ component: BotManagement })
@@ -198,6 +295,7 @@ test('save stays visible and disabled before settings have loaded', async () => 
 })
 
 test('model save uses the typed payload and updates cached model without stale readback', async () => {
+  const editedThresholds: FieldThresholds = { ...savedThresholds, status: 0.7, start_date: 0.99 }
   const queryClient = new QueryClient()
   const initial: AdminBotStatus = {
     fetchedAt,
@@ -210,7 +308,8 @@ test('model save uses the typed payload and updates cached model without stale r
       model: 'clef',
       eventThreshold: 0.9,
       ignoreThreshold: 0.5,
-      choiceThreshold: 0.9
+      choiceThreshold: 0.9,
+      fieldThresholds: savedThresholds
     }
   }
   queryClient.setQueryData(ADMIN_BOT_QUERY_KEY, initial)
@@ -225,7 +324,7 @@ test('model save uses the typed payload and updates cached model without stale r
     captured.notification = useAdminBotTest()
     return null
   }
-  const save = spyOn(client, 'saveAdminBotConfiguration').mockImplementation(async (body) => ({ model: body.model }))
+  const save = spyOn(client, 'saveAdminBotConfiguration').mockImplementation(async (body) => body)
   const read = spyOn(client, 'getAdminBotStatus').mockImplementation(async () => initial)
   const connection = spyOn(client, 'checkAdminBotConnection').mockImplementation(async () => ({
     ...initial,
@@ -242,11 +341,14 @@ test('model save uses the typed payload and updates cached model without stale r
   try {
     renderToStaticMarkup(createElement(QueryClientProvider, { client: queryClient }, createElement(Probe)))
     if (captured.mutation === null) throw new Error('Configuration mutation unavailable')
-    await captured.mutation.mutateAsync({ model: 'clef-flash' })
-    expect(save).toHaveBeenCalledWith({ model: 'clef-flash' })
+    await captured.mutation.mutateAsync({ model: 'clef-flash', fieldThresholds: editedThresholds })
+    expect(save).toHaveBeenCalledWith({ model: 'clef-flash', fieldThresholds: editedThresholds })
     expect(successToast).toHaveBeenCalledTimes(1)
     expect(successToast).toHaveBeenCalledWith('保存しました')
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.model).toBe('clef-flash')
+    expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.fieldThresholds).toEqual(
+      editedThresholds
+    )
     expect(queryClient.getQueryState(ADMIN_BOT_QUERY_KEY)?.isInvalidated).toBe(false)
     expect(read).not.toHaveBeenCalled()
     if (captured.connection === null || captured.notification === null) throw new Error('Bot mutations unavailable')
@@ -254,6 +356,10 @@ test('model save uses the typed payload and updates cached model without stale r
     expect(connection).toHaveBeenCalledTimes(1)
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.discord?.connection).toBe('connected')
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.model).toBe('clef-flash')
+    // 接続確認の応答は保存前の古い項目別しきい値を返す（KV の読み戻し）ため、画面にある保存値を引き継ぐ。
+    expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.fieldThresholds).toEqual(
+      editedThresholds
+    )
     await captured.notification.mutateAsync()
     expect(notification).toHaveBeenCalledTimes(1)
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.model).toBe('clef-flash')
@@ -262,12 +368,18 @@ test('model save uses the typed payload and updates cached model without stale r
     save.mockImplementation(async () => {
       throw new Error('Synthetic save failure')
     })
-    await expect(captured.mutation.mutateAsync({ model: 'clef' })).rejects.toThrow('Synthetic save failure')
+    await expect(captured.mutation.mutateAsync({ model: 'clef', fieldThresholds: savedThresholds })).rejects.toThrow(
+      'Synthetic save failure'
+    )
     expect(save).toHaveBeenCalledTimes(2)
     expect(successToast).toHaveBeenCalledTimes(1)
     expect(errorToast).toHaveBeenCalledTimes(1)
     expect(errorToast).toHaveBeenCalledWith('保存できませんでした')
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.model).toBe('clef-flash')
+    // 保存に失敗しても、表示中の値（直前に保存できた値）は元に戻さない。
+    expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.fieldThresholds).toEqual(
+      editedThresholds
+    )
   } finally {
     save.mockRestore()
     read.mockRestore()

@@ -44,6 +44,10 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   FIREBASE_PROJECT_ID: string
   /** Workers AI */
   AI: Ai
+  /** イベントのタイトルを付ける Claude の接続先（secret。未設定ならタイトルは定型のまま登録する） */
+  ANTHROPIC_BASE_URL?: string
+  /** 同・認証トークン（secret） */
+  ANTHROPIC_AUTH_TOKEN?: string
   /** X Webhook の生本文署名用シークレット */
   WEBHOOK_SECRET_KEY?: string
   EVENT_DETECTION_QUEUE?: Queue<{ postId: string } | SocialQueueMessage>

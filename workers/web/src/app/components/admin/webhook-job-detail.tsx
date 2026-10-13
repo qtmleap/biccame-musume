@@ -1,14 +1,19 @@
+import { reasonLabel } from '@biccame/shared/event-detect/answer-view'
+import type { DetectionThresholds } from '@biccame/shared/event-detect/detection'
 import type { EventRequest } from '@biccame/shared/schemas/event.dto'
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { ArrowLeft, ExternalLink, FilePlus2, Link2, RefreshCw, RotateCcw, Send, X } from 'lucide-react'
+import { ExternalLink, FilePlus2, Link2, RefreshCw, RotateCcw, Send, X } from 'lucide-react'
 import { useState } from 'react'
 import { z } from 'zod'
 import { BotActionConfirmation } from '@/components/admin/bot-action-confirmation'
 import { BotSettingRow, BotSettingsLayout } from '@/components/admin/bot-settings-layout'
 import { EventForm } from '@/components/admin/event-form'
+import { WebhookAnswerTable } from '@/components/admin/webhook-answer-table'
+import { webhookResolveDefaultValues } from '@/components/admin/webhook-form-defaults'
 import {
   detectionScoreLabel,
+  isWebhookJobJudging,
   notificationRetryWarning,
   webhookActionAvailability
 } from '@/components/admin/webhook-labels'
@@ -23,33 +28,53 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { useAdminWebhookJob, useResolveAdminWebhookJob, useRetryAdminWebhookJob } from '@/hooks/use-admin-webhooks'
+import { useAdminBotStatus } from '@/hooks/use-admin-bot'
+import {
+  useAdminWebhookJob,
+  useRejudgeAdminWebhookJob,
+  useResolveAdminWebhookJob,
+  useRetryAdminWebhookJob
+} from '@/hooks/use-admin-webhooks'
 import { cn } from '@/lib/utils'
 
-type ConfirmAction = 'processing' | 'notification' | 'reject'
+type ConfirmAction = 'processing' | 'notification' | 'reject' | 'rejudge'
 
 const CONFIRM_TITLES: Record<ConfirmAction, string> = {
-  processing: '投稿の判定を再試行しますか？',
+  processing: '失敗した処理を再実行しますか？',
   notification: 'Discord通知を再送しますか？',
-  reject: 'この投稿を対象外にしますか？'
+  reject: 'この投稿を対象外にしますか？',
+  rejudge: 'AI で判定し直しますか？'
 }
 
 export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   const jobQuery = useAdminWebhookJob(postId)
+  const { data: botStatus } = useAdminBotStatus()
+  // しきい値は現在の設定。取得できるまで（読み込み中・エラー）は undefined のままにして、表は '—' を出す。
+  const thresholds: DetectionThresholds | undefined =
+    botStatus === undefined
+      ? undefined
+      : {
+          eventThreshold: botStatus.webhook.eventThreshold,
+          fieldThreshold: botStatus.webhook.choiceThreshold,
+          ignoreThreshold: botStatus.webhook.ignoreThreshold,
+          fieldThresholds: botStatus.webhook.fieldThresholds
+        }
   const retry = useRetryAdminWebhookJob()
   const resolve = useResolveAdminWebhookJob()
+  const rejudge = useRejudgeAdminWebhookJob()
   const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [linkOpen, setLinkOpen] = useState(false)
   const [linkEventId, setLinkEventId] = useState('')
   const [linkError, setLinkError] = useState(false)
   const job = jobQuery.data
-  const isPending = retry.isPending || resolve.isPending
+  const isPending = retry.isPending || resolve.isPending || rejudge.isPending
   const availability = job
-    ? webhookActionAvailability(job.status, job.notificationStatus)
+    ? webhookActionAvailability(job.status, job.notificationStatus, job.reasons)
     : {
         canResolve: false,
         canRetryProcessing: false,
+        canRejudge: false,
         canRetryNotification: false
       }
 
@@ -58,6 +83,8 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
     try {
       if (confirmAction === 'reject') {
         await resolve.mutateAsync({ postId, data: { action: 'reject' } })
+      } else if (confirmAction === 'rejudge') {
+        await rejudge.mutateAsync({ postId })
       } else {
         await retry.mutateAsync({
           postId,
@@ -97,25 +124,25 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
       ? notificationRetryWarning(job.notificationStatus)
       : confirmAction === 'reject'
         ? 'この投稿はイベント登録せず、対象外として保存します。既存イベントは変更しません。'
-        : '失敗した投稿の判定を再試行します。AI呼び出しが発生する場合があります。'
+        : confirmAction === 'rejudge'
+          ? '現在の質問とモデルで AI を再実行し、判定をやり直します。保存済みの回答と判定結果は上書きされます。結果次第でイベントが自動登録され、Discord にも通知（通知済みの場合は再通知）される場合があります。'
+          : '失敗した処理をもう一度実行します。判定結果が保存済みならそれを使い、なければ AI を呼びます。'
 
   return (
     <BotSettingsLayout
       title='Webhook 受信詳細'
       description='元投稿、判定根拠、イベント登録、Discord通知を確認します。保留は不足情報を補って解決できます。'
+      back={{ to: '/admin/webhooks', label: '受信履歴に戻る' }}
       actions={
-        <>
-          <Button variant='outline' asChild>
-            <Link to='/admin/webhooks'>
-              <ArrowLeft className='size-4' />
-              受信履歴
-            </Link>
-          </Button>
-          <Button variant='outline' onClick={() => jobQuery.refetch()} disabled={jobQuery.isFetching || isPending}>
-            <RefreshCw className={cn('size-4', jobQuery.isFetching && 'animate-spin')} />
-            更新
-          </Button>
-        </>
+        <Button
+          variant='outline'
+          className='border-card-border'
+          onClick={() => jobQuery.refetch()}
+          disabled={jobQuery.isFetching || isPending}
+        >
+          <RefreshCw className={cn('size-4', jobQuery.isFetching && 'animate-spin')} />
+          更新
+        </Button>
       }
     >
       <div aria-live='polite' className='mb-4 text-sm'>
@@ -133,12 +160,18 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           <FilePlus2 className='size-4' />
           補完して登録
         </Button>
-        <Button variant='outline' onClick={() => setLinkOpen(true)} disabled={!availability.canResolve || isPending}>
+        <Button
+          variant='outline'
+          className='border-card-border'
+          onClick={() => setLinkOpen(true)}
+          disabled={!availability.canResolve || isPending}
+        >
           <Link2 className='size-4' />
           既存へ紐付け
         </Button>
         <Button
           variant='outline'
+          className='border-card-border'
           onClick={() => setConfirmAction('reject')}
           disabled={!availability.canResolve || isPending}
         >
@@ -147,14 +180,27 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
         </Button>
         <Button
           variant='outline'
+          className='border-card-border'
           onClick={() => setConfirmAction('processing')}
           disabled={!availability.canRetryProcessing || isPending}
+          title='処理に失敗した投稿を、もう一度処理します（保存済みの判定結果があれば再利用）'
         >
           <RotateCcw className='size-4' />
-          判定を再試行
+          失敗した処理を再実行
         </Button>
         <Button
           variant='outline'
+          className='border-card-border'
+          onClick={() => setConfirmAction('rejudge')}
+          disabled={!availability.canRejudge || isPending}
+          title='保存済みの回答を消して、AI で判定し直します'
+        >
+          <RefreshCw className='size-4' />
+          AI で判定し直す
+        </Button>
+        <Button
+          variant='outline'
+          className='border-card-border'
           onClick={() => setConfirmAction('notification')}
           disabled={!availability.canRetryNotification || isPending}
         >
@@ -181,6 +227,18 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
             </p>
           </section>
           <section>
+            <h2 className='mb-2 text-lg font-semibold md:text-xl'>Clef の回答</h2>
+            {isWebhookJobJudging(job.status) ? (
+              <p role='status' className='text-sm text-muted-foreground'>
+                判定中です。結果が出ると自動で更新されます。
+              </p>
+            ) : job.answers === null ? (
+              <p className='text-sm text-muted-foreground'>回答の記録なし</p>
+            ) : (
+              <WebhookAnswerTable answers={job.answers} thresholds={thresholds} />
+            )}
+          </section>
+          <section>
             <h2 className='mb-2 text-lg font-semibold md:text-xl'>判定・イベント登録</h2>
             <dl>
               <BotSettingRow label='判定状態'>
@@ -195,8 +253,8 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
                 {job.reasons.length > 0 ? (
                   <ul className='space-y-1'>
                     {job.reasons.map((reason) => (
-                      <li key={reason} className='break-words'>
-                        {reason}
+                      <li key={reason} className='break-words' title={reason}>
+                        {reasonLabel(reason)}
                       </li>
                     ))}
                   </ul>
@@ -248,20 +306,15 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
               <p className='mb-5 text-sm text-muted-foreground'>
                 元投稿を確認し、必要な情報を入力してください。この操作ではXに投稿しません。
               </p>
+              {!job.candidate && job.draft !== null && (
+                <p className='mb-5 text-sm text-muted-foreground'>
+                  AIが確定できなかった項目は空欄です。下書きの値は元投稿と照合してください。
+                </p>
+              )}
               <EventForm
                 key={job.postId}
                 allowTweet={false}
-                defaultValues={
-                  job.candidate
-                    ? { ...job.candidate, shouldTweet: false }
-                    : {
-                        uuid: job.eventUUID,
-                        isVerified: true,
-                        isPreliminary: false,
-                        shouldTweet: false,
-                        referenceUrls: [{ uuid: crypto.randomUUID(), type: 'announce', url: job.sourceUrl }]
-                      }
-                }
+                defaultValues={webhookResolveDefaultValues(job)}
                 onSubmitPayload={register}
               />
             </section>
@@ -309,7 +362,12 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
             )}
           </div>
           <DialogFooter>
-            <Button variant='outline' onClick={() => setLinkOpen(false)} disabled={isPending}>
+            <Button
+              variant='outline'
+              className='border-card-border'
+              onClick={() => setLinkOpen(false)}
+              disabled={isPending}
+            >
               キャンセル
             </Button>
             <Button

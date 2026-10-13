@@ -63,6 +63,23 @@ export const webhookJob: WebhookJob = {
   eventId: null,
   eventTitle: null,
   postStatus: 'announce',
+  postStatusProbability: 0.75,
+  answers: {
+    is_event: { type: 'noul', noul: 0.72 },
+    status: { type: 'choice', choice: 'announce', probabilities: { announce: 0.75, start: 0.15, none: 0.05 } },
+    category: { type: 'choice', choice: 'limited_card', probabilities: { limited_card: 0.62, other: 0.3 } },
+    single_event: { type: 'noul', noul: 0.91 },
+    store: { type: 'choice', choice: 'abeno', probabilities: { abeno: 0.97, none: 0.02 } },
+    start_date: { type: 'choice', choice: 'd20261002', probabilities: { d20261002: 0.99, none: 0.01 } },
+    condition: { type: 'choice', choice: 'everyone', probabilities: { everyone: 0.88, none: 0.1 } }
+  },
+  draft: {
+    title: 'あべのたん 限定名刺配布',
+    category: 'limited_card',
+    stores: ['abeno'],
+    startDate: '2026-10-02',
+    conditions: [{ type: 'everyone' }]
+  },
   attempts: 1,
   notificationStatus: 'unknown',
   notificationId: null,
@@ -101,6 +118,18 @@ type ResponseFixtures = {
     ? () => Awaited<Result>
     : never
 }
+// 項目別しきい値の合成値。共通値 choiceThreshold（0.8）に揃えて全項目を同じ値にする。
+const fieldThresholds = {
+  single_event: 0.8,
+  status: 0.8,
+  category: 0.8,
+  store: 0.8,
+  start_date: 0.8,
+  end_date: 0.8,
+  quantity: 0.8,
+  condition: 0.8,
+  purchase_amount: 0.8
+}
 export const adminResponses = {
   getAdminBotStatus: () => ({
     botConnected: true,
@@ -112,7 +141,8 @@ export const adminResponses = {
       model: 'clef',
       eventThreshold: 0.9,
       ignoreThreshold: 0.1,
-      choiceThreshold: 0.8
+      choiceThreshold: 0.8,
+      fieldThresholds
     },
     discord: {
       configured: { token: true, channel: true },
@@ -140,7 +170,8 @@ export const adminResponses = {
       model: 'clef',
       eventThreshold: 0.9,
       ignoreThreshold: 0.1,
-      choiceThreshold: 0.8
+      choiceThreshold: 0.8,
+      fieldThresholds
     },
     discord: {
       configured: { token: true, channel: true },
@@ -158,11 +189,12 @@ export const adminResponses = {
       fetchedAt: now
     }
   }),
-  saveAdminBotConfiguration: () => ({ model: 'clef-flash' }),
+  saveAdminBotConfiguration: () => ({ model: 'clef-flash', fieldThresholds }),
   testAdminBotNotification: () => ({ status: 'sent', messageId: '10003' }),
   listAdminWebhookJobs: () => ({ jobs: [webhookJob], nextCursor: null }),
   getAdminWebhookJob: () => webhookJob,
   retryAdminWebhookJob: () => ({ ...webhookJob, notificationStatus: 'pending' }),
+  rejudgeAdminWebhookJob: () => ({ ...webhookJob, status: 'queued', notificationStatus: 'pending' }),
   resolveAdminWebhookJob: () => ({ ...webhookJob, status: 'ignored', notificationStatus: 'skipped' }),
   getEventDetectSummary: () => ({
     source: {
