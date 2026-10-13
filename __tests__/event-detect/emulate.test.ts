@@ -40,11 +40,18 @@ const card = (status: Extraction['events'][number]['status'], extra: Partial<Ext
   category: 'limited_card' as const,
   status,
   stores: [],
+  conditions: [],
   ...extra
 })
 
 describe('validateExtraction', () => {
-  const input: ExtractInput = { state: 's', stores: ['example', 'other'], dates: ['2026-10-01'], quantities: [100] }
+  const input: ExtractInput = {
+    state: 's',
+    stores: ['example', 'other'],
+    dates: ['2026-10-01'],
+    quantities: [100],
+    purchaseAmounts: [3000]
+  }
 
   test('候補から選んだ値を受け付け、none は値なしにする', () => {
     expect(
@@ -58,7 +65,8 @@ describe('validateExtraction', () => {
             stores: ['example', 'none'],
             start_date: '2026-10-01',
             end_date: 'none',
-            quantity: '100'
+            quantity: '100',
+            conditions: []
           }
         ]
       })
@@ -71,7 +79,8 @@ describe('validateExtraction', () => {
           status: 'announce',
           stores: ['example'],
           startDate: '2026-10-01',
-          quantity: 100
+          quantity: 100,
+          conditions: []
         }
       ]
     })
@@ -85,7 +94,8 @@ describe('validateExtraction', () => {
       stores: [],
       start_date: 'none',
       end_date: 'none',
-      quantity: 'none'
+      quantity: 'none',
+      conditions: []
     }
     expect(validateExtraction(input, { is_event: 1, events: [{ ...base, start_date: '2026-12-25' }] })).toContain(
       'bad start_date'
@@ -174,6 +184,7 @@ describe('runEmulation', () => {
         status: 'end',
         startDate: '2026-10-01',
         endedAt: '2026-10-20',
+        conditions: [],
         startUnknown: false
       })
       expect(events[0].posts.map((p) => p.postId)).toEqual(['1', '2', '3'])
@@ -342,6 +353,7 @@ describe('Clef による再確認', () => {
       item: 'ハロウィン名刺',
       category: 'limited_card' as const,
       status: 'start' as const,
+      conditions: [],
       startUnknown: false,
       firstSeen: 0,
       lastSeen: 0,
@@ -375,6 +387,7 @@ describe('scoreEmulation', () => {
     status: 'end',
     startDate: '2026-10-01',
     endedAt: '2026-10-20',
+    conditions: [],
     startUnknown: false,
     firstSeen: Date.parse('2026-09-20T01:00:00.000Z'),
     lastSeen: Date.parse('2026-10-20T01:00:00.000Z'),
@@ -414,4 +427,92 @@ describe('scoreEmulation', () => {
       postLinks: { total: 1, inMatchedEvent: 1 }
     })
   })
+})
+
+test('同投稿の配布物と異なる購入条件をローカル照合で合流させない', async () => {
+  const cacheDir = await mkdtemp(join(tmpdir(), 'emulate-multiple-'))
+  const preconnect = globalThis.fetch.preconnect
+  const fetch = spyOn(globalThis, 'fetch').mockImplementation(
+    Object.assign(
+      async () => {
+        throw new Error('No matching candidates should call the model')
+      },
+      { preconnect }
+    )
+  )
+  try {
+    const rows = analyze({
+      posts: [post('1', '2026-10-01T01:00:00.000Z'), post('2', '2026-10-02T01:00:00.000Z')],
+      events: [],
+      accounts,
+      characterNames: ['例たん']
+    }).rows
+    const conditions = (purchaseAmount: number) => [{ type: 'purchase' as const, purchaseAmount }]
+    const timelines = buildTimelines(
+      [
+        {
+          row: rows[0],
+          state: 's1',
+          extraction: extraction('1', [
+            card('start', { conditions: conditions(1000) }),
+            card('start', { conditions: conditions(3000) })
+          ])
+        },
+        { row: rows[1], state: 's2', extraction: extraction('2', [card('start', { conditions: conditions(5000) })]) }
+      ],
+      accounts
+    )
+    const { events } = await runEmulation({
+      timelines,
+      endpoint: { url: 'https://unused.example.test', token: 'synthetic' },
+      cacheDir,
+      concurrency: 1
+    })
+    expect(events).toHaveLength(3)
+    expect(events.map((event) => event.conditions[0].purchaseAmount)).toEqual([1000, 3000, 5000])
+    expect(fetch).not.toHaveBeenCalled()
+  } finally {
+    fetch.mockRestore()
+    await rm(cacheDir, { recursive: true, force: true })
+  }
+})
+
+test('ローカル抽出はアクスタと明示された購入条件を独立して保持する', () => {
+  const input: ExtractInput = {
+    state: 's',
+    stores: ['example'],
+    dates: ['2026-10-16'],
+    quantities: [],
+    purchaseAmounts: [3000]
+  }
+  const value = validateExtraction(input, {
+    is_event: 0.99,
+    events: [
+      {
+        item: 'ハロウィンアクスタ',
+        category: 'acsta',
+        status: 'announce',
+        stores: ['example'],
+        start_date: '2026-10-16',
+        end_date: 'none',
+        quantity: 'none',
+        conditions: [{ type: 'purchase', purchase_amount: '3000' }]
+      },
+      {
+        item: '限定名刺',
+        category: 'limited_card',
+        status: 'announce',
+        stores: ['example'],
+        start_date: 'none',
+        end_date: 'none',
+        quantity: 'none',
+        conditions: []
+      }
+    ]
+  })
+  if (typeof value === 'string') throw new Error(value)
+  expect(value.events[0].category).toBe('acsta')
+  expect(value.events[0].conditions).toEqual([{ type: 'purchase', purchaseAmount: 3000 }])
+  expect(value.events[1].conditions).toEqual([])
+  expect(value.events[1].startDate).toBeUndefined()
 })

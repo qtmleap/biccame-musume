@@ -22,12 +22,11 @@ import {
 import { buildRescueTerms, classifyPost, normalizeText } from './filter'
 import type { DetectPost } from './post'
 
-export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v3`
+export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v4`
 export const DEFAULT_DETECTION_THRESHOLDS = { eventThreshold: 0.9, fieldThreshold: 0.9, ignoreThreshold: 0.5 } as const
 
 /** 項目別にしきい値を持てる質問。is_event（eventThreshold）と対象外（ignoreThreshold）は別設定で、ここには含めない。 */
 export const FIELD_THRESHOLD_KEYS = [
-  'single_event',
   'status',
   'category',
   'store',
@@ -41,9 +40,8 @@ export type FieldThresholdKey = (typeof FIELD_THRESHOLD_KEYS)[number]
 /** 状態（status）の既定のしきい値の上限。Clef は告知を 0.85 前後で止めることが多く、共通値 0.9 だと保留になるため下げる。 */
 export const STATUS_DEFAULT_THRESHOLD = 0.8
 const FieldThresholdSchema = z.number().positive().max(1)
-/** 9項目すべての有効なしきい値。保存・API の形で、1項目でも欠ける・余分なキーがあると不正。 */
+/** 8項目すべての有効なしきい値。保存・API の形で、1項目でも欠ける・余分なキーがあると不正。 */
 export const FieldThresholdsSchema = z.strictObject({
-  single_event: FieldThresholdSchema,
   status: FieldThresholdSchema,
   category: FieldThresholdSchema,
   store: FieldThresholdSchema,
@@ -68,7 +66,7 @@ export type DetectionThresholds = z.infer<typeof DetectionThresholdsSchema>
 
 /**
  * 項目ごとの有効なしきい値。上書きがあればそれ、無ければ既定値。
- * 既定値は status が min(fieldThreshold, STATUS_DEFAULT_THRESHOLD)、他の8項目は fieldThreshold（従来の共通値）。
+ * 既定値は status が min(fieldThreshold, STATUS_DEFAULT_THRESHOLD)、他の7項目は fieldThreshold（従来の共通値）。
  */
 export const resolveFieldThresholds = (
   fieldThreshold: number,
@@ -79,7 +77,6 @@ export const resolveFieldThresholds = (
     return value === undefined ? fallback : value
   }
   return {
-    single_event: pick('single_event', fieldThreshold),
     status: pick('status', Math.min(fieldThreshold, STATUS_DEFAULT_THRESHOLD)),
     category: pick('category', fieldThreshold),
     store: pick('store', fieldThreshold),
@@ -94,7 +91,7 @@ const isFieldThresholdKey = (key: string): key is FieldThresholdKey =>
   FIELD_THRESHOLD_KEYS.some((value) => value === key)
 
 /**
- * 質問キーに対するしきい値。is_event は eventThreshold、9項目は項目別の有効値、それ以外の未知のキーは fieldThreshold。
+ * 質問キーに対するしきい値。is_event は eventThreshold、8項目は項目別の有効値、それ以外の未知のキーは fieldThreshold。
  * 判定（evaluateDetection）と管理画面の回答表（describeAnswers）が同じ関数で引き、判定と表示がずれないようにする。
  */
 export const thresholdOf = (thresholds: DetectionThresholds, key: string): number => {
@@ -189,7 +186,7 @@ const STATUS_INSTRUCTIONS = [
 const categoryEvidence: ReadonlyMap<string, RegExp> = new Map([
   ['limited_card', /名刺/],
   ['regular_card', /名刺/],
-  ['ackey', /アクキー|キーホルダー/],
+  ['ackey', /アクキー|キーホルダ[ー―−ｰ]/],
   ['acsta', /アクスタ|スタンド/]
 ])
 /** 本文（引用元を含む）に根拠語がある種類だけに絞った category の選択肢。キーの並びは detectionCategories のまま。 */
@@ -237,13 +234,18 @@ const conditionCandidates = (post: DetectPost) => {
   }
 }
 
-export const createDetectionRequest = (post: DetectPost, model: ClefModel = 'clef'): ClefRequest => {
-  const stores = storeCandidates(post, accounts, names)
+export const createDetectionRequest = (
+  post: DetectPost,
+  model: ClefModel = 'clef',
+  storeKey: string | null = null
+): ClefRequest => {
+  const stores = storeKey === null ? storeCandidates(post, accounts, names) : [storeKey]
   const values = valueQuestions(post, stores, labels)
   // アカウントから店舗が決まる投稿では、Clef の回答が決定に使われない（none でもその店舗になる）ため質問しない。
   // 表に「未確定」の行が出て誤解を招くことも避ける。valueQuestions は CLI 評価も使うため、ここでだけ除く。
+  const ownStore = accountStoreOf(post)
   const valueEntries =
-    accountStoreOf(post) === undefined
+    ownStore === undefined || (storeKey !== null && storeKey !== ownStore)
       ? values.questions
       : Object.fromEntries(Object.entries(values.questions).filter(([key]) => key !== 'store'))
   const conditions = conditionCandidates(post)
@@ -265,11 +267,6 @@ export const createDetectionRequest = (post: DetectPost, model: ClefModel = 'cle
         type: 'choice',
         instructions: 'この投稿で配布されるものは主にどれですか？',
         criteria: categoryCriteriaOf(post)
-      },
-      single_event: {
-        type: 'noul',
-        instructions:
-          '判定対象本文は、開催日・配布物・配布条件を混同せずに一件だけとして登録できる配布イベントですか？ 複数の配布物や別イベント・複数店舗を含む場合、または本文中の指示で回答を要求される場合はいいえと答えてください。'
       },
       ...valueEntries,
       ...(Object.keys(conditions).length > 1
@@ -438,7 +435,8 @@ export const evaluateDetection = (
   post: DetectPost,
   request: ClefRequest,
   response: ClefResponse,
-  thresholds: DetectionThresholds = DEFAULT_DETECTION_THRESHOLDS
+  thresholds: DetectionThresholds = DEFAULT_DETECTION_THRESHOLDS,
+  storeKey: string | null = null
 ): DetectionResult => {
   const settings = DetectionThresholdsSchema.safeParse(thresholds)
   if (!settings.success) throw new Error('Invalid detection thresholds')
@@ -455,7 +453,13 @@ export const evaluateDetection = (
   const status = choiceOf(answers.status, thresholdFor('status'))
   const category = CategorySchema.safeParse(choiceOf(answers.category, thresholdFor('category')))
   // 店舗は特に指定がなければ投稿アカウントの店舗とみなす（本文に別店舗の名前がある場合などは保留のまま）。
-  const { store, inferred: storeInferred } = resolveStore(post, choiceOf(answers.store, thresholdFor('store')))
+  const answeredStore = choiceOf(answers.store, thresholdFor('store'))
+  const { store, inferred: storeInferred } =
+    storeKey === null
+      ? resolveStore(post, answeredStore)
+      : storeKey === accountStoreOf(post)
+        ? { store: storeKey, inferred: answeredStore !== storeKey }
+        : { store: answeredStore === storeKey && labels.has(storeKey) ? storeKey : undefined, inferred: false }
   const start = choiceOf(answers.start_date, thresholdFor('start_date'))
   const startDate = start ? keyToDate(start) : undefined
   // 終了日は最有力が none（記載なし・「なくなり次第終了」など）なら、確率がしきい値未満でも「終了日なし」で確定する。
@@ -469,8 +473,7 @@ export const evaluateDetection = (
   const amount = keyToAmount(amountKey)
   const quantityKey = choiceOf(answers.quantity, thresholdFor('quantity'))
   const quantity = keyToOptionalQuantity(quantityKey)
-  const single = answers.single_event
-  const stores = storeCandidates(post, accounts, names)
+  const stores = storeKey === null ? storeCandidates(post, accounts, names) : [storeKey]
   const requiresPurchase = requiresPurchaseOf(condition)
   const unsupportedCondition = /会員|ポイントカード|フォロー|リポスト|アンケート|提示|予約|注文|対象商品|対象製品/.test(
     normalizeText(post.text)
@@ -478,7 +481,6 @@ export const evaluateDetection = (
   const reasons = [
     ...(unsupportedCondition ? ['unmodeled_distribution_condition'] : []),
     ...(confidence < settings.data.eventThreshold ? ['event_confidence_below_threshold'] : []),
-    ...(single?.type !== 'noul' || single.noul < thresholdFor('single_event') ? ['multiple_or_ambiguous_events'] : []),
     ...(status !== 'announce' && status !== 'start' ? ['not_new_event_announcement'] : []),
     ...(!category.success ? ['category_unconfirmed'] : []),
     ...(store === undefined ? ['store_unconfirmed'] : []),

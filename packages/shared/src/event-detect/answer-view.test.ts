@@ -409,7 +409,6 @@ describe('reasonLabel', () => {
     for (const reason of [
       'unmodeled_distribution_condition',
       'event_confidence_below_threshold',
-      'multiple_or_ambiguous_events',
       'not_new_event_announcement',
       'category_unconfirmed',
       'store_unconfirmed',
@@ -468,8 +467,8 @@ describe('describeAnswers with per-field thresholds', () => {
     expect(find(rows, 'quantity')).toMatchObject({ threshold: 0.9, confirmed: true })
   })
 
-  test('single_event（noul）の行も項目別のしきい値で確定を決める', () => {
-    const rows = rowsOf({ ...thresholds, fieldThresholds: { single_event: 0.95 } })
+  test('旧single_eventの監査回答は共通しきい値で表示を維持する', () => {
+    const rows = rowsOf({ ...thresholds, fieldThreshold: 0.95 })
     expect(find(rows, 'single_event')).toMatchObject({ threshold: 0.95, confirmed: false })
     expect(find(rowsOf(thresholds), 'single_event')).toMatchObject({ threshold: 0.9, confirmed: true })
   })
@@ -485,10 +484,10 @@ describe('describeAnswers with per-field thresholds', () => {
     // 未知の質問は共通値。
     const [unknown] = describeAnswers({ future_question: choice('x', { x: 0.95 }) }, value)
     expect(unknown).toMatchObject({ threshold: 0.9, confirmed: true })
-    // 9項目すべてが上書きを受ける。
+    // 8項目すべてが上書きを受ける。
     const all = Object.fromEntries(FIELD_THRESHOLD_KEYS.map((key, index) => [key, 0.5 + index / 100]))
     for (const row of describeAnswers(near, { ...thresholds, fieldThresholds: all })) {
-      if (row.key !== 'is_event') expect(row.threshold, row.key).toBe(all[row.key])
+      if (FIELD_THRESHOLD_KEYS.some((key) => key === row.key)) expect(row.threshold, row.key).toBe(all[row.key])
     }
   })
 })

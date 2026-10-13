@@ -1168,7 +1168,7 @@ const makeMaterials = async (root: string) => {
       posts: [{ postId: '6001', status: 'announce', index: 0 }]
     }
   ]
-  await writeFile(join(dir, 'emulated-v1.json'), JSON.stringify(emulated))
+  await writeFile(join(dir, 'emulated-v2.json'), JSON.stringify(emulated))
   const clef = (postId: string, noul: number) => ({
     postId,
     model: 'clef',
@@ -1436,7 +1436,7 @@ describe('runSeed', () => {
     const { db, path } = await makeLocalDb(root)
     db.close()
     const materials = await makeMaterials(root)
-    await rm(join(materials.dir, 'emulated-v1.json'))
+    await rm(join(materials.dir, 'emulated-v2.json'))
     await expect(runSeed(runOptions(root, materials, path))).rejects.toThrow('run emulate')
   })
 })
@@ -1612,7 +1612,7 @@ describe('runSeed（--titles llm。偽の endpoint）', () => {
     const materials = await makeMaterials(root)
     await withBodies(materials)
     // kyoto-1 の item を、括弧つきのルールの題になるものに差し替える
-    const emulatedPath = join(materials.dir, 'emulated-v1.json')
+    const emulatedPath = join(materials.dir, 'emulated-v2.json')
     const emulated: { id: string; item: string }[] = JSON.parse(await readFile(emulatedPath, 'utf8'))
     await writeFile(
       emulatedPath,

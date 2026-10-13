@@ -142,7 +142,7 @@ export const makeWorld = async (root: string, events: readonly WorldEvent[], gol
     lastSeen: at(event.lastSeen === undefined ? '2026-08-01T00:00:00.000Z' : event.lastSeen),
     posts: [{ postId, status: 'announce' }]
   }))
-  await writeFile(join(dir, 'emulated-v1.json'), JSON.stringify(emulated))
+  await writeFile(join(dir, 'emulated-v2.json'), JSON.stringify(emulated))
   await writeFile(
     join(dir, 'posts.jsonl'),
     `${posts

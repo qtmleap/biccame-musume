@@ -23,6 +23,7 @@ import { adminEndpoints } from '@/utils/client/admin'
 
 const postId = '1000000000000000001'
 const baseJob: WebhookJob = {
+  candidates: [],
   postId,
   post: {
     id: postId,
@@ -135,7 +136,10 @@ describe('保留・対象外ジョブの再判定', () => {
     const endpoint = adminEndpoints.find((entry) => entry.alias === 'rejudgeAdminWebhookJob')
     expect(endpoint?.method).toBe('post')
     expect(endpoint?.path).toBe('/api/admin/webhook/jobs/:postId/rejudge')
-    expect(endpoint?.parameters?.map((parameter) => [parameter.name, parameter.type])).toEqual([['postId', 'Path']])
+    expect(endpoint?.parameters?.map((parameter) => [parameter.name, parameter.type])).toEqual([
+      ['postId', 'Path'],
+      ['candidateId', 'Query']
+    ])
   })
 
   test('再判定のフックは実行関数を返し、実行前は待機中にならない', () => {

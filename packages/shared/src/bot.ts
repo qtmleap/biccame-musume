@@ -104,6 +104,14 @@ export type PostingSessionResult = z.infer<typeof postingSessionResultSchema>
 
 const discordNotificationFields = {
   requestId: z.uuid(),
+  candidate: z
+    .strictObject({
+      id: z.uuid(),
+      item: z.string().nonempty().max(200),
+      index: z.number().int().positive(),
+      total: z.number().int().positive().max(20)
+    })
+    .optional(),
   postId: z.string().regex(/^\d+$/),
   postUrl: z.url().max(2000),
   managementUrl: z.url().max(2000),

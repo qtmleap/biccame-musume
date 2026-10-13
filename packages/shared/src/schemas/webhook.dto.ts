@@ -10,7 +10,7 @@ export const WebhookNotificationStatusSchema = z.enum(['pending', 'sent', 'faile
 export const WebhookQueueMessageSchema = z.strictObject({ postId: z.string().regex(/^\d{1,20}$/) })
 export type WebhookQueueMessage = z.infer<typeof WebhookQueueMessageSchema>
 
-export const WebhookJobSchema = z.object({
+export const WebhookJobFieldsSchema = z.object({
   postId: z.string().regex(/^\d{1,20}$/),
   post: DetectPostSchema,
   sourceUrl: z.url(),
@@ -40,6 +40,14 @@ export const WebhookJobSchema = z.object({
   updatedAt: z.iso.datetime(),
   judgedAt: z.iso.datetime().nullable()
 })
+export const WebhookCandidateSchema = WebhookJobFieldsSchema.extend({
+  item: z.string().nonempty(),
+  storeKey: z.string().nonempty().nullable().default(null)
+})
+export type WebhookCandidate = z.infer<typeof WebhookCandidateSchema>
+export const WebhookJobSchema = WebhookJobFieldsSchema.extend({
+  candidates: z.array(WebhookCandidateSchema).default([])
+})
 export type WebhookJob = z.infer<typeof WebhookJobSchema>
 export const WebhookJobListSchema = z.object({
   jobs: z.array(WebhookJobSchema),
@@ -53,11 +61,15 @@ export const WebhookJobQuerySchema = z.object({
     .optional(),
   limit: z.coerce.number().int().min(1).max(100).default(25)
 })
-export const WebhookRetrySchema = z.strictObject({ notificationOnly: z.boolean(), allowUnknown: z.boolean() })
+export const WebhookRetrySchema = z.strictObject({
+  notificationOnly: z.boolean(),
+  allowUnknown: z.boolean(),
+  candidateId: z.uuid().optional()
+})
 export const WebhookResolveSchema = z.discriminatedUnion('action', [
-  z.strictObject({ action: z.literal('register'), event: EventRequestSchema }),
-  z.strictObject({ action: z.literal('link'), eventId: z.uuid() }),
-  z.strictObject({ action: z.literal('reject') })
+  z.strictObject({ action: z.literal('register'), event: EventRequestSchema, candidateId: z.uuid().optional() }),
+  z.strictObject({ action: z.literal('link'), eventId: z.uuid(), candidateId: z.uuid().optional() }),
+  z.strictObject({ action: z.literal('reject'), candidateId: z.uuid().optional() })
 ])
 export const WebhookConfigurationSchema = z.object({
   configured: z.boolean(),

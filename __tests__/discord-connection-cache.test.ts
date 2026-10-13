@@ -45,7 +45,6 @@ const passive = (discord: DiscordStatus | null = passiveDiscord): AdminBotStatus
     ignoreThreshold: 0.95,
     choiceThreshold: 0.95,
     fieldThresholds: {
-      single_event: 0.95,
       status: 0.8,
       category: 0.95,
       store: 0.95,
