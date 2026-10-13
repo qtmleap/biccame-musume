@@ -63,6 +63,7 @@ const record = (
 ): EmulatedRecord => ({
   category: 'limited_card',
   status: 'ongoing',
+  conditions: [],
   startUnknown: false,
   lastSeen: fields.firstSeen,
   posts: [],
@@ -113,6 +114,7 @@ const emulatedRecords = (): EmulatedRecord[] => [
     item: 'アクキー',
     status: 'announce',
     endDate: '2025-06-01',
+    conditions: [],
     startUnknown: true,
     firstSeen: time('2025-05-02'),
     lastSeen: time('2025-05-02'),
@@ -191,6 +193,7 @@ describe('GET /api/emulated', () => {
       status: 'end',
       startDate: '2026-06-10',
       endedAt: '2026-07-01',
+      conditions: [],
       startUnknown: false,
       firstSeen: '2026-06-01T01:00:00.000Z',
       lastSeen: '2026-07-01T01:00:00.000Z',

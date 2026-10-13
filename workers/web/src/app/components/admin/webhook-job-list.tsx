@@ -13,6 +13,7 @@ import {
   webhookPostStatusLabel,
   webhookPostStatusTentativeReason
 } from '@/components/admin/webhook-labels'
+import { WebhookStatusBadge } from '@/components/admin/webhook-status-badge'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -23,6 +24,24 @@ import { cn } from '@/lib/utils'
 
 /** 登録済みイベントがあればリンク、無ければAIの下書き名を「候補」として控えめに表示する。 */
 const WebhookEventName = ({ job }: { job: WebhookJob }) => {
+  if (job.candidates.length > 0) {
+    return (
+      <ul className='space-y-2'>
+        {job.candidates.map((candidate) => (
+          <li key={candidate.eventUUID} className='flex items-center gap-2'>
+            {candidate.eventId !== null ? (
+              <Link to='/events/$uuid' params={{ uuid: candidate.eventId }} className='font-medium hover:underline'>
+                {candidate.eventTitle === null ? candidate.item : candidate.eventTitle}
+              </Link>
+            ) : (
+              <span>{candidate.item}</span>
+            )}
+            <WebhookStatusBadge status={candidate.status} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
   if (job.eventId !== null && job.eventTitle !== null) {
     return (
       <Link to='/events/$uuid' params={{ uuid: job.eventId }} className='font-medium hover:underline'>

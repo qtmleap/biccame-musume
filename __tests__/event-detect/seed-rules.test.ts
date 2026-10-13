@@ -498,7 +498,7 @@ const makeMaterials = async (root: string) => {
       ]
     }
   ]
-  await writeFile(join(dir, 'emulated-v1.json'), JSON.stringify(emulated))
+  await writeFile(join(dir, 'emulated-v2.json'), JSON.stringify(emulated))
   await Promise.all(
     ['1001', '2001', '3001', '4001'].map((postId) =>
       writeFile(

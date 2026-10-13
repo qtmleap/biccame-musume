@@ -2,6 +2,8 @@ import { createHash } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { EXTRACTION_VERSION, SPLIT_EVENT_INSTRUCTIONS } from '@biccame/shared/event-detect/extraction'
+import { z } from 'zod'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
 import type { PostRow, StoreAccount } from './analysis'
 import {
@@ -20,10 +22,10 @@ import { writeAtomic } from './store'
 // 日付・配布数は本文から機械的に拾った候補から選ばせる（v1 で本文に正解があれば 97〜98% 当たった方式）。
 // 前後の投稿との突き合わせ（どのイベントか）はここではしない。emulate.ts が古い順に行う。
 
-export const EXTRACT_VERSION = 'v2'
+export const EXTRACT_VERSION = `${EXTRACTION_VERSION}-cli-v3`
 
 const STATUSES = ['announce', 'start', 'ongoing', 'end'] as const
-const CATEGORIES = ['limited_card', 'regular_card', 'ackey', 'other'] as const
+const CATEGORIES = ['limited_card', 'regular_card', 'ackey', 'acsta', 'other'] as const
 
 export type ExtractedStatus = (typeof STATUSES)[number]
 export type ExtractedCategory = (typeof CATEGORIES)[number]
@@ -39,6 +41,7 @@ export type ExtractedEvent = {
   startDate?: string
   endDate?: string
   quantity?: number
+  conditions: { type: 'purchase' | 'first_come' | 'lottery' | 'everyone'; purchaseAmount?: number }[]
 }
 
 export type Extraction = {
@@ -59,6 +62,7 @@ export type ExtractInput = {
   stores: string[]
   dates: string[]
   quantities: number[]
+  purchaseAmounts: number[]
 }
 
 const NONE = 'none'
@@ -71,7 +75,8 @@ export const extractInput = (
   state: buildState(post, accounts),
   stores: storeCandidates(post, accounts, storeNames),
   dates: dateCandidates(post),
-  quantities: quantityCandidates(post)
+  quantities: quantityCandidates(post),
+  purchaseAmounts: [...new Set([...post.text.replace(/,/g, '').matchAll(/(\d{1,7})円/g)].map((match) => Number(match[1])))]
 })
 
 export const extractKey = (input: ExtractInput) =>
@@ -89,10 +94,12 @@ const SYSTEM = [
   'あなたはビックカメラの店舗擬人化キャラクター「ビッカメ娘」のノベルティ配布イベントを、X の投稿から整理する担当です。',
   '与えられた投稿（state）を読み、answer ツールを 1 回呼んで答えてください。',
   '- is_event: この投稿がビッカメ娘の名刺・アクリルキーホルダー・アクリルスタンド・缶バッジ・ポストカード・ギフトカード・ポイントカード・年賀状などの配布・販売・発行についての案内である確率（0〜1）。購入特典でもビッカメ娘のグッズなら含む。ビッカメ娘と関係ない商品の特典やメーカーのキャンペーン、配布物をもらった人へのお礼や雑談は含まない。',
-  '- events: この投稿が案内している配布イベントを、配布物ごとに 1 件ずつすべて列挙する。名刺とアクキーを同時に配るなら 2 件。案内していなければ空配列。',
+  SPLIT_EVENT_INSTRUCTIONS,
+  '- events: 配布物ごとに1件ずつ。案内がなければ空配列。',
   `  - status: ${describe(STATUS_CRITERIA)}（none は使わない。状態を伝えていないイベントは列挙しない）`,
-  `  - category: ${describe(CATEGORY_CRITERIA)}（none は使わない）`,
+  `  - category: ${describe({ ...CATEGORY_CRITERIA, acsta: 'アクリルスタンド（アクスタ）', other: '名刺・アクキー・アクスタ以外' })}（none は使わない）`,
   '  - item: 配布物の短い名前（例: ハロウィン限定名刺、擬人化7周年記念アクキー）。同じイベントの他の投稿と照合できるよう、本文の言葉を使う',
+  '  - conditions: 明示された配布条件だけ列挙。typeはpurchase/first_come/lottery/everyone。購入金額は候補から選び、情報がなければnone。条件不明は空配列。',
   '  - stores / start_date / end_date / quantity: 与えられた候補から選ぶ。本文に書かれていなければ none'
 ].join('\n')
 
@@ -105,9 +112,10 @@ const eventSchema = (input: ExtractInput) => ({
     stores: { type: 'array', items: { type: 'string', enum: input.stores.length > 0 ? input.stores : [NONE] } },
     start_date: { type: 'string', enum: [...input.dates, NONE] },
     end_date: { type: 'string', enum: [...input.dates, NONE] },
-    quantity: { type: 'string', enum: [...input.quantities.map(String), NONE] }
+    quantity: { type: 'string', enum: [...input.quantities.map(String), NONE] },
+    conditions: { type: 'array', items: { type: 'object', properties: { type: { type: 'string', enum: ['purchase','first_come','lottery','everyone'] }, purchase_amount: { type: 'string', enum: [...input.purchaseAmounts.map(String),NONE] } }, required: ['type','purchase_amount'], additionalProperties: false } }
   },
-  required: ['item', 'category', 'status', 'stores', 'start_date', 'end_date', 'quantity'],
+  required: ['item', 'category', 'status', 'stores', 'start_date', 'end_date', 'quantity', 'conditions'],
   additionalProperties: false
 })
 
@@ -127,7 +135,8 @@ const userMessage = (input: ExtractInput) =>
     '',
     `店舗の候補（店舗キー）: ${input.stores.length > 0 ? input.stores.join(', ') : '（なし）'}`,
     `日付の候補: ${input.dates.length > 0 ? input.dates.join(', ') : '（なし）'}`,
-    `数量の候補: ${input.quantities.length > 0 ? input.quantities.join(', ') : '（なし）'}`
+    `数量の候補: ${input.quantities.length > 0 ? input.quantities.join(', ') : '（なし）'}`,
+    `購入金額の候補: ${input.purchaseAmounts.length > 0 ? input.purchaseAmounts.join(', ') : '（なし）'}`
   ].join('\n')
 
 const isOneOf = <T extends string>(values: readonly T[], value: unknown): value is T =>
@@ -167,7 +176,10 @@ export const validateExtraction = (
     const amount = quantity === NONE ? undefined : Number(quantity)
     if (amount !== undefined && !input.quantities.includes(amount))
       return `event ${index}: bad quantity ${String(quantity)}`
+    const conditions = z.array(z.object({ type: z.enum(['purchase','first_come','lottery','everyone']), purchase_amount: z.string().nonempty() })).safeParse(field('conditions'))
+    if (!conditions.success || conditions.data.some((condition) => condition.purchase_amount !== NONE && !input.purchaseAmounts.includes(Number(condition.purchase_amount)))) return `event ${index}: bad conditions`
     result.push({
+      conditions: conditions.data.map((condition) => ({ type: condition.type, ...(condition.purchase_amount !== NONE ? { purchaseAmount: Number(condition.purchase_amount) } : {}) })),
       item: item.trim(),
       category,
       status,

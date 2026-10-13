@@ -14,7 +14,7 @@ import { writeAtomic } from './store'
 // 複数店舗に言及していれば、それぞれの店舗の流れに入る。
 // 店舗の流れは前の判断に依存するので順番に処理し、店舗どうしは並列に流す。
 
-export const LINK_VERSION = 'v1'
+export const LINK_VERSION = 'v2'
 
 const DAY = 86_400_000
 /** 最後の言及からこれ以上経ったイベントは候補にしない（終了日の無い配布は数か月続くことがある） */
@@ -51,6 +51,7 @@ export type EmulatedEvent = {
   store: string
   item: string
   category: ExtractedCategory
+  conditions: ExtractedEvent['conditions']
   status: ExtractedStatus
   startDate?: string
   endDate?: string
@@ -115,6 +116,7 @@ export const describeEvent = (event: EmulatedEvent) =>
     `開始 ${event.startDate ? event.startDate : event.startUnknown ? '不明' : '未定'}`,
     `終了予定 ${event.endDate ? event.endDate : '未定'}`,
     event.quantity ? `配布数 ${event.quantity}` : undefined,
+    `配布条件 ${JSON.stringify(event.conditions)}`,
     `最初の言及 ${jstDate(event.firstSeen)}、最後の言及 ${jstDate(event.lastSeen)}、言及 ${event.posts.length} 件`
   ]
     .filter((part) => part !== undefined)
@@ -125,6 +127,7 @@ export const describeMention = (mention: Mention) => {
   return [
     `配布物: ${event.item}（${event.category}）`,
     `状態: ${event.status}`,
+    `配布条件: ${JSON.stringify(event.conditions)}`,
     `開始日: ${event.startDate ? event.startDate : '本文に無い'}`,
     `終了日: ${event.endDate ? event.endDate : '本文に無い'}`,
     event.quantity ? `配布数: ${event.quantity}` : undefined
@@ -141,7 +144,8 @@ const SYSTEM = [
   '- 一覧の同じイベント（同じ配布物の告知の繰り返し、開始・継続・終了の報告）なら、そのキー（e0 など）',
   '- 一覧に無い新しい配布イベントなら new',
   '- この店舗の配布イベントではない、または判断できないなら none',
-  '配布物の名前の表記は投稿ごとに揺れます。同じ時期・同じ種類の配布物なら同じイベントとみなしてください。',
+  '配布物の名前の表記は投稿ごとに揺れます。同じ配布物・開催日・配布条件の案内だけを同じイベントとみなしてください。',
+  '同じカテゴリや同じ日付でも、異なる配布物や異なる購入条件なら別のイベントです。同一投稿の別の配布物を合流させないでください。',
   '一方、時期の違う同じ種類の配布物（毎年のハロウィン名刺、月替わりの名刺など）は別のイベントです。'
 ].join('\n')
 
@@ -215,6 +219,7 @@ const apply = (event: EmulatedEvent, mention: Mention, verify?: VerifyRecord) =>
   if (!event.startDate && mention.event.startDate) event.startDate = mention.event.startDate
   if (!event.startDate && (status === 'start' || status === 'ongoing') && !event.startUnknown)
     event.startDate = jstDate(time)
+  if (event.conditions.length === 0 && mention.event.conditions.length > 0) event.conditions = mention.event.conditions
   if (mention.event.endDate) event.endDate = mention.event.endDate
   if (!event.quantity && mention.event.quantity) event.quantity = mention.event.quantity
   if (status === 'end' && !event.endedAt) event.endedAt = jstDate(time)
@@ -229,6 +234,7 @@ const create = (mention: Mention, sequence: number, verify?: VerifyRecord): Emul
     store: mention.store,
     item: mention.event.item,
     category: mention.event.category,
+    conditions: mention.event.conditions,
     status,
     startUnknown: status === 'end',
     firstSeen: mention.row.time,
@@ -350,7 +356,10 @@ export const runEmulation = async (options: {
       const events: EmulatedEvent[] = []
       const mentions = options.timelines.get(store)
       for (const mention of mentions ? mentions : []) {
-        const candidates = candidatesAt(events, mention.row.time)
+        const candidates = candidatesAt(events, mention.row.time).filter((event) =>
+          !event.posts.some((post) => post.postId === mention.row.post.id && post.index !== mention.index)
+          && (event.conditions.length === 0 || mention.event.conditions.length === 0 || JSON.stringify(event.conditions) === JSON.stringify(mention.event.conditions))
+        )
         try {
           const choice =
             candidates.length === 0

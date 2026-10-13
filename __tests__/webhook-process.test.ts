@@ -6,7 +6,7 @@ import * as eventService from '@api/services/event-service'
 import { resolveWebhookJob, retryWebhookJob } from '@api/services/webhook-admin'
 import { EVENT_DETECTION_MODEL_KEY } from '@api/services/webhook-config'
 import { getWebhookJob, insertWebhookJob } from '@api/services/webhook-jobs'
-import { processWebhookJob } from '@api/services/webhook-process'
+import * as webhookProcessing from '@api/services/webhook-process'
 import { TITLE_MAX_TOKENS, TITLE_MODEL, type TitleFetcher } from '@api/services/webhook-title'
 import type { Bindings } from '@api/types/bindings'
 import type { ClefAnswer, ClefRequest, ClefResponse } from '@biccame/shared/event-detect/clef'
@@ -18,6 +18,13 @@ import { EventDetailSchema } from '@biccame/shared/schemas/event.dto'
 import dayjs from 'dayjs'
 import { convertV4MiniflareOptions, Miniflare } from 'miniflare'
 import { z } from 'zod'
+
+// 単一候補の回帰テストでは抽出を固定し、抽出通信は別のテストで検証する。
+const processWebhookJob = (env: Bindings, postId: string, options: { titleFetcher?: TitleFetcher } = {}) =>
+  webhookProcessing.processWebhookJob(env, postId, {
+    ...options,
+    extractor: async (post) => ({ events: [{ item: 'アキバたん 限定名刺配布', evidence: [post.text] }] })
+  })
 
 const responseFor = (request: ClefRequest): ClefResponse => {
   const desired: Record<string, string> = {
@@ -235,6 +242,9 @@ test('queue registration is idempotent and a notification retry does not rerun A
     const getModelSpy = spyOn(env.BICCAME_MUSUME_EVENTS, 'get').mockImplementation(async () => {
       throw new Error('KV must not be read for notification retry')
     })
+    await DB.prepare("UPDATE webhook_event_candidates SET notification_status='pending' WHERE post_id=?")
+      .bind(post.id)
+      .run()
     await DB.prepare("UPDATE webhook_event_jobs SET notification_status='pending' WHERE post_id=?").bind(post.id).run()
     await proceed(post.id)
     expect(ai.clefCalls).toHaveLength(1)
@@ -324,7 +334,7 @@ test('queue registration is idempotent and a notification retry does not rerun A
     await proceed(failedPost.id)
     expect((await getWebhookJob(env, failedPost.id)).status).toBe('held')
     expect(await DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(2)
-    await DB.prepare("UPDATE webhook_event_jobs SET status='failed' WHERE post_id=?").bind(failedPost.id).run()
+    await DB.prepare("UPDATE webhook_event_candidates SET status='failed' WHERE post_id=?").bind(failedPost.id).run()
     await retryWebhookJob(env, failedPost.id, { notificationOnly: false, allowUnknown: false })
     const cachedCalls = ai.clefCalls.length
     const cachedModel = (await getWebhookJob(env, failedPost.id)).model

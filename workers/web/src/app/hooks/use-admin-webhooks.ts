@@ -68,7 +68,8 @@ export const useRetryAdminWebhookJob = () => {
 export const useRejudgeAdminWebhookJob = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ postId }: { postId: string }) => client.rejudgeAdminWebhookJob(undefined, { params: { postId } }),
+    mutationFn: ({ postId, candidateId }: { postId: string; candidateId?: string }) =>
+      client.rejudgeAdminWebhookJob(undefined, { params: { postId }, queries: { candidateId } }),
     retry: false,
     onSuccess: async () => {
       toast.success('判定のやり直しを受け付けました')

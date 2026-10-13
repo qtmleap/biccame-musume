@@ -51,7 +51,7 @@ const extraction = (
   version: 'v2',
   postId,
   isEvent,
-  events: isEvent < 0.5 ? [] : [{ item, category: 'limited_card', status, stores: [] }],
+  events: isEvent < 0.5 ? [] : [{ item, category: 'limited_card', status, stores: [], conditions: [] }],
   attempts: 1,
   usage: { input_tokens: 0, output_tokens: 0 },
   elapsedMs: 0
@@ -233,7 +233,8 @@ describe('resolveGapEvents', () => {
                 stores: ['example'],
                 start_date: '2026-12-01',
                 end_date: 'none',
-                quantity: 'none'
+                quantity: 'none',
+                conditions: []
               }
             ]
           }),
@@ -278,6 +279,7 @@ describe('gap-events.json', () => {
         store: 'example',
         item: 'クリスマス名刺',
         category: 'limited_card',
+        conditions: [],
         status: 'announce',
         startUnknown: false,
         firstSeen: Date.parse('2026-11-20T01:00:00.000Z'),
@@ -395,6 +397,7 @@ describe('GET /api/gaps', () => {
           category: 'limited_card',
           status: 'ongoing',
           startDate: '2026-12-01',
+          conditions: [],
           startUnknown: false,
           firstSeen: Date.parse('2026-11-20T01:00:00.000Z'),
           lastSeen: Date.parse('2026-12-02T01:00:00.000Z'),
@@ -413,6 +416,7 @@ describe('GET /api/gaps', () => {
           item: '消えた名刺',
           category: 'other',
           status: 'announce',
+          conditions: [],
           startUnknown: false,
           firstSeen: Date.parse('2026-12-03T01:00:00.000Z'),
           lastSeen: Date.parse('2026-12-03T01:00:00.000Z'),
@@ -460,6 +464,7 @@ describe('GET /api/gaps', () => {
           item: 'クリスマス名刺',
           category: 'limited_card',
           status: 'ongoing',
+          conditions: [],
           startUnknown: false,
           firstSeen: Date.parse('2026-11-20T01:00:00.000Z'),
           lastSeen: Date.parse('2026-12-02T01:00:00.000Z'),
@@ -498,6 +503,7 @@ describe('GET /api/gaps', () => {
           item: 'クリスマス名刺',
           category: 'limited_card',
           status: 'announce',
+          conditions: [],
           startUnknown: false,
           firstSeen: Date.parse('2026-11-20T01:00:00.000Z'),
           lastSeen: Date.parse('2026-11-20T01:00:00.000Z'),
@@ -516,6 +522,7 @@ describe('GET /api/gaps', () => {
       item: id,
       category: 'limited_card',
       status: 'announce',
+      conditions: [],
       startUnknown: false,
       firstSeen: Date.parse(lastSeen),
       lastSeen: Date.parse(lastSeen),

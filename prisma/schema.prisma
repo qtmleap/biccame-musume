@@ -189,7 +189,45 @@ model WebhookEventJob {
 
   @@index([status, createdAt])
   @@index([notificationStatus])
+  extractionJson     String?   @map("extraction_json")
+  candidates         WebhookEventCandidate[]
+
   @@map("webhook_event_jobs")
+}
+
+/// 投稿から分割した配布物ごとの判定・登録・通知履歴
+model WebhookEventCandidate {
+  eventUUID          String    @id @map("event_uuid")
+  postId             String    @map("post_id")
+  item               String
+  storeKey           String?   @map("store_key")
+  postJson           String    @map("post_json")
+  sourceUrl          String    @map("source_url")
+  status             String    @default("queued")
+  reasonsJson        String    @default("[]") @map("reasons_json")
+  resultJson         String?   @map("result_json")
+  candidateJson      String?   @map("candidate_json")
+  answersJson        String?   @map("answers_json")
+  model              String?
+  questionVersion    String?   @map("question_version")
+  confidence         Float?
+  judgedAt           DateTime? @map("judged_at")
+  eventId            String?   @map("event_id")
+  semanticKey        String?   @unique @map("semantic_key")
+  attempts           Int       @default(0)
+  leaseToken         String?   @map("lease_token")
+  leaseUntil         DateTime? @map("lease_until")
+  notificationStatus String    @default("pending") @map("notification_status")
+  notificationId     String?   @map("notification_id")
+  notificationError  String?   @map("notification_error")
+  notificationAttempts Int    @default(0) @map("notification_attempts")
+  lastError          String?   @map("last_error")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  job                WebhookEventJob @relation(fields: [postId], references: [postId], onDelete: Cascade)
+
+  @@index([postId])
+  @@map("webhook_event_candidates")
 }
 
 /// イベントコメント（匿名）

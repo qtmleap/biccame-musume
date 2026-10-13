@@ -358,7 +358,7 @@ const reportFor = (generatedAt: string) => ({
 const makeMaterials = async (root: string, db: Database) => {
   const dir = join(root, '.cache', 'event-detect')
   await mkdir(dir, { recursive: true })
-  await writeFile(join(dir, 'emulated-v1.json'), JSON.stringify(emulatedEvents))
+  await writeFile(join(dir, 'emulated-v2.json'), JSON.stringify(emulatedEvents))
   await writeFile(
     join(dir, 'posts.jsonl'),
     `${Object.entries(kinds)

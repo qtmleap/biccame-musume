@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { ExtractionConditionsSchema } from './extraction'
 
 // イベント検出ビューワ（管理画面の /admin/event-detect）と dev サーバーのミドルウェアで共有する API の形。
 
@@ -295,6 +296,7 @@ export const GapVerifySchema = z.object({
 export type GapVerify = z.infer<typeof GapVerifySchema>
 
 export const GapEventSchema = z.object({
+  conditions: ExtractionConditionsSchema.default([]),
   id: z.string().nonempty(),
   store: z.string().nonempty(),
   item: z.string().nonempty(),
@@ -350,6 +352,7 @@ export const EmulatedD1Schema = z.object({ eventId: z.uuid(), title: z.string().
 
 /** 一覧と詳細で共通の、LLM イベント 1 件 */
 export const EmulatedEventRowSchema = z.object({
+  conditions: ExtractionConditionsSchema.default([]),
   id: EmulatedIdSchema,
   store: z.string().nonempty(),
   item: z.string().nonempty(),

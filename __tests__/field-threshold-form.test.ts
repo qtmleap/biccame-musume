@@ -16,7 +16,6 @@ import {
 
 // 項目ごとに値を変えて、キーの取り違えを検出できるようにする。
 const saved: FieldThresholds = {
-  single_event: 0.9,
   status: 0.8,
   category: 0.91,
   store: 0.92,
@@ -185,7 +184,7 @@ describe('botConfigurationForm', () => {
     expect(botConfigurationForm({ ...base, savedModel: undefined, selectedModel: 'clef-flash' }).canSave).toBe(false)
   })
 
-  test('送る body は9項目すべてを含み、既定値（status 0.8）の設定でも欠けない', () => {
+  test('送る body は8項目すべてを含み、既定値（status 0.8）の設定でも欠けない', () => {
     const form = botConfigurationForm({
       ...base,
       savedThresholds: resolveFieldThresholds(0.9),

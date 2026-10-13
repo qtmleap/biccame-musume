@@ -38,6 +38,7 @@ const characters = (() => {
 })()
 
 const listJob: WebhookJob = {
+  candidates: [],
   postId: '1000000000000000001',
   post: {
     id: '1000000000000000001',
@@ -74,7 +75,6 @@ const listJob: WebhookJob = {
 }
 
 const uniformThresholds = (value: number): FieldThresholds => ({
-  single_event: value,
   status: value,
   category: value,
   store: value,
@@ -84,7 +84,7 @@ const uniformThresholds = (value: number): FieldThresholds => ({
   condition: value,
   purchase_amount: value
 })
-// 共通値と9項目すべてを同じしきい値にした設定。項目別の差は fieldThresholds で上書きして付ける。
+// 共通値と8項目すべてを同じしきい値にした設定。項目別の差は fieldThresholds で上書きして付ける。
 const botStatus = (choiceThreshold: number, fieldThresholds: Partial<FieldThresholds> = {}): AdminBotStatus => ({
   fetchedAt: '2026-10-05T03:00:00.000Z',
   botConnected: true,
@@ -859,4 +859,38 @@ describe('項目別のしきい値の反映', () => {
     expect(cells('配布物')[3]).toBe('<span class="font-mono tabular-nums leading-[0]">90.0%</span>')
     expect(cells('配布物')[4]).toContain('未確定')
   })
+})
+
+test('一覧と詳細は一部登録・一部保留を配布物ごとに表示し、元投稿を維持する', async () => {
+  const candidates = [
+    {
+      ...listJob,
+      item: 'ハロウィン限定名刺',
+      storeKey: 'akiba',
+      status: 'held' as const,
+      eventId: null,
+      eventTitle: null,
+      post: { ...listJob.post, text: '名刺に関する原文断片' }
+    },
+    {
+      ...listJob,
+      item: 'ハロウィンアクキー',
+      storeKey: 'akiba',
+      status: 'registered' as const,
+      eventUUID: '550e8400-e29b-41d4-a716-446655440002',
+      eventTitle: 'ハロウィンアクキー'
+    }
+  ]
+  const job: WebhookJob = { ...listJob, candidates, post: { ...listJob.post, text: 'アクキーと名刺の元投稿全文' } }
+  const list = await renderList([job])
+  expect(list).toContain('ハロウィン限定名刺')
+  expect(list).toContain('ハロウィンアクキー')
+  const detail = await renderDetail(job)
+  expect(detail).toContain('配布物ごとのイベント')
+  expect(detail).toContain('aria-pressed="true"')
+  expect(detail).toContain('aria-pressed="false"')
+  expect(detail).toContain('アクキーと名刺の元投稿全文')
+  expect(detail).not.toContain('名刺に関する原文断片')
+  for (const label of ['補完して登録', '既存へ紐付け', '対象外にする', 'AI で判定し直す', '通知を再送'])
+    expect(detail).toContain(label)
 })

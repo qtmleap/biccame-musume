@@ -256,7 +256,7 @@ describe('viewer handler のデータ読み直し', () => {
     })
   }
 
-  test('emulated-v1.json が無くても 503 にならず、現れたとき・mtime が変わったとき・消えたときに読み直す', async () => {
+  test('emulated-v2.json が無くても 503 にならず、現れたとき・mtime が変わったとき・消えたときに読み直す', async () => {
     const { handler, loads, reloads } = generationHandler()
     // emulate を実行するまでファイルは無い。無いまま普通に答える
     const first = await handler(request(`${BASE}/api/summary`))
@@ -266,20 +266,20 @@ describe('viewer handler のデータ読み直し', () => {
     expect(loads).toHaveLength(1)
 
     // emulate が結果を書いたら読み直す
-    await writeAt('emulated-v1.json', '[]', BEFORE)
+    await writeAt('emulated-v2.json', '[]', BEFORE)
     expect(await summary(handler)).toBe(generation(2))
     expect(await summary(handler)).toBe(generation(2))
     expect(loads).toHaveLength(2)
     expect(reloads).toHaveLength(1)
 
     // 書き直されたら（mtime が変わったら）読み直す
-    await utimes(join(fixture.dir, 'emulated-v1.json'), AFTER, AFTER)
+    await utimes(join(fixture.dir, 'emulated-v2.json'), AFTER, AFTER)
     expect(await summary(handler)).toBe(generation(3))
     expect(loads).toHaveLength(3)
     expect(reloads).toHaveLength(2)
 
     // 消えたときも、結果の無い状態として読み直す（503 にはしない）
-    await rm(join(fixture.dir, 'emulated-v1.json'))
+    await rm(join(fixture.dir, 'emulated-v2.json'))
     const removed = await handler(request(`${BASE}/api/summary`))
     expect(removed.status).toBe(200)
     expect(await removed.text()).toBe(generation(4))
@@ -287,12 +287,12 @@ describe('viewer handler のデータ読み直し', () => {
     expect(reloads).toHaveLength(3)
   })
 
-  test('検証用の emulated-v1-score.json などを書き換えても読み直さない', async () => {
+  test('検証用の emulated-v2-score.json などを書き換えても読み直さない', async () => {
     const { handler, loads, reloads } = generationHandler()
     await summary(handler)
-    await writeAt('emulated-v1-score.json', '{}', AFTER)
-    await writeAt('emulated-v1-clef-0.5.json', '[]', AFTER)
-    await writeAt('emulated-v1-clef-0.5-score.json', '{}', AFTER)
+    await writeAt('emulated-v2-score.json', '{}', AFTER)
+    await writeAt('emulated-v2-clef-0.5.json', '[]', AFTER)
+    await writeAt('emulated-v2-clef-0.5-score.json', '{}', AFTER)
     expect(await summary(handler)).toBe(generation(1))
     expect(loads).toHaveLength(1)
     expect(reloads).toHaveLength(0)

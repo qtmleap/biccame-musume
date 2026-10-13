@@ -8,12 +8,27 @@ import { buildDetectionDraft } from '@biccame/shared/event-detect/detection'
 import { type DetectPost, DetectPostSchema } from '@biccame/shared/event-detect/post'
 import { GapStatusSchema } from '@biccame/shared/event-detect/viewer'
 import { EventDetailSchema, type EventRequest, EventRequestSchema } from '@biccame/shared/schemas/event.dto'
-import { type WebhookJob, type WebhookJobQuerySchema, WebhookJobSchema } from '@biccame/shared/schemas/webhook.dto'
+import {
+  WebhookCandidateSchema,
+  type WebhookJob,
+  type WebhookJobQuerySchema,
+  WebhookJobSchema
+} from '@biccame/shared/schemas/webhook.dto'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod'
 
 export const storedJson = (value: string): unknown => JSON.parse(value)
+
+export type WebhookTarget = {
+  table: 'webhook_event_jobs' | 'webhook_event_candidates'
+  column: 'post_id' | 'event_uuid'
+  id: string
+}
+export const webhookTarget = (postId: string, candidateId?: string): WebhookTarget =>
+  candidateId === undefined
+    ? { table: 'webhook_event_jobs', column: 'post_id', id: postId }
+    : { table: 'webhook_event_candidates', column: 'event_uuid', id: candidateId }
 
 const JobColumns = `j.post_id AS postId, j.post_json AS postJson, j.source_url AS sourceUrl, j.event_uuid AS eventUUID,
   j.status, j.reasons_json AS reasonsJson, j.candidate_json AS candidateJson, j.confidence, j.model,
@@ -25,6 +40,7 @@ const JobTables = 'webhook_event_jobs j LEFT JOIN events e ON e.id=j.event_id'
 const TimestampSchema = z.union([z.number(), z.string().nonempty()])
 const StoredJobSchema = WebhookJobSchema.omit({
   post: true,
+  candidates: true,
   reasons: true,
   candidate: true,
   postStatus: true,
@@ -66,7 +82,7 @@ const postStatusFromAnswers = (
   return { status: status.data, probability: probability === undefined ? null : probability }
 }
 
-const toJob = (value: unknown): WebhookJob => {
+export const toJob = (value: unknown): WebhookJob => {
   const stored = StoredJobSchema.safeParse(value)
   if (!stored.success) throw new Error('Invalid stored webhook job')
   const row = stored.data
@@ -109,8 +125,83 @@ const toJob = (value: unknown): WebhookJob => {
 export const getWebhookJob = async (env: Pick<Bindings, 'DB'>, postId: string): Promise<WebhookJob> => {
   const row = await env.DB.prepare(`SELECT ${JobColumns} FROM ${JobTables} WHERE j.post_id=?`).bind(postId).first()
   if (row === null) throw new HTTPException(404, { message: 'Webhook job not found' })
-  return toJob(row)
+  const candidates = await webhookCandidates(env, postId)
+  return { ...toJob(row), candidates }
 }
+export const webhookCandidates = async (env: Pick<Bindings, 'DB'>, postId: string) => {
+  const rows = await env.DB.prepare(
+    `SELECT ${JobColumns},j.item,j.store_key AS storeKey FROM webhook_event_candidates j LEFT JOIN events e ON e.id=j.event_id WHERE j.post_id=? ORDER BY j.created_at,j.event_uuid`
+  )
+    .bind(postId)
+    .all()
+  return rows.results.map((row) => {
+    const candidate = WebhookCandidateSchema.safeParse({ ...toJob(row), item: row.item, storeKey: row.storeKey })
+    if (!candidate.success) throw new Error('Invalid stored webhook candidate')
+    return candidate.data
+  })
+}
+
+export const getWebhookCandidate = async (
+  env: Pick<Bindings, 'DB'>,
+  postId: string,
+  candidateId: string
+): Promise<WebhookJob> => {
+  const candidate = (await webhookCandidates(env, postId)).find((value) => value.eventUUID === candidateId)
+  if (!candidate) throw new HTTPException(404, { message: 'Webhook candidate not found' })
+  return { ...candidate, candidates: [] }
+}
+
+/** 投稿の集約状態は候補の状態から作る。成功済み候補は保留や再試行で上書きしない。 */
+export const refreshWebhookJob = async (env: Pick<Bindings, 'DB'>, postId: string, token?: string) => {
+  const candidates = await webhookCandidates(env, postId)
+  if (candidates.length === 0) return
+  const status = candidates.some((candidate) => candidate.status === 'failed')
+    ? 'failed'
+    : candidates.some((candidate) => candidate.status === 'queued' || candidate.status === 'processing')
+      ? 'processing'
+      : candidates.some((candidate) => candidate.status === 'held')
+        ? 'held'
+        : candidates.some((candidate) => candidate.status === 'registered')
+          ? 'registered'
+          : 'ignored'
+  const notificationStatus = candidates.some((candidate) => candidate.notificationStatus === 'pending')
+    ? 'pending'
+    : candidates.some((candidate) => candidate.notificationStatus === 'unknown')
+      ? 'unknown'
+      : candidates.some((candidate) => candidate.notificationStatus === 'failed')
+        ? 'failed'
+        : candidates.some((candidate) => candidate.notificationStatus === 'sent')
+          ? 'sent'
+          : 'skipped'
+  const first = candidates[0]
+  if (!first) return
+  const failed = candidates.find((candidate) => candidate.lastError !== null)
+  const result =
+    await env.DB.prepare(`UPDATE webhook_event_jobs SET status=?,notification_status=?,event_id=?,candidate_json=?,answers_json=?,
+    confidence=?,model=?,question_version=?,judged_at=?,reasons_json=?,notification_id=?,notification_error=?,notification_attempts=?,last_error=?,updated_at=? WHERE post_id=? ${token === undefined ? '' : 'AND lease_token=?'}`)
+      .bind(
+        status,
+        notificationStatus,
+        first.eventId,
+        first.candidate === null ? null : JSON.stringify(first.candidate),
+        first.answers === null ? null : JSON.stringify(first.answers),
+        first.confidence,
+        first.model,
+        first.questionVersion,
+        first.judgedAt === null ? null : dayjs(first.judgedAt).valueOf(),
+        JSON.stringify([...new Set(candidates.flatMap((candidate) => candidate.reasons))]),
+        first.notificationId,
+        first.notificationError,
+        candidates.reduce((sum, candidate) => sum + candidate.notificationAttempts, 0),
+        failed === undefined ? null : failed.lastError,
+        dayjs().valueOf(),
+        postId,
+        ...(token === undefined ? [] : [token])
+      )
+      .run()
+  if (result.meta.changes !== 1) throw new Error('Webhook aggregation lease lost')
+}
+
 export const listWebhookJobs = async (env: Pick<Bindings, 'DB'>, query: z.infer<typeof WebhookJobQuerySchema>) => {
   const filters = [
     ...(query.status ? ['j.status=?'] : []),
@@ -131,7 +222,12 @@ export const listWebhookJobs = async (env: Pick<Bindings, 'DB'>, query: z.infer<
     .bind(...values)
     .all()
   const rows = result.results
-  const jobs = rows.slice(0, query.limit).map(toJob)
+  const jobs = await Promise.all(
+    rows.slice(0, query.limit).map(async (row) => {
+      const job = toJob(row)
+      return { ...job, candidates: await webhookCandidates(env, job.postId) }
+    })
+  )
   const last = jobs.at(-1)
   return { jobs, nextCursor: rows.length > query.limit && last ? last.postId : null }
 }
@@ -235,17 +331,17 @@ export const registerWebhookEvent = async (
   env: Pick<Bindings, 'DB' | 'X_POSTING_ENABLED' | 'DISCORD_POSTING_ENABLED'>,
   job: WebhookJob,
   event: EventRequest,
-  token: string
+  token: string,
+  target: WebhookTarget = webhookTarget(job.postId)
 ) => {
   const now = dayjs().valueOf()
   // webhook_event_jobs は生SQL専用のミリ秒、イベント系の DateTime 列は Prisma と同じ文字列で保存する。
   const timestamp = toD1DateTime(now)
-  const audit = await env.DB.prepare('SELECT answers_json FROM webhook_event_jobs WHERE post_id=?')
-    .bind(job.postId)
+  const audit = await env.DB.prepare(`SELECT answers_json FROM ${target.table} WHERE ${target.column}=?`)
+    .bind(target.id)
     .first<{ answers_json: string | null }>()
   if (audit === null) throw new Error('Webhook job disappeared')
-  const predicate =
-    "EXISTS (SELECT 1 FROM webhook_event_jobs WHERE post_id=? AND lease_token=? AND status IN ('processing','held'))"
+  const predicate = `EXISTS (SELECT 1 FROM ${target.table} WHERE ${target.column}=? AND lease_token=? AND status IN ('processing','held'))`
   const statements = [
     env.DB.prepare(`INSERT INTO events
     (id,category,title,limited_quantity,start_date,end_date,ended_at,is_verified,is_preliminary,group_id,character_id,
@@ -269,7 +365,7 @@ export const registerWebhookEvent = async (
       job.judgedAt === null ? null : toD1DateTime(job.judgedAt),
       timestamp,
       timestamp,
-      job.postId,
+      target.id,
       token
     )
   ]
@@ -285,7 +381,7 @@ export const registerWebhookEvent = async (
         condition.quantity === undefined ? null : condition.quantity,
         timestamp,
         timestamp,
-        job.postId,
+        target.id,
         token,
         event.uuid,
         job.postId
@@ -302,7 +398,7 @@ export const registerWebhookEvent = async (
         reference.url,
         timestamp,
         timestamp,
-        job.postId,
+        target.id,
         token,
         event.uuid,
         job.postId
@@ -318,7 +414,7 @@ export const registerWebhookEvent = async (
         store,
         timestamp,
         timestamp,
-        job.postId,
+        target.id,
         token,
         event.uuid,
         job.postId
@@ -337,20 +433,20 @@ export const registerWebhookEvent = async (
   if (!detail.success) throw new Error('Invalid registered event snapshot')
   statements.push(
     ...socialInsertStatements(env, eventSocialSnapshot(detail.data, 'created'), `WHERE ${guard}`, [
-      job.postId,
+      target.id,
       token,
       event.uuid,
       job.postId
     ])
   )
   statements.push(
-    env.DB.prepare(`UPDATE webhook_event_jobs SET status='registered',event_id=?,candidate_json=?,
-    notification_status='pending',last_error=NULL,updated_at=? WHERE post_id=? AND lease_token=?
+    env.DB.prepare(`UPDATE ${target.table} SET status='registered',event_id=?,candidate_json=?,
+    notification_status='pending',last_error=NULL,updated_at=? WHERE ${target.column}=? AND lease_token=?
     AND EXISTS (SELECT 1 FROM events WHERE id=? AND clef_post_id=?)`).bind(
       event.uuid,
       JSON.stringify(event),
       now,
-      job.postId,
+      target.id,
       token,
       event.uuid,
       job.postId
@@ -360,12 +456,51 @@ export const registerWebhookEvent = async (
   if (results.at(-1)?.meta.changes !== 1) throw new Error('Webhook registration lease lost')
 }
 
-export const duplicateWebhookEvents = async (env: Bindings, event: EventRequest, sourceUrl: string) => {
+export const webhookItemIdentity = (item: string) =>
+  item
+    .normalize('NFKC')
+    .replace(/キーホルダ[―−ｰ]/g, 'キーホルダー')
+    .replace(/\s+/g, '')
+export const webhookConditionIdentity = (event: EventRequest) =>
+  JSON.stringify(
+    event.conditions
+      .map(({ type, purchaseAmount, quantity }) => [type, purchaseAmount, quantity])
+      .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)))
+  )
+
+export const duplicateWebhookEvents = async (env: Bindings, event: EventRequest, sourceUrl: string, item?: string) => {
   const placeholders = event.stores.map(() => '?').join(',')
-  const rows = await env.DB.prepare(`SELECT e.id FROM events e WHERE
+  const rows = await env.DB.prepare(`SELECT e.id,c.item,c.candidate_json AS candidateJson,
+    CASE WHEN json_valid(j.extraction_json) AND json_extract(j.extraction_json,'$.version')='legacy-single' THEN 1 ELSE 0 END AS legacy
+    FROM events e LEFT JOIN webhook_event_candidates c ON c.event_id=e.id
+    LEFT JOIN webhook_event_jobs j ON j.post_id=c.post_id WHERE e.id<>? AND (
     EXISTS (SELECT 1 FROM event_reference_urls r WHERE r.event_id=e.id AND r.url=?) OR
-    (e.category=? AND e.start_date=? AND EXISTS (SELECT 1 FROM event_stores s WHERE s.event_id=e.id AND s.store_key IN (${placeholders}))) LIMIT 10`)
-    .bind(sourceUrl, event.category, toD1DateTime(event.startDate), ...event.stores)
-    .all<{ id: string }>()
-  return rows.results.map((row) => row.id)
+    (e.category=? AND e.start_date=? AND EXISTS (SELECT 1 FROM event_stores s WHERE s.event_id=e.id AND s.store_key IN (${placeholders}))))`)
+    .bind(event.uuid, sourceUrl, event.category, toD1DateTime(event.startDate), ...event.stores)
+    .all<{ id: string; item: string | null; candidateJson: string | null; legacy: number }>()
+  return [
+    ...new Set(
+      rows.results
+        .filter((row) => {
+          if (item === undefined || row.item === null) return true
+          const stored =
+            row.candidateJson === null ? undefined : EventRequestSchema.safeParse(storedJson(row.candidateJson))
+          if (stored === undefined || !stored.success)
+            return (
+              row.legacy === 1 ||
+              row.item === '既存配布物' ||
+              webhookItemIdentity(row.item) === webhookItemIdentity(item)
+            )
+          // 旧形式のitemは生成タイトルであり、抽出名とは一致しない。移行の印を持つ行だけは項目の一致で照合する。
+          return (
+            (row.legacy === 1 || webhookItemIdentity(row.item) === webhookItemIdentity(item)) &&
+            stored.data.category === event.category &&
+            stored.data.startDate.slice(0, 10) === event.startDate.slice(0, 10) &&
+            stored.data.stores.slice().sort().join(',') === event.stores.slice().sort().join(',') &&
+            webhookConditionIdentity(stored.data) === webhookConditionIdentity(event)
+          )
+        })
+        .map((row) => row.id)
+    )
+  ]
 }
