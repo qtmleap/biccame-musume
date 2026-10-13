@@ -55,11 +55,12 @@ routes.openapi(
   createRoute({
     method: 'post',
     path: '/admin/webhook/jobs/{postId}/rejudge',
-    request: { params },
+    request: { params, query: z.object({ candidateId: z.uuid().optional() }) },
     responses: jobResponse,
     tags: ['admin-webhook']
   }),
-  async (c) => c.json(await rejudgeWebhookJob(c.env, c.req.valid('param').postId), 200)
+  async (c) =>
+    c.json(await rejudgeWebhookJob(c.env, c.req.valid('param').postId, c.req.valid('query').candidateId), 200)
 )
 routes.openapi(
   createRoute({

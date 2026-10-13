@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { createReadStream, existsSync } from 'node:fs'
 import { mkdir, readdir, readFile, rename, stat, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
+import { ExtractionConditionsSchema } from '@biccame/shared/event-detect/extraction'
 import { ClefModelSchema } from '@biccame/shared/event-detect/clef'
 import { type DetectPost, DetectPostSchema } from '@biccame/shared/event-detect/post'
 import { z } from 'zod'
@@ -341,8 +342,9 @@ const GapEventsFileSchema = z.object({
       id: z.string().nonempty(),
       store: z.string().nonempty(),
       item: z.string().nonempty(),
-      // emulate のイベントの category は extract の 4 つ。acsta は seed が題で付ける（seed.ts の judgeAcsta）ので、ここには来ない
-      category: z.enum(['limited_card', 'regular_card', 'ackey', 'other']),
+      // 抽出はアクスタも独立した配布物として保持する。
+      category: z.enum(['limited_card', 'regular_card', 'ackey', 'acsta', 'other']),
+      conditions: ExtractionConditionsSchema.default([]),
       status: GapStatusSchema,
       startDate: z.string().nonempty().optional(),
       endDate: z.string().nonempty().optional(),
@@ -375,7 +377,7 @@ export const readGapEvents = async (path: string): Promise<GapEventsFile | undef
  * emulate コマンドが書く結果のファイル名。emulate.ts の LINK_VERSION から作る名前と一致させる（テストで確かめる）。
  * emulate.ts は store.ts を import しているので、循環を避けて LINK_VERSION は読まずに文字列で持つ。
  */
-export const EMULATED_FILE = 'emulated-v1.json'
+export const EMULATED_FILE = 'emulated-v2.json'
 
 const EmulatedDaySchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
 
@@ -385,6 +387,7 @@ const EmulatedDaySchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
  * 言及の再確認（verify）は、画面に出す choice・probability・merged だけを読む。
  */
 const EmulatedEventSchema = z.object({
+  conditions: ExtractionConditionsSchema.default([]),
   id: EmulatedIdSchema,
   store: z.string().nonempty(),
   item: z.string().nonempty(),

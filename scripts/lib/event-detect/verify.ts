@@ -11,7 +11,7 @@ import { writeAtomic } from './store'
 // 別のモデルに同じ一覧を見せて「どれと同じか」を選ばせ、既存のイベントを高い確率で選んだら合流させる。
 // Clef は選択肢ごとの確率を返すので、しきい値で厳しさを調整できる。
 
-export const VERIFY_VERSION = 'v1'
+export const VERIFY_VERSION = 'v2'
 
 const NEW = 'new'
 
@@ -24,7 +24,7 @@ export const buildVerifyRequest = (
     same: {
       type: 'choice',
       instructions:
-        'この投稿が伝えている配布イベントは、店舗で進行中の次のイベントのどれと同じですか？ 同じ配布物の告知の繰り返しや、開始・継続・終了の報告なら同じイベントです。時期の違う同じ種類の配布物（毎年のハロウィン名刺など）は別のイベントです。どれとも違う新しい配布イベントなら new を選んでください。',
+        'この投稿が伝えている配布イベントは、店舗で進行中の次のイベントのどれと同じですか？ 同じ配布物の告知の繰り返しや、開始・継続・終了の報告なら同じイベントです。時期の違う同じ種類の配布物（毎年のハロウィン名刺など）は別のイベントです。同カテゴリ・同日でも別の配布物や別の配布条件なら別イベントです。どれとも違う新しい配布イベントなら new を選んでください。',
       criteria: {
         ...Object.fromEntries(candidates.map((event, index) => [`e${index}`, describeEvent(event)])),
         [NEW]: '一覧のどれとも違う、新しい配布イベント'

@@ -98,6 +98,7 @@ const emulatedEvent = (overrides: Record<string, unknown> = {}) => ({
   item: '夏名刺',
   category: 'limited_card',
   status: 'ongoing',
+  conditions: [],
   startUnknown: false,
   firstSeen: Date.parse('2026-06-01T01:00:00Z'),
   lastSeen: Date.parse('2026-06-20T01:00:00Z'),

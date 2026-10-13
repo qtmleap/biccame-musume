@@ -1,19 +1,32 @@
 import {
   enqueueWebhookJob,
+  getWebhookCandidate,
   getWebhookJob,
+  refreshWebhookJob,
   registerWebhookEvent,
   releaseWebhookJob,
-  validateWebhookEvent
+  validateWebhookEvent,
+  webhookTarget
 } from '@api/services/webhook-jobs'
 import type { Bindings } from '@api/types/bindings'
 import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
-import type { WebhookResolveSchema, WebhookRetrySchema } from '@biccame/shared/schemas/webhook.dto'
+import type { WebhookJob, WebhookResolveSchema, WebhookRetrySchema } from '@biccame/shared/schemas/webhook.dto'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
-import type { z } from 'zod'
+import { z } from 'zod'
+
+const actionJob = async (env: Bindings, postId: string, candidateId?: string): Promise<WebhookJob> => {
+  const parent = await getWebhookJob(env, postId)
+  if (candidateId !== undefined) return getWebhookCandidate(env, postId, candidateId)
+  if (parent.candidates.length > 1) throw new HTTPException(409, { message: 'Select a webhook candidate' })
+  const first = parent.candidates[0]
+  return first === undefined ? parent : { ...first, candidates: [] }
+}
 
 export const retryWebhookJob = async (env: Bindings, postId: string, input: z.infer<typeof WebhookRetrySchema>) => {
-  const job = await getWebhookJob(env, postId)
+  const parent = await getWebhookJob(env, postId)
+  const job = await actionJob(env, postId, input.candidateId)
+  const target = webhookTarget(postId, parent.candidates.length > 0 ? job.eventUUID : undefined)
   if (input.notificationOnly && job.status !== 'held' && job.status !== 'registered')
     throw new HTTPException(409, { message: 'No notification to retry' })
   if (!input.notificationOnly && job.status !== 'failed' && job.status !== 'queued')
@@ -23,23 +36,43 @@ export const retryWebhookJob = async (env: Bindings, postId: string, input: z.in
   if (input.notificationOnly && job.notificationStatus === 'sent')
     throw new HTTPException(409, { message: 'Notification already sent' })
   const now = dayjs().valueOf()
-  const result = await env.DB.prepare(`UPDATE webhook_event_jobs SET status=?,notification_status=?,
-    notification_error=NULL,last_error=NULL,lease_token=NULL,lease_until=NULL,updated_at=?
-    WHERE post_id=? AND (lease_until IS NULL OR lease_until<?) AND status=? AND notification_status=?
-      AND attempts=? AND notification_attempts=?`)
-    .bind(
-      input.notificationOnly ? job.status : 'queued',
-      input.notificationOnly ? 'pending' : job.notificationStatus,
-      now,
-      postId,
-      now,
-      job.status,
-      job.notificationStatus,
-      job.attempts,
-      job.notificationAttempts
+  const parentToken = target.table === 'webhook_event_candidates' ? crypto.randomUUID() : null
+  if (parentToken !== null) {
+    const lock = await env.DB.prepare(
+      'UPDATE webhook_event_jobs SET lease_token=?,lease_until=? WHERE post_id=? AND (lease_until IS NULL OR lease_until<?)'
     )
-    .run()
-  if (result.meta.changes !== 1) throw new HTTPException(409, { message: 'Job is being processed' })
+      .bind(parentToken, now + 300_000, postId, now)
+      .run()
+    if (lock.meta.changes !== 1) throw new HTTPException(409, { message: 'Job is being processed' })
+  }
+  try {
+    const result = await env.DB.prepare(`UPDATE ${target.table} SET status=?,notification_status=?,
+    notification_error=NULL,last_error=NULL,lease_token=NULL,lease_until=NULL,updated_at=?
+    WHERE ${target.column}=? AND (lease_until IS NULL OR lease_until<?) AND status=? AND notification_status=?
+      AND attempts=? AND notification_attempts=?`)
+      .bind(
+        input.notificationOnly ? job.status : 'queued',
+        input.notificationOnly ? 'pending' : job.notificationStatus,
+        now,
+        target.id,
+        now,
+        job.status,
+        job.notificationStatus,
+        job.attempts,
+        job.notificationAttempts
+      )
+      .run()
+    if (result.meta.changes !== 1) throw new HTTPException(409, { message: 'Job is being processed' })
+    if (parentToken !== null) {
+      await refreshWebhookJob(env, postId, parentToken)
+      if (!input.notificationOnly)
+        await env.DB.prepare("UPDATE webhook_event_jobs SET status='queued' WHERE post_id=? AND lease_token=?")
+          .bind(postId, parentToken)
+          .run()
+    }
+  } finally {
+    if (parentToken !== null) await releaseWebhookJob(env, postId, parentToken)
+  }
   await enqueueWebhookJob(env, postId)
   return getWebhookJob(env, postId)
 }
@@ -50,14 +83,67 @@ export const retryWebhookJob = async (env: Bindings, postId: string, input: z.in
  * 処理側は result_json があると Clef を呼ばず再利用するため、消さないと質問の修正が反映されない。
  * 再判定の結果次第でイベントが自動登録され、Discord へ通知（通知済みなら再通知）される場合がある。
  */
-export const rejudgeWebhookJob = async (env: Bindings, postId: string) => {
-  const job = await getWebhookJob(env, postId)
+export const rejudgeWebhookJob = async (env: Bindings, postId: string, candidateId?: string) => {
+  const parent = await getWebhookJob(env, postId)
+  const job = await actionJob(env, postId, candidateId)
+  if (parent.candidates.length > 0) {
+    if ((job.status !== 'held' && job.status !== 'ignored') || job.reasons.includes('manually_rejected')) {
+      throw new HTTPException(409, { message: 'Candidate cannot be re-judged' })
+    }
+    const now = dayjs().valueOf()
+    const token = crypto.randomUUID()
+    const lock = await env.DB.prepare(
+      'UPDATE webhook_event_jobs SET lease_token=?,lease_until=? WHERE post_id=? AND (lease_until IS NULL OR lease_until<?)'
+    )
+      .bind(token, now + 300_000, postId, now)
+      .run()
+    if (lock.meta.changes !== 1) throw new HTTPException(409, { message: 'Job is being processed' })
+    try {
+      const stored = await env.DB.prepare('SELECT extraction_json FROM webhook_event_jobs WHERE post_id=?')
+        .bind(postId)
+        .first<string>('extraction_json')
+      const legacy =
+        stored === null
+          ? false
+          : z.object({ version: z.literal('legacy-single') }).safeParse(JSON.parse(stored)).success
+      if (legacy) {
+        const changed = await env.DB.batch([
+          env.DB.prepare(
+            "DELETE FROM webhook_event_candidates WHERE event_uuid=? AND status IN ('held','ignored') AND (lease_until IS NULL OR lease_until<?)"
+          ).bind(job.eventUUID, now),
+          env.DB.prepare(
+            "UPDATE webhook_event_jobs SET status='queued',extraction_json=NULL,result_json=NULL,answers_json=NULL,candidate_json=NULL,semantic_key=NULL,confidence=NULL,model=NULL,question_version=NULL,judged_at=NULL,last_error=NULL,notification_status='pending',notification_error=NULL,reasons_json='[]',updated_at=? WHERE post_id=? AND lease_token=? AND NOT EXISTS (SELECT 1 FROM webhook_event_candidates WHERE post_id=webhook_event_jobs.post_id)"
+          ).bind(now, postId, token)
+        ])
+        if (changed.at(-1)?.meta.changes !== 1)
+          throw new HTTPException(409, { message: 'Candidate is being processed' })
+      } else {
+        const result =
+          await env.DB.prepare(`UPDATE webhook_event_candidates SET status='queued',result_json=NULL,answers_json=NULL,
+          candidate_json=NULL,reasons_json='[]',confidence=NULL,model=NULL,question_version=NULL,judged_at=NULL,semantic_key=NULL,
+          notification_status='pending',notification_error=NULL,last_error=NULL,updated_at=? WHERE event_uuid=? AND status=? AND attempts=?
+          AND notification_attempts=? AND (lease_until IS NULL OR lease_until<?)`)
+            .bind(now, job.eventUUID, job.status, job.attempts, job.notificationAttempts, now)
+            .run()
+        if (result.meta.changes !== 1) throw new HTTPException(409, { message: 'Candidate is being processed' })
+        await refreshWebhookJob(env, postId, token)
+        await env.DB.prepare("UPDATE webhook_event_jobs SET status='queued' WHERE post_id=? AND lease_token=?")
+          .bind(postId, token)
+          .run()
+      }
+    } finally {
+      await releaseWebhookJob(env, postId, token)
+    }
+    await enqueueWebhookJob(env, postId)
+    return getWebhookJob(env, postId)
+  }
   if (job.status !== 'held' && job.status !== 'ignored')
     throw new HTTPException(409, { message: 'Only held or ignored jobs can be re-judged' })
   if (job.status === 'ignored' && job.reasons.includes('manually_rejected'))
     throw new HTTPException(409, { message: 'Manually rejected jobs cannot be re-judged' })
   const now = dayjs().valueOf()
-  const result = await env.DB.prepare(`UPDATE webhook_event_jobs SET status='queued',result_json=NULL,answers_json=NULL,
+  const result =
+    await env.DB.prepare(`UPDATE webhook_event_jobs SET status='queued',extraction_json=NULL,result_json=NULL,answers_json=NULL,
     candidate_json=NULL,reasons_json='[]',confidence=NULL,model=NULL,question_version=NULL,judged_at=NULL,
     semantic_key=NULL,notification_status='pending',notification_error=NULL,last_error=NULL,lease_token=NULL,
     lease_until=NULL,updated_at=?
@@ -66,15 +152,17 @@ export const rejudgeWebhookJob = async (env: Bindings, postId: string) => {
         AND NOT EXISTS (SELECT 1 FROM json_each(webhook_event_jobs.reasons_json) WHERE value='manually_rejected')))
       AND (lease_until IS NULL OR lease_until<?)
       AND attempts=? AND notification_attempts=?`)
-    .bind(now, postId, now, job.attempts, job.notificationAttempts)
-    .run()
+      .bind(now, postId, now, job.attempts, job.notificationAttempts)
+      .run()
   if (result.meta.changes !== 1) throw new HTTPException(409, { message: 'Job is being processed' })
   await enqueueWebhookJob(env, postId)
   return getWebhookJob(env, postId)
 }
 
 export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.infer<typeof WebhookResolveSchema>) => {
-  const job = await getWebhookJob(env, postId)
+  const parent = await getWebhookJob(env, postId)
+  const job = await actionJob(env, postId, input.candidateId)
+  const target = webhookTarget(postId, parent.candidates.length > 0 ? job.eventUUID : undefined)
   if (job.status !== 'held') throw new HTTPException(409, { message: 'Only held jobs can be resolved' })
   const event = input.action === 'register' ? validateWebhookEvent(input.event, job.eventUUID) : null
   if (
@@ -86,25 +174,33 @@ export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.
   const token = crypto.randomUUID()
   const now = dayjs().valueOf()
   const claimed = await env.DB.prepare(
-    `UPDATE webhook_event_jobs SET lease_token=?,lease_until=? WHERE post_id=? AND status='held' AND (lease_until IS NULL OR lease_until<?)`
+    `UPDATE webhook_event_jobs SET lease_token=?,lease_until=? WHERE post_id=? AND (lease_until IS NULL OR lease_until<?)`
   )
     .bind(token, now + 300_000, postId, now)
     .run()
   if (claimed.meta.changes !== 1) throw new HTTPException(409, { message: 'Job is being processed' })
   try {
-    if (event !== null) await registerWebhookEvent(env, job, event, token)
+    if (target.table === 'webhook_event_candidates') {
+      const childClaim = await env.DB.prepare(
+        "UPDATE webhook_event_candidates SET lease_token=?,lease_until=? WHERE event_uuid=? AND status='held' AND (lease_until IS NULL OR lease_until<?)"
+      )
+        .bind(token, now + 300_000, target.id, now)
+        .run()
+      if (childClaim.meta.changes !== 1) throw new HTTPException(409, { message: 'Candidate is being processed' })
+    }
+    if (event !== null) await registerWebhookEvent(env, job, event, token, target)
     else {
       const status = input.action === 'link' ? 'registered' : 'ignored'
       const eventId = input.action === 'link' ? input.eventId : null
       const update = env.DB.prepare(
-        `UPDATE webhook_event_jobs SET status=?,event_id=?,reasons_json=?,notification_status=?,notification_error=NULL,updated_at=? WHERE post_id=? AND lease_token=? AND status='held'`
+        `UPDATE ${target.table} SET status=?,event_id=?,reasons_json=?,notification_status=?,notification_error=NULL,updated_at=? WHERE ${target.column}=? AND lease_token=? AND status='held'`
       ).bind(
         status,
         eventId,
         JSON.stringify([input.action === 'link' ? 'manually_linked' : 'manually_rejected']),
         input.action === 'link' ? 'pending' : 'skipped',
         now,
-        postId,
+        target.id,
         token
       )
       const references =
@@ -112,7 +208,7 @@ export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.
           ? [
               env.DB.prepare(`INSERT INTO event_reference_urls (id,event_id,type,url,created_at,updated_at)
           SELECT ?,?,'announce',?,?,? WHERE NOT EXISTS (SELECT 1 FROM event_reference_urls WHERE event_id=? AND url=?)
-          AND EXISTS (SELECT 1 FROM webhook_event_jobs WHERE post_id=? AND lease_token=? AND status='held')`).bind(
+          AND EXISTS (SELECT 1 FROM ${target.table} WHERE ${target.column}=? AND lease_token=? AND status='held')`).bind(
                 crypto.randomUUID(),
                 input.eventId,
                 job.sourceUrl,
@@ -120,7 +216,7 @@ export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.
                 toD1DateTime(now),
                 input.eventId,
                 job.sourceUrl,
-                postId,
+                target.id,
                 token
               )
             ]
@@ -128,7 +224,14 @@ export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.
       const result = await env.DB.batch([...references, update])
       if (result.at(-1)?.meta.changes !== 1) throw new HTTPException(409, { message: 'Job lease lost' })
     }
+    if (target.table === 'webhook_event_candidates') await refreshWebhookJob(env, postId, token)
   } finally {
+    if (target.table === 'webhook_event_candidates')
+      await env.DB.prepare(
+        'UPDATE webhook_event_candidates SET lease_token=NULL,lease_until=NULL WHERE event_uuid=? AND lease_token=?'
+      )
+        .bind(target.id, token)
+        .run()
     await releaseWebhookJob(env, postId, token)
   }
   if (input.action !== 'reject') await enqueueWebhookJob(env, postId)

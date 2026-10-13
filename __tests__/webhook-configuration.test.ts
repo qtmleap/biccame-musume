@@ -47,7 +47,6 @@ const save = (model: unknown, env: object) =>
   )
 // 画面から送る body。項目ごとに値を変えて、キーの取り違えを検出できるようにする。
 const editedThresholds: FieldThresholds = {
-  single_event: 0.91,
   status: 0.7,
   category: 0.92,
   store: 0.93,
@@ -181,7 +180,7 @@ test('field thresholds default from the common threshold, and stored values repl
       const lowered = await detectionConfiguration({ ...env, EVENT_DETECTION_CHOICE_THRESHOLD: '0.7' })
       expect(lowered.fieldThresholds).toEqual(resolveFieldThresholds(0.7))
       expect(lowered.fieldThresholds.status).toBe(0.7)
-      // 保存済み: 9項目の値をそのまま使う。共通値や既存の設定は変えない。
+      // 保存済み: 8項目の値をそのまま使う。共通値や既存の設定は変えない。
       await env.BICCAME_MUSUME_EVENTS.put(EVENT_DETECTION_FIELD_THRESHOLDS_KEY, JSON.stringify(editedThresholds))
       const stored = await detectionConfiguration({ ...env, EVENT_DETECTION_CHOICE_THRESHOLD: '0.95' })
       expect(stored.fieldThresholds).toEqual(editedThresholds)
@@ -249,7 +248,7 @@ test('status response carries the effective field thresholds, defaults first and
     expect(after.model).toBe('clef-flash')
     // 共通値の表示は環境変数由来のまま。
     expect(after.choiceThreshold).toBe(0.9)
-    // 保存したキーは KV に9項目の JSON で入る。
+    // 保存したキーは KV に8項目の JSON で入る。
     const raw = await env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_FIELD_THRESHOLDS_KEY, 'text')
     expect(raw).toBe(JSON.stringify(editedThresholds))
     expect(await env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_MODEL_KEY, 'text')).toBe('clef-flash')
@@ -327,4 +326,27 @@ test('configuration mutation remains protected by Cloudflare Access and CSRF mid
   expect(entrypoint).toContain("app.use('/api/*'")
   expect(entrypoint).toContain('return csrfProtection(c, next)')
   expect(entrypoint).not.toContain("c.req.path === '/api/admin/bot/configuration'")
+})
+
+test('旧single_eventだけを取り除き、他の8項目を保って保存時に新形式へ移行する', async () => {
+  await withKV(async (env) => {
+    const legacy = { ...editedThresholds, single_event: 0.55 }
+    await env.BICCAME_MUSUME_EVENTS.put(EVENT_DETECTION_FIELD_THRESHOLDS_KEY, JSON.stringify(legacy))
+    const writes: [string, string][] = []
+    const configurationEnv = Object.assign({}, env, {
+      BICCAME_MUSUME_EVENTS: {
+        get: (key: string) => env.BICCAME_MUSUME_EVENTS.get(key, 'text'),
+        put: async (key: string, value: string) => {
+          writes.push([key, value])
+          await env.BICCAME_MUSUME_EVENTS.put(key, value)
+        }
+      }
+    })
+    expect((await detectionConfiguration(configurationEnv)).fieldThresholds).toEqual(editedThresholds)
+    expect(writes).toHaveLength(0)
+    expect((await save(configurationBody('clef'), configurationEnv)).status).toBe(200)
+    const saved = writes.find(([key]) => key === EVENT_DETECTION_FIELD_THRESHOLDS_KEY)
+    if (saved === undefined) throw new Error('Expected thresholds write')
+    expect(JSON.parse(saved[1])).toEqual(editedThresholds)
+  })
 })

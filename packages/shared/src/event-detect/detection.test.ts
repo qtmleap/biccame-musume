@@ -269,7 +269,7 @@ describe('Detection gate', () => {
     expect(
       evaluateDetection(single, singleRequest, response(singleRequest, { single_event: { type: 'noul', noul: 0.3 } }))
         .reasons
-    ).toContain('multiple_or_ambiguous_events')
+    ).not.toContain('multiple_or_ambiguous_events')
   })
   test('逆転した期間は保留する', () => {
     const value = post('あべのたん限定名刺 2026年11月3日から11月2日まで先着100枚')
@@ -382,7 +382,7 @@ const shintouAnswers = (request: ClefRequest): Record<string, ClefAnswer> => ({
 
 describe('Detection version and category criteria', () => {
   test('質問文の変更に合わせて判定の版を上げる', () => {
-    expect(DETECTION_VERSION.endsWith('-webhook-v3')).toBe(true)
+    expect(DETECTION_VERSION.endsWith('-webhook-v4')).toBe(true)
   })
   test('コースターはotherに入れ、アクキー・アクスタの定義には含めない', () => {
     // アクキー・アクスタに言及する本文では、両方の選択肢が出る。
@@ -954,7 +954,6 @@ describe('Store question is omitted when the account decides the store', () => {
       'is_event',
       'status',
       'category',
-      'single_event',
       'start_date',
       'end_date',
       'quantity',
@@ -967,7 +966,6 @@ describe('Store question is omitted when the account decides the store', () => {
       'is_event',
       'status',
       'category',
-      'single_event',
       'start_date',
       'end_date',
       'quantity',
@@ -1180,7 +1178,7 @@ describe('Webhook status question compares the post date with the start date', (
     expect(status.criteria).toEqual({ ...STATUS_CRITERIA })
   })
   test('質問の位置と、状態の質問文以外の共通質問は変えない', () => {
-    expect(Object.keys(request.questions).slice(0, 4)).toEqual(['is_event', 'status', 'category', 'single_event'])
+    expect(Object.keys(request.questions).slice(0, 3)).toEqual(['is_event', 'status', 'category'])
     expect(ClefRequestSchema.safeParse(request).success).toBe(true)
   })
   test('どの投稿でも同じ質問文になり、投稿日は buildState が渡す「投稿日」の行から読ませる', () => {
@@ -1197,9 +1195,8 @@ describe('Webhook status question compares the post date with the start date', (
 })
 
 describe('Field thresholds', () => {
-  test('対象は9項目で、is_event と対象外は含まない', () => {
+  test('対象は8項目で、is_event と対象外は含まない', () => {
     expect([...FIELD_THRESHOLD_KEYS]).toEqual([
-      'single_event',
       'status',
       'category',
       'store',
@@ -1213,7 +1210,7 @@ describe('Field thresholds', () => {
   })
 
   describe('resolveFieldThresholds', () => {
-    test('overrides なしは status が min(共通値, 0.8)、他の8項目は共通値', () => {
+    test('overrides なしは status が min(共通値, 0.8)、他の7項目は共通値', () => {
       const result = resolveFieldThresholds(0.9)
       expect(result.status).toBe(0.8)
       for (const key of FIELD_THRESHOLD_KEYS) if (key !== 'status') expect(result[key], key).toBe(0.9)
@@ -1251,7 +1248,7 @@ describe('Field thresholds', () => {
       expect(thresholdOf({ ...base, fieldThresholds: { status: 0.1 } }, 'is_event')).toBe(0.93)
     })
 
-    test('9項目は項目別の有効値（上書きがあればそれ、無ければ既定値）', () => {
+    test('8項目は項目別の有効値（上書きがあればそれ、無ければ既定値）', () => {
       expect(thresholdOf(base, 'status')).toBe(0.8)
       for (const key of FIELD_THRESHOLD_KEYS) if (key !== 'status') expect(thresholdOf(base, key), key).toBe(0.91)
       const overridden = { ...base, fieldThresholds: { status: 0.55, end_date: 0.66 } }
@@ -1285,7 +1282,7 @@ describe('Field thresholds', () => {
   describe('FieldThresholdsSchema', () => {
     const full = resolveFieldThresholds(0.9)
 
-    test('9項目すべて必須で、範囲は 0 を含まず 1 以下', () => {
+    test('8項目すべて必須で、範囲は 0 を含まず 1 以下', () => {
       expect(FieldThresholdsSchema.safeParse(full).success).toBe(true)
       expect(FieldThresholdsSchema.safeParse({ ...full, status: 1 }).success).toBe(true)
       expect(FieldThresholdsSchema.safeParse({ ...full, status: 0 }).success).toBe(false)
@@ -1351,12 +1348,8 @@ describe('Field thresholds', () => {
       expect(evaluate({}, { start_date: 0.99 })).toMatchObject({ status: 'held', reasons: ['start_date_unconfirmed'] })
     })
 
-    test('category・single_event・quantity・condition・purchase_amount も項目ごとの値で効く', () => {
+    test('category・quantity・condition・purchase_amount も項目ごとの値で効く', () => {
       expect(evaluate({}, { category: 0.98 })).toMatchObject({ status: 'held', reasons: ['category_unconfirmed'] })
-      expect(evaluate({}, { single_event: 0.95 })).toMatchObject({
-        status: 'held',
-        reasons: ['multiple_or_ambiguous_events']
-      })
       expect(evaluate({}, { quantity: 0.97 })).toMatchObject({ status: 'held', reasons: ['quantity_unconfirmed'] })
       expect(evaluate({}, { condition: 0.99 })).toMatchObject({
         status: 'held',

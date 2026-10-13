@@ -18,6 +18,7 @@
     "./event-detect/clef": "./src/event-detect/clef.ts",
     "./event-detect/decide": "./src/event-detect/decide.ts",
     "./event-detect/detection": "./src/event-detect/detection.ts",
+    "./event-detect/extraction": "./src/event-detect/extraction.ts",
     "./event-detect/filter": "./src/event-detect/filter.ts",
     "./event-detect/post": "./src/event-detect/post.ts",
     "./event-detect/title": "./src/event-detect/title.ts",

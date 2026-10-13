@@ -53,6 +53,7 @@ const emulatedRecord = (
   item: '夏名刺',
   category: 'limited_card',
   status: 'ongoing',
+  conditions: [],
   startUnknown: false,
   lastSeen: fields.firstSeen,
   posts: [],

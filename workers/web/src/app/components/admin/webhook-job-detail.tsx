@@ -67,7 +67,12 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   const [linkOpen, setLinkOpen] = useState(false)
   const [linkEventId, setLinkEventId] = useState('')
   const [linkError, setLinkError] = useState(false)
-  const job = jobQuery.data
+  const [selectedCandidate, setSelectedCandidate] = useState<string | null>(null)
+  const parentJob = jobQuery.data
+  const selected = parentJob?.candidates.find((candidate) => candidate.eventUUID === selectedCandidate)
+  const active = selected === undefined ? parentJob?.candidates[0] : selected
+  const job = active === undefined ? parentJob : { ...active, candidates: [] }
+  const candidateSelection = active === undefined ? {} : { candidateId: active.eventUUID }
   const isPending = retry.isPending || resolve.isPending || rejudge.isPending
   const availability = job
     ? webhookActionAvailability(job.status, job.notificationStatus, job.reasons)
@@ -82,13 +87,14 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
     if (!job || !confirmAction) return
     try {
       if (confirmAction === 'reject') {
-        await resolve.mutateAsync({ postId, data: { action: 'reject' } })
+        await resolve.mutateAsync({ postId, data: { action: 'reject', ...candidateSelection } })
       } else if (confirmAction === 'rejudge') {
-        await rejudge.mutateAsync({ postId })
+        await rejudge.mutateAsync({ postId, ...candidateSelection })
       } else {
         await retry.mutateAsync({
           postId,
           data: {
+            ...candidateSelection,
             notificationOnly: confirmAction === 'notification',
             allowUnknown: confirmAction === 'notification' && job.notificationStatus === 'unknown'
           }
@@ -102,7 +108,10 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   }
 
   const register = async (event: EventRequest) => {
-    await resolve.mutateAsync({ postId, data: { action: 'register', event: { ...event, shouldTweet: false } } })
+    await resolve.mutateAsync({
+      postId,
+      data: { ...candidateSelection, action: 'register', event: { ...event, shouldTweet: false } }
+    })
     setShowForm(false)
   }
 
@@ -111,7 +120,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
     setLinkError(!parsed.success)
     if (!parsed.success) return
     try {
-      await resolve.mutateAsync({ postId, data: { action: 'link', eventId: parsed.data } })
+      await resolve.mutateAsync({ postId, data: { ...candidateSelection, action: 'link', eventId: parsed.data } })
       setLinkOpen(false)
       setShowForm(false)
     } catch {
@@ -151,6 +160,40 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           <p className='text-destructive'>受信詳細を取得できませんでした。更新から再試行できます。</p>
         )}
       </div>
+      {parentJob && parentJob.candidates.length > 0 && (
+        <section className='mb-6 border-y border-separator py-4' aria-label='配布物ごとのイベント'>
+          <h2 className='mb-3 text-lg font-semibold'>配布物ごとのイベント</h2>
+          <ul className='divide-y divide-separator'>
+            {parentJob.candidates.map((candidate) => (
+              <li key={candidate.eventUUID} className='flex flex-wrap items-center justify-between gap-3 py-3'>
+                <Button
+                  variant='ghost'
+                  aria-pressed={active?.eventUUID === candidate.eventUUID}
+                  disabled={isPending}
+                  onClick={() => {
+                    setSelectedCandidate(candidate.eventUUID)
+                    setShowForm(false)
+                    setLinkOpen(false)
+                    setConfirmAction(null)
+                  }}
+                >
+                  {candidate.item}
+                </Button>
+                <WebhookStatusBadge status={candidate.status} />
+                {candidate.eventId !== null && (
+                  <Link
+                    to='/admin/events/$uuid'
+                    params={{ uuid: candidate.eventId }}
+                    className='text-sm hover:underline'
+                  >
+                    登録イベント
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       <div className='mb-6 flex flex-wrap gap-2 border-b pb-5'>
         <Button
           className='bg-brand text-brand-foreground hover:bg-brand/90'
@@ -221,7 +264,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
               @{job.post.screenName} · {job.postId}
               <ExternalLink className='size-4' />
             </a>
-            <p className='mt-3 whitespace-pre-wrap break-words text-sm leading-relaxed'>{job.post.text}</p>
+            <p className='mt-3 whitespace-pre-wrap break-words text-sm leading-relaxed'>{parentJob?.post.text}</p>
             <p className='mt-3 text-xs text-muted-foreground'>
               投稿日: {dayjs(job.post.createdAt).format('YYYY/MM/DD HH:mm:ss')}
             </p>
@@ -312,7 +355,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
                 </p>
               )}
               <EventForm
-                key={job.postId}
+                key={job.eventUUID}
                 allowTweet={false}
                 defaultValues={webhookResolveDefaultValues(job)}
                 onSubmitPayload={register}

@@ -131,6 +131,15 @@ export const buildDetectionNotification = (input: EventDetectionNotification) =>
       description: input.text.slice(0, 2000),
       fields: [
         { name: '元投稿', value: input.postUrl.slice(0, 512), inline: false },
+        ...(input.candidate === undefined
+          ? []
+          : [
+              {
+                name: `配布物 ${input.candidate.index}/${input.candidate.total}`,
+                value: input.candidate.item,
+                inline: false
+              }
+            ]),
         { name: '判定スコア', value: input.confidence.toFixed(3), inline: true },
         {
           name: '店舗',

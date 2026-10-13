@@ -21,7 +21,6 @@ import { client } from '@/utils/client'
 const fetchedAt = '2026-10-14T00:00:00.000Z'
 // 項目ごとに値を変えて、行の取り違えを検出できるようにする（status だけ共通値より低い既定値）。
 const savedThresholds: FieldThresholds = {
-  single_event: 0.9,
   status: 0.8,
   category: 0.91,
   store: 0.92,
@@ -199,22 +198,12 @@ test('model selection stays in its row and unchanged save stays disabled in the 
 describe('項目別のしきい値', () => {
   const percentOf = (value: number) => String(Math.round(value * 1000) / 10)
 
-  test('9項目が、回答表の質問名と同じラベルで、保存済みの値を%で入力欄に出す', async () => {
+  test('8項目が、回答表の質問名と同じラベルで、保存済みの値を%で入力欄に出す', async () => {
     const markup = await renderSettings(discordStatus('valid'), true)
-    expect(FIELD_THRESHOLD_KEYS).toHaveLength(9)
-    expect(markup.match(/data-slot="input"/g)).toHaveLength(9)
+    expect(FIELD_THRESHOLD_KEYS).toHaveLength(8)
+    expect(markup.match(/data-slot="input"/g)).toHaveLength(8)
     expect([...markup.matchAll(/<dt[^>]*>(.*?)<\/dt>/g)].map((match) => match[1])).toEqual(
-      expect.arrayContaining([
-        '単一イベントか',
-        '状態',
-        '配布物',
-        '店舗',
-        '開始日',
-        '終了日',
-        '配布数',
-        '配布条件',
-        '購入額'
-      ])
+      expect.arrayContaining(['状態', '配布物', '店舗', '開始日', '終了日', '配布数', '配布条件', '購入額'])
     )
     for (const key of FIELD_THRESHOLD_KEYS) {
       const label = questionLabel(key)

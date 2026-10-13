@@ -43,8 +43,21 @@ export const detectionConfiguration = async (env: Bindings) => {
   })
   if (!parsed.success) throw new Error('Invalid event detection configuration')
   // 未保存なら既定値（共通値 choiceThreshold から決まる）。保存値が壊れていても保存内容は出さず、既定値に戻す。
+  // 旧9項目の保存値から廃止したsingle_eventだけを削除する。他の8項目は保持する。
+  const legacy = FieldThresholdsSchema.extend({ single_event: z.number().positive().max(1) }).safeParse(
+    storedThresholds === null ? undefined : parseJson(storedThresholds)
+  )
+  const migrated = legacy.success
+    ? (() => {
+        const { single_event: _removed, ...fields } = legacy.data
+        return fields
+      })()
+    : undefined
+  // 保存は管理APIが新形式で行う。読み取り時には書かず、KVの古い読み取りで直近の設定を上書きしない。
   const thresholds =
-    storedThresholds === null ? undefined : FieldThresholdsSchema.safeParse(parseJson(storedThresholds))
+    storedThresholds === null
+      ? undefined
+      : FieldThresholdsSchema.safeParse(migrated === undefined ? parseJson(storedThresholds) : migrated)
   if (thresholds !== undefined && !thresholds.success) {
     console.warn('Invalid stored event detection field thresholds; using defaults')
   }

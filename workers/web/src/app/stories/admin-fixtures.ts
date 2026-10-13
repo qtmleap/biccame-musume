@@ -35,6 +35,7 @@ export const detectionEvent: EventView = {
   endCandidate: false
 }
 export const emulatedEvent: EmulatedEventRow = {
+  conditions: [],
   id: 'abeno-1',
   store: 'abeno',
   item: '合成限定カード',
@@ -50,6 +51,7 @@ export const emulatedEvent: EmulatedEventRow = {
   d1: [{ eventId: events[0].uuid, title: detectionEvent.title }]
 }
 export const webhookJob: WebhookJob = {
+  candidates: [],
   postId: detectionPost.id,
   post: detectionPost,
   sourceUrl: detectionPost.url,
@@ -120,7 +122,6 @@ type ResponseFixtures = {
 }
 // 項目別しきい値の合成値。共通値 choiceThreshold（0.8）に揃えて全項目を同じ値にする。
 const fieldThresholds = {
-  single_event: 0.8,
   status: 0.8,
   category: 0.8,
   store: 0.8,

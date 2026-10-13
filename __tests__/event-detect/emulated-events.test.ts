@@ -23,6 +23,7 @@ const emulatedEvent = (overrides: Record<string, unknown> = {}) => ({
   item: '夏名刺',
   category: 'limited_card' as const,
   status: 'ongoing' as const,
+  conditions: [],
   startUnknown: false,
   firstSeen: Date.parse('2026-06-01T01:00:00Z'),
   lastSeen: Date.parse('2026-06-20T01:00:00Z'),
@@ -75,6 +76,7 @@ describe('readEmulatedEvents', () => {
           category: 'ackey',
           status: 'end',
           quantity: 50,
+          conditions: [],
           startUnknown: true,
           lastSeen: Date.parse('2026-10-31T01:00:00Z'),
           posts: [
@@ -92,6 +94,7 @@ describe('readEmulatedEvents', () => {
         category: 'ackey',
         status: 'end',
         quantity: 50,
+        conditions: [],
         startUnknown: true,
         firstSeen: Date.parse('2026-06-01T01:00:00Z'),
         lastSeen: Date.parse('2026-10-31T01:00:00Z'),
