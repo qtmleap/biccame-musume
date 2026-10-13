@@ -36,7 +36,10 @@ export const BotActionConfirmation = ({
         <AlertDialogDescription>{description}</AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel disabled={isPending}>キャンセル</AlertDialogCancel>
+        {/* キャンセルは AlertDialogCancel の既定で outline。枠線色は呼び出し側で共通テーマ色にそろえる。 */}
+        <AlertDialogCancel className='border-card-border' disabled={isPending}>
+          キャンセル
+        </AlertDialogCancel>
         <Button className='bg-brand text-brand-foreground hover:bg-brand/90' onClick={onConfirm} disabled={isPending}>
           {isPending && <Loader2 className='size-4 animate-spin' />}
           {actionLabel}

@@ -3,7 +3,8 @@ import { socialInsertStatements } from '@api/services/social-posting'
 import type { Bindings } from '@api/types/bindings'
 import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
 import { calculateEventStatus } from '@biccame/shared/domain/event-status'
-import { ClefResponseSchema } from '@biccame/shared/event-detect/clef'
+import { type ClefResponse, ClefResponseSchema } from '@biccame/shared/event-detect/clef'
+import { buildDetectionDraft } from '@biccame/shared/event-detect/detection'
 import { type DetectPost, DetectPostSchema } from '@biccame/shared/event-detect/post'
 import { GapStatusSchema } from '@biccame/shared/event-detect/viewer'
 import { EventDetailSchema, type EventRequest, EventRequestSchema } from '@biccame/shared/schemas/event.dto'
@@ -27,6 +28,9 @@ const StoredJobSchema = WebhookJobSchema.omit({
   reasons: true,
   candidate: true,
   postStatus: true,
+  postStatusProbability: true,
+  answers: true,
+  draft: true,
   createdAt: true,
   updatedAt: true,
   judgedAt: true
@@ -39,28 +43,40 @@ const StoredJobSchema = WebhookJobSchema.omit({
   updatedAt: TimestampSchema,
   judgedAt: TimestampSchema.nullable()
 })
-const postStatusFromAnswers = (value: string | null): WebhookJob['postStatus'] => {
+/** 保存済みの回答を読み取る。未判定・破損した原回答は推測せず null にする。 */
+const parseStoredAnswers = (value: string | null): ClefResponse['answers'] | null => {
   if (value === null) return null
   try {
     const response = ClefResponseSchema.safeParse({ answers: storedJson(value) })
-    if (!response.success) return null
-    const answer = response.data.answers.status
-    if (answer?.type !== 'choice') return null
-    const status = GapStatusSchema.safeParse(answer.choice)
-    return status.success ? status.data : null
+    return response.success ? response.data.answers : null
   } catch {
     // 未判定・破損した原回答は投稿状態を推測せずに扱う。
     return null
   }
 }
 
+const postStatusFromAnswers = (
+  answers: ClefResponse['answers'] | null
+): { status: WebhookJob['postStatus']; probability: WebhookJob['postStatusProbability'] } => {
+  const answer = answers?.status
+  if (answer?.type !== 'choice') return { status: null, probability: null }
+  const status = GapStatusSchema.safeParse(answer.choice)
+  if (!status.success) return { status: null, probability: null }
+  const probability = answer.probabilities[answer.choice]
+  return { status: status.data, probability: probability === undefined ? null : probability }
+}
+
 const toJob = (value: unknown): WebhookJob => {
   const stored = StoredJobSchema.safeParse(value)
   if (!stored.success) throw new Error('Invalid stored webhook job')
   const row = stored.data
+  const post = DetectPostSchema.safeParse(storedJson(row.postJson))
+  if (!post.success) throw new Error('Invalid stored webhook job')
+  const answers = parseStoredAnswers(row.answersJson)
+  const postStatus = postStatusFromAnswers(answers)
   const result = WebhookJobSchema.safeParse({
     postId: row.postId,
-    post: storedJson(row.postJson),
+    post: post.data,
     sourceUrl: row.sourceUrl,
     eventUUID: row.eventUUID,
     status: row.status,
@@ -71,7 +87,11 @@ const toJob = (value: unknown): WebhookJob => {
     questionVersion: row.questionVersion,
     eventId: row.eventId,
     eventTitle: row.eventTitle,
-    postStatus: postStatusFromAnswers(row.answersJson),
+    postStatus: postStatus.status,
+    postStatusProbability: postStatus.probability,
+    answers,
+    // 下書きは保留ジョブの保存済み回答から読み取り時に計算する。未保存や破損は null。
+    draft: row.status === 'held' && answers !== null ? buildDetectionDraft(post.data, answers) : null,
     attempts: row.attempts,
     notificationStatus: row.notificationStatus,
     notificationId: row.notificationId,

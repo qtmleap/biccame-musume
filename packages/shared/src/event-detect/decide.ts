@@ -145,20 +145,33 @@ export const valueQuestions = (post: DetectPost, stores: string[], storeLabels: 
   if (stores.length >= 1) {
     questions.store = {
       type: 'choice',
-      instructions: 'この配布イベントを開催する店舗はどれですか？',
+      instructions:
+        'この配布イベントを開催する店舗はどれですか？ 本文に店舗の記載があればその店舗、記載が無ければ投稿者の店舗を選んでください。',
       criteria: {
         ...Object.fromEntries(stores.slice(0, 254).map((store) => [store, labelOf(storeLabels, store)])),
-        none: 'どの店舗でもない・わからない'
+        none: '本文に複数の店舗が書かれていて特定できない、または投稿者が店舗以外で本文にも店舗がない'
       }
     }
   }
   if (dates.length >= 1) {
-    const criteria = {
-      ...Object.fromEntries(dates.map((date) => [dateKey(date), `${date}（${jstWeekday(`${date}T03:00:00Z`)}）`])),
-      none: '本文に書かれていない'
+    const candidates = Object.fromEntries(
+      dates.map((date) => [dateKey(date), `${date}（${jstWeekday(`${date}T03:00:00Z`)}）`])
+    )
+    questions.start_date = {
+      type: 'choice',
+      instructions: '配布の開始日はどれですか？',
+      criteria: { ...candidates, none: '本文に書かれていない' }
     }
-    questions.start_date = { type: 'choice', instructions: '配布の開始日はどれですか？', criteria }
-    questions.end_date = { type: 'choice', instructions: '配布の終了日（終了予定日）はどれですか？', criteria }
+    // 終了日は「なくなり次第終了」のように日付で終わりが決まらない告知が多いため、none を「終了日の記載なし」として明示する。
+    questions.end_date = {
+      type: 'choice',
+      instructions:
+        '配布の終了日（終了予定日）はどれですか？ 終了日が書かれていない場合や、『なくなり次第終了』『無くなり次第終了』のように日付で終わりが決まらない場合は、日付ではなく『終了日の記載なし』を選んでください。開始日を終了日として選ばないでください。',
+      criteria: {
+        ...candidates,
+        none: '終了日の記載なし（『なくなり次第終了』など日付で終わりが決まらない場合を含む）'
+      }
+    }
   }
   if (quantities.length >= 1) {
     questions.quantity = {

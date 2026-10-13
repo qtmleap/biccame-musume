@@ -4,20 +4,33 @@ import type { ReactNode } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
+/** 左上の戻るリンク。親の画面に戻れるよう、画面ごとに戻り先を指定できる。 */
+type BotSettingsBackLink = { to: '/admin' | '/admin/webhooks'; label: string }
+
 type BotSettingsLayoutProps = {
   title: string
   description: string
   actions?: ReactNode
+  /** 未指定は管理画面（最上位）に戻る。受信詳細のように親が受信履歴の画面は指定する。 */
+  back?: BotSettingsBackLink
   children: ReactNode
 }
 
-export const BotSettingsLayout = ({ title, description, actions, children }: BotSettingsLayoutProps) => (
+const DEFAULT_BACK: BotSettingsBackLink = { to: '/admin', label: '管理画面に戻る' }
+
+export const BotSettingsLayout = ({
+  title,
+  description,
+  actions,
+  back = DEFAULT_BACK,
+  children
+}: BotSettingsLayoutProps) => (
   <div className='min-h-screen bg-page-bg'>
     <main className='mx-auto max-w-6xl px-4 py-4 md:px-8 md:py-6'>
       <Button variant='ghost' size='sm' className='-ml-2 mb-4 text-muted-foreground' asChild>
-        <Link to='/admin'>
+        <Link to={back.to}>
           <ArrowLeft className='size-4' />
-          管理画面に戻る
+          {back.label}
         </Link>
       </Button>
       <header className='mb-6 flex flex-wrap items-start justify-between gap-4 pb-5'>

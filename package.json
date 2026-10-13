@@ -1,6 +1,6 @@
 {
   "name": "biccame-musume",
-  "version": "0.37.2",
+  "version": "0.37.3",
   "type": "module",
   "description": "ビックカメラの店舗擬人化キャラクター「ビッカメ娘」を応援する非公式ファンサイト",
   "author": "@QuantumLeap",
@@ -49,7 +49,7 @@
     "preview:post-images": "bun --preload ./scripts/virtual-characters-plugin.ts scripts/render-post-samples.tsx",
     "storybook": "storybook dev -p 6006 --host 0.0.0.0 --no-open",
     "storybook:inventory": "bun .storybook/catalogue/build-manifest.ts",
-    "test": "bun test && bun test ./packages/shared/src/x/transport.test.ts ./packages/shared/src/event-detect/detection.test.ts",
+    "test": "bun test && bun test ./packages/shared/src/x/transport.test.ts ./packages/shared/src/event-detect/detection.test.ts ./packages/shared/src/event-detect/answer-view.test.ts",
     "test:app-build": "BICCAME_VERIFY_BUILD=1 bun test __tests__/app-build-config.test.ts",
     "test:og-render": "bun scripts/test-og-render.ts",
     "test:storybook": "bun run check:storybook && bun run build-storybook && STORYBOOK_CATALOGUE_BUILT=1 playwright test --config .storybook/playwright.config.ts",

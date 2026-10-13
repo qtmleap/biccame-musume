@@ -33,8 +33,18 @@ export const useAdminBotConnection = () => {
     retry: false,
     onSuccess: (result) => {
       saveDiscordConnection(result)
+      // 設定は KV から読むため、保存直後は古い値が返りうる。画面にある model と項目別しきい値を引き継ぐ。
       queryClient.setQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY, (status) =>
-        status ? { ...result, webhook: { ...result.webhook, model: status.webhook.model } } : result
+        status
+          ? {
+              ...result,
+              webhook: {
+                ...result.webhook,
+                model: status.webhook.model,
+                fieldThresholds: status.webhook.fieldThresholds
+              }
+            }
+          : result
       )
     },
     onError: () => toast.error('接続状態を取得できませんでした')
@@ -48,7 +58,16 @@ export const useAdminBotConfiguration = () => {
     retry: false,
     onSuccess: (configuration) => {
       queryClient.setQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY, (status) =>
-        status ? { ...status, webhook: { ...status.webhook, model: configuration.model } } : status
+        status
+          ? {
+              ...status,
+              webhook: {
+                ...status.webhook,
+                model: configuration.model,
+                fieldThresholds: configuration.fieldThresholds
+              }
+            }
+          : status
       )
       toast.success('保存しました')
     },

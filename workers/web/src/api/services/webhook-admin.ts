@@ -44,6 +44,35 @@ export const retryWebhookJob = async (env: Bindings, postId: string, input: z.in
   return getWebhookJob(env, postId)
 }
 
+/**
+ * 保留ジョブと、人が却下していない対象外ジョブを再判定に戻す。保存済みの判定結果と回答を消して queued に戻し、キューへ積み直す。
+ * 人が却下したジョブ（reasons に manually_rejected）は再判定で上書きしない。画面側の webhookActionAvailability と同じ規則。
+ * 処理側は result_json があると Clef を呼ばず再利用するため、消さないと質問の修正が反映されない。
+ * 再判定の結果次第でイベントが自動登録され、Discord へ通知（通知済みなら再通知）される場合がある。
+ */
+export const rejudgeWebhookJob = async (env: Bindings, postId: string) => {
+  const job = await getWebhookJob(env, postId)
+  if (job.status !== 'held' && job.status !== 'ignored')
+    throw new HTTPException(409, { message: 'Only held or ignored jobs can be re-judged' })
+  if (job.status === 'ignored' && job.reasons.includes('manually_rejected'))
+    throw new HTTPException(409, { message: 'Manually rejected jobs cannot be re-judged' })
+  const now = dayjs().valueOf()
+  const result = await env.DB.prepare(`UPDATE webhook_event_jobs SET status='queued',result_json=NULL,answers_json=NULL,
+    candidate_json=NULL,reasons_json='[]',confidence=NULL,model=NULL,question_version=NULL,judged_at=NULL,
+    semantic_key=NULL,notification_status='pending',notification_error=NULL,last_error=NULL,lease_token=NULL,
+    lease_until=NULL,updated_at=?
+    WHERE post_id=?
+      AND (status='held' OR (status='ignored'
+        AND NOT EXISTS (SELECT 1 FROM json_each(webhook_event_jobs.reasons_json) WHERE value='manually_rejected')))
+      AND (lease_until IS NULL OR lease_until<?)
+      AND attempts=? AND notification_attempts=?`)
+    .bind(now, postId, now, job.attempts, job.notificationAttempts)
+    .run()
+  if (result.meta.changes !== 1) throw new HTTPException(409, { message: 'Job is being processed' })
+  await enqueueWebhookJob(env, postId)
+  return getWebhookJob(env, postId)
+}
+
 export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.infer<typeof WebhookResolveSchema>) => {
   const job = await getWebhookJob(env, postId)
   if (job.status !== 'held') throw new HTTPException(409, { message: 'Only held jobs can be resolved' })

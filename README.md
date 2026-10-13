@@ -184,10 +184,11 @@ const signature = createHmac('sha256', signingSecret)
 | app | `EVENT_DETECTION_THRESHOLD` / `EVENT_DETECTION_CHOICE_THRESHOLD` | 既定 `0.9` |
 | app | `EVENT_DETECTION_IGNORE_THRESHOLD` | 既定 `0.5`、自動登録閾値未満に設定 |
 | web | `DISCORD_TOKEN` / `DISCORD_CHANNEL_ID` (secret) | 既存 Discord Bot と通知先を再利用。Webhook 判定通知と公開イベント告知は別の履歴で管理 |
+| web | `ANTHROPIC_BASE_URL` / `ANTHROPIC_AUTH_TOKEN` (secret) | 自動登録するイベントのタイトルを Claude Haiku に付けさせる、Anthropic Messages 互換の接続先とトークン。接続先は Cloudflare Workers から到達できるものにする（ローカルのプロキシは不可）。どちらかが未登録、または通信に失敗したときは、定型のタイトル（`<店舗名> <配布物>配布`）のまま登録 |
 
 Queue は `biccame-event-detection-local` / `-staging` / `-production` と、それぞれの `-dlq` に分離しています。
 リモート環境での Queue 作成、secret 同期、マイグレーション、デプロイは管理者が承認してから行います。
-secret は既存 `scripts/sync-cf-secrets.sh` 経由で環境ごとの web Worker に同期してください。`TWITTER_*` / `DISCORD_TOKEN` / `DISCORD_CHANNEL_ID` は web Worker のサーバー専用 secret です。クライアントの `VITE_*` 設定には含めません。
+secret は既存 `scripts/sync-cf-secrets.sh` 経由で環境ごとの web Worker に同期してください。`TWITTER_*` / `DISCORD_TOKEN` / `DISCORD_CHANNEL_ID` / `ANTHROPIC_BASE_URL` / `ANTHROPIC_AUTH_TOKEN` は web Worker のサーバー専用 secret です。クライアントの `VITE_*` 設定には含めません。
 Cloudflare Access の経路保護が Webhook にも適用される場合は `/api/webhook` だけを送信元から到達可能にし、管理画面の保護は維持してください。
 
 `/admin/bot` はシークレットの設定有無、Bot 接続、通知先、AI 閾値を表示します。トークンの値は表示しません。
