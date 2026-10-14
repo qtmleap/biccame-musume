@@ -2,12 +2,13 @@ import { createHash } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
-import { EXTRACTION_VERSION, SPLIT_EVENT_INSTRUCTIONS } from '@biccame/shared/event-detect/extraction'
+import { auditItemCount, createItemCountRequest, EXTRACTION_VERSION, type ItemCountAudit, SPLIT_EVENT_INSTRUCTIONS } from '@biccame/shared/event-detect/extraction'
 import { z } from 'zod'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
 import type { PostRow, StoreAccount } from './analysis'
 import {
   buildState,
+  callClef,
   CATEGORY_CRITERIA,
   dateCandidates,
   quantityCandidates,
@@ -52,6 +53,7 @@ export type Extraction = {
   /** ビッカメ娘のノベルティ配布に関する投稿である確率（v1 の is_event と同じ意味） */
   isEvent: number
   events: ExtractedEvent[]
+  itemCountAudit?: ItemCountAudit
   attempts: number
   usage: { input_tokens: number; output_tokens: number }
   elapsedMs: number
@@ -96,7 +98,7 @@ const SYSTEM = [
   '- is_event: この投稿がビッカメ娘の名刺・アクリルキーホルダー・アクリルスタンド・缶バッジ・ポストカード・ギフトカード・ポイントカード・年賀状などの配布・販売・発行についての案内である確率（0〜1）。購入特典でもビッカメ娘のグッズなら含む。ビッカメ娘と関係ない商品の特典やメーカーのキャンペーン、配布物をもらった人へのお礼や雑談は含まない。',
   SPLIT_EVENT_INSTRUCTIONS,
   '- events: 配布物ごとに1件ずつ。案内がなければ空配列。',
-  `  - status: ${describe(STATUS_CRITERIA)}（none は使わない。状態を伝えていないイベントは列挙しない）`,
+  `  - status: ${describe(STATUS_CRITERIA)}（none は使わない。補足の「名刺も用意」も告知として残し、不明な日付・条件は創作しない）`,
   `  - category: ${describe({ ...CATEGORY_CRITERIA, acsta: 'アクリルスタンド（アクスタ）', other: '名刺・アクキー・アクスタ以外' })}（none は使わない）`,
   '  - item: 配布物の短い名前（例: ハロウィン限定名刺、擬人化7周年記念アクキー）。同じイベントの他の投稿と照合できるよう、本文の言葉を使う',
   '  - conditions: 明示された配布条件だけ列挙。typeはpurchase/first_come/lottery/everyone。購入金額は候補から選び、情報がなければnone。条件不明は空配列。',
@@ -224,6 +226,7 @@ export const runExtract = async (options: {
   cacheDir: string
   concurrency: number
   endpoint: JudgeEndpoint
+  countEndpoint?: string
   onProgress?: (progress: ExtractProgress) => void
   onError?: (target: ExtractTarget, error: unknown) => void
 }): Promise<ExtractProgress> => {
@@ -247,7 +250,8 @@ export const runExtract = async (options: {
       if (existsSync(path)) progress.cached += 1
       else {
         try {
-          const result = await callTool(
+          const countResponse = options.countEndpoint === undefined ? undefined : await callClef(options.countEndpoint, createItemCountRequest(target.row.post), 0)
+          const extract = () => callTool(
             options.endpoint,
             {
               system: SYSTEM,
@@ -257,6 +261,10 @@ export const runExtract = async (options: {
             },
             progress.stats
           )
+          const first = await extract()
+          const firstAudit = countResponse === undefined ? undefined : auditItemCount(first.value.events, countResponse, 0.9)
+          const result = firstAudit?.status === 'mismatch' ? await extract() : first
+          const itemCountAudit = countResponse === undefined ? undefined : auditItemCount(result.value.events, countResponse, 0.9)
           const extraction: Extraction = {
             key: target.key,
             model: JUDGE_MODEL,
@@ -264,13 +272,14 @@ export const runExtract = async (options: {
             postId: target.row.post.id,
             isEvent: result.value.isEvent,
             events: result.value.events,
-            attempts: result.attempts,
-            usage: result.usage,
-            elapsedMs: result.elapsedMs
+            ...(itemCountAudit === undefined ? {} : { itemCountAudit }),
+            attempts: result.attempts + (result === first ? 0 : first.attempts),
+            usage: { input_tokens: result.usage.input_tokens + (result === first ? 0 : first.usage.input_tokens), output_tokens: result.usage.output_tokens + (result === first ? 0 : first.usage.output_tokens) },
+            elapsedMs: result.elapsedMs + (result === first ? 0 : first.elapsedMs)
           }
           await writeAtomic(path, JSON.stringify(extraction))
-          progress.inputTokens += result.usage.input_tokens
-          progress.outputTokens += result.usage.output_tokens
+          progress.inputTokens += extraction.usage.input_tokens
+          progress.outputTokens += extraction.usage.output_tokens
         } catch (error) {
           progress.failed += 1
           options.onError?.(target, error)

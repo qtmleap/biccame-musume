@@ -85,7 +85,7 @@ export const buildTimelines = (
 ): Map<string, Mention[]> => {
   const timelines = new Map<string, Mention[]>()
   for (const { row, extraction, state } of items) {
-    if (extraction.isEvent < threshold) continue
+    if (extraction.isEvent < threshold || (extraction.itemCountAudit !== undefined && extraction.itemCountAudit.status !== 'matched')) continue
     const own = accounts
       .filter((account) => account.screenName.toLowerCase() === row.post.screenName.toLowerCase())
       .map((account) => account.storeId)

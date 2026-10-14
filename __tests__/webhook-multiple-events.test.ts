@@ -3,9 +3,10 @@ import { readdir, readFile } from 'node:fs/promises'
 import * as discord from '@api/services/discord'
 import * as eventService from '@api/services/event-service'
 import { rejudgeWebhookJob, resolveWebhookJob, retryWebhookJob } from '@api/services/webhook-admin'
-import { extractWebhookEvents } from '@api/services/webhook-extraction'
+import { extractWebhookEvents, webhookProcessingErrorCode } from '@api/services/webhook-extraction'
 import { getWebhookJob, insertWebhookJob } from '@api/services/webhook-jobs'
-import { processWebhookJob } from '@api/services/webhook-process'
+import { handleWebhookQueue, processWebhookJob } from '@api/services/webhook-process'
+import type { TitleFetcher } from '@api/services/webhook-title'
 import type { Bindings } from '@api/types/bindings'
 import type { EventDetectionNotification } from '@biccame/shared/bot'
 import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
@@ -83,6 +84,16 @@ const fixture = async (name: string) => {
       run: async (_model: string, raw: unknown) => {
         const request = ClefRequestSchema.safeParse(raw)
         if (!request.success) throw new Error('Invalid request')
+        if (request.data.questions.distribution_item_count) {
+          const count =
+            (/赤い/.test(request.data.state) && /青い/.test(request.data.state)) ||
+            (/キーホルダ/.test(request.data.state) && /名刺/.test(request.data.state))
+              ? '2'
+              : '1'
+          return {
+            answers: { distribution_item_count: { type: 'choice', choice: count, probabilities: { [count]: 0.99 } } }
+          }
+        }
         calls.push(request.data.state)
         if (state.fail !== '' && request.data.state.includes(state.fail)) throw new Error('Synthetic candidate failure')
         return answer(request.data)
@@ -328,7 +339,7 @@ test('抽出通信を検証し、未設定・不正根拠は再試行できる�
       })
     })
     expect(result.events).toHaveLength(1)
-    await expect(extractWebhookEvents(env, post)).rejects.toThrow('not configured')
+    await expect(extractWebhookEvents(env, post)).rejects.toThrow('extraction_not_configured')
     await expect(
       extractWebhookEvents(configured, post, async () =>
         Response.json({
@@ -340,9 +351,10 @@ test('抽出通信を検証し、未設定・不正根拠は再試行できる�
     ).rejects.toThrow('unsupported evidence')
     await migrate(env.DB)
     await insertWebhookJob(env, post)
-    await expect(processWebhookJob(env, post.id)).rejects.toThrow('not configured')
+    await expect(processWebhookJob(env, post.id)).rejects.toThrow('extraction_not_configured')
     const failed = await getWebhookJob(env, post.id)
     expect(failed.status).toBe('failed')
+    expect(failed.lastError).toBe('extraction_not_configured')
     expect(failed.candidates).toEqual([])
   } finally {
     await cleanup()
@@ -548,6 +560,149 @@ test('旧移行済みイベントの生成タイトルと新抽出名が違っ�
     expect((await getWebhookJob(env, oldPost.id)).candidates[0].eventId).toBe(uuid)
   } finally {
     delivery.mockRestore()
+    await cleanup()
+  }
+}, 60000)
+
+// 原文は投稿として保持するが、失敗理由には秘密や通信先・応答本文を含めない。
+test('抽出失敗コードをジョブへ保存し、未知例外は汎用コードのままにする', async () => {
+  const { cleanup, env, calls } = await fixture('giveaway-extraction-error-codes')
+  const configured = {
+    ...env,
+    ANTHROPIC_BASE_URL: 'https://synthetic-private-model.example.test',
+    ANTHROPIC_AUTH_TOKEN: 'synthetic-private-token'
+  }
+  const failures: { code: string; fetcher: TitleFetcher }[] = [
+    {
+      code: 'extraction_http_403',
+      fetcher: async () => new Response(configured.ANTHROPIC_AUTH_TOKEN, { status: 403 })
+    },
+    {
+      code: 'extraction_timeout',
+      fetcher: async () => {
+        throw new DOMException(configured.ANTHROPIC_AUTH_TOKEN, 'TimeoutError')
+      }
+    },
+    {
+      code: 'extraction_network_error',
+      fetcher: async () => {
+        throw new Error(configured.ANTHROPIC_BASE_URL)
+      }
+    },
+    {
+      code: 'extraction_invalid_response',
+      fetcher: async () => new Response(configured.ANTHROPIC_AUTH_TOKEN)
+    },
+    {
+      code: 'extraction_missing_tool_result',
+      fetcher: async () => Response.json({ content: [{ type: 'text', text: configured.ANTHROPIC_AUTH_TOKEN }] })
+    },
+    {
+      code: 'extraction_invalid_evidence',
+      fetcher: async () =>
+        Response.json({
+          content: [
+            { type: 'tool_use', name: 'answer', input: { events: [{ item: '限定名刺', evidence: ['創作した条件'] }] } }
+          ]
+        })
+    },
+    {
+      code: 'extraction_invalid_store',
+      fetcher: async () =>
+        Response.json({
+          content: [
+            {
+              type: 'tool_use',
+              name: 'answer',
+              input: { events: [{ item: '限定名刺', store: 'abeno', evidence: ['限定名刺を配布します。'] }] }
+            }
+          ]
+        })
+    },
+    {
+      code: 'extraction_duplicate_candidate',
+      fetcher: async () =>
+        Response.json({
+          content: [
+            {
+              type: 'tool_use',
+              name: 'answer',
+              input: { events: [0, 1].map(() => ({ item: '限定名刺', evidence: ['限定名刺を配布します。'] })) }
+            }
+          ]
+        })
+    }
+  ]
+  try {
+    await migrate(env.DB)
+    for (const [index, failure] of failures.entries()) {
+      const post = makePost(String(2109221721773576450n + BigInt(index)), '限定名刺を配布します。')
+      await insertWebhookJob(env, post)
+      await expect(processWebhookJob(configured, post.id, { extractionFetcher: failure.fetcher })).rejects.toThrow()
+      const saved = await getWebhookJob(env, post.id)
+      expect(saved.lastError).toBe(failure.code)
+      expect(saved.status).toBe('failed')
+      expect(saved.model).toBeNull()
+      expect(saved.candidates).toEqual([])
+      expect(saved.lastError).not.toContain(configured.ANTHROPIC_AUTH_TOKEN)
+      expect(saved.lastError).not.toContain(configured.ANTHROPIC_BASE_URL)
+      expect(saved.lastError).not.toContain(post.text)
+    }
+    const unknown = makePost('2109221721773576460', '限定名刺を配布します。')
+    await insertWebhookJob(env, unknown)
+    await expect(
+      processWebhookJob(env, unknown.id, {
+        extractor: async () => {
+          throw new Error(configured.ANTHROPIC_AUTH_TOKEN)
+        }
+      })
+    ).rejects.toThrow()
+    expect((await getWebhookJob(env, unknown.id)).lastError).toBe('processing_failed')
+    expect(webhookProcessingErrorCode(new Error(configured.ANTHROPIC_AUTH_TOKEN))).toBe('processing_failed')
+    expect(calls).toHaveLength(0)
+  } finally {
+    await cleanup()
+  }
+}, 60000)
+
+test('キューログは未設定の安全なコードだけを出し、失敗は再試行する', async () => {
+  const { cleanup, env } = await fixture('giveaway-extraction-queue-errors')
+  const log = spyOn(console, 'error').mockImplementation(() => {})
+  const retries: number[] = []
+  const acknowledgements: string[] = []
+  try {
+    await migrate(env.DB)
+    const post = makePost('2109221721773576461', '限定名刺を配布します。')
+    await insertWebhookJob(env, post)
+    await handleWebhookQueue(
+      {
+        queue: 'biccame-event-detection-local',
+        metadata: { metrics: { backlogCount: 1, backlogBytes: 0 } },
+        messages: [
+          {
+            id: 'synthetic-message',
+            timestamp: dayjs().toDate(),
+            attempts: 1,
+            body: { postId: post.id },
+            ack: () => {
+              acknowledgements.push('ack')
+            },
+            retry: (options) => {
+              if (options?.delaySeconds !== undefined) retries.push(options.delaySeconds)
+            }
+          }
+        ],
+        ackAll: () => {},
+        retryAll: () => {}
+      },
+      env
+    )
+    expect(log.mock.calls).toEqual([['[webhook-queue] processing failed: extraction_not_configured']])
+    expect(retries).toEqual([60])
+    expect(acknowledgements).toEqual([])
+    expect((await getWebhookJob(env, post.id)).lastError).toBe('extraction_not_configured')
+  } finally {
+    log.mockRestore()
     await cleanup()
   }
 }, 60000)

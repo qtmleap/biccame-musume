@@ -1,5 +1,6 @@
 import { ClefModelSchema, ClefResponseSchema } from '@biccame/shared/event-detect/clef'
 import { DetectionDraftSchema, FieldThresholdsSchema } from '@biccame/shared/event-detect/detection'
+import { ItemCountAuditSchema } from '@biccame/shared/event-detect/extraction'
 import { DetectPostSchema } from '@biccame/shared/event-detect/post'
 import { GapStatusSchema } from '@biccame/shared/event-detect/viewer'
 import { EventRequestSchema } from '@biccame/shared/schemas/event.dto'
@@ -46,7 +47,8 @@ export const WebhookCandidateSchema = WebhookJobFieldsSchema.extend({
 })
 export type WebhookCandidate = z.infer<typeof WebhookCandidateSchema>
 export const WebhookJobSchema = WebhookJobFieldsSchema.extend({
-  candidates: z.array(WebhookCandidateSchema).default([])
+  candidates: z.array(WebhookCandidateSchema).default([]),
+  itemCountAudit: ItemCountAuditSchema.nullable().optional()
 })
 export type WebhookJob = z.infer<typeof WebhookJobSchema>
 export const WebhookJobListSchema = z.object({

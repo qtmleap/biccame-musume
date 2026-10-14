@@ -28,6 +28,7 @@ const processWebhookJob = (env: Bindings, postId: string, options: { titleFetche
 
 const responseFor = (request: ClefRequest): ClefResponse => {
   const desired: Record<string, string> = {
+    distribution_item_count: '1',
     status: 'start',
     category: 'limited_card',
     store: 'akiba',
@@ -98,6 +99,7 @@ const mockAi = (clef: (request: ClefRequest) => Promise<ClefResponse> | ClefResp
   const run = async (model: string, request: unknown) => {
     const parsed = ClefRequestSchema.safeParse(request)
     if (!parsed.success) throw new Error('Unexpected Clef request shape')
+    if (parsed.data.questions.distribution_item_count) return responseFor(parsed.data)
     clefCalls.push({ model, state: parsed.data.state })
     return clef(parsed.data)
   }
@@ -384,6 +386,7 @@ test('saved field thresholds reach the judgement: the status threshold decides w
         // 開始日が常に未確定なので、どの条件でも保留のまま（登録まで進まず、理由の差だけで判定を見る）。
         run: async (_model: string, request: ClefRequest): Promise<ClefResponse> => {
           const base = responseFor(request)
+          if (request.questions.distribution_item_count) return base
           const startDate = base.answers.start_date
           if (startDate?.type !== 'choice') throw new Error('Missing start_date answer')
           return {

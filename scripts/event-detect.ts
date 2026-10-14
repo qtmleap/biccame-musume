@@ -453,6 +453,7 @@ const extract = async () => {
     cacheDir,
     concurrency,
     endpoint: endpointFromEnv(),
+    countEndpoint: values.endpoint,
     onProgress: (progress) => {
       if (progress.done % 100 !== 0 && progress.done !== progress.total) return
       const called = progress.done - progress.cached

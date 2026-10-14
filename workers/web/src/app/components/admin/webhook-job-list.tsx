@@ -1,8 +1,13 @@
 import type { WebhookJob } from '@biccame/shared/schemas/webhook.dto'
 import { Link, useNavigate } from '@tanstack/react-router'
 import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
 import { Bot, ChevronLeft, ChevronRight, ExternalLink, RefreshCw } from 'lucide-react'
-import { useState } from 'react'
+import {
+  nextWebhookPagination,
+  previousWebhookPagination,
+  webhookPaginationAtom
+} from '@/atoms/webhook-pagination-atom'
 import { BotSettingsLayout } from '@/components/admin/bot-settings-layout'
 import {
   detectionScoreLabel,
@@ -63,8 +68,8 @@ const WebhookEventName = ({ job }: { job: WebhookJob }) => {
 
 export const WebhookJobList = () => {
   const navigate = useNavigate()
-  const [cursor, setCursor] = useState<string | null>(null)
-  const [previousCursors, setPreviousCursors] = useState<(string | null)[]>([])
+  // ページ位置は詳細へ移動して戻っても、再読み込みしても保つ（タブ単位で保存）。
+  const [{ cursor, previousCursors }, setPagination] = useAtom(webhookPaginationAtom)
   const jobs = useAdminWebhookJobs(cursor)
   const { data: characters } = useCharacters()
   const { data: botStatus } = useAdminBotStatus()
@@ -79,15 +84,11 @@ export const WebhookJobList = () => {
   const nextPage = () => {
     const nextCursor = jobs.data?.nextCursor
     if (!nextCursor) return
-    setPreviousCursors((previous) => [...previous, cursor])
-    setCursor(nextCursor)
+    setPagination((previous) => nextWebhookPagination(previous, nextCursor))
   }
 
   const previousPage = () => {
-    const previousCursor = previousCursors.at(-1)
-    if (previousCursor === undefined) return
-    setCursor(previousCursor)
-    setPreviousCursors((previous) => previous.slice(0, -1))
+    setPagination(previousWebhookPagination)
   }
 
   return (
