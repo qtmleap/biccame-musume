@@ -265,6 +265,9 @@ test('queue registration is idempotent and a notification retry does not rerun A
     const held = await getWebhookJob(env, duplicate.id)
     expect(held.status).toBe('held')
     expect(held.reasons.some((reason) => reason.startsWith('possible_duplicate:'))).toBe(true)
+    // 重複で保留になる候補にも題が付く（人が補完して登録するときの初期値になる）
+    expect(held.candidate?.title).toBe('ハロウィン名刺')
+    expect(held.reasons).toContain('title_generated')
     expect(held.notificationStatus).toBe('unknown')
     const sentBefore = notified.length
     expect(await proceed(duplicate.id)).toBeNull()
@@ -289,7 +292,8 @@ test('queue registration is idempotent and a notification retry does not rerun A
       .bind(dayjs().valueOf() - 1, limited.id)
       .run()
     expect(await proceed(limited.id)).toBeNull()
-    expect(ai.titles).toHaveLength(1)
+    // タイトルの通信は、登録した投稿（1 回）と、重複で保留になった 2 件の投稿（各 1 回）。通知の再送では呼ばない
+    expect(ai.titles).toHaveLength(3)
     await expect(retryWebhookJob(env, duplicate.id, { notificationOnly: true, allowUnknown: false })).rejects.toThrow(
       'explicit confirmation'
     )
@@ -327,8 +331,8 @@ test('queue registration is idempotent and a notification retry does not rerun A
     await proceed(incomplete.id)
     expect((await getWebhookJob(env, incomplete.id)).status).toBe('registered')
     expect(await DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(2)
-    // 保留・無視・手動の登録・通知の再送・保存済みの判定の再利用では、タイトル用の呼び出しは一度も増えない
-    expect(ai.titles).toHaveLength(1)
+    // 登録候補の無い保留・手動の登録・紐付け・対象外・通知の再送・保存済みの判定の再利用では、タイトル用の呼び出しは増えない（上の 3 回のまま）
+    expect(ai.titles).toHaveLength(3)
     delivery.mode = 'ai_failure'
     const failedPost = { ...post, id: '2109221721773576394', url: 'https://x.com/bic_akiba/status/2109221721773576394' }
     await insertWebhookJob(env, failedPost)
@@ -343,6 +347,7 @@ test('queue registration is idempotent and a notification retry does not rerun A
     await DB.prepare("UPDATE webhook_event_candidates SET status='failed' WHERE post_id=?").bind(failedPost.id).run()
     await retryWebhookJob(env, failedPost.id, { notificationOnly: false, allowUnknown: false })
     const cachedCalls = ai.clefCalls.length
+    const titlesBeforeReuse = ai.titles.length
     const cachedModel = (await getWebhookJob(env, failedPost.id)).model
     const cachedGet = spyOn(env.BICCAME_MUSUME_EVENTS, 'get').mockImplementation(async () => {
       throw new Error('KV must not be read for saved result retry')
@@ -352,7 +357,8 @@ test('queue registration is idempotent and a notification retry does not rerun A
       expect(ai.clefCalls).toHaveLength(cachedCalls)
       expect(cachedGet).not.toHaveBeenCalled()
       expect((await getWebhookJob(env, failedPost.id)).model).toBe(cachedModel)
-      expect(ai.titles).toHaveLength(1)
+      // 保存済みの判定を再利用しても、登録候補のある保留は題をもう一度付ける（Clef は呼ばない）。1 回だけで再試行はしない
+      expect(ai.titles).toHaveLength(titlesBeforeReuse + 1)
     } finally {
       cachedGet.mockRestore()
     }
@@ -651,11 +657,11 @@ test('without ANTHROPIC_BASE_URL / ANTHROPIC_AUTH_TOKEN nothing is sent and regi
   }
 }, 120000)
 
-test('held and ignored jobs never send a title request, even when an admin registers the held one by hand', async () => {
+test('held jobs without a candidate and ignored jobs never send a title request, even when an admin registers the held one by hand', async () => {
   const harness = await titleHarness('webhook-title-skipped-test')
   try {
     const { ai, postOf, run } = harness
-    // 保留（開始日が書かれていない投稿）
+    // 保留（開始日が書かれていない投稿）。登録候補（candidate）が作れないので題を付ける材料が無く、呼ばない
     const held = await run(postOf(20, '限定名刺をどなたでも配布します'))
     expect(held.job.status).toBe('held')
     // 無視（キーワードの無い投稿）
@@ -770,7 +776,173 @@ test('the title request has the right URL, headers, model and tool, and carries 
     expect(message.content).toContain('カテゴリ: limited_card（期間限定・数量限定・記念の名刺）')
     expect(message.content).toContain('開始日: 2026-10-13（10月）')
     expect(message.content).toContain(`投稿本文:\n${post.text}`)
+    // 抽出した配布物の名前（item）も渡す。無いときの「事前に抽出したものはありません」にはならない
+    expect(message.content).toContain('この配布物の題だけを付ける')
+    expect(message.content).toContain('）: アキバたん 限定名刺配布\n')
+    expect(message.content).not.toContain('事前に抽出したものはありません')
   } finally {
     await harness.dispose()
   }
 }, 60000)
+
+/** 先に登録された投稿と同じ内容の別投稿（同じ店舗・種別・開始日・配布物）。登録の重複になり、保留になる */
+const duplicateOf = (post: DetectPost, suffix: string): DetectPost => ({
+  ...post,
+  id: `${post.id}${suffix}`,
+  url: `${post.url}${suffix}`
+})
+
+/** 重複の保留の投稿が占めるスロット（semantic_key）の持ち主。先の投稿だけが持つ */
+const slotOwners = async (env: Bindings) =>
+  (
+    await env.DB.prepare('SELECT post_id AS postId FROM webhook_event_candidates WHERE semantic_key IS NOT NULL').all<{
+      postId: string
+    }>()
+  ).results.map((row) => row.postId)
+
+test('a held job with a candidate (a duplicate post) gets the AI title while the slot stays with the first post', async () => {
+  const harness = await titleHarness('webhook-title-held-candidate-test')
+  try {
+    const { env, ai, postOf, run } = harness
+    ai.title.reply = titleToolInput('秋の名刺')
+    const first = await run(postOf(12))
+    expect(first.job.status).toBe('registered')
+    expect(first.title).toBe('秋の名刺')
+    expect(ai.titles).toHaveLength(1)
+    // スロットは先の投稿が押さえている
+    expect(await slotOwners(env)).toEqual([first.job.postId])
+    ai.title.reply = titleToolInput('冬の名刺')
+    const second = await run(duplicateOf(postOf(12), '1'))
+    // 保留になり、登録候補の題は AI が付けた題になる（抽出名のままではない）。イベントは増えない
+    expect(second.job.status).toBe('held')
+    expect(second.job.eventId).toBeNull()
+    expect(second.job.candidate?.title).toBe('冬の名刺')
+    expect(second.job.candidates[0].candidate?.title).toBe('冬の名刺')
+    expect(second.job.candidates[0].item).toBe('アキバたん 限定名刺配布')
+    expect(second.job.reasons).toContain('title_generated')
+    expect(second.job.reasons).not.toContain('title_fallback')
+    expect(second.job.reasons.some((reason) => reason.startsWith('possible_duplicate:'))).toBe(true)
+    expect(ai.titles).toHaveLength(2)
+    expect(await env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(1)
+    // スロットは先の投稿のまま（保留の投稿が奪わない）
+    expect(await slotOwners(env)).toEqual([first.job.postId])
+  } finally {
+    await harness.dispose()
+  }
+}, 60000)
+
+test('a held job with a candidate keeps the extracted name as the title and the held status when the title request fails', async () => {
+  const warn = spyOn(console, 'warn').mockImplementation(() => {})
+  const harness = await titleHarness('webhook-title-held-fallback-test')
+  try {
+    const first = await harness.run(harness.postOf(12))
+    expect(first.job.status).toBe('registered')
+    harness.ai.title.reply = () => new Response('{"error":"internal"}', { status: 500 })
+    const failed = await harness.run(duplicateOf(harness.postOf(12), '1'))
+    // 通信は 1 回だけ（再試行しない）。例外にもならず、抽出名のまま保留になる
+    expect(harness.ai.titles).toHaveLength(2)
+    expect(failed.job.status).toBe('held')
+    expect(failed.job.candidate?.title).toBe(DEFAULT_TITLE)
+    expect(failed.job.reasons).toContain('title_fallback')
+    expect(failed.job.reasons).not.toContain('title_generated')
+    expect(failed.job.reasons.some((reason) => reason.startsWith('possible_duplicate:'))).toBe(true)
+  } finally {
+    warn.mockRestore()
+    await harness.dispose()
+  }
+}, 60000)
+
+test('a held job with a candidate sends nothing and keeps the extracted name when the title API is not configured', async () => {
+  const warn = spyOn(console, 'warn').mockImplementation(() => {})
+  const harness = await titleHarness('webhook-title-held-unconfigured-test', { secrets: false })
+  try {
+    const registered = await harness.run(harness.postOf(12))
+    expect(registered.job.status).toBe('registered')
+    expect(registered.job.reasons).toContain('title_fallback')
+    const held = await harness.run(duplicateOf(harness.postOf(12), '1'))
+    expect(held.job.status).toBe('held')
+    expect(held.job.candidate?.title).toBe(DEFAULT_TITLE)
+    expect(held.job.reasons).toContain('title_fallback')
+    // 接続先・トークンが未登録の環境では、保留の候補でも通信しない
+    expect(harness.ai.titles).toHaveLength(0)
+  } finally {
+    warn.mockRestore()
+    await harness.dispose()
+  }
+}, 60000)
+
+test('ignored jobs never send a title request even when a duplicate of the same post is held and titled', async () => {
+  const harness = await titleHarness('webhook-title-ignored-test')
+  try {
+    const { ai, postOf, run } = harness
+    // Clef が対象外と判定する投稿（登録候補が無い）。保留の題付けが広がっても、対象外には呼ばない
+    const ignored = await run(postOf(21, 'こんにちは'))
+    expect(ignored.job.status).toBe('ignored')
+    expect(ignored.job.candidate).toBeNull()
+    expect(ai.titles).toHaveLength(0)
+    expect(ignored.job.reasons).not.toContain('title_generated')
+    expect(ignored.job.reasons).not.toContain('title_fallback')
+  } finally {
+    await harness.dispose()
+  }
+}, 60000)
+
+test('the title request does not carry the migrated name of a legacy single-job post (placeholder or old generated title)', async () => {
+  // 旧形式の単一ジョブを移行すると、候補の名前（item）は登録候補の題（旧形式で作った題）か、無ければ仮の「既存配布物」になる。
+  // どちらも抽出した配布物の名前ではないので、値ではなく移行の印で判定して、従来どおり本文から読み取らせる。
+  const OLD_TITLE = '旧形式の生成題 アキバたん配布'
+  const cases: [string, string | null, string][] = [
+    ['登録候補が無い（仮の名前）', null, '既存配布物'],
+    ['旧形式で作った題が候補の名前になる', OLD_TITLE, OLD_TITLE]
+  ]
+  for (const [index, [label, oldTitle, expectedItem]] of cases.entries()) {
+    const harness = await titleHarness(`webhook-title-legacy-item-test-${index}`)
+    try {
+      const { env, ai, postOf } = harness
+      const post = postOf(12)
+      const inserted = await insertWebhookJob(env, post)
+      // 旧形式の単一ジョブ: 判定結果は保存済み。登録候補があれば旧形式の題が入っている
+      const detection = {
+        category: 'limited_card',
+        title: DEFAULT_TITLE,
+        stores: ['akiba'],
+        startDate: '2026-10-12',
+        conditions: [{ type: 'everyone' }],
+        referenceUrls: [{ type: 'start', url: post.url }],
+        isPreliminary: false
+      }
+      const decision = { status: 'register', confidence: 0.99, reasons: [], candidate: detection }
+      const stored =
+        oldTitle === null
+          ? null
+          : JSON.stringify({
+              uuid: inserted.eventUUID,
+              category: 'limited_card',
+              title: oldTitle,
+              stores: ['akiba'],
+              startDate: '2026-10-12T00:00:00+09:00',
+              conditions: [{ uuid: crypto.randomUUID(), type: 'everyone' }],
+              referenceUrls: [{ uuid: crypto.randomUUID(), type: 'announce', url: post.url }],
+              isVerified: true,
+              isPreliminary: false,
+              shouldTweet: false
+            })
+      await env.DB.prepare('UPDATE webhook_event_jobs SET result_json=?,candidate_json=? WHERE post_id=?')
+        .bind(JSON.stringify(decision), stored, post.id)
+        .run()
+      await processWebhookJob(env, post.id, { titleFetcher: ai.fetcher })
+      const job = await getWebhookJob(env, post.id)
+      expect(job.candidates[0].item, label).toBe(expectedItem)
+      expect(job.status, label).toBe('registered')
+      expect(job.reasons, label).toContain('title_generated')
+      // 移行後の名前を「配布物の名前」として渡さず、従来の文言にする
+      expect(ai.titles, label).toHaveLength(1)
+      const [message] = ai.titles[0].body.messages
+      expect(message.content, label).toContain('配布物の名前: 事前に抽出したものはありません')
+      expect(message.content, label).not.toContain(expectedItem)
+      expect(message.content, label).not.toContain('この配布物の題だけを付ける')
+    } finally {
+      await harness.dispose()
+    }
+  }
+}, 120000)

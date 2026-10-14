@@ -1,8 +1,37 @@
-import type { WebhookJob } from '@biccame/shared/schemas/webhook.dto'
+import { WEBHOOK_KEYWORD_VERDICTS } from '@biccame/shared/event-detect/detection'
+import {
+  type WebhookJob,
+  type WebhookJobRange,
+  WebhookJobRangeSchema,
+  WebhookKeywordVerdictSchema,
+  WebhookPostStatusFilterSchema
+} from '@biccame/shared/schemas/webhook.dto'
 import { Link, useNavigate } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { useAtom } from 'jotai'
-import { Bot, ChevronLeft, ChevronRight, ExternalLink, RefreshCw } from 'lucide-react'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Bot,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  FilterX,
+  RefreshCw
+} from 'lucide-react'
+import {
+  changeWebhookFilterAtom,
+  cycleWebhookConfidenceSort,
+  hasWebhookFilterConditions,
+  NO_WEBHOOK_FILTER,
+  setWebhookPostStatus,
+  setWebhookRange,
+  setWebhookVerdict,
+  type WebhookFilter,
+  webhookColumnAriaSort,
+  webhookFilterAtom
+} from '@/atoms/webhook-filter-atom'
 import {
   nextWebhookPagination,
   previousWebhookPagination,
@@ -12,8 +41,11 @@ import { BotSettingsLayout } from '@/components/admin/bot-settings-layout'
 import {
   detectionScoreLabel,
   webhookAccountLabel,
+  webhookCandidateTitle,
   webhookKeywordLabel,
+  webhookKeywordVerdictLabel,
   webhookModelLabel,
+  webhookPostStatusFilterLabel,
   webhookPostStatusIsTentative,
   webhookPostStatusLabel,
   webhookPostStatusTentativeReason
@@ -21,6 +53,7 @@ import {
 import { WebhookStatusBadge } from '@/components/admin/webhook-status-badge'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useAdminBotStatus } from '@/hooks/use-admin-bot'
 import { useAdminWebhookJobs } from '@/hooks/use-admin-webhooks'
@@ -36,10 +69,10 @@ const WebhookEventName = ({ job }: { job: WebhookJob }) => {
           <li key={candidate.eventUUID} className='flex items-center gap-2'>
             {candidate.eventId !== null ? (
               <Link to='/events/$uuid' params={{ uuid: candidate.eventId }} className='font-medium hover:underline'>
-                {candidate.eventTitle === null ? candidate.item : candidate.eventTitle}
+                {webhookCandidateTitle(candidate)}
               </Link>
             ) : (
-              <span>{candidate.item}</span>
+              <span>{webhookCandidateTitle(candidate)}</span>
             )}
             <WebhookStatusBadge status={candidate.status} />
           </li>
@@ -66,16 +99,127 @@ const WebhookEventName = ({ job }: { job: WebhookJob }) => {
   )
 }
 
+const RANGE_LABELS = { '1h': '直近1時間', '24h': '直近24時間' } as const satisfies Record<WebhookJobRange, string>
+const ALL_LABEL = 'すべて'
+
+/** 精度の見出しボタンのアイコン。並べ替えの軸が精度でなければ上下の矢印、精度なら向きを示す。 */
+const confidenceSortIcon = (filter: Pick<WebhookFilter, 'sort' | 'order'>) => {
+  if (filter.sort !== 'confidence') return ArrowUpDown
+  return filter.order === 'desc' ? ArrowDown : ArrowUp
+}
+
+/** 精度の見出しを押したときの次の並びの説明。 既定 → 高い順 → 低い順 → 既定 と巡回する。 */
+const confidenceSortHint = (filter: Pick<WebhookFilter, 'sort' | 'order'>): string => {
+  if (filter.sort !== 'confidence') return '精度の高い順に並べ替え'
+  return filter.order === 'desc' ? '精度の低い順に並べ替え' : '日時の新しい順に戻す'
+}
+
+/** 期間・判定・ステータスの絞り込みと「条件をクリア」。変更はすべて changeFilter 経由で、ページ位置を1ページ目へ戻す。 */
+const WebhookFilterToolbar = ({
+  filter,
+  changeFilter
+}: {
+  filter: WebhookFilter
+  changeFilter: (update: (filter: WebhookFilter) => WebhookFilter) => void
+}) => (
+  <fieldset aria-label='絞り込み' className='mb-4 flex min-w-0 flex-wrap items-center gap-x-5 gap-y-3 border-0 p-0'>
+    <div className='flex items-center gap-2'>
+      <span className='text-sm text-muted-foreground'>期間</span>
+      <Select
+        value={filter.range === null ? 'all' : filter.range}
+        onValueChange={(value) => {
+          const range = WebhookJobRangeSchema.safeParse(value)
+          changeFilter((previous) => setWebhookRange(previous, range.success ? range.data : null))
+        }}
+      >
+        <SelectTrigger aria-label='期間' size='sm' className='w-36'>
+          <SelectValue>{filter.range === null ? ALL_LABEL : RANGE_LABELS[filter.range]}</SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value='all'>{ALL_LABEL}</SelectItem>
+          {WebhookJobRangeSchema.options.map((range) => (
+            <SelectItem key={range} value={range}>
+              {RANGE_LABELS[range]}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+    <div className='flex items-center gap-2'>
+      <span className='text-sm text-muted-foreground' title='現在のキーワードルールによる判定'>
+        判定
+      </span>
+      <Select
+        value={filter.verdict === null ? 'all' : filter.verdict}
+        onValueChange={(value) => {
+          const verdict = WebhookKeywordVerdictSchema.safeParse(value)
+          changeFilter((previous) => setWebhookVerdict(previous, verdict.success ? verdict.data : null))
+        }}
+      >
+        <SelectTrigger aria-label='判定' size='sm' className='w-32'>
+          <SelectValue>{filter.verdict === null ? ALL_LABEL : webhookKeywordVerdictLabel(filter.verdict)}</SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value='all'>{ALL_LABEL}</SelectItem>
+          {WEBHOOK_KEYWORD_VERDICTS.map((verdict) => (
+            <SelectItem key={verdict} value={verdict}>
+              {webhookKeywordVerdictLabel(verdict)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+    <div className='flex items-center gap-2'>
+      <span className='text-sm text-muted-foreground'>ステータス</span>
+      <Select
+        value={filter.postStatus === null ? 'all' : filter.postStatus}
+        onValueChange={(value) => {
+          const postStatus = WebhookPostStatusFilterSchema.safeParse(value)
+          changeFilter((previous) => setWebhookPostStatus(previous, postStatus.success ? postStatus.data : null))
+        }}
+      >
+        <SelectTrigger aria-label='ステータス' size='sm' className='w-32'>
+          <SelectValue>
+            {filter.postStatus === null ? ALL_LABEL : webhookPostStatusFilterLabel(filter.postStatus)}
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value='all'>{ALL_LABEL}</SelectItem>
+          {WebhookPostStatusFilterSchema.options.map((postStatus) => (
+            <SelectItem key={postStatus} value={postStatus}>
+              {webhookPostStatusFilterLabel(postStatus)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+    <Button
+      variant='outline'
+      className='border-card-border'
+      onClick={() => changeFilter(() => NO_WEBHOOK_FILTER)}
+      disabled={!hasWebhookFilterConditions(filter)}
+    >
+      <FilterX className='size-4' />
+      条件をクリア
+    </Button>
+  </fieldset>
+)
+
 export const WebhookJobList = () => {
   const navigate = useNavigate()
   // ページ位置は詳細へ移動して戻っても、再読み込みしても保つ（タブ単位で保存）。
   const [{ cursor, previousCursors }, setPagination] = useAtom(webhookPaginationAtom)
-  const jobs = useAdminWebhookJobs(cursor)
+  // 絞り込み・並べ替えも同じく保つ。変更はページ位置のリセットとセットで行う（changeWebhookFilterAtom）。
+  const filter = useAtomValue(webhookFilterAtom)
+  const changeFilter = useSetAtom(changeWebhookFilterAtom)
+  const jobs = useAdminWebhookJobs(cursor, filter)
   const { data: characters } = useCharacters()
   const { data: botStatus } = useAdminBotStatus()
   // 一覧の未確定は投稿状態（status）の確信度なので、status の項目別しきい値で見る。
   // しきい値を取得できるまで（読み込み中・エラー）は通常の見た目にする。
   const statusThreshold = botStatus?.webhook.fieldThresholds.status
+
+  const SortIcon = confidenceSortIcon(filter)
 
   const isTentative = (job: WebhookJob) =>
     statusThreshold !== undefined && job.status !== 'ignored' && webhookPostStatusIsTentative(job, statusThreshold)
@@ -117,6 +261,7 @@ export const WebhookJobList = () => {
         {jobs.isPending && <p className='text-muted-foreground'>受信履歴を取得しています。</p>}
         {jobs.isError && <p className='text-destructive'>受信履歴を取得できませんでした。更新から再試行できます。</p>}
       </div>
+      <WebhookFilterToolbar filter={filter} changeFilter={changeFilter} />
       <div className='overflow-x-auto border-y border-separator'>
         <Table className='whitespace-nowrap [&_tr]:border-separator'>
           <TableHeader>
@@ -125,7 +270,22 @@ export const WebhookJobList = () => {
               <TableHead className='whitespace-nowrap'>日時</TableHead>
               <TableHead title='現在のキーワードルールによる判定'>判定</TableHead>
               <TableHead>モデル</TableHead>
-              <TableHead className='text-right whitespace-nowrap'>精度</TableHead>
+              <TableHead
+                className='text-right whitespace-nowrap'
+                aria-sort={webhookColumnAriaSort(filter, 'confidence')}
+              >
+                {/* 押すたびに 既定 → 精度の高い順 → 精度の低い順 → 既定 と巡回する。 */}
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  title={confidenceSortHint(filter)}
+                  onClick={() => changeFilter(cycleWebhookConfidenceSort)}
+                  className='-mr-2 ml-auto flex h-8 w-fit items-center gap-1 px-2 font-medium'
+                >
+                  精度
+                  <SortIcon className='size-4' aria-hidden='true' />
+                </Button>
+              </TableHead>
               <TableHead>ステータス</TableHead>
               <TableHead>イベント名</TableHead>
               {/* 各行に「詳細」リンクがあるので、見出しは視覚的に隠してスクリーンリーダー向けにだけ残す。 */}
@@ -138,7 +298,10 @@ export const WebhookJobList = () => {
             {jobs.data?.jobs.length === 0 && (
               <TableRow>
                 <TableCell colSpan={8} className='py-8 text-center text-muted-foreground'>
-                  受信履歴はありません。
+                  {/* 判定の絞り込みは走査の上限で打ち切ることがあり、先が残っていれば0件でも続きを探せる。 */}
+                  {jobs.data.nextCursor === null
+                    ? '受信履歴はありません。'
+                    : 'この範囲には条件に合う履歴がありません。「次へ」で続きを検索できます。'}
                 </TableCell>
               </TableRow>
             )}

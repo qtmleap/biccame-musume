@@ -1,6 +1,14 @@
-import { filterWebhookPost } from '@biccame/shared/event-detect/detection'
+import { type WebhookKeywordVerdict, webhookKeywordVerdict } from '@biccame/shared/event-detect/detection'
 import type { StoreData } from '@biccame/shared/schemas/store.dto'
-import type { WebhookJob } from '@biccame/shared/schemas/webhook.dto'
+import type { WebhookCandidate, WebhookJob, WebhookPostStatusFilter } from '@biccame/shared/schemas/webhook.dto'
+
+/** 候補の表示名。登録済みなら登録イベントの題、無ければ保存済みの登録候補の題（AI が付けた題を含む）、無ければ抽出名。 */
+export const webhookCandidateTitle = (
+  candidate: Pick<WebhookCandidate, 'eventTitle' | 'candidate' | 'item'>
+): string => {
+  if (candidate.eventTitle !== null) return candidate.eventTitle
+  return candidate.candidate === null ? candidate.item : candidate.candidate.title
+}
 
 export const webhookAccountLabel = (screenName: string, characters: readonly StoreData[]): string => {
   const character = characters.find((entry) => entry.character.twitter_id?.toLowerCase() === screenName.toLowerCase())
@@ -10,13 +18,20 @@ export const webhookAccountLabel = (screenName: string, characters: readonly Sto
     : character.store.name
 }
 
-export const webhookKeywordLabel = (post: WebhookJob['post']): string => {
-  const verdict = filterWebhookPost(post)
-  if (verdict.reason !== undefined && verdict.reason !== 'no_keyword') return '除外'
-  return verdict.hits.length > 0 ? '一致' : '不一致'
-}
+const KEYWORD_VERDICT_LABELS = {
+  match: '一致',
+  mismatch: '不一致',
+  excluded: '除外'
+} as const satisfies Record<WebhookKeywordVerdict, string>
+
+/** 判定の表示名。一覧の「判定」列と絞り込みの選択肢が同じ表示を使う。 */
+export const webhookKeywordVerdictLabel = (verdict: WebhookKeywordVerdict): string => KEYWORD_VERDICT_LABELS[verdict]
+
+export const webhookKeywordLabel = (post: WebhookJob['post']): string =>
+  webhookKeywordVerdictLabel(webhookKeywordVerdict(post))
 
 const POST_STATUS_LABELS = { announce: '告知', start: '開始', ongoing: '継続', end: '終了' } as const
+const IGNORED_POST_STATUS_LABEL = '却下'
 
 type PostStatusFields = Pick<WebhookJob, 'postStatus' | 'postStatusProbability'>
 
@@ -27,10 +42,14 @@ const percentLabel = (probability: number): string => `${Math.round(probability 
  * 対象外判定は却下を優先する。
  */
 export const webhookPostStatusLabel = (job: Pick<WebhookJob, 'status'> & PostStatusFields): string => {
-  if (job.status === 'ignored') return '却下'
+  if (job.status === 'ignored') return IGNORED_POST_STATUS_LABEL
   if (job.postStatus === null) return '—'
   return POST_STATUS_LABELS[job.postStatus]
 }
+
+/** ステータスの絞り込みの選択肢の表示名。「ステータス」列の表示（webhookPostStatusLabel）と同じ文言。 */
+export const webhookPostStatusFilterLabel = (postStatus: WebhookPostStatusFilter): string =>
+  postStatus === 'ignored' ? IGNORED_POST_STATUS_LABEL : POST_STATUS_LABELS[postStatus]
 
 /** 投稿状態の確信度がしきい値に届かず、確定扱いにできない。 */
 export const webhookPostStatusIsTentative = (job: PostStatusFields, threshold: number): boolean =>
