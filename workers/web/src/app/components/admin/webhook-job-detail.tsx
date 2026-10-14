@@ -1,16 +1,26 @@
 import { reasonLabel } from '@biccame/shared/event-detect/answer-view'
 import type { DetectionThresholds } from '@biccame/shared/event-detect/detection'
-import type { EventRequest } from '@biccame/shared/schemas/event.dto'
+import type { EventRequestQuery } from '@biccame/shared/schemas/event.dto'
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { Circle, CircleCheck, ExternalLink, FilePlus2, Link2, RefreshCw, RotateCcw, Send, X } from 'lucide-react'
+import {
+  Circle,
+  CircleCheck,
+  ExternalLink,
+  FilePlus2,
+  Link2,
+  Pencil,
+  RefreshCw,
+  RotateCcw,
+  Send,
+  X
+} from 'lucide-react'
 import { useState } from 'react'
 import { z } from 'zod'
 import { BotActionConfirmation } from '@/components/admin/bot-action-confirmation'
 import { BotSettingRow, BotSettingsLayout } from '@/components/admin/bot-settings-layout'
-import { EventForm } from '@/components/admin/event-form'
 import { WebhookAnswerTable } from '@/components/admin/webhook-answer-table'
-import { webhookResolveDefaultValues } from '@/components/admin/webhook-form-defaults'
+import { webhookEventCreateSearch } from '@/components/admin/webhook-form-defaults'
 import {
   detectionScoreLabel,
   isWebhookJobJudging,
@@ -63,7 +73,6 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   const resolve = useResolveAdminWebhookJob()
   const rejudge = useRejudgeAdminWebhookJob()
   const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null)
-  const [showForm, setShowForm] = useState(false)
   const [linkOpen, setLinkOpen] = useState(false)
   const [linkEventId, setLinkEventId] = useState('')
   const [linkError, setLinkError] = useState(false)
@@ -73,6 +82,8 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   const active = selected === undefined ? parentJob?.candidates[0] : selected
   const job = active === undefined ? parentJob : { ...active, candidates: [] }
   const candidateSelection = active === undefined ? {} : { candidateId: active.eventUUID }
+  // 選択中の候補の登録候補・下書きを作成ページの初期値にする。読み込み中は初期値なしでリンクだけ出す。
+  const createSearch: EventRequestQuery = job === undefined ? {} : webhookEventCreateSearch(job)
   const isPending = retry.isPending || resolve.isPending || rejudge.isPending
   const availability = job
     ? webhookActionAvailability(job.status, job.notificationStatus, job.reasons)
@@ -101,18 +112,9 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
         })
       }
       setConfirmAction(null)
-      setShowForm(false)
     } catch {
       // mutationが失敗を表示する。再操作には改めて確認が必要。
     }
-  }
-
-  const register = async (event: EventRequest) => {
-    await resolve.mutateAsync({
-      postId,
-      data: { ...candidateSelection, action: 'register', event: { ...event, shouldTweet: false } }
-    })
-    setShowForm(false)
   }
 
   const link = async () => {
@@ -122,7 +124,6 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
     try {
       await resolve.mutateAsync({ postId, data: { ...candidateSelection, action: 'link', eventId: parsed.data } })
       setLinkOpen(false)
-      setShowForm(false)
     } catch {
       // mutationのエラー表示を使用する。
     }
@@ -140,7 +141,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   return (
     <BotSettingsLayout
       title='Webhook 受信詳細'
-      description='元投稿、判定根拠、イベント登録、Discord通知を確認します。保留は不足情報を補って解決できます。'
+      description='元投稿、判定根拠、イベント登録、Discord通知を確認します。登録はイベント作成ページで行えます。'
       back={{ to: '/admin/webhooks', label: '受信履歴に戻る' }}
       actions={
         <Button
@@ -161,13 +162,19 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
         )}
       </div>
       <div className='mb-6 flex flex-wrap gap-2 border-b pb-5'>
-        <Button
-          className='bg-brand text-brand-foreground hover:bg-brand/90'
-          onClick={() => setShowForm((current) => !current)}
-          disabled={!availability.canResolve || isPending}
-        >
-          <FilePlus2 className='size-4' />
-          補完して登録
+        {/* 先頭ボタンは常に同じ場所に出し、登録済みのときだけ意味を「編集」に切り替える。どちらも遷移だけで受信ジョブの状態は変えないため、常に開ける。 */}
+        <Button asChild className='bg-brand text-brand-foreground hover:bg-brand/90'>
+          {job !== undefined && job.status === 'registered' && job.eventId !== null ? (
+            <Link to='/admin/events/$uuid/edit' params={{ uuid: job.eventId }}>
+              <Pencil className='size-4' />
+              編集
+            </Link>
+          ) : (
+            <Link to='/admin/events/new' search={createSearch}>
+              <FilePlus2 className='size-4' />
+              補完して登録
+            </Link>
+          )}
         </Button>
         <Button
           variant='outline'
@@ -277,7 +284,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
                 <p className='mb-2 text-sm text-muted-foreground'>
                   クリックで選択すると、上部の操作と下の判定結果がそのイベントに切り替わります
                 </p>
-                <ul className='divide-y divide-separator'>
+                <ul className='flex flex-col gap-1.5'>
                   {parentJob.candidates.map((candidate) => {
                     const isActive = active?.eventUUID === candidate.eventUUID
                     return (
@@ -286,15 +293,16 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
                         key={candidate.eventUUID}
                         className={cn(
                           'relative flex flex-wrap items-center justify-between gap-2 rounded-md px-2 py-1 transition-colors',
-                          isActive ? 'bg-brand/10 ring-1 ring-brand/40' : 'hover:bg-brand/5',
+                          isActive ? 'bg-brand/10 ring-1 ring-brand/40' : 'shadow-none ring-0 hover:bg-brand/5',
                           isPending ? 'cursor-default' : 'cursor-pointer',
-                          'has-[button:focus-visible]:ring-[3px] has-[button:focus-visible]:ring-ring/50'
+                          // キーボード操作の目印は影（ring）ではなく、行から少し離したくっきりした枠線にする。
+                          'has-[button:focus-visible]:outline-2 has-[button:focus-visible]:outline-offset-2 has-[button:focus-visible]:outline-brand'
                         )}
                       >
                         <Button
                           variant='ghost'
                           className={cn(
-                            'h-8 gap-2 px-0 hover:bg-transparent focus-visible:ring-0 dark:hover:bg-transparent',
+                            'h-8 gap-2 px-0 transition-none hover:bg-transparent focus-visible:ring-0 dark:hover:bg-transparent',
                             'after:absolute after:inset-0 after:rounded-md',
                             isActive && 'font-semibold'
                           )}
@@ -302,7 +310,6 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
                           disabled={isPending}
                           onClick={() => {
                             setSelectedCandidate(candidate.eventUUID)
-                            setShowForm(false)
                             setLinkOpen(false)
                             setConfirmAction(null)
                           }}
@@ -405,25 +412,6 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
               <p className='mt-3 text-sm text-destructive'>{notificationRetryWarning('unknown')}</p>
             )}
           </section>
-          {showForm && availability.canResolve && (
-            <section className='border-t pt-6'>
-              <h2 className='mb-2 text-lg font-semibold md:text-xl'>不足情報を補完</h2>
-              <p className='mb-5 text-sm text-muted-foreground'>
-                元投稿を確認し、必要な情報を入力してください。この操作ではXに投稿しません。
-              </p>
-              {!job.candidate && job.draft !== null && (
-                <p className='mb-5 text-sm text-muted-foreground'>
-                  AIが確定できなかった項目は空欄です。下書きの値は元投稿と照合してください。
-                </p>
-              )}
-              <EventForm
-                key={job.eventUUID}
-                allowTweet={false}
-                defaultValues={webhookResolveDefaultValues(job)}
-                onSubmitPayload={register}
-              />
-            </section>
-          )}
         </div>
       )}
       <BotActionConfirmation

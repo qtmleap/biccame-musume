@@ -201,7 +201,8 @@ describe('項目別のしきい値', () => {
   test('8項目が、回答表の質問名と同じラベルで、保存済みの値を%で入力欄に出す', async () => {
     const markup = await renderSettings(discordStatus('valid'), true)
     expect(FIELD_THRESHOLD_KEYS).toHaveLength(8)
-    expect(markup.match(/data-slot="input"/g)).toHaveLength(8)
+    // 項目別の8項目に、判定全体の3つ（登録・必須項目の選択・対象外）を足した11個が入力欄。
+    expect(markup.match(/data-slot="input"/g)).toHaveLength(11)
     expect([...markup.matchAll(/<dt[^>]*>(.*?)<\/dt>/g)].map((match) => match[1])).toEqual(
       expect.arrayContaining(['状態', '配布物', '店舗', '開始日', '終了日', '配布数', '配布条件', '購入額'])
     )
@@ -224,13 +225,50 @@ describe('項目別のしきい値', () => {
     expect(settingMarkup(markup, '購入額')).toContain('value="82.5"')
   })
 
-  test('共通値（環境変数由来）の行は表示のまま残し、入力欄にしない', async () => {
+  test('判定全体の3つは読み取り専用の表示ではなく、保存済みの値を%で入れた入力欄になる', async () => {
     const markup = await renderSettings(discordStatus('valid'), true)
-    const common = settingMarkup(markup, '必須項目の選択閾値')
-    expect(common).toContain('80.0%')
-    expect(common).not.toContain('<input')
-    expect(settingMarkup(markup, 'イベント判定の登録閾値')).toContain('90.0%')
-    expect(settingMarkup(markup, '対象外判定の閾値')).toContain('10.0%')
+    const expected = [
+      ['イベント判定の登録閾値', '90'],
+      ['必須項目の選択閾値', '80'],
+      ['対象外判定の閾値', '10']
+    ] as const
+    for (const [label, percent] of expected) {
+      const row = settingMarkup(markup, label)
+      expect(row, label).toContain('<input')
+      expect(row, label).toContain('data-slot="input"')
+      expect(row, label).toContain(`aria-label="${label}（%）"`)
+      expect(row, label).toContain(`value="${percent}"`)
+      expect(row, label).toContain('inputMode="decimal"')
+      // 項目別と同じ見た目（右寄せの mono、デスクトップで一段大きく、行の中身は上下中央）。
+      expect(row, label).toContain('text-right font-mono tabular-nums')
+      expect(row, label).toContain('md:h-10')
+      expect(row, label).toContain('flex items-center')
+      expect(row, label).not.toContain('disabled=""')
+      expect(row, label).not.toContain('aria-invalid="true"')
+      expect(row, label).not.toContain('role="alert"')
+      // 読み取り専用の表示（90.0% のような 1 桁固定の文字列）は残さない。
+      expect(row, label).not.toMatch(/\d+\.0%/)
+    }
+    // 3つの入力欄は、項目別の見出しより前（判定モデルの直後）に並ぶ。
+    const heading = markup.indexOf('項目別の選択閾値')
+    for (const [label] of expected) expect(markup.indexOf(`>${label}</dt>`)).toBeLessThan(heading)
+    expect(markup.indexOf('>イベント判定の登録閾値</dt>')).toBeLessThan(markup.indexOf('>必須項目の選択閾値</dt>'))
+    expect(markup.indexOf('>必須項目の選択閾値</dt>')).toBeLessThan(markup.indexOf('>対象外判定の閾値</dt>'))
+  })
+
+  test('必須項目の選択閾値の入力欄の近くに、項目別が優先されることを説明する補足を出す', async () => {
+    const markup = await renderSettings(discordStatus('valid'), true)
+    const note =
+      '項目別の閾値を保存済みの場合、各項目は項目別の値が優先されます。ここは配布物の種類数の確認と、項目別の閾値が未保存のときの既定値に使われます。'
+    const row = settingMarkup(markup, '必須項目の選択閾値')
+    expect(row).toContain(note)
+    // 入力欄の説明として関連付ける。
+    expect(row).toContain('aria-describedby="field-threshold-choiceThreshold-note"')
+    expect(row).toContain('id="field-threshold-choiceThreshold-note"')
+    // 補足は必須項目の選択閾値の行だけに出す。
+    expect(markup.split(note)).toHaveLength(2)
+    expect(settingMarkup(markup, 'イベント判定の登録閾値')).not.toContain('aria-describedby')
+    expect(settingMarkup(markup, '対象外判定の閾値')).not.toContain('aria-describedby')
   })
 
   test('注意書きに、過去の判定結果は変わらず再判定が必要であることを出す', async () => {
@@ -285,6 +323,8 @@ test('save stays visible and disabled before settings have loaded', async () => 
 
 test('model save uses the typed payload and updates cached model without stale readback', async () => {
   const editedThresholds: FieldThresholds = { ...savedThresholds, status: 0.7, start_date: 0.99 }
+  // 判定全体の3つ。初期値（0.9 / 0.5 / 0.9）と全て違う値にして、反映漏れを検出する。
+  const editedEvent = { eventThreshold: 0.95, ignoreThreshold: 0.3, choiceThreshold: 0.85 }
   const queryClient = new QueryClient()
   const initial: AdminBotStatus = {
     fetchedAt,
@@ -330,14 +370,24 @@ test('model save uses the typed payload and updates cached model without stale r
   try {
     renderToStaticMarkup(createElement(QueryClientProvider, { client: queryClient }, createElement(Probe)))
     if (captured.mutation === null) throw new Error('Configuration mutation unavailable')
-    await captured.mutation.mutateAsync({ model: 'clef-flash', fieldThresholds: editedThresholds })
-    expect(save).toHaveBeenCalledWith({ model: 'clef-flash', fieldThresholds: editedThresholds })
+    await captured.mutation.mutateAsync({
+      model: 'clef-flash',
+      thresholds: editedEvent,
+      fieldThresholds: editedThresholds
+    })
+    expect(save).toHaveBeenCalledWith({
+      model: 'clef-flash',
+      thresholds: editedEvent,
+      fieldThresholds: editedThresholds
+    })
     expect(successToast).toHaveBeenCalledTimes(1)
     expect(successToast).toHaveBeenCalledWith('保存しました')
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.model).toBe('clef-flash')
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.fieldThresholds).toEqual(
       editedThresholds
     )
+    // 判定全体の3つも、保存した値でキャッシュを更新する（詳細画面の回答表が即座に新しい値で出る）。
+    expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook).toMatchObject(editedEvent)
     expect(queryClient.getQueryState(ADMIN_BOT_QUERY_KEY)?.isInvalidated).toBe(false)
     expect(read).not.toHaveBeenCalled()
     if (captured.connection === null || captured.notification === null) throw new Error('Bot mutations unavailable')
@@ -345,10 +395,11 @@ test('model save uses the typed payload and updates cached model without stale r
     expect(connection).toHaveBeenCalledTimes(1)
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.discord?.connection).toBe('connected')
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.model).toBe('clef-flash')
-    // 接続確認の応答は保存前の古い項目別しきい値を返す（KV の読み戻し）ため、画面にある保存値を引き継ぐ。
+    // 接続確認の応答は保存前の古いしきい値を返す（KV の読み戻し）ため、画面にある保存値（3つと項目別）を引き継ぐ。
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.fieldThresholds).toEqual(
       editedThresholds
     )
+    expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook).toMatchObject(editedEvent)
     await captured.notification.mutateAsync()
     expect(notification).toHaveBeenCalledTimes(1)
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.model).toBe('clef-flash')
@@ -357,9 +408,13 @@ test('model save uses the typed payload and updates cached model without stale r
     save.mockImplementation(async () => {
       throw new Error('Synthetic save failure')
     })
-    await expect(captured.mutation.mutateAsync({ model: 'clef', fieldThresholds: savedThresholds })).rejects.toThrow(
-      'Synthetic save failure'
-    )
+    await expect(
+      captured.mutation.mutateAsync({
+        model: 'clef',
+        thresholds: { eventThreshold: 0.9, ignoreThreshold: 0.5, choiceThreshold: 0.9 },
+        fieldThresholds: savedThresholds
+      })
+    ).rejects.toThrow('Synthetic save failure')
     expect(save).toHaveBeenCalledTimes(2)
     expect(successToast).toHaveBeenCalledTimes(1)
     expect(errorToast).toHaveBeenCalledTimes(1)
@@ -369,6 +424,7 @@ test('model save uses the typed payload and updates cached model without stale r
     expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook.fieldThresholds).toEqual(
       editedThresholds
     )
+    expect(queryClient.getQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY)?.webhook).toMatchObject(editedEvent)
   } finally {
     save.mockRestore()
     read.mockRestore()

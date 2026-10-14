@@ -10,7 +10,7 @@ import { createMemoryHistory, createRootRoute, createRouter, RouterProvider } fr
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { WebhookAnswerTable } from '@/components/admin/webhook-answer-table'
-import { webhookResolveDefaultValues } from '@/components/admin/webhook-form-defaults'
+import { webhookEventCreateSearch } from '@/components/admin/webhook-form-defaults'
 import { WebhookJobDetail } from '@/components/admin/webhook-job-detail'
 import { WebhookJobList } from '@/components/admin/webhook-job-list'
 import {
@@ -410,17 +410,11 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(untitled).not.toContain('候補')
   })
 
-  test('保留解決フォームの初期値は登録候補を優先し、無ければ基本値へ下書きを重ねる', () => {
-    const none = webhookResolveDefaultValues(listJob)
-    expect(none).toMatchObject({
-      uuid: listJob.eventUUID,
-      isVerified: true,
-      isPreliminary: false,
-      shouldTweet: false,
-      referenceUrls: [{ type: 'announce', url: listJob.sourceUrl }]
-    })
-    expect(none.title).toBeUndefined()
-    const filled = webhookResolveDefaultValues({
+  test('イベント作成ページへ渡すクエリは登録候補を優先し、無ければ下書きから作り、元投稿URLは常に渡す', () => {
+    const none = webhookEventCreateSearch(listJob)
+    expect(none).toEqual({ referenceUrls: listJob.sourceUrl })
+    for (const key of ['title', 'category', 'stores', 'startDate', 'endDate']) expect(none).not.toHaveProperty(key)
+    const filled = webhookEventCreateSearch({
       ...listJob,
       draft: {
         title: '新東たん アクリルスタンド配布',
@@ -432,18 +426,20 @@ describe('Webhook管理画面の判定・通知表示', () => {
         limitedQuantity: 100
       }
     })
-    expect(filled).toMatchObject({
-      uuid: listJob.eventUUID,
+    expect(filled).toEqual({
       title: '新東たん アクリルスタンド配布',
       category: 'acsta',
-      stores: ['shintou'],
-      startDate: '2026-10-19T00:00:00+09:00',
-      endDate: '2026-10-25T23:59:59+09:00',
-      conditions: [{ type: 'purchase', purchaseAmount: 1000 }],
-      limitedQuantity: 100,
-      referenceUrls: [{ type: 'announce', url: listJob.sourceUrl }]
+      stores: 'shintou',
+      startDate: '2026-10-19',
+      endDate: '2026-10-25',
+      referenceUrls: listJob.sourceUrl
     })
-    expect(filled.conditions?.[0]?.uuid).toMatch(/^[0-9a-f-]{36}$/)
+    // 作成ページのクエリで渡せない配布条件と数量は含めない。
+    expect(filled).not.toHaveProperty('conditions')
+    expect(filled).not.toHaveProperty('limitedQuantity')
+    // 下書きの空の項目はキーごと省略し、有効な店舗が無ければ stores も省略する。
+    const sparse = webhookEventCreateSearch({ ...listJob, draft: { stores: ['not-a-store'], conditions: [] } })
+    expect(sparse).toEqual({ referenceUrls: listJob.sourceUrl })
     const candidate: EventRequest = {
       uuid: listJob.eventUUID,
       category: 'other',
@@ -456,10 +452,22 @@ describe('Webhook管理画面の判定・通知表示', () => {
       conditions: [{ uuid: '11111111-1111-4111-a111-111111111111', type: 'everyone' }],
       referenceUrls: [{ uuid: '22222222-2222-4222-a222-222222222222', type: 'announce', url: listJob.sourceUrl }]
     }
-    expect(webhookResolveDefaultValues({ ...listJob, candidate, draft })).toMatchObject({
+    const fromCandidate = webhookEventCreateSearch({ ...listJob, candidate, draft })
+    expect(fromCandidate).toEqual({
       title: '登録候補',
-      shouldTweet: false
+      category: 'other',
+      stores: 'akiba',
+      startDate: '2026-10-11',
+      referenceUrls: listJob.sourceUrl
     })
+    expect(fromCandidate).not.toHaveProperty('endDate')
+    // 終了日は JST の日付にそろえる。複数店舗はカンマ区切り。
+    expect(
+      webhookEventCreateSearch({
+        ...listJob,
+        candidate: { ...candidate, stores: ['akiba', 'shintou'], endDate: '2026-10-25T23:59:59+09:00' }
+      })
+    ).toMatchObject({ stores: 'akiba,shintou', startDate: '2026-10-11', endDate: '2026-10-25' })
   })
 
   test('Clef の回答表は質問ごとに1行、確定と未確定をバッジで区別する', () => {
@@ -893,7 +901,150 @@ test('一覧と詳細は一部登録・一部保留を配布物ごとに表示�
   expect(detail).not.toContain('名刺に関する原文断片')
   // 「登録イベント」リンクは編集画面ではなくイベント詳細ページへ向ける。
   expect(detail).toContain('href="/events/550e8400-e29b-41d4-a716-446655440000"')
-  expect(detail).not.toContain('/admin/events/')
+  expect(detail).not.toMatch(/\/admin\/events\/(?!new)/)
   for (const label of ['補完して登録', '既存へ紐付け', '対象外にする', 'AI で判定し直す', '通知を再送'])
     expect(detail).toContain(label)
+})
+
+describe('受信詳細の先頭ボタン（補完して登録 / 編集）', () => {
+  // どちらも <a> で出る。ボタンの見た目は data-slot="button" の a から取る。
+  const registerAnchor = (markup: string) => anchorsOf(markup).find((anchor) => anchor.includes('補完して登録'))
+  const editAnchor = (markup: string) => anchorsOf(markup).find((anchor) => anchor.endsWith('編集</a>'))
+  const firstButton = (markup: string) =>
+    anchorsOf(markup).find((anchor) => anchor.includes('bg-brand text-brand-foreground'))
+  const hrefOf = (anchor: string | undefined) => {
+    const href = anchor?.match(/href="([^"]*)"/)?.[1]
+    if (href === undefined) throw new Error('Missing href')
+    return new URL(href.replaceAll('&amp;', '&'), 'https://example.invalid')
+  }
+
+  test('イベント作成ページ（/admin/events/new）へのリンクで、元投稿URLと下書きを初期値に渡す', async () => {
+    const anchor = registerAnchor(
+      await renderDetail({
+        ...listJob,
+        draft: { title: '新東たん アクリルスタンド配布', category: 'acsta', stores: ['shintou'], conditions: [] }
+      })
+    )
+    expect(anchor).toContain('data-slot="button"')
+    const url = hrefOf(anchor)
+    expect(url.pathname).toBe('/admin/events/new')
+    expect(url.searchParams.get('referenceUrls')).toBe(listJob.sourceUrl)
+    expect(url.searchParams.get('title')).toBe('新東たん アクリルスタンド配布')
+    expect(url.searchParams.get('category')).toBe('acsta')
+    expect(url.searchParams.get('stores')).toBe('shintou')
+  })
+
+  test('保留・対象外・失敗は無効にならず、「補完して登録」のリンクとして出る', async () => {
+    for (const status of ['held', 'ignored', 'failed'] as const) {
+      const markup = await renderDetail({ ...listJob, status })
+      const anchor = registerAnchor(markup)
+      expect(anchor).toBeDefined()
+      expect(anchor).toContain('href="/admin/events/new?')
+      // class の disabled: 修飾子とは区別し、属性としての disabled / aria-disabled が無いことを見る。
+      expect(anchor).not.toMatch(/\sdisabled[\s=>]/)
+      expect(anchor).not.toContain('aria-disabled')
+      expect(editAnchor(markup)).toBeUndefined()
+    }
+  })
+
+  test('登録済みでイベントIDがあれば、同じ位置のボタンが「編集」になり、編集画面へ直接向かう', async () => {
+    const eventId = '550e8400-e29b-41d4-a716-4466554400aa'
+    const markup = await renderDetail({ ...listJob, status: 'registered', eventId })
+    const anchor = editAnchor(markup)
+    expect(anchor).toContain(`href="/admin/events/${eventId}/edit"`)
+    expect(anchor).toContain('data-slot="button"')
+    expect(anchor).toContain('bg-brand text-brand-foreground')
+    expect(anchor).toContain('lucide-pencil')
+    expect(anchor).not.toMatch(/\sdisabled[\s=>]/)
+    // ラベルに対象名は足さず、同じ描画に「補完して登録」は出さない。
+    expect(anchor).toContain('編集</a>')
+    expect(anchor).not.toContain(listJob.eventTitle)
+    expect(markup).not.toContain('補完して登録')
+    // 位置と見た目は変えない。先頭のブランド色ボタンがそのまま「編集」になる。
+    expect(firstButton(markup)).toBe(anchor)
+    // 登録イベントの行内・判定欄のリンクは、編集ではなくイベント詳細へ向けたまま。
+    expect(markup).toContain(`href="/events/${eventId}"`)
+  })
+
+  test('登録済みでもイベントIDが無ければ従来どおり「補完して登録」に倒す', async () => {
+    const markup = await renderDetail({ ...listJob, status: 'registered', eventId: null, eventTitle: null })
+    expect(registerAnchor(markup)).toContain('href="/admin/events/new?')
+    expect(editAnchor(markup)).toBeUndefined()
+  })
+
+  test('登録済みの候補を先頭にすると「編集」、保留の候補を先頭にすると「補完して登録」になる', async () => {
+    const registered = {
+      ...listJob,
+      item: 'ハロウィンアクキー',
+      storeKey: 'akiba',
+      status: 'registered' as const,
+      eventUUID: '550e8400-e29b-41d4-a716-446655440002',
+      eventId: '550e8400-e29b-41d4-a716-4466554400bb'
+    }
+    const held = { ...listJob, item: 'ハロウィン限定名刺', storeKey: 'akiba', status: 'held' as const }
+    const registeredFirst = await renderDetail({ ...listJob, candidates: [registered, held] })
+    expect(editAnchor(registeredFirst)).toContain(`href="/admin/events/${registered.eventId}/edit"`)
+    expect(registerAnchor(registeredFirst)).toBeUndefined()
+    const heldFirst = await renderDetail({ ...listJob, candidates: [held, registered] })
+    expect(registerAnchor(heldFirst)).toContain('href="/admin/events/new?')
+    expect(editAnchor(heldFirst)).toBeUndefined()
+  })
+
+  test('識別されたイベントが複数あるとき、選択中（先頭）の候補の下書きを初期値にする', async () => {
+    const candidates = [
+      {
+        ...listJob,
+        item: '名刺',
+        storeKey: 'akiba',
+        draft: { title: 'ハロウィン限定名刺', stores: ['akiba'], conditions: [] }
+      },
+      {
+        ...listJob,
+        item: 'アクキー',
+        storeKey: 'akiba',
+        eventUUID: '550e8400-e29b-41d4-a716-446655440002',
+        draft: { title: 'ハロウィンアクキー', stores: ['shintou'], conditions: [] }
+      }
+    ]
+    const url = hrefOf(registerAnchor(await renderDetail({ ...listJob, candidates })))
+    expect(url.searchParams.get('title')).toBe('ハロウィン限定名刺')
+    expect(url.searchParams.get('stores')).toBe('akiba')
+  })
+})
+
+describe('識別されたイベント一覧の見た目', () => {
+  const candidates = ['名刺', 'アクキー', 'コースター'].map((item, index) => ({
+    ...listJob,
+    item,
+    storeKey: 'akiba',
+    eventUUID: `550e8400-e29b-41d4-a716-44665544010${index}`
+  }))
+  const listOf = async () => {
+    const markup = await renderDetail({ ...listJob, candidates })
+    const section = markup.match(/<section[^>]*aria-label="識別されたイベント"[^>]*>.*?<\/section>/)?.[0]
+    if (section === undefined) throw new Error('Missing candidate section')
+    return section
+  }
+
+  test('行は区切り線ではなく gap で離し、未選択行に影（ring）を付けない', async () => {
+    const section = await listOf()
+    const ul = section.match(/<ul\b[^>]*class="([^"]*)"/)?.[1]
+    expect(ul).toContain('flex-col')
+    expect(ul).toContain('gap-1.5')
+    expect(ul).not.toContain('divide-')
+    const items = [...section.matchAll(/<li\b[^>]*class="([^"]*)"/g)].map((match) => match[1])
+    expect(items).toHaveLength(3)
+    // 選択中は ring-1 で縁取り、未選択は ring と shadow を明示的に消す。
+    expect(items[0]).toContain('ring-1')
+    for (const item of items.slice(1)) {
+      expect(item).toContain('ring-0')
+      expect(item).toContain('shadow-none')
+      expect(item).not.toContain('ring-1')
+    }
+    // キーボード操作の目印は影の ring ではなく outline にする。
+    for (const item of items) {
+      expect(item).toContain('has-[button:focus-visible]:outline-2')
+      expect(item).not.toContain('has-[button:focus-visible]:ring')
+    }
+  })
 })
