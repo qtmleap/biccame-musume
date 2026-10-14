@@ -1,6 +1,7 @@
 import type { Bindings } from '@api/types/bindings'
 import { ClefModelSchema } from '@biccame/shared/event-detect/clef'
 import { FieldThresholdsSchema, resolveFieldThresholds } from '@biccame/shared/event-detect/detection'
+import { EventThresholdsSchema } from '@biccame/shared/schemas/admin-bot.dto'
 import { z } from 'zod'
 
 const ProbabilitySchema = z.coerce.number().min(0).max(1)
@@ -16,6 +17,8 @@ const ConfigSchema = z
 export const EVENT_DETECTION_MODEL_KEY = 'settings:event-detection:model'
 /** 項目別しきい値（9項目すべての有効値の JSON）の保存先。モデルのキーとは別に持つ。 */
 export const EVENT_DETECTION_FIELD_THRESHOLDS_KEY = 'settings:event-detection:field-thresholds'
+/** 登録・必須項目の選択・対象外の3つのしきい値（JSON）の保存先。保存されていれば環境変数より優先する。 */
+export const EVENT_DETECTION_THRESHOLDS_KEY = 'settings:event-detection:thresholds'
 
 /** 不正な JSON は例外にせず undefined（スキーマ違反と同じ扱い）にする。 */
 const parseJson = (text: string): unknown => {
@@ -27,22 +30,33 @@ const parseJson = (text: string): unknown => {
 }
 
 export const detectionConfiguration = async (env: Bindings) => {
-  const [stored, storedThresholds] = await Promise.all([
+  const [stored, storedThresholds, storedEventThresholds] = await Promise.all([
     env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_MODEL_KEY, 'text'),
-    env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_FIELD_THRESHOLDS_KEY, 'text')
+    env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_FIELD_THRESHOLDS_KEY, 'text'),
+    env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_THRESHOLDS_KEY, 'text')
   ])
   const model = ClefModelSchema.safeParse(stored)
   if (stored !== null && !model.success) {
     console.warn('Invalid stored event detection model; using environment configuration')
   }
+  // 3つのしきい値は保存値が環境変数より優先。壊れた保存値は内容を出さず、環境変数の値に戻す。
+  const eventThresholds =
+    storedEventThresholds === null ? undefined : EventThresholdsSchema.safeParse(parseJson(storedEventThresholds))
+  if (eventThresholds !== undefined && !eventThresholds.success) {
+    console.warn('Invalid stored event detection thresholds; using environment configuration')
+  }
   const parsed = ConfigSchema.safeParse({
     model: model.success ? model.data : env.EVENT_DETECTION_MODEL,
-    eventThreshold: env.EVENT_DETECTION_THRESHOLD,
-    ignoreThreshold: env.EVENT_DETECTION_IGNORE_THRESHOLD,
-    choiceThreshold: env.EVENT_DETECTION_CHOICE_THRESHOLD
+    eventThreshold: eventThresholds?.success ? eventThresholds.data.eventThreshold : env.EVENT_DETECTION_THRESHOLD,
+    ignoreThreshold: eventThresholds?.success
+      ? eventThresholds.data.ignoreThreshold
+      : env.EVENT_DETECTION_IGNORE_THRESHOLD,
+    choiceThreshold: eventThresholds?.success
+      ? eventThresholds.data.choiceThreshold
+      : env.EVENT_DETECTION_CHOICE_THRESHOLD
   })
   if (!parsed.success) throw new Error('Invalid event detection configuration')
-  // 未保存なら既定値（共通値 choiceThreshold から決まる）。保存値が壊れていても保存内容は出さず、既定値に戻す。
+  // 未保存なら既定値（上書き後の有効な choiceThreshold から決まる）。保存値が壊れていても保存内容は出さず、既定値に戻す。
   // 旧9項目の保存値から廃止したsingle_eventだけを削除する。他の8項目は保持する。
   const legacy = FieldThresholdsSchema.extend({ single_event: z.number().positive().max(1) }).safeParse(
     storedThresholds === null ? undefined : parseJson(storedThresholds)
