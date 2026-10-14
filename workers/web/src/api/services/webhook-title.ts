@@ -13,7 +13,7 @@ import {
 import type { StoreKey } from '@biccame/shared/schemas/store.dto'
 import { z } from 'zod'
 
-// 自動登録するイベントのタイトルを Claude Haiku に付けさせる。
+// 登録候補のイベントのタイトルを Claude Haiku に付けさせる（自動登録するものと、重複などで保留になるもの）。
 // 命名の指示・手本の作り方・検査は shared（event-detect/title.ts）。ここは D1 から手本を取り、モデルを呼び、出力を受けるまで。
 // 呼び方は CLI（scripts/lib/event-detect/judge.ts の callTool）と同じ Anthropic Messages の形（scripts は import しない）。
 // どこで失敗しても例外にはせず { ok: false } を返す（呼び出し側は今の形のタイトルのまま登録する）。
@@ -91,6 +91,8 @@ export type TitleInput = {
   stores: readonly StoreKey[]
   /** 元の投稿の本文 */
   body: string
+  /** 投稿本文から抽出した配布物の名前。1 投稿に複数の配布物があるとき、どの配布物の題かを示す（無ければ本文から読み取らせる） */
+  item?: string
 }
 
 export type GeneratedTitle = { ok: true; title: string } | { ok: false; reason: string }
@@ -123,7 +125,8 @@ const generate = async (
     category: input.category,
     startDay: input.startDay,
     forbidden: storeNameTerms(input.stores),
-    body: input.body
+    body: input.body,
+    item: input.item
   })
   const response = await options
     .fetcher(`${baseUrl.replace(/\/+$/, '')}/v1/messages`, {
@@ -160,10 +163,11 @@ const generate = async (
 }
 
 /**
- * 自動登録するイベントのタイトルを作る。D1 の登録済みタイトルを手本に、answer ツールで題を返させ、
+ * 登録候補のイベントのタイトルを作る。D1 の登録済みタイトルを手本に、answer ツールで題を返させ、
  * shared の検査（空・長さ・括弧・キャラ名・店舗名・説明語・1 行・同名の企画とのカテゴリの食い違い）に通った題を返す。
  * 未設定（ANTHROPIC_BASE_URL / ANTHROPIC_AUTH_TOKEN）・手本の取得・通信・タイムアウト・HTTP エラー・出力の形式・検査の
  * どれが失敗しても { ok: false }（例外にしない）。D1 に登録済みのイベントが 0 件でも失敗ではなく、空の手本で作る。
+ * item（抽出した配布物の名前）を渡すと、同じ投稿の配布物ごとに別の題を付けさせる。
  */
 export const generateEventTitle = async (
   env: Bindings,

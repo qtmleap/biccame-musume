@@ -11,9 +11,10 @@ import {
 } from '@api/services/webhook-jobs'
 import type { Bindings } from '@api/types/bindings'
 import type { ClefAnswer } from '@biccame/shared/event-detect/clef'
+import { webhookKeywordVerdict } from '@biccame/shared/event-detect/detection'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
 import type { EventRequest } from '@biccame/shared/schemas/event.dto'
-import { WebhookJobSchema } from '@biccame/shared/schemas/webhook.dto'
+import { WebhookJobListSchema, WebhookJobSchema } from '@biccame/shared/schemas/webhook.dto'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
 import { convertV4MiniflareOptions, Miniflare } from 'miniflare'
@@ -629,5 +630,558 @@ test('rejudge route accepts a bodyless POST and maps errors to 404, 409 and 400'
     expect(rejected.status).toBe(409)
     expect(await rejected.text()).toBe('Manually rejected jobs cannot be re-judged')
     expect(sent).toEqual([postId, ignoredId])
+  })
+}, 60000)
+
+// ---- 受信履歴の絞り込み・並べ替え ----
+
+type ListSeed = {
+  postId: string
+  /** 受信日時(ms)。 */
+  createdAt: number
+  /** null は未判定。 */
+  confidence: number | null
+  text: string
+  screenName?: string
+  kind?: DetectPost['kind']
+  /** ジョブの状態。省略は held。 */
+  status?: string
+  /** 保存する回答（answers_json）。省略と null は未保存(NULL)。壊れた JSON もそのまま入れて確かめる。 */
+  answersJson?: string | null
+}
+
+const MATCH_TEXT = 'あべのたん限定名刺 2026年11月3日から先着100枚を配布します'
+const MISMATCH_TEXT = '日常のあいさつです'
+
+/** 判定の期待値は本文から推測せず、判定関数そのものを通して確かめてから使う。 */
+const verdictOf = (seed: ListSeed) => webhookKeywordVerdict(listSeedPost(seed))
+
+const listSeedPost = (seed: ListSeed): DetectPost => ({
+  id: seed.postId,
+  screenName: seed.screenName === undefined ? 'bic_abeno' : seed.screenName,
+  text: seed.text,
+  createdAt: '2026-10-11T00:00:00Z',
+  kind: seed.kind === undefined ? 'original' : seed.kind,
+  url: `https://x.com/bic_abeno/status/${seed.postId}`,
+  media: []
+})
+
+const seedListJobs = async (env: Bindings, seeds: readonly ListSeed[]) => {
+  for (const seed of seeds) {
+    await env.DB.prepare(
+      `INSERT INTO webhook_event_jobs(post_id,post_json,source_url,event_uuid,status,answers_json,confidence,created_at,updated_at)
+       VALUES (?,?,?,?,?,?,?,?,?)`
+    )
+      .bind(
+        seed.postId,
+        JSON.stringify(listSeedPost(seed)),
+        `https://x.com/bic_abeno/status/${seed.postId}`,
+        crypto.randomUUID(),
+        seed.status === undefined ? 'held' : seed.status,
+        seed.answersJson === undefined ? null : seed.answersJson,
+        seed.confidence,
+        seed.createdAt,
+        seed.createdAt
+      )
+      .run()
+  }
+}
+
+/** 期待する並び。SQL とは独立に JS で作る。NULL は最小値(-1)、同値は投稿IDで同じ向きに並べる。 */
+const expectedOrder = (
+  seeds: readonly ListSeed[],
+  sort: 'createdAt' | 'confidence',
+  order: 'asc' | 'desc'
+): string[] => {
+  const keyOf = (seed: ListSeed) =>
+    sort === 'createdAt' ? seed.createdAt : seed.confidence === null ? -1 : seed.confidence
+  const sign = order === 'asc' ? 1 : -1
+  return seeds
+    .toSorted((a, b) => {
+      const byKey = keyOf(a) - keyOf(b)
+      if (byKey !== 0) return sign * byKey
+      // 投稿IDは TEXT の比較(SQLite の既定は 2 進数順)。桁数が違えば桁数の少ない方が先になるとは限らない。
+      return sign * (a.postId < b.postId ? -1 : a.postId > b.postId ? 1 : 0)
+    })
+    .map((seed) => seed.postId)
+}
+
+type ListOptions = Parameters<typeof listWebhookJobs>[1]
+type ListScan = Parameters<typeof listWebhookJobs>[2]
+
+/** nextCursor が null になるまで辿り、各ページの投稿IDを返す。無限ループ防止に上限を持つ。 */
+const walkPages = async (
+  env: Bindings,
+  options: ListOptions,
+  scan?: ListScan,
+  cursor?: string,
+  pages: readonly string[][] = []
+): Promise<string[][]> => {
+  if (pages.length >= 200) throw new Error('Pagination did not terminate')
+  const page = await listWebhookJobs(env, cursor === undefined ? options : { ...options, cursor }, scan)
+  const collected = [...pages, page.jobs.map((job) => job.postId)]
+  return page.nextCursor === null ? collected : walkPages(env, options, scan, page.nextCursor, collected)
+}
+
+const HOUR = 3_600_000
+const BASE = 1_791_676_800_000
+
+/**
+ * 重複・欠落を捉えるための並び。
+ * - 投稿IDの桁数が違う(9, 10, 100, 1000)。TEXT 比較なので '9' > '10' になる。
+ * - created_at の同値、confidence の同値、複数の NULL。
+ * - 判定は一致・不一致・除外(リツイート)が混在する。
+ */
+const pagingSeeds: readonly ListSeed[] = [
+  { postId: '9', createdAt: BASE, confidence: 0.5, text: MATCH_TEXT },
+  { postId: '10', createdAt: BASE, confidence: 0.5, text: MISMATCH_TEXT },
+  { postId: '100', createdAt: BASE, confidence: null, text: MATCH_TEXT },
+  { postId: '1000', createdAt: BASE + 1, confidence: null, text: MATCH_TEXT, kind: 'retweet' },
+  { postId: '11', createdAt: BASE + 1, confidence: 0.9, text: MISMATCH_TEXT },
+  { postId: '12', createdAt: BASE + 2, confidence: 0, text: MATCH_TEXT },
+  { postId: '13', createdAt: BASE + 2, confidence: 1, text: MATCH_TEXT },
+  { postId: '14', createdAt: BASE + 3, confidence: 0.9, text: MISMATCH_TEXT, kind: 'retweet' },
+  { postId: '15', createdAt: BASE + 3, confidence: null, text: MATCH_TEXT },
+  { postId: '16', createdAt: BASE + 4, confidence: 0.25, text: MATCH_TEXT }
+]
+
+test('list: every sort and order pages without duplicates or gaps, NULL confidence is the lowest', async () => {
+  await withRejudgeEnv(async (env) => {
+    await seedListJobs(env, pagingSeeds)
+    for (const sort of ['createdAt', 'confidence'] as const) {
+      for (const order of ['asc', 'desc'] as const) {
+        const expected = expectedOrder(pagingSeeds, sort, order)
+        for (const limit of [1, 2, 3, 4, 100]) {
+          const pages = await walkPages(env, { limit, sort, order })
+          // 連結した結果が、順序・重複・欠落まで含めて期待順と完全に一致する。
+          expect(pages.flat()).toEqual(expected)
+          for (const page of pages.slice(0, -1)) expect(page).toHaveLength(limit)
+        }
+      }
+    }
+    // 並びを省略すると受信日時の新しい順。
+    expect((await walkPages(env, { limit: 100 })).flat()).toEqual(expectedOrder(pagingSeeds, 'createdAt', 'desc'))
+    // 精度の昇順は、未判定(NULL)が先頭に来る。
+    const lowest = (await listWebhookJobs(env, { limit: 100, sort: 'confidence', order: 'asc' })).jobs
+    expect(lowest.slice(0, 3).map((job) => job.confidence)).toEqual([null, null, null])
+    expect(lowest.at(-1)?.confidence).toBe(1)
+  })
+}, 60000)
+
+test('list: range keeps only jobs received within the window', async () => {
+  await withRejudgeEnv(async (env) => {
+    const now = dayjs().valueOf()
+    // 境界ちょうどを避け、30分前・2時間前・25時間前にする。
+    const seeds: ListSeed[] = [
+      { postId: '201', createdAt: now - 30 * 60_000, confidence: 0.5, text: MATCH_TEXT },
+      { postId: '202', createdAt: now - 2 * HOUR, confidence: 0.5, text: MATCH_TEXT },
+      { postId: '203', createdAt: now - 25 * HOUR, confidence: 0.5, text: MATCH_TEXT },
+      { postId: '204', createdAt: now - 10 * 60_000, confidence: null, text: MATCH_TEXT }
+    ]
+    await seedListJobs(env, seeds)
+    const ids = async (range?: '1h' | '24h') => (await walkPages(env, { limit: 1, range })).flat()
+    expect(await ids()).toEqual(['204', '201', '202', '203'])
+    expect(await ids('1h')).toEqual(['204', '201'])
+    expect(await ids('24h')).toEqual(['204', '201', '202'])
+    // 他の条件と組み合わせても、窓は受信日時(created_at)で決まる。精度の昇順は未判定(NULL)が先頭。
+    const byConfidence = await walkPages(env, { limit: 1, range: '24h', sort: 'confidence', order: 'asc' })
+    expect(byConfidence.flat()).toEqual(['204', '201', '202'])
+  })
+}, 60000)
+
+/** 判定の絞り込みテスト用の並び。受信日時の新しい順に並べたときの判定を、先頭から固定する。 */
+const verdictSeeds = (verdicts: readonly ('match' | 'mismatch' | 'excluded')[]): ListSeed[] =>
+  verdicts.map((verdict, index) => ({
+    postId: String(3000 + index),
+    // index が小さいほど新しい(= 日時の新しい順で先に出る)。
+    createdAt: BASE + 1000 - index,
+    confidence: index % 3 === 0 ? null : (index % 10) / 10,
+    text: verdict === 'mismatch' ? MISMATCH_TEXT : MATCH_TEXT,
+    kind: verdict === 'excluded' ? 'retweet' : 'original'
+  }))
+
+test('list verdict: the stored posts really produce match, mismatch and excluded', () => {
+  expect(new Set(pagingSeeds.map(verdictOf))).toEqual(new Set(['match', 'mismatch', 'excluded']))
+  expect(pagingSeeds.filter((seed) => verdictOf(seed) === 'match').length).toBeGreaterThan(0)
+})
+
+test('list verdict: filters by the same rule the list column shows, across every sort and order', async () => {
+  await withRejudgeEnv(async (env) => {
+    await seedListJobs(env, pagingSeeds)
+    for (const verdict of ['match', 'mismatch', 'excluded'] as const) {
+      const matching = pagingSeeds.filter((seed) => verdictOf(seed) === verdict)
+      expect(matching.length).toBeGreaterThan(0)
+      for (const sort of ['createdAt', 'confidence'] as const) {
+        for (const order of ['asc', 'desc'] as const) {
+          // 走査を小さくして、複数バッチにまたがる経路も通す。上限を十分大きくして取りこぼしを無くす。
+          for (const scan of [{ batch: 2, maxBatches: 100 }, { batch: 3, maxBatches: 100 }, undefined] as const) {
+            for (const limit of [1, 2, 100]) {
+              const pages = await walkPages(env, { limit, sort, order, verdict }, scan)
+              expect(pages.flat()).toEqual(expectedOrder(matching, sort, order))
+              // 一覧の「判定」列の表示と同じ判定になっている。
+              const page = await listWebhookJobs(env, { limit: 100, sort, order, verdict }, scan)
+              for (const job of page.jobs) expect(webhookKeywordVerdict(job.post)).toBe(verdict)
+            }
+          }
+        }
+      }
+    }
+  })
+}, 60000)
+
+test('list verdict: combines with status in SQL, then filters the rest by verdict', async () => {
+  await withRejudgeEnv(async (env) => {
+    await seedListJobs(env, pagingSeeds)
+    await env.DB.prepare("UPDATE webhook_event_jobs SET status='registered' WHERE post_id IN ('9','12')").run()
+    const registered = await walkPages(
+      env,
+      { limit: 5, status: 'registered', verdict: 'match' },
+      { batch: 2, maxBatches: 100 }
+    )
+    expect(registered.flat()).toEqual(
+      expectedOrder(
+        pagingSeeds.filter((seed) => ['9', '12'].includes(seed.postId) && verdictOf(seed) === 'match'),
+        'createdAt',
+        'desc'
+      )
+    )
+  })
+}, 60000)
+
+test('list verdict: a scan that hits the cap returns an empty page whose cursor continues from the last scanned row', async () => {
+  await withRejudgeEnv(async (env) => {
+    // 新しい順に 一致 ×1, 不一致 ×7, 一致 ×1。batch 2 × 最大 2 回 = 4 行を走査して打ち切る。
+    const seeds = verdictSeeds([
+      'match',
+      'mismatch',
+      'mismatch',
+      'mismatch',
+      'mismatch',
+      'mismatch',
+      'mismatch',
+      'mismatch',
+      'match'
+    ])
+    await seedListJobs(env, seeds)
+    const scan = { batch: 2, maxBatches: 2 }
+    const query = { limit: 5, verdict: 'excluded' as const }
+    // 除外は 1 件も無い。上限に達しても行は残っているので、0件のまま続きの印(最後に走査した行)を返す。
+    const first = await listWebhookJobs(env, query, scan)
+    expect(first.jobs).toEqual([])
+    expect(first.nextCursor).toBe(seeds[3]?.postId)
+    // その印から続けて辿ると、最後は行を使い切って null になる。
+    const rest = await walkPages(env, query, scan, first.nextCursor === null ? undefined : first.nextCursor)
+    expect(rest.flat()).toEqual([])
+    expect(rest.length).toBeGreaterThan(0)
+
+    // 一致の絞り込み: 先頭の 1 件は上限内で見つかり、後ろの 1 件は次ページ以降で見つかる。
+    const matchQuery = { limit: 5, verdict: 'match' as const }
+    const page1 = await listWebhookJobs(env, matchQuery, scan)
+    expect(page1.jobs.map((job) => job.postId)).toEqual([seeds[0]?.postId])
+    expect(page1.nextCursor).toBe(seeds[3]?.postId)
+    const page2 = await listWebhookJobs(
+      env,
+      { ...matchQuery, cursor: page1.nextCursor === null ? undefined : page1.nextCursor },
+      scan
+    )
+    expect(page2.jobs).toEqual([])
+    expect(page2.nextCursor).toBe(seeds[7]?.postId)
+    const page3 = await listWebhookJobs(
+      env,
+      { ...matchQuery, cursor: page2.nextCursor === null ? undefined : page2.nextCursor },
+      scan
+    )
+    expect(page3.jobs.map((job) => job.postId)).toEqual([seeds[8]?.postId])
+    expect(page3.nextCursor).toBeNull()
+    // 打ち切りを挟んでも、全ページを連結すれば一致行がすべて順に出る。
+    expect((await walkPages(env, matchQuery, scan)).flat()).toEqual([seeds[0]?.postId, seeds[8]?.postId])
+  })
+}, 60000)
+
+test('list verdict: stops exactly at the limit, and the cursor is the last returned row', async () => {
+  await withRejudgeEnv(async (env) => {
+    // 新しい順に 一致 ×3 のみ。limit 3 ちょうどで行を使い切る / limit 2 だと続きがある。
+    const seeds = verdictSeeds(['match', 'match', 'match'])
+    await seedListJobs(env, seeds)
+    const scan = { batch: 2, maxBatches: 10 }
+
+    // limit+1 件目が見つかる: 返した最後の行が nextCursor(余分に見つけた行は返さない)。
+    const more = await listWebhookJobs(env, { limit: 2, verdict: 'match' }, scan)
+    expect(more.jobs.map((job) => job.postId)).toEqual([seeds[0]?.postId, seeds[1]?.postId])
+    expect(more.nextCursor).toBe(seeds[1]?.postId)
+    const tail = await listWebhookJobs(
+      env,
+      { limit: 2, verdict: 'match', cursor: more.nextCursor === null ? undefined : more.nextCursor },
+      scan
+    )
+    expect(tail.jobs.map((job) => job.postId)).toEqual([seeds[2]?.postId])
+    expect(tail.nextCursor).toBeNull()
+
+    // limit 件ぴったりで行を使い切った: 続きは無いので null。
+    const exact = await listWebhookJobs(env, { limit: 3, verdict: 'match' }, scan)
+    expect(exact.jobs.map((job) => job.postId)).toEqual(seeds.map((seed) => seed.postId))
+    expect(exact.nextCursor).toBeNull()
+  })
+}, 60000)
+
+test('list verdict: ends with a null cursor when the cap and the last row coincide', async () => {
+  await withRejudgeEnv(async (env) => {
+    // 4 行を batch 2 × 2 回でちょうど走査し終える。最後のバッチが満杯でも、次の取得は空で null になる。
+    const seeds = verdictSeeds(['mismatch', 'mismatch', 'mismatch', 'mismatch'])
+    await seedListJobs(env, seeds)
+    const result = await listWebhookJobs(env, { limit: 5, verdict: 'match' }, { batch: 2, maxBatches: 2 })
+    expect(result.jobs).toEqual([])
+    // 上限に達した時点では先があるか分からないので、最後に走査した行を印にする。続きを辿れば null で終わる。
+    expect(result.nextCursor).toBe(seeds[3]?.postId)
+    const next = await listWebhookJobs(
+      env,
+      { limit: 5, verdict: 'match', cursor: seeds[3]?.postId },
+      { batch: 2, maxBatches: 2 }
+    )
+    expect(next).toEqual({ jobs: [], nextCursor: null })
+  })
+}, 60000)
+
+test('list route: validates the new query over HTTP', async () => {
+  await withRejudgeEnv(async (env) => {
+    await seedListJobs(env, postStatusSeeds)
+    const get = (search: string) => adminWebhookRoutes.request(`/admin/webhook/jobs?${search}`, undefined, env)
+    expect((await get('range=7d')).status).toBe(400)
+    expect((await get('sort=status')).status).toBe(400)
+    expect((await get('verdict=unknown')).status).toBe(400)
+    expect((await get('postStatus=foo')).status).toBe(400)
+    // ジョブの状態名はステータスの値ではない。
+    expect((await get('postStatus=held')).status).toBe(400)
+    const ok = await get('sort=confidence&order=asc&postStatus=announce&range=24h')
+    expect(ok.status).toBe(200)
+    const body = await ok.json()
+    expect(body).toMatchObject({ jobs: [], nextCursor: null })
+    // ステータスの絞り込みと並びが効く。
+    const sorted = await get('limit=100&sort=confidence&order=desc&postStatus=end')
+    expect(sorted.status).toBe(200)
+    const sortedBody = WebhookJobListSchema.safeParse(await sorted.json())
+    expect(sortedBody.success ? sortedBody.data.jobs.map((job) => job.postId) : null).toEqual(
+      expectedOrder(postStatusSeedsOf(['13', '14']), 'confidence', 'desc')
+    )
+    // 精度の下限・上限はもう受け付けない。未知のキーとして捨てるので 400 にならず、絞り込みにも効かない。
+    const unfiltered = await get('limit=100')
+    const withBounds = await get('limit=100&minConfidence=0.9&maxConfidence=0.1')
+    expect(withBounds.status).toBe(200)
+    expect(await withBounds.json()).toEqual(await unfiltered.json())
+  })
+}, 60000)
+
+// ---- 受信履歴のステータス絞り込み ----
+
+/** 保存する回答。ステータス列は、この status の選択肢を表示する。 */
+const statusAnswers = (choice: string) =>
+  JSON.stringify({
+    is_event: { type: 'noul', noul: 0.9 },
+    status: { type: 'choice', choice, probabilities: { [choice]: 0.9 } }
+  })
+
+/**
+ * ステータスの絞り込みを確かめる並び。
+ * - 投稿IDの桁数が違う、created_at と confidence の同値、NULL がある（ページ送りの重複・欠落を捉える）。
+ * - 却下(ignored)のジョブは保存済み回答が announce でも「却下」にだけ一致する。
+ * - 回答が無い・壊れた JSON・JSON でも status が選択式でない・4値にない選択肢の行は、どの4値にも一致しない。
+ */
+const postStatusSeeds: readonly ListSeed[] = [
+  { postId: '9', createdAt: BASE, confidence: 0.5, text: MATCH_TEXT, answersJson: statusAnswers('announce') },
+  { postId: '10', createdAt: BASE, confidence: 0.5, text: MISMATCH_TEXT, answersJson: statusAnswers('announce') },
+  { postId: '100', createdAt: BASE, confidence: null, text: MATCH_TEXT, answersJson: statusAnswers('start') },
+  {
+    postId: '1000',
+    createdAt: BASE + 1,
+    confidence: 0.9,
+    text: MATCH_TEXT,
+    kind: 'retweet',
+    answersJson: statusAnswers('start')
+  },
+  { postId: '11', createdAt: BASE + 1, confidence: 0.9, text: MISMATCH_TEXT, answersJson: statusAnswers('ongoing') },
+  { postId: '12', createdAt: BASE + 2, confidence: 0, text: MATCH_TEXT, answersJson: statusAnswers('ongoing') },
+  { postId: '13', createdAt: BASE + 2, confidence: 1, text: MATCH_TEXT, answersJson: statusAnswers('end') },
+  {
+    postId: '14',
+    createdAt: BASE + 3,
+    confidence: 0.9,
+    text: MISMATCH_TEXT,
+    kind: 'retweet',
+    answersJson: statusAnswers('end')
+  },
+  // 却下: 保存済み回答は announce でも、画面のステータスは「却下」。
+  {
+    postId: '15',
+    createdAt: BASE + 3,
+    confidence: null,
+    text: MATCH_TEXT,
+    status: 'ignored',
+    answersJson: statusAnswers('announce')
+  },
+  { postId: '16', createdAt: BASE + 4, confidence: 0.25, text: MATCH_TEXT, status: 'ignored', answersJson: null },
+  // 登録済みのジョブでも、回答の選択肢で絞れる。
+  {
+    postId: '22',
+    createdAt: BASE + 4,
+    confidence: 0.8,
+    text: MATCH_TEXT,
+    status: 'registered',
+    answersJson: statusAnswers('announce')
+  },
+  // どの4値にも一致しない行。
+  { postId: '17', createdAt: BASE + 5, confidence: 0.5, text: MATCH_TEXT, answersJson: null },
+  { postId: '18', createdAt: BASE + 5, confidence: 0.5, text: MATCH_TEXT, answersJson: 'not json{' },
+  { postId: '19', createdAt: BASE + 5, confidence: 0.5, text: MATCH_TEXT, answersJson: '[]' },
+  { postId: '20', createdAt: BASE + 6, confidence: 0.5, text: MATCH_TEXT, answersJson: '{"status":"announce"}' },
+  {
+    postId: '21',
+    createdAt: BASE + 6,
+    confidence: 0.5,
+    text: MATCH_TEXT,
+    answersJson: JSON.stringify({ status: { type: 'noul', noul: 0.5, choice: 'announce' } })
+  },
+  { postId: '23', createdAt: BASE + 6, confidence: 0.5, text: MATCH_TEXT, answersJson: statusAnswers('unknown_status') }
+]
+
+/** 期待する行の投稿IDを、並びのとおりに seed へ引き直す。 */
+const postStatusSeedsOf = (postIds: readonly string[]): ListSeed[] =>
+  postStatusSeeds.filter((seed) => postIds.includes(seed.postId))
+
+/** 値ごとに一致するはずの投稿ID。画面の表示とは独立に、シードの内容から固定する。 */
+const POST_STATUS_IDS = {
+  announce: ['9', '10', '22'],
+  start: ['100', '1000'],
+  ongoing: ['11', '12'],
+  end: ['13', '14'],
+  ignored: ['15', '16']
+} as const
+const POST_STATUSES = ['announce', 'start', 'ongoing', 'end', 'ignored'] as const
+
+test('list postStatus: the seeded answers really include broken rows that would make an unguarded json_extract fail', async () => {
+  await withRejudgeEnv(async (env) => {
+    await seedListJobs(env, postStatusSeeds)
+    // 保護なしの json_extract は、壊れた JSON の行でエラーになる。だから listFilter は json_valid で守っている。
+    await expect(
+      env.DB.prepare(
+        "SELECT json_extract(answers_json,'$.status.type') AS v FROM webhook_event_jobs WHERE post_id='18'"
+      ).all()
+    ).rejects.toThrow()
+    // 守れば、壊れた行も NULL（どの値にも一致しない）として扱える。
+    const guarded = await env.DB.prepare(
+      "SELECT post_id AS id, CASE WHEN json_valid(answers_json) THEN json_extract(answers_json,'$.status.type') END AS v FROM webhook_event_jobs WHERE post_id IN ('17','18','19','20')"
+    ).all<{ id: string; v: string | null }>()
+    expect(guarded.results.map((row) => row.v)).toEqual([null, null, null, null])
+  })
+}, 60000)
+
+test('list postStatus: each value matches what the status column shows, and ignored wins over the saved answer', async () => {
+  await withRejudgeEnv(async (env) => {
+    await seedListJobs(env, postStatusSeeds)
+    const all = (await listWebhookJobs(env, { limit: 100 })).jobs
+    expect(all).toHaveLength(postStatusSeeds.length)
+    for (const postStatus of POST_STATUSES) {
+      const expected = POST_STATUS_IDS[postStatus]
+      expect(expected.length).toBeGreaterThan(0)
+      const page = await listWebhookJobs(env, { limit: 100, postStatus })
+      expect(page.jobs.map((job) => job.postId).toSorted()).toEqual(expected.toSorted())
+      expect(page.nextCursor).toBeNull()
+      // 画面のステータス列の規則（webhookPostStatusLabel）から導いた期待値とも一致する。
+      const shown = all
+        .filter((job) =>
+          postStatus === 'ignored'
+            ? job.status === 'ignored'
+            : job.status !== 'ignored' && job.postStatus === postStatus
+        )
+        .map((job) => job.postId)
+      expect(page.jobs.map((job) => job.postId).toSorted()).toEqual(shown.toSorted())
+    }
+    // 却下のジョブは、保存済み回答が announce でも announce には一致しない。
+    const announce = (await listWebhookJobs(env, { limit: 100, postStatus: 'announce' })).jobs.map((job) => job.postId)
+    expect(announce).not.toContain('15')
+    expect(
+      (await listWebhookJobs(env, { limit: 100, postStatus: 'ignored' })).jobs.find((job) => job.postId === '15')
+    ).toMatchObject({ status: 'ignored', postStatus: 'announce' })
+    // 回答が無い・壊れている・status が選択式でない・4値にない選択肢の行は、どの値にも一致せず、エラーにもならない。
+    const returned = new Set<string>()
+    for (const postStatus of POST_STATUSES) {
+      for (const job of (await listWebhookJobs(env, { limit: 100, postStatus })).jobs) returned.add(job.postId)
+    }
+    for (const postId of ['17', '18', '19', '20', '21', '23']) expect(returned.has(postId)).toBe(false)
+    // 絞り込みなしでは、それらの行も含めて全行が返る。
+    expect(all.map((job) => job.postId).toSorted()).toEqual(postStatusSeeds.map((seed) => seed.postId).toSorted())
+  })
+}, 60000)
+
+test('list postStatus: every sort and order pages without duplicates or gaps', async () => {
+  await withRejudgeEnv(async (env) => {
+    await seedListJobs(env, postStatusSeeds)
+    for (const postStatus of POST_STATUSES) {
+      const matching = postStatusSeedsOf(POST_STATUS_IDS[postStatus])
+      for (const sort of ['createdAt', 'confidence'] as const) {
+        for (const order of ['asc', 'desc'] as const) {
+          for (const limit of [1, 2, 100]) {
+            const pages = await walkPages(env, { limit, sort, order, postStatus })
+            expect(pages.flat()).toEqual(expectedOrder(matching, sort, order))
+            for (const page of pages.slice(0, -1)) expect(page).toHaveLength(limit)
+          }
+        }
+      }
+    }
+  })
+}, 60000)
+
+test('list postStatus: combines with verdict, status and range without duplicates or gaps', async () => {
+  await withRejudgeEnv(async (env) => {
+    await seedListJobs(env, postStatusSeeds)
+    // 判定の走査（複数バッチ）でも、ステータスの条件が SQL 側で効いている。
+    for (const postStatus of POST_STATUSES) {
+      for (const verdict of ['match', 'mismatch', 'excluded'] as const) {
+        const matching = postStatusSeedsOf(POST_STATUS_IDS[postStatus]).filter((seed) => verdictOf(seed) === verdict)
+        for (const scan of [{ batch: 2, maxBatches: 100 }, { batch: 3, maxBatches: 100 }, undefined] as const) {
+          for (const limit of [1, 2, 100]) {
+            for (const sort of ['createdAt', 'confidence'] as const) {
+              const pages = await walkPages(env, { limit, sort, order: 'desc', postStatus, verdict }, scan)
+              expect(pages.flat()).toEqual(expectedOrder(matching, sort, 'desc'))
+            }
+          }
+        }
+      }
+    }
+    // 少なくとも一つの組は空でなく、複数ページにまたがる（検証が空振りしない）。
+    const announceMatch = await walkPages(
+      env,
+      { limit: 1, postStatus: 'announce', verdict: 'match' },
+      { batch: 2, maxBatches: 100 }
+    )
+    expect(announceMatch.flat()).toEqual(['22', '9'])
+    expect(announceMatch.length).toBeGreaterThan(1)
+    // ジョブの状態との組み合わせ。登録済みの announce は 22 だけ。
+    expect((await walkPages(env, { limit: 1, postStatus: 'announce', status: 'registered' })).flat()).toEqual(['22'])
+    expect((await walkPages(env, { limit: 1, postStatus: 'announce', status: 'held' })).flat()).toEqual(
+      expectedOrder(postStatusSeedsOf(['9', '10']), 'createdAt', 'desc')
+    )
+    // 却下はジョブの状態が ignored の行だけ。状態を held にすると重ならない。
+    expect(await listWebhookJobs(env, { limit: 100, postStatus: 'ignored', status: 'held' })).toEqual({
+      jobs: [],
+      nextCursor: null
+    })
+    // 受信日時の窓と組み合わせても、窓の外の行は出ない（シードは過去なので 1 時間の窓は空）。
+    expect(await listWebhookJobs(env, { limit: 100, postStatus: 'announce', range: '1h' })).toEqual({
+      jobs: [],
+      nextCursor: null
+    })
+  })
+}, 60000)
+
+test('list postStatus: a verdict scan that hits the cap still continues exactly under a postStatus filter', async () => {
+  await withRejudgeEnv(async (env) => {
+    await seedListJobs(env, postStatusSeeds)
+    const scan = { batch: 2, maxBatches: 2 }
+    const query = { limit: 5, postStatus: 'announce' as const, verdict: 'match' as const }
+    // 打ち切りを挟んでも、辿った結果は上限なしの結果と同じ（重複も欠落も無い）。
+    const capped = await walkPages(env, query, scan)
+    const uncapped = await walkPages(env, query, { batch: 2, maxBatches: 100 })
+    expect(capped.flat()).toEqual(uncapped.flat())
+    expect(capped.flat()).toEqual(expectedOrder(postStatusSeedsOf(['9', '22']), 'createdAt', 'desc'))
   })
 }, 60000)

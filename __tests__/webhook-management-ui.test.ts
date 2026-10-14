@@ -4,11 +4,23 @@ import type { FieldThresholds } from '@biccame/shared/event-detect/detection'
 import type { AdminBotStatus } from '@biccame/shared/schemas/admin-bot.dto'
 import type { EventRequest } from '@biccame/shared/schemas/event.dto'
 import { StoreDataSchema } from '@biccame/shared/schemas/store.dto'
-import { type WebhookJob, WebhookNotificationStatusSchema } from '@biccame/shared/schemas/webhook.dto'
+import {
+  type WebhookJob,
+  WebhookNotificationStatusSchema,
+  WebhookPostStatusFilterSchema
+} from '@biccame/shared/schemas/webhook.dto'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createMemoryHistory, createRootRoute, createRouter, RouterProvider } from '@tanstack/react-router'
+import { createStore, Provider } from 'jotai'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
+import {
+  INITIAL_WEBHOOK_FILTER,
+  NO_WEBHOOK_FILTER,
+  type WebhookFilter,
+  webhookFilterAtom
+} from '@/atoms/webhook-filter-atom'
+import { INITIAL_WEBHOOK_PAGINATION, webhookPaginationAtom } from '@/atoms/webhook-pagination-atom'
 import { WebhookAnswerTable } from '@/components/admin/webhook-answer-table'
 import { webhookEventCreateSearch } from '@/components/admin/webhook-form-defaults'
 import { WebhookJobDetail } from '@/components/admin/webhook-job-detail'
@@ -18,15 +30,17 @@ import {
   notificationRetryWarning,
   webhookAccountLabel,
   webhookActionAvailability,
+  webhookCandidateTitle,
   webhookJobLabel,
   webhookKeywordLabel,
   webhookNotificationLabel,
+  webhookPostStatusFilterLabel,
   webhookPostStatusIsTentative,
   webhookPostStatusLabel
 } from '@/components/admin/webhook-labels'
 import { WebhookStatusBadge } from '@/components/admin/webhook-status-badge'
 import { ADMIN_BOT_QUERY_KEY } from '@/hooks/use-admin-bot'
-import { ADMIN_WEBHOOK_QUERY_KEY } from '@/hooks/use-admin-webhooks'
+import { ADMIN_WEBHOOK_QUERY_KEY, webhookJobListQueryKey } from '@/hooks/use-admin-webhooks'
 import { charactersQueryKey } from '@/hooks/use-characters'
 import { adminEndpoints } from '@/utils/client/admin'
 import canonicalCharacters from '../workers/web/public/characters.json'
@@ -101,18 +115,33 @@ const botStatus = (choiceThreshold: number, fieldThresholds: Partial<FieldThresh
   error: null
 })
 
-const renderList = async (jobs: WebhookJob[], choiceThreshold?: number, fieldThresholds?: Partial<FieldThresholds>) => {
+type RenderListOptions = { filter?: WebhookFilter; nextCursor?: string | null }
+
+/** 一覧を描画する。jotai の既定ストアは使わず、テストごとの store に絞り込みの保存値を入れる（他のテストへ漏らさない）。 */
+const renderList = async (
+  jobs: WebhookJob[],
+  choiceThreshold?: number,
+  fieldThresholds?: Partial<FieldThresholds>,
+  { filter = INITIAL_WEBHOOK_FILTER, nextCursor = null }: RenderListOptions = {}
+) => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-  queryClient.setQueryData([...ADMIN_WEBHOOK_QUERY_KEY, 'list', null], { jobs, nextCursor: null })
+  queryClient.setQueryData(webhookJobListQueryKey(null, filter), { jobs, nextCursor })
   queryClient.setQueryData(charactersQueryKey, characters)
   if (choiceThreshold !== undefined)
     queryClient.setQueryData(ADMIN_BOT_QUERY_KEY, botStatus(choiceThreshold, fieldThresholds))
+  const store = createStore()
+  store.set(webhookFilterAtom, filter)
+  store.set(webhookPaginationAtom, INITIAL_WEBHOOK_PAGINATION)
   const routeTree = createRootRoute({ component: WebhookJobList })
   const router = createRouter({ routeTree, history: createMemoryHistory({ initialEntries: ['/'] }) })
   try {
     await router.load()
     return renderToStaticMarkup(
-      createElement(QueryClientProvider, { client: queryClient }, createElement(RouterProvider, { router }))
+      createElement(
+        Provider,
+        { store },
+        createElement(QueryClientProvider, { client: queryClient }, createElement(RouterProvider, { router }))
+      )
     )
   } finally {
     queryClient.clear()
@@ -154,7 +183,8 @@ const draft = { title: '新東たん アクリルスタンド配布', stores: ['
 describe('Webhook管理画面の判定・通知表示', () => {
   test('受信履歴は8列でキーワード判定とモデル、精度、投稿状態を別々に表示し、末尾に詳細列を置く', async () => {
     const markup = await renderList([listJob])
-    expect([...markup.matchAll(/<th\b[^>]*>(.*?)<\/th>/g)].map((match) => match[1])).toEqual([
+    // 精度の見出しは並べ替えのボタン（アイコン付き）なので、タグを除いた文字で比べる。
+    expect([...markup.matchAll(/<th\b[^>]*>(.*?)<\/th>/g)].map((match) => match[1]?.replace(/<[^>]*>/g, ''))).toEqual([
       'アカウント',
       '日時',
       '判定',
@@ -162,7 +192,7 @@ describe('Webhook管理画面の判定・通知表示', () => {
       '精度',
       'ステータス',
       'イベント名',
-      '<span class="sr-only">詳細</span>'
+      '詳細'
     ])
     expect([...markup.matchAll(/<td\b/g)]).toHaveLength(8)
     expect(markup).toContain('@synthetic_account')
@@ -820,9 +850,221 @@ describe('管理画面の outline ボタンの枠線', () => {
 
   test('受信履歴の outline ボタンはすべて枠線に border-card-border を指定する', async () => {
     const tags = outlineTags(await renderList([listJob], 0.9))
-    // 更新・bot 設定・前へ・次へ。
-    expect(tags).toHaveLength(4)
+    // 更新・bot 設定・条件をクリア・前へ・次へ。
+    expect(tags).toHaveLength(5)
     for (const tag of tags) expect(tag).toContain('border-card-border')
+  })
+})
+
+describe('受信履歴の絞り込みツールバーと並べ替え', () => {
+  const toolbar = (markup: string) => markup.match(/<fieldset\b[^>]*aria-label="絞り込み"[^>]*>.*?<\/fieldset>/)?.[0]
+  const confidenceHeader = (markup: string) =>
+    [...markup.matchAll(/<th\b[^>]*>.*?<\/th>/g)].map((match) => match[0]).find((cell) => cell.includes('>精度'))
+  // 条件なし（NO_WEBHOOK_FILTER）を土台に上書きする。既定（判定は一致）が混ざると、判定の違いが検証から消えるため。
+  const filterWith = (overrides: Partial<WebhookFilter>): WebhookFilter => ({ ...NO_WEBHOOK_FILTER, ...overrides })
+  const selectValues = (bar: string | undefined) =>
+    bar === undefined ? [] : [...bar.matchAll(/data-slot="select-value"[^>]*>(.*?)<\/span>/g)].map((match) => match[1])
+
+  test('表の上に、期間・判定・ステータス・条件をクリアをこの順で同じ場所に出し、精度の絞り込みは出さない', async () => {
+    const markup = await renderList([listJob], 0.9)
+    const bar = toolbar(markup)
+    expect(bar).toBeDefined()
+    const labels = ['aria-label="期間"', 'aria-label="判定"', 'aria-label="ステータス"', '条件をクリア']
+    for (const label of labels) expect(bar).toContain(label)
+    const positions = labels.map((label) => (bar === undefined ? -1 : bar.indexOf(label)))
+    expect(positions).toEqual(positions.toSorted((a, b) => a - b))
+    // 精度の絞り込み（下限・上限の入力欄）は無い。精度は並べ替えだけ。
+    expect(bar).not.toContain('aria-label="精度 下限 %"')
+    expect(bar).not.toContain('aria-label="精度 上限 %"')
+    expect(bar).not.toContain('<input')
+    expect(markup).not.toContain('aria-label="精度 下限 %"')
+    expect(markup).not.toContain('aria-label="精度 上限 %"')
+    // ツールバーは表より前にある。
+    expect(markup.indexOf('aria-label="絞り込み"')).toBeLessThan(markup.indexOf('<table'))
+    // 既定の選択は、期間は「すべて」、判定は「一致」、ステータスは「すべて」。
+    expect(selectValues(bar)).toEqual(['すべて', '一致', 'すべて'])
+  })
+
+  test('ステータスの選択肢は 告知・開始・継続・終了・却下 で、列の表示と同じ文言を使う', () => {
+    const labels = WebhookPostStatusFilterSchema.options.map(webhookPostStatusFilterLabel)
+    expect(labels).toEqual(['告知', '開始', '継続', '終了', '却下'])
+    // 一覧の「ステータス」列（webhookPostStatusLabel）と同じ表示。却下はジョブの状態が最優先。
+    const base = { status: 'registered', postStatusProbability: 0.9 } as const
+    expect(
+      (['announce', 'start', 'ongoing', 'end'] as const).map((postStatus) =>
+        webhookPostStatusLabel({ ...base, postStatus })
+      )
+    ).toEqual(labels.slice(0, 4))
+    expect(webhookPostStatusLabel({ ...base, status: 'ignored', postStatus: 'announce' })).toBe(labels[4])
+  })
+
+  test('条件なし（判定が null）の絞り込みでは、判定を既定の一致に戻さず「すべて」と表示する', async () => {
+    const bar = toolbar(await renderList([listJob], 0.9, undefined, { filter: NO_WEBHOOK_FILTER }))
+    expect(selectValues(bar)).toEqual(['すべて', 'すべて', 'すべて'])
+  })
+
+  test('絞り込みの値は選択中の表示に出す', async () => {
+    const filter = filterWith({ range: '24h', verdict: 'excluded', postStatus: 'ongoing' })
+    const bar = toolbar(await renderList([listJob], 0.9, undefined, { filter }))
+    expect(selectValues(bar)).toEqual(['直近24時間', '除外', '継続'])
+    for (const [postStatus, label] of [
+      ['announce', '告知'],
+      ['start', '開始'],
+      ['end', '終了'],
+      ['ignored', '却下']
+    ] as const) {
+      const other = toolbar(await renderList([listJob], 0.9, undefined, { filter: filterWith({ postStatus }) }))
+      expect(selectValues(other)).toEqual(['すべて', 'すべて', label])
+    }
+  })
+
+  test('「条件をクリア」は常に出し、外せる条件が無い（NO_WEBHOOK_FILTER）ときだけ disabled にする', async () => {
+    const clearButton = (markup: string) =>
+      [...markup.matchAll(/<button\b[^>]*>.*?<\/button>/g)]
+        .map((match) => match[0])
+        .find((tag) => tag.includes('条件をクリア'))
+    // 既定は判定が一致なので、外せる条件がある。押せる。
+    const initial = clearButton(await renderList([listJob], 0.9))
+    expect(initial).toBeDefined()
+    expect(initial).not.toContain('disabled=""')
+    expect(initial).toContain('border-card-border')
+    // 条件が何も無ければ押せない。
+    const none = clearButton(await renderList([listJob], 0.9, undefined, { filter: NO_WEBHOOK_FILTER }))
+    expect(none).toContain('disabled=""')
+    expect(none).toContain('border-card-border')
+    for (const filter of [
+      INITIAL_WEBHOOK_FILTER,
+      filterWith({ range: '1h' }),
+      filterWith({ verdict: 'match' }),
+      filterWith({ verdict: 'excluded' }),
+      filterWith({ postStatus: 'announce' }),
+      filterWith({ postStatus: 'ignored' }),
+      filterWith({ sort: 'confidence', order: 'desc' }),
+      filterWith({ sort: 'confidence', order: 'asc' })
+    ]) {
+      const active = clearButton(await renderList([listJob], 0.9, undefined, { filter }))
+      expect(active).toBeDefined()
+      expect(active).not.toContain('disabled=""')
+    }
+  })
+
+  test('精度の見出しはボタンで、並べ替えの向きを aria-sort と矢印アイコンで示す', async () => {
+    const cases = [
+      [INITIAL_WEBHOOK_FILTER, 'none', 'lucide-arrow-up-down'],
+      [filterWith({ sort: 'confidence', order: 'desc' }), 'descending', 'lucide-arrow-down'],
+      [filterWith({ sort: 'confidence', order: 'asc' }), 'ascending', 'lucide-arrow-up']
+    ] as const
+    for (const [filter, ariaSort, icon] of cases) {
+      const header = confidenceHeader(await renderList([listJob], 0.9, undefined, { filter }))
+      expect(header).toContain(`aria-sort="${ariaSort}"`)
+      expect(header).toContain('<button')
+      expect(header).toContain(icon)
+      // 矢印アイコンは装飾。ボタンの名前は「精度」だけ。
+      expect(header).toContain('aria-hidden="true"')
+      expect(header).toMatch(/>精度<svg/)
+    }
+  })
+
+  test('精度の見出しボタンは行内で右寄せの数値列に揃い、操作の説明を title に持つ', async () => {
+    const header = confidenceHeader(await renderList([listJob], 0.9))
+    expect(header).toContain('aria-sort="none"')
+    expect(header).toContain('text-right')
+    expect(header).toContain('title="精度の高い順に並べ替え"')
+    const high = confidenceHeader(
+      await renderList([listJob], 0.9, undefined, { filter: filterWith({ sort: 'confidence', order: 'desc' }) })
+    )
+    expect(high).toContain('title="精度の低い順に並べ替え"')
+    const low = confidenceHeader(
+      await renderList([listJob], 0.9, undefined, { filter: filterWith({ sort: 'confidence', order: 'asc' }) })
+    )
+    expect(low).toContain('title="日時の新しい順に戻す"')
+  })
+
+  test('0件でも先があるときは続きを検索できる旨を、先が無いときは従来の文言を出す', async () => {
+    const more = await renderList([], 0.9, undefined, { nextCursor: '1000000000000000001' })
+    expect(more).toContain('この範囲には条件に合う履歴がありません。「次へ」で続きを検索できます。')
+    expect(more).not.toContain('受信履歴はありません。')
+    const none = await renderList([], 0.9)
+    expect(none).toContain('受信履歴はありません。')
+    expect(none).not.toContain('続きを検索できます')
+    // どちらも8列をまたぐ。
+    expect(more).toContain('colSpan="8"')
+  })
+
+  test('更新・前へ・次へと同じく、ツールバーのボタンも枠線色は共通テーマ色', async () => {
+    const bar = toolbar(await renderList([listJob], 0.9))
+    expect(bar).toBeDefined()
+    for (const tag of outlineTags(bar === undefined ? '' : bar)) expect(tag).toContain('border-card-border')
+  })
+})
+
+describe('候補の表示名', () => {
+  const baseCandidate = {
+    eventTitle: null,
+    candidate: null,
+    item: 'ハロウィン限定名刺'
+  } as const
+  const registeredRequest: EventRequest = {
+    uuid: listJob.eventUUID,
+    category: 'limited_card',
+    title: 'AI が付けた題',
+    stores: ['akiba'],
+    startDate: '2026-10-11T00:00:00+09:00',
+    isVerified: true,
+    isPreliminary: false,
+    shouldTweet: false,
+    conditions: [{ uuid: '11111111-1111-4111-a111-111111111111', type: 'everyone' }],
+    referenceUrls: [{ uuid: '22222222-2222-4222-a222-222222222222', type: 'announce', url: listJob.sourceUrl }]
+  }
+
+  test('登録済みなら登録イベントの題、無ければ保存済みの登録候補の題、無ければ抽出名の順で選ぶ', () => {
+    expect(
+      webhookCandidateTitle({ ...baseCandidate, eventTitle: '実際のイベント名', candidate: registeredRequest })
+    ).toBe('実際のイベント名')
+    expect(webhookCandidateTitle({ ...baseCandidate, candidate: registeredRequest })).toBe('AI が付けた題')
+    expect(webhookCandidateTitle(baseCandidate)).toBe('ハロウィン限定名刺')
+  })
+
+  test('一覧は登録済みのリンクにも未登録の行にも同じ表示名を使う', async () => {
+    const candidates = [
+      {
+        ...listJob,
+        item: '抽出名のみ',
+        storeKey: 'akiba',
+        status: 'held' as const,
+        eventId: null,
+        eventTitle: null,
+        candidate: null
+      },
+      {
+        ...listJob,
+        item: '登録候補あり',
+        storeKey: 'akiba',
+        status: 'held' as const,
+        eventUUID: '550e8400-e29b-41d4-a716-446655440003',
+        eventId: null,
+        eventTitle: null,
+        candidate: registeredRequest
+      },
+      {
+        ...listJob,
+        item: '登録済み',
+        storeKey: 'akiba',
+        status: 'registered' as const,
+        eventUUID: '550e8400-e29b-41d4-a716-446655440004',
+        eventTitle: '紐付け先の実イベント名'
+      }
+    ]
+    const markup = await renderList([{ ...listJob, candidates }])
+    const cell = eventNameCell(markup)
+    // 抽出名のみ → 抽出名、登録候補あり → AI が付けた題(抽出名ではない)、登録済み → 登録イベントの題。
+    expect(cell).toContain('<span>抽出名のみ</span>')
+    expect(cell).toContain('<span>AI が付けた題</span>')
+    expect(cell).not.toContain('登録候補あり')
+    expect(cell).toMatch(
+      /<a\b[^>]*href="\/events\/550e8400-e29b-41d4-a716-446655440000"[^>]*>紐付け先の実イベント名<\/a>/
+    )
+    expect(cell).not.toContain('<span>登録済み</span>')
   })
 })
 
@@ -1007,7 +1249,8 @@ describe('受信詳細の先頭ボタン（補完して登録 / 編集）', () =
       }
     ]
     const url = hrefOf(registerAnchor(await renderDetail({ ...listJob, candidates })))
-    expect(url.searchParams.get('title')).toBe('ハロウィン限定名刺')
+    // 登録候補が無く下書きだけのとき、題は下書きの定型題（店舗名・「配布」入り）ではなく、選択中の候補の抽出名にする。
+    expect(url.searchParams.get('title')).toBe('名刺')
     expect(url.searchParams.get('stores')).toBe('akiba')
   })
 })

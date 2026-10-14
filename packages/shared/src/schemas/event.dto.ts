@@ -119,7 +119,13 @@ export const EventRequestQuerySchema = z.object({
   endDate: z.string().nonempty('終了日は必須です').optional(),
   endAt: z.string().nonempty('終了日時は必須です').optional(),
   referenceUrls: z.url().optional(),
-  from: z.uuid().optional()
+  from: z.uuid().optional(),
+  // 受信履歴の詳細から開いたとき、作成したイベントを紐付ける受信ジョブ（投稿 ID と、複数候補の投稿では候補の UUID）
+  webhookPostId: z
+    .string()
+    .regex(/^\d{1,20}$/)
+    .optional(),
+  webhookCandidateId: z.uuid().optional()
 })
 export type EventRequestQuery = z.infer<typeof EventRequestQuerySchema>
 

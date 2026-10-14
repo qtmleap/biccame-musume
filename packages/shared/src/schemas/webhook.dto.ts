@@ -1,5 +1,9 @@
 import { ClefModelSchema, ClefResponseSchema } from '@biccame/shared/event-detect/clef'
-import { DetectionDraftSchema, FieldThresholdsSchema } from '@biccame/shared/event-detect/detection'
+import {
+  DetectionDraftSchema,
+  FieldThresholdsSchema,
+  WEBHOOK_KEYWORD_VERDICTS
+} from '@biccame/shared/event-detect/detection'
 import { ItemCountAuditSchema } from '@biccame/shared/event-detect/extraction'
 import { DetectPostSchema } from '@biccame/shared/event-detect/post'
 import { GapStatusSchema } from '@biccame/shared/event-detect/viewer'
@@ -55,14 +59,40 @@ export const WebhookJobListSchema = z.object({
   jobs: z.array(WebhookJobSchema),
   nextCursor: z.string().nonempty().nullable()
 })
+// 一覧の絞り込み・並べ替え。サーバー（クエリ）・クライアント・画面の保存値が同じスキーマを共有する。
+/** 受信日時（j.created_at）の窓。未指定は全期間。 */
+export const WebhookJobRangeSchema = z.enum(['1h', '24h'])
+export type WebhookJobRange = z.infer<typeof WebhookJobRangeSchema>
+/** 並べ替えの軸。confidence の NULL（未判定）は最小値として扱う。 */
+export const WebhookJobSortSchema = z.enum(['createdAt', 'confidence'])
+export type WebhookJobSort = z.infer<typeof WebhookJobSortSchema>
+export const WebhookJobOrderSchema = z.enum(['asc', 'desc'])
+export type WebhookJobOrder = z.infer<typeof WebhookJobOrderSchema>
+/** 既定の並びは受信日時の新しい順。 */
+export const DEFAULT_WEBHOOK_JOB_SORT = 'createdAt' satisfies WebhookJobSort
+export const DEFAULT_WEBHOOK_JOB_ORDER = 'desc' satisfies WebhookJobOrder
+/** 現在のキーワードルールによる判定。DB に保存しない値なので、サーバーは走査して絞り込む。 */
+export const WebhookKeywordVerdictSchema = z.enum(WEBHOOK_KEYWORD_VERDICTS)
+/**
+ * 一覧のステータス列と同じ規則の絞り込み。ignored（却下）はジョブの状態で、画面では最優先。
+ * それ以外は保存済みの回答（answers_json）で選ばれた投稿状態。
+ */
+export const WebhookPostStatusFilterSchema = z.enum([...GapStatusSchema.options, 'ignored'])
+export type WebhookPostStatusFilter = z.infer<typeof WebhookPostStatusFilterSchema>
 export const WebhookJobQuerySchema = z.object({
   status: WebhookJobStatusSchema.optional(),
   cursor: z
     .string()
     .regex(/^\d{1,20}$/)
     .optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25)
+  limit: z.coerce.number().int().min(1).max(100).default(25),
+  range: WebhookJobRangeSchema.optional(),
+  sort: WebhookJobSortSchema.default(DEFAULT_WEBHOOK_JOB_SORT),
+  order: WebhookJobOrderSchema.default(DEFAULT_WEBHOOK_JOB_ORDER),
+  verdict: WebhookKeywordVerdictSchema.optional(),
+  postStatus: WebhookPostStatusFilterSchema.optional()
 })
+export type WebhookJobQuery = z.infer<typeof WebhookJobQuerySchema>
 export const WebhookRetrySchema = z.strictObject({
   notificationOnly: z.boolean(),
   allowUnknown: z.boolean(),

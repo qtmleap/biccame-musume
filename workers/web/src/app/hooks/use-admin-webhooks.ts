@@ -2,19 +2,32 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
 import { toast } from 'sonner'
+import type { WebhookFilter } from '@/atoms/webhook-filter-atom'
 import { type WebhookJobPollWindow, webhookJobPoll } from '@/components/admin/webhook-labels'
 import { client } from '@/utils/client'
 
 export const ADMIN_WEBHOOK_QUERY_KEY = ['admin', 'webhooks'] as const
 export const WEBHOOK_PAGE_SIZE = 25
 
-export const useAdminWebhookJobs = (cursor: string | null) =>
+/** 絞り込み・並べ替えの値を API のクエリにする。null（指定なし）は送らない。 */
+const webhookJobQueries = (cursor: string | null, filter: WebhookFilter) => ({
+  limit: WEBHOOK_PAGE_SIZE,
+  cursor: cursor === null ? undefined : cursor,
+  range: filter.range === null ? undefined : filter.range,
+  sort: filter.sort,
+  order: filter.order,
+  verdict: filter.verdict === null ? undefined : filter.verdict,
+  postStatus: filter.postStatus === null ? undefined : filter.postStatus
+})
+
+/** 一覧のクエリキー。条件ごとに別のキャッシュにする（cursor は条件ごとの並びの続きなので、条件が違えば使い回せない）。 */
+export const webhookJobListQueryKey = (cursor: string | null, filter: WebhookFilter) =>
+  [...ADMIN_WEBHOOK_QUERY_KEY, 'list', cursor, filter] as const
+
+export const useAdminWebhookJobs = (cursor: string | null, filter: WebhookFilter) =>
   useQuery({
-    queryKey: [...ADMIN_WEBHOOK_QUERY_KEY, 'list', cursor],
-    queryFn: () =>
-      client.listAdminWebhookJobs({
-        queries: { limit: WEBHOOK_PAGE_SIZE, cursor: cursor === null ? undefined : cursor }
-      }),
+    queryKey: webhookJobListQueryKey(cursor, filter),
+    queryFn: () => client.listAdminWebhookJobs({ queries: webhookJobQueries(cursor, filter) }),
     staleTime: 0,
     gcTime: 0,
     retry: false,

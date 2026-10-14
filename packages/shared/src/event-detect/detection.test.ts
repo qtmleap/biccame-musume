@@ -16,7 +16,9 @@ import {
   filterWebhookPost,
   resolveFieldThresholds,
   STATUS_DEFAULT_THRESHOLD,
-  thresholdOf
+  thresholdOf,
+  WEBHOOK_KEYWORD_VERDICTS,
+  webhookKeywordVerdict
 } from './detection'
 import type { DetectPost } from './post'
 import { normalizeWebhookPayload } from './webhook'
@@ -1436,5 +1438,36 @@ describe('Field thresholds', () => {
       category: choice('other', { other: 0.62, acsta: 0.2 })
     }
     expect(buildDetectionDraft(shintou, answers)).toMatchObject({ category: 'other', stores: ['shintou'] })
+  })
+})
+
+describe('Webhook keyword verdict', () => {
+  const retweet = post(undefined, { kind: 'retweet' })
+  const cases = [
+    ['限定名刺の告知は一致', post(), 'match'],
+    ['キーワードが無い投稿は不一致（no_keyword は除外ではない）', post('日常のあいさつです'), 'mismatch'],
+    ['店舗アカウントでない投稿は除外', post(undefined, { screenName: 'untrusted' }), 'excluded'],
+    ['リツイートは除外', retweet, 'excluded']
+  ] as const
+
+  test.each(cases)('%s', (_label, value, expected) => {
+    expect(webhookKeywordVerdict(value)).toBe(expected)
+  })
+
+  test('filterWebhookPost の結果と同じ規則: reason が無くても no_keyword でもなければ除外、hits があれば一致', () => {
+    for (const [, value] of cases) {
+      const verdict = filterWebhookPost(value)
+      const expected =
+        verdict.reason !== undefined && verdict.reason !== 'no_keyword'
+          ? 'excluded'
+          : verdict.hits.length > 0
+            ? 'match'
+            : 'mismatch'
+      expect(webhookKeywordVerdict(value)).toBe(expected)
+    }
+  })
+
+  test('一覧の絞り込みに使う3種がすべて実際に出る', () => {
+    expect(new Set(cases.map(([, value]) => webhookKeywordVerdict(value)))).toEqual(new Set(WEBHOOK_KEYWORD_VERDICTS))
   })
 })
