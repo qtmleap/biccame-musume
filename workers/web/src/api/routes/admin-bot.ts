@@ -2,6 +2,7 @@ import { checkDiscordConnection, discordStatus, testDiscordNotification } from '
 import {
   EVENT_DETECTION_FIELD_THRESHOLDS_KEY,
   EVENT_DETECTION_MODEL_KEY,
+  EVENT_DETECTION_THRESHOLDS_KEY,
   webhookConfiguration
 } from '@api/services/webhook-config'
 import type { Bindings } from '@api/types/bindings'
@@ -113,7 +114,7 @@ routes.openapi(
     },
     responses: {
       200: {
-        description: '保存した判定モデルと項目別しきい値',
+        description: '保存した判定モデル・3つのしきい値・項目別しきい値',
         content: { 'application/json': { schema: AdminBotConfigurationResponseSchema } }
       },
       503: {
@@ -127,7 +128,8 @@ routes.openapi(
     c.header('Cache-Control', 'no-store')
     const configuration = c.req.valid('json')
     try {
-      // 2回の put は原子的ではない。しきい値→モデルの順に書き、どちらかが失敗したら 503 を返す。
+      // 3回の put は原子的ではない。3つのしきい値→項目別しきい値→モデルの順に書き、どれかが失敗したら 503 を返す。
+      await c.env.BICCAME_MUSUME_EVENTS.put(EVENT_DETECTION_THRESHOLDS_KEY, JSON.stringify(configuration.thresholds))
       await c.env.BICCAME_MUSUME_EVENTS.put(
         EVENT_DETECTION_FIELD_THRESHOLDS_KEY,
         JSON.stringify(configuration.fieldThresholds)

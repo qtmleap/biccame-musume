@@ -181,8 +181,8 @@ const signature = createHmac('sha256', signingSecret)
 |---|---|---|
 | app | `WEBHOOK_SECRET_KEY` (secret) | 受信 HMAC。未設定なら受信を停止 |
 | app | `EVENT_DETECTION_MODEL` | 初期設定: `clef` (既定) / `clef-flash`。管理画面の保存値が優先 |
-| app | `EVENT_DETECTION_THRESHOLD` / `EVENT_DETECTION_CHOICE_THRESHOLD` | 既定 `0.9` |
-| app | `EVENT_DETECTION_IGNORE_THRESHOLD` | 既定 `0.5`、自動登録閾値未満に設定 |
+| app | `EVENT_DETECTION_THRESHOLD` / `EVENT_DETECTION_CHOICE_THRESHOLD` | 既定 `0.9`。管理画面（`/admin/bot`）で保存した値が優先 |
+| app | `EVENT_DETECTION_IGNORE_THRESHOLD` | 既定 `0.5`、自動登録閾値未満に設定。管理画面で保存した値が優先 |
 | web | `DISCORD_TOKEN` / `DISCORD_CHANNEL_ID` (secret) | 既存 Discord Bot と通知先を再利用。Webhook 判定通知と公開イベント告知は別の履歴で管理 |
 | web | `ANTHROPIC_BASE_URL` / `ANTHROPIC_AUTH_TOKEN` (secret) | 配布イベントの抽出とタイトル生成に使う、Anthropic Messages・tool use互換の接続先とトークン。自動登録の抽出には両方必須。接続先は Cloudflare Workers から到達できるものにする（ローカルのプロキシは不可）。未設定・抽出失敗時はイベントを登録せず、安全なエラーコードを記録して再試行する。抽出成功後のタイトル生成だけが失敗した場合は、定型のタイトル（`<店舗名> <配布物>配布`）で登録 |
 
@@ -194,6 +194,7 @@ Cloudflare Access の経路保護が Webhook にも適用される場合は `/ap
 `/admin/bot` はシークレットの設定有無、Bot 接続、通知先、AI 閾値を表示します。トークンの値は表示しません。
 ページ表示時はWorker設定の存在・形式だけを検証し、Discord APIには接続しません。右上の「接続確認」で認証・チャンネルアクセスを確認します。必要な設定は`DISCORD_TOKEN`と数字の`DISCORD_CHANNEL_ID`だけで、OAuth用のApplication ID・Client ID・Client Secretは不要です。チャンネルへのアクセス確認と実際の送信成功は区別し、テスト送信は確認付きの明示操作でのみ行います。
 判定モデルは `/admin/bot` の「判定モデル」で `clef` / `clef-flash` を選び、「保存」で変更できます。保存先は環境別の既存 `BICCAME_MUSUME_EVENTS` KV の `settings:event-detection:model` です。KVの反映には最大約60秒かかる場合があります。変更は未判定の投稿に適用され、保存済みのAI判定や通知の再試行では再判定しません。保存値がない場合は `EVENT_DETECTION_MODEL`、未指定なら `clef` を使用します。モデル名はシークレットではありません。
+登録・必須項目の選択・対象外の3つのしきい値と項目別のしきい値も `/admin/bot` で変更でき、保存先は同じ KV の `settings:event-detection:thresholds` と `settings:event-detection:field-thresholds` です。保存した値が環境変数より優先され、保存値が壊れているときは環境変数の値を使います。
 `/admin/webhooks` は保留/登録/失敗と通知状態を確認する受信履歴です。保留を手動登録・既存イベントへ紐付け・却下できます。
 通知失敗でも登録を巻き戻しません。通信結果不明 (`unknown`) は二重通知の可能性があるため自動再送せず、明示確認後に通知だけを再試行します。
 Discord の nonce は短期間の重複抑止であり、永続的な exactly-once の保証ではありません。

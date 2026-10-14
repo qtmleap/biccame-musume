@@ -215,7 +215,11 @@ test('queue registration is idempotent and a notification retry does not rerun A
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: 'clef-flash', fieldThresholds: resolveFieldThresholds(0.9) })
+        body: JSON.stringify({
+          model: 'clef-flash',
+          thresholds: { eventThreshold: 0.9, ignoreThreshold: 0.5, choiceThreshold: 0.9 },
+          fieldThresholds: resolveFieldThresholds(0.9)
+        })
       },
       env
     )
@@ -425,13 +429,18 @@ test('saved field thresholds reach the judgement: the status threshold decides w
       await processWebhookJob(env, post.id)
       return getWebhookJob(env, post.id)
     }
-    const saveThresholds = async (status: number) => {
+    const defaultEventThresholds = { eventThreshold: 0.9, ignoreThreshold: 0.5, choiceThreshold: 0.9 }
+    const saveThresholds = async (status: number, thresholds = defaultEventThresholds) => {
       const response = await botRoutes.request(
         '/admin/bot/configuration',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ model: 'clef', fieldThresholds: { ...resolveFieldThresholds(0.9), status } })
+          body: JSON.stringify({
+            model: 'clef',
+            thresholds,
+            fieldThresholds: { ...resolveFieldThresholds(0.9), status }
+          })
         },
         env
       )
@@ -450,6 +459,18 @@ test('saved field thresholds reach the judgement: the status threshold decides w
     await saveThresholds(0.7)
     const raised = await judge(postOf(14))
     expect(raised.reasons).toEqual(['not_new_event_announcement', 'start_date_unconfirmed'])
+    // 登録の閾値を上限の 100% にして保存すると、イベント確率 0.99 でも未満になる（保存した値が判定に使われる）。
+    await saveThresholds(0.7, { eventThreshold: 1, ignoreThreshold: 0.5, choiceThreshold: 0.9 })
+    const strict = await judge(postOf(15))
+    expect(strict.reasons).toEqual([
+      'event_confidence_below_threshold',
+      'not_new_event_announcement',
+      'start_date_unconfirmed'
+    ])
+    // 90% に戻して保存し直すと、その理由は消える。
+    await saveThresholds(0.7)
+    const restored = await judge(postOf(16))
+    expect(restored.reasons).toEqual(['not_new_event_announcement', 'start_date_unconfirmed'])
   } finally {
     notificationSpy.mockRestore()
     await mf.dispose()

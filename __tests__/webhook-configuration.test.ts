@@ -5,7 +5,8 @@ import botRoutes from '@api/routes/admin-bot'
 import {
   detectionConfiguration,
   EVENT_DETECTION_FIELD_THRESHOLDS_KEY,
-  EVENT_DETECTION_MODEL_KEY
+  EVENT_DETECTION_MODEL_KEY,
+  EVENT_DETECTION_THRESHOLDS_KEY
 } from '@api/services/webhook-config'
 import type { Bindings } from '@api/types/bindings'
 import {
@@ -13,7 +14,12 @@ import {
   type FieldThresholds,
   resolveFieldThresholds
 } from '@biccame/shared/event-detect/detection'
-import { AdminBotStatusSchema } from '@biccame/shared/schemas/admin-bot.dto'
+import {
+  AdminBotConfigurationRequestSchema,
+  AdminBotStatusSchema,
+  type EventThresholds,
+  EventThresholdsSchema
+} from '@biccame/shared/schemas/admin-bot.dto'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { csrf } from 'hono/csrf'
 import { convertV4MiniflareOptions, Miniflare } from 'miniflare'
@@ -56,7 +62,13 @@ const editedThresholds: FieldThresholds = {
   condition: 0.97,
   purchase_amount: 0.825
 }
-const configurationBody = (model: string, fieldThresholds: unknown = editedThresholds) => ({ model, fieldThresholds })
+// 判定全体の3つ。環境変数の既定値（90% / 50% / 90%）と全て違う値にして、上書きと取り違えを検出できるようにする。
+const editedEventThresholds: EventThresholds = { eventThreshold: 0.92, ignoreThreshold: 0.4, choiceThreshold: 0.85 }
+const configurationBody = (
+  model: string,
+  fieldThresholds: unknown = editedThresholds,
+  thresholds: unknown = editedEventThresholds
+) => ({ model, thresholds, fieldThresholds })
 
 test('missing override uses environment bootstrap or clef default; valid override wins', async () => {
   await withKV(async (env) => {
@@ -97,15 +109,41 @@ test('save validates the exact payload before writing and never reads eventual K
     }
   }
   const { status: _status, ...withoutStatus } = editedThresholds
+  const { choiceThreshold: _choice, ...eventWithoutChoice } = editedEventThresholds
   const invalid: unknown[] = [
-    { model: 'other', fieldThresholds: editedThresholds },
+    { model: 'other', thresholds: editedEventThresholds, fieldThresholds: editedThresholds },
     { ...configurationBody('clef'), extra: true },
     {},
-    { model: null, fieldThresholds: editedThresholds },
+    { model: null, thresholds: editedEventThresholds, fieldThresholds: editedThresholds },
     // しきい値が無い・モデルだけの旧形式は受け付けない。
     { model: 'clef' },
     { model: 'clef', fieldThresholds: null },
     { model: 'clef', fieldThresholds: {} },
+    // 項目別だけを送る旧形式（判定全体の3つが無い）は受け付けない。
+    { model: 'clef', fieldThresholds: editedThresholds },
+    { model: 'clef', thresholds: null, fieldThresholds: editedThresholds },
+    { model: 'clef', thresholds: {}, fieldThresholds: editedThresholds },
+    // 判定全体の3つの不正: 欠け・余分なキー・範囲外・文字列・順序違反。
+    configurationBody('clef', editedThresholds, eventWithoutChoice),
+    configurationBody('clef', editedThresholds, { ...editedEventThresholds, extra: 0.9 }),
+    configurationBody('clef', editedThresholds, { ...editedEventThresholds, eventThreshold: 0 }),
+    configurationBody('clef', editedThresholds, { ...editedEventThresholds, eventThreshold: 1.1 }),
+    configurationBody('clef', editedThresholds, { ...editedEventThresholds, choiceThreshold: 0 }),
+    configurationBody('clef', editedThresholds, { ...editedEventThresholds, choiceThreshold: 1.1 }),
+    configurationBody('clef', editedThresholds, { ...editedEventThresholds, ignoreThreshold: -0.1 }),
+    configurationBody('clef', editedThresholds, { ...editedEventThresholds, ignoreThreshold: 1.1 }),
+    configurationBody('clef', editedThresholds, { ...editedEventThresholds, eventThreshold: '0.9' }),
+    configurationBody('clef', editedThresholds, { ...editedEventThresholds, ignoreThreshold: null }),
+    configurationBody('clef', editedThresholds, {
+      ...editedEventThresholds,
+      eventThreshold: 0.4,
+      ignoreThreshold: 0.4
+    }),
+    configurationBody('clef', editedThresholds, {
+      ...editedEventThresholds,
+      eventThreshold: 0.4,
+      ignoreThreshold: 0.5
+    }),
     configurationBody('clef', withoutStatus),
     configurationBody('clef', { ...editedThresholds, extra: 0.9 }),
     configurationBody('clef', { ...editedThresholds, status: 0 }),
@@ -123,21 +161,58 @@ test('save validates the exact payload before writing and never reads eventual K
     expect(response.status).toBe(200)
     expect(response.headers.get('cache-control')).toBe('no-store')
     const body: unknown = await response.json()
-    expect(body).toEqual({ model, fieldThresholds: editedThresholds })
+    expect(body).toEqual({ model, thresholds: editedEventThresholds, fieldThresholds: editedThresholds })
   }
-  // しきい値 → モデルの順に、2回の put をする。
+  // 判定全体の3つ → 項目別 → モデルの順に、3回の put をする。
   expect(writes).toEqual([
+    [EVENT_DETECTION_THRESHOLDS_KEY, JSON.stringify(editedEventThresholds)],
     [EVENT_DETECTION_FIELD_THRESHOLDS_KEY, JSON.stringify(editedThresholds)],
     [EVENT_DETECTION_MODEL_KEY, 'clef'],
+    [EVENT_DETECTION_THRESHOLDS_KEY, JSON.stringify(editedEventThresholds)],
     [EVENT_DETECTION_FIELD_THRESHOLDS_KEY, JSON.stringify(editedThresholds)],
     [EVENT_DETECTION_MODEL_KEY, 'clef-flash']
   ])
   // 上限の 1 とごく小さい値も受け付ける。
   const boundary = Object.fromEntries(FIELD_THRESHOLD_KEYS.map((key) => [key, key === 'status' ? 0.001 : 1]))
   expect((await save(configurationBody('clef', boundary), env)).status).toBe(200)
+  // 対象外の 0 と、登録・必須項目の上限 1 も受け付ける。
+  const eventBoundary = { eventThreshold: 1, ignoreThreshold: 0, choiceThreshold: 1 }
+  expect((await save(configurationBody('clef', editedThresholds, eventBoundary), env)).status).toBe(200)
+  const smallest = { eventThreshold: 0.001, ignoreThreshold: 0, choiceThreshold: 0.001 }
+  expect((await save(configurationBody('clef', editedThresholds, smallest), env)).status).toBe(200)
 })
 
-test('either put failing returns 503; thresholds are written before the model', async () => {
+test('thresholds in the request is required: the previous request shape is rejected by the strict schema', () => {
+  // thresholds を含まない旧形式は strictObject の必須違反。含めれば通る。
+  const previous = { model: 'clef', fieldThresholds: editedThresholds }
+  expect(AdminBotConfigurationRequestSchema.safeParse(previous).success).toBe(false)
+  expect(AdminBotConfigurationRequestSchema.safeParse(configurationBody('clef')).success).toBe(true)
+})
+
+test('EventThresholdsSchema requires every key and ignoreThreshold strictly below eventThreshold', () => {
+  const valid = [
+    editedEventThresholds,
+    { eventThreshold: 0.9, ignoreThreshold: 0, choiceThreshold: 0.9 },
+    { eventThreshold: 1, ignoreThreshold: 0.999, choiceThreshold: 1 }
+  ]
+  for (const value of valid) expect(EventThresholdsSchema.safeParse(value).success, JSON.stringify(value)).toBe(true)
+  const invalid = [
+    {},
+    { eventThreshold: 0.9, ignoreThreshold: 0.5 },
+    { ...editedEventThresholds, extra: 1 },
+    // 同値は不可（環境変数の規則と同じ）。
+    { eventThreshold: 0.5, ignoreThreshold: 0.5, choiceThreshold: 0.9 },
+    { eventThreshold: 0.4, ignoreThreshold: 0.5, choiceThreshold: 0.9 },
+    { eventThreshold: 0, ignoreThreshold: 0, choiceThreshold: 0.9 },
+    { eventThreshold: 0.9, ignoreThreshold: 0.5, choiceThreshold: 0 },
+    { eventThreshold: 0.9, ignoreThreshold: -0.1, choiceThreshold: 0.9 },
+    { eventThreshold: 0.9, ignoreThreshold: 0.5, choiceThreshold: Number.NaN },
+    { eventThreshold: '0.9', ignoreThreshold: 0.5, choiceThreshold: 0.9 }
+  ]
+  for (const value of invalid) expect(EventThresholdsSchema.safeParse(value).success, JSON.stringify(value)).toBe(false)
+})
+
+test('any put failing returns 503; event thresholds, then field thresholds, are written before the model', async () => {
   const writes: string[] = []
   const envFailingOn = (failing: string) => ({
     BICCAME_MUSUME_EVENTS: {
@@ -147,18 +222,25 @@ test('either put failing returns 503; thresholds are written before the model', 
       }
     }
   })
+  const eventFail = await save(configurationBody('clef-flash'), envFailingOn(EVENT_DETECTION_THRESHOLDS_KEY))
+  expect(eventFail.status).toBe(503)
+  const eventBody: unknown = await eventFail.json()
+  expect(eventBody).toEqual({ error: 'configuration_unavailable' })
+  // 判定全体の3つの書き込みに失敗したら、後ろの項目別としきい値もモデルも書かない。
+  expect(writes).toEqual([])
   const thresholdsFail = await save(configurationBody('clef-flash'), envFailingOn(EVENT_DETECTION_FIELD_THRESHOLDS_KEY))
   expect(thresholdsFail.status).toBe(503)
   const thresholdsBody: unknown = await thresholdsFail.json()
   expect(thresholdsBody).toEqual({ error: 'configuration_unavailable' })
-  // しきい値の書き込みに失敗したら、モデルは書かない。
-  expect(writes).toEqual([])
+  // 項目別の書き込みに失敗したら、モデルは書かない（3つは先に書き込み済み）。
+  expect(writes).toEqual([EVENT_DETECTION_THRESHOLDS_KEY])
+  writes.length = 0
   const modelFail = await save(configurationBody('clef-flash'), envFailingOn(EVENT_DETECTION_MODEL_KEY))
   expect(modelFail.status).toBe(503)
   const modelBody: unknown = await modelFail.json()
   expect(modelBody).toEqual({ error: 'configuration_unavailable' })
-  // モデルの書き込みだけ失敗した場合、しきい値は先に書き込み済み（2回の put は原子的ではない）。
-  expect(writes).toEqual([EVENT_DETECTION_FIELD_THRESHOLDS_KEY])
+  // モデルの書き込みだけ失敗した場合、2種類のしきい値は先に書き込み済み（3回の put は原子的ではない）。
+  expect(writes).toEqual([EVENT_DETECTION_THRESHOLDS_KEY, EVENT_DETECTION_FIELD_THRESHOLDS_KEY])
 })
 
 test('field thresholds default from the common threshold, and stored values replace them', async () => {
@@ -229,6 +311,114 @@ test('invalid stored field thresholds warn without disclosing stored data and fa
   })
 })
 
+test('stored event thresholds override the environment values; unsaved ones follow the environment', async () => {
+  await withKV(async (env) => {
+    const warning = spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      const overridden = { ...env, EVENT_DETECTION_THRESHOLD: '0.95', EVENT_DETECTION_IGNORE_THRESHOLD: '0.3' }
+      // 未保存: 環境変数の値（読み取りは KV に書かない）。
+      const before = await detectionConfiguration({ ...overridden, EVENT_DETECTION_CHOICE_THRESHOLD: '0.97' })
+      expect(before).toMatchObject({ eventThreshold: 0.95, ignoreThreshold: 0.3, choiceThreshold: 0.97 })
+      expect(await env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_THRESHOLDS_KEY, 'text')).toBeNull()
+      // 保存済み: 3つとも環境変数ではなく保存値を使う。モデルなど他の設定は変えない。
+      await env.BICCAME_MUSUME_EVENTS.put(EVENT_DETECTION_THRESHOLDS_KEY, JSON.stringify(editedEventThresholds))
+      const after = await detectionConfiguration({ ...overridden, EVENT_DETECTION_CHOICE_THRESHOLD: '0.97' })
+      expect(after).toMatchObject(editedEventThresholds)
+      expect(after.model).toBe('clef')
+      // 環境変数が不正でも、保存値が有効ならその3つで動く。
+      const brokenEnv = await detectionConfiguration({ ...env, EVENT_DETECTION_THRESHOLD: 'invalid' })
+      expect(brokenEnv).toMatchObject(editedEventThresholds)
+      // 対象外の 0 も保存値として有効。
+      const zero = { eventThreshold: 0.8, ignoreThreshold: 0, choiceThreshold: 0.7 }
+      await env.BICCAME_MUSUME_EVENTS.put(EVENT_DETECTION_THRESHOLDS_KEY, JSON.stringify(zero))
+      expect(await detectionConfiguration(env)).toMatchObject(zero)
+      expect(warning).not.toHaveBeenCalled()
+    } finally {
+      warning.mockRestore()
+    }
+  })
+})
+
+test('invalid stored event thresholds warn without disclosing stored data and fall back to the environment', async () => {
+  await withKV(async (env) => {
+    const { eventThreshold: _event, ...withoutEvent } = editedEventThresholds
+    const invalid = [
+      'synthetic-private-not-json{',
+      '"synthetic-private-string"',
+      'null',
+      '[]',
+      JSON.stringify({}),
+      JSON.stringify(withoutEvent),
+      JSON.stringify({ ...editedEventThresholds, extra: 0.9 }),
+      JSON.stringify({ ...editedEventThresholds, eventThreshold: 0 }),
+      JSON.stringify({ ...editedEventThresholds, choiceThreshold: 1.5 }),
+      JSON.stringify({ ...editedEventThresholds, ignoreThreshold: -0.1 }),
+      JSON.stringify({ ...editedEventThresholds, eventThreshold: '0.92' }),
+      // 対象外が登録以上の保存値（同値を含む）は環境変数に戻す。
+      JSON.stringify({ eventThreshold: 0.4, ignoreThreshold: 0.5, choiceThreshold: 0.9 }),
+      JSON.stringify({ eventThreshold: 0.5, ignoreThreshold: 0.5, choiceThreshold: 0.9 })
+    ]
+    const warning = spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      for (const [index, value] of invalid.entries()) {
+        await env.BICCAME_MUSUME_EVENTS.put(EVENT_DETECTION_THRESHOLDS_KEY, value)
+        const result = await detectionConfiguration(env)
+        // wrangler.toml 相当の既定値（90% / 50% / 90%）に戻る。
+        expect(result, value).toMatchObject({ eventThreshold: 0.9, ignoreThreshold: 0.5, choiceThreshold: 0.9 })
+        expect(warning).toHaveBeenCalledTimes(index + 1)
+      }
+      expect(JSON.stringify(warning.mock.calls)).not.toContain('synthetic-private')
+      expect(
+        warning.mock.calls.every(
+          (call) => call[0] === 'Invalid stored event detection thresholds; using environment configuration'
+        )
+      ).toBe(true)
+      // 環境変数の値があれば、その値に戻る。
+      const result = await detectionConfiguration({ ...env, EVENT_DETECTION_THRESHOLD: '0.95' })
+      expect(result.eventThreshold).toBe(0.95)
+    } finally {
+      warning.mockRestore()
+    }
+  })
+})
+
+test('without saved field thresholds the defaults follow the stored choice threshold, not the environment', async () => {
+  await withKV(async (env) => {
+    const warning = spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      // 項目別が未保存で、3つだけ保存済み: 項目別の既定値は保存した choiceThreshold（0.7）から決まる。
+      const stored = { eventThreshold: 0.92, ignoreThreshold: 0.4, choiceThreshold: 0.7 }
+      await env.BICCAME_MUSUME_EVENTS.put(EVENT_DETECTION_THRESHOLDS_KEY, JSON.stringify(stored))
+      const result = await detectionConfiguration({ ...env, EVENT_DETECTION_CHOICE_THRESHOLD: '0.99' })
+      expect(result.choiceThreshold).toBe(0.7)
+      expect(result.fieldThresholds).toEqual(resolveFieldThresholds(0.7))
+      expect(result.fieldThresholds.status).toBe(0.7)
+      expect(result.fieldThresholds.category).toBe(0.7)
+      // 共通値が 0.8 を超えるときも、status の既定値は 0.8 で頭打ち。
+      const high = { eventThreshold: 0.99, ignoreThreshold: 0.4, choiceThreshold: 0.95 }
+      await env.BICCAME_MUSUME_EVENTS.put(EVENT_DETECTION_THRESHOLDS_KEY, JSON.stringify(high))
+      const raised = await detectionConfiguration(env)
+      expect(raised.fieldThresholds).toEqual({ ...resolveFieldThresholds(0.95), status: 0.8 })
+      expect(raised.fieldThresholds.category).toBe(0.95)
+      // 項目別が保存済みなら項目別が優先され、3つの保存値は影響しない（choiceThreshold だけが別に出る）。
+      await env.BICCAME_MUSUME_EVENTS.put(EVENT_DETECTION_FIELD_THRESHOLDS_KEY, JSON.stringify(editedThresholds))
+      const both = await detectionConfiguration(env)
+      expect(both.fieldThresholds).toEqual(editedThresholds)
+      expect(both.choiceThreshold).toBe(0.95)
+      // 3つの保存値が壊れているときは、環境変数の choiceThreshold から既定値を決める（項目別も未保存の場合）。
+      await env.BICCAME_MUSUME_EVENTS.delete(EVENT_DETECTION_FIELD_THRESHOLDS_KEY)
+      await env.BICCAME_MUSUME_EVENTS.put(EVENT_DETECTION_THRESHOLDS_KEY, 'synthetic-private-not-json{')
+      const fallback = await detectionConfiguration({ ...env, EVENT_DETECTION_CHOICE_THRESHOLD: '0.6' })
+      expect(fallback.choiceThreshold).toBe(0.6)
+      expect(fallback.fieldThresholds).toEqual(resolveFieldThresholds(0.6))
+      // 読み取りでは KV に書かない。
+      expect(await env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_FIELD_THRESHOLDS_KEY, 'text')).toBeNull()
+    } finally {
+      warning.mockRestore()
+    }
+  })
+})
+
 test('status response carries the effective field thresholds, defaults first and saved values after', async () => {
   await withKV(async (env) => {
     const read = async () => {
@@ -243,14 +433,18 @@ test('status response carries the effective field thresholds, defaults first and
     expect(before.fieldThresholds).toEqual(resolveFieldThresholds(0.9))
     const response = await save(configurationBody('clef-flash'), env)
     expect(response.status).toBe(200)
+    expect(before).toMatchObject({ eventThreshold: 0.9, ignoreThreshold: 0.5 })
     const after = await read()
     expect(after.fieldThresholds).toEqual(editedThresholds)
     expect(after.model).toBe('clef-flash')
-    // 共通値の表示は環境変数由来のまま。
-    expect(after.choiceThreshold).toBe(0.9)
+    // 判定全体の3つは、保存した値に変わる（環境変数の値ではなくなる）。
+    expect(after).toMatchObject(editedEventThresholds)
     // 保存したキーは KV に8項目の JSON で入る。
     const raw = await env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_FIELD_THRESHOLDS_KEY, 'text')
     expect(raw).toBe(JSON.stringify(editedThresholds))
+    expect(await env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_THRESHOLDS_KEY, 'text')).toBe(
+      JSON.stringify(editedEventThresholds)
+    )
     expect(await env.BICCAME_MUSUME_EVENTS.get(EVENT_DETECTION_MODEL_KEY, 'text')).toBe('clef-flash')
   })
 })

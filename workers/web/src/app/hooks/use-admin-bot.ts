@@ -33,7 +33,7 @@ export const useAdminBotConnection = () => {
     retry: false,
     onSuccess: (result) => {
       saveDiscordConnection(result)
-      // 設定は KV から読むため、保存直後は古い値が返りうる。画面にある model と項目別しきい値を引き継ぐ。
+      // 設定は KV から読むため、保存直後は古い値が返りうる。画面にある model と3つのしきい値、項目別しきい値を引き継ぐ。
       queryClient.setQueryData<AdminBotStatus>(ADMIN_BOT_QUERY_KEY, (status) =>
         status
           ? {
@@ -41,6 +41,9 @@ export const useAdminBotConnection = () => {
               webhook: {
                 ...result.webhook,
                 model: status.webhook.model,
+                eventThreshold: status.webhook.eventThreshold,
+                ignoreThreshold: status.webhook.ignoreThreshold,
+                choiceThreshold: status.webhook.choiceThreshold,
                 fieldThresholds: status.webhook.fieldThresholds
               }
             }
@@ -64,6 +67,9 @@ export const useAdminBotConfiguration = () => {
               webhook: {
                 ...status.webhook,
                 model: configuration.model,
+                eventThreshold: configuration.thresholds.eventThreshold,
+                ignoreThreshold: configuration.thresholds.ignoreThreshold,
+                choiceThreshold: configuration.thresholds.choiceThreshold,
                 fieldThresholds: configuration.fieldThresholds
               }
             }

@@ -77,9 +77,13 @@ const renderDetail = async (job: WebhookJob | null) => {
 
 type ButtonState = 'missing' | 'disabled' | 'enabled'
 
-/** 受信詳細の2つのボタンのラベル。画面側の文言とは別に、ここで固定する。 */
+/** 受信詳細の操作ボタンのラベル。画面側の文言とは別に、ここで固定する。 */
 const RETRY_LABEL = '失敗した処理を再実行'
 const REJUDGE_LABEL = 'AI で判定し直す'
+/** 保留（canResolve）のときだけ有効になるボタン。状態で可否が変わるボタンの見本に使う。 */
+const LINK_LABEL = '既存へ紐付け'
+/** イベント作成ページへ遷移するリンク。ボタンではなく <a> で、受信ジョブの状態に関係なく常に押せる。 */
+const CREATE_LABEL = '補完して登録'
 
 /** ラベルを含むボタンの状態。描画されていなければ missing、disabled 属性があれば disabled。 */
 const buttonState = (markup: string, label: string): ButtonState => {
@@ -88,6 +92,22 @@ const buttonState = (markup: string, label: string): ButtonState => {
     .find((markupOfButton) => markupOfButton.includes(label))
   if (button === undefined) return 'missing'
   return /^<button\b[^>]*\sdisabled=""/.test(button) ? 'disabled' : 'enabled'
+}
+
+type LinkInfo = { href: string | undefined; disabled: boolean }
+
+/** ラベルを含む <a> の情報。描画されていなければ undefined。disabled は無効を示す属性（disabled / aria-disabled）の有無。 */
+const linkOf = (markup: string, label: string): LinkInfo | undefined => {
+  const link = [...markup.matchAll(/<a\b[^>]*>.*?<\/a>/g)]
+    .map((match) => match[0])
+    .find((markupOfLink) => markupOfLink.includes(label))
+  if (link === undefined) return undefined
+  const openTag = link.slice(0, link.indexOf('>') + 1)
+  const href = /\shref="([^"]*)"/.exec(openTag)
+  return {
+    href: href === null ? undefined : href[1],
+    disabled: /\s(disabled|aria-disabled)(=|\s|>)/.test(openTag)
+  }
 }
 
 describe('保留・対象外ジョブの再判定', () => {
@@ -158,14 +178,28 @@ describe('保留・対象外ジョブの再判定', () => {
   })
 
   // ボタンの探し方が正しいことを、すでにある操作ボタンで確かめる。
-  test('既存の操作ボタンは状態によらず描画され、使えるときだけ有効になる', async () => {
+  test('既存の操作ボタンは状態によらず描画され、使えるときだけ有効になる。「補完して登録」はリンクで常に押せる', async () => {
     const held = await renderDetail({ ...baseJob, status: 'held', notificationStatus: 'sent' })
     expect(buttonState(held, RETRY_LABEL)).toBe('disabled')
-    expect(buttonState(held, '補完して登録')).toBe('enabled')
+    expect(buttonState(held, LINK_LABEL)).toBe('enabled')
     const failed = await renderDetail({ ...baseJob, status: 'failed' })
     expect(buttonState(failed, RETRY_LABEL)).toBe('enabled')
-    expect(buttonState(failed, '補完して登録')).toBe('disabled')
+    expect(buttonState(failed, LINK_LABEL)).toBe('disabled')
     expect(buttonState(await renderDetail(null), RETRY_LABEL)).toBe('disabled')
+    const autoIgnored = await renderDetail({
+      ...baseJob,
+      status: 'ignored',
+      notificationStatus: 'skipped',
+      reasons: ['not_distribution_event']
+    })
+    // 「補完して登録」はイベント作成ページへ遷移するだけの <a> で、受信ジョブの状態に関係なく常に押せる。
+    for (const markup of [held, failed, autoIgnored]) {
+      const link = linkOf(markup, CREATE_LABEL)
+      expect(link).toBeDefined()
+      expect(link?.href?.startsWith('/admin/events/new')).toBe(true)
+      expect(link?.disabled).toBe(false)
+      expect(buttonState(markup, CREATE_LABEL)).toBe('missing')
+    }
   })
 
   test('「AI で判定し直す」ボタンは状態によらず常に描画され、保留と対象外のときだけ有効になる', async () => {
@@ -192,7 +226,7 @@ describe('保留・対象外ジョブの再判定', () => {
     })
     expect(buttonState(rejected, REJUDGE_LABEL)).toBe('disabled')
     // 他のボタンの規則は変わらない（対象外のジョブは解決・再試行・通知再送を持たない）。
-    expect(buttonState(autoIgnored, '補完して登録')).toBe('disabled')
+    expect(buttonState(autoIgnored, LINK_LABEL)).toBe('disabled')
     expect(buttonState(autoIgnored, RETRY_LABEL)).toBe('disabled')
     expect(buttonState(autoIgnored, '通知を再送')).toBe('disabled')
   })
@@ -470,6 +504,6 @@ describe('Webhook詳細の判定待ち表示', () => {
   test('判定待ちでも操作ボタンの可否は変えない（再判定は押せないまま）', async () => {
     const markup = await renderDetail({ ...baseJob, status: 'queued', notificationStatus: 'pending' })
     expect(buttonState(markup, REJUDGE_LABEL)).toBe('disabled')
-    expect(buttonState(markup, '補完して登録')).toBe('disabled')
+    expect(buttonState(markup, LINK_LABEL)).toBe('disabled')
   })
 })

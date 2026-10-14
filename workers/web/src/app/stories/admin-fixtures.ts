@@ -190,7 +190,11 @@ export const adminResponses = {
       fetchedAt: now
     }
   }),
-  saveAdminBotConfiguration: () => ({ model: 'clef-flash', fieldThresholds }),
+  saveAdminBotConfiguration: () => ({
+    model: 'clef-flash',
+    thresholds: { eventThreshold: 0.9, ignoreThreshold: 0.1, choiceThreshold: 0.8 },
+    fieldThresholds
+  }),
   testAdminBotNotification: () => ({ status: 'sent', messageId: '10003' }),
   listAdminWebhookJobs: () => ({ jobs: [webhookJob], nextCursor: null }),
   getAdminWebhookJob: () => webhookJob,

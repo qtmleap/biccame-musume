@@ -1,7 +1,7 @@
 import type { DiscordDeliveryResult, DiscordStatus } from '@biccame/shared/bot'
 import { questionLabel } from '@biccame/shared/event-detect/answer-view'
 import { type ClefModel, ClefModelSchema } from '@biccame/shared/event-detect/clef'
-import { FIELD_THRESHOLD_KEYS, type FieldThresholdKey } from '@biccame/shared/event-detect/detection'
+import { FIELD_THRESHOLD_KEYS } from '@biccame/shared/event-detect/detection'
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { CheckCircle2, Inbox, RefreshCw, Send, XCircle } from 'lucide-react'
@@ -10,10 +10,12 @@ import { BotActionConfirmation } from '@/components/admin/bot-action-confirmatio
 import { BotSettingRow, BotSettingsLayout } from '@/components/admin/bot-settings-layout'
 import {
   botConfigurationForm,
+  type EventThresholdKey,
+  eventThresholdInputValue,
   type FieldThresholdDrafts,
-  fieldThresholdInputValue
+  fieldThresholdInputValue,
+  type ThresholdKey
 } from '@/components/admin/field-threshold-form'
-import { detectionScoreLabel } from '@/components/admin/webhook-labels'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -86,41 +88,55 @@ const TestResult = ({ result }: { result: DiscordDeliveryResult }) => {
   return <p className='text-sm text-destructive'>テスト送信失敗: {result.kind}</p>
 }
 
-/** 項目別しきい値の編集行。%で入力し、不正なときは行ごとにエラーを出す。 */
-const FieldThresholdRow = ({
-  fieldKey,
+/** しきい値の編集行。%で入力し、不正なときは行ごとにエラーを出す。note は入力欄の下に出す補足。 */
+const ThresholdRow = ({
+  thresholdKey,
+  label,
+  ariaLabel,
   value,
   error,
+  note,
   disabled,
   onChange
 }: {
-  fieldKey: FieldThresholdKey
+  thresholdKey: ThresholdKey
+  label: string
+  ariaLabel: string
   value: string
   error: string | undefined
+  note?: string
   disabled: boolean
   onChange: (value: string) => void
 }) => {
-  const label = questionLabel(fieldKey)
-  const errorId = `field-threshold-${fieldKey}-error`
+  const errorId = `field-threshold-${thresholdKey}-error`
+  const noteId = `field-threshold-${thresholdKey}-note`
+  const describedBy = [error === undefined ? null : errorId, note === undefined ? null : noteId].filter(
+    (id) => id !== null
+  )
   return (
-    <BotSettingRow label={label} className='sm:items-center'>
+    <BotSettingRow label={label} className='py-2 sm:items-center'>
       <div className='flex items-center gap-2'>
         <Input
           type='text'
           inputMode='decimal'
           autoComplete='off'
-          aria-label={`${label}の閾値（%）`}
+          aria-label={ariaLabel}
           aria-invalid={error !== undefined}
-          aria-describedby={error === undefined ? undefined : errorId}
+          aria-describedby={describedBy.length === 0 ? undefined : describedBy.join(' ')}
           value={value}
           disabled={disabled}
           onChange={(event) => onChange(event.target.value)}
-          className='h-9 w-24 text-right font-mono tabular-nums md:h-10 md:w-28 md:text-base'
+          className='h-8 w-20 text-right font-mono text-sm tabular-nums'
         />
-        <span aria-hidden='true' className='text-muted-foreground md:text-base'>
+        <span aria-hidden='true' className='text-sm text-muted-foreground'>
           %
         </span>
       </div>
+      {note !== undefined && (
+        <p id={noteId} className='mt-1 text-sm font-normal leading-relaxed text-muted-foreground'>
+          {note}
+        </p>
+      )}
       {error !== undefined && (
         <p id={errorId} role='alert' className='mt-1 text-sm font-normal text-destructive'>
           {error}
@@ -130,19 +146,41 @@ const FieldThresholdRow = ({
   )
 }
 
+/** 判定全体の3つのしきい値の行。ラベルは従来の表示のまま。 */
+const EVENT_THRESHOLD_ROWS: readonly { key: EventThresholdKey; label: string; note?: string }[] = [
+  { key: 'eventThreshold', label: 'イベント判定の登録閾値' },
+  {
+    key: 'choiceThreshold',
+    label: '必須項目の選択閾値',
+    // 判定は項目別の有効値（保存値、無ければこの値から決めた既定値）で行う。この値は配布物の種類数の確認にも使う。
+    note: '項目別の閾値を保存済みの場合、各項目は項目別の値が優先されます。ここは配布物の種類数の確認と、項目別の閾値が未保存のときの既定値に使われます。'
+  },
+  { key: 'ignoreThreshold', label: '対象外判定の閾値' }
+]
+
 export const BotManagement = () => {
   const status = useAdminBotStatus()
   const test = useAdminBotTest()
   const connection = useAdminBotConnection()
   const configuration = useAdminBotConfiguration()
   const [selectedModel, setSelectedModel] = useState<ClefModel | null>(null)
-  // 編集中の項目別しきい値（%の入力文字列）。編集していない項目は保存済みの値を出す。
+  // 編集中のしきい値（%の入力文字列）。判定全体の3つと項目別の8項目。編集していない項目は保存済みの値を出す。
   const [drafts, setDrafts] = useState<FieldThresholdDrafts>({})
   const [confirmOpen, setConfirmOpen] = useState(false)
   const savedThresholds = status.data?.webhook.fieldThresholds
+  const webhook = status.data?.webhook
+  const savedEventThresholds =
+    webhook === undefined
+      ? undefined
+      : {
+          eventThreshold: webhook.eventThreshold,
+          ignoreThreshold: webhook.ignoreThreshold,
+          choiceThreshold: webhook.choiceThreshold
+        }
   const form = botConfigurationForm({
     savedModel: status.data?.webhook.model,
     selectedModel,
+    savedEventThresholds,
     savedThresholds,
     drafts,
     busy: configuration.isPending || status.isFetching || connection.isPending || test.isPending
@@ -208,7 +246,7 @@ export const BotManagement = () => {
       {status.data && (
         <div className='space-y-8'>
           <section>
-            <h2 className='mb-2 text-lg font-semibold md:text-xl'>web Worker 投稿設定</h2>
+            <h2 className='mb-2 text-lg font-semibold md:text-xl'>投稿設定</h2>
             <dl>
               <BotSettingRow label='web Worker'>
                 <SettingFlag enabled={status.data.botConnected} configured />
@@ -320,22 +358,35 @@ export const BotManagement = () => {
                   </SelectContent>
                 </Select>
               </BotSettingRow>
-              <BotSettingRow label='イベント判定の登録閾値'>
-                {detectionScoreLabel(status.data.webhook.eventThreshold)}
-              </BotSettingRow>
-              <BotSettingRow label='必須項目の選択閾値'>
-                {detectionScoreLabel(status.data.webhook.choiceThreshold)}
-              </BotSettingRow>
-              <BotSettingRow label='対象外判定の閾値'>
-                {detectionScoreLabel(status.data.webhook.ignoreThreshold)}
-              </BotSettingRow>
+              {EVENT_THRESHOLD_ROWS.map(({ key, label, note }) => (
+                <ThresholdRow
+                  key={key}
+                  thresholdKey={key}
+                  label={label}
+                  ariaLabel={`${label}（%）`}
+                  value={
+                    savedEventThresholds === undefined
+                      ? ''
+                      : eventThresholdInputValue(savedEventThresholds, drafts, key)
+                  }
+                  error={form.errors[key]}
+                  note={note}
+                  disabled={configuration.isPending}
+                  onChange={(value) => {
+                    setDrafts((current) => ({ ...current, [key]: value }))
+                    configuration.reset()
+                  }}
+                />
+              ))}
             </dl>
             <h3 className='mt-6 mb-1 text-base font-semibold md:text-lg'>項目別の選択閾値</h3>
             <dl>
               {FIELD_THRESHOLD_KEYS.map((key) => (
-                <FieldThresholdRow
+                <ThresholdRow
                   key={key}
-                  fieldKey={key}
+                  thresholdKey={key}
+                  label={questionLabel(key)}
+                  ariaLabel={`${questionLabel(key)}の閾値（%）`}
                   value={savedThresholds === undefined ? '' : fieldThresholdInputValue(savedThresholds, drafts, key)}
                   error={form.errors[key]}
                   disabled={configuration.isPending}
@@ -365,7 +416,7 @@ export const BotManagement = () => {
           disabled={!form.canSave}
           onClick={() => {
             if (form.request !== null) {
-              // 保存後は status キャッシュが保存値に更新されるので、編集中の入力は捨てて保存済みの値を出す。
+              // 保存後は status キャッシュが保存値に更新されるので、編集中の入力（3つと項目別の全て）は捨てて保存済みの値を出す。
               configuration.mutate(form.request, { onSuccess: () => setDrafts({}) })
             }
           }}
