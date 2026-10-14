@@ -184,7 +184,7 @@ const signature = createHmac('sha256', signingSecret)
 | app | `EVENT_DETECTION_THRESHOLD` / `EVENT_DETECTION_CHOICE_THRESHOLD` | 既定 `0.9` |
 | app | `EVENT_DETECTION_IGNORE_THRESHOLD` | 既定 `0.5`、自動登録閾値未満に設定 |
 | web | `DISCORD_TOKEN` / `DISCORD_CHANNEL_ID` (secret) | 既存 Discord Bot と通知先を再利用。Webhook 判定通知と公開イベント告知は別の履歴で管理 |
-| web | `ANTHROPIC_BASE_URL` / `ANTHROPIC_AUTH_TOKEN` (secret) | 自動登録するイベントのタイトルを Claude Haiku に付けさせる、Anthropic Messages 互換の接続先とトークン。接続先は Cloudflare Workers から到達できるものにする（ローカルのプロキシは不可）。どちらかが未登録、または通信に失敗したときは、定型のタイトル（`<店舗名> <配布物>配布`）のまま登録 |
+| web | `ANTHROPIC_BASE_URL` / `ANTHROPIC_AUTH_TOKEN` (secret) | 配布イベントの抽出とタイトル生成に使う、Anthropic Messages・tool use互換の接続先とトークン。自動登録の抽出には両方必須。接続先は Cloudflare Workers から到達できるものにする（ローカルのプロキシは不可）。未設定・抽出失敗時はイベントを登録せず、安全なエラーコードを記録して再試行する。抽出成功後のタイトル生成だけが失敗した場合は、定型のタイトル（`<店舗名> <配布物>配布`）で登録 |
 
 Queue は `biccame-event-detection-local` / `-staging` / `-production` と、それぞれの `-dlq` に分離しています。
 リモート環境での Queue 作成、secret 同期、マイグレーション、デプロイは管理者が承認してから行います。

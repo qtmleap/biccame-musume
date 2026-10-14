@@ -44,7 +44,7 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   FIREBASE_PROJECT_ID: string
   /** Workers AI */
   AI: Ai
-  /** イベントのタイトルを付ける Claude の接続先（secret。未設定ならタイトルは定型のまま登録する） */
+  /** 配布イベント抽出とタイトル生成のClaude接続先（secret。未設定なら抽出は失敗し、登録しない） */
   ANTHROPIC_BASE_URL?: string
   /** 同・認証トークン（secret） */
   ANTHROPIC_AUTH_TOKEN?: string

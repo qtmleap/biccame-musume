@@ -3,7 +3,7 @@ import type { DetectionThresholds } from '@biccame/shared/event-detect/detection
 import type { EventRequest } from '@biccame/shared/schemas/event.dto'
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { ExternalLink, FilePlus2, Link2, RefreshCw, RotateCcw, Send, X } from 'lucide-react'
+import { Circle, CircleCheck, ExternalLink, FilePlus2, Link2, RefreshCw, RotateCcw, Send, X } from 'lucide-react'
 import { useState } from 'react'
 import { z } from 'zod'
 import { BotActionConfirmation } from '@/components/admin/bot-action-confirmation'
@@ -160,40 +160,6 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           <p className='text-destructive'>受信詳細を取得できませんでした。更新から再試行できます。</p>
         )}
       </div>
-      {parentJob && parentJob.candidates.length > 0 && (
-        <section className='mb-6 border-y border-separator py-4' aria-label='配布物ごとのイベント'>
-          <h2 className='mb-3 text-lg font-semibold'>配布物ごとのイベント</h2>
-          <ul className='divide-y divide-separator'>
-            {parentJob.candidates.map((candidate) => (
-              <li key={candidate.eventUUID} className='flex flex-wrap items-center justify-between gap-3 py-3'>
-                <Button
-                  variant='ghost'
-                  aria-pressed={active?.eventUUID === candidate.eventUUID}
-                  disabled={isPending}
-                  onClick={() => {
-                    setSelectedCandidate(candidate.eventUUID)
-                    setShowForm(false)
-                    setLinkOpen(false)
-                    setConfirmAction(null)
-                  }}
-                >
-                  {candidate.item}
-                </Button>
-                <WebhookStatusBadge status={candidate.status} />
-                {candidate.eventId !== null && (
-                  <Link
-                    to='/admin/events/$uuid'
-                    params={{ uuid: candidate.eventId }}
-                    className='text-sm hover:underline'
-                  >
-                    登録イベント
-                  </Link>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
       <div className='mb-6 flex flex-wrap gap-2 border-b pb-5'>
         <Button
           className='bg-brand text-brand-foreground hover:bg-brand/90'
@@ -251,24 +217,120 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           通知を再送
         </Button>
       </div>
+      {parentJob && (
+        <section className='mb-6 border-b border-separator pb-4' aria-label='投稿全体の配布物数チェック'>
+          <h2 className='mb-2 text-lg font-semibold'>投稿全体の配布物数チェック</h2>
+          {parentJob.itemCountAudit ? (
+            <>
+              <p>
+                配布物：判定
+                {parentJob.itemCountAudit.expected === null ? '未確定' : `${parentJob.itemCountAudit.expected}種類`}
+                ／抽出{parentJob.itemCountAudit.extracted}種類／候補{parentJob.itemCountAudit.candidates}件
+              </p>
+              <p className='mt-1 text-sm text-muted-foreground'>
+                {
+                  {
+                    matched: '一致',
+                    mismatch: '件数不一致',
+                    unknown: '件数未確定',
+                    low_confidence: '確率がしきい値未満',
+                    overflow: '21種類以上（上限超過）'
+                  }[parentJob.itemCountAudit.status]
+                }
+                {' · '}確率{' '}
+                {parentJob.itemCountAudit.probability === null
+                  ? '—'
+                  : `${(parentJob.itemCountAudit.probability * 100).toFixed(1)}%`}
+                {' · '}しきい値 {(parentJob.itemCountAudit.threshold * 100).toFixed(1)}%{' · '}
+                {parentJob.itemCountAudit.version}
+              </p>
+            </>
+          ) : (
+            <p className='text-sm text-muted-foreground'>
+              件数未チェック（旧保存値を含む）。候補の再判定時に投稿全体を確認します。
+            </p>
+          )}
+        </section>
+      )}
       {job && (
         <div className='space-y-8'>
-          <section>
-            <h2 className='mb-2 text-lg font-semibold md:text-xl'>元投稿</h2>
-            <a
-              href={job.sourceUrl}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='inline-flex items-center gap-1 text-sm hover:underline'
-            >
-              @{job.post.screenName} · {job.postId}
-              <ExternalLink className='size-4' />
-            </a>
-            <p className='mt-3 whitespace-pre-wrap break-words text-sm leading-relaxed'>{parentJob?.post.text}</p>
-            <p className='mt-3 text-xs text-muted-foreground'>
-              投稿日: {dayjs(job.post.createdAt).format('YYYY/MM/DD HH:mm:ss')}
-            </p>
-          </section>
+          <div className={cn('grid min-w-0 gap-4', parentJob && parentJob.candidates.length > 0 && 'md:grid-cols-2')}>
+            <section className='min-w-0'>
+              <h2 className='mb-2 text-lg font-semibold md:text-xl'>元投稿</h2>
+              <a
+                href={job.sourceUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex items-center gap-1 text-sm hover:underline'
+              >
+                @{job.post.screenName} · {job.postId}
+                <ExternalLink className='size-4' />
+              </a>
+              <p className='mt-3 whitespace-pre-wrap break-words text-sm leading-relaxed'>{parentJob?.post.text}</p>
+              <p className='mt-3 text-xs text-muted-foreground'>
+                投稿日: {dayjs(job.post.createdAt).format('YYYY/MM/DD HH:mm:ss')}
+              </p>
+            </section>
+            {parentJob && parentJob.candidates.length > 0 && (
+              <section className='min-w-0' aria-label='識別されたイベント'>
+                <h2 className='mb-1 text-lg font-semibold md:text-xl'>識別されたイベント</h2>
+                <p className='mb-2 text-sm text-muted-foreground'>
+                  クリックで選択すると、上部の操作と下の判定結果がそのイベントに切り替わります
+                </p>
+                <ul className='divide-y divide-separator'>
+                  {parentJob.candidates.map((candidate) => {
+                    const isActive = active?.eventUUID === candidate.eventUUID
+                    return (
+                      // 候補名ボタンの疑似要素で行全体を覆い、行のどこをクリックしても選択できるようにする（リンクはz-10で除外）。
+                      <li
+                        key={candidate.eventUUID}
+                        className={cn(
+                          'relative flex flex-wrap items-center justify-between gap-2 rounded-md px-2 py-1 transition-colors',
+                          isActive ? 'bg-brand/10 ring-1 ring-brand/40' : 'hover:bg-brand/5',
+                          isPending ? 'cursor-default' : 'cursor-pointer',
+                          'has-[button:focus-visible]:ring-[3px] has-[button:focus-visible]:ring-ring/50'
+                        )}
+                      >
+                        <Button
+                          variant='ghost'
+                          className={cn(
+                            'h-8 gap-2 px-0 hover:bg-transparent focus-visible:ring-0 dark:hover:bg-transparent',
+                            'after:absolute after:inset-0 after:rounded-md',
+                            isActive && 'font-semibold'
+                          )}
+                          aria-pressed={isActive}
+                          disabled={isPending}
+                          onClick={() => {
+                            setSelectedCandidate(candidate.eventUUID)
+                            setShowForm(false)
+                            setLinkOpen(false)
+                            setConfirmAction(null)
+                          }}
+                        >
+                          {isActive ? (
+                            <CircleCheck className='size-4' />
+                          ) : (
+                            <Circle className='size-4 text-muted-foreground' />
+                          )}
+                          {candidate.item}
+                        </Button>
+                        <WebhookStatusBadge status={candidate.status} />
+                        {candidate.eventId !== null && (
+                          <Link
+                            to='/events/$uuid'
+                            params={{ uuid: candidate.eventId }}
+                            className='relative z-10 text-sm hover:underline'
+                          >
+                            登録イベント
+                          </Link>
+                        )}
+                      </li>
+                    )
+                  })}
+                </ul>
+              </section>
+            )}
+          </div>
           <section>
             <h2 className='mb-2 text-lg font-semibold md:text-xl'>Clef の回答</h2>
             {isWebhookJobJudging(job.status) ? (
@@ -310,7 +372,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
               </BotSettingRow>
               <BotSettingRow label='登録イベント'>
                 {job.eventId ? (
-                  <Link to='/admin/events/$uuid' params={{ uuid: job.eventId }} className='hover:underline'>
+                  <Link to='/events/$uuid' params={{ uuid: job.eventId }} className='hover:underline'>
                     {job.eventId}
                   </Link>
                 ) : (

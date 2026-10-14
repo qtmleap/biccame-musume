@@ -2,7 +2,7 @@ import { notifyEventDetection } from '@api/services/discord'
 import { getEvent } from '@api/services/event-service'
 import { exhaustSocialJob, processSocialJob } from '@api/services/social-posting'
 import { detectionConfiguration } from '@api/services/webhook-config'
-import { extractWebhookEvents } from '@api/services/webhook-extraction'
+import { extractWebhookEvents, webhookProcessingErrorCode } from '@api/services/webhook-extraction'
 import {
   claimWebhookJob,
   duplicateWebhookEvents,
@@ -29,7 +29,14 @@ import {
   DetectionResultSchema,
   evaluateDetection
 } from '@biccame/shared/event-detect/detection'
-import { EXTRACTION_VERSION, extractedPost, validateEventExtraction } from '@biccame/shared/event-detect/extraction'
+import {
+  auditItemCount,
+  createItemCountRequest,
+  EXTRACTION_VERSION,
+  extractedPost,
+  ItemCountAuditSchema,
+  validateEventExtraction
+} from '@biccame/shared/event-detect/extraction'
 import { EventRequestSchema } from '@biccame/shared/schemas/event.dto'
 import { type WebhookJob, WebhookQueueMessageSchema } from '@biccame/shared/schemas/webhook.dto'
 import { SocialQueueMessageSchema } from '@biccame/shared/social'
@@ -386,12 +393,40 @@ export const processWebhookJob = async (
           ).bind(postId, token)
         ])
       } else {
-        const raw =
-          options.extractor === undefined
-            ? await extractWebhookEvents(env, job.post, options.extractionFetcher)
-            : await options.extractor(job.post)
-        const extraction = validateEventExtraction(job.post, raw)
+        const configuration = await detectionConfiguration(env)
+        const countRequest = createItemCountRequest(job.post, configuration.model)
+        const countRaw: unknown = await detectionDeadline(
+          env.AI.run(`@cf/cloudflare/${configuration.model}`, countRequest)
+        )
+        const countResponse = ClefResponseSchema.safeParse(countRaw)
+        if (!countResponse.success) throw new Error('Invalid item count response')
+        const extract = async () =>
+          validateEventExtraction(
+            job.post,
+            options.extractor === undefined
+              ? await extractWebhookEvents(env, job.post, options.extractionFetcher)
+              : await options.extractor(job.post)
+          )
+        const first = await extract()
+        const firstAudit = auditItemCount(first.events, countResponse.data, configuration.choiceThreshold)
+        // 件数不一致による再抽出は1回だけ。各抽出のツール未呼び出し再試行を含め最大4通信。
+        const extraction = firstAudit.status === 'mismatch' ? await extract() : first
+        const itemCountAudit = auditItemCount(extraction.events, countResponse.data, configuration.choiceThreshold)
         const now = dayjs().valueOf()
+        if (itemCountAudit.status !== 'matched') {
+          await env.DB.prepare(
+            "UPDATE webhook_event_jobs SET extraction_json=?,status='held',notification_status='skipped',reasons_json=?,updated_at=? WHERE post_id=? AND lease_token=?"
+          )
+            .bind(
+              JSON.stringify({ version: EXTRACTION_VERSION, ...extraction, itemCountAudit }),
+              JSON.stringify([`distribution_item_count_${itemCountAudit.status}`]),
+              now,
+              postId,
+              token
+            )
+            .run()
+          return null
+        }
         const statements = extraction.events.map((event, index) =>
           env.DB.prepare(`INSERT INTO webhook_event_candidates
           (event_uuid,post_id,item,store_key,post_json,source_url,status,created_at,updated_at)
@@ -412,7 +447,7 @@ export const processWebhookJob = async (
           env.DB.prepare(
             `UPDATE webhook_event_jobs SET extraction_json=?,status=?,notification_status=?,reasons_json=?,updated_at=? WHERE post_id=? AND lease_token=?`
           ).bind(
-            JSON.stringify({ version: EXTRACTION_VERSION, ...extraction }),
+            JSON.stringify({ version: EXTRACTION_VERSION, ...extraction, itemCountAudit }),
             extraction.events.length === 0 ? 'ignored' : 'processing',
             extraction.events.length === 0 ? 'skipped' : 'pending',
             JSON.stringify(extraction.events.length === 0 ? ['not_distribution_event'] : []),
@@ -426,6 +461,41 @@ export const processWebhookJob = async (
       }
     }
     const candidates = (await getWebhookJob(env, postId)).candidates
+    // 旧候補は明示的な再判定時だけ件数を監査し、登録済みUUIDや配布内容は変えない。
+    if (job.status === 'queued' && candidates.length > 0 && stored.extraction_json !== null) {
+      const savedExtraction = validateEventExtraction(job.post, storedJson(stored.extraction_json))
+      const configuration = await detectionConfiguration(env)
+      const request = createItemCountRequest(job.post, configuration.model)
+      const raw: unknown = await detectionDeadline(env.AI.run(`@cf/cloudflare/${configuration.model}`, request))
+      const response = ClefResponseSchema.safeParse(raw)
+      if (!response.success) throw new Error('Invalid item count response')
+      const audit = auditItemCount(savedExtraction.events, response.data, configuration.choiceThreshold)
+      await env.DB.prepare('UPDATE webhook_event_jobs SET extraction_json=? WHERE post_id=? AND lease_token=?')
+        .bind(JSON.stringify({ ...savedExtraction, version: EXTRACTION_VERSION, itemCountAudit: audit }), postId, token)
+        .run()
+      if (audit.status !== 'matched') {
+        await env.DB.prepare(
+          "UPDATE webhook_event_jobs SET status='held',reasons_json=? WHERE post_id=? AND lease_token=?"
+        )
+          .bind(JSON.stringify([`distribution_item_count_${audit.status}`]), postId, token)
+          .run()
+        await env.DB.prepare(
+          "UPDATE webhook_event_candidates SET status='held',reasons_json=? WHERE post_id=? AND status='queued'"
+        )
+          .bind(JSON.stringify([`distribution_item_count_${audit.status}`]), postId)
+          .run()
+        return null
+      }
+    }
+    if (stored.extraction_json !== null && candidates.length === 0) {
+      const envelope = storedJson(stored.extraction_json)
+      const audit = ItemCountAuditSchema.safeParse(
+        typeof envelope === 'object' && envelope !== null && 'itemCountAudit' in envelope
+          ? envelope.itemCountAudit
+          : undefined
+      )
+      if (audit.success && audit.data.status !== 'matched') return null
+    }
     const delays: number[] = []
     const failures: unknown[] = []
     for (const candidate of candidates) {
@@ -474,9 +544,9 @@ export const processWebhookJob = async (
     return delays.length > 0 ? Math.max(...delays) : null
   } catch (error) {
     await env.DB.prepare(
-      `UPDATE webhook_event_jobs SET status=CASE WHEN status='processing' THEN 'failed' ELSE status END,last_error='processing_failed',updated_at=? WHERE post_id=? AND lease_token=?`
+      `UPDATE webhook_event_jobs SET status=CASE WHEN status='processing' THEN 'failed' ELSE status END,last_error=?,updated_at=? WHERE post_id=? AND lease_token=?`
     )
-      .bind(dayjs().valueOf(), postId, token)
+      .bind(webhookProcessingErrorCode(error), dayjs().valueOf(), postId, token)
       .run()
     throw error
   } finally {
@@ -527,8 +597,8 @@ export const handleWebhookQueue = async (batch: MessageBatch<unknown>, env: Bind
       const delay = await processWebhookJob(env, parsed.data.postId)
       if (delay === null) message.ack()
       else message.retry({ delaySeconds: Math.min(delay, 43200) })
-    } catch {
-      console.error('[webhook-queue] processing failed')
+    } catch (error) {
+      console.error(`[webhook-queue] processing failed: ${webhookProcessingErrorCode(error)}`)
       message.retry({ delaySeconds: Math.min(30 * 2 ** Math.min(message.attempts, 6), 1800) })
     }
   }

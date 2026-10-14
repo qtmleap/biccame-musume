@@ -5,6 +5,7 @@ import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
 import { calculateEventStatus } from '@biccame/shared/domain/event-status'
 import { type ClefResponse, ClefResponseSchema } from '@biccame/shared/event-detect/clef'
 import { buildDetectionDraft } from '@biccame/shared/event-detect/detection'
+import { ItemCountAuditSchema } from '@biccame/shared/event-detect/extraction'
 import { type DetectPost, DetectPostSchema } from '@biccame/shared/event-detect/post'
 import { GapStatusSchema } from '@biccame/shared/event-detect/viewer'
 import { EventDetailSchema, type EventRequest, EventRequestSchema } from '@biccame/shared/schemas/event.dto'
@@ -122,11 +123,31 @@ export const toJob = (value: unknown): WebhookJob => {
   return result.data
 }
 
+/** 旧抽出・旧単一候補の保存値には監査を捏造せず、未チェックとして返す。 */
+const storedItemCountAudit = (value: unknown) => {
+  if (typeof value !== 'string') return null
+  try {
+    const envelope = storedJson(value)
+    const parsed = ItemCountAuditSchema.safeParse(
+      typeof envelope === 'object' && envelope !== null && 'itemCountAudit' in envelope
+        ? envelope.itemCountAudit
+        : undefined
+    )
+    return parsed.success ? parsed.data : null
+  } catch {
+    return null
+  }
+}
+
 export const getWebhookJob = async (env: Pick<Bindings, 'DB'>, postId: string): Promise<WebhookJob> => {
-  const row = await env.DB.prepare(`SELECT ${JobColumns} FROM ${JobTables} WHERE j.post_id=?`).bind(postId).first()
+  const row = await env.DB.prepare(
+    `SELECT ${JobColumns},j.extraction_json AS extractionJson FROM ${JobTables} WHERE j.post_id=?`
+  )
+    .bind(postId)
+    .first()
   if (row === null) throw new HTTPException(404, { message: 'Webhook job not found' })
   const candidates = await webhookCandidates(env, postId)
-  return { ...toJob(row), candidates }
+  return { ...toJob(row), candidates, itemCountAudit: storedItemCountAudit(row.extractionJson) }
 }
 export const webhookCandidates = async (env: Pick<Bindings, 'DB'>, postId: string) => {
   const rows = await env.DB.prepare(
@@ -217,15 +238,19 @@ export const listWebhookJobs = async (env: Pick<Bindings, 'DB'>, query: z.infer<
     query.limit + 1
   ]
   const result = await env.DB.prepare(
-    `SELECT ${JobColumns} FROM ${JobTables} ${filters.length > 0 ? `WHERE ${filters.join(' AND ')}` : ''} ORDER BY j.created_at DESC, j.post_id DESC LIMIT ?`
+    `SELECT ${JobColumns},j.extraction_json AS extractionJson FROM ${JobTables} ${filters.length > 0 ? `WHERE ${filters.join(' AND ')}` : ''} ORDER BY j.created_at DESC, j.post_id DESC LIMIT ?`
   )
     .bind(...values)
     .all()
   const rows = result.results
-  const jobs = await Promise.all(
+  const jobs: WebhookJob[] = await Promise.all(
     rows.slice(0, query.limit).map(async (row) => {
       const job = toJob(row)
-      return { ...job, candidates: await webhookCandidates(env, job.postId) }
+      return {
+        ...job,
+        candidates: await webhookCandidates(env, job.postId),
+        itemCountAudit: storedItemCountAudit(row.extractionJson)
+      }
     })
   )
   const last = jobs.at(-1)
