@@ -25,7 +25,8 @@ import {
   detectionScoreLabel,
   isWebhookJobJudging,
   notificationRetryWarning,
-  webhookActionAvailability
+  webhookActionAvailability,
+  webhookCandidateTitle
 } from '@/components/admin/webhook-labels'
 import { WebhookStatusBadge } from '@/components/admin/webhook-status-badge'
 import { Button } from '@/components/ui/button'
@@ -83,7 +84,14 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   const job = active === undefined ? parentJob : { ...active, candidates: [] }
   const candidateSelection = active === undefined ? {} : { candidateId: active.eventUUID }
   // 選択中の候補の登録候補・下書きを作成ページの初期値にする。読み込み中は初期値なしでリンクだけ出す。
-  const createSearch: EventRequestQuery = job === undefined ? {} : webhookEventCreateSearch(job)
+  // 作成したイベントはこの受信ジョブ（複数候補なら選択中の候補）へ自動で紐付ける。紐付け先を渡すかどうかは保留の状態かで決まる。
+  const createSearch: EventRequestQuery =
+    job === undefined
+      ? {}
+      : webhookEventCreateSearch(job, {
+          link: { postId, ...candidateSelection },
+          ...(active === undefined ? {} : { item: active.item })
+        })
   const isPending = retry.isPending || resolve.isPending || rejudge.isPending
   const availability = job
     ? webhookActionAvailability(job.status, job.notificationStatus, job.reasons)
@@ -319,7 +327,11 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
                           ) : (
                             <Circle className='size-4 text-muted-foreground' />
                           )}
-                          {candidate.item}
+                          {webhookCandidateTitle(candidate)}
+                          {/* AI の題が抽出名と違うときだけ、元の抽出名を控えめに添える */}
+                          {webhookCandidateTitle(candidate) !== candidate.item && (
+                            <span className='text-xs font-normal text-muted-foreground'>抽出: {candidate.item}</span>
+                          )}
                         </Button>
                         <WebhookStatusBadge status={candidate.status} />
                         {candidate.eventId !== null && (

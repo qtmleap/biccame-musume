@@ -18,7 +18,13 @@ import {
 import { AdminUserListResponseSchemaForClient } from '@biccame/shared/schemas/user.dto'
 import {
   WebhookJobListSchema,
+  WebhookJobOrderSchema,
+  WebhookJobQuerySchema,
+  WebhookJobRangeSchema,
   WebhookJobSchema,
+  WebhookJobSortSchema,
+  WebhookKeywordVerdictSchema,
+  WebhookPostStatusFilterSchema,
   WebhookResolveSchema,
   WebhookRetrySchema
 } from '@biccame/shared/schemas/webhook.dto'
@@ -211,14 +217,12 @@ export const adminEndpoints = makeApi([
     alias: 'listAdminWebhookJobs',
     parameters: [
       { name: 'limit', type: 'Query', schema: z.number().int().min(1).max(100).optional() },
-      {
-        name: 'cursor',
-        type: 'Query',
-        schema: z
-          .string()
-          .regex(/^\d{1,20}$/)
-          .optional()
-      }
+      { name: 'cursor', type: 'Query', schema: WebhookJobQuerySchema.shape.cursor },
+      { name: 'range', type: 'Query', schema: WebhookJobRangeSchema.optional() },
+      { name: 'sort', type: 'Query', schema: WebhookJobSortSchema.optional() },
+      { name: 'order', type: 'Query', schema: WebhookJobOrderSchema.optional() },
+      { name: 'verdict', type: 'Query', schema: WebhookKeywordVerdictSchema.optional() },
+      { name: 'postStatus', type: 'Query', schema: WebhookPostStatusFilterSchema.optional() }
     ],
     response: WebhookJobListSchema
   },

@@ -39,8 +39,8 @@ describe('管理画面の outline ボタンの枠線色', () => {
   test.each([
     // 更新・既存へ紐付け・対象外にする・失敗した処理を再実行・AI で判定し直す・通知を再送と、紐付けダイアログのキャンセル。
     ['workers/web/src/app/components/admin/webhook-job-detail.tsx', 7],
-    // 更新・bot 設定・前へ・次へ。
-    ['workers/web/src/app/components/admin/webhook-job-list.tsx', 4],
+    // 更新・bot 設定・条件をクリア・前へ・次へ。
+    ['workers/web/src/app/components/admin/webhook-job-list.tsx', 5],
     // 接続確認と受信履歴。
     ['workers/web/src/app/components/admin/bot-management.tsx', 2]
   ] as const)('%sの outline ボタンはすべて %i 個とも border-card-border を指定する', async (path, count) => {

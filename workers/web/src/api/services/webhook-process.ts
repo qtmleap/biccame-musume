@@ -64,6 +64,9 @@ const eventCandidate = (candidate: DetectionCandidate, uuid: string) => {
   return parsed.success ? parsed.data : null
 }
 
+/** 旧単一ジョブの移行で、登録候補の題が無いときに候補へ入れる仮の名前 */
+const LEGACY_ITEM = '既存配布物'
+
 const detectionDeadline = async <T>(task: Promise<T>): Promise<T> => {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), 60_000)
@@ -196,7 +199,8 @@ const processWebhookCandidate = async (
   options: ProcessOptions,
   target: WebhookTarget,
   item: string,
-  storeKey: string | null
+  storeKey: string | null,
+  legacy: boolean
 ): Promise<number | null> => {
   const currentJob = () => getWebhookCandidate(env, postId, target.id)
   try {
@@ -264,7 +268,7 @@ const processWebhookCandidate = async (
       ...duplicates.map((id) => `possible_duplicate:${id}`)
     ]
     const canRegister = result.status === 'register' && candidate !== null && duplicates.length === 0
-    // 同じ店舗・種別・開始日の別投稿が登録済みなら保留にする。タイトルを付ける（LLM を呼ぶ）前に判定して、保留になる投稿では呼ばない。
+    // 同じ店舗・種別・開始日の別投稿が登録済みなら保留にする。この判定とスロットの予約は、タイトルを付ける（LLM を呼ぶ）前に済ませる。
     const semantic =
       canRegister && candidate !== null
         ? JSON.stringify([
@@ -291,16 +295,20 @@ const processWebhookCandidate = async (
         .bind(semantic, target.id, token)
         .run()
     }
-    // 自動登録する（Clef を通って登録になる）ときだけ、イベントのタイトルを Claude に付けさせる。失敗・未設定なら今の形のタイトルのまま登録する。
+    // 登録候補（candidate）が作れたときは、自動登録に進むものも、重複などで保留になるもの（人が補完して登録する）も、
+    // イベントのタイトルを Claude に付けさせる。candidate が無い（対象外・日付やカテゴリが決まらない）ときは呼ばない。
+    // 配布物の名前（item）を渡して、同じ投稿の配布物どうしで別の題になるようにする。失敗・未設定なら今の形のタイトルのまま。
+    // 旧単一ジョブ（移行の印あり）の item は抽出した名前ではなく、旧形式で作った題か仮の名前なので渡さない（本文から読み取らせる）。
     const titled =
-      registering && candidate !== null
+      candidate !== null
         ? await generateEventTitle(
             env,
             {
               category: candidate.category,
               startDay: candidate.startDate.slice(0, 10),
               stores: candidate.stores,
-              body: job.post.text
+              body: job.post.text,
+              ...(legacy ? {} : { item })
             },
             options.titleFetcher === undefined ? {} : { fetcher: options.titleFetcher }
           )
@@ -384,7 +392,7 @@ export const processWebhookJob = async (
         await env.DB.batch([
           env.DB.prepare(`INSERT INTO webhook_event_candidates (event_uuid,post_id,item,post_json,source_url,status,reasons_json,result_json,candidate_json,answers_json,model,question_version,confidence,judged_at,event_id,semantic_key,attempts,notification_status,notification_id,notification_error,notification_attempts,last_error,created_at,updated_at)
             SELECT event_uuid,post_id,?,post_json,source_url,status,reasons_json,result_json,candidate_json,answers_json,model,question_version,confidence,judged_at,event_id,semantic_key,attempts,notification_status,notification_id,notification_error,notification_attempts,last_error,created_at,updated_at FROM webhook_event_jobs WHERE post_id=? AND lease_token=?`).bind(
-            job.candidate?.title ? job.candidate.title : '既存配布物',
+            job.candidate?.title ? job.candidate.title : LEGACY_ITEM,
             postId,
             token
           ),
@@ -461,6 +469,13 @@ export const processWebhookJob = async (
       }
     }
     const candidates = (await getWebhookJob(env, postId)).candidates
+    // 旧単一ジョブの移行の印（この実行で移行した場合を含む）。候補の名前の値では判定しない（旧形式の題が入ることがある）。
+    const legacy =
+      (await env.DB.prepare(
+        `SELECT 1 AS legacy FROM webhook_event_jobs WHERE post_id=? AND json_valid(extraction_json) AND json_extract(extraction_json,'$.version')='legacy-single'`
+      )
+        .bind(postId)
+        .first()) !== null
     // 旧候補は明示的な再判定時だけ件数を監査し、登録済みUUIDや配布内容は変えない。
     if (job.status === 'queued' && candidates.length > 0 && stored.extraction_json !== null) {
       const savedExtraction = validateEventExtraction(job.post, storedJson(stored.extraction_json))
@@ -526,7 +541,8 @@ export const processWebhookJob = async (
           options,
           webhookTarget(postId, candidate.eventUUID),
           candidate.item,
-          candidate.storeKey
+          candidate.storeKey,
+          legacy
         )
         if (delay !== null) delays.push(delay)
       } catch (error) {
