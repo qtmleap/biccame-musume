@@ -246,7 +246,7 @@ export const BotManagement = () => {
       {status.data && (
         <div className='space-y-8'>
           <section>
-            <h2 className='mb-2 text-lg font-semibold md:text-xl'>web Worker 投稿設定</h2>
+            <h2 className='mb-2 text-lg font-semibold md:text-xl'>投稿設定</h2>
             <dl>
               <BotSettingRow label='web Worker'>
                 <SettingFlag enabled={status.data.botConnected} configured />
