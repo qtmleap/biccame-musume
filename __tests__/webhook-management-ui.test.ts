@@ -585,7 +585,7 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(markup).not.toContain('<table')
   })
 
-  test('詳細は「元投稿」と「判定・イベント登録」の間に「Clef の回答」を出し、判定理由は日本語でコードをtitleに残す', async () => {
+  test('詳細は先頭に投稿全体の配布物数チェックを置き、「元投稿」と「判定・イベント登録」の間に「Clef の回答」を出し、判定理由は日本語でコードをtitleに残す', async () => {
     const markup = await renderDetail(
       {
         ...listJob,
@@ -595,7 +595,7 @@ describe('Webhook管理画面の判定・通知表示', () => {
       0.9
     )
     const headings = [...markup.matchAll(/<h2\b[^>]*>(.*?)<\/h2>/g)].map((match) => match[1])
-    expect(headings.slice(0, 3)).toEqual(['元投稿', 'Clef の回答', '判定・イベント登録'])
+    expect(headings.slice(0, 4)).toEqual(['投稿全体の配布物数チェック', '元投稿', 'Clef の回答', '判定・イベント登録'])
     expect(markup).toContain('>店舗を確定できない</li>')
     expect(markup).toContain('title="store_unconfirmed"')
     expect(markup).toContain('>重複の可能性あり</li>')
@@ -886,11 +886,14 @@ test('一覧と詳細は一部登録・一部保留を配布物ごとに表示�
   expect(list).toContain('ハロウィン限定名刺')
   expect(list).toContain('ハロウィンアクキー')
   const detail = await renderDetail(job)
-  expect(detail).toContain('配布物ごとのイベント')
+  expect(detail).toContain('識別されたイベント')
   expect(detail).toContain('aria-pressed="true"')
   expect(detail).toContain('aria-pressed="false"')
   expect(detail).toContain('アクキーと名刺の元投稿全文')
   expect(detail).not.toContain('名刺に関する原文断片')
+  // 「登録イベント」リンクは編集画面ではなくイベント詳細ページへ向ける。
+  expect(detail).toContain('href="/events/550e8400-e29b-41d4-a716-446655440000"')
+  expect(detail).not.toContain('/admin/events/')
   for (const label of ['補完して登録', '既存へ紐付け', '対象外にする', 'AI で判定し直す', '通知を再送'])
     expect(detail).toContain(label)
 })
