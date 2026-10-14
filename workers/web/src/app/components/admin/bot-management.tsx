@@ -114,7 +114,7 @@ const ThresholdRow = ({
     (id) => id !== null
   )
   return (
-    <BotSettingRow label={label} className='sm:items-center'>
+    <BotSettingRow label={label} className='py-2 sm:items-center'>
       <div className='flex items-center gap-2'>
         <Input
           type='text'
@@ -126,9 +126,9 @@ const ThresholdRow = ({
           value={value}
           disabled={disabled}
           onChange={(event) => onChange(event.target.value)}
-          className='h-9 w-24 text-right font-mono tabular-nums md:h-10 md:w-28 md:text-base'
+          className='h-8 w-20 text-right font-mono text-sm tabular-nums'
         />
-        <span aria-hidden='true' className='text-muted-foreground md:text-base'>
+        <span aria-hidden='true' className='text-sm text-muted-foreground'>
           %
         </span>
       </div>

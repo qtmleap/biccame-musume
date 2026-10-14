@@ -212,10 +212,11 @@ describe('項目別のしきい値', () => {
       expect(row, key).toContain(`aria-label="${label}の閾値（%）"`)
       expect(row, key).toContain(`value="${percentOf(savedThresholds[key])}"`)
       expect(row, key).toContain('inputMode="decimal"')
-      // 数値は右寄せの mono、デスクトップで一段大きく、行の中身は上下中央。
-      expect(row, key).toContain('text-right font-mono tabular-nums')
-      expect(row, key).toContain('md:h-10')
-      expect(row, key).toContain('md:text-base')
+      // 数値は右寄せの mono、高さ32px・文字14pxで md でも拡大せず、行の中身は上下中央。
+      expect(row, key).toContain('h-8 w-20 text-right font-mono text-sm tabular-nums')
+      expect(row, key).not.toContain('md:h-10')
+      expect(row, key).not.toContain('md:w-28')
+      expect(row, key).not.toContain('md:text-base')
       expect(row, key).toContain('flex items-center')
       expect(row, key).not.toContain('aria-invalid="true"')
       expect(row, key).not.toContain('role="alert"')
@@ -239,9 +240,10 @@ describe('項目別のしきい値', () => {
       expect(row, label).toContain(`aria-label="${label}（%）"`)
       expect(row, label).toContain(`value="${percent}"`)
       expect(row, label).toContain('inputMode="decimal"')
-      // 項目別と同じ見た目（右寄せの mono、デスクトップで一段大きく、行の中身は上下中央）。
-      expect(row, label).toContain('text-right font-mono tabular-nums')
-      expect(row, label).toContain('md:h-10')
+      // 項目別と同じ見た目（右寄せの mono、高さ32px・文字14pxで md でも拡大せず、行の中身は上下中央）。
+      expect(row, label).toContain('h-8 w-20 text-right font-mono text-sm tabular-nums')
+      expect(row, label).not.toContain('md:h-10')
+      expect(row, label).not.toContain('md:text-base')
       expect(row, label).toContain('flex items-center')
       expect(row, label).not.toContain('disabled=""')
       expect(row, label).not.toContain('aria-invalid="true"')
