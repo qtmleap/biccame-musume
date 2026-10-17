@@ -7,38 +7,59 @@ permissions:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
+  ci-change-scope:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/ci-change-scope.yaml
+    with:
+      doc-paths: '["AGENTS.md","CLAUDE.md","LICENSE","README.md","docs/development/ci-change-scope.md","docs/fix/00-summary.md","docs/fix/01-characters-json-cache.md","docs/fix/02-sw-update-and-auto-reload.md","docs/fix/03-firebase-auth-404.md","docs/fix/twitter-health.md","docs/list-post-archive.md","docs/mocks/2026-05-daily-tweets.md","docs/plans/2026-04-10-ui-ux-19-improvements.md","docs/plans/2026-04-11-events-page-ui-refactor.md","docs/plans/2026-04-11-update-overlay-official-transparent-images.md","docs/plans/2026-05-01-character-bulk-pipeline.md","docs/plans/2026-05-01-code-refactor-agent-skill.md","docs/plans/2026-05-02-event-comments-mvp.md","docs/plans/2026-05-03-admin-comment-delete.md","docs/plans/2026-05-05-favorite-bulk-vote.md","docs/plans/2026-05-06-badges-data-model.md","docs/plans/2026-06-29-codebase-refactor-audit.md","docs/plans/2026-06-29-do-counters-and-vote-perf.md","docs/plans/2026-06-29-handoff-remaining-tasks.md","docs/plans/2026-06-29-ws-push-notifications.md","docs/plans/2026-07-22-codebase-audit-remediation-plan.md","docs/plans/2026-07-22-codebase-audit-report.md","docs/plans/2026-07-24-badge-visit-count-and-ikebukuro-complete.md","docs/plans/2026-07-24-mypage-events-half-year-filter.md","docs/plans/2026-07-24-public-api-user-info-leak-remediation.md","docs/plans/2026-10-02-responsive-visual-review.md","docs/plans/2026-10-02-ui-ux-design-issues.md","docs/plans/2026-10-02-ui-ux-design-plan.md","docs/plans/2026-10-03-bot-worker-integration.md"]'
+      doc-prefixes: '[]'
+      runner: '["self-hosted","ubuntu-latest"]'
+
   ui-regression:
+    env:
+      GITHUB_TOKEN: '${{ fromJSON((needs[''ci-change-scope''].result != ''success'' || needs[''ci-change-scope''].outputs.docs_only != ''true'') && toJSON(secrets.GITHUB_TOKEN) || ''""'') }}'
+    if: ${{ !cancelled() && (true) }}
+    needs: ["ci-change-scope"]
     name: Local UI and authentication regression
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON((needs['ci-change-scope'].result == 'success' && needs['ci-change-scope'].outputs.docs_only == 'true') && '["self-hosted","ubuntu-latest"]' || '"ubuntu-latest"') }}
     steps:
       - uses: actions/checkout@v6
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         with:
           submodules: true
       - uses: oven-sh/setup-bun@v2
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
       - uses: actions/setup-node@v6
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         with:
           node-version: '24'
       - run: bun install --frozen-lockfile --ignore-scripts
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
       - run: bun run generate
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
       - run: bunx playwright install --with-deps chromium
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
       - name: Assert route, sticky, visual guard and real local authentication
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         run: |
           bun run e2e:regression
           bun run e2e:vote-limit
           bash e2e/local/run.sh e2e/routes.test.ts e2e/sticky-check.spec.ts e2e/local-auth.spec.ts
       - name: Capture pending candidates with separate stability comparators
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         run: bun run e2e:candidates
       - name: Compare human-approved baselines
-        if: hashFiles('e2e/approved/*.png') != ''
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') && (hashFiles('e2e/approved/*.png') != '') }}
         run: bash e2e/local/run.sh e2e/visual-check.spec.ts
       - name: Record pending baseline review
-        if: hashFiles('e2e/approved/*.png') == ''
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') && (hashFiles('e2e/approved/*.png') == '') }}
         run: echo '::notice::Visual candidates await human review. No approved visual baseline exists; production visual regression approval is pending.'
       - name: Build review gallery
-        if: always()
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') && (always()) }}
         run: bun e2e/local/gallery.ts
       - uses: actions/upload-artifact@v6
-        if: always()
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') && (always()) }}
         with:
           name: ui-candidates-pending-human-approval
           include-hidden-files: true
@@ -47,6 +68,14 @@ jobs:
             .cache/a15/gallery.html
             test-results
             playwright-report
+      - name: Docs-only exemption
+        if: ${{ needs['ci-change-scope'].result == 'success' && needs['ci-change-scope'].outputs.docs_only == 'true' }}
+        shell: bash
+        working-directory: .
+        env:
+          CI_CHANGE_REASON: ${{ needs['ci-change-scope'].outputs.reason }}
+        run: |
+          printf '%s\n' "$CI_CHANGE_REASON" >> "$GITHUB_STEP_SUMMARY"
   commitlint:
     name: CommitLint
     if: github.event.action != 'closed' || github.event.pull_request.merged != true
@@ -99,17 +128,23 @@ jobs:
         run: |
           bun biome check workers/web/src packages/shared/src __tests__
   migrations:
+    env:
+      GITHUB_TOKEN: '${{ fromJSON((needs[''ci-change-scope''].result != ''success'' || needs[''ci-change-scope''].outputs.docs_only != ''true'') && toJSON(secrets.GITHUB_TOKEN) || ''""'') }}'
+    needs: ["ci-change-scope"]
     name: Migrations
-    runs-on: ubuntu-latest
-    if: github.event.action != 'closed' || github.event.pull_request.merged != true
+    runs-on: ${{ fromJSON((needs['ci-change-scope'].result == 'success' && needs['ci-change-scope'].outputs.docs_only == 'true') && '["self-hosted","ubuntu-latest"]' || '"ubuntu-latest"') }}
+    if: ${{ !cancelled() && (true) && (github.event.action != 'closed' || github.event.pull_request.merged != true) }}
     steps:
       - name: Checkout
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         uses: actions/checkout@v6
       - name: Bun
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
       - name: Cache
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         uses: actions/cache@v5
         with:
           path: node_modules
@@ -117,29 +152,45 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bun-
       - name: Install dependencies
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         run: bun install --frozen-lockfile --ignore-scripts
       # schema.prisma を変更したのにマイグレーションを生成し忘れた PR を落とす。
       # --from-migrations はコミット済み履歴の再生結果が起点なので DB もクレデンシャルも不要。
       # 差分があれば --exit-code が 2 を返してジョブが失敗する。
       - name: Check migrations are up to date
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         run: |
           bunx prisma migrate diff \
             --from-migrations ./prisma/migrations \
             --to-schema ./prisma/schema.prisma \
             --config ./prisma/prisma.config.ts \
             --exit-code
+      - name: Docs-only exemption
+        if: ${{ needs['ci-change-scope'].result == 'success' && needs['ci-change-scope'].outputs.docs_only == 'true' }}
+        shell: bash
+        working-directory: .
+        env:
+          CI_CHANGE_REASON: ${{ needs['ci-change-scope'].outputs.reason }}
+        run: |
+          printf '%s\n' "$CI_CHANGE_REASON" >> "$GITHUB_STEP_SUMMARY"
   test:
+    env:
+      GITHUB_TOKEN: '${{ fromJSON((needs[''ci-change-scope''].result != ''success'' || needs[''ci-change-scope''].outputs.docs_only != ''true'') && toJSON(secrets.GITHUB_TOKEN) || ''""'') }}'
+    needs: ["ci-change-scope"]
     name: Test
-    runs-on: ubuntu-latest
-    if: github.event.action != 'closed' || github.event.pull_request.merged != true
+    runs-on: ${{ fromJSON((needs['ci-change-scope'].result == 'success' && needs['ci-change-scope'].outputs.docs_only == 'true') && '["self-hosted","ubuntu-latest"]' || '"ubuntu-latest"') }}
+    if: ${{ !cancelled() && (true) && (github.event.action != 'closed' || github.event.pull_request.merged != true) }}
     steps:
       - name: Checkout
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         uses: actions/checkout@v6
       - name: Bun
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
       - name: Cache
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         uses: actions/cache@v5
         with:
           path: node_modules
@@ -147,12 +198,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bun-
       - name: Install dependencies
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         run: bun install --frozen-lockfile --ignore-scripts
       - name: Generate Prisma Client
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         run: bun run generate
       - name: Test
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         run: |
           bun run test
+      - name: Docs-only exemption
+        if: ${{ needs['ci-change-scope'].result == 'success' && needs['ci-change-scope'].outputs.docs_only == 'true' }}
+        shell: bash
+        working-directory: .
+        env:
+          CI_CHANGE_REASON: ${{ needs['ci-change-scope'].outputs.reason }}
+        run: |
+          printf '%s\n' "$CI_CHANGE_REASON" >> "$GITHUB_STEP_SUMMARY"
   knip:
     name: Knip
     runs-on: ubuntu-latest
@@ -203,17 +265,23 @@ jobs:
         run: |
           bun run typecheck
   build:
+    env:
+      GITHUB_TOKEN: '${{ fromJSON((needs[''ci-change-scope''].result != ''success'' || needs[''ci-change-scope''].outputs.docs_only != ''true'') && toJSON(secrets.GITHUB_TOKEN) || ''""'') }}'
+    needs: ["ci-change-scope"]
     name: Vite Build (production)
-    runs-on: ubuntu-latest
-    if: github.event.action != 'closed' || github.event.pull_request.merged != true
+    runs-on: ${{ fromJSON((needs['ci-change-scope'].result == 'success' && needs['ci-change-scope'].outputs.docs_only == 'true') && '["self-hosted","ubuntu-latest"]' || '"ubuntu-latest"') }}
+    if: ${{ !cancelled() && (true) && (github.event.action != 'closed' || github.event.pull_request.merged != true) }}
     steps:
       - name: Checkout
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         uses: actions/checkout@v6
       - name: Bun
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
       - name: Cache
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         uses: actions/cache@v5
         with:
           path: node_modules
@@ -223,6 +291,7 @@ jobs:
       # Build asset caches mirror deployment.yaml so this job catches
       # build-time failures (e.g. vite-plugin-pwa × intlayer) before merge.
       - name: Cache character images
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         uses: actions/cache@v5
         with:
           path: |
@@ -237,6 +306,7 @@ jobs:
               )
             }}
       - name: Cache OG images
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         uses: actions/cache@v5
         with:
           path: |
@@ -252,10 +322,13 @@ jobs:
               )
             }}
       - name: Install dependencies
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         run: bun install --frozen-lockfile --ignore-scripts
       - name: Generate Prisma Client
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         run: bun run generate
       - name: Build
+        if: ${{ (needs['ci-change-scope'].result != 'success' || needs['ci-change-scope'].outputs.docs_only != 'true') }}
         run: |
           bunx rimraf workers/web/dist
           bun run scripts/download-character-images.ts
@@ -270,3 +343,12 @@ jobs:
           CLOUDFLARE_ENV=staging bun run test:app-build
         env:
           CLOUDFLARE_ENV: production
+
+      - name: Docs-only exemption
+        if: ${{ needs['ci-change-scope'].result == 'success' && needs['ci-change-scope'].outputs.docs_only == 'true' }}
+        shell: bash
+        working-directory: .
+        env:
+          CI_CHANGE_REASON: ${{ needs['ci-change-scope'].outputs.reason }}
+        run: |
+          printf '%s\n' "$CI_CHANGE_REASON" >> "$GITHUB_STEP_SUMMARY"
