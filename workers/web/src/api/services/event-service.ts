@@ -159,27 +159,59 @@ export const getEvent = async (env: Bindings, id: string): Promise<EventDetail> 
   return transformDetail(event, interestedCount, completedCount)
 }
 
+/** D1 のバインド数上限 (100) に収まるよう、関連つきでイベントを読む ID の単位を絞る。 */
+const EVENT_ID_CHUNK_SIZE = 50
+
+/**
+ * 指定された ID のイベントを、渡された ID の順に取得する。
+ * Prisma は conditions / stores を IN (<取得対象の ID 全件>) で読むため、
+ * ID を少数ずつに分けて逐次取得し、D1 のバインド数上限を超えないようにする。
+ * 取得の間に削除された ID は結果から除く。
+ * @param env - Cloudflare Workers環境変数
+ * @param ids - 取得するイベントID (この順に返す)
+ * @throws HTTPException 400 - バリデーションエラーの場合
+ */
+const getEventsByIds = async (env: Bindings, ids: string[]): Promise<Event[]> => {
+  const prisma = getPrisma(env)
+  const uniqueIds = [...new Set(ids)]
+  const rows: EventListPayload[] = []
+  for (const offset of Array.from(
+    { length: Math.ceil(uniqueIds.length / EVENT_ID_CHUNK_SIZE) },
+    (_, index) => index * EVENT_ID_CHUNK_SIZE
+  )) {
+    rows.push(
+      ...(await prisma.event.findMany({
+        where: { id: { in: uniqueIds.slice(offset, offset + EVENT_ID_CHUNK_SIZE) } },
+        select: EVENT_LIST_SELECT
+      }))
+    )
+  }
+  const rowById = new Map(rows.map((row) => [row.id, row]))
+  const events = uniqueIds.flatMap((id) => {
+    const row = rowById.get(id)
+    return row === undefined ? [] : [transform(row)]
+  })
+  const result = EventSchema.array().safeParse(events)
+  if (!result.success) {
+    throw new HTTPException(400, { message: result.error.message })
+  }
+  return result.data
+}
+
 /**
  * イベント一覧を where 条件つきで取得 (開始日降順)
+ * 絞り込みと並び順は ID だけの軽いクエリで決め、関連つきの本体は ID を分けて取得する。
  * @param env - Cloudflare Workers環境変数
  * @param where - 絞り込み条件 (省略時は全件)
  * @throws HTTPException 400 - バリデーションエラーの場合
  */
 const listEvents = async (env: Bindings, where?: Prisma.EventWhereInput): Promise<Event[]> => {
   const prisma = getPrisma(env)
-
-  const events = (
-    await prisma.event.findMany({
-      where,
-      select: EVENT_LIST_SELECT,
-      orderBy: { startDate: 'desc' }
-    })
-  ).map((v) => transform(v))
-  const result = EventSchema.array().safeParse(events)
-  if (!result.success) {
-    throw new HTTPException(400, { message: result.error.message })
-  }
-  return result.data
+  const rows = await prisma.event.findMany({ where, select: { id: true }, orderBy: { startDate: 'desc' } })
+  return getEventsByIds(
+    env,
+    rows.map((row) => row.id)
+  )
 }
 
 /**
@@ -209,12 +241,7 @@ export const getWebhookEventIds = async (env: Pick<Bindings, 'DB'>): Promise<str
 
 /** 登録元を確認したイベントだけを通常の管理一覧と同じ形式で返す。 */
 export const getAdminWebhookEvents = async (env: Bindings): Promise<Event[]> => {
-  const ids = await getWebhookEventIds(env)
-  const events: Event[] = []
-  // D1のバインド数上限を超えないよう、少数ずつ逐次取得する。
-  for (const offset of Array.from({ length: Math.ceil(ids.length / 50) }, (_, index) => index * 50)) {
-    events.push(...(await listEvents(env, { id: { in: ids.slice(offset, offset + 50) } })))
-  }
+  const events = await getEventsByIds(env, await getWebhookEventIds(env))
   return events.sort((left, right) => dayjs(right.startDate).valueOf() - dayjs(left.startDate).valueOf())
 }
 
