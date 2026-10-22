@@ -1,15 +1,11 @@
 import { describe, expect, test } from 'bun:test'
 import { describeAnswers } from './answer-view'
-import {
-  buildDetectionDraft,
-  createDetectionRequests,
-  DEFAULT_DETECTION_THRESHOLDS,
-  evaluateDetection
-} from './detection'
+import { buildDetectionDraft, createDetectionRequests, DEFAULT_DETECTION_THRESHOLDS } from './detection'
 import {
   associationAnswers,
   categoryCriteria,
   choice,
+  evaluateWithStore,
   post,
   requestWithAssociations,
   response
@@ -47,14 +43,18 @@ describe('限定販売と入金・チャージ条件', () => {
       expect(request.questions).not.toHaveProperty('purchase_amount')
       expect(request.questions.charge_amount).toMatchObject({ criteria: { p1000: '1000円' } })
       expect(request.questions.condition).toMatchObject({ criteria: { charge_first_come: expect.any(String) } })
-      const result = evaluateDetection(value, request, response(request, chargeAnswers))
-      expect(result.status).toBe('register')
-      if (result.status !== 'register') throw new Error('Expected charge registration')
-      expect(result.candidate.conditions).toEqual([
+      const answers = response(request, chargeAnswers)
+      // 入金条件は保留規則で自動登録しない（正解を確認できていない）。入金条件そのものは下書きに正しく入る。
+      expect(evaluateWithStore(value, request, answers)).toMatchObject({
+        status: 'held',
+        reasons: ['condition_pattern_unconfirmed', 'charge_condition_unconfirmed']
+      })
+      const draft = buildDetectionDraft(value, answers.answers)
+      expect(draft.conditions).toEqual([
         { type: 'charge', chargeAmount: 1000 },
         { type: 'first_come', quantity: 100 }
       ])
-      expect(result.candidate.category).toBe('other')
+      expect(draft.category).toBe('other')
     }
   )
 
@@ -65,18 +65,13 @@ describe('限定販売と入金・チャージ条件', () => {
     const request = requestWithAssociations(value)
     expect(request.questions.purchase_amount).toMatchObject({ criteria: { p4000: '4000円' } })
     expect(request.questions.charge_amount).toMatchObject({ criteria: { p1000: '1000円' } })
-    const result = evaluateDetection(
-      value,
-      request,
-      response(request, {
-        ...chargeAnswers,
-        condition: choice('purchase_charge_first_come', { purchase_charge_first_come: 0.99 }),
-        purchase_amount: choice('p4000', { p4000: 0.99 })
-      })
-    )
-    expect(result.status).toBe('register')
-    if (result.status !== 'register') throw new Error('Expected combined registration')
-    expect(result.candidate.conditions).toEqual([
+    const answers = response(request, {
+      ...chargeAnswers,
+      condition: choice('purchase_charge_first_come', { purchase_charge_first_come: 0.99 }),
+      purchase_amount: choice('p4000', { p4000: 0.99 })
+    })
+    expect(evaluateWithStore(value, request, answers).reasons).toContain('charge_condition_unconfirmed')
+    expect(buildDetectionDraft(value, answers.answers).conditions).toEqual([
       { type: 'purchase', purchaseAmount: 4000 },
       { type: 'charge', chargeAmount: 1000 },
       { type: 'first_come', quantity: 100 }
@@ -85,7 +80,7 @@ describe('限定販売と入金・チャージ条件', () => {
 
   test('入金額が未確定なら保留し、購入額不足と誤表示しない', () => {
     const request = requestWithAssociations(chargePost)
-    const result = evaluateDetection(
+    const result = evaluateWithStore(
       chargePost,
       request,
       response(request, {
@@ -103,7 +98,7 @@ describe('限定販売と入金・チャージ条件', () => {
   test('商品価格・決済方法だけの説明をイベントとして登録しない', () => {
     const value = post('ギフトカードは1,000円から入金できます。お支払い方法をご案内します')
     const request = requestWithAssociations(value)
-    const result = evaluateDetection(value, request, response(request, associationAnswers('none', 'none')))
+    const result = evaluateWithStore(value, request, response(request, associationAnswers('none', 'none')))
     expect(result).toMatchObject({ status: 'ignored', reasons: ['not_distribution_event'] })
   })
 
@@ -112,7 +107,7 @@ describe('限定販売と入金・チャージ条件', () => {
     const request = requestWithAssociations(value)
     expect(request.questions).not.toHaveProperty('purchase_amount')
     expect(request.questions).not.toHaveProperty('condition')
-    expect(evaluateDetection(value, request, response(request)).reasons).toContain('distribution_condition_unspecified')
+    expect(evaluateWithStore(value, request, response(request)).reasons).toContain('distribution_condition_unspecified')
   })
 
   test('旧抽出と新抽出を区別しつつ入金付き限定販売の対象を受理する', () => {
@@ -154,37 +149,37 @@ describe('物品の種別とイベント適否の責務分離', () => {
       category: choice('other', { other: 0.99 })
     })
     expect(answers.answers.category).toMatchObject({ choice: 'other' })
-    expect(evaluateDetection(value, request, answers).status).toBe('ignored')
+    expect(evaluateWithStore(value, request, answers).status).toBe('ignored')
   })
 })
 
 describe('開催店舗・ビッカメ娘は選ばれた1件だけを採用する', () => {
   test('確定した店舗と娘を採用し、次点の確率では取り消さない', () => {
     const request = requestWithAssociations(chargePost)
-    const result = evaluateDetection(
-      chargePost,
-      request,
-      response(request, {
-        ...chargeAnswers,
-        store: choice('abeno', { abeno: 0.95, takatsuki: 0.03 }),
-        character: choice('abeno', { abeno: 0.95, shinyoko: 0.03 })
-      })
-    )
-    expect(result.status).toBe('register')
-    if (result.status !== 'register') throw new Error('Expected confirmed associations')
-    expect(result.candidate.stores).toEqual(['abeno'])
-    expect(result.candidate.characterIds).toEqual(['abeno'])
+    const answers = response(request, {
+      ...chargeAnswers,
+      store: choice('abeno', { abeno: 0.95, takatsuki: 0.03 }),
+      character: choice('abeno', { abeno: 0.95, shinyoko: 0.03 })
+    })
+    // 入金条件は保留規則で保留になるが、店舗と娘の理由は付かない（採用されている）。
+    const result = evaluateWithStore(chargePost, request, answers)
+    expect(result.reasons).not.toContain('store_unconfirmed')
+    expect(result.reasons).not.toContain('character_unconfirmed')
+    expect(buildDetectionDraft(chargePost, answers.answers)).toMatchObject({
+      stores: ['abeno'],
+      characterIds: ['abeno']
+    })
   })
 
-  test('しきい値未満の選択は保留のまま、採用しない', () => {
+  test('最上位の確率が下限（0.3）に届かない選択は保留のまま、採用しない', () => {
     const request = requestWithAssociations(chargePost)
-    const result = evaluateDetection(
+    const result = evaluateWithStore(
       chargePost,
       request,
       response(request, {
         ...chargeAnswers,
-        store: choice('abeno', { abeno: 0.75, takatsuki: 0.2 }),
-        character: choice('abeno', { abeno: 0.75, shinyoko: 0.2 })
+        store: choice('abeno', { abeno: 0.25, takatsuki: 0.2 }),
+        character: choice('abeno', { abeno: 0.25, shinyoko: 0.2 })
       })
     )
     expect(result.status).toBe('held')

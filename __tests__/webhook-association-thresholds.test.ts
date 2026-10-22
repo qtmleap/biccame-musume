@@ -90,8 +90,8 @@ test('store の確率が項目別のしきい値に届かなければ store_unco
   const { cleanup, env, overrides } = await harness('association-thresholds-store')
   const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
   try {
-    // 既定の store のしきい値は 0.9。0.7 の選択は確定できず、店舗が決まらないので保留（候補なし）。
-    overrides.value = { store: ['nanba', 0.7] }
+    // 未保存の store のしきい値は 0.3（最上位採用の下限）。0.2 の選択は下限に届かず、店舗が決まらないので保留（候補なし）。
+    overrides.value = { store: ['nanba', 0.2] }
     const held = await judge(
       env,
       '2112378276735750733',
@@ -104,9 +104,9 @@ test('store の確率が項目別のしきい値に届かなければ store_unco
     expect(held.candidate).toBeNull()
     await env.BICCAME_MUSUME_EVENTS.put(
       EVENT_DETECTION_FIELD_THRESHOLDS_KEY,
-      JSON.stringify({ ...resolveFieldThresholds(0.9), store: 0.6 })
+      JSON.stringify({ ...resolveFieldThresholds(0.9), store: 0.15 })
     )
-    overrides.value = { store: ['yao', 0.7] }
+    overrides.value = { store: ['yao', 0.2] }
     const lowered = await judge(env, '2112378276735750734', '本日から八尾たんの限定名刺をどなたでも配布します。', 'yao')
     expect(lowered.status).toBe('registered')
     expect(lowered.candidate?.stores).toEqual(['yao'])
@@ -116,11 +116,11 @@ test('store の確率が項目別のしきい値に届かなければ store_unco
   }
 }, 60000)
 
-test('character は共通のしきい値（choiceThreshold）で判定し、届かなければ character_unconfirmed で保留する', async () => {
+test('character は min(共通のしきい値 choiceThreshold, 0.3) で判定し、届かなければ character_unconfirmed で保留する', async () => {
   const { cleanup, env, overrides } = await harness('association-thresholds-character')
   const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
   try {
-    overrides.value = { character: ['akiba', 0.7] }
+    overrides.value = { character: ['akiba', 0.2] }
     const held = await judge(
       env,
       '2112378276735750735',
@@ -131,12 +131,12 @@ test('character は共通のしきい値（choiceThreshold）で判定し、届�
     expect(held.reasons).toContain('character_unconfirmed')
     expect(held.reasons).not.toContain('store_unconfirmed')
     expect(held.candidate).toBeNull()
-    // 共通の選択肢しきい値を 0.6 に下げると、同じ 0.7 の回答でも娘が確定し、登録される。
+    // 共通の選択肢しきい値を 0.15 に下げると、同じ 0.2 の回答でも娘が確定し、登録される（下限は min(共通値, 0.3)）。
     await env.BICCAME_MUSUME_EVENTS.put(
       EVENT_DETECTION_THRESHOLDS_KEY,
-      JSON.stringify({ eventThreshold: 0.9, ignoreThreshold: 0.5, choiceThreshold: 0.6 })
+      JSON.stringify({ eventThreshold: 0.9, ignoreThreshold: 0.5, choiceThreshold: 0.15 })
     )
-    overrides.value = { character: ['abeno', 0.7] }
+    overrides.value = { character: ['abeno', 0.2] }
     const lowered = await judge(
       env,
       '2112378276735750736',

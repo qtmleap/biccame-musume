@@ -190,13 +190,14 @@ describe('回答に store / character の choice がある（v13・v2 の店舗�
 
   test('v13: 店舗・ビッカメ娘の行は choice の行として、確率・しきい値・判定・次点を持つ（— ではない）', () => {
     const [store, character] = cellsOf(basicOf(renderWith(v13Answers, given))).slice(2)
-    expect(textsOf(store)).toEqual([STORE_ROW, '船橋駅FACE店', '95.0%', '90.0%', '確定', 'AKIBA店 3.0% 店舗なし 1.0%'])
+    // 未保存の店舗・娘のしきい値は、最上位をそのまま採用するための 30%（共通値 90% ではない）。
+    expect(textsOf(store)).toEqual([STORE_ROW, '船橋駅FACE店', '95.0%', '30.0%', '確定', 'AKIBA店 3.0% 店舗なし 1.0%'])
     expect(textsOf(character)).toEqual([
       CHARACTER_ROW,
       'ふなとーたん',
       '60.0%',
-      '90.0%',
-      '未確定',
+      '30.0%',
+      '確定',
       'ふなたん 30.0% 複数 5.0%'
     ])
     // しきい値を取れない間は、ほかの choice の行と同じくしきい値と判定の列が — になる。

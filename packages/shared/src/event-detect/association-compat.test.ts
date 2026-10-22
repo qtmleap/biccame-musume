@@ -108,7 +108,7 @@ describe('回答表: v13 の store / character は choice の行', () => {
       label: '開催・配布店舗',
       answer: '船橋駅FACE店',
       probability: 0.95,
-      threshold: 0.9,
+      threshold: 0.3,
       confirmed: true
     })
     expect(row?.alternatives).toEqual([
@@ -117,20 +117,25 @@ describe('回答表: v13 の store / character は choice の行', () => {
     ])
     expect(row?.answer).not.toContain('ビックカメラ')
   })
-  test('娘の行は「対象ビッカメ娘」。娘の名前で出し、しきい値は共通値、未満なら未確定', () => {
-    const [row] = rowsOf({ character: choice('funato', { funato: 0.6, funabashi: 0.3, multiple: 0.05 }) })
+  test('娘の行は「対象ビッカメ娘」。娘の名前で出し、しきい値は min(共通値, 0.3)、未満なら未確定', () => {
+    const [row] = rowsOf({ character: choice('funato', { funato: 0.25, funabashi: 0.2, multiple: 0.05 }) })
     expect(row).toMatchObject({
       key: 'character',
       label: '対象ビッカメ娘',
       answer: 'ふなとーたん',
-      probability: 0.6,
-      threshold: 0.9,
+      probability: 0.25,
+      threshold: 0.3,
       confirmed: false
     })
     expect(row?.alternatives).toEqual([
-      { answer: 'ふなたん', probability: 0.3 },
+      { answer: 'ふなたん', probability: 0.2 },
       { answer: '複数', probability: 0.05 }
     ])
+    // 最上位をそのまま採用するので、確率が散っていても下限以上なら確定の表示になる。
+    expect(rowsOf({ character: choice('funato', { funato: 0.35, funabashi: 0.3 }) })[0]).toMatchObject({
+      probability: 0.35,
+      confirmed: true
+    })
   })
   test.each([
     ['none', '該当なし'],
@@ -162,15 +167,17 @@ describe('回答表: v13 の store / character は choice の行', () => {
     })
     expect(rows.map((row) => row.key)).toEqual(['store', 'character', 'start_date'])
   })
-  test('character のしきい値は共通値 fieldThreshold で、store の項目別設定に影響されない', () => {
-    expect(thresholdOf(DEFAULT_DETECTION_THRESHOLDS, 'character')).toBe(0.9)
+  test('character のしきい値は min(共通値 fieldThreshold, 0.3) で、store の項目別設定に影響されない', () => {
+    expect(thresholdOf(DEFAULT_DETECTION_THRESHOLDS, 'character')).toBe(0.3)
     expect(
       thresholdOf(
-        { ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.7, fieldThresholds: { store: 0.99 } },
+        { ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.2, fieldThresholds: { store: 0.99 } },
         'character'
       )
-    ).toBe(0.7)
+    ).toBe(0.2)
     expect(thresholdOf({ ...DEFAULT_DETECTION_THRESHOLDS, fieldThresholds: { store: 0.99 } }, 'store')).toBe(0.99)
+    // 保存された設定がなければ store の既定値も 0.3。
+    expect(thresholdOf(DEFAULT_DETECTION_THRESHOLDS, 'store')).toBe(0.3)
   })
 })
 

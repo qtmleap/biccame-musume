@@ -10,7 +10,8 @@ export const realPost = {
   createdAt: '2026-03-10T00:00:00.000Z',
   screenName: 'bic_yuurakuchou',
   kind: 'original' as const,
-  text: '3月16日から有楽町店で限定名刺を先着100名様に配布します。どなたでもOK',
+  // 自動登録の保留規則（条件は全員か購入＋先着）を通る本文にする。
+  text: '3月16日から有楽町店で限定名刺を1,000円以上お買い上げの方に先着100名様に配布します。',
   url: 'https://x.com/bic_yuurakuchou/status/1000000000000000001',
   media: []
 }
@@ -46,7 +47,8 @@ export const judgementWith = (
     start_date: pick(spec.start === undefined ? 'd20260316' : spec.start, 0.95, keysOf('start_date')),
     end_date: pick('none', 0.95, keysOf('end_date')),
     quantity: pick('q100', 0.95, keysOf('quantity')),
-    condition: pick('first_come', 0.95, keysOf('condition')),
+    condition: pick('purchase_first_come', 0.95, keysOf('condition')),
+    purchase_amount: pick('p1000', 0.95, keysOf('purchase_amount')),
     store: pick(spec.store[0], spec.store[1], keysOf('store')),
     character: pick(spec.character[0], spec.character[1], keysOf('character'))
   }

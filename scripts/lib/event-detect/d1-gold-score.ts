@@ -1,5 +1,5 @@
 import type { Top } from './d1-gold-candidate'
-import { allFieldsMatch, coreFieldsMatch, FIELD_NAMES, failedFields } from './d1-gold-compare'
+import { allFieldsMatch, coreFieldsMatch, type EndDateMode, FIELD_NAMES, failedFields } from './d1-gold-compare'
 import { type CandidateRecord, type CaseRecord, SPECIAL_CHOICES } from './d1-gold-records'
 import type { GoldCase } from './d1-gold-schema'
 import { countByKey } from './d1-gold-schema'
@@ -43,6 +43,7 @@ const relationOf = (candidate: CandidateRecord) => {
 export const THRESHOLDS = [0.9, 0.8, 0.7, 0.6, 0.5] as const
 
 // 登録された候補が正解と全項目一致するか。対応づかなかった登録は「誤った登録（対応なし）」として数える。
+// 最上位の数字は strict（終了日の完全一致）。announceTime が R1（候補に終了日が無ければ一致）で、登録の可否は同じ。
 const registrationQuality = (
   rows: readonly CandidateRecord[],
   pick: (row: CandidateRecord) => CandidateRecord['current'],
@@ -50,24 +51,30 @@ const registrationQuality = (
 ) => {
   const registered = rows.filter((row) => pick(row).status === 'register')
   const withGold = registered.filter((row) => pick(row).fields !== null)
-  const exact = withGold.filter((row) => {
-    const fields = pick(row).fields
-    return fields !== null && allFieldsMatch(fields)
-  })
+  const qualityOf = (mode: EndDateMode) => {
+    const exact = withGold.filter((row) => {
+      const fields = pick(row).fields
+      return fields !== null && allFieldsMatch(fields, mode)
+    })
+    return {
+      correct: exact.length,
+      wrongMatched: withGold.length - exact.length,
+      precision: rate(exact.length, registered.length),
+      recallOfGoldEvents: rate(exact.length, goldTotal),
+      wrongByField: countByKey(
+        withGold.flatMap((row) => {
+          const fields = pick(row).fields
+          return fields === null ? [] : failedFields(fields, mode)
+        }),
+        (name) => name
+      )
+    }
+  }
   return {
     registered: registered.length,
-    correct: exact.length,
-    wrongMatched: withGold.length - exact.length,
+    ...qualityOf('strict'),
     wrongUnmatched: registered.length - withGold.length,
-    precision: rate(exact.length, registered.length),
-    recallOfGoldEvents: rate(exact.length, goldTotal),
-    wrongByField: countByKey(
-      withGold.flatMap((row) => {
-        const fields = pick(row).fields
-        return fields === null ? [] : failedFields(fields)
-      }),
-      (name) => name
-    )
+    announceTime: qualityOf('announce-time')
   }
 }
 
@@ -112,7 +119,7 @@ export const scoreRecords = (
   }
 
   // b. 対応づけた候補の最上位予測（しきい値なし）と正解の一致率。
-  const field = (name: (typeof FIELD_NAMES)[number]) => ({
+  const field = (name: (typeof FIELD_NAMES)[number] | 'endDateAnnounceTime') => ({
     ofMatchedCandidates: rate(
       count(matched, (candidate) => candidate.argmax?.[name] === true),
       matched.length
@@ -124,13 +131,18 @@ export const scoreRecords = (
   })
   const predicted = {
     matchedCandidates: matched.length,
-    fields: Object.fromEntries(FIELD_NAMES.map((name) => [name, field(name)])),
+    // endDate は strict、endDateAnnounceTime は終了日を R1（候補に終了日が無ければ一致）で比べた列。
+    fields: Object.fromEntries([...FIELD_NAMES, 'endDateAnnounceTime' as const].map((name) => [name, field(name)])),
     coreAllMatch: rate(
       count(matched, (candidate) => candidate.argmax !== null && coreFieldsMatch(candidate.argmax)),
       matched.length
     ),
     allMatch: rate(
       count(matched, (candidate) => candidate.argmax !== null && allFieldsMatch(candidate.argmax)),
+      matched.length
+    ),
+    allMatchAnnounceTime: rate(
+      count(matched, (candidate) => candidate.argmax !== null && allFieldsMatch(candidate.argmax, 'announce-time')),
       matched.length
     ),
     storeMatchedByExtractionOnly: rate(

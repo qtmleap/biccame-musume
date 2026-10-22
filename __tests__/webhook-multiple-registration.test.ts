@@ -22,8 +22,8 @@ test('同カテゴリの2配布物を独立登録し、同投稿URLと再試行�
     const post = makePost('2109221721773576390', `${red}\n${blue}`)
     const extractor = async () => ({
       events: [
-        { item: '赤い限定名刺', stores: [], characterIds: [], evidence: [red] },
-        { item: '青い限定名刺', stores: [], characterIds: [], evidence: [blue] }
+        { item: '赤い限定名刺', stores: ['akiba'], characterIds: [], evidence: [red] },
+        { item: '青い限定名刺', stores: ['akiba'], characterIds: [], evidence: [blue] }
       ]
     })
     await insertWebhookJob(env, post)
@@ -67,15 +67,15 @@ test('片方の情報不足・再判定・手動解決で成功済み候補を�
   const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
   try {
     await migrate(env.DB)
-    const key = '10/16から3,000円以上ご購入でハロウィンアクリルキーホルダ―をプレゼントします。'
+    const key = '10/16から3,000円以上ご購入の方に先着100名でハロウィンアクリルキーホルダ―をプレゼントします。'
     const card = 'ハロウィン限定名刺も用意しています。'
     const post = makePost('2109221721773576392', `${key}\n${card}`)
     await insertWebhookJob(env, post)
     await processWebhookJob(env, post.id, {
       extractor: async () => ({
         events: [
-          { item: 'ハロウィンアクキー', stores: [], characterIds: [], evidence: [key] },
-          { item: 'ハロウィン限定名刺', stores: [], characterIds: [], evidence: [card] }
+          { item: 'ハロウィンアクキー', stores: ['akiba'], characterIds: [], evidence: [key] },
+          { item: 'ハロウィン限定名刺', stores: ['akiba'], characterIds: [], evidence: [card] }
         ]
       })
     })
@@ -127,8 +127,8 @@ test('同配布物でも日付・購入条件が違えば別候補、失敗し�
   const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
   try {
     await migrate(env.DB)
-    const first = '10/16から1,000円以上購入で記念限定名刺を配布します。'
-    const second = '10/16から3,000円以上購入で記念限定名刺を配布します。'
+    const first = '10/16から1,000円以上購入の方に先着100名で記念限定名刺を配布します。'
+    const second = '10/16から3,000円以上購入の方に先着100名で記念限定名刺を配布します。'
     const post = makePost('2109221721773576393', `${first}\n${second}`)
     state.fail = '3,000円'
     await insertWebhookJob(env, post)
@@ -136,8 +136,8 @@ test('同配布物でも日付・購入条件が違えば別候補、失敗し�
       processWebhookJob(env, post.id, {
         extractor: async () => ({
           events: [
-            { item: '記念限定名刺', stores: [], characterIds: [], evidence: [first] },
-            { item: '記念限定名刺', stores: [], characterIds: [], evidence: [second] }
+            { item: '記念限定名刺', stores: ['akiba'], characterIds: [], evidence: [first] },
+            { item: '記念限定名刺', stores: ['akiba'], characterIds: [], evidence: [second] }
           ]
         })
       })
@@ -202,7 +202,7 @@ test('合同開催（複数店舗）は店舗ごとの候補・イベントに�
     ]
     for (const value of repeated) await insertWebhookJob(env, value)
     const extractor = async (value: DetectPost) => ({
-      events: [{ item: '競合限定名刺', stores: [], characterIds: [], evidence: [value.text] }]
+      events: [{ item: '競合限定名刺', stores: ['akiba'], characterIds: [], evidence: [value.text] }]
     })
     await Promise.allSettled(repeated.map((value) => processWebhookJob(env, value.id, { extractor })))
     for (const value of repeated) await processWebhookJob(env, value.id)

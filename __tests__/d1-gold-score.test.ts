@@ -1,6 +1,15 @@
 import { expect, test } from 'bun:test'
 import { viewOf } from '../scripts/lib/event-detect/d1-gold-candidate'
-import { compareArgmax, compareRegistered, failedFields } from '../scripts/lib/event-detect/d1-gold-compare'
+import {
+  allFieldsMatch,
+  compareArgmax,
+  compareRegistered,
+  DEFAULT_END_DATE_MODE,
+  type EndDateMode,
+  endDateMatches,
+  endDateMatchOf,
+  failedFields
+} from '../scripts/lib/event-detect/d1-gold-compare'
 import { buildCaseRecord } from '../scripts/lib/event-detect/d1-gold-records'
 import { checkReplayParity, pinTopChoice, replayDecision } from '../scripts/lib/event-detect/d1-gold-replay'
 import { formatScore } from '../scripts/lib/event-detect/d1-gold-report'
@@ -12,7 +21,10 @@ import { judgementWith, pick, realModule, realPost } from './d1-gold-judgement'
 const gold = goldEvent({
   stores: ['yuurakuchou'],
   startDateJst: '2026-03-16',
-  conditions: [{ type: 'first_come', quantity: 100 }]
+  conditions: [
+    { type: 'purchase', purchaseAmount: 1000 },
+    { type: 'first_come', quantity: 100 }
+  ]
 })
 const resultOf = (judgements: ReturnType<typeof judgementWith>[]): GoalPipelineResult => ({
   version: 'v',
@@ -67,6 +79,67 @@ test('argmax comparison scores each field against the D1 gold event, and an expl
   )
   expect(failedFields(wrong)).toContain('store')
   expect(failedFields(wrong)).toContain('category')
+})
+
+// 終了日の比べ方。strict が既定で、announce-time（R1）は「候補に終了日が無ければ D1 の終了日が何でも一致」。
+test('end date modes: strict is the default, and announce-time accepts a candidate without an end date', () => {
+  expect(DEFAULT_END_DATE_MODE).toBe('strict')
+  // [候補の終了日, D1 の終了日, strict, announce-time]
+  const table: [string | undefined, string | undefined, boolean, boolean][] = [
+    [undefined, undefined, true, true],
+    [undefined, '2026-03-31', false, true],
+    ['2026-03-31', '2026-03-31', true, true],
+    ['2026-03-30', '2026-03-31', false, false],
+    ['2026-03-31', undefined, false, false]
+  ]
+  for (const [candidate, goldEnd, strict, announceTime] of table) {
+    expect(endDateMatches('strict', candidate, goldEnd), `strict ${candidate} ${goldEnd}`).toBe(strict)
+    expect(endDateMatches('announce-time', candidate, goldEnd), `announce-time ${candidate} ${goldEnd}`).toBe(
+      announceTime
+    )
+  }
+})
+
+test('both end date results are recorded, the default decision stays strict, and only the end date differs', () => {
+  const module = realModule()
+  // 候補は終了日を持たない（D1 の正解には 2026-03-31 がある）。
+  const judgement = judgementWith({ store: ['yuurakuchou', 0.95], character: ['other', 0.95] })
+  const replay = replayDecision(module, judgement, 'saved')
+  if (replay.candidate === null) throw new Error('no candidate')
+  const fields = compareRegistered(replay.candidate, gold)
+  expect(fields).toMatchObject({ endDate: false, endDateAnnounceTime: true })
+  expect(endDateMatchOf(fields)).toBe(false)
+  expect(endDateMatchOf(fields, 'announce-time')).toBe(true)
+  // 既定（引数なし）は strict なので、これまでの呼び出しの結果は変わらない。
+  expect(allFieldsMatch(fields)).toBe(false)
+  expect(allFieldsMatch(fields, 'strict')).toBe(false)
+  expect(allFieldsMatch(fields, 'announce-time')).toBe(true)
+  expect(failedFields(fields)).toEqual(['endDate'])
+  expect(failedFields(fields, 'announce-time')).toEqual([])
+  // 終了日以外が違えば、どのモードでも不一致。
+  const wrongStore = compareRegistered(replay.candidate, goldEvent({ ...gold, stores: ['honten'] }))
+  for (const mode of ['strict', 'announce-time'] as const satisfies readonly EndDateMode[]) {
+    expect(allFieldsMatch(wrongStore, mode), mode).toBe(false)
+    expect(failedFields(wrongStore, mode), mode).toContain('store')
+  }
+})
+
+test('argmax end date: a missing date matches only under announce-time, an unreadable one under neither', () => {
+  const view = viewOf(judgementWith({ store: ['yuurakuchou', 0.6], character: ['other', 0.5] }), 0)
+  expect(view.endDate).toEqual({ kind: 'none' })
+  expect(compareArgmax(view, gold)).toMatchObject({ endDate: false, endDateAnnounceTime: true })
+  expect(compareArgmax(view, goldEvent({ ...gold, endDateJst: undefined }))).toMatchObject({
+    endDate: true,
+    endDateAnnounceTime: true
+  })
+  const dated = { ...view, endDate: { kind: 'date' as const, value: '2026-03-31' } }
+  expect(compareArgmax(dated, gold)).toMatchObject({ endDate: true, endDateAnnounceTime: true })
+  expect(compareArgmax(dated, goldEvent({ ...gold, endDateJst: undefined }))).toMatchObject({
+    endDate: false,
+    endDateAnnounceTime: false
+  })
+  const unreadable = { ...view, endDate: { kind: 'unknown' as const } }
+  expect(compareArgmax(unreadable, gold)).toMatchObject({ endDate: false, endDateAnnounceTime: false })
 })
 
 test('replay with unmodified answers reproduces the saved decision, status, reasons and candidate', () => {

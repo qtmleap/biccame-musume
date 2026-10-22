@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import type { ClefAnswer, ClefRequest, ClefResponse } from './clef'
-import { createDetectionRequests, evaluateDetection } from './detection'
+import { buildDetectionDraft, createDetectionRequests, evaluateDetection } from './detection'
 import { extractedPost, extractionSystem, validateEventExtraction } from './extraction'
 import type { DetectPost } from './post'
 
@@ -124,12 +124,16 @@ describe('配布物ごとの抽出', () => {
     expect(card.text).not.toContain('10/16')
     const request = createDetectionRequest(key, 'clef', 'abeno')
     expect(request.questions.single_event).toBeUndefined()
-    const decision = evaluateDetection(key, request, response(request), undefined, 'abeno')
-    expect(decision.status).toBe('register')
-    if (decision.status !== 'register') throw new Error('Expected registration')
-    expect(decision.candidate.category).toBe('ackey')
-    expect(decision.candidate.startDate).toBe('2026-10-16')
-    expect(decision.candidate.conditions).toEqual([{ type: 'purchase', purchaseAmount: 3000 }])
+    const answers = response(request)
+    // 購入だけの条件は保留規則で自動登録しない。他の物品の条件を流用していないことは、下書きの内容で確かめる。
+    expect(evaluateDetection(key, request, answers, undefined, 'abeno')).toMatchObject({
+      status: 'held',
+      reasons: ['condition_pattern_unconfirmed']
+    })
+    const draft = buildDetectionDraft(key, answers.answers)
+    expect(draft.category).toBe('ackey')
+    expect(draft.startDate).toBe('2026-10-16')
+    expect(draft.conditions).toEqual([{ type: 'purchase', purchaseAmount: 3000 }])
   })
   test('アクリルだけではアクキーに分類しない', () => {
     const request = createDetectionRequest({ ...post, text: '本日からアクリルコースターをどなたでも配布します' })

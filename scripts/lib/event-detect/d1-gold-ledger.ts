@@ -5,6 +5,8 @@ import { z } from 'zod'
 
 // この測定専用の台帳。既存の phase-live-attempts.jsonl・スモーク結果・承認ファイル・1200上限とは共有しない。
 export const D1_GOLD_CALL_LIMIT = 450
+// 分割した検証用の測定（検証用 + 別枠の約196投稿）専用の上限。通常の測定の上限（450）は変えず、この測定だけ引き上げる。
+export const D1_GOLD_SPLIT_CALL_LIMIT = 900
 export const D1_GOLD_LEDGER_FILE = 'live-attempts.jsonl'
 
 const entrySchema = z.object({
@@ -18,8 +20,10 @@ const entrySchema = z.object({
 export type D1GoldAttempt = Omit<z.infer<typeof entrySchema>, 'sequence' | 'at'>
 
 // 送信前に1行ずつ追記する。出力先ごとに排他ロックを取り、別プロセスの同時送信と上限の二重消費を防ぐ。
-export const openD1GoldLedger = async (directory: string, limit: number) => {
-  if (!Number.isInteger(limit) || limit < 1 || limit > D1_GOLD_CALL_LIMIT) throw new Error('Invalid D1 gold call limit')
+export const openD1GoldLedger = async (directory: string, limit: number, ceiling: number = D1_GOLD_CALL_LIMIT) => {
+  if (ceiling !== D1_GOLD_CALL_LIMIT && ceiling !== D1_GOLD_SPLIT_CALL_LIMIT)
+    throw new Error('Invalid D1 gold call ceiling')
+  if (!Number.isInteger(limit) || limit < 1 || limit > ceiling) throw new Error('Invalid D1 gold call limit')
   await mkdir(directory, { recursive: true, mode: 0o700 })
   const lockPath = join(directory, '.run.lock')
   const lock = await open(lockPath, 'wx', 0o600)

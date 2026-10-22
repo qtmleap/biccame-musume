@@ -41,7 +41,7 @@ test('抽出通信を検証し、未設定・不正根拠は再試行できる�
             {
               type: 'tool_use',
               name: 'answer',
-              input: { events: [{ item: '限定名刺', stores: [], characterIds: [], evidence: ['創作した条件'] }] }
+              input: { events: [{ item: '限定名刺', stores: ['akiba'], characterIds: [], evidence: ['創作した条件'] }] }
             }
           ]
         })
@@ -118,7 +118,7 @@ test('旧単一ジョブのUUID・回答・通知状態を保持し、旧保留�
       extractor: async () => ({
         events: held.text.split('\n').map((evidence, index) => ({
           item: index === 0 ? '赤い限定名刺' : '青い限定名刺',
-          stores: [],
+          stores: ['akiba'],
           characterIds: [],
           evidence: [evidence]
         }))
@@ -157,7 +157,7 @@ test('候補単位の通知不明は盲目的に再送せず、承認された�
       extractor: async () => ({
         events: lines.map((evidence, index) => ({
           item: index === 0 ? '通知用赤い限定名刺' : '通知用青い限定名刺',
-          stores: [],
+          stores: ['akiba'],
           characterIds: [],
           evidence: [evidence]
         }))
@@ -188,7 +188,10 @@ test('旧移行済みイベントの生成タイトルと新抽出名が違っ�
   try {
     const migration = '20261013123514_multiple_giveaway_events'
     await migrate(env.DB, migration)
-    const oldPost = makePost('2109221721773576410', '10月11日より1,000円以上ご購入で限定名刺を配布します。')
+    const oldPost = makePost(
+      '2109221721773576410',
+      '10月11日より1,000円以上ご購入の方に先着100名で限定名刺を配布します。'
+    )
     const uuid = crypto.randomUUID()
     const candidate = EventRequestSchema.safeParse({
       uuid,
@@ -200,7 +203,10 @@ test('旧移行済みイベントの生成タイトルと新抽出名が違っ�
       isVerified: true,
       isPreliminary: false,
       shouldTweet: false,
-      conditions: [{ uuid: crypto.randomUUID(), type: 'purchase', purchaseAmount: 1000 }],
+      conditions: [
+        { uuid: crypto.randomUUID(), type: 'purchase', purchaseAmount: 1000 },
+        { uuid: crypto.randomUUID(), type: 'first_come', quantity: 100 }
+      ],
       referenceUrls: [{ uuid: crypto.randomUUID(), type: 'announce', url: oldPost.url }]
     })
     if (!candidate.success) throw new Error('Invalid legacy candidate fixture')
@@ -249,17 +255,20 @@ test('旧移行済みイベントの生成タイトルと新抽出名が違っ�
     const repost = makePost('2109221721773576411', oldPost.text)
     await insertWebhookJob(env, repost)
     await processWebhookJob(env, repost.id, {
-      extractor: async () => ({ events: [{ item, stores: [], characterIds: [], evidence: [repost.text] }] })
+      extractor: async () => ({ events: [{ item, stores: ['akiba'], characterIds: [], evidence: [repost.text] }] })
     })
     const held = await getWebhookJob(env, repost.id)
     expect(held.candidates[0].status).toBe('held')
     expect(held.candidates[0].reasons).toContain(`possible_duplicate:${uuid}`)
     expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM events').first<number>('total')).toBe(1)
     // 旧行との照合でも、購入条件が違えば別の配布候補として登録する。
-    const different = makePost('2109221721773576412', '10月11日より3,000円以上ご購入で限定名刺を配布します。')
+    const different = makePost(
+      '2109221721773576412',
+      '10月11日より3,000円以上ご購入の方に先着100名で限定名刺を配布します。'
+    )
     await insertWebhookJob(env, different)
     await processWebhookJob(env, different.id, {
-      extractor: async () => ({ events: [{ item, stores: [], characterIds: [], evidence: [different.text] }] })
+      extractor: async () => ({ events: [{ item, stores: ['akiba'], characterIds: [], evidence: [different.text] }] })
     })
     expect((await getWebhookJob(env, different.id)).candidates[0].status).toBe('registered')
     expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM events').first<number>('total')).toBe(2)

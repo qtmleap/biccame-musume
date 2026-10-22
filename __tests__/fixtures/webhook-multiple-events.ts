@@ -32,12 +32,21 @@ export const answer = (request: ClefRequest, picks: AssociationPicks = {}): Clef
       const association = associationAnswer(request, id, question, picks, 0)
       if (association !== undefined) return [id, association]
       const keys = Object.keys(question.criteria)
+      const conditionQuestion = request.questions.condition
+      const asksFirstCome =
+        conditionQuestion?.type === 'choice' && Object.hasOwn(conditionQuestion.criteria, 'purchase_first_come')
+      const firstQuantity = keys.find((key) => /^q\d+$/.test(key))
       const preferred: Record<string, string> = {
         status: 'start',
         category: keys.includes('ackey') ? 'ackey' : keys.includes('acsta') ? 'acsta' : 'limited_card',
-        condition: keys.includes('purchase') ? 'purchase' : 'everyone',
+        // 自動登録の保留規則（condition_pattern_unconfirmed）を通る形: 購入＋先着（配布数あり）か全員。
+        condition: keys.includes('purchase_first_come')
+          ? 'purchase_first_come'
+          : keys.includes('purchase')
+            ? 'purchase'
+            : 'everyone',
         end_date: 'none',
-        quantity: 'none'
+        quantity: asksFirstCome && firstQuantity !== undefined ? firstQuantity : 'none'
       }
       const desired = preferred[id]
       const choice = desired !== undefined && keys.includes(desired) ? desired : keys.find((key) => key !== 'none')

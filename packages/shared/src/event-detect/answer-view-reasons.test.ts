@@ -4,8 +4,9 @@ import { resolve } from 'node:path'
 import { judgmentReasons, reasonLabel } from './answer-view'
 import { choice } from './answer-view-test-fixtures'
 import type { ClefAnswer, ClefRequest } from './clef'
-import { createDetectionRequest, evaluateDetection } from './detection'
+import { createDetectionRequest } from './detection'
 import { ConditionSchema } from './detection-schemas'
+import { evaluateWithStore } from './detection-test-fixtures'
 import { DROP_REASONS } from './filter'
 import type { DetectPost } from './post'
 
@@ -37,6 +38,9 @@ describe('reasonLabel', () => {
     quantity_unconfirmed: '配布数を確定できない',
     invalid_date_range: '期間が不正',
     unmodeled_distribution_condition: '未対応の配布条件',
+    condition_pattern_unconfirmed: '配布条件の組み合わせが自動登録の対象外',
+    charge_condition_unconfirmed: '入金・チャージ条件は自動登録の対象外',
+    extraction_store_unspecified: '抽出段階で開催店舗を特定できていない',
     invalid_event_candidate: '登録候補が不正',
     not_distribution_event: 'ビッカメ娘のイベントではない',
     no_keyword: 'キーワードなし',
@@ -110,7 +114,7 @@ describe('reasonLabel', () => {
       storeKey: string | null = null
     ) => {
       const request = createDetectionRequest(value)
-      const result = evaluateDetection(
+      const result = evaluateWithStore(
         value,
         request,
         answersFor(request, { is_event: { type: 'noul', noul: event }, ...overrides }),
@@ -132,6 +136,23 @@ describe('reasonLabel', () => {
       start_date: choice('d20261103', { d20261103: 0.99 }),
       end_date: choice('d20261102', { d20261102: 0.99 }),
       condition: choice('purchase_first_come', { purchase_first_come: 0.99 })
+    })
+    // 新規の告知で配布条件が先着だけ・入金条件・抽出段階の店舗候補なし（保留規則）。
+    const announced = {
+      status: choice('announce', { announce: 0.99 }),
+      category: choice('limited_card', { limited_card: 0.99 }),
+      start_date: choice('d20261103', { d20261103: 0.99 })
+    }
+    collect(post('あべのたん限定名刺 2026年11月3日から先着100枚'), {
+      ...announced,
+      condition: choice('first_come', { first_come: 0.99 }),
+      quantity: choice('q100', { q100: 0.99 })
+    })
+    collect(post('あべのたん限定名刺 2026年11月3日から1,000円以上入金で先着100枚'), {
+      ...announced,
+      condition: choice('charge_first_come', { charge_first_come: 0.99 }),
+      charge_amount: choice('p1000', { p1000: 0.99 }),
+      quantity: choice('q100', { q100: 0.99 })
     })
     // is_event は参考値なので、低くても店舗とビッカメ娘が取れていれば理由は増えない。
     collect(post('あべのたん限定名刺 2026年11月3日から先着100枚'), {}, 0.1)
@@ -184,6 +205,9 @@ describe('reasonLabel', () => {
       'invalid_date_range',
       'distribution_condition_unconfirmed',
       'purchase_amount_unconfirmed',
+      'condition_pattern_unconfirmed',
+      'charge_condition_unconfirmed',
+      'extraction_store_unspecified',
       'not_distribution_event',
       ...DROP_REASONS
     ])

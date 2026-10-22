@@ -41,6 +41,10 @@ const missingFieldNames: ReadonlyMap<string, string> = new Map([
   ['unmodeled_distribution_condition', 'conditions'],
   ['purchase_amount_unconfirmed', 'purchaseAmount'],
   ['charge_amount_unconfirmed', 'chargeAmount'],
+  // 自動登録の精度のための保留規則（detection.ts の gateReasons）。足りない項目ではなく、人が確認する項目を指す。
+  ['condition_pattern_unconfirmed', 'conditions'],
+  ['charge_condition_unconfirmed', 'conditions'],
+  ['extraction_store_unspecified', 'stores'],
   ['quantity_unconfirmed', 'limitedQuantity']
 ])
 

@@ -100,14 +100,16 @@ describe('describeAnswers', () => {
 
   test('しきい値以上と、最有力が none の終了日だけが確定になり、is_event だけがイベント用のしきい値を使う', () => {
     // end_date は none 0.541 でしきい値未満だが、最有力が none（終了日の記載なし）なので確定。
+    // store は既定のしきい値が 0.3（最上位採用）なので、none 0.6084 でも確率としては確定の表示になる（採用されない none は保留）。
     expect(rows.filter((row) => row.confirmed).map((row) => row.key)).toEqual([
       'single_event',
+      'store',
       'start_date',
       'end_date',
       'quantity',
       'condition'
     ])
-    for (const key of ['status', 'category', 'store', 'is_event']) expect(rowOf(key).confirmed).toBe(false)
+    for (const key of ['status', 'category', 'is_event']) expect(rowOf(key).confirmed).toBe(false)
     expect(rowOf('is_event').threshold).toBe(0.9)
     const split = describeAnswers(shintouAnswers, { eventThreshold: 0.7, fieldThreshold: 0.95, ignoreThreshold: 0.5 })
     expect(split.find((row) => row.key === 'is_event')).toMatchObject({ threshold: 0.7, confirmed: true })
@@ -136,7 +138,7 @@ describe('describeAnswers', () => {
       {
         start_date: choice('none', { none: 0.7, d20261019: 0.3 }),
         quantity: choice('none', { none: 0.7, q60: 0.3 }),
-        store: choice('none', { none: 0.7, shintou: 0.3 }),
+        store: choice('none', { none: 0.25, shintou: 0.2 }),
         end_date: choice('none', { none: 0.7, d20261019: 0.3 })
       },
       thresholds

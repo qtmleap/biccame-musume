@@ -4,18 +4,13 @@ import { detectionStores } from './associations'
 import type { ClefRequest } from './clef'
 import { ClefRequestSchema } from './clef'
 import { baseQuestions, buildState, QUESTION_VERSION, STATUS_CRITERIA } from './decide'
-import {
-  buildDetectionDraft,
-  createDetectionRequest,
-  createDetectionRequests,
-  DETECTION_VERSION,
-  evaluateDetection
-} from './detection'
+import { buildDetectionDraft, createDetectionRequest, createDetectionRequests, DETECTION_VERSION } from './detection'
 import { detectionAuthorLabel } from './detection-requests'
 import {
   categoryCriteria,
   choice,
   choiceQuestionOf,
+  evaluateWithStore,
   post,
   requestWithAssociations,
   response,
@@ -228,9 +223,10 @@ describe('Category criteria are narrowed to kinds with evidence in the text', ()
   })
 
   test('絞り込んだ category に other が高確率で返れば、category_unconfirmed なしで other の登録候補になる', () => {
-    const value = post(shintouPostText, shintouOverrides)
+    // 条件は購入＋先着（保留規則を通る形）にするため、本文に「先着順」を足す。
+    const value = post(`${shintouPostText}\n先着順`, shintouOverrides)
     const request = requestWithAssociations(value)
-    const result = evaluateDetection(
+    const result = evaluateWithStore(
       value,
       request,
       response(request, {
@@ -238,7 +234,7 @@ describe('Category criteria are narrowed to kinds with evidence in the text', ()
         category: choice('other', { other: 0.95, none: 0.03 }),
         start_date: choice('d20261019', { d20261019: 0.99 }),
         end_date: choice('none', { none: 0.7348, d20261019: 0.2652 }),
-        condition: choice('purchase', { purchase: 0.99 }),
+        condition: choice('purchase_first_come', { purchase_first_come: 0.99 }),
         purchase_amount: choice('p5000', { p5000: 0.99 }),
         quantity: choice('q60', { q60: 0.99 })
       })
@@ -253,7 +249,7 @@ describe('Category criteria are narrowed to kinds with evidence in the text', ()
     const value = post(shintouPostText, shintouOverrides)
     const request = requestWithAssociations(value)
     expect(() =>
-      evaluateDetection(value, request, response(request, { category: choice('acsta', { acsta: 0.95, other: 0.03 }) }))
+      evaluateWithStore(value, request, response(request, { category: choice('acsta', { acsta: 0.95, other: 0.03 }) }))
     ).toThrow('Invalid detection choice')
   })
   test('旧版が保存した全選択肢の category 回答も、下書きと表示でそのまま扱える', () => {
