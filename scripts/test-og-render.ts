@@ -40,13 +40,13 @@ const MAX_BYTES = 5 * 1024 * 1024
 
 // 開催店舗の表示パターン: 店舗の娘が対象 / 別の娘が対象 / 並べきれない複数店舗 / 店舗が折り返す最長の組み合わせ
 const cases = {
-  single: { title: 'スマホ用カードケース+擬人化10周年記念アクキー', stores: ['chofu'], limitedQuantity: 100 },
-  character: { title: 'ビッカメ娘11周年記念名刺', stores: ['chofu'], characterId: 'seiseki', limitedQuantity: null },
-  many: { title: '8がつく店舗コラボ名刺', stores: ['hachioji', 'shibuhachi', 'yao', 'nagoya'], limitedQuantity: 50 },
+  single: { title: 'スマホ用カードケース+擬人化10周年記念アクキー', stores: ['chofu'], characterIds: [], limitedQuantity: 100 },
+  character: { title: 'ビッカメ娘11周年記念名刺', stores: ['chofu'], characterIds: ['seiseki'], limitedQuantity: null },
+  many: { title: '8がつく店舗コラボ名刺', stores: ['hachioji', 'shibuhachi', 'yao', 'nagoya'], characterIds: [], limitedQuantity: 50 },
   wrap: {
     title: 'スマホ用カードケース+擬人化10周年記念アクキー・デカ立川たんアクキー',
     stores: ['nagoyagate', 'abeno', 'ikenishi'],
-    characterId: 'seiseki',
+    characterIds: ['seiseki'],
     limitedQuantity: 1000
   }
 }
@@ -189,7 +189,7 @@ const usedStoreKeys = new Set(
   [...eventCases, ...summaryCases].flatMap(({ snapshot, index }) => {
     const image = snapshot.images[index]
     if (image.type === 'event') return image.event.avatars
-    return image.type === 'summary' ? image.rows.map((row) => row.avatar) : []
+    return image.type === 'summary' ? image.rows.flatMap((row) => row.avatars) : []
   })
 )
 const missingKey = StoreKeySchema.options.find((key) => !usedStoreKeys.has(key))
@@ -298,7 +298,7 @@ const assetTypes: Record<string, string> = { woff: 'font/woff', png: 'image/png'
 const mf = new Miniflare({ workers: [{
   config: {
     type: 'worker', name: 'og-render-test', compatibilityDate: '2026-05-11', compatibilityFlags: ['nodejs_compat'],
-    env: { ASSETS: { type: 'worker', workerName: 'assets' } },
+    env: { ASSETS: { type: 'worker', worker: 'assets' } },
     manifest: { mainModule: 'index.js', modules }
   }
 }, {
@@ -419,7 +419,7 @@ const fixtureShapes: Record<string, (snapshot: SocialSnapshot) => void> = {
     assert.deepEqual(rowCounts(snapshot, 'ending'), [])
   },
   'daily-H2-special': (snapshot) => {
-    const avatars = rowsOf(snapshot, 'starting').map((row) => row.avatar)
+    const avatars = rowsOf(snapshot, 'starting').flatMap((row) => row.avatars)
     assert.ok(avatars.includes('secret') && avatars.includes('other'))
   },
   // 毎週は左端の日付が付く。同じ日付が続く行は先頭だけに残るので、日付のある行と無い行の両方が出る。
@@ -430,7 +430,7 @@ const fixtureShapes: Record<string, (snapshot: SocialSnapshot) => void> = {
     }
   },
   'weekly-H2-special': (snapshot) => {
-    const avatars = rowsOf(snapshot, 'starting').map((row) => row.avatar)
+    const avatars = rowsOf(snapshot, 'starting').flatMap((row) => row.avatars)
     assert.ok(avatars.includes('secret') && avatars.includes('other'))
     assert.equal(snapshot.kind, 'weekly')
   }
