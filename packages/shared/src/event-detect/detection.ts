@@ -9,7 +9,14 @@ import {
 } from './associations'
 import { type ClefAnswer, type ClefRequest, type ClefResponse, ClefResponseSchema } from './clef'
 import { keyToDate, keyToQuantity, QUESTION_VERSION } from './decide'
-import { requiresCharge, requiresPurchase } from './detection-conditions'
+import {
+  conditionQuestions,
+  hasAmbiguousMoney,
+  hasFirstComeAndLottery,
+  hasUnsupportedCondition,
+  requiresCharge,
+  requiresPurchase
+} from './detection-conditions'
 import { categoryLabels, filterWebhookPost, labels } from './detection-context'
 import {
   type Category,
@@ -28,7 +35,6 @@ import {
   type FieldThresholdKey,
   thresholdOf
 } from './detection-thresholds'
-import { normalizeText } from './filter'
 import type { DetectPost } from './post'
 
 export {
@@ -98,6 +104,14 @@ const choiceOf = (answer: ClefAnswer | undefined, threshold: number) => {
 const keyToAmount = (key: string | undefined) => (key && /^p\d+$/.test(key) ? Number(key.slice(1)) : undefined)
 const keyToOptionalQuantity = (key: string | undefined) => (key && key !== 'none' ? keyToQuantity(key) : undefined)
 
+/**
+ * 配布条件を書いていない投稿は、条件なし＝全員への配布とみなす（D1 の人手修正済みイベントも条件を書かないものは全員として登録されている）。
+ * 条件の質問が作られなかった投稿（questionAsked が偽）にだけ適用する。質問があって none の投稿は「判断できない」であって条件なしではない。
+ * 「円以上」だけの曖昧な金額、先着と抽選の両方の語（質問を作れない）、会員・提示などモデルに載っていない条件の語がある投稿は、全員とみなさず人が確認する。
+ */
+const impliesEveryone = (post: DetectPost, questionAsked: boolean) =>
+  !questionAsked && !hasAmbiguousMoney(post) && !hasFirstComeAndLottery(post) && !hasUnsupportedCondition(post)
+
 /** 配布条件の選択肢と金額・数量から保存用の条件一覧を組み立てる。登録判定と下書きで共有する。 */
 const buildConditions = (
   condition: string | undefined,
@@ -157,7 +171,12 @@ export const evaluateDetection = (
   const endIsNone = endAnswer?.type === 'choice' && endAnswer.choice === 'none'
   const end = choiceOf(endAnswer, thresholdFor('end_date'))
   const endDate = end && end !== 'none' ? keyToDate(end) : undefined
-  const condition = choiceOf(answers.condition, thresholdFor('condition'))
+  // 送った request に条件の質問が無く、応答にも条件の回答が無い投稿は、本文に配布条件の記載が無いものとして全員配布とみなす。
+  // 本文から質問を作り直さず、実際に送った request で判断する（版が古い保存データでも同じ）。
+  const conditionAsked = request.questions.condition !== undefined || answers.condition !== undefined
+  const condition = impliesEveryone(post, conditionAsked)
+    ? 'everyone'
+    : choiceOf(answers.condition, thresholdFor('condition'))
   const amountKey = choiceOf(answers.purchase_amount, thresholdFor('purchase_amount'))
   const amount = keyToAmount(amountKey)
   const quantityKey = choiceOf(answers.quantity, thresholdFor('quantity'))
@@ -165,10 +184,7 @@ export const evaluateDetection = (
   const purchaseRequired = requiresPurchase(condition)
   const chargeRequired = requiresCharge(condition)
   const chargeAmount = keyToAmount(choiceOf(answers.charge_amount, settings.data.fieldThreshold))
-  const unsupportedCondition =
-    /会員|ポイントカード|フォロー|リポスト|アンケート|提示|予約|注文|対象商品|対象製品|キーワード|合言葉|あいことば/.test(
-      normalizeText(post.text)
-    )
+  const unsupportedCondition = hasUnsupportedCondition(post)
   const statusReason =
     status === 'ongoing' ? 'existing_event_update' : status === 'end' ? 'event_ended' : 'status_unconfirmed'
   const itemUnspecified = choiceOf(answers.category, thresholdFor('category')) === 'none'
@@ -252,7 +268,7 @@ const draftCategory = (answer: ClefAnswer | undefined): Category | undefined => 
  * ただしカテゴリは最有力候補の確率が過半数の時だけ採用する（僅差の誤ったカテゴリを下書きに載せない）。
  * 回答が欠けていても投げず、取れない項目は undefined / 空配列にする。evaluateDetection の判定には影響しない。
  */
-export const buildDetectionDraft = (_post: DetectPost, answers: ClefResponse['answers']): DetectionDraft => {
+export const buildDetectionDraft = (post: DetectPost, answers: ClefResponse['answers']): DetectionDraft => {
   const category = draftCategory(answers.category)
   // 下書きでも開催店舗から対象キャラクターを推測しない。版ごとに回答の形が違うため、キーの有無で読み分ける。
   //  v2: store（choice）／v3〜v12: venue.* と character.*（noul）／v13 以降（v14・v15 を含む）: store と character（choice）
@@ -287,7 +303,20 @@ export const buildDetectionDraft = (_post: DetectPost, answers: ClefResponse['an
     characterIds,
     ...(startDate ? { startDate } : {}),
     ...(endDate ? { endDate } : {}),
-    conditions: buildConditions(argmaxOf(answers.condition), amount, quantity, chargeAmount),
+    // 条件の質問が無かった本文は、登録判定と同じ規則で全員配布を下書きに入れる。下書きは送った request を持たないため、
+    // 回答に condition が無く、現行の本文からも条件の質問が作られないときだけ「質問が無かった」とみなす。
+    // 回答が1件も無い（判定が行われていない）下書きと、回答が欠けただけの投稿は、全員とみなさない。
+    conditions: buildConditions(
+      impliesEveryone(
+        post,
+        keys.length === 0 || answers.condition !== undefined || conditionQuestions(post).condition !== undefined
+      )
+        ? 'everyone'
+        : argmaxOf(answers.condition),
+      amount,
+      quantity,
+      chargeAmount
+    ),
     ...(quantity !== undefined ? { limitedQuantity: quantity } : {})
   }
 }

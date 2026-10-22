@@ -10,7 +10,15 @@ import {
   WEBHOOK_KEYWORD_VERDICTS,
   webhookKeywordVerdict
 } from './detection'
-import { categoryCriteria, now, payload, post, requestWithAssociations, response } from './detection-test-fixtures'
+import {
+  categoryCriteria,
+  choice,
+  now,
+  payload,
+  post,
+  requestWithAssociations,
+  response
+} from './detection-test-fixtures'
 import { normalizeWebhookPayload } from './webhook'
 
 describe('Webhook payload', () => {
@@ -76,6 +84,9 @@ describe('Strict date candidates', () => {
     ])
   })
 })
+
+const omitKey = <T>(record: Record<string, T>, key: string): Record<string, T> =>
+  Object.fromEntries(Object.entries(record).filter(([name]) => name !== key))
 
 describe('Detection gate', () => {
   test('初期Clefリクエストは既存schemaを満たす', () => {
@@ -143,12 +154,75 @@ describe('Detection gate', () => {
     )
     expect(result.status).toBe('register')
   })
-  test('必須の開催日や配布条件が欠ける場合は保留する', () => {
-    for (const text of ['あべのたん限定名刺を先着100枚配布します', 'あべのたん限定名刺を2026年11月3日から配布します']) {
-      const value = post(text)
-      const request = requestWithAssociations(value)
-      expect(evaluateDetection(value, request, response(request)).status).toBe('held')
-    }
+  test('必須の開催日が欠ける場合は保留する', () => {
+    const value = post('あべのたん限定名刺を先着100枚配布します')
+    const request = requestWithAssociations(value)
+    expect(evaluateDetection(value, request, response(request))).toMatchObject({
+      status: 'held',
+      reasons: ['start_date_unspecified']
+    })
+  })
+  test('配布条件を書いていない投稿は条件なし（全員）として登録し、条件未記載で保留しない', () => {
+    const value = post('あべのたん限定名刺を2026年11月3日から配布します')
+    const request = requestWithAssociations(value)
+    // 本文に条件の語が無いので、条件の質問は作られない。
+    expect(request.questions).not.toHaveProperty('condition')
+    const result = evaluateDetection(value, request, response(request))
+    expect(result.status).toBe('register')
+    if (result.status !== 'register') throw new Error('Expected candidate')
+    expect(result.candidate.conditions).toEqual([{ type: 'everyone' }])
+  })
+  test('質問の有無は本文から作り直さず、送った request で決める（条件の質問が無い古い版の保存データでも評価できる）', () => {
+    const value = post('あべのたん限定名刺を2026年11月3日から先着で配布します')
+    const sent = requestWithAssociations(value)
+    expect(sent.questions).toHaveProperty('condition')
+    const request = { ...sent, questions: omitKey(sent.questions, 'condition') }
+    expect(evaluateDetection(value, request, response(request))).toMatchObject({
+      status: 'register',
+      candidate: { conditions: [{ type: 'everyone' }] }
+    })
+  })
+  test('「円以上」だけで購入・入金の語が無い曖昧な金額は、全員とみなさず保留する', () => {
+    const value = post('あべのたん限定名刺を2026年11月3日から3,000円以上で配布します')
+    const request = requestWithAssociations(value)
+    expect(request.questions).not.toHaveProperty('condition')
+    expect(evaluateDetection(value, request, response(request))).toMatchObject({
+      status: 'held',
+      reasons: ['distribution_condition_unspecified']
+    })
+  })
+  test('先着と抽選の両方の語がある投稿は、条件の質問が作られなくても全員とみなさず保留する', () => {
+    const value = post('あべのたん限定名刺を2026年11月3日から先着100枚を抽選で配布します')
+    const request = requestWithAssociations(value)
+    expect(request.questions).not.toHaveProperty('condition')
+    expect(evaluateDetection(value, request, response(request))).toMatchObject({
+      status: 'held',
+      reasons: ['distribution_condition_unspecified']
+    })
+  })
+  test('条件の質問があって none と答えた・確率が足りない投稿は、条件なしとみなさず保留する', () => {
+    const value = post('あべのたん限定名刺を2026年11月3日から先着で配布します')
+    const request = requestWithAssociations(value)
+    expect(request.questions).toHaveProperty('condition')
+    const none = response(request, { condition: choice('none', { none: 0.99 }) })
+    expect(evaluateDetection(value, request, none)).toMatchObject({
+      status: 'held',
+      reasons: ['distribution_condition_unspecified']
+    })
+    const unsure = response(request, { condition: choice('first_come', { first_come: 0.5, none: 0.4 }) })
+    expect(evaluateDetection(value, request, unsure)).toMatchObject({
+      status: 'held',
+      reasons: ['distribution_condition_unconfirmed']
+    })
+  })
+  test('未対応の会員・提示などの語がある投稿は、条件の質問が無くても全員とみなさず保留する', () => {
+    const value = post('あべのたん限定名刺を2026年11月3日から会員カード提示で配布します')
+    const request = requestWithAssociations(value)
+    expect(request.questions).not.toHaveProperty('condition')
+    expect(evaluateDetection(value, request, response(request))).toMatchObject({
+      status: 'held',
+      reasons: ['unmodeled_distribution_condition', 'distribution_condition_unspecified']
+    })
   })
   test('終了日・数量の記載がないこと自体は保留理由にしない', () => {
     const value = post('あべのたん限定名刺を2026年11月3日からどなたでも配布します')

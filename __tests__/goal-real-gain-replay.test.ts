@@ -199,7 +199,13 @@ for (const id of ['962146543649239040', '1012319233298989056']) {
       expect(candidate.post.extractionContext?.evidence.length).toBeGreaterThan(0)
       expect(candidate.discovery?.relevance).toBe('detected')
       expect(candidate.discovery?.action).toBe('review')
-      expect(candidate.discovery?.evidence).toEqual(['model_event_confirmed'])
+      // 962146543649239040 は録画に条件の質問が無く、本文にも条件の語が無いので全員配布として評価が登録に進み、
+      // 件数の監査（low_confidence）だけが保留にする。もう一方は本文のキーワードが無く対象外のまま。
+      expect(candidate.discovery?.evidence).toEqual(
+        id === '962146543649239040'
+          ? ['model_event_confirmed', 'validated_registration_candidate']
+          : ['model_event_confirmed']
+      )
       expect(candidate.discovery?.missingFields).toContain('itemCountAudit')
       expect(candidate.reasons).toContain('distribution_item_count_low_confidence')
       expect(candidate.relatedEvents).toBeNull()
@@ -210,8 +216,9 @@ for (const id of ['962146543649239040', '1012319233298989056']) {
         expect(job.status).toBe('held')
         expect(job.itemCountAudit?.probability).toBe(0.8847)
         expect(candidate.discovery?.confidence).toBe(0.9774)
-        expect(candidate.discovery?.missingFields).toContain('conditions')
-        expect(candidate.reasons).toContain('distribution_condition_unspecified')
+        expect(candidate.discovery?.missingFields).not.toContain('conditions')
+        expect(candidate.reasons).not.toContain('distribution_condition_unspecified')
+        expect(candidate.draft?.conditions).toEqual([{ type: 'everyone' }])
         expect(candidate.draft?.category).toBe('limited_card')
         expect(candidate.draft?.stores).toEqual(['kawasaki'])
       } else {

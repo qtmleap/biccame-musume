@@ -10,20 +10,20 @@ const webhookVersionIds = webhookPromptDefinitions
 
 describe('プロンプトバージョンの表示名', () => {
   test.each([
-    ['v2-webhook-v4', 'v4 基本の質問'],
-    ['v3-webhook-v5-associations', 'v5 店舗・娘を個別に判定'],
-    ['v4-webhook-v10-operation-updates', 'v10 運営情報の更新'],
-    ['v5-webhook-v13-choice-associations', 'v13 店舗・娘を選択式で判定'],
-    ['v5-webhook-v14-concise-choices', 'v14 選択肢の名前を簡潔に'],
-    ['v5-webhook-v15-concise-author', 'v15 投稿者の店舗名を簡潔に']
-  ])('%s は短い版番号と説明の表示名にする', (id, label) => {
+    ['v2-webhook-v4', 'v4'],
+    ['v3-webhook-v5-associations', 'v5'],
+    ['v4-webhook-v10-operation-updates', 'v10'],
+    ['v5-webhook-v13-choice-associations', 'v13'],
+    ['v5-webhook-v14-concise-choices', 'v14'],
+    ['v5-webhook-v15-concise-author', 'v15']
+  ])('%s は版番号だけの表示名にする', (id, label) => {
     expect(promptVersionLabel(id)).toBe(label)
   })
 
-  test('登録済みの全版が「v<数字> <説明>」の形になる', () => {
+  test('登録済みの全版が「v<数字>」だけの形になり、説明を含まない', () => {
     expect(webhookVersionIds.length).toBeGreaterThan(0)
     for (const id of webhookVersionIds) {
-      expect(promptVersionLabel(id)).toMatch(/^v\d+ \S+/)
+      expect(promptVersionLabel(id)).toMatch(/^v\d+$/)
     }
   })
 
@@ -39,14 +39,12 @@ describe('プロンプトバージョンの表示名', () => {
   test('表示名の版番号はIDの webhook-v<数字> と一致する', () => {
     const mismatched = webhookVersionIds.filter((id) => {
       const match = /webhook-v(\d+)/.exec(id)
-      return match === null || !promptVersionLabel(id).startsWith(`v${match[1]} `)
+      return match === null || promptVersionLabel(id) !== `v${match[1]}`
     })
     expect(mismatched).toEqual([])
   })
 
   test('表示名の版番号は版どうしで重複しない', () => {
-    const numbers = webhookVersionIds.map((id) => promptVersionLabel(id).split(' ')[0])
-    expect(new Set(numbers).size).toBe(numbers.length)
     const labels = webhookVersionIds.map((id) => promptVersionLabel(id))
     expect(new Set(labels).size).toBe(labels.length)
   })

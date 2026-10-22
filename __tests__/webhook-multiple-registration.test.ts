@@ -88,7 +88,8 @@ test('片方の情報不足・再判定・手動解決で成功済み候補を�
     expect(registered.candidate?.conditions[0].purchaseAmount).toBe(3000)
     expect(held.status).toBe('held')
     expect(held.reasons).toContain('start_date_unspecified')
-    expect(held.reasons).toContain('distribution_condition_unspecified')
+    // 条件の語が無い本文は全員配布として扱うので、条件未記載の保留理由は付かない（開始日の未記載だけが理由）。
+    expect(held.reasons).not.toContain('distribution_condition_unspecified')
     expect(held.reasons).not.toContain('multiple_or_ambiguous_events')
     expect(held.post.text).not.toContain('3,000円')
     await expect(resolveWebhookJob(env, post.id, { action: 'reject' })).rejects.toThrow('Select a webhook candidate')

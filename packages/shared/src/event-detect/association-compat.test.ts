@@ -28,6 +28,15 @@ describe('下書き: 版ごとの回答の読み分け', () => {
       characterIds: []
     })
   })
+  test('v2: 条件の回答が無い保存応答でも下書きを作れ、本文に条件の語が無ければ全員、あれば空にする', () => {
+    const saved: Record<string, ClefAnswer> = { ...common, store: choice('abeno', { abeno: 0.9 }) }
+    const { condition: _condition, ...old } = saved
+    expect(buildDetectionDraft(post('あべのたん限定名刺を11月3日から配布します'), old)).toMatchObject({
+      stores: ['abeno'],
+      conditions: [{ type: 'everyone' }]
+    })
+    expect(buildDetectionDraft(post('あべのたん限定名刺を11月3日から先着100枚配布します'), old).conditions).toEqual([])
+  })
   test('v3〜v12: venue.* と character.* の noul を 0.5 以上で採用し、複数も保持する', () => {
     const draft = buildDetectionDraft(value, {
       ...common,

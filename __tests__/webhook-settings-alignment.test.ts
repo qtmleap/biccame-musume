@@ -18,8 +18,8 @@ test('プロンプトバージョンはラベルと操作ボタンを上下中�
   expect(markup).not.toContain('min-h-8')
   expect(markup).not.toContain('py-2')
   expect(markup).toContain('aria-label="Clefのプロンプトを表示"')
-  // 見える文字は短い表示名、生のIDはtitleにだけ残る。折り返さないので行の高さも変わらない
-  expect(markup).toMatch(/data-state="closed">v4 基本の質問<svg/)
+  // 見える文字は版番号だけの表示名、生のIDはtitleにだけ残る。折り返さないので行の高さも変わらない
+  expect(markup).toMatch(/data-state="closed">v4<svg/)
   expect(markup).toContain('title="送信入力とプロンプト定義を確認 · v2-webhook-v4"')
   expect(markup).not.toMatch(/>v2-webhook-v4</)
   expect(markup).toContain('whitespace-nowrap')

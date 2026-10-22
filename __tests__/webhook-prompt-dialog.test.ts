@@ -61,9 +61,9 @@ describe('Clefの送信済みプロンプト表示', () => {
   test('実送信記録の無い旧版でもD1版定義を表示し、当時の実入力とは明確に区別する', () => {
     const markup = renderRecord([], 'v2-webhook-v4', definition, 'definition')
     expect(markup).toContain('D1に保存された当該バージョンのプロンプト定義')
-    expect(markup).toContain('プロンプト定義 · v4 基本の質問')
+    expect(markup).toContain('プロンプト定義 · v4')
     expect(markup).not.toContain('プロンプト定義 · v2-webhook-v4')
-    expect(markup).toContain('プロンプトバージョン：v4 基本の質問')
+    expect(markup).toContain('プロンプトバージョン：v4</p>')
     expect(markup).toContain('ID: v2-webhook-v4')
     expect(markup).toContain(definition.origin)
     expect(markup).toContain(definition.stateTemplate)
@@ -93,7 +93,7 @@ describe('Clefの送信済みプロンプト表示', () => {
 
   test('登録済みの版は表示名を主表示にし、保存されているIDを小さく併記する', () => {
     const markup = renderRecord([], 'v5-webhook-v13-choice-associations')
-    expect(markup).toContain('プロンプトバージョン：v13 店舗・娘を選択式で判定')
+    expect(markup).toContain('プロンプトバージョン：v13</p>')
     expect(markup).not.toContain('プロンプトバージョン：v5-webhook-v13-choice-associations')
     expect(markup).toContain(
       '<p class="break-all text-xs text-muted-foreground">ID: v5-webhook-v13-choice-associations</p>'
@@ -107,10 +107,10 @@ describe('Clefの送信済みプロンプト表示', () => {
   })
 
   test.each([
-    ['v2-webhook-v4', 'v4 基本の質問', '送信入力とプロンプト定義を確認 · v2-webhook-v4'],
+    ['v2-webhook-v4', 'v4', '送信入力とプロンプト定義を確認 · v2-webhook-v4'],
     [
       'v5-webhook-v13-choice-associations',
-      'v13 店舗・娘を選択式で判定',
+      'v13',
       '送信入力とプロンプト定義を確認 · v5-webhook-v13-choice-associations'
     ],
     ['recorded-v4', 'recorded-v4', '送信入力とプロンプト定義を確認 · recorded-v4'],

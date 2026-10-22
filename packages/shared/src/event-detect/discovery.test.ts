@@ -45,7 +45,7 @@ describe('根拠つき発見と登録可否', () => {
     )
   })
 
-  test('日付・条件が未記載でも本人企画の発見を失わず、登録はしない', () => {
+  test('日付が未記載でも本人企画の発見を失わず、登録はしない', () => {
     const value = post('あべのたんハロウィンアクキーを配布します。')
     const request = requestWithAssociations(value)
     const answers = response(request, { is_event: { type: 'noul', noul: 0.72 } }).answers
@@ -56,7 +56,8 @@ describe('根拠つき発見と登録可否', () => {
     expect(outcome.discovery.confidence).toBe(0.72)
     expect(outcome.discovery.evidence).toContain('named_character_object')
     expect(outcome.action).toBe('review')
-    expect(outcome.missingFields).toEqual(expect.arrayContaining(['startDate', 'conditions']))
+    // 条件の記載が無いことは全員配布として扱うので、未入力の項目には数えない。
+    expect(outcome.missingFields).toEqual(['category', 'startDate'])
   })
 
   test('本文根拠は未実行AIの確率を作らずに表現する', () => {
@@ -116,12 +117,12 @@ describe('根拠つき発見と登録可否', () => {
     expect(describeDetectionOutcome(value, { is_event: { type: 'noul', noul: 0.99 } }, null).action).toBe('ignore')
   })
 
-  test('条件未記載はeveryoneへ補完しない', () => {
+  test('条件の記載が無い投稿は条件なし（everyone）として登録し、下書きにも同じ条件を入れる', () => {
     const value = post('あべのたん名刺は11/3から配布')
     const request = requestWithAssociations(value)
     const result = evaluateDetection(value, request, response(request))
-    expect(result).toMatchObject({ status: 'held', reasons: ['distribution_condition_unspecified'] })
-    expect(buildDetectionDraft(value, response(request).answers).conditions).toEqual([])
+    expect(result).toMatchObject({ status: 'register', reasons: [], candidate: { conditions: [{ type: 'everyone' }] } })
+    expect(buildDetectionDraft(value, response(request).answers).conditions).toEqual([{ type: 'everyone' }])
   })
 
   test('任意数量noneの低確度は登録を止めない', () => {

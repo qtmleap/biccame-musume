@@ -19,15 +19,40 @@ const amountsOf = (text: string, patterns: readonly RegExp[]): number[] =>
     (a, b) => a - b
   )
 
+const conditionTextOf = (post: DetectPost) => normalizeText(post.text).replaceAll(',', '')
+const hasPurchaseWord = (text: string) => /お買い上げ|お買上げ|購入|買い物|買物|会計|レシート/.test(text)
+const hasChargeWord = (text: string) => /入金|チャージ/.test(text)
+
+/**
+ * 「円以上」だけがあり、購入・入金の語がない曖昧な本文か。条件を決めてはいけず、人が確認する。
+ * conditionQuestions（質問を作らない）と登録判定（条件なしを全員とみなさない）で同じ式を共有する。
+ */
+export const hasAmbiguousMoney = (post: DetectPost): boolean => {
+  const text = conditionTextOf(post)
+  return /円以上/.test(text) && !hasPurchaseWord(text) && !hasChargeWord(text)
+}
+
+/** 先着と抽選の両方の語がある本文か。条件の語はあるのに質問の選択肢にできない（conditionQuestions は質問を作らない）ので、条件なしとはみなさない。 */
+export const hasFirstComeAndLottery = (post: DetectPost): boolean => {
+  const text = conditionTextOf(post)
+  return /先着/.test(text) && /抽選/.test(text)
+}
+
+/** モデルに載っていない入手条件（会員・提示・予約など）の語があるか。全員配布とはみなさない。 */
+export const hasUnsupportedCondition = (post: DetectPost): boolean =>
+  /会員|ポイントカード|フォロー|リポスト|アンケート|提示|予約|注文|対象商品|対象製品|キーワード|合言葉|あいことば/.test(
+    normalizeText(post.text)
+  )
+
 /** 購入と入金は異なる条件。単に「円以上」があるだけでは購入と推定しない。 */
 export const conditionQuestions = (post: DetectPost): ClefRequest['questions'] => {
-  const text = normalizeText(post.text).replaceAll(',', '')
-  const purchase = /お買い上げ|お買上げ|購入|買い物|買物|会計|レシート/.test(text)
-  const charge = /入金|チャージ/.test(text)
+  const text = conditionTextOf(post)
+  const purchase = hasPurchaseWord(text)
+  const charge = hasChargeWord(text)
   const firstCome = /先着/.test(text)
   const lottery = /抽選/.test(text)
   const everyone = /どなたでも|全員(?:に|へ)|来店.{0,10}皆様/.test(text)
-  const ambiguousMoney = /円以上/.test(text) && !purchase && !charge
+  const ambiguousMoney = hasAmbiguousMoney(post)
   const payment = [purchase ? 'purchase' : '', charge ? 'charge' : ''].filter(Boolean).join('_')
   const paymentLabel = [purchase ? '商品購入' : '', charge ? '入金・チャージ' : ''].filter(Boolean).join('と')
   const condition = firstCome && !lottery ? 'first_come' : lottery && !firstCome ? 'lottery' : ''

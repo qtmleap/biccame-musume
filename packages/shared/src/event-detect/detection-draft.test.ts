@@ -96,6 +96,48 @@ describe('Detection draft', () => {
   })
 })
 
+describe('Detection draft: 条件の記載が無い投稿', () => {
+  const conditionsFor = (text: string, overrides: Record<string, ClefAnswer> = {}) => {
+    const value = post(text)
+    const request = requestWithAssociations(value)
+    return { request, conditions: buildDetectionDraft(value, response(request, overrides).answers).conditions }
+  }
+
+  test('条件の質問が作られず、曖昧でもない本文は、登録判定と同じく everyone を下書きに入れる', () => {
+    const { request, conditions } = conditionsFor('あべのたん名刺は11/3から配布')
+    expect(request.questions).not.toHaveProperty('condition')
+    expect(conditions).toEqual([{ type: 'everyone' }])
+  })
+
+  test('「円以上」だけの曖昧な金額・未対応の条件の語がある本文は、条件を入れない', () => {
+    expect(conditionsFor('あべのたん限定名刺を2026年11月3日から3,000円以上で配布します').conditions).toEqual([])
+    expect(conditionsFor('あべのたん限定名刺を2026年11月3日から会員カード提示で配布します').conditions).toEqual([])
+    expect(conditionsFor('あべのたん限定名刺を2026年11月3日から先着100枚を抽選で配布します').conditions).toEqual([])
+  })
+
+  test('条件の質問があって none と答えた場合は、条件を入れない（判断できないのであって条件なしではない）', () => {
+    const { request, conditions } = conditionsFor('あべのたん限定名刺を2026年11月3日から先着で配布します', {
+      condition: choice('none', { none: 0.99 })
+    })
+    expect(request.questions).toHaveProperty('condition')
+    expect(conditions).toEqual([])
+  })
+
+  test('条件の質問が作られる本文で回答の condition だけが欠けた下書きは、全員とみなさない', () => {
+    const value = post('あべのたん限定名刺を2026年11月3日から先着で配布します')
+    const { condition: _condition, ...answers } = response(requestWithAssociations(value)).answers
+    expect(buildDetectionDraft(value, answers).conditions).toEqual([])
+  })
+
+  test('先着の語がある投稿の下書きの条件は、これまでどおり回答の最有力候補から作る', () => {
+    const value = post('あべのたん限定名刺を2026年11月3日から先着100枚を配布します')
+    const request = requestWithAssociations(value)
+    expect(buildDetectionDraft(value, response(request).answers).conditions).toEqual([
+      { type: 'first_come', quantity: 100 }
+    ])
+  })
+})
+
 describe('End date none confirmation', () => {
   // 新東たんの実投稿に近い入力。本文に店舗名・「ビッカメ娘」は無く、終了日は「なくなり次第終了」。
   const value = post(
