@@ -6,7 +6,6 @@ type User = {
   displayName: string | null
   thumbnailURL: string | null
   screenName: string | null
-  email: string | null
   createdAt: Date
   updatedAt: Date
 }
