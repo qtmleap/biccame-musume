@@ -29,7 +29,6 @@ const managers = [
         {
           id: 'cache-regression-user',
           displayName: label,
-          email: 'test@example.com',
           thumbnailURL: null,
           createdAt: '2026-10-02T00:00:00.000Z'
         }

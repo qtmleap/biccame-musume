@@ -22,9 +22,8 @@ import { z } from 'zod'
 const CustomJwtClaimsSchema = z
   .object({
     uid: z.string().nonempty(),
+    // 発行済みクッキーに残っている旧 email / email_verified は未知キーとして捨てられる（strict にしない）
     usr: z.object({
-      email: z.string().nullable(),
-      email_verified: z.boolean(),
       display_name: z.string().nullable(),
       thumbnail_url: z.string().nullable()
     })
@@ -60,8 +59,6 @@ export const signToken = async (
       aud: idToken.aud,
       uid: idToken.uid,
       usr: {
-        email: idToken.email || null,
-        email_verified: idToken.email_verified || false,
         display_name: idToken.name || null,
         thumbnail_url: idToken.picture || null
       }

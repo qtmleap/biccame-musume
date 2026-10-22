@@ -74,8 +74,6 @@ export type Bindings = VerifyFirebaseAuthEnv & {
 export type CustomJwtClaims = JWTPayload & {
   uid: string
   usr: {
-    email: string | null
-    email_verified: boolean
     display_name: string | null
     thumbnail_url: string | null
   }

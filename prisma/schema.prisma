@@ -302,10 +302,6 @@ model User {
   thumbnailURL String?  @map("thumbnail_url")
   /// Twitterスクリーンネーム（@なし）
   screenName   String?  @map("screen_name")
-  /// メールアドレス（任意）
-  email        String?
-  // /// メールアドレス確認済みフラグ
-  // emailVerified Boolean  @default(false) @map("email_verified")
   /// 作成日時
   createdAt    DateTime @default(now()) @map("created_at")
   /// 更新日時
