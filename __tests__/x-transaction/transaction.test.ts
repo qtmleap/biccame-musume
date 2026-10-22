@@ -32,10 +32,11 @@ describe('ClientTransaction', () => {
     expect(decodeBase64Length(id)).toBeGreaterThan(20)
   })
 
-  test('two consecutive calls produce different ids (random byte differs)', async () => {
+  test('different random bytes produce different ids', async () => {
+    spyOn(Math, 'random').mockReturnValueOnce(0.1).mockReturnValueOnce(0.9)
     const tx = ClientTransaction.create({ homePageHtml, ondemandFileText })
-    const a = await tx.generateTransactionId('POST', '/some/path')
-    const b = await tx.generateTransactionId('POST', '/some/path')
+    const a = await tx.generateTransactionId('POST', '/some/path', 1_700_000_000_000)
+    const b = await tx.generateTransactionId('POST', '/some/path', 1_700_000_000_000)
     expect(a).not.toBe(b)
   })
 
