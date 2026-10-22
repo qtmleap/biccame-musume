@@ -1,0 +1,130 @@
+[
+  {
+    "id": "expanded-v2-positive-622181477439016960",
+    "source": "public-post",
+    "description": "mito-cookie-social-screen-2015",
+    "post": {
+      "id": "622181477439016960",
+      "createdAt": "2015-07-17T23:09:58.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "オリジナルプリントクッキーは Sweets Spot(@swespo)さんにご協力いただきました！ \nいよいよ水戸たんクッキー配布です☆  みなさま投稿画面 ご用意くださいね〜\nhttp://t.co/xiG8g4R4hi http://t.co/pHeLY5Auw4",
+      "url": "https://x.com/biccameramito/status/622181477439016960",
+      "media": [
+        "https://pbs.twimg.com/media/CKJuv_6VEAASRz8.jpg",
+        "https://pbs.twimg.com/media/CKJuwAGVAAAIMsl.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "mito"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "投稿画面の提示を求める初期クッキー配布。購入金額を推測しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "mito-cookie-social-screen-2015",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "水戸たんクッキー",
+          "evidence": [
+            "オリジナルプリントクッキーは Sweets Spot(@swespo)さんにご協力いただきました！ ",
+            "いよいよ水戸たんクッキー配布です☆  みなさま投稿画面 ご用意くださいね〜",
+            "http://t.co/xiG8g4R4hi http://t.co/pHeLY5Auw4"
+          ]
+        }
+      ],
+      "groupingNote": "投稿画面の提示を求める初期クッキー配布。購入金額を推測しない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1074281,
+      "postSha256": "da849bb6bb86386cce0b4a15029fd212a32748d4016ab545705fc9a73c384edd",
+      "textSha256": "644fe75a83b64871cd4f156401286b5f728b204f3a710bef429b7110ca5c926e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-619123303567917057",
+    "source": "public-post",
+    "description": "mito-cookie-social-screen-2015 matched control",
+    "post": {
+      "id": "619123303567917057",
+      "createdAt": "2015-07-09T12:37:52.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "BIC SIMの新規契約や携帯電話番号ポータビリティ（ＭＮＰ）転入手続きなど、即時に対応可能な「BIC SIMカウンター」が7月11日(土)に「ビックカメラ高崎東口店 1階」にオープン予定です！※まだ水戸駅店の予定は・・・ http://t.co/XL3Jju51sH",
+      "url": "https://x.com/biccameramito/status/619123303567917057",
+      "media": [
+        "https://pbs.twimg.com/media/CJXp8GKUYAAVrQd.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-619123303567917057",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1074983,
+      "postSha256": "321a20ed0d40681d79c35db38c9e832c5052c18a3c1289abaea4f40b145fd628",
+      "textSha256": "597ad683b910960256ea7eefbe4d1c5f237c82643fe61300fa95166ebf209762"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

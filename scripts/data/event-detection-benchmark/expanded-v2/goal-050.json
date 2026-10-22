@@ -1,0 +1,140 @@
+[
+  {
+    "id": "expanded-v2-positive-2017772388948316502",
+    "source": "public-post",
+    "description": "sagami-valentine-card-2026",
+    "post": {
+      "id": "2017772388948316502",
+      "createdAt": "2026-02-01T01:30:00.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "💚さがみたんバレンタイン名刺🤎\nさがみたんミュージアムにて名刺を配布中です！\nご来店の際は是非もらってくださいね(*´ω`*)\n2月28日(土)まで\n※お一人様一枚限り\n※フリマサイトなどでの出品・販売は固くお断り致します\n#さがみたん https://t.co/3ogjFd8iPP",
+      "url": "https://x.com/bic_sagamioono/status/2017772388948316502",
+      "media": [
+        "https://pbs.twimg.com/media/G__WGBebEAIROru.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "sagami"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "2月28日まで配布中。転売禁止は入手条件の購入ではない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "sagami-valentine-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "バレンタイン名刺",
+          "evidence": [
+            "💚さがみたんバレンタイン名刺🤎",
+            "さがみたんミュージアムにて名刺を配布中です！",
+            "ご来店の際は是非もらってくださいね(*´ω`*)",
+            "2月28日(土)まで",
+            "※お一人様一枚限り",
+            "※フリマサイトなどでの出品・販売は固くお断り致します",
+            "#さがみたん https://t.co/3ogjFd8iPP"
+          ]
+        }
+      ],
+      "groupingNote": "2月28日まで配布中。転売禁止は入手条件の購入ではない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 75965,
+      "postSha256": "47152b743ea5012b8710d51721cdf487949d98ec71d12a9d2fe7fcbca7121097",
+      "textSha256": "cb6fb593f51ed9161a1f4311cd85903a0b9019d0dcf7ea8548346dfd736755a3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "association": "reference-url",
+          "eventId": "f71bc65b-cbad-41e4-99ae-fc0beeef8eda",
+          "type": "start",
+          "url": "https://x.com/bic_sagamioono/status/2017772388948316502"
+        }
+      ]
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2019215647771881600",
+    "source": "public-post",
+    "description": "sagami-valentine-card-2026 matched control",
+    "post": {
+      "id": "2019215647771881600",
+      "createdAt": "2026-02-05T01:05:00.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "⚔️本日発売⚔️\nPS5・Switch・Switch2ソフト\n『ドラゴンクエストVII Reimagined』\n好奇心は海を越え、時を超える。\nゲームコーナーにて好評販売中(*´ω`*)\n#ドラクエ7Reimagined #さがみたんのゲーム情報 https://t.co/8VzZHWW1kU",
+      "url": "https://x.com/bic_sagamioono/status/2019215647771881600",
+      "media": [
+        "https://pbs.twimg.com/media/HAS3tzDbMAAFG7R.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2019215647771881600",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 74788,
+      "postSha256": "0c803fa416527815951d03176220d17b3b79178885b26c3f7af74c0ce9646912",
+      "textSha256": "61dde7a810fbbe04d37c58e6bd3ab7990cef21eb0840e0498f8dcf6449037443"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

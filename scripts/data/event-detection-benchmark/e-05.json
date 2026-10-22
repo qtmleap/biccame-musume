@@ -1,0 +1,193 @@
+[
+  {
+    "id": "public-e-971643440155934721",
+    "source": "public-post",
+    "description": "柏たん誕生日限定名刺",
+    "post": {
+      "id": "971643440155934721",
+      "createdAt": "2018-03-08T07:07:03.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "□⌒ヾ(･д･ o)三(o ･д･)ﾂ⌒□ 号外!!号外!!\n\n3月９日(金)～11日(日)\n☆3日間限定☆\n【柏たんお誕生日限定名刺配布決定‼】\n\n＊デザインは当日までのお楽しみ☆\n＃3月10日は柏たんのお誕生日　\n＃柏たん　＃限定名刺　#ビッカメ娘 https://t.co/pqOqRTwPwG",
+      "url": "https://x.com/bic_kashiwa/status/971643440155934721",
+      "media": [
+        "https://pbs.twimg.com/media/DXv3jXeVMAAa_In.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": "2018-03-09"
+    },
+    "rationale": "柏たん誕生日名刺を3/9〜3/11の3日間配布と明記。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "birthday",
+      "limited-card"
+    ],
+    "group": "kashiwa-birthday-card-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "84da00bcb04b62d2d797e0468060a044e3c9c47e0c21a110d4c0465df05415e5"
+  },
+  {
+    "id": "public-e-1045865269808123904",
+    "source": "public-post",
+    "description": "川崎店12周年名刺",
+    "post": {
+      "id": "1045865269808123904",
+      "createdAt": "2018-09-29T02:38:06.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "✨期間限定名刺配布のお知らせ✨\nビックカメララゾーナ川崎店店舗誕生12周年記念 #川崎たん 限定名刺本日より配布開始らぞ！！\n\n配布場所は２階総合カウンター！✨\nみんなに貰ってほしいから『お一人様一枚』でお願いしますらぞ！\n\n配布期間：９月２９日(土)～１０月８日(月･祝)迄 https://t.co/kYj0uN1mNo",
+      "url": "https://x.com/Bic_kawasaki/status/1045865269808123904",
+      "media": [
+        "https://pbs.twimg.com/media/DoOozFCUYAAvcm6.jpg",
+        "https://pbs.twimg.com/media/DoOozuVU0AAGwVJ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": "2018-09-29"
+    },
+    "rationale": "店舗12周年の川崎たん限定名刺を9/29〜10/8配布。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "anniversary-card"
+    ],
+    "group": "kawasaki-store-twelfth-card-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "d9283014c1db99adad588a9e009c16012fb15d045fd19bfcb87c6ac311cb4a02"
+  },
+  {
+    "id": "public-e-962128993007804416",
+    "source": "public-post",
+    "description": "東海3店舗のバレンタイン名刺",
+    "post": {
+      "id": "962128993007804416",
+      "createdAt": "2018-02-10T01:00:02.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "♡バレンタイン名刺\n♡1F 総合カウンター\n♡配布中\n\n今回は東海組で共通点あり！\nぜひ揃えて欲しいので、東海3店舗に限り3/14まで配布しますね٩( 'ω' )و ﾐﾝﾅ ｷﾃﾈｰ\n\n＞東海組\n#はまたん #なごやたん #なごやげーとたん\n\n＞難易度\nLv1：名古屋 2店舗制覇\nLv3：東海 3店舗制覇 https://t.co/ZPggFbvTxL",
+      "url": "https://x.com/bic_nagoya/status/962128993007804416",
+      "media": [
+        "https://pbs.twimg.com/media/DVmlQejUQAEtNBq.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "hamamatsu",
+        "nagoya",
+        "nagoyagate"
+      ],
+      "characterIds": [
+        "hamamatsu",
+        "nagoya",
+        "nagoyagate"
+      ]
+    },
+    "rationale": "東海3店舗で共通点のある名刺を3/14まで配布と明記し、3人を列挙。開始日は未記載。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "collaboration",
+      "multi-store",
+      "multi-character"
+    ],
+    "group": "tokai-valentine-collaboration-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "85c7c4ab2ffeb905037f7a8885a34b25e6cad8f56521b6c7f52dafaf8ea0d696"
+  },
+  {
+    "id": "public-e-1139004503452241921",
+    "source": "public-post",
+    "description": "有楽町たん誕生日のアクキーと限定名刺",
+    "post": {
+      "id": "1139004503452241921",
+      "createdAt": "2019-06-13T03:00:09.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ【予告！！】明日は #有楽町たんのバースデー ！\nそこで！30日までの期間限定でお誕生会を開催！！\n①期間中税込3,000円以上ご購入のレシート（合算可）を1階総合受付カウンターでご提示で先着100名様に有楽町たんアクリルキーホルダープレゼント！！\n②お誕生日限定デザイン名刺を配布！！ https://t.co/dLn9A27vDv",
+      "url": "https://x.com/bic_yuurakuchou/status/1139004503452241921",
+      "media": [
+        "https://pbs.twimg.com/media/D86Oj0IW4AAXnn7.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "yuurakuchou"
+      ],
+      "characterIds": [
+        "yuurakuchou"
+      ],
+      "startDate": "2019-06-14"
+    },
+    "rationale": "有楽町たん誕生日に3000円購入先着100名アクキーと別の限定名刺を提供。2物品のcategoryや条件を全体に混ぜず未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "birthday",
+      "multi-item",
+      "purchase"
+    ],
+    "group": "yuurakuchou-birthday-giveaways-2019",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "7e62a8d10589054e04d7c9f1b3c6fb6d503650314156a9b4d3d3f05b39653d5c"
+  },
+  {
+    "id": "public-e-1033925137869852674",
+    "source": "public-post",
+    "description": "さがみたんと本店たんのコラボ名刺",
+    "post": {
+      "id": "1033925137869852674",
+      "createdAt": "2018-08-27T03:52:16.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "❘*´ω`)当店の本店たんとのコラボ名刺はまだ配布中です！！\n相模大野駅店の配布終了日に関しては未だ未定となっております。\n決まりましたらこちらでご報告させていただきます。\n#さがみたん",
+      "url": "https://x.com/bic_sagamioono/status/1033925137869852674",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sagami"
+      ],
+      "characterIds": [
+        "sagami",
+        "honten"
+      ]
+    },
+    "rationale": "当店の本店たんとのコラボ名刺が配布継続中と明記。終了未定なので日付は未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "collaboration",
+      "continuing-notice"
+    ],
+    "group": "sagami-honten-collaboration-card-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "d2dbc129369ea3a7306ca51a41f63dd6e2e84a3b22e860e806063eb8780c05a5"
+  }
+]

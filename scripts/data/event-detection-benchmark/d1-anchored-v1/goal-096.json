@@ -1,0 +1,172 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2103672416593674545",
+    "source": "public-post",
+    "description": "hachioji-stand-sold-out-key-left-2026",
+    "post": {
+      "id": "2103672416593674545",
+      "createdAt": "2026-09-26T02:26:03.000Z",
+      "screenName": "bichachioji",
+      "kind": "original",
+      "text": "おっはちおーじ！(θ仝θ)\nアクスタが完売と聞いてビックリ(；ﾟДﾟ)\n朝早くからご来店いただきありがとうございました✨\nアクキーはまだ少し残っていますので、まだゲットできていない方は是非！\n等身大パネルツアーも始まっているよ(˶’ᵕ’˶)ゎ‹ゎ‹\n今日もよろしくお願いします🐝\n＃八王子たん",
+      "url": "https://x.com/bichachioji/status/2103672416593674545",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "hachioji"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アクスタ完売、アクキーは少し残る状況の案内。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:eight-stores-tour-2026"
+    ],
+    "group": "hachioji-stand-sold-out-key-left-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アクスタ",
+          "evidence": [
+            "アクスタが完売と聞いてビックリ(；ﾟДﾟ)"
+          ]
+        },
+        {
+          "item": "アクキー",
+          "evidence": [
+            "アクキーはまだ少し残っていますので、まだゲットできていない方は是非！"
+          ]
+        }
+      ],
+      "groupingNote": "アクスタ完売、アクキーは少し残る状況の案内。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 3769,
+      "postSha256": "56109de9212c7ae2da3ade82a407802a3ce28fb9a7497e414ddbdcc895463169",
+      "textSha256": "17cff3497606e9b7e23e9eb532de60ec830bef54c08cd4fe46878655c49b66b7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "4a55b292-6471-4773-8f80-f0cb90289dc5",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bichachioji/status/2103672416593674545",
+          "origin": "manual-or-seed",
+          "title": "めにめにはっぴーツアー アクスタ",
+          "category": "acsta",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-25T15:00:00.000+00:00",
+            "endDate": "2026-10-06T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "hachioji"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 30,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 5000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2096793662802022741",
+    "source": "public-post",
+    "description": "hachioji-stand-sold-out-key-left-2026 matched control",
+    "post": {
+      "id": "2096793662802022741",
+      "createdAt": "2026-09-07T02:52:20.000Z",
+      "screenName": "bichachioji",
+      "kind": "original",
+      "text": "\\\\敬⽼の⽇のギフトはお決まりですか？//\n\nいつも見守ってくれる大切な人へ\nリカバリーウェア、マッサージグッズ、血圧計など\n家電で快適な休息時間をプレゼント✨\n一緒に感謝の気持ちをお届けませんか？\n\n4F家電コーナーでご紹介中です！ https://t.co/2Dc2h8eX8M",
+      "url": "https://x.com/bichachioji/status/2096793662802022741",
+      "media": [
+        "https://pbs.twimg.com/media/HRlMEl9bQAAwJAv.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2096793662802022741",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 9641,
+      "postSha256": "432cce636b1572b224310a75b07b6e2b2e5dd75730877dffaf473de30bb0ec3e",
+      "textSha256": "03fd5beae8a08f1191a1798545d996fedc2579f3705a3df153dbb8ae33890aa7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,133 @@
+[
+  {
+    "id": "public-b-2109834005982175631",
+    "source": "public-post",
+    "description": "Meta Quest3Sの期間限定値引き",
+    "post": {
+      "id": "2109834005982175631",
+      "createdAt": "2026-10-13T02:30:00.503Z",
+      "screenName": "bic_nagoyagate",
+      "kind": "original",
+      "text": "オールインワンVRヘッドセットの入門機として最適なメタクエスト3Sが10月19日(月)までの期間限定お買い得キャンペーン開催中！\n\nご興味ご関心をお持ちのお客様は\nぜひ、9階ゲームコーナーまで足をお運びくださいませ～✨",
+      "url": "https://x.com/bic_nagoyagate/status/2109834005982175631",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "期間限定キャンペーンは汎用VR機器の値引きで、キャラクター限定販売ではない。 物品はMeta Quest 3SのVRヘッドセットと明示されているため、非対象イベントだが物品種別はotherと注釈する。",
+    "tags": [
+      "hard-negative",
+      "limited-sale",
+      "vr"
+    ],
+    "group": "meta-quest-oct-sale",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "6e78b95207ad34238909fd5dbe1908d6bd3b0002bb5be2d2da98f202faf396f2"
+  },
+  {
+    "id": "public-b-2109839209792245828",
+    "source": "public-post",
+    "description": "缶酎ハイの限定出荷紹介",
+    "post": {
+      "id": "2109839209792245828",
+      "createdAt": "2026-10-13T02:50:41.188Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "🥝新入荷🍇\n限定出荷『-196』\nキウイ:愛媛産\n巨峰:山梨産\n\n3Fお酒コーナーで販売中♪\n※お酒は二十歳になってから♪",
+      "url": "https://x.com/bic_ohmiya/status/2109839209792245828",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "限定という語があるが一般の酒類の入荷告知。",
+    "tags": [
+      "ordinary-sale",
+      "limited-product",
+      "alcohol"
+    ],
+    "group": "196-kiwi-grape-arrival",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "62be4f095944d242aca3656cbf163e388d6a78a5271bf5ae1621f286276082ba"
+  },
+  {
+    "id": "public-b-2109841561030721829",
+    "source": "public-post",
+    "description": "会員向けプリンター買取キャンペーン",
+    "post": {
+      "id": "2109841561030721829",
+      "createdAt": "2026-10-13T03:00:01.767Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "プリンター買い替えたいけど今使っているものはどうしよう…😵‍💫と悩んでませんか❓\n\nラクウル会員様限定で\nご自宅にあるプリンターを100円で買取致します✨\n\nおうちで買取・店頭買取、どちらも対応しておりますのでぜひこちらのキャンペーンをご利用ください📦💖",
+      "url": "https://x.com/bicpkanhonten/status/2109841561030721829",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "会員限定の買取条件を案内しているだけで、娘の企画ではない。",
+    "tags": [
+      "hard-negative",
+      "membership",
+      "buyback"
+    ],
+    "group": "rakuuru-printer-buyback",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "29e5f3a4a977a18066cdb168aa3402fda0bf37b92e0cc15a420565d979257982"
+  },
+  {
+    "id": "public-b-2109849105510109482",
+    "source": "public-post",
+    "description": "携帯コーナーのシール体験会",
+    "post": {
+      "id": "2109849105510109482",
+      "createdAt": "2026-10-13T03:30:00.511Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "📢いよいよ今週末開催❤\n\n【3階 携帯コーナー】\n\n📅10/17(土)-18(日) ⏰11:15~19:00\n💗🎈ぷっくりシール体験会🎈💗\n\nオリジナルシールを作っちゃおう♪\nチラシ持参でプレゼント🎁も…!?\n\n※ご参加の前に必ず添付画像をご確認ください。",
+      "url": "https://x.com/bic_kashiwa/status/2109849105510109482",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "無料体験やプレゼントの案内だがビッカメ娘・その限定デザインとの関係が本文にない。",
+    "tags": [
+      "hard-negative",
+      "generic-workshop",
+      "present-word"
+    ],
+    "group": "kashiwa-sticker-workshop-oct17",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "686f39ce672daa0c269ec3d031d85b89c2b091cf70cc4e4e8b5852c6b235441e"
+  },
+  {
+    "id": "public-b-2109851877320110271",
+    "source": "public-post",
+    "description": "エコバッグMOTTERUの取扱開始",
+    "post": {
+      "id": "2109851877320110271",
+      "createdAt": "2026-10-13T03:41:01.362Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "エコバッグ、MOTTERU？\n６階トラベルコーナーにて、エコバッグ「MOTTERU」の取り扱いをはじめました！(*‘ω‘ *)\nちょっとしたお買い物からからまとめ買いまで！様々なサイズを販売中です！🛒\n全サイズのサンプルをご用意してます！\n畳みやすい、入れやすい！エコバッグを実際にご覧ください！(=ﾟωﾟ)ﾉ",
+      "url": "https://x.com/bic_chiba/status/2109851877320110271",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "店頭サンプルのある通常商品案内で、配布物の企画ではない。 物品はMOTTERUのエコバッグと明示されているため、非対象イベントだが物品種別はotherと注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "travel-goods"
+    ],
+    "group": "motteru-ecobag-arrival",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "47f8206ccdac2578198c2de6e2948a4ccdf7186be37997c94ae08ad12ce57c62"
+  }
+]

@@ -1,0 +1,130 @@
+[
+  {
+    "id": "expanded-v2-positive-1159379788609413120",
+    "source": "public-post",
+    "description": "niigata-summer-card-2019",
+    "post": {
+      "id": "1159379788609413120",
+      "createdAt": "2019-08-08T08:24:16.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "バタバタっとこのまま告知できなくなる前に！！\n#にいがたたん 夏限定名刺を、明日から配布開始です！\n～8月31日までとなってますので、ぜひビックカメラ新潟店にご来店ください♪ https://t.co/gZL7DT9mC7",
+      "url": "https://x.com/niigata_bic/status/1159379788609413120",
+      "media": [
+        "https://pbs.twimg.com/media/EBbxxBBU0AAzDvl.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": [
+        "niigata"
+      ],
+      "characterIds": [
+        "niigata"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "翌日から8月31日までの娘夏名刺。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "niigata-summer-card-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "夏限定名刺",
+          "evidence": [
+            "バタバタっとこのまま告知できなくなる前に！！",
+            "#にいがたたん 夏限定名刺を、明日から配布開始です！",
+            "～8月31日までとなってますので、ぜひビックカメラ新潟店にご来店ください♪ https://t.co/gZL7DT9mC7"
+          ]
+        }
+      ],
+      "groupingNote": "翌日から8月31日までの娘夏名刺。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 723931,
+      "postSha256": "0de72b590b6a47cc628297c1428b5b65ac7451a45ecd8a42b8eb346cd4564a24",
+      "textSha256": "6ea307a535e6846d7b08b8d1b82517e5aee9bf54e265989d92bc1a675086b657"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1165520877703827456",
+    "source": "public-post",
+    "description": "niigata-summer-card-2019 matched control",
+    "post": {
+      "id": "1165520877703827456",
+      "createdAt": "2019-08-25T07:06:46.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "\\\\11月15日発売！//\nポケットモンスター ソード・シールドのご予約を１Fレジカウンターにてご予約受付中だよ！\nビックカメラオリジナル特典もつくよ！\n\nぜひご利用ください https://t.co/6B7NR2xOVJ",
+      "url": "https://x.com/niigata_bic/status/1165520877703827456",
+      "media": [
+        "https://pbs.twimg.com/media/ECzDCHmUEAETB9d.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1165520877703827456",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 718986,
+      "postSha256": "5f53bd3268c0309f7a7fc52e04c6b7c73cbf3e43c512937090a274df02d8903c",
+      "textSha256": "083bc040d8a1ea1ac96d598bd17c8f8ab7b8928d0e8ca3beeddeb130d7df7ebb"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

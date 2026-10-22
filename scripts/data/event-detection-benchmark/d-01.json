@@ -1,0 +1,151 @@
+[
+  {
+    "id": "public-d-2014912525046047054",
+    "source": "public-post",
+    "description": "写真コンテストのギフトカード賞品",
+    "post": {
+      "id": "2014912525046047054",
+      "createdAt": "2026-01-24T04:05:55.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "今年も開催致します‼️\nビックカメラのフォトコンテスト‼️\n「BIC CAMERA Photo World2026」\n\n最優秀賞の方には、100万円分のビックカメラギフトカードを贈呈‼️\n\n是非、ご応募下さい‼️\n\n#駅西カメラ\n#BICCAMERAPhotoWorld2026 https://t.co/RGCR0sFyom",
+      "url": "https://x.com/bic_nagoya/status/2014912525046047054",
+      "media": [
+        "https://pbs.twimg.com/amplify_video_thumb/2014912405768437761/img/PLgdiwjtUJgmsvVX.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "写真コンテストと賞金相当の汎用ギフトカードの案内であり、ビッカメ娘の出演・絵柄・コラボ企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "gift-card",
+      "prize",
+      "contest"
+    ],
+    "group": "photo-world-contest-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2004377025617055762",
+    "source": "public-post",
+    "description": "アミノ酸チャージという商品の広告",
+    "post": {
+      "id": "2004377025617055762",
+      "createdAt": "2025-12-26T02:21:37.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "＼2025年の疲れた体に／\n\n＿人人人人人人人人人＿\n＞アミノ酸チャージ‼️＜\n￣Y^Y^Y^Y^Y^Y^Y^Y￣\n\nアミノバイタル シリーズ、取り扱い開始しました！\n6階ドラッグコーナにお越しくださいませ♪ https://t.co/FkdlgYjkEQ",
+      "url": "https://x.com/bic_sapporo/status/2004377025617055762",
+      "media": [
+        "https://pbs.twimg.com/media/G9D58tlboAA30G_.jpg",
+        "https://pbs.twimg.com/media/G9D5-VSbMAAkwoE.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "チャージは栄養補給の比喩で、アミノバイタル取扱開始の一般商品案内。娘の配布・入金企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "charge-word",
+      "metaphor",
+      "ordinary-product"
+    ],
+    "group": "amino-vital-launch-december-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1984860000372826444",
+    "source": "public-post",
+    "description": "昼食後の元気チャージという挨拶",
+    "post": {
+      "id": "1984860000372826444",
+      "createdAt": "2025-11-02T05:47:55.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(3・ω・)ひるふじ！\n牡蠣グラタン食べて元気チャージしてきたぜ👍\n今日もよろしくな！",
+      "url": "https://x.com/bic_fujisawa/status/1984860000372826444",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "昼食を食べて元気を補充したという近況と挨拶だけで、来店者向けの企画・配布はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "charge-word",
+      "greeting-only"
+    ],
+    "group": "fujisawa-lunch-greeting-november-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1981191345701331341",
+    "source": "public-post",
+    "description": "Suica新規入会のポイント特典",
+    "post": {
+      "id": "1981191345701331341",
+      "createdAt": "2025-10-23T02:50:00.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\n11月30日(日)まで🐧\n＼\n\n#ビックカメラ で1番お得なお支払い✨\n#ビックカメラSuicaカード 新規入会キャンペーン開催中📣\n\n新規入会+当社グループ店舗でのご利用\nJCBブランドのカードを選んで…\n合計最大8000円相当のポイントプレゼント🎁\n\n詳しくは当店1階総合案内カウンターまで‼ https://t.co/6PiPk0B1Yl",
+      "url": "https://x.com/bic_tachikawa/status/1981191345701331341",
+      "media": [
+        "https://pbs.twimg.com/media/Gz9rt1lbkAAAQvE.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "11月30日までの新規入会とクレジット利用特典。娘デザインの物品や娘の催しへの関与はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "payment",
+      "points",
+      "enrollment"
+    ],
+    "group": "suica-autumn-enrollment-8000-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1981918889929027730",
+    "source": "public-post",
+    "description": "ボカロ売場リニューアルと初音ミク機器展示",
+    "post": {
+      "id": "1981918889929027730",
+      "createdAt": "2025-10-25T03:01:00.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "／\nビックカメラAKIBA\n音声合成ソフトコーナーが【リニューアル】✨❣\n＼\n\n#初音ミク コラボのデバイスも展示中💕\nエスカレーターで2階へ上がってすぐ🎵\n\n新しくなった #ボカロ コーナー\nζ( ✧ω✧)ζ  ぜひお越しくださいませ➰💓 https://t.co/a0nguue2Yp",
+      "url": "https://x.com/bic_akiba/status/1981918889929027730",
+      "media": [
+        "https://pbs.twimg.com/media/G3NugzKa0AAgw3P.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "音声合成ソフト売場と初音ミクコラボ機器の展示案内。初音ミクは別IPで、ビッカメ娘企画の告知ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "collaboration",
+      "display",
+      "renewal"
+    ],
+    "group": "akiba-vocaloid-corner-renewal-2025",
+    "reviewStatus": "provisional"
+  }
+]

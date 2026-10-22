@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-967253819305336832",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "967253819305336832",
+      "createdAt": "2018-02-24T04:24:15.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "*'▽')つ【キャンペーン】\nトリエ京王調布C館・\nイオンシネマ シアタス調布さんとのコラボ実現🎬\n\n当日鑑賞券(半券or全券)を、\nビックカメラ京王調布店でのお買い物の際にご提示頂くと、ビックカメラでの商品がポイントアップ❗️\n是非ご利用下さいませ🎵\n\n#ビックカメラ \n#シアタス調布\n#映画\n#調布 https://t.co/pcrK8l2AlI",
+      "url": "https://x.com/bic_keiochofu/status/967253819305336832",
+      "media": [
+        "https://pbs.twimg.com/media/DWxgLErU0AAbR1L.jpg",
+        "https://pbs.twimg.com/media/DWxgMv-U8AApvHk.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「*'▽')つ【キャンペーン】 / トリエ京王調布C館・ / イオンシネマ シアタス調布さんとのコラボ実現🎬」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "chofu-cinema-ticket-point-bonus-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 880548,
+      "postSha256": "cca87b5bb8286805eeb529e277fbab9bd43063e1d9957065e9c1ac75d6e885b4",
+      "textSha256": "ddd9fe7d238a9c16525f45a021b8efc5ec8231e40c6f65635c68f08e2a2a19a7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-968737608732954625",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "968737608732954625",
+      "createdAt": "2018-02-28T06:40:18.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "ビックカメラでは『学割U25』キャンペーン中❤️\n25歳以下のおきゃくさまー( ｣´0｀)｣ひっけんですよー！！！\n対象商品も沢山ご用意してますので詳しくはこちら↓をみてね(๑>◡<๑)\nhttps://t.co/ZPGKmtS975 https://t.co/PVOrgUeS4C",
+      "url": "https://x.com/bic_sagamioono/status/968737608732954625",
+      "media": [
+        "https://pbs.twimg.com/media/DXGlRY5W0AEIE0l.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ビックカメラでは『学割U25』キャンペーン中❤️ / 25歳以下のおきゃくさまー( ｣´0｀)｣ひっけんですよー！！！ / 対象商品も沢山ご用意してますので詳しくはこちら↓をみてね(๑>◡<๑)」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "under25-student-discounts-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 879657,
+      "postSha256": "7e60b376e994b79fab5f0f798dd95a742869ea17781c41b7442cdd74f3065248",
+      "textSha256": "d7a2cf7ab42ece0170a431c344c8157a97ba02cd07d3c1a946792850b5f5e96c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

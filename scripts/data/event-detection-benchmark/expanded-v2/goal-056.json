@@ -1,0 +1,136 @@
+[
+  {
+    "id": "expanded-v2-positive-1539435932755316737",
+    "source": "public-post",
+    "description": "akiba-idol-badge-set-sale-2022",
+    "post": {
+      "id": "1539435932755316737",
+      "createdAt": "2022-06-22T02:31:42.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "／\n　物販はコチラでーす💝✨\n＼\n\nアキバたんがセットに含まれている、\n「ビッカメ娘缶バッチセットE」を\n3階下りエスカレーター付近（アイドルアキバたん🐱）にて販売ちゅー😆💕\n\n物販会場で待ってるにゃ😼🫶💓\n\nζ(╹v╹)ζ 税込1070円です💡\n＃アキバたんアイドルプロデュース https://t.co/Kvu9gduyfS",
+      "url": "https://x.com/bic_akiba/status/1539435932755316737",
+      "media": [
+        "https://pbs.twimg.com/media/FV0r0QmaMAArM3Y.jpg",
+        "https://pbs.twimg.com/media/FV0r13BaMAYeN-x.jpg",
+        "https://pbs.twimg.com/media/FV0sgixaQAAHajh.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アキバたんを含むセットの販売。構成娘数を物品数にしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "akiba-idol-badge-set-sale-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "ビッカメ娘缶バッチセットE",
+          "evidence": [
+            "／",
+            "　物販はコチラでーす💝✨",
+            "＼",
+            "アキバたんがセットに含まれている、",
+            "「ビッカメ娘缶バッチセットE」を",
+            "3階下りエスカレーター付近（アイドルアキバたん🐱）にて販売ちゅー😆💕",
+            "物販会場で待ってるにゃ😼🫶💓",
+            "ζ(╹v╹)ζ 税込1070円です💡",
+            "＃アキバたんアイドルプロデュース https://t.co/Kvu9gduyfS"
+          ]
+        }
+      ],
+      "groupingNote": "アキバたんを含むセットの販売。構成娘数を物品数にしない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 450106,
+      "postSha256": "ee9e461cd91274bbb180ae53b1706eb385c6691d3e661503148925dcc86d0ec5",
+      "textSha256": "ce9626d1cdd233a70f5e2c14f77d97d7768db814dbb82e7161360e8f9d2601eb"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1539885972715732992",
+    "source": "public-post",
+    "description": "akiba-idol-badge-set-sale-2022 matched control",
+    "post": {
+      "id": "1539885972715732992",
+      "createdAt": "2022-06-23T08:20:00.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "✨ビックカメラAKIBA🌸5周年記念✨\n　　6月25日㈯、26日㈰限定❣\n\n薬💊、化粧品💄、日用品🪥、\n合計金額【税込1,000円】以上で\n化粧品・日用品のサンプルをプレゼント🎁\n\n「そういえば無くなりそうだった💡」という日用品はこの機会に買っておこ🫶💓\n🌸4階ドラッグコーナーにて実施🌸 https://t.co/fqMhOt5qHs",
+      "url": "https://x.com/bic_akiba/status/1539885972715732992",
+      "media": [
+        "https://pbs.twimg.com/media/FV7DPk7aUAAW97U.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1539885972715732992",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 449636,
+      "postSha256": "6748f327979617951012f201f8f28de6e0e450e0a0a876865a7b1f7197a9f97f",
+      "textSha256": "67d854e7267d31d19bff58b2e6b07d3adc26cf8c9aefb733799a267973767641"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1464765681929375751",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1464765681929375751",
+      "createdAt": "2021-11-28T01:18:47.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "＼新製品展示開始しました！／\n\nEOS R3を展示中です🆕\n\n他のRFレンズ及びEFレンズもお試し可能です！\nビックカメラ池袋 カメラ・パソコン館 １階 でぜひお試しください🙌✨\n\n※人気商品の為、予約でのご案内となります。\nhttps://t.co/0Zy9nCeSFK https://t.co/uBcMjGzJgD",
+      "url": "https://x.com/bicpkanhonten/status/1464765681929375751",
+      "media": [
+        "https://pbs.twimg.com/media/FFPkmETaMAMJl2L.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「＼新製品展示開始しました！／ / EOS R3を展示中です🆕 / 他のRFレンズ及びEFレンズもお試し可能です！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "canon-eos-r3-display-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 507981,
+      "postSha256": "aa9326388ba6e6ac67cd0300a1c2827878015da2ebdafcac4edca190810bed2e",
+      "textSha256": "9388c1f359720d863c4828f3eb8787b9256289a4d6e731daf069fd20b62b5927"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1477061386576744448",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1477061386576744448",
+      "createdAt": "2021-12-31T23:37:31.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "おはようございま～っすヾ(≧▽≦お)ﾉ🌄\nおーちゃんログインしました〜っ♪\n\nあけましておめでとうございます㊗️\n本年もビックカメラと大宮たんをよろしくお願いしま〜っす♪\n昨日は紅白の年越し蕎麦食べたよ〜( ´艸｀お)\n\nお店は朝10時から元気に開店しま〜っす♪ https://t.co/2Xx2CbzKkt",
+      "url": "https://x.com/bic_ohmiya/status/1477061386576744448",
+      "media": [
+        "https://pbs.twimg.com/media/FH-TWlbaIAIJZbe.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「おはようございま～っすヾ(≧▽≦お)ﾉ🌄 / おーちゃんログインしました〜っ♪ / あけましておめでとうございます㊗️」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "ohmiya-newyear-greeting-only-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 497484,
+      "postSha256": "b5d90fbb31c0eb3f0e6d1ae34782543e4b1d26238a0872855c399d6a15b6adb2",
+      "textSha256": "39b2f5ee9ee8c956b8e9c6b5831874f9b16749d652ae33077a92b8ff97ae6ce1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

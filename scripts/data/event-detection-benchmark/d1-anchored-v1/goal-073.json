@@ -1,0 +1,169 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2078026921175314543",
+    "source": "public-post",
+    "description": "shibuto-anniv7-shiori-2026",
+    "post": {
+      "id": "2078026921175314543",
+      "createdAt": "2026-07-17T08:00:00.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "擬人化7周年記念🎉\n追加第二弾✨\nクリアしおりプレゼント🎁\n\nしぶとーたんは2種類✨\n1000円以上のお買い上げレシートで1枚ランダムで🎁\n1会計2000円以上のお買い上げレシートで最大2枚まで！※無くなり次第終了となります。\n\nお渡し場所は本館1階ドラッグレジにて✨\n\n＃ビッカメ娘  ＃しぶとーたん https://t.co/3xykFAEafa",
+      "url": "https://x.com/bic_shibuya/status/2078026921175314543",
+      "media": [
+        "https://pbs.twimg.com/media/HNaZVQ-bwAAg4W1.jpg",
+        "https://pbs.twimg.com/media/HNaZWfnbYAAHAAP.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "shibuto"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "追加第二弾のクリアしおり。1000円で1枚、2000円で最大2枚の段階条件。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "boundary:action",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:shibuya-shibuhachi-anniv7-2026"
+    ],
+    "group": "shibuto-anniv7-shiori-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "クリアしおり",
+          "evidence": [
+            "クリアしおりプレゼント🎁"
+          ]
+        }
+      ],
+      "groupingNote": "追加第二弾のクリアしおり。1000円で1枚、2000円で最大2枚の段階条件。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 24166,
+      "postSha256": "45634ae70f0799eafe24cecbd82f57fcca44a7d8c4e85e422d40a412f4da750c",
+      "textSha256": "51a05985b8e70ab1a08c6aeb48778e0562d25dd3d41138dbae7c5d52444263af"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "22402048-e057-4b99-85bd-4d3ced89801c",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_shibuya/status/2078026921175314543",
+          "origin": "manual-or-seed",
+          "title": "クリアしおり",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-17T15:00:00.000+00:00",
+            "endDate": "2026-08-01T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shibuto"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2078073412552208714",
+    "source": "public-post",
+    "description": "shibuto-anniv7-shiori-2026 matched control",
+    "post": {
+      "id": "2078073412552208714",
+      "createdAt": "2026-07-17T11:04:44.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "📢今週末のイベントのお知らせ📢\n\n本館4階にて7/18(土)〜7/20(日)の三連休でソーダストリームのイベントをやるのです〜！\n試飲もできます🍹+:.☆\\( °ω° )/☆.:+.*ｳﾚｼｲ　\n\n暑い夏にぜひ冷たい炭酸を飲みに来て欲しいのです✨\n＃ソーダストリーム　＃炭酸水メーカー　＃実演会 https://t.co/Otty2kKuQd",
+      "url": "https://x.com/bic_shibuya/status/2078073412552208714",
+      "media": [
+        "https://pbs.twimg.com/media/HNbMwAhakAAF9eP.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2078073412552208714",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 24119,
+      "postSha256": "cc881204248aaab6aeee6152b5d2a804d700750680a5b7772445e40754c7a3a1",
+      "textSha256": "07a5ea4b430b2b3cd66b5c85f60f4bcc264168532bd010887b736227197d4a5b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

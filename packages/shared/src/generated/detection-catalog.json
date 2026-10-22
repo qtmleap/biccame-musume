@@ -1,0 +1,430 @@
+{
+  "stores": [
+    {
+      "id": "abeno",
+      "name": "ビックカメラあべのキューズモール店",
+      "screenName": "bic_abeno"
+    },
+    {
+      "id": "akasaka",
+      "name": "ビックカメラ赤坂見附駅店",
+      "screenName": "bicakasaka"
+    },
+    {
+      "id": "akiba",
+      "name": "ビックカメラAKIBA",
+      "screenName": "bic_akiba"
+    },
+    {
+      "id": "bicqlo",
+      "name": "ビックカメラ新宿東口店",
+      "screenName": "bic_shinjuku3ch"
+    },
+    {
+      "id": "chiba",
+      "name": "ビックカメラ千葉駅前店",
+      "screenName": "bic_chiba"
+    },
+    {
+      "id": "chofu",
+      "name": "ビックカメラ京王調布店",
+      "screenName": "bic_keiochofu"
+    },
+    {
+      "id": "fujisawa",
+      "name": "ビックカメラ藤沢店",
+      "screenName": "bic_fujisawa"
+    },
+    {
+      "id": "funabashi",
+      "name": "ビックカメラ船橋駅FACE店",
+      "screenName": "bic_funabashi"
+    },
+    {
+      "id": "hachioji",
+      "name": "ビックカメラJR八王子駅店",
+      "screenName": "bichachioji"
+    },
+    {
+      "id": "hamamatsu",
+      "name": "ビックカメラ浜松店",
+      "screenName": "bic_hamamatsu"
+    },
+    {
+      "id": "hiroshima",
+      "name": "ビックカメラ広島駅前店",
+      "screenName": "bic_hiroshima"
+    },
+    {
+      "id": "honten",
+      "name": "ビックカメラ池袋本店",
+      "screenName": "bicikebukuro"
+    },
+    {
+      "id": "ikenishi",
+      "name": "ビックカメラ池袋西口店",
+      "screenName": "bicikenishi"
+    },
+    {
+      "id": "itt",
+      "name": "ビックカメラ池袋西口IT tower店",
+      "screenName": "bic_itt"
+    },
+    {
+      "id": "kagoshima",
+      "name": "ビックカメラ鹿児島中央駅店",
+      "screenName": "bic_kagoshima"
+    },
+    {
+      "id": "kashiwa",
+      "name": "ビックカメラ柏店",
+      "screenName": "bic_kashiwa"
+    },
+    {
+      "id": "kawasaki",
+      "name": "ビックカメララゾーナ川崎店",
+      "screenName": "Bic_kawasaki"
+    },
+    {
+      "id": "kumamoto",
+      "name": "ビックカメラアミュプラザくまもと店",
+      "screenName": "bic_kumamoto"
+    },
+    {
+      "id": "mito",
+      "name": "ビックカメラ水戸駅店",
+      "screenName": "biccameramito"
+    },
+    {
+      "id": "nagoya",
+      "name": "ビックカメラ名古屋駅西店",
+      "screenName": "bic_nagoya"
+    },
+    {
+      "id": "nagoyagate",
+      "name": "ビックカメラ名古屋JRゲートタワー店",
+      "screenName": "bic_nagoyagate"
+    },
+    {
+      "id": "nanba",
+      "name": "ビックカメラなんば店",
+      "screenName": "biccamera_nanba"
+    },
+    {
+      "id": "niigata",
+      "name": "ビックカメラ新潟店",
+      "screenName": "niigata_bic"
+    },
+    {
+      "id": "ohmiya",
+      "name": "ビックカメラ大宮西口そごう店",
+      "screenName": "bic_ohmiya"
+    },
+    {
+      "id": "okayama",
+      "name": "ビックカメラ岡山駅前店",
+      "screenName": "Bic_Okayamaten"
+    },
+    {
+      "id": "pkan",
+      "name": "ビックカメラ池袋カメラ・パソコン館",
+      "screenName": "bicpkanhonten"
+    },
+    {
+      "id": "prosta",
+      "name": "prosta",
+      "screenName": "bic_shasinkan"
+    },
+    {
+      "id": "sagami",
+      "name": "ビックカメラ相模大野駅店",
+      "screenName": "bic_sagamioono"
+    },
+    {
+      "id": "sapporo",
+      "name": "ビックカメラ札幌店",
+      "screenName": "bic_sapporo"
+    },
+    {
+      "id": "shibuhachi",
+      "name": "ビックカメラ渋谷ハチ公口店",
+      "screenName": "bicshibuhachi00"
+    },
+    {
+      "id": "shibuto",
+      "name": "ビックカメラ渋谷東口店",
+      "screenName": "bic_shibuya"
+    },
+    {
+      "id": "shinjyuku",
+      "name": "ビックカメラ新宿西口店",
+      "screenName": "bic_shinjyuku"
+    },
+    {
+      "id": "shintou",
+      "name": "ビックカメラ新宿東口駅前店",
+      "screenName": "Bic_shintoueki"
+    },
+    {
+      "id": "shinyoko",
+      "name": "ビックカメラ新横浜店",
+      "screenName": "bic_shinyoko"
+    },
+    {
+      "id": "tachikawa",
+      "name": "ビックカメラ立川店",
+      "screenName": "bic_tachikawa"
+    },
+    {
+      "id": "takasaki",
+      "name": "ビックカメラ高崎東口店",
+      "screenName": "bictakasaki"
+    },
+    {
+      "id": "takatsuki",
+      "name": "ビックカメラ高槻阪急スクエア店",
+      "screenName": "bic_takatsuki"
+    },
+    {
+      "id": "tenjin",
+      "name": "ビックカメラ天神1号館",
+      "screenName": "bic_tenjin"
+    },
+    {
+      "id": "tenjin2",
+      "name": "ビックカメラ天神2号館",
+      "screenName": "biccameratenjin"
+    },
+    {
+      "id": "tokorozawa",
+      "name": "ビックカメラ所沢駅店",
+      "screenName": "bic_toko"
+    },
+    {
+      "id": "urawa",
+      "name": "ビックカメラ浦和西口店",
+      "screenName": "bic_urawa"
+    },
+    {
+      "id": "yao",
+      "name": "ビックカメラアリオ八尾店",
+      "screenName": "bic_yao"
+    },
+    {
+      "id": "yokonishi",
+      "name": "ビックカメラ横浜西口店",
+      "screenName": "bicyokonishi"
+    },
+    {
+      "id": "yuurakuchou",
+      "name": "ビックカメラ有楽町店",
+      "screenName": "bic_yuurakuchou"
+    }
+  ],
+  "characters": [
+    {
+      "id": "abeno",
+      "name": "あべのたん"
+    },
+    {
+      "id": "akasaka",
+      "name": "みっけたん"
+    },
+    {
+      "id": "akiba",
+      "name": "アキバたん"
+    },
+    {
+      "id": "bicqlo",
+      "name": "しんじゅくたん"
+    },
+    {
+      "id": "camera",
+      "name": "カメ館たん"
+    },
+    {
+      "id": "chiba",
+      "name": "千葉たん"
+    },
+    {
+      "id": "chofu",
+      "name": "調布たん"
+    },
+    {
+      "id": "fujisawa",
+      "name": "藤沢たん"
+    },
+    {
+      "id": "funabashi",
+      "name": "ふなたん"
+    },
+    {
+      "id": "funato",
+      "name": "ふなとーたん"
+    },
+    {
+      "id": "hachioji",
+      "name": "八王子たん"
+    },
+    {
+      "id": "hamamatsu",
+      "name": "はまたん"
+    },
+    {
+      "id": "hiroshima",
+      "name": "広島たん"
+    },
+    {
+      "id": "honten",
+      "name": "本店たん"
+    },
+    {
+      "id": "ikenishi",
+      "name": "池西たん"
+    },
+    {
+      "id": "itt",
+      "name": "あいタワたん"
+    },
+    {
+      "id": "kagoshima",
+      "name": "鹿児島たん"
+    },
+    {
+      "id": "kashiwa",
+      "name": "柏たん"
+    },
+    {
+      "id": "kawasaki",
+      "name": "川崎たん"
+    },
+    {
+      "id": "kumamoto",
+      "name": "くまもとたん"
+    },
+    {
+      "id": "kyoto",
+      "name": "京都たん"
+    },
+    {
+      "id": "machida",
+      "name": "町田たん"
+    },
+    {
+      "id": "mito",
+      "name": "水戸たん"
+    },
+    {
+      "id": "nagoya",
+      "name": "なごやたん"
+    },
+    {
+      "id": "nagoyagate",
+      "name": "なごやげーとたん"
+    },
+    {
+      "id": "nanba",
+      "name": "なんばたん"
+    },
+    {
+      "id": "niigata",
+      "name": "にいがたたん"
+    },
+    {
+      "id": "ohmiya",
+      "name": "大宮たん"
+    },
+    {
+      "id": "okayama",
+      "name": "岡山たん"
+    },
+    {
+      "id": "photo",
+      "name": "フォトたん"
+    },
+    {
+      "id": "pkan",
+      "name": "パソ館たん"
+    },
+    {
+      "id": "prosta",
+      "name": "プロスタたん"
+    },
+    {
+      "id": "sagami",
+      "name": "さがみたん"
+    },
+    {
+      "id": "sapporo",
+      "name": "さっぽろたん"
+    },
+    {
+      "id": "seiseki",
+      "name": "せいせきたん"
+    },
+    {
+      "id": "shibuhachi",
+      "name": "しぶハチたん"
+    },
+    {
+      "id": "shibuto",
+      "name": "しぶとーたん"
+    },
+    {
+      "id": "shinjyuku",
+      "name": "新宿西口たん"
+    },
+    {
+      "id": "shintou",
+      "name": "新東たん"
+    },
+    {
+      "id": "shinyoko",
+      "name": "新横たん"
+    },
+    {
+      "id": "tachikawa",
+      "name": "立川たん"
+    },
+    {
+      "id": "takasaki",
+      "name": "たかさきたん"
+    },
+    {
+      "id": "takatsuki",
+      "name": "たかつきたん"
+    },
+    {
+      "id": "tamapla",
+      "name": "たまプラたん"
+    },
+    {
+      "id": "tenjin",
+      "name": "天神1号たん"
+    },
+    {
+      "id": "tenjin2",
+      "name": "天神2号たん"
+    },
+    {
+      "id": "tokorozawa",
+      "name": "所沢たん"
+    },
+    {
+      "id": "urawa",
+      "name": "浦和たん"
+    },
+    {
+      "id": "yao",
+      "name": "八尾たん"
+    },
+    {
+      "id": "yokonishi",
+      "name": "横西たん"
+    },
+    {
+      "id": "yuurakuchou",
+      "name": "有楽町たん"
+    }
+  ]
+}

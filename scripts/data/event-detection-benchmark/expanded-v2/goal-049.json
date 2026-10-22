@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expanded-v2-positive-1786966549317701954",
+    "source": "public-post",
+    "description": "kashiwa-aqua-savon-mouillette-2024",
+    "post": {
+      "id": "1786966549317701954",
+      "createdAt": "2024-05-05T03:50:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "📢本日開催\n【2階 #お薬・日用品】\n\nいい香りをまとって出掛けよう！\nAQUA SAVON series体験会開催予定✨\n\n本イベント限定‼お試し頂いた方に\n#柏たん ムエット(試香紙)プレゼント🎁 https://t.co/6o9z14oyaO",
+      "url": "https://x.com/bic_kashiwa/status/1786966549317701954",
+      "media": [
+        "https://pbs.twimg.com/media/GMx1DW-bAAArtfB.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "試香体験での柏たんムエット。購入が必要とは書かれていない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-aqua-savon-mouillette-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ムエット(試香紙)",
+          "evidence": [
+            "📢本日開催",
+            "【2階 #お薬・日用品】",
+            "いい香りをまとって出掛けよう！",
+            "AQUA SAVON series体験会開催予定✨",
+            "本イベント限定‼お試し頂いた方に",
+            "#柏たん ムエット(試香紙)プレゼント🎁 https://t.co/6o9z14oyaO"
+          ]
+        }
+      ],
+      "groupingNote": "試香体験での柏たんムエット。購入が必要とは書かれていない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 255467,
+      "postSha256": "9ef32f9ec1012dcf8a1ad743c678c44e88cd8071c4a931e8f288251ef70b6cf5",
+      "textSha256": "876fb69158390b4f7c9edf50347a7f8846b654532ba7cf7cadb193bdd90cbfc9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1789566181575139746",
+    "source": "public-post",
+    "description": "kashiwa-aqua-savon-mouillette-2024 matched control",
+    "post": {
+      "id": "1789566181575139746",
+      "createdAt": "2024-05-12T08:00:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【5階 #文房具コーナー】\n今日の柏たん文房具コーナー探検は。。。\nホワイトボード＆ブラックボードコーナーへ\n\n各種サイズそろってます！\nもちろん専用のペンも♪\n\n素敵な作品が生まれそうです( ´∀｀ )💕 https://t.co/f6p8rlo7Xc",
+      "url": "https://x.com/bic_kashiwa/status/1789566181575139746",
+      "media": [
+        "https://pbs.twimg.com/media/GNWFmgjbcAIQjsz.png",
+        "https://pbs.twimg.com/media/GNWFngEbcAA8QWB.png",
+        "https://pbs.twimg.com/media/GNWFob-bgAA7LVd.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1789566181575139746",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 252727,
+      "postSha256": "c958ecfc3f971d7e8c0fa98b5ca3b24013f3124f636d8922d869858bd47538f3",
+      "textSha256": "abe972d974ebeaa414af3aee6a8e11b2c23cc85af41f5ddb2de291aac9fa8082"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

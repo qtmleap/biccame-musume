@@ -1,0 +1,137 @@
+[
+  {
+    "id": "goal-positive-962146543649239040",
+    "source": "public-post",
+    "description": "kawasaki valentine card 2018",
+    "post": {
+      "id": "962146543649239040",
+      "createdAt": "2018-02-10T02:09:46.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "今日から１４日までの『期間限定』で\n\n#川崎たん バレンタインデーVer.の名刺を配布していまーすヾ(*´∀｀*)ﾉ\n\n\"2F総合カウンター”にあるのでご自由にお取りくださいらぞ♪\n\nでも、たくさんの方に貰って欲しいのでおひとり様1枚でお願いしますらぞ(人>ω<*)\n\n#ビックカメラ #ビッカメ娘 https://t.co/mfdmKGowHj",
+      "url": "https://x.com/Bic_kawasaki/status/962146543649239040",
+      "media": [
+        "https://pbs.twimg.com/media/DVo6-MJV4AAvktx.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "category": "limited_card",
+      "startDate": "2018-02-10",
+      "conditions": [
+        {
+          "type": "everyone"
+        }
+      ]
+    },
+    "rationale": "今日から14日まで、ご自由にと明示。一人1枚を数量上限にしない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "kawasaki-valentine-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "ready",
+      "items": [
+        {
+          "item": "川崎たんバレンタイン名刺",
+          "evidence": [
+            "#川崎たん バレンタインデーVer.の名刺を配布していまーすヾ(*´∀｀*)ﾉ"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": []
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 884790,
+      "postSha256": "e2287ef7270cb9ed20b2d1386de3446cd1ea7935b12cd9f7fd34d8ebac34bc6c",
+      "textSha256": "3f586f49a44a729f56981d6bdaebfd2934393d6bec5cc5c30fc27729c9c24f90"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-962251452495233025",
+    "source": "public-post",
+    "description": "akiba valentine card 2018",
+    "post": {
+      "id": "962251452495233025",
+      "createdAt": "2018-02-10T09:06:38.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "バレンタインということで、\n今から #アキバたん バレンタインver.\nの名刺の配布を開始致しますζ(╹ω╹)ζ\nこちらの名刺は\n#ピーチェリーズ でお揃いなの☆\n通常名刺と合わせてゲットしてね♪ https://t.co/MbulA2nuWf",
+      "url": "https://x.com/bic_akiba/status/962251452495233025",
+      "media": [
+        "https://pbs.twimg.com/media/DVqahwyU8AEtGH9.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "startDate": "2018-02-10"
+    },
+    "rationale": "バレンタイン版の開始と通常名刺の併存。2種類へ異なる期間を保つ。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "akiba-valentine-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "アキバたんバレンタイン名刺",
+          "evidence": [
+            "の名刺の配布を開始致しますζ(╹ω╹)ζ",
+            "こちらの名刺は",
+            "通常名刺と合わせてゲットしてね♪ https://t.co/MbulA2nuWf"
+          ]
+        },
+        {
+          "item": "通常名刺",
+          "evidence": [
+            "の名刺の配布を開始致しますζ(╹ω╹)ζ",
+            "こちらの名刺は",
+            "通常名刺と合わせてゲットしてね♪ https://t.co/MbulA2nuWf"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 884601,
+      "postSha256": "d848994b88273bbf6e29d2f3597755e6526d57ea39404660847c7212e5ce9c73",
+      "textSha256": "64b5c5f44ef8137b0c182df470b0b4dc84214b11ddddef39ff9d69678f903a95"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

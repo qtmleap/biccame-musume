@@ -1,0 +1,139 @@
+[
+  {
+    "id": "expanded-v2-positive-1348147912446889992",
+    "source": "public-post",
+    "description": "shintou-debut-card-extension-2021",
+    "post": {
+      "id": "1348147912446889992",
+      "createdAt": "2021-01-10T06:01:24.000Z",
+      "screenName": "Bic_shintoueki",
+      "kind": "original",
+      "text": "ｶﾞｶﾞｰｶﾞｶﾞｶﾞｰ(名刺作成中の音)\n\n昨年の12月31日まで配布予定でした爆誕Ver名刺ですが新しい名刺を作成中なので少しの間延長します(´・ω・｀)\n新しい名刺が完成するまで少々お待ちください🥺\n\nちなみにお正月Ver名刺とポスターパネルのPOPは明日11日までとなってます🎵",
+      "url": "https://x.com/Bic_shintoueki/status/1348147912446889992",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "shintou"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "爆誕名刺の延長と正月名刺の終了予告。初期配布数を推測しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "shintou-debut-card-extension-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "爆誕Ver名刺",
+          "evidence": [
+            "爆誕Ver名刺ですが",
+            "少しの間延長"
+          ]
+        },
+        {
+          "item": "お正月Ver名刺",
+          "evidence": [
+            "お正月Ver名刺とポスターパネルのPOPは明日11日まで"
+          ]
+        },
+        {
+          "item": "ポスターパネルのPOP",
+          "evidence": [
+            "ポスターパネルのPOPは明日11日まで"
+          ]
+        }
+      ],
+      "groupingNote": "爆誕名刺の延長と正月名刺の終了予告。初期配布数を推測しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 586450,
+      "postSha256": "675ccc339b9c0d5fdacd42f9d80a1d206f1bd7d60077c629f87662c86ea323f9",
+      "textSha256": "42cb6f81939d1d4420338784a56cfce4411d9beb86f6c7cdbe4776c3f29b37c8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1344898179205005313",
+    "source": "public-post",
+    "description": "shintou-debut-card-extension-2021 matched control",
+    "post": {
+      "id": "1344898179205005313",
+      "createdAt": "2021-01-01T06:48:07.000Z",
+      "screenName": "Bic_shintoueki",
+      "kind": "original",
+      "text": "＼🎍ハッピープレミアム特典／\n当社指定商品をご購入で最大2万ポイントプレゼント🎁\n1月11日までの期間限定となっております🎵 https://t.co/REnPJ7CNLs",
+      "url": "https://x.com/Bic_shintoueki/status/1344898179205005313",
+      "media": [
+        "https://pbs.twimg.com/media/EqoJL4sVoAAxrDQ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1344898179205005313",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 589299,
+      "postSha256": "85a6ec273d978dc102496df023ef3ec38f8a9aa03e1ef239d7705b942660b009",
+      "textSha256": "90b7181ee076a22f03978a624a8a9beb10edca5f20a0408cec819723acb97e36"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

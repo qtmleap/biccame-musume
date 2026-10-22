@@ -1,0 +1,129 @@
+[
+  {
+    "id": "expanded-v2-positive-631255278789332992",
+    "source": "public-post",
+    "description": "kashiwa-summer-festival-card-2015",
+    "post": {
+      "id": "631255278789332992",
+      "createdAt": "2015-08-12T00:06:01.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "【 #ビックカメラ柏たん夏祭り 情報④】\n柏たん先輩の名刺を7000枚配布予定です！\nさがみんも壁ﾁﾗしてるかも？│ω・)ﾁﾗ\n柏たん先輩ファンの皆様は是非、8月15日16日はビックカメラ柏店にお立ち寄りください！",
+      "url": "https://x.com/bic_sagamioono/status/631255278789332992",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": "2015-08-15",
+      "conditions": null
+    },
+    "rationale": "2日間柏店での名刺配布予定。投稿アカウント相模大野と開催地柏を区別。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-summer-festival-card-2015",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "柏たん先輩の名刺",
+          "evidence": [
+            "【 #ビックカメラ柏たん夏祭り 情報④】",
+            "柏たん先輩の名刺を7000枚配布予定です！",
+            "さがみんも壁ﾁﾗしてるかも？│ω・)ﾁﾗ",
+            "柏たん先輩ファンの皆様は是非、8月15日16日はビックカメラ柏店にお立ち寄りください！"
+          ]
+        }
+      ],
+      "groupingNote": "2日間柏店での名刺配布予定。投稿アカウント相模大野と開催地柏を区別。",
+      "unannotatedFields": [
+        "category",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1072100,
+      "postSha256": "37e10f22d9d8b61e88e90faeea71385acc5ab1b668f5460f57dce76433b7427e",
+      "textSha256": "8fe0a6ec429610210dd23f12660b1ba0eb1e74a9eca56a646446d8aaf95325ff"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-631252927315734528",
+    "source": "public-post",
+    "description": "kashiwa-summer-festival-card-2015 matched control",
+    "post": {
+      "id": "631252927315734528",
+      "createdAt": "2015-08-11T23:56:40.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "【さがみたん】ヾ(⌒(ﾉ'ω')ﾉﾜｯｼｮｲ\n浴衣もしくは甚平でビックカメラにご来店いただくと、対象商品がお得に購入できるキャンペーンを実施しています♪\n【対象店舗】ビックカメラ全店（アウトレット含む）\n 【期間】8/16（日）まで http://t.co/1nQR2EWpJA",
+      "url": "https://x.com/bic_sagamioono/status/631252927315734528",
+      "media": [
+        "https://pbs.twimg.com/media/CKrp-S7UcAAn9SA.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-631252927315734528",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1072110,
+      "postSha256": "956223a887ddd3c2e5cd0659905f112f5fde0698831950a4f0158f23d1534d14",
+      "textSha256": "2cecb7164c62ebe166826b53c4eae726f4c0b57e105adf4ebc560e3fedf75b31"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

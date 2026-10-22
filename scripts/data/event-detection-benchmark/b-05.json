@@ -1,0 +1,132 @@
+[
+  {
+    "id": "public-b-2110172834459009098",
+    "source": "public-post",
+    "description": "iFace購入特典アクリルキーホルダーの制限",
+    "post": {
+      "id": "2110172834459009098",
+      "createdAt": "2026-10-14T00:56:23.507Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "<ご案内>\n本日発売のiFace #SafePaq のご購入特典””アクリルキーホルダー””ですが、当店ではノベルティ付商品の購入は””お一人様1点限りと数量制限””させていただきます。\n\n注意事項などは引用先ポストを\nご確認ください。⬇️ ＼_(˙꒳​˙*2)\nx.com/Bic_kawasaki/s…",
+      "url": "https://x.com/Bic_kawasaki/status/2110172834459009098",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "ackey"
+    },
+    "rationale": "ノベルティという語はあるが商品iFaceの購入特典で、本文にビッカメ娘デザインの根拠がない。 購入特典の物品はアクリルキーホルダーと明示されているため、非対象イベントだが物品種別はackeyと注釈する。",
+    "tags": [
+      "hard-negative",
+      "generic-novelty",
+      "ackey-word"
+    ],
+    "group": "iface-safepaq-purchase-novelty",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "637593a54105df0d08a95eb6e801b9c296b5f2f93116e426a3ab36df5ce19646"
+  },
+  {
+    "id": "public-b-2110182033595265411",
+    "source": "public-post",
+    "description": "炊飯器選びの一般的な相談案内",
+    "post": {
+      "id": "2110182033595265411",
+      "createdAt": "2026-10-14T01:32:56.752Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "炊飯器どれも同じ⁉️\n炊飯器によって炊き方が異なり、食感等が異なります。\n新しい炊飯器が欲しいけど何を選んだら良いのか分からないお客様は是非ビックカメラ名古屋駅西店にお越しくださいませ🏃",
+      "url": "https://x.com/bic_nagoya/status/2110182033595265411",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "製品の選び方と来店相談だけで、キャラ企画ではない。",
+    "tags": [
+      "product-advice",
+      "appliance"
+    ],
+    "group": "rice-cooker-selection-advice",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "7caffb149a35e789099910524af1a5a74bf91e3286b8128568682060078e307a"
+  },
+  {
+    "id": "public-b-2110188846214472134",
+    "source": "public-post",
+    "description": "Suicaクレジットカード入会特典",
+    "post": {
+      "id": "2110188846214472134",
+      "createdAt": "2026-10-14T02:00:01.007Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "📢ビックカメラSuicaカード新規入会キャンペーン\n新規入会＆ご利用対象店舗でのクレジット利用など、合わせて最大11,000相当のポイントプレゼント🎁\n詳しくは【 biccamera.com/bc/c/super/oka… 】\n★新規入会申込:11月1",
+      "url": "https://x.com/bic_shinjyuku/status/2110188846214472134",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ポイントプレゼントは金融商品の入会・利用特典で、ビッカメ娘グッズではない。",
+    "tags": [
+      "hard-negative",
+      "points",
+      "card-membership"
+    ],
+    "group": "suica-card-enrollment-points",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "57ab69f903c609f788e03438226151cfab1893e5c3010c5e17dda5a2620fd285"
+  },
+  {
+    "id": "public-b-2110193979820228999",
+    "source": "public-post",
+    "description": "キーボードキャップの体験展示",
+    "post": {
+      "id": "2110193979820228999",
+      "createdAt": "2026-10-14T02:20:24.954Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\n今話題のアイテムが大集合⁉️\n＼\n6階　登りエスカレーター前に話題のキーボードキャップが登場！\n\nカチカチ音がクセになる！\n\n何回も押してストレス発散！\n\n長押しすると色とりどりに光ります✨\n\nテスターもあるので、ご興味のある方は試してみてください🍀\n#ASMR  #キーボードクリッカー",
+      "url": "https://x.com/bic_tachikawa/status/2110193979820228999",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "試せる一般商品を紹介しており娘の限定配布企画ではない。",
+    "tags": [
+      "ordinary-sale",
+      "generic-exhibition",
+      "keyboard"
+    ],
+    "group": "keyboard-clicker-display",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "92073f8869f90ecc280caea63f538496f494f24f6ab9fb5608495f93b2d8bf33"
+  },
+  {
+    "id": "public-b-2110195385868169344",
+    "source": "public-post",
+    "description": "フロンターレの限定Anker商品",
+    "post": {
+      "id": "2110195385868169344",
+      "createdAt": "2026-10-14T02:26:00.182Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "🟩【 #ビックカメラ ラゾーナ川崎店限定】🟩\n\n川崎フロンターレファン必見👀✨\nAnker⚡から #川崎フロンターレ ⚽コラボモデルのモバイルバッテリーと急速充電器が数量限定で登場💡\n２階Anker Storeにて好評販売中✨ぜひお越しください！\n#Anker #AnkerStore #モバイルバッテリー",
+      "url": "https://x.com/Bic_kawasaki/status/2110195385868169344",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "限定コラボ商品だが対象はサッカークラブでありビッカメ娘ではない。",
+    "tags": [
+      "hard-negative",
+      "limited-sale",
+      "other-ip"
+    ],
+    "group": "frontale-anker-collaboration",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "4598f5c350ea985575a441f3763946b7664465cc5c819be7f4336da30ee2e40c"
+  }
+]

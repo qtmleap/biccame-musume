@@ -1,0 +1,139 @@
+[
+  {
+    "id": "goal-positive-1463450851012329475",
+    "source": "public-post",
+    "description": "pkan store24 badge card 2021",
+    "post": {
+      "id": "1463450851012329475",
+      "createdAt": "2021-11-24T10:14:07.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "＼ 11月27日は店舗24周年記念！ ／\n\n11/27～ 先着100名様に #パソ館たん 缶バッジをプレゼント🎁\n\n税込3000円以上のご購入が対象です！\nまた、希望の方にはクリスマスカード🎄もプレゼント🥰\n\n配布場所は【5階レジ】です。お間違えの無いようお気を付けください。\n\n※金券・ギフトカードは対象外です https://t.co/RYUVpnpJLS",
+      "url": "https://x.com/bicpkanhonten/status/1463450851012329475",
+      "media": [
+        "https://pbs.twimg.com/media/FE83IT4aMAAJ6TN.jpg",
+        "https://pbs.twimg.com/media/FE83IzDaQAAr3eZ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "3000円購入先着100名は缶バッジ、カードは希望者への別物品。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "pkan-store24-badge-card-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "パソ館たん缶バッジ",
+          "evidence": [
+            "11/27～ 先着100名様に #パソ館たん 缶バッジをプレゼント🎁"
+          ]
+        },
+        {
+          "item": "クリスマスカード",
+          "evidence": [
+            "また、希望の方にはクリスマスカード🎄もプレゼント🥰"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 508919,
+      "postSha256": "1fb7218803cfb8704a2ddc9310defd5a3383303246fae981666a90e0773ea156",
+      "textSha256": "c7f92506b9cb5d4c253b17c639e996d20f0d8cdb1fd9dff7f0a02ed322300f2d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1465850951764365315",
+    "source": "public-post",
+    "description": "ohmiya christmas card 2021",
+    "post": {
+      "id": "1465850951764365315",
+      "createdAt": "2021-12-01T01:11:15.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "🎄クリスマス限定名刺🎄\n\n本日〜12月26日（日）まで3Fそごう連絡通路の大宮たんパネルにてクリスマス限定名刺を配布してま〜す♪\n通常名刺は1Fエレベーターホールの大宮たんパネルで販売中♪\n\nぜひGETしてくださ〜い♪\nヾ(お･ω･)ﾉヾ(≧▽≦み)ﾉ\n※お1人様1枚でお願いいたします♪ https://t.co/hFwDV9Epqf",
+      "url": "https://x.com/bic_ohmiya/status/1465850951764365315",
+      "media": [
+        "https://pbs.twimg.com/media/FFe_l6WakAEgzN4.jpg",
+        "https://pbs.twimg.com/media/FFe_l8uaQAE2At7.jpg",
+        "https://pbs.twimg.com/media/FFe_l81aMAEJqF5.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "12/26までの限定版と通常版の場所を分離。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "ohmiya-christmas-card-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "クリスマス名刺",
+          "evidence": [
+            "🎄クリスマス限定名刺🎄",
+            "本日〜12月26日（日）まで3Fそごう連絡通路の大宮たんパネルにてクリスマス限定名刺を配布してま〜す♪",
+            "通常名刺は1Fエレベーターホールの大宮たんパネルで販売中♪"
+          ]
+        },
+        {
+          "item": "通常名刺",
+          "evidence": [
+            "🎄クリスマス限定名刺🎄",
+            "本日〜12月26日（日）まで3Fそごう連絡通路の大宮たんパネルにてクリスマス限定名刺を配布してま〜す♪",
+            "通常名刺は1Fエレベーターホールの大宮たんパネルで販売中♪"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 507142,
+      "postSha256": "d55aa205a6b4782ad42be442cc014d394085037aaf29fe9c39151dda39c9ef60",
+      "textSha256": "a945a2ca4db38e098d15b28452e0cb001dd1d1d00a75f02edf0bbab801957fa2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1503959243300515843",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1503959243300515843",
+      "createdAt": "2022-03-16T05:00:00.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "✨4/3まで✨\n＼パナソニック大還元祭／\n当社指定パナソニック製品を1万円以上ご購入のポイントカード会員様に抽選で…\n『ビックカメラギフトカード10万円分』など豪華景品が320名様に当たります！\n是非チェックしてみてくださいねーヾ(*´ω`)ﾉﾞ\nhttps://t.co/ioeV7tacNI https://t.co/PcYIFHwzio",
+      "url": "https://x.com/bic_sagamioono/status/1503959243300515843",
+      "media": [
+        "https://pbs.twimg.com/media/FN8GdaEUcAcuIgA.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「✨4/3まで✨ / ＼パナソニック大還元祭／ / 当社指定パナソニック製品を1万円以上ご購入のポイントカード会員様に抽選で…」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "panasonic-redemption-giftcard-lottery-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 478017,
+      "postSha256": "10956ee4c0689e1b355a9e2cd70e1844a8f490c90346d0bd421c29ed550139c3",
+      "textSha256": "db86739e3436b3586cafdd4d07877eed2eaaa53963dcc4dcc5a006b230d24d28"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1520352940812214273",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1520352940812214273",
+      "createdAt": "2022-04-30T10:42:42.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "ビックカメラの新サービス‼\n\n当店にてカメラのレンタルできます📷\n試してから買える新品レンタルサービスです\nお試しして気に入れば購入、好みに合わなければ返却できます\nhttps://t.co/FSQurJ62r0 https://t.co/XZqqMLGUzf",
+      "url": "https://x.com/bic_nagoya/status/1520352940812214273",
+      "media": [
+        "https://pbs.twimg.com/media/FRlgGgIVcAAt7RL.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ビックカメラの新サービス‼ / 当店にてカメラのレンタルできます📷 / 試してから買える新品レンタルサービスです」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "nagoya-camera-rental-service-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 465007,
+      "postSha256": "b135bc9472b5986492121dd83d298d934b277432239f14754aec7ac1ed49443c",
+      "textSha256": "531cb9b1993d1070af67d9e3fd25518d5a5a209de0d1eb66568171d6658d9f96"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

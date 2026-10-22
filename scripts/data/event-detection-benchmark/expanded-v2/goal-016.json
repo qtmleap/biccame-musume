@@ -1,0 +1,126 @@
+[
+  {
+    "id": "expanded-v2-positive-1339468788173967362",
+    "source": "public-post",
+    "description": "kawasaki-bicsim-collaboration-december-2020",
+    "post": {
+      "id": "1339468788173967362",
+      "createdAt": "2020-12-17T07:13:39.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "(ス´-`*)ﾉ こんにちは、スタッフたんです。ご案内がありましたが、今週12月19日(土)と20日(日)の2日間限定でビックシムたんがラゾーナ川崎店に遊びに来てくれます。\nそれにあたりシムたんから告知もありましたが『(コラボ)名刺」配布しまーす！！ https://t.co/UhCuuRCKct",
+      "url": "https://x.com/Bic_kawasaki/status/1339468788173967362",
+      "media": [
+        "https://pbs.twimg.com/media/EpayotKVoAAEuQ9.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2020-12-19",
+      "conditions": null
+    },
+    "rationale": "ビックシムたん来店とコラボ名刺の2日間企画。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kawasaki-bicsim-collaboration-december-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "(コラボ)名刺",
+          "evidence": [
+            "(ス´-`*)ﾉ こんにちは、スタッフたんです。ご案内がありましたが、今週12月19日(土)と20日(日)の2日間限定でビックシムたんがラゾーナ川崎店に遊びに来てくれます。",
+            "それにあたりシムたんから告知もありましたが『(コラボ)名刺」配布しまーす！！ https://t.co/UhCuuRCKct"
+          ]
+        }
+      ],
+      "groupingNote": "ビックシムたん来店とコラボ名刺の2日間企画。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 593813,
+      "postSha256": "1f97f3c781f41e2974c458a64f2186799c5cc9112572fc6873dccf0173458e78",
+      "textSha256": "78485de4b376c2e402b59deded7b4ee3d90c068131c9437c2a0f2c3100545315"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1336841517596516354",
+    "source": "public-post",
+    "description": "kawasaki-bicsim-collaboration-december-2020 matched control",
+    "post": {
+      "id": "1336841517596516354",
+      "createdAt": "2020-12-10T01:13:49.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "－ご案内－\nビックカメラ ラゾーナ川崎店の「SIX PAD」ブースは、４階家電コーナーから２階ビックスポーツへ移動いたしました。\nご利用の方は階が変更となっておりますので、ご注意ください\n#ビックカメラ #ラゾーナ川崎 \n#シックスパッド #sixpad https://t.co/YISBAlokrl",
+      "url": "https://x.com/Bic_kawasaki/status/1336841517596516354",
+      "media": [
+        "https://pbs.twimg.com/media/Eo1pITVVQAA4LAn.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1336841517596516354",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 596281,
+      "postSha256": "d6987b18b1466eff77b39e35ddf1b0c13e2d5cd34b1310f553a7a111802e1028",
+      "textSha256": "0fedcd1533f33a72691ec1c770e7e2258e830784f912ed0f96bedb17cadb9fe4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

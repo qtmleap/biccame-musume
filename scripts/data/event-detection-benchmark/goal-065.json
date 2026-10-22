@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-957056004054663168",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "957056004054663168",
+      "createdAt": "2018-01-27T01:01:47.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(1￣▽￣)1/27(土),1/28(日)の2日間限定！\nビックカメラ藤沢店は日立フェア開催！\n当社指定の日立製品1万円以上ご購入で、4階特設会場にて抽選会に参加できるぜ。\nハズレなし！お見逃しなく！",
+      "url": "https://x.com/bic_fujisawa/status/957056004054663168",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「(1￣▽￣)1/27(土),1/28(日)の2日間限定！ / ビックカメラ藤沢店は日立フェア開催！ / 当社指定の日立製品1万円以上ご購入で、4階特設会場にて抽選会に参加できるぜ。」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "hitachi-appliance-fair-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 888441,
+      "postSha256": "7a845f6650b1cbb3c13548d9c016f3ef48b5b03e60cc926f8b8526b61a9b0eb6",
+      "textSha256": "0dfec1ecd15ee74e32e5423d9d8c50976eb9741e506ef9c4716347a8ae34ca4e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-949924850071584768",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "949924850071584768",
+      "createdAt": "2018-01-07T08:45:07.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "新生活の準備はビックカメラにお任せください！！\n家電セット🔌テレビセット📺パソコンセット💻など...\nお得セットを多数ご用意致しましたヽ(´>∀<｀*)ﾉ♪♪\n是非ご来店お待ちしております～🎶 https://t.co/AU3ThJYbKU",
+      "url": "https://x.com/bic_ohmiya/status/949924850071584768",
+      "media": [
+        "https://pbs.twimg.com/media/DS7Oa1KVAAI-Dbl.jpg",
+        "https://pbs.twimg.com/media/DS7OcQ2VAAENqqr.jpg",
+        "https://pbs.twimg.com/media/DS7Ocx7VoAEvhC6.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「新生活の準備はビックカメラにお任せください！！ / 家電セット🔌テレビセット📺パソコンセット💻など... / お得セットを多数ご用意致しましたヽ(´>∀<｀*)ﾉ♪♪」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "new-life-appliance-sets-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 893236,
+      "postSha256": "e67ed7ed331ccbbffa231ad1915c80665f42c012d4c7059458d6601c599378ee",
+      "textSha256": "114f4721fbd8c375b596ceefb276e397408402ed982fbf7a0ca38a2ef735955e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

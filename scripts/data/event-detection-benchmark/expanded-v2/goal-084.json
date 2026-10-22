@@ -1,0 +1,126 @@
+[
+  {
+    "id": "expanded-v2-positive-1473918080107843585",
+    "source": "public-post",
+    "description": "ikenishi-christmas-card-restock-2021",
+    "post": {
+      "id": "1473918080107843585",
+      "createdAt": "2021-12-23T07:27:09.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "一時的に切らしてましたクリスマス名刺！\n追加ご用意できました！！！\n配布再開です！ヽ(´∀`🎀)ﾉ",
+      "url": "https://x.com/bicikenishi/status/1473918080107843585",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "欠品した名刺の再配布。新しいクリスマス企画ではない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "ikenishi-christmas-card-restock-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "クリスマス名刺",
+          "evidence": [
+            "一時的に切らしてましたクリスマス名刺！",
+            "追加ご用意できました！！！",
+            "配布再開です！ヽ(´∀`🎀)ﾉ"
+          ]
+        }
+      ],
+      "groupingNote": "欠品した名刺の再配布。新しいクリスマス企画ではない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 499956,
+      "postSha256": "971aabd6cb197f2bedb1a3027a0009de6754326a24fb865fed193a7663b3b05b",
+      "textSha256": "9c5a57f8869fbd2a2da31a3808ed8db669b4500aa30f07947639991941e4f53e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1470643380560736257",
+    "source": "public-post",
+    "description": "ikenishi-christmas-card-restock-2021 matched control",
+    "post": {
+      "id": "1470643380560736257",
+      "createdAt": "2021-12-14T06:34:39.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "ドラッグコーナーの販売員たんにおススメされたよヾ(🎀๑╹◡╹)ﾉ\"\n今日は本当に寒いよね！\nみんなも風邪引かないように気をつけてね(*´꒳`*🎀)\n\n#足の冷えない不思議なくつ下 #ビックドラッグ https://t.co/cfH5uidoJy",
+      "url": "https://x.com/bicikenishi/status/1470643380560736257",
+      "media": [
+        "https://pbs.twimg.com/media/FGjGSG4VkAEj26H.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1470643380560736257",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 502760,
+      "postSha256": "c148e69492843cb60249d1e09eb6969025f73c60fe1351d2618debfcc89f667c",
+      "textSha256": "d3a6b5a5f3aacfa5d0e531b18d990fbe358833cf7395f54884a2157f812df379"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

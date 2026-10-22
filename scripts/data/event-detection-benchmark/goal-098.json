@@ -1,0 +1,108 @@
+[
+  {
+    "id": "goal-negative-1585131461845606400",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1585131461845606400",
+      "createdAt": "2022-10-26T04:49:25.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "今なら❣洗剤自動投入搭載洗濯機のご購入で\nお試し用『自動投入用洗剤』をプレゼント🎁✨\n\n🐈洗剤自動投入機能のメリットは❓\n事前にタンクに洗剤を入れておくことで\n衣類に合わせた量が投入されるので、手間も省けるよ👀\n\n👑ドラム式洗濯乾燥機 人気売れ筋ランキング👑\nhttps://t.co/rpS7XXbPyn https://t.co/FXIPukowf0",
+      "url": "https://x.com/bic_akiba/status/1585131461845606400",
+      "media": [
+        "https://pbs.twimg.com/media/Ff-CZuiaEAAHygF.jpg",
+        "https://pbs.twimg.com/media/Ff-Ca6EaEAAj0QQ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「今なら❣洗剤自動投入搭載洗濯機のご購入で / お試し用『自動投入用洗剤』をプレゼント🎁✨ / 🐈洗剤自動投入機能のメリットは❓」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "washer-detergent-purchase-gift-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 416208,
+      "postSha256": "f35a46f09fb4035f318155e1c156ef5e9394bbd761cb4244a832dd245bf642ae",
+      "textSha256": "72ca46d92ac1b5b29b0573f05b66108d0738ddbbdb72f52d442cfa7d33be6876"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1597466928561651712",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1597466928561651712",
+      "createdAt": "2022-11-29T05:46:09.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "📣新製品情報\n\n🌟本日発売🌟\n『Surface Pro9』\n\n最新の第12世代CPU搭載❗️\nプラチナ、グラファイトに加えて\nNEWカラーのサファイアとフォレストが登場💎🌲\n\n実際にお試し頂ける展示機もあるので、\nぜひ所沢駅店にお越し下さい(§๑˃̵ᴗ˂̵)✨ https://t.co/u0yDFYjQkR",
+      "url": "https://x.com/bic_toko/status/1597466928561651712",
+      "media": [
+        "https://pbs.twimg.com/media/FitXsrqVsAE0sac.jpg",
+        "https://pbs.twimg.com/media/FitXsucUYAEUTho.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「📣新製品情報 / 🌟本日発売🌟 / 『Surface Pro9』」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "surface-pro9-launch-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 407113,
+      "postSha256": "91aa3887fced96782ecd08abb4018a9058a2feeb107f438b09e85164e1c825ed",
+      "textSha256": "828bdf3e0a24f1327176b754ac203520794566b62793c191fda7f749c2a74f48"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

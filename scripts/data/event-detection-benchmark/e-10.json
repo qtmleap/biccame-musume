@@ -1,0 +1,195 @@
+[
+  {
+    "id": "public-e-1698652626819358812",
+    "source": "public-post",
+    "description": "温泉むすめとビッカメ娘のアクキー",
+    "post": {
+      "id": "1698652626819358812",
+      "createdAt": "2023-09-04T11:02:00.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "#温泉むすめ と #ビッカメ娘 の描きおろしイラストを用いたアクリルキーホルダーは4階レジ前にて販売中🎉\n無くなり次第終了となります。手に入れていない方はお早めにぜひ✨\n\n🔹アクリルキーホルダー\n　各700円（税込） https://t.co/sm39Kg8DRR",
+      "url": "https://x.com/biccameramito/status/1698652626819358812",
+      "media": [
+        "https://pbs.twimg.com/media/F4cGXj7aMAAFU1q.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "mito"
+      ]
+    },
+    "rationale": "温泉むすめとビッカメ娘描き下ろしアクキー販売。700円は販売価格で購入条件金額としない。対象娘の列挙はない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "collaboration",
+      "limited-sale"
+    ],
+    "group": "onsen-musume-biccame-ackey-2023",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "208de874ec404fb704cbdd9ddd8199c23869a9159ae60889cd2c65b67f596c21"
+  },
+  {
+    "id": "public-e-1747097149291233457",
+    "source": "public-post",
+    "description": "新横たん4周年のアクキーと名刺",
+    "post": {
+      "id": "1747097149291233457",
+      "createdAt": "2024-01-16T03:23:14.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "✨お知らせ✨\n1月23日で新横たん爆誕4周年となります💕\n記念イベントとして1月23日(火)より\n税込3,000円以上ご購入のお客様先着60名にアクキーをプレゼント‼️\n記念名刺も配布します✨\n※おひとり様1枚でお願いします\n※新年名刺も1月31日まで配布中です🎶\n※ 通常名刺は販売員までお申しつけください https://t.co/rEgJAEs8Hn",
+      "url": "https://x.com/bic_shinyoko/status/1747097149291233457",
+      "media": [
+        "https://pbs.twimg.com/media/GD7vl0AbUAA4cek.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shinyoko"
+      ],
+      "characterIds": [
+        "shinyoko"
+      ],
+      "startDate": "2024-01-23"
+    },
+    "rationale": "4周年アクキーは3000円購入先着60、別に記念/新年/通常名刺もあり、条件や単一categoryを投稿全体へ流用しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "anniversary",
+      "multi-item",
+      "purchase"
+    ],
+    "group": "shinyoko-fourth-birthday-giveaways-2024",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "7994b5656e9acb64772687a91c47a702886dbfc861eb3df73db7820fefa8da00"
+  },
+  {
+    "id": "public-e-1821360402430656584",
+    "source": "public-post",
+    "description": "ラディウス製品購入のなんばたんアクスタ",
+    "post": {
+      "id": "1821360402430656584",
+      "createdAt": "2024-08-08T01:38:53.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼本日発売📢／\n猫好きの間でバズり散らかし、発売前から品薄ぎみの #猫イヤホン なんば店在庫あります❗️🐾\n\nなんば店でラディウス製品をご購入頂くと、なんばたんアクリルスタンドをプレゼント🎁✨\n猫イヤホンだけでなくラディウス製品なら何でもOKです✨\nアクリルスタンドが無くなり次第終了やで～🙇 https://t.co/XER2lZVXde",
+      "url": "https://x.com/biccamera_nanba/status/1821360402430656584",
+      "media": [
+        "https://pbs.twimg.com/media/GUbEWk9XoAAatQL.png",
+        "https://pbs.twimg.com/media/GUbEYHzaQAAPVCv.png",
+        "https://pbs.twimg.com/media/GUbE72JaQAAsPyj.png",
+        "https://pbs.twimg.com/media/GUbE9AubUAAInGR.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "acsta",
+      "stores": [
+        "nanba"
+      ],
+      "characterIds": [
+        "nanba"
+      ]
+    },
+    "rationale": "ラディウス製品購入でなんばたんアクスタ提供と明記。金額のない購入条件と在庫制限を完全列挙できないためconditionsは未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "purchase-bonus",
+      "acrylic-stand"
+    ],
+    "group": "nanba-radius-acsta-bonus-2024",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "124b54cbff899d788cd422c6956afbec65edeffbfd5da129e26dd91f0e584a7d"
+  },
+  {
+    "id": "public-e-1785487866765979815",
+    "source": "public-post",
+    "description": "八王子たんと柏たんコラボ名刺",
+    "post": {
+      "id": "1785487866765979815",
+      "createdAt": "2024-05-01T01:54:14.000Z",
+      "screenName": "bichachioji",
+      "kind": "original",
+      "text": "おはっちおーじ( ＠仝＠)ﾉ\n今日から5月🎏\n#柏たん とのコラボ名刺配布スタート！\n2階総合案内カウンターにて配布してるので、ぜひゲットしてねー✨\n#ビッカメ娘 https://t.co/ejuHYvFiYZ",
+      "url": "https://x.com/bichachioji/status/1785487866765979815",
+      "media": [
+        "https://pbs.twimg.com/media/GMdTvc_bAAA-dnG.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "hachioji"
+      ],
+      "characterIds": [
+        "hachioji",
+        "kashiwa"
+      ],
+      "startDate": "2024-05-01"
+    },
+    "rationale": "八王子側で柏たんとのコラボ名刺を本日から配布。柏店開催までは本文から確定しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "collaboration",
+      "multi-character"
+    ],
+    "group": "hachioji-kashiwa-collaboration-card-2024",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "3b6b29205cf900c6446b9144f20826841f81de864f978225f34bc1d3b9abca1e"
+  },
+  {
+    "id": "public-e-1765935486386725104",
+    "source": "public-post",
+    "description": "8がつく3店舗のコラボ名刺",
+    "post": {
+      "id": "1765935486386725104",
+      "createdAt": "2024-03-08T03:00:04.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "\\ 期間限定 /\n🎊#8がつく3店舗 コラボ名刺配布🎊\n\n渋谷ハチ公口店、JR八王子駅店、アリオ八尾店限定！\nお揃いコーデのコラボ名刺🎵\nぜひゲットしてハチ～✨\n\n配布期間：3月8日(金)～4月7日(日)\n渋谷ハチ公口店配布場所：B館6階 しぶハチたんブース\n#しぶハチたん #八王子たん #八尾たん #ビッカメ娘 https://t.co/bFzmi4ppsN",
+      "url": "https://x.com/bicshibuhachi00/status/1765935486386725104",
+      "media": [
+        "https://pbs.twimg.com/media/GIHSc1FbMAAtQ0j.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "shibuhachi",
+        "hachioji",
+        "yao"
+      ],
+      "characterIds": [
+        "shibuhachi",
+        "hachioji",
+        "yao"
+      ],
+      "startDate": "2024-03-08"
+    },
+    "rationale": "3店名・3娘名と3/8〜4/7の配布を明記し全対象を保持。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "collaboration",
+      "multi-store",
+      "multi-character"
+    ],
+    "group": "eight-number-three-stores-card-2024",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "95c9ab36b27c4a283d92bcaea3f5fde8e5563c731e71dd7cfc2b1d43c4f72c65"
+  }
+]

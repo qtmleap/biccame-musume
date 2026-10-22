@@ -1,0 +1,174 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2069627627657470214",
+    "source": "public-post",
+    "description": "akiba-acrylic-stand-end-2026",
+    "post": {
+      "id": "2069627627657470214",
+      "createdAt": "2026-06-24T03:44:12.000Z",
+      "screenName": "bic_akiba",
+      "kind": "quote",
+      "text": "＃アキバたんアクスタ は昨日終了しました💡\n\n平日なのにすごい…✨\n\nありがとうございましたにゃ₍^> ̫<^₎💕 https://t.co/3PGT6lVbKX",
+      "url": "https://x.com/bic_akiba/status/2069627627657470214",
+      "quoted": {
+        "id": "2065630247387799666",
+        "screenName": "bic_akiba",
+        "text": "🎂アキバたん🐱アクスタ企画🎂\n\n2025年6月22日㈪～ #アキバたん店舗誕生9周年\nビックカメラAKIBAにて【税込8,000円以上】のご購入レシートご提示で\n『きらりん☆彡アイドルアキバたんアクスタ』をプレゼント🎁✨\n\nお渡し場所は［1階総合カウンター］です🌟\n※ツリー含む注意事項をよくお読みください。 https://t.co/koqbg82IEy"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HLjLEvVacAAiuz_.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "acsta",
+      "stores": null,
+      "characterIds": [
+        "akiba"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アキバたんアクスタが前日に終了。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "akiba-acrylic-stand-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アキバたんアクスタ",
+          "evidence": [
+            "＃アキバたんアクスタ は昨日終了しました💡"
+          ]
+        }
+      ],
+      "groupingNote": "アキバたんアクスタが前日に終了。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 31709,
+      "postSha256": "52330bd697ad3aa1446a46b74b214116859d5fe26f96ab44f7b01d9bca59afcc",
+      "textSha256": "45a2d9b11e36579a5fc573bbc79ef15fa3a7f2ffe9a4160d20ad0d87185c9fc6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "387b8c30-6f72-4681-b4c4-3baaa70aa12e",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_akiba/status/2069627627657470214",
+          "origin": "manual-or-seed",
+          "title": "店舗9周年記念アクスタ",
+          "category": "acsta",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-06-21T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "akiba"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 8000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2067527476209930391",
+    "source": "public-post",
+    "description": "akiba-acrylic-stand-end-2026 matched control",
+    "post": {
+      "id": "2067527476209930391",
+      "createdAt": "2026-06-18T08:38:57.000Z",
+      "screenName": "bic_akiba",
+      "kind": "quote",
+      "text": "おかえりにゃさいませ❣\nあっとほーむなビックカメラAKIBA⁉😆\nζ(╹ᗜ╹)ζ 酒販コーナーのご利用ありがとにゃん❤️",
+      "url": "https://x.com/bic_akiba/status/2067527476209930391",
+      "quoted": {
+        "id": "2067526295488208966",
+        "screenName": "HR19_arya",
+        "text": "アキバの予習に来ました～\nなんかアキバたんちに来るとホッとするのは私だけでしょうか？？(オタクの習性)🤣\nウマ娘のエナドリ買って帰りますッ\n20260618\n#アキバたん https://t.co/eeyp6vWmhv"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2067527476209930391",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 33558,
+      "postSha256": "ce4ae2decefd0c6eb6f1afe04f23aefcd803f9727cfc8117ba5001c2ffe6134b",
+      "textSha256": "151f006e8156bb9e0e87586b42322c9fe27ff2196e24b1487304d95a2bd1324c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

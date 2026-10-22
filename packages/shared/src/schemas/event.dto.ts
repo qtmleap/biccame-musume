@@ -22,7 +22,7 @@ export type EventCategory = z.infer<typeof EventCategorySchema>
 /**
  * 配布条件の種類
  */
-export const EventConditionTypeSchema = z.enum(['purchase', 'first_come', 'lottery', 'everyone'], {
+export const EventConditionTypeSchema = z.enum(['purchase', 'charge', 'first_come', 'lottery', 'everyone'], {
   error: '配布条件の種類を選択してください'
 })
 
@@ -31,17 +31,33 @@ export type EventConditionType = z.infer<typeof EventConditionTypeSchema>
 /**
  * 配布条件の詳細
  */
-export const EventConditionSchema = z.object({
-  uuid: z.uuid(),
-  type: EventConditionTypeSchema,
-  // 購入条件の場合の金額（円）
-  purchaseAmount: z
-    .number({ error: '金額は数値で入力してください' })
-    .min(0, '金額は 0 円以上で入力してください')
-    .optional(),
-  // 先着または抽選の人数
-  quantity: z.number({ error: '人数は数値で入力してください' }).min(1, '人数は 1 人以上で入力してください').optional()
-})
+export const EventConditionSchema = z
+  .object({
+    uuid: z.uuid(),
+    type: EventConditionTypeSchema,
+    // 購入条件の場合の金額（円）
+    purchaseAmount: z
+      .number({ error: '金額は数値で入力してください' })
+      .min(0, '金額は 0 円以上で入力してください')
+      .optional(),
+    // 入金・チャージ条件の場合の金額（円）。商品購入とは区別する。
+    chargeAmount: z
+      .number({ error: '金額は数値で入力してください' })
+      .int('金額は整数で入力してください')
+      .min(0, '金額は 0 円以上で入力してください')
+      .optional(),
+    // 先着または抽選の人数
+    quantity: z.number({ error: '人数は数値で入力してください' }).min(1, '人数は 1 人以上で入力してください').optional()
+  })
+  // 入金額は入金条件だけに持たせ、購入額との混在を防ぐ。未判定の省略は許容する。
+  .refine((condition) => condition.type === 'charge' || condition.chargeAmount === undefined, {
+    path: ['chargeAmount'],
+    message: '入金・チャージ額は入金条件にのみ指定できます'
+  })
+  .refine((condition) => condition.type !== 'charge' || condition.purchaseAmount === undefined, {
+    path: ['purchaseAmount'],
+    message: '入金条件に商品購入額は指定できません'
+  })
 
 /**
  * 参考URLの種類
@@ -102,8 +118,8 @@ export const EventRequestSchema = z.object({
   isPreliminary: z.boolean(),
   // 所属するイベントグループの UUID（任意）
   groupId: z.uuid('グループ ID は UUID 形式で指定してください').optional(),
-  // 対象のビッカメ娘（任意）。未指定なら開催店舗と同一とみなす
-  characterId: EventCharacterSchema.optional(),
+  // 対象ビッカメ娘。空配列は未判定であり、開催店舗から補完しない。
+  characterIds: z.array(EventCharacterSchema),
   shouldTweet: z.boolean()
 })
 export type EventRequest = z.infer<typeof EventRequestSchema>
@@ -115,6 +131,7 @@ export const EventRequestQuerySchema = z.object({
   category: EventCategorySchema.optional(),
   title: z.string().nonempty('イベント名は必須です').optional(),
   stores: z.string().nonempty('店舗は必須です').optional(),
+  characterIds: z.string().nonempty('対象ビッカメ娘を指定してください').optional(),
   startDate: z.string().nonempty('開始日は必須です').optional(),
   endDate: z.string().nonempty('終了日は必須です').optional(),
   endAt: z.string().nonempty('終了日時は必須です').optional(),
@@ -146,8 +163,8 @@ export const EventSchema = z.object({
   isPreliminary: z.boolean(),
   // 所属するイベントグループの UUID（任意）
   groupId: z.string().optional(),
-  // 対象のビッカメ娘（任意）。未指定なら開催店舗と同一とみなす
-  characterId: EventCharacterSchema.optional(),
+  // 対象ビッカメ娘。空配列は未判定であり、開催店舗から補完しない。
+  characterIds: z.array(EventCharacterSchema),
   status: EventStatusSchema,
   daysUntil: z.number(),
   interestedCount: z.number().int().nonnegative(),

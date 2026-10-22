@@ -1,0 +1,128 @@
+[
+  {
+    "id": "expanded-v2-positive-1526040647932600321",
+    "source": "public-post",
+    "description": "sagami-new-card-preparation-2022",
+    "post": {
+      "id": "1526040647932600321",
+      "createdAt": "2022-05-16T03:23:37.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "【お知らせ】\n現在、さがみたん新名刺は作成中です(*ﾉД`*)\n完成次第配布しますのでしばしお待ちを🙇‍♀️💦\n#さがみたん",
+      "url": "https://x.com/bic_sagamioono/status/1526040647932600321",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "作成中で完成後配布する予告。カテゴリや条件、開始日は未確認。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "preliminary"
+    ],
+    "group": "sagami-new-card-preparation-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "新名刺",
+          "evidence": [
+            "【お知らせ】",
+            "現在、さがみたん新名刺は作成中です(*ﾉД`*)",
+            "完成次第配布しますのでしばしお待ちを🙇‍♀️💦",
+            "#さがみたん"
+          ]
+        }
+      ],
+      "groupingNote": "作成中で完成後配布する予告。カテゴリや条件、開始日は未確認。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 460439,
+      "postSha256": "ffa7ca75470c4d8ce40757714c6e2eb2eccdf3a239267cce8e6606685b1d191c",
+      "textSha256": "44a9ae0830798336aa7b7e56ac9cb55163d59fa38604e6521710e3ff0d6a7593"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1522025475043848192",
+    "source": "public-post",
+    "description": "sagami-new-card-preparation-2022 matched control",
+    "post": {
+      "id": "1522025475043848192",
+      "createdAt": "2022-05-05T01:28:45.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "＼5月5日は #レゴの日 ／\n\n✨5月5日限定✨\n『今日はレゴの日』を合言葉に『レゴ ミニフィギュア』をもらおうヾ(*´ω`)ﾉﾞ\n※配布対象は4歳〜小学生のお子様です\n※無くなり次第終了\n是非おもちゃコーナーまでお越し下さい(*≧ω≦) https://t.co/RbWpLSOPVN",
+      "url": "https://x.com/bic_sagamioono/status/1522025475043848192",
+      "media": [
+        "https://pbs.twimg.com/media/FR9RaTLUcAAKeF8.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1522025475043848192",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 463707,
+      "postSha256": "f90ff50f3c43ebbbdcf7cbe4191d459d98bff63c65e7b94302644827535869c0",
+      "textSha256": "1a0f347e2b79ca3608bc84858fce1e61168c7c8e9742bcb9c7705b8f4bebe2f9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

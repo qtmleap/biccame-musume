@@ -1,0 +1,104 @@
+[
+  {
+    "id": "goal-negative-1243391127715119104",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1243391127715119104",
+      "createdAt": "2020-03-27T04:15:20.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "【3月28日・29日 臨時休業について】\n#ビックカメラ 相模大野駅店は3月28日・29日は臨時休業と致します。\nなお、3月30日(月)以降の営業につきましては\nAM11：00～PM8：00にて営業する予定です。\nhttps://t.co/DJ9RYgTFtx",
+      "url": "https://x.com/bic_sagamioono/status/1243391127715119104",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【3月28日・29日 臨時休業について】 / #ビックカメラ 相模大野駅店は3月28日・29日は臨時休業と致します。 / なお、3月30日(月)以降の営業につきましては」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "sagami-covid-temporary-closure-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 654222,
+      "postSha256": "d517d9b58b042279f623443e127f61886d08c370136b5f7af428fe2a1e5321fe",
+      "textSha256": "550c99f2e8702d55172c352bafe20a353096a93fd91e505a477a0ad86af3cf77"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1287986572277608448",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1287986572277608448",
+      "createdAt": "2020-07-28T05:41:43.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "USBかと思ったら…ワイヤレスマウスなんです٩(ˊωˋ*)و\n持ち運び時は小さく、使用時は大きく！！！\nクリップが付いているから持ち運びも便利！\nキャップをはめれば傷やホコリ、誤作動から守ります！\nエレコム　『M-CC2BRS』\nhttps://t.co/Kmj71g3V8D https://t.co/9Ajv7Afrd7",
+      "url": "https://x.com/bic_sagamioono/status/1287986572277608448",
+      "media": [
+        "https://pbs.twimg.com/media/Ed_Ty0SU8AIsX6c.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「USBかと思ったら…ワイヤレスマウスなんです٩(ˊωˋ*)و / 持ち運び時は小さく、使用時は大きく！！！ / クリップが付いているから持ち運びも便利！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "elecom-clip-mouse-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 635870,
+      "postSha256": "f704162d534e8c4301a646cc29fdc538ebeb6a71858e337055d0cb32fe87107a",
+      "textSha256": "b1fcfc23ff895327e2a5caeec3e5d4395af2b5aa232afb73a92ade353f5a75a1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

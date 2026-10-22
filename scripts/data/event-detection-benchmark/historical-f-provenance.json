@@ -1,0 +1,277 @@
+{
+  "datasetRevision": "historical-negative-f-v1-year-matched",
+  "annotationStatus": "provisional",
+  "sourceArchive": ".cache/event-detect/posts.jsonl",
+  "liveEvaluation": "not-run; reserved matched final holdout and hidden from prompt author",
+  "matching": {
+    "positiveCorpus": "e-*.json metadata snapshot (year, account, text length only)",
+    "yearCounts": {
+      "2016": 1,
+      "2017": 15,
+      "2018": 12,
+      "2019": 3,
+      "2020": 5,
+      "2021": 3,
+      "2022": 4,
+      "2023": 3,
+      "2024": 4
+    },
+    "yearAccountCountsExact": true,
+    "positiveTextLengthMean": 154.28,
+    "negativeTextLengthMean": 155.06,
+    "positiveTextLengthMedian": 159.5,
+    "negativeTextLengthMedian": 163.0
+  },
+  "posts": [
+    {
+      "id": "806812970965573632",
+      "createdAt": "2016-12-08T10:49:36.000Z",
+      "textSha256": "2dab20a2c99584351b8affb34cc68881bdc78952c8dc0b836750a59dedcadaa7"
+    },
+    {
+      "id": "876325848457990144",
+      "createdAt": "2017-06-18T06:28:58.000Z",
+      "textSha256": "9959e5209380f213634f2ab915cf3701239ccd02b5e38378cbce48965181c66b"
+    },
+    {
+      "id": "874832056131268608",
+      "createdAt": "2017-06-14T03:33:10.000Z",
+      "textSha256": "4c7a0e04d7a9bd8266903bbe87f7c4b4e6888f07c14a391fd004a6611e3ae98e"
+    },
+    {
+      "id": "845564139506298880",
+      "createdAt": "2017-03-25T09:12:55.000Z",
+      "textSha256": "bfe96816b006c2fcb6ff51c1afdaf646f8b1e9cb70d97738a1cbb019f9d0b98c"
+    },
+    {
+      "id": "913597031314219008",
+      "createdAt": "2017-09-29T02:51:20.000Z",
+      "textSha256": "44c2a9691d74ac599996a481922adc639f668e5adf448cc4f5b263aef89a16ca"
+    },
+    {
+      "id": "865402108811427842",
+      "createdAt": "2017-05-19T03:01:55.000Z",
+      "textSha256": "d99ce5bdfe2bb3e460a4747c61a24105cb94add4009b96418b615f8c226b0a75"
+    },
+    {
+      "id": "822658634794594306",
+      "createdAt": "2017-01-21T04:14:37.000Z",
+      "textSha256": "7afb3669c927cadb210b5286023693954c00f3801ffc9bdf9c4485d245d270b1"
+    },
+    {
+      "id": "870825534996885505",
+      "createdAt": "2017-06-03T02:12:41.000Z",
+      "textSha256": "7729126c9d1d78f6f3e041127f1652522d5ba477468bd9d5688aceb9063e7407"
+    },
+    {
+      "id": "936832805002027009",
+      "createdAt": "2017-12-02T05:42:00.000Z",
+      "textSha256": "3e7c2c7fe67c54bd31abce03f73dc66135d8ad0d75a5d6aa496f1d1c36549f3b"
+    },
+    {
+      "id": "881762964792942592",
+      "createdAt": "2017-07-03T06:34:07.000Z",
+      "textSha256": "160b7b2ac1a1a7f6f7481a27a6972cc5f254aa1bad5d73b4f9e0bcd3d61aed72"
+    },
+    {
+      "id": "825539432241467392",
+      "createdAt": "2017-01-29T03:01:53.000Z",
+      "textSha256": "ab0240227ff35f8ef02853a231aba73a8a03f576fab93b82f50abffde297b851"
+    },
+    {
+      "id": "901627179141701634",
+      "createdAt": "2017-08-27T02:07:25.000Z",
+      "textSha256": "5133dda0e4a06e5ceb03b7275a08f3f72520cecfa133903846a1847bb5d96d92"
+    },
+    {
+      "id": "867692212708036608",
+      "createdAt": "2017-05-25T10:41:59.000Z",
+      "textSha256": "0370a27c172c89a4b34b6ced1f3c2a6f3411480385adf0555fcc4f63ac1ae6ea"
+    },
+    {
+      "id": "896255905561329664",
+      "createdAt": "2017-08-12T06:23:54.000Z",
+      "textSha256": "140bc383bcb38fbba6ec10e270f8daa9798d263854de7ed6c655dda93d35c79a"
+    },
+    {
+      "id": "938950565425397760",
+      "createdAt": "2017-12-08T01:57:14.000Z",
+      "textSha256": "787d9946a970bfae5235f00d54cec0aab567546a2c1c9c881cf84bcaea9e905d"
+    },
+    {
+      "id": "873084276119556096",
+      "createdAt": "2017-06-09T07:48:07.000Z",
+      "textSha256": "0ad523a265340dd802e9ba823f252a12e5794b674069ede7b1e31171801049a4"
+    },
+    {
+      "id": "1050263491481751552",
+      "createdAt": "2018-10-11T05:55:03.000Z",
+      "textSha256": "ee34dec6ab22e1c6fb8f7fc3ae2906a0e28fb05e956a3ce7902fad54900e2036"
+    },
+    {
+      "id": "974893222156648448",
+      "createdAt": "2018-03-17T06:20:31.000Z",
+      "textSha256": "aaf5987e0089ae8755fd9affb7cf0c4507c8ad56c79db41944996279efca5f03"
+    },
+    {
+      "id": "1036183449302978561",
+      "createdAt": "2018-09-02T09:26:00.000Z",
+      "textSha256": "08c10af3b884e122a22b8f3399c022c8482029970fbd03656c0469e8c006d327"
+    },
+    {
+      "id": "1040426399377444864",
+      "createdAt": "2018-09-14T02:25:58.000Z",
+      "textSha256": "7bb279d3645b6460609ff8c2eab4797d8562a4a47aca1289f507d7719a13a6ab"
+    },
+    {
+      "id": "1000206912032464898",
+      "createdAt": "2018-05-26T02:48:05.000Z",
+      "textSha256": "540c01c845278dbe4d1f9098a7ce7695d7de66fd8c85be08d1f823bbc8e57075"
+    },
+    {
+      "id": "994497978038538240",
+      "createdAt": "2018-05-10T08:42:49.000Z",
+      "textSha256": "23d5cfef6de4842abaabec81215b7debd5742fbb5a69d6aab74bf2c95698ce1f"
+    },
+    {
+      "id": "971634900997517312",
+      "createdAt": "2018-03-08T06:33:07.000Z",
+      "textSha256": "02ad0f4f8952ca8135de7139eb295559e3b9cebb0c357ee1ca6eb32419455977"
+    },
+    {
+      "id": "1114441629421588481",
+      "createdAt": "2019-04-06T08:16:04.000Z",
+      "textSha256": "a362da7d5698f5f2036052f071080b222be050a038c0210a094e93bb64c20871"
+    },
+    {
+      "id": "1062885447217500160",
+      "createdAt": "2018-11-15T01:50:12.000Z",
+      "textSha256": "262fc0e1c137d7a276f6956df048a4cb02eb51fe68d7dda5c091ca0a6a333f0a"
+    },
+    {
+      "id": "964746806516051970",
+      "createdAt": "2018-02-17T06:22:17.000Z",
+      "textSha256": "f4883c851a39ce53326ff67a9fd5ae2ec8659ed438f8c57be076e1c2c614472d"
+    },
+    {
+      "id": "1053464510000848896",
+      "createdAt": "2018-10-20T01:54:46.000Z",
+      "textSha256": "570effb694c20b5b668fb0e2be7d44a5630ed7f2eda9dd4146b5580aa51bfc9c"
+    },
+    {
+      "id": "1032076691626049536",
+      "createdAt": "2018-08-22T01:27:12.000Z",
+      "textSha256": "72008e4a5e54217a09eef9fc231d16b4e4c487335264c856366e3ae0d6477ba9"
+    },
+    {
+      "id": "1050614473625493504",
+      "createdAt": "2018-10-12T05:09:44.000Z",
+      "textSha256": "28f9126b925bb60e4ca03376bd0d37817b4041010611dc8c0e826a870a72307d"
+    },
+    {
+      "id": "1155788829929828352",
+      "createdAt": "2019-07-29T10:35:05.000Z",
+      "textSha256": "4ebeb821bc3ea3461e5276aaa70f0cbad63aea5a50897c51231baf0a9594338b"
+    },
+    {
+      "id": "1139429241991262208",
+      "createdAt": "2019-06-14T07:07:55.000Z",
+      "textSha256": "2d6aed72c7ae2075b0d92ec45373e59bd965cd660e813a29b43026a3a46b5bef"
+    },
+    {
+      "id": "1331107252430802945",
+      "createdAt": "2020-11-24T05:27:54.000Z",
+      "textSha256": "cab2029e883d9d5d045804057b8fc7333296f19eecdfb4897d2186500c6fca27"
+    },
+    {
+      "id": "1332927793181511680",
+      "createdAt": "2020-11-29T06:02:05.000Z",
+      "textSha256": "aa2a2e2e10969ab4aa60197f824f09c04210f314fc7defa2c79f629fdf2652fb"
+    },
+    {
+      "id": "1237273631593390080",
+      "createdAt": "2020-03-10T07:06:35.000Z",
+      "textSha256": "edd869f6dec9c9ceded8e0dcab658f8a01e930842ec0308bffc78c99dfa97002"
+    },
+    {
+      "id": "1226038030084919298",
+      "createdAt": "2020-02-08T07:00:19.000Z",
+      "textSha256": "c825d1f37e270655ac7ef993b51b253627399fc36ef3ce90d58b75ed73d77a02"
+    },
+    {
+      "id": "1318827810971025409",
+      "createdAt": "2020-10-21T08:13:47.000Z",
+      "textSha256": "295abebee86dfcba1f532b080f985142be1fbcc9ca4929b6f626203c7ca102fe"
+    },
+    {
+      "id": "1428644100870316032",
+      "createdAt": "2021-08-20T09:04:31.000Z",
+      "textSha256": "83a11d870f4841fcac5e9a688e9708390b0421c89ba1e3191c52f2f10a18c2f7"
+    },
+    {
+      "id": "1402801398064947204",
+      "createdAt": "2021-06-10T01:34:50.000Z",
+      "textSha256": "60708b94470a1c4ecd2840018b5b0d225dc55c4383c2a488d6b9101a11162dfd"
+    },
+    {
+      "id": "1451369798412038150",
+      "createdAt": "2021-10-22T02:08:19.000Z",
+      "textSha256": "1670e68607a932fe658fdb5c3259119e21e4579c0105bca3150526c420ce6528"
+    },
+    {
+      "id": "1550708018702348288",
+      "createdAt": "2022-07-23T05:02:57.000Z",
+      "textSha256": "377c2745695793c412927e2e58b70db67988d11d513db0f9b8f5d8fc6d7f87e0"
+    },
+    {
+      "id": "1544136586774081536",
+      "createdAt": "2022-07-05T01:50:25.000Z",
+      "textSha256": "f585edff042a4efca7c93705b09279e7f3ff1904090bde9cd258073c3faa8310"
+    },
+    {
+      "id": "1594255209160912896",
+      "createdAt": "2022-11-20T09:03:56.000Z",
+      "textSha256": "135f60b87d4e46b5afd0fbed20b36498028f57bcb1b0a2261418fb2ea6363b3b"
+    },
+    {
+      "id": "1487255026519375873",
+      "createdAt": "2022-01-29T02:43:24.000Z",
+      "textSha256": "dc143d4a2c88936822db9704aa1b43feec58ef7e45a82f0e3e998ce79ba4b26d"
+    },
+    {
+      "id": "1626783009012875265",
+      "createdAt": "2023-02-18T03:17:48.000Z",
+      "textSha256": "a010692244e23b60da3f7eb81f7840e3aa49f6ee0e791568df757f539bfdfd83"
+    },
+    {
+      "id": "1618810417043873794",
+      "createdAt": "2023-01-27T03:17:34.000Z",
+      "textSha256": "cc8b1a7d5343940792aa01613cf6f721327ccbd5d6f47f7201c625e25a8f3d6d"
+    },
+    {
+      "id": "1724372867876610070",
+      "createdAt": "2023-11-14T10:25:03.000Z",
+      "textSha256": "38922582915dc17c0f002898da151d90f7bc476a92c50406e91e7672fec024f5"
+    },
+    {
+      "id": "1760564223250419818",
+      "createdAt": "2024-02-22T07:16:35.000Z",
+      "textSha256": "27374f968ca688156bdc10b4d807fa9f4f027e470f6e40f1d5b5ebe06196d91c"
+    },
+    {
+      "id": "1816698544876577046",
+      "createdAt": "2024-07-26T04:54:20.000Z",
+      "textSha256": "01628d27b686c0057441f1851224b54ec8f195f1534865f9e741b20e595b7956"
+    },
+    {
+      "id": "1758076303151095901",
+      "createdAt": "2024-02-15T10:30:28.000Z",
+      "textSha256": "a8453b69902796a14f44932ff6892da30f5962ec6c761562f51ae793ddc50a51"
+    },
+    {
+      "id": "1873550685125664769",
+      "createdAt": "2024-12-30T02:04:26.000Z",
+      "textSha256": "dac07b921518b8f20bb29ad7a6bb9bd3b4ca4f744cccbbd46db2146f8ebec418"
+    }
+  ]
+}

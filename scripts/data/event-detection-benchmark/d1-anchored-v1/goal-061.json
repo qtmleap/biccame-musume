@@ -1,0 +1,170 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2063460100271173638",
+    "source": "public-post",
+    "description": "akasaka-acrylic-stand-end-2026",
+    "post": {
+      "id": "2063460100271173638",
+      "createdAt": "2026-06-07T03:16:39.000Z",
+      "screenName": "bicakasaka",
+      "kind": "quote",
+      "text": "🌹みっけたん情報🌹\n\n大変ありがたいことに\n先着で配布しておりましたアクリルスタンドは\n全て配布終了いたしました🌹\n\n13周年記念名刺は引き続き6/30まで配布中です✨\n2階に記念ブースもあるのでお祝いしに来てね～(*´˘`*)ﾉ\n\n#みっけたん\n#6月7日はみっけたんのバースデー",
+      "url": "https://x.com/bicakasaka/status/2063460100271173638",
+      "quoted": {
+        "id": "2058065625050931363",
+        "screenName": "bicakasaka",
+        "text": "🌹みっけたん情報🌹\n\n＼オープン13周年記念イベント開催／\n\n6月7日(日)～\n🌹13周年記念名刺を配布‼️\n🌹当日税込5,000円以上のお買い物で\n数量限定(先着70名様)アクリルスタンドプレゼント🎁\n\n※お並び状況により整理券等を配布する場合があります\n※無くなり次第終了です\n\nぜひご参加ください！！ https://t.co/96EGKj7omv"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "acsta",
+      "stores": null,
+      "characterIds": [
+        "akasaka"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アクスタ配布終了、13周年記念名刺は6/30まで継続と併記。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "akasaka-acrylic-stand-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アクリルスタンド",
+          "evidence": [
+            "先着で配布しておりましたアクリルスタンドは"
+          ]
+        }
+      ],
+      "groupingNote": "アクスタ配布終了、13周年記念名刺は6/30まで継続と併記。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 37064,
+      "postSha256": "d599abee8db0fa9cb82ea7a62a636fc4073619afc2c32c7ff61116c881c4f72f",
+      "textSha256": "4395718e17df098f6693ca874d94b5525fb24975bff21deec6b73cff4dacae57"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "e3f18685-c844-430e-b8b5-99322ecea4e0",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bicakasaka/status/2063460100271173638",
+          "origin": "manual-or-seed",
+          "title": "店舗誕生13周年記念アクスタ",
+          "category": "acsta",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-06-06T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "akasaka"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 70,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 5000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2071821031489327172",
+    "source": "public-post",
+    "description": "akasaka-acrylic-stand-end-2026 matched control",
+    "post": {
+      "id": "2071821031489327172",
+      "createdAt": "2026-06-30T05:00:01.000Z",
+      "screenName": "bicakasaka",
+      "kind": "original",
+      "text": "☆抽選販売のご案内☆\n\n7月17日(金)発売\nG-SHOCK. Pokémonコラボレーションモデル\nCASIO G-SHOCK『GA-110PKM-7AJR』\n\n受付時間：7月1日(水) 9：05～9：30\n受付場所：1F 店舗正面入口\n\n⚠️先着順ではありません\n📋抽選条件をよくお確かめのうえご来店ください\n（エントリーは1店舗かつ1回限りです） https://t.co/95Amr2FCTB",
+      "url": "https://x.com/bicakasaka/status/2071821031489327172",
+      "media": [
+        "https://pbs.twimg.com/media/HMCNSl8XoAAEkrk.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative",
+      "kind-mismatch-fallback"
+    ],
+    "group": "control-2071821031489327172",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 29755,
+      "postSha256": "086e5aee6b79886349746d20ad41bf9728b066c967c11c6a30d13460ebe752ba",
+      "textSha256": "89bcda1e920c8d048a9597af60089491491d6294ebc7c06e5003adbf47413931"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-2005911742480539823",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2005911742480539823",
+      "createdAt": "2025-12-30T08:00:02.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "気まぐれ配信!\n販売員たんのコレ撮ってきました📷\n\n今回は京都の街並みを一望できるスポットにいってきました‼️\n\nSONY α7cⅡ\nSONY FE 50mm F1.2 GM\n\n単焦点レンズならではの高解像とぼけが楽しめちゃいます❣️\n\n当店カメラコーナーでは同じ構成でお試しいただけます🥰 https://t.co/SnN3Xl2MwB",
+      "url": "https://x.com/bicpkanhonten/status/2005911742480539823",
+      "media": [
+        "https://pbs.twimg.com/media/G9ZaYCibQAAFEx4.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「気まぐれ配信! / 販売員たんのコレ撮ってきました📷 / 今回は京都の街並みを一望できるスポットにいってきました‼️」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pkan-sony-camera-kyoto-sample-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 84187,
+      "postSha256": "6e43ce1c4614f6aa76f124f0dbee93320fe015c372fb7883eed02d4849a27e61",
+      "textSha256": "f4b5e91c7bb9add021aaabbe58f36feb4aa9ef8b9189828102d6e74263357a78"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-2017505689879646313",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2017505689879646313",
+      "createdAt": "2026-01-31T07:50:14.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "毎日の #電気代 が気になる...\nなら、電気を自給自足しませんか!?∑m9⊙ω⊙2)\n\n💡電気代削減大相談会開催中 💡\n\n本日明日の２日間、川崎店4Fリフォームコーナーで専門スタッフによる相談会を実施中！\nさらに日用品などが当たる抽選会も開催！ぜひお立ち寄りください\n#太陽光 #リフォーム #ビックカメラ https://t.co/X2d5vXWkmB",
+      "url": "https://x.com/Bic_kawasaki/status/2017505689879646313",
+      "media": [
+        "https://pbs.twimg.com/media/G_-epvvawAAV12c.jpg",
+        "https://pbs.twimg.com/media/G_-etuebEAMuESi.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「毎日の #電気代 が気になる... / なら、電気を自給自足しませんか!?∑m9⊙ω⊙2) / 💡電気代削減大相談会開催中 💡」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "solar-electricity-consultation-lottery-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 76039,
+      "postSha256": "188260725011427e56d0a6748fb11119736bc2df23d3f1eb94ca10860501e4e3",
+      "textSha256": "f8bea3095267d8e66759d09a636da75dbf492cd42b20798089b3a0ed4fc8c509"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

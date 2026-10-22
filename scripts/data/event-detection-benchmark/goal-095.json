@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1487971602012962816",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1487971602012962816",
+      "createdAt": "2022-01-31T02:10:49.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "大宮たんちにも入荷しました〜ヾ(お･ω･)ﾉ\n「スーパーサウンド呼び込み君ミニ」\n\n2Fおもちゃコーナーで販売中♪ https://t.co/rDx76qBp28",
+      "url": "https://x.com/bic_ohmiya/status/1487971602012962816",
+      "media": [
+        "https://pbs.twimg.com/media/FKZWGAXaAAAm94x.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「大宮たんちにも入荷しました〜ヾ(お･ω･)ﾉ / 「スーパーサウンド呼び込み君ミニ」 / 2Fおもちゃコーナーで販売中♪ https://t.co/rDx76qBp28」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "yobikomikun-mini-arrival-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 489530,
+      "postSha256": "9642407cfcada7b39d26b4e30523ef417c2ea3e4ccd70a2334dfcbcfa79a983f",
+      "textSha256": "1d61a2ca0d6e3a9921622f1e30a999cf5e3e43e6fa6e114fcd92e1185d37c4f1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1487984618540191744",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1487984618540191744",
+      "createdAt": "2022-01-31T03:02:33.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "🐶お買い得キャンペーン🐶\n\n＃surface　が数量限定でお買い得価格に✨\nsurfacePro7＋キーボード付きセット‼\nお見逃しなくハチっ(; ･`д･´)\n\nB館4階　パソコンコーナーにて🐾 https://t.co/T9x3xEjYVp",
+      "url": "https://x.com/bicshibuhachi00/status/1487984618540191744",
+      "media": [
+        "https://pbs.twimg.com/media/FKZiEe1VIAQJn1a.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「🐶お買い得キャンペーン🐶 / ＃surface　が数量限定でお買い得価格に✨ / surfacePro7＋キーボード付きセット‼」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "surface-pro7-keyboard-sale-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 489506,
+      "postSha256": "659bfa62b6a8124b6bb96596a590726b5a4b85bd54da9043b2448b59c9a63cda",
+      "textSha256": "46f5633e8a64aeaf95ccf715e2824bac9b1ac1b950f8c38756c6e22ea570f794"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

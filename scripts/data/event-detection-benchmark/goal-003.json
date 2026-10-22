@@ -1,0 +1,135 @@
+[
+  {
+    "id": "goal-positive-924118392369328128",
+    "source": "public-post",
+    "description": "kashiwa halloween photo 2017",
+    "post": {
+      "id": "924118392369328128",
+      "createdAt": "2017-10-28T03:39:28.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【２階店頭】\n★今回のｲﾍﾞﾝﾄは土日二日間限定★\n\n🎃小学生以下対象 射的🎃\n👻チェキ無料撮影会👻\n\n※参加条件は店頭POPか販売員さんに聞いてね🤗\n\n柏たんはチェキ無料撮影会のところにいるので\n一緒に写真撮ってくれたらうれしいなっ😉\n\n😊🎃👻ハッピーハロウィーン😊🎃👻 https://t.co/nrN5emSJZL",
+      "url": "https://x.com/bic_kashiwa/status/924118392369328128",
+      "media": [
+        "https://pbs.twimg.com/media/DNMgD2VU8AEKRSB.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": "2017-10-28"
+    },
+    "rationale": "柏たんが撮影会の場所にいると明示。射的だけを娘イベントと数えない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-halloween-photo-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "チェキ写真",
+          "evidence": [
+            "👻チェキ無料撮影会👻",
+            "柏たんはチェキ無料撮影会のところにいるので",
+            "一緒に写真撮ってくれたらうれしいなっ😉"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 911038,
+      "postSha256": "6c811638586ed71482e29960a91c8b50b0f3e636ecaa7bafbb69c1cb1cfc543b",
+      "textSha256": "ac0e2f92d9cbd5633f170e24b7017432c251e676f5a8c1bdb7aad9079440675a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-916233816175370240",
+    "source": "public-post",
+    "description": "sagami halloween maze 2017",
+    "post": {
+      "id": "916233816175370240",
+      "createdAt": "2017-10-06T09:28:59.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "10/7～10/31まで\nおもちゃコーナーにてちょっとしたハロウィンゲームをします(●´ω`●)\nおもちゃコーナーにこの紙があるので〇の中に入る文字を埋めてレジまで持ってきてね♪\nお菓子とハロウィンバージョンのさがみたんの名刺をお渡しします♡\nみなさんのご参加お待ちしてます♡ https://t.co/ehTQDqGRbE",
+      "url": "https://x.com/bic_sagamioono/status/916233816175370240",
+      "media": [
+        "https://pbs.twimg.com/media/DLcdtuFU8AAjIyB.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sagami"
+      ],
+      "characterIds": [
+        "sagami"
+      ],
+      "startDate": "2017-10-07"
+    },
+    "rationale": "紙の穴埋め回答を持参してお菓子と名刺を受け取る。未対応キーワード条件。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "sagami-halloween-maze-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "お菓子",
+          "evidence": [
+            "お菓子とハロウィンバージョンのさがみたんの名刺をお渡しします♡"
+          ]
+        },
+        {
+          "item": "ハロウィン名刺",
+          "evidence": [
+            "お菓子とハロウィンバージョンのさがみたんの名刺をお渡しします♡"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 915672,
+      "postSha256": "e70a5f557bd85c0692fc5642419795e4d426c9f772a3fec2e9a201e855fee3f2",
+      "textSha256": "a013ecaf0f3898d5985a03102bfce1e6ae44228e3720f749d6d4d3d08bcf7775"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

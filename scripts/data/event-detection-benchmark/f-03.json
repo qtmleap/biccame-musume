@@ -1,0 +1,153 @@
+[
+  {
+    "id": "public-f-825539432241467392",
+    "source": "public-post",
+    "description": "SONYフェア購入景品と近況",
+    "post": {
+      "id": "825539432241467392",
+      "createdAt": "2017-01-29T03:01:53.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "SONYフェア開催中！\n（お寿司食べたい…）\n4Kテレビやブルーレイレコーダーなどの対象商品ご購入で\n（お寿司食べたい…）\n素敵な景品をプレゼント♪\n（お寿司食べたい…）\n3Fテレビコーナーの他に、\n1Fカメラコーナーでも開催しています🍣\n（お寿司食べたい…） https://t.co/g5dgrW1eTV",
+      "url": "https://x.com/bic_sapporo/status/825539432241467392",
+      "media": [
+        "https://pbs.twimg.com/media/C3TnUJ_UMAEeqgj.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "テレビ等購入の一般景品と寿司を食べたいという独り言で、娘の物品・出演企画はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "fair",
+      "purchase-benefit",
+      "character-voice"
+    ],
+    "group": "sapporo-sony-fair-january-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-901627179141701634",
+    "source": "public-post",
+    "description": "日立フェアのポケモングッズ抽選",
+    "post": {
+      "id": "901627179141701634",
+      "createdAt": "2017-08-27T02:07:25.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "本日最終日‼️\n日立わくわくフェア開催中🌟\n抽選でポケモングッズなど素敵な景品プレゼント🎁\n是非4F家電コーナーをご利用下さいo(^▽^)o https://t.co/XUehiLNTXR",
+      "url": "https://x.com/bic_sapporo/status/901627179141701634",
+      "media": [
+        "https://pbs.twimg.com/media/DIM5Fo-UMAA9vs2.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "日立家電の販促と別IPポケモン景品の抽選。ビッカメ娘の催しではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "fair",
+      "lottery"
+    ],
+    "group": "sapporo-hitachi-fair-august-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-867692212708036608",
+    "source": "public-post",
+    "description": "携帯契約のUCギフトカード特典",
+    "post": {
+      "id": "867692212708036608",
+      "createdAt": "2017-05-25T10:41:59.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "【CM】\nビックカメラなんば店では、ドコモの2017年夏モデルをご予約・ご契約で、UCギフトカード1000円分プレゼントキャンペーン中！☺️👍\n1階携帯コーナーへお越し下さい～！6月30日まで！✨",
+      "url": "https://x.com/biccamera_nanba/status/867692212708036608",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "携帯電話の予約・契約による汎用UCギフトカード特典で、娘の記念デザインカードではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "gift-card",
+      "contract-benefit",
+      "ordinary-product"
+    ],
+    "group": "nanba-docomo-uc-giftcard-summer-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-896255905561329664",
+    "source": "public-post",
+    "description": "初音ミク10周年のイラスト参加企画",
+    "post": {
+      "id": "896255905561329664",
+      "createdAt": "2017-08-12T06:23:54.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "今年は #初音ミク 誕生10周年。\n自分史上最高のミクを描いて、この特別な記念日のお祝いに参加しよう！\n「DANCING MIKU MAKER」にアップすると、あなたのミクが踊りだす！\n\nMIKU DANCING FES.\nhttps://t.co/uEiPn2U85N",
+      "url": "https://x.com/biccameramito/status/896255905561329664",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "誕生10周年の対象は別IP初音ミク。ビッカメ娘の周年・コラボではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "anniversary",
+      "participation"
+    ],
+    "group": "miku-tenth-dancing-fes-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-938950565425397760",
+    "source": "public-post",
+    "description": "ゲーム同時購入のカレンダー特典",
+    "post": {
+      "id": "938950565425397760",
+      "createdAt": "2017-12-08T01:57:14.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "12月8日、本日より\n任天堂switch専用ソフトを2本以上同時購入で\nオリジナルA1カレンダープレゼント！！(⋈ ☌∀☌)/\n※プレゼントはなくなり次第終了\n\n5Fゲーム\n#本店たん店内散歩\n#NintendoSwitch \n#マリオ　#どうぶつの森 https://t.co/IiQ8gi8sVL",
+      "url": "https://x.com/bicikebukuro/status/938950565425397760",
+      "media": [
+        "https://pbs.twimg.com/media/DQfSRB9UMAAtCgB.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "対象はNintendo Switchソフト同時購入で貰える一般カレンダー。娘カレンダーという記載はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "purchase-benefit",
+      "calendar-word",
+      "giveaway"
+    ],
+    "group": "switch-games-calendar-benefit-december-2017",
+    "reviewStatus": "provisional"
+  }
+]

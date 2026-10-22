@@ -1,0 +1,161 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1881175567544013105",
+    "source": "public-post",
+    "description": "takatsuki-valentine-card-2025",
+    "post": {
+      "id": "1881175567544013105",
+      "createdAt": "2025-01-20T03:03:00.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "۶(* ´∀｀)📢\\　告　知　/\n\n🍫バレンタインイベント名刺🍫\n\n【配布期間】2/1㈯～2/28㈮\n　の期間で配布します✨\n\n ご来店お待ちしています！\n#たかつきたんイベント名刺 #たかつきたん名刺台 https://t.co/oDDwVa6Fup",
+      "url": "https://x.com/bic_takatsuki/status/1881175567544013105",
+      "media": [
+        "https://pbs.twimg.com/media/Ghs7GO5aUAACWrI.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "takatsuki"
+      ],
+      "startDate": "2025-02-01",
+      "conditions": null
+    },
+    "rationale": "2/1〜2/28のイベント名刺配布。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:seasonal-valentine-card"
+    ],
+    "group": "takatsuki-valentine-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "バレンタインイベント名刺",
+          "evidence": [
+            "🍫バレンタインイベント名刺🍫",
+            "#たかつきたんイベント名刺 #たかつきたん名刺台 https://t.co/oDDwVa6Fup"
+          ]
+        }
+      ],
+      "groupingNote": "2/1〜2/28のイベント名刺配布。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 177046,
+      "postSha256": "ab2ebc812e2cc371d1eb2d405b659850fb178946db502371a02cb7bc7e572687",
+      "textSha256": "4fa7bf84785db680276e0a1db7690edcb60cf4aa941779a1f115f95870fdce67"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "54104eea-a562-49d4-875b-6e89137c6d0e",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_takatsuki/status/1881175567544013105",
+          "origin": "manual-or-seed",
+          "title": "バレンタインイベント名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-01-31T15:00:00.000+00:00",
+            "endDate": "2025-02-27T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "takatsuki"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1883405258631594235",
+    "source": "public-post",
+    "description": "takatsuki-valentine-card-2025 matched control",
+    "post": {
+      "id": "1883405258631594235",
+      "createdAt": "2025-01-26T06:43:00.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "۶( ´∀｀o )))Σ≡ｑ┌|∵|┘\n\n🌸春の新生活応援セール🌸\n\nプロも認める、最軽量ドライヤー✨\nサロン帰りのシルキータッチな髪へ✨\n日本限定カラー🌸\n\nhttps://t.co/SiFyNj8yVR https://t.co/l1OIvS53fR",
+      "url": "https://x.com/bic_takatsuki/status/1883405258631594235",
+      "media": [
+        "https://pbs.twimg.com/media/GiL04hwbUAArL3w.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1883405258631594235",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 175033,
+      "postSha256": "105cdfacc59a25c74e9c1e05c513c397059ebb9556710a30d8950ce203262313",
+      "textSha256": "46c46a14598f1da6a36e7759c9724840fed8b5c2d0619c012823e9d6da735d76"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

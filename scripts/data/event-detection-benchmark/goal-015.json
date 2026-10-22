@@ -1,0 +1,125 @@
+[
+  {
+    "id": "goal-positive-1012319233298989056",
+    "source": "public-post",
+    "description": "mito birthday air lottery 2018",
+    "post": {
+      "id": "1012319233298989056",
+      "createdAt": "2018-06-28T12:58:07.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "(*´-`)そろそろラストスパート！\n水戸駅店に行けない想いや、行ったつもりになれるおもしろツイートをお待ちしております。お１人様何回でも投稿可能です。ツイートしてくれたユーザーの中から抽選で2名様にアクリルフィギュアをプレゼント！\n#水戸たん生誕祭2018エア参加組\n6月30日（土）23：59まで https://t.co/G8YvkxQwLc",
+      "url": "https://x.com/biccameramito/status/1012319233298989056",
+      "media": [
+        "https://pbs.twimg.com/media/Dgx6-FWVQAMuj4C.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "other"
+    },
+    "rationale": "店に行けない人の投稿応募企画の締切。店頭購入と別企画。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "end"
+    ],
+    "group": "mito-birthday-air-lottery-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アクリルフィギュア",
+          "evidence": [
+            "水戸駅店に行けない想いや、行ったつもりになれるおもしろツイートをお待ちしております。お１人様何回でも投稿可能です。ツイートしてくれたユーザーの中から抽選で2名様にアクリルフィギュアをプレゼント！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 844747,
+      "postSha256": "292a97c9e0359621d80b5ae75599f3e37b1b4c0c6e310ea6799f77f1eb5851ba",
+      "textSha256": "8d36e6271fe7e97fc2148c82ffc783d2a0872f3e903081c9fd8a173ca81cd114"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1008878880206118912",
+    "source": "public-post",
+    "description": "honten june limited card 2018",
+    "post": {
+      "id": "1008878880206118912",
+      "createdAt": "2018-06-19T01:07:23.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "おはやっぽー！(⋈ ☌◒☌)/ \n\n今日から6月30日までの期間限定で\n本店たん名刺を配るよー！\n\n配布場所は二箇所！\n➡︎一階本店たんパネル手元\n➡︎地下一階階段横の池袋姉妹展開ブース\n\nそれでは今日も一日よろしくでっす！ https://t.co/Czjwt3a1Ag",
+      "url": "https://x.com/bicikebukuro/status/1008878880206118912",
+      "media": [
+        "https://pbs.twimg.com/media/DgBB_LPUcAA_L4T.jpg",
+        "https://pbs.twimg.com/media/DgBB_LOVAAAX8fT.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "honten"
+      ],
+      "characterIds": [
+        "honten"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "本日から6/30まで。1階と地下1階は同じ店舗の二会場。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "honten-june-limited-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "本店たん期間限定名刺",
+          "evidence": [
+            "本店たん名刺を配るよー！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 847662,
+      "postSha256": "89fbb182954a2f1e15f0a6b48df6a139b0d57d3cc8c46cd1af87938600219d40",
+      "textSha256": "1e568e191b0ab371938a00b8cead3bdbe77fdf3d16c649a74898a358ffccfd23"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

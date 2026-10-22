@@ -1,0 +1,183 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2059220677828485624",
+    "source": "public-post",
+    "description": "nanba-anniv11-card-status-2026",
+    "post": {
+      "id": "2059220677828485624",
+      "createdAt": "2026-05-26T10:30:42.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼予告／\nビッカメ娘11周年を記念して名刺を配布するで🥳\n1⃣なんばたんの11周年名刺\n期間：5月1日～2027年3月31日まで（※ 配布中です）\n\n2⃣京都たんの11周年名刺\n期間：6月1日～6月30日まで（※ 準備中です🙇）\n\n3⃣缶バッジイベントは6月6日からスタートです🙇 https://t.co/OsREiunkd2",
+      "url": "https://x.com/biccamera_nanba/status/2059220677828485624",
+      "media": [
+        "https://pbs.twimg.com/media/HJPSNjgakAA0sn2.jpg",
+        "https://pbs.twimg.com/media/HJPSQf_bMAAIMYs.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "nanba",
+        "kyoto"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "配布中・準備中・開始日の状況をまとめた案内。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "boundary:action",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:anniv11-card"
+    ],
+    "group": "nanba-anniv11-card-status-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "なんばたんの11周年名刺",
+          "evidence": [
+            "ビッカメ娘11周年を記念して名刺を配布するで🥳",
+            "1⃣なんばたんの11周年名刺",
+            "2⃣京都たんの11周年名刺"
+          ]
+        },
+        {
+          "item": "京都たんの11周年名刺",
+          "evidence": [
+            "ビッカメ娘11周年を記念して名刺を配布するで🥳",
+            "1⃣なんばたんの11周年名刺",
+            "2⃣京都たんの11周年名刺"
+          ]
+        },
+        {
+          "item": "缶バッジイベント",
+          "evidence": [
+            "3⃣缶バッジイベントは6月6日からスタートです🙇 https://t.co/OsREiunkd2"
+          ]
+        }
+      ],
+      "groupingNote": "配布中・準備中・開始日の状況をまとめた案内。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 40889,
+      "postSha256": "49f5fd8e6564c3ac320821f0f5f785903eefdc7a705b82d84989b7611fdb5a55",
+      "textSha256": "f984b1fa81950029401498f6b9cfc57b2fed5b1453a5d9c3247d9db3a5d9064f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "aaef6745-ced2-4ae9-936b-a3201b3f9348",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/biccamera_nanba/status/2059220677828485624",
+          "origin": "manual-or-seed",
+          "title": "ビッカメ娘11周年記念名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-05-31T15:00:00.000+00:00",
+            "endDate": "2026-06-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "nanba"
+            ],
+            "characters": [
+              "kyoto"
+            ],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2057421806328570221",
+    "source": "public-post",
+    "description": "nanba-anniv11-card-status-2026 matched control",
+    "post": {
+      "id": "2057421806328570221",
+      "createdAt": "2026-05-21T11:22:38.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼取り扱いはじめました🤖／\n毎日のコーディネートにとけこむ、\nプレゼントにもちょうどいい、身につけて楽しい\nキーホルダー型コンパニオンロボット\n✨Eiliko（エイリコ）✨\n\n豊かな感情アニメーションであなたの喜怒哀楽をそっと代弁してくれます\n1階 総合カウンター前でお試しください https://t.co/cttMmXPLWP",
+      "url": "https://x.com/biccamera_nanba/status/2057421806328570221",
+      "media": [
+        "https://pbs.twimg.com/media/HI1rcY2aMAAnsPa.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2057421806328570221",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 42402,
+      "postSha256": "89a9b258aaaa10c67d38d31fdc019b8eaa714dd26cce4f7e46b83fc82649a4c3",
+      "textSha256": "8c5b8cb0023881a4cff13fbf9cfaaa2907f24e3329aedb5aec656b63965032b0"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

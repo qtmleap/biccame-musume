@@ -1,0 +1,158 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2076553083275112618",
+    "source": "public-post",
+    "description": "puchi-train-trip-card-yokonishi-2026",
+    "post": {
+      "id": "2076553083275112618",
+      "createdAt": "2026-07-13T06:23:30.000Z",
+      "screenName": "bicyokonishi",
+      "kind": "original",
+      "text": "＼\\🚃開催予告❗️/／ \n\n7月26日(日)〜8月31日(月)\n上野東京・京浜東北線沿線娘の名刺コラボイベントを開催✨\n皆さまのご来店をお待ちしてます🚃✨\n#ビッカメ娘 #横西たん\n#ビッ旅プチトレイントリップ https://t.co/eeyDwa0SsH",
+      "url": "https://x.com/bicyokonishi/status/2076553083275112618",
+      "media": [
+        "https://pbs.twimg.com/media/HNFmBL-bAAAfHkk.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "yokonishi"
+      ],
+      "startDate": "2026-07-26",
+      "conditions": null
+    },
+    "rationale": "7/26〜8/31の開催予告。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:puchi-train-trip-card"
+    ],
+    "group": "puchi-train-trip-card-yokonishi-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "名刺コラボイベント",
+          "evidence": [
+            "上野東京・京浜東北線沿線娘の名刺コラボイベントを開催✨"
+          ]
+        }
+      ],
+      "groupingNote": "7/26〜8/31の開催予告。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 25386,
+      "postSha256": "658d7f452669cd22816696aac70f3561eb85b8bb4cfa2f867b592981530c77b0",
+      "textSha256": "0fc08f0668fd573da4cdd42fefabc40c8fce6a928558f7392e474c49f2694f21"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "e73a9818-072d-4631-a9c0-0f75fa5d7179",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicyokonishi/status/2076553083275112618",
+          "origin": "manual-or-seed",
+          "title": "ビッ旅プチトレイントリップ",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-25T15:00:00.000+00:00",
+            "endDate": "2026-08-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yokonishi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2080887601427587258",
+    "source": "public-post",
+    "description": "puchi-train-trip-card-yokonishi-2026 matched control",
+    "post": {
+      "id": "2080887601427587258",
+      "createdAt": "2026-07-25T05:27:19.000Z",
+      "screenName": "bicyokonishi",
+      "kind": "original",
+      "text": "(๑˃̵ᴗ˂̵)＜ひるよこにし～✨🎤\n 今日は湿気・気温・日差しマシマシです☀️\n\n午後からの雷予報を見て「今しかない！」と午前中だけ布団を干したのですが、取り込んだら想像以上にほわっほわ✨ 太陽のパワーに驚かされました😆\n\n でわでわっ、本日もよろしくです～～✨🎵",
+      "url": "https://x.com/bicyokonishi/status/2080887601427587258",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2080887601427587258",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 21600,
+      "postSha256": "37496db4179ec05294347bacfa82e9d43df8b6550058970cddef9d51cd211417",
+      "textSha256": "2e06102f9d81d45054f6da74734e899c057d34521080661f81915948b94a0f67"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

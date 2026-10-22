@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-967617770350198784",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "967617770350198784",
+      "createdAt": "2018-02-25T04:30:28.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【4階 オーディオｺｰﾅｰ】\nSONY 試聴会\n\n＿人人 人人人＿\n＞ 本日最終日 ＜\n￣Y^Y^Y^Y^Y￣\n\n#プレミアムフライデー https://t.co/LPBra9DBKG",
+      "url": "https://x.com/bic_kashiwa/status/967617770350198784",
+      "media": [
+        "https://pbs.twimg.com/media/DW2rDPyV4AA0WGb.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【4階 オーディオｺｰﾅｰ】 / SONY 試聴会 / ＿人人 人人人＿」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "sony-audio-listening-event-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 880317,
+      "postSha256": "7880c84f718e689543f15230cc4b7e272865f0b559d036f6b127c1841c85d0b9",
+      "textSha256": "d6f93fdc38d6f7b68b4f3514026e9e834c671f2bf8af2b87c86f3e22855832ac"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-968790449736400896",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "968790449736400896",
+      "createdAt": "2018-02-28T10:10:17.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "横から軽く手を添えて使う新設計！！自然な角度で握ることができるので手首への負担を軽減！！\n\n『ワイヤレスブルーLEDエルゴマウス(MA-ERGW13)』\n\nhttps://t.co/PaoRXmioGC\n\nはじめてみるマウスらぞΣ(,,oΔo,,*)ｽｺﾞｲ https://t.co/eJL8HeYobc",
+      "url": "https://x.com/Bic_kawasaki/status/968790449736400896",
+      "media": [
+        "https://pbs.twimg.com/media/DXHU65uUMAAXZ5E.jpg",
+        "https://pbs.twimg.com/media/DXHVCr9VAAAmIjC.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「横から軽く手を添えて使う新設計！！自然な角度で握ることができるので手首への負担を軽減！！ / 『ワイヤレスブルーLEDエルゴマウス(MA-ERGW13)』 / はじめてみるマウスらぞΣ(,,oΔo,,*)ｽｺﾞｲ https://t.co/」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "sanwa-ergonomic-mouse-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 879580,
+      "postSha256": "bbc65defaa3ee5431019718d689de15768d9f604439ec8357f9ba31b2e5db6a7",
+      "textSha256": "67705f370f3bd7b37e074961d03766cd19e30637ec2b5a61e36ba2a3a0132c80"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

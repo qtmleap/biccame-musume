@@ -1,0 +1,212 @@
+{
+  "answers": {
+    "character.abeno": {
+      "type": "noul",
+      "noul": 0.0232
+    },
+    "character.akasaka": {
+      "type": "noul",
+      "noul": 0.0395
+    },
+    "character.akiba": {
+      "type": "noul",
+      "noul": 0.076
+    },
+    "character.bicqlo": {
+      "type": "noul",
+      "noul": 0.1099
+    },
+    "character.camera": {
+      "type": "noul",
+      "noul": 0.1169
+    },
+    "character.chiba": {
+      "type": "noul",
+      "noul": 0.0493
+    },
+    "character.chofu": {
+      "type": "noul",
+      "noul": 0.0626
+    },
+    "character.fujisawa": {
+      "type": "noul",
+      "noul": 0.0486
+    },
+    "character.funabashi": {
+      "type": "noul",
+      "noul": 0.0425
+    },
+    "character.funato": {
+      "type": "noul",
+      "noul": 0.0235
+    },
+    "character.hachioji": {
+      "type": "noul",
+      "noul": 0.0268
+    },
+    "character.hamamatsu": {
+      "type": "noul",
+      "noul": 0.0374
+    },
+    "character.hiroshima": {
+      "type": "noul",
+      "noul": 0.0261
+    },
+    "character.honten": {
+      "type": "noul",
+      "noul": 0.035
+    },
+    "character.ikenishi": {
+      "type": "noul",
+      "noul": 0.0526
+    },
+    "character.itt": {
+      "type": "noul",
+      "noul": 0.0385
+    },
+    "character.kagoshima": {
+      "type": "noul",
+      "noul": 0.0238
+    },
+    "character.kashiwa": {
+      "type": "noul",
+      "noul": 0.0647
+    },
+    "character.kawasaki": {
+      "type": "noul",
+      "noul": 0.9897
+    },
+    "character.kumamoto": {
+      "type": "noul",
+      "noul": 0.1867
+    },
+    "character.kyoto": {
+      "type": "noul",
+      "noul": 0.0496
+    },
+    "character.machida": {
+      "type": "noul",
+      "noul": 0.0853
+    },
+    "character.mito": {
+      "type": "noul",
+      "noul": 0.1066
+    },
+    "character.nagoya": {
+      "type": "noul",
+      "noul": 0.087
+    },
+    "character.nagoyagate": {
+      "type": "noul",
+      "noul": 0.4706
+    },
+    "character.nanba": {
+      "type": "noul",
+      "noul": 0.0389
+    },
+    "character.niigata": {
+      "type": "noul",
+      "noul": 0.0299
+    },
+    "character.ohmiya": {
+      "type": "noul",
+      "noul": 0.0504
+    },
+    "character.okayama": {
+      "type": "noul",
+      "noul": 0.0374
+    },
+    "character.photo": {
+      "type": "noul",
+      "noul": 0.0283
+    },
+    "character.pkan": {
+      "type": "noul",
+      "noul": 0.0636
+    },
+    "character.prosta": {
+      "type": "noul",
+      "noul": 0.0433
+    },
+    "character.sagami": {
+      "type": "noul",
+      "noul": 0.1567
+    },
+    "character.sapporo": {
+      "type": "noul",
+      "noul": 0.041
+    },
+    "character.seiseki": {
+      "type": "noul",
+      "noul": 0.28
+    },
+    "character.shibuhachi": {
+      "type": "noul",
+      "noul": 0.1655
+    },
+    "character.shibuto": {
+      "type": "noul",
+      "noul": 0.2316
+    },
+    "character.shinjyuku": {
+      "type": "noul",
+      "noul": 0.0346
+    },
+    "character.shintou": {
+      "type": "noul",
+      "noul": 0.22
+    },
+    "character.shinyoko": {
+      "type": "noul",
+      "noul": 0.1263
+    },
+    "character.tachikawa": {
+      "type": "noul",
+      "noul": 0.0473
+    },
+    "character.takasaki": {
+      "type": "noul",
+      "noul": 0.3752
+    },
+    "character.takatsuki": {
+      "type": "noul",
+      "noul": 0.0672
+    },
+    "character.tamapla": {
+      "type": "noul",
+      "noul": 0.1711
+    },
+    "character.tenjin": {
+      "type": "noul",
+      "noul": 0.1502
+    },
+    "character.tenjin2": {
+      "type": "noul",
+      "noul": 0.0294
+    },
+    "character.tokorozawa": {
+      "type": "noul",
+      "noul": 0.2379
+    },
+    "character.urawa": {
+      "type": "noul",
+      "noul": 0.1179
+    },
+    "character.yao": {
+      "type": "noul",
+      "noul": 0.1007
+    },
+    "character.yokonishi": {
+      "type": "noul",
+      "noul": 0.2064
+    },
+    "character.yuurakuchou": {
+      "type": "noul",
+      "noul": 0.0453
+    }
+  },
+  "usage": {
+    "input_tokens": 8595,
+    "output_tokens": 0
+  }
+}

@@ -1,0 +1,108 @@
+[
+  {
+    "id": "goal-negative-935460851619848192",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "935460851619848192",
+      "createdAt": "2017-11-28T10:50:21.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "パナソニック製ハンガー型脱臭機「MS-DH100」で簡単衣類ケア！(╹▽╹)✨ナノイーX搭載のハンガーにかけて汗臭リセット！更に付属の衣類カバーで煙草臭、焼肉臭、花粉までリセットできちゃうぞ(∩´∀`∩)ご家庭でなかなか洗濯できないスーツにおすすめです！5階で取り扱い中！https://t.co/jHc9pNeyOO https://t.co/xZXpJ0AZyo",
+      "url": "https://x.com/biccamera_nanba/status/935460851619848192",
+      "media": [
+        "https://pbs.twimg.com/media/DPtr_yhUMAAcNmc.jpg",
+        "https://pbs.twimg.com/media/DPtsBO_UQAAow7E.jpg",
+        "https://pbs.twimg.com/media/DPtsB8jVQAAZA6w.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「パナソニック製ハンガー型脱臭機「MS-DH100」で簡単衣類ケア！(╹▽╹)✨ナノイーX搭載のハンガーにかけて汗臭リセット！更に付属の衣類カバーで煙草臭、焼肉臭、花粉までリセットできちゃうぞ(∩´∀`∩)ご家庭でなかなか洗濯できないスーツに」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "panasonic-hanger-deodorizer-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 903932,
+      "postSha256": "23b1b4a36aa4055a2636104d3294208c4fc8fcc1555e19ebd6239d48d4ab09d0",
+      "textSha256": "a1532b0b95abbccb3e352a44443b44ce1fa10d5fe94d2a16170fdf5c3a247c00"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-947434531547574272",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "947434531547574272",
+      "createdAt": "2017-12-31T11:49:29.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "§( *'▽')ノ📹\n【営業時間のご案内】\n\n明日2018年1月1日は、\nビックカメラ京王調布店は、朝10時より開店いたします。\nまた、夜は8時閉店となります。 https://t.co/Yxveuupht1",
+      "url": "https://x.com/bic_keiochofu/status/947434531547574272",
+      "media": [
+        "https://pbs.twimg.com/media/DSX2T_mU8AA_kkh.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「§( *'▽')ノ📹 / 【営業時間のご案内】 / 明日2018年1月1日は、」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "chofu-newyear-opening-hours-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 895221,
+      "postSha256": "0dd8838ad5b6a89b836d622f8e337eb83263d190e50198d0585b22eb1b64cf73",
+      "textSha256": "e3a44f2bd6a1b5281da8329339557a1e854e3f8f3c7af2c15f3d07f632794abe"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

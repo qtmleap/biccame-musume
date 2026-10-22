@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expanded-v2-positive-757103602720657408",
+    "source": "public-post",
+    "description": "biccame-summer-fan-book-2016",
+    "post": {
+      "id": "757103602720657408",
+      "createdAt": "2016-07-24T06:42:19.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "7月30日(土)～31日(日)柏まつりにあわせて柏店店頭でイベントを開催します☆\n・夏祭り縁日（タカラトミー様、TKK各社協賛）\n　⇒水風船なげ（予定）、射的（予定）\n・ビックカメラのうちわ娘（柏たんver）配布\n・ビックカメラの薄い本「たびっく vol.2」配布\n＃ビッカメ娘",
+      "url": "https://x.com/bic_kashiwa/status/757103602720657408",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "柏まつりの娘うちわと冊子。2017年の別年度うちわ企画と区別。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "biccame-summer-fan-book-2016",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "うちわ娘（柏たんver）",
+          "evidence": [
+            "7月30日(土)～31日(日)",
+            "ビックカメラのうちわ娘（柏たんver）配布"
+          ]
+        },
+        {
+          "item": "たびっく vol.2",
+          "evidence": [
+            "7月30日(土)～31日(日)",
+            "ビックカメラの薄い本「たびっく vol.2」配布"
+          ]
+        }
+      ],
+      "groupingNote": "柏まつりの娘うちわと冊子。2017年の別年度うちわ企画と区別。",
+      "unannotatedFields": [
+        "category",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1034890,
+      "postSha256": "f035d22b5a5aa1309dbc49c6ccbddffc62109dc0d9853efc4931d30c5c79729d",
+      "textSha256": "ed3656fd11247b97ac24b49f1711570843812eae332ed8545aca9c8f93032b14"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-754120655126212608",
+    "source": "public-post",
+    "description": "biccame-summer-fan-book-2016 matched control",
+    "post": {
+      "id": "754120655126212608",
+      "createdAt": "2016-07-16T01:09:09.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "8月14日（日）まで！ドコモ契約特典キャンペーン!!\n期間内にNTTドコモ携帯電話ご購入のお客様（全店合計2,500個）に今話題の「ＶＲゴーグル」をプレゼント！※なくなり次第終了となります。 https://t.co/44fFxyDHBO",
+      "url": "https://x.com/bic_kashiwa/status/754120655126212608",
+      "media": [
+        "https://pbs.twimg.com/media/CncsqclUEAIXKzx.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-754120655126212608",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1036732,
+      "postSha256": "ae70467e9b94e7d9e67d870176497bd79925b9dd1925f5f4a96e34b3f208d9cd",
+      "textSha256": "df220799e1cc9c4830b523f71d8274063e7ac05bbe71f7cd0a1273c926b41fa5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

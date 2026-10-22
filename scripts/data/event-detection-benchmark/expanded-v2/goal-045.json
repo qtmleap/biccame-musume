@@ -1,0 +1,136 @@
+[
+  {
+    "id": "expanded-v2-positive-1227906860256124928",
+    "source": "public-post",
+    "description": "biccame-valentine-popup-chocolate-2020",
+    "post": {
+      "id": "1227906860256124928",
+      "createdAt": "2020-02-13T10:46:23.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "#ビックカメラのチョ娘2020 \n2月14日～16日限定です✨\n\nビックカメラ京王調布店にて2000円以上ご購入の当日レシート（合算可）のご提示頂くと『ビッカメ娘 バレンタインオリジナルPOPUPカード+ミニチョコ』をプレゼント！🍫\n「1F総合カウンター」にお越しください💕\n\n※なくなり次第終了。\n（つづく） https://t.co/Vf9pS5eLuN",
+      "url": "https://x.com/bic_keiochofu/status/1227906860256124928",
+      "media": [
+        "https://pbs.twimg.com/media/EQphoIFUcAIs5ex.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": [
+        "chofu"
+      ],
+      "characterIds": null,
+      "startDate": "2020-02-14",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 2000
+        }
+      ]
+    },
+    "rationale": "同日合算可2000円購入のセット。別年の菓子企画と区別。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "biccame-valentine-popup-chocolate-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "バレンタインオリジナルPOPUPカード+ミニチョコ",
+          "evidence": [
+            "#ビックカメラのチョ娘2020 ",
+            "2月14日～16日限定です✨",
+            "ビックカメラ京王調布店にて2000円以上ご購入の当日レシート（合算可）のご提示頂くと『ビッカメ娘 バレンタインオリジナルPOPUPカード+ミニチョコ』をプレゼント！🍫",
+            "「1F総合カウンター」にお越しください💕",
+            "※なくなり次第終了。",
+            "（つづく） https://t.co/Vf9pS5eLuN"
+          ]
+        }
+      ],
+      "groupingNote": "同日合算可2000円購入のセット。別年の菓子企画と区別。",
+      "unannotatedFields": [
+        "characterIds"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 669282,
+      "postSha256": "4c684ddd92ecfab172961c43bb13e782326ffc63397d21806294cd8ec8784918",
+      "textSha256": "b9bf720dfd4c0a88208666daa2f1f2d795c4339b17207d5cae1624bfe8e71379"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1228515904926806017",
+    "source": "public-post",
+    "description": "biccame-valentine-popup-chocolate-2020 matched control",
+    "post": {
+      "id": "1228515904926806017",
+      "createdAt": "2020-02-15T03:06:31.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "#ビックでダイソンスリム \n2月15日(土)16日(日) 限定！\n\nダイソン最新モデルが特別価格！\n『Dyson V8 Slim Fluffy 』\n通常価格53,900円⇒39,800円(税込)‼\n\n吸引力・バッテリー持ちと軽さを両立した日本向けに開発されたモデル！5年間の無料長期保証付き！\n\nビックカメラ京王調布店でもお試し出来ます https://t.co/D9P2y5HZBB",
+      "url": "https://x.com/bic_keiochofu/status/1228515904926806017",
+      "media": [
+        "https://pbs.twimg.com/media/EQyQs05U8AA6TVu.jpg",
+        "https://pbs.twimg.com/media/EQyQs06UYAAY4xd.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1228515904926806017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 668530,
+      "postSha256": "1818e9da5645fc05f39a40329ffeebd269984831a4ddedb559cd8e1a210ad967",
+      "textSha256": "4fbaec00d2c734a53a9c68a1f699cb79f9ece9314813108724c815c080ce70b0"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,216 @@
+[
+  {
+    "id": "public-2110528582439084069",
+    "source": "public-post",
+    "description": "ポケモンカード当選発表",
+    "post": {
+      "id": "2110528582439084069",
+      "createdAt": "2026-10-15T00:30:00.435Z",
+      "screenName": "bic_itt",
+      "kind": "original",
+      "text": "■当選発表のご案内■ \n10/16(金)発売 ポケモンカードゲームMEGA \n【30th CELEBRATIONカードセット　全9種】\n購入期間：10/16(金)～10/18(日)　4Fレジ \n\n※ご当選の場合必ず注意事項をご確認し、必要物をお持ちください。 \n※お忘れの場合、販売致しかねます \n※詳しくは添付画像をご確認ください\n1/2",
+      "url": "https://x.com/bic_itt/status/2110528582439084069",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "抽選・購入期間・カードでも別商品の販売抽選結果である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "other-franchise",
+      "lottery",
+      "card-word"
+    ],
+    "group": "pokemon-card-lottery",
+    "reviewStatus": "provisional",
+    "sourceHash": "1f0e86d76b62f8cafb1fe684cfeb6593e490011ca4fce169d3f1e213f454e1d6"
+  },
+  {
+    "id": "public-2110536131112480810",
+    "source": "public-post",
+    "description": "ゲームリマスター発売",
+    "post": {
+      "id": "2110536131112480810",
+      "createdAt": "2026-10-15T01:00:00.179Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "\\名作RPGのリマスター発売情報/\n\nテイルズ オブ エターニア リマスターが本日発売😃\n便利な機能の追加で遊びやすさが向上⤴\nSwitch2やPS5など最近機種のよりキレイ✨なグラフィック💻でプレイしませんか😊\n当店7階にて販売中",
+      "url": "https://x.com/bicpkanhonten/status/2110536131112480810",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "通常のゲーム発売案内である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "new-product"
+    ],
+    "group": "tales-eternia-remaster",
+    "reviewStatus": "provisional",
+    "sourceHash": "15b63fafdac6be41ba815c98589502603ee45ef4138580f99f3c202f2c8b5af7"
+  },
+  {
+    "id": "public-2110565414107521462",
+    "source": "public-post",
+    "description": "別ゲームのCD缶バッジ特典",
+    "post": {
+      "id": "2110565414107521462",
+      "createdAt": "2026-10-15T02:56:21.789Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "✦ 特典再入荷✦\n『Sullyland Nursery Rhyme』\nビックカメラ・アニメガ×ソフマップ限定セット\n【店舗特典ドラマCD＋ハート缶バッジ5個セット付き】\n※おひとり様1点限り\n\n完売後は次回入荷未定のため気になる方はぜひお求めください😌\n7階ゲームコーナーにて販売中❣\n#サリライ #オトメイト",
+      "url": "https://x.com/bicikebukuro/status/2110565414107521462",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "缶バッジ・限定セットがあっても別作品の有料商品特典。",
+    "tags": [
+      "other-franchise",
+      "bonus",
+      "badge-word"
+    ],
+    "group": "sullyland-bonus-set",
+    "reviewStatus": "provisional",
+    "sourceHash": "8fe836f599a47315b1e308b83ea2ede466a4a2abb7547fa0714b189682f22cb3"
+  },
+  {
+    "id": "public-2110634279881281976",
+    "source": "public-post",
+    "description": "別アニメのグッズフェア",
+    "post": {
+      "id": "2110634279881281976",
+      "createdAt": "2026-10-15T07:30:00.669Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "🍸TVアニメ『上伊那ぼたん、酔へる姿は百合の花』グッズフェア in ビックカメラグループ🍸\n\n10/16から7Fポップアップスペースにて開催📣\n6F階段前にはパネルも展示いたします❣\n\nぜひお越しくださいませ✨\n※初日は状況により列整理や個数制限を設ける場合がございます。",
+      "url": "https://x.com/bicikebukuro/status/2110634279881281976",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "店舗コラボでもビッカメ娘ではなく上伊那ぼたんの企画である。",
+    "tags": [
+      "other-franchise",
+      "fair",
+      "display"
+    ],
+    "group": "kamina-botan-goods-fair",
+    "reviewStatus": "provisional",
+    "sourceHash": "66ccd28b33871cb2dde10bd1d7ff4907131f58c4090e5b4542790f4aa1b993d3"
+  },
+  {
+    "id": "public-2110675433079595461",
+    "source": "public-post",
+    "description": "ゼルダ40周年モデル予約",
+    "post": {
+      "id": "2110675433079595461",
+      "createdAt": "2026-10-15T10:13:32.356Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "(2*ゝω•)o[予約受付中]o\n\n#ゼルダの伝説40周年 アニバーサリーエディション\n🔹NintendoSwitch2本体\n🔹Switch2Proコントローラー\n🔹Switch2キャリングケース\n\n新潟店で、予約受付中。\n\n(2*ゝω•) 謎が解けると、今もあの効果音が頭に響く。",
+      "url": "https://x.com/niigata_bic/status/2110675433079595461",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "周年記念の限定機器でも対象はゲーム作品である。",
+    "tags": [
+      "other-franchise",
+      "anniversary-keyword",
+      "reservation"
+    ],
+    "group": "zelda-anniversary-hardware",
+    "reviewStatus": "provisional",
+    "sourceHash": "f22a0fa9afb47f81ddb4f9cd86fea643814338974dc6eb449ba27118e6df6f1d"
+  },
+  {
+    "id": "public-2110681328425521481",
+    "source": "public-post",
+    "description": "プリキュアのアクリルスタンド",
+    "post": {
+      "id": "2110681328425521481",
+      "createdAt": "2026-10-15T10:36:57.916Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "╱⋰\nはなまる素敵な入荷のお知らせ🌟\n╲⋱\n#映画たんプリ \n「ミニアクリルスタンド vol.1」\n再入荷です！\nビックカメラ大宮西口そごう店では\n「名探偵プリキュア！」グッズ 好評販売中！\nぜひご利用ください💜🩷🩵🤍\n\n#たんプリ #ブルジュラ\n2階おもちゃコーナーヾ(╹◡╹上)ﾉﾞ",
+      "url": "https://x.com/bic_ohmiya/status/2110681328425521481",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "acsta"
+    },
+    "rationale": "アクリルスタンドでも通常の別作品グッズ販売である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "other-franchise",
+      "ordinary-sale",
+      "acrylic-word"
+    ],
+    "group": "precure-acrylic-stand",
+    "reviewStatus": "provisional",
+    "sourceHash": "b091abff7bc3bb2c956df2baa520c21a4dd7379625330910e5375671985dfa3d"
+  },
+  {
+    "id": "public-2110928736111718816",
+    "source": "public-post",
+    "description": "柏の冬名刺配布",
+    "post": {
+      "id": "2110928736111718816",
+      "createdAt": "2026-10-16T03:00:04.505Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "📢冬名刺配布のお知らせです～❄❄\n\n配布期間\n📅11月1日(日)～12月31日(木)\n\nデザインは見てのお楽しみ❄❄\n\n是非ゲットしてくださいね♪",
+      "url": "https://x.com/bic_kashiwa/status/2110928736111718816",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "kashiwa"
+      ],
+      "startDate": "2026-11-01"
+    },
+    "rationale": "冬名刺を11月1日から12月31日まで配布すると明記。デザイン未公開のため対象娘は推測注釈しない。",
+    "tags": [
+      "seasonal-card",
+      "date-range"
+    ],
+    "group": "kashiwa-winter-card-2026",
+    "reviewStatus": "provisional",
+    "sourceHash": "b57c726f2bc3a6b0efd87a07201430fce75b61084089967449c44d59be2c681d"
+  },
+  {
+    "id": "public-2110992664762122536",
+    "source": "public-post",
+    "description": "第五人格フェアの特典終了",
+    "post": {
+      "id": "2110992664762122536",
+      "createdAt": "2026-10-16T07:14:06.283Z",
+      "screenName": "bicyokonishi",
+      "kind": "original",
+      "text": "＼\\第五人格×ビックカメラグループグッズフェア /／\n\n10/9(金)～10/26(月)\nビックカメラ横浜西口店\n1F　入口特設コーナーにて販売中✨\nアクスタやトートバッグ等、追加入荷しました〜✨\nぜひぜひご覧ください♪✨\n\n※購入特典はご好評につき配布終了しました\n #第五人格 #IdentityV",
+      "url": "https://x.com/bicyokonishi/status/2110992664762122536",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "グッズと購入特典の終了案内だが別作品である。",
+    "tags": [
+      "other-franchise",
+      "ended",
+      "bonus"
+    ],
+    "group": "identity-v-goods-fair",
+    "reviewStatus": "provisional",
+    "sourceHash": "357ddf890c9ab92827d9a2969caab2df3f5c9f0dd92741ebe81d027f4ace8d93"
+  }
+]

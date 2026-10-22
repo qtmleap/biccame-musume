@@ -1,0 +1,141 @@
+[
+  {
+    "id": "expanded-v2-positive-2081293753982324847",
+    "source": "public-post",
+    "description": "sapporo-panel-locations-2026",
+    "post": {
+      "id": "2081293753982324847",
+      "createdAt": "2026-07-26T08:21:14.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "#さっぽろたん 等身大パネル設置場所\n5F\n①制服・はっぴ姿\n②夏服・白ワンピ\n\n6F\n③ギタリスト\n④エレナイコラボ\n⑤大集合の壁\n\n⑥名刺はご自由にお持ちください\n※在庫がない場合は販売員にお声掛けください\n\nご来店の際はぜひ撮影してくださいね♪\n※設置場所は予告なく変更になる場合がございます https://t.co/xWx7CjTrSh",
+      "url": "https://x.com/bic_sapporo/status/2081293753982324847",
+      "media": [
+        "https://pbs.twimg.com/media/HOI8k2CaAAAZ_8s.jpg",
+        "https://pbs.twimg.com/media/HOI8swlbQAAuZ3O.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "sapporo"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "展示の6デザインと自由持ち帰り名刺。パネル6種を入手可能な物品にしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "sapporo-panel-locations-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "等身大パネル",
+          "evidence": [
+            "等身大パネル設置場所",
+            "①制服・はっぴ姿",
+            "②夏服・白ワンピ",
+            "③ギタリスト",
+            "④エレナイコラボ",
+            "⑤大集合の壁"
+          ]
+        },
+        {
+          "item": "名刺",
+          "evidence": [
+            "⑥名刺はご自由にお持ちください",
+            "在庫がない場合は販売員"
+          ]
+        }
+      ],
+      "groupingNote": "展示の6デザインと自由持ち帰り名刺。パネル6種を入手可能な物品にしない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 21054,
+      "postSha256": "2075041692149bed373547ee731e1774125d6629ecfeef8ec784a886cf15b653",
+      "textSha256": "e3adb49409578cdb10855c0841200d5b618cae98d21ff56bf4b62e3516b4d831"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2076120327688696197",
+    "source": "public-post",
+    "description": "sapporo-panel-locations-2026 matched control",
+    "post": {
+      "id": "2076120327688696197",
+      "createdAt": "2026-07-12T01:43:53.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "＼本日最終日／\n#KINUJO ヘアアイロン・ドライヤー体験会\n6Fビューティー家電コーナー\n\nプロの美容師が実際にご紹介！\nご体験で記念品プレゼント！\n\nさらに期間中KINUJO製品税込24200円以上ご購入でヘアクリップをプレゼント！\n\n本日19時までです！\nぜひお立ち寄り下さい♪\n#ドライヤー #ヘアアイロン https://t.co/z1TJkJH8WK",
+      "url": "https://x.com/bic_sapporo/status/2076120327688696197",
+      "media": [
+        "https://pbs.twimg.com/media/HM_cVYJacAAb3fl.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2076120327688696197",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 25838,
+      "postSha256": "8aab2a6fd552fdf09f7eb8761aa156aef399c2e24cb8bbfc0c51b2db35942a42",
+      "textSha256": "ed28e7d0d9333aa10e8267476fac3afbad43d93c9a3c72319126874fd0bbcb72"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

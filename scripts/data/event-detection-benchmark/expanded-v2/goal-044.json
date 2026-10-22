@@ -1,0 +1,138 @@
+[
+  {
+    "id": "expanded-v2-positive-1946382059699839432",
+    "source": "public-post",
+    "description": "fujisawa-store19-summer-christmas-2025",
+    "post": {
+      "id": "1946382059699839432",
+      "createdAt": "2025-07-19T01:30:19.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "📢HAPPY SUMMER Xmas！\n#8月4日は藤沢たんのバースデ―\nビックカメラ藤沢店店舗誕生19周年イベント開催✨\n\n期間中記念名刺の配布🎅\nさらに！\n8/1・2・3・4日の4日間\n【毎日先着25名(合計100名様)】\n税込5,000円以上ご購入のレシートご提示で\nサーファー藤沢たんのアクリルキーホルダーをプレゼント🌴💖 https://t.co/SvCLonDGYU",
+      "url": "https://x.com/bic_fujisawa/status/1946382059699839432",
+      "media": [
+        "https://pbs.twimg.com/media/GwLwKNiWoAAHL0p.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": [
+        "fujisawa"
+      ],
+      "characterIds": [
+        "fujisawa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "名刺と4日間の購入特典は別条件。毎日25名と合計100名を区別。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "fujisawa-store19-summer-christmas-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "記念名刺",
+          "evidence": [
+            "期間中記念名刺の配布"
+          ]
+        },
+        {
+          "item": "アクリルキーホルダー",
+          "evidence": [
+            "8/1・2・3・4日",
+            "毎日先着25名",
+            "税込5,000円以上",
+            "サーファー藤沢たんのアクリルキーホルダー"
+          ]
+        }
+      ],
+      "groupingNote": "名刺と4日間の購入特典は別条件。毎日25名と合計100名を区別。",
+      "unannotatedFields": [
+        "category",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 127128,
+      "postSha256": "7277f062f0e738f5d7d10fdb5fa2ce60c56a6a682b4a9488cccb820870928f47",
+      "textSha256": "84253889e79462134ef2d7714e2bb989c005c8049544abbb7ca50f14ac7d0911"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1948343883248579012",
+    "source": "public-post",
+    "description": "fujisawa-store19-summer-christmas-2025 matched control",
+    "post": {
+      "id": "1948343883248579012",
+      "createdAt": "2025-07-24T11:25:54.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "㊗Apple Shopリニューアルオープン㊗\n7月25日(金)よりビックカメラ藤沢店\n地下１階のApple Shopがリニューアルオープン🎉\nMac、iPadをご購入頂くと先着でオリジナルトートバッグをプレゼント🎁\nリニューアル記念で、一部商品を特別価格にてご提供します！\n新しくなったApple Shopをぜひ体験ください🍎 https://t.co/HKhiMe3FsZ",
+      "url": "https://x.com/bic_fujisawa/status/1948343883248579012",
+      "media": [
+        "https://pbs.twimg.com/media/Gwnn2VDbsAAR7pl.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1948343883248579012",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 125335,
+      "postSha256": "6519f9185f5e3912af423bab06987969e33df93c68d36bbe915ebd99d3ff7f96",
+      "textSha256": "b9c7336401e84b69bcfdc7f8f149c154778bab2dc051dccc4f7709091f60a7f4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

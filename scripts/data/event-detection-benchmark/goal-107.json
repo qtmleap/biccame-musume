@@ -1,0 +1,109 @@
+[
+  {
+    "id": "goal-negative-1839922996280274964",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1839922996280274964",
+      "createdAt": "2024-09-28T07:00:01.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "#家電コーナー】\n今週末実演開催！\n今話題💡ｼｬｰｸ　🌀🍊🍇ﾆﾝｼﾞｬﾌﾞﾗｽﾄ🍓🍎\n\n本日開催中🚩\nいつ・どこ・なんでも。混ぜたいままに。\nｱﾒﾘｶ大手調理家電ｼｬｰｸﾆﾝｼﾞｬから\n静音ｺﾝﾊﾟｸﾄｺｰﾄﾞﾚｽﾐｷｻｰ登場❗️\n\n驚きのパワーと美味しいスムージー\nぜひご体験ください！😋 https://t.co/9uGGFFqQXU",
+      "url": "https://x.com/bic_kashiwa/status/1839922996280274964",
+      "media": [
+        "https://pbs.twimg.com/media/GYi3GDWaUAAqmve.jpg",
+        "https://pbs.twimg.com/media/GYi3GDsasAAqLrr.jpg",
+        "https://pbs.twimg.com/media/GYi3GDNaUAA9xbB.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「#家電コーナー】 / 今週末実演開催！ / 今話題💡ｼｬｰｸ　🌀🍊🍇ﾆﾝｼﾞｬﾌﾞﾗｽﾄ🍓🍎」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "shark-ninja-blender-demo-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 206897,
+      "postSha256": "eb052d299c4bef24a6d2435aaf2ffac3a6cb6f6a2f54009eb2afaa1f3afdf46c",
+      "textSha256": "1bccd25fafe3269479d16f1262659bb08cba2211c53c949e5edc3f695e23c320"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1862765511643377916",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1862765511643377916",
+      "createdAt": "2024-11-30T07:48:01.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "⌚取り扱いスタートしました⌚\n\n2011創設スウェーデンの時計/アクセサリーメーカー「ダニエル・ウェリントン」の時計を、#ビックカメラ ラゾーナ川崎店1F時計コーナーで取り扱い開始しました！\nシンプルでコーディネートしやすい1本✨\nクリスマスの贈り物にもピッタリです！ぜひご利用ください！ https://t.co/F7wOid07bq",
+      "url": "https://x.com/Bic_kawasaki/status/1862765511643377916",
+      "media": [
+        "https://pbs.twimg.com/media/GdnfJUdXoAI4N_K.jpg",
+        "https://pbs.twimg.com/media/GdnfVABboAUAECF.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「⌚取り扱いスタートしました⌚ / 2011創設スウェーデンの時計/アクセサリーメーカー「ダニエル・ウェリントン」の時計を、#ビックカメラ ラゾーナ川崎店1F時計コーナーで取り扱い開始しました！ / シンプルでコーディネートしやすい1本✨」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "daniel-wellington-watch-stock-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 190471,
+      "postSha256": "9e7337ceb953c917824f7a0e12523402eeb9489dcff325608a0e82227617e555",
+      "textSha256": "2c520f076b0a79ffcc296ab594ac9141edbf644860d8be1f3cacf53a397f12df"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

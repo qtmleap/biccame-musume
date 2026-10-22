@@ -1,0 +1,122 @@
+[
+  {
+    "id": "goal-positive-1104911551423700994",
+    "source": "public-post",
+    "description": "sagami birthday event end 2019",
+    "post": {
+      "id": "1104911551423700994",
+      "createdAt": "2019-03-11T01:06:56.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "❘*´ω`)おはようございます！！\nさがみたんバースデーイベントは昨日をもちまして終了しました！！沢山のご来店、お祝いありがとうございます♡アクキーも大好評のようで私も嬉しかったです♡これからも9周年を迎えた相模大野駅店をよろしくお願いします♡♡♡",
+      "url": "https://x.com/bic_sagamioono/status/1104911551423700994",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey"
+    },
+    "rationale": "バースデー終了報告。販売数・条件を作らない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "end"
+    ],
+    "group": "sagami-birthday-event-end-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "さがみたんアクキー",
+          "evidence": [
+            "さがみたんバースデーイベントは昨日をもちまして終了しました！！沢山のご来店、お祝いありがとうございます♡アクキーも大好評のようで私も嬉しかったです♡これからも9周年を迎えた相模大野駅店をよろしくお願いします♡♡♡"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 771025,
+      "postSha256": "ae1ec53b9e0ce4037063a1023eeda04a38c770b4f17b6edcc240fcaea2760d78",
+      "textSha256": "0a6647c3fb2e72fb17cfb74ddb82625a6296ec5a58a7f461b2a6717496975168"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1125591879595073536",
+    "source": "public-post",
+    "description": "kawasaki regular card 2019",
+    "post": {
+      "id": "1125591879595073536",
+      "createdAt": "2019-05-07T02:43:11.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "【定期案内】\n通常版「川崎たん名刺」は、２階総合カウンターにて配布しております。\nぜひお店にお立ち寄りの際は、来店記念にお持ちください！\n\n|ス´-`*).｡oO(なかった場合、カウンターのスタッフまでお声がけいただければ直ぐにご用意できます。)\n#川崎たん #ビッカメ娘 https://t.co/NdqFqCZUkN",
+      "url": "https://x.com/Bic_kawasaki/status/1125591879595073536",
+      "media": [
+        "https://pbs.twimg.com/media/D57jawXU0AAUNNh.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "category": "regular_card"
+    },
+    "rationale": "通年名刺の定期的な場所案内で、新規デザイン告知ではない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "kawasaki-regular-card-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "川崎たん通常名刺",
+          "evidence": [
+            "通常版「川崎たん名刺」は、２階総合カウンターにて配布しております。"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 752333,
+      "postSha256": "5e0e1e38e8541bbc9a42b3b9b45e9ae68dbd617f96b4db2a85bca299b0db0d6c",
+      "textSha256": "079726cebf8bfc152a6adce4238a31f01018b1aad9b9ddb92d37b0478daf31f6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

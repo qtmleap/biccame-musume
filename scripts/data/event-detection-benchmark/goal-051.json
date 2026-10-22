@@ -1,0 +1,131 @@
+[
+  {
+    "id": "goal-positive-1915314516943949902",
+    "source": "public-post",
+    "description": "kawasaki election card preview 2025",
+    "post": {
+      "id": "1915314516943949902",
+      "createdAt": "2025-04-24T07:59:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "川崎たん #ログアウト タイムです！\n本日も低浮上でしたが、コメント・いいね・リポストありがとうらぞです！\n明日もよろしくらぞーー！\n\n総選挙用名刺は５月からの\n配布を予定してます！\n   ∧,,∧\n  (  ˙꒳​˙2 )ｶﾀｶﾀｶﾀ\n  / ꜆꜄꜆ /￣￣￣/\n￣＼/＿＿＿/￣ https://t.co/XCl6LqINKz",
+      "url": "https://x.com/Bic_kawasaki/status/1915314516943949902",
+      "media": [
+        "https://pbs.twimg.com/media/GpSPcZ4bYAElCQp.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card"
+    },
+    "rationale": "5月配布予定のみ。確定初日や条件はない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "preliminary"
+    ],
+    "group": "kawasaki-election-card-preview-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "総選挙用名刺",
+          "evidence": [
+            "総選挙用名刺は５月からの"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 152475,
+      "postSha256": "96c91f1d696fec5947bb853e90045544063834a869abf9be91c5a24aa9dab213",
+      "textSha256": "5a42a2a6b0f834f91a861f8ceb6084bb953d5ab5b4946a6d0b78b68a63fb96d7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1924424989564117035",
+    "source": "public-post",
+    "description": "shinjyuku birthday sticker card 2025",
+    "post": {
+      "id": "1924424989564117035",
+      "createdAt": "2025-05-19T11:20:46.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "＼【予告】 #新宿西口たん爆誕祭2025 開催します🎊／\n期間中、税込3,000円以上ご購入の先着150名様(ポイントカード会員様限定)に #新宿西口たん シールセットをプレゼント🎁\n爆誕記念名刺の配布やメッセージボードも設置します！\n詳しくは画像をご確認ください\n★5月23日(金)～6月30日(月)\n#ビッカメ娘 https://t.co/YApvWawBSI",
+      "url": "https://x.com/bic_shinjyuku/status/1924424989564117035",
+      "media": [
+        "https://pbs.twimg.com/media/GrTtYU6XYAAWvw4.jpg",
+        "https://pbs.twimg.com/media/GrTtZw6XUAAyDHP.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shinjyuku"
+      ],
+      "characterIds": [
+        "shinjyuku"
+      ],
+      "startDate": "2025-05-23"
+    },
+    "rationale": "3000円・先着150はシールセット、記念名刺と混同しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "shinjyuku-birthday-sticker-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "新宿西口たんシールセット",
+          "evidence": [
+            "期間中、税込3,000円以上ご購入の先着150名様(ポイントカード会員様限定)に #新宿西口たん シールセットをプレゼント🎁"
+          ]
+        },
+        {
+          "item": "爆誕記念名刺",
+          "evidence": [
+            "爆誕記念名刺の配布やメッセージボードも設置します！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 144446,
+      "postSha256": "8dd36ed56c30c3b160472bc9859b4505838e16a1a79d25c111da78cb669bd9cf",
+      "textSha256": "0b330e93733b2b8fa593d4549b369550aa8277d7d5cdfb670f7c290047ef7f2a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

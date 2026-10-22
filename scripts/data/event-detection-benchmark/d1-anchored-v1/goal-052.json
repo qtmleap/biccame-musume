@@ -1,0 +1,209 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2054750345587548430",
+    "source": "public-post",
+    "description": "yuurakuchou-shiori-key-end-2026",
+    "post": {
+      "id": "2054750345587548430",
+      "createdAt": "2026-05-14T02:27:12.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "💞おはようございます～🌟\n☘️今日もヨロシクお願いします。☘️\n\nクリアしおり＆アクリルキーホルダーは\n昨日の夕方を持ちまして、配布が終了しました。\n皆様のご来店ありがとうございました。 https://t.co/AowX4UEtYv",
+      "url": "https://x.com/bic_yuurakuchou/status/2054750345587548430",
+      "media": [
+        "https://pbs.twimg.com/media/HIPwdxBa0AAXVkQ.jpg",
+        "https://pbs.twimg.com/media/HIPwfgzb0AAxn34.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "クリアしおりとアクキーが前日夕方で配布終了。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "yuurakuchou-shiori-key-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "クリアしおり",
+          "evidence": [
+            "クリアしおり＆アクリルキーホルダーは"
+          ]
+        },
+        {
+          "item": "アクリルキーホルダー",
+          "evidence": [
+            "クリアしおり＆アクリルキーホルダーは"
+          ]
+        }
+      ],
+      "groupingNote": "クリアしおりとアクキーが前日夕方で配布終了。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 44879,
+      "postSha256": "ea5e54ff9a530159a549cb8e1bcdafae2fd7441a1dde05ece59c1c7a28feb4e9",
+      "textSha256": "f0db8f124e071f96cb6ac5fa07370a58e36e1ca7f44feb0d0826d4548e0cf4a5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "1f3f224d-0018-546d-b11d-cd60c38fc5e6",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_yuurakuchou/status/2054750345587548430",
+          "origin": "manual-or-seed",
+          "title": "擬人化10周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-05-09T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yuurakuchou"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "71355ba9-8611-4a44-8dee-dd87c627a055",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_yuurakuchou/status/2054750345587548430",
+          "origin": "manual-or-seed",
+          "title": "四連クリアしおり",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-05-09T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yuurakuchou"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 2000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2061011046958236112",
+    "source": "public-post",
+    "description": "yuurakuchou-shiori-key-end-2026 matched control",
+    "post": {
+      "id": "2061011046958236112",
+      "createdAt": "2026-05-31T09:04:59.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "【Surface新生活応援モデル】\nSurface Pro12・SurfaceLaptop13が\n大変お買い求め易くなっております！\n\n✨💻ご興味ご関心をお持ちの方は、\nぜひ5Fパソコンコーナーまでお越し下さい！！ https://t.co/aLroCCv202",
+      "url": "https://x.com/bic_yuurakuchou/status/2061011046958236112",
+      "media": [
+        "https://pbs.twimg.com/media/HJouYkfaYAA6SKE.jpg",
+        "https://pbs.twimg.com/media/HJoub5WbkAIT6YZ.jpg",
+        "https://pbs.twimg.com/media/HJoudmbaUAA51P7.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2061011046958236112",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 39260,
+      "postSha256": "7ae9bb3c037ac703ef8e317aa1876a959e2992b2b0617a9ebbba000ff0434dae",
+      "textSha256": "8d314d77ed78c28125bcf3b387a3037901003a5a75ac62edc7ccf30a7096a559"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

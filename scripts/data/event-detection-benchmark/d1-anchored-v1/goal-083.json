@@ -1,0 +1,318 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2087820410842952016",
+    "source": "public-post",
+    "description": "ikenishi-store-festival-can-badge-lottery-2026",
+    "post": {
+      "id": "2087820410842952016",
+      "createdAt": "2026-08-13T08:35:50.000Z",
+      "screenName": "bicikenishi",
+      "kind": "reply",
+      "text": "【缶バッチくじ詳細】\n\n💗当日11:00～20:00まで開催\n💗税込1,000円で1回くじ引き💭\n💗全6種の中からランダム（最大１日３回まで）\n💗2階特設会場にて開催🎉\n💗残ったら2日目も実施\n💗ポイントカード必須\n\n（次のポストに公開できる範囲の缶バッチの柄を公開します。ネタバレが嫌な方は避けてください） https://t.co/whtZTf63iG",
+      "url": "https://x.com/bicikenishi/status/2087820410842952016",
+      "replyTo": {
+        "id": "2087788754044141754",
+        "screenName": "bicikenishi"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HPlr3hSakAA2BIR.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "缶バッチくじの詳細。ポイントカード必須などで条件は未注釈。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:reply",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "ikenishi-store-festival-can-badge-lottery-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "缶バッチくじ",
+          "evidence": [
+            "【缶バッチくじ詳細】",
+            "（次のポストに公開できる範囲の缶バッチの柄を公開します。ネタバレが嫌な方は避けてください） https://t.co/whtZTf63iG"
+          ]
+        }
+      ],
+      "groupingNote": "缶バッチくじの詳細。ポイントカード必須などで条件は未注釈。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 16568,
+      "postSha256": "babbc96fade9c9e708aad46dd85d8cd1dfcd8201e7568a9da51e9e10e1b943c0",
+      "textSha256": "8b50625b8152612e079e9b0bc51258db9a30ad0a0c28e22ff82a1db04a21a59e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "76c9a27f-234f-4341-8de0-891cd207d3ae",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicikenishi/status/2087820410842952016",
+          "origin": "manual-or-seed",
+          "title": "缶バッジくじ",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-18T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "ikenishi"
+            ],
+            "characters": [
+              "ikenishi"
+            ],
+            "conditions": [
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "33e72ddd-d818-4647-b312-e59dff7d22b0",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicikenishi/status/2087820410842952016",
+          "origin": "manual-or-seed",
+          "title": "缶バッジくじ",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-18T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "ikenishi"
+            ],
+            "characters": [
+              "itt"
+            ],
+            "conditions": [
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "1ccc16a8-c377-4de7-87d0-e5aa56b77511",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicikenishi/status/2087820410842952016",
+          "origin": "manual-or-seed",
+          "title": "缶バッジくじ",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-18T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "ikenishi"
+            ],
+            "characters": [
+              "prosta"
+            ],
+            "conditions": [
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "59a56ed5-6ae5-4aa4-9d33-ed0782cb227a",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicikenishi/status/2087820410842952016",
+          "origin": "manual-or-seed",
+          "title": "缶バッジくじ",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-18T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "ikenishi"
+            ],
+            "characters": [
+              "photo"
+            ],
+            "conditions": [
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "bb47e64c-573f-4907-ba87-b996f402bb21",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicikenishi/status/2087820410842952016",
+          "origin": "manual-or-seed",
+          "title": "缶バッジくじ",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-18T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "ikenishi"
+            ],
+            "characters": [
+              "secret"
+            ],
+            "conditions": [
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "ef85a18f-29ee-469b-8f50-87cff484a5b1",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicikenishi/status/2087820410842952016",
+          "origin": "manual-or-seed",
+          "title": "缶バッジくじ",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-18T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "ikenishi"
+            ],
+            "characters": [
+              "other"
+            ],
+            "conditions": [
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2087062616208486564",
+    "source": "public-post",
+    "description": "ikenishi-store-festival-can-badge-lottery-2026 matched control",
+    "post": {
+      "id": "2087062616208486564",
+      "createdAt": "2026-08-11T06:24:38.000Z",
+      "screenName": "bicikenishi",
+      "kind": "reply",
+      "text": "@bic_tachikawa ２３日ならﾜﾝﾁｬﾝ推し事の前に....一瞬だけ寄れる可能性が...😭\nうわああツーショット？！熱い🔥",
+      "url": "https://x.com/bicikenishi/status/2087062616208486564",
+      "replyTo": {
+        "id": "2087061562586710325",
+        "screenName": "bic_tachikawa"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:reply",
+      "easy-negative"
+    ],
+    "group": "control-2087062616208486564",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 17175,
+      "postSha256": "914bfc63aa1e40ba36f87878dcf6077ef1bb5f5f389766cf8f463dc4efb20b9b",
+      "textSha256": "ff20172b45107f5cc7bc5173032a7f247d51832a1f3ad1c95c4e43377621de5f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

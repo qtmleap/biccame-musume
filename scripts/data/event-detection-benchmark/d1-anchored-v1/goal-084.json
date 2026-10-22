@@ -1,0 +1,300 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2087856697180119070",
+    "source": "public-post",
+    "description": "eight-stores-tour-2026",
+    "post": {
+      "id": "2087856697180119070",
+      "createdAt": "2026-08-13T11:00:01.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "✨＼ᐠ 8月22日スタート ᐟ／✨\n８がつく めにめにはっぴー ツアー！\n✈私たちと一緒に旅しよう！！🚄\n\n8⃣つの企画を用意したよ！\n🎞️動画内でスライド形式で発表します！\n（※スライド1つにつき5秒となってます）\n\n#八尾たん #しぶハチたん #八王子たん\n#ビッカメ娘\n#８がつくめにはぴツアー https://t.co/0BPCcVIwQg",
+      "url": "https://x.com/bic_yao/status/2087856697180119070",
+      "media": [
+        "https://pbs.twimg.com/amplify_video_thumb/2087844789261848576/img/sOV6xVjSNQudCPRI.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "yao",
+        "shibuhachi",
+        "hachioji"
+      ],
+      "startDate": "2026-08-22",
+      "conditions": null
+    },
+    "rationale": "8/22開始、8つの企画を動画で発表する予告。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "preliminary",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:eight-stores-tour-2026"
+    ],
+    "group": "eight-stores-tour-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "8がつくめにはぴツアーの企画",
+          "evidence": [
+            "８がつく めにめにはっぴー ツアー！",
+            "#８がつくめにはぴツアー https://t.co/0BPCcVIwQg"
+          ]
+        }
+      ],
+      "groupingNote": "8/22開始、8つの企画を動画で発表する予告。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 16539,
+      "postSha256": "ca5d1178558c29c2161d5e1a865966dae6f53172a81fc32db05d1b7e06a1ad19",
+      "textSha256": "a221d71aa545d63f7aeced870b63fb4cf928dfab6e6479f6e7fb7132df6e5cf6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "8541085d-992d-4b45-a230-1fad5777baef",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_yao/status/2087856697180119070",
+          "origin": "manual-or-seed",
+          "title": "ステージパス風ステッカー",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-08-21T15:00:00.000+00:00",
+            "endDate": "2026-10-11T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yao"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "e7c511ac-4acd-4659-b181-5663a29601f6",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_yao/status/2087856697180119070",
+          "origin": "manual-or-seed",
+          "title": "キーボードキーホルダー",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-08-27T15:00:00.000+00:00",
+            "endDate": "2026-10-11T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yao"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 50,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 6000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "b6a4da96-0bac-4d48-82e5-a23710def9ac",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_yao/status/2087856697180119070",
+          "origin": "manual-or-seed",
+          "title": "めにめにはっぴーツアー アクスタ",
+          "category": "acsta",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-08-27T15:00:00.000+00:00",
+            "endDate": "2026-09-07T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yao"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 30,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 5000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "5b0d3e06-f292-4caf-8c8d-a20354576826",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_yao/status/2087856697180119070",
+          "origin": "manual-or-seed",
+          "title": "めにめにはっぴーツアー アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-08-27T15:00:00.000+00:00",
+            "endDate": "2026-09-07T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yao"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 50,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "8ac3e785-aa46-4ef5-8708-28056d2080a0",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_yao/status/2087856697180119070",
+          "origin": "manual-or-seed",
+          "title": "イベント記念名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-08-21T15:00:00.000+00:00",
+            "endDate": "2026-10-11T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yao"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2088908264142717157",
+    "source": "public-post",
+    "description": "eight-stores-tour-2026 matched control",
+    "post": {
+      "id": "2088908264142717157",
+      "createdAt": "2026-08-16T08:38:34.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "BOSE夏のホリデーセールは本日閉店まで‼️\nワイヤレスイヤホン、ヘッドホン、スピーカー、ぜひこの機会にお買い求め下さい(8 ,,ÒωÓ,, )ﾄﾞﾔｵｯ! https://t.co/vKOkhg7WYQ",
+      "url": "https://x.com/bic_yao/status/2088908264142717157",
+      "media": [
+        "https://pbs.twimg.com/media/HP1K-4WbEAAkLe6.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2088908264142717157",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 15777,
+      "postSha256": "4c36767c14b502e62fd882ec3df5cbab4d5c5a9524edca0fea52345dcfd3d3c3",
+      "textSha256": "5a53311ab9e6e04448add333e20f97c50a825891b30c5f08a88739ac94db7ede"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

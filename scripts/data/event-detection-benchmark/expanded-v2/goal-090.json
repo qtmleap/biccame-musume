@@ -1,0 +1,139 @@
+[
+  {
+    "id": "expanded-v2-positive-1229018950505123840",
+    "source": "public-post",
+    "description": "tenjin2-panel-height-adjustment-2020",
+    "post": {
+      "id": "1229018950505123840",
+      "createdAt": "2020-02-16T12:25:26.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "今日は皆さんにご報告っ❗️\nゆる天神たん等身大POPの\n身長高くね❓の疑いを\n上司たんより指摘されたため、\n一時展示を取りやめとりますっ❗️\n\nゆる天神たんの身体測定の後、\n正確な身長の等身大POPを\n展示するけん、\n今しばらくお待ちくださいっ❗️\n\n#ビッカメ娘　#天神たん　\n#ビッカメ娘を描き隊 https://t.co/Yjy0rv6XOt",
+      "url": "https://x.com/biccameratenjin/status/1229018950505123840",
+      "media": [
+        "https://pbs.twimg.com/media/EQ5aNzBUwActYiu.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "tenjin2"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "身長調整のため一時的に展示を取りやめた案内。配布終了や永久撤去と断定しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "tenjin2-panel-height-adjustment-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "ゆる天神たん等身大POP",
+          "evidence": [
+            "今日は皆さんにご報告っ❗️",
+            "ゆる天神たん等身大POPの",
+            "身長高くね❓の疑いを",
+            "上司たんより指摘されたため、",
+            "一時展示を取りやめとりますっ❗️",
+            "ゆる天神たんの身体測定の後、",
+            "正確な身長の等身大POPを",
+            "展示するけん、",
+            "今しばらくお待ちくださいっ❗️",
+            "#ビッカメ娘　#天神たん　",
+            "#ビッカメ娘を描き隊 https://t.co/Yjy0rv6XOt"
+          ]
+        }
+      ],
+      "groupingNote": "身長調整のため一時的に展示を取りやめた案内。配布終了や永久撤去と断定しない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 667575,
+      "postSha256": "439e956ddde5689db625503f500910c19caed4be4eba41d08713aa2122e97fed",
+      "textSha256": "4d0e184c78bc047c565d367e0f9b7f60bdbf5174155e76cf15e3f46867f42260"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1223810397947318272",
+    "source": "public-post",
+    "description": "tenjin2-panel-height-adjustment-2020 matched control",
+    "post": {
+      "id": "1223810397947318272",
+      "createdAt": "2020-02-02T03:28:30.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "＼本日2/2(日)まで！5F家電コーナー／\nダイソン軽量モデルV7Slimと最上位モデルのV11Fluffyが本日まで大特価で～す！\n\nまた冬物一層売り尽くしセールも開催中！\n台数限定でエアコンもお安くなっとりま～す！\n\nぜひビックカメラ天神2号館へ\nご来店お待ちしとりま～す💗 #天神たん https://t.co/UIMtBqQT5j",
+      "url": "https://x.com/biccameratenjin/status/1223810397947318272",
+      "media": [
+        "https://pbs.twimg.com/media/EPvZDCnU0AM9r0X.jpg",
+        "https://pbs.twimg.com/media/EPvZDCjVUAAQcwQ.jpg",
+        "https://pbs.twimg.com/media/EPvZDCkUYAAisyh.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1223810397947318272",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 673446,
+      "postSha256": "657047df0bf98ff053d8544f8bacd07f673acbc31b85f44493022696a9befe6e",
+      "textSha256": "f2389ebfbe1ba54e4db8e15a070f57bded03a39a23b12c612c5bbf04eb3fc8b5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

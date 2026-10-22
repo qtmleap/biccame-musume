@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-1752571590888591623",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1752571590888591623",
+      "createdAt": "2024-01-31T05:56:43.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "🚄 1/27発売の新商品 🚆\n\n＼チェンジ！シンカリオン！！／\n新作TVアニメ『シンカリオン チェンジ ザ ワールド』より、主人公たちが操縦する #シンカリオン 3機体を含む9商品のおもちゃが放送に先駆けて発売！\n「 #シンカリオンCW 」シリーズ、川崎店では１Ｆトイズコーナーで好評販売中！ https://t.co/MNCVzBYITz",
+      "url": "https://x.com/Bic_kawasaki/status/1752571590888591623",
+      "media": [
+        "https://pbs.twimg.com/media/GFJiY_5acAAJfKt.jpg",
+        "https://pbs.twimg.com/media/GFJiigTbAAAzSTa.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「🚄 1/27発売の新商品 🚆 / ＼チェンジ！シンカリオン！！／ / 新作TVアニメ『シンカリオン チェンジ ザ ワールド』より、主人公たちが操縦する #シンカリオン 3機体を含む9商品のおもちゃが放送に先駆けて発売！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "shinkalion-change-world-toys-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 286894,
+      "postSha256": "e9136ecda4384d2a02e5614cb7af3c91de3e9834e7952c371cb7f8e0514244bf",
+      "textSha256": "9f74c5651bbc1cfff48c58fc5dfc497ebee3f90dfc5d2667c290ec0ca4a18eb6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1763135692740403289",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1763135692740403289",
+      "createdAt": "2024-02-29T09:34:41.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "ファイナルファンタジーVII リバース\n只今2階店頭特設会場にて好評販売中\nバスターソードを持った販売員と会えるかも⁉️🫣\n\n先着購入特典も御座います✨\n更に本日最終日‼️\nPS5本体とPS5ソフト同時購入で\nソフトが2750円引きです！\nこちらもお見逃しなく😆🔥\n#FF7リバース \n#セフィロスがXを燃やし尽くす https://t.co/cIkBXWz4a0",
+      "url": "https://x.com/bic_fujisawa/status/1763135692740403289",
+      "media": [
+        "https://pbs.twimg.com/media/GHfqjbMbMAA1gM8.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ファイナルファンタジーVII リバース / 只今2階店頭特設会場にて好評販売中 / バスターソードを持った販売員と会えるかも⁉️🫣」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "finalfantasy7-rebirth-sale-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 277096,
+      "postSha256": "ea11361504949c9ee6df61a623c092c2c74ce4f47fd823003bff38387c711b31",
+      "textSha256": "d3237ea7969cf34c8acdcbfb93b4e7b345f429dd3ac3b304d0661b135b9653a9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

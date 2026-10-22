@@ -1,0 +1,130 @@
+[
+  {
+    "id": "expanded-v2-positive-1617085037933137924",
+    "source": "public-post",
+    "description": "shinyoko-third-character-anniversary-2023",
+    "post": {
+      "id": "1617085037933137924",
+      "createdAt": "2023-01-22T09:01:31.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "(2｡•ㅅ•｡)お知らせです📢\n\n明日、1/23〜2/28までの約1ヶ月間、\n新横たん3周年記念名刺を配布します🎊\n配布場所は通常名刺と同じ\n3階ビューティ家電コーナーになります！\nデザインをチラッとお先に…\nぜひお手に取ってくださいね♪ https://t.co/FmQrE9NVbe",
+      "url": "https://x.com/bic_shinyoko/status/1617085037933137924",
+      "media": [
+        "https://pbs.twimg.com/media/FnEIFWfaYAMZ4yJ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "shinyoko"
+      ],
+      "startDate": "2023-01-23",
+      "conditions": null
+    },
+    "rationale": "1月23日から2月28日配布。翌年4周年企画とは別。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "shinyoko-third-character-anniversary-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "3周年記念名刺",
+          "evidence": [
+            "(2｡•ㅅ•｡)お知らせです📢",
+            "明日、1/23〜2/28までの約1ヶ月間、",
+            "新横たん3周年記念名刺を配布します🎊",
+            "配布場所は通常名刺と同じ",
+            "3階ビューティ家電コーナーになります！",
+            "デザインをチラッとお先に…",
+            "ぜひお手に取ってくださいね♪ https://t.co/FmQrE9NVbe"
+          ]
+        }
+      ],
+      "groupingNote": "1月23日から2月28日配布。翌年4周年企画とは別。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 392932,
+      "postSha256": "48934c0b23864408ee36d565f9de66b2f3242726df25416972603d74f0188c42",
+      "textSha256": "a6279721f26a76e39703d905e90a2e07aeec197896f06c1be4347a28bc68b5aa"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1615949831998177282",
+    "source": "public-post",
+    "description": "shinyoko-third-character-anniversary-2023 matched control",
+    "post": {
+      "id": "1615949831998177282",
+      "createdAt": "2023-01-19T05:50:37.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "(2｡•ㅅ•｡)皆様～！こんよこです～！\n\n今日は少し遅めのログインです🤔\n最近はいきなり雨が降ったり晴れたりと\n天候の変化が激しいですが\n変わらずお過ごしでしょうか？\n早めに寝てみたり、湯船にゆっくり浸かったり\nリラックスする時間が取れるといいですね😊\n\n今日も1日よろしくお願いします♪",
+      "url": "https://x.com/bic_shinyoko/status/1615949831998177282",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1615949831998177282",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 393820,
+      "postSha256": "46b5f1bb965c36ceee8eb18eeb5823dc924ddda0ebe82e2e2d19b9d7e375a517",
+      "textSha256": "a61bc5a737d8066aabf2e3dd61a3047c6609a5fb1657b961ca831b5ee6e24a6b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,128 @@
+[
+  {
+    "id": "goal-positive-947634904862355457",
+    "source": "public-post",
+    "description": "fujisawa new year card 2018",
+    "post": {
+      "id": "947634904862355457",
+      "createdAt": "2018-01-01T01:05:42.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(1￣▽￣)お知らせ！\n#藤沢たん 名刺は、今日からしばらくの間、2階総合案内カウンターで配布するぜ。\nまた、#ビッカメ娘 藤沢たん年賀状は、当日ご購入レシートの提示で先着配布中！\nカウンターの担当者に声を掛けてくれ！",
+      "url": "https://x.com/bic_fujisawa/status/947634904862355457",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "fujisawa"
+      ],
+      "characterIds": [
+        "fujisawa"
+      ]
+    },
+    "rationale": "名刺と年賀状を別物品として保持。購入レシート条件は年賀状だけ。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "fujisawa-new-year-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "藤沢たん名刺",
+          "evidence": [
+            "#藤沢たん 名刺は、今日からしばらくの間、2階総合案内カウンターで配布するぜ。"
+          ]
+        },
+        {
+          "item": "藤沢たん年賀状",
+          "evidence": [
+            "(1￣▽￣)お知らせ！\n#藤沢たん 名刺は、今日からしばらくの間、2階総合案内カウンターで配布するぜ。\nまた、#ビッカメ娘 藤沢たん年賀状は、当日ご購入レシートの提示で先着配布中！\nカウンターの担当者に声を掛けてくれ！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 895182,
+      "postSha256": "ed744a75b357d2c560bf1e0111b59f4a9f4635d26ea168694fa11e31baa5e92d",
+      "textSha256": "521d88db957b4f29b8522c710bf11b62b0c9ad3914ad68ab2199586dff329f21"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-956763513996820480",
+    "source": "public-post",
+    "description": "ohmiya regular first wave end 2018",
+    "post": {
+      "id": "956763513996820480",
+      "createdAt": "2018-01-26T05:39:32.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "＼お知らせ／\n\n大宮たん名刺はご好評につき、第一弾はすべて配布終了いたしました！\nご来店いただいた皆様、ありがとうございましたっ！\n\n第二弾の配布も準備しておりますので、配布期間が決まり次第またお知らせいたしま～すヾ(*´ω`)ﾉﾞ https://t.co/fYjHvN5sWX",
+      "url": "https://x.com/bic_ohmiya/status/956763513996820480",
+      "media": [
+        "https://pbs.twimg.com/media/DUcbSxlU0AMpxHV.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "regular_card"
+    },
+    "rationale": "第一弾配布終了と次版準備。新規登録でなく終了・予告情報。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "end"
+    ],
+    "group": "ohmiya-regular-first-wave-end-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "大宮たん第一弾名刺",
+          "evidence": [
+            "大宮たん名刺はご好評につき、第一弾はすべて配布終了いたしました！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 888599,
+      "postSha256": "40721b21f96ba950eb93fef97c7caa234614ffe4e8d720c3d61ff132028e4bcf",
+      "textSha256": "2788bae79bd16f40a9aab16be194544f6e95fcc173531bd6b95708d1d80edf68"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

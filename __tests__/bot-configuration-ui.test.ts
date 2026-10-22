@@ -204,7 +204,7 @@ describe('項目別のしきい値', () => {
     // 項目別の8項目に、判定全体の3つ（登録・必須項目の選択・対象外）を足した11個が入力欄。
     expect(markup.match(/data-slot="input"/g)).toHaveLength(11)
     expect([...markup.matchAll(/<dt[^>]*>(.*?)<\/dt>/g)].map((match) => match[1])).toEqual(
-      expect.arrayContaining(['状態', '配布物', '店舗', '開始日', '終了日', '配布数', '配布条件', '購入額'])
+      expect.arrayContaining(['状態', '配布物', '開催・配布店舗', '開始日', '終了日', '配布数', '配布条件', '購入額'])
     )
     for (const key of FIELD_THRESHOLD_KEYS) {
       const label = questionLabel(key)

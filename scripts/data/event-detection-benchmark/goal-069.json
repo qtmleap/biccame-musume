@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-967997174079414272",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "967997174079414272",
+      "createdAt": "2018-02-26T05:38:05.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "🌟新製品情報🌟\n#Canon ミラーレス一眼\n『EOS Kiss M』登場！\n\nカメラ初心者でもスマホ感覚で手軽に使える♪\n1Fカメラコーナーにてご予約受付中です📸\nhttps://t.co/w4z0KDk0nm\n#EOSKissM https://t.co/YTZaOdkBp4",
+      "url": "https://x.com/bic_sapporo/status/967997174079414272",
+      "media": [
+        "https://pbs.twimg.com/media/DW8D-yvVQAAkGn9.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「🌟新製品情報🌟 / #Canon ミラーレス一眼 / 『EOS Kiss M』登場！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "canon-eos-kissm-preorders-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 879986,
+      "postSha256": "234ee0721c3b3e7da84e2f4034f514ef5a5b175d54d25ebf5c2356b6ba427059",
+      "textSha256": "abb526ee75d47f00ee42c59b0d7a27fdb12e94cf2cc60722652b30e465500970"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-979997139538386944",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "979997139538386944",
+      "createdAt": "2018-03-31T08:21:40.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "🌸3月のまとめ🌸\n\nなんといっても柏たんのお誕生日🎂\n沢山の人がお祝いしてくれて\nとーっても②幸せでした(ﾟ´Д`)ﾉﾟ｡\n本当にありがとうございました☆\n\nこれからも #ビックカメラ柏店 ＃柏たん をよろかしわ～ﾃﾞｽ⭐️ https://t.co/e6PmZBLXRj",
+      "url": "https://x.com/bic_kashiwa/status/979997139538386944",
+      "media": [
+        "https://pbs.twimg.com/media/DZmmAQfVAAA9JKb.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「🌸3月のまとめ🌸 / なんといっても柏たんのお誕生日🎂 / 沢山の人がお祝いしてくれて」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "kashiwa-birthday-thanks-only-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 870332,
+      "postSha256": "e83a67078b4d657c4dc68372ba84f5064a8ecb58c78099b4748f2d9359d3e1ba",
+      "textSha256": "29aeb3708d4d1d5c390413b0b3056cccc27be77270a167ab47b11f3fa900c7dc"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

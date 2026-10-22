@@ -1,0 +1,104 @@
+[
+  {
+    "id": "goal-negative-1002130433021100032",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1002130433021100032",
+      "createdAt": "2018-05-31T10:11:28.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "#ルガルガン がんばれー！٩( 'ω' )و\n☆2017年11月発売 #タカラトミー #ポケットモンスター #モンコレEX ESP-15 ルガルガン（たそがれのすがた）\n☆5階おもちゃコーナー【 https://t.co/nm0cwN1QXu 】\n\n#アニポケ #anipoke https://t.co/NActtOrR2E",
+      "url": "https://x.com/bic_shinjyuku/status/1002130433021100032",
+      "media": [
+        "https://pbs.twimg.com/media/DehIS6VVAAErbKV.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「#ルガルガン がんばれー！٩( 'ω' )و / ☆2017年11月発売 #タカラトミー #ポケットモンスター #モンコレEX ESP-15 ルガルガン（たそがれのすがた） / ☆5階おもちゃコーナー【 https://t.co/nm0cw」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pokemon-lycanroc-toy-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 852753,
+      "postSha256": "691c8a897a775beec9cf3e0d87abbda0d8c70c4288c092c01c6d1a2e3aa3c94e",
+      "textSha256": "c8be28ac2154b930c8d1bd89082fba8fc8d426c016dca28f4ecd69880ca84468"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1012317821236178946",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1012317821236178946",
+      "createdAt": "2018-06-28T12:52:31.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "ありがとうございます！\n (`・ω・´)ゞ ビシッ\n#Surface #サーフェス https://t.co/X85LhOfZu9",
+      "url": "https://x.com/biccameramito/status/1012317821236178946",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ありがとうございます！ / (`・ω・´)ゞ ビシッ / #Surface #サーフェス https://t.co/X85LhOfZu9」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "mito-surface-thanks-only-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 844750,
+      "postSha256": "1eb647b4fc7623c9fa4ea588660d9df6d17024f3662f592aedf194a7ef3b19a0",
+      "textSha256": "a77132212cb67980e93f04e43eb738cfa1c333dd81f23f4f402ff9e0a5697743"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

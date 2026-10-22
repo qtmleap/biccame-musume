@@ -1,0 +1,109 @@
+[
+  {
+    "id": "goal-negative-1310866980832833538",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1310866980832833538",
+      "createdAt": "2020-09-29T09:00:17.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "【GoToトラベル 地域共通クーポン】【10月1日(木)開始】\n全国のビックカメラ店舗でご利用できます✈\n\n詳しくはこちら\nhttps://t.co/wq2MXycS3M https://t.co/bjeH0kJQtD",
+      "url": "https://x.com/bic_fujisawa/status/1310866980832833538",
+      "media": [
+        "https://pbs.twimg.com/media/EjEikRXVgAA8Dn0.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【GoToトラベル 地域共通クーポン】【10月1日(木)開始】 / 全国のビックカメラ店舗でご利用できます✈ / 詳しくはこちら」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "goto-travel-coupon-acceptance-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 617131,
+      "postSha256": "649cd5111721e5d288ae7d7ebea4bc8a2d178622a513daeb2afcd250c62060a2",
+      "textSha256": "2e293a8a04ee91d7f333218fd122b93c3758ba1187d7c5a7b2277b0d06673306"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1322024182033522688",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1322024182033522688",
+      "createdAt": "2020-10-30T03:55:01.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "新要素を追加しさらにグレードアップ─！\n\n「桃太郎電鉄シリーズ」の完全新作が4年振りにNintendo Switchに登場！\n「桃太郎電鉄 ～昭和 平成 令和も定番！～」11月19日発売🎮1階ゲームコーナーにて予約受付中🍑\n\nビックカメラ.comでも予約受付中▶️https://t.co/TXvZSKL2vL\n#桃鉄令和 https://t.co/Q48QXbhGwT",
+      "url": "https://x.com/Bic_kawasaki/status/1322024182033522688",
+      "media": [
+        "https://pbs.twimg.com/media/EljFsLyUcAAnVnw.png",
+        "https://pbs.twimg.com/media/EljFxC0UcAMKFrg.png",
+        "https://pbs.twimg.com/media/EljFyP_UcAEFlcT.png",
+        "https://pbs.twimg.com/media/EljFzcpUYAM8ACq.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「新要素を追加しさらにグレードアップ─！ / 「桃太郎電鉄シリーズ」の完全新作が4年振りにNintendo Switchに登場！ / 「桃太郎電鉄 ～昭和 平成 令和も定番！～」11月19日発売🎮1階ゲームコーナーにて予約受付中🍑」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "momotaro-dentetsu-switch-preorder-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 607459,
+      "postSha256": "27f1145b35ca14f371a6cee8088011fa7c658dfeb97a095e823903ec70f43a2e",
+      "textSha256": "d7450f7d254ba2a768776635851c37fadbbb71854c57ad790c0a14967a15fa53"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

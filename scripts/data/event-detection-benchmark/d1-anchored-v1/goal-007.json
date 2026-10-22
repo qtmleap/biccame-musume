@@ -1,0 +1,160 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1874380926224101424",
+    "source": "public-post",
+    "description": "yuurakuchou-january-card-2025",
+    "post": {
+      "id": "1874380926224101424",
+      "createdAt": "2025-01-01T09:03:31.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ本日より有楽町たん🎍１月限定名刺✨の配布を行っております。\n配布は、１階総合案内カウンター前にて配布しております。\nお一人様一枚となります。\nぜひ、皆さん有楽町たんからの新年のご挨拶を受け取ってくださいね🦢💕 https://t.co/gr4lAysC7g",
+      "url": "https://x.com/bic_yuurakuchou/status/1874380926224101424",
+      "media": [
+        "https://pbs.twimg.com/media/GgMjI0vaoAA88Fj.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "yuurakuchou"
+      ],
+      "startDate": "2025-01-01",
+      "conditions": null
+    },
+    "rationale": "本日より有楽町たんの1月限定名刺を配布。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:seasonal-newyear-card"
+    ],
+    "group": "yuurakuchou-january-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "1月限定名刺",
+          "evidence": [
+            "ξ(σεσ)ξ本日より有楽町たん🎍１月限定名刺✨の配布を行っております。"
+          ]
+        }
+      ],
+      "groupingNote": "本日より有楽町たんの1月限定名刺を配布。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 181771,
+      "postSha256": "6d6814e9f7fa14b0e48a50d28223cad8a5683387929de0ead6a6f3af5751410f",
+      "textSha256": "c3fac33f4048738a84f37cb67f360f98af3891a84e92e60118ea40423c420de3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "4a916e31-c266-4a37-97fc-61672a89161b",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_yuurakuchou/status/1874380926224101424",
+          "origin": "manual-or-seed",
+          "title": "1月限定名刺配布開始",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2024-12-31T15:00:00.000+00:00",
+            "endDate": "2025-01-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yuurakuchou"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1880799110879723831",
+    "source": "public-post",
+    "description": "yuurakuchou-january-card-2025 matched control",
+    "post": {
+      "id": "1880799110879723831",
+      "createdAt": "2025-01-19T02:07:06.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "【本日最終日！】\nNELLマットレスが期間限定で15％引き！\n上質な寝心地を実現するため、スムーズな寝返りにこだわったNELLマットレス✨\n120日間のフリートライアルで寝心地をお試しできて安心です👏\n\n#NELL\n#ネルマットレス https://t.co/WO0D6eoFDI",
+      "url": "https://x.com/bic_yuurakuchou/status/1880799110879723831",
+      "media": [
+        "https://pbs.twimg.com/media/Ghnw0ZlbgAAG4Qc.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1880799110879723831",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 177364,
+      "postSha256": "f8a091171543723ca7ceac4544f8e8d293ebd51c6a90d59e2c66b284661a9070",
+      "textSha256": "fd65df432bb303676d6c58a4d684034d4495d70a01a6cbe04273e99d07166154"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

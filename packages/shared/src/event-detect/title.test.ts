@@ -182,7 +182,7 @@ describe('titleSystem', () => {
     expect(system).toContain('- ハロウィン名刺（1）')
     expect(system).toContain('- limited_card（期間限定・数量限定・記念の名刺）: ハロウィン名刺')
     expect(system).toContain(
-      '- other（アクスタ・缶バッジ・ステッカー・ポストカードなど名刺とアクキー以外）: 缶バッジくじ'
+      '- other（アクスタ・缶バッジ・ステッカー・ポストカード・ギフトカードなど名刺とアクキー以外）: 缶バッジくじ'
     )
     expect(system).toContain(`${TITLE_MAX_LENGTH} 文字以内`)
   })
@@ -202,6 +202,22 @@ describe('titleState', () => {
     expect(state).toContain('開始日: 2026-10-19（10月）')
     expect(state).toContain('入れてはいけない語（この店舗のキャラ名・店舗名）: 新東たん、新宿東口駅前店')
     expect(state).toContain('投稿本文:\n10月19日より新東たん擬人化6周年記念アクリルコースターを配布します')
+  })
+
+  test('ギフトカードの配布物名とotherカテゴリを命名時にも保持する', () => {
+    const title = 'ビックカメラギフトカード'
+    const state = titleState({
+      ...subject,
+      category: 'other',
+      item: title,
+      body: 'ビックカメラギフトカードを先着でプレゼントします'
+    })
+    expect(state.split('\n')[0]).toEndWith(`: ${title}`)
+    expect(state).toContain('カテゴリ: other（アクスタ・缶バッジ・ステッカー・ポストカード・ギフトカード')
+    expect(state).not.toContain('カテゴリ: limited_card')
+    expect(state).not.toContain('カテゴリ: regular_card')
+    expect(check(title, 'other', [[title, 'other']])).toEqual({ ok: true, title })
+    expect(check(title, 'limited_card', [[title, 'other']])).toMatchObject({ ok: false, reason: 'category' })
   })
 
   test('acsta は other として渡す（命名の指示に acsta が無いため）', () => {

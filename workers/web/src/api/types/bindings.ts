@@ -55,6 +55,8 @@ export type Bindings = VerifyFirebaseAuthEnv & {
   EVENT_DETECTION_THRESHOLD?: string
   EVENT_DETECTION_IGNORE_THRESHOLD?: string
   EVENT_DETECTION_CHOICE_THRESHOLD?: string
+  /** 配布物の件数監査だけに使う確度しきい値（未設定なら 0.9） */
+  EVENT_DETECTION_ITEM_COUNT_THRESHOLD?: string
   /** コメント投稿レート制限用バインディング */
   COMMENT_RATE_LIMITER: RateLimitBinding
   /** 経路検索レート制限用バインディング（IPごと10件/60秒） */

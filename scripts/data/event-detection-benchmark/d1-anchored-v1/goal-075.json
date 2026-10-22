@@ -1,0 +1,167 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2079039354073395389",
+    "source": "public-post",
+    "description": "sapporo-birthday-postcard-2026",
+    "post": {
+      "id": "2079039354073395389",
+      "createdAt": "2026-07-20T03:03:03.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "＼大好評につき／\n追加ノベルティ決定❣️\n#さっぽろたん生誕祭2026\n\n8月11日（火・祝）まで、\n1000円以上ご購入で\nさっぽろたん ドレス姿のポストカードをプレゼント！\n※お1人様1枚限り\n\nたくさんご用意しました！☺️\nご来店お待ちしております♪\n※注意事項はリプライにてご確認ください\n #ビッカメ娘 https://t.co/anedXSCnap",
+      "url": "https://x.com/bic_sapporo/status/2079039354073395389",
+      "media": [
+        "https://pbs.twimg.com/media/HNo5uyvaQAACVlA.jpg",
+        "https://pbs.twimg.com/media/HNo50s_a4AEEtD3.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "sapporo"
+      ],
+      "startDate": null,
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 1000
+        }
+      ]
+    },
+    "rationale": "追加ノベルティのポストカード。8/11まで、1000円以上。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "boundary:action",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "sapporo-birthday-postcard-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "さっぽろたんドレス姿のポストカード",
+          "evidence": [
+            "さっぽろたん ドレス姿のポストカードをプレゼント！"
+          ]
+        }
+      ],
+      "groupingNote": "追加ノベルティのポストカード。8/11まで、1000円以上。",
+      "unannotatedFields": [
+        "stores",
+        "startDate"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 23119,
+      "postSha256": "102cf0a7ec437f3389a2912e75b093caf2a8ae1846536fc114af21dddb1d93fe",
+      "textSha256": "42f646239fde15380836927e8eb4b4ef11dc0cd5312110f33dddfb137cc5f1e5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "e20e343a-a395-405f-b9db-944f1cf8d6e5",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_sapporo/status/2079039354073395389",
+          "origin": "manual-or-seed",
+          "title": "擬人化10周年記念ポストカード",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-17T15:00:00.000+00:00",
+            "endDate": "2026-08-10T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "sapporo"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2075404053148999959",
+    "source": "public-post",
+    "description": "sapporo-birthday-postcard-2026 matched control",
+    "post": {
+      "id": "2075404053148999959",
+      "createdAt": "2026-07-10T02:17:40.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "もうすぐ夏休み🌞\nプロジェクターを使って\nおうち映画館🎥\nプラネタリウム🌌\nなんていかがでしょう！\n\n7/13（月）までの期間限定\n人気プロジェクター各種が大幅お値下げ中！\nアラジンpocaは通常より23%引‼️\n担当者一押し👍\nお求めやすくなってます！\n\nぜひ5Fプロジェクターコーナーでお試しください♪ https://t.co/57hQvDMW8W",
+      "url": "https://x.com/bic_sapporo/status/2075404053148999959",
+      "media": [
+        "https://pbs.twimg.com/media/HM1QyYKa4AAyZhC.jpg",
+        "https://pbs.twimg.com/media/HM1Q0qiagAA9o4m.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2075404053148999959",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 26459,
+      "postSha256": "0d91bc4a65f85a6e26ad562f0960ed87d8f3536fad5c8c0b24ab0ab3811f635c",
+      "textSha256": "8d3fce946bcc243894d063581422c107e2f07f15ac92f7043287e32fa6c5a9d7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

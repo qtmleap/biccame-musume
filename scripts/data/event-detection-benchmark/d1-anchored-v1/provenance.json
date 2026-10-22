@@ -1,0 +1,245 @@
+{
+  "datasetRevision": "annotated-d1-anchored-v1",
+  "annotationStatus": "provisional-not-human-reviewed",
+  "cases": 200,
+  "positive": 100,
+  "negative": 100,
+  "sourceArchives": {
+    ".cache/event-detect/posts.jsonl": 200
+  },
+  "sourceRecordsSha256": "4b4df3a99d4f4561433da3901c691c5dcbc7c8c0244f8c7a50c0ffb4f246cae8",
+  "annotationsSha256": "c230c15205b15599e3beecaddfc11400d4d6cd5529323789e7ad5190b8bee04f",
+  "yearAccountMonthMatched": true,
+  "priorCorpusCases": 786,
+  "d1Anchoring": {
+    "referenceSource": "local-d1-event_reference_urls(x.com status ids); account catalog = packages/shared/src/generated/bot-stores.json (40 accounts)",
+    "eventOrigins": {
+      "manual-or-seed": 449,
+      "webhook-job-or-candidate": 7
+    },
+    "referenceRows": {
+      "total": 580,
+      "xStatus": 533,
+      "nonStatus": 47
+    },
+    "candidatePool": {
+      "distinctXStatusIds": 450,
+      "catalogAccountCandidates": 359,
+      "annotatedAsEventFromText": 330,
+      "selectedPositives": 100,
+      "annotatedButNotSelected": 230,
+      "leftUnannotated": 29
+    },
+    "exclusions": {
+      "alreadyInPriorOrExpandedV2": 56,
+      "notInLocalArchives": 8,
+      "nonCatalogAccount": 27,
+      "catalogCandidateLeftUnannotated": 29
+    },
+    "unannotatedCandidateReasons": {
+      "item-not-named-in-text": 2,
+      "details-only-in-image": 5,
+      "no-distribution-stated": 1,
+      "non-biccame-musume-character": 2,
+      "incidental-mention-in-greeting": 1,
+      "end-reply-item-only-in-quote": 8,
+      "teaser-without-event-content": 2,
+      "comment-on-other-account-event": 2,
+      "mixed-end-and-continuation-deferred": 1,
+      "redistribution-new-or-update-ambiguous-deferred": 1,
+      "correction-without-content": 1,
+      "ticket-distribution-without-item": 1,
+      "near-duplicate-sibling-of-annotated-post": 2
+    },
+    "selectedEventOrigins": {
+      "manual-or-seed": 119
+    },
+    "negativeSelection": {
+      "method": "same-month-same-account-same-kind-preferred",
+      "excludedPostsReferencedByAnyD1Event": true,
+      "excludedWebhookJobOrCandidatePosts": true,
+      "excludedPriorAndExpandedV2Posts": true,
+      "maxTrigramJaccardToAnyOtherCase": 0.4,
+      "hardNegatives": 53,
+      "easyNegatives": 47,
+      "kindMismatchFallback": 4,
+      "replacedAfterFinalRead": 9
+    },
+    "templateFamilies": [
+      {
+        "family": "abeno-anniv10-key",
+        "caseIds": [
+          "d1-anchored-v1-positive-2092140233148289318",
+          "d1-anchored-v1-positive-2100795764184383578"
+        ]
+      },
+      {
+        "family": "anniv11-card",
+        "caseIds": [
+          "d1-anchored-v1-positive-2049443971534029240",
+          "d1-anchored-v1-positive-2059220677828485624"
+        ]
+      },
+      {
+        "family": "chiba-summer-parade",
+        "caseIds": [
+          "d1-anchored-v1-positive-2061281595471151182",
+          "d1-anchored-v1-positive-2084454470092816702"
+        ]
+      },
+      {
+        "family": "eight-stores-tour-2026",
+        "caseIds": [
+          "d1-anchored-v1-positive-2087856697180119070",
+          "d1-anchored-v1-positive-2098732881262813362",
+          "d1-anchored-v1-positive-2103672416593674545"
+        ]
+      },
+      {
+        "family": "four-store-25th-shiori",
+        "caseIds": [
+          "d1-anchored-v1-positive-2057296936747905099",
+          "d1-anchored-v1-positive-2060242211451941267"
+        ]
+      },
+      {
+        "family": "fujisawa-store-anniv20-2026",
+        "caseIds": [
+          "d1-anchored-v1-positive-2072975751276798436",
+          "d1-anchored-v1-positive-2080191684756066578",
+          "d1-anchored-v1-positive-2084805383445737577"
+        ]
+      },
+      {
+        "family": "kansai-regular-card-renewal",
+        "caseIds": [
+          "d1-anchored-v1-positive-1895402244847345949",
+          "d1-anchored-v1-positive-1895647732880327088"
+        ]
+      },
+      {
+        "family": "kawasaki-newyear-goods-2026",
+        "caseIds": [
+          "d1-anchored-v1-positive-2003707213169459543",
+          "d1-anchored-v1-positive-2006192334044815707"
+        ]
+      },
+      {
+        "family": "nagoya-autumn-festival",
+        "caseIds": [
+          "d1-anchored-v1-positive-2100027135142605259",
+          "d1-anchored-v1-positive-2100027135230365927"
+        ]
+      },
+      {
+        "family": "nanba-newyear-ema-2026",
+        "caseIds": [
+          "d1-anchored-v1-positive-2004043810733719584",
+          "d1-anchored-v1-positive-2010171971242521065"
+        ]
+      },
+      {
+        "family": "pkan-niigata-gw-2026",
+        "caseIds": [
+          "d1-anchored-v1-positive-2040006407098110068",
+          "d1-anchored-v1-positive-2043162195102425486"
+        ]
+      },
+      {
+        "family": "seasonal-christmas-card",
+        "caseIds": [
+          "d1-anchored-v1-positive-1991426202670887019",
+          "d1-anchored-v1-positive-1995005820170637551"
+        ]
+      },
+      {
+        "family": "seasonal-halloween-card",
+        "caseIds": [
+          "d1-anchored-v1-positive-1833702011990069388",
+          "d1-anchored-v1-positive-2104046126160888029"
+        ]
+      },
+      {
+        "family": "seasonal-newyear-card",
+        "caseIds": [
+          "d1-anchored-v1-positive-1740285445202686233",
+          "d1-anchored-v1-positive-1874380926224101424"
+        ]
+      },
+      {
+        "family": "seasonal-valentine-card",
+        "caseIds": [
+          "d1-anchored-v1-positive-1881174830193475811",
+          "d1-anchored-v1-positive-1881175567544013105"
+        ]
+      },
+      {
+        "family": "shibuhachi-neko-collab-2025",
+        "caseIds": [
+          "d1-anchored-v1-positive-1881314119967760512",
+          "d1-anchored-v1-positive-1881314140993822826"
+        ]
+      },
+      {
+        "family": "shibuya-shibuhachi-anniv7-2026",
+        "caseIds": [
+          "d1-anchored-v1-positive-2062459341043548255",
+          "d1-anchored-v1-positive-2062459352100065407",
+          "d1-anchored-v1-positive-2072953499873124714",
+          "d1-anchored-v1-positive-2074776044197081342",
+          "d1-anchored-v1-positive-2078026921175314543",
+          "d1-anchored-v1-positive-2078026926032118081"
+        ]
+      },
+      {
+        "family": "shinjyuku-bakutan-fes-2026",
+        "caseIds": [
+          "d1-anchored-v1-positive-2045782264483848271",
+          "d1-anchored-v1-positive-2058001685235331560"
+        ]
+      },
+      {
+        "family": "shinyoko-anniv6-key-2026",
+        "caseIds": [
+          "d1-anchored-v1-positive-2014515510143287738",
+          "d1-anchored-v1-positive-2015955352043540682"
+        ]
+      },
+      {
+        "family": "takatsuki-trading-card-2026",
+        "caseIds": [
+          "d1-anchored-v1-positive-2004419316373246079",
+          "d1-anchored-v1-positive-2034835661182910730"
+        ]
+      }
+    ],
+    "priorTemplateRelated": [
+      {
+        "caseId": "d1-anchored-v1-positive-1874695494422901159",
+        "priorId": "expanded-v2-positive-2017772388948316502",
+        "similarity": 0.612
+      },
+      {
+        "caseId": "d1-anchored-v1-positive-2041381381385924899",
+        "priorId": "expanded-v2-positive-2017772388948316502",
+        "similarity": 0.571
+      },
+      {
+        "caseId": "d1-anchored-v1-positive-2048944198217499100",
+        "priorId": "public-c-2005550626063925362",
+        "similarity": 0.692
+      }
+    ],
+    "limitations": [
+      "nonCatalogAccount counts accounts absent from bot-stores.json (40 accounts); bictakasaki, bic_kumamoto, bic_itt, bic_urawa exist in the detection catalog (44 stores) and in earlier corpora, so this exclusion is conservative.",
+      "Item-noun baseline: a regex over 名刺/アクキー/アクスタ/ステッカー/缶バッジ/ギフトカード/アクリル matches 82 to 83 of 100 positives (by regex variant) and 0 of 100 negatives (precision 1.00; expanded-v2 matches 5 of 100 negatives). No negative mentions a Biccame-musume item, so isEvent is easier than expanded-v2.",
+      "Action boundary: posts that end one item and continue another carry the boundary:action tag. They are labelled end when the termination is the main message and update when the post gives substantive new details (condition, place, period) for the continuing item; keep them out of the action main table.",
+      "All labels are provisional annotations from the assistant own reading (no model API inference), not human review.",
+      "D1 event values (title, category, stores, characters, dates, conditions) are reference-only diagnostics and never gold or model input.",
+      "Selected positives reference only manual-or-seed D1 events; the 7 webhook-origin events were excluded by design.",
+      "The D1 data is concentrated in 2026 (84 percent of events); older years are scarce, so year coverage is narrower than expanded-v2.",
+      "Images and target links were not viewed; image-only information stays unannotated.",
+      "Same-family seasonal posts are not independent campaigns; keep cases of one family on the same side of any holdout split."
+    ]
+  }
+}

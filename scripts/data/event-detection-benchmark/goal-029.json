@@ -1,0 +1,129 @@
+[
+  {
+    "id": "goal-positive-1303919041543720962",
+    "source": "public-post",
+    "description": "fujisawa regular card transition 2020",
+    "post": {
+      "id": "1303919041543720962",
+      "createdAt": "2020-09-10T04:51:39.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "【お知らせ】\n(1￣▽￣)現在の #藤沢たん 通常名刺が、現在総合カウンターでストックしている分をもって一旦配布終了することになったぜ。突然の連絡で申し訳ない！\n現在、2号が新・通常名刺を製作中。ちょっと時間が掛かるかも知れないが、完成して配布できるようになったら、改めてお知らせするぜ。",
+      "url": "https://x.com/bic_fujisawa/status/1303919041543720962",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "fujisawa"
+      ],
+      "characterIds": [
+        "fujisawa"
+      ],
+      "category": "regular_card"
+    },
+    "rationale": "現デザインを在庫限り終了、新版は製作中。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "end"
+    ],
+    "group": "fujisawa-regular-card-transition-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "藤沢たん旧通常名刺",
+          "evidence": [
+            "(1￣▽￣)現在の #藤沢たん 通常名刺が、現在総合カウンターでストックしている分をもって一旦配布終了することになったぜ。突然の連絡で申し訳ない！",
+            "現在、2号が新・通常名刺を製作中。ちょっと時間が掛かるかも知れないが、完成して配布できるようになったら、改めてお知らせするぜ。"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 623843,
+      "postSha256": "2ef3ba7a67c2d59a9f0d9510cd68b71a8c0757bf445345d1124fcb7e8dacd3b6",
+      "textSha256": "d365f1957901af2464265354d1265ece43f486775b6da9e2f5b5eeb7847886e1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1314035556892897280",
+    "source": "public-post",
+    "description": "kawasaki store fourteenth card 2020",
+    "post": {
+      "id": "1314035556892897280",
+      "createdAt": "2020-10-08T02:51:05.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": ".  ラゾーナ川崎店14周年記念\n🎧限定名刺ただいま配布中🎧\n\nただいま2階総合カウンターにて、ラゾーナ川崎店14周年記念「川崎たん限定名刺」を配布いたしております\nご来店の際はぜひ記念にお持ちください😊\n\n配布期間：9/12(土)～10/11(日) \n●『お一人様一枚』でお願いします\n#ビッカメ娘 #川崎たん https://t.co/iApmtKENYP",
+      "url": "https://x.com/Bic_kawasaki/status/1314035556892897280",
+      "media": [
+        "https://pbs.twimg.com/media/EjxjPl-UcAEzAjS.png",
+        "https://pbs.twimg.com/media/EjxkKL7UwAcEBO9.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "9/12から10/11の周年名刺配布中。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "kawasaki-store-fourteenth-card-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "川崎たん店舗14周年名刺",
+          "evidence": [
+            "🎧限定名刺ただいま配布中🎧",
+            "ただいま2階総合カウンターにて、ラゾーナ川崎店14周年記念「川崎たん限定名刺」を配布いたしております"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 614378,
+      "postSha256": "c6b1e535a415d0232bb6490de09ab6ffd8f91a7b198a06c79f0f3b7efa99be70",
+      "textSha256": "974409106ec33ccfa1926adb8038109f36d9b10cff65db3084153a319220bc0a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,135 @@
+[
+  {
+    "id": "expanded-v2-positive-1696794690820231207",
+    "source": "public-post",
+    "description": "kawasaki-tachikawa-nambu-collaboration-2023",
+    "post": {
+      "id": "1696794690820231207",
+      "createdAt": "2023-08-30T07:59:13.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": ".　　　-夏休み企画🏝-\n🚋南武線コンビに会いに行こう🚋\n\n|*˙꒳​˙2)ﾉｼ 明日まで立川たんとのコラボ名刺配布中✨✨\n約５年振りの南武線コンビでのコラボなのでまだの人はぜひ貰いに来てね～！\n\n期間:～8/31(木)迄\n川崎店配布場所:2F総合カウンター\n#ビッカメ娘 #川崎たん #立川たん https://t.co/rfEWKAeMAc",
+      "url": "https://x.com/Bic_kawasaki/status/1696794690820231207",
+      "media": [
+        "https://pbs.twimg.com/media/F4w5rIwbYAA-3df.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki",
+        "tachikawa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "川崎たんと立川たんのコラボ名刺。明日まで配布中で即時終了ではない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "kawasaki-tachikawa-nambu-collaboration-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "コラボ名刺",
+          "evidence": [
+            ".　　　-夏休み企画🏝-",
+            "🚋南武線コンビに会いに行こう🚋",
+            "|*˙꒳​˙2)ﾉｼ 明日まで立川たんとのコラボ名刺配布中✨✨",
+            "約５年振りの南武線コンビでのコラボなのでまだの人はぜひ貰いに来てね～！",
+            "期間:～8/31(木)迄",
+            "川崎店配布場所:2F総合カウンター",
+            "#ビッカメ娘 #川崎たん #立川たん https://t.co/rfEWKAeMAc"
+          ]
+        }
+      ],
+      "groupingNote": "川崎たんと立川たんのコラボ名刺。明日まで配布中で即時終了ではない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 332748,
+      "postSha256": "b95cc28eabfc3ed0ad646245a63e468d8fff3110dfa1d72ce6234f631bacdb98",
+      "textSha256": "d3889ebd239f558ff4f864d4b02e3462b77b36eaab1ed45fc69c83da4e63a138"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1692748592073846961",
+    "source": "public-post",
+    "description": "kawasaki-tachikawa-nambu-collaboration-2023 matched control",
+    "post": {
+      "id": "1692748592073846961",
+      "createdAt": "2023-08-19T04:01:28.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": ":゜☆川崎たんお勧め＆気になるガチャ紹介☆゜:。\n\n「仮面ライダー電王 イマジンサウナ２」\n(1階カプセルトイコーナー)\n１回 400円/4種類\n\n⊂( `˙꒳​˙´2)⊃ﾊﾞｯ 　俺！！\n\n  ＼参jyo...／\n\\\\◝( `˙꒳​˙´2)ﾉ //\n\nｯ!!!∑(*˙꒳​˙2) デ、デデ、デネブがいる！？\n#カプセルトイ #仮面ライダー電王 https://t.co/lvAnSOPhnL",
+      "url": "https://x.com/Bic_kawasaki/status/1692748592073846961",
+      "media": [
+        "https://pbs.twimg.com/media/F33Zyi0aYAAhbLL.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1692748592073846961",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 335966,
+      "postSha256": "ee64201661c506bb9ed6945e5893b26cc7624e3d17fb19dcf2bda5f3079d7761",
+      "textSha256": "5644322a55167cdaed503fb5e827291be027f731af651b1825a0a36fc85a3631"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

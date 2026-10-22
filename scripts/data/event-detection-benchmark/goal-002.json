@@ -1,0 +1,128 @@
+[
+  {
+    "id": "goal-positive-908497018460323840",
+    "source": "public-post",
+    "description": "shinjyuku regular redesign september 2017",
+    "post": {
+      "id": "908497018460323840",
+      "createdAt": "2017-09-15T01:05:42.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "【拡散希望】 #新宿西口たん 名刺新・通常版、４階ペンタブレットコーナーにて本日開店から配布します(๑•̀ㅁ•́๑)✧\nデザイン変更及び印刷品質大幅向上しておりますので、お手に取って下さると嬉しいです〜！\nたくさんのみなさまにお渡ししたいので、お一人様一枚でよろしくお願いします☆ https://t.co/naKxFantfj",
+      "url": "https://x.com/bic_shinjyuku/status/908497018460323840",
+      "media": [
+        "https://pbs.twimg.com/media/DJuhNZKUEAEBsuW.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shinjyuku"
+      ],
+      "characterIds": [
+        "shinjyuku"
+      ],
+      "category": "regular_card",
+      "startDate": "2017-09-15"
+    },
+    "rationale": "新・通常版の名刺を本日から4階で配布と明示。1人1枚は総数量でない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "shinjyuku-regular-redesign-september-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "新宿西口たん通常名刺",
+          "evidence": [
+            "【拡散希望】 #新宿西口たん 名刺新・通常版、４階ペンタブレットコーナーにて本日開店から配布します(๑•̀ㅁ•́๑)✧"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 919529,
+      "postSha256": "c67f6dd3823b2be3afcc687685c8efe1934fa0cd794b046696381982dde08b05",
+      "textSha256": "8bd368c5f3476bbbe81281cca8e3133c861c0ccee4f10015af09c936138df6c9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-923154301760847872",
+    "source": "public-post",
+    "description": "kawasaki halloween card 2017",
+    "post": {
+      "id": "923154301760847872",
+      "createdAt": "2017-10-25T11:48:31.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "2F総合カウンターにて #川崎たん「ハロウィン🎃名刺」絶賛配布中♪\nご自由にお持ちいただけますので、まだの方はゼヒゼヒ～((〃'･∀･)ﾉ\"\n\n#ご来店頂いた皆様ありがとうございました https://t.co/Qwbzek68eV",
+      "url": "https://x.com/Bic_kawasaki/status/923154301760847872",
+      "media": [
+        "https://pbs.twimg.com/media/DM-zqeCVwAEyU59.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "ハロウィン名刺を配布中。自由持ち帰りは明示されるが初回開始日は不明。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "kawasaki-halloween-card-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "川崎たんハロウィン名刺",
+          "evidence": [
+            "2F総合カウンターにて #川崎たん「ハロウィン🎃名刺」絶賛配布中♪"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 911671,
+      "postSha256": "bf397f932781fa19d504c762aeb6c6fd62c9a9363a46bd64b888f435e9e4c057",
+      "textSha256": "2f1f2d602c94c822d170c050da6d7ac12f8e4ff04705b7827c5c944fa6a55823"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

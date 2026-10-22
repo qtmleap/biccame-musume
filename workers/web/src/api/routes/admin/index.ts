@@ -4,6 +4,7 @@ import adminBot from '@api/routes/admin-bot'
 import adminComments from '@api/routes/admin-comment'
 import adminEvents from '@api/routes/admin-event'
 import adminEventDetect from '@api/routes/admin-event-detect'
+import adminEventDetectExtract from '@api/routes/admin-event-detect-extract'
 import adminEventGroups from '@api/routes/admin-event-group'
 import adminTwitter from '@api/routes/admin-twitter'
 import adminUsers from '@api/routes/admin-user'
@@ -28,6 +29,7 @@ admin.route('/', adminBadges)
 admin.route('/', adminComments)
 admin.route('/', adminEvents)
 admin.route('/', adminEventDetect)
+admin.route('/', adminEventDetectExtract)
 admin.route('/', adminEventGroups)
 admin.route('/', adminUsers)
 admin.route('/', adminTwitter)

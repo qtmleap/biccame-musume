@@ -12,6 +12,8 @@ export const WEBHOOK_PAGE_SIZE = 25
 /** 絞り込み・並べ替えの値を API のクエリにする。null（指定なし）は送らない。 */
 const webhookJobQueries = (cursor: string | null, filter: WebhookFilter) => ({
   limit: WEBHOOK_PAGE_SIZE,
+  screenName: filter.screenName === null ? undefined : filter.screenName,
+  discovery: filter.discovery === null ? undefined : filter.discovery,
   cursor: cursor === null ? undefined : cursor,
   range: filter.range === null ? undefined : filter.range,
   sort: filter.sort,
@@ -64,6 +66,20 @@ export const useAdminWebhookJob = (postId: string) => {
   })
 }
 
+/** 実送信記録は大きいため、プロンプトダイアログを開いたときだけ取得し永続キャッシュに入れない。 */
+export const useAdminWebhookPrompt = (postId: string, candidateId?: string) =>
+  useQuery({
+    queryKey: [...ADMIN_WEBHOOK_QUERY_KEY, postId, 'prompt', candidateId === undefined ? null : candidateId],
+    queryFn: () => client.getAdminWebhookPrompt({ params: { postId }, queries: { candidateId } }),
+    staleTime: 0,
+    gcTime: 0,
+    retry: false,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: false,
+    networkMode: 'always',
+    meta: { persist: false }
+  })
+
 export const useRetryAdminWebhookJob = () => {
   const queryClient = useQueryClient()
   return useMutation({
@@ -89,6 +105,21 @@ export const useRejudgeAdminWebhookJob = () => {
       await queryClient.invalidateQueries({ queryKey: ADMIN_WEBHOOK_QUERY_KEY })
     },
     onError: () => toast.error('判定のやり直しを受け付けられませんでした')
+  })
+}
+
+/** 登録済みジョブの回答だけを現在の質問とモデルで更新する（確認用）。イベント・判定状態・通知は変わらない。 */
+export const useRecheckAdminWebhookJob = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ postId, candidateId }: { postId: string; candidateId?: string }) =>
+      client.recheckAdminWebhookJob(undefined, { params: { postId }, queries: { candidateId } }),
+    retry: false,
+    onSuccess: async () => {
+      toast.success('判定を再確認しました')
+      await queryClient.invalidateQueries({ queryKey: ADMIN_WEBHOOK_QUERY_KEY })
+    },
+    onError: () => toast.error('判定を再確認できませんでした')
   })
 }
 

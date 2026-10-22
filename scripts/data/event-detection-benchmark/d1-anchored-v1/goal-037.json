@@ -1,0 +1,174 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2018138290319491398",
+    "source": "public-post",
+    "description": "yokonishi-anniv-card-key-2026",
+    "post": {
+      "id": "2018138290319491398",
+      "createdAt": "2026-02-02T01:43:58.000Z",
+      "screenName": "bicyokonishi",
+      "kind": "original",
+      "text": "／\nお知らせです✨\n＼\n【横西たん擬人化記念アクキー】はご好評につき、すべて配布完了致しました！\nありがとうございます！\n\n【記念名刺】は配布中です✨\n当日の1000円以上のレシートを【1Fレジ】にてご提示下さい\n✅POSAカードなどの金券購入・チャージは対象外です\n\nよっろしくお願いします～✨ https://t.co/FpfiRBIEEx",
+      "url": "https://x.com/bicyokonishi/status/2018138290319491398",
+      "media": [
+        "https://pbs.twimg.com/media/HAHd15Fa0AAVkn9.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "yokonishi"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アクキー配布完了と記念名刺の継続配布が混在し、名刺側のレシート条件は物品別。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "boundary:action",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "yokonishi-anniv-card-key-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "横西たん擬人化記念アクキー",
+          "evidence": [
+            "【横西たん擬人化記念アクキー】はご好評につき、すべて配布完了致しました！"
+          ]
+        },
+        {
+          "item": "記念名刺",
+          "evidence": [
+            "【記念名刺】は配布中です✨"
+          ]
+        }
+      ],
+      "groupingNote": "アクキー配布完了と記念名刺の継続配布が混在し、名刺側のレシート条件は物品別。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 75654,
+      "postSha256": "ffc83f068fa4568066b0b001b31c291367e726c369af5c95f542be667db29054",
+      "textSha256": "9b1629b53ab30811347703a8260df074ffb0aa9606e5578d37fe0457d7e9f301"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "edbf5516-b9ba-473f-aec4-bb769291b5c1",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bicyokonishi/status/2018138290319491398",
+          "origin": "manual-or-seed",
+          "title": "爆誕記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-01-30T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "yokonishi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2027564270612005174",
+    "source": "public-post",
+    "description": "yokonishi-anniv-card-key-2026 matched control",
+    "post": {
+      "id": "2027564270612005174",
+      "createdAt": "2026-02-28T01:59:27.000Z",
+      "screenName": "bicyokonishi",
+      "kind": "original",
+      "text": "╭━━━━━━━╮\n#ポケモングッズ を\n　　プレゼント🎁\n╰━ｖ━━━━━╯\n2月28日(土)・3月1日(日)\n10:00〜19:00\n1F 特設会場でポケモングッズが当たるルーレット🎯を実施❗️\nAからD賞、どれがもらえるかな〜✨\n#どなた様も参加OK\n#お待ちしております✨ https://t.co/MahyquEJ37",
+      "url": "https://x.com/bicyokonishi/status/2027564270612005174",
+      "media": [
+        "https://pbs.twimg.com/media/HCNawj1bEAE2F4k.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2027564270612005174",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 67895,
+      "postSha256": "4a8560941251edf406ae7bf4cba08deca74fbeb017bf2c56a8b057eae50a0e43",
+      "textSha256": "c578d61054f69c28314df805fa82586839fca700281afedc02befba26597b15d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

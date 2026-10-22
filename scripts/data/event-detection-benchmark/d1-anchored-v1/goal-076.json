@@ -1,0 +1,186 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2080191684756066578",
+    "source": "public-post",
+    "description": "fujisawa-anniv20-prize-design-2026",
+    "post": {
+      "id": "2080191684756066578",
+      "createdAt": "2026-07-23T07:22:00.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "quote",
+      "text": "(3・ω・)📢続報～～～！\n『ビックカメラ藤沢店20周年大感謝祭』\n抽選会にてプレゼント予定の\n【ビックカメラギフトカード】\n【サンキューカード(ポストカード)】\nデザインを解禁するぜ✨\n\n花束を貰ってほほ笑む藤沢たんが\nとってもステキ(自賛)なイラスト！\nお買物の後ぜひぜひ参加してくれよな！ https://t.co/DqzqVvqLMy",
+      "url": "https://x.com/bic_fujisawa/status/2080191684756066578",
+      "quoted": {
+        "id": "2079129289350578587",
+        "screenName": "bic_fujisawa",
+        "text": "(3・ω・)📢さんきゅー！！！\n『ビックカメラ藤沢店20周年大感謝祭』\n8月開催決定💕\n\nなんと✨10,000円分✨の\nビックカメラギフトカードが当たる\nガラポン抽選会を実施予定！\n\nさらに\n抽選会ご参加でご希望の方に\n「藤沢店20周年記念藤沢たんサンキューカード」\nをプレゼント！\n\n8/1(土)～7(金)　2F店頭 https://t.co/SBiWSIXBcK"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HN5QKNSaQAApBYf.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": [
+        "fujisawa"
+      ],
+      "characterIds": [
+        "fujisawa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "抽選会景品のデザイン解禁。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:fujisawa-store-anniv20-2026"
+    ],
+    "group": "fujisawa-anniv20-prize-design-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "ビックカメラギフトカード",
+          "evidence": [
+            "『ビックカメラ藤沢店20周年大感謝祭』",
+            "【ビックカメラギフトカード】"
+          ]
+        },
+        {
+          "item": "サンキューカード(ポストカード)",
+          "evidence": [
+            "【サンキューカード(ポストカード)】"
+          ]
+        }
+      ],
+      "groupingNote": "抽選会景品のデザイン解禁。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 22192,
+      "postSha256": "d73f3f06f6429217d2426b95cd54dc858cc95e8d5943baff254803b5bef8534d",
+      "textSha256": "6566de4b5fd213b476707f92c018410caf8da1bec4d2ce22452b9f43998f42e8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "d514179d-ec4b-4435-a053-a85877409d9c",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_fujisawa/status/2080191684756066578",
+          "origin": "manual-or-seed",
+          "title": "ポストカード",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-31T15:00:00.000+00:00",
+            "endDate": "2026-08-07T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "fujisawa"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 5000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2080140850059673907",
+    "source": "public-post",
+    "description": "fujisawa-anniv20-prize-design-2026 matched control",
+    "post": {
+      "id": "2080140850059673907",
+      "createdAt": "2026-07-23T04:00:00.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "quote",
+      "text": "【抽選会　当選発表】\n7/21・22実施\nポケモンカードゲームMEGA\n拡張パック『アビスアイ』\n\nご当選の場合\nレシートが添付された抽選台紙、マイナンバーカード、受付時のビックカメラsuicaカードを6階レジまで必ずお持ちください。\n 購入期限：7/23(木)13:00～24(金) https://t.co/uFgg2iwfLj",
+      "url": "https://x.com/bic_fujisawa/status/2080140850059673907",
+      "quoted": {
+        "id": "2078686758255120622",
+        "screenName": "bic_fujisawa",
+        "text": "【藤沢店限定】抽選販売のご案内\nポケモンカードゲームMEGA\n拡張パック『アビスアイ』\n\n受付期間：7月21日(火)～22日(水)\n受付場所：6階レジ\n※先着順ではございません\n※詳細は画像または店頭にて https://t.co/31x5aES4Di"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HN4ee4GaEAAqp95.png",
+        "https://pbs.twimg.com/media/HN4ejUiaAAAq4uV.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2080140850059673907",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 22281,
+      "postSha256": "7c830164d74099d43f047afab6b4d858640ab04f33286cf686e37a3fd915efb0",
+      "textSha256": "ecb5211ebd84e3154b42ed845fc66ac31492672eb710258589c729b6788954fd"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

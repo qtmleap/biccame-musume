@@ -1,0 +1,153 @@
+[
+  {
+    "id": "goal-positive-2036284371083170214",
+    "source": "public-post",
+    "description": "nagoyagate ninth ackey 2026",
+    "post": {
+      "id": "2036284371083170214",
+      "createdAt": "2026-03-24T03:30:01.000Z",
+      "screenName": "bic_nagoyagate",
+      "kind": "original",
+      "text": "金鯱|*ºωº){皆さまのご来店お待ちしております～✨\n\n3月30(月)より\n#なごやげーとたん 擬人化9記念キャンペーンを開催🎂\n当店で税込3,000円以上ご購入で、先着100名様にアクリルキーホルダーをプレゼント🎁\n\n当日お買い上げのレシートを9F総合カウンターまでお持ちくださいませ～✨\n※無くなり次第終了 https://t.co/CQ7K1Kkfcb",
+      "url": "https://x.com/bic_nagoyagate/status/2036284371083170214",
+      "media": [
+        "https://pbs.twimg.com/media/HEJUYh4aIAAuI6S.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "nagoyagate"
+      ],
+      "characterIds": [
+        "nagoyagate"
+      ],
+      "category": "ackey",
+      "startDate": "2026-03-30",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "3/30から3000円購入、先着100名と明示。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "nagoyagate-ninth-ackey-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "ready",
+      "items": [
+        {
+          "item": "なごやげーとたんアクキー",
+          "evidence": [
+            "当店で税込3,000円以上ご購入で、先着100名様にアクリルキーホルダーをプレゼント🎁"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": []
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 60586,
+      "postSha256": "db16354d1182cea5ed986949fe73d40ddfb32a3a9aa98c06d416b0b3b73a9696",
+      "textSha256": "9582e529fe7eea245ef0215f410d854cbf4e1eaaac8d46b9a8b50bb15217a84c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bic_nagoyagate/status/2036284371083170214",
+          "referenceType": "announce",
+          "eventId": "4a184d3a-ea9c-4043-a077-2095d31fc096",
+          "title": "擬人化9周年記念アクキー",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "goal-positive-2034496206173561300",
+    "source": "public-post",
+    "description": "shinyoko store18 card 2026",
+    "post": {
+      "id": "2034496206173561300",
+      "createdAt": "2026-03-19T05:04:29.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "【📢新横たんよりお知らせ】\n\n3月26日(木)から4月30日(木)まで \n\n店舗誕生18周年記念名刺を配布します✨\n配布場所は通常名刺の配布と同じ\n9階レストラン側の のぼりエスカレーター横です✨\n\n※おひとり様1枚でお願いします。 https://t.co/mQB5uR52Z3",
+      "url": "https://x.com/bic_shinyoko/status/2034496206173561300",
+      "media": [
+        "https://pbs.twimg.com/media/HDv7gLda8AAw2TT.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shinyoko"
+      ],
+      "category": "limited_card",
+      "startDate": "2026-03-26"
+    },
+    "rationale": "3/26から4/30。擬人化6周年のアクキーとは別。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "shinyoko-store18-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "新横たん店舗18周年名刺",
+          "evidence": [
+            "店舗誕生18周年記念名刺を配布します✨",
+            "配布場所は通常名刺の配布と同じ"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 62110,
+      "postSha256": "8edc9e328054cc9b7c6fd92682bf13e48ea895076eec58b4420cf2f99dda2f9a",
+      "textSha256": "5c3db608d5bbebca92d5a3ca2c7965677d5d3675f0c78ff076dbb9a72e2be76a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bic_shinyoko/status/2034496206173561300",
+          "referenceType": "announce",
+          "eventId": "9b42dbb7-6419-41f8-9c31-750a00b1b7e2",
+          "title": "18周年記念名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  }
+]

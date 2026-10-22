@@ -1,0 +1,229 @@
+{
+  "answers": {
+    "is_event": {
+      "type": "noul",
+      "noul": 0.9774
+    },
+    "status": {
+      "type": "choice",
+      "choice": "start",
+      "probabilities": {
+        "announce": 0.0069,
+        "start": 0.9635,
+        "ongoing": 0.0194,
+        "end": 0.0061,
+        "none": 0.0041
+      },
+      "confidence": 0.911
+    },
+    "category": {
+      "type": "choice",
+      "choice": "limited_card",
+      "probabilities": {
+        "limited_card": 0.976,
+        "regular_card": 0.0081,
+        "other": 0.0099,
+        "none": 0.006
+      },
+      "confidence": 0.937
+    },
+    "start_date": {
+      "type": "choice",
+      "choice": "d20180210",
+      "probabilities": {
+        "d20180210": 0.9918,
+        "none": 0.0082
+      },
+      "confidence": 0.9673
+    },
+    "end_date": {
+      "type": "choice",
+      "choice": "none",
+      "probabilities": {
+        "d20180210": 0.0476,
+        "none": 0.9524
+      },
+      "confidence": 0.8188
+    },
+    "venue.abeno": {
+      "type": "noul",
+      "noul": 0.014
+    },
+    "venue.akasaka": {
+      "type": "noul",
+      "noul": 0.0129
+    },
+    "venue.akiba": {
+      "type": "noul",
+      "noul": 0.029
+    },
+    "venue.bicqlo": {
+      "type": "noul",
+      "noul": 0.018
+    },
+    "venue.chiba": {
+      "type": "noul",
+      "noul": 0.0155
+    },
+    "venue.chofu": {
+      "type": "noul",
+      "noul": 0.0159
+    },
+    "venue.fujisawa": {
+      "type": "noul",
+      "noul": 0.0227
+    },
+    "venue.funabashi": {
+      "type": "noul",
+      "noul": 0.0126
+    },
+    "venue.hachioji": {
+      "type": "noul",
+      "noul": 0.017
+    },
+    "venue.hamamatsu": {
+      "type": "noul",
+      "noul": 0.0737
+    },
+    "venue.hiroshima": {
+      "type": "noul",
+      "noul": 0.0129
+    },
+    "venue.honten": {
+      "type": "noul",
+      "noul": 0.0134
+    },
+    "venue.ikenishi": {
+      "type": "noul",
+      "noul": 0.0414
+    },
+    "venue.itt": {
+      "type": "noul",
+      "noul": 0.0571
+    },
+    "venue.kagoshima": {
+      "type": "noul",
+      "noul": 0.018
+    },
+    "venue.kashiwa": {
+      "type": "noul",
+      "noul": 0.0329
+    },
+    "venue.kawasaki": {
+      "type": "noul",
+      "noul": 0.9824
+    },
+    "venue.kumamoto": {
+      "type": "noul",
+      "noul": 0.3138
+    },
+    "venue.mito": {
+      "type": "noul",
+      "noul": 0.0375
+    },
+    "venue.nagoya": {
+      "type": "noul",
+      "noul": 0.0147
+    },
+    "venue.nagoyagate": {
+      "type": "noul",
+      "noul": 0.0283
+    },
+    "venue.nanba": {
+      "type": "noul",
+      "noul": 0.0338
+    },
+    "venue.niigata": {
+      "type": "noul",
+      "noul": 0.088
+    },
+    "venue.ohmiya": {
+      "type": "noul",
+      "noul": 0.2381
+    },
+    "venue.okayama": {
+      "type": "noul",
+      "noul": 0.0137
+    },
+    "venue.pkan": {
+      "type": "noul",
+      "noul": 0.0146
+    },
+    "venue.prosta": {
+      "type": "noul",
+      "noul": 0.021
+    },
+    "venue.sagami": {
+      "type": "noul",
+      "noul": 0.0205
+    },
+    "venue.sapporo": {
+      "type": "noul",
+      "noul": 0.0162
+    },
+    "venue.shibuhachi": {
+      "type": "noul",
+      "noul": 0.0179
+    },
+    "venue.shibuto": {
+      "type": "noul",
+      "noul": 0.2189
+    },
+    "venue.shinjyuku": {
+      "type": "noul",
+      "noul": 0.0136
+    },
+    "venue.shintou": {
+      "type": "noul",
+      "noul": 0.3194
+    },
+    "venue.shinyoko": {
+      "type": "noul",
+      "noul": 0.1248
+    },
+    "venue.tachikawa": {
+      "type": "noul",
+      "noul": 0.014
+    },
+    "venue.takasaki": {
+      "type": "noul",
+      "noul": 0.2807
+    },
+    "venue.takatsuki": {
+      "type": "noul",
+      "noul": 0.1259
+    },
+    "venue.tenjin": {
+      "type": "noul",
+      "noul": 0.0161
+    },
+    "venue.tenjin2": {
+      "type": "noul",
+      "noul": 0.0223
+    },
+    "venue.tokorozawa": {
+      "type": "noul",
+      "noul": 0.0215
+    },
+    "venue.urawa": {
+      "type": "noul",
+      "noul": 0.029
+    },
+    "venue.yao": {
+      "type": "noul",
+      "noul": 0.0396
+    },
+    "venue.yokonishi": {
+      "type": "noul",
+      "noul": 0.0213
+    },
+    "venue.yuurakuchou": {
+      "type": "noul",
+      "noul": 0.0141
+    }
+  },
+  "usage": {
+    "input_tokens": 8436,
+    "output_tokens": 0
+  }
+}

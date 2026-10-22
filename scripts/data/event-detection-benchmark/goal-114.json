@@ -1,0 +1,108 @@
+[
+  {
+    "id": "goal-negative-2017197796244500560",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2017197796244500560",
+      "createdAt": "2026-01-30T11:26:47.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "パナソニック #ジアイーノ『FML4000B』が2月22日までの期間限定で7000円引き‼️\n次亜塩素酸の力でお部屋を除菌・脱臭できるのはジアイーノだけ✨\n寒すぎてお外出たくなーい🥺\nでも換気したらお部屋が寒ーい🥺\nそんな時に大活躍✨\n\n他にも空気清浄機たくさん取り揃えています😆\n(5階 空気清浄機コーナー) https://t.co/loeysfQ1Fc",
+      "url": "https://x.com/biccamera_nanba/status/2017197796244500560",
+      "media": [
+        "https://pbs.twimg.com/media/G_6FdonawAIXeyB.png",
+        "https://pbs.twimg.com/media/G_6FfKtbYAAlX-V.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「パナソニック #ジアイーノ『FML4000B』が2月22日までの期間限定で7000円引き‼️ / 次亜塩素酸の力でお部屋を除菌・脱臭できるのはジアイーノだけ✨ / 寒すぎてお外出たくなーい🥺」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "panasonic-ziaino-air-cleaner-sale-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 76264,
+      "postSha256": "e4f2a7f666342476fbbbaa9714ca9cb76dcbb781d58ad0807d1cbd4efe7d269d",
+      "textSha256": "fe734be8ce909b2e44e6d5e67ebcaede226861caac77ead610882205ec641594"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-2017486705339863325",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2017486705339863325",
+      "createdAt": "2026-01-31T06:34:48.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "▷ #クロノヴァ × #ビックカメラ ◀︎\n\nクロノヴァグッズフェア in ビックカメラグループ\n2月13日までは館内放送クロノヴァverが放送中❣\n\nサンプルも展示中！デスクマットも確認できます👀\n何を買おうか迷っている方はぜひご覧ください✨ https://t.co/4UrgTNqMN0",
+      "url": "https://x.com/bicikebukuro/status/2017486705339863325",
+      "media": [
+        "https://pbs.twimg.com/media/G_-MzPlasAAztiP.jpg",
+        "https://pbs.twimg.com/media/G_-NWTMbEAgTwZY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「▷ #クロノヴァ × #ビックカメラ ◀︎ / クロノヴァグッズフェア in ビックカメラグループ / 2月13日までは館内放送クロノヴァverが放送中❣」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "chronova-goods-fair-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 76057,
+      "postSha256": "3e27f4cb1c4bfdc2baea0c91beae073a5cc9110e5502c47ab248fd576aaf158a",
+      "textSha256": "44a631b388ab0d9322c5efcc59ee3eb3776360d47a66bf59ae6c3eda9ed72fa1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

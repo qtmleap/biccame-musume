@@ -1,0 +1,123 @@
+[
+  {
+    "id": "goal-positive-1053194513580093440",
+    "source": "public-post",
+    "description": "shinjyuku radius display 2018",
+    "post": {
+      "id": "1053194513580093440",
+      "createdAt": "2018-10-19T08:01:54.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "|≧∇≦)ﾉ #新宿西口たん 情報☆\n等身大パネル☆2階エスカレーター側の入口エリア\n名刺配布場所☆4階ペンタブレットコーナー(くだりエスカレーターお隣)\n\n★11月18日(木)まで\n#ラディウス コラボ階段ゲート装飾☆3階\n二次元コードから #ナイセン さん描き下ろしイラストのスマホ用壁紙をGETできます！ https://t.co/ohwG2yxUKy",
+      "url": "https://x.com/bic_shinjyuku/status/1053194513580093440",
+      "media": [
+        "https://pbs.twimg.com/media/Dp2AU4WUcAAlz-4.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "ラディウス階段装飾・壁紙取得と、既存の新宿西口たん名刺の配布場所を案内。名刺は配布物だが展示物や壁紙を物理配布物へ追加しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "shinjyuku-radius-display-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "新宿西口たん名刺",
+          "evidence": [
+            "名刺配布場所☆4階ペンタブレットコーナー(くだりエスカレーターお隣)"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 806170,
+      "postSha256": "328abf4b708a930f31d9b2a09d703cf6612efb589624c765d2d3983f1038865b",
+      "textSha256": "8adff959c1168c8c8552c399a60ec162bbcb82b162ab004abf6c3fd1c19b0228"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1050190020483547136",
+    "source": "public-post",
+    "description": "honten halloween card 2018",
+    "post": {
+      "id": "1050190020483547136",
+      "createdAt": "2018-10-11T01:03:07.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "本日より🎃ハロウィンver🎃名刺が登場！\n(⋈ ☌∀☌)/配布場所はB1のみ！\n\n①池袋メンバークイズ付き名刺\n→1F店頭正面向かって左側ハロウィン商品横本店たんパネル手元\n②誕生日名刺・ハロウィン名刺←NEW✨\n→地下1F奥の階段横ビッカメ娘イラスト壁面\n #本店たん名刺配布状況 https://t.co/6ZSJyfY8G1",
+      "url": "https://x.com/bicikebukuro/status/1050190020483547136",
+      "media": [
+        "https://pbs.twimg.com/media/DpMGL61UYAA7oMT.jpg",
+        "https://pbs.twimg.com/media/DpMGMQNU0AEhA3f.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card"
+    },
+    "rationale": "誕生日・クイズ名刺と併存する新しいハロウィン名刺。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "honten-halloween-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "本店たんハロウィン名刺",
+          "evidence": [
+            "本日より🎃ハロウィンver🎃名刺が登場！",
+            "①池袋メンバークイズ付き名刺",
+            "②誕生日名刺・ハロウィン名刺←NEW✨",
+            " #本店たん名刺配布状況 https://t.co/6ZSJyfY8G1"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 815089,
+      "postSha256": "9b3d82ada3246535a5ef01112e709d67dc7f58a51da8cec52957b41301ceedb0",
+      "textSha256": "549e86e2f3b0dd9767d83bc80dabaea727add677ed97839ded2087bb945e5361"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

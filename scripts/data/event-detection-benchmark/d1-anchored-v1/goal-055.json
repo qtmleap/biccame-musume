@@ -1,0 +1,181 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2058753818121347584",
+    "source": "public-post",
+    "description": "takatsuki-open4-bittabi-2026",
+    "post": {
+      "id": "2058753818121347584",
+      "createdAt": "2026-05-25T03:35:34.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "📢＼　①店舗OPEN4周年+②ビッカメ娘旅\n合同イ ベ ン ト　告 知　/\n\n①店舗OPEN4周年+②ビッカメ娘旅\n税込2,200円以上ご購入で\nたかつきたんステッカー　1点\nたかつきたん缶バッチ　1点\n各1点ずつ プレゼント✨\n\nお渡しは、おもちゃ自転車ゲーム相談カウンター\nです✨ https://t.co/vGJKWxfwvm",
+      "url": "https://x.com/bic_takatsuki/status/2058753818121347584",
+      "media": [
+        "https://pbs.twimg.com/media/HJIo63vbMAAlEku.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "takatsuki"
+      ],
+      "startDate": null,
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 2200
+        }
+      ]
+    },
+    "rationale": "2200円以上でステッカーと缶バッジを各1点。開始日は本文にない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "takatsuki-open4-bittabi-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "たかつきたんステッカー",
+          "evidence": [
+            "たかつきたんステッカー　1点",
+            "たかつきたん缶バッチ　1点"
+          ]
+        },
+        {
+          "item": "たかつきたん缶バッチ",
+          "evidence": [
+            "たかつきたんステッカー　1点",
+            "たかつきたん缶バッチ　1点"
+          ]
+        }
+      ],
+      "groupingNote": "2200円以上でステッカーと缶バッジを各1点。開始日は本文にない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 41272,
+      "postSha256": "e5881aa2a5f1059bc4dc15ef49199c5db2b4aac1f3f0917a58ab2c6bb3ba97ae",
+      "textSha256": "3e1ce29c7a35de5cdce93aca31acc672139093eeffc8e42e8bea4cb617259ab7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "ab36fa72-60a2-4106-a263-3a21b289c6be",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_takatsuki/status/2058753818121347584",
+          "origin": "manual-or-seed",
+          "title": "店舗4周年記念ステッカー",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-06-05T15:00:00.000+00:00",
+            "endDate": "2026-06-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "takatsuki"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 1100,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2054762259059236916",
+    "source": "public-post",
+    "description": "takatsuki-open4-bittabi-2026 matched control",
+    "post": {
+      "id": "2054762259059236916",
+      "createdAt": "2026-05-14T03:14:32.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "📢 ご来店の際に\nチェックしていただきたいコーナー☑\n\nゲームコーナーの\n「ゲームソフト注目タイトル」の\n✨裏✨\n「ゲームソフトご予約受付中」の\n✨裏✨\n\nぜひ、のぞいてみてください🔎 https://t.co/aSkR0oCFIG",
+      "url": "https://x.com/bic_takatsuki/status/2054762259059236916",
+      "media": [
+        "https://pbs.twimg.com/media/HIP3c7SbIAAavRl.jpg",
+        "https://pbs.twimg.com/media/HIP3egracAA3c0C.jpg",
+        "https://pbs.twimg.com/media/HIP31GBaQAAH71L.jpg",
+        "https://pbs.twimg.com/media/HIP33TiboAAMLXL.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2054762259059236916",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 44852,
+      "postSha256": "5dff7cba95dbe5397c148a772520f93c47d85955d748e4caf09f162d2fefe2ed",
+      "textSha256": "3d53527d26dcbf9675e92bac59b209c61ab90c0cc98d8665e8c6da4e70c7b6b5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

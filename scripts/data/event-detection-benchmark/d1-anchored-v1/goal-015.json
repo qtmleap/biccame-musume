@@ -1,0 +1,162 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1895402244847345949",
+    "source": "public-post",
+    "description": "nanba-regular-card-renewal-2025",
+    "post": {
+      "id": "1895402244847345949",
+      "createdAt": "2025-02-28T09:14:44.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "なんばたんの通常名刺、結構長い間同じデザインやったから新しいの作ったやで😆✨\n明日から👇こちらに変わります❗️👇\n遊びに来たついでに1階総合カウンター前のなんばたん等身大パネルから受け取ってな☺️ https://t.co/YpNJ4BuVI8",
+      "url": "https://x.com/biccamera_nanba/status/1895402244847345949",
+      "media": [
+        "https://pbs.twimg.com/media/Gk3RgAKaIAAf6FF.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "regular_card",
+      "stores": null,
+      "characterIds": [
+        "nanba"
+      ],
+      "startDate": "2025-03-01",
+      "conditions": null
+    },
+    "rationale": "通常名刺の新デザインを明日から配布。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:kansai-regular-card-renewal"
+    ],
+    "group": "nanba-regular-card-renewal-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "なんばたん新通常名刺",
+          "evidence": [
+            "なんばたんの通常名刺、結構長い間同じデザインやったから新しいの作ったやで😆✨",
+            "遊びに来たついでに1階総合カウンター前のなんばたん等身大パネルから受け取ってな☺️ https://t.co/YpNJ4BuVI8"
+          ]
+        }
+      ],
+      "groupingNote": "通常名刺の新デザインを明日から配布。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 165928,
+      "postSha256": "26901be23c097b14f8117a2f0fbd99ffbb6734d18e66da1586c5f24c731a4aca",
+      "textSha256": "726d53d1128a33f818bd59984f57a1aaf7f2ff1d3f4bf858240727cbf85e2992"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "04edaf77-dc4f-4684-b727-5182958a58e9",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/biccamera_nanba/status/1895402244847345949",
+          "origin": "manual-or-seed",
+          "title": "通常名刺",
+          "category": "regular_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-02-28T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "nanba"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1891782928566452482",
+    "source": "public-post",
+    "description": "nanba-regular-card-renewal-2025 matched control",
+    "post": {
+      "id": "1891782928566452482",
+      "createdAt": "2025-02-18T09:32:52.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "❄️アンバサダー就任記念❄️\n#ハイアール 製品1点ご購入ごとに羽生結弦さんのオリジナルノベルティを１つプレゼント🎁\nハイアール製品5万円以上ご購入で限定A2ポスタープレゼント🎁\n(無くなり次第終了)\n青い衣装みたいに鮮やかなブルーイッシュグレーの冷蔵庫『JRGX47AH』も展示中🛼\n(6階 家電コーナー) https://t.co/1PrGztcdda",
+      "url": "https://x.com/biccamera_nanba/status/1891782928566452482",
+      "media": [
+        "https://pbs.twimg.com/media/GkD1q96aAAI73QJ.jpg",
+        "https://pbs.twimg.com/media/GkD1sztbkAACKea.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1891782928566452482",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 168666,
+      "postSha256": "bf6112e56fd2d1160d712881307f148ea699cc032745d9d3c192861a5694d20d",
+      "textSha256": "181c9946ccf6dff7aa4f415292f1119d13eee1108812b936151464a3c95db38f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

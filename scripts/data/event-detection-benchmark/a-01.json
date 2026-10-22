@@ -1,0 +1,205 @@
+[
+  {
+    "id": "public-2109594900237037897",
+    "source": "public-post",
+    "description": "子どもの販売員体験募集",
+    "post": {
+      "id": "2109594900237037897",
+      "createdAt": "2026-10-12T10:39:53.251Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "＼ちびっこ販売員、大募集！📣／\n\n10月25日(日)ビックカメラ有楽町店で\nお子様向け「おしごと体験」を開催🎊\n赤ベスト制服で販売員に変身✨\n\n🔗応募ページ：biccamera.com/bc/questionnai…\n\n【当選発表】\n10月19日(月)より順次DMにてご連絡\n※当選者様のみ連絡",
+      "url": "https://x.com/bic_yuurakuchou/status/2109594900237037897",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "子ども向け就業体験で、ビッカメ娘を対象とする企画の記載がない。",
+    "tags": [
+      "ordinary-event",
+      "application"
+    ],
+    "group": "children-job-experience",
+    "reviewStatus": "provisional",
+    "sourceHash": "4d3ce3942ae3218f79ae9851b6803ad9c576518c9b5f744fbb45cdc0c1a92844"
+  },
+  {
+    "id": "public-2109800511973265756",
+    "source": "public-post",
+    "description": "朝の挨拶だけ",
+    "post": {
+      "id": "2109800511973265756",
+      "createdAt": "2026-10-13T00:16:54.909Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "おはにしーヽ(^∀^*🎀)ﾉ🍞🍳🥓",
+      "url": "https://x.com/bicikenishi/status/2109800511973265756",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "挨拶のみでイベントや対象物の告知がない。",
+    "tags": [
+      "greeting"
+    ],
+    "group": "ikenishi-morning-greeting",
+    "reviewStatus": "provisional",
+    "sourceHash": "7e5047be50187f0399b0c4fa018dda575bc3534a791f777b2def0aaaeec0d8f2"
+  },
+  {
+    "id": "public-2109811357273243968",
+    "source": "public-post",
+    "description": "au PAY支払いクーポン",
+    "post": {
+      "id": "2109811357273243968",
+      "createdAt": "2026-10-13T01:00:00.630Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "本日10/13最終日！\nビックカメラ対象店舗にて、\n1回10,000円(税込)以上のau PAYで使えるクーポンを配布します！\nau PAYをご利用中の方もご検討中の方も、是非この期間にご来店ください\n※条件などは専用Webサイトもしくは店頭auスタッフまで\n\n■開催期間\n2026年10月9日(金)～2026年10月13日(火)",
+      "url": "https://x.com/bic_shinjuku3ch/status/2109811357273243968",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "決済サービスのクーポンであり、ビッカメ娘の配布物や企画ではない。",
+    "tags": [
+      "payment",
+      "coupon",
+      "numeric-condition"
+    ],
+    "group": "aupay-coupon-202610",
+    "reviewStatus": "provisional",
+    "sourceHash": "89e0db7bd6753eaa2c212325de53e65a87b101cccaeb9ab7600e688c1469c1da"
+  },
+  {
+    "id": "public-2109812614091981119",
+    "source": "public-post",
+    "description": "Meta Quest通常特価",
+    "post": {
+      "id": "2109812614091981119",
+      "createdAt": "2026-10-13T01:05:00.279Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "／\nMeta Quest 3S がお買い得！\n＼\n\nVRの世界へ飛び込もう！\nゲームコーナーにて好評販売中！\n10月19日(月)まで",
+      "url": "https://x.com/bic_sagamioono/status/2109812614091981119",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "一般向けVR製品の特価販売で、ビッカメ娘の企画ではない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "limited-period"
+    ],
+    "group": "meta-quest-oct-sale",
+    "reviewStatus": "provisional",
+    "sourceHash": "da7dc0ec0084c413cb67f2e51db6a5459a67bed6c29c849f7b2b823cf2e6a1f4"
+  },
+  {
+    "id": "public-2109814050414879053",
+    "source": "public-post",
+    "description": "さっぽろたんログイン挨拶",
+    "post": {
+      "id": "2109814050414879053",
+      "createdAt": "2026-10-13T01:10:42.725Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "おはっぽろ～！\nさっぽろたんログインしました！\n本日もどうぞよろしくお願いします♪",
+      "url": "https://x.com/bic_sapporo/status/2109814050414879053",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ビッカメ娘名はあるが、ログイン挨拶だけである。",
+    "tags": [
+      "greeting",
+      "character-mention"
+    ],
+    "group": "sapporo-login",
+    "reviewStatus": "provisional",
+    "sourceHash": "2a2394be2c42442423bd135f98c56f900ad275bbe450abec78c01d1e1ec2ddfe"
+  },
+  {
+    "id": "public-2109816472914829466",
+    "source": "public-post",
+    "description": "八王子たんの天気と夕飯",
+    "post": {
+      "id": "2109816472914829466",
+      "createdAt": "2026-10-13T01:20:20.294Z",
+      "screenName": "bichachioji",
+      "kind": "original",
+      "text": "おっはちおーじ(≧仝≦)💛\n八王子ただいまくもり☁です❣\nきのうは仕込んでおいたおでんをお夕飯にしました！\nだいこんしみしみでおいしかったです✨\n最近コンビニではおでん販売しなくなっちゃったのかな？😿\nきょうも元気によろしくおねがいします🌸\n#八王子たん\n#企業公式が地元の天気を言い合う",
+      "url": "https://x.com/bichachioji/status/2109816472914829466",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "キャラ名と生活の話題はあるが、イベント告知や配布物はない。",
+    "tags": [
+      "greeting",
+      "character-mention",
+      "weather"
+    ],
+    "group": "hachioji-weather-dinner",
+    "reviewStatus": "provisional",
+    "sourceHash": "f5c8aeb894f9f27c2bc85ff7bd613327f514f69a43187607f7a8bc9b04b4c0f8"
+  },
+  {
+    "id": "public-2109819473373053347",
+    "source": "public-post",
+    "description": "Corsairモニター新入荷",
+    "post": {
+      "id": "2109819473373053347",
+      "createdAt": "2026-10-13T01:32:15.659Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "＼期間限定セール中！／\n14.5インチのタッチ対応サブモニター #Corsair のXENEON EDGEが入荷しました！\nデスク置きはもちろん、マグネットで様々な場所に取り付け可能！\nStreamDeck機能対応で便利すぎて手放せなくなること間違いなし！\nお買い得なこの機会に2Fゲーミングコーナーにてお求めください！",
+      "url": "https://x.com/bic_ohmiya/status/2109819473373053347",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "通常のPC周辺機器販売案内である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "new-product"
+    ],
+    "group": "corsair-xeneon-monitor",
+    "reviewStatus": "provisional",
+    "sourceHash": "61a63b2c3afdfa58012f9d940dd0fa75dbc8b5f21cc41ced4f914f21ff89be75"
+  },
+  {
+    "id": "public-2109820967153516593",
+    "source": "public-post",
+    "description": "社内の絵の話",
+    "post": {
+      "id": "2109820967153516593",
+      "createdAt": "2026-10-13T01:38:11.804Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "( っ*´ω`*c).o0(やはり弊社、絵がうまい人が多すぎるのでは…？)",
+      "url": "https://x.com/bicpkanhonten/status/2109820967153516593",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "絵が上手いという雑談のみで、配布・販売・展示企画の告知はない。",
+    "tags": [
+      "small-talk",
+      "illustration-mention"
+    ],
+    "group": "pkan-illustration-talk",
+    "reviewStatus": "provisional",
+    "sourceHash": "0a93468a2e2cc0948e8ac37e02d22d27686ca8fc76f2f17ee52106b226db668c"
+  }
+]

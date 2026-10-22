@@ -1,0 +1,137 @@
+[
+  {
+    "id": "expanded-v2-positive-1619258982081626112",
+    "source": "public-post",
+    "description": "shintou-valentine-card-2023",
+    "post": {
+      "id": "1619258982081626112",
+      "createdAt": "2023-01-28T09:00:00.000Z",
+      "screenName": "Bic_shintoueki",
+      "kind": "original",
+      "text": "💕お知らせ💕\n💛#新東たん バレンタイン名刺配布💛\n\n期間：2/1～2/28\n場所：3F 新東たんポスターパネル前\n\n🍓🍫🍓🍫🍓🍫🍓🍫🍓🍫🍓\nいちご味のチョコってお好きですか?\n良かったら受け取ってください❣️\nﾃﾚｯ♡ (◞ꈍ∇ꈍ)っ💝\n🍓🍫🍓🍫🍓🍫🍓🍫🍓🍫🍓\n\nお一人様一枚まででお願い致します\n#ビッカメ娘 https://t.co/zFzfR1HOjn",
+      "url": "https://x.com/Bic_shintoueki/status/1619258982081626112",
+      "media": [
+        "https://pbs.twimg.com/media/FnicLZPaQAAkAGr.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "shintou"
+      ],
+      "startDate": "2023-02-01",
+      "conditions": null
+    },
+    "rationale": "名刺配布は明示。いちご味のチョコへの言及と受け取りの呼びかけはあるが、チョコ独立配布の有無は本文だけでは未確定。単一itemは暫定。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new",
+      "challenge"
+    ],
+    "group": "shintou-valentine-card-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "バレンタイン名刺",
+          "evidence": [
+            "💕お知らせ💕",
+            "💛#新東たん バレンタイン名刺配布💛",
+            "期間：2/1～2/28",
+            "場所：3F 新東たんポスターパネル前",
+            "🍓🍫🍓🍫🍓🍫🍓🍫🍓🍫🍓",
+            "いちご味のチョコってお好きですか?",
+            "良かったら受け取ってください❣️",
+            "ﾃﾚｯ♡ (◞ꈍ∇ꈍ)っ💝",
+            "🍓🍫🍓🍫🍓🍫🍓🍫🍓🍫🍓",
+            "お一人様一枚まででお願い致します",
+            "#ビッカメ娘 https://t.co/zFzfR1HOjn"
+          ]
+        }
+      ],
+      "groupingNote": "名刺配布は明示。いちご味のチョコへの言及と受け取りの呼びかけはあるが、チョコ独立配布の有無は本文だけでは未確定。単一itemは暫定。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 391545,
+      "postSha256": "1a83efc7da8a623a08e85f755d5630a0894efa2a1db0c82cf575ca53eb25c6fe",
+      "textSha256": "7e8cf56b10fc388f8b4d4c303370fa82891d7a5e46c27b24affc2e78dbcde4e7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1615299837423153156",
+    "source": "public-post",
+    "description": "shintou-valentine-card-2023 matched control",
+    "post": {
+      "id": "1615299837423153156",
+      "createdAt": "2023-01-17T10:47:46.000Z",
+      "screenName": "Bic_shintoueki",
+      "kind": "original",
+      "text": "🌸2023年 #新生活応援セール 🌸\n新生活の必需品がまとめてお得🎉\n\n生活シーンに合わせて2点セット～5点セットまで\nご用意しております🎶\n\nさらに2月12日までは『早得』でポイント3％アップ⤴️\n\n詳しくは5階家電コーナー販売員までお気軽にお問合せくださいませ。\nhttps://t.co/3ovzqupQJt https://t.co/xfl1wlRUJN",
+      "url": "https://x.com/Bic_shintoueki/status/1615299837423153156",
+      "media": [
+        "https://pbs.twimg.com/media/Fmqyoo9aEAAKQuB.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1615299837423153156",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 394130,
+      "postSha256": "b351d2b6031fe899b1f71cd773e85828d4a544139235aea551eecfac8c242818",
+      "textSha256": "74ee23b37b08a6532f23e6f09a83be6b96f1b953a56d5eee959c7312c9508963"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

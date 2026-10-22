@@ -1,0 +1,171 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2005495050357350717",
+    "source": "public-post",
+    "description": "funabashi-newyear-postcard-2026",
+    "post": {
+      "id": "2005495050357350717",
+      "createdAt": "2025-12-29T04:24:14.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "🌻イベント告知🌻\n\n🌅期間:1月1日〜1月31日まで🎍\n\n期間中税込1000円以上ご購入のお客様に、レジにてボクの年賀状をお渡しいたします！ 🐴\nご希望のお客様は、4Fレジにて販売員にお申し付けください🧧\n\n※レシートの合算・電子レシートはお渡し不可となっておりますのでお気をつけください💦 https://t.co/E3YvoAZA9K",
+      "url": "https://x.com/bic_funabashi/status/2005495050357350717",
+      "media": [
+        "https://pbs.twimg.com/media/G9TaS0la0AElMNQ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2026-01-01",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 1000
+        }
+      ]
+    },
+    "rationale": "1/1〜1/31に税込1000円以上購入で年賀状を配布。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "funabashi-newyear-postcard-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "年賀状",
+          "evidence": [
+            "期間中税込1000円以上ご購入のお客様に、レジにてボクの年賀状をお渡しいたします！ 🐴"
+          ]
+        }
+      ],
+      "groupingNote": "1/1〜1/31に税込1000円以上購入で年賀状を配布。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 84450,
+      "postSha256": "ded3dd58b06fb05a64e5c5c658f3d619a1e24668218320f1db1abcd552fd4138",
+      "textSha256": "c3a973ea2dfa44036091f507c40a44aa3e8f09139cde213e01ae00c9fefe9e3a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "7b594ee3-bc08-4126-83a0-d2452fe2979f",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_funabashi/status/2005495050357350717",
+          "origin": "manual-or-seed",
+          "title": "年賀状",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-12-31T15:00:00.000+00:00",
+            "endDate": "2026-01-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": 1,
+            "stores": [
+              "funabashi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2001865160756203778",
+    "source": "public-post",
+    "description": "funabashi-newyear-postcard-2026 matched control",
+    "post": {
+      "id": "2001865160756203778",
+      "createdAt": "2025-12-19T04:00:21.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "\\❄️BOSE ウインターセール⛄/\n\n12月31日(水)までの期間限定!\n新製品の\n「QC Ultra Earbuds 2nd」\n「QC UltraHeadphones 2nd」に加え、\n「SoundLink Home」\n「Smart Ultra Soundbar」 などのBOSEの大人気商品が特別価格になるチャンス‼️\n\n#BOSE https://t.co/XuRbj71ZEV",
+      "url": "https://x.com/bic_funabashi/status/2001865160756203778",
+      "media": [
+        "https://pbs.twimg.com/media/G8gMOAXasAAQqi7.jpg",
+        "https://pbs.twimg.com/media/G8gMP-qbMAADCA9.jpg",
+        "https://pbs.twimg.com/media/G8gMTXCboAAHAT8.jpg",
+        "https://pbs.twimg.com/media/G8gMVpwb0AAF6xR.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2001865160756203778",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 87246,
+      "postSha256": "d6e94e82c96b1ae161b76009cfd9fb949acff3a93dca6eeadf01327ed432ba2d",
+      "textSha256": "d72e7d20d3b6abf9ef815150448557db37c6241aba932e4353371bfa644705f4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

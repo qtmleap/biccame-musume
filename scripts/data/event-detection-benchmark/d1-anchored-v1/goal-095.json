@@ -1,0 +1,181 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2102747851680080178",
+    "source": "public-post",
+    "description": "pkan-autumn-collab-stock-2026",
+    "post": {
+      "id": "2102747851680080178",
+      "createdAt": "2026-09-23T13:12:09.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "quote",
+      "text": "／\nパソ館たん×千葉たんコラボイベント\n#あきいろパレット \n【パソ館たんノベルティ在庫情報】\n＼\n\n本日(9/23)閉店時点で残り【31個】です✨\n\n明日も開店より1Fにて配布いたします！\nコラボ名刺も【1Fカウンター】にて配布します✨",
+      "url": "https://x.com/bicpkanhonten/status/2102747851680080178",
+      "quoted": {
+        "id": "2091722176298627274",
+        "screenName": "bicpkanhonten",
+        "text": "／\nパソ館たん×千葉たん コラボイベント\n✏ #あきいろパレット 🍁\n＼\n\n✅9/23(水・祝)～　先着100セット\n✅当店で税込5,000円以上ご購入で\n　「🅰️ペンケース＆下敷きセット」プレゼント🎁\n\n「芸術の秋」にちなんだノベルティを配布します！\n\n詳しくは添付の画像をご確認ください☺️ https://t.co/1gCla73Itr"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "pkan",
+        "chiba"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "ノベルティの残数31個とコラボ名刺の配布案内。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:pkan-chiba-autumn-collab"
+    ],
+    "group": "pkan-autumn-collab-stock-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "パソ館たんノベルティ",
+          "evidence": [
+            "パソ館たん×千葉たんコラボイベント",
+            "【パソ館たんノベルティ在庫情報】"
+          ]
+        },
+        {
+          "item": "コラボ名刺",
+          "evidence": [
+            "パソ館たん×千葉たんコラボイベント",
+            "コラボ名刺も【1Fカウンター】にて配布します✨"
+          ]
+        }
+      ],
+      "groupingNote": "ノベルティの残数31個とコラボ名刺の配布案内。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 4383,
+      "postSha256": "1ee867a23e01ff430e394634281046b431bc73fc1ebbf24f959899033afb2752",
+      "textSha256": "aba6dd99fb1a149a060c6feedb3f39721820ddfc0cd571aabf9d01952741819a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "8dc92357-cbab-432b-92f3-00b7517bf860",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicpkanhonten/status/2102747851680080178",
+          "origin": "manual-or-seed",
+          "title": "コラボ名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-22T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "pkan"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2104757622134202629",
+    "source": "public-post",
+    "description": "pkan-autumn-collab-stock-2026 matched control",
+    "post": {
+      "id": "2104757622134202629",
+      "createdAt": "2026-09-29T02:18:16.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "quote",
+      "text": "／\nTurtle Beach x hololive Dreams\nキャンペーン実施中！\n＼\n\nビックカメラ池袋カメラ・パソコン館7Fに\n☄#星街すいせい 💀 #森カリオペ のパネルが登場✨\n\n対象のTurtle Beach商品をご購入で数量限定ホロドリオリジナルうちわが貰えます💕ぜひGETしてくださいね！ https://t.co/E7hrJVqvcq",
+      "url": "https://x.com/bicpkanhonten/status/2104757622134202629",
+      "quoted": {
+        "id": "2102390050495558063",
+        "screenName": "hololive_dreams",
+        "text": "#ホロドリ × タートルビーチ コラボキャンペーン🎶🎧️\n\n9/29(火)スタート！\n全国のヨドバシカメラ・ビックカメラ対象店舗のタートルビーチ売場にタレント54名の等身大パネルを設置！\nさらに、対象商品のご購入で「オリジナルうちわ」がもらえます！\n\nどのタレントのパネルがどの店舗に設置されるのかは、ツリーをチェック！\n\n▼コラボヘッドセットも受注販売受付中！\nhttps://t.co/rTHehLK7Kp"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HTWYu0vbIAAdHso.jpg",
+        "https://pbs.twimg.com/media/HTWYw_EaEAACj0I.jpg",
+        "https://pbs.twimg.com/media/HTWY2H8bIAAtw0d.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2104757622134202629",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 2985,
+      "postSha256": "fbdaaa2d5162aa6ef9af5ae85e514f51a0feb56c80164a0c1ba2383264aadfd4",
+      "textSha256": "288e1312910ecd1fc0dac85ccef38961f4318af7c2457efe99e18c169a4f6a6d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

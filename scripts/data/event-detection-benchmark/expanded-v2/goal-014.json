@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expanded-v2-positive-1095878461883744257",
+    "source": "public-post",
+    "description": "sapporo-valentine-kitkat-card-2019",
+    "post": {
+      "id": "1095878461883744257",
+      "createdAt": "2019-02-14T02:52:40.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "#ビッカメ娘 オリジナルキットカットと #さっぽろたん 名刺をセットでプレゼント中です❣️当日お買い上げの2,000円以上(税込)のレシートを1F総合案内カウンターにご提示ください。お一人様1セット限り、なくなり次第終了となりますのでお早めにどうぞ♡(*´ω｀*)/♡\n#ビックカメラのチョ娘 https://t.co/oyUjSLW2Ao",
+      "url": "https://x.com/bic_sapporo/status/1095878461883744257",
+      "media": [
+        "https://pbs.twimg.com/media/DzVXgk2UUAADd3w.jpg",
+        "https://pbs.twimg.com/media/DzVXhrEUUAELf_n.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "sapporo"
+      ],
+      "startDate": null,
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 2000
+        }
+      ]
+    },
+    "rationale": "2000円レシートでキットカットと名刺をセット提供。別条件としない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "sapporo-valentine-kitkat-card-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "オリジナルキットカットと #さっぽろたん 名刺",
+          "evidence": [
+            "#ビッカメ娘 オリジナルキットカットと #さっぽろたん 名刺をセットでプレゼント中です❣️当日お買い上げの2,000円以上(税込)のレシートを1F総合案内カウンターにご提示ください。お一人様1セット限り、なくなり次第終了となりますのでお早めにどうぞ♡(*´ω｀*)/♡",
+            "#ビックカメラのチョ娘 https://t.co/oyUjSLW2Ao"
+          ]
+        }
+      ],
+      "groupingNote": "2000円レシートでキットカットと名刺をセット提供。別条件としない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 779712,
+      "postSha256": "c5c1f7dbb51be9571c0d3fd7638bd8ba6533f6039680cd7d7cd65c90dc3815d1",
+      "textSha256": "dbc96c1e58aa07b813b29c8ff454480d440db3598eda7b944495df90054f5802"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1098460993749901317",
+    "source": "public-post",
+    "description": "sapporo-valentine-kitkat-card-2019 matched control",
+    "post": {
+      "id": "1098460993749901317",
+      "createdAt": "2019-02-21T05:54:43.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "今日の札幌は暖かいな～と思ったら3月下旬並みの気温…！( ⊙᎑⊙ )\nそんな春めいている中、一足先に春を感じられる一角が2Fお酒コーナーに！🌸\nこちらには春限定チューハイが揃っております～(*´▽`*)\n春らしい桃とさくらんぼ🍑🍒に、爽やかな甘みのはっさく❣️\n是非お買い求め下さいませ(*´ω`*)♪ https://t.co/sijUKOxjU3",
+      "url": "https://x.com/bic_sapporo/status/1098460993749901317",
+      "media": [
+        "https://pbs.twimg.com/media/Dz6DSywUUAA_YbN.png",
+        "https://pbs.twimg.com/media/Dz6DUCYVsAEo-mv.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1098460993749901317",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 777224,
+      "postSha256": "e49e1a26ff2f86513756a066f679e9ac3af4ff4d6be7a43afe007acf0157d1dc",
+      "textSha256": "c9433e792d50d60564a8a5925c90ad6bde8a999a4026b2e2fb2b7306b94198e7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

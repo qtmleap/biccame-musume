@@ -1,0 +1,129 @@
+[
+  {
+    "id": "goal-positive-1879132369795616794",
+    "source": "public-post",
+    "description": "shibutou radius neko 2025",
+    "post": {
+      "id": "1879132369795616794",
+      "createdAt": "2025-01-14T11:44:04.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "＼📢販売員たんからのお知らせ📢／\n\n#しぶとーたん コラボです♪\n\n#radius #NEKO シリーズ 【新色】をご予約いただくと\nコラボアクリルスタンドをプレゼント🎁✨\n（※１店舗１種類のプレゼントになります）\n\nさらに店舗では特別コーナーを展開中🐱\n\n本館3Fイヤホンコーナーにて🎵 https://t.co/RBp43J0nOb",
+      "url": "https://x.com/bic_shibuya/status/1879132369795616794",
+      "media": [
+        "https://pbs.twimg.com/media/GhQE7UxakAETpkS.jpg",
+        "https://pbs.twimg.com/media/GhQE7U6b0AATxGX.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shibuto"
+      ],
+      "characterIds": [
+        "shibuto"
+      ],
+      "category": "acsta"
+    },
+    "rationale": "NEKO新色予約特典。一般商品紹介だけでなく本人コラボ対象物。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "shibutou-radius-neko-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "しぶとーたんコラボアクスタ",
+          "evidence": [
+            "コラボアクリルスタンドをプレゼント🎁✨"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 178428,
+      "postSha256": "c1602559383afd21dc27d55e03c090e2e8f5e70df2600ecff7033a3dba9da183",
+      "textSha256": "20027a8084fd9ac421e03313cb32ea9541f9b794f17811eb2e7477cce2859b64"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1893097117981560962",
+    "source": "public-post",
+    "description": "ohmiya keyword card 2025",
+    "post": {
+      "id": "1893097117981560962",
+      "createdAt": "2025-02-22T00:34:59.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "🍺お酒コーナー限定名刺🍺\nお酒コーナーに隠された大宮たんを探してキーワードを完成させてね！\nお酒コーナーの販売員たんに伝えると限定名刺がもらえるよ♪\n（メッセージ入りレア有）\n撮影ボードもございま〜っす♪\n\n場所:3Fお酒コーナー\n期間:2025/2/22〜2026/2/21\n↓ https://t.co/AkcLyBrUv1",
+      "url": "https://x.com/bic_ohmiya/status/1893097117981560962",
+      "media": [
+        "https://pbs.twimg.com/media/GkWg6wwWUAEqqwY.jpg",
+        "https://pbs.twimg.com/media/GkWg6wcXUAApVWs.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "ohmiya"
+      ],
+      "category": "limited_card",
+      "startDate": "2025-02-22"
+    },
+    "rationale": "店内キーワードを完成し販売員へ伝える条件。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "ohmiya-keyword-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "大宮たん酒販限定名刺",
+          "evidence": [
+            "🍺お酒コーナー限定名刺🍺",
+            "お酒コーナーの販売員たんに伝えると限定名刺がもらえるよ♪"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 167803,
+      "postSha256": "b1acd466859efe86ea87fa4e069e39d3fdf320f502c5daedc0c155845efd850a",
+      "textSha256": "a8f277694769281ae067cf83b854a151d77634b905e7aca6f596bd909478bb90"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

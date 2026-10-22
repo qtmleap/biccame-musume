@@ -4,7 +4,7 @@ import { recoverSocialSummaries, runSocialSchedule } from '@api/services/social-
 import { recoverableSocialSummarySchedules, reserveSocialSummary } from '@api/services/social-summary'
 import type { Bindings } from '@api/types/bindings'
 import { buildSummarySnapshot } from '@biccame/shared/domain/social-post'
-import { EventSchema } from '@biccame/shared/schemas/event.dto'
+import { type EventCharacter, EventSchema } from '@biccame/shared/schemas/event.dto'
 import { SocialSnapshotSchema, snapshotEventIds } from '@biccame/shared/social'
 import dayjs from 'dayjs'
 import { convertV4MiniflareOptions, Miniflare } from 'miniflare'
@@ -19,6 +19,7 @@ const event = (index: number, input: Record<string, unknown> = {}) => {
     title: `イベント${index}`,
     category: 'limited_card',
     stores: ['akiba'],
+    characterIds: ['akiba'],
     startDate: `2026-10-12T10:${String(index % 60).padStart(2, '0')}:00+09:00`,
     endDate: '2026-10-18T23:59:59+09:00',
     isVerified: true,
@@ -80,6 +81,26 @@ const runStatus = (env: Bindings, key: string) =>
 const jobCount = (env: Bindings) =>
   env.DB.prepare('SELECT COUNT(*) AS count FROM social_post_jobs').first<number>('count')
 const imageTypes = (snapshot: { images: { type: string }[] }) => snapshot.images.map((image) => image.type)
+
+test('summary snapshots keep target characters independent from venue stores, including multiple or unknown targets', () => {
+  const targets: EventCharacter[][] = [['funato'], ['funato', 'abeno'], []]
+  for (const characterIds of targets) {
+    const snapshot = buildSummarySnapshot({
+      kind: 'daily',
+      scheduledAt,
+      starting: [event(1, { stores: ['funabashi'], characterIds })],
+      ending: []
+    })
+    const image = snapshot?.images[0]
+    if (image?.type !== 'summary') throw new Error('Expected a summary image')
+    const [row] = image.rows
+    expect(row.avatars).toEqual(characterIds)
+    expect(row.stores.join('')).toContain('船橋')
+    expect(row.target).toBe(
+      characterIds.length === 0 ? null : characterIds.length === 1 ? 'ふなとーたん' : 'ふなとーたん・あべのたん'
+    )
+  }
+})
 
 test('a run freezes one post with every image, both channel jobs, and an empty run stays empty on repeated invocation', async () => {
   await withDatabase(async (env) => {

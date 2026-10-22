@@ -1,0 +1,136 @@
+[
+  {
+    "id": "expanded-v2-positive-943457262416384000",
+    "source": "public-post",
+    "description": "biccame-calendar-2018",
+    "post": {
+      "id": "943457262416384000",
+      "createdAt": "2017-12-20T12:25:14.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "(ﾟｰﾟ*)｡oO（さて #ビッカメ娘 カレンダー📅ですが、当店は4Fレジにて税込500円以上お買い上げの方に配布致します。その際、ご希望のお客様はレジ担当者にお申し付けください(≧Д≦)。無くなり次第終了なのでお早めにお願いしますっ！\n#さがみたん #本店たん #ふなたん #天神2号たん https://t.co/2rd78U8RV0",
+      "url": "https://x.com/bic_funabashi/status/943457262416384000",
+      "media": [
+        "https://pbs.twimg.com/media/DRfVYIdXUAAXOvz.jpg",
+        "https://pbs.twimg.com/media/DRfVYDqX0AEP12j.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "sagami",
+        "honten",
+        "funabashi",
+        "tenjin2"
+      ],
+      "startDate": null,
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 500
+        }
+      ]
+    },
+    "rationale": "500円購入の娘カレンダー。店舗名から全対象娘を補完しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "biccame-calendar-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "カレンダー",
+          "evidence": [
+            "(ﾟｰﾟ*)｡oO（さて #ビッカメ娘 カレンダー📅ですが、当店は4Fレジにて税込500円以上お買い上げの方に配布致します。その際、ご希望のお客様はレジ担当者にお申し付けください(≧Д≦)。無くなり次第終了なのでお早めにお願いしますっ！",
+            "#さがみたん #本店たん #ふなたん #天神2号たん https://t.co/2rd78U8RV0"
+          ]
+        }
+      ],
+      "groupingNote": "500円購入の娘カレンダー。店舗名から全対象娘を補完しない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 898002,
+      "postSha256": "99a175cb4ba09ffbf9918e2eb150e7f4549805b7a1e9e276952e4a5d2b3b4e39",
+      "textSha256": "43b28739517a1eac76d8a89034fc4e289c9d18f5a5825165321df8ada8ed2709"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-941985995934670848",
+    "source": "public-post",
+    "description": "biccame-calendar-2018 matched control",
+    "post": {
+      "id": "941985995934670848",
+      "createdAt": "2017-12-16T10:58:57.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "(ﾟｰﾟ*)｡oO（時計コーナーでは、5000円以上のカジュアルウォッチ2点以上同時購入で1点につき1000円引きのキャンペーンがあるんだよ！レディース・メンズ問わずお友達とのクリスマスプレゼントにぴったり(*^^*)！だったら #ふなとーたん とお揃いのも良いなぁ！\n\n#クリスマスプレゼントに欲しいもの https://t.co/MlkuGtrPOk",
+      "url": "https://x.com/bic_funabashi/status/941985995934670848",
+      "media": [
+        "https://pbs.twimg.com/media/DRKXlO-V4AAeqBk.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-941985995934670848",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 899032,
+      "postSha256": "61a19e9a8fcd941e0e62ee5227d87c343fe4b8e1451e7f1c1fe008724ec7e819",
+      "textSha256": "bd73578dfe3a19ae820e3cb80fb8836671007c0ec790e0f2615685e727fdcef4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

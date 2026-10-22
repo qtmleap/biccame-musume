@@ -1,0 +1,173 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2004043810733719584",
+    "source": "public-post",
+    "description": "nanba-newyear-ema-2026",
+    "post": {
+      "id": "2004043810733719584",
+      "createdAt": "2025-12-25T04:17:32.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼ビッカメ娘イベント告知1⃣／\n🎍新春記念🎍\n【期間】1月1日㈭～無くなり次第終了\n\n税込3,000円以上の当日ご購入レシートをなんば店1階 総合カウンターにお持ちいただくと、『なんばたん新春絵馬』をプレゼント🎁✨\nナイセンさん描きおろしのメチャかわ巫女デザイン❣️\nぜひGETしてな😆✨ https://t.co/gme7sEmnu3",
+      "url": "https://x.com/biccamera_nanba/status/2004043810733719584",
+      "media": [
+        "https://pbs.twimg.com/media/G8_Bjxkb0AA-vGw.jpg",
+        "https://pbs.twimg.com/media/G8_CV7TagAAZAeG.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": [
+        "nanba"
+      ],
+      "characterIds": [
+        "nanba"
+      ],
+      "startDate": "2026-01-01",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "1/1から3000円以上購入でなんば店1階にて。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:nanba-newyear-ema-2026"
+    ],
+    "group": "nanba-newyear-ema-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "ready",
+      "items": [
+        {
+          "item": "なんばたん新春絵馬",
+          "evidence": [
+            "税込3,000円以上の当日ご購入レシートをなんば店1階 総合カウンターにお持ちいただくと、『なんばたん新春絵馬』をプレゼント🎁✨"
+          ]
+        }
+      ],
+      "groupingNote": "1/1から3000円以上購入でなんば店1階にて。",
+      "unannotatedFields": []
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 85511,
+      "postSha256": "2dd356d1bb397dd72ed3fa04396c6ff020b60cdb70aa5c260480a18f0bee5fc3",
+      "textSha256": "97f6033f487edc50b9a5430c4653199b7068c47396ae147d97d694cc2ab7d270"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "df6e178e-aebc-42e4-a8c2-80aaf961c7a0",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/biccamera_nanba/status/2004043810733719584",
+          "origin": "manual-or-seed",
+          "title": "新春絵馬",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-12-31T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "nanba"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1997154448112800032",
+    "source": "public-post",
+    "description": "nanba-newyear-ema-2026 matched control",
+    "post": {
+      "id": "1997154448112800032",
+      "createdAt": "2025-12-06T04:01:40.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼いよいよイベント当日／\nクリスマスワークショップ＆カッティングマシン実演イベント🎄\n\nカッティングマシンメーカーsilhouetteとコラボ✨\n体験してみたい方はワークショップへ➡\n購入検討中の方、質問したい方は実演イベントへ➡\n当日マシンをご成約のお客様に豪華ノベルティをプレゼント🎁✨ https://t.co/uFAuyu49ZJ",
+      "url": "https://x.com/biccamera_nanba/status/1997154448112800032",
+      "media": [
+        "https://pbs.twimg.com/media/G7dRGXCb0AEa2p7.jpg",
+        "https://pbs.twimg.com/media/G7dRHtYawAArdRX.jpg",
+        "https://pbs.twimg.com/media/G7dRJE_bIAAzYRK.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1997154448112800032",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 90672,
+      "postSha256": "691634a153d6f5b8c643f427375024077c95d8124f1f561115e562395d42fe58",
+      "textSha256": "468641dd012b17ff804089da39fec66e919cc8fdaff5cf75d262086de9419a36"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

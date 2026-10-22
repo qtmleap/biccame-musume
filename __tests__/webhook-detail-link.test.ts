@@ -1,117 +1,25 @@
 import { describe, expect, test } from 'bun:test'
-import { type EventRequest, EventRequestQuerySchema } from '@biccame/shared/schemas/event.dto'
-import { type WebhookCandidate, type WebhookJob, WebhookJobStatusSchema } from '@biccame/shared/schemas/webhook.dto'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import {
-  createMemoryHistory,
-  createRootRoute,
-  createRouter,
-  defaultParseSearch,
-  RouterProvider
-} from '@tanstack/react-router'
-import { createElement } from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
+import { EventRequestQuerySchema } from '@biccame/shared/schemas/event.dto'
+import { type WebhookJob, WebhookJobStatusSchema } from '@biccame/shared/schemas/webhook.dto'
 import { webhookEventCreateSearch } from '@/components/admin/webhook-form-defaults'
-import { WebhookJobDetail } from '@/components/admin/webhook-job-detail'
 import { webhookCandidateTitle } from '@/components/admin/webhook-labels'
-import { ADMIN_WEBHOOK_QUERY_KEY } from '@/hooks/use-admin-webhooks'
 import {
   createEventThenLink,
   runSingleFlight,
   WEBHOOK_LINK_FAILED_MESSAGE
 } from '@/hooks/use-create-event-with-webhook-link'
-
-const postId = '1000000000000000001'
-const sourceUrl = `https://example.invalid/post/${postId}`
-const firstUuid = '550e8400-e29b-41d4-a716-446655440001'
-const secondUuid = '550e8400-e29b-41d4-a716-446655440002'
-
-const baseJob: WebhookJob = {
-  candidates: [],
+import {
+  baseJob,
+  candidateOf,
+  createLink,
+  eventOf,
+  firstUuid,
+  identifiedSection,
   postId,
-  post: {
-    id: postId,
-    createdAt: '2026-10-02T03:00:00.000Z',
-    screenName: 'synthetic_account',
-    kind: 'original',
-    text: '赤い限定名刺と青い限定名刺を配布します',
-    url: sourceUrl,
-    media: []
-  },
-  sourceUrl,
-  eventUUID: firstUuid,
-  status: 'held',
-  reasons: [],
-  candidate: null,
-  confidence: 0.72,
-  model: 'clef-flash',
-  questionVersion: 'test-v1',
-  eventId: null,
-  eventTitle: null,
-  postStatus: 'start',
-  postStatusProbability: 0.99,
-  answers: null,
-  draft: null,
-  attempts: 1,
-  notificationStatus: 'sent',
-  notificationId: null,
-  notificationError: null,
-  notificationAttempts: 1,
-  lastError: null,
-  createdAt: '2026-10-05T03:00:00.000Z',
-  updatedAt: '2026-10-05T03:00:00.000Z',
-  judgedAt: null
-}
-
-const eventOf = (title: string, uuid: string): EventRequest => ({
-  uuid,
-  category: 'limited_card',
-  title,
-  stores: ['akiba'],
-  startDate: '2026-10-11T00:00:00+09:00',
-  isVerified: true,
-  isPreliminary: false,
-  shouldTweet: false,
-  conditions: [{ uuid: '11111111-1111-4111-a111-111111111111', type: 'everyone' }],
-  referenceUrls: [{ uuid: '22222222-2222-4222-a222-222222222222', type: 'announce', url: sourceUrl }]
-})
-
-const candidateOf = (item: string, uuid: string, overrides: Partial<WebhookCandidate> = {}): WebhookCandidate => ({
-  ...baseJob,
-  eventUUID: uuid,
-  item,
-  storeKey: null,
-  ...overrides
-})
-
-const renderDetail = async (job: WebhookJob) => {
-  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-  queryClient.setQueryData([...ADMIN_WEBHOOK_QUERY_KEY, job.postId], job)
-  const routeTree = createRootRoute({ component: () => createElement(WebhookJobDetail, { postId: job.postId }) })
-  const router = createRouter({ routeTree, history: createMemoryHistory({ initialEntries: ['/'] }) })
-  try {
-    await router.load()
-    return renderToStaticMarkup(
-      createElement(QueryClientProvider, { client: queryClient }, createElement(RouterProvider, { router }))
-    )
-  } finally {
-    queryClient.clear()
-  }
-}
-
-/** 「識別されたイベント」の節のマークアップ */
-const identifiedSection = (markup: string) => markup.match(/aria-label="識別されたイベント"[\s\S]*?<\/section>/)?.[0]
-
-/**
- * 「補完して登録」リンクの遷移先。href は文字列一致で比べず、パスと search に分けて返す
- * （TanStack Router の既定の search は JSON として読めてしまう文字列を引用符つきで出すので、読み戻して比べる）。
- */
-const createLink = (markup: string) => {
-  const href = markup.match(/<a\b[^>]*?href="([^"]*)"[^>]*>(?:(?!<\/a>)[\s\S])*?補完して登録/)?.[1]
-  if (href === undefined) return undefined
-  const url = new URL(href.replaceAll('&amp;', '&'), 'http://localhost')
-  return { path: url.pathname, search: defaultParseSearch(url.search) }
-}
+  renderDetail,
+  secondUuid,
+  sourceUrl
+} from './fixtures/webhook-detail-link'
 
 describe('EventRequestQuerySchema の受信ジョブ紐付け先', () => {
   test('webhookPostId（数字 1〜20 桁）と webhookCandidateId（UUID）を受け付け、どちらも任意', () => {
@@ -177,6 +85,7 @@ describe('webhookEventCreateSearch', () => {
 
   test('登録候補が無く下書きだけのときは、下書きの定型題ではなく渡された抽出名を題にする', () => {
     const draft = {
+      characterIds: [],
       title: '新東たん アクリルスタンド配布',
       category: 'acsta' as const,
       stores: ['shintou'],
@@ -279,7 +188,7 @@ describe('createEventThenLink', () => {
     expect(result).toEqual({ linked: false })
     expect(created).toBe(1)
     expect(WEBHOOK_LINK_FAILED_MESSAGE).toContain('イベントは登録しましたが')
-    expect(WEBHOOK_LINK_FAILED_MESSAGE).toContain('既存へ紐付け')
+    expect(WEBHOOK_LINK_FAILED_MESSAGE).toContain('連携')
   })
 })
 
@@ -340,22 +249,23 @@ describe('受信詳細の描画', () => {
     expect(webhookCandidateTitle(plainCandidate)).toBe('青い限定名刺')
   })
 
-  test('識別されたイベントは AI の題を主表示にし、抽出名と違うときだけ「抽出: ○○」を添える', async () => {
+  test('識別されたイベントは AI の題を主表示にし、題が違う候補でも抽出名を添えない', async () => {
     const section = identifiedSection(await renderDetail(multiple))
     if (section === undefined) throw new Error('識別されたイベントの節が描画されていない')
     expect(section).toContain('赤名刺')
-    expect(section).toContain('抽出: 赤い限定名刺')
-    // 題が付いていない候補は抽出名がそのまま主表示で、補助表示は出さない
+    // 題が付いていない候補は抽出名がそのまま主表示になる
     expect(section).toContain('青い限定名刺')
-    expect(section).not.toContain('抽出: 青い限定名刺')
-    // 補助表示は候補名ボタンの中にあり、行全体のクリックで選べる作りを崩さない
+    // 題が違う候補でも、抽出名の補助表示は出さない
+    expect(section).not.toContain('抽出:')
+    expect(section).not.toContain('赤い限定名刺')
+    // 候補名ボタンは候補ごとに1つで、行全体のクリックで選べる作りを崩さない
     const buttons = [...section.matchAll(/<button\b[^>]*>[\s\S]*?<\/button>/g)].map((match) => match[0])
     expect(buttons).toHaveLength(2)
-    expect(buttons[0]).toContain('抽出: 赤い限定名刺')
-    expect(buttons[1]).not.toContain('抽出:')
+    expect(buttons[0]).toContain('赤名刺')
+    expect(buttons[1]).toContain('青い限定名刺')
   })
 
-  test('登録済みの候補は登録イベントの題を主表示にし、抽出名が違えば補助表示を添える', async () => {
+  test('登録済みの候補は登録イベントの題を主表示にし、AI の題も抽出名も出さない', async () => {
     const registered = candidateOf('赤い限定名刺', firstUuid, {
       status: 'registered',
       eventId: secondUuid,
@@ -365,12 +275,14 @@ describe('受信詳細の描画', () => {
     const section = identifiedSection(await renderDetail({ ...baseJob, candidates: [registered] }))
     expect(section).toContain('登録された赤名刺')
     expect(section).not.toContain('AIの赤名刺')
-    expect(section).toContain('抽出: 赤い限定名刺')
+    expect(section).not.toContain('抽出:')
+    expect(section).not.toContain('赤い限定名刺')
   })
 
-  test('題が抽出名と同じなら補助表示は出さない', async () => {
+  test('題が抽出名と同じ候補は、その名前を主表示にし、補助表示は出さない', async () => {
     const same = candidateOf('赤い限定名刺', firstUuid, { candidate: eventOf('赤い限定名刺', firstUuid) })
     const section = identifiedSection(await renderDetail({ ...baseJob, candidates: [same] }))
+    expect(section).toContain('赤い限定名刺')
     expect(section).not.toContain('抽出:')
   })
 
@@ -391,7 +303,13 @@ describe('受信詳細の描画', () => {
 
   test('登録候補が無い候補は、下書きの定型題ではなく抽出名を作成ページの題にする', async () => {
     const draftOnly = candidateOf('青い限定名刺', secondUuid, {
-      draft: { title: 'アキバたん 限定名刺配布', category: 'limited_card', stores: ['akiba'], conditions: [] }
+      draft: {
+        characterIds: [],
+        title: 'アキバたん 限定名刺配布',
+        category: 'limited_card',
+        stores: ['akiba'],
+        conditions: []
+      }
     })
     const link = createLink(await renderDetail({ ...baseJob, candidates: [draftOnly] }))
     expect(link?.search).toMatchObject({ title: '青い限定名刺', category: 'limited_card', stores: 'akiba' })

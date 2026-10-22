@@ -1,0 +1,206 @@
+[
+  {
+    "id": "public-2109896651611771270",
+    "source": "public-post",
+    "description": "新東たんの短い雑談",
+    "post": {
+      "id": "2109896651611771270",
+      "createdAt": "2026-10-13T06:38:56.385Z",
+      "screenName": "Bic_shintoueki",
+      "kind": "original",
+      "text": "|꒳`*)໒꒱₊˚ ﾁﾗｯ! うふふ♡\n\n|彡ｻｻｯ!\n\n|꒳´*)◤ψ ﾁﾗｯ! むふふ★",
+      "url": "https://x.com/Bic_shintoueki/status/2109896651611771270",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "顔文字と短い雑談だけで、対象企画を読み取れない。",
+    "tags": [
+      "small-talk"
+    ],
+    "group": "shintou-peek-talk",
+    "reviewStatus": "provisional",
+    "sourceHash": "cc02265219423b562e436c31f9304a6d2e98c832821996b2c063491c0312c81a"
+  },
+  {
+    "id": "public-2109916582885601509",
+    "source": "public-post",
+    "description": "ポケトーク期間限定特価",
+    "post": {
+      "id": "2109916582885601509",
+      "createdAt": "2026-10-13T07:58:08.371Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "【期間限定特価！】\n10月13日（火）～10月19日（月）まで‼\nAI翻訳機『POCKETALK S2』が期間限定で特別価格に🌟\n通常税込み36300円のところ、19800円にて販売中！\n\n在庫限りとなりますので、ご興味をお持ちの方は\nぜひ当店ポケトークコーナーまで✨",
+      "url": "https://x.com/bic_hamamatsu/status/2109916582885601509",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "期間限定という語はあるが、通常の翻訳機販売である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "limited-period"
+    ],
+    "group": "pocketalk-sale",
+    "reviewStatus": "provisional",
+    "sourceHash": "2a502d6e18517ff001ee32fa2daa59174958ca6406d823ad37e8e5e0e1f7fca0"
+  },
+  {
+    "id": "public-2109917057915465850",
+    "source": "public-post",
+    "description": "美容家電の返金保証",
+    "post": {
+      "id": "2109917057915465850",
+      "createdAt": "2026-10-13T08:00:01.627Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【3階 ビューティ家電】\n\n今話題のbrighte製品を試せるチャンス！\n\n✨45日満足返金保証キャンペーン✨\n\nヘアアイロンやドライヤー、エレキリフト、エレキブラシが対象です！\n是非この機会に3Fビューティコーナーまで足をお運びください。\n※ご購入期限12/31まで",
+      "url": "https://x.com/bic_kashiwa/status/2109917057915465850",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "購入期限・保証キャンペーンであり、ビッカメ娘の企画ではない。",
+    "tags": [
+      "ordinary-sale",
+      "numeric-condition"
+    ],
+    "group": "brighte-money-back",
+    "reviewStatus": "provisional",
+    "sourceHash": "629dfac4e605167ad5a23b88e1adc19bb456f906ae3f99ac2b9ae9d7985a10a9"
+  },
+  {
+    "id": "public-2109917451328925709",
+    "source": "public-post",
+    "description": "ANKERオーディオ特価",
+    "post": {
+      "id": "2109917451328925709",
+      "createdAt": "2026-10-13T08:01:35.424Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "【キャンペーン情報】\n🎧10月19日(月)までの期間限定🎧\n当社指定の『ANKER』イヤホン・ヘッドホンが特別価格！\n高音質と高性能ノイズキャンセリングを備えた人気モデルがお買い得！\n\nご購入を検討中の方は、ぜひオーディオコーナーへ！\nこの機会をお見逃しなく！",
+      "url": "https://x.com/bic_hamamatsu/status/2109917451328925709",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "通常のイヤホン・ヘッドホンの販促である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale"
+    ],
+    "group": "anker-audio-sale",
+    "reviewStatus": "provisional",
+    "sourceHash": "8c2f2025d15fe54277f8d41ad71779df1e0158b853354501efe400028996db83"
+  },
+  {
+    "id": "public-2109924603787456709",
+    "source": "public-post",
+    "description": "スマートグラスのお試し",
+    "post": {
+      "id": "2109924603787456709",
+      "createdAt": "2026-10-13T08:30:00.703Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "👉話題のスマートグラスお試しいただけます👓✨",
+      "url": "https://x.com/bic_kashiwa/status/2109924603787456709",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "一般製品の体験案内でキャラクター企画の記載がない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "demo",
+      "ordinary-product"
+    ],
+    "group": "smart-glasses-trial",
+    "reviewStatus": "provisional",
+    "sourceHash": "47d956ce3a81d9ae2f5e040cfa99040c921dc9840600a2ad4e1c4252f34024df"
+  },
+  {
+    "id": "public-2109930433966375116",
+    "source": "public-post",
+    "description": "別Vtuber誕生日パネル",
+    "post": {
+      "id": "2109930433966375116",
+      "createdAt": "2026-10-13T08:53:10.726Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "📢オリーさんお誕生日おめでとうございます🎉\nビックカメラ藤沢店地下一階にて、\nクレイジー・オリーさんのパネル展示中！\nぜひ会いに来てください✨\n#ホロライブ #holodori #Hololive",
+      "url": "https://x.com/bic_fujisawa/status/2109930433966375116",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "誕生日・パネル展示があるが、対象はクレイジー・オリーでビッカメ娘ではない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "other-franchise",
+      "birthday-keyword",
+      "display"
+    ],
+    "group": "ollie-birthday-panel",
+    "reviewStatus": "provisional",
+    "sourceHash": "fb691311c9d1a1105ec2dd2391882ffee5272047eeb0931cbc3b7c863eb327b0"
+  },
+  {
+    "id": "public-2109931504050860304",
+    "source": "public-post",
+    "description": "食品に見えるメッセージカード",
+    "post": {
+      "id": "2109931504050860304",
+      "createdAt": "2026-10-13T08:57:25.854Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "アメリカンドッグ✨\n美味しいですよねぇ。たまに食べたくなる〜。\nこちらはメッセージカードなので、口に入れない様に注意しなくちゃ！6階文房具コーナー✏️取り扱い中です。　#アメリカンドッグ　#メッセージカード　#文房具　#キングジム",
+      "url": "https://x.com/bicikenishi/status/2109931504050860304",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "メッセージカードという語はあるが、市販文房具の商品紹介である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "card-word"
+    ],
+    "group": "american-dog-message-card",
+    "reviewStatus": "provisional",
+    "sourceHash": "07122b0af4a4f229802b15fffaa3ed944864ef5680c666be4d0400282f755a0e"
+  },
+  {
+    "id": "public-2109932154058899673",
+    "source": "public-post",
+    "description": "カメラバッグの紹介",
+    "post": {
+      "id": "2109932154058899673",
+      "createdAt": "2026-10-13T09:00:00.828Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "📷おすすめカメラバッグのご紹介📷\n\n初めてのミラーレスのバッグにおすすめ！ハクバの人気シリーズchululuのデイリーショルダーインナーバッグ！ショルダーとしてもインナーバッグとしても使え、ダブルズームキット＋お財布等の小物がちょうど入るサイズです✨\n2Fカメラコーナーにてお試しできます💕",
+      "url": "https://x.com/bicpkanhonten/status/2109932154058899673",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "通常のカメラバッグ販売・試用の案内である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale"
+    ],
+    "group": "camera-bag",
+    "reviewStatus": "provisional",
+    "sourceHash": "7d0816eda6ee8bcab0dc7dc7178b6b9488cc815be09fd4f35308597153f281cd"
+  }
+]

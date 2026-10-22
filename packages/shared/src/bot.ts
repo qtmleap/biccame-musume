@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { WebhookDiscoverySchema } from './schemas/webhook-discovery.dto'
 
 export const botPingRequestSchema = z.strictObject({ requestId: z.string().nonempty().max(128) })
 export const botPingResponseSchema = z.strictObject({
@@ -118,7 +119,9 @@ const discordNotificationFields = {
   text: z.string().nonempty().max(20000),
   confidence: z.number().min(0).max(1),
   reasons: z.array(z.string().nonempty().max(500)).max(20),
-  stores: z.array(z.string().nonempty().max(200)).max(20)
+  stores: z.array(z.string().nonempty().max(200)).max(64),
+  characters: z.array(z.string().nonempty().max(200)).max(64),
+  discovery: WebhookDiscoverySchema.nullable().optional()
 }
 export const eventDetectionNotificationSchema = z.discriminatedUnion('status', [
   z.strictObject({ ...discordNotificationFields, status: z.literal('held') }),

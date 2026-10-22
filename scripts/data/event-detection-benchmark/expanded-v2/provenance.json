@@ -1,0 +1,15 @@
+{
+  "datasetRevision": "annotated-expanded-v2",
+  "annotationStatus": "provisional-not-human-reviewed",
+  "cases": 200,
+  "positive": 100,
+  "negative": 100,
+  "sourceArchives": {
+    ".cache/event-detect/posts.jsonl": 198,
+    ".cache/event-detect-full/posts.jsonl": 2
+  },
+  "sourceRecordsSha256": "e360a4e0122e77efa72eab42d1769bca3e7b379adb5d7a29869cf19d53d1d8c2",
+  "annotationsSha256": "c3766324cee28d00b55f32d0c3241e106b26e162f6f38f0b0217865c18f52d39",
+  "yearAccountMonthMatched": true,
+  "priorCorpusCases": 586
+}

@@ -94,16 +94,32 @@ export const detectionScoreLabel = (score: number | null): string =>
   score === null ? '—' : `${(score * 100).toFixed(1)}%`
 
 /**
- * 再判定できるのは保留と、人が却下していない対象外のジョブ。人の却下（reasons に manually_rejected）は再判定で上書きしない。
+ * 再判定できるのは保留、人が却下していない対象外、手動で連携した登録済み（reasons に manually_linked）のジョブ。
+ * 人の却下（reasons に manually_rejected）は再判定で上書きしない。自動登録された登録済みは、作成済みのイベントが重複しうるため再判定できない。
  * サーバー側の rejudgeWebhookJob（webhook-admin.ts）と同じ規則。
  */
 const canRejudgeJob = (status: string, reasons: readonly string[]): boolean =>
-  status === 'held' || (status === 'ignored' && !reasons.includes('manually_rejected'))
+  status === 'held' ||
+  (status === 'ignored' && !reasons.includes('manually_rejected')) ||
+  (status === 'registered' && reasons.includes('manually_linked'))
+
+/**
+ * 連携できるのは保留と対象外、および登録済み（連携先の付け替え）。サーバー側の resolveWebhookJob（webhook-admin.ts）と同じ規則。
+ */
+const canLinkJob = (status: string): boolean => status === 'held' || status === 'ignored' || status === 'registered'
+
+/**
+ * 確認用に再判定できるのは登録済みのジョブだけ。回答・確率・プロンプトの版・判定モデルを更新するだけで、イベント・判定状態・通知は変えない。
+ * サーバー側の recheckWebhookJob（webhook-recheck.ts）と同じ規則。通常の再判定（canRejudge）とは独立している。
+ */
+const canRecheckJob = (status: string): boolean => status === 'registered'
 
 export const webhookActionAvailability = (status: string, notificationStatus: string, reasons: readonly string[]) => ({
   canResolve: status === 'held',
+  canLink: canLinkJob(status),
   canRetryProcessing: status === 'failed',
   canRejudge: canRejudgeJob(status, reasons),
+  canRecheck: canRecheckJob(status),
   canRetryNotification:
     (status === 'held' || status === 'registered') &&
     (notificationStatus === 'failed' || notificationStatus === 'unknown')

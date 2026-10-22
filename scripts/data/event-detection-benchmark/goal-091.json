@@ -1,0 +1,108 @@
+[
+  {
+    "id": "goal-negative-1420970228729618432",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1420970228729618432",
+      "createdAt": "2021-07-30T04:51:17.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "📸予約受付中📸\nソニー『VLOGCAM ZV-E10』\nαシリーズとして初めてVlog（ブイログ）など動画撮影に特化したAPS-Cイメージセンサー搭載のレンズ交換式Vlogカメラ📷\n9月17日発売\n#新製品 #ソニー \nhttps://t.co/Ei4RZmQ9eL https://t.co/UJBqIzxodl",
+      "url": "https://x.com/bic_sagamioono/status/1420970228729618432",
+      "media": [
+        "https://pbs.twimg.com/media/E7hMuvDVgAMJNQt.jpg",
+        "https://pbs.twimg.com/media/E7hMNPDVUAIOcbb.jpg",
+        "https://pbs.twimg.com/media/E7hMOmkVEAM2oiY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「📸予約受付中📸 / ソニー『VLOGCAM ZV-E10』 / αシリーズとして初めてVlog（ブイログ）など動画撮影に特化したAPS-Cイメージセンサー搭載のレンズ交換式Vlogカメラ📷」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "sony-zve10-preorder-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 538050,
+      "postSha256": "9cc3b8e0b0e52fb5c759200fdf4342c9751eb3f3c8264fc1366634acbcdf848e",
+      "textSha256": "080204fcf5ac5ee63895853df77bc97be310a9122ebbe5b0584ebd928191a554"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1432538638043123712",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1432538638043123712",
+      "createdAt": "2021-08-31T03:00:01.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "今週の #おうちでエステ #明日の私はもっとキレイ  はDyson Corraleヘアーアイロンをご紹介✨\n\nフレックスプレートで包み込む、唯一のコードレスヘアアイロン🤩！！\nより低温でスタイリングができ、髪により高いテンションを与え、切り毛を低減し、髪の強さを守ります～🙆‍♀️\nhttps://t.co/fv3miSYVz2 https://t.co/5J7WOjOEL4",
+      "url": "https://x.com/bic_abeno/status/1432538638043123712",
+      "media": [
+        "https://pbs.twimg.com/media/E-FVtG-VkAI3nPj.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「今週の #おうちでエステ #明日の私はもっとキレイ  はDyson Corraleヘアーアイロンをご紹介✨ / フレックスプレートで包み込む、唯一のコードレスヘアアイロン🤩！！ / より低温でスタイリングができ、髪により高いテンションを与え」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "dyson-corrale-esthe-video-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 531410,
+      "postSha256": "db3a77b40aa0ecf9763b808ec1b44c538832bdd6d2292a68b90bd9098ab06e06",
+      "textSha256": "8232558d65a1865ad8aef78734b0c2704501e712c40f339217001adb67ad4566"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

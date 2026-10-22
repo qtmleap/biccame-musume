@@ -1,0 +1,130 @@
+[
+  {
+    "id": "expanded-v2-positive-1035331791823953920",
+    "source": "public-post",
+    "description": "hamamatsu-nagoya-summer-card-2018",
+    "post": {
+      "id": "1035331791823953920",
+      "createdAt": "2018-08-31T01:01:49.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "|๑σ｡σ)ﾉ.o0(#はまたん 夏名刺は本日8月31日までの配布！です！\n#なごやたん #なごやげーとたん での夏名刺配布も本日までですよー！ https://t.co/1daMYtqw4x",
+      "url": "https://x.com/bic_hamamatsu/status/1035331791823953920",
+      "media": [
+        "https://pbs.twimg.com/media/Dl48jmSUYAAM6Ay.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "hamamatsu",
+        "nagoya",
+        "nagoyagate"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "複数店舗の名刺最終日告知。会場や開始日を補完しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "hamamatsu-nagoya-summer-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "夏名刺",
+          "evidence": [
+            "|๑σ｡σ)ﾉ.o0(#はまたん 夏名刺は本日8月31日までの配布！です！",
+            "#なごやたん #なごやげーとたん での夏名刺配布も本日までですよー！ https://t.co/1daMYtqw4x"
+          ]
+        }
+      ],
+      "groupingNote": "複数店舗の名刺最終日告知。会場や開始日を補完しない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 825370,
+      "postSha256": "a93274ae799e4fa01ae100a376591914d4dfcba876d4303629da1f4ff7ab9a11",
+      "textSha256": "0031f0f593ce66d822f7b784d084551fdd087930e91fbc3462b0352f2ea6a5dd"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1028143113095671808",
+    "source": "public-post",
+    "description": "hamamatsu-nagoya-summer-card-2018 matched control",
+    "post": {
+      "id": "1028143113095671808",
+      "createdAt": "2018-08-11T04:56:34.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "|๑σ｡<)ﾉ.o0(明日8/12閉店まで！\n期間限定で人気のスマートスピーカー\n『Google Home Mini』が当店通常販売価格より半額でご購入いただけます☆\n期間限定！お見逃しなく♪ https://t.co/aMquJJVFci",
+      "url": "https://x.com/bic_hamamatsu/status/1028143113095671808",
+      "media": [
+        "https://pbs.twimg.com/media/DkSygxaU0AUaXDv.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1028143113095671808",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 831273,
+      "postSha256": "f7eb6425d17f861924e37ec60ea04bda9d2748b0ab169d5fbb2d3d96fce6d182",
+      "textSha256": "956e3070dbdce9db6975344cb55c57d1190eea5464cdcfe12a566cf9b6378790"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

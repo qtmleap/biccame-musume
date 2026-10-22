@@ -1,0 +1,129 @@
+[
+  {
+    "id": "goal-positive-1186497427924082688",
+    "source": "public-post",
+    "description": "honten halloween card 2019",
+    "post": {
+      "id": "1186497427924082688",
+      "createdAt": "2019-10-22T04:20:05.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "本店たんハロウィンバージョン名刺\n補充いたしました!!\n地下1階のカメラコーナーの特設ハロウィン装飾に飾ってあります!!\n\nてんちゃんからのお願い♪\nたくさんの方に貰って欲しいので、持っていくのは\nお一人様、保存用と布教用の2枚くらいにしておいてくださいね~\\(0ω0)/\n\n#本店たん名刺配布状況",
+      "url": "https://x.com/bicikebukuro/status/1186497427924082688",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "honten"
+      ],
+      "characterIds": [
+        "honten"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "印刷補充の報告。1人2枚程度は総配布数でない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "honten-halloween-card-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "本店たんハロウィン名刺",
+          "evidence": [
+            "本店たんハロウィンバージョン名刺",
+            "#本店たん名刺配布状況"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 703277,
+      "postSha256": "5d2628db47889a9038591dcdcc29b6c5010d2b71807da5ecb48206ef6fb7169a",
+      "textSha256": "638f0fc26eda38127550719ae4888fbb21df25aafc2ca25fa2400145c8df863f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1200230651447803904",
+    "source": "public-post",
+    "description": "bicqlo sagami christmas 2019",
+    "post": {
+      "id": "1200230651447803904",
+      "createdAt": "2019-11-29T01:51:01.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "ヾ(*・ω・)ノ｡oO（と、いうことで…本日11月29日『#いい肉の日』に相模大野駅店の #さがみたん とのクリスマス限定コラボ名刺配布スタートです！！さがみんが作ってくれた可愛い名刺です！！ぜひ、さがみんの名刺と一緒にお手に取ってくださいね～！！さがみん、ホントにホントにありがとー💕） https://t.co/x3CYdY15Cz",
+      "url": "https://x.com/bic_shinjuku3ch/status/1200230651447803904",
+      "media": [
+        "https://pbs.twimg.com/media/EKgTYl3UEAARiqJ.jpg",
+        "https://pbs.twimg.com/media/EKgTYmDUcAA9sxP.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "bicqlo"
+      ],
+      "characterIds": [
+        "bicqlo",
+        "sagami"
+      ],
+      "category": "limited_card",
+      "startDate": "2019-11-29"
+    },
+    "rationale": "11/29のコラボ開始。通常の別IP商品とは異なる本人企画。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "bicqlo-sagami-christmas-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "しんじゅくたん×さがみたんクリスマス名刺",
+          "evidence": [
+            "ヾ(*・ω・)ノ｡oO（と、いうことで…本日11月29日『#いい肉の日』に相模大野駅店の #さがみたん とのクリスマス限定コラボ名刺配布スタートです！！さがみんが作ってくれた可愛い名刺です！！ぜひ、さがみんの名刺と一緒にお手に取ってくださいね～！！さがみん、ホントにホントにありがとー💕） https://t.co/x3CYdY15Cz"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 692743,
+      "postSha256": "88c41d66acb6c59c39a7c7e450ee69c59711f5988714a842ff469752e33900bd",
+      "textSha256": "00ee5fafc220a29d08aa535b32c795fc0c8bec3f1ebfd3f577459f129b8ef48d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

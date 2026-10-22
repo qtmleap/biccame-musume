@@ -1,0 +1,126 @@
+[
+  {
+    "id": "expanded-v2-positive-1785942694143123822",
+    "source": "public-post",
+    "description": "shinjuku-goldenweek-art-display-2024",
+    "post": {
+      "id": "1785942694143123822",
+      "createdAt": "2024-05-02T08:01:34.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "ヾ(*・ω・)ノ｡oO（ぬわぬわわわわわー！としていて浮上できないのですが、これだけ言いたい！！！販売員たんがまたまた可愛いしんじゅくたんを描いてくれたんだぁぁぁぁぁあ！！GW、皆様ぜひ見に来てくださいね！B2Fラッピングコーナーに展示しております💕） https://t.co/ZbRfzuAJpA",
+      "url": "https://x.com/bic_shinjuku3ch/status/1785942694143123822",
+      "media": [
+        "https://pbs.twimg.com/media/GMjxX9KaUAAJ6Ze.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "販売員作イラストのラッピングコーナー展示。描かれた娘を描き手の販売員と混同しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "shinjuku-goldenweek-art-display-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "しんじゅくたんイラスト",
+          "evidence": [
+            "ヾ(*・ω・)ノ｡oO（ぬわぬわわわわわー！としていて浮上できないのですが、これだけ言いたい！！！販売員たんがまたまた可愛いしんじゅくたんを描いてくれたんだぁぁぁぁぁあ！！GW、皆様ぜひ見に来てくださいね！B2Fラッピングコーナーに展示しております💕） https://t.co/ZbRfzuAJpA"
+          ]
+        }
+      ],
+      "groupingNote": "販売員作イラストのラッピングコーナー展示。描かれた娘を描き手の販売員と混同しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 256613,
+      "postSha256": "8b501584abc662f6fb4a7216cc68cbb3f2a480a0c89fa2e424dbb70e2119833e",
+      "textSha256": "a4943abfa6e5c91961219efa3a4c498f00bb9dadb41dd24cbf82c39930e124db"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1793552246908838390",
+    "source": "public-post",
+    "description": "shinjuku-goldenweek-art-display-2024 matched control",
+    "post": {
+      "id": "1793552246908838390",
+      "createdAt": "2024-05-23T07:59:12.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "🚲8階 自転車コーナー🚲\n\n＼5月26日(日)限定／\n\nビックカメラ新宿東口店にてFUGUINOVATIONSJAPANの、MeisterFの試乗会開催✨\n\n開催時間は12:00～19:00\n試乗参加者にはオリジナルグッズもプレゼント🎁\n是非8階自転車コーナーにお立ち寄り下さい！ https://t.co/oHsRQgGqbS",
+      "url": "https://x.com/bic_shinjuku3ch/status/1793552246908838390",
+      "media": [
+        "https://pbs.twimg.com/media/GOP6L-NawAAyHta.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1793552246908838390",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 249115,
+      "postSha256": "21fe820449c4d5e55e476d46b6388b2e3390617f250b845cc9ada83defa8307f",
+      "textSha256": "3d2664e099d1e8d278ec4a2c4672479a474ecb8aa4a7f8ede261f2fdefe837ba"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

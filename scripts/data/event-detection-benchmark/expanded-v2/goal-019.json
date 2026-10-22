@@ -1,0 +1,147 @@
+[
+  {
+    "id": "expanded-v2-positive-2018599120668443032",
+    "source": "public-post",
+    "description": "sagami-valentine-kitkat-2026",
+    "post": {
+      "id": "2018599120668443032",
+      "createdAt": "2026-02-03T08:15:08.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "🍫さがみたんのチョ娘🍫\n2月14日(土)～\n当店で税込4,000円以上ご購入のお客様に\n🩷さがみたんキットカットプレゼント！🩷\n100個限定🍫※なくなり次第終了\n#さがみたん https://t.co/tt8LnWmDsz",
+      "url": "https://x.com/bic_sagamioono/status/2018599120668443032",
+      "media": [
+        "https://pbs.twimg.com/media/HAOBMl_bMAACOWc.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "sagami"
+      ],
+      "startDate": "2026-02-14",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 4000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "4000円以上購入、100個限定。購入とチャージを混同しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "sagami-valentine-kitkat-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "さがみたんキットカット",
+          "evidence": [
+            "🍫さがみたんのチョ娘🍫",
+            "2月14日(土)～",
+            "当店で税込4,000円以上ご購入のお客様に",
+            "🩷さがみたんキットカットプレゼント！🩷",
+            "100個限定🍫※なくなり次第終了",
+            "#さがみたん https://t.co/tt8LnWmDsz"
+          ]
+        }
+      ],
+      "groupingNote": "4000円以上購入、100個限定。購入とチャージを混同しない。",
+      "unannotatedFields": [
+        "stores"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 75139,
+      "postSha256": "52e04b1c25e0ac8432a45db010f18b7b928efefdfee223d2aede38c2f4d81cb8",
+      "textSha256": "49720c3347e3dce4f05708d741b3974d52fc8aa2af9fd7958355a7ee164c003b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "association": "reference-url",
+          "eventId": "782f2170-a3fc-40e3-8ddf-ae8fc5384c5d",
+          "type": "announce",
+          "url": "https://x.com/bic_sagamioono/status/2018599120668443032"
+        }
+      ]
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2018567610703794426",
+    "source": "public-post",
+    "description": "sagami-valentine-kitkat-2026 matched control",
+    "post": {
+      "id": "2018567610703794426",
+      "createdAt": "2026-02-03T06:09:56.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "ゲームソフト・プラモデルが安い(*ﾟДﾟ*)\nゲームコーナーやおもちゃコーナーではお宝発掘市や売り尽くし開催中🙌\n在庫限り！早い者勝ちなのでお早めに～(*´ω`*) https://t.co/mkvBAiDJf4",
+      "url": "https://x.com/bic_sagamioono/status/2018567610703794426",
+      "media": [
+        "https://pbs.twimg.com/media/HANjw22bgAATv-o.png",
+        "https://pbs.twimg.com/media/HANkDzEawAAvrzL.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2018567610703794426",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 75178,
+      "postSha256": "f92fae5ce67da983ae7aaf311fa70508ef14ce7e45b44ef1da325bd98b8b34aa",
+      "textSha256": "6e1dbb52a18ead70324d9cf8cb02238d0eee3c0b8321cba74efa60d63453cf5d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,164 @@
+[
+  {
+    "id": "goal-positive-2024318019678388606",
+    "source": "public-post",
+    "description": "kashiwa store21 umbrella card 2026",
+    "post": {
+      "id": "2024318019678388606",
+      "createdAt": "2026-02-19T03:00:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "📢お知らせです\n🎉3/10でビックカメラ柏店は21周年🎉\n🔥柏たん店舗誕生21周年記念イベント開催決定🔥\n \n①柏たんアンブレラマーカー配布🌂\n②柏たん21周年記念名刺配布❣\n\n詳細は添付画像をご参照ください‼ https://t.co/zoZPHI0KiJ",
+      "url": "https://x.com/bic_kashiwa/status/2024318019678388606",
+      "media": [
+        "https://pbs.twimg.com/media/HBblMvLbcAA7BJk.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": [
+        "kashiwa"
+      ]
+    },
+    "rationale": "配布物2種類は明示、詳細条件は画像なので未注釈。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "preliminary",
+      "multi-item"
+    ],
+    "group": "kashiwa-store21-umbrella-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "柏たんアンブレラマーカー",
+          "evidence": [
+            "①柏たんアンブレラマーカー配布🌂"
+          ]
+        },
+        {
+          "item": "柏たん21周年記念名刺",
+          "evidence": [
+            "②柏たん21周年記念名刺配布❣"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 70299,
+      "postSha256": "ff100e4f047f1ce434d0a99d2d6dd7eff3a7f59ce5f05175c153779e6fdc93ad",
+      "textSha256": "1dc2f3518003ac811ad23f0b8be8b50933c2e4bfcc90eac72cfd8e222a898152"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bic_kashiwa/status/2024318019678388606",
+          "referenceType": "announce",
+          "eventId": "ca89b5f3-ea29-4e5e-bbff-67e17243ead8",
+          "title": "アンブレラマーカー",
+          "isVerified": true,
+          "isPreliminary": false
+        },
+        {
+          "url": "https://x.com/bic_kashiwa/status/2024318019678388606",
+          "referenceType": "announce",
+          "eventId": "b56a66f8-920f-5b6b-961d-8851c0212bf3",
+          "title": "開店21周年記念名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "goal-positive-2027662510493733208",
+    "source": "public-post",
+    "description": "machida seventh sagami 2026",
+    "post": {
+      "id": "2027662510493733208",
+      "createdAt": "2026-02-28T08:29:49.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "💙3月1日(日)～🧡\nヾ(*´ω`)ﾉﾞ町田たん擬人化7周年🎉\n相模大野駅店で税込3000円以上ご購入の方に町田たんアクリルキーホルダーをプレゼント！\nご希望の際はレジにてお申し付けください♪\n#3月1日は町田たん擬人化7周年 https://t.co/SwGAFsjrPT",
+      "url": "https://x.com/bic_sagamioono/status/2027662510493733208",
+      "media": [
+        "https://pbs.twimg.com/media/HCO0TUkbEAMWCe3.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sagami"
+      ],
+      "characterIds": [
+        "machida"
+      ],
+      "category": "ackey",
+      "startDate": "2026-03-01",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "3/1から相模大野駅店で3000円購入、対象は町田たん。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "machida-seventh-sagami-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "ready",
+      "items": [
+        {
+          "item": "町田たんアクキー",
+          "evidence": [
+            "相模大野駅店で税込3000円以上ご購入の方に町田たんアクリルキーホルダーをプレゼント！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": []
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 67705,
+      "postSha256": "2bfe82d9d10c344e463469de4a39dd1b0f58ac8eb00f9a96cb9e2610e389c79f",
+      "textSha256": "49b35711a2dd32d1434b5a344e0009ba2ae90d1fff625fac5a8bbe1b3a70c06d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bic_sagamioono/status/2027662510493733208",
+          "referenceType": "start",
+          "eventId": "51cc4d54-9004-48f3-8e03-aec5d3629095",
+          "title": "擬人化7周年記念アクキー",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  }
+]

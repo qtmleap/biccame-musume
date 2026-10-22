@@ -1,0 +1,132 @@
+[
+  {
+    "id": "goal-positive-1500016613239578626",
+    "source": "public-post",
+    "description": "sagami store12 coaster card 2022",
+    "post": {
+      "id": "1500016613239578626",
+      "createdAt": "2022-03-05T07:53:24.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "『12周年限定さがみたんコースター』\n配布終了しました！！！\n12周年名刺はさがみたんミュージアムにて再配布しておりますのでご来店の際は是非貰って下さいヾ(*´ω`)ﾉﾞ\n#3月4日はさがみたんのバースデー https://t.co/dmu0RqtlbJ",
+      "url": "https://x.com/bic_sagamioono/status/1500016613239578626",
+      "media": [
+        "https://pbs.twimg.com/media/FNEg-5lVEAElVOZ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "コースターは終了、名刺は再配布で物品ごと状態が異なる。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "end",
+      "multi-item"
+    ],
+    "group": "sagami-store12-coaster-card-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "12周年コースター",
+          "evidence": [
+            "『12周年限定さがみたんコースター』"
+          ]
+        },
+        {
+          "item": "12周年名刺",
+          "evidence": [
+            "12周年名刺はさがみたんミュージアムにて再配布しておりますのでご来店の際は是非貰って下さいヾ(*´ω`)ﾉﾞ"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 481098,
+      "postSha256": "aee7b76acbb8ffa2153711d00fcf2a1ad41da136c23522e8c151bad8d28401a5",
+      "textSha256": "65ac00b41ecea862e61ade7444b16a45d40f94fe53311c4a1a96a63d9542adc8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1509715700843442180",
+    "source": "public-post",
+    "description": "nagoya gate5 gacha card 2022",
+    "post": {
+      "id": "1509715700843442180",
+      "createdAt": "2022-04-01T02:14:06.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "名古屋JRゲートタワー店5周年イベント開催✨\n名古屋駅西店でも同時開催‼️\n2022年4月1日（金）～4月30日（土）\n\n・アクリルキーホルダーガチャ！(全3種類)\n税込3,000円以上ご購入のレシートでご参加いただけます😊\n\n・なごやたんクリア名刺配布\n1階総合案内カウンターにて配布中🎵\n\n※無くなり次第終了 https://t.co/dKakxoKKx8",
+      "url": "https://x.com/bic_nagoya/status/1509715700843442180",
+      "media": [
+        "https://pbs.twimg.com/media/FPOWL2paQAAAw3f.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "startDate": "2022-04-01"
+    },
+    "rationale": "JRゲートタワーと名古屋駅西で同時開催、購入3000円はガチャ参加条件。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "nagoya-gate5-gacha-card-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "アクキーガチャ",
+          "evidence": [
+            "・アクリルキーホルダーガチャ！(全3種類)"
+          ]
+        },
+        {
+          "item": "なごやたんクリア名刺",
+          "evidence": [
+            "・なごやたんクリア名刺配布"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 473328,
+      "postSha256": "e9c8a79617e5dc9522d08efa1edaf0c415484014ee4470d1a7abaaa6af40a2b8",
+      "textSha256": "3c7fc4f030b670e83d23613d7a6c95a5ff885f88b05c134d6a0de40b09fe3a7a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

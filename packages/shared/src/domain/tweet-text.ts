@@ -1,5 +1,6 @@
 import { CHARACTER_NAME_LABELS, STORE_NAME_LABELS } from '@biccame/shared/domain/character-names'
-import { isSpecialCharacter, resolveEventCharacter } from '@biccame/shared/domain/event-character'
+import { isSpecialCharacter, resolveEventCharacters } from '@biccame/shared/domain/event-character'
+import { SPECIAL_CHARACTER_NAMES } from '@biccame/shared/domain/special-character-names'
 import type { Event, EventDetail } from '@biccame/shared/schemas/event.dto'
 
 export const SITE_BASE = 'https://biccame-musume.com'
@@ -30,21 +31,21 @@ export const weightedLength = (text: string): number => {
   return urlWeight + charWeight
 }
 
-type EventStoreLabelSource = Pick<Event, 'stores' | 'characterId'>
+type EventStoreLabelSource = Pick<Event, 'stores' | 'characterIds'>
 
 const eventStoreLabel = (event: EventStoreLabelSource): { storeName: string; characterName: string } => {
-  const resolved = resolveEventCharacter(event)
-  // その他・シークレットは特定の娘に紐付かないため、ツイートでは開催店舗の娘として扱う
-  const character = isSpecialCharacter(resolved) ? event.stores[0] : resolved
+  const characters = resolveEventCharacters(event).map((character) =>
+    isSpecialCharacter(character) ? SPECIAL_CHARACTER_NAMES[character] : CHARACTER_NAME_LABELS[character]
+  )
   return {
-    storeName: STORE_NAME_LABELS[event.stores[0]],
-    characterName: CHARACTER_NAME_LABELS[character] || STORE_NAME_LABELS[character]
+    storeName: event.stores.map((store) => STORE_NAME_LABELS[store]).join('・'),
+    characterName: characters.length === 0 ? '対象未判定' : characters.join('・')
   }
 }
 
 const eventStoreText = (event: EventStoreLabelSource): string => {
-  const { characterName } = eventStoreLabel(event)
-  return event.stores.length === 1 ? characterName : `${characterName}など${event.stores.length}店舗`
+  const { storeName, characterName } = eventStoreLabel(event)
+  return `${storeName}で配布する${characterName}`
 }
 
 export const buildEventCreatedText = (event: EventDetail): string => {
@@ -79,7 +80,7 @@ const dailyHeader = (count: number): string => `本日は${count}件のイベン
 const endingTodayHeader = (count: number): string => `本日最終日のイベントは${count}件！`
 const dailyHashtags = ['#ビッカメ娘', '#ビックカメラ']
 
-type DailySummaryEvent = Pick<Event, 'stores' | 'characterId' | 'title'>
+type DailySummaryEvent = Pick<Event, 'stores' | 'characterIds' | 'title'>
 
 const formatEventLine = (event: DailySummaryEvent): string => {
   const { characterName } = eventStoreLabel(event)

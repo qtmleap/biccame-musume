@@ -1,0 +1,163 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2041381381385924899",
+    "source": "public-post",
+    "description": "sagami-spring-card-2026",
+    "post": {
+      "id": "2041381381385924899",
+      "createdAt": "2026-04-07T05:03:43.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "🌸さがみたん春名刺🌸\nご来店の際は是非もらってくださいね(*´ω`*)\n5月31日(日)まで\n※お一人様一枚限り\n※フリマサイトなどでの出品・販売は固くお断り致します\n#さがみたん https://t.co/EGJRyQ2ZY4",
+      "url": "https://x.com/bic_sagamioono/status/2041381381385924899",
+      "media": [
+        "https://pbs.twimg.com/media/HFRxi19aUAAUBdH.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "sagami"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "5月31日までの春名刺。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:sagami-monthly-card",
+      "prior-template-related:expanded-v2-positive-2017772388948316502"
+    ],
+    "group": "sagami-spring-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "さがみたん春名刺",
+          "evidence": [
+            "🌸さがみたん春名刺🌸",
+            "#さがみたん https://t.co/EGJRyQ2ZY4"
+          ]
+        }
+      ],
+      "groupingNote": "5月31日までの春名刺。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 56441,
+      "postSha256": "1bc134b93190f19bf00fa6e26755dc66ad67a9833a2a2e8f86ad232d0f5e3e54",
+      "textSha256": "218c58b60df0c9340c060cf2bd01a301b79e2bb6384f9776ded36bb5867bd8df"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "afaefdb4-b115-45aa-9d16-37026d7444e3",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_sagamioono/status/2041381381385924899",
+          "origin": "manual-or-seed",
+          "title": "春名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-03-31T15:00:00.000+00:00",
+            "endDate": "2026-05-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "sagami"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2046034298298667309",
+    "source": "public-post",
+    "description": "sagami-spring-card-2026 matched control",
+    "post": {
+      "id": "2046034298298667309",
+      "createdAt": "2026-04-20T01:12:44.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "|*´ω`)チョコミン党が忙しい季節になってきました、おはようございます🌿\n続々とチョコミントの新商品情報が入ってきてﾜｸﾜｸしますね！では今日もよろしくお願いします🌿 https://t.co/DNQFYvo9mL",
+      "url": "https://x.com/bic_sagamioono/status/2046034298298667309",
+      "media": [
+        "https://pbs.twimg.com/media/HGT48I0awAAiuhx.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2046034298298667309",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 52948,
+      "postSha256": "5b807e94e570f8a6a1024ed3d1c6069149b3d7b05d373d53c6d74b9d98a88291",
+      "textSha256": "9d63debae70a0ff54525f2fbbe0909e37ccfb46996d1dece6e394558e5529fac"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

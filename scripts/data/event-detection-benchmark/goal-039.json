@@ -1,0 +1,129 @@
+[
+  {
+    "id": "goal-positive-1578675135099568128",
+    "source": "public-post",
+    "description": "akiba gummy style card 2022",
+    "post": {
+      "id": "1578675135099568128",
+      "createdAt": "2022-10-08T09:14:17.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "あにゃたのハート、\n狙い撃ちばっきゅーん💘\n\n10月31日㈪まで👻\nアキバたん🐈‍⬛2022ハロウィン名刺\n『プニプニ肉球グミ🐾 ~ひとめぼれ❤️べりぃ味~』配布ちゅ‼\n\nグミのパッケージっぽく、こだわったよ❣\n受け取ってほしいにゃ💖\n🎃1階総合カウンターにてお気軽にお声がけください🎃⚠グミは付きません。 https://t.co/ByIyL2FCnb",
+      "url": "https://x.com/bic_akiba/status/1578675135099568128",
+      "media": [
+        "https://pbs.twimg.com/media/FeiUkB6aAAA8UgZ.jpg",
+        "https://pbs.twimg.com/media/FeiUmgZakAYYMRm.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "akiba"
+      ],
+      "characterIds": [
+        "akiba"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "グミ風パッケージの名刺。グミは付かないと明示。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "akiba-gummy-style-card-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アキバたんハロウィン名刺",
+          "evidence": [
+            "アキバたん🐈‍⬛2022ハロウィン名刺"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 421535,
+      "postSha256": "827e0c64fcdd67722425f85333c1f2cb780726a6da8bbf6f0bbc566c61d51d41",
+      "textSha256": "89ccc917b51a0c98499edce34ae099d1d6dc5f0127636af3ded66b2600411a93"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1589214008170938369",
+    "source": "public-post",
+    "description": "tokorozawa card postcard 2022",
+    "post": {
+      "id": "1589214008170938369",
+      "createdAt": "2022-11-06T11:12:00.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "所沢たんログアウトのお時間とこ(§*´꒳`*)✈️\n本日も1日おつとこでした🌙✨\n\n明日から期間限定名刺とポストカードの配布がスタートするとこ❣️\n明日もよろとこです(末§≧∀≦)🎵",
+      "url": "https://x.com/bic_toko/status/1589214008170938369",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "明日から2物品の開始予告。対象デザインや条件を補わない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "preliminary",
+      "multi-item"
+    ],
+    "group": "tokorozawa-card-postcard-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "期間限定名刺",
+          "evidence": [
+            "明日から期間限定名刺とポストカードの配布がスタートするとこ❣️"
+          ]
+        },
+        {
+          "item": "ポストカード",
+          "evidence": [
+            "明日から期間限定名刺とポストカードの配布がスタートするとこ❣️"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 413095,
+      "postSha256": "3f882a119454d05e06c6241364adb650d3de42927a7ef3c7b71823fb8daa5f4c",
+      "textSha256": "e0c932b51a985afbc5d345e1065459900a40d668f55b05e313f371cec7cbc5b2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

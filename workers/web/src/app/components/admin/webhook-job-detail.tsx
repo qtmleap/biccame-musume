@@ -1,60 +1,43 @@
-import { reasonLabel } from '@biccame/shared/event-detect/answer-view'
 import type { DetectionThresholds } from '@biccame/shared/event-detect/detection'
 import type { EventRequestQuery } from '@biccame/shared/schemas/event.dto'
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import {
-  Circle,
-  CircleCheck,
-  ExternalLink,
-  FilePlus2,
-  Link2,
-  Pencil,
-  RefreshCw,
-  RotateCcw,
-  Send,
-  X
-} from 'lucide-react'
+import { ExternalLink, FilePlus2, Pencil, RefreshCw, RotateCcw, ScanSearch, Send, X } from 'lucide-react'
 import { useState } from 'react'
-import { z } from 'zod'
 import { BotActionConfirmation } from '@/components/admin/bot-action-confirmation'
 import { BotSettingRow, BotSettingsLayout } from '@/components/admin/bot-settings-layout'
 import { WebhookAnswerTable } from '@/components/admin/webhook-answer-table'
+import { WebhookCandidateList } from '@/components/admin/webhook-candidate-list'
+import { WebhookDiscoveryPanel } from '@/components/admin/webhook-discovery-panel'
+import { WebhookEventLinkDialog } from '@/components/admin/webhook-event-link-dialog'
 import { webhookEventCreateSearch } from '@/components/admin/webhook-form-defaults'
 import {
-  detectionScoreLabel,
   isWebhookJobJudging,
   notificationRetryWarning,
-  webhookActionAvailability,
-  webhookCandidateTitle
+  webhookActionAvailability
 } from '@/components/admin/webhook-labels'
+import { WebhookPromptDialog } from '@/components/admin/webhook-prompt-dialog'
+import { WebhookReasonRows } from '@/components/admin/webhook-reason-rows'
 import { WebhookStatusBadge } from '@/components/admin/webhook-status-badge'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
 import { useAdminBotStatus } from '@/hooks/use-admin-bot'
 import {
   useAdminWebhookJob,
+  useRecheckAdminWebhookJob,
   useRejudgeAdminWebhookJob,
   useResolveAdminWebhookJob,
   useRetryAdminWebhookJob
 } from '@/hooks/use-admin-webhooks'
 import { cn } from '@/lib/utils'
 
-type ConfirmAction = 'processing' | 'notification' | 'reject' | 'rejudge'
+type ConfirmAction = 'processing' | 'notification' | 'reject' | 'rejudge' | 'recheck'
 
 const CONFIRM_TITLES: Record<ConfirmAction, string> = {
   processing: '失敗した処理を再実行しますか？',
   notification: 'Discord通知を再送しますか？',
   reject: 'この投稿を対象外にしますか？',
-  rejudge: 'AI で判定し直しますか？'
+  rejudge: 'AI で判定し直しますか？',
+  recheck: '判定を再確認しますか？'
 }
 
 export const WebhookJobDetail = ({ postId }: { postId: string }) => {
@@ -73,16 +56,25 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   const retry = useRetryAdminWebhookJob()
   const resolve = useResolveAdminWebhookJob()
   const rejudge = useRejudgeAdminWebhookJob()
+  const recheck = useRecheckAdminWebhookJob()
   const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null)
-  const [linkOpen, setLinkOpen] = useState(false)
-  const [linkEventId, setLinkEventId] = useState('')
-  const [linkError, setLinkError] = useState(false)
   const [selectedCandidate, setSelectedCandidate] = useState<string | null>(null)
   const parentJob = jobQuery.data
   const selected = parentJob?.candidates.find((candidate) => candidate.eventUUID === selectedCandidate)
-  const active = selected === undefined ? parentJob?.candidates[0] : selected
+  const firstDetected = parentJob?.candidates.find((candidate) => candidate.discovery?.relevance === 'detected')
+  const active =
+    selected === undefined ? (firstDetected === undefined ? parentJob?.candidates[0] : firstDetected) : selected
   const job = active === undefined ? parentJob : { ...active, candidates: [] }
   const candidateSelection = active === undefined ? {} : { candidateId: active.eventUUID }
+  // 回答に店舗・ビッカメ娘の質問が無い旧版の保存データでも表に出せるよう、判定結果（登録候補、無ければ下書き）の関連先を渡す。
+  const outcome =
+    job === undefined
+      ? undefined
+      : job.candidate === null
+        ? job.draft === null
+          ? undefined
+          : job.draft
+        : job.candidate
   // 選択中の候補の登録候補・下書きを作成ページの初期値にする。読み込み中は初期値なしでリンクだけ出す。
   // 作成したイベントはこの受信ジョブ（複数候補なら選択中の候補）へ自動で紐付ける。紐付け先を渡すかどうかは保留の状態かで決まる。
   const createSearch: EventRequestQuery =
@@ -92,13 +84,15 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           link: { postId, ...candidateSelection },
           ...(active === undefined ? {} : { item: active.item })
         })
-  const isPending = retry.isPending || resolve.isPending || rejudge.isPending
+  const isPending = retry.isPending || resolve.isPending || rejudge.isPending || recheck.isPending
   const availability = job
     ? webhookActionAvailability(job.status, job.notificationStatus, job.reasons)
     : {
         canResolve: false,
+        canLink: false,
         canRetryProcessing: false,
         canRejudge: false,
+        canRecheck: false,
         canRetryNotification: false
       }
 
@@ -109,6 +103,8 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
         await resolve.mutateAsync({ postId, data: { action: 'reject', ...candidateSelection } })
       } else if (confirmAction === 'rejudge') {
         await rejudge.mutateAsync({ postId, ...candidateSelection })
+      } else if (confirmAction === 'recheck') {
+        await recheck.mutateAsync({ postId, ...candidateSelection })
       } else {
         await retry.mutateAsync({
           postId,
@@ -125,18 +121,6 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
     }
   }
 
-  const link = async () => {
-    const parsed = z.uuid().safeParse(linkEventId.trim())
-    setLinkError(!parsed.success)
-    if (!parsed.success) return
-    try {
-      await resolve.mutateAsync({ postId, data: { ...candidateSelection, action: 'link', eventId: parsed.data } })
-      setLinkOpen(false)
-    } catch {
-      // mutationのエラー表示を使用する。
-    }
-  }
-
   const confirmDescription =
     confirmAction === 'notification' && job
       ? notificationRetryWarning(job.notificationStatus)
@@ -144,7 +128,9 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
         ? 'この投稿はイベント登録せず、対象外として保存します。既存イベントは変更しません。'
         : confirmAction === 'rejudge'
           ? '現在の質問とモデルで AI を再実行し、判定をやり直します。保存済みの回答と判定結果は上書きされます。結果次第でイベントが自動登録され、Discord にも通知（通知済みの場合は再通知）される場合があります。'
-          : '失敗した処理をもう一度実行します。判定結果が保存済みならそれを使い、なければ AI を呼びます。'
+          : confirmAction === 'recheck'
+            ? '現在の質問とモデルで AI を再実行し、回答表・確率・プロンプトの版を更新します。登録済みのイベント、判定状態、Discord 通知は変更しません。'
+            : '失敗した処理をもう一度実行します。判定結果が保存済みならそれを使い、なければ AI を呼びます。'
 
   return (
     <BotSettingsLayout
@@ -169,7 +155,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           <p className='text-destructive'>受信詳細を取得できませんでした。更新から再試行できます。</p>
         )}
       </div>
-      <div className='mb-6 flex flex-wrap gap-2 border-b pb-5'>
+      <div className='mb-6 flex flex-wrap gap-2'>
         {/* 先頭ボタンは常に同じ場所に出し、登録済みのときだけ意味を「編集」に切り替える。どちらも遷移だけで受信ジョブの状態は変えないため、常に開ける。 */}
         <Button asChild className='bg-brand text-brand-foreground hover:bg-brand/90'>
           {job !== undefined && job.status === 'registered' && job.eventId !== null ? (
@@ -184,15 +170,15 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
             </Link>
           )}
         </Button>
-        <Button
-          variant='outline'
-          className='border-card-border'
-          onClick={() => setLinkOpen(true)}
-          disabled={!availability.canResolve || isPending}
-        >
-          <Link2 className='size-4' />
-          既存へ紐付け
-        </Button>
+        <WebhookEventLinkDialog
+          key={`${postId}:${active === undefined ? 'post' : active.eventUUID}`}
+          disabled={!availability.canLink}
+          isPending={isPending}
+          replacing={job !== undefined && job.status === 'registered'}
+          onLink={async (eventId) =>
+            await resolve.mutateAsync({ postId, data: { ...candidateSelection, action: 'link', eventId } })
+          }
+        />
         <Button
           variant='outline'
           className='border-card-border'
@@ -221,6 +207,16 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
         >
           <RefreshCw className='size-4' />
           AI で判定し直す
+        </Button>
+        <Button
+          variant='outline'
+          className='border-card-border'
+          onClick={() => setConfirmAction('recheck')}
+          disabled={!availability.canRecheck || isPending}
+          title='登録済みのイベントや通知は変えずに、回答・確率・プロンプトの版だけ AI で更新します'
+        >
+          <ScanSearch className='size-4' />
+          判定を再確認
         </Button>
         <Button
           variant='outline'
@@ -269,6 +265,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
       )}
       {job && (
         <div className='space-y-8'>
+          <WebhookDiscoveryPanel job={job} />
           <div className={cn('grid min-w-0 gap-4', parentJob && parentJob.candidates.length > 0 && 'md:grid-cols-2')}>
             <section className='min-w-0'>
               <h2 className='mb-2 text-lg font-semibold md:text-xl'>元投稿</h2>
@@ -287,67 +284,15 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
               </p>
             </section>
             {parentJob && parentJob.candidates.length > 0 && (
-              <section className='min-w-0' aria-label='識別されたイベント'>
-                <h2 className='mb-1 text-lg font-semibold md:text-xl'>識別されたイベント</h2>
-                <p className='mb-2 text-sm text-muted-foreground'>
-                  クリックで選択すると、上部の操作と下の判定結果がそのイベントに切り替わります
-                </p>
-                <ul className='flex flex-col gap-1.5'>
-                  {parentJob.candidates.map((candidate) => {
-                    const isActive = active?.eventUUID === candidate.eventUUID
-                    return (
-                      // 候補名ボタンの疑似要素で行全体を覆い、行のどこをクリックしても選択できるようにする（リンクはz-10で除外）。
-                      <li
-                        key={candidate.eventUUID}
-                        className={cn(
-                          'relative flex flex-wrap items-center justify-between gap-2 rounded-md px-2 py-1 transition-colors',
-                          isActive ? 'bg-brand/10 ring-1 ring-brand/40' : 'shadow-none ring-0 hover:bg-brand/5',
-                          isPending ? 'cursor-default' : 'cursor-pointer',
-                          // キーボード操作の目印は影（ring）ではなく、行から少し離したくっきりした枠線にする。
-                          'has-[button:focus-visible]:outline-2 has-[button:focus-visible]:outline-offset-2 has-[button:focus-visible]:outline-brand'
-                        )}
-                      >
-                        <Button
-                          variant='ghost'
-                          className={cn(
-                            'h-8 gap-2 px-0 transition-none hover:bg-transparent focus-visible:ring-0 dark:hover:bg-transparent',
-                            'after:absolute after:inset-0 after:rounded-md',
-                            isActive && 'font-semibold'
-                          )}
-                          aria-pressed={isActive}
-                          disabled={isPending}
-                          onClick={() => {
-                            setSelectedCandidate(candidate.eventUUID)
-                            setLinkOpen(false)
-                            setConfirmAction(null)
-                          }}
-                        >
-                          {isActive ? (
-                            <CircleCheck className='size-4' />
-                          ) : (
-                            <Circle className='size-4 text-muted-foreground' />
-                          )}
-                          {webhookCandidateTitle(candidate)}
-                          {/* AI の題が抽出名と違うときだけ、元の抽出名を控えめに添える */}
-                          {webhookCandidateTitle(candidate) !== candidate.item && (
-                            <span className='text-xs font-normal text-muted-foreground'>抽出: {candidate.item}</span>
-                          )}
-                        </Button>
-                        <WebhookStatusBadge status={candidate.status} />
-                        {candidate.eventId !== null && (
-                          <Link
-                            to='/events/$uuid'
-                            params={{ uuid: candidate.eventId }}
-                            className='relative z-10 text-sm hover:underline'
-                          >
-                            登録イベント
-                          </Link>
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
-              </section>
+              <WebhookCandidateList
+                candidates={parentJob.candidates}
+                activeId={active?.eventUUID}
+                isPending={isPending}
+                onSelect={(id) => {
+                  setSelectedCandidate(id)
+                  setConfirmAction(null)
+                }}
+              />
             )}
           </div>
           <section>
@@ -359,7 +304,12 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
             ) : job.answers === null ? (
               <p className='text-sm text-muted-foreground'>回答の記録なし</p>
             ) : (
-              <WebhookAnswerTable answers={job.answers} thresholds={thresholds} />
+              <WebhookAnswerTable
+                answers={job.answers}
+                thresholds={thresholds}
+                stores={outcome === undefined ? [] : outcome.stores}
+                characterIds={outcome === undefined ? [] : outcome.characterIds}
+              />
             )}
           </section>
           <section>
@@ -368,24 +318,16 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
               <BotSettingRow label='判定状態'>
                 <WebhookStatusBadge status={job.status} />
               </BotSettingRow>
-              <BotSettingRow label='イベント判定スコア'>
-                <span className='font-mono tabular-nums'>{detectionScoreLabel(job.confidence)}</span>
-              </BotSettingRow>
               <BotSettingRow label='判定モデル'>{job.model ? job.model : '未判定'}</BotSettingRow>
-              <BotSettingRow label='質問の版'>{job.questionVersion ? job.questionVersion : '未判定'}</BotSettingRow>
-              <BotSettingRow label='判定理由'>
-                {job.reasons.length > 0 ? (
-                  <ul className='space-y-1'>
-                    {job.reasons.map((reason) => (
-                      <li key={reason} className='break-words' title={reason}>
-                        {reasonLabel(reason)}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  '理由の記録なし'
-                )}
+              <BotSettingRow label='プロンプトバージョン'>
+                <WebhookPromptDialog
+                  key={`${postId}:${active === undefined ? 'post' : active.eventUUID}`}
+                  postId={postId}
+                  candidateId={active?.eventUUID}
+                  questionVersion={job.questionVersion}
+                />
               </BotSettingRow>
+              <WebhookReasonRows reasons={job.reasons} />
               <BotSettingRow label='処理回数'>
                 <span className='font-mono tabular-nums'>{job.attempts}</span>
               </BotSettingRow>
@@ -437,54 +379,6 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
         isPending={isPending}
         onConfirm={confirm}
       />
-      <Dialog open={linkOpen} onOpenChange={isPending ? undefined : setLinkOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>既存イベントへ紐付け</DialogTitle>
-            <DialogDescription>
-              管理画面のイベントURL末尾にあるUUIDを入力してください。既存イベントの内容は変更しません。
-            </DialogDescription>
-          </DialogHeader>
-          <div className='space-y-2'>
-            <label htmlFor='link-event-id' className='text-sm font-medium'>
-              イベントUUID
-            </label>
-            <Input
-              id='link-event-id'
-              value={linkEventId}
-              onChange={(event) => {
-                setLinkEventId(event.target.value)
-                setLinkError(false)
-              }}
-              placeholder='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-              disabled={isPending}
-              aria-invalid={linkError}
-            />
-            {linkError && (
-              <p role='alert' className='text-sm text-destructive'>
-                有効なイベントUUIDを入力してください。
-              </p>
-            )}
-          </div>
-          <DialogFooter>
-            <Button
-              variant='outline'
-              className='border-card-border'
-              onClick={() => setLinkOpen(false)}
-              disabled={isPending}
-            >
-              キャンセル
-            </Button>
-            <Button
-              className='bg-brand text-brand-foreground hover:bg-brand/90'
-              onClick={link}
-              disabled={!availability.canResolve || isPending}
-            >
-              紐付ける
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </BotSettingsLayout>
   )
 }

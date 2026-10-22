@@ -1,4 +1,5 @@
-import { isSpecialCharacter, resolveEventCharacter } from '@biccame/shared/domain/event-character'
+import { isSpecialCharacter, resolveEventCharacters } from '@biccame/shared/domain/event-character'
+import { SPECIAL_CHARACTER_NAMES } from '@biccame/shared/domain/special-character-names'
 import type { Event } from '@biccame/shared/schemas/event.dto'
 import type { StoreKey } from '@biccame/shared/schemas/store.dto'
 import dayjs from 'dayjs'
@@ -14,7 +15,7 @@ export type ImageEvent = Pick<
   | 'title'
   | 'category'
   | 'stores'
-  | 'characterId'
+  | 'characterIds'
   | 'startDate'
   | 'endDate'
   | 'endedAt'
@@ -86,6 +87,11 @@ export const conditionLabels = (event: Pick<ImageEvent, 'conditions' | 'limitedQ
     if (condition.type === 'purchase') {
       return condition.purchaseAmount ? `${condition.purchaseAmount.toLocaleString('ja-JP')}円以上購入` : '購入特典'
     }
+    if (condition.type === 'charge') {
+      return condition.chargeAmount === undefined
+        ? '入金・チャージ'
+        : `${condition.chargeAmount.toLocaleString('ja-JP')}円以上入金`
+    }
     if (condition.type === 'first_come') return condition.quantity ? `先着${condition.quantity}名` : '先着順'
     if (condition.type === 'lottery') return condition.quantity ? `抽選${condition.quantity}名` : '抽選'
     return '全員配布'
@@ -95,17 +101,19 @@ export const conditionLabels = (event: Pick<ImageEvent, 'conditions' | 'limitedQ
   return event.limitedQuantity && !counted ? [...labels, `限定${event.limitedQuantity}個`] : labels
 }
 
-/** 立ち絵を出す娘。対象の娘が決まっていればその娘、そうでなければ開催店舗の娘 */
-export const portraitKeys = (event: Pick<ImageEvent, 'stores' | 'characterId'>): StoreKey[] => {
-  const resolved = resolveEventCharacter(event)
-  if (!isSpecialCharacter(resolved) && event.characterId) return [resolved]
-  return [...new Set(event.stores)].slice(0, MAX_PORTRAITS)
+/** 明示された対象の娘を立ち絵にする。未判定なら開催店舗の娘へ置き換えない。 */
+export const portraitKeys = (event: Pick<ImageEvent, 'stores' | 'characterIds'>): StoreKey[] => {
+  return resolveEventCharacters(event)
+    .flatMap((character) => (isSpecialCharacter(character) ? [] : [character]))
+    .slice(0, MAX_PORTRAITS)
 }
 
-/** 開催店舗の娘と異なる娘が対象のときだけ、その娘の名前を返す */
-export const targetCharacterName = (event: Pick<ImageEvent, 'stores' | 'characterId'>): string | null => {
-  const resolved = resolveEventCharacter(event)
-  return isSpecialCharacter(resolved) || resolved === event.stores[0] ? null : CHARACTER_NAME_LABELS[resolved]
+/** 対象全員の名前を開催店舗と独立して返す。 */
+export const targetCharacterName = (event: Pick<ImageEvent, 'stores' | 'characterIds'>): string | null => {
+  const names = resolveEventCharacters(event).map((character) =>
+    isSpecialCharacter(character) ? SPECIAL_CHARACTER_NAMES[character] : CHARACTER_NAME_LABELS[character]
+  )
+  return names.length === 0 ? null : names.join('・')
 }
 
 const listStores = (stores: StoreKey[]): { stores: string[]; otherStoreCount: number } => {
@@ -123,7 +131,10 @@ const same = (values: string[]): boolean => values.every((value) => value === va
 export const groupRows = (events: ImageEvent[], note: (event: ImageEvent) => string): EventRow[] => {
   const groups = new Map<string, ImageEvent[]>()
   for (const event of events) {
-    const key = event.groupId === undefined ? `${event.category}:${event.title}` : event.groupId
+    const key = JSON.stringify([
+      event.groupId === undefined ? `${event.category}:${event.title}` : event.groupId,
+      event.characterIds.toSorted()
+    ])
     const members = groups.get(key)
     if (members) members.push(event)
     else groups.set(key, [event])

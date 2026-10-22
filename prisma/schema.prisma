@@ -19,10 +19,12 @@ datasource db {
 model EventCondition {
   id             String   @id @default(uuid())
   eventId        String   @map("event_id")
-  /// 配布条件の種類: purchase, first_come, lottery, everyone
+  /// 配布条件の種類: purchase, charge, first_come, lottery, everyone
   type           String
   /// 購入条件の場合の金額（円）
   purchaseAmount Int?     @map("purchase_amount")
+  /// 入金・チャージ条件の場合の金額（円）
+  chargeAmount   Int?     @map("charge_amount")
   /// 先着または抽選の人数
   quantity       Int?
   /// 作成日時
@@ -66,6 +68,20 @@ model EventStore {
   @@unique([eventId, storeKey])
   @@index([eventId])
   @@map("event_stores")
+}
+
+/// 配布物の対象ビッカメ娘（開催店舗とは独立）
+model EventCharacter {
+  id          String   @id @default(uuid())
+  eventId     String   @map("event_id")
+  characterId String   @map("character_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, characterId])
+  @@index([eventId])
+  @@map("event_characters")
 }
 
 /// イベントグループ（11周年記念キャンペーン等、複数Eventを束ねる）
@@ -112,7 +128,7 @@ model Event {
   isPreliminary   Boolean             @default(false) @map("is_preliminary")
   /// 所属するイベントグループ（任意）
   groupId         String?             @map("group_id")
-  /// 対象のビッカメ娘（任意）。null のときは開催店舗と同一とみなす
+  /// 旧形式の明示対象。新しい対象は characters に保存する
   characterId     String?             @map("character_id")
   /// LLM が「配布イベントである」と判定した確率（0〜1、任意）。人手登録のイベントは null
   llmConfidence   Float?              @map("llm_confidence")
@@ -148,6 +164,8 @@ model Event {
   referenceUrls   EventReferenceUrl[]
   /// 開催店舗
   stores          EventStore[]
+  /// 配布物の対象ビッカメ娘
+  characters      EventCharacter[]
   /// イベントとユーザーの関係
   userEvents      UserEvent[]
   /// コメント
@@ -157,6 +175,15 @@ model Event {
 
   @@index([groupId])
   @@map("events")
+}
+
+/// 版ごとのプロンプト定義。判定ごとの実入力とは分離して保持する
+model WebhookPromptVersion {
+  version        String   @id
+  definitionJson String   @map("definition_json")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("webhook_prompt_versions")
 }
 
 /// X Webhook の受信・判定・通知履歴
@@ -170,6 +197,7 @@ model WebhookEventJob {
   resultJson         String?   @map("result_json")
   candidateJson      String?   @map("candidate_json")
   answersJson        String?   @map("answers_json")
+  requestsJson       String?   @map("requests_json")
   model              String?
   questionVersion    String?   @map("question_version")
   confidence         Float?
@@ -208,6 +236,7 @@ model WebhookEventCandidate {
   resultJson         String?   @map("result_json")
   candidateJson      String?   @map("candidate_json")
   answersJson        String?   @map("answers_json")
+  requestsJson       String?   @map("requests_json")
   model              String?
   questionVersion    String?   @map("question_version")
   confidence         Float?

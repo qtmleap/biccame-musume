@@ -1,0 +1,129 @@
+[
+  {
+    "id": "expanded-v2-positive-1807579881146089899",
+    "source": "public-post",
+    "description": "kyushu-trio-summer-card-2024",
+    "post": {
+      "id": "1807579881146089899",
+      "createdAt": "2024-07-01T01:00:01.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "おっはてーん(✿╹◡╹)ﾉ\n7月がスタートしました～🍉🌞\nということで\n本日から7階エレベーター前で\n夏限定コラボ名刺の配布を始めます✨\n天神１号たんと鹿児島たんとのコラボやけんぜひ遊びにこんね～🍠",
+      "url": "https://x.com/biccameratenjin/status/1807579881146089899",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "天神1号たんと鹿児島たんも対象。投稿会場と対象全員は別。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kyushu-trio-summer-card-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "夏限定コラボ名刺",
+          "evidence": [
+            "おっはてーん(✿╹◡╹)ﾉ",
+            "7月がスタートしました～🍉🌞",
+            "ということで",
+            "本日から7階エレベーター前で",
+            "夏限定コラボ名刺の配布を始めます✨",
+            "天神１号たんと鹿児島たんとのコラボやけんぜひ遊びにこんね～🍠"
+          ]
+        }
+      ],
+      "groupingNote": "天神1号たんと鹿児島たんも対象。投稿会場と対象全員は別。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 235645,
+      "postSha256": "1d2cdbefedd88742887e6b1bcb39259239e41bf646c1eb4036bba33a2ff052f0",
+      "textSha256": "02069853edc8a205b45afc32a3218dc82015bff0e1925acc0b607a7c8b14376e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1808704787946615231",
+    "source": "public-post",
+    "description": "kyushu-trio-summer-card-2024 matched control",
+    "post": {
+      "id": "1808704787946615231",
+      "createdAt": "2024-07-04T03:30:00.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "7/6（土）〜7/7（日）2日間限定🌞\n10:00〜18:00⏲ビックカメラ天神2号館にて\n#花王 体感イベントを開催✨\nイベント会場でボディシートや制汗スプレーの感想をSNSに投稿📱もしくは1,000円以上購入でプレゼント🎁\nまとめ買いキャンペーンもあるけん今年の暑さ対策🌴にご来店まっとるよ～🎵 https://t.co/0ndsiik5Ym",
+      "url": "https://x.com/biccameratenjin/status/1808704787946615231",
+      "media": [
+        "https://pbs.twimg.com/media/GResHSvb0AEUXHO.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1808704787946615231",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 234622,
+      "postSha256": "9c5ac55463e7ee90b1de7abb199e0d45366eade76ae5af3192b0f38495be4901",
+      "textSha256": "e2732d9b78f1e847a3e621aee061905870fac193e7bfbfb7c162b1b42a785383"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

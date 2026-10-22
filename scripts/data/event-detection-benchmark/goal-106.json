@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1795772245656404381",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1795772245656404381",
+      "createdAt": "2024-05-29T11:00:41.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "池袋カメラ・パソコン館では\nプリンターや事務機器本体だけでなく、\nインクやレジロール、タイムカード、\nシュレッダーオイルなどのOA消耗品も\n豊富に取り揃えております📠\n\n店頭に取扱いがない商品でも、\nお取り寄せ承りますのでお気軽にご相談ください！\n\n是非、当店2Fまでお越しくださいませ😃 https://t.co/90pvSvlz9n",
+      "url": "https://x.com/bicpkanhonten/status/1795772245656404381",
+      "media": [
+        "https://pbs.twimg.com/media/GOvcp-Sb0AA1Nom.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「池袋カメラ・パソコン館では / プリンターや事務機器本体だけでなく、 / インクやレジロール、タイムカード、」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pkan-office-consumables-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 247069,
+      "postSha256": "daf4985e8135f46c3a7dbcb8bc4545a75ed22e4b0b6712f7aa2786272224c609",
+      "textSha256": "be8e4e7f8af2fdcd94b63b0b9a1424a657b95c69f25d02f606d5568c95224a11"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1818545715855212846",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1818545715855212846",
+      "createdAt": "2024-07-31T07:14:20.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "📣7月31日まで❗️\n\n＼ビックカメラで買い替えがお🉐‼️／\n\n📸対象のデジカメ、レンズのご購入で\n買取金額【最大20%増額⤴️クーポン】進呈(*ﾟ▽ﾟ*)✨\n\n🏬本館5階サービスサポートカウンターにて https://t.co/oN24onLSjJ",
+      "url": "https://x.com/bic_shibuya/status/1818545715855212846",
+      "media": [
+        "https://pbs.twimg.com/media/GTzFr2ibwAE-RaR.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「📣7月31日まで❗️ / ＼ビックカメラで買い替えがお🉐‼️／ / 📸対象のデジカメ、レンズのご購入で」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "shibuya-camera-tradein-bonus-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 224740,
+      "postSha256": "cc223ef8745b0bbcd90e19c342bee8c02eba0e6c25267841acd01c94bf5edc0a",
+      "textSha256": "46b9f47b97479d787c0454a1e4c2da985d83610ba156365f3bf73679f8f58d2e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

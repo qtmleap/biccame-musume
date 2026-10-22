@@ -1,0 +1,169 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2077954965356863702",
+    "source": "public-post",
+    "description": "hamamatsu-leftover-summer-card-2026",
+    "post": {
+      "id": "2077954965356863702",
+      "createdAt": "2026-07-17T03:14:04.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "quote",
+      "text": "整理してたら去年の夏名刺を見つけました。\nなんでこんなにあるんだろ？と思ったら\nしんじゅたん名刺で入れ替えたやつでした…。\n\n|๑σ.σ).o0(とりあえず明日から名刺置き場に置いておくのでこれでも欲しいという方はお受け取り下さい…‼\n※こちらもなくなり次第終了です https://t.co/9PEDF0Xsve",
+      "url": "https://x.com/bic_hamamatsu/status/2077954965356863702",
+      "quoted": {
+        "id": "2069684854271430991",
+        "screenName": "bic_hamamatsu",
+        "text": "|๑σ｡σ).o0(ちょっと皆さまへご質問‼\n\n過去に期間限定で配っていた名刺が少し余ってて\n無くなり次第終わりになってしまうんですが欲しいかったりします❓"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HNZc62baEAAIA4O.jpg",
+        "https://pbs.twimg.com/media/HNZdO-cawAAmuj2.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "余っていた過去の限定名刺を名刺置き場に置く告知。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "challenge",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "hamamatsu-leftover-summer-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "去年の夏名刺",
+          "evidence": [
+            "整理してたら去年の夏名刺を見つけました。"
+          ]
+        }
+      ],
+      "groupingNote": "余っていた過去の限定名刺を名刺置き場に置く告知。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 24306,
+      "postSha256": "679dfa465ef7585849eea30c7cf4e9a73ac6a8b2d1e88bb94ff57a2c554e1a47",
+      "textSha256": "e620a452fb2bd0fa6689647deb404dc007b9da8911ecb0d903a43beefc0bcfc3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "479a8cfa-6d09-4ec0-a968-af57dc96deb3",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_hamamatsu/status/2077954965356863702",
+          "origin": "manual-or-seed",
+          "title": "しんじゅたん名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-17T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "hamamatsu"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2072180615185866783",
+    "source": "public-post",
+    "description": "hamamatsu-leftover-summer-card-2026 matched control",
+    "post": {
+      "id": "2072180615185866783",
+      "createdAt": "2026-07-01T04:48:52.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "quote",
+      "text": "というわけで、7月30日で10周年を迎える\n音街ウナちゃんのパネル置かせていただいちゃいました✨\n|๑σ｡σ).o0(ｶﾜｲｲ…)",
+      "url": "https://x.com/bic_hamamatsu/status/2072180615185866783",
+      "quoted": {
+        "id": "2072178719691886610",
+        "screenName": "bic_hamamatsu",
+        "text": "本日から店頭はまたんパネルの横に\n#音街ウナ 大型パネル設置をはじめました✨\n\nビックカメラ浜松店にご来店の際は\nぜひウナちゃんパネル見ていってくださいね💖\nはまたんとのツーショット撮影もぜひ🍪🍪 https://t.co/5TeVOnz6s7"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2072180615185866783",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 29413,
+      "postSha256": "f31e0f938d835c1b9c6cdf33b5666a018be5add6ca65b48897341723e7f4aba9",
+      "textSha256": "fae5d2c0c1feb16b9cd0454b1f1c47fa98158c575374c52110746c30b3b84a25"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

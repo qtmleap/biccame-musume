@@ -1,0 +1,168 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2009918759658815563",
+    "source": "public-post",
+    "description": "pkan-valentine-novelty-2026",
+    "post": {
+      "id": "2009918759658815563",
+      "createdAt": "2026-01-10T09:22:29.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "quote",
+      "text": "／\nイベント告知！\n＼\n\n2月と言えばバレンタインデー💝✨\n【2/14(土) 開店時】より数量限定で\n #パソ館たん オリジナルノベルティをご用意します！ \n\n配布条件(金額)・配布物については1月下旬に改めて告知します☺️ https://t.co/NY2rjz88xK",
+      "url": "https://x.com/bicpkanhonten/status/2009918759658815563",
+      "quoted": {
+        "id": "2003636619874881976",
+        "screenName": "bicpkanhonten",
+        "text": "( っ*´ω`*c)超！先行予告！！\n2/14(土)から何かしらのイベント行います🍫\nバレンタインはパソ館たんに会いに来てね☺️💕"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/G-SpTcYbkAE8Akm.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "pkan"
+      ],
+      "startDate": "2026-02-14",
+      "conditions": null
+    },
+    "rationale": "配布条件と配布物は1月下旬に改めて告知とされる。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "preliminary",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "pkan-valentine-novelty-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "パソ館たんオリジナルノベルティ",
+          "evidence": [
+            " #パソ館たん オリジナルノベルティをご用意します！ "
+          ]
+        }
+      ],
+      "groupingNote": "配布条件と配布物は1月下旬に改めて告知とされる。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 81064,
+      "postSha256": "7ad129a76d01313217e2bd083ffbfdcf13038e31efa881cea42055d2f3adabcc",
+      "textSha256": "644a0439a99165893a8611d4a24138fc9e8fea84cc685adfe24f892fad8aff2b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "13784ca0-4797-48ed-8cbe-da2002792cb2",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicpkanhonten/status/2009918759658815563",
+          "origin": "manual-or-seed",
+          "title": "オリジナルノベルティ",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-02-13T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "pkan"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2007019546042155090",
+    "source": "public-post",
+    "description": "pkan-valentine-novelty-2026 matched control",
+    "post": {
+      "id": "2007019546042155090",
+      "createdAt": "2026-01-02T09:22:03.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "quote",
+      "text": "( っ*´ω`*c)相変わらずリプもいいねも引用も通知来ないんですが、自分のID(bicpkanhonten)を検索したらリプが見れるのでそれでしばらくガンバリマス！💪",
+      "url": "https://x.com/bicpkanhonten/status/2007019546042155090",
+      "quoted": {
+        "id": "2007001020036268051",
+        "screenName": "bicpkanhonten",
+        "text": "( っ*´ω`*c).o0(リプやいいねの通知がちゃんと来てないような……気のせい……？)"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2007019546042155090",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 83177,
+      "postSha256": "2e542c7e5e0eb451d425f43fab354d4a128da3861e75004c88215e8adbbd6ead",
+      "textSha256": "3a0be9c757e17ff373db4f1c3f23eb6bba7c173b0cef061711b828712a6c43db"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

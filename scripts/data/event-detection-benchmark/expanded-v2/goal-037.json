@@ -1,0 +1,136 @@
+[
+  {
+    "id": "expanded-v2-positive-2049032367440814267",
+    "source": "public-post",
+    "description": "four-store25-bookmark-2026",
+    "post": {
+      "id": "2049032367440814267",
+      "createdAt": "2026-04-28T07:46:00.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\n5月10日(日)から✨\n＼\n\nビックカメラ立川店・なんば店・有楽町店・札幌店は今年で開店25周年です🎉\n\n#ビッカメ娘 4店舗合同イベント開催🎵\n\n立川店で税込2,000円以上のお買物で【4連クリアしおり】プレゼント🎁\nうちでは #なんばたん #さっぽろたん #立川たん のしおり🔖\n\nお楽しみに(Ｕ 'ᴗ' Ｕ)❤ https://t.co/7aVLdJIn4o",
+      "url": "https://x.com/bic_tachikawa/status/2049032367440814267",
+      "media": [
+        "https://pbs.twimg.com/media/HGadIIjboAA7isZ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": [
+        "tachikawa"
+      ],
+      "characterIds": [
+        "nanba",
+        "sapporo",
+        "tachikawa"
+      ],
+      "startDate": "2026-05-10",
+      "conditions": null
+    },
+    "rationale": "4店舗25周年企画。立川店のしおりの対象は3娘で全会場名と一致しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "four-store25-bookmark-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "4連クリアしおり",
+          "evidence": [
+            "／",
+            "5月10日(日)から✨",
+            "＼",
+            "ビックカメラ立川店・なんば店・有楽町店・札幌店は今年で開店25周年です🎉",
+            "#ビッカメ娘 4店舗合同イベント開催🎵",
+            "立川店で税込2,000円以上のお買物で【4連クリアしおり】プレゼント🎁",
+            "うちでは #なんばたん #さっぽろたん #立川たん のしおり🔖",
+            "お楽しみに(Ｕ 'ᴗ' Ｕ)❤ https://t.co/7aVLdJIn4o"
+          ]
+        }
+      ],
+      "groupingNote": "4店舗25周年企画。立川店のしおりの対象は3娘で全会場名と一致しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 50259,
+      "postSha256": "0d608d6b9a044cd03e1bb7bd76acf3188376b2ca3de49e449329f3423a40a757",
+      "textSha256": "d9578c1943e958c40a3982efa51871317236f5a693f2ded50a06c5add033aff4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2046770968849437051",
+    "source": "public-post",
+    "description": "four-store25-bookmark-2026 matched control",
+    "post": {
+      "id": "2046770968849437051",
+      "createdAt": "2026-04-22T02:00:00.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\n新製品の予約は\n#ビックカメラ で🎮\n＼\n\n超次元サッカーRPG #イナズマイレブン シリーズの家庭用最新作がついに登場！\n#NintendoSwitch2 の高精細で滑らかな画面で楽しめます‼\n\n6/11(木)発売(Ｕ 'ᴗ' Ｕ)⚽\n当店6階でご予約ください🔥\nhttps://t.co/UoEUzBK45E https://t.co/jfwAjVljpg",
+      "url": "https://x.com/bic_tachikawa/status/2046770968849437051",
+      "media": [
+        "https://pbs.twimg.com/media/HGEnhBAbAAAeX_P.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2046770968849437051",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 52290,
+      "postSha256": "b5549ba3fbb00646cee6c089ac609b79acda24919cf5318929dddf167d3d4d6f",
+      "textSha256": "363c1aefe874173802ef52efe027264be5e0c671b38bf0ef6f7aa149b9fa48cd"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

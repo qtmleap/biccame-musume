@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1111519393878433792",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1111519393878433792",
+      "createdAt": "2019-03-29T06:44:09.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "3/31まで！店舗限定！\n\nMacBook Airを手に入れよう。\nMacBook Air（2018年モデル）が税抜価格より11,000円引き！\n\n※MQD32J/Aは対象外となります。 https://t.co/8YGLbMmPCg",
+      "url": "https://x.com/bic_sagamioono/status/1111519393878433792",
+      "media": [
+        "https://pbs.twimg.com/media/D2zo--yU0AA4LL0.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「3/31まで！店舗限定！ / MacBook Airを手に入れよう。 / MacBook Air（2018年モデル）が税抜価格より11,000円引き！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "macbook-air-2018-model-sale-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 764919,
+      "postSha256": "4672f13fe3cad043db3b5cfd698fc08209ce11fc882e0ccbb270a3672ec8cbc5",
+      "textSha256": "a063ede25b95d85a9e9a995b3a0a13616fc3d752471d907c002929a7f9d3efcd"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1134331372733026304",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1134331372733026304",
+      "createdAt": "2019-05-31T05:30:48.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "✨限定キャンペーン✨\n\n6月3日までの4日間限定、ビックカメラ ラゾーナ川崎店にて対象のクレジットカードでお買い物をすると、三井ショッピングパークポイントを100円(税抜)につき１ポイントプレゼント！ビックポイントも付きますので、ぜひご利用くださいませ！\nポイント付与予定:2019年7月末頃 https://t.co/0Hirwxnbzp",
+      "url": "https://x.com/Bic_kawasaki/status/1134331372733026304",
+      "media": [
+        "https://pbs.twimg.com/media/D730Xa0U8AEOlAu.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「✨限定キャンペーン✨ / 6月3日までの4日間限定、ビックカメラ ラゾーナ川崎店にて対象のクレジットカードでお買い物をすると、三井ショッピングパークポイントを100円(税抜)につき１ポイントプレゼント！ビックポイントも付きますので、ぜひご利」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "lazona-shopping-card-point-bonus-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 745149,
+      "postSha256": "56a4f6afe6af7ee35e5b4b769aa86e9f8b5d2ce252c823d72ddb02df5ed80e6b",
+      "textSha256": "f6f0adf3e91b1c858e4a08535afc72082080f94af1aceedd788950c208d40fae"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

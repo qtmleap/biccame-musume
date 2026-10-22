@@ -11,7 +11,7 @@ const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
 const cacheKey = (id: string): string => `og:event:${id}`
 
 // 画像のデザインを変えたら上げる。イベントが更新されていなくても、古いデザインのキャッシュを作り直す
-const RENDER_VERSION = 2
+const RENDER_VERSION = 3
 
 type CachedMeta = { updatedAt: string; version?: number }
 

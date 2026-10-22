@@ -1,0 +1,127 @@
+[
+  {
+    "id": "goal-positive-1035070925039853568",
+    "source": "public-post",
+    "description": "shinjuku west bicqlo summer 2018",
+    "post": {
+      "id": "1035070925039853568",
+      "createdAt": "2018-08-30T07:45:13.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "#ビックロたん @bic_shinjuku3ch とコラボした #新宿西口たん 夏限定名刺は明日8月31日(金)まで配布いたします！\n新宿へお越しの方でまだもらってないよ！という皆様、ぜひ両店舗に遊びに来てくださいね｡ﾟ+.(*｀･∀･´*)ﾟ+.ﾟ\n\n★新宿西口店(新宿西口たんver.)：4階ペンタブレットコーナー https://t.co/3hYGOEWUEa",
+      "url": "https://x.com/bic_shinjyuku/status/1035070925039853568",
+      "media": [
+        "https://pbs.twimg.com/media/Dl1PVDCU8AE6Yil.jpg",
+        "https://pbs.twimg.com/media/Dl1PWULU0AEyliX.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shinjyuku",
+        "bicqlo"
+      ],
+      "characterIds": [
+        "shinjyuku",
+        "bicqlo"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "両店で同コラボ名刺、配布最終日。初日を推測しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "end"
+    ],
+    "group": "shinjuku-west-bicqlo-summer-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "新宿西口たん・ビックロたん夏名刺",
+          "evidence": [
+            "#ビックロたん @bic_shinjuku3ch とコラボした #新宿西口たん 夏限定名刺は明日8月31日(金)まで配布いたします！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 825489,
+      "postSha256": "03b9a634e3f0d8a3189be4e068b9fa0919bb2a6c2a24698d8235693f53ef7a0b",
+      "textSha256": "1259356a06397dd9fe09b601bc689b1dd0ab09f1f7ffab4e3c6a8c62f04cbdee"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1028135606243622912",
+    "source": "public-post",
+    "description": "tachikawa card and display 2018",
+    "post": {
+      "id": "1028135606243622912",
+      "createdAt": "2018-08-11T04:26:45.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "#立川たん 名刺配布スタートを記念して色紙描きました(U^∀^U) 5階おもちゃコーナーの立川たんが立っている所に一緒に飾っております。 https://t.co/NDZHonolUN",
+      "url": "https://x.com/bic_tachikawa/status/1028135606243622912",
+      "media": [
+        "https://pbs.twimg.com/media/DkSr3oxVAAAzUg7.jpg",
+        "https://pbs.twimg.com/media/DkSr4L9V4AA8Hsf.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "名刺配布開始と色紙展示のお知らせ。色紙を配布物に加えない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "tachikawa-card-and-display-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "立川たん名刺",
+          "evidence": [
+            "#立川たん 名刺配布スタートを記念して色紙描きました(U^∀^U) 5階おもちゃコーナーの立川たんが立っている所に一緒に飾っております。 https://t.co/NDZHonolUN"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 831297,
+      "postSha256": "150ca4eba047be0c66a5fff9c215c2ebc2a6074417fbaff8534839ea2f1cb156",
+      "textSha256": "aae22bf3a00cba0a6f575a12cb6ba337e9c389499d8f744ba78bc32cf089e8ba"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

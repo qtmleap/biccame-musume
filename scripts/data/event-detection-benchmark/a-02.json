@@ -1,0 +1,221 @@
+[
+  {
+    "id": "public-2109824057147617590",
+    "source": "public-post",
+    "description": "ノンフライヤーの展示販売",
+    "post": {
+      "id": "2109824057147617590",
+      "createdAt": "2026-10-13T01:50:28.516Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "🍗普段の料理をヘルシーに🍗\nダイエットや健康管理を意識している方は必見👀\nほったらかしで揚げ物が簡単に作ることができます✨\nローストビーフなど低温調理もできるノンフライヤーの実物を5階家電コーナーでご覧ください🌟",
+      "url": "https://x.com/bic_nagoya/status/2109824057147617590",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "家電製品の通常展示案内である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "display"
+    ],
+    "group": "air-fryer-demo",
+    "reviewStatus": "provisional",
+    "sourceHash": "68cd03c59c7dd8a66fca9dc257bd421d2c10c2140ef2bdd82b0834676d2d8205"
+  },
+  {
+    "id": "public-2109826462438113293",
+    "source": "public-post",
+    "description": "接客予約サービス",
+    "post": {
+      "id": "2109826462438113293",
+      "createdAt": "2026-10-13T02:00:01.982Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "＼新宿西口店にて「接客予約」サービス承ります／\nネットで24時間いつでも予約、来店時の待ち時間なしで販売員がご案内致します。\nメニューバーから商品を選んで、予約可能な時間帯からご希望の枠をお選びください✨\nご利用お待ちしております(*｀･ω･)ゞ\n\nご予約は➡️【 airrsv.net/biccamera-sin-",
+      "url": "https://x.com/bic_shinjyuku/status/2109826462438113293",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "商品相談の予約サービスの案内で、キャラクター企画ではない。",
+    "tags": [
+      "service",
+      "reservation"
+    ],
+    "group": "shopping-appointment",
+    "reviewStatus": "provisional",
+    "sourceHash": "eb342f59d64896b3bff1724cfe01ebcdde5f8c535fb612c019ffd92448c7c383"
+  },
+  {
+    "id": "public-2109834262451200154",
+    "source": "public-post",
+    "description": "周年感謝祭のAR機器体験",
+    "post": {
+      "id": "2109834262451200154",
+      "createdAt": "2026-10-13T02:31:01.650Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "📢 ビックカメラ有楽町店 25周年感謝祭 開催！\n\n10/17(土)・10/18(日)の2日間限定！ \n1Fベルキンブースにて「Belkin × XREAL 近未来体験イベント」開催✨\nXREALのARグラスで広がる大画面空間を体験しながら、ベルキン製品の魅力や活用方法をご紹介いたします🙌",
+      "url": "https://x.com/bic_yuurakuchou/status/2109834262451200154",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "店舗周年の文脈でも、本文の企画はBelkinとXREALの製品体験で、ビッカメ娘を扱わない。",
+    "tags": [
+      "ordinary-event",
+      "anniversary-keyword",
+      "demo"
+    ],
+    "group": "belkin-xreal-demo",
+    "reviewStatus": "provisional",
+    "sourceHash": "b511870b86740b2cc57a4f75288c05fa396e5a58383d1af98ce9aae7b364081a"
+  },
+  {
+    "id": "public-2109841560305361272",
+    "source": "public-post",
+    "description": "新東たん記念アクリルコースター",
+    "post": {
+      "id": "2109841560305361272",
+      "createdAt": "2026-10-13T03:00:01.594Z",
+      "screenName": "Bic_shintoueki",
+      "kind": "original",
+      "text": "🎃新東たん擬人化６周年イベント🎃\n\n「これはもう一人のわたし…」\n🩶 #新東たんオルタ (Alternative)🩶\nアクリルコースタープレゼント🎁\n\n日付：10月19日（月）～なくなり次第終了\n枚数：限定60枚\n※5,000円以上お買い物でお一人様一枚まで\n※整理券配布に関しては後日お知らせいたします",
+      "url": "https://x.com/Bic_shintoueki/status/2109841560305361272",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "other",
+      "stores": [
+        "shintou"
+      ],
+      "characterIds": [
+        "shintou"
+      ],
+      "startDate": "2026-10-19",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 5000
+        }
+      ]
+    },
+    "rationale": "新東たん擬人化6周年として、商品購入条件付きのアクリルコースタープレゼントを明記。",
+    "tags": [
+      "commemorative-giveaway",
+      "purchase",
+      "limited-quantity"
+    ],
+    "group": "shintou-sixth-anniversary-2026",
+    "reviewStatus": "provisional",
+    "sourceHash": "6b80b0c675c300c85a43e4c1963f51bb9802889cb1e2f14617ebf79dd3796b51"
+  },
+  {
+    "id": "public-2109841569289282042",
+    "source": "public-post",
+    "description": "Airペイ導入案内",
+    "post": {
+      "id": "2109841569289282042",
+      "createdAt": "2026-10-13T03:00:03.736Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "キャッシュレス導入ならAirペイ！\n✅ 月額固定費無料\n✅ 振込手数料無料\n✅ オンライン決済対応\nさらに新端末が登場✨\n見やすく、使いやすく進化しました！\n詳しくは地下2階 Airレジカウンターまで♪",
+      "url": "https://x.com/bic_shinjuku3ch/status/2109841569289282042",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "決済端末・加盟サービスの案内であり、配布イベントではない。",
+    "tags": [
+      "payment",
+      "service"
+    ],
+    "group": "airpay-service",
+    "reviewStatus": "provisional",
+    "sourceHash": "ec51ea972a2b581aff7b9b32552e6ce51d1b536beeb88ef13b317af5be5523da"
+  },
+  {
+    "id": "public-2109843567938003348",
+    "source": "public-post",
+    "description": "あべのたんの推し家電",
+    "post": {
+      "id": "2109843567938003348",
+      "createdAt": "2026-10-13T03:08:00.251Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "火曜日は #あべのたんの推し家電🎶\nドリップ式と浸漬式を組み合わせて、コーヒー豆が持っている個性を余すことなくしっかりと引き出す事ができます☕️\n\n挽き目が粗挽きから細挽きまで無段階で\n調節可能‼️\nその日の気分に合わせた挽き目で自分の好みの味わいを楽しみめます☺️🐙\n\nbiccamera.com/bc/item/1",
+      "url": "https://x.com/bic_abeno/status/2109843567938003348",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "あべのたんのハッシュタグ付きでも、内容はコーヒーミルの通常紹介である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "character-mention"
+    ],
+    "group": "abeno-coffee-mill",
+    "reviewStatus": "provisional",
+    "sourceHash": "64d5f597929ecef63e841887412d065ea3c824d3a1741269a9d5d4d358c84f6f"
+  },
+  {
+    "id": "public-2109848087615377503",
+    "source": "public-post",
+    "description": "スクイーズの通常品紹介",
+    "post": {
+      "id": "2109848087615377503",
+      "createdAt": "2026-10-13T03:25:57.826Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "【 9階 トイズコーナーよりお知らせ 】\n\n　　　🤎極とろスクイーズ🤎\n\n秋のおやつシリーズをまとめてみました❣️\nハロウィンクッキー🎃👻\nみたらし団子🍡\n焼き芋🍠\nモンブラン🌰\nさぁどれにする～🥰\n\n※10月13日時点の価格となります",
+      "url": "https://x.com/bic_shinyoko/status/2109848087615377503",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "ハロウィンという季節語を含むが、玩具の通常販売案内である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "seasonal-keyword"
+    ],
+    "group": "squishy-autumn-toys",
+    "reviewStatus": "provisional",
+    "sourceHash": "e1dfb9216117b3d09276287bf1716552240bd0320198b266dac58aa66482d2b9"
+  },
+  {
+    "id": "public-2109848358047334778",
+    "source": "public-post",
+    "description": "スヌーピー商品と特典",
+    "post": {
+      "id": "2109848358047334778",
+      "createdAt": "2026-10-13T03:27:02.302Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "#PEANUTS売場づくりコンテスト2026 に参加中♪\n\n只今1階でスヌーピーグッズ販売中！\nアウトドアメーカーLOGOSのアイテムもご用意しております！\n期間中オリジナルステッカープレゼント！\n\n#peanuts\n#snoopy\n#logos",
+      "url": "https://x.com/bic_tachikawa/status/2109848358047334778",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ステッカープレゼントは記載されるが、対象はPEANUTSでビッカメ娘ではない。",
+    "tags": [
+      "other-franchise",
+      "giveaway-word"
+    ],
+    "group": "peanuts-sticker-promotion",
+    "reviewStatus": "provisional",
+    "sourceHash": "ae1878cb7da5034b284740c6a0eff9fa7adeef5f1794208f28ae73ce395f633d"
+  }
+]

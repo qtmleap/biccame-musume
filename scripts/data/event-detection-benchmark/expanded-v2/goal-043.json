@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expanded-v2-positive-1875082749541011554",
+    "source": "public-post",
+    "description": "abeno-nanba-newyear-card-2025",
+    "post": {
+      "id": "1875082749541011554",
+      "createdAt": "2025-01-03T07:32:19.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "2025年1月2日(木)から1月31日(金)までの期間限定❗️\nなんばたんとお揃いデザインの #新年限定名刺 を配布中ー🎶🥳🐙🎉\n\n場所はいつもの店内エレベーターホール、あべのたんパネルです❗️😆🐙ぜひもらいに来てな～✨✨ https://t.co/zBPZliwuDV",
+      "url": "https://x.com/bic_abeno/status/1875082749541011554",
+      "media": [
+        "https://pbs.twimg.com/media/GgWgzcQaUAAdMBC.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2025-01-02",
+      "conditions": null
+    },
+    "rationale": "あべのたんとななんばたん共通デザイン。店舗と対象娘を混同しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "abeno-nanba-newyear-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "新年限定名刺",
+          "evidence": [
+            "2025年1月2日(木)から1月31日(金)までの期間限定❗️",
+            "なんばたんとお揃いデザインの #新年限定名刺 を配布中ー🎶🥳🐙🎉",
+            "場所はいつもの店内エレベーターホール、あべのたんパネルです❗️😆🐙ぜひもらいに来てな～✨✨ https://t.co/zBPZliwuDV"
+          ]
+        }
+      ],
+      "groupingNote": "あべのたんとななんばたん共通デザイン。店舗と対象娘を混同しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 181190,
+      "postSha256": "e13ba91bff3115cc0016826019a782b65b8e30c329886ba0ce0b10d0531445ad",
+      "textSha256": "e5e17168970d787cc8df97a4e5478cfbcc3ff8e1cd86eee8ad8a00387110d026"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "association": "reference-url",
+          "eventId": "03b8ccbf-29d8-401f-8d86-3561269c13cc",
+          "type": "announce",
+          "url": "https://x.com/bic_abeno/status/1875082749541011554"
+        }
+      ]
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1877188550862450736",
+    "source": "public-post",
+    "description": "abeno-nanba-newyear-card-2025 matched control",
+    "post": {
+      "id": "1877188550862450736",
+      "createdAt": "2025-01-09T03:00:01.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "木曜日は #あべのたんエンタ通信 🎮\n本日は【おうちでワイワイ　ワニワニパニック】をご紹介❗️😆🐙\n\nあの『#ワニワニパニック』がおもちゃになって登場❗️\n「イデッ！」や「まいった！降参だ！」など、おなじみの音が楽しめるで～✨✨\n\nおもちゃコーナーにて好評販売中～🐊🔨\nhttps://t.co/CGREDLcFgl https://t.co/lSjmqtCJ9y",
+      "url": "https://x.com/bic_abeno/status/1877188550862450736",
+      "media": [
+        "https://pbs.twimg.com/media/GgqfPaJaMAETrHG.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1877188550862450736",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 179806,
+      "postSha256": "ce75704b9c645d4d4c0ccd4aefb393e05efd87092a88db8c27dd70d6186d0312",
+      "textSha256": "1a6b2d2f13edaefc833ef2a0e669c70ebd6ddcdefdbf72ce925dd9c7c3a73572"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

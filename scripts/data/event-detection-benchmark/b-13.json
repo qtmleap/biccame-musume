@@ -1,0 +1,137 @@
+[
+  {
+    "id": "public-b-2112020663363948673",
+    "source": "public-post",
+    "description": "新東たん6周年のお祝いラクガキ",
+    "post": {
+      "id": "2112020663363948673",
+      "createdAt": "2026-10-19T03:19:00.249Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "( っ*´ω`*c)  #10月19日は新東たん擬人化6周年 ！いつも可愛くて優しい新東たんが大好き〜！\nお祝いに新東たんオルタをラクガキしてみました〜☺️💕6周年おめしんと〜🥰",
+      "url": "https://x.com/bicpkanhonten/status/2112020663363948673",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "記念日の祝福と個人的な絵の披露だけで、来店者が参加・受取できる企画の案内はない。",
+    "tags": [
+      "hard-negative",
+      "anniversary-word",
+      "celebration-only"
+    ],
+    "group": "shintou-sixth-anniversary-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "efe2e28285b014a706856cc0867b79ac368708ac3c8909084d33bfb22c2753b7"
+  },
+  {
+    "id": "public-b-2112095208016130317",
+    "source": "public-post",
+    "description": "タイガー家電購入者へのVisaギフトカード",
+    "post": {
+      "id": "2112095208016130317",
+      "createdAt": "2026-10-19T08:15:13.079Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼#タイガー 新製品🆕／\nマルチグリルクッカー『CLX-A400』発売記念‼️\nGRISIA〈グリシア〉CLX型を早期購入&ご応募で、全員に5,000円分のVisaギフトカードをプレゼント中🎁\n下準備したらあとは待つだけ楽々✨\n煮込み・トースト・グリルが1台でできちゃうのはグリシアだけ✨\n（5階 調理家電コーナー） pic",
+      "url": "https://x.com/biccamera_nanba/status/2112095208016130317",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "ギフトカードプレゼントは一般家電の購入応募特典で、限定ビッカメ娘デザインではない。 購入応募特典はVisaギフトカードと明示されているため、非対象イベントでも特典物品の種別はotherと注釈する。",
+    "tags": [
+      "hard-negative",
+      "gift-card",
+      "generic-novelty",
+      "purchase"
+    ],
+    "group": "tiger-grisia-visa-cashback-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "e91ff340ed42af1a53ac2dd8d4ea57da624832e74a46cf3ae31c5545473351f6"
+  },
+  {
+    "id": "public-b-2112356049269465446",
+    "source": "public-post",
+    "description": "パソ館たんのアクキー・ギフトカード・視聴特典残数",
+    "post": {
+      "id": "2112356049269465446",
+      "createdAt": "2026-10-20T01:31:42.480Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "／\n当店配布物に関するお知らせ\n＼\n\n【美味しいもの食べ隊withパソ館たん】\nパソ館たんアクキー：残り【１７個】\n4店舗特典ギフトカード：残り【７８枚】\n\n【ビックカメラのB面】\n視聴特典ステッカー＆名刺：残り【約５０％】",
+      "url": "https://x.com/bicpkanhonten/status/2112356049269465446",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "当店配布物として複数のキャラ企画の在庫を案内。残数や残り割合を元数量と解釈しない。単一カテゴリ・全対象娘は未注釈。",
+    "tags": [
+      "giveaway",
+      "multiple-items",
+      "gift-card",
+      "inventory-update"
+    ],
+    "group": "delicious-food-tai-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "0d5d7d969040c4eb3fa3abfedc56050cddd783c31c0c0695a027e3c1f7bd79c6"
+  },
+  {
+    "id": "public-b-2112372789890138198",
+    "source": "public-post",
+    "description": "本店の娘があいタワたんの店を訪ねた雑談",
+    "post": {
+      "id": "2112372789890138198",
+      "createdAt": "2026-10-20T02:38:13.755Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "ログイン(◉◉)\n\nほんちゃんこの前あいタワたんちで念願の(?)ちょコア。食べてきた🍦早く食べたくて写真撮るのも忘れた😂\nまた食べに行こーっと(*◉◉*)\n\nそれでは今日もよろしくお願いしますー！",
+      "url": "https://x.com/bicikebukuro/status/2112372789890138198",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "あいタワたんの店で食べた経験は個人的な近況で、コラボ企画の告知ではない。",
+    "tags": [
+      "hard-negative",
+      "cross-store",
+      "character-mention-only"
+    ],
+    "group": "honten-itt-icecream-chat",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "996801a015cd060f46c82f1fd62a66c52c02de34fd3880763914dc396f9f5390"
+  },
+  {
+    "id": "public-b-2112378276735750637",
+    "source": "public-post",
+    "description": "柏店の冬名刺配布予定",
+    "post": {
+      "id": "2112378276735750637",
+      "createdAt": "2026-10-20T03:00:01.921Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "📢冬名刺の配布は11/1から予定しております❄\nお楽しみに♪",
+      "url": "https://x.com/bic_kashiwa/status/2112378276735750637",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "startDate": "2026-11-01"
+    },
+    "rationale": "冬名刺を11月1日から配布予定と明示する企画告知。対象娘名や条件は本文にない。",
+    "tags": [
+      "giveaway",
+      "seasonal-card",
+      "dated-event"
+    ],
+    "group": "kashiwa-winter-card-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "bb8008aa6d236bb93f916e9c5ab66bed0567777de48ac8223892c80280f51e01"
+  }
+]

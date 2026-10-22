@@ -1,0 +1,181 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2014515510143287738",
+    "source": "public-post",
+    "description": "shinyoko-anniv6-acrylic-key-start-2026",
+    "post": {
+      "id": "2014515510143287738",
+      "createdAt": "2026-01-23T01:48:20.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "quote",
+      "text": "(2｡•ㅅ•｡)本日より開始です🎶\nアクキーのお渡しは4階の総合案内カウンターになります。\n\n ※6周年名刺は9階にて配布となっております✨ https://t.co/pCDraT636x",
+      "url": "https://x.com/bic_shinyoko/status/2014515510143287738",
+      "quoted": {
+        "id": "2011664177644065255",
+        "screenName": "bic_shinyoko",
+        "text": "【ビックカメラ新横浜店よりお知らせ📢】\n\n新横たん擬人化6周年を記念して、1月23日(金)より\n税込3,000円以上のお買物で先着100名様に\nドレス衣装の新横たんアクキーをプレゼント‼ \n\n※4F総合案内カウンターにてお渡しです。\n※無くなり次第終了となります。\n※おひとり様1個でお願いします。 https://t.co/R8nFM4bDxq"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/G_T_KrcWUAAFPXM.png",
+        "https://pbs.twimg.com/media/G_T_JNHbAAAQBqd.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2026-01-23",
+      "conditions": null
+    },
+    "rationale": "開始当日の案内。引用元で告知済みのアクキーと別物品の6周年名刺が混在する。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:shinyoko-anniv6-key-2026"
+    ],
+    "group": "shinyoko-anniv6-acrylic-key-start-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アクキーのお渡し",
+          "evidence": [
+            "アクキーのお渡しは4階の総合案内カウンターになります。"
+          ]
+        },
+        {
+          "item": "6周年名刺",
+          "evidence": [
+            " ※6周年名刺は9階にて配布となっております✨ https://t.co/pCDraT636x"
+          ]
+        }
+      ],
+      "groupingNote": "開始当日の案内。引用元で告知済みのアクキーと別物品の6周年名刺が混在する。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 78270,
+      "postSha256": "89020dc75cc8a6ce39ce25f0184963658663448ba59342f26f11de9ad776305d",
+      "textSha256": "05996bbd469413af2be17e86344d7e0d610777afd58424300f30b30664959127"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "5475996c-764d-40e8-8186-e6bfaf4cf7ef",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_shinyoko/status/2014515510143287738",
+          "origin": "manual-or-seed",
+          "title": "擬人化6周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-01-22T15:00:00.000+00:00",
+            "endDate": "2026-01-26T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "shinyoko"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2007652899825094824",
+    "source": "public-post",
+    "description": "shinyoko-anniv6-acrylic-key-start-2026 matched control",
+    "post": {
+      "id": "2007652899825094824",
+      "createdAt": "2026-01-04T03:18:46.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "quote",
+      "text": "(1 ˙꒳˙)ご来店ありがとうございます🎶\nお洋服も褒めてもらってうれしいです👘✨\n作ってくれた2号たんにも伝えさせてもらいますね💐\n\nまたお待ちしてます‹‹\\(´ω` )/››💙",
+      "url": "https://x.com/bic_shinyoko/status/2007652899825094824",
+      "quoted": {
+        "id": "2007294399382990906",
+        "screenName": "ShinkouTW",
+        "text": "③#新横たん\n晴れ着姿に衣替えした新横たんぬいぐるみを見てきました。マフラーに帽子に晴れ着のバラ模様に…全てが編み込みで作られていて凄いのひと言…！✨ https://t.co/wVmC5Zmx5P"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2007652899825094824",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 82744,
+      "postSha256": "a903d4b75236b7af2890696abe8d37d22391c73853a27f787c6d0ca173b23016",
+      "textSha256": "6f66fd5d4481e620eb245fa88c2412f5d2e086b2b42e0890c85c9297fcfb0b61"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

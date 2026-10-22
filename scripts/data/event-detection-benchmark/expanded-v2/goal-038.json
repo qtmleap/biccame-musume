@@ -1,0 +1,130 @@
+[
+  {
+    "id": "expanded-v2-positive-815532384187662336",
+    "source": "public-post",
+    "description": "biccame-newyear-card-2017",
+    "post": {
+      "id": "815532384187662336",
+      "createdAt": "2017-01-01T12:17:26.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "本日も21時を持ちまして閉店となりました！\n明日も朝10時より営業いたします(*ゝω･*)\n#ビッカメ娘 年賀状、当店分はまだまだございますので、初売りのお店が増える明日のご来店もお待ちしておりますー！！\n２階案内カウンターでの配布ですのでよろしくお願いいたします♪\nではではー☆ https://t.co/VAZOi6aRId",
+      "url": "https://x.com/bic_shinjyuku/status/815532384187662336",
+      "media": [
+        "https://pbs.twimg.com/media/C1FaXwZUsAAXGUC.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "正月の娘年賀状配布。店舗営業時間の挨拶だけとして除外しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "biccame-newyear-card-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "年賀状",
+          "evidence": [
+            "本日も21時を持ちまして閉店となりました！",
+            "明日も朝10時より営業いたします(*ゝω･*)",
+            "#ビッカメ娘 年賀状、当店分はまだまだございますので、初売りのお店が増える明日のご来店もお待ちしておりますー！！",
+            "２階案内カウンターでの配布ですのでよろしくお願いいたします♪",
+            "ではではー☆ https://t.co/VAZOi6aRId"
+          ]
+        }
+      ],
+      "groupingNote": "正月の娘年賀状配布。店舗営業時間の挨拶だけとして除外しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 996876,
+      "postSha256": "c442c0bc9fc15dcdae94f54fc79b13ea33fa36fb6f826a2000f58bbb961a26e3",
+      "textSha256": "03806233b5affc32ab2a867326f415adf5609620ce48de1ea104deb13d211c16"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-822431691146862596",
+    "source": "public-post",
+    "description": "biccame-newyear-card-2017 matched control",
+    "post": {
+      "id": "822431691146862596",
+      "createdAt": "2017-01-20T13:12:49.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "#バイオハザード7 がPS4＆Xbox Oneで1月26日（木）に発売！\n発売に先駆け1月21日（土）に #PSVR を使用した先行体験会を開催致します。\nご参加頂いたお客様にはオリジナルノベルティをプレゼント！\n体験会のお時間は11時から17時まで、12才以上の方が対象です☆ https://t.co/7IshGJP4hN",
+      "url": "https://x.com/bic_shinjyuku/status/822431691146862596",
+      "media": [
+        "https://pbs.twimg.com/media/C2ndKkoUAAAojqv.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-822431691146862596",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 990509,
+      "postSha256": "67d8ec94e1bfe8869e3d3808a63803dbc736e4d514e6a1f13702f2f250d7f692",
+      "textSha256": "e0b96a70ea3acd0607479c017fc1fbeb015fba60d8dd89459b58d32e792a165e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

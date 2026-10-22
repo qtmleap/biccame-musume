@@ -1,0 +1,166 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2051141398762848424",
+    "source": "public-post",
+    "description": "fujisawa-bittabi-card-period-2026",
+    "post": {
+      "id": "2051141398762848424",
+      "createdAt": "2026-05-04T03:26:32.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "quote",
+      "text": "(3・ω・) ＃ビッ旅 名刺は11周年イベント期間、2027年の3月31日まで配布する予定だぜ！いつでも待ってる！",
+      "url": "https://x.com/bic_fujisawa/status/2051141398762848424",
+      "quoted": {
+        "id": "2051132409710776699",
+        "screenName": "hayashirikuo",
+        "text": "配布期間長めだと嬉しいです☺"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "名刺の配布期限が2027年3月31日までと補足する。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "fujisawa-bittabi-card-period-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "ビッ旅名刺",
+          "evidence": [
+            "(3・ω・) ＃ビッ旅 名刺は11周年イベント期間、2027年の3月31日まで配布する予定だぜ！いつでも待ってる！"
+          ]
+        }
+      ],
+      "groupingNote": "名刺の配布期限が2027年3月31日までと補足する。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 48120,
+      "postSha256": "2273c21951875ad7e3800c919e3778aabca39326b0ac6603e8ccbdf1e17365e2",
+      "textSha256": "d04bf1c92001629672dad30a434e81a29839e4b83cf386cd3652ea5e4733d01c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "01fc079e-e7a7-4871-bb3a-6cbe4743fb9a",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_fujisawa/status/2051141398762848424",
+          "origin": "manual-or-seed",
+          "title": "ビッカメ娘11周年記念名刺",
+          "category": "regular_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-04-30T15:00:00.000+00:00",
+            "endDate": "2027-03-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "fujisawa"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2055830609579450444",
+    "source": "public-post",
+    "description": "fujisawa-bittabi-card-period-2026 matched control",
+    "post": {
+      "id": "2055830609579450444",
+      "createdAt": "2026-05-17T01:59:47.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "quote",
+      "text": "(3・ω・)うちにもいたことがある西内さん！\nいつも明るくて笑顔がステキなママさんだぜ✨",
+      "url": "https://x.com/bic_fujisawa/status/2055830609579450444",
+      "quoted": {
+        "id": "2055233478120054860",
+        "screenName": "biccameraE",
+        "text": "【新着】\nビックカメラ公式YouTube\n#ビックカメラのB面\n\n＼ママは6つの資格を取得した専門販売員／\n\n2年半の育休を経て、時短勤務という限られた時間の中で\n「主任」として輝くビックカメラ柏店・西内さんに密着。 \n\n6つの資格を武器にしたプロの接客術と、家庭でのリアルな素顔に迫ります。"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2055830609579450444",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 43794,
+      "postSha256": "aa093b58c59dd2fae18a643b3e95fc20ee95476689ae29a0937c9511a9f2477e",
+      "textSha256": "f3ca1d34566e82be87b12b3789100a48b273aea6dbf32b61510c8f6fec1e223c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

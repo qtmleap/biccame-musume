@@ -1,0 +1,173 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2058001685235331560",
+    "source": "public-post",
+    "description": "shinjyuku-a-set-end-2026",
+    "post": {
+      "id": "2058001685235331560",
+      "createdAt": "2026-05-23T01:46:52.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "quote",
+      "text": "Aセットのお渡しは終了いたしました\nみなさまご来店いただきありがとうございます",
+      "url": "https://x.com/bic_shinjyuku/status/2058001685235331560",
+      "quoted": {
+        "id": "2057388110133207279",
+        "screenName": "bic_shinjyuku",
+        "text": "＼5月23日から開催🎊／\n#新宿西口たん爆誕祭2026 改めましてお知らせです\n①【2階にて実施！6月30日まで】\n爆誕記念名刺の配布やメッセージボードを設置します💙\n②【3階でお渡し！※なくなり次第終了】\n当日、当店にて指定金額以上のお買い物＆先着で、A・Bいずれかお一つをプレゼント🎁\n\n#ビッカメ娘 https://t.co/p7N5HPBuIs"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "Aセットのお渡しが終了。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:shinjyuku-bakutan-fes-2026"
+    ],
+    "group": "shinjyuku-a-set-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "Aセット",
+          "evidence": [
+            "Aセットのお渡しは終了いたしました"
+          ]
+        }
+      ],
+      "groupingNote": "Aセットのお渡しが終了。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 42065,
+      "postSha256": "60eb4bf5fafe47d2388214c8c53aeaeea51a467f888201cb17df70b1b62bec09",
+      "textSha256": "b42269be73889980416a09d28fc4b6561e90fd9cd2142d59ed8263bd32f3835f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "bd6be786-c086-4f8d-b3bf-641dacfca71f",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_shinjyuku/status/2058001685235331560",
+          "origin": "manual-or-seed",
+          "title": "スマホ用カードケース+擬人化10周年記念アクキー",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-05-22T15:00:00.000+00:00",
+            "endDate": "2026-06-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shinjyuku"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 50,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 5000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2050140986068877465",
+    "source": "public-post",
+    "description": "shinjyuku-a-set-end-2026 matched control",
+    "post": {
+      "id": "2050140986068877465",
+      "createdAt": "2026-05-01T09:11:15.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "quote",
+      "text": "時間差で見てしまった瞬間、わたしにしか聞こえてない(といいな)と思うのですが盛大にお腹が鳴りました(*´﹀`*)ｸﾞｩｩ",
+      "url": "https://x.com/bic_shinjyuku/status/2050140986068877465",
+      "quoted": {
+        "id": "2047088065672613932",
+        "screenName": "nakamuraya_1901",
+        "text": "＼新宿中村屋最高峰のあんまん／\n\n「天成餡饅」は北海道十勝の契約農場で栽培された小豆や、丁寧に焙煎し香りを引き出した黒ゴマペーストを使用して練り上げた中華こし餡を、中村屋独自の弾力があり風味の良い生地で包みました✨ https://t.co/KHvzjElP25"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2050140986068877465",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 49044,
+      "postSha256": "8ca6a9f2e49dfade6568defc6b7b9ce8105fc5a3e5a2b4117d5baa37922903d7",
+      "textSha256": "0f90cefcd1a92c8a42dc9e14aa77160ea13311b0be3405262e0415142252a348"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

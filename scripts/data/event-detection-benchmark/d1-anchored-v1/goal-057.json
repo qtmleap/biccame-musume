@@ -1,0 +1,177 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2060242211451941267",
+    "source": "public-post",
+    "description": "sapporo-shiori-end-2026",
+    "post": {
+      "id": "2060242211451941267",
+      "createdAt": "2026-05-29T06:09:55.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "quote",
+      "text": "#ビッカメ娘 『4連クリアしおり』\n札幌店での配布を終了しました。\nたくさんのご利用ありがとうございました❣️\n\nコラボを考えて色々作ってくれた #なんばたん\n一緒に盛り上げてくれた #立川たん #有楽町たん\nありがとう😆とっても楽しかった～✨\n#さっぽろたん",
+      "url": "https://x.com/bic_sapporo/status/2060242211451941267",
+      "quoted": {
+        "id": "2055876295603724289",
+        "screenName": "bic_sapporo",
+        "text": "#ビッカメ娘 店舗25周年記念🎊\n\n税込2,000円以上の当日ご購入レシートを札幌店5階 総合カウンターにお持ちいただくと『4連クリアしおり』プレゼント🎁\n無くなり次第終了です！\n\n#さっぽろたん #なんばたん #立川たん #有楽町たん のコラボノベルティグッズをぜひゲットしてください♪ https://t.co/2OBrKjpp93"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": [
+        "sapporo"
+      ],
+      "characterIds": [
+        "sapporo",
+        "nanba",
+        "tachikawa",
+        "yuurakuchou"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "札幌店での4連クリアしおり配布終了。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:four-store-25th-shiori"
+    ],
+    "group": "sapporo-shiori-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "4連クリアしおり",
+          "evidence": [
+            "#ビッカメ娘 『4連クリアしおり』"
+          ]
+        }
+      ],
+      "groupingNote": "札幌店での4連クリアしおり配布終了。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 40091,
+      "postSha256": "75a037ab4c9c60d8f54c5b6faa5f22af8af57945e547545471288f8f90e34fc1",
+      "textSha256": "896be2c24e150234d9423569f42bee76991ff07ea34513593b3ceeb4817ea11f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "8803f61c-e82d-4cff-8d38-52c44971543c",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_sapporo/status/2060242211451941267",
+          "origin": "manual-or-seed",
+          "title": "四連クリアしおり",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-05-09T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "sapporo"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 2000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2058402141400928349",
+    "source": "public-post",
+    "description": "sapporo-shiori-end-2026 matched control",
+    "post": {
+      "id": "2058402141400928349",
+      "createdAt": "2026-05-24T04:18:08.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "quote",
+      "text": "こちらの商品は、\n\n栄光富士 \n『煌凛(こうりん)』と\n『くまさんの輝き』となっております。\n\n数量限定で販売中です！\nぜひ6Fお酒コーナーへ♪",
+      "url": "https://x.com/bic_sapporo/status/2058402141400928349",
+      "quoted": {
+        "id": "2057738925532406107",
+        "screenName": "bic_sapporo",
+        "text": "＼限定入荷／\n\n栄光富士\n『煌凛(こうりん)』\n『森のくまさん』\n数量限定で販売中！\n\n春らしい華やかな香りと、\nジューシーな旨みが人気の限定酒🍶\n\nぜひお早めに6Fお酒コーナーへ♪ https://t.co/4VuAjMA5f7"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2058402141400928349",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 41582,
+      "postSha256": "542c7ca4942f4cc30958856db33c42be91392907ce1cec525cc4fd67e98450a1",
+      "textSha256": "7c3f4e7aa1021690cd8a7b770608ed4a4ff1d30f97dbe7cc478c307720901f1a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

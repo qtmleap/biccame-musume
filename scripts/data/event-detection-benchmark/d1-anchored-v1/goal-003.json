@@ -1,0 +1,161 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1833702011990069388",
+    "source": "public-post",
+    "description": "tenjin-halloween-card-2024",
+    "post": {
+      "id": "1833702011990069388",
+      "createdAt": "2024-09-11T03:00:02.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "ハロウィン限定名刺配布決定°˖✧◝(⁰▿⁰)◜✧˖°\n配布期間は『9/15(日)～10/31(木)』\n天神2号館＆天神1号館　２店舗そろえると\n一つのイラストになるけんぜひ両館遊びにこんね❓\n皆様のご来店をまっとるけん🐾 https://t.co/yxNoqilZfq",
+      "url": "https://x.com/biccameratenjin/status/1833702011990069388",
+      "media": [
+        "https://pbs.twimg.com/media/GXKKhMsa4AABpmZ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": [
+        "tenjin",
+        "tenjin2"
+      ],
+      "characterIds": null,
+      "startDate": "2024-09-15",
+      "conditions": null
+    },
+    "rationale": "9/15〜10/31の両館コラボ。2店舗そろえると一つのイラストになる。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:seasonal-halloween-card"
+    ],
+    "group": "tenjin-halloween-card-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ハロウィン限定名刺",
+          "evidence": [
+            "ハロウィン限定名刺配布決定°˖✧◝(⁰▿⁰)◜✧˖°"
+          ]
+        }
+      ],
+      "groupingNote": "9/15〜10/31の両館コラボ。2店舗そろえると一つのイラストになる。",
+      "unannotatedFields": [
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 212188,
+      "postSha256": "104975f69a749dab1b32bf9711ab2e715f7c9c650057dffbd6d751e99bbd56da",
+      "textSha256": "4ceb6fb66882aeb7a1c79dc52454ad299f7eb0783b0dad2016b824ab5a63ddd8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "06a4b008-4d18-4ee7-950e-282869fc06b4",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/biccameratenjin/status/1833702011990069388",
+          "origin": "manual-or-seed",
+          "title": "ハロウィン限定名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2024-09-14T15:00:00.000+00:00",
+            "endDate": "2024-10-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "tenjin2"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1834788288013779391",
+    "source": "public-post",
+    "description": "tenjin-halloween-card-2024 matched control",
+    "post": {
+      "id": "1834788288013779391",
+      "createdAt": "2024-09-14T02:56:31.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "本日(9/14)～③日限定\n#JQ SUGOCA　にお申込みいただくと\n記念品プレゼント🎁\nさらに…お得な\n新規入会キャンペーンもおこなっとるけん\nぜひぜひご来店をお待ちしとるよぉ～🐾 https://t.co/Y3U14x8yN4",
+      "url": "https://x.com/biccameratenjin/status/1834788288013779391",
+      "media": [
+        "https://pbs.twimg.com/media/GXZ5Ysxa4AA6qLU.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1834788288013779391",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 211385,
+      "postSha256": "400c6c8452c0007b0b5c01fd2bf8f7a0680ed2fb03f20255c94f0b84f22677c2",
+      "textSha256": "6d6640af0c6f0c68e18917c9bde36bc6eba4b50c819e5db57deaaa62dea10bb0"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

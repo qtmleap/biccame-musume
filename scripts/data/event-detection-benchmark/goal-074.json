@@ -1,0 +1,109 @@
+[
+  {
+    "id": "goal-negative-1012279300098174976",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1012279300098174976",
+      "createdAt": "2018-06-28T10:19:27.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "「こちらスネーク。大佐、聞こえるか？ご一緒に電池ケースはいかがですか。ご一緒に電池ケースはいかがですか。」\n#ビックカメラ #なんば https://t.co/IIyJFF1E0b",
+      "url": "https://x.com/biccameramito/status/1012279300098174976",
+      "media": [
+        "https://pbs.twimg.com/media/DgxWpPVUEAAFsZi.jpg",
+        "https://pbs.twimg.com/media/DgxWpPWUYAAg4xm.jpg",
+        "https://pbs.twimg.com/media/DgxWpPZV4AAR4r_.jpg",
+        "https://pbs.twimg.com/media/DgxWpPYUEAEDynd.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「「こちらスネーク。大佐、聞こえるか？ご一緒に電池ケースはいかがですか。ご一緒に電池ケースはいかがですか。」 / #ビックカメラ #なんば https://t.co/IIyJFF1E0b」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "mito-battery-case-product-joke-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 844787,
+      "postSha256": "122680adbc47fd1e2a0e13056969d5c5298fa3628ab5642f3bf7592a6a17aa35",
+      "textSha256": "2b89ad9f2121740aba30b19b1bd2a52ec9df20203433455855600f3f882f4dc1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1011424570388054016",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1011424570388054016",
+      "createdAt": "2018-06-26T01:43:03.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "スコーンがこんなところに！\n\nPanasonic\nジアイーノご購入でプレゼント！(⋈ ☌◒☌)/\n\nあ、お腹減った....\n\n6階季節家電 https://t.co/S8NwY5LM9z",
+      "url": "https://x.com/bicikebukuro/status/1011424570388054016",
+      "media": [
+        "https://pbs.twimg.com/media/DglNSGmUYAARdYK.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「スコーンがこんなところに！ / Panasonic / ジアイーノご購入でプレゼント！(⋈ ☌◒☌)/」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "ziaino-scone-purchase-gift-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 845660,
+      "postSha256": "1539304c7d3607f9437b7b7a6f178f182099b49f1d9837e17a6fe36436bbc998",
+      "textSha256": "aa768946966190057cf05cb3b54abf820adeeecfe5db4ed256e78722ace27072"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,108 @@
+[
+  {
+    "id": "goal-negative-1678602511312101378",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1678602511312101378",
+      "createdAt": "2023-07-11T03:10:00.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "#Surface が『 #おっ得フェア 開催中！』\n7月23日まで！\n#SurfacePro9 #SurfaceLaptop5 が #期間限定 の価格！\n\nSurfaceってお高いんでしょ？\nって思ってるお客様は #ビックカメラ船橋駅FACE店 へ足をお運びください！\n\nあなたにとって #最高 の1台に出会えることでしょう！\n\nhttps://t.co/0bW3Te27dE https://t.co/2agAPC98gD",
+      "url": "https://x.com/bic_funabashi/status/1678602511312101378",
+      "media": [
+        "https://pbs.twimg.com/media/F0rBHbragAEc9Rs.jpg",
+        "https://pbs.twimg.com/media/F0rBItTaYAAq97W.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「#Surface が『 #おっ得フェア 開催中！』 / 7月23日まで！ / #SurfacePro9 #SurfaceLaptop5 が #期間限定 の価格！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "surface-pro9-laptop5-sale-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 347549,
+      "postSha256": "8cffb25f9bf2d7da285fc7b0e482229c8e7226e9806d1da5911297e233c3fe9d",
+      "textSha256": "9fecb331b0cc7d69c037c8f5680556a96a29542ec43d3e3603444f1905092edb"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1697098215827653044",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1697098215827653044",
+      "createdAt": "2023-08-31T04:05:19.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【4階 #カメラコーナー】\n【8月2回目の満月、#ブルームーン を観よう🌕】\n\n今夜の満月は、今年最も月が近づく #スーパームーン\nまた、今月2回目の満月になり一部でブルームーンとも呼ばれるとか✨\n\n卓上でコンパクトに使える天体望遠鏡で天体観測‼\nスマホで撮影出来るアダプターもセットでお得 https://t.co/zfDq7ZmYAJ",
+      "url": "https://x.com/bic_kashiwa/status/1697098215827653044",
+      "media": [
+        "https://pbs.twimg.com/media/F41N0OYawAA96wp.jpg",
+        "https://pbs.twimg.com/media/F41N1AfbIAAQmSU.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【4階 #カメラコーナー】 / 【8月2回目の満月、#ブルームーン を観よう🌕】 / 今夜の満月は、今年最も月が近づく #スーパームーン」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "blue-moon-telescope-products-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 332573,
+      "postSha256": "c0b0f38da9d545d4deba0d0c8fc852d0ac813b5f155b1ed4ed0aabf658f9004c",
+      "textSha256": "f26243b68f0c6d30f9d3ebd7e8c645292da73aa64679ec8e838ee5bc207fabd5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,137 @@
+[
+  {
+    "id": "expanded-v2-positive-1172407219427495937",
+    "source": "public-post",
+    "description": "shibutou-lifesize-panel-debut-2019",
+    "post": {
+      "id": "1172407219427495937",
+      "createdAt": "2019-09-13T07:10:38.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "じゃじゃーん*\\(^o^)/*\n遂に、しぶとーたんの等身大パネル設置なのです〜！！\n本館 2階 カメラコーナー のエレベーターホール側入口です☆等身大パネル設置記念として名刺も配布いたします〜！本館1階 レジにてお声掛けくださいませ！ https://t.co/ExLjXXHZo6",
+      "url": "https://x.com/bic_shibuya/status/1172407219427495937",
+      "media": [
+        "https://pbs.twimg.com/media/EEU6IvBU0AALFUu.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": [
+        "shibuto"
+      ],
+      "characterIds": [
+        "shibuto"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "新規パネルの設置と設置記念名刺。展示物を配布物と数えない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "shibutou-lifesize-panel-debut-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "等身大パネル",
+          "evidence": [
+            "しぶとーたんの等身大パネル設置",
+            "本館 2階 カメラコーナー"
+          ]
+        },
+        {
+          "item": "名刺",
+          "evidence": [
+            "等身大パネル設置記念として名刺",
+            "本館1階 レジにて"
+          ]
+        }
+      ],
+      "groupingNote": "新規パネルの設置と設置記念名刺。展示物を配布物と数えない。",
+      "unannotatedFields": [
+        "category",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 713326,
+      "postSha256": "18b897ffa79ef0aeba0f4eaedd6e6a6cc75f4de8542aab4c3647b093a82622d3",
+      "textSha256": "5fa2ca37a1f3726a490bc89218c903bb28e3b26b277da513b2bc0a4ffb89ce02"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1172784455657742337",
+    "source": "public-post",
+    "description": "shibutou-lifesize-panel-debut-2019 matched control",
+    "post": {
+      "id": "1172784455657742337",
+      "createdAt": "2019-09-14T08:09:38.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "【別館 2階 PC】\n本日、明日、明後日の3日間限定で、大人気Surfaceシリーズが大変お買い得になるキャンペーンを実施中ヽ(^o^)丿\n当店指定機種が最大46800円引きとなっております。\nまた、今ならご購入のお客様に先着でマイクロソフトグッズもプレゼント中！お見逃しなく～(*'ω'*) https://t.co/Iby2ILobMw",
+      "url": "https://x.com/bic_shibuya/status/1172784455657742337",
+      "media": [
+        "https://pbs.twimg.com/media/EEaRPbcUcAEIV91.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1172784455657742337",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 713043,
+      "postSha256": "67fe051da8f0cd9ab048bbd64893dd0dff0acebad87ad39158ed3de2bb4ec9b6",
+      "textSha256": "655d1c5f4bfdab379d0c792dd9dce4a864988d124072fef927f735250bb867ed"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

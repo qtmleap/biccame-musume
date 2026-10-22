@@ -1,0 +1,138 @@
+[
+  {
+    "id": "expanded-v2-positive-2016701489293775289",
+    "source": "public-post",
+    "description": "abeno-valentine-card-2026",
+    "post": {
+      "id": "2016701489293775289",
+      "createdAt": "2026-01-29T02:34:38.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "💓あべのキューズモール店💓\nバレンタイン名刺配布します❣️❣️\n\n2/1㈰～2/28㈯\nバレンタイン限定の名刺を配布いたします🥳\n\nみなさま是非貰いにきてな～🥰\nお待ちしてま～す🐙 https://t.co/UQTCAXMXJM",
+      "url": "https://x.com/bic_abeno/status/2016701489293775289",
+      "media": [
+        "https://pbs.twimg.com/media/G_zDTjFboAAkGcV.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": [
+        "abeno"
+      ],
+      "characterIds": null,
+      "startDate": "2026-02-01",
+      "conditions": null
+    },
+    "rationale": "2026年のあべの期間限定名刺。他年同季節を同一キャンペーンにしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "abeno-valentine-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "バレンタイン名刺",
+          "evidence": [
+            "💓あべのキューズモール店💓",
+            "バレンタイン名刺配布します❣️❣️",
+            "2/1㈰～2/28㈯",
+            "バレンタイン限定の名刺を配布いたします🥳",
+            "みなさま是非貰いにきてな～🥰",
+            "お待ちしてま～す🐙 https://t.co/UQTCAXMXJM"
+          ]
+        }
+      ],
+      "groupingNote": "2026年のあべの期間限定名刺。他年同季節を同一キャンペーンにしない。",
+      "unannotatedFields": [
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 76616,
+      "postSha256": "f73ce845fd72ee676b1eb420033bb7b0ff9f1c06679e877e516f0db6dd8e08dc",
+      "textSha256": "75edcbdf3c6f6a31e22074268561fdaccfcb6b48819e7b4d0c361921bd93b96f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "association": "reference-url",
+          "eventId": "c2315029-a9a2-46b1-96ae-65ba826018e4",
+          "type": "announce",
+          "url": "https://x.com/bic_abeno/status/2016701489293775289"
+        }
+      ]
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2009101502963675184",
+    "source": "public-post",
+    "description": "abeno-valentine-card-2026 matched control",
+    "post": {
+      "id": "2009101502963675184",
+      "createdAt": "2026-01-08T03:15:00.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "木曜日は #あべのたんエンタ通信 🎮\n\nポケットモンスター ＃ぴょこぷにゅ シリーズ❣️\n\nhttps://t.co/IqJfNvzAqu　\n開くたびに、つつくたびに、いろいろなポケモンのリアクションが楽しめます🥰\n連続でつつくと、特別なリアクションが聞けたりするねんて‼️\nおもちゃコーナーにて販売中🐙 https://t.co/RVUE1mECsn",
+      "url": "https://x.com/bic_abeno/status/2009101502963675184",
+      "media": [
+        "https://pbs.twimg.com/media/G-GsUtCagAA044l.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2009101502963675184",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 81745,
+      "postSha256": "d1d1c52d75d1ceb1e9e122014f2b86c7ac967cc87588b11f59a2eaf5416d3589",
+      "textSha256": "d4e2f94fbaff4995e1fd1450cff7f632f38520027dde2c615258d95f6bdf1f3c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

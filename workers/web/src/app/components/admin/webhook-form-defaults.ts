@@ -15,6 +15,7 @@ const candidateSearch = (candidate: EventRequest): PrefillSearch => ({
   title: candidate.title,
   category: candidate.category,
   ...storesSearch(candidate.stores),
+  ...(candidate.characterIds.length > 0 ? { characterIds: candidate.characterIds.join(',') } : {}),
   startDate: getJstDateKey(candidate.startDate),
   ...(candidate.endDate !== undefined ? { endDate: getJstDateKey(candidate.endDate) } : {})
 })
@@ -24,6 +25,7 @@ const candidateSearch = (candidate: EventRequest): PrefillSearch => ({
 const draftSearch = (draft: NonNullable<WebhookJob['draft']>): PrefillSearch => ({
   ...(draft.title !== undefined ? { title: draft.title } : {}),
   ...(draft.category !== undefined ? { category: draft.category } : {}),
+  ...(draft.characterIds.length > 0 ? { characterIds: draft.characterIds.join(',') } : {}),
   ...storesSearch(
     draft.stores.flatMap((store) => {
       const parsed = StoreKeySchema.safeParse(store)

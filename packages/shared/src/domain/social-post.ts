@@ -1,12 +1,10 @@
 import { STORE_NAME_LABELS } from '@biccame/shared/domain/character-names'
-import { isSpecialCharacter, resolveEventCharacter } from '@biccame/shared/domain/event-character'
+import { resolveEventCharacters } from '@biccame/shared/domain/event-character'
 import { eventOgPlace } from '@biccame/shared/domain/og-event-place'
-import { SPECIAL_CHARACTER_NAMES } from '@biccame/shared/domain/special-character-names'
 import { SITE_BASE } from '@biccame/shared/domain/tweet-text'
 import type { Event, EventCharacter } from '@biccame/shared/schemas/event.dto'
 import {
   isSocialSideImage,
-  MAX_AVATARS_PER_EVENT,
   MAX_IMAGES_PER_POST,
   MAX_ROWS_PER_SIDE,
   ROWS_PER_IMAGE,
@@ -20,6 +18,7 @@ import {
 } from '@biccame/shared/social'
 import dayjs, { type Dayjs } from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { eventConditionLabel } from './event-condition'
 
 dayjs.extend(utc)
 
@@ -104,24 +103,9 @@ const isOneDay = (event: Event): boolean => {
   return end !== null && dateKey(jstDay(end)) === dateKey(jstDay(event.startDate))
 }
 
-const conditionLabel = (condition: Event['conditions'][number]): string => {
-  switch (condition.type) {
-    case 'purchase':
-      return condition.purchaseAmount === undefined
-        ? '商品購入'
-        : `${condition.purchaseAmount.toLocaleString('ja-JP')}円以上購入`
-    case 'first_come':
-      return condition.quantity === undefined ? '先着順' : `先着${condition.quantity}名`
-    case 'lottery':
-      return condition.quantity === undefined ? '抽選' : `抽選${condition.quantity}名`
-    case 'everyone':
-      return '全員配布'
-  }
-}
-
 /** 条件ラベル。限定数は「限定N個」として末尾に足す。 */
 export const eventConditionTexts = (event: Event): string[] => [
-  ...event.conditions.map(conditionLabel),
+  ...event.conditions.map(eventConditionLabel),
   ...(event.limitedQuantity === undefined ? [] : [`限定${event.limitedQuantity}個`])
 ]
 
@@ -144,11 +128,8 @@ export const rowPeriodText = (event: Event, side: SocialSide): string | null => 
   return side === 'starting' ? `${formatMonthDay(jstDay(end))}まで` : null
 }
 
-/** 対象ラベル。開催店舗の娘と違うときだけ入り、特殊値は「シークレット」「その他」になる。 */
-const eventTarget = (event: Event): string | null => {
-  const resolved = resolveEventCharacter(event)
-  return isSpecialCharacter(resolved) ? SPECIAL_CHARACTER_NAMES[resolved] : eventOgPlace(event).character
-}
+/** 開催店舗とは独立した対象全員のラベル。特殊値もそのまま表示する。 */
+const eventTarget = (event: Event): string | null => eventOgPlace(event).character
 
 /** 行の対象ラベル。まとめたイベントの全部が同じ娘を指すときだけ出す。 */
 const rowTarget = (events: Event[]): string | null => {
@@ -156,12 +137,8 @@ const rowTarget = (events: Event[]): string | null => {
   return first !== null && rest.every((target) => target === first) ? first : null
 }
 
-/** 重ねて描く娘。対象が特殊値または明示されたときは1人、未指定の複数店舗は先頭の店舗から最大3人。 */
-const eventAvatars = (event: Event): EventCharacter[] => {
-  const resolved = resolveEventCharacter(event)
-  if (isSpecialCharacter(resolved) || event.characterId !== undefined) return [resolved]
-  return [...new Set(event.stores)].slice(0, MAX_AVATARS_PER_EVENT)
-}
+/** 保存する対象全員。立ち絵の描画上限とは独立して保持する。 */
+const eventAvatars = (event: Event): EventCharacter[] => resolveEventCharacters(event)
 
 /** 追加・更新の1件表示に載せる内容。 */
 export const socialEventView = (event: Event): SocialEventView => ({
@@ -202,9 +179,9 @@ const mergeKey = (event: Event): string => {
     event.title,
     dateKey(jstDay(event.startDate)),
     end === null ? null : dateKey(jstDay(end)),
-    event.conditions.map(conditionLabel).toSorted(),
+    event.conditions.map(eventConditionLabel).toSorted(),
     event.limitedQuantity === undefined ? null : event.limitedQuantity,
-    event.characterId === undefined ? null : event.characterId
+    event.characterIds.toSorted()
   ])
 }
 
@@ -232,7 +209,7 @@ const toRow = (group: Event[], side: SocialSide, kind: SocialSummaryKind): Socia
     eventIds: group.map((event) => event.uuid),
     title: first.title,
     stores: [...new Set(group.flatMap((event) => event.stores))].map((store) => STORE_NAME_LABELS[store]),
-    avatar: resolveEventCharacter(first),
+    avatars: eventAvatars(first),
     target: rowTarget(group),
     period: rowPeriodText(first, side),
     date: kind === 'weekly' ? rowDate(first, side) : null

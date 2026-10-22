@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-2016044729054724515",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2016044729054724515",
+      "createdAt": "2026-01-27T07:04:54.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "ポケモンの温アイマスクがドラッグコーナーにあったよ❤️\n香り付きで1枚ずつ販売していたから、試してみようかな(🎀╹◡╹)\n#ビックドラッグ\n#温アイマスク\n#ほんやら堂 https://t.co/oTnY2oIeCV",
+      "url": "https://x.com/bicikenishi/status/2016044729054724515",
+      "media": [
+        "https://pbs.twimg.com/media/G_pt-V3bAAURLaI.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ポケモンの温アイマスクがドラッグコーナーにあったよ❤️ / 香り付きで1枚ずつ販売していたから、試してみようかな(🎀╹◡╹) / #ビックドラッグ」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pokemon-warming-eye-mask-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 76988,
+      "postSha256": "60d42ae325a23e9c090576ba0240360793cc4e72e8f60b396ec0940e8e4b9951",
+      "textSha256": "d86ffcd8d7bcb3cdd277a6680319887956ce379440b530de6c26adae424c24de"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-2027206908302786700",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2027206908302786700",
+      "createdAt": "2026-02-27T02:19:25.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "千葉ロッテマリーンズを応援しよう！\n\n合計100組200名様を『ビックカメラデー』にご招待⚾️\n期間中、船橋駅FACE店にて税込合計3,000円以上お買い上げのポイントカード会員様に抽選で「観戦ペアチケット」などが当たります🎉\n\n⏰応募期間：4/5(日)まで\n\n詳しくはこちら\nhttps://t.co/r63GWhyPem https://t.co/TRxoh516v6",
+      "url": "https://x.com/bic_funabashi/status/2027206908302786700",
+      "media": [
+        "https://pbs.twimg.com/media/HCIV5rjaUAEsi5f.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「千葉ロッテマリーンズを応援しよう！ / 合計100組200名様を『ビックカメラデー』にご招待⚾️ / 期間中、船橋駅FACE店にて税込合計3,000円以上お買い上げのポイントカード会員様に抽選で「観戦ペアチケット」などが当たります🎉」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "lotte-baseball-ticket-lottery-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 68154,
+      "postSha256": "03780ce0a5c7ed30b381017164ef36a2e818c9e4331c4525413e5a0f88c3a4a2",
+      "textSha256": "0148a0d44ac65352e9693c508c9117f977bab1c3ff3679924b375faaf3138851"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

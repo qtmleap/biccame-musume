@@ -1,0 +1,160 @@
+[
+  {
+    "id": "goal-positive-2008750444567572636",
+    "source": "public-post",
+    "description": "tachikawa store25 set 2026",
+    "post": {
+      "id": "2008750444567572636",
+      "createdAt": "2026-01-07T04:00:01.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\nお知らせ①\n＼\n\nビックカメラ立川店は\n2026年1月26日でオープン25周年を迎えます💐✨\n\n記念イベント開催決定🎵\n\nデカ #立川たん アクリルキーホルダー&ポストカードプレゼント（税込6000円以上ご購入）\n1/23(金)・24(土)・25(日)・26(月)の4日間で合計100セット配布❤\n\n名刺と展示も準備中～‼",
+      "url": "https://x.com/bic_tachikawa/status/2008750444567572636",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "tachikawa"
+      ],
+      "characterIds": [
+        "tachikawa"
+      ]
+    },
+    "rationale": "6000円購入・4日間合計100セットはセットだけ。名刺は準備中。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "tachikawa-store25-set-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "アクキー＆ポストカードセット",
+          "evidence": [
+            "デカ #立川たん アクリルキーホルダー&ポストカードプレゼント（税込6000円以上ご購入）"
+          ]
+        },
+        {
+          "item": "名刺",
+          "evidence": [
+            "名刺と展示も準備中～‼"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 81972,
+      "postSha256": "1494937b8d4baec7833340883bf43c2b669f18cc28cc1b5332905bbc080cdb56",
+      "textSha256": "8a3c5a2fb85b54a9d49faa0679d975867c450b2a2546d4a094de354b6338d7c1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bic_tachikawa/status/2008750444567572636",
+          "referenceType": "announce",
+          "eventId": "651050b9-af56-4bee-88a2-da65f83180a1",
+          "title": "限定デザイン名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        },
+        {
+          "url": "https://x.com/bic_tachikawa/status/2008750444567572636",
+          "referenceType": "announce",
+          "eventId": "ad0729d8-506e-4007-bd9c-ad974b05b33a",
+          "title": "デカ立川たんアクキー&わんにゃんポストカード",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "goal-positive-2016324886336307436",
+    "source": "public-post",
+    "description": "takatsuki valentine card 2026",
+    "post": {
+      "id": "2016324886336307436",
+      "createdAt": "2026-01-28T01:38:09.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "📢＼　イ ベ ン ト 予 告　/    \n🍫たかつきたんイベント名刺🍫\n配布・名刺台設置！\n\n【期間】 2/2㈪ー2/28㈯\n\n今年のバレンタインイベント名刺は、\nピンクのチェック柄にしてみました✨\n\nご来店お待ちしています✨ https://t.co/y2Uj5fLEHa",
+      "url": "https://x.com/bic_takatsuki/status/2016324886336307436",
+      "media": [
+        "https://pbs.twimg.com/media/G_tsG_nbAAAYDgX.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "takatsuki"
+      ],
+      "characterIds": [
+        "takatsuki"
+      ],
+      "category": "limited_card",
+      "startDate": "2026-02-02"
+    },
+    "rationale": "2/2から2/28、設置と新デザインが明示。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "takatsuki-valentine-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "たかつきたんバレンタイン名刺",
+          "evidence": [
+            "🍫たかつきたんイベント名刺🍫",
+            "配布・名刺台設置！",
+            "今年のバレンタインイベント名刺は、"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 76867,
+      "postSha256": "9fd30db76afe0734e993acf7da5b96be853ffec37a3089e039537477e9b7841b",
+      "textSha256": "bb809cf3073219ccbc6313212db7f1ce3c4aeff259a83879ad771f25f8a9eb4f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bic_takatsuki/status/2016324886336307436",
+          "referenceType": "announce",
+          "eventId": "b52c8446-bbe6-412d-b1a2-44a24ece8635",
+          "title": "イベント名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  }
+]

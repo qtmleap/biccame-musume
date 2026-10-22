@@ -1,6 +1,7 @@
 import type { Bindings } from '@api/types/bindings'
 import { ClefModelSchema } from '@biccame/shared/event-detect/clef'
 import { FieldThresholdsSchema, resolveFieldThresholds } from '@biccame/shared/event-detect/detection'
+import { DEFAULT_ITEM_COUNT_THRESHOLD } from '@biccame/shared/event-detect/extraction'
 import { EventThresholdsSchema } from '@biccame/shared/schemas/admin-bot.dto'
 import { z } from 'zod'
 
@@ -10,7 +11,9 @@ const ConfigSchema = z
     model: ClefModelSchema.default('clef'),
     eventThreshold: ProbabilitySchema.positive().default(0.9),
     ignoreThreshold: ProbabilitySchema.default(0.5),
-    choiceThreshold: ProbabilitySchema.positive().default(0.9)
+    choiceThreshold: ProbabilitySchema.positive().default(0.9),
+    // 件数監査だけのしきい値。保存値（KV）では変えず、環境変数でのみ調整する。
+    itemCountThreshold: ProbabilitySchema.positive().default(DEFAULT_ITEM_COUNT_THRESHOLD)
   })
   .refine((value) => value.ignoreThreshold < value.eventThreshold)
 
@@ -53,7 +56,8 @@ export const detectionConfiguration = async (env: Bindings) => {
       : env.EVENT_DETECTION_IGNORE_THRESHOLD,
     choiceThreshold: eventThresholds?.success
       ? eventThresholds.data.choiceThreshold
-      : env.EVENT_DETECTION_CHOICE_THRESHOLD
+      : env.EVENT_DETECTION_CHOICE_THRESHOLD,
+    itemCountThreshold: env.EVENT_DETECTION_ITEM_COUNT_THRESHOLD
   })
   if (!parsed.success) throw new Error('Invalid event detection configuration')
   // 未保存なら既定値（上書き後の有効な choiceThreshold から決まる）。保存値が壊れていても保存内容は出さず、既定値に戻す。

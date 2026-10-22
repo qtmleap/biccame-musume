@@ -1,0 +1,126 @@
+[
+  {
+    "id": "expanded-v2-positive-1178574823288500224",
+    "source": "public-post",
+    "description": "shibutou-limited-card-september-2019",
+    "post": {
+      "id": "1178574823288500224",
+      "createdAt": "2019-09-30T07:38:29.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "[壁]ω'*)ﾁﾗｯ\nしぶとーたんの限定名刺は本日配布最終日となっております\n１階ドラッグコーナーで配布中です\n[壁])≡ｻｯ!!",
+      "url": "https://x.com/bic_shibuya/status/1178574823288500224",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "shibuto"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "配布最終日だが配布中。閉店後の終了報告とは違う。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "shibutou-limited-card-september-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "限定名刺",
+          "evidence": [
+            "[壁]ω'*)ﾁﾗｯ",
+            "しぶとーたんの限定名刺は本日配布最終日となっております",
+            "１階ドラッグコーナーで配布中です",
+            "[壁])≡ｻｯ!!"
+          ]
+        }
+      ],
+      "groupingNote": "配布最終日だが配布中。閉店後の終了報告とは違う。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 708553,
+      "postSha256": "4630f32249396aee4ae34525fcef4bb41d82e92260b15b6dd9d853e3e68f83ed",
+      "textSha256": "0fa6a9219ac579b4ee107669d56730eaa0ff8c41d56db19761b06d8c817bd76d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1170211893132193792",
+    "source": "public-post",
+    "description": "shibutou-limited-card-september-2019 matched control",
+    "post": {
+      "id": "1170211893132193792",
+      "createdAt": "2019-09-07T05:47:11.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "ちょっと遅くなりました💦\nおはようございます(*'ω'*)\nログインいたしました☆\n本日も一日宜しくお願いいたします~ヽ(^o^)丿",
+      "url": "https://x.com/bic_shibuya/status/1170211893132193792",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1170211893132193792",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 714984,
+      "postSha256": "d6a22efa66f97e4f785fd5108431c25e335e7a181fe161e726b8179626398353",
+      "textSha256": "0478234437f67d7ffe5c63eba4ac03a57bb176006903b8c3d61af4dea4c1886f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

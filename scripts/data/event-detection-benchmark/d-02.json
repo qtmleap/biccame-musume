@@ -1,0 +1,156 @@
+[
+  {
+    "id": "public-d-1980189348508364949",
+    "source": "public-post",
+    "description": "初音ミクねんどろいどの予約期限",
+    "post": {
+      "id": "1980189348508364949",
+      "createdAt": "2025-10-20T08:28:25.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "／\n可愛くて、かっこいい。\n＼\n⏰予約締切間近！11/2まで💨\nポップでキュートなバーチャル・アイドル\n「#初音ミク」が「#ねんどろいど 3.0」で登場！\n\n#miku\n🎵2026年2月発売\n🎵2階おもちゃコーナーヾ('ω'上)ﾉﾞ\n【https://t.co/GlDUNp0iZR】 https://t.co/i60q2msRzn",
+      "url": "https://x.com/bic_ohmiya/status/1980189348508364949",
+      "media": [
+        "https://pbs.twimg.com/media/G3sLbF-XEAAxrru.jpg",
+        "https://pbs.twimg.com/media/G3sLb0dWsAAeW7C.jpg",
+        "https://pbs.twimg.com/media/G3sLcooXoAAee4x.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "別IPの初音ミクフィギュアの通常予約販売で、ビッカメ娘の物品や出演は記載されていない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "reservation",
+      "figure"
+    ],
+    "group": "miku-nendoroid-30-preorder-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1991029963240452237",
+    "source": "public-post",
+    "description": "プラモデル等の販売整理券配布",
+    "post": {
+      "id": "1991029963240452237",
+      "createdAt": "2025-11-19T06:25:09.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "11 月 22 日（土）発売！！\nガンダムプラモデル、たまごっちパラダイスの整理券を 9 時から配布いたします。\nその他のおもちゃのお問い合わせは整理券を配布している販売員にお問い合わせください。\n✨混雑状況によって早めに配布する場合もございます✨ https://t.co/xgEj1INV85",
+      "url": "https://x.com/bic_toko/status/1991029963240452237",
+      "media": [
+        "https://pbs.twimg.com/media/G6GPMYbbIAAimov.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "配布するのはガンダムプラモデルとたまごっち購入用の整理券。ビッカメ娘ノベルティ配布ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "ticket-distribution",
+      "ordinary-sale"
+    ],
+    "group": "gundam-tamagotchi-tickets-november-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2014895935730680286",
+    "source": "public-post",
+    "description": "鬼滅の刃コラボ機器の展示販売",
+    "post": {
+      "id": "2014895935730680286",
+      "createdAt": "2026-01-24T03:00:00.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "🎴Pulsar×鬼滅の刃コラボデバイス好評発売中🎴\n\nビックカメラAKIBAでは\n炭治朗、善逸、天元のコラボデザインを展示中です🖱\n\nぜひお手に取ってお試しくださいにゃ₍^> ̫<^₎❣\n※フィギュアはイメージで付属しません。 https://t.co/zYZwdc3jba",
+      "url": "https://x.com/bic_akiba/status/2014895935730680286",
+      "media": [
+        "https://pbs.twimg.com/media/G_ZCatnbAAEpA8D.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "鬼滅の刃の登場人物を題材にしたPulsar製品の展示で、ビッカメ娘とのコラボではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "collaboration",
+      "display"
+    ],
+    "group": "pulsar-demonslayer-devices-january-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2002995796900516258",
+    "source": "public-post",
+    "description": "鬼滅の刃コラボ時計の入荷",
+    "post": {
+      "id": "2002995796900516258",
+      "createdAt": "2025-12-22T06:53:06.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "″GARRACK 鬼滅の刃 続々入荷″\n\n大人気のコラボウォッチブランド「GARRACK」より鬼滅の刃が大量入荷致しました！\n\n新作の、不死川実弥、伊黒小芭内、悲鳴嶼行冥をイメージした3モデルもございます。\n\n6階時計コーナーまでぜひお越しください♪\n#鬼滅の刃 https://t.co/AGQ0ugpFhE",
+      "url": "https://x.com/bic_sapporo/status/2002995796900516258",
+      "media": [
+        "https://pbs.twimg.com/media/G8wQ0X0bkAA2FaA.jpg",
+        "https://pbs.twimg.com/media/G8wQ3TracAAlh4K.jpg",
+        "https://pbs.twimg.com/media/G8wQ6CKbAAEnCaR.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "GARRACKと鬼滅の刃の時計入荷・通常販売の案内で、娘の催しや配布物はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "collaboration",
+      "stock-notice"
+    ],
+    "group": "garrack-demonslayer-watches-december-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2032365321592746165",
+    "source": "public-post",
+    "description": "遊戯王カードの先着販売",
+    "post": {
+      "id": "2032365321592746165",
+      "createdAt": "2026-03-13T07:57:06.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "3月20日(金)発売\n『遊戯王OCG デュエルモンスターズ LIMIT OVER COLLECTION -THE RIVALS-』\n先着販売いたします！\n詳細はこちら🔽 https://t.co/AwZUKWkYRm",
+      "url": "https://x.com/bic_sagamioono/status/2032365321592746165",
+      "media": [
+        "https://pbs.twimg.com/media/HDRpLrpaQAAPFQZ.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "先着という条件は遊戯王商品の購入順の説明。ビッカメ娘のカードやノベルティの企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "first-come",
+      "trading-card"
+    ],
+    "group": "yugioh-rivals-march-2026",
+    "reviewStatus": "provisional"
+  }
+]

@@ -1,0 +1,126 @@
+[
+  {
+    "id": "goal-positive-1885501039765577864",
+    "source": "public-post",
+    "description": "honten valentine card 2025",
+    "post": {
+      "id": "1885501039765577864",
+      "createdAt": "2025-02-01T01:30:53.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "【緊急告知】\n\n本日から2月14日まで🍫\nB1F本店たんミュージアムにて\nバレンタイン限定名刺配布開始‼\n\n絵柄はもらった方だけのお楽しみ🍫\n\n※おひとり様2枚までとなります\n※フリマサイトへの出品及びご購入はご遠慮ください https://t.co/TX8cIYlgxI",
+      "url": "https://x.com/bicikebukuro/status/1885501039765577864",
+      "media": [
+        "https://pbs.twimg.com/media/Giqk5hEa4AA--lJ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card"
+    },
+    "rationale": "本日から2/14、1人2枚は個人上限。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "honten-valentine-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "本店たんバレンタイン名刺",
+          "evidence": [
+            "バレンタイン限定名刺配布開始‼"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 173081,
+      "postSha256": "845119a717f3504f6007717b6674a028a9b47511cba5464e3a5bf20e0f9f017a",
+      "textSha256": "56bba4477b3e581323baae902fd3616cdcde1365bdd529549007e64b07994e40"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1898226697704816880",
+    "source": "public-post",
+    "description": "eight number return card 2025",
+    "post": {
+      "id": "1898226697704816880",
+      "createdAt": "2025-03-08T04:18:06.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "予想してくれた人もおるかもしれんけど、じゃじゃーんっっっ！\n3人娘が帰ってきた！\n八王子たん、しぶハチたんとまたまたコラボやるで(8 ,,ÒωÓ,, )ﾄﾞﾔｵｯ!\n第2弾に関してはまた後日お知らせするな！\nとりあえず本日から2階総合カウンターでコラボ名刺配布すんでー✨ぜひ3つとも集めてな♪ https://t.co/ksrqVcbj1O",
+      "url": "https://x.com/bic_yao/status/1898226697704816880",
+      "media": [
+        "https://pbs.twimg.com/media/GlfZ8FtbUAAplV9.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "yao"
+      ],
+      "characterIds": [
+        "hachioji",
+        "shibuhachi",
+        "yao"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "八王子・しぶハチ・八尾の3デザイン。次弾は未発表。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "eight-number-return-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "3店舗コラボ名刺",
+          "evidence": [
+            "とりあえず本日から2階総合カウンターでコラボ名刺配布すんでー✨ぜひ3つとも集めてな♪ https://t.co/ksrqVcbj1O"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 163925,
+      "postSha256": "d92b839c2107de0f4041c9964c7723b6b1fac38794702b32c6fae2b23234eaea",
+      "textSha256": "9c16d114588d60dbfac96078d6632285798679707723a08d4246da0f2d48b9da"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

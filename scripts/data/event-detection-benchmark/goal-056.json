@@ -1,0 +1,155 @@
+[
+  {
+    "id": "goal-positive-2016368028804686098",
+    "source": "public-post",
+    "description": "ikenishi valentine keychain 2026",
+    "post": {
+      "id": "2016368028804686098",
+      "createdAt": "2026-01-28T04:29:35.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "＼　イベント告知！　／\n\nやっと準備が終わりました！(🎀人*´∀｀)｡*ﾟ+\n２月１４日（土）～\nまたまた先着５０名様に\nアクリルキーホルダープレゼント企画です！\n#池西たん #池西たんのアクキー\n\n✅詳細は画像をチェック！ https://t.co/34y16S2e7q",
+      "url": "https://x.com/bicikenishi/status/2016368028804686098",
+      "media": [
+        "https://pbs.twimg.com/media/G_uS_02a4AE8Z3-.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "ikenishi"
+      ],
+      "characterIds": [
+        "ikenishi"
+      ],
+      "category": "ackey",
+      "startDate": "2026-02-14"
+    },
+    "rationale": "2/14開始・先着50。購入条件は画像参照で不明。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "preliminary"
+    ],
+    "group": "ikenishi-valentine-keychain-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "池西たんアクキー",
+          "evidence": [
+            "アクリルキーホルダープレゼント企画です！",
+            "#池西たん #池西たんのアクキー"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 72112,
+      "postSha256": "bd835212c7c441ce689b1763a89ce5cefeb177a401e93ec26cb93ee7f663a757",
+      "textSha256": "842aa360c03686c3d2abe2c6729807f21cc3febea2757e53a339a5f7a2d025ee"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bicikenishi/status/2016368028804686098",
+          "referenceType": "announce",
+          "eventId": "7b4b4843-3bed-419f-9369-e8d5d54f20a4",
+          "title": "バレンタインアクキー",
+          "isVerified": true,
+          "isPreliminary": false
+        },
+        {
+          "url": "https://x.com/bicikenishi/status/2016368028804686098",
+          "referenceType": "announce",
+          "eventId": "9da3fcb7-31eb-45e2-b024-944cdc89059c",
+          "title": "バレンタイン名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "goal-positive-2024710917012017343",
+    "source": "public-post",
+    "description": "funabashi store16 card 2026",
+    "post": {
+      "id": "2024710917012017343",
+      "createdAt": "2026-02-20T05:01:14.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "やっほ💛\nビックカメラ娘のふなたんだよっ🐤✨\n\nなんと明日は…\nビックカメラ船橋駅FACE店🎉\n開店16周年🎉\n\nいつもありがとうの気持ちをこめて、\nふなたん名刺をリニューアルしちゃいましたっ♡\n\n遊びに来てくれたらぜひぜひゲットしてね💌\n待ってるよ〜っ💛\n\n#ビックカメラ \n#船橋駅FACE店 \n#ふなたん https://t.co/vXzXwfmYkx",
+      "url": "https://x.com/bic_funabashi/status/2024710917012017343",
+      "media": [
+        "https://pbs.twimg.com/media/HBk3zr9bUAMAjn8.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "funabashi"
+      ],
+      "characterIds": [
+        "funabashi"
+      ],
+      "category": "regular_card"
+    },
+    "rationale": "船橋店16周年に名刺リニューアル、擬人化5月企画とは別。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "funabashi-store16-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ふなたん新デザイン名刺",
+          "evidence": [
+            "ふなたん名刺をリニューアルしちゃいましたっ♡"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 69958,
+      "postSha256": "b2f8ceb791cd45c9a9e5cb793f0b50bb1b3a277eb4c8a465b1df756b79e1beec",
+      "textSha256": "ecb0e9586c84d4d6ec16852667ad542211e586696da3d3ece568eed066d4aeec"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bic_funabashi/status/2024710917012017343",
+          "referenceType": "announce",
+          "eventId": "bfef07af-64d9-539a-94b9-1ec2259513bd",
+          "title": "通常名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  }
+]

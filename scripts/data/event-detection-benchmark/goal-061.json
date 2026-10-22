@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-913943095749705728",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "913943095749705728",
+      "createdAt": "2017-09-30T01:46:28.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "10/5（木）#ニンテンドークラシックミニ スーパーファミコン 抽選販売のお知らせ。\n抽選受付時間は朝8:00～朝8:30まで、当選発表は10時前後に店頭およびこちらのtwitterで発表いたします！\n詳しくは\nhttps://t.co/eQtf3khUex https://t.co/8ivNoSYUvJ",
+      "url": "https://x.com/bic_shinjyuku/status/913943095749705728",
+      "media": [
+        "https://pbs.twimg.com/media/DK75i6oUEAE2rdM.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「10/5（木）#ニンテンドークラシックミニ スーパーファミコン 抽選販売のお知らせ。 / 抽選受付時間は朝8:00～朝8:30まで、当選発表は10時前後に店頭およびこちらのtwitterで発表いたします！ / 詳しくは」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "snes-mini-lottery-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 916894,
+      "postSha256": "12358990d274559ef0fbc10d4ebd7f2adc79581bdf57b05e87af7e659e876325",
+      "textSha256": "9d0848f262dd0f4837679da80d0a9bda56433c562858b7ffdbd9a405b3de2513"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-924511814984929280",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "924511814984929280",
+      "createdAt": "2017-10-29T05:42:47.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【5階ﾌﾟﾘﾝﾀｰｺｰﾅｰ】\n\n本日最終日!!\nブラザープリンター体験会☆\nブラザー製プリンターご購入でハロウィンレター＆ボディシールプレゼント🎃 https://t.co/u275KCVRqP",
+      "url": "https://x.com/bic_kashiwa/status/924511814984929280",
+      "media": [
+        "https://pbs.twimg.com/media/DNSGD9QV4AELxem.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【5階ﾌﾟﾘﾝﾀｰｺｰﾅｰ】 / 本日最終日!! / ブラザープリンター体験会☆」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "brother-printer-halloween-gift-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 910789,
+      "postSha256": "fa2e9b59902410cbf1995130dbf5a0650f889ece75e8d813c6b96b3fd542ac8a",
+      "textSha256": "7f77f49203d04f8ae4e31191e3f9cea0dcd029b09cbff5c93f75c10cc7123839"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

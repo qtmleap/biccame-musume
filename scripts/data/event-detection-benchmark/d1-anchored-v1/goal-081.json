@@ -1,0 +1,174 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2087797091741679953",
+    "source": "public-post",
+    "description": "abeno-mermaid-key-end-2026",
+    "post": {
+      "id": "2087797091741679953",
+      "createdAt": "2026-08-13T07:03:10.000Z",
+      "screenName": "bic_abeno",
+      "kind": "quote",
+      "text": "アクリルキーホルダー配布終了いたしました‼️🧜\nお迎えしてくれた方はありがとうございます🥰\n\n限定の名刺はまだ配布中ですのでお近くにお越しの際はぜひお立ち寄りください☺️🐙",
+      "url": "https://x.com/bic_abeno/status/2087797091741679953",
+      "quoted": {
+        "id": "2073608540510687525",
+        "screenName": "bic_abeno",
+        "text": "＼ビッカメ娘イベント予告✨／\nsummerコラボ🏝️in関西\n\n8/1㈯～無くなり次第終了\n税込3,000円以上の当日ご購入で『マーメイドアクキー』プレゼント🧜‍♀️\nなんばたん、たかつきたん、八尾たんのお店でも同時開催❣️\nぜひGETしてな😆\n\n⚠️キーホルダーに個体差がありますがお選びいただけません🙇‍♀️御了承下さい https://t.co/U05F2S8F0G"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アクキー配布終了、限定名刺は継続。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:kansai-mermaid-key"
+    ],
+    "group": "abeno-mermaid-key-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アクリルキーホルダー",
+          "evidence": [
+            "アクリルキーホルダー配布終了いたしました‼️🧜"
+          ]
+        }
+      ],
+      "groupingNote": "アクキー配布終了、限定名刺は継続。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 16610,
+      "postSha256": "40371cf73a3245331c5685b5389518800c4bd9a50485395ee17c7e93daa2da5a",
+      "textSha256": "d1a93c96e16705f8ec2d872140a86fe50403022a3b2c2740f681552f604cb3b9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "82107e1e-2d6c-48eb-8866-39db9bdcc526",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_abeno/status/2087797091741679953",
+          "origin": "manual-or-seed",
+          "title": "マーメイドアクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-31T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "abeno"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 70,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2086305377931743405",
+    "source": "public-post",
+    "description": "abeno-mermaid-key-end-2026 matched control",
+    "post": {
+      "id": "2086305377931743405",
+      "createdAt": "2026-08-09T04:15:38.000Z",
+      "screenName": "bic_abeno",
+      "kind": "quote",
+      "text": "人気メーカーのイヤホンも追加されてます☺️🎵🎧 https://t.co/XeIAFuUAkW",
+      "url": "https://x.com/bic_abeno/status/2086305377931743405",
+      "quoted": {
+        "id": "2086264125873930595",
+        "screenName": "bic_abeno",
+        "text": "今日もやってます‼️\nぜひお立ち寄りください☺️🐙"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HPQLa7na8AAVQti.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2086305377931743405",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 17850,
+      "postSha256": "86da43f643d7c57b5db84fdbd312e588fc872f6cd41a471e532dc4795e9e72fb",
+      "textSha256": "bdd026c3fe6ef5606b0eed11f73e258f59a0744d692a7fdfe54f53bae6437181"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

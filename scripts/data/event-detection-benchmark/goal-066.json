@@ -1,0 +1,104 @@
+[
+  {
+    "id": "goal-negative-966620805063852033",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "966620805063852033",
+      "createdAt": "2018-02-22T10:28:53.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "4月1日まで！！\n今ならsurface proご購入で\n専用キーボードプレゼント！\nさらに学生の方は最大4万円キャッシュバックキャンペーンも適応するとめっちゃお得♪詳細は↓まで\nhttps://t.co/WpxE0ALHso\n是非ご利用下さいませ！\n#Microsoft\n#Surface \n#期間限定 \n#キャンペーン https://t.co/O9zYdijWPn",
+      "url": "https://x.com/bic_akiba/status/966620805063852033",
+      "media": [
+        "https://pbs.twimg.com/media/DWogeuwUQAAABD1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「4月1日まで！！ / 今ならsurface proご購入で / 専用キーボードプレゼント！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "surface-pro-keyboard-bonus-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 881073,
+      "postSha256": "06424c79d82415f2508bd179fe10dcf35eef0764fd540009f6d384f507b8ebe0",
+      "textSha256": "7ba2ebe88b6f51865241995d8918bcd31693aa094a52aaf0ff173938919bb686"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-968416290284060673",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "968416290284060673",
+      "createdAt": "2018-02-27T09:23:30.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "くしゃみが出たら！\n\n空気清浄機、ふとんクリーナー、マスク、目薬、飲み薬、スプレー、ゴーグル、1dayコンタクト、ティッシュ…などなど\n\nどう対策する？\nビックカメラには、ヒントがあるぜ！\n#花粉 #花粉症",
+      "url": "https://x.com/bic_fujisawa/status/968416290284060673",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「くしゃみが出たら！ / 空気清浄機、ふとんクリーナー、マスク、目薬、飲み薬、スプレー、ゴーグル、1dayコンタクト、ティッシュ…などなど / どう対策する？」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pollen-protection-products-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 879873,
+      "postSha256": "cbece01f2aac1aa3c1071aa6c9adeb73846431edaba876ccf4a02d91f66f55e5",
+      "textSha256": "923b995be8ee2c78762132506075316ea92d8ea33248ec1942713e06d4219696"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

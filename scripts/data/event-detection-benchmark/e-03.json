@@ -1,0 +1,181 @@
+[
+  {
+    "id": "public-e-938624126163435521",
+    "source": "public-post",
+    "description": "さがみたん通常名刺の配布終了",
+    "post": {
+      "id": "938624126163435521",
+      "createdAt": "2017-12-07T04:20:05.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "【名刺配布終了のお知らせ】\n大好評でした #さがみたん の通常版名刺は配布終了となりましたm(*･´ω`･*)m\nお手に取ってくださった方ありがとうございました！\n新たな名刺の配布は考えていますがまだデザインを考え中なのでしばしお待ちを(*;ω人)",
+      "url": "https://x.com/bic_sagamioono/status/938624126163435521",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "regular_card",
+      "stores": [
+        "sagami"
+      ],
+      "characterIds": [
+        "sagami"
+      ]
+    },
+    "rationale": "通常版名刺の終了が明記され、単なる挨拶ではなく配布状況更新。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "end-notice",
+      "regular-card"
+    ],
+    "group": "sagami-regular-card-end-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "4e92ce78fec6fab9e7d1722e44b32151b8f804af3ea22d9496b1c4200df29f16"
+  },
+  {
+    "id": "public-e-886866375263703042",
+    "source": "public-post",
+    "description": "PSVR抽選参加者への娘名刺",
+    "post": {
+      "id": "886866375263703042",
+      "createdAt": "2017-07-17T08:33:15.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "大人気 #PSVR\n7/23(日)朝9時～10時に1F西側店頭（カメラコーナー側出入口）にて抽選販売‼️\n当選結果は11時掲示。ご購入は11～15時迄。\n当日お並び頂いたお客様には\n#さっぽろたん の名刺を配布致します❣️\n詳細➡️https://t.co/oMDGn4djPP https://t.co/hYnzCSy1qq",
+      "url": "https://x.com/bic_sapporo/status/886866375263703042",
+      "media": [
+        "https://pbs.twimg.com/media/DE6_CnVUMAAwdz7.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sapporo"
+      ],
+      "characterIds": [
+        "sapporo"
+      ],
+      "startDate": "2017-07-23"
+    },
+    "rationale": "一般製品の抽選販売案内と同居するが、当日参加者にさっぽろたん名刺を提供すると明記。物品種別は名刺の限定性不明。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "product-promotion-with-character-bonus"
+    ],
+    "group": "sapporo-psvr-card-bonus-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "a1e4e2646b91aad60b471b344d87c58989fc2a8c03c98a611507c7e1b3b77727"
+  },
+  {
+    "id": "public-e-944451836693450752",
+    "source": "public-post",
+    "description": "鹿児島たんギフトカード抽選",
+    "post": {
+      "id": "944451836693450752",
+      "createdAt": "2017-12-23T06:17:19.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "#鹿児島たん (@bic_kagoshima) をフォローしてこのツイートをリツイートすると、抽選で1名様に鹿児島たんオリジナルギフトカード1万円分をプレゼントですよ～！🍠ヾ(*´∀｀*)ﾉ🎁\nこれはみなさん鹿児島たんをフォローするしか～！٩(๑＞◡＜๑)۶ https://t.co/bWXHHMnAuE",
+      "url": "https://x.com/bic_sapporo/status/944451836693450752",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "other",
+      "characterIds": [
+        "kagoshima"
+      ],
+      "conditions": [
+        {
+          "type": "lottery",
+          "quantity": 1
+        }
+      ]
+    },
+    "rationale": "札幌アカウントから鹿児島たんオリジナルカードの応募案内。札幌店開催と推定せず店舗未注釈。1名抽選は明記。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "gift-card",
+      "social-lottery",
+      "different-account"
+    ],
+    "group": "kagoshima-gift-card-social-lottery-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "ca9d19132f518c1778b568aeea17dc57063137de5dd6c9028717ae6cec94c628"
+  },
+  {
+    "id": "public-e-920513280732532736",
+    "source": "public-post",
+    "description": "なんばたんハロウィン名刺",
+    "post": {
+      "id": "920513280732532736",
+      "createdAt": "2017-10-18T04:54:03.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "1階総合カウンターのなんばたん等身大パネルに季節限定名刺をそっと設置しました！ハロウィン終了までまたは無くなり次第終了です～お近くにこられた際はよかったらお持ち帰り下さい🎃n(╹▽╹n)🎃 https://t.co/B04e3n4Uiv",
+      "url": "https://x.com/biccamera_nanba/status/920513280732532736",
+      "media": [
+        "https://pbs.twimg.com/media/DMZRjX5WkAEZEuk.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "nanba"
+      ]
+    },
+    "rationale": "季節限定名刺をハロウィンまで配布。なんばたんはパネルの設置場所名だけなので絵柄対象は未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "seasonal-card"
+    ],
+    "group": "nanba-halloween-card-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "65b59e304237063d3b3a807fc9e05d25f0fe5d619a41d678603a26dbdb530fde"
+  },
+  {
+    "id": "public-e-865174567089602561",
+    "source": "public-post",
+    "description": "水戸たんエア参加フィギュア抽選",
+    "post": {
+      "id": "865174567089602561",
+      "createdAt": "2017-05-18T11:57:45.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "＼エア参加キャンペーン開催／\n@biccameramito をフォロー後、ナイセンさんが出展している展示会に行けない思いや、行ったつもりになってハッシュタグ「#金沢エア参加組」で面白いツイートをしよう！抽選で3名様に【水戸たんアクリルフィギュア】をプレゼント\n締切：5/20（土） https://t.co/2I4TMHdlql",
+      "url": "https://x.com/biccameramito/status/865174567089602561",
+      "media": [
+        "https://pbs.twimg.com/media/DAGzUcAUIAMZ5Nl.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "conditions": [
+        {
+          "type": "lottery",
+          "quantity": 3
+        }
+      ]
+    },
+    "rationale": "水戸たん企画のエア参加抽選でアクリルフィギュアを3名に提供。形状は未記載でacstaかotherかは断定せずcategoryを未注釈。開催店舗や絵柄の全対象も強制しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "social-lottery",
+      "figure"
+    ],
+    "group": "mito-kanazawa-air-participation-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "4e1ab2a2587ea6a783b44451809d48cfa3334454828c22d6299588fa8e25efce"
+  }
+]
