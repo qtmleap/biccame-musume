@@ -114,6 +114,43 @@ describe('回答表の確認の行', () => {
   })
 })
 
+describe('店舗の娘は娘の確認を聞かないので、回答表に娘の確認の行は出ない', () => {
+  // 店舗の娘（store と character が同じ ID）。本番と同じく、店舗の確認の質問だけをまとめた request で判定する。
+  const storeOnly = createConfirmRequest(first, { store: 'funabashi' })
+  const storeOnlyRequest = { ...first, questions: { ...first.questions, ...storeOnly.questions } }
+  const storeCharacterAnswers = (store: number): Record<string, ClefAnswer> => ({
+    ...response(storeOnlyRequest, {
+      category: choice('ackey', { ackey: 0.99 }),
+      condition: choice('everyone', { everyone: 0.99 }),
+      quantity: choice('none', { none: 0.99 }),
+      ...associationAnswers('funabashi', 'funabashi')
+    }).answers,
+    [STORE_CONFIRM_KEY]: { type: 'noul', noul: store }
+  })
+
+  test('店舗の確認の行だけが、店舗の行の直後に出る。娘の行は 1 段目のものだけで、壊れない', () => {
+    const rows = describeAnswers(storeCharacterAnswers(0.8), thresholds)
+    const keys = rows.map((row) => row.key)
+    expect(keys).toContain(STORE_CONFIRM_KEY)
+    expect(keys).not.toContain(CHARACTER_CONFIRM_KEY)
+    expect(keys.indexOf(STORE_CONFIRM_KEY)).toBe(keys.indexOf('store') + 1)
+    expect(keys).toContain('character')
+    expect(rows.find((row) => row.key === STORE_CONFIRM_KEY)?.label).toBe('開催・配布店舗の確認（船橋駅FACE店）')
+    expect(rows.find((row) => row.key === 'character')?.answer).toBe('ふなたん')
+  })
+  test('判定の理由と表の確定表示は一致する（娘の確認の理由は付かない）', () => {
+    for (const store of [0.3, 0.69, 0.7, 0.99]) {
+      const answers = storeCharacterAnswers(store)
+      const confirmed = describeAnswers(answers, thresholds).find((row) => row.key === STORE_CONFIRM_KEY)?.confirmed
+      const result = evaluateWithStore(value, storeOnlyRequest, { answers })
+      expect(confirmed, `store ${store}`).toBe(!result.reasons.includes('store_confirm_low'))
+      expect(result.reasons).not.toContain('character_confirm_low')
+      expect(result.reasons).not.toContain('character_unconfirmed')
+      expect(result.status === 'register').toBe(store >= 0.7)
+    }
+  })
+})
+
 describe('回答表の確定表示は、判定（evaluateDetection）の関門と一致する', () => {
   const probabilities = [0, 0.3, 0.5, 0.69, 0.7, 0.71, 0.99, 1]
   test('確認の確率の全ての組み合わせで、「確定」と判定の通過が一致する', () => {

@@ -62,14 +62,19 @@ test('確認の「はい」が下限以上なら登録に進み、確認の質�
     expect(candidate.status).toBe('registered')
     expect(candidate.questionVersion).toBe(DETECTION_VERSION)
     expect(candidate.answers?.store_confirm).toEqual({ type: 'noul', noul: 0.9 })
-    expect(candidate.answers?.character_confirm).toEqual({ type: 'noul', noul: 0.9 })
-    // 1 候補につき 2 段目は 1 回（店舗と娘をまとめて）。
+    // 既定の AI は店舗も娘もアキバ（店舗の娘）を選ぶので、娘の確認は聞かず、回答も保存しない。
+    expect(candidate.answers).not.toHaveProperty('character_confirm')
+    expect(candidate.candidate?.characterIds).toEqual(['akiba'])
+    // 1 候補につき 2 段目は 1 回（店舗の確認だけ）。
     expect(calls).toHaveLength(1)
-    expect(Object.keys(calls[0].questions)).toEqual(['store_confirm', 'character_confirm'])
+    expect(Object.keys(calls[0].questions)).toEqual(['store_confirm'])
+    expect(calls[0].state.split('\n').at(-1)).toBe('確認対象の開催店舗: AKIBA店')
+    expect(calls[0].state).not.toContain('確認対象のビッカメ娘')
     const prompt = await getWebhookPrompt(env, post.id, candidate.eventUUID)
     expect(prompt.questionVersion).toBe(DETECTION_VERSION)
     expect(prompt.requests).toHaveLength(2)
     expect(prompt.requests[1]).toEqual(calls[0])
+    // 版の定義には、娘の確認も含めた全候補の質問が載る。
     expect(prompt.definition?.questions.map((question) => question.key)).toEqual(
       expect.arrayContaining(['store_confirm', 'character_confirm'])
     )
@@ -79,13 +84,59 @@ test('確認の「はい」が下限以上なら登録に進み、確認の質�
   }
 }, 60000)
 
-test('確認の「はい」が下限未満なら、店舗・娘を確定せず保留し、理由に確認が低かったことが残る', async () => {
+test('店舗と別の娘なら、店舗と娘の確認を 1 リクエストにまとめて聞き、両方の回答が保存される', async () => {
+  const base = await fixture('confirm-pipeline-other-character')
+  const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
+  const calls: ClefRequest[] = []
+  const env = Object.assign(base.env, { AI: withConfirmAi(base.env.AI, { value: 0.9, fail: false }, calls) })
+  base.state.picks = { character: 'funato' }
+  try {
+    await migrate(env.DB)
+    const post = await judge(env, '2112378276735750814')
+    const candidate = (await getWebhookJob(env, post.id)).candidates[0]
+    expect(candidate.status).toBe('registered')
+    expect(candidate.candidate?.characterIds).toEqual(['funato'])
+    expect(calls).toHaveLength(1)
+    expect(Object.keys(calls[0].questions)).toEqual(['store_confirm', 'character_confirm'])
+    expect(candidate.answers?.store_confirm).toEqual({ type: 'noul', noul: 0.9 })
+    expect(candidate.answers?.character_confirm).toEqual({ type: 'noul', noul: 0.9 })
+  } finally {
+    delivery.mockRestore()
+    await base.cleanup()
+  }
+}, 60000)
+
+test('確認の「はい」が下限未満なら、店舗を確定せず保留し、理由に確認が低かったことが残る（店舗の娘は娘の確認を聞かないので娘は確定する）', async () => {
   const base = await fixture('confirm-pipeline-low')
   const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
   const env = Object.assign(base.env, { AI: withConfirmAi(base.env.AI, { value: 0.4, fail: false }, []) })
   try {
     await migrate(env.DB)
     const post = await judge(env, '2112378276735750812')
+    const candidate = (await getWebhookJob(env, post.id)).candidates[0]
+    expect(candidate.status).toBe('held')
+    expect(candidate.candidate).toBeNull()
+    expect(candidate.reasons).toEqual(expect.arrayContaining(['store_unconfirmed', 'store_confirm_low']))
+    expect(candidate.reasons).not.toContain('character_unconfirmed')
+    expect(candidate.reasons).not.toContain('character_confirm_low')
+    // 確認の回答は保存され、回答表で「はい」の確率を確かめられる。
+    expect(candidate.answers?.store_confirm).toEqual({ type: 'noul', noul: 0.4 })
+    expect(candidate.answers).not.toHaveProperty('character_confirm')
+    expect(await env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)
+  } finally {
+    delivery.mockRestore()
+    await base.cleanup()
+  }
+}, 60000)
+
+test('店舗と別の娘で確認の「はい」が下限未満なら、店舗・娘とも確定せず保留し、両方の理由が残る', async () => {
+  const base = await fixture('confirm-pipeline-low-other-character')
+  const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
+  const env = Object.assign(base.env, { AI: withConfirmAi(base.env.AI, { value: 0.4, fail: false }, []) })
+  base.state.picks = { character: 'funato' }
+  try {
+    await migrate(env.DB)
+    const post = await judge(env, '2112378276735750815')
     const candidate = (await getWebhookJob(env, post.id)).candidates[0]
     expect(candidate.status).toBe('held')
     expect(candidate.candidate).toBeNull()
@@ -97,9 +148,7 @@ test('確認の「はい」が下限未満なら、店舗・娘を確定せず�
         'character_confirm_low'
       ])
     )
-    // 確認の回答は保存され、回答表で「はい」の確率を確かめられる。
-    expect(candidate.answers?.store_confirm).toEqual({ type: 'noul', noul: 0.4 })
-    expect(await env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)
+    expect(candidate.answers?.character_confirm).toEqual({ type: 'noul', noul: 0.4 })
   } finally {
     delivery.mockRestore()
     await base.cleanup()
@@ -149,12 +198,12 @@ test('再判定（recheck）も 2 段目を含み、確認の回答を保存す�
     const target = Object.assign({}, env, { AI: withConfirmAi({ run: ai.run }, { value: 0.85, fail: false }, calls) })
     ai.state.armed = true
     const job = await recheckWebhookJob(target, post.id)
-    // 1 段目 + 2 段目。確認の質問は店舗と娘をまとめた 1 リクエスト。
+    // 1 段目 + 2 段目。既定の AI は店舗の娘を選ぶので、確認の質問は店舗だけ。
     expect(ai.state.calls).toHaveLength(1)
     expect(calls).toHaveLength(1)
-    expect(Object.keys(calls[0].questions)).toEqual(['store_confirm', 'character_confirm'])
+    expect(Object.keys(calls[0].questions)).toEqual(['store_confirm'])
     expect(job.candidates[0].answers?.store_confirm).toEqual({ type: 'noul', noul: 0.85 })
-    expect(job.candidates[0].answers?.character_confirm).toEqual({ type: 'noul', noul: 0.85 })
+    expect(job.candidates[0].answers).not.toHaveProperty('character_confirm')
     expect(job.candidates[0].questionVersion).toBe(DETECTION_VERSION)
     expect(job.candidates[0].status).toBe('registered')
     const prompt = await getWebhookPrompt(env, post.id, candidateId)

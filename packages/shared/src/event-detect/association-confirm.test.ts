@@ -9,12 +9,13 @@ import {
   createConfirmRequest,
   hasConfirmTarget,
   isConfirmKey,
+  isStoreCharacter,
   passesConfirm,
   STORE_CONFIRM_QUESTION,
   STORE_TARGET_LABEL,
   yesProbability
 } from './association-confirm'
-import { CHARACTER_CONFIRM_KEY, STORE_CONFIRM_KEY } from './associations'
+import { CHARACTER_CONFIRM_KEY, detectionStores, STORE_CONFIRM_KEY } from './associations'
 import { type ClefAnswer, ClefRequestSchema } from './clef'
 import { DETECTION_VERSION } from './detection'
 import { choice, post, requestWithAssociations } from './detection-test-fixtures'
@@ -36,6 +37,45 @@ describe('2段目の対象は、1段目の最上位が具体的な店舗・娘�
   test.each(['none', 'multiple', 'other', 'secret'])('娘が %s なら娘は対象にせず、店舗だけを対象にする', (special) => {
     expect(confirmTargetOf(answersOf('abeno', special))).toEqual({ store: 'abeno' })
   })
+  test('店舗の娘（最上位の娘の ID が最上位の店舗の ID と同じ）は、指定がなければ店舗の娘とみなして娘を対象にしない', () => {
+    const target = confirmTargetOf(answersOf('abeno', 'abeno'))
+    expect(target).toEqual({ store: 'abeno' })
+    expect(hasConfirmTarget(target)).toBe(true)
+    // 質問も state の娘の行も作らず、店舗の確認だけを聞く。
+    expect(Object.keys(confirmQuestions(target))).toEqual([STORE_CONFIRM_KEY])
+    expect(confirmStateLines(target)).toEqual([`${STORE_TARGET_LABEL}: あべのキューズモール店`])
+    expect(createConfirmRequest(first, target).state).not.toContain(CHARACTER_TARGET_LABEL)
+  })
+  test('どの店舗でも、同じ ID の娘は店舗の娘として娘を対象にしない', () => {
+    expect(detectionStores.length).toBeGreaterThan(40)
+    for (const store of detectionStores) {
+      expect(confirmTargetOf(answersOf(store.id, store.id))).toEqual({ store: store.id })
+      expect(isStoreCharacter(store.id, store.id)).toBe(true)
+    }
+  })
+  test('店舗と別の具体的な娘は、従来どおり娘も対象にする（別の店舗の娘も、店舗の無い娘も）', () => {
+    expect(confirmTargetOf(answersOf('funabashi', 'funato'))).toEqual({ store: 'funabashi', character: 'funato' })
+    expect(confirmTargetOf(answersOf('abeno', 'akiba'))).toEqual({ store: 'abeno', character: 'akiba' })
+    expect(isStoreCharacter('abeno', 'akiba')).toBe(false)
+    expect(isStoreCharacter('funabashi', 'funato')).toBe(false)
+  })
+  test('店舗が none・multiple なら店舗の娘とは言えないので、娘が具体的なら（店舗の ID と同じ名前でも）娘を対象にする', () => {
+    for (const special of ['none', 'multiple']) {
+      expect(confirmTargetOf(answersOf(special, 'abeno'))).toEqual({ character: 'abeno' })
+      expect(isStoreCharacter(special, 'abeno')).toBe(false)
+    }
+  })
+  test('店舗の娘と見なせるのは、店舗も娘も具体的で同じ ID のときだけ', () => {
+    expect(isStoreCharacter(undefined, undefined)).toBe(false)
+    expect(isStoreCharacter('abeno', undefined)).toBe(false)
+    expect(isStoreCharacter(undefined, 'abeno')).toBe(false)
+    // 同じ文字列でも、カタログに無い id や none・multiple・other・secret は店舗の娘ではない。
+    for (const special of ['none', 'multiple', 'other', 'secret', 'nowhere']) {
+      expect(isStoreCharacter(special, special)).toBe(false)
+    }
+    expect(confirmTargetOf(answersOf('none', 'none'))).toEqual({})
+    expect(confirmTargetOf(answersOf('multiple', 'multiple'))).toEqual({})
+  })
   test('どちらも具体的でなければ対象は無く、質問も作らない', () => {
     const target = confirmTargetOf(answersOf('none', 'other'))
     expect(target).toEqual({})
@@ -54,6 +94,12 @@ describe('2段目の対象は、1段目の最上位が具体的な店舗・娘�
       character: choice('funato', { funato: 0.05, akiba: 0.04 })
     }
     expect(confirmTargetOf(low)).toEqual({ store: 'abeno', character: 'funato' })
+    // 店舗の娘かどうかも最上位だけで決める（確率が低くても、最上位が同じ ID なら娘は聞かない）。
+    const lowSame: Record<string, ClefAnswer> = {
+      store: choice('abeno', { abeno: 0.05, akiba: 0.04 }),
+      character: choice('abeno', { abeno: 0.05, akiba: 0.04 })
+    }
+    expect(confirmTargetOf(lowSame)).toEqual({ store: 'abeno' })
   })
 })
 
@@ -164,6 +210,12 @@ describe('v16 の版定義', () => {
       expect(defined?.instructions).toBe(question.instructions)
       expect(defined?.criteria).toEqual({})
     }
+  })
+  test('定義の説明は、店舗の娘には娘の確認を聞かないことを書いている（質問文は変わらない）', () => {
+    expect(v16.dynamicCriteria).toContain('character_confirm は送られません')
+    expect(v16.stateTemplate).toContain('店舗の娘（最上位の店舗と同じ ID）ではないときだけ娘の行と質問が作られる')
+    expect(v15.dynamicCriteria).not.toContain('店舗の娘')
+    expect(v15.stateTemplate).not.toContain('店舗の娘')
   })
   test('state のひな形は v15 の末尾に確認の行の説明を足しただけ', () => {
     expect(v16.stateTemplate.startsWith(`${v15.stateTemplate}\n`)).toBe(true)

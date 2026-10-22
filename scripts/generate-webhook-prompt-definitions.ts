@@ -170,12 +170,13 @@ const definitionOf = (
   return parsed.data
 }
 // v16 の2段目。確認の質問と state の末尾の行は、1段目で最上位に選んだ店舗・娘が具体的なときだけ、別の呼び出しで送る。
-// 定義には確認の質問を載せるため、店舗・娘の両方を対象にした確認の request を 1 つ足す。
+// 最上位の娘が店舗の娘（最上位の店舗と同じ ID）のときは、指定がなければ店舗の娘とみなして娘は聞かない。
+// 定義には確認の質問を載せるため、店舗と別の娘の両方を対象にした確認の request を 1 つ足す。
 const CONFIRM_STATE_TEMPLATE =
-  '\n{{2段目（確認）の呼び出しだけ: 上の入力の末尾に「確認対象の開催店舗: <1段目で最上位に選んだ店舗の短い名前>」「確認対象のビッカメ娘: <1段目で最上位に選んだ娘の名前>」の行を足す。最上位が具体的な店舗（娘）のときだけ、その行と質問が作られる}}'
-const CONFIRM_DYNAMIC_CRITERIA = `${CURRENT_DYNAMIC_CRITERIA}確認の質問（store_confirm・character_confirm）は、1段目で最上位に選んだ開催店舗・対象ビッカメ娘が具体的なときだけ、別の呼び出しで送られます（はい/いいえの質問で、選択肢はありません）。`
+  '\n{{2段目（確認）の呼び出しだけ: 上の入力の末尾に「確認対象の開催店舗: <1段目で最上位に選んだ店舗の短い名前>」「確認対象のビッカメ娘: <1段目で最上位に選んだ娘の名前>」の行を足す。最上位が具体的な店舗のときだけ店舗の行と質問が作られ、最上位が具体的な娘で、かつ店舗の娘（最上位の店舗と同じ ID）ではないときだけ娘の行と質問が作られる}}'
+const CONFIRM_DYNAMIC_CRITERIA = `${CURRENT_DYNAMIC_CRITERIA}確認の質問（store_confirm・character_confirm）は、1段目で最上位に選んだ開催店舗・対象ビッカメ娘が具体的なときだけ、別の呼び出しで送られます（はい/いいえの質問で、選択肢はありません）。ただし最上位の娘が最上位の店舗の娘（同じ ID）のときは、特に指定がなければ店舗の娘とみなして、character_confirm は送られません。`
 const confirmRequests = posts.map((post) =>
-  createConfirmRequest(createDetectionRequests(post)[0], { store: 'akiba', character: 'akiba' })
+  createConfirmRequest(createDetectionRequests(post)[0], { store: 'akiba', character: 'funato' })
 )
 const generated = [
   definitionOf('v2-webhook-v4', `git:${revision}`, legacy.data.detection),

@@ -67,3 +67,19 @@ test('確認の行が無い保存データ（v15 以前）の表は、確認の�
   expect(markup).not.toContain('の確認')
   expect(rowsOf(markup)).toHaveLength(3)
 })
+
+test('店舗の娘（店舗と同じ ID）は娘の確認を聞かないので、店舗の確認の行だけが出て、表は壊れない', () => {
+  const { character_confirm: _character, ...asked } = answers(0.85, 0.9)
+  const storeCharacter: Record<string, ClefAnswer> = {
+    ...asked,
+    character: { type: 'choice', choice: 'funabashi', probabilities: { funabashi: 0.8, akiba: 0.1 } }
+  }
+  const markup = render(storeCharacter)
+  const rows = rowsOf(markup)
+  const labels = rows.map((row) => row.text.split(' ')[0])
+  expect(labels).toContain('開催・配布店舗の確認（船橋駅FACE店）')
+  expect(labels.some((label) => label.startsWith('対象ビッカメ娘の確認'))).toBe(false)
+  // 1 段目の娘の行は残る（確認の行だけが無い）。
+  expect(labels).toContain('対象ビッカメ娘')
+  expect(rows).toHaveLength(4)
+})

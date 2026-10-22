@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { createConfirmRequest } from './association-confirm'
+import { confirmTargetOf, createConfirmRequest } from './association-confirm'
 import { CHARACTER_CONFIRM_KEY, STORE_CONFIRM_KEY } from './associations'
 import type { ClefAnswer, ClefRequest } from './clef'
 import {
@@ -165,4 +165,67 @@ describe('確認の質問が無い request は、判定を一切変えない（v
       run(noneStore, associationAnswers('none', 'funato'), { [CHARACTER_CONFIRM_KEY]: { type: 'noul', noul: 0.99 } })
     ).toMatchObject({ status: 'held', reasons: ['store_unconfirmed'] })
   })
+})
+
+describe('店舗の娘は娘の確認を聞かず、関門を掛けない', () => {
+  // 本番（runWebhookDetection）と同じく、1段目の最上位から確認の対象を決めて、確認の質問をまとめた request を作る。
+  const productionRequest = (answers: Record<string, ClefAnswer>): ClefRequest => {
+    const confirm = createConfirmRequest(first, confirmTargetOf(answers))
+    return { ...first, questions: { ...first.questions, ...confirm.questions } }
+  }
+  const sameId = associationAnswers('funabashi', 'funabashi')
+  const storeYes = (probability: number): Record<string, ClefAnswer> => ({
+    [STORE_CONFIRM_KEY]: { type: 'noul', noul: probability }
+  })
+
+  test('最上位の娘が店舗と同じ ID なら、request に娘の確認の質問が無く、店舗の確認が通れば娘を含めて登録に進む', () => {
+    const request = productionRequest(sameId)
+    expect(Object.keys(request.questions)).toContain(STORE_CONFIRM_KEY)
+    expect(Object.keys(request.questions)).not.toContain(CHARACTER_CONFIRM_KEY)
+    const result = run(request, sameId, storeYes(0.99))
+    expect(result.status).toBe('register')
+    if (result.status !== 'register') throw new Error('Expected registration')
+    expect(result.candidate.stores).toEqual(['funabashi'])
+    expect(result.candidate.characterIds).toEqual(['funabashi'])
+  })
+  test('店舗の確認が下限未満なら店舗だけを保留し、娘の理由（character_*）は付かない', () => {
+    const result = run(productionRequest(sameId), sameId, storeYes(0.69))
+    expect(result).toMatchObject({ status: 'held', reasons: ['store_unconfirmed', 'store_confirm_low'] })
+  })
+  test('娘の確認の回答が応答に残っていても、request に質問が無ければ使わない', () => {
+    expect(run(productionRequest(sameId), sameId, yes(0.99, 0.01)).status).toBe('register')
+  })
+  test('娘の確認の質問が request に残っている保存データ（店舗の娘にも娘を聞いた版）は、残った質問どおりに関門を掛ける', () => {
+    const asked = merged({ store: 'funabashi', character: 'funabashi' })
+    expect(Object.keys(asked.questions)).toContain(CHARACTER_CONFIRM_KEY)
+    expect(run(asked, sameId, yes(0.99, 0.99)).status).toBe('register')
+    expect(run(asked, sameId, yes(0.99, 0.69))).toMatchObject({
+      status: 'held',
+      reasons: ['character_unconfirmed', 'character_confirm_low']
+    })
+    expect(run(asked, sameId, yes(0.99, 0.69))).not.toHaveProperty('candidate')
+  })
+  test('店舗と別の娘は、従来どおり娘の確認を聞き、下限未満なら娘を保留する', () => {
+    const different = associationAnswers('funabashi', 'funato')
+    const request = productionRequest(different)
+    expect(Object.keys(request.questions)).toEqual(expect.arrayContaining([STORE_CONFIRM_KEY, CHARACTER_CONFIRM_KEY]))
+    expect(run(request, different, yes(0.99, 0.99)).status).toBe('register')
+    expect(run(request, different, yes(0.99, 0.69))).toMatchObject({
+      status: 'held',
+      reasons: ['character_unconfirmed', 'character_confirm_low']
+    })
+  })
+  test.each(['none', 'multiple'])(
+    '店舗が %s で娘が具体的なら店舗の娘とは言えないので、娘の確認を聞いて関門を掛ける',
+    (special) => {
+      const answers = associationAnswers(special, 'funabashi')
+      const request = productionRequest(answers)
+      expect(Object.keys(request.questions)).toContain(CHARACTER_CONFIRM_KEY)
+      expect(Object.keys(request.questions)).not.toContain(STORE_CONFIRM_KEY)
+      const low = run(request, answers, { [CHARACTER_CONFIRM_KEY]: { type: 'noul', noul: 0.3 } })
+      expect(low.reasons).toContain('character_confirm_low')
+      const high = run(request, answers, { [CHARACTER_CONFIRM_KEY]: { type: 'noul', noul: 0.99 } })
+      expect(high.reasons).not.toContain('character_confirm_low')
+    }
+  )
 })

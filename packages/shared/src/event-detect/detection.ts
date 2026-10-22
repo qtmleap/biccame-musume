@@ -191,7 +191,8 @@ export const evaluateDetection = (
   const storeChoice = choiceOf(answers.store, thresholdFor('store'))
   const characterChoice = choiceOf(answers.character, thresholdOf(settings.data, CHARACTER_QUESTION_KEY))
   // 2段目（v16 以降）。request に確認の質問が含まれるときだけ、採用された最上位の店舗・娘について確認の「はい」の確率が下限以上かを見る。
-  // 含まれない（v15 以前の保存データ、none・multiple・other・secret が最上位）ときは関門を掛けず、判定を変えない。
+  // 含まれない（v15 以前の保存データ、none・multiple・other・secret が最上位、最上位の娘が店舗の娘で娘の確認を聞かなかった）ときは関門を掛けず、判定を変えない。
+  // 店舗の娘にも娘の確認を聞いていた保存データ（request に質問が含まれる）は、含まれる質問どおりに関門を掛ける。
   const storeLow =
     isConcreteStore(storeChoice) &&
     !passesConfirm(request, answers, STORE_CONFIRM_KEY, thresholdOf(settings.data, STORE_CONFIRM_KEY))

@@ -123,6 +123,46 @@ test('店舗だけ・娘だけが具体的なら、その確認の質問だけ�
   }
 })
 
+test('最上位の娘が店舗の娘（最上位の店舗と同じ ID）なら娘は聞かず、店舗の確認だけを 1 回送る', async () => {
+  const { cleanup, env, calls } = await harness('confirm-selection-store-character', {
+    store: 'akiba',
+    character: 'akiba'
+  })
+  try {
+    const sent: number[] = []
+    const run = await runWebhookDetection(env, post, 'akiba', async (requests) => {
+      sent.push(requests.length)
+    })
+    // AI は 2 回（1 段目 + 店舗だけの 2 段目）。娘の質問も state の娘の行も作らない。
+    expect(calls).toHaveLength(2)
+    expect(sent).toEqual([1, 2])
+    expect(Object.keys(calls[1].request.questions)).toEqual(['store_confirm'])
+    expect(calls[1].request.state.split('\n').at(-1)).toBe('確認対象の開催店舗: AKIBA店')
+    expect(calls[1].request.state).not.toContain('確認対象のビッカメ娘')
+    expect(Object.keys(run.request.questions)).not.toContain('character_confirm')
+    expect(Object.keys(run.response.answers)).not.toContain('character_confirm')
+    expect(Object.keys(run.response.answers).sort()).toEqual(Object.keys(run.request.questions).sort())
+  } finally {
+    await cleanup()
+  }
+})
+
+test.each([
+  ['none', 'akiba'],
+  ['multiple', 'akiba']
+])('店舗が %s で娘が具体的（%s）なら、店舗の娘とは言えないので娘の確認だけを送る', async (store, character) => {
+  const { cleanup, env, calls } = await harness(`confirm-selection-character-${store}`, { store, character })
+  try {
+    await runWebhookDetection(env, post, null, async () => {})
+    expect(calls).toHaveLength(2)
+    expect(Object.keys(calls[1].request.questions)).toEqual(['character_confirm'])
+    expect(calls[1].request.state.split('\n').at(-1)).toBe('確認対象のビッカメ娘: アキバたん')
+    expect(calls[1].request.state).not.toContain('確認対象の開催店舗')
+  } finally {
+    await cleanup()
+  }
+})
+
 test.each([
   ['none', 'other'],
   ['multiple', 'secret'],
@@ -146,10 +186,10 @@ test.each([
   }
 })
 
-test('確認の確率は 1 段目の最上位が低くても対象を変えない（最上位の店舗・娘をそのまま確認する）', async () => {
+test('確認の確率は 1 段目の最上位が低くても対象を変えない（最上位の店舗と、店舗と別の娘をそのまま確認する）', async () => {
   const { cleanup, env, calls } = await harness('confirm-selection-low-yes', {
     store: 'akiba',
-    character: 'akiba',
+    character: 'funato',
     yes: 0.1
   })
   try {
@@ -157,6 +197,7 @@ test('確認の確率は 1 段目の最上位が低くても対象を変えな�
     expect(calls).toHaveLength(2)
     // 確認の確率が低くても例外にせず、回答をそのまま返す（保留にするのは evaluateDetection）。
     expect(run.response.answers.store_confirm).toEqual({ type: 'noul', noul: 0.1 })
+    expect(run.response.answers.character_confirm).toEqual({ type: 'noul', noul: 0.1 })
   } finally {
     await cleanup()
   }

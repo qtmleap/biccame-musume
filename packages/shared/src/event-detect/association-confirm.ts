@@ -10,6 +10,7 @@ import {
 import { type ClefQuestion, type ClefRequest, ClefRequestSchema, type ClefResponse } from './clef'
 
 // 2段目（確認）の質問。1段目の choice で最上位に選んだ店舗・娘ごとに、はい/いいえ（noul）で別の Clef 呼び出しとして聞く（v16 以降）。
+// ただし店舗の娘（最上位の娘の ID が最上位の店舗の ID と同じ）は、特に指定がなければその店舗の娘とみなすので、娘の確認は聞かない。
 // 質問文は版ごとに固定する（webhook-prompt.ts が版定義と完全一致で検査する）。投稿ごとの値は instructions に入れず、state の末尾の行だけで渡す。
 // 文言は測定（scripts/lib/event-detect/d1-confirm-requests.ts）で固定したものと同一で、この定義を測定側も参照する。変えると測定の質問の版（sha256）が変わる。
 export const STORE_TARGET_LABEL = '確認対象の開催店舗'
@@ -52,13 +53,25 @@ const topChoice = (answers: ClefResponse['answers'], key: string): string | unde
 }
 
 /**
+ * 店舗の娘か。最上位の娘の ID が最上位の店舗の ID と同じなら、その店舗の娘とみなす。
+ * 投稿で娘が指定されていなければ店舗の娘と考えてよく（D1 でも娘が明示されるのは店舗の娘と違うときだけ）、本文に娘の名前が無くても誤りではない。
+ * 店舗が none・multiple のとき、または娘が none・multiple・other・secret のときは、具体的な ID どうしではないので店舗の娘とは言えない。
+ */
+export const isStoreCharacter = (store: string | undefined, character: string | undefined): boolean =>
+  isConcreteStore(store) && isConcreteCharacter(character) && store === character
+
+/**
  * 1段目の回答から、2段目で確認する対象を決める。確率の下限は見ず、choice の最上位だけで選ぶ。
  * 最上位が具体的な店舗のときだけ店舗、具体的な娘のときだけ娘を対象にする。none・multiple（と娘の other・secret）は確認の対象にならない。
+ * 店舗の娘（isStoreCharacter）は、指定がなければ店舗の娘とみなすので娘を対象にしない。店舗と別の具体的な娘だけ、本文から読めるかを確認する。
  */
 export const confirmTargetOf = (answers: ClefResponse['answers']): ConfirmTarget => {
   const store = topChoice(answers, STORE_QUESTION_KEY)
   const character = topChoice(answers, CHARACTER_QUESTION_KEY)
-  return { ...(isConcreteStore(store) ? { store } : {}), ...(isConcreteCharacter(character) ? { character } : {}) }
+  return {
+    ...(isConcreteStore(store) ? { store } : {}),
+    ...(isConcreteCharacter(character) && !isStoreCharacter(store, character) ? { character } : {})
+  }
 }
 
 export const hasConfirmTarget = (target: ConfirmTarget): boolean =>

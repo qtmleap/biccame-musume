@@ -43,7 +43,8 @@ const ProvenanceSchema = z.object({
 // これ以外の未録画の質問は補わず、再生を失敗させる（条件などを捏造して録画の結果を変えないため）。
 const SYNTHETIC_KEYS = ['character', 'store'] as const
 // v16 の 2 段目（確認の質問だけの別の呼び出し）。録画に無いので、同じく合成の回答（はい 0.99）で補う。
-const CONFIRM_KEYS = ['character_confirm', 'store_confirm'] as const
+// 録画の抽出は店舗と娘が同じ ID（店舗の娘）なので、娘は確認の対象にならず、店舗の確認（store_confirm）だけが送られる。
+const CONFIRM_KEYS = ['store_confirm'] as const
 const syntheticChoice = (choice: string, criteria: string[]): ClefAnswer => ({
   type: 'choice',
   choice,
@@ -197,7 +198,8 @@ for (const id of ['962146543649239040', '1012319233298989056']) {
           }))
         })
       )
-      // 1 段目の判定の後に、2 段目の確認が 1 回（店舗と娘をまとめて）。
+      // 1 段目の判定の後に、2 段目の確認が 1 回（店舗だけ。店舗の娘は娘の確認を聞かない）。
+      expect(synthetic.character).toBe(synthetic.store)
       expect(calls).toEqual(['count', 'extract', 'judge', 'confirm'])
       // 合成したのは store / character と、2 段目の確認だけ。ほかの回答は録画のまま。
       expect(synthesized.slice().sort()).toEqual([...SYNTHETIC_KEYS])
@@ -212,7 +214,7 @@ for (const id of ['962146543649239040', '1012319233298989056']) {
       for (const [key, value] of Object.entries(saved))
         if (!isSynthetic(key)) expect(value).toEqual(recordedAnswers[key])
       expect(saved.store_confirm).toEqual({ type: 'noul', noul: 0.99 })
-      expect(saved.character_confirm).toEqual({ type: 'noul', noul: 0.99 })
+      expect(saved).not.toHaveProperty('character_confirm')
       expect(saved.store).toMatchObject({ type: 'choice', choice: synthetic.store })
       expect(saved.character).toMatchObject({ type: 'choice', choice: synthetic.character })
       expect(candidate.post.extractionContext?.originalText).toBe(recording.post.text)
