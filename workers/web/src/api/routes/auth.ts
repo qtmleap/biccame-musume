@@ -64,8 +64,7 @@ routes.openapi(
         id: idToken.uid,
         displayName: idToken.name || null,
         thumbnailURL: idToken.picture || null,
-        screenName: null,
-        email: idToken.email || null
+        screenName: null
       }
     })
     const token = await signToken(c, idToken)

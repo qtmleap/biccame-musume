@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils'
 type AdminUser = {
   id: string
   displayName: string | null
-  email: string | null
   thumbnailURL: string | null
   createdAt: string
 }
@@ -47,7 +46,6 @@ const UserCard = ({ user, index }: { user: AdminUser; index: number }) => {
             </Avatar>
             <div className='flex-1 min-w-0'>
               <h3 className='text-base font-semibold text-foreground line-clamp-1'>{user.displayName ?? '(未設定)'}</h3>
-              <div className='mt-0.5 text-xs text-muted-foreground truncate'>{user.email ?? '(メール未登録)'}</div>
             </div>
           </div>
           <div className='mt-auto pt-2 flex items-center gap-1 text-xs text-muted-foreground font-numeric tabular-nums'>
