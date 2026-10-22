@@ -256,13 +256,15 @@ describe('Field thresholds', () => {
       const run = (answers: typeof spread, thresholds: Parameters<typeof evaluateDetection>[3]) =>
         evaluateWithStore(shintou, request, answers, thresholds)
       expect(run(spread, DEFAULT_DETECTION_THRESHOLDS).status).toBe('register')
-      // 0.3 に届かない選択は採用せず保留する。共通値を下げれば、それに従って下限も下がる。
-      const low = answersWith({ character: choice('shintou', { shintou: 0.25, none: 0.2, abeno: 0.1 }) })
-      expect(run(low, DEFAULT_DETECTION_THRESHOLDS)).toMatchObject({
-        status: 'held',
-        reasons: ['character_unconfirmed']
-      })
-      expect(run(low, { ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.2 }).status).toBe('register')
+      // 0.3 に届かない選択は明示されたものとして採用せず、採用した店舗（shintou）の娘にする（保留しない）。
+      // 共通値を下げれば、それに従って下限も下がり、0.25 の別の娘（abeno）が明示されたものとして採用される。
+      const low = answersWith({ character: choice('abeno', { abeno: 0.25, none: 0.2, shintou: 0.1 }) })
+      const characterIdsOf = (result: ReturnType<typeof evaluateDetection>) => {
+        if (result.status !== 'register') throw new Error('Expected candidate')
+        return result.candidate.characterIds
+      }
+      expect(characterIdsOf(run(low, DEFAULT_DETECTION_THRESHOLDS))).toEqual(['shintou'])
+      expect(characterIdsOf(run(low, { ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.2 }))).toEqual(['abeno'])
       // 店舗の項目別のしきい値は娘に影響しない。
       expect(run(spread, { ...DEFAULT_DETECTION_THRESHOLDS, fieldThresholds: { store: 0.995 } })).toMatchObject({
         status: 'held',

@@ -4,6 +4,7 @@ import { resolve } from 'node:path'
 import {
   DETECTION_VERSION,
   type DetectionThresholds,
+  evaluateDetection,
   STORE_DEFAULT_THRESHOLD
 } from '@biccame/shared/event-detect/detection'
 import { webhookPromptDefinition } from '@biccame/shared/event-detect/prompt-definitions'
@@ -99,6 +100,10 @@ describe('Golden フィクスチャの整合', () => {
 })
 
 // 下限は 2026-10-22 の実測（規則は COND・ESN・CHG の 3 つ、END は試して外した）から余裕を持たせた値。
+// 娘の既定（指定がなければ店舗の娘。detection-character.ts）を入れた後に、現行の evaluateDetection で測り直した実測も同じだった:
+// 開発用 R1 登録 26・全項目一致 23・88.5%、検証用 R1 登録 70・全項目一致 50・71.4%（件数の監査 70% は開発用 20 / 18、検証用 61 / 45）。
+// 保存応答で娘の確率が下限（0.3）に届かず、娘の既定で character_unconfirmed が外れる候補は 4 件だけで、どれも他の理由（店舗の食い違い・状態・購入額など）で保留のまま、登録は増減しない。
+// 登録 0 件・精度の低下は無いので、下限は置き直さない（実測から余裕を持たせた値のまま）。
 // 再評価は決定的なので、割れたときは評価ロジックの変更が精度を下げたということ。
 // 下限は主指標の R1 に置く。D1 の終了日はイベント終了後に人が確定した値で、開始時点の投稿からは取れないので、
 // 候補に終了日が無ければ一致とする（候補に終了日があるときは D1 と同じ日付のときだけ一致。docs/event-detection-golden.md）。
@@ -152,6 +157,44 @@ describe('現行の判定（店舗・娘を最上位採用 + 保留規則）の�
     // 参考の実測: 開発用 19 件・検証用 42 件。終了日の食い違いだけで、R1 との差は開発用 4 件・検証用 8 件。
     expect(summarize(rules.dev, 'raw').exact).toBe(19)
     expect(summarize(rules.test, 'raw').exact).toBe(42)
+  })
+
+  test('娘の既定: 保存応答で character_unconfirmed の保留は、店舗が採用されないか、娘の最上位が multiple・none のものだけ', () => {
+    const tops = fixture.cases
+      .filter((item) => item.split === 'dev' || item.split === 'test')
+      .flatMap((item) => item.candidates.map((candidate) => sourceOfFixture(item, candidate)))
+      .flatMap((source) => {
+        const result = evaluateDetection(
+          source.post,
+          source.request,
+          { answers: source.answers },
+          ADOPTED,
+          source.storeKey
+        )
+        const character = source.answers.character
+        return result.reasons.includes('character_unconfirmed') &&
+          !result.reasons.includes('store_unconfirmed') &&
+          character?.type === 'choice'
+          ? [character.choice]
+          : []
+      })
+    expect(tops.length).toBeGreaterThan(0)
+    for (const top of tops) expect(['multiple', 'none']).toContain(top)
+  })
+
+  test('娘の既定: 登録した候補の娘は 1 件で、店舗の娘・other・secret・店舗と別の具体的な娘のいずれか（空にならない）', () => {
+    for (const split of ['dev', 'test'] as const) {
+      const registered = rules[split]
+        .flatMap((item) => item.outcomes)
+        .filter((outcome) => outcome.status === 'register')
+      expect(registered.length, split).toBeGreaterThan(0)
+      for (const outcome of registered) {
+        const candidate = outcome.candidate
+        if (typeof candidate !== 'object' || candidate === null || !('characterIds' in candidate))
+          throw new Error('Missing candidate')
+        expect(candidate.characterIds, split).toHaveLength(1)
+      }
+    }
   })
 
   test('登録した候補に、本文だけから作った文脈候補（抽出が 0 件の投稿）は含まれない', () => {

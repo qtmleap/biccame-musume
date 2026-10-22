@@ -18,7 +18,8 @@ import {
 
 // 確認（2 段目）の質問だけの呼び出しかどうか。1 段目の判定には is_event がある。
 const isConfirm = (request: ClefRequest) => request.questions.is_event === undefined
-type Yes = { value: number; fail: boolean }
+// byKey は、質問のキーごとに「はい」の確率を変えたいとき（例: 店舗の確認は高く、娘の確認は低く）に使う。
+type Yes = { value: number; fail: boolean; byKey?: Record<string, number> }
 
 /** 2 段目（確認）の「はい」の確率を差し替え、失敗させられる AI。1 段目と件数の質問は、元のフェイクの AI に任せる。 */
 const withConfirmAi = (
@@ -34,7 +35,10 @@ const withConfirmAi = (
     if (yes.fail) throw new Error('Synthetic confirm failure')
     return {
       answers: Object.fromEntries(
-        Object.keys(request.data.questions).map((key) => [key, { type: 'noul', noul: yes.value }])
+        Object.keys(request.data.questions).map((key) => [
+          key,
+          { type: 'noul', noul: yes.byKey !== undefined && Object.hasOwn(yes.byKey, key) ? yes.byKey[key] : yes.value }
+        ])
       )
     }
   }
@@ -148,6 +152,32 @@ test('店舗と別の娘で確認の「はい」が下限未満なら、店舗�
         'character_confirm_low'
       ])
     )
+    expect(candidate.answers?.character_confirm).toEqual({ type: 'noul', noul: 0.4 })
+  } finally {
+    delivery.mockRestore()
+    await base.cleanup()
+  }
+}, 60000)
+
+test('店舗の確認は通り、店舗と別の娘の確認だけが下限未満なら、娘は明示されていないので保留せず店舗の娘で登録する', async () => {
+  const base = await fixture('confirm-pipeline-low-character-only')
+  const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
+  const env = Object.assign(base.env, {
+    AI: withConfirmAi(base.env.AI, { value: 0.9, fail: false, byKey: { character_confirm: 0.4 } }, [])
+  })
+  base.state.picks = { character: 'funato' }
+  try {
+    await migrate(env.DB)
+    const post = await judge(env, '2112378276735750816')
+    const candidate = (await getWebhookJob(env, post.id)).candidates[0]
+    expect(candidate.status).toBe('registered')
+    expect(candidate.candidate?.stores).toEqual(['akiba'])
+    // 1 段目は別の娘（funato）を選んだが、確認が低く本文から読めないので、採用した店舗（akiba）の娘になる。
+    expect(candidate.candidate?.characterIds).toEqual(['akiba'])
+    expect(candidate.reasons).not.toContain('character_unconfirmed')
+    expect(candidate.reasons).not.toContain('character_confirm_low')
+    // 確認の回答は保存され、回答表で「はい」の確率を確かめられる。
+    expect(candidate.answers?.store_confirm).toEqual({ type: 'noul', noul: 0.9 })
     expect(candidate.answers?.character_confirm).toEqual({ type: 'noul', noul: 0.4 })
   } finally {
     delivery.mockRestore()

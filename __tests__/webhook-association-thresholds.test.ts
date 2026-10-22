@@ -116,27 +116,28 @@ test('store の確率が項目別のしきい値に届かなければ store_unco
   }
 }, 60000)
 
-test('character は min(共通のしきい値 choiceThreshold, 0.3) で判定し、届かなければ character_unconfirmed で保留する', async () => {
+test('character は min(共通のしきい値 choiceThreshold, 0.3) で判定し、届かなければ明示されていないとして店舗の娘で登録する', async () => {
   const { cleanup, env, overrides } = await harness('association-thresholds-character')
   const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
   try {
-    overrides.value = { character: ['akiba', 0.2] }
-    const held = await judge(
+    // 0.2 は下限（0.3）に届かないので、別の娘（abeno）が最上位でも明示されたものとして扱わず、採用した店舗（akiba）の娘で登録する。
+    overrides.value = { character: ['abeno', 0.2] }
+    const registered = await judge(
       env,
       '2112378276735750735',
       '本日からアキバたんの限定名刺をどなたでも配布します。',
       'akiba'
     )
-    expect(held.status).toBe('held')
-    expect(held.reasons).toContain('character_unconfirmed')
-    expect(held.reasons).not.toContain('store_unconfirmed')
-    expect(held.candidate).toBeNull()
-    // 共通の選択肢しきい値を 0.15 に下げると、同じ 0.2 の回答でも娘が確定し、登録される（下限は min(共通値, 0.3)）。
+    expect(registered.status).toBe('registered')
+    expect(registered.reasons).not.toContain('character_unconfirmed')
+    expect(registered.candidate?.stores).toEqual(['akiba'])
+    expect(registered.candidate?.characterIds).toEqual(['akiba'])
+    // 共通の選択肢しきい値を 0.15 に下げると、同じ 0.2 の回答でも娘が明示されたものとして確定し、その娘で登録される（下限は min(共通値, 0.3)）。
     await env.BICCAME_MUSUME_EVENTS.put(
       EVENT_DETECTION_THRESHOLDS_KEY,
       JSON.stringify({ eventThreshold: 0.9, ignoreThreshold: 0.5, choiceThreshold: 0.15 })
     )
-    overrides.value = { character: ['abeno', 0.2] }
+    overrides.value = { character: ['akiba', 0.2] }
     const lowered = await judge(
       env,
       '2112378276735750736',
@@ -144,7 +145,8 @@ test('character は min(共通のしきい値 choiceThreshold, 0.3) で判定し
       'abeno'
     )
     expect(lowered.status).toBe('registered')
-    expect(lowered.candidate?.characterIds).toEqual(['abeno'])
+    expect(lowered.candidate?.stores).toEqual(['abeno'])
+    expect(lowered.candidate?.characterIds).toEqual(['akiba'])
   } finally {
     delivery.mockRestore()
     await cleanup()

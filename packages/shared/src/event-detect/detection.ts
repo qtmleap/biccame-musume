@@ -12,6 +12,7 @@ import {
 } from './associations'
 import { type ClefAnswer, type ClefRequest, type ClefResponse, ClefResponseSchema } from './clef'
 import { keyToDate, keyToQuantity, QUESTION_VERSION } from './decide'
+import { resolveCharacterIds } from './detection-character'
 import {
   conditionQuestions,
   hasAmbiguousMoney,
@@ -113,6 +114,8 @@ const choiceOf = (answer: ClefAnswer | undefined, threshold: number) => {
   const probability = answer.probabilities[answer.choice]
   return probability !== undefined && probability >= threshold ? answer.choice : undefined
 }
+/** しきい値を適用しない最有力候補（argmax）。回答が無い・型が違う場合は undefined。 */
+const argmaxOf = (answer: ClefAnswer | undefined) => (answer?.type === 'choice' ? answer.choice : undefined)
 const keyToAmount = (key: string | undefined) => (key && /^p\d+$/.test(key) ? Number(key.slice(1)) : undefined)
 const keyToOptionalQuantity = (key: string | undefined) => (key && key !== 'none' ? keyToQuantity(key) : undefined)
 
@@ -202,8 +205,14 @@ export const evaluateDetection = (
   const status = choiceOf(answers.status, thresholdFor('status'))
   const category = CategorySchema.safeParse(choiceOf(answers.category, thresholdFor('category')))
   // 登録する店舗・対象ビッカメ娘は選ばれた 1 件まで。共同絵柄（multiple）は人が編集フォームで複数指定する。
+  // 娘が明示されていない（確率不足、または店舗と別の娘の確認が低い）ときは、採用した店舗の娘にする（detection-character.ts）。
   const stores = storeLow ? [] : selectedStores(storeChoice)
-  const characterIds = characterLow ? [] : selectedCharacterIds(characterChoice)
+  const characterIds = resolveCharacterIds({
+    stores,
+    choice: characterChoice,
+    top: argmaxOf(answers.character),
+    confirmLow: characterLow
+  })
   const start = choiceOf(answers.start_date, thresholdFor('start_date'))
   const startDate = start ? keyToDate(start) : undefined
   // 終了日は最有力が none（記載なし・「なくなり次第終了」など）なら、確率がしきい値未満でも「終了日なし」で確定する。
@@ -259,7 +268,8 @@ export const evaluateDetection = (
     // 確認が通らなかったときは、確定できない理由（上の store_unconfirmed）に、確認の「はい」の確率が下限未満だったことを足す。
     ...(storeLow ? ['store_confirm_low'] : []),
     ...(characterIds.length === 0 ? ['character_unconfirmed'] : []),
-    ...(characterLow ? ['character_confirm_low'] : []),
+    // 確認が低くても、店舗の娘として登録に進むときは保留ではないので付けない。店舗が採用されず保留のときだけ併記する。
+    ...(characterLow && characterIds.length === 0 ? ['character_confirm_low'] : []),
     ...(!startDate
       ? [answers.start_date === undefined || start === 'none' ? 'start_date_unspecified' : 'start_date_unconfirmed']
       : []),
@@ -312,8 +322,6 @@ const validOrUndefined = <T>(schema: z.ZodType<T>, value: unknown): T | undefine
   const parsed = schema.safeParse(value)
   return parsed.success ? parsed.data : undefined
 }
-/** しきい値を適用しない最有力候補（argmax）。回答が無い・型が違う場合は undefined。 */
-const argmaxOf = (answer: ClefAnswer | undefined) => (answer?.type === 'choice' ? answer.choice : undefined)
 
 /** 下書きのカテゴリを採用する最小の確率。過半数に届かない僅差はモデルが決めかねている状態として採用しない。 */
 export const DRAFT_CATEGORY_MIN_PROBABILITY = 0.5

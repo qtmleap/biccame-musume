@@ -74,9 +74,12 @@ describe('2段目の確認の関門（request に確認の質問があるとき�
     expect(result).toMatchObject({ status: 'held', reasons: ['store_unconfirmed', 'store_confirm_low'] })
     expect(result).not.toHaveProperty('candidate')
   })
-  test('娘の確認が下限未満なら、娘を確定せず保留する（店舗は確定する）', () => {
+  test('娘の確認が下限未満なら、娘は明示されていないので保留せず、採用した店舗の娘で登録する（character_confirm_low は付けない）', () => {
     const result = run(both, {}, yes(0.99, 0.69))
-    expect(result).toMatchObject({ status: 'held', reasons: ['character_unconfirmed', 'character_confirm_low'] })
+    expect(result).toMatchObject({ status: 'register', reasons: [] })
+    if (result.status !== 'register') throw new Error('Expected registration')
+    expect(result.candidate.stores).toEqual(['funabashi'])
+    expect(result.candidate.characterIds).toEqual(['funabashi'])
   })
   test('両方が下限未満なら、両方の理由を併記する', () => {
     expect(run(both, {}, yes(0.1, 0.1))).toMatchObject({
@@ -84,15 +87,15 @@ describe('2段目の確認の関門（request に確認の質問があるとき�
       reasons: ['store_unconfirmed', 'store_confirm_low', 'character_unconfirmed', 'character_confirm_low']
     })
   })
-  test('確認の回答が欠けているなら、通さずに保留する（例外にしない）', () => {
+  test('確認の回答が欠けているなら、通さない（例外にしない）。店舗は保留、娘は店舗の娘になる', () => {
     expect(run(both, {}, { [CHARACTER_CONFIRM_KEY]: { type: 'noul', noul: 0.99 } })).toMatchObject({
       status: 'held',
       reasons: ['store_unconfirmed', 'store_confirm_low']
     })
-    expect(run(both, {}, { [STORE_CONFIRM_KEY]: { type: 'noul', noul: 0.99 } })).toMatchObject({
-      status: 'held',
-      reasons: ['character_unconfirmed', 'character_confirm_low']
-    })
+    const characterMissing = run(both, {}, { [STORE_CONFIRM_KEY]: { type: 'noul', noul: 0.99 } })
+    expect(characterMissing).toMatchObject({ status: 'register', reasons: [] })
+    if (characterMissing.status !== 'register') throw new Error('Expected registration')
+    expect(characterMissing.candidate.characterIds).toEqual(['funabashi'])
     expect(run(both, {}, {})).toMatchObject({
       status: 'held',
       reasons: ['store_unconfirmed', 'store_confirm_low', 'character_unconfirmed', 'character_confirm_low']
@@ -199,21 +202,23 @@ describe('店舗の娘は娘の確認を聞かず、関門を掛けない', () =
     const asked = merged({ store: 'funabashi', character: 'funabashi' })
     expect(Object.keys(asked.questions)).toContain(CHARACTER_CONFIRM_KEY)
     expect(run(asked, sameId, yes(0.99, 0.99)).status).toBe('register')
-    expect(run(asked, sameId, yes(0.99, 0.69))).toMatchObject({
-      status: 'held',
-      reasons: ['character_unconfirmed', 'character_confirm_low']
-    })
-    expect(run(asked, sameId, yes(0.99, 0.69))).not.toHaveProperty('candidate')
+    // 確認が低いのは娘が明示されていないということ。店舗の娘は元から店舗の娘なので、保留せず同じ娘で登録する。
+    const low = run(asked, sameId, yes(0.99, 0.69))
+    expect(low).toMatchObject({ status: 'register', reasons: [] })
+    if (low.status !== 'register') throw new Error('Expected registration')
+    expect(low.candidate.characterIds).toEqual(['funabashi'])
   })
-  test('店舗と別の娘は、従来どおり娘の確認を聞き、下限未満なら娘を保留する', () => {
+  test('店舗と別の娘は、従来どおり娘の確認を聞き、下限未満なら娘は明示されていないとして店舗の娘で登録する', () => {
     const different = associationAnswers('funabashi', 'funato')
     const request = productionRequest(different)
     expect(Object.keys(request.questions)).toEqual(expect.arrayContaining([STORE_CONFIRM_KEY, CHARACTER_CONFIRM_KEY]))
-    expect(run(request, different, yes(0.99, 0.99)).status).toBe('register')
-    expect(run(request, different, yes(0.99, 0.69))).toMatchObject({
-      status: 'held',
-      reasons: ['character_unconfirmed', 'character_confirm_low']
-    })
+    const high = run(request, different, yes(0.99, 0.99))
+    if (high.status !== 'register') throw new Error('Expected registration')
+    expect(high.candidate.characterIds).toEqual(['funato'])
+    const low = run(request, different, yes(0.99, 0.69))
+    expect(low).toMatchObject({ status: 'register', reasons: [] })
+    if (low.status !== 'register') throw new Error('Expected registration')
+    expect(low.candidate.characterIds).toEqual(['funabashi'])
   })
   test.each(['none', 'multiple'])(
     '店舗が %s で娘が具体的なら店舗の娘とは言えないので、娘の確認を聞いて関門を掛ける',

@@ -161,12 +161,14 @@ describe('回答表の確定表示は、判定（evaluateDetection）の関門�
         const confirmed = (key: string) => rows.find((row) => row.key === key)?.confirmed
         const result = evaluateWithStore(value, merged, { answers })
         const reasons = result.reasons
-        // 表で「未確定」の項目は、判定で *_confirm_low を出し、「確定」の項目は出さない。
+        // 店舗は、表で「未確定」なら判定で store_confirm_low を出し、「確定」なら出さない。店舗が確認を通らなければ保留。
         expect(confirmed(STORE_CONFIRM_KEY), `store ${store}`).toBe(!reasons.includes('store_confirm_low'))
-        expect(confirmed(CHARACTER_CONFIRM_KEY), `character ${character}`).toBe(
-          !reasons.includes('character_confirm_low')
+        expect(result.status === 'register').toBe(store >= 0.7)
+        // 娘の確認が低いのは「娘が明示されていない」ということで、店舗が採用されているなら店舗の娘で登録に進み、保留にしない。
+        // character_confirm_low は、店舗が採用されず保留になるときだけ併記される。表の娘の確認の行は確率だけで「未確定」と出る（表示は変えない）。
+        expect(reasons.includes('character_confirm_low'), `store ${store} character ${character}`).toBe(
+          character < 0.7 && store < 0.7
         )
-        expect(result.status === 'register').toBe(store >= 0.7 && character >= 0.7)
       }
     }
   })
