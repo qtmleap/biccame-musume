@@ -1,5 +1,7 @@
 # 実パイプラインの評価
 
+> 登録の精度の主評価は D1 の人手修正済みイベントを正解とする Golden に移った（[event-detection-golden.md](./event-detection-golden.md)）。この文書の本文からの暫定注釈のコーパスは主評価ではない。
+
 `bun run benchmark:events` は実パイプラインの主評価です。既定はofflineで入力集合だけを確認し、AI呼出は0回です。投稿全文を直接判定する旧診断は `benchmark:events:raw`（deprecated/historical）、旧5例は `benchmark:events:smoke` に分離しています。旧raw診断は抽出前停止・複数物品・必須情報を再現せず、その結果を実アプリの検出率や登録率とは呼びません。
 
 ## 段階

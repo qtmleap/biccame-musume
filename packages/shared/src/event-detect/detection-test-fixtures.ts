@@ -1,10 +1,10 @@
 import dayjs from 'dayjs'
 import type { ClefAnswer, ClefRequest, ClefResponse } from './clef'
-import { createDetectionRequests } from './detection'
+import { createDetectionRequests, type DetectionThresholds, evaluateDetection } from './detection'
 import type { DetectPost } from './post'
 
 export const post = (
-  text = 'あべのたん限定名刺 2026年11月3日から先着100枚を配布します',
+  text = 'あべのたん限定名刺 2026年11月3日から1,000円以上お買い上げの方に先着100枚を配布します',
   overrides: Partial<DetectPost> = {}
 ): DetectPost => ({
   id: '2109221721773576390',
@@ -32,28 +32,46 @@ export const response = (request: ClefRequest, overrides: Record<string, ClefAns
   // 投稿者の店舗（state の「投稿者」の行）が開催店舗でも対象ビッカメ娘でもあるものとして答える。
   // 店舗名の書式（v14 までは「店舗名（店舗ID）」、v15 からは短い店舗名）に依らないよう、行頭の投稿者のアカウント名で見分ける。
   const own = request.state.includes(`投稿者: @${shintouOverrides.screenName} /`) ? 'shintou' : 'abeno'
-  const selected: Record<string, string> = {
-    status: 'announce',
-    category: 'limited_card',
-    store: own,
-    character: own,
-    start_date: 'd20261103',
-    end_date: 'none',
-    condition: 'first_come',
-    quantity: 'q100',
-    purchase_amount: 'p1000'
+  // 選択肢にあるものを先頭から選ぶ。保留規則（条件は全員か購入＋先着）を通る値を先に置き、無ければ従来の値にする。
+  const selected: Record<string, string[]> = {
+    status: ['announce'],
+    category: ['limited_card'],
+    store: [own],
+    character: [own],
+    start_date: ['d20261103'],
+    end_date: ['none'],
+    condition: ['purchase_first_come', 'first_come'],
+    quantity: ['q100'],
+    purchase_amount: ['p1000']
   }
   const answers = Object.fromEntries(
     Object.entries(request.questions).map(([key, question]): [string, ClefAnswer] => {
       if (question.type === 'noul') return [key, { type: 'noul', noul: 0.99 }]
       if (question.type !== 'choice') throw new Error('Unexpected test question')
-      const choice = selected[key]
-      if (!choice || !Object.hasOwn(question.criteria, choice))
-        return [key, { type: 'choice', choice: 'none', probabilities: { none: 0.99 } }]
+      const wanted = Object.hasOwn(selected, key) ? selected[key] : []
+      const choice = wanted.find((candidate) => Object.hasOwn(question.criteria, candidate))
+      if (!choice) return [key, { type: 'choice', choice: 'none', probabilities: { none: 0.99 } }]
       return [key, { type: 'choice', choice, probabilities: { [choice]: 0.99 }, confidence: 0.01 }]
     })
   )
   return { answers: { ...answers, ...overrides } }
+}
+/**
+ * evaluateDetection を、抽出段階の開催店舗候補（storeKey）が選ばれた店舗と同じ前提で呼ぶ。
+ * storeKey が null だと保留規則（extraction_store_unspecified）で全て保留になるため、ESN を検証する以外のテストはこちらを使う。
+ * 店舗が選ばれていない（none など）ときは投稿元の abeno を候補とし、storeKey を渡せばそれを優先する。
+ */
+export const evaluateWithStore = (
+  value: DetectPost,
+  request: ClefRequest,
+  result: ClefResponse,
+  thresholds?: DetectionThresholds,
+  storeKey?: string | null
+) => {
+  const store = result.answers.store
+  const selected =
+    store?.type === 'choice' && store.choice !== 'none' && store.choice !== 'multiple' ? store.choice : 'abeno'
+  return evaluateDetection(value, request, result, thresholds, storeKey === undefined ? selected : storeKey)
 }
 export const payload = (iso = '2026-10-11T01:00:00.000Z') => {
   const id = (((BigInt(dayjs(iso).valueOf()) - 1_288_834_974_657n) << 22n) + 123n).toString()

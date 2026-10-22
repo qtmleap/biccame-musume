@@ -116,6 +116,8 @@ export type D1GoldRunOptions = {
   extractionEndpoint: string
   concurrency?: number
   createClient?: D1GoldClientFactory
+  // 台帳の上限の天井。既定は通常の測定の上限。分割した検証用の測定だけが引き上げた天井を渡す。
+  callCeiling?: number
 }
 
 export const runGoldCohort = async (options: D1GoldRunOptions) => {
@@ -126,7 +128,7 @@ export const runGoldCohort = async (options: D1GoldRunOptions) => {
     throw new Error('Invalid D1 gold deadline')
   const createClient = options.createClient === undefined ? createGoalModelClient : options.createClient
   await mkdir(options.directory, { recursive: true, mode: 0o700 })
-  const ledger = await openD1GoldLedger(options.directory, options.maxCalls)
+  const ledger = await openD1GoldLedger(options.directory, options.maxCalls, options.callCeiling)
   try {
     return await runLocked(options, ledger, createClient, concurrency)
   } finally {

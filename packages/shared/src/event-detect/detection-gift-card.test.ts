@@ -1,12 +1,13 @@
 import { describe, expect, test } from 'bun:test'
 import { EventCategorySchema } from '../schemas/event.dto'
 import { baseQuestions } from './decide'
-import { evaluateDetection, filterWebhookPost } from './detection'
+import { filterWebhookPost } from './detection'
 import {
   associationAnswers,
   categoryCriteria,
   choice,
   choiceQuestionOf,
+  evaluateWithStore,
   post,
   requestWithAssociations,
   response
@@ -14,13 +15,13 @@ import {
 
 describe('ギフトカードの配布判定', () => {
   test.each(['配布', 'プレゼント'])('%sするギフトカードを検出し、その他として登録する', (give) => {
-    const value = post(`あべのたんのギフトカードを2026年11月3日から先着100枚${give}します`)
+    const value = post(`あべのたんのギフトカードを2026年11月3日から1,000円以上お買い上げの方に先着100枚${give}します`)
     expect(filterWebhookPost(value).reason).toBeUndefined()
     expect(filterWebhookPost(value).hits).toContainEqual({ keyword: 'ギフトカード', group: 'item' })
     const request = requestWithAssociations(value)
     expect(Object.keys(categoryCriteria(request))).toEqual(['other', 'none'])
     expect(categoryCriteria(request).other).toContain('ギフトカード')
-    const decision = evaluateDetection(
+    const decision = evaluateWithStore(
       value,
       request,
       response(request, { category: choice('other', { other: 0.99 }) })
@@ -49,7 +50,7 @@ describe('ギフトカードの配布判定', () => {
       const value = post(text)
       const request = requestWithAssociations(value)
       // is_event は参考値なので、高くても登録の根拠にしない。対象外にするのは店舗とビッカメ娘の none。
-      const decision = evaluateDetection(
+      const decision = evaluateWithStore(
         value,
         request,
         response(request, { is_event: { type: 'noul', noul: 0.99 }, ...associationAnswers('none', 'none') })

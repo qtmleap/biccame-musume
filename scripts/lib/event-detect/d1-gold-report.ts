@@ -24,6 +24,7 @@ export const formatScore = (score: Score, topOneInterpretable: boolean) => {
     pct(value.ofMatchedCandidates),
     pct(value.ofAllGoldEvents)
   ])
+  // 終了日は R1（候補に終了日が無ければ一致）を主指標、strict（完全一致）を参考として併記する。
   const quality = (title: string, value: Score['current']['registeredCorrect']) =>
     table(
       [
@@ -37,7 +38,16 @@ export const formatScore = (score: Score, topOneInterpretable: boolean) => {
       ],
       [
         [
-          title,
+          `${title} [終了日 R1]`,
+          String(value.registered),
+          String(value.announceTime.correct),
+          String(value.announceTime.wrongMatched),
+          String(value.wrongUnmatched),
+          pct(value.announceTime.precision),
+          pct(value.announceTime.recallOfGoldEvents)
+        ],
+        [
+          `${title} [終了日 strict]`,
           String(value.registered),
           String(value.correct),
           String(value.wrongMatched),
@@ -72,7 +82,8 @@ export const formatScore = (score: Score, topOneInterpretable: boolean) => {
       ['指標', '値'],
       [
         ['店舗・種類・開始日がすべて一致', pct(predicted.coreAllMatch)],
-        ['全項目一致 (娘は明示分のみ)', pct(predicted.allMatch)],
+        ['全項目一致 (娘は明示分のみ、終了日 R1)', pct(predicted.allMatchAnnounceTime)],
+        ['全項目一致 (娘は明示分のみ、終了日 strict)', pct(predicted.allMatch)],
         [
           '抽出段階の店舗が合わず、判定の店舗が一致して対応づいた候補 (店舗の一致が対応づけと独立でない)',
           pct(predicted.storeMatchedByExtractionOnly)

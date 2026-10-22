@@ -37,8 +37,8 @@ test('複数の配布物の候補ごとに、その配布物の名前を渡し�
     const blue = '本日から青い限定名刺をどなたでも配布します。'
     const extractor = async () => ({
       events: [
-        { item: '赤い限定名刺', stores: [], characterIds: [], evidence: [red] },
-        { item: '青い限定名刺', stores: [], characterIds: [], evidence: [blue] }
+        { item: '赤い限定名刺', stores: ['akiba'], characterIds: [], evidence: [red] },
+        { item: '青い限定名刺', stores: ['akiba'], characterIds: [], evidence: [blue] }
       ]
     })
     const post = makePost('2109221721773576390', `${red}\n${blue}`)
@@ -115,7 +115,7 @@ test('抽出失敗コードをジョブへ保存し、未知例外は汎用コ�
             {
               type: 'tool_use',
               name: 'answer',
-              input: { events: [{ item: '限定名刺', stores: [], characterIds: [], evidence: ['創作した条件'] }] }
+              input: { events: [{ item: '限定名刺', stores: ['akiba'], characterIds: [], evidence: ['創作した条件'] }] }
             }
           ]
         })
@@ -152,7 +152,12 @@ test('抽出失敗コードをジョブへ保存し、未知例外は汎用コ�
               name: 'answer',
               input: {
                 events: [
-                  { item: '限定名刺', stores: [], characterIds: ['invented'], evidence: ['限定名刺を配布します。'] }
+                  {
+                    item: '限定名刺',
+                    stores: ['akiba'],
+                    characterIds: ['invented'],
+                    evidence: ['限定名刺を配布します。']
+                  }
                 ]
               }
             }

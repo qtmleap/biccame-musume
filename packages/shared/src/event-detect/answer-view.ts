@@ -278,6 +278,10 @@ const REASON_LABELS: ReadonlyMap<string, string> = new Map([
   ['charge_amount_unconfirmed', '入金・チャージ額を確定できない'],
   ['quantity_unconfirmed', '配布数を確定できない'],
   ['unmodeled_distribution_condition', '未対応の配布条件'],
+  // 自動登録の精度のための保留規則（detection.ts の gateReasons）。Golden で誤登録が多かった形を人が確認する。
+  ['condition_pattern_unconfirmed', '配布条件の組み合わせが自動登録の対象外'],
+  ['charge_condition_unconfirmed', '入金・チャージ条件は自動登録の対象外'],
+  ['extraction_store_unspecified', '抽出段階で開催店舗を特定できていない'],
   ['invalid_event_candidate', '登録候補が不正'],
   // 画面には出さない情報用のコード（NOTE_REASON_LABELS）
   ...NOTE_REASON_LABELS,

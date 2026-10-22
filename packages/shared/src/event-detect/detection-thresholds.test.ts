@@ -4,15 +4,17 @@ import {
   buildDetectionDraft,
   DEFAULT_DETECTION_THRESHOLDS,
   DetectionThresholdsSchema,
-  evaluateDetection,
+  type evaluateDetection,
   FIELD_THRESHOLD_KEYS,
   FieldThresholdsSchema,
   resolveFieldThresholds,
   STATUS_DEFAULT_THRESHOLD,
+  STORE_DEFAULT_THRESHOLD,
   thresholdOf
 } from './detection'
 import {
   choice,
+  evaluateWithStore,
   post,
   requestWithAssociations,
   response,
@@ -36,18 +38,26 @@ describe('Field thresholds', () => {
   })
 
   describe('resolveFieldThresholds', () => {
-    test('overrides なしは status が min(共通値, 0.8)、他の7項目は共通値', () => {
+    test('overrides なしは status が min(共通値, 0.8)、store が min(共通値, 0.3)、他の6項目は共通値', () => {
       const result = resolveFieldThresholds(0.9)
       expect(result.status).toBe(0.8)
-      for (const key of FIELD_THRESHOLD_KEYS) if (key !== 'status') expect(result[key], key).toBe(0.9)
+      expect(result.store).toBe(STORE_DEFAULT_THRESHOLD)
+      for (const key of FIELD_THRESHOLD_KEYS)
+        if (key !== 'status' && key !== 'store') expect(result[key], key).toBe(0.9)
       expect(Object.keys(result).sort()).toEqual([...FIELD_THRESHOLD_KEYS].sort())
       expect(FieldThresholdsSchema.safeParse(result).success).toBe(true)
     })
 
-    test('共通値が 0.8 未満なら status も共通値に揃う（0.7 なら 0.7）', () => {
+    test('共通値が 0.8 未満なら status も共通値に揃う（0.7 なら 0.7）。store は 0.3 以下の共通値にだけ揃う', () => {
       const result = resolveFieldThresholds(0.7)
-      for (const key of FIELD_THRESHOLD_KEYS) expect(result[key], key).toBe(0.7)
+      for (const key of FIELD_THRESHOLD_KEYS) expect(result[key], key).toBe(key === 'store' ? 0.3 : 0.7)
       expect(resolveFieldThresholds(0.8).status).toBe(0.8)
+      expect(resolveFieldThresholds(0.2).store).toBe(0.2)
+    })
+
+    test('保存済みの store の値（0.9 など）は既定値より優先する', () => {
+      expect(resolveFieldThresholds(0.9, { store: 0.9 }).store).toBe(0.9)
+      expect(resolveFieldThresholds(0.9, { store: 0.5 }).store).toBe(0.5)
     })
 
     test('共通値が変わると status 以外の既定値が追従する', () => {
@@ -76,11 +86,22 @@ describe('Field thresholds', () => {
 
     test('8項目は項目別の有効値（上書きがあればそれ、無ければ既定値）', () => {
       expect(thresholdOf(base, 'status')).toBe(0.8)
-      for (const key of FIELD_THRESHOLD_KEYS) if (key !== 'status') expect(thresholdOf(base, key), key).toBe(0.91)
+      expect(thresholdOf(base, 'store')).toBe(0.3)
+      for (const key of FIELD_THRESHOLD_KEYS)
+        if (key !== 'status' && key !== 'store') expect(thresholdOf(base, key), key).toBe(0.91)
       const overridden = { ...base, fieldThresholds: { status: 0.55, end_date: 0.66 } }
       expect(thresholdOf(overridden, 'status')).toBe(0.55)
       expect(thresholdOf(overridden, 'end_date')).toBe(0.66)
-      expect(thresholdOf(overridden, 'store')).toBe(0.91)
+      expect(thresholdOf(overridden, 'store')).toBe(0.3)
+      expect(thresholdOf({ ...base, fieldThresholds: { store: 0.9 } }, 'store')).toBe(0.9)
+    })
+
+    test('対象ビッカメ娘は min(共通値, 0.3)、旧 venue.* / character.*（noul）は共通値のまま', () => {
+      expect(thresholdOf(base, 'character')).toBe(0.3)
+      expect(thresholdOf({ ...base, fieldThreshold: 0.2 }, 'character')).toBe(0.2)
+      expect(thresholdOf({ ...base, fieldThresholds: { store: 0.5 } }, 'character')).toBe(0.3)
+      expect(thresholdOf(base, 'venue.abeno')).toBe(0.91)
+      expect(thresholdOf(base, 'character.abeno')).toBe(0.91)
     })
 
     test('未知のキーは共通値（fieldThreshold）', () => {
@@ -122,7 +143,8 @@ describe('Field thresholds', () => {
 
   describe('evaluateDetection', () => {
     // 新東たんの実投稿に近い回答。開催店舗と対象キャラの独立質問も回答済みとする。
-    const shintou = post(shintouPostText, shintouOverrides)
+    // 条件は購入＋先着（保留規則を通る形）にするため、本文に「先着順」を足す。
+    const shintou = post(`${shintouPostText}\n先着順`, shintouOverrides)
     const request = requestWithAssociations(shintou)
     const answersWith = (overrides: Record<string, ClefAnswer> = {}) =>
       response(request, {
@@ -133,7 +155,7 @@ describe('Field thresholds', () => {
         start_date: choice('d20261019', { d20261019: 0.9787 }),
         end_date: choice('none', { none: 0.9976 }),
         quantity: choice('q60', { q60: 0.965 }),
-        condition: choice('purchase', { purchase: 0.9865 }),
+        condition: choice('purchase_first_come', { purchase_first_come: 0.9865 }),
         purchase_amount: choice('p5000', { p5000: 0.9719 }),
         ...overrides
       })
@@ -141,7 +163,7 @@ describe('Field thresholds', () => {
       overrides: Record<string, ClefAnswer> = {},
       fieldThresholds?: Partial<Record<(typeof FIELD_THRESHOLD_KEYS)[number], number>>
     ) =>
-      evaluateDetection(shintou, request, answersWith(overrides), {
+      evaluateWithStore(shintou, request, answersWith(overrides), {
         ...DEFAULT_DETECTION_THRESHOLDS,
         ...(fieldThresholds === undefined ? {} : { fieldThresholds })
       })
@@ -176,9 +198,11 @@ describe('Field thresholds', () => {
 
     test('category・quantity・condition・purchase_amount も項目ごとの値で効く', () => {
       expect(evaluate({}, { category: 0.98 })).toMatchObject({ status: 'held', reasons: ['category_unconfirmed'] })
-      const withoutQuantity = evaluate({}, { quantity: 0.97 })
-      expect(withoutQuantity.status).toBe('register')
-      if (withoutQuantity.status === 'register') expect(withoutQuantity.candidate).not.toHaveProperty('limitedQuantity')
+      // 配布数が確定しない先着は、保留規則（配布数なしの先着）で保留する。
+      expect(evaluate({}, { quantity: 0.97 })).toMatchObject({
+        status: 'held',
+        reasons: ['condition_pattern_unconfirmed']
+      })
       expect(evaluate({}, { condition: 0.99 })).toMatchObject({
         status: 'held',
         reasons: ['distribution_condition_unconfirmed']
@@ -213,10 +237,12 @@ describe('Field thresholds', () => {
 
     test('開催店舗はstore項目別のしきい値で選ばれた店舗を採用し、届かなければ保留する', () => {
       // 投稿元ではなく、店舗の質問（choice 1 問）で選ばれた店舗の確率を使う。
-      const value = post('ビックカメラ秋葉原店で限定名刺を2026年11月3日から先着100枚配布します')
+      const value = post(
+        'ビックカメラ秋葉原店で限定名刺を2026年11月3日から1,000円以上お買い上げの方に先着100枚配布します'
+      )
       const asked = requestWithAssociations(value)
       const run = (fieldThresholds?: { store: number }) =>
-        evaluateDetection(value, asked, response(asked, { store: choice('abeno', { abeno: 0.99, none: 0.01 }) }), {
+        evaluateWithStore(value, asked, response(asked, { store: choice('abeno', { abeno: 0.99, none: 0.01 }) }), {
           ...DEFAULT_DETECTION_THRESHOLDS,
           ...(fieldThresholds === undefined ? {} : { fieldThresholds })
         })
@@ -224,16 +250,24 @@ describe('Field thresholds', () => {
       expect(run({ store: 0.995 })).toMatchObject({ status: 'held', reasons: ['store_unconfirmed'] })
     })
 
-    test('対象ビッカメ娘は共通値 fieldThreshold を使い、store 項目別のしきい値には影響されない', () => {
-      const answers = answersWith({ character: choice('shintou', { shintou: 0.92, none: 0.05 }) })
-      const run = (thresholds: Parameters<typeof evaluateDetection>[3]) =>
-        evaluateDetection(shintou, request, answers, thresholds)
-      expect(run(DEFAULT_DETECTION_THRESHOLDS).status).toBe('register')
-      expect(run({ ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.93 })).toMatchObject({
+    test('対象ビッカメ娘は min(共通値, 0.3) を使い、store 項目別のしきい値には影響されない', () => {
+      // 最上位をそのまま採用するので、確率が散っていても 0.3 以上なら採用する。
+      const spread = answersWith({ character: choice('shintou', { shintou: 0.32, none: 0.2, abeno: 0.1 }) })
+      const run = (answers: typeof spread, thresholds: Parameters<typeof evaluateDetection>[3]) =>
+        evaluateWithStore(shintou, request, answers, thresholds)
+      expect(run(spread, DEFAULT_DETECTION_THRESHOLDS).status).toBe('register')
+      // 0.3 に届かない選択は採用せず保留する。共通値を下げれば、それに従って下限も下がる。
+      const low = answersWith({ character: choice('shintou', { shintou: 0.25, none: 0.2, abeno: 0.1 }) })
+      expect(run(low, DEFAULT_DETECTION_THRESHOLDS)).toMatchObject({
         status: 'held',
-        reasons: expect.arrayContaining(['character_unconfirmed'])
+        reasons: ['character_unconfirmed']
       })
-      expect(thresholdOf({ ...DEFAULT_DETECTION_THRESHOLDS, fieldThresholds: { store: 0.5 } }, 'character')).toBe(0.9)
+      expect(run(low, { ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.2 }).status).toBe('register')
+      // 店舗の項目別のしきい値は娘に影響しない。
+      expect(run(spread, { ...DEFAULT_DETECTION_THRESHOLDS, fieldThresholds: { store: 0.995 } })).toMatchObject({
+        status: 'held',
+        reasons: ['store_unconfirmed']
+      })
     })
 
     test('is_event は参考値で、eventThreshold や fieldThresholds を変えても判定に使わない', () => {
@@ -243,16 +277,16 @@ describe('Field thresholds', () => {
         { ...DEFAULT_DETECTION_THRESHOLDS, eventThreshold: 1 }
       ])
         expect(
-          evaluateDetection(shintou, request, answersWith({ is_event: { type: 'noul', noul: 0.8 } }), thresholds)
+          evaluateWithStore(shintou, request, answersWith({ is_event: { type: 'noul', noul: 0.8 } }), thresholds)
         ).toMatchObject({ status: 'register', confidence: 0.8 })
     })
 
     test('共通値 fieldThreshold を上げても status の既定値は 0.8 のまま、他の項目は追従する', () => {
       const answers = answersWith({ category: choice('other', { other: 0.92 }) })
-      expect(evaluateDetection(shintou, request, answers, DEFAULT_DETECTION_THRESHOLDS).status).toBe('register')
+      expect(evaluateWithStore(shintou, request, answers, DEFAULT_DETECTION_THRESHOLDS).status).toBe('register')
       // 共通値 0.93 では category 0.92 が届かない。一方 status 0.8536 は既定値 0.8 のままなので通る。
       const strict = { ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.93 }
-      expect(evaluateDetection(shintou, request, answers, strict)).toMatchObject({
+      expect(evaluateWithStore(shintou, request, answers, strict)).toMatchObject({
         status: 'held',
         reasons: ['category_unconfirmed']
       })
@@ -260,7 +294,7 @@ describe('Field thresholds', () => {
 
     test('不正な fieldThresholds は検証で投げる', () => {
       expect(() =>
-        evaluateDetection(shintou, request, answersWith(), {
+        evaluateWithStore(shintou, request, answersWith(), {
           ...DEFAULT_DETECTION_THRESHOLDS,
           fieldThresholds: { status: 0 }
         })

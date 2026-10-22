@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import { botStores } from '../stores'
-import { buildDetectionDraft, evaluateDetection, filterWebhookPost } from './detection'
-import { choice, post, requestWithAssociations, response } from './detection-test-fixtures'
+import { buildDetectionDraft, filterWebhookPost } from './detection'
+import { choice, evaluateWithStore, post, requestWithAssociations, response } from './detection-test-fixtures'
 import { describeDetectionOutcome, groundedDiscoveryEvidence, groundedDiscoveryProof } from './discovery'
 import { quantityCandidates } from './quantity'
 
@@ -49,7 +49,7 @@ describe('根拠つき発見と登録可否', () => {
     const value = post('あべのたんハロウィンアクキーを配布します。')
     const request = requestWithAssociations(value)
     const answers = response(request, { is_event: { type: 'noul', noul: 0.72 } }).answers
-    const decision = evaluateDetection(value, request, { answers })
+    const decision = evaluateWithStore(value, request, { answers })
     expect(decision.status).toBe('held')
     const outcome = describeDetectionOutcome(value, answers, decision)
     expect(outcome.discovery.status).toBe('detected')
@@ -120,21 +120,45 @@ describe('根拠つき発見と登録可否', () => {
   test('条件の記載が無い投稿は条件なし（everyone）として登録し、下書きにも同じ条件を入れる', () => {
     const value = post('あべのたん名刺は11/3から配布')
     const request = requestWithAssociations(value)
-    const result = evaluateDetection(value, request, response(request))
+    const result = evaluateWithStore(value, request, response(request))
     expect(result).toMatchObject({ status: 'register', reasons: [], candidate: { conditions: [{ type: 'everyone' }] } })
     expect(buildDetectionDraft(value, response(request).answers).conditions).toEqual([{ type: 'everyone' }])
   })
 
-  test('任意数量noneの低確度は登録を止めない', () => {
+  test('任意数量noneの低確度は、それだけでは保留理由にしない（配布数なしの先着は条件の規則で保留する）', () => {
     const value = post()
     const request = requestWithAssociations(value)
-    const result = evaluateDetection(
+    const result = evaluateWithStore(
       value,
       request,
       response(request, { quantity: choice('none', { none: 0.6, q100: 0.4 }) })
     )
-    expect(result.status).toBe('register')
-    if (result.status === 'register') expect(result.candidate).not.toHaveProperty('limitedQuantity')
+    expect(result.reasons).not.toContain('quantity_unconfirmed')
+    expect(result).toMatchObject({ status: 'held', reasons: ['condition_pattern_unconfirmed'] })
+  })
+
+  test('自動登録の精度のための保留理由は、未知のコードにならず足りない項目に対応づく', () => {
+    const value = post()
+    const request = requestWithAssociations(value)
+    const answers = response(request).answers
+    // 抽出段階の開催店舗候補が無い候補は保留。発見は検出のまま、確認に回る。
+    const decision = evaluateWithStore(value, request, { answers }, undefined, null)
+    expect(decision).toMatchObject({ status: 'held', reasons: ['extraction_store_unspecified'] })
+    expect(describeDetectionOutcome(value, answers, decision)).toMatchObject({
+      discovery: { status: 'detected' },
+      action: 'review',
+      missingFields: ['stores']
+    })
+    // 条件・入金の規則も、同じ項目名に対応づく（重複は1回にまとめる）。
+    const held = {
+      status: 'held' as const,
+      confidence: 0.99,
+      reasons: ['condition_pattern_unconfirmed', 'charge_condition_unconfirmed', 'extraction_store_unspecified']
+    }
+    expect(describeDetectionOutcome(value, answers, held)).toMatchObject({
+      action: 'review',
+      missingFields: ['conditions', 'stores']
+    })
   })
 
   test('旧store回答は下書き境界で読み、対象娘へは転用しない', () => {

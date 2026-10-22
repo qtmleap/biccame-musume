@@ -53,6 +53,7 @@ export {
   DetectionResultSchema
 } from './detection-schemas'
 export {
+  CHARACTER_DEFAULT_THRESHOLD,
   DEFAULT_DETECTION_THRESHOLDS,
   type DetectionThresholds,
   DetectionThresholdsSchema,
@@ -62,6 +63,7 @@ export {
   FieldThresholdsSchema,
   resolveFieldThresholds,
   STATUS_DEFAULT_THRESHOLD,
+  STORE_DEFAULT_THRESHOLD,
   thresholdOf
 } from './detection-thresholds'
 
@@ -134,6 +136,20 @@ const buildConditions = (
   ]
 }
 
+/**
+ * 自動登録に進める配布条件の組み合わせ。D1 の人手修正済みイベントで、全項目が一致して登録できた条件はこの 2 形が大半を占める。
+ *  - 全員（[everyone] のみ）
+ *  - 購入（購入金額あり）と先着（配布数あり）の 2 件ちょうど
+ * 購入のみ・先着のみ・配布数なしの先着・購入と全員の併記などは、正解と食い違うことが多いので人が確認する。
+ */
+const hasRegistrableConditionPattern = (conditions: readonly Condition[]): boolean => {
+  if (conditions.length === 1) return conditions[0].type === 'everyone'
+  if (conditions.length !== 2) return false
+  const purchase = conditions.find((condition) => condition.type === 'purchase')
+  const firstCome = conditions.find((condition) => condition.type === 'first_come')
+  return purchase?.purchaseAmount !== undefined && firstCome?.quantity !== undefined
+}
+
 export const evaluateDetection = (
   post: DetectPost,
   request: ClefRequest,
@@ -152,12 +168,18 @@ export const evaluateDetection = (
   const confidence = isEvent.noul
   // 項目ごとのしきい値。answer-view.ts の describeAnswer も同じ thresholdOf で引くので、判定と回答表の確定表示は一致する。
   const thresholdFor = (key: FieldThresholdKey) => thresholdOf(settings.data, key)
-  // 店舗とビッカメ娘は choice 1 問ずつ。両方が none をしきい値以上で選んだときだけ、ビッカメ娘の企画ではないとして対象外にする。
+  // 店舗とビッカメ娘は choice 1 問ずつ。両方が none を共通のしきい値（fieldThreshold）以上で選んだときだけ、ビッカメ娘の企画ではないとして対象外にする。
+  // 採用の下限（下の store / character）は最上位を採るために低く、それで対象外にすると確信の低い none で投稿を捨ててしまうので、対象外には使わない。
   // 片方だけ none の投稿は、下の store_unconfirmed / character_unconfirmed で保留になる。
+  if (
+    choiceOf(answers.store, settings.data.fieldThreshold) === ASSOCIATION_NONE &&
+    choiceOf(answers.character, settings.data.fieldThreshold) === ASSOCIATION_NONE
+  )
+    return { status: 'ignored', confidence, reasons: ['not_distribution_event'] }
+  // 開催店舗とビッカメ娘は、選択肢が多くて確率が散るため、最上位をそのまま採用する（確率が下限以上のとき）。
+  // multiple・none は下の selectedStores / selectedCharacterIds で採用されず保留になる。下限は thresholdOf を通すので、管理画面で保存した店舗の値も効く。
   const storeChoice = choiceOf(answers.store, thresholdFor('store'))
   const characterChoice = choiceOf(answers.character, thresholdOf(settings.data, CHARACTER_QUESTION_KEY))
-  if (storeChoice === ASSOCIATION_NONE && characterChoice === ASSOCIATION_NONE)
-    return { status: 'ignored', confidence, reasons: ['not_distribution_event'] }
   const status = choiceOf(answers.status, thresholdFor('status'))
   const category = CategorySchema.safeParse(choiceOf(answers.category, thresholdFor('category')))
   // 登録する店舗・対象ビッカメ娘は選ばれた 1 件まで。共同絵柄（multiple）は人が編集フォームで複数指定する。
@@ -188,6 +210,23 @@ export const evaluateDetection = (
   const statusReason =
     status === 'ongoing' ? 'existing_event_update' : status === 'end' ? 'event_ended' : 'status_unconfirmed'
   const itemUnspecified = choiceOf(answers.category, thresholdFor('category')) === 'none'
+  const conditions = buildConditions(condition, amount, quantity, chargeAmount)
+  const newAnnouncement = status === 'announce' || status === 'start'
+  // 自動登録の精度のための保留規則（D1 の Golden で検証済み）。新規の告知・開始だけに付け、継続・終了の投稿には付けない。
+  // 規則は 3 つ: 配布条件の組み合わせ（COND）・抽出段階の店舗が未特定（ESN）・入金・チャージ条件（CHG）。
+  // 名刺で終了日が無い候補を保留にする規則（END）も試したが、止めた不正解が失った正解の 2 倍に届かず、外した（docs/event-detection-golden.md）。
+  // 上の理由と併記する。条件がまだ確定していない（conditions が空）・購入額が未確定のときは、先の distribution_condition_* / purchase_amount_unconfirmed に任せて、条件の組み合わせの規則は付けない。
+  const gateReasons = newAnnouncement
+    ? [
+        ...(conditions.length > 0 &&
+        !(purchaseRequired && amount === undefined) &&
+        !hasRegistrableConditionPattern(conditions)
+          ? ['condition_pattern_unconfirmed']
+          : []),
+        ...(chargeRequired ? ['charge_condition_unconfirmed'] : []),
+        ...(storeKey === null ? ['extraction_store_unspecified'] : [])
+      ]
+    : []
   const reasons = [
     ...(unsupportedCondition ? ['unmodeled_distribution_condition'] : []),
     ...(status !== 'announce' && status !== 'start' ? [statusReason] : []),
@@ -212,7 +251,8 @@ export const evaluateDetection = (
         ]
       : []),
     ...(purchaseRequired && amount === undefined ? ['purchase_amount_unconfirmed'] : []),
-    ...(chargeRequired && chargeAmount === undefined ? ['charge_amount_unconfirmed'] : [])
+    ...(chargeRequired && chargeAmount === undefined ? ['charge_amount_unconfirmed'] : []),
+    ...gateReasons
   ]
   if (
     reasons.length > 0 ||
@@ -222,7 +262,6 @@ export const evaluateDetection = (
     (status !== 'announce' && status !== 'start')
   )
     return { status: 'held', confidence, reasons }
-  const conditions = buildConditions(condition, amount, quantity, chargeAmount)
   const label = stores.map((store) => labels.get(store)).join('・')
   const candidate = DetectionCandidateSchema.safeParse({
     category: category.data,

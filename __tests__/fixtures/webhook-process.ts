@@ -20,7 +20,8 @@ export const processWebhookJob = (env: Bindings, postId: string, options: { titl
   webhookProcessing.processWebhookJob(env, postId, {
     ...options,
     extractor: async (post) => ({
-      events: [{ item: 'アキバたん 限定名刺配布', stores: [], characterIds: [], evidence: [post.text] }]
+      // 抽出段階の開催店舗候補が無い候補は自動登録の保留規則（extraction_store_unspecified）で保留になるので、投稿元のアキバを入れる。
+      events: [{ item: 'アキバたん 限定名刺配布', stores: ['akiba'], characterIds: [], evidence: [post.text] }]
     })
   })
 

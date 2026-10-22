@@ -5,7 +5,6 @@ import { dateCandidates } from './decide'
 import {
   createDetectionRequest,
   DetectionThresholdsSchema,
-  evaluateDetection,
   filterWebhookPost,
   WEBHOOK_KEYWORD_VERDICTS,
   webhookKeywordVerdict
@@ -13,6 +12,7 @@ import {
 import {
   categoryCriteria,
   choice,
+  evaluateWithStore,
   now,
   payload,
   post,
@@ -104,7 +104,7 @@ describe('Detection gate', () => {
   test('高スコアで必須項目が揃う告知だけ登録候補にする', () => {
     const value = post()
     const request = requestWithAssociations(value)
-    const result = evaluateDetection(value, request, response(request))
+    const result = evaluateWithStore(value, request, response(request))
     expect(result.status).toBe('register')
     if (result.status !== 'register') throw new Error('Expected candidate')
     expect(result.candidate).toEqual({
@@ -113,7 +113,10 @@ describe('Detection gate', () => {
       stores: ['abeno'],
       characterIds: ['abeno'],
       startDate: '2026-11-03',
-      conditions: [{ type: 'first_come', quantity: 100 }],
+      conditions: [
+        { type: 'purchase', purchaseAmount: 1000 },
+        { type: 'first_come', quantity: 100 }
+      ],
       referenceUrls: [{ type: 'announce', url: value.url }],
       limitedQuantity: 100,
       isPreliminary: false
@@ -123,7 +126,7 @@ describe('Detection gate', () => {
     const value = post()
     const request = requestWithAssociations(value)
     for (const noul of [0.1, 0.8])
-      expect(evaluateDetection(value, request, response(request, { is_event: { type: 'noul', noul } }))).toMatchObject({
+      expect(evaluateWithStore(value, request, response(request, { is_event: { type: 'noul', noul } }))).toMatchObject({
         status: 'register',
         confidence: noul,
         reasons: []
@@ -132,7 +135,7 @@ describe('Detection gate', () => {
   test('confidenceではなく選択肢のprobabilitiesで足切りする', () => {
     const value = post()
     const request = requestWithAssociations(value)
-    const result = evaluateDetection(
+    const result = evaluateWithStore(
       value,
       request,
       response(request, {
@@ -144,7 +147,7 @@ describe('Detection gate', () => {
   test('閾値ちょうどは通過する', () => {
     const value = post()
     const request = requestWithAssociations(value)
-    const result = evaluateDetection(
+    const result = evaluateWithStore(
       value,
       request,
       response(request, {
@@ -157,17 +160,16 @@ describe('Detection gate', () => {
   test('必須の開催日が欠ける場合は保留する', () => {
     const value = post('あべのたん限定名刺を先着100枚配布します')
     const request = requestWithAssociations(value)
-    expect(evaluateDetection(value, request, response(request))).toMatchObject({
-      status: 'held',
-      reasons: ['start_date_unspecified']
-    })
+    const result = evaluateWithStore(value, request, response(request))
+    expect(result.status).toBe('held')
+    expect(result.reasons).toContain('start_date_unspecified')
   })
   test('配布条件を書いていない投稿は条件なし（全員）として登録し、条件未記載で保留しない', () => {
     const value = post('あべのたん限定名刺を2026年11月3日から配布します')
     const request = requestWithAssociations(value)
     // 本文に条件の語が無いので、条件の質問は作られない。
     expect(request.questions).not.toHaveProperty('condition')
-    const result = evaluateDetection(value, request, response(request))
+    const result = evaluateWithStore(value, request, response(request))
     expect(result.status).toBe('register')
     if (result.status !== 'register') throw new Error('Expected candidate')
     expect(result.candidate.conditions).toEqual([{ type: 'everyone' }])
@@ -177,7 +179,7 @@ describe('Detection gate', () => {
     const sent = requestWithAssociations(value)
     expect(sent.questions).toHaveProperty('condition')
     const request = { ...sent, questions: omitKey(sent.questions, 'condition') }
-    expect(evaluateDetection(value, request, response(request))).toMatchObject({
+    expect(evaluateWithStore(value, request, response(request))).toMatchObject({
       status: 'register',
       candidate: { conditions: [{ type: 'everyone' }] }
     })
@@ -186,7 +188,7 @@ describe('Detection gate', () => {
     const value = post('あべのたん限定名刺を2026年11月3日から3,000円以上で配布します')
     const request = requestWithAssociations(value)
     expect(request.questions).not.toHaveProperty('condition')
-    expect(evaluateDetection(value, request, response(request))).toMatchObject({
+    expect(evaluateWithStore(value, request, response(request))).toMatchObject({
       status: 'held',
       reasons: ['distribution_condition_unspecified']
     })
@@ -195,7 +197,7 @@ describe('Detection gate', () => {
     const value = post('あべのたん限定名刺を2026年11月3日から先着100枚を抽選で配布します')
     const request = requestWithAssociations(value)
     expect(request.questions).not.toHaveProperty('condition')
-    expect(evaluateDetection(value, request, response(request))).toMatchObject({
+    expect(evaluateWithStore(value, request, response(request))).toMatchObject({
       status: 'held',
       reasons: ['distribution_condition_unspecified']
     })
@@ -205,12 +207,12 @@ describe('Detection gate', () => {
     const request = requestWithAssociations(value)
     expect(request.questions).toHaveProperty('condition')
     const none = response(request, { condition: choice('none', { none: 0.99 }) })
-    expect(evaluateDetection(value, request, none)).toMatchObject({
+    expect(evaluateWithStore(value, request, none)).toMatchObject({
       status: 'held',
       reasons: ['distribution_condition_unspecified']
     })
     const unsure = response(request, { condition: choice('first_come', { first_come: 0.5, none: 0.4 }) })
-    expect(evaluateDetection(value, request, unsure)).toMatchObject({
+    expect(evaluateWithStore(value, request, unsure)).toMatchObject({
       status: 'held',
       reasons: ['distribution_condition_unconfirmed']
     })
@@ -219,15 +221,15 @@ describe('Detection gate', () => {
     const value = post('あべのたん限定名刺を2026年11月3日から会員カード提示で配布します')
     const request = requestWithAssociations(value)
     expect(request.questions).not.toHaveProperty('condition')
-    expect(evaluateDetection(value, request, response(request))).toMatchObject({
+    expect(evaluateWithStore(value, request, response(request))).toMatchObject({
       status: 'held',
       reasons: ['unmodeled_distribution_condition', 'distribution_condition_unspecified']
     })
   })
-  test('終了日・数量の記載がないこと自体は保留理由にしない', () => {
+  test('終了日・数量の記載がないこと自体は保留理由にしない（名刺でも同じ）', () => {
     const value = post('あべのたん限定名刺を2026年11月3日からどなたでも配布します')
     const request = requestWithAssociations(value)
-    const result = evaluateDetection(
+    const result = evaluateWithStore(
       value,
       request,
       response(request, { condition: { type: 'choice', choice: 'everyone', probabilities: { everyone: 0.99 } } })
@@ -246,13 +248,13 @@ describe('Detection gate', () => {
     }
     const unknown = post('あべのたん限定名刺 2026年11月3日からお買い上げの方先着100枚')
     const unknownRequest = requestWithAssociations(unknown)
-    expect(evaluateDetection(unknown, unknownRequest, response(unknownRequest, { condition }))).toMatchObject({
+    expect(evaluateWithStore(unknown, unknownRequest, response(unknownRequest, { condition }))).toMatchObject({
       status: 'held',
       reasons: ['purchase_amount_unconfirmed']
     })
     const value = post('あべのたん限定名刺 2026年11月3日から1,000円以上お買い上げの方先着100枚')
     const request = requestWithAssociations(value)
-    const result = evaluateDetection(value, request, response(request, { condition }))
+    const result = evaluateWithStore(value, request, response(request, { condition }))
     expect(result.status).toBe('register')
     if (result.status !== 'register') throw new Error('Expected candidate')
     expect(result.candidate.conditions).toEqual([
@@ -265,7 +267,7 @@ describe('Detection gate', () => {
     const request = requestWithAssociations(value)
     for (const choice of ['ongoing', 'end'])
       expect(
-        evaluateDetection(
+        evaluateWithStore(
           value,
           request,
           response(request, { status: { type: 'choice', choice, probabilities: { [choice]: 0.99 } } })
@@ -273,13 +275,13 @@ describe('Detection gate', () => {
       ).toMatchObject({ status: 'held', reasons: [choice === 'ongoing' ? 'existing_event_update' : 'event_ended'] })
   })
   test('本文の複数キャラ言及だけでは店舗やイベントの曖昧さとみなさない', () => {
-    const value = post('あべのたん・アキバたん 限定名刺 2026年11月3日から先着100枚')
+    const value = post('あべのたん・アキバたん 限定名刺 2026年11月3日から1,000円以上お買い上げの方先着100枚')
     const request = requestWithAssociations(value)
-    expect(evaluateDetection(value, request, response(request)).status).toBe('register')
+    expect(evaluateWithStore(value, request, response(request)).status).toBe('register')
     const single = post()
     const singleRequest = requestWithAssociations(single)
     expect(
-      evaluateDetection(single, singleRequest, response(singleRequest, { single_event: { type: 'noul', noul: 0.3 } }))
+      evaluateWithStore(single, singleRequest, response(singleRequest, { single_event: { type: 'noul', noul: 0.3 } }))
         .reasons
     ).not.toContain('multiple_or_ambiguous_events')
   })
@@ -287,7 +289,7 @@ describe('Detection gate', () => {
     const value = post('あべのたん限定名刺 2026年11月3日から11月2日まで先着100枚')
     const request = requestWithAssociations(value)
     expect(
-      evaluateDetection(
+      evaluateWithStore(
         value,
         request,
         response(request, { end_date: { type: 'choice', choice: 'd20261102', probabilities: { d20261102: 0.99 } } })
@@ -297,19 +299,19 @@ describe('Detection gate', () => {
   test('欠落・不正選択・不正確率はupstream失敗として扱う', () => {
     const value = post()
     const request = requestWithAssociations(value)
-    expect(() => evaluateDetection(value, request, { answers: {} })).toThrow('Incomplete detection response')
+    expect(() => evaluateWithStore(value, request, { answers: {} })).toThrow('Incomplete detection response')
     expect(() =>
-      evaluateDetection(
+      evaluateWithStore(
         value,
         request,
         response(request, { category: { type: 'choice', choice: 'invented', probabilities: { invented: 0.99 } } })
       )
     ).toThrow('Invalid detection choice')
-    expect(() => evaluateDetection(value, request, response(request, { is_event: { type: 'noul', noul: 2 } }))).toThrow(
+    expect(() => evaluateWithStore(value, request, response(request, { is_event: { type: 'noul', noul: 2 } }))).toThrow(
       'Invalid detection response'
     )
     expect(() =>
-      evaluateDetection(
+      evaluateWithStore(
         value,
         request,
         response(request, {
@@ -321,13 +323,13 @@ describe('Detection gate', () => {
   test('未対応の会員・提示条件を無条件配布に置き換えない', () => {
     const value = post('あべのたん限定名刺 2026年11月3日から会員カード提示で先着100枚配布')
     const request = requestWithAssociations(value)
-    expect(evaluateDetection(value, request, response(request)).reasons).toContain('unmodeled_distribution_condition')
+    expect(evaluateWithStore(value, request, response(request)).reasons).toContain('unmodeled_distribution_condition')
   })
   test('単なる購入表記も購入額不明なら先着だけで登録しない', () => {
     const value = post('あべのたん限定名刺 2026年11月3日から商品購入で先着100枚配布')
     const request = requestWithAssociations(value)
     expect(
-      evaluateDetection(
+      evaluateWithStore(
         value,
         request,
         response(request, {
@@ -340,7 +342,7 @@ describe('Detection gate', () => {
     const value = post()
     const request = requestWithAssociations(value)
     expect(() =>
-      evaluateDetection(
+      evaluateWithStore(
         value,
         request,
         response(request, {

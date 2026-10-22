@@ -100,7 +100,9 @@ export const registerSingle = async (env: RecheckEnv, id: string, text = singleT
   const post = makePost(id, text)
   await insertWebhookJob(env, post)
   await processWebhookJob(env, post.id, {
-    extractor: async () => ({ events: [{ item: '赤い限定名刺', stores: [], characterIds: [], evidence: [text] }] })
+    extractor: async () => ({
+      events: [{ item: '赤い限定名刺', stores: ['akiba'], characterIds: [], evidence: [text] }]
+    })
   })
   return post
 }
@@ -115,8 +117,8 @@ export const registerPair = async (env: RecheckEnv, id: string) => {
   await processWebhookJob(env, post.id, {
     extractor: async () => ({
       events: [
-        { item: '赤い限定名刺', stores: [], characterIds: [], evidence: [red] },
-        { item: '青い限定名刺', stores: [], characterIds: [], evidence: [blue] }
+        { item: '赤い限定名刺', stores: ['akiba'], characterIds: [], evidence: [red] },
+        { item: '青い限定名刺', stores: ['akiba'], characterIds: [], evidence: [blue] }
       ]
     })
   })

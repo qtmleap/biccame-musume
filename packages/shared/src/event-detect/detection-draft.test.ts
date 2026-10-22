@@ -1,7 +1,15 @@
 import { describe, expect, test } from 'bun:test'
 import type { ClefAnswer } from './clef'
-import { buildDetectionDraft, DetectionDraftSchema, evaluateDetection } from './detection'
-import { choice, post, requestWithAssociations, response, shintouAnswers, shintouPost } from './detection-test-fixtures'
+import { buildDetectionDraft, DetectionDraftSchema } from './detection'
+import {
+  choice,
+  evaluateWithStore,
+  post,
+  requestWithAssociations,
+  response,
+  shintouAnswers,
+  shintouPost
+} from './detection-test-fixtures'
 
 describe('Detection draft', () => {
   test('カテゴリが僅差（0.45 / 0.43）の時はカテゴリを採用せず、タイトルを「店舗名 配布」にする', () => {
@@ -21,7 +29,7 @@ describe('Detection draft', () => {
     expect(draft.category).toBeUndefined()
     expect(DetectionDraftSchema.safeParse(draft).success).toBe(true)
     // 同じ回答は登録候補にならず保留のまま。下書きは判定結果を変えない。
-    expect(evaluateDetection(split, request, { answers })).toMatchObject({ status: 'held' })
+    expect(evaluateWithStore(split, request, { answers })).toMatchObject({ status: 'held' })
   })
   test('カテゴリは最有力候補の確率が0.5以上の時だけ採用し、タイトルにカテゴリ名を含める', () => {
     const answers = shintouAnswers(requestWithAssociations(shintouPost))
@@ -141,7 +149,7 @@ describe('Detection draft: 条件の記載が無い投稿', () => {
 describe('End date none confirmation', () => {
   // 新東たんの実投稿に近い入力。本文に店舗名・「ビッカメ娘」は無く、終了日は「なくなり次第終了」。
   const value = post(
-    '🎃新東たん擬人化６周年イベント🎃\n日付：10月19日（月）～なくなり次第終了\n枚数：限定60枚\n※5,000円以上お買い物でお一人様一枚まで\nアクリルコースタープレゼント🎁',
+    '🎃新東たん擬人化６周年イベント🎃\n日付：10月19日（月）～なくなり次第終了\n枚数：限定60枚\n※5,000円以上お買い物でお一人様一枚まで\nアクリルコースタープレゼント🎁\n先着順',
     { screenName: 'Bic_shintoueki', createdAt: '2026-10-16T01:00:00.000Z' }
   )
   const request = requestWithAssociations(value)
@@ -151,13 +159,13 @@ describe('End date none confirmation', () => {
       category: choice('other', { other: 0.99 }),
       start_date: choice('d20261019', { d20261019: 0.99 }),
       end_date: endDate,
-      condition: choice('purchase', { purchase: 0.99 }),
+      condition: choice('purchase_first_come', { purchase_first_come: 0.99 }),
       purchase_amount: choice('p5000', { p5000: 0.99 }),
       quantity: choice('q60', { q60: 0.99 })
     })
 
   test('最有力が none（0.7348）ならしきい値未満でも終了日なしで確定し、end_date_unconfirmed を付けずに登録する', () => {
-    const result = evaluateDetection(value, request, answersOf(choice('none', { none: 0.7348, d20261019: 0.2652 })))
+    const result = evaluateWithStore(value, request, answersOf(choice('none', { none: 0.7348, d20261019: 0.2652 })))
     expect(result.status).toBe('register')
     expect(result.reasons).not.toContain('end_date_unconfirmed')
     expect(result.reasons).toEqual([])
@@ -167,18 +175,18 @@ describe('End date none confirmation', () => {
   })
 
   test('none が過半数に届かなくても、最有力ならしきい値未満で確定する', () => {
-    const result = evaluateDetection(value, request, answersOf(choice('none', { none: 0.4, d20261019: 0.35 })))
+    const result = evaluateWithStore(value, request, answersOf(choice('none', { none: 0.4, d20261019: 0.35 })))
     expect(result.status).toBe('register')
     expect(result.reasons).not.toContain('end_date_unconfirmed')
   })
 
   test('最有力が日付で確率がしきい値未満（0.6）なら従来どおり end_date_unconfirmed で保留する', () => {
-    const result = evaluateDetection(value, request, answersOf(choice('d20261019', { d20261019: 0.6, none: 0.3 })))
+    const result = evaluateWithStore(value, request, answersOf(choice('d20261019', { d20261019: 0.6, none: 0.3 })))
     expect(result).toMatchObject({ status: 'held', reasons: ['end_date_unconfirmed'] })
   })
 
   test('最有力が日付でしきい値以上（0.95）なら終了日が入る', () => {
-    const result = evaluateDetection(value, request, answersOf(choice('d20261019', { d20261019: 0.95, none: 0.04 })))
+    const result = evaluateWithStore(value, request, answersOf(choice('d20261019', { d20261019: 0.95, none: 0.04 })))
     expect(result.status).toBe('register')
     if (result.status !== 'register') throw new Error('Expected candidate')
     expect(result.candidate.endDate).toBe('2026-10-19')
