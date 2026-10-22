@@ -22,8 +22,8 @@ import { createItemCountRequest } from './extraction'
 import type { DetectPost } from './post'
 
 describe('Detection version and category criteria', () => {
-  test('質問文の変更に合わせて判定の版を上げる', () => {
-    expect(DETECTION_VERSION).toBe(`${QUESTION_VERSION}-webhook-v15-concise-author`)
+  test('質問文の変更に合わせて判定の版を上げる（v16 は1段目が v15 と同一で、2段目の確認の質問を足した版）', () => {
+    expect(DETECTION_VERSION).toBe(`${QUESTION_VERSION}-webhook-v16-confirm-selection`)
   })
   test('コースターはotherに入れ、アクキー・アクスタの定義には含めない', () => {
     // アクキー・アクスタに言及する本文では、両方の選択肢が出る。

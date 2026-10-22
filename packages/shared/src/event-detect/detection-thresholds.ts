@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { CHARACTER_CONFIRM_KEY, STORE_CONFIRM_KEY } from './associations'
 
 export const DEFAULT_DETECTION_THRESHOLDS = { eventThreshold: 0.9, fieldThreshold: 0.9, ignoreThreshold: 0.5 } as const
 
@@ -28,6 +29,13 @@ export const STORE_DEFAULT_THRESHOLD = 0.3
  * それに従って下がる。none・multiple は採用しない。
  */
 export const CHARACTER_DEFAULT_THRESHOLD = 0.3
+/**
+ * 2段目（確認）の「はい」の確率の下限（v16 以降）。1段目で最上位に選んだ店舗・娘を、この下限以上で「はい」と答えたときだけ確定する。
+ * FieldThresholdsSchema は保存済みの設定との互換のためキーを増やせないので、管理画面の設定には含めず定数で持つ。
+ * 0.7 は D1 の測定（正しい店舗の「はい」の 91% が通り、誤った店舗の 9% が通る）から決めた仮の値で、後続の測定で決め直す。
+ */
+export const STORE_CONFIRM_THRESHOLD = 0.7
+export const CHARACTER_CONFIRM_THRESHOLD = 0.7
 const FieldThresholdSchema = z.number().positive().max(1)
 /** 8項目すべての有効なしきい値。保存・API の形で、1項目でも欠ける・余分なキーがあると不正。 */
 export const FieldThresholdsSchema = z.strictObject({
@@ -83,7 +91,7 @@ const isFieldThresholdKey = (key: string): key is FieldThresholdKey =>
   FIELD_THRESHOLD_KEYS.some((value) => value === key)
 
 /**
- * 質問キーに対するしきい値。is_event は eventThreshold、8項目は項目別の有効値、それ以外の未知のキーは fieldThreshold。
+ * 質問キーに対するしきい値。is_event は eventThreshold、8項目は項目別の有効値、確認の質問は定数、それ以外の未知のキーは fieldThreshold。
  * 判定（evaluateDetection）と管理画面の回答表（describeAnswers）が同じ関数で引き、判定と表示がずれないようにする。
  */
 export const thresholdOf = (thresholds: DetectionThresholds, key: string): number => {
@@ -94,6 +102,9 @@ export const thresholdOf = (thresholds: DetectionThresholds, key: string): numbe
   // v13 以降の対象ビッカメ娘（choice）。専用のしきい値キーは作らず（FieldThresholdsSchema は保存値の互換のため変えない）、
   // 共通値と定数の小さい方（最上位採用）を使う。
   if (key === 'character') return Math.min(thresholds.fieldThreshold, CHARACTER_DEFAULT_THRESHOLD)
+  // v16 以降の2段目（確認）の質問。設定に依らず定数で、evaluateDetection の関門と回答表の確定表示が同じ値を引く。
+  if (key === STORE_CONFIRM_KEY) return STORE_CONFIRM_THRESHOLD
+  if (key === CHARACTER_CONFIRM_KEY) return CHARACTER_CONFIRM_THRESHOLD
   if (!isFieldThresholdKey(key)) return thresholds.fieldThreshold
   return resolveFieldThresholds(thresholds.fieldThreshold, thresholds.fieldThresholds)[key]
 }

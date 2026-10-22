@@ -42,6 +42,8 @@ const ProvenanceSchema = z.object({
 // 合成の回答で補う。合成の値は録画した抽出（Haiku の実出力）の stores / characterIds の唯一の値で、確率は 0.99 に固定する。
 // これ以外の未録画の質問は補わず、再生を失敗させる（条件などを捏造して録画の結果を変えないため）。
 const SYNTHETIC_KEYS = ['character', 'store'] as const
+// v16 の 2 段目（確認の質問だけの別の呼び出し）。録画に無いので、同じく合成の回答（はい 0.99）で補う。
+const CONFIRM_KEYS = ['character_confirm', 'store_confirm'] as const
 const syntheticChoice = (choice: string, criteria: string[]): ClefAnswer => ({
   type: 'choice',
   choice,
@@ -96,6 +98,7 @@ for (const id of ['962146543649239040', '1012319233298989056']) {
       character: only(recordedEvent.data.events[0].characterIds, 'character')
     }
     const synthesized: string[] = []
+    const confirmed: string[] = []
     const calls: string[] = []
     const base = await fixture(`goal-real-gain-${id}`)
     try {
@@ -136,6 +139,19 @@ for (const id of ['962146543649239040', '1012319233298989056']) {
             if (request.data.questions.distribution_item_count !== undefined) {
               calls.push('count')
               return count
+            }
+            // 2 段目（確認）は is_event を含まない。録画した回答は 1 段目のものだけ。
+            if (request.data.questions.is_event === undefined) {
+              calls.push('confirm')
+              confirmed.push(...Object.keys(request.data.questions))
+              return {
+                answers: Object.fromEntries(
+                  Object.keys(request.data.questions).map((key): [string, ClefAnswer] => [
+                    key,
+                    { type: 'noul', noul: 0.99 }
+                  ])
+                )
+              }
             }
             calls.push('judge')
             return {
@@ -181,17 +197,22 @@ for (const id of ['962146543649239040', '1012319233298989056']) {
           }))
         })
       )
-      expect(calls).toEqual(['count', 'extract', 'judge'])
-      // 合成したのは store / character だけ。ほかの回答は録画のまま。
+      // 1 段目の判定の後に、2 段目の確認が 1 回（店舗と娘をまとめて）。
+      expect(calls).toEqual(['count', 'extract', 'judge', 'confirm'])
+      // 合成したのは store / character と、2 段目の確認だけ。ほかの回答は録画のまま。
       expect(synthesized.slice().sort()).toEqual([...SYNTHETIC_KEYS])
+      expect(confirmed.slice().sort()).toEqual([...CONFIRM_KEYS])
       expect(job.itemCountAudit?.status).toBe('low_confidence')
       expect(job.candidates).toHaveLength(1)
       const candidate = job.candidates[0]
       const saved = candidate.answers === null ? {} : candidate.answers
-      expect(Object.keys(saved).filter((key) => !SYNTHETIC_KEYS.some((value) => value === key))).not.toHaveLength(0)
+      const isSynthetic = (key: string) =>
+        [...SYNTHETIC_KEYS, ...CONFIRM_KEYS].some((synthesizedKey) => synthesizedKey === key)
+      expect(Object.keys(saved).filter((key) => !isSynthetic(key))).not.toHaveLength(0)
       for (const [key, value] of Object.entries(saved))
-        if (!SYNTHETIC_KEYS.some((synthesizedKey) => synthesizedKey === key))
-          expect(value).toEqual(recordedAnswers[key])
+        if (!isSynthetic(key)) expect(value).toEqual(recordedAnswers[key])
+      expect(saved.store_confirm).toEqual({ type: 'noul', noul: 0.99 })
+      expect(saved.character_confirm).toEqual({ type: 'noul', noul: 0.99 })
       expect(saved.store).toMatchObject({ type: 'choice', choice: synthetic.store })
       expect(saved.character).toMatchObject({ type: 'choice', choice: synthetic.character })
       expect(candidate.post.extractionContext?.originalText).toBe(recording.post.text)

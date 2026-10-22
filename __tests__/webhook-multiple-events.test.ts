@@ -48,9 +48,18 @@ test('共同デザイン（娘が複数）は店舗ごとの候補で multiple �
         ]
       })
     })
-    // 件数の質問 1 回 + 店舗ごとの候補の判定 1 回ずつ。判定は 1 バッチで 64 問以内。
+    // 件数の質問 1 回 + 店舗ごとの候補の判定 1 回ずつ + 2 段目の確認 1 回ずつ。判定は 1 バッチで 64 問以内。
+    // 娘は multiple を選ぶので 2 段目の確認の対象にならず、確認の質問は店舗（store_confirm）だけ。
     const judged = requests.filter((request) => request.questions.is_event !== undefined)
-    expect(requests).toHaveLength(3)
+    const confirms = requests.filter(
+      (request) => request.questions.is_event === undefined && request.questions.store_confirm !== undefined
+    )
+    expect(requests).toHaveLength(5)
+    expect(confirms.map((request) => Object.keys(request.questions))).toEqual([['store_confirm'], ['store_confirm']])
+    expect(confirms.map((request) => request.state.split('\n').at(-1))).toEqual([
+      '確認対象の開催店舗: 船橋駅FACE店',
+      '確認対象の開催店舗: AKIBA店'
+    ])
     expect(judged.every((request) => Object.keys(request.questions).length <= 64)).toBe(true)
     // 各候補の判定には、その候補自身の店舗が抽出段階の開催店舗候補として渡る。
     expect(judged.map((request) => request.state.match(/抽出段階の開催店舗候補（未確定）: (\S+)/)?.[1])).toEqual([
@@ -80,13 +89,13 @@ test('共同デザイン（娘が複数）は店舗ごとの候補で multiple �
       { type: 'choice', choice: 'funabashi' },
       { type: 'choice', choice: 'akiba' }
     ])
-    // 候補ごとに送信入力は 1 件。親ジョブの送信入力は件数の質問だけ。
+    // 候補ごとの送信入力は 2 件（1 段目の判定と、2 段目の確認）。親ジョブの送信入力は件数の質問だけ。
     expect((await getWebhookPrompt(target, post.id)).requests).toEqual(requests.slice(0, 1))
     expect((await getWebhookPrompt(target, post.id, job.candidates[0].eventUUID)).requests).toEqual(
-      requests.slice(1, 2)
+      requests.slice(1, 3)
     )
     expect((await getWebhookPrompt(target, post.id, job.candidates[1].eventUUID)).requests).toEqual(
-      requests.slice(2, 3)
+      requests.slice(3, 5)
     )
     expect(await target.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)
   } finally {

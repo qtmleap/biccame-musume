@@ -6,13 +6,16 @@ import {
   type DetectionThresholds,
   STORE_DEFAULT_THRESHOLD
 } from '@biccame/shared/event-detect/detection'
-import { evaluateFixtureCases, summarize } from '../scripts/lib/event-detect/d1-gold-fixture-eval'
+import { webhookPromptDefinition } from '@biccame/shared/event-detect/prompt-definitions'
+import { evaluateFixtureCases, sourceOfFixture, summarize } from '../scripts/lib/event-detect/d1-gold-fixture-eval'
 import {
   FIXTURE_FILE,
   type FixtureSplit,
   fixtureHash,
   parseFixture
 } from '../scripts/lib/event-detect/d1-gold-fixture-schema'
+import { canonicalJson } from '../scripts/lib/event-detect/d1-gold-replay'
+import { sha256Hex } from '../scripts/lib/event-detect/d1-gold-schema'
 import { GOAL_PIPELINE_PROFILE } from '../scripts/lib/event-detect/goal-pipeline-profile'
 
 // 保存した実 AI の応答（D1 の人手修正済みイベントを正解とする Golden）を、現行の evaluateDetection で再評価して精度の下限を守る。
@@ -41,11 +44,44 @@ const rules = { dev: evaluateSplit('dev', ADOPTED, 0.9), test: evaluateSplit('te
 // 参考: 件数の監査を 70% にした場合（EVENT_DETECTION_ITEM_COUNT_THRESHOLD=0.7）。不一致のときの抽出のやり直しは再現していない近似。
 const audit70 = { dev: evaluateSplit('dev', ADOPTED, 0.7), test: evaluateSplit('test', ADOPTED, 0.7) }
 
+// フィクスチャの保存応答は v15 の 1 段目の質問への回答。v16 は 1 段目が v15 と同一で、2 段目（確認の質問）を足した版なので、
+// 版の文字列は現行（v16）と比べず、「作られた版（v15）」と「現行の 1 段目の質問が v15 と同一であること」の 2 つで守る。
+// 2 段目の回答はフィクスチャに無い。確認の質問を含まない request は evaluateDetection の判定を変えないので、再評価は v15 のときと同じ数字になる。
+// 確認の回答を含むフィクスチャへの再作成は、v16 を実 AI で測り直した後に行う（docs/event-detection-golden.md）。
+const FIXTURE_VERSION = 'v5-webhook-v15-concise-author'
+// v15 のソースで、全フィクスチャ候補から作った 1 段目の request（state と質問）の sha256。1 段目の質問・文言・選択肢・state が変わると変わる。
+const FIRST_STAGE_REQUESTS_SHA256 = 'e1dfe1e1490bad1f609ea0974254cd81e44af1a65e16ebd649da8e6c4714cad4'
+
 describe('Golden フィクスチャの整合', () => {
-  test('フィクスチャの版が DETECTION_VERSION と一致する', () => {
-    const message = `質問が変わったので、新しい版で保存応答を測定し直してから bun scripts/export-d1-gold-fixture.ts で再作成が必要です（${fixture.detectionVersion} -> ${DETECTION_VERSION}。手順は docs/event-detection-golden.md）`
-    if (fixture.detectionVersion !== DETECTION_VERSION) throw new Error(message)
-    expect(fixture.detectionVersion).toBe(DETECTION_VERSION)
+  test('フィクスチャは v15 の 1 段目の質問で作られている', () => {
+    const message = `フィクスチャの版が想定と違います（${fixture.detectionVersion} != ${FIXTURE_VERSION}）。再作成したら FIXTURE_VERSION と FIRST_STAGE_REQUESTS_SHA256 を更新してください（手順は docs/event-detection-golden.md）`
+    if (fixture.detectionVersion !== FIXTURE_VERSION) throw new Error(message)
+    expect(fixture.detectionVersion).toBe(FIXTURE_VERSION)
+  })
+
+  test('現行の版（v16）の 1 段目の質問は、フィクスチャを作った v15 と同一（保存応答の再評価が有効）', () => {
+    expect(DETECTION_VERSION).not.toBe(FIXTURE_VERSION)
+    const requests = fixture.cases.flatMap((item) =>
+      item.candidates.flatMap((candidate) => sourceOfFixture(item, candidate).requests)
+    )
+    expect(requests.length).toBeGreaterThan(0)
+    expect(sha256Hex(canonicalJson(requests))).toBe(FIRST_STAGE_REQUESTS_SHA256)
+    // 現行の 1 段目に確認の質問は無い（確認の質問は 2 段目の呼び出しだけで足される）。
+    for (const request of requests) {
+      expect(Object.keys(request.questions)).not.toContain('store_confirm')
+      expect(Object.keys(request.questions)).not.toContain('character_confirm')
+    }
+  })
+
+  test('版定義でも、v16 の 1 段目の質問は v15 と同一で、足されたのは確認の 2 問だけ', () => {
+    const v15 = webhookPromptDefinition(FIXTURE_VERSION)
+    const v16 = webhookPromptDefinition(DETECTION_VERSION)
+    if (v15 === undefined || v16 === undefined) throw new Error('Missing prompt definition')
+    expect(v16.questions.slice(0, v15.questions.length)).toEqual(v15.questions)
+    expect(v16.questions.slice(v15.questions.length).map((question) => question.key)).toEqual([
+      'store_confirm',
+      'character_confirm'
+    ])
   })
 
   test('内容のハッシュが一致する（フィクスチャの破損・改変の検知）', () => {

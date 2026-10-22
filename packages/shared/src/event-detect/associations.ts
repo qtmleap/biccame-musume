@@ -8,6 +8,9 @@ export const detectionCharacters = catalog.characters
 // 店舗とビッカメ娘の質問（v13 以降）。どちらも choice 1 問で、回答のキーは質問と同じ。
 export const STORE_QUESTION_KEY = 'store'
 export const CHARACTER_QUESTION_KEY = 'character'
+// 2段目（v16 以降）の確認の質問。1段目で選んだ最上位の店舗・娘ごとに、はい/いいえ（noul）で別の呼び出しとして聞く。
+export const STORE_CONFIRM_KEY = 'store_confirm'
+export const CHARACTER_CONFIRM_KEY = 'character_confirm'
 /** 選択肢の特別な値。カタログの id と衝突しないことをテストで固定している。 */
 export const ASSOCIATION_NONE = 'none'
 export const ASSOCIATION_MULTIPLE = 'multiple'
