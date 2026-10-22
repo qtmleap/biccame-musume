@@ -63,8 +63,7 @@ routes.openapi(
           id: jwtPayload.uid,
           displayName: jwtPayload.usr.display_name,
           thumbnailURL: jwtPayload.usr.thumbnail_url,
-          screenName: null,
-          email: jwtPayload.usr.email
+          screenName: null
         },
         200
       )

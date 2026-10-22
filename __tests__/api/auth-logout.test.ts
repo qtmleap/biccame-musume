@@ -16,7 +16,7 @@ test('logout_then_protected_api_returns_401', async () => {
     {
       uid: 'account-a',
       exp: Math.floor(Date.now() / 1000) + 3600,
-      usr: { email: null, email_verified: false, display_name: null, thumbnail_url: null }
+      usr: { display_name: null, thumbnail_url: null }
     },
     env.JWT_SECRET_KEY,
     'HS256'

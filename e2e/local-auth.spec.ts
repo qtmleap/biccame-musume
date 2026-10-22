@@ -31,7 +31,7 @@ test('real Firebase SDK + AuthProvider exchanges emulator token for cookie and l
   expect(privateResponse.status()).toBe(200)
   const payload = await privateResponse.json()
   expect(payload.uid).toBe(await page.getByTestId('user').textContent())
-  expect(payload.user.email).toBe('fixture@example.test')
+  expect(payload.user).toEqual({ id: payload.uid })
   const logout = page.waitForResponse((response) => response.url().endsWith('/api/auth/logout'))
   await page.getByRole('button', { name: 'ログアウト', exact: true }).click()
   const logoutResponse = await logout

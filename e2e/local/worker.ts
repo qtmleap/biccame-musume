@@ -11,7 +11,7 @@ app.use('/api/*', csrf({ origin: (origin, c) => isAllowedOrigin(origin, c.env) }
 app.route('/api/auth', auth)
 app.get('/api/session', verifyToken, async (c) => {
   const uid = getToken(c)
-  const user = await c.env.DB.prepare('SELECT id, email FROM users WHERE id = ?').bind(uid).first()
+  const user = await c.env.DB.prepare('SELECT id FROM users WHERE id = ?').bind(uid).first()
   return c.json({ uid, user })
 })
 app.get('/health', (c) => c.json({ environment: c.env.ENVIRONMENT, project: c.env.FIREBASE_PROJECT_ID }))

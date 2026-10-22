@@ -37,7 +37,6 @@ routes.openapi(
       select: {
         id: true,
         displayName: true,
-        email: true,
         thumbnailURL: true,
         createdAt: true
       }
@@ -45,7 +44,6 @@ routes.openapi(
     const users = rows.map((u) => ({
       id: u.id,
       displayName: u.displayName,
-      email: u.email,
       thumbnailURL: u.thumbnailURL,
       createdAt: u.createdAt.toISOString()
     }))
