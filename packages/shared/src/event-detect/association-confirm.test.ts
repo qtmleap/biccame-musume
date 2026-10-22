@@ -17,7 +17,6 @@ import {
 } from './association-confirm'
 import { CHARACTER_CONFIRM_KEY, detectionStores, STORE_CONFIRM_KEY } from './associations'
 import { type ClefAnswer, ClefRequestSchema } from './clef'
-import { DETECTION_VERSION } from './detection'
 import { choice, post, requestWithAssociations } from './detection-test-fixtures'
 import { webhookPromptDefinition } from './prompt-definitions'
 
@@ -192,7 +191,8 @@ describe('v16 の版定義', () => {
     return definition
   }
   const v15 = definitionOf('v5-webhook-v15-concise-author')
-  const v16 = definitionOf(DETECTION_VERSION)
+  // 現行の版（DETECTION_VERSION）は v17 に進んでいる。v16 は保存済みの定義を明示的な ID で引く。
+  const v16 = definitionOf('v5-webhook-v16-confirm-selection')
 
   test('1段目の質問は v15 と同一で、末尾に確認の2問だけが足される', () => {
     expect(v16.questionVersion).toBe('v5-webhook-v16-confirm-selection')

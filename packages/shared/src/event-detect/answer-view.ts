@@ -1,4 +1,4 @@
-import { storeShortName } from './association-questions'
+import { CHARACTER_STORE_CRITERIA, storeShortName } from './association-questions'
 import {
   ASSOCIATION_MULTIPLE,
   ASSOCIATION_NONE,
@@ -6,6 +6,7 @@ import {
   CHARACTER_OTHER,
   CHARACTER_QUESTION_KEY,
   CHARACTER_SECRET,
+  CHARACTER_STORE,
   detectionCharacters,
   detectionStores,
   STORE_CONFIRM_KEY,
@@ -86,6 +87,8 @@ const CONDITION_LABELS: ReadonlyMap<string, string> = new Map([
   ['none', '確定できない']
 ])
 const SPECIAL_CHARACTER_LABELS: ReadonlyMap<string, string> = new Map([
+  // v17 以降。質問の選択肢の説明（association-questions.ts）と同じ文言を出す。
+  [CHARACTER_STORE, CHARACTER_STORE_CRITERIA],
   [CHARACTER_OTHER, 'その他'],
   [CHARACTER_SECRET, 'シークレット'],
   [ASSOCIATION_MULTIPLE, '複数'],

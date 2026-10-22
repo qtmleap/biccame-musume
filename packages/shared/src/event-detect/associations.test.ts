@@ -23,7 +23,7 @@ const post: DetectPost = {
   media: []
 }
 const other: DetectPost = { ...post, screenName: 'bic_abeno', text: 'あべのたん限定名刺を11/3から配布します' }
-const SPECIAL_KEYS = ['none', 'multiple', 'other', 'secret']
+const SPECIAL_KEYS = ['none', 'multiple', 'other', 'secret', 'store_character']
 
 describe('開催店舗と配布物の対象ビッカメ娘', () => {
   test('通知対象外と閉店キャラも判定辞書へ含み、物理店舗とは分離する', () => {
@@ -36,17 +36,18 @@ describe('開催店舗と配布物の対象ビッカメ娘', () => {
   })
 })
 
-describe('現行版（v16）の1段目の質問セット（v15 と同一）', () => {
+describe('現行版（v17）の1段目の質問セット（店舗の質問は v15 から変わらない。娘は store_character を足した）', () => {
   const [request] = createDetectionRequests(post)
 
-  test('店舗は44店舗 + multiple + none の46択、娘は51人 + other・secret・multiple・none の55択', () => {
+  test('店舗は44店舗 + multiple + none の46択、娘は51人 + store_character・other・secret・multiple・none の56択', () => {
     const store = choiceQuestionOf(request, 'store')
     const character = choiceQuestionOf(request, 'character')
     expect(Object.keys(store.criteria)).toHaveLength(46)
-    expect(Object.keys(character.criteria)).toHaveLength(55)
+    expect(Object.keys(character.criteria)).toHaveLength(56)
     expect(Object.keys(store.criteria)).toEqual([...detectionStores.map((entry) => entry.id), 'multiple', 'none'])
     expect(Object.keys(character.criteria)).toEqual([
       ...detectionCharacters.map((entry) => entry.id),
+      'store_character',
       'other',
       'secret',
       'multiple',
@@ -78,11 +79,13 @@ describe('現行版（v16）の1段目の質問セット（v15 と同一）', ()
     for (const entry of detectionStores) expect(StoreKeySchema.safeParse(entry.id).success, entry.id).toBe(true)
     for (const entry of detectionCharacters)
       expect(EventCharacterSchema.safeParse(entry.id).success, entry.id).toBe(true)
-    // 特別値のうち、娘として保存できるのは other と secret だけ。none と multiple は登録候補に入れない。
+    // 特別値のうち、娘として保存できるのは other と secret だけ。none・multiple・store_character は登録候補に入れない
+    // （store_character は採用した店舗の娘に置き換えて保存する。detection-character.ts）。
     expect(EventCharacterSchema.safeParse('other').success).toBe(true)
     expect(EventCharacterSchema.safeParse('secret').success).toBe(true)
     expect(EventCharacterSchema.safeParse('none').success).toBe(false)
     expect(EventCharacterSchema.safeParse('multiple').success).toBe(false)
+    expect(EventCharacterSchema.safeParse('store_character').success).toBe(false)
   })
   test('送信は1バッチで、質問は64問以内。店舗・娘ごとの noul 質問は作らない', () => {
     const batches = createDetectionRequests(post)
@@ -115,7 +118,6 @@ describe('現行版（v16）の1段目の質問セット（v15 と同一）', ()
   })
   test('娘の質問文は共同デザインを multiple、企画でないものを none とし、本文にない娘の推測を禁じる', () => {
     const { instructions } = choiceQuestionOf(request, 'character')
-    expect(instructions).toContain('開催店舗・投稿者の娘と同一と仮定しない')
     expect(instructions).toContain('本文に名前のない娘を推測しない')
     expect(instructions).toContain('multiple')
     expect(instructions).toContain('other')
@@ -132,8 +134,10 @@ const V13 = 'v5-webhook-v13-choice-associations'
 const V14 = 'v5-webhook-v14-concise-choices'
 const V15 = 'v5-webhook-v15-concise-author'
 const V16 = 'v5-webhook-v16-confirm-selection'
+const V17 = 'v5-webhook-v17-store-character'
 const SPECIAL_STORE_KEYS = ['multiple', 'none']
 const SPECIAL_CHARACTER_KEYS = ['other', 'secret', 'multiple', 'none']
+const V17_CHARACTER_KEYS = ['store_character', ...SPECIAL_CHARACTER_KEYS]
 const questionOfVersion = (version: string, key: 'store' | 'character') => {
   const definition = webhookPromptDefinition(version)
   const question = definition?.questions.find((entry) => entry.key === key)
@@ -145,8 +149,8 @@ describe('v14 から続く選択肢の説明: 名前だけ（括弧・id・「�
   const store = storeCriteria()
   const character = characterCriteria()
 
-  test('現行版は v16 で、店舗 44 件の説明はすべてアプリの短い店舗名（STORE_DISPLAY_NAMES）', () => {
-    expect(DETECTION_VERSION).toBe(V16)
+  test('現行版は v17 で、店舗 44 件の説明はすべてアプリの短い店舗名（STORE_DISPLAY_NAMES）', () => {
+    expect(DETECTION_VERSION).toBe(V17)
     expect(detectionStores).toHaveLength(44)
     for (const entry of detectionStores) {
       const key = StoreKeySchema.safeParse(entry.id)
@@ -176,11 +180,17 @@ describe('v14 から続く選択肢の説明: 名前だけ（括弧・id・「�
     expect(new Set(Object.values(store)).size).toBe(Object.keys(store).length)
     expect(new Set(Object.values(character)).size).toBe(Object.keys(character).length)
   })
-  test('選択肢の数とキーは v13 から変わらない（店舗 46、娘 55）', () => {
+  test('選択肢の数とキー: 店舗は v13 から変わらず 46、娘は v13 の 55 に store_character を足した 56', () => {
     expect(Object.keys(store)).toEqual([...detectionStores.map((entry) => entry.id), ...SPECIAL_STORE_KEYS])
-    expect(Object.keys(character)).toEqual([...detectionCharacters.map((entry) => entry.id), ...SPECIAL_CHARACTER_KEYS])
+    expect(Object.keys(character)).toEqual([...detectionCharacters.map((entry) => entry.id), ...V17_CHARACTER_KEYS])
     expect(Object.keys(store)).toHaveLength(46)
-    expect(Object.keys(character)).toHaveLength(55)
+    expect(Object.keys(character)).toHaveLength(56)
+    const v13Character = questionOfVersion(V13, 'character').criteria
+    expect(Object.keys(character).filter((key) => key !== 'store_character')).toEqual([
+      ...detectionCharacters.map((entry) => entry.id),
+      ...SPECIAL_CHARACTER_KEYS
+    ])
+    expect(Object.keys(v13Character)).toHaveLength(55)
   })
   test('特別な選択肢（multiple・none・other・secret）の説明は v13 のまま変えない', () => {
     const v13Store = questionOfVersion(V13, 'store').criteria
@@ -200,14 +210,13 @@ describe('v13 の定義は固定のまま残り、v14 は説明だけが違う',
     for (const entry of detectionStores) expect(store[entry.id], entry.id).toBe(`${entry.name}（${entry.id}）`)
     for (const entry of detectionCharacters) expect(character[entry.id], entry.id).toBe(`${entry.name}（${entry.id}）`)
   })
-  test('v14 の定義は新形式で、生成物が現行コードの質問と一致する', () => {
+  test('v14 の定義は新形式で、店舗は現行コードの質問と、娘は v16 の保存済み定義（v17 より前の最後の版）と一致する', () => {
     const [request] = createDetectionRequests(post)
-    for (const key of ['store', 'character'] as const) {
-      const defined = questionOfVersion(V14, key)
-      const actual = choiceQuestionOf(request, key)
-      expect(defined.criteria).toEqual(actual.criteria)
-      expect(defined.instructions).toBe(actual.instructions)
-    }
+    const actual = choiceQuestionOf(request, 'store')
+    expect(questionOfVersion(V14, 'store').criteria).toEqual(actual.criteria)
+    expect(questionOfVersion(V14, 'store').instructions).toBe(actual.instructions)
+    expect(questionOfVersion(V14, 'character').criteria).toEqual(questionOfVersion(V16, 'character').criteria)
+    expect(questionOfVersion(V14, 'character').instructions).toBe(questionOfVersion(V16, 'character').instructions)
     expect(questionOfVersion(V14, 'store').criteria.abeno).toBe('あべのキューズモール店')
     expect(questionOfVersion(V14, 'character').criteria.abeno).toBe('あべのたん')
   })
@@ -259,14 +268,13 @@ describe('v14 の定義は固定のまま残り、v15 は state の「投稿者�
     expect(lines15[1]).not.toContain('その版の店舗辞書')
     expect(lines15[1]).not.toContain('ビックカメラ')
   })
-  test('v15 の定義は現行コードの店舗・娘の質問と一致する', () => {
+  test('v15 の定義は、店舗は現行コードの質問と、娘は v16 の保存済み定義と一致する（娘の質問は v17 で変わった）', () => {
     const [request] = createDetectionRequests(post)
-    for (const key of ['store', 'character'] as const) {
-      const defined = questionOfVersion(V15, key)
-      const actual = choiceQuestionOf(request, key)
-      expect(defined.criteria).toEqual(actual.criteria)
-      expect(defined.instructions).toBe(actual.instructions)
-    }
+    const actual = choiceQuestionOf(request, 'store')
+    expect(questionOfVersion(V15, 'store').criteria).toEqual(actual.criteria)
+    expect(questionOfVersion(V15, 'store').instructions).toBe(actual.instructions)
+    expect(questionOfVersion(V15, 'character').criteria).toEqual(questionOfVersion(V16, 'character').criteria)
+    expect(questionOfVersion(V15, 'character').instructions).toBe(questionOfVersion(V16, 'character').instructions)
   })
   test('配布物の抽出の定義は従来の「店舗名（店舗ID）」のひな形のまま（抽出の入力は v15 で変えない）', () => {
     const extraction = definitionOf(EXTRACTION_VERSION)

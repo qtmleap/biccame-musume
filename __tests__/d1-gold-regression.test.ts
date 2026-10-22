@@ -45,44 +45,85 @@ const rules = { dev: evaluateSplit('dev', ADOPTED, 0.9), test: evaluateSplit('te
 // 参考: 件数の監査を 70% にした場合（EVENT_DETECTION_ITEM_COUNT_THRESHOLD=0.7）。不一致のときの抽出のやり直しは再現していない近似。
 const audit70 = { dev: evaluateSplit('dev', ADOPTED, 0.7), test: evaluateSplit('test', ADOPTED, 0.7) }
 
-// フィクスチャの保存応答は v15 の 1 段目の質問への回答。v16 は 1 段目が v15 と同一で、2 段目（確認の質問）を足した版なので、
-// 版の文字列は現行（v16）と比べず、「作られた版（v15）」と「現行の 1 段目の質問が v15 と同一であること」の 2 つで守る。
+// フィクスチャの保存応答は v15 の 1 段目の質問への回答。現行の版（v17）は、v15 に対して娘の質問に store_character を足し、
+// 「店舗の娘と同一と仮定しない」注意書きを外した版なので、現行のソースは v15 の 1 段目の質問をもう作れない。
+// そこで版の文字列は現行（v17）と比べず、次の 3 つで守る。
+//   1. フィクスチャは「作られた版（v15）」の 1 段目の質問への回答であること。
+//   2. 生成済みの版定義に、v15 の 1 段目の質問が 1 文字も変わらず残っていること（内容の sha256 で固定）。
+//   3. 保存応答の再評価に使う現行の request は、娘の質問を除けば v15 と同一で、娘の質問の選択肢は v15 の選択肢を全て含むこと。
 // 2 段目の回答はフィクスチャに無い。確認の質問を含まない request は evaluateDetection の判定を変えないので、再評価は v15 のときと同じ数字になる。
-// 確認の回答を含むフィクスチャへの再作成は、v16 を実 AI で測り直した後に行う（docs/event-detection-golden.md）。
+// v17 の回答を含むフィクスチャへの再作成は、v17 を実 AI で測り直した後に行う（docs/event-detection-golden.md）。
 const FIXTURE_VERSION = 'v5-webhook-v15-concise-author'
+// 生成済みの v15 の版定義（保存済み。変えてはならない）の内容の sha256。
+const V15_DEFINITION_SHA256 = '4dea483fb9bb0eec2b07087ce6ba616846baefd0c33932fbb1cd4f24a7ed765a'
 // v15 のソースで、全フィクスチャ候補から作った 1 段目の request（state と質問）の sha256。1 段目の質問・文言・選択肢・state が変わると変わる。
+// 現行の request の娘の質問を v15 の版定義の娘の質問に置き換えたものが、この値と一致する。
 const FIRST_STAGE_REQUESTS_SHA256 = 'e1dfe1e1490bad1f609ea0974254cd81e44af1a65e16ebd649da8e6c4714cad4'
+
+const v15Definition = () => {
+  const definition = webhookPromptDefinition(FIXTURE_VERSION)
+  if (definition === undefined) throw new Error('Missing v15 prompt definition')
+  return definition
+}
+const v15CharacterQuestion = () => {
+  const question = v15Definition().questions.find((entry) => entry.key === 'character')
+  if (question === undefined || question.type !== 'choice') throw new Error('Missing v15 character question')
+  return { type: question.type, instructions: question.instructions, criteria: question.criteria }
+}
+const fixtureRequests = () =>
+  fixture.cases.flatMap((item) => item.candidates.flatMap((candidate) => sourceOfFixture(item, candidate).requests))
 
 describe('Golden フィクスチャの整合', () => {
   test('フィクスチャは v15 の 1 段目の質問で作られている', () => {
-    const message = `フィクスチャの版が想定と違います（${fixture.detectionVersion} != ${FIXTURE_VERSION}）。再作成したら FIXTURE_VERSION と FIRST_STAGE_REQUESTS_SHA256 を更新してください（手順は docs/event-detection-golden.md）`
+    const message = `フィクスチャの版が想定と違います（${fixture.detectionVersion} != ${FIXTURE_VERSION}）。再作成したら FIXTURE_VERSION と V15_DEFINITION_SHA256 / FIRST_STAGE_REQUESTS_SHA256 を更新してください（手順は docs/event-detection-golden.md）`
     if (fixture.detectionVersion !== FIXTURE_VERSION) throw new Error(message)
     expect(fixture.detectionVersion).toBe(FIXTURE_VERSION)
   })
 
-  test('現行の版（v16）の 1 段目の質問は、フィクスチャを作った v15 と同一（保存応答の再評価が有効）', () => {
+  test('生成済みの版定義に v15 の 1 段目の質問が変わらず残っている（現行の版 v17 とは別の版）', () => {
     expect(DETECTION_VERSION).not.toBe(FIXTURE_VERSION)
-    const requests = fixture.cases.flatMap((item) =>
-      item.candidates.flatMap((candidate) => sourceOfFixture(item, candidate).requests)
-    )
+    expect(sha256Hex(JSON.stringify(v15Definition()))).toBe(V15_DEFINITION_SHA256)
+    // v15 の定義の質問は、1 段目の質問だけ（確認の質問は v16 から）。
+    expect(v15Definition().questions.map((question) => question.key)).not.toContain('store_confirm')
+    expect(v15Definition().questions.map((question) => question.key)).not.toContain('character_confirm')
+  })
+
+  test('現行の 1 段目の request は、娘の質問を v15 の定義に戻せば v15 と同一（娘の質問以外は変わっていない）', () => {
+    const requests = fixtureRequests()
     expect(requests.length).toBeGreaterThan(0)
-    expect(sha256Hex(canonicalJson(requests))).toBe(FIRST_STAGE_REQUESTS_SHA256)
-    // 現行の 1 段目に確認の質問は無い（確認の質問は 2 段目の呼び出しだけで足される）。
+    const restored = requests.map((request) => ({
+      ...request,
+      questions: { ...request.questions, character: v15CharacterQuestion() }
+    }))
+    expect(sha256Hex(canonicalJson(restored))).toBe(FIRST_STAGE_REQUESTS_SHA256)
+    // 現行の娘の質問は v15 とは別物（store_character を足した）で、現行の 1 段目に確認の質問は無い。
     for (const request of requests) {
       expect(Object.keys(request.questions)).not.toContain('store_confirm')
       expect(Object.keys(request.questions)).not.toContain('character_confirm')
+      const character = request.questions.character
+      if (character?.type !== 'choice') throw new Error('Missing character question')
+      expect(character.criteria).not.toEqual(v15CharacterQuestion().criteria)
+      expect(Object.keys(character.criteria)).toContain('store_character')
     }
   })
 
-  test('版定義でも、v16 の 1 段目の質問は v15 と同一で、足されたのは確認の 2 問だけ', () => {
-    const v15 = webhookPromptDefinition(FIXTURE_VERSION)
-    const v16 = webhookPromptDefinition(DETECTION_VERSION)
-    if (v15 === undefined || v16 === undefined) throw new Error('Missing prompt definition')
-    expect(v16.questions.slice(0, v15.questions.length)).toEqual(v15.questions)
-    expect(v16.questions.slice(v15.questions.length).map((question) => question.key)).toEqual([
-      'store_confirm',
-      'character_confirm'
-    ])
+  test('v15 の保存応答の娘の回答は、v15 の選択肢にも現行の選択肢にも含まれ、store_character は含まない（再評価が有効）', () => {
+    const v15Keys = Object.keys(v15CharacterQuestion().criteria)
+    const checked = fixture.cases.flatMap((item) =>
+      item.candidates.map((candidate) => {
+        const source = sourceOfFixture(item, candidate)
+        const character = source.answers.character
+        const current = source.request.questions.character
+        if (character?.type !== 'choice' || current?.type !== 'choice') throw new Error('Missing character answer')
+        for (const key of [character.choice, ...Object.keys(character.probabilities)]) {
+          expect(v15Keys).toContain(key)
+          expect(Object.keys(current.criteria)).toContain(key)
+          expect(key).not.toBe('store_character')
+        }
+        return character.choice
+      })
+    )
+    expect(checked.length).toBeGreaterThan(0)
   })
 
   test('内容のハッシュが一致する（フィクスチャの破損・改変の検知）', () => {

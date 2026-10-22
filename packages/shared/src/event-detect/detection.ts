@@ -7,12 +7,11 @@ import {
   CHARACTER_CONFIRM_KEY,
   CHARACTER_QUESTION_KEY,
   STORE_CONFIRM_KEY,
-  selectedCharacterIds,
   selectedStores
 } from './associations'
 import { type ClefAnswer, type ClefRequest, type ClefResponse, ClefResponseSchema } from './clef'
 import { keyToDate, keyToQuantity, QUESTION_VERSION } from './decide'
-import { resolveCharacterIds } from './detection-character'
+import { draftCharacterIds, resolveCharacterIds } from './detection-character'
 import {
   conditionQuestions,
   hasAmbiguousMoney,
@@ -75,8 +74,9 @@ export {
   thresholdOf
 } from './detection-thresholds'
 
-// v16: 1段目（店舗・娘の choice を含む質問）は v15 と同一。2段目として、選んだ最上位の店舗・娘ごとに「はい/いいえ」の確認を別の呼び出しで聞く。
-export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v16-confirm-selection`
+// v17: 娘の質問に store_character（本文でビッカメ娘に特に言及がなければ開催店舗の娘）を足し、「店舗の娘と同一と仮定しない」注意書きを外した。
+// 店舗の質問と2段目（選んだ最上位の店舗・娘ごとの「はい/いいえ」の確認。v16 で追加）の質問は v16 と同一。
+export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v17-store-character`
 export {
   type DetectionOutcome,
   DetectionOutcomeSchema,
@@ -339,15 +339,15 @@ const draftCategory = (answer: ClefAnswer | undefined): Category | undefined => 
  */
 export const buildDetectionDraft = (post: DetectPost, answers: ClefResponse['answers']): DetectionDraft => {
   const category = draftCategory(answers.category)
-  // 下書きでも開催店舗から対象キャラクターを推測しない。版ごとに回答の形が違うため、キーの有無で読み分ける。
-  //  v2: store（choice）／v3〜v12: venue.* と character.*（noul）／v13 以降（v14・v15 を含む）: store と character（choice）
+  // 下書きでも開催店舗から対象キャラクターを推測しない（v17 の store_character が最上位のときだけ、下書きの店舗の娘）。版ごとに回答の形が違うため、キーの有無で読み分ける。
+  //  v2: store（choice）／v3〜v12: venue.* と character.*（noul）／v13 以降（v14〜v17 を含む）: store と character（choice）
   const keys = Object.keys(answers)
   const stores = keys.some((key) => key.startsWith('venue.'))
     ? associationIds(answers, 'venue', 0.5)
     : selectedStores(argmaxOf(answers.store))
   const characterIds = keys.some((key) => key.startsWith('character.'))
     ? associatedCharacterIds(answers, 0.5)
-    : selectedCharacterIds(argmaxOf(answers.character))
+    : draftCharacterIds(argmaxOf(answers.character), stores)
   const start = argmaxOf(answers.start_date)
   const startDate = validOrUndefined(z.iso.date(), start ? keyToDate(start) : undefined)
   const end = argmaxOf(answers.end_date)

@@ -16,6 +16,8 @@ export const ASSOCIATION_NONE = 'none'
 export const ASSOCIATION_MULTIPLE = 'multiple'
 export const CHARACTER_OTHER = 'other'
 export const CHARACTER_SECRET = 'secret'
+// v17 以降。本文でビッカメ娘に特に言及がないときの選択肢で、開催店舗の娘として扱う。EventCharacter ではないので、そのままは保存されない。
+export const CHARACTER_STORE = 'store_character'
 
 /** 選択された店舗 id から登録候補の店舗を作る。カタログにある店舗 1 つだけを採用し、none・multiple・未知の値は空にする。 */
 export const selectedStores = (choice: string | undefined): string[] =>
@@ -23,7 +25,7 @@ export const selectedStores = (choice: string | undefined): string[] =>
 
 /**
  * 選択されたビッカメ娘から登録候補の対象を作る。EventCharacterSchema に合う値（店舗キー・other・secret）1 つだけを採用し、
- * none・multiple・未知の値は空にする。共同デザインは人が編集フォームで複数指定する。
+ * none・multiple・store_character・未知の値は空にする。store_character は開催店舗の娘で、店舗を採用した側（detection-character.ts）が決める。共同デザインは人が編集フォームで複数指定する。
  */
 export const selectedCharacterIds = (choice: string | undefined) => {
   const parsed = EventCharacterSchema.safeParse(choice)
