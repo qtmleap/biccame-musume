@@ -26,8 +26,13 @@ body {
      Use CSS outline (drawn inside via negative offset) instead of border-color
      so 1px frame doesn't eat into content width / overlap with neighbors.
      Placed in `utilities` layer so it wins over Tailwind utility classes like
-     `bg-transparent` baked into the shadcn primitives. */
+     `bg-transparent` baked into the shadcn primitives.
+     `<Button asChild variant="outline"><Link/></Button>` は `<a>` として描画されるため、
+     `button` だけでなく `a[data-slot="button"]` も同じルールに含める。
+     PaginationLink は data-variant を持たないため、現在ページ（data-active="true"）だけ別途含める（ghost の非アクティブは枠なし）。 */
   button[data-variant="outline"][data-slot],
+  a[data-variant="outline"][data-slot="button"],
+  a[data-slot="pagination-link"][data-active="true"],
   [data-slot="select-trigger"],
   [data-slot="input"] {
     background-color: var(--button-surface);
@@ -37,6 +42,8 @@ body {
     outline-offset: -1.5px;
   }
   button[data-variant="outline"][data-slot]:hover,
+  a[data-variant="outline"][data-slot="button"]:hover,
+  a[data-slot="pagination-link"][data-active="true"]:hover,
   [data-slot="select-trigger"]:hover {
     background-color: var(--button-surface-hover);
   }

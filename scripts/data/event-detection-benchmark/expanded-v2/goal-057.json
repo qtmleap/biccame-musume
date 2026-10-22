@@ -1,0 +1,132 @@
+[
+  {
+    "id": "expanded-v2-positive-1860917553218076927",
+    "source": "public-post",
+    "description": "takatsuki-christmas-card-at-yao-2024",
+    "post": {
+      "id": "1860917553218076927",
+      "createdAt": "2024-11-25T05:24:53.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "↓たかつきたんからメッセージやで✨\n\n۶(๑╹∀╹)q #こんつき\nアカウントロックの為、ご不便おかけしすみません ۶(人ω<`;)\nアカウントロック解除されるまで、温かく見守っていただけると嬉しいです \n\n本日から、「クリスマスイベント名刺」配布しています🎄\n期間は11月25㈪から12月25日㈬です https://t.co/edllzh1tlf",
+      "url": "https://x.com/bic_yao/status/1860917553218076927",
+      "media": [
+        "https://pbs.twimg.com/media/GdNMWJMa4AAz6ho.png",
+        "https://pbs.twimg.com/media/GdNMZlpa4AAMH4n.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": [
+        "takatsuki"
+      ],
+      "characterIds": [
+        "takatsuki"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "八尾のアカウントがたかつきたんの伝言を掲載。アカウントだけから対象娘を八尾にしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "takatsuki-christmas-card-at-yao-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "クリスマスイベント名刺",
+          "evidence": [
+            "↓たかつきたんからメッセージやで✨",
+            "۶(๑╹∀╹)q #こんつき",
+            "アカウントロックの為、ご不便おかけしすみません ۶(人ω<`;)",
+            "アカウントロック解除されるまで、温かく見守っていただけると嬉しいです ",
+            "本日から、「クリスマスイベント名刺」配布しています🎄",
+            "期間は11月25㈪から12月25日㈬です https://t.co/edllzh1tlf"
+          ]
+        }
+      ],
+      "groupingNote": "八尾のアカウントがたかつきたんの伝言を掲載。アカウントだけから対象娘を八尾にしない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 191733,
+      "postSha256": "2cc75d2e6872c7800ca64019c6c3ddbe4d20ccd130240ac919918986d8de2106",
+      "textSha256": "617f947c1f46f3cd848acff2c7a0c817b588085c879891303338df966410aac9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1853289628167713014",
+    "source": "public-post",
+    "description": "takatsuki-christmas-card-at-yao-2024 matched control",
+    "post": {
+      "id": "1853289628167713014",
+      "createdAt": "2024-11-04T04:14:14.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "ひるやおー☀\n秋晴れの良いお天気だねぇ。\n三連休最終日、皆はどこかお出かけする？\n最近TVで秋スイーツ特集よく見るから、カフェ巡りとかもいいなぁ🤤\nアリオ八尾の中にも秋限定メニュー出してるお店色々あるから、おやつ食べに行くのもいいかも🍠🌰🎃\n皆の秋のおすすめメニューあったら教えて✨",
+      "url": "https://x.com/bic_yao/status/1853289628167713014",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1853289628167713014",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 196629,
+      "postSha256": "ba1970e5df45a58f450cb6475c2e552ac305b74b70e6c059e8b816ec0c10fd42",
+      "textSha256": "eb2ca18f0d7fd4d26873f278d12c0d5acb49db651ccd84a470d65e3ee49d74ee"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

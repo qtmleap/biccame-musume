@@ -1,0 +1,123 @@
+[
+  {
+    "id": "expanded-v2-positive-1095542221628006400",
+    "source": "public-post",
+    "description": "bicqlo-radius-badge-end-2019",
+    "post": {
+      "id": "1095542221628006400",
+      "createdAt": "2019-02-13T04:36:34.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "ヾ(*・ω・)ノ｡oO（ラディウスさん（@Mr_i_radius）とコラボのビックロたん缶バッチですが…配布終了となりました！！ラディウスさんとビッカメ娘のコラボイヤホンをお手にとってくださった皆様、ありがとうございました！！！！）",
+      "url": "https://x.com/bic_shinjuku3ch/status/1095542221628006400",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "bicqlo"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "ラディウスのコラボイヤホン特典缶バッチが完配。全店舗の他の企画まで終了としない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "end"
+    ],
+    "group": "bicqlo-radius-badge-end-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "ビックロたん缶バッチ",
+          "evidence": [
+            "ヾ(*・ω・)ノ｡oO（ラディウスさん（@Mr_i_radius）とコラボのビックロたん缶バッチですが…配布終了となりました！！ラディウスさんとビッカメ娘のコラボイヤホンをお手にとってくださった皆様、ありがとうございました！！！！）"
+          ]
+        }
+      ],
+      "groupingNote": "ラディウスのコラボイヤホン特典缶バッチが完配。全店舗の他の企画まで終了としない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 780178,
+      "postSha256": "e61f28ad109a05f23337563643fae4cd4760f4e953f402f3490d9ecaec2e3c9a",
+      "textSha256": "a0e329305cfd756f0ded737f2be0ab32e61c0b2f3aec218d982ab4bac5b6bf0a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1099846776834514946",
+    "source": "public-post",
+    "description": "bicqlo-radius-badge-end-2019 matched control",
+    "post": {
+      "id": "1099846776834514946",
+      "createdAt": "2019-02-25T01:41:20.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "ヾ(*・ω・)ノ｡oO（おはようございます☆今日は朝ご飯に梅おにぎりを作ったのです。梅干しをたたいて、長ネギをみじん切りにして少し入れて混ぜるのです。とっても美味しくできました♡さて、そんな本日もビックロでお待ちしております♪）",
+      "url": "https://x.com/bic_shinjuku3ch/status/1099846776834514946",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1099846776834514946",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 775990,
+      "postSha256": "244a9fd9600cdd305a502d49883972cfef14fd5f8476858a918931cbc8cb2137",
+      "textSha256": "346cd26681b481d57fe0088de2d8362796fb3246ada160b788a2edc73f9c1662"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

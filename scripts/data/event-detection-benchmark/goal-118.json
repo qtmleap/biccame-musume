@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-2049322818349982196",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2049322818349982196",
+      "createdAt": "2026-04-29T03:00:09.000Z",
+      "screenName": "bictakasaki",
+      "kind": "original",
+      "text": "みなのもの、おはようございますなのじゃ🌸\n\nきょうは #昭和の日 ✨\n\nビックカメラ高崎東口店は昭和うまれなのじゃ✨\nながい れきし があるのじゃ🌸 https://t.co/jfr0fH9UsD",
+      "url": "https://x.com/bictakasaki/status/2049322818349982196",
+      "media": [
+        "https://pbs.twimg.com/media/HHCn3d8boAAewVf.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「みなのもの、おはようございますなのじゃ🌸 / きょうは #昭和の日 ✨ / ビックカメラ高崎東口店は昭和うまれなのじゃ✨」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "takasaki-showa-day-greeting-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 50034,
+      "postSha256": "ac1514a4b40fdf87f07ecf0454ff4dbb87d078dbc9f91458e888001816632faf",
+      "textSha256": "3542614555269b98616f95023fbcac343681ee05b4f524f80eab02b4f0484d15"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-2083499881042448547",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2083499881042448547",
+      "createdAt": "2026-08-01T10:27:35.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "8/7(金)から\n『使うたび、めぐるたび、\n千葉の楽しさが広がっていく！\n千葉県キャッシュレス決済キャンペーン！』がスタートします✨\n\nビックカメラ船橋駅FACE店も対象です!!🌻 https://t.co/PVmxUO7KWr",
+      "url": "https://x.com/bic_funabashi/status/2083499881042448547",
+      "media": [
+        "https://pbs.twimg.com/media/HOoTdUpa4AAeOkz.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「8/7(金)から / 『使うたび、めぐるたび、 / 千葉の楽しさが広がっていく！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "chiba-cashless-payment-campaign-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 19925,
+      "postSha256": "f1564661e15bde93aa6e05aa8c5115fb4cac34f1930913a7317756603f65a81f",
+      "textSha256": "882b63a1d299f9570e75868e01c8a49775664deef699fed6080b3030ede64373"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

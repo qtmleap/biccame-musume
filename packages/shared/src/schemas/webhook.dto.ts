@@ -1,4 +1,4 @@
-import { ClefModelSchema, ClefResponseSchema } from '@biccame/shared/event-detect/clef'
+import { ClefModelSchema, ClefRequestSchema, ClefResponseSchema } from '@biccame/shared/event-detect/clef'
 import {
   DetectionDraftSchema,
   FieldThresholdsSchema,
@@ -9,6 +9,33 @@ import { DetectPostSchema } from '@biccame/shared/event-detect/post'
 import { GapStatusSchema } from '@biccame/shared/event-detect/viewer'
 import { EventRequestSchema } from '@biccame/shared/schemas/event.dto'
 import { z } from 'zod'
+import { WebhookDiscoverySchema, WebhookRelatedEventsSchema } from './webhook-discovery.dto'
+
+export { type WebhookDiscovery, WebhookDiscoverySchema } from './webhook-discovery.dto'
+
+// 版ごとの不変な定義と、判定ごとの実入力を区別する。
+export const WebhookPromptDefinitionSchema = z.object({
+  questionVersion: z.string().nonempty(),
+  origin: z.string().nonempty(),
+  stateTemplate: z.string().nonempty(),
+  questions: z.array(
+    z.object({
+      key: z.string().nonempty(),
+      type: z.enum(['noul', 'choice', 'score']),
+      instructions: z.string().nonempty(),
+      criteria: z.record(z.string().nonempty(), z.string().nonempty())
+    })
+  ),
+  dynamicCriteria: z.string().nonempty()
+})
+export type WebhookPromptDefinition = z.infer<typeof WebhookPromptDefinitionSchema>
+export const WebhookPromptSchema = z.object({
+  questionVersion: z.string().nonempty().nullable(),
+  requests: z.array(ClefRequestSchema),
+  source: z.enum(['recorded', 'definition', 'unavailable']),
+  definition: WebhookPromptDefinitionSchema.nullable()
+})
+export type WebhookPrompt = z.infer<typeof WebhookPromptSchema>
 
 export const WebhookJobStatusSchema = z.enum(['queued', 'processing', 'held', 'registered', 'ignored', 'failed'])
 export const WebhookNotificationStatusSchema = z.enum(['pending', 'sent', 'failed', 'unknown', 'skipped'])
@@ -35,6 +62,9 @@ export const WebhookJobFieldsSchema = z.object({
   postStatusProbability: z.number().min(0).max(1).nullable(),
   // 保留ジョブだけに付く、しきい値を適用しないAIの下書き（未登録）。
   draft: DetectionDraftSchema.nullable(),
+  // 未保存の旧判定を現行ルールで再生成せず、旧履歴とは区別する。
+  discovery: WebhookDiscoverySchema.nullable().optional(),
+  relatedEvents: WebhookRelatedEventsSchema.nullable().optional(),
   attempts: z.number().int().nonnegative(),
   notificationStatus: WebhookNotificationStatusSchema,
   notificationId: z.string().nonempty().nullable(),
@@ -79,7 +109,12 @@ export const WebhookKeywordVerdictSchema = z.enum(WEBHOOK_KEYWORD_VERDICTS)
  */
 export const WebhookPostStatusFilterSchema = z.enum([...GapStatusSchema.options, 'ignored'])
 export type WebhookPostStatusFilter = z.infer<typeof WebhookPostStatusFilterSchema>
+export const WebhookScreenNameSchema = z.string().regex(/^[A-Za-z0-9_]{1,15}$/)
+export const WebhookDiscoveryFilterSchema = z.enum(['detected', 'uncertain', 'not_detected', 'unrecorded'])
+export type WebhookDiscoveryFilter = z.infer<typeof WebhookDiscoveryFilterSchema>
 export const WebhookJobQuerySchema = z.object({
+  screenName: WebhookScreenNameSchema.optional(),
+  discovery: WebhookDiscoveryFilterSchema.optional(),
   status: WebhookJobStatusSchema.optional(),
   cursor: z
     .string()

@@ -1,0 +1,154 @@
+[
+  {
+    "id": "public-d-1980182718408458384",
+    "source": "public-post",
+    "description": "期間限定iPhone買取増額",
+    "post": {
+      "id": "1980182718408458384",
+      "createdAt": "2025-10-20T08:02:04.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "＼まだまだやってます #メガ買取❢／\n\n11/17まで期間限定 #iPhone の買取が増額中❣\niPhone15ProMax1TBが、最大14万円で買取❢\n\n#ビックカメラ 新潟店の買取カウンターは平日が比較的あいているので、スピーディーに査定します❢\n\n⬇️画像以外のモデルはこちらから検索⬇️\nhttps://t.co/VQFaN9UOxx https://t.co/D8DT8B2VyN",
+      "url": "https://x.com/niigata_bic/status/1980182718408458384",
+      "media": [
+        "https://pbs.twimg.com/media/G3sEymeWoAA0lfo.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "iPhone査定金額の買取キャンペーンで、娘のノベルティや催しは記載されていない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "limited",
+      "buyback",
+      "ordinary-product"
+    ],
+    "group": "mega-iphone-buyback-autumn-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1979112926817452418",
+    "source": "public-post",
+    "description": "iPad Pro発売と予約受付",
+    "post": {
+      "id": "1979112926817452418",
+      "createdAt": "2025-10-17T09:11:06.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "iPad Pro。\nApple Intelligenceのために設計。\n10月22日(水)発売\n\n新しい iPad Pro はビックカメラ店舗、ビックカメラ.comにてご予約承り中です。\n※一部取り扱いのない店舗がございます。\n\n詳しくはこちら\nhttps://t.co/pg9gZAoykw https://t.co/f3YGgNguHD",
+      "url": "https://x.com/bic_akiba/status/1979112926817452418",
+      "media": [
+        "https://pbs.twimg.com/media/G3c4sR5WQAASzPG.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "Apple製品の発売・予約案内だけで、ビッカメ娘の記念・限定物品や出演はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "launch",
+      "reservation",
+      "ordinary-product"
+    ],
+    "group": "ipad-pro-launch-october-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1974293397122003030",
+    "source": "public-post",
+    "description": "Apple購入者向け初期設定相談会",
+    "post": {
+      "id": "1974293397122003030",
+      "createdAt": "2025-10-04T02:00:01.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "＼ \\ ビックカメラ藤沢店Apple相談会 / ／\n10月4日(土)・11日(土)・18日(土)の\n✨3日間限定　13時～17時✨\n\n相談会当日にビックカメラ藤沢店にて\n【Mac】または【iPad】をご購入頂きますと\n初期設定のご相談を専門販売員が承ります\n\nぜひこの機会に地下1階パソコンコーナーへ\nお越しくださいませ！ https://t.co/o96H9QF7FQ",
+      "url": "https://x.com/bic_fujisawa/status/1974293397122003030",
+      "media": [
+        "https://pbs.twimg.com/media/G2YYbsAasAAT5D5.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "MacまたはiPad購入者の初期設定サポート。娘が関わる相談会とは記載されていない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "ordinary-event",
+      "purchase",
+      "consultation"
+    ],
+    "group": "fujisawa-apple-consultation-october-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2049346959241314793",
+    "source": "public-post",
+    "description": "AnkerStoreのGW期間限定セール",
+    "post": {
+      "id": "2049346959241314793",
+      "createdAt": "2026-04-29T04:36:04.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": ".　  　＼2026 AnkerStore／\n🛫🚢GOLDEN WEEK SALE 🏕🏝\n\n＼4/25(土)～5/6(水)／\nAnker対象のイヤホン・モバイルバッテリーなどが期間限定でお得✨🥳✨\nAnkerStoreは #ビックカメラ ラゾーナ川崎店2階エスカレーター横！ぜひお越しください🎉\n#Anker #AnkerStore #イヤホン #モバイルバッテリー https://t.co/Xyxl3n1tlm",
+      "url": "https://x.com/Bic_kawasaki/status/2049346959241314793",
+      "media": [
+        "https://pbs.twimg.com/media/HHC9VbEbMAA1vxd.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "イヤホンやモバイルバッテリーの一般セール。店舗名や期間限定だけでは娘の企画にならない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "limited",
+      "sale",
+      "ordinary-product"
+    ],
+    "group": "anker-golden-week-sale-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2026204041974620170",
+    "source": "public-post",
+    "description": "プロジェクター発売記念ポイント特典",
+    "post": {
+      "id": "2026204041974620170",
+      "createdAt": "2026-02-24T07:54:23.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "【新製品情報】\nご自宅がまるで映画館に！\n着脱式のデュアルスピーカーを搭載した\nAnker ホームプロジェクター『Soundcore Nebula P1』が2/18発売‼\n実際にお試し頂ける体験機もご用意🌟\n\n3/2(月)までの期間限定、発売を記念してビックカメラポイント30％サービス🌟\nご興味をお持ちの方は当店まで✨ https://t.co/4Btudy6Ujd",
+      "url": "https://x.com/bic_hamamatsu/status/2026204041974620170",
+      "media": [
+        "https://pbs.twimg.com/media/HB6BvfObQAA3Kgm.jpg",
+        "https://pbs.twimg.com/media/HB6Fy-rbUAA1K7i.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "発売記念はAnker製品の発売で、ポイント30%の通常商品販促。娘の周年やノベルティではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "launch",
+      "anniversary-word",
+      "points",
+      "experience"
+    ],
+    "group": "nebula-p1-launch-points-february-2026",
+    "reviewStatus": "provisional"
+  }
+]

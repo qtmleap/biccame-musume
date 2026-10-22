@@ -10,6 +10,7 @@ const makeEvent = (uuid: string, overrides: Partial<Event> = {}): Event => ({
   category: 'regular_card',
   title: uuid,
   stores: ['chofu'],
+  characterIds: ['chofu'],
   startDate: date('2026-10-04T00:00:00+09:00'),
   endDate: date('2027-03-31T00:00:00+09:00'),
   conditions: [],
@@ -27,9 +28,9 @@ const makeEvent = (uuid: string, overrides: Partial<Event> = {}): Event => ({
 const uuids = (events: { uuid: string }[]) => events.map((e) => e.uuid)
 
 describe('通常名刺の重複除去', () => {
-  test('同じ店舗でも別の娘（characterId あり）の通常名刺は両方残る', () => {
+  test('同じ店舗でも別の娘（対象が明示されたもの）の通常名刺は両方残る', () => {
     const own = makeEvent('own')
-    const other = makeEvent('other', { characterId: 'seiseki' })
+    const other = makeEvent('other', { characterIds: ['seiseki'] })
     expect(uuids(deduplicateRegularCards([own, other]))).toEqual(['own', 'other'])
     expect(uuids(deduplicateRegularCards([other, own]))).toEqual(['other', 'own'])
   })
@@ -37,59 +38,92 @@ describe('通常名刺の重複除去', () => {
   test('同じ店舗で別々の娘が複数いても、娘ごとに1件ずつ残る', () => {
     const events = [
       makeEvent('own'),
-      makeEvent('seiseki', { characterId: 'seiseki' }),
+      makeEvent('seiseki', { characterIds: ['seiseki'] }),
       makeEvent('own-old'),
-      makeEvent('seiseki-old', { characterId: 'seiseki' })
+      makeEvent('seiseki-old', { characterIds: ['seiseki'] })
     ]
     expect(uuids(deduplicateRegularCards(events))).toEqual(['own', 'seiseki'])
   })
 
-  test('同じ店舗・同じ娘（characterId なし同士）は先頭だけ残る', () => {
+  test('同じ店舗・同じ娘（同じ対象配列同士）は先頭だけ残る', () => {
     const events = [makeEvent('first'), makeEvent('second'), makeEvent('third')]
     expect(uuids(deduplicateRegularCards(events))).toEqual(['first'])
   })
 
-  test('同じ店舗・同じ娘（同じ characterId 同士）は先頭だけ残る', () => {
-    const events = [makeEvent('first', { characterId: 'seiseki' }), makeEvent('second', { characterId: 'seiseki' })]
+  test('同じ店舗・同じ娘（同じ characterIds 同士）は先頭だけ残る', () => {
+    const events = [
+      makeEvent('first', { characterIds: ['seiseki'] }),
+      makeEvent('second', { characterIds: ['seiseki'] })
+    ]
     expect(uuids(deduplicateRegularCards(events))).toEqual(['first'])
   })
 
-  test('characterId が店舗キーと同じ値のものと characterId なしは同じ娘として扱う', () => {
-    const unset = makeEvent('unset')
-    const same = makeEvent('same', { characterId: 'chofu' })
-    expect(uuids(deduplicateRegularCards([unset, same]))).toEqual(['unset'])
-    expect(uuids(deduplicateRegularCards([same, unset]))).toEqual(['same'])
+  test('対象未判定と開催店舗の娘が明示された名刺を混同しない', () => {
+    const unset = makeEvent('unset', { characterIds: [] })
+    const same = makeEvent('same', { characterIds: ['chofu'] })
+    expect(uuids(deduplicateRegularCards([unset, same]))).toEqual(['unset', 'same'])
+    expect(uuids(deduplicateRegularCards([same, unset]))).toEqual(['same', 'unset'])
   })
 
-  test('特殊値の characterId（other / secret）も別の娘として扱う', () => {
+  test('特殊値の characterIds（other / secret）も別の娘として扱う', () => {
     const events = [
       makeEvent('own'),
-      makeEvent('other', { characterId: 'other' }),
-      makeEvent('secret', { characterId: 'secret' }),
-      makeEvent('other-again', { characterId: 'other' })
+      makeEvent('other', { characterIds: ['other'] }),
+      makeEvent('secret', { characterIds: ['secret'] }),
+      makeEvent('other-again', { characterIds: ['other'] })
     ]
     expect(uuids(deduplicateRegularCards(events))).toEqual(['own', 'other', 'secret'])
   })
 
   test('別の店舗の通常名刺は同じ娘でも別々に残る', () => {
     const events = [
-      makeEvent('chofu', { stores: ['chofu'], characterId: 'seiseki' }),
-      makeEvent('seiseki', { stores: ['seiseki'] })
+      makeEvent('chofu', { stores: ['chofu'], characterIds: ['seiseki'] }),
+      makeEvent('seiseki', { stores: ['seiseki'], characterIds: ['seiseki'] })
     ]
     expect(uuids(deduplicateRegularCards(events))).toEqual(['chofu', 'seiseki'])
   })
 
-  test('複数店舗のイベントは、いずれかの店舗・娘が既出なら除かれる', () => {
+  test('複数開催店舗の集合が異なる名刺を、一部の共通店舗だけで除かない', () => {
     const events = [
       makeEvent('single', { stores: ['chofu'] }),
       makeEvent('multi', { stores: ['chofu', 'seiseki'] }),
-      makeEvent('other-character', { stores: ['chofu', 'seiseki'], characterId: 'seiseki' })
+      makeEvent('other-character', { stores: ['chofu', 'seiseki'], characterIds: ['seiseki'] })
     ]
-    expect(uuids(deduplicateRegularCards(events))).toEqual(['single', 'other-character'])
+    expect(uuids(deduplicateRegularCards(events))).toEqual(['single', 'multi', 'other-character'])
+  })
+
+  test('共同デザインと単独デザインは一部の対象が共通していても両方残る', () => {
+    const single = makeEvent('single', { characterIds: ['funato'] })
+    const collaboration = makeEvent('collaboration', { characterIds: ['funato', 'funabashi'] })
+    expect(uuids(deduplicateRegularCards([single, collaboration]))).toEqual(['single', 'collaboration'])
+    expect(uuids(deduplicateRegularCards([collaboration, single]))).toEqual(['collaboration', 'single'])
+    expect(collaboration.characterIds).toEqual(['funato', 'funabashi'])
+  })
+
+  test('開催店舗・対象キャラの集合全体が同じなら配列順によらず重複になる', () => {
+    const first = makeEvent('first', { stores: ['funabashi', 'abeno'], characterIds: ['funato', 'funabashi'] })
+    const reordered = makeEvent('reordered', { stores: ['abeno', 'funabashi'], characterIds: ['funabashi', 'funato'] })
+    expect(uuids(deduplicateRegularCards([first, reordered]))).toEqual(['first'])
+    expect(first.stores).toEqual(['funabashi', 'abeno'])
+    expect(first.characterIds).toEqual(['funato', 'funabashi'])
+  })
+
+  test('同名でも対象未判定の名刺同士は店舗から対象を推測して削除しない', () => {
+    const events = [
+      makeEvent('first', { title: '通常名刺', characterIds: [] }),
+      makeEvent('second', { title: '通常名刺', characterIds: [] })
+    ]
+    expect(uuids(deduplicateRegularCards(events))).toEqual(['first', 'second'])
   })
 
   test('店舗がない通常名刺は題で判定する', () => {
-    const card = (uuid: string, title: string) => ({ uuid, category: 'regular_card' as const, title, stores: [] })
+    const card = (uuid: string, title: string) => ({
+      uuid,
+      category: 'regular_card' as const,
+      title,
+      stores: [],
+      characterIds: ['chofu']
+    })
     const events = [card('a1', '共通名刺'), card('a2', '共通名刺'), card('b1', '別の名刺')]
     expect(uuids(deduplicateRegularCards(events))).toEqual(['a1', 'b1'])
   })
@@ -113,7 +147,7 @@ describe('通常名刺の重複除去', () => {
       makeEvent('regular-a'),
       makeEvent('limited', { category: 'limited_card' }),
       makeEvent('regular-dup'),
-      makeEvent('regular-b', { characterId: 'seiseki' }),
+      makeEvent('regular-b', { characterIds: ['seiseki'] }),
       makeEvent('ackey', { category: 'ackey' })
     ]
     expect(uuids(deduplicateRegularCards(events))).toEqual(['regular-a', 'limited', 'regular-b', 'ackey'])

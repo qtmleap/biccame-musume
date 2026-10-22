@@ -1,0 +1,104 @@
+[
+  {
+    "id": "goal-negative-1046335257857814528",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1046335257857814528",
+      "createdAt": "2018-09-30T09:45:40.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "【台風に伴う営業時間変更のお知らせ】\nビックカメラ京王調布店は、\n台風の影響により本日9月30日（日）は18時30分に閉店させていただきました。\n\nご不便ご迷惑をおかけしますが\nご了承のほどお願い致します。\n\n※電話も不通となります。\n\nなお、10月1日（月）は通常営業を予定しております。 https://t.co/QXt96G2N9p",
+      "url": "https://x.com/bic_keiochofu/status/1046335257857814528",
+      "media": [
+        "https://pbs.twimg.com/media/DoVTDwLV4AErYC4.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【台風に伴う営業時間変更のお知らせ】 / ビックカメラ京王調布店は、 / 台風の影響により本日9月30日（日）は18時30分に閉店させていただきました。」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "chofu-typhoon-store-hours-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 817692,
+      "postSha256": "221d20b5d67da1d1070060fb1f3a4953ab4fc5cd49e4d0e7f3691ffb382f276c",
+      "textSha256": "77f8e6f67156e7b961f93f8980b1eb6ca1c7f2442711ac398f8f45d054d5c171"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1057177010034765824",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1057177010034765824",
+      "createdAt": "2018-10-30T07:46:55.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(1￣▽￣) びゃあ゛(検閲されました)\n\n卵割り機能内蔵！\nビックカメラ.com クッキングトイ週間売れ筋ランキング1位！\n\nタカラトミーアーツ\n究極のTKG（たまごかけごはん）\nhttps://t.co/5NZrE8jyZ8\n\n#卵かけご飯の日 #たまごかけご飯の日",
+      "url": "https://x.com/bic_fujisawa/status/1057177010034765824",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「(1￣▽￣) びゃあ゛(検閲されました) / 卵割り機能内蔵！ / ビックカメラ.com クッキングトイ週間売れ筋ランキング1位！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "ultimate-tkg-cooking-toy-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 809523,
+      "postSha256": "e931fd7b93c5c3a41c4f85c56d201332d778b1b909f40e4acf3ed3157f840603",
+      "textSha256": "c6c6cef8e867390724c271af7fb051d7120f4073026eb91959cbfb35645d5c7b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,60 @@
+{
+  "case": "goal-positive-962146543649239040",
+  "version": "v5-webhook-v12-neutral-context",
+  "extractionVersion": "giveaways-v6-focused-review",
+  "post": {
+    "id": "962146543649239040",
+    "createdAt": "2018-02-10T02:09:46.000Z",
+    "screenName": "Bic_kawasaki",
+    "kind": "original",
+    "text": "今日から１４日までの『期間限定』で\n\n#川崎たん バレンタインデーVer.の名刺を配布していまーすヾ(*´∀｀*)ﾉ\n\n\"2F総合カウンター”にあるのでご自由にお取りくださいらぞ♪\n\nでも、たくさんの方に貰って欲しいのでおひとり様1枚でお願いしますらぞ(人>ω<*)\n\n#ビックカメラ #ビッカメ娘 https://t.co/mfdmKGowHj",
+    "url": "https://x.com/Bic_kawasaki/status/962146543649239040",
+    "media": [
+      "https://pbs.twimg.com/media/DVo6-MJV4AAvktx.jpg"
+    ]
+  },
+  "sources": [
+    {
+      "file": "962146543649239040-count.json",
+      "source": "goal-positive-962146543649239040.response-1.json",
+      "recordedResponseHash": "1d93df97afece508daca110b1c8237491330cc2d41c4850e9a13927f85b5a474",
+      "sha256": "eaa0c10e9a22232bc6bfdaeda802d95f50751067250a6bc73bdaf36df24b50be"
+    },
+    {
+      "file": "962146543649239040-extract.json",
+      "source": "goal-positive-962146543649239040.response-2.json",
+      "recordedResponseHash": "9a6b92b402f69f113a5a397eefa678c6524c52ecfa080b3445cb5497af859af4",
+      "sha256": "48adf20c249a176b04da2968627a4420c1daaafe60c79d57ce7cc585399ee1ee"
+    },
+    {
+      "file": "962146543649239040-judge-3.json",
+      "source": "goal-positive-962146543649239040.response-3.json",
+      "recordedResponseHash": "e11d15e6650a8559b5271fe41e906d35ceb4ea32a2f1d7635beea09e374582db",
+      "sha256": "db0990da99f6b92bfc6ffa2230e924f5e9a15ffcfc424e2526acdf70d1dd690b"
+    },
+    {
+      "file": "962146543649239040-judge-4.json",
+      "source": "goal-positive-962146543649239040.response-4.json",
+      "recordedResponseHash": "a06ca199a96922476d5df511c5a00bbaeb935cd593e7d721df6f6cda220c8d23",
+      "sha256": "04b83960caa7e5eeb6b4c7ac782b83a0237be1638a62df5dcdb8a527aade9359"
+    }
+  ],
+  "baseline": {
+    "version": "v4-webhook-v8-object-kind",
+    "audit": {
+      "version": "distribution-items-v1",
+      "expected": 1,
+      "probability": 0.8812,
+      "threshold": 0.9,
+      "extracted": 1,
+      "candidates": 1,
+      "status": "low_confidence"
+    },
+    "stopped": true,
+    "stopReasons": [
+      "distribution_item_count_low_confidence"
+    ],
+    "calls": 2,
+    "sourceSha256": "f34f93394422bb137650ef28a1800ff373a21ef4b5fa09eedb1cde1c8243ae7b"
+  }
+}

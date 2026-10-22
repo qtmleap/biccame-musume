@@ -1,0 +1,127 @@
+[
+  {
+    "id": "expanded-v2-positive-829208965338787842",
+    "source": "public-post",
+    "description": "biccame-valentine-chocolate-2017",
+    "post": {
+      "id": "829208965338787842",
+      "createdAt": "2017-02-08T06:03:17.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "|๑σ.σ).o0(いよいよ2月10日より配布開始♪\n今年もビックカメラ擬人化店舗でチョコレート配布が決定！\n#ビッカメ娘 も25人に！私たち、チョコになります(灬╹ω╹灬)┣¨ｷ┣¨ｷ*\n\n#ビックカメラのチョ娘\n🍫詳細👉【https://t.co/OpwRzK6eWg】",
+      "url": "https://x.com/bic_hamamatsu/status/829208965338787842",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2017-02-10",
+      "conditions": null
+    },
+    "rationale": "2017年のチョコレート企画。2018年のクッキーとは別年別物品。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "biccame-valentine-chocolate-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "チョコレート",
+          "evidence": [
+            "|๑σ.σ).o0(いよいよ2月10日より配布開始♪",
+            "今年もビックカメラ擬人化店舗でチョコレート配布が決定！",
+            "#ビッカメ娘 も25人に！私たち、チョコになります(灬╹ω╹灬)┣¨ｷ┣¨ｷ*",
+            "#ビックカメラのチョ娘",
+            "🍫詳細👉【https://t.co/OpwRzK6eWg】"
+          ]
+        }
+      ],
+      "groupingNote": "2017年のチョコレート企画。2018年のクッキーとは別年別物品。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 984718,
+      "postSha256": "ea9b36dbf859e1a9ec2f76fa31bf4296ae30383f4b6a4150a94f02f59be8485d",
+      "textSha256": "7a467346c0266bcf276bbaa5f4da9a4664cea4ced746f48ffb4f654184c2b97c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-831773434271129601",
+    "source": "public-post",
+    "description": "biccame-valentine-chocolate-2017 matched control",
+    "post": {
+      "id": "831773434271129601",
+      "createdAt": "2017-02-15T07:53:34.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "|๑σ.σ).o0(今日のおやつはカルビーさん( @Calbee_JP )の『かっぱえびせん ロッテリアエビバーガー味』♪見つけた瞬間手に持ってました☆\n以前販売されてたタルタルソース味に比べ酸っぱさ抑えて気味ですね！\nやっぱりやめられないとまらない、でした☆\n#はまたんのおやつ https://t.co/PCKmqTezBn",
+      "url": "https://x.com/bic_hamamatsu/status/831773434271129601",
+      "media": [
+        "https://pbs.twimg.com/media/C4sMBSsWMAATs2c.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-831773434271129601",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 981343,
+      "postSha256": "f194738897a7f6eb0138a53dc2f6aa69e787c2dbfa75c43951651b210edb1ce9",
+      "textSha256": "160d679a8e2d4f96b9756f0348638c7e9a150ab78a266d18c644aaf32dd04f33"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

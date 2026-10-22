@@ -1,0 +1,183 @@
+[
+  {
+    "id": "public-c-2033369080179437619",
+    "source": "public-post",
+    "description": "くまもとたん参加の九州コラボ名刺",
+    "post": {
+      "id": "2033369080179437619",
+      "createdAt": "2026-03-16T02:25:41.000Z",
+      "screenName": "bic_kagoshima",
+      "kind": "original",
+      "text": "本日より🤩\n#九州コラボ 名刺配布始まりましたぁ🥰🙌\n#くまもとたん も一緒の初コラボになるのでぜひGETしてほしいな～😊💕\n\n配布期間：3/16(月)～5/6(水) https://t.co/oLmogEvzuI",
+      "url": "https://x.com/bic_kagoshima/status/2033369080179437619",
+      "media": [
+        "https://pbs.twimg.com/media/HDf5BvnbkAAA-SO.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "kagoshima"
+      ],
+      "startDate": "2026-03-16"
+    },
+    "rationale": "3月16日から5月6日に九州コラボ名刺配布。全ての絵柄の娘が列挙されないため対象配列は確定しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "collaboration",
+      "partial-annotation"
+    ],
+    "group": "kyushu-spring-collaboration-card-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2039152963999223959",
+    "source": "public-post",
+    "description": "千葉たん通年名刺の新デザイン",
+    "post": {
+      "id": "2039152963999223959",
+      "createdAt": "2026-04-01T01:28:46.000Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "本日から\n通年名刺新デザイン配布中〜‼️\n2025年から配布していた方は現在配布中の分無くなり次第終了となります∩^ω^∩\n\n#千葉たん名刺告知 https://t.co/dBLHdzlII9",
+      "url": "https://x.com/bic_chiba/status/2039152963999223959",
+      "media": [
+        "https://pbs.twimg.com/media/HEyGkwfbcAAe014.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "regular_card",
+      "stores": [
+        "chiba"
+      ],
+      "characterIds": [
+        "chiba"
+      ],
+      "startDate": "2026-04-01"
+    },
+    "rationale": "4月1日から通年名刺の新デザイン配布と明示。2025年版終了は在庫次第で、新版開始と区別する。",
+    "tags": [
+      "historical",
+      "positive",
+      "regular-card",
+      "design-change"
+    ],
+    "group": "chiba-regular-new-design-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2047894090550022512",
+    "source": "public-post",
+    "description": "千葉たんメガホンver.アクスタ",
+    "post": {
+      "id": "2047894090550022512",
+      "createdAt": "2026-04-25T04:22:53.000Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "5月1日(金)からビックカメラ千葉駅前店(1F-6F)で\n指定金額のご購入をしていただくと、\n千葉たんアクリルスタンド(メガホンver)\nプレゼントイベントを開催いたします！\n詳細は添付画像にて！｡･:*:･(*´∇`*人)｡･:*:･\n\n#千葉たんイベント情報 https://t.co/UpzTQ1tGqd",
+      "url": "https://x.com/bic_chiba/status/2047894090550022512",
+      "media": [
+        "https://pbs.twimg.com/media/HGuT6DqagAA769h.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "acsta",
+      "stores": [
+        "chiba"
+      ],
+      "characterIds": [
+        "chiba"
+      ],
+      "startDate": "2026-05-01"
+    },
+    "rationale": "5月1日から千葉駅前店で指定金額購入により千葉たんアクリルスタンドを提供。額は本文にない。",
+    "tags": [
+      "historical",
+      "positive",
+      "image-dependent-terms"
+    ],
+    "group": "chiba-megaphone-stand-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2044611747336659064",
+    "source": "public-post",
+    "description": "ふなたん擬人化記念ドレスアクキー",
+    "post": {
+      "id": "2044611747336659064",
+      "createdAt": "2026-04-16T03:00:02.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "🌻ビッカメ娘イベント告知🌻\n🎂ふなたん擬人化記念🎂\n【期間】5月16日(土)～\nおひとり様1個限り\nなくなり次第終了\n\n税込3,000円以上ご購入で、『ふなたん擬人化記念アクリルキーホルダ―』プレゼント🎁✨\n\nドレス姿のボクのアクキーだよ☀️ https://t.co/7FgJL8rpcb",
+      "url": "https://x.com/bic_funabashi/status/2044611747336659064",
+      "media": [
+        "https://pbs.twimg.com/media/HF_pj91aMAAS2_S.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "funabashi"
+      ],
+      "characterIds": [
+        "funabashi"
+      ],
+      "startDate": "2026-05-16",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "5月16日から3000円以上購入でふなたんアクキー。開発用10月ふなとーたん企画とは対象娘・物品・時期が異なる。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase"
+    ],
+    "group": "funabashi-anniversary-keychain-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2041712648652231078",
+    "source": "public-post",
+    "description": "酒販柏たんお披露目1周年名刺",
+    "post": {
+      "id": "2041712648652231078",
+      "createdAt": "2026-04-08T03:00:03.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "📢お知らせです\n\n酒販柏たんお披露目から1年‼\n\n記念名刺を配布します🍷\n📅配布期間：4/11(土)～6/30(木)\n🍷場所：3階ビック酒販\n\n※お1人様1枚でお願いします！ https://t.co/ACEDy4JaAj",
+      "url": "https://x.com/bic_kashiwa/status/2041712648652231078",
+      "media": [
+        "https://pbs.twimg.com/media/HFWcQ4zbQAAzHHG.jpg",
+        "https://pbs.twimg.com/media/HFWcQ6Va8AEVJmK.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": "2026-04-11"
+    },
+    "rationale": "4月11日から6月30日に酒販柏たん記念名刺を3階酒販で配布と明示。",
+    "tags": [
+      "historical",
+      "positive",
+      "limited-card"
+    ],
+    "group": "kashiwa-wine-first-anniversary-2026",
+    "reviewStatus": "provisional"
+  }
+]

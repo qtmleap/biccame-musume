@@ -1,0 +1,175 @@
+[
+  {
+    "id": "goal-positive-2001502516589273106",
+    "source": "public-post",
+    "description": "pkan regular bictreasure 2025",
+    "post": {
+      "id": "2001502516589273106",
+      "createdAt": "2025-12-18T03:59:20.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "／\nパソ館たん名刺\n現在2種類配布中です！\n＼\n\n💻通年名刺\n⇨2025/6/29～終了日未定\n\n💎ビックトレジャー名刺 (パソ館たんver.)\n⇨2025/11/14～【12/31まで】\n　2026/1/1以降はストック無くなり次第配布終了\n\n【配布場所】\n📍3F エスカレーター前\nご来店の記念にぜひお持ち帰りください✨ https://t.co/mNNsAIsOS8",
+      "url": "https://x.com/bicpkanhonten/status/2001502516589273106",
+      "media": [
+        "https://pbs.twimg.com/media/G8bAumObwAAfn3Q.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "2025/6/29開始の通年と11/14開始の期間限定名刺を分離。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update",
+      "multi-item"
+    ],
+    "group": "pkan-regular-bictreasure-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "通年名刺",
+          "evidence": [
+            "パソ館たん名刺",
+            "💻通年名刺",
+            "💎ビックトレジャー名刺 (パソ館たんver.)"
+          ]
+        },
+        {
+          "item": "ビックトレジャー名刺",
+          "evidence": [
+            "パソ館たん名刺",
+            "💻通年名刺",
+            "💎ビックトレジャー名刺 (パソ館たんver.)"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 87513,
+      "postSha256": "1caf9eace72bc88ee34a1ebd6a3d0a7059c5b5b1066210e06c22ca39aa8fd854",
+      "textSha256": "431d4dc513245576da46df8e361866d7f0aa6fbc339e28ee986dd913af182ed6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bicpkanhonten/status/2001502516589273106",
+          "referenceType": "announce",
+          "eventId": "e7f8fec3-7d86-4635-acff-7a5db3fc95e3",
+          "title": "通年名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        },
+        {
+          "url": "https://x.com/bicpkanhonten/status/2001502516589273106",
+          "referenceType": "announce",
+          "eventId": "eeb6ae60-1578-45c4-9f35-5bc40aaaa3fe",
+          "title": "ビックトレジャー限定名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "goal-positive-2016715422792634838",
+    "source": "public-post",
+    "description": "kawasaki valentine two items 2026",
+    "post": {
+      "id": "2016715422792634838",
+      "createdAt": "2026-01-29T03:30:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "✨🍫【告知】バレンタイン企画🍫✨\n\n❶ 2/14㊏から川崎店で指定金額以上購入した当日レシートを、2F総合カウンターで提示すると「 #川崎たん アクリルキーフォルダー」をプレゼント❣️\n\n❷ バレンタイン＆ホワイトデー名刺\n配布期間：2/14㊏ - 3/14㊏\n\n🚨アクキー条件は画像を確認\n #ビッカメ娘 https://t.co/56e0dkwinT",
+      "url": "https://x.com/Bic_kawasaki/status/2016715422792634838",
+      "media": [
+        "https://pbs.twimg.com/media/G_yz1pNbUAIuN5O.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": "2026-02-14"
+    },
+    "rationale": "アクキー金額は画像参照で本文不明、名刺だけ2/14〜3/14。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "kawasaki-valentine-two-items-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "川崎たんアクキー",
+          "evidence": [
+            "❶ 2/14㊏から川崎店で指定金額以上購入した当日レシートを、2F総合カウンターで提示すると「 #川崎たん アクリルキーフォルダー」をプレゼント❣️",
+            "🚨アクキー条件は画像を確認"
+          ]
+        },
+        {
+          "item": "バレンタイン＆ホワイトデー名刺",
+          "evidence": [
+            "❷ バレンタイン＆ホワイトデー名刺"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 76594,
+      "postSha256": "0a1ad7c2b930da8873cd140866ac67a37d35ab86d6841e82cd3567b39c468b8b",
+      "textSha256": "edf7d96c22a283c4625aa0bce1368b81629eb62015c6f21ce0b98d026ea91aa6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/Bic_kawasaki/status/2016715422792634838",
+          "referenceType": "announce",
+          "eventId": "69988ae5-6d3b-466e-8d19-aad8fdc43662",
+          "title": "バレンタイン名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        },
+        {
+          "url": "https://x.com/Bic_kawasaki/status/2016715422792634838",
+          "referenceType": "announce",
+          "eventId": "9fd14806-2036-4409-aa5a-3a4e23318fd9",
+          "title": "バレンタインアクキー",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  }
+]

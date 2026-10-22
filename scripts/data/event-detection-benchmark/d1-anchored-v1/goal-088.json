@@ -1,0 +1,172 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2094621276622950577",
+    "source": "public-post",
+    "description": "kashiwa-bittabi-can-badge-2026",
+    "post": {
+      "id": "2094621276622950577",
+      "createdAt": "2026-09-01T03:00:03.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "📢お知らせ～\n\nビッカメ娘11周年記念🎉\n缶バッジで繋ぐビッカメ娘旅 #ビッ旅🗾\n9/5(土) からいよいよ千葉エリアの3店舗がスタート🎬\n\n期間中柏店で合計1,100円以上ご購入で\n「柏たん」缶バッジをプレゼント🎁\n\n(数量限定なくなり次第終了) https://t.co/x0h9mLySrb",
+      "url": "https://x.com/bic_kashiwa/status/2094621276622950577",
+      "media": [
+        "https://pbs.twimg.com/media/HRFrOMba8AA4TN9.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": "2026-09-05",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 1100
+        }
+      ]
+    },
+    "rationale": "9/5から柏店で1100円以上。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:bittabi-can-badge-chiba"
+    ],
+    "group": "kashiwa-bittabi-can-badge-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "ready",
+      "items": [
+        {
+          "item": "柏たん缶バッジ",
+          "evidence": [
+            "缶バッジで繋ぐビッカメ娘旅 #ビッ旅🗾",
+            "「柏たん」缶バッジをプレゼント🎁"
+          ]
+        }
+      ],
+      "groupingNote": "9/5から柏店で1100円以上。",
+      "unannotatedFields": []
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 11535,
+      "postSha256": "a86dc0a1b78a14ce0987d41a73e6b4b58b3fc1b0cccec1e9296c7d355fa8472c",
+      "textSha256": "7d20fbd850786602a15d973237913c9a49a63d2ef23ca395f8b6e3d7d95d3531"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "49f520d2-4bcb-4547-a2f7-2b17aa8d95b2",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_kashiwa/status/2094621276622950577",
+          "origin": "manual-or-seed",
+          "title": "缶バッジで繋ぐビッカメ娘旅",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-04T15:00:00.000+00:00",
+            "endDate": "2026-09-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "kashiwa"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 250,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 1100,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2099400256496844889",
+    "source": "public-post",
+    "description": "kashiwa-bittabi-can-badge-2026 matched control",
+    "post": {
+      "id": "2099400256496844889",
+      "createdAt": "2026-09-14T07:30:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【3階 ビューティ家電】\n\n\\10月26日まで！/\n\n多機能カジュアル美顔器GESKEが\n今だけ👀なんと全品50%off💥\n\nお悩みに合わせて選べて、\nコンパクトな美顔器シリーズです！\n\nこの機会に是非3階ビューティコーナーまで足をお運びください！ https://t.co/2v4uLztqoN",
+      "url": "https://x.com/bic_kashiwa/status/2099400256496844889",
+      "media": [
+        "https://pbs.twimg.com/media/HSJuoQpaMAAi62l.jpg",
+        "https://pbs.twimg.com/media/HSJund-bUAABm9J.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2099400256496844889",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 7397,
+      "postSha256": "224b4d3b7d798540b6ebe1361b592c17f4c8968897396c6c8d319900f6116c51",
+      "textSha256": "05cc00d42053545bfdf646e8e7b61bd17a5833d13ae67168ebb0ce6229d4ff08"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

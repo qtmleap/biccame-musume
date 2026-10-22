@@ -2,24 +2,38 @@ import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import utc from 'dayjs/plugin/utc'
 import type { ClefQuestion } from './clef'
+import { extractionContextState } from './extraction-context'
 import { normalizeText } from './filter'
 import type { DetectPost } from './post'
+import { quantityCandidates } from './quantity'
+
+export { quantityCandidates } from './quantity'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(utc)
 
-// 日付候補の解釈を変更したため、旧CLIキャッシュとは分ける。
-export const QUESTION_VERSION = 'v2'
+// 初期配布数と残数・セット内訳を分離するため、旧CLIキャッシュとは分ける。
+export const QUESTION_VERSION = 'v5'
 export type StoreAccount = { storeId: string; name: string; screenName: string }
 
 const jst = (iso: string) => dayjs.utc(iso).utcOffset(9 * 60)
 export const jstDate = (iso: string) => jst(iso).format('YYYY-MM-DD')
 export const jstWeekday = (iso: string) => '日月火水木金土'[jst(iso).day()]
 
-/** 投稿本文は指示ではなく判定対象データとして渡す。 */
-export const buildState = (post: DetectPost, accounts: readonly StoreAccount[]): string => {
+/** 投稿者の表示名の既定。「店舗名（店舗ID）」の形で、抽出や CLI の入力文はこの形のまま固定されている。 */
+const defaultAuthorLabel = (account: StoreAccount): string => `${account.name}（${account.storeId}）`
+
+/**
+ * 投稿本文は指示ではなく判定対象データとして渡す。
+ * authorLabel は投稿者の店舗アカウントの表示名を作る関数。省略すると従来の「店舗名（店舗ID）」で、出力は変わらない。
+ */
+export const buildState = (
+  post: DetectPost,
+  accounts: readonly StoreAccount[],
+  authorLabel: (account: StoreAccount) => string = defaultAuthorLabel
+): string => {
   const own = accounts.filter((account) => account.screenName.toLowerCase() === post.screenName.toLowerCase())
-  const author = own.length > 0 ? own.map((account) => `${account.name}（${account.storeId}）`).join('・') : '店舗以外'
+  const author = own.length > 0 ? own.map((account) => authorLabel(account)).join('・') : '店舗以外'
   const lines = [
     `投稿日: ${jstDate(post.createdAt)}（${jstWeekday(post.createdAt)}）`,
     `投稿者: @${post.screenName} / ${author}`,
@@ -29,6 +43,7 @@ export const buildState = (post: DetectPost, accounts: readonly StoreAccount[]):
   ]
   if (post.quoted?.text)
     lines.push('', `引用元 @${post.quoted.screenName ? post.quoted.screenName : '不明'}:`, post.quoted.text)
+  lines.push(...extractionContextState(post))
   return lines.join('\n')
 }
 
@@ -44,7 +59,7 @@ export const CATEGORY_CRITERIA = {
   limited_card: '期間限定・数量限定・記念の名刺',
   regular_card: '通年配布の通常名刺',
   ackey: 'アクリルキーホルダー（アクキー）',
-  other: 'アクスタ・缶バッジ・ステッカー・ポストカードなど名刺とアクキー以外',
+  other: 'アクスタ・缶バッジ・ステッカー・ポストカード・ギフトカードなど名刺とアクキー以外',
   none: '配布物の話ではない'
 } as const
 
@@ -52,7 +67,7 @@ export const baseQuestions = (): Record<string, ClefQuestion> => ({
   is_event: {
     type: 'noul',
     instructions:
-      'この投稿は、ビッカメ娘（ビックカメラの店舗擬人化キャラクター）の名刺・アクリルキーホルダー・アクリルスタンド・缶バッジなどのノベルティを配布するイベントについての投稿ですか？ ビッカメ娘と関係ない商品の購入特典やメーカーのキャンペーンは含みません。'
+      'この投稿は、ビッカメ娘（ビックカメラの店舗擬人化キャラクター）の名刺・アクリルキーホルダー・アクリルスタンド・缶バッジ・ギフトカードなどのノベルティを配布するイベントについての投稿ですか？ ビッカメ娘の記念・限定デザインの販売・頒布や、入金・チャージ条件付き受取も含みます。無料配布だけに限定しません。汎用ギフトカードの通常販売・購入・残高チャージ方法・支払い方法の案内だけは含みません。ビッカメ娘と関係ない商品の購入特典やメーカーのキャンペーンは含みません。'
   },
   status: {
     type: 'choice',
@@ -61,7 +76,8 @@ export const baseQuestions = (): Record<string, ClefQuestion> => ({
   },
   category: {
     type: 'choice',
-    instructions: 'この投稿で配布されるものは主にどれですか？',
+    instructions:
+      'この企画で受け取る・購入する対象物は主にどれですか？ 配布、記念・限定販売、入金・チャージ条件付き受取を含みます。決済手段として言及されたギフトカードは対象物に数えません。',
     criteria: { ...CATEGORY_CRITERIA }
   }
 })
@@ -114,17 +130,6 @@ export const dateCandidates = (post: DetectPost): string[] => {
     ...(/明日/.test(text) ? [posted.add(1, 'day').format('YYYY-MM-DD')] : [])
   ]
   return [...new Set([...found, ...relative])].sort()
-}
-
-export const quantityCandidates = (post: DetectPost): number[] => {
-  const text = normalizeText(post.text).replace(/,/g, '')
-  return [
-    ...new Set(
-      [...text.matchAll(/(?<!\d)(\d{1,6})(?:個|枚|名|人|セット|点|本)/g)]
-        .map((match) => Number(match[1]))
-        .filter((quantity) => quantity > 0)
-    )
-  ].sort((a, b) => a - b)
 }
 
 const labelOf = (labels: Map<string, string>, store: string) => {

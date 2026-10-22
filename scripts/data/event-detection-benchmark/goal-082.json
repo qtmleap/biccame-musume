@@ -1,0 +1,108 @@
+[
+  {
+    "id": "goal-negative-1134298127819653122",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1134298127819653122",
+      "createdAt": "2019-05-31T03:18:42.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "スマブラがVRで遊べるようになったとか( ﾟ ω ﾟ ) ! !\nすごいね！！やってみたいー！！！\n『Nintendo Labo』や『大乱闘スマッシュブラザーズ SPECIAL』はレジにて好評発売中です♡\n気になる方は是非遊んでみてくださいね(*´ω`)\n#スマブラSP \nhttps://t.co/AZfMeUxVpw\nhttps://t.co/M7qC5BNq4Q https://t.co/lZTmSJ3VZ7",
+      "url": "https://x.com/bic_sagamioono/status/1134298127819653122",
+      "media": [
+        "https://pbs.twimg.com/media/D73VKmfU0AEH_Y9.jpg",
+        "https://pbs.twimg.com/media/D73VLmnUIAAyLXo.jpg",
+        "https://pbs.twimg.com/media/D73Va5DVsAA4_EH.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「スマブラがVRで遊べるようになったとか( ﾟ ω ﾟ ) ! ! / すごいね！！やってみたいー！！！ / 『Nintendo Labo』や『大乱闘スマッシュブラザーズ SPECIAL』はレジにて好評発売中です♡」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "nintendo-labo-smash-vr-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 745195,
+      "postSha256": "bcdf2f83fa82fcb891498b72df7b3ee7908426eb76ccccd68d0e10c104649d84",
+      "textSha256": "dce7049cb4ba6bc237b640a91ccfcec2fcef155a46e8bf4d1c07b68ce364dfc9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1145222578224549889",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1145222578224549889",
+      "createdAt": "2019-06-30T06:48:34.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "(*´-`) その頃、ビックカメラ水戸駅店では本日最終日のSurface ProキーボードプレゼントキャンペーンのPOPが https://t.co/yyBUnGE2uR",
+      "url": "https://x.com/biccameramito/status/1145222578224549889",
+      "media": [
+        "https://pbs.twimg.com/media/D-Sl2_8UEAAIBx6.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「(*´-`) その頃、ビックカメラ水戸駅店では本日最終日のSurface ProキーボードプレゼントキャンペーンのPOPが https://t.co/yyBUnGE2uR」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "surface-pro-keyboard-campaign-end-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 735733,
+      "postSha256": "63265d64e44d0ebc128981111f7053258719ab8c2c717bc6a51d43836a0b4f61",
+      "textSha256": "8143d0d468547f88f1550aaef7177f50a6acb64828760d2331d44f2bf2972ad4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

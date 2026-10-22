@@ -1,0 +1,130 @@
+[
+  {
+    "id": "expanded-v2-positive-1584705674461995008",
+    "source": "public-post",
+    "description": "ikebukuro-three-store-badge-completion-2022",
+    "post": {
+      "id": "1584705674461995008",
+      "createdAt": "2022-10-25T00:37:29.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "🕸️🕷️🎃お知らせ🦇🌛🐈‍⬛\n#池袋地区のビッカメ娘が缶バッジになったらしい !!\n10月28日~なくなり次第終了。\n今回は3店舗コンプリートすると先着150名様に\n追加で記念缶バッジプレゼントです✨ https://t.co/1KMVCC9W4k",
+      "url": "https://x.com/bicikenishi/status/1584705674461995008",
+      "media": [
+        "https://pbs.twimg.com/media/Ff4BXPDaYAA9aHF.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "3店コンプリートで追加特典。購入条件や最初のバッジの条件を補完しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "ikebukuro-three-store-badge-completion-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "記念缶バッジ",
+          "evidence": [
+            "🕸️🕷️🎃お知らせ🦇🌛🐈‍⬛",
+            "#池袋地区のビッカメ娘が缶バッジになったらしい !!",
+            "10月28日~なくなり次第終了。",
+            "今回は3店舗コンプリートすると先着150名様に",
+            "追加で記念缶バッジプレゼントです✨ https://t.co/1KMVCC9W4k"
+          ]
+        }
+      ],
+      "groupingNote": "3店コンプリートで追加特典。購入条件や最初のバッジの条件を補完しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 416656,
+      "postSha256": "70231fcfe927165b6153531194194037e768e4383bf41a5de9a0dfdbf5472b5e",
+      "textSha256": "ced3e758568ffced78ea25618ae0d308f1e2a82d36d9060cf67e773b466f4c74"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1581476112156147712",
+    "source": "public-post",
+    "description": "ikebukuro-three-store-badge-completion-2022 matched control",
+    "post": {
+      "id": "1581476112156147712",
+      "createdAt": "2022-10-16T02:44:22.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "📢7階おもちゃコーナー\n\n10月15日〜10月31日\n『仮面ライダーギーツARスタンプラリー』開催中！\n\n店舗内の3カ所のポスターを発見して全てのQRコードを読み込むと特典クーポンプレゼント‼️ https://t.co/t1iEVQ2o6w",
+      "url": "https://x.com/bicikenishi/status/1581476112156147712",
+      "media": [
+        "https://pbs.twimg.com/media/FfKH4r8UYAA9I6J.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1581476112156147712",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 419207,
+      "postSha256": "b883cfcf620462be9a151f7b85f4db2575cbcc7ca68e2ffcad1e2790dd12e0e6",
+      "textSha256": "13afde405eedd90690eb18eeda1f4d6d8ad92a8cd8ee4d135a2009d00787fb75"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

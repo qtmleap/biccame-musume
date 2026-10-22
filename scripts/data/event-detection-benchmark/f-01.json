@@ -1,0 +1,156 @@
+[
+  {
+    "id": "public-f-806812970965573632",
+    "source": "public-post",
+    "description": "Surfaceと漫画制作ソフトのワークショップ",
+    "post": {
+      "id": "806812970965573632",
+      "createdAt": "2016-12-08T10:49:36.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "(P*^ω^)つ【スペシャルイベント追加決定！】12/17(土)18(日)に1階特設会場にて『Surface × Clip Studio マンガ ワークショップ』開催っ！講師にマンガ家の濱元隆輔先生(@RyuMoto)をお迎えして、Surfaceによるイラスト作成を学びます！！",
+      "url": "https://x.com/bicpkanhonten/status/806812970965573632",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "講師の漫画家を迎えるSurfaceによる漫画制作講座。ビッカメ娘の出演や娘デザインの物品は案内していない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "ordinary-event",
+      "workshop",
+      "creator"
+    ],
+    "group": "surface-manga-workshop-december-2016",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-876325848457990144",
+    "source": "public-post",
+    "description": "ポッ拳のSwitch版予約",
+    "post": {
+      "id": "876325848457990144",
+      "createdAt": "2017-06-18T06:28:58.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "【予約受付開始】\nニンテンドースイッチにあの大人気ゲーム『ポッ拳 POKÉMON TOUNAMENT DX』がやって来る！\n9/22(金)発売予定やで🎮✨✨全額内金にてご予約承り中٩( 'ω' )و https://t.co/TvkD27ACdS",
+      "url": "https://x.com/bic_abeno/status/876325848457990144",
+      "media": [
+        "https://pbs.twimg.com/media/DClVgk1VwAEWnk2.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ポケモンの対戦ゲームの通常予約販売。娘を対象にした物品や催しではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "reservation",
+      "game"
+    ],
+    "group": "pokken-switch-preorder-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-874832056131268608",
+    "source": "public-post",
+    "description": "Suica新規入会と利用のポイント特典",
+    "post": {
+      "id": "874832056131268608",
+      "createdAt": "2017-06-14T03:33:10.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "みんな知ってるか〜！？\n【ビックカメラ #Suica カード】\n新規入会＋ご利用で\nなんと\n最大7000円相当のポイントをプレゼント！\n\nお申込みは当店2階Suicaカウンターにて受付中\n対象期間は7月31日(月)まで\nお早めにご利用下さいだぜ〜\n_(2 _´ω`)_ #Bic https://t.co/DVPV4lvmHD",
+      "url": "https://x.com/bic_fujisawa/status/874832056131268608",
+      "media": [
+        "https://pbs.twimg.com/media/DCQHF7kW0AY1-i2.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "カード入会と利用による最大7000円相当ポイントの一般キャンペーンで、娘の物品・出演はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "payment",
+      "points",
+      "enrollment"
+    ],
+    "group": "suica-enrollment-7000-summer-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-845564139506298880",
+    "source": "public-post",
+    "description": "ガンプラ新作と初回限定台座",
+    "post": {
+      "id": "845564139506298880",
+      "createdAt": "2017-03-25T09:12:55.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "|๑σ｡σ)ﾉ.o0(新作ガンプラ入荷してます！\n『1/100 フルメカニクス ガンダムバエル』が新入荷☆\n初回限定仕様は限定SP台座付きです♪\nまた、『RG 1/144 ガンダムアストレイ ゴールドフレーム天ミナ』も新発売となっております☆ https://t.co/gpTzOhpXCC",
+      "url": "https://x.com/bic_hamamatsu/status/845564139506298880",
+      "media": [
+        "https://pbs.twimg.com/media/C7wLEkIVsAAWdHH.jpg",
+        "https://pbs.twimg.com/media/C7wLbViUwAEisGl.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ガンダム商品の発売と初回特典であり、ビッカメ娘とのコラボではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "limited",
+      "purchase-benefit"
+    ],
+    "group": "gundam-bael-astray-launch-march-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-913597031314219008",
+    "source": "public-post",
+    "description": "日替わりカメラ限定品の抽選結果",
+    "post": {
+      "id": "913597031314219008",
+      "createdAt": "2017-09-29T02:51:20.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "9月29日(金)\nビックカメラ京王調布店の日替わり限定品の抽選結果はこちらの画像になります。\n\n【キヤノン、ミラーレス一眼】\n\n（2ツイート/5ツイート）\n（続きます） https://t.co/GTg2gtk4vT",
+      "url": "https://x.com/bic_keiochofu/status/913597031314219008",
+      "media": [
+        "https://pbs.twimg.com/media/DK2_owkV4AAHvtf.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "キヤノンのカメラ商品販売の抽選発表。限定・抽選という語だけで娘企画とはしない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "lottery-result",
+      "limited",
+      "ordinary-product"
+    ],
+    "group": "chofu-canon-lottery-september-2017",
+    "reviewStatus": "provisional"
+  }
+]

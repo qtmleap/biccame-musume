@@ -1,0 +1,174 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1987024987413459324",
+    "source": "public-post",
+    "description": "yao-anniv3-acrylic-key-2025",
+    "post": {
+      "id": "1987024987413459324",
+      "createdAt": "2025-11-08T05:10:48.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "【予告】\n11/14で八尾たんは3歳になります(8 ,,ÒωÓ,, )ﾄﾞﾔｵｯ!\nそこで、八尾たん爆誕3周年を記念して、アクリルキーホルダーを配布します！\n11/14（金）～先着100名様🎁\n当日のお買い上げ3000円以上のレシートを2階ビックカメラ総合案内カウンターに持って来てな。\n待ってるでー✨ https://t.co/4tDB79H1L9",
+      "url": "https://x.com/bic_yao/status/1987024987413459324",
+      "media": [
+        "https://pbs.twimg.com/media/G5NUsKvbEAAFLip.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": [
+        "yao"
+      ],
+      "startDate": "2025-11-14",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "【予告】だが日付・先着数・購入条件まで揃う告知。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "boundary:action",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "yao-anniv3-acrylic-key-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "爆誕3周年記念アクリルキーホルダー",
+          "evidence": [
+            "そこで、八尾たん爆誕3周年を記念して、アクリルキーホルダーを配布します！"
+          ]
+        }
+      ],
+      "groupingNote": "【予告】だが日付・先着数・購入条件まで揃う告知。",
+      "unannotatedFields": [
+        "stores"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 98551,
+      "postSha256": "accef580426957511967efa5eb47cb441c5cc8ff008b71f5518a360fca370801",
+      "textSha256": "a6cac767ff9f5fc01216ea39d25fdc94800c086131dd709583661675a70e2d88"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "4c6feaf0-46f7-4fe0-a92a-9aca017a51de",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_yao/status/1987024987413459324",
+          "origin": "manual-or-seed",
+          "title": "擬人化3周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-11-13T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "yao"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1984464774344876279",
+    "source": "public-post",
+    "description": "yao-anniv3-acrylic-key-2025 matched control",
+    "post": {
+      "id": "1984464774344876279",
+      "createdAt": "2025-11-01T03:37:26.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "期間限定iQOSショップ、オープン中！\n\n前回ご好評だった、iQOSのポップアップストアが帰ってきた！\n今回は数量限定モデルもご用意しています！\n期間は11/1（土）～11/3（月）まで。\n2階ビックカメラ前でお待ちしています(8 ,,ÒωÓ,, )\n\n #ビックカメラ\n #アリオ八尾\n #アイコス https://t.co/KPHq9Qy34W",
+      "url": "https://x.com/bic_yao/status/1984464774344876279",
+      "media": [
+        "https://pbs.twimg.com/media/G4o8MDabYAAlye2.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1984464774344876279",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 100379,
+      "postSha256": "c31946ced48caa68699141aeacaeba1c5f58b72213b5dad559e6f9ab23fb21ea",
+      "textSha256": "f038e5ee6601b30fcd33141807f6edbd9a759454b7c653b814edca44586d953e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

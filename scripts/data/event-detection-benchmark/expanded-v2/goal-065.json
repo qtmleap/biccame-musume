@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expanded-v2-positive-1679684177644642307",
+    "source": "public-post",
+    "description": "sapporo-birthday-postcard-2023",
+    "post": {
+      "id": "1679684177644642307",
+      "createdAt": "2023-07-14T02:48:09.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "(*'▽')み～～て～～～\n\nさっぽろたんのポストカードが完成！\nたくさん印刷しました！\n\n7月22日（土）から配布します！\nどうぞお楽しみに♪\n#さっぽろたん生誕祭2023\n#ビッカメ娘 https://t.co/cDTJK1A5ad",
+      "url": "https://x.com/bic_sapporo/status/1679684177644642307",
+      "media": [
+        "https://pbs.twimg.com/media/F09u569acAI0j9H.jpg",
+        "https://pbs.twimg.com/media/F09u-8JaYAYEztD.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "sapporo"
+      ],
+      "startDate": "2023-07-22",
+      "conditions": null
+    },
+    "rationale": "7月22日から配布予定の娘ポストカード。印刷数が多いことから上限推定しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "sapporo-birthday-postcard-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ポストカード",
+          "evidence": [
+            "(*'▽')み～～て～～～",
+            "さっぽろたんのポストカードが完成！",
+            "たくさん印刷しました！",
+            "7月22日（土）から配布します！",
+            "どうぞお楽しみに♪",
+            "#さっぽろたん生誕祭2023",
+            "#ビッカメ娘 https://t.co/cDTJK1A5ad"
+          ]
+        }
+      ],
+      "groupingNote": "7月22日から配布予定の娘ポストカード。印刷数が多いことから上限推定しない。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 346856,
+      "postSha256": "60091d60c86580fc7160ea24c8b2281dc71389da2b7ce92fd34546e461007fd4",
+      "textSha256": "984aa91cb06b13db600f09a147be8b9fb042c1abdcb20762485adc5eefeed688"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1681839126222626816",
+    "source": "public-post",
+    "description": "sapporo-birthday-postcard-2023 matched control",
+    "post": {
+      "id": "1681839126222626816",
+      "createdAt": "2023-07-20T01:31:09.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "劇場アニメ『青春ブタ野郎はおでかけシスターの夢を見ない』\n映画の半券もしくはムビチケカードをお持ち頂いたお客様に #桜島麻衣 さんオリジナルポストカードをプレゼント！ \n先着100枚！ お1人様１枚。無くなり次第終了です。\n1F総合案内カウンターにお越しください♪\n#青ブタ https://t.co/0KzrynKiDn",
+      "url": "https://x.com/bic_sapporo/status/1681839126222626816",
+      "media": [
+        "https://pbs.twimg.com/media/F1cXrPzaUAIrM-w.jpg",
+        "https://pbs.twimg.com/media/F1cXslcacAAyePR.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1681839126222626816",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 345045,
+      "postSha256": "41cee627e7abf23677eca6e590476660e95650f3a06e14d0b54d8672111cb007",
+      "textSha256": "008cbc6597af15e667b365706a171493a00f75bbc00f74b1fabea47226d28c5d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -42,6 +42,21 @@ export const buildClosedStoreKeys = (input: unknown) => {
     .map((item) => item.id)
 }
 
+const detectionSourceSchema = z.array(z.object({
+  id: z.string().nonempty(),
+  character: z.object({ name: z.string().nonempty(), is_biccame_musume: z.boolean().default(false), twitter_id: z.string().nonempty().optional() }),
+  store: z.object({ name: z.string().nonempty().optional() }).nullish()
+})).nonempty()
+
+export const buildDetectionCatalog = (input: unknown) => {
+  const parsed = detectionSourceSchema.safeParse(input)
+  if (!parsed.success) throw new Error('Invalid canonical detection catalog')
+  return {
+    stores: parsed.data.flatMap((entry) => entry.store === undefined || entry.store === null ? [] : [{ id: entry.id, name: entry.store.name === undefined ? entry.id : entry.store.name, ...(entry.character.twitter_id === undefined ? {} : { screenName: entry.character.twitter_id }) }]),
+    characters: parsed.data.filter((entry) => entry.character.is_biccame_musume).map((entry) => ({ id: entry.id, name: entry.character.name }))
+  }
+}
+
 if (import.meta.main) {
   const root = resolve(import.meta.dirname, '..')
   const source = JSON.parse(readFileSync(resolve(root, 'workers/web/public/characters.json'), 'utf8'))
@@ -50,10 +65,14 @@ if (import.meta.main) {
   const output = resolve(root, 'packages/shared/src/generated/bot-stores.json')
   const closedOutput = resolve(root, 'packages/shared/src/generated/closed-store-keys.json')
   const closedExpected = `${JSON.stringify(buildClosedStoreKeys(source), null, 2)}\n`
+  const catalogOutput = resolve(root, 'packages/shared/src/generated/detection-catalog.json')
+  const catalogExpected = `${JSON.stringify(buildDetectionCatalog(source), null, 2)}\n`
   if (process.argv.includes('--check')) {
+    if (readFileSync(catalogOutput, 'utf8') !== catalogExpected) throw new Error('Detection catalog is stale; run bun scripts/generate-bot-stores.ts')
     if (readFileSync(output, 'utf8') !== expected) throw new Error('Bot store data is stale; run bun scripts/generate-bot-stores.ts')
     if (readFileSync(closedOutput, 'utf8') !== closedExpected) throw new Error('Closed store data is stale; run bun scripts/generate-bot-stores.ts')
   } else {
+    writeFileSync(catalogOutput, catalogExpected)
     writeFileSync(output, expected)
     writeFileSync(closedOutput, closedExpected)
   }

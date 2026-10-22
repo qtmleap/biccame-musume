@@ -1,0 +1,199 @@
+[
+  {
+    "id": "public-e-1021937124457644032",
+    "source": "public-post",
+    "description": "さっぽろたん生誕祭の名刺とポストカード",
+    "post": {
+      "id": "1021937124457644032",
+      "createdAt": "2018-07-25T01:56:11.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "＼重版出来／\n\n#さっぽろたん生誕祭2018 大好評開催中です✨\n7/20(金)～8/12（日）まで1F総合案内カウンターにて名刺とポストカードをセットでプレゼント🎁\n皆様のご来店お待ちしております❣️\n※無くなり次第終了となります。\n#さっぽろたん https://t.co/8DmM8UaycJ",
+      "url": "https://x.com/bic_sapporo/status/1021937124457644032",
+      "media": [
+        "https://pbs.twimg.com/media/Di6lzIxUUAAMb_-.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sapporo"
+      ],
+      "characterIds": [
+        "sapporo"
+      ],
+      "startDate": "2018-07-20"
+    },
+    "rationale": "生誕祭の名刺とポストカードセットを7/20〜8/12提供。カテゴリは複数種なので強制しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "birthday",
+      "multi-item"
+    ],
+    "group": "sapporo-birthday-card-postcard-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "a88701b06f96a5c3e904944db26cf83cfcca00b77102dca20ad92e26e2d69fd9"
+  },
+  {
+    "id": "public-e-1045850853343518720",
+    "source": "public-post",
+    "description": "有楽町たんハロウィン名刺",
+    "post": {
+      "id": "1045850853343518720",
+      "createdAt": "2018-09-29T01:40:49.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξそしてそして‼️\n昨日も最後にチラッとしましたが…\n今日から #有楽町たん ハロウィン名刺を配布しま～す🎃✨\n\n10月31日まで配布予定です☆\n1階の総合カウンターにございますので、ぜひゲットして下さいね♡\nお待ちしておりま～す(*´ω`*)🍭 https://t.co/8TGUxegqQS",
+      "url": "https://x.com/bic_yuurakuchou/status/1045850853343518720",
+      "media": [
+        "https://pbs.twimg.com/media/DoObrVhVYAAYVSV.jpg",
+        "https://pbs.twimg.com/media/DoObtBiVsAAS8PN.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "yuurakuchou"
+      ],
+      "characterIds": [
+        "yuurakuchou"
+      ],
+      "startDate": "2018-09-29"
+    },
+    "rationale": "有楽町たんハロウィン名刺を今日から10/31まで1階で配布。既知の2026ギフトカード企画とは別。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "seasonal-card"
+    ],
+    "group": "yuurakuchou-halloween-card-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "216e403d1fae8cf148f1a5019562287db97b182da9782690b61ca068b4be0c6a"
+  },
+  {
+    "id": "public-e-1015773291888324608",
+    "source": "public-post",
+    "description": "本店とさがみコラボ・クイズ名刺",
+    "post": {
+      "id": "1015773291888324608",
+      "createdAt": "2018-07-08T01:43:19.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "名刺は現在2種類配布中です(⋈ ☌◒☌)/\n\n絵柄\n◆さがみたんコラボチョコミント名刺\n◆池袋メンバークイズ付き本店たん名刺\n\n場所\n★1F店頭正面向かって右側の本店たんパネル手元\n★地下1F天体望遠鏡付近の階段横ビッカメ娘イラスト壁面\n\nわからなくなったら\n #本店たん名刺配布状況 で確認してね！",
+      "url": "https://x.com/bicikebukuro/status/1015773291888324608",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "honten"
+      ],
+      "characterIds": [
+        "honten",
+        "sagami"
+      ]
+    },
+    "rationale": "さがみたんコラボ名刺と本店たんクイズ名刺の2種類を本店で配布。カテゴリと開始日は未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "multi-item",
+      "multi-character"
+    ],
+    "group": "honten-sagami-quiz-cards-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "2ada96707109921459db771306f1efce6095cdff991001e828610f39f2623b12"
+  },
+  {
+    "id": "public-e-1045601587320635392",
+    "source": "public-post",
+    "description": "池西たん名刺の配布再開",
+    "post": {
+      "id": "1045601587320635392",
+      "createdAt": "2018-09-28T09:10:19.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "【報告】名刺お待ちのみなさま😊大変長くお待たせいたしましただっべぇ★\n\nおかげさまで、池西たん名刺配布再開いたします‼️\nさ～ら～に～数量限定→期間限定だっべぇ♪\n10月31日まで池西たんが配布いたしますので、ぜひお見逃しなく～～(★´∀`)ﾉ\n\n＊お１人様1点とさせていただきます。 https://t.co/CPPHcu7Hwv",
+      "url": "https://x.com/bicikenishi/status/1045601587320635392",
+      "media": [
+        "https://pbs.twimg.com/media/DoK4CAxV4AAdtgx.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "ikenishi"
+      ],
+      "characterIds": [
+        "ikenishi"
+      ],
+      "startDate": "2018-09-28"
+    },
+    "rationale": "池西たん名刺を数量限定から期間限定へ変更して再開し10/31までと明記。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "resume-notice",
+      "limited-card"
+    ],
+    "group": "ikenishi-autumn-card-resume-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "1d2ef7f26fb8359d273b90710df30795a7408850755498ac53dd777de17116ed"
+  },
+  {
+    "id": "public-e-1125670249343344645",
+    "source": "public-post",
+    "description": "なんばたん誕生日アクキー",
+    "post": {
+      "id": "1125670249343344645",
+      "createdAt": "2019-05-07T07:54:36.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "🎂#5月10日はなんばたんのバースデー🎂\n【告　知】\n『5/10～5/24』の期間中、税込3000円以上ご購入の先着50名様に、なんばたんアクリルキーホルダーバースデーVer.をプレゼント！\nご希望の方は対象レシートを1階総合カウンターにお持ち下さい！期間中の合算OK、8階アウトレットなんば店レシートOKです https://t.co/vqmXooiQas",
+      "url": "https://x.com/biccamera_nanba/status/1125670249343344645",
+      "media": [
+        "https://pbs.twimg.com/media/D58rSaQUIAIcrL8.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "nanba"
+      ],
+      "characterIds": [
+        "nanba"
+      ],
+      "startDate": "2019-05-10",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 50
+        }
+      ]
+    },
+    "rationale": "なんばたんアクキーを税込3000円購入の先着50名へ5/10から提供。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "birthday",
+      "purchase",
+      "first-come"
+    ],
+    "group": "nanba-birthday-ackey-2019",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "3b734a235d81ea459a8b808c4f600519b685835d6abe0646fe2f1ee5d7e3eef6"
+  }
+]

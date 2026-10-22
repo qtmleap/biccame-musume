@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1917382142264500468",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1917382142264500468",
+      "createdAt": "2025-04-30T00:55:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "おはらぞございます！\nビックカメラ ラゾーナ川崎店\nまもなく【朝10時】に開店です！\n川崎駅周辺今朝の天気は青空広がる晴れ模様☀\n\n4月最終日!!!\n   ∧,,∧ ｶﾀｶﾀｶﾀ\n  ( *˙꒳​˙2 )ｶﾀｶﾀｶﾀ\n  / ꜆꜄꜆ /￣￣￣/\n￣＼/＿＿＿/￣\n#企業公式が毎朝地元の天気を言い合う \n#イマソラ https://t.co/NIdeRUQUqU",
+      "url": "https://x.com/Bic_kawasaki/status/1917382142264500468",
+      "media": [
+        "https://pbs.twimg.com/media/Gpvo3iUaYAA1IkF.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「おはらぞございます！ / ビックカメラ ラゾーナ川崎店 / まもなく【朝10時】に開店です！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "kawasaki-morning-weather-greeting-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 150764,
+      "postSha256": "e377dfd905862af48049c257a7e34ef57263178088ca475bc3454a62cc268de2",
+      "textSha256": "b9c0b8df997c0edd70ab37f5fd87ad236e12701fc1ddfd5e67f154a284450fc3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1922193469646274765",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1922193469646274765",
+      "createdAt": "2025-05-13T07:33:30.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "【 #ポケカ 抽選受付のお知らせ】\n6月6日(金)発売 ポケモンカードゲーム\n①拡張パック『ブラックボルト』\n②拡張パック『ホワイトフレア』\n③カードファイルセット『ブラックボルト・ホワイトフレア』\n\n受付期間:5月16日(金)～18日(日)\n場所:6階おもちゃコーナーレジ\n⚠先着順ではございません https://t.co/PbPZyC6MKs",
+      "url": "https://x.com/bic_shinjyuku/status/1922193469646274765",
+      "media": [
+        "https://pbs.twimg.com/media/Gq0AoAAaoAA_Ma1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【 #ポケカ 抽選受付のお知らせ】 / 6月6日(金)発売 ポケモンカードゲーム / ①拡張パック『ブラックボルト』」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pokemon-black-white-flare-lottery-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 139634,
+      "postSha256": "70f53231ec3e9fe06938180be911130d57218f5e22df1e2f2ef62a23fc3dba38",
+      "textSha256": "788455b04a590227703e0124e38b2fb82723b93f3693027ac7051a92247121fe"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,173 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2084805383445737577",
+    "source": "public-post",
+    "description": "fujisawa-acrylic-stand-end-2026",
+    "post": {
+      "id": "2084805383445737577",
+      "createdAt": "2026-08-05T00:55:11.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "quote",
+      "text": "藤沢たんのアクスタ、配布終了いたしました。\nお受け取りいただいた皆様ありがとうございました！",
+      "url": "https://x.com/bic_fujisawa/status/2084805383445737577",
+      "quoted": {
+        "id": "2072975751276798436",
+        "screenName": "bic_fujisawa",
+        "text": "✨ビックカメラ藤沢店20周年記念✨\n\nビックカメラポイントカード会員様限定\n『藤沢たん等身大パネルイラスト\n　アクリルスタンドプレゼント』\n\n8/4(火)開店時より【限定70個】\n先着順にて配布するぜ🎁\n\n※藤沢店にて税込7,000円以上\n当日お買い上げのレシートを\n2F総合カウンターへお持ちください\n↓ https://t.co/siBCE65Ccl"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "acsta",
+      "stores": null,
+      "characterIds": [
+        "fujisawa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アクスタ配布終了。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:fujisawa-store-anniv20-2026"
+    ],
+    "group": "fujisawa-acrylic-stand-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "藤沢たんのアクスタ",
+          "evidence": [
+            "藤沢たんのアクスタ、配布終了いたしました。"
+          ]
+        }
+      ],
+      "groupingNote": "アクスタ配布終了。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 19185,
+      "postSha256": "0c6facfcd42e1396bab4ce13d934c8c2e9a62ba6340f345c7b5f268e66e2792c",
+      "textSha256": "86e3202b4bfb82c5b5312a292d6ce541e8115eb0472c9d2c00bb371bd35a476a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "ee371693-d0c4-4d0d-a57c-0874c6eec365",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_fujisawa/status/2084805383445737577",
+          "origin": "manual-or-seed",
+          "title": "20周年記念アクリルスタンド",
+          "category": "acsta",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-08-03T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "fujisawa"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 70,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 7000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2086735423167221791",
+    "source": "public-post",
+    "description": "fujisawa-acrylic-stand-end-2026 matched control",
+    "post": {
+      "id": "2086735423167221791",
+      "createdAt": "2026-08-10T08:44:29.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "quote",
+      "text": "(3・ω・)かわいくて元気いっぱいでいいぞ！\n同日記念日のさがみたんと藤沢たんを描いてくれてありがとな！",
+      "url": "https://x.com/bic_fujisawa/status/2086735423167221791",
+      "quoted": {
+        "id": "2085118813562175901",
+        "screenName": "toinekoxcrossp",
+        "text": "おはようにゃああああ〜😆🙌🐈️💨\n今日も元気に頑張るにゃー！😼🐈️\n\n朝イラストはビッカメ娘の #さがみたん と #藤沢たん だにゃ！\n2人でジャーンプ！！！🍖🦑💨\n\n指描き　落書きファンアート\n#絵描きさんと繋がりたい\n(※イラスト制作時間5時間40分) https://t.co/pD9vDrooBc"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2086735423167221791",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 17410,
+      "postSha256": "7a5497686ad003014aed8966e5e42436d554f9920f4587e58419ec351bc25c69",
+      "textSha256": "c89b6ffdabc0a71f30bc3b928d845dcca4ffebe9a44087c79aa0914444d06af4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

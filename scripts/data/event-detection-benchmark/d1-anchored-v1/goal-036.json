@@ -1,0 +1,159 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2017770449250488394",
+    "source": "public-post",
+    "description": "abeno-new-card-2026-02",
+    "post": {
+      "id": "2017770449250488394",
+      "createdAt": "2026-02-01T01:22:18.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "おはあべ～😆\nあっという間に２月やな‼️\n今月も元気によろあべです🫡\n今日から新しい名刺も配布されるので貰いに来てな～🐙❣️ https://t.co/VzawLYLVCr",
+      "url": "https://x.com/bic_abeno/status/2017770449250488394",
+      "media": [
+        "https://pbs.twimg.com/media/HACOskjbEAQAnne.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2026-02-01",
+      "conditions": null
+    },
+    "rationale": "今日から新しい名刺が配布される。種別や期間は本文にない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "abeno-new-card-2026-02",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "新しい名刺",
+          "evidence": [
+            "今日から新しい名刺も配布されるので貰いに来てな～🐙❣️ https://t.co/VzawLYLVCr"
+          ]
+        }
+      ],
+      "groupingNote": "今日から新しい名刺が配布される。種別や期間は本文にない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 75970,
+      "postSha256": "a24f9fafee76762588b54a96a099d1d7197fa7cd13dafdf0ad63762ddc9e524e",
+      "textSha256": "5fedd18bc633fa2023f356391902fa293685551a3713a9bff8284d0446011bb7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "304b2770-5d8b-4413-9201-d7db8c88454f",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_abeno/status/2017770449250488394",
+          "origin": "manual-or-seed",
+          "title": "通常名刺",
+          "category": "regular_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-01-31T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "abeno"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2025027699836944523",
+    "source": "public-post",
+    "description": "abeno-new-card-2026-02 matched control",
+    "post": {
+      "id": "2025027699836944523",
+      "createdAt": "2026-02-21T02:00:01.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "💡2/21～2/23限定💡\n\n大人気タイガー炊飯器の炊き比べ実演会を開催しております🐯🥰\n\nこの機会に最新炊飯器の特徴や土鍋炊飯器の素晴らしさをご体感下さい✨🍚 https://t.co/Wg7EAPXNas",
+      "url": "https://x.com/bic_abeno/status/2025027699836944523",
+      "media": [
+        "https://pbs.twimg.com/media/HBpOnSraMAAHy4o.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2025027699836944523",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 69739,
+      "postSha256": "96d18dcdf71c8f71414beead73be53cae0e1ea71b4cf58e4070a28f9abb18836",
+      "textSha256": "b2ec6917eb2534d5ebf0c31ff5594822a0ad0466d0f2f68b769e8d4a5ba5f1eb"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

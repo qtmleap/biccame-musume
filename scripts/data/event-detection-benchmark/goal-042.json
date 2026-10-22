@@ -1,0 +1,130 @@
+[
+  {
+    "id": "goal-positive-1637982702862495746",
+    "source": "public-post",
+    "description": "sagami ackey wave2 2023",
+    "post": {
+      "id": "1637982702862495746",
+      "createdAt": "2023-03-21T01:01:23.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "|*´ω`)おはようございます！！！\n「さがみたんのアクキー第二弾！」は残り僅かですがまだ配布してます♪\nでは今日もよろしくお願いします♪ https://t.co/ZnqtUyi4xq",
+      "url": "https://x.com/bic_sagamioono/status/1637982702862495746",
+      "media": [
+        "https://pbs.twimg.com/media/FrtIlYNakAMJS5o.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sagami"
+      ],
+      "characterIds": [
+        "sagami"
+      ],
+      "category": "ackey"
+    },
+    "rationale": "残り僅かだが提供継続、総数や初日はない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "sagami-ackey-wave2-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "さがみたんアクキー第二弾",
+          "evidence": [
+            "「さがみたんのアクキー第二弾！」は残り僅かですがまだ配布してます♪"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 378251,
+      "postSha256": "ce394029bbdb51c374c25b84fa5323c2b66c43b7edf674d1454579b0df383f84",
+      "textSha256": "14ea747b32ecf405376b21fd7ff9c04aafdd0d227eb1e82f979eccd933b43245"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1652877817166835715",
+    "source": "public-post",
+    "description": "machida sagami final card 2023",
+    "post": {
+      "id": "1652877817166835715",
+      "createdAt": "2023-05-01T03:29:15.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "ありがとう町田たん💙最後のコラボ名刺\nさがみたんミュージアムにて町田たんと最後のコラボ名刺を配布中です(*´ω`*)\n町田たんは5月末までお手伝いしてくれているのでツーショットを収めるなら今のうちです(*≧ω≦)\n✨5/31まで✨\n#さがみたん https://t.co/amkp69IOJu",
+      "url": "https://x.com/bic_sagamioono/status/1652877817166835715",
+      "media": [
+        "https://pbs.twimg.com/media/FvAytBiacAAMAbH.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sagami"
+      ],
+      "characterIds": [
+        "sagami",
+        "machida"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "町田たんの最終お手伝い5/31までの共同名刺。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "end"
+    ],
+    "group": "machida-sagami-final-card-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "町田たん×さがみたんコラボ名刺",
+          "evidence": [
+            "ありがとう町田たん💙最後のコラボ名刺",
+            "さがみたんミュージアムにて町田たんと最後のコラボ名刺を配布中です(*´ω`*)"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 367933,
+      "postSha256": "f72e37e6bee4d8b0498a3929b7cc40f80266b50e51ce026e9013f4adec90ea5e",
+      "textSha256": "9791bfdc472b908fdfa34a177ddfd8667b19071c9a3b5b8d6619fe43e7c22fd4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

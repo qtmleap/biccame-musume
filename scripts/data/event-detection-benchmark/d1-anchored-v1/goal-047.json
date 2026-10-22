@@ -1,0 +1,164 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2048700610615333355",
+    "source": "public-post",
+    "description": "ikenishi-anniv9-acrylic-key-2026",
+    "post": {
+      "id": "2048700610615333355",
+      "createdAt": "2026-04-27T09:47:43.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "キャンペーン中に被せて告知ごめんなさい｡°(´∩ω∩`🎀)°｡\n\n５月９日（土）～\n擬人化９周年ということで\nドレス姿のアクキープレゼント\nやらせていただきます🔥\n\n今回の配布での反省点などあるので\n少しだけ内容練って再度お知らせします！ https://t.co/lI9PbTGxkO",
+      "url": "https://x.com/bicikenishi/status/2048700610615333355",
+      "media": [
+        "https://pbs.twimg.com/media/HG5xfP2bIAA4HO5.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2026-05-09",
+      "conditions": null
+    },
+    "rationale": "5/9開始は告げるが内容は練り直して再告知するとされる。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "preliminary",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "ikenishi-anniv9-acrylic-key-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ドレス姿のアクキー",
+          "evidence": [
+            "ドレス姿のアクキープレゼント"
+          ]
+        }
+      ],
+      "groupingNote": "5/9開始は告げるが内容は練り直して再告知するとされる。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 46467,
+      "postSha256": "af351ed3beee5f4c125ae976e2852cf0c179c31039ab90227eb2f4bc41183272",
+      "textSha256": "c99d0eaa3ee5a6b77934cda5c00c46a168748bc72c9a94e5a7799a9ba8179f66"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "eb268372-c517-482a-b8b4-f1d77ae4032b",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicikenishi/status/2048700610615333355",
+          "origin": "manual-or-seed",
+          "title": "擬人化9周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-05-08T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "ikenishi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2047476291050566091",
+    "source": "public-post",
+    "description": "ikenishi-anniv9-acrylic-key-2026 matched control",
+    "post": {
+      "id": "2047476291050566091",
+      "createdAt": "2026-04-24T00:42:42.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "＼買取を検討中の方必見！！📢／\n\n毎月5のつく日は「買取の日」\n毎月5日、15日、25日に店頭買取をお申込みいただくと…\n現金での買取金額3％増額します💰\n買取するなら5のつく日がとってもお得！\n買取は、当店5階買取カウンターまで https://t.co/vsvDuLigSO",
+      "url": "https://x.com/bicikenishi/status/2047476291050566091",
+      "media": [
+        "https://pbs.twimg.com/media/HGoYxxFbcAApPX_.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2047476291050566091",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 51817,
+      "postSha256": "dfdb22116d5043cad71aa5163a3ac7f1e519cfecdb66853436621088f7169f31",
+      "textSha256": "53b68c35e9c5964cdedfa1f535f5d651a15400618e0a2ffa0b2efdfd287133c7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

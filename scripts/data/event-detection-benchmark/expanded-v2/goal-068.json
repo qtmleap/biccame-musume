@@ -1,0 +1,145 @@
+[
+  {
+    "id": "expanded-v2-positive-2065612094364697059",
+    "source": "public-post",
+    "description": "kawasaki-bicsim-scratch-june-2026",
+    "post": {
+      "id": "2065612094364697059",
+      "createdAt": "2026-06-13T01:47:55.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": ".　　6/13(土)・6/14(日)\n<ビックシムたん>が遊びに来てるよ📢\n\n-内容-\n・ #ビックシムたん パネル来店\n・コラボ名刺配布\n・成約特典 川崎たんスクラッチ※数量限定\n\n　　　”∧,,∧ ﾋｮｺ\n　 　 ||( *˙꒳​˙2 ) ||\n￣￣￣　゜゜￣￣￣\n#ビッカメ娘 #川崎たん https://t.co/IaeDGKk3Te",
+      "url": "https://x.com/Bic_kawasaki/status/2065612094364697059",
+      "media": [
+        "https://pbs.twimg.com/media/HKqCeugaUAAeN0Y.jpg",
+        "https://pbs.twimg.com/media/HKqCgKKaoAAOksM.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "bicsim",
+        "kawasaki"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "来店展示と名刺、成約特典の別条件。名刺にも成約を要すると推測しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kawasaki-bicsim-scratch-june-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ビックシムたんパネル",
+          "evidence": [
+            "6/13(土)・6/14(日)",
+            "ビックシムたん パネル来店"
+          ]
+        },
+        {
+          "item": "コラボ名刺",
+          "evidence": [
+            "6/13(土)・6/14(日)",
+            "コラボ名刺配布"
+          ]
+        },
+        {
+          "item": "川崎たんスクラッチ",
+          "evidence": [
+            "6/13(土)・6/14(日)",
+            "成約特典 川崎たんスクラッチ"
+          ]
+        }
+      ],
+      "groupingNote": "来店展示と名刺、成約特典の別条件。名刺にも成約を要すると推測しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 35187,
+      "postSha256": "d9b293f9862151064986793dcc3514350bb684eaedf59ba3437e9b6411ea2129",
+      "textSha256": "4a12661cc7c64990b723faadfdcc0a221e8b3e9c68e129bd682a4e6e79f34a75"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2069972597874266337",
+    "source": "public-post",
+    "description": "kawasaki-bicsim-scratch-june-2026 matched control",
+    "post": {
+      "id": "2069972597874266337",
+      "createdAt": "2026-06-25T02:35:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "川崎店1Fに来たら『Nintendo Store』 アプリでチェックインしよう‼️\n\n任天堂エリアに『GPSチェックイン』スポット設置中！\nアプリのマイページからチェックイン！レジで『景品受取りへ』画面をみせると限定ステッカーをランダムでプレゼント！現在はマリオシリーズを配布中！\n#ビックカメラ https://t.co/a91VyiYTNa",
+      "url": "https://x.com/Bic_kawasaki/status/2069972597874266337",
+      "media": [
+        "https://pbs.twimg.com/media/HLn27FQakAAM_Rd.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2069972597874266337",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 31428,
+      "postSha256": "2fd38241fab7b8df7ae45f66bae7626997f9555980eb25f8621b55057101ce21",
+      "textSha256": "e054469ed25d5907f1281d1aa3d39023cb36cacc08ad6d206122f73e07d521b3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

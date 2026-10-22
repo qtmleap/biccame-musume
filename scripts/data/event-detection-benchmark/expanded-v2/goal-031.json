@@ -1,0 +1,128 @@
+[
+  {
+    "id": "expanded-v2-positive-1519506651493318657",
+    "source": "public-post",
+    "description": "kanagawa-machida-collaboration-card-2022",
+    "post": {
+      "id": "1519506651493318657",
+      "createdAt": "2022-04-28T02:39:51.000Z",
+      "screenName": "bicyokonishi",
+      "kind": "original",
+      "text": "(๑˃̵ᴗ˂̵)くこんよこにし〜！\n神奈川組with町田たんコラボ名刺の配布は明日から開始です〜〜っ！！♪( ´▽｀)💖\n全部集められるかなぁ…❣️\nたのしみすぎるっっっ♬\n\nでわっ今日もよろしくですーっ！🙌\n\n＃ビックカメラ\n#名刺コラボ",
+      "url": "https://x.com/bicyokonishi/status/1519506651493318657",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "翌日開始。参加店舗や各対象娘を投稿アカウントだけから補完しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kanagawa-machida-collaboration-card-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "神奈川組with町田たんコラボ名刺",
+          "evidence": [
+            "(๑˃̵ᴗ˂̵)くこんよこにし〜！",
+            "神奈川組with町田たんコラボ名刺の配布は明日から開始です〜〜っ！！♪( ´▽｀)💖",
+            "全部集められるかなぁ…❣️",
+            "たのしみすぎるっっっ♬",
+            "でわっ今日もよろしくですーっ！🙌",
+            "＃ビックカメラ",
+            "#名刺コラボ"
+          ]
+        }
+      ],
+      "groupingNote": "翌日開始。参加店舗や各対象娘を投稿アカウントだけから補完しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect-full/posts.jsonl",
+      "line": 477487,
+      "postSha256": "d687390471b237e4f323bd6e622da90c8f85e131bfdfe89cebbedc3d6694e2bd",
+      "textSha256": "a722e17f293faa469b79c33ae989234e553a0aa2780feb86027b16480ee10c5d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1512312655112925185",
+    "source": "public-post",
+    "description": "kanagawa-machida-collaboration-card-2022 matched control",
+    "post": {
+      "id": "1512312655112925185",
+      "createdAt": "2022-04-08T06:13:29.000Z",
+      "screenName": "bicyokonishi",
+      "kind": "original",
+      "text": "(๑˃̵ᴗ˂̵)くこんよこにし〜！\n今日は #忠犬ハチ公🐕の日〜\n一昨年映画見ました。。😭\nテレビの前で涙が止まりませんでした😭😭かなしすぎます。。うぅ。。\nハチと飼い主さんが無事に会えてますように…🍀\n\nでわっ今日もよろしくですーっ！🙌",
+      "url": "https://x.com/bicyokonishi/status/1512312655112925185",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1512312655112925185",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect-full/posts.jsonl",
+      "line": 483005,
+      "postSha256": "40e3ba8fe95e3017fc9d006360af4898a2491f7c3ef2342c522dcf00b4d1e437",
+      "textSha256": "7ff10f39354b9752674927018b7f4417510138e24352387639951357d8d75221"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

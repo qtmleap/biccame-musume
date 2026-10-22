@@ -1,0 +1,104 @@
+[
+  {
+    "id": "goal-negative-1233650326319726592",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1233650326319726592",
+      "createdAt": "2020-02-29T07:08:52.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "【営業時間変更のお知らせ】\nビックカメラ京王調布店は\n3月4日（水）より当面の間、下記の営業時間とさせていただきます。\n\n11：00～20：00\n\nお客様にはご迷惑をお掛け致しますが何卒ご理解頂きます様お願い申し上げます。\n\n※詳細は引用RT元をご確認お願い致します→\nhttps://t.co/lqoH32QP3k",
+      "url": "https://x.com/bic_keiochofu/status/1233650326319726592",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【営業時間変更のお知らせ】 / ビックカメラ京王調布店は / 3月4日（水）より当面の間、下記の営業時間とさせていただきます。」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "chofu-covid-reduced-hours-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 663004,
+      "postSha256": "9c50edd5e1fe472edf1907d8a36872fd8950cece183d4d50e10ff1fc85225b57",
+      "textSha256": "cd46587421f582c80219656b619868028e044972ecb25f7688ee43cd01630922"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1231815139642339334",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1231815139642339334",
+      "createdAt": "2020-02-24T05:36:29.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "【本館 4階 家電】\n3月1日まで！！決算特価ヽ(^o^)丿\n絡まない！ぶつからない！隅まで届く！エレクトロラクスのカメラ搭載上位モデルロボット掃除機がなんと、税込49,800円！！お見逃しなく～(*'ω'*) https://t.co/Jm3buliL1R",
+      "url": "https://x.com/bic_shibuya/status/1231815139642339334",
+      "media": [
+        "https://pbs.twimg.com/media/ERg3YyfVAAExIh3.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【本館 4階 家電】 / 3月1日まで！！決算特価ヽ(^o^)丿 / 絡まない！ぶつからない！隅まで届く！エレクトロラクスのカメラ搭載上位モデルロボット掃除機がなんと、税込49,800円！！お見逃しなく～(*'ω'*) https://t.」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "electrolux-robot-vacuum-sale-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 664738,
+      "postSha256": "66124816a4a8d3000d59d7723ac56af30efc7636d7f35e9a4bbf01e72a719675",
+      "textSha256": "5092667372294a1da243d3b5795408287b4726206af405bede65b05949cce0ce"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

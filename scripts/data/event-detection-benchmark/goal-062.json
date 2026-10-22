@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-925328433944522752",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "925328433944522752",
+      "createdAt": "2017-10-31T11:47:45.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "iPhone X\nビックカメラグループにて予約受付開始！\n11月3日（金）発売\n\n詳しくはこちら\n\nhttps://t.co/rdTJKWwdKj https://t.co/1bvcBGfAeZ",
+      "url": "https://x.com/Bic_kawasaki/status/925328433944522752",
+      "media": [
+        "https://pbs.twimg.com/media/DNIEAyTUMAUZUOu.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「iPhone X / ビックカメラグループにて予約受付開始！ / 11月3日（金）発売」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "iphone-x-launch-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 910197,
+      "postSha256": "261da4611897f28f61cfe44480366c4fa49b9c19492f8b57adc6c03293cc0139",
+      "textSha256": "8d85943fbf9b542f615ff8d5b77cd177eac82635ed0abe1d4b6c07afe00f7f52"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-923418378999447553",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "923418378999447553",
+      "createdAt": "2017-10-26T05:17:52.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "SONYよりスマートスピーカーが登場✨\n12月9日発売\nGoogleアシスタント搭載\nジェスチャーで操作も出来ちゃいます😀\nオーディオコーナーにて予約受付中です☺️❤️ https://t.co/bRUVtVjz1s",
+      "url": "https://x.com/bic_sagamioono/status/923418378999447553",
+      "media": [
+        "https://pbs.twimg.com/media/DNCh-8CVQAAMQvU.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「SONYよりスマートスピーカーが登場✨ / 12月9日発売 / Googleアシスタント搭載」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "sony-smart-speaker-launch-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 911542,
+      "postSha256": "dd1367e9dec8375a606b0b98df6fbc8c2d25ccbc95d7a5930675ee441c087ea1",
+      "textSha256": "76b2056d21035fdd7b14c2c17912077f3af9d6c889858300a1e9dd63aa608f40"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

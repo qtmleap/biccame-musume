@@ -1,0 +1,137 @@
+[
+  {
+    "id": "expanded-v2-positive-1842419544775917625",
+    "source": "public-post",
+    "description": "pkan-halloween-cheki-card-2024",
+    "post": {
+      "id": "1842419544775917625",
+      "createdAt": "2024-10-05T04:20:24.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "( っ*´ω`*c)そくほー！月末最後の土日に店頭で行うチェキ体験会で #パソ館たん ハロウィン名刺🎃を限定配布します！！参加無料！！！\nデザインや開催時間はまた後日！\n\n店頭にフォトスポットも用意する(予定)のでみんな来てね🥰 https://t.co/bYiwL4fOkX",
+      "url": "https://x.com/bicpkanhonten/status/1842419544775917625",
+      "media": [
+        "https://pbs.twimg.com/media/GZGWt40awAAs1V8.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "pkan"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "月末チェキ体験会の限定名刺。デザインや開催時間は後日で詳細未確定。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "preliminary"
+    ],
+    "group": "pkan-halloween-cheki-card-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ハロウィン名刺",
+          "evidence": [
+            "月末最後の土日に店頭で行うチェキ体験会",
+            "ハロウィン名刺🎃を限定配布",
+            "参加無料",
+            "デザインや開催時間はまた後日"
+          ]
+        },
+        {
+          "item": "フォトスポット",
+          "evidence": [
+            "店頭にフォトスポットも用意する(予定)"
+          ]
+        }
+      ],
+      "groupingNote": "月末チェキ体験会の限定名刺。デザインや開催時間は後日で詳細未確定。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 205086,
+      "postSha256": "a21b15ab2118aeba8816ca09cbd8c2fc676a08465a2c8fcd41f7f854e0f2115a",
+      "textSha256": "5bf21440b300926f93a3b7e627bacd58f98958da99a7f6690fdc7a2443e59c63"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1847127968298279031",
+    "source": "public-post",
+    "description": "pkan-halloween-cheki-card-2024 matched control",
+    "post": {
+      "id": "1847127968298279031",
+      "createdAt": "2024-10-18T04:10:00.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "\\秋のSONYカメラフェア！/\n\n📷SONYのカメラが大変お買い得✨\n当社指定機種を購入頂くとスペシャル特典をプレゼント！\n詳しくは当店1Fカメラコーナーまで💨\n\nキャンペーン期間は2024年10月20日(日)まで！\nもう間もなく終了ですので、この機会を是非お見逃しなく👀 https://t.co/OmKWchYhBN",
+      "url": "https://x.com/bicpkanhonten/status/1847127968298279031",
+      "media": [
+        "https://pbs.twimg.com/media/GaJPtogbwAA1hbZ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1847127968298279031",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 201586,
+      "postSha256": "0dfd6575f8984320fa0e0a1149ac60703e55bbbae313e463cd1322ba68ec72c4",
+      "textSha256": "d6eb3d47c09bd4384579ffb40a8a10fe819684d2b92ee46b3882474a0d335085"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

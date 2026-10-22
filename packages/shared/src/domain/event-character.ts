@@ -6,24 +6,16 @@ import {
 } from '@biccame/shared/schemas/event.dto'
 import type { StoreKey } from '@biccame/shared/schemas/store.dto'
 
-/**
- * 対象ビッカメ娘が「その他」「シークレット」のような特殊値かどうか。
- * 特殊値のイベントはどの娘にも紐付かない扱いになる
- */
+/** 特殊値は特定のビッカメ娘には紐付かない。 */
 export const isSpecialCharacter = (character: EventCharacter): character is SpecialCharacter =>
   SpecialCharacterSchema.safeParse(character).success
 
-/**
- * イベントの対象ビッカメ娘を解決する。
- * characterId が未指定のイベントは開催店舗と同じ娘が対象という扱い。
- * 閉店店舗の娘のイベントを別の娘が担当する場合や、
- * 特定の娘に紐付かない場合（other / secret）にのみ characterId が設定される。
- */
-export const resolveEventCharacter = (event: Pick<Event, 'characterId' | 'stores'>): EventCharacter =>
-  event.characterId ?? event.stores[0]
+/** 開催店舗と対象ビッカメ娘は独立しており、空配列を店舗から補完しない。 */
+export const resolveEventCharacters = (event: Pick<Event, 'characterIds'>): EventCharacter[] => event.characterIds
 
-/**
- * イベントが指定の娘に紐付くかどうか。特殊値のイベントはどの娘にも紐付かない
- */
-export const isEventForCharacter = (event: Pick<Event, 'characterId' | 'stores'>, storeKey: StoreKey): boolean =>
-  resolveEventCharacter(event) === storeKey
+/** 単一の代表画像が必要な箇所向け。対象未判定なら undefined。 */
+export const resolveEventCharacter = (event: Pick<Event, 'characterIds'>): EventCharacter | undefined =>
+  event.characterIds[0]
+
+export const isEventForCharacter = (event: Pick<Event, 'characterIds'>, storeKey: StoreKey): boolean =>
+  event.characterIds.includes(storeKey)

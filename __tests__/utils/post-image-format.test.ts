@@ -20,6 +20,7 @@ const event = (overrides: Partial<ImageEvent> = {}): ImageEvent => ({
   title: 'バレンタイン名刺',
   category: 'limited_card',
   stores: ['kawasaki'],
+  characterIds: ['kawasaki'],
   startDate: jst('2026-02-14'),
   endDate: jst('2026-03-14'),
   conditions: [],
@@ -68,7 +69,7 @@ test('same_campaign_across_stores_becomes_one_row', () => {
     title: 'バレンタイン名刺',
     stores: ['千葉駅前店', '船橋駅FACE店'],
     otherStoreCount: 2,
-    portraits: ['chiba', 'funabashi', 'kashiwa'],
+    portraits: ['kawasaki'],
     note: '3/14(土)まで'
   })
 })
@@ -88,13 +89,13 @@ test('differing_periods_and_conditions_are_not_merged_into_one_value', () => {
 
 test('target_character_and_other_category', () => {
   const row = eventRow(
-    event({ title: '缶バッジで繋ぐビッカメ娘旅', category: 'other', stores: ['chofu'], characterId: 'seiseki' })
+    event({ title: '缶バッジで繋ぐビッカメ娘旅', category: 'other', stores: ['chofu'], characterIds: ['seiseki'] })
   )
   expect(row.category).toBeNull()
   expect(row.character).toBe('せいせきたん')
   expect(row.portraits).toEqual(['seiseki'])
-  expect(eventRow(event({ stores: ['chofu'], characterId: 'chofu' })).character).toBeNull()
-  expect(eventRow(event({ stores: ['chofu'], characterId: 'secret' })).portraits).toEqual(['chofu'])
+  expect(eventRow(event({ stores: ['chofu'], characterIds: ['chofu'] })).character).toBe('調布たん')
+  expect(eventRow(event({ stores: ['chofu'], characterIds: ['secret'] })).portraits).toEqual([])
 })
 
 test('titles_break_at_natural_points', () => {

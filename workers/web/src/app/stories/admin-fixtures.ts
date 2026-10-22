@@ -79,6 +79,7 @@ export const webhookJob: WebhookJob = {
     title: 'あべのたん 限定名刺配布',
     category: 'limited_card',
     stores: ['abeno'],
+    characterIds: ['abeno'],
     startDate: '2026-10-02',
     conditions: [{ type: 'everyone' }]
   },

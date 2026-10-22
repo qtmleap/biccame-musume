@@ -1,4 +1,4 @@
-import { isSpecialCharacter, resolveEventCharacter } from '@biccame/shared/domain/event-character'
+import { isSpecialCharacter, resolveEventCharacters } from '@biccame/shared/domain/event-character'
 import type { Event, EventDetail } from '@biccame/shared/schemas/event.dto'
 import type { StoreKey } from '@biccame/shared/schemas/store.dto'
 import { Link } from '@tanstack/react-router'
@@ -25,6 +25,10 @@ const getConditionDetail = (condition: Event['conditions'][0]): string => {
   switch (condition.type) {
     case 'purchase':
       return `${(condition.purchaseAmount ?? 0).toLocaleString()}円以上購入`
+    case 'charge':
+      return condition.chargeAmount === undefined
+        ? '入金・チャージ'
+        : `${condition.chargeAmount.toLocaleString('ja-JP')}円以上入金`
     case 'first_come':
       return condition.quantity
         ? EVENT_LABELS.firstComeWithCount.replace('{count}', condition.quantity.toString())
@@ -94,25 +98,31 @@ const EventStoresSection = ({ stores }: { stores: string[] }) => {
 }
 
 /**
- * 対象ビッカメ娘セクション
- * 開催店舗の娘がそのまま対象のときは「対象店舗」と重複するため表示しない
+ * 対象ビッカメ娘セクション。開催店舗から推定せず、明示された対象を表示する。
  */
 const EventCharacterSection = ({ event }: { event: Event }) => {
-  const character = resolveEventCharacter(event)
-  if (character === event.stores[0]) return null
+  const characters = resolveEventCharacters(event)
 
   return (
     <div className='flex items-start gap-3'>
       <UserRound className='h-5 w-5 text-muted-foreground shrink-0 mt-0.5' />
       <div className='min-w-0 flex-1'>
         <p className='text-xs font-medium text-muted-foreground'>対象ビッカメ娘</p>
-        <div className='text-sm text-foreground'>
-          {isSpecialCharacter(character) ? (
-            <span>{SPECIAL_CHARACTER_LABELS[character]}</span>
-          ) : (
-            <Link to='/characters/$id' params={{ id: character }} className='text-brand hover:underline'>
-              {CHARACTER_NAME_LABELS[character] || STORE_NAME_LABELS[character] || character}
-            </Link>
+        <div className='text-sm text-foreground flex flex-wrap gap-x-2'>
+          {characters.length === 0 && <span className='text-muted-foreground'>未判定</span>}
+          {characters.map((character) =>
+            isSpecialCharacter(character) ? (
+              <span key={character}>{SPECIAL_CHARACTER_LABELS[character]}</span>
+            ) : (
+              <Link
+                key={character}
+                to='/characters/$id'
+                params={{ id: character }}
+                className='text-brand hover:underline'
+              >
+                {CHARACTER_NAME_LABELS[character]}
+              </Link>
+            )
           )}
         </div>
       </div>

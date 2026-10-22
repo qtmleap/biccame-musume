@@ -54,7 +54,8 @@ test('atomic manual create is concurrent-idempotent and snapshots committed chil
         ...eventRequest.referenceUrls,
         { uuid: '44444444-4444-4444-a444-444444444444', type: 'start', url: 'https://example.com/start' }
       ],
-      stores: ['akiba', 'kawasaki']
+      stores: ['funabashi', 'akiba'],
+      characterIds: ['funato', 'kawasaki']
     }
     const results = await Promise.all([createEvent(env, request), createEvent(env, request)])
     expect(results[0].event).toEqual(results[1].event)
@@ -73,6 +74,9 @@ test('atomic manual create is concurrent-idempotent and snapshots committed chil
     const saved = await readAtomicManualEvent(env, eventRequest.uuid)
     // 保存した行（条件の uuid は保存時に採番し直される）と同じ内容が、固定済みの1件表示に入っている。
     expect(snapshot.data.images).toEqual([{ type: 'event', event: socialEventView(saved) }])
+    expect(saved.stores).toEqual(request.stores)
+    expect(saved.characterIds).toEqual(['funato', 'kawasaki'])
+    expect(await env.DB.prepare('SELECT count(*) AS n FROM event_characters').first<number>('n')).toBe(2)
     expect(saved.conditions[0].uuid).not.toBe(eventRequest.conditions[0].uuid)
     expect(saved.referenceUrls[0].uuid).not.toBe(eventRequest.referenceUrls[0].uuid)
     expect(
@@ -121,17 +125,17 @@ test('atomic update preserves field semantics and distinct monotonically increas
       ...eventRequest,
       title: '変更後',
       endDate: undefined,
-      characterId: 'secret'
+      characterIds: ['secret']
     })
     expect(updated.limitedQuantity).toBe(25)
     expect(updated.endDate).toBeUndefined()
-    expect(updated.characterId).toBe('secret')
+    expect(updated.characterIds).toEqual(['secret'])
     expect(updated.conditions[0].uuid).toBe(eventRequest.conditions[0].uuid)
     expect(updated.referenceUrls[0].uuid).toBe(eventRequest.referenceUrls[0].uuid)
     const again = await updateEvent(env, { ...eventRequest, title: '再更新', limitedQuantity: 10 })
     expect(again.updatedAt.getTime()).toBeGreaterThan(updated.updatedAt.getTime())
     expect(again.limitedQuantity).toBe(10)
-    expect(again.characterId).toBeUndefined()
+    expect(again.characterIds).toEqual(eventRequest.characterIds)
     const jobs = await env.DB.prepare(
       "SELECT key,snapshot_json FROM social_post_jobs WHERE channel='x' ORDER BY created_at"
     ).all<{ key: string; snapshot_json: string }>()

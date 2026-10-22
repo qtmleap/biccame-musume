@@ -1,0 +1,131 @@
+[
+  {
+    "id": "expanded-v2-positive-1541023317649682432",
+    "source": "public-post",
+    "description": "shinjyuku-sixth-character-birthday-end-2022",
+    "post": {
+      "id": "1541023317649682432",
+      "createdAt": "2022-06-26T11:39:24.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "#新宿西口たん爆誕祭2022 は終了しました。\n#5月23日は新宿西口たんのバースデー\n#5月23日は新宿西口たん擬人化6周年\nから約1ヶ月間、たくさんのみなさまにお祝いしていただき、本当にありがとうございました！\n今後とも新宿西口店と #ビッカメ娘 #新宿西口たん をよろしくお願いします☆٩(๑❛ᴗ❛๑)۶ https://t.co/zrGPw2aXTL",
+      "url": "https://x.com/bic_shinjyuku/status/1541023317649682432",
+      "media": [
+        "https://pbs.twimg.com/media/FWLQdm5aAAA7tnb.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "shinjyuku"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "約1か月開催した擬人化6周年爆誕祭の終了。具体的配布物は本文だけでは不明。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "end"
+    ],
+    "group": "shinjyuku-sixth-character-birthday-end-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "新宿西口たん爆誕祭2022",
+          "evidence": [
+            "#新宿西口たん爆誕祭2022 は終了しました。",
+            "#5月23日は新宿西口たんのバースデー",
+            "#5月23日は新宿西口たん擬人化6周年",
+            "から約1ヶ月間、たくさんのみなさまにお祝いしていただき、本当にありがとうございました！",
+            "今後とも新宿西口店と #ビッカメ娘 #新宿西口たん をよろしくお願いします☆٩(๑❛ᴗ❛๑)۶ https://t.co/zrGPw2aXTL"
+          ]
+        }
+      ],
+      "groupingNote": "約1か月開催した擬人化6周年爆誕祭の終了。具体的配布物は本文だけでは不明。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 448511,
+      "postSha256": "a5eca9249c5d47aff2f6efc53eccb53693d36424cfc16be9dbf7ccd8c6fe792d",
+      "textSha256": "ff1c0f50a776458b87a88bd6846f2870e77001e922c566840780d5d8614db058"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1533407652922789888",
+    "source": "public-post",
+    "description": "shinjyuku-sixth-character-birthday-end-2022 matched control",
+    "post": {
+      "id": "1533407652922789888",
+      "createdAt": "2022-06-05T11:17:28.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "「格闘技」×「サッカー」 ルール無用の新スポーツ「ストライク」が開幕💥\n☆6月10日(金)発売予定 #NintendoSwitch 用ソフト『 マリオストライカーズ : バトルリーグ 』全額内金にて予約承り中\n☆5階ゲームコーナー【 https://t.co/edJQmu2YFX 】\n\n#マリオストライカーズ https://t.co/6RQFmlLddS",
+      "url": "https://x.com/bic_shinjyuku/status/1533407652922789888",
+      "media": [
+        "https://pbs.twimg.com/media/FUfCFdyVEAAVVX8.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1533407652922789888",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 454529,
+      "postSha256": "94fe64decac7d8bb771bc97c17279b0d4bcf21c69622e420f403f92282c7a3c8",
+      "textSha256": "a811075fa24d2789950ccd5bdf75194b71470017552cd1cbd0110dd213418c50"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

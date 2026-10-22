@@ -1,0 +1,60 @@
+{
+  "case": "goal-positive-1012319233298989056",
+  "version": "v5-webhook-v12-neutral-context",
+  "extractionVersion": "giveaways-v6-focused-review",
+  "post": {
+    "id": "1012319233298989056",
+    "createdAt": "2018-06-28T12:58:07.000Z",
+    "screenName": "biccameramito",
+    "kind": "original",
+    "text": "(*´-`)そろそろラストスパート！\n水戸駅店に行けない想いや、行ったつもりになれるおもしろツイートをお待ちしております。お１人様何回でも投稿可能です。ツイートしてくれたユーザーの中から抽選で2名様にアクリルフィギュアをプレゼント！\n#水戸たん生誕祭2018エア参加組\n6月30日（土）23：59まで https://t.co/G8YvkxQwLc",
+    "url": "https://x.com/biccameramito/status/1012319233298989056",
+    "media": [
+      "https://pbs.twimg.com/media/Dgx6-FWVQAMuj4C.jpg"
+    ]
+  },
+  "sources": [
+    {
+      "file": "1012319233298989056-count.json",
+      "source": "goal-positive-1012319233298989056.response-1.json",
+      "recordedResponseHash": "34cad17d998f0e0d8b2f2777b0b7ed496d689338800268cc2b5f46d1c7e31be5",
+      "sha256": "6fef6f23f4a58e29c2d0564c65a6cff9694c2267926113f6cf5d47a2237861b0"
+    },
+    {
+      "file": "1012319233298989056-extract.json",
+      "source": "goal-positive-1012319233298989056.response-2.json",
+      "recordedResponseHash": "1a86541e3c065fe296bee94bfd2027f27893cdea8c7604a0e095abadf5292209",
+      "sha256": "50ab675a5c240c93180a68987e8f81727f711e243490ffaa1906acbe9b1b84c7"
+    },
+    {
+      "file": "1012319233298989056-judge-3.json",
+      "source": "goal-positive-1012319233298989056.response-3.json",
+      "recordedResponseHash": "6135f7896c91a8786bdb637ebbde5a8557ab9a29ec4bf8ca29d923c8071a4c46",
+      "sha256": "806414e28a75ec133a399118b016d5c4070061c1ce9816a1d83a06b8a42e11ae"
+    },
+    {
+      "file": "1012319233298989056-judge-4.json",
+      "source": "goal-positive-1012319233298989056.response-4.json",
+      "recordedResponseHash": "072629e26c010023fc3cb9506d01f01c2aeb883a8598e9d987701b3a5f884265",
+      "sha256": "244adf855d1cfc121bb7a18f0eba292c994c9c1d8dc232d40a2f3a7194973f0c"
+    }
+  ],
+  "baseline": {
+    "version": "v4-webhook-v8-object-kind",
+    "audit": {
+      "version": "distribution-items-v1",
+      "expected": 1,
+      "probability": 0.8149,
+      "threshold": 0.9,
+      "extracted": 1,
+      "candidates": 1,
+      "status": "low_confidence"
+    },
+    "stopped": true,
+    "stopReasons": [
+      "distribution_item_count_low_confidence"
+    ],
+    "calls": 2,
+    "sourceSha256": "1f23e01792b8e3649d9b1487d1894c87f91f1433b6e82da3c3c3efabe44f0c47"
+  }
+}

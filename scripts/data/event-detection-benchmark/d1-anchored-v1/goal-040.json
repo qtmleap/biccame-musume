@@ -1,0 +1,173 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2034835661182910730",
+    "source": "public-post",
+    "description": "takatsuki-trading-card-end-2026",
+    "post": {
+      "id": "2034835661182910730",
+      "createdAt": "2026-03-20T03:33:21.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "quote",
+      "text": "📢 たかつきたんトレーディングカード\n　　の配布は、終了しました✨\n\nありがとうございました✨",
+      "url": "https://x.com/bic_takatsuki/status/2034835661182910730",
+      "quoted": {
+        "id": "2004419316373246079",
+        "screenName": "bic_takatsuki",
+        "text": "📢＼　新 年 イ ベ ン ト  告 知　/ \n\n👑本日の主役たかつきたん👑\nトレーディングカード配布✨\n【期間】2026年1月3日㈯～\n※無くなり次第終了。\n\n合計税込2026円以上ご購入で、\n先着100名様にプレゼント！\nお渡しは、おもちゃ自転車ゲーム相談カウンター \nです。 https://t.co/zFrK8JqeoN"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "takatsuki"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "トレーディングカード配布終了の報告。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:takatsuki-trading-card-2026"
+    ],
+    "group": "takatsuki-trading-card-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "たかつきたんトレーディングカード",
+          "evidence": [
+            "📢 たかつきたんトレーディングカード"
+          ]
+        }
+      ],
+      "groupingNote": "トレーディングカード配布終了の報告。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 61801,
+      "postSha256": "3eeeac67edcb021a4bc55d6dbef49ddd455cd15a7a33d778184481ba802d187c",
+      "textSha256": "1bcd145ed2170f52846373cd852c5e27df7ae522beb59b5bc927d9f1f04cf50e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "4b467ce8-6f06-410d-abab-2f3c60b0644a",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_takatsuki/status/2034835661182910730",
+          "origin": "manual-or-seed",
+          "title": "トレーディングカード",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-01-02T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "takatsuki"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 2026,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2037070654667890993",
+    "source": "public-post",
+    "description": "takatsuki-trading-card-end-2026 matched control",
+    "post": {
+      "id": "2037070654667890993",
+      "createdAt": "2026-03-26T07:34:25.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "quote",
+      "text": "📢 わくわくどきどき✨\nが、上位かなと\n実は思っていたんです。\n\n「ど」は付いてますが\nえらいこっちゃ！の需要の高さに\n驚いています✨\n\nでは、改めまして・・・\n\n「ど」えらいこっちゃ！！",
+      "url": "https://x.com/bic_takatsuki/status/2037070654667890993",
+      "quoted": {
+        "id": "2037006777779474577",
+        "screenName": "itallinc",
+        "text": "フォロワーさんフォロワーさん、内線71番にお電話です。至急この外線をRT・ふぁぼしてください！😳"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2037070654667890993",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 59867,
+      "postSha256": "776929a067d020fb0e87223549d89318322899d0af183dc8012d19dd00582ad4",
+      "textSha256": "1562d8756f0b0732e4b26c706c15f4cd18f9b5a11794585b75c5f74eb5ed2cbb"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

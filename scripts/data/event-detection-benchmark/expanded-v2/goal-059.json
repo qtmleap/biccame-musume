@@ -1,0 +1,139 @@
+[
+  {
+    "id": "expanded-v2-positive-2050805796980896135",
+    "source": "public-post",
+    "description": "sapporo-cycle-safety-riddle-badges-2026",
+    "post": {
+      "id": "2050805796980896135",
+      "createdAt": "2026-05-03T05:12:58.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "🌸イベント情報🌸\n自転車 交通安全ルール・防犯フェア🚲\n5/4（月）～5/5（火）\n10～17時 1F南口イベント会場\n\n謎解きラリーにご参加で\n #さっぽろたん の缶バッジいずれか1個プレゼント😊\n全5種類の中からお好きな物をお選びいただけます。\n※なくなり次第終了。\n\nぜひお立ち寄りください♪ https://t.co/YPP8MAYhxi",
+      "url": "https://x.com/bic_sapporo/status/2050805796980896135",
+      "media": [
+        "https://pbs.twimg.com/media/HHXszMYbIAAt28T.jpg",
+        "https://pbs.twimg.com/media/HHXs0mnagAAt1Yp.jpg",
+        "https://pbs.twimg.com/media/HHXs2Laa4AEMF1k.png",
+        "https://pbs.twimg.com/media/HHXs49VawAAJI-F.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "sapporo"
+      ],
+      "startDate": "2026-05-04",
+      "conditions": null
+    },
+    "rationale": "謎解き参加で5種から好きな1個を選択。5種を5入手単位としない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "sapporo-cycle-safety-riddle-badges-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "缶バッジ",
+          "evidence": [
+            "🌸イベント情報🌸",
+            "自転車 交通安全ルール・防犯フェア🚲",
+            "5/4（月）～5/5（火）",
+            "10～17時 1F南口イベント会場",
+            "謎解きラリーにご参加で",
+            " #さっぽろたん の缶バッジいずれか1個プレゼント😊",
+            "全5種類の中からお好きな物をお選びいただけます。",
+            "※なくなり次第終了。",
+            "ぜひお立ち寄りください♪ https://t.co/YPP8MAYhxi"
+          ]
+        }
+      ],
+      "groupingNote": "謎解き参加で5種から好きな1個を選択。5種を5入手単位としない。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 48406,
+      "postSha256": "0f19a8f868f2f63a6ab00eb5a9fcc11627a1b7e4a360116bb5ec6acb7ca1ede6",
+      "textSha256": "8904f8747f29b11f2e60708f33f188308b7794c4d905c3a4a4e14150b18d4a26"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2053020091567235443",
+    "source": "public-post",
+    "description": "sapporo-cycle-safety-riddle-badges-2026 matched control",
+    "post": {
+      "id": "2053020091567235443",
+      "createdAt": "2026-05-09T07:51:47.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "＼5/22(金)発売！／\n#テンデンス より「#仮面ライダーアギト」25周年を記念したスペシャルモデルが登場！\nアギトを象徴する「クロスホーン」を中央にデザインし、ブラック×ゴールドで重厚で高級感のある仕上がりでアギトの力強さや存在感、世界観を表現\nこちらは6階時計コーナーにて予約受付中です！ https://t.co/ZqVNbU0OYU",
+      "url": "https://x.com/bic_sapporo/status/2053020091567235443",
+      "media": [
+        "https://pbs.twimg.com/media/HH3Ke7pb0AAH_mw.png",
+        "https://pbs.twimg.com/media/HH3Ke9Fa4AAUkAo.png",
+        "https://pbs.twimg.com/media/HH3Ke8aa0AAtDDn.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2053020091567235443",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 46376,
+      "postSha256": "f4f21fea52bb0edf9c22956c369e8744d0d958f80c32d36b6fc120d6e98b3877",
+      "textSha256": "09a12a053b14951b9504029d72e3ef645f951f6f955a63fd3b598a60946b045f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

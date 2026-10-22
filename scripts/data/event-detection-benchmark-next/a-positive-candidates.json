@@ -1,0 +1,44 @@
+{
+  "revision": "next",
+  "activeManifestChanged": false,
+  "candidateCases": [
+    {
+      "id": "public-2110994133380985000",
+      "source": "public-post",
+      "description": "八王子たん・町田たん缶バッジの継続入手案内",
+      "post": {
+        "id": "2110994133380985000",
+        "createdAt": "2026-10-16T07:19:56.429Z",
+        "screenName": "bichachioji",
+        "kind": "original",
+        "text": "【缶バッチ残り数】10/16時点\n限定数２５０個ずつに対しまして現在のこり数\n八王子たん：１０７個前後\n町田たん：１１６個前後\nございます！\nまだまだたくさんあります👑\nみなさまのご来店お待ちしています✨",
+        "url": "https://x.com/bichachioji/status/2110994133380985000",
+        "media": []
+      },
+      "expected": {
+        "isEvent": true,
+        "category": "other",
+        "stores": ["hachioji"],
+        "characterIds": ["hachioji", "machida"]
+      },
+      "rationale": "八王子たん・町田たんの缶バッジを入手できる継続案内で、各250個の限定数と各デザインの現在残数を区別している。購入・無料・先着の条件は本文にないため追加しない。",
+      "tags": ["character-merchandise", "multi-character", "giveaway-progress", "quantity-not-remaining"],
+      "group": "hachioji-machida-badges-2026",
+      "reviewStatus": "provisional",
+      "sourceHash": "8c5ed8e864fac3d5379339ff2db1d09ac41a36472bcd699aee1f9d67230ba716",
+      "annotationDetails": {
+        "limitedQuantityPerDesign": 250,
+        "remainingApproximate": { "hachioji": 107, "machida": 116 },
+        "note": "現行スコアラーに単一の総数量として投入しない。物品別数量評価を追加する次revision用の注釈。"
+      }
+    }
+  ],
+  "notCountedCandidates": [
+    {
+      "postId": "2111641797156131042",
+      "reason": "12月のイベントと千葉たんのイベントの日程重複を述べるが、対象となる自身の企画は省略されている。告知と雑談の境界なので独立した確定陽性として件数に含めない。",
+      "reviewStatus": "needs-review"
+    }
+  ],
+  "limitation": "未採用偶数側の他の明瞭な陽性は既存の食べ隊・新東6周年・柏冬名刺・有楽町周年などの同企画更新が中心で、独立10〜15企画を追加できるとは確認できなかった。"
+}

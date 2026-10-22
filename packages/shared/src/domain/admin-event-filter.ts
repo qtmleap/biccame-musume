@@ -42,6 +42,7 @@ export const filterAdminEvents = (events: Event[], filter: AdminEventFilter, now
   events.filter((event) => {
     if (!matchesVerification(event, filter.verification)) return false
     if (event.category !== filter.category) return false
+    // 店舗条件は開催店舗だけを見る。対象ビッカメ娘の所属店舗からは補完しない。
     if (filter.store !== null && !event.stores.some((store) => store === filter.store)) return false
     return filter.status[getListStatus(event, now)]
   })

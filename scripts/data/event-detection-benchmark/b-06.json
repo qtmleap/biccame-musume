@@ -1,0 +1,130 @@
+[
+  {
+    "id": "public-b-2110201673067168030",
+    "source": "public-post",
+    "description": "ポケモンの寝具コラボ販売",
+    "post": {
+      "id": "2110201673067168030",
+      "createdAt": "2026-10-14T02:50:59.167Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "毎日の眠りにコイルが寄り添う。\nたくさんのコイルを、大人の寝室に自然になじむデザインで仕上げた特別なコレクション。\n\nNELL×COIL ポケモンコラボ\nオリジナルデザインの\nかけ布団カバー、ボックスシーツが登場！\n\n6階生毛工房にて体感できます♪\n#めちゃいるコイル\n#NELL #コイル #ポケモン",
+      "url": "https://x.com/bic_sapporo/status/2110201673067168030",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "コラボの対象はポケモンのコイルで、娘の記念企画ではない。",
+    "tags": [
+      "hard-negative",
+      "other-ip",
+      "bedding"
+    ],
+    "group": "pokemon-coil-nell-bedding",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "17f85fd10003f8ba19d74a60e8288f1acc51d33bd71eaed4268da11bf06e9fc8"
+  },
+  {
+    "id": "public-b-2110204698297032940",
+    "source": "public-post",
+    "description": "エアコンの買替え相談",
+    "post": {
+      "id": "2110204698297032940",
+      "createdAt": "2026-10-14T03:03:00.438Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "❄🔥Q.エアコンの寿命は─\n\n＼A.平均寿命...10〜13年程度／\n\n10年以上前のモデルはほとんど修理部品がないため買い替えがおすすめ！\n#エアコン の買い替えをご検討中の方 #ビックカメラ ではご相談も承ってます！ぜひご来店ください！\n\n(*˙꒳​˙2)なお多くのメーカー様のエアコン標準使用期間は10年です",
+      "url": "https://x.com/Bic_kawasaki/status/2110204698297032940",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "寿命と修理部品の一般案内でありキャラ企画ではない。",
+    "tags": [
+      "product-advice",
+      "appliance"
+    ],
+    "group": "air-conditioner-replacement-advice",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "98c407567d33fe2f7b7ea4f969a77265a4b09a4bee56548fbaec14a9d46c1942"
+  },
+  {
+    "id": "public-b-2110215360788267009",
+    "source": "public-post",
+    "description": "Airレジ対応自動釣銭機の展示",
+    "post": {
+      "id": "2110215360788267009",
+      "createdAt": "2026-10-14T03:45:22.574Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "これからお店をオープンする方、店舗オーナー様必見！\nAirレジ対応の\n自動釣銭機展示しております。\n自動釣銭機導入でレジ対応の効率アップ！\n他にもメリット沢山！\n当店5階Airレジカウンターに是非お越しください。\n↓ご予約はこちら↓\nbiccamera.co.jp/airregi/access…\n#エアレジ #A",
+      "url": "https://x.com/bic_yuurakuchou/status/2110215360788267009",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "店舗事業者向けの設備導入案内で娘企画ではない。 物品はAirレジ対応の自動釣銭機と明示されているため、非対象イベントだが物品種別はotherと注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "business-equipment"
+    ],
+    "group": "airregi-change-machine-display",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "9319fb33f0fcbe9e578e16513d12237d583a17fc25cd6980ed5889d970a9edb0"
+  },
+  {
+    "id": "public-b-2110223319975006509",
+    "source": "public-post",
+    "description": "スマートフォンの自宅買取キット",
+    "post": {
+      "id": "2110223319975006509",
+      "createdAt": "2026-10-14T04:17:00.192Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "＼ビックアイデア❣️／\n機種変更や買い替えで使わなくなったスマートフォンを、自宅から手軽に買取へ！\n\nスマホにぴったり「よくぞ！」なサイズのラクウルかんたんキットが登場🐪\n\nビックカメラ ラゾーナ川崎店2Fで取扱中！\nラクウル公式HP🐪raku-uru.sofmap.com\n#ビックアイデア #買取 pic",
+      "url": "https://x.com/Bic_kawasaki/status/2110223319975006509",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ラクウルのサービス案内であり配布物の企画ではない。",
+    "tags": [
+      "buyback",
+      "service-information"
+    ],
+    "group": "rakuuru-smartphone-kit",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "588192e10a6bd60b34f114421a02d86c65c59827343225484636e6d7a6efe689"
+  },
+  {
+    "id": "public-b-2110227085184860435",
+    "source": "public-post",
+    "description": "楽園追放のパネルと館内放送",
+    "post": {
+      "id": "2110227085184860435",
+      "createdAt": "2026-10-14T04:31:57.888Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "#楽園追放 ×  ビックカメラ コラボ\n\n10/14～12/13まで\nガブリエルさんの店内ナレーションを放送中！\n\n5Fエスカレーター前（オーディオコーナー裏）にはスタンディパネルと、\n「楽園追放 心のレゾナンス」のポスターも登場！\n\nビックカメラは店内撮影OKです👌\nご来店お待ちしております♪",
+      "url": "https://x.com/bic_sapporo/status/2110227085184860435",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "展示と期間があっても題材は他作品のガブリエルで、ビッカメ娘企画ではない。",
+    "tags": [
+      "hard-negative",
+      "other-ip",
+      "generic-exhibition"
+    ],
+    "group": "rakuen-tsuiho-sapporo-panel",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "d08278f634d3448e2f1402535cb64e696d1255ceff5945cbfa8c7dfd9b4da430"
+  }
+]

@@ -1,0 +1,136 @@
+[
+  {
+    "id": "expanded-v2-positive-1667066050490552320",
+    "source": "public-post",
+    "description": "yuurakuchou-illustration-card-wave2-2023",
+    "post": {
+      "id": "1667066050490552320",
+      "createdAt": "2023-06-09T07:08:13.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "本日よりスタートした第二弾クリアイラストカード配布に合わせて、名刺置き場の有楽町たんも変わっております✨\nご来店の際は、ぜひこちらもご覧下さい❣\n\n昨日までは、ケーキを持った有楽町たんでした🍰 https://t.co/evgJ37S5mc",
+      "url": "https://x.com/bic_yuurakuchou/status/1667066050490552320",
+      "media": [
+        "https://pbs.twimg.com/media/FyKbD1caYAADb20.jpg",
+        "https://pbs.twimg.com/media/FyKbE4WacAAkk3V.jpg",
+        "https://pbs.twimg.com/media/FyKbozxacAAuD74.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "第2弾配布開始と展示変更。展示パネルも配布されると推測しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "yuurakuchou-illustration-card-wave2-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "第二弾クリアイラストカード",
+          "evidence": [
+            "本日よりスタートした第二弾クリアイラストカード配布"
+          ]
+        },
+        {
+          "item": "有楽町たん展示",
+          "evidence": [
+            "名刺置き場の有楽町たんも変わっております",
+            "昨日までは、ケーキを持った有楽町たん"
+          ]
+        }
+      ],
+      "groupingNote": "第2弾配布開始と展示変更。展示パネルも配布されると推測しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 357221,
+      "postSha256": "be3f839f9ed52a49b82d40b502d883dda14120e55e4c29911e2ec43a92889aad",
+      "textSha256": "79b480f32f863e4b28e3d26161aa60a5bed9ee0eba83cc441cdbc2fea799919a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1664467500367757312",
+    "source": "public-post",
+    "description": "yuurakuchou-illustration-card-wave2-2023 matched control",
+    "post": {
+      "id": "1664467500367757312",
+      "createdAt": "2023-06-02T03:02:31.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "BICSIM10周年×キン肉マン\nスペシャルコラボ！\n\n音声即時契約でキン肉マンコラボグッズが抽選応募て当たるチャンス！\n1階 携帯電話コーナーでご契約受付中です！\n\nご来店特典、毎週変わるキン肉マンスマホ壁紙プレゼントも実施中！ https://t.co/YRlXuNPBSV",
+      "url": "https://x.com/bic_yuurakuchou/status/1664467500367757312",
+      "media": [
+        "https://pbs.twimg.com/media/FxlgXYdakAEWJNh.jpg",
+        "https://pbs.twimg.com/media/FxlgXc_aYAAwUeB.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1664467500367757312",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 359230,
+      "postSha256": "9d1932c2cd7ef7382ab114becd4551940e33ce7cd9742250bb5acf8f94663483",
+      "textSha256": "352f35cea018902d198d97a0fa0be49d4d02dcf66fe292ce82ffee4918179a6a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

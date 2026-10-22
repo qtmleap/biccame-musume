@@ -1,0 +1,157 @@
+[
+  {
+    "id": "public-f-964746806516051970",
+    "source": "public-post",
+    "description": "テレビ販促コラボの景品特典",
+    "post": {
+      "id": "964746806516051970",
+      "createdAt": "2018-02-17T06:22:17.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "こちらのイベントも2/17・18の今日と明日限定です！\n\nSONY×Softbankのコラボイベントが開催中です！\nお米がもらえたり、ご成約でスマートスピーカーがもらえたり…！？(✪ω✪)\n4Kテレビのご購入をお考えの方や、乗り換えをお考えの方は是非この2日間、3Fテレビコーナー特設会場へお越しください～！ https://t.co/NIDi2XCvEP",
+      "url": "https://x.com/bic_sapporo/status/964746806516051970",
+      "media": [
+        "https://pbs.twimg.com/media/DWN3OAqVAAIIFYM.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "SONYとSoftbankの一般販促で、米やスピーカーの特典があっても娘の企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "ordinary-event",
+      "collaboration",
+      "purchase-benefit"
+    ],
+    "group": "sony-softbank-tv-fair-february-2018",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1053464510000848896",
+    "source": "public-post",
+    "description": "野球応援感謝セールのポイント特典",
+    "post": {
+      "id": "1053464510000848896",
+      "createdAt": "2018-10-20T01:54:46.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ＜読売ジャイアンツ 応援感謝セール⚾️\n\n応援していただいたみなさまに感謝を込めて！\n\n当社指定エアコンが、\n通常ポイントにプラスでさらに！1万ポイントプレゼント🎁\n\nぜひ 地下1階家電コーナーまでお越しくださーい♪\n10月28日(日)まで☆\n\n#ジャイアンツ #巨人 https://t.co/mJiDF8bcac",
+      "url": "https://x.com/bic_yuurakuchou/status/1053464510000848896",
+      "media": [
+        "https://pbs.twimg.com/media/Dp6n8LCVYAAANHF.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ジャイアンツ応援とエアコン購入特典の一般販促で、娘の物品・出演はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "sale",
+      "points"
+    ],
+    "group": "giants-thanks-sale-october-2018",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1032076691626049536",
+    "source": "public-post",
+    "description": "イヤホン試聴と成約景品",
+    "post": {
+      "id": "1032076691626049536",
+      "createdAt": "2018-08-22T01:27:12.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "＿人人人人人人人＿\n＞　毎日開催！　＜\n￣Y^Y^Y^Y^Y^Y^￣\n8月31日までの期間2Fオーディオコーナーにて試聴会を開催！\nSONYフルワイヤレスイヤホンを期間中ご購入で\nご成約記念品をプレゼント！\n土日ではなかなかこれなかったという方も、この機会にぜひ\nご利用ください！！\n\n＃フルワイヤレスイヤホン https://t.co/zPFj66obAT",
+      "url": "https://x.com/bicikebukuro/status/1032076691626049536",
+      "media": [
+        "https://pbs.twimg.com/media/DlKrMfRX4AknZIj.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "店頭オーディオ試聴会と一般購入景品の案内。娘を対象にした企画とは記載されていない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "ordinary-event",
+      "experience",
+      "purchase-benefit"
+    ],
+    "group": "honten-sony-earphone-trial-august-2018",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1050614473625493504",
+    "source": "public-post",
+    "description": "掃除機の期間限定価格",
+    "post": {
+      "id": "1050614473625493504",
+      "createdAt": "2018-10-12T05:09:44.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "14日(日)までの期間限定ᕕ( ᐛ )ᕗ⭐️\n\n『吸引力の変わらないただ一つの掃除機』で\nお馴染みのダイソンスティッククリーナー！\n\nV6シリーズ『DC62MH』がなんと‼️\n税抜22800円更にポイントサービス🙄‼️\n\n6階家電コーナーにて販売中だっべ〜💓 https://t.co/uNsldZXIFE",
+      "url": "https://x.com/bicikenishi/status/1050614473625493504",
+      "media": [
+        "https://pbs.twimg.com/media/DpSISDNU4AAy3tJ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "娘の語尾で書かれているが、本文の対象はダイソン掃除機の通常販売価格。娘の物品や催しではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "character-voice",
+      "limited",
+      "ordinary-product"
+    ],
+    "group": "ikenishi-dyson-sale-october-2018",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1155788829929828352",
+    "source": "public-post",
+    "description": "カメラ購入の複数特典",
+    "post": {
+      "id": "1155788829929828352",
+      "createdAt": "2019-07-29T10:35:05.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "ミラーレス一眼 #Z7 #Z6 は【7月29日】までのご購入で特典もりもり！💪(╹▽╹💪)\n1.ご購入&ご応募で、最大4万円キャッシュバック！\n2.買取金額20％UPクーポンプレゼント！\n3.同時購入で交換レンズ最大10％引き！(※これは8/31ﾏﾃﾞ)\n4.残価設定・無金利アップグレードプログラム(※24回) https://t.co/k5zV6qjdSt",
+      "url": "https://x.com/biccamera_nanba/status/1155788829929828352",
+      "media": [
+        "https://pbs.twimg.com/media/EAovzozU8AAO3sT.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "キャッシュバック・買取・レンズ値引きなどカメラ購入の特典で、娘のデザイン物品はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "purchase-benefit",
+      "cashback",
+      "ordinary-product"
+    ],
+    "group": "nikon-z7-z6-purchase-benefits-july-2019",
+    "reviewStatus": "provisional"
+  }
+]

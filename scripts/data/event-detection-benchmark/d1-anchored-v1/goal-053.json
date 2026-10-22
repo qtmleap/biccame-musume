@@ -1,0 +1,177 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2057296936747905099",
+    "source": "public-post",
+    "description": "sapporo-store-anniv25-shiori-2026",
+    "post": {
+      "id": "2057296936747905099",
+      "createdAt": "2026-05-21T03:06:27.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "#ビッカメ娘 店舗25周年記念🎊\n\n税込2,000円以上の当日ご購入レシートを札幌店5階 総合カウンターにお持ちいただくと『4連クリアしおり』プレゼント🎁\n\n札幌店ではまだまだ配布中❣️\n\n#さっぽろたん #なんばたん #立川たん #有楽町たん のコラボノベルティグッズをぜひゲットしてください♪ https://t.co/OzaL2zEtZX",
+      "url": "https://x.com/bic_sapporo/status/2057296936747905099",
+      "media": [
+        "https://pbs.twimg.com/media/HIz8nfhaYAAxzlt.jpg",
+        "https://pbs.twimg.com/media/HIz8pE8aMAABteY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": [
+        "sapporo"
+      ],
+      "characterIds": [
+        "sapporo",
+        "nanba",
+        "tachikawa",
+        "yuurakuchou"
+      ],
+      "startDate": null,
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 2000
+        }
+      ]
+    },
+    "rationale": "札幌店ではまだ配布中という継続案内。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:four-store-25th-shiori"
+    ],
+    "group": "sapporo-store-anniv25-shiori-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "4連クリアしおり",
+          "evidence": [
+            "税込2,000円以上の当日ご購入レシートを札幌店5階 総合カウンターにお持ちいただくと『4連クリアしおり』プレゼント🎁"
+          ]
+        }
+      ],
+      "groupingNote": "札幌店ではまだ配布中という継続案内。",
+      "unannotatedFields": [
+        "startDate"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 42590,
+      "postSha256": "9c87c7dfe94d295de059fb751dc319eb1eae5f5326dcde0de26d24359bacfa59",
+      "textSha256": "83207218e20ac7907b7d531dd66aeea4f9c03e24b51b3e584fadccb7aef84343"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "8803f61c-e82d-4cff-8d38-52c44971543c",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_sapporo/status/2057296936747905099",
+          "origin": "manual-or-seed",
+          "title": "四連クリアしおり",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-05-09T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "sapporo"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 2000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2054758717015654466",
+    "source": "public-post",
+    "description": "sapporo-store-anniv25-shiori-2026 matched control",
+    "post": {
+      "id": "2054758717015654466",
+      "createdAt": "2026-05-14T03:00:28.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "＼5/22(金)発売！ でつ／\n#エンジェルクローバー より\n#ピーナッツ コラボレーションモデルウォッチが登場！\n\n#スヌーピー と #ウッドストック が文字盤を旅する遊び心あふれるデザイン♪\nカラーはシルバー・ブラック・ホワイトの3色展開！\n\nただいま6階時計コーナーにて予約受付中です♪ https://t.co/FIgE5BRbgz",
+      "url": "https://x.com/bic_sapporo/status/2054758717015654466",
+      "media": [
+        "https://pbs.twimg.com/media/HIP3611b0AA-sFQ.png",
+        "https://pbs.twimg.com/media/HIP4GWlbcAAd7Ej.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2054758717015654466",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 44859,
+      "postSha256": "d6969f797cc032eb9748c7096d32c12b7bbbe7b38a8b3e6d82e9ebc34de59369",
+      "textSha256": "c04f30eb84cd49612a68c3427e1d41543ed9efd04a063f126d0ced3691ab98f2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

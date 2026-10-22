@@ -1,0 +1,139 @@
+[
+  {
+    "id": "expanded-v2-positive-1549589936730681346",
+    "source": "public-post",
+    "description": "sapporo-birthday-postcard-2022",
+    "post": {
+      "id": "1549589936730681346",
+      "createdAt": "2022-07-20T03:00:05.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "☀️イベント予告☀️\n#さっぽろたん生誕祭2022 開催！\n\n7月23日（土）～8月14日(日）の期間中1000円以上ご購入でポストカードをプレゼント！ご来店お待ちしてます♪\n※お1人様1枚限り。無くなり次第終了\n#7月26日はさっぽろたんのバースデー\n#8月10日はさっぽろたん擬人化6周年\n#さっぽろたん\n#ビッカメ娘 https://t.co/0WFq1PdyDU",
+      "url": "https://x.com/bic_sapporo/status/1549589936730681346",
+      "media": [
+        "https://pbs.twimg.com/media/FYE_FGjaQAIVuCH.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "sapporo"
+      ],
+      "startDate": "2022-07-23",
+      "conditions": [
+        {
+          "type": "purchase"
+        }
+      ]
+    },
+    "rationale": "1000円購入の2022年生誕祭ポストカード。2023年とは別年度。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "sapporo-birthday-postcard-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ポストカード",
+          "evidence": [
+            "☀️イベント予告☀️",
+            "#さっぽろたん生誕祭2022 開催！",
+            "7月23日（土）～8月14日(日）の期間中1000円以上ご購入でポストカードをプレゼント！ご来店お待ちしてます♪",
+            "※お1人様1枚限り。無くなり次第終了",
+            "#7月26日はさっぽろたんのバースデー",
+            "#8月10日はさっぽろたん擬人化6周年",
+            "#さっぽろたん",
+            "#ビッカメ娘 https://t.co/0WFq1PdyDU"
+          ]
+        }
+      ],
+      "groupingNote": "1000円購入の2022年生誕祭ポストカード。2023年とは別年度。",
+      "unannotatedFields": [
+        "stores"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 442032,
+      "postSha256": "f20c67a3adce5a02f9354e785503ad2645acc38a89369db04430a802200bb620",
+      "textSha256": "5ca8d1bbf969bc5b13e3aa68d8763f119aafe581a12e3e5d25e26eafbb64fec1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1553635334545874944",
+    "source": "public-post",
+    "description": "sapporo-birthday-postcard-2022 matched control",
+    "post": {
+      "id": "1553635334545874944",
+      "createdAt": "2022-07-31T06:55:03.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "ビックカメラ札幌店には、モバイルバッテリーシェアリングサービス「ChargeSpot」がございます！\n\n1Fスマホコーナー側出入口\n1F証明写真機横\n2Fドラッグコーナー側出入口\n4F家電コーナーレジ向かい\n\nQRスキャンでモバイルバッテリーが借りられます！\nスマホの充電にお気軽にご利用下さい♪\n#ChargeSpot https://t.co/fdKchtDSWY",
+      "url": "https://x.com/bic_sapporo/status/1553635334545874944",
+      "media": [
+        "https://pbs.twimg.com/media/FY-ezzdaIAUqaRQ.png",
+        "https://pbs.twimg.com/media/FY-e2K7aQAALZ94.png",
+        "https://pbs.twimg.com/media/FY-e4B4aAAE3FBS.png",
+        "https://pbs.twimg.com/media/FY-e5KVagAEuXj-.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1553635334545874944",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 439218,
+      "postSha256": "058f5e21c5935189375a9719ab2b4c4135ddf44a0a9d52a25ddcab23fa3bb63a",
+      "textSha256": "7f05a41444b0e4dd8d37600fdad371a0467ae36eca49ef738f4b89991921e12d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

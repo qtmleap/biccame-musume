@@ -1,0 +1,133 @@
+[
+  {
+    "id": "goal-positive-962127057516822530",
+    "source": "public-post",
+    "description": "fujisawa valentine card 2018",
+    "post": {
+      "id": "962127057516822530",
+      "createdAt": "2018-02-10T00:52:20.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(1￣▽￣)おふじさわ！今日もこのあと朝10時オープン！よろしくな！\n\n今日から2月14日(水)までの期間限定！\n#藤沢たん バレンタイン限定デザイン名刺を 2階総合案内カウンターにてプレゼント！\nカウンターの担当者に声を掛けてくれ！\n(お一人様1枚までで宜しく頼むぜ！) https://t.co/iuAkTdasnn",
+      "url": "https://x.com/bic_fujisawa/status/962127057516822530",
+      "media": [
+        "https://pbs.twimg.com/media/DVopceqV4AAUljI.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "fujisawa"
+      ],
+      "characterIds": [
+        "fujisawa"
+      ],
+      "category": "limited_card",
+      "startDate": "2018-02-10"
+    },
+    "rationale": "2/10から2/14の期間・場所明示。1人1枚は個人上限。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "fujisawa-valentine-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "藤沢たんバレンタイン名刺",
+          "evidence": [
+            "#藤沢たん バレンタイン限定デザイン名刺を 2階総合案内カウンターにてプレゼント！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 884822,
+      "postSha256": "9eb5494a2512d20094e476066a57746cbc8a90103716e3776d08eb53672c1854",
+      "textSha256": "5052dc91e75c938054ac99687dbe719cb1fe581c45ac75537c69c3d652894e37"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-963325595487674368",
+    "source": "public-post",
+    "description": "kashiwa valentine cookie 2018",
+    "post": {
+      "id": "963325595487674368",
+      "createdAt": "2018-02-13T08:14:54.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【2月14日限定！】\n\nﾊﾞﾚﾝﾀｲﾝ企画①\n🍪柏たんクッキー🍪\n税込1000円以上ﾋﾞｯｸｶﾒﾗ柏店ご利用レシートを\n2階総合案内ｶｳﾝﾀｰでご提示ください😊\n\nﾊﾞﾚﾝﾀｲﾝ企画②\nふなたん作ﾊﾞﾚﾝﾀｲﾝver.名刺配布も14日まで！\n千葉組ｺﾗﾎﾞ名刺是非受け取ってね😍 https://t.co/HCHZiPKY1n",
+      "url": "https://x.com/bic_kashiwa/status/963325595487674368",
+      "media": [
+        "https://pbs.twimg.com/media/DV5qv1DU0AA7q_s.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kashiwa"
+      ]
+    },
+    "rationale": "購入1000円条件はクッキーだけ。名刺へ流用しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "kashiwa-valentine-cookie-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "柏たんクッキー",
+          "evidence": [
+            "🍪柏たんクッキー🍪"
+          ]
+        },
+        {
+          "item": "千葉組バレンタイン名刺",
+          "evidence": [
+            "ふなたん作ﾊﾞﾚﾝﾀｲﾝver.名刺配布も14日まで！",
+            "千葉組ｺﾗﾎﾞ名刺是非受け取ってね😍 https://t.co/HCHZiPKY1n"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 883615,
+      "postSha256": "92ab33e18b73defc3ff5e1aeeb86b03ae18f6ae49c66bc504f2b2ddb1e0b1998",
+      "textSha256": "abc1115b3d0c47eb17f0d44bcdee843ae6fb253cbd67992a8864d7010c327c25"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

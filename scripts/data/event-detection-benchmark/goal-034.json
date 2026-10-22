@@ -1,0 +1,129 @@
+[
+  {
+    "id": "goal-positive-1447482433306181634",
+    "source": "public-post",
+    "description": "yuurakuchou halloween card 2021",
+    "post": {
+      "id": "1447482433306181634",
+      "createdAt": "2021-10-11T08:41:19.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ＜はっぴーハロウィン🎃⭐️\n\n#有楽町たん ハロウィン名刺ができました💗\n今年のはこわーい＆きゅーとなイメージ(⁎˃ᴗ˂⁎)🍭\n\n本日から10月31日まで！\n1階 総合カウンターにて配布しております✨ https://t.co/EnpSh5l98E",
+      "url": "https://x.com/bic_yuurakuchou/status/1447482433306181634",
+      "media": [
+        "https://pbs.twimg.com/media/FBZ9gJAVQAkOv91.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "yuurakuchou"
+      ],
+      "characterIds": [
+        "yuurakuchou"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "本日から10/31、配布開始が明示。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "yuurakuchou-halloween-card-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "有楽町たんハロウィン名刺",
+          "evidence": [
+            "#有楽町たん ハロウィン名刺ができました💗"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 521025,
+      "postSha256": "0deb3558c762c848f99ff8cdc26e2147e57c4210927047b484373df52b3ca84b",
+      "textSha256": "1c64ebd0fb35e49413f4f911c4f373b5fd825d766073d8a731ce285ed49f75d6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1461245049765654534",
+    "source": "public-post",
+    "description": "akiba winter card 2021",
+    "post": {
+      "id": "1461245049765654534",
+      "createdAt": "2021-11-18T08:09:03.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "出来ました…ッ✨\n\n／\n冬限定❣\nアキバたん名刺配布開始～～～🐱\n＼\n\n枚数限定だよ🔔\n\nサンタアキバたんの名刺\n是非ゲットしてね🎅🎄💕\n\n🌸1階総合カウンターにてお声がけください🌸\n＃アキバたん　＃ビックカメラAKIBA https://t.co/ZvAQZkpg1w",
+      "url": "https://x.com/bic_akiba/status/1461245049765654534",
+      "media": [
+        "https://pbs.twimg.com/media/FEdiT2daMAAYEJ8.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "akiba"
+      ],
+      "characterIds": [
+        "akiba"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "冬限定・枚数限定だが総数は明示されない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "akiba-winter-card-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "アキバたん冬名刺",
+          "evidence": [
+            "アキバたん名刺配布開始～～～🐱",
+            "サンタアキバたんの名刺"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 510905,
+      "postSha256": "f43c084214f9cd5073f198103f032b537a84484d06b8ac69ebad72aff18deb2d",
+      "textSha256": "88070bc5ada5eabde77bd99e80f7956e8dd1907880ef6294111a9a48a8f3c43b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,167 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1991426202670887019",
+    "source": "public-post",
+    "description": "tenjin-christmas-card-2025",
+    "post": {
+      "id": "1991426202670887019",
+      "createdAt": "2025-11-20T08:39:40.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "11月22日（土）～12月25日（木）　まで\nクリスマス限定名刺配布予定～🎄°˖✧◝(⁰▿⁰)◜✧˖°\n今回は…\n岡山たん🍑広島たん🍁鹿児島たん🍠天神１号たん🍓とコラボの名刺になります(⋈◍＞◡＜◍)\nぜひ皆様のご来店をお待ちしております🎶\nまだ…アクキー残っとるよ( ；∀；) https://t.co/epilAb1Ase",
+      "url": "https://x.com/biccameratenjin/status/1991426202670887019",
+      "media": [
+        "https://pbs.twimg.com/media/G6L3joeacAkf6PO.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "11/22〜12/25のコラボ限定名刺とアクキー残りの案内。2物品で共通項目は未注釈。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:seasonal-christmas-card"
+    ],
+    "group": "tenjin-christmas-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "クリスマス限定名刺",
+          "evidence": [
+            "クリスマス限定名刺配布予定～🎄°˖✧◝(⁰▿⁰)◜✧˖°"
+          ]
+        },
+        {
+          "item": "アクキー",
+          "evidence": [
+            "まだ…アクキー残っとるよ( ；∀；) https://t.co/epilAb1Ase"
+          ]
+        }
+      ],
+      "groupingNote": "11/22〜12/25のコラボ限定名刺とアクキー残りの案内。2物品で共通項目は未注釈。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 95034,
+      "postSha256": "ebe72d36697bd0c184595a5d95c90389a81e3d3bf465503c0c804ad3dc5a2e42",
+      "textSha256": "ac0dbfcdb6367d7ba47e13774bb7dc120c2c09da3b7b0219e3f6e94998148986"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "3380070e-8db7-4090-8aaa-615ac134d9d7",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/biccameratenjin/status/1991426202670887019",
+          "origin": "manual-or-seed",
+          "title": "クリスマス限定名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-11-21T15:00:00.000+00:00",
+            "endDate": "2025-12-24T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "tenjin2"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1992407383759565003",
+    "source": "public-post",
+    "description": "tenjin-christmas-card-2025 matched control",
+    "post": {
+      "id": "1992407383759565003",
+      "createdAt": "2025-11-23T01:38:32.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "期間限定❣『BLACK FRIDAY』特別価格🎁\n『メタクエスト3S』が…な❣なんとΣ（・□・；）\n128GBモデルが40,700円🎁✨\n256GBモデルは53,900円🎁✨✨\nクリスマスプレゼント🎅にもオススメ(⋈◍＞◡＜◍)\n今だけのお買い得価格をお見逃しないよう🎶\n天神２号館6階でまっとるよ🐾 https://t.co/S2q25kJG3t",
+      "url": "https://x.com/biccameratenjin/status/1992407383759565003",
+      "media": [
+        "https://pbs.twimg.com/media/G6ZzRf5bsAA-3vh.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1992407383759565003",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 94278,
+      "postSha256": "66905553fcd8e4fb0cb474d2332c0be6b370b17bf19e4ba92c1b4706b0b51a99",
+      "textSha256": "5fae5b858270235e30c7d6203319fe7d3e3e9f89c4fa1fea5fb099ccf3c2c66b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,173 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2100027135230365927",
+    "source": "public-post",
+    "description": "nagoya-autumn-festival-key-2026",
+    "post": {
+      "id": "2100027135230365927",
+      "createdAt": "2026-09-16T01:01:00.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "/／\n📢9/19(土)~ 名古屋地区限定\n「いこまい名古屋 秋祭🍤」開催！\n\\＼\n\n|'ω'*)｡oO(指定金額以上ご購入で、ちょっと大きめのアクリルキーホルダーを先着120名様にプレゼント🎁\n\n詳しくは添付画像をご確認ください\n#ビッカメ娘　#なごやたん https://t.co/5qTS8KJnkh",
+      "url": "https://x.com/bic_nagoya/status/2100027135230365927",
+      "media": [
+        "https://pbs.twimg.com/media/HSJ2IfhbAAACSL_.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": [
+        "nagoya"
+      ],
+      "startDate": "2026-09-19",
+      "conditions": [
+        {
+          "type": "purchase"
+        },
+        {
+          "type": "first_come",
+          "quantity": 120
+        }
+      ]
+    },
+    "rationale": "9/19から指定金額以上で先着120名。金額は画像参照。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:nagoya-autumn-festival"
+    ],
+    "group": "nagoya-autumn-festival-key-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ちょっと大きめのアクリルキーホルダー",
+          "evidence": [
+            "|'ω'*)｡oO(指定金額以上ご購入で、ちょっと大きめのアクリルキーホルダーを先着120名様にプレゼント🎁"
+          ]
+        }
+      ],
+      "groupingNote": "9/19から指定金額以上で先着120名。金額は画像参照。",
+      "unannotatedFields": [
+        "stores"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 6849,
+      "postSha256": "846f776387bccaccf8683143cc539e543354b2b19865cf69ba5a5ece42caa1de",
+      "textSha256": "8052abb798cf2c5f4b0d8f48c23c1b42ddefee6f5442ffafaf73dadba274bf2d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "0fbaa78f-9928-4f0b-a224-9ad6a8b2d688",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_nagoya/status/2100027135230365927",
+          "origin": "manual-or-seed",
+          "title": "いこまい名古屋秋祭りアクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-18T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "nagoya"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 120,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2100416630660723139",
+    "source": "public-post",
+    "description": "nagoya-autumn-festival-key-2026 matched control",
+    "post": {
+      "id": "2100416630660723139",
+      "createdAt": "2026-09-17T02:48:43.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "📢ヘッドホン試聴会開催🎧\n\n9月19日と20日の2日間限定、MEZEオーディオのヘッドホン試聴会開催決定ッ‼️‼️\n\n平面磁界ドライバーのEmpyrean、POETが2日間限定で登場🤩\n\n2Fオーディオコーナーでお待ちしてます🙌\nこのチャンスをお見逃しなく👀 https://t.co/5uPEXb51Ij",
+      "url": "https://x.com/bic_nagoya/status/2100416630660723139",
+      "media": [
+        "https://pbs.twimg.com/media/HSYtxkBaYAAwXJF.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2100416630660723139",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 6497,
+      "postSha256": "3ab8411dcbc65c125e86a5f7ec0e2bc9552bd67a79526504ebb672a97eea60db",
+      "textSha256": "713d30818d758f406ba919b5e6a32d3964a2b6fa1fda322ac2be59dad6bafc40"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

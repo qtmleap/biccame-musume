@@ -1,0 +1,135 @@
+[
+  {
+    "id": "expanded-v2-positive-1159399760584798208",
+    "source": "public-post",
+    "description": "bicqlo-utme-wave6-2019",
+    "post": {
+      "id": "1159399760584798208",
+      "createdAt": "2019-08-08T09:43:38.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "#ビッカメ娘 × #ビックロユニクロ新宿東口店 コラボ企画！\n8月9日（金）より、ビッカメ娘UTme!スタンプ第６弾が登場！\nビックロ1FのUTme!コーナーで、新しいスタンプを使ってビッカメ娘オリジナルT\nシャツやトートバッグが作成できます！！\n※ビックロ限定。他のユニクロでは販売しておりません。 https://t.co/H7MP2kZngJ",
+      "url": "https://x.com/bic_shinjuku3ch/status/1159399760584798208",
+      "media": [
+        "https://pbs.twimg.com/media/EBcD7SQVAAEdtMK.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": [
+        "bicqlo"
+      ],
+      "characterIds": null,
+      "startDate": "2019-08-09",
+      "conditions": null
+    },
+    "rationale": "娘スタンプを使った限定カスタム商品の販売。配布と誤解しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "bicqlo-utme-wave6-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "オリジナルTシャツ",
+          "evidence": [
+            "8月9日",
+            "オリジナルT",
+            "シャツやトートバッグ"
+          ]
+        },
+        {
+          "item": "トートバッグ",
+          "evidence": [
+            "8月9日",
+            "シャツやトートバッグ"
+          ]
+        }
+      ],
+      "groupingNote": "娘スタンプを使った限定カスタム商品の販売。配布と誤解しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 723878,
+      "postSha256": "4439bb0993dbbf5b6200242a554d141c1f2d9d6d49e2e56c83f33095929da1ba",
+      "textSha256": "4436b5937e166235bad5aa7b9c62f5a78ff3c63058be2d34876a418be5b3e114"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1167341801734205440",
+    "source": "public-post",
+    "description": "bicqlo-utme-wave6-2019 matched control",
+    "post": {
+      "id": "1167341801734205440",
+      "createdAt": "2019-08-30T07:42:28.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "☆地下1階 カメラコーナー☆\n本日8月30日（金）発売！！\nソニーコンパクトデジタルカメラ『RX100Ⅶ』\nフルサイズミラーレス一眼カメラ『α9』同等の高速・AF性能を実現したプレミアムコンパクトカメラ。\n高倍率ズームや強化した動画性能も小型ボディに凝縮。\n地下1階 カメラコーナーにて発売中です！！ https://t.co/DtdBShreT2",
+      "url": "https://x.com/bic_shinjuku3ch/status/1167341801734205440",
+      "media": [
+        "https://pbs.twimg.com/media/EDM7K5OU8AEGFE8.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1167341801734205440",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 717623,
+      "postSha256": "71d3eda75a53706466948e582c3cc085b1e1345fdd93438b729d5940dfa646df",
+      "textSha256": "00a362c6ee877eeabbbd36b379ac265b9aa34e28044e265fde64c4c3948122be"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

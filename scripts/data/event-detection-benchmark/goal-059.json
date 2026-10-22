@@ -1,0 +1,175 @@
+[
+  {
+    "id": "goal-positive-2042448652367774130",
+    "source": "public-post",
+    "description": "takasaki birthday giftcard 2026",
+    "post": {
+      "id": "2042448652367774130",
+      "createdAt": "2026-04-10T03:44:40.000Z",
+      "screenName": "bictakasaki",
+      "kind": "original",
+      "text": "みなのもの、追加じょうほうなのじゃ✨\nあしたの爆誕記念イベントで、\n🌸たかさきたんデザイン ビックカメラギフトカード🌸\nの販売が決定なのじゃ✨\nこちらは限定50枚なので、おいそぎください なのじゃ✨ https://t.co/gOsQ0QleWv",
+      "url": "https://x.com/bictakasaki/status/2042448652367774130",
+      "media": [
+        "https://pbs.twimg.com/media/HFg7_aebQAUkrxD.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "takasaki"
+      ],
+      "characterIds": [
+        "takasaki"
+      ],
+      "category": "other",
+      "startDate": "2026-04-11"
+    },
+    "rationale": "明日の爆誕イベントで限定50枚販売。金額を推測しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "takasaki-birthday-giftcard-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "たかさきたんデザインギフトカード",
+          "evidence": [
+            "🌸たかさきたんデザイン ビックカメラギフトカード🌸"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 55471,
+      "postSha256": "e99107e32f8cd16f799fd8a7a962aaabdbc0d65c14d9d712ea8ffc0a501082ba",
+      "textSha256": "afb0533d84d891829b928d2d87b1cab209cab156799962a2ba0eea2c29ef8e25"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bictakasaki/status/2042448652367774130",
+          "referenceType": "announce",
+          "eventId": "ca1fccb3-0b67-4001-b22b-e690bc3b98f0",
+          "title": "ビックカメラギフトカード",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "goal-positive-2093537875417841795",
+    "source": "public-post",
+    "description": "chiba bictrip badge 2026",
+    "post": {
+      "id": "2093537875417841795",
+      "createdAt": "2026-08-29T03:15:00.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "日本列島を北上！\n缶バッジで繋ぐビッカメ娘旅！！\n\n9/5からはついに千葉県の3店舗🌻\nそれぞれ合計1100円以上ご購入で『ふなたん』と『ふなとーたん』の缶バッチをプレゼントします🎁\n各250名様の先着限定となります！\n\n限定の名刺も配布するのでお楽しみに⭐ https://t.co/gldHjAc4U0",
+      "url": "https://x.com/bic_funabashi/status/2093537875417841795",
+      "media": [
+        "https://pbs.twimg.com/media/HQx9nNMagAAvRjx.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "characterIds": [
+        "funabashi",
+        "funato"
+      ],
+      "startDate": "2026-09-05"
+    },
+    "rationale": "9/5から千葉3店舗、1100円購入・各250名は缶バッジ。名刺へ条件流用禁止。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "chiba-bictrip-badge-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ふなたん・ふなとーたん缶バッジ",
+          "evidence": [
+            "缶バッジで繋ぐビッカメ娘旅！！"
+          ]
+        },
+        {
+          "item": "限定名刺",
+          "evidence": [
+            "限定の名刺も配布するのでお楽しみに⭐ https://t.co/gldHjAc4U0"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 12422,
+      "postSha256": "bd562df0c4038b04630af49045a66abfcc0e3619042ce5bf59c61580cab57b15",
+      "textSha256": "a7aad0a04a325969444a1ec1d4d7a23effbfbe90c02c979dad7736416f59287a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bic_funabashi/status/2093537875417841795",
+          "referenceType": "start",
+          "eventId": "36ff492b-75f2-43b7-bcfb-37c3046315ea",
+          "title": "缶バッジで繋ぐビッカメ娘旅",
+          "isVerified": true,
+          "isPreliminary": false
+        },
+        {
+          "url": "https://x.com/bic_funabashi/status/2093537875417841795",
+          "referenceType": "start",
+          "eventId": "057e3cf0-0e8e-4f6b-bd56-3cc845d001a1",
+          "title": "缶バッジで繋ぐビッカメ娘旅",
+          "isVerified": true,
+          "isPreliminary": false
+        },
+        {
+          "url": "https://x.com/bic_funabashi/status/2093537875417841795",
+          "referenceType": "announce",
+          "eventId": "63713a56-c03f-4e14-acc9-253b4c122f1e",
+          "title": "ビッカメ娘11周年記念名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        },
+        {
+          "url": "https://x.com/bic_funabashi/status/2093537875417841795",
+          "referenceType": "announce",
+          "eventId": "0a65f090-8a4b-4491-b993-f2cfba3e4882",
+          "title": "ビッカメ娘11周年記念名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  }
+]

@@ -1,10 +1,13 @@
 import { rejudgeWebhookJob, resolveWebhookJob, retryWebhookJob } from '@api/services/webhook-admin'
 import { getWebhookJob, listWebhookJobs } from '@api/services/webhook-jobs'
+import { getWebhookPrompt } from '@api/services/webhook-prompt'
+import { recheckWebhookJob } from '@api/services/webhook-recheck'
 import type { Bindings } from '@api/types/bindings'
 import {
   WebhookJobListSchema,
   WebhookJobQuerySchema,
   WebhookJobSchema,
+  WebhookPromptSchema,
   WebhookResolveSchema,
   WebhookRetrySchema
 } from '@biccame/shared/schemas/webhook.dto'
@@ -65,11 +68,34 @@ routes.openapi(
 routes.openapi(
   createRoute({
     method: 'post',
+    path: '/admin/webhook/jobs/{postId}/recheck',
+    request: { params, query: z.object({ candidateId: z.uuid().optional() }) },
+    responses: jobResponse,
+    tags: ['admin-webhook']
+  }),
+  async (c) =>
+    c.json(await recheckWebhookJob(c.env, c.req.valid('param').postId, c.req.valid('query').candidateId), 200)
+)
+routes.openapi(
+  createRoute({
+    method: 'post',
     path: '/admin/webhook/jobs/{postId}/resolve',
     request: { params, body: { required: true, content: { 'application/json': { schema: WebhookResolveSchema } } } },
     responses: jobResponse,
     tags: ['admin-webhook']
   }),
   async (c) => c.json(await resolveWebhookJob(c.env, c.req.valid('param').postId, c.req.valid('json')), 200)
+)
+routes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/admin/webhook/jobs/{postId}/prompt',
+    request: { params, query: z.object({ candidateId: z.uuid().optional() }) },
+    responses: {
+      200: { description: '保存されたClef送信入力', content: { 'application/json': { schema: WebhookPromptSchema } } }
+    },
+    tags: ['admin-webhook']
+  }),
+  async (c) => c.json(await getWebhookPrompt(c.env, c.req.valid('param').postId, c.req.valid('query').candidateId), 200)
 )
 export default routes

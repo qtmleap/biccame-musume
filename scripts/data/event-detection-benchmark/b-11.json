@@ -1,0 +1,132 @@
+[
+  {
+    "id": "public-b-2110691590461399075",
+    "source": "public-post",
+    "description": "新東たんの整理券配布とノベルティ引換",
+    "post": {
+      "id": "2110691590461399075",
+      "createdAt": "2026-10-15T11:17:44.576Z",
+      "screenName": "Bic_shintoueki",
+      "kind": "original",
+      "text": "💛追加のお知らせ💛\n10月19日(月)に限り『整理券』を配布いたします💌\n詳細につきましては画像をご確認ください。\n\n※お並び順にお渡ししますのでプリントされている新東たんの絵柄は選べません。\n※整理券はノベルティお渡し時にスタンプを押してお返しいたします。記念にどうぞ～🥰",
+      "url": "https://x.com/Bic_shintoueki/status/2110691590461399075",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "startDate": "2026-10-19"
+    },
+    "rationale": "新東たんの絵柄付き整理券をノベルティ引換時に返す企画の運用告知。配布物本体の分類は不明。",
+    "tags": [
+      "giveaway",
+      "ticketing",
+      "dated-event"
+    ],
+    "group": "shintou-sixth-anniversary-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "720092c36b2d97351e5d317e05cdf6b05a982d365b766a8b53f8a899c8dcdd6b"
+  },
+  {
+    "id": "public-b-2110904019455803692",
+    "source": "public-post",
+    "description": "デュエルマスターズ抽選当選者の購入案内",
+    "post": {
+      "id": "2110904019455803692",
+      "createdAt": "2026-10-16T01:21:51.595Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "【 抽選結果発表📢】\n\n抽選：デュエルマスターズ『切札不滅!! デュエキング FOREVER 2026』\n購入期限：10月17日 (土) ～ 10月18日 (日)\n時間：両日共に 13：00～20：00\n\n当選された方は受付時の「レシート」「ポイントカード」「マイナンバーカード」をお持ちの上9階レジまでお越しください。",
+      "url": "https://x.com/bic_shinyoko/status/2110904019455803692",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "抽選や持参条件は一般トレーディングカードの販売手続きで、娘企画ではない。",
+    "tags": [
+      "hard-negative",
+      "lottery-sale",
+      "other-ip"
+    ],
+    "group": "duelmasters-forever-lottery-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "348410a2a79714f09b19a67fea2206525c7500ff715c18d830e1900d237e6e9b"
+  },
+  {
+    "id": "public-b-2110926269290533236",
+    "source": "public-post",
+    "description": "OCEANUS購入者へのブランドクロス",
+    "post": {
+      "id": "2110926269290533236",
+      "createdAt": "2026-10-16T02:50:16.369Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "⌚本日発売⌚\nOCEANUSより新たにカシャロOCW-P3000シリーズがついに発売！！\nボタン操作で簡単に各国の時刻を確認出来る「タイムゾーンナビゲーター」機能を搭載。\nただ今こちらのシリーズをお買い求めのお客様にロゴ入りクロスをプレゼント🎁\nぜひこの機会にお求めください♪",
+      "url": "https://x.com/bic_shinjuku3ch/status/2110926269290533236",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "購入特典の配布はあるが時計ブランドのロゴ入りクロスで、ビッカメ娘を題材にしていない。",
+    "tags": [
+      "hard-negative",
+      "generic-novelty",
+      "purchase"
+    ],
+    "group": "oceanus-cachalot-logo-cloth",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "837fe7fd67ffe722b1e8598bcb844dacb3a461e6d68764b29bbbb57999c841fe"
+  },
+  {
+    "id": "public-b-2111276010213945651",
+    "source": "public-post",
+    "description": "Air BicCameraの通常会計・ポイント案内",
+    "post": {
+      "id": "2111276010213945651",
+      "createdAt": "2026-10-17T02:00:01.103Z",
+      "screenName": "air_biccamera",
+      "kind": "original",
+      "text": "Air BicCameraは免税会計だけではなく通常のお買い物でもご利用いただけます。基本10％のポイントサービスや、会計時のポイント利用も🆗。価格は有楽町のお店と同じで、安心してお買い物いただけます。万が一価格が違う場合はお気軽に販売員までお声がけください 😊",
+      "url": "https://x.com/air_biccamera/status/2111276010213945651",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "免税以外の会計やポイント利用の説明でありキャラクター企画ではない。",
+    "tags": [
+      "payment-instructions",
+      "points"
+    ],
+    "group": "air-biccamera-normal-payment",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "a7568a05233ca4f4aad9857edb584108ff50401011963e405e06780e9d6162fd"
+  },
+  {
+    "id": "public-b-2111325277892796518",
+    "source": "public-post",
+    "description": "自前ビッカメ娘グッズを持ち込んだ雑談",
+    "post": {
+      "id": "2111325277892796518",
+      "createdAt": "2026-10-17T05:15:47.433Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "Q.なんでスケッチブック持ち帰らなかったんですか？\n\nA.( っ*´ω`*c)自前のビッカメ娘グッズを大量に持ち込みすぎてカバンがありえないくらい重かったからです",
+      "url": "https://x.com/bicpkanhonten/status/2111325277892796518",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ビッカメ娘グッズに言及するが私物と荷物の話で、来店者向けの頒布・販売企画はない。",
+    "tags": [
+      "hard-negative",
+      "character-goods-mention-only",
+      "casual-chat"
+    ],
+    "group": "pkan-private-goods-bag-chat",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "038a71993a0c4390b53b08119bc5c3a32e3910c80d58809bb58bb90c728cc3a2"
+  }
+]

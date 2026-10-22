@@ -1,0 +1,135 @@
+[
+  {
+    "id": "expanded-v2-positive-1856962773609320585",
+    "source": "public-post",
+    "description": "kashiwa-christmas-gacha-photo-2024",
+    "post": {
+      "id": "1856962773609320585",
+      "createdAt": "2024-11-14T07:30:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【7階 #おもちゃコーナー】\n\n#柏店ガチャ写 コーナーがリニューアル🆕 \n今回のテーマは「クリスマス」と「ビックカメラ柏店」です🎄\n\n柏たんミニ等身大と一緒に撮影しよう❣\n\n撮影後は #柏店ガチャ写 で投稿してください📷\n※撮影に使用したおもちゃは販売員の私物です https://t.co/LpjUh7Xcii",
+      "url": "https://x.com/bic_kashiwa/status/1856962773609320585",
+      "media": [
+        "https://pbs.twimg.com/media/GcTxCzQbkAAHnLO.jpg",
+        "https://pbs.twimg.com/media/GcTxDwRa0AAZNst.jpg",
+        "https://pbs.twimg.com/media/GcTxE-ja0AAth4b.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "柏たんと撮る専用撮影コーナー。撮影用玩具が販売品や配布品とは限らない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-christmas-gacha-photo-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "柏たんミニ等身大",
+          "evidence": [
+            "【7階 #おもちゃコーナー】",
+            "#柏店ガチャ写 コーナーがリニューアル🆕 ",
+            "今回のテーマは「クリスマス」と「ビックカメラ柏店」です🎄",
+            "柏たんミニ等身大と一緒に撮影しよう❣",
+            "撮影後は #柏店ガチャ写 で投稿してください📷",
+            "※撮影に使用したおもちゃは販売員の私物です https://t.co/LpjUh7Xcii"
+          ]
+        }
+      ],
+      "groupingNote": "柏たんと撮る専用撮影コーナー。撮影用玩具が販売品や配布品とは限らない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 193982,
+      "postSha256": "6bff23079ed47f92513a3f38e01e1a5d6aed1da989fed36bc47dbfc17813f0b6",
+      "textSha256": "3be0cbab7922567e6bdb8bec0b59e70717cf38534ab85e29370fbd6d4c68091a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1852621668704821539",
+    "source": "public-post",
+    "description": "kashiwa-christmas-gacha-photo-2024 matched control",
+    "post": {
+      "id": "1852621668704821539",
+      "createdAt": "2024-11-02T08:00:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【アイリッシュウィスキー試飲会】\n😳販売員たんのオススメ😳\n\n３回蒸留によって造られる豊かな香味と\nスムースな味わいでシンプルなソーダ割りがオススメ\n＃ジェムソンウィスキー🥃✨\n数量限定 ＃デザインボトル も♪\n\n是非この機会にお試しください♪\n#JAMESON #試飲会 ＃ﾋﾞｯｸｶﾒﾗ柏店 https://t.co/ZpfQsxSEFz",
+      "url": "https://x.com/bic_kashiwa/status/1852621668704821539",
+      "media": [
+        "https://pbs.twimg.com/media/GbXOeqVb0AAG2Ro.jpg",
+        "https://pbs.twimg.com/media/GbXOgOjaMAAHqkE.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1852621668704821539",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 197132,
+      "postSha256": "a66a77157d25c5ad8e7b0ab4f65261bb52fbb0d4d25d7da6d4878bccb2d72ce5",
+      "textSha256": "caafe13d56707ea0452c4cefac3cff35de8e3ea0a5451625a28fe0c616b59eec"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

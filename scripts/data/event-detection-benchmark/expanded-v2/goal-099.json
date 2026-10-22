@@ -1,0 +1,126 @@
+[
+  {
+    "id": "expanded-v2-positive-1223531763625943040",
+    "source": "public-post",
+    "description": "niigata-second-anniversary-valentine-2020",
+    "post": {
+      "id": "1223531763625943040",
+      "createdAt": "2020-02-01T09:01:19.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "はっ！こちらの告知が！！\n2周年とバレンタイン合体名刺配布中です！\n～2月14日まで配布中だよ～！",
+      "url": "https://x.com/niigata_bic/status/1223531763625943040",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "2月14日までの記念名刺継続。店舗周年と娘周年は原文では未確定。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "niigata-second-anniversary-valentine-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "2周年とバレンタイン合体名刺",
+          "evidence": [
+            "はっ！こちらの告知が！！",
+            "2周年とバレンタイン合体名刺配布中です！",
+            "～2月14日まで配布中だよ～！"
+          ]
+        }
+      ],
+      "groupingNote": "2月14日までの記念名刺継続。店舗周年と娘周年は原文では未確定。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 673662,
+      "postSha256": "0fe5d3419277c5bbdee70ada594d22460a3ff045c9f235bbf1c9242e62a5498b",
+      "textSha256": "84ac9e111cd9a99cc6c674b5279b70c1231429df9a19bee9d6de36eb7551d159"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1230353157596700673",
+    "source": "public-post",
+    "description": "niigata-second-anniversary-valentine-2020 matched control",
+    "post": {
+      "id": "1230353157596700673",
+      "createdAt": "2020-02-20T04:47:06.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "タイミングよく上手く撮れない～っ！\nおはガタ～！\n本日で新潟店店舗11周年🎂\nこれからも新潟店をよろしくお願いします😊\n\n今日もよろしくお願いします😊 https://t.co/3gWob798Bk",
+      "url": "https://x.com/niigata_bic/status/1230353157596700673",
+      "media": [
+        "https://pbs.twimg.com/media/ERMU-ImUUAAiacA.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1230353157596700673",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 666504,
+      "postSha256": "840575c9296d4abc288b8689c253fec0054259f32bd0dd9a71770bfd82fe0dff",
+      "textSha256": "eac2a9a0cfbfecedf7d16133962320e4233115ec20c6418f0c2bfc67182e8b75"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

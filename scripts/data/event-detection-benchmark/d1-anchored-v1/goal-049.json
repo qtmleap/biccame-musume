@@ -1,0 +1,163 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2049443971534029240",
+    "source": "public-post",
+    "description": "nanba-anniv11-card-2026",
+    "post": {
+      "id": "2049443971534029240",
+      "createdAt": "2026-04-29T11:01:34.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼予告／\nビッカメ娘11周年を記念して名刺を配布するで🥳\n\n【期間】\nなんばたんの名刺は5月1日から配布開始❗️😆\n2027年3月31日まで通常名刺として設置します✨\n\n1階総合カウンター前のなんばたん等身大パネルから受け取ってな😆💐明日はまだ無いで❗️ https://t.co/ihivAaHzqk",
+      "url": "https://x.com/biccamera_nanba/status/2049443971534029240",
+      "media": [
+        "https://pbs.twimg.com/media/HHEWWiVakAArY63.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "regular_card",
+      "stores": null,
+      "characterIds": [
+        "nanba"
+      ],
+      "startDate": "2026-05-01",
+      "conditions": null
+    },
+    "rationale": "5/1開始、2027/3/31まで通常名刺として設置する。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "boundary:action",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:anniv11-card"
+    ],
+    "group": "nanba-anniv11-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ビッカメ娘11周年記念名刺",
+          "evidence": [
+            "ビッカメ娘11周年を記念して名刺を配布するで🥳"
+          ]
+        }
+      ],
+      "groupingNote": "5/1開始、2027/3/31まで通常名刺として設置する。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 49757,
+      "postSha256": "b65e052903ba7c202416161c09511d20b2957402b904435626089e04227a57fe",
+      "textSha256": "cf6c6109174d4932aa58bc06d28476369474ada683f1a27114dd07aef066ed40"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "368b3872-11b0-4ebb-ae1a-d7a344d21bcf",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/biccamera_nanba/status/2049443971534029240",
+          "origin": "manual-or-seed",
+          "title": "ビッカメ娘11周年記念名刺",
+          "category": "regular_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-04-30T15:00:00.000+00:00",
+            "endDate": "2027-03-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "nanba"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2039885597914108297",
+    "source": "public-post",
+    "description": "nanba-anniv11-card-2026 matched control",
+    "post": {
+      "id": "2039885597914108297",
+      "createdAt": "2026-04-03T02:00:00.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼本日から開催📢／\n桃太郎電鉄２グッズフェア in ビックカメラグループ が本日よりスタート🚂\n桃太郎たちがビックカメラの店員姿で社長のみなさんの新生活を応援‼️\nさらにSNS投稿でなんば店オリジナルのプレゼントがもらえるキャンペーンも✨\nPOPUP会場は7階です😆 https://t.co/U2QQKBIsbv",
+      "url": "https://x.com/biccamera_nanba/status/2039885597914108297",
+      "media": [
+        "https://pbs.twimg.com/media/HE5XWT8bYAATQa4.png",
+        "https://pbs.twimg.com/media/HE5XZUxboAAtarG.jpg",
+        "https://pbs.twimg.com/media/HE5XamHbsAAnat1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2039885597914108297",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 57655,
+      "postSha256": "9949a87f04a9227f6686caf93c878f50fcdb853716f1b4fe75ae4c7e9692037e",
+      "textSha256": "0b3f8a0a932640c1f605a5161854bc9b5df2eab9a72ed74e9b7a941117a2bc7e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

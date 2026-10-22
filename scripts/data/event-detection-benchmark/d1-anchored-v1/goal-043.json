@@ -1,0 +1,178 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2043162195102425486",
+    "source": "public-post",
+    "description": "pkan-niigata-gw-acrylic-stand-2026/detail",
+    "post": {
+      "id": "2043162195102425486",
+      "createdAt": "2026-04-12T03:00:02.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "／\nにいがたたんといっしょにお出かけ💗\nどこいくか決めよ～！\n＼\n\n✅4/29(水・祝)～　先着105個\n✅当店で5000円以上お買い上げで\n　【アクスタ🅰️】をプレゼント🎁\n\n新潟店では絵柄違いの【アクスタ🅱️】を配布します♪\nにいがたたんの投稿もチェックしてね！\n\n#パソ館たんとにいがたたんのGW二人旅 https://t.co/Z7GaH7FggX",
+      "url": "https://x.com/bicpkanhonten/status/2043162195102425486",
+      "media": [
+        "https://pbs.twimg.com/media/HFq8MmMbUAAdHFA.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "acsta",
+      "stores": null,
+      "characterIds": [
+        "niigata",
+        "pkan"
+      ],
+      "startDate": "2026-04-29",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 5000
+        },
+        {
+          "type": "first_come",
+          "quantity": 105
+        }
+      ]
+    },
+    "rationale": "先着数が105個になった詳細投稿。数量の相違を本文だけで判断できる。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "boundary:action",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:pkan-niigata-gw-2026"
+    ],
+    "group": "pkan-niigata-gw-acrylic-stand-2026/detail",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "アクスタA",
+          "evidence": [
+            "　【アクスタ🅰️】をプレゼント🎁",
+            "新潟店では絵柄違いの【アクスタ🅱️】を配布します♪"
+          ]
+        }
+      ],
+      "groupingNote": "先着数が105個になった詳細投稿。数量の相違を本文だけで判断できる。",
+      "unannotatedFields": [
+        "stores"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 55085,
+      "postSha256": "8cbac2199c8c19262f51a7df37989762a0ea51989042e898d85d755232ff37a3",
+      "textSha256": "1df30516e17ca0303802569d1d8fb5ab1794cf1295cf4635d60d357906a11304"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "b7ac56fe-701f-45f5-b81e-2e2c4247bf6f",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicpkanhonten/status/2043162195102425486",
+          "origin": "manual-or-seed",
+          "title": "GWアクスタA",
+          "category": "acsta",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-04-28T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "pkan"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 105,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 5000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2045414976891097338",
+    "source": "public-post",
+    "description": "pkan-niigata-gw-acrylic-stand-2026/detail matched control",
+    "post": {
+      "id": "2045414976891097338",
+      "createdAt": "2026-04-18T08:11:47.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "＼良形状✖️超低遅延／\n\nつかみ持ち特化の形状でプロにも愛された、Endgame Gearのマウス、XM1が更に進化！\n\nXM2 8K V2展示中です👀\n\n特徴はなんといってもその低遅延さ！\n遅延はたったの約70マイクロ秒✨\nクリック音が耳に聞こえるより速く反応します😳\n\n是非当店7階で触ってみてください🥰 https://t.co/kbyYUaJwDr",
+      "url": "https://x.com/bicpkanhonten/status/2045414976891097338",
+      "media": [
+        "https://pbs.twimg.com/media/HGLF5T_aEAANKbO.jpg",
+        "https://pbs.twimg.com/media/HGLF6aaagAA4OWV.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2045414976891097338",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 53271,
+      "postSha256": "0327e8b11a427b1d280a2d430b9e45370a0b3c6a4668385b6905a1b8a298cfb9",
+      "textSha256": "73ccc35eb034ef21cf1ce36d4f997f9d4031a242f1f7403d495fcae69611cf47"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

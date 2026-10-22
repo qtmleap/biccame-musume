@@ -1,0 +1,176 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2087818077820096887",
+    "source": "public-post",
+    "description": "ikenishi-store-festival-acrylic-key-2026",
+    "post": {
+      "id": "2087818077820096887",
+      "createdAt": "2026-08-13T08:26:34.000Z",
+      "screenName": "bicikenishi",
+      "kind": "reply",
+      "text": "【アクリルキーホルダー詳細】\n\n💙整理券配布予定（時間分かり次第追記します）\n💙税込3,000円以上で１個プレゼント\n💙新規イラスト使用\n💙裏面までこだわりました\n💙先着８０個\n\n#池西店舗誕生祭 https://t.co/dtbChcte0V",
+      "url": "https://x.com/bicikenishi/status/2087818077820096887",
+      "replyTo": {
+        "id": "2087788754044141754",
+        "screenName": "bicikenishi"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HPlqnK9aEAARW8i.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 80
+        }
+      ]
+    },
+    "rationale": "整理券・3000円以上・先着80個の詳細。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:reply",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "ikenishi-store-festival-acrylic-key-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アクリルキーホルダー",
+          "evidence": [
+            "【アクリルキーホルダー詳細】"
+          ]
+        }
+      ],
+      "groupingNote": "整理券・3000円以上・先着80個の詳細。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 7502,
+      "postSha256": "d6c5811b11df9bf9fd9bf1f14512858e0ad2270dd263aa13185983c5b5047411",
+      "textSha256": "4c06100450405965d73b1ce0519f1d4bceda49d056ab7887b3ceb4249bfe0583"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "b9a883a4-8fd4-4e61-a9e4-131f431f69ed",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicikenishi/status/2087818077820096887",
+          "origin": "manual-or-seed",
+          "title": "池西24周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-18T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "ikenishi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 80,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2093555055597391923",
+    "source": "public-post",
+    "description": "ikenishi-store-festival-acrylic-key-2026 matched control",
+    "post": {
+      "id": "2093555055597391923",
+      "createdAt": "2026-08-29T04:23:16.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "こんにし(🎀人*´∀｀)｡*ﾟ+\n\nたわわじゃって言ってるたかさきたんが可愛くて悶絶したお昼でした",
+      "url": "https://x.com/bicikenishi/status/2093555055597391923",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative",
+      "kind-mismatch-fallback"
+    ],
+    "group": "control-2093555055597391923",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 12378,
+      "postSha256": "dc8ceb2b0ab6b72212527409276fa3c53934959902d8ffaef78b0132717a1d5a",
+      "textSha256": "d5c89a97a50e59d09dea0fdab6d7b084f4431e510f4dab41e323e1f32965bf6f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

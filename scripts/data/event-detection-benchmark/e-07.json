@@ -1,0 +1,186 @@
+[
+  {
+    "id": "public-e-1106477569556111361",
+    "source": "public-post",
+    "description": "ビジュアルブックのギフトカード購入特典",
+    "post": {
+      "id": "1106477569556111361",
+      "createdAt": "2019-03-15T08:49:44.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "ビッカメ娘ビジュアルブック入荷いたしました！\nご予約受け取りの方は３Fレジにてのお受け取りになります♪\n通常販売分は１Fレジにて販売中です！\n先着購入特典のギフトカードも今なら付いてますよ！\nチャージはされてないので、気をつけてね！\n\n保管用と観賞用で二冊がオススメよ（゜∀゜）ｳﾌﾌ https://t.co/UxN7M8zBHz",
+      "url": "https://x.com/niigata_bic/status/1106477569556111361",
+      "media": [
+        "https://pbs.twimg.com/media/D1r7tVQVAAAT8xe.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "other",
+      "stores": [
+        "niigata"
+      ]
+    },
+    "rationale": "ビッカメ娘本の先着購入特典ギフトカードを新潟店で提供。チャージなしは機能状態であり入金条件を作らない。複合条件の金額不明なのでconditions未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "gift-card",
+      "purchase-bonus",
+      "charge-zero-not-condition"
+    ],
+    "group": "biccame-visual-book-gift-card-2019",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "5d68bb720daa8f4a6ee137902065b88c0962ced0d8ec2633a64144baf1d9dfe7"
+  },
+  {
+    "id": "public-e-1236916906822688768",
+    "source": "public-post",
+    "description": "柏店15周年のアクキー",
+    "post": {
+      "id": "1236916906822688768",
+      "createdAt": "2020-03-09T07:29:06.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "⭐️いよ②明日3月10日(火)スタート⭐️\n\nお陰様でビックカメラ柏店は\n3月10日で✨15周年✨を迎えます♪\n\n日頃の感謝を込めて\n【2階 総合案内カウンター】にて\n税込3000円以上のレシートをご提示で\n新規書下ろしイラスト😍の #アクリルキーホルダー を\n先着55名様にプレゼント🎁❤️\n\n＃柏たんち15周年 https://t.co/voCwHVXq3j",
+      "url": "https://x.com/bic_kashiwa/status/1236916906822688768",
+      "media": [
+        "https://pbs.twimg.com/media/ESpnzaNU4AAd53Q.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "kashiwa"
+      ],
+      "startDate": "2020-03-10",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 55
+        }
+      ]
+    },
+    "rationale": "柏店15周年・柏たんちの新規描き下ろしアクキーを3000円購入先着55名へ。絵柄の対象名は本文に直接列挙されないため未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "anniversary",
+      "purchase",
+      "first-come"
+    ],
+    "group": "kashiwa-store-fifteenth-ackey-2020",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "33cd8e3ed5a65710daaa759e1d441a540b5986b094edc844c9f0ebc367956c9c"
+  },
+  {
+    "id": "public-e-1335061836736077825",
+    "source": "public-post",
+    "description": "川崎たん擬人化4周年名刺",
+    "post": {
+      "id": "1335061836736077825",
+      "createdAt": "2020-12-05T03:22:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "💚ご案内💚\nただいま2階総合カウンターにて、12月1日に擬人化4周年をむかえた川崎たんの「記念名刺」を配布中🎊\nぜひご来店の際は記念にお持ちください😊\n\n配布期間:12/1(火)～12/27(日)\n※『お一人様一枚』でお願いします\n#川崎たん #ビッカメ娘 https://t.co/atcR7KtCbc",
+      "url": "https://x.com/Bic_kawasaki/status/1335061836736077825",
+      "media": [
+        "https://pbs.twimg.com/media/EocXH57UYAEN1Xx.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": "2020-12-01"
+    },
+    "rationale": "川崎たんの擬人化4周年記念名刺、12/1〜12/27の配布を明記。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "anniversary-card"
+    ],
+    "group": "kawasaki-fourth-character-anniversary-2020",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "e90b6b73cf4af26d4745ae3c494682d6723721e958d013f9eca8de4ab77d6bca"
+  },
+  {
+    "id": "public-e-1280427937125117952",
+    "source": "public-post",
+    "description": "渋谷2人の擬人化1周年ギフトカード",
+    "post": {
+      "id": "1280427937125117952",
+      "createdAt": "2020-07-07T09:06:24.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "じゃじゃん☆\n擬人化1周年記念企画 プレゼントなギフトカードは7月7日にちなんで、彦星さんなのです〜*\\(^o^)/*\nそして、しぶとーたんが彦星さんと言う事は…☆\nナイセンさん、カワイイ しぶとーたんと しぶハチたんをありがとうございます〜(*'ω'*) https://t.co/VW3rTpqF78",
+      "url": "https://x.com/bic_shibuya/status/1280427937125117952",
+      "media": [
+        "https://pbs.twimg.com/media/EcT9JemUcAA9hBU.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "other"
+    },
+    "rationale": "擬人化1周年ギフトカードと彦星姿のしぶとーたん、しぶハチたんへの謝辞が同居。両者が同じカードの全対象かは画像なしでは断定せず対象配列は未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "gift-card",
+      "multi-character"
+    ],
+    "group": "shibuya-first-anniversary-gift-card-2020",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "c6788a83d35cd2e2f47bf52cdf0b0326f49ad27f901b032ecf2d5d57af3c8a3b"
+  },
+  {
+    "id": "public-e-1319442618422489089",
+    "source": "public-post",
+    "description": "立川たん爆誕4周年名刺",
+    "post": {
+      "id": "1319442618422489089",
+      "createdAt": "2020-10-23T00:56:48.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "#立川たん爆誕生4周年 #立川たん誕生4周年 を記念した限定デザイン名刺を配布致します。\nビックカメラ立川店5階トイズコーナーレジ横の #立川たん 等身大パネルに設置しております。画像の右下あたりです。通常デザインの名刺もいっしょに設置してあります。\n\n→ https://t.co/6xJdT3ZwVI",
+      "url": "https://x.com/bic_tachikawa/status/1319442618422489089",
+      "media": [
+        "https://pbs.twimg.com/media/Ek-YdqNVkAApnIb.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "tachikawa"
+      ],
+      "characterIds": [
+        "tachikawa"
+      ]
+    },
+    "rationale": "立川たん4周年限定デザイン名刺の配布場所と通常名刺併設を明記。通常名刺もあるため単一categoryを未注釈にする。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "anniversary-card"
+    ],
+    "group": "tachikawa-fourth-character-anniversary-2020",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "d2e31d0f92dff29674cb1e5546453b595d28cb12d5aec3ab8f99fc7eddf65d42"
+  }
+]

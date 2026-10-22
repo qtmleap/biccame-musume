@@ -1,0 +1,130 @@
+[
+  {
+    "id": "goal-positive-1218064872027516930",
+    "source": "public-post",
+    "description": "sagami valentine card 2020",
+    "post": {
+      "id": "1218064872027516930",
+      "createdAt": "2020-01-17T06:57:50.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "🍫さがみたんバレンタイン名刺🍫を昨日から配布しています(* >ω<)\n配布場所はゲームコーナー奥ガチャガチャコーナーになりますので是非もらいに来てくださいね♡\nなお、冬名刺は1月19日までとなりますのでこちらはお早めに～❣️❣️\n\nあっ！後ろには今日映画公開のメイドインアビスの総集編が！！← https://t.co/1Be07mDlEr",
+      "url": "https://x.com/bic_sagamioono/status/1218064872027516930",
+      "media": [
+        "https://pbs.twimg.com/media/EOdvilpU8AcndR1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "季節2種の切替。名刺と背景の映画商品を混同しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update",
+      "multi-item"
+    ],
+    "group": "sagami-valentine-card-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "バレンタイン名刺",
+          "evidence": [
+            "🍫さがみたんバレンタイン名刺🍫を昨日から配布しています(* >ω<)",
+            "なお、冬名刺は1月19日までとなりますのでこちらはお早めに～❣️❣️"
+          ]
+        },
+        {
+          "item": "冬名刺",
+          "evidence": [
+            "🍫さがみたんバレンタイン名刺🍫を昨日から配布しています(* >ω<)",
+            "なお、冬名刺は1月19日までとなりますのでこちらはお早めに～❣️❣️"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 679012,
+      "postSha256": "f0482365ad8f04a83838e9d18f0cee6129636e68194a77039ac48bf6b8489033",
+      "textSha256": "e3135e8cc7803ffb37c360ae252dd80995d5d1c7f8aab77d42a0f8b9a9894c29"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1220161506173546498",
+    "source": "public-post",
+    "description": "akasaka first anniversary card 2020",
+    "post": {
+      "id": "1220161506173546498",
+      "createdAt": "2020-01-23T01:49:07.000Z",
+      "screenName": "bicakasaka",
+      "kind": "original",
+      "text": "☆一周年記念☆\n\n本日より、記念名刺を配布いたします～♪\n2月末まで配布予定です！\n\nぜひぜひ、みっけたんに会いにきてね～🌹 https://t.co/QZj8oUd0su",
+      "url": "https://x.com/bicakasaka/status/1220161506173546498",
+      "media": [
+        "https://pbs.twimg.com/media/EO7iayEUEAAWE-L.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "akasaka"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "本日から2月末まで周年名刺。具体的入手条件は不明。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "akasaka-first-anniversary-card-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "みっけたん1周年名刺",
+          "evidence": [
+            "本日より、記念名刺を配布いたします～♪"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 676956,
+      "postSha256": "80a94be08b9dfb779789da04e8b13bd5677c8ff981e2f56cba188c91419d9897",
+      "textSha256": "8696643b86fe18897abf26f5a9f99394b8bcc5f21e1a9de2066bacfdb1c94ca4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

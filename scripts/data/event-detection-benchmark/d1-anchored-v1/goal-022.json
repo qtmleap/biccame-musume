@@ -1,0 +1,166 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1995005820170637551",
+    "source": "public-post",
+    "description": "tenjin1-anniv5-christmas-card-2025",
+    "post": {
+      "id": "1995005820170637551",
+      "createdAt": "2025-11-30T05:43:47.000Z",
+      "screenName": "bic_tenjin",
+      "kind": "original",
+      "text": "🎀お知らせ🎀 \n12月1日（(月)）～12月31日(水)まで 🎈\n\n爆誕5周年✨記念名刺を配布します～✨\n\n🎄クリスマス限定名刺🎄も配布しよるけん⛄\n\nぜひ皆様のご来店をお待ちしております～🌈🎈 https://t.co/QoMXAa7YYM",
+      "url": "https://x.com/bic_tenjin/status/1995005820170637551",
+      "media": [
+        "https://pbs.twimg.com/media/G6-ukanboAEDO4a.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2025-12-01",
+      "conditions": null
+    },
+    "rationale": "12/1〜12/31の記念名刺とクリスマス限定名刺。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:seasonal-christmas-card"
+    ],
+    "group": "tenjin1-anniv5-christmas-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "爆誕5周年記念名刺",
+          "evidence": [
+            "爆誕5周年✨記念名刺を配布します～✨"
+          ]
+        },
+        {
+          "item": "クリスマス限定名刺",
+          "evidence": [
+            "🎄クリスマス限定名刺🎄も配布しよるけん⛄"
+          ]
+        }
+      ],
+      "groupingNote": "12/1〜12/31の記念名刺とクリスマス限定名刺。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 92316,
+      "postSha256": "d13b399d332c9bb9b77ea60718a20e86c158e75efc010729e99435fbfe6a9f90",
+      "textSha256": "89bf156bf296bc67e1598f96f8d1315f547675b0290fa7c942fbe3d7f707db7c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "51e0b784-902a-4a4d-bd43-2c05fda9a5c7",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_tenjin/status/1995005820170637551",
+          "origin": "manual-or-seed",
+          "title": "爆誕5周年記念名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-11-30T15:00:00.000+00:00",
+            "endDate": "2025-12-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "tenjin"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1991727459679760775",
+    "source": "public-post",
+    "description": "tenjin1-anniv5-christmas-card-2025 matched control",
+    "post": {
+      "id": "1991727459679760775",
+      "createdAt": "2025-11-21T04:36:45.000Z",
+      "screenName": "bic_tenjin",
+      "kind": "original",
+      "text": "📷12/1までの期間限定📷\n\n誰でも簡単に4K映像が撮影できる✨\n大人気DJIのアクションカメラが特別セールにて、\n大変お買い得となっております📹✨\nご検討のお客様はこの機会お見逃しのないようぜひ店舗へ足をお運びください～い！！ https://t.co/gCbz5aQYrm",
+      "url": "https://x.com/bic_tenjin/status/1991727459679760775",
+      "media": [
+        "https://pbs.twimg.com/media/G6QI2rSacA0v4da.jpg",
+        "https://pbs.twimg.com/media/G6QI3maaMAAeMFR.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1991727459679760775",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 94798,
+      "postSha256": "7c8a58c3f76788b1ddc68c6ead73dc6767685fc53d3728f0a2e9852a91075d50",
+      "textSha256": "6288d476261d2db57f7abd21c883625719c41f5df33d31481d803b071f708ffb"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

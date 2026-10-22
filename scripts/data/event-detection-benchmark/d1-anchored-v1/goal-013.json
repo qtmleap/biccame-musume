@@ -1,0 +1,180 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1881314119967760512",
+    "source": "public-post",
+    "description": "shibuya-neko-collab-card-2025",
+    "post": {
+      "id": "1881314119967760512",
+      "createdAt": "2025-01-20T12:13:33.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "はっ！！！(*'ω'*)！！\n大切な事をお知らせしてなかったです💦\n\nNEKOコラボ名刺は本館1階にて通常名刺とお正月名刺と共に配布中です！！🐈\nそしてNEKOコラボパネルは本館5階のシーズンミニパネルのお隣におります🐱\nよろしくお願いいたします～✨ https://t.co/OaSKcInEqJ",
+      "url": "https://x.com/bic_shibuya/status/1881314119967760512",
+      "media": [
+        "https://pbs.twimg.com/media/GhvFFf9aMAA4fqF.jpg",
+        "https://pbs.twimg.com/media/GhvFI4RboAAP6HO.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "配布中の名刺とパネル設置の案内。複数物品で共通項目は未注釈。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:shibuhachi-neko-collab-2025"
+    ],
+    "group": "shibuya-neko-collab-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "NEKOコラボ名刺",
+          "evidence": [
+            "NEKOコラボ名刺は本館1階にて通常名刺とお正月名刺と共に配布中です！！🐈",
+            "そしてNEKOコラボパネルは本館5階のシーズンミニパネルのお隣におります🐱"
+          ]
+        },
+        {
+          "item": "通常名刺",
+          "evidence": [
+            "NEKOコラボ名刺は本館1階にて通常名刺とお正月名刺と共に配布中です！！🐈"
+          ]
+        },
+        {
+          "item": "お正月名刺",
+          "evidence": [
+            "NEKOコラボ名刺は本館1階にて通常名刺とお正月名刺と共に配布中です！！🐈"
+          ]
+        },
+        {
+          "item": "NEKOコラボパネル",
+          "evidence": [
+            "NEKOコラボ名刺は本館1階にて通常名刺とお正月名刺と共に配布中です！！🐈",
+            "そしてNEKOコラボパネルは本館5階のシーズンミニパネルのお隣におります🐱"
+          ]
+        }
+      ],
+      "groupingNote": "配布中の名刺とパネル設置の案内。複数物品で共通項目は未注釈。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 176771,
+      "postSha256": "2a13eacba0c4ede566744e8e09097007d8ee60bf3e688e0185ac79a68319a803",
+      "textSha256": "d6ccdec77b945a1d8efe9a3f1dcda703da37bf1d350485d88f594778afda2b9d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "15259fde-8cf6-4bf7-8be6-b6aed9189db0",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_shibuya/status/1881314119967760512",
+          "origin": "manual-or-seed",
+          "title": "NEKOコラボ名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-01-19T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shibuto"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1880422452364513668",
+    "source": "public-post",
+    "description": "shibuya-neko-collab-card-2025 matched control",
+    "post": {
+      "id": "1880422452364513668",
+      "createdAt": "2025-01-18T01:10:23.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "おはようございます٩( 'ω' )و\nしぶとーたんログインいたします✨\n\n今日は #都バスの日 🚌\n実はビックカメラのラッピングバスが走っているのです･:*+.\\(( °ω° ))/.:+\nしぶとーたんのラッピング、してくれないかな… |´-`)ﾁﾗﾘ\n\n本日もよろしくおねがいします╰(*´︶`*)╯♡",
+      "url": "https://x.com/bic_shibuya/status/1880422452364513668",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1880422452364513668",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 177645,
+      "postSha256": "4ea1d3b18020995436b42de8f5555f78558200a3038e416f472ea67e3816955e",
+      "textSha256": "b5a4101847028ed299b7399e174558dd3cf5b48c3bcf811fb4a74028eea84dd6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,128 @@
+[
+  {
+    "id": "expanded-v2-positive-1057817066445529088",
+    "source": "public-post",
+    "description": "biccame-newyear-book-postcard-2018",
+    "post": {
+      "id": "1057817066445529088",
+      "createdAt": "2018-11-01T02:10:16.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "ビックカメラで販売中のとある年賀状書籍を買うとついてくる #ビッカメ娘 ポストカード🎍 ハロウィンも終わりましたし、次はク…クリスマ…  もういくつ寝ると お正月ですね🌅\nご来店お待ちしております https://t.co/DYgqXSDAhT",
+      "url": "https://x.com/biccameramito/status/1057817066445529088",
+      "media": [
+        "https://pbs.twimg.com/media/Dq4fAvkVsAEswzP.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": [
+        {
+          "type": "purchase"
+        }
+      ]
+    },
+    "rationale": "年賀状書籍購入の娘ポストカード特典。年賀状単体販売とは入手条件が別。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "biccame-newyear-book-postcard-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "ポストカード",
+          "evidence": [
+            "ビックカメラで販売中のとある年賀状書籍を買うとついてくる #ビッカメ娘 ポストカード🎍 ハロウィンも終わりましたし、次はク…クリスマ…  もういくつ寝ると お正月ですね🌅",
+            "ご来店お待ちしております https://t.co/DYgqXSDAhT"
+          ]
+        }
+      ],
+      "groupingNote": "年賀状書籍購入の娘ポストカード特典。年賀状単体販売とは入手条件が別。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 809118,
+      "postSha256": "76cc3ea92d4e9a8eeff4cd852542ef61c61a1c50deed995eaeaf6f5714e252ff",
+      "textSha256": "eef56c6b95da7e2ca7159fbafe3ed83a864d5b25390cfdbebf2373a9cc45ab9e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1068081597738442752",
+    "source": "public-post",
+    "description": "biccame-newyear-book-postcard-2018 matched control",
+    "post": {
+      "id": "1068081597738442752",
+      "createdAt": "2018-11-29T09:57:51.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "「鬼武者」など3タイトルが遊べる店頭体験会が追加開催。12月1日と2日，ビックカメラ あべのキューズモール店にて。ゲームを体験いただいた方には、先着で各タイトルのオリジナルステッカーをプレゼント！\nhttps://t.co/qAiupSSquZ",
+      "url": "https://x.com/biccameramito/status/1068081597738442752",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1068081597738442752",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 800777,
+      "postSha256": "057f99baba80ecdeec4dc4049560592b509785252c2ff908104b7832e3951631",
+      "textSha256": "723326faeead8ee263e27a504d9e40aa1d84d0cfac5cffea5795e0a6358e6d47"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

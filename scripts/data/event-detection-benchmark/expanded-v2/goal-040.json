@@ -1,0 +1,130 @@
+[
+  {
+    "id": "expanded-v2-positive-1064110885029928963",
+    "source": "public-post",
+    "description": "hamamatsu-birthday-card-2018",
+    "post": {
+      "id": "1064110885029928963",
+      "createdAt": "2018-11-18T10:59:39.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "|๑σ｡<)ﾉ.o0(はまたんバースデーイベント第一弾！\n11月20日より12月9日までの期間限定で\n「はまたんバースデー名刺」を配布いたします！\n配布場所は夏名刺と同じく、『はまたん 尼さんver』に取り付け、配布予定です！\n11月20日に改めて設置場所を投稿しますのでみなさまよろしくお願いいたしますね♪ https://t.co/baSdg2O1n3",
+      "url": "https://x.com/bic_hamamatsu/status/1064110885029928963",
+      "media": [
+        "https://pbs.twimg.com/media/DsR6lZsUwAAjAen.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "hamamatsu"
+      ],
+      "startDate": "2018-11-20",
+      "conditions": null
+    },
+    "rationale": "11月20日から12月9日の名刺。尼さんverは設置パネルで配布物でない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "hamamatsu-birthday-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "はまたんバースデー名刺",
+          "evidence": [
+            "|๑σ｡<)ﾉ.o0(はまたんバースデーイベント第一弾！",
+            "11月20日より12月9日までの期間限定で",
+            "「はまたんバースデー名刺」を配布いたします！",
+            "配布場所は夏名刺と同じく、『はまたん 尼さんver』に取り付け、配布予定です！",
+            "11月20日に改めて設置場所を投稿しますのでみなさまよろしくお願いいたしますね♪ https://t.co/baSdg2O1n3"
+          ]
+        }
+      ],
+      "groupingNote": "11月20日から12月9日の名刺。尼さんverは設置パネルで配布物でない。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 803916,
+      "postSha256": "b4b68fc565a2ce1b6f0bfbe8aa792ce944533f6e0246c2b5dba8c83d094652aa",
+      "textSha256": "ddff0e6db2ceedc391ab13c4c741e5bde90ba741999ed006c024f635add4698a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1063245342697635840",
+    "source": "public-post",
+    "description": "hamamatsu-birthday-card-2018 matched control",
+    "post": {
+      "id": "1063245342697635840",
+      "createdAt": "2018-11-16T01:40:18.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "|๑σ｡σ)ﾉ.o0(本日11月16日発売！\nニンテンドーSwichソフト『ポケットモンスター Let’s Go！ ピカチュウ』『ポケットモンスター Let’s Go！ イーブイ』が新発売です！\n当店ゲームコーナー、ビックカメラ.comにてお取り扱い中です☆\nhttps://t.co/TVoCUWMcaV https://t.co/k8YdCHApUY",
+      "url": "https://x.com/bic_hamamatsu/status/1063245342697635840",
+      "media": [
+        "https://pbs.twimg.com/media/DsFe4XRVYAYukm0.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1063245342697635840",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 804932,
+      "postSha256": "7561d6cb2e329a3b8e23393d49b0345306f9b2b78e52785226c87a4ee32727db",
+      "textSha256": "ea6245875206426831c6c529289910b40580009594b752b310e09a5d629a4701"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

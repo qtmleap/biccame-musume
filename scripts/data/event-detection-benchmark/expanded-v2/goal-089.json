@@ -1,0 +1,150 @@
+[
+  {
+    "id": "expanded-v2-positive-1676496156187328512",
+    "source": "public-post",
+    "description": "shibuhachi-fourth-character-anniversary-2023",
+    "post": {
+      "id": "1676496156187328512",
+      "createdAt": "2023-07-05T07:40:06.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "しぶハチたん🐶4thイベント情報🎊\n\n📣アクキー\n税込3,000円以上の当日レシート提示で\nアクリルキーホルダー１個プレゼント\n※お一人様１個まで\n※条件等画像を要確認\n\n📣４周年記念名刺\n※お一人様１枚まで（通常名刺も配布中）\n\n📣しぶハチたんブース４周年記念＆七夕仕様 https://t.co/a8fVmOY1fI",
+      "url": "https://x.com/bicshibuhachi00/status/1676496156187328512",
+      "media": [
+        "https://pbs.twimg.com/media/F0QbRHaaYAA9GqD.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "shibuhachi"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "3000円当日レシートのアクキーと記念・通常名刺。ブース展示は持ち帰り物品でない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "shibuhachi-fourth-character-anniversary-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アクリルキーホルダー",
+          "evidence": [
+            "税込3,000円以上の当日レシート",
+            "アクリルキーホルダー１個",
+            "お一人様１個",
+            "条件等画像を要確認"
+          ]
+        },
+        {
+          "item": "４周年記念名刺",
+          "evidence": [
+            "４周年記念名刺",
+            "お一人様１枚まで"
+          ]
+        },
+        {
+          "item": "通常名刺",
+          "evidence": [
+            "通常名刺も配布中"
+          ]
+        },
+        {
+          "item": "しぶハチたんブース",
+          "evidence": [
+            "しぶハチたんブース４周年記念＆七夕仕様"
+          ]
+        }
+      ],
+      "groupingNote": "3000円当日レシートのアクキーと記念・通常名刺。ブース展示は持ち帰り物品でない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 349459,
+      "postSha256": "be85b872e1a7e26c72a12621f7c15bde994578ff460ac94d3cd2b738bb65b33c",
+      "textSha256": "0bfe858f9c6100820fb6c308938eb92af7961a00b983c0bfb0620c057349f773"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1683331000850604037",
+    "source": "public-post",
+    "description": "shibuhachi-fourth-character-anniversary-2023 matched control",
+    "post": {
+      "id": "1683331000850604037",
+      "createdAt": "2023-07-24T04:19:20.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "やったぁー‼ \n7/22から\n#しぶハチたん ちで\n#ビックカメラ 渋谷ハチ公口店で\n#ハチペイ 🐶が\n使えるようになったハチ👏👏\n\nハチペイアプリでの支払いで\nハチペイポイント付与！（現在キャンペーン中）\nさらに\nビックポイントが10％還元の商品なら\nビックポイント10％付与ハチ✨\n\n詳しくは販売員まで‼ https://t.co/Zjjm2maovc",
+      "url": "https://x.com/bicshibuhachi00/status/1683331000850604037",
+      "media": [
+        "https://pbs.twimg.com/media/F1xkHbhaYAA7Vwk.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1683331000850604037",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 343607,
+      "postSha256": "6e7305195299097a2cbc4feffacfd28c738d869fa2d07ea0c412fad5d21c8ac4",
+      "textSha256": "b004f436d3c0fae92d8c63fa0f2e5a7c514520552b0efc1c90ea86046caed400"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

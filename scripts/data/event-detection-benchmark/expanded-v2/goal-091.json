@@ -1,0 +1,129 @@
+[
+  {
+    "id": "expanded-v2-positive-1486176153865912324",
+    "source": "public-post",
+    "description": "tenjin1-first-anniversary-card-2022",
+    "post": {
+      "id": "1486176153865912324",
+      "createdAt": "2022-01-26T03:16:21.000Z",
+      "screenName": "bic_tenjin",
+      "kind": "original",
+      "text": "てんにちわーっ(^^)/\n今日も元気にお仕事です！\n\n1周年記念の名刺配布期間も\nあと残りわずかとなりましたっ(>_<)\n\nまだゲットされてない方は\nぜひお持ち帰り下さいませー！\n\nそれでは今日もヨロシク\nお願いしますっ(^^ゞ",
+      "url": "https://x.com/bic_tenjin/status/1486176153865912324",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "記念名刺配布期間が残りわずか。店舗開店周年と同一視しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "tenjin1-first-anniversary-card-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "1周年記念の名刺",
+          "evidence": [
+            "てんにちわーっ(^^)/",
+            "今日も元気にお仕事です！",
+            "1周年記念の名刺配布期間も",
+            "あと残りわずかとなりましたっ(>_<)",
+            "まだゲットされてない方は",
+            "ぜひお持ち帰り下さいませー！",
+            "それでは今日もヨロシク",
+            "お願いしますっ(^^ゞ"
+          ]
+        }
+      ],
+      "groupingNote": "記念名刺配布期間が残りわずか。店舗開店周年と同一視しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 490804,
+      "postSha256": "87ce61ff1ad74b5dc45fba553433e6a57a58e22406f0459e589be4d950e1d488",
+      "textSha256": "be51096d7a455896a7d68baf7e8935b64ff6fd8478449df6e68855afda7107a4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1483972208909504516",
+    "source": "public-post",
+    "description": "tenjin1-first-anniversary-card-2022 matched control",
+    "post": {
+      "id": "1483972208909504516",
+      "createdAt": "2022-01-20T01:18:40.000Z",
+      "screenName": "bic_tenjin",
+      "kind": "original",
+      "text": "おっはて～ん(=ﾟωﾟ)ﾉ\n今日も元気にお仕事スタートです！\n\nビックカメラ天神1号館＆2号館\n変わらず営業中です٩( ''ω'' )( ''ω'' )وﾂｲﾝｽﾞ☆\n\nそれでは今日も1日ヨロシクお願い\nします～('◇')ゞ❤️",
+      "url": "https://x.com/bic_tenjin/status/1483972208909504516",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1483972208909504516",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 492430,
+      "postSha256": "97156dd7267fb106d1caea158957dc2c1f227a3b5cdfe7191f37cfadf227ee35",
+      "textSha256": "9fb286375853df621d1d75f8e602ac77c2b2cc7117128675ce3b4292855fad3b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

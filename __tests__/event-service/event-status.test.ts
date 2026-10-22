@@ -14,7 +14,7 @@ const fixture: EventListPayload = {
   isPreliminary: false,
   limitedQuantity: null,
   groupId: null,
-  characterId: null,
+  characters: [],
   createdAt: dayjs('2026-12-01').toDate(),
   updatedAt: dayjs('2026-12-01').toDate(),
   conditions: [],

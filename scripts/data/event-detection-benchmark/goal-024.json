@@ -1,0 +1,135 @@
+[
+  {
+    "id": "goal-positive-1149193682651738112",
+    "source": "public-post",
+    "description": "sagami rain to summer card 2019",
+    "post": {
+      "id": "1149193682651738112",
+      "createdAt": "2019-07-11T05:48:19.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "☔️さがみたん梅雨名刺☔️\n\n現在配布しております『さがみたん梅雨名刺』は本日までとなります！！\n明日からは新デザインの☀️夏名刺☀️が配布となりますのでお楽しみに～ヾ(*´ω`)ﾉﾞ\n#さがみたん https://t.co/A3wWxhXcfW",
+      "url": "https://x.com/bic_sagamioono/status/1149193682651738112",
+      "media": [
+        "https://pbs.twimg.com/media/D_LAnBEUYAAlQwG.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "梅雨版の終了と翌日夏版開始が同一投稿。状態を別々に保つ。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "end",
+      "multi-item"
+    ],
+    "group": "sagami-rain-to-summer-card-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "梅雨名刺",
+          "evidence": [
+            "☔️さがみたん梅雨名刺☔️",
+            "現在配布しております『さがみたん梅雨名刺』は本日までとなります！！",
+            "明日からは新デザインの☀️夏名刺☀️が配布となりますのでお楽しみに～ヾ(*´ω`)ﾉﾞ"
+          ]
+        },
+        {
+          "item": "夏名刺",
+          "evidence": [
+            "☔️さがみたん梅雨名刺☔️",
+            "現在配布しております『さがみたん梅雨名刺』は本日までとなります！！",
+            "明日からは新デザインの☀️夏名刺☀️が配布となりますのでお楽しみに～ヾ(*´ω`)ﾉﾞ"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 732537,
+      "postSha256": "676179dfbb7df2f41260d59e2f474af6e745830f2f239d6b3f2704b2c3afc96c",
+      "textSha256": "07b66dd3ee73a34baa99f0d18c3e480df3901a674741e14c681988c79cd88b4d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1182132759210283009",
+    "source": "public-post",
+    "description": "kashiwa halloween card 2019",
+    "post": {
+      "id": "1182132759210283009",
+      "createdAt": "2019-10-10T03:16:27.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "お知らせだよ～📣\n\n🎃2019年ハロウィンバージョンの名刺配布決定🎃\n\n10月11日（金）～10月31日（木）まで\n\n2階総合カウンターで「ハロウィン名刺ください♪」って\n柏たんちの人に声かけてくださいね♪\n\nお1人様1枚でお願いします😊\n\nデザインは見てからのお楽しみ☆ https://t.co/CvcwO6NBYX",
+      "url": "https://x.com/bic_kashiwa/status/1182132759210283009",
+      "media": [
+        "https://pbs.twimg.com/media/EGfHeLKU0AAkDNa.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": [
+        "kashiwa"
+      ],
+      "category": "limited_card",
+      "startDate": "2019-10-11"
+    },
+    "rationale": "10/11から10/31、声かけと1人1枚。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-halloween-card-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "柏たんハロウィン名刺",
+          "evidence": [
+            "🎃2019年ハロウィンバージョンの名刺配布決定🎃",
+            "2階総合カウンターで「ハロウィン名刺ください♪」って"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 705814,
+      "postSha256": "3b0f37c2d153db70be2bf00e48db235c2b9e242dda871587f26403365c2e7e65",
+      "textSha256": "744bb0e9d89c7d956f88d2ab62668c6eb5e068800d66dae386ec4c072742dbe9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

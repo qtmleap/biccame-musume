@@ -1,0 +1,132 @@
+[
+  {
+    "id": "expanded-v2-positive-1577931674863644672",
+    "source": "public-post",
+    "description": "tokorozawa-door-art-card-2022",
+    "post": {
+      "id": "1577931674863644672",
+      "createdAt": "2022-10-06T08:00:02.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "お待たせしましたっ❣️\n\n今週末よりおもちゃコーナー横の扉イラストのリニューアル記念で期間限定名刺を配布するとこ(§*ﾟ▽ﾟ*)✈️\n鉄扉と同じデザインの名刺とこ〜🎵✨\n期間➡️10/8(土)〜10/31(月)\n場所➡️6階総合案内カウンター\n\nぜひ所沢駅店にお越し下さい🎀 https://t.co/GPhAZEBpPw",
+      "url": "https://x.com/bic_toko/status/1577931674863644672",
+      "media": [
+        "https://pbs.twimg.com/media/FeXdoSEUUAA5JNw.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": [
+        "tokorozawa"
+      ],
+      "characterIds": [
+        "tokorozawa"
+      ],
+      "startDate": "2022-10-08",
+      "conditions": null
+    },
+    "rationale": "扉イラスト変更を記念した名刺。扉自体の配布ではない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "tokorozawa-door-art-card-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "期間限定名刺",
+          "evidence": [
+            "お待たせしましたっ❣️",
+            "今週末よりおもちゃコーナー横の扉イラストのリニューアル記念で期間限定名刺を配布するとこ(§*ﾟ▽ﾟ*)✈️",
+            "鉄扉と同じデザインの名刺とこ〜🎵✨",
+            "期間➡️10/8(土)〜10/31(月)",
+            "場所➡️6階総合案内カウンター",
+            "ぜひ所沢駅店にお越し下さい🎀 https://t.co/GPhAZEBpPw"
+          ]
+        }
+      ],
+      "groupingNote": "扉イラスト変更を記念した名刺。扉自体の配布ではない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 422035,
+      "postSha256": "319a00b4e805df3b13f1465c1438f49369eded6d44a972cac8bc65f37c788e4d",
+      "textSha256": "1ff5252172f9e6068d27286befafb1f0f5edbe7f80e014fad1f91643fb1229d7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1583348027946737665",
+    "source": "public-post",
+    "description": "tokorozawa-door-art-card-2022 matched control",
+    "post": {
+      "id": "1583348027946737665",
+      "createdAt": "2022-10-21T06:42:41.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "スイッチ用ソフト「ポケモンソード」「ポケモンシールド」のソフトアイコンをお店の人に見せると色違いのムゲンダイナがもらえるシリアルコードをプレゼント❗️\n\nお渡し場所:総合カウンター\n※無くなり次第終了\n\nポケモンソード・シールドを持っている方はお店で色違いの伝説ポケモンをゲットとこ😄🎶 https://t.co/YckSyWnZco",
+      "url": "https://x.com/bic_toko/status/1583348027946737665",
+      "media": [
+        "https://pbs.twimg.com/media/FfkuomxVEAASZDZ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1583348027946737665",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 417890,
+      "postSha256": "cca37a0022949a43c274f26e90c213858b6958f0cb39ea4f47e17c3f49f608b7",
+      "textSha256": "43cd51df17e414ef26e751a48046d7b4a0adb509409b25780fd990a9b4cdd0f9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

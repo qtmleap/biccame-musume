@@ -1,0 +1,177 @@
+[
+  {
+    "id": "public-c-1976506085973557729",
+    "source": "public-post",
+    "description": "にいがたたん水族館コラボ名刺",
+    "post": {
+      "id": "1976506085973557729",
+      "createdAt": "2025-10-10T04:32:27.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "【📢予告】\nアクアリウムは踊らない×ビックカメラ新潟店！\n\nビアンカ水族館風の水族館にいるにいがたたんデザインの名刺を配布するよ！\n\nこちらは準備が整い次第改めてお知らせしますね✨\n\n#アクアリウムは踊らない https://t.co/WuPxskbwaw",
+      "url": "https://x.com/niigata_bic/status/1976506085973557729",
+      "media": [
+        "https://pbs.twimg.com/media/G231zfCaAAMyiwf.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "niigata"
+      ],
+      "characterIds": [
+        "niigata"
+      ]
+    },
+    "rationale": "作品とのコラボでにいがたたんデザイン名刺を配布予定と明示。準備が整い次第なので日付は注釈しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "collaboration",
+      "date-unknown"
+    ],
+    "group": "niigata-aquarium-collaboration-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1990985885857325240",
+    "source": "public-post",
+    "description": "川崎たんクリスマス名刺",
+    "post": {
+      "id": "1990985885857325240",
+      "createdAt": "2025-11-19T03:30:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "( `˙꒳​˙2 )【告知】どえす！2\n🎄川崎たん2025クリスマス名刺🎅\n\n💚期間：12/1(月)～12/25(木)\n💛場所：2F総合カウンター\n💙お渡し方法：手渡し配布\n#川崎たん #ビッカメ娘 https://t.co/oAMH3oo76E",
+      "url": "https://x.com/Bic_kawasaki/status/1990985885857325240",
+      "media": [
+        "https://pbs.twimg.com/media/G6Fd7t3bYAAVZ5B.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": "2025-12-01"
+    },
+    "rationale": "12月1日から25日、2Fカウンターで川崎たんクリスマス名刺を手渡し配布。",
+    "tags": [
+      "historical",
+      "positive",
+      "limited-card"
+    ],
+    "group": "kawasaki-christmas-card-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1991393571510112640",
+    "source": "public-post",
+    "description": "川崎たん擬人化9周年アクキー",
+    "post": {
+      "id": "1991393571510112640",
+      "createdAt": "2025-11-20T06:30:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "( `˙꒳​˙2 )【告知】どえす！3\n💚川崎たん擬人化９周年企画① 💚\n\n12/1(日)から当店で対象金額以上購入した当日レシートを2F総合カウンターで提示すると『 #川崎たん アクリルキーホルダー』をプレゼント！\n\n⚠️配布条件は画像を要確認❣️\n#12月1日は川崎たん擬人化9周年 #ビッカメ娘 https://t.co/XGKAfQYwg6",
+      "url": "https://x.com/Bic_kawasaki/status/1991393571510112640",
+      "media": [
+        "https://pbs.twimg.com/media/G6LWqUkacAURZxP.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": "2025-12-01"
+    },
+    "rationale": "川崎店で12月1日から指定額購入レシートと引換の川崎たんアクキー。金額は画像なので注釈しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "image-dependent-terms"
+    ],
+    "group": "kawasaki-ninth-anniversary-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1995037530077761670",
+    "source": "public-post",
+    "description": "千葉たんクリスマス名刺開始予告",
+    "post": {
+      "id": "1995037530077761670",
+      "createdAt": "2025-11-30T07:49:47.000Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "千葉たんクリスマスverチラ見せ🎄\n明日からクリスマス名刺配布開始しまーす！！✧٩(ˊωˋ*)و✧ https://t.co/FKhVKRDl9r",
+      "url": "https://x.com/bic_chiba/status/1995037530077761670",
+      "media": [
+        "https://pbs.twimg.com/media/G6_L2nrbkAEwh94.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "chiba"
+      ],
+      "characterIds": [
+        "chiba"
+      ],
+      "startDate": "2025-12-01"
+    },
+    "rationale": "11月30日の明日からクリスマス名刺配布と明示。",
+    "tags": [
+      "historical",
+      "positive",
+      "limited-card",
+      "relative-date"
+    ],
+    "group": "chiba-christmas-card-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1993145795458351597",
+    "source": "public-post",
+    "description": "九州方面のクリスマスコラボ名刺",
+    "post": {
+      "id": "1993145795458351597",
+      "createdAt": "2025-11-25T02:32:43.000Z",
+      "screenName": "bic_kagoshima",
+      "kind": "original",
+      "text": "／\nお知らせ～🎄\n＼\n\nお伝えが遅くなりましたが💦\n11/22(土)～12/25(木)までクリスマス限定名刺を配布してま～す🎅✨\n天神1号2号たん🍓岡山たん🍑と広島たん🍁とのコラボ名刺になりますっ😍\n\nぜひぜひみなさまのご来店お待ちしてま～す😆🙌 https://t.co/38YP46xolx",
+      "url": "https://x.com/bic_kagoshima/status/1993145795458351597",
+      "media": [
+        "https://pbs.twimg.com/media/G6kSE-ebwAst1fY.jpg",
+        "https://pbs.twimg.com/media/G6kSGLcbcAEvrQc.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "kagoshima"
+      ],
+      "startDate": "2025-11-22"
+    },
+    "rationale": "11月22日からコラボ名刺を配布。複数の娘の名はあるが全デザイン対象が完全には確定しないため対象配列は未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "collaboration",
+      "partial-annotation"
+    ],
+    "group": "kyushu-okayama-hiroshima-christmas-card-2025",
+    "reviewStatus": "provisional"
+  }
+]

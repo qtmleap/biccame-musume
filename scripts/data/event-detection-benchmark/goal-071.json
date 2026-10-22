@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-986049584748113920",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "986049584748113920",
+      "createdAt": "2018-04-17T01:11:55.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "＼本日発売／\n「写ルンです」と 「Fate/Apocrypha」のコラボレーション！ \n限定2,000台の数量限定！！\n【ビックカメラグループ独占販売】\n\nお早目にGetくださいませ～！ https://t.co/HYHWipRY0S",
+      "url": "https://x.com/bic_nagoya/status/986049584748113920",
+      "media": [
+        "https://pbs.twimg.com/media/Da8mz4CUQAAj9eR.jpg",
+        "https://pbs.twimg.com/media/Da8m2PRUwAAIHC8.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「＼本日発売／ / 「写ルンです」と 「Fate/Apocrypha」のコラボレーション！ / 限定2,000台の数量限定！！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "fate-apocrypha-utsurundesu-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 865533,
+      "postSha256": "49d12622ff2b5c0b760778f8d254aee6d6515e062c52d37b065fae4629050d27",
+      "textSha256": "55683dded5ccd8057de40c9847e3970a539d4eebd65e2acf99e4a5d7026edc71"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-990856468143337472",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "990856468143337472",
+      "createdAt": "2018-04-30T07:32:45.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "E5系「はやぶさ」カラーのデジタルカメラ、『ニコン COOLPIX W100 E5系』は こどもの日のプレゼントにもぴったり。5/6までこどもの日特典もご用意しております。防水仕様なので海に、川に、レジャーでもこれからの季節大活躍です！https://t.co/xjyHaUnn03 https://t.co/XOTkL3PtKH",
+      "url": "https://x.com/bic_sapporo/status/990856468143337472",
+      "media": [
+        "https://pbs.twimg.com/media/DcA6qwgVQAAF0BD.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「E5系「はやぶさ」カラーのデジタルカメラ、『ニコン COOLPIX W100 E5系』は こどもの日のプレゼントにもぴったり。5/6までこどもの日特典もご用意しております。防水仕様なので海に、川に、レジャーでもこれからの季節大活躍です！ht」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "nikon-shinkansen-w100-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 861709,
+      "postSha256": "b066662f5b6a2e7e71193427da78113044a4ef52add38318fe1dc1f324b4957d",
+      "textSha256": "eb2f986c6519023a225fcec1ded94b271a27e0cac79b4345c372312f24983892"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

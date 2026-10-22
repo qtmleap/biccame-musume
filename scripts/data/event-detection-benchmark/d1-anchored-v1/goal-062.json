@@ -1,0 +1,168 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2064188436932874393",
+    "source": "public-post",
+    "description": "hamamatsu-anniv11-card-period-correction-2026",
+    "post": {
+      "id": "2064188436932874393",
+      "createdAt": "2026-06-09T03:30:48.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "quote",
+      "text": "|๑σ.σ).o0(擬人化11周年名刺は6/30までの配布ですって投稿しようと思ったら\n5/31までですーって言ってましたね…。\n\n6/30まで「擬人化11周年名刺」配布しております‼",
+      "url": "https://x.com/bic_hamamatsu/status/2064188436932874393",
+      "quoted": {
+        "id": "2049052446958436606",
+        "screenName": "bic_hamamatsu",
+        "text": "|๑σ.σ).o0(名刺は5月1日～31日まで配布いたしますー https://t.co/OXhI1sQM6T"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "配布期限を6/30に訂正する。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "hamamatsu-anniv11-card-period-correction-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "擬人化11周年名刺",
+          "evidence": [
+            "|๑σ.σ).o0(擬人化11周年名刺は6/30までの配布ですって投稿しようと思ったら",
+            "6/30まで「擬人化11周年名刺」配布しております‼"
+          ]
+        }
+      ],
+      "groupingNote": "配布期限を6/30に訂正する。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 36429,
+      "postSha256": "193ef8257bb34489d560a9dc1ec75397b0499e178545c5e52a4feb07b9e86e0e",
+      "textSha256": "ce68fe09c43af2ecbebd31b1cee1ff797f86b547f2e33999923e797377ad451a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "3ca80bda-433c-4d1a-9574-e84d116cf170",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_hamamatsu/status/2064188436932874393",
+          "origin": "manual-or-seed",
+          "title": "擬人化11周年記念名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-04-30T15:00:00.000+00:00",
+            "endDate": "2026-06-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "hamamatsu"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2069622233518195142",
+    "source": "public-post",
+    "description": "hamamatsu-anniv11-card-period-correction-2026 matched control",
+    "post": {
+      "id": "2069622233518195142",
+      "createdAt": "2026-06-24T03:22:46.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "quote",
+      "text": "＼#檸檬堂 のレモンサワーで夏を乗り切ろう🍋／\n\n|๑σ｡<)ﾉ.o0(浜松店お酒のコーナー\nビック酒販でも #檸檬堂 のレモンサワーお取り扱いしております✨ https://t.co/PRRXewMiFU",
+      "url": "https://x.com/bic_hamamatsu/status/2069622233518195142",
+      "quoted": {
+        "id": "2066430688824537479",
+        "screenName": "bic_shuhan",
+        "text": "／\n#檸檬堂 のレモンサワーで夏を乗り切れ‼️🍋\n＼\n人気のレモンサワー『檸檬堂』当社指定商品のまとめ買いキャンペーンを開催中‼️📣\n甘くない無糖シリーズや季節限定の #ラムネレモンサワー 味も対象ですよ🎶(*´艸`*)🌻\n8月31日までの期間限定なのでお見逃しなく🗓️👀✨ https://t.co/yclsbIWL4h"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HLjGSf0XQAA-4li.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2069622233518195142",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 31726,
+      "postSha256": "05a30dffb7c82e133a2e8a8290deffbf4983e9e8a670593d5f64bab37d373c80",
+      "textSha256": "80387b23da10b63170221a80d1a2d66ebf04be4dda5341d0c801111db58082a6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

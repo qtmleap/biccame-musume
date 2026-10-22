@@ -1,0 +1,130 @@
+[
+  {
+    "id": "goal-positive-1437947557989158912",
+    "source": "public-post",
+    "description": "ohmiya capsule keychain 2021",
+    "post": {
+      "id": "1437947557989158912",
+      "createdAt": "2021-09-15T01:13:08.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "本日‼︎大宮ガチャ第3弾発売〜っ‼︎＼( 'ω'お)／ｳｵｵｵｵｵｱｱｱｰｰｰｯ！\n\nビックカメラ大宮西口そごう店も3Fそごう連絡通路にて販売中♪\n\nぜひ大宮ガチャ回してくださ〜いヾ(≧▽≦お)ﾉ\n大宮たんアクキーは大宮ガチャ第2弾に入ってるよ(bゝД･お)b✨ https://t.co/OXpn8kvTf9",
+      "url": "https://x.com/bic_ohmiya/status/1437947557989158912",
+      "media": [
+        "https://pbs.twimg.com/media/E_Sdl2gVgAAjNMj.jpg",
+        "https://pbs.twimg.com/media/E_SdnoEVIAEengC.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey"
+    },
+    "rationale": "新発売第3弾と第2弾アクキーを区別。アクキーの所在は第2弾。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "ohmiya-capsule-keychain-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "大宮たんガチャアクキー",
+          "evidence": [
+            "大宮たんアクキーは大宮ガチャ第2弾に入ってるよ(bゝД･お)b✨ https://t.co/OXpn8kvTf9"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 528035,
+      "postSha256": "d90825a3ca173f9c68a4d1a8802eece6d0f07072ac64c71e0d8c30791aa220ae",
+      "textSha256": "8a30c3246d1176b10e1597fd22d5ba7666fbe217051c13273739c8d55cae7fae"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1444110244695580676",
+    "source": "public-post",
+    "description": "ohmiya halloween card 2021",
+    "post": {
+      "id": "1444110244695580676",
+      "createdAt": "2021-10-02T01:21:27.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "チラ…|お･ω･*)ﾁﾗ\n\n本日から10月31日まで1Fエレベーターホール大宮たん等身大パネルにてハロウィン限定名刺を配布いたしま〜すヾ(お･ω･)ﾉ🎃\nカボチャポシェットからGETしてくださ〜い♪\n※お1人様1枚でお願いいたします\n※通常名刺は3Fエレベーターホールの埼玉ポーズパネルにて配布しています https://t.co/1oUomgq9z1",
+      "url": "https://x.com/bic_ohmiya/status/1444110244695580676",
+      "media": [
+        "https://pbs.twimg.com/media/FAqBicUUUAE2eXp.jpg",
+        "https://pbs.twimg.com/media/FAqBidmVkAE-jh7.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "限定版と通常版の異なる階/パネルを分離。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "ohmiya-halloween-card-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ハロウィン名刺",
+          "evidence": [
+            "本日から10月31日まで1Fエレベーターホール大宮たん等身大パネルにてハロウィン限定名刺を配布いたしま〜すヾ(お･ω･)ﾉ🎃",
+            "※通常名刺は3Fエレベーターホールの埼玉ポーズパネルにて配布しています https://t.co/1oUomgq9z1"
+          ]
+        },
+        {
+          "item": "通常名刺",
+          "evidence": [
+            "本日から10月31日まで1Fエレベーターホール大宮たん等身大パネルにてハロウィン限定名刺を配布いたしま〜すヾ(お･ω･)ﾉ🎃",
+            "※通常名刺は3Fエレベーターホールの埼玉ポーズパネルにて配布しています https://t.co/1oUomgq9z1"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 523599,
+      "postSha256": "a3b016f9bd3f2c98a3fe80be7eddc53929a369c1fda133db7b460a395ae78ff6",
+      "textSha256": "f7f8cdecfb745dd38a3c0609f6af565370da7283b8817a954cd55f2c9d17b98a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

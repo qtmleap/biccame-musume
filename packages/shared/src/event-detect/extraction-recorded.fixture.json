@@ -1,0 +1,224 @@
+[
+  {
+    "id": "expanded-v2-positive-1902978486974697885",
+    "post": {
+      "id": "1902978486974697885",
+      "createdAt": "2025-03-21T07:00:01.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "📢お知らせです【2階 特設会場】\n\n4/5(土)6(日)2日間限定🍇\nオーストラリアワイン\nジェイコブス・クリーク試飲会開催決定🍷\n\nさらにジェイコブス・クリークご購入で\n酒販柏たんステッカープレゼント🎁\n4/5:40部　4/6:40部　計80部配布予定です‼ https://t.co/3mq4KpunOd",
+      "url": "https://x.com/bic_kashiwa/status/1902978486974697885",
+      "media": [
+        "https://pbs.twimg.com/media/Gmi1AoeagAAv2OC.jpg",
+        "https://pbs.twimg.com/media/Gmi1AoobMAA9fMh.jpg"
+      ]
+    },
+    "input": {
+      "events": [
+        {
+          "item": "酒販柏たんステッカー",
+          "stores": [
+            "kashiwa"
+          ],
+          "characterIds": [],
+          "evidence": [
+            "📢お知らせです【2階 特設会場】",
+            "4/5(土)6(日)2日間限定🍇",
+            "さらにジェイコブス・クリークご購入で\n酒販柏たんステッカープレゼント🎁",
+            "4/5:40部　4/6:40部　計80部配布予定です‼"
+          ]
+        },
+        {
+          "item": "酒販柏たんステッカー",
+          "stores": [
+            "kashiwa"
+          ],
+          "characterIds": [],
+          "evidence": [
+            "📢お知らせです【2階 特設会場】",
+            "4/5(土)6(日)2日間限定🍇",
+            "さらにジェイコブス・クリークご購入で\n酒販柏たんステッカープレゼント🎁",
+            "4/5:40部　4/6:40部　計80部配布予定です‼"
+          ]
+        }
+      ]
+    },
+    "previousError": "Duplicate event extraction",
+    "responseHash": "12f1957091e1115dcd43055431a58587898e7c113b8701bce44bcf4b29c08bd2"
+  },
+  {
+    "id": "expanded-v2-negative-1902185758154166577",
+    "post": {
+      "id": "1902185758154166577",
+      "createdAt": "2025-03-19T02:30:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【2階 #お薬・日用品】\nJR山手線🚃池袋駅・神田駅🚃の\n実際の発車ベル音が流れる！\nミニチュア発車ベルプレゼントキャンペーン実施中！\n\n対象商品、条件などご不明な点は\nHPまたは売り場販売員までお気軽にお尋ねください😊\nhttps://t.co/vzflSd0cdu https://t.co/YAt0yly6Nw",
+      "url": "https://x.com/bic_kashiwa/status/1902185758154166577",
+      "media": [
+        "https://pbs.twimg.com/media/GmXhwlMa8AEraJg.png",
+        "https://pbs.twimg.com/media/GmXhxnMbAAABvEF.png"
+      ]
+    },
+    "input": {
+      "events": [
+        {
+          "item": "ミニチュア発車ベル",
+          "stores": [],
+          "characterIds": [],
+          "evidence": [
+            "ミニチュア発車ベルプレゼントキャンペーン実施中！",
+            "対象商品、条件などご不明な点はHPまたは売り場販売員までお気軽にお尋ねください😊"
+          ]
+        }
+      ]
+    },
+    "previousError": "Event extraction contains unsupported evidence",
+    "responseHash": "f50fee6a7e80e55ca1891f6709b4410dc072e1d2c7c200de960d03f2cf767bf0"
+  },
+  {
+    "id": "expanded-v2-positive-1057817066445529088",
+    "post": {
+      "id": "1057817066445529088",
+      "createdAt": "2018-11-01T02:10:16.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "ビックカメラで販売中のとある年賀状書籍を買うとついてくる #ビッカメ娘 ポストカード🎍 ハロウィンも終わりましたし、次はク…クリスマ…  もういくつ寝ると お正月ですね🌅\nご来店お待ちしております https://t.co/DYgqXSDAhT",
+      "url": "https://x.com/biccameramito/status/1057817066445529088",
+      "media": [
+        "https://pbs.twimg.com/media/Dq4fAvkVsAEswzP.jpg"
+      ]
+    },
+    "input": {
+      "events": "[{\"item\":\"年賀状書籍購入特典ポストカード\",\"stores\":[],\"characterIds\":[],\"evidence\":[\"ビックカメラで販売中のとある年賀状書籍を買うとついてくる #ビッカメ娘 ポストカード🎍\"],\"}]"
+    },
+    "previousError": "Invalid event extraction",
+    "responseHash": "de2d4f2c6f8a0bc0f602d0c0d881dd89decdc662dabacbf40734de49ef997e4e"
+  },
+  {
+    "id": "expanded-v2-positive-1986243032812003779",
+    "post": {
+      "id": "1986243032812003779",
+      "createdAt": "2025-11-06T01:23:36.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "ビックカメラ所沢駅店店は お陰様で11月8日で店舗6周年を迎え、爆誕4周年とこ✈️\nそこで‼︎\n  当店で税込3000円以上のご購入で 所沢たんアクリルキーホルダープレゼント🎁 限定名刺もあるとこ✨  \n  #11月8日は所沢たんのバースデー #所沢たん https://t.co/rXbeTSHmpg",
+      "url": "https://x.com/bic_toko/status/1986243032812003779",
+      "media": [
+        "https://pbs.twimg.com/media/G5CNgTYaYAAzneM.jpg"
+      ]
+    },
+    "input": {
+      "events": [
+        {
+          "item": "所沢たんアクリルキーホルダー",
+          "stores": [
+            "tokorozawa"
+          ],
+          "characterIds": [
+            "tokorozawa"
+          ],
+          "evidence": [
+            "当店で税込3000円以上のご購入で 所沢たんアクリルキーホルダープレゼント🎁"
+          ]
+        },
+        {
+          "item": "限定名刺",
+          "stores": [
+            "tokorozawa"
+          ],
+          "characterIds": [],
+          "evidence": [
+            "ビックカメラ所沢駅店店は お陰様で11月8日で店舗6周年を迎え、爆誕4周年とこ✈️",
+            "限定名刺もあるとこ✨"
+          ]
+        }
+      ]
+    },
+    "previousError": "Event extraction contains unsupported evidence",
+    "responseHash": "555a3f3718ef0a27135d3a17aaa1967eaa9ba31e69aab32369f608e9caac9709"
+  },
+  {
+    "id": "expanded-v2-positive-1584705674461995008",
+    "post": {
+      "id": "1584705674461995008",
+      "createdAt": "2022-10-25T00:37:29.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "🕸️🕷️🎃お知らせ🦇🌛🐈‍⬛\n#池袋地区のビッカメ娘が缶バッジになったらしい !!\n10月28日~なくなり次第終了。\n今回は3店舗コンプリートすると先着150名様に\n追加で記念缶バッジプレゼントです✨ https://t.co/1KMVCC9W4k",
+      "url": "https://x.com/bicikenishi/status/1584705674461995008",
+      "media": [
+        "https://pbs.twimg.com/media/Ff4BXPDaYAA9aHF.jpg"
+      ]
+    },
+    "input": {
+      "events": [
+        {
+          "item": "池袋地区のビッカメ娘缶バッジ",
+          "stores": [],
+          "characterIds": [],
+          "evidence": [
+            "#池袋地区のビッカメ娘が缶バッジになったらしい !!",
+            "10月28日~なくなり次第終了。"
+          ]
+        },
+        {
+          "item": "記念缶バッジ",
+          "stores": [],
+          "characterIds": [],
+          "evidence": [
+            "今回は3店舗コンプリートすると先着150名様に追加で記念缶バッジプレゼントです✨"
+          ]
+        }
+      ]
+    },
+    "previousError": "Event extraction contains unsupported evidence",
+    "responseHash": "9375568f79cfc8039fa2a9aa5433a9d3a97e6a7f3cf1fff00cd23c82c36f78ed"
+  },
+  {
+    "id": "expanded-v2-negative-1808704787946615231",
+    "post": {
+      "id": "1808704787946615231",
+      "createdAt": "2024-07-04T03:30:00.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "7/6（土）〜7/7（日）2日間限定🌞\n10:00〜18:00⏲ビックカメラ天神2号館にて\n#花王 体感イベントを開催✨\nイベント会場でボディシートや制汗スプレーの感想をSNSに投稿📱もしくは1,000円以上購入でプレゼント🎁\nまとめ買いキャンペーンもあるけん今年の暑さ対策🌴にご来店まっとるよ～🎵 https://t.co/0ndsiik5Ym",
+      "url": "https://x.com/biccameratenjin/status/1808704787946615231",
+      "media": [
+        "https://pbs.twimg.com/media/GResHSvb0AEUXHO.png"
+      ]
+    },
+    "input": {
+      "events": [
+        {
+          "item": "花王体感イベントのプレゼント",
+          "stores": [
+            "tenjin2"
+          ],
+          "characterIds": [],
+          "evidence": [
+            "7/6（土）〜7/7（日）2日間限定🌞",
+            "10:00〜18:00⏲ビックカメラ天神2号館にて",
+            "#花王 体感イベントを開催✨",
+            "イベント会場でボディシートや制汗スプレーの感想をSNSに投稿📱もしくは1,000円以上購入でプレゼント🎁"
+          ]
+        },
+        {
+          "item": "花王体感イベントのプレゼント",
+          "stores": [
+            "tenjin2"
+          ],
+          "characterIds": [],
+          "evidence": [
+            "7/6（土）〜7/7（日）2日間限定🌞",
+            "10:00〜18:00⏲ビックカメラ天神2号館にて",
+            "#花王 体感イベントを開催✨",
+            "イベント会場でボディシートや制汗スプレーの感想をSNSに投稿📱もしくは1,000円以上購入でプレゼント🎁"
+          ]
+        }
+      ]
+    },
+    "previousError": "Duplicate event extraction",
+    "responseHash": "1f3ce72193fd23bb9534abd498eca191319e5a5fd45bafb8bacf96d69f85fab5"
+  }
+]

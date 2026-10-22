@@ -1,0 +1,124 @@
+[
+  {
+    "id": "goal-positive-1015502208698216448",
+    "source": "public-post",
+    "description": "honten tanabata card 2018",
+    "post": {
+      "id": "1015502208698216448",
+      "createdAt": "2018-07-07T07:46:08.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "本店たん七夕限定デザイン名刺は\n1階店頭等身大パネルと地下一階の天体望遠鏡コーナー付近で配布しています!!\n等身大パネルにない場合はお手数ですが地下1階もご確認いただければ幸いです。 https://t.co/fjdhYLS08a",
+      "url": "https://x.com/bicikebukuro/status/1015502208698216448",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card"
+    },
+    "rationale": "七夕デザインの配布場所案内。チョコミントの旧企画とは別。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "honten-tanabata-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "本店たん七夕名刺",
+          "evidence": [
+            "本店たん七夕限定デザイン名刺は"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 841969,
+      "postSha256": "727bae42570696a28af9ea9dc08f16c7e32d26e06113f671985dad9af88da6b3",
+      "textSha256": "f0c8fc924d095b310b0d953683abd8cf63417fe83300b5041fc7da40c61ca3e2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1027383445264117762",
+    "source": "public-post",
+    "description": "kawasaki summer card 2018",
+    "post": {
+      "id": "1027383445264117762",
+      "createdAt": "2018-08-09T02:37:55.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "✨期間限定名刺配布のお知らせ✨\n\n＼ #川崎たん 期間限定名刺配布チュウらぞ♥️／\n\n配布場所は、2F 総合カウンター！！\n\n期間は８月４日(土)～８月３１日(金)までらぞよ！\n\n絵柄はもらってからのお楽しみ(* ´艸｀2)\n※『お一人様一枚』でお願いします！\n#ビッカメ娘 https://t.co/NOl1xl0wFA",
+      "url": "https://x.com/Bic_kawasaki/status/1027383445264117762",
+      "media": [
+        "https://pbs.twimg.com/media/DkH_V8-U8AEaQi0.jpg",
+        "https://pbs.twimg.com/media/DkH_ts_UUAA0sb7.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "8/4から8/31の期間限定。配布中を初回告知扱いしない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "kawasaki-summer-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "川崎たん夏限定名刺",
+          "evidence": [
+            "✨期間限定名刺配布のお知らせ✨",
+            "＼ #川崎たん 期間限定名刺配布チュウらぞ♥️／"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 832036,
+      "postSha256": "0bfe24bc860ddbcad8d08bbf14163fb06528ce1f7eead3b7aa90775cb49539b0",
+      "textSha256": "42a76c294b12111f7cecdcdb1b0cd9d8f7fdeb27e8d885b8d9790b67365ec001"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

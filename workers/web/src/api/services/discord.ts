@@ -7,6 +7,11 @@ import {
   type EventDetectionNotification,
   eventDetectionNotificationSchema
 } from '@biccame/shared/bot'
+import {
+  webhookDiscoveryActionLabel,
+  webhookDiscoveryLabel,
+  webhookMissingFieldLabel
+} from '@biccame/shared/domain/webhook-discovery-labels'
 import dayjs from 'dayjs'
 import { z } from 'zod'
 
@@ -140,12 +145,35 @@ export const buildDetectionNotification = (input: EventDetectionNotification) =>
                 inline: false
               }
             ]),
-        { name: '判定スコア', value: input.confidence.toFixed(3), inline: true },
         {
-          name: '店舗',
+          name: '判定スコア',
+          value: input.discovery?.confidence === null ? '未判定' : input.confidence.toFixed(3),
+          inline: true
+        },
+        {
+          name: '開催・配布店舗',
           value: (input.stores.length > 0 ? input.stores.join('・') : '未確定').slice(0, 512),
           inline: false
         },
+        {
+          name: '対象ビッカメ娘',
+          value: (input.characters.length > 0 ? input.characters.join('・') : '未確定').slice(0, 512),
+          inline: false
+        },
+        ...(input.discovery === undefined || input.discovery === null
+          ? []
+          : [
+              { name: '検出結果', value: webhookDiscoveryLabel(input.discovery), inline: true },
+              { name: '登録判断', value: webhookDiscoveryActionLabel(input.discovery.action), inline: true },
+              {
+                name: '不足・未確定の情報',
+                value: (input.discovery.missingFields.length === 0
+                  ? 'なし'
+                  : input.discovery.missingFields.map(webhookMissingFieldLabel).join('・')
+                ).slice(0, 512),
+                inline: false
+              }
+            ]),
         ...(input.status === 'held'
           ? [
               {

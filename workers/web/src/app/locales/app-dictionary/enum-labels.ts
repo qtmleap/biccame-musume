@@ -22,6 +22,7 @@ export const enumContent = {
   },
   condition: {
     [EventConditionTypeSchema.enum.purchase]: '購入条件',
+    [EventConditionTypeSchema.enum.charge]: '入金条件',
     [EventConditionTypeSchema.enum.first_come]: '先着順',
     [EventConditionTypeSchema.enum.lottery]: '抽選',
     [EventConditionTypeSchema.enum.everyone]: '全員配布'

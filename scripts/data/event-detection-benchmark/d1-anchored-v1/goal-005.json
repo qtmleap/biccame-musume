@@ -1,0 +1,159 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1872831555909128312",
+    "source": "public-post",
+    "description": "shinyoko-follower-card-2025",
+    "post": {
+      "id": "1872831555909128312",
+      "createdAt": "2024-12-28T02:26:53.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "【新横たんからお知らせ📢】\n\nフォロワー様8888人達成記念名刺を\n2025年1月1日(水)より1月31日(金)まで\n9階エレベーター前にて配布します🎉✨\n併せてフォトブースも変わる予定ですので楽しみにしていてください🥰💭\n\n※おひとり様1枚でお願いします https://t.co/YFNw5qJudL",
+      "url": "https://x.com/bic_shinyoko/status/1872831555909128312",
+      "media": [
+        "https://pbs.twimg.com/media/Gf2iXllawAEq4Hq.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "shinyoko"
+      ],
+      "startDate": "2025-01-01",
+      "conditions": null
+    },
+    "rationale": "フォロワー数達成の記念名刺。2025年1月1日から1月31日。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "shinyoko-follower-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "フォロワー8888人達成記念名刺",
+          "evidence": [
+            "フォロワー様8888人達成記念名刺を"
+          ]
+        }
+      ],
+      "groupingNote": "フォロワー数達成の記念名刺。2025年1月1日から1月31日。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 183124,
+      "postSha256": "b6f35bf0deeafd4f8be71a939b054dc6b6fe7098d3eefa88cb145c3c1c9849a7",
+      "textSha256": "0d474f3b5f824d3ac6877440b21f77d00c57fd8fbea318aa59ace9c176c5b1a8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "70f62d79-9ccb-4dde-8ad3-3987714bf449",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_shinyoko/status/1872831555909128312",
+          "origin": "manual-or-seed",
+          "title": "8888人達成名刺配布",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2024-12-31T15:00:00.000+00:00",
+            "endDate": "2025-01-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shinyoko"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1868852294403735912",
+    "source": "public-post",
+    "description": "shinyoko-follower-card-2025 matched control",
+    "post": {
+      "id": "1868852294403735912",
+      "createdAt": "2024-12-17T02:54:43.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "【4階電池コーナーからお知らせ📢】\nお買い忘れはございませんか？\nビックカメラオリジナルの乾電池(ブラック)は安心の液漏れ防止構造です‼\nなんと10年の長期保存が可能です🎶\n12月22日(日)までポイントアップ中ですのでぜひこの機会にご利用くださいませ🔋✨ https://t.co/s8vaINnfop",
+      "url": "https://x.com/bic_shinyoko/status/1868852294403735912",
+      "media": [
+        "https://pbs.twimg.com/media/Ge9_QH6asAATezv.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-1868852294403735912",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 186099,
+      "postSha256": "838168062a50e6164d7d77f459bc54945924e81f669692f75ffbfb88e91dfb78",
+      "textSha256": "b96563fa91cde8dfbbeba749adb7a68b1e637e4493835c9fab6766523c23ef4a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

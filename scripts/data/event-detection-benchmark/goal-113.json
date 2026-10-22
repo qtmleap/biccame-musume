@@ -1,0 +1,109 @@
+[
+  {
+    "id": "goal-negative-2017532305355554935",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2017532305355554935",
+      "createdAt": "2026-01-31T09:36:00.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\n新作ゲームの予約は当店で🎮\n＼\n\nPS5・NintendoSwitch2 ソフト\n【バイオハザード レクイエム】\n\n2/27(金)発売‼\n6階ゲームコーナーでご予約を👻\n\n※こちらのゲームは表現内容により販売対象年齢が定められております\n#PS5\nhttps://t.co/BPYNozDoJn\n#NintendoSwitch2\nhttps://t.co/LJrJOhOPjB https://t.co/HZjP0aw42a",
+      "url": "https://x.com/bic_tachikawa/status/2017532305355554935",
+      "media": [
+        "https://pbs.twimg.com/media/G9Dv3umb0AEMg9d.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「／ / 新作ゲームの予約は当店で🎮 / ＼」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "resident-evil-requiem-preorders-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 76009,
+      "postSha256": "7791c1ed08c74b1f8df99a5e5f495daa03c5497ba452337719a0efc2bf267f7a",
+      "textSha256": "4141599e11a05498e23d5a698de1d48c805780c35f8cc47fd9d82a4d7d282230"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-2014145700720767462",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2014145700720767462",
+      "createdAt": "2026-01-22T01:18:50.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "📢1/23㈮ 発売   ポケモンカードゲームMEGA\n抽選①拡張パック『ムニキスゼロ 』\n(全4ページ)\n抽選②スペシャルカードセット『メガエルレイドex』\n(全1ページ)\n抽選結果です。\n\n 当選された方は、\n1/23(金)〜1/25(日)までに\nレジにお越しください。\n\n※エントリー用紙の注意事項の\nご確認をお願いします https://t.co/OO1XhKdHvG",
+      "url": "https://x.com/bic_takatsuki/status/2014145700720767462",
+      "media": [
+        "https://pbs.twimg.com/media/G_OrNJIbQAAVJXV.png",
+        "https://pbs.twimg.com/media/G_OrbMRa0AAEor2.jpg",
+        "https://pbs.twimg.com/media/G_Ordf8akAAbV3T.png",
+        "https://pbs.twimg.com/media/G_OrfXjbQAM6xNv.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「📢1/23㈮ 発売   ポケモンカードゲームMEGA / 抽選①拡張パック『ムニキスゼロ 』 / (全4ページ)」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pokemon-munikis-zero-lottery-results-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 78583,
+      "postSha256": "61c86cb5c763d8fbfe0fe315979633cba8f0a708160d6ad7c8eb4b6a1ffa8260",
+      "textSha256": "878b0e32bf9260c26da62f719cec91b0f0e776a6128e80b844e53f6e67152bf2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

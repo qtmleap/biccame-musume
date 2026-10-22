@@ -1,0 +1,170 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2094364501521162457",
+    "source": "public-post",
+    "description": "seiseki-acrylic-key-end-2026",
+    "post": {
+      "id": "2094364501521162457",
+      "createdAt": "2026-08-31T09:59:43.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "§( *'▽'o[お知らせ]o\nせいせきたんアクキー配布終了致しました🥲\nご来店頂いたお客様ありがとうございました！\n\nせいせきたんと一緒に考えた、記念のコラボ名刺はたくさん準備しましたので…ぜひ…！！！\n( ❀ '▽'。)人('▽' *)§\n\n#8月31日はせいせきたん擬人化10周年\n#せいせきたん #調布たん https://t.co/U52agYAcHW",
+      "url": "https://x.com/bic_keiochofu/status/2094364501521162457",
+      "media": [
+        "https://pbs.twimg.com/media/HRCskOybQAAlrbw.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": [
+        "seiseki",
+        "chofu"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アクキー配布終了、コラボ名刺は継続。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "seiseki-acrylic-key-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "せいせきたんアクキー",
+          "evidence": [
+            "せいせきたんアクキー配布終了致しました🥲",
+            "せいせきたんと一緒に考えた、記念のコラボ名刺はたくさん準備しましたので…ぜひ…！！！",
+            "#8月31日はせいせきたん擬人化10周年",
+            "#せいせきたん #調布たん https://t.co/U52agYAcHW"
+          ]
+        }
+      ],
+      "groupingNote": "アクキー配布終了、コラボ名刺は継続。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 11620,
+      "postSha256": "fd869e1265432526fc8ca3ed3c9c281d34c166abe4596fe2313ee1d66f8dc138",
+      "textSha256": "92d00dc0ab6fdc68151ac17ebca3b32c0848f26592f44cf632b61026d127fc44"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "6d8222a0-18bb-4065-9289-a010e237f175",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_keiochofu/status/2094364501521162457",
+          "origin": "manual-or-seed",
+          "title": "擬人化10周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-08-30T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "chofu"
+            ],
+            "characters": [
+              "seiseki"
+            ],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2094254515373638035",
+    "source": "public-post",
+    "description": "seiseki-acrylic-key-end-2026 matched control",
+    "post": {
+      "id": "2094254515373638035",
+      "createdAt": "2026-08-31T02:42:40.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "( ´-`).｡oO（今日は、推しごとの忙しさが許す限り、推し事をしていきたいと思っています。\n\nせいせきたんの代わり！！！\n\nｶﾀｶﾀ…ﾎﾟﾁﾎﾟﾁﾎﾟﾁ!!\n　　 (∩`･ω･)　ｼｭﾊﾞﾊﾞﾊﾞ!!\n　＿/_ﾐつ/￣￣￣/\n　　　＼/＿＿＿/\n\n#月末\n #8月31日はせいせきたん擬人化10周年",
+      "url": "https://x.com/bic_keiochofu/status/2094254515373638035",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2094254515373638035",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 11817,
+      "postSha256": "7fe7422a4f4de00141b070cf99f596555becacecf41478da88b9a8b288098053",
+      "textSha256": "08e1a4f89627a211fde3b1ea7b74484ef40e1fec973213f88bf954c75963b8c6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

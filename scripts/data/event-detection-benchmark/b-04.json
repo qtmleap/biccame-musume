@@ -1,0 +1,136 @@
+[
+  {
+    "id": "public-b-2109930538555564061",
+    "source": "public-post",
+    "description": "AIスマートグラスの15%割引",
+    "post": {
+      "id": "2109930538555564061",
+      "createdAt": "2026-10-13T08:53:35.662Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "🔥＼10月19日(月)までの期間限定／🔥\nAIスマートグラス\n🕶️INMO GO 3 『Black Silver IMG301』\n🔊ワイヤレススピーカー\n🌟💰期間限定15%OFF💰🌟\n\n翻訳・撮影・AIアシスタント・ナビゲーション・会議メモなどを集約したAIスマートグラス✨\nぜひ当店4階までお越しくださいませ😎👍",
+      "url": "https://x.com/bicpkanhonten/status/2109930538555564061",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "期間限定の一般機器セールで、ビッカメ娘のグッズではない。",
+    "tags": [
+      "ordinary-sale",
+      "discount",
+      "smart-glasses"
+    ],
+    "group": "inmo-smart-glasses-sale",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "26461c2d69704f6710b68ffa45902d8105103ad25eef8eac3b3cd79fd5f022fd"
+  },
+  {
+    "id": "public-b-2109931787237622122",
+    "source": "public-post",
+    "description": "レトルトカレーフェア",
+    "post": {
+      "id": "2109931787237622122",
+      "createdAt": "2026-10-13T08:58:33.371Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\nこだわり #カレー\n大集合🍛\n＼\n\n1階特設コーナーで\n【レトルトカレーフェア】\n開催中(Ｕ 'ᴗ' Ｕ)🎵\n\nよーく見てみると面白いラインナップなのです‼\nぜひお立ち寄りください✨",
+      "url": "https://x.com/bic_tachikawa/status/2109931787237622122",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "フェアという催事表現だが通常食品の販売で娘とのコラボはない。",
+    "tags": [
+      "hard-negative",
+      "generic-fair",
+      "food"
+    ],
+    "group": "tachikawa-retort-curry-fair",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "f8d4be5cd21d17794e81905eaa0c1698b459d6d8a74b727cf56f94fd35f73e57"
+  },
+  {
+    "id": "public-b-2109932614648041714",
+    "source": "public-post",
+    "description": "Surface新製品の発売",
+    "post": {
+      "id": "2109932614648041714",
+      "createdAt": "2026-10-13T09:01:50.641Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "📣Surface新製品遂に発売！\n新色ブラックも加わり、\nさらに魅力的なラインアップに✨\n\nSurface Pro12インチ(第2世代)\nSurface Laptop13インチ(第2世代)\n\n気になる方はB1Fパソコンコーナーまで",
+      "url": "https://x.com/bic_fujisawa/status/2109932614648041714",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "発売案内だけで記念キャラ配布物や企画は記載されていない。",
+    "tags": [
+      "ordinary-sale",
+      "computer-launch"
+    ],
+    "group": "surface-new-model-launch",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "3ea1789360c2291debd77993862bdbad39c6c4a0a806a28e4508c654797b6ad8"
+  },
+  {
+    "id": "public-b-2109941892930814125",
+    "source": "public-post",
+    "description": "あべのたんハロウィンのアクキーと限定名刺",
+    "post": {
+      "id": "2109941892930814125",
+      "createdAt": "2026-10-13T09:38:42.756Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "＼🎃👻ハロウィンイベント告知👻🎃／\n\n10/16(金)から、3,000円以上ご購入で\n『あべのたんアクリルキーホルダ― ハロウィンver.』をプレゼントするで～✨🎉\n\n⚠️おひとり様1個、無くなり次第終了となります⚠️\n\nハロウィン限定名刺も用意してるからぜひお店に遊びに来てな～🫡🐙🐈‍⬛",
+      "url": "https://x.com/bic_abeno/status/2109941892930814125",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "characterIds": [
+        "abeno"
+      ],
+      "startDate": "2026-10-16"
+    },
+    "rationale": "あべのたんのアクキーを購入特典としてプレゼントし、別の限定名刺も告知している。複数配布物なので単一カテゴリは未注釈。",
+    "tags": [
+      "giveaway",
+      "purchase",
+      "multiple-items",
+      "halloween"
+    ],
+    "group": "abeno-halloween-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "adc4b5b6072fa8818dabcee51e850e322b9a1eaa4ba3848056a6abc15c6c2408"
+  },
+  {
+    "id": "public-b-2109951025914200483",
+    "source": "public-post",
+    "description": "DarkFlash DM8シリーズのPCパーツ紹介",
+    "post": {
+      "id": "2109951025914200483",
+      "createdAt": "2026-10-13T10:15:00.229Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "＼おすすめパーツ紹介！／\n\n✨DarkFlash DM8シリーズ✨\n\nインフィニティミラー採用！\n🔄リバースファン対応モデルもあり、見た目にこだわったPC構成にもおすすめ👍\nケース内をより華やかに演出したい方は要チェック🌈\n\n📍当店6階PCパーツコーナー パソコン組み立て工房にてご案内中📢",
+      "url": "https://x.com/bicpkanhonten/status/2109951025914200483",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "一般PCパーツの特徴と売場を紹介している。 物品はDM8シリーズのPCパーツと明示されているため、非対象イベントだが物品種別はotherと注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "pc-parts"
+    ],
+    "group": "darkflash-dm8-case-introduction",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "c353e5089f989e151beedfd65a1cc1c8824f597a6893ab8ef439a695fe146bea"
+  }
+]

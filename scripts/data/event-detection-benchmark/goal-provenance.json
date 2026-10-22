@@ -1,0 +1,141 @@
+{
+  "datasetRevision": "goal-pipeline-v1",
+  "annotationStatus": "provisional-not-human-reviewed",
+  "cases": 236,
+  "positive": 118,
+  "negative": 118,
+  "annotationSource": "Raw public text; D1 observations attached only after labels were fixed. No prior AI answers read as gold.",
+  "sourcePostCount": 236,
+  "sourceArchives": {
+    ".cache/event-detect/posts.jsonl": 236
+  },
+  "yearAccountMonthMatched": true,
+  "currentD1HasSelfReferenceLeakageWarning": "Do not feed observedD1 or the test post own persisted registration into the evaluator as prior evidence.",
+  "observedD1": {
+    "jobs": 0,
+    "candidatePosts": 0,
+    "referencePosts": 16
+  },
+  "goldFields": {
+    "isEvent": 236,
+    "stores": 83,
+    "characterIds": 74,
+    "startDate": 51,
+    "category": 84,
+    "conditions": 5
+  },
+  "actions": {
+    "new": 75,
+    "update": 26,
+    "end": 11,
+    "preliminary": 6,
+    "not_event": 118
+  },
+  "sourceRecordsSha256": "efd4ebcee8579762cc183ed90bbb82f8c02d2268d5e81cbbacb2c90a83e772c2",
+  "stageGoldActionScope": "Post intent at publication time, not an instruction to create a duplicate in the current D1 database.",
+  "excludedProposalPosts": [
+    {
+      "id": "2017508152216879610",
+      "reason": "Same-year monthly calendar template already represented by C January; 93% similarity."
+    },
+    {
+      "id": "2026639215686201535",
+      "reason": "Same-year monthly calendar template already represented by C January; 93% similarity."
+    }
+  ],
+  "templateRelatedPairs": [
+    {
+      "postId": "2013169969735897094",
+      "relatedPostId": "2004043998965690726",
+      "similarity": 0.78,
+      "note": "Distinct real campaign/target: Nanba subject versus closed Kyoto subject at Nanba. Keep together in a template family when splitting."
+    },
+    {
+      "postId": "2036284371083170214",
+      "relatedPostId": "2045370086446506487",
+      "similarity": 0.768,
+      "note": "Distinct Nagoyagate 9th versus Nagoya 10th anniversary, shared advertisement template. Do not cross template family into strict holdout."
+    },
+    {
+      "postId": "1012319233298989056",
+      "relatedPostId": "1145172688815579136",
+      "similarity": 0.705,
+      "note": "Different years and figure versus keychain campaign, but related air-participation wording. Keep together when splitting."
+    }
+  ],
+  "annotationsSha256": "076216b73180fa4474c2c1d341cc7a1fdbef5fdb43b35592d5e4ad3bae926c68",
+  "independentAuditCorrection": {
+    "revision": "goal-label-audit-four-fixes",
+    "correctedPosts": [
+      "981824942927888387",
+      "1045844703701168129",
+      "1053194513580093440",
+      "1682232917504958465"
+    ],
+    "sourcePostsChanged": 0,
+    "isEventLabelsChanged": 0,
+    "remainingPolicyGold": "Item/action ambiguity requires separate review; isEvent labels remain provisional."
+  },
+  "stageScoringReview": {
+    "eventLabels": "All 236 isEvent labels are provisionally approved; not human-reviewed.",
+    "itemActionLabels": "Do not treat unresolved item/action/start-date fields as confirmed gold.",
+    "sourceAudit": "goal-label-audit.json",
+    "snapshotNote": "Audit must be refreshed after the four definite annotation corrections.",
+    "stages": {
+      "eventRelevanceIsEvent": {
+        "verdict": "approved-for-provisional-evaluation",
+        "cases": 236,
+        "confirmedErrors": 0
+      },
+      "registrationReady": {
+        "verdict": "approved-for-provisional-evaluation",
+        "cases": 5,
+        "confirmedErrors": 0
+      },
+      "itemsAndItemCount": {
+        "verdict": "need-specific-fix",
+        "casePostIds": [
+          "2006320489594298735",
+          "2093537875417841795"
+        ]
+      },
+      "actionNewUpdateEndPreliminary": {
+        "verdict": "need-decision",
+        "casePostIds": [
+          "1012319233298989056",
+          "1652877817166835715",
+          "2016368028804686098"
+        ]
+      },
+      "startDate": {
+        "verdict": "need-specific-fix",
+        "casePostIds": [
+          "1227869942122287104"
+        ]
+      },
+      "rationaleText": {
+        "verdict": "resolved-in-snapshot",
+        "casePostIds": []
+      }
+    },
+    "pendingStageScoringExclusionPostIds": [
+      "962251452495233025",
+      "1012319233298989056",
+      "1050190020483547136",
+      "1149193682651738112",
+      "1227869942122287104",
+      "1437947557989158912",
+      "1444110244695580676",
+      "1465850951764365315",
+      "1500016613239578626",
+      "1556499004447289345",
+      "1570583281623793664",
+      "1652877817166835715",
+      "1898226697704816880",
+      "2006320489594298735",
+      "2008750444567572636",
+      "2016368028804686098",
+      "2093537875417841795"
+    ]
+  }
+}

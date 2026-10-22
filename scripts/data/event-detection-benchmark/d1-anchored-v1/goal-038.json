@@ -1,0 +1,181 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2020758051343741021",
+    "source": "public-post",
+    "description": "tachikawa-valentine-cookie-2026/detail",
+    "post": {
+      "id": "2020758051343741021",
+      "createdAt": "2026-02-09T07:13:57.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "quote",
+      "text": "／\nズッ友でいてね❤\n＼\n\n#立川たん から #バレンタイン のおくりもの🎁\n\n2/14(土)～\nビックカメラ立川店で4000円以上お買い上げの方に「立川たんハート型クッキー」プレゼント‼\n\n1階総合案内カウンターでお待ちしております🎵\n\n⚠無くなり次第終了です https://t.co/o3bnMyvy1S",
+      "url": "https://x.com/bic_tachikawa/status/2020758051343741021",
+      "quoted": {
+        "id": "2017518475024240990",
+        "screenName": "bic_tachikawa",
+        "text": "／\nイベント予告📣\n＼\n\n#立川たん 今年の #バレンタイン は\nクッキー配ります(Ｕ 'ᴗ' Ｕ)つ🍪ﾄﾞｿﾞｰ\n\n2月14日(土)から100個限定❤\n当店で4,000円以上お買い上げの方にプレゼント🎁\n\n⚠手作りではありませんが心は込めてます\n⚠無くなり次第終了\n⚠いつもみたいに日別で配布数分けません"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HAsd6BSacAAY6j8.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": [
+        "tachikawa"
+      ],
+      "characterIds": [
+        "tachikawa"
+      ],
+      "startDate": "2026-02-14",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 4000
+        }
+      ]
+    },
+    "rationale": "引用元の予告に続く詳細。4000円以上購入でクッキー。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "boundary:action",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "tachikawa-valentine-cookie-2026/detail",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "立川たんハート型クッキー",
+          "evidence": [
+            "ビックカメラ立川店で4000円以上お買い上げの方に「立川たんハート型クッキー」プレゼント‼"
+          ]
+        }
+      ],
+      "groupingNote": "引用元の予告に続く詳細。4000円以上購入でクッキー。",
+      "unannotatedFields": []
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 73459,
+      "postSha256": "9ed918c0be6bd029b9314745880826d4dd1867ca3b4b79509599fb48f7a3f445",
+      "textSha256": "c75ed75e54b23202dfdf331a28cf2cbc73dcfe36026bdbc79666f8c834675bce"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "4964124e-d167-41fe-b73e-ee03a9e9e570",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_tachikawa/status/2020758051343741021",
+          "origin": "manual-or-seed",
+          "title": "ハート型クッキー",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-02-13T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "tachikawa"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 4000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2021395280508354831",
+    "source": "public-post",
+    "description": "tachikawa-valentine-cookie-2026/detail matched control",
+    "post": {
+      "id": "2021395280508354831",
+      "createdAt": "2026-02-11T01:26:05.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "quote",
+      "text": "／\nまとめ買いがお得🎵\n＼\n\n1階お菓子コーナーでは\n#不二家 の大袋お菓子を2点購入で540円\n4点購入で1080円(U⁠ ⁠╹⁠▽⁠╹⁠ U⁠)🙌ﾔｯﾀｰ\n\nたくさん買って皆で食べようね💗\n#バレンタイン にも良い感じ‼ https://t.co/FxaJ0xCxM1",
+      "url": "https://x.com/bic_tachikawa/status/2021395280508354831",
+      "quoted": {
+        "id": "2021394763136823409",
+        "screenName": "bic_tachikawa",
+        "text": "／\nこんなに種類あったら\nプレゼントに良いかもね💗\n＼\n\n1階お菓子コーナーには\nおいしい #チョコレート がいっぱい👀✨\n#バレンタイン にぴったり‼\n\n手作りする方も板チョコあるのでぜひ🎵\nどれも美味しそう(U⁠ ⁠╹⁠▽⁠╹⁠ U⁠)💝 https://t.co/gs0R1qYrQz"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HA1v5bqaAAEVImi.jpg",
+        "https://pbs.twimg.com/media/HA1v5bxaAAQNuCc.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2021395280508354831",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 73053,
+      "postSha256": "8466b7b7b8ec82a2cceb276edc54515279504630b90a593d24b541116b9f4e76",
+      "textSha256": "d80844812693f4868124c79dac52e4c383b230142db972301de03973f736e396"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

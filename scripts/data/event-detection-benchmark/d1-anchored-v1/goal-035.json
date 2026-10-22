@@ -1,0 +1,172 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2015955352043540682",
+    "source": "public-post",
+    "description": "shinyoko-acrylic-key-end-2026",
+    "post": {
+      "id": "2015955352043540682",
+      "createdAt": "2026-01-27T01:09:45.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "quote",
+      "text": "(1 ˙꒳˙)ご好評につきアクキーは配布終了いたしました！",
+      "url": "https://x.com/bic_shinyoko/status/2015955352043540682",
+      "quoted": {
+        "id": "2015350654420857126",
+        "screenName": "bic_shinyoko",
+        "text": "✨お知らせ✨\n\n1月23日(木)に新横たん爆誕6周年を迎えます🎶\n税込み3,000円以上ご購入でアクリルキーホルダーをプレゼント‼\n\n※当日合算可能\nお一人様1個まで\n無くなり次第終了となります\n4階総合カウンターまでレシートをお持ち下さい https://t.co/V1mj7EiRGf"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "ご好評につきアクキー配布終了。対象娘は本文にない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:shinyoko-anniv6-key-2026"
+    ],
+    "group": "shinyoko-acrylic-key-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アクキー",
+          "evidence": [
+            "(1 ˙꒳˙)ご好評につきアクキーは配布終了いたしました！"
+          ]
+        }
+      ],
+      "groupingNote": "ご好評につきアクキー配布終了。対象娘は本文にない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 77061,
+      "postSha256": "9e2cff21c7aaf5b09ea4bf3ba7554677fb4c3be0fe6062be858e2ddd311f9b4f",
+      "textSha256": "a6ae5f59093aa95c138a0ea04f76537645546f61339b1dd4d863f86a3e81a0a0"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "5475996c-764d-40e8-8186-e6bfaf4cf7ef",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_shinyoko/status/2015955352043540682",
+          "origin": "manual-or-seed",
+          "title": "擬人化6周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-01-22T15:00:00.000+00:00",
+            "endDate": "2026-01-26T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "shinyoko"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2012366089292857754",
+    "source": "public-post",
+    "description": "shinyoko-acrylic-key-end-2026 matched control",
+    "post": {
+      "id": "2012366089292857754",
+      "createdAt": "2026-01-17T03:27:18.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "quote",
+      "text": "(1 ˙꒳˙)これは優れものだよね～！！\n健康に気を使いながらおいしくご飯が食べられそう🍚",
+      "url": "https://x.com/bic_shinyoko/status/2012366089292857754",
+      "quoted": {
+        "id": "2012359226295796103",
+        "screenName": "bic_kashiwa",
+        "text": "【6階 #家電コーナー】\n\n調理家電コーナーよりご案内です‼️\n美味しい料理が食べたいけどカロリーがちょっと気になる。。。\n\nそんな方にはヘルシー調理家電をオススメ❗️\n【減塩🧂⬇️減油🍤⬇️減糖⬇️】\n揚げ物🍗やお肉🥩にスープ🍲いつものお料理を美味しくヘルシーに調理してみませんか⁉️ https://t.co/HS81m6SEH2"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2012366089292857754",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 79663,
+      "postSha256": "656089b9541911492affc3c981dfecb876ae9b4b46773a3a47182bd942afa4f9",
+      "textSha256": "611d20bb28736ab48ecba5e8ec52cd879f03ea5cba1bf2271207987f6f176017"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

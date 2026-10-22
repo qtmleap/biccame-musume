@@ -25,6 +25,7 @@ import {
   WebhookJobSortSchema,
   WebhookKeywordVerdictSchema,
   WebhookPostStatusFilterSchema,
+  WebhookPromptSchema,
   WebhookResolveSchema,
   WebhookRetrySchema
 } from '@biccame/shared/schemas/webhook.dto'
@@ -234,6 +235,16 @@ export const adminEndpoints = makeApi([
     response: WebhookJobSchema
   },
   {
+    method: 'get',
+    path: '/api/admin/webhook/jobs/:postId/prompt',
+    alias: 'getAdminWebhookPrompt',
+    parameters: [
+      { name: 'postId', type: 'Path', schema: z.string().regex(/^\d{1,20}$/) },
+      { name: 'candidateId', type: 'Query', schema: z.uuid().optional() }
+    ],
+    response: WebhookPromptSchema
+  },
+  {
     method: 'post',
     path: '/api/admin/webhook/jobs/:postId/retry',
     alias: 'retryAdminWebhookJob',
@@ -247,6 +258,16 @@ export const adminEndpoints = makeApi([
     method: 'post',
     path: '/api/admin/webhook/jobs/:postId/rejudge',
     alias: 'rejudgeAdminWebhookJob',
+    parameters: [
+      { name: 'postId', type: 'Path', schema: z.string().regex(/^\d{1,20}$/) },
+      { name: 'candidateId', type: 'Query', schema: z.uuid().optional() }
+    ],
+    response: WebhookJobSchema
+  },
+  {
+    method: 'post',
+    path: '/api/admin/webhook/jobs/:postId/recheck',
+    alias: 'recheckAdminWebhookJob',
     parameters: [
       { name: 'postId', type: 'Path', schema: z.string().regex(/^\d{1,20}$/) },
       { name: 'candidateId', type: 'Query', schema: z.uuid().optional() }

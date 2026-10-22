@@ -1,0 +1,128 @@
+[
+  {
+    "id": "expanded-v2-positive-1074224741894901760",
+    "source": "public-post",
+    "description": "biccame-newyear-postcard-sale-2019",
+    "post": {
+      "id": "1074224741894901760",
+      "createdAt": "2018-12-16T08:48:31.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "🎍ビッカメ娘年賀状🎍\nB1 レジにて好評販売中！\n\n(´ω`).o0( 年賀状は12月25日までに投函するのがおすすめです。 https://t.co/hjeUly43Vx",
+      "url": "https://x.com/bic_nagoya/status/1074224741894901760",
+      "media": [
+        "https://pbs.twimg.com/media/DuhobwxUcAAUevt.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "娘デザイン年賀状の販売。通常商品だけではない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "biccame-newyear-postcard-sale-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "ビッカメ娘年賀状",
+          "evidence": [
+            "🎍ビッカメ娘年賀状🎍",
+            "B1 レジにて好評販売中！",
+            "(´ω`).o0( 年賀状は12月25日までに投函するのがおすすめです。 https://t.co/hjeUly43Vx"
+          ]
+        }
+      ],
+      "groupingNote": "娘デザイン年賀状の販売。通常商品だけではない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 795794,
+      "postSha256": "a134a93907d4dbdd2bcbd410b72b4e99db12a012de28c8333d765c13c7fde2de",
+      "textSha256": "5fa1222c34b06a719892af69a296c31f00a1b55087ae2812aaf975d43502a149"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1074556374451802112",
+    "source": "public-post",
+    "description": "biccame-newyear-postcard-sale-2019 matched control",
+    "post": {
+      "id": "1074556374451802112",
+      "createdAt": "2018-12-17T06:46:18.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "【お知らせ】\nビックカメラ 2019年カレンダーは、昨日(12/16)をもって配布終了となりました。\nたくさんのご来店、ありがとうございました！！ https://t.co/7JvsHaUbBj",
+      "url": "https://x.com/bic_nagoya/status/1074556374451802112",
+      "media": [
+        "https://pbs.twimg.com/media/DumW1c7UUAAr6zM.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1074556374451802112",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 795540,
+      "postSha256": "edbade2ce055eeb462d0d920ef13fd4fb8ee44cb40d08f2dcfd8f2b575ec33c1",
+      "textSha256": "9059eb2041db6c9badee8183a8a40160386c1fa7f5cdb19b5a790e29e1ad6f9d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

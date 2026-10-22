@@ -1,0 +1,156 @@
+[
+  {
+    "id": "public-f-1724372867876610070",
+    "source": "public-post",
+    "description": "ポイント会員向けポケモン抽選販売",
+    "post": {
+      "id": "1724372867876610070",
+      "createdAt": "2023-11-14T10:25:03.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "ポケカ「#シャイニートレジャーex」は\nビックカメラポイントカード会員様限定での抽選販売となります。詳しくは画像をご確認ください\n\n※11月12日までに発行したお客様情報登録済みのビックカメラのポイント機能付きカードもしくはビックカメラ公式アプリを所持している会員様が対象です。 https://t.co/c6tvGrmPoE",
+      "url": "https://x.com/biccameramito/status/1724372867876610070",
+      "media": [
+        "https://pbs.twimg.com/media/F-4zqSObEAAjXRl.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "会員カードが条件となる他IPカード商品の抽選で、娘の名刺やグッズではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "trading-card",
+      "membership",
+      "lottery"
+    ],
+    "group": "pokemon-shiny-treasure-lottery-2023",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1760564223250419818",
+    "source": "public-post",
+    "description": "遊戯王25周年商品と整理券配布",
+    "post": {
+      "id": "1760564223250419818",
+      "createdAt": "2024-02-22T07:16:35.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "【9階 おもちゃコーナーよりお知らせ📣】 \n\nいよいよ明日発売‼️ \n「遊戯王OCG」25周年の歴史を振り返ることができる\n2カ月連続リリースのスペシャルパック第一弾「side:UNITY」が登場‼️\nぜひ、当店をご利用ください🎵\n \n※開店前に列形成がされる場合、当店3階店頭にて\n　整理券を配布致します。 https://t.co/0ZwMXyyY8F",
+      "url": "https://x.com/bic_shinyoko/status/1760564223250419818",
+      "media": [
+        "https://pbs.twimg.com/media/GG7H00bacAAsyI-.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "25周年の対象は遊戯王で、配布は商品購入用の整理券。娘の周年やノベルティではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "anniversary",
+      "ticket-distribution"
+    ],
+    "group": "yugioh25-side-unity-february-2024",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1816698544876577046",
+    "source": "public-post",
+    "description": "ワンピースカードの当選者購入案内",
+    "post": {
+      "id": "1816698544876577046",
+      "createdAt": "2024-07-26T04:54:20.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "【抽選結果発表】\n7/27(土)発売　ワンピースカード　プレミアムブースター『ONE PIECE CARD THE BEST』\nご当選されたお客様は必ず受付時の「ポイントカードもしくはアプリ」「レシート」「ご本人様確認書類」をお持ち下さい。\n\n期間7/27～7/28\n場所：7階レジ\n⚠申し込み店舗以外での購入はできません https://t.co/aqG9fYIvZH",
+      "url": "https://x.com/biccamera_nanba/status/1816698544876577046",
+      "media": [
+        "https://pbs.twimg.com/media/GTY1sRTaQAEz_2u.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "レシート等の提示を求める他IPカード商品購入の案内で、娘の企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "lottery-result",
+      "receipt-word"
+    ],
+    "group": "onepiece-card-best-lottery-july-2024",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1758076303151095901",
+    "source": "public-post",
+    "description": "ドラゴンボールカード販売整理券",
+    "post": {
+      "id": "1758076303151095901",
+      "createdAt": "2024-02-15T10:30:28.000Z",
+      "screenName": "bichachioji",
+      "kind": "original",
+      "text": "2/16(金)発売の #ドラゴンボールスーパーカードゲーム #フュージョンワールド の\n販売整理券を朝9:00より配布致します。\n詳細は添付画像をご覧ください。\n\n※ポイントカードをお持ちのお客様に限らせて頂きます。\n※販売はお一人様最大1BOXまでです。\n※当日11時までにご購入ください。 https://t.co/sUKD3Xu6dx",
+      "url": "https://x.com/bichachioji/status/1758076303151095901",
+      "media": [
+        "https://pbs.twimg.com/media/GGXxC7IaMAAeVFI.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "先着の整理券とポイントカード要件は他IP商品の販売条件で、娘の配布物ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "ticket-distribution",
+      "membership"
+    ],
+    "group": "dragonball-fusion-tickets-february-2024",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1873550685125664769",
+    "source": "public-post",
+    "description": "しぶハチたんの近況と開店挨拶",
+    "post": {
+      "id": "1873550685125664769",
+      "createdAt": "2024-12-30T02:04:26.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "おはハチ☀\n\nきょうもハチたんちオープンハチ‼\n(⁎˃ ꇴ ˂⁎)ｯ ｵｰﾌﾟﾝｯ!!ｵｰﾌﾟﾝｯ!!\nきのうはね\nやわらくておいしいお肉を食べたんだよ‼\nパワーチャージできたハチ！\n\nきょうもよろしくハチ✨\n#おはようございます\n#しぶハチたん\n#企業公式相互フォロー\n#企業公式冬のフォロー祭り",
+      "url": "https://x.com/bicshibuhachi00/status/1873550685125664769",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "娘の名前はあるが、食事と元気チャージの近況・通常開店の挨拶だけ。来店者向けの具体的企画は案内していない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "character-greeting",
+      "charge-word",
+      "greeting-only"
+    ],
+    "group": "shibuhachi-greeting-december-2024",
+    "reviewStatus": "provisional"
+  }
+]

@@ -13,6 +13,7 @@ export const eventRequest: EventRequest = {
   conditions: [{ uuid: '11111111-1111-4111-a111-111111111111', type: 'everyone' }],
   referenceUrls: [{ uuid: '22222222-2222-4222-a222-222222222222', type: 'announce', url: 'https://example.com/event' }],
   stores: ['akiba'],
+  characterIds: ['akiba'],
   shouldTweet: true
 }
 
@@ -28,6 +29,7 @@ export const eventRow = {
   isPreliminary: false,
   groupId: null,
   characterId: null,
+  characters: [{ characterId: 'akiba' }],
   createdAt: new Date('2026-01-01T00:00:00Z'),
   updatedAt: new Date('2026-01-01T00:00:00Z'),
   conditions: eventRequest.conditions.map((c) => ({ id: c.uuid, type: c.type, purchaseAmount: null, quantity: null })),

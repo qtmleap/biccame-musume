@@ -1,0 +1,161 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1877954304835043759",
+    "source": "public-post",
+    "description": "kawasaki-valentine-card-2025/announce",
+    "post": {
+      "id": "1877954304835043759",
+      "createdAt": "2025-01-11T05:42:51.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "✧( `˙꒳​˙2 ) 早いですが【告知】らぞ\n\n　　　＼２０２５／ \n🍫川崎たんバレンタイン名刺🍫\n　 　1/25(土)配布スタート！\n\n🌟お一人様１枚まで\n🌟配布場所:2F総合カウンター\n　※名刺は\"手渡し”いたします\n🌟期間：1/25(土)～2/16(日)迄\n|꒳​˙2) 新規イラスト使用❤\n#川崎たん #ビッカメ娘 https://t.co/dUbBSr5B82",
+      "url": "https://x.com/Bic_kawasaki/status/1877954304835043759",
+      "media": [
+        "https://pbs.twimg.com/media/Gg_VSsTbUAAjjz4.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": "2025-01-25",
+      "conditions": null
+    },
+    "rationale": "1/25開始の先行告知。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:kawasaki-valentine-card-2025"
+    ],
+    "group": "kawasaki-valentine-card-2025/announce",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "川崎たんバレンタイン名刺",
+          "evidence": [
+            "🍫川崎たんバレンタイン名刺🍫"
+          ]
+        }
+      ],
+      "groupingNote": "1/25開始の先行告知。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 179261,
+      "postSha256": "e6b9651c20a0a1d8de6f176f1fe51fd9c759a23c4593bec65e8762bbaa136354",
+      "textSha256": "12b8a7025eac67b487b1b436f449d257c5356f38377539b097f3fe0fb6d47fff"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "79027db5-3013-4e4f-8b6f-987d5e342cb4",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/Bic_kawasaki/status/1877954304835043759",
+          "origin": "manual-or-seed",
+          "title": "バレンタイン名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-01-24T15:00:00.000+00:00",
+            "endDate": "2025-02-15T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "kawasaki"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1882605346935718374",
+    "source": "public-post",
+    "description": "kawasaki-valentine-card-2025/announce matched control",
+    "post": {
+      "id": "1882605346935718374",
+      "createdAt": "2025-01-24T01:44:26.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "🥕🍆 【告知】野菜詰め放題イベント🥦🥬\n\nイベント期間中、 #ビックカメラ ラゾーナ川崎店で税込5,000円ご購入+アンケートにお答えいただくと参加できる『野菜詰め放題』イベントを開催🎊\nみなさまのお越しお待ちしております😃\n\n実施日:1/25(土)・1/26(日)限定[11:00-19:00]\n場所:2F店頭特設会場 https://t.co/IAli3ozs6D",
+      "url": "https://x.com/Bic_kawasaki/status/1882605346935718374",
+      "media": [
+        "https://pbs.twimg.com/media/GiBbC-waYAADMbA.jpg",
+        "https://pbs.twimg.com/media/GiBbRfCa0AAzbWv.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1882605346935718374",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 175798,
+      "postSha256": "95b9b8652cbf75f4b4ad4e81a0041ca160eae82b7bd85e25f53ac53f4f494dd0",
+      "textSha256": "8ea141de2538d4a962be35b88afec8b51fb569d4c2d692c0b05516103ba57d02"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

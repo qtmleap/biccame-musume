@@ -1,0 +1,187 @@
+[
+  {
+    "id": "public-c-2010986967358718357",
+    "source": "public-post",
+    "description": "藤沢たん擬人化10周年アクキー",
+    "post": {
+      "id": "2010986967358718357",
+      "createdAt": "2026-01-13T08:07:10.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "📢#2月12日は藤沢たん擬人化10周年🥳\nというわけで、オレのターン！\n\n①擬人化記念アクリルキーホルダープレゼント！\n当日税込3,000円以上商品ご購入の\n先着100名様、おひとり様1個限り\n※2/11(水祝)のみ先着50名様まで配布\n2/12(木)以降なくなり次第終了です\n※当日レシート合算OK\n詳細は画像にて https://t.co/RAG6zPxywS",
+      "url": "https://x.com/bic_fujisawa/status/2010986967358718357",
+      "media": [
+        "https://pbs.twimg.com/media/G-h1-1VbYAAdUK4.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "fujisawa"
+      ],
+      "characterIds": [
+        "fujisawa"
+      ]
+    },
+    "rationale": "藤沢たん周年アクキーは3000円以上商品購入、通常先着100・2月11日は50。日別上限を全体上限へ誤写像しないため条件一式は未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "per-day-quantity",
+      "partial-annotation"
+    ],
+    "group": "fujisawa-tenth-anniversary-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2011634453240754680",
+    "source": "public-post",
+    "description": "柏たんバレンタイン名刺とポストカード",
+    "post": {
+      "id": "2011634453240754680",
+      "createdAt": "2026-01-15T03:00:02.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "📢お知らせです\n\n①柏たんバレンタイン名刺配布🍫\n📅2月1日(日)～3月9日(月)📅\n※2階フォトスポットも変更予定💖\n\n②バレンタインポストカード配布💖\n📅2月1日(日)～2月14日(土)📅\n※先着100枚、無くなり次第終了\n※詳しくは添付画像をご確認ください。 https://t.co/Bbkn7hRuE2",
+      "url": "https://x.com/bic_kashiwa/status/2011634453240754680",
+      "media": [
+        "https://pbs.twimg.com/media/G-nexoibkAAkJKh.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kashiwa"
+      ],
+      "startDate": "2026-02-01"
+    },
+    "rationale": "2月1日から名刺とポストカードの別物品を提供。先着100枚はポストカードだけなので全体条件へ流用しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "multi-item",
+      "partial-annotation"
+    ],
+    "group": "kashiwa-valentine-postcard-card-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2011664177644065255",
+    "source": "public-post",
+    "description": "新横たん擬人化6周年ドレスアクキー",
+    "post": {
+      "id": "2011664177644065255",
+      "createdAt": "2026-01-15T04:58:09.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "【ビックカメラ新横浜店よりお知らせ📢】\n\n新横たん擬人化6周年を記念して、1月23日(金)より\n税込3,000円以上のお買物で先着100名様に\nドレス衣装の新横たんアクキーをプレゼント‼ \n\n※4F総合案内カウンターにてお渡しです。\n※無くなり次第終了となります。\n※おひとり様1個でお願いします。 https://t.co/R8nFM4bDxq",
+      "url": "https://x.com/bic_shinyoko/status/2011664177644065255",
+      "media": [
+        "https://pbs.twimg.com/media/G-rd5vPaoAA_n2m.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "shinyoko"
+      ],
+      "characterIds": [
+        "shinyoko"
+      ],
+      "startDate": "2026-01-23",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "1月23日から税込3000円以上購入・先着100名に新横たんアクキーと明示。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "first-come"
+    ],
+    "group": "shinyoko-sixth-anniversary-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2011657094525595932",
+    "source": "public-post",
+    "description": "みっけたん擬人化7周年アクキー",
+    "post": {
+      "id": "2011657094525595932",
+      "createdAt": "2026-01-15T04:30:00.000Z",
+      "screenName": "bicakasaka",
+      "kind": "original",
+      "text": "🌹みっけたん情報🌹\n\n【予告】\n１月23日(金)より\n擬人化7周年記念イベントを実施いたします🌹\n\n当日のお会計で\n合計税込3,000円以上ご購入で\n擬人化記念アクリルキーホルダーをプレゼント🎁\n\n※こちらはなくなり次第終了です(限定100個)\n※お渡し場所は1階総合カウンターになります https://t.co/y5eT2DDL0q",
+      "url": "https://x.com/bicakasaka/status/2011657094525595932",
+      "media": [
+        "https://pbs.twimg.com/media/G-q_jD3bQAkiEoY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "akasaka"
+      ],
+      "characterIds": [
+        "akasaka"
+      ],
+      "startDate": "2026-01-23"
+    },
+    "rationale": "1月23日から当日の合計3000円以上購入、限定100個の擬人化記念アクキー。先着の明記はなく、総数上限を先着条件へ推定しないため条件一式は未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "partial-annotation"
+    ],
+    "group": "akasaka-seventh-anniversary-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2015001247368241171",
+    "source": "public-post",
+    "description": "横西たん爆誕記念の名刺とアクキー",
+    "post": {
+      "id": "2015001247368241171",
+      "createdAt": "2026-01-24T09:58:28.000Z",
+      "screenName": "bicyokonishi",
+      "kind": "original",
+      "text": "／\n予告です❗️\n＼\n✨横西たん爆誕記念✨\n【1月31日(土)】より\n❶税込1,000円以上のご購入の方に記念名刺(※無くなり次第終了)\n❷税込3,000円以上ご購入の方に1/31(土)・2/1(日)各日先着50名様にアクキーをプレゼント✨\n※お一人様❶・❷を各1点までです\nレシートをお持ちの上、1Fレジにお越し下さい https://t.co/mzonCnmxkL",
+      "url": "https://x.com/bicyokonishi/status/2015001247368241171",
+      "media": [
+        "https://pbs.twimg.com/media/G_a4wiUX0AAXjTs.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "yokonishi"
+      ],
+      "characterIds": [
+        "yokonishi"
+      ],
+      "startDate": "2026-01-31"
+    },
+    "rationale": "1月31日から名刺は1000円購入、アクキーは3000円購入・各日先着50。異なる物品条件を混ぜずcategory/条件全体は未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "multi-item",
+      "per-item-conditions"
+    ],
+    "group": "yokonishi-birthday-2026",
+    "reviewStatus": "provisional"
+  }
+]

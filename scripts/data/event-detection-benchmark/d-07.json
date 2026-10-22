@@ -1,0 +1,152 @@
+[
+  {
+    "id": "public-d-1983812406922113226",
+    "source": "public-post",
+    "description": "ビックカメラ限定キヤノンフェア",
+    "post": {
+      "id": "1983812406922113226",
+      "createdAt": "2025-10-30T08:25:09.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "B2Fカメラコーナーよりキヤノンカメラフェアを開催中🌈\nこちらのキャンペーンはビックカメラグループ限定となっております📸\nキャノンの各種ミラーレスカメラが大変お得にご購入頂けるキャンペーンは終了まで残り2日！\nカメラの購入や買い替えをご検討中のお客様は是非、B2Fまで足をお運び下さいませ‼️ https://t.co/XLdjbs0k2t",
+      "url": "https://x.com/bic_yuurakuchou/status/1983812406922113226",
+      "media": [
+        "https://pbs.twimg.com/media/G4fq25ia8AAghci.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ビックカメラグループ限定のカメラ購入促進で、娘を対象にしたフェア・配布はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "fair",
+      "limited",
+      "ordinary-product"
+    ],
+    "group": "canon-camera-fair-october-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2051942588824027482",
+    "source": "public-post",
+    "description": "ニコン写真家セミナーの無料参加案内",
+    "post": {
+      "id": "2051942588824027482",
+      "createdAt": "2026-05-06T08:30:11.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "5/30(土)ニコンプロカメラマンセミナーを開催📸\n講師は\n写真家の『成澤広幸（なりさわひろゆき）先生』です✨\nテーマは『ニコンＺシリーズで撮る星空撮影』です🌟\n時間は13：30🕒からと15：00🕒の2回❣\n内容も変わります🎵\n予約不要❣参加無料❣天神2号館3階カメラコーナーでまっとるよ～🐾 https://t.co/QB7j9AvULs",
+      "url": "https://x.com/biccameratenjin/status/2051942588824027482",
+      "media": [
+        "https://pbs.twimg.com/media/HHn239DagAAd8Ml.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "具体的な店頭イベントだが出演者は写真家で、ビッカメ娘の出演・物品ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "ordinary-event",
+      "free",
+      "seminar"
+    ],
+    "group": "nikon-star-photo-seminar-may-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1994978305624477988",
+    "source": "public-post",
+    "description": "土日限定の家電まとめ買い値引き",
+    "post": {
+      "id": "1994978305624477988",
+      "createdAt": "2025-11-30T03:54:27.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "📢土日限定‼️\nソニー＆日立まとめ買いで特別値引き💰\nカメラ・家電をお得にゲットするなら今✨\n詳しくは店頭で👉\n#週末限定 #ソニー #日立 https://t.co/tD7Nh5SqLk",
+      "url": "https://x.com/bicpkanhonten/status/1994978305624477988",
+      "media": [
+        "https://pbs.twimg.com/media/G6-WFjMbkAgy5pD.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "特別値引きとカメラ・家電販売だけで、ビッカメ娘が企画対象である根拠がない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "limited",
+      "purchase",
+      "ordinary-product"
+    ],
+    "group": "sony-hitachi-weekend-discount-november-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1992125541953237496",
+    "source": "public-post",
+    "description": "連休限定ソニーカメラ体験会",
+    "post": {
+      "id": "1992125541953237496",
+      "createdAt": "2025-11-22T06:58:35.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "【5階 カメラコーナーよりお知らせ】\n\n3連休限定  12：00～18：00\nソニー超高性能ミラーレス一眼カメラ\n交換レンズの体験会を開催中🎉✨\n\n普段は体感出来ないカメラ/レンズを展開しております📸\nぜひ5階カメラコーナーをご利用くださいませ🎶 https://t.co/8nkSMnWEAR",
+      "url": "https://x.com/bic_shinyoko/status/1992125541953237496",
+      "media": [
+        "https://pbs.twimg.com/media/G6VznfkbgAAISxY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "店頭の一般カメラ・レンズ試用イベント。娘の出演や配布企画は案内されていない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "ordinary-event",
+      "limited",
+      "experience"
+    ],
+    "group": "sony-camera-lens-experience-november-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2004793164281118955",
+    "source": "public-post",
+    "description": "富士フイルムカメラの冬キャンペーン",
+    "post": {
+      "id": "2004793164281118955",
+      "createdAt": "2025-12-27T05:55:12.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "🎞 フィルムカメラのような味わいをデジタルで。\nお出かけのお供に、クラシカルな 富士フイルム Xhalf はいかがですか？📸\n✨ ウインターキャンペーン開催中！\n今なら 2月28日まで の期間限定チャンス！\n気になる方は、ぜひ 地下1階カメラコーナー📷 へお越しください。\nこの機会をお見逃しなく！ https://t.co/wrRccEM8V4",
+      "url": "https://x.com/bic_nagoya/status/2004793164281118955",
+      "media": [
+        "https://pbs.twimg.com/media/G9J0u15bgAYDPZc.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "冬の期間限定はカメラ購入の販促であり、娘の季節名刺などの企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "seasonal",
+      "limited",
+      "ordinary-product"
+    ],
+    "group": "fujifilm-xhalf-winter-campaign-2025",
+    "reviewStatus": "provisional"
+  }
+]

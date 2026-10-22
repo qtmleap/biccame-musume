@@ -1,0 +1,175 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1974786805427040712",
+    "source": "public-post",
+    "description": "okayama-anniv-acrylic-card-2025",
+    "post": {
+      "id": "1974786805427040712",
+      "createdAt": "2025-10-05T10:40:38.000Z",
+      "screenName": "Bic_Okayamaten",
+      "kind": "reply",
+      "text": "🎂擬人化記念企画実施中🎂\n\n✅合計税込3000円以上お買い上げでアクキープレゼント\n✅無料限定名刺配布\n\n1F総合カウンターにてお申し付けください🙏 https://t.co/0hIhB6P1RL",
+      "url": "https://x.com/Bic_Okayamaten/status/1974786805427040712",
+      "replyTo": {
+        "id": "1974786116365775119",
+        "screenName": "Bic_Okayamaten"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/G2fZj1cbAAAQ8wq.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "擬人化記念企画の実施中案内。購入条件はアクキー側だけで名刺には及ばない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:reply",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "okayama-anniv-acrylic-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アクキー",
+          "evidence": [
+            "✅合計税込3000円以上お買い上げでアクキープレゼント"
+          ]
+        },
+        {
+          "item": "無料限定名刺",
+          "evidence": [
+            "✅無料限定名刺配布"
+          ]
+        }
+      ],
+      "groupingNote": "擬人化記念企画の実施中案内。購入条件はアクキー側だけで名刺には及ばない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 106828,
+      "postSha256": "3fb3f0004b1249202b08f9dd78205f6a58514c7f477ef554f5d5596c7ed8b367",
+      "textSha256": "ff06d7032551dd4430ca014b1c697d2ee23fc1d5e735d675d5e358fbc41b7463"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "ba080a92-9ba2-4c35-9132-e71a18128ef9",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/Bic_Okayamaten/status/1974786805427040712",
+          "origin": "manual-or-seed",
+          "title": "擬人化9周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-10-04T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "okayama"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1983737827193168214",
+    "source": "public-post",
+    "description": "okayama-anniv-acrylic-card-2025 matched control",
+    "post": {
+      "id": "1983737827193168214",
+      "createdAt": "2025-10-30T03:28:48.000Z",
+      "screenName": "Bic_Okayamaten",
+      "kind": "original",
+      "text": "【🍡】*'▽'*)\n\nうちもドラクエ買ったけどポケモンZAまだ終わってないんよな～～～～～～\nサブクエとポケモン厳選やってたら一生終わらん🥹",
+      "url": "https://x.com/Bic_Okayamaten/status/1983737827193168214",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative",
+      "kind-mismatch-fallback"
+    ],
+    "group": "control-1983737827193168214",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 100881,
+      "postSha256": "094ca814eaf541730f47dcda5080fe8baab28d56d164385e1844b1624a67f80e",
+      "textSha256": "f2e3f096d01d8f842964fbfa4e3ea99ad43be1447da1e013e68e9dd40b40f867"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

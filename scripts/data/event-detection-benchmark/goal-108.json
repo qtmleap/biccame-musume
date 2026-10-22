@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1883705305839841670",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1883705305839841670",
+      "createdAt": "2025-01-27T02:35:17.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "【本館4F】\n🌸まるで渋谷に春🌸\n\n📣新生活応援セール開催中📣\n\n詳しくは販売員までお気軽にお声がけください╰(*´︶`*)╯♡\n#ビックカメラ https://t.co/qT53xRbRbs",
+      "url": "https://x.com/bic_shibuya/status/1883705305839841670",
+      "media": [
+        "https://pbs.twimg.com/media/GiRDxqEbcAAwmck.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【本館4F】 / 🌸まるで渋谷に春🌸 / 📣新生活応援セール開催中📣」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "shibuya-new-life-sale-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 174808,
+      "postSha256": "34b4c2ae7119d9f89e668fd9b84cebf60944276073e48fe7a4145bfb995ad19a",
+      "textSha256": "62904a7224672c243c354b1bb311c99bf7126423c70fb9f2d9a38db5dfcc9e26"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1895318861983162776",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1895318861983162776",
+      "createdAt": "2025-02-28T03:43:24.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "🛁新商品🛁\nびっくら？たまご『プリキュア プリティマスコット』\n\n2Fおもちゃコーナーで販売中♪ https://t.co/MTjqPL2aaf",
+      "url": "https://x.com/bic_ohmiya/status/1895318861983162776",
+      "media": [
+        "https://pbs.twimg.com/media/Gk2GNQwa8AARCh1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「🛁新商品🛁 / びっくら？たまご『プリキュア プリティマスコット』 / 2Fおもちゃコーナーで販売中♪ https://t.co/MTjqPL2aaf」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "precure-bath-mascot-toys-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 166037,
+      "postSha256": "05102ca7026e7c4a941506a1dbc6b20019d8589f2f1142286321da09bd777340",
+      "textSha256": "f6970bef8b630f175dca55f9fb7e760599dfcb00196931c755d712911e19cb6f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

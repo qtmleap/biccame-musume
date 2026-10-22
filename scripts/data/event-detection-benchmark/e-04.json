@@ -1,0 +1,190 @@
+[
+  {
+    "id": "public-e-918646676625035264",
+    "source": "public-post",
+    "description": "本店たん初ハロウィン名刺",
+    "post": {
+      "id": "918646676625035264",
+      "createdAt": "2017-10-13T01:16:49.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "おはやっぽ～～～！！！(⋈ ☌◒☌)/\n\n今日から1F総合案内カウンターにて\n本店たんの名刺を10月31日まで配布するよー！！\nハロウィン限定デザイン★ほんちゃん手書きコメ入り★\n何気に初の名刺なの♪もらってね～～～！\n\nでは今日も一日よろしくお願いします！ https://t.co/NzHEImgzc3",
+      "url": "https://x.com/bicikebukuro/status/918646676625035264",
+      "media": [
+        "https://pbs.twimg.com/media/DL-vZNIU8AA-FnU.jpg",
+        "https://pbs.twimg.com/media/DL-valeVQAAsFaN.jpg",
+        "https://pbs.twimg.com/media/DL-wANWUEAI9PE7.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "honten"
+      ],
+      "characterIds": [
+        "honten"
+      ],
+      "startDate": "2017-10-13"
+    },
+    "rationale": "本店たんのハロウィン限定デザイン名刺を本日から配布し、10/31までと明記。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "seasonal-card",
+      "start-notice"
+    ],
+    "group": "honten-halloween-card-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "3b1a0c029c392f4b06c52d64edf4c201d1ac3ef302acdbe4a97800f15a8772cb"
+  },
+  {
+    "id": "public-e-866887511355801600",
+    "source": "public-post",
+    "description": "パソ館たん新名刺の開始",
+    "post": {
+      "id": "866887511355801600",
+      "createdAt": "2017-05-23T05:24:23.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "ヾ(ぱ*‘ω‘ )ノあたらしいお名刺は本日から配布開始！裏面は･･･見てのお楽しみ💓\n６階ペンタブレットコーナーでお渡ししてます♪\n※おひとりさま１枚でお願いします。\n\n#ビッカメ娘 #パソ館たん #池袋姉妹団 https://t.co/TVAaVbXYfg",
+      "url": "https://x.com/bicpkanhonten/status/866887511355801600",
+      "media": [
+        "https://pbs.twimg.com/media/DAfNkRxW0AA7qpH.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "pkan"
+      ],
+      "startDate": "2017-05-23"
+    },
+    "rationale": "パソ館たんの投稿で新名刺を本日から配布。裏面は未公開で他の対象も不明なので全対象配列は未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "card",
+      "start-notice"
+    ],
+    "group": "pkan-new-card-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "ef5522f4e269ee6ac5f36bf973e26f8d53289124756f260830746191bbe094d2"
+  },
+  {
+    "id": "public-e-962655822252720128",
+    "source": "public-post",
+    "description": "あべのたんとなんばたんのバレンタイン名刺",
+    "post": {
+      "id": "962655822252720128",
+      "createdAt": "2018-02-11T11:53:27.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "お待たせしました！！\nなんばたんとお揃いのバレンタイン名刺を\n明日〜2月14日まで配布します☺️✨\n等身大パネルに設置しますので\nお一人様１枚まででよろしくお願いします！ https://t.co/j035gzx4Ay",
+      "url": "https://x.com/bic_abeno/status/962655822252720128",
+      "media": [
+        "https://pbs.twimg.com/media/DVwKWKEVoAc_5Wm.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "abeno"
+      ],
+      "startDate": "2018-02-12"
+    },
+    "rationale": "なんばたんとお揃いのバレンタイン名刺を明日から配布。同一絵柄や両者同時描写とは明記されないので対象配列を推測しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "collaboration",
+      "multi-character"
+    ],
+    "group": "abeno-nanba-valentine-card-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "19e4fa6259dc4e72525913966162d9d0ded155f384315371f7b600848ae2c7d4"
+  },
+  {
+    "id": "public-e-961887443753594880",
+    "source": "public-post",
+    "description": "船橋2店舗のバレンタイン名刺",
+    "post": {
+      "id": "961887443753594880",
+      "createdAt": "2018-02-09T09:00:12.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "(ﾟｰﾟ*)｡oO（バレンタインクッキー🍪プレゼントに先駆け、船橋地区2店舗で #ふなたん #ふなとーたん のオリジナル名刺の配布を枚数限定で実施します✨！期間は2/10～2/14までで、用意した枚数がなくなり次第配布終了となります。当店の配布場所はお酒コーナーです！ご来店お待ちしておりますっ！ https://t.co/oeMIOFNVse",
+      "url": "https://x.com/bic_funabashi/status/961887443753594880",
+      "media": [
+        "https://pbs.twimg.com/media/DVlPh7ZXUAAyhZX.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "funabashi",
+        "funato"
+      ],
+      "characterIds": [
+        "funabashi",
+        "funato"
+      ],
+      "startDate": "2018-02-10"
+    },
+    "rationale": "船橋地区2店舗でふなたんとふなとーたんの名刺を配布し、2/10〜2/14を明記。 historical店舗キーとしてfunatoを保持。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "collaboration",
+      "multi-store",
+      "multi-character",
+      "closed-character"
+    ],
+    "group": "funabashi-funato-valentine-card-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "01e35b19cba0244438450e18982ffbeae7f4e1de7c9ab3b2b686bd23eb0cac2e"
+  },
+  {
+    "id": "public-e-1036136389971046401",
+    "source": "public-post",
+    "description": "広島店2周年の限定名刺",
+    "post": {
+      "id": "1036136389971046401",
+      "createdAt": "2018-09-02T06:19:00.000Z",
+      "screenName": "bic_hiroshima",
+      "kind": "original",
+      "text": "✨9月14日は広島駅前店2周年！！✨\n…といことで9月14日〜9月30日までの期間限定で『2周年記念広島たんオリジナル名刺』を配布いたします〜(*´∀｀*)\nフォロワーの皆様へ感謝をこめてささやかな気持ちじゃけ〜❣️\nB2F店頭にいる広島たんがお配りします♡\nみんな来てくれるの待っとるけ〜ねヽ(´▽｀)/ https://t.co/etjYqVJR0W",
+      "url": "https://x.com/bic_hiroshima/status/1036136389971046401",
+      "media": [
+        "https://pbs.twimg.com/media/DmEYinnVsAAPqmU.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "hiroshima"
+      ],
+      "characterIds": [
+        "hiroshima"
+      ],
+      "startDate": "2018-09-14"
+    },
+    "rationale": "広島店2周年記念の広島たん名刺、9/14〜9/30、B2店頭配布を明記。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "anniversary-card"
+    ],
+    "group": "hiroshima-second-store-anniversary-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "1d3d3e54e204593285c688f5ebcd5969a274e04d1ace581475e5cccb6ec27ac0"
+  }
+]

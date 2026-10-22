@@ -1,0 +1,173 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2074776044197081342",
+    "source": "public-post",
+    "description": "shibuto-acrylic-key-end-2026",
+    "post": {
+      "id": "2074776044197081342",
+      "createdAt": "2026-07-08T08:42:11.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "quote",
+      "text": "【配布終了のお知らせ】\nしぶとーたんアクリルキーホルダーは\n配布終了いたしました！",
+      "url": "https://x.com/bic_shibuya/status/2074776044197081342",
+      "quoted": {
+        "id": "2072228727992541654",
+        "screenName": "bic_shibuya",
+        "text": "擬人化7周年イベントご案内(*'ω'*)ノ\n7月4日(土)～8月2日(日)\n＃しぶとーたん アクリルキーホルダープレゼント✨\n\n💜限定100個\n💜当日レシート税込3000円以上で1個お渡し\n💜おひとり様1個まで\n💜お渡し場所：本館1階ドラッグコーナー\n\n＃ビッカメ娘\n＃7月7日はしぶとーたん擬人化7周年 https://t.co/w25vmytEdZ"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": [
+        "shibuto"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アクキーの配布終了のお知らせ。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:shibuya-shibuhachi-anniv7-2026"
+    ],
+    "group": "shibuto-acrylic-key-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "しぶとーたんアクリルキーホルダー",
+          "evidence": [
+            "しぶとーたんアクリルキーホルダーは"
+          ]
+        }
+      ],
+      "groupingNote": "アクキーの配布終了のお知らせ。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 26838,
+      "postSha256": "1e3a859e1f3eef19a48c60894bbf102cb5ce70579decc103edf0d9eea6e899ef",
+      "textSha256": "b3282abd0cda24d337b9af000bb2b8c9d9db9f8d588444e2b284d469a761bdb8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "b71e9095-b3b3-4998-8dd8-232643b412a9",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_shibuya/status/2074776044197081342",
+          "origin": "manual-or-seed",
+          "title": "擬人化7周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-03T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shibuto"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2074805673637154897",
+    "source": "public-post",
+    "description": "shibuto-acrylic-key-end-2026 matched control",
+    "post": {
+      "id": "2074805673637154897",
+      "createdAt": "2026-07-08T10:39:55.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "quote",
+      "text": "ハチたんと一緒にお絵描き\nありがとうございます～(*'ω'*)✨\n\n＃しぶとーたんをお絵描き",
+      "url": "https://x.com/bic_shibuya/status/2074805673637154897",
+      "quoted": {
+        "id": "2074452228661018635",
+        "screenName": "usakoroAZ3",
+        "text": "今日は休暇とっててのんびり寝暮らししてしまったわ_(´ཀ`」 ∠)_\nあっ！\n2人ともハピバ〜←\n\n#7月7日しぶハチたん擬人化7周年\n#7月7日しぶとーたん擬人化7周年\n#無着色でもどなたか判別してもらえるようになろうチャレンジ https://t.co/1cKEybxSQE"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2074805673637154897",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 26811,
+      "postSha256": "3ecb2fa741be601cf6077d673b4e1bd6e7b204878f8fbf35ab9cb4549dbcba00",
+      "textSha256": "660386d15404dff6b0e27aa514221344b8dea22a79de50da81f131cd5e9b2b91"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,207 @@
+[
+  {
+    "id": "public-c-2045370086446506487",
+    "source": "public-post",
+    "description": "なごやたん擬人化10周年アクキー",
+    "post": {
+      "id": "2045370086446506487",
+      "createdAt": "2026-04-18T05:13:24.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "4月26(日)より\n#なごやたん擬人化10th 記念キャンペーン開催🎂\n\n当店にて税込3,000円以上ご購入で、先着100名様にアクリルキーホルダーをプレゼント🎁\n当日お買い上げのレシートを1F総合カウンターまでお持ちください\n\n※無くなり次第終了\nご来店お待ちしてます🍤 https://t.co/ElK8Cjr1wM",
+      "url": "https://x.com/bic_nagoya/status/2045370086446506487",
+      "media": [
+        "https://pbs.twimg.com/media/HGKdNsBaAAABmM9.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "nagoya"
+      ],
+      "characterIds": [
+        "nagoya"
+      ],
+      "startDate": "2026-04-26",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "4月26日から当店で3000円以上購入・先着100名へ記念アクキー。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "first-come"
+    ],
+    "group": "nagoya-tenth-anniversary-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2044611747017847041",
+    "source": "public-post",
+    "description": "しんじゅくたん擬人化11周年企画",
+    "post": {
+      "id": "2044611747017847041",
+      "createdAt": "2026-04-16T03:00:02.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "【イベント告知】\n5月16日(土)より\n#しんじゅくたん 擬人化11周年記念イベント開催🎂\n\n①ビックカメラ新宿東口店にて税込み3000円以上ご購入でしんじゅくたんアクリルキーホルダープレゼント\n（5/16～無くなり次第終了）\n②擬人化記念名刺配布（5/16～6/30）\n\n※詳細は添付画像をご参照ください。 https://t.co/COwmJ7yjGn",
+      "url": "https://x.com/bic_shinjuku3ch/status/2044611747017847041",
+      "media": [
+        "https://pbs.twimg.com/media/HF_afbLbUAEVsps.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "bicqlo"
+      ],
+      "characterIds": [
+        "bicqlo"
+      ],
+      "startDate": "2026-05-16"
+    },
+    "rationale": "5月16日から新宿東口店で3000円購入のアクキーと記念名刺を案内。別物品へ同じ条件を強制しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "multi-item",
+      "per-item-conditions"
+    ],
+    "group": "shinjuku-eleventh-anniversary-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2044995220627227092",
+    "source": "public-post",
+    "description": "水戸たん擬人化11周年アクキー",
+    "post": {
+      "id": "2044995220627227092",
+      "createdAt": "2026-04-17T04:23:49.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "【予告】\nおはみと〜( *´꒳`* )\n4/27は水戸たん擬人化11周年🎂\nこれを記念しアクキープレゼント始まります⸜(*˙꒳˙*)⸝\n期間は前日の26日〜29日までの4日間！\n当日3000円以上のレシートご提示でプレゼント✨\n\n※日により個数が異なります｡(初日多めの配分｡各日余ったら翌日繰越)\n画像もご確認を👇 https://t.co/w1D8uG4rDM",
+      "url": "https://x.com/biccameramito/status/2044995220627227092",
+      "media": [
+        "https://pbs.twimg.com/media/HGFF6aPb0AAV0Xm.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "mito"
+      ],
+      "characterIds": [
+        "mito"
+      ],
+      "startDate": "2026-04-26",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "4月26日から29日、当日3000円以上のレシートでアクキー。日別個数は本文で確定できない。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "per-day-quantity"
+    ],
+    "group": "mito-eleventh-anniversary-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2058035193164730538",
+    "source": "public-post",
+    "description": "アキバたん擬人化記念ドレスアクキー",
+    "post": {
+      "id": "2058035193164730538",
+      "createdAt": "2026-05-23T04:00:01.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "🎂アキバたん🐱アクキー企画🎂\n\n6月5日㈮～\n ビックカメラAKIBAにて【税込3,000円以上】のご購入レシートご提示で\n『擬人化記念ドレスアキバたんアクキー』をプレゼント🎁✨\n\nお渡し場所は［1階総合カウンター］です🌟\n※ツリー含む注意事項をよくお読みください。 https://t.co/GQd3PPtdwy",
+      "url": "https://x.com/bic_akiba/status/2058035193164730538",
+      "media": [
+        "https://pbs.twimg.com/media/HI-YOPZaAAA1Q09.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "akiba"
+      ],
+      "characterIds": [
+        "akiba"
+      ],
+      "startDate": "2026-06-05",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "6月5日からAKIBAで3000円以上購入レシートによりドレスアクキーを提供。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase"
+    ],
+    "group": "akiba-dress-keychain-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2065630247387799666",
+    "source": "public-post",
+    "description": "アキバたんアイドルアクスタ",
+    "post": {
+      "id": "2065630247387799666",
+      "createdAt": "2026-06-13T03:00:03.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "🎂アキバたん🐱アクスタ企画🎂\n\n2025年6月22日㈪～ #アキバたん店舗誕生9周年\nビックカメラAKIBAにて【税込8,000円以上】のご購入レシートご提示で\n『きらりん☆彡アイドルアキバたんアクスタ』をプレゼント🎁✨\n\nお渡し場所は［1階総合カウンター］です🌟\n※ツリー含む注意事項をよくお読みください。 https://t.co/koqbg82IEy",
+      "url": "https://x.com/bic_akiba/status/2065630247387799666",
+      "media": [
+        "https://pbs.twimg.com/media/HKqQV-rbUAAuMvo.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "acsta",
+      "stores": [
+        "akiba"
+      ],
+      "characterIds": [
+        "akiba"
+      ],
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 8000
+        }
+      ]
+    },
+    "rationale": "店舗誕生9周年アクスタを8000円以上購入で提供。本文の年表記と投稿時期が食い違うので開始日は未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "conflicting-year"
+    ],
+    "group": "akiba-store-ninth-anniversary-stand-2026",
+    "reviewStatus": "provisional"
+  }
+]

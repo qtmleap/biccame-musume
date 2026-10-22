@@ -1,0 +1,135 @@
+[
+  {
+    "id": "goal-positive-1687659942981804033",
+    "source": "public-post",
+    "description": "akasaka radius neko giveaways 2023",
+    "post": {
+      "id": "1687659942981804033",
+      "createdAt": "2023-08-05T03:01:00.000Z",
+      "screenName": "bicakasaka",
+      "kind": "original",
+      "text": "☆みっけたん情報②☆\n\n「#radius × #みっけたん」\n／\nさらに、\nコラボ限定名刺を配布❗️\n＆\n5,000円以上の対象商品をご購入の方に先着で\nコラボアクリルキーホルダーをプレゼント🎁\n＼\n※こちらは無くなり次第終了となります。\n\nみんな新しい衣装のみっけたんを見に来てね🌹\n@radius_JP https://t.co/yEAeMk24cs",
+      "url": "https://x.com/bicakasaka/status/1687659942981804033",
+      "media": [
+        "https://pbs.twimg.com/media/F2ry0XzaoAAp2sY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "akasaka"
+      ],
+      "characterIds": [
+        "akasaka"
+      ]
+    },
+    "rationale": "5000円以上対象商品購入はアクキー。名刺への流用禁止。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "akasaka-radius-neko-giveaways-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "みっけたんコラボ名刺",
+          "evidence": [
+            "コラボ限定名刺を配布❗️"
+          ]
+        },
+        {
+          "item": "みっけたんアクキー",
+          "evidence": [
+            "コラボアクリルキーホルダーをプレゼント🎁"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 340251,
+      "postSha256": "2774a7c1d92eab51d5017ca86e378ce81f1aa1f0d35f710a8644f633b199fd5e",
+      "textSha256": "0c9397f73c47c23bdc096ce41a06b437836c67bae9fa3a93402de9bce6b0cc4c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1708318685126086934",
+    "source": "public-post",
+    "description": "honten eighth anniversary card 2023",
+    "post": {
+      "id": "1708318685126086934",
+      "createdAt": "2023-10-01T03:11:28.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "10月はイベントいっぱいなのですが…！\nその中のひとつ本店たん擬人化8周年！！！\n\nということで本日より！！！\n10/31まで本店たん擬人化8周年限定名刺配布！\n場所は通年と同じ本店たんミュージアムとなります\nぜひゲットしてくださいね🦉\n\n※お一人1枚でお願いいたします。\n\n#本店たん名刺配布状況 https://t.co/7CIAGCN9cy",
+      "url": "https://x.com/bicikebukuro/status/1708318685126086934",
+      "media": [
+        "https://pbs.twimg.com/media/F7UilCdaMAAAVx6.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "honten"
+      ],
+      "characterIds": [
+        "honten"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "本日から10/31、1人1枚。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "honten-eighth-anniversary-card-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "本店たん擬人化8周年名刺",
+          "evidence": [
+            "10/31まで本店たん擬人化8周年限定名刺配布！",
+            "#本店たん名刺配布状況 https://t.co/7CIAGCN9cy"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 324461,
+      "postSha256": "ba012a11d3f1429aab19bb75fed29c3c71395b76a4f256755c5ddb2bcffadbbc",
+      "textSha256": "816c50481ba148e68794332d5efb4f2a7f170fe61b06cf4e389f7622d4174b8c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

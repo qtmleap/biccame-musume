@@ -1,0 +1,130 @@
+[
+  {
+    "id": "expanded-v2-positive-1834064390842364179",
+    "source": "public-post",
+    "description": "shinjyuku-tachikawa-figure-display-2024",
+    "post": {
+      "id": "1834064390842364179",
+      "createdAt": "2024-09-12T03:00:00.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "＼当店6階にて展示中／\nめてりん(Z•Project+)様( @Twit_Mete )作成 #ビッカメ娘 フィギュアより #立川たん をご紹介！\n少しでも背を大きく見せるため大きな帽子を被っている。謎の横髪は立川の名産・ウドをイメージ。胸の花はコブシ。萌え袖が特徴。\n公式HP🏠 https://t.co/rJo0NF3Gzx https://t.co/LAV7yWXG1T",
+      "url": "https://x.com/bic_shinjyuku/status/1834064390842364179",
+      "media": [
+        "https://pbs.twimg.com/media/GXKWIxoaIAALlds.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "tachikawa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "新宿西口店に立川たんフィギュアを展示。店と娘を別に扱う。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "shinjyuku-tachikawa-figure-display-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "フィギュア",
+          "evidence": [
+            "＼当店6階にて展示中／",
+            "めてりん(Z•Project+)様( @Twit_Mete )作成 #ビッカメ娘 フィギュアより #立川たん をご紹介！",
+            "少しでも背を大きく見せるため大きな帽子を被っている。謎の横髪は立川の名産・ウドをイメージ。胸の花はコブシ。萌え袖が特徴。",
+            "公式HP🏠 https://t.co/rJo0NF3Gzx https://t.co/LAV7yWXG1T"
+          ]
+        }
+      ],
+      "groupingNote": "新宿西口店に立川たんフィギュアを展示。店と娘を別に扱う。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 211971,
+      "postSha256": "279b05b82dda5efdd166d7ffa2ebe10e52e6c38d03f2f2cd286d5caee6540663",
+      "textSha256": "67282a5863314a12c13e3345f10df9ac575ab5c67a6cddf0ef064a1b02ae2959"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1837688198170022228",
+    "source": "public-post",
+    "description": "shinjyuku-tachikawa-figure-display-2024 matched control",
+    "post": {
+      "id": "1837688198170022228",
+      "createdAt": "2024-09-22T02:59:43.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "／\nタッチ＆トライイベント開催！\n＼\n本日9/22(日)13時より、6階プラモデルコーナーにて\n#KADOKAWA PLASTIC MODEL SERIES\n『この素晴らしい世界に祝福を！3』#めぐみん　タッチ&トライイベントを開催！\nご参加頂いた方には「めぐみんデフォルメステッカー」をプレゼント！\n#カドプラ #このすば https://t.co/LI0mgEimqE",
+      "url": "https://x.com/bic_shinjyuku/status/1837688198170022228",
+      "media": [
+        "https://pbs.twimg.com/media/GYDHZ2Gb0AA4BvU.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1837688198170022228",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 208876,
+      "postSha256": "733953abdf2af8d3f06dc1b8b2f7516626257384e38c338c983aa93e762e344b",
+      "textSha256": "3797bab126b61258c369895841a29ff383994cb121cdf23b7f559ed1bcec02fc"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

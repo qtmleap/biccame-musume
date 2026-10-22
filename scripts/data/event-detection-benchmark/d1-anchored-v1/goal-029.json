@@ -1,0 +1,182 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2006192334044815707",
+    "source": "public-post",
+    "description": "kawasaki-newyear-events-2026",
+    "post": {
+      "id": "2006192334044815707",
+      "createdAt": "2025-12-31T02:35:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "quote",
+      "text": "( `˙꒳​˙2 ) 明日から川崎たん【年始企画】2つスタートです！ステッカーは条件を要チェックらぞ！\n\n🐎川崎たん絵馬風マグネットシート📮🔽\nhttps://t.co/0dTjPwQStr\n🎯川崎たん千社札風ステッカー📮🔽\nhttps://t.co/X77ZcYRQEo https://t.co/xjuCuiQYDr",
+      "url": "https://x.com/Bic_kawasaki/status/2006192334044815707",
+      "quoted": {
+        "id": "2003707213169459543",
+        "screenName": "Bic_kawasaki",
+        "text": "( `˙꒳​˙2 )【告知】どえす！【年始企画】①\n💚川崎たん千社札風ステッカー💚\n\n1/1(木)朝10時から当店で〔対象商品〕を指定金額以上購入した当日レシートを””対象の売場の販売員にご提示””でステッカー１枚プレゼント！\n※一部お渡し場所が異なります\n\n⚠️詳細は画像を要確認⚠️\n#川崎たん #ビッカメ娘 https://t.co/R8EpHM4Nlo"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/G9dlz0zaYAAmWca.jpg",
+        "https://pbs.twimg.com/media/G9dl51tbIAASxYF.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": "2026-01-01",
+      "conditions": null
+    },
+    "rationale": "明日から年始企画2つのスタート案内。ステッカーは条件の確認を促すのみ。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:kawasaki-newyear-goods-2026"
+    ],
+    "group": "kawasaki-newyear-events-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "川崎たん絵馬風マグネットシート",
+          "evidence": [
+            "🐎川崎たん絵馬風マグネットシート📮🔽"
+          ]
+        },
+        {
+          "item": "川崎たん千社札風ステッカー",
+          "evidence": [
+            "( `˙꒳​˙2 ) 明日から川崎たん【年始企画】2つスタートです！ステッカーは条件を要チェックらぞ！",
+            "🎯川崎たん千社札風ステッカー📮🔽"
+          ]
+        }
+      ],
+      "groupingNote": "明日から年始企画2つのスタート案内。ステッカーは条件の確認を促すのみ。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 84039,
+      "postSha256": "a2fcb24a181df33f34b771e9860508e3d806d8cd7bf3ca04d763f2397c71e918",
+      "textSha256": "4a4a13262b8ec03d6ae8a6824a419ca7acc633120b04b8f544eb1e63c10e57a5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "f85d92de-6510-41ec-978d-59e7955456d2",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/Bic_kawasaki/status/2006192334044815707",
+          "origin": "manual-or-seed",
+          "title": "絵馬風マグネットシート",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-12-31T15:00:00.000+00:00",
+            "endDate": "2026-01-06T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "kawasaki"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 2026,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1998976516412322197",
+    "source": "public-post",
+    "description": "kawasaki-newyear-events-2026 matched control",
+    "post": {
+      "id": "1998976516412322197",
+      "createdAt": "2025-12-11T04:41:55.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "quote",
+      "text": "お祝いイラストありがとうらぞです✨✨\n\n嬉Ｃ〜✨\n   ∧,,∧ \n  ( *´꒳`2)つ━💚・*。\n⊂　   ﾉ 　　　・゜+.\n と--Ｊ　　　°。+ *´¨)\n　　　　　　　　　 .· ´¸.·*´¨) ¸.·*¨)\n　　　　　　　　　　(¸.·´ (¸.·’* 💗\nhttps://t.co/UPb1InH4Sf",
+      "url": "https://x.com/Bic_kawasaki/status/1998976516412322197",
+      "quoted": {
+        "id": "1995611648351240659",
+        "screenName": "toinekoxcrossp",
+        "text": "おはようございます☀😄🐈️\n場所が空いたら荷卸行ってきます〜\n今日も頑張りましょう！\n\nイラストはハチたんと川崎たん！🎄🐕️😆🐈️\n#しぶハチたん 「間に合ったハチぃいいいい！」\n#川崎たん 「メリークリスマスらぞっ！」\n\n#ビッカメ娘 (ナイセン)\n#指描き ファンアート\n#絵描きさんと繋がりたい https://t.co/gbJNHR26vV"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-1998976516412322197",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 89439,
+      "postSha256": "31990b8e034948ef1ffd9cba394843d4ca183d0bb7ecc88990cdf99eeff37633",
+      "textSha256": "bec13d8a8da8e93445b76d30d0f2b6c4758a278801d5ac5c893c97892f9927ce"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

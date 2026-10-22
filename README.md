@@ -85,6 +85,24 @@
 認証に `GITHUB_TOKEN` を使うため、`bun install` に必要です。
 Dev Container では `.envrc` が `.env` を読み込むので、`.env` に書いておくと反映されます。
 
+ローカルの依存インストールでは、次のコマンドを使えます。`GITHUB_TOKEN` が未設定なら
+`gh auth token --hostname github.com` の認証情報を子プロセスの環境変数にだけ渡します。
+`.env` は自動読込せず、トークンをファイルやコマンド引数に保存しません。
+
+```sh
+bun --no-env-file run dependencies:install --frozen-lockfile
+```
+
+Bun 1.4.3 の `install` は `--no-env-file` を無視するため、このコマンドは設定だけを一時ルートに置き、
+正規 installer で元の `node_modules` を更新します。workspace は元ディレクトリを参照し、一時ルートは終了時に削除します。
+ライフサイクルスクリプトは実行しないため、必要な Prisma Client は別途 `bun --no-env-file run generate` で生成します。
+
+依存を更新する場合は manifest の互換範囲を維持してください。`bun update --latest` は TypeScript 6 系、
+Intlayer 8.8 系、Prisma 7.10.0 の制約も越えるため、一括指定しないでください。
+Cloudflare の Vite plugin・Wrangler・Miniflare は整合する組合せで更新します。
+`vite-intlayer` 8.8.0 は旧 8.5.2 用パッチの修正（`mergeConfig` の二重適用回避）を取り込み済みのため、
+旧パッチの登録は不要です。
+
 #### セットアップ
 
 `biome-plugins` は git サブモジュールです。`biome.json` が `./biome-plugins/*.grit` を読むため、初期化しないとリントが通りません。
@@ -183,6 +201,7 @@ const signature = createHmac('sha256', signingSecret)
 | app | `EVENT_DETECTION_MODEL` | 初期設定: `clef` (既定) / `clef-flash`。管理画面の保存値が優先 |
 | app | `EVENT_DETECTION_THRESHOLD` / `EVENT_DETECTION_CHOICE_THRESHOLD` | 既定 `0.9`。管理画面（`/admin/bot`）で保存した値が優先 |
 | app | `EVENT_DETECTION_IGNORE_THRESHOLD` | 既定 `0.5`、自動登録閾値未満に設定。管理画面で保存した値が優先 |
+| app | `EVENT_DETECTION_ITEM_COUNT_THRESHOLD` | 既定 `0.9`。配布物の件数監査（件数質問の確度）専用で、`EVENT_DETECTION_CHOICE_THRESHOLD` や管理画面の保存値とは連動しない。環境変数のみで調整 |
 | web | `DISCORD_TOKEN` / `DISCORD_CHANNEL_ID` (secret) | 既存 Discord Bot と通知先を再利用。Webhook 判定通知と公開イベント告知は別の履歴で管理 |
 | web | `ANTHROPIC_BASE_URL` / `ANTHROPIC_AUTH_TOKEN` (secret) | 配布イベントの抽出とタイトル生成に使う、Anthropic Messages・tool use互換の接続先とトークン。自動登録の抽出には両方必須。接続先は Cloudflare Workers から到達できるものにする（ローカルのプロキシは不可）。未設定・抽出失敗時はイベントを登録せず、安全なエラーコードを記録して再試行する。抽出成功後のタイトル生成だけが失敗した場合は、定型のタイトル（`<店舗名> <配布物>配布`）で登録 |
 
@@ -326,13 +345,18 @@ bun run check:bot-stores # 生成店舗データの鮮度を確認（既存フ�
 
 #### ローカル専用のツール
 
-どちらも本番には書き込みません。
+以下のツールは本番には書き込みません。
 
 - `bun run event-detect`（`scripts/event-detect.ts`）: X の投稿からイベントを検出するツールです。
   `prepare` / `report` / `eval` / `judge` / `extract` / `emulate` / `gaps` / `clef` / `seed` / `serve` のサブコマンドがあり、
   `seed` は検出したイベントを**ローカル D1**（`.wrangler/state`）に未確認イベントとして登録します（既定は dry-run、`--apply` で書き込み）。
   管理画面のビューワ（`/admin/event-detect`）は `serve`（`127.0.0.1:15176`）の API を使います。
   使い方は `bun scripts/event-detect.ts --help`。
+- `bun run benchmark:events`: 件数質問→実抽出→監査→物品別判定の実パイプライン評価です。新規の公開公式投稿236件（陽118・陰118）から、既定は月×アカウントを揃えた100件（各50）の入力を確認します。**既定はoffline・AI呼出0**です。
+  固定100件の承認済み実測は関連性49/50（98%）・FP0、旧200＋新432＋限定通信確認18＝650回。旧版は監査で止まり関連性判定未実行のため、モデル能力差とは呼びません。登録readyは旧新とも0です。
+  分母・runtime固定条件・実行済みの再現記録・保存証跡は [`docs/event-pipeline-benchmark.md`](docs/event-pipeline-benchmark.md) を参照してください。追加の実AI呼出・実job再判定・公開は承認されていません。
+  **新イベント判定200ケース（陽100・陰100）を別datasetとして追加**しました。前回の98%（固定100件）には含めず、今回の新規AI呼出は0回です。`bun run benchmark:events --dataset expanded` で外部通信なしに件数と選定を確認できます（凍結directory・承認は旧goalと別）。
+- `bun run benchmark:events:raw`: 投稿全文を直接判定した旧診断（deprecated/historical）です。現行の主評価ではありません。版ごとに未使用の `--directory` を必ず指定し、旧v8既定directoryや保存原本を現行版で再利用しません。詳細は [`docs/event-detection-benchmark.md`](docs/event-detection-benchmark.md)。旧5例は `benchmark:events:smoke` のままです。
 - `bun run archive:list-posts` / `bun run archive:list-timeline`: X のリストの投稿をローカル（`.cache/`）に保存します。
   使い方は [`docs/list-post-archive.md`](docs/list-post-archive.md) を参照してください。
 

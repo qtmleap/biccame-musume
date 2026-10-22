@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-1619522332208562177",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1619522332208562177",
+      "createdAt": "2023-01-29T02:26:27.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "|*˙꒳​˙2)っ[週末イベント]\n\n＼最終日！／\n2階店頭特設会場にて ポケモングッズがもらえる「ポケモンモバイルガチャ」を開催チュウ⚡\n参加条件はなし！ぜひご家族でご来店ください😊\n\n開催時間 11:00-19:00\n※お一人さま1回まで ※無くなり次第終了\n#ビックカメラ #ラゾーナ #ポケモン https://t.co/gGtonyLNG5",
+      "url": "https://x.com/Bic_kawasaki/status/1619522332208562177",
+      "media": [
+        "https://pbs.twimg.com/media/FnmyaMkagAADlFn.jpg",
+        "https://pbs.twimg.com/media/Fnmy6x5aAAI27hg.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「|*˙꒳​˙2)っ[週末イベント] / ＼最終日！／ / 2階店頭特設会場にて ポケモングッズがもらえる「ポケモンモバイルガチャ」を開催チュウ⚡」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pokemon-mobile-gacha-giveaway-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 391421,
+      "postSha256": "071ac971aaddc26f0b081afc6f424f850cc5945853fdd57e401b69653ef5e46d",
+      "textSha256": "728ef1004db7aefe8fd60161432eb1a7ae78d01dd6ba45a66cf1c07abd5191ea"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1620258820021944320",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1620258820021944320",
+      "createdAt": "2023-01-31T03:13:00.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼プロカメラマンセミナー予告📸／\n➡2月11日（土）・12日（日）\n➡3階カメラコーナー\n今注目の写真家、中西学先生（@ukphoto2）をお招きしてFujifilmのフラッグシップミラーレスカメラの店頭セミナーを開催予定✨Fujifilm　X-H2SとX-H2の使用感や特長をわかりやすくレクチャーします😉参加無料です!📸 https://t.co/K60NbLLtVT",
+      "url": "https://x.com/biccamera_nanba/status/1620258820021944320",
+      "media": [
+        "https://pbs.twimg.com/media/FnxQt7eaIAAQbF3.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「＼プロカメラマンセミナー予告📸／ / ➡2月11日（土）・12日（日） / ➡3階カメラコーナー」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "nanba-fujifilm-camera-seminar-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 390911,
+      "postSha256": "f03cdb4d1f9375e4250fd0492c7caaaa8e82f034e3e4dceb8dff9c91660d77ea",
+      "textSha256": "cbca98b8f48a73b61d4e7507f759695938d715f2b624353898138c9bf72e9d7e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

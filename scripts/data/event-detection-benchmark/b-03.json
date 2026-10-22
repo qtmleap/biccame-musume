@@ -1,0 +1,132 @@
+[
+  {
+    "id": "public-b-2109856656301457434",
+    "source": "public-post",
+    "description": "ヒツジのいらない枕シリーズの特価",
+    "post": {
+      "id": "2109856656301457434",
+      "createdAt": "2026-10-13T04:00:00.760Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "6階寝具🛏コーナー\n＼ 大人気！ヒツジのいらないシリーズ ！／\n人気の4種類が期間限定特価でお買い得！\n🐏🌙\n☑️スタンダード至極モデル\n☑️高さ調節可能、調律モデル\n☑️柔らかく高めの極柔モデル\n☑️うつ伏せ対応、和みモデル\nお悩みに合ったカタチで！寝心地フィット🧘🏼‍♀️✨\n期間限定！10/19（月）まで💨",
+      "url": "https://x.com/bic_kashiwa/status/2109856656301457434",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "期間と特価が記載された一般寝具の販促。",
+    "tags": [
+      "ordinary-sale",
+      "discount",
+      "bedding"
+    ],
+    "group": "hitsujinoiranai-pillows-oct-sale",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "694e5633ad8d7c5f5d2b5f4971b9f6539f945e70d4b3d011383809a1d97bf5cf"
+  },
+  {
+    "id": "public-b-2109878749319897525",
+    "source": "public-post",
+    "description": "NikonとCanonカメラの展示・予約",
+    "post": {
+      "id": "2109878749319897525",
+      "createdAt": "2026-10-13T05:27:48.146Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "#Nikon と #Canon から新製品が登場📸\n\nNikonZ5iiC\n従来のZ5iiからファインダーをなくすことによってコンパクトになったカメラ\n\nCanonR8Markii\nR8(初代)からデザインを一新し最大“7.5段分”の手振れ補正を搭載したカメラ\n\nどちらもB1階カメラコーナーにて展示中＆予約受付中!!",
+      "url": "https://x.com/bic_tachikawa/status/2109878749319897525",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "新製品の通常展示と予約受付であり娘の企画ではない。",
+    "tags": [
+      "ordinary-sale",
+      "camera",
+      "reservation"
+    ],
+    "group": "nikon-canon-camera-reservations",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "8f16e5ae9fc25a03fb3d3aee023bce9616312c0bcfdf77675c3f4f94958db406"
+  },
+  {
+    "id": "public-b-2109896018439639107",
+    "source": "public-post",
+    "description": "プロ写真家の無料セミナー",
+    "post": {
+      "id": "2109896018439639107",
+      "createdAt": "2026-10-13T06:36:25.425Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "📸1日限定プロ写真家セミナーのお知らせ📢\n10/17(土)有楽町店B2Fにて\nプロ写真家　中村貴史先生による\nOM SYSTEM「PEN」発売記念セミナーを開催🎉\n参加費無料、予約不要！\n①14:00〜15:00\n②16:00〜17:00\n皆様のご来店を心よりお待ちしております🎶",
+      "url": "https://x.com/bic_yuurakuchou/status/2109896018439639107",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "参加無料・日時明記の催事だが、写真家とカメラ製品を対象としビッカメ娘企画ではない。",
+    "tags": [
+      "hard-negative",
+      "generic-seminar",
+      "free-event"
+    ],
+    "group": "om-system-photo-seminar-oct17",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "3ac31b5cb1e4d3b751cade42982fcf252faa61c513ca526f78b46c7fa3b3c1c1"
+  },
+  {
+    "id": "public-b-2109923634781528481",
+    "source": "public-post",
+    "description": "公式アプリ会員の決済ポイント案内",
+    "post": {
+      "id": "2109923634781528481",
+      "createdAt": "2026-10-13T08:26:09.674Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "＼新規会員募集中📱／\n\nビックカメラ公式アプリ会員なら\nクレジット・QRコード決済でも\n\n＿人人人人人人人人人人人人人＿\n＞現金と同率ポイントサービス＜\n￣Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y￣\n\nアプリを使ってお得に買い物♪\n\nご加入ご希望の方は販売員まで‼",
+      "url": "https://x.com/bicikebukuro/status/2109923634781528481",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "クレジット・QR決済のポイント制度で、対象グッズの受取企画ではない。",
+    "tags": [
+      "payment-instructions",
+      "membership"
+    ],
+    "group": "bic-app-payment-point-service",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "ed189ccb41497f04bd90424222d483a1c979a7c07185fcdac0e7b37491a202ba"
+  },
+  {
+    "id": "public-b-2109928154983002408",
+    "source": "public-post",
+    "description": "ZETAブロマイドの再入荷",
+    "post": {
+      "id": "2109928154983002408",
+      "createdAt": "2026-10-13T08:44:07.374Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "📢再入荷のお知らせ\n大好評につきお品切れしていた\n『ZETA DIVISION 第五人格部門 ランダムブロマイドセット』 が入荷しました！\n\n推しメンバーのブロマイドを\nコレクションするチャンス✨\nなくなり次第終了となりますので、\nお求めの方はお早めに🏃‍♂️💨\n#ZETADIVISION #第五人格 #IdentityV",
+      "url": "https://x.com/bic_fujisawa/status/2109928154983002408",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "数量終了の文言はあるが、他IP・チーム商品の通常再入荷。 物品は他IP・チームのブロマイドセットと明示されているため、非対象イベントだが物品種別はotherと注釈する。",
+    "tags": [
+      "hard-negative",
+      "other-ip",
+      "limited-stock"
+    ],
+    "group": "zeta-identityv-bromide-restock",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "b2560c867d13f9b043253d27a29d67a145dee30c1f37e52dc2f76bbd0130c8f0"
+  }
+]

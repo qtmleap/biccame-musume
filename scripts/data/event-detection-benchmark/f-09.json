@@ -1,0 +1,160 @@
+[
+  {
+    "id": "public-f-1544136586774081536",
+    "source": "public-post",
+    "description": "スプラトゥーン購入特典グッズ",
+    "post": {
+      "id": "1544136586774081536",
+      "createdAt": "2022-07-05T01:50:25.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "お待たせいたしました!\nスプラトゥーン３ 特典内容がついに決定✨\n●特典A\n挟んだ紙で背景チェンジ!\nイカすチェンジクリアファイル\n●特典B\n①軽くて丈夫！内側と底にも模様を入れたＷプリント仕様!!イカすメラミンカップ\n②財布やスマホ等の小物入れに便利！ミニトートバッグ\nhttps://t.co/PtqJbDo5nH https://t.co/OMCROSjyt9",
+      "url": "https://x.com/bic_shinjuku3ch/status/1544136586774081536",
+      "media": [
+        "https://pbs.twimg.com/media/FW3f9wPaUAAuxeh.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "クリアファイル・カップ・バッグは別IPゲームの特典であり、娘グッズではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "clear-file",
+      "purchase-benefit"
+    ],
+    "group": "splatoon3-purchase-benefits-2022",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1594255209160912896",
+    "source": "public-post",
+    "description": "コンタクトレンズのポイントと値引き",
+    "post": {
+      "id": "1594255209160912896",
+      "createdAt": "2022-11-20T09:03:56.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "(1 ˙꒳˙)8階 コンタクトコーナーより\n大好評につき、内容パワーアップ💪\n\n当社指定 #コンタクトレンズ \n今なら 通常ポイントサービスに加え 最大8000ポイントプレゼント🎁\n\n更に、今なら #コンタクト ご購入で #メガネ フレームが表示価格より20%引きになるクーポンも発行中です👓\n\n12/31㈯まで！ https://t.co/fABiNgNRm4",
+      "url": "https://x.com/bic_shinyoko/status/1594255209160912896",
+      "media": [
+        "https://pbs.twimg.com/media/Fh_b-bKaAAAdYo2.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "コンタクト購入によるポイントや眼鏡クーポンの一般販促で、娘の企画はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "points",
+      "coupon",
+      "ordinary-product"
+    ],
+    "group": "contacts-glasses-points-winter-2022",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1487255026519375873",
+    "source": "public-post",
+    "description": "腕時計の期間限定ポイント特典",
+    "post": {
+      "id": "1487255026519375873",
+      "createdAt": "2022-01-29T02:43:24.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ✨オメガ✨\n\n＼本日から1月31日まで／\n当社指定 #オメガ の腕時計が店頭表示価格から5％引き‼️\n更に5,000ポイントプレゼント🎁\n更に更に！10％ポイントサービスで大変お買い得☺\n\n幅広い世代から支持されているオメガの腕時計⌚\nぜひ一度お立ち寄りください✨\n\n※写真は一例です。 https://t.co/AltbxjiwAu",
+      "url": "https://x.com/bic_yuurakuchou/status/1487255026519375873",
+      "media": [
+        "https://pbs.twimg.com/media/FKPKZUqacAQgOYB.jpg",
+        "https://pbs.twimg.com/media/FKPKcZyakAEiIVV.png",
+        "https://pbs.twimg.com/media/FKPKeUvaIAArRua.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "オメガ腕時計の割引・ポイント案内で、娘デザインや記念企画の告知ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "limited",
+      "points",
+      "ordinary-product"
+    ],
+    "group": "omega-watch-points-january-2022",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1626783009012875265",
+    "source": "public-post",
+    "description": "ソフトバンク主催ビンゴ景品",
+    "post": {
+      "id": "1626783009012875265",
+      "createdAt": "2023-02-18T03:17:48.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(3・ω・)今週のイベントはビンゴゥ！\n2/18(土)＆19(日) 11：00～19：00、1階入口にてソフトバンク主催の『BINGOゲーム』開催中！\n当日税込み2,000円以上ご購入のレシートと、レジでお渡しの参加券でチャレンジできるぜ。\n簡単な質問に答えながらビンゴで景品をゲットしよう✨ https://t.co/dmk0mrqf9a",
+      "url": "https://x.com/bic_fujisawa/status/1626783009012875265",
+      "media": [
+        "https://pbs.twimg.com/media/FpN9XdvaIAEZhue.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "買物レシートで参加する一般携帯販促ゲーム。娘の挨拶口調だけでは娘の企画関与を意味しない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "ordinary-event",
+      "game",
+      "purchase",
+      "character-voice"
+    ],
+    "group": "softbank-bingo-fujisawa-february-2023",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1618810417043873794",
+    "source": "public-post",
+    "description": "新生活向け自転車の値引きとポイント",
+    "post": {
+      "id": "1618810417043873794",
+      "createdAt": "2023-01-27T03:17:34.000Z",
+      "screenName": "bic_nagoyagate",
+      "kind": "original",
+      "text": "金鯱|*ºωº){新生活応援セール！🌸\n\n1月27日（金）から1月31日（火）までの限定特価！\n\n当社指定パナソニック電動アシスト自転車ご購入で\n表示価格から5,000円引き！\n\nさらに通常ポイントに追加で5,000ポイントをプレゼント！🉐\n\nぜひ、新しい自転車で新生活を！\nお求めは9階自転車コーナー🚴まで～✨ https://t.co/8Ptj7PxTRy",
+      "url": "https://x.com/bic_nagoyagate/status/1618810417043873794",
+      "media": [
+        "https://pbs.twimg.com/media/FncrfVJagAAqFaQ.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "パナソニック自転車の購入販促で、娘の物品・出演企画はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "seasonal",
+      "discount",
+      "points"
+    ],
+    "group": "panasonic-bicycle-sale-january-2023",
+    "reviewStatus": "provisional"
+  }
+]

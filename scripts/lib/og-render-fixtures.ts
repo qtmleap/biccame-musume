@@ -35,7 +35,7 @@ type Fixture = {
   start: string
   /** 終了日時（JST）。省略すると終了日未定。 */
   end?: string
-  characterId?: EventCharacter
+  characterIds?: EventCharacter[]
   limitedQuantity?: number
   conditions?: Record<string, unknown>[]
 }
@@ -123,14 +123,14 @@ const specialStarting = (n: number, days: [string, string, string, string]): Eve
     title: '缶バッジくじ',
     stores: ['ikenishi'],
     start: `${days[0]} 10:00`,
-    characterId: 'secret',
+    characterIds: ['secret'],
     conditions: [everyone]
   }),
   fixtureEvent(n + 1, {
     title: '缶バッジくじ',
     stores: ['ikenishi'],
     start: `${days[1]} 10:00`,
-    characterId: 'other',
+    characterIds: ['other'],
     conditions: [everyone]
   }),
   startingRow(n + 2, 0, days[2], '2026-10-31'),
@@ -149,7 +149,7 @@ const eventRoles: [EventRole, Event][] = [
       stores: ['chofu'],
       start: '2026-10-12 10:00',
       end: '2026-10-18 21:00',
-      characterId: 'seiseki',
+      characterIds: ['seiseki'],
       limitedQuantity: 100,
       conditions: [purchase(3000)]
     })
@@ -159,6 +159,8 @@ const eventRoles: [EventRole, Event][] = [
     fixtureEvent(2, {
       title: '8がつく店舗コラボ名刺',
       stores: ['hachioji', 'shibuhachi', 'yao', 'nagoya'],
+      // 対象の娘は店舗から補完しないので、立ち絵が上限の 3 人に収まる確認のために明示する。
+      characterIds: ['hachioji', 'shibuhachi', 'yao'],
       start: '2026-10-12 10:00',
       end: '2026-11-03 21:00',
       conditions: [firstCome(50)]
@@ -170,7 +172,7 @@ const eventRoles: [EventRole, Event][] = [
       title: '缶バッジくじ',
       stores: ['ikenishi'],
       start: '2026-10-12 10:00',
-      characterId: 'secret',
+      characterIds: ['secret'],
       conditions: [everyone]
     })
   ],
@@ -180,7 +182,7 @@ const eventRoles: [EventRole, Event][] = [
       title: '缶バッジくじ',
       stores: ['ikenishi'],
       start: '2026-10-12 10:00',
-      characterId: 'other',
+      characterIds: ['other'],
       conditions: [everyone]
     })
   ]
@@ -238,7 +240,7 @@ const postCases: PostCase[] = [
         stores: ['tachikawa'],
         start: '2026-04-10 10:00',
         end: '2026-04-29 20:00',
-        characterId: 'seiseki'
+        characterIds: ['seiseki']
       })
     ]
   },

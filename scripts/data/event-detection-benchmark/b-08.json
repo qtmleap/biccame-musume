@@ -1,0 +1,131 @@
+[
+  {
+    "id": "public-b-2110261928279044212",
+    "source": "public-post",
+    "description": "NICOH携帯コーヒー器具の先行展示",
+    "post": {
+      "id": "2110261928279044212",
+      "createdAt": "2026-10-14T06:50:25.129Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "NICOHから10月16日(金)より発売予定の\nポータブル電動コーヒーメーカー\nポータブル電動エスプレッソマシン\nポータブル電動コーヒーグラインダーが\n先行展示中！！\n\nオフィスや外出先で挽きたてのコーヒーはいかがですか？\n\n他にもコーヒーアイテムを揃えております。☕️\n#NICOH\n#コーヒーグラインダー",
+      "url": "https://x.com/bicikenishi/status/2110261928279044212",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "先行展示は通常家電の販売促進でキャラ企画ではない。",
+    "tags": [
+      "ordinary-sale",
+      "product-preview"
+    ],
+    "group": "nicoh-portable-coffee-preview",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "50b677f3b42118bfc36d5283f840511da953021a50908118e796ec9175afda2c"
+  },
+  {
+    "id": "public-b-2110264343447396706",
+    "source": "public-post",
+    "description": "PCパーツの数量限定特価",
+    "post": {
+      "id": "2110264343447396706",
+      "createdAt": "2026-10-14T07:00:00.950Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "掘り出し物がが見つかるかも😳\n\n6階で数量限定特価品を展開中！ \nグラボ・マザーボード・メモリなど、お買い得商品を多数ご用意✨\n早い者勝ち！ ぜひチェックしてください👀\n※価格は変動する場合があります\n ※詳しくは店頭にて",
+      "url": "https://x.com/bicpkanhonten/status/2110264343447396706",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "数量限定・早い者勝ちは一般商品の値引きで、キャラクター限定企画ではない。",
+    "tags": [
+      "hard-negative",
+      "limited-stock",
+      "pc-parts"
+    ],
+    "group": "pkan-pc-parts-clearance",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "5019479ad7c34c3072fa337ef449c73d4f0bca7abb987f82ccc0d6f9b34d3d9e"
+  },
+  {
+    "id": "public-b-2110266193076752468",
+    "source": "public-post",
+    "description": "SEIKO145周年限定腕時計",
+    "post": {
+      "id": "2110266193076752468",
+      "createdAt": "2026-10-14T07:07:21.936Z",
+      "screenName": "bictakasaki",
+      "kind": "original",
+      "text": "セイコー145周年記念 限定モデルの\nアストロン なのじゃ✨\n\nSEIKO ASTRON\n　HAC003J\n　HAB011J\n　HAD003J\n\n限定なので おはやめに🌿",
+      "url": "https://x.com/bictakasaki/status/2110266193076752468",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "周年記念の限定品だが時計ブランドの記念商品で、ビッカメ娘デザインではない。 物品はセイコーの腕時計アストロンと明示されているため、非対象イベントだが物品種別はotherと注釈する。",
+    "tags": [
+      "hard-negative",
+      "anniversary-word",
+      "limited-sale"
+    ],
+    "group": "seiko-145th-astron-watch",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "a0123df56899520be32b5b20a111d5a674905dc36fdf74b084c49bf54400428a"
+  },
+  {
+    "id": "public-b-2110266960051417367",
+    "source": "public-post",
+    "description": "千葉たんエリアのポスパネ展示終了",
+    "post": {
+      "id": "2110266960051417367",
+      "createdAt": "2026-10-14T07:10:24.797Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "7Fの千葉組が4面並んでるポスパネは\n本日で展開終了になります～。\n明日新しくなります～。(* > <)⁾⁾ﾍﾟｺﾘ\n#7F千葉たんエリア",
+      "url": "https://x.com/bic_chiba/status/2110266960051417367",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "千葉組のポスターパネル展示を終了・更新する案内で、娘を題材にした展示企画の状態告知。全4人の内訳は未注釈。",
+    "tags": [
+      "exhibition",
+      "end-announcement",
+      "multiple-characters-partial"
+    ],
+    "group": "chiba-four-panel-display-oct14",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "2f9e00711c17ca164a20b73a7815e185635ff6a24142434bff920e7d6d4fd80f"
+  },
+  {
+    "id": "public-b-2110269030489817399",
+    "source": "public-post",
+    "description": "BOSEイヤホンの新発売",
+    "post": {
+      "id": "2110269030489817399",
+      "createdAt": "2026-10-14T07:18:38.428Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "【新発売】#BOSE\n『Bose UItra OpenEarbuds(第2世代)』好評発売中‼️\n耳を塞がないカフ型に、耳の穴に近い場所で深みのある豊かなプライベートサウンドを再生する技術を搭載✨\n\nスポーツ特化型のオープンイヤーイヤホン\n『Base Sport OpenEarbuds』も同日発売‼️\nぜひ一緒にお試し下さい\n(3階オーディオ)",
+      "url": "https://x.com/biccamera_nanba/status/2110269030489817399",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "製品の特徴と試聴案内のみで、ビッカメ娘を題材にしていない。",
+    "tags": [
+      "ordinary-sale",
+      "audio-launch"
+    ],
+    "group": "bose-ultra-sport-earbuds-launch",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "22ec4e95f856ef046005b04c24ee3cde57d97b2d49d6340dec3e03a1827cc2b6"
+  }
+]

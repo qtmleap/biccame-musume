@@ -82,6 +82,44 @@ describe('questions', () => {
     expect(state).toContain('引用元 @bic_other:\n告知')
   })
 
+  // 判定の入力文だけ投稿者の店舗名を短くした（v15）。抽出と CLI が使う buildState の既定は、変更前の出力と1文字も違わない。
+  describe('buildState の既定の出力（投稿者の店舗名は「店舗名（店舗ID）」）', () => {
+    const funabashi = { storeId: 'funabashi', name: 'ビックカメラ船橋駅FACE店', screenName: 'bic_funabashi' }
+    const funato = { storeId: 'funato', name: 'ビックカメラ船橋東武店', screenName: 'Bic_Funabashi' }
+    const text = 'ふなたん限定名刺 2026年11月3日から先着100枚を配布します'
+    const stateOf = (screenName: string, stores: Parameters<typeof buildState>[1]) =>
+      buildState(post(text, { screenName, createdAt: '2026-10-11T01:00:00.000Z' }), stores)
+    const header = '投稿日: 2026-10-11（日）'
+    const footer = `画像: 0 枚（画像の内容は含まれない）\n本文:\n${text}`
+
+    test('店舗アカウントの投稿者', () => {
+      expect(stateOf('bic_funabashi', [funabashi])).toBe(
+        `${header}\n投稿者: @bic_funabashi / ビックカメラ船橋駅FACE店（funabashi）\n${footer}`
+      )
+    })
+    test('同じアカウントの店舗が複数なら「・」で連結する', () => {
+      expect(stateOf('bic_funabashi', [funabashi, funato])).toBe(
+        `${header}\n投稿者: @bic_funabashi / ビックカメラ船橋駅FACE店（funabashi）・ビックカメラ船橋東武店（funato）\n${footer}`
+      )
+    })
+    test('店舗アカウントでない投稿者は「店舗以外」', () => {
+      expect(stateOf('someone', [funabashi])).toBe(`${header}\n投稿者: @someone / 店舗以外\n${footer}`)
+    })
+    test('第3引数を渡さなくても、undefined を渡しても出力は同じ', () => {
+      const withDefault = buildState(post(text, { screenName: 'bic_funabashi' }), [funabashi])
+      expect(buildState(post(text, { screenName: 'bic_funabashi' }), [funabashi], undefined)).toBe(withDefault)
+    })
+    test('第3引数で投稿者の店舗名の作り方を変えられる。「・」の連結と「店舗以外」は変わらない', () => {
+      const shortName = (account: { storeId: string }) => account.storeId.toUpperCase()
+      const state = (screenName: string, stores: Parameters<typeof buildState>[1]) =>
+        buildState(post(text, { screenName, createdAt: '2026-10-11T01:00:00.000Z' }), stores, shortName)
+      expect(state('bic_funabashi', [funabashi, funato])).toBe(
+        `${header}\n投稿者: @bic_funabashi / FUNABASHI・FUNATO\n${footer}`
+      )
+      expect(state('someone', [funabashi])).toBe(`${header}\n投稿者: @someone / 店舗以外\n${footer}`)
+    })
+  })
+
   test('本文に出てくるキャラ名の店舗も候補に入れる', () => {
     const names = new Map([
       ['example', ['例たん']],

@@ -1,0 +1,124 @@
+[
+  {
+    "id": "expanded-v2-positive-1218848820076826630",
+    "source": "public-post",
+    "description": "pkan-newyear-extension-2020",
+    "post": {
+      "id": "1218848820076826630",
+      "createdAt": "2020-01-19T10:52:58.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "(ぱっ´ω`c).o0(いまさらですがお年賀名刺、かなりたっぷり刷ってしまったのでしばらく配布しますね)(良かったらもらってね)",
+      "url": "https://x.com/bicpkanhonten/status/1218848820076826630",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "追加印刷を理由に配布期間を延長。初日や終了日を補完しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "pkan-newyear-extension-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "お年賀名刺",
+          "evidence": [
+            "(ぱっ´ω`c).o0(いまさらですがお年賀名刺、かなりたっぷり刷ってしまったのでしばらく配布しますね)(良かったらもらってね)"
+          ]
+        }
+      ],
+      "groupingNote": "追加印刷を理由に配布期間を延長。初日や終了日を補完しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 678297,
+      "postSha256": "e541029aa45d124353671efd7d67a4c65245d52e7b56a4fdbb7caf9e234d9413",
+      "textSha256": "a99787a2039046ac77f538b94e131b392f48c558f8857eb746e281d67e552f68"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1219534681407770624",
+    "source": "public-post",
+    "description": "pkan-newyear-extension-2020 matched control",
+    "post": {
+      "id": "1219534681407770624",
+      "createdAt": "2020-01-21T08:18:20.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "(ぱっ´ω`c)パソ館たんのおうちも実はガチャがあります♪　B1階サポートカウンター横です♥\n\nその中から可愛い＆気になるガチャをご紹介❗️\n『ハーモニカペンダント』\nミニサイズでかわいい♪音の出るハーモニカ型ペンダント♪\n全種吹いても吸っても音が出るよ！\n全7種/200円 https://t.co/2556MtcxI4",
+      "url": "https://x.com/bicpkanhonten/status/1219534681407770624",
+      "media": [
+        "https://pbs.twimg.com/media/EOyoSPHU8AQiofx.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1219534681407770624",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 677704,
+      "postSha256": "114fc9157c6bb953f1160d7400cb831bb9ef12309524f5edfe99c5239d45c60f",
+      "textSha256": "cc7ff28f8f6eabb4f7d36cd05272618fe4a7f986444499205df7b4b6fdacfa06"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

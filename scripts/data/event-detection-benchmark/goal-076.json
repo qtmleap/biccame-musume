@@ -1,0 +1,108 @@
+[
+  {
+    "id": "goal-negative-1035361533239406592",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1035361533239406592",
+      "createdAt": "2018-08-31T03:00:00.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "＼ビックカメラ40周年 #フォトコンテスト ご応募は本日まで！／\nグランプリはビックカメラギフトカード40万円分！詳細はこちら【 https://t.co/XzB0w5FwSq 】ぜひご参加ください～☆\n\n応募期間★8月31日(金)まで\n店頭持込★2階写真プリントコーナーにて受付中！※作品の返却は行いません\n#フォトコン https://t.co/Zil1MGvoY5",
+      "url": "https://x.com/bic_shinjyuku/status/1035361533239406592",
+      "media": [
+        "https://pbs.twimg.com/media/DjRGaMqU8AEFj1E.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「＼ビックカメラ40周年 #フォトコンテスト ご応募は本日まで！／ / グランプリはビックカメラギフトカード40万円分！詳細はこちら【 https://t.co/XzB0w5FwSq 】ぜひご参加ください～☆ / 応募期間★8月31日(金)ま」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "camera-40th-photo-contest-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 807088,
+      "postSha256": "e8d1e9591a0cb177549cc8896fa8af735e7931e5b6e05a913c8c8675937cb6bd",
+      "textSha256": "0379498a8ca4b300738769713fe46af599683ac4d6f6d4af9873464176c94d20"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1035519674937561088",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1035519674937561088",
+      "createdAt": "2018-08-31T13:28:24.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "と言ったところで\n担当これにてログアウトーっ!!!\n\n明日は平成最後の新ライダー\n｢ #仮面ライダージオウ ｣の関連商品の発売日だジオ！\n※大人気商品の為、お品切れの際はご了承下さいませ<(_ _)>\n\n明後日の放送開始を\n玩具片手に楽しみに待ちましょー☆\n\nそれでは皆様また～(◎∀◎)ﾉ ｼﾞｵ https://t.co/YjVIMp3KaI",
+      "url": "https://x.com/bic_tachikawa/status/1035519674937561088",
+      "media": [
+        "https://pbs.twimg.com/media/Dl7nlrNU8AApLQ3.jpg",
+        "https://pbs.twimg.com/media/Dl7nncxV4AA3PdO.jpg",
+        "https://pbs.twimg.com/media/Dl7noxpUYAADvKX.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「と言ったところで / 担当これにてログアウトーっ!!! / 明日は平成最後の新ライダー」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "kamen-rider-zi-o-toys-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 825073,
+      "postSha256": "e6527b03cdef39598dc68f9b68315b4a21a9f4fb330ae8e4df15a6c7a8bb6e71",
+      "textSha256": "c8a8e8680240fbfeb72b213b5e530de3ab80134247cb2d3c768b61690cbf96b2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

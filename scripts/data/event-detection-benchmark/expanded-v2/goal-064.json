@@ -1,0 +1,133 @@
+[
+  {
+    "id": "expanded-v2-positive-1479618862647676930",
+    "source": "public-post",
+    "description": "tokorozawa-seibu-panel-card-2022",
+    "post": {
+      "id": "1479618862647676930",
+      "createdAt": "2022-01-08T01:00:01.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "おはとこ〜(§*´꒳`*)✈️\n11日から西武の2階に\n出張が決まったとこ〜(๑˃̵ᴗ˂̵)✨\n1/31まで出張して限定名刺も\n配布しているので遊びに来てとこ〜‼️\n今日も一日よろとこです♪\n​\n▼くわしくは\nhttps://t.co/bcKSbQKCko",
+      "url": "https://x.com/bic_toko/status/1479618862647676930",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "tokorozawa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "西武2階への出張展示と限定名刺。投稿店舗から会場階を置換しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "tokorozawa-seibu-panel-card-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "限定名刺",
+          "evidence": [
+            "おはとこ〜(§*´꒳`*)✈️",
+            "11日から西武の2階に",
+            "出張が決まったとこ〜(๑˃̵ᴗ˂̵)✨",
+            "1/31まで出張して限定名刺も",
+            "配布しているので遊びに来てとこ〜‼️",
+            "今日も一日よろとこです♪",
+            "​",
+            "▼くわしくは",
+            "https://t.co/bcKSbQKCko"
+          ]
+        }
+      ],
+      "groupingNote": "西武2階への出張展示と限定名刺。投稿店舗から会場階を置換しない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 493795,
+      "postSha256": "5436a427aa1a104de707174f0d306d2ac64d8f109f17adc3dd05bd48f78cc120",
+      "textSha256": "a049dc9056f084ad0d7c06490f2dce044ec5af22c6d59b03574a3fc2d05ecee7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1480811724634734594",
+    "source": "public-post",
+    "description": "tokorozawa-seibu-panel-card-2022 matched control",
+    "post": {
+      "id": "1480811724634734594",
+      "createdAt": "2022-01-11T08:00:01.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "パソコン💻のU25学割キャンペーンが始まったとこ(§*´꒳`*)✈️\n\n当社指定PC購入時、年齢の確認できるご本人様確認証をご提示頂くだけで、最大1万円引きになるお得なキャンペーンとこ🎵\n\n是非ご利用下さい✨ https://t.co/0J7T5tAi7e",
+      "url": "https://x.com/bic_toko/status/1480811724634734594",
+      "media": [
+        "https://pbs.twimg.com/media/FIzEEpHaMAEgJ7x.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1480811724634734594",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 494315,
+      "postSha256": "dcf2a9be4161921d7be05cc14d93720f17cbbab54f25e4c2ea71e7af3891ab88",
+      "textSha256": "95c5ac1b5bfd3018f4d8932ec4097aa1dc16e564b79d23131287a0774b2f4b3c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

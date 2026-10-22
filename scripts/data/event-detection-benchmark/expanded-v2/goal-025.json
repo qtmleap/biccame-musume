@@ -1,0 +1,129 @@
+[
+  {
+    "id": "expanded-v2-positive-1355025558707429376",
+    "source": "public-post",
+    "description": "tachikawa-store20-card-2021",
+    "post": {
+      "id": "1355025558707429376",
+      "createdAt": "2021-01-29T05:30:43.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "#立川たん #名刺 #コレクション ＼(U 'ω'U)／💐\n今回配布中の #ビックカメラ立川店 #開店20周年 を記念したものです～🎵\n表はバレンタイン衣装の立川たん！裏は今まで #ナイセン さんがTwitterにあげてくださっていた立川たんと他の #ビッカメ娘 が一緒に描かれているイラストで纏めてみました！ https://t.co/7nYlFYiCy0",
+      "url": "https://x.com/bic_tachikawa/status/1355025558707429376",
+      "media": [
+        "https://pbs.twimg.com/media/Es4D8SYU4AAL3v2.jpg",
+        "https://pbs.twimg.com/media/Es4D8SfUUAYb2Cv.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "開店20周年記念でバレンタイン衣装を使用。両面の人物数を物品数にしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "tachikawa-store20-card-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "名刺",
+          "evidence": [
+            "#立川たん #名刺 #コレクション ＼(U 'ω'U)／💐",
+            "今回配布中の #ビックカメラ立川店 #開店20周年 を記念したものです～🎵",
+            "表はバレンタイン衣装の立川たん！裏は今まで #ナイセン さんがTwitterにあげてくださっていた立川たんと他の #ビッカメ娘 が一緒に描かれているイラストで纏めてみました！ https://t.co/7nYlFYiCy0"
+          ]
+        }
+      ],
+      "groupingNote": "開店20周年記念でバレンタイン衣装を使用。両面の人物数を物品数にしない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 581420,
+      "postSha256": "f16cb891a6028ef3915aec260bef787dcd1114fba9c55543996a3617cadb7d71",
+      "textSha256": "d76ff0d47633488de6a5f029244cd072151774b3f11b00964ba6adcef8cd38f3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1348866416334622721",
+    "source": "public-post",
+    "description": "tachikawa-store20-card-2021 matched control",
+    "post": {
+      "id": "1348866416334622721",
+      "createdAt": "2021-01-12T05:36:29.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "#予約受付中 (Ｕ >ᴗ< Ｕ)⛺✨\n#ビックカメラ の #館内放送 にも登場している #人気アニメ #ゆるキャン△ #ゆるキャンseason2 の #ブルーレイ #DVD のご予約は当店3階CD/DVDコーナーをご利用くださいませ🎵\nビックカメラ.comでも受付中👉https://t.co/1zcpBslzMr https://t.co/kRexjQGqjn",
+      "url": "https://x.com/bic_tachikawa/status/1348866416334622721",
+      "media": [
+        "https://pbs.twimg.com/media/ErgiKE0VQAQfBDu.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1348866416334622721",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 585916,
+      "postSha256": "74633021ec83f1322a4aea90b37bfa2cf3dca6c500abbd5fdb6f1eac55c86a23",
+      "textSha256": "b2420c50090b818b0e0efc0ea905cefa627a1caadda8facc2adddb02a0012100"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

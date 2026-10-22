@@ -1,0 +1,129 @@
+[
+  {
+    "id": "goal-positive-1081751597435080704",
+    "source": "public-post",
+    "description": "kawasaki newyear card 2019",
+    "post": {
+      "id": "1081751597435080704",
+      "createdAt": "2019-01-06T03:17:33.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "✨期間限定名刺配布中✨\nただいま「川崎たんお正月限定名刺」を配布中らぞ！！\n\n配布場所は２階総合カウンター！✨\nみんなに貰ってほしいから『お一人様一枚』でお願いしますらぞ！\n\n配布最終日は、明日の1月7日(月)まで！\n#川崎たん #ビッカメ娘 https://t.co/flQcqOTwv4",
+      "url": "https://x.com/Bic_kawasaki/status/1081751597435080704",
+      "media": [
+        "https://pbs.twimg.com/media/DwMmluoUwAAufXO.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "翌1/7まで配布する終了間近の案内。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "end"
+    ],
+    "group": "kawasaki-newyear-card-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "川崎たんお正月名刺",
+          "evidence": [
+            "✨期間限定名刺配布中✨",
+            "ただいま「川崎たんお正月限定名刺」を配布中らぞ！！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 791016,
+      "postSha256": "8bd26cf00783bf1e9daba6ee60ac76967ecc25da6ddc782e0190b2bfcf169363",
+      "textSha256": "ee812e56ed7a45fee2b37c638759d9f52dbb4d62157985e3cb6467c103756d47"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1084691877356462080",
+    "source": "public-post",
+    "description": "mito valentine card 2019",
+    "post": {
+      "id": "1084691877356462080",
+      "createdAt": "2019-01-14T06:01:10.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "✨お知らせ✨\n#ビッカメ娘 #水戸たん 名刺 バレンタインバージョンの配布を水戸駅店4F店頭パネルにてスタートしました！ 来店記念にぜひツイートしてくださいね🍫 https://t.co/eFemaMor4E",
+      "url": "https://x.com/biccameramito/status/1084691877356462080",
+      "media": [
+        "https://pbs.twimg.com/media/Dw2ZgHXVYAIq_M-.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "mito"
+      ],
+      "characterIds": [
+        "mito"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "水戸駅店4階の配布開始案内。条件は書かれていない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "mito-valentine-card-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "水戸たんバレンタイン名刺",
+          "evidence": [
+            "#ビッカメ娘 #水戸たん 名刺 バレンタインバージョンの配布を水戸駅店4F店頭パネルにてスタートしました！ 来店記念にぜひツイートしてくださいね🍫 https://t.co/eFemaMor4E"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 789080,
+      "postSha256": "9a5642c82ba4f71cc3ea4a7627ef50eae508cb751577a1162ae4a1d95f1fff72",
+      "textSha256": "562d3b2c73d7bf6745d4dfd42877bbacd9512fee988df047383f5e90392cf6e3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

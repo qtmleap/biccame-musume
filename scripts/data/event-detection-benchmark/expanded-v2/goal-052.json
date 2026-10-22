@@ -1,0 +1,129 @@
+[
+  {
+    "id": "expanded-v2-positive-1111893547509116929",
+    "source": "public-post",
+    "description": "sapporo-radius-panel-end-2019",
+    "post": {
+      "id": "1111893547509116929",
+      "createdAt": "2019-03-30T07:30:54.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "#ラディウス さんコラボのさっぽろたんパネル、3Fオーディオコーナーでの展示もいよいよ明日までです…！(>ω<)\n期間中たくさんの方に会いに来ていただけてとても嬉しかったです✧。(◍＞◡＜◍)。✧\n明日まで3Fオーディオコーナーレジ前にいますので、ぜひ会いに来てくださいね～！🎧 https://t.co/dEArr5Aziq",
+      "url": "https://x.com/bic_sapporo/status/1111893547509116929",
+      "media": [
+        "https://pbs.twimg.com/media/D248c9tUYAMI68v.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "sapporo"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "明日まで展示中。投稿時点で既に終了とはしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "sapporo-radius-panel-end-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "さっぽろたんパネル",
+          "evidence": [
+            "#ラディウス さんコラボのさっぽろたんパネル、3Fオーディオコーナーでの展示もいよいよ明日までです…！(>ω<)",
+            "期間中たくさんの方に会いに来ていただけてとても嬉しかったです✧。(◍＞◡＜◍)。✧",
+            "明日まで3Fオーディオコーナーレジ前にいますので、ぜひ会いに来てくださいね～！🎧 https://t.co/dEArr5Aziq"
+          ]
+        }
+      ],
+      "groupingNote": "明日まで展示中。投稿時点で既に終了とはしない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 764579,
+      "postSha256": "572a3ba6e998cc9fa2177598121ef37c40d333375eb21bcc1a4561adc52f54fd",
+      "textSha256": "c3bb4db4cd1fcfb8eacfe161b36c07fd60bc440026ee3414392d629fced3199a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1106767829519335424",
+    "source": "public-post",
+    "description": "sapporo-radius-panel-end-2019 matched control",
+    "post": {
+      "id": "1106767829519335424",
+      "createdAt": "2019-03-16T04:03:07.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "🌸春の超Payトク祭り🌸\n\n3/31（日）まで、LINE Pay支払いで20％分還元‼️もちろんビックポイントも8％たまります😊もらえるくじも実施中☀️\n詳しくはこちら➡️https://t.co/DYyAbfNLNt\n是非ご利用下さいませ～ヾ(o´∀｀o)ﾉ\n#LINEPay https://t.co/8U6jwlXGdL",
+      "url": "https://x.com/bic_sapporo/status/1106767829519335424",
+      "media": [
+        "https://pbs.twimg.com/media/D1wF1YbUcAAyMMh.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1106767829519335424",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 769264,
+      "postSha256": "6afdd8fed7ec46c6a0f1fb5e6795b48a83ee6d17ad6c271dc07148573bddd517",
+      "textSha256": "50fad6523acbeb2c11ce05ca2d3060031f99e7d6d25a3aaba8f1707509fab1d5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

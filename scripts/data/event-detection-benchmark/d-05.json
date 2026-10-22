@@ -1,0 +1,157 @@
+[
+  {
+    "id": "public-d-2033362961813971301",
+    "source": "public-post",
+    "description": "Apple体験会のオリジナルクリアファイル",
+    "post": {
+      "id": "2033362961813971301",
+      "createdAt": "2026-03-16T02:01:22.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ビックカメラ有楽町店 1F 店頭ピロティにてAppleイベントを開催中！！\n\n新しく誕生したMacBook Neoを実際に触ってみませんか？\n体験いただいたお客様には記念品としてAppleオリジナルのクリアファイルをプレゼント！🎁\n\n全く新しいMacBook Neoは好評販売中！！\n#MacBookNeo https://t.co/m08FVHGKb8",
+      "url": "https://x.com/bic_yuurakuchou/status/2033362961813971301",
+      "media": [
+        "https://pbs.twimg.com/media/HDf0zPFaoAA8Uza.jpg",
+        "https://pbs.twimg.com/media/HDf00YyasAAmnL1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "Apple製品の体験者へのApple記念品プレゼント。イベントや配布はあるが娘との関与がない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "ordinary-event",
+      "giveaway",
+      "clear-file",
+      "experience"
+    ],
+    "group": "macbook-neo-experience-march-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1977177029553668121",
+    "source": "public-post",
+    "description": "ソニックゲーム体験会の特典",
+    "post": {
+      "id": "1977177029553668121",
+      "createdAt": "2025-10-12T00:58:32.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "7階ゲームコーナーからイベントお知らせ📢\n本日・明日の2日間\n11時〜19時まで\n🏎「#ソニックレーシング クロスワールド」🏎の\n体験会を実施します‼️\n\nご体験いただいた方には\nクリアファイルをプレゼント🎁\n遊ぶたびに変化するソニックたちのレースを\nぜひご体験ください😊 https://t.co/t7baKNydEo",
+      "url": "https://x.com/biccamera_nanba/status/1977177029553668121",
+      "media": [
+        "https://pbs.twimg.com/media/G3BXRvCbwAAzHr9.jpg",
+        "https://pbs.twimg.com/media/G3BXZlrbgAATZv1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ソニックのゲーム体験会とクリアファイル特典であり、ビッカメ娘の企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "ordinary-event",
+      "giveaway",
+      "experience"
+    ],
+    "group": "sonic-crossworlds-demo-october-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1975481700064133256",
+    "source": "public-post",
+    "description": "ポケモンのシリアルコード先着配布",
+    "post": {
+      "id": "1975481700064133256",
+      "createdAt": "2025-10-07T08:41:54.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "『ポケットモンスター スカーレット・バイオレット』\n色違いの伝説ポケモンプレゼントキャンペーン\nシリアルコード再入荷しました！\n中央レジにて先着配布中。\n※無くなり次第配布終了\n※必ずゲーム機本体をお持ち下さい。\n※画面の写真やスクリーンショットのご提示ではお渡し出来ません。 https://t.co/M4hXSYOQCU",
+      "url": "https://x.com/bic_hamamatsu/status/1975481700064133256",
+      "media": [
+        "https://pbs.twimg.com/media/G2pRUfSbIAEXFP6.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "配布・プレゼントはゲーム内ポケモンのシリアルコード。ビッカメ娘の物品や出演とは無関係。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "giveaway",
+      "first-come"
+    ],
+    "group": "pokemon-shiny-serial-october-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1975445499521212846",
+    "source": "public-post",
+    "description": "ポケモンカード再販の当日抽選",
+    "post": {
+      "id": "1975445499521212846",
+      "createdAt": "2025-10-07T06:18:03.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "📢当日抽選販売(再販)のお知らせ\n＃ポケモンカードゲーム\nスカーレット＆バイオレット　ハイクラスパック\n＃テラスタルフェスex\n詳細は画像または店頭でご確認ください🙇 https://t.co/x3LNhzTZEz",
+      "url": "https://x.com/biccamera_nanba/status/1975445499521212846",
+      "media": [
+        "https://pbs.twimg.com/media/G2oxJM5agAIdGnN.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "他IPのカード商品の再販売と抽選であり、娘の名刺・コラボカードの企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "trading-card",
+      "lottery",
+      "resale"
+    ],
+    "group": "pokemon-terastal-resale-october-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1981238491163087107",
+    "source": "public-post",
+    "description": "Switch2用メモリーカードの取扱開始",
+    "post": {
+      "id": "1981238491163087107",
+      "createdAt": "2025-10-23T05:57:20.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "Switch2で使える\n『マイクロSDエクスプレスカード』\n任天堂ライセンス以外の商品も取り扱い始めましたヾ(*´ω`)ﾉﾞ\n大容量512GBもあります！\n是非ゲームコーナーにお越しください(*´pq`*) https://t.co/GnOMcQai0u",
+      "url": "https://x.com/bic_sagamioono/status/1981238491163087107",
+      "media": [
+        "https://pbs.twimg.com/media/G37FlNQXQAA5JmK.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "カードは記憶媒体で、ライセンス品以外も扱う通常商品案内。娘の対象物ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "card-word",
+      "ordinary-product",
+      "stock-notice"
+    ],
+    "group": "switch2-microsd-stock-october-2025",
+    "reviewStatus": "provisional"
+  }
+]

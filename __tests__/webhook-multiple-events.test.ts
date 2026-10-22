@@ -1,775 +1,206 @@
 import { expect, spyOn, test } from 'bun:test'
-import { readdir, readFile } from 'node:fs/promises'
 import * as discord from '@api/services/discord'
-import * as eventService from '@api/services/event-service'
-import { rejudgeWebhookJob, resolveWebhookJob, retryWebhookJob } from '@api/services/webhook-admin'
-import { extractWebhookEvents, webhookProcessingErrorCode } from '@api/services/webhook-extraction'
 import { getWebhookJob, insertWebhookJob } from '@api/services/webhook-jobs'
-import { handleWebhookQueue, processWebhookJob } from '@api/services/webhook-process'
-import type { TitleFetcher } from '@api/services/webhook-title'
-import type { Bindings } from '@api/types/bindings'
+import { processWebhookJob } from '@api/services/webhook-process'
+import { getWebhookPrompt } from '@api/services/webhook-prompt'
 import type { EventDetectionNotification } from '@biccame/shared/bot'
-import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
-import type { ClefAnswer, ClefRequest, ClefResponse } from '@biccame/shared/event-detect/clef'
+import type { ClefRequest } from '@biccame/shared/event-detect/clef'
 import { ClefRequestSchema } from '@biccame/shared/event-detect/clef'
-import type { DetectPost } from '@biccame/shared/event-detect/post'
-import { EventDetailSchema, EventRequestSchema } from '@biccame/shared/schemas/event.dto'
-import dayjs from 'dayjs'
-import { convertV4MiniflareOptions, Miniflare } from 'miniflare'
+import { answer, fixture, makePost, migrate } from './fixtures/webhook-multiple-events'
 
-const makePost = (id: string, text: string): DetectPost => ({
-  id,
-  text,
-  screenName: 'bic_akiba',
-  kind: 'original',
-  createdAt: '2026-10-11T00:00:00Z',
-  url: `https://x.com/bic_akiba/status/${id}`,
-  media: []
-})
-const answer = (request: ClefRequest): ClefResponse => ({
-  answers: Object.fromEntries(
-    Object.entries(request.questions).map(([id, question]): [string, ClefAnswer] => {
-      if (question.type === 'noul') return [id, { type: 'noul', noul: 0.99 }]
-      if (question.type === 'score') return [id, { type: 'score', score: 1, confidence: 0.99 }]
-      const keys = Object.keys(question.criteria)
-      const preferred: Record<string, string> = {
-        status: 'start',
-        category: keys.includes('ackey') ? 'ackey' : keys.includes('acsta') ? 'acsta' : 'limited_card',
-        condition: keys.includes('purchase') ? 'purchase' : 'everyone',
-        end_date: 'none',
-        quantity: 'none'
-      }
-      const desired = preferred[id]
-      const choice = desired !== undefined && keys.includes(desired) ? desired : keys.find((key) => key !== 'none')
-      if (choice === undefined) throw new Error('Missing choice')
-      return [
-        id,
-        {
-          type: 'choice',
-          choice,
-          probabilities: Object.fromEntries(keys.map((key) => [key, key === choice ? 0.99 : 0]))
-        }
-      ]
-    })
-  )
-})
-const migrate = async (db: D1Database, until?: string) => {
-  const dirs = (await readdir('prisma/migrations', { withFileTypes: true }))
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .sort()
-  for (const dir of dirs) {
-    if (until !== undefined && dir >= until) continue
-    await db.exec(
-      (await readFile(`prisma/migrations/${dir}/migration.sql`, 'utf8')).replace(/^--.*$/gm, '').replace(/\n/g, ' ')
-    )
+const SHARED_TEXT = '本日から船橋店と秋葉原店でふなとーたんと川崎たんの記念アクリルキーホルダーを全員に配布します。'
+const SINGLE_TEXT = '本日から船橋店でふなとーたんの記念アクリルキーホルダーを全員に配布します。'
+
+/** 判定の送信を記録し、配布数の質問は固定で返すフェイクの AI。回答は picks で決める。 */
+const recordingAi = (
+  base: { run: (model: string, raw: unknown) => Promise<unknown> },
+  picks: { character?: string },
+  requests: ClefRequest[]
+) => ({
+  run: async (model: string, raw: unknown) => {
+    const parsed = ClefRequestSchema.safeParse(raw)
+    if (!parsed.success) throw new Error('Invalid batched request')
+    requests.push(parsed.data)
+    return parsed.data.questions.distribution_item_count === undefined
+      ? answer(parsed.data, picks)
+      : base.run(model, raw)
   }
-}
-const fixture = async (name: string) => {
-  const mf = new Miniflare(
-    convertV4MiniflareOptions({
-      name,
-      modules: true,
-      script: 'export default {fetch(){return new Response("test")}}',
-      compatibilityDate: '2026-05-11',
-      d1Databases: ['DB'],
-      kvNamespaces: ['BICCAME_MUSUME_EVENTS']
-    })
-  )
-  const calls: string[] = []
-  const state = { fail: '' }
-  const env = Object.assign(await mf.getBindings<Bindings>(), {
-    EVENT_DETECTION_QUEUE: { send: async () => {} },
-    AI: {
-      run: async (_model: string, raw: unknown) => {
-        const request = ClefRequestSchema.safeParse(raw)
-        if (!request.success) throw new Error('Invalid request')
-        if (request.data.questions.distribution_item_count) {
-          const count =
-            (/赤い/.test(request.data.state) && /青い/.test(request.data.state)) ||
-            (/キーホルダ/.test(request.data.state) && /名刺/.test(request.data.state))
-              ? '2'
-              : '1'
-          return {
-            answers: { distribution_item_count: { type: 'choice', choice: count, probabilities: { [count]: 0.99 } } }
+})
+
+test('共同デザイン（娘が複数）は店舗ごとの候補で multiple を選び、対象の娘を決めず保留にする', async () => {
+  const { cleanup, env } = await fixture('independent-store-character-shared')
+  const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
+  const requests: ClefRequest[] = []
+  const target = Object.assign({}, env, { AI: recordingAi(env.AI, { character: 'multiple' }, requests) })
+  try {
+    await migrate(env.DB)
+    const post = { ...makePost('2109221721773576690', SHARED_TEXT), screenName: 'bic_funabashi' }
+    await insertWebhookJob(target, post)
+    await processWebhookJob(target, post.id, {
+      extractor: async () => ({
+        events: [
+          {
+            item: '記念アクリルキーホルダー',
+            stores: ['funabashi', 'akiba'],
+            characterIds: ['funato', 'kawasaki'],
+            evidence: [post.text]
           }
-        }
-        calls.push(request.data.state)
-        if (state.fail !== '' && request.data.state.includes(state.fail)) throw new Error('Synthetic candidate failure')
-        return answer(request.data)
-      }
-    }
-  })
-  const eventSpy = spyOn(eventService, 'getEvent').mockImplementation(async (_env, id) => {
-    const json = await env.DB.prepare('SELECT candidate_json FROM webhook_event_candidates WHERE event_id=?')
-      .bind(id)
-      .first<string>('candidate_json')
-    const candidate = EventRequestSchema.safeParse(json === null ? null : JSON.parse(json))
-    if (!candidate.success) throw new Error('Invalid stored event fixture')
-    const detail = EventDetailSchema.safeParse({
-      ...candidate.data,
-      createdAt: dayjs().toISOString(),
-      updatedAt: dayjs().toISOString(),
-      status: 'ongoing',
-      daysUntil: 0,
-      interestedCount: 0,
-      completedCount: 0,
-      comments: []
+        ]
+      })
     })
-    if (!detail.success) throw new Error('Invalid event detail fixture')
-    return detail.data
-  })
-  const cleanup = async () => {
-    eventSpy.mockRestore()
-    await mf.dispose()
+    // 件数の質問 1 回 + 店舗ごとの候補の判定 1 回ずつ。判定は 1 バッチで 64 問以内。
+    const judged = requests.filter((request) => request.questions.is_event !== undefined)
+    expect(requests).toHaveLength(3)
+    expect(judged.every((request) => Object.keys(request.questions).length <= 64)).toBe(true)
+    // 各候補の判定には、その候補自身の店舗が抽出段階の開催店舗候補として渡る。
+    expect(judged.map((request) => request.state.match(/抽出段階の開催店舗候補（未確定）: (\S+)/)?.[1])).toEqual([
+      'funabashi',
+      'akiba'
+    ])
+    // 店舗（store）と対象の娘（character）は独立した choice で、ふなとーたん（funato）と船橋店の娘（funabashi）は別の選択肢。
+    const character = judged[0].questions.character
+    expect(character.type === 'choice' ? Object.keys(character.criteria) : []).toEqual(
+      expect.arrayContaining(['funato', 'funabashi', 'kawasaki', 'multiple', 'none'])
+    )
+    expect(judged[0].questions['character.funato']).toBeUndefined()
+    const job = await getWebhookJob(target, post.id)
+    expect(job.candidates.map((candidate) => candidate.storeKey)).toEqual(['funabashi', 'akiba'])
+    expect(job.candidates.map((candidate) => candidate.item)).toEqual([
+      '記念アクリルキーホルダー',
+      '記念アクリルキーホルダー'
+    ])
+    expect(job.candidates.map((candidate) => candidate.status)).toEqual(['held', 'held'])
+    for (const candidate of job.candidates) {
+      expect(candidate.reasons).toContain('character_unconfirmed')
+      expect(candidate.reasons).not.toContain('store_unconfirmed')
+      expect(candidate.candidate).toBeNull()
+      expect(candidate.answers?.character).toMatchObject({ type: 'choice', choice: 'multiple' })
+    }
+    expect(job.candidates.map((candidate) => candidate.answers?.store)).toMatchObject([
+      { type: 'choice', choice: 'funabashi' },
+      { type: 'choice', choice: 'akiba' }
+    ])
+    // 候補ごとに送信入力は 1 件。親ジョブの送信入力は件数の質問だけ。
+    expect((await getWebhookPrompt(target, post.id)).requests).toEqual(requests.slice(0, 1))
+    expect((await getWebhookPrompt(target, post.id, job.candidates[0].eventUUID)).requests).toEqual(
+      requests.slice(1, 2)
+    )
+    expect((await getWebhookPrompt(target, post.id, job.candidates[1].eventUUID)).requests).toEqual(
+      requests.slice(2, 3)
+    )
+    expect(await target.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)
+  } finally {
+    delivery.mockRestore()
+    await cleanup()
   }
-  return { cleanup, env, calls, state }
-}
+}, 60000)
 
-// モデルの文章理解を偽装せず、抽出された原文断片を使った保存・分割・再試行を検証する。
-test('同カテゴリの2配布物を独立登録し、同投稿URLと再試行でも潰さない', async () => {
-  const { cleanup, env, calls } = await fixture('multiple-giveaway-registration')
+test('娘が 1 人なら店舗とは独立に funato のまま登録し、船橋店の娘（funabashi）に置き換えない', async () => {
+  const { cleanup, env } = await fixture('independent-store-character-single')
   const notifications: EventDetectionNotification[] = []
   const delivery = spyOn(discord, 'notifyEventDetection').mockImplementation(async (_env, input) => {
     notifications.push(input)
     return { status: 'sent', messageId: '1234567890' }
   })
+  const requests: ClefRequest[] = []
+  const target = Object.assign({}, env, { AI: recordingAi(env.AI, { character: 'funato' }, requests) })
   try {
     await migrate(env.DB)
-    const red = '本日から赤い限定名刺をどなたでも配布します。'
-    const blue = '本日から青い限定名刺をどなたでも配布します。'
-    const post = makePost('2109221721773576390', `${red}\n${blue}`)
-    const extractor = async () => ({
-      events: [
-        { item: '赤い限定名刺', evidence: [red] },
-        { item: '青い限定名刺', evidence: [blue] }
-      ]
+    const post = { ...makePost('2109221721773576692', SINGLE_TEXT), screenName: 'bic_funabashi' }
+    await insertWebhookJob(target, post)
+    await processWebhookJob(target, post.id, {
+      extractor: async () => ({
+        events: [
+          { item: '記念アクリルキーホルダー', stores: ['funabashi'], characterIds: ['funato'], evidence: [post.text] }
+        ]
+      })
     })
-    await insertWebhookJob(env, post)
-    await processWebhookJob(env, post.id, { extractor })
-    const saved = await getWebhookJob(env, post.id)
-    expect(saved.status).toBe('registered')
-    expect(saved.candidates.map((candidate) => candidate.status)).toEqual(['registered', 'registered'])
-    expect(new Set(saved.candidates.map((candidate) => candidate.eventUUID)).size).toBe(2)
-    expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM events').first<number>('total')).toBe(2)
-    expect(
-      await env.DB.prepare('SELECT COUNT(*) AS total FROM event_reference_urls WHERE url=?')
-        .bind(post.url)
-        .first<number>('total')
-    ).toBe(2)
-    expect(calls).toHaveLength(2)
-    expect(notifications.map((notification) => notification.candidate?.total)).toEqual([2, 2])
-    expect(notifications.map((notification) => notification.candidate?.index)).toEqual([1, 2])
-    await processWebhookJob(env, post.id, {
-      extractor: async () => {
-        throw new Error('Must not extract again')
+    const candidate = (await getWebhookJob(target, post.id)).candidates[0]
+    expect(candidate.status).toBe('registered')
+    expect(candidate.candidate?.stores).toEqual(['funabashi'])
+    expect(candidate.candidate?.characterIds).toEqual(['funato'])
+    expect(candidate.answers?.character).toMatchObject({ type: 'choice', choice: 'funato' })
+    expect(await target.DB.prepare('SELECT count(*) AS total FROM event_characters').first<number>('total')).toBe(1)
+    expect(notifications).toHaveLength(1)
+    expect(notifications[0].stores).toContain('ビックカメラ船橋駅FACE店')
+    expect(notifications[0].characters).toEqual(['ふなとーたん'])
+    expect(notifications[0].characters).not.toContain('ふなたん')
+  } finally {
+    delivery.mockRestore()
+    await cleanup()
+  }
+}, 60000)
+
+test('判定の応答が不完全なら保存せず failed にし、送った 1 バッチだけを履歴に残す', async () => {
+  const { cleanup, env } = await fixture('independent-store-character-incomplete')
+  const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
+  const incomplete = Object.assign({}, env, {
+    AI: {
+      run: async (model: string, raw: unknown) => {
+        const parsed = ClefRequestSchema.safeParse(raw)
+        if (!parsed.success) throw new Error('Invalid batched request')
+        return parsed.data.questions.character === undefined ? env.AI.run(model, raw) : { answers: {} }
       }
-    })
-    expect(calls).toHaveLength(2)
-    expect(notifications).toHaveLength(2)
-    const duplicate = makePost('2109221721773576391', post.text)
-    await insertWebhookJob(env, duplicate)
-    await processWebhookJob(env, duplicate.id, { extractor })
-    expect((await getWebhookJob(env, duplicate.id)).candidates.map((candidate) => candidate.status)).toEqual([
-      'held',
-      'held'
-    ])
-    expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM events').first<number>('total')).toBe(2)
-  } finally {
-    delivery.mockRestore()
-    await cleanup()
-  }
-}, 60000)
-
-test('片方の情報不足・再判定・手動解決で成功済み候補を変更しない', async () => {
-  const { cleanup, env, calls } = await fixture('multiple-giveaway-partial')
-  const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
-  try {
-    await migrate(env.DB)
-    const key = '10/16から3,000円以上ご購入でハロウィンアクリルキーホルダ―をプレゼントします。'
-    const card = 'ハロウィン限定名刺も用意しています。'
-    const post = makePost('2109221721773576392', `${key}\n${card}`)
-    await insertWebhookJob(env, post)
-    await processWebhookJob(env, post.id, {
-      extractor: async () => ({
-        events: [
-          { item: 'ハロウィンアクキー', evidence: [key] },
-          { item: 'ハロウィン限定名刺', evidence: [card] }
-        ]
-      })
-    })
-    const saved = await getWebhookJob(env, post.id)
-    expect(saved.status).toBe('held')
-    const registered = saved.candidates[0]
-    const held = saved.candidates[1]
-    expect(registered.status).toBe('registered')
-    expect(registered.candidate?.category).toBe('ackey')
-    expect(registered.candidate?.conditions[0].purchaseAmount).toBe(3000)
-    expect(held.status).toBe('held')
-    expect(held.reasons).toContain('start_date_unconfirmed')
-    expect(held.reasons).toContain('distribution_condition_unconfirmed')
-    expect(held.reasons).not.toContain('multiple_or_ambiguous_events')
-    expect(held.post.text).not.toContain('3,000円')
-    await expect(resolveWebhookJob(env, post.id, { action: 'reject' })).rejects.toThrow('Select a webhook candidate')
-    await rejudgeWebhookJob(env, post.id, held.eventUUID)
-    await processWebhookJob(env, post.id)
-    expect(calls).toHaveLength(3)
-    const rejudged = await getWebhookJob(env, post.id)
-    expect(rejudged.candidates[0].eventId).toBe(registered.eventId)
-    expect(rejudged.candidates[1].eventUUID).toBe(held.eventUUID)
-    if (registered.candidate === null) throw new Error('Expected candidate')
-    const event = {
-      ...registered.candidate,
-      uuid: held.eventUUID,
-      category: 'limited_card' as const,
-      title: 'ハロウィン限定名刺',
-      conditions: [{ uuid: crypto.randomUUID(), type: 'everyone' as const }],
-      referenceUrls: [{ uuid: crypto.randomUUID(), type: 'announce' as const, url: post.url }]
     }
-    await resolveWebhookJob(env, post.id, { action: 'register', candidateId: held.eventUUID, event })
-    await processWebhookJob(env, post.id)
-    const resolved = await getWebhookJob(env, post.id)
-    expect(resolved.status).toBe('registered')
-    expect(resolved.candidates[0].eventId).toBe(registered.eventId)
-    expect(resolved.candidates[1].candidate?.conditions).toEqual(event.conditions)
-    expect(calls).toHaveLength(3)
-    expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM events').first<number>('total')).toBe(2)
-  } finally {
-    delivery.mockRestore()
-    await cleanup()
-  }
-}, 60000)
-
-test('同配布物でも日付・購入条件が違えば別候補、失敗した候補だけを再試行する', async () => {
-  const { cleanup, env, calls, state } = await fixture('multiple-giveaway-retry')
-  const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
-  try {
-    await migrate(env.DB)
-    const first = '10/16から1,000円以上購入で記念限定名刺を配布します。'
-    const second = '10/16から3,000円以上購入で記念限定名刺を配布します。'
-    const post = makePost('2109221721773576393', `${first}\n${second}`)
-    state.fail = '3,000円'
-    await insertWebhookJob(env, post)
-    await expect(
-      processWebhookJob(env, post.id, {
-        extractor: async () => ({
-          events: [
-            { item: '記念限定名刺', evidence: [first] },
-            { item: '記念限定名刺', evidence: [second] }
-          ]
-        })
-      })
-    ).rejects.toThrow('Synthetic candidate failure')
-    const partial = await getWebhookJob(env, post.id)
-    expect(partial.candidates.map((candidate) => candidate.status)).toEqual(['registered', 'failed'])
-    state.fail = ''
-    await retryWebhookJob(env, post.id, {
-      notificationOnly: false,
-      allowUnknown: false,
-      candidateId: partial.candidates[1].eventUUID
-    })
-    await processWebhookJob(env, post.id)
-    const done = await getWebhookJob(env, post.id)
-    expect(done.candidates.map((candidate) => candidate.status)).toEqual(['registered', 'registered'])
-    expect(done.candidates.map((candidate) => candidate.candidate?.conditions[0].purchaseAmount)).toEqual([1000, 3000])
-    expect(done.candidates[0].eventId).toBe(partial.candidates[0].eventId)
-    expect(calls).toHaveLength(3)
-    expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM events').first<number>('total')).toBe(2)
-  } finally {
-    delivery.mockRestore()
-    await cleanup()
-  }
-}, 60000)
-
-test('複数店舗を選択候補の店舗へ限定し、同一候補の並行処理は重複登録しない', async () => {
-  const { cleanup, env } = await fixture('multiple-giveaway-stores')
-  const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
-  try {
-    await migrate(env.DB)
-    const text = 'アキバたんとあべのたんの限定名刺を本日からどなたでも配布します。'
-    const post = makePost('2109221721773576394', text)
-    await insertWebhookJob(env, post)
-    await processWebhookJob(env, post.id, {
-      extractor: async () => ({
-        events: [
-          { item: '合同限定名刺', store: 'akiba', evidence: [text] },
-          { item: '合同限定名刺', store: 'abeno', evidence: [text] }
-        ]
-      })
-    })
-    const job = await getWebhookJob(env, post.id)
-    expect(job.candidates.map((candidate) => candidate.candidate?.stores)).toEqual([['akiba'], ['abeno']])
-    const repeated = [
-      makePost('2109221721773576395', '本日から競合限定名刺をどなたでも配布します。'),
-      makePost('2109221721773576396', '本日から競合限定名刺をどなたでも配布します。')
-    ]
-    for (const value of repeated) await insertWebhookJob(env, value)
-    const extractor = async (value: DetectPost) => ({ events: [{ item: '競合限定名刺', evidence: [value.text] }] })
-    await Promise.allSettled(repeated.map((value) => processWebhookJob(env, value.id, { extractor })))
-    for (const value of repeated) await processWebhookJob(env, value.id)
-    expect(
-      await env.DB.prepare("SELECT COUNT(*) AS total FROM events WHERE title='競合限定名刺'").first<number>('total')
-    ).toBe(1)
-  } finally {
-    delivery.mockRestore()
-    await cleanup()
-  }
-}, 60000)
-
-test('抽出通信を検証し、未設定・不正根拠は再試行できる失敗にする', async () => {
-  const { cleanup, env } = await fixture('multiple-giveaway-extraction')
-  try {
-    const post = makePost('2109221721773576397', '本日から限定名刺をどなたでも配布します。')
-    const configured = {
-      ...env,
-      ANTHROPIC_BASE_URL: 'https://model.example.test/',
-      ANTHROPIC_AUTH_TOKEN: 'synthetic-token'
-    }
-    const result = await extractWebhookEvents(configured, post, async (url, init) => {
-      expect(url).toBe('https://model.example.test/v1/messages')
-      expect(new Headers(init.headers).get('Authorization')).toBe('Bearer synthetic-token')
-      return Response.json({
-        content: [
-          {
-            type: 'tool_use',
-            name: 'answer',
-            input: { events: [{ item: '限定名刺', store: 'akiba', evidence: [post.text] }] }
-          }
-        ]
-      })
-    })
-    expect(result.events).toHaveLength(1)
-    await expect(extractWebhookEvents(env, post)).rejects.toThrow('extraction_not_configured')
-    await expect(
-      extractWebhookEvents(configured, post, async () =>
-        Response.json({
-          content: [
-            { type: 'tool_use', name: 'answer', input: { events: [{ item: '限定名刺', evidence: ['創作した条件'] }] } }
-          ]
-        })
-      )
-    ).rejects.toThrow('unsupported evidence')
-    await migrate(env.DB)
-    await insertWebhookJob(env, post)
-    await expect(processWebhookJob(env, post.id)).rejects.toThrow('extraction_not_configured')
-    const failed = await getWebhookJob(env, post.id)
-    expect(failed.status).toBe('failed')
-    expect(failed.lastError).toBe('extraction_not_configured')
-    expect(failed.candidates).toEqual([])
-  } finally {
-    await cleanup()
-  }
-}, 60000)
-
-test('旧単一ジョブのUUID・回答・通知状態を保持し、旧保留だけを再抽出する', async () => {
-  const { cleanup, env } = await fixture('multiple-giveaway-legacy')
-  const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
-  try {
-    const migration = '20261013123514_multiple_giveaway_events'
-    await migrate(env.DB, migration)
-    const text = '本日から赤い限定名刺をどなたでも配布します。\n本日から青い限定名刺をどなたでも配布します。'
-    const held = makePost('2109221721773576398', text)
-    const registered = makePost('2109221721773576399', text)
-    const registeredUUID = crypto.randomUUID()
-    const heldUUID = crypto.randomUUID()
-    const answers = JSON.stringify({
-      is_event: { type: 'noul', noul: 0.99 },
-      single_event: { type: 'noul', noul: 0.2 }
-    })
-    for (const [post, uuid, status] of [
-      [held, heldUUID, 'held'],
-      [registered, registeredUUID, 'registered']
-    ] as const) {
-      await env.DB.prepare(`INSERT INTO webhook_event_jobs
-        (post_id,post_json,source_url,event_uuid,status,result_json,answers_json,question_version,notification_status,notification_id,notification_attempts,event_id,created_at,updated_at)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
-        .bind(
-          post.id,
-          JSON.stringify(post),
-          post.url,
-          uuid,
-          status,
-          JSON.stringify({ status: 'held', confidence: 0.99, reasons: ['multiple_or_ambiguous_events'] }),
-          answers,
-          'v2-webhook-v3',
-          'sent',
-          '1234567890',
-          2,
-          status === 'registered' ? uuid : null,
-          1791676800000,
-          1791676800000
-        )
-        .run()
-    }
-    await env.DB.exec(
-      (await readFile(`prisma/migrations/${migration}/migration.sql`, 'utf8'))
-        .replace(/^--.*$/gm, '')
-        .replace(/\n/g, ' ')
-    )
-    const copied = await getWebhookJob(env, registered.id)
-    expect(copied.candidates).toHaveLength(1)
-    expect(copied.candidates[0].eventUUID).toBe(registeredUUID)
-    expect(copied.candidates[0].notificationStatus).toBe('sent')
-    expect(copied.candidates[0].notificationAttempts).toBe(2)
-    expect(copied.candidates[0].answers?.single_event).toEqual({ type: 'noul', noul: 0.2 })
-    await expect(rejudgeWebhookJob(env, registered.id)).rejects.toThrow('cannot be re-judged')
-    await rejudgeWebhookJob(env, held.id, heldUUID)
-    expect((await getWebhookJob(env, held.id)).candidates).toHaveLength(0)
-    await processWebhookJob(env, held.id, {
-      extractor: async () => ({
-        events: held.text
-          .split('\n')
-          .map((evidence, index) => ({ item: index === 0 ? '赤い限定名刺' : '青い限定名刺', evidence: [evidence] }))
-      })
-    })
-    expect((await getWebhookJob(env, held.id)).candidates.map((candidate) => candidate.status)).toEqual([
-      'registered',
-      'registered'
-    ])
-    expect((await getWebhookJob(env, registered.id)).candidates[0].eventUUID).toBe(registeredUUID)
-  } finally {
-    delivery.mockRestore()
-    await cleanup()
-  }
-}, 60000)
-
-test('候補単位の通知不明は盲目的に再送せず、承認された候補だけ再送する', async () => {
-  const { cleanup, env, calls } = await fixture('multiple-giveaway-notification')
-  const sent: string[] = []
-  const state = { unknown: true }
-  const delivery = spyOn(discord, 'notifyEventDetection').mockImplementation(async (_env, input) => {
-    sent.push(input.requestId)
-    return state.unknown && input.candidate?.index === 1
-      ? { status: 'unknown', kind: 'delivery_unknown' }
-      : { status: 'sent', messageId: '1234567890' }
   })
   try {
     await migrate(env.DB)
-    const lines = [
-      '本日から通知用赤い限定名刺をどなたでも配布します。',
-      '本日から通知用青い限定名刺をどなたでも配布します。'
-    ]
-    const post = makePost('2109221721773576400', lines.join('\n'))
-    await insertWebhookJob(env, post)
-    await processWebhookJob(env, post.id, {
-      extractor: async () => ({
-        events: lines.map((evidence, index) => ({
-          item: index === 0 ? '通知用赤い限定名刺' : '通知用青い限定名刺',
-          evidence: [evidence]
-        }))
-      })
-    })
-    const job = await getWebhookJob(env, post.id)
-    expect(job.candidates.map((candidate) => candidate.notificationStatus)).toEqual(['unknown', 'sent'])
-    await processWebhookJob(env, post.id)
-    expect(sent).toHaveLength(2)
-    const candidateId = job.candidates[0].eventUUID
+    const post = { ...makePost('2109221721773576691', SINGLE_TEXT), screenName: 'bic_funabashi' }
+    await insertWebhookJob(incomplete, post)
     await expect(
-      retryWebhookJob(env, post.id, { candidateId, notificationOnly: true, allowUnknown: false })
-    ).rejects.toThrow('explicit confirmation')
-    state.unknown = false
-    await retryWebhookJob(env, post.id, { candidateId, notificationOnly: true, allowUnknown: true })
-    await processWebhookJob(env, post.id)
-    expect(sent).toEqual([candidateId, job.candidates[1].eventUUID, candidateId])
-    expect(calls).toHaveLength(2)
-  } finally {
-    delivery.mockRestore()
-    await cleanup()
-  }
-}, 60000)
-
-test('旧移行済みイベントの生成タイトルと新抽出名が違っても再告知を重複登録しない', async () => {
-  const { cleanup, env } = await fixture('multiple-giveaway-legacy-duplicate')
-  const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
-  try {
-    const migration = '20261013123514_multiple_giveaway_events'
-    await migrate(env.DB, migration)
-    const oldPost = makePost('2109221721773576410', '10月11日より1,000円以上ご購入で限定名刺を配布します。')
-    const uuid = crypto.randomUUID()
-    const candidate = EventRequestSchema.safeParse({
-      uuid,
-      category: 'limited_card',
-      title: 'アキバたん 限定名刺配布',
-      stores: ['akiba'],
-      startDate: '2026-10-11T00:00:00+09:00',
-      isVerified: true,
-      isPreliminary: false,
-      shouldTweet: false,
-      conditions: [{ uuid: crypto.randomUUID(), type: 'purchase', purchaseAmount: 1000 }],
-      referenceUrls: [{ uuid: crypto.randomUUID(), type: 'announce', url: oldPost.url }]
-    })
-    if (!candidate.success) throw new Error('Invalid legacy candidate fixture')
-    const timestamp = toD1DateTime(dayjs().valueOf())
-    await env.DB.batch([
-      env.DB.prepare(
-        'INSERT INTO events (id,category,title,start_date,is_verified,is_preliminary,created_at,updated_at) VALUES (?,?,?,?,1,0,?,?)'
-      ).bind(
-        uuid,
-        candidate.data.category,
-        candidate.data.title,
-        toD1DateTime(candidate.data.startDate),
-        timestamp,
-        timestamp
-      ),
-      env.DB.prepare('INSERT INTO event_stores (id,event_id,store_key,created_at,updated_at) VALUES (?,?,?,?,?)').bind(
-        crypto.randomUUID(),
-        uuid,
-        'akiba',
-        timestamp,
-        timestamp
-      ),
-      env.DB.prepare(`INSERT INTO webhook_event_jobs (post_id,post_json,source_url,event_uuid,status,candidate_json,result_json,event_id,question_version,notification_status,created_at,updated_at)
-        VALUES (?,?,?,?,'registered',?,?,?,'v2-webhook-v3','sent',?,?)`).bind(
-        oldPost.id,
-        JSON.stringify(oldPost),
-        oldPost.url,
-        uuid,
-        JSON.stringify(candidate.data),
-        JSON.stringify({ status: 'register', confidence: 0.99, reasons: [], candidate: candidate.data }),
-        uuid,
-        dayjs().valueOf(),
-        dayjs().valueOf()
-      )
-    ])
-    await env.DB.exec(
-      (await readFile(`prisma/migrations/${migration}/migration.sql`, 'utf8'))
-        .replace(/^--.*$/gm, '')
-        .replace(/\n/g, ' ')
-    )
-    const migrated = await getWebhookJob(env, oldPost.id)
-    expect(migrated.candidates[0].item).toBe('アキバたん 限定名刺配布')
-    const item = '秋の限定名刺'
-    expect(migrated.candidates[0].item).not.toBe(item)
-    const repost = makePost('2109221721773576411', oldPost.text)
-    await insertWebhookJob(env, repost)
-    await processWebhookJob(env, repost.id, {
-      extractor: async () => ({ events: [{ item, evidence: [repost.text] }] })
-    })
-    const held = await getWebhookJob(env, repost.id)
-    expect(held.candidates[0].status).toBe('held')
-    expect(held.candidates[0].reasons).toContain(`possible_duplicate:${uuid}`)
-    expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM events').first<number>('total')).toBe(1)
-    // 旧行との照合でも、購入条件が違えば別の配布候補として登録する。
-    const different = makePost('2109221721773576412', '10月11日より3,000円以上ご購入で限定名刺を配布します。')
-    await insertWebhookJob(env, different)
-    await processWebhookJob(env, different.id, {
-      extractor: async () => ({ events: [{ item, evidence: [different.text] }] })
-    })
-    expect((await getWebhookJob(env, different.id)).candidates[0].status).toBe('registered')
-    expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM events').first<number>('total')).toBe(2)
-    expect((await getWebhookJob(env, oldPost.id)).candidates[0].eventId).toBe(uuid)
-  } finally {
-    delivery.mockRestore()
-    await cleanup()
-  }
-}, 60000)
-
-// 1 投稿に複数の配布物があっても、候補ごとに別の item で題を付けさせる（同じ本文で区別できないまま同じ題にならない）。
-test('複数の配布物の候補ごとに、その配布物の名前を渡して別々の題を付ける（保留になる候補にも付く）', async () => {
-  const { cleanup, env } = await fixture('multiple-giveaway-titles')
-  const delivery = spyOn(discord, 'notifyEventDetection').mockImplementation(async () => ({
-    status: 'sent',
-    messageId: '1234567890'
-  }))
-  try {
-    await migrate(env.DB)
-    const configured = Object.assign(env, {
-      ANTHROPIC_BASE_URL: 'https://anthropic.example.test',
-      ANTHROPIC_AUTH_TOKEN: 'test-token-not-a-secret'
-    })
-    // 題の通信は titleFetcher のモック。user メッセージの 1 行目（配布物の名前）で返す題を変える
-    const requested: string[] = []
-    const titleFetcher: TitleFetcher = async (_url, init) => {
-      const body: unknown = JSON.parse(String(init.body))
-      if (typeof body !== 'object' || body === null) throw new Error('Unexpected title request body')
-      const messages: unknown = Reflect.get(body, 'messages')
-      const content: unknown = Array.isArray(messages) ? Reflect.get(messages[0], 'content') : undefined
-      if (typeof content !== 'string') throw new Error('Unexpected title request content')
-      const head = content.split('\n')[0]
-      requested.push(head)
-      const title = head.endsWith('赤い限定名刺') ? '赤名刺' : '青名刺'
-      return Response.json({ content: [{ type: 'tool_use', name: 'answer', input: { title } }] })
-    }
-    const red = '本日から赤い限定名刺をどなたでも配布します。'
-    const blue = '本日から青い限定名刺をどなたでも配布します。'
-    const extractor = async () => ({
-      events: [
-        { item: '赤い限定名刺', evidence: [red] },
-        { item: '青い限定名刺', evidence: [blue] }
-      ]
-    })
-    const post = makePost('2109221721773576390', `${red}\n${blue}`)
-    await insertWebhookJob(configured, post)
-    await processWebhookJob(configured, post.id, { extractor, titleFetcher })
-    const saved = await getWebhookJob(configured, post.id)
-    // 候補ごとに別の item を渡し、候補ごとに別の題が付いて登録される
-    expect(requested).toHaveLength(2)
-    expect(requested[0]).toEndWith(': 赤い限定名刺')
-    expect(requested[1]).toEndWith(': 青い限定名刺')
-    expect(saved.candidates.map((candidate) => candidate.candidate?.title)).toEqual(['赤名刺', '青名刺'])
-    expect(saved.candidates.map((candidate) => candidate.eventTitle)).toEqual(['赤名刺', '青名刺'])
-    expect(saved.candidates.map((candidate) => candidate.item)).toEqual(['赤い限定名刺', '青い限定名刺'])
-    for (const candidate of saved.candidates) expect(candidate.reasons).toContain('title_generated')
-    // 同じ内容の別投稿は重複で保留になるが、保留の候補にも配布物ごとの題が付く（イベントは増えない）
-    const duplicate = makePost('2109221721773576391', post.text)
-    await insertWebhookJob(configured, duplicate)
-    await processWebhookJob(configured, duplicate.id, { extractor, titleFetcher })
-    const held = await getWebhookJob(configured, duplicate.id)
-    expect(held.candidates.map((candidate) => candidate.status)).toEqual(['held', 'held'])
-    expect(held.candidates.map((candidate) => candidate.candidate?.title)).toEqual(['赤名刺', '青名刺'])
-    for (const candidate of held.candidates) {
-      expect(candidate.eventTitle).toBeNull()
-      expect(candidate.reasons).toContain('title_generated')
-    }
-    expect(requested).toHaveLength(4)
-    expect(requested[2]).toEndWith(': 赤い限定名刺')
-    expect(requested[3]).toEndWith(': 青い限定名刺')
-    expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM events').first<number>('total')).toBe(2)
-  } finally {
-    delivery.mockRestore()
-    await cleanup()
-  }
-}, 60000)
-
-// 原文は投稿として保持するが、失敗理由には秘密や通信先・応答本文を含めない。
-test('抽出失敗コードをジョブへ保存し、未知例外は汎用コードのままにする', async () => {
-  const { cleanup, env, calls } = await fixture('giveaway-extraction-error-codes')
-  const configured = {
-    ...env,
-    ANTHROPIC_BASE_URL: 'https://synthetic-private-model.example.test',
-    ANTHROPIC_AUTH_TOKEN: 'synthetic-private-token'
-  }
-  const failures: { code: string; fetcher: TitleFetcher }[] = [
-    {
-      code: 'extraction_http_403',
-      fetcher: async () => new Response(configured.ANTHROPIC_AUTH_TOKEN, { status: 403 })
-    },
-    {
-      code: 'extraction_timeout',
-      fetcher: async () => {
-        throw new DOMException(configured.ANTHROPIC_AUTH_TOKEN, 'TimeoutError')
-      }
-    },
-    {
-      code: 'extraction_network_error',
-      fetcher: async () => {
-        throw new Error(configured.ANTHROPIC_BASE_URL)
-      }
-    },
-    {
-      code: 'extraction_invalid_response',
-      fetcher: async () => new Response(configured.ANTHROPIC_AUTH_TOKEN)
-    },
-    {
-      code: 'extraction_missing_tool_result',
-      fetcher: async () => Response.json({ content: [{ type: 'text', text: configured.ANTHROPIC_AUTH_TOKEN }] })
-    },
-    {
-      code: 'extraction_invalid_evidence',
-      fetcher: async () =>
-        Response.json({
-          content: [
-            { type: 'tool_use', name: 'answer', input: { events: [{ item: '限定名刺', evidence: ['創作した条件'] }] } }
-          ]
+      processWebhookJob(incomplete, post.id, {
+        extractor: async () => ({
+          events: [{ item: '記念アクリルキーホルダー', stores: [], characterIds: [], evidence: [post.text] }]
         })
-    },
-    {
-      code: 'extraction_invalid_store',
-      fetcher: async () =>
-        Response.json({
-          content: [
-            {
-              type: 'tool_use',
-              name: 'answer',
-              input: { events: [{ item: '限定名刺', store: 'abeno', evidence: ['限定名刺を配布します。'] }] }
-            }
-          ]
-        })
-    },
-    {
-      code: 'extraction_duplicate_candidate',
-      fetcher: async () =>
-        Response.json({
-          content: [
-            {
-              type: 'tool_use',
-              name: 'answer',
-              input: { events: [0, 1].map(() => ({ item: '限定名刺', evidence: ['限定名刺を配布します。'] })) }
-            }
-          ]
-        })
-    }
-  ]
-  try {
-    await migrate(env.DB)
-    for (const [index, failure] of failures.entries()) {
-      const post = makePost(String(2109221721773576450n + BigInt(index)), '限定名刺を配布します。')
-      await insertWebhookJob(env, post)
-      await expect(processWebhookJob(configured, post.id, { extractionFetcher: failure.fetcher })).rejects.toThrow()
-      const saved = await getWebhookJob(env, post.id)
-      expect(saved.lastError).toBe(failure.code)
-      expect(saved.status).toBe('failed')
-      expect(saved.model).toBeNull()
-      expect(saved.candidates).toEqual([])
-      expect(saved.lastError).not.toContain(configured.ANTHROPIC_AUTH_TOKEN)
-      expect(saved.lastError).not.toContain(configured.ANTHROPIC_BASE_URL)
-      expect(saved.lastError).not.toContain(post.text)
-    }
-    const unknown = makePost('2109221721773576460', '限定名刺を配布します。')
-    await insertWebhookJob(env, unknown)
-    await expect(
-      processWebhookJob(env, unknown.id, {
-        extractor: async () => {
-          throw new Error(configured.ANTHROPIC_AUTH_TOKEN)
-        }
       })
-    ).rejects.toThrow()
-    expect((await getWebhookJob(env, unknown.id)).lastError).toBe('processing_failed')
-    expect(webhookProcessingErrorCode(new Error(configured.ANTHROPIC_AUTH_TOKEN))).toBe('processing_failed')
-    expect(calls).toHaveLength(0)
+    ).rejects.toThrow('Incomplete detection response')
+    const failed = await getWebhookJob(incomplete, post.id)
+    expect(failed.candidates[0].answers).toBeNull()
+    expect(failed.candidates[0].status).toBe('failed')
+    const prompt = await getWebhookPrompt(incomplete, post.id, failed.candidates[0].eventUUID)
+    expect(prompt.requests).toHaveLength(1)
+    expect(prompt.requests[0].questions.store).toBeDefined()
+    expect(prompt.requests[0].questions.character).toBeDefined()
+    expect(await incomplete.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)
   } finally {
+    delivery.mockRestore()
     await cleanup()
   }
 }, 60000)
 
-test('キューログは未設定の安全なコードだけを出し、失敗は再試行する', async () => {
-  const { cleanup, env } = await fixture('giveaway-extraction-queue-errors')
-  const log = spyOn(console, 'error').mockImplementation(() => {})
-  const retries: number[] = []
-  const acknowledgements: string[] = []
+test('判定の送信が失敗した場合、送ろうとした 1 バッチだけを履歴に載せる', async () => {
+  const { cleanup, env } = await fixture('prompt-partial-send')
+  const sent: ClefRequest[] = []
+  const target = Object.assign({}, env, {
+    AI: {
+      run: async (_model: string, raw: unknown) => {
+        const parsed = ClefRequestSchema.safeParse(raw)
+        if (!parsed.success) throw new Error('Invalid prompt request')
+        sent.push(parsed.data)
+        if (parsed.data.questions.is_event) throw new Error('Synthetic first-batch failure')
+        return { answers: { distribution_item_count: { type: 'choice', choice: '1', probabilities: { '1': 0.99 } } } }
+      }
+    }
+  })
   try {
     await migrate(env.DB)
-    const post = makePost('2109221721773576461', '限定名刺を配布します。')
-    await insertWebhookJob(env, post)
-    await handleWebhookQueue(
-      {
-        queue: 'biccame-event-detection-local',
-        metadata: { metrics: { backlogCount: 1, backlogBytes: 0 } },
-        messages: [
-          {
-            id: 'synthetic-message',
-            timestamp: dayjs().toDate(),
-            attempts: 1,
-            body: { postId: post.id },
-            ack: () => {
-              acknowledgements.push('ack')
-            },
-            retry: (options) => {
-              if (options?.delaySeconds !== undefined) retries.push(options.delaySeconds)
-            }
-          }
-        ],
-        ackAll: () => {},
-        retryAll: () => {}
-      },
-      env
-    )
-    expect(log.mock.calls).toEqual([['[webhook-queue] processing failed: extraction_not_configured']])
-    expect(retries).toEqual([60])
-    expect(acknowledgements).toEqual([])
-    expect((await getWebhookJob(env, post.id)).lastError).toBe('extraction_not_configured')
+    const source = makePost('2112431406978945273', '本日から記念アクリルキーホルダーを全員に配布します。')
+    await insertWebhookJob(target, source)
+    await expect(
+      processWebhookJob(target, source.id, {
+        extractor: async () => ({
+          events: [{ item: '記念アクリルキーホルダー', stores: [], characterIds: [], evidence: [source.text] }]
+        })
+      })
+    ).rejects.toThrow('Synthetic first-batch failure')
+    const failed = await getWebhookJob(target, source.id)
+    const snapshot = await getWebhookPrompt(target, source.id, failed.candidates[0].eventUUID)
+    expect(snapshot.requests).toEqual(sent.slice(1))
+    expect(snapshot.requests).toHaveLength(1)
+    expect(snapshot.requests[0].questions['character.funato']).toBeUndefined()
+    expect(snapshot.requests[0].questions.character).toBeDefined()
+    expect(failed.candidates[0].answers).toBeNull()
   } finally {
-    log.mockRestore()
     await cleanup()
   }
 }, 60000)

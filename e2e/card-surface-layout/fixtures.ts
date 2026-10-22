@@ -11,6 +11,7 @@ export const events = ['limited_card', 'regular_card', 'ackey', 'other'].map((ca
         ? '秋の記念プレゼント・とても長いイベント名でも条件と開催店舗を比較できる合成データ'
         : '秋の記念プレゼント',
     stores: ['nagoyagate'],
+    characterIds: [],
     startDate: '2026-10-01',
     endDate: '2026-11-06',
     conditions: [],

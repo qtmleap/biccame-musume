@@ -1,0 +1,133 @@
+[
+  {
+    "id": "expanded-v2-positive-1904084601221632431",
+    "source": "public-post",
+    "description": "kashiwa-store20-bingo-trading-card-2025",
+    "post": {
+      "id": "1904084601221632431",
+      "createdAt": "2025-03-24T08:15:19.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【3階 #携帯コーナー】\n\n⭐️イベント告知です⭐️\n3/29(土)30(日)11:00-19:00\n\n柏店20th記念\n春の通信大相談会&ビンゴイベント開催！\n参加費無料でどなた様でもご参加頂けます。\nイベント参加者には数量限定で柏たんトレカ＆お菓子プレゼント✨\n※4/5-6にも同様の内容で柏たんトレカ配布予定です✨ https://t.co/UrwQsmXEgY",
+      "url": "https://x.com/bic_kashiwa/status/1904084601221632431",
+      "media": [
+        "https://pbs.twimg.com/media/Gmyq1MUbIAAfrGY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": "2025-03-29",
+      "conditions": null
+    },
+    "rationale": "無料の通信相談会ビンゴ参加特典。購入条件なしが明記。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-store20-bingo-trading-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "柏たんトレカ＆お菓子",
+          "evidence": [
+            "【3階 #携帯コーナー】",
+            "⭐️イベント告知です⭐️",
+            "3/29(土)30(日)11:00-19:00",
+            "柏店20th記念",
+            "春の通信大相談会&ビンゴイベント開催！",
+            "参加費無料でどなた様でもご参加頂けます。",
+            "イベント参加者には数量限定で柏たんトレカ＆お菓子プレゼント✨",
+            "※4/5-6にも同様の内容で柏たんトレカ配布予定です✨ https://t.co/UrwQsmXEgY"
+          ]
+        }
+      ],
+      "groupingNote": "無料の通信相談会ビンゴ参加特典。購入条件なしが明記。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 159766,
+      "postSha256": "0a913b1ed8223a2ff5c4d2ada5a98cfeb2290676a8dc8ad3b292cd31004688de",
+      "textSha256": "e533155ee7613ac08a11a10e8d60a7cce6b306dc839bce3053ef96064a31abe1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1902266796717027601",
+    "source": "public-post",
+    "description": "kashiwa-store20-bingo-trading-card-2025 matched control",
+    "post": {
+      "id": "1902266796717027601",
+      "createdAt": "2025-03-19T07:52:01.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【7階　#ゲームコーナー 🎮】\n\n比類なきゲームクリエイター小島秀夫が、ふたたび世界を変える。\n人類を救うために仲間と共に新たな旅を始めよう。\n\n#デスストランディング2オンザビーチ が6月26日ついに発売‼️\n\n7階 ゲームコーナーにて大好評ご予約承り中です✨\n#デススト2 #DeathStranding2 https://t.co/jw7iGrbjtm",
+      "url": "https://x.com/bic_kashiwa/status/1902266796717027601",
+      "media": [
+        "https://pbs.twimg.com/media/GmY1XDOa8AANZ6W.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1902266796717027601",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 161027,
+      "postSha256": "c2a63f0ca5bc376fec706f7b571ddec8228cf38465c1936adccb9b49a055f092",
+      "textSha256": "a02cdbcb6e3393c1212b7f7bc74dadabb2096f489c5c6b9d625bbc5047693a79"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

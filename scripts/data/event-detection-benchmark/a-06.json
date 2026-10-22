@@ -1,0 +1,213 @@
+[
+  {
+    "id": "public-2109954803182748076",
+    "source": "public-post",
+    "description": "ポラロイド即時プリント",
+    "post": {
+      "id": "2109954803182748076",
+      "createdAt": "2026-10-13T10:30:00.800Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "＼撮ってその場プリント🤗／\n\nポラロイドカメラで写真を撮るとその場でプリント出来ちゃう🎃🎄🎅\n可愛らしいフォルムのポラロイドカメラで撮れる味わいのある写真は、きっと思い出深いモノになるはず💗\nぜひ、1階カメラコーナーへお越しください💁‍♀️",
+      "url": "https://x.com/bicpkanhonten/status/2109954803182748076",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "カメラ製品の通常紹介である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "photo-word"
+    ],
+    "group": "polaroid-camera",
+    "reviewStatus": "provisional",
+    "sourceHash": "6d97d837b1d96d23e83fd184070b09c8183fa7201587529c7b415d7bc4e6f74a"
+  },
+  {
+    "id": "public-2109959544789193160",
+    "source": "public-post",
+    "description": "グラファイトヒーター紹介",
+    "post": {
+      "id": "2109959544789193160",
+      "createdAt": "2026-10-13T10:48:51.287Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "「すぐに暖かくなる #暖房 ない？」\n(2*ゝω•)ﾉ ⏱️0.2秒で発熱☀️\n\n朝の寒い部屋で、スイッチを入れてから暖まるまでじっと待つ時間…地味にしんどい。\n\n足元にすぐ届く暖かさで、朝の支度がラクになる。\n\n#アラジン 遠赤グラファイトヒーター\nAEH-G1000BBIT｜￥14,800（10/13時点）",
+      "url": "https://x.com/niigata_bic/status/2109959544789193160",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "価格付きの暖房器具販促であり、購入額条件の配布ではない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "product-price"
+    ],
+    "group": "graphite-heater",
+    "reviewStatus": "provisional",
+    "sourceHash": "9ac19843f2a27dd3ee8cd598014a6fdda85a0fcbee9e807fadf98b9a0e573072"
+  },
+  {
+    "id": "public-2109963809746190537",
+    "source": "public-post",
+    "description": "一般客のプラモデル展示",
+    "post": {
+      "id": "2109963809746190537",
+      "createdAt": "2026-10-13T11:05:48.132Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "エキニシ模型展示コーナーに\nストリヅ90 さんが作品を展示してくれました！\n3階エキニシ模型で是非、見応えのある作品をご覧下さい\nストリヅ90 さんありがとうございます！！\n\n#エキニシ模型\n#プラモデル",
+      "url": "https://x.com/bic_nagoya/status/2109963809746190537",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "作品展示だがビッカメ娘を扱うという記載はない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "display",
+      "other-franchise"
+    ],
+    "group": "customer-model-display",
+    "reviewStatus": "provisional",
+    "sourceHash": "06594b35d463813841443f746bddf1977607930828e17f20e8cc2ec0327f75fc"
+  },
+  {
+    "id": "public-2110171345174819142",
+    "source": "public-post",
+    "description": "別アニメ等身大パネル受注",
+    "post": {
+      "id": "2110171345174819142",
+      "createdAt": "2026-10-14T00:50:28.434Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "等身大パネル販売しています‼\n\n立川店には #高山マリア さんが登場🎵\n\nこちらは受注生産となります✨\n\nTVアニメ『僕は友達が少ない』\nビックカメラグループフェア\n\n6階特設コーナーでお待ちしております💗",
+      "url": "https://x.com/bic_tachikawa/status/2110171345174819142",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "等身大パネル販売でも、対象は高山マリアでビッカメ娘ではない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "other-franchise",
+      "limited-sale",
+      "display"
+    ],
+    "group": "haganai-panel-order",
+    "reviewStatus": "provisional",
+    "sourceHash": "4a95eb92d61a72d12b97504d0f5036d5f509baf9a973c62de19683328d22af23"
+  },
+  {
+    "id": "public-2110180314052259988",
+    "source": "public-post",
+    "description": "パソ館たんの勤務場所の雑談",
+    "post": {
+      "id": "2110180314052259988",
+      "createdAt": "2026-10-14T01:26:06.781Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "Q.パソ館たんって池袋でお仕事してますよね？\n\nA.( っ*´ω`*c)なんか稀に違うところでお仕事してるらしいですよ！",
+      "url": "https://x.com/bicpkanhonten/status/2110180314052259988",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "娘名・店舗名はあるが、具体的な企画や配布物の告知ではない。",
+    "tags": [
+      "small-talk",
+      "character-mention"
+    ],
+    "group": "pkan-work-location-talk",
+    "reviewStatus": "provisional",
+    "sourceHash": "b1f03e7ed964a3180e2165257f1afde32f72dabda207c8bda75591cb4201c7da"
+  },
+  {
+    "id": "public-2110185622703087712",
+    "source": "public-post",
+    "description": "パソ館の複数配布物残数",
+    "post": {
+      "id": "2110185622703087712",
+      "createdAt": "2026-10-14T01:47:12.462Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "／\n美味しいもの食べ隊withパソ館たん\n【当店分の残数告知】\n＼\n\n本日開店時点で\nパソ館たんアクキー：残り【２７個】\n4店舗特典ギフトカード：残り【９０枚】\n\n本日も1Fにてお渡し＆発行しております！\n美味しいもの食べ隊withパソ館たん名刺は【3F】にて配布中です✨",
+      "url": "https://x.com/bicpkanhonten/status/2110185622703087712",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "pkan"
+      ]
+    },
+    "rationale": "同じ本文にアクキー・特典ギフトカード・名刺を別々に挙げて提供継続を告知。単一カテゴリへ正解を強制しない。",
+    "tags": [
+      "multiple-items",
+      "gift-card",
+      "giveaway-progress"
+    ],
+    "group": "delicious-food-tai-2026",
+    "reviewStatus": "provisional",
+    "sourceHash": "57404f549caca3cf030ed77936143cd413acad925ad9a925f012d3a75d2237cd"
+  },
+  {
+    "id": "public-2110192369262010534",
+    "source": "public-post",
+    "description": "アイシャドウを贈り物に勧める",
+    "post": {
+      "id": "2110192369262010534",
+      "createdAt": "2026-10-14T02:14:00.967Z",
+      "screenName": "bic_itt",
+      "kind": "original",
+      "text": "おはタワ〜\nこんなの見つけたわ！\nこれ、アイシャドウパレットなんですって！パッケージは油絵みたいな質感になってるの✨\nプレゼントにも良いわね☺️",
+      "url": "https://x.com/bic_itt/status/2110192369262010534",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "プレゼントという語は贈り物用途で、配布の意味ではない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "present-ambiguity"
+    ],
+    "group": "eyeshadow-gift-suggestion",
+    "reviewStatus": "provisional",
+    "sourceHash": "54adc50fa6afb786ffbbda6cbba44f9d884ea67cb5c498aef828b9af1e4fce09"
+  },
+  {
+    "id": "public-2110204194443362491",
+    "source": "public-post",
+    "description": "名刺なしを明記した料金相談会",
+    "post": {
+      "id": "2110204194443362491",
+      "createdAt": "2026-10-14T03:01:00.310Z",
+      "screenName": "bicsim_official",
+      "kind": "original",
+      "text": "料金相談会の告知📢\n\n#ビックカメラ\nAKIBA @bic_akiba\n藤沢@bic_fujisawa\n名古屋駅西@bic_nagoya\n名古屋JRゲートタワー@bic_nagoyagate\n\n10/17(土)-18(日)\n\nMNP限定で…3,000円分ポイント増額🎵\n\n※ビックシムたんのパネル、コラボ名刺はございません。\n #BICSIM #格安SIM",
+      "url": "https://x.com/bicsim_official/status/2110204194443362491",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文でビックシムたんのパネル・コラボ名刺がないと否定される。通常の通信相談会。",
+    "tags": [
+      "explicit-negation",
+      "consultation",
+      "multi-store"
+    ],
+    "group": "bicsim-consultation-no-card",
+    "reviewStatus": "provisional",
+    "sourceHash": "fa09ee1cce3af31035d0e6906e37c62034c39bbac12cabcbad9cecaf712d15da"
+  }
+]

@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expanded-v2-positive-1621341558099578880",
+    "source": "public-post",
+    "description": "niigata-fifth-character-anniversary-2023",
+    "post": {
+      "id": "1621341558099578880",
+      "createdAt": "2023-02-03T02:55:25.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "\\\\またまたお知らせ‼️//\n🎀にいがたたん爆誕５周年🎀\n記念名刺の準備が出来たよー✨\n3Fエスカレーター脇の等身大パネルのところに設置しているのでぜひ😆\n配布は12月末まで行います♪\n\n※等身大パネルに無い場合はレジカウンターで声をかけてね😣\n\n#にいがたたん\n#5周年 https://t.co/bipWHMv1xe",
+      "url": "https://x.com/niigata_bic/status/1621341558099578880",
+      "media": [
+        "https://pbs.twimg.com/media/FoApaH5akAAcu7e.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "niigata"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "娘5周年記念名刺。年末まで配布で通常名刺とは断定しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "niigata-fifth-character-anniversary-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "記念名刺",
+          "evidence": [
+            "\\\\またまたお知らせ‼️//",
+            "🎀にいがたたん爆誕５周年🎀",
+            "記念名刺の準備が出来たよー✨",
+            "3Fエスカレーター脇の等身大パネルのところに設置しているのでぜひ😆",
+            "配布は12月末まで行います♪",
+            "※等身大パネルに無い場合はレジカウンターで声をかけてね😣",
+            "#にいがたたん",
+            "#5周年 https://t.co/bipWHMv1xe"
+          ]
+        }
+      ],
+      "groupingNote": "娘5周年記念名刺。年末まで配布で通常名刺とは断定しない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 390131,
+      "postSha256": "bc74a25d65f6a986ce7eb88ecc6076dbbb665120406f1923dc4656efcff5ec36",
+      "textSha256": "330848466c5e35c741a97e74d6f6a2540cf440a6b7c312ce3e41ef022d66c815"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1625766866051547136",
+    "source": "public-post",
+    "description": "niigata-fifth-character-anniversary-2023 matched control",
+    "post": {
+      "id": "1625766866051547136",
+      "createdAt": "2023-02-15T08:00:00.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "2/15（水）よりビックカメラ・コジマにて「#ディズニープラス」の店頭加入受付がスタート、店頭でのお申込みではじめの6日間が無料に！(月額料金990円)\nリリースを記念してテレビコーナーにお越しのお客様に「オリジナルクリアファイル」をプレゼント！詳しくは販売員にお声かけください！\n#ディズニー https://t.co/XdYGvo5ESJ",
+      "url": "https://x.com/niigata_bic/status/1625766866051547136",
+      "media": [
+        "https://pbs.twimg.com/media/Fo-oJshaMAI23WE.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1625766866051547136",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 387044,
+      "postSha256": "e89269996a2b959c2a209b92c0bb1d3f6c89d04a58a28b86ba33fa6e2158e776",
+      "textSha256": "9966d5c0a7813f54d3af5c2ba2a81af244e4d4e077b6c57770b90ed7ba53f758"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,180 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1838382849306579318",
+    "source": "public-post",
+    "description": "tenjin2-anniv7-card-2024",
+    "post": {
+      "id": "1838382849306579318",
+      "createdAt": "2024-09-24T01:00:01.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "25日から配布予定やったけど…\n1日早く配布開始します💦\n天神2号たん、擬人化7周年記念限定名を配布致します～(⋈◍＞◡＜◍)\nハロウィン限定名刺🎃＆通常名刺🍓＆びたみん名刺💊も一緒に7階がちゃがちゃコーナーにて配布しとるけん🎶皆様のご来店まっとるよぉ～(~ ˙꒳​˙ )~ https://t.co/Hze1MStoTb",
+      "url": "https://x.com/biccameratenjin/status/1838382849306579318",
+      "media": [
+        "https://pbs.twimg.com/media/GYJifEVaMAATfmk.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "tenjin2"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "配布予定日を1日早めた変更と複数名刺の配布案内。物品ごとの期間が異なるため共通項目は未注釈。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "boundary:action",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "tenjin2-anniv7-card-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "擬人化7周年記念限定名刺",
+          "evidence": [
+            "天神2号たん、擬人化7周年記念限定名を配布致します～(⋈◍＞◡＜◍)"
+          ]
+        },
+        {
+          "item": "ハロウィン限定名刺",
+          "evidence": [
+            "ハロウィン限定名刺🎃＆通常名刺🍓＆びたみん名刺💊も一緒に7階がちゃがちゃコーナーにて配布しとるけん🎶皆様のご来店まっとるよぉ～(~ ˙꒳​˙ )~ https://t.co/Hze1MStoTb"
+          ]
+        },
+        {
+          "item": "通常名刺",
+          "evidence": [
+            "ハロウィン限定名刺🎃＆通常名刺🍓＆びたみん名刺💊も一緒に7階がちゃがちゃコーナーにて配布しとるけん🎶皆様のご来店まっとるよぉ～(~ ˙꒳​˙ )~ https://t.co/Hze1MStoTb"
+          ]
+        },
+        {
+          "item": "びたみん名刺",
+          "evidence": [
+            "ハロウィン限定名刺🎃＆通常名刺🍓＆びたみん名刺💊も一緒に7階がちゃがちゃコーナーにて配布しとるけん🎶皆様のご来店まっとるよぉ～(~ ˙꒳​˙ )~ https://t.co/Hze1MStoTb"
+          ]
+        }
+      ],
+      "groupingNote": "配布予定日を1日早めた変更と複数名刺の配布案内。物品ごとの期間が異なるため共通項目は未注釈。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 208367,
+      "postSha256": "da251de04db1afcd3568a88f885df4631e34e507bf75ebbb6e896b1ab3305e0d",
+      "textSha256": "96385ce247f3c6958fe365bf975ab404fd28b7e51be5268a31b8a02ec8127108"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "674f1410-8485-4d94-91ed-3c83900a7f13",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/biccameratenjin/status/1838382849306579318",
+          "origin": "manual-or-seed",
+          "title": "爆誕7周年記念限定名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2024-09-24T15:00:00.000+00:00",
+            "endDate": "2024-11-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "tenjin2"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1834804263978946929",
+    "source": "public-post",
+    "description": "tenjin2-anniv7-card-2024 matched control",
+    "post": {
+      "id": "1834804263978946929",
+      "createdAt": "2024-09-14T04:00:00.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "9/14(本日)～9/16　③日間限定❣\n#ビックカメラ2号館 秋の #docomo　感謝祭イベント開催中🎶\n新型のiPhoneを予約購入で最大3000円分のポイント還元✨\niPhone15も最大44000円引きにΣ（・□・；）3日間限定で冷たいドリンク🥤もプレゼント🎁 https://t.co/qXGqup92xp",
+      "url": "https://x.com/biccameratenjin/status/1834804263978946929",
+      "media": [
+        "https://pbs.twimg.com/media/GXZ84dgbwAEId1A.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1834804263978946929",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 211340,
+      "postSha256": "8f6faf1718404c61889fa7cd3bfda8e84d811139b6097e6a9cf3a9d6364b4c79",
+      "textSha256": "c7376c59cc24725cb7560a16274eb5a08c75ec221027eacf6169e12ac7ebe27f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

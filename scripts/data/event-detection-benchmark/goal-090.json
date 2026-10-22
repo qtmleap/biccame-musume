@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-1365512295149789188",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1365512295149789188",
+      "createdAt": "2021-02-27T04:01:15.000Z",
+      "screenName": "bic_tenjin",
+      "kind": "original",
+      "text": "＼2月27日(土)・28日(日)限定／\n最新・最軽量の\nダイソンステッククリーナー\n「Dyson Micro 1.5kg」\n\n通常販売価格64,900円が\nなんと！47,800円（税込）＼( 'ω')／\n\n天神1号館はAブロックで販売しとるよ！\n\n無くなり次第終了！\nお見逃しなく😆\n\n#ダイソンならビックカメラ\n\nhttps://t.co/vkXGK783X8 https://t.co/3nRAreWTIc",
+      "url": "https://x.com/bic_tenjin/status/1365512295149789188",
+      "media": [
+        "https://pbs.twimg.com/media/EvNGMPwUcAAJG4I.jpg",
+        "https://pbs.twimg.com/media/EvNGMPsVoAcaiyt.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「＼2月27日(土)・28日(日)限定／ / 最新・最軽量の / ダイソンステッククリーナー」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "dyson-micro-vacuum-sale-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 573470,
+      "postSha256": "eaf1cd90a873290654efc636a6b35e92b5ec390e10ced9a6e090d093bd123a01",
+      "textSha256": "7f7ee2d710b2d362857e71a0b7edc75008d74f9901ba8c24a660b3b96d0f0ef1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1409799469290328066",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1409799469290328066",
+      "createdAt": "2021-06-29T09:02:40.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ👼お肌に優しいムダ毛ケア👼\n\n＃パナソニック のボディーシェーバー「＃ボディフェリエ」シリーズは肌を傷つけにくい丸い刃先✨\n更に防水タイプやデリケートゾーン専用など種類も豊富です🥺☝️\n\n3階ビューティーコーナーにてお取り扱い中です🏃‍♀️❕ https://t.co/FNYnnbWcvY",
+      "url": "https://x.com/bic_yuurakuchou/status/1409799469290328066",
+      "media": [
+        "https://pbs.twimg.com/media/E5CdIqJVoAIAVJ4.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ξ(σεσ)ξ👼お肌に優しいムダ毛ケア👼 / ＃パナソニック のボディーシェーバー「＃ボディフェリエ」シリーズは肌を傷つけにくい丸い刃先✨ / 更に防水タイプやデリケートゾーン専用など種類も豊富です🥺☝️」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "panasonic-body-ferie-shavers-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 546204,
+      "postSha256": "06133efb986e269f554d0f8e1ba821b17ea3d8dad111bbaeabf912ced2bb104f",
+      "textSha256": "fe6f0cc1d44a9a33b270ca5bc548d908694298846b095df3cfe73e300ae5ffa2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

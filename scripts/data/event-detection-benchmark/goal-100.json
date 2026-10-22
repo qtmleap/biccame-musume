@@ -1,0 +1,104 @@
+[
+  {
+    "id": "goal-negative-1630507366264479745",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1630507366264479745",
+      "createdAt": "2023-02-28T09:57:04.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "7月14(金)発売予定の『Pokémon GO Plus +』\nビックカメラあべのキューズモール店で絶賛予約受付中～❗️❗️🥳🐙🎉\n\n#ポケモンGO が快適にプレイできたり、今夏配信予定の『Pokémon Sleep』と連携して遊べるで❗️\n当店でご予約いただくと、オリジナル特典のブロマイドがもらえるで～❗️❗️😍🐙\n#ポケモンGO https://t.co/uOw5C0olMZ",
+      "url": "https://x.com/bic_abeno/status/1630507366264479745",
+      "media": [
+        "https://pbs.twimg.com/media/FqC376racAEbDTx.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「7月14(金)発売予定の『Pokémon GO Plus +』 / ビックカメラあべのキューズモール店で絶賛予約受付中～❗️❗️🥳🐙🎉 / #ポケモンGO が快適にプレイできたり、今夏配信予定の『Pokémon Sleep』と連携して遊べる」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pokemon-go-plus-preorder-bonus-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 383560,
+      "postSha256": "661d33f189e33363577ac8a9e475c88ee8f81fd7b79cc9e39cdf8604f9f6f17a",
+      "textSha256": "16ca6bc5262e1fc82ec92b95e1e50f1bd3a7039376577fedc5be538a12a2447d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1628938143658553345",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1628938143658553345",
+      "createdAt": "2023-02-24T02:01:32.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "おはやお～～( 8,,ÒωÓ,, )ﾄﾞﾔｵｯ!\n今日は朝から雨だけど、ビックカメラアリオ八尾店は21時まで元気に営業中✨\n今日も一日よろやお～(*'ω'*)ﾉｼ",
+      "url": "https://x.com/bic_yao/status/1628938143658553345",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「おはやお～～( 8,,ÒωÓ,, )ﾄﾞﾔｵｯ! / 今日は朝から雨だけど、ビックカメラアリオ八尾店は21時まで元気に営業中✨ / 今日も一日よろやお～(*'ω'*)ﾉｼ」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "yao-rainy-opening-greeting-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 384830,
+      "postSha256": "045c75df50217ff70ecbc34481d5f02ea31aca784e5b66383cb466c5c6eadc43",
+      "textSha256": "a1a000a8c001e6cd140b2e282a64089d1b380f4400f476620289a34044daa53e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

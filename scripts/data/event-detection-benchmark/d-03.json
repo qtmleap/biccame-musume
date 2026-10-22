@@ -1,0 +1,155 @@
+[
+  {
+    "id": "public-d-2082285906690720110",
+    "source": "public-post",
+    "description": "ドラゴンボールと遊戯王の抽選販売",
+    "post": {
+      "id": "2082285906690720110",
+      "createdAt": "2026-07-29T02:03:41.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "📢　抽選販売のお知らせ\n8/8㈯発売\n①ドラゴンボールスーパーカードゲーム\n「STORY BOOSTER 01」 \n②遊戯王OCG「UTILITY SELECTION」\n\n抽選受付期間:8/1㈯-8/2㈰ \n当選発表:8/6㈭ \n購入期限:8/8㈯〜8/9㈰  \n受付場所:自転車おもちゃゲーム相談カウンター\n※詳細は、添付画像にてご確認ください。 https://t.co/7kg2AvGfvk",
+      "url": "https://x.com/bic_takatsuki/status/2082285906690720110",
+      "media": [
+        "https://pbs.twimg.com/media/HOXD_VxagAA9Q3u.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "複数の他IPカード商品の抽選日・購入期限の案内で、娘を対象にした物品や企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "lottery",
+      "multi-item"
+    ],
+    "group": "dragonball-story-booster-utility-august-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2064953824222282214",
+    "source": "public-post",
+    "description": "ドラゴンボールカードの抽選受付",
+    "post": {
+      "id": "2064953824222282214",
+      "createdAt": "2026-06-11T06:12:11.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "【6/13　発売🎉】 ドラゴンボールスーパーカードゲーム『CROSS FORCE【FB10】』抽選販売のご案内📷 \n受付日：6/13(土)　受付場所：ビックカメラ天神２号館1階店頭　抽選対象の注意事項をご確認ください🐾 https://t.co/UyjC2YPBvq",
+      "url": "https://x.com/biccameratenjin/status/2064953824222282214",
+      "media": [
+        "https://pbs.twimg.com/media/HKgvoSMaoAAMhEQ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ドラゴンボール商品FB10の抽選販売。発売・受付場所の記載だけでは娘イベントとしない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "lottery",
+      "trading-card"
+    ],
+    "group": "dragonball-cross-force-june-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2059440864833982767",
+    "source": "public-post",
+    "description": "ワンピースカードの当選者購入案内",
+    "post": {
+      "id": "2059440864833982767",
+      "createdAt": "2026-05-27T01:05:39.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "【5/30(土)発売ワンピースカード『決戦の刻』当選発表】　1/2\nリストはツリーに繋げてポストします。(全5枚)\n当選された方は受付時の「ビックカメラSuicaカード」「抽選レシート」「本人確認書類」をお持ちください。\n購入期間：5/30(土)～5/31(日) https://t.co/W2tiOnDVXQ",
+      "url": "https://x.com/bic_yuurakuchou/status/2059440864833982767",
+      "media": [
+        "https://pbs.twimg.com/media/HJSac3sbQAAhHlt.jpg",
+        "https://pbs.twimg.com/media/HJSad9wbUAESvVw.png",
+        "https://pbs.twimg.com/media/HJSafDYa0AEtuNP.png",
+        "https://pbs.twimg.com/media/HJSagAXbMAALbHU.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ワンピース商品の抽選当選者にレシートや本人確認書類を求める案内。娘の物品・コラボではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "lottery-result",
+      "receipt-word"
+    ],
+    "group": "onepiece-kessen-may-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2000062665671184857",
+    "source": "public-post",
+    "description": "トレーディングカード用スリーブの新色",
+    "post": {
+      "id": "2000062665671184857",
+      "createdAt": "2025-12-14T04:37:53.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "ポケモンカード・ワンピースカード等の\nレギュラーサイズ用の耐久性・シャッフル性能が高い「ドラゴンスリーブ デュアルマット」の取り扱い開始！\n\n今月発売の新色もあります！\n是非、７Ｆおもちゃコーナーにお越しください⸜(●˙꒳˙●🎀)⸝\n\n＃ドラゴンスリーブ\n＃ポケカ https://t.co/9RMTEzzvPd",
+      "url": "https://x.com/bicikenishi/status/2000062665671184857",
+      "media": [
+        "https://pbs.twimg.com/media/G8GmWemaMAAKJV1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "カードという語は汎用カード保護用品の用途。娘の名刺や限定カード配布は案内していない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "card-word",
+      "accessory",
+      "ordinary-product"
+    ],
+    "group": "dragon-sleeve-new-colors-december-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1983443688769400911",
+    "source": "public-post",
+    "description": "他IPキャラクターマーケットの期間限定売場",
+    "post": {
+      "id": "1983443688769400911",
+      "createdAt": "2025-10-29T08:00:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "⭐️期間限定OPEN⭐️\n3階　エスカレーター横に\n💜キャラクターマーケットがOPEN💜\n\n💜ちいかわ💜🎀サンリオ🎀❤️PEANUTS❤️　\nあたなの好きが見つかるかも⁉　\n\n是非お立ち寄りくださ～い♪ https://t.co/GyKTTQz4rm",
+      "url": "https://x.com/bic_kashiwa/status/1983443688769400911",
+      "media": [
+        "https://pbs.twimg.com/media/G4ZFgKfaQAAFAVu.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ちいかわ・サンリオ・PEANUTSの期間限定売場であり、ビッカメ娘が対象・出演する企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "limited",
+      "shop-opening"
+    ],
+    "group": "kashiwa-character-market-october-2025",
+    "reviewStatus": "provisional"
+  }
+]

@@ -1,0 +1,126 @@
+[
+  {
+    "id": "goal-positive-849870880268144641",
+    "source": "public-post",
+    "description": "kawasaki photo day 2017",
+    "post": {
+      "id": "849870880268144641",
+      "createdAt": "2017-04-06T06:26:22.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "4月8・9・10の『３日間限定』！\n３Fカメラコーナーにて\n\n＿人人人人人人人人＿\n＞チェキ撮影会📸＜\n￣ＹＹＹＹ人人人人￣\n\n川崎たんと一緒に写真撮れます！！\n\nそしてその場で『チェキ』お渡ししますよ！\n\n皆様ぜひ、お越し下さいね♪ https://t.co/LjdwnNO2ok",
+      "url": "https://x.com/Bic_kawasaki/status/849870880268144641",
+      "media": [
+        "https://pbs.twimg.com/media/C8tXmGAUwAA5ltg.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": "2017-04-08"
+    },
+    "rationale": "3日間の川崎たんとの撮影会と撮ったチェキの提供。通常の商品販売ではない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "kawasaki-photo-day-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "チェキ写真",
+          "evidence": [
+            "＞チェキ撮影会📸＜",
+            "川崎たんと一緒に写真撮れます！！",
+            "そしてその場で『チェキ』お渡ししますよ！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 965166,
+      "postSha256": "e24edd1f5c06ac21345049954b74cb67f9c9ae05a13b61848ae50737a9a6b856",
+      "textSha256": "51dbe0e5cec87fe99500be45d690c5abeaa687c820ff9020512a0dc8b639e83e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-900992069560188928",
+    "source": "public-post",
+    "description": "kashiwa premium friday photo 2017",
+    "post": {
+      "id": "900992069560188928",
+      "createdAt": "2017-08-25T08:03:43.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "みんなぁ～ヽ(´∀｀。)ﾉ･ﾟ\n柏たんと一緒に写真撮影しよ📸✨\n今日から３日間のイベントだよぉ～❤️\n撮った写真はその場で印刷してプレゼントだよ🎁\n#プレミアムフライデー \n＃柏たん　＃写真撮影会 https://t.co/9o7UH9Muxg",
+      "url": "https://x.com/bic_kashiwa/status/900992069560188928",
+      "media": [
+        "https://pbs.twimg.com/media/DID3boqUQAIbvRx.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "startDate": "2017-08-25"
+    },
+    "rationale": "柏たんとの3日間の撮影会。写真をその場で印刷して提供する。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-premium-friday-photo-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "撮影写真",
+          "evidence": [
+            "柏たんと一緒に写真撮影しよ📸✨",
+            "撮った写真はその場で印刷してプレゼントだよ🎁",
+            "＃柏たん　＃写真撮影会 https://t.co/9o7UH9Muxg"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 923201,
+      "postSha256": "578577415a0b36aee48ab18651205427101b518cc0eb5d20f079b0eb5503f25b",
+      "textSha256": "609a2a72a88b886182389313807bf56f0ec33df19bec8fbcc8227af6930acf79"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

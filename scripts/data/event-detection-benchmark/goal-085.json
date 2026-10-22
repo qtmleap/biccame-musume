@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1222780205107834881",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1222780205107834881",
+      "createdAt": "2020-01-30T07:14:53.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "そろそろバレンタイン❤️\n大切な方へのプレゼントは決まりましたか？？😘\nビックカメラではバレンタインの贈り物にぴったりな商品がお買い得になるキャンペーン中☺️❤️\n大切な方へチョコ以外の贈り物をしてみてはいかがですか？😍🎁\nhttps://t.co/yWeaplPF2w https://t.co/7edYQHikEs",
+      "url": "https://x.com/bic_sagamioono/status/1222780205107834881",
+      "media": [
+        "https://pbs.twimg.com/media/EPgwHDCUwAEyq1M.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「そろそろバレンタイン❤️ / 大切な方へのプレゼントは決まりましたか？？😘 / ビックカメラではバレンタインの贈り物にぴったりな商品がお買い得になるキャンペーン中☺️❤️」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "valentine-general-gift-sale-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 674477,
+      "postSha256": "0d825043a1b64e11746fe1bfac92e06abfdb8003cde384bf2d2021e2ce55d3b0",
+      "textSha256": "580e88242b8c3b5d877c9fa40e10845bd92a2ba6a4fd9989e1a2e7e63303d734"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1222760112500006912",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1222760112500006912",
+      "createdAt": "2020-01-30T05:55:03.000Z",
+      "screenName": "bicakasaka",
+      "kind": "original",
+      "text": "ビックカメラ赤坂見附駅店の8階トイズコーナーにはこんなにいっぱいガシャポンがあるよー(о´∀`о)♬ https://t.co/UE1lIFh22p",
+      "url": "https://x.com/bicakasaka/status/1222760112500006912",
+      "media": [
+        "https://pbs.twimg.com/media/EPgd0IoVUAAkAsd.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ビックカメラ赤坂見附駅店の8階トイズコーナーにはこんなにいっぱいガシャポンがあるよー(о´∀`о)♬ https://t.co/UE1lIFh22p」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "akasaka-capsule-toy-corner-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 674507,
+      "postSha256": "42148f5651d18932b298920696cf119dce287e52f9c098a7712ede5ba57838ad",
+      "textSha256": "04ba6b97a6a0e0f991ebfe07399467fa82d937f3e3113686bf6674b6cc14bed8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

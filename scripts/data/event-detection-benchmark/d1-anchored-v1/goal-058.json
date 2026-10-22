@@ -1,0 +1,204 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2061281595471151182",
+    "source": "public-post",
+    "description": "funabashi-chiba-summer-parade-2026",
+    "post": {
+      "id": "2061281595471151182",
+      "createdAt": "2026-06-01T03:00:03.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "📢あのコラボが返ってきた❣\n🌴CHIBA SUMMER PARADE🌴\n\n開催期間：7/18(土)～なくなり次第終了\n①指定金額の当日お買い上げレシートでクールタオルプレゼント🎁\n②コラボ名刺配布💛　📅7/1(水)～7/1(水)\n※詳細は添付画像をご参照ください\n\n#サマパレ千葉 https://t.co/PQNLM9EESa",
+      "url": "https://x.com/bic_funabashi/status/2061281595471151182",
+      "media": [
+        "https://pbs.twimg.com/media/HJsa3T_awAAvMkT.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同企画の船橋店投稿。名刺期間が7/1〜7/1と誤記に見える。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "challenge",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:chiba-summer-parade"
+    ],
+    "group": "funabashi-chiba-summer-parade-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "クールタオル",
+          "evidence": [
+            "①指定金額の当日お買い上げレシートでクールタオルプレゼント🎁"
+          ]
+        },
+        {
+          "item": "コラボ名刺",
+          "evidence": [
+            "📢あのコラボが返ってきた❣",
+            "②コラボ名刺配布💛　📅7/1(水)～7/1(水)"
+          ]
+        }
+      ],
+      "groupingNote": "同企画の船橋店投稿。名刺期間が7/1〜7/1と誤記に見える。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 39120,
+      "postSha256": "b5e3a2392c2be21ef46e530d2b0c56b653ef8fa8a45b46e6da4f20de0f137efb",
+      "textSha256": "5cd5197b1e91e562bd46d9781cf577944c0cafe98d5eed52ba77fb5c70d17c90"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "30d09637-92c1-4bb9-863b-e2adc6400ffc",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_funabashi/status/2061281595471151182",
+          "origin": "manual-or-seed",
+          "title": "サマパレ名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-06-30T15:00:00.000+00:00",
+            "endDate": "2026-07-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "funabashi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "815a1975-ff0d-49f1-a94a-d66e921086a5",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_funabashi/status/2061281595471151182",
+          "origin": "manual-or-seed",
+          "title": "CHIBA SUMMER PARADE",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-17T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "funabashi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 150,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2062848603274793016",
+    "source": "public-post",
+    "description": "funabashi-chiba-summer-parade-2026 matched control",
+    "post": {
+      "id": "2062848603274793016",
+      "createdAt": "2026-06-05T10:46:47.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "お酒コーナーでは、千葉の地酒応援宣言💪と\n題しまして、千葉の地酒をご提案させて頂きます♪\n\n第一弾は、\n千葉県富津市　#和蔵酒造 様のお酒🍶をご用意✨\n\n明日6/6(土)11時〜 試飲会も実施致します。\nご興味のある方、ぜひ足をお運び下さいませ❗️\n\n⚠️お車・自転車を運転される方はご試飲頂けません⚠️ https://t.co/iVI5zhImkM",
+      "url": "https://x.com/bic_funabashi/status/2062848603274793016",
+      "media": [
+        "https://pbs.twimg.com/media/HKC1rembAAAiwP0.jpg",
+        "https://pbs.twimg.com/media/HKC1teYa0AApMqO.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2062848603274793016",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 37684,
+      "postSha256": "e2eebae9effd1b59dc234c88e5054bf47ffacdca276993f28faa4c72afe5a94d",
+      "textSha256": "317192fd66ecc0c03503186869ff0ce14a0abe3b2bc0d455a81bb3521c5ea0af"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

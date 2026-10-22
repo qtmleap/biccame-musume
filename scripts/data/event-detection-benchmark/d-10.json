@@ -1,0 +1,153 @@
+[
+  {
+    "id": "public-d-2047495747541819863",
+    "source": "public-post",
+    "description": "マリオソフト同時購入値引き特典",
+    "post": {
+      "id": "2047495747541819863",
+      "createdAt": "2026-04-24T02:00:01.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "📢5月10日㈰まで❣\nスーパーマリオギャラクシー同時購入特典✨\n\n当社指定Switch、Switch2のソフトを同時購入で\nスーパーマリオギャラクシー+スーパーマリオギャラクシー2から【550円引き】‼\n\n※パッケージ版のみ対象\n🌸7階ゲームコーナーにて取り扱い中🌸 https://t.co/3ddJWtDV10",
+      "url": "https://x.com/bic_akiba/status/2047495747541819863",
+      "media": [
+        "https://pbs.twimg.com/media/HGkdBzOacAAS_kD.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "同時購入特典は一般ゲーム商品の値引きで、ビッカメ娘の配布物はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "purchase-benefit",
+      "discount"
+    ],
+    "group": "mario-galaxy-bundle-discount-april-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2071894948664975589",
+    "source": "public-post",
+    "description": "ポケモンコラボG-SHOCKの抽選販売",
+    "post": {
+      "id": "2071894948664975589",
+      "createdAt": "2026-06-30T09:53:44.000Z",
+      "screenName": "bic_hiroshima",
+      "kind": "original",
+      "text": "【抽選販売のご案内】\n7月17日(金)発売\nポケモンコラボモデルG-SHOCK【GA-110PKM-7AJR】\n受付期間：7月1日(水)～7月5日(日)20時まで\n当選発表：7月16日(木)\n購入期限：7月17日(金)～7月19日(日)20時まで\n抽選対象をご確認頂き、広島駅前店地下1階で皆様のご来店をお待ちしております♪ https://t.co/Vx3O5FYBHy",
+      "url": "https://x.com/bic_hiroshima/status/2071894948664975589",
+      "media": [
+        "https://pbs.twimg.com/media/HMDZcApXsAAKA8c.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "コラボはポケモンと時計ブランドの企画で、娘のコラボグッズや出演ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "collaboration",
+      "lottery"
+    ],
+    "group": "pokemon-gshock-july-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2071881434202304563",
+    "source": "public-post",
+    "description": "住宅塗装相談のポイントプレゼント",
+    "post": {
+      "id": "2071881434202304563",
+      "createdAt": "2026-06-30T09:00:02.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "🏠屋根外壁塗装相談会開催のお知らせ🏠\n期間中にお見積りまたはお申込みで500円分のビックカメラポイントプレゼント🎁\nその他ご契約特典もございます\nご自宅の屋根外壁塗装で気になるところを知識豊富なスタッフにぜひご相談ください！\n\n★7月4日(土)・5日(日)10:00～18:00\n★5階リフォームコーナー https://t.co/vkUJXJQevJ",
+      "url": "https://x.com/bic_shinjyuku/status/2071881434202304563",
+      "media": [
+        "https://pbs.twimg.com/media/HLkh9XTXcAAnglY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "イベント・特典は住宅塗装の相談や契約に関する販促で、娘の企画関与はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "ordinary-event",
+      "points",
+      "consultation"
+    ],
+    "group": "roof-wall-consultation-july-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2071836882585944501",
+    "source": "public-post",
+    "description": "買取アプリ連携のポイント特典",
+    "post": {
+      "id": "2071836882585944501",
+      "createdAt": "2026-06-30T06:03:00.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "8/31まで‼️\n＼ラクウル 200円分ポイントプレゼント！📢／\n\n買取アプリ #ラクウル アプリ と ビックカメラアプリ\nの連携でビックポイント200円分プレゼント🎁\n\n⚠️ポイントの付与は9月末頃予定\nぜひ、ダウンロードと連携を‼️☺️🐙 https://t.co/04PlnhQ0HC",
+      "url": "https://x.com/bic_abeno/status/2071836882585944501",
+      "media": [
+        "https://pbs.twimg.com/media/HL-aqHwaUAAAYAA.png",
+        "https://pbs.twimg.com/media/HL-aqINbwAA4MBb.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ビックカメラアプリとの連携によるポイント付与。娘のイベントや物品入手企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "points",
+      "app-link",
+      "ordinary-campaign"
+    ],
+    "group": "rakuuru-app-link-points-summer-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2071812130152886372",
+    "source": "public-post",
+    "description": "冷蔵庫と省エネ家電買替キャンペーン",
+    "post": {
+      "id": "2071812130152886372",
+      "createdAt": "2026-06-30T04:24:38.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "\\\\パナソニック買うなら絶対今！キャンペーン//\n\n#パナソニック 冷蔵庫が大変お買い得となっております‼️\nそれに加え名古屋市民限定省エネ家電買い替えキャンペーンも対象となっております\n\n大変お買い得となっております🉐✨\n是非お見逃しの無いようビックカメラ名古屋駅西店にお越しくださいませ🎶 https://t.co/nSHsttxpZj",
+      "url": "https://x.com/bic_nagoya/status/2071812130152886372",
+      "media": [
+        "https://pbs.twimg.com/media/HMCOIVtWsAAbqj1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "パナソニック冷蔵庫購入と市民向け買替支援の告知。娘の企画・対象グッズではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "ordinary-campaign",
+      "appliance",
+      "limited"
+    ],
+    "group": "panasonic-fridge-summer-campaign-2026",
+    "reviewStatus": "provisional"
+  }
+]

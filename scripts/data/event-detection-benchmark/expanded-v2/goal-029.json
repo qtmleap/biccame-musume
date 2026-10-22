@@ -1,0 +1,130 @@
+[
+  {
+    "id": "expanded-v2-positive-1730077629913723051",
+    "source": "public-post",
+    "description": "sagami-winter-seasonal-card-2023",
+    "post": {
+      "id": "1730077629913723051",
+      "createdAt": "2023-11-30T04:13:44.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "＼大変お待たせしました／\n❄️さがみたん季節名刺❄️\n12/1(金)より配布開始しますヾ(*´ω`)ﾉﾞ\n\n今回も可愛く仕上がったと思うので是非貰いに来てくださいね～(*´ω`*)\n#さがみたん",
+      "url": "https://x.com/bic_sagamioono/status/1730077629913723051",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "sagami"
+      ],
+      "startDate": "2023-12-01",
+      "conditions": null
+    },
+    "rationale": "12月1日からの季節名刺。終了日や配布条件は不明。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "sagami-winter-seasonal-card-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "季節名刺",
+          "evidence": [
+            "＼大変お待たせしました／",
+            "❄️さがみたん季節名刺❄️",
+            "12/1(金)より配布開始しますヾ(*´ω`)ﾉﾞ",
+            "今回も可愛く仕上がったと思うので是非貰いに来てくださいね～(*´ω`*)",
+            "#さがみたん"
+          ]
+        }
+      ],
+      "groupingNote": "12月1日からの季節名刺。終了日や配布条件は不明。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 306800,
+      "postSha256": "28d6e72fe7a77219776d0862c8b7a9b2fd14aea2e21ab6fa8c995e5d162e5b8a",
+      "textSha256": "f7f116ce07ee5bdcbb446f01555c12c38b61f6b39e3f299b3a59989b95423ae6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1726493267230150905",
+    "source": "public-post",
+    "description": "sagami-winter-seasonal-card-2023 matched control",
+    "post": {
+      "id": "1726493267230150905",
+      "createdAt": "2023-11-20T06:50:46.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "🚆好評発売中🚆\nswitchソフト\n『桃太郎電鉄ワールド ～地球は希望でまわってる！～』\n\n今度は世界が舞台！めざせ総資産世界一！\nゲームコーナーにて販売中！\n#桃鉄ワールド #さがみたんのゲーム情報\nhttps://t.co/bchcCt6t0p https://t.co/BukrA0MSHp",
+      "url": "https://x.com/bic_sagamioono/status/1726493267230150905",
+      "media": [
+        "https://pbs.twimg.com/media/F_W8DeebAAA-pLT.jpg",
+        "https://pbs.twimg.com/media/F_W8EXbbEAALkcJ.jpg",
+        "https://pbs.twimg.com/media/F_W8FcBaYAAc3-0.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1726493267230150905",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 309630,
+      "postSha256": "3261ecd7474182800b9f1029d0de3195de2b181cffbea421a85fd9ac4f11e58e",
+      "textSha256": "31e8a0b223fff26a3f24dcf709892a4b2e62bd118a5df4e7e32e01a2cdede367"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

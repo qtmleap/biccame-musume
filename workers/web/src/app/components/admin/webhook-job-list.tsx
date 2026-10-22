@@ -1,33 +1,11 @@
-import { WEBHOOK_KEYWORD_VERDICTS } from '@biccame/shared/event-detect/detection'
-import {
-  type WebhookJob,
-  type WebhookJobRange,
-  WebhookJobRangeSchema,
-  WebhookKeywordVerdictSchema,
-  WebhookPostStatusFilterSchema
-} from '@biccame/shared/schemas/webhook.dto'
+import type { WebhookJob } from '@biccame/shared/schemas/webhook.dto'
 import { Link, useNavigate } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import {
-  ArrowDown,
-  ArrowUp,
-  ArrowUpDown,
-  Bot,
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink,
-  FilterX,
-  RefreshCw
-} from 'lucide-react'
+import { ArrowDown, ArrowUp, ArrowUpDown, Bot, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react'
 import {
   changeWebhookFilterAtom,
   cycleWebhookConfidenceSort,
-  hasWebhookFilterConditions,
-  NO_WEBHOOK_FILTER,
-  setWebhookPostStatus,
-  setWebhookRange,
-  setWebhookVerdict,
   type WebhookFilter,
   webhookColumnAriaSort,
   webhookFilterAtom
@@ -38,22 +16,22 @@ import {
   webhookPaginationAtom
 } from '@/atoms/webhook-pagination-atom'
 import { BotSettingsLayout } from '@/components/admin/bot-settings-layout'
+import { WebhookDiscoveryBadge } from '@/components/admin/webhook-discovery-badge'
+import { webhookDiscoveryActionLabel } from '@/components/admin/webhook-discovery-labels'
+import { WebhookFilterToolbar } from '@/components/admin/webhook-filter-toolbar'
 import {
   detectionScoreLabel,
   webhookAccountLabel,
   webhookCandidateTitle,
   webhookKeywordLabel,
-  webhookKeywordVerdictLabel,
   webhookModelLabel,
-  webhookPostStatusFilterLabel,
   webhookPostStatusIsTentative,
   webhookPostStatusLabel,
   webhookPostStatusTentativeReason
 } from '@/components/admin/webhook-labels'
-import { WebhookStatusBadge } from '@/components/admin/webhook-status-badge'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useAdminBotStatus } from '@/hooks/use-admin-bot'
 import { useAdminWebhookJobs } from '@/hooks/use-admin-webhooks'
@@ -74,7 +52,7 @@ const WebhookEventName = ({ job }: { job: WebhookJob }) => {
             ) : (
               <span>{webhookCandidateTitle(candidate)}</span>
             )}
-            <WebhookStatusBadge status={candidate.status} />
+            <WebhookDiscoveryBadge job={candidate} compact />
           </li>
         ))}
       </ul>
@@ -88,7 +66,15 @@ const WebhookEventName = ({ job }: { job: WebhookJob }) => {
     )
   }
   const draftTitle = job.draft === null ? undefined : job.draft.title
-  if (draftTitle === undefined) return '—'
+  if (draftTitle === undefined)
+    return job.discovery !== undefined && job.discovery !== null ? (
+      <div className='flex items-center gap-2'>
+        <span>{webhookDiscoveryActionLabel(job.discovery.action)}</span>
+        <WebhookDiscoveryBadge job={job} compact />
+      </div>
+    ) : (
+      '—'
+    )
   return (
     <div className='flex items-center gap-2 whitespace-nowrap text-muted-foreground'>
       {draftTitle}
@@ -98,9 +84,6 @@ const WebhookEventName = ({ job }: { job: WebhookJob }) => {
     </div>
   )
 }
-
-const RANGE_LABELS = { '1h': '直近1時間', '24h': '直近24時間' } as const satisfies Record<WebhookJobRange, string>
-const ALL_LABEL = 'すべて'
 
 /** 精度の見出しボタンのアイコン。並べ替えの軸が精度でなければ上下の矢印、精度なら向きを示す。 */
 const confidenceSortIcon = (filter: Pick<WebhookFilter, 'sort' | 'order'>) => {
@@ -113,97 +96,6 @@ const confidenceSortHint = (filter: Pick<WebhookFilter, 'sort' | 'order'>): stri
   if (filter.sort !== 'confidence') return '精度の高い順に並べ替え'
   return filter.order === 'desc' ? '精度の低い順に並べ替え' : '日時の新しい順に戻す'
 }
-
-/** 期間・判定・ステータスの絞り込みと「条件をクリア」。変更はすべて changeFilter 経由で、ページ位置を1ページ目へ戻す。 */
-const WebhookFilterToolbar = ({
-  filter,
-  changeFilter
-}: {
-  filter: WebhookFilter
-  changeFilter: (update: (filter: WebhookFilter) => WebhookFilter) => void
-}) => (
-  <fieldset aria-label='絞り込み' className='mb-4 flex min-w-0 flex-wrap items-center gap-x-5 gap-y-3 border-0 p-0'>
-    <div className='flex items-center gap-2'>
-      <span className='text-sm text-muted-foreground'>期間</span>
-      <Select
-        value={filter.range === null ? 'all' : filter.range}
-        onValueChange={(value) => {
-          const range = WebhookJobRangeSchema.safeParse(value)
-          changeFilter((previous) => setWebhookRange(previous, range.success ? range.data : null))
-        }}
-      >
-        <SelectTrigger aria-label='期間' size='sm' className='w-36'>
-          <SelectValue>{filter.range === null ? ALL_LABEL : RANGE_LABELS[filter.range]}</SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value='all'>{ALL_LABEL}</SelectItem>
-          {WebhookJobRangeSchema.options.map((range) => (
-            <SelectItem key={range} value={range}>
-              {RANGE_LABELS[range]}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-    <div className='flex items-center gap-2'>
-      <span className='text-sm text-muted-foreground' title='現在のキーワードルールによる判定'>
-        判定
-      </span>
-      <Select
-        value={filter.verdict === null ? 'all' : filter.verdict}
-        onValueChange={(value) => {
-          const verdict = WebhookKeywordVerdictSchema.safeParse(value)
-          changeFilter((previous) => setWebhookVerdict(previous, verdict.success ? verdict.data : null))
-        }}
-      >
-        <SelectTrigger aria-label='判定' size='sm' className='w-32'>
-          <SelectValue>{filter.verdict === null ? ALL_LABEL : webhookKeywordVerdictLabel(filter.verdict)}</SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value='all'>{ALL_LABEL}</SelectItem>
-          {WEBHOOK_KEYWORD_VERDICTS.map((verdict) => (
-            <SelectItem key={verdict} value={verdict}>
-              {webhookKeywordVerdictLabel(verdict)}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-    <div className='flex items-center gap-2'>
-      <span className='text-sm text-muted-foreground'>ステータス</span>
-      <Select
-        value={filter.postStatus === null ? 'all' : filter.postStatus}
-        onValueChange={(value) => {
-          const postStatus = WebhookPostStatusFilterSchema.safeParse(value)
-          changeFilter((previous) => setWebhookPostStatus(previous, postStatus.success ? postStatus.data : null))
-        }}
-      >
-        <SelectTrigger aria-label='ステータス' size='sm' className='w-32'>
-          <SelectValue>
-            {filter.postStatus === null ? ALL_LABEL : webhookPostStatusFilterLabel(filter.postStatus)}
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value='all'>{ALL_LABEL}</SelectItem>
-          {WebhookPostStatusFilterSchema.options.map((postStatus) => (
-            <SelectItem key={postStatus} value={postStatus}>
-              {webhookPostStatusFilterLabel(postStatus)}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-    <Button
-      variant='outline'
-      className='border-card-border'
-      onClick={() => changeFilter(() => NO_WEBHOOK_FILTER)}
-      disabled={!hasWebhookFilterConditions(filter)}
-    >
-      <FilterX className='size-4' />
-      条件をクリア
-    </Button>
-  </fieldset>
-)
 
 export const WebhookJobList = () => {
   const navigate = useNavigate()
@@ -261,13 +153,16 @@ export const WebhookJobList = () => {
         {jobs.isPending && <p className='text-muted-foreground'>受信履歴を取得しています。</p>}
         {jobs.isError && <p className='text-destructive'>受信履歴を取得できませんでした。更新から再試行できます。</p>}
       </div>
-      <WebhookFilterToolbar filter={filter} changeFilter={changeFilter} />
-      <div className='overflow-x-auto border-y border-separator'>
+      <WebhookFilterToolbar filter={filter} changeFilter={changeFilter} characters={characters} />
+      <div className='min-w-0 border-y border-separator'>
         <Table className='whitespace-nowrap [&_tr]:border-separator'>
           <TableHeader>
             <TableRow>
-              <TableHead className='whitespace-nowrap'>アカウント</TableHead>
-              <TableHead className='whitespace-nowrap'>日時</TableHead>
+              <TableHead className='w-12'>
+                <span className='sr-only'>アカウント</span>
+              </TableHead>
+              <TableHead className='w-64'>投稿内容</TableHead>
+              <TableHead className='whitespace-nowrap'>投稿時間</TableHead>
               <TableHead title='現在のキーワードルールによる判定'>判定</TableHead>
               <TableHead>モデル</TableHead>
               <TableHead
@@ -288,8 +183,8 @@ export const WebhookJobList = () => {
               </TableHead>
               <TableHead>ステータス</TableHead>
               <TableHead>イベント名</TableHead>
-              {/* 各行に「詳細」リンクがあるので、見出しは視覚的に隠してスクリーンリーダー向けにだけ残す。 */}
-              <TableHead className='whitespace-nowrap'>
+              {/* 詳細列は Table 内部のスクロール領域の右端に固定し、背景で下の内容を隠す。 */}
+              <TableHead className='sticky right-0 z-20 border-l border-separator bg-page-bg whitespace-nowrap'>
                 <span className='sr-only'>詳細</span>
               </TableHead>
             </TableRow>
@@ -297,7 +192,7 @@ export const WebhookJobList = () => {
           <TableBody>
             {jobs.data?.jobs.length === 0 && (
               <TableRow>
-                <TableCell colSpan={8} className='py-8 text-center text-muted-foreground'>
+                <TableCell colSpan={9} className='py-8 text-center text-muted-foreground'>
                   {/* 判定の絞り込みは走査の上限で打ち切ることがあり、先が残っていれば0件でも続きを探せる。 */}
                   {jobs.data.nextCursor === null
                     ? '受信履歴はありません。'
@@ -307,18 +202,42 @@ export const WebhookJobList = () => {
             )}
             {jobs.data?.jobs.map((job) => {
               const accountLabel = webhookAccountLabel(job.post.screenName, characters)
+              const postPreview = job.post.text.trim()
+              const character = characters.find(
+                (entry) => entry.character.twitter_id?.toLowerCase() === job.post.screenName.toLowerCase()
+              )
               return (
                 <TableRow key={job.postId}>
-                  <TableCell className='max-w-80 min-w-52'>
+                  <TableCell className='w-12'>
                     <a
                       href={job.sourceUrl}
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='flex w-fit items-center gap-1 font-medium hover:underline'
+                      title={accountLabel}
+                      aria-label={`${accountLabel}の元投稿を開く`}
+                      className='flex w-fit items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
                     >
-                      {accountLabel}
-                      <ExternalLink className='size-3.5 shrink-0' />
+                      <Avatar className='size-8 border border-card-border' aria-hidden='true'>
+                        {character !== undefined && (
+                          <AvatarImage
+                            src={character.character.image_url}
+                            alt=''
+                            className='mix-blend-multiply scale-150 translate-y-[20%]'
+                          />
+                        )}
+                        <AvatarFallback className='bg-brand/10 text-brand'>
+                          {(character === undefined ? job.post.screenName : accountLabel).slice(0, 1)}
+                        </AvatarFallback>
+                      </Avatar>
                     </a>
+                  </TableCell>
+                  <TableCell className='w-64 max-w-64'>
+                    <p
+                      className='w-64 line-clamp-2 whitespace-pre-line break-all text-sm text-muted-foreground'
+                      title={postPreview.length === 0 ? undefined : postPreview}
+                    >
+                      {postPreview.length === 0 ? '—' : postPreview}
+                    </p>
                   </TableCell>
                   <TableCell className='whitespace-nowrap tabular-nums'>
                     {dayjs(job.post.createdAt).format('YYYY/MM/DD HH:mm:ss')}
@@ -327,13 +246,17 @@ export const WebhookJobList = () => {
                   <TableCell className='whitespace-nowrap'>{webhookModelLabel(job.model)}</TableCell>
                   {/*
                     td に font-mono を付けると行の基線が等幅フォントで決まり、隣のセルとずれる。等幅は内側の span にだけ付ける。
-                    span の行高は 0 にして、等幅フォントの上下の余白が行ボックスを広げ、基線を動かさないようにする。
+                    span の行高を 0 にし、親を flex にして通常行ボックスの基線から外し、数値もセルの中央に揃える。
                   */}
                   <TableCell className='text-right'>
                     {job.confidence === null ? (
                       '—'
                     ) : (
-                      <span className='font-mono tabular-nums leading-[0]'>{detectionScoreLabel(job.confidence)}</span>
+                      <div className='flex items-center justify-end'>
+                        <span className='font-mono tabular-nums leading-[0]'>
+                          {detectionScoreLabel(job.confidence)}
+                        </span>
+                      </div>
                     )}
                   </TableCell>
                   <TableCell
@@ -345,7 +268,7 @@ export const WebhookJobList = () => {
                   <TableCell className='min-w-44 whitespace-nowrap'>
                     <WebhookEventName job={job} />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className='sticky right-0 z-10 border-l border-separator bg-page-bg'>
                     {/* Button 既定の inline-flex は基線に乗るため、ブロックの flex に上書きして上下中央に揃える。 */}
                     <Button asChild variant='ghost' size='sm' className='flex w-fit items-center'>
                       <Link

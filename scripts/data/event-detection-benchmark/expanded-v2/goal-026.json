@@ -1,0 +1,131 @@
+[
+  {
+    "id": "expanded-v2-positive-1206902683698810881",
+    "source": "public-post",
+    "description": "nagoyagate-christmas-keychain-2019",
+    "post": {
+      "id": "1206902683698810881",
+      "createdAt": "2019-12-17T11:43:17.000Z",
+      "screenName": "bic_nagoyagate",
+      "kind": "original",
+      "text": "金鯱|*ºωº){蔵出し映像企画！！(その2)\nある日のカメラ担当たんに担がれての💪🏻撮影会!!\n\n今度は開店前の眠い中、呼び出された時の渾身の一枚！！\n\nアクリルキーホルダーは引き続き配布中ですので、是非是非ご来店下さいませ～✨\n\n#ゲトクリ🎄#なごやげーとたん https://t.co/VuCD66YDHZ",
+      "url": "https://x.com/bic_nagoyagate/status/1206902683698810881",
+      "media": [
+        "https://pbs.twimg.com/media/EL_HlTaVAAAhZ7Y.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": [
+        "nagoyagate"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "撮影裏話に含まれるアクキー継続配布。新しい撮影会の募集ではない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "nagoyagate-christmas-keychain-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アクリルキーホルダー",
+          "evidence": [
+            "金鯱|*ºωº){蔵出し映像企画！！(その2)",
+            "ある日のカメラ担当たんに担がれての💪🏻撮影会!!",
+            "今度は開店前の眠い中、呼び出された時の渾身の一枚！！",
+            "アクリルキーホルダーは引き続き配布中ですので、是非是非ご来店下さいませ～✨",
+            "#ゲトクリ🎄#なごやげーとたん https://t.co/VuCD66YDHZ"
+          ]
+        }
+      ],
+      "groupingNote": "撮影裏話に含まれるアクキー継続配布。新しい撮影会の募集ではない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 687223,
+      "postSha256": "da4329c17943a6858facf87586a5dbc6386b5be69d0480125ba9c006d03e33e5",
+      "textSha256": "276b8cfd3565bb81d2161a337ac56d6eac3858f2c8142942fa8fe1842f78b951"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1206859492865953795",
+    "source": "public-post",
+    "description": "nagoyagate-christmas-keychain-2019 matched control",
+    "post": {
+      "id": "1206859492865953795",
+      "createdAt": "2019-12-17T08:51:40.000Z",
+      "screenName": "bic_nagoyagate",
+      "kind": "original",
+      "text": "金鯱|*ºωº){当店は #ストライダー🚲の正規取扱店です～！\n\n12/22(日)までポイントアップで、通常ポイントに+3％ポイントサービス中!!\n\n元気なお子様へのプレゼントにおすすめです～✨\nさらにメーカーキャンペーンでプレゼント品🎁もご用意しております！！\n(こちらは無くなり次第終了) https://t.co/N1U6Nlb5d3",
+      "url": "https://x.com/bic_nagoyagate/status/1206859492865953795",
+      "media": [
+        "https://pbs.twimg.com/media/EL-gTc_U8AA-IHE.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1206859492865953795",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 687274,
+      "postSha256": "1d97cea037a182af54f6e8eb70657730f1b7cf84959579329fc6a663649edb94",
+      "textSha256": "1f18caf6cd6c8441a143ea918e48c093f29bdb6a60f08f076a7a114b6733fc33"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

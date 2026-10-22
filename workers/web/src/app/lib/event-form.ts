@@ -18,10 +18,10 @@ import type { useEventOrNull } from '@/hooks/use-events'
  * フォーム上は空文字を未入力として扱い、送信直前に toEventPayload で undefined へ畳む。
  */
 export const EventFormSchema = EventRequestSchema.extend({
+  characterIds: z.array(EventCharacterSchema),
   endDate: z.union([z.literal(''), z.string().nonempty('終了日は必須です')]),
   endedAt: z.union([z.literal(''), z.string().nonempty('終了日時は必須です')]),
-  groupId: z.union([z.literal(''), z.uuid('グループ ID は UUID 形式で指定してください')]),
-  characterId: z.union([z.literal(''), EventCharacterSchema])
+  groupId: z.union([z.literal(''), z.uuid('グループ ID は UUID 形式で指定してください')])
 })
 export type EventFormValues = z.infer<typeof EventFormSchema>
 
@@ -38,7 +38,7 @@ export const DEFAULT_VALUES: DefaultValues<EventFormValues> = {
   isVerified: true,
   isPreliminary: false,
   groupId: '',
-  characterId: '',
+  characterIds: [],
   shouldTweet: true,
   uuid: undefined
 }
@@ -59,7 +59,7 @@ export const toFormValues = (
   isVerified: event.isVerified ?? false,
   isPreliminary: event.isPreliminary ?? false,
   groupId: event.groupId ? event.groupId : '',
-  characterId: event.characterId ? event.characterId : '',
+  characterIds: event.characterIds,
   shouldTweet: false
 })
 
@@ -80,6 +80,13 @@ export const toFormValuesFromQuery = (search: EventRequestQuery, uuid: string): 
   category: search.category as EventCategory,
   title: search.title ? search.title : '',
   stores: search.stores ? (search.stores.split(',').map((s) => s.trim()) as StoreKey[]) : [],
+  characterIds:
+    search.characterIds === undefined
+      ? []
+      : search.characterIds.split(',').flatMap((value) => {
+          const parsed = EventCharacterSchema.safeParse(value.trim())
+          return parsed.success ? [parsed.data] : []
+        }),
   referenceUrls: search.referenceUrls
     ? search.referenceUrls.split(',').map((url) => ({
         uuid: uuidv4(),
@@ -121,13 +128,14 @@ export const toEventPayload = (
     uuid: c.uuid || uuidv4(),
     type: c.type,
     purchaseAmount: c.purchaseAmount,
+    chargeAmount: c.chargeAmount,
     quantity: c.quantity
   })) as EventRequest['conditions'],
   stores: data.stores as EventRequest['stores'],
   isVerified: data.isVerified,
   isPreliminary: data.isPreliminary,
   groupId: data.groupId === '' ? undefined : data.groupId,
-  characterId: data.characterId === '' ? undefined : data.characterId,
+  characterIds: data.characterIds,
   shouldTweet: data.shouldTweet,
   uuid: opts.isEditMode && opts.fallbackUuid ? opts.fallbackUuid : data.uuid ? data.uuid : uuidv4(),
   endDate: data.endDate.trim() === '' ? undefined : dayjs(data.endDate).toISOString(),

@@ -1,0 +1,154 @@
+[
+  {
+    "id": "public-d-2037067026070724721",
+    "source": "public-post",
+    "description": "薄桜鬼ゲーム予約の缶バッジ特典",
+    "post": {
+      "id": "2037067026070724721",
+      "createdAt": "2026-03-26T07:20:00.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\n新製品の予約は\n#ビックカメラ で🎮\n＼\n\n19世紀初頭の旧東欧の地が舞台の #薄桜鬼\n#NintendoSwitch ソフト\n「 #薄桜鬼異聞 ベレジンスキーの魔女」8/27(木)発売✨\n\n#ビックカメラ 特典\nドラマCD+ハート缶バッジ5個セット\nもあります(U⁠ ⁠╹⁠▽⁠╹⁠ U⁠)🌸\n\n当店6階ゲームコーナーでご予約を‼ https://t.co/g6XxxUZE4p",
+      "url": "https://x.com/bic_tachikawa/status/2037067026070724721",
+      "media": [
+        "https://pbs.twimg.com/media/HEUcudXbYAAvj9o.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "缶バッジは別IPゲームの予約特典。ビッカメ娘のグッズやコラボではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "badge-word",
+      "purchase-benefit",
+      "reservation"
+    ],
+    "group": "hakuouki-beresinsky-preorder-march-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1997534534691438617",
+    "source": "public-post",
+    "description": "Technics試聴会参加者への缶バッジ",
+    "post": {
+      "id": "1997534534691438617",
+      "createdAt": "2025-12-07T05:12:00.000Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "🎵本日最終日🎵\nビックカメラ千葉駅前店では\nTechnicsのワイヤレスイヤホン試聴会を\n本日18時まで開催中❗️\n\nイヤホン3機種とオープン型ワイヤレスイヤホンの\nご試聴が出来ます🎵\nご参加された方には缶バッジをプレゼント🎁\nぜひ、5階オーディオコーナーに\n足をお運びくださいませ🔈 https://t.co/IDdS6dUwL8",
+      "url": "https://x.com/bic_chiba/status/1997534534691438617",
+      "media": [
+        "https://pbs.twimg.com/media/G7iq8M-aYAAFZSW.jpg",
+        "https://pbs.twimg.com/media/G7iq8VybUAA0LM4.jpg",
+        "https://pbs.twimg.com/media/G7iq8-PaAAA6Ix7.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "配布対象は音響メーカー試聴会の参加者で、娘を対象にした物品や催しではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "ordinary-event",
+      "badge-word",
+      "giveaway",
+      "experience"
+    ],
+    "group": "technics-listening-giveaway-december-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1991310532612104651",
+    "source": "public-post",
+    "description": "岡山店18周年の感謝挨拶",
+    "post": {
+      "id": "1991310532612104651",
+      "createdAt": "2025-11-20T01:00:02.000Z",
+      "screenName": "Bic_Okayamaten",
+      "kind": "original",
+      "text": "【🍡】(木|≡\\(*'▽'*)/≡|兆)パンパカパッカーン‼️\n\n今日は…\n\n＼＼#11月20日は岡山たんのバースデー／／\n\nビックカメラ岡山駅前店18周年🥳🎉\n\nいつも当店をご利用いただき、ありがとうございます🙏\nおかげさまで18周年を迎えることができました💞\n今後ともご愛顧賜りますようお願い申し上げます🙇‍♀️",
+      "url": "https://x.com/Bic_Okayamaten/status/1991310532612104651",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "岡山たんのバースデーという語はあるが、本文は店舗周年への感謝のみ。配布・出演・参加企画の告知はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "character-greeting",
+      "anniversary",
+      "thanks-only"
+    ],
+    "group": "okayama-store18-thanks-november-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1973276276367695994",
+    "source": "public-post",
+    "description": "子供へのプレゼント向けデジカメ",
+    "post": {
+      "id": "1973276276367695994",
+      "createdAt": "2025-10-01T06:38:20.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "【5階 カメラコーナーよりお知らせ📢】\n\nキッズ向けデジタルカメラ📸\nコンパクトで持ちやすい形状で写真撮影の他に、ビデオ動画を\n撮影できるものやゲーム機能付きのもの等ご用意しております🎶\nお子様へのプレゼントに最適です🎁\n是非5階カメラコーナーをご利用くださいませ📷 https://t.co/gTQkWUbma1",
+      "url": "https://x.com/bic_shinyoko/status/1973276276367695994",
+      "media": [
+        "https://pbs.twimg.com/media/G2J8TtKaIAEHL38.jpg",
+        "https://pbs.twimg.com/media/G2J8TuSaIAEeMxe.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "プレゼントに適するという商品推薦で、店舗が景品を配布する企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "gift-word",
+      "ordinary-product"
+    ],
+    "group": "kids-digital-camera-october-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2029468959074845107",
+    "source": "public-post",
+    "description": "一般キャラクター腕時計のプレゼント推薦",
+    "post": {
+      "id": "2029468959074845107",
+      "createdAt": "2026-03-05T08:08:00.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "キャラクターの腕時計たくさんあります⌚️✨\n\nディズニー・サンリオ・ちいかわ等各種お取り扱いしてます😁\n小さなお子様へのプレゼント🎁にも最適です😁 https://t.co/1eOKD30cfg",
+      "url": "https://x.com/bic_abeno/status/2029468959074845107",
+      "media": [
+        "https://pbs.twimg.com/media/HCntdSQawAAdeS9.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ディズニー・サンリオ・ちいかわの腕時計を贈り物に勧める通常販売。娘の物品ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "gift-word",
+      "ordinary-product"
+    ],
+    "group": "character-watches-march-2026",
+    "reviewStatus": "provisional"
+  }
+]

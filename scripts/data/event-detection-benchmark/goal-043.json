@@ -1,0 +1,128 @@
+[
+  {
+    "id": "goal-positive-1682232917504958465",
+    "source": "public-post",
+    "description": "funabashi summer festival 2023",
+    "post": {
+      "id": "1682232917504958465",
+      "createdAt": "2023-07-21T03:35:56.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "こんふな～(*•̀ω•́ )ゝ✧💛💛\n暑い日が続いていますが・・\nボクからの涼しいお知らせです٩(｡˃ ᵕ ˂ )و♪\n 8/11・12・13の3日間限定で\n【ふなたんの夏祭り】を開催いたします！！\n税込3000円以上でご参加できます💛\nアクキーも先着順です💛\n#ふなたん　#ビックカメラ　＃夏祭り　＃お菓子釣り https://t.co/3SCHB2SIk9",
+      "url": "https://x.com/bic_funabashi/status/1682232917504958465",
+      "media": [
+        "https://pbs.twimg.com/media/F1h8LULaMAA-lZj.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "funabashi"
+      ],
+      "characterIds": [
+        "funabashi"
+      ],
+      "category": "ackey",
+      "startDate": "2023-08-11"
+    },
+    "rationale": "8/11〜13、税込3,000円以上で夏祭りに参加でき、アクキーは先着順と明示。購入とは書かれず、祭り参加費とアクキー入手の完全条件を同一視しないためconditionsは未注釈。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "funabashi-summer-festival-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ふなたん夏祭りアクキー",
+          "evidence": [
+            "アクキーも先着順です💛"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 344646,
+      "postSha256": "6907627a272fcd61ccc02b467ef466b799b95a6e5ca972adc21438bbc7511045",
+      "textSha256": "945f4592686db873f18bd9309e0e92dd3113dd5110191e210c47b426ef5c736f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1694922550357176344",
+    "source": "public-post",
+    "description": "kashiwa autumn card 2023",
+    "post": {
+      "id": "1694922550357176344",
+      "createdAt": "2023-08-25T04:00:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "🍁お知らせです🍁\n\n柏たん2023年秋名刺を配布します🍄\n\n9月1日(金)～10月31日(火)まで\nデザインは見てのお楽しみです💗\n\n今回のイラストもなんと！ナイセンさん新規描きおろしです♪\n恒例の2階フォトスポットも一新予定です🎃🦇 https://t.co/OBYdz08nXp",
+      "url": "https://x.com/bic_kashiwa/status/1694922550357176344",
+      "media": [
+        "https://pbs.twimg.com/media/F4ROp0eaAAAPhCM.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": [
+        "kashiwa"
+      ],
+      "category": "limited_card",
+      "startDate": "2023-09-01"
+    },
+    "rationale": "9/1から10/31、描き下ろし名刺とフォトスポット更新。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-autumn-card-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "柏たん秋名刺",
+          "evidence": [
+            "柏たん2023年秋名刺を配布します🍄"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 334182,
+      "postSha256": "a8c5e1378b79cc3d8cd61865255217c6c1598762558ad861086f394e25e786bd",
+      "textSha256": "c29cfa15c71bb70c889ce7a1104cf58197d2eb2e15e29ae9c09c5151ad7b73c8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

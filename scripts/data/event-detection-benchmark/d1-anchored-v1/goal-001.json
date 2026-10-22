@@ -1,0 +1,157 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1740285445202686233",
+    "source": "public-post",
+    "description": "tenjin-newyear-card-2024",
+    "post": {
+      "id": "1740285445202686233",
+      "createdAt": "2023-12-28T08:15:57.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "2024年1月1日～1月31日まで\n#天神1号たん　とコラボのようでコラボじゃない\n新年名刺を配布します～✨\nぜひぜひうちらに会いに来てくださいねぇ～🎶 https://t.co/P2dxu2BA84",
+      "url": "https://x.com/biccameratenjin/status/1740285445202686233",
+      "media": [
+        "https://pbs.twimg.com/media/GCa8C-dbAAAekBX.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2024-01-01",
+      "conditions": null
+    },
+    "rationale": "2024年1月の新年名刺配布の告知。コラボ相手は本文で完全には特定できない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:seasonal-newyear-card"
+    ],
+    "group": "tenjin-newyear-card-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "新年名刺",
+          "evidence": [
+            "新年名刺を配布します～✨"
+          ]
+        }
+      ],
+      "groupingNote": "2024年1月の新年名刺配布の告知。コラボ相手は本文で完全には特定できない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 297504,
+      "postSha256": "f6de1a0d7146929db038cf120e4450375e8c411c2e1e52cb41535c3a2c8a3f2f",
+      "textSha256": "1fd46b7c977492412f2420f65328ba8ebe04c2397f0b04c0812f3cc334edc827"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "141b3af3-9e2b-4b98-a1f6-b7ab96f99278",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/biccameratenjin/status/1740285445202686233",
+          "origin": "manual-or-seed",
+          "title": "新年名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2023-12-31T15:00:00.000+00:00",
+            "endDate": "2024-01-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "tenjin2"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1731115962194362705",
+    "source": "public-post",
+    "description": "tenjin-newyear-card-2024 matched control",
+    "post": {
+      "id": "1731115962194362705",
+      "createdAt": "2023-12-03T00:59:42.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "おっはてーん(✿╹◡╹)ﾉｼ\n天神２号館かいて～ん‹‹\\(*'ω'* )/›› ‹‹\\( *'ω'*)/›› ｸﾙｸﾙ❢\nということで本日も元気いっぱいよろしゅうお願いします～°˖✧◝(⁰▿⁰)◜✧˖°",
+      "url": "https://x.com/biccameratenjin/status/1731115962194362705",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-1731115962194362705",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 305779,
+      "postSha256": "cc0366ed1e1e96f6a0a5b08efe760553c351eebd2b9cf932243b8e4b51bc01ac",
+      "textSha256": "46ce2f2e46620f5f0ac64b00dee0ae365811d243f497114e887193a722c322db"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

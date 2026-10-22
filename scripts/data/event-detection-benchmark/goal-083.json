@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1156081336425177088",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1156081336425177088",
+      "createdAt": "2019-07-30T05:57:24.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "💼就活応援💼\n\nビックカメラでは就活の方々を応援します💪\n就活に必要は腕時計、OAバッグ等がお買い得❣️❣️\n9月1日までです🤗❤️ https://t.co/XmTMkVpnde",
+      "url": "https://x.com/bic_sagamioono/status/1156081336425177088",
+      "media": [
+        "https://pbs.twimg.com/media/EAs518KVUAApzVH.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「💼就活応援💼 / ビックカメラでは就活の方々を応援します💪 / 就活に必要は腕時計、OAバッグ等がお買い得❣️❣️」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "job-hunting-watch-bag-sale-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 726632,
+      "postSha256": "cc6bfda9330489dff963b7d9e16786a3274682a2539f7168ebf51a008e07205b",
+      "textSha256": "ba89c84f6529506ce2cda30a67434116554714f506837bcec77d367013f935af"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1189785632081530881",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1189785632081530881",
+      "createdAt": "2019-10-31T06:06:14.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "＼秋の調理家電🍁／\n\n【6階　家電】\n\n#SHARP #ﾎｯﾄｸｯｸ KN-HW24E\n\n食材と調味料を入れるだけホットくクッキング‼️\n\n無水＆自動調理でほったらかしでも\n手間をかけたような味✨\n\n週末には体験イベントも開催予定✨\n\nhttps://t.co/BTFPUBWNTn https://t.co/mo9gF8cPUt",
+      "url": "https://x.com/bic_kashiwa/status/1189785632081530881",
+      "media": [
+        "https://pbs.twimg.com/media/EIL3t6dWkAAcreg.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「＼秋の調理家電🍁／ / 【6階　家電】 / #SHARP #ﾎｯﾄｸｯｸ KN-HW24E」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "sharp-hotcook-demo-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 700649,
+      "postSha256": "4d86e111073c7d530996c3a23d6d55500c7235124499dc2992ede27065939809",
+      "textSha256": "019cdfe7939202343d439c733386175332b9c7ede4f164a75f9dcf56618783d4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

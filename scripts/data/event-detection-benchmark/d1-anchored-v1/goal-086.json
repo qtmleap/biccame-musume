@@ -1,0 +1,170 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2094285729560244515",
+    "source": "public-post",
+    "description": "tamapla-card-extension-2026",
+    "post": {
+      "id": "2094285729560244515",
+      "createdAt": "2026-08-31T04:46:42.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "quote",
+      "text": "たまプラたんの名刺は9月以降も配布する事にしました！\n引き続きレジにてお渡しするのでご来店の際はお声かけください(*´ω`*)\n※なくなり次第終了",
+      "url": "https://x.com/bic_sagamioono/status/2094285729560244515",
+      "quoted": {
+        "id": "2081979423205781637",
+        "screenName": "bic_sagamioono",
+        "text": "💚たまプラたん名刺配布💚\n『ビッカメ娘11周年記念 たまプラたん名刺』をレジにて配布いたします！\nレジで「たまプラたんの名刺ください」とお声かけください。\n8/1(土)～8/31(金)まで\n※お一人様一枚限り\n※フリマサイトなどでの出品・販売は固くお断り致します\n#たまプラたん https://t.co/QBanDxPYsa"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "tamapla"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "8月末までだった名刺を9月以降も配布する延長。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "tamapla-card-extension-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "たまプラたん名刺",
+          "evidence": [
+            "たまプラたんの名刺は9月以降も配布する事にしました！"
+          ]
+        }
+      ],
+      "groupingNote": "8月末までだった名刺を9月以降も配布する延長。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 11753,
+      "postSha256": "6923baf37bb52ae7428b95aa44b5a63113067ba027ae8a8bdf855ab222b813c2",
+      "textSha256": "54016882a7b88288ea467ed60ffe27beee46682c03410cf42dac9d97a5be09e0"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "602144e2-17a2-4c05-9ded-b633cf1b22f9",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_sagamioono/status/2094285729560244515",
+          "origin": "manual-or-seed",
+          "title": "ビッカメ娘11周年記念名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-31T15:00:00.000+00:00",
+            "endDate": "2026-09-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "sagami"
+            ],
+            "characters": [
+              "tamapla"
+            ],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2084828151407104045",
+    "source": "public-post",
+    "description": "tamapla-card-extension-2026 matched control",
+    "post": {
+      "id": "2084828151407104045",
+      "createdAt": "2026-08-05T02:25:40.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "quote",
+      "text": "新横たんありがと～！\nさがみたんミュージアムに新横たんも召喚しちゃったヾ(*´ω`)ﾉﾞ https://t.co/cFRPUnbxTd",
+      "url": "https://x.com/bic_sagamioono/status/2084828151407104045",
+      "quoted": {
+        "id": "2084517898677354660",
+        "screenName": "bic_shinyoko",
+        "text": "さがみたん‼擬人化11周年おめでとうございま～す🎶"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HO7MJm1bIAATI-g.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2084828151407104045",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 19134,
+      "postSha256": "6c4f6d19b27eb83f72b2bb1c32658fbf7e374299debf8cb787a37d8c05cbf093",
+      "textSha256": "ec4e5430821173482daa5abd607f52d03f8554aa5ece3309eb20dc486ffd9a16"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

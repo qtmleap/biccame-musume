@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1023840229675814912",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1023840229675814912",
+      "createdAt": "2018-07-30T07:58:27.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "夏の気になる服のニオイ…\n洗剤とか柔軟剤をどれにしようって方！\n\n4F ドラックコーナーでは\n液体のからジェルのものまで取り扱ってます！\n\n一部香りのテスターがもございますので\nお好みのものを見つけてみてください\nこれで夏も爽やかにお洗濯っ(*'▽'ﾉﾉﾞ\n\n＃ビックカメラ池袋本店 https://t.co/4qi7UTypWQ",
+      "url": "https://x.com/bicikebukuro/status/1023840229675814912",
+      "media": [
+        "https://pbs.twimg.com/media/DjVolrqUUAA7Bin.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「夏の気になる服のニオイ… / 洗剤とか柔軟剤をどれにしようって方！ / 4F ドラックコーナーでは」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "summer-laundry-detergents-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 834998,
+      "postSha256": "fa8161d1860ba8c6bf88c3a52e958b31ec12aadbc1fbfd4a7c39a039eb56e1a9",
+      "textSha256": "00f94347cbf40e15e06c14cc135ec720a0f2f81161f29cf1eff87e95d6f3cdb0"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1035370941981720576",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1035370941981720576",
+      "createdAt": "2018-08-31T03:37:23.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "４０年分の感謝をこめて‼️\n\n４階ビックのリフォームでは\n\n＿人人人人人人人人人人人人人＿\n＞決算大感謝セール開催中！＜\n￣ＹＹＹＹＹＹＹＹＹＹYＹＹ￣\n\n本日８月３１日迄！\n是非ご利用くださいませ！！\n#ビックカメラ #リフォーム \n#キャンペーン https://t.co/WST41mZvzo",
+      "url": "https://x.com/Bic_kawasaki/status/1035370941981720576",
+      "media": [
+        "https://pbs.twimg.com/media/Dl5fNHyU4AAB-ff.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「４０年分の感謝をこめて‼️ / ４階ビックのリフォームでは / ＿人人人人人人人人人人人人人＿」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "home-reform-closing-sale-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 825263,
+      "postSha256": "e0f4a19fa42b89d09e779d292fc55d1fb9b4e58e3088cb3e52f5cc138e3ada18",
+      "textSha256": "3ac8a11a19f97c4a9ce84c0b06de1dfe24b8e40614ae4b8889bd0c7890ab04d0"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

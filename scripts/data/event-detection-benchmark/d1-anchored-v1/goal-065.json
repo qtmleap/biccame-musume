@@ -1,0 +1,242 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2071401802810151142",
+    "source": "public-post",
+    "description": "camera-pkan-anniv10-end-2026",
+    "post": {
+      "id": "2071401802810151142",
+      "createdAt": "2026-06-29T01:14:09.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "quote",
+      "text": "／\nカメ館たん＆パソ館たん\n擬人化10周年ノベルティ\n全て配布終了しました！\n＼\n\nたくさんのご来店＆お祝いのお言葉ありがとうございました！これからもカメ館たんとパソ館たんをよろしくお願いします👏\n\n※1Fに設置中の「お手紙BOX」は本日で撤去させていただきます",
+      "url": "https://x.com/bicpkanhonten/status/2071401802810151142",
+      "quoted": {
+        "id": "2056668724397289691",
+        "screenName": "bicpkanhonten",
+        "text": "／\nカメ館たん＆パソ館たんは\n今年で擬人化10周年！✨\n＼\n\n✅6/28(日)～　先着・各100個\n✅お買い上げ金額に応じて\n\nA：カメ館たん👗アクキー\nB：パソ館たん👗アクキー\nC：10周年記念アクスタ\n\n計3種をプレゼント！🎁💗\n\n#6月29日はカメ館たん擬人化10周年 📷\n#6月29日はパソ館たん擬人化10周年 💻 https://t.co/M8M7RabfvF"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "camera",
+        "pkan"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "10周年ノベルティが全て配布終了。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "camera-pkan-anniv10-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "擬人化10周年ノベルティ",
+          "evidence": [
+            "擬人化10周年ノベルティ"
+          ]
+        }
+      ],
+      "groupingNote": "10周年ノベルティが全て配布終了。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 30136,
+      "postSha256": "e70e12adeeee4dbf8e0611a97b1d8a11f9c6ddbe6f7839eec6aa2f08831dc73e",
+      "textSha256": "ae8f85a98ead7c211377ede2034823111f590c4883b7ba6514139add54bc75ee"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "cae06dfd-07d3-4229-8f54-edd73c6cd747",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bicpkanhonten/status/2071401802810151142",
+          "origin": "manual-or-seed",
+          "title": "擬人化10周年ノベルティB",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-06-27T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "pkan"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "6ed157cc-8e6d-4968-b4d2-908a4e693918",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bicpkanhonten/status/2071401802810151142",
+          "origin": "manual-or-seed",
+          "title": "擬人化10周年ノベルティC",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-06-27T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "pkan"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 4000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "3cd0fa00-5742-40b1-8a2e-0a862837dcc0",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bicpkanhonten/status/2071401802810151142",
+          "origin": "manual-or-seed",
+          "title": "擬人化10周年ノベルティA",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-06-27T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "pkan"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2061660407451058579",
+    "source": "public-post",
+    "description": "camera-pkan-anniv10-end-2026 matched control",
+    "post": {
+      "id": "2061660407451058579",
+      "createdAt": "2026-06-02T04:05:19.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "quote",
+      "text": "( っ*´ω`*c)素通り禁止！いつもかわいいパソ館たんをありがとうございます～☺️💕\nツイ廃というイメージがなぜか(?)定着しているパソ館たんをこれからもよろしくお願いします！！！！💪✨",
+      "url": "https://x.com/bicpkanhonten/status/2061660407451058579",
+      "quoted": {
+        "id": "2061199123588751368",
+        "screenName": "toinekoxcrossp",
+        "text": "全ての絵描きが思うこと🐈️\n\nツイ廃パソ館たんの\n#素通り禁止チャレンジ\n#絵描きさんと繋がりたい https://t.co/WuBSriMbD5"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2061660407451058579",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 38820,
+      "postSha256": "d283aba40be94b5af51fd2573fe8941965f20773b36397417e17e946c0fc8877",
+      "textSha256": "4d19dbe31074e97ce851b4cc643842a91b9d6041ab2e0c26c281bbdcfd73553c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

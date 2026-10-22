@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expanded-v2-positive-1978717628618379304",
+    "source": "public-post",
+    "description": "kawasaki-detective-quiz-rally-2025",
+    "post": {
+      "id": "1978717628618379304",
+      "createdAt": "2025-10-16T07:00:20.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "【明日スタート】\n🔍 ビッカメ娘クイズラリー-イージー編-🔎\n\n＼10/17(金)～10/31(金)／\n【クイズ全問正解】+指定金額以上の【当日購入レシート】を2F総合カウンターで提示すると「名探偵川崎たんステッカー＆限定名刺」をプレゼント！\n\n⚠️参加方法・条件は画像を確認！\n#ビッカメ娘 #川崎たん https://t.co/uerpka5JtA",
+      "url": "https://x.com/Bic_kawasaki/status/1978717628618379304",
+      "media": [
+        "https://pbs.twimg.com/media/G3XIWySbUAAHJnj.jpg",
+        "https://pbs.twimg.com/media/G3XIkLybkAAJsRC.jpg",
+        "https://pbs.twimg.com/media/G3XRIo3bkAA0H5S.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "クイズ全問正解と購入レシートの複合条件。金額は画像依存で補完しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kawasaki-detective-quiz-rally-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "名探偵川崎たんステッカー＆限定名刺",
+          "evidence": [
+            "【明日スタート】",
+            "🔍 ビッカメ娘クイズラリー-イージー編-🔎",
+            "＼10/17(金)～10/31(金)／",
+            "【クイズ全問正解】+指定金額以上の【当日購入レシート】を2F総合カウンターで提示すると「名探偵川崎たんステッカー＆限定名刺」をプレゼント！",
+            "⚠️参加方法・条件は画像を確認！",
+            "#ビッカメ娘 #川崎たん https://t.co/uerpka5JtA"
+          ]
+        }
+      ],
+      "groupingNote": "クイズ全問正解と購入レシートの複合条件。金額は画像依存で補完しない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 104358,
+      "postSha256": "4e11e5d3b189603304b7dd09d05d63587ae68ed566cc9b6898a702189831a638",
+      "textSha256": "af513bf484292e86384bbd4d1f570db1fd3abfca4d6845b482697659bf7a22f2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1979430455838732662",
+    "source": "public-post",
+    "description": "kawasaki-detective-quiz-rally-2025 matched control",
+    "post": {
+      "id": "1979430455838732662",
+      "createdAt": "2025-10-18T06:12:51.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": ".　 ／\n📣10/18(土)限定 本日限りの大特価❗️\n 　＼\n寒い夜に欠かせない❗️\n✨暖か〜い生毛布団が20％引きの大特価セール実施中です✨\n実際にお試しもしていただけます🛏️💤\nぜひ、川崎店4階 生毛工房 までお立ち寄りください！\n\nϵ( •Θ•ｽ)϶ ご来店お待ちしてま～す\n#ビックカメラ #寝具 https://t.co/XLMgFozIsH",
+      "url": "https://x.com/Bic_kawasaki/status/1979430455838732662",
+      "media": [
+        "https://pbs.twimg.com/media/G3hZbD0XEAAOfQo.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1979430455838732662",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 103875,
+      "postSha256": "f5e50e82eebb4bf74124a4c38a065c2de941576fd18e2f041e5a15fda8f21ebe",
+      "textSha256": "5e1b8aa7f693c5da7ad1e96778f34f5be62e2a0303f4b2d158dd4d02afd3feb6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,131 @@
+[
+  {
+    "id": "expanded-v2-positive-1124955109564096512",
+    "source": "public-post",
+    "description": "chiba-team-goldenweek-kashiwa-end-2019",
+    "post": {
+      "id": "1124955109564096512",
+      "createdAt": "2019-05-05T08:32:53.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【お知らせ】\n#ちーむちばＧＷ2019　柏たん名刺\n配布枚数に達したため、配布終了となりました。\n\n※ふなたん配布分も残りわずか\nお早目にご来店ください🌻✨ https://t.co/LVfDs0sr5p",
+      "url": "https://x.com/bic_kashiwa/status/1124955109564096512",
+      "media": [
+        "https://pbs.twimg.com/media/D5ykquBV4AEqCtl.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "柏たん名刺が配布枚数に達して終了。ふなたん配布分は残りわずかで終了ではない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "end"
+    ],
+    "group": "chiba-team-goldenweek-kashiwa-end-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "柏たん名刺",
+          "evidence": [
+            "【お知らせ】",
+            "#ちーむちばＧＷ2019　柏たん名刺",
+            "配布枚数に達したため、配布終了となりました。",
+            "※ふなたん配布分も残りわずか",
+            "お早目にご来店ください🌻✨ https://t.co/LVfDs0sr5p"
+          ]
+        }
+      ],
+      "groupingNote": "柏たん名刺が配布枚数に達して終了。ふなたん配布分は残りわずかで終了ではない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 752851,
+      "postSha256": "e3f029019f35217301c2c99335eb1b78d80b613bcfd25bbb23e01df70d5c7da6",
+      "textSha256": "ad5e1d991175eb5fc75f897665ca50596f29f662ecb13ea7d17de8fe94131633"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1124852406909452288",
+    "source": "public-post",
+    "description": "chiba-team-goldenweek-kashiwa-end-2019 matched control",
+    "post": {
+      "id": "1124852406909452288",
+      "createdAt": "2019-05-05T01:44:47.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "今日も2階店頭にて\n★射的大会（小学生以下対象）\n★ガラポン抽選会\n開催！\n\n参加には条件がございます\nご不明な点は販売員までお気軽にお尋ねください😊 https://t.co/rAbVOW2vV7",
+      "url": "https://x.com/bic_kashiwa/status/1124852406909452288",
+      "media": [
+        "https://pbs.twimg.com/media/D5xG2ppUwAEnris.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1124852406909452288",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 753222,
+      "postSha256": "0d5d20a1590f3b2a28d3633829238b77f97eb52d34b63f9aaf78e33bcf189e16",
+      "textSha256": "0126927877db28fceb4018603257c1e217ec773ceee83aef694fac24607933c1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

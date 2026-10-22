@@ -1,0 +1,142 @@
+[
+  {
+    "id": "expanded-v2-positive-1737306837761003890",
+    "source": "public-post",
+    "description": "kashiwa-newyear-valentine-photospot-2024",
+    "post": {
+      "id": "1737306837761003890",
+      "createdAt": "2023-12-20T03:00:02.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "🎍お知らせです🎍\n\n柏たん2024年新年名刺を配布します🐉\n\n⚠️今回は配布期間が1か月です‼⚠️\n1月1日(月)～1月31日(水)まで\n\n📢また、2月1日(木)～3月9日(土)まで\nバレンタイン名刺配布を予定してます🍫\nこちらもお楽しみに♪\n\n恒例の2階フォトスポットも一新予定です‼(こちらは1月1日～3月9日まで) https://t.co/GUCz3ZFrES",
+      "url": "https://x.com/bic_kashiwa/status/1737306837761003890",
+      "media": [
+        "https://pbs.twimg.com/media/GBwduKhbwAAa1n9.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "異なる配布期間の名刺と展示予定を列挙。条件を共有と推測しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "preliminary"
+    ],
+    "group": "kashiwa-newyear-valentine-photospot-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "新年名刺",
+          "evidence": [
+            "柏たん2024年新年名刺",
+            "1月1日(月)～1月31日(水)"
+          ]
+        },
+        {
+          "item": "バレンタイン名刺",
+          "evidence": [
+            "2月1日(木)～3月9日(土)",
+            "バレンタイン名刺配布"
+          ]
+        },
+        {
+          "item": "フォトスポット",
+          "evidence": [
+            "恒例の2階フォトスポット"
+          ]
+        }
+      ],
+      "groupingNote": "異なる配布期間の名刺と展示予定を列挙。条件を共有と推測しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 300253,
+      "postSha256": "63659381a2eecd4dfdc99354f0b4003ac4fc9fa00521d85028de24a40350441e",
+      "textSha256": "6929f5f46c15f48ec9884d4be4247918a6456dd5c8c09417a33deba4a62020ea"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1737012389889954120",
+    "source": "public-post",
+    "description": "kashiwa-newyear-valentine-photospot-2024 matched control",
+    "post": {
+      "id": "1737012389889954120",
+      "createdAt": "2023-12-19T07:30:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "けん玉　得意ですか！！？？\n\n競技用や海外製🎊\n本体や球の部分の材質も様々💐\nけん玉にもいろんな種類があるんですね！！👏\n\n柏たんも挑戦してみようかな？？😍\n\n7階おもちゃコーナーにて\n大好評販売中です💞 https://t.co/ccxG9ahOaa",
+      "url": "https://x.com/bic_kashiwa/status/1737012389889954120",
+      "media": [
+        "https://pbs.twimg.com/media/GBrP665aUAAY8vB.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1737012389889954120",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 300441,
+      "postSha256": "b138e011d59ba062497647aec1152b536872e001256dd3219cf6eb3d6151df15",
+      "textSha256": "909b6093011c1b8a6c70ce42a2f68afbf08cd90052477a2a0ecf9cf98d297da5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

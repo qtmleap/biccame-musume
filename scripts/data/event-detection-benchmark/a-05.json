@@ -1,0 +1,209 @@
+[
+  {
+    "id": "public-2109932404035190899",
+    "source": "public-post",
+    "description": "通信サービスの支払い",
+    "post": {
+      "id": "2109932404035190899",
+      "createdAt": "2026-10-13T09:01:00.427Z",
+      "screenName": "bicsim_official",
+      "kind": "original",
+      "text": "｛おつしむ～！\n\n#BICSIM は、「通信品質」のファクターでトップとなった #IIJmio の高品質な通信を使ってます✨\n\n#ビックカメラ 店頭で安心サポートもあるBIC SIM💡\n月額料金のお支払いに #ビックポイント も使えます🎵\n\n▼詳細はコチラ♪\nbicsim.com/feature/?utm_s…\n\nそれでは\n｛ばいしむ🍀\n#格安",
+      "url": "https://x.com/bicsim_official/status/2109932404035190899",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "BICSIMの通信・ポイント支払い案内であり、ビックシムたん配布物ではない。",
+    "tags": [
+      "payment",
+      "service"
+    ],
+    "group": "bicsim-network-payment",
+    "reviewStatus": "provisional",
+    "sourceHash": "9f51177e0de646056fe165229238e58c3bce8ac5dc6a665a04bcd5ec6f93c020"
+  },
+  {
+    "id": "public-2109932734504477116",
+    "source": "public-post",
+    "description": "レトルトカレーのコラボ",
+    "post": {
+      "id": "2109932734504477116",
+      "createdAt": "2026-10-13T09:02:19.217Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\nレトルトカレーフェア\n大好評開催中✨\n＼\n\n旅行情報誌 #るるぶ\n元祖カレー粉メーカー #HACHI\n夢のコラボ(Ｕ 'ᴗ' Ｕ)🍛🌈\n\n食卓で旅行気分が味わえる⁉\n\n各地にちなんだ食材や味付で楽しめる\n#レトルトカレー 勢揃いです‼\n\n1階特設コーナーでお待ちしております🎵",
+      "url": "https://x.com/bic_tachikawa/status/2109932734504477116",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "コラボとフェアの語があっても、るるぶとHACHIの商品企画である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "other-collaboration",
+      "ordinary-sale"
+    ],
+    "group": "tachikawa-retort-curry-fair",
+    "reviewStatus": "provisional",
+    "sourceHash": "3b736ac36113009ba6ef5b88cd83cab07677fcfe63a8e926ead9b155d2fb41cd"
+  },
+  {
+    "id": "public-2109936013363830801",
+    "source": "public-post",
+    "description": "浜松アクキーの配布実績",
+    "post": {
+      "id": "2109936013363830801",
+      "createdAt": "2026-10-13T09:15:20.958Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "|๑σ｡σ).o0(10月13日 18時くらいでのアクキー配布数は【73個】です。\n数も少なくなってまいりました…！皆さまご来店ありがとうございます✨",
+      "url": "https://x.com/bic_hamamatsu/status/2109936013363830801",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey"
+    },
+    "rationale": "アクキー配布の継続状況。73個は配布済み実績で、配布上限と断定してはならない。",
+    "tags": [
+      "giveaway-progress",
+      "quantity-not-limit"
+    ],
+    "group": "hamamatsu-keychain-progress",
+    "reviewStatus": "provisional",
+    "sourceHash": "b1d36ad6259ba788bc5247e56481193a7b96c374534554f53eb3544e73de5625"
+  },
+  {
+    "id": "public-2109938819449634986",
+    "source": "public-post",
+    "description": "イベント告知後の不安という雑談",
+    "post": {
+      "id": "2109938819449634986",
+      "createdAt": "2026-10-13T09:26:29.981Z",
+      "screenName": "Bic_shintoueki",
+      "kind": "original",
+      "text": "|꒳`*)໒꒱₊˚ いつもイベントのお知らせをした後、\n「誰も来なかったらどうしよー」ってなっちゃう🥺",
+      "url": "https://x.com/Bic_shintoueki/status/2109938819449634986",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "イベントという語はあるが、参加内容や配布を案内する投稿ではない。",
+    "tags": [
+      "small-talk",
+      "event-word"
+    ],
+    "group": "shintou-event-anxiety",
+    "reviewStatus": "provisional",
+    "sourceHash": "f2f6ab5dc853e7cb03f6e4cacd9815b7d34663c20985f3a7cb1a7f03d1e57f80"
+  },
+  {
+    "id": "public-2109939704221085781",
+    "source": "public-post",
+    "description": "スマホ初期設定サポート",
+    "post": {
+      "id": "2109939704221085781",
+      "createdAt": "2026-10-13T09:30:00.927Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "／\nスマホ📱買い換えたら…\nビックカメラにお任せ✨\n＼\n\n面倒なスマホの設定・データ移行・LINEの引継ぎ\nビックカメラの📲スマホまるっとサポートで安心解決✨\nご不明点は当店B1Fサービスサポートカウンターまでお気軽にお尋ねください😊",
+      "url": "https://x.com/bicpkanhonten/status/2109939704221085781",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "有償・無償を問わず、通常の端末設定サービス案内である。",
+    "tags": [
+      "service"
+    ],
+    "group": "smartphone-setup",
+    "reviewStatus": "provisional",
+    "sourceHash": "c2d6cfd5a2aefdcb52838e578286a27a263b0313ad0ffc3483f8f8128d54c745"
+  },
+  {
+    "id": "public-2109943476041441669",
+    "source": "public-post",
+    "description": "フィルム販売と現像",
+    "post": {
+      "id": "2109943476041441669",
+      "createdAt": "2026-10-13T09:45:00.199Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "🌁大切な思い出をフィルムカメラで残そう📷\n\n🏞️当店B1Fにて写ルンですなどの使い切りカメラや各種フィルムを多数販売中❗️\n🥰18時30分までの受付で即日現像ができるフィルムなら最短90分仕上げでスマホ転送できますよ💕\n詳しくは当店B1F写真プリントにてお待ちしてます〜☺️",
+      "url": "https://x.com/bicpkanhonten/status/2109943476041441669",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "通常のフィルム・現像サービスであり、キャラクター企画ではない。",
+    "tags": [
+      "ordinary-sale",
+      "service"
+    ],
+    "group": "film-development",
+    "reviewStatus": "provisional",
+    "sourceHash": "34fbe72a18128d1790c42f513d6203c3af255f9c525485d580b2a5f116bd1095"
+  },
+  {
+    "id": "public-2109947257810514344",
+    "source": "public-post",
+    "description": "Surface新型発売",
+    "post": {
+      "id": "2109947257810514344",
+      "createdAt": "2026-10-13T10:00:01.843Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "＼surface新型発売‼️／\n\nSnapdragon X2 搭載の新型surfaceが今日から発売‼️  laptop13インチ、pro12ともに新色ブラックが仲間入り‼️\n この洗練されたデザインをぜひ当店5階パソコンコーナーでご体験ください！",
+      "url": "https://x.com/bicpkanhonten/status/2109947257810514344",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "発売日付きのPC販売で、記念キャラクター企画ではない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "new-product"
+    ],
+    "group": "surface-new-model-launch",
+    "reviewStatus": "provisional",
+    "sourceHash": "b163f1301845c25837f735139f371c7ea4fa735c60187d12bf34bc401bf69312"
+  },
+  {
+    "id": "public-2109952352283439532",
+    "source": "public-post",
+    "description": "パソ館の開店記念予告",
+    "post": {
+      "id": "2109952352283439532",
+      "createdAt": "2026-10-13T10:20:16.460Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "( っ*´ω`*c)後日ちゃんとした告知する予定なんですが、当店の開店記念イベントは【 11/28(土) 】を予定してます！！\n前回の千葉たんコラボのチラシ読んだ方は知ってるかもですが、どこかのお店が一緒にお祝いしてくれます☺️どこのお店かな～☺️\n\nヒント：池袋から電車で30分圏内",
+      "url": "https://x.com/bicpkanhonten/status/2109952352283439532",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "pkan"
+      ],
+      "startDate": "2026-11-28"
+    },
+    "rationale": "当店の開店記念イベントの予定日と他店とのお祝いを告知。前回の千葉たんは今回の対象と確定しない。",
+    "tags": [
+      "anniversary-event",
+      "preliminary",
+      "past-reference"
+    ],
+    "group": "pkan-opening-anniversary",
+    "reviewStatus": "provisional",
+    "sourceHash": "085315218456783eea3092c39994d34143b630894dfeba5921d89d73e806d532"
+  }
+]

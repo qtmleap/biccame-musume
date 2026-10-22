@@ -1,0 +1,108 @@
+[
+  {
+    "id": "goal-negative-2027292621370998819",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2027292621370998819",
+      "createdAt": "2026-02-27T08:00:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【3階 #携帯コーナー】\n\n本日は #ポケモン30周年　⚡\n\n好きなポケモンでスマホをデコろう♪\n\n携帯アクセサリー取り扱ってます♪ https://t.co/15IwtTz6ee",
+      "url": "https://x.com/bic_kashiwa/status/2027292621370998819",
+      "media": [
+        "https://pbs.twimg.com/media/HCJN6s8bMAAy-R6.jpg",
+        "https://pbs.twimg.com/media/HCJN79JbIAE276Z.jpg",
+        "https://pbs.twimg.com/media/HCJN-PIbYAE4GRR.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【3階 #携帯コーナー】 / 本日は #ポケモン30周年　⚡ / 好きなポケモンでスマホをデコろう♪」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pokemon-phone-accessories-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 68019,
+      "postSha256": "52663fa00ea6365bd1d39bb77ca07b167b65ed7c7395cef1f85d01e744c92fda",
+      "textSha256": "6307e5195869b2905761ea9b40ff9a03b6493bcf5b564c1ed739f3b7a6257342"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-2027556946291920982",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2027556946291920982",
+      "createdAt": "2026-02-28T01:30:20.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "【抽選結果発表】\nドラゴンボールスーパーダイバーズ アドバンスパック抽選販売分 結果発表！\n当選されたお客様は抽選券をお持ちいただき、本日15時までにレジまでお越しください。 https://t.co/x4iUEDPp06",
+      "url": "https://x.com/bic_sagamioono/status/2027556946291920982",
+      "media": [
+        "https://pbs.twimg.com/media/HCNUSvmbEAI9nDl.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【抽選結果発表】 / ドラゴンボールスーパーダイバーズ アドバンスパック抽選販売分 結果発表！ / 当選されたお客様は抽選券をお持ちいただき、本日15時までにレジまでお越しください。 https://t.co/x4iUEDPp06」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "dragonball-divers-lottery-results-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 67916,
+      "postSha256": "2df77f6d7ffc675950a675ab58f91c8325973b7e770e5d36a31007d98584eeaf",
+      "textSha256": "e4e40b462830cc7fbf962b1993c42f1a93739266945089865655198fd1f71bc8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,202 @@
+[
+  {
+    "id": "public-c-1985582689878237382",
+    "source": "public-post",
+    "description": "プロスタたん10周年の撮影特典アクキー",
+    "post": {
+      "id": "1985582689878237382",
+      "createdAt": "2025-11-04T05:39:38.000Z",
+      "screenName": "bic_shasinkan",
+      "kind": "original",
+      "text": "📢 #11月11日はプロスタたん擬人化10周年💐\n\nということでイヴの11/10から\n撮影して頂いた方にアクリルキーホルダープレゼント🎁！！！\n証明写真・記念写真どちらも🙆\n※すみませんが撮影は事前予約お願いします！\n\n普段と違う姿👗のアクキーは激レア間違いなしッッ\nお楽しみに～💚✨ https://t.co/rcO7bblyIH",
+      "url": "https://x.com/bic_shasinkan/status/1985582689878237382",
+      "media": [
+        "https://pbs.twimg.com/media/G440S1-bQAAQm-v.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "prosta"
+      ],
+      "characterIds": [
+        "prosta"
+      ],
+      "startDate": "2025-11-10"
+    },
+    "rationale": "11月10日から予約撮影した人へアクキーを提供する企画。撮影サービス条件を購入金額や誰でもへ変換しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "service-condition",
+      "partial-annotation"
+    ],
+    "group": "prosta-tenth-anniversary-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2005896314538910055",
+    "source": "public-post",
+    "description": "川崎たん通常名刺Ver.4への切替",
+    "post": {
+      "id": "2005896314538910055",
+      "createdAt": "2025-12-30T06:58:43.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "🍀川崎たん通常名刺について🍀\n2024年7月より配布していた #川崎たん 通常名刺[Ver.3]は＜2026年1月6日(火)＞をもちまして配布終了します。\n\n翌日1月7日(水)-日中-からは、通常名刺[Ver.4]を配布いたします。\n７日から数時間名刺がない状態になります\n 　 ∧,,∧\n    ( *˙꒳​˙2 )ﾗｿﾞ!\n￣　゜゜￣￣ https://t.co/sOpe1m8d2s",
+      "url": "https://x.com/Bic_kawasaki/status/2005896314538910055",
+      "media": [
+        "https://pbs.twimg.com/media/G9ZgCC5aYAAFbQe.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "regular_card",
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": "2026-01-07"
+    },
+    "rationale": "旧Ver.3を1月6日に終了し、翌7日からVer.4配布と明示。通常名刺の新デザイン企画。",
+    "tags": [
+      "historical",
+      "positive",
+      "regular-card",
+      "design-change"
+    ],
+    "group": "kawasaki-regular-card-v4-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2004796904996307339",
+    "source": "public-post",
+    "description": "あべのたん新年名刺",
+    "post": {
+      "id": "2004796904996307339",
+      "createdAt": "2025-12-27T06:10:04.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "🎍あべのたん新年名刺配布します🎍✨\n\n1/2~1/31までの期間なのでぜひ貰いにきてな～🐙\nなんばたん・たかつきたんとお揃いやねんで🥰\n\n⚠️1/1は休館日なのでご注意ください‼️ https://t.co/axujfLkEYa",
+      "url": "https://x.com/bic_abeno/status/2004796904996307339",
+      "media": [
+        "https://pbs.twimg.com/media/G9J4JrcaMAAurk-.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "abeno"
+      ],
+      "characterIds": [
+        "abeno"
+      ],
+      "startDate": "2026-01-02"
+    },
+    "rationale": "1月2日から31日にあべのたん新年名刺を配布。なんば・たかつきとお揃いは開催店舗の追加とは断定しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "limited-card",
+      "unrelated-store-mention"
+    ],
+    "group": "abeno-new-year-card-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1999283060538581294",
+    "source": "public-post",
+    "description": "千葉たん擬人化1周年ドレスアクキー",
+    "post": {
+      "id": "1999283060538581294",
+      "createdAt": "2025-12-12T01:00:01.000Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "🎉千葉たん擬人化1周年記念🎊\n12月12日～税込3,000円以上のお買物で\n先着100名様にドレス衣装の\n千葉たんアクキーをプレゼント！\nお渡しは1F総合案内カウンター✧٩(ˊωˋ*)و✧ \n無くなり次第終了となります。 https://t.co/gN2ljytkyC",
+      "url": "https://x.com/bic_chiba/status/1999283060538581294",
+      "media": [
+        "https://pbs.twimg.com/media/G77YBTkagAQcgQN.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "chiba"
+      ],
+      "characterIds": [
+        "chiba"
+      ],
+      "startDate": "2025-12-12",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "12月12日から3000円以上購入で先着100名へ千葉たんドレスアクキー。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "first-come"
+    ],
+    "group": "chiba-first-anniversary-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1996400770397372755",
+    "source": "public-post",
+    "description": "鹿児島たん擬人化8周年アクキー",
+    "post": {
+      "id": "1996400770397372755",
+      "createdAt": "2025-12-04T02:06:49.000Z",
+      "screenName": "bic_kagoshima",
+      "kind": "original",
+      "text": "お知らせ～📢\n\n薄々お気づきの方もいらっしゃると思いますが…\n\nそうです‼\n鹿児島たん擬人化8周年を記念してアクリルキーホルダーを配布します😆🙌\n\n12/18(木)から\n当日合計3,000円以上ご購入で先着100名様に『鹿児島たんアクリルキーホルダー』をプレゼント🎁\n\n⚠️配布条件は画像を要確認 https://t.co/thTVhJakwA",
+      "url": "https://x.com/bic_kagoshima/status/1996400770397372755",
+      "media": [
+        "https://pbs.twimg.com/media/G7Sj49JbAAAdTbD.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "kagoshima"
+      ],
+      "characterIds": [
+        "kagoshima"
+      ],
+      "startDate": "2025-12-18",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "12月18日から3000円以上購入で先着100名へ記念アクキー。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "first-come"
+    ],
+    "group": "kagoshima-eighth-anniversary-2025",
+    "reviewStatus": "provisional"
+  }
+]

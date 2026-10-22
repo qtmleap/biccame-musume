@@ -1,0 +1,246 @@
+[
+  {
+    "id": "public-2111264695357493627",
+    "source": "public-post",
+    "description": "浦和の名刺配布開始",
+    "post": {
+      "id": "2111264695357493627",
+      "createdAt": "2026-10-17T01:15:03.431Z",
+      "screenName": "bic_urawa",
+      "kind": "original",
+      "text": "おはうらわ(´•ᴗ-ก )\nいつのまにかフォロワー様が7000人になっておりましたワ✊🏻❣️\nいつもありがとうございます♥︎.*\nそして！お待たせしましたがこちらの名刺も配布開始いたしますワ😚🎶\n本日もよろしくお願いしますネ❣️",
+      "url": "https://x.com/bic_urawa/status/2111264695357493627",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "urawa"
+      ],
+      "startDate": "2026-10-17"
+    },
+    "rationale": "ログイン挨拶だけでなく本日の名刺配布開始を明記。画像を読まず名刺の種別は断定しない。",
+    "tags": [
+      "greeting-with-giveaway",
+      "same-day"
+    ],
+    "group": "urawa-card-start",
+    "reviewStatus": "provisional",
+    "sourceHash": "5e82129769eb60177ec58d40cba0da1f9bf50f66f60b109c0c19070632048075"
+  },
+  {
+    "id": "public-2111730292637757639",
+    "source": "public-post",
+    "description": "Vtuber周辺機器コラボ",
+    "post": {
+      "id": "2111730292637757639",
+      "createdAt": "2026-10-18T08:05:10.473Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "／\n「#赤見かるび ｘ #ふもコレ」\nコラボアイテム入荷してます！🥩\n＼\n#ふもっふのおみせ がプロデュースする「ふもコレ」と\nVtuber「赤見かるび」さんのコラボアイテム！\n🥩キーボード\n🥩マウス\n🥩マウスパッド\nが入荷です！ぜひお迎えください🌟\n\n🎮2階ゲーミングコーナーヾ(╹◡╹上)ﾉﾞ",
+      "url": "https://x.com/bic_ohmiya/status/2111730292637757639",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "コラボ商品でも赤見かるびのPC周辺機器でビッカメ娘ではない。",
+    "tags": [
+      "other-collaboration",
+      "ordinary-sale"
+    ],
+    "group": "karubi-fumocollection",
+    "reviewStatus": "provisional",
+    "sourceHash": "0ab500767791249fdcf203125ebcdd87c7f2d3c855e2c261310a02dd0758105a"
+  },
+  {
+    "id": "public-2111747466014126157",
+    "source": "public-post",
+    "description": "千葉のキーワード配布セット",
+    "post": {
+      "id": "2111747466014126157",
+      "createdAt": "2026-10-18T09:13:24.925Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "お呼ばれしたのでログアウト～💦\nステッカーと名刺のセットはまだたくさんあります！\n(｀･ω･´)bぜひキーワードを伝えてゲットしてください！\n|彡ｻｯ! 💨",
+      "url": "https://x.com/bic_chiba/status/2111747466014126157",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "chiba"
+      ]
+    },
+    "rationale": "ステッカーと名刺のセットをキーワードで入手できると案内。商品購入額や対象娘を創作しない。",
+    "tags": [
+      "multiple-items",
+      "keyword-condition",
+      "giveaway-progress"
+    ],
+    "group": "chiba-keyword-card-sticker",
+    "reviewStatus": "provisional",
+    "sourceHash": "b5adcd196a71671583a9baa003424a5ad841ed7e07da51fa9d2477a7df7201d8"
+  },
+  {
+    "id": "public-2111985683686383995",
+    "source": "public-post",
+    "description": "新東たんへの祝辞だけ",
+    "post": {
+      "id": "2111985683686383995",
+      "createdAt": "2026-10-19T01:00:00.444Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "新東たん、擬人化6周年おめでとうございます～！\n(*ˊᵕˋo💐o\n\n#10月19日は新東たん擬人化6周年",
+      "url": "https://x.com/bic_chiba/status/2111985683686383995",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "キャラの擬人化記念日を祝うだけで、イベント参加や対象物を告知していない。",
+    "tags": [
+      "character-mention",
+      "anniversary-keyword",
+      "congratulation-only"
+    ],
+    "group": "shintou-sixth-anniversary-2026",
+    "reviewStatus": "provisional",
+    "sourceHash": "e9dbc697afc2001b1e6e75c7036a551f96011f1084f78cb5c033b1e5d16a1382"
+  },
+  {
+    "id": "public-2112098931106824521",
+    "source": "public-post",
+    "description": "別作品キャラクターの誕生日商品紹介",
+    "post": {
+      "id": "2112098931106824521",
+      "createdAt": "2026-10-19T08:30:00.733Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【7階 エンタメコーナー】\n🎉🎂Happy Birthday🎁✨\n今日10月19日は…\nみんな大好き ドキンちゃん 💓と\nシルバニアファミリーのほしぞらネコのお母さんアリソンさんのお誕生日です🐈‍⬛🌟\n可愛いおもちゃやドールをたくさんご用意して皆さまをお待ちしております🧸🎀\nぜひお店でチェックしてくださいね👀✨",
+      "url": "https://x.com/bic_kashiwa/status/2112098931106824521",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "誕生日を祝う対象はドキンちゃんとアリソンさんで、ビッカメ娘ではない。通常の玩具売場案内である。",
+    "tags": [
+      "other-franchise",
+      "birthday-keyword",
+      "ordinary-sale"
+    ],
+    "group": "dokin-alison-birthday-products",
+    "reviewStatus": "provisional",
+    "sourceHash": "8e6847dfedec32f7c3d7a88a7975047e2e4145e7b9d379d0d8cd5584bb73983a"
+  },
+  {
+    "id": "public-2112379378332217763",
+    "source": "public-post",
+    "description": "アイドルアクキー告知の再投稿",
+    "post": {
+      "id": "2112379378332217763",
+      "createdAt": "2026-10-20T03:04:24.562Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "｜ω・)｡oO（アイドルアクキーの告知、うっかり画像入れ忘れたので再投稿しております…申し訳ございません💦）",
+      "url": "https://x.com/bic_shinjuku3ch/status/2112379378332217763",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey"
+    },
+    "rationale": "アクキー企画の告知を画像付きで再投稿したことを案内。本文にない数量や開始日は注釈しない。",
+    "tags": [
+      "giveaway-announcement-reference",
+      "missing-details"
+    ],
+    "group": "shinjuku-idol-keychain",
+    "reviewStatus": "provisional",
+    "sourceHash": "82ba89174c307952aaf016f96bff57af101cbd2517a325008ec6bbb87b3c135b"
+  },
+  {
+    "id": "public-2112392999204479184",
+    "source": "public-post",
+    "description": "リアル有楽町たんお渡し撮影会",
+    "post": {
+      "id": "2112392999204479184",
+      "createdAt": "2026-10-20T03:58:32.031Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "🦢リアル有楽町たん　ギフトカードお渡し会＆チェキ撮影会🦢\n\n日にち：2026年10月24日(土)\n場所：有楽町店　地下2階特設会場\n時間：11:00～/13:30～/16:00～\n人数：各回15名様\n\n限定ギフトカードの発行後、リアル有楽町たんからのギフトカードお渡し＆ツーショットチェキ撮影\n\nツリーもお読み下さい",
+      "url": "https://x.com/bic_yuurakuchou/status/2112392999204479184",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "other",
+      "stores": [
+        "yuurakuchou"
+      ],
+      "characterIds": [
+        "yuurakuchou"
+      ],
+      "startDate": "2026-10-24"
+    },
+    "rationale": "限定カード発行後のリアル有楽町たんによるお渡し・チェキ会を日時会場付きで告知。各回15名を総数15名と断定しない。",
+    "tags": [
+      "handover-event",
+      "photo-event",
+      "gift-card",
+      "per-session-quantity"
+    ],
+    "group": "yuurakuchou-25th-giftcard-2026",
+    "reviewStatus": "provisional",
+    "sourceHash": "41752907898f645a1517a6b87f64ba1e90af4df4d1fc0cbf161e3efd9261c66b"
+  },
+  {
+    "id": "public-2112431117894816142",
+    "source": "public-post",
+    "description": "池西たんとあいタワたんの共同アクスタ",
+    "post": {
+      "id": "2112431117894816142",
+      "createdAt": "2026-10-20T06:30:00.235Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "＼　☕イベント開催のお知らせ☕　／\n\nあいタワたんと秋のカフェ巡りコラボ✨\n\n🍁11/7（土）～　先着100個！\n🍁税込4,000円以上のお買い上げで\n「池西たん×あいタワたん\n秋のカフェ巡りアクリルスタンド」をプレゼント！✨\n\nあいタワたんのお家と合わせてチェックです！👀✨",
+      "url": "https://x.com/bicikenishi/status/2112431117894816142",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "acsta",
+      "stores": [
+        "ikenishi",
+        "itt"
+      ],
+      "characterIds": [
+        "ikenishi",
+        "itt"
+      ],
+      "startDate": "2026-11-07",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 4000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "二人の共同デザインを商品購入条件付きでプレゼント。池西店だけでなくあいタワたんの店舗も案内する。",
+    "tags": [
+      "collaboration",
+      "multi-character",
+      "multi-store",
+      "purchase",
+      "first-come"
+    ],
+    "group": "itt-ikenishi-autumn-cafe-acsta-2026",
+    "reviewStatus": "provisional",
+    "sourceHash": "0ce65fa2fe8a036f8c35b38e43aadce48f08edc131039a1fde459d28c1141a45"
+  }
+]

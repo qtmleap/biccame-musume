@@ -1,0 +1,211 @@
+[
+  {
+    "id": "public-2110209799086637400",
+    "source": "public-post",
+    "description": "モンストのカード付き菓子",
+    "post": {
+      "id": "2110209799086637400",
+      "createdAt": "2026-10-14T03:23:16.561Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "『モンストウエハースEL』\n\n大人気スマホアプリ『モンスターストライク』のカードウエハースが登場❣\n\n一部のレアカードにはモンスターストライクのアプリ内で使用できる「ストライクシール」がもらえる2次元コードつきですにゃ🐱\n🌸7階トイズコーナーにて取り扱い中🌸",
+      "url": "https://x.com/bic_akiba/status/2110209799086637400",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "カードや特典があっても対象は別ゲーム作品の商品である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "other-franchise",
+      "card-word",
+      "bonus"
+    ],
+    "group": "monster-strike-wafer",
+    "reviewStatus": "provisional",
+    "sourceHash": "113f80163502e91cbccfcfebb209715da26fe031e4ab9b5d0b497a8c02d28816"
+  },
+  {
+    "id": "public-2110213002200830074",
+    "source": "public-post",
+    "description": "REGZA20周年還元企画",
+    "post": {
+      "id": "2110213002200830074",
+      "createdAt": "2026-10-14T03:36:00.243Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "＼\\\\レグザ20周年ホームシアターキャンペーン //／\n2026/10/9(金)〜2027/1/12(火)までに REGZA対象テレビorテレビ+サウンドシステムを購入し、対象期間内に指定の応募手続きをすると定めた金額がキャッシュバック✨\n\n詳細は #REGZA 公式ページをチェック🔽\nregza-20th-home-theater",
+      "url": "https://x.com/Bic_kawasaki/status/2110213002200830074",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "周年・購入・キャッシュバックでも対象はテレビ製品でビッカメ娘ではない。",
+    "tags": [
+      "anniversary-keyword",
+      "cashback",
+      "ordinary-product"
+    ],
+    "group": "regza-cashback",
+    "reviewStatus": "provisional",
+    "sourceHash": "561b22a5b4c9e6a8234a02a0ce878f652f2efc2f8e49f450995dafbba9fc1888"
+  },
+  {
+    "id": "public-2110216875359785423",
+    "source": "public-post",
+    "description": "鉄道の日の来店挨拶",
+    "post": {
+      "id": "2110216875359785423",
+      "createdAt": "2026-10-14T03:51:23.676Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "＼今日は何の日ふっふー？／\n ₍₍🚃 o( ºωº2Ξ ºωº2)o🚋 ⁾⁾\n\n10月14日は\"\"鉄道の日\"\"♪\n\n|*˙꒳​˙2) せーんろはつづくーよー♪藤沢〜高崎までビックカメラの店舗は８店舗！\nぜひぜひお買い物、ご購入相談ございましたら各店へお越しください！ご来店お待ちしてます！\n#ビッカメ娘 #鉄道の日",
+      "url": "https://x.com/Bic_kawasaki/status/2110216875359785423",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ビッカメ娘タグと複数店舗の言及はあるが、通常の来店案内のみ。",
+    "tags": [
+      "character-mention",
+      "multi-store",
+      "calendar-word"
+    ],
+    "group": "railway-day-greeting",
+    "reviewStatus": "provisional",
+    "sourceHash": "b852d9c0e3b4182397f9cfa54ddfb7c7d0df9d93967a35930e75e4ab92d704bd"
+  },
+  {
+    "id": "public-2110228236236128416",
+    "source": "public-post",
+    "description": "コードギアス作例展示",
+    "post": {
+      "id": "2110228236236128416",
+      "createdAt": "2026-10-14T04:36:32.320Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "#ホビージャパン 発行のメカ・ロボットプラモデル専門誌「Mech R #03」掲載作例を編集部よりお借りして展示中です。\n今回は祝・20周年！『 #コードギアス 』シリーズを総特集！\n是非当店6階でご覧ください。\n\n#geassp",
+      "url": "https://x.com/bic_shinjyuku/status/2110228236236128416",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "20周年の展示でも別作品の企画であり、ビッカメ娘対象ではない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "other-franchise",
+      "anniversary-keyword",
+      "display"
+    ],
+    "group": "code-geass-model-display",
+    "reviewStatus": "provisional",
+    "sourceHash": "418ada4ec59197ce7623877ac1eb4d6877d62f59c85f4fa5a98021a506fd35f8"
+  },
+  {
+    "id": "public-2110234141728096325",
+    "source": "public-post",
+    "description": "アリナミン新製品",
+    "post": {
+      "id": "2110234141728096325",
+      "createdAt": "2026-10-14T05:00:00.299Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【2階　ビックドラッグ】\n\n新商品入荷しました📣\n\n滋養強壮に\n溜まった疲れに😩\n生薬配合のアリナミンが発売！！\n6種の生薬と6種のビタミンを配合\nどうぞお試し下さい！！\n\n⚠️服用は15歳以上の方が対象です",
+      "url": "https://x.com/bic_kashiwa/status/2110234141728096325",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "医薬品の通常販売案内である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "new-product"
+    ],
+    "group": "alinamin-product",
+    "reviewStatus": "provisional",
+    "sourceHash": "2d71247b8ed9430014b51b8e577b424706f17bde28a7c38628990d3b4e9dbd27"
+  },
+  {
+    "id": "public-2110239418120593673",
+    "source": "public-post",
+    "description": "集音器の比較紹介",
+    "post": {
+      "id": "2110239418120593673",
+      "createdAt": "2026-10-14T05:20:58.289Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "耳を塞がない集音器 3機種を比較！\n🔹カシオ：アプリで聴力を測定し音質を自動最適化\n🔹NTT：耳掛け型で動いてもズレにくい抜群の安定感\n🔹ミライスピーカー：ケースがテレビ音を直接耳へ届ける\n\n耳を塞がずお洒落で快適な人気モデル。\n詳しくは2階補聴器集音器コーナーへ！\n #ビックカメラ #集音器",
+      "url": "https://x.com/bic_nagoya/status/2110239418120593673",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "製品比較・相談の通常案内である。",
+    "tags": [
+      "ordinary-product",
+      "service"
+    ],
+    "group": "hearing-device-comparison",
+    "reviewStatus": "provisional",
+    "sourceHash": "c55106b4710bb7cdb135b464ebe281d73acb8aa85972cf3c4cbb02a761a22358"
+  },
+  {
+    "id": "public-2110242708371742918",
+    "source": "public-post",
+    "description": "Suicaカード入会特典",
+    "post": {
+      "id": "2110242708371742918",
+      "createdAt": "2026-10-14T05:34:02.746Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "💳新規入会キャンペーン11月1日（日）まで！\n\n⭐ビックカメラSuicaカード🥰\nビックカメラSuicaカードでクレジット支払いなら通常ポイントに【＋１％】ポイントサービス🎉\nさらに新規入会キャンペーン実施中！\n🎁合計最大11,000円相当プレゼント！\nご来店お待ちしております🌟",
+      "url": "https://x.com/bicpkanhonten/status/2110242708371742918",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "カード入会・クレジット決済の特典で、ビッカメ娘デザインの告知ではない。",
+    "tags": [
+      "payment",
+      "card-word",
+      "bonus"
+    ],
+    "group": "suica-card-enrollment-points",
+    "reviewStatus": "provisional",
+    "sourceHash": "b862502bae929a7cae6dec7ea0fd61736308bf1be16a8e4e8ecd75f72de97a06"
+  },
+  {
+    "id": "public-2110252659081150914",
+    "source": "public-post",
+    "description": "レコード時計のDIY商品",
+    "post": {
+      "id": "2110252659081150914",
+      "createdAt": "2026-10-14T06:13:35.180Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "お気に入りのレコード盤を壁掛け時計に⁉\n\nレコードが一枚あれば、\n簡単な組み立てでオリジナルの時計が作れるDIYキットです💿\n\n🌸3階オーディオコーナーにて取り扱い中🌸\nbiccamera.com/bc/item/1",
+      "url": "https://x.com/bic_akiba/status/2110252659081150914",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "DIYキットという市販商品の紹介であり、キャラクター企画ではない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "craft-word"
+    ],
+    "group": "record-clock-kit",
+    "reviewStatus": "provisional",
+    "sourceHash": "15b72bccefa12c3f9e1baa64e146e16fb7f51b606624d6f64c9f8fd16032ba09"
+  }
+]

@@ -1,0 +1,135 @@
+[
+  {
+    "id": "goal-positive-999110879567167488",
+    "source": "public-post",
+    "description": "shinjyuku character birthday 2018",
+    "post": {
+      "id": "999110879567167488",
+      "createdAt": "2018-05-23T02:12:50.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "【拡散希望】#新宿西口たん爆誕祭2018 本日スタート！\n★クリアファイル\n→≪2階案内カウンター≫にて当日ご購入1000円以上のレシートをご提示\n★記念名刺配布・爆誕祭記念スペース\n→≪4階ペンタブレットコーナー≫\nご来店いただいたみなさまのお祝いメッセージをぜひお待ちしております☆彡 https://t.co/qL2TRnzpTq",
+      "url": "https://x.com/bic_shinjyuku/status/999110879567167488",
+      "media": [
+        "https://pbs.twimg.com/media/Dd2N1cEU0AElspg.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shinjyuku"
+      ],
+      "characterIds": [
+        "shinjyuku"
+      ]
+    },
+    "rationale": "購入1000円はクリアファイルだけ。メッセージ展示もある。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "shinjyuku-character-birthday-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "クリアファイル",
+          "evidence": [
+            "★クリアファイル"
+          ]
+        },
+        {
+          "item": "記念名刺",
+          "evidence": [
+            "★記念名刺配布・爆誕祭記念スペース"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 850453,
+      "postSha256": "85096eb87a9a0d654831f1565c4895287948708a552c1df27515a36869b81b6d",
+      "textSha256": "86b0a6496330af24ac70a22cb2acbe675cc2235def39531853c7fc0fd5ab21f2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1010762962582188032",
+    "source": "public-post",
+    "description": "mito birthday figure lottery 2018",
+    "post": {
+      "id": "1010762962582188032",
+      "createdAt": "2018-06-24T05:54:04.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "6月23日ビックカメラ水戸駅店7周年を迎えました！\n#水戸たん生誕祭2018 として、期間中水戸駅店で3,000円以上お買い上げの方の中から抽選で17名様に水戸たんアクリルフィギュアをプレゼント✨\nバースデー名刺ＱＲから応募してくださいね☆\n期間：6月23日（土）～7月22日（日） https://t.co/LIRo2dzoYi",
+      "url": "https://x.com/biccameramito/status/1010762962582188032",
+      "media": [
+        "https://pbs.twimg.com/media/DgV-yiyUcAAYwBJ.jpg",
+        "https://pbs.twimg.com/media/DgV-z7RV4AUiZlf.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "mito"
+      ],
+      "characterIds": [
+        "mito"
+      ],
+      "category": "other",
+      "startDate": "2018-06-23"
+    },
+    "rationale": "6/23から7/22、購入3000円・抽選17名・QR応募。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "mito-birthday-figure-lottery-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "水戸たんアクリルフィギュア",
+          "evidence": [
+            "#水戸たん生誕祭2018 として、期間中水戸駅店で3,000円以上お買い上げの方の中から抽選で17名様に水戸たんアクリルフィギュアをプレゼント✨"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 846061,
+      "postSha256": "7f3950481c16b2574bd8d8902017f86e93d66d3b1befec642f778064759fad71",
+      "textSha256": "a9cef6b9943cd30ea427c65bebc15abce37dbdb72026248347507027725bec35"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

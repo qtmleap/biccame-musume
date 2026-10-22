@@ -1,0 +1,161 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2027327729860071460",
+    "source": "public-post",
+    "description": "ikenishi-march-card-2026",
+    "post": {
+      "id": "2027327729860071460",
+      "createdAt": "2026-02-27T10:19:31.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "３月の池西たん限定名刺は新しい絵柄です(🎀人*´∀｀)｡*ﾟ+ https://t.co/sjeFvNlrdZ",
+      "url": "https://x.com/bicikenishi/status/2027327729860071460",
+      "media": [
+        "https://pbs.twimg.com/media/HCKDcEcacAAR6eJ.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "ikenishi"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "3月の限定名刺が新しい絵柄になったという短い案内。期間や条件はない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:monthly-card"
+    ],
+    "group": "ikenishi-march-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "池西たん3月限定名刺",
+          "evidence": [
+            "３月の池西たん限定名刺は新しい絵柄です(🎀人*´∀｀)｡*ﾟ+ https://t.co/sjeFvNlrdZ"
+          ]
+        }
+      ],
+      "groupingNote": "3月の限定名刺が新しい絵柄になったという短い案内。期間や条件はない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 67975,
+      "postSha256": "ae26209070078399ae4d6f8bdd1ed9ac32fc99e4063b2f9fcf9275dabe0da2cf",
+      "textSha256": "3ac29b460582e9a56bb7a3a00fb95b59ff605b46a10b31af611eeaedab19467c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "b5fee711-0943-4896-844f-c318c1a9b92b",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicikenishi/status/2027327729860071460",
+          "origin": "manual-or-seed",
+          "title": "限定名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-02-28T15:00:00.000+00:00",
+            "endDate": "2026-03-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "ikenishi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2024738135884919146",
+    "source": "public-post",
+    "description": "ikenishi-march-card-2026 matched control",
+    "post": {
+      "id": "2024738135884919146",
+      "createdAt": "2026-02-20T06:49:24.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "シールも\n\nありますよ(*´∀｀*🎀）\n\nぜしぜし\n\n#シール https://t.co/eme6DoaBcR",
+      "url": "https://x.com/bicikenishi/status/2024738135884919146",
+      "media": [
+        "https://pbs.twimg.com/media/HBlQjw2bUAQ6Pe1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2024738135884919146",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 69932,
+      "postSha256": "bec614de1fc229968dc045cab9dbe0929de6b2bc462bb9be6e299b78c3968726",
+      "textSha256": "9a3a7e50bf44b8a835a5387e41305fdc9c4d775cc22e6a83e832028d1fe109ba"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]
