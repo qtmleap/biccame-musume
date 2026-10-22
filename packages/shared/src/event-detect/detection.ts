@@ -1,14 +1,17 @@
 import { z } from 'zod'
+import { isConcreteCharacter, isConcreteStore, isConfirmKey, passesConfirm } from './association-confirm'
 import {
   ASSOCIATION_NONE,
   associatedCharacterIds,
   associationIds,
+  CHARACTER_CONFIRM_KEY,
   CHARACTER_QUESTION_KEY,
-  selectedCharacterIds,
+  STORE_CONFIRM_KEY,
   selectedStores
 } from './associations'
 import { type ClefAnswer, type ClefRequest, type ClefResponse, ClefResponseSchema } from './clef'
 import { keyToDate, keyToQuantity, QUESTION_VERSION } from './decide'
+import { draftCharacterIds, resolveCharacterIds } from './detection-character'
 import {
   conditionQuestions,
   hasAmbiguousMoney,
@@ -37,6 +40,8 @@ import {
 } from './detection-thresholds'
 import type { DetectPost } from './post'
 
+// Worker 側は、dev サーバーが起動時の package.json の exports を保持するため、新しいサブパスを作らずここから import する。
+export { confirmTargetOf, createConfirmRequest, hasConfirmTarget } from './association-confirm'
 export {
   filterWebhookPost,
   WEBHOOK_KEYWORD_VERDICTS,
@@ -53,6 +58,7 @@ export {
   DetectionResultSchema
 } from './detection-schemas'
 export {
+  CHARACTER_CONFIRM_THRESHOLD,
   CHARACTER_DEFAULT_THRESHOLD,
   DEFAULT_DETECTION_THRESHOLDS,
   type DetectionThresholds,
@@ -63,11 +69,14 @@ export {
   FieldThresholdsSchema,
   resolveFieldThresholds,
   STATUS_DEFAULT_THRESHOLD,
+  STORE_CONFIRM_THRESHOLD,
   STORE_DEFAULT_THRESHOLD,
   thresholdOf
 } from './detection-thresholds'
 
-export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v15-concise-author`
+// v17: 娘の質問に store_character（本文でビッカメ娘に特に言及がなければ開催店舗の娘）を足し、「店舗の娘と同一と仮定しない」注意書きを外した。
+// 店舗の質問と2段目（選んだ最上位の店舗・娘ごとの「はい/いいえ」の確認。v16 で追加）の質問は v16 と同一。
+export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v17-store-character`
 export {
   type DetectionOutcome,
   DetectionOutcomeSchema,
@@ -82,6 +91,8 @@ const validateAnswers = (request: ClefRequest, response: ClefResponse) => {
   if (!parsed.success) throw new Error('Invalid detection response')
   for (const [key, question] of Object.entries(request.questions)) {
     const answer = parsed.data.answers[key]
+    // 確認の質問の回答の欠落だけは例外にせず、下で確認が通らない（保留）扱いにする。型が違う回答は他の質問と同じく不正。
+    if (answer === undefined && isConfirmKey(key)) continue
     if (!answer || answer.type !== question.type) throw new Error('Incomplete detection response')
     if (question.type === 'choice' && answer.type === 'choice') {
       const selected = answer.probabilities[answer.choice]
@@ -103,6 +114,8 @@ const choiceOf = (answer: ClefAnswer | undefined, threshold: number) => {
   const probability = answer.probabilities[answer.choice]
   return probability !== undefined && probability >= threshold ? answer.choice : undefined
 }
+/** しきい値を適用しない最有力候補（argmax）。回答が無い・型が違う場合は undefined。 */
+const argmaxOf = (answer: ClefAnswer | undefined) => (answer?.type === 'choice' ? answer.choice : undefined)
 const keyToAmount = (key: string | undefined) => (key && /^p\d+$/.test(key) ? Number(key.slice(1)) : undefined)
 const keyToOptionalQuantity = (key: string | undefined) => (key && key !== 'none' ? keyToQuantity(key) : undefined)
 
@@ -180,11 +193,26 @@ export const evaluateDetection = (
   // multiple・none は下の selectedStores / selectedCharacterIds で採用されず保留になる。下限は thresholdOf を通すので、管理画面で保存した店舗の値も効く。
   const storeChoice = choiceOf(answers.store, thresholdFor('store'))
   const characterChoice = choiceOf(answers.character, thresholdOf(settings.data, CHARACTER_QUESTION_KEY))
+  // 2段目（v16 以降）。request に確認の質問が含まれるときだけ、採用された最上位の店舗・娘について確認の「はい」の確率が下限以上かを見る。
+  // 含まれない（v15 以前の保存データ、none・multiple・other・secret が最上位、最上位の娘が店舗の娘で娘の確認を聞かなかった）ときは関門を掛けず、判定を変えない。
+  // 店舗の娘にも娘の確認を聞いていた保存データ（request に質問が含まれる）は、含まれる質問どおりに関門を掛ける。
+  const storeLow =
+    isConcreteStore(storeChoice) &&
+    !passesConfirm(request, answers, STORE_CONFIRM_KEY, thresholdOf(settings.data, STORE_CONFIRM_KEY))
+  const characterLow =
+    isConcreteCharacter(characterChoice) &&
+    !passesConfirm(request, answers, CHARACTER_CONFIRM_KEY, thresholdOf(settings.data, CHARACTER_CONFIRM_KEY))
   const status = choiceOf(answers.status, thresholdFor('status'))
   const category = CategorySchema.safeParse(choiceOf(answers.category, thresholdFor('category')))
   // 登録する店舗・対象ビッカメ娘は選ばれた 1 件まで。共同絵柄（multiple）は人が編集フォームで複数指定する。
-  const stores = selectedStores(storeChoice)
-  const characterIds = selectedCharacterIds(characterChoice)
+  // 娘が明示されていない（確率不足、または店舗と別の娘の確認が低い）ときは、採用した店舗の娘にする（detection-character.ts）。
+  const stores = storeLow ? [] : selectedStores(storeChoice)
+  const characterIds = resolveCharacterIds({
+    stores,
+    choice: characterChoice,
+    top: argmaxOf(answers.character),
+    confirmLow: characterLow
+  })
   const start = choiceOf(answers.start_date, thresholdFor('start_date'))
   const startDate = start ? keyToDate(start) : undefined
   // 終了日は最有力が none（記載なし・「なくなり次第終了」など）なら、確率がしきい値未満でも「終了日なし」で確定する。
@@ -237,7 +265,11 @@ export const evaluateDetection = (
       : storeKey !== null && !stores.includes(storeKey)
         ? ['store_mismatch']
         : []),
+    // 確認が通らなかったときは、確定できない理由（上の store_unconfirmed）に、確認の「はい」の確率が下限未満だったことを足す。
+    ...(storeLow ? ['store_confirm_low'] : []),
     ...(characterIds.length === 0 ? ['character_unconfirmed'] : []),
+    // 確認が低くても、店舗の娘として登録に進むときは保留ではないので付けない。店舗が採用されず保留のときだけ併記する。
+    ...(characterLow && characterIds.length === 0 ? ['character_confirm_low'] : []),
     ...(!startDate
       ? [answers.start_date === undefined || start === 'none' ? 'start_date_unspecified' : 'start_date_unconfirmed']
       : []),
@@ -290,8 +322,6 @@ const validOrUndefined = <T>(schema: z.ZodType<T>, value: unknown): T | undefine
   const parsed = schema.safeParse(value)
   return parsed.success ? parsed.data : undefined
 }
-/** しきい値を適用しない最有力候補（argmax）。回答が無い・型が違う場合は undefined。 */
-const argmaxOf = (answer: ClefAnswer | undefined) => (answer?.type === 'choice' ? answer.choice : undefined)
 
 /** 下書きのカテゴリを採用する最小の確率。過半数に届かない僅差はモデルが決めかねている状態として採用しない。 */
 export const DRAFT_CATEGORY_MIN_PROBABILITY = 0.5
@@ -309,15 +339,15 @@ const draftCategory = (answer: ClefAnswer | undefined): Category | undefined => 
  */
 export const buildDetectionDraft = (post: DetectPost, answers: ClefResponse['answers']): DetectionDraft => {
   const category = draftCategory(answers.category)
-  // 下書きでも開催店舗から対象キャラクターを推測しない。版ごとに回答の形が違うため、キーの有無で読み分ける。
-  //  v2: store（choice）／v3〜v12: venue.* と character.*（noul）／v13 以降（v14・v15 を含む）: store と character（choice）
+  // 下書きでも開催店舗から対象キャラクターを推測しない（v17 の store_character が最上位のときだけ、下書きの店舗の娘）。版ごとに回答の形が違うため、キーの有無で読み分ける。
+  //  v2: store（choice）／v3〜v12: venue.* と character.*（noul）／v13 以降（v14〜v17 を含む）: store と character（choice）
   const keys = Object.keys(answers)
   const stores = keys.some((key) => key.startsWith('venue.'))
     ? associationIds(answers, 'venue', 0.5)
     : selectedStores(argmaxOf(answers.store))
   const characterIds = keys.some((key) => key.startsWith('character.'))
     ? associatedCharacterIds(answers, 0.5)
-    : selectedCharacterIds(argmaxOf(answers.character))
+    : draftCharacterIds(argmaxOf(answers.character), stores)
   const start = argmaxOf(answers.start_date)
   const startDate = validOrUndefined(z.iso.date(), start ? keyToDate(start) : undefined)
   const end = argmaxOf(answers.end_date)

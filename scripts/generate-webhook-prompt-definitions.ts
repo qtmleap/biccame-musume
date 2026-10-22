@@ -4,6 +4,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { build } from 'esbuild'
 import { z } from 'zod'
+import { createConfirmRequest } from '../packages/shared/src/event-detect/association-confirm'
 import { ClefRequestSchema } from '../packages/shared/src/event-detect/clef'
 import { createDetectionRequests, DETECTION_VERSION } from '../packages/shared/src/event-detect/detection'
 import { createItemCountRequest, EXTRACTION_VERSION } from '../packages/shared/src/event-detect/extraction'
@@ -111,17 +112,22 @@ const LEGACY_DYNAMIC_CRITERIA =
   'これは版ごとの質問定義です。日付・数量・金額・店舗候補・本文の根拠語による質問の有無や選択肢は、投稿ごとに生成されます。全候補を示した定義であり、過去に実送信した入力を記録したものではありません。'
 const CURRENT_DYNAMIC_CRITERIA =
   'これは版ごとの質問定義です。日付・数量・金額・本文の根拠語による質問の有無や選択肢は、投稿ごとに生成されます。開催・配布店舗（store）と対象ビッカメ娘（character）の選択肢は版ごとに固定で、全投稿で同じです。全候補を示した定義であり、過去に実送信した入力を記録したものではありません。'
-// state の「投稿者」の行に入る店舗名のひな形。判定の入力（DETECTION_VERSION）だけが v15 から短い名前で、
+// state の「投稿者」の行に入る店舗名のひな形。判定の入力（DETECTION_VERSION）は v15 から短い名前で、
 // 他の版と配布物の抽出は従来の「店舗名（店舗ID）」のまま。過去の版の定義は保存済みのものを変えない。
+// 版を上げたときは、前の版（v15・v16 を含む）の定義をここで作り直さず、保存済みの定義を残す。現行のソースは前の版の質問を作れないため。
 const FULL_AUTHOR_PLACEHOLDER = '{{その版の店舗辞書で解決した投稿者}}'
 const SHORT_AUTHOR_PLACEHOLDER =
   '{{投稿者の店舗の短い名前（店舗の選択肢の説明と同じ。社名の接頭辞や括弧書きの店舗IDは付けない）。店舗アカウントが複数なら「・」で連結、店舗アカウントでなければ「店舗以外」}}'
-type DefinitionOptions = { dynamicKeys?: readonly string[]; dynamicCriteria?: string }
+type DefinitionOptions = { dynamicKeys?: readonly string[]; dynamicCriteria?: string; stateTemplateExtra?: string }
 const definitionOf = (
   questionVersion: string,
   origin: string,
   requests: z.infer<typeof ClefRequestSchema>[],
-  { dynamicKeys = LEGACY_DYNAMIC_KEYS, dynamicCriteria = LEGACY_DYNAMIC_CRITERIA }: DefinitionOptions = {}
+  {
+    dynamicKeys = LEGACY_DYNAMIC_KEYS,
+    dynamicCriteria = LEGACY_DYNAMIC_CRITERIA,
+    stateTemplateExtra = ''
+  }: DefinitionOptions = {}
 ) => {
   const keys = [...new Set(requests.flatMap((request) => Object.keys(request.questions)))]
   const questions = keys.map((key) => {
@@ -153,20 +159,36 @@ const definitionOf = (
       (origin.startsWith('git:') ? '' : '\n{{抽出文脈がある場合: 今回の対象物・対象根拠・参考原投稿/引用。別物品だけの日時/条件/数量は流用しない}}') +
       (questionVersion === DETECTION_VERSION
         ? '\n{{物品未抽出の確認候補は企画の存在も不在も前提にしない。参考原文だけで関連性を判断する}}\n{{抽出段階の開催店舗候補（未確定）がある場合のみ: 「抽出段階の開催店舗候補（未確定）: <店舗キー>」の1行。店舗の質問はこの店舗でこの企画が実施されるかを判定する}}'
-        : ''),
+        : '') +
+      stateTemplateExtra,
     questions,
     dynamicCriteria
   })
   if (!parsed.success) throw new Error('Invalid prompt definition')
   return parsed.data
 }
+// v16 から続く2段目（v17 の質問は v16 と同一）。確認の質問と state の末尾の行は、1段目で最上位に選んだ店舗・娘が具体的なときだけ、別の呼び出しで送る。
+// 最上位の娘が店舗の娘（最上位の店舗と同じ ID）のときは、指定がなければ店舗の娘とみなして娘は聞かない。
+// 定義には確認の質問を載せるため、店舗と別の娘の両方を対象にした確認の request を 1 つ足す。
+const CONFIRM_STATE_TEMPLATE =
+  '\n{{2段目（確認）の呼び出しだけ: 上の入力の末尾に「確認対象の開催店舗: <1段目で最上位に選んだ店舗の短い名前>」「確認対象のビッカメ娘: <1段目で最上位に選んだ娘の名前>」の行を足す。最上位が具体的な店舗のときだけ店舗の行と質問が作られ、最上位が具体的な娘で、かつ店舗の娘（最上位の店舗と同じ ID）ではないときだけ娘の行と質問が作られる}}'
+const CONFIRM_DYNAMIC_CRITERIA = `${CURRENT_DYNAMIC_CRITERIA}確認の質問（store_confirm・character_confirm）は、1段目で最上位に選んだ開催店舗・対象ビッカメ娘が具体的なときだけ、別の呼び出しで送られます（はい/いいえの質問で、選択肢はありません）。ただし最上位の娘が最上位の店舗の娘（同じ ID）のときは、特に指定がなければ店舗の娘とみなして、character_confirm は送られません。`
+const confirmRequests = posts.map((post) =>
+  createConfirmRequest(createDetectionRequests(post)[0], { store: 'akiba', character: 'funato' })
+)
 const generated = [
   definitionOf('v2-webhook-v4', `git:${revision}`, legacy.data.detection),
   definitionOf('giveaways-v2', `git:${revision}`, legacy.data.extraction),
-  definitionOf(DETECTION_VERSION, 'versioned-source', posts.flatMap((post) => createDetectionRequests(post)), {
-    dynamicKeys: CURRENT_DYNAMIC_KEYS,
-    dynamicCriteria: CURRENT_DYNAMIC_CRITERIA
-  }),
+  definitionOf(
+    DETECTION_VERSION,
+    'versioned-source',
+    [...posts.flatMap((post) => createDetectionRequests(post)), ...confirmRequests],
+    {
+      dynamicKeys: CURRENT_DYNAMIC_KEYS,
+      dynamicCriteria: CONFIRM_DYNAMIC_CRITERIA,
+      stateTemplateExtra: CONFIRM_STATE_TEMPLATE
+    }
+  ),
   definitionOf(EXTRACTION_VERSION, 'versioned-source', posts.map((post) => createItemCountRequest(post)))
 ]
 const previous = z.array(WebhookPromptDefinitionSchema).safeParse(existsSync(output) ? JSON.parse(await readFile(output, 'utf8')) : [])

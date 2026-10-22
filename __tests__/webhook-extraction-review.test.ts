@@ -27,7 +27,8 @@ const reviewFixture = async (name: string, choice: string, probability: number, 
             }
           }
         }
-        // v13 の判定は 1 候補につき 1 バッチ。
+        // v13 の判定は 1 候補につき 1 バッチ（候補の数）。v16 の 2 段目（確認の質問だけの呼び出し）は候補に数えない。
+        if (parsed.data.questions.is_event === undefined) return answer(parsed.data)
         calls.candidate += 1
         const response = answer(parsed.data)
         return {

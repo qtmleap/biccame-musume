@@ -74,12 +74,14 @@ describe('店舗と対象ビッカメ娘を choice 1 問ずつで決める', () 
     expect(result).toMatchObject({ status: 'held', reasons: ['character_unconfirmed'] })
     expect(result).not.toHaveProperty('candidate')
   })
-  test('娘の確率が下限（0.3）に届かないなら、次点が近くても採用せず保留する', () => {
+  test('娘の確率が下限（0.3）に届かないなら、娘は明示されていないので、次点が近くても採用せず店舗の娘で登録する', () => {
     const result = run({
       ...associationAnswers('funabashi', 'funato'),
       character: choice('funato', { funato: 0.25, funabashi: 0.2 })
     })
-    expect(result).toMatchObject({ status: 'held', reasons: ['character_unconfirmed'] })
+    expect(result).toMatchObject({ status: 'register', reasons: [] })
+    if (result.status !== 'register') throw new Error('Expected registration')
+    expect(result.candidate.characterIds).toEqual(['funabashi'])
   })
   test('店舗の質問にない値や、辞書にない娘を答えた応答は不正な選択として投げる', () => {
     expect(() => run({ store: choice('invented', { invented: 0.99 }) })).toThrow('Invalid detection choice')
