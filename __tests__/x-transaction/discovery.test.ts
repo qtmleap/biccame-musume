@@ -1,5 +1,6 @@
 import { afterEach, expect, spyOn, test } from 'bun:test'
 import {
+  fetchHomePageHtml,
   fetchOnDemandFileText,
   fetchTransactionInputs,
   getOndemandFileUrl
@@ -7,6 +8,10 @@ import {
 
 const root =
   '<meta name="twitter-site-verification" content="key"><script type="module" src="https://abs.twimg.com/x-web/x-web/entry-client-logged-out-abc.js"></script>'
+// 現行の x.com は <script src> を持たず、inline script の変数 entryHref にエントリを埋め込む。
+const inlineEntry = (href: string) =>
+  `<script nonce="n">!function(){var stylesheetHref="https://abs.twimg.com/x-web/x-web/assets/styles-a.css",entryHref="${href}";function startEntry(event){var script=document.createElement('script');script.src=entryHref;document.head.appendChild(script)}document.addEventListener('load',startEntry,true)}();document.currentScript.remove()</script>`
+const inlineRoot = inlineEntry('https://abs.twimg.com/x-web/x-web/entry-client-logged-out-abc.js')
 afterEach(() => {
   spyOn(globalThis, 'fetch').mockRestore()
 })
@@ -193,4 +198,65 @@ test('rejects asset redirects without following their destinations', async () =>
   )
   await expect(fetchOnDemandFileText(',1:"ondemand.s",1:"abc"')).rejects.toThrow('302')
   expect(requests).toEqual(['https://abs.twimg.com/responsive-web/client-web/ondemand.s.abca.js'])
+})
+
+test('discovers signer from an inline entryHref through a backtick dynamic import', async () => {
+  const fetch = network({
+    'https://x.com/': inlineRoot,
+    'https://abs.twimg.com/x-web/x-web/entry-client-logged-out-abc.js':
+      'import{t as e}from"./assets/rolldown-runtime-x.js";import{n as t}from"./assets/startup-dynamic-y.js";',
+    'https://abs.twimg.com/x-web/x-web/assets/rolldown-runtime-x.js': 'export const t=1',
+    'https://abs.twimg.com/x-web/x-web/assets/startup-dynamic-y.js':
+      '$p??=R(()=>import(`./sign.o-z.js`).then(e=>e.default()),[])',
+    'https://abs.twimg.com/x-web/x-web/assets/sign.o-z.js': 'inline entry signer'
+  })
+  expect(await fetchTransactionInputs()).toEqual({ homePageHtml: inlineRoot, ondemandFileText: 'inline entry signer' })
+  // ホーム → entry → (entry の静的 import 2 本) → sign.o の順に辿る
+  expect(fetch.mock.calls.map(([url]) => String(url))).toEqual([
+    'https://x.com/',
+    'https://abs.twimg.com/x-web/x-web/entry-client-logged-out-abc.js',
+    'https://abs.twimg.com/x-web/x-web/assets/rolldown-runtime-x.js',
+    'https://abs.twimg.com/x-web/x-web/assets/startup-dynamic-y.js',
+    'https://abs.twimg.com/x-web/x-web/assets/sign.o-z.js'
+  ])
+})
+test('accepts a homepage whose only bootstrap is an inline entryHref', async () => {
+  const fetch = network({ 'https://x.com/': inlineRoot })
+  expect(await fetchHomePageHtml()).toBe(inlineRoot)
+  expect(fetch.mock.calls).toHaveLength(1)
+})
+test('deduplicates an entry present as both script src and inline entryHref', async () => {
+  const html = `${root}${inlineRoot}`
+  const fetch = network({
+    'https://abs.twimg.com/x-web/x-web/entry-client-logged-out-abc.js': 'import "./assets/sign.o-dup.js";',
+    'https://abs.twimg.com/x-web/x-web/assets/sign.o-dup.js': 'dup signer'
+  })
+  expect(await fetchOnDemandFileText(html)).toBe('dup signer')
+  expect(fetch.mock.calls.map(([url]) => String(url))).toEqual([
+    'https://abs.twimg.com/x-web/x-web/entry-client-logged-out-abc.js',
+    'https://abs.twimg.com/x-web/x-web/assets/sign.o-dup.js'
+  ])
+})
+test('ignores hostile inline entryHref values without fetching them', async () => {
+  const hostile = [
+    'https://evil.example/x-web/entry-client-a.js',
+    'https://abs.twimg.com/other/entry-client-a.js',
+    'https://abs.twimg.com/x-web/x-web/assets/startup-a.js'
+  ].map(inlineEntry)
+  const html = hostile.join('')
+  const fetch = network({})
+  await expect(fetchOnDemandFileText(html)).rejects.toThrow('searched 0 modules')
+  expect(fetch.mock.calls).toHaveLength(0)
+  // ホームのブートストラップとしても受理しない (ホームとフォールバックの取得のみ)
+  network({ 'https://x.com/': html, 'https://x.com/home': html })
+  await expect(fetchHomePageHtml()).rejects.toThrow('No usable transaction bootstrap')
+})
+test('fetches only the valid entry when hostile entryHref values are mixed in', async () => {
+  const html = `${inlineEntry('https://evil.example/x-web/entry-client-a.js')}${inlineRoot}`
+  const fetch = network({
+    'https://abs.twimg.com/x-web/x-web/entry-client-logged-out-abc.js': 'import "./assets/sign.o-mix.js";',
+    'https://abs.twimg.com/x-web/x-web/assets/sign.o-mix.js': 'mixed signer'
+  })
+  expect(await fetchOnDemandFileText(html)).toBe('mixed signer')
+  expect(fetch.mock.calls).toHaveLength(2)
 })
