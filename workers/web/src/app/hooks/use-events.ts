@@ -53,6 +53,16 @@ export const useAdminEvents = () => {
   })
 }
 
+/** 紐付け先を選ぶダイアログ用。開いたときだけマウントして管理一覧を取得する。 */
+export const useAdminEventOptions = () =>
+  useQuery({
+    queryKey: ADMIN_EVENTS_QUERY_KEY,
+    queryFn: async () => client.getAdminEvents(),
+    staleTime: 0,
+    refetchOnMount: 'always',
+    retry: false
+  })
+
 /**
  * 単一イベントを取得するフック
  */

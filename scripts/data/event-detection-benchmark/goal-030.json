@@ -1,0 +1,130 @@
+[
+  {
+    "id": "goal-positive-1316241106917416960",
+    "source": "public-post",
+    "description": "tenjin2 halloween card 2020",
+    "post": {
+      "id": "1316241106917416960",
+      "createdAt": "2020-10-14T04:55:09.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "てんにっちは～(❀╹▿╹)ﾉ\n天神2号たんログインします🎶\n\n本日よりハロウィンバージョン名刺を配布しとるばい🎃\n1F階段前と7F『サービスサポートカウンター』前にて\n10月31日まで配布しとるけん、ご来店の際はぜひ貰っていってね💕\n#天神2号館 #ハロウィン #10月31日 https://t.co/fNwLBTITg3",
+      "url": "https://x.com/biccameratenjin/status/1316241106917416960",
+      "media": [
+        "https://pbs.twimg.com/media/EkQz8OWVcAEGie0.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "tenjin2"
+      ],
+      "characterIds": [
+        "tenjin2"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "本日から10/31まで2つの配布場所を案内。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "tenjin2-halloween-card-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "天神2号たんハロウィン名刺",
+          "evidence": [
+            "本日よりハロウィンバージョン名刺を配布しとるばい🎃"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 612396,
+      "postSha256": "d0a0146f91c835faa7394f6925912c63eaa1344c2cb4adce65330ebf219c2178",
+      "textSha256": "b36cbf8ef6318be8dbdc716610f6662a55266eb1ee6604869d36d10a947908a3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1359684118796062721",
+    "source": "public-post",
+    "description": "fujisawa fifth anniversary cards 2021",
+    "post": {
+      "id": "1359684118796062721",
+      "createdAt": "2021-02-11T02:02:10.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(1￣▽￣)じゅーだいはっぴょーう！\n\n2月12日はなんと…\n🎂🎂🎂🎂🎂🎂🎂\n🎂藤沢たん爆誕日🎂\n🎂🎂🎂🎂🎂🎂🎂\n\n皆様のおかげで5周年を迎えるぜ🦑\n\n日ごろの感謝を込めて\n藤沢たん爆誕名刺を配布致します！\n\nさらに\n2月14日はバレンタインデーですので\nバレンタイン🍫名刺も配布決定！\n\n嬉しすぎて文字数",
+      "url": "https://x.com/bic_fujisawa/status/1359684118796062721",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "2種の配布決定、本文末尾は文字数で切れており不明項目を作らない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "preliminary",
+      "multi-item"
+    ],
+    "group": "fujisawa-fifth-anniversary-cards-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "藤沢たん爆誕名刺",
+          "evidence": [
+            "藤沢たん爆誕名刺を配布致します！",
+            "バレンタイン🍫名刺も配布決定！"
+          ]
+        },
+        {
+          "item": "バレンタイン名刺",
+          "evidence": [
+            "藤沢たん爆誕名刺を配布致します！",
+            "バレンタイン🍫名刺も配布決定！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 577993,
+      "postSha256": "28c8d4dcac8c250acecc77f4c34a0f422d63ed3f709402b88ca3319ba1aea8fa",
+      "textSha256": "239a267d3dd08b46f6c9829ee2055224db6ef59b45a80309ee1b478f66e1e128"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

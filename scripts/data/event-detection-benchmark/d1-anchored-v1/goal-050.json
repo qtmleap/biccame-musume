@@ -1,0 +1,165 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2050047633667055844",
+    "source": "public-post",
+    "description": "shinjuku-three-pinned-guide-2026",
+    "post": {
+      "id": "2050047633667055844",
+      "createdAt": "2026-05-01T03:00:18.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "固定用💙ご案内\n店舗営業時間/接客予約/ #ラクウル 買取査定来店予約など➡ https://t.co/gaJrRNWaKG\n公式Instagram開設！➡ https://t.co/3SsRL35cFi\n\nビッカメ娘💙 #新宿西口たん\n等身大パネル・名刺➡2階自動ドアの側\n🎤26/05/01～「アイドル」がテーマの新宿3店舗合同名刺を配布中❤💛💙 https://t.co/024ukIAi2c",
+      "url": "https://x.com/bic_shinjyuku/status/2050047633667055844",
+      "media": [
+        "https://pbs.twimg.com/media/HHM7bXAbUAAYwRU.jpg",
+        "https://pbs.twimg.com/media/HHM7c28aMAA5wsh.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2026-05-01",
+      "conditions": null
+    },
+    "rationale": "固定投稿の案内に混在する3店舗合同名刺の配布中の記載。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "challenge",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:shinjuku-three-collab-card"
+    ],
+    "group": "shinjuku-three-pinned-guide-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "新宿3店舗合同名刺",
+          "evidence": [
+            "🎤26/05/01～「アイドル」がテーマの新宿3店舗合同名刺を配布中❤💛💙 https://t.co/024ukIAi2c"
+          ]
+        }
+      ],
+      "groupingNote": "固定投稿の案内に混在する3店舗合同名刺の配布中の記載。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 13061,
+      "postSha256": "f0cff218461212b89fdeb23b4f900f892828f9f6a8c5ebdb64453c4b0a7bb3f6",
+      "textSha256": "75ff290636b2e3888231994c894aba6d1ba0b8563be587378f1e77e6bb4c54c0"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "dea545a8-e913-4f46-b738-6e71a53e0795",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_shinjyuku/status/2050047633667055844",
+          "origin": "manual-or-seed",
+          "title": "2026年通年名刺",
+          "category": "regular_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-04-30T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shinjyuku"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2056255981244526984",
+    "source": "public-post",
+    "description": "shinjuku-three-pinned-guide-2026 matched control",
+    "post": {
+      "id": "2056255981244526984",
+      "createdAt": "2026-05-18T06:10:03.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "キラ、カガリ、お誕生日おめでとうございます！🎉🎂\n『機動戦士ガンダムSEED FREEDOM ZERO』も楽しみですね！\n2026年1月再販したふたりの #るかっぷ 他などをご紹介！\n・キラ【 https://t.co/eSGt2hEccE 】\n・カガリ【 https://t.co/YxrUciRwih 】\n\n#SEEDFREEDOM #ガンダムSEED https://t.co/PmwaCGqGTE",
+      "url": "https://x.com/bic_shinjyuku/status/2056255981244526984",
+      "media": [
+        "https://pbs.twimg.com/media/HIk3g4bbkAAQp7k.jpg",
+        "https://pbs.twimg.com/media/HIk3hniaIAAFXA3.jpg",
+        "https://pbs.twimg.com/media/HIk3ickaUAARRw9.jpg",
+        "https://pbs.twimg.com/media/HIk3jLzbYAAhUeN.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2056255981244526984",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 43390,
+      "postSha256": "a6179a1f07f6d6221bf7e610f0f1282a4b29f0baca1e097ceab366b5e0bb7505",
+      "textSha256": "12b10d308560cdb2886fc9b3d2dcbc44b99dc1296a0e5f6a0f88d5190423bc07"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

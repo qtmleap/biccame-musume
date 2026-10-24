@@ -1,0 +1,108 @@
+[
+  {
+    "id": "goal-negative-1758377832559026320",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1758377832559026320",
+      "createdAt": "2024-02-16T06:28:39.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "#BOSE から\n3/5(火)発売の新製品ハチ✨\n\nBOSE Ultra Open Earbuds\n耳をふさがない\nオープンイヤー型ワイヤレスイヤホン🎵\n\n耳掛けタイプじゃないから\nマスクや眼鏡をしてても干渉せず\nいい感じハチ～🐶\n\n発売前の試聴もできるハチ‼\n\nしぶハチたんち\nA館３階オーディオコーナーにて\n予約受付中ハチ🎵 https://t.co/LDx8fvnAer",
+      "url": "https://x.com/bicshibuhachi00/status/1758377832559026320",
+      "media": [
+        "https://pbs.twimg.com/media/GGcDOaPb0AA5okp.png",
+        "https://pbs.twimg.com/media/GGcDRghbwAAxE8W.png",
+        "https://pbs.twimg.com/media/GGcDRjHa0AAfUB6.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「#BOSE から / 3/5(火)発売の新製品ハチ✨ / BOSE Ultra Open Earbuds」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "bose-ultra-open-earbuds-preorder-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 281705,
+      "postSha256": "3d8e27611bd8dec381e98356de5d1594f0442e72f40aa9f28e83a3bbf9f81761",
+      "textSha256": "7b5f99db929da2db869782775ec6da1f3f14864baeddbb0935949574ca083d00"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1784782251928191228",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1784782251928191228",
+      "createdAt": "2024-04-29T03:10:23.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "✨本日限定✨\n4Fおもちゃコーナーにて『ボードゲーム&パズルゲーム体験会』が開催中！\n頭脳戦が楽しめるボードゲーム・パズルゲームをご用意しております♪\n大人の方も大歓迎！\n中には高難度のパズルも😱\n\nこちらのイベントは18時まで！\nぜひ4Fおもちゃコーナーへお越しください🙌 https://t.co/EPEsqyYZtC",
+      "url": "https://x.com/bic_yuurakuchou/status/1784782251928191228",
+      "media": [
+        "https://pbs.twimg.com/media/GMTR-cNbgAApjDc.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「✨本日限定✨ / 4Fおもちゃコーナーにて『ボードゲーム&パズルゲーム体験会』が開催中！ / 頭脳戦が楽しめるボードゲーム・パズルゲームをご用意しております♪」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "boardgame-puzzle-experience-event-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 257808,
+      "postSha256": "cfca544c6cdf9be30a4eadc037c2642a3b2413c20f668812c70185d15658b385",
+      "textSha256": "8ee12df2403adb4b5b5e7172dde42a137ec0560c612bd9ca706938f56795e88b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

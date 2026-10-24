@@ -50,6 +50,9 @@ jobs:
                 'workers/web/public/characters.json'
               )
             }}
+          # 完全一致しないときは直前のキャッシュを使う。ダウンロード script は既存の画像を飛ばし、足りない分だけ取得する
+          restore-keys: |
+            ${{ runner.os }}-character-images-
       # OG 画像 (カード + 投稿画像用の丸 Avatar) の生成結果を再利用するキャッシュ。生成ロジック
       # (script / map / characters.json) のハッシュを key にしているので、いずれかが変わると
       # key が変わって再生成される。変更なしなら scripts/generate-og-images.ts と

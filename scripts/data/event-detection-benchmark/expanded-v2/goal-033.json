@@ -1,0 +1,135 @@
+[
+  {
+    "id": "expanded-v2-positive-1902978486974697885",
+    "source": "public-post",
+    "description": "kashiwa-jacobs-creek-tasting-2025",
+    "post": {
+      "id": "1902978486974697885",
+      "createdAt": "2025-03-21T07:00:01.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "📢お知らせです【2階 特設会場】\n\n4/5(土)6(日)2日間限定🍇\nオーストラリアワイン\nジェイコブス・クリーク試飲会開催決定🍷\n\nさらにジェイコブス・クリークご購入で\n酒販柏たんステッカープレゼント🎁\n4/5:40部　4/6:40部　計80部配布予定です‼ https://t.co/3mq4KpunOd",
+      "url": "https://x.com/bic_kashiwa/status/1902978486974697885",
+      "media": [
+        "https://pbs.twimg.com/media/Gmi1AoeagAAv2OC.jpg",
+        "https://pbs.twimg.com/media/Gmi1AoobMAA9fMh.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": "2025-04-05",
+      "conditions": null
+    },
+    "rationale": "ワイン購入で各日40部。計80部と日別上限の違いを保持。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-jacobs-creek-tasting-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "酒販柏たんステッカー",
+          "evidence": [
+            "📢お知らせです【2階 特設会場】",
+            "4/5(土)6(日)2日間限定🍇",
+            "オーストラリアワイン",
+            "ジェイコブス・クリーク試飲会開催決定🍷",
+            "さらにジェイコブス・クリークご購入で",
+            "酒販柏たんステッカープレゼント🎁",
+            "4/5:40部　4/6:40部　計80部配布予定です‼ https://t.co/3mq4KpunOd"
+          ]
+        }
+      ],
+      "groupingNote": "ワイン購入で各日40部。計80部と日別上限の違いを保持。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 160602,
+      "postSha256": "29fee964907aba789c0700dd1ae3f7d6a16c737bb010319001359c91e65cf5d7",
+      "textSha256": "72e2c181b2fdbf1fd8b313d78ac442989a33f2862e5ba8fabc6568c580a7ede8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1902185758154166577",
+    "source": "public-post",
+    "description": "kashiwa-jacobs-creek-tasting-2025 matched control",
+    "post": {
+      "id": "1902185758154166577",
+      "createdAt": "2025-03-19T02:30:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【2階 #お薬・日用品】\nJR山手線🚃池袋駅・神田駅🚃の\n実際の発車ベル音が流れる！\nミニチュア発車ベルプレゼントキャンペーン実施中！\n\n対象商品、条件などご不明な点は\nHPまたは売り場販売員までお気軽にお尋ねください😊\nhttps://t.co/vzflSd0cdu https://t.co/YAt0yly6Nw",
+      "url": "https://x.com/bic_kashiwa/status/1902185758154166577",
+      "media": [
+        "https://pbs.twimg.com/media/GmXhwlMa8AEraJg.png",
+        "https://pbs.twimg.com/media/GmXhxnMbAAABvEF.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1902185758154166577",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 161164,
+      "postSha256": "ca6175778d7f129cef180524cbfd5505d3f7bc08afdd362ce6f038fa24f37187",
+      "textSha256": "08a99ed15cefaab7f1990a46796b66e2f5eb333ec9d70dbc66ce15b24d54f9cc"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

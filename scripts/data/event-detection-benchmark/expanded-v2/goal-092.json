@@ -1,0 +1,132 @@
+[
+  {
+    "id": "expanded-v2-positive-1227089147434688513",
+    "source": "public-post",
+    "description": "shinyoko-card-debut-2020",
+    "post": {
+      "id": "1227089147434688513",
+      "createdAt": "2020-02-11T04:37:05.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "皆様〜！こんよこです〜！\n\nお待たせしました！\n#新横たん 名刺が完成しました！\n3階レジ前にて配布してますのでぜひゲットしてください☺️\n\n今日も一日よろしくお願いします！ https://t.co/oSxDIJm7FD",
+      "url": "https://x.com/bic_shinyoko/status/1227089147434688513",
+      "media": [
+        "https://pbs.twimg.com/media/EQd_EOVUwAAFD9L.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "shinyoko"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "新横たんの名刺完成と配布。デビューと周年企画を混同しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "shinyoko-card-debut-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "名刺",
+          "evidence": [
+            "皆様〜！こんよこです〜！",
+            "お待たせしました！",
+            "#新横たん 名刺が完成しました！",
+            "3階レジ前にて配布してますのでぜひゲットしてください☺️",
+            "今日も一日よろしくお願いします！ https://t.co/oSxDIJm7FD"
+          ]
+        }
+      ],
+      "groupingNote": "新横たんの名刺完成と配布。デビューと周年企画を混同しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 670099,
+      "postSha256": "49ae5c35dbc05f239e1ac2049f438d4b29defe25efea9b99dbf9382bf9d421a3",
+      "textSha256": "9556b0b223a1f30e03da80d265f6e73539f1d3769053c2006df467b3824887c3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1225310421839564800",
+    "source": "public-post",
+    "description": "shinyoko-card-debut-2020 matched control",
+    "post": {
+      "id": "1225310421839564800",
+      "createdAt": "2020-02-06T06:49:04.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "☆新作ガチャガチャパート2☆\n\nスター・ウォーズ プルバックドロイドPhase3\n残り僅かですがございます🎶\nこんなにたくさんドロイドの種類があるの\n初めて知りました😅 https://t.co/wZKUJFMCJe",
+      "url": "https://x.com/bic_shinyoko/status/1225310421839564800",
+      "media": [
+        "https://pbs.twimg.com/media/EQEtUveU0AIIYwd.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1225310421839564800",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 671812,
+      "postSha256": "91b9ae9bc400bd5c0b53f2bfe81251e600babbbfb8706b5b8554c03e2aa19449",
+      "textSha256": "4f090b0a8778d054f19f83a0f1671c0afce0b6b5fc7a35d52d60735c1aeb8d71"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

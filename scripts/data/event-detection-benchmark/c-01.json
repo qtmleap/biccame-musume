@@ -1,0 +1,183 @@
+[
+  {
+    "id": "public-c-1974442197132140696",
+    "source": "public-post",
+    "description": "岡山たん擬人化9周年のアクキーと名刺",
+    "post": {
+      "id": "1974442197132140696",
+      "createdAt": "2025-10-04T11:51:17.000Z",
+      "screenName": "Bic_Okayamaten",
+      "kind": "original",
+      "text": "【🍡】*'▽'*)\n\n明日 #10月5日は岡山たん擬人化9周年\n\n合計税込3000円以上ご購入で\n擬人化記念アクリルキーホルダーがもらえる✨\n先着100名おひとり様1点限り⚠️\nなくなり次第終了！\n\nさらに…\n\n9周年記念名刺も配布決定！\n1F総合カウンターにて販売員にお声かけください😊\n\nご来店お待ちしとるで～💞 https://t.co/JbobpRYtz9",
+      "url": "https://x.com/Bic_Okayamaten/status/1974442197132140696",
+      "media": [
+        "https://pbs.twimg.com/media/G2aeTS-aQAEAvLA.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "okayama"
+      ],
+      "characterIds": [
+        "okayama"
+      ],
+      "startDate": "2025-10-05"
+    },
+    "rationale": "周年アクキーは3000円購入・先着100、別に記念名刺も明示。条件を名刺へ流用しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "multi-item",
+      "anniversary"
+    ],
+    "group": "okayama-ninth-anniversary-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1984102527994912855",
+    "source": "public-post",
+    "description": "川崎店19周年・ハロウィン名刺の最終日",
+    "post": {
+      "id": "1984102527994912855",
+      "createdAt": "2025-10-31T03:38:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "🥗- 限定名刺配布最終日-🥗\n🎊ラゾーナ川崎店19周年名刺🎊\n　🎃2025ハロウィン名刺🎃\n\n🖤配布終了日：10/31(金)\n🖤場所：2F総合カウンター\n🖤お渡し方法：手渡し配布\n#川崎たん #ビッカメ娘 https://t.co/o8vXF4begw",
+      "url": "https://x.com/Bic_kawasaki/status/1984102527994912855",
+      "media": [
+        "https://pbs.twimg.com/media/G4jth51a8AIT6Cq.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ]
+    },
+    "rationale": "川崎たんの2種の限定名刺と手渡し配布終了日が明示され、終了告知も企画関連。開始日は未記載。",
+    "tags": [
+      "historical",
+      "positive",
+      "multiple-items-same-category",
+      "end-notice"
+    ],
+    "group": "kawasaki-lazona19-halloween-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1976558325547360568",
+    "source": "public-post",
+    "description": "新東たん擬人化5周年のセットとアクキー",
+    "post": {
+      "id": "1976558325547360568",
+      "createdAt": "2025-10-10T08:00:02.000Z",
+      "screenName": "Bic_shintoueki",
+      "kind": "original",
+      "text": "💛#新東たん 擬人化５周年イベント💛\n\n10/19㈰より『B2F』にて\n当店で当日 指定金額以上ご購入のお客様へ\n\nA：アクスタ＋アクキーセット（50セット）\nB：アクキー（50個）\n\nのA・Bいずれかお一つをプレゼント🎁\n※アクキーは同一デザインです。\n\nイベント詳細は画像をご確認くださーい🌺\n\n#ビッカメ娘 https://t.co/m7YWFYlwIs",
+      "url": "https://x.com/Bic_shintoueki/status/1976558325547360568",
+      "media": [
+        "https://pbs.twimg.com/media/G23tUlzaAAAKN8n.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shintou"
+      ],
+      "characterIds": [
+        "shintou"
+      ],
+      "startDate": "2025-10-19"
+    },
+    "rationale": "10月19日から当店B2Fで2種類の景品を購入者へ提供。対象金額は画像に委ねられ断定できない。",
+    "tags": [
+      "historical",
+      "positive",
+      "multi-item",
+      "image-dependent-terms"
+    ],
+    "group": "shintou-fifth-anniversary-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1982981659906715698",
+    "source": "public-post",
+    "description": "千葉たんハロウィン名刺の配布終了予告",
+    "post": {
+      "id": "1982981659906715698",
+      "createdAt": "2025-10-28T01:24:04.000Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "千葉たんハロウィン名刺は\n現在置いてある分で終了となります。(*ᴗˬᴗ)⁾⁾\n補充はございませんのでまだお持ち帰りいただいていない方はお早めに～！🎃\n配布場所：7F千葉たんエリア https://t.co/tBTSsrCfbE",
+      "url": "https://x.com/bic_chiba/status/1982981659906715698",
+      "media": [
+        "https://pbs.twimg.com/media/G4T1_TmacAAYyhU.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "chiba"
+      ],
+      "characterIds": [
+        "chiba"
+      ]
+    },
+    "rationale": "千葉たんハロウィン名刺は置いてある分で終了、7Fで配布と明示。残数を初期数量と推定しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "stock-update"
+    ],
+    "group": "chiba-halloween-card-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1981292643218051265",
+    "source": "public-post",
+    "description": "立川たん爆誕9周年アクキー",
+    "post": {
+      "id": "1981292643218051265",
+      "createdAt": "2025-10-23T09:32:31.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\nいよいよ明日から✨\n＼\n\n#立川たん 爆誕9周年💗\nアクリルキーホルダープレゼント🎁\n\n当日のレシート（3000円以上）を1階総合案内カウンターまでお願いします‼\n\n(Ｕ⌒▽⌒Ｕ)💛\n10/25は #天神2号たん と #立川たん のバースデー🎂 https://t.co/qM5A7oalAU",
+      "url": "https://x.com/bic_tachikawa/status/1981292643218051265",
+      "media": [
+        "https://pbs.twimg.com/media/G372oqNXwAAzB4A.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "tachikawa"
+      ],
+      "characterIds": [
+        "tachikawa"
+      ],
+      "startDate": "2025-10-24",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "明日10月24日から立川たんアクキーを3000円以上の当日レシートで提供。天神2号たんは誕生日の言及で対象物とは書かれていない。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "unrelated-character-mention"
+    ],
+    "group": "tachikawa-ninth-anniversary-2025",
+    "reviewStatus": "provisional"
+  }
+]

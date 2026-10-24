@@ -103,7 +103,7 @@ test('web owns the environment-isolated Queue and production daily cron without 
     expect(config.services).toEqual([])
     expect(config.vars.X_POSTING_ENABLED).toBe(suffix === 'production' ? 'true' : 'false')
     expect(config.vars.DISCORD_POSTING_ENABLED).toBe(suffix === 'production' ? 'true' : 'false')
-    expect(config.vars.X_ACCOUNT_READ_ENABLED).toBe(suffix === 'production' ? 'true' : 'false')
+    expect(config.vars.X_ACCOUNT_READ_ENABLED).toBe(suffix === 'staging' ? 'false' : 'true')
     expect(config.queues.producers).toEqual([
       { binding: 'EVENT_DETECTION_QUEUE', queue: `biccame-event-detection-${suffix}` }
     ])

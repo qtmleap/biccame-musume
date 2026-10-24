@@ -1,0 +1,148 @@
+[
+  {
+    "id": "goal-positive-2004388693835239927",
+    "source": "public-post",
+    "description": "takatsuki newyear collaboration 2026",
+    "post": {
+      "id": "2004388693835239927",
+      "createdAt": "2025-12-26T03:07:59.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "📢＼　イ ベ ン ト 予 告　/  \n\n🎍たかつきたん新年イベント名刺👑\n配布・名刺台設置！\n\n【期間】 1/3㈯ー1/31㈯\n今回は、新絵案 投票第1位の\n👑本日の主役たかつきたん👑 \nお披露目と\nなんばたん・あべのたんとのコラボデザイン✨ https://t.co/yKQK68yBp8",
+      "url": "https://x.com/bic_takatsuki/status/2004388693835239927",
+      "media": [
+        "https://pbs.twimg.com/media/G9EE3HMaQAAl18t.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "takatsuki"
+      ],
+      "characterIds": [
+        "takatsuki",
+        "nanba",
+        "abeno"
+      ],
+      "category": "limited_card",
+      "startDate": "2026-01-03"
+    },
+    "rationale": "1/3から1/31、なんば・あべのとのコラボデザイン。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "takatsuki-newyear-collaboration-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "たかつきたん新年名刺",
+          "evidence": [
+            "🎍たかつきたん新年イベント名刺👑",
+            "配布・名刺台設置！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 85288,
+      "postSha256": "88367ac0252d203600592c85f83bd831a8ceedbb193cb6670e127cbbc5ddcef2",
+      "textSha256": "6cf207f4c73e005431423c16d83dcb457b5afd5b2b7314cacc2752cbf4661872"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bic_takatsuki/status/2004388693835239927",
+          "referenceType": "announce",
+          "eventId": "a5803581-3ee0-45cc-9270-cd534ff50b10",
+          "title": "新年イベント名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "goal-positive-2006320489594298735",
+    "source": "public-post",
+    "description": "tokorozawa newyear two cards 2026",
+    "post": {
+      "id": "2006320489594298735",
+      "createdAt": "2025-12-31T11:04:15.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "本年も1年ありがとこ〜✨\n2026年も #ビックカメラ所沢駅店 と #所沢たん をよろとこです✈️\n皆さんにとって素敵な1年になりますように💖\n\nそしてお知らせ📣\n1月2日〜1月31日まで、新年限定名刺を配布するとこ🎍\n今回は2種類...ご来店の際はぜひ！！ https://t.co/GRHcAw2vrN",
+      "url": "https://x.com/bic_toko/status/2006320489594298735",
+      "media": [
+        "https://pbs.twimg.com/media/G9fh2VSaIAAWWWC.jpg",
+        "https://pbs.twimg.com/media/G9fh2WYawAAiuA6.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "tokorozawa"
+      ],
+      "category": "limited_card",
+      "startDate": "2026-01-02"
+    },
+    "rationale": "1/2から1/31の2種類。枚数と種類を混同しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "tokorozawa-newyear-two-cards-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "所沢たん新年名刺2種類",
+          "evidence": [
+            "1月2日〜1月31日まで、新年限定名刺を配布するとこ🎍"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 83802,
+      "postSha256": "0add09fd6c7ea808471771e3c259016b61f75476c761ed3c2b8b1da81c6442ac",
+      "textSha256": "ad4dfcb10265235fc5abbdaf153e8fa9d529e122bc9a29260def04b7294b1ecd"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bic_toko/status/2006320489594298735",
+          "referenceType": "announce",
+          "eventId": "46d02cf3-29a0-45d9-97e2-afa815334d0b",
+          "title": "新年限定名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  }
+]

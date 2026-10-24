@@ -1,0 +1,131 @@
+[
+  {
+    "id": "expanded-v2-positive-1548234777152860161",
+    "source": "public-post",
+    "description": "shibutou-summer-card-2022",
+    "post": {
+      "id": "1548234777152860161",
+      "createdAt": "2022-07-16T09:15:10.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "【別館1階店頭】\n7月１6日～１8日までハズレなしのジャンボルーレットイベントを開催中です～(*'ω'*)✨\nご来店していただくだけで１回、100円以上のレシートで、もう１回抽選にご参加いただけます～！\nしぶとーたん限定名刺もまだまだ配布中ですので、是非遊びに来てくださいませ～✨ https://t.co/6ApyYihS3V",
+      "url": "https://x.com/bic_shibuya/status/1548234777152860161",
+      "media": [
+        "https://pbs.twimg.com/media/FXxvRbhaUAAJmzJ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "shibuto"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "通常のルーレット催事の宣伝内に娘限定名刺継続を明記。ルーレット条件を名刺へ流用しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "shibutou-summer-card-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "しぶとーたん限定名刺",
+          "evidence": [
+            "【別館1階店頭】",
+            "7月１6日～１8日までハズレなしのジャンボルーレットイベントを開催中です～(*'ω'*)✨",
+            "ご来店していただくだけで１回、100円以上のレシートで、もう１回抽選にご参加いただけます～！",
+            "しぶとーたん限定名刺もまだまだ配布中ですので、是非遊びに来てくださいませ～✨ https://t.co/6ApyYihS3V"
+          ]
+        }
+      ],
+      "groupingNote": "通常のルーレット催事の宣伝内に娘限定名刺継続を明記。ルーレット条件を名刺へ流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 442939,
+      "postSha256": "1e27092c4d500e2fc937698cec26fd275e3d870eb0b4fb624c77d617b37aba0b",
+      "textSha256": "5a6036338c08e4cebc35b57b391d60f622c07705f94f0169711f7c7aaf69d300"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1552525403478433792",
+    "source": "public-post",
+    "description": "shibutou-summer-card-2022 matched control",
+    "post": {
+      "id": "1552525403478433792",
+      "createdAt": "2022-07-28T05:24:35.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "さらにmitiko様のガンプラも展示させて頂きました(*'ω'*)✨\nつや消しマットの重厚感は、空を飛ぶポーズをしていても健在です！\n\nガンプラ担当者は熱く皆様の展示作品を募集中です！詳しくは【本館4階ガンプラコーナー】担当者にお問い合わせくださいヽ(*'ω'*)ﾉ \n#ガンプラ https://t.co/q9K2Vupery",
+      "url": "https://x.com/bic_shibuya/status/1552525403478433792",
+      "media": [
+        "https://pbs.twimg.com/media/FYutZjlakAAg7m2.jpg",
+        "https://pbs.twimg.com/media/FYutbXoaUAAD5I2.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1552525403478433792",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 440087,
+      "postSha256": "3fddc76d165be3db517310b81b6713c9ef54d88525a79ba1b019ca82b1415f1e",
+      "textSha256": "600daf22555e175d02071fd57386d130ffea43f5fc1c5922847dc4b33ac49fb7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

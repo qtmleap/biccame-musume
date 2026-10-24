@@ -1,0 +1,129 @@
+[
+  {
+    "id": "expanded-v2-positive-2095345941943603395",
+    "source": "public-post",
+    "description": "ohmiya-pkan-souvenir-illustration-2026",
+    "post": {
+      "id": "2095345941943603395",
+      "createdAt": "2026-09-03T02:59:36.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "(」お˃̶͈̀ ﾛ ˂̶͈́)」＜パソ館たん（@bicpkanhonten ）からもらったお土産イラスト展示したよー！！\n\n3Fエレベーターホールの大宮たんのアトリエに展示中♪\nぜひ写真撮っていってね(お๑•̀ㅂ•́)و✧ https://t.co/KLWk7BccwN",
+      "url": "https://x.com/bic_ohmiya/status/2095345941943603395",
+      "media": [
+        "https://pbs.twimg.com/media/HRQqBNvbUAA1eMr.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "パソ館たんから受領したイラストの展示。描かれた対象と作者は本文だけでは不明。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update",
+      "challenge"
+    ],
+    "group": "ohmiya-pkan-souvenir-illustration-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "お土産イラスト",
+          "evidence": [
+            "(」お˃̶͈̀ ﾛ ˂̶͈́)」＜パソ館たん（@bicpkanhonten ）からもらったお土産イラスト展示したよー！！",
+            "3Fエレベーターホールの大宮たんのアトリエに展示中♪",
+            "ぜひ写真撮っていってね(お๑•̀ㅂ•́)و✧ https://t.co/KLWk7BccwN"
+          ]
+        }
+      ],
+      "groupingNote": "パソ館たんから受領したイラストの展示。描かれた対象と作者は本文だけでは不明。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 10915,
+      "postSha256": "66053b6987cf2caaa4edb3d7fa3bd2ec8884f63615720fbf1479d0c86ba51883",
+      "textSha256": "9ca4024bd52b12611a62843eb0d7c78c01409b026e7bfece4e881669846aac1e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2104753983579721958",
+    "source": "public-post",
+    "description": "ohmiya-pkan-souvenir-illustration-2026 matched control",
+    "post": {
+      "id": "2104753983579721958",
+      "createdAt": "2026-09-29T02:03:48.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "🐻販売員たんおすすめ🐻\n\n(」販˃̶͈̀ ﾛ ˂̶͈́)」＜クラッツェルもう食べたー？\n\n食べ切りお手頃サイズ！\n小腹が空いた時につまみたいね (お๑•̀﹃•́)و✧ \n\n3Fお酒コーナーで販売中♪ https://t.co/g70ODxhDAw",
+      "url": "https://x.com/bic_ohmiya/status/2104753983579721958",
+      "media": [
+        "https://pbs.twimg.com/media/HTWWkB0bAAAR2T-.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2104753983579721958",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 2991,
+      "postSha256": "284025c35c5ca1230128283a4b7dc1cf6b68b9eaa46890dea99aeb29fefd64cb",
+      "textSha256": "88ff858be4a8a3cdfd113668b27b19cadd42365c003a6b9444017279af3514a1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

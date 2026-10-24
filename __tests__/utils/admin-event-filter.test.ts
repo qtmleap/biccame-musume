@@ -11,6 +11,7 @@ const makeEvent = (uuid: string, overrides: Partial<Event> = {}): Event => ({
   category: 'limited_card',
   title: uuid,
   stores: ['akiba'],
+  characterIds: ['akiba'],
   startDate: date('2026-06-01T00:00:00+09:00'),
   endDate: date('2026-06-30T00:00:00+09:00'),
   conditions: [],
@@ -106,6 +107,25 @@ describe('filterAdminEvents — 確認状態 x カテゴリ x 店舗 x ステー
       'u-limited-abeno-ongoing',
       'u-limited-multi'
     ])
+  })
+
+  test('開催店舗の絞り込みに対象ビッカメ娘の所属店舗を混ぜない', () => {
+    const separate = [
+      makeEvent('funato-at-funabashi', { stores: ['funabashi'], characterIds: ['funato'] }),
+      makeEvent('funabashi-at-akiba', { stores: ['akiba'], characterIds: ['funabashi'] }),
+      makeEvent('multiple-targets', { stores: ['funabashi', 'abeno'], characterIds: ['funato', 'seiseki'] }),
+      makeEvent('unidentified', { stores: ['funabashi'], characterIds: [] })
+    ]
+    expect(uuids(filterAdminEvents(separate, { ...baseFilter, store: 'funabashi' }, now))).toEqual([
+      'funato-at-funabashi',
+      'multiple-targets',
+      'unidentified'
+    ])
+    expect(filterAdminEvents(separate, { ...baseFilter, store: 'funato' }, now)).toEqual([])
+    const all = filterAdminEvents(separate, baseFilter, now)
+    expect(all[2].stores).toEqual(['funabashi', 'abeno'])
+    expect(all[2].characterIds).toEqual(['funato', 'seiseki'])
+    expect(all[3].characterIds).toEqual([])
   })
 
   test('ステータスのチェックを外すとその状態のイベントが消える', () => {

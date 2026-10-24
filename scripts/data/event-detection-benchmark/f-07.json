@@ -1,0 +1,155 @@
+[
+  {
+    "id": "public-f-1139429241991262208",
+    "source": "public-post",
+    "description": "Apple Watch期間限定値引き",
+    "post": {
+      "id": "1139429241991262208",
+      "createdAt": "2019-06-14T07:07:55.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "AppleWatchで \n新しい健康習慣、始めませんか？ \n\nビックカメラならApple Watch Series4が6/14~30までの期間限定で\n税抜価格から5,000円引き。\n#AppleWatch　#Apple\n\n詳しくはこちら\nhttps://t.co/fEM7ShY4Q4 https://t.co/Uemq7a1wy9",
+      "url": "https://x.com/niigata_bic/status/1139429241991262208",
+      "media": [
+        "https://pbs.twimg.com/media/D8_4KNaUcAAKax5.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "健康習慣に向けたApple Watchの通常値引きで、娘の企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "limited",
+      "discount",
+      "ordinary-product"
+    ],
+    "group": "apple-watch-discount-june-2019",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1331107252430802945",
+    "source": "public-post",
+    "description": "掃除機購入のギフトカード抽選",
+    "post": {
+      "id": "1331107252430802945",
+      "createdAt": "2020-11-24T05:27:54.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "✨ビックカメラの大掃除大作戦✨\n\n11月20日(金)～12月31(木)\n\n最新の掃除機をご購入で\nA賞👑10万円のギフトカード\nB賞🌟ビックポイント3.000ポイント\nが抽選で当たるチャンス🎁\n\n対象商品購入後にレシートクーポンで応募できます♩\n\n今年の大掃除は最新掃除機で～‼ https://t.co/2Wrvma3S2i",
+      "url": "https://x.com/bic_kashiwa/status/1331107252430802945",
+      "media": [
+        "https://pbs.twimg.com/media/EnkK7g4UcAEuu9v.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "家電購入者向け汎用ギフトカードやポイントの抽選。娘デザインや娘イベントとは記載されていない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "gift-card",
+      "lottery",
+      "purchase-benefit"
+    ],
+    "group": "cleaning-campaign-giftcard-winter-2020",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1332927793181511680",
+    "source": "public-post",
+    "description": "家電購入の週末長期保証特典",
+    "post": {
+      "id": "1332927793181511680",
+      "createdAt": "2020-11-29T06:02:05.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "‼️土日限定特典‼️\n📢貯まるポイント5%分を加入費用にあてていただくと入れるビックの「長期保証」！\nただいま当社指定エアコン、洗濯機、冷蔵庫を購入すると長期保証を＜無料＞でお付けできます！\n対象製品や詳細は店頭スタッフへお尋ねください！\n\n長期保証について▶️https://t.co/xT2ruKiVOX https://t.co/GoDyx6nyna",
+      "url": "https://x.com/Bic_kawasaki/status/1332927793181511680",
+      "media": [
+        "https://pbs.twimg.com/media/En-ClwbVkAI2w3Q.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "エアコン等を購入した際の長期保証無料特典で、娘の物品や出演企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "purchase-benefit",
+      "limited",
+      "ordinary-product"
+    ],
+    "group": "appliance-warranty-weekend-november-2020",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1237273631593390080",
+    "source": "public-post",
+    "description": "d払いの還元キャンペーン",
+    "post": {
+      "id": "1237273631593390080",
+      "createdAt": "2020-03-10T07:06:35.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "13日限定のキャンペーンです～☆ポイント付与上限1000ポイント、付与時期は4月下旬以降。キャンペーン参加にはエントリーが必要となりますのでご注意くださいませ～(*'ω'*)\n\n全国の加盟店で「d払い」を使うと50％還元　3月12日の“財布の日”限定キャンペーン - ITmedia NEWS https://t.co/muikneVDUP",
+      "url": "https://x.com/bic_shibuya/status/1237273631593390080",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "決済利用とエントリー条件による還元案内であり、娘のグッズや催しではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "payment",
+      "cashback",
+      "ordinary-campaign"
+    ],
+    "group": "d-payment-wallet-day-march-2020",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1226038030084919298",
+    "source": "public-post",
+    "description": "ゲーム予約のアクリルキーホルダー特典",
+    "post": {
+      "id": "1226038030084919298",
+      "createdAt": "2020-02-08T07:00:19.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "#予約開始 ＼(U 'ω'U)／🎮🐶\n#NintendoSwitch 用ソフト\n「あつまれ どうぶつの森」のご予約を5階ゲームコーナーにて承り中です♪\nビックカメラだけのアクリルキーホルダーが付いてくる限定版もあります！！ https://t.co/DtbSmJxqDJ",
+      "url": "https://x.com/bic_tachikawa/status/1226038030084919298",
+      "media": [
+        "https://pbs.twimg.com/media/EQPDD-hU0AE5anO.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "アクキーはどうぶつの森ゲームの店舗予約特典で、ビッカメ娘デザインではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "acrylic-word",
+      "purchase-benefit"
+    ],
+    "group": "animal-crossing-akey-preorder-february-2020",
+    "reviewStatus": "provisional"
+  }
+]

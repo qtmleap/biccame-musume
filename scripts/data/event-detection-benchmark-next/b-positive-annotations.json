@@ -1,0 +1,195 @@
+{
+  "revisionPurpose": "次データセット改訂用。実測中の100件manifestと既存Bコーパスは変更しない。",
+  "reviewStatus": "provisional",
+  "provenance": "公式投稿の本文だけで追補。保存AI回答・実測結果は参照していない。itemsは次版での物品別採点候補であり、現在の単一物品採点schemaへ無条件に合成しない。",
+  "patches": [
+    {
+      "baseCaseId": "public-b-2109941892930814125",
+      "postId": "2109941892930814125",
+      "items": [
+        {
+          "name": "あべのたんアクリルキーホルダ― ハロウィンver.",
+          "category": "ackey",
+          "characterIds": ["abeno"],
+          "startDate": "2026-10-16",
+          "conditions": [{"type": "purchase", "amount": 3000}],
+          "perPersonLimit": 1,
+          "evidenceSummary": "10/16(金)から、3,000円以上ご購入で『あべのたんアクリルキーホルダ― ハロウィンver.』をプレゼント",
+          "rationale": "金額と開始日はアクキーに直接かかる。1個は一人当たり上限であり総配布数ではない。"
+        },
+        {
+          "name": "ハロウィン限定名刺",
+          "category": "limited_card",
+          "evidenceSummary": "ハロウィン限定名刺も用意してる",
+          "rationale": "別物品として明示。先行するアクキーの購入額や開始日を流用せず、その条件は未注釈。"
+        }
+      ],
+      "rationale": "投稿単位の単一categoryや条件へ潰さず、購入額がどの物品に属するかを採点する次版用注釈。"
+    },
+    {
+      "baseCaseId": "public-b-2110287829914026178",
+      "postId": "2110287829914026178",
+      "items": [
+        {
+          "name": "ビッカメ娘旅 立川たんver 缶バッジ",
+          "category": "other",
+          "characterIds": ["tachikawa"],
+          "inventory": {"remaining": 70},
+          "evidenceSummary": "ビッカメ娘旅 #ビッ旅 缶バッジ #立川たん ver 残り70個",
+          "rationale": "残り70個を当初の先着配布人数・総数量へ転記しない。開始日と入手条件は未注釈。"
+        }
+      ]
+    },
+    {
+      "baseCaseId": "public-b-2110551981337305382",
+      "postId": "2110551981337305382",
+      "items": [
+        {
+          "name": "美味しいもの食べ隊 しんじゅくたんアクキー",
+          "category": "ackey",
+          "characterIds": ["bicqlo"],
+          "evidenceSummary": "美味しいもの食べ隊、しんじゅくたんのアクキーまだございます",
+          "rationale": "物品と対象娘は明示される。購入・先着・人数・日付を創作しない。"
+        }
+      ]
+    },
+    {
+      "baseCaseId": "public-b-2111383983300948388",
+      "postId": "2111383983300948388",
+      "items": [
+        {
+          "name": "美味しいもの食べ隊withパソ館たん アクキー",
+          "category": "ackey",
+          "inventory": {"remaining": 22},
+          "evidenceSummary": "美味しいもの食べ隊withパソ館たんのアクキーは残り22個",
+          "rationale": "パソ館たんへの言及はあるが共同デザインの全対象娘を列挙したとは限らず、characterIdsの完全一致注釈はしない。22は残数。"
+        }
+      ]
+    },
+    {
+      "baseCaseId": "public-b-2111965788316012551",
+      "postId": "2111965788316012551",
+      "items": [
+        {
+          "name": "新東たん擬人化6周年記念名刺",
+          "category": "limited_card",
+          "characterIds": ["shintou"],
+          "endDate": "2026-10-31",
+          "perPersonLimit": 1,
+          "evidenceSummary": "記念名刺をB2Fに設置しておきましたのでどうぞ～ ※10/31まで。お一人様一枚まで",
+          "rationale": "終了日と一人一枚の上限はこの記念名刺にかかる。『設置済み』から開始日を創作しない。"
+        },
+        {
+          "name": "アイドル名刺",
+          "startDate": "2026-11-01",
+          "evidenceSummary": "アイドル名刺は11/1より再配布となります",
+          "rationale": "別の再配布物品。記念名刺の10/31終了や一人一枚条件を流用しない。"
+        }
+      ]
+    },
+    {
+      "baseCaseId": "public-b-2112356049269465446",
+      "postId": "2112356049269465446",
+      "items": [
+        {
+          "name": "パソ館たんアクキー",
+          "category": "ackey",
+          "inventory": {"remaining": 17},
+          "evidenceSummary": "パソ館たんアクキー：残り【１７個】"
+        },
+        {
+          "name": "4店舗特典ギフトカード",
+          "category": "other",
+          "inventory": {"remaining": 78},
+          "evidenceSummary": "4店舗特典ギフトカード：残り【７８枚】"
+        },
+        {
+          "name": "ビックカメラのB面 視聴特典ステッカー",
+          "category": "other",
+          "inventory": {"remainingApproximatePercent": 50},
+          "evidenceSummary": "【ビックカメラのB面】視聴特典ステッカー＆名刺：残り【約５０％】"
+        },
+        {
+          "name": "ビックカメラのB面 視聴特典名刺",
+          "inventory": {"remainingApproximatePercent": 50},
+          "evidenceSummary": "【ビックカメラのB面】視聴特典ステッカー＆名刺：残り【約５０％】",
+          "rationale": "名刺は明示されるが通年/限定区分は当該本文では不明なのでcategory未注釈。ステッカーとのセット提供かも未注釈。"
+        }
+      ],
+      "rationale": "異なる配布物ごとに残数を保持し、総先着数・4店舗の具体的店舗キー・対象娘全員を創作しない。"
+    },
+    {
+      "baseCaseId": "public-b-2112378276735750637",
+      "postId": "2112378276735750637",
+      "items": [
+        {
+          "name": "冬名刺",
+          "category": "limited_card",
+          "startDate": "2026-11-01",
+          "evidenceSummary": "冬名刺の配布は11/1から予定しております",
+          "rationale": "季節名刺の開始日は明示。購入条件や対象娘をアカウントから補わない。"
+        }
+      ]
+    },
+    {
+      "baseCaseId": "public-b-2112392477038780586",
+      "postId": "2112392477038780586",
+      "items": [
+        {
+          "name": "有楽町たんデザインギフトカード",
+          "category": "other",
+          "characterIds": ["yuurakuchou"],
+          "startDate": "2026-10-24",
+          "conditions": [{"type": "charge", "amount": 1000}, {"type": "first_come", "quantity": 55}],
+          "evidenceSummary": "有楽町たんデザインギフトカード 数量限定販売／2026年10月24日(土)～／先着55名様／入金金額1,000円以上",
+          "rationale": "入金を商品購入へ誤写像しない。配布数増加の可能性はあるが、記載の初期先着数は55。開発例であり次holdoutへ移さない。"
+        }
+      ]
+    },
+    {
+      "baseCaseId": "public-b-2112431406978945270",
+      "postId": "2112431406978945270",
+      "items": [
+        {
+          "name": "あいタワたん×池西たん 秋のカフェ巡りアクリルスタンド",
+          "category": "acsta",
+          "characterIds": ["itt", "ikenishi"],
+          "startDate": "2026-11-07",
+          "conditions": [{"type": "purchase", "amount": 4000}, {"type": "first_come", "quantity": 100}],
+          "evidenceSummary": "11/7(土)～先着100個／税込4,000円以上のお買い上げで『あいタワたん×池西たん 秋のカフェ巡りアクリルスタンド』をプレゼント",
+          "rationale": "共同物品と条件が明示。アカウントの片方だけを対象にしない。既知の開発例と同campaignなので新たな独立holdout件数に数えない。"
+        }
+      ]
+    },
+    {
+      "baseCaseId": "public-b-2112435987582513432",
+      "postId": "2112435987582513432",
+      "items": [
+        {
+          "name": "ふなとーたん擬人化記念アクリルキーホルダ―",
+          "category": "ackey",
+          "characterIds": ["funato"],
+          "startDate": "2026-11-15",
+          "conditions": [{"type": "purchase", "amount": 3000}, {"type": "first_come", "quantity": 100}],
+          "perPersonLimit": 1,
+          "evidenceSummary": "税込3,000円以上ご購入で『ふなとーたん擬人化記念アクリルキーホルダ―』プレゼント／11/15(日)～／先着100名様／おひとり様1個限り",
+          "rationale": "対象娘はふなとーたん。投稿者からふなたんへ置換しない。100は総先着人数、1は一人当たり上限として別々に保持。既知開発例なので新holdout件数に数えない。"
+        }
+      ]
+    },
+    {
+      "baseCaseId": "public-b-2112454018958320030",
+      "postId": "2112454018958320030",
+      "items": [
+        {
+          "name": "川崎たん＆たまプラたんのアクスタセット",
+          "category": "acsta",
+          "characterIds": ["kawasaki", "tamapla"],
+          "unitsPerRecipient": 2,
+          "evidenceSummary": "十三夜企画はアクスタ２個お渡し／表に #たまプラたん 裏に私 #川崎たん のアクスタをいれたセットでプレゼンツ",
+          "rationale": "2は一人へ渡すセットの内容数で、総先着人数や在庫ではない。日付・購入条件は未注釈。"
+        }
+      ]
+    }
+  ]
+}

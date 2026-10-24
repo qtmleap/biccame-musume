@@ -1,0 +1,125 @@
+[
+  {
+    "id": "goal-positive-1556499004447289345",
+    "source": "public-post",
+    "description": "okayama acsta display 2022",
+    "post": {
+      "id": "1556499004447289345",
+      "createdAt": "2022-08-08T04:34:15.000Z",
+      "screenName": "Bic_Okayamaten",
+      "kind": "original",
+      "text": "【🍡】(木|≡\\(*'▽'*)/≡|兆)パンパカパッカーン‼️\n\n販売員たんに頼まれて、岡山たんのアクスタ作った〜🥰\nパンパカしとるんよ🍑☀️\n初めてだったからちょっと滲んだりしてるのは許して🙇‍♀️\n\nB1Fカメラコーナーの推し活応援コーナーにおるよ〜✨ https://t.co/1tXermJjh8",
+      "url": "https://x.com/Bic_Okayamaten/status/1556499004447289345",
+      "media": [
+        "https://pbs.twimg.com/media/FZnLEmaVUAAXJct.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "推し活コーナーへの岡山たん自作アクスタ展示。配布とは書かれていない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update",
+      "zero-giveaway"
+    ],
+    "group": "okayama-acsta-display-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 437156,
+      "postSha256": "3b29f0a3b465d10d33dc8f0ecb6b2ff0086da40f4288da0ec16681146e0398ac",
+      "textSha256": "20bd07f1254bec87a733d77dba02c22a18ee9e1ac5698e9ba509da289f3014b9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1570583281623793664",
+    "source": "public-post",
+    "description": "yuurakuchou halloween card 2022",
+    "post": {
+      "id": "1570583281623793664",
+      "createdAt": "2022-09-16T01:20:09.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ👻#有楽町たん ハロウィン名刺🎃\n\n＼9月16日(金)～10月31日(月)まで／\n1階 総合カウンターにて配布します❣️\n\n名刺置き場も装飾して\nハロウィンっぽくしてみましたよ～🎃✨\nぜひこちらも見てね⁽⁽ଘ(*´꒳`*)ଓ⁾⁾\n\n通常名刺も置いてあります💗\n#ビッカメ娘 #ビックカメラ有楽町店 https://t.co/P0log0XAGH",
+      "url": "https://x.com/bic_yuurakuchou/status/1570583281623793664",
+      "media": [
+        "https://pbs.twimg.com/media/FcvVKN2agAIYqYX.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "yuurakuchou"
+      ]
+    },
+    "rationale": "9/16から10/31の限定版と通常名刺併記。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "yuurakuchou-halloween-card-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "有楽町たんハロウィン名刺",
+          "evidence": [
+            "ξ(σεσ)ξ👻#有楽町たん ハロウィン名刺🎃",
+            "名刺置き場も装飾して",
+            "通常名刺も置いてあります💗"
+          ]
+        },
+        {
+          "item": "通常名刺",
+          "evidence": [
+            "ξ(σεσ)ξ👻#有楽町たん ハロウィン名刺🎃",
+            "名刺置き場も装飾して",
+            "通常名刺も置いてあります💗"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 427602,
+      "postSha256": "e46b4b72709ef68a908067e1de946974d2990d6ba384f8966fc937df0d872dcb",
+      "textSha256": "ae361cabc8a271d7e5c955e7f902d7194f8ef9ec4593b993d62f297cf2a2a501"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

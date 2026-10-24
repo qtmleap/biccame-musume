@@ -1,0 +1,223 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2098732881262813362",
+    "source": "public-post",
+    "description": "shibuhachi-novelty-stock-status-2026",
+    "post": {
+      "id": "2098732881262813362",
+      "createdAt": "2026-09-12T11:18:06.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "８がつくめにめにはっぴーツアー\n🚅✈️🐶🐙👑🚅✈️\n【ノベルティ配布状況】\n③アクキー配布終了しました。\n\n● 配布終了 ●\n③アクリルキーホルダー\n④アクリルスタンド\n\n● 残り２０前後 ●\n①ステッカー\n②キーボードキーホルダー\n\n#しぶハチたん\n#ビッカメ娘 #８がつくめにはぴツアー https://t.co/b39PnfBYq3",
+      "url": "https://x.com/bicshibuhachi00/status/2098732881262813362",
+      "media": [
+        "https://pbs.twimg.com/media/HSAybfra0AALIvB.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "shibuhachi"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "4種のノベルティの配布状況。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:eight-stores-tour-2026"
+    ],
+    "group": "shibuhachi-novelty-stock-status-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "ステッカー",
+          "evidence": [
+            "①ステッカー"
+          ]
+        },
+        {
+          "item": "キーボードキーホルダー",
+          "evidence": [
+            "③アクリルキーホルダー",
+            "②キーボードキーホルダー"
+          ]
+        },
+        {
+          "item": "アクリルキーホルダー",
+          "evidence": [
+            "③アクリルキーホルダー",
+            "②キーボードキーホルダー"
+          ]
+        },
+        {
+          "item": "アクリルスタンド",
+          "evidence": [
+            "③アクリルキーホルダー",
+            "④アクリルスタンド"
+          ]
+        }
+      ],
+      "groupingNote": "4種のノベルティの配布状況。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 7906,
+      "postSha256": "1588ef339ee4aa1f245beaf29d6cf7147c624d0a67d49815c89ed45319b5333c",
+      "textSha256": "be87161eb67b1e1a6d01acc615ebe1bfec174f49024861ccd0edb8a147687d92"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "3330d3a9-5303-4d6d-beac-536a963dbbb0",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bicshibuhachi00/status/2098732881262813362",
+          "origin": "manual-or-seed",
+          "title": "めにめにはっぴーツアー アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-11T15:00:00.000+00:00",
+            "endDate": "2026-11-22T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shibuhachi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 50,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "943516f0-3869-4f44-9278-3884faf77bb9",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bicshibuhachi00/status/2098732881262813362",
+          "origin": "manual-or-seed",
+          "title": "めにめにはっぴーツアー アクスタ",
+          "category": "acsta",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-11T15:00:00.000+00:00",
+            "endDate": "2026-11-22T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shibuhachi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 30,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 5000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2104530297656352894",
+    "source": "public-post",
+    "description": "shibuhachi-novelty-stock-status-2026 matched control",
+    "post": {
+      "id": "2104530297656352894",
+      "createdAt": "2026-09-28T11:14:57.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "🌟あしたから！🌟\n渋谷ハチ公口店に\n一条莉々華さんの\n等身大パネルがお目見えするハチ🎉\n\n📅 9/29（火） 〜\n📍B館5階 タートルビーチ売場\n\n対象商品ご購入でオリジナルうちわプレゼント企画も！\nお仕事の合間や、お近くに来た際はぜひ！\nあしたが楽しみハチ✨\n#一条莉々華 #ホロライブ https://t.co/t7vWHa2UXO",
+      "url": "https://x.com/bicshibuhachi00/status/2104530297656352894",
+      "media": [
+        "https://pbs.twimg.com/media/HTTLC7KbQAADABD.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2104530297656352894",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 3047,
+      "postSha256": "dd8a98023300ecce0767a5eb7cd8ce99893039b8a32f843d7d44866ae6432a4b",
+      "textSha256": "f84619d9eac838da8c17ba7a04e0e7bfbfbe47f54122e648428378b056541989"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

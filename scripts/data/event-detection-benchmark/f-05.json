@@ -1,0 +1,159 @@
+[
+  {
+    "id": "public-f-1000206912032464898",
+    "source": "public-post",
+    "description": "会社40周年のエアコンポイント特典",
+    "post": {
+      "id": "1000206912032464898",
+      "createdAt": "2018-05-26T02:48:05.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "＃あと2日‼\n\n5月25日(金)・26日(土)・27日(日)\n\n＿人人 人人＿\n＞3日間限定 ＜\n￣Y^Y^Y^Y￣\n\n🅱️ビックカメラ40周年🅱️\n\n税抜10万円以上のエアコンご購入で\n基本10％ポイントサービス＋さらに５％ポイントアップ＝15％ポイントサービス✨\n\n本格的な夏が始まる前に是非‼️\n\n#ビックカメラ40周年 https://t.co/a8lWgfpyeZ",
+      "url": "https://x.com/bic_kashiwa/status/1000206912032464898",
+      "media": [
+        "https://pbs.twimg.com/media/DeFy3P_VwAEy9uf.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "周年はビックカメラ全体の家電販促で、娘の周年・デザイン物品ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "anniversary",
+      "points",
+      "purchase-benefit"
+    ],
+    "group": "bic40-airconditioner-points-may-2018",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-994497978038538240",
+    "source": "public-post",
+    "description": "PCとデータ通信商品のリチャージクーポン",
+    "post": {
+      "id": "994497978038538240",
+      "createdAt": "2018-05-10T08:42:49.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "LTE対応モデルのパソコン💻と\n『BICSIM』のデータ通信専用パッケージを\n同時購入で\n「リチャージクーポン10㎇」ｘ2\nプレゼント‼\n\nつまり！\n＿人人人人人人人＿\n＞ 20GB分 お得！ ＜\n￣ＹＹＹＹＹＹＹ￣\n\n#キャンペーン #お得情報 https://t.co/Q9RmLWqvgY",
+      "url": "https://x.com/Bic_kawasaki/status/994497978038538240",
+      "media": [
+        "https://pbs.twimg.com/media/DclewrTVwAAn_Mr.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "LTEパソコンと通信専用パッケージの同時購入特典。BICSIMは通信商品名で、周辺マスコットの出演は記載されていない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "charge-word",
+      "purchase-benefit",
+      "data-plan"
+    ],
+    "group": "laptop-data-coupon-may-2018",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-971634900997517312",
+    "source": "public-post",
+    "description": "新幹線モデルの限定カメラとポストカード",
+    "post": {
+      "id": "971634900997517312",
+      "createdAt": "2018-03-08T06:33:07.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "お子様にも人気の新幹線 E5系「はやぶさ」をモチーフにしたデジタルカメラ\n『ニコン COOLPIX W100 E5系』を3/16(金)に発売します！\nビックカメラグループの限定販売モデルです。\n\n予約特典として、E5系はやぶさオリジナルポストカードを同梱します。\nご予約承り中です！\nhttps://t.co/zNTgKBuRps https://t.co/U0plQ1YWzf",
+      "url": "https://x.com/bic_nagoya/status/971634900997517312",
+      "media": [
+        "https://pbs.twimg.com/media/DXvwx7NUQAAQR-p.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "JR新幹線を題材にしたカメラの予約ポストカード特典で、娘デザインの配布物ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "limited",
+      "postcard-word",
+      "purchase-benefit"
+    ],
+    "group": "nikon-hayabusa-camera-march-2018",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1114441629421588481",
+    "source": "public-post",
+    "description": "ガンダム40周年モデル腕時計の限定予約",
+    "post": {
+      "id": "1114441629421588481",
+      "createdAt": "2019-04-06T08:16:04.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ＜６階時計コーナーでは本日4/6より【SEIKO PROSPEX　#機動戦士ガンダム４０周年記念】＜#量産型ザク＞＜#シャア専用ザク＞の２モデルのご予約が始まりました！！\n\nどちらも台数限定！台数到達次第予約終了となりますので、是非お早めに６階時計コーナーSEIKOブースまでお越し下さいませ～⌚️ https://t.co/oOjFuSTYxa",
+      "url": "https://x.com/bic_yuurakuchou/status/1114441629421588481",
+      "media": [
+        "https://pbs.twimg.com/media/D3dKnPUUwAAX0yk.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "周年の対象は機動戦士ガンダムで、SEIKO製時計の台数限定予約。娘の周年や娘デザイングッズではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "anniversary",
+      "limited",
+      "reservation"
+    ],
+    "group": "seiko-gundam40-watch-april-2019",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1062885447217500160",
+    "source": "public-post",
+    "description": "マリオパーティのJoy-Con同梱版予約",
+    "post": {
+      "id": "1062885447217500160",
+      "createdAt": "2018-11-15T01:50:12.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "🍄12月1日発売🍄\n\nニンテンドースイッチ\n『スーパー マリオパーティ　4人で遊べる Joy-Conセット 』\n\nパッケージ版『スーパー マリオパーティ』に、「Joy-Con」2個が付属したセットがついに登場❣️❣️これがあれば4人でのゲームが可能に🤗❤️\nレジにて予約受付中です🎵\n#さがみたんのゲーム情報 https://t.co/wZ9zqQl4wG",
+      "url": "https://x.com/bic_sagamioono/status/1062885447217500160",
+      "media": [
+        "https://pbs.twimg.com/media/DsAgD35UcAA30Kp.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "商品セットの発売と予約案内。娘のグッズ・コラボイベントとは関係しない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "reservation",
+      "bundle"
+    ],
+    "group": "mario-party-joycon-bundle-2018",
+    "reviewStatus": "provisional"
+  }
+]

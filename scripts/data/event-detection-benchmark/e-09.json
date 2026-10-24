@@ -1,0 +1,185 @@
+[
+  {
+    "id": "public-e-1481534893918396417",
+    "source": "public-post",
+    "description": "新宿3店舗合同新名刺",
+    "post": {
+      "id": "1481534893918396417",
+      "createdAt": "2022-01-13T07:53:38.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "【予告】\n#ビックロたん の通年名刺がついにリニューアル✨\n1月14日(金)から新宿3店舗合同新名刺を配布致します!!\n今回の名刺も #新宿西口たん がデザインしてくれました💕\nとっても可愛い合同名刺、ぜひお手に取ってくださいね✨\nヾ(*・ω・)ノ｡oO(うわぁぁぁい!!おっそろい!!おっそろい!!)\n#新東たん https://t.co/VLeHGJffwH",
+      "url": "https://x.com/bic_shinjuku3ch/status/1481534893918396417",
+      "media": [
+        "https://pbs.twimg.com/media/FI93nOvaAAMvQoO.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "regular_card",
+      "stores": [
+        "bicqlo",
+        "shinjyuku",
+        "shintou"
+      ],
+      "startDate": "2022-01-14"
+    },
+    "rationale": "新宿3店舗合同の通年新名刺と1/14開始を明記。新宿西口たんは制作者、別の娘はタグでもあり、3人全てが絵柄にいるとは断定せず全対象配列を未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "collaboration",
+      "multi-store",
+      "multi-character",
+      "historical-name"
+    ],
+    "group": "shinjuku-three-stores-renewal-card-2022",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "b66c121488cb90998e1eb7c0f58797e79ca73c34364c4ca9482b13749bd2de23"
+  },
+  {
+    "id": "public-e-1537289062901760001",
+    "source": "public-post",
+    "description": "横浜線組のコラボ名刺",
+    "post": {
+      "id": "1537289062901760001",
+      "createdAt": "2022-06-16T04:20:48.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "(2｡•ㅅ•｡)町田たんからもお知らせありましたが\n横浜線組コラボ名刺を配布しま～す🚃\n\n配布期間：6月18日(土)～9月30日(金)まで\n配布場所：新横浜店　3F レジ前\n\n出来るだけたくさんの方に貰って欲しいので\n配布期間も長めです🎶\nコンプツイートお待ちしてます✨ https://t.co/hGcWNCGHoM",
+      "url": "https://x.com/bic_shinyoko/status/1537289062901760001",
+      "media": [
+        "https://pbs.twimg.com/media/FVWMPzxagAAe8sY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "shinyoko"
+      ],
+      "startDate": "2022-06-18"
+    },
+    "rationale": "町田たんと横浜線組コラボの6/18〜9/30、新横浜店配布を明記。デザイン全対象を本文だけで列挙できないので未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "collaboration",
+      "different-character"
+    ],
+    "group": "yokohama-line-collaboration-card-2022",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "5a62eb3ca4292563cbad7d8878a589481143488bb37eb13e0dbde185ad4c220d"
+  },
+  {
+    "id": "public-e-1574251163553304577",
+    "source": "public-post",
+    "description": "15店舗のコラボ名刺の旅",
+    "post": {
+      "id": "1574251163553304577",
+      "createdAt": "2022-09-26T04:15:00.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ🦢関東・関西・九州🦢\n✈ビッカメ娘コラボ名刺の旅🚃\n\n10/1(土)よりビックカメラ15店舗で\n同一デザインのオリジナルコラボ名刺を配布します❣️\n\nぜひゲットして下さいね～⁽⁽ଘ(*´꒳`*)ଓ⁾⁾\n\n🌟有楽町店 配布場所:1階 総合カウンター\n🌟配布期間:10/1(土)～12/31(土)\n#ビッカメ娘 #ビックカメラ https://t.co/c8IUB8M3bb",
+      "url": "https://x.com/bic_yuurakuchou/status/1574251163553304577",
+      "media": [
+        "https://pbs.twimg.com/media/FdjcUkHVUAA4Njn.jpg",
+        "https://pbs.twimg.com/media/FdjcUj_UcAAhPCq.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "startDate": "2022-10-01"
+    },
+    "rationale": "15店で同一名刺を10/1〜12/31配布。15店や全キャラを本文で列挙しないため配列を一部だけ正解にしない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "collaboration",
+      "many-stores"
+    ],
+    "group": "fifteen-store-card-tour-2022",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "f28e53160f6eeee72981cc4a173a192827386d133ef4e58697cddafaa8fde96c"
+  },
+  {
+    "id": "public-e-1669893029971525633",
+    "source": "public-post",
+    "description": "藤沢たん出演とコラボ名刺の相談会",
+    "post": {
+      "id": "1669893029971525633",
+      "createdAt": "2023-06-17T02:21:38.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(3・ω・)📢BICSIMイベント！\n6/17(土)-18(日) 2階入口\n11時～19時→10時～21時に変更💪✨\n2,900円以上のお買い物で参加可🎵\n#キン肉マン グッズorビックポイントがあたる抽選会を実施中！\n\n会場にて藤沢たん×ビックシムたんコラボ名刺も配布！\n藤沢たんとビックシムたん2人でお出迎えしてるぜ🤗 https://t.co/LLRhbDSWBG",
+      "url": "https://x.com/bic_fujisawa/status/1669893029971525633",
+      "media": [
+        "https://pbs.twimg.com/media/FyylWOpaEAATM8Y.jpg",
+        "https://pbs.twimg.com/media/FyylecUaIAA95IP.jpg",
+        "https://pbs.twimg.com/media/FyylkfeaQAEI4lr.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "fujisawa"
+      ],
+      "characterIds": [
+        "fujisawa"
+      ],
+      "startDate": "2023-06-17"
+    },
+    "rationale": "藤沢たん本人の出演とコラボ名刺配布が明記。BICSIMだけの一般相談会とは区別。2900円条件は別景品抽選なので名刺へ流用しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "character-appearance",
+      "mascot-collaboration"
+    ],
+    "group": "fujisawa-bicsim-character-appearance-2023",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "2cf66386dc78d3c39fee86093212b4f8b15885dea753bf2d08ef86de214c188c"
+  },
+  {
+    "id": "public-e-1680191905601323008",
+    "source": "public-post",
+    "description": "なごやげーとたん夏季名刺",
+    "post": {
+      "id": "1680191905601323008",
+      "createdAt": "2023-07-15T12:25:41.000Z",
+      "screenName": "bic_nagoyagate",
+      "kind": "original",
+      "text": "金鯱|*´꒳`){#なごやげーとたん 夏季限定🏝️\n🎆名刺配布のお知らせ🎆\n\n配布期間：7/16(日)～8月31日(木)予定\n配布場所：ツインパネル前\n(９階シャトルエレベーターホール内）\n\n印刷や補充が間に合わなくなってしまう場合がございますので、おひとり様1枚までのお持ち帰りでお願いします🙏🏻 https://t.co/J91xUaHVJb",
+      "url": "https://x.com/bic_nagoyagate/status/1680191905601323008",
+      "media": [
+        "https://pbs.twimg.com/media/F1E9oScaYAILnSo.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "nagoyagate"
+      ],
+      "characterIds": [
+        "nagoyagate"
+      ],
+      "startDate": "2023-07-16"
+    },
+    "rationale": "なごやげーとたんの夏季限定名刺を7/16から配布と明記。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "seasonal-card"
+    ],
+    "group": "nagoyagate-summer-card-2023",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "ae8be9a2b1832904a9afea2d7026e2c4147f1084ab12f69a1ae97b52353f842c"
+  }
+]

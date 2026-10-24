@@ -1,0 +1,109 @@
+[
+  {
+    "id": "goal-negative-989792970625892353",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "989792970625892353",
+      "createdAt": "2018-04-27T09:06:48.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "#カルビー #チーズビット プレゼント♪\nビックカメラの対象店舗にて1000円以上(税込)\nお買上の方対象でプレゼント致します(Ｕ⌒▽⌒Ｕ) https://t.co/0LwbMj0Tjy",
+      "url": "https://x.com/bic_tachikawa/status/989792970625892353",
+      "media": [
+        "https://pbs.twimg.com/media/DbxmvKRV4AAHK6l.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「#カルビー #チーズビット プレゼント♪ / ビックカメラの対象店舗にて1000円以上(税込) / お買上の方対象でプレゼント致します(Ｕ⌒▽⌒Ｕ) https://t.co/0LwbMj0Tjy」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "calbee-cheesebit-purchase-gift-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 862750,
+      "postSha256": "2aefe3d13fd8826701db1ea3699a2de44923a7b36ed0c876b554d090130ff443",
+      "textSha256": "de4e36f5ee2c1e3076ea772d54981d77aeeaf0f17d6364bba3836da04bf6b74a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1001753627675869190",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1001753627675869190",
+      "createdAt": "2018-05-30T09:14:11.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "＼✨予約開始！✨／\n6/8から開始！Playstationキャンペーン『Days of Play』を記念した\n特別モデルが6/8発売！限定モデル多数発表されましたよ。\nお見逃しなく!!　本日より予約開始でーす♪ https://t.co/UaYRK7zFYC",
+      "url": "https://x.com/bic_ohmiya/status/1001753627675869190",
+      "media": [
+        "https://pbs.twimg.com/media/DebxXQAU8AEcKKO.jpg",
+        "https://pbs.twimg.com/media/DebxahQUQAAolw4.jpg",
+        "https://pbs.twimg.com/media/DebxcMaU0AAFe6C.jpg",
+        "https://pbs.twimg.com/media/DebxdlvUQAAuGo6.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「＼✨予約開始！✨／ / 6/8から開始！Playstationキャンペーン『Days of Play』を記念した / 特別モデルが6/8発売！限定モデル多数発表されましたよ。」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "playstation-days-of-play-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 853020,
+      "postSha256": "5e705f817180406da6c8be109a7e8e5886497ee1f2c0a4ae479c5a66092ea610",
+      "textSha256": "65f64354d57b994253004cdde083ccd3f0d2e1b1d01754b1bec4b0f9d5e71702"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

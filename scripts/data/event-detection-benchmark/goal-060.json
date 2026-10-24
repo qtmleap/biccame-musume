@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-858622803448184832",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "858622803448184832",
+      "createdAt": "2017-04-30T10:03:23.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "【自動ツイート】\n\nビックカメララゾーナ川崎店は\n『川崎フロンターレを応援します！』\n\nサポーターのみなさんは『お得！』\nぜひ「グッズ」を持ってご来店下さい！\n\nhttps://t.co/LZjWqI9e3E",
+      "url": "https://x.com/Bic_kawasaki/status/858622803448184832",
+      "media": [
+        "https://pbs.twimg.com/media/C7r0-7YVwAUwUog.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【自動ツイート】 / ビックカメララゾーナ川崎店は / 『川崎フロンターレを応援します！』」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "frontale-supporter-store-discount-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 958435,
+      "postSha256": "8bd26ab6824adc06968c684e8f169711c1d3f805aee431cdea88c911b4a18297",
+      "textSha256": "cb2e3069c12d292bdf215bb3485495c7d5c45b774853df15fc5f2cecdbf6b8a9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-902801269433049090",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "902801269433049090",
+      "createdAt": "2017-08-30T07:52:50.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "食欲の秋🍠健康の秋🏋️‍♀️\n美味しく食べて健康になれたらとってもハッピー❤️\nシャープ ヘルシオシリーズ🍴\n柏たんちは6階家電コーナーにて展開中ﾃﾞｽ✨\n＃SHARP　＃ヘルシオ　＃調理家電\nhttps://t.co/Q9AxJna2T5 https://t.co/1oDgOaan5B",
+      "url": "https://x.com/bic_kashiwa/status/902801269433049090",
+      "media": [
+        "https://pbs.twimg.com/media/DIdkNJrVoAA0Bda.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「食欲の秋🍠健康の秋🏋️‍♀️ / 美味しく食べて健康になれたらとってもハッピー❤️ / シャープ ヘルシオシリーズ🍴」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "sharp-healsio-appliances-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 922262,
+      "postSha256": "b45b434ad627e1f27e21bfd2c698c614045666dbaed4d260ce9963b804f875b0",
+      "textSha256": "461cbb24a44ea28817de9fee8a33c12047e4ee2805e7272ddc12fbe9f4996b42"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

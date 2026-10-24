@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1322448032844050432",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1322448032844050432",
+      "createdAt": "2020-10-31T07:59:15.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "10月31日（土）11月1日（日）限定！\nまとめ買いがお得！\n\n期間中、10,000円以上の東芝対象製品ば\n3点以上同時購入すると税込価格から『10％引き』\n2点同時購入で、税込価格から『5％引き』✨\nさらにポイントサービス‼\nぜひ、こん機会ばお見逃しのうに～💞\n\n#ビックカメラ #天神2号館 #東芝 #天神 https://t.co/sjP0OIvo1X",
+      "url": "https://x.com/biccameratenjin/status/1322448032844050432",
+      "media": [
+        "https://pbs.twimg.com/media/ElpGsToU4AAyvg5.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「10月31日（土）11月1日（日）限定！ / まとめ買いがお得！ / 期間中、10,000円以上の東芝対象製品ば」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "toshiba-appliance-bundle-discount-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 607154,
+      "postSha256": "eedc55f1a391e9ff6b24b8b7436dd8184bfb28387503d0c2e854662efed14c2e",
+      "textSha256": "2ff77e3c9ec8a7113682c1a4bda643aa6fe8869265c92bafe21d306713990eac"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1364834672560119813",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1364834672560119813",
+      "createdAt": "2021-02-25T07:08:37.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(1￣▽￣)キノコドラゴンの仲間はっけーん！\n\nガチャガチャ「寿司ドラゴン」\nイカドラゴンは居なイカ…🦑🐉\n\nビックカメラ藤沢店\n6階おもちゃコーナーでは\n約400台のガチャガチャが稼働中だぜ！ https://t.co/97iPenIX0e",
+      "url": "https://x.com/bic_fujisawa/status/1364834672560119813",
+      "media": [
+        "https://pbs.twimg.com/media/EvDd5KlUcAkufcD.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「(1￣▽￣)キノコドラゴンの仲間はっけーん！ / ガチャガチャ「寿司ドラゴン」 / イカドラゴンは居なイカ…🦑🐉」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "sushi-dragon-capsule-toys-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 573917,
+      "postSha256": "00e334cb636481315336650bedd266b476b86d097fc208120a8c5ce6c0315aa8",
+      "textSha256": "6e16dc66103bb896b3ce3a00b8b6ebceececfdff94743c8407f8c9141ca29b0e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

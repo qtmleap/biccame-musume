@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expanded-v2-positive-1099621206733406209",
+    "source": "public-post",
+    "description": "shinjyuku-scalpd-collaboration-2019",
+    "post": {
+      "id": "1099621206733406209",
+      "createdAt": "2019-02-24T10:45:00.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "＼ #スカルプD × #ビッカメ娘 ／\n対象のスカルプDをご購入で、新宿西口店限定☆13代目 #パックたん ＆ #新宿西口たん デザインのクリアファイルをプレゼント！商品と引換券をレジにお持ちください♪(*≧∀≦)ﾉ\n\n★なくなり次第終了\n★5階 #ビックドラッグ\n#アンファー #スカルプD擬人化計画 https://t.co/YJWbzzsydn",
+      "url": "https://x.com/bic_shinjyuku/status/1099621206733406209",
+      "media": [
+        "https://pbs.twimg.com/media/DxV6ZdhVsAAJXje.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "shinjyuku"
+      ],
+      "startDate": null,
+      "conditions": [
+        {
+          "type": "purchase"
+        }
+      ]
+    },
+    "rationale": "対象スカルプD購入で新宿西口たんとパックたんのファイル。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "shinjyuku-scalpd-collaboration-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "クリアファイル",
+          "evidence": [
+            "＼ #スカルプD × #ビッカメ娘 ／",
+            "対象のスカルプDをご購入で、新宿西口店限定☆13代目 #パックたん ＆ #新宿西口たん デザインのクリアファイルをプレゼント！商品と引換券をレジにお持ちください♪(*≧∀≦)ﾉ",
+            "★なくなり次第終了",
+            "★5階 #ビックドラッグ",
+            "#アンファー #スカルプD擬人化計画 https://t.co/YJWbzzsydn"
+          ]
+        }
+      ],
+      "groupingNote": "対象スカルプD購入で新宿西口たんとパックたんのファイル。",
+      "unannotatedFields": [
+        "stores",
+        "startDate"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 776034,
+      "postSha256": "ede1bde8b4c5ee35ab53f83a65531c9c7943f3f653c1075134b4fa2e14012ffa",
+      "textSha256": "ac566f3586fca53ada1b0d02cbe820e5b2abf3dce07af4f6dccdb630550802ff"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1094066880912842752",
+    "source": "public-post",
+    "description": "shinjyuku-scalpd-collaboration-2019 matched control",
+    "post": {
+      "id": "1094066880912842752",
+      "createdAt": "2019-02-09T02:54:05.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "＼カメラコーナーリニューアル記念！親子記念撮影会／\n3連休限定の記念撮影会！撮影した写真はその場で印刷してプレゼントしますっ(*≧∀≦*)\n親子でなくてもご参加いただけますので、ご来店の記念にぜひ！\n\n★2月9日(土)～2月11日(月・祝)12:00～19:00\n★4階　カメラコーナー\n※画像はイメージです。 https://t.co/HVtv4A0zYH",
+      "url": "https://x.com/bic_shinjyuku/status/1094066880912842752",
+      "media": [
+        "https://pbs.twimg.com/media/Dy7nOV5VAAA7vtm.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1094066880912842752",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 781385,
+      "postSha256": "df8079ef8dea56b1ac8bb7b49c6af665693635e0556a202faaceab2795383b59",
+      "textSha256": "d4c9f85ba360f68d595c2b2d23baa3b3533be0225e5ae621dd3f5cd4f376ca2f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

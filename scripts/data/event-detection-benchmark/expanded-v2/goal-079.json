@@ -1,0 +1,137 @@
+[
+  {
+    "id": "expanded-v2-positive-2089208095755116999",
+    "source": "public-post",
+    "description": "tachikawa-tenjin2-anniversary-collaboration-2026",
+    "post": {
+      "id": "2089208095755116999",
+      "createdAt": "2026-08-17T04:30:00.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "開催予告📯\n10月25日はうちらの擬人化記念日🎵\n#立川たん ＃天神２号たん　コラボするっちゃん🎉\n①NEWイラストあり🌼\n②アクキー配布　10月25日～\n③コラボ名刺配布　10月25日～11月28日\nぜひ楽しみにまっといてねぇ～°˖✧◝(⁰▿⁰)◜✧˖°",
+      "url": "https://x.com/biccameratenjin/status/2089208095755116999",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "tachikawa",
+        "tenjin2"
+      ],
+      "startDate": "2026-10-25",
+      "conditions": null
+    },
+    "rationale": "2娘の擬人化記念コラボ。10月開始で8月の投稿日に配布中とはしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "preliminary"
+    ],
+    "group": "tachikawa-tenjin2-anniversary-collaboration-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "アクキー",
+          "evidence": [
+            "②アクキー配布"
+          ]
+        },
+        {
+          "item": "コラボ名刺",
+          "evidence": [
+            "③コラボ名刺配布"
+          ]
+        }
+      ],
+      "groupingNote": "2娘の擬人化記念コラボ。10月開始で8月の投稿日に配布中とはしない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 15566,
+      "postSha256": "44579041fc58f2fd44b26c08fce375a191cf9deff70a0eab683828f72231457d",
+      "textSha256": "62be3f1da3d21a36f8f402eadda61a355e10499f9575e286e5bfe0448d90b735"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "association": "reference-url",
+          "eventId": "4ac90e01-5feb-4ba8-b8e8-2d7a4baf9a0c",
+          "type": "announce",
+          "url": "https://x.com/biccameratenjin/status/2089208095755116999"
+        }
+      ]
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2084822629421326550",
+    "source": "public-post",
+    "description": "tachikawa-tenjin2-anniversary-collaboration-2026 matched control",
+    "post": {
+      "id": "2084822629421326550",
+      "createdAt": "2026-08-05T02:03:43.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "いつもご覧いただきありがとうございます。\n投稿を一時自粛しておりましたが、少しずつですが投稿を再開してまいります。\n自粛のお知らせ・情報配信が出来ずご心配やご迷惑をおかけしましたことを心よりお詫び申し上げます。\n今後ともよろしくお願いいたします。",
+      "url": "https://x.com/biccameratenjin/status/2084822629421326550",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2084822629421326550",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 19146,
+      "postSha256": "70540b92219481c10fa6a33bff9d25b3bf5b2675be14d07d4a2484863814cc3b",
+      "textSha256": "8f53a2f622e46bc0f4d30bc601de333038b4bf6a0ea850cd9c4747475a3e7bd1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

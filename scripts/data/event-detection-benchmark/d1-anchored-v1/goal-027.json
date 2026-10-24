@@ -1,0 +1,184 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2004419316373246079",
+    "source": "public-post",
+    "description": "takatsuki-newyear-card-trading-2026",
+    "post": {
+      "id": "2004419316373246079",
+      "createdAt": "2025-12-26T05:09:39.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "quote",
+      "text": "📢＼　新 年 イ ベ ン ト  告 知　/ \n\n👑本日の主役たかつきたん👑\nトレーディングカード配布✨\n【期間】2026年1月3日㈯～\n※無くなり次第終了。\n\n合計税込2026円以上ご購入で、\n先着100名様にプレゼント！\nお渡しは、おもちゃ自転車ゲーム相談カウンター \nです。 https://t.co/zFrK8JqeoN",
+      "url": "https://x.com/bic_takatsuki/status/2004419316373246079",
+      "quoted": {
+        "id": "1977932378812133629",
+        "screenName": "bic_takatsuki",
+        "text": "📢#たかつきたん 爆誕記念イベント第1弾\n＼　新規イラスト投票　／\n\n✨投　票　結　果　です✨\n\n1番票の多かったイラスト案は…\n\n総投票数　１１４票\n３４％　の\n\n✨本日の主役たかつきたん✨\nです！\n\nたくさんの投票ありがとうございました！\n\n※1位に選ばれたイラストの発表時期は、また、告知します"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/G9Ee2nnakAAXp5P.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "takatsuki"
+      ],
+      "startDate": "2026-01-03",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 2026
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "2026/1/3から税込2026円以上で先着100名。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:takatsuki-trading-card-2026"
+    ],
+    "group": "takatsuki-newyear-card-trading-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "トレーディングカード",
+          "evidence": [
+            "トレーディングカード配布✨"
+          ]
+        }
+      ],
+      "groupingNote": "2026/1/3から税込2026円以上で先着100名。",
+      "unannotatedFields": [
+        "stores"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 85227,
+      "postSha256": "68db1744dea75acfba8ba81e9407f981b473c08da0d9b254feeb4b041e2bab08",
+      "textSha256": "95aec36b9c682e8d26f8c4ca7fb05f5fb980d9f5d1cef2cdf369fdfb3d0a8d1b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "4b467ce8-6f06-410d-abab-2f3c60b0644a",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_takatsuki/status/2004419316373246079",
+          "origin": "manual-or-seed",
+          "title": "トレーディングカード",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-01-02T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "takatsuki"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 2026,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2004001443389534377",
+    "source": "public-post",
+    "description": "takatsuki-newyear-card-trading-2026 matched control",
+    "post": {
+      "id": "2004001443389534377",
+      "createdAt": "2025-12-25T01:29:11.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "quote",
+      "text": "📢 メリークリスマス🎄\n\nふくろうたん🦉、たこたん🐙\n かもめたん⌒(ё)⌒、はにわたん|∵|┘\n\n誰か来てくれましたか？\n※夢の中でも可✨ https://t.co/9dz440B2O6",
+      "url": "https://x.com/bic_takatsuki/status/2004001443389534377",
+      "quoted": {
+        "id": "2003667335962595568",
+        "screenName": "bic_takatsuki",
+        "text": "📢 やつらって、誰だろう・・・\n\nふくろうたん🦉、たこたん🐙、\nかもめたん⌒(ё)⌒、はにわたん|∵|┘\nかなぁ・・・"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/G8-kViXbMAARxkn.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2004001443389534377",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 85623,
+      "postSha256": "df8098be9d0d97856b696a42ef20497743e0deaec612eeff20d5555019517325",
+      "textSha256": "9e9fd37210bf370d694360477b68713068253173ba9db38943b4b1d8a1519878"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

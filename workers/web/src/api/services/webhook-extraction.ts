@@ -3,6 +3,7 @@ import type { Bindings } from '@api/types/bindings'
 import {
   type EventExtraction,
   EventExtractionValidationError,
+  extractionCharacters,
   extractionStores,
   extractionSystem,
   extractionTool,
@@ -61,6 +62,7 @@ export const extractWebhookEvents = async (
         role: 'user',
         content: JSON.stringify({
           stores: extractionStores(post),
+          characters: extractionCharacters(),
           text: post.text,
           quoted: post.quoted,
           screenName: post.screenName,

@@ -1,0 +1,148 @@
+[
+  {
+    "id": "goal-positive-2013169969735897094",
+    "source": "public-post",
+    "description": "nanba dress anniversary keychain 2026",
+    "post": {
+      "id": "2013169969735897094",
+      "createdAt": "2026-01-19T08:41:38.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼ビッカメ娘イベント告知／\n🎂なんばたん擬人化記念🎂\n🌟期間➡2月21日㈯～、無くなり次第終了\n\n税込3,000円以上の当日ご購入レシートをなんば店1階 総合カウンターにお持ちいただくと、『なんばたんアクリルキーホルダ― ドレスver.』プレゼント🎁✨\n\n1階 総合カウンターでぜひ受け取ってな☺️💕 https://t.co/3bqPN3Fy8W",
+      "url": "https://x.com/biccamera_nanba/status/2013169969735897094",
+      "media": [
+        "https://pbs.twimg.com/media/G_AylPMXYAAa_Fa.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "nanba"
+      ],
+      "characterIds": [
+        "nanba"
+      ],
+      "category": "ackey",
+      "startDate": "2026-02-21",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "2/21から3000円購入、なくなり次第終了。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "nanba-dress-anniversary-keychain-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "ready",
+      "items": [
+        {
+          "item": "なんばたんドレスアクキー",
+          "evidence": [
+            "税込3,000円以上の当日ご購入レシートをなんば店1階 総合カウンターにお持ちいただくと、『なんばたんアクリルキーホルダ― ドレスver.』プレゼント🎁✨"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": []
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 79228,
+      "postSha256": "5babdc4689630c24adb13dd86518cd90a78a6eb89cda292bf0c1dc2d6fca654e",
+      "textSha256": "f273d7b1af065dc4cb8a72cfc47f0afc9e369bf30b24f8a5889adc782d3eb676"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/biccamera_nanba/status/2013169969735897094",
+          "referenceType": "announce",
+          "eventId": "659163bb-0b1f-4631-9473-9252d3569d34",
+          "title": "擬人化9周年記念アクキー",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "goal-positive-2016390784216662534",
+    "source": "public-post",
+    "description": "honten valentine card 2026",
+    "post": {
+      "id": "2016390784216662534",
+      "createdAt": "2026-01-28T06:00:00.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "\\お知らせ/\n✨バレンタイン限定デザイン名刺配布決定✨\n\n配布期間\n1月31日(土)～2月14日(土)まで\n\nお一人様2枚まで！\n\n配布場所は池袋本店地下1階の本店たんギャラリーです！\n\nほんちゃんが可愛くデザインしてくれたのでお楽しみに～🍫 https://t.co/L7EdpHTxRD",
+      "url": "https://x.com/bicikebukuro/status/2016390784216662534",
+      "media": [
+        "https://pbs.twimg.com/media/G_uikd8bAAEFbHx.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "honten"
+      ],
+      "category": "limited_card",
+      "startDate": "2026-01-31"
+    },
+    "rationale": "1/31から2/14、会場名だけで絵柄対象を補完しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "honten-valentine-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "本店バレンタイン名刺",
+          "evidence": [
+            "✨バレンタイン限定デザイン名刺配布決定✨"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 76740,
+      "postSha256": "3ac7bbda549e43cccc881768da7f43bd6dc4994c80bf81e6376de00c6d10d0ab",
+      "textSha256": "3184f17b8dc842a7b9d5f395f9848e1f756f83471db0a00e80ae4d0fb4a06dbd"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "url": "https://x.com/bicikebukuro/status/2016390784216662534",
+          "referenceType": "announce",
+          "eventId": "56cbcc70-df16-40b8-b40b-160fcfe07042",
+          "title": "バレンタイン限定デザイン名刺",
+          "isVerified": true,
+          "isPreliminary": false
+        }
+      ]
+    }
+  }
+]

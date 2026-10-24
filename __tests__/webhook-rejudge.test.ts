@@ -1,16 +1,8 @@
-import { afterEach, describe, expect, setSystemTime, test } from 'bun:test'
-import type { ClefAnswer } from '@biccame/shared/event-detect/clef'
-import {
-  type WebhookJob,
-  WebhookJobStatusSchema,
-  WebhookNotificationStatusSchema
-} from '@biccame/shared/schemas/webhook.dto'
+import { describe, expect, test } from 'bun:test'
+import { WebhookJobStatusSchema, WebhookNotificationStatusSchema } from '@biccame/shared/schemas/webhook.dto'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createMemoryHistory, createRootRoute, createRouter, RouterProvider } from '@tanstack/react-router'
-import dayjs from 'dayjs'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { WebhookJobDetail } from '@/components/admin/webhook-job-detail'
 import {
   isWebhookJobInProgress,
   WEBHOOK_JOB_POLL_INTERVAL_MS,
@@ -18,99 +10,31 @@ import {
   webhookActionAvailability,
   webhookJobPoll
 } from '@/components/admin/webhook-labels'
-import { ADMIN_WEBHOOK_QUERY_KEY, useAdminWebhookJob, useRejudgeAdminWebhookJob } from '@/hooks/use-admin-webhooks'
+import { useRejudgeAdminWebhookJob } from '@/hooks/use-admin-webhooks'
 import { adminEndpoints } from '@/utils/client/admin'
-
-const postId = '1000000000000000001'
-const baseJob: WebhookJob = {
-  candidates: [],
-  postId,
-  post: {
-    id: postId,
-    createdAt: '2026-10-02T03:00:00.000Z',
-    screenName: 'synthetic_account',
-    kind: 'original',
-    text: '再判定の確認に使う投稿本文',
-    url: `https://example.invalid/post/${postId}`,
-    media: []
-  },
-  sourceUrl: `https://example.invalid/post/${postId}`,
-  eventUUID: '550e8400-e29b-41d4-a716-446655440001',
-  status: 'held',
-  reasons: [],
-  candidate: null,
-  confidence: 0.72,
-  model: 'clef-flash',
-  questionVersion: 'test-v1',
-  eventId: null,
-  eventTitle: null,
-  postStatus: 'announce',
-  postStatusProbability: 0.75,
-  answers: null,
-  draft: null,
-  attempts: 1,
-  notificationStatus: 'sent',
-  notificationId: null,
-  notificationError: null,
-  notificationAttempts: 1,
-  lastError: null,
-  createdAt: '2026-10-05T03:00:00.000Z',
-  updatedAt: '2026-10-05T03:00:00.000Z',
-  judgedAt: null
-}
-
-/** 詳細画面を描画する。job が null のときは読み込み前（取得データなし）の画面になる。 */
-const renderDetail = async (job: WebhookJob | null) => {
-  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-  if (job !== null) queryClient.setQueryData([...ADMIN_WEBHOOK_QUERY_KEY, job.postId], job)
-  const routeTree = createRootRoute({ component: () => createElement(WebhookJobDetail, { postId }) })
-  const router = createRouter({ routeTree, history: createMemoryHistory({ initialEntries: ['/'] }) })
-  try {
-    await router.load()
-    return renderToStaticMarkup(
-      createElement(QueryClientProvider, { client: queryClient }, createElement(RouterProvider, { router }))
-    )
-  } finally {
-    queryClient.clear()
-  }
-}
-
-type ButtonState = 'missing' | 'disabled' | 'enabled'
-
-/** 受信詳細の操作ボタンのラベル。画面側の文言とは別に、ここで固定する。 */
-const RETRY_LABEL = '失敗した処理を再実行'
-const REJUDGE_LABEL = 'AI で判定し直す'
-/** 保留（canResolve）のときだけ有効になるボタン。状態で可否が変わるボタンの見本に使う。 */
-const LINK_LABEL = '既存へ紐付け'
-/** イベント作成ページへ遷移するリンク。ボタンではなく <a> で、受信ジョブの状態に関係なく常に押せる。 */
-const CREATE_LABEL = '補完して登録'
-
-/** ラベルを含むボタンの状態。描画されていなければ missing、disabled 属性があれば disabled。 */
-const buttonState = (markup: string, label: string): ButtonState => {
-  const button = [...markup.matchAll(/<button\b[^>]*>.*?<\/button>/g)]
-    .map((match) => match[0])
-    .find((markupOfButton) => markupOfButton.includes(label))
-  if (button === undefined) return 'missing'
-  return /^<button\b[^>]*\sdisabled=""/.test(button) ? 'disabled' : 'enabled'
-}
-
-type LinkInfo = { href: string | undefined; disabled: boolean }
-
-/** ラベルを含む <a> の情報。描画されていなければ undefined。disabled は無効を示す属性（disabled / aria-disabled）の有無。 */
-const linkOf = (markup: string, label: string): LinkInfo | undefined => {
-  const link = [...markup.matchAll(/<a\b[^>]*>.*?<\/a>/g)]
-    .map((match) => match[0])
-    .find((markupOfLink) => markupOfLink.includes(label))
-  if (link === undefined) return undefined
-  const openTag = link.slice(0, link.indexOf('>') + 1)
-  const href = /\shref="([^"]*)"/.exec(openTag)
-  return {
-    href: href === null ? undefined : href[1],
-    disabled: /\s(disabled|aria-disabled)(=|\s|>)/.test(openTag)
-  }
-}
+import {
+  baseJob,
+  buttonState,
+  CREATE_LABEL,
+  LINK_LABEL,
+  linkOf,
+  REJUDGE_LABEL,
+  RETRY_LABEL,
+  renderDetail
+} from './fixtures/webhook-rejudge'
 
 describe('保留・対象外ジョブの再判定', () => {
+  test('手動連携は保留・対象外・登録済み（付け替え）で許可し、処理中・失敗の制限は広げない', async () => {
+    for (const status of WebhookJobStatusSchema.options) {
+      const expected = status === 'held' || status === 'ignored' || status === 'registered'
+      expect(webhookActionAvailability(status, 'skipped', []).canLink).toBe(expected)
+      expect(webhookActionAvailability(status, 'skipped', []).canResolve).toBe(status === 'held')
+      expect(buttonState(await renderDetail({ ...baseJob, status }), LINK_LABEL)).toBe(
+        expected ? 'enabled' : 'disabled'
+      )
+    }
+  })
+
   test('再判定できるのは保留と、人が却下していない対象外のジョブだけで、通知状態には左右されない', () => {
     for (const status of WebhookJobStatusSchema.options) {
       for (const notificationStatus of ['pending', 'sent', 'failed', 'unknown', 'skipped']) {
@@ -124,8 +48,10 @@ describe('保留・対象外ジョブの再判定', () => {
     }
     expect(webhookActionAvailability('held', 'sent', [])).toEqual({
       canResolve: true,
+      canLink: true,
       canRetryProcessing: false,
       canRejudge: true,
+      canRecheck: false,
       canRetryNotification: false
     })
   })
@@ -133,8 +59,10 @@ describe('保留・対象外ジョブの再判定', () => {
   test('人が却下した対象外のジョブ（reasons に manually_rejected）は再判定できない。他の操作の規則は変わらない', () => {
     expect(webhookActionAvailability('ignored', 'skipped', ['manually_rejected'])).toEqual({
       canResolve: false,
+      canLink: true,
       canRetryProcessing: false,
       canRejudge: false,
+      canRecheck: false,
       canRetryNotification: false
     })
     expect(
@@ -143,8 +71,10 @@ describe('保留・対象外ジョブの再判定', () => {
     // AI が対象外にしたジョブは、解決・通知再送の対象にはならないまま、再判定だけできる。
     expect(webhookActionAvailability('ignored', 'skipped', ['not_distribution_event'])).toEqual({
       canResolve: false,
+      canLink: true,
       canRetryProcessing: false,
       canRejudge: true,
+      canRecheck: false,
       canRetryNotification: false
     })
     for (const status of ['registered', 'queued', 'processing', 'failed']) {
@@ -225,8 +155,8 @@ describe('保留・対象外ジョブの再判定', () => {
       reasons: ['manually_rejected']
     })
     expect(buttonState(rejected, REJUDGE_LABEL)).toBe('disabled')
-    // 他のボタンの規則は変わらない（対象外のジョブは解決・再試行・通知再送を持たない）。
-    expect(buttonState(autoIgnored, LINK_LABEL)).toBe('disabled')
+    // 対象外でも手動連携は可能だが、処理・通知の再送は許可しない。
+    expect(buttonState(autoIgnored, LINK_LABEL)).toBe('enabled')
     expect(buttonState(autoIgnored, RETRY_LABEL)).toBe('disabled')
     expect(buttonState(autoIgnored, '通知を再送')).toBe('disabled')
   })
@@ -390,120 +320,5 @@ describe('Webhook詳細の自動更新（再取得間隔の決定）', () => {
       window: { phase: 'judging', startedAt: start },
       interval: false
     })
-  })
-})
-
-describe('Webhook詳細の自動更新（フックの再取得設定）', () => {
-  afterEach(() => setSystemTime())
-
-  const queryKey = [...ADMIN_WEBHOOK_QUERY_KEY, postId]
-  /** useAdminWebhookJob を描画して、キャッシュ上のクエリに登録された refetchInterval を取り出す。 */
-  const mountHook = (job: WebhookJob) => {
-    const queryClient = new QueryClient()
-    queryClient.setQueryData(queryKey, job)
-    const Probe = () => {
-      useAdminWebhookJob(postId)
-      return null
-    }
-    renderToStaticMarkup(createElement(QueryClientProvider, { client: queryClient }, createElement(Probe)))
-    const query = queryClient.getQueryCache().find<WebhookJob>({ queryKey })
-    if (query === undefined) throw new Error('query was not registered')
-    // Query.options の型には refetchInterval が無い（実体は observer のオプション）ため、in で絞って取り出す。
-    const { options } = query
-    if (!('refetchInterval' in options) || typeof options.refetchInterval !== 'function') {
-      throw new Error('refetchInterval must be a function')
-    }
-    const { refetchInterval } = options
-    return {
-      queryClient,
-      refetchIntervalInBackground:
-        'refetchIntervalInBackground' in options ? options.refetchIntervalInBackground : null,
-      /** 取得結果が job に変わったものとして、次の再取得間隔を評価する。 */
-      next: (nextJob: WebhookJob): unknown => {
-        queryClient.setQueryData(queryKey, nextJob)
-        return refetchInterval(query)
-      },
-      current: (): unknown => refetchInterval(query)
-    }
-  }
-
-  test('進行中の間だけ2秒間隔で再取得し、3分で止め、背景タブでは動かさない', () => {
-    setSystemTime(dayjs('2026-10-13T00:00:00Z').toDate())
-    const hook = mountHook({ ...baseJob, status: 'queued', notificationStatus: 'pending' })
-    try {
-      expect(hook.refetchIntervalInBackground).toBe(false)
-      expect(hook.current()).toBe(2000)
-      setSystemTime(dayjs('2026-10-13T00:02:59Z').toDate())
-      expect(hook.next({ ...baseJob, status: 'processing', notificationStatus: 'pending' })).toBe(2000)
-      setSystemTime(dayjs('2026-10-13T00:03:00Z').toDate())
-      expect(hook.current()).toBe(false)
-    } finally {
-      hook.queryClient.clear()
-    }
-  })
-
-  test('判定が終われば止まり、次の再判定ではまた3分使える。取得前（データなし）は動かさない', () => {
-    setSystemTime(dayjs('2026-10-13T00:00:00Z').toDate())
-    const hook = mountHook({ ...baseJob, status: 'queued', notificationStatus: 'pending' })
-    try {
-      expect(hook.next({ ...baseJob, status: 'held', notificationStatus: 'pending' })).toBe(2000)
-      expect(hook.next({ ...baseJob, status: 'held', notificationStatus: 'sent' })).toBe(false)
-      setSystemTime(dayjs('2026-10-13T00:10:00Z').toDate())
-      expect(hook.next({ ...baseJob, status: 'queued', notificationStatus: 'sent' })).toBe(2000)
-      setSystemTime(dayjs('2026-10-13T00:12:59Z').toDate())
-      expect(hook.current()).toBe(2000)
-      setSystemTime(dayjs('2026-10-13T00:13:00Z').toDate())
-      expect(hook.current()).toBe(false)
-    } finally {
-      hook.queryClient.clear()
-    }
-  })
-
-  test('処理失敗と対象外では再取得しない', () => {
-    const hook = mountHook({ ...baseJob, status: 'failed', notificationStatus: 'pending' })
-    try {
-      expect(hook.current()).toBe(false)
-      expect(hook.next({ ...baseJob, status: 'ignored', notificationStatus: 'skipped' })).toBe(false)
-    } finally {
-      hook.queryClient.clear()
-    }
-  })
-})
-
-const answers: Record<string, ClefAnswer> = {
-  is_event: { type: 'noul', noul: 0.7224 },
-  status: { type: 'choice', choice: 'announce', probabilities: { announce: 0.7499, start: 0.15, none: 0.05 } }
-}
-const JUDGING_NOTICE = '判定中です。結果が出ると自動で更新されます。'
-
-describe('Webhook詳細の判定待ち表示', () => {
-  test('判定待ち（queued / processing）は回答表の場所に案内を出し、「回答の記録なし」は出さない', async () => {
-    for (const status of ['queued', 'processing'] as const) {
-      const markup = await renderDetail({ ...baseJob, status, notificationStatus: 'pending', answers: null })
-      expect(markup).toContain(JUDGING_NOTICE)
-      expect(markup).not.toContain('回答の記録なし')
-      expect(markup).not.toContain('<table')
-      // 案内は「Clef の回答」の見出しの直後（元投稿と判定・イベント登録の間）に出る。
-      expect(markup.indexOf('元投稿')).toBeLessThan(markup.indexOf('Clef の回答'))
-      expect(markup.indexOf('Clef の回答')).toBeLessThan(markup.indexOf(JUDGING_NOTICE))
-      expect(markup.indexOf(JUDGING_NOTICE)).toBeLessThan(markup.indexOf('判定・イベント登録'))
-    }
-  })
-
-  test('判定が終わったジョブは従来どおり、回答があれば表、無ければ「回答の記録なし」を出す', async () => {
-    for (const status of ['held', 'ignored', 'registered', 'failed'] as const) {
-      const withAnswers = await renderDetail({ ...baseJob, status, notificationStatus: 'sent', answers })
-      expect(withAnswers).toContain('aria-label="Clef の回答"')
-      expect(withAnswers).not.toContain(JUDGING_NOTICE)
-      const without = await renderDetail({ ...baseJob, status, notificationStatus: 'sent', answers: null })
-      expect(without).toContain('回答の記録なし')
-      expect(without).not.toContain(JUDGING_NOTICE)
-    }
-  })
-
-  test('判定待ちでも操作ボタンの可否は変えない（再判定は押せないまま）', async () => {
-    const markup = await renderDetail({ ...baseJob, status: 'queued', notificationStatus: 'pending' })
-    expect(buttonState(markup, REJUDGE_LABEL)).toBe('disabled')
-    expect(buttonState(markup, LINK_LABEL)).toBe('disabled')
   })
 })

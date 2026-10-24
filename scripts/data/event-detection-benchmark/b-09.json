@@ -1,0 +1,135 @@
+[
+  {
+    "id": "public-b-2110272205749907893",
+    "source": "public-post",
+    "description": "原付試乗イベントの安全条件",
+    "post": {
+      "id": "2110272205749907893",
+      "createdAt": "2026-10-14T07:31:15.469Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "参加無料\n特定小型原付試乗条件:16歳以上\n※道路交通法により16歳未満の特定小型原動機付自転車の運転は禁止。年齢確認できない場合試乗はお断り致します\n※安全の為乗車時(無料貸出)ヘルメット着用必須\n※イベント模様を撮影する場合がございます\n※天候等の理由でイベントを中止する場合がございます",
+      "url": "https://x.com/bic_yao/status/2110272205749907893",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "無料イベントの注意事項だが、対象は原付試乗で娘企画ではない。",
+    "tags": [
+      "hard-negative",
+      "generic-trial",
+      "free-event"
+    ],
+    "group": "yao-small-moped-trial",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "4dc5bd510a5b7bfc5aae244ca0ae95eacc853f01db6ae37d2357fd0a72789b6c"
+  },
+  {
+    "id": "public-b-2110274400490803462",
+    "source": "public-post",
+    "description": "ダイナブックフェア",
+    "post": {
+      "id": "2110274400490803462",
+      "createdAt": "2026-10-14T07:39:58.736Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "【 6階 パソコンコーナーよりお知らせ 】\n\n6階パソコンコーナーでは 「ダイナブックフェア」を開催中💻\n期間中は、当社指定 ダイナブックPCが通常販売価格よりお得にご購入いただけるチャンス‼️\n人気モデルをお得に購入できるこの機会をぜひご利用下さい🎶\nダイナブックフェアは 11月1日(日) まで✨",
+      "url": "https://x.com/bic_shinyoko/status/2110274400490803462",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "フェアはPCの価格訴求で、キャラ限定企画ではない。",
+    "tags": [
+      "hard-negative",
+      "generic-fair",
+      "computer-sale"
+    ],
+    "group": "dynabook-fair-nov1",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "aa0e73a5242254e209b03d5dc24dde19517bb4204e8dde93d96ff513c7db9477"
+  },
+  {
+    "id": "public-b-2110277218119401732",
+    "source": "public-post",
+    "description": "Apple初期設定の無料サポート",
+    "post": {
+      "id": "2110277218119401732",
+      "createdAt": "2026-10-14T07:51:10.511Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "《apple初期設定サポート実施中！》\n\n【1F/5F Apple Shop】\n\n大人気のApple製品（MacBook/iPad/Apple Watch）\n気になるけど使えるか不安…という方もご安心ください！\nご体験はもちろん、初期設定も無料でサポートさせていただきます！\n\nぜひお気軽にご来店ください✨",
+      "url": "https://x.com/bic_yuurakuchou/status/2110277218119401732",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "無料サービスの案内だけで配布物・キャラ企画はない。",
+    "tags": [
+      "service-information",
+      "free-word"
+    ],
+    "group": "apple-initial-setup-support",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "3cbd5a098da7d1506f39e2c8e699f9f0c9be5169636aa3795b40093583eee893"
+  },
+  {
+    "id": "public-b-2110278192972066921",
+    "source": "public-post",
+    "description": "立川たんの工作の雑談",
+    "post": {
+      "id": "2110278192972066921",
+      "createdAt": "2026-10-14T07:55:02.934Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "ちょっと工作しました(Ｕ 'ᴗ' Ｕ)✨\nなんだかわかるかな⁉\n\nきちんと然るべき所にOKいただいております…‼\n#ビッカメ娘 #立川たん",
+      "url": "https://x.com/bic_tachikawa/status/2110278192972066921",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ビッカメ娘タグはあるが工作したという話だけで、一般客向けの企画や配布の告知はない。",
+    "tags": [
+      "hard-negative",
+      "character-mention-only",
+      "casual-art"
+    ],
+    "group": "tachikawa-craft-chat-oct14",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "0d4dd4856a54b8766cbb37582db2fb7f32f2e00ae3490db2f2ce088a3a3a9ccd"
+  },
+  {
+    "id": "public-b-2110287829914026178",
+    "source": "public-post",
+    "description": "立川たん缶バッジの残数案内",
+    "post": {
+      "id": "2110287829914026178",
+      "createdAt": "2026-10-14T08:33:20.560Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "ビッカメ娘旅 #ビッ旅 缶バッジ\n#立川たん ver\n\n残り70個となっております‼\nお求めの方はお早めに(Ｕ 'ᴗ' Ｕ)👍\nぜひもらってくださいね～💗",
+      "url": "https://x.com/bic_tachikawa/status/2110287829914026178",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "other",
+      "characterIds": [
+        "tachikawa"
+      ]
+    },
+    "rationale": "ビッカメ娘旅の立川たんデザイン缶バッジを入手できる継続企画の告知。70は残数で開始数量ではない。",
+    "tags": [
+      "giveaway",
+      "inventory-update",
+      "remaining-not-quota"
+    ],
+    "group": "tachikawa-bictrip-badge-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "66f151fff08eae8de2ff52f8bd2b0c1fc8dcb1f47bbb6d38bfbfa7175223aafc"
+  }
+]

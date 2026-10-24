@@ -1,0 +1,198 @@
+[
+  {
+    "id": "public-b-2112385819361370325",
+    "source": "public-post",
+    "description": "川崎たんによる新東たん記念日のお祝い",
+    "post": {
+      "id": "2112385819361370325",
+      "createdAt": "2026-10-20T03:30:00.223Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "昨日10月19日は #新東たん 擬人化記念日✨🎉🎂✨\n新東たん６周年おめでとうらぞらぞー✨(*˙꒳​˙2o🎉🎉ﾊﾟﾊﾟｰｰｰﾝ✨\n\n#10月19日は新東たん擬人化6周年 💛\n#ビッカメ娘 #川崎たんお絵描き",
+      "url": "https://x.com/Bic_kawasaki/status/2112385819361370325",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "擬人化記念日を祝う投稿で、川崎店での配布や開催を示していない。",
+    "tags": [
+      "hard-negative",
+      "anniversary-word",
+      "cross-character",
+      "celebration-only"
+    ],
+    "group": "shintou-sixth-anniversary-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "35df59cc051fbe30713af4e9406d23622c072b20b418607ce72ef37b1081f4a5"
+  },
+  {
+    "id": "public-b-2112392477038780586",
+    "source": "public-post",
+    "description": "有楽町たん25周年ギフトカードの限定販売",
+    "post": {
+      "id": "2112392477038780586",
+      "createdAt": "2026-10-20T03:56:27.537Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "✨有楽町25周年記念✨\n🦢有楽町たんデザインギフトカード　数量限定販売🦢\n\n日にち：2026年10月24日(土)～\n数量：先着55名様（お渡し会の参加人数によって配布数が増える可能性有り）\n条件：ギフトカードの入金金額1,000円以上\n場所：1階　総合案内カウンターにて販売\n\nツリーも合わせてお読み下さい",
+      "url": "https://x.com/bic_yuurakuchou/status/2112392477038780586",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "other",
+      "stores": [
+        "yuurakuchou"
+      ],
+      "characterIds": [
+        "yuurakuchou"
+      ],
+      "startDate": "2026-10-24",
+      "conditions": [
+        {
+          "type": "charge",
+          "amount": 1000
+        },
+        {
+          "type": "first_come",
+          "quantity": 55
+        }
+      ]
+    },
+    "rationale": "キャラ記念デザインの数量限定販売を日付・場所・入金条件付きで案内。汎用カード販売ではない。",
+    "tags": [
+      "anniversary",
+      "limited-sale",
+      "gift-card",
+      "charge",
+      "first-come"
+    ],
+    "group": "yuurakuchou-25th-giftcard-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "fc85d1fcb5781e71b5a5ee2e7ae904c733f2af2a8ba48aa86b588b427f5a2668"
+  },
+  {
+    "id": "public-b-2112431406978945270",
+    "source": "public-post",
+    "description": "あいタワたんと池西たんのアクスタ共同企画",
+    "post": {
+      "id": "2112431406978945270",
+      "createdAt": "2026-10-20T06:31:09.158Z",
+      "screenName": "bic_itt",
+      "kind": "original",
+      "text": "🍂イベント開催のお知らせ☕\n池西たんと秋の素敵なコラボをするわ⭐\n\n■11/7(土)～先着100個\n■税込4,000円以上のお買い上げで\n『あいタワたん×池西たん　秋のカフェ巡りアクリルスタンド』をプレゼントします✨\n\n池西たん家と私のお家で、お待ちしているわね💕\n詳しくは画像をチェック✅",
+      "url": "https://x.com/bic_itt/status/2112431406978945270",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "acsta",
+      "stores": [
+        "ikenishi",
+        "itt"
+      ],
+      "characterIds": [
+        "ikenishi",
+        "itt"
+      ],
+      "startDate": "2026-11-07",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 4000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "両キャラの共同デザインを両店で購入特典として渡す。投稿者だけで開催店や対象を単一化しない。",
+    "tags": [
+      "collaboration",
+      "purchase",
+      "first-come",
+      "multiple-stores",
+      "multiple-characters"
+    ],
+    "group": "itt-ikenishi-autumn-cafe-acsta-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "727b9a5e0799829b2f21f052ef6f446dfc4509a8ef5e8e99a1a5b12520b86761"
+  },
+  {
+    "id": "public-b-2112435987582513432",
+    "source": "public-post",
+    "description": "船橋店でふなとーたん記念アクキー",
+    "post": {
+      "id": "2112435987582513432",
+      "createdAt": "2026-10-20T06:49:21.259Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "🌻ビッカメ娘イベント告知🌻\n🎉ふなとーたん擬人化記念🎊\n\n税込3,000円以上ご購入で、\n『ふなとーたん擬人化記念アクリルキーホルダ―』プレゼント🎁\n\n期間：11/15(日)～ \n先着100名様\nおひとり様1個限り、なくなり次第終了",
+      "url": "https://x.com/bic_funabashi/status/2112435987582513432",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "characterIds": [
+        "funato"
+      ],
+      "startDate": "2026-11-15",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "本文はふなとーたんデザインを明示し、投稿者のふなたんへ置き換えてはいけない。開始日・購入額・先着数も明示。",
+    "tags": [
+      "anniversary",
+      "purchase",
+      "first-come",
+      "cross-store-character",
+      "closed-character"
+    ],
+    "group": "funato-anniversary-ackey-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "6d141624e3705cd87c26f1ff2f763f9e5b3c4a3e54de63f1ac070f7cc6872f3b"
+  },
+  {
+    "id": "public-b-2112454018958320030",
+    "source": "public-post",
+    "description": "川崎たんとたまプラたんの十三夜アクスタセット",
+    "post": {
+      "id": "2112454018958320030",
+      "createdAt": "2026-10-20T08:01:00.274Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "十三夜企画はアクスタ２個お渡しなので、お渡し忘れないようにペララなお紙を仕切りで入れ表に #たまプラたん 裏に私 #川崎たん のアクスタをいれたセットでプレゼンツします。\n　 ∧,,∧\n　(o˙꒳˙2 )\n　/ oｶﾁｶﾁ /￣￣￣/\n ￣ 🖱＼/＿＿＿/￣￣\n#ビッカメ娘 \nx.com/Bic_kawasaki/s… p",
+      "url": "https://x.com/Bic_kawasaki/status/2112454018958320030",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "acsta",
+      "characterIds": [
+        "kawasaki",
+        "tamapla"
+      ]
+    },
+    "rationale": "二人のアクスタをセットでプレゼントする企画の提供物を説明している。日付や購入条件は当該本文だけでは不明。",
+    "tags": [
+      "collaboration",
+      "acsta",
+      "multiple-characters",
+      "closed-character"
+    ],
+    "group": "kawasaki-tamapla-jusanya-acsta-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "980e8137be6cff5fa83414625d8e8e09ce38e69d9ac3eeeea647f9f3f9678b10"
+  }
+]

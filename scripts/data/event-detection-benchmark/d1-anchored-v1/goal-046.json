@@ -1,0 +1,173 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2046065260789207193",
+    "source": "public-post",
+    "description": "hamamatsu-anniv11-event-2026",
+    "post": {
+      "id": "2046065260789207193",
+      "createdAt": "2026-04-20T03:15:46.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "|๑σ｡<)ﾉ.o0(5月23日より\nはまたん擬人化11周年イベント開催🍊\n当日税込3,000円以上のご購入でアクリルキーホルダーをプレゼント🍭\n\n限定名刺も配布予定、お見逃しなくー‼\n※無くなり次第終了\n※おひとり様1個限り https://t.co/KKBo3Ey0DJ",
+      "url": "https://x.com/bic_hamamatsu/status/2046065260789207193",
+      "media": [
+        "https://pbs.twimg.com/media/HGUUhWabQAAsfQu.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "hamamatsu"
+      ],
+      "startDate": "2026-05-23",
+      "conditions": null
+    },
+    "rationale": "5/23から3000円以上でアクキー、限定名刺は配布予定。購入条件はアクキーのみ。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "hamamatsu-anniv11-event-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "アクリルキーホルダー",
+          "evidence": [
+            "当日税込3,000円以上のご購入でアクリルキーホルダーをプレゼント🍭"
+          ]
+        },
+        {
+          "item": "限定名刺",
+          "evidence": [
+            "限定名刺も配布予定、お見逃しなくー‼"
+          ]
+        }
+      ],
+      "groupingNote": "5/23から3000円以上でアクキー、限定名刺は配布予定。購入条件はアクキーのみ。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 52867,
+      "postSha256": "297127ac5415e3585f2d94977a748d1f622ea5cf6c05e6a0578d06d3a296fc10",
+      "textSha256": "b173690cca4ce8203d8ceddf1b2a6e42031f43badd412500b941f79b665c1b5b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "604a9f1a-b9ad-457c-b794-4882939e1fe4",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_hamamatsu/status/2046065260789207193",
+          "origin": "manual-or-seed",
+          "title": "擬人化11周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-05-22T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "hamamatsu"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2039614412882071726",
+    "source": "public-post",
+    "description": "hamamatsu-anniv11-event-2026 matched control",
+    "post": {
+      "id": "2039614412882071726",
+      "createdAt": "2026-04-02T08:02:24.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "時計コーナーより『CASIO OCEANUS OCW-S700CN-1AJF』をご案内⌚\n\n月明りが差し込む静かな夜を表現。\n江戸切子ベゼルリングを採用した限定モデル。\n腕を傾けるたびに、ベゼルの色調の変化を楽しめます。\n\n時計コーナーにてご試着可能‼\nご興味をお持ちの方はぜひ当店時計コーナーまで⌚ https://t.co/K0eScEJxwP",
+      "url": "https://x.com/bic_hamamatsu/status/2039614412882071726",
+      "media": [
+        "https://pbs.twimg.com/media/HE4qIWgaMAA2vZ6.png",
+        "https://pbs.twimg.com/media/HE4qKwjaQAAU_3_.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2039614412882071726",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 57741,
+      "postSha256": "d1f33a4d069d46cd22bf38b1159af02059c4305559f814085d903d7efde9e05a",
+      "textSha256": "f9815525c6ab72bdce3c8481fa979b022c2f84f8d9a2942eea9398bd0245ef5a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -26,7 +26,7 @@ export const SocialEventViewSchema = z.object({
   /** 開催店舗の表示名。 */
   stores: z.array(TextSchema).nonempty(),
   /** 重ねて描く娘。先頭が手前。対象が特殊値のときは 'secret' / 'other' だけを持つ。 */
-  avatars: z.array(EventCharacterSchema).nonempty().max(MAX_AVATARS_PER_EVENT),
+  avatars: z.array(EventCharacterSchema),
   /** 開催店舗の娘と違うときだけ入る対象ラベル（特殊値は「シークレット」「その他」）。 */
   target: TextSchema.nullable(),
   /** 「M/D(曜) 〜 M/D(曜)」「M/D(曜) のみ」「M/D(曜) 〜 終了日未定」。 */
@@ -37,14 +37,14 @@ export const SocialEventViewSchema = z.object({
 export type SocialEventView = z.infer<typeof SocialEventViewSchema>
 
 /** 毎朝・毎週の画像の1行。同じ内容のイベントは店舗違いでも1行にまとまる。 */
-export const SocialRowSchema = z.object({
+const CurrentSocialRowSchema = z.object({
   /** この行にまとまった元イベントの uuid（並び順）。 */
   eventIds: z.array(z.uuid()).nonempty(),
   title: TextSchema,
   /** まとまったイベントの店舗表示名。重複なし、出現順。 */
   stores: z.array(TextSchema).nonempty(),
-  /** Avatar に描く娘。先頭イベントの対象（店舗キーまたは 'secret' / 'other'）。 */
-  avatar: EventCharacterSchema,
+  /** 対象の娘をすべて保持する。空配列は対象未判定。 */
+  avatars: z.array(EventCharacterSchema),
   /** 行全体で同じ娘を指すときだけ入る対象ラベル。 */
   target: TextSchema.nullable(),
   /** 開始側は「M/D(曜)まで」「終了日未定」、終了側は無し。開始日と終了日が同じ日なら両側とも「1日のみ」。 */
@@ -52,6 +52,13 @@ export const SocialRowSchema = z.object({
   /** 毎週の左端日付「M/D(曜)」。毎朝は無し。同じ日付が続く行は画像内で先頭行だけに入る。 */
   date: TextSchema.nullable()
 })
+// 保存済みの旧スナップショットだけは、単一対象を明示的な配列へ移す。
+export const SocialRowSchema = z.union([
+  CurrentSocialRowSchema,
+  CurrentSocialRowSchema.omit({ avatars: true })
+    .extend({ avatar: EventCharacterSchema })
+    .transform(({ avatar, ...row }) => ({ ...row, avatars: [avatar] }))
+])
 export type SocialRow = z.infer<typeof SocialRowSchema>
 
 export const SocialSideSchema = z.enum(['starting', 'ending'])

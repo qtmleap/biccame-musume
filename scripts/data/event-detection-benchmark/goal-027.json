@@ -1,0 +1,136 @@
+[
+  {
+    "id": "goal-positive-1227869942122287104",
+    "source": "public-post",
+    "description": "chofu stamp rally card 2020",
+    "post": {
+      "id": "1227869942122287104",
+      "createdAt": "2020-02-13T08:19:41.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "§( *'▽')ノ📹 \n明日2/14からはビッカメ娘スタンプラリー！\n\nそれに合わせた限定名刺は、着々と準備中ですよ♪\n٩(ˊᗜˋ*)و\n\n※配布はスタンプラリー期間中です。\n※お一人様一枚でお願い致します。\n\n#調布たん\n#ビッカメ娘 https://t.co/cZW1GV3BUE",
+      "url": "https://x.com/bic_keiochofu/status/1227869942122287104",
+      "media": [
+        "https://pbs.twimg.com/media/EQpE9MgUcAAyQrM.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "chofu"
+      ],
+      "characterIds": [
+        "chofu"
+      ],
+      "category": "limited_card",
+      "startDate": "2020-02-14"
+    },
+    "rationale": "2/14からラリーに合わせた名刺を準備中。未発表の詳細は補完しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "preliminary"
+    ],
+    "group": "chofu-stamp-rally-card-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "調布たんスタンプラリー名刺",
+          "evidence": [
+            "それに合わせた限定名刺は、着々と準備中ですよ♪"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 669346,
+      "postSha256": "9a02ab01d43f82a8d7ac194192d3d35b6e3c190d786f4f5520c44dacb6770f4c",
+      "textSha256": "93c7c616273b4b460302e0142336edc6f84ebfdfa6c71fa312a87ef4f55584a5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1230358716492304384",
+    "source": "public-post",
+    "description": "shibutou birthday ackey 2020",
+    "post": {
+      "id": "1230358716492304384",
+      "createdAt": "2020-02-20T05:09:11.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "（渋上ﾟ○ﾟ）｡oO(３月２日（月）～\nしぶとーたんバースデー企画\n\nビックカメラ渋谷東口店にて3,000円（込）以上ご購入のお客様先着６０名様に\nしぶとーたんアクリルキーホルダーをプレゼント！！)\n(*'ω'*)なんと！\n\n※景品は無くなり次第終了となります。 https://t.co/BhOwhPU3Mf",
+      "url": "https://x.com/bic_shibuya/status/1230358716492304384",
+      "media": [
+        "https://pbs.twimg.com/media/ERMcobeVAAEQ05k.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shibuto"
+      ],
+      "characterIds": [
+        "shibuto"
+      ],
+      "category": "ackey",
+      "startDate": "2020-03-02",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 60
+        }
+      ]
+    },
+    "rationale": "3/2から渋谷東口店、3000円購入・先着60。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "shibutou-birthday-ackey-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "ready",
+      "items": [
+        {
+          "item": "しぶとーたんアクキー",
+          "evidence": [
+            "しぶとーたんアクリルキーホルダーをプレゼント！！)"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": []
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 666497,
+      "postSha256": "82926f7feeccb0689334fb7c2af9bcad44c55641cec17525eaa5b21e7ffbb081",
+      "textSha256": "282208283f807a3a67f86c83e164acc2046fbbf4c8b03f6bd46e464bdb47121f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

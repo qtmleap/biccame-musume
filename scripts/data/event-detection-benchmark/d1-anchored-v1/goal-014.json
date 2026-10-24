@@ -1,0 +1,167 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1881314140993822826",
+    "source": "public-post",
+    "description": "shibuhachi-neko-collab-card-2025/continue",
+    "post": {
+      "id": "1881314140993822826",
+      "createdAt": "2025-01-20T12:13:38.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "ログアウトするハチにゃ✨\n\nNEKOちゃんのデビューイベント\n楽しんでくれたかな？\nコラボ名刺にアクスタプレゼントは\nA館3階 オーディオコーナーにて\n継続っ(`･ω･´)b\nまた店頭でできるかにゃ…\n\n7店舗集合のこちらのイラストは\nB館6階でみれるよぉ～\n\nおつハチにゃ～🐱✨\n#お疲れ様です\n#しぶハチたん https://t.co/crQ5vmIDbX",
+      "url": "https://x.com/bicshibuhachi00/status/1881314140993822826",
+      "media": [
+        "https://pbs.twimg.com/media/GhvFO-faYAA80Q0.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "コラボ名刺とアクスタ配布の継続。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:shibuhachi-neko-collab-2025"
+    ],
+    "group": "shibuhachi-neko-collab-card-2025/continue",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "コラボ名刺",
+          "evidence": [
+            "コラボ名刺にアクスタプレゼントは"
+          ]
+        },
+        {
+          "item": "アクスタ",
+          "evidence": [
+            "コラボ名刺にアクスタプレゼントは"
+          ]
+        }
+      ],
+      "groupingNote": "コラボ名刺とアクスタ配布の継続。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 176770,
+      "postSha256": "3b3910c5f0068004558ddc3090e0b8e3550caafb8a936f55f83ceb5ef1f3215f",
+      "textSha256": "544780933e760a81c787f78a1de7809abb94c167d7fb735303cd930525793977"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "c4a3ac7b-de2b-4707-85f3-9e360f0477fc",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicshibuhachi00/status/1881314140993822826",
+          "origin": "manual-or-seed",
+          "title": "コラボ名刺",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-01-19T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shibuhachi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1874259252539244875",
+    "source": "public-post",
+    "description": "shibuhachi-neko-collab-card-2025/continue matched control",
+    "post": {
+      "id": "1874259252539244875",
+      "createdAt": "2025-01-01T01:00:02.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "おはハチ☀\n新年おめでとうハチ🎍🐕\n\n2025年も\nわふわふっ🐶✨な\n１年にしようハチ‼\nハチたんもみんなに\nわふわふっ✨してもらえるよう頑張るハチ\n\n今年もよろしくハチィィィっ✨\nこのあとは福箱抽選結果のお知らせハチ‼\n#新年おめでとうございます\n#2025年 \n#しぶハチたん\n#企業公式相互フォロー https://t.co/DKNCaaZfw9",
+      "url": "https://x.com/bicshibuhachi00/status/1874259252539244875",
+      "media": [
+        "https://pbs.twimg.com/media/GgHbYWGagAAqBLf.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1874259252539244875",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 182176,
+      "postSha256": "b011cfeae8f4ecff47bb4754ce004ff31ed8760bb364d8c6c174768b297dd806",
+      "textSha256": "9cbb3a05553d3439d08938dd10e4171f2540ee845303b7b72ce9310e5646faa6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

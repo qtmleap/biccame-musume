@@ -1,0 +1,193 @@
+[
+  {
+    "id": "public-c-2014888037650727388",
+    "source": "public-post",
+    "description": "にいがたたん擬人化8周年アクキー",
+    "post": {
+      "id": "2014888037650727388",
+      "createdAt": "2026-01-24T02:28:37.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "\\\\🌾🍙告知だよ🍙🌾//\n2月1日でにいがたたん擬人化８周年！\n\n当店で税込合計3,000円以上お買い上げで\n擬人化8周年記念アクリルキーホルダーをプレゼント！\n\n可愛くドレスアップしたにいがたたん🍙\nぜひ貰いに来てね！\n※無くなり次第終了です https://t.co/pzf8zoiBd7",
+      "url": "https://x.com/niigata_bic/status/2014888037650727388",
+      "media": [
+        "https://pbs.twimg.com/media/G_ZRGebbAAILLio.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "niigata"
+      ],
+      "characterIds": [
+        "niigata"
+      ],
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "2月1日の擬人化8周年に3000円以上購入で記念アクキーを提供。明示された企画開始の独立日付は注釈しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase"
+    ],
+    "group": "niigata-eighth-anniversary-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2018595312940826632",
+    "source": "public-post",
+    "description": "アキバたんバレンタインアクキー",
+    "post": {
+      "id": "2018595312940826632",
+      "createdAt": "2026-02-03T08:00:00.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "🍫アキバたん🐱アクキー企画🍫\n\n2026年2月14日㈯～15日㈰の２日間限定\nビックカメラAKIBAにて【税込3,000円以上】のご購入レシートご提示で『バレンタインアキバたんアクキー』をプレゼント🎁\n\nお渡し場所は［1階総合カウンター］です🌟\n※ツリー含む注意事項をよくお読みください。 https://t.co/AHf36v9HIK",
+      "url": "https://x.com/bic_akiba/status/2018595312940826632",
+      "media": [
+        "https://pbs.twimg.com/media/HANgqXcbIAAEH88.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "akiba"
+      ],
+      "characterIds": [
+        "akiba"
+      ],
+      "startDate": "2026-02-14",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "2026年2月14日から15日、AKIBAで3000円以上購入のレシートでバレンタインアクキーを提供。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase"
+    ],
+    "group": "akiba-valentine-keychain-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2019682475799458293",
+    "source": "public-post",
+    "description": "八王子たんバレンタイン名刺",
+    "post": {
+      "id": "2019682475799458293",
+      "createdAt": "2026-02-06T08:00:00.000Z",
+      "screenName": "bichachioji",
+      "kind": "original",
+      "text": "/／ \n📣#八王子たん\n📣#バレンタイン 限定名刺配布決定❣🍫\n\\＼\n\n2/7（土）～2/15（日）\n2F総合カウンターにて配布しまーす❤\nお一人様１枚まで✨\nなくなり次第終了です💦\nぜひあそびにきてね～❣\n🍫(◎仝◎)🍫(≧仝≦)🍫(θ仝θ)🍫\n\n⚠フリマサイトなどでの出品・販売は固くお断りいたします。 https://t.co/1IS6ShCEQ1",
+      "url": "https://x.com/bichachioji/status/2019682475799458293",
+      "media": [
+        "https://pbs.twimg.com/media/HAdHlicacAQ_MEP.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "hachioji"
+      ],
+      "characterIds": [
+        "hachioji"
+      ],
+      "startDate": "2026-02-07"
+    },
+    "rationale": "2月7日から15日に八王子たん限定名刺配布と明示。",
+    "tags": [
+      "historical",
+      "positive",
+      "limited-card"
+    ],
+    "group": "hachioji-valentine-card-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2027941899521429871",
+    "source": "public-post",
+    "description": "キューピッド新東たん名刺",
+    "post": {
+      "id": "2027941899521429871",
+      "createdAt": "2026-03-01T03:00:00.000Z",
+      "screenName": "Bic_shintoueki",
+      "kind": "original",
+      "text": "˚₊꒰ঌ (*´ ˘ `*) ໒꒱₊˚\n🌟バースデーイベント企画🌟\n\nきゅるりん❣️みんなのハートを狙い撃ちッ🏹💘\n『キューピッド新東たん 名刺』配布しまーす🎊\n\n💘配布期間：3/3～3/31\n💘配布場所：B2Fレジ前\n\nすっごく可愛く仕上がりました！！！\nご来店の際はぜひお受け取りくださ➰い💛\n#新東たん #ビッカメ娘 https://t.co/poR0jZzwsJ",
+      "url": "https://x.com/Bic_shintoueki/status/2027941899521429871",
+      "media": [
+        "https://pbs.twimg.com/media/HCSyJltb0AA9Etj.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "shintou"
+      ],
+      "characterIds": [
+        "shintou"
+      ],
+      "startDate": "2026-03-03"
+    },
+    "rationale": "バースデー企画として3月3日から31日にキューピッド新東たん名刺を配布。前年10月の5周年とは別企画。",
+    "tags": [
+      "historical",
+      "positive",
+      "limited-card"
+    ],
+    "group": "shintou-cupid-birthday-card-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2033793360960647322",
+    "source": "public-post",
+    "description": "IT tower爆誕記念コラボアクキー",
+    "post": {
+      "id": "2033793360960647322",
+      "createdAt": "2026-03-17T06:31:37.000Z",
+      "screenName": "bic_itt",
+      "kind": "original",
+      "text": "こんタワ！\n【🔥爆誕記念第２弾　予告🔥】\n3月20日(金・祝)～22日(日)の３日間限定！\n当店で合計税込5,000円以上をご購入のお客様へ特別アクリルキーホルダーを1つプレゼントするわ！\n池袋の ＃ビッカメ娘 と ＃あいタワたん が早速のコラボね！👀\n※絵柄指定はできません。おひとり様最大3つまで。 https://t.co/jUX1kHcfXM",
+      "url": "https://x.com/bic_itt/status/2033793360960647322",
+      "media": [
+        "https://pbs.twimg.com/media/HDl561PbEAMt39W.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "itt"
+      ],
+      "startDate": "2026-03-20",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 5000
+        }
+      ]
+    },
+    "rationale": "3月20日から22日に当店で5000円購入の人へ記念アクキー提供。池袋の娘とあいタワたんの全員名は未記載のため対象配列は未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "collaboration",
+      "partial-annotation"
+    ],
+    "group": "itt-debut-second-wave-2026",
+    "reviewStatus": "provisional"
+  }
+]

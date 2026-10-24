@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-1641256689113628673",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1641256689113628673",
+      "createdAt": "2023-03-30T01:51:02.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "【ご案内】\n4/14(金)発売\nポケモンカードゲーム 拡張パック「スノーハザード」「クレイバースト」を抽選にて販売します。\n\n●抽選受付:3/31～4/2\n●受付場所:店頭レジ/抽選受付カウンター\n\n※先着順ではございません\n※抽選条件をよくお確かめの上ご来店下さい https://t.co/SWhmNhGYlS",
+      "url": "https://x.com/bic_sagamioono/status/1641256689113628673",
+      "media": [
+        "https://pbs.twimg.com/media/FsbpvLKaQAAPkpk.png",
+        "https://pbs.twimg.com/media/FsbqIQTaMAEJUmB.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【ご案内】 / 4/14(金)発売 / ポケモンカードゲーム 拡張パック「スノーハザード」「クレイバースト」を抽選にて販売します。」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pokemon-snowhazard-clayburst-lottery-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 375818,
+      "postSha256": "73dce502f807e8886f66374c24f08bf72647a41010682236c1d46a87376c3b6a",
+      "textSha256": "74345b43f259e78d97d4504c7a6e8bcd174f755b10cb0d690fa0c532c3d3ac27"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1663735063966810114",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1663735063966810114",
+      "createdAt": "2023-05-31T02:32:04.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "BIC（BIG）な頼れるやつがソニーから登場！？\n踊りたくなるようなダイナミックな音を出す、パワフルスピーカーが発売！\nキャスター付きだから、女性も持ち運びらくちん！\nしかも、アプリでライトを自由にアレンジできちゃう！\n#SONY SRS-XV800\nお取り寄せ承ってます(*´ω`*)\nhttps://t.co/oRik9oZbeh https://t.co/aQlaPWTGWG",
+      "url": "https://x.com/bic_sagamioono/status/1663735063966810114",
+      "media": [
+        "https://pbs.twimg.com/ext_tw_video_thumb/1663734147352002560/pu/img/86YHCOKiQ7lqtn5s.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「BIC（BIG）な頼れるやつがソニーから登場！？ / 踊りたくなるようなダイナミックな音を出す、パワフルスピーカーが発売！ / キャスター付きだから、女性も持ち運びらくちん！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "sony-srs-xv800-speaker-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 359824,
+      "postSha256": "41a3aa70f947c8e9cceca13f7fd586824362bfda583aa8494a1846a03438d57b",
+      "textSha256": "b129895d33cbb70c2fd30e52ee42ce39b9600c5b89765fab7bc42ad3e17ae0fc"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

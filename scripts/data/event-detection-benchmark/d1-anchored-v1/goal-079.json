@@ -1,0 +1,168 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2084454470092816702",
+    "source": "public-post",
+    "description": "chiba-summer-parade-end-2026",
+    "post": {
+      "id": "2084454470092816702",
+      "createdAt": "2026-08-04T01:40:47.000Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "遅ればせながら #サマパレ千葉 イベントは終了しました！ご参加いただいたみなさま\nほんとうにありがとうございました！٩(*´꒳`*)۶\n7Fの展示は8月末頃まで続きますっ！(末日ではない場合があります)　名刺も無くなり次第終了です★\n\n#千葉たんメモリー\n#千葉たんイベント情報 https://t.co/pMb7UjBcDr",
+      "url": "https://x.com/bic_chiba/status/2084454470092816702",
+      "media": [
+        "https://pbs.twimg.com/amplify_video_thumb/2084454194052988928/img/oyR7KR74BsLA687M.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "イベント終了と展示・名刺の継続案内。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:chiba-summer-parade"
+    ],
+    "group": "chiba-summer-parade-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "サマパレ千葉イベント",
+          "evidence": [
+            "遅ればせながら #サマパレ千葉 イベントは終了しました！ご参加いただいたみなさま",
+            "#千葉たんイベント情報 https://t.co/pMb7UjBcDr"
+          ]
+        }
+      ],
+      "groupingNote": "イベント終了と展示・名刺の継続案内。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 19373,
+      "postSha256": "a541b0eab5f296ae8a1d3fdd1dc9081ff16aae7bdac1ab1984ac96f70a4bc2d9",
+      "textSha256": "6fc3f6b46016e66cfdf3206596ae0cff47d12011a2d669868a39294990b46637"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "1d5cbd79-5c8c-4018-8fe9-5e65f6dd6b09",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_chiba/status/2084454470092816702",
+          "origin": "manual-or-seed",
+          "title": "CHIBA SUMMER PARADE",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-17T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "chiba"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 150,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2092871569890816014",
+    "source": "public-post",
+    "description": "chiba-summer-parade-end-2026 matched control",
+    "post": {
+      "id": "2092871569890816014",
+      "createdAt": "2026-08-27T07:07:20.000Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "マウスの操作性UP❗️\nゲームのテンションもUP❗️\nALLONE 「ARM COVER AIM+」\n\n滑り止めグリップがついているから、\nマウスをしっかりとホールド！\n肌触り抜群！ゲーム用はもちろん、普段使いにも最適！\n\n4階に展示がございますので、ぜひお試しください🖱️ https://t.co/FbIglz0j1B",
+      "url": "https://x.com/bic_chiba/status/2092871569890816014",
+      "media": [
+        "https://pbs.twimg.com/media/HQtflLibgAAM9cG.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2092871569890816014",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 12871,
+      "postSha256": "7c7324234fffa4770b4f1d42c7fa015dc1ed12fb157a58aa1b5954aeadbea77e",
+      "textSha256": "bd09e5e145c2d8376d7a5e057887f5896bf558be127fdd005547976de7bd1fb7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

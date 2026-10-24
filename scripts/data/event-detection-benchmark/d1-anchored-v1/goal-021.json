@@ -1,0 +1,159 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1991675428918997429",
+    "source": "public-post",
+    "description": "shinjyuku-regular-card-2025",
+    "post": {
+      "id": "1991675428918997429",
+      "createdAt": "2025-11-21T01:10:00.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "新しい通常名刺本日から配布スタート！\n#ビッカメ娘 10周年を記念して新宿3人娘がアイドル活動！……という設定です☆\nご来店の際はぜひ貰ってください🌟\n\n★期間：2026年4月30日(木)まで\n★2階等身大パネルの近く\n※名刺はおひとり様1枚まで\n※フリマサイトへの出品はお控えください\n#新宿西口たん https://t.co/FdI3pBlEkS",
+      "url": "https://x.com/bic_shinjyuku/status/1991675428918997429",
+      "media": [
+        "https://pbs.twimg.com/media/G6L7rphacAEZ7jd.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "regular_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2025-11-21",
+      "conditions": null
+    },
+    "rationale": "本日から配布の通常名刺。2026-04-30までの期間つき。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "shinjyuku-regular-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "新しい通常名刺",
+          "evidence": [
+            "新しい通常名刺本日から配布スタート！"
+          ]
+        }
+      ],
+      "groupingNote": "本日から配布の通常名刺。2026-04-30までの期間つき。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 94977,
+      "postSha256": "194d7d0a61d3389c174233b189259438adeef4ba015797139d254b67ab80d895",
+      "textSha256": "2a51f0f1e55ace9bd4112b773e09516744ba24b03b489847318535c04b055404"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "ddee6f2e-8955-450f-99cc-88e0775260e0",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_shinjyuku/status/1991675428918997429",
+          "origin": "manual-or-seed",
+          "title": "限定名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-11-20T15:00:00.000+00:00",
+            "endDate": "2026-04-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shinjyuku"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1984865577916350568",
+    "source": "public-post",
+    "description": "shinjyuku-regular-card-2025 matched control",
+    "post": {
+      "id": "1984865577916350568",
+      "createdAt": "2025-11-02T06:10:05.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "アキユビュー史上最高の快適性とうるおいを追求したコンタクトレンズ✨\nワンデーアキュビューオアシスMAX\nワンデーアキュビューオアシスMAXマルチフォーカル\n\n＼店舗限定／\n今だけ2大特典♪ポイントアップ\n★12月31日(水)まで\n★5階コンタクトコーナー※ご購入の際はコンタクトレンズ処方箋が必要です https://t.co/oUa3XFCZ1u",
+      "url": "https://x.com/bic_shinjyuku/status/1984865577916350568",
+      "media": [
+        "https://pbs.twimg.com/media/G4unixwbQAAdtNN.jpg",
+        "https://pbs.twimg.com/amplify_video_thumb/1984864289002569728/img/NtiOZv7eWLOhmbKH.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1984865577916350568",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 100033,
+      "postSha256": "10c20ff7eca1387e1a3ad86cab0e35da865970d4b87b711baf74c0cc768a2275",
+      "textSha256": "6a8685efa8a9b21d52ce37b6cf8cfc9688733c86cf8c7fbea9bf086ba4a54340"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

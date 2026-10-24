@@ -1,0 +1,136 @@
+[
+  {
+    "id": "expanded-v2-positive-1742776056694898761",
+    "source": "public-post",
+    "description": "yao-newyear-card-minipanel-2024",
+    "post": {
+      "id": "1742776056694898761",
+      "createdAt": "2024-01-04T05:12:45.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "おはやお～( 8,,ÒωÓ,, )ﾄﾞﾔｵｯ!\n1日に間に合わなかったけど、総合案内カウンターの八尾たんミニパネルがお正月仕様に変わったで‼\n1/31までお正月名刺も配布中‼\nまだまだお買い得商品もあるから是非遊びにきてなぁ( *´ω`* ) https://t.co/HMBRr7zxig",
+      "url": "https://x.com/bic_yao/status/1742776056694898761",
+      "media": [
+        "https://pbs.twimg.com/media/GC-VBWyb0AAReD0.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "yao"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "展示変更と名刺継続。展示を持ち帰り品と推測しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "yao-newyear-card-minipanel-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "八尾たんミニパネル",
+          "evidence": [
+            "八尾たんミニパネルがお正月仕様"
+          ]
+        },
+        {
+          "item": "お正月名刺",
+          "evidence": [
+            "1/31までお正月名刺"
+          ]
+        }
+      ],
+      "groupingNote": "展示変更と名刺継続。展示を持ち帰り品と推測しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 295331,
+      "postSha256": "5c32c1d8a4f56c1e8620f350af310a2a49e0b7bbd20f32472c81e330a4f67af7",
+      "textSha256": "501f57eb55bd4a8d6f8f58c87490484d1822688b95e796d761ee0f1ca4f5d14e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1743540572806324398",
+    "source": "public-post",
+    "description": "yao-newyear-card-minipanel-2024 matched control",
+    "post": {
+      "id": "1743540572806324398",
+      "createdAt": "2024-01-06T07:50:40.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "電池、LED電球、電源タップ\n気付けばストックが切れてることがあるから、お得な時に購入しちゃおう！\n今なら当社指定商品が最大20％のポイントサービス！！\n1/8までの期間限定なんで、要チェックやで～💡 https://t.co/350qzfP5HC",
+      "url": "https://x.com/bic_yao/status/1743540572806324398",
+      "media": [
+        "https://pbs.twimg.com/media/GDJL_44bUAAYoZx.jpg",
+        "https://pbs.twimg.com/media/GDJMBhSaYAA2zJX.jpg",
+        "https://pbs.twimg.com/media/GDJMCkUaAAADj6b.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1743540572806324398",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 294552,
+      "postSha256": "372b848301a759a8786e6115accdc8eb3914233d61bd32e8c7b8cedbdf0e5ac2",
+      "textSha256": "8d8b2cb846339a9b2fb24f96b6f8134b4be4be3203b5a95aa73c566d637fd666"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

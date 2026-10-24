@@ -1,10 +1,7 @@
-import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
+import { describe, expect, test } from 'bun:test'
 import { WEBHOOK_KEYWORD_VERDICTS, webhookKeywordVerdict } from '@biccame/shared/event-detect/detection'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
-import { WebhookJobQuerySchema } from '@biccame/shared/schemas/webhook.dto'
-import { createStore } from 'jotai'
 import {
-  changeWebhookFilterAtom,
   cycleWebhookConfidenceSort,
   hasWebhookFilterConditions,
   INITIAL_WEBHOOK_FILTER,
@@ -12,19 +9,12 @@ import {
   parseWebhookFilter,
   setWebhookPostStatus,
   setWebhookRange,
+  setWebhookScreenName,
   setWebhookVerdict,
-  type WebhookFilter,
-  webhookColumnAriaSort,
-  webhookFilterAtom
+  webhookColumnAriaSort
 } from '@/atoms/webhook-filter-atom'
-import {
-  INITIAL_WEBHOOK_PAGINATION,
-  type WebhookPagination,
-  webhookPaginationAtom
-} from '@/atoms/webhook-pagination-atom'
 import { webhookKeywordLabel, webhookKeywordVerdictLabel } from '@/components/admin/webhook-labels'
-
-const query = (value: Record<string, string>) => WebhookJobQuerySchema.safeParse(value)
+import { filterWith, query } from './fixtures/webhook-filter'
 
 describe('受信履歴のクエリスキーマ', () => {
   test('何も指定しなければ日時の新しい順で、期間・判定・ステータスは絞り込まない', () => {
@@ -59,6 +49,13 @@ describe('受信履歴のクエリスキーマ', () => {
     if (parsed.success) expect(parsed.data.postStatus).toBe(postStatus)
   })
 
+  test('キャラクターの投稿アカウントを受け付け、不正な値を拒否する', () => {
+    expect(query({ screenName: 'BIC_abeno' }).success).toBe(true)
+    for (const screenName of ['', '@bic_abeno', 'a'.repeat(16), "bic' OR 1=1", 'bic%']) {
+      expect(query({ screenName }).success).toBe(false)
+    }
+  })
+
   test('精度の下限・上限はもう絞り込みに使わない（未知のキーとして捨てる）', () => {
     // zod の object は未知のキーを捨てるので 400 ではなく無視になる。結果にも残らない。
     const parsed = query({ minConfidence: '0.9', maxConfidence: '0.1' })
@@ -89,9 +86,6 @@ describe('受信履歴のクエリスキーマ', () => {
   })
 })
 
-// 条件なし（NO_WEBHOOK_FILTER）を土台に上書きする。既定（判定は一致）が混ざると、判定を一致へ変える検証が空振りになるため。
-const filterWith = (overrides: Partial<WebhookFilter>): WebhookFilter => ({ ...NO_WEBHOOK_FILTER, ...overrides })
-
 describe('受信履歴の絞り込み・並べ替えの状態', () => {
   test('既定は判定が一致・日時の新しい順で、条件なしは判定・ステータスもすべての日時の新しい順', () => {
     expect(INITIAL_WEBHOOK_FILTER).toEqual({
@@ -99,14 +93,18 @@ describe('受信履歴の絞り込み・並べ替えの状態', () => {
       sort: 'createdAt',
       order: 'desc',
       verdict: 'match',
-      postStatus: null
+      postStatus: null,
+      screenName: null,
+      discovery: null
     })
     expect(NO_WEBHOOK_FILTER).toEqual({
       range: null,
       sort: 'createdAt',
       order: 'desc',
       verdict: null,
-      postStatus: null
+      postStatus: null,
+      screenName: null,
+      discovery: null
     })
     // 既定と条件なしは判定だけが違う。
     expect(NO_WEBHOOK_FILTER).toEqual({ ...INITIAL_WEBHOOK_FILTER, verdict: null })
@@ -116,6 +114,7 @@ describe('受信履歴の絞り込み・並べ替えの状態', () => {
     expect(hasWebhookFilterConditions(NO_WEBHOOK_FILTER)).toBe(false)
     expect(hasWebhookFilterConditions(INITIAL_WEBHOOK_FILTER)).toBe(true)
     for (const changed of [
+      filterWith({ screenName: 'bic_abeno' }),
       filterWith({ range: '1h' }),
       filterWith({ range: '24h' }),
       filterWith({ sort: 'confidence' }),
@@ -190,6 +189,19 @@ describe('受信履歴の絞り込み・並べ替えの状態', () => {
     }
   })
 
+  test('キャラクターを変えても他の条件を保ち、同じ値なら参照を保つ', () => {
+    const base = filterWith({ range: '24h', verdict: 'excluded', postStatus: 'end', sort: 'confidence' })
+    const selected = setWebhookScreenName(base, 'bic_abeno')
+    expect(selected).toEqual({ ...base, screenName: 'bic_abeno' })
+    expect(setWebhookScreenName(selected, 'bic_abeno')).toBe(selected)
+    expect(setWebhookScreenName(selected, null)).toEqual(base)
+    expect(parseWebhookFilter(selected)).toEqual(selected)
+    const { screenName, ...legacy } = selected
+    expect(screenName).toBe('bic_abeno')
+    expect(parseWebhookFilter(legacy)).toEqual(base)
+    expect(parseWebhookFilter({ ...base, screenName: '@invalid' })).toEqual(INITIAL_WEBHOOK_FILTER)
+  })
+
   test('更新は元の値を書き換えない', () => {
     const base = filterWith({ range: '1h' })
     setWebhookRange(base, '24h')
@@ -260,191 +272,5 @@ describe('判定の表示と絞り込みの対応', () => {
 
   test('絞り込みの選択肢の表示名は列の表示名と同じで、すべての判定にある', () => {
     expect(WEBHOOK_KEYWORD_VERDICTS.map(webhookKeywordVerdictLabel)).toEqual(['一致', '不一致', '除外'])
-  })
-})
-
-type FakeWindow = { sessionStorage: Storage; localStorage: Storage }
-type AtomModule = typeof import('@/atoms/webhook-filter-atom')
-
-describe('絞り込み・並べ替えの永続化 atom', () => {
-  const key = 'biccame-admin-webhook-filter'
-  const paginationKey = 'biccame-admin-webhook-pagination'
-  const session = new Map<string, string>()
-  const local = new Map<string, string>()
-  const fakeStorage = (data: Map<string, string>) => ({
-    getItem: (name: string) => (data.has(name) ? String(data.get(name)) : null),
-    setItem: (name: string, value: string) => data.set(name, value),
-    removeItem: (name: string) => data.delete(name)
-  })
-  const throwingStorage = {
-    getItem: () => {
-      throw new Error('storage is not available')
-    },
-    setItem: () => {
-      throw new Error('storage is not available')
-    },
-    removeItem: () => {
-      throw new Error('storage is not available')
-    }
-  }
-  // 保存された JSON を読み戻す。未保存なら JSON として不正になり、テストが落ちる。
-  const saved = (name: string) => JSON.parse(String(session.get(name)))
-
-  const hadWindow = Reflect.has(globalThis, 'window')
-  const originalWindow = Reflect.get(globalThis, 'window')
-  const setWindow = (value: Partial<FakeWindow> | Record<string, unknown>) => Reflect.set(globalThis, 'window', value)
-  beforeEach(() => {
-    session.clear()
-    local.clear()
-    setWindow({ sessionStorage: fakeStorage(session), localStorage: fakeStorage(local) })
-  })
-  afterEach(() => {
-    if (hadWindow) Reflect.set(globalThis, 'window', originalWindow)
-    else Reflect.deleteProperty(globalThis, 'window')
-  })
-
-  // getOnInit は atom の生成時(モジュール読込時)に保存値を読むので、テストごとに読み込み直して初期表示を再現する。
-  let loads = 0
-  const loadAtoms = async () => {
-    loads += 1
-    const filterModule: AtomModule = await import(`../workers/web/src/app/atoms/webhook-filter-atom?load=${loads}`)
-    return { filterModule }
-  }
-
-  test('保存が無ければ既定値（判定は一致）', async () => {
-    const { filterModule } = await loadAtoms()
-    const value = createStore().get(filterModule.webhookFilterAtom)
-    expect(value).toEqual(INITIAL_WEBHOOK_FILTER)
-    expect(value.verdict).toBe('match')
-  })
-
-  test('保存済みの「すべて」(verdict: null)は既定の一致で上書きせず、そのまま使う', async () => {
-    session.set(key, JSON.stringify(NO_WEBHOOK_FILTER))
-    const { filterModule } = await loadAtoms()
-    expect(createStore().get(filterModule.webhookFilterAtom)).toEqual(NO_WEBHOOK_FILTER)
-  })
-
-  test('判定を「すべて」にして保存すると、読み込み直しても「すべて」のまま', async () => {
-    const first = await loadAtoms()
-    createStore().set(first.filterModule.webhookFilterAtom, NO_WEBHOOK_FILTER)
-    expect(saved(key)).toEqual(NO_WEBHOOK_FILTER)
-    const second = await loadAtoms()
-    expect(createStore().get(second.filterModule.webhookFilterAtom)).toEqual(NO_WEBHOOK_FILTER)
-  })
-
-  test('保存値を初期表示から読む(既定値を経由しない)', async () => {
-    const value = filterWith({ range: '1h', sort: 'confidence', order: 'asc', verdict: 'excluded', postStatus: 'end' })
-    session.set(key, JSON.stringify(value))
-    const { filterModule } = await loadAtoms()
-    expect(createStore().get(filterModule.webhookFilterAtom)).toEqual(value)
-  })
-
-  test('書き込むと sessionStorage に保存され、読み込み直しても残る。localStorage は使わない', async () => {
-    const value = filterWith({ range: '24h', postStatus: 'ongoing' })
-    const first = await loadAtoms()
-    createStore().set(first.filterModule.webhookFilterAtom, value)
-    expect(saved(key)).toEqual(value)
-    expect(local.size).toBe(0)
-    const second = await loadAtoms()
-    expect(createStore().get(second.filterModule.webhookFilterAtom)).toEqual(value)
-  })
-
-  test.each([
-    ['JSON として壊れている', '{"range":'],
-    ['形が違う', JSON.stringify({ range: '7d' })],
-    ['未知のステータス', JSON.stringify({ ...INITIAL_WEBHOOK_FILTER, postStatus: 'foo' })],
-    [
-      'ステータスの項目が無い(旧い保存値)',
-      JSON.stringify({ range: null, sort: 'createdAt', order: 'desc', verdict: null })
-    ],
-    ['配列', '[]']
-  ])('壊れた保存値(%s)は既定値(判定は一致)に倒す', async (_label, raw) => {
-    session.set(key, raw)
-    const { filterModule } = await loadAtoms()
-    const value = createStore().get(filterModule.webhookFilterAtom)
-    expect(value).toEqual(INITIAL_WEBHOOK_FILTER)
-    expect(value.verdict).toBe('match')
-  })
-
-  test('sessionStorage が使えなくても落ちず、メモリ上で操作を続けられる', async () => {
-    setWindow({ sessionStorage: throwingStorage })
-    const { filterModule } = await loadAtoms()
-    const store = createStore()
-    expect(store.get(filterModule.webhookFilterAtom)).toEqual(INITIAL_WEBHOOK_FILTER)
-    store.set(filterModule.webhookFilterAtom, filterWith({ range: '1h' }))
-    expect(store.get(filterModule.webhookFilterAtom)).toEqual(filterWith({ range: '1h' }))
-  })
-
-  test('window が無い環境(SSR・テスト)でも既定値で動く', async () => {
-    Reflect.deleteProperty(globalThis, 'window')
-    const { filterModule } = await loadAtoms()
-    const store = createStore()
-    expect(store.get(filterModule.webhookFilterAtom)).toEqual(INITIAL_WEBHOOK_FILTER)
-    store.set(filterModule.webhookFilterAtom, filterWith({ verdict: 'excluded' }))
-    expect(store.get(filterModule.webhookFilterAtom)).toEqual(filterWith({ verdict: 'excluded' }))
-  })
-
-  // 本番と同じ結線を確かめるため、絞り込み atom が内部で参照する素のモジュール（クエリ無し）の atom を使う。
-  // 保存値の読み込み（getOnInit）は検証済みなので、ここでは store に値を入れて更新の振る舞いだけを見る。
-  describe('条件を変えたらページ位置を1ページ目へ戻す', () => {
-    const page3: WebhookPagination = {
-      cursor: '1000000000000000005',
-      previousCursors: [null, '1000000000000000010']
-    }
-
-    // 条件なしから始める。既定（判定は一致）から始めると、判定を一致へ変える更新が「変わらない更新」になってしまう。
-    const prepare = (start: WebhookFilter = NO_WEBHOOK_FILTER) => {
-      const store = createStore()
-      store.set(webhookFilterAtom, start)
-      store.set(webhookPaginationAtom, page3)
-      expect(store.get(webhookPaginationAtom)).toEqual(page3)
-      return store
-    }
-
-    test('期間・判定・ステータス・並べ替えのどれを変えても、3ページ目から1ページ目に戻り、保存にも反映される', () => {
-      const store = prepare()
-      const changes: ((filter: WebhookFilter) => WebhookFilter)[] = [
-        (filter) => setWebhookRange(filter, '1h'),
-        (filter) => setWebhookVerdict(filter, 'match'),
-        (filter) => setWebhookPostStatus(filter, 'announce'),
-        cycleWebhookConfidenceSort
-      ]
-      for (const change of changes) {
-        store.set(webhookPaginationAtom, page3)
-        store.set(changeWebhookFilterAtom, change)
-        expect(store.get(webhookPaginationAtom)).toEqual(INITIAL_WEBHOOK_PAGINATION)
-        expect(saved(paginationKey)).toEqual(INITIAL_WEBHOOK_PAGINATION)
-      }
-      expect(saved(key)).toEqual(store.get(webhookFilterAtom))
-    })
-
-    test('実際には変わらない更新(同じ値)ではページ位置を動かさない', () => {
-      const store = prepare()
-      store.set(changeWebhookFilterAtom, (filter) => setWebhookRange(filter, null))
-      store.set(changeWebhookFilterAtom, (filter) => setWebhookPostStatus(filter, null))
-      store.set(changeWebhookFilterAtom, (filter) => filter)
-      expect(store.get(webhookPaginationAtom)).toEqual(page3)
-      expect(store.get(webhookFilterAtom)).toEqual(NO_WEBHOOK_FILTER)
-    })
-
-    test('「条件をクリア」(条件なしへ戻す)も条件の変更なので1ページ目へ戻し、すでに条件なしなら何も動かさない', () => {
-      const store = prepare()
-      store.set(webhookFilterAtom, filterWith({ range: '24h', verdict: 'excluded', postStatus: 'ignored' }))
-      store.set(changeWebhookFilterAtom, () => NO_WEBHOOK_FILTER)
-      expect(store.get(webhookFilterAtom)).toEqual(NO_WEBHOOK_FILTER)
-      expect(store.get(webhookPaginationAtom)).toEqual(INITIAL_WEBHOOK_PAGINATION)
-      expect(saved(key)).toEqual(NO_WEBHOOK_FILTER)
-      store.set(webhookPaginationAtom, page3)
-      store.set(changeWebhookFilterAtom, () => NO_WEBHOOK_FILTER)
-      expect(store.get(webhookPaginationAtom)).toEqual(page3)
-    })
-
-    test('既定（判定は一致）のままでも「条件をクリア」は効き、判定を「すべて」にして1ページ目へ戻す', () => {
-      const store = prepare(INITIAL_WEBHOOK_FILTER)
-      store.set(changeWebhookFilterAtom, () => NO_WEBHOOK_FILTER)
-      expect(store.get(webhookFilterAtom)).toEqual(NO_WEBHOOK_FILTER)
-      expect(store.get(webhookFilterAtom).verdict).toBeNull()
-      expect(store.get(webhookPaginationAtom)).toEqual(INITIAL_WEBHOOK_PAGINATION)
-    })
   })
 })

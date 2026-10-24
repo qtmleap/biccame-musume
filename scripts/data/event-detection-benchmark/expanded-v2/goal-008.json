@@ -1,0 +1,133 @@
+[
+  {
+    "id": "expanded-v2-positive-1510064624326279168",
+    "source": "public-post",
+    "description": "ohmiya-easter-stamp-rally-2022",
+    "post": {
+      "id": "1510064624326279168",
+      "createdAt": "2022-04-02T01:20:36.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "🐰ハッピーイースター🥚\nスタンプラリーイベント✨\n店内4ヶ所のスタンプを見つけて台紙の同じ番号の枠にスタンプしてね♪\n全部集まったら3Fメガネ・コンタクトコーナーに持っていってお菓子と大宮たんイースター限定名刺をGETしてね♪\n※台紙はスタンプ台全てに設置してます\n※なくなり次第終了です https://t.co/6hDr5WuqSM",
+      "url": "https://x.com/bic_ohmiya/status/1510064624326279168",
+      "media": [
+        "https://pbs.twimg.com/media/FPTTjkgakAgwqoX.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "ohmiya"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "スタンプ4か所を集める参加条件。購入条件ではない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "ohmiya-easter-stamp-rally-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "お菓子と大宮たんイースター限定名刺",
+          "evidence": [
+            "🐰ハッピーイースター🥚",
+            "スタンプラリーイベント✨",
+            "店内4ヶ所のスタンプを見つけて台紙の同じ番号の枠にスタンプしてね♪",
+            "全部集まったら3Fメガネ・コンタクトコーナーに持っていってお菓子と大宮たんイースター限定名刺をGETしてね♪",
+            "※台紙はスタンプ台全てに設置してます",
+            "※なくなり次第終了です https://t.co/6hDr5WuqSM"
+          ]
+        }
+      ],
+      "groupingNote": "スタンプ4か所を集める参加条件。購入条件ではない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 472960,
+      "postSha256": "6c9ebfcc5f916e708ecac5664ac34c045206f3e2b80c877d542dbbec5a0fd225",
+      "textSha256": "0137761fa39b8f00327797f31d3e5cdf486eb7ebc2e9bab9757e8f35a057ff99"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1517750791465226241",
+    "source": "public-post",
+    "description": "ohmiya-easter-stamp-rally-2022 matched control",
+    "post": {
+      "id": "1517750791465226241",
+      "createdAt": "2022-04-23T06:22:41.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "３月にリニューアル♪グランドセイコーコーナーでフェア開催中✨\n4月30日(土)までにグランドセイコーご購入のお客様に特製ウォッチケアキットをプレゼント🎁(※数に限りがあります)\nさらに当店のグランドセイコーは全品10%ポイントサービス！是非お見逃しなく〜(お ≧ロ≦)੭ꠥ⁾⁾\n\n#グランドセイコー https://t.co/NXhENQxu2m",
+      "url": "https://x.com/bic_ohmiya/status/1517750791465226241",
+      "media": [
+        "https://pbs.twimg.com/media/FRAhg6_aUAAA0Y0.jpg",
+        "https://pbs.twimg.com/media/FRAhg9DaMAEo49r.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1517750791465226241",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 467060,
+      "postSha256": "9c6b5f5eea3dc5254b5b6282b3d258c79610958568ed5d92931133a6567e1f52",
+      "textSha256": "b74616513dd857f9a2865131fa6aa60bd086a7c1703471d606c390717895a013"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

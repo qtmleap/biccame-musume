@@ -1,0 +1,129 @@
+[
+  {
+    "id": "expanded-v2-positive-725912502467366912",
+    "source": "public-post",
+    "description": "biccame-niconico-bag-2016",
+    "post": {
+      "id": "725912502467366912",
+      "createdAt": "2016-04-29T05:00:02.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "くコ:彡 #ニコニコ超会議2016 \nビッカメ娘の袋復活！！！\n数少ないのでソフマップ背景撮影したらプレゼント！！ごめんな｡ﾟ(ﾟ´Д｀ﾟ)ﾟ｡ https://t.co/iOLfHYUmgc",
+      "url": "https://x.com/bic_fujisawa/status/725912502467366912",
+      "media": [
+        "https://pbs.twimg.com/media/ChL1hbPUUAAJC9G.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "撮影参加で少数の娘袋をプレゼント。袋の在庫数や購入を補完しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "biccame-niconico-bag-2016",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "ビッカメ娘の袋",
+          "evidence": [
+            "くコ:彡 #ニコニコ超会議2016 ",
+            "ビッカメ娘の袋復活！！！",
+            "数少ないのでソフマップ背景撮影したらプレゼント！！ごめんな｡ﾟ(ﾟ´Д｀ﾟ)ﾟ｡ https://t.co/iOLfHYUmgc"
+          ]
+        }
+      ],
+      "groupingNote": "撮影参加で少数の娘袋をプレゼント。袋の在庫数や購入を補完しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1049445,
+      "postSha256": "36b27154e1c5c89597a8470bbf35507203414d0a388ff5f3e2f2ab98e9aa1212",
+      "textSha256": "59c3816329202b339e1e102cf25ec86acc2b80d731ac3b2f5d490619c7be966a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-724121825710473216",
+    "source": "public-post",
+    "description": "biccame-niconico-bag-2016 matched control",
+    "post": {
+      "id": "724121825710473216",
+      "createdAt": "2016-04-24T06:24:31.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "くコ:彡お茶飲みたい人～。\n本日レジでお茶のチケット配布中( ´・ω・)つ旦\nまたウォーターサーバーお申し込みのお客様に永谷園の人気商品詰め合わせプレゼント！ https://t.co/Hwo21yHFtK",
+      "url": "https://x.com/bic_fujisawa/status/724121825710473216",
+      "media": [
+        "https://pbs.twimg.com/media/CgyY52UUUAACu7r.jpg",
+        "https://pbs.twimg.com/media/CgyY7qmU4AAuPr0.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-724121825710473216",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1050035,
+      "postSha256": "bfb137787aca677bad26a30003f4d10ae3ca78307d65c32c63c0c9b8568a8acc",
+      "textSha256": "b3bb53992d33f87f51e9ee74caaa7e250aa846f66872852f0d7540294218d66b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

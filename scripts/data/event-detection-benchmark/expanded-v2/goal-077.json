@@ -1,0 +1,135 @@
+[
+  {
+    "id": "expanded-v2-positive-1669213980672524288",
+    "source": "public-post",
+    "description": "shinjuku-bottleman-field-2023",
+    "post": {
+      "id": "1669213980672524288",
+      "createdAt": "2023-06-15T05:23:20.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "【イベント告知】\n6月18日（日）14：00～17：00\nボトルマンイベント開催！！\nしんじゅくたんイラスト付きのバトルフィールドを先着30名様にプレゼント！！\nぜひ、ご参加ください✨ https://t.co/rUeSJOFRCe",
+      "url": "https://x.com/bic_shinjuku3ch/status/1669213980672524288",
+      "media": [
+        "https://pbs.twimg.com/media/Fyo9P9RacAEfqoh.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "shintou"
+      ],
+      "startDate": "2023-06-18",
+      "conditions": [
+        {
+          "type": "first_come",
+          "quantity": 30
+        }
+      ]
+    },
+    "rationale": "しんじゅくたんイラスト付きの先着30名特典。参加の購入要否は不明。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "shinjuku-bottleman-field-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "バトルフィールド",
+          "evidence": [
+            "【イベント告知】",
+            "6月18日（日）14：00～17：00",
+            "ボトルマンイベント開催！！",
+            "しんじゅくたんイラスト付きのバトルフィールドを先着30名様にプレゼント！！",
+            "ぜひ、ご参加ください✨ https://t.co/rUeSJOFRCe"
+          ]
+        }
+      ],
+      "groupingNote": "しんじゅくたんイラスト付きの先着30名特典。参加の購入要否は不明。",
+      "unannotatedFields": [
+        "stores"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 355345,
+      "postSha256": "4137c119cf05bc9aa70daf4699997fc68d85ea97bf6233505ad7f88a9ec75faa",
+      "textSha256": "6a7c3b779029ef6d36d5292437d2d9a98d2815e6186ac6ba887ec6309bd00169"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1672071365040680960",
+    "source": "public-post",
+    "description": "shinjuku-bottleman-field-2023 matched control",
+    "post": {
+      "id": "1672071365040680960",
+      "createdAt": "2023-06-23T02:37:33.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "＼期間限定キャンペーン／\n6/22～7/23の期間中にツェッペリンの腕時計をご購入の上、アンケートに答えてご応募頂いた方に、LAMYのボールペンをプレゼント🎁\nLAMYの人気シリーズ「safari」のボールペンにZEPPELINのロゴをデザインした限定品✨\n地下1階時計コーナーでお求めください♪\n#ZEPPELIN\n#LAMY https://t.co/ll36JhrKhS",
+      "url": "https://x.com/bic_shinjuku3ch/status/1672071365040680960",
+      "media": [
+        "https://pbs.twimg.com/media/FzRkAClacAMbFUP.jpg",
+        "https://pbs.twimg.com/media/FzRkBleacAAb-5i.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1672071365040680960",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 353178,
+      "postSha256": "49bfd5e2faec7eaece7cd5f1c48262edbb39574da920822ecb61dd05210adb2c",
+      "textSha256": "fd276a683ea3e8f59f82d46c3cfe67df2c7101648e9c5bae363d6193001caef6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

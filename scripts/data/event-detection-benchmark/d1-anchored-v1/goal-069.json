@@ -1,0 +1,166 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2076101734255186313",
+    "source": "public-post",
+    "description": "ikebukuro-gift-card-vol2-sold-out-2026",
+    "post": {
+      "id": "2076101734255186313",
+      "createdAt": "2026-07-12T00:30:00.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "quote",
+      "text": "池袋限定ビッカメ娘ギフトカード第２弾(集合ver)は\n完売致しました。\n\nありがとうございました！",
+      "url": "https://x.com/bicikebukuro/status/2076101734255186313",
+      "quoted": {
+        "id": "2072153227186037008",
+        "screenName": "bicikebukuro",
+        "text": "／\n🦉池袋限定🅱\nビッカメ娘ギフトカード第2弾\n数量限定販売決定！\n＼\n✅7/11(土)～　先着100枚\n✅チャージ可能な「ビックカメラギフトカード(本店たんver.)」を販売！\n\n店舗により販売する絵柄が異なります🙌\nぜひGETしてくださいね☺️\n※7/11(土)開店前より引換券配布を予定しております https://t.co/1EFPFTja6U"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "集合verのギフトカードが完売。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:gift-card-vol2"
+    ],
+    "group": "ikebukuro-gift-card-vol2-sold-out-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "ビッカメ娘ギフトカード第2弾(集合ver)",
+          "evidence": [
+            "池袋限定ビッカメ娘ギフトカード第２弾(集合ver)は"
+          ]
+        }
+      ],
+      "groupingNote": "集合verのギフトカードが完売。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 25878,
+      "postSha256": "fc0ca54e60de7db707800027a9a6fc6f30128eb7955efb1de821897cc576b24d",
+      "textSha256": "3306e0648ad1cf9f2ad840495704e7859419d856b1f7803cc3ed8fa7210d8eb4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "4fdc6504-8c42-43b2-838b-4ce8ed5b5b13",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bicikebukuro/status/2076101734255186313",
+          "origin": "manual-or-seed",
+          "title": "ビックカメラギフトカード",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-10T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "honten"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2077927487498289274",
+    "source": "public-post",
+    "description": "ikebukuro-gift-card-vol2-sold-out-2026 matched control",
+    "post": {
+      "id": "2077927487498289274",
+      "createdAt": "2026-07-17T01:24:53.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "quote",
+      "text": "『ウマ娘 プリティーダービー』×ビックカメラグループ 限定グッズ\n\nただいまのお時間は入場制限を行っております。\nまた、一部完売商品もございます。\nご了承ください。",
+      "url": "https://x.com/bicikebukuro/status/2077927487498289274",
+      "quoted": {
+        "id": "2077656085142622325",
+        "screenName": "bicikebukuro",
+        "text": "🎉7/17開催🎉\n『ウマ娘 プリティーダービー』×ビックカメラグループ 限定グッズ\n7Fにて開催！！\n\nスタンディパネルも5Fに設置致します！\nウマ娘ファンの皆様！ぜひお越しくださいませ✨✨\n\n※初日は入場制限や個数制限、お並びに関しても制限を設ける可能性がございます https://t.co/PM1z6Uh2WO"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2077927487498289274",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 24292,
+      "postSha256": "b9b52e87491cbb78981aa23b521aecefc6d7ef4f41d9c534b2685bbb9c951f69",
+      "textSha256": "8a345006505b9925d31935dd814b69ce53dc7a2201c2255f5acb5018d0b1c22f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

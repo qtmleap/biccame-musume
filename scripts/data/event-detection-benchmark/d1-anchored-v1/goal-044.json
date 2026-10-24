@@ -1,0 +1,202 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2043600078708081148",
+    "source": "public-post",
+    "description": "yokonishi-store-anniv35-2026",
+    "post": {
+      "id": "2043600078708081148",
+      "createdAt": "2026-04-13T08:00:01.000Z",
+      "screenName": "bicyokonishi",
+      "kind": "original",
+      "text": "／\n【予告】\nビックカメラ横浜西口店\n開店35周年記念キャンペーンを開催します✨🎤\n＼\n4月23日(木)～4月30日(木)まで\n➊記念名刺を配布！\n❷等身大デザインのアクスタを\n当日税込5000円のお買い物でプレゼント🎁✨\n詳しくは添付画像をご覧ください～✨\n＃横西たん\n＃4月23日は横西開店35周年 https://t.co/WFjBfcFAhV",
+      "url": "https://x.com/bicyokonishi/status/2043600078708081148",
+      "media": [
+        "https://pbs.twimg.com/media/HFwq-kWbIAAQznl.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": [
+        "yokonishi"
+      ],
+      "characterIds": [
+        "yokonishi"
+      ],
+      "startDate": "2026-04-23",
+      "conditions": null
+    },
+    "rationale": "【予告】だが期間・景品・購入額まで揃う。名刺とアクスタで条件の範囲が異なる。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "boundary:action",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "yokonishi-store-anniv35-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "記念名刺",
+          "evidence": [
+            "➊記念名刺を配布！"
+          ]
+        },
+        {
+          "item": "等身大デザインのアクスタ",
+          "evidence": [
+            "❷等身大デザインのアクスタを"
+          ]
+        }
+      ],
+      "groupingNote": "【予告】だが期間・景品・購入額まで揃う。名刺とアクスタで条件の範囲が異なる。",
+      "unannotatedFields": [
+        "category",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 54631,
+      "postSha256": "0b086ec73e5db900db3fb7c6e60a7b52993b173bdfea66b392e1e3264293903c",
+      "textSha256": "48e527ba54583fc9ea8e72e7b85cbf8414f44ef0b2aef63d02f7cc3c9b65daab"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "4f777cd6-6e8c-4c92-b52b-88dab01ee715",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicyokonishi/status/2043600078708081148",
+          "origin": "manual-or-seed",
+          "title": "開店35周年記念名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-04-22T15:00:00.000+00:00",
+            "endDate": "2026-04-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yokonishi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "a0c02c3c-5be5-46e0-9903-cd39c54bb2e3",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicyokonishi/status/2043600078708081148",
+          "origin": "manual-or-seed",
+          "title": "開店35周年記念アクスタ",
+          "category": "acsta",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-04-22T15:00:00.000+00:00",
+            "endDate": "2026-04-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yokonishi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 150,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 5000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2039602293298040911",
+    "source": "public-post",
+    "description": "yokonishi-store-anniv35-2026 matched control",
+    "post": {
+      "id": "2039602293298040911",
+      "createdAt": "2026-04-02T07:14:15.000Z",
+      "screenName": "bicyokonishi",
+      "kind": "original",
+      "text": "＼Instagram始めました〜✨✨／ \nビックカメラ横浜西口店の\n公式Instagramはコチラ✨\nhttps://t.co/GYmjsQ1Lkc\n\n販売員たんが店内の様子や、おすすめ商品を紹介してます✨\nぜひぜひご覧ください〜✨🎶 https://t.co/3ZrQoqXz6n",
+      "url": "https://x.com/bicyokonishi/status/2039602293298040911",
+      "media": [
+        "https://pbs.twimg.com/media/HE4fV0mbIAApHJk.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2039602293298040911",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 57762,
+      "postSha256": "6201ccc7a9ec46aa4dc0160c8a7fb331ec6d7f089e2a1b2635285af045f6a41a",
+      "textSha256": "f95f557b89c1398e427bf51d654321383a4b9a5748257a2a8532e8db4f054ae7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

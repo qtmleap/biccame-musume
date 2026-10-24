@@ -1,0 +1,104 @@
+[
+  {
+    "id": "goal-negative-979897244513026048",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "979897244513026048",
+      "createdAt": "2018-03-31T01:44:43.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "＼こちらは明日4/1(日)まで！／\n\n税抜5万円以上のエアコン全品ご購入で5％引き❣️\n夏が来る前、今のうちにお買い得に手に入れちゃいましょう～ﾟ ✧˖ ٩( ‘ω’ )و ✧ ˖ﾟ https://t.co/b1bN0yg6O8",
+      "url": "https://x.com/bic_sapporo/status/979897244513026048",
+      "media": [
+        "https://pbs.twimg.com/media/DZlKVBsV4AEmbFW.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「＼こちらは明日4/1(日)まで！／ / 税抜5万円以上のエアコン全品ご購入で5％引き❣️ / 夏が来る前、今のうちにお買い得に手に入れちゃいましょう～ﾟ ✧˖ ٩( ‘ω’ )و ✧ ˖ﾟ https://t.co/b1bN0yg6O8」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "air-conditioner-five-percent-sale-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 870500,
+      "postSha256": "90f050fb03b43b5f2c9613617ff027ff0e72c1ca53e9ff8563a387bce949d45d",
+      "textSha256": "91f20dfafca12695c333a5e5b975de0101f0b8f76a81f52743d07d730a24e2e8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-990855460403142656",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "990855460403142656",
+      "createdAt": "2018-04-30T07:28:45.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "5/6（日）まで！\nMacBook Airが今なら1万円引き！\n対象商品はこちら\nhttps://t.co/UtZZyC8CeN …",
+      "url": "https://x.com/Bic_kawasaki/status/990855460403142656",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「5/6（日）まで！ / MacBook Airが今なら1万円引き！ / 対象商品はこちら」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "macbook-air-discount-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 861711,
+      "postSha256": "d46bf3ee075ca42b0cce9a6e91dd4da8f8ee0733ed68b88b86eda6f497ed7de4",
+      "textSha256": "b8b6b7038733f36830aba1556030ae9c9291637776c6c51607b4bf6a4ba65592"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

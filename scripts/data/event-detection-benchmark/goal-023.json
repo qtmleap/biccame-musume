@@ -1,0 +1,126 @@
+[
+  {
+    "id": "goal-positive-1133943719378296832",
+    "source": "public-post",
+    "description": "machida sagami collaboration 2019",
+    "post": {
+      "id": "1133943719378296832",
+      "createdAt": "2019-05-30T03:50:25.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "🚆町田たん×さがみたんコラボ名刺🚆\n\nコラボ名刺の配布は『6月2日まで』となります！！！\nまだお持ちでない方はお早めにもらってくださいね(*´ω`)♡\n#町田たん #さがみたん https://t.co/SxYzOJNwi2",
+      "url": "https://x.com/bic_sagamioono/status/1133943719378296832",
+      "media": [
+        "https://pbs.twimg.com/media/D7yRB-5UEAEAgc1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sagami"
+      ],
+      "characterIds": [
+        "sagami",
+        "machida"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "6/2までの配布終了予定。開始日未記載。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "machida-sagami-collaboration-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "町田たん×さがみたんコラボ名刺",
+          "evidence": [
+            "🚆町田たん×さがみたんコラボ名刺🚆",
+            "コラボ名刺の配布は『6月2日まで』となります！！！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 745468,
+      "postSha256": "2f570ef895115bd7c64f9118d484682ab2bdec3f6b2531c1eaefd3379de4e285",
+      "textSha256": "2afe837a8980c4968b6ecc9d2a6ccfdc718f05e74cd2ab1e26213b4fca58b698"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1145172688815579136",
+    "source": "public-post",
+    "description": "mito birthday air keychain 2019",
+    "post": {
+      "id": "1145172688815579136",
+      "createdAt": "2019-06-30T03:30:19.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "本日締め切り！水戸駅店に行けない想いや、行ったつもりになれるおもしろツイートをお待ちしております。ハッシュタグをつけてツイートしてくれたユーザーの中から抽選で5名様にアクリルキーホルダーをプレゼント！\n#水戸たん生誕祭2019エア参加組 https://t.co/ON6NvKxr1M",
+      "url": "https://x.com/biccameramito/status/1145172688815579136",
+      "media": [
+        "https://pbs.twimg.com/media/D9vdbYsU4AI5JaG.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey"
+    },
+    "rationale": "投稿応募と抽選5名の締切。金額条件はないと推測しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "end"
+    ],
+    "group": "mito-birthday-air-keychain-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "水戸たんアクキー",
+          "evidence": [
+            "本日締め切り！水戸駅店に行けない想いや、行ったつもりになれるおもしろツイートをお待ちしております。ハッシュタグをつけてツイートしてくれたユーザーの中から抽選で5名様にアクリルキーホルダーをプレゼント！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 735870,
+      "postSha256": "93a4ce412cb74bdd51a6e7024396529bf0f5c63e4390e74b073e8728af0e7d66",
+      "textSha256": "ab3e17fd88b89665ea954279c57d8f557da073c226f4e9fc69d83b611e8566e8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

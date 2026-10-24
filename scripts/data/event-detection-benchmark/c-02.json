@@ -1,0 +1,201 @@
+[
+  {
+    "id": "public-c-1973636566850339090",
+    "source": "public-post",
+    "description": "たかつきたん爆誕2周年アクキー",
+    "post": {
+      "id": "1973636566850339090",
+      "createdAt": "2025-10-02T06:30:00.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "📢＼　イ ベ ン ト 予 告　/\n✨たかつきたん爆誕2周年イベント✨\n\n『　第　3　弾　』\n\n合計税込3000円以上ご購入で、\n✨擬人化記念アクリルキーホルダー配布✨\n\n10/11㈯より　先着100名様　\n無くなり次第終了です。 https://t.co/8KFpHsDU7C",
+      "url": "https://x.com/bic_takatsuki/status/1973636566850339090",
+      "media": [
+        "https://pbs.twimg.com/media/G2O-5g9acAANfPt.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "takatsuki"
+      ],
+      "characterIds": [
+        "takatsuki"
+      ],
+      "startDate": "2025-10-11",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "10月11日開始、税込3000円以上購入・先着100名で擬人化記念アクキーと明示。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "first-come"
+    ],
+    "group": "takatsuki-second-anniversary-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1982716451833479344",
+    "source": "public-post",
+    "description": "水戸たん復刻ハロウィン名刺",
+    "post": {
+      "id": "1982716451833479344",
+      "createdAt": "2025-10-27T07:50:13.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "ビックカメラ水戸駅店の店頭で配布している水戸たん名刺の､ハロウィンVerをご用意しました🎃\nデザインは過去の復刻ですが､よければ是非( ܸ ⩌⩊⩌ ܸ )\n\n配布期間は11/3(月･祝)までの予定デス！ https://t.co/ninsDgbHP7",
+      "url": "https://x.com/biccameramito/status/1982716451833479344",
+      "media": [
+        "https://pbs.twimg.com/media/G4QEyMKWIAAxAac.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "mito"
+      ],
+      "characterIds": [
+        "mito"
+      ]
+    },
+    "rationale": "水戸駅店店頭で水戸たんハロウィン名刺を配布すると明示。終了予定だけで開始日は不明。",
+    "tags": [
+      "historical",
+      "positive",
+      "reprint"
+    ],
+    "group": "mito-halloween-card-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1981893141952405542",
+    "source": "public-post",
+    "description": "天神2号たんアクキー",
+    "post": {
+      "id": "1981893141952405542",
+      "createdAt": "2025-10-25T01:18:41.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "本日より\n先着100名様限定\n3000円以上ご購入レシートを1階総合カウンターにお持ち頂くと\n天神２号たんアクリルキーホルダープレゼント🎁\nこの機会にぜひご来店をお待ちしております～°˖✧◝(⁰▿⁰)◜✧˖° https://t.co/zi12hIS2QC",
+      "url": "https://x.com/biccameratenjin/status/1981893141952405542",
+      "media": [
+        "https://pbs.twimg.com/media/G4EY0SeW8AEiHFc.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "tenjin2"
+      ],
+      "characterIds": [
+        "tenjin2"
+      ],
+      "startDate": "2025-10-25",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "本日10月25日より先着100名、3000円以上購入レシートで天神2号たんアクキーと明示。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "first-come"
+    ],
+    "group": "tenjin2-anniversary-keychain-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1974383990632067283",
+    "source": "public-post",
+    "description": "池袋本店のハロウィン名刺配布",
+    "post": {
+      "id": "1974383990632067283",
+      "createdAt": "2025-10-04T08:00:00.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "🎃お知らせ🎃\n\n＼ハロウィン名刺2025配布決定／\n\n急遽ではありますが\nハロウィン名刺を配布します\\(◉◉*\\)(/*0ω0)/ﾜｰｲ\n\n🎃10月5日(日)～10月31日(金)まで\n🎃B1階本店たんミュージアムにて\n🎃お一人様2枚まで\n\nぜひもらってくださいね～\\(◉◉)人(0ω0)/ https://t.co/FwTYqe6Mkk",
+      "url": "https://x.com/bicikebukuro/status/1974383990632067283",
+      "media": [
+        "https://pbs.twimg.com/media/G2ZoLhDbMAIXvk7.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "honten"
+      ],
+      "startDate": "2025-10-05"
+    },
+    "rationale": "本店たんミュージアムで10月5日から31日のハロウィン名刺配布を告知。娘名は開催場所にしか出ず対象デザインは未記載なので対象娘は未注釈。1人2枚は総配布数量ではない。",
+    "tags": [
+      "historical",
+      "positive",
+      "limited-card"
+    ],
+    "group": "honten-halloween-card-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1975108775989129352",
+    "source": "public-post",
+    "description": "本店たん10周年アクキー",
+    "post": {
+      "id": "1975108775989129352",
+      "createdAt": "2025-10-06T08:00:02.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "🎉お知らせ🎉\n\nビッカメ娘擬人化10周年記念🎂\n本店たんアクリルキーホルダー配布決定🎉✨\n\n■10月11日(土)～なくなり次第終了\n■当日税込3,000円以上お買い上げのレシート\n■1階総合案内カウンターにて\n\nぜひもらってください\\(*◉◉*)/\\(*0ω0*)/\n\n※詳細は画像のご確認をお願いします https://t.co/exahOlhQZK",
+      "url": "https://x.com/bicikebukuro/status/1975108775989129352",
+      "media": [
+        "https://pbs.twimg.com/media/G2jqv2UaoAAMO-r.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "honten"
+      ],
+      "characterIds": [
+        "honten"
+      ],
+      "startDate": "2025-10-11",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "10月11日開始、本店たんアクキーを当日税込3000円以上購入レシートで提供。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase"
+    ],
+    "group": "honten-tenth-anniversary-2025",
+    "reviewStatus": "provisional"
+  }
+]

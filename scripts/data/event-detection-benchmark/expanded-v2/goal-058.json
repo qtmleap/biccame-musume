@@ -1,0 +1,128 @@
+[
+  {
+    "id": "expanded-v2-positive-1598137501570727936",
+    "source": "public-post",
+    "description": "ohmiya-kawasaki-celebration-pop-2022",
+    "post": {
+      "id": "1598137501570727936",
+      "createdAt": "2022-12-01T02:10:46.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "本日  #12月1日は川崎たん擬人化6周年 記念日〜っヾ(≧▽≦お)ﾉ🎉🎉\n#川崎たん 爆誕記念日おめでと〜っ♪\n\nお祝いPOPは2Fスポーツコーナーに展示中で〜っす(お๑•̀ㅂ•́)و✧\n\n#ナイセン #ビッカメ娘 https://t.co/VDzaPMsMA9",
+      "url": "https://x.com/bic_ohmiya/status/1598137501570727936",
+      "media": [
+        "https://pbs.twimg.com/media/Fi25QAuagAEpgUV.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "大宮店に川崎たんのお祝いPOPを展示。店舗と対象を分離。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "ohmiya-kawasaki-celebration-pop-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "お祝いPOP",
+          "evidence": [
+            "本日  #12月1日は川崎たん擬人化6周年 記念日〜っヾ(≧▽≦お)ﾉ🎉🎉",
+            "#川崎たん 爆誕記念日おめでと〜っ♪",
+            "お祝いPOPは2Fスポーツコーナーに展示中で〜っす(お๑•̀ㅂ•́)و✧",
+            "#ナイセン #ビッカメ娘 https://t.co/VDzaPMsMA9"
+          ]
+        }
+      ],
+      "groupingNote": "大宮店に川崎たんのお祝いPOPを展示。店舗と対象を分離。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 406723,
+      "postSha256": "50ca055546ec4f523bc7acc21b11eb502abd4d3390176a90c1448706dcdc89ad",
+      "textSha256": "3d6c75bd77070fa4c56558815997e1f1f6f4a40e7968d2d64f019de12ab28099"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1598253226717229057",
+    "source": "public-post",
+    "description": "ohmiya-kawasaki-celebration-pop-2022 matched control",
+    "post": {
+      "id": "1598253226717229057",
+      "createdAt": "2022-12-01T09:50:38.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "おーちゃんログアウトの時間です～っヾ( ・ω・お)ﾉﾞ\n今日もたくさん イイネ&RT ありがとうございますっ♪\n次回も よろしくおねがいしま～っす♪\n\n今日は #ワッフルの日 ♪\n帰りに買っていこうかな〜( ´艸｀お)\n\nお店はこの後も夜9時まで元気に営業中ですっ♪",
+      "url": "https://x.com/bic_ohmiya/status/1598253226717229057",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1598253226717229057",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 406499,
+      "postSha256": "1939959adeaab26af909f335b77393519b3d132b12bace7ee9b218d7b7cec809",
+      "textSha256": "97f52c61a54a76ac0cbb67e76749ba1bcc42e6fd59d145abbce2b160fa664867"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

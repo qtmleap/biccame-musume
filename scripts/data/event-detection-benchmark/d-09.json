@@ -1,0 +1,155 @@
+[
+  {
+    "id": "public-d-2060631442250682869",
+    "source": "public-post",
+    "description": "ウルトラマン60周年アクリルグッズ",
+    "post": {
+      "id": "2060631442250682869",
+      "createdAt": "2026-05-30T07:56:35.000Z",
+      "screenName": "bic_kumamoto",
+      "kind": "original",
+      "text": "ウルトラマン60周年を記念した「円谷プロオリジナルグッズ」をアミュプラザくまもと店でも販売中です！\nアクリルキーホルダーやポーチ、ぬいぐるみ等のグッズを取り揃えています！\nこの機会にぜひ、お立ち寄りくださいませ！！\n＃ウルトラマン https://t.co/kVXYopoYNy",
+      "url": "https://x.com/bic_kumamoto/status/2060631442250682869",
+      "media": [
+        "https://pbs.twimg.com/media/HJjVFi4a0AAnFmS.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "周年・アクキー・ぬいぐるみはウルトラマンの記念商品。娘の周年や対象デザインではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "anniversary",
+      "acrylic-word"
+    ],
+    "group": "ultraman60-anniversary-goods-may-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2064543083971129744",
+    "source": "public-post",
+    "description": "川崎たんから高槻店4周年への祝辞",
+    "post": {
+      "id": "2064543083971129744",
+      "createdAt": "2026-06-10T03:00:03.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "今日6月10日はビックカメラ高槻阪急スクエア店店舗誕生4周年✨🍰🎊✨\n#たかつきたん おめでとうらぞ！(*˙꒳​˙2o🎉🎉ﾊﾟﾊﾟｰｰﾝ✨\n\n.    ＊~４~＊\n　∴┍★☆┑∴\n∵┍*HAPPY*┑∵\n┍♡BIRTHDAY♡┑\n┖**************┛\n#6月10日はたかつきたんのバースデー \n#ビッカメ娘 #川崎たんお絵描き https://t.co/MaaBPbAAEs",
+      "url": "https://x.com/Bic_kawasaki/status/2064543083971129744",
+      "media": [
+        "https://pbs.twimg.com/media/HKah2nAbAAAyeh-.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "複数の娘の名前と周年語があるが、おめでとうというお祝い投稿だけで来店者向け企画はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "multi-character-mention",
+      "anniversary",
+      "greeting-only"
+    ],
+    "group": "kawasaki-congratulates-takatsuki-store4-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2036672863667986871",
+    "source": "public-post",
+    "description": "アキバたんも買うというゲーム予約広告",
+    "post": {
+      "id": "2036672863667986871",
+      "createdAt": "2026-03-25T05:13:44.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "📢予約受付中🌟3月27日㈮発売‼\n流星のロックマン パーフェクトコレクション 【Switch】\n\n「流星のロックマン」は、ロックマン生誕20周年記念作品として2006年に誕生したアクションRPGシリーズ❣\n\n懐かしい～❣アキバたんも買う～🎮\n🌸7階ゲームコーナーにて予約受付中🌸\nhttps://t.co/qjTemVdOKR https://t.co/WFHRVfBUAc",
+      "url": "https://x.com/bic_akiba/status/2036672863667986871",
+      "media": [
+        "https://pbs.twimg.com/media/HEO2vAnboAAXrgM.jpg",
+        "https://pbs.twimg.com/media/HEO2vA5bIAAGrPJ.jpg",
+        "https://pbs.twimg.com/media/HEO2vB8bEAESKnv.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "アキバたんの個人的な購入予定の一言はあるが、企画対象はロックマン記念作品の通常予約販売。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "character-mention",
+      "other-ip",
+      "anniversary",
+      "reservation"
+    ],
+    "group": "megaman-starforce20-preorder-march-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2071790837252399122",
+    "source": "public-post",
+    "description": "Surface購入のトートバッグ特典",
+    "post": {
+      "id": "2071790837252399122",
+      "createdAt": "2026-06-30T03:00:02.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "/\n🌟Surface購入特典🌟\n\\\n\n本日より、当店にてMicrosoft Surfaceをご購入頂くと、オリジナルトートバッグ🛍️をプレゼント🎁\n※無くなり次第終了\n\n新型Surface ProやLaptopも絶賛展示中❗️\n\nパソコン選びは🅱️池袋カメラ・パソコン館で💁‍♀️\nお待ちしてます🥰 https://t.co/2gfZ74NwJt",
+      "url": "https://x.com/bicpkanhonten/status/2071790837252399122",
+      "media": [
+        "https://pbs.twimg.com/media/HL5FoyVaMAAESN_.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "一般PC購入時のオリジナルバッグ配布であり、ビッカメ娘のデザイン・出演・企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "purchase-benefit",
+      "giveaway",
+      "ordinary-product"
+    ],
+    "group": "surface-tote-purchase-benefit-june-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2067072839849738703",
+    "source": "public-post",
+    "description": "レシートプリンター購入の登録無料サポート",
+    "post": {
+      "id": "2067072839849738703",
+      "createdAt": "2026-06-17T02:32:24.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "＼当社指定レシートプリンター購入特典／\n\n6/15(月)〜8/31(日)の期間限定で、\nAirレジ商品登録無料サポートを実施中！\n\n最大30アイテムの商品登録作業をお手伝い✨\n\n詳しくは札幌店5階 Airレジカウンターにて♪ https://t.co/L9iEzFQ6pd",
+      "url": "https://x.com/bic_sapporo/status/2067072839849738703",
+      "media": [
+        "https://pbs.twimg.com/media/HK-3wa6aQAAwK0s.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "購入特典はAirレジの商品登録作業で、レシートという語も娘の配布条件とは関係がない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "purchase-benefit",
+      "receipt-word",
+      "service"
+    ],
+    "group": "airregi-product-support-summer-2026",
+    "reviewStatus": "provisional"
+  }
+]

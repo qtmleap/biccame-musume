@@ -1,0 +1,136 @@
+[
+  {
+    "id": "expanded-v2-positive-1518424567277965313",
+    "source": "public-post",
+    "description": "kashiwa-character7-store17-cards-2022",
+    "post": {
+      "id": "1518424567277965313",
+      "createdAt": "2022-04-25T03:00:02.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "🎏お知らせです🎏\n\n🍀柏たん擬人化7周年記念名刺を配布します🍀\n\n5月1日(日)～6月30日(木)まで\nデザインは見てのお楽しみ💗\n\n17周年名刺も引き続き配布中なのでこちらも是非♪ https://t.co/HBzWeEmD2w",
+      "url": "https://x.com/bic_kashiwa/status/1518424567277965313",
+      "media": [
+        "https://pbs.twimg.com/media/FRJ8-FTaMAAsCiW.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "擬人化7周年と店舗17周年の名刺を区別。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-character7-store17-cards-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "擬人化7周年記念名刺",
+          "evidence": [
+            "柏たん擬人化7周年記念名刺",
+            "5月1日(日)～6月30日(木)"
+          ]
+        },
+        {
+          "item": "17周年名刺",
+          "evidence": [
+            "17周年名刺も引き続き配布中"
+          ]
+        }
+      ],
+      "groupingNote": "擬人化7周年と店舗17周年の名刺を区別。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 466481,
+      "postSha256": "e594d2eb8436055b678c71739197505584ef6da0a94c7e1aa80496d2bd8220e6",
+      "textSha256": "e151ce22a949a84ceb1cb480cef9631084804f3bd2123d71a4ab68dd9eb1e3e0"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1519503885144313856",
+    "source": "public-post",
+    "description": "kashiwa-character7-store17-cards-2022 matched control",
+    "post": {
+      "id": "1519503885144313856",
+      "createdAt": "2022-04-28T02:28:51.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【7階 #おもちゃコーナー】\n\n♬リズスタ♬アイテムが本日発売になりました✨\n\nみんなでリズスタになりきってレッツダンス♩\n\n「リズスタブレス」を先着購入でラバーバンドを主人公の名前入りでプレゼント🎁 https://t.co/6UjHJtFTtp",
+      "url": "https://x.com/bic_kashiwa/status/1519503885144313856",
+      "media": [
+        "https://pbs.twimg.com/media/FRZcpfBakAAwBNt.png",
+        "https://pbs.twimg.com/media/FRZcr0dakAAMh1u.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1519503885144313856",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 465829,
+      "postSha256": "8fc3b9ecdc4ee119c9f6740015aed2e3c786ffa2f0291ea25418599d25bcc80a",
+      "textSha256": "9e2a585c047e60524473bfcf34a3c4b1e53c6e3b2fe70bca670dbde0d0d9ad88"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

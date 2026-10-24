@@ -1,0 +1,163 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1876469019429265772",
+    "source": "public-post",
+    "description": "kawasaki-regular-card-notice-2025",
+    "post": {
+      "id": "1876469019429265772",
+      "createdAt": "2025-01-07T03:20:51.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "🥗- 定期案内 -🥗\nビッカメ娘24番目の娘 川崎たんの名刺は2階総合カウンターで配布中🍀\n\n-名刺について-[1/7現在]\n●種類：1種類 (通常名刺)\n※イベントにより配布種類が変わります\n●配布方法：スタッフから\"手渡し”\n▲お一人１枚まで \n#ビッカメ娘 #川崎たん https://t.co/Feo08vWijD",
+      "url": "https://x.com/Bic_kawasaki/status/1876469019429265772",
+      "media": [
+        "https://pbs.twimg.com/media/GgqObciagAAg27z.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "regular_card",
+      "stores": null,
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "通常名刺の定期案内。配布中の継続情報。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:kawasaki-regular-card-notice"
+    ],
+    "group": "kawasaki-regular-card-notice-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "川崎たん通常名刺",
+          "evidence": [
+            "ビッカメ娘24番目の娘 川崎たんの名刺は2階総合カウンターで配布中🍀",
+            "●種類：1種類 (通常名刺)",
+            "#ビッカメ娘 #川崎たん https://t.co/Feo08vWijD"
+          ]
+        }
+      ],
+      "groupingNote": "通常名刺の定期案内。配布中の継続情報。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 180366,
+      "postSha256": "1e19539df4265032803ade97928724d194b201847ac31f3c17532ddb78442843",
+      "textSha256": "3e8784bd47e4c0ea458b489d89767d3f11c490471a09999482ece6ee43238c2d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "97a48cd2-5245-4724-a4e1-fef46a94947b",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/Bic_kawasaki/status/1876469019429265772",
+          "origin": "manual-or-seed",
+          "title": "通常名刺",
+          "category": "regular_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2024-06-30T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "kawasaki"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1876847491905146939",
+    "source": "public-post",
+    "description": "kawasaki-regular-card-notice-2025 matched control",
+    "post": {
+      "id": "1876847491905146939",
+      "createdAt": "2025-01-08T04:24:46.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "🎮 ニンテンドーマガジン 2024  winter ❄\n\n　　ラゾーナ川崎店1階ゲームコーナー\n　任天堂エリアで冊子版（無料）配布中！\n\n10月オープン「ニンテンドーミュージアム」の突撃レポートやさまざまなソフトや情報が色いろ掲載中♪\n\n※数量限定。無くなり次第終了 https://t.co/vHJBuDUSuu",
+      "url": "https://x.com/Bic_kawasaki/status/1876847491905146939",
+      "media": [
+        "https://pbs.twimg.com/media/Ggvm1FiaUAAw0Qi.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1876847491905146939",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 180102,
+      "postSha256": "f47e6f22c2ec037a7cb4c4e3b4b22c050b40203969286691f8266dff3b24814f",
+      "textSha256": "eea332ad3aa1c25f48761cda9ff75deee2be381c65f0df22a930cd52b5ea89a2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

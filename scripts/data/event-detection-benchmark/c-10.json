@@ -1,0 +1,206 @@
+[
+  {
+    "id": "public-c-2064260955731845202",
+    "source": "public-post",
+    "description": "高崎・立川の夏コラボ",
+    "post": {
+      "id": "2064260955731845202",
+      "createdAt": "2026-06-09T08:18:58.000Z",
+      "screenName": "bictakasaki",
+      "kind": "original",
+      "text": "／ \nちょっと似ている2人の夏コラボ🎇\n＼\n\n①「夏おでかけver」アクリルキーホルダー配布(税込3,000以上のレシート)\n②コラボ名刺配布\n\n①は6/27(土)～無くなり次第終了\n　初日のみ整理券配布予定\n②は6/27(土)～7/26(日)\n\n高崎東口店では #たかさきたん\n立川店では #立川たん\nの配布となります！ https://t.co/8gkzI2zYOt",
+      "url": "https://x.com/bictakasaki/status/2064260955731845202",
+      "media": [
+        "https://pbs.twimg.com/media/HKW55kVaAAAWzz5.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "takasaki",
+        "tachikawa"
+      ],
+      "characterIds": [
+        "takasaki",
+        "tachikawa"
+      ],
+      "startDate": "2026-06-27"
+    },
+    "rationale": "高崎東口と立川で異なる娘のアクキー・名刺を6月27日から提供。店舗と対象娘を独立複数保持し、アクキーだけの購入条件を名刺へ混ぜない。",
+    "tags": [
+      "historical",
+      "positive",
+      "multi-store",
+      "multi-character",
+      "multi-item"
+    ],
+    "group": "takasaki-tachikawa-summer-collaboration-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2073608540510687525",
+    "source": "public-post",
+    "description": "関西4店舗のマーメイドアクキー",
+    "post": {
+      "id": "2073608540510687525",
+      "createdAt": "2026-07-05T03:22:56.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "＼ビッカメ娘イベント予告✨／\nsummerコラボ🏝️in関西\n\n8/1㈯～無くなり次第終了\n税込3,000円以上の当日ご購入で『マーメイドアクキー』プレゼント🧜‍♀️\nなんばたん、たかつきたん、八尾たんのお店でも同時開催❣️\nぜひGETしてな😆\n\n⚠️キーホルダーに個体差がありますがお選びいただけません🙇‍♀️御了承下さい https://t.co/U05F2S8F0G",
+      "url": "https://x.com/bic_abeno/status/2073608540510687525",
+      "media": [
+        "https://pbs.twimg.com/media/HMbvdQfasAA9c_v.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "abeno",
+        "nanba",
+        "takatsuki",
+        "yao"
+      ],
+      "startDate": "2026-08-01",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "8月1日からあべの・なんば・たかつき・八尾で3000円購入のアクキー。全デザイン対象は本文から断定しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "multi-store",
+      "purchase",
+      "partial-annotation"
+    ],
+    "group": "kansai-mermaid-keychain-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2082759852586356905",
+    "source": "public-post",
+    "description": "藤沢たん20周年ギフトカード限定販売",
+    "post": {
+      "id": "2082759852586356905",
+      "createdAt": "2026-07-30T09:26:59.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "📢藤沢店20周年記念追加イベント🎉\n藤沢限定 ビッカメ娘ギフトカード\n数量限定販売！\n\n藤沢たんの新規イラストを使用した\nオリジナルデザイン✨\n\n先着70枚、おひとり様1枚限り\n販売開始：8/10(月)～\n場所：2F総合案内カウンター\n\n※ビックカメラギフトカードの発行には、1,000円以上の入金が必要です https://t.co/6NrNUhyrIy",
+      "url": "https://x.com/bic_fujisawa/status/2082759852586356905",
+      "media": [
+        "https://pbs.twimg.com/media/HOdxFycbsAAjmXV.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "other",
+      "stores": [
+        "fujisawa"
+      ],
+      "characterIds": [
+        "fujisawa"
+      ],
+      "startDate": "2026-08-10",
+      "conditions": [
+        {
+          "type": "charge",
+          "amount": 1000
+        },
+        {
+          "type": "first_come",
+          "quantity": 70
+        }
+      ]
+    },
+    "rationale": "8月10日から新規藤沢たんイラストのカードを先着70枚販売し、発行には1000円以上入金が必要と明記。開発用有楽町企画と別キャンペーン。",
+    "tags": [
+      "historical",
+      "positive",
+      "limited-sale",
+      "gift-card",
+      "charge",
+      "first-come"
+    ],
+    "group": "fujisawa-twentieth-giftcard-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2072164014659129855",
+    "source": "public-post",
+    "description": "ITT店でフォトたんギフトカード限定販売",
+    "post": {
+      "id": "2072164014659129855",
+      "createdAt": "2026-07-01T03:42:54.000Z",
+      "screenName": "bic_itt",
+      "kind": "original",
+      "text": "／\n  🦉池袋限定🅱\n  ビッカメ娘ギフトカード第2弾\n  数量限定販売決定！\n  ＼\n✅7/11(土)～　先着100枚\n✅チャージ可能な「ビックカメラギフトカード(フォトたんver.)」を販売！\n\n店舗により販売する絵柄が異なります🙌\n  ぜひGETしてくださいね☺️\n\n※7/11(土)開店前より引換券配布を予定しております https://t.co/dQdhhmmoLO",
+      "url": "https://x.com/bic_itt/status/2072164014659129855",
+      "media": [
+        "https://pbs.twimg.com/media/HMHN6vLb0AAo_Un.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "other",
+      "stores": [
+        "itt"
+      ],
+      "characterIds": [
+        "photo"
+      ],
+      "startDate": "2026-07-11"
+    },
+    "rationale": "7月11日からフォトたんver.ギフトカードを先着100枚販売。投稿元あいタワたんと対象フォトたんを区別。「チャージ可能」は機能であり入金金額条件ではない。",
+    "tags": [
+      "historical",
+      "positive",
+      "limited-sale",
+      "gift-card",
+      "cross-store-character",
+      "closed-character",
+      "charge-capability-not-condition"
+    ],
+    "group": "ikebukuro-giftcard-second-wave-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2093310751662612897",
+    "source": "public-post",
+    "description": "調布店でせいせきたん生誕祭",
+    "post": {
+      "id": "2093310751662612897",
+      "createdAt": "2026-08-28T12:12:29.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "§( *'▽'o[お知らせ]o\n\n( ❀ '▽'。)人('▽' *)§\n8月31日はせいせきたんお誕生日！\n生誕祭企画🎉🎂\n\nビックカメラ京王調布店で税込3000円以上のご購入で、せいせきたんのアクリルキーホルダーをプレゼント💕\nコラボ名刺間に合いましたっ\n\n#8月31日はせいせきたん擬人化10周年\n#せいせきたん #調布たん https://t.co/RMJNO9DKQH",
+      "url": "https://x.com/bic_keiochofu/status/2093310751662612897",
+      "media": [
+        "https://pbs.twimg.com/media/HQzuSKFaQAA0K4y.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "chofu"
+      ],
+      "characterIds": [
+        "seiseki",
+        "chofu"
+      ]
+    },
+    "rationale": "京王調布店でせいせきたんアクキーとコラボ名刺を提供。アクキーの3000円条件を名刺へ混ぜず、開始日も誕生日から勝手に補完しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "closed-character",
+      "cross-store-character",
+      "multi-item"
+    ],
+    "group": "seiseki-tenth-anniversary-chofu-2026",
+    "reviewStatus": "provisional"
+  }
+]

@@ -1,0 +1,158 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2077640396168134820",
+    "source": "public-post",
+    "description": "tokorozawa-air-collab-card-2026",
+    "post": {
+      "id": "2077640396168134820",
+      "createdAt": "2026-07-16T06:24:05.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "✈️限定デザイン名刺 配布✈️\n\nなんとなんと！！\n#Airたん とのおそろいデザイン名刺を\n7月18日(土)～8月31日(月)まで配布するとこ～✨\n\nご来店の際はチェックしてくださいね❣️\nよろとこ～(§*'▽'*)✈️ https://t.co/7buXcWpriL",
+      "url": "https://x.com/bic_toko/status/2077640396168134820",
+      "media": [
+        "https://pbs.twimg.com/media/HNU__ghbIAA2CfE.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2026-07-18",
+      "conditions": null
+    },
+    "rationale": "7/18〜8/31の限定デザイン名刺。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "tokorozawa-air-collab-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "Airたんとのおそろいデザイン名刺",
+          "evidence": [
+            "#Airたん とのおそろいデザイン名刺を"
+          ]
+        }
+      ],
+      "groupingNote": "7/18〜8/31の限定デザイン名刺。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 24495,
+      "postSha256": "220e650bf202ad68f6a3eef2506e6331cbe78997578177a427f7a887fbbf7379",
+      "textSha256": "251e0cf76c42ddd0ae7b2ad4ad5ffab0ed4d2f3f96e45dc1b718b4a2b1c62a90"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "199ff82a-f553-4bc2-9da9-ae3370952545",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_toko/status/2077640396168134820",
+          "origin": "manual-or-seed",
+          "title": "限定デザイン名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-17T15:00:00.000+00:00",
+            "endDate": "2026-08-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "tokorozawa"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2080570180552581447",
+    "source": "public-post",
+    "description": "tokorozawa-air-collab-card-2026 matched control",
+    "post": {
+      "id": "2080570180552581447",
+      "createdAt": "2026-07-24T08:26:00.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "⭐️明日25日は買取の日⭐️\n\n現金買取が３％増額されます！\nサービスサポートカウンターにて高価買取実施中❗️\n\nお見逃しなく✨ https://t.co/VNiGfc3ScZ",
+      "url": "https://x.com/bic_toko/status/2080570180552581447",
+      "media": [
+        "https://pbs.twimg.com/media/HN-rjG4bMAEHava.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2080570180552581447",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 21851,
+      "postSha256": "5594c3dfac44401526507c6a5f1c26586e7cbee7adb4ddc57adcbb518df477bb",
+      "textSha256": "e5d599f311944a4a28f8597ede6a367326bc59c5378cd0dbffc709a1b366f8b6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

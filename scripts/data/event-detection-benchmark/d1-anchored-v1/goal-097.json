@@ -1,0 +1,172 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2103787531657724394",
+    "source": "public-post",
+    "description": "ikebukuro-honten-key-end-2026",
+    "post": {
+      "id": "2103787531657724394",
+      "createdAt": "2026-09-26T10:03:28.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "quote",
+      "text": "＼配布終了しました／\n\n本店たんアクキーはご好評につき配布終了いたしました！\nありがとうございました！\n\nhttps://t.co/LRKhjGXYsT",
+      "url": "https://x.com/bicikebukuro/status/2103787531657724394",
+      "quoted": {
+        "id": "2096871089565585553",
+        "screenName": "bicikebukuro",
+        "text": "🎉池袋本店店舗誕生記念イベント🎉\n本店たんアクキープレゼント企画\n\n📅9月26日(土)～なくなり次第終了\n📦当日税込3,000円以上\n📦先着100名様\n📦総合案内カウンターにて配布\n\n大人気の段ボールに入った本店たんのアクキーです✨\n\nぜひGETしてください\\(◉◉)人(0ω0)/ https://t.co/izg3M83evf"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": [
+        "honten"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アクキーの配布終了。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "ikebukuro-honten-key-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "本店たんアクキー",
+          "evidence": [
+            "本店たんアクキーはご好評につき配布終了いたしました！"
+          ]
+        }
+      ],
+      "groupingNote": "アクキーの配布終了。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 3549,
+      "postSha256": "048e58c2cec61e50aebe012301c5e654804da88685b254975e52290bb08a704a",
+      "textSha256": "f26906eef0af11bde8ef733352d6473988fb2c0ce61714242cf9d1a55aee76f6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "b09f1830-9f22-41c0-90f0-44ffd42b59f9",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bicikebukuro/status/2103787531657724394",
+          "origin": "manual-or-seed",
+          "title": "本店たんアクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-25T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "honten"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2103369207790673924",
+    "source": "public-post",
+    "description": "ikebukuro-honten-key-end-2026 matched control",
+    "post": {
+      "id": "2103369207790673924",
+      "createdAt": "2026-09-25T06:21:12.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "quote",
+      "text": "👻『ファントムバスターズ』👻\n🎊TVアニメ化おめでとうございます🎊\n\nビックカメラ池袋本店7階では\nファントムバスターズのグッズをお取り扱い中です✨",
+      "url": "https://x.com/bicikebukuro/status/2103369207790673924",
+      "quoted": {
+        "id": "2103046826425479208",
+        "screenName": "phanbus_anime",
+        "text": "┎┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┒\n👻『#ファントムバスターズ 』👻\n　　　2027年TVアニメ化決定！！\n┖┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┚\n\n原作・ネオショコ先生\nアニメ化決定お祝いイラストを解禁✨\n\n続報をお楽しみに！\n\n🔽TVアニメ公式サイト\nhttps://t.co/Hj6Gx0VPoE\n\n#ファンバス https://t.co/NsNxzK1hIY"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2103369207790673924",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 3948,
+      "postSha256": "2bcc0df328ed355a34d600678c534fd4a3191ffabe9b1bc765ed36bda8451a84",
+      "textSha256": "865412cfcebd9e53019c839677bdb12fb8f68f27a9c5acc1f5a7e0f1f05af802"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

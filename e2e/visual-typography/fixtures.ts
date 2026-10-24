@@ -5,6 +5,7 @@ export const events = (['ongoing', 'upcoming', 'last_day', 'ended'] as const).ma
     title: '限定名刺・秋のお買い物キャンペーン 特別記念プレゼントのお知らせ',
     category: 'limited_card',
     stores: ['nagoyagate'],
+    characterIds: [],
     startDate: status === 'upcoming' ? '2026-10-04' : '2026-09-28',
     endDate: index === 1 ? undefined : '2026-10-05',
     conditions: [{ uuid: '00000000-0000-4000-8000-000000000010', type: 'purchase', purchaseAmount: 1000 }],

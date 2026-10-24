@@ -1,0 +1,259 @@
+{
+  "sourceArchive": ".cache/event-detect/posts.jsonl",
+  "sourceKind": "normalized-public-official-posts",
+  "datasetRevision": "historical-positive-c-v1",
+  "annotationStatus": "provisional",
+  "liveEvaluation": "not-run; excluded from the frozen current 100-case run",
+  "posts": [
+    {
+      "id": "1974442197132140696",
+      "createdAt": "2025-10-04T11:51:17.000Z",
+      "textSha256": "1bd42fe4709d624f8768b77461384394ce5f363c3e9a8b78174b47d87a38aa92"
+    },
+    {
+      "id": "1984102527994912855",
+      "createdAt": "2025-10-31T03:38:00.000Z",
+      "textSha256": "32a1475016ea46401e3fb7f04435e997823acf9d8e65dd2ebf5f7f43c12c395d"
+    },
+    {
+      "id": "1976558325547360568",
+      "createdAt": "2025-10-10T08:00:02.000Z",
+      "textSha256": "5a755bc86ca0f8cfcdc0df7145f0546596c85c223347ce50f7ee8382a63ba467"
+    },
+    {
+      "id": "1982981659906715698",
+      "createdAt": "2025-10-28T01:24:04.000Z",
+      "textSha256": "3c598cf70d304ee0555495c425668fc4ac9711d3e72da6e559b09f9ad66d918e"
+    },
+    {
+      "id": "1981292643218051265",
+      "createdAt": "2025-10-23T09:32:31.000Z",
+      "textSha256": "efd62808da04aa23df991f91297f359ebb1080c819c597aa8c3837b44d189f27"
+    },
+    {
+      "id": "1973636566850339090",
+      "createdAt": "2025-10-02T06:30:00.000Z",
+      "textSha256": "096a7a4d9d4d454b19aaebdb220400027601375aa067368e99070d9ff1e822b4"
+    },
+    {
+      "id": "1982716451833479344",
+      "createdAt": "2025-10-27T07:50:13.000Z",
+      "textSha256": "bd0109ba7b886ddb43c661f4ad5f79aa499381acf7a23194026f5b1f0f3b5868"
+    },
+    {
+      "id": "1981893141952405542",
+      "createdAt": "2025-10-25T01:18:41.000Z",
+      "textSha256": "5cd6df20365a741adad6ba4e812823e8db0776dc893077ad5e7351085fc4f422"
+    },
+    {
+      "id": "1974383990632067283",
+      "createdAt": "2025-10-04T08:00:00.000Z",
+      "textSha256": "f9d714ce00828e9e11b2e1e69f6529db760ff9a3201c418ca3dec102cdb39e85"
+    },
+    {
+      "id": "1975108775989129352",
+      "createdAt": "2025-10-06T08:00:02.000Z",
+      "textSha256": "1c91ba2670b683e7ba4ef8b15186b2e14a418c48b7e5b6dcb1ae4369b3afaafe"
+    },
+    {
+      "id": "1976506085973557729",
+      "createdAt": "2025-10-10T04:32:27.000Z",
+      "textSha256": "2b9a3e946d64e942553ce3e479949772f3bf734627492609bc5a03b9a28d0ad0"
+    },
+    {
+      "id": "1990985885857325240",
+      "createdAt": "2025-11-19T03:30:00.000Z",
+      "textSha256": "ba4e4bd45e215d1a6a0dcc934b6bbe9bf87ca90d5612aa831f472ae597aa3b2b"
+    },
+    {
+      "id": "1991393571510112640",
+      "createdAt": "2025-11-20T06:30:00.000Z",
+      "textSha256": "333380a0a53ac3dee29f2228e6c320e559d8b94a43f49f04284f5190d8969fb4"
+    },
+    {
+      "id": "1995037530077761670",
+      "createdAt": "2025-11-30T07:49:47.000Z",
+      "textSha256": "f7f572350e908c0f0faf1c7957d1e7630e89b1fcbb3c3530d1e17188c6d28eaa"
+    },
+    {
+      "id": "1993145795458351597",
+      "createdAt": "2025-11-25T02:32:43.000Z",
+      "textSha256": "f0f29ae640c9d7456dea3f8bd582c8c5b00c4a78d235dec9e9fc4748acb1c170"
+    },
+    {
+      "id": "1985582689878237382",
+      "createdAt": "2025-11-04T05:39:38.000Z",
+      "textSha256": "0615b338c7b9f42904da4008d7a74fba32b3f65b5b51bccc79bf418a83f4e43a"
+    },
+    {
+      "id": "2005896314538910055",
+      "createdAt": "2025-12-30T06:58:43.000Z",
+      "textSha256": "b07cc5568c733c3f9cfad05eb0171ce533c799b88540732dec73c18570d943a3"
+    },
+    {
+      "id": "2004796904996307339",
+      "createdAt": "2025-12-27T06:10:04.000Z",
+      "textSha256": "b8f7d896d0c37ee42b90106b8e98e53e41f2b20b0f672f712819fd902148a0cb"
+    },
+    {
+      "id": "1999283060538581294",
+      "createdAt": "2025-12-12T01:00:01.000Z",
+      "textSha256": "3543483072b3cde47921b1fdf4063dba3b3a9efe8b736e5cff5791806e8573e4"
+    },
+    {
+      "id": "1996400770397372755",
+      "createdAt": "2025-12-04T02:06:49.000Z",
+      "textSha256": "45b842a2ab584938dd01c412e173f65ca70eafa0ac6fd859c9db2c2b30050fdc"
+    },
+    {
+      "id": "1997867242416148706",
+      "createdAt": "2025-12-08T03:14:03.000Z",
+      "textSha256": "bd7eccbddd8aa1ab186639814727f904eb42cbd5b4b8d59d3c01edaa421aaed1"
+    },
+    {
+      "id": "1996826527326195840",
+      "createdAt": "2025-12-05T06:18:38.000Z",
+      "textSha256": "e9220bcddc17b8ae480f2c986a882656c433f2e65e84468b94aaf0c27ca0b13d"
+    },
+    {
+      "id": "2005550626063925362",
+      "createdAt": "2025-12-29T08:05:05.000Z",
+      "textSha256": "2c0a8b68b6215daacdc5fb306dff8e64b9060de662526918940ca2cf5036a5b4"
+    },
+    {
+      "id": "2004043998965690726",
+      "createdAt": "2025-12-25T04:18:17.000Z",
+      "textSha256": "a8a131beaa17c91cc6e4c4e78f4f8ec99f3f732588a8f579fa64e16746c2730a"
+    },
+    {
+      "id": "2005849710360219756",
+      "createdAt": "2025-12-30T03:53:32.000Z",
+      "textSha256": "77e2a2168e1d1efcd0086fb2d68a9a44af5f551f1f545df46a9d68a6a1eb520e"
+    },
+    {
+      "id": "2010986967358718357",
+      "createdAt": "2026-01-13T08:07:10.000Z",
+      "textSha256": "782c798151e2a74d8b3c18dd0df9e64b03236f3c9a97ffd50ee7594395720e06"
+    },
+    {
+      "id": "2011634453240754680",
+      "createdAt": "2026-01-15T03:00:02.000Z",
+      "textSha256": "d9f75a845edca494590ca1dab8fbdf60278111ad7f480e830bee3136a92cff77"
+    },
+    {
+      "id": "2011664177644065255",
+      "createdAt": "2026-01-15T04:58:09.000Z",
+      "textSha256": "31f5a233c5e67f5f6f85d937a3ec15fb5dd23374d293a2b8a98f20bf1d2d940e"
+    },
+    {
+      "id": "2011657094525595932",
+      "createdAt": "2026-01-15T04:30:00.000Z",
+      "textSha256": "3ecd83f15123afc9c91c972688d762fd9da8adecbe76bbe12bf066365aaa03e1"
+    },
+    {
+      "id": "2015001247368241171",
+      "createdAt": "2026-01-24T09:58:28.000Z",
+      "textSha256": "e74b33d48a56da0be0c4d83b8e97d5af49ba00adac13fdc9305b452be76bfe20"
+    },
+    {
+      "id": "2014888037650727388",
+      "createdAt": "2026-01-24T02:28:37.000Z",
+      "textSha256": "393e30a8bbbd641a29ba0c49258988642f37e4ba12e0e8b8a3bc09aceb9d97bf"
+    },
+    {
+      "id": "2018595312940826632",
+      "createdAt": "2026-02-03T08:00:00.000Z",
+      "textSha256": "25c64fb47f503c39e880e06162bae53636c3388f61181ea6ac5c63471e744b38"
+    },
+    {
+      "id": "2019682475799458293",
+      "createdAt": "2026-02-06T08:00:00.000Z",
+      "textSha256": "559bbe16ea1532d204e89c2ca9cd0c1fafc0e3fbc3b059d484768ab455dedfb0"
+    },
+    {
+      "id": "2027941899521429871",
+      "createdAt": "2026-03-01T03:00:00.000Z",
+      "textSha256": "d696dd4202f0b8c504535230de4033fad1a440b23a8d9d3190d0c5b4ab56c2b0"
+    },
+    {
+      "id": "2033793360960647322",
+      "createdAt": "2026-03-17T06:31:37.000Z",
+      "textSha256": "906757878fff5861e622f3b975f27cc42c21f2af02be8d8972f1dd261c25636f"
+    },
+    {
+      "id": "2033369080179437619",
+      "createdAt": "2026-03-16T02:25:41.000Z",
+      "textSha256": "3278e425a125adda27a28e8b50ecd7dfe370c4d13e50c29386fa85feebd825d0"
+    },
+    {
+      "id": "2039152963999223959",
+      "createdAt": "2026-04-01T01:28:46.000Z",
+      "textSha256": "b6b8471f7aa59ab9ac93fac93fe3d2c5d2d07e4511a877df7d0fddf2858701f9"
+    },
+    {
+      "id": "2047894090550022512",
+      "createdAt": "2026-04-25T04:22:53.000Z",
+      "textSha256": "c53c1ee18b090cd156dd69e6265e739c6bb91a01201861d5c65da9d33a8b2c9b"
+    },
+    {
+      "id": "2044611747336659064",
+      "createdAt": "2026-04-16T03:00:02.000Z",
+      "textSha256": "9eae2832fada42c6148e2ee6e240b5d7a8d2c3a1fb10199297f12b5142bc2be7"
+    },
+    {
+      "id": "2041712648652231078",
+      "createdAt": "2026-04-08T03:00:03.000Z",
+      "textSha256": "13a78e7b096666c22c3fe5925e66ff3dbae809069e94c9c3ff2396240ee36f4b"
+    },
+    {
+      "id": "2045370086446506487",
+      "createdAt": "2026-04-18T05:13:24.000Z",
+      "textSha256": "a90c5c236982613e3628c0f659462351684e63a40fb10282f55e8807726cf4e6"
+    },
+    {
+      "id": "2044611747017847041",
+      "createdAt": "2026-04-16T03:00:02.000Z",
+      "textSha256": "9a03f76c049490d0e6589a8b4482fb2cdb68db4803b81d4c752910137c63ce85"
+    },
+    {
+      "id": "2044995220627227092",
+      "createdAt": "2026-04-17T04:23:49.000Z",
+      "textSha256": "23d00ac68b143e1a9373233d2e1de19e678b1fb2e7b50d0dfc4dca7866e83bfe"
+    },
+    {
+      "id": "2058035193164730538",
+      "createdAt": "2026-05-23T04:00:01.000Z",
+      "textSha256": "5de8aeaeef8089ac78e28954e56e9afa48cf9f384832c9c7a4f2a89816afff7d"
+    },
+    {
+      "id": "2065630247387799666",
+      "createdAt": "2026-06-13T03:00:03.000Z",
+      "textSha256": "626edc194e91cbc946c97fab8c32ec75a1587295048bf003775c0b3d24085fd8"
+    },
+    {
+      "id": "2064260955731845202",
+      "createdAt": "2026-06-09T08:18:58.000Z",
+      "textSha256": "100fea7112361fa29e9706bcb0745c07c2ea1ffe583f2221b36f508cae5f2c74"
+    },
+    {
+      "id": "2073608540510687525",
+      "createdAt": "2026-07-05T03:22:56.000Z",
+      "textSha256": "fd1079e326f0af08c192ae354068ace0e8370969c1af587cf268c70eca1bacc2"
+    },
+    {
+      "id": "2082759852586356905",
+      "createdAt": "2026-07-30T09:26:59.000Z",
+      "textSha256": "3efcbd60231c8333855976cde38fec7c0424d769f52256e32946d3b00ab29a48"
+    },
+    {
+      "id": "2072164014659129855",
+      "createdAt": "2026-07-01T03:42:54.000Z",
+      "textSha256": "67e05601135e6844d43525733ed678efb1cd19bcc038ea2caf13bf1dd716fa8c"
+    },
+    {
+      "id": "2093310751662612897",
+      "createdAt": "2026-08-28T12:12:29.000Z",
+      "textSha256": "b20af8d74b053753d30214d971f060426cdf3b35db0eddfb34fed2e88f141e10"
+    }
+  ]
+}

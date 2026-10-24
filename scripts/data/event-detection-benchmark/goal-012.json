@@ -1,0 +1,141 @@
+[
+  {
+    "id": "goal-positive-981824942927888387",
+    "source": "public-post",
+    "description": "nagoyagate first birthday 2018",
+    "post": {
+      "id": "981824942927888387",
+      "createdAt": "2018-04-05T09:24:42.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "なごやげーとたんバースデーイベント\n4月6日より開催٩( 'ω' )و\n\n■アクリルフィギュアプレゼント\n→抽選 各20名様\n\n■クリアファイル プレゼント\n→各店 先着200名様\n\n■なごやげーとたんお誕生会\n→KEY'S CAFEにて開催\n\n(´ω`)｡oO(バースデー名刺も配布します\n\n#4月7日はなごやげーとたんの誕生日 https://t.co/zCcEMyJjri",
+      "url": "https://x.com/bic_nagoya/status/981824942927888387",
+      "media": [
+        "https://pbs.twimg.com/media/DaAkA5QVAAAFrca.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "お誕生会と3物品の企画。抽選各20名はアクリルフィギュア、先着200名はクリアファイルで別物品。撮影会とは記載されない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "nagoyagate-first-birthday-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "アクリルフィギュア",
+          "evidence": [
+            "■アクリルフィギュアプレゼント",
+            "■クリアファイル プレゼント"
+          ]
+        },
+        {
+          "item": "クリアファイル",
+          "evidence": [
+            "■アクリルフィギュアプレゼント",
+            "■クリアファイル プレゼント"
+          ]
+        },
+        {
+          "item": "バースデー名刺",
+          "evidence": [
+            "(´ω`)｡oO(バースデー名刺も配布します"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 868698,
+      "postSha256": "d5e80a55bf0f39cc3ba9f56495d16809004119d847dacb32ec170041c4f9d812",
+      "textSha256": "9c07d901904831281254856d6688edb5255ea3cafdddb4184dc9707bac565c82"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-987898888815198208",
+    "source": "public-post",
+    "description": "sapporo baseball night 2018",
+    "post": {
+      "id": "987898888815198208",
+      "createdAt": "2018-04-22T03:40:24.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "#北海道日本ハムファイターズ\n4/24(火)はビックカメラプレゼンツナイター\n札幌ドームにてビックカメラポイントカード又は公式アプリ画面ご提示でクリアファイルプレセント🎁更に先着でスペシャル名刺プレゼント❣️\n#さっぽろたん 等身大パネル記念撮影コーナーもあるよ⚾️\n#いちばん青い空にしよう https://t.co/BNRHnM6f8H",
+      "url": "https://x.com/bic_sapporo/status/987898888815198208",
+      "media": [
+        "https://pbs.twimg.com/media/DbW4A6EVQAEJkuS.jpg",
+        "https://pbs.twimg.com/media/DbW4C-fVMAAoL5u.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "startDate": "2018-04-24"
+    },
+    "rationale": "札幌ドームでの名刺とパネル撮影。店内開催と誤認しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "sapporo-baseball-night-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "クリアファイル",
+          "evidence": [
+            "札幌ドームにてビックカメラポイントカード又は公式アプリ画面ご提示でクリアファイルプレセント🎁更に先着でスペシャル名刺プレゼント❣️"
+          ]
+        },
+        {
+          "item": "スペシャル名刺",
+          "evidence": [
+            "札幌ドームにてビックカメラポイントカード又は公式アプリ画面ご提示でクリアファイルプレセント🎁更に先着でスペシャル名刺プレゼント❣️"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 864240,
+      "postSha256": "7b5710ea14e2063eab5d6c958b85a9ea4775f03bce262ace49518ca9b6d28bd3",
+      "textSha256": "4cb6424ae08220b199cb969f4ae094fe273370486638958e0715e9b856591e6d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

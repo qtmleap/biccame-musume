@@ -15,6 +15,7 @@ const event: Event = {
   title: 'Webhook作成のアクキー配布',
   category: 'ackey',
   stores: ['akiba'],
+  characterIds: ['akiba'],
   conditions: [],
   startDate: dayjs('2026-10-01').toDate(),
   createdAt: dayjs('2026-10-01').toDate(),

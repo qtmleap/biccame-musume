@@ -1,11 +1,13 @@
 import {
   DEFAULT_WEBHOOK_JOB_ORDER,
   DEFAULT_WEBHOOK_JOB_SORT,
+  WebhookDiscoveryFilterSchema,
   WebhookJobOrderSchema,
   WebhookJobRangeSchema,
   WebhookJobSortSchema,
   WebhookKeywordVerdictSchema,
-  WebhookPostStatusFilterSchema
+  WebhookPostStatusFilterSchema,
+  WebhookScreenNameSchema
 } from '@biccame/shared/schemas/webhook.dto'
 import { atom } from 'jotai'
 import { atomWithStorage, createJSONStorage } from 'jotai/utils'
@@ -19,6 +21,8 @@ const KEY = 'biccame-admin-webhook-filter'
  * null は「指定なし」（期間は全期間、判定・ステータスはすべて）。
  */
 export const WebhookFilterSchema = z.object({
+  screenName: WebhookScreenNameSchema.nullable().default(null),
+  discovery: WebhookDiscoveryFilterSchema.nullable().default(null),
   range: WebhookJobRangeSchema.nullable(),
   sort: WebhookJobSortSchema,
   order: WebhookJobOrderSchema,
@@ -29,6 +33,8 @@ export type WebhookFilter = z.infer<typeof WebhookFilterSchema>
 
 /** 条件が何も無い状態（判定・ステータスもすべて）・日時の新しい順。「条件をクリア」で戻す先。 */
 export const NO_WEBHOOK_FILTER: WebhookFilter = {
+  screenName: null,
+  discovery: null,
   range: null,
   sort: DEFAULT_WEBHOOK_JOB_SORT,
   order: DEFAULT_WEBHOOK_JOB_ORDER,
@@ -46,6 +52,8 @@ export const parseWebhookFilter = (value: unknown): WebhookFilter => {
 }
 
 export const sameWebhookFilter = (a: WebhookFilter, b: WebhookFilter): boolean =>
+  a.screenName === b.screenName &&
+  a.discovery === b.discovery &&
   a.range === b.range &&
   a.sort === b.sort &&
   a.order === b.order &&
@@ -59,6 +67,12 @@ export const hasWebhookFilterConditions = (filter: WebhookFilter): boolean =>
 /** 変えても何も変わらないときは、同じ参照を返す（呼び出し側が変更の有無を === で見分けられる）。 */
 const updated = (filter: WebhookFilter, next: WebhookFilter): WebhookFilter =>
   sameWebhookFilter(filter, next) ? filter : next
+
+export const setWebhookScreenName = (filter: WebhookFilter, screenName: WebhookFilter['screenName']): WebhookFilter =>
+  updated(filter, { ...filter, screenName })
+
+export const setWebhookDiscovery = (filter: WebhookFilter, discovery: WebhookFilter['discovery']): WebhookFilter =>
+  updated(filter, { ...filter, discovery })
 
 export const setWebhookRange = (filter: WebhookFilter, range: WebhookFilter['range']): WebhookFilter =>
   updated(filter, { ...filter, range })

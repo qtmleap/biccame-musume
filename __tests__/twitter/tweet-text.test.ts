@@ -18,6 +18,7 @@ const baseEvent = (overrides: Partial<EventDetail> = {}): EventDetail =>
     category: 'limited_card',
     title: 'シール録',
     stores: ['sagami'],
+    characterIds: ['sagami'],
     startDate: new Date('2026-05-08T00:00:00+09:00'),
     endDate: new Date('2026-05-15T00:00:00+09:00'),
     conditions: [],
@@ -84,17 +85,17 @@ describe('buildEventCreatedText', () => {
 
   test('uses characterId over the hosting store when set', () => {
     // 閉店した町田店の娘のイベントを相模原店が開催するケース
-    const text = buildEventCreatedText(baseEvent({ characterId: 'machida' }))
+    const text = buildEventCreatedText(baseEvent({ characterIds: ['machida'] }))
     expect(text).toContain('町田たん')
     expect(text).not.toContain('さがみたんの')
     // 店舗ハッシュタグは開催店舗のまま
     expect(text).toContain('#相模大野駅店')
   })
 
-  test('falls back to the hosting store character for special characterId', () => {
+  test('special targets do not become the hosting store character', () => {
     for (const characterId of ['other', 'secret'] as const) {
-      const text = buildEventCreatedText(baseEvent({ characterId }))
-      expect(text).toContain('さがみたん')
+      const text = buildEventCreatedText(baseEvent({ characterIds: [characterId] }))
+      expect(text).not.toContain('さがみたん')
       expect(text).not.toContain(characterId)
     }
   })
@@ -117,8 +118,9 @@ describe('buildDailySummaryText', () => {
     ({
       uuid: `${String(i).padStart(8, '0')}-1111-4111-8111-111111111111`,
       title: `テストイベント${i}`,
-      stores: ['sagami']
-    }) as Pick<EventDetail, 'uuid' | 'title' | 'stores'>
+      stores: ['sagami'],
+      characterIds: ['sagami']
+    }) as Pick<EventDetail, 'uuid' | 'title' | 'stores' | 'characterIds'>
 
   test('throws when 0 events', () => {
     expect(() => buildDailySummaryTweets([])).toThrow()
@@ -186,8 +188,9 @@ describe('buildEndingTodaySummaryTweets', () => {
     ({
       uuid: `${String(i).padStart(8, '0')}-1111-4111-8111-111111111111`,
       title: `終了イベント${i}`,
-      stores: ['sagami']
-    }) as Pick<EventDetail, 'uuid' | 'title' | 'stores'>
+      stores: ['sagami'],
+      characterIds: ['sagami']
+    }) as Pick<EventDetail, 'uuid' | 'title' | 'stores' | 'characterIds'>
 
   test('throws when 0 events', () => {
     expect(() => buildEndingTodaySummaryTweets([])).toThrow()

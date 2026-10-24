@@ -1,0 +1,104 @@
+[
+  {
+    "id": "goal-negative-1564487577607974915",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1564487577607974915",
+      "createdAt": "2022-08-30T05:37:59.000Z",
+      "screenName": "Bic_Okayamaten",
+      "kind": "original",
+      "text": "【🍡】*'▽'*)\n\nながら読書ができる\n「オーディオブック」📖\n\n小説、ビジネス書、経済番組など、豊富なラインナップ✨\n読みたかったあの本もaudiobookで聴いて楽しめます🎶\n\nビックカメラ利用者限定‼️\n＼ 2ヶ月無料トライアル ／\n\n詳しくはこちら👇\nhttps://t.co/KFLSwXZ87m https://t.co/hyemzudcmW",
+      "url": "https://x.com/Bic_Okayamaten/status/1564487577607974915",
+      "media": [
+        "https://pbs.twimg.com/media/FbYtA_AUIAMVMIg.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【🍡】*'▽'*) / ながら読書ができる / 「オーディオブック」📖」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "audiobook-two-month-trial-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 431657,
+      "postSha256": "6c7c8807ad2858e04a9c95d30f1e27e6562b6ef15f40912d3a35c4cac3e0082d",
+      "textSha256": "058f95dd50bf1296a94cbf95712348780264fb6a718ba0cbfd1562db014e4597"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1575812691532210176",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1575812691532210176",
+      "createdAt": "2022-09-30T11:39:57.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ有楽町たん、ログアウトさせていただきます〜♫\n\n今日もたくさん有難う御座いました🥰💓🥰\n\nビックカメラ有楽町店は☀朝10時から🌙夜9時まで\n営業しておりま～す⁽⁽ଘ(*˘꒳˘*)ଓ⁾⁾\nでは、また明日～お疲れ様でした～。",
+      "url": "https://x.com/bic_yuurakuchou/status/1575812691532210176",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ξ(σεσ)ξ有楽町たん、ログアウトさせていただきます〜♫ / 今日もたくさん有難う御座いました🥰💓🥰 / ビックカメラ有楽町店は☀朝10時から🌙夜9時まで」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "yuurakuchou-closing-greeting-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 423531,
+      "postSha256": "c418c90e347173289f953ea6449abb95e3cad2b6a7d691f62ea45ae6c1a6951a",
+      "textSha256": "2122b3f25cd391658e486d8b36a9b8b5e2047ef418bc539cb091d8df671b60bc"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

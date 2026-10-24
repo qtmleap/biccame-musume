@@ -8,7 +8,7 @@ import { useCreateEvent } from '@/hooks/use-events'
 export type WebhookLinkTarget = { postId: string; candidateId?: string }
 
 export const WEBHOOK_LINK_FAILED_MESSAGE =
-  'イベントは登録しましたが、受信履歴への紐付けに失敗しました。受信詳細の「既存へ紐付け」から紐付けてください'
+  'イベントは登録しましたが、受信履歴への紐付けに失敗しました。受信詳細の「連携」から連携してください'
 
 type CreateThenLink = {
   /** イベントを作成する。失敗したら throw する（このときは紐付けない） */

@@ -1,0 +1,140 @@
+[
+  {
+    "id": "expanded-v2-positive-2078670291589628108",
+    "source": "public-post",
+    "description": "sapporo-birthday-dress-keychain-2026",
+    "post": {
+      "id": "2078670291589628108",
+      "createdAt": "2026-07-19T02:36:31.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "＼残り40個未満です／\n\n#さっぽろたん生誕祭2026 開催中！\n3000円以上ご購入でさっぽろたん ドレス姿のアクリルキーホルダーをプレゼント！\n先着100個限定、無くなり次第終了です。\nぜひお早めにご来店ください♪\n#ビッカメ娘 https://t.co/UM0tNmPNOM",
+      "url": "https://x.com/bic_sapporo/status/2078670291589628108",
+      "media": [
+        "https://pbs.twimg.com/media/HNjrfvma8AA0HqF.png",
+        "https://pbs.twimg.com/media/HNjrhLVaoAAoK9J.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": [
+        "sapporo"
+      ],
+      "startDate": null,
+      "conditions": [
+        {
+          "type": "purchase"
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "残り40個未満と初期先着100個を区別。3000円以上購入が明記。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "sapporo-birthday-dress-keychain-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アクリルキーホルダー",
+          "evidence": [
+            "＼残り40個未満です／",
+            "#さっぽろたん生誕祭2026 開催中！",
+            "3000円以上ご購入でさっぽろたん ドレス姿のアクリルキーホルダーをプレゼント！",
+            "先着100個限定、無くなり次第終了です。",
+            "ぜひお早めにご来店ください♪",
+            "#ビッカメ娘 https://t.co/UM0tNmPNOM"
+          ]
+        }
+      ],
+      "groupingNote": "残り40個未満と初期先着100個を区別。3000円以上購入が明記。",
+      "unannotatedFields": [
+        "stores",
+        "startDate"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 23552,
+      "postSha256": "f3e948943d71f1d899c351fe9e74f8ece7de179b5e71f98a870660552570be15",
+      "textSha256": "2d644e02a36358bee370936019dc39e91bd95c4a0e47960a1dfad9754658da39"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2077589018410373241",
+    "source": "public-post",
+    "description": "sapporo-birthday-dress-keychain-2026 matched control",
+    "post": {
+      "id": "2077589018410373241",
+      "createdAt": "2026-07-16T02:59:56.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "#カルドセプトビギンズ\n新作ゲームソフトと関連グッズを5Fレジにて販売中です！\n\nグッズをお買い上げ3,000円税込ごとに、特製クリーチャーカード型キーホルダーをプレゼント！\n無くなり次第終了となりますので、ぜひお早めにご利用ください♪\n #CuldceptBEGINS https://t.co/2e2776SdZI",
+      "url": "https://x.com/bic_sapporo/status/2077589018410373241",
+      "media": [
+        "https://pbs.twimg.com/media/HNUTdadbUAAV4yL.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2077589018410373241",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 24586,
+      "postSha256": "fc016482d0cd141c17d90d46d66d3f64e1ece2c5c7d47af5371c476b08ed1846",
+      "textSha256": "b7c4b195e738a9b43c4b40c3d0200488b86ce64305c68a6de3bae0b996434f81"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

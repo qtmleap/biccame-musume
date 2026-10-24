@@ -1,0 +1,104 @@
+[
+  {
+    "id": "goal-negative-1090898861680353280",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1090898861680353280",
+      "createdAt": "2019-01-31T09:05:31.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "‼️新製品情報‼️\n乾きがちな目もとの隅々まで集中保湿、うるおいを補給✨\nホットスチームがめぐり最後までメリハリのある温感が続き、選べる３つのコースとアロマの香りでリラックスタイムを！\n\nPanasonic『目もとエステ(EH-CSW67-W)』2月27日(水)発売\n\n４階ビューティー家電コーナーにて予約受付中 https://t.co/wnptJqUbfL",
+      "url": "https://x.com/Bic_kawasaki/status/1090898861680353280",
+      "media": [
+        "https://pbs.twimg.com/media/DyOhpITU8AEjHtV.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「‼️新製品情報‼️ / 乾きがちな目もとの隅々まで集中保湿、うるおいを補給✨ / ホットスチームがめぐり最後までメリハリのある温感が続き、選べる３つのコースとアロマの香りでリラックスタイムを！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "panasonic-eye-esthe-csw67-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 784470,
+      "postSha256": "0825c7f756b2e1f87a8d560c792c20f38ee53fd7a1b1e4f9fbd2f09d5fd843cc",
+      "textSha256": "9060136d44f4400021d95f22ce14cd7bba692fc2bfa9557699929da25eadfe39"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1090443312983502849",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1090443312983502849",
+      "createdAt": "2019-01-30T02:55:19.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "ビックカメラ、「ゼルダの伝説 ブレス オブ ザ ワイルド」などソフト3本とグッズが付属するNintendo Switch本体セットの発売を決定（Impress Watch） - Yahoo!ニュース https://t.co/CEFefxeD4n @YahooNewsTopics",
+      "url": "https://x.com/biccameramito/status/1090443312983502849",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ビックカメラ、「ゼルダの伝説 ブレス オブ ザ ワイルド」などソフト3本とグッズが付属するNintendo Switch本体セットの発売を決定（Impress Watch） - Yahoo!ニュース https://t.co/CEFefxe」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "zelda-switch-software-bundle-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 784885,
+      "postSha256": "b930e1afd528586613e8552ad860d32a7e3b7850ebce96376ee38a27d180f6a4",
+      "textSha256": "4da7d41a0313373570fed5d7aca079383a7d0faf10867a115e5408653fec5aa2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

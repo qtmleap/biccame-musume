@@ -54,7 +54,12 @@ export const BotSettingRow = ({
   children: ReactNode
   className?: string
 }) => (
-  <div className={cn('grid gap-1 border-b py-3 text-sm last:border-b-0 sm:grid-cols-[15rem_1fr] sm:gap-5', className)}>
+  <div
+    className={cn(
+      'grid items-center gap-1 border-b border-separator py-3 text-sm last:border-b-0 sm:grid-cols-[15rem_1fr] sm:gap-5',
+      className
+    )}
+  >
     <dt className='text-muted-foreground'>{label}</dt>
     <dd className='min-w-0 break-words font-medium'>{children}</dd>
   </div>

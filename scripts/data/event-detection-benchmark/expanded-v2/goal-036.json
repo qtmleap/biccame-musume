@@ -1,0 +1,131 @@
+[
+  {
+    "id": "expanded-v2-positive-1630186868318015488",
+    "source": "public-post",
+    "description": "shibutou-challenge-grandprix-2023",
+    "post": {
+      "id": "1630186868318015488",
+      "createdAt": "2023-02-27T12:43:31.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "しぶとーたんログアウトのお時間です(*'ω'*)\n本日も一日ありがとうございました🌟\n\n低浮上でお返事できずでしたが…(*'ω'*)💦\n明日も頑張るますなのです💪\n#しぶとーたん炎のチャレンジ 名刺の配布と\n#しぶとーグランプリ 受付は明日までです✨\nでは明日もよろしくお願いします～💫💫",
+      "url": "https://x.com/bic_shibuya/status/1630186868318015488",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "shibuto"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "名刺配布とグランプリ受付の締切前案内。受付終了済みではない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "shibutou-challenge-grandprix-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "名刺",
+          "evidence": [
+            "しぶとーたんログアウトのお時間です(*'ω'*)",
+            "本日も一日ありがとうございました🌟",
+            "低浮上でお返事できずでしたが…(*'ω'*)💦",
+            "明日も頑張るますなのです💪",
+            "#しぶとーたん炎のチャレンジ 名刺の配布と",
+            "#しぶとーグランプリ 受付は明日までです✨",
+            "では明日もよろしくお願いします～💫💫"
+          ]
+        }
+      ],
+      "groupingNote": "名刺配布とグランプリ受付の締切前案内。受付終了済みではない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 383699,
+      "postSha256": "da317e034cf95c65d276f1f3a350faff37482567e35c1b6ad129e44727ffabfa",
+      "textSha256": "484ff44e8dad787afc78cd7bdfd489bd8c82c352e3f1c64705b48e57dbdad209"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1627567036732964866",
+    "source": "public-post",
+    "description": "shibutou-challenge-grandprix-2023 matched control",
+    "post": {
+      "id": "1627567036732964866",
+      "createdAt": "2023-02-20T07:13:14.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "本日でビックカメラ渋谷東口店は店舗誕生30周年を迎えました💐✨\nいつもたくさんの応援をありがとうございます(*'ω'*)💕\n今後もみなさまにご来店いただき、愛していただけるよう、販売員・スタッフたん一同頑張るのです💪🔥\nよろしくお願いします🙏💫\n#2月20日はしぶとーたんのバースデー #ビッカメ娘 https://t.co/x9VAxZTG1Y",
+      "url": "https://x.com/bic_shibuya/status/1627567036732964866",
+      "media": [
+        "https://pbs.twimg.com/media/FpZHlbfaAAIZddH.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1627567036732964866",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 385668,
+      "postSha256": "535891359b607cc010acad01a7e181c2745e0d0d01372e519ccda7ffa98eb0f4",
+      "textSha256": "8d875f10c150ad433433124bca1e4210ea7ee31efb616476b5b028c2867bddae"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

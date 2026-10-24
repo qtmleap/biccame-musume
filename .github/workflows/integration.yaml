@@ -236,6 +236,9 @@ jobs:
                 'workers/web/public/characters.json'
               )
             }}
+          # 完全一致しないときは直前のキャッシュを使う。ダウンロード script は既存の画像を飛ばし、足りない分だけ取得する
+          restore-keys: |
+            ${{ runner.os }}-character-images-
       - name: Cache OG images
         uses: actions/cache@v5
         with:

@@ -1,0 +1,128 @@
+[
+  {
+    "id": "goal-positive-1621057678108917760",
+    "source": "public-post",
+    "description": "abeno valentine card 2023",
+    "post": {
+      "id": "1621057678108917760",
+      "createdAt": "2023-02-02T08:07:22.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "じゃじゃん❗️❗️❗️🥳🐙🎉🎉\n\n2/1(水) から 2/28(火) まで、期間限定で #バレンタイン 名刺を配布するで❣️❣️😆💝🐙\n\n店内エレベーターホールのあべのたんパネルに名刺をご用意してます❗️ぜひゲットしてな✨✨\n\nもしなかったらお手数ですが販売員にお声掛けください～🥺💦 https://t.co/QrUwoL386y",
+      "url": "https://x.com/bic_abeno/status/1621057678108917760",
+      "media": [
+        "https://pbs.twimg.com/media/Fn8l6LVaEAAcu8c.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "abeno"
+      ],
+      "category": "limited_card",
+      "startDate": "2023-02-01"
+    },
+    "rationale": "2/1から2/28、本人パネルが配布場所。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "abeno-valentine-card-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "あべのたんバレンタイン名刺",
+          "evidence": [
+            "2/1(水) から 2/28(火) まで、期間限定で #バレンタイン 名刺を配布するで❣️❣️😆💝🐙",
+            "店内エレベーターホールのあべのたんパネルに名刺をご用意してます❗️ぜひゲットしてな✨✨"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 390265,
+      "postSha256": "c2f02593645920b5cd89494abd6e34c31c2fca87e43a141b66679a588aaf37e7",
+      "textSha256": "6c531a3b4aa4b11556e981932e29c81989d46bb39079a8b54a919de1afc098cb"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1620635321045254145",
+    "source": "public-post",
+    "description": "yao first valentine card 2023",
+    "post": {
+      "id": "1620635321045254145",
+      "createdAt": "2023-02-01T04:09:05.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "おはやお～( 8,,ÒωÓ,, )ﾄﾞﾔｵｯ!\n今日から2月‼️2月と言えばバレンタインデー💝\nということで、今日から八尾たん初のバレンタイン名刺を配布します🎉\n配布場所は2階総合案内カウンター、おひとり様1枚でお願いします。\nお買い物のついでに受け取っててね🌟\nそれじゃ、今日も一日よろやお～(*'ω'*) https://t.co/bEOSd9Obkz",
+      "url": "https://x.com/bic_yao/status/1620635321045254145",
+      "media": [
+        "https://pbs.twimg.com/media/Fn2nFHKaIAIWjK7.jpg",
+        "https://pbs.twimg.com/media/Fn2nFNxagAAvT_s.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "yao"
+      ],
+      "characterIds": [
+        "yao"
+      ],
+      "category": "limited_card",
+      "startDate": "2023-02-01"
+    },
+    "rationale": "今日から初バレンタイン名刺、場所と個人上限が明示。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "yao-first-valentine-card-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "八尾たん初バレンタイン名刺",
+          "evidence": [
+            "ということで、今日から八尾たん初のバレンタイン名刺を配布します🎉"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 390649,
+      "postSha256": "9678599d84c9a3838190beaa4f812b0772a416743e4138a00d75891bc44816f3",
+      "textSha256": "9e850d671f98c67a3e4e4c7d4161910309f94643fe07760b6ff141a47c8429f7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

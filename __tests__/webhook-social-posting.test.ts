@@ -113,6 +113,7 @@ const eventFor = (uuid: string, sourceUrl: string): EventRequest => ({
   category: 'limited_card',
   title: TITLE,
   stores: ['akiba'],
+  characterIds: ['akiba'],
   startDate: '2026-10-11T00:00:00+09:00',
   isVerified: true,
   isPreliminary: false,

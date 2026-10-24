@@ -1,0 +1,129 @@
+[
+  {
+    "id": "expanded-v2-positive-652404919303999490",
+    "source": "public-post",
+    "description": "mito-city-thin-book-festival-2015",
+    "post": {
+      "id": "652404919303999490",
+      "createdAt": "2015-10-09T08:47:08.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "みんなで水戸を盛り上げよう！\n10月25日(日) まちなかで、水戸たん薄い本を大配布！\n水戸まちなかフェスティバルに紛れこむ擬人化企画第3弾\n＃ビックカメラ水戸たん薄い本フェスティバル ⇒http://t.co/AN3kd6gAYK http://t.co/4OYfARLoxW",
+      "url": "https://x.com/biccameramito/status/652404919303999490",
+      "media": [
+        "https://pbs.twimg.com/media/CQ3O0O6UEAAl6-x.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "mito"
+      ],
+      "startDate": "2015-10-25",
+      "conditions": null
+    },
+    "rationale": "まちなかフェスティバルの冊子配布企画。一般店舗広告ではない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "mito-city-thin-book-festival-2015",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "水戸たん薄い本",
+          "evidence": [
+            "みんなで水戸を盛り上げよう！",
+            "10月25日(日) まちなかで、水戸たん薄い本を大配布！",
+            "水戸まちなかフェスティバルに紛れこむ擬人化企画第3弾",
+            "＃ビックカメラ水戸たん薄い本フェスティバル ⇒http://t.co/AN3kd6gAYK http://t.co/4OYfARLoxW"
+          ]
+        }
+      ],
+      "groupingNote": "まちなかフェスティバルの冊子配布企画。一般店舗広告ではない。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1066554,
+      "postSha256": "db47e429257fab52333c881caa7d417b8402bfb85f03712a093bfde2916e65ec",
+      "textSha256": "4d3181768ec42e35592e5073fe1560bbac8a98d964488c582695aad2a5eb7cbe"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-652655592507502593",
+    "source": "public-post",
+    "description": "mito-city-thin-book-festival-2015 matched control",
+    "post": {
+      "id": "652655592507502593",
+      "createdAt": "2015-10-10T01:23:13.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "10月10日～10月12日\n本日オープン！コジマ×ビックカメラ宇都宮本店イベント情報！\n1,000円（税込）以上購入でかっぱえびせんプレゼント！\nじゃんけん大会勝ったら2個！負けても1個\nhttp://t.co/A5F2oxrRNY http://t.co/JDKkYj8ffv",
+      "url": "https://x.com/biccameramito/status/652655592507502593",
+      "media": [
+        "https://pbs.twimg.com/media/CQ6yzUXVEAEPD5d.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-652655592507502593",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1066491,
+      "postSha256": "fda67eb53906f90176fa7c165a309e1c671680f4617664f4459dbdf85648b3ca",
+      "textSha256": "cf06931fd59ef313cc55aca4e1cc9f9ddb3b2b55822b183e55c510a2ff588771"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

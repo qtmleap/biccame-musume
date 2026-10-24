@@ -1,0 +1,132 @@
+[
+  {
+    "id": "goal-positive-1235411111521824768",
+    "source": "public-post",
+    "description": "sagami birthday many items 2020",
+    "post": {
+      "id": "1235411111521824768",
+      "createdAt": "2020-03-05T03:45:36.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "🎂＃3月4日はさがみたんのバースデー🎂\n3月4日～3月11日\n\n🎉ポストカードプレゼント\n🎉バースデーメッセージ大募集\n🎉バースデー名刺配布※4月末まで配布\n🎉スタンプラリー\n\nポストカード、お菓子はレジにてお渡しします😊❣️\n※パスケースは配布終了となりました\n詳しくはこちら🔽🔽🔽 https://t.co/CS6fjxXNkD",
+      "url": "https://x.com/bic_sagamioono/status/1235411111521824768",
+      "media": [
+        "https://pbs.twimg.com/media/ESUPvMqUcAAvfvm.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "名刺だけは4月末まで、他の物品は3/11までの企画。混ぜない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "sagami-birthday-many-items-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ポストカード",
+          "evidence": [
+            "🎉ポストカードプレゼント",
+            "ポストカード、お菓子はレジにてお渡しします😊❣️"
+          ]
+        },
+        {
+          "item": "お菓子",
+          "evidence": [
+            "🎉ポストカードプレゼント",
+            "ポストカード、お菓子はレジにてお渡しします😊❣️"
+          ]
+        },
+        {
+          "item": "バースデー名刺",
+          "evidence": [
+            "🎉バースデー名刺配布※4月末まで配布"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 661350,
+      "postSha256": "089cf64280b34c19bce27892284073e41814afc66b92f7d597b547a22fa7831b",
+      "textSha256": "47b9feb82d39a965cebe8aa72b2595e04d22c4cabe4a83c831d3f603dceb1592"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1281490321394659330",
+    "source": "public-post",
+    "description": "sagami yukata card 2020",
+    "post": {
+      "id": "1281490321394659330",
+      "createdAt": "2020-07-10T07:27:56.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "❘*´ω`)ログアウトのお時間です。\n今日は画像が見られないという呪いにかかったり裏でもトラブルだらけでなんだかバタバタした日でした💦\n人気だった浴衣さがみたんの名刺配布中ですのでもらってくださいね♡ではまたー",
+      "url": "https://x.com/bic_sagamioono/status/1281490321394659330",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card"
+    },
+    "rationale": "配布継続のお知らせで初日/条件は不明。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "sagami-yukata-card-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "浴衣さがみたん名刺",
+          "evidence": [
+            "人気だった浴衣さがみたんの名刺配布中ですのでもらってくださいね♡ではまたー"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 640592,
+      "postSha256": "bae8c443ec3fcded820dbfa494be33ca11031b12417df1eaeb7245289b969e2c",
+      "textSha256": "bb481d8fbd0b3ad40cc0556f6be0ad82b1289a9e698f3b3b41eb5ec9eb147a14"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

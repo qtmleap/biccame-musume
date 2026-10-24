@@ -1,0 +1,160 @@
+[
+  {
+    "id": "public-d-1982294448772882473",
+    "source": "public-post",
+    "description": "サンリオのカードホルダー入荷",
+    "post": {
+      "id": "1982294448772882473",
+      "createdAt": "2025-10-26T03:53:20.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "＼入荷しました！／\n#サンリオ 【エンジョイアイドルシリーズ 純白天使デザイン】トレーディングカード用ホルダー\n白いレースやパール、天使の羽などがモチーフの、お気に入りのカードを持ち歩くのにピッタリなかわいいホルダーです☆\n是非6階おもちゃコーナーへお立ち寄りください！ https://t.co/Sl45B3cPSO",
+      "url": "https://x.com/bic_shinjyuku/status/1982294448772882473",
+      "media": [
+        "https://pbs.twimg.com/media/G4KF6P5XEAA0ULR.jpg",
+        "https://pbs.twimg.com/media/G4KF6-HWIAA7aJx.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "アイドルというシリーズ名とカード用品の販売案内。ビッカメ娘デザインや参加企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "card-word",
+      "stock-notice"
+    ],
+    "group": "sanrio-angel-card-holder-october-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1994361511037342094",
+    "source": "public-post",
+    "description": "博衣こより活動4周年とフィギュア販売",
+    "post": {
+      "id": "1994361511037342094",
+      "createdAt": "2025-11-28T11:03:32.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "／\n🧪活動4周年！おめでとうございます！🎉\n＼\n新商品入荷しました！\n『#ホロライブ プロダクション』より\n秘密結社holoX（ホロックス）の研究者\n「#博衣こより」が1/7スケールフィギュアで登場！\n\n#博衣こより4周年\n🧪 在庫あり お迎えいただけます！\n🧪 2階おもちゃコーナーヾ('ω'上)ﾉ https://t.co/8ZQKXGOCaY",
+      "url": "https://x.com/bic_ohmiya/status/1994361511037342094",
+      "media": [
+        "https://pbs.twimg.com/media/G61lKrwacAE5caP.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "周年のお祝い対象はホロライブの博衣こより。ビッカメ娘の周年ではなく、別IP商品の販売。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "anniversary",
+      "birthday-keyword"
+    ],
+    "group": "koyori-fourth-anniversary-figure-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1992832755093344716",
+    "source": "public-post",
+    "description": "プロセカ宵崎奏フィギュアの予約",
+    "post": {
+      "id": "1992832755093344716",
+      "createdAt": "2025-11-24T05:48:48.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "／\nずっと作る。お父さんの呪いだとしても――\n＼\n大人気『プロジェクトセカイ カラフルステージ！ feat. 初音ミク』より\n『25時、ナイトコードで。』の作曲担当「宵崎奏」がねんどろいど化！\n\n#プロセカ #ニーゴ\n🎧2026年5月発売 店頭ご予約受付中！\n🎧2階おもちゃコーナーヾ('ω'上)ﾉﾞ https://t.co/zCe699KNOU",
+      "url": "https://x.com/bic_ohmiya/status/1992832755093344716",
+      "media": [
+        "https://pbs.twimg.com/media/G6f2w9YasAAwgm8.jpg",
+        "https://pbs.twimg.com/media/G6f2xy4a0AA2zgI.jpg",
+        "https://pbs.twimg.com/media/G6f2yqwaUAArfMX.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "プロジェクトセカイのキャラクター商品予約で、ビッカメ娘との企画関与はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "reservation",
+      "figure"
+    ],
+    "group": "project-sekai-kanade-nendoroid-preorder-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-2014156063780569520",
+    "source": "public-post",
+    "description": "プリキュア商品購入時のクリアカード特典",
+    "post": {
+      "id": "2014156063780569520",
+      "createdAt": "2026-01-22T02:00:01.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "「ハートキャッチプリキュア！」 「Go！プリンセスプリキュア」 ビックカメラグループグッズ販売‼️\n\n1/23(金)より開店10：00より販売開始です😆🐙\n\n税込3,000円お買上ごとにランダムクリアカード（全13種）を1枚プレゼント🎁\n\n詳細はこちら⬇️\nhttps://t.co/BI1vJQoqeJ https://t.co/iCTKvcQ2AC",
+      "url": "https://x.com/bic_abeno/status/2014156063780569520",
+      "media": [
+        "https://pbs.twimg.com/media/G_OzzT1aMAArykI.jpg",
+        "https://pbs.twimg.com/media/G_OzzVKbsAAdQTs.jpg",
+        "https://pbs.twimg.com/media/G_OzzW2aIAEO3Hr.jpg",
+        "https://pbs.twimg.com/media/G_OzzYCXMAABjAI.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "3000円購入ごとのランダムクリアカードはプリキュア周年グッズの特典。娘のデザイン・催しではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "purchase-benefit",
+      "clear-card",
+      "anniversary"
+    ],
+    "group": "precure-anniversary-clearcard-benefit-january-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-d-1976090234405175488",
+    "source": "public-post",
+    "description": "ポケモン新作予約と御三家への投票",
+    "post": {
+      "id": "1976090234405175488",
+      "createdAt": "2025-10-09T01:00:00.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "いよいよ発売まであと1週間！🎉\n『ポケモンレジェンズZA』、あなたはどのポケモンと旅に出る？🌿\n「やっぱりチコリータ！」という方は、ぜひ「いいね」で教えてね！\n当店では『ZA』の予約受付中！御三家のぬいぐるみを揃えてお待ちしております！\n#ポケモンレジェンズZA #御三家投票 https://t.co/nbUC9NhJCg",
+      "url": "https://x.com/bic_nagoya/status/1976090234405175488",
+      "media": [
+        "https://pbs.twimg.com/media/G2pT3V0bIAEEHjg.jpg",
+        "https://pbs.twimg.com/media/G2pT3UebIAEuPlo.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "好きなポケモンへのいいねを募るゲーム予約案内。店の娘の企画やノベルティ配布ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "other-ip",
+      "reservation",
+      "engagement-prompt"
+    ],
+    "group": "pokemon-legends-za-preorder-october-2025",
+    "reviewStatus": "provisional"
+  }
+]

@@ -1,0 +1,138 @@
+[
+  {
+    "id": "expanded-v2-positive-1986243032812003779",
+    "source": "public-post",
+    "description": "tokorozawa-store6-character4-2025",
+    "post": {
+      "id": "1986243032812003779",
+      "createdAt": "2025-11-06T01:23:36.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "ビックカメラ所沢駅店店は お陰様で11月8日で店舗6周年を迎え、爆誕4周年とこ✈️\nそこで‼︎\n  当店で税込3000円以上のご購入で 所沢たんアクリルキーホルダープレゼント🎁 限定名刺もあるとこ✨  \n  #11月8日は所沢たんのバースデー #所沢たん https://t.co/rXbeTSHmpg",
+      "url": "https://x.com/bic_toko/status/1986243032812003779",
+      "media": [
+        "https://pbs.twimg.com/media/G5CNgTYaYAAzneM.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "tokorozawa"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "店舗6周年と擬人化4周年を区別。3000円購入はアクキーの条件で名刺へ流用しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "tokorozawa-store6-character4-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "アクリルキーホルダー",
+          "evidence": [
+            "当店で税込3000円以上",
+            "所沢たんアクリルキーホルダー"
+          ]
+        },
+        {
+          "item": "限定名刺",
+          "evidence": [
+            "限定名刺もある"
+          ]
+        }
+      ],
+      "groupingNote": "店舗6周年と擬人化4周年を区別。3000円購入はアクキーの条件で名刺へ流用しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 99195,
+      "postSha256": "b8e7b0903b0ce65d28829555bcc4863b401a2db14487db29acd0d37824a10d0a",
+      "textSha256": "8cf6f5f0ac7b2d74fd5b0fd589febde6bed46224b74163095602e3c4c2426199"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1993847243506368747",
+    "source": "public-post",
+    "description": "tokorozawa-store6-character4-2025 matched control",
+    "post": {
+      "id": "1993847243506368747",
+      "createdAt": "2025-11-27T01:00:01.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "ポケモンカードゲーム\n抽選結果発表①\nハイクラスパック『メガドリームex』\nご当選されたお客様は受付時のポイントカードとレシート、受付台紙をお持ち頂き11/28(金)〜11/30(日)までに6Fレジにお越しください。\nお忘れの場合は、販売致しかねます。 https://t.co/EJY5d58I0b",
+      "url": "https://x.com/bic_toko/status/1993847243506368747",
+      "media": [
+        "https://pbs.twimg.com/media/G6rUme3awAIOnwW.png",
+        "https://pbs.twimg.com/media/G6rUmgOaQAEsvSQ.png",
+        "https://pbs.twimg.com/media/G6rUmgFboAAAtnt.png",
+        "https://pbs.twimg.com/media/G6rUmgUagAACRkX.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1993847243506368747",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 93192,
+      "postSha256": "f1831893dd7c2c92d4ce2307b3fc4b0c471427131be8f648692d8d0bff0e81c1",
+      "textSha256": "c46a02c967b0288a84ffec8708a03d0e43bbb710214f72d596f18dcc5d9cc5a9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,139 @@
+[
+  {
+    "id": "expanded-v2-positive-2101495057388077151",
+    "source": "public-post",
+    "description": "kawasaki-rain-card-2026",
+    "post": {
+      "id": "2101495057388077151",
+      "createdAt": "2026-09-20T02:14:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "＼特殊条件☆限定名刺発動／\n　    　∧,,∧\n　  []o( `˙꒳​˙2)\n　   　/  [[[o\n　  　しー-Ｊ\n☔️雨の日限定名刺☔️\n配布期間：6/1(月)～9/30(水)\n★川崎駅周辺で以下の雨条件で配布\n・朝から１日中雨の日\n・営業中雨が降ってきた時から配布\nなど！他詳しくは画像をチェック！\n#ビッカメ娘 #川崎たん https://t.co/k4T7EedcvE",
+      "url": "https://x.com/Bic_kawasaki/status/2101495057388077151",
+      "media": [
+        "https://pbs.twimg.com/media/HSn_ahAaAAALt7O.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": "2026-06-01",
+      "conditions": null
+    },
+    "rationale": "降雨条件付き名刺。条件は画像も必要で誰でも扱いにしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "kawasaki-rain-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "雨の日限定名刺",
+          "evidence": [
+            "＼特殊条件☆限定名刺発動／",
+            "　    　∧,,∧",
+            "　  []o( `˙꒳​˙2)",
+            "　   　/  [[[o",
+            "　  　しー-Ｊ",
+            "☔️雨の日限定名刺☔️",
+            "配布期間：6/1(月)～9/30(水)",
+            "★川崎駅周辺で以下の雨条件で配布",
+            "・朝から１日中雨の日",
+            "・営業中雨が降ってきた時から配布",
+            "など！他詳しくは画像をチェック！",
+            "#ビッカメ娘 #川崎たん https://t.co/k4T7EedcvE"
+          ]
+        }
+      ],
+      "groupingNote": "降雨条件付き名刺。条件は画像も必要で誰でも扱いにしない。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 5508,
+      "postSha256": "818c195a48d4668c6e903e0bb6f47466cdad2a1e55f14ec8f216422ae4de9d72",
+      "textSha256": "86307fba09e7bee5bb349e6e218dddccb5ac05c1813047a0c2546718258963ff"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2101128642919317971",
+    "source": "public-post",
+    "description": "kawasaki-rain-card-2026 matched control",
+    "post": {
+      "id": "2101128642919317971",
+      "createdAt": "2026-09-19T01:58:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "🍁9/21(月･祝)は #敬老の日 👴👵\n\n9/23(水)まで、#SIXPAD フットフィット3 コンパクトをご購入で「マッサージボール」を今だけプレゼント中🎁\nまたSIXPAD指定のPower Gunが20％OFFとお買い得✨\n店頭で実際にお試しも可能です！ぜひご利用くださいませ😊\n📍ビックカメラ ラゾーナ川崎店4F https://t.co/HpKalX8x1w",
+      "url": "https://x.com/Bic_kawasaki/status/2101128642919317971",
+      "media": [
+        "https://pbs.twimg.com/media/HSinx6obAAAhi9z.jpg",
+        "https://pbs.twimg.com/media/HSioHbTaYAAgrIY.jpg",
+        "https://pbs.twimg.com/media/HSioUmxboAAwgcg.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2101128642919317971",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 5943,
+      "postSha256": "3574886918db91958b393a1929d53e65c7720c56d9f6f4403276a57a99f10f37",
+      "textSha256": "bc92d4045763fb64c53aa8f278a1fa063b1d762d90ac72c6bf84cf1452ea0ad3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

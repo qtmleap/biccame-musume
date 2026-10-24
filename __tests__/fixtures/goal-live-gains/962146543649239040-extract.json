@@ -1,0 +1,36 @@
+{
+  "content": [
+    {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "CAQSmAoKEAgTGAI4AUIIdGhpbmtpbmcSDDnC/EciuwS3ywmqoBoM5mUa7LA5jHnf7zUDIjDI4AqOqyhw3oyHmiItqfB95pV0JExagQMJn/ghNJuKke3rqokV8UtFprHX0pYIwpEqtQnfIrnO+iRyli3MRJglulUB+W3XTMo5rad9dRvlbWXiMIQn2cE2RIgvq+2XE3gbU2WVmB5TsUheAR5r78CEXT4fDXNbwqG6XwSJwHRBZhu39HKzGE2zaYSJCn9jwNinReaGDCkHOhhwu0/eZIj+Ukvj10u1h4IHoDXrOVdMuw+U9V9sDXBhzhvQifQnpmY4A/RhxhtRt9gbfP48O6nP2vOdQwyjXZl1CdyV0o7b8K8Fgzd8Eq/WCACovXTBu7qigE2ImWzCkhGgqbZsY6w/wcj8CXrQLFvo4PuTQfF5RPGbfG4galrjbS/K0PNqRczEYcFI92TrUvQL3Xk/LRoSUPFdGtwifNwq/V+TpfCmiJLZxLVOw2zqztYi0VBWcak5M2T9joKiRNQE5oi3eRztnxrzUbU8ATEkydh3YIG0Jq1Nif0iekNzgqvvGP+XrCdXOdK4THZLi7ErlRjUjJngC+98LT8cDGUDxQ17+TTkyr94smUgmbSyqVjKJl7VhKonItyoaVMkySbDYhe3ylj9dLvu51CWrTl9X8FUu4yxQAIveHKMlo4DQpyLeAAIzEH+JmK0THciiqAzWN3gVHsExuKfo/FWlk4s1qsp3M4kbj0Wkjzm/uWT7e8RMB+7oI9xBKK9sP2BpGmv9C1/LO9fc05lzqFatF01oKG2cn2bzb86EMS6o+1oRW6s8Whls+qbhnDFDa4rEkgWFv5TG8s1q7AQ4PgtLeD2IIFcv0X7mraGk8WFXb1jz57BcMMgOnNa8azfm65+6x2AF3b6vccmJwoXYDq1lOeJECi8UgT36NSRYVWeHWuyqowZUOpoM0JqAI7cfZjVz0B8kNYCEoTZWU8keUOojNTE4L/AlEUsFl8JZCn/shfM0MluZnBJo1Mrmvr2osG6M0KLm6Tt/ghDHm4PjI7C9sUR9OYUBtq+8oY7VHpbcTMc8OJO7afgv6BACH+zQ6+fTNEtWe5LZozWB8nWynt9J1os1+xY2UKm3jleqhB7Pna/HYcw+DlISS8oUiJ/HaK953jtSFCIBqsb4YKa7bXTOzdUKKPqMzOgAt31fnGVk5HmLGlL/pKEeu+fXGLTq1E9Oge0lklSVMzK9fbpUjWROcVyFgpaRsCAjEMdIMDBXump9dlng54qfUDeMSx1zefFv1Y3Ya5/nzR9sK2Jk/FDDDue9jasKwxdPp6hbs6bIxIeyX4oBV9D+WsvrPJkchXTL/HqInxgZV/RbRTk4WsbJA4sX1WsbHUdMgE5peqpQuKZnQrUd9Y9Egi/ei0dQ4FBh5am7mq6VUko1wlIiyYbEVQju/nQJbnnStyHdXuccZNI7LN01G/I3j6WC3vkLde+lo7+1FmbLzPRqlEV4aYNkGa5nThS1/S35arT0CYs8UaVIbsurPDb8VV1UUXDs9jO0Dd7PbWN+bzPm1TdPg5esITMVDaZp4fNe5ZMBmpWpHu1HMxHgaqEmP86VBeHUPbqyGZiyK6vo9RZigeZ3ROfyzkVAST8od6pkOvWJnlJ09uPjNvHy7ALkzhoZgYcmY5EwaQRnCMtitCFJE5+qgJhB4gSFWBWa0dxlWyI5uGvP5tbyBSIYdhk0Qy9jFA78BmOohgB"
+    },
+    {
+      "type": "tool_use",
+      "id": "toolu_012FfazsrScbr5hGRhrbtAmY",
+      "name": "answer",
+      "input": {
+        "events": [
+          {
+            "item": "川崎たん バレンタインデーVer.の名刺",
+            "stores": [
+              "kawasaki"
+            ],
+            "characterIds": [
+              "kawasaki"
+            ],
+            "evidence": [
+              "今日から１４日までの『期間限定』で",
+              "#川崎たん バレンタインデーVer.の名刺を配布していまーすヾ(*´∀｀*)ﾉ",
+              "\"2F総合カウンター”にあるのでご自由にお取りくださいらぞ♪",
+              "でも、たくさんの方に貰って欲しいのでおひとり様1枚でお願いしますらぞ(人>ω<*)"
+            ]
+          }
+        ]
+      },
+      "caller": {
+        "type": "direct"
+      }
+    }
+  ]
+}

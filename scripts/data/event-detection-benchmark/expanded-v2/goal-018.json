@@ -1,0 +1,127 @@
+[
+  {
+    "id": "expanded-v2-positive-1896879286709272600",
+    "source": "public-post",
+    "description": "sagami-birthday-acsta-end-2025",
+    "post": {
+      "id": "1896879286709272600",
+      "createdAt": "2025-03-04T11:03:58.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "『さがみたんアクスタ』は只今を持ちまして配布終了しました(´･ω･`)\nたくさんのご来店ありがとうございました♡\n#3月4日はさがみたんのバースデー https://t.co/BWTt5hP7ak",
+      "url": "https://x.com/bic_sagamioono/status/1896879286709272600",
+      "media": [
+        "https://pbs.twimg.com/media/GlMRpwabQAAJwAY.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "acsta",
+      "stores": null,
+      "characterIds": [
+        "sagami"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "只今をもって完配した明確な終了報告。名刺や他の特典の終了を補完しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "end"
+    ],
+    "group": "sagami-birthday-acsta-end-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "さがみたんアクスタ",
+          "evidence": [
+            "『さがみたんアクスタ』は只今を持ちまして配布終了しました(´･ω･`)",
+            "たくさんのご来店ありがとうございました♡",
+            "#3月4日はさがみたんのバースデー https://t.co/BWTt5hP7ak"
+          ]
+        }
+      ],
+      "groupingNote": "只今をもって完配した明確な終了報告。名刺や他の特典の終了を補完しない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 164819,
+      "postSha256": "187c4108569cf9f687cb71df154eadc4c47e48951cbd710ddda7fd97259353a6",
+      "textSha256": "1b4544b2f9e8e4aa7e22ce4e5ba1bbed03ea02f07051d51990808978e504b1d6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1902171417984237865",
+    "source": "public-post",
+    "description": "sagami-birthday-acsta-end-2025 matched control",
+    "post": {
+      "id": "1902171417984237865",
+      "createdAt": "2025-03-19T01:33:01.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "|*´ω`)おはようございます❄️\n私が来たときは相模大野に雪が降っていました(((=ω=)))\n寒すぎて凍えるかと思った(((=ω=))) \nこの後は晴れるのかな？では今日もよろしくお願いします♪",
+      "url": "https://x.com/bic_sagamioono/status/1902171417984237865",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1902171417984237865",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 161202,
+      "postSha256": "ae922243673f0a2a1566c1ab6de331a233f793386da14abdc02055451515de72",
+      "textSha256": "bfaf139c5e77491d524d27f1f8babfda8f45c72c82f483d5c8f7aa47c9905249"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

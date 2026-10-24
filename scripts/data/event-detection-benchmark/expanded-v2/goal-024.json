@@ -1,0 +1,128 @@
+[
+  {
+    "id": "expanded-v2-positive-1706148640384069964",
+    "source": "public-post",
+    "description": "kyushu-trio-halloween-card-2023",
+    "post": {
+      "id": "1706148640384069964",
+      "createdAt": "2023-09-25T03:28:29.000Z",
+      "screenName": "bic_kagoshima",
+      "kind": "original",
+      "text": "おはいも🍠🍠~~~ヾ(＾∇＾)ー♪\n本日9/25～10/31まで\n九州三人娘コラボ✨\nハロウィン限定名刺配布スタート🍠 https://t.co/e5moRlMANx",
+      "url": "https://x.com/bic_kagoshima/status/1706148640384069964",
+      "media": [
+        "https://pbs.twimg.com/media/F611JH7aoAA8qFJ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2023-09-25",
+      "conditions": null
+    },
+    "rationale": "九州三人娘の共同企画。投稿店舗から全対象娘を補完しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kyushu-trio-halloween-card-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ハロウィン限定名刺",
+          "evidence": [
+            "おはいも🍠🍠~~~ヾ(＾∇＾)ー♪",
+            "本日9/25～10/31まで",
+            "九州三人娘コラボ✨",
+            "ハロウィン限定名刺配布スタート🍠 https://t.co/e5moRlMANx"
+          ]
+        }
+      ],
+      "groupingNote": "九州三人娘の共同企画。投稿店舗から全対象娘を補完しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 325770,
+      "postSha256": "33a41c550f427ef45c04f3d89da276374ea3a0fad174398b382abacb223cce36",
+      "textSha256": "f5da43304161b4fea724507a9e92d7a1ae54757ff916ce64f59e83436c022f1b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1700050237443002729",
+    "source": "public-post",
+    "description": "kyushu-trio-halloween-card-2023 matched control",
+    "post": {
+      "id": "1700050237443002729",
+      "createdAt": "2023-09-08T07:35:36.000Z",
+      "screenName": "bic_kagoshima",
+      "kind": "original",
+      "text": "＼⌚本日発売の新商品⌚／\n#GSHOCK #BABYG\n#TWEETYコラボ モデル🤩\n\nスペシャルパッケージもとっても可愛い😍✨\n2階時計コーナーにて取扱いございますので\nぜひお立ち寄りくださいませ☺️ https://t.co/kJJ4lHVI6L",
+      "url": "https://x.com/bic_kagoshima/status/1700050237443002729",
+      "media": [
+        "https://pbs.twimg.com/media/F5fKF6SbUAA0kVv.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1700050237443002729",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 330370,
+      "postSha256": "8a2e46e263a33a9c6e518a5d00a1662af260df08e103aed7976f57158088b49d",
+      "textSha256": "1cf64b19c5862d5f530c7d90fb88e0da1cf55484c75c00bfc85629e7ec533006"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

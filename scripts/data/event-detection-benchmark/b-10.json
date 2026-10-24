@@ -1,0 +1,142 @@
+[
+  {
+    "id": "public-b-2110290853805924557",
+    "source": "public-post",
+    "description": "青ブタのスタンディパネル展示",
+    "post": {
+      "id": "2110290853805924557",
+      "createdAt": "2026-10-14T08:45:21.512Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "🐷 #青ブタ × #ビックカメラ 🐷\n 『青春ブタ野郎はディアフレンドの夢を見ない』公開記念🎉\n11/30㊊までビックカメラ23店舗で青ブタコラボ実施中🎊\n川崎店は３階で #桜島麻衣 さん スタンディパネル＆劇場告知ポスターを掲出中！\nさらに期間中、麻衣さんの限定館内放送も！ぜひお越しください！",
+      "url": "https://x.com/Bic_kawasaki/status/2110290853805924557",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "コラボ展示だが対象キャラは桜島麻衣でビッカメ娘ではない。",
+    "tags": [
+      "hard-negative",
+      "other-ip",
+      "generic-exhibition"
+    ],
+    "group": "aobuta-kawasaki-panel-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "01b923034fc3f6248c7c2850f4bb324519a8de1e155e04cf3206ed99d8e43a85"
+  },
+  {
+    "id": "public-b-2110311816341676477",
+    "source": "public-post",
+    "description": "立川たんのハロウィン雑談",
+    "post": {
+      "id": "2110311816341676477",
+      "createdAt": "2026-10-14T10:08:39.370Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "毎年ハロウィンは他のビッカメ娘がやってくれてるからカボチャのスイーツが美味しい季節として過ごしているんだけど…カボチャが美味しいからOKだよね\n\n(Ｕ 'ᴗ' Ｕ)🎃✨",
+      "url": "https://x.com/bic_tachikawa/status/2110311816341676477",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ハロウィンと他の娘に言及しても、本人の食べ物の雑談で企画告知ではない。",
+    "tags": [
+      "hard-negative",
+      "seasonal-word",
+      "character-mention-only"
+    ],
+    "group": "tachikawa-pumpkin-chat",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "dadae1954a83342e4fd0379a37d99c3e5a9c1c0daf32de4f2f7f6df6d35c9d29"
+  },
+  {
+    "id": "public-b-2110551981337305382",
+    "source": "public-post",
+    "description": "しんじゅくたん美味しいもの食べ隊アクキー継続",
+    "post": {
+      "id": "2110551981337305382",
+      "createdAt": "2026-10-15T02:02:59.167Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "ヾ(*・ω・)ノ｡oO（美味しいもの食べ隊、しんじゅくたんのアクキーまだございます～！さぁ！みんなでLet’ｓいも…美味しいもの食べ隊✨）",
+      "url": "https://x.com/bic_shinjuku3ch/status/2110551981337305382",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "characterIds": [
+        "bicqlo"
+      ]
+    },
+    "rationale": "しんじゅくたんのアクキーがまだ入手できることを案内している。開始日と購入条件は記載なし。",
+    "tags": [
+      "giveaway",
+      "inventory-update",
+      "ackey"
+    ],
+    "group": "delicious-food-tai-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "2a335179250f35f54bfa960670a9f11e707a354eb428f7d36f2f56513430c687"
+  },
+  {
+    "id": "public-b-2110572742504534438",
+    "source": "public-post",
+    "description": "初音ミクのアクリルスタンド通常販売",
+    "post": {
+      "id": "2110572742504534438",
+      "createdAt": "2026-10-15T03:25:29.015Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "「初音ミク×招き猫×真夏の熊谷」\nステンドグラス風素材加工アクリルスタンド❣\n\nキラキラでとっても綺麗なアクスタですにゃ～✨\n\nフチも猫耳になっていて可愛いにゃ。ご利益ご利益～₍^> ̫<^₎✨\n🌸2階PCコーナーにて取り扱い中🌸 pic.x",
+      "url": "https://x.com/bic_akiba/status/2110572742504534438",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "acsta"
+    },
+    "rationale": "アクスタという配布物語はあるが別IPの商品紹介で、娘の企画ではない。 他IPの商品だがアクリルスタンドと明示されているため、非対象イベントでも物品種別はacstaと注釈する。",
+    "tags": [
+      "hard-negative",
+      "other-ip",
+      "acsta-word"
+    ],
+    "group": "miku-manekineko-acsta",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "8f439cea74ee8551d5f4392c0db5bb8746c836556d6ed9c98db7130cccdb2e2a"
+  },
+  {
+    "id": "public-b-2110626732063805924",
+    "source": "public-post",
+    "description": "千葉たん・パソ館たん出演の公式動画公開",
+    "post": {
+      "id": "2110626732063805924",
+      "createdAt": "2026-10-15T07:00:01.129Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "＃ビックカメラのB面 にっっ\nついにビッカメ娘が登場～～～っっ！？\nなんとなんとなんとぉおっっ\n千葉たんがっパソ館たんがぁあ～～～っっ\n✧*。ヾ(*´∀｀*⪩⪨)ﾉ✧*。\n本編は10月16日18時公開予定！\n公式ページのチャンネル登録をしてお待ちくださ～い！",
+      "url": "https://x.com/bic_chiba/status/2110626732063805924",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "characterIds": [
+        "chiba",
+        "pkan"
+      ],
+      "startDate": "2026-10-16"
+    },
+    "rationale": "ビッカメ娘が登場する番組の公開日時を明示したデジタル企画。物理配布物や開催店舗は未注釈。",
+    "tags": [
+      "digital-content",
+      "collaboration",
+      "multiple-characters"
+    ],
+    "group": "biccamera-bmen-chiba-pkan-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "66a947296f2192f957ce15c0cba3605412b11b54441968e5554623b066942d23"
+  }
+]

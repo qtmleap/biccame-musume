@@ -1,0 +1,165 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2083842037846266333",
+    "source": "public-post",
+    "description": "sagami-anniv11-acrylic-key-2026",
+    "post": {
+      "id": "2083842037846266333",
+      "createdAt": "2026-08-02T09:07:12.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "💜3月4日～💜\n#8月4日はさがみたん擬人化11周年\n当店で税込3,000円以上ご購入のお客様に\n『さがみたんアクリルキーホルダー』をプレゼント🩷\n✨限定100個✨\n※なくなり次第終了\n#さがみたん https://t.co/IpR3moa6hx",
+      "url": "https://x.com/bic_sagamioono/status/2083842037846266333",
+      "media": [
+        "https://pbs.twimg.com/media/HOtLSI2aoAAcKyf.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": [
+        "sagami"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "「3月4日～」と記すが記念日は8月4日。日付が矛盾し開始日は未注釈。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "challenge",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "sagami-anniv11-acrylic-key-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "さがみたんアクリルキーホルダー",
+          "evidence": [
+            "『さがみたんアクリルキーホルダー』をプレゼント🩷"
+          ]
+        }
+      ],
+      "groupingNote": "「3月4日～」と記すが記念日は8月4日。日付が矛盾し開始日は未注釈。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 19794,
+      "postSha256": "941492e136431b0523519916530f19bd86dc342c4e19ae241d1327f5c555e5cd",
+      "textSha256": "edbf9b7ea209d7faa554db1bfe438f5a2e82e1f57332b18d8363eb015e9467f4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "65a31fee-6240-4bbc-95a3-7563301c5236",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_sagamioono/status/2083842037846266333",
+          "origin": "manual-or-seed",
+          "title": "擬人化10周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-08-03T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "sagami"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2094351140918059369",
+    "source": "public-post",
+    "description": "sagami-anniv11-acrylic-key-2026 matched control",
+    "post": {
+      "id": "2094351140918059369",
+      "createdAt": "2026-08-31T09:06:37.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "今月はイベントも配布物も盛りだくさんで、沢山の方に来てもらえて とっても楽しい1か月でした♡\nみなさん来店報告やお祝いのメッセージにイラスト、本当にありがとうございました(*´pq`*)\n\nでは、また9月にお会いしましょう～",
+      "url": "https://x.com/bic_sagamioono/status/2094351140918059369",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2094351140918059369",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 11632,
+      "postSha256": "84bd19b94b9db45e599f9827556c78091b88dc05147c4c439da148e17ee5fdca",
+      "textSha256": "2dbdecc8800ad3a432c93e5b205fc9ffb7c12d934530f539cedeb894ef5469ef"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

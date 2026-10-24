@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-2036045512361824337",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2036045512361824337",
+      "createdAt": "2026-03-23T11:40:52.000Z",
+      "screenName": "bic_nagoyagate",
+      "kind": "original",
+      "text": "文章や音声を翻訳、会話をリアルタイムに翻訳する機能を持つもAIスマートグラス 『Even G2』\nビックカメラ名古屋JRゲートタワー店\n9階ゲームコーナー🎮にて好評ご予約承り中です👓 https://t.co/0eJQ2wbOon",
+      "url": "https://x.com/bic_nagoyagate/status/2036045512361824337",
+      "media": [
+        "https://pbs.twimg.com/media/HEF8dcGbMAALPte.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「文章や音声を翻訳、会話をリアルタイムに翻訳する機能を持つもAIスマートグラス 『Even G2』 / ビックカメラ名古屋JRゲートタワー店 / 9階ゲームコーナー🎮にて好評ご予約承り中です👓 https://t.co/0eJQ2wbOon」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "even-g2-ai-glasses-preorders-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 60676,
+      "postSha256": "c8e7fbf25e25e0435b9172cf74f357b15c4304ff8c61b4343ad18d61fa44a28d",
+      "textSha256": "66f24792a2e5311d72e4485daa822593ab0c6a8532a75b259c2e27322dba777d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-2038164110844854561",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2038164110844854561",
+      "createdAt": "2026-03-29T07:59:25.000Z",
+      "screenName": "bic_shinyoko",
+      "kind": "original",
+      "text": "【7階家電コーナーよりお知らせ】\n\n🉐炊飯器がお得、これが安い‼🉐\n\n３．５合(1～2人向け)～５．５合(2～3人向け)まで\n炊飯方式と容量を色々ご準備しておりますので\nぜひ7階調理家電コーナーをご利用ください🎶\n\n※3月29日時点の価格となります https://t.co/XlTIQpNI3y",
+      "url": "https://x.com/bic_shinyoko/status/2038164110844854561",
+      "media": [
+        "https://pbs.twimg.com/media/HEkDctKbgAA-Pgy.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「【7階家電コーナーよりお知らせ】 / 🉐炊飯器がお得、これが安い‼🉐 / ３．５合(1～2人向け)～５．５合(2～3人向け)まで」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "shinyoko-rice-cooker-sale-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 58846,
+      "postSha256": "c7857c190753a27a67a31016799a373a733ef946fcaf154cd54401c1af170cc7",
+      "textSha256": "c4437ac1499a4ceab439ef1d447cbf64e106ca9f82b546170f2eca5d813cd62c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

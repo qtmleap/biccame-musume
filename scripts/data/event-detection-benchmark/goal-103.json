@@ -1,0 +1,104 @@
+[
+  {
+    "id": "goal-negative-1690943490098921472",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1690943490098921472",
+      "createdAt": "2023-08-14T04:28:38.000Z",
+      "screenName": "bicakasaka",
+      "kind": "original",
+      "text": "☆キャンペーン情報☆\n\n8月20日(日)まで\nビック得売デーを開催中🉐\n\n期間中に指定金額以上の対象製品を、\n2点同時購入で5％引き❗️\n3点同時購入で10%引き‼️\n\n今ならまとめ買いがお得です✨\n是非、この機会にご利用くださいませ。 https://t.co/dM4kcSrcBO",
+      "url": "https://x.com/bicakasaka/status/1690943490098921472",
+      "media": [
+        "https://pbs.twimg.com/media/F3duAmyaoAAERaO.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「☆キャンペーン情報☆ / 8月20日(日)まで / ビック得売デーを開催中🉐」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "akasaka-multiple-product-discount-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 337377,
+      "postSha256": "19e056ef9535819bab9da87062eb6d71ed8378158918b997caad1278b8dbe9f5",
+      "textSha256": "7d339f16d7fe5e4a40e2aeaf15230731bb29a8c90b236b50022cce0eb1824620"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1719273831741980898",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1719273831741980898",
+      "createdAt": "2023-10-31T08:43:18.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "ドーナツの話題が出たからペタリ。\nてんちゃん小学生の頃お友達のお家で🍩作らせてもらったことあるの思い出したんだけど、油使って揚げたりしてとっても大変だった💦\nこういう方が便利だよね～(0ω0)\n\nビックカメラ.com\nhttps://t.co/mJ5K6tK1ub",
+      "url": "https://x.com/bicikebukuro/status/1719273831741980898",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ドーナツの話題が出たからペタリ。 / てんちゃん小学生の頃お友達のお家で🍩作らせてもらったことあるの思い出したんだけど、油使って揚げたりしてとっても大変だった💦 / こういう方が便利だよね～(0ω0)」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "honten-donut-cooking-product-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 315826,
+      "postSha256": "775eb17955d5447e8494b8b0d1fa5a18571e55aa6d4eb61a64ac42636dd6865f",
+      "textSha256": "67379f116d68f715b2a06a059dc334313b42f440b8721fcf603ba6ee707ed26b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,185 @@
+[
+  {
+    "id": "public-c-1997867242416148706",
+    "source": "public-post",
+    "description": "大宮たん擬人化10周年アクキー",
+    "post": {
+      "id": "1997867242416148706",
+      "createdAt": "2025-12-08T03:14:03.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "(」お˃̶͈̀ ﾛ ˂̶͈́)」＜告知1個目ー！\n👑大宮たん擬人化10周年企画👑\n\n12/13(土)から当店で対象金額以上購入した当日レシートを3Fコンタクトコーナーで提示すると『 👗アクリルキーホルダー』をプレゼント🎁\n配布条件は画像を要チェック\n\n#12月15日は大宮たん擬人化10周年\n#ビッカメ娘 https://t.co/K4YSotyfQz",
+      "url": "https://x.com/bic_ohmiya/status/1997867242416148706",
+      "media": [
+        "https://pbs.twimg.com/media/G7nZqpVbsAAozQx.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "ohmiya"
+      ],
+      "characterIds": [
+        "ohmiya"
+      ],
+      "startDate": "2025-12-13"
+    },
+    "rationale": "12月13日から対象金額以上購入したレシートで記念アクキーと明示。額は本文にない。",
+    "tags": [
+      "historical",
+      "positive",
+      "image-dependent-terms"
+    ],
+    "group": "ohmiya-tenth-anniversary-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-1996826527326195840",
+    "source": "public-post",
+    "description": "所沢たんクリスマス名刺",
+    "post": {
+      "id": "1996826527326195840",
+      "createdAt": "2025-12-05T06:18:38.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "✨🎄クリスマス限定名刺🎄✨\n\n12月6日(土)～12月31日(水)まで！\n所沢たんクリスマス限定名刺を配布します✨\n\n配布場所：ＰＣコーナー付近\nところざわたん等身大のところ✈️\n\nおひとり様1枚でお願いします🎁\nよろとこです(§*'▽'*)🎄✨ https://t.co/HjCVZ5FWVv",
+      "url": "https://x.com/bic_toko/status/1996826527326195840",
+      "media": [
+        "https://pbs.twimg.com/media/G7YnA5Wb0AMio5J.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "tokorozawa"
+      ],
+      "characterIds": [
+        "tokorozawa"
+      ],
+      "startDate": "2025-12-06"
+    },
+    "rationale": "12月6日から31日に所沢たんクリスマス名刺を配布。",
+    "tags": [
+      "historical",
+      "positive",
+      "limited-card"
+    ],
+    "group": "tokorozawa-christmas-card-2025",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2005550626063925362",
+    "source": "public-post",
+    "description": "有楽町たん1月カレンダー名刺",
+    "post": {
+      "id": "2005550626063925362",
+      "createdAt": "2025-12-29T08:05:05.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ有楽町たんからのお知らせです❣\n2026年1月1日(木)から1月31日(土)までの期間限定で\n有楽町たん1月カレンダー名刺の配布を行います📅\n場所は、1F総合案内カウンター前の✨有楽町たん祭壇\nにてお受け取りいただけます👐\n🌟お受け取りは、お一人様一枚でお願いします🌟\nぜひ、お受け取りください! https://t.co/HGL9EV2DXZ",
+      "url": "https://x.com/bic_yuurakuchou/status/2005550626063925362",
+      "media": [
+        "https://pbs.twimg.com/media/G9UlQr0bYAAjgfB.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "yuurakuchou"
+      ],
+      "characterIds": [
+        "yuurakuchou"
+      ],
+      "startDate": "2026-01-01"
+    },
+    "rationale": "2026年1月1日から31日に有楽町たんカレンダー名刺を配布。10月の開発用ギフトカードとは別物・別時期。",
+    "tags": [
+      "historical",
+      "positive",
+      "limited-card"
+    ],
+    "group": "yuurakuchou-calendar-january-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2004043998965690726",
+    "source": "public-post",
+    "description": "なんば店で京都たん記念アクキー",
+    "post": {
+      "id": "2004043998965690726",
+      "createdAt": "2025-12-25T04:18:17.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼ビッカメ娘イベント告知2⃣／\n🎂京都たん擬人化記念🎂\n【期間】1月10日㈯～無くなり次第終了\n\n税込3,000円以上の当日ご購入レシートをなんば店1階 総合カウンターにお持ちいただくと、『京都たんアクリルキーホルダ― ドレスver.』プレゼント🎁✨\n\n京都たんはお店が無いからうちがお祝いするで😆🎉 https://t.co/ADFqtOaawM",
+      "url": "https://x.com/biccamera_nanba/status/2004043998965690726",
+      "media": [
+        "https://pbs.twimg.com/media/G8_EtqoasAA8joY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "nanba"
+      ],
+      "characterIds": [
+        "kyoto"
+      ],
+      "startDate": "2026-01-10",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "京都たんは店が無いためなんば店が祝い、1月10日から3000円購入レシートで京都たんアクキーを提供と明示。",
+    "tags": [
+      "historical",
+      "positive",
+      "purchase",
+      "cross-store-character",
+      "closed-character"
+    ],
+    "group": "kyoto-ninth-anniversary-nanba-2026",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-c-2005849710360219756",
+    "source": "public-post",
+    "description": "池西たんお正月アクキー",
+    "post": {
+      "id": "2005849710360219756",
+      "createdAt": "2025-12-30T03:53:32.000Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "＼　大変お待たせいたしました　／\n\n１月３日（土）よりアクキープレゼント企画を\n開催します！(🎀人*´∀｀)｡*ﾟ+\n\n新しいお正月のイラストをアクキーにしました！✨\nめちゃかわいいので是非ゲットしてね！\n\n#池西たん　#ビックカメラ池袋西口店\n\n✅詳細は添付画像をチェック！ https://t.co/lf2DJH8VWc",
+      "url": "https://x.com/bicikenishi/status/2005849710360219756",
+      "media": [
+        "https://pbs.twimg.com/media/G9Y0q4UbIAAHpGi.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey",
+      "stores": [
+        "ikenishi"
+      ],
+      "characterIds": [
+        "ikenishi"
+      ],
+      "startDate": "2026-01-03"
+    },
+    "rationale": "1月3日からお正月イラストの池西たんアクキープレゼント企画。条件は画像のため注釈しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "image-dependent-terms"
+    ],
+    "group": "ikenishi-new-year-keychain-2026",
+    "reviewStatus": "provisional"
+  }
+]

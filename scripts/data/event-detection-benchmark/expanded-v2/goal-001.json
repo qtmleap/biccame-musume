@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expanded-v2-positive-1156098691716931584",
+    "source": "public-post",
+    "description": "kinshachi-beer-coaster-2019",
+    "post": {
+      "id": "1156098691716931584",
+      "createdAt": "2019-07-30T07:06:22.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "ヾ(*・ω・)ノ｡oO（当店4階 お酒コーナーでも『金しゃち×ビッカメ娘 飲み比べセット』をご購入でなごやたんとなごやげーとたんのオリジナルコースタープレゼント始まりました♪）\n※なくなり次第終了となります https://t.co/y1AE714Unq",
+      "url": "https://x.com/bic_shinjuku3ch/status/1156098691716931584",
+      "media": [
+        "https://pbs.twimg.com/media/EAtJfMOUwAAzfiQ.jpg",
+        "https://pbs.twimg.com/media/EAtJiuFU4AAZmMt.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "nagoya",
+        "nagoyagate"
+      ],
+      "startDate": null,
+      "conditions": [
+        {
+          "type": "purchase"
+        }
+      ]
+    },
+    "rationale": "飲み比べセット購入でのコースター。店舗別投稿を別企画として増やさない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kinshachi-beer-coaster-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "オリジナルコースター",
+          "evidence": [
+            "ヾ(*・ω・)ノ｡oO（当店4階 お酒コーナーでも『金しゃち×ビッカメ娘 飲み比べセット』をご購入でなごやたんとなごやげーとたんのオリジナルコースタープレゼント始まりました♪）",
+            "※なくなり次第終了となります https://t.co/y1AE714Unq"
+          ]
+        }
+      ],
+      "groupingNote": "飲み比べセット購入でのコースター。店舗別投稿を別企画として増やさない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 726606,
+      "postSha256": "83e1ffd57c41472dab8f8a4705dd7d88bd1b12af85585178b0071ed11e1b53eb",
+      "textSha256": "b9fd2633c40adbcd5cd296fcdf7bbb5d0a538da594f6ab10da80f764125829d3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1153495533714935808",
+    "source": "public-post",
+    "description": "kinshachi-beer-coaster-2019 matched control",
+    "post": {
+      "id": "1153495533714935808",
+      "createdAt": "2019-07-23T02:42:20.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "本日先行発売！！\nBlu-rayソフト『あした世界が終わるとしても』\nビックロ限定先着購入特典として先着100名様に『櫻木監督サイン入りジャケット』をプレゼント！！\nぜひ、ビックロにてお求めください☆ https://t.co/UjcdVleLB5",
+      "url": "https://x.com/bic_shinjuku3ch/status/1153495533714935808",
+      "media": [
+        "https://pbs.twimg.com/media/EAIJJXuUIAAEqSd.jpg",
+        "https://pbs.twimg.com/media/EAIJLqJVUAEVtdB.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1153495533714935808",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 728843,
+      "postSha256": "e8c0b70d8bde7c3a803bc151dddf26b371439f4beacb9b55ac463772614642d1",
+      "textSha256": "32ec9727a4613f74ded9023f09f33cf3753f88612b2842b09294709c456602bf"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -97,12 +97,13 @@ max_concurrency = 1
 # 公開イベント告知のみを制御し、Webhook の Discord 判定通知とは分離する。
 X_POSTING_ENABLED = "false"
 DISCORD_POSTING_ENABLED = "false"
-# 管理画面の X アカウント読み取り。投稿の有効化とは別に制御する。
-X_ACCOUNT_READ_ENABLED = "false"
+# 管理画面の X アカウント読み取り。投稿の有効化とは別に制御する。local でも読み取りだけ有効にする。
+X_ACCOUNT_READ_ENABLED = "true"
 EVENT_DETECTION_MODEL = "clef"
 EVENT_DETECTION_THRESHOLD = "0.9"
 EVENT_DETECTION_IGNORE_THRESHOLD = "0.5"
 EVENT_DETECTION_CHOICE_THRESHOLD = "0.9"
+EVENT_DETECTION_ITEM_COUNT_THRESHOLD = "0.9"
 ENVIRONMENT = "local"
 # ローカル開発で 1 日 1 回制限を迂回する。E2E は vite.config.ts 側で false に上書きする
 VOTE_LIMIT_BYPASS = "true"
@@ -212,6 +213,7 @@ EVENT_DETECTION_MODEL = "clef"
 EVENT_DETECTION_THRESHOLD = "0.9"
 EVENT_DETECTION_IGNORE_THRESHOLD = "0.5"
 EVENT_DETECTION_CHOICE_THRESHOLD = "0.9"
+EVENT_DETECTION_ITEM_COUNT_THRESHOLD = "0.9"
 ENVIRONMENT = "dev"
 # vars は環境に継承されないため、迂回しないことを明示する
 VOTE_LIMIT_BYPASS = "false"
@@ -325,6 +327,7 @@ EVENT_DETECTION_MODEL = "clef"
 EVENT_DETECTION_THRESHOLD = "0.9"
 EVENT_DETECTION_IGNORE_THRESHOLD = "0.5"
 EVENT_DETECTION_CHOICE_THRESHOLD = "0.9"
+EVENT_DETECTION_ITEM_COUNT_THRESHOLD = "0.9"
 ENVIRONMENT = "prod"
 # vars は環境に継承されないため、迂回しないことを明示する
 VOTE_LIMIT_BYPASS = "false"

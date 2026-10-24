@@ -1,0 +1,136 @@
+[
+  {
+    "id": "expanded-v2-positive-1825444929805377858",
+    "source": "public-post",
+    "description": "funabashi-warrior-postcard-2024",
+    "post": {
+      "id": "1825444929805377858",
+      "createdAt": "2024-08-19T08:09:21.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "📢ボクからのお知らせ～～！！\n緊急告知なり～～💛💛\n明日8月20日から税込み1000円以上ご購入のお客様に【ビッカメ娘戦士ふなたん】の限定ポストカードをプレゼント！！\n9/1から始まるステッカーイベントと同時配布が新たに決定！！\n※8/20～8/31まではポスカだけしか貰えないのでご注意ください https://t.co/Iz9CqKndy6",
+      "url": "https://x.com/bic_funabashi/status/1825444929805377858",
+      "media": [
+        "https://pbs.twimg.com/media/GVVHaskaoAAwX4-.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "funabashi"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "翌日ポスカ開始と9月ステッカー開始の時差を保持。両特典が即日同時とはしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "funabashi-warrior-postcard-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "限定ポストカード",
+          "evidence": [
+            "明日8月20日から税込み1000円以上",
+            "8/20～8/31まではポスカだけ"
+          ]
+        },
+        {
+          "item": "ステッカー",
+          "evidence": [
+            "9/1から始まるステッカーイベント"
+          ]
+        }
+      ],
+      "groupingNote": "翌日ポスカ開始と9月ステッカー開始の時差を保持。両特典が即日同時とはしない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 218243,
+      "postSha256": "f33aed1667a7996206077596fdef5f9431efc9ebcfd6abf32ee3b5503acd9a87",
+      "textSha256": "5bf03b4d107cc43a2bc80a2560d0049a258551fb9395649124c08af1a5caac90"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1828301684264870211",
+    "source": "public-post",
+    "description": "funabashi-warrior-postcard-2024 matched control",
+    "post": {
+      "id": "1828301684264870211",
+      "createdAt": "2024-08-27T05:21:04.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "Nintendo Switchソフト \n『#ウマ娘 プリティーダービー 熱血ハチャメチャ大感謝祭！』 \n8/30(金)発売!!  \n\nビックカメラグループオリジナル特典として、チームリリィ(#スティルインラブ,#スイープトウショウ,#アストンマーチャン,#ウオッカ,#ダイワスカーレット)のA4クリアファイル付き!! https://t.co/w3gSqZLJbs",
+      "url": "https://x.com/bic_funabashi/status/1828301684264870211",
+      "media": [
+        "https://pbs.twimg.com/media/GV9ursVaoAAdKsf.jpg",
+        "https://pbs.twimg.com/media/GV9uru9XwAAH3o8.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1828301684264870211",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 216100,
+      "postSha256": "3ad47efd0c6cd11f0bcf564324b1fcf658731c026a4ba73152f648bcf8ada053",
+      "textSha256": "62af0257edb73cf4602c605daabd9f331f2ad5553823b2e9e4c3bfc6c8fd1e3a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

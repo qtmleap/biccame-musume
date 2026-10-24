@@ -1,0 +1,167 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2078026926032118081",
+    "source": "public-post",
+    "description": "shibuhachi-anniv7-shiori-2026",
+    "post": {
+      "id": "2078026926032118081",
+      "createdAt": "2026-07-17T08:00:01.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "＼ᐠ  追加情報  ᐟ／\n擬人化7周年イベント‼\n\n✨第2弾 急遽決定✨\nしぶハチたん クリアしおり\n\n➡️ 限定 各種１００枚\n➡️ 当日レシート税込１０００円ごとに１種ランダムでお渡し\n➡️ 1会計につき２枚まで\n➡️ お渡し会場 A館1F レジ\n※なくなり次第終了\n#ビッカメ娘 \n#7月7日しぶハチたん擬人化7周年 https://t.co/xfBHXho8Pf",
+      "url": "https://x.com/bicshibuhachi00/status/2078026926032118081",
+      "media": [
+        "https://pbs.twimg.com/media/HNWHqnfaQAAkPaH.jpg",
+        "https://pbs.twimg.com/media/HNWHqhvaYAArfn8.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "shibuhachi"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "第2弾として急遽決定したクリアしおり。1000円ごとにランダムの条件。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "boundary:action",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:shibuya-shibuhachi-anniv7-2026"
+    ],
+    "group": "shibuhachi-anniv7-shiori-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "クリアしおり",
+          "evidence": [
+            "しぶハチたん クリアしおり"
+          ]
+        }
+      ],
+      "groupingNote": "第2弾として急遽決定したクリアしおり。1000円ごとにランダムの条件。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 19927,
+      "postSha256": "fa724614edc2673fda1bb09684f4511c3df6debd297d715d5f198d52d6935eaa",
+      "textSha256": "d0416aaa9293de5b9162a4012a98e67054d4eb236e607decf47a334a09d7dfdd"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "3307a01d-5b7e-4dc5-ab24-3fc66ccbd806",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicshibuhachi00/status/2078026926032118081",
+          "origin": "manual-or-seed",
+          "title": "クリアしおり",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-17T15:00:00.000+00:00",
+            "endDate": "2026-08-01T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shibuhachi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2080845232330170576",
+    "source": "public-post",
+    "description": "shibuhachi-anniv7-shiori-2026 matched control",
+    "post": {
+      "id": "2080845232330170576",
+      "createdAt": "2026-07-25T02:38:58.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "おはハチ☀\n\n🍧🍧🍧🍧 ／\n　かき氷の日　やったぁー\n🍧🍧🍧🍧 ＼ そして大安吉日\n\nお気に入りの味ってある？\nハチたんはフルーツいっぱいのかき氷！🍧✨\nみつけたら、もう……ついじーっと👀\nかき氷屋さんとかにおでかけしたいハチね～✨\n\nきょうもよろしくハチ✨\n#おはようございます\n#しぶハチたん",
+      "url": "https://x.com/bicshibuhachi00/status/2080845232330170576",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2080845232330170576",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 21698,
+      "postSha256": "9f0f7f323dc6a2055c1b24911a7bd4739e2c779152c22762b3126b82128b6501",
+      "textSha256": "58b9b1cb9d7600cf11115506d9070e48d5eb0b4477fe4fbe2b2341f45c41cef2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,161 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2048944198217499100",
+    "source": "public-post",
+    "description": "yuurakuchou-may-calendar-card-2026",
+    "post": {
+      "id": "2048944198217499100",
+      "createdAt": "2026-04-28T01:55:39.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ✨有楽町たんからのお知らせ✨\n5月1日(金)から5月31日(日)までの期間限定で\n有楽町たん5月カレンダー名刺の配布を行います📅\n場所は、1F総合案内カウンター前の✨有楽町たん祭壇  にてお受け取りいただけます👐\n🌟お受け取りは、お一人様一枚でお願いします🌟\nぜひ、お受け取りください ❣ https://t.co/ekmkuJnOs5",
+      "url": "https://x.com/bic_yuurakuchou/status/2048944198217499100",
+      "media": [
+        "https://pbs.twimg.com/media/HG9OwUObMAAD3CS.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "yuurakuchou"
+      ],
+      "startDate": "2026-05-01",
+      "conditions": null
+    },
+    "rationale": "5月カレンダー名刺。月替わりの同型文面。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:monthly-calendar-card",
+      "prior-template-related:public-c-2005550626063925362"
+    ],
+    "group": "yuurakuchou-may-calendar-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "有楽町たん5月カレンダー名刺",
+          "evidence": [
+            "有楽町たん5月カレンダー名刺の配布を行います📅"
+          ]
+        }
+      ],
+      "groupingNote": "5月カレンダー名刺。月替わりの同型文面。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 50392,
+      "postSha256": "bd4fdbdc9fddb9fa9c16869fd46ff700684c9f7ebf9b545ba7348798227b443b",
+      "textSha256": "da8975197544df661001e6c820d6f07fffec207e5d8a2a1747b6358b676a307e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "e08a2ac1-392d-4667-8558-fd11eb238e16",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_yuurakuchou/status/2048944198217499100",
+          "origin": "manual-or-seed",
+          "title": "5月カレンダー名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-04-30T15:00:00.000+00:00",
+            "endDate": "2026-05-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yuurakuchou"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2039160765165551815",
+    "source": "public-post",
+    "description": "yuurakuchou-may-calendar-card-2026 matched control",
+    "post": {
+      "id": "2039160765165551815",
+      "createdAt": "2026-04-01T01:59:46.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "【レジ周りを一気にスマート化】\nAirレジ×周辺機器でレジ業務をスムーズに✨\n導入から運用方法まで専門スタッフがしっかりご案内。\n実機体験も可能です！\n当店5階 Airレジカウンターへ👇\nhttps://t.co/10o8LBWjI5\n#エアレジ #POSレジ #業務効率化 #店舗運営 #Airレジ https://t.co/wjGSqocaSQ",
+      "url": "https://x.com/bic_yuurakuchou/status/2039160765165551815",
+      "media": [
+        "https://pbs.twimg.com/amplify_video_thumb/2039160356900315136/img/GThG1SnOaYCjPfAO.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2039160765165551815",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 58198,
+      "postSha256": "7367ab45ed438ea86c6c544f7f64e61c2515e0a9d1cac9effd8aa2d2c31cbc9b",
+      "textSha256": "31e9e9ebd1f2b901e035dd2d3787070ce26d0672afe27544a97897a58e7a28e3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

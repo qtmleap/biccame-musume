@@ -1,0 +1,176 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2082757319310667796",
+    "source": "public-post",
+    "description": "fujisawa-bittabi-can-badge-2026",
+    "post": {
+      "id": "2082757319310667796",
+      "createdAt": "2026-07-30T09:16:55.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "＼8月は神奈川地区！／\n日本列島を北上！\n缶バッジで繋ぐビッカメ娘旅\n通称 #ビッ旅 藤沢たんの番が来た✨\n\n8/1(土)～8/31(月)\n期間中、2F総合案内カウンターにて\n税込1,100円以上ご購入のレシートを\nお持ちいただくと缶バッジプレゼント！\n\n先着250名様限定、なくなり次第終了\nご来店待ってるぜ！ https://t.co/quSHeQavyr",
+      "url": "https://x.com/bic_fujisawa/status/2082757319310667796",
+      "media": [
+        "https://pbs.twimg.com/media/HOdvxqVb0AAIhxn.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "fujisawa"
+      ],
+      "startDate": "2026-08-01",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 1100
+        },
+        {
+          "type": "first_come",
+          "quantity": 250
+        }
+      ]
+    },
+    "rationale": "8/1〜8/31、1100円以上で先着250名。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:bittabi-can-badge-kanagawa"
+    ],
+    "group": "fujisawa-bittabi-can-badge-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "缶バッジ",
+          "evidence": [
+            "缶バッジで繋ぐビッカメ娘旅",
+            "お持ちいただくと缶バッジプレゼント！"
+          ]
+        }
+      ],
+      "groupingNote": "8/1〜8/31、1100円以上で先着250名。",
+      "unannotatedFields": [
+        "stores"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 20184,
+      "postSha256": "15b44651dd586776923db6128c16e2e0766e168c099af27585c65736c2e684e7",
+      "textSha256": "1537c0560a02904495e181f79fad5cad1730919f7c21a7e6d75e5fbf2bf2bd27"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "d5adb4bf-5cbe-474f-bb81-fd4410c8eb73",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_fujisawa/status/2082757319310667796",
+          "origin": "manual-or-seed",
+          "title": "缶バッジで繋ぐビッカメ娘旅",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-31T15:00:00.000+00:00",
+            "endDate": "2026-08-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "fujisawa"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 250,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 1100,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2075757219501724121",
+    "source": "public-post",
+    "description": "fujisawa-bittabi-can-badge-2026 matched control",
+    "post": {
+      "id": "2075757219501724121",
+      "createdAt": "2026-07-11T01:41:01.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "📢7/13(月)までの特別値引き✨\n話題のリカバリーウェア\n『TENTIAL BAKUNE』\n当社指定商品が\n表示価格より最大20%引き！\n\n夏のパジャマにぴったりなメッシュ生地、ドライ生地商品をお得に購入するチャンス🎐💤\n\n5Fにある試着室にて、サイズ感をお試しいただけます！\nぜひご利用ください https://t.co/FDY5uTFOvs",
+      "url": "https://x.com/bic_fujisawa/status/2075757219501724121",
+      "media": [
+        "https://pbs.twimg.com/media/HM6RCg_bwAALHqG.jpg",
+        "https://pbs.twimg.com/media/HM6RFNcagAAyhe2.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2075757219501724121",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 26183,
+      "postSha256": "ebb20ea26165460c290f5f36ec83043ba21fed936e1d69e79d4b27832396d534",
+      "textSha256": "f9746f1eeac05a03fb644d334162f7d484a0e57dfdfd79e5decfbd20fef66184"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

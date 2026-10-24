@@ -40,6 +40,7 @@ const fixtureEvent = (n: number, input: Record<string, unknown> = {}): Event => 
     title: `イベント${n}`,
     category: 'limited_card',
     stores: ['akiba'],
+    characterIds: ['akiba'],
     startDate: '2026-10-12T10:00:00+09:00',
     endDate: '2026-10-18T23:59:59+09:00',
     isVerified: true,
@@ -86,7 +87,7 @@ const row = (input: Partial<SocialRow> = {}): SocialRow => ({
   eventIds: [uuid(1)],
   title: '題名',
   stores: ['新宿店'],
-  avatar: 'akiba',
+  avatars: ['akiba'],
   target: null,
   period: null,
   date: null,
@@ -195,7 +196,7 @@ describe('summary image layout', () => {
 })
 
 describe('image properties', () => {
-  const event = fixtureEvent(1, { stores: ['akiba', 'chofu'] })
+  const event = fixtureEvent(1, { stores: ['akiba', 'chofu'], characterIds: ['akiba', 'chofu'] })
   const eventImage = createdSnapshot(event).images[0]
   const [starting, ending] = dailySnapshot(
     fixtureEvent(2),

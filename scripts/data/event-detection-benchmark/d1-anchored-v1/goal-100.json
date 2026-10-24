@@ -1,0 +1,231 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2106927357407920394",
+    "source": "public-post",
+    "description": "tachikawa-tenjin2-flower-fairy-2026",
+    "post": {
+      "id": "2106927357407920394",
+      "createdAt": "2026-10-05T02:00:01.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "quote",
+      "text": "／\n10/25(日)から🧚\n＼\n\n#天神2号たん と #立川たん は\n擬人化記念日が一緒なので…コラボしちゃいます‼\n\n🌼フラワーフェアリーランド🌼\n\n花の妖精になった私たちも可愛いでしょ⁉\n\n遊びに来てね(Ｕ⌒▽⌒Ｕ)🥰✨\n#ビッカメ娘 https://t.co/llnoYcJOrR",
+      "url": "https://x.com/bic_tachikawa/status/2106927357407920394",
+      "quoted": {
+        "id": "2097882764146065480",
+        "screenName": "bic_tachikawa",
+        "text": "天神2号たん＆立川たん🌼\n擬人化記念日コラボ\n～Flower Fairyland～\n\n10月25日(日)～\n\nコラボイラスト公開(Ｕ 'ᴗ' Ｕ)✨\n#ビッカメ娘 も妖精になれるんだ～🧚\n\nアクリルキーホルダーの配布数などの詳細は9月末までにお知らせします～！ https://t.co/BXXqXR9N04"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/HTcto4SaMAAQ6uV.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "tenjin2",
+        "tachikawa"
+      ],
+      "startDate": "2026-10-25",
+      "conditions": null
+    },
+    "rationale": "10/25から。配布物の詳細は後日とされる。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "preliminary",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "tachikawa-tenjin2-flower-fairy-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "フラワーフェアリーランドのコラボ",
+          "evidence": [
+            "🌼フラワーフェアリーランド🌼"
+          ]
+        }
+      ],
+      "groupingNote": "10/25から。配布物の詳細は後日とされる。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1127,
+      "postSha256": "96319487f17bbd05e1dea9ca96f516018c05516084e661034a6f8960d22e0dea",
+      "textSha256": "ca15479275ac4978e7aa79ef8face5854dee82054c9ac57f64b2ba7f13f88ba5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "7d31b379-a9cc-4dd5-96e5-fe08095609e6",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_tachikawa/status/2106927357407920394",
+          "origin": "manual-or-seed",
+          "title": "立川&天神2号 コラボ名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-10-24T15:00:00.000+00:00",
+            "endDate": "2026-11-28T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "tachikawa"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "719780dc-a8e4-4f2e-814e-3d4cfccbca71",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_tachikawa/status/2106927357407920394",
+          "origin": "manual-or-seed",
+          "title": "Flower Fairyland アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-10-24T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "tachikawa"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "a9cb4689-9cc2-43d6-8fd9-9c4c9b402c46",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_tachikawa/status/2106927357407920394",
+          "origin": "manual-or-seed",
+          "title": "立川&天神2号 コラボ名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-10-24T15:00:00.000+00:00",
+            "endDate": "2026-11-28T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "tenjin2"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2108017242978078952",
+    "source": "public-post",
+    "description": "tachikawa-tenjin2-flower-fairy-2026 matched control",
+    "post": {
+      "id": "2108017242978078952",
+      "createdAt": "2026-10-08T02:10:50.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "quote",
+      "text": "ご来店ありがとうございます(Ｕ 'ᴗ' Ｕ)🎵\nビックカメラ立川店にはラプ様がいます✨\nまたお待ちしております👍",
+      "url": "https://x.com/bic_tachikawa/status/2108017242978078952",
+      "quoted": {
+        "id": "2106344187486695730",
+        "screenName": "naru04181977nya",
+        "text": "立川にラプ様いた https://t.co/R3KgQqNbH6"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2108017242978078952",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 220,
+      "postSha256": "65c05c0faa05c59534cb1560ab37b61783b38709c798c511e0fd83abd13d3d59",
+      "textSha256": "4d03d7749bd570072168ce8aec98b3973e8a6997b07211e4b68fb81dda6662f7"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

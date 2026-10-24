@@ -1,0 +1,160 @@
+[
+  {
+    "id": "public-f-873084276119556096",
+    "source": "public-post",
+    "description": "Xperia Touch予約と店頭体験",
+    "post": {
+      "id": "873084276119556096",
+      "createdAt": "2017-06-09T07:48:07.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "(P*･ω<*)✌＼Xperia Touch予約開始／\nソニーより本日予約開始となりましたAndroid搭載スマートプロジェクター「XperiaTouch」が6階プロジェクターコーナーでお試し出来ます！！テーブルや壁に投影したスクリーンをタッチで操作！6/24(土)発売予定♪ https://t.co/CICrGRWfeT",
+      "url": "https://x.com/bicpkanhonten/status/873084276119556096",
+      "media": [
+        "https://pbs.twimg.com/media/DB3Rf-UUwAEjlDF.jpg",
+        "https://pbs.twimg.com/media/DB3RgwmU0AAM-Lp.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ソニーのスマートプロジェクターの発売・予約・試用案内で、娘イベントではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "ordinary-product",
+      "reservation",
+      "experience"
+    ],
+    "group": "xperia-touch-preorder-june-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1050263491481751552",
+    "source": "public-post",
+    "description": "PS4Pro値下げ予約",
+    "post": {
+      "id": "1050263491481751552",
+      "createdAt": "2018-10-11T05:55:03.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "🌟予約🌟PS4Proがお求めやすい価格になって登場！\n#PS4Pro ジェットブラック1TB Proが10月12日（金）から5,000円お買い得！新価格で予約承ります。※商品のお渡しは10月12日以降になります https://t.co/xmDP9DDYup",
+      "url": "https://x.com/biccameramito/status/1050263491481751552",
+      "media": [
+        "https://pbs.twimg.com/media/DotkWp2VAAADb7i.jpg",
+        "https://pbs.twimg.com/media/DotkdcKUcAAu01r.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ゲーム機の値下げと予約販売で、ビッカメ娘の物品や参加企画はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "ordinary-product",
+      "reservation",
+      "discount"
+    ],
+    "group": "ps4pro-price-drop-october-2018",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-974893222156648448",
+    "source": "public-post",
+    "description": "J-WESTカードのポイントクーポン",
+    "post": {
+      "id": "974893222156648448",
+      "createdAt": "2018-03-17T06:20:31.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "☆ビックカメラJ-WESTカード\n＋３％ポイントアップクーポンプレゼントキャンペーン☆\n\n店頭にて新規申し込みの方、\nお！もう持ってるよ！という方🙋‍♀️\nこちらのキャンペーンは3/31までです！ https://t.co/4JCquYg16s",
+      "url": "https://x.com/bic_abeno/status/974893222156648448",
+      "media": [
+        "https://pbs.twimg.com/media/DYeCoinUMAAFltN.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "新規カード申込みや既存会員向けクーポン配布。娘の名刺・景品ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "payment",
+      "enrollment",
+      "coupon"
+    ],
+    "group": "jwest-coupon-march-2018",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1036183449302978561",
+    "source": "public-post",
+    "description": "野球ファンクラブ会員の買物特典",
+    "post": {
+      "id": "1036183449302978561",
+      "createdAt": "2018-09-02T09:26:00.000Z",
+      "screenName": "bic_funabashi",
+      "kind": "original",
+      "text": "(ﾟｰﾟCM)｡oO（9/3以降の、#千葉ロッテマリーンズ ファンクラブ #TEAM26 会員様特典のスケジュールはこちら。対象日にレジにて会員証を御提示頂くと指定商品が3%ポイントアップ！※千葉県内のビックカメラ・コジマにて実施します。 #chibalotte https://t.co/EoqbmbezQp",
+      "url": "https://x.com/bic_funabashi/status/1036183449302978561",
+      "media": [
+        "https://pbs.twimg.com/media/DlmFbGHVAAADp9w.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "千葉ロッテ会員証提示のポイント増額で、千葉たん等の娘の企画とは異なる。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "points",
+      "membership"
+    ],
+    "group": "marines-team26-points-september-2018",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1040426399377444864",
+    "source": "public-post",
+    "description": "Nikon Z7の先行展示",
+    "post": {
+      "id": "1040426399377444864",
+      "createdAt": "2018-09-14T02:25:58.000Z",
+      "screenName": "bic_hiroshima",
+      "kind": "original",
+      "text": "✨本日から先行展示中✨\n９月２８日発売の≪Nikon Z7≫当店でお試しいただけます‼️\nニコン待望のフルサイズミラーレスＺマウントシステム誕生です😁\nご予約も承り中ですのでＢ１Ｆカメラコーナーまでお越しくださいませ～🎶\n＃先行展示\n＃Nikon\n#カメラ好きな人と繋がりたい https://t.co/CmTeOZ3tnS",
+      "url": "https://x.com/bic_hiroshima/status/1040426399377444864",
+      "media": [
+        "https://pbs.twimg.com/media/DnBVOkxUcAAD7Y0.jpg",
+        "https://pbs.twimg.com/media/DnBV9BrUYAAyI-r.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "カメラの発売予約と店頭試用を案内しており、娘の出演・グッズ配布はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "display",
+      "reservation",
+      "ordinary-product"
+    ],
+    "group": "nikon-z7-demo-september-2018",
+    "reviewStatus": "provisional"
+  }
+]

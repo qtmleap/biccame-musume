@@ -1,0 +1,131 @@
+[
+  {
+    "id": "goal-positive-1616692350943916037",
+    "source": "public-post",
+    "description": "kawasaki valentine purchase card 2023",
+    "post": {
+      "id": "1616692350943916037",
+      "createdAt": "2023-01-21T07:01:07.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "-【予告】-\n 1月27日(金)から #川崎たん バレンタイン名刺を配布いたします。\n\n　≪ 配布条件 ≫\n🍫川崎店1階ビック酒販で＜税込1,000円以上＞お買い上げで1枚配布\n🍫期間：1/27(金)~2/14(火)\n🍫配布場所：2階総合カウンター\n  ∧,,,∧ \n(ス´꒳` o)\n /  ꜆꜄꜆ /￣￣￣/\n￣＼/＿＿＿/￣\n#ビッカメ娘 https://t.co/uqOOlzTAnf",
+      "url": "https://x.com/Bic_kawasaki/status/1616692350943916037",
+      "media": [
+        "https://pbs.twimg.com/media/Fm-kwQfakAAZm9i.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "category": "limited_card",
+      "startDate": "2023-01-27"
+    },
+    "rationale": "酒販1000円購入で1枚、1/27から2/14の名刺。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "kawasaki-valentine-purchase-card-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "川崎たんバレンタイン名刺",
+          "evidence": [
+            " 1月27日(金)から #川崎たん バレンタイン名刺を配布いたします。"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 393248,
+      "postSha256": "4f832cacc1aa081912884d371c11d9572d9da6107dd43287aaa83488208d1d18",
+      "textSha256": "96031d896dff24f1827b1c1b6d61bf58baee727b66ed847b4cc8b06b728cf578"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1620268520570519552",
+    "source": "public-post",
+    "description": "nanba valentine card 2023",
+    "post": {
+      "id": "1620268520570519552",
+      "createdAt": "2023-01-31T03:51:33.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "＼💝バレンタイン名刺🍫✨／\n【2023年2月1日～2月28日まで】\n＼期間限定のバレンタイン名刺を配布します！／\n明日から1階総合カウンター前、等身大なんばたんが名刺を持ってるので受け取ってな💕\nお1人様1枚でお願いします🙇\nなんばたん作のお揃い名刺が他にもあるかも😆⁉️ https://t.co/PGriASJULS",
+      "url": "https://x.com/biccamera_nanba/status/1620268520570519552",
+      "media": [
+        "https://pbs.twimg.com/media/FnxZZZWaQAA9-kA.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "nanba"
+      ],
+      "characterIds": [
+        "nanba"
+      ],
+      "category": "limited_card",
+      "startDate": "2023-02-01"
+    },
+    "rationale": "2/1から2/28の期間と場所が明示。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "nanba-valentine-card-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "なんばたんバレンタイン名刺",
+          "evidence": [
+            "＼💝バレンタイン名刺🍫✨／",
+            "＼期間限定のバレンタイン名刺を配布します！／",
+            "明日から1階総合カウンター前、等身大なんばたんが名刺を持ってるので受け取ってな💕",
+            "なんばたん作のお揃い名刺が他にもあるかも😆⁉️ https://t.co/PGriASJULS"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 390895,
+      "postSha256": "003a5d1f015fb6c51fd4fcae268041a03e3b647ea1cb6b5fdf492915d02052ff",
+      "textSha256": "5255cf9e905f9648937b66d1208f0e8e2c852fc081c6a25330158394dfdcf859"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

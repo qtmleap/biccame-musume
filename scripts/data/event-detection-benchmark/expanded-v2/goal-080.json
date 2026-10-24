@@ -1,0 +1,135 @@
+[
+  {
+    "id": "expanded-v2-positive-2022138873653199278",
+    "source": "public-post",
+    "description": "chiba-valentine-pop-card-2026",
+    "post": {
+      "id": "2022138873653199278",
+      "createdAt": "2026-02-13T02:40:51.000Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "7FのバレンタインPOPは\n明日14日で終了になります～(∩´﹏`∩) \nバレンタイン名刺は無くなり次第終了。",
+      "url": "https://x.com/bic_chiba/status/2022138873653199278",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "展示は翌日まで、名刺は無くなり次第。終了条件を取り違えない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "chiba-valentine-pop-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "バレンタインPOP",
+          "evidence": [
+            "7FのバレンタインPOP",
+            "明日14日で終了"
+          ]
+        },
+        {
+          "item": "バレンタイン名刺",
+          "evidence": [
+            "バレンタイン名刺は無くなり次第終了"
+          ]
+        }
+      ],
+      "groupingNote": "展示は翌日まで、名刺は無くなり次第。終了条件を取り違えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 72375,
+      "postSha256": "fd45893c5e9f348060b1f9fca3aa04b044d6665428f5253f0c5a3bc46db6bc53",
+      "textSha256": "4fd4c81a0b158df955c1bc1e95e9b3c15b356a7c916ab9969e2012c5904f0c6f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-2022519089256894507",
+    "source": "public-post",
+    "description": "chiba-valentine-pop-card-2026 matched control",
+    "post": {
+      "id": "2022519089256894507",
+      "createdAt": "2026-02-14T03:51:42.000Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "明日2/15から放送開始！\n6階おもちゃコーナーでは新番組「超宇宙刑事ギャバンインフィニティ」のおもちゃを大好評販売中です！！\n小学生以下のお子様限定、合言葉プレゼントキャンペーンも実施中！ https://t.co/7T5QSBTDYN",
+      "url": "https://x.com/bic_chiba/status/2022519089256894507",
+      "media": [
+        "https://pbs.twimg.com/media/HBFuR3YbcAAPzdN.jpg",
+        "https://pbs.twimg.com/media/HBFuVrFakAARi3F.jpg",
+        "https://pbs.twimg.com/media/HBFuX10akAQzpI-.jpg",
+        "https://pbs.twimg.com/media/HBFuYeVb0AALYaB.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-2022519089256894507",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 71980,
+      "postSha256": "59eab490c66a267b764ca42980d6b622367563007dc2d2ed95720b3ccc36e782",
+      "textSha256": "b7a325dd0e63de1d16b1272fc76063eb30b11fb4659d20d472ad95613d9f6228"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

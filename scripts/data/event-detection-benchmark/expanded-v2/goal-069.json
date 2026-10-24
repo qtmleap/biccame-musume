@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expanded-v2-positive-1637682802295734279",
+    "source": "public-post",
+    "description": "tokorozawa-sawatokoro-return-2023",
+    "post": {
+      "id": "1637682802295734279",
+      "createdAt": "2023-03-20T05:09:41.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "🌸緊急告知🌸\n\n#沢ところ ちゃんがまた遊びに来てくれたとこ(§*´∇｀*)✈️\n\n本日から3月31日(金)まで\n6階駐車場側エレベーター前にて2人で待ってるとこ✨\n\n前回とは違う場所なのでご注意下さい🙇🏻‍♀️\n\nMEICA＆コラボ名刺も\n残りわずかですが継続して配布中❣️\n\n是非 #ビックカメラ所沢駅店 にお越し下さい🎶 https://t.co/e85LIumMX7",
+      "url": "https://x.com/bic_toko/status/1637682802295734279",
+      "media": [
+        "https://pbs.twimg.com/media/Fro30upaAAIHxis.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": [
+        "tokorozawa"
+      ],
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "コラボ展示の会場移動と配布継続。再来店を新しい名刺デザインと推測しない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "tokorozawa-sawatokoro-return-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "MEICA＆コラボ名刺",
+          "evidence": [
+            "🌸緊急告知🌸",
+            "#沢ところ ちゃんがまた遊びに来てくれたとこ(§*´∇｀*)✈️",
+            "本日から3月31日(金)まで",
+            "6階駐車場側エレベーター前にて2人で待ってるとこ✨",
+            "前回とは違う場所なのでご注意下さい🙇🏻‍♀️",
+            "MEICA＆コラボ名刺も",
+            "残りわずかですが継続して配布中❣️",
+            "是非 #ビックカメラ所沢駅店 にお越し下さい🎶 https://t.co/e85LIumMX7"
+          ]
+        }
+      ],
+      "groupingNote": "コラボ展示の会場移動と配布継続。再来店を新しい名刺デザインと推測しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 378344,
+      "postSha256": "9ad5a8e203f5753d02ac257a5bd417ffefd66151093ad6b9126f69cca4b44a86",
+      "textSha256": "303a8c4fbe5516feabe3bfa49694407d418757211571b8b9cf00b14eac8335bb"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1639454556693184518",
+    "source": "public-post",
+    "description": "tokorozawa-sawatokoro-return-2023 matched control",
+    "post": {
+      "id": "1639454556693184518",
+      "createdAt": "2023-03-25T02:30:00.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "PayPayポイントスロット開催中🎰\n\n🌟3月25日（土）〜3月26日（日）\n🌟11時〜19時まで\n\n当日お買い物をされたお客様へ、レジにてチケットを配布中❣️\n\nイベントブースにてQRを読み込んでスロットに挑戦💫\nPayPayポイントをプレゼント🎁\n※PayPayのアプリが必要です\n\nご参加お待ちしてるとこ(§*'▽'*)🎵 https://t.co/6ItYfHnFY4",
+      "url": "https://x.com/bic_toko/status/1639454556693184518",
+      "media": [
+        "https://pbs.twimg.com/media/FsCB0AsaIAAgUaq.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1639454556693184518",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 377172,
+      "postSha256": "06e878ee0cb7fbca75bfc6f0b9bb1b0ecf6b5ea6c9f2941fa89e696b00e4cc35",
+      "textSha256": "c33bbf3b3dbe0153ec9d0b0d2aa5a12ec3b2ee77b37b469a182480720a57d6c4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

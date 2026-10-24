@@ -1,0 +1,142 @@
+[
+  {
+    "id": "public-b-2111383983300948388",
+    "source": "public-post",
+    "description": "美味しいもの食べ隊withパソ館たんの残数",
+    "post": {
+      "id": "2111383983300948388",
+      "createdAt": "2026-10-17T09:09:03.893Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "❘*´ω`)｡oO(ｶﾞｶﾞｶﾞ…ｶﾞｶﾞｶﾞｶﾞ…ﾋﾟｰ…美味しいもの食べ隊withパソ館たんのアクキーは残り22個だそうです…ｶﾞｶﾞ…みなさん…まだお迎えいただけますよ…ｯｶﾞｶﾞｶﾞ…お待ちしてます…ねﾋﾟｰ…ｶﾞｶﾞg…）",
+      "url": "https://x.com/bic_sagamioono/status/2111383983300948388",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "ackey"
+    },
+    "rationale": "キャラ企画アクキーの在庫と入手機会を案内している。22は残数であり初期数量ではない。対象全員は本文だけでは不明。",
+    "tags": [
+      "giveaway",
+      "inventory-update",
+      "remaining-not-quota",
+      "cross-store"
+    ],
+    "group": "delicious-food-tai-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "0812591b8784d1f338103a37e8df5b63c54a39b41b81d116a63ab6c4c9b4ecad"
+  },
+  {
+    "id": "public-b-2111633864368210298",
+    "source": "public-post",
+    "description": "ビックシムたんのパネル・コラボ名刺（対象外マスコット）",
+    "post": {
+      "id": "2111633864368210298",
+      "createdAt": "2026-10-18T01:42:00.182Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": ".　　＼本日最終日／\n<ビックシムたん>が遊びに来てるよ📢\n\n📍ビックカメラ ラゾーナ川崎店２Ｆ\n📅10/17(土)・10/18(日)\n・シムたん来店(ﾊﾟﾈﾙ)\n・コラボ名刺\n・ #BicSIM 成約特典( #ビックシムたん グッズ)\nMNP限定でポイント増額キャンペーンも開催中🎉\n\nぜひお越しください！ pic.x",
+      "url": "https://x.com/Bic_kawasaki/status/2111633864368210298",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文の対象はビックシムたんで、canonicalではis_biccame_musume=falseの別マスコット。川崎たんの参加・デザインは明記されておらず、店舗アカウントだけで補わない。この対象範囲の暫定注釈は要レビュー。",
+    "tags": [
+      "hard-negative",
+      "other-mascot",
+      "collaboration",
+      "panel",
+      "multiple-items",
+      "dated-event"
+    ],
+    "group": "kawasaki-bicsim-collaboration-oct17",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "5fb2b543400e217cde2b09c40998f9ce9575f6d9c004814c2f5222a66d852060"
+  },
+  {
+    "id": "public-b-2111636108362842164",
+    "source": "public-post",
+    "description": "AI PC体験の一般参加ノベルティ",
+    "post": {
+      "id": "2111636108362842164",
+      "createdAt": "2026-10-18T01:50:55.192Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "☀️イベント予告\n\n最新パソコンでAIを使ってオリジナルキーホルダーを作れる 『AI PC体験イベント』\n\n10/24(土)・10/25（日）\n11:00～12:00\n5Fパソコンコーナー\n\nご参加で #DELL オリジナルタンブラーをプレゼント！\n対象商品ご購入で ＃ぷくぷくシール プレゼント！\n\nぜひお気軽にお立ち寄りください♪",
+      "url": "https://x.com/bic_sapporo/status/2111636108362842164",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "タンブラーやシールはDELL等の通常製品体験特典で、ビッカメ娘デザインではない。",
+    "tags": [
+      "hard-negative",
+      "generic-novelty",
+      "generic-workshop"
+    ],
+    "group": "sapporo-ai-pc-workshop-oct24",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "050701c309a33a22070ab45a765655b0a818d06403abade4b7dba6438f986c8a"
+  },
+  {
+    "id": "public-b-2111687467657220602",
+    "source": "public-post",
+    "description": "パソ館たんのタイムラプス追加アンケート",
+    "post": {
+      "id": "2111687467657220602",
+      "createdAt": "2026-10-18T05:15:00.202Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "( っ*´ω`*)っ【予約投稿】みなさまにアンケート！💪\n\nそろそろ3階エスカレーター前にタイムラプス追加しようかな？と思ってるんですが、どの絵のタイムラプスが見たいですか？\nお気に入りの絵があったら教えてください〜☺️\n\n※一部データ削除したのでタイムラプス無いかもです🙇‍♀️",
+      "url": "https://x.com/bicpkanhonten/status/2111687467657220602",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "どの絵を追加するかという意見募集で、企画の開催・頒布・公開開始を確定告知していない。",
+    "tags": [
+      "hard-negative",
+      "survey",
+      "unconfirmed-plan"
+    ],
+    "group": "pkan-timelapse-survey-oct18",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "0cec470d905ff2491b3fa4ea7719c688352a506c0f475993bebd292e654eecf0"
+  },
+  {
+    "id": "public-b-2111965788316012551",
+    "source": "public-post",
+    "description": "新東たん擬人化6周年名刺とアイドル名刺再配布",
+    "post": {
+      "id": "2111965788316012551",
+      "createdAt": "2026-10-18T23:40:57.018Z",
+      "screenName": "Bic_shintoueki",
+      "kind": "original",
+      "text": "◥( *`꒳´*)◤ψ おるしんと～🎂🎃\n#10月19日は新東たん擬人化6周年 記念日です🩶\n\nいつも応援ありがとうございます🥰\nこれからもゆるりお付き合いいただけたら嬉しいです🫶\n\n記念名刺をB2Fに設置しておきましたのでどうぞ～💌\n※10/31まで。お一人様一枚まで\n※アイドル名刺は11/1より再配布となります",
+      "url": "https://x.com/Bic_shintoueki/status/2111965788316012551",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "characterIds": [
+        "shintou"
+      ]
+    },
+    "rationale": "記念日に合わせた名刺設置と次の再配布を案内。複数の開始時期なので単一開始日は未注釈。",
+    "tags": [
+      "anniversary",
+      "giveaway",
+      "multiple-items",
+      "redistribution"
+    ],
+    "group": "shintou-sixth-anniversary-2026",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "e6410406d455dc63a8009ac5e424339a47eb8685a5eb64fc2323aa5c3ba39447"
+  }
+]

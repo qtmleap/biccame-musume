@@ -1,0 +1,127 @@
+[
+  {
+    "id": "goal-positive-1047761535496376320",
+    "source": "public-post",
+    "description": "kashiwa halloween card 2018",
+    "post": {
+      "id": "1047761535496376320",
+      "createdAt": "2018-10-04T08:13:11.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "♪。* ゜ﾙﾝ + ヽ(o´∀｀o)ノ。* ゜ + ﾙﾝ。・゜・♪\n✨いよいよ明日から配布スタート✨\n【柏たんハロウィンver.名刺】の準備が整いましたぁ☆\n\n表の柄は明日までナイショ((・｀艸･´))...｡oо○\n＃ハロウィン　＃柏たん名刺　#期間限定 https://t.co/sC31Rl7q6H",
+      "url": "https://x.com/bic_kashiwa/status/1047761535496376320",
+      "media": [
+        "https://pbs.twimg.com/media/DopkMdLVsAA7tWS.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": [
+        "kashiwa"
+      ],
+      "category": "limited_card",
+      "startDate": "2018-10-05"
+    },
+    "rationale": "明日から配布開始、見た目未発表。日時と絵柄の情報不足を分離。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-halloween-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "柏たんハロウィン名刺",
+          "evidence": [
+            "【柏たんハロウィンver.名刺】の準備が整いましたぁ☆",
+            "＃ハロウィン　＃柏たん名刺　#期間限定 https://t.co/sC31Rl7q6H"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 816785,
+      "postSha256": "e333109793f0c5679c7ae92a50cb38fa7b4effa30a9831b0f2394b1a2dd00d47",
+      "textSha256": "ff73467fae9142c87974315f66a5401f93a7a47eeebcd8e2e1fe3e61a1229d1d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1048074141134336000",
+    "source": "public-post",
+    "description": "sagami halloween card 2018",
+    "post": {
+      "id": "1048074141134336000",
+      "createdAt": "2018-10-05T04:55:22.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "❘*´ω`)私もハロウィン名刺作りました～🎃👻\nラッピングカウンターにあるのでお一人様一枚まででお願いします！！\n配布期間は10月31日までです❣️❣️\n#さがみたん\n#ハロウィン https://t.co/LQ13UUCVVV",
+      "url": "https://x.com/bic_sagamioono/status/1048074141134336000",
+      "media": [
+        "https://pbs.twimg.com/media/DouA4rJUwAAI5CZ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sagami"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "10/31までラッピングカウンターで配布。全体数量不明。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "sagami-halloween-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "さがみたんハロウィン名刺",
+          "evidence": [
+            "❘*´ω`)私もハロウィン名刺作りました～🎃👻"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 816511,
+      "postSha256": "b68007b5e8d9e51f7d8a3ea2cc3e9fcadb93f36202a3fee2d38a8195e823e5f6",
+      "textSha256": "38cae4fc39c047e814ca68f18f501224df9d30cd665c56ac6fedc8b42e8d4e9f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

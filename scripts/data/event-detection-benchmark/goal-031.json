@@ -1,0 +1,125 @@
+[
+  {
+    "id": "goal-positive-1359386784740765698",
+    "source": "public-post",
+    "description": "tenjin1 valentine card 2021",
+    "post": {
+      "id": "1359386784740765698",
+      "createdAt": "2021-02-10T06:20:40.000Z",
+      "screenName": "bic_tenjin",
+      "kind": "original",
+      "text": "チョッコレ～ト♪チョッコレ( ﾟдﾟ)ﾊｯ!\n\n2号たんと同じく名刺バレンタインver.は2月中の配布を予定しとるけど、\n無くなるまで配布は続けます！\n配布場所はいつもの所ばい💓\n配布終了の際は再度ご報告します✨\n\n#天神たん #天神1号たん\n#バレンタインデー名刺配布中💕 https://t.co/QUzJCRWzDT",
+      "url": "https://x.com/bic_tenjin/status/1359386784740765698",
+      "media": [
+        "https://pbs.twimg.com/media/Et2DEnRVgAEwqju.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card"
+    },
+    "rationale": "2月予定だが在庫がある間継続。確定終了日ではない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "tenjin1-valentine-card-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "天神1号たんバレンタイン名刺",
+          "evidence": [
+            "2号たんと同じく名刺バレンタインver.は2月中の配布を予定しとるけど、",
+            "#バレンタインデー名刺配布中💕 https://t.co/QUzJCRWzDT"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 578221,
+      "postSha256": "f75953f7852a7e0c5fe883263f93f27fd38482e87009363d430c8f2b8fb268b9",
+      "textSha256": "f1243d047dea72ef40a75ab3bc58e50448b393b8c746c591f35a237e40295b4d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1404710267947266048",
+    "source": "public-post",
+    "description": "yuurakuchou store20 card 2021",
+    "post": {
+      "id": "1404710267947266048",
+      "createdAt": "2021-06-15T08:00:00.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ＜#有楽町たん からのお知らせ✨\n\n6月14日で店舗誕生20周年を迎えました\n＼#ビックカメラ有楽町店／\n\n遅くなりましたが…\n【有楽町たん 20周年記念名刺】を配布します❣️\n\n1階 総合カウンターにて\n6月15日より一年間配布予定です(⁎˃ᴗ˂⁎)\n\nお立ち寄りの際にはぜひお手に取って下さいね🥰 https://t.co/K77hgjpNJ8",
+      "url": "https://x.com/bic_yuurakuchou/status/1404710267947266048",
+      "media": [
+        "https://pbs.twimg.com/media/E36GaQRVoAMcN4V.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "yuurakuchou"
+      ],
+      "characterIds": [
+        "yuurakuchou"
+      ],
+      "category": "limited_card",
+      "startDate": "2021-06-15"
+    },
+    "rationale": "6/15から1年間の配布と明記。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "yuurakuchou-store20-card-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "有楽町たん20周年名刺",
+          "evidence": [
+            "【有楽町たん 20周年記念名刺】を配布します❣️"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 549571,
+      "postSha256": "ea7140aabad2c73fb99b1e5e2546ed1115b0514d6e0a3c72e8526405f1875a6b",
+      "textSha256": "ad4288f367aead5cf6f461616ed5282bc3cc37bf4a6f8f067c8e4aa79857b895"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

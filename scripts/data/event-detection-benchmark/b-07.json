@@ -1,0 +1,130 @@
+[
+  {
+    "id": "public-b-2110237149299929523",
+    "source": "public-post",
+    "description": "フロンターレファンクラブの優待",
+    "post": {
+      "id": "2110237149299929523",
+      "createdAt": "2026-10-14T05:11:57.360Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "|`˙꒳​˙2 )当店も対象のラゾーナさんキャンペーン❣️\n\n#川崎フロンターレ クラブ創設30周年記念！\n「30周年×26（フロ）年ありがとうキャンペーン」\n12/31(木)まで、#ラゾーナ川崎プラザ 対象店舗で、ファンクラブ会員証を提示でするとお得な特典ご用意してます！フロサポのみなさまぜひお越しください！",
+      "url": "https://x.com/Bic_kawasaki/status/2110237149299929523",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "記念年のキャンペーンはスポーツクラブ会員の優待で、娘の企画ではない。",
+    "tags": [
+      "hard-negative",
+      "anniversary-word",
+      "membership"
+    ],
+    "group": "frontale-lazona-30th-benefits",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "7ba7ac1caab1b1953d84b76ee798c3da8508e5d804cc059d7bf84118d606a424"
+  },
+  {
+    "id": "public-b-2110242194439483627",
+    "source": "public-post",
+    "description": "キヤノン一眼の高額買取祭",
+    "post": {
+      "id": "2110242194439483627",
+      "createdAt": "2026-10-14T05:32:00.215Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "🦉買取祭! キヤノンミラーレス一眼高額買取🦉\nキヤノンミラーレス一眼をお売り頂く際に\nフルサイズミラーレスモデルは\n査定金額より💴10％増額💴\n🔍買取査定無料です！🔎\n当店2階買取カウンターへお持ち下さい！\n＃ビックカメラ池袋本店\n＃キヤノンミラーレス一眼\n＃高額買取",
+      "url": "https://x.com/bicikebukuro/status/2110242194439483627",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "祭り・増額という表現だが通常の買取サービス。",
+    "tags": [
+      "buyback",
+      "campaign-word",
+      "camera"
+    ],
+    "group": "canon-fullframe-buyback-increase",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "b03ed25d3da984efbcf4b9932fb84375eb76d3df8600f3076d6844afa4f3cdf8"
+  },
+  {
+    "id": "public-b-2110249247958516215",
+    "source": "public-post",
+    "description": "秋のしるこサンド新商品",
+    "post": {
+      "id": "2110249247958516215",
+      "createdAt": "2026-10-14T06:00:01.905Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "サクッ…サクッ…\n\n【2階　ビックドラッグ】\n\n新商品入荷しました📣\n秋🍂の味覚！！\nさつまいも🍠と栗🌰の\nしるこサンドです😋\nぜひご賞味下さい！！",
+      "url": "https://x.com/bic_kashiwa/status/2110249247958516215",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "さつまいも・栗の食品入荷案内であり企画配布ではない。",
+    "tags": [
+      "ordinary-sale",
+      "food"
+    ],
+    "group": "shiruko-sand-autumn-arrival",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "2dcde020bc9bd29c8079612f0817086579220f2a2c4e6708fe82134085db3711"
+  },
+  {
+    "id": "public-b-2110250247737762063",
+    "source": "public-post",
+    "description": "Apple製品の買取増額",
+    "post": {
+      "id": "2110250247737762063",
+      "createdAt": "2026-10-14T06:04:00.271Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "眠っているApple製品はありませんか❓\n\n11/3までの期間限定で対象のMacBookAirが今なら5000円増額❣️\n買い替えは今がお得！まずは無料査定‼️😆🐙\n#Apple #MacBook #買取",
+      "url": "https://x.com/bic_abeno/status/2110250247737762063",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "MacBookの査定キャンペーンでキャラグッズの入手企画ではない。",
+    "tags": [
+      "buyback",
+      "limited-campaign"
+    ],
+    "group": "apple-macbook-buyback-nov3",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "54de5508c40411203a8cd177cfd31aa6baae333fdab3141147a1a8d0a2dc67bf"
+  },
+  {
+    "id": "public-b-2110254378938675359",
+    "source": "public-post",
+    "description": "レコルト調理家電の実演会",
+    "post": {
+      "id": "2110254378938675359",
+      "createdAt": "2026-10-14T06:20:25.226Z",
+      "screenName": "bic_itt",
+      "kind": "original",
+      "text": "週末イベント告知🎉\n\n10/17(土)•18(日)限定！\n【ほったらかし調理 レコルト実演会】を開催予定☝️\n\n食材を入れてスタートするだけで刻む•温める•混ぜるをすべておまかせ！\n\n手間なしなのにプロ級の美味しさをぜひご体感ください✨\n\n時間：11:00〜19:00\n📍東京都豊島区西池袋3-28-13 2F試食堂",
+      "url": "https://x.com/bic_itt/status/2110254378938675359",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "イベント開催告知だが製品試食・体験の案内でビッカメ娘との関連はない。",
+    "tags": [
+      "hard-negative",
+      "generic-demonstration",
+      "dated-event"
+    ],
+    "group": "recolte-cooking-demo-oct17",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "5182fb8d5afd8bba20eaee9bfd6f181af60a81d24a440739ad3f63628c9996bb"
+  }
+]

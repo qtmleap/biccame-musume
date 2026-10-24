@@ -1,0 +1,171 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2071128671197479125",
+    "source": "public-post",
+    "description": "ikebukuro-card-file-end-2026",
+    "post": {
+      "id": "2071128671197479125",
+      "createdAt": "2026-06-28T07:08:49.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "quote",
+      "text": "ビッカメ娘名刺ファイル配布終了致しました\nありがとうございました!!",
+      "url": "https://x.com/bicikebukuro/status/2071128671197479125",
+      "quoted": {
+        "id": "2071035858002514327",
+        "screenName": "bicikebukuro",
+        "text": "おはようございます。\n\n■ビッカメ娘ギフトカード本店たんver\n■ビッカメ娘名刺ファイル\n\n若干数ですがご用意がございます！\nご希望の方は添付画像詳細をご確認頂きまして\n1階総合案内カウンターまでお越し下さい\n(ご来店時に販売・配布が終了している場合もございますのでご了承ください) https://t.co/POXf51CX9O"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "名刺ファイルの配布終了。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "ikebukuro-card-file-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "ビッカメ娘名刺ファイル",
+          "evidence": [
+            "ビッカメ娘名刺ファイル配布終了致しました"
+          ]
+        }
+      ],
+      "groupingNote": "名刺ファイルの配布終了。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 30248,
+      "postSha256": "435f255f813dce0b60af9dafa1353d0622ebff431db3ede747d842fc2335a08b",
+      "textSha256": "9bfd1e7e97efd8c17a46449e1673f86bcbe4bce0ddf7be6fb6d9700cee217ce6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "ee44f7cb-bdde-456e-a4ea-ec0fba4cdd82",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bicikebukuro/status/2071128671197479125",
+          "origin": "manual-or-seed",
+          "title": "ビッカメ娘名刺ファイル",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-06-26T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "honten"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 170,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 8000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2063073991229899123",
+    "source": "public-post",
+    "description": "ikebukuro-card-file-end-2026 matched control",
+    "post": {
+      "id": "2063073991229899123",
+      "createdAt": "2026-06-06T01:42:24.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "quote",
+      "text": "＼🎵試聴会イベント🎵／\n\n本日・明日の2日間限定！\n3階オーディオコーナーにて\nVictor「Wood master」視聴会を開催✨\n\n対象商品ご購入でブランドロゴでもお馴染み\n「ニッパーくん」のぬいぐるみをプレゼント🎁(なくなり次第終了)\n\nぜひお気軽にご参加ください🎵",
+      "url": "https://x.com/bicikebukuro/status/2063073991229899123",
+      "quoted": {
+        "id": "2062814181032710317",
+        "screenName": "bicikebukuro",
+        "text": "📢明日より開催‼\n\n【6月6日(土)、6月7日(日)2日間限定】\n3階オーディオコーナーで\nVictor「Wood master」視聴会を開催♪\n\nWood masterをご購入頂いたお客様には\nブランドロゴでお馴染み「ニッパーくん」\nぬいぐるみをプレゼント🎁\nなくなり次第終了となります！\n\nぜひお気軽にお越しくださいませ！ https://t.co/oNLXnrPT6i"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2063073991229899123",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 37576,
+      "postSha256": "1d2efb008912df395a54d897673cc9dabf7edb289cf7f7514562f6f72b97c615",
+      "textSha256": "ab5256ecf57e31636e42024fa9192806560cf79bc1463bc32c88ad894a1bd449"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

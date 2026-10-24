@@ -1,0 +1,131 @@
+[
+  {
+    "id": "goal-positive-1477075031486513154",
+    "source": "public-post",
+    "description": "ohmiya tiger newyear card 2022",
+    "post": {
+      "id": "1477075031486513154",
+      "createdAt": "2022-01-01T00:31:44.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "1月1日朝10:00開店から配布スタート✨\n\n大宮たん2022年寅年 年賀名刺ヾ(お･ω･)ﾉ\n3Fエレベーターホール等身大パネルにて配布しま〜っす♪\nなくなり次第終了です！\n※お1人様1枚でお願いいたします https://t.co/CrOMwDXge3",
+      "url": "https://x.com/bic_ohmiya/status/1477075031486513154",
+      "media": [
+        "https://pbs.twimg.com/media/FH-fYeCacAAciJv.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "ohmiya"
+      ],
+      "characterIds": [
+        "ohmiya"
+      ],
+      "category": "limited_card",
+      "startDate": "2022-01-01"
+    },
+    "rationale": "1/1開始、なくなり次第終了を数量へ変換しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "ohmiya-tiger-newyear-card-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "大宮たん寅年名刺",
+          "evidence": [
+            "大宮たん2022年寅年 年賀名刺ヾ(お･ω･)ﾉ"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 497471,
+      "postSha256": "795bccef939b48e81927c30ea5b4701c6589f3439f1f4225081cce533807ee01",
+      "textSha256": "8f5952b4e1d8a0738e6e2244e70102c3596222f2846bea28da6673fcd65717a9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1486984278324187138",
+    "source": "public-post",
+    "description": "shibuhachi valentine card 2022",
+    "post": {
+      "id": "1486984278324187138",
+      "createdAt": "2022-01-28T08:47:33.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "#あべのたん みたいに名刺並べてみたけど\n違うか…\n\nきょうも バレンタイン名刺もらってくれて\nありがとハチっ◟(˃᷄ꇴ˂᷅ ૂ๑)༡л̵ʱªʱª✧˖ｧ '`,､'`,､'`,､\n\n💖#しぶハチたん バレンタイン名刺\n💖好評配布中ハチ🐶\n💖A館1Fカメラコーナーレジにて\n\nあべのたんのバレンタイン名刺は2/1(火)～ https://t.co/VAVArSFFkH",
+      "url": "https://x.com/bicshibuhachi00/status/1486984278324187138",
+      "media": [
+        "https://pbs.twimg.com/media/FKLUTyEaUAQ4_TY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shibuhachi"
+      ],
+      "characterIds": [
+        "shibuhachi"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "本人名刺を配布中。他店あべのたんの開始予告は別対象。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "shibuhachi-valentine-card-2022",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "しぶハチたんバレンタイン名刺",
+          "evidence": [
+            "#あべのたん みたいに名刺並べてみたけど",
+            "きょうも バレンタイン名刺もらってくれて",
+            "💖#しぶハチたん バレンタイン名刺",
+            "あべのたんのバレンタイン名刺は2/1(火)～ https://t.co/VAVArSFFkH"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 490144,
+      "postSha256": "4c3f3a6d4fbfde4b215c53ee5e96096b5e6a67fd498c0188bfb3949a4c45aa1b",
+      "textSha256": "4f62125972c12de5de1ab8c3a947a30e3b4f39d2033edb9f49e6abc29dcb5bf1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

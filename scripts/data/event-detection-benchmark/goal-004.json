@@ -1,0 +1,128 @@
+[
+  {
+    "id": "goal-positive-919016926583468032",
+    "source": "public-post",
+    "description": "shinjuku west bicqlo halloween 2017",
+    "post": {
+      "id": "919016926583468032",
+      "createdAt": "2017-10-14T01:48:04.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "【拡散希望】\n本日から #ビックロたん ハロウィン名刺を『1階ビックロたん等身大パネル』にて 『10月31日まで』配布致しますヾ(*・ω・)ノ(人´∀`*)\n#新宿西口たん (@bic_shinjyuku) とのコラボレーション名刺！\nぜひお手に取って下さいね～♪ https://t.co/ZKlFXEoQgv",
+      "url": "https://x.com/bic_shinjuku3ch/status/919016926583468032",
+      "media": [
+        "https://pbs.twimg.com/media/DMEArdcVoAACOge.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "bicqlo"
+      ],
+      "characterIds": [
+        "bicqlo",
+        "shinjyuku"
+      ],
+      "category": "limited_card",
+      "startDate": "2017-10-14"
+    },
+    "rationale": "新宿の2人のコラボ名刺。別店側同デザイン告知は別ケースにしない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "shinjuku-west-bicqlo-halloween-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "新宿西口たん・ビックロたんコラボ名刺",
+          "evidence": [
+            "本日から #ビックロたん ハロウィン名刺を『1階ビックロたん等身大パネル』にて 『10月31日まで』配布致しますヾ(*・ω・)ノ(人´∀`*)",
+            "#新宿西口たん (@bic_shinjyuku) とのコラボレーション名刺！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 914356,
+      "postSha256": "571359ecc0018f0abd7e7344aa7b019c3e3601b18bed5fd31b34f9e863489849",
+      "textSha256": "c3e622ec9a632d612288e8f9fba393f29c3d22c6e4dbb9618a957182477d3cd4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-936186775684333569",
+    "source": "public-post",
+    "description": "kawasaki first character anniversary 2017",
+    "post": {
+      "id": "936186775684333569",
+      "createdAt": "2017-11-30T10:54:55.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "＿人人人人人人人人人＿\n＞ 「名刺」できた‼️＜\n￣Y^Y^Y^Y^Y^Y^Y^Y^￣\n\n#明日から配布\n#ビッカメ娘 #川崎たん #12月1日 #擬人化1周年 https://t.co/pNOgD0Y15Z",
+      "url": "https://x.com/Bic_kawasaki/status/936186775684333569",
+      "media": [
+        "https://pbs.twimg.com/media/DP4AP-_UIAUFIbu.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "characterIds": [
+        "kawasaki"
+      ],
+      "category": "limited_card",
+      "startDate": "2017-12-01"
+    },
+    "rationale": "12月1日から名刺配布と明示。配布条件は未記載。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "kawasaki-first-character-anniversary-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "川崎たん擬人化1周年名刺",
+          "evidence": [
+            "＞ 「名刺」できた‼️＜"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 903537,
+      "postSha256": "2d9770bc7610362513cec44f8cc727fa002ac75070f24c9e7fcccfc22fa1aa81",
+      "textSha256": "1407fbdf4dc6ddef59fbdacbdb0715eb1378e0a5e9d969f70530516fdd31a51b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

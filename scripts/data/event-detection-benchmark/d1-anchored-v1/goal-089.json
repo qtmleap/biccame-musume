@@ -1,0 +1,157 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2097965298959995037",
+    "source": "public-post",
+    "description": "kawasaki-lazona20-card-teaser-2026",
+    "post": {
+      "id": "2097965298959995037",
+      "createdAt": "2026-09-10T08:28:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "20thAnniversary名刺も配布します。\n期間などはまた近日中にお知らせします。\n  　∧,,,∧\n     ( `˙꒳​˙2 ) \n　 /  っ /￣￣￣/\n￣￣＼/＿＿＿/￣￣",
+      "url": "https://x.com/Bic_kawasaki/status/2097965298959995037",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "期間などは近日お知らせとされる予告。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "preliminary",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "kawasaki-lazona20-card-teaser-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "20thAnniversary名刺",
+          "evidence": [
+            "20thAnniversary名刺も配布します。"
+          ]
+        }
+      ],
+      "groupingNote": "期間などは近日お知らせとされる予告。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 8654,
+      "postSha256": "4bed25c43e0ac89a3d82b8e69aba4873a82b9aee10c6a65326bf37fa636194b9",
+      "textSha256": "d18348ca6cff65b90956a9415ccec2f912803bc0499846a7b9c06e264d3e873a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "cf8205d5-fdfe-4adb-b63e-057e9715ff70",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/Bic_kawasaki/status/2097965298959995037",
+          "origin": "manual-or-seed",
+          "title": "20thAnniversary名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-27T15:00:00.000+00:00",
+            "endDate": "2026-10-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "kawasaki"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2101149530666529058",
+    "source": "public-post",
+    "description": "kawasaki-lazona20-card-teaser-2026 matched control",
+    "post": {
+      "id": "2101149530666529058",
+      "createdAt": "2026-09-19T03:21:00.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "U25限定\nMac と iPadがお得です。\n \nU25応援キャンペーン\n25歳以下限定 対象の Mac・iPadご購入で\n最大22,000円引き！ https://t.co/OceqS2XQio",
+      "url": "https://x.com/Bic_kawasaki/status/2101149530666529058",
+      "media": [
+        "https://pbs.twimg.com/media/HSjGnWDasAAAErm.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2101149530666529058",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 5861,
+      "postSha256": "096ddf7dcbc8d87999946fbcaa316d5f3fea0145f5d8aa82220e73fe29eddea4",
+      "textSha256": "c57d54232e4de93463ca70cbb13e605c2318dce3e9d40a0a1d3a1c26b2c59f0a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

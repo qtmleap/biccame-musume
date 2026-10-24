@@ -34,6 +34,7 @@ const event: Event = {
   category: 'limited_card',
   title: 'ビッカメ娘のお誕生日と店舗周年を記念した限定名刺プレゼント',
   stores: ['abeno'],
+  characterIds: ['abeno'],
   startDate: dayjs('2026-10-01T00:00:00+09:00').toDate(),
   endDate: dayjs('2026-10-31T23:59:59+09:00').toDate(),
   conditions: [{ uuid: '00000000-0000-4000-8000-000000000011', type: 'everyone' }],

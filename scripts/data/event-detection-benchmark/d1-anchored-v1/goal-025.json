@@ -1,0 +1,170 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2003707213169459543",
+    "source": "public-post",
+    "description": "kawasaki-newyear-sticker-2026",
+    "post": {
+      "id": "2003707213169459543",
+      "createdAt": "2025-12-24T06:00:01.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "( `˙꒳​˙2 )【告知】どえす！【年始企画】①\n💚川崎たん千社札風ステッカー💚\n\n1/1(木)朝10時から当店で〔対象商品〕を指定金額以上購入した当日レシートを””対象の売場の販売員にご提示””でステッカー１枚プレゼント！\n※一部お渡し場所が異なります\n\n⚠️詳細は画像を要確認⚠️\n#川崎たん #ビッカメ娘 https://t.co/R8EpHM4Nlo",
+      "url": "https://x.com/Bic_kawasaki/status/2003707213169459543",
+      "media": [
+        "https://pbs.twimg.com/media/G86RmlTawAE2XR4.jpg",
+        "https://pbs.twimg.com/media/G86SKJMbsAApXHX.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "kawasaki"
+      ],
+      "startDate": "2026-01-01",
+      "conditions": [
+        {
+          "type": "purchase"
+        }
+      ]
+    },
+    "rationale": "1/1朝10時開始。購入条件の金額は画像で本文にない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:kawasaki-newyear-goods-2026"
+    ],
+    "group": "kawasaki-newyear-sticker-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "川崎たん千社札風ステッカー",
+          "evidence": [
+            "💚川崎たん千社札風ステッカー💚"
+          ]
+        }
+      ],
+      "groupingNote": "1/1朝10時開始。購入条件の金額は画像で本文にない。",
+      "unannotatedFields": [
+        "stores"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 85782,
+      "postSha256": "649ed1b0bb773c6db64a4517875a04aab4a0adeb2f2b6d3dd7c870e2078e9513",
+      "textSha256": "194eb91723ed3d9cf050084221e375f441a254836ff5eca015f8320fc7fc5514"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "36a8aaa2-9463-442c-9bf7-6936387cdbc7",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/Bic_kawasaki/status/2003707213169459543",
+          "origin": "manual-or-seed",
+          "title": "千社札風ステッカー",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-12-31T15:00:00.000+00:00",
+            "endDate": "2026-01-06T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": 200,
+            "stores": [
+              "kawasaki"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 200,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 1000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1997502354082669008",
+    "source": "public-post",
+    "description": "kawasaki-newyear-sticker-2026 matched control",
+    "post": {
+      "id": "1997502354082669008",
+      "createdAt": "2025-12-07T03:04:07.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "【12月21日(日)まで】\n_(  _*ˇ꒳​ˇ2)_｡･ﾟ毎日の睡眠に…ｽﾔｧ\n\nNELLマットレスが期間限定で15％引き！\n上質な寝心地を実現するため、スムーズな寝返りにこだわったNELLマットレス♪\n川崎店4F寝具コーナーでお試し出来ます！\n#NELLマットレス #ネルマットレス \n#寝具 #ビックカメラ https://t.co/r1pdAEVjdh",
+      "url": "https://x.com/Bic_kawasaki/status/1997502354082669008",
+      "media": [
+        "https://pbs.twimg.com/media/G7iNy3ibYAAR9Ec.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1997502354082669008",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 90342,
+      "postSha256": "a4e71721ab323e75be9b85ec05db6f401ed78ccaf0925ff42500092715330643",
+      "textSha256": "d232f286fd6b81553bd5697a106a3dfb4cfff55d83773cd4c9421bf2b775a88a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

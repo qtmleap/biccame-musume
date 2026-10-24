@@ -1,0 +1,155 @@
+[
+  {
+    "id": "public-f-865402108811427842",
+    "source": "public-post",
+    "description": "公式アプリのクーポン配布機能",
+    "post": {
+      "id": "865402108811427842",
+      "createdAt": "2017-05-19T03:01:55.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "|定期|  ビックカメラ公式アプリは ①登録で全国配送無料 ②ポイントカード機能搭載 ③チラシが見られる ④クーポン配布 で便利！(･ω･)⊃ https://t.co/Awd9pS1IAp",
+      "url": "https://x.com/bic_nagoya/status/865402108811427842",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "アプリの配送無料・ポイントカード・チラシ・クーポン機能の案内で、娘のグッズ配布ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "app",
+      "coupon",
+      "card-word"
+    ],
+    "group": "bic-app-coupon-features-may-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-822658634794594306",
+    "source": "public-post",
+    "description": "Switch予約開始の日の近況",
+    "post": {
+      "id": "822658634794594306",
+      "createdAt": "2017-01-21T04:14:37.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "|*´ω`)｡oO（こんにちはー！\n今日は Nintendo Switchの予約解禁日！\n\n昨日の帰り道、雪が降ってたので心配だったのですが、\n天気が良くて良かったです。",
+      "url": "https://x.com/bic_nagoya/status/822658634794594306",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "天気の近況とNintendo Switch予約開始に触れているだけで、ビッカメ娘の企画告知ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "greeting",
+      "reservation",
+      "ordinary-product"
+    ],
+    "group": "nagoya-switch-reservation-january-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-870825534996885505",
+    "source": "public-post",
+    "description": "先着10名のソニーカメラ撮影体験",
+    "post": {
+      "id": "870825534996885505",
+      "createdAt": "2017-06-03T02:12:41.000Z",
+      "screenName": "bic_nagoyagate",
+      "kind": "original",
+      "text": "6月3日･4日限定で\nSONYミラーレス一眼カメラ 撮影体験イベント\nを行います♡ _(⌒(｢📷ω')｣ﾊﾟｼｬﾘ\n\n開催時間：\n１回目12:00\n２回目14:00\n３回目16:00\n開催場所：カメラコーナー横のキーズカフェ\n\n金鯱|*´꒳​`){先着10名様ですのでお早めに～！ https://t.co/RCqGkRlGej",
+      "url": "https://x.com/bic_nagoyagate/status/870825534996885505",
+      "media": [
+        "https://pbs.twimg.com/media/DBXLMy6UMAI5uiI.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "参加人数と会場のある体験イベントだが、対象は一般カメラ機器で、娘の企画関与はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "ordinary-event",
+      "experience",
+      "first-come"
+    ],
+    "group": "gate-sony-camera-trial-june-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-936832805002027009",
+    "source": "public-post",
+    "description": "プリンター購入者の週末抽選会",
+    "post": {
+      "id": "936832805002027009",
+      "createdAt": "2017-12-02T05:42:00.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "年賀状シーズン到来！！\n今週末限定！！当社指定Canonプリンターご購入頂いたお客様を対象に\n大抽選会を開催中！！\n\nｶﾞﾗｶﾞﾗｶﾞﾗｶﾞﾗｶﾞﾗ...㊗️ https://t.co/28lcqGdyD0",
+      "url": "https://x.com/bic_ohmiya/status/936832805002027009",
+      "media": [
+        "https://pbs.twimg.com/media/DQBLuhdUMAMOFIh.jpg",
+        "https://pbs.twimg.com/media/DQBLvagUMAEay3x.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "Canonプリンター購入者向けの抽選会。娘のデザイン景品や出演とは書かれていない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "ordinary-event",
+      "lottery",
+      "purchase-benefit"
+    ],
+    "group": "omiya-canon-printer-draw-december-2017",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-881762964792942592",
+    "source": "public-post",
+    "description": "レシート裏アンケートのポイント抽選",
+    "post": {
+      "id": "881762964792942592",
+      "createdAt": "2017-07-03T06:34:07.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "これ、なんだかわかりますか？？\nそう、レシートの裏！！！\n\nご購入者アンケートを答えていただくと抽選で500円分のポイントプレゼント😆🎊\nもちろん私への応援メッセージでも…❤️\n是非簡単だからやってみてねー😊 https://t.co/ughmuQIb9g",
+      "url": "https://x.com/bic_sagamioono/status/881762964792942592",
+      "media": [
+        "https://pbs.twimg.com/media/DDymsPFVwAAkLlT.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "応援メッセージへの言及はあるが、企画は一般顧客アンケートの500ポイント抽選。娘を題材にした物品ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "receipt-word",
+      "survey",
+      "points",
+      "character-voice"
+    ],
+    "group": "sagamioono-receipt-survey-points-july-2017",
+    "reviewStatus": "provisional"
+  }
+]

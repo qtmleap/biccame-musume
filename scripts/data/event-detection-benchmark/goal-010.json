@@ -1,0 +1,128 @@
+[
+  {
+    "id": "goal-positive-961846796468154368",
+    "source": "public-post",
+    "description": "sapporo valentine card 2018",
+    "post": {
+      "id": "961846796468154368",
+      "createdAt": "2018-02-09T06:18:41.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "❤️ #バレンタイン スペシャル企画❤️\n2/10（土）～2/14（水）の5日間限定！\n1F総合案内カウンターにて\n#さっぽろたん の名刺 #バレンタイン バージョンを配布致します❣️\n冬のイベント盛り沢山の札幌に遊びに来たら、ビックカメラ札幌店にも是非足をお運び下さいませ～❄️\n❄️(灬╹ω╹灬)❄️ https://t.co/rbMXpVaOiY",
+      "url": "https://x.com/bic_sapporo/status/961846796468154368",
+      "media": [
+        "https://pbs.twimg.com/media/DVkqTWFUMAUhr6T.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sapporo"
+      ],
+      "characterIds": [
+        "sapporo"
+      ],
+      "category": "limited_card",
+      "startDate": "2018-02-10"
+    },
+    "rationale": "2/10から14日、場所あり。札幌誕生日セットとは別季節企画。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "sapporo-valentine-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "さっぽろたんバレンタイン名刺",
+          "evidence": [
+            "#さっぽろたん の名刺 #バレンタイン バージョンを配布致します❣️"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 884981,
+      "postSha256": "208450b81d873594a7131b83232bb529f73d6fa3d9ae2d2332f78447a4705ab2",
+      "textSha256": "d02142cce941365bd1c5bfaf71f614442dfcbd78d586bb81b21adbd7dec140e2"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-970952488697253889",
+    "source": "public-post",
+    "description": "kashiwa thirteenth figure lottery 2018",
+    "post": {
+      "id": "970952488697253889",
+      "createdAt": "2018-03-06T09:21:27.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "号外!!□⌒ヾ(･д･ o)三(o ･д･)ﾂ⌒□ 号外!!　\n＃柏たん の ＃アクリルフィギュア☆　\n柏たんち１３周年を記念して抽選にて１３名様⭐️ \n\n＊応募条件３月９日～１１日の３日間ビックカメラ柏店にて\n3000円(税込)以上ご購入の上、専用QRコードよりご応募となります☆\n＃３月10日は柏たんの誕生日 https://t.co/Jo0QfXT5FV",
+      "url": "https://x.com/bic_kashiwa/status/970952488697253889",
+      "media": [
+        "https://pbs.twimg.com/media/DXmDrpUVoAEw9rt.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kashiwa"
+      ],
+      "characterIds": [
+        "kashiwa"
+      ],
+      "category": "other",
+      "startDate": "2018-03-09"
+    },
+    "rationale": "購入3000円と専用QR応募、抽選13名。先着へ写像しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "kashiwa-thirteenth-figure-lottery-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "柏たんアクリルフィギュア",
+          "evidence": [
+            "＃柏たん の ＃アクリルフィギュア☆　"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 877861,
+      "postSha256": "05141406d057bb1ad53ee682e910707e190e57b8a0f169bc1b19bce15cbad453",
+      "textSha256": "10f91cf7ba49ca6b6788b11b9c02692fd08f1d18c75c40dc4da7ff75860b9e6e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

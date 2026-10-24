@@ -1,7 +1,18 @@
-import { botStores } from '../stores'
+import { storeShortName } from './association-questions'
+import {
+  ASSOCIATION_MULTIPLE,
+  ASSOCIATION_NONE,
+  CHARACTER_OTHER,
+  CHARACTER_SECRET,
+  detectionCharacters,
+  detectionStores
+} from './associations'
 import type { ClefAnswer } from './clef'
 import { keyToDate, keyToQuantity } from './decide'
 import { type DetectionThresholds, thresholdOf } from './detection'
+
+// 管理画面向けの表示名をここから参照できるようにする（vite が起動時の exports を保持していても解決できる入口）。
+export { promptVersionLabel } from './prompt-version-label'
 
 // 保存済みの Clef 回答を、管理画面で読める形に変換する。
 // 質問の再生成（createDetectionRequest）には依存しない。質問の版が変わると保存済みの回答と食い違うため、
@@ -26,12 +37,15 @@ const QUESTION_LABELS: ReadonlyMap<string, string> = new Map([
   ['status', '状態'],
   ['category', '配布物'],
   ['single_event', '単一イベントか'],
-  ['store', '店舗'],
+  // 店舗と対象ビッカメ娘は v13 では choice 1 問ずつ。画面の補い行（webhook-answer-table.tsx）と同じ文言にする。
+  ['store', '開催・配布店舗'],
+  ['character', '対象ビッカメ娘'],
   ['start_date', '開始日'],
   ['end_date', '終了日'],
   ['quantity', '配布数'],
   ['condition', '配布条件'],
-  ['purchase_amount', '購入額']
+  ['purchase_amount', '購入額'],
+  ['charge_amount', '入金・チャージ額']
 ])
 
 const STATUS_LABELS: ReadonlyMap<string, string> = new Map([
@@ -56,9 +70,20 @@ const CONDITION_LABELS: ReadonlyMap<string, string> = new Map([
   ['everyone', '全員'],
   ['purchase_first_come', '購入＋先着'],
   ['purchase_lottery', '購入＋抽選'],
+  ['charge', '入金・チャージ'],
+  ['charge_first_come', '入金・チャージ＋先着'],
+  ['charge_lottery', '入金・チャージ＋抽選'],
+  ['purchase_charge', '購入＋入金・チャージ'],
+  ['purchase_charge_first_come', '購入＋入金・チャージ＋先着'],
+  ['purchase_charge_lottery', '購入＋入金・チャージ＋抽選'],
   ['none', '確定できない']
 ])
-const storeNames: ReadonlyMap<string, string> = new Map(botStores.map((store) => [store.id, store.name]))
+const SPECIAL_CHARACTER_LABELS: ReadonlyMap<string, string> = new Map([
+  [CHARACTER_OTHER, 'その他'],
+  [CHARACTER_SECRET, 'シークレット'],
+  [ASSOCIATION_MULTIPLE, '複数'],
+  [ASSOCIATION_NONE, '該当なし']
+])
 const yenFormat = new Intl.NumberFormat('en-US')
 
 const YES_LABEL = 'はい'
@@ -73,7 +98,32 @@ const lookup = (labels: ReadonlyMap<string, string>, value: string): string => {
 }
 
 /** 質問キーの日本語名（回答表の「質問」列と同じ）。知らないキーはキーのまま返す。 */
-export const questionLabel = (key: string): string => lookup(QUESTION_LABELS, key)
+export const questionLabel = (key: string): string => {
+  if (key.startsWith('venue.')) {
+    const id = key.slice('venue.'.length)
+    const store = detectionStores.find((entry) => entry.id === id)
+    return `開催店舗: ${store === undefined ? id : store.name}`
+  }
+  if (key.startsWith('character.')) {
+    const id = key.slice('character.'.length)
+    const character = detectionCharacters.find((entry) => entry.id === id)
+    return `対象ビッカメ娘: ${character === undefined ? id : character.name}`
+  }
+  return lookup(QUESTION_LABELS, key)
+}
+
+// 店舗名は「ビックカメラ」を付けないアプリの短い名前で出す（質問の選択肢の説明と同じ storeShortName）。
+const storeChoiceLabel = (value: string): string => {
+  if (value === ASSOCIATION_NONE) return '店舗なし'
+  if (value === ASSOCIATION_MULTIPLE) return '複数'
+  return storeShortName(value)
+}
+const characterChoiceLabel = (value: string): string => {
+  const special = SPECIAL_CHARACTER_LABELS.get(value)
+  if (special !== undefined) return special
+  const character = detectionCharacters.find((entry) => entry.id === value)
+  return character === undefined ? value : character.name
+}
 
 const dateLabel = (value: string): string => {
   if (value === 'none') return 'なし'
@@ -99,7 +149,9 @@ const choiceLabel = (key: string, value: string): string => {
     case 'category':
       return lookup(CATEGORY_LABELS, value)
     case 'store':
-      return value === 'none' ? '店舗なし' : lookup(storeNames, value)
+      return storeChoiceLabel(value)
+    case 'character':
+      return characterChoiceLabel(value)
     case 'start_date':
     case 'end_date':
       return dateLabel(value)
@@ -108,6 +160,7 @@ const choiceLabel = (key: string, value: string): string => {
     case 'condition':
       return lookup(CONDITION_LABELS, value)
     case 'purchase_amount':
+    case 'charge_amount':
       return amountLabel(value)
     default:
       return value
@@ -131,7 +184,8 @@ const describeAnswer = (key: string, answer: ClefAnswer, thresholds: DetectionTh
       probability: isYes ? yes : no,
       threshold,
       // 確定は表示した回答ではなく P(はい) をしきい値と比べる（evaluateDetection と同じ）。
-      confirmed: yes >= threshold,
+      confirmed:
+        key.startsWith('venue.') || key.startsWith('character.') ? Math.max(yes, no) >= threshold : yes >= threshold,
       alternatives: [{ answer: isYes ? NO_LABEL : YES_LABEL, probability: isYes ? no : yes }]
     }
   }
@@ -178,6 +232,16 @@ export const describeAnswers = (answers: Record<string, ClefAnswer>, thresholds:
   })
 }
 
+// 画面には出さない情報用のコード。判定の理由ではなく、登録候補を作るときに何をしたかの記録（登録可否には影響しない）。
+// 保存はするが理由の表示からは除く。除外の基準はこの表のキーだけにして、REASON_LABELS へ取り込む。ラベルとの食い違いを防ぐ。
+const NOTE_REASON_LABELS: ReadonlyMap<string, string> = new Map([
+  // 店舗を投稿アカウントから補って登録候補にしたこと。
+  ['store_inferred_from_account', '店舗は投稿アカウントから補完'],
+  // 自動登録するイベントのタイトルを AI が作れたか、作れず定型のまま登録したか（webhook-candidate-process.ts）。
+  ['title_generated', 'タイトルは AI が作成'],
+  ['title_fallback', 'タイトルは定型（AI の作成に失敗）']
+])
+
 // 判定理由コード。detection.ts（evaluateDetection）・filter.ts（DROP_REASONS）・webhook-process.ts・webhook-admin.ts で出す全てを網羅する。
 const REASON_LABELS: ReadonlyMap<string, string> = new Map([
   // 除外（filter.ts の DROP_REASONS）
@@ -190,6 +254,12 @@ const REASON_LABELS: ReadonlyMap<string, string> = new Map([
   ['not_distribution_event', 'ビッカメ娘のイベントではない'],
   ['event_confidence_below_threshold', 'ビッカメ娘のイベントと確信できない'],
   ['not_new_event_announcement', '新規の告知ではない'],
+  ['status_unconfirmed', '告知・継続・終了の状態を確定できない'],
+  ['existing_event_update', '既存企画の継続・更新情報'],
+  ['event_ended', '既存企画の終了情報'],
+  ['distribution_item_unspecified', '対象物が未記載・未発表'],
+  ['start_date_unspecified', '初回開始日が未記載'],
+  ['distribution_condition_unspecified', '入手条件が未記載・未発表'],
   ['multiple_or_ambiguous_events', '複数または曖昧なイベント'],
   ['distribution_item_count_mismatch', '配布物の種類数と抽出結果が一致しない'],
   ['distribution_item_count_unknown', '配布物の種類数を確定できない'],
@@ -197,20 +267,24 @@ const REASON_LABELS: ReadonlyMap<string, string> = new Map([
   ['distribution_item_count_overflow', '配布物が21種類以上で抽出上限を超えている'],
   ['multiple_or_ambiguous_stores', '複数または曖昧な店舗'],
   ['category_unconfirmed', '配布物を確定できない'],
-  ['store_unconfirmed', '店舗を確定できない'],
+  ['store_unconfirmed', '開催店舗を確定できない'],
+  ['store_mismatch', '抽出した開催店舗と判定した店舗が一致しない'],
+  ['character_unconfirmed', '対象ビッカメ娘を確定できない'],
   ['start_date_unconfirmed', '開始日を確定できない'],
   ['end_date_unconfirmed', '終了日を確定できない'],
   ['invalid_date_range', '期間が不正'],
   ['distribution_condition_unconfirmed', '配布条件を確定できない'],
   ['purchase_amount_unconfirmed', '購入額を確定できない'],
+  ['charge_amount_unconfirmed', '入金・チャージ額を確定できない'],
   ['quantity_unconfirmed', '配布数を確定できない'],
   ['unmodeled_distribution_condition', '未対応の配布条件'],
+  // 自動登録の精度のための保留規則（detection.ts の gateReasons）。Golden で誤登録が多かった形を人が確認する。
+  ['condition_pattern_unconfirmed', '配布条件の組み合わせが自動登録の対象外'],
+  ['charge_condition_unconfirmed', '入金・チャージ条件は自動登録の対象外'],
+  ['extraction_store_unspecified', '抽出段階で開催店舗を特定できていない'],
   ['invalid_event_candidate', '登録候補が不正'],
-  // 情報用。店舗を投稿アカウントから補って登録候補にしたことを示す（登録可否には影響しない）。
-  ['store_inferred_from_account', '店舗は投稿アカウントから補完'],
-  // 情報用。自動登録するイベントのタイトルを AI が作れたか、作れず定型のまま登録したか（webhook-process.ts。登録可否には影響しない）。
-  ['title_generated', 'タイトルは AI が作成'],
-  ['title_fallback', 'タイトルは定型（AI の作成に失敗）'],
+  // 画面には出さない情報用のコード（NOTE_REASON_LABELS）
+  ...NOTE_REASON_LABELS,
   // 管理画面での手動解決（webhook-admin.ts）
   ['manually_linked', '手動で紐付け'],
   ['manually_rejected', '手動で却下']
@@ -231,3 +305,10 @@ export const reasonLabel = (code: string): string => {
   const prefixed = PREFIXED_REASON_LABELS.get(code.slice(0, separator))
   return prefixed === undefined ? code : prefixed
 }
+
+/**
+ * 保存された理由コードから、画面に出さない情報用のコード（NOTE_REASON_LABELS）を除く。表示のための絞り込みで、保存する値や登録可否は変えない。
+ * 未知のコードや `<code>:<id>` の形は残す。元の並びは保つ。
+ */
+export const judgmentReasons = (reasons: readonly string[]): string[] =>
+  reasons.filter((reason) => !NOTE_REASON_LABELS.has(reason))

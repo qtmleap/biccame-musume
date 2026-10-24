@@ -1,0 +1,104 @@
+[
+  {
+    "id": "goal-negative-1454656876424089603",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1454656876424089603",
+      "createdAt": "2021-10-31T03:50:00.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "ξ(σεσ)ξ⭐️キャンペーン情報⭐️\n\n本日最終日！\n月々の電気料金をおトクに🎶\n\n当社指定7,000円(税込)以上の商品が5,500円引き‼️\nまた新規ご加入でなんと電気代が1ヶ月全額0円✨\n\n詳しくは #ビックカメラ有楽町店\n1階 #Softbank カウンターまで😊\n\n#おうちでんき https://t.co/C5IGbff4Wy",
+      "url": "https://x.com/bic_yuurakuchou/status/1454656876424089603",
+      "media": [
+        "https://pbs.twimg.com/media/FC_5BxGaQAATfEm.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ξ(σεσ)ξ⭐️キャンペーン情報⭐️ / 本日最終日！ / 月々の電気料金をおトクに🎶」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "softbank-home-electricity-offer-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 515906,
+      "postSha256": "f1e063cb0c91546f0b02f6c7fc5fd029133d8a4ce20e774bbf76a7fe45831d4f",
+      "textSha256": "7a98080075baa88b47fc16f988850da0c39f979a431d487f6411917df6d1b968"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1464889301334847489",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1464889301334847489",
+      "createdAt": "2021-11-28T09:30:00.000Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "#ぐっばいたいむー！\nアキバたんログアウトのお時間です🐾\n本日もありがとうございました❣\nビックカメラAKIBAは21時まで営業してるよ～ん\n\nでわでわ、、温かくしてすごしてね😌💕\n＼＼ #おつあきばいばい🌸／／\nζ(╹v╹)ζ またね🐈",
+      "url": "https://x.com/bic_akiba/status/1464889301334847489",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「#ぐっばいたいむー！ / アキバたんログアウトのお時間です🐾 / 本日もありがとうございました❣」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "akiba-closing-greeting-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 507701,
+      "postSha256": "6424675680667c5e257b554d191ec17c25367043afa86b5cbbc3c7813764d1c6",
+      "textSha256": "1f42383f13b0d0bba2181f84dcd7618090ea3dc8b9930073b1bce0341fe64a3e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

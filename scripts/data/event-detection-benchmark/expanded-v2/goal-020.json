@@ -1,0 +1,127 @@
+[
+  {
+    "id": "expanded-v2-positive-1855547038928363565",
+    "source": "public-post",
+    "description": "tenjin1-fourth-character-anniversary-2024",
+    "post": {
+      "id": "1855547038928363565",
+      "createdAt": "2024-11-10T09:44:23.000Z",
+      "screenName": "bic_tenjin",
+      "kind": "original",
+      "text": "11/13(水)～12/31(火)の期間中に\n擬人化4周年記念名刺を配布致します♬\nぜひ皆さんとお会いで来るのを楽しみにまっとるけん☆彡 https://t.co/OatQOxBysm",
+      "url": "https://x.com/bic_tenjin/status/1855547038928363565",
+      "media": [
+        "https://pbs.twimg.com/media/GcA53_2awAAXL0p.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2024-11-13",
+      "conditions": null
+    },
+    "rationale": "明示された11月13日から12月31日の限定名刺。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "tenjin1-fourth-character-anniversary-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "擬人化4周年記念名刺",
+          "evidence": [
+            "11/13(水)～12/31(火)の期間中に",
+            "擬人化4周年記念名刺を配布致します♬",
+            "ぜひ皆さんとお会いで来るのを楽しみにまっとるけん☆彡 https://t.co/OatQOxBysm"
+          ]
+        }
+      ],
+      "groupingNote": "明示された11月13日から12月31日の限定名刺。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 194956,
+      "postSha256": "2e33f87db05f433fb7fc11c25bc86cae5c897f8f0ab491c5db1dfac5e2299733",
+      "textSha256": "bae51ea94d427d391096e2c6f0c0f481983ada47a15e2b8b07c27d93b85eb491"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1852153585540435993",
+    "source": "public-post",
+    "description": "tenjin1-fourth-character-anniversary-2024 matched control",
+    "post": {
+      "id": "1852153585540435993",
+      "createdAt": "2024-11-01T01:00:00.000Z",
+      "screenName": "bic_tenjin",
+      "kind": "original",
+      "text": "〈PS5pro当選番号発表〉\n抽選番号を下の画像よりご確認ください。\n購入期間：11/7～11/14\n※ご購入時は必ず受付時の提携クレジットカード、抽選レシートをお持ちください。 https://t.co/SVkI5qsuxG",
+      "url": "https://x.com/bic_tenjin/status/1852153585540435993",
+      "media": [
+        "https://pbs.twimg.com/media/GbN2V8EakAAcfJ_.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1852153585540435993",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 195925,
+      "postSha256": "666b5e5cf9fe4212ceaadd519de3821ab74ee46db5a715e78e32f0a520a6112f",
+      "textSha256": "2716cf741c2b1771d4a7211506aa9542cd0a2cebc4ba495d56bd6e15d66e6928"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

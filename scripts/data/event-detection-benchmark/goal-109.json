@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-1895331091936108735",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1895331091936108735",
+      "createdAt": "2025-02-28T04:32:00.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "⚔狩猟解禁⚔\n#モンスターハンターワイルズ とPS5本体がセットになった本体同梱版がついに発売!!\nPS5本体のお値段そのまま #モンスターハンターワイルズ のソフトが付いてくる！\n7階ゲームコーナーにて好評販売中です!!\n ※ソフトはダウンロード版になります https://t.co/ykaZohd8c2",
+      "url": "https://x.com/bicikebukuro/status/1895331091936108735",
+      "media": [
+        "https://pbs.twimg.com/media/Gk2BFZ5XwAAnQhT.jpg",
+        "https://pbs.twimg.com/media/Gk2RfV7WoAAj1Mc.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「⚔狩猟解禁⚔ / #モンスターハンターワイルズ とPS5本体がセットになった本体同梱版がついに発売!! / PS5本体のお値段そのまま #モンスターハンターワイルズ のソフトが付いてくる！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "monsterhunter-wilds-ps5-bundle-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 166006,
+      "postSha256": "b1cad603b83f2b3ac10510a5c4504422b0fff0b31fb274be2a753d6278e25932",
+      "textSha256": "0d56720bfe1bebf912d41af337b57dd503e6791ca6321998d0d6b3c12892e3ca"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1906514280113127551",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1906514280113127551",
+      "createdAt": "2025-03-31T01:10:00.000Z",
+      "screenName": "bic_yao",
+      "kind": "original",
+      "text": "🌟抽選販売のご案内🌟\n4/18(金)発売　ポケモンカードゲーム\n拡張パック『ロケット団の栄光』について、事前抽選での販売とさせて頂きます。\n受付期間：4/4(金)～4/6(日)\n抽選条件をお確かめの上、3階ビックトイズレジへお越しください。 https://t.co/MUjgI0ROar",
+      "url": "https://x.com/bic_yao/status/1906514280113127551",
+      "media": [
+        "https://pbs.twimg.com/media/GnRa2x8bwAAehOn.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「🌟抽選販売のご案内🌟 / 4/18(金)発売　ポケモンカードゲーム / 拡張パック『ロケット団の栄光』について、事前抽選での販売とさせて頂きます。」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "pokemon-rocket-glory-lottery-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 158266,
+      "postSha256": "989412aaa0c762b2bec8990a836dbc31b0732f07fbacf5df95e84ff177ad50c6",
+      "textSha256": "2872893d995a7d2d5eeaa2dfc5c648486e5124f9662bd1817bdf3277c6dcce7c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

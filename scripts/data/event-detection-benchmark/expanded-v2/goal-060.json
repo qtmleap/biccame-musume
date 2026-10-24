@@ -1,0 +1,139 @@
+[
+  {
+    "id": "expanded-v2-positive-1722101642298822734",
+    "source": "public-post",
+    "description": "takatsuki-character-debut-keychain-2023",
+    "post": {
+      "id": "1722101642298822734",
+      "createdAt": "2023-11-08T04:00:01.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "ヾ۶(o´∀｀o)ﾉ＼📢　告知　　／  \n#たかつきたん アクキー配布イベント開催！\n11/27㈪より \nビックカメラ高槻阪急スクエア店にて\n税込3000円以上お買い上げで\n✨アクリルキーホルダー プレゼント✨\n※お一人様１個でお願いします。\n※無くなり次第終了です。\nお待ちしております✨ https://t.co/W5fOgqKShw",
+      "url": "https://x.com/bic_takatsuki/status/1722101642298822734",
+      "media": [
+        "https://pbs.twimg.com/media/F-Ya8kkaYAAlWV1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": [
+        "takatsuki"
+      ],
+      "characterIds": [
+        "takatsuki"
+      ],
+      "startDate": "2023-11-27",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        }
+      ]
+    },
+    "rationale": "3000円購入のプレゼント。1人1個と初期総数を区別。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "takatsuki-character-debut-keychain-2023",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "ready",
+      "items": [
+        {
+          "item": "アクリルキーホルダー",
+          "evidence": [
+            "ヾ۶(o´∀｀o)ﾉ＼📢　告知　　／  ",
+            "#たかつきたん アクキー配布イベント開催！",
+            "11/27㈪より ",
+            "ビックカメラ高槻阪急スクエア店にて",
+            "税込3000円以上お買い上げで",
+            "✨アクリルキーホルダー プレゼント✨",
+            "※お一人様１個でお願いします。",
+            "※無くなり次第終了です。",
+            "お待ちしております✨ https://t.co/W5fOgqKShw"
+          ]
+        }
+      ],
+      "groupingNote": "3000円購入のプレゼント。1人1個と初期総数を区別。",
+      "unannotatedFields": []
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 313494,
+      "postSha256": "c507b6b2e79c04c2c49027fb4f4de9df3f4f85651af9f594d9746f4ade420eec",
+      "textSha256": "582820a79003515018aa11ebde746d510b0fad0f81183c071f1cea59ad4fce39"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1730084098235121875",
+    "source": "public-post",
+    "description": "takatsuki-character-debut-keychain-2023 matched control",
+    "post": {
+      "id": "1730084098235121875",
+      "createdAt": "2023-11-30T04:39:27.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "σ۶(o´∀｀o)　冬のキッチン家電といえば...\n\n年末年始の家族の集まり、お友達とパーティー\nも、\n楽しいですが\n暖かいお部屋でのんびりTVを見ながら\nひとりでゆっくりお鍋やたこ焼きするのも\n贅沢な時間ですよね✨\n۶ (＊ˊ艸ˋ)\n\n販売員たんおすすめの商品ご紹介しています✨ https://t.co/n4EqR9jR0s",
+      "url": "https://x.com/bic_takatsuki/status/1730084098235121875",
+      "media": [
+        "https://pbs.twimg.com/media/GAJ73F-aEAA2wlJ.jpg",
+        "https://pbs.twimg.com/media/GAJ7_Yoa4AAdSS6.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1730084098235121875",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 306784,
+      "postSha256": "88f15497e59b7b4208fd77792ca7c8178cef8fcb865b53c9767b514d5d349fcc",
+      "textSha256": "0a2c2721fe0bc63e3595e90b3b3917d439c49cae4ece7d6b35cc85b29d34c405"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,184 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2010171971242521065",
+    "source": "public-post",
+    "description": "nanba-ema-key-2026/end",
+    "post": {
+      "id": "2010171971242521065",
+      "createdAt": "2026-01-11T02:08:39.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "quote",
+      "text": "①なんばたん絵馬は配布終了です！\nありがとうございました☺️✨\n\n②京都たんアクキーはまだ配布中です！✨\n\nなんばたん絵馬の在庫がないので、6000円以上のレシートで両方受け取れなくなってます。京都たんアクキーのみです。ご注意ください🙇",
+      "url": "https://x.com/biccamera_nanba/status/2010171971242521065",
+      "quoted": {
+        "id": "2009513728493146207",
+        "screenName": "biccamera_nanba",
+        "text": "＼イベント①／\n1月1日からなんばたん絵馬を配布中です✨\n\n＼イベント②／\n1月10日から京都たんアクキーを配布します✨\n\n【1月10日から】\n🌟3,000円以上のレシートでアクキーか絵馬か好きな方を選べます\n🌟6,000円以上のレシートで両方もらえます\n※両方在庫がある場合に限ります\n(1階 総合カウンター) https://t.co/9ksCKTMybo"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "nanba",
+        "kyoto"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "なんばたん絵馬の終了と京都たんアクキーの継続が混在。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "boundary:action",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:nanba-newyear-ema-2026"
+    ],
+    "group": "nanba-ema-key-2026/end",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "なんばたん絵馬",
+          "evidence": [
+            "①なんばたん絵馬は配布終了です！",
+            "なんばたん絵馬の在庫がないので、6000円以上のレシートで両方受け取れなくなってます。京都たんアクキーのみです。ご注意ください🙇"
+          ]
+        },
+        {
+          "item": "京都たんアクキー",
+          "evidence": [
+            "②京都たんアクキーはまだ配布中です！✨",
+            "なんばたん絵馬の在庫がないので、6000円以上のレシートで両方受け取れなくなってます。京都たんアクキーのみです。ご注意ください🙇"
+          ]
+        }
+      ],
+      "groupingNote": "なんばたん絵馬の終了と京都たんアクキーの継続が混在。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 81000,
+      "postSha256": "6efd2b16b897fd3566afc0d4dbfe58b28331035123f9094e25c9e181d651e431",
+      "textSha256": "d52d3008dc43cb24b5857e41fb7da0a63d4b332ab9b4f20528b4559bc110e962"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "df6e178e-aebc-42e4-a8c2-80aaf961c7a0",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/biccamera_nanba/status/2010171971242521065",
+          "origin": "manual-or-seed",
+          "title": "新春絵馬",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-12-31T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "nanba"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2006584431633744264",
+    "source": "public-post",
+    "description": "nanba-ema-key-2026/end matched control",
+    "post": {
+      "id": "2006584431633744264",
+      "createdAt": "2026-01-01T04:33:03.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "quote",
+      "text": "＼🎍新年おめでとうございます🎍／\n本日はなんば店は19時まで営業しております‼️\n新春初売りはお得なキャンペーンがいっぱい✨\nお客様のご来店をお待ちしております‼️😆",
+      "url": "https://x.com/biccamera_nanba/status/2006584431633744264",
+      "quoted": {
+        "id": "2006538364233605179",
+        "screenName": "biccameraE",
+        "text": "🟥⬜🟥⬜🟥⬜🟥\n 2026年新春初売り\n1月1日(木)ビックカメラの新春初売りがスタート🐎\n\n◇2026年新春福箱\n◇2026新春豪華セット\n◇4⽇間限りの新春初夢特価\n◇お年玉特典\n◇新春まとめ割\n\nあらゆる商品がお得にご購入いただけるこの時期をお見逃しなく！"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2006584431633744264",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 83549,
+      "postSha256": "8fb3580feb154a77945e0b6e70690e9e029a2a1f1287153f93652cf328bf8c03",
+      "textSha256": "477c8545cef2ecc9f690cbc928b682ce4a74b31faa20a891d1039890d92225bd"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

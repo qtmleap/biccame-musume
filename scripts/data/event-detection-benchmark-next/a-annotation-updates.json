@@ -1,0 +1,74 @@
+{
+  "revision": "next",
+  "activeManifestChanged": false,
+  "updates": [
+    {
+      "id": "public-2109841560305361272",
+      "group": "shintou-sixth-anniversary-2026",
+      "selectionRecommendation": "同groupの次回代表は、明示条件を持つこの原文を候補にする。現行100件の代表を変更しない。",
+      "expectedAlreadyAnnotated": {
+        "isEvent": true,
+        "category": "other",
+        "stores": ["shintou"],
+        "characterIds": ["shintou"],
+        "startDate": "2026-10-19",
+        "conditions": [{ "type": "purchase", "amount": 5000 }]
+      },
+      "conditionEvidence": ["※5,000円以上お買い物でお一人様一枚まで", "枚数：限定60枚"],
+      "annotationDetails": {
+        "limitedQuantity": 60,
+        "perPersonLimit": 1,
+        "evidenceDoesNotEstablish": ["first_come", "charge"]
+      },
+      "rationale": "商品購入5000円以上は原文に明示済み。限定60枚は総配布上限であり、先着という語は本文にない。購入条件と総数量・一人あたり上限を別々に扱う。",
+      "reviewStatus": "provisional"
+    },
+    {
+      "id": "public-2112431117894816142",
+      "group": "itt-ikenishi-autumn-cafe-acsta-2026",
+      "selectionRecommendation": "同groupの次回代表は、購入金額・先着数量・二人の対象が揃うこの原文を候補にする。現行100件は変更しない。",
+      "expectedAlreadyAnnotated": {
+        "isEvent": true,
+        "category": "acsta",
+        "stores": ["ikenishi", "itt"],
+        "characterIds": ["ikenishi", "itt"],
+        "startDate": "2026-11-07",
+        "conditions": [
+          { "type": "purchase", "amount": 4000 },
+          { "type": "first_come", "quantity": 100 }
+        ]
+      },
+      "conditionEvidence": ["🍁11/7（土）～　先着100個！", "🍁税込4,000円以上のお買い上げで"],
+      "rationale": "4000円以上の商品購入と先着100個が別々に明示される。入金条件や無料配布と読み替えない。既存A注釈は既にこの二条件を持ち、現行選抜の条件分母0は注釈不存在とは別問題。",
+      "reviewStatus": "provisional"
+    },
+    {
+      "id": "public-2110928736111718816",
+      "group": "kashiwa-winter-card-2026",
+      "proposedExpectedExtension": { "endDate": "2026-12-31" },
+      "evidence": ["📅11月1日(日)～12月31日(木)"],
+      "rationale": "開始・終了の両日が明示されるため、次revisionで終了日評価を追加する際の正解にできる。購入・先着など未記載条件を空集合や無料として断定しない。",
+      "reviewStatus": "provisional"
+    },
+    {
+      "id": "public-2110185622703087712",
+      "group": "delicious-food-tai-2026",
+      "annotationDetails": {
+        "items": [
+          { "kind": "acrylic-keychain", "category": "ackey", "characterIds": ["pkan"], "remainingQuantity": 27 },
+          { "kind": "benefit-gift-card", "category": "other", "remainingQuantity": 90 },
+          { "kind": "name-card", "categoryUnspecified": true }
+        ],
+        "quantityRole": "remaining-not-total-limit"
+      },
+      "evidence": ["パソ館たんアクキー：残り【２７個】", "4店舗特典ギフトカード：残り【９０枚】", "美味しいもの食べ隊withパソ館たん名刺は【3F】にて配布中です✨"],
+      "rationale": "一投稿に三種類あるため、投稿全体の単一categoryを強制するのでなく、次revisionの配布物単位スコア用に区別する。27/90は残数で、配布上限や購入金額ではない。",
+      "reviewStatus": "provisional"
+    }
+  ],
+  "notes": [
+    "初期暫定注釈でありhuman-reviewedとは称さない。AI結果・保存済み判定は参照していない。",
+    "現在実行中の100件manifest・a-*.json・b-*.jsonには変更していない。",
+    "新しい項目は現行スコアラーで自動採点されたとは主張しない。次revisionの契約拡張・人手確認が必要。"
+  ]
+}

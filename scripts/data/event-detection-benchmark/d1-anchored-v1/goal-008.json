@@ -1,0 +1,164 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1874695494422901159",
+    "source": "public-post",
+    "description": "sagami-newyear-card-2025",
+    "post": {
+      "id": "1874695494422901159",
+      "createdAt": "2025-01-02T05:53:30.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "🎍さがみたん正月名刺🎍\nさがみたんミュージアムにて正月限定名刺を配布しております！\nご来店の際は是非もらってくださいね(*´ω`*)\n1月31日(金)まで\n※お一人様一枚限り \n※フリマサイトなどでの出品・販売は固くお断り致します \n#さがみたん https://t.co/haZJYs600m",
+      "url": "https://x.com/bic_sagamioono/status/1874695494422901159",
+      "media": [
+        "https://pbs.twimg.com/media/GgRBnPPa8AAFhcu.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "sagami"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "1月31日までの正月限定名刺。開始日は本文にない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:sagami-newyear-card",
+      "prior-template-related:expanded-v2-positive-2017772388948316502"
+    ],
+    "group": "sagami-newyear-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "さがみたん正月名刺",
+          "evidence": [
+            "🎍さがみたん正月名刺🎍",
+            "さがみたんミュージアムにて正月限定名刺を配布しております！",
+            "#さがみたん https://t.co/haZJYs600m"
+          ]
+        }
+      ],
+      "groupingNote": "1月31日までの正月限定名刺。開始日は本文にない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 181549,
+      "postSha256": "a5abf061e2319e97c597b8fdd466bbaba66d432047ce765c6c7a37820f229af7",
+      "textSha256": "ca57961df752757104efe459b37ee870a8d138f865e75bec5b37837b87ed2f23"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "b6781807-bf7d-4ace-88c0-d4562fe51a97",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_sagamioono/status/1874695494422901159",
+          "origin": "manual-or-seed",
+          "title": "正月名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2024-12-31T15:00:00.000+00:00",
+            "endDate": "2025-01-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "sagami"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1874692618401296875",
+    "source": "public-post",
+    "description": "sagami-newyear-card-2025 matched control",
+    "post": {
+      "id": "1874692618401296875",
+      "createdAt": "2025-01-02T05:42:04.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "お正月はSwitchで楽しもう！\n1⃣Switch本体+対象ソフト同時購入で2200円引き！\n2⃣対象ソフトを3本同時購入で1100円引き！ \n2本同時購入で550円引き！\n\n1月5日(日)までなのでお見逃しなくヾ(*´ω`)ﾉﾞ https://t.co/2aIRUI8zas",
+      "url": "https://x.com/bic_sagamioono/status/1874692618401296875",
+      "media": [
+        "https://pbs.twimg.com/media/GgQ-_xnaAAAbGat.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-1874692618401296875",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 181552,
+      "postSha256": "37a6a4d8286e46adb63ded1ce6638d436260249f8407d23fadc96164b7fcbb57",
+      "textSha256": "b1191bbe0fd14da160990f278e65eeb054b9eea4813a147f0570487503ede6f3"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

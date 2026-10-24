@@ -15,6 +15,7 @@ export const socialEvent = (n: number, input: Record<string, unknown> = {}): Eve
     title: `イベント${n}`,
     category: 'limited_card',
     stores: ['akiba'],
+    characterIds: ['akiba'],
     startDate: '2026-10-12T10:00:00+09:00',
     endDate: '2026-10-18T23:59:59+09:00',
     isVerified: true,

@@ -1,0 +1,169 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2062459352100065407",
+    "source": "public-post",
+    "description": "shibuhachi-anniv7-event-2026",
+    "post": {
+      "id": "2062459352100065407",
+      "createdAt": "2026-06-04T09:00:02.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "7/7は\n#しぶハチたん と #しぶとーたん 擬人化７周年🎂\n\nそこで～\n擬人化７周年イベントやるよぉ～\n＼\\　日程は 　/／\n　　  7/4(土)\n／/7ﾆﾁｼﾞｬﾅｲﾊﾁ!!\\＼\nみんなカレンダーにメモメモして待っててハチ！\n\n#ビッカメ娘\n#7月7日はしぶハチたん擬人化7周年\n#7月7日はしぶとーたん擬人化7周年 https://t.co/OsBeXMCO7x",
+      "url": "https://x.com/bicshibuhachi00/status/2062459352100065407",
+      "media": [
+        "https://pbs.twimg.com/media/HJ4rs4jbIAAb8Am.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "shibuhachi",
+        "shibuto"
+      ],
+      "startDate": "2026-07-04",
+      "conditions": null
+    },
+    "rationale": "日程のみで内容は未発表の予告。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "preliminary",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:shibuya-shibuhachi-anniv7-2026"
+    ],
+    "group": "shibuhachi-anniv7-event-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "擬人化7周年イベント",
+          "evidence": [
+            "#しぶハチたん と #しぶとーたん 擬人化７周年🎂",
+            "擬人化７周年イベントやるよぉ～",
+            "#7月7日はしぶハチたん擬人化7周年",
+            "#7月7日はしぶとーたん擬人化7周年 https://t.co/OsBeXMCO7x"
+          ]
+        }
+      ],
+      "groupingNote": "日程のみで内容は未発表の予告。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 38148,
+      "postSha256": "57c1c4fbc6f6a29d1223a259691e41a33706e78c3f8b2592f2f6129bb4ee0f55",
+      "textSha256": "e85708cdf41dd0ba6c58f60220f8b1ce6c89062f8bb476c9d98623920398e8ab"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "b650c9dd-8359-4312-8afe-708c38344adb",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bicshibuhachi00/status/2062459352100065407",
+          "origin": "manual-or-seed",
+          "title": "擬人化7周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-07-03T15:00:00.000+00:00",
+            "endDate": "2026-08-01T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shibuhachi"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2069259070671089724",
+    "source": "public-post",
+    "description": "shibuhachi-anniv7-event-2026 matched control",
+    "post": {
+      "id": "2069259070671089724",
+      "createdAt": "2026-06-23T03:19:42.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "こんハチ🐶\n\nきょうはアチアチ💦☀️\n水分ちゃんと取ろうハチ！\nそして、お昼になったら\nおいしいご飯食べて🍔🍟\n食べた後はハチたんちに立ち寄って\n夜になったら\nまたおいしいご飯食べようハチ(`･ω･´)b🍚🍖🥗\n\nきょうもよろしくハチ✨\n#おはようございます\n#しぶハチたん\n#企業公式相互フォロー",
+      "url": "https://x.com/bicshibuhachi00/status/2069259070671089724",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2069259070671089724",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 31971,
+      "postSha256": "a8254eda6895a33ad1722e604d988ba18fa147944f15d516de1ef6a05c25b81b",
+      "textSha256": "6f23e61d4f36c486ea9ea2d22fc5d05f1774764fa8211c37fedd59fee8b74c01"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,125 @@
+[
+  {
+    "id": "goal-positive-1762801828708962656",
+    "source": "public-post",
+    "description": "shibuhachi regular card end 2024",
+    "post": {
+      "id": "1762801828708962656",
+      "createdAt": "2024-02-28T11:28:01.000Z",
+      "screenName": "bicshibuhachi00",
+      "kind": "original",
+      "text": "ログアウトするハチ🐶\n\nいま配布中の通常名刺は\nあしたで一旦終了ハチ‼\nあしたはなにかなぁ～(*´艸`*)\n\nまたあしたハチ～✨\n#お疲れ様です\n#しぶハチたん\n#企業公式相互フォロー",
+      "url": "https://x.com/bicshibuhachi00/status/1762801828708962656",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shibuhachi"
+      ],
+      "category": "regular_card"
+    },
+    "rationale": "通常名刺は明日で一旦終了との案内。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "end"
+    ],
+    "group": "shibuhachi-regular-card-end-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "しぶハチたん通常名刺",
+          "evidence": [
+            "いま配布中の通常名刺は"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 277365,
+      "postSha256": "68c08dbf03d0cd622e85a051037728da6dbde08fdbf1d6b3d86741bf0678551c",
+      "textSha256": "6c663b8c15eace08f2e046866414c1026b7e5f9afaf35ed590e019f7afc1850f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1783074337526067561",
+    "source": "public-post",
+    "description": "yuurakuchou find me card 2024",
+    "post": {
+      "id": "1783074337526067561",
+      "createdAt": "2024-04-24T10:03:44.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "✨有楽町たんイベント開催✨\n＼＼＼『有楽町たんを探せ』／／／\nビックカメラ有楽町店内のどこかにいる有楽町たんを見つけて下さい🔍\n「 #有楽町たんを探せ 」を見つけた写真と一緒にXに投稿、投稿画面を提示で限定名刺をお渡し！\n期間：4月27日(土)～5月6日(日)\n名刺渡し場所：1階 総合案内カウンター https://t.co/saNPmZWI16",
+      "url": "https://x.com/bic_yuurakuchou/status/1783074337526067561",
+      "media": [
+        "https://pbs.twimg.com/media/GL7AopCbsAE_0bR.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "yuurakuchou"
+      ],
+      "characterIds": [
+        "yuurakuchou"
+      ],
+      "category": "limited_card",
+      "startDate": "2024-04-27"
+    },
+    "rationale": "撮影してX投稿・画面提示で名刺。キーワード/購入以外の条件。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "yuurakuchou-find-me-card-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "有楽町たん限定名刺",
+          "evidence": [
+            "「 #有楽町たんを探せ 」を見つけた写真と一緒にXに投稿、投稿画面を提示で限定名刺をお渡し！",
+            "名刺渡し場所：1階 総合案内カウンター https://t.co/saNPmZWI16"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 259705,
+      "postSha256": "be2130a4e04f4acb49e577d0befe9db61dcf696cf6a04f4205d40d4c85e8750f",
+      "textSha256": "8c14545727027e8cf633f19446dab0c57ddd9784e123e40e260d717d13e0a5f6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

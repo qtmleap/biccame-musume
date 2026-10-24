@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-1056358774582108161",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1056358774582108161",
+      "createdAt": "2018-10-28T01:35:32.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "10月28日（日）\nﾋﾞｯｸｶﾒﾗ柏店日替わり限定品抽選結果\n\n★021　ノートパソコン\n↑全員当選↑\n※抽選券を５階PCﾚｼﾞにお持ち下さい\n\n★012　格安スマホ\n購入希望者多数の為、抽選販売とさせて頂きました。\n抽選結果は添付の通りです。\n当選された方は抽選券を2階携帯ﾚｼﾞにお持ち下さい https://t.co/xGKODoiGUV",
+      "url": "https://x.com/bic_kashiwa/status/1056358774582108161",
+      "media": [
+        "https://pbs.twimg.com/media/Dqjwi5DXQAUCYki.jpg",
+        "https://pbs.twimg.com/media/Dqjwj9AWsAAn4ya.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「10月28日（日） / ﾋﾞｯｸｶﾒﾗ柏店日替わり限定品抽選結果 / ★021　ノートパソコン」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "kashiwa-pc-phone-sale-lottery-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 809998,
+      "postSha256": "cadc02e131f699354e69a918bbe7a2a9d80b7d2c3da056c5262d409ddf4215b9",
+      "textSha256": "983854413104688794d8c6dd3a5bef9fce2481d1daaa9ccf5d3d2edfbd3955f5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1057481410599096320",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1057481410599096320",
+      "createdAt": "2018-10-31T03:56:29.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "🕸️本日最終日🕸️\n\n「#withbic」のタグを付けてInstagramかTwitterでハロウィンの写真を投稿しよう🎃❣️ビックカメラギフトカード3000円分が当たるかも😊\n小学生以下のお子様にはレジでキャンディをプレゼントしてるよ🍬\n＃ハロウィン #ハッピーハロウィン\n#Halloween #HappyHalloween https://t.co/SsdY0yno0o",
+      "url": "https://x.com/bic_sagamioono/status/1057481410599096320",
+      "media": [
+        "https://pbs.twimg.com/media/Dqztau-U8AA5SLX.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「🕸️本日最終日🕸️ / 「#withbic」のタグを付けてInstagramかTwitterでハロウィンの写真を投稿しよう🎃❣️ビックカメラギフトカード3000円分が当たるかも😊 / 小学生以下のお子様にはレジでキャンディをプレゼントしてる」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "withbic-halloween-photo-giftcard-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 809352,
+      "postSha256": "55b64e563da534a0a9147ccfa160a2a108be34f0bfe163fa96d0bec618fb8679",
+      "textSha256": "ad1296d5632a023485c2e7c7f66d861b19d2066a08f079b1a117f3e39e6b31cb"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

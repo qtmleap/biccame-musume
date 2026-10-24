@@ -72,7 +72,7 @@ const BadgesContent = () => {
               </p>
             </div>
             <div className='flex items-center gap-2 shrink-0'>
-              <Button variant='outline' size='sm' asChild>
+              <Button variant='outline' size='sm' className='border-card-border' asChild>
                 <Link to='/admin/badges/ranking'>
                   <Trophy className='size-4 mr-1' />
                   所持数ランキング

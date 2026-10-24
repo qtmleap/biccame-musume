@@ -12,8 +12,6 @@ import { ReferenceUrlsSection } from '@/components/admin/form/reference-urls-sec
 import { AuthProvider } from '@/components/auth/auth-provider'
 import { BackendSessionGate } from '@/components/auth/backend-session-gate'
 import { CalendarEventDrawerContent } from '@/components/calendar/calendar-event-drawer-content'
-import { CharacterFavoriteButton } from '@/components/characters/character-favorite-button'
-import { CharacterFollowButton } from '@/components/characters/character-follow-button'
 import { ErrorBoundary } from '@/components/common/error-boundary'
 import { EventCategoryFilter } from '@/components/events/event-category-filter'
 import { EventUserActivityFilter } from '@/components/events/event-user-activity-filter'
@@ -42,22 +40,13 @@ import {
   routeResult,
   stores
 } from '@/stories/catalogue-fixtures'
+import { providerChild, SyntheticFailure } from '@/stories/component-example-context'
 import { runtime } from '../../../../../.storybook/catalogue/runtime'
 
 const isComponent = (value: unknown): value is ComponentType<Record<string, unknown>> =>
   typeof value === 'function' || (typeof value === 'object' && value !== null && '$$typeof' in value)
 const modules = import.meta.glob('/workers/web/src/app/components/**/*.tsx', { eager: true })
 const statusFilter = atom({ upcoming: true, ongoing: true, ended: false })
-const SyntheticFailure = (): never => {
-  throw new Error('Storybookで指定した子コンポーネントのエラー')
-}
-const providerChild = (
-  <section className='rounded-xl bg-card p-4 border border-card-border'>
-    <h2 className='font-bold mb-3'>認証コンテキスト内の実コンポーネント</h2>
-    <CharacterFavoriteButton characterId='abeno' characterName='あべのたん' />
-    <CharacterFollowButton twitterId='storybook_fixture' />
-  </section>
-)
 export type ComponentExampleProps = {
   source: string
   exportName: string
@@ -245,7 +234,7 @@ export const ComponentExample = ({
   if (source.includes('/calendar/') && !source.includes('controls')) props.events = calendarEvents
   if (exportName === 'UpcomingEventListItem')
     props.event = { character: characters[2], type: 'character', date, daysUntil: 0 }
-  if (exportName === 'EventCharacterBadge') props.event = { ...eventDetail, characterId: 'kyoto' }
+  if (exportName === 'EventCharacterBadge') props.event = { ...eventDetail, characterIds: ['kyoto'] }
   if (exportName === 'StoreName') props.name = characters[0].store.name
   if (exportName === 'InfoItem') props.children = <p>営業時間 10:00〜21:00</p>
   if (exportName === 'StoreAccess') props.access = characters[0].store.access
@@ -260,118 +249,119 @@ export const ComponentExample = ({
   if (exportName === 'HeartBurstOverlay' || exportName === 'FireworkBurstOverlay') props.visible = trigger % 2 === 1
   const animation = exportName.includes('Burst')
   // Typed render fixtures for contracts that require form/provider/layout context.
-  let content = createElement(Component, props)
-  if (exportName === 'ErrorBoundary')
-    content = <ErrorBoundary>{displayError ? <SyntheticFailure /> : providerChild}</ErrorBoundary>
-  if (exportName === 'BackendSessionGate') content = <BackendSessionGate>{providerChild}</BackendSessionGate>
-  if (exportName === 'CalendarEventDrawerContent')
-    content = (
-      <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>2026年10月2日の予定</DrawerTitle>
-          </DrawerHeader>
-          <CalendarEventDrawerContent year={2026} month={10} day={2} events={calendarEvents} />
-        </DrawerContent>
-      </Drawer>
-    )
-  if (exportName === 'AuthProvider') content = <AuthProvider>{providerChild}</AuthProvider>
-  if (exportName === 'EventForm') content = <EventForm defaultValues={formValues} onSuccess={action} />
-  if (exportName === 'EventGroupForm')
-    content = <EventGroupForm defaultValues={toGroupFormValues(group)} onSuccess={action} />
-  if (exportName === 'ConditionsSection')
-    content = (
-      <ConditionsSection
-        fields={conditions.fields}
-        register={form.register}
-        remove={conditions.remove}
-        append={conditions.append}
-      />
-    )
-  if (exportName === 'ReferenceUrlsSection')
-    content = (
-      <ReferenceUrlsSection
-        fields={references.fields}
-        register={form.register}
-        remove={references.remove}
-        append={references.append}
-        referenceUrls={references.fields}
-        duplicateWarnings={{}}
-        onCheckDuplicate={action}
-        onClearWarning={action}
-      />
-    )
-  if (exportName === 'DateField')
-    content = (
-      <DateField<EventFormValues>
-        id='story-start-date'
-        label='開始日'
-        control={form.control}
-        name='startDate'
-        clearable
-      />
-    )
-  if (exportName === 'EventFlagsSection') content = <EventFlagsSection control={form.control} />
-  if (exportName === 'EventCategoryFilter')
-    content = <EventCategoryFilter value={categories} onChange={setCategories} />
-  if (exportName === 'EventUserActivityFilter')
-    content = <EventUserActivityFilter value={activity} onChange={setActivity} />
-  if (exportName === 'GanttHeader')
-    content = (
-      <GanttHeader
-        monthOffset={layout.monthOffset}
-        onMonthSelect={layout.setMonthOffset}
-        onToday={() => layout.setMonthOffset(0)}
-      />
-    )
-  if (exportName === 'GanttMonthSelector')
-    content = <GanttMonthSelector monthOffset={layout.monthOffset} onSelect={layout.setMonthOffset} />
-  if (exportName === 'GanttDateHeader')
-    content = <GanttDateHeader dates={layout.dates} today={layout.today} actualMonthEnd={layout.actualMonthEnd} />
-  if (exportName === 'GanttGridCell')
-    content = (
-      <div className='w-fit'>
-        <GanttDateHeader dates={[date]} today={layout.today} actualMonthEnd={layout.actualMonthEnd} />
-        <div className='flex h-8'>
-          <GanttGridCell date={date} today={layout.today} actualMonthEnd={layout.actualMonthEnd} />
+  const content = (() => {
+    if (exportName === 'ErrorBoundary')
+      return <ErrorBoundary>{displayError ? <SyntheticFailure /> : providerChild}</ErrorBoundary>
+    if (exportName === 'BackendSessionGate') return <BackendSessionGate>{providerChild}</BackendSessionGate>
+    if (exportName === 'CalendarEventDrawerContent')
+      return (
+        <Drawer open={open} onOpenChange={setOpen}>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>2026年10月2日の予定</DrawerTitle>
+            </DrawerHeader>
+            <CalendarEventDrawerContent year={2026} month={10} day={2} events={calendarEvents} />
+          </DrawerContent>
+        </Drawer>
+      )
+    if (exportName === 'AuthProvider') return <AuthProvider>{providerChild}</AuthProvider>
+    if (exportName === 'EventForm') return <EventForm defaultValues={formValues} onSuccess={action} />
+    if (exportName === 'EventGroupForm')
+      return <EventGroupForm defaultValues={toGroupFormValues(group)} onSuccess={action} />
+    if (exportName === 'ConditionsSection')
+      return (
+        <ConditionsSection
+          fields={conditions.fields}
+          register={form.register}
+          remove={conditions.remove}
+          append={conditions.append}
+        />
+      )
+    if (exportName === 'ReferenceUrlsSection')
+      return (
+        <ReferenceUrlsSection
+          fields={references.fields}
+          register={form.register}
+          remove={references.remove}
+          append={references.append}
+          referenceUrls={references.fields}
+          duplicateWarnings={{}}
+          onCheckDuplicate={action}
+          onClearWarning={action}
+        />
+      )
+    if (exportName === 'DateField')
+      return (
+        <DateField<EventFormValues>
+          id='story-start-date'
+          label='開始日'
+          control={form.control}
+          name='startDate'
+          clearable
+        />
+      )
+    if (exportName === 'EventFlagsSection') return <EventFlagsSection control={form.control} />
+    if (exportName === 'EventCategoryFilter') return <EventCategoryFilter value={categories} onChange={setCategories} />
+    if (exportName === 'EventUserActivityFilter')
+      return <EventUserActivityFilter value={activity} onChange={setActivity} />
+    if (exportName === 'GanttHeader')
+      return (
+        <GanttHeader
+          monthOffset={layout.monthOffset}
+          onMonthSelect={layout.setMonthOffset}
+          onToday={() => layout.setMonthOffset(0)}
+        />
+      )
+    if (exportName === 'GanttMonthSelector')
+      return <GanttMonthSelector monthOffset={layout.monthOffset} onSelect={layout.setMonthOffset} />
+    if (exportName === 'GanttDateHeader')
+      return <GanttDateHeader dates={layout.dates} today={layout.today} actualMonthEnd={layout.actualMonthEnd} />
+    if (exportName === 'GanttGridCell')
+      return (
+        <div className='w-fit'>
+          <GanttDateHeader dates={[date]} today={layout.today} actualMonthEnd={layout.actualMonthEnd} />
+          <div className='flex h-8'>
+            <GanttGridCell date={date} today={layout.today} actualMonthEnd={layout.actualMonthEnd} />
+          </div>
         </div>
-      </div>
-    )
-  if (exportName === 'GanttRow') {
-    const bar = layout.eventBars[0]
-    if (!bar) throw new Error('Gantt fixture must include a visible event')
-    content = (
-      <GanttRow
-        bar={bar}
-        dates={layout.dates}
-        today={layout.today}
-        actualMonthEnd={layout.actualMonthEnd}
-        isScrolling={layout.isScrolling}
-        labelOffset={0}
-        hasDraggedRef={dragRef}
-      />
-    )
-  }
-  if (exportName === 'GanttTimeline')
-    content = (
-      <GanttTimeline
-        eventBars={layout.eventBars}
-        dates={layout.dates}
-        today={layout.today}
-        actualMonthEnd={layout.actualMonthEnd}
-        monthOffset={layout.monthOffset}
-        isScrolling={layout.isScrolling}
-        isDragging={layout.isDragging}
-        scrollContainerRef={layout.scrollContainerRef}
-        onScroll={layout.handleScroll}
-        onMouseDown={layout.handleMouseDown}
-        onMouseMove={layout.handleMouseMove}
-        onMouseUp={layout.handleMouseUp}
-        onMouseLeave={layout.handleMouseLeave}
-        getLabelOffset={layout.getLabelOffset}
-        hasDraggedRef={dragRef}
-      />
-    )
+      )
+    if (exportName === 'GanttRow') {
+      const bar = layout.eventBars[0]
+      if (!bar) throw new Error('Gantt fixture must include a visible event')
+      return (
+        <GanttRow
+          bar={bar}
+          dates={layout.dates}
+          today={layout.today}
+          actualMonthEnd={layout.actualMonthEnd}
+          isScrolling={layout.isScrolling}
+          labelOffset={0}
+          hasDraggedRef={dragRef}
+        />
+      )
+    }
+    if (exportName === 'GanttTimeline')
+      return (
+        <GanttTimeline
+          eventBars={layout.eventBars}
+          dates={layout.dates}
+          today={layout.today}
+          actualMonthEnd={layout.actualMonthEnd}
+          monthOffset={layout.monthOffset}
+          isScrolling={layout.isScrolling}
+          isDragging={layout.isDragging}
+          scrollContainerRef={layout.scrollContainerRef}
+          onScroll={layout.handleScroll}
+          onMouseDown={layout.handleMouseDown}
+          onMouseMove={layout.handleMouseMove}
+          onMouseUp={layout.handleMouseUp}
+          onMouseLeave={layout.handleMouseLeave}
+          getLabelOffset={layout.getLabelOffset}
+          hasDraggedRef={dragRef}
+        />
+      )
+    return createElement(Component, props)
+  })()
   return (
     <FormProvider {...form}>
       <div

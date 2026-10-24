@@ -1,0 +1,127 @@
+[
+  {
+    "id": "expanded-v2-positive-1333605322414383104",
+    "source": "public-post",
+    "description": "abeno-christmas-card-2020",
+    "post": {
+      "id": "1333605322414383104",
+      "createdAt": "2020-12-01T02:54:20.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "じゃ・じゃ・じゃ・じゃーん❗️🎄🥳🎉🎉\n🎄クリスマス名刺🎄配ります❗️❗️\n配布期間は12/7(月)～12/25(金)の予定です❗️😆🐙 https://t.co/UdRs4HeoQf",
+      "url": "https://x.com/bic_abeno/status/1333605322414383104",
+      "media": [
+        "https://pbs.twimg.com/media/EoHqBNTVcAE-KSN.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2020-12-07",
+      "conditions": null
+    },
+    "rationale": "12月7日から25日予定の限定名刺。他年企画と区別。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "abeno-christmas-card-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "クリスマス名刺",
+          "evidence": [
+            "じゃ・じゃ・じゃ・じゃーん❗️🎄🥳🎉🎉",
+            "🎄クリスマス名刺🎄配ります❗️❗️",
+            "配布期間は12/7(月)～12/25(金)の予定です❗️😆🐙 https://t.co/UdRs4HeoQf"
+          ]
+        }
+      ],
+      "groupingNote": "12月7日から25日予定の限定名刺。他年企画と区別。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 598641,
+      "postSha256": "c1a0f59a9e7a5c224b1df54d64f06f8614fc7e2a2dec950813395ac3873af957",
+      "textSha256": "f1d39a2e6b9cec5963af76ec90f5e7a73e7bf161deb89b1e49eba4c7d1d8b855"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1340209791902253057",
+    "source": "public-post",
+    "description": "abeno-christmas-card-2020 matched control",
+    "post": {
+      "id": "1340209791902253057",
+      "createdAt": "2020-12-19T08:18:08.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "当社指定の資生堂・パナソニックビューティー商品をお買い上げのお客様から抽選でギフトカード当たるでー❗️❗️😆🐙\n👇要チェックや❗️\nhttps://t.co/4eOjKjeqKd https://t.co/vAjAgOiZBn",
+      "url": "https://x.com/bic_abeno/status/1340209791902253057",
+      "media": [
+        "https://pbs.twimg.com/media/EplhFutVEAAEYA8.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1340209791902253057",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 593173,
+      "postSha256": "15f92417472dede36695e0bbb5729074803e684bd4fc6aae1a0ac3bd0a0de6d7",
+      "textSha256": "95ccf27ed20fc6026dfce1b84348b0e716939f364b9340524792b8704ad5bacf"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

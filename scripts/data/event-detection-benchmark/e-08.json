@@ -1,0 +1,187 @@
+[
+  {
+    "id": "public-e-1223487071974649856",
+    "source": "public-post",
+    "description": "天神2号たんのバレンタイン名刺",
+    "post": {
+      "id": "1223487071974649856",
+      "createdAt": "2020-02-01T06:03:43.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "🍫今日から #天神2号たん #バレンタイン限定名刺\n期間限定で配布しま～す！\nぜひ天神に遊びに来てくれんねっ(ノ≧∀)ﾉ♬\n※1階階段前にて配布中！無くなり次第終了となります\n※おひとり様各1枚までのお受け取りにご協力ばお願いします ※通常名刺も配布してます\n#天神たん #ビッカメ娘 https://t.co/FlA6LWM17G",
+      "url": "https://x.com/biccameratenjin/status/1223487071974649856",
+      "media": [
+        "https://pbs.twimg.com/media/EPqy_mqVUAAk03q.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "tenjin2"
+      ],
+      "startDate": "2020-02-01"
+    },
+    "rationale": "天神2号たんバレンタイン名刺と通常名刺の配布案内。通常名刺の全対象は明記されず天神たんのタグだけでは両物品の全絵柄対象を確定しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "seasonal-card",
+      "multi-item"
+    ],
+    "group": "tenjin2-valentine-card-2020",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "48fd1c51031c75d67f208f524a3554a42bdf023f87f20ef15e36357f4242ebeb"
+  },
+  {
+    "id": "public-e-1464042224413396994",
+    "source": "public-post",
+    "description": "あべのたん期間限定名刺予告",
+    "post": {
+      "id": "1464042224413396994",
+      "createdAt": "2021-11-26T01:24:01.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "おはあべ～(Q*aωa)つ🐙\n今日からしばらく #あべのたん は店内のエレベーター前にお引越ししています✨✨\n\n明日11/27(土)から12/31(金)まで、#期間限定名刺 を配布するのでお楽しみに❗️❗️🥳🐙🎉🎉\n\nどしどし会いに来てね～❗️今日も元気によろしくやで☀😆🐙\n#企業公式相互フォロー https://t.co/os3u5amcWb",
+      "url": "https://x.com/bic_abeno/status/1464042224413396994",
+      "media": [
+        "https://pbs.twimg.com/media/FFFRa_maAAAoKU3.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "abeno"
+      ],
+      "startDate": "2021-11-27"
+    },
+    "rationale": "本人の店舗で11/27〜12/31期間限定名刺を予告。パネル名だけから絵柄対象は確定しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "advance-notice",
+      "limited-card"
+    ],
+    "group": "abeno-year-end-card-2021",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "30ac9fbe7f22f98b49d58120f6633f644895ae44cd781b99d78eabccf860f013"
+  },
+  {
+    "id": "public-e-1455021585606213634",
+    "source": "public-post",
+    "description": "さがみたんクリスマス名刺",
+    "post": {
+      "id": "1455021585606213634",
+      "createdAt": "2021-11-01T03:59:13.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "🎁11/1～12/26🎁\nさがみたんクリスマスバージョン🎄✨\n扉・名刺がクリスマスバージョンになりましたヾ(*´ω`)ﾉﾞ\n名刺はさがみたんミュージアムにて配布中です♡\n#さがみたん https://t.co/K5UvLgUUVH",
+      "url": "https://x.com/bic_sagamioono/status/1455021585606213634",
+      "media": [
+        "https://pbs.twimg.com/media/FDFFyZWagAAnMul.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "sagami"
+      ],
+      "characterIds": [
+        "sagami"
+      ],
+      "startDate": "2021-11-01"
+    },
+    "rationale": "さがみたんクリスマス版の名刺を11/1〜12/26配布と明記。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "seasonal-card"
+    ],
+    "group": "sagami-christmas-card-2021",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "a2689771bd3f6dc3455b3fd1ed28b4be6c66521b0d3fcae85417ee4329d98663"
+  },
+  {
+    "id": "public-e-1410498555375017987",
+    "source": "public-post",
+    "description": "にいがたたん夏名刺",
+    "post": {
+      "id": "1410498555375017987",
+      "createdAt": "2021-07-01T07:20:36.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "＼おまたせしました！／\n＃にいがたたん 名刺🍙2021夏Ver.🌴\n✨配布開始しました✨\n\n8月31日まで店頭のにいがたたんパネルのところで配布しています！ご来店の際はチェックしてみてね😊\nパネルのところにない場合は3Fレジに声をかけてね！\n\n隠れ○○がいるらしいよ\n\n＃ビッカメ娘 https://t.co/EwR8Rv6bnP",
+      "url": "https://x.com/niigata_bic/status/1410498555375017987",
+      "media": [
+        "https://pbs.twimg.com/media/E5MYiOzVUAAw3Gm.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "niigata"
+      ],
+      "characterIds": [
+        "niigata"
+      ],
+      "startDate": "2021-07-01"
+    },
+    "rationale": "にいがたたん名刺2021夏verが配布開始、8/31までと明記。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "seasonal-card",
+      "start-notice"
+    ],
+    "group": "niigata-summer-card-2021",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "ccb85ee5142d7f94a77647278e0aa512b6af00974f6b7af81c3d17c2b60608e7"
+  },
+  {
+    "id": "public-e-1554693545994461185",
+    "source": "public-post",
+    "description": "藤沢たんとさがみたん同日記念コラボ",
+    "post": {
+      "id": "1554693545994461185",
+      "createdAt": "2022-08-03T05:00:00.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(3・ω・)📢記念日おめでとうありがとう！\n⏰8/4(木)～9/4(日)まで\nさがみたん擬人化7周年＆藤沢店店舗誕生16周年を記念して、お待ちかねのコラボが実現💞\nそれぞれのお店でコラボ名刺を配布するぜ！\n2枚仲良くゲットよろしくな💐✨\n#8月4日はさがみたん擬人化7周年\n#8月4日は藤沢たんのバースデー https://t.co/RoTWeJaVqe",
+      "url": "https://x.com/bic_fujisawa/status/1554693545994461185",
+      "media": [
+        "https://pbs.twimg.com/media/FZNbww-acAARUXa.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "fujisawa",
+        "sagami"
+      ],
+      "characterIds": [
+        "fujisawa",
+        "sagami"
+      ],
+      "startDate": "2022-08-04"
+    },
+    "rationale": "2人の同日記念でそれぞれの店が8/4〜9/4コラボ名刺を配布と明記。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "collaboration",
+      "multi-store",
+      "multi-character"
+    ],
+    "group": "fujisawa-sagami-anniversary-collaboration-2022",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "b1ab62fb4ccdd8b98d4b630ef3ed119db04ed097d0efab42b6050738c7b1f15c"
+  }
+]

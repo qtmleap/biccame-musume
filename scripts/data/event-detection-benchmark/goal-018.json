@@ -1,0 +1,126 @@
+[
+  {
+    "id": "goal-positive-1045844703701168129",
+    "source": "public-post",
+    "description": "chofu first anniversary 2018",
+    "post": {
+      "id": "1045844703701168129",
+      "createdAt": "2018-09-29T01:16:22.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "§( *'▽')ノ📹\n【突然のお知らせ】\n一周年ありがとうございます❗️\n\nビックカメラ京王調布店では、1F総合案内カウンターにて、調布たんの一周年限定バージョン『名刺』を配布します！！\n\nご来店お待ちしております🎵\n\n#ビックカメラ\n#調布\n#ビッカメ娘\n#調布たん \n#9月29日は調布たんのバースデー https://t.co/UDhjKpzgiD",
+      "url": "https://x.com/bic_keiochofu/status/1045844703701168129",
+      "media": [
+        "https://pbs.twimg.com/media/DoOWNmRVYAAZ2Zl.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "chofu"
+      ],
+      "characterIds": [
+        "chofu"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "調布たんの1周年限定名刺の配布と対象店・配布場所が本文で明示される。開始日は本文にないため未注釈。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "chofu-first-anniversary-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "調布たん1周年名刺",
+          "evidence": [
+            "ビックカメラ京王調布店では、1F総合案内カウンターにて、調布たんの一周年限定バージョン『名刺』を配布します！！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 818252,
+      "postSha256": "613ce29e9e0c6155702a944cd0ce55001541624561a03954e8c40cb4dd5f9177",
+      "textSha256": "d25733134ca0373be52a90c35c420ade0af2fecc3e9adcdf3169aa48051fb9a4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1054994705396711424",
+    "source": "public-post",
+    "description": "fujisawa halloween card 2018",
+    "post": {
+      "id": "1054994705396711424",
+      "createdAt": "2018-10-24T07:15:13.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(1￣▽￣) #藤沢たん ハロウィン限定名刺は10月31日(水)まで、2階総合カウンターにて配布中だぜ。カウンターの担当者に声を掛けてくれ。\n11月以降は配布しないから、まだの人は #青ブタ 聖地巡礼 その他で藤沢になんとか来れるように調整してくれると、とってもとってもとっても嬉しいぜ。",
+      "url": "https://x.com/bic_fujisawa/status/1054994705396711424",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "fujisawa"
+      ],
+      "characterIds": [
+        "fujisawa"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "10/31まで配布中。終了予定であり初日は不明。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "fujisawa-halloween-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "藤沢たんハロウィン名刺",
+          "evidence": [
+            "(1￣▽￣) #藤沢たん ハロウィン限定名刺は10月31日(水)まで、2階総合カウンターにて配布中だぜ。カウンターの担当者に声を掛けてくれ。"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 811216,
+      "postSha256": "bf55f74a504bbb28bf7e630713b975593b34056629aad3c81b9428351f3ed093",
+      "textSha256": "261acde855bb3d4006752476d175905227128c990f27ae471ab1567dbd1f0a0c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,171 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1895647732880327088",
+    "source": "public-post",
+    "description": "abeno-regular-card-renewal-2025",
+    "post": {
+      "id": "1895647732880327088",
+      "createdAt": "2025-03-01T01:30:13.000Z",
+      "screenName": "bic_abeno",
+      "kind": "quote",
+      "text": "なんばたんの名刺と一緒に、あべのたんの名刺も新しくなったで❗️😆🐙\n\n今日から配布開始してます❗️\n場所は店内のエレベーターホール、あべのたん等身大パネルから受け取ってな🎶\n\nご来店お待ちしてるで～🥰🐙 https://t.co/Yi946kYCmV",
+      "url": "https://x.com/bic_abeno/status/1895647732880327088",
+      "quoted": {
+        "id": "1895402244847345949",
+        "screenName": "biccamera_nanba",
+        "text": "なんばたんの通常名刺、結構長い間同じデザインやったから新しいの作ったやで😆✨\n明日から👇こちらに変わります❗️👇\n遊びに来たついでに1階総合カウンター前のなんばたん等身大パネルから受け取ってな☺️ https://t.co/YpNJ4BuVI8"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/Gk6w3phbQAIljCH.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "regular_card",
+      "stores": null,
+      "characterIds": [
+        "abeno"
+      ],
+      "startDate": "2025-03-01",
+      "conditions": null
+    },
+    "rationale": "今日から新しい名刺の配布開始。引用元の別店舗投稿は補完に使わない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed",
+      "template-family:kansai-regular-card-renewal"
+    ],
+    "group": "abeno-regular-card-renewal-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "あべのたん新通常名刺",
+          "evidence": [
+            "なんばたんの名刺と一緒に、あべのたんの名刺も新しくなったで❗️😆🐙",
+            "場所は店内のエレベーターホール、あべのたん等身大パネルから受け取ってな🎶"
+          ]
+        }
+      ],
+      "groupingNote": "今日から新しい名刺の配布開始。引用元の別店舗投稿は補完に使わない。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 165862,
+      "postSha256": "263ac19b14efd356b6e4b027ae733c3cf97bd993fd7ea8a6146c349db3f787bc",
+      "textSha256": "d45b7a29ea9d443ed9e95c61a06197a4c331343884d67802c15f4297b1b3b83e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "e9fb07d1-b6ad-4a06-b4cf-b4c11f4b222c",
+          "association": "reference-url",
+          "referenceType": "start",
+          "referenceUrl": "https://x.com/bic_abeno/status/1895647732880327088",
+          "origin": "manual-or-seed",
+          "title": "通常名刺",
+          "category": "regular_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-02-28T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "abeno"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1898264321203044444",
+    "source": "public-post",
+    "description": "abeno-regular-card-renewal-2025 matched control",
+    "post": {
+      "id": "1898264321203044444",
+      "createdAt": "2025-03-08T06:47:36.000Z",
+      "screenName": "bic_abeno",
+      "kind": "quote",
+      "text": "レンジメートで焼き鮭を作ったで～✨✨\nこんがり焼き目がおいしそうに焼けました❗️🤤🐙 https://t.co/WLjiFYTYHS",
+      "url": "https://x.com/bic_abeno/status/1898264321203044444",
+      "quoted": {
+        "id": "1898207051089608799",
+        "screenName": "bic_abeno",
+        "text": "今話題の電子レンジ専用調理器具【レンジメートプロ】の調理実演会を開催中～❗️❗️🥳🐙🎉🎉\n\n特許取得の特殊構造でレンジ調理なのに直火で調理したような焼き目がついてこんがり美味しく焼きあがるで～✨✨\n\nぜひレンジコーナーへお立ち寄りください❗️😆🐙\nhttps://t.co/RLTw12Hx3T https://t.co/iCA2bUDGjU"
+      },
+      "media": [
+        "https://pbs.twimg.com/media/Glf9K8LbwAMk6e7.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-1898264321203044444",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 163857,
+      "postSha256": "aacc264d9d60bdbbcbc3ac34d1c8757dec9868c7b8d57bd89de51739120534e2",
+      "textSha256": "dab2a48c7cba373ecfdc5040311b5dbfbf7324661f1da242561c285f5eb3b494"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

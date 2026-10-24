@@ -1,0 +1,136 @@
+[
+  {
+    "id": "expanded-v2-positive-1061789243700170752",
+    "source": "public-post",
+    "description": "ohmiya-store15-card-2018",
+    "post": {
+      "id": "1061789243700170752",
+      "createdAt": "2018-11-12T01:14:17.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "✨お知らせ✨\n11月21日は大宮西口そごう店15周年記念日～!!\nキャンペーン第1弾は限定名刺配布🎉\n\n11月12日～12月14日までの限定配布で～っす♪\n１F入り口等身大パネルの いつもの名刺ポシェットが\n限定名刺用サコッシュにパワーアップして\n通常名刺も同時配布中で～っすヾ(*´ω`)ﾉﾞ♪\n\n＃大宮たん https://t.co/OMLGVyGgSg",
+      "url": "https://x.com/bic_ohmiya/status/1061789243700170752",
+      "media": [
+        "https://pbs.twimg.com/media/Drw6zhnVYAEv3kx.jpg",
+        "https://pbs.twimg.com/media/Drw61DqVsAAAp9G.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": [
+        "ohmiya"
+      ],
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "店舗15周年記念の限定名刺と通常名刺の並行配布。店舗記念日と擬人化記念日を区別。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "ohmiya-store15-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "限定名刺",
+          "evidence": [
+            "キャンペーン第1弾は限定名刺",
+            "11月12日～12月14日"
+          ]
+        },
+        {
+          "item": "通常名刺",
+          "evidence": [
+            "通常名刺も同時配布中"
+          ]
+        }
+      ],
+      "groupingNote": "店舗15周年記念の限定名刺と通常名刺の並行配布。店舗記念日と擬人化記念日を区別。",
+      "unannotatedFields": [
+        "category",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 806004,
+      "postSha256": "c3f98cf4f55e3f66e06ff20a10ece1cbc43b5fb391319b3dc97bcd71afba8095",
+      "textSha256": "5aac44e66344288bb812b60110195ebd45709ee8322aab3b6e88ad83a1f12b8f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1063319705077788672",
+    "source": "public-post",
+    "description": "ohmiya-store15-card-2018 matched control",
+    "post": {
+      "id": "1063319705077788672",
+      "createdAt": "2018-11-16T06:35:47.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "✨SONYandroidTV体感フェアイベント✨\n11月17日（土）・18日（日）１F店頭入り口で開催しま～っす♪\n\nTVが声で反応するっ!?∑(ﾟﾛﾟ〃)\nぜひ この機会にご体感くださ～い!!\n\nアンケートにご参加いただくと 記念品のプレゼントもございま～っす！\n\nご参加おまちしてま～っすヾ(*´ω`)ﾉﾞ♪ https://t.co/1ubqwKMZgd",
+      "url": "https://x.com/bic_ohmiya/status/1063319705077788672",
+      "media": [
+        "https://pbs.twimg.com/media/DsGqlxrVYAAPBp6.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1063319705077788672",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 804776,
+      "postSha256": "61519b664f20ae26c0b60a370c2d8ab6f731caabaa010740843bc99f141b207a",
+      "textSha256": "9dd2ae084b5ea173e1907ba9346ea02beaca905a9848bb69234dfff71e0f2529"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

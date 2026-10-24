@@ -1,0 +1,172 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2100550080839188857",
+    "source": "public-post",
+    "description": "shinjyuku-idol-key-end-2026",
+    "post": {
+      "id": "2100550080839188857",
+      "createdAt": "2026-09-17T11:39:00.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "quote",
+      "text": "アイドル新宿西口たんアクリルキーホルダーのお渡しは本日を持ちまして終了致しました。\nご来店いただいた皆様、ありがとうございました🙇\n#新宿西口たん #ビッカメ娘",
+      "url": "https://x.com/bic_shinjyuku/status/2100550080839188857",
+      "quoted": {
+        "id": "2096424487612993681",
+        "screenName": "bic_shinjyuku",
+        "text": "|∇≦)たくさんではないですが、まだあります～\n\n新宿3人娘アイドル名刺企画❤💛💙ツアーファイナル\n📢アイドル #新宿西口たん アクキープレゼント🎁\n当日当店にて税込3,000円以上ご購入＆購入レシートをお持ちいただいたお客様にプレゼント\n9月5日(土)～なくなり次第終了\nお渡し場所➡3階総合案内\n↓ https://t.co/hUB3M7z8P2"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": [
+        "shinjyuku"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アクキーのお渡しが終了。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "shinjyuku-idol-key-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "アイドル新宿西口たんアクリルキーホルダー",
+          "evidence": [
+            "アイドル新宿西口たんアクリルキーホルダーのお渡しは本日を持ちまして終了致しました。"
+          ]
+        }
+      ],
+      "groupingNote": "アクキーのお渡しが終了。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 6328,
+      "postSha256": "dedd6dc3ee8e48058be245feb63280bc5ce02fe27e8cc4a84ee2cb912d13c359",
+      "textSha256": "0452bfda71d1571ef4998a40672a5590b1c5ced53b8e58c4d712a4ad4cb700d5"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "74f63248-d3f6-41f3-bdbe-a27a30388d60",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bic_shinjyuku/status/2100550080839188857",
+          "origin": "manual-or-seed",
+          "title": "新宿三人娘アイドル結成記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-04T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shinjyuku"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 120,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2096444380215411068",
+    "source": "public-post",
+    "description": "shinjyuku-idol-key-end-2026 matched control",
+    "post": {
+      "id": "2096444380215411068",
+      "createdAt": "2026-09-06T03:44:24.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "quote",
+      "text": "#ブレインスリープ 体験会は本日最終日です。\n3F上りエスカレーター前で体験できます。\nぜひお立ち寄り下さい❣️",
+      "url": "https://x.com/bic_shinjyuku/status/2096444380215411068",
+      "quoted": {
+        "id": "2096087970206097473",
+        "screenName": "bic_shinjyuku",
+        "text": "＼📢 #ブレインスリープ 体験会開催中✨／\n「寝つきが悪い」「朝スッキリ起きられない」など睡眠のお悩みはありませんか？\n#ブレインスリープピロー とマットレスをぜひお試しください！\n体験いただいた方に記念品も🎁\n\n★9月5日(土)・6日(日)各日10:00～19:00\n★3階上りエスカレーター前特設会場 https://t.co/xUcB3mVtlI"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2096444380215411068",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 9976,
+      "postSha256": "9a9961bfb49dd3af3a774e8cbe67ce16676bc2f922134d10b8a966e93c9d5bc8",
+      "textSha256": "efea6da233c9691cda89627dcf981e6325f606e12423e01e58bb086fedd58a3f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

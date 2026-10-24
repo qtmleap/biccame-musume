@@ -1,0 +1,160 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2104046126160888029",
+    "source": "public-post",
+    "description": "hachioji-halloween-card-2026",
+    "post": {
+      "id": "2104046126160888029",
+      "createdAt": "2026-09-27T03:11:02.000Z",
+      "screenName": "bichachioji",
+      "kind": "original",
+      "text": "\\(≧仝≦)(θ仝θ)/＜八王子たん👑からのお知らせ\n10月1日～10月31日まで\n2F総合カウンターにて\nハロウィン名刺を配布いたします！🎃🐈‍⬛\nみなさまのご来店お待ちしております👑✨ https://t.co/Ywkzh7r174",
+      "url": "https://x.com/bichachioji/status/2104046126160888029",
+      "media": [
+        "https://pbs.twimg.com/media/HTMR2PObgAA-yow.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "hachioji"
+      ],
+      "startDate": "2026-10-01",
+      "conditions": null
+    },
+    "rationale": "10/1〜10/31のハロウィン名刺。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:seasonal-halloween-card"
+    ],
+    "group": "hachioji-halloween-card-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "ハロウィン名刺",
+          "evidence": [
+            "ハロウィン名刺を配布いたします！🎃🐈‍⬛"
+          ]
+        }
+      ],
+      "groupingNote": "10/1〜10/31のハロウィン名刺。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 3435,
+      "postSha256": "cd47292b131751eb5dbe8049ae5e2cff8f08b95c4a2229980a041cfdfd4232c9",
+      "textSha256": "bcee36880128d4e3f3abb19c2bdfd85dc1a904f3fc50baafc0300b78ae281bbe"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "497fadd8-57d6-4652-931c-d5949e7acae3",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bichachioji/status/2104046126160888029",
+          "origin": "manual-or-seed",
+          "title": "ハロウィン名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-09-30T15:00:00.000+00:00",
+            "endDate": "2026-10-30T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "hachioji"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2103695091420533160",
+    "source": "public-post",
+    "description": "hachioji-halloween-card-2026 matched control",
+    "post": {
+      "id": "2103695091420533160",
+      "createdAt": "2026-09-26T03:56:09.000Z",
+      "screenName": "bichachioji",
+      "kind": "original",
+      "text": "＼📢土日限定／\n今週末もまとめ割やってます！\n当社指定条件でまとめ買いいただくと\n\n3点同時購入で10％引き‼️\n2点同時購入で5％引き‼️\n\nぜひご来店下さい\\(≧仝≦)(θ仝θ)/ https://t.co/3lL62HegJD",
+      "url": "https://x.com/bichachioji/status/2103695091420533160",
+      "media": [
+        "https://pbs.twimg.com/media/HTHSvzsbMAAhjss.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2103695091420533160",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 3718,
+      "postSha256": "8e66c558ea96e73fa38da72fec8170d76a104ba52d3981231c985861d8fa227b",
+      "textSha256": "9e02ecb34aa3000b0e27d3e329bc64420b9a1bbd067d7d81a6c5a15137452c2b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

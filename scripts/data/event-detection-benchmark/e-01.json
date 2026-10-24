@@ -1,0 +1,201 @@
+[
+  {
+    "id": "public-e-787187635953348608",
+    "source": "public-post",
+    "description": "パソ館たんの初期名刺配布",
+    "post": {
+      "id": "787187635953348608",
+      "createdAt": "2016-10-15T07:05:32.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "ぱ|ω･)本日より当店にて #パソ館たん の名刺を配布致します♪ご希望の方は４階ゲーミングPCコーナーと６階ペンタブコーナーの販売員にお声がけください☆\nみなさまのご来店をお待ちしております✨\n#ビッカメ娘 https://t.co/tKkEogPjco",
+      "url": "https://x.com/bicpkanhonten/status/787187635953348608",
+      "media": [
+        "https://pbs.twimg.com/media/Cuym-W6UkAA15sd.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "pkan"
+      ],
+      "characterIds": [
+        "pkan"
+      ],
+      "startDate": "2016-10-15"
+    },
+    "rationale": "パソ館たんの名刺を本日から当店で配布すると明示。通常か限定かは未記載なのでカテゴリを強制しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "card",
+      "start-notice"
+    ],
+    "group": "pkan-card-launch-2016",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "b210171b38145e89570f7a7a8efc52a61ba4e4398c07e04873edfb327c617f23"
+  },
+  {
+    "id": "public-e-852089234160668672",
+    "source": "public-post",
+    "description": "あべのたん名刺の配布開始",
+    "post": {
+      "id": "852089234160668672",
+      "createdAt": "2017-04-12T09:21:19.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "あべのたんの名刺配布を開始しました〜〜！！\n場所は、、、ふふふ( ◠‿◠ )\nあべのたんが持ってるで〜〜(● ˃̶͈̀ロ˂̶͈́)੭ꠥ⁾⁾🐙\n（あべのたんはお店の入り口にいるよ） https://t.co/WFdOfGutpi",
+      "url": "https://x.com/bic_abeno/status/852089234160668672",
+      "media": [
+        "https://pbs.twimg.com/media/C9M6j-wUAAAtxgn.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "abeno"
+      ],
+      "characterIds": [
+        "abeno"
+      ],
+      "startDate": "2017-04-12"
+    },
+    "rationale": "あべのたんの名刺配布開始と店入口の受取場所を明記。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "card",
+      "start-notice"
+    ],
+    "group": "abeno-card-launch-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "ac75f4a02d7dc43ac2499d4517417ecd206b65048a1bcdb4d269fdb88c473efd"
+  },
+  {
+    "id": "public-e-941472152225685504",
+    "source": "public-post",
+    "description": "藤沢たん名刺の配布開始",
+    "post": {
+      "id": "941472152225685504",
+      "createdAt": "2017-12-15T00:57:07.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(1￣▽￣)そしてそしてー！！\n長らくお待たせしたな！！\n\n#藤沢たん 名刺、今日から配布開始！\nお1人様1枚ずつどうぞ！\n2階の #JB_anime スタンプラリー台に置いてるぜ！ https://t.co/dJjOI3P2e0",
+      "url": "https://x.com/bic_fujisawa/status/941472152225685504",
+      "media": [
+        "https://pbs.twimg.com/media/DRDH66_UEAAz4Un.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "fujisawa"
+      ],
+      "characterIds": [
+        "fujisawa"
+      ],
+      "startDate": "2017-12-15"
+    },
+    "rationale": "藤沢たん名刺を今日から配布と明示。本文に季節や限定の語は無いのでカテゴリを未注釈にする。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "start-notice",
+      "card"
+    ],
+    "group": "fujisawa-winter-card-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "1a5e6be6c19444c5942336014d8fad697c3e565200044763a21dea29d8b70d52"
+  },
+  {
+    "id": "public-e-914826473965572096",
+    "source": "public-post",
+    "description": "はまたんのハロウィン名刺",
+    "post": {
+      "id": "914826473965572096",
+      "createdAt": "2017-10-02T12:16:42.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "original",
+      "text": "|๑σ｡<)ﾉ【HAPPY HALLOWEEN!!】\n浜松店にてはまたん名刺を10月31日まで\nペンタブコーナーにて配布致します☆\n\n実はこの名刺 #なごやたん に作ってもらったんです♪\nそしてこの名刺には秘密が…!?正解はまた今度…!!\n#はまたん https://t.co/QGhIIX8uAi",
+      "url": "https://x.com/bic_hamamatsu/status/914826473965572096",
+      "media": [
+        "https://pbs.twimg.com/media/DLIcUayV4AAfEXS.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "hamamatsu"
+      ],
+      "characterIds": [
+        "hamamatsu"
+      ]
+    },
+    "rationale": "はまたん名刺を浜松店で10/31まで配布。なごやたんは制作者であり対象デザインの追加とは判断しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "seasonal-card",
+      "other-character-creator"
+    ],
+    "group": "hamamatsu-halloween-card-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "a1bfb2ba66572f8ee22b2e6cf24d49e281787b9ab54bcb2ca5d76147d89e98fa"
+  },
+  {
+    "id": "public-e-971334575883300865",
+    "source": "public-post",
+    "description": "水戸の日ギフトカード購入特典",
+    "post": {
+      "id": "971334575883300865",
+      "createdAt": "2018-03-07T10:39:44.000Z",
+      "screenName": "biccameramito",
+      "kind": "original",
+      "text": "＼3月10日は #水戸の日🌸／\n3月9日（金）から先着31名様に「水戸たんギフトカード（チャージ0円）」をプレゼント🎁水戸駅店にて当日税込1,000円以上お買い上げのレシートを「4Ｆ総合案内カウンター」にてご提示ください。\n※お一人様1枚限り。\n※ギフトカードの購入は対象外とさせていただきます。 https://t.co/QESF5CKGsk",
+      "url": "https://x.com/biccameramito/status/971334575883300865",
+      "media": [
+        "https://pbs.twimg.com/media/DXrfQybU8AAA4dt.jpg",
+        "https://pbs.twimg.com/media/DXrfR8LUQAA0TAP.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "other",
+      "stores": [
+        "mito"
+      ],
+      "characterIds": [
+        "mito"
+      ],
+      "startDate": "2018-03-09",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 1000
+        },
+        {
+          "type": "first_come",
+          "quantity": 31
+        }
+      ]
+    },
+    "rationale": "水戸たんギフトカードを当日1000円購入の先着31名へ提供。チャージ0円は残高説明で入金条件ではない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "gift-card",
+      "purchase",
+      "charge-zero-not-condition",
+      "first-come"
+    ],
+    "group": "mito-day-gift-card-2018",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "bc7c1cbd0c40d70cff2ab4991f259523e60c97c9a292c6618e6849407a14e5c0"
+  }
+]

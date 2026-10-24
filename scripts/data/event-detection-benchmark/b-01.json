@@ -1,0 +1,131 @@
+[
+  {
+    "id": "public-b-2109798897157857514",
+    "source": "public-post",
+    "description": "さつまいもの日の朝の挨拶",
+    "post": {
+      "id": "2109798897157857514",
+      "createdAt": "2026-10-13T00:10:29.907Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "おはようございま～っすヾ(≧▽≦お)ﾉ 🌤️\nおーちゃんログインしました〜っ♪  \n\n今日は #さつまいもの日 🍠\n今1番気になってる🍠お菓子(º﹃º お） \n\nお店は朝10時から元気に開店しま～っす♪ 今日も1日よろしくおねがいしま～っす♪",
+      "url": "https://x.com/bic_ohmiya/status/2109798897157857514",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "営業開始と日常の食べ物の話題だけで、キャラクター企画の告知はない。",
+    "tags": [
+      "greeting",
+      "character-voice"
+    ],
+    "group": "ohmiya-sweet-potato-greeting",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "46d40b5f89ee109ced3cb85073f0a19bf800ad21afd462f13b4c8ef4caff90e4"
+  },
+  {
+    "id": "public-b-2109801119375646932",
+    "source": "public-post",
+    "description": "レイバンサングラスの通常商品紹介",
+    "post": {
+      "id": "2109801119375646932",
+      "createdAt": "2026-10-13T00:19:19.725Z",
+      "screenName": "bicikenishi",
+      "kind": "original",
+      "text": "200本以上のサングラスからお出掛け用サングラス🕶を見つけよう(^^🎀♪\n6階サングラスコーナーには大人気レイバンサングラスの他、スポーツサングラスなどなど各種取り扱い御座います！",
+      "url": "https://x.com/bicikenishi/status/2109801119375646932",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "取扱サングラスの紹介で、ビッカメ娘を題材にした企画ではない。 物品はサングラスと明示されているため、非対象イベントだが物品種別はotherと注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "sunglasses"
+    ],
+    "group": "rayban-sunglasses-display",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "6866446e1edeb5ec0cdbf4be7491c978651b35873291890928904d76ed8506d0"
+  },
+  {
+    "id": "public-b-2109811607329243237",
+    "source": "public-post",
+    "description": "象印の炊飯器・レンジ実演会",
+    "post": {
+      "id": "2109811607329243237",
+      "createdAt": "2026-10-13T01:01:00.248Z",
+      "screenName": "bic_hiroshima",
+      "kind": "original",
+      "text": "【第3弾は象印炊飯器&オーブンレンジ実演会✨】\n10/17（土）、10/18（日）の2日間限定！\n圧倒的な大火力で炊き上げる炎舞炊き🍚\n極上調理が叶うエブリノ🍖\n是非ご体感下さい🔥\n\n⏰11:30〜16:30\n📍3F家電コーナー入口\n#nxab10   #esgy26 pic",
+      "url": "https://x.com/bic_hiroshima/status/2109811607329243237",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "日付とイベント名はあるが、家電の体験会でビッカメ娘の企画ではない。",
+    "tags": [
+      "hard-negative",
+      "generic-demonstration",
+      "dated-event"
+    ],
+    "group": "zojirushi-appliance-demo-oct17",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "56448c934c041ece3ae82606f095453fc43a1ecb04b3208f3c6a37acda9e2ec1"
+  },
+  {
+    "id": "public-b-2109825914167230900",
+    "source": "public-post",
+    "description": "Switch2とソフトの通常セット販売",
+    "post": {
+      "id": "2109825914167230900",
+      "createdAt": "2026-10-13T01:57:51.264Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "\\(*ˊᗜˋ*)/ ＜Switch2本体とソフトの＼ お得 ／なセット✨\n指定のソフト　3本のうちいずれか1つと引き換えできるダウンロード番号がついた、お得な本体セット!!※画像参照\nSwitch2をこれから始める方はもちろん、ご家族やご友人へのプレゼントにもおすすめのセットです🎮🎮\n是非ご予約下さい💨",
+      "url": "https://x.com/bic_nagoya/status/2109825914167230900",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "プレゼントという語は贈答用途の説明で、キャラグッズの贈呈ではない。",
+    "tags": [
+      "ordinary-sale",
+      "gift-word",
+      "game-console"
+    ],
+    "group": "switch2-software-bundle",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "bd9c27deab23f9275e8b04c8edf07d9da649c8b85831cb66d3666c7f555731b6"
+  },
+  {
+    "id": "public-b-2109827210245001507",
+    "source": "public-post",
+    "description": "クロミ来店とゲーム試遊会",
+    "post": {
+      "id": "2109827210245001507",
+      "createdAt": "2026-10-13T02:03:00.273Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "11/1（日）開催🎉\nSwitch/Switch2用ソフト\n「サンリオパーティーランド」発売記念✨\n\nなんとクロミちゃんがお店にやってくる‼️\nゲームの試遊会もあります。🎮\nぜひ遊びに来てね‼️😊🐙",
+      "url": "https://x.com/bic_abeno/status/2109827210245001507",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "具体的な来店イベントだが対象はサンリオのクロミであり、ビッカメ娘の企画ではない。",
+    "tags": [
+      "hard-negative",
+      "other-ip",
+      "visitor-event"
+    ],
+    "group": "kuromi-sanrio-partyland-visit",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "cf6195c78cea2774459d0cf61d9b94dc0737c099a4a8dcf505bdeafef5a6f20b"
+  }
+]

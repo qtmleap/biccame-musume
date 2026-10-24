@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1442010099313086464",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1442010099313086464",
+      "createdAt": "2021-09-26T06:16:13.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "3F調理家電コーナーの実演料理も出来てた〜ヾ(≧▽≦お)ﾉ\n電子レンジのグリル機能で作ったハンバーグしっかり中まで火が通ってる〜ヾ(お･ω･)ﾉ\n\nおいしそ〜(º﹃º お） https://t.co/FAFvIjATMs",
+      "url": "https://x.com/bic_ohmiya/status/1442010099313086464",
+      "media": [
+        "https://pbs.twimg.com/media/FAMMhPXVIAQLN-X.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「3F調理家電コーナーの実演料理も出来てた〜ヾ(≧▽≦お)ﾉ / 電子レンジのグリル機能で作ったハンバーグしっかり中まで火が通ってる〜ヾ(お･ω･)ﾉ / おいしそ〜(º﹃º お） https://t.co/FAFvIjATMs」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "ohmiya-cooking-appliance-demo-september-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 525054,
+      "postSha256": "9dc141fbbb25149605bfdb1af8d33a7c2f7e5c4c0b0e1d994637b8e851e618f3",
+      "textSha256": "eb87e968771a735e0692bccf4048ff3e432ea930b4e8a409cf9ceca0d9ab83c4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1452481695555342341",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1452481695555342341",
+      "createdAt": "2021-10-25T03:46:36.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "Nintendo Switch（有機ELモデル）\n11月6日（土）以降お渡し分の予約受付スタートしました♪\n※全額内金・お一人様一台・いずれか一色となります\n※購入条件をご確認ください\n\n2Fゲームレジにて受付中で〜すヾ(お･ω･)ﾉ\n\n#Switch https://t.co/3IRGOGDiMW",
+      "url": "https://x.com/bic_ohmiya/status/1452481695555342341",
+      "media": [
+        "https://pbs.twimg.com/media/FCg_xI5VIAkPIXq.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「Nintendo Switch（有機ELモデル） / 11月6日（土）以降お渡し分の予約受付スタートしました♪ / ※全額内金・お一人様一台・いずれか一色となります」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "nintendo-oled-switch-reservations-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 517339,
+      "postSha256": "4e64fd2178670abdcf83eb8900fbb89dbb4ac44b37a8f7947e19b6e6a38b482e",
+      "textSha256": "6829d93fb016ef5dc4de14699374ae50561358f6313eee6397364188cce9e7e9"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

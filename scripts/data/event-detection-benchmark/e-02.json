@@ -1,0 +1,185 @@
+[
+  {
+    "id": "public-e-918031147031863298",
+    "source": "public-post",
+    "description": "調布たん名刺の新規配布",
+    "post": {
+      "id": "918031147031863298",
+      "createdAt": "2017-10-11T08:30:56.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "これはーーーーーー！！！\n\n＼( 'ω')／ｳｵｵｵｵｵｵｱｱｱｱｱｱｱｱｰｰｰｯ！\n\n調布たんの名刺が出来上がりましたー♥️\n\n1F・総合カウンターにて配布をいたします！\nご自由にお持ちくださいませ。\n\n※おひとり様１枚ずつでお願い致しますね。\n\n#調布たん \n#ビッカメ娘 https://t.co/Syfy3VPR20",
+      "url": "https://x.com/bic_keiochofu/status/918031147031863298",
+      "media": [
+        "https://pbs.twimg.com/media/DL2AdS-VQAEU5Xo.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "chofu"
+      ],
+      "characterIds": [
+        "chofu"
+      ],
+      "conditions": [
+        {
+          "type": "everyone"
+        }
+      ]
+    },
+    "rationale": "調布たんの名刺完成と1階総合カウンターで自由に取得できる案内。開始日が明示されないため未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "card",
+      "everyone"
+    ],
+    "group": "chofu-card-launch-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "2bd45d7b74f8e59abd4342d1563a21aa8e3170ff37793ee5474a14bc7cb2dd0c"
+  },
+  {
+    "id": "public-e-850152088155725824",
+    "source": "public-post",
+    "description": "ゲートタワー開店記念の名古屋配布",
+    "post": {
+      "id": "850152088155725824",
+      "createdAt": "2017-04-07T01:03:47.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "|ω･)｡oO（名古屋JRゲートタワー店オープン記念！という事で。\n\n今日から、1階の総合カウンターで名刺配布します( ´ ▽ ` )ﾉｼ\nそっと置いてあるので、そっと持って行ってくださいませ～♡\n\n※名古屋駅西店のみの配布となります。\n\n#なごやげーとたん\n#なごやたん https://t.co/O3gG5p0wOt",
+      "url": "https://x.com/bic_nagoya/status/850152088155725824",
+      "media": [
+        "https://pbs.twimg.com/media/C8xYz4HUMAAK3Uw.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "nagoya"
+      ],
+      "startDate": "2017-04-07"
+    },
+    "rationale": "ゲートタワー店開店記念だが配布は名古屋駅西店のみと明記。2人のタグだけから名刺デザインの全対象は確定しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "anniversary",
+      "different-location"
+    ],
+    "group": "nagoya-gate-opening-card-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "aafb6dfaa252a0eb8be640209b21a53338211016d9d510ba9906cc3bc0d77f95"
+  },
+  {
+    "id": "public-e-927698364552036352",
+    "source": "public-post",
+    "description": "なごやたん誕生日の両面名刺",
+    "post": {
+      "id": "927698364552036352",
+      "createdAt": "2017-11-07T00:45:00.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "なごやたん お誕生日記念！\n\n本日(11/7)より、新しい名刺の配布を始めます！\n【1F 総合案内カウンター】へお越しくださいませ～♪\n\n今回も裏面は #なごやげーとたん と…♡\n\n#11月7日はなごやたん店舗誕生日\n#いつもご利用ありがとうございます https://t.co/uH24cXsKfG",
+      "url": "https://x.com/bic_nagoya/status/927698364552036352",
+      "media": [
+        "https://pbs.twimg.com/media/DN85kNEU8AAe2ni.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "nagoya"
+      ],
+      "startDate": "2017-11-07"
+    },
+    "rationale": "なごやたん誕生日の名刺配布と裏面になごやげーとたんがいる旨は明示。ただし「と…」以降の全対象が不明なので対象配列を強制しない。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "birthday",
+      "multi-character"
+    ],
+    "group": "nagoya-birthday-card-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "bf1c2426d64aaa8f3af104545bcb255d6b11cba75b00f749d3b9e7eb263a0f4a"
+  },
+  {
+    "id": "public-e-892350778735640581",
+    "source": "public-post",
+    "description": "うちわ終了と名刺継続",
+    "post": {
+      "id": "892350778735640581",
+      "createdAt": "2017-08-01T11:46:19.000Z",
+      "screenName": "bic_nagoyagate",
+      "kind": "original",
+      "text": "金鯱|*´꒳​`){うちわ配布終了のお知らせ\n\nご好評につき、全てのうちわが旅立っていきました～！\n旅先でみなさまをたくさん涼しくできるといいな♡\nうちわGETのためにご来店くださり、ありがとうございました✨\n\n※単体名刺はまだあります\n\n#ビッカメ娘\n#夏季限定うちわ https://t.co/9Pzip2GDmi",
+      "url": "https://x.com/bic_nagoyagate/status/892350778735640581",
+      "media": [
+        "https://pbs.twimg.com/media/DGJESMkVYAAJojH.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "nagoyagate"
+      ]
+    },
+    "rationale": "ビッカメ娘夏うちわの配布終了と単体名刺の継続を告知。複数物品なので単一カテゴリは未注釈。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "end-notice",
+      "continuing-card",
+      "multi-item"
+    ],
+    "group": "biccame-summer-fan-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "aaa14ba5f95b872ab8542c20de39093233b39a952aec5fca52fbb5106057f8a9"
+  },
+  {
+    "id": "public-e-941517083329695744",
+    "source": "public-post",
+    "description": "大宮たん生誕2周年名刺",
+    "post": {
+      "id": "941517083329695744",
+      "createdAt": "2017-12-15T03:55:39.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "＼( 'ω')／ｳｵｵｵｵｵｵｱｱｱｱｱｱｱｰｰｰｯ！！\nわたしの名刺がついに！！ついに！！\n出来ました～～‼️‼️\n\n1階店頭入口で配布していますので是非\nご来店くださいませ～♪♪\n#大宮たん生誕2周年 #名刺配布 #生誕祭 https://t.co/i1yBIndmyQ",
+      "url": "https://x.com/bic_ohmiya/status/941517083329695744",
+      "media": [
+        "https://pbs.twimg.com/media/DRDs8IbVAAESdfH.jpg",
+        "https://pbs.twimg.com/media/DRDs_LcVAAA-zev.jpg",
+        "https://pbs.twimg.com/media/DRDtBr6VQAAo0Wm.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "stores": [
+        "ohmiya"
+      ],
+      "characterIds": [
+        "ohmiya"
+      ]
+    },
+    "rationale": "大宮たん生誕2周年タグと名刺完成・配布場所が明示される。開始日は未記載。",
+    "tags": [
+      "historical",
+      "positive",
+      "fresh-final",
+      "anniversary-card"
+    ],
+    "group": "ohmiya-second-birthday-card-2017",
+    "reviewStatus": "provisional",
+    "sourceTextHash": "8e64e79376440ac8200e308d4bb105ebed81ada6576e7932ad611b74ff244e3a"
+  }
+]

@@ -1,0 +1,132 @@
+[
+  {
+    "id": "goal-positive-1748589271118958860",
+    "source": "public-post",
+    "description": "kawasaki valentine card 2024",
+    "post": {
+      "id": "1748589271118958860",
+      "createdAt": "2024-01-20T06:12:24.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": ".　🍫 季節名刺 🍫\n期間限定「川崎たんバレンタイン名刺」2F総合カウンターにて配布中💖\n川崎店にご来店の際はぜひお持ちくださいらぞ✨\n\nバレンタインチョコの代わりに！\n #ビッカメ娘チョコ名刺 🍫\n 　　 ∧,,∧\n ❀   ( *´꒳`2 )❀ \n￣￣　゜゜￣￣\n#川崎たん #ビッカメ娘 https://t.co/mVDwsE11zK",
+      "url": "https://x.com/Bic_kawasaki/status/1748589271118958860",
+      "media": [
+        "https://pbs.twimg.com/media/GEQ8oqda4AAlfa4.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "店頭での期間限定名刺配布中の案内。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "kawasaki-valentine-card-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "川崎たんバレンタイン名刺",
+          "evidence": [
+            ".　🍫 季節名刺 🍫",
+            "期間限定「川崎たんバレンタイン名刺」2F総合カウンターにて配布中💖",
+            " #ビッカメ娘チョコ名刺 🍫"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 290573,
+      "postSha256": "75b06842ab2e3008229ea26e307971294b986e6fea7d5ee39eb1032086cbecd4",
+      "textSha256": "b6fa60e7585063e4c0220967d40d9306360f0a77f503eb003b0c27b319118ed4"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1756134897822118260",
+    "source": "public-post",
+    "description": "fujisawa eighth anniversary card 2024",
+    "post": {
+      "id": "1756134897822118260",
+      "createdAt": "2024-02-10T01:56:01.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(3・ω・) #2月12日は藤沢たん擬人化8周年\n記念名刺を2月29日(木)まで配布中！\n\n⚠️今年から等身大と名刺置き場が\n変わっているのでご注意ください\n2階の総合案内カウンター奥にいるぜ https://t.co/sLPyXhDylx",
+      "url": "https://x.com/bic_fujisawa/status/1756134897822118260",
+      "media": [
+        "https://pbs.twimg.com/media/GF8KTTIbwAAFYUp.jpg",
+        "https://pbs.twimg.com/media/GF8KU9pagAAafOz.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "fujisawa"
+      ],
+      "characterIds": [
+        "fujisawa"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "2/29まで、配布場所が変更されたと明示。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "fujisawa-eighth-anniversary-card-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "藤沢たん8周年名刺",
+          "evidence": [
+            "記念名刺を2月29日(木)まで配布中！",
+            "⚠️今年から等身大と名刺置き場が"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 283915,
+      "postSha256": "5c56f573b92fe7ac1bd3d7ed3cae1826d2d744be51f4bab20058f21c77777368",
+      "textSha256": "35709e7ef89b7ea3b73b4592c99fcd386b4d2918272f5870cdf62f64574397fc"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

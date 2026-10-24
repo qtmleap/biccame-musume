@@ -1,0 +1,124 @@
+[
+  {
+    "id": "goal-positive-929681374184816640",
+    "source": "public-post",
+    "description": "nanba christmas card 2017",
+    "post": {
+      "id": "929681374184816640",
+      "createdAt": "2017-11-12T12:04:46.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "クリスマスの名刺やっぱり置きたくて頑張ってつくった！n(╹ω╹n)✨\n配布は明日からです！総合カウンター前のなんばたん等身大パネルから受け取れるようにしておきますね！(＊´▽`＊)✨✨ https://t.co/cm77aIkHbh",
+      "url": "https://x.com/biccamera_nanba/status/929681374184816640",
+      "media": [
+        "https://pbs.twimg.com/media/DObjdIKVwAIzn_E.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "startDate": "2017-11-13"
+    },
+    "rationale": "クリスマス名刺を明日からパネルで受け取れると告知。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "nanba-christmas-card-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "なんばたんクリスマス名刺",
+          "evidence": [
+            "クリスマスの名刺やっぱり置きたくて頑張ってつくった！n(╹ω╹n)✨"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 907843,
+      "postSha256": "e935e0c8a73240281b376f74c6fcacefd05020c16f047aa24256f457d69fbd7e",
+      "textSha256": "a3d9300647ec7c9950fae053af6f2af431b26de11a4afaed63116a65d7e40d8f"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-937667313867808768",
+    "source": "public-post",
+    "description": "chofu christmas card 2017",
+    "post": {
+      "id": "937667313867808768",
+      "createdAt": "2017-12-04T12:58:03.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "§( *'▽')ノ📹\n\n調布たんの\n🎄 クリスマス名刺  🎄\n\nビックカメラ京王調布店\n1F総合カウンターにて配布しております♪\n\nどうぞよろしくお願いします‼️\n\n#拡散希望\n#調布たん\n#ビッカメ娘 https://t.co/heOXunzZq6",
+      "url": "https://x.com/bic_keiochofu/status/937667313867808768",
+      "media": [
+        "https://pbs.twimg.com/media/DQNCk7oUMAArn_p.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "chofu"
+      ],
+      "characterIds": [
+        "chofu"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "限定名刺の配布場所を明示する継続案内。初日と条件を推測しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "chofu-christmas-card-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "調布たんクリスマス名刺",
+          "evidence": [
+            "🎄 クリスマス名刺  🎄"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 902196,
+      "postSha256": "724eeddb5b6efc43ca58900e961ec7a9c57cb0d823a7eb428f2ed20200a73e2b",
+      "textSha256": "c7bc7ad98f2aa528f14f0d1e76ec859ce7fd646fa565dfa46d999115868c4a80"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

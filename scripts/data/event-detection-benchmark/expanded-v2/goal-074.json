@@ -1,0 +1,137 @@
+[
+  {
+    "id": "expanded-v2-positive-718672396593418245",
+    "source": "public-post",
+    "description": "hachioji-photo-day-sd-2016",
+    "post": {
+      "id": "718672396593418245",
+      "createdAt": "2016-04-09T05:30:26.000Z",
+      "screenName": "bichachioji",
+      "kind": "original",
+      "text": "【1階カメラコーナー】\n今日・明日と #フォトの日 企画『 #八王子たん と撮影会』実施中♪\n今回登場は…\n\n＿人人人人人人＿\n＞えすでぃ～ver＜\n￣Y^Y^Y^Y^Y^Y^￣ \n\nコレはイイッ！•ू(ᵒ̴̶̷ωᵒ̴̶̷*•ू) https://t.co/wWwxkrY5Em",
+      "url": "https://x.com/bichachioji/status/718672396593418245",
+      "media": [
+        "https://pbs.twimg.com/media/Cfk8mSKVIAAhx6E.jpg",
+        "https://pbs.twimg.com/media/Cfk8o-3UEAQqG4F.jpg",
+        "https://pbs.twimg.com/media/Cfk8sZqVAAUT2ta.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "hachioji"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "SD版娘との撮影会開催中。写真の配布や料金は本文に書かれていない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "hachioji-photo-day-sd-2016",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "八王子たん と撮影会",
+          "evidence": [
+            "【1階カメラコーナー】",
+            "今日・明日と #フォトの日 企画『 #八王子たん と撮影会』実施中♪",
+            "今回登場は…",
+            "＿人人人人人人＿",
+            "＞えすでぃ～ver＜",
+            "￣Y^Y^Y^Y^Y^Y^￣ ",
+            "コレはイイッ！•ू(ᵒ̴̶̷ωᵒ̴̶̷*•ू) https://t.co/wWwxkrY5Em"
+          ]
+        }
+      ],
+      "groupingNote": "SD版娘との撮影会開催中。写真の配布や料金は本文に書かれていない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1051397,
+      "postSha256": "225944c547b5eb8f94de1ce73520ae9742efa8b230b87f801541aca45725acfe",
+      "textSha256": "8c70b6b0d3ed3d9dad66eaa8e06fa3569b889a4b1054483cfdb2cabb82726699"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-716161852539973632",
+    "source": "public-post",
+    "description": "hachioji-photo-day-sd-2016 matched control",
+    "post": {
+      "id": "716161852539973632",
+      "createdAt": "2016-04-02T07:14:25.000Z",
+      "screenName": "bichachioji",
+      "kind": "original",
+      "text": "【ゲームコーナー】(◎仝◎)/\n｢妖怪ウォッチ｣と｢三国志｣が奇跡のコラボ！\n｢さくら国｣の統一を目指してウォッチッチ♪\nニンテンドー3DSソフト『妖怪三国志』本日発売⭐\n\n先着で可愛らしい｢コマサン孫策ストラップ｣プレゼント中♪ https://t.co/Gr98mPlxr8",
+      "url": "https://x.com/bichachioji/status/716161852539973632",
+      "media": [
+        "https://pbs.twimg.com/media/CfBRUhgUIAEFlZs.jpg",
+        "https://pbs.twimg.com/media/CfBRWu9UUAIVGzx.jpg",
+        "https://pbs.twimg.com/media/CfBRZC7UMAIPNey.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-716161852539973632",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 1052049,
+      "postSha256": "6c48b92811f1ebb526b8fad13f51f622c26e4e23c62d72535c41cdf8b73ea212",
+      "textSha256": "9872b7f9626fa9db477179ab7834353de505257a0a25e60aa534672369ba4441"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

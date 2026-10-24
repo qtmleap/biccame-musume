@@ -1,0 +1,238 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2045782264483848271",
+    "source": "public-post",
+    "description": "shinjyuku-bakutan-fes-2026",
+    "post": {
+      "id": "2045782264483848271",
+      "createdAt": "2026-04-19T08:31:15.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "＼【予告】 #新宿西口たん爆誕祭2026 開催決定🎊／\n5月23日(土)より、当日指定金額以上のお買い物＆先着でA・Bいずれかお一つをプレゼント🎁\n\nA：新宿西口たんスマホ用カードケース＋アクリルキーホルダーセット(50セット)\nB：新宿西口たんアクリルキーホルダー(50個)\n\n※アクキーはAB同一デザインです https://t.co/KRmjlnireI",
+      "url": "https://x.com/bic_shinjyuku/status/2045782264483848271",
+      "media": [
+        "https://pbs.twimg.com/media/HGQToxtaEAAGV1l.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "shinjyuku"
+      ],
+      "startDate": "2026-05-23",
+      "conditions": null
+    },
+    "rationale": "【予告】だが日付・景品2種・先着数まで揃う。AB別の数量で条件は未注釈。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "boundary:action",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:shinjyuku-bakutan-fes-2026"
+    ],
+    "group": "shinjyuku-bakutan-fes-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "新宿西口たんスマホ用カードケース＋アクリルキーホルダーセット",
+          "evidence": [
+            "A：新宿西口たんスマホ用カードケース＋アクリルキーホルダーセット(50セット)",
+            "B：新宿西口たんアクリルキーホルダー(50個)"
+          ]
+        },
+        {
+          "item": "新宿西口たんアクリルキーホルダー",
+          "evidence": [
+            "A：新宿西口たんスマホ用カードケース＋アクリルキーホルダーセット(50セット)",
+            "B：新宿西口たんアクリルキーホルダー(50個)"
+          ]
+        }
+      ],
+      "groupingNote": "【予告】だが日付・景品2種・先着数まで揃う。AB別の数量で条件は未注釈。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 52998,
+      "postSha256": "40fa13144ab2787a17f4f45f6e275c2977637df2556a605a387e2904b4b23fe7",
+      "textSha256": "8bf3f7b05e98219cf8c00bc3ddda81e3c55e78f6ca4a921ed2d066838f7ad5aa"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "3a28d8a9-ea88-4200-ad26-aff2dc1f0d32",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_shinjyuku/status/2045782264483848271",
+          "origin": "manual-or-seed",
+          "title": "擬人化10周年記念名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-05-22T15:00:00.000+00:00",
+            "endDate": "2026-06-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shinjyuku"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "bd6be786-c086-4f8d-b3bf-641dacfca71f",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_shinjyuku/status/2045782264483848271",
+          "origin": "manual-or-seed",
+          "title": "スマホ用カードケース+擬人化10周年記念アクキー",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-05-22T15:00:00.000+00:00",
+            "endDate": "2026-06-29T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shinjyuku"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 50,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 5000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        },
+        {
+          "eventId": "aa779c8a-a56a-4d75-a293-821f0c3a9206",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_shinjyuku/status/2045782264483848271?",
+          "origin": "manual-or-seed",
+          "title": "擬人化10周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-05-22T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "shinjyuku"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 50,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2048990594001952944",
+    "source": "public-post",
+    "description": "shinjyuku-bakutan-fes-2026 matched control",
+    "post": {
+      "id": "2048990594001952944",
+      "createdAt": "2026-04-28T05:00:00.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "📢GW特別価格\nダイソン スティック掃除機Cyclone DS20が限定特価！\nツールを付け替えるだけで、ハンディクリーナーや布団クリーナーとしても使用OK！\n★5階家事家電コーナー【 https://t.co/SVsx1peIxM 】\n\nデジタルチラシはこちら➡【 https://t.co/OJtCUHAMyZ 】 https://t.co/hf2TGgkAoe",
+      "url": "https://x.com/bic_shinjyuku/status/2048990594001952944",
+      "media": [
+        "https://pbs.twimg.com/media/HG55jtUbsAAAfjv.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2048990594001952944",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 50325,
+      "postSha256": "42105655423820b588a11b65dbbc02959f95fea638fe308fec0a805d680b7fce",
+      "textSha256": "0c5b21c0edcaa31b3ff846d84ab220655df0c09a2346203b39ed40b60b0ebd3e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

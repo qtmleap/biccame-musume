@@ -1,0 +1,204 @@
+[
+  {
+    "id": "public-2109852165309415477",
+    "source": "public-post",
+    "description": "美顔器の予約案内",
+    "post": {
+      "id": "2109852165309415477",
+      "createdAt": "2026-10-13T03:42:10.024Z",
+      "screenName": "bic_chiba",
+      "kind": "original",
+      "text": "🌟美顔器予約受付中💫\nPanasonicの美顔器から新製品が11月1日発売！ \n従来モデルよりEMSがさらにパワーアップし、広範囲への効率的なケアが可能に。 1台16役で、さまざまな肌悩みにアプローチします❕\n2階ビューティー家電コーナーにてご予約承り中！ ぜひご来店くださいませ🎀🫧",
+      "url": "https://x.com/bic_chiba/status/2109852165309415477",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "発売日付きの家電予約であり、キャラクターの企画ではない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "reservation"
+    ],
+    "group": "panasonic-beauty-device",
+    "reviewStatus": "provisional",
+    "sourceHash": "bfa98fde1108a102116c748057911ac60954c70831481075210cc14ff1a89725"
+  },
+  {
+    "id": "public-2109875154784559580",
+    "source": "public-post",
+    "description": "コスメ通常販売",
+    "post": {
+      "id": "2109875154784559580",
+      "createdAt": "2026-10-13T05:13:31.142Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\n🩷🩷キャンメイクのコスメで可愛さ　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　GET🩷🩷\n＼\n\n1階　コスメコーナーにて、可愛いらしいキャンメイクのコスメ販売中‼️\n人気なリップやプランパーも数多く並んでいます☺️🫶\n\nぜひご来店ください✨\n#キャンメイク　#CANMAKE",
+      "url": "https://x.com/bic_tachikawa/status/2109875154784559580",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "GETという表現はあるが、通常コスメ販売である。",
+    "tags": [
+      "ordinary-sale",
+      "get-word"
+    ],
+    "group": "canmake-cosmetics",
+    "reviewStatus": "provisional",
+    "sourceHash": "7620ac056b2f68f50be7c44fec05f100bcc008faab87b18aa43b6f3a82c7402c"
+  },
+  {
+    "id": "public-2109876967730499979",
+    "source": "public-post",
+    "description": "ちいかわグッズ売場",
+    "post": {
+      "id": "2109876967730499979",
+      "createdAt": "2026-10-13T05:20:43.382Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\nちいかわグッズが大集合っ⁉️\n＼\n\n6階　下りエスカレーター前には、ちいかわたちが出迎えてくれます！🩷\n\n普段あまり見かけないちいかわグッズに出会えちゃいます！✨\n\nちいかわが好き\nみてみたい\n\nという方も、知らない方も、ぜひ一度当店6階までお立ち寄り下さい。\n#ちいかわグッズ　#ちいかわ",
+      "url": "https://x.com/bic_tachikawa/status/2109876967730499979",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "キャラクターグッズだがビッカメ娘ではなく、通常販売の案内。",
+    "tags": [
+      "other-franchise",
+      "ordinary-sale"
+    ],
+    "group": "chiikawa-merchandise",
+    "reviewStatus": "provisional",
+    "sourceHash": "dcf95af1aa91b2582681c84fa2dce269da205563d481a0bee63ed6583a21717a"
+  },
+  {
+    "id": "public-2109878920720056360",
+    "source": "public-post",
+    "description": "シルバニア通常販売",
+    "post": {
+      "id": "2109878920720056360",
+      "createdAt": "2026-10-13T05:28:29.011Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "／\n「#シル活」が流行っているのを\nご存知ですか？\n＼\n\n只今ビックカメラ立川店では「はじめてのシルバニアファミリー」セットや気に入った子を単体で購入することができます！是非あなたの推しを見つけてください🐰🫶\n\n6階おもちゃコーナーにて『シルバニアファミリー』大好評発売中！！",
+      "url": "https://x.com/bic_tachikawa/status/2109878920720056360",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "推しを見つけるという表現でも、別作品の通常商品紹介である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "other-franchise",
+      "ordinary-sale"
+    ],
+    "group": "sylvanian-family",
+    "reviewStatus": "provisional",
+    "sourceHash": "6afa197204d0e8a04e81049d112651144571f62052a98db046bbb72b7e59ca70"
+  },
+  {
+    "id": "public-2109881107726639436",
+    "source": "public-post",
+    "description": "ペット用品の販売",
+    "post": {
+      "id": "2109881107726639436",
+      "createdAt": "2026-10-13T05:37:10.434Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "ペットを飼ってる皆様へ、#ビックカメラ でペット用品を買ってみませんか⁉️\n\n当店1階にあるペット用品コーナーには、便利なペット家電やペットと遊ぶおもちゃなどを販売しております♪\n\n皆様の飼っている可愛いために買ってみてはいかがでしょうか‼️",
+      "url": "https://x.com/bic_tachikawa/status/2109881107726639436",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ペット用品や家電の通常売場案内である。",
+    "tags": [
+      "ordinary-sale"
+    ],
+    "group": "pet-supplies",
+    "reviewStatus": "provisional",
+    "sourceHash": "f3eaa953fe91e9f47f08f9c19249feb3aed266063af46fcfb304cc43bbbb1472"
+  },
+  {
+    "id": "public-2109884277622288883",
+    "source": "public-post",
+    "description": "職業体験投稿への反応依頼",
+    "post": {
+      "id": "2109884277622288883",
+      "createdAt": "2026-10-13T05:49:46.196Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "と、いうわけで中学生の皆様にX投稿をしてもらいました～‼\nどれかわかるかな⁉\n\nぜひいいね💗RP🔄してくださいね(Ｕ 'ᴗ' Ｕ)🎵",
+      "url": "https://x.com/bic_tachikawa/status/2109884277622288883",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "中学生の投稿への反応を頼むだけで、ビッカメ娘企画の告知ではない。",
+    "tags": [
+      "small-talk",
+      "engagement"
+    ],
+    "group": "student-post-engagement",
+    "reviewStatus": "provisional",
+    "sourceHash": "3e8129ab6d8a0db3e88e7a76a9b51bc99428c25132633f7ee595c8c31198c33e"
+  },
+  {
+    "id": "public-2109891886383026531",
+    "source": "public-post",
+    "description": "スマホ買取サービス",
+    "post": {
+      "id": "2109891886383026531",
+      "createdAt": "2026-10-13T06:20:00.266Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "お売りください‼️\n\n📢スマホを高く売るコツは「早さ」💨\n🔋バッテリー消耗で大幅減額の危機⁉️\n✨ビックカメラなら最新スマホ高額買取🪙\n🔒買取後のデータ消去も徹底で安心😌\n劣化が進んで損をする前に、まずは無料査定‼️🐙\n＃スマホ買取  #iPhone買取",
+      "url": "https://x.com/bic_abeno/status/2109891886383026531",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "高額買取・査定の案内であり、配布や限定キャラ販売ではない。",
+    "tags": [
+      "service",
+      "trade-in"
+    ],
+    "group": "smartphone-trade-in",
+    "reviewStatus": "provisional",
+    "sourceHash": "7b9ffd483f3b39b8c329b59aeae680dd1593dc10a69e06db5e291ee2eb7762d7"
+  },
+  {
+    "id": "public-2109894944425230839",
+    "source": "public-post",
+    "description": "マットレス特価",
+    "post": {
+      "id": "2109894944425230839",
+      "createdAt": "2026-10-13T06:32:09.360Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【6階 生毛工房】\n\n大人気！コアラマットレスが最大20%OFF🐨🌿\n\nオリジナルコアラマットレスと旧モデルのPLUS、SUPREMEが在庫限り20%引き！\nNEWモデル2ndGENは20%ポイントサービス☀️\nあなたにぴったりなマットレスを寝比べ🧘🏼‍♀️🌙\n\nこちらのキャンペーンは10/19（月）まで💨",
+      "url": "https://x.com/bic_kashiwa/status/2109894944425230839",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "期間付きの割引でも、一般寝具の通常販促である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "limited-period"
+    ],
+    "group": "koala-mattress-sale",
+    "reviewStatus": "provisional",
+    "sourceHash": "6aa1714a27798171639551249caa0a795834596876c8eff46179158dde53b5cb"
+  }
+]

@@ -1,0 +1,168 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2092140233148289318",
+    "source": "public-post",
+    "description": "abeno-anniv10-key-announce-2026",
+    "post": {
+      "id": "2092140233148289318",
+      "createdAt": "2026-08-25T06:41:16.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "＼ビッカメ娘イベント告知／ \n\nあべのたん擬人化記念 開催❗️❗️(Q*aωa)つ🎂🐙\n9月1日(火)から、税込3,000円以上ご購入で『あべのたんアクリルキーホルダ― ドレスver.』をプレゼントするで～✨✨\n⚠️無くなり次第終了です\n\n期間限定名刺も用意してるからぜひお店に遊びに来てな～😆🐙 https://t.co/4rqRs5HyRf",
+      "url": "https://x.com/bic_abeno/status/2092140233148289318",
+      "media": [
+        "https://pbs.twimg.com/media/HQjGOMgaoAAtRfx.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": [
+        "abeno"
+      ],
+      "startDate": "2026-09-01",
+      "conditions": null
+    },
+    "rationale": "9/1から3000円以上でアクキー。名刺は条件なし。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:abeno-anniv10-key"
+    ],
+    "group": "abeno-anniv10-key-announce-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "あべのたんアクリルキーホルダー ドレスver.",
+          "evidence": [
+            "9月1日(火)から、税込3,000円以上ご購入で『あべのたんアクリルキーホルダ― ドレスver.』をプレゼントするで～✨✨"
+          ]
+        },
+        {
+          "item": "期間限定名刺",
+          "evidence": [
+            "期間限定名刺も用意してるからぜひお店に遊びに来てな～😆🐙 https://t.co/4rqRs5HyRf"
+          ]
+        }
+      ],
+      "groupingNote": "9/1から3000円以上でアクキー。名刺は条件なし。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 13511,
+      "postSha256": "6ea1693839910633d1a19ae98d837f7a1b32a3199fcb308e67868dfc0812737f",
+      "textSha256": "5113cae8a390a0352b1d4e7c0ce8086f26ccd93c7b80382e5deacd7555a53059"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "9662ef59-0a8b-44d9-a499-882b112cc400",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_abeno/status/2092140233148289318",
+          "origin": "manual-or-seed",
+          "title": "限定名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-08-31T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "abeno"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2086694029568393281",
+    "source": "public-post",
+    "description": "abeno-anniv10-key-announce-2026 matched control",
+    "post": {
+      "id": "2086694029568393281",
+      "createdAt": "2026-08-10T06:00:00.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "スマホメガ買取直前キャンペーン開催‼️\n\n事前エントリー＆スマホ買取でポイントGETのチャンス✨\n＼最大5,000ptプレゼント🎁／\n\n📅期間：8/10〜9/15\n\n詳しい参加条件はURLをチェック👇\nhttps://t.co/WLko3xLMyy\n\n＃iPhone買い替え ＃スマホ買取＃メガ買取 https://t.co/LyBRmrw0fE",
+      "url": "https://x.com/bic_abeno/status/2086694029568393281",
+      "media": [
+        "https://pbs.twimg.com/media/HPQBBLPaIAAlV6-.png",
+        "https://pbs.twimg.com/media/HPQBEUMaAAExO-c.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-2086694029568393281",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 17457,
+      "postSha256": "4ecc937d18807fe178fabe541aceaa2e9e338cad1028d03de73cc7e99d8dbe4b",
+      "textSha256": "ee26e06d655c110eb67f8680eecf9842bc5bff8e0c04d4f27212c19486138647"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

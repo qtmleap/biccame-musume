@@ -1,0 +1,172 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2014935612869185860",
+    "source": "public-post",
+    "description": "akasaka-anniv7-acrylic-key-end-2026",
+    "post": {
+      "id": "2014935612869185860",
+      "createdAt": "2026-01-24T05:37:40.000Z",
+      "screenName": "bicakasaka",
+      "kind": "quote",
+      "text": "☆みっけたん情報☆\n\n✨ご好評につき✨\n#みっけたん 擬人化7周年記念アクリルキーホルダーは\n只今の時間をもちまして配布終了いたしました🌹\n\nたくさんのご来店ありがみっけでした❣️\n\n引き続き記念名刺は2/14(土)まで配布しております🍫\nお祝いしにきてね～(*´˘`*)ﾉ",
+      "url": "https://x.com/bicakasaka/status/2014935612869185860",
+      "quoted": {
+        "id": "2014900400210772411",
+        "screenName": "bicakasaka",
+        "text": "☆みっけたん情報☆\n\nありがたいことに、\nアクキーが残りわずかとなっております。\n\nご希望の方はお早めにご来店くださいませ🌹\n※なくなり次第終了となります"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": [
+        "akasaka"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "アクキーのみ配布終了、記念名刺は2/14まで継続と明記。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "end",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "akasaka-anniv7-acrylic-key-end-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "end",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "擬人化7周年記念アクリルキーホルダー",
+          "evidence": [
+            "#みっけたん 擬人化7周年記念アクリルキーホルダーは"
+          ]
+        }
+      ],
+      "groupingNote": "アクキーのみ配布終了、記念名刺は2/14まで継続と明記。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 77728,
+      "postSha256": "9a8c3efc1302bd87c68ccb10ba184e2175f0d38f641d0710c905ab81554e7cc9",
+      "textSha256": "0b30a6c1a3ca2c6afe20a94fd235308977f4d03eaf5e1d04bbc9071e46f38954"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "7678d195-179b-441d-adbf-1b84948cb69d",
+          "association": "reference-url",
+          "referenceType": "end",
+          "referenceUrl": "https://x.com/bicakasaka/status/2014935612869185860",
+          "origin": "manual-or-seed",
+          "title": "擬人化7周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-01-22T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "akasaka"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2009203549356560607",
+    "source": "public-post",
+    "description": "akasaka-anniv7-acrylic-key-end-2026 matched control",
+    "post": {
+      "id": "2009203549356560607",
+      "createdAt": "2026-01-08T10:00:30.000Z",
+      "screenName": "bicakasaka",
+      "kind": "quote",
+      "text": "#大宮たん が #パギャンヌ したと聞いて👂\n\nでは採点のお時間です。\n今回のチャレンジは、、、\n\n21点ですー🥢\\(\"▔□▔)/ﾊﾟｷﾞｬｰﾝﾇ\n\n去年のアキバたんの方がパギャンヌ度高かったですね～🥢\n#みっけたんチャレンジ",
+      "url": "https://x.com/bicakasaka/status/2009203549356560607",
+      "quoted": {
+        "id": "2006962396666216713",
+        "screenName": "bic_ohmiya",
+        "text": "一昨日すごーく久しぶりに #みっけたんチャレンジ 🥢\n\n『パギャンヌ！』( ˃ ⌑ ˂ഃ お) https://t.co/KHtp9t7tWO"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "hard-negative"
+    ],
+    "group": "control-2009203549356560607",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 81594,
+      "postSha256": "3556b10094f8e73bc8957fcd4f08629357d94acfc62fc17554d9118424986602",
+      "textSha256": "f8b75bed2ba79c032a5e13b90f6ba4c00bf2fd9f3222d87f3a560617a5821782"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

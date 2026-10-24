@@ -1,0 +1,129 @@
+[
+  {
+    "id": "expanded-v2-positive-1781880537193595278",
+    "source": "public-post",
+    "description": "honten-stamp-rally-card-spring-2024",
+    "post": {
+      "id": "1781880537193595278",
+      "createdAt": "2024-04-21T03:00:00.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "本日最終日のスタンプラリー限定名刺は出ている分で終了です!!\n\nたくさんの人に貰って頂けました！\nいつもありがとうございます!!\n\nまだもらっていないよー!!\nって方はぜひお持ちください!!\n\nすでに貰ってくれた方は貰ってない人の為に残しておいてください(0人0)💦ご協力お願いします！",
+      "url": "https://x.com/bicikebukuro/status/1781880537193595278",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "残っている配布分が無くなり次第終了。すでに完配とはしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "honten-stamp-rally-card-spring-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "スタンプラリー限定名刺",
+          "evidence": [
+            "本日最終日のスタンプラリー限定名刺は出ている分で終了です!!",
+            "たくさんの人に貰って頂けました！",
+            "いつもありがとうございます!!",
+            "まだもらっていないよー!!",
+            "って方はぜひお持ちください!!",
+            "すでに貰ってくれた方は貰ってない人の為に残しておいてください(0人0)💦ご協力お願いします！"
+          ]
+        }
+      ],
+      "groupingNote": "残っている配布分が無くなり次第終了。すでに完配とはしない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 260638,
+      "postSha256": "7d1f488d54b80a19c05c3ee34202f78adb27b2e37e5a8c7afcb883b4bf7cb263",
+      "textSha256": "b68afbde3a0c6e24ee0c67d6eae81a96e52df6bedf783a1f8f3092799b3eeea0"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1776795043652944063",
+    "source": "public-post",
+    "description": "honten-stamp-rally-card-spring-2024 matched control",
+    "post": {
+      "id": "1776795043652944063",
+      "createdAt": "2024-04-07T02:12:04.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "【カードゲーム機　停止のお知らせ】\n誠に勝手ながら4/14(日)のベイブレード大会期間中は\n当店7階カードゲーム機及び一部カプセルトイの使用を休止致します。 \n※大会終了後より稼働を再開致します。\n何卒ご理解の程よろしくお願い申し上げます。 https://t.co/EqhxVWRUaA",
+      "url": "https://x.com/bicikebukuro/status/1776795043652944063",
+      "media": [
+        "https://pbs.twimg.com/media/GKhxq9nakAAHKHO.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1776795043652944063",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 265068,
+      "postSha256": "8a312f5b4cb619175b12b8f97757e73a28de6496fcdf0b7cc3130a3cd88fc96b",
+      "textSha256": "bcb8e4bccbda6da604e85b07ad3d470561f78efb0ef190134843e0f379611a64"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

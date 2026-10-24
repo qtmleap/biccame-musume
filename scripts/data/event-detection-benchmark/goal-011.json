@@ -1,0 +1,130 @@
+[
+  {
+    "id": "goal-positive-979207268620058624",
+    "source": "public-post",
+    "description": "sapporo spring card 2018",
+    "post": {
+      "id": "979207268620058624",
+      "createdAt": "2018-03-29T04:03:00.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "#さっぽろたん の名刺\n🌸春バージョン🌸\nできました～！\n+。:.ﾟ٩(๑＞◡＜๑)۶:.｡+ﾟ\n\n明日3/30（金）より1F総合案内カウンターにて配布致します❣️\n無くなり次第終了です！\n是非受け取って下さいね～💕\n#桜 https://t.co/sfsOdtqNez",
+      "url": "https://x.com/bic_sapporo/status/979207268620058624",
+      "media": [
+        "https://pbs.twimg.com/media/DZbXIvnU8AEQJhi.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sapporo"
+      ],
+      "characterIds": [
+        "sapporo"
+      ],
+      "category": "limited_card",
+      "startDate": "2018-03-30"
+    },
+    "rationale": "3/30から春デザインを開始。なくなり次第は数量未記載。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "sapporo-spring-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "さっぽろたん春名刺",
+          "evidence": [
+            "#さっぽろたん の名刺"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 871093,
+      "postSha256": "f0072df2287afe4337a76ce175dd7a28f85f562b4a09f06e1480d0153f136439",
+      "textSha256": "4a1c77335509f768fc610c41cdd5cb50527c05da2c34a79cc3c8019cac2c611b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-990042374251298816",
+    "source": "public-post",
+    "description": "kawasaki goldenweek card 2018",
+    "post": {
+      "id": "990042374251298816",
+      "createdAt": "2018-04-28T01:37:50.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "✨期間限定名刺配布のお知らせ✨\n\n＼ #川崎たん の名刺本日より配布中らぞ♥️／\n\n配布場所は...✨ 2F 総合カウンター！✨\n\n気になる裏面はゲットしてから確認してね( ´艸｀*)\n\n※みんなに貰ってほしいから『お一人様一枚』でお願いﾗｿﾞ！\n\n配布期間：４月２８日(土)～５月１３日(日)まで https://t.co/Vs2rDRjgrg",
+      "url": "https://x.com/Bic_kawasaki/status/990042374251298816",
+      "media": [
+        "https://pbs.twimg.com/media/Db1WL4TUQAASUYt.jpg",
+        "https://pbs.twimg.com/media/Db1WQJrU0AMfL8r.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "kawasaki"
+      ],
+      "characterIds": [
+        "kawasaki"
+      ],
+      "category": "limited_card",
+      "startDate": "2018-04-28"
+    },
+    "rationale": "4/28から5/13までの期間限定。翌月同告知を重複採用しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "kawasaki-goldenweek-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "川崎たんGW限定名刺",
+          "evidence": [
+            "✨期間限定名刺配布のお知らせ✨",
+            "＼ #川崎たん の名刺本日より配布中らぞ♥️／"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 862657,
+      "postSha256": "d69e9ba1c0772988f7100755030796c088b1f4ee37879b189fca5109690f69e4",
+      "textSha256": "542c8cb138d6e75a841fee11cc9b5aee90d6397e56f6287c7292c0c281a6662e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

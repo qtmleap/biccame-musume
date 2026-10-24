@@ -1,0 +1,175 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2001476515679412346",
+    "source": "public-post",
+    "description": "kagoshima-anniv8-acrylic-key-2025",
+    "post": {
+      "id": "2001476515679412346",
+      "createdAt": "2025-12-18T02:16:01.000Z",
+      "screenName": "bic_kagoshima",
+      "kind": "original",
+      "text": "そしてそして鹿児島たん擬人化8周年記念アクキーの配布始まりました～😍🙌\n\n税込3,000円以上のお買物で先着100名様にドレス衣装の鹿児島たんアクキープレゼント🎁\n\n1・2Fレジにてお渡しできますのでご希望のお客様はお声掛けくださ～い😍💕 https://t.co/SC2q1ZZMeB",
+      "url": "https://x.com/bic_kagoshima/status/2001476515679412346",
+      "media": [
+        "https://pbs.twimg.com/media/G8arP9HakAEUYeM.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "ackey",
+      "stores": null,
+      "characterIds": [
+        "kagoshima"
+      ],
+      "startDate": null,
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 3000
+        },
+        {
+          "type": "first_come",
+          "quantity": 100
+        }
+      ]
+    },
+    "rationale": "配布が始まったことと3000円以上先着100名の条件。開始日は本文にない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "kagoshima-anniv8-acrylic-key-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "鹿児島たん擬人化8周年記念アクキー",
+          "evidence": [
+            "そしてそして鹿児島たん擬人化8周年記念アクキーの配布始まりました～😍🙌",
+            "税込3,000円以上のお買物で先着100名様にドレス衣装の鹿児島たんアクキープレゼント🎁"
+          ]
+        }
+      ],
+      "groupingNote": "配布が始まったことと3000円以上先着100名の条件。開始日は本文にない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 87579,
+      "postSha256": "6d22944dc6bfd370c20e51427574925ea9ff86321fde130c6013708ab63074e5",
+      "textSha256": "8b8b5ff6ca7b96f22e784c2e638a5d0fc8f75bae0a1d38616124617ec2dbcbba"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "d6f312a4-1d5d-45c1-9ee0-7d162b5f740d",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_kagoshima/status/2001476515679412346",
+          "origin": "manual-or-seed",
+          "title": "擬人化8周年記念アクキー",
+          "category": "ackey",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-12-17T15:00:00.000+00:00",
+            "endDate": null,
+            "isPreliminary": false,
+            "limitedQuantity": 100,
+            "stores": [
+              "kagoshima"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 100,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 3000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2005094742103880070",
+    "source": "public-post",
+    "description": "kagoshima-anniv8-acrylic-key-2025 matched control",
+    "post": {
+      "id": "2005094742103880070",
+      "createdAt": "2025-12-28T01:53:34.000Z",
+      "screenName": "bic_kagoshima",
+      "kind": "original",
+      "text": "年末の大掃除は既にお済みですか？\nかさばる書類、個人情報も心配・・・📷\nHPシュレッダー H1506CCならホッチキスやカードもそのまま細断📷\n容量15Lでたっぷり収納、A4コピー紙160枚分！\n📷価格:￥8,980円(税込み) https://t.co/ZUxGEHa3xY",
+      "url": "https://x.com/bic_kagoshima/status/2005094742103880070",
+      "media": [
+        "https://pbs.twimg.com/media/G9OHALqbYAANgiN.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-2005094742103880070",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 84782,
+      "postSha256": "f77e4b142751cdaf06e287f5cf5b1330bdedf36d084b3f63d232b166f54699ff",
+      "textSha256": "1c06587c94b0d811ed244224cdd7377be83e8791400450d6e14b8e5a7e24b4ee"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

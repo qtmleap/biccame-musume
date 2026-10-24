@@ -1,0 +1,143 @@
+[
+  {
+    "id": "expanded-v2-positive-1850095362624884769",
+    "source": "public-post",
+    "description": "kansai-autumn-fashion-stickers-2024",
+    "post": {
+      "id": "1850095362624884769",
+      "createdAt": "2024-10-26T08:41:22.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "🍁秋のビッカメ娘巡りin関西🍁\n【期間】11/1㈮～11/30㈯\n※なくなり次第終了\nなんば店・あべのキューズモール店\nアリオ八尾店・高槻阪急スクエア店、\nそれぞれの店舗で\n税込1000円以上の購入レシート掲示で\n秋ファッションの関西ビッカメ娘ステッカー\nプレゼント🎁シークレットもあるで✨\n⬇️詳しくは⬇️ https://t.co/K7SObZuscH",
+      "url": "https://x.com/biccamera_nanba/status/1850095362624884769",
+      "media": [
+        "https://pbs.twimg.com/media/Gazb0BVawAAgQRH.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": [
+        "nanba",
+        "abeno",
+        "yao",
+        "takatsuki"
+      ],
+      "characterIds": null,
+      "startDate": "2024-11-01",
+      "conditions": [
+        {
+          "type": "purchase",
+          "amount": 1000
+        }
+      ]
+    },
+    "rationale": "4会場各店1000円購入のステッカー。シークレットを別条件としない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "kansai-autumn-fashion-stickers-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "関西ビッカメ娘ステッカー",
+          "evidence": [
+            "🍁秋のビッカメ娘巡りin関西🍁",
+            "【期間】11/1㈮～11/30㈯",
+            "※なくなり次第終了",
+            "なんば店・あべのキューズモール店",
+            "アリオ八尾店・高槻阪急スクエア店、",
+            "それぞれの店舗で",
+            "税込1000円以上の購入レシート掲示で",
+            "秋ファッションの関西ビッカメ娘ステッカー",
+            "プレゼント🎁シークレットもあるで✨",
+            "⬇️詳しくは⬇️ https://t.co/K7SObZuscH"
+          ]
+        }
+      ],
+      "groupingNote": "4会場各店1000円購入のステッカー。シークレットを別条件としない。",
+      "unannotatedFields": [
+        "characterIds"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 199138,
+      "postSha256": "18edb922135189a290207603f45dc0067e8e1c41557c615d35c9dbcae953a1f8",
+      "textSha256": "97ae8b4e7afc4416aba2eec7938c319c8fa26c92bdbce4914571f956bd59ebef"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1849040613532115179",
+    "source": "public-post",
+    "description": "kansai-autumn-fashion-stickers-2024 matched control",
+    "post": {
+      "id": "1849040613532115179",
+      "createdAt": "2024-10-23T10:50:10.000Z",
+      "screenName": "biccamera_nanba",
+      "kind": "original",
+      "text": "10月25日発売予定TVゲームソフト\n『ソニック✖シャドウジェネレーションズ』\n\nなんば店1階 東口にフォトスポットが登場‼️\n\nさらに11/10までスタンプラリーを開催中‼️\n店内で4つのスタンプを集めて7階レジか1階総合カウンターにお持ち頂くと、シャドウのオリジナルステッカーをプレゼントしちゃうで🎁😆 https://t.co/ClhzgN5Pca",
+      "url": "https://x.com/biccamera_nanba/status/1849040613532115179",
+      "media": [
+        "https://pbs.twimg.com/media/GakWVJCbcAA72-U.jpg",
+        "https://pbs.twimg.com/media/GakWVJUacAAwRew.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1849040613532115179",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 199920,
+      "postSha256": "cc54ce53a23c6d56fd81dcabbd72299ca85ff1c162d094def59b5a07f7ed15f7",
+      "textSha256": "1edc36dd1f9b9f642fe98778b587aef118b9986d8bb955ffbf739bbc30a7d068"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

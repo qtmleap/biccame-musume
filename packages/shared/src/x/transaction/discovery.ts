@@ -30,12 +30,17 @@ function assetUrl(value: string, base: string): string | null {
   }
 }
 function bootstrapUrls(html: string): string[] {
-  const urls: string[] = []
-  for (const match of html.matchAll(/<script\b[^>]*\bsrc\s*=\s*["']([^"']+)["'][^>]*>/gi)) {
-    const url = assetUrl(match[1], 'https://x.com/')
-    if (url && /entry-client/.test(url)) urls.push(url)
+  const urls = new Set<string>()
+  // 従来の <script src> に加え、現行の x.com は inline script の変数 entryHref にエントリを埋め込む。
+  // どちらも assetUrl() の検証と entry-client の条件を同じように通す。
+  const patterns = [/<script\b[^>]*\bsrc\s*=\s*["']([^"']+)["'][^>]*>/gi, /\bentryHref\s*=\s*["']([^"']+)["']/g]
+  for (const pattern of patterns) {
+    for (const match of html.matchAll(pattern)) {
+      const url = assetUrl(match[1], 'https://x.com/')
+      if (url && /entry-client/.test(url)) urls.add(url)
+    }
   }
-  return urls
+  return [...urls]
 }
 async function read(url: string): Promise<string> {
   const response = await fetch(url, { headers: HEADERS, redirect: 'manual' })

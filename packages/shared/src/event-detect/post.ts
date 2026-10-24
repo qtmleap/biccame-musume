@@ -16,6 +16,18 @@ const ReferencedPostSchema = z.object({
   text: z.string().nonempty().optional()
 })
 
+/** 抽出後の対象物と参考文脈。根拠と元投稿を区別し、他物品の条件を流用しない。 */
+export const ExtractionContextSchema = z.object({
+  kind: z.enum(['item', 'event']),
+  item: z.string().nonempty().max(200),
+  evidence: z.array(z.string().nonempty()).nonempty().max(20),
+  originalText: z.string().nonempty(),
+  quotedText: z.string().nonempty().optional(),
+  quotedId: z.string().regex(/^\d+$/).optional(),
+  quotedScreenName: z.string().nonempty().optional()
+})
+export type ExtractionContext = z.infer<typeof ExtractionContextSchema>
+
 /**
  * イベント検出に使う投稿。X の生レスポンスから判定に要る項目だけを抜き出したもの。
  * 本文は HTML エンティティを戻した全文（長文投稿は note_tweet 側）を持つ。
@@ -30,7 +42,8 @@ export const DetectPostSchema = z.object({
   replyTo: z.object({ id: z.string().regex(/^\d+$/), screenName: z.string().nonempty() }).optional(),
   quoted: ReferencedPostSchema.optional(),
   retweeted: ReferencedPostSchema.optional(),
-  media: z.array(z.url()).default([])
+  media: z.array(z.url()).default([]),
+  extractionContext: ExtractionContextSchema.optional()
 })
 
 export type DetectPost = z.infer<typeof DetectPostSchema>

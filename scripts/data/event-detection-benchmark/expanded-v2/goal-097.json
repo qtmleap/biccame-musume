@@ -1,0 +1,126 @@
+[
+  {
+    "id": "expanded-v2-positive-1325696144597422084",
+    "source": "public-post",
+    "description": "sagami-autumn-card-end-preview-2020",
+    "post": {
+      "id": "1325696144597422084",
+      "createdAt": "2020-11-09T07:06:05.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "【お知らせ】\n『さがみたん秋名刺』は現在入っているもので終了となります(´･ω･`)追加はありませんのでご了承ください。\nなお、新しい名刺は作成中ですのでお楽しみに～！！\n#さがみたん",
+      "url": "https://x.com/bic_sagamioono/status/1325696144597422084",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "sagami"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "現在残った分で終了、新名刺作成中。配布終了済みとしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "sagami-autumn-card-end-preview-2020",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "さがみたん秋名刺",
+          "evidence": [
+            "【お知らせ】",
+            "『さがみたん秋名刺』は現在入っているもので終了となります(´･ω･`)追加はありませんのでご了承ください。",
+            "なお、新しい名刺は作成中ですのでお楽しみに～！！",
+            "#さがみたん"
+          ]
+        }
+      ],
+      "groupingNote": "現在残った分で終了、新名刺作成中。配布終了済みとしない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 604531,
+      "postSha256": "369a29c5ca2a2418e4665b9d6c1a211664bdefcb7b5e02198a638f99890bdaa7",
+      "textSha256": "c854d8484c952966f516201c933bc4b69b8ff2668850fd9cc8be0a876abb16a6"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1326702513727311877",
+    "source": "public-post",
+    "description": "sagami-autumn-card-end-preview-2020 matched control",
+    "post": {
+      "id": "1326702513727311877",
+      "createdAt": "2020-11-12T01:45:02.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "❘*´ω`)ということでおはようございますー！！！\n今日はものすごく寒くて暖かいコート出してきちゃいました💦皆さんも暖かくしてお出かけして下さいね♪\nでは今日もよろしくお願いします～",
+      "url": "https://x.com/bic_sagamioono/status/1326702513727311877",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1326702513727311877",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 603944,
+      "postSha256": "c59d7dd1ddb45ec824a140b9b8bcc1ac2388445422c746d2bd86b6850826ad83",
+      "textSha256": "98febdda09d30825bbe133b9e87b4967216dc911fb4035c5ea06c88a7b7bac0b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
-import { auditItemCount, createItemCountRequest, EXTRACTION_VERSION, type ItemCountAudit, SPLIT_EVENT_INSTRUCTIONS } from '@biccame/shared/event-detect/extraction'
+import { auditItemCount, createItemCountRequest, EXTRACTION_VERSION, type ExtractionConditionsSchema, type ItemCountAudit, SPLIT_EVENT_INSTRUCTIONS } from '@biccame/shared/event-detect/extraction'
 import { z } from 'zod'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
 import type { PostRow, StoreAccount } from './analysis'
@@ -42,7 +42,7 @@ export type ExtractedEvent = {
   startDate?: string
   endDate?: string
   quantity?: number
-  conditions: { type: 'purchase' | 'first_come' | 'lottery' | 'everyone'; purchaseAmount?: number }[]
+  conditions: z.infer<typeof ExtractionConditionsSchema>
 }
 
 export type Extraction = {

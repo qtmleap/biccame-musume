@@ -1,0 +1,209 @@
+[
+  {
+    "id": "public-2110256791548477727",
+    "source": "public-post",
+    "description": "ゲーミング製品予約特典",
+    "post": {
+      "id": "2110256791548477727",
+      "createdAt": "2026-10-14T06:30:00.437Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "/\nロジクール新製品予約最終日📣\n\\\n\nPROシリーズが一斉に予約を受付中👍\nゲーミングマウスG502X PLUSやG304Xの新色、ゲーミングマイクYETI2も予約できます✨\n本日が予約受付の最終日です！\n予約特典のガジェットポーチもまだご用意があります🎁 \n※数量限定のため、なくなり次第終了となります。",
+      "url": "https://x.com/bicpkanhonten/status/2110256791548477727",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "数量限定ポーチ特典があっても通常ゲーミング製品の予約である。",
+    "tags": [
+      "ordinary-sale",
+      "reservation",
+      "bonus",
+      "limited-quantity"
+    ],
+    "group": "logitech-preorder-pouch",
+    "reviewStatus": "provisional",
+    "sourceHash": "b1f46ad3b430a9db5cde27505faf805920a03a1bdba92719aa3a97036a9aff25"
+  },
+  {
+    "id": "public-2110258869788393719",
+    "source": "public-post",
+    "description": "キウイ味の飲料発売",
+    "post": {
+      "id": "2110258869788393719",
+      "createdAt": "2026-10-14T06:38:15.928Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "💚🥝新商品、入荷してます❣️🥝💚\n\n10月13日（火）新発売✌️いろんな果物が味わえる、大人気の196シリーズから〈キウイ〉が新登場🆕✨こだわりの愛媛産ですよ❣️トロピカルながらもスッキリとした爽やかな酸味を、ぜひお楽しみください😋",
+      "url": "https://x.com/bic_ohmiya/status/2110258869788393719",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "新商品発売であり、ビッカメ娘の企画ではない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "new-product"
+    ],
+    "group": "196-kiwi-grape-arrival",
+    "reviewStatus": "provisional",
+    "sourceHash": "d0bc81fdc2574154a2ea0abdcbddc0d63391d3e1d5cc0dc8cf8d988c85dc8682"
+  },
+  {
+    "id": "public-2110260889278714319",
+    "source": "public-post",
+    "description": "フォトブースの導入",
+    "post": {
+      "id": "2110260889278714319",
+      "createdAt": "2026-10-14T06:46:17.412Z",
+      "screenName": "bic_itt",
+      "kind": "original",
+      "text": "3F トライフルスタジオに新しいフォトブースが登場したわ！\nあえて盛らない、自然な写りのPHOTOGRAY （フォトグレイ）\nライティング・色味・質感で自分の良さをそのまま引き出して魅せる1枚になるそうよ✨",
+      "url": "https://x.com/bic_itt/status/2110260889278714319",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "写真という語があっても通常の撮影サービスである。",
+    "tags": [
+      "service",
+      "photo-word"
+    ],
+    "group": "photogray-booth",
+    "reviewStatus": "provisional",
+    "sourceHash": "b65df2441929ef3601404f7a189472fb2f8fe6a97668bb507965a7a0a6517222"
+  },
+  {
+    "id": "public-2110264340989288512",
+    "source": "public-post",
+    "description": "美容器具の通常紹介",
+    "post": {
+      "id": "2110264340989288512",
+      "createdAt": "2026-10-14T07:00:00.364Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "【3階 ビューティ家電】\n\n＼サロニア　フェイスカレントポインター／📢\n\n今話題の「カッサ×ポインター」で表情筋にアプローチし、理想のフェイスラインへ✨\n\nお家🏠でテレビを見ながら、簡単にできちゃいます💖\nご興味ある方、購入検討の方は\n是非3階ビューティコーナーまでお立ち寄り下さい！",
+      "url": "https://x.com/bic_kashiwa/status/2110264340989288512",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "通常の美容家電販売である。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale"
+    ],
+    "group": "salonia-face-device",
+    "reviewStatus": "provisional",
+    "sourceHash": "f5b144e347a6236c7c968226037f36f55a7d56f4121d12ef46ffcb1ae7f8fb56"
+  },
+  {
+    "id": "public-2110275428015571024",
+    "source": "public-post",
+    "description": "HP小型PCの展示",
+    "post": {
+      "id": "2110275428015571024",
+      "createdAt": "2026-10-14T07:44:03.717Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "HPダイレクトより、HP初のMiniデスクトップPCのご案内♪\n機種名【HP OmniDesk Mini M05】\nコンパクトなサイズながらタワー型デスクトップのパワーをギュギュッと集約💪😊\n機種によっては最大4台までのマルチモニタも可能♪\n設置場所を選ばず快適なワークスペースを実現します🤗\n実機も５階にて展開中!",
+      "url": "https://x.com/bic_yuurakuchou/status/2110275428015571024",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "製品展示であり、対象キャラの企画を示していない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-product",
+      "display"
+    ],
+    "group": "hp-mini-desktop",
+    "reviewStatus": "provisional",
+    "sourceHash": "e690c5e50996453e4f32af3cb3063591e108822f2168590d19538d2969097900"
+  },
+  {
+    "id": "public-2110277661130137776",
+    "source": "public-post",
+    "description": "一般キャンドル作り体験",
+    "post": {
+      "id": "2110277661130137776",
+      "createdAt": "2026-10-14T07:52:56.133Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "10/17-10/18🕯1F店頭ピロティで #キャンドル作り 体験を開催✨\n✅本格フラワーキャンドル 500円 ✅ハロウィン手ごねキャンドル 無料!\n※ご参加には簡単なアンケートへのご協力をお願いします。 \n※混雑状況によりお待ちいただく場合がございます。ご了承ください。#ビックカメラ有楽町店 #25周年感謝祭",
+      "url": "https://x.com/bic_yuurakuchou/status/2110277661130137776",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "無料体験・周年という語があるが、ビッカメ娘を対象とする企画ではない。",
+    "tags": [
+      "ordinary-event",
+      "free-word",
+      "anniversary-keyword"
+    ],
+    "group": "candle-making-experience",
+    "reviewStatus": "provisional",
+    "sourceHash": "4c9feed3264e6ceaa7e73522e3933c9cdbbcbcb0b909fbc23936f12e0080a6ad"
+  },
+  {
+    "id": "public-2110280027132899743",
+    "source": "public-post",
+    "description": "キャラクター柄ふりかけ",
+    "post": {
+      "id": "2110280027132899743",
+      "createdAt": "2026-10-14T08:02:20.232Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "お昼のお弁当タイムに、ふりかけ❣いかがですか❓\n\nコロンとした可愛いキャラクターパッケージで、お弁当の白米にひと工夫🎵\n\n🌸4階ドラッグコーナーにて取り扱い中🌸",
+      "url": "https://x.com/bic_akiba/status/2110280027132899743",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "一般キャラクターの商品紹介で、ビッカメ娘の配布物ではない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "character-word"
+    ],
+    "group": "furikake-package",
+    "reviewStatus": "provisional",
+    "sourceHash": "cef1892575abeee346e7a704b8792d1763bc1778d43ae9ad7cc50f24f0c6ef25"
+  },
+  {
+    "id": "public-2110291519559340159",
+    "source": "public-post",
+    "description": "写真用アクリルフレーム",
+    "post": {
+      "id": "2110291519559340159",
+      "createdAt": "2026-10-14T08:48:00.240Z",
+      "screenName": "bic_akiba",
+      "kind": "original",
+      "text": "FUJICOLORのCOYOMIに\n『アクリルmini』が仲間入りしました📅\n\nお気に入りの写真をアクリルフレームに挟んでおしゃれに飾ろう📷😆✨\n\n🌸5階カメラコーナーにてご注文承り中🌸",
+      "url": "https://x.com/bic_akiba/status/2110291519559340159",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "category": "other"
+    },
+    "rationale": "アクリルという材質語だけでノベルティに分類しない。 非ビッカメ娘イベントだが物品種別は明示されているため、イベント関連性とは独立にカテゴリを注釈する。",
+    "tags": [
+      "ordinary-sale",
+      "acrylic-word"
+    ],
+    "group": "coyomi-acrylic-frame",
+    "reviewStatus": "provisional",
+    "sourceHash": "792cd96be578e16f35e8df115b9a1bdc73c58fc8227a184f719a730b08222cd3"
+  }
+]

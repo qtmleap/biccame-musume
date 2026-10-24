@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expanded-v2-positive-1738443375626559975",
+    "source": "public-post",
+    "description": "takatsuki-newyear-card-2024",
+    "post": {
+      "id": "1738443375626559975",
+      "createdAt": "2023-12-23T06:16:14.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "ヾ۶(o´∀｀o)ﾉ＼📢　告　知　　／\n#たかつきたん 名刺【謹賀新年デザイン】 \n\n2024年1月2日より配布します🎍\n【期間】1月2日～1月31日\n※高槻阪急スクエア店は、1月1日が休館の為\n　2024年は、1月2日より営業します。\n\n名刺がない時はお手数ですが\n販売員にお声掛けください✨ https://t.co/55HHxcGKHl",
+      "url": "https://x.com/bic_takatsuki/status/1738443375626559975",
+      "media": [
+        "https://pbs.twimg.com/media/GCAxCGLb0AAiclG.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "takatsuki"
+      ],
+      "startDate": "2024-01-02",
+      "conditions": null
+    },
+    "rationale": "1月1日休館のため1月2日開始。一般的な正月開始日を当てはめない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "new"
+    ],
+    "group": "takatsuki-newyear-card-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "名刺【謹賀新年デザイン】",
+          "evidence": [
+            "ヾ۶(o´∀｀o)ﾉ＼📢　告　知　　／",
+            "#たかつきたん 名刺【謹賀新年デザイン】 ",
+            "2024年1月2日より配布します🎍",
+            "【期間】1月2日～1月31日",
+            "※高槻阪急スクエア店は、1月1日が休館の為",
+            "　2024年は、1月2日より営業します。",
+            "名刺がない時はお手数ですが",
+            "販売員にお声掛けください✨ https://t.co/55HHxcGKHl"
+          ]
+        }
+      ],
+      "groupingNote": "1月1日休館のため1月2日開始。一般的な正月開始日を当てはめない。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 299138,
+      "postSha256": "c5485d25aa90ce498f86cafbea288e951ecb62d8e6aedd71fc8897280365ce50",
+      "textSha256": "901c1d1a75e5d0c8d3ae12a258c7c36cd6c9bd32fe54e87deedb2f509e80ee45"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1740596756768079968",
+    "source": "public-post",
+    "description": "takatsuki-newyear-card-2024 matched control",
+    "post": {
+      "id": "1740596756768079968",
+      "createdAt": "2023-12-29T04:53:00.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "Σ۶(ﾟДﾟ) 年末年始のお出かけや帰省中の\nおともに！！\n#モバイルバッテリー🔋\n\n販売員たんおすすめ✨Best1✨\nHIDISC ハイディスク　モバイルバッテリー\n薄型軽量タイプなので、\nバックに入れていてもかさばりません！\n\n充電済のモバイルバッテリーもご用意しています！\nhttps://t.co/kOzOcSRddI https://t.co/g1P8tlnmD1",
+      "url": "https://x.com/bic_takatsuki/status/1740596756768079968",
+      "media": [
+        "https://pbs.twimg.com/media/GCfQL-qbEAAmivn.jpg",
+        "https://pbs.twimg.com/media/GCfQNyLbgAAHHAe.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1740596756768079968",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 297322,
+      "postSha256": "c40098330d8676394b7018c6cf728f0cb31687d99cefe30abe97cb49c338eebe",
+      "textSha256": "89cd49a3323d2f9928676cf2e651f3e2648d46e798557f0bff2e077306cf3a9e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-2006201674944373151",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2006201674944373151",
+      "createdAt": "2025-12-31T03:12:07.000Z",
+      "screenName": "bic_takatsuki",
+      "kind": "original",
+      "text": "📢 2026年1月3日㈯　福箱販売方法🎍\n\n福箱販売について\n2026年1月3日㈯　朝 8時30分までに\n高槻阪急スクエア店 1階正面入口に\nお並びいただいたお客様より受付いたします。\n\n抽選販売の商品は、\n3階ビックカメラ店頭とXにて発表\n10時30分を予定\n\nご購入期限は、当日 15時00分までです。 https://t.co/tVCMQtKghc",
+      "url": "https://x.com/bic_takatsuki/status/2006201674944373151",
+      "media": [
+        "https://pbs.twimg.com/media/G9dykXaa8AA-4RF.jpg",
+        "https://pbs.twimg.com/media/G9dyln6bsAA--yc.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「📢 2026年1月3日㈯　福箱販売方法🎍 / 福箱販売について / 2026年1月3日㈯　朝 8時30分までに」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "takatsuki-newyear-luckybox-lottery-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 84021,
+      "postSha256": "012ea89544e4602ab0861891430819acdb747f70f42b10c5ca674be69b4a4523",
+      "textSha256": "bf08d0d1c74f0b8876c4720f1eecbbc22f539de6d5445fa0b435e7b1029a220d"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-2004110828367380585",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "2004110828367380585",
+      "createdAt": "2025-12-25T08:43:50.000Z",
+      "screenName": "bic_toko",
+      "kind": "original",
+      "text": "ビックカメラ所沢駅店\n年末年始の営業時間のご案内📣\n\n2025年\n12月31日(水) 【10:00〜19:00】\n\n2026年\n1月1日(木) 【休館】\n1月2日(金)より通常営業【10:00〜20:00】\n\n各店舗の年末年始営業時間はコチラ⬇️\nhttps://t.co/gvs25ynO2y https://t.co/t14wDXx4dS",
+      "url": "https://x.com/bic_toko/status/2004110828367380585",
+      "media": [
+        "https://pbs.twimg.com/media/G9AIKrzb0AUV9UO.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ビックカメラ所沢駅店 / 年末年始の営業時間のご案内📣 / 2025年」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "tokorozawa-yearend-hours-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 85399,
+      "postSha256": "82449befc1fbb39ff9b13d577855b07ceea0de9be6f76849fbe96b57e252ce92",
+      "textSha256": "242e4b9921029fd15ea15f5b8179ed2edbbd05d968681e3c1a453cad477a6d38"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -23,7 +23,8 @@ const notification: EventDetectionNotification = {
   text: '@everyone 配布についてのテスト投稿',
   confidence: 0.92,
   reasons: ['開始日が不明'],
-  stores: ['架空の店舗']
+  stores: ['架空の店舗'],
+  characters: ['架空の娘']
 }
 
 const reply = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status })
@@ -131,12 +132,35 @@ test('registered notifications include event content and distinct short nonces',
   expect(calls[1]).toContain('終了日未定')
 })
 
+test('店舗と対象キャラを独立表示し、対象未判定を店舗から補完しない', () => {
+  const payload = buildDetectionNotification({
+    ...notification,
+    stores: ['ビックカメラ船橋駅FACE店'],
+    characters: ['ふなとーたん', '川崎たん']
+  })
+  expect(payload.embeds[0].fields).toContainEqual({
+    name: '開催・配布店舗',
+    value: 'ビックカメラ船橋駅FACE店',
+    inline: false
+  })
+  expect(payload.embeds[0].fields).toContainEqual({
+    name: '対象ビッカメ娘',
+    value: 'ふなとーたん・川崎たん',
+    inline: false
+  })
+  expect(JSON.stringify(payload)).not.toContain('ふなたん')
+  const unresolved = buildDetectionNotification({ ...notification, stores: [], characters: [] })
+  expect(unresolved.embeds[0].fields).toContainEqual({ name: '開催・配布店舗', value: '未確定', inline: false })
+  expect(unresolved.embeds[0].fields).toContainEqual({ name: '対象ビッカメ娘', value: '未確定', inline: false })
+})
+
 test('maximum notification values stay within Discord embed limits', () => {
   const payload = buildDetectionNotification({
     ...notification,
     status: 'registered',
     text: '文'.repeat(20000),
-    stores: Array.from({ length: 20 }, () => '店'.repeat(200)),
+    stores: Array.from({ length: 64 }, () => '店'.repeat(200)),
+    characters: Array.from({ length: 64 }, () => '娘'.repeat(200)),
     event: {
       title: '名'.repeat(300),
       url: `https://example.invalid/${'a'.repeat(1900)}`,

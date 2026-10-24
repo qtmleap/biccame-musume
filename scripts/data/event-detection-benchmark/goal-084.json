@@ -1,0 +1,107 @@
+[
+  {
+    "id": "goal-negative-1187973273662787584",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1187973273662787584",
+      "createdAt": "2019-10-26T06:04:34.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "10月26日・27日\nビックカメラ池袋本店\n1階特設コーナーにて\nBOSE初のオーディオサングラス\nNEW BOSE FRAMES\n試聴イベント開催!!\n\nご成約頂いたお客様にはオリジナルグッズをプレゼント!\n(プレゼント品は無くなり次第終了)\nお気軽にご参加ください♪ https://t.co/C903hl8SjO",
+      "url": "https://x.com/bicikebukuro/status/1187973273662787584",
+      "media": [
+        "https://pbs.twimg.com/media/EHyHY1FUEAMo9A8.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「10月26日・27日 / ビックカメラ池袋本店 / 1階特設コーナーにて」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "bose-frames-listening-gift-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 702130,
+      "postSha256": "11272d202cf8eb10dacbcbb68a1095149e480ebec6635e997dc30733ea5fc0a5",
+      "textSha256": "9e199349cab1cb90a150c40bc77a977adcf78e3dddff748610c4bba539484475"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1198789950814076928",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1198789950814076928",
+      "createdAt": "2019-11-25T02:26:11.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "本日最終日！！\nビックロ誕生感謝祭！！\n1階 ライオン口特設会場にて抽選会開催☆\n期間中に税込5,000円以上ご購入で1回、10,000円以上で2回、100,000円以上で最大3回チャレンジ♪\n特賞は『富士急ハイランドフリーパス』!\nぜひご参加ください！！\n※ビックロ ビックカメラ・ユニクロのレシートのみ https://t.co/c5Afk6Iv50",
+      "url": "https://x.com/bic_shinjuku3ch/status/1198789950814076928",
+      "media": [
+        "https://pbs.twimg.com/media/EKL1FgYUcAA74Dk.jpg",
+        "https://pbs.twimg.com/media/EKL1FgOVAAA_1Ox.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「本日最終日！！ / ビックロ誕生感謝祭！！ / 1階 ライオン口特設会場にて抽選会開催☆」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "bicqlo-store-thanks-lottery-2019",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 693783,
+      "postSha256": "24e5fbd4d368909e676dff6344a7852e048e28a267a61866cc180894a72db976",
+      "textSha256": "af5cf56e59c210020b8d464e61fa372ce8e8e4bcb1d06d3fb86cb4c5bf5235d8"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

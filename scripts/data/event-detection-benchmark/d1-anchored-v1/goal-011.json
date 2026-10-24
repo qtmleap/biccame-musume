@@ -1,0 +1,160 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1881174830193475811",
+    "source": "public-post",
+    "description": "kashiwa-valentine-card-2025",
+    "post": {
+      "id": "1881174830193475811",
+      "createdAt": "2025-01-20T03:00:04.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "🍫お知らせです🍫\n\n柏たんバレンタイン名刺を配布します💖\n\n2月1日(土)～3月9日(日)まで\nデザインは見てのお楽しみに♪\n\n※お1人様1枚でお願いします。 https://t.co/ey5ZHdGM0i",
+      "url": "https://x.com/bic_kashiwa/status/1881174830193475811",
+      "media": [
+        "https://pbs.twimg.com/media/Ghs6sVBaoAAew7d.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": [
+        "kashiwa"
+      ],
+      "startDate": "2025-02-01",
+      "conditions": null
+    },
+    "rationale": "2/1〜3/9の柏たんバレンタイン名刺。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed",
+      "template-family:seasonal-valentine-card"
+    ],
+    "group": "kashiwa-valentine-card-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "柏たんバレンタイン名刺",
+          "evidence": [
+            "柏たんバレンタイン名刺を配布します💖"
+          ]
+        }
+      ],
+      "groupingNote": "2/1〜3/9の柏たんバレンタイン名刺。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 177050,
+      "postSha256": "82e90a0de8c4ba90ad85f17f158f3317b76471768fd2e2b1b6b5b7cd89043ff1",
+      "textSha256": "7927c709d4f779b31bc5a90fd9f2e08b0662c8e2327b1c51f0e654803763d809"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "fc90d9e0-87f9-473b-a947-1d2bade40ce3",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_kashiwa/status/1881174830193475811",
+          "origin": "manual-or-seed",
+          "title": "バレンタイン名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2023-01-31T15:00:00.000+00:00",
+            "endDate": "2023-03-08T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "kashiwa"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1875711882113511662",
+    "source": "public-post",
+    "description": "kashiwa-valentine-card-2025 matched control",
+    "post": {
+      "id": "1875711882113511662",
+      "createdAt": "2025-01-05T01:12:16.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "おはかしわ～❄柏たんログインしました♪\n\nビックカメラの #初売り は本日最終日✨\n明日からお仕事の方も多いのではないでしょうか❓\n\n今日も1日よろかしわ～🐍 https://t.co/EVo6MLakM2",
+      "url": "https://x.com/bic_kashiwa/status/1875711882113511662",
+      "media": [
+        "https://pbs.twimg.com/media/GgfeAzYa8AM5Wy0.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "hard-negative"
+    ],
+    "group": "control-1875711882113511662",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 180848,
+      "postSha256": "418e2e9298a7d915c60139d10b2d1023f278ebf9b29c6b736f33bb2f8e5b6209",
+      "textSha256": "33b67a2e36e721adbacf26b57a84a7f50edec7b86741a85f0567944568d84869"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

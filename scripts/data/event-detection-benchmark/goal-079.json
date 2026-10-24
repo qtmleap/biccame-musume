@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-1057565340027310080",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1057565340027310080",
+      "createdAt": "2018-10-31T09:30:00.000Z",
+      "screenName": "bic_shinjyuku",
+      "kind": "original",
+      "text": "iPhone XR 好評発売中！\nビックカメラグループでは、\n店舗、またはWebページからご予約も承り中！\n\n詳しくはこちら\nhttps://t.co/hGIuJOmbf2\n\n※在庫については販売員にお尋ねください。 https://t.co/ZtlxF052HA",
+      "url": "https://x.com/bic_shinjyuku/status/1057565340027310080",
+      "media": [
+        "https://pbs.twimg.com/amplify_video_thumb/1053156438514655232/img/qvvEtOkppA6b5TlU.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「iPhone XR 好評発売中！ / ビックカメラグループでは、 / 店舗、またはWebページからご予約も承り中！」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "iphone-xr-launch-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 809223,
+      "postSha256": "3de3688993d76612da47dec3e81867a35097383c8b52b58e7b019d90eedf378b",
+      "textSha256": "6ed1dc2a20ba07c65d35f9701a97dc2b5293717271da825e5e1b1602892b9e6c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-1056464410674311168",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "1056464410674311168",
+      "createdAt": "2018-10-28T08:35:18.000Z",
+      "screenName": "bicikebukuro",
+      "kind": "original",
+      "text": "ビックカメラ池袋本店で\n米津玄師の最新楽曲が聴ける!!!!\n\n10月31日発売のNew Single\n「Flamingo」がハイレゾ音源で試聴可能!!\n\nこの機会にぜひご試聴ください!!\n\n池袋本店2階　オーディオコーナー https://t.co/ssC0H99GxA",
+      "url": "https://x.com/bicikebukuro/status/1056464410674311168",
+      "media": [
+        "https://pbs.twimg.com/media/DqlPodOUcAE6Nwc.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「ビックカメラ池袋本店で / 米津玄師の最新楽曲が聴ける!!!! / 10月31日発売のNew Single」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "yonezu-flamingo-hires-listening-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 809804,
+      "postSha256": "df516e7739e60e5b585d35cc0efb9d2be29962fd0eba6099fa95e35ffa480631",
+      "textSha256": "fadaafbcfc0d17e2ace617246489ec9a8be3e2d06d4e36e37bf70c7782045780"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

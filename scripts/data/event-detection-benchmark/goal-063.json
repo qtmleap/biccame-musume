@@ -1,0 +1,106 @@
+[
+  {
+    "id": "goal-negative-925186647649533953",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "925186647649533953",
+      "createdAt": "2017-10-31T02:24:20.000Z",
+      "screenName": "bic_shinjuku3ch",
+      "kind": "original",
+      "text": "只今、#ビックロ ではお得な『#年賀状早割キャンペーン』を実施中です！ビックカメラ.comのよりネット注文も受付中！こちらのキャンペーンは12/10（日）までとなっております！ぜひご利用くださいませ！\n\n☆年賀状ご注文はコチラ☆\nhttps://t.co/tpJqZoD823 https://t.co/CzI8WtuEDj",
+      "url": "https://x.com/bic_shinjuku3ch/status/925186647649533953",
+      "media": [
+        "https://pbs.twimg.com/media/DNbrSKuV4AA6E9h.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「只今、#ビックロ ではお得な『#年賀状早割キャンペーン』を実施中です！ビックカメラ.comのよりネット注文も受付中！こちらのキャンペーンは12/10（日）までとなっております！ぜひご利用くださいませ！ / ☆年賀状ご注文はコチラ☆」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "newyear-photo-print-early-discount-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 910351,
+      "postSha256": "f7f028fcb48e50a53fde63535cd38345bf32f813a0443c5a0395ee15979099dc",
+      "textSha256": "f77aa922c3aff5af32801a489fcd3ffc88c6bbbfb0c5b1224ef4b76feab38242"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-negative-936123900777267200",
+    "source": "public-post",
+    "description": "一般販促・別IP・決済・営業時間等の非対象投稿",
+    "post": {
+      "id": "936123900777267200",
+      "createdAt": "2017-11-30T06:45:04.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "#キヤノン 高画質コンデジの『フラッグシップモデル』\n\n「PowerShot G1 X Mark III」#本日発売\n\nAPS-Cサイズの大型撮像素子、光学3倍ズームレンズ、電子ビューファインダー（EVF）が揃って\nさらに、\n＿人人人人人人人人人＿\n＞非常にコンパクト！＜\n￣ Y^Y^Y^Y^Y^Y^Y^Y ￣\n\n#新製品 #Canon #カメラの日 https://t.co/ybDZ23WJvN",
+      "url": "https://x.com/Bic_kawasaki/status/936123900777267200",
+      "media": [
+        "https://pbs.twimg.com/media/DP3HrpqVoAAyWI1.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "本文は「#キヤノン 高画質コンデジの『フラッグシップモデル』 / 「PowerShot G1 X Mark III」#本日発売 / APS-Cサイズの大型撮像素子、光学3倍ズームレンズ、電子ビューファインダー（EVF）が揃って」の案内。娘の参加・対象デザイン等の具体企画を述べず、投稿者の口調や店舗名だけでは本人企画にしない。",
+    "tags": [
+      "goal-pipeline",
+      "negative",
+      "non-character-promotion"
+    ],
+    "group": "canon-powershot-g1xiii-launch-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "一般商品や他作品の物品をビッカメ娘配布物へ数えない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 903624,
+      "postSha256": "739b95296f79d7668646b792923906872f196a61e1c02852792e20ba2f368405",
+      "textSha256": "c56b685ef328556adcc19d56e9d5d65c243d4a9e9aa676b82e30c696542b572e"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

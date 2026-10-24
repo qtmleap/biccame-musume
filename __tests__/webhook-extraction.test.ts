@@ -17,7 +17,7 @@ const post: DetectPost = {
   media: []
 }
 const toolResponse = (input: unknown) => Response.json({ content: [{ type: 'tool_use', name: 'answer', input }] })
-const validInput = { events: [{ item: '限定名刺', store: 'akiba', evidence: [post.text] }] }
+const validInput = { events: [{ item: '限定名刺', stores: ['akiba'], characterIds: [], evidence: [post.text] }] }
 
 const cases: { name: string; code: string; fetcher: TitleFetcher }[] = [
   {
@@ -57,17 +57,16 @@ const cases: { name: string; code: string; fetcher: TitleFetcher }[] = [
   {
     name: '根拠の創作を区別する',
     code: 'extraction_invalid_evidence',
-    fetcher: async () => toolResponse({ events: [{ item: '限定名刺', evidence: ['創作した条件'] }] })
+    fetcher: async () =>
+      toolResponse({ events: [{ item: '限定名刺', stores: [], characterIds: [], evidence: ['創作した条件'] }] })
   },
   {
     name: '対象外の店舗を区別する',
     code: 'extraction_invalid_store',
-    fetcher: async () => toolResponse({ events: [{ item: '限定名刺', store: 'abeno', evidence: [post.text] }] })
-  },
-  {
-    name: '重複候補を区別する',
-    code: 'extraction_duplicate_candidate',
-    fetcher: async () => toolResponse({ events: [validInput.events[0], validInput.events[0]] })
+    fetcher: async () =>
+      toolResponse({
+        events: [{ item: '限定名刺', stores: ['synthetic-invalid-store'], characterIds: [], evidence: [post.text] }]
+      })
   },
   {
     name: '複数ツールの応答は再試行しない',
@@ -106,6 +105,16 @@ for (const scenario of cases) {
     expect(calls).toHaveLength(1)
   })
 }
+
+test('同じ原文範囲の完全重複は通信を増やさず1候補に戻す', async () => {
+  const calls: string[] = []
+  const extracted = await extractWebhookEvents(env, post, async (url) => {
+    calls.push(url)
+    return toolResponse({ events: [validInput.events[0], validInput.events[0]] })
+  })
+  expect(extracted).toEqual(validInput)
+  expect(calls).toHaveLength(1)
+})
 
 test('片方の設定だけ欠けても通信せず安全なコードを返す', async () => {
   const calls: string[] = []

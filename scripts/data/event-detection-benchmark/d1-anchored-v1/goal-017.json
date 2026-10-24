@@ -1,0 +1,160 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1914882478323671491",
+    "source": "public-post",
+    "description": "tenjin-store-anniv-card-2025/period",
+    "post": {
+      "id": "1914882478323671491",
+      "createdAt": "2025-04-23T03:22:14.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "GW🎏もあるし…\n総選挙✏もあるし…\nクリアファイルプレゼント🎁もあるし…\n店舗誕生名刺の配布期間を\n『5/11（日）』に変更しますΣ（・□・；） https://t.co/2evhBaHU8v",
+      "url": "https://x.com/biccameratenjin/status/1914882478323671491",
+      "media": [
+        "https://pbs.twimg.com/media/GpMG74ua4AAtjOZ.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "limited_card",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "店舗誕生名刺の配布期間を5/11に変更する通知。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "update",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "tenjin-store-anniv-card-2025/period",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "店舗誕生名刺",
+          "evidence": [
+            "店舗誕生名刺の配布期間を"
+          ]
+        }
+      ],
+      "groupingNote": "店舗誕生名刺の配布期間を5/11に変更する通知。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 152808,
+      "postSha256": "2093741d703a6d945abceee40d074d963782127ae3527a691b1f9e9bd657a9d9",
+      "textSha256": "d28839e3b7747d0a7e1ed5b4d7d8e39ba295cb58b360762d9d46874e71e376a1"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "fad5154d-1e37-47f0-885a-e57060749ae9",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/biccameratenjin/status/1914882478323671491",
+          "origin": "manual-or-seed",
+          "title": "店舗誕生名刺",
+          "category": "limited_card",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2025-03-26T15:00:00.000+00:00",
+            "endDate": "2025-05-10T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "tenjin2"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "everyone",
+                "purchaseAmount": null,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1916061650618355948",
+    "source": "public-post",
+    "description": "tenjin-store-anniv-card-2025/period matched control",
+    "post": {
+      "id": "1916061650618355948",
+      "createdAt": "2025-04-26T09:27:50.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "圧巻(ﾟωﾟﾉ)ﾉ\n各メーカーのレンズ📷をいつでも手に取れる❣\n重さ…サイズ…装着感…自分のカメラ📷でお試しできるって🎶\nビックカメラ天神②号館３階カメラコーナーにぜひご来店下さい🐾 https://t.co/Du6LLPSIBP",
+      "url": "https://x.com/biccameratenjin/status/1916061650618355948",
+      "media": [
+        "https://pbs.twimg.com/media/Gpc06ebbEAMNgOB.png",
+        "https://pbs.twimg.com/media/Gpc1r1CbMAANkNB.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-1916061650618355948",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 151885,
+      "postSha256": "41e96373f6226b4118449e087f6307b7c9b266166e7124155dac104439d4c538",
+      "textSha256": "6d8ba9c6e6be6ffed83581254ac44470637fa5f8185d9e225cb7fe722f56d72b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

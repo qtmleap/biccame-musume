@@ -1,0 +1,160 @@
+[
+  {
+    "id": "goal-positive-1836299114016907645",
+    "source": "public-post",
+    "description": "kashiwa regular redesign autumn 2024",
+    "post": {
+      "id": "1836299114016907645",
+      "createdAt": "2024-09-18T07:00:00.000Z",
+      "screenName": "bic_kashiwa",
+      "kind": "original",
+      "text": "💡柏たん名刺に関してお知らせです💡\n\n📝現在配布している名刺は3種類です\n①通年名刺(旧デザイン)→無くなり次第終了\n②通年名刺(新デザイン)→期間問わず配布\n③季節名刺(秋デザイン)→9/1～10/31\n\n※いずれもお1人様1枚でお願いします。\n※名刺入れに無い場合、お近くの販売員にお声掛けください。 https://t.co/JNby88Payl",
+      "url": "https://x.com/bic_kashiwa/status/1836299114016907645",
+      "media": [
+        "https://pbs.twimg.com/media/GXuSHNnagAAdP-A.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "3デザインの期間が別々、秋版は9/1から10/31。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update",
+      "multi-item"
+    ],
+    "group": "kashiwa-regular-redesign-autumn-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "旧通年名刺",
+          "evidence": [
+            "💡柏たん名刺に関してお知らせです💡",
+            "📝現在配布している名刺は3種類です",
+            "①通年名刺(旧デザイン)→無くなり次第終了",
+            "②通年名刺(新デザイン)→期間問わず配布",
+            "③季節名刺(秋デザイン)→9/1～10/31",
+            "※名刺入れに無い場合、お近くの販売員にお声掛けください。 https://t.co/JNby88Payl"
+          ]
+        },
+        {
+          "item": "新通年名刺",
+          "evidence": [
+            "💡柏たん名刺に関してお知らせです💡",
+            "📝現在配布している名刺は3種類です",
+            "①通年名刺(旧デザイン)→無くなり次第終了",
+            "②通年名刺(新デザイン)→期間問わず配布",
+            "③季節名刺(秋デザイン)→9/1～10/31",
+            "※名刺入れに無い場合、お近くの販売員にお声掛けください。 https://t.co/JNby88Payl"
+          ]
+        },
+        {
+          "item": "秋名刺",
+          "evidence": [
+            "💡柏たん名刺に関してお知らせです💡",
+            "📝現在配布している名刺は3種類です",
+            "①通年名刺(旧デザイン)→無くなり次第終了",
+            "②通年名刺(新デザイン)→期間問わず配布",
+            "③季節名刺(秋デザイン)→9/1～10/31",
+            "※名刺入れに無い場合、お近くの販売員にお声掛けください。 https://t.co/JNby88Payl"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 210156,
+      "postSha256": "299eff3d7f427b983493dd53fef82cdd2ca9f8b76f7faefea7230031fba6f7c4",
+      "textSha256": "d19121bc3ef242b5305f600fe9a231eaa4f6e921c2c612cf298b012fe6dd3c96"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1858764695911661726",
+    "source": "public-post",
+    "description": "kawasaki regular autumn card 2024",
+    "post": {
+      "id": "1858764695911661726",
+      "createdAt": "2024-11-19T06:50:12.000Z",
+      "screenName": "Bic_kawasaki",
+      "kind": "original",
+      "text": "🥗- 定期案内 -🥗\n#ビッカメ娘 24番目の娘 #川崎たん の名刺は2階総合カウンターで配布中🍀等身大パネルは２階店内側店頭で皆さまをお迎えしてます！\n\n-名刺について-\n●種類：2種類 (通常 / 季節名刺 )\n●季節限定名刺は【配布条件有り】\n●配布方法：スタッフから\"手渡し”\n▲お一人１日各種１枚まで https://t.co/gC6h4jfLiK",
+      "url": "https://x.com/Bic_kawasaki/status/1858764695911661726",
+      "media": [
+        "https://pbs.twimg.com/media/GcuolCjbgAANSYt.jpg",
+        "https://pbs.twimg.com/media/GcuonrbbcAAps5T.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true
+    },
+    "rationale": "季節版だけ配布条件あり、具体条件は未記載。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update",
+      "multi-item"
+    ],
+    "group": "kawasaki-regular-autumn-card-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "通常名刺",
+          "evidence": [
+            "#ビッカメ娘 24番目の娘 #川崎たん の名刺は2階総合カウンターで配布中🍀等身大パネルは２階店内側店頭で皆さまをお迎えしてます！",
+            "-名刺について-",
+            "●種類：2種類 (通常 / 季節名刺 )",
+            "●季節限定名刺は【配布条件有り】"
+          ]
+        },
+        {
+          "item": "季節名刺",
+          "evidence": [
+            "#ビッカメ娘 24番目の娘 #川崎たん の名刺は2階総合カウンターで配布中🍀等身大パネルは２階店内側店頭で皆さまをお迎えしてます！",
+            "-名刺について-",
+            "●種類：2種類 (通常 / 季節名刺 )",
+            "●季節限定名刺は【配布条件有り】"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 192928,
+      "postSha256": "9e1d87c1dfa28b23885148ee7fd7f49a294da69a2caa7508f57d2f97cca04217",
+      "textSha256": "c1ce8e00848b020751f283cf0dfac49a570c7be862e6b37d5179c69525751b78"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

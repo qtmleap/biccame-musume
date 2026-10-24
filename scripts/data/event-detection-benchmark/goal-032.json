@@ -1,0 +1,125 @@
+[
+  {
+    "id": "goal-positive-1410433063767592963",
+    "source": "public-post",
+    "description": "sagami summer card 2021",
+    "post": {
+      "id": "1410433063767592963",
+      "createdAt": "2021-07-01T03:00:21.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "＼ビッカメ娘の夏扉／\n🏖️7/1～8/31まで🏖️\n扉と名刺が夏バージョンになりました(*≧ω≦)\n名刺はゲームコーナー奥さがみたんミュージアムで配布しております！！\nご来店の際は貰って下さいね(*´艸`*)\n#さがみたん https://t.co/RYM6TEqkgW",
+      "url": "https://x.com/bic_sagamioono/status/1410433063767592963",
+      "media": [
+        "https://pbs.twimg.com/media/E5Lc0oIUcAETGIg.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "category": "limited_card",
+      "startDate": "2021-07-01"
+    },
+    "rationale": "7/1から8/31、扉の展示更新と名刺配布。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "sagami-summer-card-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "さがみたん夏名刺",
+          "evidence": [
+            "扉と名刺が夏バージョンになりました(*≧ω≦)",
+            "名刺はゲームコーナー奥さがみたんミュージアムで配布しております！！"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 545934,
+      "postSha256": "88e3c25f41ff05694adf28ed133629caf024684ec076d604b3b2350019bc7f58",
+      "textSha256": "019fe271a1cba7b3c50cc7de3f15d7471ed2e47ee57df687d0a38be6f6b41810"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1431104185928351747",
+    "source": "public-post",
+    "description": "abeno halloween card 2021",
+    "post": {
+      "id": "1431104185928351747",
+      "createdAt": "2021-08-27T04:00:01.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "じゃっじゃーん❗️❗️❗️\nあべのたんの✨期間限定ハロウィン名刺✨を配布するよー！🦇(Q*aωa)つ👻\n\n期間は9月1日(水)～10月31日(日)まで🥳🎉🎉\nお近くにお寄りの際はぜひゲットしてな✨🎃✨\n店頭のあべのたんにご用意してます🧡\n\n(もしあべのたんの所になかったらビックカメラの人にお声掛けください🥺💦) https://t.co/4m5qqRlyMu",
+      "url": "https://x.com/bic_abeno/status/1431104185928351747",
+      "media": [
+        "https://pbs.twimg.com/media/E9xEeUnVgAEowpt.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "abeno"
+      ],
+      "characterIds": [
+        "abeno"
+      ],
+      "category": "limited_card",
+      "startDate": "2021-09-01"
+    },
+    "rationale": "9/1から10/31の限定名刺。条件無記載。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "abeno-halloween-card-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "あべのたんハロウィン名刺",
+          "evidence": [
+            "あべのたんの✨期間限定ハロウィン名刺✨を配布するよー！🦇(Q*aωa)つ👻"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 532140,
+      "postSha256": "2dfded8dd8bcf7a1d70b0400554dcdbab23b776b5e732edb8f7b8fbd6bc0fcf6",
+      "textSha256": "b08b7b7ae5fb549056c3bd651c153343243dbb6acb5efc3a6c225e52e5c7df56"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

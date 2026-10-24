@@ -1,0 +1,128 @@
+[
+  {
+    "id": "expanded-v2-positive-832523610325606400",
+    "source": "public-post",
+    "description": "nagoyagate-opening-song-contest-2017",
+    "post": {
+      "id": "832523610325606400",
+      "createdAt": "2017-02-17T09:34:30.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "＼2/23 23:59まで／\n4月7日オープンの名古屋JRゲートタワー店の歌詞を大募集！\n採用された方には、ビッカメ娘オリジナルGIFTカード(最大3万円分)をプレゼント！！\n#ビックカメラテーマソング募集\n詳しくはコチラ⇒ https://t.co/vtM0ElcjvB https://t.co/4Lh9QtgTLq",
+      "url": "https://x.com/bic_nagoya/status/832523610325606400",
+      "media": [
+        "https://pbs.twimg.com/media/C422qttVMAEXMHo.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "歌詞採用者へのギフトカード。通常ギフトカード販促や全員配布ではない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "nagoyagate-opening-song-contest-2017",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "オリジナルGIFTカード",
+          "evidence": [
+            "＼2/23 23:59まで／",
+            "4月7日オープンの名古屋JRゲートタワー店の歌詞を大募集！",
+            "採用された方には、ビッカメ娘オリジナルGIFTカード(最大3万円分)をプレゼント！！",
+            "#ビックカメラテーマソング募集",
+            "詳しくはコチラ⇒ https://t.co/vtM0ElcjvB https://t.co/4Lh9QtgTLq"
+          ]
+        }
+      ],
+      "groupingNote": "歌詞採用者へのギフトカード。通常ギフトカード販促や全員配布ではない。",
+      "unannotatedFields": [
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 980395,
+      "postSha256": "4536be6665bac516e8f2f2743335cd7bb93629200e0e376842a318e71a85818a",
+      "textSha256": "6d8c1798040c2585f6f203c06302eea0289a4fa35ba8559e0c3da48d2c639996"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-834939521435336704",
+    "source": "public-post",
+    "description": "nagoyagate-opening-song-contest-2017 matched control",
+    "post": {
+      "id": "834939521435336704",
+      "createdAt": "2017-02-24T01:34:28.000Z",
+      "screenName": "bic_nagoya",
+      "kind": "original",
+      "text": "【2F テレビコーナー】\n \nプレミアムフライデーの本日限定！！\n『4Kテレビ』と『ホームシアター』の体験会を実施中！(｡･ω･)ﾉﾞ \n \n80型大画面テレビと大迫力のホームシアターを\n圧巻の4K高画質と共にご体験頂けます♪... https://t.co/dCb1waX3io",
+      "url": "https://x.com/bic_nagoya/status/834939521435336704",
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-834939521435336704",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 978185,
+      "postSha256": "6b2156f8e10b156244a26d72b156305df36a0e048a55f59aa891e04cb6b7a985",
+      "textSha256": "6c522c39f5e1edaef193caac4d1d6f64dc5b1b2eef0b9c78856cc8fe40a3d71b"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

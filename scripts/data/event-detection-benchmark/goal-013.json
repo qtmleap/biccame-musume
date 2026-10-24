@@ -1,0 +1,131 @@
+[
+  {
+    "id": "goal-positive-989793811831246848",
+    "source": "public-post",
+    "description": "tachikawa goldenweek card 2018",
+    "post": {
+      "id": "989793811831246848",
+      "createdAt": "2018-04-27T09:10:08.000Z",
+      "screenName": "bic_tachikawa",
+      "kind": "original",
+      "text": "そしてそして！ #立川たん #GW 限定！\n名刺の配布を明日からスタート(Ｕ 'ᴗ' Ｕ)\n期間は4/28(土)～5/13(日)です♪\n場所は1階総合カウンターにて✨✨\n担当者に #立川たんの名刺ください でお願いします♪\nすこーしだけ見せちゃいます(Ｕ⌒▽⌒Ｕ)チラッ https://t.co/YO7nTAOCBg",
+      "url": "https://x.com/bic_tachikawa/status/989793811831246848",
+      "media": [
+        "https://pbs.twimg.com/media/DbxzzE7V0AAC2Bl.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "tachikawa"
+      ],
+      "characterIds": [
+        "tachikawa"
+      ],
+      "category": "limited_card",
+      "startDate": "2018-04-28"
+    },
+    "rationale": "4/28から5/13、名刺くださいと声かけ。購入条件はないと断定しない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "tachikawa-goldenweek-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "立川たんGW限定名刺",
+          "evidence": [
+            "名刺の配布を明日からスタート(Ｕ 'ᴗ' Ｕ)",
+            "担当者に #立川たんの名刺ください でお願いします♪"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 862748,
+      "postSha256": "9edeab06b070370d0a0d356dc42ff63e840aa95b14b49f981016d18b0180b4db",
+      "textSha256": "f907980348a44b0dc65bd662e7b8b4358c4a928a2264672568f47354400e5d80"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-997317926809100289",
+    "source": "public-post",
+    "description": "ohmiya new card may 2018",
+    "post": {
+      "id": "997317926809100289",
+      "createdAt": "2018-05-18T03:28:17.000Z",
+      "screenName": "bic_ohmiya",
+      "kind": "original",
+      "text": "５月１８日 本日から 新デザインの名刺配布してま～っす♪\n１F入り口の わたしのパネルに設置中!!\nぜひぜひ お持ち帰りくださ～いヾ(*´ω`)ﾉﾞ\n.｡oO（くつ下柄と絆創膏 トレードマーク２つもデザインしてもらった( ´艸｀)\n\n＃大宮たん\n＃大宮たん名刺 https://t.co/pXthGQDkhl",
+      "url": "https://x.com/bic_ohmiya/status/997317926809100289",
+      "media": [
+        "https://pbs.twimg.com/media/DdcsuLNVMAA6tpc.jpg",
+        "https://pbs.twimg.com/media/DdcsvuLUwAAVO5K.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "ohmiya"
+      ],
+      "characterIds": [
+        "ohmiya"
+      ],
+      "category": "regular_card"
+    },
+    "rationale": "本日から新デザインを配布。パネルの場所と対象デザインの根拠を区別。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "ohmiya-new-card-may-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "大宮たん新デザイン名刺",
+          "evidence": [
+            "５月１８日 本日から 新デザインの名刺配布してま～っす♪",
+            "＃大宮たん名刺 https://t.co/pXthGQDkhl"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 856798,
+      "postSha256": "3d478a54d5277830d2a8c5621ac161858e7b4417cd3b252ea0cfd05842bd0d6e",
+      "textSha256": "70586e13810e14bbc9384370f3f3d0426a09c137ec60d1729ecde738c4f83edf"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

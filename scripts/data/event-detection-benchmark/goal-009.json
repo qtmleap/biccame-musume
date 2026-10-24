@@ -1,0 +1,138 @@
+[
+  {
+    "id": "goal-positive-962137468609835008",
+    "source": "public-post",
+    "description": "chofu valentine card 2018",
+    "post": {
+      "id": "962137468609835008",
+      "createdAt": "2018-02-10T01:33:42.000Z",
+      "screenName": "bic_keiochofu",
+      "kind": "original",
+      "text": "＼§( *'▽')／ﾊﾞﾊﾞｰﾝ!!\n\n調布たんログイン～！\n今日から、 #調布たん バレンタイン限定名刺を1F総合案内カウンターにて配布開始ですよ🎵\n\n#おはようございます \n#バレンタイン\n#ビッカメ娘 https://t.co/wzeOi6H1bH",
+      "url": "https://x.com/bic_keiochofu/status/962137468609835008",
+      "media": [
+        "https://pbs.twimg.com/media/DVoy6r1VAAA4CFv.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "chofu"
+      ],
+      "characterIds": [
+        "chofu"
+      ],
+      "category": "limited_card",
+      "startDate": "2018-02-10"
+    },
+    "rationale": "今日から限定名刺を開始。2/14以降延長投稿は同企画として除く。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new"
+    ],
+    "group": "chofu-valentine-card-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "調布たんバレンタイン名刺",
+          "evidence": [
+            "今日から、 #調布たん バレンタイン限定名刺を1F総合案内カウンターにて配布開始ですよ🎵"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 884810,
+      "postSha256": "34eb95e41f2c679a1b332082fb1e8d26e25365016abcaf16c179b5f60bf56258",
+      "textSha256": "91f3d72bc57fba4f97ca276ffbfa132096ff2e9591e21cb4161ad920577a851a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-967614503452946432",
+    "source": "public-post",
+    "description": "sagami birthday three giveaways 2018",
+    "post": {
+      "id": "967614503452946432",
+      "createdAt": "2018-02-25T04:17:29.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "ついに明日から…\n\n＼さがみたんのお誕生会／\n\n始まりますよ～！！！\nご来店された方には名刺とめいろとバースデーカードをプレゼントしてますよ(๑>◡<๑)バースデーカードはレジで「バースデーカードください」と一言言ってね！みんな来てくれると嬉しいな～♪\n#3月4日はさがみたんのバースデー https://t.co/m9nmUkS73P",
+      "url": "https://x.com/bic_sagamioono/status/967614503452946432",
+      "media": [
+        "https://pbs.twimg.com/media/DW2niNQUQAEbv4f.png"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "sagami"
+      ],
+      "startDate": "2018-02-26"
+    },
+    "rationale": "名刺・めいろ・バースデーカードを明示。声かけ条件はカードだけ。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "new",
+      "multi-item"
+    ],
+    "group": "sagami-birthday-three-giveaways-2018",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "名刺",
+          "evidence": [
+            "ご来店された方には名刺とめいろとバースデーカードをプレゼントしてますよ(๑>◡<๑)バースデーカードはレジで「バースデーカードください」と一言言ってね！みんな来てくれると嬉しいな～♪"
+          ]
+        },
+        {
+          "item": "めいろ",
+          "evidence": [
+            "ご来店された方には名刺とめいろとバースデーカードをプレゼントしてますよ(๑>◡<๑)バースデーカードはレジで「バースデーカードください」と一言言ってね！みんな来てくれると嬉しいな～♪"
+          ]
+        },
+        {
+          "item": "バースデーカード",
+          "evidence": [
+            "ご来店された方には名刺とめいろとバースデーカードをプレゼントしてますよ(๑>◡<๑)バースデーカードはレジで「バースデーカードください」と一言言ってね！みんな来てくれると嬉しいな～♪"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 880326,
+      "postSha256": "cceccb88619af1b72087d66aa3b6bdf9512dd3d8de0d8c1ac390d976c3fdc32f",
+      "textSha256": "642f2a0145b92c0e05bca380449c25e7ca86b2a922534b027c55e52cc7d11f32"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

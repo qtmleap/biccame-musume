@@ -1,0 +1,165 @@
+[
+  {
+    "id": "public-f-1318827810971025409",
+    "source": "public-post",
+    "description": "アプリでタッチの抽選ポイント",
+    "post": {
+      "id": "1318827810971025409",
+      "createdAt": "2020-10-21T08:13:47.000Z",
+      "screenName": "biccameratenjin",
+      "kind": "original",
+      "text": "#アプリでタッチ 試して当たる！\n\n期間中、エントリーばしよっただき、対象店舗で「アプリでタッチ」ばご利用もろうたお客様ん中から、抽選で50名様にビックポイントば1,000ポイントプレゼント！\n\n2020年10月1日（木）～10月31日（土）\n\nエントリーと詳細は👇\nhttps://t.co/77Yvf5ZUuf\n\n#ビックカメラ https://t.co/YN6m3mR0Os",
+      "url": "https://x.com/biccameratenjin/status/1318827810971025409",
+      "media": [
+        "https://pbs.twimg.com/media/Ek1ppZfVMAAk5a1.jpg",
+        "https://pbs.twimg.com/media/Ek1pvHXVMAAbkYH.jpg",
+        "https://pbs.twimg.com/media/Ek1pwonU0AEE1KN.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "アプリ利用とエントリーによる一般ポイント抽選で、娘の物品や参加企画ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "app",
+      "lottery",
+      "points"
+    ],
+    "group": "app-touch-points-october-2020",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1428644100870316032",
+    "source": "public-post",
+    "description": "home 5G予約のdポイント特典",
+    "post": {
+      "id": "1428644100870316032",
+      "createdAt": "2021-08-20T09:04:31.000Z",
+      "screenName": "bic_abeno",
+      "kind": "original",
+      "text": "おうちのネット、遅くない！？\n簡単設置でWi-Fi環境が整う❗️😆🐙\n『home 5G　HR01』がついに登場！\n\n工事不要でコンセントに挿すだけですぐに５G高速通信が使えるで✨✨\n8/26までのご予約・お申込みで3.000ｄポイントプレゼント❗️お得な機会をお見逃しなく❗️🧐🐙\n詳しくは当店ドコモスタッフまで～🥰🐙 https://t.co/x74TdIftIA",
+      "url": "https://x.com/bic_abeno/status/1428644100870316032",
+      "media": [
+        "https://pbs.twimg.com/media/E9OQOyYVUAEAVWO.png",
+        "https://pbs.twimg.com/media/E9OQOyJVgAMHIk7.png",
+        "https://pbs.twimg.com/media/E9OQOyeVcAA9-EO.png"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "回線機器の予約・申込みポイント特典で、娘の企画・物品ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "reservation",
+      "points",
+      "ordinary-product"
+    ],
+    "group": "docomo-home5g-launch-august-2021",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1402801398064947204",
+    "source": "public-post",
+    "description": "イヤホン先行展示と予約",
+    "post": {
+      "id": "1402801398064947204",
+      "createdAt": "2021-06-10T01:34:50.000Z",
+      "screenName": "bic_sagamioono",
+      "kind": "original",
+      "text": "#ソニー フルワイヤレスイヤホンの最高峰モデル登場！\n『WF-1000XM4BM』\nソニーの完全ワイヤレスで初めてのハイレゾワイヤレス✨\nビックカメラでは先行展示中ヾ(*´ω`)ﾉﾞ\nオーディオコーナーにて予約受付中！！\nhttps://t.co/X57Ru6D14c https://t.co/uoh6VgncRX",
+      "url": "https://x.com/bic_sagamioono/status/1402801398064947204",
+      "media": [
+        "https://pbs.twimg.com/media/E3e_-00UcAAITEs.jpg",
+        "https://pbs.twimg.com/media/E3e_7ALUcAgvwfH.jpg",
+        "https://pbs.twimg.com/media/E3e_75qVoAAd2hs.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ソニー製品の展示と予約の案内で、娘デザインの物品や出演はない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "display",
+      "reservation",
+      "ordinary-product"
+    ],
+    "group": "sony-wf1000xm4-preorder-june-2021",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1451369798412038150",
+    "source": "public-post",
+    "description": "ポケモン25周年カードの当選発表",
+    "post": {
+      "id": "1451369798412038150",
+      "createdAt": "2021-10-22T02:08:19.000Z",
+      "screenName": "niigata_bic",
+      "kind": "original",
+      "text": "【ポケモンカードゲーム 25th ANNIVERSARY COLLECTION 抽選結果発表】\nご当選の方は受付時の「番号札」をお持ちください\n⚡購入期限：10/22(金)営業時間中（21時まで）\n⚡販売場所：2Fレジカウンター\n※申し込み店舗以外購入できません https://t.co/saTuPaczQW",
+      "url": "https://x.com/niigata_bic/status/1451369798412038150",
+      "media": [
+        "https://pbs.twimg.com/media/FCRNEUEVIAQ4AEy.jpg",
+        "https://pbs.twimg.com/media/FCRNFaGVQAMX-zK.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "周年・カードはポケモン商品の抽選販売を指し、娘の周年名刺等ではない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "other-ip",
+      "anniversary",
+      "trading-card",
+      "lottery-result"
+    ],
+    "group": "pokemon25-card-lottery-october-2021",
+    "reviewStatus": "provisional"
+  },
+  {
+    "id": "public-f-1550708018702348288",
+    "source": "public-post",
+    "description": "テレビ選び方セミナーの参加特典",
+    "post": {
+      "id": "1550708018702348288",
+      "createdAt": "2022-07-23T05:02:57.000Z",
+      "screenName": "bic_fujisawa",
+      "kind": "original",
+      "text": "(3・ω・)7/23＆24限定\n⏰12時・14時・16時 1日計3回\n『ソニーテレビ選び方セミナー』開催！\nテレビの買い替えを検討中の方は必聴✨\nわかりやすく大きさや違いを説明してくれるぜ。\nご参加頂いた方に、先着で記念品プレゼント🎁\n興味がある方、お時間ある方は2Fテレビコーナーで待ってるぜ🤗 https://t.co/RNRpeojytk",
+      "url": "https://x.com/bic_fujisawa/status/1550708018702348288",
+      "media": [
+        "https://pbs.twimg.com/media/FYU2EveaMAA0_5s.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false
+    },
+    "rationale": "ソニーの一般テレビ講座と記念品で、娘の出演や娘のグッズは案内されていない。",
+    "tags": [
+      "historical",
+      "negative",
+      "hard-negative",
+      "year-matched",
+      "ordinary-event",
+      "seminar",
+      "giveaway"
+    ],
+    "group": "sony-tv-seminar-july-2022",
+    "reviewStatus": "provisional"
+  }
+]

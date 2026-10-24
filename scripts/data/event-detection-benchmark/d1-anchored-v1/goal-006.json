@@ -1,0 +1,165 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-1873932722839994431",
+    "source": "public-post",
+    "description": "yuurakuchou-keys-cafe-notebook-2025",
+    "post": {
+      "id": "1873932722839994431",
+      "createdAt": "2024-12-31T03:22:31.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "キーズカフェと有楽町たんより「ありがとう」を込めてイベント開催💕\n\n☕1月1日～なくなり次第終了\n　※最長でキーズカフェ有楽町店の閉店日（2025年1月19日）まで\n☕特製ノートを200部限定\n☕キーズカフェ商品1点＋店内2,000円以上の両レシート（当日会計のみ）\n☕1階総合案内カウンターにてお渡し https://t.co/WNhPe7GzWg",
+      "url": "https://x.com/bic_yuurakuchou/status/1873932722839994431",
+      "media": [
+        "https://pbs.twimg.com/media/GgGL2KDa4AAuaJt.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "yuurakuchou"
+      ],
+      "startDate": "2025-01-01",
+      "conditions": null
+    },
+    "rationale": "キーズカフェ閉店前の特製ノート200部限定。複合レシート条件は型に収まらず条件は未注釈。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "new",
+      "post-kind:original",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "yuurakuchou-keys-cafe-notebook-2025",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "new",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "特製ノート",
+          "evidence": [
+            "☕特製ノートを200部限定"
+          ]
+        }
+      ],
+      "groupingNote": "キーズカフェ閉店前の特製ノート200部限定。複合レシート条件は型に収まらず条件は未注釈。",
+      "unannotatedFields": [
+        "stores",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 182435,
+      "postSha256": "90a4419542fe2f002f7b16a2db722d09f6f926a3c2be4249c86a815dd16f2165",
+      "textSha256": "94e886647b78f1219940fce94feda349f6c5c57e2bb648c15ad1969cb9908e6c"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "abafc285-1ec3-4f81-b222-4536d63c5852",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_yuurakuchou/status/1873932722839994431",
+          "origin": "manual-or-seed",
+          "title": "特製ノート",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2024-12-31T15:00:00.000+00:00",
+            "endDate": "2025-01-18T15:00:00.000+00:00",
+            "isPreliminary": false,
+            "limitedQuantity": null,
+            "stores": [
+              "yuurakuchou"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 200,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 2000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-1870337613049270728",
+    "source": "public-post",
+    "description": "yuurakuchou-keys-cafe-notebook-2025 matched control",
+    "post": {
+      "id": "1870337613049270728",
+      "createdAt": "2024-12-21T05:16:50.000Z",
+      "screenName": "bic_yuurakuchou",
+      "kind": "original",
+      "text": "B2Fカメラコーナーよりイベントのお知らせ📢\n\n今年もやってまいりました、地下2階地下鉄入り口にて、チェキの体験会を実施中です✨\nとっても小さい手のひらサイズチェキのinstaxpal！\nスマホの写真を簡単プリントのinstaxminilink3！\n\n是非このイベントでチェキのわくわくを体感してみては！🎄 https://t.co/Msqci7OFfx",
+      "url": "https://x.com/bic_yuurakuchou/status/1870337613049270728",
+      "media": [
+        "https://pbs.twimg.com/media/GfTGIiFa8AAPMK_.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:original",
+      "easy-negative"
+    ],
+    "group": "control-1870337613049270728",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 184909,
+      "postSha256": "16ab1940188f00023dcd5fce430b5aba0d053d9db2c727cadb073a4a2703221a",
+      "textSha256": "36836eafcd8f63fae568cf97b5bb468b3e641602346eb44d045a7c7e4a5af2e0"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

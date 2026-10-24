@@ -1,0 +1,128 @@
+[
+  {
+    "id": "goal-positive-1787731424767771105",
+    "source": "public-post",
+    "description": "pkan parcoala keychain 2024",
+    "post": {
+      "id": "1787731424767771105",
+      "createdAt": "2024-05-07T06:29:20.000Z",
+      "screenName": "bicpkanhonten",
+      "kind": "original",
+      "text": "＼もうGET✊💖したよね…？／\n❣️パソ館たん×パルコアラ　アクキー❣️\n\n超可愛いアクキーは当店で4,000円以上の購入でお渡ししてます😻≪ﾏﾀﾞｱﾙﾖ‼︎\n\n5階でもおしゃれな商品沢山扱ってるので是非お越しくださいね🦋🦋\n等身大パネル🧚‍♂️と写真撮ってくださいね！\n\n⚠︎娘ファン販売員のポストです⚠︎ https://t.co/63z8q00Iob",
+      "url": "https://x.com/bicpkanhonten/status/1787731424767771105",
+      "media": [
+        "https://pbs.twimg.com/media/GM9LYdYa4AAUXTf.jpg",
+        "https://pbs.twimg.com/media/GM9LZnyboAAnznY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "pkan"
+      ],
+      "characterIds": [
+        "pkan"
+      ],
+      "category": "ackey"
+    },
+    "rationale": "4000円以上購入で継続配布。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "pkan-parcoala-keychain-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "パソ館たん×パルコアラアクキー",
+          "evidence": [
+            "❣️パソ館たん×パルコアラ　アクキー❣️",
+            "超可愛いアクキーは当店で4,000円以上の購入でお渡ししてます😻≪ﾏﾀﾞｱﾙﾖ‼︎"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 254559,
+      "postSha256": "04b454365e04ada3c66557596e72d94e17a4f827696f53e8ff2c5e877a382cca",
+      "textSha256": "b66cb2714f24e74cf97af6965020901b676b92ab472cd300563e2935f75dd2bf"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "goal-positive-1809769306453844272",
+    "source": "public-post",
+    "description": "shibuya fifth anniversary card 2024",
+    "post": {
+      "id": "1809769306453844272",
+      "createdAt": "2024-07-07T02:00:01.000Z",
+      "screenName": "bic_shibuya",
+      "kind": "original",
+      "text": "おはハチ🐶\n#しぶハチたん ハチ✨\n\n#しぶとーたん ちにきたハチ🎵\n( *´艸｀)ｳﾚｼｲﾊﾁ～\n\nきょうは #七夕🎋 そして～\nしぶハチたんとしぶとーたんの\n擬人化５周年ハチ‼ めでたいっ🎂\n\n渋谷ハチ公口店で\n５周年記念名刺(しぶハチたんVer)配布中だよ～\n遊びに来てハチ🎵\n\n#渋谷ビッカメ娘とおでかけ",
+      "url": "https://x.com/bic_shibuya/status/1809769306453844272",
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "stores": [
+        "shibuhachi"
+      ],
+      "characterIds": [
+        "shibuhachi"
+      ],
+      "category": "limited_card"
+    },
+    "rationale": "ハチ公口店で配布中。投稿元東口店を開催地としない。",
+    "tags": [
+      "goal-pipeline",
+      "positive",
+      "update"
+    ],
+    "group": "shibuya-fifth-anniversary-card-2024",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "しぶハチたん5周年名刺",
+          "evidence": [
+            "５周年記念名刺(しぶハチたんVer)配布中だよ～"
+          ]
+        }
+      ],
+      "groupingNote": "本文に列挙された対象物。セットと別候補の数は同一視せず、各物品へ他物品の条件を流用しない。",
+      "unannotatedFields": [
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 233453,
+      "postSha256": "55f975dd0bbe724e8c2b5d20e82d40b46e2cdec8c07284b2ac86c098e08c58a7",
+      "textSha256": "69a9957c58f13691ff86b723b90cc757a1449035603d9aa28900dab987fd2058"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

@@ -1,0 +1,178 @@
+[
+  {
+    "id": "d1-anchored-v1-positive-2013805992858001691",
+    "source": "public-post",
+    "description": "hamamatsu-february-event-2026",
+    "post": {
+      "id": "2013805992858001691",
+      "createdAt": "2026-01-21T02:48:58.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "quote",
+      "text": "|๑σ｡σ).o0(追加情報ですが、開催は2026年2月7日(土)と8日(日)の二日間、期間限定の名刺も用意します…？",
+      "url": "https://x.com/bic_hamamatsu/status/2013805992858001691",
+      "quoted": {
+        "id": "2010588798837825601",
+        "screenName": "bic_hamamatsu",
+        "text": "2月にちょっと簡単な店頭イベントを開催しようと思ってますー。\n詳しくはまた後日…|๑σ｡<)ﾉ"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": "2026-02-07",
+      "conditions": null
+    },
+    "rationale": "2月7日・8日の二日間の開催予定。名刺は疑問形で確定していない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "positive",
+      "preliminary",
+      "challenge",
+      "post-kind:quote",
+      "d1-origin:manual-or-seed"
+    ],
+    "group": "hamamatsu-february-event-2026",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "preliminary",
+      "registration": "needs_info",
+      "items": [
+        {
+          "item": "店頭イベント",
+          "evidence": [
+            "|๑σ｡σ).o0(追加情報ですが、開催は2026年2月7日(土)と8日(日)の二日間、期間限定の名刺も用意します…？"
+          ]
+        },
+        {
+          "item": "期間限定の名刺",
+          "evidence": [
+            "|๑σ｡σ).o0(追加情報ですが、開催は2026年2月7日(土)と8日(日)の二日間、期間限定の名刺も用意します…？"
+          ]
+        }
+      ],
+      "groupingNote": "2月7日・8日の二日間の開催予定。名刺は疑問形で確定していない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 78861,
+      "postSha256": "cf82c12012b17e052337fd18fab41e6de18a49fe457c3fd7e7ab5921e5a55e79",
+      "textSha256": "8054a7469393a30bb35c25ea104ff0928fbe3d2b48b6fd0d16456402dcd9c0ae"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": [
+        {
+          "eventId": "b056305e-7798-4956-a569-eb97659f5244",
+          "association": "reference-url",
+          "referenceType": "announce",
+          "referenceUrl": "https://x.com/bic_hamamatsu/status/2013805992858001691",
+          "origin": "manual-or-seed",
+          "title": "はまたんポストカード",
+          "category": "other",
+          "referenceOnly": {
+            "note": "D1登録値(人手またはseed)。正解ではなくモデル入力にも使わない。",
+            "startDate": "2026-02-06T15:00:00.000+00:00",
+            "endDate": "2026-02-07T15:00:00.000+00:00",
+            "isPreliminary": true,
+            "limitedQuantity": 50,
+            "stores": [
+              "hamamatsu"
+            ],
+            "characters": [],
+            "conditions": [
+              {
+                "type": "first_come",
+                "purchaseAmount": null,
+                "quantity": 50,
+                "chargeAmount": null
+              },
+              {
+                "type": "purchase",
+                "purchaseAmount": 2000,
+                "quantity": null,
+                "chargeAmount": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "d1-anchored-v1-negative-2006631844419350652",
+    "source": "public-post",
+    "description": "hamamatsu-february-event-2026 matched control",
+    "post": {
+      "id": "2006631844419350652",
+      "createdAt": "2026-01-01T07:41:27.000Z",
+      "screenName": "bic_hamamatsu",
+      "kind": "quote",
+      "text": "|๑ˊᗜˋ).o0(本日1月1日の営業は、10時～19時となります。明日1月2日以降は通常通り営業いたします。\nよろしくお願いいたします✨",
+      "url": "https://x.com/bic_hamamatsu/status/2006631844419350652",
+      "quoted": {
+        "id": "2003303962653671778",
+        "screenName": "bic_hamamatsu",
+        "text": "【ビックカメラ浜松店】 \n🎍年末年始 営業時間のご案内🎍\n🔴2025年12月31日(水)　10:00～19:00 \n🔵2026年1月1日(木)　10:00～19:00 \n🔵2026年1月2日(金)以降　10:00～20:00（通常営業）\n\n▼ビックカメラ各店舗年末年始営業時間はこちら▼\nhttps://t.co/Kyu1YjOOPx https://t.co/EtKKsQ0v53"
+      },
+      "media": []
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・メーカー特典・店舗案内・挨拶・お礼などで、ビッカメ娘固有の入手物の告知・継続・終了・予告を含まない。D1のどのイベントにも参照されない。",
+    "tags": [
+      "goal-pipeline",
+      "d1-anchored-v1",
+      "negative",
+      "not_event",
+      "post-kind:quote",
+      "easy-negative"
+    ],
+    "group": "control-2006631844419350652",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 83460,
+      "postSha256": "a26e1f1e6a782ff3194e559fefdd139165a44e7c777ab35d926ef36776566fdb",
+      "textSha256": "4b2aadb42c7fc9a02dcd5af124bdd97d1429597c5304cfeba519128a8de2fd3a"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]

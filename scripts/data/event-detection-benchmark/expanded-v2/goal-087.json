@@ -1,0 +1,144 @@
+[
+  {
+    "id": "expanded-v2-positive-1377432733538869273",
+    "source": "public-post",
+    "description": "sapporo-aprilfools-panel-absence-2021",
+    "post": {
+      "id": "1377432733538869273",
+      "createdAt": "2021-04-01T01:28:49.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "【お知らせ】\n現在、1Fカメラコーナー側出入口の「さっぽろたん等身大パネル」はお出かけをしており展示をしておりません💦お昼過ぎに戻る予定ですので予めご了承下さい。\n1Fカメラコーナー内の「ギタリストさっぽろたん」と2Fお酒コーナー側出入口の「夏服さっぽろたん」は展示中です☺️\n#さっぽろたん https://t.co/yCSKEX27EP",
+      "url": "https://x.com/bic_sapporo/status/1377432733538869273",
+      "media": [
+        "https://pbs.twimg.com/media/Ex2fl7sUUAErxIN.jpg",
+        "https://pbs.twimg.com/media/Ex2fm4dVoAAbAnv.jpg",
+        "https://pbs.twimg.com/media/Ex2fuo5UYAI7MKY.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": true,
+      "status": null,
+      "category": "other",
+      "stores": null,
+      "characterIds": [
+        "sapporo"
+      ],
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "一部展示パネルだけ一時撤去、他2体は継続展示。全展示終了にしない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "positive",
+      "update"
+    ],
+    "group": "sapporo-aprilfools-panel-absence-2021",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "update",
+      "registration": "not_new",
+      "items": [
+        {
+          "item": "さっぽろたん等身大パネル",
+          "evidence": [
+            "さっぽろたん等身大パネル",
+            "展示をしておりません",
+            "お昼過ぎに戻る予定"
+          ]
+        },
+        {
+          "item": "ギタリストさっぽろたん",
+          "evidence": [
+            "ギタリストさっぽろたん"
+          ]
+        },
+        {
+          "item": "夏服さっぽろたん",
+          "evidence": [
+            "夏服さっぽろたん"
+          ]
+        }
+      ],
+      "groupingNote": "一部展示パネルだけ一時撤去、他2体は継続展示。全展示終了にしない。",
+      "unannotatedFields": [
+        "stores",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 565318,
+      "postSha256": "5306d2df1866c0fa3fa2e3bc77c7e40850ff4935015a07747373a3ac294c1d2e",
+      "textSha256": "43b80251d3e256c524cc12c929b488235e2b6569250aa13468bb2853e2a5a582"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  },
+  {
+    "id": "expanded-v2-negative-1387987094778257410",
+    "source": "public-post",
+    "description": "sapporo-aprilfools-panel-absence-2021 matched control",
+    "post": {
+      "id": "1387987094778257410",
+      "createdAt": "2021-04-30T04:28:05.000Z",
+      "screenName": "bic_sapporo",
+      "kind": "original",
+      "text": "☀️5月9日まで☀️\ndynabookフェア\n\n3Fパソコンコーナーでは当社指定のdynabookパソコンがお買い得価格でお求め頂けます！ご購入で素敵なプレゼントも🎁\n当社指定液晶ディスプレイ同時購入で5000円引きキャンペーンも実施中です🖥️\nさらにポイントサービスです！\n#dynabook https://t.co/LKj1ZF7A41",
+      "url": "https://x.com/bic_sapporo/status/1387987094778257410",
+      "media": [
+        "https://pbs.twimg.com/media/E0MeHV4VcAQJrZd.jpg",
+        "https://pbs.twimg.com/media/E0MeIqaUcAEjivi.jpg"
+      ]
+    },
+    "expected": {
+      "isEvent": false,
+      "status": null,
+      "category": null,
+      "stores": null,
+      "characterIds": null,
+      "startDate": null,
+      "conditions": null
+    },
+    "rationale": "同月・同一公式アカウントの対照。本文は一般商品・別IP・店舗案内・日常の投稿で、ビッカメ娘固有の入手物・展示・参加企画を告知していない。",
+    "tags": [
+      "goal-pipeline",
+      "expanded-v2",
+      "negative",
+      "not_event"
+    ],
+    "group": "control-1387987094778257410",
+    "reviewStatus": "provisional",
+    "stageGold": {
+      "action": "not_event",
+      "registration": "not_applicable",
+      "items": [],
+      "groupingNote": "陽性と同じ年月・アカウントの独立対照。画像未確認の情報は補完しない。",
+      "unannotatedFields": [
+        "category",
+        "stores",
+        "characterIds",
+        "startDate",
+        "conditions"
+      ]
+    },
+    "provenance": {
+      "archive": ".cache/event-detect/posts.jsonl",
+      "line": 559506,
+      "postSha256": "5a3a859a0145bb0cacd1ee6ed28c880b629fba112805b3fa9d4c995ff1d989e4",
+      "textSha256": "1a0b7713a2eff299069c3f015f335aae9c56bbb855ef7d4709d31bea1f132a10"
+    },
+    "observedD1": {
+      "annotationUse": "diagnostic-only-not-gold-not-model-input",
+      "job": null,
+      "candidates": [],
+      "referencedEvents": []
+    }
+  }
+]
