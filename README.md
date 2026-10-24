@@ -324,7 +324,7 @@ bun biome check --write workers/web/src packages/shared/src __tests__
 `TWITTER_AUTH_TOKEN` / `TWITTER_CSRF_TOKEN`、必要に応じて `TWITTER_BEARER_TOKEN`、`DISCORD_TOKEN` / `DISCORD_CHANNEL_ID`、認証監視用 `DISCORD_WEBHOOK_URL` は web Worker の secret に同期します。既存の X 署名付き通信と Discord Bot API を使い、別の OAuth 方式は追加していません。
 
 `X_POSTING_ENABLED` / `DISCORD_POSTING_ENABLED` は production で `"true"`、local / staging で `"false"` に固定しています。Webhook の Discord 保留・判定通知は、この公開告知フラグとは別の経路です。
-管理画面の X アカウント情報は別の読み取り専用フラグ `X_ACCOUNT_READ_ENABLED` で制御し、production は `"true"`、local / staging は `"false"` です。このフラグは投稿を有効化しません。
+管理画面の X アカウント情報は別の読み取り専用フラグ `X_ACCOUNT_READ_ENABLED` で制御し、production / local は `"true"`、staging は `"false"` です。このフラグは投稿を有効化しません。
 
 旧 bot を CI から外しても、リモート Worker の cron は自動で停止しません。本番切替は管理者の明示承認を得て、次の順で実施します。
 
