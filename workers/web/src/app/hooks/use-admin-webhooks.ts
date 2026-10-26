@@ -95,7 +95,10 @@ export const useRetryAdminWebhookJob = () => {
   })
 }
 
-/** 「再実行」。保存済みの回答と判定結果を消して queued に戻し、AI で最初から判定し直す。 */
+/**
+ * 「再実行」。現在の設定で AI の判定をやり直す。自動登録済みは登録・通知を変えずに回答と判定結果だけを同期的に更新し、
+ * それ以外は保存済みの回答と判定結果を消して queued に戻し、AI で最初から判定し直す。どちらも応答は更新後のジョブ。
+ */
 export const useRejudgeAdminWebhookJob = () => {
   const queryClient = useQueryClient()
   return useMutation({

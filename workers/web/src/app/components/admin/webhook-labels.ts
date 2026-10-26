@@ -1,3 +1,4 @@
+import { isAutoRegisteredWebhookJob } from '@biccame/shared/domain/webhook-rejudge'
 import { type WebhookKeywordVerdict, webhookKeywordVerdict } from '@biccame/shared/event-detect/detection'
 import type { StoreData } from '@biccame/shared/schemas/store.dto'
 import type { WebhookCandidate, WebhookJob, WebhookPostStatusFilter } from '@biccame/shared/schemas/webhook.dto'
@@ -98,42 +99,50 @@ export const isWebhookJobJudging = (status: string): boolean => status === 'queu
 
 /** 再実行できない理由（確認ダイアログの説明に出す）。 */
 const REJUDGE_BLOCKED_JUDGING = '判定の処理中です。完了してからもう一度押してください。'
-const REJUDGE_BLOCKED_AUTO_REGISTERED =
-  '自動登録されたイベントがあるため再実行できません。内容を直すときは『編集』から、別のイベントに付け替えるときは『連携』から行ってください。'
 const REJUDGE_BLOCKED_REJECTED = '人が対象外にした投稿のため再実行できません。'
 const REJUDGE_BLOCKED_OTHER = 'この状態では再実行できません。'
 
 /**
- * 「再実行」（保存済みの回答と判定結果を消して、AI で最初から判定し直す）を実行できない理由。実行できる状態は null。
- * 実行できるのは、保留、処理に失敗したジョブ、人が却下していない対象外、手動で連携した登録済み（reasons に manually_linked）のジョブ。
- * 失敗したジョブは途中の結果が壊れていることがあるため、再実行も判定し直しで最初からやり直す。
- * 人の却下（reasons に manually_rejected）は、人の判断を上書きしないため実行できない。
- * 自動登録された登録済みは、同じイベントの登録が重複して失敗しうるため実行できない。処理中（queued / processing）は、リース中で二重に走らせられない。
+ * 「再実行」（現在の設定で AI の判定をやり直す）を実行できない理由。実行できる状態は null。
+ * 実行できるのは、保留、処理に失敗したジョブ、人が却下していない対象外、登録済み（自動登録・手動連携とも）のジョブ。
+ * 人の却下（reasons に manually_rejected）は、人の判断を上書きしないため実行できない。処理中（queued / processing）は、リース中で二重に走らせられない。
+ * 自動登録された登録済みも実行できる。登録を変えずに回答と判定結果だけを更新する（rejudgeConfirmation の説明を参照）。
  * サーバー側の rejudgeWebhookJob（webhook-admin.ts）の 409 と同じ規則。ボタンは常に押せるので、押せない状態はこの理由をダイアログに出す。
  */
 export const rejudgeBlockedReason = (status: string, reasons: readonly string[]): string | null => {
   if (status === 'held') return null
   if (isWebhookJobJudging(status)) return REJUDGE_BLOCKED_JUDGING
-  if (status === 'registered') return reasons.includes('manually_linked') ? null : REJUDGE_BLOCKED_AUTO_REGISTERED
+  if (status === 'registered')
+    return isAutoRegisteredWebhookJob(status, reasons) && reasons.includes('manually_rejected')
+      ? REJUDGE_BLOCKED_REJECTED
+      : null
   if (status === 'ignored' || status === 'failed')
     return reasons.includes('manually_rejected') ? REJUDGE_BLOCKED_REJECTED : null
   return REJUDGE_BLOCKED_OTHER
 }
 
-/** 実行できるときの「再実行」の確認の説明。 */
+/** 実行できるときの「再実行」の確認の説明。保存済みの結果を消して queued に戻す通常の経路。 */
 export const REJUDGE_DESCRIPTION =
   '保存済みの回答と判定結果を消して、AI で最初から判定し直します。結果次第でイベントが自動登録され、Discord にも通知（通知済みの場合は再通知）される場合があります。'
 
+/** 自動登録済みのときの「再実行」の確認の説明。登録を変えずに、現在の設定で回答と判定結果だけを更新する経路。 */
+export const REJUDGE_REGISTERED_DESCRIPTION =
+  '現在の設定（しきい値）でAIの判定をやり直し、回答と判定結果を更新します。登録済みのイベントと Discord 通知は変更しません。'
+
 /**
  * 「再実行」の確認ダイアログの内容。実行できない状態では、説明に理由を出し、実行ボタンを押せなくする（blocked）。
- * 実行できる状態では通常の説明を出す。
+ * 実行できる状態では、自動登録済みなら登録を変えない説明、それ以外は通常の説明を出す（サーバーの振り分け isAutoRegisteredWebhookJob と同じ）。
  */
 export const rejudgeConfirmation = (
   status: string,
   reasons: readonly string[]
 ): { description: string; blocked: boolean } => {
   const reason = rejudgeBlockedReason(status, reasons)
-  return reason === null ? { description: REJUDGE_DESCRIPTION, blocked: false } : { description: reason, blocked: true }
+  if (reason !== null) return { description: reason, blocked: true }
+  return {
+    description: isAutoRegisteredWebhookJob(status, reasons) ? REJUDGE_REGISTERED_DESCRIPTION : REJUDGE_DESCRIPTION,
+    blocked: false
+  }
 }
 
 /**

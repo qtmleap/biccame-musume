@@ -69,16 +69,11 @@ describe('登録済みジョブの連携し直し', () => {
     })
   }, 60000)
 
-  test('自動登録された登録済みジョブ（manually_linked なし）も付け替えられるが、再判定は 409 のまま', async () => {
+  // 自動登録済みの再実行は 409 ではなく、登録を変えずに判定だけをやり直す（webhook-rejudge-registered.test.ts）。
+  test('自動登録された登録済みジョブ（manually_linked なし）も付け替えられ、付け替えると手動連携として扱われる', async () => {
     await withRejudgeEnv(async (env, sent) => {
       await insertEvent(env, event.uuid, 'パイプラインが作ったイベント')
       const postId = await seedRejudgeJob(env, 1, autoRegisteredSeed)
-      const before = await rawRejudgeRow(env, postId)
-      expect(await conflictOf(rejudgeWebhookJob(env, postId))).toEqual({
-        status: 409,
-        message: 'Only held or ignored jobs can be re-judged'
-      })
-      expect(await rawRejudgeRow(env, postId)).toEqual(before)
       expect(sent).toEqual([])
       const oldBefore = await eventSnapshot(env, event.uuid)
       const nextId = crypto.randomUUID()
@@ -204,16 +199,13 @@ describe('登録済みジョブの判定し直し', () => {
     })
   }, 60000)
 
-  test('manually_linked を部分一致で含むだけの理由・人の却下・処理中リースは 409 で何も変えない', async () => {
+  // manually_linked を部分一致で含むだけの理由の登録済みは、手動連携ではなく自動登録済みとして扱う（webhook-rejudge-registered-guards.test.ts）。
+  test('人の却下・処理中リースは 409 で何も変えない', async () => {
     await withRejudgeEnv(async (env, sent) => {
       const cases = [
         {
-          seed: { ...linkedSeed, reasons: ['possible_duplicate:manually_linked_x'] },
-          message: 'Only held or ignored jobs can be re-judged'
-        },
-        {
           seed: { ...linkedSeed, reasons: ['manually_rejected'] },
-          message: 'Only held or ignored jobs can be re-judged'
+          message: 'Manually rejected jobs cannot be re-judged'
         },
         { seed: rejectedSeed, message: 'Manually rejected jobs cannot be re-judged' },
         { seed: { ...linkedSeed, leaseUntil: 9999999999999 }, message: 'Job is being processed' }
