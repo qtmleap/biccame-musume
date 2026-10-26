@@ -183,19 +183,19 @@ describe('Webhook管理画面の判定・通知表示', () => {
       '次点'
     ])
     const rows = answerRows(markup)
-    expect(rows).toHaveLength(5)
+    // is_event（ビッカメ娘のイベントか）は回答に入っていても行を出さない。
+    expect(rows).toHaveLength(4)
     expect(rows.map((row) => row.match(/<td\b[^>]*>(.*?)<\/td>/)?.[1])).toEqual([
-      'ビッカメ娘のイベントか',
       '状態',
       '配布物',
       '開始日',
       '配布条件'
     ])
     const badges = [...markup.matchAll(/data-slot="badge"[^>]*>(.*?)<\/span>/g)].map((match) => match[1])
-    expect(badges).toEqual(['未確定', '未確定', '未確定', '確定', '確定'])
+    expect(badges).toEqual(['未確定', '未確定', '確定', '確定'])
     expect(markup).toContain('告知')
     expect(markup).toContain('2026-10-19')
-    expect(markup).toContain('72.2%')
+    expect(markup).not.toContain('72.2%')
     expect(markup).toContain('90.0%')
     expect(markup).toContain('開始</span> 15.0%')
     expect(markup).toContain('しきい値は現在の設定です。判定した時点の設定と異なる場合があります。')
@@ -206,16 +206,16 @@ describe('Webhook管理画面の判定・通知表示', () => {
       createElement(WebhookAnswerTable, { answers: shintouAnswers, thresholds: answerThresholds })
     )
     const rows = answerRows(markup)
-    expect(rows.filter((row) => row.includes('bg-warning/10'))).toHaveLength(3)
+    expect(rows.filter((row) => row.includes('bg-warning/10'))).toHaveLength(2)
     expect(rows.filter((row) => row.includes('border-success/50'))).toHaveLength(2)
-    expect(rows.filter((row) => row.includes('border-warning/60'))).toHaveLength(3)
+    expect(rows.filter((row) => row.includes('border-warning/60'))).toHaveLength(2)
     expect(markup).not.toMatch(/#[0-9a-fA-F]{3,8}\b|rgb\(/)
   })
 
   test('回答表の確率は右寄せのmono、しきい値が無い間は しきい値と判定の列に—を出す', () => {
     const loading = renderToStaticMarkup(createElement(WebhookAnswerTable, { answers: shintouAnswers }))
     const rows = answerRows(loading)
-    expect(rows).toHaveLength(5)
+    expect(rows).toHaveLength(4)
     for (const row of rows) {
       const cells = [...row.matchAll(/<td\b[^>]*>(.*?)<\/td>/g)].map((match) => match[1])
       // しきい値の列は mono の span の中に—を置く（td は右寄せのまま、flex にせず基線は sans の行で決まる）。
@@ -257,7 +257,7 @@ describe('Webhook管理画面の判定・通知表示', () => {
       const cell = [...row.matchAll(/<td\b[^>]*>(.*?)<\/td>/g)][5]?.[1]
       return cell === undefined || cell === '—' ? [] : [cell]
     })
-    expect(alternativeCells).toHaveLength(5)
+    expect(alternativeCells).toHaveLength(4)
     const alternative =
       '<span class="font-mono tabular-nums leading-\\[0\\] flex items-baseline gap-1"><span class="font-sans leading-5">[^<]+</span> [\\d.]+%</span>'
     for (const cell of alternativeCells) {

@@ -46,6 +46,11 @@ const rowLabel = (row: AnswerRow): string => {
 // v3〜v12 の noul 質問（venue.* / character.*）。グループ見出しの振り分けは前方一致で行う。
 const isVenueRow = (row: AnswerRow): boolean => row.key.startsWith('venue.')
 const isCharacterRow = (row: AnswerRow): boolean => row.key.startsWith('character.')
+// 「ビッカメ娘のイベントか」（is_event）は判定（しきい値・理由）には使うが、回答表の行としては画面に出さない。
+// 行を返すのは describeAnswers のままで、ここで除く。理由欄や管理画面のしきい値入力には影響しない。
+const HIDDEN_ANSWER_KEY = 'is_event'
+const isEventRow = (row: AnswerRow): boolean => row.key === HIDDEN_ANSWER_KEY
+
 // v2 と v13 の choice 質問。キーが store / character そのもので、前方一致のグループには入らず基本判定に並ぶ。
 const isStoreChoiceRow = (row: AnswerRow): boolean => row.key === 'store'
 const isCharacterChoiceRow = (row: AnswerRow): boolean => row.key === 'character'
@@ -100,7 +105,10 @@ export const WebhookAnswerTable = ({
   characterIds?: readonly string[]
 }) => {
   // しきい値が無い時の行のしきい値・確定は使わない（列を '—' にする）ため、既定値で表だけ組み立てる。
-  const rows = describeAnswers(answers, thresholds === undefined ? DEFAULT_DETECTION_THRESHOLDS : thresholds)
+  // is_event の行は画面に出さない。空判定・グループ分けは、この除外後の rows をすべてで使う。
+  const rows = describeAnswers(answers, thresholds === undefined ? DEFAULT_DETECTION_THRESHOLDS : thresholds).filter(
+    (row) => !isEventRow(row)
+  )
   if (rows.length === 0) return <p className='text-sm text-muted-foreground'>回答の記録なし</p>
   const hasVenueRows = rows.some(isVenueRow)
   const hasCharacterRows = rows.some(isCharacterRow)

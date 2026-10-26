@@ -77,9 +77,9 @@ describe('回答表の確認の行', () => {
     expect(keys.indexOf(STORE_CONFIRM_KEY)).toBe(keys.indexOf('store') + 1)
     expect(keys.indexOf(CHARACTER_CONFIRM_KEY)).toBe(keys.indexOf('character') + 1)
   })
-  test('質問名に、確認した最上位の名前を添える', () => {
-    expect(rowOf(STORE_CONFIRM_KEY).label).toBe('開催・配布店舗の確認（船橋駅FACE店）')
-    expect(rowOf(CHARACTER_CONFIRM_KEY).label).toBe('対象ビッカメ娘の確認（ふなとーたん）')
+  test('質問名は、確認した最上位の名前を添えない素のラベルで出す', () => {
+    expect(rowOf(STORE_CONFIRM_KEY).label).toBe('開催・配布店舗の確認')
+    expect(rowOf(CHARACTER_CONFIRM_KEY).label).toBe('対象ビッカメ娘の確認')
   })
   test('「はい」の確率としきい値（0.7）を出し、未満なら未確定にする', () => {
     expect(rowOf(STORE_CONFIRM_KEY)).toMatchObject({
@@ -101,7 +101,7 @@ describe('回答表の確認の行', () => {
     const no = describeAnswers(answersOf(yes(0.2, 0.2)), thresholds).find((row) => row.key === STORE_CONFIRM_KEY)
     expect(no).toMatchObject({ answer: 'いいえ', probability: 0.8, threshold: 0.7, confirmed: false })
   })
-  test('1段目の最上位が無い（store の回答が無い）保存データでも、質問名は例外にせず出す', () => {
+  test('1段目の最上位が無い（store の回答が無い）保存データでも、質問名は素のラベルのまま、例外にせず出す', () => {
     const { store: _store, ...withoutStore } = answersOf(yes(0.9, 0.9))
     const row = describeAnswers(withoutStore, thresholds).find((entry) => entry.key === STORE_CONFIRM_KEY)
     expect(row?.label).toBe('開催・配布店舗の確認')
@@ -135,7 +135,7 @@ describe('店舗の娘は娘の確認を聞かないので、回答表に娘の�
     expect(keys).not.toContain(CHARACTER_CONFIRM_KEY)
     expect(keys.indexOf(STORE_CONFIRM_KEY)).toBe(keys.indexOf('store') + 1)
     expect(keys).toContain('character')
-    expect(rows.find((row) => row.key === STORE_CONFIRM_KEY)?.label).toBe('開催・配布店舗の確認（船橋駅FACE店）')
+    expect(rows.find((row) => row.key === STORE_CONFIRM_KEY)?.label).toBe('開催・配布店舗の確認')
     expect(rows.find((row) => row.key === 'character')?.answer).toBe('ふなたん')
   })
   test('判定の理由と表の確定表示は一致する（娘の確認の理由は付かない）', () => {

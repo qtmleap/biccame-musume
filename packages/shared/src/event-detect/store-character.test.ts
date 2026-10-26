@@ -246,16 +246,16 @@ describe('保留ジョブの下書き（buildDetectionDraft）', () => {
 })
 
 describe('回答表（describeAnswers）', () => {
-  test('store_character は質問の選択肢の説明と同じ文言で出る（最上位にも次点にも）', () => {
+  test('store_character は質問の選択肢の長い説明ではなく、短い固定ラベル「店舗の娘」で出る（最上位にも次点にも）', () => {
     const answers: Record<string, ClefAnswer> = {
       character: choice(CHARACTER_STORE, { [CHARACTER_STORE]: 0.6, funato: 0.3, other: 0.05 })
     }
     const [row] = describeAnswers(answers, thresholds)
-    expect(row).toMatchObject({ key: 'character', answer: CHARACTER_STORE_CRITERIA, probability: 0.6 })
+    expect(row).toMatchObject({ key: 'character', answer: '店舗の娘', probability: 0.6 })
     const second = describeAnswers(
       { character: choice('funato', { funato: 0.6, [CHARACTER_STORE]: 0.3 }) },
       thresholds
     )[0]
-    expect(second.alternatives[0]).toEqual({ answer: CHARACTER_STORE_CRITERIA, probability: 0.3 })
+    expect(second.alternatives[0]).toEqual({ answer: '店舗の娘', probability: 0.3 })
   })
 })

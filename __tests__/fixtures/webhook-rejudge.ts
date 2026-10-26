@@ -65,9 +65,16 @@ export const renderDetail = async (job: WebhookJob | null) => {
 export type ButtonState = 'missing' | 'disabled' | 'enabled'
 
 /** 受信詳細の操作ボタンのラベル。画面側の文言とは別に、ここで固定する。 */
-export const RETRY_LABEL = '失敗した処理を再実行'
+export const REJUDGE_LABEL = '再実行'
 
-export const REJUDGE_LABEL = 'AI で判定し直す'
+/** 一つに統合する前にあったボタンの文言。受信詳細のボタンにも説明（title）にも出てはならない。 */
+export const REMOVED_LABELS = [
+  '失敗した処理を再実行',
+  '判定を再確認',
+  'AI で判定し直す',
+  '判定を再試行',
+  '再判定'
+] as const
 
 /** 保留・対象外（canLink）のときに有効になるボタン。 */
 export const LINK_LABEL = '連携'

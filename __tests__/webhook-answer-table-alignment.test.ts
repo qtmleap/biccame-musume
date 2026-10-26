@@ -6,10 +6,12 @@ import { WebhookAnswerTable } from '@/components/admin/webhook-answer-table'
 
 const thresholds = { eventThreshold: 0.9, fieldThreshold: 0.9, ignoreThreshold: 0.5 }
 
-// 確定する行（is_event 99%）、未確定で次点が2件ある行（status）、次点が無い行（score）を混ぜる。
+// 未確定で次点が2件ある行（status）、確定する行（single_event 99%）、次点が無い行（score）を混ぜる。
+// is_event は回答表に行を出さないので、確定する行には single_event を使う。行は固定の順（status、single_event、未知のキー）で並ぶ。
 const answers: Record<string, ClefAnswer> = {
   is_event: { type: 'noul', noul: 0.99 },
   status: { type: 'choice', choice: 'announce', probabilities: { announce: 0.7499, start: 0.15, none: 0.05 } },
+  single_event: { type: 'noul', noul: 0.99 },
   unknown_question: { type: 'score', score: 3 }
 }
 
@@ -45,9 +47,9 @@ describe('Clef の回答表の基線揃え', () => {
   })
 
   test('確率としきい値の値は等幅 span の中に出て、しきい値が無い間のしきい値は — になる', () => {
-    const [first] = rowsOf(render(true))
-    expect(first?.[2]?.content).toBe('<span class="font-mono tabular-nums leading-[0]">99.0%</span>')
-    expect(first?.[3]?.content).toBe('<span class="font-mono tabular-nums leading-[0]">90.0%</span>')
+    const [, confirmed] = rowsOf(render(true))
+    expect(confirmed?.[2]?.content).toBe('<span class="font-mono tabular-nums leading-[0]">99.0%</span>')
+    expect(confirmed?.[3]?.content).toBe('<span class="font-mono tabular-nums leading-[0]">90.0%</span>')
     for (const cells of rowsOf(render(false))) {
       expect(cells[3]?.content).toBe('<span class="font-mono tabular-nums leading-[0]">—</span>')
       expect(cells[3]?.attributes).toContain('text-muted-foreground')
@@ -56,7 +58,7 @@ describe('Clef の回答表の基線揃え', () => {
 
   test('次点は基線揃えの flex で並べ、箱の中心揃え（items-center）を使わない', () => {
     const rows = rowsOf(render(true))
-    const [confirmed, tentative, withoutAlternatives] = rows.map((cells) => cells[5]?.content)
+    const [tentative, confirmed, withoutAlternatives] = rows.map((cells) => cells[5]?.content)
     // 次点が2件ある行は、gap-4 の flex の中に等幅 span が2つ並ぶ。
     expect(tentative).toBe(
       '<div class="flex items-baseline gap-4">' +
@@ -77,8 +79,8 @@ describe('Clef の回答表の基線揃え', () => {
   test('判定のバッジは従来どおり flex items-center で行の中央に揃え、確定と未確定の文言を出す', () => {
     const rows = rowsOf(render(true))
     expect(rows.map((cells) => cells[4]?.content.match(/data-slot="badge"[^>]*>(.*?)<\/span>/)?.[1])).toEqual([
-      '確定',
       '未確定',
+      '確定',
       '未確定'
     ])
     for (const cells of rows) {
