@@ -1,6 +1,6 @@
 import type { Bindings } from '@api/types/bindings'
 import { ClefModelSchema } from '@biccame/shared/event-detect/clef'
-import { FieldThresholdsSchema, resolveFieldThresholds } from '@biccame/shared/event-detect/detection'
+import { resolveFieldThresholds, StoredFieldThresholdsSchema } from '@biccame/shared/event-detect/detection'
 import { DEFAULT_ITEM_COUNT_THRESHOLD } from '@biccame/shared/event-detect/extraction'
 import { EventThresholdsSchema } from '@biccame/shared/schemas/admin-bot.dto'
 import { z } from 'zod'
@@ -18,7 +18,7 @@ const ConfigSchema = z
   .refine((value) => value.ignoreThreshold < value.eventThreshold)
 
 export const EVENT_DETECTION_MODEL_KEY = 'settings:event-detection:model'
-/** 項目別しきい値（9項目すべての有効値の JSON）の保存先。モデルのキーとは別に持つ。 */
+/** 項目別しきい値（保存した値の JSON。旧 8 項目は必須、後から足した 4 項目は任意）の保存先。モデルのキーとは別に持つ。 */
 export const EVENT_DETECTION_FIELD_THRESHOLDS_KEY = 'settings:event-detection:field-thresholds'
 /** 登録・必須項目の選択・対象外の3つのしきい値（JSON）の保存先。保存されていれば環境変数より優先する。 */
 export const EVENT_DETECTION_THRESHOLDS_KEY = 'settings:event-detection:thresholds'
@@ -61,8 +61,8 @@ export const detectionConfiguration = async (env: Bindings) => {
   })
   if (!parsed.success) throw new Error('Invalid event detection configuration')
   // 未保存なら既定値（上書き後の有効な choiceThreshold から決まる）。保存値が壊れていても保存内容は出さず、既定値に戻す。
-  // 旧9項目の保存値から廃止したsingle_eventだけを削除する。他の8項目は保持する。
-  const legacy = FieldThresholdsSchema.extend({ single_event: z.number().positive().max(1) }).safeParse(
+  // 旧9項目（旧 8 項目 + single_event）の保存値から廃止したsingle_eventだけを削除する。他の項目は保持する。
+  const legacy = StoredFieldThresholdsSchema.extend({ single_event: z.number().positive().max(1) }).safeParse(
     storedThresholds === null ? undefined : parseJson(storedThresholds)
   )
   const migrated = legacy.success
@@ -72,14 +72,18 @@ export const detectionConfiguration = async (env: Bindings) => {
       })()
     : undefined
   // 保存は管理APIが新形式で行う。読み取り時には書かず、KVの古い読み取りで直近の設定を上書きしない。
+  // 旧 8 項目だけの保存値も読める。足りない項目（後から足した 4 項目）は既定値にして、状態には常に全項目を返す。
   const thresholds =
     storedThresholds === null
       ? undefined
-      : FieldThresholdsSchema.safeParse(migrated === undefined ? parseJson(storedThresholds) : migrated)
+      : StoredFieldThresholdsSchema.safeParse(migrated === undefined ? parseJson(storedThresholds) : migrated)
   if (thresholds !== undefined && !thresholds.success) {
     console.warn('Invalid stored event detection field thresholds; using defaults')
   }
-  const fieldThresholds = thresholds?.success ? thresholds.data : resolveFieldThresholds(parsed.data.choiceThreshold)
+  const fieldThresholds = resolveFieldThresholds(
+    parsed.data.choiceThreshold,
+    thresholds?.success ? thresholds.data : undefined
+  )
   return { ...parsed.data, fieldThresholds }
 }
 

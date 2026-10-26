@@ -58,7 +58,7 @@ describe('店舗と対象ビッカメ娘を choice 1 問ずつで決める', () 
       status: 'held',
       reasons: ['store_unconfirmed']
     })
-    // 選ばれた店舗の確率が下限（0.3）に届かないときも、採用せず保留する。
+    // 選ばれた店舗の確率が下限（0.7）に届かず、確認の質問も無い（旧版の保存データ）ときは、採用せず保留する。
     expect(
       run({
         ...associationAnswers('funabashi', 'funato'),
@@ -74,7 +74,7 @@ describe('店舗と対象ビッカメ娘を choice 1 問ずつで決める', () 
     expect(result).toMatchObject({ status: 'held', reasons: ['character_unconfirmed'] })
     expect(result).not.toHaveProperty('candidate')
   })
-  test('娘の確率が下限（0.3）に届かないなら、娘は明示されていないので、次点が近くても採用せず店舗の娘で登録する', () => {
+  test('娘の確率が下限（0.7）に届かず確認も無いなら、娘は明示されていないので、次点が近くても採用せず店舗の娘で登録する', () => {
     const result = run({
       ...associationAnswers('funabashi', 'funato'),
       character: choice('funato', { funato: 0.25, funabashi: 0.2 })

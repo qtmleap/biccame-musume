@@ -70,14 +70,29 @@ test('確認の行が無い保存データ（v15 以前）の表は、確認の�
   expect(rowsOf(markup)).toHaveLength(2)
 })
 
-test('店舗の娘（店舗と同じ ID）は娘の確認を聞かないので、店舗の確認の行だけが出て、表は壊れない', () => {
+test('店舗の娘（店舗と同じ ID）にも娘の確認を聞くので、開催・配布店舗の確認と対象ビッカメ娘の確認の両方の行が出る', () => {
+  const storeCharacter: Record<string, ClefAnswer> = {
+    ...answers(0.85, 0.9),
+    character: { type: 'choice', choice: 'funabashi', probabilities: { funabashi: 0.8, akiba: 0.1 } }
+  }
+  const rows = rowsOf(render(storeCharacter))
+  const labels = rows.map((row) => row.text.split(' ')[0])
+  expect(labels).toContain('開催・配布店舗の確認')
+  // 添え字は付けない。行の並びは「対象ビッカメ娘」の次。
+  expect(labels).toContain('対象ビッカメ娘の確認')
+  expect(labels.indexOf('対象ビッカメ娘の確認')).toBe(labels.indexOf('対象ビッカメ娘') + 1)
+  expect(labels.indexOf('開催・配布店舗の確認')).toBe(labels.indexOf('開催・配布店舗') + 1)
+  expect(rows.find((row) => row.text.startsWith('対象ビッカメ娘 '))?.text).toContain('ふなたん')
+  expect(rows).toHaveLength(4)
+})
+
+test('旧版の保存データ（店舗の娘で娘の確認の質問が無い）の表は、店舗の確認の行だけが出て、壊れない', () => {
   const { character_confirm: _character, ...asked } = answers(0.85, 0.9)
   const storeCharacter: Record<string, ClefAnswer> = {
     ...asked,
     character: { type: 'choice', choice: 'funabashi', probabilities: { funabashi: 0.8, akiba: 0.1 } }
   }
-  const markup = render(storeCharacter)
-  const rows = rowsOf(markup)
+  const rows = rowsOf(render(storeCharacter))
   const labels = rows.map((row) => row.text.split(' ')[0])
   expect(labels).toContain('開催・配布店舗の確認')
   expect(labels.some((label) => label.startsWith('対象ビッカメ娘の確認'))).toBe(false)

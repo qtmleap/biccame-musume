@@ -100,10 +100,9 @@ describe('describeAnswers', () => {
 
   test('しきい値以上と、最有力が none の終了日だけが確定になり、is_event だけがイベント用のしきい値を使う', () => {
     // end_date は none 0.541 でしきい値未満だが、最有力が none（終了日の記載なし）なので確定。
-    // store は既定のしきい値が 0.3（最上位採用）なので、none 0.6084 でも確率としては確定の表示になる（採用されない none は保留）。
+    // store の既定のしきい値は 0.7 なので、none 0.6084 は未確定の表示になる（確認の行が無い保存データ。none は確率が高くても採用されず保留）。
     expect(rows.filter((row) => row.confirmed).map((row) => row.key)).toEqual([
       'single_event',
-      'store',
       'start_date',
       'end_date',
       'quantity',

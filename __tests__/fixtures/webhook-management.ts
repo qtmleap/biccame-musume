@@ -64,14 +64,18 @@ export const uniformThresholds = (value: number): FieldThresholds => ({
   status: value,
   category: value,
   store: value,
+  store_confirm: value,
+  character: value,
+  character_confirm: value,
   start_date: value,
   end_date: value,
   quantity: value,
   condition: value,
-  purchase_amount: value
+  purchase_amount: value,
+  charge_amount: value
 })
 
-// 共通値と8項目すべてを同じしきい値にした設定。項目別の差は fieldThresholds で上書きして付ける。
+// 共通値と12項目すべてを同じしきい値にした設定。項目別の差は fieldThresholds で上書きして付ける。
 export const botStatus = (choiceThreshold: number, fieldThresholds: Partial<FieldThresholds> = {}): AdminBotStatus => ({
   fetchedAt: '2026-10-05T03:00:00.000Z',
   botConnected: true,

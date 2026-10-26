@@ -47,11 +47,17 @@ if (frozen.DETECTION_VERSION !== DETECTION_VERSION)
   throw new Error('The saved responses were made with another detection version; measure again before exporting')
 
 const profile = GOAL_PIPELINE_PROFILE.thresholds
-// 設定ごとの判定が保存した元の結果とフィクスチャで同じになることを確かめる。店舗は本番設定のまま・下限の両方、件数の監査も含む。
+// 設定ごとの判定が保存した元の結果とフィクスチャで同じになることを確かめる。店舗は本番設定のまま（保存値 0.9）・既定（0.7）・旧版の下限（0.3）の
+// 3 通り、件数の監査も含む。店舗のしきい値は保存値が優先するので、値によって判定が変わる（保存応答は 2 段目の確認を持たない）。
 const SETTINGS = [
   { name: 'saved-store-0.9', thresholds: profile, pinTop: false },
   {
-    name: 'saved-store-0.3',
+    name: 'default-store-0.7',
+    thresholds: { ...profile, fieldThresholds: { ...profile.fieldThresholds, store: 0.7 } },
+    pinTop: false
+  },
+  {
+    name: 'legacy-store-0.3',
     thresholds: { ...profile, fieldThresholds: { ...profile.fieldThresholds, store: 0.3 } },
     pinTop: false
   },

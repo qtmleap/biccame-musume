@@ -13,8 +13,12 @@ export const hintedStore = (request: ClefRequest): string | null => {
 /** 選ぶ選択肢。文字列は固定、関数はリクエスト（state など）から決める。 */
 export type PickChoice = string | ((request: ClefRequest) => string)
 
-/** フェイクの AI が store / character の質問で選ぶ選択肢。省略した側は下の既定値になる。 */
-export type AssociationPicks = { store?: PickChoice; character?: PickChoice }
+/**
+ * フェイクの AI が store / character の質問で選ぶ選択肢。省略した側は下の既定値になる。
+ * probability は選んだ選択肢の確率（既定 0.99）。1 段目の最上位が 70% 以上なら 2 段目の確認を聞かずに確定するので、
+ * 2 段目（確認）を調べるテストは 0.7 未満（例: 0.6）を指定する。
+ */
+export type AssociationPicks = { store?: PickChoice; character?: PickChoice; probability?: number }
 
 /** 店舗の既定値は、その候補の抽出段階の店舗（state の行）。無ければ秋葉原。 */
 export const DEFAULT_PICK_STORE = 'akiba'
@@ -37,17 +41,20 @@ export const pickedAssociation = (
 }
 
 /**
- * 選んだ選択肢だけ 0.99、ほかは other の確率にした choice の回答。
+ * 選んだ選択肢だけ selected（既定 0.99）、ほかは other の確率にした choice の回答。
  * 選択肢に無い値はそのまま選んだ扱い（確率が付かず未確定になる）。store / character の選択は associationAnswer が検査する。
  */
 export const choiceAnswer = (
   question: Extract<ClefQuestion, { type: 'choice' }>,
   choice: string,
-  other: number
+  other: number,
+  selected = 0.99
 ): ClefAnswer => ({
   type: 'choice',
   choice,
-  probabilities: Object.fromEntries(Object.keys(question.criteria).map((key) => [key, key === choice ? 0.99 : other]))
+  probabilities: Object.fromEntries(
+    Object.keys(question.criteria).map((key) => [key, key === choice ? selected : other])
+  )
 })
 
 /** 質問が store / character のとき、picks から選んだ回答を返す。それ以外の質問は undefined。 */
@@ -62,5 +69,5 @@ export const associationAnswer = (
   if (question.type !== 'choice') throw new Error(`${id} must be a choice question`)
   const choice = pickedAssociation(request, id, picks)
   if (!Object.hasOwn(question.criteria, choice)) throw new Error(`Unknown ${id} choice in test: ${choice}`)
-  return choiceAnswer(question, choice, other)
+  return choiceAnswer(question, choice, other, picks.probability)
 }

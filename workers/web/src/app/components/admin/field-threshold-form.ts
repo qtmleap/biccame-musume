@@ -12,14 +12,20 @@ import {
 } from '@biccame/shared/schemas/admin-bot.dto'
 
 // しきい値の編集欄まわりの純関数。画面は%で入力・表示し、保存は 0〜1 の値で送る。
-// 編集できるのは、項目別の8項目と、判定全体の3つ（登録・必須項目の選択・対象外）。
+// 編集できるのは、項目別の12項目（回答表の質問と同じ順）と、判定全体の3つ（登録・必須項目の選択・対象外）。
 // 画面（bot-management.tsx）から切り出してあり、入力検証・変更検知・保存可否をレンダリングなしで確認できる。
 
 /** 判定全体の3つのしきい値のキー。 */
 export const EVENT_THRESHOLD_KEYS = ['eventThreshold', 'ignoreThreshold', 'choiceThreshold'] as const
 export type EventThresholdKey = (typeof EVENT_THRESHOLD_KEYS)[number]
-/** 編集欄ごとのキー。項目別の8項目と判定全体の3つ。 */
-export type ThresholdKey = FieldThresholdKey | EventThresholdKey
+/**
+ * 画面で編集できる項目別のキー。保存・API の形（FIELD_THRESHOLD_KEYS）と同じ12項目で、回答表の質問と同じ順
+ * （状態・配布物・開催・配布店舗・その確認・対象ビッカメ娘・その確認・開始日・終了日・配布数・配布条件・購入額・入金・チャージ額）。
+ */
+export type EditableFieldThresholdKey = FieldThresholdKey
+export const EDITABLE_FIELD_THRESHOLD_KEYS: readonly EditableFieldThresholdKey[] = FIELD_THRESHOLD_KEYS
+/** 編集欄ごとのキー。項目別の12項目と判定全体の3つ。 */
+export type ThresholdKey = EditableFieldThresholdKey | EventThresholdKey
 
 /** 入力欄の文字列。編集された項目だけを持つ（無い項目は保存済みの値をそのまま出す）。 */
 export type FieldThresholdDrafts = Partial<Record<ThresholdKey, string>>
@@ -67,7 +73,7 @@ const inputValueOf = (saved: number, draft: string | undefined): string =>
 export const fieldThresholdInputValue = (
   saved: FieldThresholds,
   drafts: FieldThresholdDrafts,
-  key: FieldThresholdKey
+  key: EditableFieldThresholdKey
 ): string => inputValueOf(saved[key], drafts[key])
 
 /** 判定全体の3つの入力欄に出す文字列。 */
@@ -86,10 +92,10 @@ export type BotConfigurationForm = {
   canSave: boolean
 }
 
-const ALL_THRESHOLD_KEYS: readonly ThresholdKey[] = [...FIELD_THRESHOLD_KEYS, ...EVENT_THRESHOLD_KEYS]
+const ALL_THRESHOLD_KEYS: readonly ThresholdKey[] = [...EDITABLE_FIELD_THRESHOLD_KEYS, ...EVENT_THRESHOLD_KEYS]
 
 /**
- * 判定モデルの選択としきい値（判定全体の3つと項目別の8項目）の編集内容から、エラー・保存 body・保存可否を決める。
+ * 判定モデルの選択としきい値（判定全体の3つと項目別の12項目）の編集内容から、エラー・保存 body・保存可否を決める。
  * 編集していない値は保存済みの値を一切変換せず送る（環境変数由来の小数も丸めない）。
  */
 export const botConfigurationForm = (input: {
@@ -128,7 +134,7 @@ export const botConfigurationForm = (input: {
     ignoreValue >= eventValue
   const allErrors = ignoreOrderError ? { ...errors, ignoreThreshold: IGNORE_THRESHOLD_ORDER_ERROR } : errors
   const fieldCandidate = Object.fromEntries(
-    FIELD_THRESHOLD_KEYS.map((key) => {
+    EDITABLE_FIELD_THRESHOLD_KEYS.map((key) => {
       const text = drafts[key]
       return [key, text === undefined ? savedThresholds[key] : percentToThreshold(text)]
     })
@@ -139,7 +145,7 @@ export const botConfigurationForm = (input: {
   const model = selectedModel === null ? savedModel : selectedModel
   const changed =
     model !== savedModel ||
-    FIELD_THRESHOLD_KEYS.some((key) => fieldParsed.data[key] !== savedThresholds[key]) ||
+    EDITABLE_FIELD_THRESHOLD_KEYS.some((key) => fieldParsed.data[key] !== savedThresholds[key]) ||
     EVENT_THRESHOLD_KEYS.some((key) => eventParsed.data[key] !== savedEventThresholds[key])
   return {
     errors: allErrors,

@@ -35,8 +35,9 @@ describe('保留・対象外ジョブの再判定', () => {
     }
   })
 
-  test('再実行できるのは保留・処理に失敗した・人が却下していない対象外のジョブだけで、通知状態には左右されない', () => {
-    const rejudgeable = (status: string) => status === 'held' || status === 'ignored' || status === 'failed'
+  test('再実行できるのは保留・処理に失敗した・人が却下していない対象外・登録済みのジョブだけで、通知状態には左右されない', () => {
+    const rejudgeable = (status: string) =>
+      status === 'held' || status === 'ignored' || status === 'failed' || status === 'registered'
     for (const status of WebhookJobStatusSchema.options) {
       for (const notificationStatus of ['pending', 'sent', 'failed', 'unknown', 'skipped']) {
         expect(webhookActionAvailability(status, notificationStatus, []).canRejudge).toBe(rejudgeable(status))
@@ -206,16 +207,16 @@ describe('保留・対象外ジョブの再判定', () => {
     }
   })
 
-  test('「再実行」ボタンには、押すと確認が出る旨と判定し直す旨の説明（title）が、どの状態でも付く', async () => {
+  test('「再実行」ボタンには、押すと確認が出る旨の説明（title）が、どの状態でも付く。状態によって矛盾する説明は含めない', async () => {
     const screens = [
       await renderDetail({ ...baseJob, status: 'failed' }),
       await renderDetail({ ...baseJob, status: 'registered' }),
       await renderDetail(null)
     ]
     for (const markup of screens) {
-      expect(markup).toContain(
-        'title="押すと確認が出ます（保存済みの回答と判定結果を消して、AI で最初から判定し直します）"'
-      )
+      expect(markup).toContain('title="押すと確認が出ます"')
+      // 保存済みの結果を消すかどうかは状態で違う（自動登録済みは消さずに更新する）ので、ボタンの説明には書かない。
+      expect(markup).not.toContain('title="押すと確認が出ます（')
     }
   })
 })

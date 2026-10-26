@@ -126,32 +126,16 @@ describe('複数候補ジョブの連携し直しと判定し直し', () => {
     })
   }, 60000)
 
-  test('自動登録された候補の判定し直しは 409 で、何も変えない。リースも残さない', async () => {
+  // 自動登録された候補の再実行は 409 ではなく、登録を変えずに判定だけをやり直す（webhook-rejudge-registered-guards.test.ts）。
+  test('人が却下した候補は判定し直せない', async () => {
     await withRejudgeEnv(async (env, sent) => {
       const postId = await seedPair(env, 1)
-      const parentBefore = await rawRejudgeRow(env, postId)
-      const childBefore = await candidateRow(env, autoId)
-      expect(await conflictOf(rejudgeWebhookJob(env, postId, autoId))).toEqual({
-        status: 409,
-        message: 'Candidate cannot be re-judged'
-      })
-      expect(await rawRejudgeRow(env, postId)).toEqual(parentBefore)
-      expect(await candidateRow(env, autoId)).toEqual(childBefore)
-      expect(sent).toEqual([])
-    })
-  }, 60000)
-
-  test('人が却下した候補・理由が部分一致なだけの候補は判定し直せない', async () => {
-    await withRejudgeEnv(async (env, sent) => {
-      const postId = await seedPair(env, 1)
-      for (const reasons of [['manually_rejected'], ['possible_duplicate:manually_linked_x']]) {
-        await env.DB.prepare('UPDATE webhook_event_candidates SET reasons_json=?,status=? WHERE event_uuid=?')
-          .bind(JSON.stringify(reasons), reasons[0] === 'manually_rejected' ? 'ignored' : 'registered', autoId)
-          .run()
-        const before = await candidateRow(env, autoId)
-        expect((await conflictOf(rejudgeWebhookJob(env, postId, autoId))).status).toBe(409)
-        expect(await candidateRow(env, autoId)).toEqual(before)
-      }
+      await env.DB.prepare('UPDATE webhook_event_candidates SET reasons_json=?,status=? WHERE event_uuid=?')
+        .bind(JSON.stringify(['manually_rejected']), 'ignored', autoId)
+        .run()
+      const before = await candidateRow(env, autoId)
+      expect((await conflictOf(rejudgeWebhookJob(env, postId, autoId))).status).toBe(409)
+      expect(await candidateRow(env, autoId)).toEqual(before)
       expect(sent).toEqual([])
     })
   }, 60000)
@@ -191,8 +175,9 @@ describe('操作の可否（画面とサーバーで同じ規則）', () => {
     readonly [string, string, readonly string[], { canLink: boolean; canRejudge: boolean; canResolve: boolean }]
   > = [
     ['registered + manually_linked', 'registered', linked, { canLink: true, canRejudge: true, canResolve: false }],
-    ['registered + 自動登録', 'registered', auto, { canLink: true, canRejudge: false, canResolve: false }],
-    ['registered + 理由なし', 'registered', [], { canLink: true, canRejudge: false, canResolve: false }],
+    ['registered + 自動登録', 'registered', auto, { canLink: true, canRejudge: true, canResolve: false }],
+    ['registered + 理由なし', 'registered', [], { canLink: true, canRejudge: true, canResolve: false }],
+    ['registered + manually_rejected', 'registered', rejected, { canLink: true, canRejudge: false, canResolve: false }],
     ['held', 'held', ['needs_review'], { canLink: true, canRejudge: true, canResolve: true }],
     ['ignored', 'ignored', ['not_distribution_event'], { canLink: true, canRejudge: true, canResolve: false }],
     ['ignored + manually_rejected', 'ignored', rejected, { canLink: true, canRejudge: false, canResolve: false }],
@@ -206,7 +191,7 @@ describe('操作の可否（画面とサーバーで同じ規則）', () => {
     expect(webhookActionAvailability(status, 'sent', reasons)).toMatchObject(expected)
   })
 
-  test('登録済みの手動連携以外では、manually_linked を持っていても判定し直せない', () => {
+  test('登録済み以外（処理中など）では、manually_linked を持っていても判定し直せない', () => {
     for (const status of ['queued', 'processing']) {
       expect(webhookActionAvailability(status, 'sent', linked).canRejudge).toBe(false)
       expect(webhookActionAvailability(status, 'sent', linked).canLink).toBe(false)

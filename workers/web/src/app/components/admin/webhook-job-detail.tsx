@@ -92,8 +92,9 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
         canRetryNotification: false
       }
 
-  // 「再実行」は状態によらず押せて、押すと必ず確認が出る。実行できない状態（自動登録済み・人の却下・処理中など）は、
+  // 「再実行」は状態によらず押せて、押すと必ず確認が出る。実行できない状態（人の却下・処理中など）は、
   // 確認の説明に理由を出して実行ボタンを無効にする。可否の規則はサーバーの 409 と同じ（rejudgeBlockedReason）。
+  // 自動登録済みも実行できる。その説明は、登録とDiscord通知を変えず、現在の設定で回答と判定結果だけを更新すると伝える（rejudgeConfirmation）。
   const rejudgeState = job === undefined ? undefined : rejudgeConfirmation(job.status, job.reasons)
   const rejudgeBlocked = rejudgeState === undefined || rejudgeState.blocked
 
@@ -197,7 +198,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           onClick={() => setConfirmAction('rejudge')}
           // 状態では無効にしない。受信詳細を取得できていない間（job が無い間）だけは、確認で状態を示せず実行もできないため押せなくする。
           disabled={job === undefined || isPending}
-          title='押すと確認が出ます（保存済みの回答と判定結果を消して、AI で最初から判定し直します）'
+          title='押すと確認が出ます'
         >
           <RefreshCw className='size-4' />
           再実行

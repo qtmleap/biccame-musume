@@ -167,7 +167,7 @@ describe('reasonLabel', () => {
       character: choice('multiple', { multiple: 0.99 })
     })
     collect(post('あべのたん限定名刺 2026年11月3日から先着100枚'), {}, 0.99, 'akiba')
-    // 2段目の確認の質問を含む request で、確認の「はい」が低いとき（v16）。
+    // 2段目の確認の質問を含む request で、1段目の最上位が 70% 未満で確認の「はい」が低いとき（v16）。
     {
       const value = post('あべのたん限定名刺 2026年11月3日から先着100枚')
       const request = createDetectionRequest(value)
@@ -182,6 +182,8 @@ describe('reasonLabel', () => {
         value,
         merged,
         answersFor(merged, {
+          store: choice('abeno', { abeno: 0.6 }),
+          character: choice('abeno', { abeno: 0.6 }),
           store_confirm: { type: 'noul', noul: 0.1 },
           character_confirm: { type: 'noul', noul: 0.1 }
         })

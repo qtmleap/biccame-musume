@@ -48,11 +48,14 @@ export const BotSettingsLayout = ({
 export const BotSettingRow = ({
   label,
   children,
-  className
+  className,
+  labelClassName
 }: {
   label: string
   children: ReactNode
   className?: string
+  /** ラベル（dt）に足す className。入力欄の隣でラベルの位置を決めたい行だけが使う（他の行の見た目は変わらない）。 */
+  labelClassName?: string
 }) => (
   <div
     className={cn(
@@ -60,7 +63,7 @@ export const BotSettingRow = ({
       className
     )}
   >
-    <dt className='text-muted-foreground'>{label}</dt>
+    <dt className={cn('text-muted-foreground', labelClassName)}>{label}</dt>
     <dd className='min-w-0 break-words font-medium'>{children}</dd>
   </div>
 )

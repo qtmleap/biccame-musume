@@ -25,10 +25,12 @@ import {
   associationAnswers,
   choice,
   choiceQuestionOf,
+  choiceThresholds,
   evaluateWithStore,
   post,
   requestWithAssociations,
-  response
+  response,
+  uncertainAnswers
 } from './detection-test-fixtures'
 import { webhookPromptDefinition } from './prompt-definitions'
 
@@ -163,11 +165,13 @@ describe('store_character の判定（evaluateDetection）', () => {
       expect(result.reasons).toEqual([])
     }
   })
-  test('店舗の確認が通った 2 段目の request でも、娘の確認は聞かれず、店舗の娘で登録する', () => {
-    const asked = createConfirmRequest(first, confirmTargetOf({ ...associationAnswers('funabashi', CHARACTER_STORE) }))
+  test('最上位が store_character なら、2 段目で娘の確認は聞かれず（具体的な娘ではない）、店舗の確認が通れば店舗の娘で登録する', () => {
+    // 店舗は 60%（70% 未満）なので確認を聞く。娘は store_character なので、確率に関わらず確認の対象にならない。
+    const answers = uncertainAnswers('funabashi', CHARACTER_STORE)
+    const asked = createConfirmRequest(first, confirmTargetOf(answers, choiceThresholds()))
     const request = { ...first, questions: { ...first.questions, ...asked.questions } }
     expect(Object.keys(asked.questions)).toEqual([STORE_CONFIRM_KEY])
-    const result = run({ [STORE_CONFIRM_KEY]: { type: 'noul', noul: 0.99 } }, request)
+    const result = run({ ...answers, [STORE_CONFIRM_KEY]: { type: 'noul', noul: 0.99 } }, request)
     if (result.status !== 'register') throw new Error(`Expected registration: ${result.reasons.join(',')}`)
     expect(result.candidate.characterIds).toEqual(['funabashi'])
   })
@@ -177,13 +181,17 @@ describe('store_character の判定（evaluateDetection）', () => {
       expect(result).toMatchObject({ status: 'held', reasons: ['store_unconfirmed', 'character_unconfirmed'] })
       expect(result).not.toHaveProperty('candidate')
     }
+    // 70% 未満で確認の質問が無い（旧版の保存データ）店舗は採用されない。
     const weak = run({ store: choice('funabashi', { funabashi: 0.25, none: 0.2 }) })
     expect(weak).toMatchObject({ status: 'held', reasons: ['store_unconfirmed', 'character_unconfirmed'] })
   })
   test('店舗の確認が下限未満で店舗が採用されないときも、store_character は店舗の娘にならず保留', () => {
     const asked = createConfirmRequest(first, { store: 'funabashi' })
     const request = { ...first, questions: { ...first.questions, ...asked.questions } }
-    const result = run({ [STORE_CONFIRM_KEY]: { type: 'noul', noul: 0.4 } }, request)
+    const result = run(
+      { store: choice('funabashi', { funabashi: 0.6 }), [STORE_CONFIRM_KEY]: { type: 'noul', noul: 0.4 } },
+      request
+    )
     expect(result).toMatchObject({
       status: 'held',
       reasons: ['store_unconfirmed', 'store_confirm_low', 'character_unconfirmed']
@@ -202,20 +210,23 @@ describe('store_character の判定（evaluateDetection）', () => {
 })
 
 describe('2段目の確認の対象（confirmTargetOf）', () => {
-  test('store_character は具体的な娘ではないので、娘の確認の対象にならない（店舗だけ聞く）', () => {
-    const target = confirmTargetOf(associationAnswers('funabashi', CHARACTER_STORE))
+  test('store_character は具体的な娘ではないので、娘の確認の対象にならない（店舗だけ聞く。店舗が 70% 未満のとき）', () => {
+    const target = confirmTargetOf(uncertainAnswers('funabashi', CHARACTER_STORE), choiceThresholds())
     expect(target).toEqual({ store: 'funabashi' })
     expect(Object.keys(confirmQuestions(target))).toEqual([STORE_CONFIRM_KEY])
   })
   test('店舗が none・multiple で娘が store_character なら、聞く対象が無い', () => {
     for (const store of ['none', 'multiple'])
-      expect(hasConfirmTarget(confirmTargetOf(associationAnswers(store, CHARACTER_STORE)))).toBe(false)
+      expect(hasConfirmTarget(confirmTargetOf(uncertainAnswers(store, CHARACTER_STORE), choiceThresholds()))).toBe(
+        false
+      )
   })
-  test('具体的な娘は従来どおり対象になる', () => {
-    expect(confirmTargetOf(associationAnswers('funabashi', 'funato'))).toEqual({
+  test('具体的な娘は、70% 未満なら対象になり、70% 以上なら対象にならない', () => {
+    expect(confirmTargetOf(uncertainAnswers('funabashi', 'funato'), choiceThresholds())).toEqual({
       store: 'funabashi',
       character: 'funato'
     })
+    expect(confirmTargetOf(associationAnswers('funabashi', 'funato'), choiceThresholds())).toEqual({})
   })
 })
 
