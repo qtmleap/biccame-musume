@@ -11,7 +11,12 @@ import { EventRequestSchema } from '@biccame/shared/schemas/event.dto'
 import { z } from 'zod'
 import { WebhookDiscoverySchema, WebhookRelatedEventsSchema } from './webhook-discovery.dto'
 
-export { type WebhookDiscovery, WebhookDiscoverySchema } from './webhook-discovery.dto'
+export {
+  type WebhookDiscovery,
+  WebhookDiscoverySchema,
+  type WebhookLinkedEvent,
+  WebhookLinkedEventSchema
+} from './webhook-discovery.dto'
 
 // 版ごとの不変な定義と、判定ごとの実入力を区別する。
 export const WebhookPromptDefinitionSchema = z.object({

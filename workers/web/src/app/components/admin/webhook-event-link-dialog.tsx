@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { Link2, RefreshCw, Search } from 'lucide-react'
 import { useReducer, useRef, useState } from 'react'
 import {
-  INITIAL_WEBHOOK_EVENT_SEARCH,
+  initialWebhookEventSearch,
   reduceWebhookEventSearch,
   searchWebhookLinkEvents,
   selectedWebhookLinkEvent,
@@ -30,6 +30,8 @@ type LinkDialogProps = {
   isPending: boolean
   /** 登録済みの連携先を付け替えるときは true。説明に、元のイベントは変更しない旨を足す。 */
   replacing: boolean
+  /** 連携先の提案（終了と判定された投稿）のイベント ID。あるときだけ、ダイアログを開いた時点でそのイベントを選択済みにする（連携は人が押すまで行わない）。 */
+  suggestedEventId?: string
   onLink: (eventId: string) => Promise<unknown>
 }
 
@@ -90,11 +92,12 @@ const WebhookEventLinkContent = ({
   disabled,
   isPending,
   replacing,
+  suggestedEventId,
   onLink,
   onClose
 }: LinkDialogProps & { onClose: () => void }) => {
   const eventsQuery = useAdminEventOptions()
-  const [state, dispatch] = useReducer(reduceWebhookEventSearch, INITIAL_WEBHOOK_EVENT_SEARCH)
+  const [state, dispatch] = useReducer(reduceWebhookEventSearch, suggestedEventId, initialWebhookEventSearch)
   const [failed, setFailed] = useState(false)
   const submitting = useRef(false)
   const events = eventsQuery.data === undefined ? [] : eventsQuery.data

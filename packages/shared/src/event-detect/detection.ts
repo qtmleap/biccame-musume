@@ -67,6 +67,17 @@ export {
   StoredFieldThresholdsSchema,
   thresholdOf
 } from './detection-thresholds'
+export {
+  createLinkedEventRequest,
+  isLinkedEventQuestion,
+  LINKED_EVENT_MAX_OPTIONS,
+  LINKED_EVENT_QUESTION_KEY,
+  type LinkableEvent,
+  linkedEventOptions,
+  linkedEventProposalOf,
+  linkedEventTargetStore,
+  postAccountStore
+} from './linked-event'
 
 // v17: 娘の質問に store_character（本文でビッカメ娘に特に言及がなければ開催店舗の娘）を足し、「店舗の娘と同一と仮定しない」注意書きを外した。
 // 店舗の質問と2段目（選んだ最上位の店舗・娘ごとの「はい/いいえ」の確認。v16 で追加）の質問は v16 と同一。

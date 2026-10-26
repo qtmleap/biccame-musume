@@ -35,6 +35,12 @@ export type WebhookEventSearchAction = { type: 'search'; value: string } | { typ
 
 export const INITIAL_WEBHOOK_EVENT_SEARCH: WebhookEventSearchState = { search: '', selectedId: null }
 
+/** ダイアログを開いた時点の状態。連携先の提案があるときだけ、そのイベントを選択済みにする（連携は人が押すまで行わない）。 */
+export const initialWebhookEventSearch = (suggestedEventId: string | undefined): WebhookEventSearchState =>
+  suggestedEventId === undefined
+    ? INITIAL_WEBHOOK_EVENT_SEARCH
+    : { ...INITIAL_WEBHOOK_EVENT_SEARCH, selectedId: suggestedEventId }
+
 /** 検索語を変えたら選択を解除し、見えなくなったイベントへ誤って紐付けない。 */
 export const reduceWebhookEventSearch = (
   state: WebhookEventSearchState,

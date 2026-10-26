@@ -17,6 +17,7 @@ import {
   rejudgeConfirmation,
   webhookActionAvailability
 } from '@/components/admin/webhook-labels'
+import { WebhookLinkedEventProposal } from '@/components/admin/webhook-linked-event-proposal'
 import { WebhookPromptDialog } from '@/components/admin/webhook-prompt-dialog'
 import { WebhookReasonRows } from '@/components/admin/webhook-reason-rows'
 import { WebhookRelatedEvents } from '@/components/admin/webhook-related-events'
@@ -87,6 +88,10 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           link: { postId, ...candidateSelection },
           ...(active === undefined ? {} : { item: active.item })
         })
+  // 連携先の提案があるときだけ、連携ダイアログの初期選択に渡す（連携は人が押すまで行わない）。
+  const linkedEvent =
+    job === undefined || job.discovery === undefined || job.discovery === null ? undefined : job.discovery.linkedEvent
+  const suggestedLink = linkedEvent === undefined ? {} : { suggestedEventId: linkedEvent.eventId }
   const isPending = retry.isPending || resolve.isPending || rejudge.isPending
   const availability = job
     ? webhookActionAvailability(job.status, job.notificationStatus, job.reasons)
@@ -184,6 +189,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           disabled={!availability.canLink}
           isPending={isPending}
           replacing={job !== undefined && job.status === 'registered'}
+          {...suggestedLink}
           onLink={async (eventId) =>
             await resolve.mutateAsync({ postId, data: { ...candidateSelection, action: 'link', eventId } })
           }
@@ -221,6 +227,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
       {job && (
         <div className='space-y-8'>
           <WebhookRelatedEvents job={job} />
+          <WebhookLinkedEventProposal job={job} />
           <div className={cn('grid min-w-0 gap-4', parentJob && parentJob.candidates.length > 0 && 'md:grid-cols-2')}>
             <section className='min-w-0'>
               <h2 className='mb-2 text-lg font-semibold md:text-xl'>元投稿</h2>
