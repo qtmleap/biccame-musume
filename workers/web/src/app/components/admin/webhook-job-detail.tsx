@@ -93,6 +93,9 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
     job === undefined || job.discovery === undefined || job.discovery === null ? undefined : job.discovery.linkedEvent
   const suggestedLink = linkedEvent === undefined ? {} : { suggestedEventId: linkedEvent.eventId }
   const isPending = retry.isPending || resolve.isPending || rejudge.isPending
+  // 連携ダイアログと、連携先の提案の確認ダイアログが共有する連携（選択中の候補へ紐付ける）。
+  const linkEvent = async (eventId: string) =>
+    await resolve.mutateAsync({ postId, data: { ...candidateSelection, action: 'link', eventId } })
   const availability = job
     ? webhookActionAvailability(job.status, job.notificationStatus, job.reasons)
     : {
@@ -190,9 +193,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           isPending={isPending}
           replacing={job !== undefined && job.status === 'registered'}
           {...suggestedLink}
-          onLink={async (eventId) =>
-            await resolve.mutateAsync({ postId, data: { ...candidateSelection, action: 'link', eventId } })
-          }
+          onLink={linkEvent}
         />
         <Button
           variant='outline'
@@ -227,7 +228,13 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
       {job && (
         <div className='space-y-8'>
           <WebhookRelatedEvents job={job} />
-          <WebhookLinkedEventProposal job={job} />
+          <WebhookLinkedEventProposal
+            key={`${postId}:${active === undefined ? 'post' : active.eventUUID}`}
+            job={job}
+            canLink={availability.canLink}
+            isPending={isPending}
+            onLink={linkEvent}
+          />
           <div className={cn('grid min-w-0 gap-4', parentJob && parentJob.candidates.length > 0 && 'md:grid-cols-2')}>
             <section className='min-w-0'>
               <h2 className='mb-2 text-lg font-semibold md:text-xl'>元投稿</h2>

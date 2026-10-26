@@ -35,7 +35,10 @@ const headings = (markup: string) => [...markup.matchAll(/<h2\b[^>]*>(.*?)<\/h2>
 
 /** Link を含むので、ルーターの中で描画する。 */
 const renderProposal = async (job: WebhookJob) => {
-  const routeTree = createRootRoute({ component: () => createElement(WebhookLinkedEventProposal, { job }) })
+  const routeTree = createRootRoute({
+    component: () =>
+      createElement(WebhookLinkedEventProposal, { job, canLink: true, isPending: false, onLink: async () => {} })
+  })
   const router = createRouter({ routeTree, history: createMemoryHistory({ initialEntries: ['/'] }) })
   await router.load()
   return renderToStaticMarkup(createElement(RouterProvider, { router }))
