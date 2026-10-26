@@ -1,7 +1,19 @@
 import dayjs from 'dayjs'
 import type { ClefAnswer, ClefRequest, ClefResponse } from './clef'
-import { createDetectionRequests, type DetectionThresholds, evaluateDetection } from './detection'
+import {
+  createDetectionRequests,
+  DEFAULT_DETECTION_THRESHOLDS,
+  type DetectionThresholds,
+  evaluateDetection,
+  thresholdOf
+} from './detection'
 import type { DetectPost } from './post'
+
+/** 既定の設定での 1 段目の下限（これ以上なら 2 段目の確認を聞かずに確定する）。confirmTargetOf に渡す。 */
+export const choiceThresholds = (thresholds: DetectionThresholds = DEFAULT_DETECTION_THRESHOLDS) => ({
+  store: thresholdOf(thresholds, 'store'),
+  character: thresholdOf(thresholds, 'character')
+})
 
 export const post = (
   text = 'あべのたん限定名刺 2026年11月3日から1,000円以上お買い上げの方に先着100枚を配布します',
@@ -129,8 +141,17 @@ export const choiceQuestionOf = (request: ClefRequest, key: string) => {
   return question
 }
 
-/** 開催店舗と対象ビッカメ娘の選択（choice 1 問ずつ）。選んだ候補の確率を 0.99 にする。 */
+/** 開催店舗と対象ビッカメ娘の選択（choice 1 問ずつ）。選んだ候補の確率を 0.99 にする（1段目の下限 70% 以上なので、2段目の確認なしで確定する）。 */
 export const associationAnswers = (store: string, character: string): Record<string, ClefAnswer> => ({
   store: choice(store, { [store]: 0.99 }),
   character: choice(character, { [character]: 0.99 })
+})
+
+/**
+ * 1段目の最上位の確率を 70% 未満（既定 60%）にした店舗・娘の選択。2段目の確認の「はい」が採用を決める。
+ * 確認の関門（store_confirm_low など）を調べるテストは、確認なしで確定してしまう associationAnswers ではなくこちらを使う。
+ */
+export const uncertainAnswers = (store: string, character: string, probability = 0.6): Record<string, ClefAnswer> => ({
+  store: choice(store, { [store]: probability }),
+  character: choice(character, { [character]: probability })
 })

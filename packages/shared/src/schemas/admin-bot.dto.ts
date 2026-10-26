@@ -1,6 +1,6 @@
 import { discordStatusSchema } from '@biccame/shared/bot'
 import { ClefModelSchema } from '@biccame/shared/event-detect/clef'
-import { FieldThresholdsSchema } from '@biccame/shared/event-detect/detection'
+import { FieldThresholdsSchema, StoredFieldThresholdsSchema } from '@biccame/shared/event-detect/detection'
 import { WebhookConfigurationSchema } from '@biccame/shared/schemas/webhook.dto'
 import { z } from 'zod'
 
@@ -29,10 +29,12 @@ export const EventThresholdsSchema = z
   })
 export type EventThresholds = z.infer<typeof EventThresholdsSchema>
 
+// リクエストは旧 8 項目を必須、後から足した 4 項目（store_confirm・character・character_confirm・charge_amount）を任意にする。
+// 8 キーだけで保存する古いクライアント（PWA のキャッシュ）のリクエストを 400 にしないため。レスポンス（状態）は常に全項目を返す。
 export const AdminBotConfigurationRequestSchema = z.strictObject({
   model: ClefModelSchema,
   thresholds: EventThresholdsSchema,
-  fieldThresholds: FieldThresholdsSchema
+  fieldThresholds: StoredFieldThresholdsSchema
 })
 export const AdminBotConfigurationResponseSchema = z.strictObject({
   model: ClefModelSchema,

@@ -11,13 +11,7 @@ import {
   STORE_CONFIRM_THRESHOLD,
   thresholdOf
 } from './detection'
-import {
-  associationAnswers,
-  evaluateWithStore,
-  post,
-  requestWithAssociations,
-  response
-} from './detection-test-fixtures'
+import { evaluateWithStore, post, requestWithAssociations, response, uncertainAnswers } from './detection-test-fixtures'
 
 const value = post('ふなとーたん擬人化記念アクキーを2026年11月3日から全員に配布します', {
   screenName: 'bic_funabashi',
@@ -35,13 +29,14 @@ const answersOf = (confirmAnswers: Record<string, ClefAnswer>): Record<string, C
     category: choice('ackey', { ackey: 0.99 }),
     condition: choice('everyone', { everyone: 0.99 }),
     quantity: choice('none', { none: 0.99 }),
-    ...associationAnswers('funabashi', 'funato')
+    // 1段目の最上位は 60%（70% 未満）。確認の「はい」が採用を決める。
+    ...uncertainAnswers('funabashi', 'funato')
   }).answers,
   ...confirmAnswers
 })
 
 describe('thresholdOf は確認の質問に定数のしきい値を返す', () => {
-  test('店舗・娘の確認は、設定（共通値・項目別）に依らず 0.7', () => {
+  test('店舗・娘の確認は、共通値や他の項目に依らず既定 0.7', () => {
     for (const setting of [
       thresholds,
       { ...thresholds, fieldThreshold: 0.2 },
@@ -54,9 +49,18 @@ describe('thresholdOf は確認の質問に定数のしきい値を返す', () =
     expect(STORE_CONFIRM_THRESHOLD).toBe(0.7)
     expect(CHARACTER_CONFIRM_THRESHOLD).toBe(0.7)
   })
+  test('保存した確認のしきい値があれば、それが優先する', () => {
+    const saved: DetectionThresholds = {
+      ...thresholds,
+      fieldThresholds: { store_confirm: 0.5, character_confirm: 0.6 }
+    }
+    expect(thresholdOf(saved, STORE_CONFIRM_KEY)).toBe(0.5)
+    expect(thresholdOf(saved, CHARACTER_CONFIRM_KEY)).toBe(0.6)
+  })
   test('他のキーのしきい値は変わらない', () => {
-    expect(thresholdOf(thresholds, 'store')).toBe(0.3)
-    expect(thresholdOf(thresholds, 'character')).toBe(0.3)
+    // 1段目の店舗・娘の下限は既定 0.7（共通値 0.9 には依らない。管理画面で保存した値が優先する）。
+    expect(thresholdOf(thresholds, 'store')).toBe(0.7)
+    expect(thresholdOf(thresholds, 'character')).toBe(0.7)
     expect(thresholdOf(thresholds, 'condition')).toBe(0.9)
     expect(thresholdOf(thresholds, 'is_event')).toBe(0.9)
     // 似た名前の未知のキーは共通値のまま（確認のキーだけを個別に扱う）。
@@ -114,40 +118,59 @@ describe('回答表の確認の行', () => {
   })
 })
 
-describe('店舗の娘は娘の確認を聞かないので、回答表に娘の確認の行は出ない', () => {
-  // 店舗の娘（store と character が同じ ID）。本番と同じく、店舗の確認の質問だけをまとめた request で判定する。
-  const storeOnly = createConfirmRequest(first, { store: 'funabashi' })
-  const storeOnlyRequest = { ...first, questions: { ...first.questions, ...storeOnly.questions } }
-  const storeCharacterAnswers = (store: number): Record<string, ClefAnswer> => ({
-    ...response(storeOnlyRequest, {
+describe('店舗の娘にも娘の確認を聞くので、回答表に店舗の確認と娘の確認の両方の行が出る', () => {
+  // 店舗の娘（store と character が同じ ID）。本番と同じく、店舗と娘の両方の確認の質問をまとめた request で判定する。
+  const sameConfirm = createConfirmRequest(first, { store: 'funabashi', character: 'funabashi' })
+  const sameRequest = { ...first, questions: { ...first.questions, ...sameConfirm.questions } }
+  const storeCharacterAnswers = (store: number, character: number): Record<string, ClefAnswer> => ({
+    ...response(sameRequest, {
       category: choice('ackey', { ackey: 0.99 }),
       condition: choice('everyone', { everyone: 0.99 }),
       quantity: choice('none', { none: 0.99 }),
-      ...associationAnswers('funabashi', 'funabashi')
+      ...uncertainAnswers('funabashi', 'funabashi')
     }).answers,
-    [STORE_CONFIRM_KEY]: { type: 'noul', noul: store }
+    ...yes(store, character)
   })
 
-  test('店舗の確認の行だけが、店舗の行の直後に出る。娘の行は 1 段目のものだけで、壊れない', () => {
-    const rows = describeAnswers(storeCharacterAnswers(0.8), thresholds)
+  test('開催・配布店舗の確認と対象ビッカメ娘の確認の両方の行が出て、それぞれ店舗・娘の行の直後に並ぶ', () => {
+    const rows = describeAnswers(storeCharacterAnswers(0.8, 0.9), thresholds)
+    const keys = rows.map((row) => row.key)
+    expect(keys).toContain(STORE_CONFIRM_KEY)
+    expect(keys).toContain(CHARACTER_CONFIRM_KEY)
+    expect(keys.indexOf(STORE_CONFIRM_KEY)).toBe(keys.indexOf('store') + 1)
+    // 行の並びは「対象ビッカメ娘」の次。
+    expect(keys.indexOf(CHARACTER_CONFIRM_KEY)).toBe(keys.indexOf('character') + 1)
+    expect(rows.find((row) => row.key === STORE_CONFIRM_KEY)?.label).toBe('開催・配布店舗の確認')
+    // 添え字は付けない。
+    expect(rows.find((row) => row.key === CHARACTER_CONFIRM_KEY)?.label).toBe('対象ビッカメ娘の確認')
+    expect(rows.find((row) => row.key === 'character')?.answer).toBe('ふなたん')
+  })
+  test('店舗の確認が低いと、判定の理由と表の確定表示が一致して保留になる。娘の確認は低くても保留にしない', () => {
+    for (const store of [0.3, 0.69, 0.7, 0.99]) {
+      for (const character of [0.01, 0.69, 0.7, 0.99]) {
+        const answers = storeCharacterAnswers(store, character)
+        const rows = describeAnswers(answers, thresholds)
+        const confirmed = (key: string) => rows.find((row) => row.key === key)?.confirmed
+        const result = evaluateWithStore(value, sameRequest, { answers })
+        expect(confirmed(STORE_CONFIRM_KEY), `store ${store}`).toBe(!result.reasons.includes('store_confirm_low'))
+        // 表の娘の確認の行は確率だけで確定・未確定が決まる（表示は変えない）。
+        expect(confirmed(CHARACTER_CONFIRM_KEY), `character ${character}`).toBe(character >= 0.7)
+        // 登録できるかは店舗の確認だけで決まる。店舗の娘は、娘の確認が低くても店舗の娘で登録する。
+        expect(result.status === 'register', `store ${store} character ${character}`).toBe(store >= 0.7)
+        if (result.status === 'register') expect(result.candidate.characterIds).toEqual(['funabashi'])
+      }
+    }
+  })
+  test('娘の確認の質問が無い保存データ（旧版の店舗の娘）は、店舗の確認の行だけを出し、表は壊れない', () => {
+    const storeOnly = createConfirmRequest(first, { store: 'funabashi' })
+    const request = { ...first, questions: { ...first.questions, ...storeOnly.questions } }
+    const { [CHARACTER_CONFIRM_KEY]: _character, ...asked } = storeCharacterAnswers(0.8, 0.9)
+    const rows = describeAnswers(asked, thresholds)
     const keys = rows.map((row) => row.key)
     expect(keys).toContain(STORE_CONFIRM_KEY)
     expect(keys).not.toContain(CHARACTER_CONFIRM_KEY)
-    expect(keys.indexOf(STORE_CONFIRM_KEY)).toBe(keys.indexOf('store') + 1)
     expect(keys).toContain('character')
-    expect(rows.find((row) => row.key === STORE_CONFIRM_KEY)?.label).toBe('開催・配布店舗の確認')
-    expect(rows.find((row) => row.key === 'character')?.answer).toBe('ふなたん')
-  })
-  test('判定の理由と表の確定表示は一致する（娘の確認の理由は付かない）', () => {
-    for (const store of [0.3, 0.69, 0.7, 0.99]) {
-      const answers = storeCharacterAnswers(store)
-      const confirmed = describeAnswers(answers, thresholds).find((row) => row.key === STORE_CONFIRM_KEY)?.confirmed
-      const result = evaluateWithStore(value, storeOnlyRequest, { answers })
-      expect(confirmed, `store ${store}`).toBe(!result.reasons.includes('store_confirm_low'))
-      expect(result.reasons).not.toContain('character_confirm_low')
-      expect(result.reasons).not.toContain('character_unconfirmed')
-      expect(result.status === 'register').toBe(store >= 0.7)
-    }
+    expect(evaluateWithStore(value, request, { answers: asked }).status).toBe('register')
   })
 })
 

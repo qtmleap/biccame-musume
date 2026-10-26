@@ -3,9 +3,11 @@ import type { ClefAnswer } from '@biccame/shared/event-detect/clef'
 import {
   CHARACTER_DEFAULT_THRESHOLD,
   DEFAULT_DETECTION_THRESHOLDS,
+  FIELD_THRESHOLD_KEYS,
   FieldThresholdsSchema,
   resolveFieldThresholds,
   STORE_DEFAULT_THRESHOLD,
+  StoredFieldThresholdsSchema,
   thresholdOf
 } from '@biccame/shared/event-detect/detection'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
@@ -174,19 +176,22 @@ describe('CHG: 入金・チャージ条件', () => {
   })
 })
 
-describe('店舗・ビッカメ娘は最上位を採用する', () => {
+describe('店舗・ビッカメ娘は、最上位が 70% 以上なら確認なしで採用する（確認の質問が無い保存データ）', () => {
   const value = post(`あべのたんアクキーを${PERIOD}どなたでも配布します`)
   const request = requestWithAssociations(value)
   const base = { ...goods, ...start, ...noEnd, condition: choice('everyone', { everyone: 0.99 }) }
   const run = (overrides: Record<string, ClefAnswer>, thresholds = DEFAULT_DETECTION_THRESHOLDS) =>
     evaluateWithStore(value, request, response(request, { ...base, ...overrides }), thresholds, 'abeno')
 
-  test('確率 0.5 でも最上位なら登録に進む（既定の 90% を求めない）', () => {
-    const spread = {
-      store: choice('abeno', { abeno: 0.5, takatsuki: 0.2, akiba: 0.1 }),
-      character: choice('abeno', { abeno: 0.5, shinyoko: 0.2, akiba: 0.1 })
-    }
-    expect(run(spread)).toMatchObject({ status: 'register', reasons: [] })
+  test('確率 0.7 なら最上位が散っていても登録に進む（既定の 90% を求めない）。ちょうど 0.7 が境界', () => {
+    const spread = (top: number) => ({
+      store: choice('abeno', { abeno: top, takatsuki: 0.2, akiba: 0.1 }),
+      character: choice('abeno', { abeno: top, shinyoko: 0.2, akiba: 0.1 })
+    })
+    expect(run(spread(0.7))).toMatchObject({ status: 'register', reasons: [] })
+    // 0.69 は確認でしか確定できない。確認の質問が無い保存データでは採用しない（旧版の下限 30% は廃止）。
+    // 店舗が採用されないので、娘も店舗の娘にできず、両方の理由で保留する。
+    expect(run(spread(0.69))).toMatchObject({ status: 'held', reasons: ['store_unconfirmed', 'character_unconfirmed'] })
   })
 
   test('multiple と none は最上位でも採用せず保留する（娘の other と secret は採用する）', () => {
@@ -198,19 +203,19 @@ describe('店舗・ビッカメ娘は最上位を採用する', () => {
       expect(run(associationAnswers('abeno', special)).status, special).toBe('register')
   })
 
-  test('下限（0.3）に届かない選択は採用しない（娘は店舗の娘になる）', () => {
-    const low = { abeno: 0.25, takatsuki: 0.2 }
+  test('下限（0.7）に届かない選択は採用しない（娘は店舗の娘になる）', () => {
+    const low = { abeno: 0.69, takatsuki: 0.2 }
     expect(run({ store: choice('abeno', low) }).reasons).toEqual(['store_unconfirmed'])
     // 娘が明示されていない（確率不足）ときは、採用した店舗の娘で登録に進む。下限に届いた別の娘は、そのまま採用する。
-    const lowCharacter = run({ character: choice('takatsuki', { takatsuki: 0.25, abeno: 0.2 }) })
+    const lowCharacter = run({ character: choice('takatsuki', { takatsuki: 0.69, abeno: 0.2 }) })
     expect(lowCharacter).toMatchObject({ status: 'register', reasons: [], candidate: { characterIds: ['abeno'] } })
-    const explicit = run({ character: choice('takatsuki', { takatsuki: 0.35, abeno: 0.2 }) })
+    const explicit = run({ character: choice('takatsuki', { takatsuki: 0.7, abeno: 0.2 }) })
     expect(explicit).toMatchObject({ status: 'register', reasons: [], candidate: { characterIds: ['takatsuki'] } })
   })
 
   test('確率が下限に届かなくても、最上位が multiple・none なら店舗の娘にせず保留する', () => {
     for (const top of ['multiple', 'none'])
-      expect(run({ character: choice(top, { [top]: 0.25, abeno: 0.2 }) }).reasons).toEqual(['character_unconfirmed'])
+      expect(run({ character: choice(top, { [top]: 0.45, abeno: 0.2 }) }).reasons).toEqual(['character_unconfirmed'])
   })
 
   test('両方 none を確信しているときだけ対象外にする（none の確率が低いと保留）', () => {
@@ -224,46 +229,81 @@ describe('店舗・ビッカメ娘は最上位を採用する', () => {
 })
 
 describe('KV に保存済みの設定との互換', () => {
-  test('項目別のしきい値は 8 キーのまま（キーを足していない）で、旧形式の保存値も検証を通る', () => {
-    expect(Object.keys(resolveFieldThresholds(0.9)).sort()).toEqual(
-      ['category', 'condition', 'end_date', 'purchase_amount', 'quantity', 'start_date', 'status', 'store'].sort()
-    )
-    const legacy = {
-      status: 0.8,
-      category: 0.85,
+  // 旧 8 項目（store が 0.9）の保存データ。本番の KV に実際に入っている形。
+  const legacy = {
+    status: 0.8,
+    category: 0.85,
+    store: 0.9,
+    start_date: 0.9,
+    end_date: 0.9,
+    quantity: 0.9,
+    condition: 0.9,
+    purchase_amount: 0.9
+  }
+
+  test('旧 8 項目の保存データが読め、足りない 4 項目は既定値になる（状態は常に全 12 キー）', () => {
+    const parsed = StoredFieldThresholdsSchema.safeParse(legacy)
+    expect(parsed.success).toBe(true)
+    if (!parsed.success) throw new Error('Expected legacy to be readable')
+    const resolved = resolveFieldThresholds(0.9, parsed.data)
+    expect(Object.keys(resolved).sort()).toEqual([...FIELD_THRESHOLD_KEYS].sort())
+    expect(FieldThresholdsSchema.safeParse(resolved).success).toBe(true)
+    // 保存した店舗 0.9 はそのまま、新しいキーは既定値（店舗・娘の 4 項目は 0.7、charge_amount は共通値）。
+    expect(resolved).toMatchObject({
       store: 0.9,
-      start_date: 0.9,
-      end_date: 0.9,
-      quantity: 0.9,
-      condition: 0.9,
-      purchase_amount: 0.9
-    }
-    expect(FieldThresholdsSchema.safeParse(legacy).success).toBe(true)
-    expect(FieldThresholdsSchema.safeParse({ ...legacy, character: 0.3 }).success).toBe(false)
+      store_confirm: STORE_DEFAULT_THRESHOLD,
+      character: CHARACTER_DEFAULT_THRESHOLD,
+      character_confirm: 0.7,
+      charge_amount: 0.9
+    })
+    // 全 12 キーの形としては旧形式は不正（状態のレスポンスは常に全キー）。余分なキーは不正のまま。
+    expect(FieldThresholdsSchema.safeParse(legacy).success).toBe(false)
+    expect(StoredFieldThresholdsSchema.safeParse({ ...legacy, extra: 0.3 }).success).toBe(false)
   })
 
-  test('未保存なら store の既定は 0.3、保存済みの値（0.9 など）は下限で上書きせず優先する', () => {
-    expect(thresholdOf(DEFAULT_DETECTION_THRESHOLDS, 'store')).toBe(STORE_DEFAULT_THRESHOLD)
+  test('保存した store: 0.9 は判定に効く。最上位 85% は確認を聞く側（確認の質問が無ければ不採用）、95% は確認なしで採用', () => {
     const saved = { ...DEFAULT_DETECTION_THRESHOLDS, fieldThresholds: resolveFieldThresholds(0.9, { store: 0.9 }) }
     expect(thresholdOf(saved, 'store')).toBe(0.9)
+    expect(thresholdOf(DEFAULT_DETECTION_THRESHOLDS, 'store')).toBe(STORE_DEFAULT_THRESHOLD)
     const value = post(`あべのたんアクキーを${PERIOD}どなたでも配布します`)
     const request = requestWithAssociations(value)
-    const answers = response(request, {
-      category: choice('ackey', { ackey: 0.99 }),
-      start_date: choice('d20261103', { d20261103: 0.99 }),
-      end_date: choice('none', { none: 0.99 }),
-      condition: choice('everyone', { everyone: 0.99 }),
-      store: choice('abeno', { abeno: 0.5, takatsuki: 0.2 })
-    })
-    expect(evaluateWithStore(value, request, answers, DEFAULT_DETECTION_THRESHOLDS, 'abeno').status).toBe('register')
-    expect(evaluateWithStore(value, request, answers, saved, 'abeno')).toMatchObject({
+    const answersAt = (top: number) =>
+      response(request, {
+        category: choice('ackey', { ackey: 0.99 }),
+        start_date: choice('d20261103', { d20261103: 0.99 }),
+        end_date: choice('none', { none: 0.99 }),
+        condition: choice('everyone', { everyone: 0.99 }),
+        store: choice('abeno', { abeno: top, takatsuki: 0.05 })
+      })
+    expect(evaluateWithStore(value, request, answersAt(0.85), DEFAULT_DETECTION_THRESHOLDS, 'abeno').status).toBe(
+      'register'
+    )
+    expect(evaluateWithStore(value, request, answersAt(0.85), saved, 'abeno')).toMatchObject({
       status: 'held',
       reasons: ['store_unconfirmed']
     })
+    expect(evaluateWithStore(value, request, answersAt(0.95), saved, 'abeno').status).toBe('register')
   })
 
-  test('娘の下限は専用の設定を持たず、min(共通値, 0.3) になる', () => {
+  test('娘の下限は共通値に依らず既定 0.7（保存した値があればそれが優先する）', () => {
     expect(thresholdOf(DEFAULT_DETECTION_THRESHOLDS, 'character')).toBe(CHARACTER_DEFAULT_THRESHOLD)
-    expect(thresholdOf({ ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.2 }, 'character')).toBe(0.2)
+    expect(thresholdOf({ ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.2 }, 'character')).toBe(0.7)
+    expect(thresholdOf({ ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 1 }, 'character')).toBe(0.7)
+    expect(
+      thresholdOf(
+        { ...DEFAULT_DETECTION_THRESHOLDS, fieldThresholds: resolveFieldThresholds(0.9, { character: 0.5 }) },
+        'character'
+      )
+    ).toBe(0.5)
+  })
+
+  test('charge_amount が未保存なら共通値（従来と同じ）。保存すれば判定に反映される', () => {
+    expect(thresholdOf(DEFAULT_DETECTION_THRESHOLDS, 'charge_amount')).toBe(DEFAULT_DETECTION_THRESHOLDS.fieldThreshold)
+    expect(thresholdOf({ ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.6 }, 'charge_amount')).toBe(0.6)
+    const saved = {
+      ...DEFAULT_DETECTION_THRESHOLDS,
+      fieldThresholds: resolveFieldThresholds(0.9, { charge_amount: 0.5 })
+    }
+    expect(thresholdOf(saved, 'charge_amount')).toBe(0.5)
   })
 })

@@ -48,11 +48,15 @@ const passive = (discord: DiscordStatus | null = passiveDiscord): AdminBotStatus
       status: 0.8,
       category: 0.95,
       store: 0.95,
+      store_confirm: 0.95,
+      character: 0.95,
+      character_confirm: 0.95,
       start_date: 0.95,
       end_date: 0.95,
       quantity: 0.95,
       condition: 0.95,
-      purchase_amount: 0.95
+      purchase_amount: 0.95,
+      charge_amount: 0.95
     }
   },
   error: null

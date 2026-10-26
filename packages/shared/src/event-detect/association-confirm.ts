@@ -7,10 +7,12 @@ import {
   STORE_CONFIRM_KEY,
   STORE_QUESTION_KEY
 } from './associations'
-import { type ClefQuestion, type ClefRequest, ClefRequestSchema, type ClefResponse } from './clef'
+import { type ClefAnswer, type ClefQuestion, type ClefRequest, ClefRequestSchema, type ClefResponse } from './clef'
 
-// 2段目（確認）の質問。1段目の choice で最上位に選んだ店舗・娘ごとに、はい/いいえ（noul）で別の Clef 呼び出しとして聞く（v16 以降）。
-// ただし店舗の娘（最上位の娘の ID が最上位の店舗の ID と同じ）は、特に指定がなければその店舗の娘とみなすので、娘の確認は聞かない。
+// 2段目（確認）の質問。1段目の choice の最上位の確率が下限（store・character のしきい値。既定 70%）未満の店舗・娘について、
+// はい/いいえ（noul）で別の Clef 呼び出しとして聞く（v16 以降）。下限以上は確認なしで確定するので聞かない。
+// 最上位の娘が店舗の娘（最上位の店舗と同じ ID）でも、具体的な娘で確率が下限未満なら娘の確認を聞く（店舗と娘は二回チェックする）。
+// 「特に指定がなければその店舗の娘」は、娘が未指定のときの既定値（detection-character.ts）の話で、2回目のチェックを省く意味ではない。
 // 質問文は版ごとに固定する（webhook-prompt.ts が版定義と完全一致で検査する）。投稿ごとの値は instructions に入れず、state の末尾の行だけで渡す。
 // 文言は測定（scripts/lib/event-detect/d1-confirm-requests.ts）で固定したものと同一で、この定義を測定側も参照する。変えると測定の質問の版（sha256）が変わる。
 export const STORE_TARGET_LABEL = '確認対象の開催店舗'
@@ -47,30 +49,50 @@ export const characterShortName = (id: string): string => {
 /** 2段目で確認する対象。店舗と娘のどちらか、または両方。 */
 export type ConfirmTarget = { store?: string; character?: string }
 
-const topChoice = (answers: ClefResponse['answers'], key: string): string | undefined => {
+/** choice の最上位（確率は問わない）。回答が無い・choice でない場合は undefined。 */
+export const topChoice = (answers: ClefResponse['answers'], key: string): string | undefined => {
   const answer = answers[key]
   return answer?.type === 'choice' ? answer.choice : undefined
 }
 
-/**
- * 店舗の娘か。最上位の娘の ID が最上位の店舗の ID と同じなら、その店舗の娘とみなす。
- * 投稿で娘が指定されていなければ店舗の娘と考えてよく（D1 でも娘が明示されるのは店舗の娘と違うときだけ）、本文に娘の名前が無くても誤りではない。
- * 店舗が none・multiple のとき、または娘が none・multiple・other・secret のときは、具体的な ID どうしではないので店舗の娘とは言えない。
- */
-export const isStoreCharacter = (store: string | undefined, character: string | undefined): boolean =>
-  isConcreteStore(store) && isConcreteCharacter(character) && store === character
+/** choice の最上位の確率。choice でない回答・最上位の確率が欠けた回答は null。 */
+export const topProbability = (answer: ClefAnswer | undefined): number | null => {
+  if (answer?.type !== 'choice') return null
+  const probability = answer.probabilities[answer.choice]
+  return probability === undefined ? null : probability
+}
 
 /**
- * 1段目の回答から、2段目で確認する対象を決める。確率の下限は見ず、choice の最上位だけで選ぶ。
- * 最上位が具体的な店舗のときだけ店舗、具体的な娘のときだけ娘を対象にする。none・multiple（と娘の other・secret）は確認の対象にならない。
- * 店舗の娘（isStoreCharacter）は、指定がなければ店舗の娘とみなすので娘を対象にしない。店舗と別の具体的な娘だけ、本文から読めるかを確認する。
+ * 1段目の最上位の確率が下限以上で、2段目の確認なしに確定できるか。ちょうど下限は確定する（確認を聞かない）。
+ * 確率が取れない・欠けた回答は確定できない扱い（確認を聞く側に倒す）。確認を聞くか（confirmTargetOf）と採用するか（detection-association.ts）が同じこの関数を使う。
  */
-export const confirmTargetOf = (answers: ClefResponse['answers']): ConfirmTarget => {
+export const isConfident = (answer: ClefAnswer | undefined, threshold: number): boolean => {
+  const probability = topProbability(answer)
+  return probability !== null && probability >= threshold
+}
+
+/** 確認を聞かずに確定する、1段目の最上位の確率の下限（store・character のしきい値。thresholdOf で引いた値）。 */
+export type ChoiceThresholds = { store: number; character: number }
+
+/**
+ * 1段目の回答から、2段目で確認する対象を決める。最上位が具体的な店舗（娘）で、かつ最上位の確率が下限（choiceThresholds。既定 70%）未満のときだけ対象にする。
+ * 下限以上は確認なしで確定するので聞かない（2段目の呼び出しも減る）。確率が取れない・欠けた回答は下限未満として扱い、確認を聞く側に倒す。
+ * 下限は判定（detection-association.ts）と同じ thresholdOf の値を、呼び出し側が渡す。判定と確認の対象選択で値がずれない。
+ * none・multiple（と娘の other・secret・store_character）は、確認する具体的な店舗・娘が無いので対象にならない。
+ * 最上位の娘が店舗の娘（最上位の店舗と同じ ID）でも、具体的な娘で下限未満なら娘を対象にする（店舗と娘は二回チェックする）。
+ * 確認が低くても、娘は保留にせず採用した店舗の娘で登録する（detection-character.ts）ので、店舗の娘では判定は変わらない。
+ */
+export const confirmTargetOf = (
+  answers: ClefResponse['answers'],
+  choiceThresholds: ChoiceThresholds
+): ConfirmTarget => {
   const store = topChoice(answers, STORE_QUESTION_KEY)
   const character = topChoice(answers, CHARACTER_QUESTION_KEY)
   return {
-    ...(isConcreteStore(store) ? { store } : {}),
-    ...(isConcreteCharacter(character) && !isStoreCharacter(store, character) ? { character } : {})
+    ...(isConcreteStore(store) && !isConfident(answers[STORE_QUESTION_KEY], choiceThresholds.store) ? { store } : {}),
+    ...(isConcreteCharacter(character) && !isConfident(answers[CHARACTER_QUESTION_KEY], choiceThresholds.character)
+      ? { character }
+      : {})
   }
 }
 
@@ -111,17 +133,20 @@ export const yesProbability = (answers: ClefResponse['answers'], key: string): n
   return answer?.type === 'noul' ? answer.noul : null
 }
 
+/** request に確認の質問を送ったか。送っていない（v15 以前の保存データや、確認の対象にならなかった項目）なら false。 */
+export const wasConfirmAsked = (request: ClefRequest, key: string): boolean => request.questions[key] !== undefined
+
 /**
- * 確認の関門を通るか。request に確認の質問が無い（v15 以前の保存データや、確認の対象にならなかった項目）ときは関門を掛けず通す。
- * 質問があるときは、「はい」の確率が下限以上のときだけ通す。回答が欠けていれば通さない。
+ * 確認が通ったか（確認を聞いて「はい」が下限以上か）。質問を送っていない・回答が欠けている・下限未満なら通らない。
+ * 質問が無ければ「通す」関門ではなく、「確認では確定できない」。1段目の最上位が下限以上の項目は、確認を聞かないのでこの関数を使わない。
  */
-export const passesConfirm = (
+export const isConfirmedYes = (
   request: ClefRequest,
   answers: ClefResponse['answers'],
   key: string,
   threshold: number
 ): boolean => {
-  if (request.questions[key] === undefined) return true
+  if (!wasConfirmAsked(request, key)) return false
   const probability = yesProbability(answers, key)
   return probability !== null && probability >= threshold
 }

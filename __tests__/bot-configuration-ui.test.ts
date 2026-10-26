@@ -1,7 +1,11 @@
 import { describe, expect, spyOn, test } from 'bun:test'
 import type { DiscordStatus } from '@biccame/shared/bot'
 import { questionLabel } from '@biccame/shared/event-detect/answer-view'
-import { FIELD_THRESHOLD_KEYS, type FieldThresholds } from '@biccame/shared/event-detect/detection'
+import {
+  FIELD_THRESHOLD_KEYS,
+  type FieldThresholds,
+  resolveFieldThresholds
+} from '@biccame/shared/event-detect/detection'
 import type { AdminBotStatus } from '@biccame/shared/schemas/admin-bot.dto'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createMemoryHistory, createRootRoute, createRouter, RouterProvider } from '@tanstack/react-router'
@@ -9,6 +13,7 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { toast } from 'sonner'
 import { BotManagement } from '@/components/admin/bot-management'
+import { EDITABLE_FIELD_THRESHOLD_KEYS } from '@/components/admin/field-threshold-form'
 import {
   ADMIN_BOT_QUERY_KEY,
   useAdminBotConfiguration,
@@ -24,11 +29,15 @@ const savedThresholds: FieldThresholds = {
   status: 0.8,
   category: 0.91,
   store: 0.92,
+  store_confirm: 0.71,
+  character: 0.72,
+  character_confirm: 0.73,
   start_date: 0.93,
   end_date: 0.94,
   quantity: 0.95,
   condition: 0.96,
-  purchase_amount: 0.825
+  purchase_amount: 0.825,
+  charge_amount: 0.97
 }
 
 const discordStatus = (setting: DiscordStatus['settings']['token']): DiscordStatus => ({
@@ -195,25 +204,53 @@ test('model selection stays in its row and unchanged save stays disabled in the 
   expect(markup).not.toContain('保存しました')
 })
 
+// 項目別の12項目と判定全体の3つのラベル（行のクラスを調べるときに使う）。
+const EDITABLE_LABELS: readonly string[] = [
+  ...EDITABLE_FIELD_THRESHOLD_KEYS.map((key) => questionLabel(key)),
+  'イベント判定の登録閾値',
+  '必須項目の選択閾値',
+  '対象外判定の閾値'
+]
+
 describe('項目別のしきい値', () => {
   const percentOf = (value: number) => String(Math.round(value * 1000) / 10)
 
-  test('8項目が、回答表の質問名と同じラベルで、保存済みの値を%で入力欄に出す', async () => {
+  test('12項目が、回答表の質問名と同じラベルで、質問の順に、保存済みの値を%で入力欄に出す', async () => {
     const markup = await renderSettings(discordStatus('valid'), true)
-    expect(FIELD_THRESHOLD_KEYS).toHaveLength(8)
-    // 項目別の8項目に、判定全体の3つ（登録・必須項目の選択・対象外）を足した11個が入力欄。
-    expect(markup.match(/data-slot="input"/g)).toHaveLength(11)
-    expect([...markup.matchAll(/<dt[^>]*>(.*?)<\/dt>/g)].map((match) => match[1])).toEqual(
-      expect.arrayContaining(['状態', '配布物', '開催・配布店舗', '開始日', '終了日', '配布数', '配布条件', '購入額'])
-    )
-    for (const key of FIELD_THRESHOLD_KEYS) {
+    // 保存・状態の形は12キー。画面の入力欄も同じ12項目（編集できるキーは FIELD_THRESHOLD_KEYS と同じ）。
+    expect(FIELD_THRESHOLD_KEYS).toHaveLength(12)
+    expect([...EDITABLE_FIELD_THRESHOLD_KEYS]).toEqual([...FIELD_THRESHOLD_KEYS])
+    // 項目別の12項目に、判定全体の3つ（登録・必須項目の選択・対象外）を足した15個が入力欄。
+    expect(markup.match(/data-slot="input"/g)).toHaveLength(15)
+    const labels = EDITABLE_FIELD_THRESHOLD_KEYS.map((key) => questionLabel(key))
+    expect(labels).toEqual([
+      '状態',
+      '配布物',
+      '開催・配布店舗',
+      '開催・配布店舗の確認',
+      '対象ビッカメ娘',
+      '対象ビッカメ娘の確認',
+      '開始日',
+      '終了日',
+      '配布数',
+      '配布条件',
+      '購入額',
+      '入金・チャージ額'
+    ])
+    // 並びは質問の順（項目別の見出しより後で、この順に出る）。
+    const positions = labels.map((label) => markup.indexOf(`>${label}</dt>`))
+    expect(positions.every((position) => position >= 0)).toBe(true)
+    expect(positions).toEqual([...positions].sort((a, b) => a - b))
+    expect(positions[0]).toBeGreaterThan(markup.indexOf('項目別の選択閾値'))
+    for (const key of EDITABLE_FIELD_THRESHOLD_KEYS) {
       const label = questionLabel(key)
       const row = settingMarkup(markup, label)
       expect(row, key).toContain(`aria-label="${label}の閾値（%）"`)
       expect(row, key).toContain(`value="${percentOf(savedThresholds[key])}"`)
       expect(row, key).toContain('inputMode="decimal"')
-      // 数値は右寄せの mono、高さ32px・文字14pxで md でも拡大せず、行の中身は上下中央。
-      expect(row, key).toContain('h-8 w-20 text-right font-mono text-sm tabular-nums')
+      // 数値はラベルと同じフォント（等幅だと数字が上に寄る）の右寄せ。高さ32px・文字14pxで md でも拡大せず、行の中身は上下中央。
+      expect(row, key).toContain('h-8 w-20 text-right text-sm tabular-nums')
+      expect(row, key).not.toContain('font-mono')
       expect(row, key).not.toContain('md:h-10')
       expect(row, key).not.toContain('md:w-28')
       expect(row, key).not.toContain('md:text-base')
@@ -221,9 +258,46 @@ describe('項目別のしきい値', () => {
       expect(row, key).not.toContain('aria-invalid="true"')
       expect(row, key).not.toContain('role="alert"')
     }
-    // 状態は共通値より低い 80%、購入額は 82.5% のように、行ごとに別の値が入る。
+    // 状態は共通値より低い 80%、購入額は 82.5%、店舗・娘は 92% / 72% のように、行ごとに別の値が入る。
     expect(settingMarkup(markup, '状態')).toContain('value="80"')
     expect(settingMarkup(markup, '購入額')).toContain('value="82.5"')
+    expect(settingMarkup(markup, '開催・配布店舗')).toContain('value="92"')
+    expect(settingMarkup(markup, '対象ビッカメ娘')).toContain('value="72"')
+    expect(settingMarkup(markup, '入金・チャージ額')).toContain('value="97"')
+  })
+
+  test('店舗・娘の行には、確認を省く条件を説明する補足を出し、確認の行には「はい」の条件を出す。他の項目には出さない', async () => {
+    const markup = await renderSettings(discordStatus('valid'), true)
+    const skip = 'この確率以上なら確認を省いて確定。未満なら「確認」の質問で決めます。'
+    const yes = '「はい」の確率がこの値以上なら確定します。'
+    for (const [label, key, note] of [
+      ['開催・配布店舗', 'store', skip],
+      ['開催・配布店舗の確認', 'store_confirm', yes],
+      ['対象ビッカメ娘', 'character', skip],
+      ['対象ビッカメ娘の確認', 'character_confirm', yes]
+    ] as const) {
+      const row = settingMarkup(markup, label)
+      expect(row, label).toContain(note)
+      expect(row, label).toContain(`aria-describedby="field-threshold-${key}-note"`)
+      expect(row, label).toContain(`id="field-threshold-${key}-note"`)
+    }
+    expect(markup.split(skip)).toHaveLength(3)
+    expect(markup.split(yes)).toHaveLength(3)
+    for (const label of ['状態', '配布物', '開始日', '終了日', '配布数', '配布条件', '購入額', '入金・チャージ額'])
+      expect(settingMarkup(markup, label), label).not.toContain('aria-describedby')
+  })
+
+  test('行は上揃えにし、ラベルは入力欄の高さの中で中央揃えにする（補足文・エラー文のある行でラベルがずれない）', async () => {
+    const markup = await renderSettings(discordStatus('valid'), true)
+    const rows = [...markup.matchAll(/<div class="grid[^"]*"><dt class="([^"]*)">([^<]*)<\/dt>/g)]
+    const thresholdRows = rows.filter(([, , label]) => label.includes('閾値') || EDITABLE_LABELS.includes(label))
+    expect(thresholdRows.length).toBeGreaterThanOrEqual(15)
+    for (const [, labelClass, label] of thresholdRows) {
+      expect(labelClass, label).toContain('sm:flex sm:h-8 sm:items-center')
+    }
+    const gridClasses = [...markup.matchAll(/<div class="(grid[^"]*)"><dt[^>]*>([^<]*)<\/dt>/g)]
+    for (const [, gridClass, label] of gridClasses.filter(([, , text]) => EDITABLE_LABELS.includes(text)))
+      expect(gridClass, label).toContain('sm:items-start')
   })
 
   test('判定全体の3つは読み取り専用の表示ではなく、保存済みの値を%で入れた入力欄になる', async () => {
@@ -240,8 +314,9 @@ describe('項目別のしきい値', () => {
       expect(row, label).toContain(`aria-label="${label}（%）"`)
       expect(row, label).toContain(`value="${percent}"`)
       expect(row, label).toContain('inputMode="decimal"')
-      // 項目別と同じ見た目（右寄せの mono、高さ32px・文字14pxで md でも拡大せず、行の中身は上下中央）。
-      expect(row, label).toContain('h-8 w-20 text-right font-mono text-sm tabular-nums')
+      // 項目別と同じ見た目（ラベルと同じフォントの右寄せ、高さ32px・文字14pxで md でも拡大せず、行の中身は上下中央）。
+      expect(row, label).toContain('h-8 w-20 text-right text-sm tabular-nums')
+      expect(row, label).not.toContain('font-mono')
       expect(row, label).not.toContain('md:h-10')
       expect(row, label).not.toContain('md:text-base')
       expect(row, label).toContain('flex items-center')
@@ -355,7 +430,11 @@ test('model save uses the typed payload and updates cached model without stale r
     captured.notification = useAdminBotTest()
     return null
   }
-  const save = spyOn(client, 'saveAdminBotConfiguration').mockImplementation(async (body) => body)
+  // 保存 API と同じく、応答は常に全項目（足りない項目は既定値）にする。
+  const save = spyOn(client, 'saveAdminBotConfiguration').mockImplementation(async (body) => ({
+    ...body,
+    fieldThresholds: resolveFieldThresholds(body.thresholds.choiceThreshold, body.fieldThresholds)
+  }))
   const read = spyOn(client, 'getAdminBotStatus').mockImplementation(async () => initial)
   const connection = spyOn(client, 'checkAdminBotConnection').mockImplementation(async () => ({
     ...initial,

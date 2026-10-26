@@ -1,17 +1,10 @@
 import { z } from 'zod'
-import { isConcreteCharacter, isConcreteStore, isConfirmKey, passesConfirm } from './association-confirm'
-import {
-  ASSOCIATION_NONE,
-  associatedCharacterIds,
-  associationIds,
-  CHARACTER_CONFIRM_KEY,
-  CHARACTER_QUESTION_KEY,
-  STORE_CONFIRM_KEY,
-  selectedStores
-} from './associations'
+import { isConfirmKey } from './association-confirm'
+import { ASSOCIATION_NONE, associatedCharacterIds, associationIds, selectedStores } from './associations'
 import { type ClefAnswer, type ClefRequest, type ClefResponse, ClefResponseSchema } from './clef'
 import { keyToDate, keyToQuantity, QUESTION_VERSION } from './decide'
-import { draftCharacterIds, resolveCharacterIds } from './detection-character'
+import { decideAssociations } from './detection-association'
+import { draftCharacterIds } from './detection-character'
 import {
   conditionQuestions,
   hasAmbiguousMoney,
@@ -71,6 +64,7 @@ export {
   STATUS_DEFAULT_THRESHOLD,
   STORE_CONFIRM_THRESHOLD,
   STORE_DEFAULT_THRESHOLD,
+  StoredFieldThresholdsSchema,
   thresholdOf
 } from './detection-thresholds'
 
@@ -189,30 +183,16 @@ export const evaluateDetection = (
     choiceOf(answers.character, settings.data.fieldThreshold) === ASSOCIATION_NONE
   )
     return { status: 'ignored', confidence, reasons: ['not_distribution_event'] }
-  // 開催店舗とビッカメ娘は、選択肢が多くて確率が散るため、最上位をそのまま採用する（確率が下限以上のとき）。
-  // multiple・none は下の selectedStores / selectedCharacterIds で採用されず保留になる。下限は thresholdOf を通すので、管理画面で保存した店舗の値も効く。
-  const storeChoice = choiceOf(answers.store, thresholdFor('store'))
-  const characterChoice = choiceOf(answers.character, thresholdOf(settings.data, CHARACTER_QUESTION_KEY))
-  // 2段目（v16 以降）。request に確認の質問が含まれるときだけ、採用された最上位の店舗・娘について確認の「はい」の確率が下限以上かを見る。
-  // 含まれない（v15 以前の保存データ、none・multiple・other・secret が最上位、最上位の娘が店舗の娘で娘の確認を聞かなかった）ときは関門を掛けず、判定を変えない。
-  // 店舗の娘にも娘の確認を聞いていた保存データ（request に質問が含まれる）は、含まれる質問どおりに関門を掛ける。
-  const storeLow =
-    isConcreteStore(storeChoice) &&
-    !passesConfirm(request, answers, STORE_CONFIRM_KEY, thresholdOf(settings.data, STORE_CONFIRM_KEY))
-  const characterLow =
-    isConcreteCharacter(characterChoice) &&
-    !passesConfirm(request, answers, CHARACTER_CONFIRM_KEY, thresholdOf(settings.data, CHARACTER_CONFIRM_KEY))
+  // 開催店舗とビッカメ娘は、選択肢が多くて確率が散る。最上位の確率が 70% 以上なら 2 段目の確認なしで確定し、70% 未満なら 2 段目の確認
+  // （はい/いいえ）の「はい」が下限以上のときだけ確定する（detection-association.ts）。確認の質問を送っていない保存データ（v15 以前）の 70% 未満は確定しない。
+  // multiple・none は確率が高くても採用されず保留になる。下限は thresholdOf を通す値（既定 70%。管理画面で保存した値が優先する）で、確認の対象選択（confirmTargetOf）も同じ値を使う。
+  const { stores, characterIds, storeConfirmLow, characterConfirmLow } = decideAssociations(
+    request,
+    answers,
+    settings.data
+  )
   const status = choiceOf(answers.status, thresholdFor('status'))
   const category = CategorySchema.safeParse(choiceOf(answers.category, thresholdFor('category')))
-  // 登録する店舗・対象ビッカメ娘は選ばれた 1 件まで。共同絵柄（multiple）は人が編集フォームで複数指定する。
-  // 娘が明示されていない（確率不足、または店舗と別の娘の確認が低い）ときは、採用した店舗の娘にする（detection-character.ts）。
-  const stores = storeLow ? [] : selectedStores(storeChoice)
-  const characterIds = resolveCharacterIds({
-    stores,
-    choice: characterChoice,
-    top: argmaxOf(answers.character),
-    confirmLow: characterLow
-  })
   const start = choiceOf(answers.start_date, thresholdFor('start_date'))
   const startDate = start ? keyToDate(start) : undefined
   // 終了日は最有力が none（記載なし・「なくなり次第終了」など）なら、確率がしきい値未満でも「終了日なし」で確定する。
@@ -233,7 +213,7 @@ export const evaluateDetection = (
   const quantity = keyToOptionalQuantity(quantityKey)
   const purchaseRequired = requiresPurchase(condition)
   const chargeRequired = requiresCharge(condition)
-  const chargeAmount = keyToAmount(choiceOf(answers.charge_amount, settings.data.fieldThreshold))
+  const chargeAmount = keyToAmount(choiceOf(answers.charge_amount, thresholdFor('charge_amount')))
   const unsupportedCondition = hasUnsupportedCondition(post)
   const statusReason =
     status === 'ongoing' ? 'existing_event_update' : status === 'end' ? 'event_ended' : 'status_unconfirmed'
@@ -265,11 +245,11 @@ export const evaluateDetection = (
       : storeKey !== null && !stores.includes(storeKey)
         ? ['store_mismatch']
         : []),
-    // 確認が通らなかったときは、確定できない理由（上の store_unconfirmed）に、確認の「はい」の確率が下限未満だったことを足す。
-    ...(storeLow ? ['store_confirm_low'] : []),
+    // 確認を聞いて通らなかったときは、確定できない理由（上の store_unconfirmed）に、確認の「はい」の確率が下限未満だったことを足す。
+    ...(storeConfirmLow ? ['store_confirm_low'] : []),
     ...(characterIds.length === 0 ? ['character_unconfirmed'] : []),
     // 確認が低くても、店舗の娘として登録に進むときは保留ではないので付けない。店舗が採用されず保留のときだけ併記する。
-    ...(characterLow && characterIds.length === 0 ? ['character_confirm_low'] : []),
+    ...(characterConfirmLow && characterIds.length === 0 ? ['character_confirm_low'] : []),
     ...(!startDate
       ? [answers.start_date === undefined || start === 'none' ? 'start_date_unspecified' : 'start_date_unconfirmed']
       : []),

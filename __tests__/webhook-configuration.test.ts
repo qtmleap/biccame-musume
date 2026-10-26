@@ -56,11 +56,15 @@ const editedThresholds: FieldThresholds = {
   status: 0.7,
   category: 0.92,
   store: 0.93,
+  store_confirm: 0.74,
+  character: 0.75,
+  character_confirm: 0.76,
   start_date: 0.94,
   end_date: 0.95,
   quantity: 0.96,
   condition: 0.97,
-  purchase_amount: 0.825
+  purchase_amount: 0.825,
+  charge_amount: 0.98
 }
 // 判定全体の3つ。環境変数の既定値（90% / 50% / 90%）と全て違う値にして、上書きと取り違えを検出できるようにする。
 const editedEventThresholds: EventThresholds = { eventThreshold: 0.92, ignoreThreshold: 0.4, choiceThreshold: 0.85 }

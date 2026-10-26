@@ -2,14 +2,17 @@ import { describe, expect, test } from 'bun:test'
 import type { ClefAnswer } from './clef'
 import {
   buildDetectionDraft,
+  CHARACTER_CONFIRM_THRESHOLD,
+  CHARACTER_DEFAULT_THRESHOLD,
   DEFAULT_DETECTION_THRESHOLDS,
   DetectionThresholdsSchema,
-  type evaluateDetection,
   FIELD_THRESHOLD_KEYS,
   FieldThresholdsSchema,
   resolveFieldThresholds,
   STATUS_DEFAULT_THRESHOLD,
+  STORE_CONFIRM_THRESHOLD,
   STORE_DEFAULT_THRESHOLD,
+  StoredFieldThresholdsSchema,
   thresholdOf
 } from './detection'
 import {
@@ -23,54 +26,79 @@ import {
 } from './detection-test-fixtures'
 
 describe('Field thresholds', () => {
-  test('対象は8項目で、is_event と対象外は含まない', () => {
+  test('対象は12項目で、回答表の質問の順。is_event と single_event（廃止）は含まない', () => {
     expect([...FIELD_THRESHOLD_KEYS]).toEqual([
       'status',
       'category',
       'store',
+      'store_confirm',
+      'character',
+      'character_confirm',
       'start_date',
       'end_date',
       'quantity',
       'condition',
-      'purchase_amount'
+      'purchase_amount',
+      'charge_amount'
     ])
     expect(STATUS_DEFAULT_THRESHOLD).toBe(0.8)
   })
 
+  test('店舗・ビッカメ娘の1段目と確認の既定値は、どれも 70%', () => {
+    expect(STORE_DEFAULT_THRESHOLD).toBe(0.7)
+    expect(CHARACTER_DEFAULT_THRESHOLD).toBe(0.7)
+    expect(STORE_CONFIRM_THRESHOLD).toBe(0.7)
+    expect(CHARACTER_CONFIRM_THRESHOLD).toBe(0.7)
+  })
+
   describe('resolveFieldThresholds', () => {
-    test('overrides なしは status が min(共通値, 0.8)、store が min(共通値, 0.3)、他の6項目は共通値', () => {
+    // 共通値に追従せず、既定が定数の 0.7 になる 4 項目。
+    const association = ['store', 'store_confirm', 'character', 'character_confirm'] as const
+
+    test('overrides なしは status が min(共通値, 0.8)、店舗・娘の4項目が 0.7、他の7項目は共通値', () => {
       const result = resolveFieldThresholds(0.9)
       expect(result.status).toBe(0.8)
-      expect(result.store).toBe(STORE_DEFAULT_THRESHOLD)
+      for (const key of association) expect(result[key], key).toBe(0.7)
       for (const key of FIELD_THRESHOLD_KEYS)
-        if (key !== 'status' && key !== 'store') expect(result[key], key).toBe(0.9)
+        if (key !== 'status' && !association.some((value) => value === key)) expect(result[key], key).toBe(0.9)
       expect(Object.keys(result).sort()).toEqual([...FIELD_THRESHOLD_KEYS].sort())
       expect(FieldThresholdsSchema.safeParse(result).success).toBe(true)
     })
 
-    test('共通値が 0.8 未満なら status も共通値に揃う（0.7 なら 0.7）。store は 0.3 以下の共通値にだけ揃う', () => {
+    test('店舗・娘の4項目は共通値に依らない（0.2 でも 1 でも 0.7）。status は 0.8 未満の共通値に揃う', () => {
+      for (const common of [0.2, 0.5, 0.95, 1]) {
+        const result = resolveFieldThresholds(common)
+        for (const key of association) expect(result[key], `${key} ${common}`).toBe(0.7)
+      }
       const result = resolveFieldThresholds(0.7)
-      for (const key of FIELD_THRESHOLD_KEYS) expect(result[key], key).toBe(key === 'store' ? 0.3 : 0.7)
+      for (const key of FIELD_THRESHOLD_KEYS) expect(result[key], key).toBe(0.7)
       expect(resolveFieldThresholds(0.8).status).toBe(0.8)
-      expect(resolveFieldThresholds(0.2).store).toBe(0.2)
     })
 
-    test('保存済みの store の値（0.9 など）は既定値より優先する', () => {
-      expect(resolveFieldThresholds(0.9, { store: 0.9 }).store).toBe(0.9)
-      expect(resolveFieldThresholds(0.9, { store: 0.5 }).store).toBe(0.5)
+    test('保存済みの店舗・娘の値（0.9 など）は既定値より優先する', () => {
+      const result = resolveFieldThresholds(0.9, {
+        store: 0.9,
+        store_confirm: 0.5,
+        character: 0.6,
+        character_confirm: 0.85
+      })
+      expect(result).toMatchObject({ store: 0.9, store_confirm: 0.5, character: 0.6, character_confirm: 0.85 })
+      expect(FieldThresholdsSchema.safeParse(result).success).toBe(true)
     })
 
-    test('共通値が変わると status 以外の既定値が追従する', () => {
+    test('共通値が変わると status と店舗・娘の4項目以外の既定値が追従する', () => {
       const result = resolveFieldThresholds(0.95)
       expect(result.status).toBe(0.8)
       expect(result.category).toBe(0.95)
       expect(result.purchase_amount).toBe(0.95)
+      expect(result.charge_amount).toBe(0.95)
     })
 
     test('overrides のある項目はその値、無い項目は既定値', () => {
-      const result = resolveFieldThresholds(0.9, { status: 0.6, start_date: 0.99 })
+      const result = resolveFieldThresholds(0.9, { status: 0.6, start_date: 0.99, charge_amount: 0.5 })
       expect(result.status).toBe(0.6)
       expect(result.start_date).toBe(0.99)
+      expect(result.charge_amount).toBe(0.5)
       expect(result.category).toBe(0.9)
       expect(resolveFieldThresholds(0.9, {})).toEqual(resolveFieldThresholds(0.9))
     })
@@ -84,29 +112,50 @@ describe('Field thresholds', () => {
       expect(thresholdOf({ ...base, fieldThresholds: { status: 0.1 } }, 'is_event')).toBe(0.93)
     })
 
-    test('8項目は項目別の有効値（上書きがあればそれ、無ければ既定値）', () => {
+    test('12項目は項目別の有効値（上書きがあればそれ、無ければ既定値）', () => {
       expect(thresholdOf(base, 'status')).toBe(0.8)
-      expect(thresholdOf(base, 'store')).toBe(0.3)
-      for (const key of FIELD_THRESHOLD_KEYS)
-        if (key !== 'status' && key !== 'store') expect(thresholdOf(base, key), key).toBe(0.91)
-      const overridden = { ...base, fieldThresholds: { status: 0.55, end_date: 0.66 } }
+      for (const key of ['store', 'store_confirm', 'character', 'character_confirm'])
+        expect(thresholdOf(base, key), key).toBe(0.7)
+      for (const key of [
+        'category',
+        'start_date',
+        'end_date',
+        'quantity',
+        'condition',
+        'purchase_amount',
+        'charge_amount'
+      ])
+        expect(thresholdOf(base, key), key).toBe(0.91)
+      const overridden = { ...base, fieldThresholds: { status: 0.55, end_date: 0.66, charge_amount: 0.44 } }
       expect(thresholdOf(overridden, 'status')).toBe(0.55)
       expect(thresholdOf(overridden, 'end_date')).toBe(0.66)
-      expect(thresholdOf(overridden, 'store')).toBe(0.3)
-      expect(thresholdOf({ ...base, fieldThresholds: { store: 0.9 } }, 'store')).toBe(0.9)
+      expect(thresholdOf(overridden, 'charge_amount')).toBe(0.44)
+      expect(thresholdOf(overridden, 'store')).toBe(0.7)
     })
 
-    test('対象ビッカメ娘は min(共通値, 0.3)、旧 venue.* / character.*（noul）は共通値のまま', () => {
-      expect(thresholdOf(base, 'character')).toBe(0.3)
-      expect(thresholdOf({ ...base, fieldThreshold: 0.2 }, 'character')).toBe(0.2)
-      expect(thresholdOf({ ...base, fieldThresholds: { store: 0.5 } }, 'character')).toBe(0.3)
+    test('店舗・娘とその確認は、保存した値があればその値、共通値には依らない', () => {
+      for (const key of ['store', 'store_confirm', 'character', 'character_confirm'] as const) {
+        expect(thresholdOf({ ...base, fieldThresholds: { [key]: 0.9 } }, key), key).toBe(0.9)
+        expect(thresholdOf({ ...base, fieldThresholds: { [key]: 0.15 } }, key), key).toBe(0.15)
+        expect(thresholdOf({ ...base, fieldThreshold: 0.2 }, key), key).toBe(0.7)
+        expect(thresholdOf({ ...base, fieldThreshold: 1 }, key), key).toBe(0.7)
+      }
+      // 別の項目の保存値は影響しない。
+      expect(thresholdOf({ ...base, fieldThresholds: { store: 0.9 } }, 'character')).toBe(0.7)
+      expect(thresholdOf({ ...base, fieldThresholds: { character: 0.9 } }, 'store')).toBe(0.7)
+    })
+
+    test('旧 venue.* / character.*（noul）は共通値のまま', () => {
       expect(thresholdOf(base, 'venue.abeno')).toBe(0.91)
       expect(thresholdOf(base, 'character.abeno')).toBe(0.91)
+      expect(thresholdOf({ ...base, fieldThresholds: { character: 0.2 } }, 'character.abeno')).toBe(0.91)
     })
 
     test('未知のキーは共通値（fieldThreshold）', () => {
       expect(thresholdOf(base, 'future_question')).toBe(0.91)
       expect(thresholdOf({ ...base, fieldThresholds: { status: 0.1 } }, 'future_question')).toBe(0.91)
+      // 似た名前の未知のキーは共通値のまま。
+      expect(thresholdOf(base, 'store_confirm_a')).toBe(0.91)
     })
   })
 
@@ -129,7 +178,7 @@ describe('Field thresholds', () => {
   describe('FieldThresholdsSchema', () => {
     const full = resolveFieldThresholds(0.9)
 
-    test('8項目すべて必須で、範囲は 0 を含まず 1 以下', () => {
+    test('12項目すべて必須（状態は常に全キーを返す）で、範囲は 0 を含まず 1 以下', () => {
       expect(FieldThresholdsSchema.safeParse(full).success).toBe(true)
       expect(FieldThresholdsSchema.safeParse({ ...full, status: 1 }).success).toBe(true)
       expect(FieldThresholdsSchema.safeParse({ ...full, status: 0 }).success).toBe(false)
@@ -138,6 +187,43 @@ describe('Field thresholds', () => {
       const { status: _status, ...missing } = full
       expect(FieldThresholdsSchema.safeParse(missing).success).toBe(false)
       expect(FieldThresholdsSchema.safeParse({ ...full, extra: 0.9 }).success).toBe(false)
+      // 後から足したキーが欠けた形（旧 8 項目だけ）は、全キーの形としては不正。
+      const { store_confirm: _a, character: _b, character_confirm: _c, charge_amount: _d, ...legacy } = full
+      expect(FieldThresholdsSchema.safeParse(legacy).success).toBe(false)
+    })
+  })
+
+  describe('StoredFieldThresholdsSchema（保存・リクエストの形）', () => {
+    const full = resolveFieldThresholds(0.9)
+    const { store_confirm: _a, character: _b, character_confirm: _c, charge_amount: _d, ...legacy } = full
+
+    test('旧 8 項目だけの形も、12 項目の形も読める。後から足した 4 項目は任意', () => {
+      expect(StoredFieldThresholdsSchema.safeParse(legacy).success).toBe(true)
+      expect(StoredFieldThresholdsSchema.safeParse(full).success).toBe(true)
+      expect(StoredFieldThresholdsSchema.safeParse({ ...legacy, character: 0.6 }).success).toBe(true)
+      expect(StoredFieldThresholdsSchema.safeParse({ ...legacy, charge_amount: 0.6 }).success).toBe(true)
+    })
+    test('旧 8 項目は必須で、余分なキー・範囲外は不正（strictObject の方針は保つ）', () => {
+      const { status: _status, ...missing } = legacy
+      expect(StoredFieldThresholdsSchema.safeParse(missing).success).toBe(false)
+      expect(StoredFieldThresholdsSchema.safeParse({ ...legacy, extra: 0.9 }).success).toBe(false)
+      expect(StoredFieldThresholdsSchema.safeParse({ ...legacy, single_event: 0.9 }).success).toBe(false)
+      expect(StoredFieldThresholdsSchema.safeParse({ ...legacy, character: 0 }).success).toBe(false)
+      expect(StoredFieldThresholdsSchema.safeParse({ ...legacy, charge_amount: 1.1 }).success).toBe(false)
+      expect(StoredFieldThresholdsSchema.safeParse({ ...legacy, store_confirm: '0.7' }).success).toBe(false)
+    })
+    test('保存の形から resolveFieldThresholds で全 12 キーの状態になり、足りないキーは既定値', () => {
+      const parsed = StoredFieldThresholdsSchema.safeParse(legacy)
+      if (!parsed.success) throw new Error('Expected legacy to be readable')
+      const resolved = resolveFieldThresholds(0.9, parsed.data)
+      expect(FieldThresholdsSchema.safeParse(resolved).success).toBe(true)
+      expect(resolved).toEqual({
+        ...legacy,
+        store_confirm: 0.7,
+        character: 0.7,
+        character_confirm: 0.7,
+        charge_amount: 0.9
+      })
     })
   })
 
@@ -233,43 +319,6 @@ describe('Field thresholds', () => {
       const low = { end_date: choice('d20261019', { d20261019: 0.6, none: 0.3 }) }
       expect(evaluate(low).status).toBe('held')
       expect(evaluate(low, { end_date: 0.5 }).status).toBe('register')
-    })
-
-    test('開催店舗はstore項目別のしきい値で選ばれた店舗を採用し、届かなければ保留する', () => {
-      // 投稿元ではなく、店舗の質問（choice 1 問）で選ばれた店舗の確率を使う。
-      const value = post(
-        'ビックカメラ秋葉原店で限定名刺を2026年11月3日から1,000円以上お買い上げの方に先着100枚配布します'
-      )
-      const asked = requestWithAssociations(value)
-      const run = (fieldThresholds?: { store: number }) =>
-        evaluateWithStore(value, asked, response(asked, { store: choice('abeno', { abeno: 0.99, none: 0.01 }) }), {
-          ...DEFAULT_DETECTION_THRESHOLDS,
-          ...(fieldThresholds === undefined ? {} : { fieldThresholds })
-        })
-      expect(run()).toMatchObject({ status: 'register', reasons: [] })
-      expect(run({ store: 0.995 })).toMatchObject({ status: 'held', reasons: ['store_unconfirmed'] })
-    })
-
-    test('対象ビッカメ娘は min(共通値, 0.3) を使い、store 項目別のしきい値には影響されない', () => {
-      // 最上位をそのまま採用するので、確率が散っていても 0.3 以上なら採用する。
-      const spread = answersWith({ character: choice('shintou', { shintou: 0.32, none: 0.2, abeno: 0.1 }) })
-      const run = (answers: typeof spread, thresholds: Parameters<typeof evaluateDetection>[3]) =>
-        evaluateWithStore(shintou, request, answers, thresholds)
-      expect(run(spread, DEFAULT_DETECTION_THRESHOLDS).status).toBe('register')
-      // 0.3 に届かない選択は明示されたものとして採用せず、採用した店舗（shintou）の娘にする（保留しない）。
-      // 共通値を下げれば、それに従って下限も下がり、0.25 の別の娘（abeno）が明示されたものとして採用される。
-      const low = answersWith({ character: choice('abeno', { abeno: 0.25, none: 0.2, shintou: 0.1 }) })
-      const characterIdsOf = (result: ReturnType<typeof evaluateDetection>) => {
-        if (result.status !== 'register') throw new Error('Expected candidate')
-        return result.candidate.characterIds
-      }
-      expect(characterIdsOf(run(low, DEFAULT_DETECTION_THRESHOLDS))).toEqual(['shintou'])
-      expect(characterIdsOf(run(low, { ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.2 }))).toEqual(['abeno'])
-      // 店舗の項目別のしきい値は娘に影響しない。
-      expect(run(spread, { ...DEFAULT_DETECTION_THRESHOLDS, fieldThresholds: { store: 0.995 } })).toMatchObject({
-        status: 'held',
-        reasons: ['store_unconfirmed']
-      })
     })
 
     test('is_event は参考値で、eventThreshold や fieldThresholds を変えても判定に使わない', () => {

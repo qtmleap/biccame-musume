@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test'
 import { describeAnswers, questionLabel, reasonLabel } from './answer-view'
 import { thresholds } from './answer-view-test-fixtures'
 import type { ClefAnswer } from './clef'
-import { buildDetectionDraft, DEFAULT_DETECTION_THRESHOLDS, thresholdOf } from './detection'
+import { buildDetectionDraft, DEFAULT_DETECTION_THRESHOLDS, resolveFieldThresholds, thresholdOf } from './detection'
 import { choice, post } from './detection-test-fixtures'
 
 // 版ごとに回答の形が違う保存データ（v2: store choice／v3〜v12: venue.* と character.* の noul／v13: store と character の choice）を、
@@ -108,7 +108,7 @@ describe('回答表: v13 の store / character は choice の行', () => {
       label: '開催・配布店舗',
       answer: '船橋駅FACE店',
       probability: 0.95,
-      threshold: 0.3,
+      threshold: 0.7,
       confirmed: true
     })
     expect(row?.alternatives).toEqual([
@@ -117,25 +117,70 @@ describe('回答表: v13 の store / character は choice の行', () => {
     ])
     expect(row?.answer).not.toContain('ビックカメラ')
   })
-  test('娘の行は「対象ビッカメ娘」。娘の名前で出し、しきい値は min(共通値, 0.3)、未満なら未確定', () => {
+  test('娘の行は「対象ビッカメ娘」。娘の名前で出し、しきい値は既定の 70%、未満なら未確定', () => {
     const [row] = rowsOf({ character: choice('funato', { funato: 0.25, funabashi: 0.2, multiple: 0.05 }) })
     expect(row).toMatchObject({
       key: 'character',
       label: '対象ビッカメ娘',
       answer: 'ふなとーたん',
       probability: 0.25,
-      threshold: 0.3,
+      threshold: 0.7,
       confirmed: false
     })
     expect(row?.alternatives).toEqual([
       { answer: 'ふなたん', probability: 0.2 },
       { answer: '複数', probability: 0.05 }
     ])
-    // 最上位をそのまま採用するので、確率が散っていても下限以上なら確定の表示になる。
-    expect(rowsOf({ character: choice('funato', { funato: 0.35, funabashi: 0.3 }) })[0]).toMatchObject({
-      probability: 0.35,
+    // 最上位の確率が下限（既定 70%）以上なら確定の表示になる（確認の行が無い保存データ）。
+    expect(rowsOf({ character: choice('funato', { funato: 0.75, funabashi: 0.2 }) })[0]).toMatchObject({
+      probability: 0.75,
       confirmed: true
     })
+  })
+  test('店舗・娘の確定は既定 70%: 80.5% / 78.9% は確定、69.9% は未確定、ちょうど 70% は確定。共通値には依らない', () => {
+    const answers = {
+      store: choice('funabashi', { funabashi: 0.805, akiba: 0.1 }),
+      character: choice('funato', { funato: 0.789, funabashi: 0.1 })
+    }
+    for (const value of [thresholds, { ...thresholds, fieldThreshold: 0.2 }]) {
+      const rows = describeAnswers(answers, value)
+      expect(rows.map((row) => [row.key, row.threshold, row.confirmed])).toEqual([
+        ['store', 0.7, true],
+        ['character', 0.7, true]
+      ])
+      expect(rows.map((row) => row.threshold)).toEqual([thresholdOf(value, 'store'), thresholdOf(value, 'character')])
+    }
+    const low = describeAnswers(
+      {
+        store: choice('funabashi', { funabashi: 0.699, akiba: 0.1 }),
+        character: choice('funato', { funato: 0.699, funabashi: 0.1 })
+      },
+      thresholds
+    )
+    expect(low.map((row) => [row.key, row.threshold, row.confirmed])).toEqual([
+      ['store', 0.7, false],
+      ['character', 0.7, false]
+    ])
+    expect(
+      describeAnswers({ store: choice('funabashi', { funabashi: 0.7, akiba: 0.1 }) }, thresholds)[0]
+    ).toMatchObject({
+      threshold: 0.7,
+      confirmed: true
+    })
+  })
+  test('管理画面で保存した値があれば、しきい値と確定表示はその値に従う（store: 0.9 なら 80.5% は未確定）', () => {
+    const saved = { ...thresholds, fieldThresholds: resolveFieldThresholds(0.9, { store: 0.9, character: 0.5 }) }
+    const rows = describeAnswers(
+      {
+        store: choice('funabashi', { funabashi: 0.805, akiba: 0.1 }),
+        character: choice('funato', { funato: 0.55, funabashi: 0.1 })
+      },
+      saved
+    )
+    expect(rows.map((row) => [row.key, row.threshold, row.confirmed])).toEqual([
+      ['store', 0.9, false],
+      ['character', 0.5, true]
+    ])
   })
   test.each([
     ['none', '該当なし'],
@@ -167,17 +212,13 @@ describe('回答表: v13 の store / character は choice の行', () => {
     })
     expect(rows.map((row) => row.key)).toEqual(['store', 'character', 'start_date'])
   })
-  test('character のしきい値は min(共通値 fieldThreshold, 0.3) で、store の項目別設定に影響されない', () => {
-    expect(thresholdOf(DEFAULT_DETECTION_THRESHOLDS, 'character')).toBe(0.3)
-    expect(
-      thresholdOf(
-        { ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.2, fieldThresholds: { store: 0.99 } },
-        'character'
-      )
-    ).toBe(0.2)
+  test('character と store のしきい値は既定 0.7 で、共通値 fieldThreshold には依らず、保存した値があればそれが優先する', () => {
+    expect(thresholdOf(DEFAULT_DETECTION_THRESHOLDS, 'character')).toBe(0.7)
+    expect(thresholdOf(DEFAULT_DETECTION_THRESHOLDS, 'store')).toBe(0.7)
+    expect(thresholdOf({ ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.2 }, 'character')).toBe(0.7)
     expect(thresholdOf({ ...DEFAULT_DETECTION_THRESHOLDS, fieldThresholds: { store: 0.99 } }, 'store')).toBe(0.99)
-    // 保存された設定がなければ store の既定値も 0.3。
-    expect(thresholdOf(DEFAULT_DETECTION_THRESHOLDS, 'store')).toBe(0.3)
+    // 店舗の保存値は娘に影響しない。
+    expect(thresholdOf({ ...DEFAULT_DETECTION_THRESHOLDS, fieldThresholds: { store: 0.99 } }, 'character')).toBe(0.7)
   })
 })
 

@@ -14,7 +14,7 @@ const SINGLE_TEXT = '本日から船橋店でふなとーたんの記念アク�
 /** 判定の送信を記録し、配布数の質問は固定で返すフェイクの AI。回答は picks で決める。 */
 const recordingAi = (
   base: { run: (model: string, raw: unknown) => Promise<unknown> },
-  picks: { character?: string },
+  picks: { character?: string; probability?: number },
   requests: ClefRequest[]
 ) => ({
   run: async (model: string, raw: unknown) => {
@@ -31,7 +31,9 @@ test('共同デザイン（娘が複数）は店舗ごとの候補で multiple �
   const { cleanup, env } = await fixture('independent-store-character-shared')
   const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
   const requests: ClefRequest[] = []
-  const target = Object.assign({}, env, { AI: recordingAi(env.AI, { character: 'multiple' }, requests) })
+  const target = Object.assign({}, env, {
+    AI: recordingAi(env.AI, { character: 'multiple', probability: 0.6 }, requests)
+  })
   try {
     await migrate(env.DB)
     const post = { ...makePost('2109221721773576690', SHARED_TEXT), screenName: 'bic_funabashi' }
