@@ -178,7 +178,49 @@ describe('受信詳細の「判定・イベント登録」の行', () => {
     expect(labels[0]).toBe('判定状態')
     expect(labels[1]).toBe('判定モデル')
     expect(labels).toContain('プロンプトバージョン')
-    expect(labels).toContain('処理回数')
     expect(labels).toContain('登録イベント')
+  })
+
+  test('md 以上で二段組にし、判定状態・判定モデル・プロンプトバージョン・登録イベント・受信日時・最終更新と判定理由を全て出す', async () => {
+    const markup = await renderDetail({ ...listJob, reasons: ['store_unconfirmed'] })
+    const section = sectionOf(markup)
+    expect(section).toMatch(/<dl class="[^"]*\bmd:grid\b[^"]*\bmd:grid-cols-2\b[^"]*\bmd:gap-x-8\b/)
+    // 左→右、上→下の並び。判定理由は行数が可変なので末尾に置いて両列にまたがせる。dl の最後の子になるので last:border-b-0 が効き、ひとつ前の段（受信日時・最終更新）の下線が判定理由との境になる。
+    expect(labelsOf(section)).toEqual([
+      '判定状態',
+      '判定モデル',
+      'プロンプトバージョン',
+      '登録イベント',
+      '受信日時',
+      '最終更新',
+      '判定理由'
+    ])
+    const rows = [...section.matchAll(/<div class="([^"]*)"><dt\b[^>]*>([^<]*)<\/dt>/g)]
+    expect(rows).toHaveLength(7)
+    for (const [, className, label] of rows) {
+      // ラベル列は既定の 15rem のまま md で狭め、他の画面の行（既定のクラスだけ）は変えない。
+      expect(className, label).toContain('md:grid-cols-[9.5rem_1fr]')
+      expect(className.includes('md:col-span-2'), label).toBe(label === '判定理由')
+    }
+    expect(section).toContain('開催店舗を確定できない')
+  })
+
+  test('処理回数は表示しない。データ（attempts）が残っていても、通知試行回数など他の節は変えない', async () => {
+    const markup = await renderDetail({ ...listJob, attempts: 7, notificationAttempts: 3 })
+    expect(sectionOf(markup)).not.toContain('処理回数')
+    expect(markup).not.toContain('処理回数')
+    expect(markup).toContain('通知試行回数')
+    // 二段組とラベル列の上書きは「判定・イベント登録」の節だけ。Discord 通知の節の行は既定のまま。
+    const notification = markup.slice(markup.indexOf('Discord 通知'))
+    expect(notification).toContain('sm:grid-cols-[15rem_1fr]')
+    expect(notification).not.toContain('md:grid-cols-[9.5rem_1fr]')
+    expect(notification).not.toContain('md:grid-cols-2')
+  })
+
+  test('登録イベントの UUID は半幅でも折り返せる（dd に break-words と min-w-0）', async () => {
+    const markup = await renderDetail({ ...listJob, eventId: '550e8400-e29b-41d4-a716-446655440000' })
+    expect(sectionOf(markup)).toMatch(
+      /<dt[^>]*>登録イベント<\/dt><dd class="[^"]*min-w-0[^"]*break-words[^"]*"><a [^>]*>550e8400-e29b-41d4-a716-446655440000<\/a>/
+    )
   })
 })

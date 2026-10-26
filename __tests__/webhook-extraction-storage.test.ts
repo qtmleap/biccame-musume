@@ -8,7 +8,7 @@ for (const scenario of [
   { id: '2112378276735750640', expectedCount: '1', probability: 0.82, expectedStatus: 'low_confidence' },
   { id: '2112378276735750641', expectedCount: '2', probability: 0.99, expectedStatus: 'mismatch' }
 ] as const) {
-  test(`監査${scenario.expectedStatus}でも抽出候補と根拠を永続化する`, async () => {
+  test(`監査${scenario.expectedStatus}は記録だけして、抽出候補と根拠を永続化し、親の理由には入れない`, async () => {
     const { env, cleanup } = await fixture(`extraction-storage-${scenario.expectedStatus}`)
     try {
       await migrate(env.DB)
@@ -37,7 +37,8 @@ for (const scenario of [
       const saved = await getWebhookJob(env, post.id)
       expect(saved.candidates).toHaveLength(1)
       expect(saved.status).toBe('processing')
-      expect(saved.reasons).toContain(`distribution_item_count_${scenario.expectedStatus}`)
+      expect(saved.reasons).toEqual([])
+      expect(saved.itemCountAudit?.status).toBe(scenario.expectedStatus)
       expect(saved.candidates[0].status).toBe('queued')
       expect(saved.candidates[0].post.text).toBe(post.text)
       expect(await env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)

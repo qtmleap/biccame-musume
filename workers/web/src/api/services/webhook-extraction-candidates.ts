@@ -4,13 +4,12 @@ import {
   EXTRACTION_VERSION,
   extractionCandidateInputs,
   extractionInputStoreKey,
-  type ItemCountAudit,
-  itemCountReviewReasons
+  type ItemCountAudit
 } from '@biccame/shared/event-detect/extraction'
 import type { WebhookJob } from '@biccame/shared/schemas/webhook.dto'
 import dayjs from 'dayjs'
 
-/** 候補を監査結果と一緒に保存し、確認が必要な監査でも後段の発見判定へ渡す。複数店舗の抽出イベントは店舗ごとの候補（store_key はその店舗）に展開して保存する。抽出の保存形式（extraction_json）は展開しない。 */
+/** 候補を監査結果と一緒に保存する。件数の監査は記録するだけで、親ジョブの理由（reasons_json）にも自動登録の可否にも使わない。複数店舗の抽出イベントは店舗ごとの候補（store_key はその店舗）に展開して保存する。抽出の保存形式（extraction_json）は展開しない。 */
 export const persistWebhookExtractionCandidates = async (
   env: Pick<Bindings, 'DB'>,
   job: WebhookJob,
@@ -49,7 +48,7 @@ export const persistWebhookExtractionCandidates = async (
         ...extraction,
         itemCountAudit: audit
       }),
-      JSON.stringify(itemCountReviewReasons(audit)),
+      JSON.stringify([]),
       now,
       job.postId,
       token

@@ -46,7 +46,7 @@ const reviewFixture = async (name: string, choice: string, probability: number, 
   return { ...base, env, calls }
 }
 
-test('件数の最有力値が一致しても確度が低い場合、候補を残して判定し自動登録だけ保留する', async () => {
+test('件数の最有力値の確度が低くても、候補を残して判定し、ほかの条件が通れば自動登録する', async () => {
   const value = await reviewFixture('item-count-low-confidence-keeps-evidence', '1', 0.82)
   try {
     const post = makePost('2112378276735750637', '本日から限定名刺をどなたでも配布します。')
@@ -61,16 +61,19 @@ test('件数の最有力値が一致しても確度が低い場合、候補を�
     expect(value.calls.candidate).toBe(1)
     expect(job.candidates).toHaveLength(1)
     expect(job.candidates[0].answers).not.toBeNull()
-    expect(job.eventId).toBeNull()
-    expect(job.reasons).toContain('distribution_item_count_low_confidence')
-    expect(await value.env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)
+    // 低確度は記録だけして、理由にも関門にもしない。
+    expect(job.itemCountAudit?.status).toBe('low_confidence')
+    expect(job.reasons.some((reason) => reason.startsWith('distribution_item_count_'))).toBe(false)
+    expect(job.candidates[0].reasons).not.toContain('auto_registration_not_allowed')
+    expect(job.candidates[0].status).toBe('registered')
+    expect(await value.env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(1)
     expect(job.candidates[0].post.extractionContext?.kind).toBe('item')
   } finally {
     await value.cleanup()
   }
 })
 
-test('不一致の再抽出が終わっても抽出済み候補を捨てず、監査不一致のまま登録しない', async () => {
+test('不一致なら再抽出を1回だけ行い、それでも不一致のとき抽出済み候補を捨てず、件数を理由にせず登録する', async () => {
   const value = await reviewFixture('item-count-mismatch-keeps-evidence', '2', 0.99)
   try {
     const post = makePost('2111747466014126157', '本日から限定名刺をどなたでも配布します。')
@@ -86,9 +89,10 @@ test('不一致の再抽出が終わっても抽出済み候補を捨てず、�
     expect(extractions).toHaveLength(2)
     expect(job.candidates).toHaveLength(1)
     expect(value.calls.candidate).toBe(1)
-    expect(job.eventId).toBeNull()
-    expect(job.reasons).toContain('distribution_item_count_mismatch')
-    expect(await value.env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)
+    expect(job.itemCountAudit?.status).toBe('mismatch')
+    expect(job.reasons.some((reason) => reason.startsWith('distribution_item_count_'))).toBe(false)
+    expect(job.candidates[0].status).toBe('registered')
+    expect(await value.env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(1)
   } finally {
     await value.cleanup()
   }
@@ -144,9 +148,11 @@ test('配布物ゼロの通常商品販促は確認候補があっても陽性�
   }
 })
 
-test('再判定では物品候補へ原文参考を復元し、低確度監査で再び前段停止しない', async () => {
+test('再判定では物品候補へ原文参考を復元し、低確度監査でも前段停止せず、再判定後は登録に進む', async () => {
   const value = await reviewFixture('rejudge-audited-candidate-with-context', '1', 0.82)
   try {
+    // 最初の判定は、回答の確率 0.99 に届かない共通しきい値で件数と無関係な理由により保留にする（登録済みの再実行は候補を作り直さないため）。
+    Object.assign(value.env, { EVENT_DETECTION_CHOICE_THRESHOLD: '0.995' })
     const post = makePost('2110287829914026178', '本日から限定名刺をどなたでも配布します。')
     await insertWebhookJob(value.env, post)
     await processWebhookJob(value.env, post.id, {
@@ -155,7 +161,10 @@ test('再判定では物品候補へ原文参考を復元し、低確度監査�
       })
     })
     const first = await getWebhookJob(value.env, post.id)
+    expect(first.candidates[0].status).toBe('held')
+    expect(first.reasons.some((reason) => reason.startsWith('distribution_item_count_'))).toBe(false)
     const id = first.candidates[0].eventUUID
+    Object.assign(value.env, { EVENT_DETECTION_CHOICE_THRESHOLD: '0.7' })
     await value.env.DB.prepare('UPDATE webhook_event_candidates SET post_json=? WHERE event_uuid=?')
       .bind(JSON.stringify(post), id)
       .run()
@@ -167,7 +176,7 @@ test('再判定では物品候補へ原文参考を復元し、低確度監査�
     expect(result.candidates[0].post.extractionContext?.originalText).toBe(post.text)
     expect(value.calls.count).toBe(2)
     expect(value.calls.candidate).toBe(2)
-    expect(result.eventId).toBeNull()
+    expect(result.candidates[0].status).toBe('registered')
   } finally {
     await value.cleanup()
   }

@@ -63,10 +63,10 @@ describe('受信詳細の判定理由', () => {
     expect(markup).not.toContain('登録時の補足')
   })
 
-  test('判定理由の行は処理回数の行より前にある', async () => {
+  test('判定理由の行は、二段組の他の行（最終更新まで）の後ろに、両列にまたがって出る', async () => {
     const markup = await renderDetail({ ...baseJob, status: 'held', reasons: ['store_unconfirmed'] })
-    expect(markup.indexOf('判定理由')).toBeGreaterThan(-1)
-    expect(markup.indexOf('判定理由')).toBeLessThan(markup.indexOf('処理回数'))
+    expect(markup.indexOf('判定理由')).toBeGreaterThan(markup.indexOf('最終更新'))
+    expect(markup).toMatch(/<div class="[^"]*md:col-span-2[^"]*"><dt[^>]*>判定理由<\/dt>/)
   })
 
   test('未知の理由コードは判定理由の側に残り、補足は出ない', async () => {
@@ -76,5 +76,49 @@ describe('受信詳細の判定理由', () => {
     if (judgment === undefined) return
     expect(itemsOf(judgment)).toEqual(['future_reason'])
     expect(markup).not.toContain('タイトルは定型')
+  })
+
+  describe('自動登録できなかったことを示す総括のコード（auto_registration_not_allowed）', () => {
+    const generic = 'auto_registration_not_allowed'
+
+    test('具体的な理由が併記されるときは、具体的な理由だけを出し、生のコードは画面に出さない', async () => {
+      const reasons = [generic, 'distribution_item_count_mismatch']
+      const markup = await renderDetail({ ...baseJob, status: 'held', reasons })
+      const judgment = rowOf(markup, '判定理由')
+      expect(judgment).toBeDefined()
+      if (judgment === undefined) return
+      expect(itemsOf(judgment)).toEqual(['配布物の種類数と抽出結果が一致しない'])
+      expect(judgment).not.toContain(generic)
+      expect(markup).not.toContain(generic)
+      expect(reasons).toEqual([generic, 'distribution_item_count_mismatch'])
+    })
+
+    test('唯一の理由なら、日本語のラベルで出す（生のコードでも「理由の記録なし」でもない）', async () => {
+      const markup = await renderDetail({ ...baseJob, status: 'held', reasons: [generic] })
+      const judgment = rowOf(markup, '判定理由')
+      expect(judgment).toBeDefined()
+      if (judgment === undefined) return
+      expect(itemsOf(judgment)).toEqual(['自動登録の条件を満たさない'])
+      expect(judgment).not.toContain('理由の記録なし')
+      expect(judgment).toContain(`title="${generic}"`)
+    })
+
+    test('title_generated などの情報用のコードと併せても同じ', async () => {
+      const only = await renderDetail({ ...baseJob, status: 'held', reasons: [generic, 'title_generated'] })
+      const onlyRow = rowOf(only, '判定理由')
+      expect(onlyRow).toBeDefined()
+      if (onlyRow === undefined) return
+      expect(itemsOf(onlyRow)).toEqual(['自動登録の条件を満たさない'])
+      const withSpecific = await renderDetail({
+        ...baseJob,
+        status: 'held',
+        reasons: ['title_fallback', generic, 'store_unconfirmed']
+      })
+      const specificRow = rowOf(withSpecific, '判定理由')
+      expect(specificRow).toBeDefined()
+      if (specificRow === undefined) return
+      expect(itemsOf(specificRow)).toEqual(['開催店舗を確定できない'])
+      expect(withSpecific).not.toContain('タイトルは定型')
+    })
   })
 })

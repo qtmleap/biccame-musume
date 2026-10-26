@@ -28,9 +28,8 @@ const NoteLine = ({ parts }: { parts: NotePart[] }) => (
 )
 
 /**
- * 回答1つぶんのセル。1行目にラベルとステータス、2行目に回答と確率、3行目に小さくしきい値・次点・理由を出す。
+ * 回答1つぶんのセル。1行目にラベルとステータス、2行目に回答と確率、3行目に小さくしきい値・次点を出す。
  * thresholdKnown が false（現在のしきい値を取得できていない間）は、しきい値とステータスを「—」にして未確定の強調も付けない。
- * 件数の判定行は判定時に保存した値なので、呼び出し側が thresholdKnown を true にして渡す。
  * 判定を確認の行が担う行（confirmed が null）は、ステータスを「—」にし、しきい値だけ出す。
  */
 export const AnswerCell = ({
@@ -42,7 +41,7 @@ export const AnswerCell = ({
   label: string
   thresholdKnown: boolean
 }) => {
-  const { threshold, confirmed, alternatives, reason } = row
+  const { threshold, confirmed, alternatives } = row
   const decided = thresholdKnown && threshold !== null && confirmed !== null
   const thresholdPart: NotePart[] = !thresholdKnown
     ? [{ key: 'threshold', node: 'しきい値 —' }]
@@ -77,8 +76,7 @@ export const AnswerCell = ({
             )
           }
         ]
-  const reasonPart: NotePart[] = reason === undefined ? [] : [{ key: 'reason', node: reason }]
-  const parts = [...thresholdPart, ...alternativePart, ...reasonPart]
+  const parts = [...thresholdPart, ...alternativePart]
   return (
     <li data-key={row.key} className={cn(CELL, decided && !confirmed && 'bg-warning/10')}>
       <div className={LINE}>

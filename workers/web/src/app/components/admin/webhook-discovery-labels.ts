@@ -1,7 +1,5 @@
 export {
   webhookDiscoveryActionLabel,
-  webhookDiscoveryEvidenceLabel,
   webhookDiscoveryFilterLabel,
-  webhookDiscoveryLabel,
-  webhookMissingFieldLabel
+  webhookDiscoveryLabel
 } from '@biccame/shared/domain/webhook-discovery-labels'

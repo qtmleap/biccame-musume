@@ -56,12 +56,11 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(gridRootOf(markup)).toBeNull()
   })
 
-  test('詳細は先頭に投稿全体の配布物数チェックを置き、「元投稿」と「判定・イベント登録」の間に「Clef の回答」を出し、判定理由は日本語でコードをtitleに残す', async () => {
+  test('詳細は「元投稿」と「判定・イベント登録」の間に「Clef の回答」を出し、判定理由は日本語でコードをtitleに残す', async () => {
     const markup = await renderDetail(
       {
         ...listJob,
         answers: shintouAnswers,
-        // 検出と登録可否のパネルは、検出の記録があるジョブにだけ出る。
         discovery: {
           relevance: 'detected',
           action: 'review',
@@ -75,13 +74,10 @@ describe('Webhook管理画面の判定・通知表示', () => {
       0.9
     )
     const headings = [...markup.matchAll(/<h2\b[^>]*>(.*?)<\/h2>/g)].map((match) => match[1])
-    expect(headings.slice(0, 5)).toEqual([
-      '投稿全体の配布物数チェック',
-      '検出と登録可否',
-      '元投稿',
-      'Clef の回答',
-      '判定・イベント登録'
-    ])
+    expect(headings.slice(0, 3)).toEqual(['元投稿', 'Clef の回答', '判定・イベント登録'])
+    // 検出の記録があっても、「検出と登録可否」の節は出さない。
+    expect(markup).not.toContain('aria-label="検出と登録可否"')
+    expect(markup).not.toContain('検出と登録可否')
     expect(markup).toContain('>開催店舗を確定できない</li>')
     expect(markup).toContain('title="store_unconfirmed"')
     expect(markup).toContain('>重複の可能性あり</li>')
@@ -92,10 +88,10 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(markup).toContain('data-slot="badge"')
   })
 
-  test('詳細は検出の記録が無い古い履歴では「検出と登録可否」を出さず、他の見出しの順序は保つ', async () => {
+  test('詳細は検出の記録が無い古い履歴でも「検出と登録可否」を出さず、他の見出しの順序は保つ', async () => {
     const markup = await renderDetail({ ...listJob, answers: shintouAnswers, discovery: null }, 0.9)
     const headings = [...markup.matchAll(/<h2\b[^>]*>(.*?)<\/h2>/g)].map((match) => match[1])
-    expect(headings.slice(0, 4)).toEqual(['投稿全体の配布物数チェック', '元投稿', 'Clef の回答', '判定・イベント登録'])
+    expect(headings.slice(0, 3)).toEqual(['元投稿', 'Clef の回答', '判定・イベント登録'])
     expect(markup).not.toContain('検出と登録可否')
     expect(markup).not.toContain('検出の記録なし')
     expect(markup).not.toContain('旧履歴')

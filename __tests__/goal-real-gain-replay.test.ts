@@ -65,7 +65,7 @@ const response = async (file: string) => {
 }
 
 for (const id of ['962146543649239040', '1012319233298989056']) {
-  test(`実測の前段停止改善を一時DBの公開DTOまで再生する: ${id}`, async () => {
+  test(`件数の関門があった頃に前段停止した実測を、関門なしで一時DBの公開DTOまで再生する: ${id}`, async () => {
     const parsed = ProvenanceSchema.safeParse(await load(`${id}-provenance.json`))
     if (!parsed.success) throw new Error('Invalid replay provenance')
     const recording = parsed.data
@@ -181,7 +181,7 @@ for (const id of ['962146543649239040', '1012319233298989056']) {
           return Response.json(extraction)
         },
         titleFetcher: async () => {
-          throw new Error('Review must not generate a title')
+          throw new Error('Title service is unavailable in replay')
         }
       })
       const job = await getWebhookJob(env, id)
@@ -223,39 +223,40 @@ for (const id of ['962146543649239040', '1012319233298989056']) {
       expect(candidate.post.extractionContext?.kind).toBe('item')
       expect(candidate.post.extractionContext?.evidence.length).toBeGreaterThan(0)
       expect(candidate.discovery?.relevance).toBe('detected')
-      expect(candidate.discovery?.action).toBe('review')
-      // 962146543649239040 は録画に条件の質問が無く、本文にも条件の語が無いので全員配布として評価が登録に進み、
-      // 件数の監査（low_confidence）だけが保留にする。もう一方は本文のキーワードが無く対象外のまま。
-      expect(candidate.discovery?.evidence).toEqual(
-        id === '962146543649239040'
-          ? ['model_event_confirmed', 'validated_registration_candidate']
-          : ['model_event_confirmed']
-      )
-      expect(candidate.discovery?.missingFields).toContain('itemCountAudit')
-      expect(candidate.reasons).toContain('distribution_item_count_low_confidence')
+      // 件数の監査（low_confidence）は記録だけして、理由にも発見記録の不足項目にも入れない。
+      expect(candidate.discovery?.missingFields).not.toContain('itemCountAudit')
+      expect(candidate.reasons.some((reason) => reason.startsWith('distribution_item_count_'))).toBe(false)
+      expect(candidate.reasons).not.toContain('auto_registration_not_allowed')
       expect(candidate.relatedEvents).toBeNull()
-      expect(candidate.eventId).toBeNull()
       if (id === '962146543649239040') {
-        expect(candidate.notificationStatus).toBe('failed')
-        expect(candidate.notificationError).toBe('configuration')
-        expect(job.status).toBe('held')
-        expect(job.itemCountAudit?.probability).toBe(0.8847)
+        // 録画に条件の質問が無く、本文にも条件の語が無いので全員配布として評価が登録に進む。件数が低確度でも止めずに登録する。
+        expect(candidate.discovery?.action).toBe('create')
+        expect(candidate.discovery?.evidence).toEqual(['model_event_confirmed', 'validated_registration_candidate'])
         expect(candidate.discovery?.confidence).toBe(0.9774)
         expect(candidate.discovery?.missingFields).not.toContain('conditions')
         expect(candidate.reasons).not.toContain('distribution_condition_unspecified')
-        expect(candidate.draft?.conditions).toEqual([{ type: 'everyone' }])
-        expect(candidate.draft?.category).toBe('limited_card')
-        expect(candidate.draft?.stores).toEqual(['kawasaki'])
+        expect(job.itemCountAudit?.probability).toBe(0.8847)
+        expect(candidate.status).toBe('registered')
+        expect(candidate.eventId).not.toBeNull()
+        expect(job.status).toBe('registered')
+        // Discord は未設定なので、通知は設定不足で失敗として残る（登録は変わらない）。
+        expect(candidate.notificationStatus).toBe('failed')
+        expect(candidate.notificationError).toBe('configuration')
+        expect(await env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(1)
       } else {
+        // 本文のキーワードが無く対象外のまま。件数とは無関係。
+        expect(candidate.discovery?.action).toBe('review')
+        expect(candidate.discovery?.evidence).toEqual(['model_event_confirmed'])
         expect(candidate.notificationStatus).toBe('skipped')
         expect(job.status).toBe('ignored')
         expect(job.itemCountAudit?.probability).toBe(0.8056)
         expect(candidate.discovery?.confidence).toBe(0.9533)
         expect(candidate.reasons).toContain('no_keyword')
         expect(candidate.draft).toBeNull()
+        expect(candidate.eventId).toBeNull()
+        expect(job.eventId).toBeNull()
+        expect(await env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)
       }
-      expect(job.eventId).toBeNull()
-      expect(await env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)
       expect(await env.DB.prepare('SELECT count(*) AS total FROM social_post_jobs').first<number>('total')).toBe(0)
     } finally {
       await base.cleanup()

@@ -32,20 +32,6 @@ const FIELD_LABELS: ReadonlyMap<string, string> = new Map([
   ['quantity', '配布数量'],
   ['itemCountAudit', '配布物件数の監査']
 ])
-const EVIDENCE_LABELS: ReadonlyMap<string, string> = new Map([
-  ['canonical_official_account', '正規店舗アカウントの投稿'],
-  ['named_character_object', '本文内のビッカメ娘名・対象物を検出'],
-  ['explicit_own_object', '本人の対象物であることを本文に明記'],
-  ['official_card_distribution', '正規店舗からの名刺配布案内'],
-  ['character_display_operation', 'ビッカメ娘の展示・入替・終了の案内'],
-  ['explicit_character_anniversary_event', '店舗・ビッカメ娘の記念企画を明記'],
-  ['explicit_event_operation', '配布・販売・展示等の実施情報を明記'],
-  ['model_event_confirmed', 'AIがイベントと判定（しきい値以上）']
-])
-export const webhookDiscoveryEvidenceLabel = (evidence: string): string => {
-  const label = EVIDENCE_LABELS.get(evidence)
-  return label === undefined ? evidence : label
-}
 export const webhookDiscoveryFilterLabel = (value: WebhookDiscoveryFilter): string => RELEVANCE_LABELS[value]
 export const webhookDiscoveryLabel = (discovery: WebhookDiscovery | null | undefined): string =>
   discovery === null || discovery === undefined ? RELEVANCE_LABELS.unrecorded : RELEVANCE_LABELS[discovery.relevance]
