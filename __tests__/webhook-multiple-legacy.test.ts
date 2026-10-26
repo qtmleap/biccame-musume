@@ -111,7 +111,17 @@ test('旧単一ジョブのUUID・回答・通知状態を保持し、旧保留�
     expect(copied.candidates[0].notificationStatus).toBe('sent')
     expect(copied.candidates[0].notificationAttempts).toBe(2)
     expect(copied.candidates[0].answers?.single_event).toEqual({ type: 'noul', noul: 0.2 })
-    await expect(rejudgeWebhookJob(env, registered.id)).rejects.toThrow('cannot be re-judged')
+    // 移行した登録済みは自動登録済みの扱い。再実行しても queued に戻さず、UUID・登録・通知の状態を保ったまま回答と判定結果だけを更新する。
+    const rejudged = await rejudgeWebhookJob(env, registered.id)
+    expect(rejudged.candidates).toHaveLength(1)
+    expect(rejudged.candidates[0]).toMatchObject({
+      eventUUID: registeredUUID,
+      status: 'registered',
+      eventId: registeredUUID,
+      notificationStatus: 'sent',
+      notificationAttempts: 2
+    })
+    expect(rejudged.candidates[0].answers?.single_event).toBeUndefined()
     await rejudgeWebhookJob(env, held.id, heldUUID)
     expect((await getWebhookJob(env, held.id)).candidates).toHaveLength(0)
     await processWebhookJob(env, held.id, {

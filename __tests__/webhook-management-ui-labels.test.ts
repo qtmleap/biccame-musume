@@ -258,11 +258,11 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(webhookNotificationLabel('future_state')).toBe('future_state')
   })
 
-  test('登録後の通知失敗では判定・登録の再実行を許可しない。連携の付け替えだけ許可する', () => {
+  test('登録後の通知失敗でも、判定の再実行（登録を変えない）と連携の付け替えと通知の再送ができる。解決はできない', () => {
     expect(webhookActionAvailability('registered', 'failed', [])).toEqual({
       canResolve: false,
       canLink: true,
-      canRejudge: false,
+      canRejudge: true,
       canRetryNotification: true
     })
   })

@@ -179,10 +179,9 @@ describe('処理に失敗したジョブの再実行（rejudgeWebhookJob）', ()
     })
   }, 60000)
 
-  test('自動登録された登録済み・処理中・待機中は、これまでどおり 409 のまま（失敗だけが加わった）', async () => {
+  test('処理中・待機中は、これまでどおり 409 のまま（自動登録済みは 409 ではなく、登録を変えずに判定をやり直す）', async () => {
     await withRejudgeEnv(async (env, sent) => {
       const cases = [
-        { ...heldSeed, status: 'registered', reasons: ['title_generated'], notificationStatus: 'sent' },
         { ...heldSeed, status: 'processing', reasons: [], notificationStatus: 'pending' },
         { ...heldSeed, status: 'queued', reasons: [], notificationStatus: 'pending' }
       ]
@@ -191,7 +190,7 @@ describe('処理に失敗したジョブの再実行（rejudgeWebhookJob）', ()
         const before = await rawRejudgeRow(env, postId)
         expect(await conflictOf(rejudgeWebhookJob(env, postId))).toEqual({
           status: 409,
-          message: 'Only held or ignored jobs can be re-judged'
+          message: 'This job cannot be re-judged'
         })
         expect(await rawRejudgeRow(env, postId)).toEqual(before)
       }

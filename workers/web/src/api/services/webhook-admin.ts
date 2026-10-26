@@ -8,8 +8,10 @@ import {
   validateWebhookEvent,
   webhookTarget
 } from '@api/services/webhook-jobs'
+import { rejudgeRegisteredWebhookJob } from '@api/services/webhook-rejudge-registered'
 import type { Bindings } from '@api/types/bindings'
 import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
+import { isAutoRegisteredWebhookJob } from '@biccame/shared/domain/webhook-rejudge'
 import type { WebhookJob, WebhookResolveSchema, WebhookRetrySchema } from '@biccame/shared/schemas/webhook.dto'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
@@ -79,9 +81,10 @@ export const retryWebhookJob = async (env: Bindings, postId: string, input: z.in
 }
 
 /**
- * 再判定（画面の「再実行」）できる行だけを更新対象にする SQL の条件。table は更新対象の表（reasons_json を読む表）。
+ * 再判定（画面の「再実行」）のうち、queued に戻して処理し直せる行だけを更新対象にする SQL の条件。table は更新対象の表（reasons_json を読む表）。
  * 保留、処理に失敗した行、人が却下していない対象外、手動で連携した登録済み（reasons に manually_linked）が対象。
- * 自動登録された登録済みはパイプラインが作ったイベントを持つため、再判定で重複登録や再通知が起こりうるので含めない。
+ * 自動登録された登録済みはパイプラインが作ったイベントを持つため、queued に戻すと同じイベントの重複登録や再通知が起こりうるので含めない
+ * （rejudgeWebhookJob が webhook-rejudge-registered.ts へ振り分け、登録を変えずに判定だけをやり直す）。
  * 失敗した行は対象外と同じく、人の却下（manually_rejected）がなければ対象にする（画面側の canRejudgeJob と同じ）。
  */
 const rejudgeableRow = (table: 'webhook_event_jobs' | 'webhook_event_candidates') =>
@@ -90,17 +93,22 @@ const rejudgeableRow = (table: 'webhook_event_jobs' | 'webhook_event_candidates'
     OR (status='registered' AND EXISTS (SELECT 1 FROM json_each(${table}.reasons_json) WHERE value='manually_linked')))`
 
 /**
- * 保留ジョブ、処理に失敗したジョブ、人が却下していない対象外ジョブ、手動で連携した登録済みジョブを再判定に戻す（画面の「再実行」）。
- * 保存済みの判定結果と回答を消して queued に戻し、キューへ積み直す。失敗したジョブは途中の結果が壊れていることがあるため、保留と同じく最初からやり直す。
- * 人が却下したジョブ（reasons に manually_rejected）は再判定で上書きしない。画面側の webhookActionAvailability と同じ規則。
- * 登録済みは reasons に manually_linked があるものだけ。誤った連携を外すため event_id を NULL に戻す（連携先のイベント本体は変更しない）。
- * 自動登録された登録済み（manually_linked なし）は 409 のまま。
- * 処理側は result_json があると Clef を呼ばず再利用するため、消さないと質問の修正が反映されない。
+ * 画面の「再実行」。保存済みの判定結果と回答を、現在の設定で判定し直す。状態で処理を振り分ける。
+ * 自動登録された登録済み（manually_linked なし）は、登録・通知を変えずに回答と判定結果だけを同期的に更新する（rejudgeRegisteredWebhookJob）。
+ * それ以外は、保存済みの判定結果と回答を消して queued に戻し、キューへ積み直す。以下はこちらの説明。
+ * 保留ジョブ、処理に失敗したジョブ、人が却下していない対象外ジョブ、手動で連携した登録済みジョブが対象。
+ * 失敗したジョブは途中の結果が壊れていることがあるため、保留と同じく最初からやり直す。
+ * 人が却下したジョブ（reasons に manually_rejected）は再判定で上書きしない。画面側の rejudgeBlockedReason と同じ規則。処理中（queued / processing）も 409。
+ * 登録済みは reasons に manually_linked があるものだけここへ来る。誤った連携を外すため event_id を NULL に戻す（連携先のイベント本体は変更しない）。
+ * 処理側は result_json があると Clef を呼ばず再利用するため、消さないと質問の修正やしきい値の変更が反映されない。
  * 再判定の結果次第でイベントが自動登録され、Discord へ通知（通知済みなら再通知）される場合がある。
+ * どちらの経路も、判定は実行のたびに現在の設定（モデル・しきい値）を読んで行う。
  */
 export const rejudgeWebhookJob = async (env: Bindings, postId: string, candidateId?: string) => {
   const parent = await getWebhookJob(env, postId)
   const job = await actionJob(env, postId, candidateId)
+  // 自動登録済みは queued に戻さない（同じイベントの INSERT が衝突して失敗し、通知も繰り返されうる）。登録を変えず判定だけをやり直す。
+  if (isAutoRegisteredWebhookJob(job.status, job.reasons)) return rejudgeRegisteredWebhookJob(env, postId, parent, job)
   if (parent.candidates.length > 0) {
     const manuallyLinked = job.status === 'registered' && job.reasons.includes('manually_linked')
     if (
@@ -163,7 +171,7 @@ export const rejudgeWebhookJob = async (env: Bindings, postId: string, candidate
   }
   const manuallyLinked = job.status === 'registered' && job.reasons.includes('manually_linked')
   if (job.status !== 'held' && job.status !== 'ignored' && job.status !== 'failed' && !manuallyLinked)
-    throw new HTTPException(409, { message: 'Only held or ignored jobs can be re-judged' })
+    throw new HTTPException(409, { message: 'This job cannot be re-judged' })
   if ((job.status === 'ignored' || job.status === 'failed') && job.reasons.includes('manually_rejected'))
     throw new HTTPException(409, { message: 'Manually rejected jobs cannot be re-judged' })
   const now = dayjs().valueOf()

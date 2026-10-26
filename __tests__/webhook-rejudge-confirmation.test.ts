@@ -4,6 +4,7 @@ import { isValidElement } from 'react'
 import { BotActionConfirmation } from '@/components/admin/bot-action-confirmation'
 import {
   REJUDGE_DESCRIPTION,
+  REJUDGE_REGISTERED_DESCRIPTION,
   rejudgeBlockedReason,
   rejudgeConfirmation,
   webhookActionAvailability
@@ -14,8 +15,6 @@ import { baseJob, buttonState, REJUDGE_LABEL, renderDetail } from './fixtures/we
 
 // 「再実行」は状態で無効にせず、押すと必ず確認ダイアログが開く。押せない状態は、説明に理由を出して実行ボタンを無効にする。
 const JUDGING = '判定の処理中です。完了してからもう一度押してください。'
-const AUTO_REGISTERED =
-  '自動登録されたイベントがあるため再実行できません。内容を直すときは『編集』から、別のイベントに付け替えるときは『連携』から行ってください。'
 const REJECTED = '人が対象外にした投稿のため再実行できません。'
 const OTHER = 'この状態では再実行できません。'
 
@@ -29,8 +28,9 @@ const table: ReadonlyArray<readonly [string, string, readonly string[], string |
   ['failed', 'failed', [], null],
   ['ignored（AI が対象外）', 'ignored', ['not_distribution_event'], null],
   ['registered + manually_linked（手動連携）', 'registered', linked, null],
-  ['registered + 自動登録', 'registered', auto, AUTO_REGISTERED],
-  ['registered + 理由なし', 'registered', [], AUTO_REGISTERED],
+  ['registered + 自動登録', 'registered', auto, null],
+  ['registered + 理由なし', 'registered', [], null],
+  ['registered + manually_rejected', 'registered', rejected, REJECTED],
   ['ignored + manually_rejected（人が対象外）', 'ignored', rejected, REJECTED],
   ['failed + manually_rejected', 'failed', rejected, REJECTED],
   ['queued', 'queued', [], JUDGING],
@@ -61,18 +61,15 @@ describe('「再実行」を押せない理由（rejudgeBlockedReason）', () =>
     }
   })
 
-  test('理由の文言は、画面の実際のボタン名（編集・連携）を指す', async () => {
-    const registered = await renderDetail({
-      ...baseJob,
-      status: 'registered',
-      reasons: auto,
-      eventId: '550e8400-e29b-41d4-a716-446655440000'
-    })
-    // 登録済みのときの先頭ボタンは「編集」、連携のダイアログを開くボタンは「連携」。
-    expect(registered).toContain('編集')
-    expect(buttonState(registered, '連携')).toBe('enabled')
-    expect(AUTO_REGISTERED).toContain('『編集』')
-    expect(AUTO_REGISTERED).toContain('『連携』')
+  test('自動登録済みは再実行できる（以前は「編集」「連携」を案内して止めていたが、その案内は出ない）', () => {
+    for (const reasons of [auto, []]) {
+      expect(rejudgeBlockedReason('registered', reasons)).toBeNull()
+      expect(webhookActionAvailability('registered', 'sent', reasons).canRejudge).toBe(true)
+    }
+    for (const status of ['registered', 'held', 'failed', 'ignored']) {
+      const reason = rejudgeBlockedReason(status, [])
+      expect(reason === null || !reason.includes('『編集』')).toBe(true)
+    }
   })
 })
 
@@ -80,19 +77,41 @@ describe('「再実行」の確認ダイアログの内容（rejudgeConfirmation
   test.each(table)('%s', (_label, status, reasons, expected) => {
     const confirmation = rejudgeConfirmation(status, reasons)
     if (expected === null) {
-      // 実行できる状態は、通常の説明を出し、実行ボタンを押せる。
-      expect(confirmation).toEqual({ description: REJUDGE_DESCRIPTION, blocked: false })
+      // 実行できる状態は、説明を出し、実行ボタンを押せる。自動登録済みだけは、登録を変えない説明になる。
+      const autoRegistered = status === 'registered' && !reasons.includes('manually_linked')
+      expect(confirmation).toEqual({
+        description: autoRegistered ? REJUDGE_REGISTERED_DESCRIPTION : REJUDGE_DESCRIPTION,
+        blocked: false
+      })
     } else {
       // 実行できない状態は、説明に理由を出し、実行ボタンを押せなくする。
       expect(confirmation).toEqual({ description: expected, blocked: true })
     }
   })
 
-  test('実行できる状態の説明は、回答と判定結果が消えること、自動登録と通知の可能性を伝える', () => {
+  test('通常の説明は、回答と判定結果が消えること、自動登録と通知の可能性を伝える', () => {
     expect(REJUDGE_DESCRIPTION).toContain('保存済みの回答と判定結果を消して')
     expect(REJUDGE_DESCRIPTION).toContain('AI で最初から判定し直します')
     expect(REJUDGE_DESCRIPTION).toContain('自動登録')
     expect(REJUDGE_DESCRIPTION).toContain('通知')
+  })
+
+  test('自動登録済みの説明は、現在のしきい値で回答と判定結果を更新し、登録済みのイベントと Discord 通知は変えないと伝える', () => {
+    expect(REJUDGE_REGISTERED_DESCRIPTION).toBe(
+      '現在の設定（しきい値）でAIの判定をやり直し、回答と判定結果を更新します。登録済みのイベントと Discord 通知は変更しません。'
+    )
+    // 通常の説明と取り違えない（再通知・自動登録の可能性は書かない）。
+    expect(REJUDGE_REGISTERED_DESCRIPTION).not.toBe(REJUDGE_DESCRIPTION)
+    expect(REJUDGE_REGISTERED_DESCRIPTION).not.toContain('再通知')
+  })
+
+  test('登録済みでも、手動連携なら通常の説明（queued に戻す経路）、自動登録なら登録を変えない説明を出す', () => {
+    expect(rejudgeConfirmation('registered', linked).description).toBe(REJUDGE_DESCRIPTION)
+    expect(rejudgeConfirmation('registered', auto).description).toBe(REJUDGE_REGISTERED_DESCRIPTION)
+    expect(rejudgeConfirmation('registered', []).description).toBe(REJUDGE_REGISTERED_DESCRIPTION)
+    for (const status of ['held', 'failed', 'ignored']) {
+      expect(rejudgeConfirmation(status, []).description).toBe(REJUDGE_DESCRIPTION)
+    }
   })
 })
 

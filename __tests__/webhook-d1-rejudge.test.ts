@@ -78,15 +78,16 @@ test('rejudge resets a held job to queued, clears stored judgement and enqueues 
   })
 }, 60000)
 
-test('rejudge rejects every status other than held, ignored and failed with 409 and changes nothing', async () => {
+// 自動登録済み（registered で manually_linked なし）は 409 ではなく、登録を変えずに判定だけをやり直す（webhook-rejudge-registered.test.ts）。
+test('rejudge rejects queued and processing jobs with 409 and changes nothing', async () => {
   await withRejudgeEnv(async (env, sent) => {
-    const statuses = ['registered', 'queued', 'processing']
+    const statuses = ['queued', 'processing']
     for (const [index, status] of statuses.entries()) {
       const postId = await seedRejudgeJob(env, index + 1, { ...heldSeed, status })
       const before = await rawRejudgeRow(env, postId)
       expect(await conflictOf(rejudgeWebhookJob(env, postId))).toEqual({
         status: 409,
-        message: 'Only held or ignored jobs can be re-judged'
+        message: 'This job cannot be re-judged'
       })
       expect(await rawRejudgeRow(env, postId)).toEqual(before)
     }
@@ -239,10 +240,10 @@ test('rejudge route accepts a bodyless POST and maps errors to 404, 409 and 400'
     expect(body.success).toBe(true)
     expect(body.success ? body.data : null).toMatchObject({ postId, status: 'queued', notificationStatus: 'pending' })
     expect(sent).toEqual([postId])
-    // 保留でも対象外でもなくなったジョブ、存在しないジョブ、形式の違う ID は再実行できない。
+    // 処理中（queued）になったジョブ、存在しないジョブ、形式の違う ID は再実行できない。
     const again = await request(postId)
     expect(again.status).toBe(409)
-    expect(await again.text()).toBe('Only held or ignored jobs can be re-judged')
+    expect(await again.text()).toBe('This job cannot be re-judged')
     expect((await request('9999')).status).toBe(404)
     expect((await request('not-a-post-id')).status).toBe(400)
     expect(sent).toEqual([postId])
