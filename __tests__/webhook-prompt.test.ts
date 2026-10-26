@@ -209,7 +209,8 @@ test('未知の旧版を現行の質問で捏造せず、実入力はその版�
         .filter((question) => question.key === key)
         .flatMap((question) => Object.keys(question.criteria)).length
     expect(optionCount('store')).toBe(46)
-    expect(optionCount('character')).toBe(55)
+    // 娘は 51 人 + store_character・other・secret・multiple・none（v17 で store_character を足した）。
+    expect(optionCount('character')).toBe(56)
     expect(saved.definition?.questions.some((question) => /^(venue|character)\./.test(question.key))).toBe(false)
   })
 }, 60000)

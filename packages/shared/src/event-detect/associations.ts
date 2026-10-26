@@ -8,11 +8,16 @@ export const detectionCharacters = catalog.characters
 // 店舗とビッカメ娘の質問（v13 以降）。どちらも choice 1 問で、回答のキーは質問と同じ。
 export const STORE_QUESTION_KEY = 'store'
 export const CHARACTER_QUESTION_KEY = 'character'
+// 2段目（v16 以降）の確認の質問。1段目で選んだ最上位の店舗・娘ごとに、はい/いいえ（noul）で別の呼び出しとして聞く。
+export const STORE_CONFIRM_KEY = 'store_confirm'
+export const CHARACTER_CONFIRM_KEY = 'character_confirm'
 /** 選択肢の特別な値。カタログの id と衝突しないことをテストで固定している。 */
 export const ASSOCIATION_NONE = 'none'
 export const ASSOCIATION_MULTIPLE = 'multiple'
 export const CHARACTER_OTHER = 'other'
 export const CHARACTER_SECRET = 'secret'
+// v17 以降。本文でビッカメ娘に特に言及がないときの選択肢で、開催店舗の娘として扱う。EventCharacter ではないので、そのままは保存されない。
+export const CHARACTER_STORE = 'store_character'
 
 /** 選択された店舗 id から登録候補の店舗を作る。カタログにある店舗 1 つだけを採用し、none・multiple・未知の値は空にする。 */
 export const selectedStores = (choice: string | undefined): string[] =>
@@ -20,7 +25,7 @@ export const selectedStores = (choice: string | undefined): string[] =>
 
 /**
  * 選択されたビッカメ娘から登録候補の対象を作る。EventCharacterSchema に合う値（店舗キー・other・secret）1 つだけを採用し、
- * none・multiple・未知の値は空にする。共同デザインは人が編集フォームで複数指定する。
+ * none・multiple・store_character・未知の値は空にする。store_character は開催店舗の娘で、店舗を採用した側（detection-character.ts）が決める。共同デザインは人が編集フォームで複数指定する。
  */
 export const selectedCharacterIds = (choice: string | undefined) => {
   const parsed = EventCharacterSchema.safeParse(choice)
