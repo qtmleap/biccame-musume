@@ -26,6 +26,7 @@ describe('管理画面の黒背景防止', () => {
     ['workers/web/src/app/components/admin/bot-management.tsx', 2],
     ['workers/web/src/app/components/admin/webhook-job-detail.tsx', 1],
     ['workers/web/src/app/components/admin/webhook-event-link-dialog.tsx', 1],
+    ['workers/web/src/app/components/admin/webhook-event-link-confirm.tsx', 1],
     ['workers/web/src/app/components/admin/bot-action-confirmation.tsx', 1]
   ] as const)('%sの塗りボタンは既存ブランド色を使う', async (path, count) => {
     const classes = await buttonClasses(path)

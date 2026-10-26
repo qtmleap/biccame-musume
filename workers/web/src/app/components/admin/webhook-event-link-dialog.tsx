@@ -1,9 +1,12 @@
 import type { Event } from '@biccame/shared/schemas/event.dto'
+import type { WebhookLinkedEvent } from '@biccame/shared/schemas/webhook.dto'
 import dayjs from 'dayjs'
 import { Link2, RefreshCw, Search } from 'lucide-react'
 import { useReducer, useRef, useState } from 'react'
+import { WebhookEventLinkConfirm } from '@/components/admin/webhook-event-link-confirm'
+import { initialWebhookLinkStage, reduceWebhookLinkStage } from '@/components/admin/webhook-event-link-stage'
 import {
-  initialWebhookEventSearch,
+  INITIAL_WEBHOOK_EVENT_SEARCH,
   reduceWebhookEventSearch,
   searchWebhookLinkEvents,
   selectedWebhookLinkEvent,
@@ -30,8 +33,11 @@ type LinkDialogProps = {
   isPending: boolean
   /** 登録済みの連携先を付け替えるときは true。説明に、元のイベントは変更しない旨を足す。 */
   replacing: boolean
-  /** 連携先の提案（終了と判定された投稿）のイベント ID。あるときだけ、ダイアログを開いた時点でそのイベントを選択済みにする（連携は人が押すまで行わない）。 */
-  suggestedEventId?: string
+  /**
+   * 連携先の提案（終了と判定された投稿。discovery.linkedEvent をそのまま渡す）。あるときだけ、最初に「このイベントですか？」と確認する段階で開く。
+   * 「別のイベントを選ぶ」で検索の段階へ移るときは、提案を選択済みにしない。連携は人が「このイベントと連携する」か検索の「連携する」を押すまで行わない。
+   */
+  suggestion?: WebhookLinkedEvent
   onLink: (eventId: string) => Promise<unknown>
 }
 
@@ -88,16 +94,15 @@ export const WebhookEventSearchResults = ({
   )
 }
 
-const WebhookEventLinkContent = ({
-  disabled,
-  isPending,
-  replacing,
-  suggestedEventId,
-  onLink,
-  onClose
-}: LinkDialogProps & { onClose: () => void }) => {
+type SearchProps = Omit<LinkDialogProps, 'suggestion'> & { onClose: () => void }
+
+/**
+ * 検索して選ぶ段階。DialogContent の中身だけを描く。提案を受け取らないので、必ず選択なしで始まる。
+ * イベント一覧は、この段階に入ったとき(提案がなければ開いたとき)に取得する。
+ */
+export const WebhookEventLinkSearch = ({ disabled, isPending, replacing, onLink, onClose }: SearchProps) => {
   const eventsQuery = useAdminEventOptions()
-  const [state, dispatch] = useReducer(reduceWebhookEventSearch, suggestedEventId, initialWebhookEventSearch)
+  const [state, dispatch] = useReducer(reduceWebhookEventSearch, INITIAL_WEBHOOK_EVENT_SEARCH)
   const [failed, setFailed] = useState(false)
   const submitting = useRef(false)
   const events = eventsQuery.data === undefined ? [] : eventsQuery.data
@@ -117,16 +122,7 @@ const WebhookEventLinkContent = ({
     }
   }
   return (
-    <DialogContent
-      className='max-h-[85dvh] border-card-border sm:max-w-2xl'
-      showCloseButton={!isPending}
-      onEscapeKeyDown={(event) => {
-        if (isPending) event.preventDefault()
-      }}
-      onInteractOutside={(event) => {
-        if (isPending) event.preventDefault()
-      }}
-    >
+    <>
       <DialogHeader>
         <DialogTitle>既存イベントへ連携</DialogTitle>
         <DialogDescription>
@@ -203,9 +199,45 @@ const WebhookEventLinkContent = ({
           </Button>
         </DialogFooter>
       </form>
-    </DialogContent>
+    </>
   )
 }
+
+/**
+ * ダイアログの中身。提案があるときは確認の段階から始まり、「別のイベントを選ぶ」で検索の段階へ移る。提案がなければ検索の段階から始まる。
+ * DialogContent の外側(WebhookEventLinkContent)と分けてあるので、Dialog の中に置けば静的描画でも段階ごとの中身を確かめられる。
+ */
+export const WebhookEventLinkBody = ({ suggestion, ...props }: LinkDialogProps & { onClose: () => void }) => {
+  const [stage, dispatch] = useReducer(reduceWebhookLinkStage, suggestion, initialWebhookLinkStage)
+  return stage === 'confirm' && suggestion !== undefined ? (
+    <WebhookEventLinkConfirm
+      suggestion={suggestion}
+      replacing={props.replacing}
+      canLink={!props.disabled}
+      isPending={props.isPending}
+      onLink={props.onLink}
+      onClose={props.onClose}
+      onChooseOther={() => dispatch({ type: 'choose_other' })}
+    />
+  ) : (
+    <WebhookEventLinkSearch {...props} />
+  )
+}
+
+const WebhookEventLinkContent = (props: LinkDialogProps & { onClose: () => void }) => (
+  <DialogContent
+    className='max-h-[85dvh] border-card-border sm:max-w-2xl'
+    showCloseButton={!props.isPending}
+    onEscapeKeyDown={(event) => {
+      if (props.isPending) event.preventDefault()
+    }}
+    onInteractOutside={(event) => {
+      if (props.isPending) event.preventDefault()
+    }}
+  >
+    <WebhookEventLinkBody {...props} />
+  </DialogContent>
+)
 
 export const WebhookEventLinkDialog = (props: LinkDialogProps) => {
   const [open, setOpen] = useState(false)

@@ -88,10 +88,10 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           link: { postId, ...candidateSelection },
           ...(active === undefined ? {} : { item: active.item })
         })
-  // 連携先の提案があるときだけ、連携ダイアログの初期選択に渡す（連携は人が押すまで行わない）。
+  // 連携先の提案があるときだけ、連携ダイアログに渡す（最初に「このイベントですか？」と確認する。連携は人が押すまで行わない）。
   const linkedEvent =
     job === undefined || job.discovery === undefined || job.discovery === null ? undefined : job.discovery.linkedEvent
-  const suggestedLink = linkedEvent === undefined ? {} : { suggestedEventId: linkedEvent.eventId }
+  const suggestedLink = linkedEvent === undefined ? {} : { suggestion: linkedEvent }
   const isPending = retry.isPending || resolve.isPending || rejudge.isPending
   // 連携ダイアログと、連携先の提案の確認ダイアログが共有する連携（選択中の候補へ紐付ける）。
   const linkEvent = async (eventId: string) =>

@@ -1,23 +1,14 @@
 import { describe, expect, test } from 'bun:test'
-import type { Event } from '@biccame/shared/schemas/event.dto'
 import type { WebhookCandidate, WebhookDiscovery, WebhookJob } from '@biccame/shared/schemas/webhook.dto'
 import { createMemoryHistory, createRootRoute, createRouter, RouterProvider } from '@tanstack/react-router'
-import dayjs from 'dayjs'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import {
-  INITIAL_WEBHOOK_EVENT_SEARCH,
-  initialWebhookEventSearch,
-  reduceWebhookEventSearch,
-  selectedWebhookLinkEvent
-} from '@/components/admin/webhook-event-search'
 import { WebhookLinkedEventProposal } from '@/components/admin/webhook-linked-event-proposal'
 import { makeJob } from './fixtures/webhook-d1-jobs'
 import { listJob, renderDetail } from './fixtures/webhook-management'
 
 const TITLE = '連携先の提案'
 const PROPOSED = '550e8400-e29b-41d4-a716-446655440077'
-const OTHER = '550e8400-e29b-41d4-a716-446655440078'
 const EDIT_HREF = `href="/admin/events/${PROPOSED}/edit"`
 const discovery: WebhookDiscovery = {
   relevance: 'detected',
@@ -95,43 +86,5 @@ describe('詳細ページの連携先の提案', () => {
     const other = await renderDetail({ ...listJob, candidates: [without, withProposal] })
     expect(other).not.toContain(EDIT_HREF)
     expect(other).not.toContain(TITLE)
-  })
-})
-
-describe('連携ダイアログの初期選択', () => {
-  const eventOf = (uuid: string, title: string): Event => ({
-    uuid,
-    title,
-    category: 'limited_card',
-    stores: ['akiba'],
-    characterIds: ['akiba'],
-    startDate: dayjs('2026-10-01T03:00:00Z').toDate(),
-    conditions: [],
-    isVerified: false,
-    isPreliminary: false,
-    status: 'ongoing',
-    daysUntil: 0,
-    interestedCount: 0,
-    completedCount: 0,
-    createdAt: dayjs('2026-09-30T03:00:00Z').toDate(),
-    updatedAt: dayjs('2026-09-30T03:00:00Z').toDate()
-  })
-  const options = [eventOf(PROPOSED, '提案された配布イベント'), eventOf(OTHER, '別のイベント')]
-
-  test('提案が無ければ従来どおり未選択で始まる', () => {
-    expect(initialWebhookEventSearch(undefined)).toEqual(INITIAL_WEBHOOK_EVENT_SEARCH)
-    expect(selectedWebhookLinkEvent(options, initialWebhookEventSearch(undefined))).toBeUndefined()
-  })
-
-  test('提案があればそのイベントを選択済みにして始まり、検索語を変えると解除される', () => {
-    const state = initialWebhookEventSearch(PROPOSED)
-    expect(state).toEqual({ search: '', selectedId: PROPOSED })
-    expect(selectedWebhookLinkEvent(options, state)?.title).toBe('提案された配布イベント')
-    const searched = reduceWebhookEventSearch(state, { type: 'search', value: '別' })
-    expect(selectedWebhookLinkEvent(options, searched)).toBeUndefined()
-  })
-
-  test('提案のイベントが一覧に無いときは未選択のまま（誤って別のイベントへ連携しない）', () => {
-    expect(selectedWebhookLinkEvent([options[1]], initialWebhookEventSearch(PROPOSED))).toBeUndefined()
   })
 })
