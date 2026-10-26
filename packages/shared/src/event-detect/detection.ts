@@ -14,6 +14,7 @@ import {
   requiresPurchase
 } from './detection-conditions'
 import { categoryLabels, filterWebhookPost, labels } from './detection-context'
+import { withoutNewEventOnlyReasons } from './detection-reasons'
 import {
   type Category,
   CategorySchema,
@@ -235,7 +236,7 @@ export const evaluateDetection = (
         ...(storeKey === null ? ['extraction_store_unspecified'] : [])
       ]
     : []
-  const reasons = [
+  const detectedReasons = [
     ...(unsupportedCondition ? ['unmodeled_distribution_condition'] : []),
     ...(status !== 'announce' && status !== 'start' ? [statusReason] : []),
     ...(!category.success ? [itemUnspecified ? 'distribution_item_unspecified' : 'category_unconfirmed'] : []),
@@ -266,6 +267,11 @@ export const evaluateDetection = (
     ...(chargeRequired && chargeAmount === undefined ? ['charge_amount_unconfirmed'] : []),
     ...gateReasons
   ]
+  // 状態が継続・終了と確定した投稿は、新規登録の話ではないので、日付・配布条件・金額と本文の条件の語の理由（detection-reasons.ts）は付けない。
+  // 状態の理由と、どのイベントかを決める店舗・娘・配布物の理由は付ける。告知・開始と、状態が確定しない投稿は従来どおり。
+  // 継続・終了は下の条件（status が announce / start 以外）で必ず保留になるので、理由の付け方では登録の可否は変わらない。
+  const reasons =
+    status === 'ongoing' || status === 'end' ? withoutNewEventOnlyReasons(detectedReasons) : detectedReasons
   if (
     reasons.length > 0 ||
     !category.success ||
