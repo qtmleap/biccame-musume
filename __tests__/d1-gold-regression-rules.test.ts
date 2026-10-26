@@ -198,10 +198,19 @@ describe('店舗・ビッカメ娘は最上位を採用する', () => {
       expect(run(associationAnswers('abeno', special)).status, special).toBe('register')
   })
 
-  test('下限（0.3）に届かない選択は採用しない', () => {
+  test('下限（0.3）に届かない選択は採用しない（娘は店舗の娘になる）', () => {
     const low = { abeno: 0.25, takatsuki: 0.2 }
     expect(run({ store: choice('abeno', low) }).reasons).toEqual(['store_unconfirmed'])
-    expect(run({ character: choice('abeno', low) }).reasons).toEqual(['character_unconfirmed'])
+    // 娘が明示されていない（確率不足）ときは、採用した店舗の娘で登録に進む。下限に届いた別の娘は、そのまま採用する。
+    const lowCharacter = run({ character: choice('takatsuki', { takatsuki: 0.25, abeno: 0.2 }) })
+    expect(lowCharacter).toMatchObject({ status: 'register', reasons: [], candidate: { characterIds: ['abeno'] } })
+    const explicit = run({ character: choice('takatsuki', { takatsuki: 0.35, abeno: 0.2 }) })
+    expect(explicit).toMatchObject({ status: 'register', reasons: [], candidate: { characterIds: ['takatsuki'] } })
+  })
+
+  test('確率が下限に届かなくても、最上位が multiple・none なら店舗の娘にせず保留する', () => {
+    for (const top of ['multiple', 'none'])
+      expect(run({ character: choice(top, { [top]: 0.25, abeno: 0.2 }) }).reasons).toEqual(['character_unconfirmed'])
   })
 
   test('両方 none を確信しているときだけ対象外にする（none の確率が低いと保留）', () => {

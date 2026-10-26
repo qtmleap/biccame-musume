@@ -6,6 +6,7 @@ import {
   CHARACTER_OTHER,
   CHARACTER_QUESTION_KEY,
   CHARACTER_SECRET,
+  CHARACTER_STORE,
   detectionCharacters,
   detectionStores,
   STORE_QUESTION_KEY
@@ -27,9 +28,12 @@ const STORE_INSTRUCTIONS = [
 
 // is_event の除外条項と同じ内容を、none（ビッカメ娘の企画ではない）の定義として持つ。
 // 汎用ギフトカードの通常販売・チャージ案内などを登録しないための判定は、これが担う。
+// 規則は「娘が明示されていなければ、その店舗の娘」（D1 でも娘が書かれるのは店舗の娘と違うときだけ）。v17 で store_character として質問に持つ。
+// 店舗の娘と同一と仮定しない注意書きは v16 までの文面にあり、この規則と逆なので v17 で外した。
 const CHARACTER_INSTRUCTIONS = [
-  'この企画の対象物（配布物・記念限定販売品）に描かれる、または対象物そのものの対象のビッカメ娘は誰ですか？ 開催店舗・投稿者の娘と同一と仮定しないでください。本文に名前のない娘を推測しないでください。',
-  `共同デザインなど複数の娘が対象で1人に決まらないときは ${ASSOCIATION_MULTIPLE} を選んでください。ビッカメ娘の企画だが特定の娘に紐付かないときは ${CHARACTER_OTHER}、対象が伏せられているときは ${CHARACTER_SECRET} を選んでください。`,
+  'この企画の対象物（配布物・記念限定販売品）に描かれる、または対象物そのものの対象のビッカメ娘は誰ですか？ 本文に娘の名前・愛称・デザインの言及があるときは、その娘を選んでください。本文に名前のない娘を推測しないでください。',
+  `本文でビッカメ娘に特に言及がなく、どの娘の名前・愛称・デザインにも触れていないときは、開催店舗の娘が対象なので ${CHARACTER_STORE} を選んでください。`,
+  `共同デザインなど複数の娘が対象で1人に決まらないときは ${ASSOCIATION_MULTIPLE} を選んでください。ビッカメ娘の企画であることは本文から明らかだが特定の娘に紐付かないときは ${CHARACTER_OTHER}、対象が伏せられているときは ${CHARACTER_SECRET} を選んでください。本文でビッカメ娘に特に言及がないだけのときは ${CHARACTER_OTHER} ではなく ${CHARACTER_STORE} です。`,
   `ビッカメ娘の企画ではない場合は ${ASSOCIATION_NONE} を選んでください。ビッカメ娘の企画ではない例は、汎用ギフトカードの通常販売・購入・残高チャージ方法・支払い方法の案内だけの投稿、通常の商品紹介・家電の宣伝・雑談、ビッカメ娘と関係ない商品の購入特典・メーカーのキャンペーンです。ビッカメ娘の記念・限定デザインを対象にした販売・頒布や、ギフトカードの入金・チャージ条件付き受取は、無料配布かどうかにかかわらずビッカメ娘の企画なので ${ASSOCIATION_NONE} にしません。`
 ].join('')
 
@@ -51,9 +55,14 @@ export const storeCriteria = (): Record<string, string> => ({
   [ASSOCIATION_NONE]: '開催・配布店舗を特定できない、またはビッカメ娘の企画ではない'
 })
 
-/** ビッカメ娘 51 人の名前（id は付けない）と、その他・秘密・複数・該当なし。 */
+/** store_character の説明。回答表（answer-view.ts）も同じ文言を表示する。 */
+export const CHARACTER_STORE_CRITERIA =
+  '本文でビッカメ娘に特に言及がない（どの娘の名前・愛称・デザインにも触れていない）。開催店舗の娘として扱う'
+
+/** ビッカメ娘 51 人の名前（id は付けない）と、店舗の娘・その他・秘密・複数・該当なし。 */
 export const characterCriteria = (): Record<string, string> => ({
   ...Object.fromEntries(detectionCharacters.map((character) => [character.id, character.name])),
+  [CHARACTER_STORE]: CHARACTER_STORE_CRITERIA,
   [CHARACTER_OTHER]: 'ビッカメ娘の企画だが、特定の娘に紐付かない',
   [CHARACTER_SECRET]: '対象のビッカメ娘が伏せられている（シークレット）',
   [ASSOCIATION_MULTIPLE]: '共同デザインなど、複数の娘が対象で1人に決められない',

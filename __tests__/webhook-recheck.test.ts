@@ -139,8 +139,9 @@ describe('登録済みジョブの確認用の再判定（サービス）', () =
       const job = await recheckWebhookJob(env, postId)
       const keys = answerKeys(job.answers)
       // 回答のキーは、再確認で送った現行の質問のキーと一致する（store と character は choice 1 問ずつ、venue.* / character.* は無い）。
-      expect(ai.state.calls).toHaveLength(1)
-      expect(keys.slice().sort()).toEqual(Object.keys(ai.state.calls[0].questions).sort())
+      // 現行の v16 は 1 段目の判定と 2 段目の確認の 2 回送るので、キーは 2 回の質問の和集合。
+      expect(ai.state.calls).toHaveLength(2)
+      expect(keys.slice().sort()).toEqual(ai.state.calls.flatMap((call) => Object.keys(call.questions)).sort())
       expect(keys).toContain('store')
       expect(keys).toContain('character')
       expect(keys.some((key) => /^(venue|character)\./.test(key))).toBe(false)

@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { judgmentReasons, reasonLabel } from './answer-view'
 import { choice } from './answer-view-test-fixtures'
+import { createConfirmRequest } from './association-confirm'
 import type { ClefAnswer, ClefRequest } from './clef'
 import { createDetectionRequest } from './detection'
 import { ConditionSchema } from './detection-schemas'
@@ -26,6 +27,8 @@ describe('reasonLabel', () => {
     store_unconfirmed: '開催店舗を確定できない',
     store_mismatch: '抽出した開催店舗と判定した店舗が一致しない',
     character_unconfirmed: '対象ビッカメ娘を確定できない',
+    store_confirm_low: '開催店舗の確認の確率がしきい値未満',
+    character_confirm_low: '対象ビッカメ娘の確認の確率がしきい値未満',
     store_inferred_from_account: '店舗は投稿アカウントから補完',
     title_generated: 'タイトルは AI が作成',
     title_fallback: 'タイトルは定型（AI の作成に失敗）',
@@ -164,6 +167,27 @@ describe('reasonLabel', () => {
       character: choice('multiple', { multiple: 0.99 })
     })
     collect(post('あべのたん限定名刺 2026年11月3日から先着100枚'), {}, 0.99, 'akiba')
+    // 2段目の確認の質問を含む request で、確認の「はい」が低いとき（v16）。
+    {
+      const value = post('あべのたん限定名刺 2026年11月3日から先着100枚')
+      const request = createDetectionRequest(value)
+      const merged: ClefRequest = {
+        ...request,
+        questions: {
+          ...request.questions,
+          ...createConfirmRequest(request, { store: 'abeno', character: 'abeno' }).questions
+        }
+      }
+      const result = evaluateWithStore(
+        value,
+        merged,
+        answersFor(merged, {
+          store_confirm: { type: 'noul', noul: 0.1 },
+          character_confirm: { type: 'noul', noul: 0.1 }
+        })
+      )
+      for (const reason of result.reasons) seen.add(reason)
+    }
     collect(post('あべのたん限定名刺 2026年11月3日から先着100枚'), {
       category: choice('limited_card', { limited_card: 0.5, none: 0.4 }),
       start_date: choice('d20261103', { d20261103: 0.5, none: 0.4 })
@@ -200,6 +224,8 @@ describe('reasonLabel', () => {
       'store_unconfirmed',
       'store_mismatch',
       'character_unconfirmed',
+      'store_confirm_low',
+      'character_confirm_low',
       'start_date_unconfirmed',
       'end_date_unconfirmed',
       'invalid_date_range',

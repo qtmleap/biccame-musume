@@ -1,11 +1,16 @@
-import { storeShortName } from './association-questions'
+import { CHARACTER_STORE_CRITERIA, storeShortName } from './association-questions'
 import {
   ASSOCIATION_MULTIPLE,
   ASSOCIATION_NONE,
+  CHARACTER_CONFIRM_KEY,
   CHARACTER_OTHER,
+  CHARACTER_QUESTION_KEY,
   CHARACTER_SECRET,
+  CHARACTER_STORE,
   detectionCharacters,
-  detectionStores
+  detectionStores,
+  STORE_CONFIRM_KEY,
+  STORE_QUESTION_KEY
 } from './associations'
 import type { ClefAnswer } from './clef'
 import { keyToDate, keyToQuantity } from './decide'
@@ -39,7 +44,10 @@ const QUESTION_LABELS: ReadonlyMap<string, string> = new Map([
   ['single_event', '単一イベントか'],
   // 店舗と対象ビッカメ娘は v13 では choice 1 問ずつ。画面の補い行（webhook-answer-table.tsx）と同じ文言にする。
   ['store', '開催・配布店舗'],
+  // v16 以降の2段目。1段目で最上位に選んだ店舗・娘に対する、はい/いいえの確認（対象の名前は describeAnswers が添える）。
+  [STORE_CONFIRM_KEY, '開催・配布店舗の確認'],
   ['character', '対象ビッカメ娘'],
+  [CHARACTER_CONFIRM_KEY, '対象ビッカメ娘の確認'],
   ['start_date', '開始日'],
   ['end_date', '終了日'],
   ['quantity', '配布数'],
@@ -79,6 +87,8 @@ const CONDITION_LABELS: ReadonlyMap<string, string> = new Map([
   ['none', '確定できない']
 ])
 const SPECIAL_CHARACTER_LABELS: ReadonlyMap<string, string> = new Map([
+  // v17 以降。質問の選択肢の説明（association-questions.ts）と同じ文言を出す。
+  [CHARACTER_STORE, CHARACTER_STORE_CRITERIA],
   [CHARACTER_OTHER, 'その他'],
   [CHARACTER_SECRET, 'シークレット'],
   [ASSOCIATION_MULTIPLE, '複数'],
@@ -219,6 +229,18 @@ const describeAnswer = (key: string, answer: ClefAnswer, thresholds: DetectionTh
   }
 }
 
+// 確認の質問の行には、何を確認したかが分かるよう、1段目で最上位に選んだ名前を添える（確認の対象は最上位から作られる）。
+const confirmTargetName = (key: string, answers: Record<string, ClefAnswer>): string | undefined => {
+  const first = answers[key === STORE_CONFIRM_KEY ? STORE_QUESTION_KEY : CHARACTER_QUESTION_KEY]
+  if (first?.type !== 'choice') return undefined
+  return key === STORE_CONFIRM_KEY ? storeChoiceLabel(first.choice) : characterChoiceLabel(first.choice)
+}
+const withConfirmTarget = (row: AnswerRow, answers: Record<string, ClefAnswer>): AnswerRow => {
+  if (row.key !== STORE_CONFIRM_KEY && row.key !== CHARACTER_CONFIRM_KEY) return row
+  const name = confirmTargetName(row.key, answers)
+  return name === undefined ? row : { ...row, label: `${row.label}（${name}）` }
+}
+
 /**
  * 質問ごとの回答・確率・しきい値との比較を、固定の順（既知の質問、その後に未知のキー）で返す。
  * 確定の判定は evaluateDetection と同じく「確率がしきい値以上」。ただし終了日の最有力が none なら、しきい値未満でも確定。
@@ -228,7 +250,7 @@ export const describeAnswers = (answers: Record<string, ClefAnswer>, thresholds:
   const unknown = Object.keys(answers).filter((key) => !QUESTION_LABELS.has(key))
   return [...known, ...unknown].flatMap((key) => {
     const answer = answers[key]
-    return answer === undefined ? [] : [describeAnswer(key, answer, thresholds)]
+    return answer === undefined ? [] : [withConfirmTarget(describeAnswer(key, answer, thresholds), answers)]
   })
 }
 
@@ -270,6 +292,9 @@ const REASON_LABELS: ReadonlyMap<string, string> = new Map([
   ['store_unconfirmed', '開催店舗を確定できない'],
   ['store_mismatch', '抽出した開催店舗と判定した店舗が一致しない'],
   ['character_unconfirmed', '対象ビッカメ娘を確定できない'],
+  // 2段目の確認（detection.ts の evaluateDetection）。確定できない理由（store_unconfirmed・character_unconfirmed）に併記する。
+  ['store_confirm_low', '開催店舗の確認の確率がしきい値未満'],
+  ['character_confirm_low', '対象ビッカメ娘の確認の確率がしきい値未満'],
   ['start_date_unconfirmed', '開始日を確定できない'],
   ['end_date_unconfirmed', '終了日を確定できない'],
   ['invalid_date_range', '期間が不正'],

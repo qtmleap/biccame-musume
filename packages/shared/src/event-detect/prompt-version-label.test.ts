@@ -15,7 +15,9 @@ describe('プロンプトバージョンの表示名', () => {
     ['v4-webhook-v10-operation-updates', 'v10'],
     ['v5-webhook-v13-choice-associations', 'v13'],
     ['v5-webhook-v14-concise-choices', 'v14'],
-    ['v5-webhook-v15-concise-author', 'v15']
+    ['v5-webhook-v15-concise-author', 'v15'],
+    ['v5-webhook-v16-confirm-selection', 'v16'],
+    ['v5-webhook-v17-store-character', 'v17']
   ])('%s は版番号だけの表示名にする', (id, label) => {
     expect(promptVersionLabel(id)).toBe(label)
   })
