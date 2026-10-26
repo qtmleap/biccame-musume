@@ -99,7 +99,7 @@ describe('Webhook詳細の判定待ち表示', () => {
       const markup = await renderDetail({ ...baseJob, status, notificationStatus: 'pending', answers: null })
       expect(markup).toContain(JUDGING_NOTICE)
       expect(markup).not.toContain('回答の記録なし')
-      expect(markup).not.toContain('<table')
+      expect(markup).not.toContain('aria-label="Clef の回答"')
       // 案内は「Clef の回答」の見出しの直後（元投稿と判定・イベント登録の間）に出る。
       expect(markup.indexOf('元投稿')).toBeLessThan(markup.indexOf('Clef の回答'))
       expect(markup.indexOf('Clef の回答')).toBeLessThan(markup.indexOf(JUDGING_NOTICE))

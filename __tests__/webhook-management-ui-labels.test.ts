@@ -12,9 +12,9 @@ import {
 } from '@/components/admin/webhook-labels'
 import { WebhookStatusBadge } from '@/components/admin/webhook-status-badge'
 import { adminEndpoints } from '@/utils/client/admin'
+import { basicCellsOf, gridRootOf } from './fixtures/webhook-answer-grid'
 import {
   anchorsOf,
-  answerRows,
   answerThresholds,
   listJob,
   outlineTags,
@@ -24,23 +24,28 @@ import {
 } from './fixtures/webhook-management'
 
 describe('Webhook管理画面の判定・通知表示', () => {
-  test('回答表の全セルは上下中央に揃え、中身にinline-flexを使わずブロックのflexを使う', () => {
+  test('回答表の全セルは1行目と2行目を基線揃えの flex にし、inline-flex を直下に使わず、バッジはステータス欄に入る', () => {
     const markup = renderToStaticMarkup(
       createElement(WebhookAnswerTable, { answers: shintouAnswers, thresholds: answerThresholds })
     )
-    for (const row of answerRows(markup)) {
-      const cells = [...row.matchAll(/<td\b[^>]*>.*?<\/td>/g)].map((match) => match[0])
-      expect(cells).toHaveLength(6)
-      for (const cell of cells) {
-        expect(cell).toContain('align-middle')
-        expect(cell).not.toMatch(/^<td\b[^>]*>\s*<[a-z]+\b[^>]*class="[^"]*inline-flex/)
+    const root = gridRootOf(markup)
+    if (root === null) throw new Error('Missing grid root')
+    const cells = root.querySelectorAll('li[data-key]')
+    expect(cells).toHaveLength(4)
+    for (const cell of cells) {
+      const lines = cell.querySelectorAll(':scope > div')
+      expect(lines).toHaveLength(2)
+      for (const line of lines) {
+        expect(line.getAttribute('class')).toContain('flex')
+        expect(line.getAttribute('class')).toContain('items-baseline')
+        expect(line.getAttribute('class')).not.toContain('inline-flex')
       }
+      // Badge は inline-flex を持つが、flex コンテナ内では flex アイテムになり基線に乗らない。
+      expect(cell.querySelector('[data-field="status"] [data-slot="badge"]')).not.toBeNull()
     }
-    const judge = [...markup.matchAll(/<td\b[^>]*>(?:(?!<\/td>).)*data-slot="badge".*?<\/td>/g)]
-    expect(judge).toHaveLength(4)
-    for (const cell of judge) expect(cell[0]).toMatch(/<div class="flex items-center">/)
-    // 次点は箱の中心ではなく基線で揃える。
-    expect(markup).toMatch(/<div class="flex items-baseline gap-4">/)
+    expect(basicCellsOf(markup).map((cell) => cell.status)).toEqual(['未確定', '未確定', '確定', '確定'])
+    // 箱の中心揃え（items-center）は Badge の中身だけで、セルの行には使わない。
+    expect(markup).not.toMatch(/<div class="flex items-center/)
   })
 
   test('回答が空の時は表の代わりに「回答の記録なし」を出す', () => {
@@ -48,7 +53,7 @@ describe('Webhook管理画面の判定・通知表示', () => {
       createElement(WebhookAnswerTable, { answers: {}, thresholds: answerThresholds })
     )
     expect(markup).toContain('回答の記録なし')
-    expect(markup).not.toContain('<table')
+    expect(gridRootOf(markup)).toBeNull()
   })
 
   test('詳細は先頭に投稿全体の配布物数チェックを置き、「元投稿」と「判定・イベント登録」の間に「Clef の回答」を出し、判定理由は日本語でコードをtitleに残す', async () => {
@@ -100,9 +105,10 @@ describe('Webhook管理画面の判定・通知表示', () => {
     const none = await renderDetail({ ...listJob, answers: null })
     expect(none).toContain('Clef の回答')
     expect(none).toContain('回答の記録なし')
-    expect(none).not.toContain('<table aria-label')
+    expect(gridRootOf(none)).toBeNull()
+    expect(none).not.toContain('aria-label="Clef の回答"')
     const loading = await renderDetail({ ...listJob, answers: shintouAnswers })
-    expect(loading).toContain('<table')
+    expect(gridRootOf(loading)).not.toBeNull()
     expect(loading).toContain('2026-10-19')
     expect(loading).not.toContain('border-success/50')
     expect(loading).not.toContain('border-warning/60')

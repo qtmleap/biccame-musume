@@ -201,7 +201,7 @@ const signature = createHmac('sha256', signingSecret)
 | app | `EVENT_DETECTION_MODEL` | 初期設定: `clef` (既定) / `clef-flash`。管理画面の保存値が優先 |
 | app | `EVENT_DETECTION_THRESHOLD` / `EVENT_DETECTION_CHOICE_THRESHOLD` | 既定 `0.9`。管理画面（`/admin/bot`）で保存した値が優先 |
 | app | `EVENT_DETECTION_IGNORE_THRESHOLD` | 既定 `0.5`、自動登録閾値未満に設定。管理画面で保存した値が優先 |
-| app | `EVENT_DETECTION_ITEM_COUNT_THRESHOLD` | 既定 `0.9`。配布物の件数監査（件数質問の確度）専用で、`EVENT_DETECTION_CHOICE_THRESHOLD` や管理画面の保存値とは連動しない。環境変数のみで調整 |
+| app | `EVENT_DETECTION_ITEM_COUNT_THRESHOLD` | `wrangler.toml` は3環境とも `0.7`（未設定のときだけコードの既定 `0.9` に戻る）。配布物の件数監査（件数質問の確度）専用で、`EVENT_DETECTION_CHOICE_THRESHOLD` や管理画面の保存値とは連動しない。環境変数のみで調整 |
 | web | `DISCORD_TOKEN` / `DISCORD_CHANNEL_ID` (secret) | 既存 Discord Bot と通知先を再利用。Webhook 判定通知と公開イベント告知は別の履歴で管理 |
 | web | `ANTHROPIC_BASE_URL` / `ANTHROPIC_AUTH_TOKEN` (secret) | 配布イベントの抽出とタイトル生成に使う、Anthropic Messages・tool use互換の接続先とトークン。自動登録の抽出には両方必須。接続先は Cloudflare Workers から到達できるものにする（ローカルのプロキシは不可）。未設定・抽出失敗時はイベントを登録せず、安全なエラーコードを記録して再試行する。抽出成功後のタイトル生成だけが失敗した場合は、定型のタイトル（`<店舗名> <配布物>配布`）で登録 |
 

@@ -294,6 +294,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
                 thresholds={thresholds}
                 stores={outcome === undefined ? [] : outcome.stores}
                 characterIds={outcome === undefined ? [] : outcome.characterIds}
+                itemCountAudit={parentJob?.itemCountAudit}
               />
             )}
           </section>

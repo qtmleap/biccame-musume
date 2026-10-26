@@ -16,6 +16,8 @@ import type { ClefAnswer } from './clef'
 import { keyToDate, keyToQuantity } from './decide'
 import { type DetectionThresholds, thresholdOf } from './detection'
 
+// 件数の判定行の組み立て。回答表の入口（このファイル）から参照できるようにする。
+export { describeItemCountAudit, ITEM_COUNT_QUESTION_KEY, uncheckedItemCountRow } from './answer-view-item-count'
 // 管理画面向けの表示名をここから参照できるようにする（vite が起動時の exports を保持していても解決できる入口）。
 export { promptVersionLabel } from './prompt-version-label'
 
@@ -31,14 +33,21 @@ export type AnswerRow = {
   /** 表示した回答の確率（noul は、はいなら肯定の確率、いいえなら1から引いた確率）。確率を持たない回答（score など）は null */
   probability: number | null
   /**
-   * しきい値（0〜1）。判定を同じ行の確認が担う行（回答に対応する確認の行がある store / character の choice 行）は null で、画面は「—」を出す。
-   * 判定は直下の確認の行が決める（1段目の確率が70%未満なら確認の「はい」で決まる）ので、choice 行に確定・未確定を出すと食い違って見える。
+   * しきい値（0〜1）。thresholdOf が返す、判定で実際に効く値。
+   * 判定を直下の確認が担う行（回答に対応する確認の行がある store / character の choice 行）では、確認を省いて確定できる 1 段目の下限を表す
+   * （最上位の確率がこの値未満のときだけ確認を聞く）。管理画面で保存した値があればそれ、無ければ 70%。
+   * 件数の判定行（describeItemCountAudit）は、判定時に保存した値。
    */
   threshold: number | null
-  /** 確定か。threshold が null の行（判定を確認の行が担う）は null。 */
+  /**
+   * 確定か。判定を直下の確認の行が担う行（上記の choice 行）は null で、画面は「—」を出す。
+   * 判定は直下の確認の行が決める（1段目の確率が70%未満なら確認の「はい」で決まる）ので、choice 行に確定・未確定を出すと食い違って見える。
+   */
   confirmed: boolean | null
   /** 次点まで最大2件（確率の降順、選ばれた回答は除く）。noul は反対の回答1件 */
   alternatives: AnswerAlternative[]
+  /** 判定に添える短い理由。件数の判定行（describeItemCountAudit）が、未確定の理由を持つときだけ付く。 */
+  reason?: string
 }
 
 /** 行の並びと質問の日本語名。ここに無いキーは最後にキー名のまま出す。 */
@@ -185,7 +194,7 @@ const choiceLabel = (key: string, value: string): string => {
   }
 }
 
-// 1段目の choice の行と、その判定を担う確認の行の対応。確認の行が回答にある choice 行は、しきい値・判定を「—」にする。
+// 1段目の choice の行と、その判定を担う確認の行の対応。確認の行が回答にある choice 行は、判定（confirmed）を null にする。しきい値は残す。
 const CONFIRM_KEY_OF: ReadonlyMap<string, string> = new Map([
   [STORE_QUESTION_KEY, STORE_CONFIRM_KEY],
   [CHARACTER_QUESTION_KEY, CHARACTER_CONFIRM_KEY]
@@ -202,7 +211,8 @@ const describeAnswer = (
   // 回答表の確定表示と実際の判定がずれないよう、ここで別の規則を持たない。
   const threshold = thresholdOf(thresholds, key)
   // 対応する確認の行（store_confirm / character_confirm）が回答にある choice 行は、判定をその確認の行が担う（「確認が確定なら choice が確定かどうかは
-  // どうでもいい」）。保存済みの回答だけから決めるので、request は再生成しない。確認の行が無い保存データ（v15 以前）は、しきい値と確定を従来どおり出す。
+  // どうでもいい」）ので confirmed は null。しきい値は、確認を聞くかどうかを決める下限として thresholdOf の値をそのまま残す（確認があっても効いている値）。
+  // 保存済みの回答だけから決めるので、request は再生成しない。確認の行が無い保存データ（v15 以前）は、しきい値と確定を従来どおり出す。
   const confirmKey = CONFIRM_KEY_OF.get(key)
   const decidedByConfirm = confirmKey !== undefined && answers[confirmKey] !== undefined
   if (answer.type === 'noul') {
@@ -245,7 +255,7 @@ const describeAnswer = (
     label,
     answer: choiceLabel(key, answer.choice),
     probability,
-    threshold: decidedByConfirm ? null : threshold,
+    threshold,
     // 終了日の最有力が none（記載なし）なら、確率がしきい値未満でも確定扱い。evaluateDetection の終了日の扱いと揃える。
     confirmed: decidedByConfirm
       ? null
