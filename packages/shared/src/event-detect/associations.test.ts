@@ -36,7 +36,7 @@ describe('開催店舗と配布物の対象ビッカメ娘', () => {
   })
 })
 
-describe('現行版（v17）の1段目の質問セット（店舗の質問は v15 から変わらない。娘は store_character を足した）', () => {
+describe('現行版（v18）の1段目の質問セット（v17 と同一。店舗の質問は v15 から変わらない。娘は store_character を足した）', () => {
   const [request] = createDetectionRequests(post)
 
   test('店舗は44店舗 + multiple + none の46択、娘は51人 + store_character・other・secret・multiple・none の56択', () => {
@@ -134,7 +134,7 @@ const V13 = 'v5-webhook-v13-choice-associations'
 const V14 = 'v5-webhook-v14-concise-choices'
 const V15 = 'v5-webhook-v15-concise-author'
 const V16 = 'v5-webhook-v16-confirm-selection'
-const V17 = 'v5-webhook-v17-store-character'
+const V18 = 'v5-webhook-v18-store-confirm-default'
 const SPECIAL_STORE_KEYS = ['multiple', 'none']
 const SPECIAL_CHARACTER_KEYS = ['other', 'secret', 'multiple', 'none']
 const V17_CHARACTER_KEYS = ['store_character', ...SPECIAL_CHARACTER_KEYS]
@@ -149,8 +149,8 @@ describe('v14 から続く選択肢の説明: 名前だけ（括弧・id・「�
   const store = storeCriteria()
   const character = characterCriteria()
 
-  test('現行版は v17 で、店舗 44 件の説明はすべてアプリの短い店舗名（STORE_DISPLAY_NAMES）', () => {
-    expect(DETECTION_VERSION).toBe(V17)
+  test('現行版は v18 で、店舗 44 件の説明はすべてアプリの短い店舗名（STORE_DISPLAY_NAMES）', () => {
+    expect(DETECTION_VERSION).toBe(V18)
     expect(detectionStores).toHaveLength(44)
     for (const entry of detectionStores) {
       const key = StoreKeySchema.safeParse(entry.id)
