@@ -80,6 +80,7 @@ export const useAdminWebhookPrompt = (postId: string, candidateId?: string) =>
     meta: { persist: false }
   })
 
+/** 画面から呼ぶのは「通知を再送」だけ。「再実行」（useRejudgeAdminWebhookJob）と同じトーストにならないよう、通知の再送と分かる文言にする。 */
 export const useRetryAdminWebhookJob = () => {
   const queryClient = useQueryClient()
   return useMutation({
@@ -87,13 +88,14 @@ export const useRetryAdminWebhookJob = () => {
       client.retryAdminWebhookJob(data, { params: { postId } }),
     retry: false,
     onSuccess: async () => {
-      toast.success('再実行を受け付けました')
+      toast.success('通知の再送を受け付けました')
       await queryClient.invalidateQueries({ queryKey: ADMIN_WEBHOOK_QUERY_KEY })
     },
-    onError: () => toast.error('再実行を受け付けられませんでした')
+    onError: () => toast.error('通知の再送を受け付けられませんでした')
   })
 }
 
+/** 「再実行」。保存済みの回答と判定結果を消して queued に戻し、AI で最初から判定し直す。 */
 export const useRejudgeAdminWebhookJob = () => {
   const queryClient = useQueryClient()
   return useMutation({
@@ -101,25 +103,10 @@ export const useRejudgeAdminWebhookJob = () => {
       client.rejudgeAdminWebhookJob(undefined, { params: { postId }, queries: { candidateId } }),
     retry: false,
     onSuccess: async () => {
-      toast.success('判定のやり直しを受け付けました')
+      toast.success('再実行を受け付けました')
       await queryClient.invalidateQueries({ queryKey: ADMIN_WEBHOOK_QUERY_KEY })
     },
-    onError: () => toast.error('判定のやり直しを受け付けられませんでした')
-  })
-}
-
-/** 登録済みジョブの回答だけを現在の質問とモデルで更新する（確認用）。イベント・判定状態・通知は変わらない。 */
-export const useRecheckAdminWebhookJob = () => {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: ({ postId, candidateId }: { postId: string; candidateId?: string }) =>
-      client.recheckAdminWebhookJob(undefined, { params: { postId }, queries: { candidateId } }),
-    retry: false,
-    onSuccess: async () => {
-      toast.success('判定を再確認しました')
-      await queryClient.invalidateQueries({ queryKey: ADMIN_WEBHOOK_QUERY_KEY })
-    },
-    onError: () => toast.error('判定を再確認できませんでした')
+    onError: () => toast.error('再実行を受け付けられませんでした')
   })
 }
 

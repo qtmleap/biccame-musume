@@ -93,40 +93,62 @@ export const webhookNotificationLabel = (status: string): string => {
 export const detectionScoreLabel = (score: number | null): string =>
   score === null ? '—' : `${(score * 100).toFixed(1)}%`
 
+/** キューの判定結果を待っている状態。回答はまだ無い（再判定直後は answers も空になる）。 */
+export const isWebhookJobJudging = (status: string): boolean => status === 'queued' || status === 'processing'
+
+/** 再実行できない理由（確認ダイアログの説明に出す）。 */
+const REJUDGE_BLOCKED_JUDGING = '判定の処理中です。完了してからもう一度押してください。'
+const REJUDGE_BLOCKED_AUTO_REGISTERED =
+  '自動登録されたイベントがあるため再実行できません。内容を直すときは『編集』から、別のイベントに付け替えるときは『連携』から行ってください。'
+const REJUDGE_BLOCKED_REJECTED = '人が対象外にした投稿のため再実行できません。'
+const REJUDGE_BLOCKED_OTHER = 'この状態では再実行できません。'
+
 /**
- * 再判定できるのは保留、人が却下していない対象外、手動で連携した登録済み（reasons に manually_linked）のジョブ。
- * 人の却下（reasons に manually_rejected）は再判定で上書きしない。自動登録された登録済みは、作成済みのイベントが重複しうるため再判定できない。
- * サーバー側の rejudgeWebhookJob（webhook-admin.ts）と同じ規則。
+ * 「再実行」（保存済みの回答と判定結果を消して、AI で最初から判定し直す）を実行できない理由。実行できる状態は null。
+ * 実行できるのは、保留、処理に失敗したジョブ、人が却下していない対象外、手動で連携した登録済み（reasons に manually_linked）のジョブ。
+ * 失敗したジョブは途中の結果が壊れていることがあるため、再実行も判定し直しで最初からやり直す。
+ * 人の却下（reasons に manually_rejected）は、人の判断を上書きしないため実行できない。
+ * 自動登録された登録済みは、同じイベントの登録が重複して失敗しうるため実行できない。処理中（queued / processing）は、リース中で二重に走らせられない。
+ * サーバー側の rejudgeWebhookJob（webhook-admin.ts）の 409 と同じ規則。ボタンは常に押せるので、押せない状態はこの理由をダイアログに出す。
  */
-const canRejudgeJob = (status: string, reasons: readonly string[]): boolean =>
-  status === 'held' ||
-  (status === 'ignored' && !reasons.includes('manually_rejected')) ||
-  (status === 'registered' && reasons.includes('manually_linked'))
+export const rejudgeBlockedReason = (status: string, reasons: readonly string[]): string | null => {
+  if (status === 'held') return null
+  if (isWebhookJobJudging(status)) return REJUDGE_BLOCKED_JUDGING
+  if (status === 'registered') return reasons.includes('manually_linked') ? null : REJUDGE_BLOCKED_AUTO_REGISTERED
+  if (status === 'ignored' || status === 'failed')
+    return reasons.includes('manually_rejected') ? REJUDGE_BLOCKED_REJECTED : null
+  return REJUDGE_BLOCKED_OTHER
+}
+
+/** 実行できるときの「再実行」の確認の説明。 */
+export const REJUDGE_DESCRIPTION =
+  '保存済みの回答と判定結果を消して、AI で最初から判定し直します。結果次第でイベントが自動登録され、Discord にも通知（通知済みの場合は再通知）される場合があります。'
+
+/**
+ * 「再実行」の確認ダイアログの内容。実行できない状態では、説明に理由を出し、実行ボタンを押せなくする（blocked）。
+ * 実行できる状態では通常の説明を出す。
+ */
+export const rejudgeConfirmation = (
+  status: string,
+  reasons: readonly string[]
+): { description: string; blocked: boolean } => {
+  const reason = rejudgeBlockedReason(status, reasons)
+  return reason === null ? { description: REJUDGE_DESCRIPTION, blocked: false } : { description: reason, blocked: true }
+}
 
 /**
  * 連携できるのは保留と対象外、および登録済み（連携先の付け替え）。サーバー側の resolveWebhookJob（webhook-admin.ts）と同じ規則。
  */
 const canLinkJob = (status: string): boolean => status === 'held' || status === 'ignored' || status === 'registered'
 
-/**
- * 確認用に再判定できるのは登録済みのジョブだけ。回答・確率・プロンプトの版・判定モデルを更新するだけで、イベント・判定状態・通知は変えない。
- * サーバー側の recheckWebhookJob（webhook-recheck.ts）と同じ規則。通常の再判定（canRejudge）とは独立している。
- */
-const canRecheckJob = (status: string): boolean => status === 'registered'
-
 export const webhookActionAvailability = (status: string, notificationStatus: string, reasons: readonly string[]) => ({
   canResolve: status === 'held',
   canLink: canLinkJob(status),
-  canRetryProcessing: status === 'failed',
-  canRejudge: canRejudgeJob(status, reasons),
-  canRecheck: canRecheckJob(status),
+  canRejudge: rejudgeBlockedReason(status, reasons) === null,
   canRetryNotification:
     (status === 'held' || status === 'registered') &&
     (notificationStatus === 'failed' || notificationStatus === 'unknown')
 })
-
-/** キューの判定結果を待っている状態。回答はまだ無い（再判定直後は answers も空になる）。 */
-export const isWebhookJobJudging = (status: string): boolean => status === 'queued' || status === 'processing'
 
 /**
  * 結果がまだ動いている最中のジョブ。判定待ち（queued / processing）か、判定後の Discord 通知待ち（pending）。

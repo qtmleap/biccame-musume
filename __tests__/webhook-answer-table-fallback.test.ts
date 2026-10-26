@@ -75,9 +75,8 @@ describe('Clef回答表の店舗・ビッカメ娘の補い行（選択式の質
     expect(groupsOf(markup).map((group) => group.label)).toEqual(['基本判定'])
     expect(markup).not.toContain('scope="rowgroup"')
     expect(markup).not.toContain('<th data-slot="table-head" class="px-2')
-    // 既存の行（ビッカメ娘のイベントか → はい、配布物 → アクキー）のあとに、同じ形の行が2つ続く。
+    // 既存の行（配布物 → アクキー）のあとに、同じ形の行が2つ続く。is_event（ビッカメ娘のイベントか）の行は出さない。
     expect(pairsOf(basicOf(markup))).toEqual([
-      ['ビッカメ娘のイベントか', 'はい'],
       ['配布物', 'アクキー'],
       [STORE_ROW, '船橋駅FACE店、AKIBA店'],
       [CHARACTER_ROW, 'ふなたん、その他']
@@ -86,19 +85,19 @@ describe('Clef回答表の店舗・ビッカメ娘の補い行（選択式の質
 
   test('補い行の回答は「はい」ではなく名前で、質問の列は他の質問と同じ font-medium', () => {
     const rows = cellsOf(basicOf(render(v2Answers, { stores: ['funabashi'], characterIds: ['funabashi'] })))
-    for (const cells of rows.slice(2)) {
+    for (const cells of rows.slice(1)) {
       expect(cells[0]?.attributes).toContain('font-medium')
       expect(cells[1]?.content).not.toBe('はい')
     }
-    // 補い行より前にある、はい／いいえの質問（ビッカメ娘のイベントか）だけが「はい」になる。
-    expect(rows.filter((cells) => cells[1]?.content === 'はい')).toHaveLength(1)
+    // 補い行より前の行（配布物）も名前の回答で、「はい」の行は無い（is_event の行は出さない）。
+    expect(rows.filter((cells) => cells[1]?.content === 'はい')).toHaveLength(0)
   })
 
   test('空なら回答の列は「未判定」で、行は6つのセルのまま', () => {
     const rows = cellsOf(basicOf(render(v2Answers, { stores: [], characterIds: [] })))
-    expect(rows).toHaveLength(4)
-    for (const cells of rows.slice(2)) expect(cells).toHaveLength(6)
-    expect(pairsOf(basicOf(render(v2Answers, { stores: [], characterIds: [] }))).slice(2)).toEqual([
+    expect(rows).toHaveLength(3)
+    for (const cells of rows.slice(1)) expect(cells).toHaveLength(6)
+    expect(pairsOf(basicOf(render(v2Answers, { stores: [], characterIds: [] }))).slice(1)).toEqual([
       [STORE_ROW, '未判定'],
       [CHARACTER_ROW, '未判定']
     ])
@@ -108,7 +107,7 @@ describe('Clef回答表の店舗・ビッカメ娘の補い行（選択式の質
     for (const configured of [true, false]) {
       const rows = cellsOf(
         basicOf(render(v2Answers, { stores: ['funabashi'], characterIds: ['funabashi'], configured }))
-      ).slice(2)
+      ).slice(1)
       expect(rows).toHaveLength(2)
       for (const cells of rows) {
         expect(cells).toHaveLength(6)
@@ -122,7 +121,7 @@ describe('Clef回答表の店舗・ビッカメ娘の補い行（選択式の質
       }
     }
     const rowMarkups = rowMarkupsOf(basicOf(render(v2Answers, { stores: ['funabashi'], characterIds: ['funabashi'] })))
-    for (const row of rowMarkups.slice(2)) {
+    for (const row of rowMarkups.slice(1)) {
       expect(row).not.toContain('bg-warning/10')
       expect(row).not.toContain('flex')
       expect(row).not.toContain('data-slot="badge"')
@@ -133,7 +132,7 @@ describe('Clef回答表の店舗・ビッカメ娘の補い行（選択式の質
     const rowMarkups = rowMarkupsOf(basicOf(render(v2Answers, { stores: ['funabashi'], characterIds: [] })))
     const cell =
       'class="p-2 align-middle [&amp;:has([role=checkbox])]:pr-0 [&amp;&gt;[role=checkbox]]:translate-y-[2px]'
-    expect(rowMarkups[2]).toBe(
+    expect(rowMarkups[1]).toBe(
       '<tr data-slot="table-row" class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">' +
         `<td data-slot="table-cell" ${cell} font-medium">開催・配布店舗</td>` +
         `<td data-slot="table-cell" ${cell}">船橋駅FACE店</td>` +
@@ -153,7 +152,7 @@ describe('Clef回答表の店舗・ビッカメ娘の補い行（選択式の質
           characterIds: ['funabashi', 'other', 'secret', 'unknown_id']
         })
       )
-    ).slice(2)
+    ).slice(1)
     expect(rows).toEqual([
       [STORE_ROW, 'unknown_store、船橋駅FACE店'],
       [CHARACTER_ROW, 'ふなたん、その他、シークレット、unknown_id']
@@ -170,10 +169,7 @@ describe('Clef回答表の店舗・ビッカメ娘の補い行（選択式の質
       expect(after).toContain('scope="rowgroup"')
       expect(pairsOf(groupsOf(after)[1]?.markup)).toEqual([['船橋駅FACE店', 'はい']])
       expect(pairsOf(groupsOf(after)[2]?.markup)).toEqual([['ふなとーたん', 'はい']])
-      expect(pairsOf(basicOf(after))).toEqual([
-        ['ビッカメ娘のイベントか', 'はい'],
-        ['配布物', 'アクキー']
-      ])
+      expect(pairsOf(basicOf(after))).toEqual([['配布物', 'アクキー']])
       expect(after).not.toContain('未判定')
     }
   })
@@ -183,7 +179,6 @@ describe('Clef回答表の店舗・ビッカメ娘の補い行（選択式の質
     const groups = groupsOf(render(answers, { stores: ['akiba'], characterIds: ['funabashi'] }))
     expect(groups.map((group) => group.label)).toEqual(['基本判定', STORE_ROW])
     expect(pairsOf(groups[0]?.markup)).toEqual([
-      ['ビッカメ娘のイベントか', 'はい'],
       ['配布物', 'アクキー'],
       [CHARACTER_ROW, 'ふなたん']
     ])
@@ -196,7 +191,7 @@ describe('Clef回答表の店舗・ビッカメ娘の補い行（選択式の質
     const answers = { ...v2Answers, 'character.funato': { type: 'noul' as const, noul: 0.99 } }
     const groups = groupsOf(render(answers, { stores: ['akiba'], characterIds: ['funabashi'] }))
     expect(groups.map((group) => group.label)).toEqual(['基本判定', CHARACTER_ROW])
-    expect(pairsOf(groups[0]?.markup).slice(2)).toEqual([[STORE_ROW, 'AKIBA店']])
+    expect(pairsOf(groups[0]?.markup).slice(1)).toEqual([[STORE_ROW, 'AKIBA店']])
     expect(groups[1]?.markup).toContain('ふなとーたん')
     expect(groups[1]?.markup).toContain('99.0%')
     expect(groups[1]?.markup).not.toContain('ふなたん')
@@ -212,7 +207,7 @@ describe('Clef回答表の店舗・ビッカメ娘の補い行（選択式の質
   test('店舗とビッカメ娘を渡さないときは、回答にある行だけを出す', () => {
     const markup = render(v2Answers)
     expect(groupsOf(markup).map((group) => group.label)).toEqual(['基本判定'])
-    expect(pairsOf(basicOf(markup))).toHaveLength(2)
+    expect(pairsOf(basicOf(markup))).toHaveLength(1)
     expect(markup).not.toContain('scope="rowgroup"')
     expect(markup).not.toContain('未判定')
   })
@@ -235,7 +230,7 @@ describe('回答表に出す店舗名は「ビックカメラ」を含まない�
 
   test('補い行は全店舗でアプリの短い名前を「、」で並べ、表のマークアップに「ビックカメラ」が出ない', () => {
     const markup = render(v2Answers, { stores: catalogIds, characterIds: [] })
-    expect(pairsOf(basicOf(markup)).slice(2)[0]).toEqual([STORE_ROW, catalogIds.map(shortNameOf).join('、')])
+    expect(pairsOf(basicOf(markup)).slice(1)[0]).toEqual([STORE_ROW, catalogIds.map(shortNameOf).join('、')])
     expect(markup).not.toContain('ビックカメラ')
   })
 
@@ -254,7 +249,7 @@ describe('回答表に出す店舗名は「ビックカメラ」を含まない�
     const answer = render({ ...v2Answers, 'venue.prosta': { type: 'noul', noul: 0.98 } })
     expect(pairsOf(groupsOf(answer)[1]?.markup)).toEqual([['池袋西口プロスタジアム', 'はい']])
     const fallback = render(v2Answers, { stores: ['prosta'], characterIds: [] })
-    expect(pairsOf(basicOf(fallback)).slice(2)[0]).toEqual([STORE_ROW, '池袋西口プロスタジアム'])
+    expect(pairsOf(basicOf(fallback)).slice(1)[0]).toEqual([STORE_ROW, '池袋西口プロスタジアム'])
   })
 })
 
@@ -280,7 +275,7 @@ describe('受信詳細から回答表へ渡す店舗・ビッカメ娘', () => {
       { ...listJob, answers: v2Answers, draft: { ...draft, characterIds: ['funabashi'] } },
       0.9
     )
-    expect(answerPairs(markup).slice(2)).toEqual([
+    expect(answerPairs(markup).slice(1)).toEqual([
       [STORE_ROW, '新宿東口駅前店'],
       [CHARACTER_ROW, 'ふなたん']
     ])
@@ -288,7 +283,7 @@ describe('受信詳細から回答表へ渡す店舗・ビッカメ娘', () => {
 
   test('登録候補があれば下書きより登録候補の店舗とビッカメ娘を優先する', async () => {
     const markup = await renderDetail({ ...listJob, answers: v2Answers, candidate, draft }, 0.9)
-    expect(answerPairs(markup).slice(2)).toEqual([
+    expect(answerPairs(markup).slice(1)).toEqual([
       [STORE_ROW, 'AKIBA店'],
       [CHARACTER_ROW, 'ふなとーたん']
     ])
@@ -296,7 +291,7 @@ describe('受信詳細から回答表へ渡す店舗・ビッカメ娘', () => {
 
   test('登録候補も下書きも無ければ、旧版の回答表の店舗とビッカメ娘は未判定になる', async () => {
     const markup = await renderDetail({ ...listJob, answers: v2Answers }, 0.9)
-    expect(answerPairs(markup).slice(2)).toEqual([
+    expect(answerPairs(markup).slice(1)).toEqual([
       [STORE_ROW, '未判定'],
       [CHARACTER_ROW, '未判定']
     ])
@@ -305,13 +300,13 @@ describe('受信詳細から回答表へ渡す店舗・ビッカメ娘', () => {
   test('回答に venue.* と character.* がある詳細は、登録候補があっても回答の行のまま', async () => {
     const markup = await renderDetail({ ...listJob, answers: v3Answers, candidate }, 0.9)
     expect(markup).toContain('aria-label="開催・配布店舗"')
-    expect(answerPairs(markup)).toHaveLength(2)
+    expect(answerPairs(markup)).toHaveLength(1)
     expect(markup).not.toContain('AKIBA店')
   })
 
   test('回答に store と character の choice がある詳細は、登録候補があっても回答の行が 1 回ずつのまま', async () => {
     const markup = await renderDetail({ ...listJob, answers: v13Answers, candidate }, 0.9)
-    expect(answerPairs(markup).slice(2)).toEqual([
+    expect(answerPairs(markup).slice(1)).toEqual([
       [STORE_ROW, '船橋駅FACE店'],
       [CHARACTER_ROW, 'ふなとーたん']
     ])

@@ -276,7 +276,7 @@ describe('項目別のしきい値', () => {
   test('注意書きに、過去の判定結果は変わらず再判定が必要であることを出す', async () => {
     const markup = await renderSettings(discordStatus('valid'), true)
     expect(markup).toContain(
-      'しきい値を変えても、過去の判定結果は変わりません。反映するには「AI で判定し直す」を実行してください。'
+      'しきい値を変えても、過去の判定結果は変わりません。反映するには「再実行」を実行してください。'
     )
   })
 

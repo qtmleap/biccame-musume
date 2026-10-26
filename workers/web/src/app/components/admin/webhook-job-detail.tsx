@@ -2,7 +2,7 @@ import type { DetectionThresholds } from '@biccame/shared/event-detect/detection
 import type { EventRequestQuery } from '@biccame/shared/schemas/event.dto'
 import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { ExternalLink, FilePlus2, Pencil, RefreshCw, RotateCcw, ScanSearch, Send, X } from 'lucide-react'
+import { ExternalLink, FilePlus2, Pencil, RefreshCw, Send, X } from 'lucide-react'
 import { useState } from 'react'
 import { BotActionConfirmation } from '@/components/admin/bot-action-confirmation'
 import { BotSettingRow, BotSettingsLayout } from '@/components/admin/bot-settings-layout'
@@ -14,6 +14,8 @@ import { webhookEventCreateSearch } from '@/components/admin/webhook-form-defaul
 import {
   isWebhookJobJudging,
   notificationRetryWarning,
+  REJUDGE_DESCRIPTION,
+  rejudgeConfirmation,
   webhookActionAvailability
 } from '@/components/admin/webhook-labels'
 import { WebhookPromptDialog } from '@/components/admin/webhook-prompt-dialog'
@@ -23,21 +25,18 @@ import { Button } from '@/components/ui/button'
 import { useAdminBotStatus } from '@/hooks/use-admin-bot'
 import {
   useAdminWebhookJob,
-  useRecheckAdminWebhookJob,
   useRejudgeAdminWebhookJob,
   useResolveAdminWebhookJob,
   useRetryAdminWebhookJob
 } from '@/hooks/use-admin-webhooks'
 import { cn } from '@/lib/utils'
 
-type ConfirmAction = 'processing' | 'notification' | 'reject' | 'rejudge' | 'recheck'
+type ConfirmAction = 'notification' | 'reject' | 'rejudge'
 
 const CONFIRM_TITLES: Record<ConfirmAction, string> = {
-  processing: '失敗した処理を再実行しますか？',
   notification: 'Discord通知を再送しますか？',
   reject: 'この投稿を対象外にしますか？',
-  rejudge: 'AI で判定し直しますか？',
-  recheck: '判定を再確認しますか？'
+  rejudge: '再実行しますか？'
 }
 
 export const WebhookJobDetail = ({ postId }: { postId: string }) => {
@@ -56,7 +55,6 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   const retry = useRetryAdminWebhookJob()
   const resolve = useResolveAdminWebhookJob()
   const rejudge = useRejudgeAdminWebhookJob()
-  const recheck = useRecheckAdminWebhookJob()
   const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null)
   const [selectedCandidate, setSelectedCandidate] = useState<string | null>(null)
   const parentJob = jobQuery.data
@@ -84,34 +82,41 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           link: { postId, ...candidateSelection },
           ...(active === undefined ? {} : { item: active.item })
         })
-  const isPending = retry.isPending || resolve.isPending || rejudge.isPending || recheck.isPending
+  const isPending = retry.isPending || resolve.isPending || rejudge.isPending
   const availability = job
     ? webhookActionAvailability(job.status, job.notificationStatus, job.reasons)
     : {
         canResolve: false,
         canLink: false,
-        canRetryProcessing: false,
         canRejudge: false,
-        canRecheck: false,
         canRetryNotification: false
       }
 
+  // 「再実行」は状態によらず押せて、押すと必ず確認が出る。実行できない状態（自動登録済み・人の却下・処理中など）は、
+  // 確認の説明に理由を出して実行ボタンを無効にする。可否の規則はサーバーの 409 と同じ（rejudgeBlockedReason）。
+  const rejudgeState = job === undefined ? undefined : rejudgeConfirmation(job.status, job.reasons)
+  const rejudgeBlocked = rejudgeState === undefined || rejudgeState.blocked
+
   const confirm = async () => {
     if (!job || !confirmAction) return
+    // 実行できない状態では何もせず閉じる（連打やダイアログを経由しない呼び出しでも、サーバーの 409 に頼らない）。
+    if (confirmAction === 'rejudge' && rejudgeBlocked) {
+      setConfirmAction(null)
+      return
+    }
     try {
       if (confirmAction === 'reject') {
         await resolve.mutateAsync({ postId, data: { action: 'reject', ...candidateSelection } })
       } else if (confirmAction === 'rejudge') {
         await rejudge.mutateAsync({ postId, ...candidateSelection })
-      } else if (confirmAction === 'recheck') {
-        await recheck.mutateAsync({ postId, ...candidateSelection })
       } else {
+        // 残る確認は通知の再送だけ。処理の再実行は「再実行」（rejudge）が担う。
         await retry.mutateAsync({
           postId,
           data: {
             ...candidateSelection,
-            notificationOnly: confirmAction === 'notification',
-            allowUnknown: confirmAction === 'notification' && job.notificationStatus === 'unknown'
+            notificationOnly: true,
+            allowUnknown: job.notificationStatus === 'unknown'
           }
         })
       }
@@ -126,11 +131,9 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
       ? notificationRetryWarning(job.notificationStatus)
       : confirmAction === 'reject'
         ? 'この投稿はイベント登録せず、対象外として保存します。既存イベントは変更しません。'
-        : confirmAction === 'rejudge'
-          ? '現在の質問とモデルで AI を再実行し、判定をやり直します。保存済みの回答と判定結果は上書きされます。結果次第でイベントが自動登録され、Discord にも通知（通知済みの場合は再通知）される場合があります。'
-          : confirmAction === 'recheck'
-            ? '現在の質問とモデルで AI を再実行し、回答表・確率・プロンプトの版を更新します。登録済みのイベント、判定状態、Discord 通知は変更しません。'
-            : '失敗した処理をもう一度実行します。判定結果が保存済みならそれを使い、なければ AI を呼びます。'
+        : rejudgeState === undefined
+          ? REJUDGE_DESCRIPTION
+          : rejudgeState.description
 
   return (
     <BotSettingsLayout
@@ -191,32 +194,13 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
         <Button
           variant='outline'
           className='border-card-border'
-          onClick={() => setConfirmAction('processing')}
-          disabled={!availability.canRetryProcessing || isPending}
-          title='処理に失敗した投稿を、もう一度処理します（保存済みの判定結果があれば再利用）'
-        >
-          <RotateCcw className='size-4' />
-          失敗した処理を再実行
-        </Button>
-        <Button
-          variant='outline'
-          className='border-card-border'
           onClick={() => setConfirmAction('rejudge')}
-          disabled={!availability.canRejudge || isPending}
-          title='保存済みの回答を消して、AI で判定し直します'
+          // 状態では無効にしない。受信詳細を取得できていない間（job が無い間）だけは、確認で状態を示せず実行もできないため押せなくする。
+          disabled={job === undefined || isPending}
+          title='押すと確認が出ます（保存済みの回答と判定結果を消して、AI で最初から判定し直します）'
         >
           <RefreshCw className='size-4' />
-          AI で判定し直す
-        </Button>
-        <Button
-          variant='outline'
-          className='border-card-border'
-          onClick={() => setConfirmAction('recheck')}
-          disabled={!availability.canRecheck || isPending}
-          title='登録済みのイベントや通知は変えずに、回答・確率・プロンプトの版だけ AI で更新します'
-        >
-          <ScanSearch className='size-4' />
-          判定を再確認
+          再実行
         </Button>
         <Button
           variant='outline'
@@ -377,6 +361,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
         description={confirmDescription}
         actionLabel={confirmAction === 'reject' ? '対象外にする' : '実行する'}
         isPending={isPending}
+        actionDisabled={confirmAction === 'rejudge' && rejudgeBlocked}
         onConfirm={confirm}
       />
     </BotSettingsLayout>

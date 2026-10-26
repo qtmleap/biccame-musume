@@ -78,9 +78,9 @@ test('rejudge resets a held job to queued, clears stored judgement and enqueues 
   })
 }, 60000)
 
-test('rejudge rejects every status other than held and ignored with 409 and changes nothing', async () => {
+test('rejudge rejects every status other than held, ignored and failed with 409 and changes nothing', async () => {
   await withRejudgeEnv(async (env, sent) => {
-    const statuses = ['registered', 'failed', 'queued', 'processing']
+    const statuses = ['registered', 'queued', 'processing']
     for (const [index, status] of statuses.entries()) {
       const postId = await seedRejudgeJob(env, index + 1, { ...heldSeed, status })
       const before = await rawRejudgeRow(env, postId)

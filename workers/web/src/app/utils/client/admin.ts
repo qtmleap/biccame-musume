@@ -266,16 +266,6 @@ export const adminEndpoints = makeApi([
   },
   {
     method: 'post',
-    path: '/api/admin/webhook/jobs/:postId/recheck',
-    alias: 'recheckAdminWebhookJob',
-    parameters: [
-      { name: 'postId', type: 'Path', schema: z.string().regex(/^\d{1,20}$/) },
-      { name: 'candidateId', type: 'Query', schema: z.uuid().optional() }
-    ],
-    response: WebhookJobSchema
-  },
-  {
-    method: 'post',
     path: '/api/admin/webhook/jobs/:postId/resolve',
     alias: 'resolveAdminWebhookJob',
     parameters: [
