@@ -1,13 +1,15 @@
 import { detectionConfiguration } from '@api/services/webhook-config'
 import { detectionDeadline } from '@api/services/webhook-processing-context'
 import type { Bindings } from '@api/types/bindings'
+import { CHARACTER_QUESTION_KEY, STORE_QUESTION_KEY } from '@biccame/shared/event-detect/associations'
 import { type ClefRequest, type ClefResponse, ClefResponseSchema } from '@biccame/shared/event-detect/clef'
 import {
   confirmTargetOf,
   createConfirmRequest,
   createDetectionRequests,
   type DetectionThresholds,
-  hasConfirmTarget
+  hasConfirmTarget,
+  thresholdOf
 } from '@biccame/shared/event-detect/detection'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
 
@@ -50,9 +52,9 @@ const sendRequest = async (
 
 /**
  * 投稿を Clef に判定させ、全バッチの回答をまとめて返す。DB へは何も書かない。
- * 1段目は各送信が64問以下。全バッチが成功してから、2段目として、最上位に選ばれた具体的な店舗・娘を「この店舗ですか」「このビッカメ娘ですか」と
- * はい/いいえで確認する質問を、1リクエストにまとめて1回送る（どちらも具体的でなければ2段目は送らず、質問も作らない）。
- * 最上位の娘が店舗の娘（最上位の店舗と同じ ID）なら、指定がなければ店舗の娘とみなして娘は聞かない。
+ * 1段目は各送信が64問以下。全バッチが成功してから、2段目として、最上位に選ばれた具体的な店舗・娘のうち最上位の確率が下限（既定 70%）未満のものを
+ * 「この店舗ですか」「このビッカメ娘ですか」とはい/いいえで確認する質問を、1リクエストにまとめて1回送る（対象が無ければ2段目は送らず、質問も作らない）。
+ * 最上位の娘が店舗の娘（最上位の店舗と同じ ID）でも、具体的な娘で下限未満なら娘も聞く（店舗と娘は二回チェックする）。
  * まとめた request / response には確認の質問と回答（store_confirm・character_confirm）も含める。
  * 全バッチと2段目が成功するまで、一部の回答だけを返さない（不正・不完全な応答は例外）。
  * beforeBatch は各バッチ（2段目を含む）を送る直前に、そこまでの送信入力を渡して呼ばれる。送信試行の記録は呼び出し側が決める。
@@ -71,8 +73,14 @@ export const runWebhookDetection = async (
     firstResponses.push(await sendRequest(env, configuration.model, request))
   }
   const firstAnswers = Object.fromEntries(firstResponses.flatMap((batch) => Object.entries(batch.answers)))
-  // 2段目の対象は、1段目の choice の最上位（確率の下限は見ない）。店舗の娘は娘の対象にしない。1段目の応答が出そろってから作る。
-  const target = confirmTargetOf(firstAnswers)
+  // 2段目の対象は、1段目の choice の最上位が具体的な店舗・娘で、かつ最上位の確率が下限（store・character のしきい値。既定 70%）未満のもの。
+  // 下限以上は確認なしで確定するので聞かない。下限は判定（evaluateDetection）と同じ thresholdOf で引く。店舗の娘も、具体的な娘なら娘の対象にする。
+  // 1段目の応答が出そろってから作る。
+  const thresholds = detectionThresholds(configuration)
+  const target = confirmTargetOf(firstAnswers, {
+    store: thresholdOf(thresholds, STORE_QUESTION_KEY),
+    character: thresholdOf(thresholds, CHARACTER_QUESTION_KEY)
+  })
   const confirmRequests = hasConfirmTarget(target) ? [createConfirmRequest(firstRequests[0], target)] : []
   const confirmResponses: ClefResponse[] = []
   for (const [index, request] of confirmRequests.entries()) {

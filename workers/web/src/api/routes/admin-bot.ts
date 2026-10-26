@@ -7,6 +7,7 @@ import {
 } from '@api/services/webhook-config'
 import type { Bindings } from '@api/types/bindings'
 import { discordDeliveryResultSchema, discordStatusSchema, discordTestRequestSchema } from '@biccame/shared/bot'
+import { resolveFieldThresholds } from '@biccame/shared/event-detect/detection'
 import {
   AdminBotConfigurationErrorSchema,
   AdminBotConfigurationRequestSchema,
@@ -135,7 +136,17 @@ routes.openapi(
         JSON.stringify(configuration.fieldThresholds)
       )
       await c.env.BICCAME_MUSUME_EVENTS.put(EVENT_DETECTION_MODEL_KEY, configuration.model)
-      return c.json(configuration, 200)
+      // 応答は常に全項目。古いクライアントが 8 項目で保存したときも、足りない項目は既定値にして返す（次に状態を読んだときと同じ値）。
+      return c.json(
+        {
+          ...configuration,
+          fieldThresholds: resolveFieldThresholds(
+            configuration.thresholds.choiceThreshold,
+            configuration.fieldThresholds
+          )
+        },
+        200
+      )
     } catch {
       return c.json({ error: 'configuration_unavailable' as const }, 503)
     }

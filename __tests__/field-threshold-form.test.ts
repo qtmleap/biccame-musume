@@ -4,7 +4,7 @@ import {
   type FieldThresholds,
   resolveFieldThresholds
 } from '@biccame/shared/event-detect/detection'
-import type { EventThresholds } from '@biccame/shared/schemas/admin-bot.dto'
+import { AdminBotConfigurationRequestSchema, type EventThresholds } from '@biccame/shared/schemas/admin-bot.dto'
 import {
   botConfigurationForm,
   eventThresholdInputValue,
@@ -23,11 +23,15 @@ const saved: FieldThresholds = {
   status: 0.8,
   category: 0.91,
   store: 0.92,
+  store_confirm: 0.71,
+  character: 0.72,
+  character_confirm: 0.73,
   start_date: 0.93,
   end_date: 0.94,
   quantity: 0.95,
   condition: 0.96,
-  purchase_amount: 0.825
+  purchase_amount: 0.825,
+  charge_amount: 0.97
 }
 // 判定全体の3つ。登録 90%・対象外 50%・必須項目の選択 90%（環境変数の既定値）。
 const savedEvent: EventThresholds = { eventThreshold: 0.9, ignoreThreshold: 0.5, choiceThreshold: 0.9 }
@@ -239,16 +243,18 @@ describe('botConfigurationForm', () => {
     )
   })
 
-  test('送る body は8項目すべてを含み、既定値（status 0.8）の設定でも欠けない', () => {
+  test('送る body は12項目すべてを含み、既定値（status 0.8、店舗・娘 0.7）の設定でも欠けない', () => {
     const form = botConfigurationForm({
       ...base,
       savedThresholds: resolveFieldThresholds(0.9),
-      drafts: { store: '50' }
+      drafts: { status: '70' }
     })
     if (form.request === null) throw new Error('Expected a request')
     expect(Object.keys(form.request.fieldThresholds).sort()).toEqual([...FIELD_THRESHOLD_KEYS].sort())
-    expect(form.request.fieldThresholds.status).toBe(0.8)
-    expect(form.request.fieldThresholds.store).toBe(0.5)
+    expect(form.request.fieldThresholds.status).toBe(0.7)
+    expect(form.request.fieldThresholds.store).toBe(0.7)
+    expect(form.request.fieldThresholds.character_confirm).toBe(0.7)
+    expect(AdminBotConfigurationRequestSchema.safeParse(form.request).success).toBe(true)
   })
 })
 

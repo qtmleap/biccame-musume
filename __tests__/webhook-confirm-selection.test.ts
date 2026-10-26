@@ -1,7 +1,8 @@
 import { expect, test } from 'bun:test'
+import { EVENT_DETECTION_FIELD_THRESHOLDS_KEY } from '@api/services/webhook-config'
 import { runWebhookDetection } from '@api/services/webhook-detection-run'
 import { type ClefAnswer, type ClefRequest, ClefRequestSchema } from '@biccame/shared/event-detect/clef'
-import { DETECTION_VERSION } from '@biccame/shared/event-detect/detection'
+import { DETECTION_VERSION, resolveFieldThresholds } from '@biccame/shared/event-detect/detection'
 import { answer, fixture, makePost, migrate } from './fixtures/webhook-multiple-events'
 
 // 2 段目（v16 の確認）を送る runWebhookDetection の単体。実際の AI は呼ばず、フェイクの AI が 1 段目の最上位と 2 段目の「はい」の確率を決める。
@@ -14,6 +15,8 @@ type Plan = {
   confirm?: 'ok' | 'throw' | 'invalid' | 'incomplete' | 'wrong_type'
   /** 1 段目の応答を失敗させる。 */
   first?: 'ok' | 'throw'
+  /** 1 段目の最上位の確率（既定 0.6）。70% 以上は確認なしで確定するので、確認を聞かせるため既定は 70% 未満にする。 */
+  probability?: number
 }
 const isConfirm = (request: ClefRequest) => request.questions.is_event === undefined
 
@@ -30,7 +33,8 @@ const harness = async (name: string, plan: Plan) => {
           if (plan.first === 'throw') throw new Error('Synthetic first stage failure')
           return answer(parsed.data, {
             ...(plan.store === undefined ? {} : { store: plan.store }),
-            ...(plan.character === undefined ? {} : { character: plan.character })
+            ...(plan.character === undefined ? {} : { character: plan.character }),
+            probability: plan.probability === undefined ? 0.6 : plan.probability
           })
         }
         const mode = plan.confirm === undefined ? 'ok' : plan.confirm
@@ -90,6 +94,58 @@ test('店舗も娘も具体的なら、1 段目の後に確認を 1 リクエス
   }
 }, 60000)
 
+test('1 段目の最上位が 70% 以上なら確認を聞かず、2 段目は送らない（呼び出しが 1 回に減る）。ちょうど 70% も聞かない', async () => {
+  for (const probability of [0.99, 0.85, 0.7]) {
+    const { cleanup, env, calls } = await harness(`confirm-selection-confident-${probability}`, {
+      store: 'akiba',
+      character: 'funato',
+      probability
+    })
+    try {
+      const sent: number[] = []
+      const run = await runWebhookDetection(env, post, 'akiba', async (requests) => {
+        sent.push(requests.length)
+      })
+      expect(calls, String(probability)).toHaveLength(1)
+      expect(sent).toEqual([1])
+      expect(run.requests).toHaveLength(1)
+      expect(Object.keys(run.request.questions)).not.toContain('store_confirm')
+      expect(Object.keys(run.request.questions)).not.toContain('character_confirm')
+      expect(Object.keys(run.response.answers)).not.toContain('store_confirm')
+    } finally {
+      await cleanup()
+    }
+  }
+})
+
+test('70% 未満（69.9%）は確認を聞く。保存した店舗のしきい値が高ければ（0.9）、85% でも聞く', async () => {
+  const below = await harness('confirm-selection-below', { store: 'akiba', character: 'funato', probability: 0.699 })
+  try {
+    await runWebhookDetection(below.env, post, 'akiba', async () => {})
+    expect(below.calls).toHaveLength(2)
+    expect(Object.keys(below.calls[1].request.questions)).toEqual(['store_confirm', 'character_confirm'])
+  } finally {
+    await below.cleanup()
+  }
+  const saved = await harness('confirm-selection-saved-threshold', {
+    store: 'akiba',
+    character: 'funato',
+    probability: 0.85
+  })
+  try {
+    await saved.env.BICCAME_MUSUME_EVENTS.put(
+      EVENT_DETECTION_FIELD_THRESHOLDS_KEY,
+      JSON.stringify({ ...resolveFieldThresholds(0.9), store: 0.9 })
+    )
+    await runWebhookDetection(saved.env, post, 'akiba', async () => {})
+    // 店舗は保存値 0.9 に届かないので聞く。娘は既定 0.7 以上なので聞かない。
+    expect(saved.calls).toHaveLength(2)
+    expect(Object.keys(saved.calls[1].request.questions)).toEqual(['store_confirm'])
+  } finally {
+    await saved.cleanup()
+  }
+})
+
 test('店舗だけ・娘だけが具体的なら、その確認の質問だけを送る', async () => {
   const storeOnly = await harness('confirm-selection-store-only', { store: 'akiba', character: 'multiple' })
   try {
@@ -123,7 +179,7 @@ test('店舗だけ・娘だけが具体的なら、その確認の質問だけ�
   }
 })
 
-test('最上位の娘が店舗の娘（最上位の店舗と同じ ID）なら娘は聞かず、店舗の確認だけを 1 回送る', async () => {
+test('最上位の娘が店舗の娘（最上位の店舗と同じ ID）でも、店舗と娘の確認を 1 リクエストにまとめて 1 回送る（二回チェック）', async () => {
   const { cleanup, env, calls } = await harness('confirm-selection-store-character', {
     store: 'akiba',
     character: 'akiba'
@@ -133,14 +189,16 @@ test('最上位の娘が店舗の娘（最上位の店舗と同じ ID）なら�
     const run = await runWebhookDetection(env, post, 'akiba', async (requests) => {
       sent.push(requests.length)
     })
-    // AI は 2 回（1 段目 + 店舗だけの 2 段目）。娘の質問も state の娘の行も作らない。
+    // AI は 2 回（1 段目 + 店舗と娘をまとめた 2 段目）。店舗の確認と娘の確認の質問があり、state の末尾に 2 つの対象の行が付く。
     expect(calls).toHaveLength(2)
     expect(sent).toEqual([1, 2])
-    expect(Object.keys(calls[1].request.questions)).toEqual(['store_confirm'])
-    expect(calls[1].request.state.split('\n').at(-1)).toBe('確認対象の開催店舗: AKIBA店')
-    expect(calls[1].request.state).not.toContain('確認対象のビッカメ娘')
-    expect(Object.keys(run.request.questions)).not.toContain('character_confirm')
-    expect(Object.keys(run.response.answers)).not.toContain('character_confirm')
+    expect(Object.keys(calls[1].request.questions)).toEqual(['store_confirm', 'character_confirm'])
+    expect(calls[1].request.state.split('\n').slice(-2)).toEqual([
+      '確認対象の開催店舗: AKIBA店',
+      '確認対象のビッカメ娘: アキバたん'
+    ])
+    expect(Object.keys(run.request.questions)).toEqual(expect.arrayContaining(['store_confirm', 'character_confirm']))
+    expect(Object.keys(run.response.answers)).toEqual(expect.arrayContaining(['store_confirm', 'character_confirm']))
     expect(Object.keys(run.response.answers).sort()).toEqual(Object.keys(run.request.questions).sort())
   } finally {
     await cleanup()

@@ -4,11 +4,13 @@ import {
   ASSOCIATION_NONE,
   CHARACTER_CONFIRM_KEY,
   CHARACTER_OTHER,
+  CHARACTER_QUESTION_KEY,
   CHARACTER_SECRET,
   CHARACTER_STORE,
   detectionCharacters,
   detectionStores,
-  STORE_CONFIRM_KEY
+  STORE_CONFIRM_KEY,
+  STORE_QUESTION_KEY
 } from './associations'
 import type { ClefAnswer } from './clef'
 import { keyToDate, keyToQuantity } from './decide'
@@ -28,8 +30,13 @@ export type AnswerRow = {
   answer: string
   /** 表示した回答の確率（noul は、はいなら肯定の確率、いいえなら1から引いた確率）。確率を持たない回答（score など）は null */
   probability: number | null
-  threshold: number
-  confirmed: boolean
+  /**
+   * しきい値（0〜1）。判定を同じ行の確認が担う行（回答に対応する確認の行がある store / character の choice 行）は null で、画面は「—」を出す。
+   * 判定は直下の確認の行が決める（1段目の確率が70%未満なら確認の「はい」で決まる）ので、choice 行に確定・未確定を出すと食い違って見える。
+   */
+  threshold: number | null
+  /** 確定か。threshold が null の行（判定を確認の行が担う）は null。 */
+  confirmed: boolean | null
   /** 次点まで最大2件（確率の降順、選ばれた回答は除く）。noul は反対の回答1件 */
   alternatives: AnswerAlternative[]
 }
@@ -105,6 +112,9 @@ const lookup = (labels: ReadonlyMap<string, string>, value: string): string => {
   return label === undefined ? value : label
 }
 
+/** 回答表の質問キー（行の並びの順）。管理画面の項目別しきい値との対応が崩れていないかを、テストで検査するために公開する。 */
+export const answerQuestionKeys = (): readonly string[] => [...QUESTION_LABELS.keys()]
+
 /** 質問キーの日本語名（回答表の「質問」列と同じ）。知らないキーはキーのまま返す。 */
 export const questionLabel = (key: string): string => {
   if (key.startsWith('venue.')) {
@@ -175,11 +185,26 @@ const choiceLabel = (key: string, value: string): string => {
   }
 }
 
-const describeAnswer = (key: string, answer: ClefAnswer, thresholds: DetectionThresholds): AnswerRow => {
+// 1段目の choice の行と、その判定を担う確認の行の対応。確認の行が回答にある choice 行は、しきい値・判定を「—」にする。
+const CONFIRM_KEY_OF: ReadonlyMap<string, string> = new Map([
+  [STORE_QUESTION_KEY, STORE_CONFIRM_KEY],
+  [CHARACTER_QUESTION_KEY, CHARACTER_CONFIRM_KEY]
+])
+
+const describeAnswer = (
+  key: string,
+  answer: ClefAnswer,
+  thresholds: DetectionThresholds,
+  answers: Record<string, ClefAnswer>
+): AnswerRow => {
   const label = questionLabel(key)
-  // しきい値は evaluateDetection と同じ thresholdOf で引く（is_event はイベント用、9項目は項目別、未知のキーは共通値）。
+  // しきい値は evaluateDetection と同じ thresholdOf で引く（is_event はイベント用、店舗・娘は固定の 70%、未知のキーは共通値）。
   // 回答表の確定表示と実際の判定がずれないよう、ここで別の規則を持たない。
   const threshold = thresholdOf(thresholds, key)
+  // 対応する確認の行（store_confirm / character_confirm）が回答にある choice 行は、判定をその確認の行が担う（「確認が確定なら choice が確定かどうかは
+  // どうでもいい」）。保存済みの回答だけから決めるので、request は再生成しない。確認の行が無い保存データ（v15 以前）は、しきい値と確定を従来どおり出す。
+  const confirmKey = CONFIRM_KEY_OF.get(key)
+  const decidedByConfirm = confirmKey !== undefined && answers[confirmKey] !== undefined
   if (answer.type === 'noul') {
     // noul は肯定の確率 P(はい)。0.5 以上なら「はい」、未満なら「いいえ」を回答として出し、反対の回答を次点に出す。
     const yes = answer.noul
@@ -220,9 +245,11 @@ const describeAnswer = (key: string, answer: ClefAnswer, thresholds: DetectionTh
     label,
     answer: choiceLabel(key, answer.choice),
     probability,
-    threshold,
+    threshold: decidedByConfirm ? null : threshold,
     // 終了日の最有力が none（記載なし）なら、確率がしきい値未満でも確定扱い。evaluateDetection の終了日の扱いと揃える。
-    confirmed: (key === 'end_date' && answer.choice === 'none') || (probability !== null && probability >= threshold),
+    confirmed: decidedByConfirm
+      ? null
+      : (key === 'end_date' && answer.choice === 'none') || (probability !== null && probability >= threshold),
     alternatives
   }
 }
@@ -236,7 +263,7 @@ export const describeAnswers = (answers: Record<string, ClefAnswer>, thresholds:
   const unknown = Object.keys(answers).filter((key) => !QUESTION_LABELS.has(key))
   return [...known, ...unknown].flatMap((key) => {
     const answer = answers[key]
-    return answer === undefined ? [] : [describeAnswer(key, answer, thresholds)]
+    return answer === undefined ? [] : [describeAnswer(key, answer, thresholds, answers)]
   })
 }
 

@@ -146,7 +146,7 @@ test('replay with unmodified answers reproduces the saved decision, status, reas
   const module = realModule()
   const judgements = [
     judgementWith({ store: ['yuurakuchou', 0.95], character: ['yuurakuchou', 0.95] }),
-    judgementWith({ store: ['yuurakuchou', 0.5], character: ['other', 0.4] }),
+    judgementWith({ store: ['yuurakuchou', 0.4], character: ['other', 0.4] }),
     judgementWith({ store: ['honten', 0.95], character: ['honten', 0.95] })
   ]
   expect(checkReplayParity(module, judgements)).toEqual({ checked: 3, mismatched: 0, ok: true })
@@ -160,7 +160,8 @@ test('replay with unmodified answers reproduces the saved decision, status, reas
 
 test('top-one replay pins store and character to 1.0 and registers where the threshold held it back', () => {
   const module = realModule()
-  const low = judgementWith({ store: ['yuurakuchou', 0.5], character: ['other', 0.4] })
+  // 店舗の下限は 50% 固定なので、それを下回る 40% を「しきい値に届かない」候補とする。
+  const low = judgementWith({ store: ['yuurakuchou', 0.4], character: ['other', 0.4] })
   expect(replayDecision(module, low, 'saved').status).toBe('held')
   const pinned = replayDecision(module, low, 'top-one')
   expect(pinned.status).toBe('register')
@@ -176,7 +177,7 @@ test('a top-one registration with a wrong store is counted as wrong, not hidden'
   const module = realModule()
   const sample = goldCase(1, { events: [gold] })
   // 抽出段階も判定も同じ誤った店舗（honten）を指し、正解は有楽町。物品名で正解と対応づく。
-  const wrong = judgementWith({ store: ['honten', 0.6], character: ['honten', 0.6] }, 'honten')
+  const wrong = judgementWith({ store: ['honten', 0.4], character: ['honten', 0.4] }, 'honten')
   const record = buildCaseRecord(module, sample, resultOf([wrong]))
   expect(record.candidates[0].current.status).toBe('held')
   expect(record.candidates[0].topOne.status).toBe('register')

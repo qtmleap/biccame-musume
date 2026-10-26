@@ -15,6 +15,8 @@ export const GOAL_PIPELINE_PROFILE = {
     fieldThresholds: {
       status: 0.8,
       category: 0.85,
+      // 本番の KV に保存されている値のスナップショット（店舗 0.9）。保存した値が優先するので、この値のままだと店舗の最上位が 90% 未満の候補は
+      // 確認（2 段目）でしか確定できない。保存応答は確認を持たないので、回帰テストは店舗を既定（0.7）に差し替えて評価する。
       store: 0.9,
       start_date: 0.9,
       end_date: 0.9,

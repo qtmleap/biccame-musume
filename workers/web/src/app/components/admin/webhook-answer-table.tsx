@@ -173,45 +173,51 @@ export const WebhookAnswerTable = ({
                   </TableCell>
                 </TableRow>
               )}
-              {group.rows.map((row) => (
-                <TableRow key={row.key} className={cn(thresholds !== undefined && !row.confirmed && 'bg-warning/10')}>
-                  <TableCell className='font-medium'>{rowLabel(row)}</TableCell>
-                  <TableCell>{row.answer}</TableCell>
-                  <TableCell className='text-right'>
-                    <span className={MONO}>{detectionScoreLabel(row.probability)}</span>
-                  </TableCell>
-                  <TableCell className={cn('text-right', thresholds === undefined && 'text-muted-foreground')}>
-                    <span className={MONO}>{thresholds === undefined ? '—' : detectionScoreLabel(row.threshold)}</span>
-                  </TableCell>
-                  <TableCell>
-                    {thresholds === undefined ? (
-                      '—'
-                    ) : (
-                      <div className='flex items-center'>
-                        <Badge variant='outline' className={row.confirmed ? TONE.success : TONE.warning}>
-                          {row.confirmed ? '確定' : '未確定'}
-                        </Badge>
-                      </div>
-                    )}
-                  </TableCell>
-                  <TableCell className='text-muted-foreground'>
-                    {row.alternatives.length === 0 ? (
-                      '—'
-                    ) : (
-                      // 外側の等幅 span は行高 0、内側の sans の span だけ行高 20px にして、行ボックスと基線を sans で決める。
-                      // flex は items-baseline で基線揃えにし、日本語と等幅の数値の基線を隣のセルの文字と一致させる。
-                      <div className='flex items-baseline gap-4'>
-                        {row.alternatives.map((alternative) => (
-                          <span key={alternative.answer} className={cn(MONO, 'flex items-baseline gap-1')}>
-                            <span className='font-sans leading-5'>{alternative.answer}</span>{' '}
-                            {detectionScoreLabel(alternative.probability)}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {group.rows.map((row) => {
+                // しきい値が取れない間と、判定を直下の確認の行が担う choice 行（threshold / confirmed が null）は、しきい値と判定を「—」にして、
+                // 未確定の強調（bg-warning/10）も付けない。
+                const { threshold, confirmed } = row
+                const decided = thresholds !== undefined && threshold !== null && confirmed !== null
+                return (
+                  <TableRow key={row.key} className={cn(decided && !confirmed && 'bg-warning/10')}>
+                    <TableCell className='font-medium'>{rowLabel(row)}</TableCell>
+                    <TableCell>{row.answer}</TableCell>
+                    <TableCell className='text-right'>
+                      <span className={MONO}>{detectionScoreLabel(row.probability)}</span>
+                    </TableCell>
+                    <TableCell className={cn('text-right', !decided && 'text-muted-foreground')}>
+                      <span className={MONO}>{decided ? detectionScoreLabel(threshold) : '—'}</span>
+                    </TableCell>
+                    <TableCell>
+                      {decided ? (
+                        <div className='flex items-center'>
+                          <Badge variant='outline' className={confirmed ? TONE.success : TONE.warning}>
+                            {confirmed ? '確定' : '未確定'}
+                          </Badge>
+                        </div>
+                      ) : (
+                        '—'
+                      )}
+                    </TableCell>
+                    <TableCell className='text-muted-foreground'>
+                      {row.alternatives.length === 0 ? (
+                        '—'
+                      ) : (
+                        // 外側の等幅 span は行高 0、内側の sans の span だけ行高 20px にして、行ボックスと基線を sans で決める。
+                        // flex は items-baseline で基線揃えにし、日本語と等幅の数値の基線を隣のセルの文字と一致させる。
+                        <div className='flex items-baseline gap-4'>
+                          {row.alternatives.map((alternative) => (
+                            <span key={alternative.answer} className={cn(MONO, 'flex items-baseline gap-1')}>
+                              <span className='font-sans leading-5'>{alternative.answer}</span>{' '}
+                              {detectionScoreLabel(alternative.probability)}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
               {group.associations.map((association) => (
                 <AssociationAnswerRow key={association.key} label={association.label} names={association.names} />
               ))}

@@ -43,12 +43,14 @@ const ProvenanceSchema = z.object({
 // これ以外の未録画の質問は補わず、再生を失敗させる（条件などを捏造して録画の結果を変えないため）。
 const SYNTHETIC_KEYS = ['character', 'store'] as const
 // v16 の 2 段目（確認の質問だけの別の呼び出し）。録画に無いので、同じく合成の回答（はい 0.99）で補う。
-// 録画の抽出は店舗と娘が同じ ID（店舗の娘）なので、娘は確認の対象にならず、店舗の確認（store_confirm）だけが送られる。
-const CONFIRM_KEYS = ['store_confirm'] as const
+// 録画の抽出は店舗と娘が同じ ID（店舗の娘）だが、店舗と娘は二回チェックするので、店舗の確認（store_confirm）と
+// 娘の確認（character_confirm）の両方が、1 回の呼び出しにまとめて送られる。
+const CONFIRM_KEYS = ['character_confirm', 'store_confirm'] as const
+// 合成の確率は 0.6（70% 未満）に固定する。70% 以上は確認を聞かずに確定するので、2 段目の確認が送られる（録画に無い確認を合成で補う）ようにするため。
 const syntheticChoice = (choice: string, criteria: string[]): ClefAnswer => ({
   type: 'choice',
   choice,
-  probabilities: Object.fromEntries(criteria.map((key) => [key, key === choice ? 0.99 : 0.01 / (criteria.length - 1)]))
+  probabilities: Object.fromEntries(criteria.map((key) => [key, key === choice ? 0.6 : 0.4 / (criteria.length - 1)]))
 })
 const only = (values: readonly string[], label: string) => {
   if (values.length !== 1) throw new Error(`Recorded extraction must have exactly one ${label}`)
@@ -198,7 +200,7 @@ for (const id of ['962146543649239040', '1012319233298989056']) {
           }))
         })
       )
-      // 1 段目の判定の後に、2 段目の確認が 1 回（店舗だけ。店舗の娘は娘の確認を聞かない）。
+      // 1 段目の判定の後に、2 段目の確認が 1 回（店舗の娘も、店舗と娘の両方を 1 回にまとめて聞く）。
       expect(synthetic.character).toBe(synthetic.store)
       expect(calls).toEqual(['count', 'extract', 'judge', 'confirm'])
       // 合成したのは store / character と、2 段目の確認だけ。ほかの回答は録画のまま。
@@ -214,7 +216,7 @@ for (const id of ['962146543649239040', '1012319233298989056']) {
       for (const [key, value] of Object.entries(saved))
         if (!isSynthetic(key)) expect(value).toEqual(recordedAnswers[key])
       expect(saved.store_confirm).toEqual({ type: 'noul', noul: 0.99 })
-      expect(saved).not.toHaveProperty('character_confirm')
+      expect(saved.character_confirm).toEqual({ type: 'noul', noul: 0.99 })
       expect(saved.store).toMatchObject({ type: 'choice', choice: synthetic.store })
       expect(saved.character).toMatchObject({ type: 'choice', choice: synthetic.character })
       expect(candidate.post.extractionContext?.originalText).toBe(recording.post.text)

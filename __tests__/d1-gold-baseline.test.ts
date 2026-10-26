@@ -83,10 +83,10 @@ const save = async (directory: string, sample: GoldCase, result: GoalPipelineRes
 const setup = async () => {
   const run = await fresh()
   const out = await fresh()
-  // 1: 店舗・娘が90%以上、件数の回答も90%以上 / 2: 件数の回答が80% / 3: 店舗・娘が50% / 4: 通信エラーで未完
+  // 1: 店舗・娘が90%以上、件数の回答も90%以上 / 2: 件数の回答が80% / 3: 店舗・娘が40%（店舗の下限 70% 未満） / 4: 通信エラーで未完
   const samples = [1, 2, 3, 4].map((index) => goldCase(index, { events: [gold(index)] }))
   const sure = judgementWith({ store: ['yuurakuchou', 0.95], character: ['yuurakuchou', 0.95] })
-  const unsure = judgementWith({ store: ['yuurakuchou', 0.5], character: ['yuurakuchou', 0.5] })
+  const unsure = judgementWith({ store: ['yuurakuchou', 0.4], character: ['yuurakuchou', 0.4] })
   await save(run, samples[0], resultFor(samples[0], sure, 0.95, 'matched'))
   await save(run, samples[1], resultFor(samples[1], sure, 0.8, 'low_confidence'))
   await save(run, samples[2], resultFor(samples[2], unsure, 0.95, 'matched'))
@@ -127,12 +127,12 @@ test('the four settings separate the audit gate and the top-one adoption, and an
   const byId = Object.fromEntries(report.settings.map((setting) => [setting.id, setting]))
   // 候補は終了日を持たない（D1 の正解には 2026-03-31 がある）。R1（announce-time）では一致、strict では不一致になる。
   // 以下の全項目一致は R1（主指標）で見て、strict は最後にまとめて確かめる。
-  // (a) 90% の監査では、件数の回答が80%の投稿と、店舗・娘が50%の候補は登録に進まない。
+  // (a) 90% の監査では、件数の回答が80%の投稿と、店舗・娘が40%の候補は登録に進まない。
   expect(byId.a).toMatchObject({ registered: 1, announceTime: { exact: 1 } })
   expect(byId.a.heldReasons).toMatchObject({ distribution_item_count_low_confidence: 1, store_unconfirmed: 1 })
-  // (b) 監査を外すと、件数の回答が80%の投稿も登録に進む。店舗・娘が50%の候補は残る。
+  // (b) 監査を外すと、件数の回答が80%の投稿も登録に進む。店舗・娘が40%の候補は残る。
   expect(byId.b).toMatchObject({ registered: 2, announceTime: { exact: 2 } })
-  // (c) 最上位採用で、店舗・娘が50%の候補も登録に進む。
+  // (c) 最上位採用で、店舗・娘が40%の候補も登録に進む。
   expect(byId.c).toMatchObject({ registered: 3, announceTime: { exact: 3 } })
   // (d) 70% の監査なら、件数の回答が80%の投稿は通る。
   expect(byId.d).toMatchObject({ registered: 3, announceTime: { exact: 3 } })

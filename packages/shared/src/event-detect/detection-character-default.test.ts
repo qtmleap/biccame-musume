@@ -14,7 +14,7 @@ import {
 } from './detection-test-fixtures'
 
 // 規則: 「ビッカメ娘の値が明示されていないときは、その店舗のビッカメ娘」。D1 でも娘が明示されるのは店舗の娘と違うときだけ。
-// 明示 = 確率が下限（0.3）以上の娘が、店舗と別の具体的な娘で2段目の確認を通った、または other・secret・店舗と同じ娘。
+// 明示 = 最上位の確率が下限（0.7）以上の娘、または 70% 未満でも2段目の確認の「はい」が下限以上の具体的な娘。
 const value = post('ふなとーたん擬人化記念アクキーを2026年11月3日から全員に配布します', {
   screenName: 'bic_funabashi',
   url: 'https://x.com/bic_funabashi/status/2109221721773576390'
@@ -48,11 +48,13 @@ const registeredCharacters = (result: ReturnType<typeof run>) => {
   if (result.status !== 'register') throw new Error(`Expected registration: ${result.reasons.join(',')}`)
   return result.candidate.characterIds
 }
-const both = withConfirm({ store: 'funabashi', character: 'funato' })
+// 娘が 60%（70% 未満）の具体的な娘。確認を聞いた request でだけ、確認の「はい」が明示かどうかを決める。
+const funato60 = { character: choice('funato', { funato: 0.6, funabashi: 0.2 }) }
+const both = withConfirm({ character: 'funato' })
 
 describe('娘が明示されていなければ、採用した店舗の娘にして保留しない', () => {
-  test('確率が下限（0.3）に届かない娘は、最上位が具体的な娘でも店舗の娘で登録する', () => {
-    const result = run(first, { character: choice('funato', { funato: 0.25, funabashi: 0.2 }) })
+  test('確率が下限（0.7）に届かない娘は、確認の質問が無い request では、最上位が具体的な娘でも店舗の娘で登録する', () => {
+    const result = run(first, funato60)
     expect(result).toMatchObject({ status: 'register', reasons: [] })
     expect(registeredCharacters(result)).toEqual(['funabashi'])
   })
@@ -62,67 +64,85 @@ describe('娘が明示されていなければ、採用した店舗の娘にし�
       expect(registeredCharacters(result), top).toEqual(['funabashi'])
     }
   })
-  test('娘の回答が確率の散った（0.3 未満の）具体的な娘でも、店舗が採用されていれば店舗の娘になる', () => {
+  test('娘の回答が確率の散った（0.7 未満の）具体的な娘でも、店舗が採用されていれば店舗の娘になる', () => {
     const result = run(first, { character: choice('akiba', { akiba: 0.1, funato: 0.09, abeno: 0.08 }) })
     expect(registeredCharacters(result)).toEqual(['funabashi'])
   })
-  test('店舗と別の娘の確認が下限未満なら、確認が通らないので店舗の娘で登録し、character_confirm_low は付けない', () => {
-    const result = run(both, { character: choice('funato', { funato: 0.99 }) }, yes(0.99, 0.69))
+  test('70% 未満で娘の確認が下限未満なら、確認が通らないので店舗の娘で登録し、character_confirm_low は付けない', () => {
+    const result = run(both, funato60, yes(0.99, 0.69))
     expect(result).toMatchObject({ status: 'register', reasons: [] })
     expect(registeredCharacters(result)).toEqual(['funabashi'])
   })
-  test('店舗と別の娘の確認の回答が欠けていても、店舗の娘で登録する（例外にしない）', () => {
-    const result = run(
-      both,
-      { character: choice('funato', { funato: 0.99 }) },
-      { [STORE_CONFIRM_KEY]: yes(1, 1)[STORE_CONFIRM_KEY] }
-    )
+  test('70% 未満で娘の確認の回答が欠けていても、店舗の娘で登録する（例外にしない）', () => {
+    const result = run(both, funato60, { [STORE_CONFIRM_KEY]: yes(1, 1)[STORE_CONFIRM_KEY] })
     expect(result).toMatchObject({ status: 'register', reasons: [] })
     expect(registeredCharacters(result)).toEqual(['funabashi'])
   })
-  test('共通値を下げれば娘の下限も下がり、0.25 の娘は明示されたものとして採用する', () => {
-    const answers = { character: choice('funato', { funato: 0.25, funabashi: 0.2 }) }
+  test('共通値を下げても娘の下限（0.7）は下がらず、0.6 の娘は確認なしでは明示されたものとして採用しない', () => {
     const loose: DetectionThresholds = { ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.2 }
-    expect(registeredCharacters(run(first, answers, {}, loose))).toEqual(['funato'])
-    expect(registeredCharacters(run(first, answers))).toEqual(['funabashi'])
+    expect(registeredCharacters(run(first, funato60, {}, loose))).toEqual(['funabashi'])
+    expect(registeredCharacters(run(first, funato60))).toEqual(['funabashi'])
   })
 })
 
 describe('娘が明示されていれば、その娘をそのまま採用する', () => {
-  test('店舗と別の娘で、確率が下限以上かつ確認が下限以上なら、その娘で登録する', () => {
-    const result = run(both, { character: choice('funato', { funato: 0.99 }) }, yes(0.99, 0.99))
+  test('70% 以上なら、確認なしで明示として採用する（確認の質問が無い request でも）', () => {
+    const result = run(first, { character: choice('funato', { funato: 0.85, funabashi: 0.1 }) })
+    expect(result).toMatchObject({ status: 'register', reasons: [] })
+    expect(registeredCharacters(result)).toEqual(['funato'])
+  })
+  test('ちょうど下限（0.7）の娘は、確認なしで明示として採用する（境界）', () => {
+    const result = run(first, { character: choice('funato', { funato: 0.7, funabashi: 0.2 }) })
+    expect(registeredCharacters(result)).toEqual(['funato'])
+  })
+  test('70% 未満でも、娘の確認が下限以上なら、その娘を明示として採用する', () => {
+    const result = run(both, funato60, yes(0.99, 0.99))
     expect(result).toMatchObject({ status: 'register', reasons: [] })
     expect(registeredCharacters(result)).toEqual(['funato'])
   })
   test('ちょうど確認の下限（0.7）でも、その娘で登録する', () => {
-    const result = run(both, { character: choice('funato', { funato: 0.99 }) }, yes(0.7, 0.7))
+    expect(registeredCharacters(run(both, funato60, yes(0.7, 0.7)))).toEqual(['funato'])
+  })
+  test('70% 以上なら、確認が回答にあって低くても、確認を見ずに明示として採用する', () => {
+    const request = withConfirm({ character: 'funato' })
+    const result = run(request, { character: choice('funato', { funato: 0.85, funabashi: 0.1 }) }, yes(0.99, 0.01))
     expect(registeredCharacters(result)).toEqual(['funato'])
   })
-  test('確認の質問が無い request（v15 以前の保存データ）は関門なしで、店舗と別の娘をそのまま採用する', () => {
-    const result = run(first, { character: choice('funato', { funato: 0.6, funabashi: 0.3 }) })
-    expect(registeredCharacters(result)).toEqual(['funato'])
+  test('下限（0.7）をわずかに下回る 0.69 の娘は、共通値が低くても確認なしでは明示として採用しない', () => {
+    const answers = { character: choice('funato', { funato: 0.69, funabashi: 0.2 }) }
+    expect(registeredCharacters(run(first, answers))).toEqual(['funabashi'])
+    const loose: DetectionThresholds = { ...DEFAULT_DETECTION_THRESHOLDS, fieldThreshold: 0.2 }
+    expect(registeredCharacters(run(first, answers, {}, loose))).toEqual(['funabashi'])
   })
-  test('下限ちょうど（0.3）の娘は明示されたものとして採用する', () => {
-    const result = run(first, { character: choice('funato', { funato: 0.3, funabashi: 0.2 }) })
-    expect(registeredCharacters(result)).toEqual(['funato'])
-  })
-  test.each(['other', 'secret'])('娘が %s なら（確認は聞かない）、その値をそのまま採用する', (special) => {
+  test.each(['other', 'secret'])('娘が %s で 70% 以上なら（確認は聞かない）、その値をそのまま採用する', (special) => {
     const request = withConfirm({ store: 'funabashi' })
     const result = run(request, associationAnswers('funabashi', special), {
       [STORE_CONFIRM_KEY]: { type: 'noul', noul: 0.99 }
     })
     expect(registeredCharacters(result)).toEqual([special])
   })
-  test('娘が店舗の娘（同じ ID）なら、店舗の娘で登録する', () => {
-    const request = withConfirm({ store: 'funabashi' })
-    const result = run(request, associationAnswers('funabashi', 'funabashi'), {
-      [STORE_CONFIRM_KEY]: { type: 'noul', noul: 0.99 }
-    })
+  test('娘が店舗の娘（同じ ID）で 70% 未満なら、店舗と娘の両方を確認し、確認が通れば店舗の娘で登録する', () => {
+    const request = withConfirm({ store: 'funabashi', character: 'funabashi' })
+    const sameId = { character: choice('funabashi', { funabashi: 0.6 }) }
+    const result = run(request, sameId, yes(0.99, 0.99))
     expect(registeredCharacters(result)).toEqual(['funabashi'])
   })
-  test('店舗の娘の確認が request に残っている保存データは、残った質問どおり関門を掛け、低ければ店舗の娘のまま登録する', () => {
+  test('娘が店舗の娘（同じ ID）で娘の確認が低くても、保留にせず同じ店舗の娘で登録する（character_confirm_low は付けない）', () => {
     const asked = withConfirm({ store: 'funabashi', character: 'funabashi' })
-    const result = run(asked, associationAnswers('funabashi', 'funabashi'), yes(0.99, 0.01))
+    const sameId = { character: choice('funabashi', { funabashi: 0.6 }) }
+    const result = run(asked, sameId, yes(0.99, 0.01))
+    expect(result).toMatchObject({ status: 'register', reasons: [] })
+    expect(registeredCharacters(result)).toEqual(['funabashi'])
+  })
+  test('娘の確認の質問が無い保存データ（旧版の店舗の娘）は、店舗の娘のまま登録する', () => {
+    const request = withConfirm({ store: 'funabashi' })
+    const result = run(
+      request,
+      { character: choice('funabashi', { funabashi: 0.6 }) },
+      {
+        [STORE_CONFIRM_KEY]: { type: 'noul', noul: 0.99 }
+      }
+    )
     expect(registeredCharacters(result)).toEqual(['funabashi'])
   })
 })
@@ -158,7 +178,7 @@ describe('娘が指定されていない扱いにしないもの（従来どお�
       expect(result, store).toMatchObject({ status: 'held', reasons: ['store_unconfirmed', 'character_unconfirmed'] })
     }
   })
-  test('店舗の確率が下限に届かないときも、娘の既定は効かず保留する', () => {
+  test('店舗の確率が 70% 未満で確認の質問が無いときは、店舗が採用されず、娘の既定は効かず保留する', () => {
     const result = run(first, {
       store: choice('funabashi', { funabashi: 0.25, none: 0.2 }),
       character: choice('funato', { funato: 0.25, funabashi: 0.2 })
@@ -169,7 +189,7 @@ describe('娘が指定されていない扱いにしないもの（従来どお�
     const request = withConfirm({ store: 'funabashi' })
     const result = run(
       request,
-      { character: choice('funato', { funato: 0.25, funabashi: 0.2 }) },
+      { store: choice('funabashi', { funabashi: 0.6 }), character: choice('funato', { funato: 0.25, funabashi: 0.2 }) },
       { [STORE_CONFIRM_KEY]: { type: 'noul', noul: 0.4 } }
     )
     expect(result).toMatchObject({
@@ -179,7 +199,8 @@ describe('娘が指定されていない扱いにしないもの（従来どお�
     expect(result).not.toHaveProperty('candidate')
   })
   test('店舗が採用されず娘の確認も低いときだけ、character_unconfirmed に character_confirm_low を併記する', () => {
-    const result = run(both, { character: choice('funato', { funato: 0.99 }) }, yes(0.1, 0.1))
+    const asked = withConfirm({ store: 'funabashi', character: 'funato' })
+    const result = run(asked, { store: choice('funabashi', { funabashi: 0.6 }), ...funato60 }, yes(0.1, 0.1))
     expect(result).toMatchObject({
       status: 'held',
       reasons: ['store_unconfirmed', 'store_confirm_low', 'character_unconfirmed', 'character_confirm_low']
@@ -189,7 +210,7 @@ describe('娘が指定されていない扱いにしないもの（従来どお�
     const request = withConfirm({ character: 'funato' })
     const result = run(
       request,
-      { store: choice('none', { none: 0.99 }), character: choice('funato', { funato: 0.99 }) },
+      { store: choice('none', { none: 0.99 }), ...funato60 },
       { [CHARACTER_CONFIRM_KEY]: { type: 'noul', noul: 0.99 } }
     )
     expect(result).toMatchObject({ status: 'held', reasons: ['store_unconfirmed'] })
@@ -197,28 +218,27 @@ describe('娘が指定されていない扱いにしないもの（従来どお�
 })
 
 describe('resolveCharacterIds（娘の決め方の単体）', () => {
-  const input = { stores: ['funabashi'], choice: undefined, top: undefined, confirmLow: false }
-  test('明示されている（確率が下限以上）なら、確認が通る限りその値。確認が低ければ店舗の娘', () => {
+  // choice は「明示として採用された最上位」。70% 以上、または 70% 未満で確認が通ったものだけが入る。
+  const input = { stores: ['funabashi'], choice: undefined, top: undefined }
+  test('明示として採用された娘はその値。明示されていなければ（choice が無ければ）店舗の娘', () => {
     expect(resolveCharacterIds({ ...input, choice: 'funato', top: 'funato' })).toEqual(['funato'])
-    expect(resolveCharacterIds({ ...input, choice: 'funato', top: 'funato', confirmLow: true })).toEqual(['funabashi'])
+    expect(resolveCharacterIds({ ...input, top: 'funato' })).toEqual(['funabashi'])
     expect(resolveCharacterIds({ ...input, choice: 'other', top: 'other' })).toEqual(['other'])
   })
-  test('確率不足は、最上位が none・multiple でも回答なしでもなければ店舗の娘', () => {
+  test('明示されていないのは、最上位が none・multiple でも回答なしでもなければ店舗の娘', () => {
     expect(resolveCharacterIds({ ...input, top: 'funato' })).toEqual(['funabashi'])
     expect(resolveCharacterIds({ ...input, top: 'multiple' })).toEqual([])
     expect(resolveCharacterIds({ ...input, top: 'none' })).toEqual([])
     expect(resolveCharacterIds({ ...input, top: undefined })).toEqual([])
   })
-  test('確率が下限以上の multiple・none は、店舗の娘にせず空（保留）', () => {
+  test('明示として採用された multiple・none は、店舗の娘にせず空（保留）', () => {
     expect(resolveCharacterIds({ ...input, choice: 'multiple', top: 'multiple' })).toEqual([])
     expect(resolveCharacterIds({ ...input, choice: 'none', top: 'none' })).toEqual([])
   })
   test('店舗が採用されない、または店舗の ID が EventCharacter として無効なら、店舗の娘にできず空', () => {
     expect(resolveCharacterIds({ ...input, stores: [], top: 'funato' })).toEqual([])
-    expect(resolveCharacterIds({ ...input, stores: [], choice: 'funato', top: 'funato', confirmLow: true })).toEqual([])
     expect(resolveCharacterIds({ ...input, stores: ['invented'], top: 'funato' })).toEqual([])
-    expect(
-      resolveCharacterIds({ ...input, stores: ['invented'], choice: 'funato', top: 'funato', confirmLow: true })
-    ).toEqual([])
+    // 明示として採用された娘は、店舗が採用されなくても娘の値としては採用される（保留の理由は店舗側が決める）。
+    expect(resolveCharacterIds({ ...input, stores: [], choice: 'funato', top: 'funato' })).toEqual(['funato'])
   })
 })

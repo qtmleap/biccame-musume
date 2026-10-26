@@ -171,7 +171,7 @@ describe('開催店舗・ビッカメ娘は選ばれた1件だけを採用する
     })
   })
 
-  test('最上位の確率が下限（0.3）に届かない選択は保留のまま、採用しない', () => {
+  test('最上位の確率が下限（0.7）に届かず確認の質問も無い選択は保留のまま、採用しない', () => {
     const request = requestWithAssociations(chargePost)
     const result = evaluateWithStore(
       chargePost,

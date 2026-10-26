@@ -29,8 +29,9 @@ const withStore = (store: number): DetectionThresholds => ({
 })
 const casesOf = (split: FixtureSplit) => fixture.cases.filter((item) => item.split === split)
 
-// 本番の設定の KV のスナップショット（店舗 90%）をそのまま使うと、保存済みの店舗の値が効いて 1 件も登録されない。
-// 管理画面で店舗の閾値を STORE_DEFAULT_THRESHOLD（30%）に保存した後の設定を「本番設定」として評価する。
+// 本番の設定の KV のスナップショット（保存済みの店舗 90%）をそのまま使うと、保存した値が優先するので、店舗の 1 段目のしきい値が 90% になる。
+// 保存応答は 2 段目（確認）の回答を持てないため、70% 以上 90% 未満の店舗は確認で拾えず、1 件も登録されない（下の「保存済みの店舗の閾値」のテスト）。
+// 実運用ではそうした店舗は確認を聞かれて拾われる。ここでは店舗の既定（STORE_DEFAULT_THRESHOLD = 70%）を明示して評価し、規則の効果を守る。
 //
 // 下限（登録数・precision）は件数の監査を外した評価で守る。委任の「本番ポリシーに合わせる」とは異なるので理由を残す:
 // 本番の監査（90%）は、保存応答では dev が 1 件（全項目一致 0）、test が 0 件しか通さない。そこに下限を置いても
@@ -51,7 +52,9 @@ const audit70 = { dev: evaluateSplit('dev', ADOPTED, 0.7), test: evaluateSplit('
 //   1. フィクスチャは「作られた版（v15）」の 1 段目の質問への回答であること。
 //   2. 生成済みの版定義に、v15 の 1 段目の質問が 1 文字も変わらず残っていること（内容の sha256 で固定）。
 //   3. 保存応答の再評価に使う現行の request は、娘の質問を除けば v15 と同一で、娘の質問の選択肢は v15 の選択肢を全て含むこと。
-// 2 段目の回答はフィクスチャに無い。確認の質問を含まない request は evaluateDetection の判定を変えないので、再評価は v15 のときと同じ数字になる。
+// 2 段目の回答はフィクスチャに無い。1 段目の最上位が 70% 以上の店舗・娘は確認なしで確定するので数字は出せるが、70% 未満は確認でしか確定できず、
+// 保存応答は確認を受けられないので採用されない。したがって下の数字は「2 段目を受けられない保存応答での下限」で、実運用では 70% 未満の候補が
+// 確認で拾われるため、登録数はこれより多くなる（実 AI で測っていない）。
 // v17 の回答を含むフィクスチャへの再作成は、v17 を実 AI で測り直した後に行う（docs/event-detection-golden.md）。
 const FIXTURE_VERSION = 'v5-webhook-v15-concise-author'
 // 生成済みの v15 の版定義（保存済み。変えてはならない）の内容の sha256。
@@ -140,29 +143,37 @@ describe('Golden フィクスチャの整合', () => {
   })
 })
 
-// 下限は 2026-10-22 の実測（規則は COND・ESN・CHG の 3 つ、END は試して外した）から余裕を持たせた値。
-// 娘の既定（指定がなければ店舗の娘。detection-character.ts）を入れた後に、現行の evaluateDetection で測り直した実測も同じだった:
-// 開発用 R1 登録 26・全項目一致 23・88.5%、検証用 R1 登録 70・全項目一致 50・71.4%（件数の監査 70% は開発用 20 / 18、検証用 61 / 45）。
-// 保存応答で娘の確率が下限（0.3）に届かず、娘の既定で character_unconfirmed が外れる候補は 4 件だけで、どれも他の理由（店舗の食い違い・状態・購入額など）で保留のまま、登録は増減しない。
-// 登録 0 件・精度の低下は無いので、下限は置き直さない（実測から余裕を持たせた値のまま）。
+// 下限は、店舗・娘の採用を「最上位が 70% 以上なら確認なしで確定」にしたあとの実測（現行の evaluateDetection で保存応答を再評価。実 AI は呼んでいない）から
+// 余裕を持たせた値。規則は COND・ESN・CHG の 3 つ（END は試して外した）。
+// 実測（件数の監査を外した評価）:
+//   開発用 R1 登録 20・全項目一致 18・90.0%、検証用 R1 登録 62・全項目一致 44・71.0%
+//   （件数の監査 70% は開発用 17 / 15、検証用 59 / 43）。
+// 変更前（旧版の下限 30%）は 開発用 26 / 23 / 88.5%、検証用 70 / 50 / 71.4%、50% 固定にした場合は 25 / 22 / 88.0% と 67 / 47 / 70.1%。
+// 下限を 70% にして登録が減る（開発用 26 → 20、検証用 70 → 62）のは、確率が 70% 未満の最上位が、確認の質問を受けられない保存応答では採用されず
+// store_unconfirmed で保留になるため。この数字は「2 段目を受けられない保存応答での下限」で、実運用では 70% 未満の候補が確認の「はい」で拾われるので、
+// 登録数は下限より多くなる。拾われた分の精度は、実 AI で測るまで分からない（docs/event-detection-golden.md の 70% の節）。
+// 下限を緩めた理由は上のとおり（保存応答に 2 段目の回答が無いため、70% 未満を採用できない）。精度が下がったからではない:
+// 減った登録（開発用 6・検証用 8）のうち、全項目一致の正解が 11 件（開発用 5・検証用 6）、誤登録が 3 件（開発用 1・検証用 2）。
+// 誤登録は開発用 3 → 2、検証用 20 → 18 と減ったが、取りこぼした正解のほうが多い。
 // 再評価は決定的なので、割れたときは評価ロジックの変更が精度を下げたということ。
 // 下限は主指標の R1 に置く。D1 の終了日はイベント終了後に人が確定した値で、開始時点の投稿からは取れないので、
 // 候補に終了日が無ければ一致とする（候補に終了日があるときは D1 と同じ日付のときだけ一致。docs/event-detection-golden.md）。
 //   開発用（規則を決めるのに使った 100 投稿）:
-//     R1: 登録 26・全項目一致 23・precision 88.5%（下限は登録 22 以上・precision 80% 以上・全項目一致 20 以上）
-//     strict（参考）: 登録 26・全項目一致 19・precision 73.1%
+//     R1: 登録 20・全項目一致 18・precision 90.0%（下限は登録 17 以上・precision 80% 以上・全項目一致 15 以上）
+//     strict（参考）: 登録 20・全項目一致 14・precision 70.0%
 //   検証用（まだ規則に使っていない 174 投稿）:
-//     R1: 登録 70・全項目一致 50・precision 71.4%（下限は登録 62 以上・precision 65% 以上・全項目一致 46 以上）
-//     strict（参考）: 登録 70・全項目一致 42・precision 60.0%
-//   合計（開発用 + 検証用）: R1 登録 96・全項目一致 73（precision 76.0%、登録率 22.8%）、strict 登録 96・全項目一致 61
-// 余裕は登録 4〜8 件、precision 6〜9 ポイント、全項目一致 3〜4 件。AI の応答が変わらない限りゆらがないが、規則の微調整を妨げない幅にしてある。
+//     R1: 登録 62・全項目一致 44・precision 71.0%（下限は登録 57 以上・precision 65% 以上・全項目一致 40 以上）
+//     strict（参考）: 登録 62・全項目一致 36・precision 58.1%
+//   合計（開発用 + 検証用）: R1 登録 82・全項目一致 62（precision 75.6%、登録率 19.4%）、strict 登録 82・全項目一致 50
+// 余裕は登録 3〜5 件、precision 5〜10 ポイント、全項目一致 3〜4 件。AI の応答が変わらない限りゆらがないが、規則の微調整を妨げない幅にしてある。
 const RULES_FLOOR = {
-  dev: { registered: 22, precision: 0.8 },
-  test: { registered: 62, precision: 0.65 }
+  dev: { registered: 17, precision: 0.8 },
+  test: { registered: 57, precision: 0.65 }
 } as const
-// 基準（店舗・娘を最上位採用し、保留規則を足さない場合）の R1 の全項目一致は 開発用 23・検証用 52。規則で失ってよいのは検証用で 6 件まで。
+// 基準（店舗・娘を最上位採用し、保留規則を足さない場合）の R1 の全項目一致は 開発用 23・検証用 52（旧版の下限 30% のときの実測）。
+// 下限を 70% にした分（2 段目を受けられない保存応答での下限）として、検証用は 12 件まで失ってよい。
 const BASELINE_EXACT = { dev: 23, test: 52 } as const
-const EXACT_FLOOR = { dev: 20, test: 46 } as const
+const EXACT_FLOOR = { dev: 15, test: 40 } as const
 // 主指標（R1）。終了日以外の項目と登録の可否は strict と同じ。
 const primary = (split: FixtureSplit) => {
   const { registered, announceTime } = summarize(rules[split], 'raw')
@@ -184,7 +195,7 @@ describe('現行の判定（店舗・娘を最上位採用 + 保留規則）の�
     expect(BASELINE_EXACT[split] - exact).toBeLessThanOrEqual(BASELINE_EXACT[split] - EXACT_FLOOR[split])
   })
 
-  test('保留規則は精度を上げる: 検証用の誤登録が、基準の 34 件（86 件中）から 24 件以下に減る（実測 20 件）', () => {
+  test('保留規則は精度を上げる: 検証用の誤登録が、基準の 34 件（86 件中）から 24 件以下に減る（実測 18 件）', () => {
     const { registered, exact } = primary('test')
     expect(registered - exact).toBeLessThanOrEqual(24)
   })
@@ -195,9 +206,9 @@ describe('現行の判定（店舗・娘を最上位採用 + 保留規則）の�
       expect(result.exact, split).toBeLessThanOrEqual(result.announceTime.exact)
       expect(result.exact, split).toBeGreaterThan(0)
     }
-    // 参考の実測: 開発用 19 件・検証用 42 件。終了日の食い違いだけで、R1 との差は開発用 4 件・検証用 8 件。
-    expect(summarize(rules.dev, 'raw').exact).toBe(19)
-    expect(summarize(rules.test, 'raw').exact).toBe(42)
+    // 参考の実測: 開発用 14 件・検証用 36 件。終了日の食い違いだけで、R1 との差は開発用 4 件・検証用 8 件。
+    expect(summarize(rules.dev, 'raw').exact).toBe(14)
+    expect(summarize(rules.test, 'raw').exact).toBe(36)
   })
 
   test('娘の既定: 保存応答で character_unconfirmed の保留は、店舗が採用されないか、娘の最上位が multiple・none のものだけ', () => {
@@ -255,18 +266,31 @@ describe('本番の運用と件数の監査', () => {
     }
   })
 
-  test('保存済みの店舗の閾値（KV のスナップショットの 90%）は下限で上書きされず、効いたままになる', () => {
+  test('保存済みの店舗の閾値（KV のスナップショットの 90%）は判定に効く。保存応答は確認を受けられないので、90% 未満の店舗は採用されない', () => {
     for (const split of ['dev', 'test'] as const) {
+      // 保存値 0.9 のまま（本番の KV と同じ）: 保存応答に 90% 以上の最上位は無く、確認の回答も無いので、登録は 0 件。
+      // 実運用では 70% 以上 90% 未満の店舗は確認を聞かれて拾われるので、0 件にはならない。確認の回数が増えるだけで登録は止まらない。
       const kept = summarize(evaluateSplit(split, withStore(snapshotFields.store), 0.9), 'raw')
       expect(kept.registered, split).toBe(0)
     }
   })
 
-  // 実測（R1）: 開発用 登録 20・全項目一致 18（90.0%）、検証用 登録 61・全項目一致 45（73.8%）。strict は 15 / 37。
+  test('店舗のしきい値は下げるほど（確認なしで確定する範囲が広がるほど）登録が増える（単調）', () => {
+    for (const split of ['dev', 'test'] as const) {
+      const registeredAt = (store: number) => summarize(evaluateSplit(split, withStore(store), 0.9), 'raw').registered
+      const [at90, at70, at50, at30] = [0.9, 0.7, 0.5, 0.3].map(registeredAt)
+      expect(at90, split).toBe(0)
+      expect(at70, split).toBeGreaterThan(at90)
+      expect(at50, split).toBeGreaterThanOrEqual(at70)
+      expect(at30, split).toBeGreaterThanOrEqual(at50)
+    }
+  })
+
+  // 実測（R1）: 開発用 登録 17・全項目一致 15（88.2%）、検証用 登録 59・全項目一致 43（72.9%）。strict は 12 / 35。
   test('参考: 件数の監査を 70% にすれば、検証用で登録 52 件以上・precision 65% 以上になる（終了日は R1）', () => {
     const dev = summarize(audit70.dev, 'production')
     const test = summarize(audit70.test, 'production')
-    expect(dev.registered).toBeGreaterThanOrEqual(16)
+    expect(dev.registered).toBeGreaterThanOrEqual(14)
     expect(dev.announceTime.precision).toBeGreaterThanOrEqual(0.8)
     expect(test.registered).toBeGreaterThanOrEqual(52)
     expect(test.announceTime.precision).toBeGreaterThanOrEqual(0.65)

@@ -126,11 +126,15 @@ const fieldThresholds = {
   status: 0.8,
   category: 0.8,
   store: 0.8,
+  store_confirm: 0.8,
+  character: 0.8,
+  character_confirm: 0.8,
   start_date: 0.8,
   end_date: 0.8,
   quantity: 0.8,
   condition: 0.8,
-  purchase_amount: 0.8
+  purchase_amount: 0.8,
+  charge_amount: 0.8
 }
 export const adminResponses = {
   getAdminBotStatus: () => ({
