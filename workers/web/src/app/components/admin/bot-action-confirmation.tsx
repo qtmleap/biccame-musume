@@ -17,6 +17,8 @@ type BotActionConfirmationProps = {
   description: string
   actionLabel: string
   isPending: boolean
+  /** 実行ボタンだけを無効にする（キャンセルは押せる）。実行できない理由を description に出すときに使う。省略時は無効にしない。 */
+  actionDisabled?: boolean
   onConfirm: () => Promise<void>
 }
 
@@ -27,6 +29,7 @@ export const BotActionConfirmation = ({
   description,
   actionLabel,
   isPending,
+  actionDisabled = false,
   onConfirm
 }: BotActionConfirmationProps) => (
   <AlertDialog open={open} onOpenChange={isPending ? undefined : onOpenChange}>
@@ -40,7 +43,11 @@ export const BotActionConfirmation = ({
         <AlertDialogCancel className='border-card-border' disabled={isPending}>
           キャンセル
         </AlertDialogCancel>
-        <Button className='bg-brand text-brand-foreground hover:bg-brand/90' onClick={onConfirm} disabled={isPending}>
+        <Button
+          className='bg-brand text-brand-foreground hover:bg-brand/90'
+          onClick={onConfirm}
+          disabled={isPending || actionDisabled}
+        >
           {isPending && <Loader2 className='size-4 animate-spin' />}
           {actionLabel}
         </Button>

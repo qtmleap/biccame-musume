@@ -19,7 +19,7 @@ import {
   LINK_LABEL,
   linkOf,
   REJUDGE_LABEL,
-  RETRY_LABEL,
+  REMOVED_LABELS,
   renderDetail
 } from './fixtures/webhook-rejudge'
 
@@ -35,34 +35,43 @@ describe('保留・対象外ジョブの再判定', () => {
     }
   })
 
-  test('再判定できるのは保留と、人が却下していない対象外のジョブだけで、通知状態には左右されない', () => {
+  test('再実行できるのは保留・処理に失敗した・人が却下していない対象外のジョブだけで、通知状態には左右されない', () => {
+    const rejudgeable = (status: string) => status === 'held' || status === 'ignored' || status === 'failed'
     for (const status of WebhookJobStatusSchema.options) {
       for (const notificationStatus of ['pending', 'sent', 'failed', 'unknown', 'skipped']) {
-        expect(webhookActionAvailability(status, notificationStatus, []).canRejudge).toBe(
-          status === 'held' || status === 'ignored'
-        )
+        expect(webhookActionAvailability(status, notificationStatus, []).canRejudge).toBe(rejudgeable(status))
         expect(webhookActionAvailability(status, notificationStatus, ['not_distribution_event']).canRejudge).toBe(
-          status === 'held' || status === 'ignored'
+          rejudgeable(status)
         )
       }
     }
     expect(webhookActionAvailability('held', 'sent', [])).toEqual({
       canResolve: true,
       canLink: true,
-      canRetryProcessing: false,
       canRejudge: true,
-      canRecheck: false,
       canRetryNotification: false
     })
+  })
+
+  test('処理に失敗したジョブは再実行（canRejudge）できる。処理の再実行・判定の再確認の可否は無くなった', () => {
+    expect(webhookActionAvailability('failed', 'pending', [])).toEqual({
+      canResolve: false,
+      canLink: false,
+      canRejudge: true,
+      canRetryNotification: false
+    })
+    for (const status of WebhookJobStatusSchema.options) {
+      const availability = webhookActionAvailability(status, 'sent', [])
+      expect(availability).not.toHaveProperty('canRetryProcessing')
+      expect(availability).not.toHaveProperty('canRecheck')
+    }
   })
 
   test('人が却下した対象外のジョブ（reasons に manually_rejected）は再判定できない。他の操作の規則は変わらない', () => {
     expect(webhookActionAvailability('ignored', 'skipped', ['manually_rejected'])).toEqual({
       canResolve: false,
       canLink: true,
-      canRetryProcessing: false,
       canRejudge: false,
-      canRecheck: false,
       canRetryNotification: false
     })
     expect(
@@ -72,9 +81,7 @@ describe('保留・対象外ジョブの再判定', () => {
     expect(webhookActionAvailability('ignored', 'skipped', ['not_distribution_event'])).toEqual({
       canResolve: false,
       canLink: true,
-      canRetryProcessing: false,
       canRejudge: true,
-      canRecheck: false,
       canRetryNotification: false
     })
     for (const status of ['registered', 'queued', 'processing', 'failed']) {
@@ -110,12 +117,12 @@ describe('保留・対象外ジョブの再判定', () => {
   // ボタンの探し方が正しいことを、すでにある操作ボタンで確かめる。
   test('既存の操作ボタンは状態によらず描画され、使えるときだけ有効になる。「補完して登録」はリンクで常に押せる', async () => {
     const held = await renderDetail({ ...baseJob, status: 'held', notificationStatus: 'sent' })
-    expect(buttonState(held, RETRY_LABEL)).toBe('disabled')
+    expect(buttonState(held, '通知を再送')).toBe('disabled')
     expect(buttonState(held, LINK_LABEL)).toBe('enabled')
     const failed = await renderDetail({ ...baseJob, status: 'failed' })
-    expect(buttonState(failed, RETRY_LABEL)).toBe('enabled')
+    expect(buttonState(failed, '通知を再送')).toBe('disabled')
     expect(buttonState(failed, LINK_LABEL)).toBe('disabled')
-    expect(buttonState(await renderDetail(null), RETRY_LABEL)).toBe('disabled')
+    expect(buttonState(await renderDetail(null), '通知を再送')).toBe('disabled')
     const autoIgnored = await renderDetail({
       ...baseJob,
       status: 'ignored',
@@ -132,15 +139,13 @@ describe('保留・対象外ジョブの再判定', () => {
     }
   })
 
-  test('「AI で判定し直す」ボタンは状態によらず常に描画され、保留と対象外のときだけ有効になる', async () => {
+  test('「再実行」ボタンは受信詳細を取得できていれば、状態によらず常に描画され、押せる（押せない状態の理由は確認ダイアログに出る）', async () => {
     for (const status of WebhookJobStatusSchema.options) {
-      expect(buttonState(await renderDetail({ ...baseJob, status }), REJUDGE_LABEL)).toBe(
-        status === 'held' || status === 'ignored' ? 'enabled' : 'disabled'
-      )
+      expect(buttonState(await renderDetail({ ...baseJob, status }), REJUDGE_LABEL)).toBe('enabled')
     }
   })
 
-  test('人が却下した対象外のジョブでは「AI で判定し直す」ボタンが描画されたまま無効になり、AI が対象外にしたジョブでは有効になる', async () => {
+  test('人が却下した対象外のジョブでも、AI が対象外にしたジョブでも、「再実行」ボタンは押せる。ほかのボタンの規則は変わらない', async () => {
     const autoIgnored = await renderDetail({
       ...baseJob,
       status: 'ignored',
@@ -154,14 +159,13 @@ describe('保留・対象外ジョブの再判定', () => {
       notificationStatus: 'skipped',
       reasons: ['manually_rejected']
     })
-    expect(buttonState(rejected, REJUDGE_LABEL)).toBe('disabled')
+    expect(buttonState(rejected, REJUDGE_LABEL)).toBe('enabled')
     // 対象外でも手動連携は可能だが、処理・通知の再送は許可しない。
     expect(buttonState(autoIgnored, LINK_LABEL)).toBe('enabled')
-    expect(buttonState(autoIgnored, RETRY_LABEL)).toBe('disabled')
     expect(buttonState(autoIgnored, '通知を再送')).toBe('disabled')
   })
 
-  test('「AI で判定し直す」ボタンは通知状態によらず、保留なら有効になる', async () => {
+  test('「再実行」ボタンは通知状態によらず押せる', async () => {
     for (const notificationStatus of WebhookNotificationStatusSchema.options) {
       expect(buttonState(await renderDetail({ ...baseJob, status: 'held', notificationStatus }), REJUDGE_LABEL)).toBe(
         'enabled'
@@ -169,40 +173,49 @@ describe('保留・対象外ジョブの再判定', () => {
     }
   })
 
-  test('読み込み前でも「AI で判定し直す」ボタンは隠れず、無効のまま描画される', async () => {
+  test('受信詳細を取得できていない間（job が無い間）は、「再実行」ボタンは隠れず、無効のまま描画される', async () => {
     expect(buttonState(await renderDetail(null), REJUDGE_LABEL)).toBe('disabled')
   })
 
-  test('「AI で判定し直す」ボタンは「失敗した処理を再実行」と「通知を再送」の間に置かれる', async () => {
+  test('「再実行」ボタンは「対象外にする」と「通知を再送」の間に置かれる', async () => {
     const markup = await renderDetail({ ...baseJob, status: 'held' })
-    const retry = markup.indexOf(RETRY_LABEL)
+    const reject = markup.indexOf('対象外にする')
     const rejudge = markup.indexOf(REJUDGE_LABEL)
     const notification = markup.indexOf('通知を再送')
-    expect(retry).toBeGreaterThan(-1)
-    expect(rejudge).toBeGreaterThan(retry)
+    expect(reject).toBeGreaterThan(-1)
+    expect(rejudge).toBeGreaterThan(reject)
     expect(notification).toBeGreaterThan(rejudge)
   })
 
-  test('2つのボタンは状態によらず常に描画され、旧文言（「判定を再試行」「再判定」）のボタンは出ない', async () => {
+  test('「再実行」ボタンは状態によらず常に1つだけ描画され、統合前の文言のボタンは出ない', async () => {
     const screens = [
       ...(await Promise.all(WebhookJobStatusSchema.options.map((status) => renderDetail({ ...baseJob, status })))),
       await renderDetail(null)
     ]
     for (const markup of screens) {
-      expect(buttonState(markup, RETRY_LABEL)).not.toBe('missing')
       expect(buttonState(markup, REJUDGE_LABEL)).not.toBe('missing')
-      // 旧文言はボタンの文言にも説明（title）にも残らない。
-      expect(buttonState(markup, '判定を再試行')).toBe('missing')
-      expect(buttonState(markup, '再判定')).toBe('missing')
+      // 「再実行」を含むボタンは、ちょうど1つ（失敗した処理の再実行ボタンが残っていない）。
+      const buttons = [...markup.matchAll(/<button\b[^>]*>.*?<\/button>/g)].filter((match) =>
+        match[0].includes(REJUDGE_LABEL)
+      )
+      expect(buttons).toHaveLength(1)
+      // 統合前の文言は、ボタンの文言にも説明（title）にも、画面のどこにも残らない。
+      for (const label of REMOVED_LABELS) expect(buttonState(markup, label)).toBe('missing')
+      for (const label of ['失敗した処理を再実行', '判定を再確認', 'AI で判定し直す'])
+        expect(markup).not.toContain(label)
     }
   })
 
-  test('2つのボタンには、違いが分かる説明（title）が無効のときも付く', async () => {
-    const enabled = await renderDetail({ ...baseJob, status: 'failed' })
-    const disabled = await renderDetail({ ...baseJob, status: 'registered' })
-    for (const markup of [enabled, disabled]) {
-      expect(markup).toContain('title="処理に失敗した投稿を、もう一度処理します（保存済みの判定結果があれば再利用）"')
-      expect(markup).toContain('title="保存済みの回答を消して、AI で判定し直します"')
+  test('「再実行」ボタンには、押すと確認が出る旨と判定し直す旨の説明（title）が、どの状態でも付く', async () => {
+    const screens = [
+      await renderDetail({ ...baseJob, status: 'failed' }),
+      await renderDetail({ ...baseJob, status: 'registered' }),
+      await renderDetail(null)
+    ]
+    for (const markup of screens) {
+      expect(markup).toContain(
+        'title="押すと確認が出ます（保存済みの回答と判定結果を消して、AI で最初から判定し直します）"'
+      )
     }
   })
 })

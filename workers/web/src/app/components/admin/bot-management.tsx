@@ -399,7 +399,7 @@ export const BotManagement = () => {
             </dl>
             <p className='mt-3 text-sm leading-relaxed text-muted-foreground'>
               判定スコアは正解率を保証しません。必須情報が不足する投稿は、スコアが高くても保留になります。
-              しきい値を変えても、過去の判定結果は変わりません。反映するには「AI で判定し直す」を実行してください。
+              しきい値を変えても、過去の判定結果は変わりません。反映するには「再実行」を実行してください。
             </p>
             <Button variant='outline' asChild className='mt-4 border-card-border'>
               <Link to='/admin/webhooks'>

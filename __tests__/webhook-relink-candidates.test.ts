@@ -196,7 +196,8 @@ describe('操作の可否（画面とサーバーで同じ規則）', () => {
     ['held', 'held', ['needs_review'], { canLink: true, canRejudge: true, canResolve: true }],
     ['ignored', 'ignored', ['not_distribution_event'], { canLink: true, canRejudge: true, canResolve: false }],
     ['ignored + manually_rejected', 'ignored', rejected, { canLink: true, canRejudge: false, canResolve: false }],
-    ['failed', 'failed', [], { canLink: false, canRejudge: false, canResolve: false }],
+    ['failed', 'failed', [], { canLink: false, canRejudge: true, canResolve: false }],
+    ['failed + manually_rejected', 'failed', rejected, { canLink: false, canRejudge: false, canResolve: false }],
     ['queued', 'queued', [], { canLink: false, canRejudge: false, canResolve: false }],
     ['processing', 'processing', [], { canLink: false, canRejudge: false, canResolve: false }]
   ]
@@ -206,36 +207,34 @@ describe('操作の可否（画面とサーバーで同じ規則）', () => {
   })
 
   test('登録済みの手動連携以外では、manually_linked を持っていても判定し直せない', () => {
-    for (const status of ['failed', 'queued', 'processing']) {
+    for (const status of ['queued', 'processing']) {
       expect(webhookActionAvailability(status, 'sent', linked).canRejudge).toBe(false)
       expect(webhookActionAvailability(status, 'sent', linked).canLink).toBe(false)
     }
     expect(webhookActionAvailability('ignored', 'skipped', [...linked, ...rejected]).canRejudge).toBe(false)
   })
 
-  test('処理失敗の再実行と通知の再送の規則は変わらない', () => {
-    expect(webhookActionAvailability('failed', 'pending', []).canRetryProcessing).toBe(true)
-    expect(webhookActionAvailability('registered', 'pending', linked).canRetryProcessing).toBe(false)
+  test('失敗したジョブは再実行（canRejudge）できるが、manually_linked を持っていても連携はできない。通知の再送の規則は変わらない', () => {
+    expect(webhookActionAvailability('failed', 'pending', linked).canRejudge).toBe(true)
+    expect(webhookActionAvailability('failed', 'pending', linked).canLink).toBe(false)
     expect(webhookActionAvailability('registered', 'failed', linked)).toEqual({
       canResolve: false,
       canLink: true,
-      canRetryProcessing: false,
       canRejudge: true,
-      canRecheck: true,
       canRetryNotification: true
     })
   })
 })
 
 describe('受信詳細の画面', () => {
-  test('登録済みでは連携が使え、AI での判定し直しは手動連携のときだけ使える。対象外にするは使えない', async () => {
+  test('登録済みでは連携が使え、「再実行」は理由によらず押せる(押せない状態の理由は確認ダイアログに出る)。対象外にするは使えない', async () => {
     const linked = await renderDetail({ ...baseJob, status: 'registered', reasons: ['manually_linked'] })
     expect(buttonState(linked, LINK_LABEL)).toBe('enabled')
     expect(buttonState(linked, REJUDGE_LABEL)).toBe('enabled')
     expect(buttonState(linked, '対象外にする')).toBe('disabled')
     const auto = await renderDetail({ ...baseJob, status: 'registered', reasons: ['title_generated'] })
     expect(buttonState(auto, LINK_LABEL)).toBe('enabled')
-    expect(buttonState(auto, REJUDGE_LABEL)).toBe('disabled')
+    expect(buttonState(auto, REJUDGE_LABEL)).toBe('enabled')
     expect(buttonState(auto, '対象外にする')).toBe('disabled')
   })
 

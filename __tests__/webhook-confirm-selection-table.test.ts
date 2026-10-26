@@ -26,21 +26,22 @@ const rowsOf = (markup: string) =>
         .trim()
     }))
 
-test('確認の質問が 1 行ずつ出て、質問の文言・対象の名前・「はい」の確率・しきい値・確定が読める', () => {
+test('確認の質問が 1 行ずつ出て、質問の文言（対象の名前を添えない素のラベル）・「はい」の確率・しきい値・確定が読める', () => {
   const rows = rowsOf(render(answers(0.85, 0.9)))
   const store = rows.find((row) => row.text.startsWith('開催・配布店舗の確認'))
   const character = rows.find((row) => row.text.startsWith('対象ビッカメ娘の確認'))
-  expect(store?.text).toContain('船橋駅FACE店')
   expect(store?.text).toContain('はい')
   expect(store?.text).toContain('85.0%')
   expect(store?.text).toContain('70.0%')
   expect(store?.text).toContain('確定')
-  expect(character?.text).toContain('ふなとーたん')
   expect(character?.text).toContain('90.0%')
+  // 確認の行のラベルに、1 段目で選んだ店舗・娘の名前は付かない。
+  expect(store?.text).not.toContain('船橋駅FACE店')
+  expect(character?.text).not.toContain('ふなとーたん')
   // 1 段目の行（開催・配布店舗、対象ビッカメ娘）の直後に並ぶ。
   const labels = rows.map((row) => row.text.split(' ')[0])
-  expect(labels.indexOf('開催・配布店舗の確認（船橋駅FACE店）')).toBe(labels.indexOf('開催・配布店舗') + 1)
-  expect(labels.indexOf('対象ビッカメ娘の確認（ふなとーたん）')).toBe(labels.indexOf('対象ビッカメ娘') + 1)
+  expect(labels.indexOf('開催・配布店舗の確認')).toBe(labels.indexOf('開催・配布店舗') + 1)
+  expect(labels.indexOf('対象ビッカメ娘の確認')).toBe(labels.indexOf('対象ビッカメ娘') + 1)
 })
 
 test('確認の確率が下限（70%）未満の行は「未確定」で、警告の背景になる。下限以上の行は「確定」', () => {
@@ -54,18 +55,19 @@ test('確認の確率が下限（70%）未満の行は「未確定」で、警�
   expect(character?.html).not.toContain('bg-warning/10')
 })
 
-test('確認の行は基本判定のグループに並び、1 段目の store / character と同じ表に収まる（行数は 5 行）', () => {
+test('確認の行は基本判定のグループに並び、1 段目の store / character と同じ表に収まる（行数は 4 行。is_event の行は出さない）', () => {
   const markup = render(answers(0.85, 0.9))
   const bodies = [...markup.matchAll(/<tbody\b[^>]*aria-label="([^"]+)"/g)].map((match) => match[1])
   expect(bodies).toEqual(['基本判定'])
-  expect(rowsOf(markup)).toHaveLength(5)
+  expect(rowsOf(markup)).toHaveLength(4)
+  expect(markup).not.toContain('ビッカメ娘のイベントか')
 })
 
 test('確認の行が無い保存データ（v15 以前）の表は、確認の行を足さない', () => {
   const { store_confirm: _store, character_confirm: _character, ...v15 } = answers(0.9, 0.9)
   const markup = render(v15)
   expect(markup).not.toContain('の確認')
-  expect(rowsOf(markup)).toHaveLength(3)
+  expect(rowsOf(markup)).toHaveLength(2)
 })
 
 test('店舗の娘（店舗と同じ ID）は娘の確認を聞かないので、店舗の確認の行だけが出て、表は壊れない', () => {
@@ -77,9 +79,9 @@ test('店舗の娘（店舗と同じ ID）は娘の確認を聞かないので�
   const markup = render(storeCharacter)
   const rows = rowsOf(markup)
   const labels = rows.map((row) => row.text.split(' ')[0])
-  expect(labels).toContain('開催・配布店舗の確認（船橋駅FACE店）')
+  expect(labels).toContain('開催・配布店舗の確認')
   expect(labels.some((label) => label.startsWith('対象ビッカメ娘の確認'))).toBe(false)
   // 1 段目の娘の行は残る（確認の行だけが無い）。
   expect(labels).toContain('対象ビッカメ娘')
-  expect(rows).toHaveLength(4)
+  expect(rows).toHaveLength(3)
 })

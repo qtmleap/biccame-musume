@@ -37,7 +37,7 @@ describe('Webhook管理画面の判定・通知表示', () => {
       }
     }
     const judge = [...markup.matchAll(/<td\b[^>]*>(?:(?!<\/td>).)*data-slot="badge".*?<\/td>/g)]
-    expect(judge).toHaveLength(5)
+    expect(judge).toHaveLength(4)
     for (const cell of judge) expect(cell[0]).toMatch(/<div class="flex items-center">/)
     // 次点は箱の中心ではなく基線で揃える。
     expect(markup).toMatch(/<div class="flex items-baseline gap-4">/)
@@ -262,16 +262,16 @@ describe('Webhook管理画面の判定・通知表示', () => {
     expect(webhookActionAvailability('registered', 'failed', [])).toEqual({
       canResolve: false,
       canLink: true,
-      canRetryProcessing: false,
       canRejudge: false,
-      canRecheck: true,
       canRetryNotification: true
     })
   })
 
-  test('保留の解決と失敗した判定の再実行を区別する', () => {
+  test('保留の解決と、失敗したジョブの再実行（判定し直し）を区別する', () => {
     expect(webhookActionAvailability('held', 'sent', []).canResolve).toBe(true)
-    expect(webhookActionAvailability('failed', 'pending', []).canRetryProcessing).toBe(true)
+    // 失敗したジョブは解決の対象ではなく、再実行（canRejudge）で最初からやり直す。
+    expect(webhookActionAvailability('failed', 'pending', []).canResolve).toBe(false)
+    expect(webhookActionAvailability('failed', 'pending', []).canRejudge).toBe(true)
     expect(webhookActionAvailability('processing', 'unknown', []).canRetryNotification).toBe(false)
     expect(webhookActionAvailability('ignored', 'sent', []).canResolve).toBe(false)
     // 対象外は解決の対象ではないが、人が却下していなければ再判定はできる。
@@ -317,8 +317,8 @@ describe('受信詳細・受信履歴の戻り先', () => {
 describe('管理画面の outline ボタンの枠線', () => {
   test('受信詳細の outline ボタンはすべて枠線に border-card-border を指定する', async () => {
     const tags = outlineTags(await renderDetail(listJob, 0.9))
-    // 更新・連携・対象外にする・失敗した処理を再実行・AI で判定し直す・判定を再確認・通知を再送。
-    expect(tags).toHaveLength(7)
+    // 更新・連携・対象外にする・再実行・通知を再送。
+    expect(tags).toHaveLength(5)
     for (const tag of tags) expect(tag).toContain('border-card-border')
   })
 

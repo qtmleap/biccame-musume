@@ -79,18 +79,19 @@ export const retryWebhookJob = async (env: Bindings, postId: string, input: z.in
 }
 
 /**
- * 再判定できる行だけを更新対象にする SQL の条件。table は更新対象の表（reasons_json を読む表）。
- * 保留、人が却下していない対象外、手動で連携した登録済み（reasons に manually_linked）が対象。
+ * 再判定（画面の「再実行」）できる行だけを更新対象にする SQL の条件。table は更新対象の表（reasons_json を読む表）。
+ * 保留、処理に失敗した行、人が却下していない対象外、手動で連携した登録済み（reasons に manually_linked）が対象。
  * 自動登録された登録済みはパイプラインが作ったイベントを持つため、再判定で重複登録や再通知が起こりうるので含めない。
+ * 失敗した行は対象外と同じく、人の却下（manually_rejected）がなければ対象にする（画面側の canRejudgeJob と同じ）。
  */
 const rejudgeableRow = (table: 'webhook_event_jobs' | 'webhook_event_candidates') =>
   `(status='held'
-    OR (status='ignored' AND NOT EXISTS (SELECT 1 FROM json_each(${table}.reasons_json) WHERE value='manually_rejected'))
+    OR (status IN ('ignored','failed') AND NOT EXISTS (SELECT 1 FROM json_each(${table}.reasons_json) WHERE value='manually_rejected'))
     OR (status='registered' AND EXISTS (SELECT 1 FROM json_each(${table}.reasons_json) WHERE value='manually_linked')))`
 
 /**
- * 保留ジョブ、人が却下していない対象外ジョブ、手動で連携した登録済みジョブを再判定に戻す。
- * 保存済みの判定結果と回答を消して queued に戻し、キューへ積み直す。
+ * 保留ジョブ、処理に失敗したジョブ、人が却下していない対象外ジョブ、手動で連携した登録済みジョブを再判定に戻す（画面の「再実行」）。
+ * 保存済みの判定結果と回答を消して queued に戻し、キューへ積み直す。失敗したジョブは途中の結果が壊れていることがあるため、保留と同じく最初からやり直す。
  * 人が却下したジョブ（reasons に manually_rejected）は再判定で上書きしない。画面側の webhookActionAvailability と同じ規則。
  * 登録済みは reasons に manually_linked があるものだけ。誤った連携を外すため event_id を NULL に戻す（連携先のイベント本体は変更しない）。
  * 自動登録された登録済み（manually_linked なし）は 409 のまま。
@@ -103,7 +104,7 @@ export const rejudgeWebhookJob = async (env: Bindings, postId: string, candidate
   if (parent.candidates.length > 0) {
     const manuallyLinked = job.status === 'registered' && job.reasons.includes('manually_linked')
     if (
-      (job.status !== 'held' && job.status !== 'ignored' && !manuallyLinked) ||
+      (job.status !== 'held' && job.status !== 'ignored' && job.status !== 'failed' && !manuallyLinked) ||
       job.reasons.includes('manually_rejected')
     ) {
       throw new HTTPException(409, { message: 'Candidate cannot be re-judged' })
@@ -131,7 +132,7 @@ export const rejudgeWebhookJob = async (env: Bindings, postId: string, candidate
       if (legacy) {
         const changed = await env.DB.batch([
           env.DB.prepare(
-            "DELETE FROM webhook_event_candidates WHERE event_uuid=? AND status IN ('held','ignored') AND (lease_until IS NULL OR lease_until<?)"
+            "DELETE FROM webhook_event_candidates WHERE event_uuid=? AND status IN ('held','ignored','failed') AND (lease_until IS NULL OR lease_until<?)"
           ).bind(job.eventUUID, now),
           env.DB.prepare(
             "UPDATE webhook_event_jobs SET status='queued',extraction_json=NULL,result_json=NULL,answers_json=NULL,requests_json=NULL,candidate_json=NULL,semantic_key=NULL,confidence=NULL,model=NULL,question_version=NULL,judged_at=NULL,last_error=NULL,notification_status='pending',notification_error=NULL,reasons_json='[]',updated_at=? WHERE post_id=? AND lease_token=? AND NOT EXISTS (SELECT 1 FROM webhook_event_candidates WHERE post_id=webhook_event_jobs.post_id)"
@@ -161,9 +162,9 @@ export const rejudgeWebhookJob = async (env: Bindings, postId: string, candidate
     return getWebhookJob(env, postId)
   }
   const manuallyLinked = job.status === 'registered' && job.reasons.includes('manually_linked')
-  if (job.status !== 'held' && job.status !== 'ignored' && !manuallyLinked)
+  if (job.status !== 'held' && job.status !== 'ignored' && job.status !== 'failed' && !manuallyLinked)
     throw new HTTPException(409, { message: 'Only held or ignored jobs can be re-judged' })
-  if (job.status === 'ignored' && job.reasons.includes('manually_rejected'))
+  if ((job.status === 'ignored' || job.status === 'failed') && job.reasons.includes('manually_rejected'))
     throw new HTTPException(409, { message: 'Manually rejected jobs cannot be re-judged' })
   const now = dayjs().valueOf()
   const result =

@@ -34,7 +34,8 @@ describe('Clef回答の独立グループ表示', () => {
       expect(group.markup).toContain('scope="rowgroup"')
       expect(group.markup).toContain('colSpan="6"')
     }
-    expect(groups[0]?.markup).toContain('ビッカメ娘のイベントか')
+    // is_event は判定には使うが、回答表の行としては出さない（他の基本判定の行は従来どおり出る）。
+    expect(groups[0]?.markup).not.toContain('ビッカメ娘のイベントか')
     expect(groups[0]?.markup).toContain('unknown_question')
     expect(groups[1]?.markup).toContain('船橋駅FACE店')
     // 検出用カタログの名前（ビックカメラ…）ではなく、アプリの短い店舗名で出す。
@@ -50,7 +51,7 @@ describe('Clef回答の独立グループ表示', () => {
   test('基本判定を保ち、店舗とビッカメ娘の否定回答だけを非表示にする', () => {
     const markup = render()
     const rows = [...markup.matchAll(/<tr\b[^>]*>(.*?)<\/tr>/g)].filter((match) => match[1]?.includes('<td'))
-    expect(rows).toHaveLength(4)
+    expect(rows).toHaveLength(3)
     expect(markup).not.toContain('AKIBA店')
     expect(answers['venue.akiba']).toEqual({ type: 'noul', noul: 0.02 })
     expect(answers['character.funabashi']).toEqual({ type: 'noul', noul: 0.01 })
@@ -59,6 +60,34 @@ describe('Clef回答の独立グループ表示', () => {
     expect(markup).toContain('いいえ')
     expect(markup).toContain('確定')
     for (const row of rows) expect([...row[0].matchAll(/<td\b/g)]).toHaveLength(6)
+  })
+
+  test('is_event の行は画面の回答表に出さず、is_event を含まない回答の行は従来どおり出る', () => {
+    const rowTexts = (markup: string) =>
+      [...markup.matchAll(/<tr\b[^>]*>(.*?)<\/tr>/g)]
+        .filter((match) => match[1]?.includes('<td'))
+        .map((match) =>
+          match[1]
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+        )
+    const withEvent = render(answers)
+    expect(withEvent).not.toContain('ビッカメ娘のイベントか')
+    const { is_event: _isEvent, ...withoutEvent } = answers
+    // is_event を含まない回答だけでも、表の行は同じ（is_event を含む回答から行を足し引きしない）。
+    expect(rowTexts(render(withoutEvent))).toEqual(rowTexts(withEvent))
+    expect(rowTexts(render(withoutEvent))).toHaveLength(3)
+    expect(render(withoutEvent)).toContain('unknown_question')
+    // 描画の入力（回答そのもの）は書き換えない。
+    expect(answers.is_event).toEqual({ type: 'noul', noul: 0.99 })
+  })
+
+  test('is_event だけの回答は、表の行が無いので「回答の記録なし」を出す', () => {
+    const markup = render({ is_event: { type: 'noul', noul: 0.99 } })
+    expect(markup).toContain('回答の記録なし')
+    expect(markup).not.toContain('<table')
+    expect(markup).not.toContain('ビッカメ娘のイベントか')
   })
 
   test('店舗のみ・ビッカメ娘のみの場合は空グループを表示しない', () => {
@@ -176,7 +205,6 @@ describe('回答に store / character の choice がある（v13・v2 の店舗�
     const markup = renderWith(v13Answers, given)
     expect(markup).toBe(renderWith(v13Answers))
     expect(pairsOf(basicOf(markup))).toEqual([
-      ['ビッカメ娘のイベントか', 'はい'],
       ['配布物', 'アクキー'],
       [STORE_ROW, '船橋駅FACE店'],
       [CHARACTER_ROW, 'ふなとーたん']
@@ -189,7 +217,7 @@ describe('回答に store / character の choice がある（v13・v2 の店舗�
   })
 
   test('v13: 店舗・ビッカメ娘の行は choice の行として、確率・しきい値・判定・次点を持つ（— ではない）', () => {
-    const [store, character] = cellsOf(basicOf(renderWith(v13Answers, given))).slice(2)
+    const [store, character] = cellsOf(basicOf(renderWith(v13Answers, given))).slice(1)
     // 未保存の店舗・娘のしきい値は、最上位をそのまま採用するための 30%（共通値 90% ではない）。
     expect(textsOf(store)).toEqual([STORE_ROW, '船橋駅FACE店', '95.0%', '30.0%', '確定', 'AKIBA店 3.0% 店舗なし 1.0%'])
     expect(textsOf(character)).toEqual([
@@ -201,24 +229,24 @@ describe('回答に store / character の choice がある（v13・v2 の店舗�
       'ふなたん 30.0% 複数 5.0%'
     ])
     // しきい値を取れない間は、ほかの choice の行と同じくしきい値と判定の列が — になる。
-    const rows = cellsOf(basicOf(renderWith(v13Answers, { ...given, configured: false }))).slice(2)
+    const rows = cellsOf(basicOf(renderWith(v13Answers, { ...given, configured: false }))).slice(1)
     for (const cells of rows) expect([cells[3]?.content, cells[4]?.content]).toEqual([MONO_DASH, '—'])
   })
 
   test('v2 で store の回答があるとき: 店舗の補い行は出ず、無いビッカメ娘だけ末尾に補う（空なら未判定）', () => {
     const answers = { ...v2Answers, store: storeChoice }
-    expect(pairsOf(basicOf(renderWith(answers, { stores: ['akiba'], characterIds: ['funabashi'] }))).slice(2)).toEqual([
+    expect(pairsOf(basicOf(renderWith(answers, { stores: ['akiba'], characterIds: ['funabashi'] }))).slice(1)).toEqual([
       [STORE_ROW, '船橋駅FACE店'],
       [CHARACTER_ROW, 'ふなたん']
     ])
-    expect(pairsOf(basicOf(renderWith(answers, { stores: [], characterIds: [] }))).slice(2)).toEqual([
+    expect(pairsOf(basicOf(renderWith(answers, { stores: [], characterIds: [] }))).slice(1)).toEqual([
       [STORE_ROW, '船橋駅FACE店'],
       [CHARACTER_ROW, '未判定']
     ])
   })
 
   test('v2 で store の回答が無い 8 問は従来どおり店舗の補い行を末尾に出し、store があれば行の順は describeAnswers のまま', () => {
-    const base = ['ビッカメ娘のイベントか', '状態', '配布物', '単一イベントか']
+    const base = ['状態', '配布物', '単一イベントか']
     const rest = ['開始日', '終了日', '配布数', '配布条件']
     const props = { stores: ['akiba'], characterIds: ['funabashi'] }
     expect(questionsOf(v2Eight, props)).toEqual([...base, ...rest, STORE_ROW, CHARACTER_ROW])
@@ -231,7 +259,7 @@ describe('回答に store / character の choice がある（v13・v2 の店舗�
 
   test('character の choice だけがあるときは、無い店舗の行だけを末尾に補う', () => {
     const pairs = pairsOf(basicOf(renderWith({ ...v2Answers, character: characterChoice }, given)))
-    expect(pairs.slice(2)).toEqual([
+    expect(pairs.slice(1)).toEqual([
       [CHARACTER_ROW, 'ふなとーたん'],
       [STORE_ROW, 'AKIBA店']
     ])
@@ -242,11 +270,11 @@ describe('回答に store / character の choice がある（v13・v2 の店舗�
       renderWith({ ...v2Answers, 'venue.funabashi': noulOf(0.98), character: characterChoice }, given)
     )
     expect(venue.map((group) => group.label)).toEqual(['基本判定', STORE_ROW])
-    expect(pairsOf(venue[0]?.markup).slice(2)).toEqual([[CHARACTER_ROW, 'ふなとーたん']])
+    expect(pairsOf(venue[0]?.markup).slice(1)).toEqual([[CHARACTER_ROW, 'ふなとーたん']])
     const character = groupsOf(
       renderWith({ ...v2Answers, 'character.funato': noulOf(0.99), store: storeChoice }, given)
     )
     expect(character.map((group) => group.label)).toEqual(['基本判定', CHARACTER_ROW])
-    expect(pairsOf(character[0]?.markup).slice(2)).toEqual([[STORE_ROW, '船橋駅FACE店']])
+    expect(pairsOf(character[0]?.markup).slice(1)).toEqual([[STORE_ROW, '船橋駅FACE店']])
   })
 })

@@ -3,18 +3,16 @@ import * as discord from '@api/services/discord'
 import { getWebhookJob, insertWebhookJob } from '@api/services/webhook-jobs'
 import { processWebhookJob } from '@api/services/webhook-process'
 import { getWebhookPrompt } from '@api/services/webhook-prompt'
-import { recheckWebhookJob } from '@api/services/webhook-recheck'
 import { type ClefRequest, ClefRequestSchema } from '@biccame/shared/event-detect/clef'
 import { DETECTION_VERSION } from '@biccame/shared/event-detect/detection'
 import { fixture, makePost, migrate } from './fixtures/webhook-multiple-events'
-import {
-  databaseSnapshot,
-  expectNoLease,
-  recheckHarness,
-  registerSingle,
-  rowOf,
-  statusOf
-} from './fixtures/webhook-recheck'
+
+type Row = Record<string, unknown>
+const rowOf = async (env: Awaited<ReturnType<typeof fixture>>['env'], table: string, column: string, id: string) => {
+  const row = await env.DB.prepare(`SELECT * FROM ${table} WHERE ${column}=?`).bind(id).first<Row>()
+  if (row === null) throw new Error('Missing row')
+  return row
+}
 
 // 確認（2 段目）の質問だけの呼び出しかどうか。1 段目の判定には is_event がある。
 const isConfirm = (request: ClefRequest) => request.questions.is_event === undefined
@@ -216,55 +214,5 @@ test('2 段目が失敗したら例外で、回答・判定結果を保存せず
     expect(await env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)
   } finally {
     await base.cleanup()
-  }
-}, 60000)
-
-test('再判定（recheck）も 2 段目を含み、確認の回答を保存する', async () => {
-  const { env, cleanup, ai } = await recheckHarness('confirm-recheck-includes')
-  try {
-    const post = await registerSingle(env, '2112378276735750821')
-    const candidateId = (await getWebhookJob(env, post.id)).candidates[0].eventUUID
-    const calls: ClefRequest[] = []
-    const target = Object.assign({}, env, { AI: withConfirmAi({ run: ai.run }, { value: 0.85, fail: false }, calls) })
-    ai.state.armed = true
-    const job = await recheckWebhookJob(target, post.id)
-    // 1 段目 + 2 段目。既定の AI は店舗の娘を選ぶので、確認の質問は店舗だけ。
-    expect(ai.state.calls).toHaveLength(1)
-    expect(calls).toHaveLength(1)
-    expect(Object.keys(calls[0].questions)).toEqual(['store_confirm'])
-    expect(job.candidates[0].answers?.store_confirm).toEqual({ type: 'noul', noul: 0.85 })
-    expect(job.candidates[0].answers).not.toHaveProperty('character_confirm')
-    expect(job.candidates[0].questionVersion).toBe(DETECTION_VERSION)
-    expect(job.candidates[0].status).toBe('registered')
-    const prompt = await getWebhookPrompt(env, post.id, candidateId)
-    expect(prompt.requests).toHaveLength(2)
-  } finally {
-    await cleanup()
-  }
-}, 60000)
-
-test('再判定の 2 段目が失敗したら 502 で、行も送信入力も元のまま、リースも解放される', async () => {
-  const { env, cleanup, ai, notifications, sent } = await recheckHarness('confirm-recheck-failure')
-  try {
-    const post = await registerSingle(env, '2112378276735750822')
-    const candidateId = (await getWebhookJob(env, post.id)).candidates[0].eventUUID
-    const candidateBefore = await rowOf(env, 'webhook_event_candidates', 'event_uuid', candidateId)
-    const parentBefore = await rowOf(env, 'webhook_event_jobs', 'post_id', post.id)
-    const databaseBefore = await databaseSnapshot(env)
-    const notified = notifications.length
-    const calls: ClefRequest[] = []
-    const failing = Object.assign({}, env, { AI: withConfirmAi({ run: ai.run }, { value: 0.9, fail: true }, calls) })
-    ai.state.armed = true
-    expect(await statusOf(recheckWebhookJob(failing, post.id))).toEqual({ status: 502, message: 'AI re-check failed' })
-    expect(calls).toHaveLength(1)
-    // 1 段目は成功していても、回答・版・送信入力を含む行は 1 つも書き換わらない。
-    expect(await rowOf(env, 'webhook_event_candidates', 'event_uuid', candidateId)).toEqual(candidateBefore)
-    expect(await rowOf(env, 'webhook_event_jobs', 'post_id', post.id)).toEqual(parentBefore)
-    expect(await databaseSnapshot(env)).toEqual(databaseBefore)
-    await expectNoLease(env, post.id)
-    expect(notifications).toHaveLength(notified)
-    expect(sent).toEqual([])
-  } finally {
-    await cleanup()
   }
 }, 60000)

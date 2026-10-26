@@ -118,9 +118,9 @@ describe('Webhook詳細の判定待ち表示', () => {
     }
   })
 
-  test('判定待ちでも操作ボタンの可否は変えない（再判定は押せないまま）', async () => {
+  test('判定待ちでも連携の可否は変えない（連携は押せないまま）。「再実行」は押せて、理由は確認ダイアログに出る', async () => {
     const markup = await renderDetail({ ...baseJob, status: 'queued', notificationStatus: 'pending' })
-    expect(buttonState(markup, REJUDGE_LABEL)).toBe('disabled')
+    expect(buttonState(markup, REJUDGE_LABEL)).toBe('enabled')
     expect(buttonState(markup, LINK_LABEL)).toBe('disabled')
   })
 })

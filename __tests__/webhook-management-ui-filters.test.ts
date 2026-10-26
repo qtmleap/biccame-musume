@@ -337,6 +337,5 @@ test('一覧と詳細は一部登録・一部保留を配布物ごとに表示�
   // 「登録イベント」リンクは編集画面ではなくイベント詳細ページへ向ける。
   expect(detail).toContain('href="/events/550e8400-e29b-41d4-a716-446655440000"')
   expect(detail).not.toMatch(/\/admin\/events\/(?!new)/)
-  for (const label of ['補完して登録', '連携', '対象外にする', 'AI で判定し直す', '通知を再送'])
-    expect(detail).toContain(label)
+  for (const label of ['補完して登録', '連携', '対象外にする', '再実行', '通知を再送']) expect(detail).toContain(label)
 })

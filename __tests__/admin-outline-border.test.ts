@@ -37,8 +37,8 @@ const outlineButtonClasses = async (path: string): Promise<(string | undefined)[
 
 describe('管理画面の outline ボタンの枠線色', () => {
   test.each([
-    // 更新・対象外にする・失敗した処理を再実行・AI で判定し直す・判定を再確認・通知を再送。
-    ['workers/web/src/app/components/admin/webhook-job-detail.tsx', 6],
+    // 更新・対象外にする・再実行・通知を再送。
+    ['workers/web/src/app/components/admin/webhook-job-detail.tsx', 4],
     // 既存へ紐付け・検索候補の再取得・キャンセル。
     ['workers/web/src/app/components/admin/webhook-event-link-dialog.tsx', 3],
     // 保存済みプロンプトの再取得。
