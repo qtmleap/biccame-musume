@@ -1,5 +1,5 @@
 import type { Bindings } from '@api/types/bindings'
-import { event, type RejudgeSeed } from './webhook-d1-jobs'
+import { event, type RejudgeSeed, SEED_UPDATED_AT } from './webhook-d1-jobs'
 
 // 手動で連携した登録済みジョブ。resolveWebhookJob の link が書く reasons と同じ。
 export const linkedSeed: RejudgeSeed = {
@@ -53,6 +53,12 @@ export type CandidateSeed = {
   notificationStatus: string
   /** 並び順（created_at, event_uuid）を決める。 */
   createdAt: number
+  /** 最後の更新（updated_at、ms）。省略すると古い固定値（止まっていると見なされる側）。 */
+  updatedAt?: number
+  /** リースの期限（lease_until、ms）。省略するとリースなし。 */
+  leaseUntil?: number
+  /** 処理の回数（attempts）。省略すると 3。 */
+  attempts?: number
 }
 
 /** 判定結果・回答・エラーを埋めた候補を、既存の親ジョブの下に作る。 */
@@ -60,9 +66,9 @@ export const seedCandidate = async (env: Bindings, postId: string, seed: Candida
   await env.DB.prepare(`INSERT INTO webhook_event_candidates
     (event_uuid,post_id,item,post_json,source_url,status,reasons_json,result_json,candidate_json,answers_json,
     model,question_version,confidence,judged_at,event_id,semantic_key,attempts,notification_status,notification_id,
-    notification_error,notification_attempts,last_error,created_at,updated_at)
-    SELECT ?,post_id,'限定名刺',post_json,source_url,?,?,?,?,?,'clef-flash','old-v1',0.72,1791676800000,?,?,3,?,
-    'message-1','previous notification error',2,'previous processing error',?,1791676800000
+    notification_error,notification_attempts,last_error,created_at,updated_at,lease_token,lease_until)
+    SELECT ?,post_id,'限定名刺',post_json,source_url,?,?,?,?,?,'clef-flash','old-v1',0.72,1791676800000,?,?,?,?,
+    'message-1','previous notification error',2,'previous processing error',?,?,?,?
     FROM webhook_event_jobs WHERE post_id=?`)
     .bind(
       seed.uuid,
@@ -73,8 +79,12 @@ export const seedCandidate = async (env: Bindings, postId: string, seed: Candida
       '{"is_event":{"type":"noul","noul":0.72}}',
       seed.eventId,
       `semantic-${seed.uuid}`,
+      seed.attempts === undefined ? 3 : seed.attempts,
       seed.notificationStatus,
       seed.createdAt,
+      seed.updatedAt === undefined ? SEED_UPDATED_AT : seed.updatedAt,
+      seed.leaseUntil === undefined ? null : 'other-worker',
+      seed.leaseUntil === undefined ? null : seed.leaseUntil,
       postId
     )
     .run()

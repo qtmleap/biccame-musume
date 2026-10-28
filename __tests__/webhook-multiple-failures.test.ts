@@ -189,8 +189,15 @@ test('抽出失敗コードをジョブへ保存し、未知例外は汎用コ�
         }
       })
     ).rejects.toThrow()
-    expect((await getWebhookJob(env, unknown.id)).lastError).toBe('processing_failed')
-    expect(webhookProcessingErrorCode(new Error(configured.ANTHROPIC_AUTH_TOKEN))).toBe('processing_failed')
+    // 旧: 'processing_failed' と完全一致。新: 抽出系の固有コードではない例外は processing_failed:<段階>:<例外名> で、
+    // 段階（抽出の通信より外側の extractor）と例外名（Error）だけを残し、メッセージ（トークン）は含めない。
+    const unknownError = (await getWebhookJob(env, unknown.id)).lastError
+    expect(unknownError).toBe('processing_failed:extraction:Error')
+    expect(unknownError).not.toContain(configured.ANTHROPIC_AUTH_TOKEN)
+    // 段階の付いていない例外は unknown 段階。メッセージは読まない。
+    expect(webhookProcessingErrorCode(new Error(configured.ANTHROPIC_AUTH_TOKEN))).toBe(
+      'processing_failed:unknown:Error'
+    )
     expect(calls).toHaveLength(0)
   } finally {
     await cleanup()

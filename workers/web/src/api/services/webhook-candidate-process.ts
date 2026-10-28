@@ -1,4 +1,5 @@
 import { detectionThresholds, runWebhookDetection } from '@api/services/webhook-detection-run'
+import { inWebhookStage, markWebhookStage } from '@api/services/webhook-failure-stage'
 import {
   duplicateWebhookEvents,
   getWebhookCandidate,
@@ -22,6 +23,7 @@ import {
 import dayjs from 'dayjs'
 import { canAutoRegisterWebhookCandidate } from './webhook-auto-registration'
 import { recordWebhookDiscovery, synchronizeWebhookDiscovery } from './webhook-discovery-record'
+import { webhookProcessingErrorCode } from './webhook-extraction'
 import { isLegacyWebhookRegisterRetry } from './webhook-item-count-review'
 import { NotificationRetry, notifyWebhookJob } from './webhook-notification'
 import { eventCandidate, type ProcessOptions } from './webhook-processing-context'
@@ -40,7 +42,7 @@ export const processWebhookCandidate = async (
   try {
     const job = await currentJob()
     if (job.status === 'registered' || job.status === 'held') {
-      await notifyWebhookJob(env, job, token, target)
+      await inWebhookStage('notification', () => notifyWebhookJob(env, job, token, target))
       return null
     }
     const stored = await env.DB.prepare(
@@ -53,8 +55,13 @@ export const processWebhookCandidate = async (
       stored.resultJson === null
         ? await (async () => {
             // 各送信の直前に、そこまでの送信入力を保存する。全バッチが成功するまで一部の判定だけを保存しない。
-            const run = await runWebhookDetection(env, job.post, storeKey, (sent) =>
-              saveWebhookPromptAttempt(env, target, token, DETECTION_VERSION, sent)
+            // 失敗の段階を残すため、Clef の判定と送信入力の保存は別の段階にする（内側の prompt_save が先に付く）。
+            const run = await inWebhookStage('detection', () =>
+              runWebhookDetection(env, job.post, storeKey, (sent) =>
+                inWebhookStage('prompt_save', () =>
+                  saveWebhookPromptAttempt(env, target, token, DETECTION_VERSION, sent)
+                )
+              )
             )
             const { configuration, request, response } = run
             const decision = evaluateDetection(
@@ -72,14 +79,20 @@ export const processWebhookCandidate = async (
             )
             // 3段目: 「終了」または「継続」（end・update）と判定された候補だけ、店舗のまだ終了していないイベントから連携先を提案する（自動では連携しない）。
             // 旧単一ジョブの仮の名前は配布物の名前として渡さない。失敗しても判定は続け、提案なしにする。
-            const linkedEvent = isLinkedEventAction(recorded.action)
-              ? await proposeWebhookLinkedEvent(env, run, {
-                  storeKey,
-                  screenName: job.post.screenName,
-                  item: legacy ? null : item,
-                  beforeSend: (sent) => saveWebhookPromptAttempt(env, target, token, DETECTION_VERSION, sent)
-                })
-              : null
+            const linkedEvent =
+              isLinkedEventAction(recorded.action)
+                ? await inWebhookStage('linked_event', () =>
+                    proposeWebhookLinkedEvent(env, run, {
+                      storeKey,
+                      screenName: job.post.screenName,
+                      item: legacy ? null : item,
+                      beforeSend: (sent) =>
+                        inWebhookStage('prompt_save', () =>
+                          saveWebhookPromptAttempt(env, target, token, DETECTION_VERSION, sent)
+                        )
+                    })
+                  )
+                : null
             const discovery = linkedEvent === null ? recorded : { ...recorded, linkedEvent }
             await env.DB.prepare(
               `UPDATE ${target.table} SET result_json=?,answers_json=?,model=?,question_version=?,confidence=?,judged_at=?,updated_at=? WHERE ${target.column}=? AND lease_token=?`
@@ -159,16 +172,18 @@ export const processWebhookCandidate = async (
     // 旧単一ジョブ（移行の印あり）の item は抽出した名前ではなく、旧形式で作った題か仮の名前なので渡さない（本文から読み取らせる）。
     const titled =
       candidate !== null && job.post.extractionContext?.kind !== 'event'
-        ? await generateEventTitle(
-            env,
-            {
-              category: candidate.category,
-              startDay: candidate.startDate.slice(0, 10),
-              stores: candidate.stores,
-              body: job.post.text,
-              ...(legacy ? {} : { item })
-            },
-            options.titleFetcher === undefined ? {} : { fetcher: options.titleFetcher }
+        ? await inWebhookStage('title', () =>
+            generateEventTitle(
+              env,
+              {
+                category: candidate.category,
+                startDay: candidate.startDate.slice(0, 10),
+                stores: candidate.stores,
+                body: job.post.text,
+                ...(legacy ? {} : { item })
+              },
+              options.titleFetcher === undefined ? {} : { fetcher: options.titleFetcher }
+            )
           )
         : null
     const registered = candidate !== null && titled?.ok ? { ...candidate, title: titled.title } : candidate
@@ -185,12 +200,8 @@ export const processWebhookCandidate = async (
       )
       .run()
     if (registering && registered !== null) {
-      await registerWebhookEvent(
-        env,
-        await currentJob(),
-        validateWebhookEvent(registered, job.eventUUID),
-        token,
-        target
+      await inWebhookStage('registration', async () =>
+        registerWebhookEvent(env, await currentJob(), validateWebhookEvent(registered, job.eventUUID), token, target)
       )
     } else if (duplicatePostId !== null) {
       await env.DB.prepare(
@@ -211,14 +222,18 @@ export const processWebhookCandidate = async (
         .bind(status, status === 'ignored' ? 'skipped' : 'pending', dayjs().valueOf(), target.id, token)
         .run()
     }
-    const finalJob = await synchronizeWebhookDiscovery(env, await currentJob(), target, token)
-    await notifyWebhookJob(env, finalJob, token, target)
+    const finalJob = await inWebhookStage('discovery', async () =>
+      synchronizeWebhookDiscovery(env, await currentJob(), target, token)
+    )
+    await inWebhookStage('notification', () => notifyWebhookJob(env, finalJob, token, target))
     return null
   } catch (error) {
     if (error instanceof NotificationRetry) return error.delay
+    // どの区切りにも入らない失敗は candidate。親ジョブ側（webhook-job-process.ts）も同じ例外から同じコードを作る。
+    markWebhookStage(error, 'candidate')
     await env.DB.prepare(`UPDATE ${target.table} SET status=CASE WHEN status='processing' THEN 'failed' ELSE status END,
-      last_error='processing_failed',updated_at=? WHERE ${target.column}=? AND lease_token=?`)
-      .bind(dayjs().valueOf(), target.id, token)
+      last_error=?,updated_at=? WHERE ${target.column}=? AND lease_token=?`)
+      .bind(webhookProcessingErrorCode(error), dayjs().valueOf(), target.id, token)
       .run()
     throw error
   }

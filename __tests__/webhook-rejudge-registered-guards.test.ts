@@ -87,8 +87,15 @@ describe('自動登録済みの再実行が拒むもの', () => {
           seed: { ...autoRegisteredSeed, reasons: ['manually_rejected'] },
           message: 'Manually rejected jobs cannot be re-judged'
         },
-        { seed: { ...heldSeed, status: 'queued', reasons: [] }, message: 'This job cannot be re-judged' },
-        { seed: { ...heldSeed, status: 'processing', reasons: [] }, message: 'This job cannot be re-judged' }
+        // 止まっていない（最後の更新が新しい）処理待ち・処理中だけが 409。60 分以上動いていないものは再実行できる（webhook-stalled-rejudge.test.ts）。
+        {
+          seed: { ...heldSeed, status: 'queued', reasons: [], updatedAt: dayjs().valueOf() },
+          message: 'This job cannot be re-judged'
+        },
+        {
+          seed: { ...heldSeed, status: 'processing', reasons: [], updatedAt: dayjs().valueOf() },
+          message: 'This job cannot be re-judged'
+        }
       ]
       ai.state.armed = true
       for (const [index, { seed, message }] of cases.entries()) {
