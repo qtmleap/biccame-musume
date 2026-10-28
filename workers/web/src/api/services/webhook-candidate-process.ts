@@ -79,20 +79,19 @@ export const processWebhookCandidate = async (
             )
             // 3段目: 「終了」または「継続」（end・update）と判定された候補だけ、店舗のまだ終了していないイベントから連携先を提案する（自動では連携しない）。
             // 旧単一ジョブの仮の名前は配布物の名前として渡さない。失敗しても判定は続け、提案なしにする。
-            const linkedEvent =
-              isLinkedEventAction(recorded.action)
-                ? await inWebhookStage('linked_event', () =>
-                    proposeWebhookLinkedEvent(env, run, {
-                      storeKey,
-                      screenName: job.post.screenName,
-                      item: legacy ? null : item,
-                      beforeSend: (sent) =>
-                        inWebhookStage('prompt_save', () =>
-                          saveWebhookPromptAttempt(env, target, token, DETECTION_VERSION, sent)
-                        )
-                    })
-                  )
-                : null
+            const linkedEvent = isLinkedEventAction(recorded.action)
+              ? await inWebhookStage('linked_event', () =>
+                  proposeWebhookLinkedEvent(env, run, {
+                    storeKey,
+                    screenName: job.post.screenName,
+                    item: legacy ? null : item,
+                    beforeSend: (sent) =>
+                      inWebhookStage('prompt_save', () =>
+                        saveWebhookPromptAttempt(env, target, token, DETECTION_VERSION, sent)
+                      )
+                  })
+                )
+              : null
             const discovery = linkedEvent === null ? recorded : { ...recorded, linkedEvent }
             await env.DB.prepare(
               `UPDATE ${target.table} SET result_json=?,answers_json=?,model=?,question_version=?,confidence=?,judged_at=?,updated_at=? WHERE ${target.column}=? AND lease_token=?`
