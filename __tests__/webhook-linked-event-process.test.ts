@@ -1,127 +1,19 @@
-import { expect, spyOn, test } from 'bun:test'
-import * as discord from '@api/services/discord'
+import { expect, test } from 'bun:test'
 import { rejudgeWebhookJob } from '@api/services/webhook-admin'
-import { getWebhookJob, insertWebhookJob } from '@api/services/webhook-jobs'
+import { getWebhookJob } from '@api/services/webhook-jobs'
 import { processWebhookJob } from '@api/services/webhook-process'
 import { getWebhookPrompt } from '@api/services/webhook-prompt'
-import { type ClefRequest, ClefRequestSchema, ClefResponseSchema } from '@biccame/shared/event-detect/clef'
 import { LINKED_EVENT_QUESTION_KEY } from '@biccame/shared/event-detect/detection'
-import { fixture, makePost, migrate } from './fixtures/webhook-multiple-events'
-
-const ENDED = '限定名刺の配布は本日で終了しました。'
-const eventId = (index: number) => `550e8400-e29b-41d4-a716-${String(index).padStart(12, '0')}`
-// 全項目を高確度で答えるフェイクの AI の status の回答を差し替えるときの値（end は終了、ongoing は継続）。
-type Status = 'end' | 'ongoing' | 'start'
-// 3 段目の応答。pick は選ぶ選択肢（'none' は該当なし）、probability は選んだ選択肢の確率。fail は送信自体の失敗、garbage は不正な応答。
-type Linked = { pick: string; probability: number; fail: boolean; garbage: boolean }
-
-const setup = async (name: string, status: Status) => {
-  const base = await fixture(name)
-  await migrate(base.env.DB)
-  const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
-  const warn = spyOn(console, 'warn').mockImplementation(() => {})
-  const calls: ClefRequest[] = []
-  const linked: Linked = { pick: eventId(1), probability: 0.9, fail: false, garbage: false }
-  // 2段目（確認）の「はい」の確率。null なら元のフェイクの AI（0.99）のまま。
-  const confirm: { yes: number | null } = { yes: null }
-  // Object.assign は base.env を書き換えるので、元のフェイクの AI は先に取っておく。
-  const inner = base.env.AI
-  const env = Object.assign(base.env, {
-    AI: {
-      run: async (model: string, raw: unknown) => {
-        const request = ClefRequestSchema.safeParse(raw)
-        if (!request.success) throw new Error('Invalid request')
-        const question = request.data.questions[LINKED_EVENT_QUESTION_KEY]
-        if (question !== undefined) {
-          calls.push(request.data)
-          if (linked.fail) throw new Error('Synthetic linked event failure')
-          if (linked.garbage) return { answers: {} }
-          return {
-            answers: {
-              [LINKED_EVENT_QUESTION_KEY]: {
-                type: 'choice',
-                choice: linked.pick,
-                probabilities: { [linked.pick]: linked.probability }
-              }
-            }
-          }
-        }
-        const yes = confirm.yes
-        if (
-          yes !== null &&
-          request.data.questions.is_event === undefined &&
-          request.data.questions.distribution_item_count === undefined
-        )
-          return {
-            answers: Object.fromEntries(
-              Object.keys(request.data.questions).map((key) => [key, { type: 'noul', noul: yes }])
-            )
-          }
-        const response = ClefResponseSchema.safeParse(await inner.run(model, raw))
-        if (!response.success) throw new Error('Invalid fake response')
-        if (request.data.questions.is_event === undefined) return response.data
-        return {
-          answers: {
-            ...response.data.answers,
-            status: { type: 'choice', choice: status, probabilities: { [status]: 0.99 } }
-          }
-        }
-      }
-    }
-  })
-  const cleanup = async () => {
-    delivery.mockRestore()
-    warn.mockRestore()
-    await base.cleanup()
-  }
-  return { env, state: base.state, calls, linked, confirm, warn, cleanup }
-}
-type Value = Awaited<ReturnType<typeof setup>>
-
-const seedEvent = async (
-  env: Value['env'],
-  index: number,
-  store: string,
-  overrides: { end?: string | null; endedAt?: string | null } = {}
-) => {
-  const stamp = '2026-10-01T00:00:00.000+00:00'
-  await env.DB.prepare(
-    'INSERT INTO events(id,category,title,start_date,end_date,ended_at,updated_at) VALUES (?,?,?,?,?,?,?)'
-  )
-    .bind(
-      eventId(index),
-      'limited_card',
-      `既存イベント${index}`,
-      stamp,
-      overrides.end === undefined ? null : overrides.end,
-      overrides.endedAt === undefined ? null : overrides.endedAt,
-      stamp
-    )
-    .run()
-  await env.DB.prepare('INSERT INTO event_stores(id,event_id,store_key,updated_at) VALUES (?,?,?,?)')
-    .bind(crypto.randomUUID(), eventId(index), store, stamp)
-    .run()
-}
-const eventsSnapshot = async (env: Value['env']) =>
-  JSON.stringify([
-    (await env.DB.prepare('SELECT * FROM events ORDER BY id').all()).results,
-    (await env.DB.prepare('SELECT * FROM event_stores ORDER BY id').all()).results
-  ])
-
-// screenName は投稿者。既定は秋葉原店の公式アカウント。店舗アカウントでない投稿者を渡すと、投稿アカウントの店舗は決まらない。
-const judge = async (value: Value, id: string, stores: string[] = ['akiba'], screenName = 'bic_akiba') => {
-  const post = { ...makePost(id, ENDED), screenName, url: `https://x.com/${screenName}/status/${id}` }
-  await insertWebhookJob(value.env, post)
-  await processWebhookJob(value.env, post.id, {
-    extractor: async () => ({ events: [{ item: '限定名刺', stores, characterIds: ['akiba'], evidence: [ENDED] }] })
-  })
-  return post
-}
-const candidateOf = async (value: Value, postId: string) => {
-  const job = await getWebhookJob(value.env, postId)
-  expect(job.candidates).toHaveLength(1)
-  return job.candidates[0]
-}
+import {
+  candidateOf,
+  eventId,
+  eventsSnapshot,
+  judge,
+  type Status,
+  seedEvent,
+  setup,
+  type Value
+} from './fixtures/webhook-linked-event'
 
 test('終了の投稿で店舗にまだ終了していないイベントがあれば 3 段目を 1 回聞き、提案を保存して、連携もイベントの変更もしない', async () => {
   const value = await setup('linked-event-proposed', 'end')
@@ -187,14 +79,16 @@ test('提案の確率が下限 0.7 ちょうどなら保存し、未満・該当
   }
 }, 60000)
 
-test.each<Status>(['ongoing', 'start'])(
-  '終了以外の投稿（%s）では 3 段目を聞かない',
+// 継続（ongoing）で聞くことは webhook-linked-event-update.test.ts で見る。ここは、終了でも継続でもない投稿（開始）で聞かないことを固定する。
+test.each<Status>(['start'])(
+  '終了でも継続でもない投稿（%s）では 3 段目を聞かない',
   async (status) => {
     const value = await setup(`linked-event-not-end-${status}`, status)
     try {
       await seedEvent(value.env, 1, 'akiba')
       const candidate = await candidateOf(value, (await judge(value, '2112378276735750921')).id)
       expect(candidate.discovery?.action).not.toBe('end')
+      expect(candidate.discovery?.action).not.toBe('update')
       expect(candidate.discovery?.linkedEvent).toBeUndefined()
       expect(value.calls).toHaveLength(0)
     } finally {

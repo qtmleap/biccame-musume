@@ -69,7 +69,9 @@ export {
 } from './detection-thresholds'
 export {
   createLinkedEventRequest,
+  isLinkedEventAction,
   isLinkedEventQuestion,
+  LINKED_EVENT_INSTRUCTIONS,
   LINKED_EVENT_MAX_OPTIONS,
   LINKED_EVENT_QUESTION_KEY,
   type LinkableEvent,

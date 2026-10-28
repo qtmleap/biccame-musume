@@ -42,12 +42,20 @@ describe('連携先の提案（単独のコンポーネント）', () => {
     const markup = await renderProposal({ ...job, discovery: proposed })
     expect(headings(markup).filter((heading) => heading === TITLE)).toHaveLength(1)
     expect(markup).toContain(`aria-label="${TITLE}"`)
-    expect(markup).toContain('終了を知らせる投稿の連携先候補です。自動では連携しません')
+    expect(markup).toContain('終了または継続を知らせる投稿の連携先候補です。自動では連携しません')
+    expect(markup).toContain('継続')
     expect(markup).toContain('提案された配布イベント')
     expect(markup).toContain(EDIT_HREF)
     expect(markup).toContain('81.2%')
     // 見出しは他の節（元告知に対応する登録済みイベントなど）と同じクラス。
     expect(markup).toContain('<h2 class="mb-2 text-lg font-semibold md:text-xl">')
+  })
+
+  test('継続（update）と判定された投稿の提案も、同じ節として描画する', async () => {
+    const markup = await renderProposal({ ...job, discovery: { ...proposed, action: 'update' } })
+    expect(headings(markup).filter((heading) => heading === TITLE)).toHaveLength(1)
+    expect(markup).toContain('終了または継続を知らせる投稿の連携先候補です')
+    expect(markup).toContain(EDIT_HREF)
   })
 
   test('提案が無ければ（旧データ・記録なし・提案なしの記録）何も描画しない', async () => {

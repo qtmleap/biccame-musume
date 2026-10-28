@@ -60,7 +60,7 @@ const warn = (error: unknown) =>
   console.warn('[webhook-linked-event]', JSON.stringify({ error: error instanceof Error ? error.message : 'unknown' }))
 
 /**
- * 3段目（連携先の提案）。「終了」と判定された候補の店舗が 1 つに決まり、その店舗にまだ終了していないイベントがあるときだけ、Clef に 1 回聞く。
+ * 3段目（連携先の提案）。「終了」または「継続」と判定された候補の店舗が 1 つに決まり、その店舗にまだ終了していないイベントがあるときだけ、Clef に 1 回聞く。
  * 選ばれたイベントの確率が下限以上のときだけ提案を返し、該当なし・下限未満・確率の欠落は null。
  * 自動では連携せず、events も書き換えない。提案は判定結果（result_json の discovery）へ保存するために呼び出し側へ返すだけ。
  * イベントの取得・AI の送信・応答の不正は判定全体を失敗にせず、警告を残して提案なし（null）にする。

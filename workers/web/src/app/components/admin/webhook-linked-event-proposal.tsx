@@ -24,7 +24,7 @@ type Props = {
 }
 
 /**
- * 終了と判定された投稿の連携先の提案。選択中の候補に提案が保存されているときだけ描画し、無ければ何も出さない。
+ * 終了または継続と判定された投稿の連携先の提案。選択中の候補に提案が保存されているときだけ描画し、無ければ何も出さない。
  * 連携は、ボタンから開く確認ダイアログで「連携する」を押すまで一切行わない。
  */
 export const WebhookLinkedEventProposal = ({ job, canLink, isPending, onLink }: Props) => {
@@ -41,7 +41,9 @@ export const WebhookLinkedEventProposal = ({ job, canLink, isPending, onLink }: 
   return (
     <section aria-label={TITLE}>
       <h2 className='mb-2 text-lg font-semibold md:text-xl'>{TITLE}</h2>
-      <p className='mb-3 text-sm text-muted-foreground'>終了を知らせる投稿の連携先候補です。自動では連携しません。</p>
+      <p className='mb-3 text-sm text-muted-foreground'>
+        終了または継続を知らせる投稿の連携先候補です。自動では連携しません。
+      </p>
       <div className='flex flex-wrap items-center gap-x-3 gap-y-1'>
         <Link
           to='/admin/events/$uuid/edit'
