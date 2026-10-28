@@ -5,6 +5,7 @@ import { useRef, useState } from 'react'
 import { BotActionConfirmation } from '@/components/admin/bot-action-confirmation'
 import { detectionScoreLabel } from '@/components/admin/webhook-labels'
 import {
+  activeLinkedEventProposal,
   LINKED_EVENT_LINK_LABEL,
   linkedEventConfirmation,
   submitLinkedEvent
@@ -24,13 +25,13 @@ type Props = {
 }
 
 /**
- * 終了または継続と判定された投稿の連携先の提案。選択中の候補に提案が保存されているときだけ描画し、無ければ何も出さない。
+ * 終了または継続と判定された投稿の連携先の提案。選択中の候補に提案が保存されていて、まだ提案のイベントへ連携していないときだけ描画し、それ以外は何も出さない。
  * 連携は、ボタンから開く確認ダイアログで「連携する」を押すまで一切行わない。
  */
 export const WebhookLinkedEventProposal = ({ job, canLink, isPending, onLink }: Props) => {
   const [open, setOpen] = useState(false)
   const busy = useRef(false)
-  const proposal = job.discovery === undefined || job.discovery === null ? undefined : job.discovery.linkedEvent
+  const proposal = activeLinkedEventProposal(job)
   if (proposal === undefined) return null
   const confirmation = linkedEventConfirmation(proposal.title, job.status === 'registered')
   // 成功したら閉じる。失敗したら閉じずに、ミューテーションのトーストで知らせる（既存の確認ダイアログと同じ）。

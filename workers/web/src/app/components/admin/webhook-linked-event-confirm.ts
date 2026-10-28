@@ -1,3 +1,5 @@
+import type { WebhookJob, WebhookLinkedEvent } from '@biccame/shared/schemas/webhook.dto'
+
 /** 連携先の提案から直接連携するときの確認ダイアログの文言と、押したときの実行の可否。表示から切り離した純粋な関数で、DOM なしでテストできる。 */
 
 export const LINKED_EVENT_CONFIRM_TITLE = 'このイベントと連携しますか？'
@@ -17,6 +19,20 @@ export const linkedEventConfirmation = (
   description: `「${eventTitle}」と連携します。既存イベントの内容は変更しません。${replacing ? LINKED_EVENT_REPLACING_NOTE : ''}`,
   actionLabel: LINKED_EVENT_CONFIRM_ACTION
 })
+
+/**
+ * 画面に出すべき連携先の提案。提案の節と、上部「連携」ボタンのダイアログの提案は、どちらもこの判定を使う。
+ * 提案が無ければ undefined。すでに提案のイベントへ連携済み（eventId が同じ）でも undefined にして、同じイベントを聞き直さない。
+ * 別のイベントへ連携済みなら提案は有効のままで、連携し直せる（確認には置き換えの追記が付く）。
+ */
+export const activeLinkedEventProposal = (
+  job: Pick<WebhookJob, 'discovery' | 'eventId'>
+): WebhookLinkedEvent | undefined => {
+  if (job.discovery === undefined || job.discovery === null) return undefined
+  const proposal = job.discovery.linkedEvent
+  if (proposal === undefined) return undefined
+  return job.eventId === proposal.eventId ? undefined : proposal
+}
 
 /** 連携の実行結果。skipped は条件を満たさず（または実行中で）API を呼ばなかったこと。 */
 export type LinkedEventSubmitOutcome = 'linked' | 'failed' | 'skipped'
