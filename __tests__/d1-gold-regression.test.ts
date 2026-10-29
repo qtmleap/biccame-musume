@@ -46,16 +46,16 @@ const rules = { dev: evaluateSplit('dev', ADOPTED, 0.9), test: evaluateSplit('te
 // 参考: 件数の監査を 70% にした場合（EVENT_DETECTION_ITEM_COUNT_THRESHOLD=0.7）。不一致のときの抽出のやり直しは再現していない近似。
 const audit70 = { dev: evaluateSplit('dev', ADOPTED, 0.7), test: evaluateSplit('test', ADOPTED, 0.7) }
 
-// フィクスチャの保存応答は v15 の 1 段目の質問への回答。現行の版（v17）は、v15 に対して娘の質問に store_character を足し、
+// フィクスチャの保存応答は v15 の 1 段目の質問への回答。現行の版（v18。1 段目は v17 と同一で、変えたのは 2 段目の店舗の確認だけ）は、v15 に対して娘の質問に store_character を足し、
 // 「店舗の娘と同一と仮定しない」注意書きを外した版なので、現行のソースは v15 の 1 段目の質問をもう作れない。
-// そこで版の文字列は現行（v17）と比べず、次の 3 つで守る。
+// そこで版の文字列は現行（v18）と比べず、次の 3 つで守る。
 //   1. フィクスチャは「作られた版（v15）」の 1 段目の質問への回答であること。
 //   2. 生成済みの版定義に、v15 の 1 段目の質問が 1 文字も変わらず残っていること（内容の sha256 で固定）。
 //   3. 保存応答の再評価に使う現行の request は、娘の質問を除けば v15 と同一で、娘の質問の選択肢は v15 の選択肢を全て含むこと。
 // 2 段目の回答はフィクスチャに無い。1 段目の最上位が 70% 以上の店舗・娘は確認なしで確定するので数字は出せるが、70% 未満は確認でしか確定できず、
 // 保存応答は確認を受けられないので採用されない。したがって下の数字は「2 段目を受けられない保存応答での下限」で、実運用では 70% 未満の候補が
 // 確認で拾われるため、登録数はこれより多くなる（実 AI で測っていない）。
-// v17 の回答を含むフィクスチャへの再作成は、v17 を実 AI で測り直した後に行う（docs/event-detection-golden.md）。
+// v18 の回答を含むフィクスチャへの再作成は、v18 を実 AI で測り直した後に行う（docs/event-detection-golden.md）。
 const FIXTURE_VERSION = 'v5-webhook-v15-concise-author'
 // 生成済みの v15 の版定義（保存済み。変えてはならない）の内容の sha256。
 const V15_DEFINITION_SHA256 = '4dea483fb9bb0eec2b07087ce6ba616846baefd0c33932fbb1cd4f24a7ed765a'
@@ -83,7 +83,7 @@ describe('Golden フィクスチャの整合', () => {
     expect(fixture.detectionVersion).toBe(FIXTURE_VERSION)
   })
 
-  test('生成済みの版定義に v15 の 1 段目の質問が変わらず残っている（現行の版 v17 とは別の版）', () => {
+  test('生成済みの版定義に v15 の 1 段目の質問が変わらず残っている（現行の版 v18 とは別の版）', () => {
     expect(DETECTION_VERSION).not.toBe(FIXTURE_VERSION)
     expect(sha256Hex(JSON.stringify(v15Definition()))).toBe(V15_DEFINITION_SHA256)
     // v15 の定義の質問は、1 段目の質問だけ（確認の質問は v16 から）。

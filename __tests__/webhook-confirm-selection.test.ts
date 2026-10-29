@@ -299,6 +299,6 @@ test('1 段目が失敗したときは 2 段目を送らない', async () => {
   }
 })
 
-test('版は v17 で、2 段目の質問は版定義に載る', () => {
-  expect(DETECTION_VERSION).toBe('v5-webhook-v17-store-character')
+test('版は v18 で、2 段目の質問は版定義に載る', () => {
+  expect(DETECTION_VERSION).toBe('v5-webhook-v18-store-confirm-default')
 })

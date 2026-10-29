@@ -16,7 +16,8 @@ const PROMPT_VERSIONS: ReadonlyArray<readonly [string, number]> = [
   ['v5-webhook-v14-concise-choices', 14],
   ['v5-webhook-v15-concise-author', 15],
   ['v5-webhook-v16-confirm-selection', 16],
-  ['v5-webhook-v17-store-character', 17]
+  ['v5-webhook-v17-store-character', 17],
+  ['v5-webhook-v18-store-confirm-default', 18]
 ]
 
 const PROMPT_VERSION_LABELS: ReadonlyMap<string, string> = new Map(
