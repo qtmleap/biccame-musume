@@ -9,10 +9,16 @@ import {
   webhookConditionIdentity,
   webhookItemIdentity
 } from '@api/services/webhook-jobs'
+import { proposeWebhookLinkedEvent } from '@api/services/webhook-linked-event'
 import { saveWebhookPromptAttempt } from '@api/services/webhook-prompt'
 import { generateEventTitle } from '@api/services/webhook-title'
 import type { Bindings } from '@api/types/bindings'
-import { DETECTION_VERSION, DetectionResultSchema, evaluateDetection } from '@biccame/shared/event-detect/detection'
+import {
+  DETECTION_VERSION,
+  DetectionResultSchema,
+  evaluateDetection,
+  isLinkedEventAction
+} from '@biccame/shared/event-detect/detection'
 import dayjs from 'dayjs'
 import { canAutoRegisterWebhookCandidate } from './webhook-auto-registration'
 import { recordWebhookDiscovery, synchronizeWebhookDiscovery } from './webhook-discovery-record'
@@ -47,9 +53,10 @@ export const processWebhookCandidate = async (
       stored.resultJson === null
         ? await (async () => {
             // 各送信の直前に、そこまでの送信入力を保存する。全バッチが成功するまで一部の判定だけを保存しない。
-            const { configuration, request, response } = await runWebhookDetection(env, job.post, storeKey, (sent) =>
+            const run = await runWebhookDetection(env, job.post, storeKey, (sent) =>
               saveWebhookPromptAttempt(env, target, token, DETECTION_VERSION, sent)
             )
+            const { configuration, request, response } = run
             const decision = evaluateDetection(
               job.post,
               request,
@@ -57,12 +64,24 @@ export const processWebhookCandidate = async (
               detectionThresholds(configuration),
               storeKey
             )
-            const discovery = recordWebhookDiscovery(
+            const recorded = recordWebhookDiscovery(
               job.post,
               response.answers,
               decision,
               detectionThresholds(configuration)
             )
+            // 3段目: 「終了」または「継続」（end・update）と判定された候補だけ、店舗の継続中のイベント（投稿より前に始まり、1段目の配布物の最上位の種類と一致するもの。確率は見ず、最上位が none などで種類が決まらなければ聞かない）から連携先を提案する（自動では連携しない）。
+            // 旧単一ジョブの仮の名前は配布物の名前として渡さない。失敗しても判定は続け、提案なしにする。
+            const linkedEvent = isLinkedEventAction(recorded.action)
+              ? await proposeWebhookLinkedEvent(env, run, {
+                  storeKey,
+                  screenName: job.post.screenName,
+                  item: legacy ? null : item,
+                  postedAt: job.post.createdAt,
+                  beforeSend: (sent) => saveWebhookPromptAttempt(env, target, token, DETECTION_VERSION, sent)
+                })
+              : null
+            const discovery = linkedEvent === null ? recorded : { ...recorded, linkedEvent }
             await env.DB.prepare(
               `UPDATE ${target.table} SET result_json=?,answers_json=?,model=?,question_version=?,confidence=?,judged_at=?,updated_at=? WHERE ${target.column}=? AND lease_token=?`
             )

@@ -17,6 +17,8 @@ import {
   rejudgeConfirmation,
   webhookActionAvailability
 } from '@/components/admin/webhook-labels'
+import { activeLinkedEventProposal } from '@/components/admin/webhook-linked-event-confirm'
+import { WebhookLinkedEventProposal } from '@/components/admin/webhook-linked-event-proposal'
 import { WebhookPromptDialog } from '@/components/admin/webhook-prompt-dialog'
 import { WebhookReasonRows } from '@/components/admin/webhook-reason-rows'
 import { WebhookRelatedEvents } from '@/components/admin/webhook-related-events'
@@ -87,7 +89,13 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           link: { postId, ...candidateSelection },
           ...(active === undefined ? {} : { item: active.item })
         })
+  // 連携先の提案があり、まだ提案のイベントへ連携していないときだけ、連携ダイアログに渡す（最初に「このイベントですか？」と確認する。連携は人が押すまで行わない）。
+  const proposal = job === undefined ? undefined : activeLinkedEventProposal(job)
+  const suggestedLink = proposal === undefined ? {} : { suggestion: proposal }
   const isPending = retry.isPending || resolve.isPending || rejudge.isPending
+  // 連携ダイアログと、連携先の提案の確認ダイアログが共有する連携（選択中の候補へ紐付ける）。
+  const linkEvent = async (eventId: string) =>
+    await resolve.mutateAsync({ postId, data: { ...candidateSelection, action: 'link', eventId } })
   const availability = job
     ? webhookActionAvailability(job.status, job.notificationStatus, job.reasons)
     : {
@@ -184,9 +192,8 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           disabled={!availability.canLink}
           isPending={isPending}
           replacing={job !== undefined && job.status === 'registered'}
-          onLink={async (eventId) =>
-            await resolve.mutateAsync({ postId, data: { ...candidateSelection, action: 'link', eventId } })
-          }
+          {...suggestedLink}
+          onLink={linkEvent}
         />
         <Button
           variant='outline'
@@ -221,6 +228,13 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
       {job && (
         <div className='space-y-8'>
           <WebhookRelatedEvents job={job} />
+          <WebhookLinkedEventProposal
+            key={`${postId}:${active === undefined ? 'post' : active.eventUUID}`}
+            job={job}
+            canLink={availability.canLink}
+            isPending={isPending}
+            onLink={linkEvent}
+          />
           <div className={cn('grid min-w-0 gap-4', parentJob && parentJob.candidates.length > 0 && 'md:grid-cols-2')}>
             <section className='min-w-0'>
               <h2 className='mb-2 text-lg font-semibold md:text-xl'>元投稿</h2>

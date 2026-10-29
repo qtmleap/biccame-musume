@@ -67,6 +67,20 @@ export {
   StoredFieldThresholdsSchema,
   thresholdOf
 } from './detection-thresholds'
+export {
+  createLinkedEventRequest,
+  isLinkedEventAction,
+  isLinkedEventQuestion,
+  LINKED_EVENT_INSTRUCTIONS,
+  LINKED_EVENT_MAX_OPTIONS,
+  LINKED_EVENT_QUESTION_KEY,
+  type LinkableEvent,
+  linkedEventKinds,
+  linkedEventOptions,
+  linkedEventProposalOf,
+  linkedEventTargetStore,
+  postAccountStore
+} from './linked-event'
 
 // v18: 2段目の店舗の確認（store_confirm）の質問を直した。本文（と引用元）に別の店舗での開催・配布が明示されていなければ、確認対象が投稿者の店舗のとき「はい」と答える。
 // 1段目（店舗・娘の質問。v17 の store_character を含む）と、2段目の娘の確認（character_confirm）の質問は v17 と同一。
