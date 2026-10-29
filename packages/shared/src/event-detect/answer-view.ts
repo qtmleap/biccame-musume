@@ -16,6 +16,7 @@ import {
 import type { ClefAnswer } from './clef'
 import { keyToDate, keyToQuantity } from './decide'
 import { type DetectionThresholds, thresholdOf } from './detection'
+import { hasExistingEventReason, withoutNewEventOnlyReasons } from './detection-reasons'
 
 // 管理画面向けの表示名をここから参照できるようにする（vite が起動時の exports を保持していても解決できる入口）。
 export { promptVersionLabel } from './prompt-version-label'
@@ -364,11 +365,15 @@ export const reasonLabel = (code: string): string => {
 
 /**
  * 保存された理由コードから、画面に出さない情報用のコード（NOTE_REASON_LABELS）を除く。表示のための絞り込みで、保存する値や登録可否は変えない。
+ * 継続・終了と判定された投稿（existing_event_update / event_ended がある）は、新規登録向けの理由（開始日・配布条件・金額など。detection-reasons.ts）も除く。
+ * 現行の判定はそもそも付けないが、すでに保存された旧ジョブには付いているため。状態の理由は残るので、理由が空にはならない。
  * 総括の auto_registration_not_allowed は、ほかに理由が残るときは除く。それだけのときは、保留の理由が無いように見えないよう残す。
  * 未知のコードや `<code>:<id>` の形は残す。元の並びは保つ。
+ * 引数は 1 件の判定の理由を想定する。複数候補の理由を合わせた配列を渡すと、告知の候補の理由まで除くことがある（管理画面は候補ごとに渡している）。
  */
 export const judgmentReasons = (reasons: readonly string[]): string[] => {
-  const shown = reasons.filter((reason) => !NOTE_REASON_LABELS.has(reason))
+  const visible = reasons.filter((reason) => !NOTE_REASON_LABELS.has(reason))
+  const shown = hasExistingEventReason(visible) ? withoutNewEventOnlyReasons(visible) : visible
   const specific = shown.filter((reason) => reason !== GENERIC_REASON)
   return specific.length > 0 ? specific : shown
 }
