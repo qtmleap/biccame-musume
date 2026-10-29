@@ -58,20 +58,21 @@ export const WebhookCandidateList = ({
               {isActive ? <CircleCheck className='size-4' /> : <Circle className='size-4 text-muted-foreground' />}
               {webhookCandidateTitle(candidate)}
             </Button>
-            <div className='flex flex-wrap items-center gap-1.5'>
-              <WebhookStatusBadge status={candidate.status} />
+            {/* 右端は常に状態バッジ。登録イベントのリンクと保留の手掛かりはその左に並べ、折り返したときも右に寄せる。 */}
+            <div className='ml-auto flex flex-wrap items-center justify-end gap-1.5'>
+              {candidate.eventId !== null && (
+                <Link
+                  to='/events/$uuid'
+                  params={{ uuid: candidate.eventId }}
+                  className='relative z-10 text-sm hover:underline'
+                >
+                  登録イベント
+                </Link>
+              )}
               {/* 検出済みは判定時点の AI の見立てで固定されるので、この行では情報にならない。判定未確定・対象外のときだけ保留の手掛かりとして併記する。 */}
               {hasUndetectedDiscovery(candidate) && <WebhookDiscoveryBadge job={candidate} />}
+              <WebhookStatusBadge status={candidate.status} />
             </div>
-            {candidate.eventId !== null && (
-              <Link
-                to='/events/$uuid'
-                params={{ uuid: candidate.eventId }}
-                className='relative z-10 text-sm hover:underline'
-              >
-                登録イベント
-              </Link>
-            )}
           </li>
         )
       })}

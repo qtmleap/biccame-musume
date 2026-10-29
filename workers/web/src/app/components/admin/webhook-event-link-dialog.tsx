@@ -4,6 +4,11 @@ import dayjs from 'dayjs'
 import { Link2, RefreshCw, Search } from 'lucide-react'
 import { useReducer, useRef, useState } from 'react'
 import { WebhookEventLinkConfirm } from '@/components/admin/webhook-event-link-confirm'
+import {
+  linkableWebhookEvents,
+  type WebhookLinkScope,
+  webhookLinkScopeDescription
+} from '@/components/admin/webhook-event-link-scope'
 import { initialWebhookLinkStage, reduceWebhookLinkStage } from '@/components/admin/webhook-event-link-stage'
 import {
   INITIAL_WEBHOOK_EVENT_SEARCH,
@@ -33,6 +38,8 @@ type LinkDialogProps = {
   isPending: boolean
   /** 登録済みの連携先を付け替えるときは true。説明に、元のイベントは変更しない旨を足す。 */
   replacing: boolean
+  /** 一覧に出すイベントの範囲(連携先を探す店舗と、投稿日時)。投稿の時点で終わっていない、その店舗のイベントだけを出す。 */
+  scope: WebhookLinkScope
   /**
    * 連携先の提案（終了または継続と判定された投稿。discovery.linkedEvent をそのまま渡す）。あるときだけ、最初に「このイベントですか？」と確認する段階で開く。
    * 「別のイベントを選ぶ」で検索の段階へ移るときは、提案を選択済みにしない。連携は人が「このイベントと連携する」か検索の「連携する」を押すまで行わない。
@@ -100,12 +107,13 @@ type SearchProps = Omit<LinkDialogProps, 'suggestion'> & { onClose: () => void }
  * 検索して選ぶ段階。DialogContent の中身だけを描く。提案を受け取らないので、必ず選択なしで始まる。
  * イベント一覧は、この段階に入ったとき(提案がなければ開いたとき)に取得する。
  */
-export const WebhookEventLinkSearch = ({ disabled, isPending, replacing, onLink, onClose }: SearchProps) => {
+export const WebhookEventLinkSearch = ({ disabled, isPending, replacing, scope, onLink, onClose }: SearchProps) => {
   const eventsQuery = useAdminEventOptions()
   const [state, dispatch] = useReducer(reduceWebhookEventSearch, INITIAL_WEBHOOK_EVENT_SEARCH)
   const [failed, setFailed] = useState(false)
   const submitting = useRef(false)
-  const events = eventsQuery.data === undefined ? [] : eventsQuery.data
+  // 管理用の全イベントのうち、連携できるもの(投稿の時点で終わっていない、対象の店舗のもの)だけを選択肢にする。見えないイベントへは連携できない。
+  const events = eventsQuery.data === undefined ? [] : linkableWebhookEvents(eventsQuery.data, scope)
   const selected = selectedWebhookLinkEvent(events, state)
   const blocked = disabled || isPending || eventsQuery.isPending || eventsQuery.isError || selected === undefined
   const submit = async () => {
@@ -126,7 +134,7 @@ export const WebhookEventLinkSearch = ({ disabled, isPending, replacing, onLink,
       <DialogHeader>
         <DialogTitle>既存イベントへ連携</DialogTitle>
         <DialogDescription>
-          イベント名・店舗・ビッカメ娘・開始日で検索して選択してください。既存イベントの内容は変更しません。
+          {webhookLinkScopeDescription(scope.stores)}既存イベントの内容は変更しません。
           {replacing && '登録済みのため、現在の連携先を置き換えます（元のイベントの内容は変更しません）。'}
         </DialogDescription>
       </DialogHeader>
@@ -150,7 +158,8 @@ export const WebhookEventLinkSearch = ({ disabled, isPending, replacing, onLink,
               setFailed(false)
             }}
             placeholder='イベント名・店舗・ビッカメ娘・開始日'
-            className='border-card-border'
+            // 枠はテーマの outline が描く。shadcn 既定のフォーカス時の枠とリングは消し、フォーカス中は outline の色だけブランド色にする。
+            className='focus-visible:border-transparent focus-visible:ring-0 focus-visible:outline-brand'
             disabled={isPending}
           />
         </div>
