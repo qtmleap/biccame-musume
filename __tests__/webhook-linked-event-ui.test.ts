@@ -9,6 +9,8 @@ import { listJob, renderDetail } from './fixtures/webhook-management'
 
 const TITLE = '連携先の提案'
 const PROPOSED = '550e8400-e29b-41d4-a716-446655440077'
+const OTHER = '550e8400-e29b-41d4-a716-446655440078'
+const LINK_LABEL = 'このイベントと連携'
 const EDIT_HREF = `href="/admin/events/${PROPOSED}/edit"`
 const discovery: WebhookDiscovery = {
   relevance: 'detected',
@@ -62,6 +64,24 @@ describe('連携先の提案（単独のコンポーネント）', () => {
     for (const recorded of [undefined, null, discovery])
       expect(await renderProposal({ ...job, discovery: recorded })).toBe('')
   })
+
+  test('提案のイベントへ連携済みなら、節も「このイベントと連携」ボタンも描画しない', async () => {
+    const linked: WebhookJob = { ...job, status: 'registered', eventId: PROPOSED, discovery: proposed }
+    expect(await renderProposal(linked)).toBe('')
+  })
+
+  test('別のイベントへ連携済みなら提案を描画し、連携し直せる', async () => {
+    const markup = await renderProposal({ ...job, status: 'registered', eventId: OTHER, discovery: proposed })
+    expect(headings(markup).filter((heading) => heading === TITLE)).toHaveLength(1)
+    expect(markup).toContain(EDIT_HREF)
+    expect(markup).toContain(LINK_LABEL)
+  })
+
+  test('未連携（eventId が null）なら提案を描画する', async () => {
+    const markup = await renderProposal({ ...job, eventId: null, discovery: proposed })
+    expect(headings(markup).filter((heading) => heading === TITLE)).toHaveLength(1)
+    expect(markup).toContain(LINK_LABEL)
+  })
 })
 
 describe('詳細ページの連携先の提案', () => {
@@ -85,6 +105,30 @@ describe('詳細ページの連携先の提案', () => {
       expect(markup).not.toContain(TITLE)
       expect(headings(markup).slice(0, 3)).toEqual(['元投稿', 'Clef の回答', '判定・イベント登録'])
     }
+  })
+
+  test('提案のイベントへ連携済みの履歴では、連携先の提案の節を出さない', async () => {
+    const markup = await renderDetail({ ...listJob, status: 'registered', eventId: PROPOSED, discovery: proposed })
+    expect(markup).not.toContain(TITLE)
+    expect(markup).not.toContain(LINK_LABEL)
+    expect(headings(markup).slice(0, 3)).toEqual(['元投稿', 'Clef の回答', '判定・イベント登録'])
+  })
+
+  test('別のイベントへ連携済みの履歴では、連携先の提案の節を出す', async () => {
+    const markup = await renderDetail({ ...listJob, status: 'registered', eventId: OTHER, discovery: proposed })
+    expect(headings(markup).slice(0, 4)).toEqual([TITLE, '元投稿', 'Clef の回答', '判定・イベント登録'])
+    expect(markup).toContain(EDIT_HREF)
+    expect(markup).toContain(LINK_LABEL)
+  })
+
+  test('複数の候補では、提案のイベントへ連携済みの候補を選んでいる間は節を出さず、未連携の候補なら出す', async () => {
+    const linked: WebhookCandidate = { ...candidateOf(1, proposed), status: 'registered', eventId: PROPOSED }
+    const unlinked: WebhookCandidate = { ...candidateOf(2, proposed), eventId: null }
+    const first = await renderDetail({ ...listJob, candidates: [linked, unlinked] })
+    expect(first).not.toContain(TITLE)
+    const second = await renderDetail({ ...listJob, candidates: [unlinked, linked] })
+    expect(headings(second)).toContain(TITLE)
+    expect(second).toContain(EDIT_HREF)
   })
 
   test('複数の候補では、選択中の候補（既定は最初の検出済み）の提案だけを出す', async () => {

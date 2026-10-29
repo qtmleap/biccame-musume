@@ -14,13 +14,15 @@ import { type ClefAnswer, type ClefQuestion, type ClefRequest, ClefRequestSchema
 // 最上位の娘が店舗の娘（最上位の店舗と同じ ID）でも、具体的な娘で確率が下限未満なら娘の確認を聞く（店舗と娘は二回チェックする）。
 // 「特に指定がなければその店舗の娘」は、娘が未指定のときの既定値（detection-character.ts）の話で、2回目のチェックを省く意味ではない。
 // 質問文は版ごとに固定する（webhook-prompt.ts が版定義と完全一致で検査する）。投稿ごとの値は instructions に入れず、state の末尾の行だけで渡す。
-// 文言は測定（scripts/lib/event-detect/d1-confirm-requests.ts）で固定したものと同一で、この定義を測定側も参照する。変えると測定の質問の版（sha256）が変わる。
+// 文言は測定（scripts/lib/event-detect/d1-confirm-requests.ts）が同じ定義を参照する。変えると測定の質問の版（sha256）が変わる（店舗の質問は v18 で変えたので、v17 までの測定とは版が違う）。
 export const STORE_TARGET_LABEL = '確認対象の開催店舗'
 export const CHARACTER_TARGET_LABEL = '確認対象のビッカメ娘'
 
+// v18: 本文（と引用元）に別の店舗での開催・配布が明示されていなければ、開催店舗は投稿者の店舗とみなして「はい」と答える（v17 までは「明らかな場合のみ」で控えめすぎた）。
+// 「投稿者の店舗」は state の「投稿者: @… / 〇〇店」の行の店舗。確認対象が別の店舗なら、本文でその店舗での開催・配布が示されているときだけ「はい」。
 export const STORE_CONFIRM_QUESTION: ClefQuestion = {
   type: 'noul',
-  instructions: `state の『${STORE_TARGET_LABEL}』は、この企画の対象物（配布物・記念限定販売品）を実際に入手できる開催・配布店舗ですか？ 対象キャラクターの所属店舗と開催店舗は別です。投稿者の店舗は、文脈上そこで配布すると明らかな場合のみ「はい」としてください。`
+  instructions: `state の『${STORE_TARGET_LABEL}』は、この企画の対象物（配布物・記念限定販売品）を実際に入手できる開催・配布店舗ですか？ 対象キャラクターの所属店舗と開催店舗は別です。投稿者の店舗は、state の「投稿者: @… / 〇〇店」の行の店舗です。本文（と引用元）に別の店舗で開催・配布すると明示されていなければ、この企画の開催店舗は投稿者の店舗です。確認対象が投稿者の店舗で、別の店舗での開催・配布が明示されていないときは「はい」としてください。確認対象が投稿者の店舗ではない別の店舗のときは、本文にその店舗での開催・配布が示されているときだけ「はい」としてください。`
 }
 // 1段目の娘の質問（choice）の趣旨と揃える。開催店舗・投稿者の娘と同一と仮定しない注意書きを含む。
 export const CHARACTER_CONFIRM_QUESTION: ClefQuestion = {

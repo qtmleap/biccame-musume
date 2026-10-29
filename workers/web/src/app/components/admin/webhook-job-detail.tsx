@@ -18,6 +18,7 @@ import {
   webhookActionAvailability,
   webhookLastErrorLabel
 } from '@/components/admin/webhook-labels'
+import { activeLinkedEventProposal } from '@/components/admin/webhook-linked-event-confirm'
 import { WebhookLinkedEventProposal } from '@/components/admin/webhook-linked-event-proposal'
 import { WebhookPromptDialog } from '@/components/admin/webhook-prompt-dialog'
 import { WebhookReasonRows } from '@/components/admin/webhook-reason-rows'
@@ -89,10 +90,9 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           link: { postId, ...candidateSelection },
           ...(active === undefined ? {} : { item: active.item })
         })
-  // 連携先の提案があるときだけ、連携ダイアログに渡す（最初に「このイベントですか？」と確認する。連携は人が押すまで行わない）。
-  const linkedEvent =
-    job === undefined || job.discovery === undefined || job.discovery === null ? undefined : job.discovery.linkedEvent
-  const suggestedLink = linkedEvent === undefined ? {} : { suggestion: linkedEvent }
+  // 連携先の提案があり、まだ提案のイベントへ連携していないときだけ、連携ダイアログに渡す（最初に「このイベントですか？」と確認する。連携は人が押すまで行わない）。
+  const proposal = job === undefined ? undefined : activeLinkedEventProposal(job)
+  const suggestedLink = proposal === undefined ? {} : { suggestion: proposal }
   const isPending = retry.isPending || resolve.isPending || rejudge.isPending
   // 連携ダイアログと、連携先の提案の確認ダイアログが共有する連携（選択中の候補へ紐付ける）。
   const linkEvent = async (eventId: string) =>

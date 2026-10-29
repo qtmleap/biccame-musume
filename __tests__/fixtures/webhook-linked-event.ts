@@ -2,7 +2,12 @@ import { expect, spyOn } from 'bun:test'
 import * as discord from '@api/services/discord'
 import { getWebhookJob, insertWebhookJob } from '@api/services/webhook-jobs'
 import { processWebhookJob } from '@api/services/webhook-process'
-import { type ClefRequest, ClefRequestSchema, ClefResponseSchema } from '@biccame/shared/event-detect/clef'
+import {
+  type ClefAnswer,
+  type ClefRequest,
+  ClefRequestSchema,
+  ClefResponseSchema
+} from '@biccame/shared/event-detect/clef'
 import { LINKED_EVENT_QUESTION_KEY } from '@biccame/shared/event-detect/detection'
 import { fixture, makePost, migrate } from './webhook-multiple-events'
 
@@ -17,6 +22,19 @@ export type Status = 'end' | 'ongoing' | 'start'
 // 3 段目の応答。pick は選ぶ選択肢（'none' は該当なし）、probability は選んだ選択肢の確率。fail は送信自体の失敗、garbage は不正な応答。
 export type Linked = { pick: string; probability: number; fail: boolean; garbage: boolean }
 
+/** 1段目の category の回答を、差し替えの指定（category）のとおりにしたもの。指定が無い、または元の回答が choice でなければ空（元のまま）。 */
+const categoryOverride = (
+  current: ClefAnswer | undefined,
+  override: { choice: string | null; probability: number | null }
+): Record<string, ClefAnswer> => {
+  if (current?.type !== 'choice' || (override.choice === null && override.probability === null)) return {}
+  const choice = override.choice === null ? current.choice : override.choice
+  const probability = override.probability === null ? 0.99 : override.probability
+  // 判定が検査する形（選んだ選択肢が最大で、合計が 1 以下）にするため、選んだもの以外は 0 にする。
+  const zeros = Object.fromEntries(Object.keys(current.probabilities).map((key) => [key, 0]))
+  return { category: { type: 'choice', choice, probabilities: { ...zeros, [choice]: probability } } }
+}
+
 export const setup = async (name: string, status: Status) => {
   const base = await fixture(name)
   await migrate(base.env.DB)
@@ -28,6 +46,9 @@ export const setup = async (name: string, status: Status) => {
   const confirm: { yes: number | null } = { yes: null }
   // is_event の確率。null なら元のフェイクの AI（0.99）のまま。低くすると、状態に関わらず「要確認」の判定になる。
   const eventScore: { value: number | null } = { value: null }
+  // 1段目の category の回答の差し替え。choice は選ぶ選択肢（質問にあるもの）、probability はその確率。null の項目は元のフェイクの AI の回答のまま。
+  // 3段目で探すイベントの種類（linkedEventKinds）は、この回答の最上位の選択肢だけで決まる（確率は見ない）。
+  const category: { choice: string | null; probability: number | null } = { choice: null, probability: null }
   // Object.assign は base.env を書き換えるので、元のフェイクの AI は先に取っておく。
   const inner = base.env.AI
   const env = Object.assign(base.env, {
@@ -67,6 +88,7 @@ export const setup = async (name: string, status: Status) => {
         return {
           answers: {
             ...response.data.answers,
+            ...categoryOverride(response.data.answers.category, category),
             ...(eventScore.value === null ? {} : { is_event: { type: 'noul', noul: eventScore.value } }),
             status: { type: 'choice', choice: status, probabilities: { [status]: 0.99 } }
           }
@@ -79,7 +101,7 @@ export const setup = async (name: string, status: Status) => {
     warn.mockRestore()
     await base.cleanup()
   }
-  return { env, state: base.state, calls, linked, confirm, eventScore, warn, cleanup }
+  return { env, state: base.state, calls, linked, confirm, eventScore, category, warn, cleanup }
 }
 export type Value = Awaited<ReturnType<typeof setup>>
 
@@ -87,7 +109,7 @@ export const seedEvent = async (
   env: Value['env'],
   index: number,
   store: string,
-  overrides: { end?: string | null; endedAt?: string | null } = {}
+  overrides: { end?: string | null; endedAt?: string | null; category?: string; start?: string } = {}
 ) => {
   const stamp = '2026-10-01T00:00:00.000+00:00'
   await env.DB.prepare(
@@ -95,9 +117,9 @@ export const seedEvent = async (
   )
     .bind(
       eventId(index),
-      'limited_card',
+      overrides.category === undefined ? 'limited_card' : overrides.category,
       `既存イベント${index}`,
-      stamp,
+      overrides.start === undefined ? stamp : overrides.start,
       overrides.end === undefined ? null : overrides.end,
       overrides.endedAt === undefined ? null : overrides.endedAt,
       stamp

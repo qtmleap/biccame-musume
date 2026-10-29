@@ -75,15 +75,16 @@ export {
   LINKED_EVENT_MAX_OPTIONS,
   LINKED_EVENT_QUESTION_KEY,
   type LinkableEvent,
+  linkedEventKinds,
   linkedEventOptions,
   linkedEventProposalOf,
   linkedEventTargetStore,
   postAccountStore
 } from './linked-event'
 
-// v17: 娘の質問に store_character（本文でビッカメ娘に特に言及がなければ開催店舗の娘）を足し、「店舗の娘と同一と仮定しない」注意書きを外した。
-// 店舗の質問と2段目（選んだ最上位の店舗・娘ごとの「はい/いいえ」の確認。v16 で追加）の質問は v16 と同一。
-export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v17-store-character`
+// v18: 2段目の店舗の確認（store_confirm）の質問を直した。本文（と引用元）に別の店舗での開催・配布が明示されていなければ、確認対象が投稿者の店舗のとき「はい」と答える。
+// 1段目（店舗・娘の質問。v17 の store_character を含む）と、2段目の娘の確認（character_confirm）の質問は v17 と同一。
+export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v18-store-confirm-default`
 export {
   type DetectionOutcome,
   DetectionOutcomeSchema,
@@ -333,7 +334,7 @@ const draftCategory = (answer: ClefAnswer | undefined): Category | undefined => 
 export const buildDetectionDraft = (post: DetectPost, answers: ClefResponse['answers']): DetectionDraft => {
   const category = draftCategory(answers.category)
   // 下書きでも開催店舗から対象キャラクターを推測しない（v17 の store_character が最上位のときだけ、下書きの店舗の娘）。版ごとに回答の形が違うため、キーの有無で読み分ける。
-  //  v2: store（choice）／v3〜v12: venue.* と character.*（noul）／v13 以降（v14〜v17 を含む）: store と character（choice）
+  //  v2: store（choice）／v3〜v12: venue.* と character.*（noul）／v13 以降（v14〜v18 を含む）: store と character（choice）
   const keys = Object.keys(answers)
   const stores = keys.some((key) => key.startsWith('venue.'))
     ? associationIds(answers, 'venue', 0.5)
