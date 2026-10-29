@@ -109,16 +109,18 @@ describe('連携ダイアログの一覧と説明は、店舗と投稿時点で�
 })
 
 describe('検索欄の枠', () => {
-  test('テーマの outline だけを枠にする（shadcn 既定のフォーカス時の枠とリングを消し、outline をブランド色にする）', () => {
+  test('shadcn 既定の枠とリングを使い、リングだけ内側に描く（フォームの overflow-hidden で切れないようにする）', () => {
     const markup = renderSearch({ stores: [], postedAt: POSTED_AT })
     const input = markup.match(/<input\b[^>]*id="webhook-link-search"[^>]*>/)?.[0]
     if (input === undefined) throw new Error('検索欄が描画されていない')
     const classAttribute = input.match(/class="([^"]*)"/)?.[1]
     if (classAttribute === undefined) throw new Error('検索欄に class が無い')
     const classes = classAttribute.split(/\s+/)
-    for (const name of ['focus-visible:border-transparent', 'focus-visible:ring-0', 'focus-visible:outline-brand'])
-      expect(classes).toContain(name)
-    // 枠はテーマの outline が描く。border-card-border はテーマが border を透明にするので指定しない。
+    expect(classes).toContain('focus-visible:ring-inset')
+    // 既定の枠とリングを消す指定は入れない。
+    for (const name of ['focus-visible:ring-0', 'focus-visible:border-transparent', 'focus-visible:outline-brand'])
+      expect(classes).not.toContain(name)
+    // border-card-border はテーマが border を透明にするので指定しない。
     expect(classes).not.toContain('border-card-border')
   })
 })

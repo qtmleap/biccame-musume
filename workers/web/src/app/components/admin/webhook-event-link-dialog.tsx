@@ -158,8 +158,8 @@ export const WebhookEventLinkSearch = ({ disabled, isPending, replacing, scope, 
               setFailed(false)
             }}
             placeholder='イベント名・店舗・ビッカメ娘・開始日'
-            // 枠はテーマの outline が描く。shadcn 既定のフォーカス時の枠とリングは消し、フォーカス中は outline の色だけブランド色にする。
-            className='focus-visible:border-transparent focus-visible:ring-0 focus-visible:outline-brand'
+            // 他の Input と同じ見た目（灰色の枠と 3px のリング）に揃える。ただしフォームが overflow-hidden で外側のリングが切れるため、リングだけ内側に描く。
+            className='focus-visible:ring-inset'
             disabled={isPending}
           />
         </div>
