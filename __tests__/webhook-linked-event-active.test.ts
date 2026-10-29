@@ -72,6 +72,7 @@ describe('上部「連携」ボタンのダイアログに渡す提案', () => {
               disabled: false,
               isPending: false,
               replacing: job.status === 'registered',
+              scope: { stores: [], postedAt: '2026-10-02T03:00:00.000Z' },
               onLink: async () => {},
               onClose: () => {}
             })

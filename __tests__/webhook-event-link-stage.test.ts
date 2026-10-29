@@ -137,6 +137,9 @@ const eventOf = (uuid: string, title: string): Event => ({
 })
 const events = [eventOf(PROPOSED, '缶バッジで繋ぐビッカメ娘旅'), eventOf(OTHER, '別のイベント')]
 
+/** 店舗が決まらない範囲(店舗では絞らない)。終了日・終了日時の無いこのファイルのイベントは、すべて一覧に残る。 */
+const scope = { stores: [], postedAt: '2026-10-02T03:00:00.000Z' }
+
 type Options = {
   suggestion?: WebhookLinkedEvent
   disabled?: boolean
@@ -168,6 +171,7 @@ const renderBody = ({
             disabled,
             isPending,
             replacing,
+            scope,
             onLink,
             onClose: () => {}
           })
@@ -281,6 +285,7 @@ describe('「別のイベントを選ぶ」の後の検索の段階は、提案�
             disabled: false,
             isPending: false,
             replacing: false,
+            scope,
             onLink: async () => {},
             onClose: () => {}
           })

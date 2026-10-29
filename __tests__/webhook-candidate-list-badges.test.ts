@@ -64,19 +64,19 @@ describe('識別されたイベントの行のバッジ', () => {
     expect(markup).not.toContain('検出済み')
   })
 
-  test('保留＋対象外は「保留」に加えて「対象外」を併記する', async () => {
+  test('保留＋対象外は「対象外」を左に、状態の「保留」を右端に出す', async () => {
     const markup = await renderList([
       candidateOf('名刺', firstUuid, { status: 'held', discovery: discoveryOf('not_detected') })
     ])
-    expect(badgeLabels(markup)).toEqual(['保留', '対象外'])
+    expect(badgeLabels(markup)).toEqual(['対象外', '保留'])
     expect(markup).not.toContain('検出済み')
   })
 
-  test('保留＋判定未確定は「保留」に加えて「判定未確定」を併記する', async () => {
+  test('保留＋判定未確定は「判定未確定」を左に、状態の「保留」を右端に出す', async () => {
     const markup = await renderList([
       candidateOf('名刺', firstUuid, { status: 'held', discovery: discoveryOf('uncertain') })
     ])
-    expect(badgeLabels(markup)).toEqual(['保留', '判定未確定'])
+    expect(badgeLabels(markup)).toEqual(['判定未確定', '保留'])
     expect(markup).not.toContain('検出済み')
   })
 
@@ -104,13 +104,35 @@ describe('識別されたイベントの行のバッジ', () => {
     expect(without).not.toContain('登録イベント')
   })
 
+  test('登録済みの行は、右のグループの最後が状態バッジで、登録イベントのリンクはその前に出る', async () => {
+    const markup = await renderList([
+      candidateOf('名刺', firstUuid, { ...registered, discovery: discoveryOf('uncertain') })
+    ])
+    const row = markup.match(/<li\b[^>]*>.*?<\/li>/)?.[0]
+    if (row === undefined) throw new Error('行が描画されていない')
+    // 右のグループ（ml-auto）は行の直下の最後の子で、閉じタグ手前の最後の要素が状態バッジになる。
+    const groupStart = row.indexOf('<div class="ml-auto')
+    expect(groupStart).toBeGreaterThan(0)
+    const group = row.slice(groupStart)
+    const link = group.indexOf('>登録イベント</a>')
+    const discovery = group.indexOf('判定未確定')
+    const status = group.lastIndexOf('data-slot="badge"')
+    expect(link).toBeGreaterThan(0)
+    expect(link).toBeLessThan(discovery)
+    expect(discovery).toBeLessThan(status)
+    expect(badgeLabels(group).at(-1)).toBe('登録済み')
+    expect(group.trimEnd().endsWith('</span></div></li>')).toBe(true)
+    // 候補名のボタンは右のグループの外（左）にある。
+    expect(row.indexOf('<button')).toBeLessThan(groupStart)
+  })
+
   test('複数の候補は、行ごとに自分の状態と検出結果のバッジを持つ', async () => {
     const markup = await renderList([
       candidateOf('名刺', firstUuid, { ...registered, discovery: discoveryOf('detected') }),
       candidateOf('アクキー', secondUuid, { status: 'held', discovery: discoveryOf('uncertain') })
     ])
     const rows = [...markup.matchAll(/<li\b[^>]*>.*?<\/li>/g)].map((match) => badgeLabels(match[0]))
-    expect(rows).toEqual([['登録済み'], ['保留', '判定未確定']])
+    expect(rows).toEqual([['登録済み'], ['判定未確定', '保留']])
   })
 
   test('詳細ページでも同じ（識別されたイベントの節に「検出済み」を出さず、登録の状態を出す）', async () => {
@@ -128,7 +150,7 @@ describe('識別されたイベントの行のバッジ', () => {
       })
     )
     if (section === undefined) throw new Error('識別されたイベントの節が描画されていない')
-    expect(badgeLabels(section)).toEqual(['登録済み', '保留', '対象外'])
+    expect(badgeLabels(section)).toEqual(['登録済み', '対象外', '保留'])
     expect(section).not.toContain('検出済み')
     expect(section).toContain(`href="/events/${secondUuid}"`)
   })
