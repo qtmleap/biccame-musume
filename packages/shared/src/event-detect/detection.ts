@@ -69,6 +69,20 @@ export {
   StoredFieldThresholdsSchema,
   thresholdOf
 } from './detection-thresholds'
+export {
+  createLinkedEventRequest,
+  isLinkedEventAction,
+  isLinkedEventQuestion,
+  LINKED_EVENT_INSTRUCTIONS,
+  LINKED_EVENT_MAX_OPTIONS,
+  LINKED_EVENT_QUESTION_KEY,
+  type LinkableEvent,
+  linkedEventKinds,
+  linkedEventOptions,
+  linkedEventProposalOf,
+  linkedEventTargetStore,
+  postAccountStore
+} from './linked-event'
 
 // v19: 配布物（category）の選択肢に gift_card を追加した。物品名にギフトカードを含む投稿だけに出し、出すとき other の説明からギフトカードを外す。
 // 質問文は v18 から一字も変えない（実モデルで、質問文を変えると gift_card を出さない投稿の出力まで揺れ、最上位が変わる投稿もあったため）。

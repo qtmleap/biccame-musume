@@ -41,6 +41,8 @@ describe('管理画面の outline ボタンの枠線色', () => {
     ['workers/web/src/app/components/admin/webhook-job-detail.tsx', 4],
     // 既存へ紐付け・検索候補の再取得・キャンセル。
     ['workers/web/src/app/components/admin/webhook-event-link-dialog.tsx', 3],
+    // キャンセル・別のイベントを選ぶ(連携先の提案の確認)。
+    ['workers/web/src/app/components/admin/webhook-event-link-confirm.tsx', 2],
     // 保存済みプロンプトの再取得。
     ['workers/web/src/app/components/admin/webhook-prompt-dialog.tsx', 1],
     // 更新・bot 設定・前へ・次へ。
