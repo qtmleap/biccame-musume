@@ -3,6 +3,7 @@ import type { ClefAnswer } from '@biccame/shared/event-detect/clef'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { WebhookAnswerTable } from '@/components/admin/webhook-answer-table'
+import { basicCellsOf, gridRootOf } from './fixtures/webhook-answer-grid'
 
 const thresholds = { eventThreshold: 0.9, fieldThreshold: 0.9, ignoreThreshold: 0.5 }
 
@@ -18,77 +19,74 @@ const answers: Record<string, ClefAnswer> = {
 const render = (configured: boolean) =>
   renderToStaticMarkup(createElement(WebhookAnswerTable, { answers, ...(configured ? { thresholds } : {}) }))
 
-// 行ごとに td の属性と中身を取り出す。td の中に td は入らないため、最短一致で切り出せる。
-const rowsOf = (markup: string) =>
-  [...markup.matchAll(/<tr\b[^>]*>(?:(?!<\/tr>).)*?<td\b.*?<\/tr>/g)].map((row) =>
-    [...row[0].matchAll(/<td\b([^>]*)>(.*?)<\/td>/g)].map((cell) => ({ attributes: cell[1], content: cell[2] }))
-  )
+const cellsOf = (configured: boolean) => {
+  const root = gridRootOf(render(configured))
+  if (root === null) throw new Error('Missing grid root')
+  return root.querySelectorAll('li[data-key]')
+}
 
-const MONO_SPAN = /^<span class="font-mono tabular-nums leading-\[0\]">[^<]+<\/span>$/
-
-describe('Clef の回答表の基線揃え', () => {
-  test('確率としきい値は flex にせず、行高 0 の等幅 span を行内に置いてセルの右端に揃える', () => {
+describe('Clef の回答 Grid の基線揃え', () => {
+  test('1行目（ラベルとステータス）も2行目（回答と確率）も items-baseline の flex で、箱の中心揃えを使わない', () => {
     for (const configured of [true, false]) {
-      const rows = rowsOf(render(configured))
-      expect(rows).toHaveLength(3)
-      for (const cells of rows) {
-        expect(cells).toHaveLength(6)
-        for (const index of [2, 3]) {
-          const cell = cells[index]
-          expect(cell?.attributes).toContain('text-right')
-          expect(cell?.attributes).not.toContain('font-mono')
-          expect(cell?.content).not.toContain('flex')
-          expect(cell?.content).not.toContain('items-center')
-          expect(cell?.content).not.toContain('justify-end')
-          expect(cell?.content).toMatch(MONO_SPAN)
+      const cells = cellsOf(configured)
+      expect(cells).toHaveLength(3)
+      for (const cell of cells) {
+        const lines = cell.querySelectorAll(':scope > div')
+        expect(lines).toHaveLength(2)
+        for (const line of lines) {
+          const classes = line.getAttribute('class')
+          expect(classes).toContain('flex')
+          expect(classes).toContain('items-baseline')
+          expect(classes).not.toContain('items-center')
         }
       }
     }
   })
 
-  test('確率としきい値の値は等幅 span の中に出て、しきい値が無い間のしきい値は — になる', () => {
-    const [, confirmed] = rowsOf(render(true))
-    expect(confirmed?.[2]?.content).toBe('<span class="font-mono tabular-nums leading-[0]">99.0%</span>')
-    expect(confirmed?.[3]?.content).toBe('<span class="font-mono tabular-nums leading-[0]">90.0%</span>')
-    for (const cells of rowsOf(render(false))) {
-      expect(cells[3]?.content).toBe('<span class="font-mono tabular-nums leading-[0]">—</span>')
-      expect(cells[3]?.attributes).toContain('text-muted-foreground')
+  test('等幅は数値の span にだけ付き、セルや行やラベル・回答の span には付かない', () => {
+    for (const configured of [true, false]) {
+      for (const cell of cellsOf(configured)) {
+        expect(cell.getAttribute('class')).not.toContain('font-mono')
+        for (const field of ['label', 'answer', 'status']) {
+          const element = cell.querySelector(`[data-field="${field}"]`)
+          expect(element?.getAttribute('class')).not.toContain('font-mono')
+        }
+        const probability = cell.querySelector('[data-field="probability"]')
+        expect(probability?.getAttribute('class')).toContain('font-mono')
+        expect(probability?.getAttribute('class')).toContain('tabular-nums')
+        expect(probability?.getAttribute('class')).toContain('text-right')
+        // 行高 0 の工夫は Grid では使わない（flex アイテムの高さが潰れるため）。
+        expect(cell.outerHTML).not.toContain('leading-[0]')
+      }
     }
   })
 
-  test('次点は基線揃えの flex で並べ、箱の中心揃え（items-center）を使わない', () => {
-    const rows = rowsOf(render(true))
-    const [tentative, confirmed, withoutAlternatives] = rows.map((cells) => cells[5]?.content)
-    // 次点が2件ある行は、gap-4 の flex の中に等幅 span が2つ並ぶ。
-    expect(tentative).toBe(
-      '<div class="flex items-baseline gap-4">' +
-        '<span class="font-mono tabular-nums leading-[0] flex items-baseline gap-1"><span class="font-sans leading-5">開始</span> 15.0%</span>' +
-        '<span class="font-mono tabular-nums leading-[0] flex items-baseline gap-1"><span class="font-sans leading-5">状態なし</span> 5.0%</span>' +
-        '</div>'
-    )
-    expect(confirmed).toBe(
-      '<div class="flex items-baseline gap-4"><span class="font-mono tabular-nums leading-[0] flex items-baseline gap-1"><span class="font-sans leading-5">いいえ</span> 1.0%</span></div>'
-    )
-    for (const content of [confirmed, tentative]) {
-      expect(content).toContain('items-baseline')
-      expect(content).not.toContain('items-center')
-    }
-    expect(withoutAlternatives).toBe('—')
-  })
-
-  test('判定のバッジは従来どおり flex items-center で行の中央に揃え、確定と未確定の文言を出す', () => {
-    const rows = rowsOf(render(true))
-    expect(rows.map((cells) => cells[4]?.content.match(/data-slot="badge"[^>]*>(.*?)<\/span>/)?.[1])).toEqual([
-      '未確定',
-      '確定',
-      '未確定'
+  test('補足のしきい値と次点の数値だけが等幅 span で、日本語の文字は sans のまま', () => {
+    const [tentative, confirmed, withoutAlternatives] = basicCellsOf(render(true))
+    expect(tentative?.note).toBe('しきい値 80.0% · 次点 開始 15.0% / 状態なし 5.0%')
+    expect(confirmed?.note).toBe('しきい値 90.0% · 次点 いいえ 1.0%')
+    expect(withoutAlternatives?.note).toBe('しきい値 90.0%')
+    const note = gridRootOf(render(true))?.querySelector('[data-key="status"] [data-field="note"]')
+    expect(note?.querySelectorAll('span').map((span) => span.getAttribute('class'))).toEqual([
+      'font-mono tabular-nums',
+      'font-mono tabular-nums',
+      'font-mono tabular-nums'
     ])
-    for (const cells of rows) {
-      expect(cells[4]?.content).toMatch(/^<div class="flex items-center"><span data-slot="badge"/)
+  })
+
+  test('確率としきい値の値は等幅 span の中に出て、現在のしきい値が無い間のしきい値は — になる', () => {
+    const [, confirmed] = basicCellsOf(render(true))
+    expect(confirmed?.probability).toBe('99.0%')
+    expect(confirmed?.note).toContain('90.0%')
+    for (const cell of basicCellsOf(render(false))) {
+      expect(cell.note).toContain('しきい値 —')
+      expect(cell.status).toBe('—')
     }
-    // しきい値が無い間は判定を出さない。
-    for (const cells of rowsOf(render(false))) {
-      expect(cells[4]?.content).toBe('—')
-    }
+  })
+
+  test('ステータスは Badge で、確定と未確定の文言を出す。現在のしきい値が無い間は出さない', () => {
+    expect(basicCellsOf(render(true)).map((cell) => cell.status)).toEqual(['未確定', '確定', '未確定'])
+    expect(render(true).match(/data-slot="badge"/g)).toHaveLength(3)
+    expect(render(false)).not.toContain('data-slot="badge"')
   })
 })

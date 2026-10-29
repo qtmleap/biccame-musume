@@ -1,4 +1,3 @@
-import type { Bindings } from '@api/types/bindings'
 import { DetectionResultSchema } from '@biccame/shared/event-detect/detection'
 import { ItemCountAuditSchema, itemCountReviewReasons } from '@biccame/shared/event-detect/extraction'
 import type { DetectPost } from '@biccame/shared/event-detect/post'
@@ -34,7 +33,7 @@ const explicitLegacyRetry = (envelope: unknown, context: LegacyRetry | undefined
   return LegacyExtractionVersionSchema.safeParse(envelope.version).success
 }
 
-/** 新保存は監査必須。互換は検証済みの旧register再試行だけに限定する。 */
+/** 保存された件数の監査から確認理由を計算する。自動登録の関門としては使わなくなった（呼び出しは単体テストだけ）。 */
 export const storedWebhookItemCountReviewReasons = (value: string | null, context?: LegacyRetry): string[] => {
   try {
     const envelope: unknown = value === null ? null : JSON.parse(value)
@@ -47,18 +46,4 @@ export const storedWebhookItemCountReviewReasons = (value: string | null, contex
   } catch {
     return unknownAudit()
   }
-}
-
-export const webhookItemCountReviewReasons = async (
-  env: Pick<Bindings, 'DB'>,
-  postId: string,
-  context: LegacyRetry
-): Promise<string[]> => {
-  const parent = await env.DB.prepare(
-    'SELECT extraction_json AS extractionJson FROM webhook_event_jobs WHERE post_id=?'
-  )
-    .bind(postId)
-    .first<{ extractionJson: string | null }>()
-  if (parent === null) throw new Error('Webhook parent disappeared')
-  return storedWebhookItemCountReviewReasons(parent.extractionJson, context)
 }

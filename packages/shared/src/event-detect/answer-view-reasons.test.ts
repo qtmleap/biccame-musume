@@ -45,6 +45,7 @@ describe('reasonLabel', () => {
     charge_condition_unconfirmed: '入金・チャージ条件は自動登録の対象外',
     extraction_store_unspecified: '抽出段階で開催店舗を特定できていない',
     invalid_event_candidate: '登録候補が不正',
+    auto_registration_not_allowed: '自動登録の条件を満たさない',
     not_distribution_event: 'ビッカメ娘のイベントではない',
     no_keyword: 'キーワードなし',
     non_store_account: '店舗以外のアカウント',
@@ -295,5 +296,38 @@ describe('judgmentReasons', () => {
     const reasons = ['title_generated', 'manually_linked']
     judgmentReasons(reasons)
     expect(reasons).toEqual(['title_generated', 'manually_linked'])
+  })
+
+  describe('auto_registration_not_allowed（自動登録できなかったことだけを示す総括のコード）', () => {
+    const generic = 'auto_registration_not_allowed'
+
+    test('具体的な理由が併記されるときは、具体的な理由だけを元の並びで残す', () => {
+      expect(judgmentReasons([generic, 'distribution_item_count_mismatch'])).toEqual([
+        'distribution_item_count_mismatch'
+      ])
+      expect(
+        judgmentReasons(['store_unconfirmed', generic, 'possible_duplicate:550e8400-e29b-41d4-a716-446655440000'])
+      ).toEqual(['store_unconfirmed', 'possible_duplicate:550e8400-e29b-41d4-a716-446655440000'])
+      expect(judgmentReasons([generic, 'future_reason'])).toEqual(['future_reason'])
+    })
+
+    test('唯一の理由なら残すので、保留なのに理由が無いようには見えない', () => {
+      expect(judgmentReasons([generic])).toEqual([generic])
+      expect(reasonLabel(generic)).toBe('自動登録の条件を満たさない')
+    })
+
+    test('情報用のコードと併せても同じ（具体的な理由があれば除き、無ければ残す）', () => {
+      expect(judgmentReasons([generic, 'title_generated'])).toEqual([generic])
+      expect(judgmentReasons(['store_inferred_from_account', generic, 'title_fallback'])).toEqual([generic])
+      expect(judgmentReasons([generic, 'title_generated', 'distribution_item_count_unknown'])).toEqual([
+        'distribution_item_count_unknown'
+      ])
+    })
+
+    test('保存された配列は書き換えない（表示の絞り込みだけで、保存する値は変わらない）', () => {
+      const reasons = Object.freeze([generic, 'title_generated', 'store_unconfirmed'])
+      expect(judgmentReasons(reasons)).toEqual(['store_unconfirmed'])
+      expect(reasons).toEqual([generic, 'title_generated', 'store_unconfirmed'])
+    })
   })
 })

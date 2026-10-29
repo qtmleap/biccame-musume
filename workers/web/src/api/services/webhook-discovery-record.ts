@@ -14,29 +14,21 @@ export const recordWebhookDiscovery = (
   post: DetectPost,
   answers: ClefResponse['answers'] | null,
   decision: DetectionResult | null,
-  thresholds?: DetectionThresholds,
-  extraReasons: readonly string[] = []
+  thresholds?: DetectionThresholds
 ): WebhookDiscovery => {
   const outcome = describeDetectionOutcome(post, answers, decision, thresholds)
-  const itemCountNeedsReview = extraReasons.some((reason) => reason.startsWith('distribution_item_count_'))
   return {
     relevance: outcome.discovery.status === 'not_event' ? 'not_detected' : outcome.discovery.status,
-    action:
-      outcome.action === 'ignore'
-        ? 'none'
-        : itemCountNeedsReview && outcome.action === 'create'
-          ? 'review'
-          : outcome.action,
+    action: outcome.action === 'ignore' ? 'none' : outcome.action,
     confidence: outcome.discovery.confidence,
     evidence: outcome.discovery.evidence,
     missingFields: [
       ...new Set([
         ...outcome.missingFields,
-        ...(decision === null ? ['status', 'category', 'stores', 'characterIds', 'startDate', 'conditions'] : []),
-        ...(itemCountNeedsReview ? ['itemCountAudit'] : [])
+        ...(decision === null ? ['status', 'category', 'stores', 'characterIds', 'startDate', 'conditions'] : [])
       ])
     ],
-    reasons: [...new Set([...(decision === null ? [] : decision.reasons), ...extraReasons])]
+    reasons: [...new Set(decision === null ? [] : decision.reasons)]
   }
 }
 
@@ -57,12 +49,7 @@ export const synchronizeWebhookDiscovery = async (
         : job.status === 'held' && current.action === 'create'
           ? 'review'
           : current.action,
-    missingFields: [
-      ...new Set([
-        ...current.missingFields,
-        ...(job.reasons.some((reason) => reason.startsWith('distribution_item_count_')) ? ['itemCountAudit'] : [])
-      ])
-    ],
+    missingFields: [...new Set(current.missingFields)],
     reasons: [...new Set(job.reasons)]
   }
   const changed = await env.DB.prepare(

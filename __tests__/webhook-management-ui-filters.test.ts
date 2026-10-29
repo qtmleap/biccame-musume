@@ -10,8 +10,8 @@ import {
   webhookPostStatusLabel
 } from '@/components/admin/webhook-labels'
 import { webhookJobListQueryKey } from '@/hooks/use-admin-webhooks'
+import { basicCellsOf } from './fixtures/webhook-answer-grid'
 import {
-  answerRows,
   characters,
   eventNameCell,
   listJob,
@@ -286,16 +286,15 @@ describe('項目別のしきい値の反映', () => {
       category: { type: 'choice', choice: 'other', probabilities: { other: 0.85, none: 0.1 } }
     }
     const markup = await renderDetail({ ...listJob, answers }, 0.9, { status: 0.8 })
-    const rows = answerRows(markup)
-    const cells = (key: string) => {
-      const row = rows.find((entry) => entry.includes(`>${key}</td>`))
-      if (row === undefined) throw new Error(`Missing row ${key}`)
-      return [...row.matchAll(/<td\b[^>]*>(.*?)<\/td>/g)].map((match) => match[1])
+    const cellOf = (label: string) => {
+      const cell = basicCellsOf(markup).find((entry) => entry.label === label)
+      if (cell === undefined) throw new Error(`Missing cell ${label}`)
+      return cell
     }
-    expect(cells('状態')[3]).toBe('<span class="font-mono tabular-nums leading-[0]">80.0%</span>')
-    expect(cells('状態')[4]).toContain('確定')
-    expect(cells('配布物')[3]).toBe('<span class="font-mono tabular-nums leading-[0]">90.0%</span>')
-    expect(cells('配布物')[4]).toContain('未確定')
+    expect(cellOf('状態').note).toContain('しきい値 80.0%')
+    expect(cellOf('状態').status).toBe('確定')
+    expect(cellOf('配布物').note).toContain('しきい値 90.0%')
+    expect(cellOf('配布物').status).toBe('未確定')
   })
 })
 
