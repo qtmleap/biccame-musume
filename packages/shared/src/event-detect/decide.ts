@@ -24,6 +24,13 @@ export const jstWeekday = (iso: string) => '日月火水木金土'[jst(iso).day(
 const defaultAuthorLabel = (account: StoreAccount): string => `${account.name}（${account.storeId}）`
 
 /**
+ * 投稿者のアカウントに一致する店舗アカウント（screenName の大文字小文字は区別しない）。
+ * 判定の入力文の「投稿者」の行（buildState）と、連携先を探す店舗の解決（linked-event.ts）が、同じ辞書・同じ規則を使うための唯一の定義。
+ */
+export const ownStoreAccounts = (screenName: string, accounts: readonly StoreAccount[]): StoreAccount[] =>
+  accounts.filter((account) => account.screenName.toLowerCase() === screenName.toLowerCase())
+
+/**
  * 投稿本文は指示ではなく判定対象データとして渡す。
  * authorLabel は投稿者の店舗アカウントの表示名を作る関数。省略すると従来の「店舗名（店舗ID）」で、出力は変わらない。
  */
@@ -32,7 +39,7 @@ export const buildState = (
   accounts: readonly StoreAccount[],
   authorLabel: (account: StoreAccount) => string = defaultAuthorLabel
 ): string => {
-  const own = accounts.filter((account) => account.screenName.toLowerCase() === post.screenName.toLowerCase())
+  const own = ownStoreAccounts(post.screenName, accounts)
   const author = own.length > 0 ? own.map((account) => authorLabel(account)).join('・') : '店舗以外'
   const lines = [
     `投稿日: ${jstDate(post.createdAt)}（${jstWeekday(post.createdAt)}）`,

@@ -15,8 +15,11 @@ import {
   notificationRetryWarning,
   REJUDGE_DESCRIPTION,
   rejudgeConfirmation,
-  webhookActionAvailability
+  webhookActionAvailability,
+  webhookLastErrorLabel
 } from '@/components/admin/webhook-labels'
+import { activeLinkedEventProposal } from '@/components/admin/webhook-linked-event-confirm'
+import { WebhookLinkedEventProposal } from '@/components/admin/webhook-linked-event-proposal'
 import { WebhookPromptDialog } from '@/components/admin/webhook-prompt-dialog'
 import { WebhookReasonRows } from '@/components/admin/webhook-reason-rows'
 import { WebhookRelatedEvents } from '@/components/admin/webhook-related-events'
@@ -87,9 +90,17 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           link: { postId, ...candidateSelection },
           ...(active === undefined ? {} : { item: active.item })
         })
+  // 連携先の提案があり、まだ提案のイベントへ連携していないときだけ、連携ダイアログに渡す（最初に「このイベントですか？」と確認する。連携は人が押すまで行わない）。
+  const proposal = job === undefined ? undefined : activeLinkedEventProposal(job)
+  const suggestedLink = proposal === undefined ? {} : { suggestion: proposal }
   const isPending = retry.isPending || resolve.isPending || rejudge.isPending
+  // 連携ダイアログと、連携先の提案の確認ダイアログが共有する連携（選択中の候補へ紐付ける）。
+  const linkEvent = async (eventId: string) =>
+    await resolve.mutateAsync({ postId, data: { ...candidateSelection, action: 'link', eventId } })
+  // 止まっている処理待ち・処理中を再実行できるよう、選択中の候補（候補が無ければ投稿）の最後の更新と現在時刻を渡す。
+  const activity = job === undefined ? undefined : { updatedAt: job.updatedAt, now: dayjs().valueOf() }
   const availability = job
-    ? webhookActionAvailability(job.status, job.notificationStatus, job.reasons)
+    ? webhookActionAvailability(job.status, job.notificationStatus, job.reasons, activity)
     : {
         canResolve: false,
         canLink: false,
@@ -100,7 +111,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   // 「再実行」は状態によらず押せて、押すと必ず確認が出る。実行できない状態（人の却下・処理中など）は、
   // 確認の説明に理由を出して実行ボタンを無効にする。可否の規則はサーバーの 409 と同じ（rejudgeBlockedReason）。
   // 自動登録済みも実行できる。その説明は、登録とDiscord通知を変えず、現在の設定で回答と判定結果だけを更新すると伝える（rejudgeConfirmation）。
-  const rejudgeState = job === undefined ? undefined : rejudgeConfirmation(job.status, job.reasons)
+  const rejudgeState = job === undefined ? undefined : rejudgeConfirmation(job.status, job.reasons, activity)
   const rejudgeBlocked = rejudgeState === undefined || rejudgeState.blocked
 
   const confirm = async () => {
@@ -184,9 +195,8 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           disabled={!availability.canLink}
           isPending={isPending}
           replacing={job !== undefined && job.status === 'registered'}
-          onLink={async (eventId) =>
-            await resolve.mutateAsync({ postId, data: { ...candidateSelection, action: 'link', eventId } })
-          }
+          {...suggestedLink}
+          onLink={linkEvent}
         />
         <Button
           variant='outline'
@@ -221,6 +231,13 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
       {job && (
         <div className='space-y-8'>
           <WebhookRelatedEvents job={job} />
+          <WebhookLinkedEventProposal
+            key={`${postId}:${active === undefined ? 'post' : active.eventUUID}`}
+            job={job}
+            canLink={availability.canLink}
+            isPending={isPending}
+            onLink={linkEvent}
+          />
           <div className={cn('grid min-w-0 gap-4', parentJob && parentJob.candidates.length > 0 && 'md:grid-cols-2')}>
             <section className='min-w-0'>
               <h2 className='mb-2 text-lg font-semibold md:text-xl'>元投稿</h2>
@@ -301,7 +318,9 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
               </BotSettingRow>
               <WebhookReasonRows reasons={job.reasons} className={JUDGMENT_WIDE_ROW} />
             </dl>
-            {job.lastError && <p className='mt-3 text-sm text-destructive'>処理エラー: {job.lastError}</p>}
+            {job.lastError && (
+              <p className='mt-3 text-sm text-destructive'>処理エラー: {webhookLastErrorLabel(job.lastError)}</p>
+            )}
             <p className='mt-3 text-sm text-muted-foreground'>
               AIスコアは正解率を保証しません。保留を解決する際は元投稿と内容を照合してください。
             </p>

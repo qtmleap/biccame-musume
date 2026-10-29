@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import { rejudgeWebhookJob } from '@api/services/webhook-admin'
 import { getWebhookJob } from '@api/services/webhook-jobs'
+import dayjs from 'dayjs'
 import {
   conflictOf,
   heldSeed,
@@ -179,11 +180,12 @@ describe('処理に失敗したジョブの再実行（rejudgeWebhookJob）', ()
     })
   }, 60000)
 
-  test('処理中・待機中は、これまでどおり 409 のまま（自動登録済みは 409 ではなく、登録を変えずに判定をやり直す）', async () => {
+  test('新しい処理中・待機中は、これまでどおり 409 のまま（自動登録済みは 409 ではなく、登録を変えずに判定をやり直す。60 分以上止まったものは再実行できる）', async () => {
     await withRejudgeEnv(async (env, sent) => {
+      const updatedAt = dayjs().valueOf()
       const cases = [
-        { ...heldSeed, status: 'processing', reasons: [], notificationStatus: 'pending' },
-        { ...heldSeed, status: 'queued', reasons: [], notificationStatus: 'pending' }
+        { ...heldSeed, status: 'processing', reasons: [], notificationStatus: 'pending', updatedAt },
+        { ...heldSeed, status: 'queued', reasons: [], notificationStatus: 'pending', updatedAt }
       ]
       for (const [index, seed] of cases.entries()) {
         const postId = await seedRejudgeJob(env, index + 1, seed)

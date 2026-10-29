@@ -1,6 +1,7 @@
 import type { WebhookTarget } from '@api/services/webhook-jobs'
 import type { Bindings } from '@api/types/bindings'
 import { type ClefRequest, ClefRequestSchema } from '@biccame/shared/event-detect/clef'
+import { isLinkedEventQuestion } from '@biccame/shared/event-detect/detection'
 import { webhookPromptDefinition } from '@biccame/shared/event-detect/prompt-definitions'
 import {
   type WebhookPrompt,
@@ -60,6 +61,8 @@ export const saveWebhookPromptAttempt = async (
   if (definition === undefined) throw new Error('Webhook prompt definition is missing for this version')
   for (const request of prompt.data.requests) {
     for (const [key, question] of Object.entries(request.questions)) {
+      // 3段目（連携先の提案）の質問は、選択肢がイベントごとに変わり版定義に載らない。固定の質問文と選択肢の形が完全一致するものだけを許可する。
+      if (isLinkedEventQuestion(key, question)) continue
       const template = definition.questions.find((entry) => entry.key === key)
       if (template === undefined || template.type !== question.type || template.instructions !== question.instructions)
         throw new Error('Webhook request does not match its prompt version')

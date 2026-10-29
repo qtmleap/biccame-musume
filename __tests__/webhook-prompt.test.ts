@@ -61,8 +61,9 @@ test('生成された現行版定義は実際の質問文と固定選択肢を�
   const definition = webhookPromptDefinition(DETECTION_VERSION)
   if (definition === undefined) throw new Error('Missing current prompt definition')
   const requests = createDetectionRequests(post('2112431406978945270'))
-  // 現行版の店舗は固定の選択肢（44店舗 + multiple + none）。投稿ごとに変わるのは日付・数量・金額だけ。
-  const dynamic = ['start_date', 'end_date', 'quantity', 'purchase_amount', 'charge_amount']
+  // 現行版の店舗は固定の選択肢（44店舗 + multiple + none）。投稿ごとに変わるのは日付・数量・金額と、v19 から配布物（category）の選択肢。
+  // category の質問文は v18 から変えておらず全投稿で同じ固定文で、上の instructions の比較が守る（選択肢だけが投稿ごとに変わる）。
+  const dynamic = ['category', 'start_date', 'end_date', 'quantity', 'purchase_amount', 'charge_amount']
   const extractionDefinition = webhookPromptDefinition(EXTRACTION_VERSION)
   const count = createItemCountRequest(post('2112431406978945270')).questions.distribution_item_count
   expect(extractionDefinition?.questionVersion).toBe(EXTRACTION_VERSION)

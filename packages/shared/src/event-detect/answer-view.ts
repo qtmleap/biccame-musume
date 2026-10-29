@@ -1,3 +1,4 @@
+import { describeMergedCharacter, roundProbability } from './answer-view-character'
 import { storeShortName } from './association-questions'
 import {
   ASSOCIATION_MULTIPLE,
@@ -78,6 +79,7 @@ const CATEGORY_LABELS: ReadonlyMap<string, string> = new Map([
   ['regular_card', '通常名刺'],
   ['ackey', 'アクキー'],
   ['acsta', 'アクスタ'],
+  ['gift_card', 'ギフトカード'],
   ['other', 'その他'],
   ['none', '配布物の話ではない']
 ])
@@ -108,9 +110,6 @@ const yenFormat = new Intl.NumberFormat('en-US')
 
 const YES_LABEL = 'はい'
 const NO_LABEL = 'いいえ'
-
-// 1 - 0.7224 が 0.27759999999999996 になるような浮動小数点ノイズを表示値に出さないため、確率は4桁に丸める。
-const roundProbability = (value: number): number => Math.round(value * 10000) / 10000
 
 const lookup = (labels: ReadonlyMap<string, string>, value: string): string => {
   const label = labels.get(value)
@@ -238,6 +237,14 @@ const describeAnswer = (
       confirmed: false,
       alternatives: []
     }
+  }
+  // 対象ビッカメ娘は、店舗が具体的な S のとき、店舗の娘（store_character）と S の娘自身を 1 つにまとめて出す（同じ人物を指すので確率を割らない）。
+  // まとめない条件に当てはまれば undefined で、下の通常の行になる。判定（resolveCharacterIds）は変えない。
+  if (key === CHARACTER_QUESTION_KEY) {
+    const merged = describeMergedCharacter(answers, { label, threshold, decidedByConfirm }, (value) =>
+      choiceLabel(key, value)
+    )
+    if (merged !== undefined) return merged
   }
   const selected = answer.probabilities[answer.choice]
   const probability = selected === undefined ? null : selected
