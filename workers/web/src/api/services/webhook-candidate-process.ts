@@ -70,13 +70,14 @@ export const processWebhookCandidate = async (
               decision,
               detectionThresholds(configuration)
             )
-            // 3段目: 「終了」または「継続」（end・update）と判定された候補だけ、店舗のまだ終了していないイベントから連携先を提案する（自動では連携しない）。
+            // 3段目: 「終了」または「継続」（end・update）と判定された候補だけ、店舗の継続中のイベント（投稿より前に始まり、1段目の配布物の最上位の種類と一致するもの。確率は見ず、最上位が none などで種類が決まらなければ聞かない）から連携先を提案する（自動では連携しない）。
             // 旧単一ジョブの仮の名前は配布物の名前として渡さない。失敗しても判定は続け、提案なしにする。
             const linkedEvent = isLinkedEventAction(recorded.action)
               ? await proposeWebhookLinkedEvent(env, run, {
                   storeKey,
                   screenName: job.post.screenName,
                   item: legacy ? null : item,
+                  postedAt: job.post.createdAt,
                   beforeSend: (sent) => saveWebhookPromptAttempt(env, target, token, DETECTION_VERSION, sent)
                 })
               : null

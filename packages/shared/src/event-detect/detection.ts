@@ -75,6 +75,7 @@ export {
   LINKED_EVENT_MAX_OPTIONS,
   LINKED_EVENT_QUESTION_KEY,
   type LinkableEvent,
+  linkedEventKinds,
   linkedEventOptions,
   linkedEventProposalOf,
   linkedEventTargetStore,
