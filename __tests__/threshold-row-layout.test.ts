@@ -7,10 +7,10 @@ import { BotSettingRow } from '@/components/admin/bot-settings-layout'
 
 // しきい値の行の縦位置: 補足文・エラー文のある行でラベルが入力欄からずれないこと、数字がラベルと同じフォントで上に寄らないこと。
 // 実ブラウザーでの測定は別（親が dev サーバーで行う）。ここではソースと描画結果のクラスを固定する。
-const source = readFileSync(resolve('workers/web/src/app/components/admin/bot-management.tsx'), 'utf8')
+const source = readFileSync(resolve('workers/web/src/app/components/admin/bot-threshold-rows.tsx'), 'utf8')
 const block = (() => {
-  const start = source.indexOf('const ThresholdRow = (')
-  const end = source.indexOf('/** 判定全体の3つのしきい値の行', start)
+  const start = source.indexOf('export const ThresholdRow = (')
+  const end = source.indexOf('/**\n * 項目別のしきい値の補足文', start)
   if (start < 0 || end < 0) throw new Error('ThresholdRow not found')
   return source.slice(start, end)
 })()

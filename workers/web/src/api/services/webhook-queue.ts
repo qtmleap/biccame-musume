@@ -33,11 +33,12 @@ export const handleWebhookQueue = async (batch: MessageBatch<unknown>, env: Bind
     }
     try {
       if (batch.queue.endsWith('-dlq')) {
+        // 再試行を使い切った行。すでに失敗の原因（processing_failed:<段階>:<例外名> や extraction_*）が残っていれば消さず、原因が無い行だけ retry_exhausted にする。
         await env.DB.batch(
           ['webhook_event_candidates', 'webhook_event_jobs'].map((table) =>
             env.DB.prepare(`UPDATE ${table} SET status=CASE WHEN status IN ('queued','processing','failed') THEN 'failed' ELSE status END,
           notification_status=CASE WHEN status IN ('held','registered') AND notification_status='pending' THEN 'failed' ELSE notification_status END,
-          last_error='retry_exhausted',lease_token=NULL,lease_until=NULL,updated_at=? WHERE post_id=?`).bind(
+          last_error=COALESCE(last_error,'retry_exhausted'),lease_token=NULL,lease_until=NULL,updated_at=? WHERE post_id=?`).bind(
               dayjs().valueOf(),
               parsed.data.postId
             )

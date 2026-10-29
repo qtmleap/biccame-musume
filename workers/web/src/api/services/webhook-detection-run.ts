@@ -34,7 +34,7 @@ export const detectionThresholds = (configuration: WebhookDetectionConfiguration
 })
 
 /** 1回の送信。AI を呼び、応答が質問と過不足なく対応していることを確かめる。不正・不完全な応答は例外にする。 */
-const sendRequest = async (
+export const sendRequest = async (
   env: Bindings,
   model: WebhookDetectionConfiguration['model'],
   request: ClefRequest

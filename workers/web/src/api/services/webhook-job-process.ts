@@ -1,5 +1,6 @@
 import { detectionConfiguration } from '@api/services/webhook-config'
 import { extractWebhookEvents, webhookProcessingErrorCode } from '@api/services/webhook-extraction'
+import { inWebhookStage, markWebhookStage } from '@api/services/webhook-failure-stage'
 import {
   claimWebhookJob,
   getWebhookJob,
@@ -35,21 +36,25 @@ const sourceExtractionVersion = (value: unknown): string =>
     ? value.version
     : 'legacy-unversioned'
 
+/** リースを取れなかったとき、キューに再試行までの秒数として返す値。待つ必要が無ければ null。 */
+const leaseRetryDelay = async (env: Bindings, postId: string): Promise<number | null> => {
+  const job = await getWebhookJob(env, postId)
+  const waiting = ['queued', 'processing', 'failed'].includes(job.status) || job.notificationStatus === 'pending'
+  if (!waiting) return null
+  const lease = await env.DB.prepare('SELECT lease_until FROM webhook_event_jobs WHERE post_id=?')
+    .bind(postId)
+    .first<number>('lease_until')
+  return lease === null ? 30 : Math.max(1, Math.ceil((lease - dayjs().valueOf()) / 1000) + 1)
+}
+
 export const processWebhookJob = async (
   env: Bindings,
   postId: string,
   options: ProcessOptions = {}
 ): Promise<number | null> => {
-  const token = await claimWebhookJob(env, postId)
-  if (token === null) {
-    const job = await getWebhookJob(env, postId)
-    const waiting = ['queued', 'processing', 'failed'].includes(job.status) || job.notificationStatus === 'pending'
-    if (!waiting) return null
-    const lease = await env.DB.prepare('SELECT lease_until FROM webhook_event_jobs WHERE post_id=?')
-      .bind(postId)
-      .first<number>('lease_until')
-    return lease === null ? 30 : Math.max(1, Math.ceil((lease - dayjs().valueOf()) / 1000) + 1)
-  }
+  // リースを取る前の失敗は last_error に書けない（書く先のリースが無い）ので、キューのログにだけ claim として出る。
+  const token = await inWebhookStage('claim', () => claimWebhookJob(env, postId))
+  if (token === null) return await inWebhookStage('claim', () => leaseRetryDelay(env, postId))
   try {
     const job = await getWebhookJob(env, postId)
     const stored = await env.DB.prepare('SELECT extraction_json,result_json FROM webhook_event_jobs WHERE post_id=?')
@@ -72,26 +77,36 @@ export const processWebhookJob = async (
         ])
       } else {
         const configuration = await detectionConfiguration(env)
-        const countRequest = createItemCountRequest(job.post, configuration.model)
-        await saveWebhookPromptAttempt(env, webhookTarget(postId), token, EXTRACTION_VERSION, [countRequest])
-        const countRaw: unknown = await detectionDeadline(
-          env.AI.run(`@cf/cloudflare/${configuration.model}`, countRequest)
-        )
-        const countResponse = ClefResponseSchema.safeParse(countRaw)
-        if (!countResponse.success) throw new Error('Invalid item count response')
-        const extract = async () =>
-          validateEventExtraction(
-            job.post,
-            options.extractor === undefined
-              ? await extractWebhookEvents(env, job.post, options.extractionFetcher)
-              : await options.extractor(job.post)
+        const countResponse = await inWebhookStage('item_count', async () => {
+          const countRequest = createItemCountRequest(job.post, configuration.model)
+          await inWebhookStage('prompt_save', () =>
+            saveWebhookPromptAttempt(env, webhookTarget(postId), token, EXTRACTION_VERSION, [countRequest])
+          )
+          const countRaw: unknown = await detectionDeadline(
+            env.AI.run(`@cf/cloudflare/${configuration.model}`, countRequest)
+          )
+          const parsed = ClefResponseSchema.safeParse(countRaw)
+          if (!parsed.success) throw new Error('Invalid item count response')
+          return parsed.data
+        })
+        // 抽出系の失敗は固有コード（extraction_*）のまま残る。それ以外の例外だけが extraction 段階になる。
+        const extract = () =>
+          inWebhookStage('extraction', async () =>
+            validateEventExtraction(
+              job.post,
+              options.extractor === undefined
+                ? await extractWebhookEvents(env, job.post, options.extractionFetcher)
+                : await options.extractor(job.post)
+            )
           )
         const first = await extract()
-        const firstAudit = auditItemCount(first.events, countResponse.data, configuration.itemCountThreshold)
+        const firstAudit = auditItemCount(first.events, countResponse, configuration.itemCountThreshold)
         // 件数不一致による再抽出は1回だけ。各抽出のツール未呼び出し再試行を含め最大4通信。
         const extraction = firstAudit.status === 'mismatch' ? await extract() : first
-        const itemCountAudit = auditItemCount(extraction.events, countResponse.data, configuration.itemCountThreshold)
-        await persistWebhookExtractionCandidates(env, job, token, extraction, itemCountAudit)
+        const itemCountAudit = auditItemCount(extraction.events, countResponse, configuration.itemCountThreshold)
+        await inWebhookStage('extraction_save', () =>
+          persistWebhookExtractionCandidates(env, job, token, extraction, itemCountAudit)
+        )
       }
     }
     const initialCandidates = (await getWebhookJob(env, postId)).candidates
@@ -106,13 +121,8 @@ export const processWebhookJob = async (
       )
       if (!parsed.success || !audit.success) throw new Error('Invalid saved extraction review')
       const extraction = validateEventExtraction(job.post, parsed.data)
-      await persistWebhookExtractionCandidates(
-        env,
-        job,
-        token,
-        extraction,
-        audit.data,
-        sourceExtractionVersion(envelope)
+      await inWebhookStage('extraction_save', () =>
+        persistWebhookExtractionCandidates(env, job, token, extraction, audit.data, sourceExtractionVersion(envelope))
       )
     }
     const candidates = (await getWebhookJob(env, postId)).candidates
@@ -130,12 +140,17 @@ export const processWebhookJob = async (
       if (!storedExtraction.success) throw new Error('Invalid stored event extraction')
       const savedExtraction = validateEventExtraction(job.post, storedExtraction.data)
       const configuration = await detectionConfiguration(env)
-      const request = createItemCountRequest(job.post, configuration.model)
-      await saveWebhookPromptAttempt(env, webhookTarget(postId), token, EXTRACTION_VERSION, [request])
-      const raw: unknown = await detectionDeadline(env.AI.run(`@cf/cloudflare/${configuration.model}`, request))
-      const response = ClefResponseSchema.safeParse(raw)
-      if (!response.success) throw new Error('Invalid item count response')
-      const audit = auditItemCount(savedExtraction.events, response.data, configuration.itemCountThreshold)
+      const response = await inWebhookStage('item_count', async () => {
+        const request = createItemCountRequest(job.post, configuration.model)
+        await inWebhookStage('prompt_save', () =>
+          saveWebhookPromptAttempt(env, webhookTarget(postId), token, EXTRACTION_VERSION, [request])
+        )
+        const raw: unknown = await detectionDeadline(env.AI.run(`@cf/cloudflare/${configuration.model}`, request))
+        const parsed = ClefResponseSchema.safeParse(raw)
+        if (!parsed.success) throw new Error('Invalid item count response')
+        return parsed.data
+      })
+      const audit = auditItemCount(savedExtraction.events, response, configuration.itemCountThreshold)
       await env.DB.prepare('UPDATE webhook_event_jobs SET extraction_json=? WHERE post_id=? AND lease_token=?')
         .bind(
           JSON.stringify({
@@ -205,10 +220,12 @@ export const processWebhookJob = async (
           .run()
       }
     }
-    await refreshWebhookJob(env, postId, token)
+    await inWebhookStage('aggregate', () => refreshWebhookJob(env, postId, token))
     if (failures.length > 0) throw failures[0]
     return delays.length > 0 ? Math.max(...delays) : null
   } catch (error) {
+    // 段階が付いていない失敗（保存済みの抽出の読み取りなど）は job。候補の失敗は候補側（webhook-candidate-process.ts）が段階を付けている。
+    markWebhookStage(error, 'job')
     await env.DB.prepare(
       `UPDATE webhook_event_jobs SET status=CASE WHEN status='processing' THEN 'failed' ELSE status END,last_error=?,updated_at=? WHERE post_id=? AND lease_token=?`
     )

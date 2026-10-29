@@ -3,8 +3,13 @@ import { Link } from '@tanstack/react-router'
 import { Circle, CircleCheck } from 'lucide-react'
 import { WebhookDiscoveryBadge } from '@/components/admin/webhook-discovery-badge'
 import { webhookCandidateTitle } from '@/components/admin/webhook-labels'
+import { WebhookStatusBadge } from '@/components/admin/webhook-status-badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+
+/** 検出の記録があり、検出済み以外（判定未確定・対象外）のとき。記録が無い旧履歴は状態バッジだけで足りるので含めない。 */
+const hasUndetectedDiscovery = (candidate: WebhookCandidate): boolean =>
+  candidate.discovery !== undefined && candidate.discovery !== null && candidate.discovery.relevance !== 'detected'
 
 export const WebhookCandidateList = ({
   candidates,
@@ -53,7 +58,11 @@ export const WebhookCandidateList = ({
               {isActive ? <CircleCheck className='size-4' /> : <Circle className='size-4 text-muted-foreground' />}
               {webhookCandidateTitle(candidate)}
             </Button>
-            <WebhookDiscoveryBadge job={candidate} />
+            <div className='flex flex-wrap items-center gap-1.5'>
+              <WebhookStatusBadge status={candidate.status} />
+              {/* 検出済みは判定時点の AI の見立てで固定されるので、この行では情報にならない。判定未確定・対象外のときだけ保留の手掛かりとして併記する。 */}
+              {hasUndetectedDiscovery(candidate) && <WebhookDiscoveryBadge job={candidate} />}
+            </div>
             {candidate.eventId !== null && (
               <Link
                 to='/events/$uuid'

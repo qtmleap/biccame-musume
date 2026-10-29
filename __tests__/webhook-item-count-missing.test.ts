@@ -23,7 +23,7 @@ const discovery = {
 }
 
 for (const variant of ['fresh-focused-null', 'fresh-focused-no-field', 'cached-new', 'cached-legacy'] as const) {
-  test(`監査欠落境界 ${variant}: 新形式は停止し明示旧registerだけretryを維持`, async () => {
+  test(`監査欠落境界 ${variant}: 件数の監査が無くても停止せず、ほかの条件が通れば登録する`, async () => {
     const value = await fixture(`missing-audit-${variant}`)
     const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({
       status: 'sent',
@@ -74,17 +74,12 @@ for (const variant of ['fresh-focused-null', 'fresh-focused-no-field', 'cached-n
         variant === 'cached-legacy'
       )
       const saved = (await getWebhookJob(value.env, original.id)).candidates[0]
-      if (variant === 'cached-legacy') {
-        expect(saved.status).toBe('registered')
-        expect(await value.env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(1)
-      } else {
-        expect(saved.status).toBe('held')
-        expect(saved.reasons).toContain('distribution_item_count_unknown')
-        expect(saved.discovery?.action).toBe('review')
-        expect(saved.discovery?.missingFields).toContain('itemCountAudit')
-        expect(saved.candidate).not.toBeNull()
-        expect(await value.env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(0)
-      }
+      // 件数の監査は自動登録の関門ではない。監査が無い（旧形式・未保存）ことを理由にした保留も、総括の理由も付かない。
+      expect(saved.status).toBe('registered')
+      expect(saved.reasons.some((reason) => reason.startsWith('distribution_item_count_'))).toBe(false)
+      expect(saved.reasons).not.toContain('auto_registration_not_allowed')
+      expect(JSON.stringify(saved.discovery)).not.toContain('itemCountAudit')
+      expect(await value.env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(1)
     } finally {
       delivery.mockRestore()
       await value.cleanup()

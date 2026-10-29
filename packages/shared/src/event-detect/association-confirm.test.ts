@@ -254,7 +254,7 @@ describe('v16 の版定義', () => {
     return definition
   }
   const v15 = definitionOf('v5-webhook-v15-concise-author')
-  // 現行の版（DETECTION_VERSION）は v17 に進んでいる。v16 は保存済みの定義を明示的な ID で引く。
+  // 現行の版（DETECTION_VERSION）は v19 に進んでいる。v16 は保存済みの定義を明示的な ID で引く。
   const v16 = definitionOf('v5-webhook-v16-confirm-selection')
 
   test('1段目の質問は v15 と同一で、末尾に確認の2問だけが足される', () => {
@@ -265,14 +265,18 @@ describe('v16 の版定義', () => {
       CHARACTER_CONFIRM_KEY
     ])
   })
-  test('確認の質問の文言と型は、実際に送る質問と完全に一致する', () => {
+  // 店舗の確認の質問は v18 で変えた（store-confirm-default.test.ts）。v18 の定義が実際に送る質問と完全に一致することは、そちらで確かめる。
+  test('娘の確認の質問の文言と型は、今も実際に送る質問と完全に一致する（店舗の確認は v18 で変わったので旧文言のまま）', () => {
     const request = createConfirmRequest(first, { store: 'abeno', character: 'funato' })
-    for (const [key, question] of Object.entries(request.questions)) {
-      const defined = v16.questions.find((entry) => entry.key === key)
-      expect(defined?.type).toBe(question.type)
-      expect(defined?.instructions).toBe(question.instructions)
-      expect(defined?.criteria).toEqual({})
-    }
+    const defined = v16.questions.find((entry) => entry.key === CHARACTER_CONFIRM_KEY)
+    expect(defined?.type).toBe(request.questions[CHARACTER_CONFIRM_KEY].type)
+    expect(defined?.instructions).toBe(request.questions[CHARACTER_CONFIRM_KEY].instructions)
+    expect(defined?.criteria).toEqual({})
+    const store = v16.questions.find((entry) => entry.key === STORE_CONFIRM_KEY)
+    expect(store?.type).toBe('noul')
+    expect(store?.instructions).toContain('文脈上そこで配布すると明らかな場合のみ「はい」としてください')
+    expect(store?.instructions).not.toBe(request.questions[STORE_CONFIRM_KEY].instructions)
+    expect(store?.criteria).toEqual({})
   })
   // 保存済みの版定義は変えられない（変えるには版を上げる）。v16・v17 の定義の説明は、店舗の娘には娘の確認を聞かないと書いたまま残っている。
   // 現行の挙動は、店舗の娘にも娘の確認を聞く（confirmTargetOf）。質問文は変わっていない。説明だけが古い。

@@ -79,11 +79,12 @@ test('rejudge resets a held job to queued, clears stored judgement and enqueues 
 }, 60000)
 
 // 自動登録済み（registered で manually_linked なし）は 409 ではなく、登録を変えずに判定だけをやり直す（webhook-rejudge-registered.test.ts）。
-test('rejudge rejects queued and processing jobs with 409 and changes nothing', async () => {
+// 60 分以上動いていない（止まっている）ものは再実行できる（webhook-stalled-rejudge.test.ts）。ここは最後の更新が新しいものだけ。
+test('rejudge rejects fresh queued and processing jobs with 409 and changes nothing', async () => {
   await withRejudgeEnv(async (env, sent) => {
     const statuses = ['queued', 'processing']
     for (const [index, status] of statuses.entries()) {
-      const postId = await seedRejudgeJob(env, index + 1, { ...heldSeed, status })
+      const postId = await seedRejudgeJob(env, index + 1, { ...heldSeed, status, updatedAt: dayjs().valueOf() })
       const before = await rawRejudgeRow(env, postId)
       expect(await conflictOf(rejudgeWebhookJob(env, postId))).toEqual({
         status: 409,

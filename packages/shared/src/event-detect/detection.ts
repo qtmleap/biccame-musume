@@ -4,6 +4,7 @@ import { ASSOCIATION_NONE, associatedCharacterIds, associationIds, selectedStore
 import { type ClefAnswer, type ClefRequest, type ClefResponse, ClefResponseSchema } from './clef'
 import { keyToDate, keyToQuantity, QUESTION_VERSION } from './decide'
 import { decideAssociations } from './detection-association'
+import { categoryOfChoice } from './detection-category'
 import { draftCharacterIds } from './detection-character'
 import {
   conditionQuestions,
@@ -14,6 +15,7 @@ import {
   requiresPurchase
 } from './detection-conditions'
 import { categoryLabels, filterWebhookPost, labels } from './detection-context'
+import { withoutNewEventOnlyReasons } from './detection-reasons'
 import {
   type Category,
   CategorySchema,
@@ -35,6 +37,7 @@ import type { DetectPost } from './post'
 
 // Worker 側は、dev サーバーが起動時の package.json の exports を保持するため、新しいサブパスを作らずここから import する。
 export { confirmTargetOf, createConfirmRequest, hasConfirmTarget } from './association-confirm'
+export { categoryOfChoice, GIFT_CARD_CHOICE } from './detection-category'
 export {
   filterWebhookPost,
   WEBHOOK_KEYWORD_VERDICTS,
@@ -67,10 +70,26 @@ export {
   StoredFieldThresholdsSchema,
   thresholdOf
 } from './detection-thresholds'
+export {
+  createLinkedEventRequest,
+  isLinkedEventAction,
+  isLinkedEventQuestion,
+  LINKED_EVENT_INSTRUCTIONS,
+  LINKED_EVENT_MAX_OPTIONS,
+  LINKED_EVENT_QUESTION_KEY,
+  type LinkableEvent,
+  linkedEventKinds,
+  linkedEventOptions,
+  linkedEventProposalOf,
+  linkedEventTargetStore,
+  postAccountStore
+} from './linked-event'
 
-// v17: 娘の質問に store_character（本文でビッカメ娘に特に言及がなければ開催店舗の娘）を足し、「店舗の娘と同一と仮定しない」注意書きを外した。
-// 店舗の質問と2段目（選んだ最上位の店舗・娘ごとの「はい/いいえ」の確認。v16 で追加）の質問は v16 と同一。
-export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v17-store-character`
+// v19: 配布物（category）の選択肢に gift_card を追加した。物品名にギフトカードを含む投稿だけに出し、出すとき other の説明からギフトカードを外す。
+// 質問文は v18 から一字も変えない（実モデルで、質問文を変えると gift_card を出さない投稿の出力まで揺れ、最上位が変わる投稿もあったため）。
+// gift_card を出さない投稿の request は v18 と完全に同一。保存するカテゴリは増やさず、gift_card は other として登録する。
+// それ以外の質問（店舗・娘の1段目、店舗・娘の確認の2段目）も v18 と同一。
+export const DETECTION_VERSION = `${QUESTION_VERSION}-webhook-v19-gift-card-category`
 export {
   type DetectionOutcome,
   DetectionOutcomeSchema,
@@ -192,7 +211,8 @@ export const evaluateDetection = (
     settings.data
   )
   const status = choiceOf(answers.status, thresholdFor('status'))
-  const category = CategorySchema.safeParse(choiceOf(answers.category, thresholdFor('category')))
+  // gift_card は質問にだけある選択肢。しきい値は最上位の選択肢の確率（gift_card と other は合算しない）で比べたあと、other として保存するカテゴリに対応づける。
+  const category = CategorySchema.safeParse(categoryOfChoice(choiceOf(answers.category, thresholdFor('category'))))
   const start = choiceOf(answers.start_date, thresholdFor('start_date'))
   const startDate = start ? keyToDate(start) : undefined
   // 終了日は最有力が none（記載なし・「なくなり次第終了」など）なら、確率がしきい値未満でも「終了日なし」で確定する。
@@ -235,7 +255,7 @@ export const evaluateDetection = (
         ...(storeKey === null ? ['extraction_store_unspecified'] : [])
       ]
     : []
-  const reasons = [
+  const detectedReasons = [
     ...(unsupportedCondition ? ['unmodeled_distribution_condition'] : []),
     ...(status !== 'announce' && status !== 'start' ? [statusReason] : []),
     ...(!category.success ? [itemUnspecified ? 'distribution_item_unspecified' : 'category_unconfirmed'] : []),
@@ -266,6 +286,11 @@ export const evaluateDetection = (
     ...(chargeRequired && chargeAmount === undefined ? ['charge_amount_unconfirmed'] : []),
     ...gateReasons
   ]
+  // 状態が継続・終了と確定した投稿は、新規登録の話ではないので、日付・配布条件・金額と本文の条件の語の理由（detection-reasons.ts）は付けない。
+  // 状態の理由と、どのイベントかを決める店舗・娘・配布物の理由は付ける。告知・開始と、状態が確定しない投稿は従来どおり。
+  // 継続・終了は下の条件（status が announce / start 以外）で必ず保留になるので、理由の付け方では登録の可否は変わらない。
+  const reasons =
+    status === 'ongoing' || status === 'end' ? withoutNewEventOnlyReasons(detectedReasons) : detectedReasons
   if (
     reasons.length > 0 ||
     !category.success ||
@@ -309,7 +334,7 @@ const draftCategory = (answer: ClefAnswer | undefined): Category | undefined => 
   if (answer?.type !== 'choice') return undefined
   const probability = answer.probabilities[answer.choice]
   if (probability === undefined || probability < DRAFT_CATEGORY_MIN_PROBABILITY) return undefined
-  return validOrUndefined(CategorySchema, answer.choice)
+  return validOrUndefined(CategorySchema, categoryOfChoice(answer.choice))
 }
 
 /**
@@ -320,7 +345,7 @@ const draftCategory = (answer: ClefAnswer | undefined): Category | undefined => 
 export const buildDetectionDraft = (post: DetectPost, answers: ClefResponse['answers']): DetectionDraft => {
   const category = draftCategory(answers.category)
   // 下書きでも開催店舗から対象キャラクターを推測しない（v17 の store_character が最上位のときだけ、下書きの店舗の娘）。版ごとに回答の形が違うため、キーの有無で読み分ける。
-  //  v2: store（choice）／v3〜v12: venue.* と character.*（noul）／v13 以降（v14〜v17 を含む）: store と character（choice）
+  //  v2: store（choice）／v3〜v12: venue.* と character.*（noul）／v13 以降（v14〜v19 を含む）: store と character（choice）
   const keys = Object.keys(answers)
   const stores = keys.some((key) => key.startsWith('venue.'))
     ? associationIds(answers, 'venue', 0.5)

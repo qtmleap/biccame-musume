@@ -1,6 +1,5 @@
 import { detectionThresholds, runWebhookDetection } from '@api/services/webhook-detection-run'
 import { recordWebhookDiscovery } from '@api/services/webhook-discovery-record'
-import { webhookItemCountReviewReasons } from '@api/services/webhook-item-count-review'
 import { getWebhookCandidate, getWebhookJob, releaseWebhookJob, webhookTarget } from '@api/services/webhook-jobs'
 import { saveWebhookPromptAttempt } from '@api/services/webhook-prompt'
 import type { Bindings } from '@api/types/bindings'
@@ -67,8 +66,6 @@ export const rejudgeRegisteredWebhookJob = async (
         ? await getWebhookCandidate(env, postId, target.id)
         : await getWebhookJob(env, postId)
     assertRejudgeable(current.status, current.reasons)
-    // 件数の監査は保存済みの抽出結果から決まり、AI を呼ばない。通常の判定（webhook-candidate-process.ts）と同じく、保存済みの判定結果を前提にしない。
-    const auditReasons = await webhookItemCountReviewReasons(env, postId, { post: current.post, resultJson: null })
     const judged = await (async () => {
       try {
         // 送信入力はここでは保存しない。全バッチが成功してから保存し、失敗時に元の送信入力を残す。
@@ -76,7 +73,7 @@ export const rejudgeRegisteredWebhookJob = async (
         // しきい値は、今回の実行で読んだ現在の設定から作る。保存済みの判定結果のしきい値は使わない。
         const thresholds = detectionThresholds(run.configuration)
         const decision = evaluateDetection(current.post, run.request, run.response, thresholds, storeKey)
-        const discovery = recordWebhookDiscovery(current.post, run.response.answers, decision, thresholds, auditReasons)
+        const discovery = recordWebhookDiscovery(current.post, run.response.answers, decision, thresholds)
         return { run, decision, discovery }
       } catch (error) {
         console.error(

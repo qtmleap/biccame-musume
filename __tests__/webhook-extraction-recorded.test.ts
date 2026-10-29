@@ -8,7 +8,7 @@ import { DetectPostSchema } from '../packages/shared/src/event-detect/post'
 import { answer, fixture, migrate } from './fixtures/webhook-multiple-events'
 
 // 保存済み6応答を一時D1へ再生する。外部モデル・通知・本番DBは使わない。
-test('実応答の復元候補は件数不明の確認を保持し、破損応答は失敗のまま登録しない', async () => {
+test('実応答の復元候補は件数不明でも件数を理由に保留せず、ほかの条件で決まる。破損応答は失敗のまま登録しない', async () => {
   const { env, cleanup } = await fixture('recorded-extraction-errors')
   const notify = spyOn(discord, 'notifyEventDetection').mockImplementation(async () => ({
     status: 'sent',
@@ -41,6 +41,7 @@ test('実応答の復元候補は件数不明の確認を保持し、破損応�
   })
   try {
     await migrate(env.DB)
+    const statuses: string[] = []
     for (const entry of recorded) {
       const post = DetectPostSchema.safeParse(entry.post)
       if (!post.success) throw new Error('Invalid recorded post')
@@ -66,15 +67,20 @@ test('実応答の復元候補は件数不明の確認を保持し、破損応�
           entry.previousError === 'Duplicate event extraction' ? 1 : entry.input.events.length
         )
         for (const candidate of saved.candidates) {
-          expect(candidate.reasons).toContain('distribution_item_count_unknown')
-          expect(candidate.status).not.toBe('registered')
-          expect(candidate.eventId).toBeNull()
+          // 件数が不明（Clef の回答は unknown 0.99）でも、理由にも総括の理由にも出さない。登録するかは、ほかの条件だけで決まる。
+          expect(candidate.reasons.some((reason) => reason.startsWith('distribution_item_count_'))).toBe(false)
+          expect(candidate.reasons).not.toContain('auto_registration_not_allowed')
+          expect(candidate.eventId === null).toBe(candidate.status !== 'registered')
+          statuses.push(candidate.status)
         }
       }
     }
-    expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM events').first<number>('total')).toBe(0)
+    // 件数不明の回答を付けても、決まる状態はほかの条件（購入額・開始日・条件の組み合わせ・キーワード）だけ。登録まで進むのは1件。
+    expect(statuses).toEqual(['held', 'ignored', 'held', 'registered', 'held', 'held', 'ignored'])
+    const registered = statuses.filter((status) => status === 'registered').length
+    expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM events').first<number>('total')).toBe(registered)
     expect(await env.DB.prepare('SELECT COUNT(*) AS total FROM social_post_jobs').first<number>('total')).toBe(0)
-    // 保留の管理通知だけをモックで受け、実通信や登録投稿は発生させない。
+    // 管理通知（保留4件と登録1件）だけをモックで受け、実通信や登録投稿は発生させない。
     expect(notify).toHaveBeenCalledTimes(5)
     expect(fetchGuard).not.toHaveBeenCalled()
   } finally {

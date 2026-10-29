@@ -1,5 +1,7 @@
+import { webhookStageOf } from '@api/services/webhook-failure-stage'
 import type { TitleFetcher } from '@api/services/webhook-title'
 import type { Bindings } from '@api/types/bindings'
+import { webhookExceptionName, webhookFailureCode } from '@biccame/shared/domain/webhook-failure'
 import {
   type EventExtraction,
   EventExtractionValidationError,
@@ -32,10 +34,15 @@ export class WebhookExtractionError extends Error {
   }
 }
 
+/**
+ * last_error とログに残す失敗理由。抽出系は固有コード（extraction_*）のまま。
+ * それ以外の例外は processing_failed:<段階>:<例外名> にする。段階は処理の区切りの固定語、例外名はサニタイズ済みのクラス名だけで、
+ * メッセージ・スタック・本文・接続先・トークンは含めない（webhook-failure.ts）。
+ */
 export const webhookProcessingErrorCode = (error: unknown): string =>
   error instanceof WebhookExtractionError || error instanceof EventExtractionValidationError
     ? error.code
-    : 'processing_failed'
+    : webhookFailureCode(webhookStageOf(error), webhookExceptionName(error))
 
 const transportFailure = (error: unknown, signal: AbortSignal) =>
   new WebhookExtractionError(
