@@ -9,6 +9,7 @@ import { BotSettingRow, BotSettingsLayout } from '@/components/admin/bot-setting
 import { WebhookAnswerTable } from '@/components/admin/webhook-answer-table'
 import { WebhookCandidateList } from '@/components/admin/webhook-candidate-list'
 import { WebhookEventLinkDialog } from '@/components/admin/webhook-event-link-dialog'
+import { type WebhookLinkScope, webhookLinkStores } from '@/components/admin/webhook-event-link-scope'
 import { webhookEventCreateSearch } from '@/components/admin/webhook-form-defaults'
 import {
   isWebhookJobJudging,
@@ -93,6 +94,12 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
   // 連携先の提案があり、まだ提案のイベントへ連携していないときだけ、連携ダイアログに渡す（最初に「このイベントですか？」と確認する。連携は人が押すまで行わない）。
   const proposal = job === undefined ? undefined : activeLinkedEventProposal(job)
   const suggestedLink = proposal === undefined ? {} : { suggestion: proposal }
+  // 連携ダイアログの一覧は、選択中の候補（無ければ投稿全体）の店舗の、投稿の時点で終わっていないイベントだけにする。
+  // 受信詳細を取得するまでは連携ダイアログを開けない（availability.canLink が偽）ので、そのときの値は使われない。
+  const linkScope: WebhookLinkScope =
+    job === undefined
+      ? { stores: [], postedAt: dayjs().toISOString() }
+      : { stores: webhookLinkStores(job, active), postedAt: job.post.createdAt }
   const isPending = retry.isPending || resolve.isPending || rejudge.isPending
   // 連携ダイアログと、連携先の提案の確認ダイアログが共有する連携（選択中の候補へ紐付ける）。
   const linkEvent = async (eventId: string) =>
@@ -195,6 +202,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           disabled={!availability.canLink}
           isPending={isPending}
           replacing={job !== undefined && job.status === 'registered'}
+          scope={linkScope}
           {...suggestedLink}
           onLink={linkEvent}
         />
