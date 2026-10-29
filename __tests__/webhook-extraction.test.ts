@@ -168,6 +168,13 @@ test('ツール未呼び出し後のHTTP失敗はさらに再試行しない', a
 })
 
 test('未知の例外メッセージと偽装したエラーコードは公開しない', () => {
-  expect(webhookProcessingErrorCode(new Error(`${env.ANTHROPIC_AUTH_TOKEN} ${post.text}`))).toBe('processing_failed')
-  expect(webhookProcessingErrorCode({ code: env.ANTHROPIC_AUTH_TOKEN })).toBe('processing_failed')
+  // 旧: どちらも 'processing_failed' と完全一致。新: 接頭辞・段階（unknown）・例外名（Error）だけで、メッセージやコードは含めない。
+  const fromMessage = webhookProcessingErrorCode(new Error(`${env.ANTHROPIC_AUTH_TOKEN} ${post.text}`))
+  const fromForgedCode = webhookProcessingErrorCode({ code: env.ANTHROPIC_AUTH_TOKEN })
+  expect(fromMessage).toBe('processing_failed:unknown:Error')
+  expect(fromForgedCode).toBe('processing_failed:unknown:Error')
+  for (const code of [fromMessage, fromForgedCode]) {
+    expect(code).not.toContain(env.ANTHROPIC_AUTH_TOKEN)
+    expect(code).not.toContain(post.text)
+  }
 })

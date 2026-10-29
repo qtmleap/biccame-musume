@@ -1,7 +1,10 @@
+import { parseWebhookFailureCode, type WebhookFailureStage } from '@biccame/shared/domain/webhook-failure'
 import { isAutoRegisteredWebhookJob } from '@biccame/shared/domain/webhook-rejudge'
+import { isStalledWebhookJudging } from '@biccame/shared/domain/webhook-stalled'
 import { type WebhookKeywordVerdict, webhookKeywordVerdict } from '@biccame/shared/event-detect/detection'
 import type { StoreData } from '@biccame/shared/schemas/store.dto'
 import type { WebhookCandidate, WebhookJob, WebhookPostStatusFilter } from '@biccame/shared/schemas/webhook.dto'
+import dayjs from 'dayjs'
 
 /** 候補の表示名。登録済みなら登録イベントの題、無ければ保存済みの登録候補の題（AI が付けた題を含む）、無ければ抽出名。 */
 export const webhookCandidateTitle = (
@@ -97,6 +100,22 @@ export const detectionScoreLabel = (score: number | null): string =>
 /** キューの判定結果を待っている状態。回答はまだ無い（再判定直後は answers も空になる）。 */
 export const isWebhookJobJudging = (status: string): boolean => status === 'queued' || status === 'processing'
 
+/**
+ * 止まっているかの判断に使う、ジョブの最後の更新（updatedAt、ISO 文字列）と現在時刻（ms）。
+ * 現在時刻は呼び出し側が渡す（テストで固定できる）。省略すると「止まっている」とは見なさない（従来どおり処理中は再実行できない）。
+ */
+export type WebhookJobActivity = { updatedAt: string; now: number }
+
+/** 止まっている処理待ち・処理中なら、最後の更新から経った分数（切り捨て）。止まっていなければ null。判定の規則はサーバーと共有する（webhook-stalled.ts）。 */
+const stalledMinutesOf = (status: string, activity: WebhookJobActivity | undefined): number | null => {
+  if (activity === undefined) return null
+  const updatedAt = dayjs(activity.updatedAt).valueOf()
+  // 画面は lease_until を持たない。リースの確認は、サーバーの UPDATE の条件が最終的に行う。
+  return isStalledWebhookJudging({ status, updatedAt, leaseUntil: null, now: activity.now })
+    ? Math.floor((activity.now - updatedAt) / 60_000)
+    : null
+}
+
 /** 再実行できない理由（確認ダイアログの説明に出す）。 */
 const REJUDGE_BLOCKED_JUDGING = '判定の処理中です。完了してからもう一度押してください。'
 const REJUDGE_BLOCKED_REJECTED = '人が対象外にした投稿のため再実行できません。'
@@ -106,12 +125,17 @@ const REJUDGE_BLOCKED_OTHER = 'この状態では再実行できません。'
  * 「再実行」（現在の設定で AI の判定をやり直す）を実行できない理由。実行できる状態は null。
  * 実行できるのは、保留、処理に失敗したジョブ、人が却下していない対象外、登録済み（自動登録・手動連携とも）のジョブ。
  * 人の却下（reasons に manually_rejected）は、人の判断を上書きしないため実行できない。処理中（queued / processing）は、リース中で二重に走らせられない。
+ * ただし処理待ち・処理中のまま止まっている（最後の更新から WEBHOOK_STALLED_MINUTES 分以上経った）ものは実行できる。キューのメッセージが失われた状態なので、やり直してよい。
  * 自動登録された登録済みも実行できる。登録を変えずに回答と判定結果だけを更新する（rejudgeConfirmation の説明を参照）。
  * サーバー側の rejudgeWebhookJob（webhook-admin.ts）の 409 と同じ規則。ボタンは常に押せるので、押せない状態はこの理由をダイアログに出す。
  */
-export const rejudgeBlockedReason = (status: string, reasons: readonly string[]): string | null => {
+export const rejudgeBlockedReason = (
+  status: string,
+  reasons: readonly string[],
+  activity?: WebhookJobActivity
+): string | null => {
   if (status === 'held') return null
-  if (isWebhookJobJudging(status)) return REJUDGE_BLOCKED_JUDGING
+  if (isWebhookJobJudging(status)) return stalledMinutesOf(status, activity) === null ? REJUDGE_BLOCKED_JUDGING : null
   if (status === 'registered')
     return isAutoRegisteredWebhookJob(status, reasons) && reasons.includes('manually_rejected')
       ? REJUDGE_BLOCKED_REJECTED
@@ -129,16 +153,24 @@ export const REJUDGE_DESCRIPTION =
 export const REJUDGE_REGISTERED_DESCRIPTION =
   '現在の設定（しきい値）でAIの判定をやり直し、回答と判定結果を更新します。登録済みのイベントと Discord 通知は変更しません。'
 
+/** 止まっている処理待ち・処理中を再実行するときの説明。止まっている旨に、通常の説明（自動登録・通知の可能性）を続ける。 */
+export const rejudgeStalledDescription = (status: string, minutes: number): string =>
+  `${minutes} 分以上動いていない${status === 'queued' ? '処理待ち' : '処理中'}をやり直します。${REJUDGE_DESCRIPTION}`
+
 /**
  * 「再実行」の確認ダイアログの内容。実行できない状態では、説明に理由を出し、実行ボタンを押せなくする（blocked）。
- * 実行できる状態では、自動登録済みなら登録を変えない説明、それ以外は通常の説明を出す（サーバーの振り分け isAutoRegisteredWebhookJob と同じ）。
+ * 実行できる状態では、自動登録済みなら登録を変えない説明、止まっている処理待ち・処理中なら止まっている旨と通常の説明、それ以外は通常の説明を出す
+ * （自動登録済みの振り分けはサーバーの isAutoRegisteredWebhookJob と同じ）。
  */
 export const rejudgeConfirmation = (
   status: string,
-  reasons: readonly string[]
+  reasons: readonly string[],
+  activity?: WebhookJobActivity
 ): { description: string; blocked: boolean } => {
-  const reason = rejudgeBlockedReason(status, reasons)
+  const reason = rejudgeBlockedReason(status, reasons, activity)
   if (reason !== null) return { description: reason, blocked: true }
+  const stalledMinutes = stalledMinutesOf(status, activity)
+  if (stalledMinutes !== null) return { description: rejudgeStalledDescription(status, stalledMinutes), blocked: false }
   return {
     description: isAutoRegisteredWebhookJob(status, reasons) ? REJUDGE_REGISTERED_DESCRIPTION : REJUDGE_DESCRIPTION,
     blocked: false
@@ -150,10 +182,15 @@ export const rejudgeConfirmation = (
  */
 const canLinkJob = (status: string): boolean => status === 'held' || status === 'ignored' || status === 'registered'
 
-export const webhookActionAvailability = (status: string, notificationStatus: string, reasons: readonly string[]) => ({
+export const webhookActionAvailability = (
+  status: string,
+  notificationStatus: string,
+  reasons: readonly string[],
+  activity?: WebhookJobActivity
+) => ({
   canResolve: status === 'held',
   canLink: canLinkJob(status),
-  canRejudge: rejudgeBlockedReason(status, reasons) === null,
+  canRejudge: rejudgeBlockedReason(status, reasons, activity) === null,
   canRetryNotification:
     (status === 'held' || status === 'registered') &&
     (notificationStatus === 'failed' || notificationStatus === 'unknown')
@@ -211,3 +248,30 @@ export const notificationRetryWarning = (status: string): string =>
   status === 'unknown'
     ? '前回の送信がDiscordに届いている可能性があります。再送すると同じ通知が重複する場合があります。'
     : 'Discord通知だけを再送します。イベントの登録やAI判定は繰り返しません。'
+
+const FAILURE_STAGE_LABELS = {
+  claim: 'ジョブの確保',
+  job: '投稿全体の処理',
+  item_count: '配布件数の判定',
+  extraction: 'イベントの抽出',
+  extraction_save: '抽出結果の保存',
+  candidate: '候補の処理',
+  detection: 'Clef の判定',
+  prompt_save: '送信入力の保存',
+  linked_event: '連携先の提案',
+  title: 'タイトルの生成',
+  registration: 'イベントの登録',
+  discovery: '判定結果の記録',
+  notification: 'Discord 通知',
+  aggregate: '投稿の集約',
+  unknown: '段階不明'
+} as const satisfies Record<WebhookFailureStage, string>
+
+/**
+ * 処理エラー（last_error）の表示。processing_failed:<段階>:<例外名> の形なら、コードはそのままに、失敗した段階の日本語を添える。
+ * 抽出系の固有コードなど、ほかの値はそのまま出す。
+ */
+export const webhookLastErrorLabel = (lastError: string): string => {
+  const failure = parseWebhookFailureCode(lastError)
+  return failure === null ? lastError : `${lastError}（${FAILURE_STAGE_LABELS[failure.stage]}で失敗）`
+}

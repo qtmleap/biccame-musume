@@ -103,7 +103,17 @@ export const withRejudgeEnv = async (run: (env: Bindings, sent: string[]) => Pro
 
 export const rejudgePostId = (index: number) => `210922172177357${String(index).padStart(4, '0')}`
 
-export type RejudgeSeed = { status: string; notificationStatus: string; leaseUntil: number | null; reasons: string[] }
+export type RejudgeSeed = {
+  status: string
+  notificationStatus: string
+  leaseUntil: number | null
+  reasons: string[]
+  /** 最後の更新（updated_at、ms）。省略すると古い固定値（止まっていると見なされる側）。新しい処理待ちを作るときは現在時刻を渡す。 */
+  updatedAt?: number
+}
+
+/** 既定の updated_at。現在時刻よりずっと前なので、queued / processing のままだと「止まっている」扱いになる。 */
+export const SEED_UPDATED_AT = 1791676800000
 
 export const heldSeed: RejudgeSeed = {
   status: 'held',
@@ -161,7 +171,7 @@ export const seedRejudgeJob = async (env: Bindings, index: number, seed: Rejudge
       seed.leaseUntil === null ? null : 'other-worker',
       seed.leaseUntil,
       1791676800000,
-      1791676800000,
+      seed.updatedAt === undefined ? SEED_UPDATED_AT : seed.updatedAt,
       postId
     )
     .run()

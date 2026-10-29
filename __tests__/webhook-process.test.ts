@@ -226,7 +226,10 @@ test('queue registration is idempotent and a notification retry does not rerun A
     await insertWebhookJob(env, failedPost)
     await expect(proceed(failedPost.id)).rejects.toThrow('synthetic AI failure')
     expect((await getWebhookJob(env, failedPost.id)).status).toBe('failed')
-    expect((await getWebhookJob(env, failedPost.id)).lastError).toBe('processing_failed')
+    // 旧: 'processing_failed' と完全一致。新: 接頭辞・段階（Clef の判定）・例外名だけで、例外のメッセージは含めない。
+    const failedError = (await getWebhookJob(env, failedPost.id)).lastError
+    expect(failedError).toBe('processing_failed:detection:Error')
+    expect(failedError).not.toContain('synthetic AI failure')
     delivery.mode = 'sent'
     await retryWebhookJob(env, failedPost.id, { notificationOnly: false, allowUnknown: false })
     await proceed(failedPost.id)
