@@ -16,7 +16,7 @@ import { DETECTION_VERSION, DetectionResultSchema, evaluateDetection } from '@bi
 import dayjs from 'dayjs'
 import { canAutoRegisterWebhookCandidate } from './webhook-auto-registration'
 import { recordWebhookDiscovery, synchronizeWebhookDiscovery } from './webhook-discovery-record'
-import { isLegacyWebhookRegisterRetry, webhookItemCountReviewReasons } from './webhook-item-count-review'
+import { isLegacyWebhookRegisterRetry } from './webhook-item-count-review'
 import { NotificationRetry, notifyWebhookJob } from './webhook-notification'
 import { eventCandidate, type ProcessOptions } from './webhook-processing-context'
 
@@ -43,10 +43,6 @@ export const processWebhookCandidate = async (
       .bind(target.id)
       .first<{ resultJson: string | null }>()
     if (stored === null) throw new Error('Webhook job disappeared')
-    const auditReasons = await webhookItemCountReviewReasons(env, postId, {
-      post: job.post,
-      resultJson: stored.resultJson
-    })
     const result =
       stored.resultJson === null
         ? await (async () => {
@@ -65,8 +61,7 @@ export const processWebhookCandidate = async (
               job.post,
               response.answers,
               decision,
-              detectionThresholds(configuration),
-              auditReasons
+              detectionThresholds(configuration)
             )
             await env.DB.prepare(
               `UPDATE ${target.table} SET result_json=?,answers_json=?,model=?,question_version=?,confidence=?,judged_at=?,updated_at=? WHERE ${target.column}=? AND lease_token=?`
@@ -98,7 +93,6 @@ export const processWebhookCandidate = async (
     const judged = await currentJob()
     const discoveryRecorded = judged.discovery !== undefined && judged.discovery !== null
     const allowed =
-      auditReasons.length === 0 &&
       (discoveryRecorded || isLegacyWebhookRegisterRetry(job.post, stored.resultJson)) &&
       canAutoRegisterWebhookCandidate(
         job.post,
@@ -108,7 +102,6 @@ export const processWebhookCandidate = async (
       )
     const baseReasons = [
       ...result.reasons,
-      ...auditReasons,
       ...(result.status === 'register' && candidate !== null && !allowed ? ['auto_registration_not_allowed'] : []),
       ...(result.status === 'register' && candidate === null ? ['invalid_event_candidate'] : []),
       ...duplicates.map((id) => `possible_duplicate:${id}`)

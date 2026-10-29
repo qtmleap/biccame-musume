@@ -5,8 +5,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { WebhookAnswerTable } from '@/components/admin/webhook-answer-table'
 import { webhookEventCreateSearch } from '@/components/admin/webhook-form-defaults'
 import { webhookPostStatusIsTentative, webhookPostStatusLabel } from '@/components/admin/webhook-labels'
+import { basicCellsOf, gridRootOf } from './fixtures/webhook-answer-grid'
 import {
-  answerRows,
   answerThresholds,
   draft,
   eventNameCell,
@@ -170,100 +170,93 @@ describe('Webhook管理画面の判定・通知表示', () => {
     })
   })
 
-  test('Clef の回答表は質問ごとに1行、確定と未確定をバッジで区別する', () => {
+  test('Clef の回答表は質問ごとに1セル、確定と未確定をバッジで区別する', () => {
     const markup = renderToStaticMarkup(
       createElement(WebhookAnswerTable, { answers: shintouAnswers, thresholds: answerThresholds })
     )
-    expect([...markup.matchAll(/<th\b[^>]*>(.*?)<\/th>/g)].map((match) => match[1])).toEqual([
-      '質問',
-      '回答',
-      '確率',
-      'しきい値',
-      '判定',
-      '次点'
-    ])
-    const rows = answerRows(markup)
-    // is_event（ビッカメ娘のイベントか）は回答に入っていても行を出さない。
-    expect(rows).toHaveLength(4)
-    expect(rows.map((row) => row.match(/<td\b[^>]*>(.*?)<\/td>/)?.[1])).toEqual([
-      '状態',
-      '配布物',
-      '開始日',
-      '配布条件'
-    ])
-    const badges = [...markup.matchAll(/data-slot="badge"[^>]*>(.*?)<\/span>/g)].map((match) => match[1])
-    expect(badges).toEqual(['未確定', '未確定', '確定', '確定'])
-    expect(markup).toContain('告知')
+    // Grid には列見出しも table のタグも無い。ラベル・ステータス・回答・確率・補足が各セルの欄になる。
+    expect(markup).not.toContain('<th')
+    expect(markup).not.toContain('<table')
+    const cells = basicCellsOf(markup)
+    // is_event（ビッカメ娘のイベントか）は回答に入っていてもセルを出さない。
+    expect(cells).toHaveLength(4)
+    expect(cells.map((cell) => cell.label)).toEqual(['状態', '配布物', '開始日', '配布条件'])
+    expect(cells.map((cell) => cell.status)).toEqual(['未確定', '未確定', '確定', '確定'])
+    expect(markup.match(/data-slot="badge"/g)).toHaveLength(4)
+    expect(cells[0]).toMatchObject({ answer: '告知', probability: '75.0%' })
+    expect(cells[0]?.note).toBe('しきい値 80.0% · 次点 開始 15.0% / 状態なし 5.0%')
     expect(markup).toContain('2026-10-19')
     expect(markup).not.toContain('72.2%')
     expect(markup).toContain('90.0%')
-    expect(markup).toContain('開始</span> 15.0%')
     expect(markup).toContain('しきい値は現在の設定です。判定した時点の設定と異なる場合があります。')
   })
 
-  test('確定はtheme トークンの success、未確定は warning で表し、未確定の行だけ薄く強調する', () => {
+  test('確定はtheme トークンの success、未確定は warning で表し、未確定のセルだけ薄く強調する', () => {
     const markup = renderToStaticMarkup(
       createElement(WebhookAnswerTable, { answers: shintouAnswers, thresholds: answerThresholds })
     )
-    const rows = answerRows(markup)
-    expect(rows.filter((row) => row.includes('bg-warning/10'))).toHaveLength(2)
-    expect(rows.filter((row) => row.includes('border-success/50'))).toHaveLength(2)
-    expect(rows.filter((row) => row.includes('border-warning/60'))).toHaveLength(2)
+    const cells = basicCellsOf(markup)
+    expect(cells.filter((cell) => cell.className.includes('bg-warning/10'))).toHaveLength(2)
+    expect(cells.filter((cell) => cell.html.includes('border-success/50'))).toHaveLength(2)
+    expect(cells.filter((cell) => cell.html.includes('border-warning/60'))).toHaveLength(2)
     expect(markup).not.toMatch(/#[0-9a-fA-F]{3,8}\b|rgb\(/)
   })
 
-  test('回答表の確率は右寄せのmono、しきい値が無い間は しきい値と判定の列に—を出す', () => {
+  test('回答表の確率は右寄せのmono、しきい値が無い間はしきい値とステータスに—を出す', () => {
     const loading = renderToStaticMarkup(createElement(WebhookAnswerTable, { answers: shintouAnswers }))
-    const rows = answerRows(loading)
-    expect(rows).toHaveLength(4)
-    for (const row of rows) {
-      const cells = [...row.matchAll(/<td\b[^>]*>(.*?)<\/td>/g)].map((match) => match[1])
-      // しきい値の列は mono の span の中に—を置く（td は右寄せのまま、flex にせず基線は sans の行で決まる）。
-      expect(cells[3]).toBe('<span class="font-mono tabular-nums leading-[0]">—</span>')
-      expect(cells[4]).toBe('—')
-      const probability = row.match(/<td\b[^>]*class="([^"]*)"[^>]*><span\b[^>]*>[\d.]+%<\/span><\/td>/)?.[1]
-      expect(probability?.split(' ')).toEqual(expect.arrayContaining(['text-right']))
+    const cells = basicCellsOf(loading)
+    expect(cells).toHaveLength(4)
+    for (const cell of cells) {
+      expect(cell.status).toBe('—')
+      expect(cell.note).toContain('しきい値 —')
+      expect(cell.note).not.toMatch(/しきい値 \d/)
+      const probability = gridRootOf(loading)?.querySelector(`[data-key="${cell.key}"] [data-field="probability"]`)
+      expect(probability?.getAttribute('class')?.split(' ')).toEqual(
+        expect.arrayContaining(['font-mono', 'tabular-nums', 'text-right'])
+      )
     }
     expect(loading).not.toContain('data-slot="badge"')
     expect(loading).not.toContain('bg-warning/10')
   })
 
-  // td に font-mono を付けると行の基線が等幅フォントで決まり、日本語フォントの隣のセルより数字が上にずれる。
-  // span の行高を 0 にして行内に置き、flex の箱の中心揃えを使わず、行ボックスと基線を sans の行で決める。
-  test('回答表の確率としきい値は、td ではなく内側の span が font-mono と tabular-nums を持つ', () => {
+  // セルの1行目・2行目は items-baseline の flex にして、日本語と等幅の数値の基線を揃える。等幅は数値の span にだけ付ける。
+  test('回答表の確率としきい値は、セルではなく内側の span が font-mono と tabular-nums を持つ', () => {
     for (const thresholds of [answerThresholds, undefined]) {
       const markup = renderToStaticMarkup(createElement(WebhookAnswerTable, { answers: shintouAnswers, thresholds }))
-      for (const row of answerRows(markup)) {
-        const cells = [...row.matchAll(/<td\b([^>]*)>(.*?)<\/td>/g)]
-        for (const index of [2, 3]) {
-          const attributes = cells[index]?.[1]
-          const content = cells[index]?.[2]
-          expect(attributes).toContain('text-right')
-          expect(attributes).not.toContain('font-mono')
-          expect(attributes).not.toContain('tabular-nums')
-          expect(content).toMatch(/^<span class="font-mono tabular-nums leading-\[0\]">[^<]+<\/span>$/)
-        }
+      const root = gridRootOf(markup)
+      if (root === null) throw new Error('Missing grid root')
+      for (const cell of root.querySelectorAll('li[data-key]')) {
+        expect(cell.getAttribute('class')).not.toContain('font-mono')
+        expect(cell.getAttribute('class')).not.toContain('tabular-nums')
+        const probability = cell.querySelector('[data-field="probability"]')
+        expect(probability?.getAttribute('class')).toContain('font-mono')
+        expect(probability?.getAttribute('class')).toContain('tabular-nums')
+        for (const line of cell.querySelectorAll(':scope > div'))
+          expect(line.getAttribute('class')).toContain('items-baseline')
       }
     }
   })
 
-  // 外側の等幅 span は行高 0、内側の sans の span だけ行高 20px にして、行ボックスと基線を sans で決める。
-  // そうしないと等幅フォントの余白で行ボックスが 22px に広がり、次点が隣のセルより 1px 上にずれる。
-  test('回答表の次点は、外側の等幅spanの行高を0、内側のsansのspanの行高を20pxにして基線を揃える', () => {
+  test('回答表の次点は、補足の行に「次点 回答 確率」を「 / 」で並べ、確率だけを等幅 span にする', () => {
     const markup = renderToStaticMarkup(
       createElement(WebhookAnswerTable, { answers: shintouAnswers, thresholds: answerThresholds })
     )
-    const alternativeCells = answerRows(markup).flatMap((row) => {
-      const cell = [...row.matchAll(/<td\b[^>]*>(.*?)<\/td>/g)][5]?.[1]
-      return cell === undefined || cell === '—' ? [] : [cell]
-    })
-    expect(alternativeCells).toHaveLength(4)
-    const alternative =
-      '<span class="font-mono tabular-nums leading-\\[0\\] flex items-baseline gap-1"><span class="font-sans leading-5">[^<]+</span> [\\d.]+%</span>'
-    for (const cell of alternativeCells) {
-      expect(cell).toMatch(new RegExp(`^<div class="flex items-baseline gap-4">(${alternative})+</div>$`))
+    const notes = basicCellsOf(markup).map((cell) => cell.note)
+    expect(notes).toEqual([
+      'しきい値 80.0% · 次点 開始 15.0% / 状態なし 5.0%',
+      'しきい値 90.0% · 次点 アクキー 42.8% / その他 9.0%',
+      'しきい値 90.0% · 次点 なし 0.4%',
+      'しきい値 90.0% · 次点 確定できない 1.0%'
+    ])
+    // 次点が2件ある行（状態・配布物）は ' / ' で区切る。
+    expect(notes.filter((note) => note?.includes(' / '))).toHaveLength(2)
+    const root = gridRootOf(markup)
+    if (root === null) throw new Error('Missing grid root')
+    const monos = root.querySelectorAll('[data-field="note"] span')
+    expect(monos.length).toBeGreaterThan(0)
+    for (const mono of monos) {
+      expect(mono.getAttribute('class')).toBe('font-mono tabular-nums')
+      expect(mono.text).toMatch(/^[\d.]+%$/)
     }
-    // 次点が2件ある行（status・category）は、gap-4 の flex の中に2つ並ぶ。
-    expect(alternativeCells.filter((cell) => cell.split('font-sans').length === 3)).toHaveLength(2)
   })
 })
