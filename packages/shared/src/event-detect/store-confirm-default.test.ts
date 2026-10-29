@@ -73,13 +73,13 @@ describe('2段目の店舗の確認の質問文（v18）', () => {
   })
 })
 
-describe('版: 現行は v18 で、v15〜v17 の保存済みの定義は変わらない', () => {
+describe('版: v15〜v18 の保存済みの定義は変わらない（現行は v19 に進んでいる）', () => {
   const v17 = definitionOf(V17)
   const v18 = definitionOf(V18)
 
-  test('DETECTION_VERSION は v18 で、画面の表示名は v18', () => {
-    expect(DETECTION_VERSION).toBe(V18)
-    expect(promptVersionLabel(DETECTION_VERSION)).toBe('v18')
+  test('v18 の画面の表示名は v18 で、現行の DETECTION_VERSION は v18 ではない（v19。gift-card-category.test.ts）', () => {
+    expect(promptVersionLabel(V18)).toBe('v18')
+    expect(DETECTION_VERSION).not.toBe(V18)
   })
   test('v18 の質問は v17 と並びも 1 段目も娘の確認も同じで、店舗の確認だけが違う', () => {
     expect(v18.questions.map((question) => question.key)).toEqual(v17.questions.map((question) => question.key))
@@ -112,7 +112,7 @@ describe('版: 現行は v18 で、v15〜v17 の保存済みの定義は変わ�
     expect(sha256(v17)).toBe('9599e3c0136842750ad73c52a7a5b63c1a5f195a1ea662e0db4b179c672bd319')
     expect(sha256(v18)).toBe('0ea84734adc7258e2d7138777dc9aee146ce5cec06e64f29d4c6c2d0ef916763')
   })
-  test('現行の 1 段目の質問は、v17 の保存済みの定義と文言・型・固定の選択肢まで同一（1 段目は変えていない）', () => {
+  test('現行の 1 段目の質問は、v17 の保存済みの定義と文言・型・固定の選択肢まで同一（1 段目は変えていない。v19 も質問文は変えず、category の選択肢に gift_card を足しただけ）', () => {
     const first = requestWithAssociations(post())
     const keys = Object.keys(first.questions)
     expect(keys).toContain('store')

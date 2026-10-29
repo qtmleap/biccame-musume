@@ -1,6 +1,6 @@
 import type { ClefAnswer } from '@biccame/shared/event-detect/clef'
 import { keyToDate } from '@biccame/shared/event-detect/decide'
-import { DetectionDraftSchema } from '@biccame/shared/event-detect/detection'
+import { categoryOfChoice, DetectionDraftSchema } from '@biccame/shared/event-detect/detection'
 import type { GoldEvent } from './d1-gold-schema'
 import type { GoalJudgement } from './goal-pipeline-schema'
 
@@ -90,7 +90,8 @@ export const viewOf = (judgement: GoalJudgement, index: number): CandidateView =
     reasons: judgement.decision.reasons,
     store: topOf(answers.store),
     character: topOf(answers.character),
-    category: category === null ? null : category.choice,
+    // 質問にだけある gift_card は、正解（D1 のカテゴリ）と比べるため other に対応づける。
+    category: category === null ? null : categoryOfChoice(category.choice),
     startDate: startDate === undefined ? null : startDate,
     endDate,
     conditions: draft.success ? signatureOf(draft.data) : null

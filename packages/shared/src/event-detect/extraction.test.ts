@@ -78,7 +78,7 @@ const response = (request: ClefRequest): ClefResponse => {
 }
 
 describe('配布物ごとの抽出', () => {
-  test('ギフトカードを配布物として保持し、名刺と混同せずその他で判定する', () => {
+  test('ギフトカードを配布物として保持し、名刺と混同せず gift_card を選択肢に出す（登録するカテゴリは other）', () => {
     const value = {
       ...post,
       text: 'あべのたんのギフトカードを10/16から先着100名にプレゼントします。限定名刺も配布します。'
@@ -100,8 +100,11 @@ describe('配布物ごとの抽出', () => {
     expect(gift.text).not.toContain('名刺')
     const category = createDetectionRequest(gift).questions.category
     if (category.type !== 'choice') throw new Error('Expected choice')
-    expect(Object.keys(category.criteria)).toEqual(['other', 'none'])
-    expect(category.criteria.other).toContain('ギフトカード')
+    // 抽出された物品の名前（あべのたんギフトカード）にギフトカードを含むので gift_card が出て、other の説明はギフトカードを外した版になる。
+    expect(Object.keys(category.criteria)).toEqual(['gift_card', 'other', 'none'])
+    expect(category.criteria.gift_card).toContain('ギフトカード')
+    expect(category.criteria.other).toContain('ギフトカード以外')
+    expect(category.criteria.other).not.toContain('ポストカード・ギフトカード')
     expect(extractionSystem).toContain('ギフトカードも配布・プレゼント、ビッカメ娘の記念・限定デザインの販売・頒布')
     expect(extractionSystem).toContain('itemにはギフトカードであることを残して')
   })
