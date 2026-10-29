@@ -108,6 +108,11 @@ if (!legacy.success) throw new Error('Invalid historical prompt definitions')
 // store は v2 だけが投稿ごとに候補を絞る。v13 以降は 44 店舗を固定の選択肢で持つため、版ごとに指定を分ける。
 const LEGACY_DYNAMIC_KEYS = ['store', 'start_date', 'end_date', 'quantity', 'purchase_amount', 'charge_amount']
 const CURRENT_DYNAMIC_KEYS = LEGACY_DYNAMIC_KEYS.filter((key) => key !== 'store')
+// v19 から配布物（category）の選択肢も投稿ごとに変わる（質問文は v18 のまま）。gift_card を出す投稿は other の説明がギフトカードを外した版になり、同じ other でも説明が2通りになるため、
+// 固定の選択肢では保存時の検査（webhook-prompt.ts）がどちらかを不一致にしてしまう。v18 までの定義は固定のまま（保存済みで、ここでは作り直さない）。
+const GIFT_CARD_DYNAMIC_KEYS = [...CURRENT_DYNAMIC_KEYS, 'category']
+const CATEGORY_DYNAMIC_LABEL =
+  '投稿本文の根拠語と、抽出された物品の名前から生成（固定値ではありません）。名刺・アクキー・アクスタは本文に根拠語があるときだけ、gift_card は物品名にギフトカードを含むときだけ選択肢に出ます。gift_card が出るとき、other の説明はギフトカードを外した版になります。other と none は常に出ます'
 const LEGACY_DYNAMIC_CRITERIA =
   'これは版ごとの質問定義です。日付・数量・金額・店舗候補・本文の根拠語による質問の有無や選択肢は、投稿ごとに生成されます。全候補を示した定義であり、過去に実送信した入力を記録したものではありません。'
 const CURRENT_DYNAMIC_CRITERIA =
@@ -118,7 +123,13 @@ const CURRENT_DYNAMIC_CRITERIA =
 const FULL_AUTHOR_PLACEHOLDER = '{{その版の店舗辞書で解決した投稿者}}'
 const SHORT_AUTHOR_PLACEHOLDER =
   '{{投稿者の店舗の短い名前（店舗の選択肢の説明と同じ。社名の接頭辞や括弧書きの店舗IDは付けない）。店舗アカウントが複数なら「・」で連結、店舗アカウントでなければ「店舗以外」}}'
-type DefinitionOptions = { dynamicKeys?: readonly string[]; dynamicCriteria?: string; stateTemplateExtra?: string }
+type DefinitionOptions = {
+  dynamicKeys?: readonly string[]
+  dynamicCriteria?: string
+  stateTemplateExtra?: string
+  // 質問ごとの dynamic のプレースホルダの文言。指定が無い質問は共通の文言。
+  dynamicLabels?: Readonly<Record<string, string>>
+}
 const definitionOf = (
   questionVersion: string,
   origin: string,
@@ -126,7 +137,8 @@ const definitionOf = (
   {
     dynamicKeys = LEGACY_DYNAMIC_KEYS,
     dynamicCriteria = LEGACY_DYNAMIC_CRITERIA,
-    stateTemplateExtra = ''
+    stateTemplateExtra = '',
+    dynamicLabels = {}
   }: DefinitionOptions = {}
 ) => {
   const keys = [...new Set(requests.flatMap((request) => Object.keys(request.questions)))]
@@ -138,8 +150,9 @@ const definitionOf = (
     const first = variants[0]
     if (first === undefined) throw new Error('Missing prompt question')
     const dynamic = dynamicKeys.includes(key)
+    const label = dynamicLabels[key]
     const criteria = dynamic
-      ? { dynamic: '投稿本文・投稿日・当時の店舗候補から生成（固定値ではありません）' }
+      ? { dynamic: label === undefined ? '投稿本文・投稿日・当時の店舗候補から生成（固定値ではありません）' : label }
       : Object.fromEntries(
           variants.flatMap((question) =>
             question.type === 'choice'
@@ -167,15 +180,18 @@ const definitionOf = (
   if (!parsed.success) throw new Error('Invalid prompt definition')
   return parsed.data
 }
-// v16 から続く2段目（v17 の質問は v16 と同一。v18 は店舗の確認の質問だけが v17 と違う）。確認の質問と state の末尾の行は、1段目で最上位に選んだ店舗・娘が具体的なときだけ、別の呼び出しで送る。
+// v16 から続く2段目（v17 の質問は v16 と同一。v18 は店舗の確認の質問だけが v17 と違う。v19 は2段目の質問を変えていない）。確認の質問と state の末尾の行は、1段目で最上位に選んだ店舗・娘が具体的なときだけ、別の呼び出しで送る。
 // 注: 下の CONFIRM_STATE_TEMPLATE / CONFIRM_DYNAMIC_CRITERIA の説明は、保存済みの版定義（変えると例外になる）に入っており、現行の挙動とは 2 点違う。
 //   1. 説明は「店舗の娘には娘の確認を聞かない」だが、現行は店舗の娘にも娘の確認を聞く（二回チェック）。
 //   2. 説明は「具体的なら必ず聞く」だが、現行は最上位の確率が下限（既定 70%）以上なら確認を聞かない。
-//   版を上げるまで直せない。管理画面のプロンプト表示には、版を上げるまで古い説明が出る（v18 も質問文だけを直した版なので、この説明は v17 までと同じ）。
+//   版を上げるまで直せない。管理画面のプロンプト表示には、版を上げるまで古い説明が出る（v18 は質問文だけ、v19 は category の選択肢だけを直した版なので、この説明は v17 までと同じ）。
 // 定義には確認の質問を載せるため、店舗と別の娘の両方を対象にした確認の request を 1 つ足す。
 const CONFIRM_STATE_TEMPLATE =
   '\n{{2段目（確認）の呼び出しだけ: 上の入力の末尾に「確認対象の開催店舗: <1段目で最上位に選んだ店舗の短い名前>」「確認対象のビッカメ娘: <1段目で最上位に選んだ娘の名前>」の行を足す。最上位が具体的な店舗のときだけ店舗の行と質問が作られ、最上位が具体的な娘で、かつ店舗の娘（最上位の店舗と同じ ID）ではないときだけ娘の行と質問が作られる}}'
 const CONFIRM_DYNAMIC_CRITERIA = `${CURRENT_DYNAMIC_CRITERIA}確認の質問（store_confirm・character_confirm）は、1段目で最上位に選んだ開催店舗・対象ビッカメ娘が具体的なときだけ、別の呼び出しで送られます（はい/いいえの質問で、選択肢はありません）。ただし最上位の娘が最上位の店舗の娘（同じ ID）のときは、特に指定がなければ店舗の娘とみなして、character_confirm は送られません。`
+// v19 の配布物（category）の質問。質問文は v18 から変えておらずどの投稿でも同じで、選択肢だけが投稿ごとに変わる。
+const CATEGORY_DYNAMIC_CRITERIA =
+  '配布物（category）の選択肢は投稿ごとに決まります（根拠語がある名刺・アクキー・アクスタだけ、抽出された物品の名前にギフトカードを含むときだけ gift_card）。質問文は全投稿で同じです。'
 const confirmRequests = posts.map((post) =>
   createConfirmRequest(createDetectionRequests(post)[0], { store: 'akiba', character: 'funato' })
 )
@@ -187,9 +203,10 @@ const generated = [
     'versioned-source',
     [...posts.flatMap((post) => createDetectionRequests(post)), ...confirmRequests],
     {
-      dynamicKeys: CURRENT_DYNAMIC_KEYS,
-      dynamicCriteria: CONFIRM_DYNAMIC_CRITERIA,
-      stateTemplateExtra: CONFIRM_STATE_TEMPLATE
+      dynamicKeys: GIFT_CARD_DYNAMIC_KEYS,
+      dynamicCriteria: `${CONFIRM_DYNAMIC_CRITERIA}${CATEGORY_DYNAMIC_CRITERIA}`,
+      stateTemplateExtra: CONFIRM_STATE_TEMPLATE,
+      dynamicLabels: { category: CATEGORY_DYNAMIC_LABEL }
     }
   ),
   definitionOf(EXTRACTION_VERSION, 'versioned-source', posts.map((post) => createItemCountRequest(post)))

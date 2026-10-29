@@ -19,6 +19,7 @@ describe('ギフトカードの配布判定', () => {
     expect(filterWebhookPost(value).reason).toBeUndefined()
     expect(filterWebhookPost(value).hits).toContainEqual({ keyword: 'ギフトカード', group: 'item' })
     const request = requestWithAssociations(value)
+    // 抽出された物品の名前（extractionContext）が無い投稿は gift_card を選択肢に出さず、other の説明にギフトカードを含む（v18 までと同じ）。
     expect(Object.keys(categoryCriteria(request))).toEqual(['other', 'none'])
     expect(categoryCriteria(request).other).toContain('ギフトカード')
     const decision = evaluateWithStore(
@@ -32,7 +33,30 @@ describe('ギフトカードの配布判定', () => {
     expect(decision.candidate.characterIds).toEqual(['abeno'])
   })
 
-  test('イベント検索などのカテゴリは既存の5種類のまま増やさない', () => {
+  test.each(['配布', 'プレゼント'])(
+    '物品名にギフトカードを含む投稿は gift_card を選択肢に出し、gift_card の回答も other として登録する（%s）',
+    (give) => {
+      const text = `あべのたんのギフトカードを2026年11月3日から1,000円以上お買い上げの方に先着100枚${give}します`
+      const value = post(text, {
+        extractionContext: { kind: 'item', item: 'あべのたんギフトカード', evidence: [text], originalText: text }
+      })
+      const request = requestWithAssociations(value)
+      expect(Object.keys(categoryCriteria(request))).toEqual(['gift_card', 'other', 'none'])
+      expect(categoryCriteria(request).gift_card).toContain('ギフトカード')
+      expect(categoryCriteria(request).other).toContain('ギフトカード以外')
+      const decision = evaluateWithStore(
+        value,
+        request,
+        response(request, { category: choice('gift_card', { gift_card: 0.99 }) })
+      )
+      expect(decision.status).toBe('register')
+      if (decision.status !== 'register') throw new Error('Expected gift card registration')
+      expect(decision.candidate.category).toBe('other')
+      expect(decision.candidate.characterIds).toEqual(['abeno'])
+    }
+  )
+
+  test('イベント検索などのカテゴリは既存の5種類のまま増やさない（gift_card は質問にだけある選択肢）', () => {
     expect(EventCategorySchema.options).toEqual(['limited_card', 'regular_card', 'ackey', 'acsta', 'other'])
     expect(baseQuestions().category).toMatchObject({ criteria: { other: expect.stringContaining('ギフトカード') } })
   })

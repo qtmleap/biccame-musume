@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import type { ClefRequest } from '@biccame/shared/event-detect/clef'
 import {
   DETECTION_VERSION,
   type DetectionThresholds,
@@ -18,6 +19,7 @@ import {
 import { canonicalJson } from '../scripts/lib/event-detect/d1-gold-replay'
 import { sha256Hex } from '../scripts/lib/event-detect/d1-gold-schema'
 import { GOAL_PIPELINE_PROFILE } from '../scripts/lib/event-detect/goal-pipeline-profile'
+import { restoreV15Request } from './d1-gold-v15-restore'
 
 // 保存した実 AI の応答（D1 の人手修正済みイベントを正解とする Golden）を、現行の evaluateDetection で再評価して精度の下限を守る。
 // 実 AI は呼ばない。フィクスチャは scripts/export-d1-gold-fixture.ts が作る（手順と指標の定義は docs/event-detection-golden.md）。
@@ -46,21 +48,30 @@ const rules = { dev: evaluateSplit('dev', ADOPTED, 0.9), test: evaluateSplit('te
 // 参考: 件数の監査を 70% にした場合（EVENT_DETECTION_ITEM_COUNT_THRESHOLD=0.7）。不一致のときの抽出のやり直しは再現していない近似。
 const audit70 = { dev: evaluateSplit('dev', ADOPTED, 0.7), test: evaluateSplit('test', ADOPTED, 0.7) }
 
-// フィクスチャの保存応答は v15 の 1 段目の質問への回答。現行の版（v18。1 段目は v17 と同一で、変えたのは 2 段目の店舗の確認だけ）は、v15 に対して娘の質問に store_character を足し、
-// 「店舗の娘と同一と仮定しない」注意書きを外した版なので、現行のソースは v15 の 1 段目の質問をもう作れない。
-// そこで版の文字列は現行（v18）と比べず、次の 3 つで守る。
+// フィクスチャの保存応答は v15 の 1 段目の質問への回答。現行の版（v19）は、v15 に対して娘の質問に store_character を足し（v17）、「店舗の娘と同一と仮定しない」注意書きを外し、
+// 物品名にギフトカードを含む候補にだけ配布物（category）の選択肢へ gift_card を足した（v19。質問文は変えていない）版なので、現行のソースは v15 の 1 段目の質問をもう作れない。
+// そこで版の文字列は現行（v19）と比べず、次の 3 つで守る。
 //   1. フィクスチャは「作られた版（v15）」の 1 段目の質問への回答であること。
 //   2. 生成済みの版定義に、v15 の 1 段目の質問が 1 文字も変わらず残っていること（内容の sha256 で固定）。
-//   3. 保存応答の再評価に使う現行の request は、娘の質問を除けば v15 と同一で、娘の質問の選択肢は v15 の選択肢を全て含むこと。
+//   3. 保存応答の再評価に使う現行の request は、娘の質問と、配布物の選択肢（gift_card と other の説明）を v15 に戻せば v15 と同一で
+//      （戻し方は d1-gold-v15-restore.ts。配布物の質問文は v15 から変わっていないので戻さない）、
+//      娘の質問の選択肢は v15 の選択肢を全て含み、配布物の質問は gift_card を足しただけであること。
+// gift_card を出すのは、抽出された物品の名前にギフトカードを含む候補だけ。フィクスチャの候補は保存した抽出の物品名を持つので、件数を固定する
+// （物品名で判定すると 17 件。本文で判定すると 19 件になるが、本文の語では出さない）。
+const GIFT_CARD_OFFERED = 17
+// gift_card を出さない候補（444 件中 427 件）の 1 段目の request は、v19 を足す前の v18 のソース（HEAD の 657e7943）で作ったものと完全に同一
+// （質問文・選択肢・説明・state・他の質問のすべて）。この値は、v18 のソースで同じ候補から作った request の sha256。
+// v19 で変えたのは、gift_card を出す候補の category の選択肢だけで、質問文は変えていない。
+const V18_PLAIN_REQUESTS_SHA256 = 'de5bf44891bc4129f4a6d96040aefd4c208c7e5e1c03073c5414731b08cf5938'
 // 2 段目の回答はフィクスチャに無い。1 段目の最上位が 70% 以上の店舗・娘は確認なしで確定するので数字は出せるが、70% 未満は確認でしか確定できず、
 // 保存応答は確認を受けられないので採用されない。したがって下の数字は「2 段目を受けられない保存応答での下限」で、実運用では 70% 未満の候補が
 // 確認で拾われるため、登録数はこれより多くなる（実 AI で測っていない）。
-// v18 の回答を含むフィクスチャへの再作成は、v18 を実 AI で測り直した後に行う（docs/event-detection-golden.md）。
+// v19 の回答を含むフィクスチャへの再作成は、v19 を実 AI で測り直した後に行う（docs/event-detection-golden.md）。
 const FIXTURE_VERSION = 'v5-webhook-v15-concise-author'
 // 生成済みの v15 の版定義（保存済み。変えてはならない）の内容の sha256。
 const V15_DEFINITION_SHA256 = '4dea483fb9bb0eec2b07087ce6ba616846baefd0c33932fbb1cd4f24a7ed765a'
 // v15 のソースで、全フィクスチャ候補から作った 1 段目の request（state と質問）の sha256。1 段目の質問・文言・選択肢・state が変わると変わる。
-// 現行の request の娘の質問を v15 の版定義の娘の質問に置き換えたものが、この値と一致する。
+// 現行の request の娘と配布物の質問を v15 の版定義の質問に戻したもの（d1-gold-v15-restore.ts）が、この値と一致する。
 const FIRST_STAGE_REQUESTS_SHA256 = 'e1dfe1e1490bad1f609ea0974254cd81e44af1a65e16ebd649da8e6c4714cad4'
 
 const v15Definition = () => {
@@ -73,8 +84,23 @@ const v15CharacterQuestion = () => {
   if (question === undefined || question.type !== 'choice') throw new Error('Missing v15 character question')
   return { type: question.type, instructions: question.instructions, criteria: question.criteria }
 }
+const v15CategoryOther = () => {
+  const other = v15Definition().questions.find((entry) => entry.key === 'category')?.criteria.other
+  if (other === undefined) throw new Error('Missing v15 category other criteria')
+  return other
+}
+const v15CategoryInstructions = () => {
+  const question = v15Definition().questions.find((entry) => entry.key === 'category')
+  if (question === undefined) throw new Error('Missing v15 category question')
+  return question.instructions
+}
 const fixtureRequests = () =>
   fixture.cases.flatMap((item) => item.candidates.flatMap((candidate) => sourceOfFixture(item, candidate).requests))
+const categoryCriteriaOf = (request: ClefRequest) => {
+  const question = request.questions.category
+  if (question?.type !== 'choice') throw new Error('Missing category question')
+  return question.criteria
+}
 
 describe('Golden フィクスチャの整合', () => {
   test('フィクスチャは v15 の 1 段目の質問で作られている', () => {
@@ -83,7 +109,7 @@ describe('Golden フィクスチャの整合', () => {
     expect(fixture.detectionVersion).toBe(FIXTURE_VERSION)
   })
 
-  test('生成済みの版定義に v15 の 1 段目の質問が変わらず残っている（現行の版 v18 とは別の版）', () => {
+  test('生成済みの版定義に v15 の 1 段目の質問が変わらず残っている（現行の版 v19 とは別の版）', () => {
     expect(DETECTION_VERSION).not.toBe(FIXTURE_VERSION)
     expect(sha256Hex(JSON.stringify(v15Definition()))).toBe(V15_DEFINITION_SHA256)
     // v15 の定義の質問は、1 段目の質問だけ（確認の質問は v16 から）。
@@ -91,13 +117,10 @@ describe('Golden フィクスチャの整合', () => {
     expect(v15Definition().questions.map((question) => question.key)).not.toContain('character_confirm')
   })
 
-  test('現行の 1 段目の request は、娘の質問を v15 の定義に戻せば v15 と同一（娘の質問以外は変わっていない）', () => {
+  test('現行の 1 段目の request は、娘の質問と配布物の選択肢を v15 の定義に戻せば v15 と同一（それ以外は変わっていない）', () => {
     const requests = fixtureRequests()
     expect(requests.length).toBeGreaterThan(0)
-    const restored = requests.map((request) => ({
-      ...request,
-      questions: { ...request.questions, character: v15CharacterQuestion() }
-    }))
+    const restored = requests.map((request) => restoreV15Request(request, v15Definition()))
     expect(sha256Hex(canonicalJson(restored))).toBe(FIRST_STAGE_REQUESTS_SHA256)
     // 現行の娘の質問は v15 とは別物（store_character を足した）で、現行の 1 段目に確認の質問は無い。
     for (const request of requests) {
@@ -107,6 +130,46 @@ describe('Golden フィクスチャの整合', () => {
       if (character?.type !== 'choice') throw new Error('Missing character question')
       expect(character.criteria).not.toEqual(v15CharacterQuestion().criteria)
       expect(Object.keys(character.criteria)).toContain('store_character')
+    }
+  })
+
+  test('戻さなければハッシュは一致しない（配布物の選択肢も戻して初めて v15 と一致する。検査が空振りでない）', () => {
+    const requests = fixtureRequests()
+    const onlyCharacter = requests.map((request) => ({
+      ...request,
+      questions: { ...request.questions, character: v15CharacterQuestion() }
+    }))
+    expect(sha256Hex(canonicalJson(onlyCharacter))).not.toBe(FIRST_STAGE_REQUESTS_SHA256)
+    expect(sha256Hex(canonicalJson(requests))).not.toBe(FIRST_STAGE_REQUESTS_SHA256)
+  })
+
+  test('gift_card を出さない候補の request は、v18 のソースで作った request と完全に同一（v18 の request と見分けがつかない）', () => {
+    const plain = fixtureRequests().filter((request) => !Object.hasOwn(categoryCriteriaOf(request), 'gift_card'))
+    expect(plain).toHaveLength(fixtureRequests().length - GIFT_CARD_OFFERED)
+    expect(sha256Hex(canonicalJson(plain))).toBe(V18_PLAIN_REQUESTS_SHA256)
+  })
+
+  test(`gift_card が出る候補は ${GIFT_CARD_OFFERED} 件だけ（物品名にギフトカードを含む候補。本文の語では出さない）`, () => {
+    const requests = fixtureRequests()
+    const offered = requests.filter((request) => Object.hasOwn(categoryCriteriaOf(request), 'gift_card'))
+    expect(offered).toHaveLength(GIFT_CARD_OFFERED)
+    // 質問文は全候補で v15 と一字も違わない（gift_card の有無に関わらず）。出る候補は other の説明からギフトカードが外れ、出ない候補は v15 の説明のまま。
+    const v15Other = v15CategoryOther()
+    const v15Instructions = v15CategoryInstructions()
+    for (const request of requests) {
+      const category = request.questions.category
+      if (category?.type !== 'choice') throw new Error('Missing category question')
+      expect(category.instructions).toBe(v15Instructions)
+      if (Object.hasOwn(category.criteria, 'gift_card')) expect(category.criteria.other).not.toBe(v15Other)
+      else expect(category.criteria.other).toBe(v15Other)
+    }
+    // 出る候補の戻した質問は、gift_card を持たず、v15 の other の説明になる（質問文は戻す前から v15 と同一）。
+    for (const request of offered) {
+      const restored = restoreV15Request(request, v15Definition()).questions.category
+      if (restored?.type !== 'choice') throw new Error('Missing category question')
+      expect(Object.keys(restored.criteria)).not.toContain('gift_card')
+      expect(restored.criteria.other).toBe(v15Other)
+      expect(restored.instructions).toBe(v15Instructions)
     }
   })
 

@@ -78,6 +78,7 @@ const CATEGORY_LABELS: ReadonlyMap<string, string> = new Map([
   ['regular_card', '通常名刺'],
   ['ackey', 'アクキー'],
   ['acsta', 'アクスタ'],
+  ['gift_card', 'ギフトカード'],
   ['other', 'その他'],
   ['none', '配布物の話ではない']
 ])

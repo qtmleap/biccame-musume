@@ -22,8 +22,8 @@ import { createItemCountRequest } from './extraction'
 import type { DetectPost } from './post'
 
 describe('Detection version and category criteria', () => {
-  test('質問文の変更に合わせて判定の版を上げる（v18 は2段目の店舗の確認の質問だけを直した版。1段目の質問は v17 と同じ）', () => {
-    expect(DETECTION_VERSION).toBe(`${QUESTION_VERSION}-webhook-v18-store-confirm-default`)
+  test('選択肢の変更に合わせて判定の版を上げる（v19 は category の選択肢に gift_card を足した版。質問文は変えない。店舗・娘の質問は v17・v18 と同じ）', () => {
+    expect(DETECTION_VERSION).toBe(`${QUESTION_VERSION}-webhook-v19-gift-card-category`)
   })
   test('コースターはotherに入れ、アクキー・アクスタの定義には含めない', () => {
     // アクキー・アクスタに言及する本文では、両方の選択肢が出る。
