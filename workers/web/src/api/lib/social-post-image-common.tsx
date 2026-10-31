@@ -8,6 +8,9 @@ import type { CSSProperties, ReactNode } from 'react'
 
 export type SocialImageKind = SocialSnapshot['kind']
 
+/** 毎朝・毎週の1行に描く娘の人数の上限。描画（SummaryRow）と Avatar の読み込み（socialImageCharacters）で同じ値を使う。 */
+export const ROW_AVATAR_LIMIT = 3
+
 const FONT_FAMILY = 'Zen Maru Gothic'
 export const C = {
   bg: 'linear-gradient(135deg, #fff5f5 0%, #ffe4e4 50%, #ffd0d0 100%)',

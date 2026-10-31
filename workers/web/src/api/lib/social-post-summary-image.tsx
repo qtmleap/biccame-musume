@@ -8,6 +8,7 @@ import {
   Frame,
   Label,
   lineHeightOf,
+  ROW_AVATAR_LIMIT,
   type SocialImageKind,
   Text
 } from './social-post-image-common'
@@ -112,7 +113,7 @@ const SummaryRow = ({
       ) : null}
       <div style={{ display: 'flex', position: 'relative', width: ROW_AVATAR_D, height: ROW_AVATAR_D, flexShrink: 0 }}>
         {row.avatars
-          .slice(0, 3)
+          .slice(0, ROW_AVATAR_LIMIT)
           .toReversed()
           .map((character, index, visible) => (
             <div key={character} style={{ display: 'flex', position: 'absolute', left: index * 18, top: index * 8 }}>
