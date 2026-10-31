@@ -1,3 +1,4 @@
+import { recoverSocialJobs } from '@api/services/social-posting'
 import {
   enqueueWebhookJob,
   getWebhookCandidate,
@@ -8,6 +9,7 @@ import {
   validateWebhookEvent,
   webhookTarget
 } from '@api/services/webhook-jobs'
+import { planEndedLink } from '@api/services/webhook-link-ended'
 import { rejudgeRegisteredWebhookJob } from '@api/services/webhook-rejudge-registered'
 import type { Bindings } from '@api/types/bindings'
 import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
@@ -112,6 +114,7 @@ const rejudgeableRow = (table: 'webhook_event_jobs' | 'webhook_event_candidates'
  * 処理中（queued / processing）は 409。ただし止まっているもの（最後の更新から WEBHOOK_STALLED_MINUTES 分以上経ち、リース中でない）は、
  * キューのメッセージが失われた状態なので、同じ経路で queued に戻して積み直す（親ジョブも候補も）。新しい処理待ち・処理中や、リース中のものは 409 のまま。
  * 登録済みは reasons に manually_linked があるものだけここへ来る。誤った連携を外すため event_id を NULL に戻す（連携先のイベント本体は変更しない）。
+ * ただし終了判定の投稿の連携（resolveWebhookJob → planEndedLink）が連携先へ書いた ended_at・end 参照URL・予約済みの更新投稿は、この再判定でも戻らない（人が手で直す）。
  * 処理側は result_json があると Clef を呼ばず再利用するため、消さないと質問の修正やしきい値の変更が反映されない。
  * 再判定の結果次第でイベントが自動登録され、Discord へ通知（通知済みなら再通知）される場合がある。
  * どちらの経路も、判定は実行のたびに現在の設定（モデル・しきい値）を読んで行う。
@@ -225,6 +228,7 @@ export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.
   const job = await actionJob(env, postId, input.candidateId)
   const target = webhookTarget(postId, parent.candidates.length > 0 ? job.eventUUID : undefined)
   // 保留以外で許可するのは明示連携だけ。対象外からの連携と、登録済みの連携し直し（付け替え）を許す。登録と却下は保留のみ。
+  // 連携は連携先のイベント本体を変えず announce 参照URLを足すだけ。例外は終了判定（postStatus が end）の投稿で、end 参照URL・ended_at・更新投稿も同じ batch で反映する。
   if (job.status !== 'held' && !(input.action === 'link' && (job.status === 'ignored' || job.status === 'registered')))
     throw new HTTPException(409, { message: 'Job cannot be resolved with this action' })
   const event = input.action === 'register' ? validateWebhookEvent(input.event, job.eventUUID) : null
@@ -255,12 +259,17 @@ export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.
     else {
       const status = input.action === 'link' ? 'registered' : 'ignored'
       const eventId = input.action === 'link' ? input.eventId : null
+      // 終了判定の投稿の連携だけは、連携先イベントの終了（ended_at・end 参照URL・更新投稿）も同じ batch で反映する。
+      const ended =
+        input.action === 'link' && job.postStatus === 'end'
+          ? await planEndedLink(env, { job, eventId: input.eventId, target, token, now })
+          : null
       const update = env.DB.prepare(
         // 登録済みの連携し直しは通知の状態を変えない（Discord への再通知を起こさない）。右辺の status は更新前の値。
         `UPDATE ${target.table} SET status=?,event_id=?,reasons_json=?,
           notification_status=CASE WHEN status='registered' THEN notification_status ELSE ? END,
           notification_error=CASE WHEN status='registered' THEN notification_error ELSE NULL END,
-          updated_at=? WHERE ${target.column}=? AND lease_token=? AND status=?`
+          updated_at=? WHERE ${target.column}=? AND lease_token=? AND status=?${ended === null ? '' : ended.guard.sql}`
       ).bind(
         status,
         eventId,
@@ -269,10 +278,11 @@ export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.
         now,
         target.id,
         token,
-        job.status
+        job.status,
+        ...(ended === null ? [] : ended.guard.values)
       )
       const references =
-        input.action === 'link'
+        input.action === 'link' && ended === null
           ? [
               env.DB.prepare(`INSERT INTO event_reference_urls (id,event_id,type,url,created_at,updated_at)
           SELECT ?,?,'announce',?,?,? WHERE NOT EXISTS (SELECT 1 FROM event_reference_urls WHERE event_id=? AND url=?)
@@ -290,8 +300,12 @@ export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.
               )
             ]
           : []
-      const result = await env.DB.batch([...references, update])
-      if (result.at(-1)?.meta.changes !== 1) throw new HTTPException(409, { message: 'Job lease lost' })
+      const result = await env.DB.batch([...references, ...(ended === null ? [] : ended.statements), update])
+      if (result.at(-1)?.meta.changes !== 1)
+        throw ended === null ? new HTTPException(409, { message: 'Job lease lost' }) : await ended.conflict()
+      // Queue 投入は commit 後。失敗しても pending の投稿ジョブは cron が回収する。
+      if (ended?.writesEndedAt)
+        await recoverSocialJobs(env).catch(() => console.error('[social] post-link queue recovery failed'))
     }
     if (target.table === 'webhook_event_candidates') await refreshWebhookJob(env, postId, token)
   } finally {
