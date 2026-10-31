@@ -10,8 +10,9 @@ const routes = new OpenAPIHono<{ Bindings: Bindings; Variables: Variables }>()
 
 const cacheKey = (id: string): string => `og:event:${id}`
 
-// 画像のデザインを変えたら上げる。イベントが更新されていなくても、古いデザインのキャッシュを作り直す
-const RENDER_VERSION = 3
+// 画像のデザインや、画像に載せるデータの意味を変えたら上げる。イベントが更新されていなくても、古いキャッシュを作り直す。
+// 4: 対象ビッカメ娘が空だった既存イベントに、バックフィルで開催店舗の娘を書いた（updated_at は変えないので、版で作り直す）。
+const RENDER_VERSION = 4
 
 type CachedMeta = { updatedAt: string; version?: number }
 
