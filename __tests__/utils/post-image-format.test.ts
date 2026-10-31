@@ -74,12 +74,71 @@ test('same_campaign_across_stores_becomes_one_row', () => {
   })
 })
 
+const STORE_KEYS = ['chiba', 'funabashi', 'kashiwa', 'hachioji'] as const
+
+test('own_store_character_does_not_split_the_row_before_or_after_backfill', () => {
+  const before = STORE_KEYS.map((store) => event({ stores: [store], characterIds: [] }))
+  const after = STORE_KEYS.map((store) => event({ stores: [store], characterIds: [store] }))
+  const mixed = STORE_KEYS.map((store, index) =>
+    event({ stores: [store], characterIds: index % 2 === 0 ? [] : [store] })
+  )
+  const shape = (events: ImageEvent[]) => groupRows(events, () => '').map((row) => [row.stores, row.otherStoreCount])
+  expect(shape(before)).toEqual([[['千葉駅前店', '船橋駅FACE店'], 2]])
+  expect(shape(after)).toEqual(shape(before))
+  expect(shape(mixed)).toEqual(shape(before))
+})
+
+test('merged_row_label_and_portraits_are_unchanged_by_the_key', () => {
+  const before = groupRows(
+    STORE_KEYS.map((store) => event({ stores: [store], characterIds: [] })),
+    () => ''
+  )[0]
+  const after = groupRows(
+    STORE_KEYS.map((store) => event({ stores: [store], characterIds: [store] })),
+    () => ''
+  )[0]
+  expect(before.character).toBeNull()
+  expect(before.portraits).toEqual([])
+  expect(after.character).toBeNull()
+  expect(after.portraits).toEqual(['chiba', 'funabashi', 'kashiwa'])
+})
+
+test('explicit_other_character_still_splits_the_row', () => {
+  const rows = groupRows(
+    [
+      event({ stores: ['chiba'], characterIds: ['chiba'] }),
+      event({ stores: ['funabashi'], characterIds: [] }),
+      event({ stores: ['kashiwa'], characterIds: ['secret'] }),
+      event({ stores: ['hachioji'], characterIds: ['chiba'] })
+    ],
+    () => ''
+  )
+  expect(rows.map((row) => row.stores)).toEqual([['千葉駅前店', '船橋駅FACE店'], ['柏店'], ['JR八王子駅店']])
+})
+
+test('collaboration_with_own_character_is_not_merged_with_other_only_row', () => {
+  const rows = groupRows(
+    [
+      event({ stores: ['chiba'], characterIds: ['chiba', 'secret'] }),
+      event({ stores: ['funabashi'], characterIds: ['secret'] }),
+      event({ stores: ['kashiwa'], characterIds: ['secret', 'chiba'] })
+    ],
+    () => ''
+  )
+  expect(rows.map((row) => row.stores)).toEqual([['千葉駅前店', '柏店'], ['船橋駅FACE店']])
+})
+
 test('differing_periods_and_conditions_are_not_merged_into_one_value', () => {
   const uuid = crypto.randomUUID()
   const [row] = groupRows(
     [
-      event({ stores: ['ikenishi'], conditions: [{ uuid, type: 'first_come', quantity: 50 }] }),
-      event({ stores: ['kawasaki'], conditions: [{ uuid, type: 'first_come', quantity: 70 }], endDate: undefined })
+      event({ stores: ['ikenishi'], characterIds: [], conditions: [{ uuid, type: 'first_come', quantity: 50 }] }),
+      event({
+        stores: ['kawasaki'],
+        characterIds: [],
+        conditions: [{ uuid, type: 'first_come', quantity: 70 }],
+        endDate: undefined
+      })
     ],
     (member) => (member.endDate ? 'まで' : '終了日未定')
   )

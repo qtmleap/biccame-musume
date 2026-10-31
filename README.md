@@ -237,6 +237,9 @@ bun run migrate:status
 
 # ローカル D1 にバッジを投入（既定の対象は local-staging）
 bun run badges:seed
+
+# 娘が空のイベントに開催店舗の娘を書き込む（既定は dry-run。詳しくは下の節）
+bun run events:backfill-characters
 ```
 
 生成された SQL に `PRAGMA foreign_keys=OFF` (テーブル再定義) が含まれていたら
@@ -256,6 +259,32 @@ staging / production へは `deployment.yaml` の `Apply D1 migrations` step が
 source .env && bunx wrangler --config workers/web/wrangler.toml d1 migrations apply DB --env=staging    --remote
 source .env && bunx wrangler --config workers/web/wrangler.toml d1 migrations apply DB --env=production --remote
 ```
+
+#### 対象ビッカメ娘のバックフィル
+
+対象ビッカメ娘が空のイベント（`event_characters` が 0 件）に、開催店舗の娘を明示で書き込む。
+複数店舗のイベントは店舗ごとの娘を全部入れる。`events.updated_at` は変えず、すでに娘のある
+イベントも書き換えない。再実行しても増えない。
+
+```zsh
+# 既定は dry-run（読み取りのみ）。対象数・入れる行数・スキップの内訳・サンプルを出す
+bun run events:backfill-characters local-staging
+# 書き込むのは --apply を付けたときだけ
+bun run events:backfill-characters local-staging --apply
+# 本番（CLOUDFLARE_API_TOKEN が要るので .env を読み込む）
+source .env && bun run events:backfill-characters remote-production
+source .env && bun run events:backfill-characters remote-production --apply
+```
+
+`deployment.yaml` では実行されない。本番は手で実行し、**必ず先に dry-run で件数とスキップの内訳を
+確認してから** `--apply` する。remote の `--apply` は全体を D1 の import API で 1 回に流す。失敗しても
+元の状態に戻るので再実行できるが、実行中は D1 が一時的にクエリを受け付けない。
+
+日次・週次のまとめ（`mergeKey`・`groupRows`）と通常名刺の重複排除（`deduplicateRegularCards`）では、
+娘の集合が開催店舗の集合とちょうど同じ（店舗キーと同じ ID だけ。バックフィルが入れる既定）なら、
+娘が空のイベントと同じに見る（`explicitTargetCharacters`）。店舗の娘に別の娘を足した場合や、
+開催店舗の一部だけを明示した場合は、そのまま明示として扱う。バックフィルで行が分かれたり、名刺が消えたりしないため。
+表示の公開側（ツイート本文・OG 画像・詳細）は、娘をそのまま表示する。
 
 #### ビルド
 
