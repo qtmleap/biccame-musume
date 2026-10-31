@@ -1,5 +1,5 @@
 import { EventCategorySchema, SpecialCharacterSchema } from '@biccame/shared/schemas/event.dto'
-import { StoreKeySchema } from '@biccame/shared/schemas/store.dto'
+import { type StoreKey, StoreKeySchema } from '@biccame/shared/schemas/store.dto'
 import { FolderTree, Package, Store, UserRound } from 'lucide-react'
 import type { Control, FieldErrors } from 'react-hook-form'
 import { Controller } from 'react-hook-form'
@@ -19,10 +19,16 @@ const NO_GROUP_VALUE = '__none__'
 
 export const EventClassificationFields = ({
   control,
-  errors
+  errors,
+  onStoresChange,
+  onCharacterIdsEdit
 }: {
   control: Control<EventFormValues>
   errors: FieldErrors<EventFormValues>
+  /** 開催店舗のチェックを変えたとき、変更後の店舗を渡す */
+  onStoresChange: (stores: StoreKey[]) => void
+  /** 対象ビッカメ娘のチェックを手で変えたときに呼ぶ */
+  onCharacterIdsEdit: () => void
 }) => {
   const { data: characters } = useCharacters()
   const { data: eventGroups } = useEventGroups()
@@ -99,11 +105,13 @@ export const EventClassificationFields = ({
                     <input
                       type='checkbox'
                       checked={field.value.includes(key)}
-                      onChange={(event) =>
-                        field.onChange(
-                          event.target.checked ? [...field.value, key] : field.value.filter((value) => value !== key)
-                        )
-                      }
+                      onChange={(event) => {
+                        const stores = event.target.checked
+                          ? [...field.value, key]
+                          : field.value.filter((value) => value !== key)
+                        field.onChange(stores)
+                        onStoresChange(stores)
+                      }}
                       className='size-4 accent-brand'
                     />
                     {STORE_NAME_LABELS[key]}
@@ -166,11 +174,12 @@ export const EventClassificationFields = ({
                     <input
                       type='checkbox'
                       checked={field.value.includes(key)}
-                      onChange={(event) =>
+                      onChange={(event) => {
                         field.onChange(
                           event.target.checked ? [...field.value, key] : field.value.filter((value) => value !== key)
                         )
-                      }
+                        onCharacterIdsEdit()
+                      }}
                       className='size-4 accent-brand'
                     />
                     {key === 'other' || key === 'secret' ? SPECIAL_CHARACTER_LABELS[key] : CHARACTER_NAME_LABELS[key]}
@@ -179,7 +188,9 @@ export const EventClassificationFields = ({
               </fieldset>
             )}
           />
-          <p className='mt-1 text-xs text-muted-foreground'>未選択は未判定です。開催店舗の娘を自動設定しません。</p>
+          <p className='mt-1 text-xs text-muted-foreground'>
+            初期値は開催店舗の娘です。変更すると、その選択をそのまま使います。
+          </p>
           {errors.characterIds && <p className='mt-1 text-xs text-destructive'>{errors.characterIds.message}</p>}
         </div>
       </div>

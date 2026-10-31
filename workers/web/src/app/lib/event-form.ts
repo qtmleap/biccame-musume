@@ -1,11 +1,12 @@
 import {
   type EventCategory,
+  type EventCharacter,
   EventCharacterSchema,
   type EventRequest,
   type EventRequestQuery,
   EventRequestSchema
 } from '@biccame/shared/schemas/event.dto'
-import type { StoreKey } from '@biccame/shared/schemas/store.dto'
+import { type StoreKey, StoreKeySchema } from '@biccame/shared/schemas/store.dto'
 import dayjs from 'dayjs'
 import type { DefaultValues } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
@@ -99,22 +100,65 @@ export const toFormValuesFromQuery = (search: EventRequestQuery, uuid: string): 
   endedAt: search.endAt ? search.endAt : ''
 })
 
-export const buildInitialValues = (defaultValues?: DefaultValues<EventFormValues>): DefaultValues<EventFormValues> => {
-  if (defaultValues) {
-    return {
-      ...DEFAULT_VALUES,
-      ...defaultValues,
-      startDate: defaultValues.startDate ? dayjs(defaultValues.startDate).format('YYYY-MM-DD') : '',
-      endDate: defaultValues.endDate ? dayjs(defaultValues.endDate).format('YYYY-MM-DD') : '',
-      endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : '',
-      uuid: defaultValues.uuid ? defaultValues.uuid : uuidv4()
-    }
-  }
+export type EventFormMode = 'create' | 'edit'
 
-  return {
-    ...DEFAULT_VALUES,
-    uuid: uuidv4()
-  }
+/**
+ * 店舗キーはそのまま娘の ID なので、開催店舗のキーが対象ビッカメ娘の初期値になる。
+ * 店舗の選択順を保ち、重複は除く。
+ */
+export const defaultCharacterIds = (stores: readonly (StoreKey | undefined)[]): StoreKey[] =>
+  Array.from(
+    new Set(
+      stores.flatMap((store) => {
+        const parsed = StoreKeySchema.safeParse(store)
+        return parsed.success ? [parsed.data] : []
+      })
+    )
+  )
+
+/**
+ * 対象ビッカメ娘を開催店舗に追従させるかの初期状態。
+ * 追従するのは新規作成で、渡された初期値（下書き・コピー元・クエリ）が対象ビッカメ娘を持たないときだけ。
+ * 編集では読み込んだ値をそのまま使う。
+ */
+export const initialFollowsStores = (mode: EventFormMode, characterIds: readonly unknown[] | undefined): boolean =>
+  mode === 'create' && (characterIds === undefined || characterIds.length === 0)
+
+/**
+ * 開催店舗が変わったときの対象ビッカメ娘。追従中は店舗の娘に合わせ、追従をやめたあとは手動の選択をそのまま返す。
+ * 追従をやめる契機（娘のチェックを手で変えたこと）は呼び出し側が持つ。
+ */
+export const characterIdsAfterStoresChange = ({
+  followsStores,
+  stores,
+  characterIds
+}: {
+  followsStores: boolean
+  stores: readonly (StoreKey | undefined)[]
+  characterIds: EventCharacter[]
+}): EventCharacter[] => (followsStores ? defaultCharacterIds(stores) : characterIds)
+
+export const buildInitialValues = (
+  defaultValues: DefaultValues<EventFormValues> | undefined,
+  mode: EventFormMode
+): DefaultValues<EventFormValues> => {
+  const values: DefaultValues<EventFormValues> = defaultValues
+    ? {
+        ...DEFAULT_VALUES,
+        ...defaultValues,
+        startDate: defaultValues.startDate ? dayjs(defaultValues.startDate).format('YYYY-MM-DD') : '',
+        endDate: defaultValues.endDate ? dayjs(defaultValues.endDate).format('YYYY-MM-DD') : '',
+        endedAt: defaultValues.endedAt ? dayjs(defaultValues.endedAt).format('YYYY-MM-DD') : '',
+        uuid: defaultValues.uuid ? defaultValues.uuid : uuidv4()
+      }
+    : {
+        ...DEFAULT_VALUES,
+        uuid: uuidv4()
+      }
+
+  const { stores } = values
+  if (stores === undefined || !initialFollowsStores(mode, values.characterIds)) return values
+  return { ...values, characterIds: defaultCharacterIds(stores) }
 }
 
 export const toEventPayload = (

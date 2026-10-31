@@ -1,4 +1,5 @@
 import type { Event, EventRequest } from '@biccame/shared/schemas/event.dto'
+import type { StoreKey } from '@biccame/shared/schemas/store.dto'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FileText } from 'lucide-react'
 import { useCallback, useState } from 'react'
@@ -14,7 +15,14 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { checkDuplicateUrl, useCreateEvent, useUpdateEvent } from '@/hooks/use-events'
-import { buildInitialValues, EventFormSchema, type EventFormValues, toEventPayload } from '@/lib/event-form'
+import {
+  buildInitialValues,
+  characterIdsAfterStoresChange,
+  EventFormSchema,
+  type EventFormValues,
+  initialFollowsStores,
+  toEventPayload
+} from '@/lib/event-form'
 import { cn } from '@/lib/utils'
 import { ADMIN_LABELS } from '@/locales/app.content'
 
@@ -41,18 +49,28 @@ export const EventForm = ({
   const [isConfirming, setIsConfirming] = useState(false)
   const [confirmedData, setConfirmedData] = useState<EventRequest | null>(null)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  // 対象ビッカメ娘を開催店舗に追従させるか。dirtyFields は初期値へ戻すと false に戻るため使わず、手で変えた時点で明示的にやめる。
+  const [followsStores, setFollowsStores] = useState(() => initialFollowsStores(formMode, defaultValues?.characterIds))
 
   const {
     register,
     control,
     handleSubmit,
     reset,
+    setValue,
+    getValues,
     formState: { errors }
   } = useForm<EventFormValues>({
     resolver: zodResolver(EventFormSchema),
-    defaultValues: buildInitialValues(defaultValues),
+    defaultValues: buildInitialValues(defaultValues, formMode),
     mode: 'onBlur'
   })
+
+  const handleStoresChange = (stores: StoreKey[]) =>
+    setValue(
+      'characterIds',
+      characterIdsAfterStoresChange({ followsStores, stores, characterIds: getValues('characterIds') })
+    )
 
   const { fields, remove, append } = useFieldArray({
     control,
@@ -91,7 +109,8 @@ export const EventForm = ({
   )
 
   const handleReset = () => {
-    reset(buildInitialValues(defaultValues))
+    reset(buildInitialValues(defaultValues, formMode))
+    setFollowsStores(initialFollowsStores(formMode, defaultValues?.characterIds))
     setIsConfirming(false)
     setConfirmedData(null)
     setIsSubmitted(false)
@@ -198,7 +217,12 @@ export const EventForm = ({
 
       <Separator />
 
-      <EventClassificationFields control={control} errors={errors} />
+      <EventClassificationFields
+        control={control}
+        errors={errors}
+        onStoresChange={handleStoresChange}
+        onCharacterIdsEdit={() => setFollowsStores(false)}
+      />
       <Separator />
 
       {/* 配布条件 */}
