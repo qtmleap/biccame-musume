@@ -19,6 +19,7 @@ import {
   webhookEventCharacterNames,
   webhookEventStoreNames
 } from '@/components/admin/webhook-event-search'
+import { linkedEventEffectNote } from '@/components/admin/webhook-linked-event-confirm'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -38,6 +39,8 @@ type LinkDialogProps = {
   isPending: boolean
   /** 登録済みの連携先を付け替えるときは true。説明に、元のイベントは変更しない旨を足す。 */
   replacing: boolean
+  /** 連携の対象にした投稿（複数候補なら選択中の候補）が終了判定のときは true。説明を、終了日などを書き込む旨に切り替える。 */
+  ended: boolean
   /** 一覧に出すイベントの範囲(連携先を探す店舗と、投稿日時)。投稿の時点で終わっていない、その店舗のイベントだけを出す。 */
   scope: WebhookLinkScope
   /**
@@ -107,7 +110,15 @@ type SearchProps = Omit<LinkDialogProps, 'suggestion'> & { onClose: () => void }
  * 検索して選ぶ段階。DialogContent の中身だけを描く。提案を受け取らないので、必ず選択なしで始まる。
  * イベント一覧は、この段階に入ったとき(提案がなければ開いたとき)に取得する。
  */
-export const WebhookEventLinkSearch = ({ disabled, isPending, replacing, scope, onLink, onClose }: SearchProps) => {
+export const WebhookEventLinkSearch = ({
+  disabled,
+  isPending,
+  replacing,
+  ended,
+  scope,
+  onLink,
+  onClose
+}: SearchProps) => {
   const eventsQuery = useAdminEventOptions()
   const [state, dispatch] = useReducer(reduceWebhookEventSearch, INITIAL_WEBHOOK_EVENT_SEARCH)
   const [failed, setFailed] = useState(false)
@@ -134,7 +145,8 @@ export const WebhookEventLinkSearch = ({ disabled, isPending, replacing, scope, 
       <DialogHeader>
         <DialogTitle>既存イベントへ連携</DialogTitle>
         <DialogDescription>
-          {webhookLinkScopeDescription(scope.stores)}既存イベントの内容は変更しません。
+          {webhookLinkScopeDescription(scope.stores)}
+          {linkedEventEffectNote(ended)}
           {replacing && '登録済みのため、現在の連携先を置き換えます（元のイベントの内容は変更しません）。'}
         </DialogDescription>
       </DialogHeader>
@@ -222,6 +234,7 @@ export const WebhookEventLinkBody = ({ suggestion, ...props }: LinkDialogProps &
     <WebhookEventLinkConfirm
       suggestion={suggestion}
       replacing={props.replacing}
+      ended={props.ended}
       canLink={!props.disabled}
       isPending={props.isPending}
       onLink={props.onLink}

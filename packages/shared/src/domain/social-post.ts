@@ -1,5 +1,5 @@
 import { STORE_NAME_LABELS } from '@biccame/shared/domain/character-names'
-import { resolveEventCharacters } from '@biccame/shared/domain/event-character'
+import { explicitTargetCharacters, resolveEventCharacters } from '@biccame/shared/domain/event-character'
 import { eventOgPlace } from '@biccame/shared/domain/og-event-place'
 import { SITE_BASE } from '@biccame/shared/domain/tweet-text'
 import type { Event, EventCharacter } from '@biccame/shared/schemas/event.dto'
@@ -171,6 +171,8 @@ export const sortSideEvents = (side: SocialSide, events: Event[]): Event[] =>
 
 /**
  * まとめキー: 題名・開始日・終了日（endedAt 優先）・条件（限定数を含む）・明示された対象の娘が同じなら1行にまとめる。
+ * 対象の娘は explicitTargetCharacters。娘が空でも、娘の集合が開催店舗の集合と同じ（バックフィルの既定）でも同じ行になり、
+ * それ以外の娘が明示されたイベントだけが分かれる。
  * 条件は D1 から返る順が保証されないため、並べ替えてからキーに入れる（表示には出さない）。
  */
 const mergeKey = (event: Event): string => {
@@ -181,7 +183,7 @@ const mergeKey = (event: Event): string => {
     end === null ? null : dateKey(jstDay(end)),
     event.conditions.map(eventConditionLabel).toSorted(),
     event.limitedQuantity === undefined ? null : event.limitedQuantity,
-    event.characterIds.toSorted()
+    explicitTargetCharacters(event)
   ])
 }
 
@@ -203,13 +205,14 @@ const rowDate = (event: Event, side: SocialSide): string | null => {
   return end === null ? null : formatMonthDay(jstDay(end))
 }
 
+/** まとめた行のアバターは、グループ全員の娘の和集合（重複なし、最初に現れた順）。描画側が上限を持つ。 */
 const toRow = (group: Event[], side: SocialSide, kind: SocialSummaryKind): SocialRow => {
   const [first] = group
   return {
     eventIds: group.map((event) => event.uuid),
     title: first.title,
     stores: [...new Set(group.flatMap((event) => event.stores))].map((store) => STORE_NAME_LABELS[store]),
-    avatars: eventAvatars(first),
+    avatars: [...new Set(group.flatMap((event) => eventAvatars(event)))],
     target: rowTarget(group),
     period: rowPeriodText(first, side),
     date: kind === 'weekly' ? rowDate(first, side) : null

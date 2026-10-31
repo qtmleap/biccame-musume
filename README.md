@@ -216,6 +216,17 @@ Cloudflare Access の経路保護が Webhook にも適用される場合は `/ap
 登録・必須項目の選択・対象外の3つのしきい値と項目別のしきい値も `/admin/bot` で変更でき、保存先は同じ KV の `settings:event-detection:thresholds` と `settings:event-detection:field-thresholds` です。保存した値が環境変数より優先され、保存値が壊れているときは環境変数の値を使います。
 `/admin/webhooks` は保留/登録/失敗と通知状態を確認する受信履歴です。保留を手動登録・既存イベントへ紐付け・却下できます。
 通知失敗でも登録を巻き戻しません。通信結果不明 (`unknown`) は二重通知の可能性があるため自動再送せず、明示確認後に通知だけを再試行します。
+
+終了・継続の投稿の自動連携: 判定が「終了」または「継続」の投稿は、新規登録ではないので保留（`event_ended` / `existing_event_update`）になり、3段目の Clef が連携先の既存イベントを提案します。
+次の3つをすべて満たすときだけ、提案のイベントへ自動で連携します。
+- 提案がある（確率の下限 0.7 は固定）。
+- 提案の確率が、選択肢項目の共通のしきい値（`EVENT_DETECTION_CHOICE_THRESHOLD`・管理画面の保存値。既定 0.9）以上（ちょうどは連携）。下限 0.7 より低くは連携しません。新しい設定項目はありません。
+- 保留の理由が状態（`event_ended` か `existing_event_update`）のちょうど 1 つだけ。店舗・娘・配布物の未確定や `possible_duplicate*` など、ほかの理由が 1 つでもあれば人が見ます（`title_generated` / `title_fallback` は数えません）。
+
+連携は管理画面の「連携」と同じ処理（同じ D1 batch・同じガード）です。終了の投稿は連携先の `ended_at`・end 参考URL・更新投稿の予約まで反映し、継続の投稿は announce の参考URLを足すだけです。
+ジョブは `registered`・`reasons=['auto_linked']`（管理画面では「自動で連携」）になり、通知は出しません（`notification_status=skipped`。Discord に「登録しました」も送りません）。
+連携の書き込みが競合・ガード不成立になったときは、判定を失敗にせず通常どおり保留にして人に回します。
+連携先を直すときは、詳細の「連携」で付け替えます（通知の状態は変わらず、理由は `manually_linked` になります）。「再実行」は連携を外して判定からやり直しますが、同じ提案が出れば同じ条件でもう一度自動連携されます。連携先の `ended_at` と予約済みの更新投稿は、どちらの操作でも戻らないので、必要なら管理画面のイベント編集で直します。
 Discord の nonce は短期間の重複抑止であり、永続的な exactly-once の保証ではありません。
 
 #### マイグレーション
@@ -237,6 +248,9 @@ bun run migrate:status
 
 # ローカル D1 にバッジを投入（既定の対象は local-staging）
 bun run badges:seed
+
+# 娘が空のイベントに開催店舗の娘を書き込む（既定は dry-run。詳しくは下の節）
+bun run events:backfill-characters
 ```
 
 生成された SQL に `PRAGMA foreign_keys=OFF` (テーブル再定義) が含まれていたら
@@ -256,6 +270,32 @@ staging / production へは `deployment.yaml` の `Apply D1 migrations` step が
 source .env && bunx wrangler --config workers/web/wrangler.toml d1 migrations apply DB --env=staging    --remote
 source .env && bunx wrangler --config workers/web/wrangler.toml d1 migrations apply DB --env=production --remote
 ```
+
+#### 対象ビッカメ娘のバックフィル
+
+対象ビッカメ娘が空のイベント（`event_characters` が 0 件）に、開催店舗の娘を明示で書き込む。
+複数店舗のイベントは店舗ごとの娘を全部入れる。`events.updated_at` は変えず、すでに娘のある
+イベントも書き換えない。再実行しても増えない。
+
+```zsh
+# 既定は dry-run（読み取りのみ）。対象数・入れる行数・スキップの内訳・サンプルを出す
+bun run events:backfill-characters local-staging
+# 書き込むのは --apply を付けたときだけ
+bun run events:backfill-characters local-staging --apply
+# 本番（CLOUDFLARE_API_TOKEN が要るので .env を読み込む）
+source .env && bun run events:backfill-characters remote-production
+source .env && bun run events:backfill-characters remote-production --apply
+```
+
+`deployment.yaml` では実行されない。本番は手で実行し、**必ず先に dry-run で件数とスキップの内訳を
+確認してから** `--apply` する。remote の `--apply` は全体を D1 の import API で 1 回に流す。失敗しても
+元の状態に戻るので再実行できるが、実行中は D1 が一時的にクエリを受け付けない。
+
+日次・週次のまとめ（`mergeKey`・`groupRows`）と通常名刺の重複排除（`deduplicateRegularCards`）では、
+娘の集合が開催店舗の集合とちょうど同じ（店舗キーと同じ ID だけ。バックフィルが入れる既定）なら、
+娘が空のイベントと同じに見る（`explicitTargetCharacters`）。店舗の娘に別の娘を足した場合や、
+開催店舗の一部だけを明示した場合は、そのまま明示として扱う。バックフィルで行が分かれたり、名刺が消えたりしないため。
+表示の公開側（ツイート本文・OG 画像・詳細）は、娘をそのまま表示する。
 
 #### ビルド
 

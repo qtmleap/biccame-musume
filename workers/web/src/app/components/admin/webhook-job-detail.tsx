@@ -19,7 +19,7 @@ import {
   webhookActionAvailability,
   webhookLastErrorLabel
 } from '@/components/admin/webhook-labels'
-import { activeLinkedEventProposal } from '@/components/admin/webhook-linked-event-confirm'
+import { activeLinkedEventProposal, isEndedPost } from '@/components/admin/webhook-linked-event-confirm'
 import { WebhookLinkedEventProposal } from '@/components/admin/webhook-linked-event-proposal'
 import { WebhookPromptDialog } from '@/components/admin/webhook-prompt-dialog'
 import { WebhookReasonRows } from '@/components/admin/webhook-reason-rows'
@@ -202,6 +202,7 @@ export const WebhookJobDetail = ({ postId }: { postId: string }) => {
           disabled={!availability.canLink}
           isPending={isPending}
           replacing={job !== undefined && job.status === 'registered'}
+          ended={job !== undefined && isEndedPost(job)}
           scope={linkScope}
           {...suggestedLink}
           onLink={linkEvent}

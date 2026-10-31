@@ -35,7 +35,7 @@ test('継続の投稿で店舗にまだ終了していないイベントがあ�
       '連携先を探す開催店舗: AKIBA店',
       '連携先を探す配布物: 限定名刺'
     ])
-    expect(candidate.discovery?.linkedEvent).toEqual({ eventId: eventId(1), title: '既存イベント1', probability: 0.9 })
+    expect(candidate.discovery?.linkedEvent).toEqual({ eventId: eventId(1), title: '既存イベント1', probability: 0.8 })
     // 自動では連携せず、保留のまま。イベント本体も変更しない。
     expect(candidate.status).toBe('held')
     expect(candidate.eventId).toBeNull()

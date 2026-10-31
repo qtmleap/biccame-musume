@@ -1,6 +1,6 @@
 {
   "name": "biccame-musume",
-  "version": "0.40.2",
+  "version": "0.41.0",
   "type": "module",
   "description": "ビックカメラの店舗擬人化キャラクター「ビッカメ娘」を応援する非公式ファンサイト",
   "author": "@QuantumLeap",
@@ -42,6 +42,7 @@
     "e2e:visual-typography": "playwright test --config e2e/visual-typography/playwright.config.ts",
     "e2e:vote-limit": "bash e2e/vote-local/run.sh",
     "event-detect": "bun scripts/event-detect.ts",
+    "events:backfill-characters": "bun scripts/backfill-event-characters.ts",
     "generate": "prisma generate --config ./prisma/prisma.config.ts",
     "migrate": "wrangler d1 migrations apply DB --local --config workers/web/wrangler.toml --persist-to .wrangler/state",
     "migrate:new": "DATABASE_URL=file:./shadow.db prisma migrate dev --create-only --config ./prisma/prisma.config.ts",

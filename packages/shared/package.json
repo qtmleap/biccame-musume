@@ -22,6 +22,7 @@
     "./event-detect/detection": "./src/event-detect/detection.ts",
     "./event-detect/extraction": "./src/event-detect/extraction.ts",
     "./event-detect/filter": "./src/event-detect/filter.ts",
+    "./event-detect/linked-event-auto": "./src/event-detect/linked-event-auto.ts",
     "./event-detect/post": "./src/event-detect/post.ts",
     "./event-detect/prompt-definitions": "./src/event-detect/prompt-definitions.ts",
     "./event-detect/prompt-version-label": "./src/event-detect/prompt-version-label.ts",

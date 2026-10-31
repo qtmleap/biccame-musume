@@ -19,3 +19,20 @@ export const resolveEventCharacter = (event: Pick<Event, 'characterIds'>): Event
 
 export const isEventForCharacter = (event: Pick<Event, 'characterIds'>, storeKey: StoreKey): boolean =>
   event.characterIds.includes(storeKey)
+
+/**
+ * 同じ企画をまとめたり重複を除いたりするキーに使う、明示された対象の娘。重複なし・昇順。
+ * 娘の集合が開催店舗の集合とちょうど同じなら、バックフィルで入れた既定（店舗の娘そのもの）なので、娘が空のイベントと
+ * 同じに見て空配列を返す。そうでなければ characterIds をそのまま返す（自店舗の娘が混ざっていても引かない。
+ * 店舗の娘に別の娘を足した共同デザインは、別の娘だけの名刺と区別される。開催店舗の一部だけの明示も、バックフィル前と同じキーのまま）。
+ * 表示するラベルや立ち絵は変えない。
+ */
+export const explicitTargetCharacters = (event: {
+  stores: readonly StoreKey[]
+  characterIds: readonly EventCharacter[]
+}): EventCharacter[] => {
+  const characters = [...new Set(event.characterIds)].toSorted()
+  const stores = new Set<string>(event.stores)
+  const isDefault = characters.length === stores.size && characters.every((character) => stores.has(character))
+  return isDefault ? [] : characters
+}

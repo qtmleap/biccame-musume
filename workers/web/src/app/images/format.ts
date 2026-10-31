@@ -1,4 +1,8 @@
-import { isSpecialCharacter, resolveEventCharacters } from '@biccame/shared/domain/event-character'
+import {
+  explicitTargetCharacters,
+  isSpecialCharacter,
+  resolveEventCharacters
+} from '@biccame/shared/domain/event-character'
 import { SPECIAL_CHARACTER_NAMES } from '@biccame/shared/domain/special-character-names'
 import type { Event } from '@biccame/shared/schemas/event.dto'
 import type { StoreKey } from '@biccame/shared/schemas/store.dto'
@@ -126,6 +130,8 @@ const same = (values: string[]): boolean => values.every((value) => value === va
 
 /**
  * 店舗違いの同一企画を1行にまとめる。groupId が無いイベントも多いため、同じ種別・同じ題名なら同一とみなす。
+ * 対象の娘は explicitTargetCharacters をキーに入れる。娘が空でも、娘の集合が開催店舗の集合と同じ（バックフィルの既定）でも
+ * 同じ行になり、それ以外の娘が明示されたイベントだけが分かれる。
  * 呼び出し側で日付ごとに分けてから渡す前提。並び順は最初に現れた順を保つ。
  */
 export const groupRows = (events: ImageEvent[], note: (event: ImageEvent) => string): EventRow[] => {
@@ -133,7 +139,7 @@ export const groupRows = (events: ImageEvent[], note: (event: ImageEvent) => str
   for (const event of events) {
     const key = JSON.stringify([
       event.groupId === undefined ? `${event.category}:${event.title}` : event.groupId,
-      event.characterIds.toSorted()
+      explicitTargetCharacters(event)
     ])
     const members = groups.get(key)
     if (members) members.push(event)

@@ -97,16 +97,16 @@ describe('提案の節の「このイベントと連携」ボタン', () => {
 })
 
 describe('確認ダイアログの文言', () => {
-  test('未登録の投稿: 提案イベントのタイトルと、既存イベントを変更しない旨だけを出す', () => {
-    expect(linkedEventConfirmation('缶バッジで繋ぐビッカメ娘旅', false)).toEqual({
+  test('未登録で終了判定でない投稿: 提案イベントのタイトルと、既存イベントを変更しない旨だけを出す', () => {
+    expect(linkedEventConfirmation('缶バッジで繋ぐビッカメ娘旅', { replacing: false, ended: false })).toEqual({
       title: 'このイベントと連携しますか？',
       description: '「缶バッジで繋ぐビッカメ娘旅」と連携します。既存イベントの内容は変更しません。',
       actionLabel: '連携する'
     })
   })
 
-  test('登録済みの投稿: 連携先を置き換える旨を続ける', () => {
-    const { description } = linkedEventConfirmation('缶バッジで繋ぐビッカメ娘旅', true)
+  test('登録済みで終了判定でない投稿: 連携先を置き換える旨を続ける', () => {
+    const { description } = linkedEventConfirmation('缶バッジで繋ぐビッカメ娘旅', { replacing: true, ended: false })
     expect(description).toBe(
       `「缶バッジで繋ぐビッカメ娘旅」と連携します。既存イベントの内容は変更しません。${LINKED_EVENT_REPLACING_NOTE}`
     )

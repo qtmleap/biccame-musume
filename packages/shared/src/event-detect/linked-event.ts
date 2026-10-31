@@ -19,7 +19,7 @@ import type { DetectionThresholds } from './detection-thresholds'
 // 選択肢にするイベント（継続中）は、まだ終了しておらず、投稿より前に始まっていて、1段目の配布物（category）から決めた種類と一致するものに絞る。
 // 種類は1段目の配布物の最上位の選択肢だけで決め、確率（しきい値）は見ない。種類の一致は必須で、最上位が none などで種類が決まらない投稿では、3段目を聞かず、提案しない。
 // 絞り込み自体は DB を引く側（webhook-linked-event.ts の unfinishedStoreEvents）が行い、ここでは探す種類（linkedEventKinds）だけを決める。
-// 提案は確認用で、自動では連携しない（イベント本体も受信ジョブの連携先も変えない）。
+// 提案の判定ではイベント本体も受信ジョブの連携先も変えない。連携するかは別（linked-event-auto.ts・webhook-auto-link.ts）。
 // 質問文は固定し、投稿ごとの値（店舗・配布物）は state の末尾の行だけで渡す。選択肢はイベントごとに変わる。
 
 export const LINKED_EVENT_QUESTION_KEY = 'linked_event'

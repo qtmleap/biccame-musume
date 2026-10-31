@@ -19,6 +19,7 @@ const REJECTED = '人が対象外にした投稿のため再実行できませ�
 const OTHER = 'この状態では再実行できません。'
 
 const linked = ['manually_linked']
+const autoLinked = ['auto_linked']
 const auto = ['title_generated']
 const rejected = ['manually_rejected']
 
@@ -28,6 +29,7 @@ const table: ReadonlyArray<readonly [string, string, readonly string[], string |
   ['failed', 'failed', [], null],
   ['ignored（AI が対象外）', 'ignored', ['not_distribution_event'], null],
   ['registered + manually_linked（手動連携）', 'registered', linked, null],
+  ['registered + auto_linked（自動連携）', 'registered', autoLinked, null],
   ['registered + 自動登録', 'registered', auto, null],
   ['registered + 理由なし', 'registered', [], null],
   ['registered + manually_rejected', 'registered', rejected, REJECTED],
@@ -78,7 +80,8 @@ describe('「再実行」の確認ダイアログの内容（rejudgeConfirmation
     const confirmation = rejudgeConfirmation(status, reasons)
     if (expected === null) {
       // 実行できる状態は、説明を出し、実行ボタンを押せる。自動登録済みだけは、登録を変えない説明になる。
-      const autoRegistered = status === 'registered' && !reasons.includes('manually_linked')
+      const autoRegistered =
+        status === 'registered' && !reasons.includes('manually_linked') && !reasons.includes('auto_linked')
       expect(confirmation).toEqual({
         description: autoRegistered ? REJUDGE_REGISTERED_DESCRIPTION : REJUDGE_DESCRIPTION,
         blocked: false

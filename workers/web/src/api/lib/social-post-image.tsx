@@ -4,7 +4,7 @@ import type { TextMetrics } from '@api/lib/og-text-metrics'
 import type { EventCharacter } from '@biccame/shared/schemas/event.dto'
 import type { SocialImage } from '@biccame/shared/social'
 import { EventImageBody } from './social-post-event-image'
-import type { SocialImageKind } from './social-post-image-common'
+import { ROW_AVATAR_LIMIT, type SocialImageKind } from './social-post-image-common'
 import { SummaryImageBody } from './social-post-summary-image'
 
 export { clusterSlots, eventAvatarSlots, eventStoreCount, eventTitleLayout } from './social-post-event-image'
@@ -27,7 +27,7 @@ export const socialImageCharacters = (image: SocialImage): EventCharacter[] => {
     case 'event':
       return image.event.avatars
     case 'summary':
-      return image.rows.flatMap((row) => row.avatars)
+      return image.rows.flatMap((row) => row.avatars.slice(0, ROW_AVATAR_LIMIT))
     case 'empty':
       return []
   }
