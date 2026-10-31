@@ -44,12 +44,13 @@ export type EndedLinkPlan = {
  * 管理画面のイベント編集（shouldTweet 付き）と同じ updated 投稿を social_post_jobs へ予約する。ended_at が既にあれば上書きしない。
  * ended_at の形式は管理画面のフォーム（日付だけを日本時間 0 時の瞬間として保存）に合わせる。
  * 読み取り後に連携先が変わった場合（updated_at の CAS 失敗）や、リースを失った場合は、参照URLも含めて何も反映されない。
+ * status は更新前のジョブ行の状態（リースの確認に使う）。手動の連携は job.status、判定の最中の自動連携は processing。
  */
 export const planEndedLink = async (
   env: Bindings,
-  input: { job: WebhookJob; eventId: string; target: WebhookTarget; token: string; now: number }
+  input: { job: WebhookJob; status: string; eventId: string; target: WebhookTarget; token: string; now: number }
 ): Promise<EndedLinkPlan> => {
-  const { job, eventId, target, token, now } = input
+  const { job, status, eventId, target, token, now } = input
   // 版は書き込みの CAS に使う値そのものを先に読む。詳細は書くと決めたときだけ後で読み、間に更新が入っても CAS が失敗するだけにする。
   const raw = RawEventSchema.safeParse(
     await env.DB.prepare('SELECT updated_at,ended_at,start_date FROM events WHERE id=?').bind(eventId).first()
@@ -61,7 +62,7 @@ export const planEndedLink = async (
   const writesEndedAt = raw.data.ended_at === null && !endedDay.isBefore(startedDay)
   const lease: SqlGuard = {
     sql: `EXISTS (SELECT 1 FROM ${target.table} WHERE ${target.column}=? AND lease_token=? AND status=?)`,
-    values: [target.id, token, job.status]
+    values: [target.id, token, status]
   }
   const unchanged: SqlGuard = {
     sql: 'EXISTS (SELECT 1 FROM events WHERE id=? AND ended_at IS NULL AND updated_at=?)',

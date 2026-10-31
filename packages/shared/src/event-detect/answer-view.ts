@@ -344,6 +344,7 @@ const REASON_LABELS: ReadonlyMap<string, string> = new Map([
   ...NOTE_REASON_LABELS,
   // 管理画面での手動解決（webhook-admin.ts）
   ['manually_linked', '手動で紐付け'],
+  ['auto_linked', '自動で連携'],
   ['manually_rejected', '手動で却下']
 ])
 /** `<code>:<id>` の形で出る理由。コロンより前のコードで引く。 */

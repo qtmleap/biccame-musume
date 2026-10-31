@@ -41,7 +41,8 @@ export const setup = async (name: string, status: Status) => {
   const delivery = spyOn(discord, 'notifyEventDetection').mockResolvedValue({ status: 'sent', messageId: '1234567890' })
   const warn = spyOn(console, 'warn').mockImplementation(() => {})
   const calls: ClefRequest[] = []
-  const linked: Linked = { pick: eventId(1), probability: 0.9, fail: false, garbage: false }
+  // 既定の確率は、提案の下限（0.7）以上で自動連携のしきい値（既定 0.9）未満の 0.8。提案は保存され、保留のまま人が連携する。自動連携を試すテストは確率を上げる。
+  const linked: Linked = { pick: eventId(1), probability: 0.8, fail: false, garbage: false }
   // 2段目（確認）の「はい」の確率。null なら元のフェイクの AI（0.99）のまま。
   const confirm: { yes: number | null } = { yes: null }
   // is_event の確率。null なら元のフェイクの AI（0.99）のまま。低くすると、状態に関わらず「要確認」の判定になる。
@@ -101,7 +102,7 @@ export const setup = async (name: string, status: Status) => {
     warn.mockRestore()
     await base.cleanup()
   }
-  return { env, state: base.state, calls, linked, confirm, eventScore, category, warn, cleanup }
+  return { env, state: base.state, calls, linked, confirm, eventScore, category, warn, delivery, cleanup }
 }
 export type Value = Awaited<ReturnType<typeof setup>>
 

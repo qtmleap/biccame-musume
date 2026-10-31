@@ -13,6 +13,7 @@ import {
 } from './fixtures/webhook-d1-jobs'
 import {
   announceUrls,
+  autoLinkedSeed,
   autoRegisteredSeed,
   eventSnapshot,
   insertAnnounce,
@@ -186,6 +187,49 @@ describe('登録済みジョブの判定し直し', () => {
       expect(await eventSnapshot(env, event.uuid)).toBe(oldBefore)
       expect(sent).toEqual([postId])
       expect(await claimWebhookJob(env, postId)).toEqual(expect.any(String))
+    })
+  }, 60000)
+
+  test('自動連携した登録済みジョブも、手動連携と同じく queued に戻り、event_id と判定結果が消える。連携先のイベントは変えない', async () => {
+    await withRejudgeEnv(async (env, sent) => {
+      await insertEvent(env, event.uuid, '自動で連携したイベント')
+      const postId = await seedRejudgeJob(env, 1, autoLinkedSeed)
+      await insertAnnounce(env, event.uuid, sourceUrlOf(postId))
+      const oldBefore = await eventSnapshot(env, event.uuid)
+      const job = await rejudgeWebhookJob(env, postId)
+      expect(job).toMatchObject({ status: 'queued', eventId: null, reasons: [], candidate: null, answers: null })
+      expect(await rawRejudgeRow(env, postId)).toMatchObject({
+        status: 'queued',
+        event_id: null,
+        result_json: null,
+        reasons_json: '[]',
+        notification_status: 'pending',
+        lease_token: null,
+        lease_until: null
+      })
+      expect(await eventSnapshot(env, event.uuid)).toBe(oldBefore)
+      expect(sent).toEqual([postId])
+    })
+  }, 60000)
+
+  test('自動連携した登録済みジョブも、別イベントへ付け替えられ、付け替えると手動連携になる。通知の状態（skipped）は変えない', async () => {
+    await withRejudgeEnv(async (env, sent) => {
+      await insertEvent(env, event.uuid, '自動で連携したイベント')
+      const postId = await seedRejudgeJob(env, 1, autoLinkedSeed)
+      const oldBefore = await eventSnapshot(env, event.uuid)
+      const nextId = crypto.randomUUID()
+      await insertEvent(env, nextId, '正しい連携先')
+      const job = await resolveWebhookJob(env, postId, { action: 'link', eventId: nextId })
+      expect(job).toMatchObject({
+        status: 'registered',
+        eventId: nextId,
+        reasons: ['manually_linked'],
+        notificationStatus: 'skipped'
+      })
+      expect(await eventSnapshot(env, event.uuid)).toBe(oldBefore)
+      expect(await announceUrls(env, nextId)).toEqual([sourceUrlOf(postId)])
+      expect(await claimWebhookJob(env, postId)).toBeNull()
+      expect(sent).toEqual([postId])
     })
   }, 60000)
 

@@ -175,6 +175,7 @@ describe('操作の可否（画面とサーバーで同じ規則）', () => {
     readonly [string, string, readonly string[], { canLink: boolean; canRejudge: boolean; canResolve: boolean }]
   > = [
     ['registered + manually_linked', 'registered', linked, { canLink: true, canRejudge: true, canResolve: false }],
+    ['registered + auto_linked', 'registered', ['auto_linked'], { canLink: true, canRejudge: true, canResolve: false }],
     ['registered + 自動登録', 'registered', auto, { canLink: true, canRejudge: true, canResolve: false }],
     ['registered + 理由なし', 'registered', [], { canLink: true, canRejudge: true, canResolve: false }],
     ['registered + manually_rejected', 'registered', rejected, { canLink: true, canRejudge: false, canResolve: false }],

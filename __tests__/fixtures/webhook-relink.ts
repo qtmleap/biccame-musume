@@ -9,7 +9,10 @@ export const linkedSeed: RejudgeSeed = {
   reasons: ['manually_linked']
 }
 
-// パイプラインが自動登録したジョブ。manually_linked を持たない。
+// 判定が保留にした終了・継続の投稿を、提案の連携先へ自動で連携したジョブ。webhook-auto-link.ts が書く reasons と同じ。
+export const autoLinkedSeed: RejudgeSeed = { ...linkedSeed, notificationStatus: 'skipped', reasons: ['auto_linked'] }
+
+// パイプラインが自動登録したジョブ。manually_linked / auto_linked を持たない。
 export const autoRegisteredSeed: RejudgeSeed = { ...linkedSeed, reasons: ['title_generated'] }
 
 /** 連携先になるイベントを最小の列で作る。 */

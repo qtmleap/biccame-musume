@@ -53,6 +53,7 @@ describe('reasonLabel', () => {
     reply_to_other: '他者宛てリプライ',
     excluded_keyword: '除外語',
     manually_linked: '手動で紐付け',
+    auto_linked: '自動で連携',
     manually_rejected: '手動で却下'
   }
 
@@ -209,6 +210,7 @@ describe('reasonLabel', () => {
     for (const reason of [
       'invalid_event_candidate',
       'manually_linked',
+      'auto_linked',
       'manually_rejected',
       'title_generated',
       'title_fallback'
