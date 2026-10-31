@@ -52,6 +52,7 @@ const renderSearch = (scope: WebhookLinkScope, values: readonly Event[] = events
             disabled: false,
             isPending: false,
             replacing: false,
+            ended: false,
             scope,
             onLink: async () => {},
             onClose: () => {}
@@ -90,7 +91,7 @@ describe('連携ダイアログの一覧と説明は、店舗と投稿時点で�
 
   test('登録済みの置き換えの一文は、説明にそのまま残る', async () => {
     const dialog = await Bun.file('workers/web/src/app/components/admin/webhook-event-link-dialog.tsx').text()
-    expect(dialog).toContain('{webhookLinkScopeDescription(scope.stores)}既存イベントの内容は変更しません。')
+    expect(dialog).toMatch(/\{webhookLinkScopeDescription\(scope\.stores\)\}\s*\{linkedEventEffectNote\(ended\)\}/)
     expect(dialog).toContain('{replacing &&')
   })
 

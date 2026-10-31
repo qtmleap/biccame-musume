@@ -6,6 +6,7 @@ import { BotActionConfirmation } from '@/components/admin/bot-action-confirmatio
 import { detectionScoreLabel } from '@/components/admin/webhook-labels'
 import {
   activeLinkedEventProposal,
+  isEndedPost,
   LINKED_EVENT_LINK_LABEL,
   linkedEventConfirmation,
   submitLinkedEvent
@@ -15,6 +16,7 @@ import { Button } from '@/components/ui/button'
 const TITLE = '連携先の提案'
 
 type Props = {
+  /** 連携の対象。複数候補の投稿では、親ジョブではなく選択中の候補を渡す。登録済みか・終了判定かも、ここから決める。 */
   job: WebhookJob
   /** 既存の「連携」ボタンと同じ可否（webhookActionAvailability の canLink）。偽ならボタンを押せない。 */
   canLink: boolean
@@ -33,7 +35,10 @@ export const WebhookLinkedEventProposal = ({ job, canLink, isPending, onLink }: 
   const busy = useRef(false)
   const proposal = activeLinkedEventProposal(job)
   if (proposal === undefined) return null
-  const confirmation = linkedEventConfirmation(proposal.title, job.status === 'registered')
+  const confirmation = linkedEventConfirmation(proposal.title, {
+    replacing: job.status === 'registered',
+    ended: isEndedPost(job)
+  })
   // 成功したら閉じる。失敗したら閉じずに、ミューテーションのトーストで知らせる（既存の確認ダイアログと同じ）。
   const confirm = async () => {
     const outcome = await submitLinkedEvent(busy, { canLink, isPending, eventId: proposal.eventId, onLink })

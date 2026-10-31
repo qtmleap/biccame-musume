@@ -17,6 +17,8 @@ type Props = {
   suggestion: WebhookLinkedEvent
   /** 登録済みの連携先を付け替えるときは true。説明に、置き換える旨を足す。 */
   replacing: boolean
+  /** 連携の対象にした投稿が終了判定のときは true。説明に、終了日などを書き込む旨を出す（終了判定以外は、変更しない旨）。 */
+  ended: boolean
   /** 連携できる状態か(上部の「連携」ボタンの disabled の逆)。偽なら「このイベントと連携する」を押せない。 */
   canLink: boolean
   isPending: boolean
@@ -34,6 +36,7 @@ type Props = {
 export const WebhookEventLinkConfirm = ({
   suggestion,
   replacing,
+  ended,
   canLink,
   isPending,
   onLink,
@@ -42,7 +45,7 @@ export const WebhookEventLinkConfirm = ({
 }: Props) => {
   const [failed, setFailed] = useState(false)
   const busy = useRef(false)
-  const ask = webhookLinkAsk(suggestion, replacing)
+  const ask = webhookLinkAsk(suggestion, { replacing, ended })
   const submit = async () => {
     setFailed(false)
     const outcome = await submitLinkedEvent(busy, { canLink, isPending, eventId: suggestion.eventId, onLink })

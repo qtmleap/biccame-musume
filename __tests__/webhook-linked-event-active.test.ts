@@ -5,7 +5,7 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { WebhookEventLinkBody } from '@/components/admin/webhook-event-link-dialog'
 import { initialWebhookLinkStage, LINK_ASK_TITLE } from '@/components/admin/webhook-event-link-stage'
-import { activeLinkedEventProposal } from '@/components/admin/webhook-linked-event-confirm'
+import { activeLinkedEventProposal, isEndedPost } from '@/components/admin/webhook-linked-event-confirm'
 import { Dialog } from '@/components/ui/dialog'
 import { makeJob } from './fixtures/webhook-d1-jobs'
 
@@ -72,6 +72,7 @@ describe('上部「連携」ボタンのダイアログに渡す提案', () => {
               disabled: false,
               isPending: false,
               replacing: job.status === 'registered',
+              ended: isEndedPost(job),
               scope: { stores: [], postedAt: '2026-10-02T03:00:00.000Z' },
               onLink: async () => {},
               onClose: () => {}

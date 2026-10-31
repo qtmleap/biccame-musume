@@ -55,7 +55,7 @@ describe('段階の決定（純関数）', () => {
 
 describe('確認の段階の文言（純関数）', () => {
   test('タイトルは「このイベントですか？」。本文は提案イベントのタイトル（「」付き）、確率、既存イベントを変更しない旨', () => {
-    expect(webhookLinkAsk(suggestion, false)).toEqual({
+    expect(webhookLinkAsk(suggestion, { replacing: false, ended: false })).toEqual({
       title: 'このイベントですか？',
       eventName: '「缶バッジで繋ぐビッカメ娘旅」',
       detail: '確率 79.3%。既存イベントの内容は変更しません。'
@@ -63,7 +63,7 @@ describe('確認の段階の文言（純関数）', () => {
   })
 
   test('登録済みの投稿では、既存の連携ダイアログと同じ置き換えの文言を続ける', () => {
-    expect(webhookLinkAsk(suggestion, true).detail).toBe(
+    expect(webhookLinkAsk(suggestion, { replacing: true, ended: false }).detail).toBe(
       `確率 79.3%。既存イベントの内容は変更しません。${LINKED_EVENT_REPLACING_NOTE}`
     )
     expect(LINKED_EVENT_REPLACING_NOTE).toBe(
@@ -145,6 +145,7 @@ type Options = {
   disabled?: boolean
   isPending?: boolean
   replacing?: boolean
+  ended?: boolean
   onLink?: (eventId: string) => Promise<unknown>
 }
 
@@ -154,6 +155,7 @@ const renderBody = ({
   disabled = false,
   isPending = false,
   replacing = false,
+  ended = false,
   onLink = async () => {}
 }: Options = {}) => {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
@@ -171,6 +173,7 @@ const renderBody = ({
             disabled,
             isPending,
             replacing,
+            ended,
             scope,
             onLink,
             onClose: () => {}
@@ -285,6 +288,7 @@ describe('「別のイベントを選ぶ」の後の検索の段階は、提案�
             disabled: false,
             isPending: false,
             replacing: false,
+            ended: false,
             scope,
             onLink: async () => {},
             onClose: () => {}

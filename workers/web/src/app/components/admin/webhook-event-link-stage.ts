@@ -2,7 +2,9 @@ import type { WebhookLinkedEvent } from '@biccame/shared/schemas/webhook.dto'
 import { detectionScoreLabel } from '@/components/admin/webhook-labels'
 import {
   LINKED_EVENT_REPLACING_NOTE,
-  type LinkedEventSubmitOutcome
+  type LinkedEventNoteContext,
+  type LinkedEventSubmitOutcome,
+  linkedEventEffectNote
 } from '@/components/admin/webhook-linked-event-confirm'
 
 /**
@@ -30,16 +32,16 @@ export const LINK_ASK_PENDING = '連携中…'
 export const LINK_ASK_FAILED = '連携に失敗しました。内容を確認して再試行してください。'
 
 /**
- * 確認の段階の内容。eventName は提案イベントのタイトル（「」付き）、detail は確率と、既存イベントを変更しない旨。
- * replacing は登録済みの投稿（連携先を置き換える）のとき true で、既存の連携ダイアログと同じ置き換えの文言を続ける。確率の表記は detectionScoreLabel と同じ。
+ * 確認の段階の内容。eventName は提案イベントのタイトル（「」付き）、detail は確率と、連携が既存イベントに何をするか（終了判定の投稿以外は、変更しない旨）。
+ * replacing は登録済みの投稿（連携先を置き換える）のとき true で、既存の連携ダイアログと同じ置き換えの文言を続ける。ended は終了判定の投稿のとき true。確率の表記は detectionScoreLabel と同じ。
  */
 export const webhookLinkAsk = (
   suggestion: WebhookLinkedEvent,
-  replacing: boolean
+  { replacing, ended }: LinkedEventNoteContext
 ): { title: string; eventName: string; detail: string } => ({
   title: LINK_ASK_TITLE,
   eventName: `「${suggestion.title}」`,
-  detail: `確率 ${detectionScoreLabel(suggestion.probability)}。既存イベントの内容は変更しません。${replacing ? LINKED_EVENT_REPLACING_NOTE : ''}`
+  detail: `確率 ${detectionScoreLabel(suggestion.probability)}。${linkedEventEffectNote(ended)}${replacing ? LINKED_EVENT_REPLACING_NOTE : ''}`
 })
 
 /**
