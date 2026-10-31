@@ -44,6 +44,9 @@ const jst = (value: string): string => `${value.replace(' ', 'T')}:00+09:00`
 
 const fixtureEvent = (n: number, { start, end, ...rest }: Fixture): Event =>
   socialEvent(n, {
+    // 娘の指定が無いイベントは、バックフィル後の既定（開催店舗の娘）にする。socialEvent の既定（akiba）のままだと、
+    // 他店舗のイベントが「別店舗の娘を明示した」扱いになり、店舗違いの同内容が1行にまとまらない。
+    characterIds: rest.stores,
     ...rest,
     startDate: jst(start),
     // 既定の終了日（10/18）を打ち消すため、終了日未定は undefined を明示する。
