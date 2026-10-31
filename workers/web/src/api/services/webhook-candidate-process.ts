@@ -21,6 +21,7 @@ import {
   isLinkedEventAction
 } from '@biccame/shared/event-detect/detection'
 import dayjs from 'dayjs'
+import { autoLinkWebhookCandidate } from './webhook-auto-link'
 import { canAutoRegisterWebhookCandidate } from './webhook-auto-registration'
 import { recordWebhookDiscovery, synchronizeWebhookDiscovery } from './webhook-discovery-record'
 import { webhookProcessingErrorCode } from './webhook-extraction'
@@ -77,7 +78,8 @@ export const processWebhookCandidate = async (
               decision,
               detectionThresholds(configuration)
             )
-            // 3段目: 「終了」または「継続」（end・update）と判定された候補だけ、店舗の継続中のイベント（投稿より前に始まり、1段目の配布物の最上位の種類と一致するもの。確率は見ず、最上位が none などで種類が決まらなければ聞かない）から連携先を提案する（自動では連携しない）。
+            // 3段目: 「終了」または「継続」（end・update）と判定された候補だけ、店舗の継続中のイベント（投稿より前に始まり、1段目の配布物の最上位の種類と一致するもの。確率は見ず、最上位が none などで種類が決まらなければ聞かない）から連携先を提案する。
+            // 提案を連携するかどうかはここでは決めず、保留にする最後の分岐（autoLinkWebhookCandidate）が、保存済みの提案から決める。
             // 旧単一ジョブの仮の名前は配布物の名前として渡さない。失敗しても判定は続け、提案なしにする。
             const linkedEvent = isLinkedEventAction(recorded.action)
               ? await inWebhookStage('linked_event', () =>
@@ -215,12 +217,28 @@ export const processWebhookCandidate = async (
         )
         .run()
     } else {
-      const status = result.status === 'ignored' ? 'ignored' : 'held'
-      await env.DB.prepare(
-        `UPDATE ${target.table} SET status=?,notification_status=?,updated_at=? WHERE ${target.column}=? AND lease_token=?`
-      )
-        .bind(status, status === 'ignored' ? 'skipped' : 'pending', dayjs().valueOf(), target.id, token)
-        .run()
+      // 保留のうち、理由が状態（終了・継続）だけで、提案の確率がしきい値以上のものは、提案の連携先へ自動で連携する（通知は出さない）。
+      // 連携できなかったとき（条件を満たさない・競合）は、通常どおり保留にして人に回す。
+      const linked =
+        result.status === 'ignored'
+          ? false
+          : await inWebhookStage('registration', () =>
+              autoLinkWebhookCandidate(env, {
+                job: judged,
+                target,
+                token,
+                reasons,
+                proposal: judged.discovery?.linkedEvent
+              })
+            )
+      if (!linked) {
+        const status = result.status === 'ignored' ? 'ignored' : 'held'
+        await env.DB.prepare(
+          `UPDATE ${target.table} SET status=?,notification_status=?,updated_at=? WHERE ${target.column}=? AND lease_token=?`
+        )
+          .bind(status, status === 'ignored' ? 'skipped' : 'pending', dayjs().valueOf(), target.id, token)
+          .run()
+      }
     }
     const finalJob = await inWebhookStage('discovery', async () =>
       synchronizeWebhookDiscovery(env, await currentJob(), target, token)

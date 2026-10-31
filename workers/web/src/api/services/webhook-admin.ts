@@ -1,4 +1,3 @@
-import { recoverSocialJobs } from '@api/services/social-posting'
 import {
   enqueueWebhookJob,
   getWebhookCandidate,
@@ -9,11 +8,15 @@ import {
   validateWebhookEvent,
   webhookTarget
 } from '@api/services/webhook-jobs'
-import { planEndedLink } from '@api/services/webhook-link-ended'
+import { applyWebhookLink } from '@api/services/webhook-link'
 import { rejudgeRegisteredWebhookJob } from '@api/services/webhook-rejudge-registered'
 import type { Bindings } from '@api/types/bindings'
-import { toD1DateTime } from '@biccame/shared/domain/d1-datetime'
-import { isAutoRegisteredWebhookJob } from '@biccame/shared/domain/webhook-rejudge'
+import {
+  isAutoRegisteredWebhookJob,
+  isLinkedWebhookJob,
+  LINKED_WEBHOOK_REASONS,
+  MANUALLY_LINKED_REASON
+} from '@biccame/shared/domain/webhook-rejudge'
 import { isStalledWebhookJudging, webhookStalledCutoff } from '@biccame/shared/domain/webhook-stalled'
 import type { WebhookJob, WebhookResolveSchema, WebhookRetrySchema } from '@biccame/shared/schemas/webhook.dto'
 import dayjs from 'dayjs'
@@ -90,9 +93,12 @@ export const retryWebhookJob = async (env: Bindings, postId: string, input: z.in
  */
 const STALLED_JUDGING_ROW = `(status IN ('queued','processing') AND updated_at<=? AND (lease_until IS NULL OR lease_until<?))`
 
+/** 連携した印の理由を SQL の IN 句に並べたもの。値はコードの定数で、入力由来の文字列は入らない。 */
+const LINKED_REASONS_SQL = LINKED_WEBHOOK_REASONS.map((reason) => `'${reason}'`).join(',')
+
 /**
  * 再判定（画面の「再実行」）のうち、queued に戻して処理し直せる行だけを更新対象にする SQL の条件。table は更新対象の表（reasons_json を読む表）。
- * 保留、処理に失敗した行、人が却下していない対象外、手動で連携した登録済み（reasons に manually_linked）、止まっている処理待ち・処理中が対象。
+ * 保留、処理に失敗した行、人が却下していない対象外、連携した登録済み（reasons に manually_linked か auto_linked）、止まっている処理待ち・処理中が対象。
  * 末尾の STALLED_JUDGING_ROW のプレースホルダ2つ（上限、現在時刻）を、この条件を使う側が最後に束縛する。
  * 自動登録された登録済みはパイプラインが作ったイベントを持つため、queued に戻すと同じイベントの重複登録や再通知が起こりうるので含めない
  * （rejudgeWebhookJob が webhook-rejudge-registered.ts へ振り分け、登録を変えずに判定だけをやり直す）。
@@ -101,21 +107,22 @@ const STALLED_JUDGING_ROW = `(status IN ('queued','processing') AND updated_at<=
 const rejudgeableRow = (table: 'webhook_event_jobs' | 'webhook_event_candidates') =>
   `(status='held'
     OR (status IN ('ignored','failed') AND NOT EXISTS (SELECT 1 FROM json_each(${table}.reasons_json) WHERE value='manually_rejected'))
-    OR (status='registered' AND EXISTS (SELECT 1 FROM json_each(${table}.reasons_json) WHERE value='manually_linked'))
+    OR (status='registered' AND EXISTS (SELECT 1 FROM json_each(${table}.reasons_json) WHERE value IN (${LINKED_REASONS_SQL})))
     OR ${STALLED_JUDGING_ROW})`
 
 /**
  * 画面の「再実行」。保存済みの判定結果と回答を、現在の設定で判定し直す。状態で処理を振り分ける。
- * 自動登録された登録済み（manually_linked なし）は、登録・通知を変えずに回答と判定結果だけを同期的に更新する（rejudgeRegisteredWebhookJob）。
+ * 自動登録された登録済み（連携の理由 manually_linked / auto_linked なし）は、登録・通知を変えずに回答と判定結果だけを同期的に更新する（rejudgeRegisteredWebhookJob）。
  * それ以外は、保存済みの判定結果と回答を消して queued に戻し、キューへ積み直す。以下はこちらの説明。
- * 保留ジョブ、処理に失敗したジョブ、人が却下していない対象外ジョブ、手動で連携した登録済みジョブが対象。
+ * 保留ジョブ、処理に失敗したジョブ、人が却下していない対象外ジョブ、連携した（手動・自動）登録済みジョブが対象。
  * 失敗したジョブは途中の結果が壊れていることがあるため、保留と同じく最初からやり直す。
  * 人が却下したジョブ（reasons に manually_rejected）は再判定で上書きしない。画面側の rejudgeBlockedReason と同じ規則。
  * 処理中（queued / processing）は 409。ただし止まっているもの（最後の更新から WEBHOOK_STALLED_MINUTES 分以上経ち、リース中でない）は、
  * キューのメッセージが失われた状態なので、同じ経路で queued に戻して積み直す（親ジョブも候補も）。新しい処理待ち・処理中や、リース中のものは 409 のまま。
- * 登録済みは reasons に manually_linked があるものだけここへ来る。誤った連携を外すため event_id を NULL に戻す（連携先のイベント本体は変更しない）。
- * ただし終了判定の投稿の連携（resolveWebhookJob → planEndedLink）が連携先へ書いた ended_at・end 参照URL・予約済みの更新投稿は、この再判定でも戻らない（人が手で直す）。
+ * 登録済みは reasons に manually_linked か auto_linked があるものだけここへ来る。誤った連携を外すため event_id を NULL に戻す（連携先のイベント本体は変更しない）。
+ * ただし終了判定の投稿の連携（resolveWebhookJob や自動連携 → applyWebhookLink → planEndedLink）が連携先へ書いた ended_at・end 参照URL・予約済みの更新投稿は、この再判定でも戻らない（人が手で直す）。
  * 処理側は result_json があると Clef を呼ばず再利用するため、消さないと質問の修正やしきい値の変更が反映されない。
+ * 自動連携したジョブを再判定すると、同じ提案が出れば同じ条件でもう一度自動連携される（連携先を直すときは「連携」で付け替える）。
  * 再判定の結果次第でイベントが自動登録され、Discord へ通知（通知済みなら再通知）される場合がある。
  * どちらの経路も、判定は実行のたびに現在の設定（モデル・しきい値）を読んで行う。
  */
@@ -133,9 +140,9 @@ export const rejudgeWebhookJob = async (env: Bindings, postId: string, candidate
   // 自動登録済みは queued に戻さない（同じイベントの INSERT が衝突して失敗し、通知も繰り返されうる）。登録を変えず判定だけをやり直す。
   if (isAutoRegisteredWebhookJob(job.status, job.reasons)) return rejudgeRegisteredWebhookJob(env, postId, parent, job)
   if (parent.candidates.length > 0) {
-    const manuallyLinked = job.status === 'registered' && job.reasons.includes('manually_linked')
+    const linked = isLinkedWebhookJob(job.status, job.reasons)
     if (
-      (job.status !== 'held' && job.status !== 'ignored' && job.status !== 'failed' && !manuallyLinked && !stalled) ||
+      (job.status !== 'held' && job.status !== 'ignored' && job.status !== 'failed' && !linked && !stalled) ||
       job.reasons.includes('manually_rejected')
     ) {
       throw new HTTPException(409, { message: 'Candidate cannot be re-judged' })
@@ -201,8 +208,8 @@ export const rejudgeWebhookJob = async (env: Bindings, postId: string, candidate
     await enqueueWebhookJob(env, postId)
     return getWebhookJob(env, postId)
   }
-  const manuallyLinked = job.status === 'registered' && job.reasons.includes('manually_linked')
-  if (job.status !== 'held' && job.status !== 'ignored' && job.status !== 'failed' && !manuallyLinked && !stalled)
+  const linked = isLinkedWebhookJob(job.status, job.reasons)
+  if (job.status !== 'held' && job.status !== 'ignored' && job.status !== 'failed' && !linked && !stalled)
     throw new HTTPException(409, { message: 'This job cannot be re-judged' })
   if ((job.status === 'ignored' || job.status === 'failed') && job.reasons.includes('manually_rejected'))
     throw new HTTPException(409, { message: 'Manually rejected jobs cannot be re-judged' })
@@ -256,56 +263,28 @@ export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.
       if (childClaim.meta.changes !== 1) throw new HTTPException(409, { message: 'Candidate is being processed' })
     }
     if (event !== null) await registerWebhookEvent(env, job, event, token, target)
-    else {
-      const status = input.action === 'link' ? 'registered' : 'ignored'
-      const eventId = input.action === 'link' ? input.eventId : null
-      // 終了判定の投稿の連携だけは、連携先イベントの終了（ended_at・end 参照URL・更新投稿）も同じ batch で反映する。
-      const ended =
-        input.action === 'link' && job.postStatus === 'end'
-          ? await planEndedLink(env, { job, eventId: input.eventId, target, token, now })
-          : null
-      const update = env.DB.prepare(
-        // 登録済みの連携し直しは通知の状態を変えない（Discord への再通知を起こさない）。右辺の status は更新前の値。
-        `UPDATE ${target.table} SET status=?,event_id=?,reasons_json=?,
-          notification_status=CASE WHEN status='registered' THEN notification_status ELSE ? END,
-          notification_error=CASE WHEN status='registered' THEN notification_error ELSE NULL END,
-          updated_at=? WHERE ${target.column}=? AND lease_token=? AND status=?${ended === null ? '' : ended.guard.sql}`
-      ).bind(
-        status,
-        eventId,
-        JSON.stringify([input.action === 'link' ? 'manually_linked' : 'manually_rejected']),
-        input.action === 'link' ? 'pending' : 'skipped',
-        now,
-        target.id,
+    else if (input.action === 'link') {
+      // 連携の本体は自動連携（webhook-candidate-process.ts）と共通。終了判定（postStatus が end）の投稿だけ、連携先の終了も同じ batch で反映する。
+      await applyWebhookLink(env, {
+        job,
+        eventId: input.eventId,
+        target,
         token,
-        job.status,
-        ...(ended === null ? [] : ended.guard.values)
-      )
-      const references =
-        input.action === 'link' && ended === null
-          ? [
-              env.DB.prepare(`INSERT INTO event_reference_urls (id,event_id,type,url,created_at,updated_at)
-          SELECT ?,?,'announce',?,?,? WHERE NOT EXISTS (SELECT 1 FROM event_reference_urls WHERE event_id=? AND url=?)
-          AND EXISTS (SELECT 1 FROM ${target.table} WHERE ${target.column}=? AND lease_token=? AND status=?)`).bind(
-                crypto.randomUUID(),
-                input.eventId,
-                job.sourceUrl,
-                toD1DateTime(now),
-                toD1DateTime(now),
-                input.eventId,
-                job.sourceUrl,
-                target.id,
-                token,
-                job.status
-              )
-            ]
-          : []
-      const result = await env.DB.batch([...references, ...(ended === null ? [] : ended.statements), update])
-      if (result.at(-1)?.meta.changes !== 1)
-        throw ended === null ? new HTTPException(409, { message: 'Job lease lost' }) : await ended.conflict()
-      // Queue 投入は commit 後。失敗しても pending の投稿ジョブは cron が回収する。
-      if (ended?.writesEndedAt)
-        await recoverSocialJobs(env).catch(() => console.error('[social] post-link queue recovery failed'))
+        now,
+        previousStatus: job.status,
+        ended: job.postStatus === 'end',
+        reason: MANUALLY_LINKED_REASON,
+        notificationStatus: 'pending'
+      })
+    } else {
+      const update = env.DB.prepare(
+        `UPDATE ${target.table} SET status='ignored',event_id=NULL,reasons_json=?,
+          notification_status=CASE WHEN status='registered' THEN notification_status ELSE 'skipped' END,
+          notification_error=CASE WHEN status='registered' THEN notification_error ELSE NULL END,
+          updated_at=? WHERE ${target.column}=? AND lease_token=? AND status=?`
+      ).bind(JSON.stringify(['manually_rejected']), now, target.id, token, job.status)
+      const result = await env.DB.batch([update])
+      if (result.at(-1)?.meta.changes !== 1) throw new HTTPException(409, { message: 'Job lease lost' })
     }
     if (target.table === 'webhook_event_candidates') await refreshWebhookJob(env, postId, token)
   } finally {

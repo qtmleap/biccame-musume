@@ -28,7 +28,7 @@ type Props = {
 
 /**
  * 終了または継続と判定された投稿の連携先の提案。選択中の候補に提案が保存されていて、まだ提案のイベントへ連携していないときだけ描画し、それ以外は何も出さない。
- * 連携は、ボタンから開く確認ダイアログで「連携する」を押すまで一切行わない。
+ * 自動で連携されなかった提案は、ボタンから開く確認ダイアログで「連携する」を押すまで連携しない（自動で連携したジョブの提案は、連携済みなので activeLinkedEventProposal が出さない）。
  */
 export const WebhookLinkedEventProposal = ({ job, canLink, isPending, onLink }: Props) => {
   const [open, setOpen] = useState(false)
@@ -48,7 +48,8 @@ export const WebhookLinkedEventProposal = ({ job, canLink, isPending, onLink }: 
     <section aria-label={TITLE}>
       <h2 className='mb-2 text-lg font-semibold md:text-xl'>{TITLE}</h2>
       <p className='mb-3 text-sm text-muted-foreground'>
-        終了または継続を知らせる投稿の連携先候補です。自動では連携しません。
+        終了または継続を知らせる投稿の連携先候補です。確率がしきい値（既定
+        90%）以上で、保留の理由が状態だけのときは自動で連携します。それ以外は、ここから連携します。
       </p>
       <div className='flex flex-wrap items-center gap-x-3 gap-y-1'>
         <Link

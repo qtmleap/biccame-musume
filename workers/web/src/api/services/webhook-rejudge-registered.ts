@@ -11,7 +11,7 @@ import { HTTPException } from 'hono/http-exception'
 
 const LEASE_MS = 300_000
 
-/** 人の却下（reasons に manually_rejected）は上書きしない。自動登録済み（manually_linked なし）以外は、この処理の対象ではない。 */
+/** 人の却下（reasons に manually_rejected）は上書きしない。自動登録済み（連携の理由 manually_linked / auto_linked なし）以外は、この処理の対象ではない。 */
 const assertRejudgeable = (status: string, reasons: readonly string[]) => {
   if (reasons.includes('manually_rejected'))
     throw new HTTPException(409, { message: 'Manually rejected jobs cannot be re-judged' })

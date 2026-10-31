@@ -44,7 +44,9 @@ describe('連携先の提案（単独のコンポーネント）', () => {
     const markup = await renderProposal({ ...job, discovery: proposed })
     expect(headings(markup).filter((heading) => heading === TITLE)).toHaveLength(1)
     expect(markup).toContain(`aria-label="${TITLE}"`)
-    expect(markup).toContain('終了または継続を知らせる投稿の連携先候補です。自動では連携しません')
+    expect(markup).toContain(
+      '終了または継続を知らせる投稿の連携先候補です。確率がしきい値（既定 90%）以上で、保留の理由が状態だけのときは自動で連携します。それ以外は、ここから連携します。'
+    )
     expect(markup).toContain('継続')
     expect(markup).toContain('提案された配布イベント')
     expect(markup).toContain(EDIT_HREF)

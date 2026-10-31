@@ -34,7 +34,7 @@ test('終了の投稿で店舗にまだ終了していないイベントがあ�
       '連携先を探す配布物: 限定名刺'
     ])
     expect(candidate.discovery?.action).toBe('end')
-    expect(candidate.discovery?.linkedEvent).toEqual({ eventId: eventId(1), title: '既存イベント1', probability: 0.9 })
+    expect(candidate.discovery?.linkedEvent).toEqual({ eventId: eventId(1), title: '既存イベント1', probability: 0.8 })
     // 自動では連携せず、保留のまま。イベント本体（ended_at を含む）も変更しない。
     expect(candidate.status).toBe('held')
     expect(candidate.eventId).toBeNull()
@@ -150,7 +150,7 @@ test('店舗の確率も確認も下限未満で採用されなくても、投�
       '連携先を探す開催店舗: 立川店',
       '連携先を探す配布物: 限定名刺'
     ])
-    expect(candidate.discovery?.linkedEvent).toEqual({ eventId: eventId(1), title: '既存イベント1', probability: 0.9 })
+    expect(candidate.discovery?.linkedEvent).toEqual({ eventId: eventId(1), title: '既存イベント1', probability: 0.8 })
     // 自動では連携せず、イベントも変えない。送信入力は 1 段目・2 段目（確認）・3 段目の 3 件。
     expect(candidate.eventId).toBeNull()
     expect(await eventsSnapshot(value.env)).toBe(before)
@@ -197,7 +197,7 @@ test('すでに提案なしで保留になっている投稿も、「再実行�
     expect(value.calls).toHaveLength(1)
     expect(again.status).toBe('held')
     expect(again.eventId).toBeNull()
-    expect(again.discovery?.linkedEvent).toEqual({ eventId: eventId(1), title: '既存イベント1', probability: 0.9 })
+    expect(again.discovery?.linkedEvent).toEqual({ eventId: eventId(1), title: '既存イベント1', probability: 0.8 })
   } finally {
     await value.cleanup()
   }

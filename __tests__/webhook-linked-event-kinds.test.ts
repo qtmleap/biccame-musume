@@ -61,7 +61,7 @@ test('配布物の最上位がアクキーなら、3段目の選択肢はアク�
     expect(candidate.discovery?.action).toBe('end')
     expect(value.calls).toHaveLength(1)
     expect(optionsOf(value.calls[0])).toEqual(sorted(1))
-    expect(candidate.discovery?.linkedEvent).toEqual({ eventId: eventId(1), title: '既存イベント1', probability: 0.9 })
+    expect(candidate.discovery?.linkedEvent).toEqual({ eventId: eventId(1), title: '既存イベント1', probability: 0.8 })
     // 送った選択肢のとおりに保存され、プロンプト確認から見える。
     const prompt = await getWebhookPrompt(value.env, post.id, candidate.eventUUID)
     expect(prompt.requests).toHaveLength(2)
