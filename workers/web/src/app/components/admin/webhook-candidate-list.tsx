@@ -7,9 +7,16 @@ import { WebhookStatusBadge } from '@/components/admin/webhook-status-badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-/** 検出の記録があり、検出済み以外（判定未確定・対象外）のとき。記録が無い旧履歴は状態バッジだけで足りるので含めない。 */
+/**
+ * 検出の記録があり、検出済み以外（判定未確定・対象外）で、まだ登録されていないとき。
+ * 記録が無い旧履歴は状態バッジだけで足りるので含めない。
+ * 登録済みは、記録が AI の判定時点のまま残っていても右端の「登録済み」で足りるので含めない。
+ */
 const hasUndetectedDiscovery = (candidate: WebhookCandidate): boolean =>
-  candidate.discovery !== undefined && candidate.discovery !== null && candidate.discovery.relevance !== 'detected'
+  candidate.status !== 'registered' &&
+  candidate.discovery !== undefined &&
+  candidate.discovery !== null &&
+  candidate.discovery.relevance !== 'detected'
 
 export const WebhookCandidateList = ({
   candidates,
@@ -69,7 +76,7 @@ export const WebhookCandidateList = ({
                   登録イベント
                 </Link>
               )}
-              {/* 検出済みは判定時点の AI の見立てで固定されるので、この行では情報にならない。判定未確定・対象外のときだけ保留の手掛かりとして併記する。 */}
+              {/* 検出済みは判定時点の AI の見立てで固定されるので、この行では情報にならない。登録済みも右端の状態バッジで足りる。未登録で判定未確定・対象外のときだけ保留の手掛かりとして併記する。 */}
               {hasUndetectedDiscovery(candidate) && <WebhookDiscoveryBadge job={candidate} />}
               <WebhookStatusBadge status={candidate.status} />
             </div>
