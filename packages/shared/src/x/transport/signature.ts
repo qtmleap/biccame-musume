@@ -30,6 +30,25 @@ export const getCachedTransactionInputs = async (): Promise<{ homePageHtml: stri
   return inputs
 }
 
+/**
+ * 署名材料のキャッシュを破棄する。次の取得で x.com から新しい材料を取り直す。
+ * 破棄は後始末なので失敗しても呼び出し側の例外分類を変えないよう、ここでは決して throw しない。
+ */
+export const invalidateTransactionInputs = async (): Promise<void> => {
+  try {
+    const cache = await caches.open('x-transaction')
+    await cache.delete(TRANSACTION_CACHE_KEY)
+  } catch {
+    console.warn('[Twitter] Failed to invalidate cached transaction inputs')
+  }
+}
+
+/**
+ * 署名付きリクエストに X が 403/404 を返した場合は、署名材料が古い可能性がある。
+ * 403 にはアカウント制限など署名と無関係な理由もあるが、破棄しても次回に取り直すだけで害は無い。
+ */
+export const isSignatureRejection = (status: number): boolean => status === 403 || status === 404
+
 export const getTransactionId = async (method: string, path: string): Promise<string> => {
   try {
     const inputs = await getCachedTransactionInputs()

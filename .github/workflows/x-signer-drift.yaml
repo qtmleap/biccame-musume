@@ -1,0 +1,98 @@
+name: X signer drift
+
+# X の x-client-transaction-id 生成が X 側の変更で壊れていないかを定期的に確かめる。
+# ログアウト状態の x.com を Chromium で開き、X 自身のクライアントが送る署名付きリクエストの ID を
+# 自前実装(packages/shared/src/x/transaction)で再計算して突き合わせる。受動的な観測のみで、X へ認証付きの通信はしない。
+#
+# 注意: schedule は既定ブランチ(master)のワークフローしか動かない。workflow_dispatch も同じで、
+# このファイルが master に入るまでは定期実行も手動実行もできない(develop や feature ブランチに置いただけでは起動しない)。
+# 一度でも実行されたあとは、gh workflow run で任意のブランチを指定して手動実行できる。
+# master へ入る前の動作確認は、scripts/check-x-signer-drift.ts のローカル実行で行う。
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+  issues: write
+
+# bun install が @qtmleap スコープを GitHub Packages から取得するために必要。
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# 実行が重なると同じずれで Issue を二重に作りかねないので直列にする。
+concurrency:
+  group: x-signer-drift
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Check the X signer
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Prisma Client の生成と biome-plugins サブモジュールは、この確認が使う packages/shared/src/x/transaction に不要。
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bunx playwright install --with-deps chromium
+      # 終了コード 0=一致 / 1=ずれ / 2=判定不能。後続で扱うので、このステップ自体は失敗させない。
+      - name: Compare X's own transaction IDs with ours
+        id: drift
+        run: |
+          set +e
+          bun --no-env-file scripts/check-x-signer-drift.ts --report "$RUNNER_TEMP/x-signer-drift-report.md"
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Report the result
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          EXIT_CODE: ${{ steps.drift.outputs.exit_code }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -eu
+          report="$RUNNER_TEMP/x-signer-drift-report.md"
+          code="$EXIT_CODE"
+          # 0 と 1 以外はすべて判定不能に寄せる。レポートが無いまま 1 で終わった場合は、
+          # ずれを検知したのではなくスクリプトが異常終了しただけなので、同じく判定不能にする。
+          case "$code" in
+            0) ;;
+            1) [ -s "$report" ] || code=2 ;;
+            *) code=2 ;;
+          esac
+          if [ ! -s "$report" ]; then
+            printf '# X signer drift check\n\nNo report was produced (exit code: %s).\n' "${EXIT_CODE:-unknown}" > "$report"
+          fi
+          cat "$report" >> "$GITHUB_STEP_SUMMARY"
+          printf '\nRun: %s\n' "$RUN_URL" >> "$report"
+
+          open_issues() {
+            gh issue list --label x-signer-drift --state open --json number --jq '.[].number'
+          }
+
+          case "$code" in
+            1)
+              gh label create x-signer-drift --force \
+                --description 'X transaction signer no longer matches the real X client' --color B60205
+              number="$(open_issues | head -n 1)"
+              if [ -n "$number" ]; then
+                gh issue comment "$number" --body-file "$report"
+              else
+                gh issue create --label x-signer-drift \
+                  --title 'X client-transaction-id signer drift detected' --body-file "$report"
+              fi
+              ;;
+            0)
+              for number in $(open_issues); do
+                gh issue close "$number" --comment "The X signer matches the real X client again. Closing automatically. Run: $RUN_URL"
+              done
+              ;;
+            *)
+              echo '::error::The X signer check could not reach a verdict. See the job summary.'
+              exit 1
+              ;;
+          esac
