@@ -79,11 +79,15 @@
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-- `read:packages` 権限を持つ GitHub のトークンを環境変数 `GITHUB_TOKEN` に設定する
+- `gh auth login` で [GitHub CLI](https://cli.github.com/) にログインしている
 
 `.npmrc` が `@qtmleap` スコープのパッケージ（bot が使う `@qtmleap/zodios`）を GitHub Packages から取得する設定で、
 認証に `GITHUB_TOKEN` を使うため、`bun install` に必要です。
-Dev Container では `.envrc` が `.env` を読み込むので、`.env` に書いておくと反映されます。
+Dev Container では `.envrc` が `.env` を読み込み、`GITHUB_TOKEN` が未設定のときだけ
+`gh auth token --hostname github.com` の値を入れます。
+`.env` や親シェルで設定した `GITHUB_TOKEN` があればそちらが優先されます。
+トークンには `read:packages` 権限が必要です。
+`.envrc` を変更した後は `direnv allow` が必要です（Dev Container では接続時に `postAttachCommand` が自動で実行します）。
 
 ローカルの依存インストールでは、次のコマンドを使えます。`GITHUB_TOKEN` が未設定なら
 `gh auth token --hostname github.com` の認証情報を子プロセスの環境変数にだけ渡します。
