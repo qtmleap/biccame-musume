@@ -8,7 +8,8 @@
  *
  * ローカルでの実行例（.env は読み込まない）:
  *   CHROME_PATH=/path/to/chrome bun --no-env-file scripts/check-x-signer-drift.ts --report /tmp/report.md
- *   CHROME_PATH を省くと Playwright が管理する既定の Chromium を使う。
+ *   CHROME_PATH を省くと、Playwright が管理するフル版の Chromium を channel: 'chromium' で使う。
+ *   既定の chromium headless shell は x.com にトップページを 403 で返されるため使わない。
  *
  * 終了コード:
  *   0: 1件以上を観測し、全件が一致した。
@@ -72,7 +73,11 @@ const collectSigned = (page: Page) => {
 
 const observe = async (): Promise<Observation> => {
   const chromePath = process.env.CHROME_PATH
-  const browser = await chromium.launch({ executablePath: chromePath === '' ? undefined : chromePath })
+  // 既定の chromium headless shell だと x.com がトップページに 403 を返すので、
+  // CHROME_PATH が無いときはフル版の Chromium(新しい headless モード)を channel 指定で使う。
+  const browser = await chromium.launch(
+    chromePath === undefined || chromePath === '' ? { channel: 'chromium' } : { executablePath: chromePath }
+  )
   try {
     const context = await browser.newContext({ locale: 'en-US', userAgent: DEFAULT_USER_AGENT })
     const page = await context.newPage()
