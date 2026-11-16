@@ -1,10 +1,19 @@
+import { INDICES_REGEX } from './constants'
+
 /** Acquire transaction material without evaluating any remotely supplied JavaScript. */
 export type TransactionInputs = { homePageHtml: string; ondemandFileText: string }
 export const DEFAULT_USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36'
 const HEADERS = { 'user-agent': DEFAULT_USER_AGENT, 'accept-language': 'en-US,en;q=0.9' }
-const MAX_REQUESTS = 12
+const MAX_REQUESTS = 16
 const MAX_DEPTH = 3
+// チャンク名がハッシュのみになり URL に sign が現れなくなったため、署名モジュールは本文の内容でも判定する。
+// 行インデックスと鍵バイト添字の最低2つが揃わないと ClientTransaction が誤った鍵で黙って動いてしまう。
+const MIN_INDICES_MATCHES = 2
+// 署名モジュールの動的 import は、ヘッダー名 client-transaction の近く(約500文字手前)に書かれている。
+const HEADER_NAME = /client-transaction/g
+const HEADER_PROXIMITY = 2000
+const SIGNER_URL = /\/sign[.-][^/]*\.js(?:\?|$)/
 
 export function getOndemandFileUrl(html: string): string | null {
   const index = /,(\d+):["']ondemand\.s["']/.exec(html)?.[1]
@@ -110,33 +119,46 @@ export async function fetchHomePageHtml(): Promise<string> {
   if (getOndemandFileUrl(fallback) || bootstrapUrls(fallback).length) return fallback
   throw new Error('No usable transaction bootstrap found on X homepage')
 }
-function importUrls(source: string, base: string): string[] {
-  const urls = new Set<string>()
+type Candidate = { url: string; priority: number }
+// 小さいほど先に取得する。ファイル名が sign なら最優先、sentry/transaction は次点。
+const urlPriority = (url: string) => (/\/sign[.-]/.test(url) ? 0 : /sentry|transaction/.test(url) ? 1 : 2)
+const looksLikeSigner = (url: string, source: string) =>
+  SIGNER_URL.test(url) || [...source.matchAll(INDICES_REGEX)].length >= MIN_INDICES_MATCHES
+function importUrls(source: string, base: string): Candidate[] {
+  const headers = [...source.matchAll(HEADER_NAME)].map((match) => match.index)
+  const priorities = new Map<string, number>()
   const pattern = /\b(?:import\s*\(\s*|import\s*(?:[^"'`;]*?\bfrom\s*)?|export\s+[^;]*?\bfrom\s*)["'`]([^"'`]+)["'`]/g
   for (const match of source.matchAll(pattern)) {
     const url = assetUrl(match[1], base)
-    if (url) urls.add(url)
+    if (!url) continue
+    const near = headers.some((position) => Math.abs(position - match.index) <= HEADER_PROXIMITY)
+    const priority = near ? 0 : urlPriority(url)
+    const current = priorities.get(url)
+    // 同じ URL が複数回現れたら最も高い優先度(小さい値)を採用する
+    priorities.set(url, current === undefined ? priority : Math.min(current, priority))
   }
-  const priority = (url: string) => (/\/sign[.-]/.test(url) ? 0 : /sentry|transaction/.test(url) ? 1 : 2)
-  return [...urls].sort((a, b) => priority(a) - priority(b))
+  return [...priorities].map(([url, priority]) => ({ url, priority }))
 }
 /** The historical name includes the current x-web signer module as well as ondemand.s. */
 export async function fetchOnDemandFileText(homePageHtml: string): Promise<string> {
   const legacyUrl = getOndemandFileUrl(homePageHtml)
   if (legacyUrl) return read(legacyUrl)
-  const queue = bootstrapUrls(homePageHtml).map((url) => ({ url, depth: 0 }))
+  const queue = bootstrapUrls(homePageHtml).map((url) => ({ url, depth: 0, priority: urlPriority(url) }))
   const visited = new Set<string>()
   while (queue.length && visited.size < MAX_REQUESTS) {
     const item = queue.shift()
     if (!item || visited.has(item.url)) continue
     visited.add(item.url)
     const source = await read(item.url)
-    if (/\/sign[.-][^/]*\.js(?:\?|$)/.test(item.url)) return source
+    if (looksLikeSigner(item.url, source)) return source
     if (item.depth < MAX_DEPTH) {
-      const imports = importUrls(source, item.url).map((url) => ({ url, depth: item.depth + 1 }))
+      const imports = importUrls(source, item.url).map(({ url, priority }) => ({
+        url,
+        depth: item.depth + 1,
+        priority
+      }))
       queue.push(...imports)
-      const priority = (url: string) => (/\/sign[.-]/.test(url) ? 0 : /sentry|transaction/.test(url) ? 1 : 2)
-      queue.sort((a, b) => priority(a.url) - priority(b.url) || a.depth - b.depth)
+      queue.sort((a, b) => a.priority - b.priority || a.depth - b.depth)
     }
   }
   throw new Error(`Could not discover transaction signer (searched ${visited.size} modules, limit ${MAX_REQUESTS})`)
