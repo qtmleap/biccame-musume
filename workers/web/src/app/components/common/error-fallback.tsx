@@ -3,7 +3,8 @@ import { AlertCircle, Home, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 type ErrorFallbackProps = {
-  error: Error
+  // TanStack Router 1.170.46 以降、errorComponent に渡る error は unknown 型
+  error: unknown
   reset?: () => void
 }
 
@@ -13,6 +14,7 @@ type ErrorFallbackProps = {
  */
 export const ErrorFallback = ({ error, reset }: ErrorFallbackProps) => {
   const router = useRouter()
+  const message = error instanceof Error ? error.message : String(error)
 
   const handleReset = () => {
     if (reset) {
@@ -36,7 +38,7 @@ export const ErrorFallback = ({ error, reset }: ErrorFallbackProps) => {
           <p className='text-muted-foreground text-lg mb-2'>申し訳ございません。予期しないエラーが発生しました。</p>
           {import.meta.env.DEV && (
             <div className='mt-4 p-4 bg-destructive/10 border border-destructive/30 rounded-lg text-left'>
-              <p className='text-sm font-mono text-destructive break-all'>{error.message}</p>
+              <p className='text-sm font-mono text-destructive break-all'>{message}</p>
             </div>
           )}
         </div>

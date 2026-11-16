@@ -20,7 +20,7 @@ const describe = (error: unknown): string => {
   return error instanceof Error ? error.message : String(error)
 }
 
-const ViewerError = ({ error }: { error: Error }) => (
+const ViewerError = ({ error }: { error: unknown }) => (
   <div className='flex items-start gap-3 rounded-lg border border-destructive/40 p-4'>
     <AlertCircle className='mt-0.5 size-5 shrink-0 text-destructive' />
     <div className='min-w-0'>

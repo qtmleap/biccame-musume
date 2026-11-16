@@ -175,7 +175,7 @@ test('admin ルートにマウントされており、ローカルの不正な�
   }
 })
 
-test('不正な入力は 400 で、プロバイダへ送らない', async () => {
+test('不正な入力は 4xx で拒否し、プロバイダへ送らない', async () => {
   const { calls, fetcher } = recordingFetcher(() => jsonResponse({ content: [] }))
   const routes = createExtractEvaluateRoutes(fetcher)
   const invalid: Array<[string, unknown]> = [
@@ -200,19 +200,25 @@ test('不正な入力は 400 で、プロバイダへ送らない', async () => 
     expect({ name, status: response.status }).toEqual({ name, status: 400 })
   }
   // Content-Type が JSON でない・本文が壊れている・空の場合も、検証を素通りして送信してはならない。
-  const raw: Array<[string, RequestInit]> = [
-    ['no content type', { method: 'POST', body: 'not json' }],
+  // @hono/zod-openapi は宣言外の Content-Type を 415 で、JSON として読めない本文を 400 で拒否する。
+  const raw: Array<[string, RequestInit, number]> = [
+    ['no content type', { method: 'POST', body: 'not json' }, 415],
     [
       'text/plain valid json',
-      { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(validBody) }
+      { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(validBody) },
+      415
     ],
-    ['json type broken body', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: 'not json' }],
-    ['json type empty body', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '' }],
-    ['no body', { method: 'POST' }]
+    [
+      'json type broken body',
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: 'not json' },
+      400
+    ],
+    ['json type empty body', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '' }, 400],
+    ['no body', { method: 'POST' }, 400]
   ]
-  for (const [name, init] of raw) {
+  for (const [name, init, status] of raw) {
     const response = await routes.request(LOCAL_URL, init, localEnv())
-    expect({ name, status: response.status }).toEqual({ name, status: 400 })
+    expect({ name, status: response.status }).toEqual({ name, status })
   }
   expect(calls).toHaveLength(0)
 })
