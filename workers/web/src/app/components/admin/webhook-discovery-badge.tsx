@@ -14,7 +14,10 @@ export const WebhookDiscoveryBadge = ({
   compact?: boolean
 }) => {
   const discovery = job.discovery
-  if (discovery === undefined || discovery === null) return <WebhookStatusBadge status={job.status} compact={compact} />
+  // discovery は AI が判定した時点の記録なので、人が連携して登録済みになった後も「判定未確定」のまま残る。
+  // 登録済みは AI の見立てより優先し、状態バッジだけを出す。
+  if (discovery === undefined || discovery === null || job.status === 'registered')
+    return <WebhookStatusBadge status={job.status} compact={compact} />
   const Icon =
     discovery.relevance === 'detected' ? ScanSearch : discovery.relevance === 'uncertain' ? CircleHelp : CircleOff
   const label = webhookDiscoveryLabel(discovery)
