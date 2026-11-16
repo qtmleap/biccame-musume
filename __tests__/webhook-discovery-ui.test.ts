@@ -27,6 +27,41 @@ test('一覧の省幅バッジも検出済みと登録処理を読み上げ説�
   expect(legacy).not.toContain('検出済み')
 })
 
+test('省幅バッジは、登録済みなら AI の記録が判定未確定・対象外のままでも状態の「登録済み」だけを出す', () => {
+  for (const relevance of ['uncertain', 'not_detected', 'detected'] as const) {
+    const markup = renderToStaticMarkup(
+      createElement(WebhookDiscoveryBadge, {
+        job: { status: 'registered', discovery: { ...discovery, relevance } },
+        compact: true
+      })
+    )
+    expect(markup, relevance).toContain('登録済み')
+    expect(markup, relevance).not.toContain('判定未確定')
+    expect(markup, relevance).not.toContain('対象外')
+    expect(markup, relevance).not.toContain('検出済み')
+  }
+  // 記録が無いときの登録済みと同じ描画になる。
+  const legacy = renderToStaticMarkup(
+    createElement(WebhookDiscoveryBadge, { job: { status: 'registered' }, compact: true })
+  )
+  const uncertain = renderToStaticMarkup(
+    createElement(WebhookDiscoveryBadge, {
+      job: { status: 'registered', discovery: { ...discovery, relevance: 'uncertain' } },
+      compact: true
+    })
+  )
+  expect(uncertain).toBe(legacy)
+  // 保留中で判定未確定のときは、従来どおり「判定未確定」と登録処理を出す。
+  const held = renderToStaticMarkup(
+    createElement(WebhookDiscoveryBadge, {
+      job: { status: 'held', discovery: { ...discovery, relevance: 'uncertain' } },
+      compact: true
+    })
+  )
+  expect(held).toContain('判定未確定')
+  expect(held).toContain('登録処理：保留')
+})
+
 test('Webhook受信履歴の画面文言に独自訳の「発見」と「原確率」を使わない', () => {
   const badges = (['detected', 'uncertain', 'not_detected'] as const).flatMap((relevance) =>
     [false, true].map((compact) =>

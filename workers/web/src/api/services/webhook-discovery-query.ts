@@ -19,10 +19,17 @@ const recordedRelevance = (alias: 'j' | 'c') => {
     THEN json_extract(${json},'$.discovery.relevance') ELSE NULL END)`
 }
 
+/**
+ * 保存された discovery は AI が判定した時点の記録で、人が連携して登録済みにしても書き換わらない。
+ * 表示の優先順位と同じく、登録済み（status='registered'）は AI の未確定・対象外より優先して 'detected' として数える。
+ */
+const effectiveRelevance = (alias: 'j' | 'c') =>
+  `(CASE WHEN ${alias}.status='registered' THEN 'detected' ELSE ${recordedRelevance(alias)} END)`
+
 /** 親の一覧表示と同じく、保存された子候補を優先して発見状態を集約する。 */
 export const webhookDiscoveryFilterClause = (value: WebhookDiscoveryFilter) => {
-  const child = recordedRelevance('c')
-  const parent = recordedRelevance('j')
+  const child = effectiveRelevance('c')
+  const parent = effectiveRelevance('j')
   const children = 'FROM webhook_event_candidates c WHERE c.post_id=j.post_id'
   const known = `(SELECT count(*) ${children} AND ${child} IS NOT NULL)`
   const relevance = `(CASE
