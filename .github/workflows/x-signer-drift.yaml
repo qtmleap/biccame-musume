@@ -30,10 +30,7 @@ concurrency:
 jobs:
   check:
     name: Check the X signer
-    # GitHub ホストのランナーでは x.com が 403 を返すので、org のセルフホストランナー(RTX 5060 グループ)で動かす。
-    # 起動条件は schedule と workflow_dispatch だけで fork の PR からは動かないため、public リポジトリでも self-hosted を使ってよい。
-    # トリガーに pull_request を追加してはいけない(fork の PR からセルフホストランナーでコードが動いてしまう)。
-    runs-on: [self-hosted, Linux, X64, docker]
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       # Prisma Client の生成と biome-plugins サブモジュールは、この確認が使う packages/shared/src/x/transaction に不要。
