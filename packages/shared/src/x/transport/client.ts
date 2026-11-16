@@ -4,7 +4,12 @@ import { ClientTransaction } from '../transaction'
 import { BOT_SCREEN_NAME, BROWSER_USER_AGENT, X_BEARER } from './constants'
 import { buildCreateTweetBody, CREATE_TWEET_PATH, CreateTweetResponseSchema, type TweetOptions } from './create-tweet'
 import { TwitterTransportError } from './errors'
-import { getCachedTransactionInputs, getTransactionId } from './signature'
+import {
+  getCachedTransactionInputs,
+  getTransactionId,
+  invalidateTransactionInputs,
+  isSignatureRejection
+} from './signature'
 import {
   type TwitterAccountInfo,
   USER_BY_SCREEN_NAME_PATH,
@@ -45,6 +50,8 @@ export class TwitterTransport {
       })
       if (!response.ok) {
         await response.body?.cancel()
+        // 再送はしない。次の呼び出しで署名材料を取り直せるよう、キャッシュだけ破棄する。
+        if (isSignatureRejection(response.status)) await invalidateTransactionInputs()
         throw new TwitterTransportError(response.status === 429 ? 'rate_limit' : 'rejected', response.status)
       }
       return response
@@ -127,6 +134,8 @@ export class TwitterTransport {
         console.warn('[Twitter] Quote tweet not allowed, retrying without quote:', { status: response.status })
         return await this.tweet(text, { ...opts, quoteTweetId: undefined })
       }
+      // 二重投稿を避けるため再送はしない。次の呼び出しで署名材料を取り直せるよう、キャッシュだけ破棄する。
+      if (isSignatureRejection(response.status)) await invalidateTransactionInputs()
       throw new TwitterTransportError(
         response.status === 429 ? 'rate_limit' : response.status >= 500 ? 'delivery_unknown' : 'rejected',
         response.status
@@ -154,37 +163,8 @@ export class TwitterTransport {
       throw new TwitterHealthError('missing_credentials')
     }
 
-    const path = '/1.1/account/settings.json'
-    let transactionId: string
-    try {
-      const inputs = await getCachedTransactionInputs()
-      transactionId = await ClientTransaction.create(inputs).generateTransactionId('GET', path)
-    } catch {
-      throw new TwitterHealthError('signature')
-    }
-
-    let response: Response
-    try {
-      response = await fetch(`https://api.x.com${path}`, {
-        method: 'GET',
-        redirect: 'manual',
-        signal: AbortSignal.timeout(15000),
-        headers: {
-          accept: 'application/json',
-          authorization: `Bearer ${X_BEARER}`,
-          cookie: `auth_token=${TWITTER_AUTH_TOKEN}; ct0=${TWITTER_CSRF_TOKEN}`,
-          referer: 'https://x.com/settings/account',
-          'user-agent': BROWSER_USER_AGENT,
-          'x-client-transaction-id': transactionId,
-          'x-csrf-token': TWITTER_CSRF_TOKEN,
-          'x-twitter-active-user': 'yes',
-          'x-twitter-auth-type': 'OAuth2Session',
-          'x-twitter-client-language': 'en'
-        }
-      })
-    } catch {
-      throw new TwitterHealthError('network')
-    }
+    const first = await this.requestAccountSettings()
+    const response = isSignatureRejection(first.status) ? await this.retryAccountSettings(first) : first
 
     if (response.status === 429) throw new TwitterHealthError('rate_limit', response.status)
     if (response.status === 401) throw new TwitterHealthError('authentication', response.status)
@@ -218,6 +198,56 @@ export class TwitterTransport {
     }
     if (parsed.data.screen_name.toLowerCase() !== BOT_SCREEN_NAME.toLowerCase()) {
       throw new TwitterHealthError('account_mismatch')
+    }
+  }
+
+  /** account/settings を署名付きで1回送る。署名の取得・生成の失敗は signature、通信の失敗は network に分類する。 */
+  private async requestAccountSettings(): Promise<Response> {
+    const { TWITTER_AUTH_TOKEN, TWITTER_CSRF_TOKEN } = this.env
+    const path = '/1.1/account/settings.json'
+    const transactionId = await (async () => {
+      try {
+        const inputs = await getCachedTransactionInputs()
+        return await ClientTransaction.create(inputs).generateTransactionId('GET', path)
+      } catch {
+        throw new TwitterHealthError('signature')
+      }
+    })()
+    try {
+      return await fetch(`https://api.x.com${path}`, {
+        method: 'GET',
+        redirect: 'manual',
+        signal: AbortSignal.timeout(15000),
+        headers: {
+          accept: 'application/json',
+          authorization: `Bearer ${X_BEARER}`,
+          cookie: `auth_token=${TWITTER_AUTH_TOKEN}; ct0=${TWITTER_CSRF_TOKEN}`,
+          referer: 'https://x.com/settings/account',
+          'user-agent': BROWSER_USER_AGENT,
+          'x-client-transaction-id': transactionId,
+          'x-csrf-token': TWITTER_CSRF_TOKEN,
+          'x-twitter-active-user': 'yes',
+          'x-twitter-auth-type': 'OAuth2Session',
+          'x-twitter-client-language': 'en'
+        }
+      })
+    } catch {
+      throw new TwitterHealthError('network')
+    }
+  }
+
+  /**
+   * 読み取り専用の settings 取得だけは、署名材料を取り直して1回だけ再送する（POST 系は再送しない）。
+   * 取り直しや再送そのものが失敗したときは、1回目の応答で従来どおり分類する。
+   */
+  private async retryAccountSettings(rejected: Response): Promise<Response> {
+    await invalidateTransactionInputs()
+    try {
+      const retried = await this.requestAccountSettings()
+      await rejected.body?.cancel().catch(() => {})
+      return retried
+    } catch {
+      return rejected
     }
   }
 
@@ -279,6 +309,7 @@ export class TwitterTransport {
 
     if (!response.ok) {
       await response.body?.cancel().catch(() => {})
+      if (isSignatureRejection(response.status)) await invalidateTransactionInputs()
       throw new TwitterTransportError(response.status === 429 ? 'rate_limit' : 'rejected', response.status)
     }
 

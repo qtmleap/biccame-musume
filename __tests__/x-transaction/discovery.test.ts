@@ -1,4 +1,5 @@
 import { afterEach, expect, spyOn, test } from 'bun:test'
+import { readFileSync } from 'node:fs'
 import {
   fetchHomePageHtml,
   fetchOnDemandFileText,
@@ -12,6 +13,12 @@ const root =
 const inlineEntry = (href: string) =>
   `<script nonce="n">!function(){var stylesheetHref="https://abs.twimg.com/x-web/x-web/assets/styles-a.css",entryHref="${href}";function startEntry(event){var script=document.createElement('script');script.src=entryHref;document.head.appendChild(script)}document.addEventListener('load',startEntry,true)}();document.currentScript.remove()</script>`
 const inlineRoot = inlineEntry('https://abs.twimg.com/x-web/x-web/entry-client-logged-out-abc.js')
+const assets = 'https://abs.twimg.com/x-web/x-web/assets'
+const entryUrl = 'https://abs.twimg.com/x-web/x-web/entry-client-logged-out-abc.js'
+// 実物の署名モジュールを抜粋した fixture。INDICES_REGEX に一致する式を4つ含む。
+const signerBody = readFileSync(`${import.meta.dir}/fixtures/x-web-sign.js`, 'utf8')
+// import() の位置が client-transaction から離れるよう、十分長い無関係な本文を挟む。
+const filler = `/*${'x'.repeat(3000)}*/`
 afterEach(() => {
   spyOn(globalThis, 'fetch').mockRestore()
 })
@@ -82,7 +89,7 @@ test('bounds module discovery on a cyclic graph', async () => {
       `import "./module${i + 1}.js"; import "./entry-client-logged-out-abc.js"`
   const fetch = network(routes)
   await expect(fetchOnDemandFileText(root)).rejects.toThrow('signer')
-  expect(fetch.mock.calls.length).toBeLessThanOrEqual(12)
+  expect(fetch.mock.calls.length).toBeLessThanOrEqual(16)
 })
 test('searches relevant siblings before unrelated dependency trees', async () => {
   network({
@@ -136,7 +143,7 @@ test('follows official HTTP homepage redirects', async () => {
   )
   expect((await fetchTransactionInputs()).homePageHtml).toBe(html)
 })
-test('caps broad import graphs at twelve module requests', async () => {
+test('caps broad import graphs at sixteen module requests', async () => {
   const routes: Record<string, string> = {
     'https://abs.twimg.com/x-web/x-web/entry-client-logged-out-abc.js': Array.from(
       { length: 20 },
@@ -146,7 +153,7 @@ test('caps broad import graphs at twelve module requests', async () => {
   for (let i = 0; i < 20; i++) routes[`https://abs.twimg.com/x-web/x-web/leaf${i}.js`] = 'export const x=1'
   const fetch = network(routes)
   await expect(fetchOnDemandFileText(root)).rejects.toThrow('signer')
-  expect(fetch.mock.calls).toHaveLength(12)
+  expect(fetch.mock.calls).toHaveLength(16)
 })
 test('preserves an empty migration POST through an official 307 redirect', async () => {
   const calls: Array<{ url: string; method: string | undefined; body: unknown }> = []
@@ -258,5 +265,55 @@ test('fetches only the valid entry when hostile entryHref values are mixed in', 
     'https://abs.twimg.com/x-web/x-web/assets/sign.o-mix.js': 'mixed signer'
   })
   expect(await fetchOnDemandFileText(html)).toBe('mixed signer')
+  expect(fetch.mock.calls).toHaveLength(2)
+})
+test('discovers a hash-named signer by its content near the client-transaction header', async () => {
+  const unrelated = Array.from({ length: 20 }, (_, i) => `import(\`./z${i}.js\`)`).join(',')
+  // 現行の x.com の形: 署名モジュールの動的 import が x-botox-client-transaction-id の約500文字手前にある
+  const appModule = `${unrelated};${filler}function Ll(){return Hl??=j(()=>import(\`./Bh8jTkH-.js\`).then(e=>e.default()),__vite__mapDeps([0])),Hl}${'a'.repeat(450)}{name:\`x-botox-client-transaction-id\`,preload(){Ll().catch(function(){})}}`
+  const routes: Record<string, string> = {
+    [entryUrl]: ['B644W4is', 'BXedN23Y', 'DxyhB25S', 'CmPnKq_-', 'Dlater1', 'Dlater2']
+      .map((name) => `import"./assets/${name}.js";`)
+      .join(''),
+    [`${assets}/B644W4is.js`]: 'export const a=1',
+    [`${assets}/BXedN23Y.js`]: 'export const b=1',
+    [`${assets}/DxyhB25S.js`]: 'export const c=1',
+    [`${assets}/CmPnKq_-.js`]: appModule,
+    [`${assets}/Dlater1.js`]: 'export const d=1',
+    [`${assets}/Dlater2.js`]: 'export const e=1',
+    [`${assets}/Bh8jTkH-.js`]: signerBody,
+    ...Object.fromEntries(Array.from({ length: 20 }, (_, i) => [`${assets}/z${i}.js`, 'export const z=1']))
+  }
+  const fetch = network(routes)
+  expect(await fetchOnDemandFileText(root)).toBe(signerBody)
+  // 署名より先に、無関係な zN.js やアプリモジュールより後ろのエントリ直下モジュールを取得しない
+  expect(fetch.mock.calls.map(([url]) => String(url))).toEqual([
+    entryUrl,
+    `${assets}/B644W4is.js`,
+    `${assets}/BXedN23Y.js`,
+    `${assets}/DxyhB25S.js`,
+    `${assets}/CmPnKq_-.js`,
+    `${assets}/Bh8jTkH-.js`
+  ])
+})
+test('uses the best priority when the same import appears far from and near the header', async () => {
+  // 近い出現を遠い出現が挟む(先勝ち・後勝ちでは優先度が落ちる)
+  const appModule = `import("./far.js");import("./Bh8jTkH-.js");${filler}import("./Bh8jTkH-.js");"x-botox-client-transaction-id";${filler}import("./Bh8jTkH-.js")`
+  const fetch = network({
+    [entryUrl]: 'import "./assets/app.js";',
+    [`${assets}/app.js`]: appModule,
+    [`${assets}/far.js`]: 'export const f=1',
+    [`${assets}/Bh8jTkH-.js`]: signerBody
+  })
+  expect(await fetchOnDemandFileText(root)).toBe(signerBody)
+  expect(fetch.mock.calls.map(([url]) => String(url))).toEqual([entryUrl, `${assets}/app.js`, `${assets}/Bh8jTkH-.js`])
+})
+test('does not accept a module with a single indices match as the signer', async () => {
+  const fetch = network({
+    [entryUrl]: 'import "./assets/Bh8jTkH-.js";',
+    // 添字式が1つだけでは行インデックスしか取れず、誤った鍵で黙って動いてしまう
+    [`${assets}/Bh8jTkH-.js`]: 'const a=I.x(e[25],16);'
+  })
+  await expect(fetchOnDemandFileText(root)).rejects.toThrow('signer')
   expect(fetch.mock.calls).toHaveLength(2)
 })
