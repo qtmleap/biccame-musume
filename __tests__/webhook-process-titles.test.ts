@@ -16,7 +16,7 @@ test('automatic registration falls back to the current title and still registers
   const harness = await titleHarness('webhook-title-fallback-test')
   const warn = spyOn(console, 'warn').mockImplementation(() => {})
   try {
-    const { ai, postOf, run } = harness
+    const { env, ai, postOf, run } = harness
     // 失敗の形と検査違反。どれも登録は成功し、題は今の形のまま、理由に title_fallback が付く。
     const failures: [string, () => Response | Promise<Response>][] = [
       ['HTTP 429', () => new Response('{"error":"rate_limited"}', { status: 429 })],
@@ -47,6 +47,8 @@ test('automatic registration falls back to the current title and still registers
       expect(job.candidate?.title, label).toBe(DEFAULT_TITLE)
       expect(job.reasons, label).toContain('title_fallback')
       expect(job.reasons, label).not.toContain('title_generated')
+      // 次のケースは別の配布。前日と同じ抽出名でも再告知と扱われないよう、終了を記録する。
+      await env.DB.prepare('UPDATE events SET ended_at=start_date WHERE id=?').bind(job.eventId).run()
     }
     // 理由の種類だけを警告に出し、本文・題・トークン・エラー本文は出さない
     const logged = warn.mock.calls.map((call) => String(call[0])).join('\n')
@@ -168,7 +170,7 @@ test('the title request has the right URL, headers, model and tool, and carries 
     await env.DB.batch(
       examples.map(([title, category]) => insert.bind(crypto.randomUUID(), category, title, now, now, now))
     )
-    const post = postOf(13)
+    const post = postOf(14)
     const second = await run(post)
     expect(second.job.status).toBe('registered')
     expect(ai.titles).toHaveLength(2)
@@ -217,7 +219,7 @@ test('the title request has the right URL, headers, model and tool, and carries 
     expect(message.content).toContain('入れてはいけない語（この店舗のキャラ名・店舗名）:')
     for (const term of ['アキバたん', 'AKIBA店']) expect(message.content, term).toContain(term)
     expect(message.content).toContain('カテゴリ: limited_card（期間限定・数量限定・記念の名刺）')
-    expect(message.content).toContain('開始日: 2026-10-13（10月）')
+    expect(message.content).toContain('開始日: 2026-10-14（10月）')
     expect(message.content).toContain(`投稿本文:\n${post.text}`)
     // 抽出した配布物の名前（item）も渡す。無いときの「事前に抽出したものはありません」にはならない
     expect(message.content).toContain('この配布物の題だけを付ける')

@@ -255,3 +255,42 @@ test('registration keeps multiple venues and target characters independent and s
     expect(stored.candidate?.characterIds).toEqual(request.characterIds)
   })
 })
+
+test('near duplicate scope includes ongoing and future events but requires matching giveaway identity', async () => {
+  await withRejudgeEnv(async (env) => {
+    const post = makeJob().post
+    await insertWebhookJob(env, post)
+    const token = await claimWebhookJob(env, post.id)
+    if (token === null) throw new Error('Expected a claimed job')
+    const job = await getWebhookJob(env, post.id)
+    const request = {
+      ...event,
+      uuid: job.eventUUID,
+      startDate: '2099-10-11T00:00:00+09:00',
+      endDate: '2099-10-15T23:59:59+09:00'
+    }
+    await registerWebhookEvent(env, job, request, token)
+    const repostUrl = 'https://x.com/bic_akiba/status/2109221721773576391'
+    const withStart = (startDate: string) => ({ ...request, uuid: crypto.randomUUID(), startDate, endDate: undefined })
+    const shifted = withStart('2099-10-10T00:00:00+09:00')
+    const overlapping = withStart('2099-10-14T00:00:00+09:00')
+    expect(await duplicateWebhookEvents(env, shifted, repostUrl, request.title)).toEqual([job.eventUUID])
+    expect(await duplicateWebhookEvents(env, overlapping, repostUrl, request.title)).toEqual([job.eventUUID])
+    expect(await duplicateWebhookEvents(env, shifted, repostUrl, '別の配布物')).toEqual([])
+    expect(
+      await duplicateWebhookEvents(env, { ...shifted, characterIds: ['funato'] }, repostUrl, request.title)
+    ).toEqual([])
+    expect(await duplicateWebhookEvents(env, { ...shifted, stores: ['funabashi'] }, repostUrl, request.title)).toEqual(
+      []
+    )
+    expect(await duplicateWebhookEvents(env, withStart('2099-10-17T00:00:00+09:00'), repostUrl, request.title)).toEqual(
+      []
+    )
+    const shiftStart = '2026-10-10T15:00:00.000+00:00'
+    await env.DB.prepare('UPDATE events SET start_date=? WHERE id=?').bind(shiftStart, job.eventUUID).run()
+    const ongoing = withStart('2026-10-14T00:00:00+09:00')
+    expect(await duplicateWebhookEvents(env, ongoing, repostUrl, request.title)).toEqual([job.eventUUID])
+    await env.DB.prepare('UPDATE events SET ended_at=? WHERE id=?').bind(shiftStart, job.eventUUID).run()
+    expect(await duplicateWebhookEvents(env, ongoing, repostUrl, request.title)).toEqual([])
+  })
+}, 60000)

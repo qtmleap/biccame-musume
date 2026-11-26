@@ -1,4 +1,6 @@
-export { duplicateWebhookEvents, webhookConditionIdentity, webhookItemIdentity } from './webhook-event-identity'
+export { duplicateWebhookEvents } from './webhook-duplicate-match'
+
+export { webhookConditionIdentity, webhookItemIdentity } from './webhook-event-identity'
 export { registerWebhookEvent, validateWebhookEvent } from './webhook-event-registration'
 export {
   claimWebhookJob,
