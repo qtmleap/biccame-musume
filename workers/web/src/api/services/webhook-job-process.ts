@@ -26,6 +26,24 @@ import { processWebhookCandidate } from './webhook-candidate-process'
 import { persistWebhookExtractionCandidates } from './webhook-extraction-candidates'
 import { detectionDeadline, LEGACY_ITEM, type ProcessOptions } from './webhook-processing-context'
 
+// 初回の抽出と保存済み抽出の再監査で、同じ送信・記録・エラー分類を使う。
+const judgeItemCount = async (
+  env: Bindings,
+  post: Parameters<typeof createItemCountRequest>[0],
+  token: string,
+  model: Awaited<ReturnType<typeof detectionConfiguration>>['model']
+) =>
+  inWebhookStage('item_count', async () => {
+    const request = createItemCountRequest(post, model)
+    await inWebhookStage('prompt_save', () =>
+      saveWebhookPromptAttempt(env, webhookTarget(post.id), token, EXTRACTION_VERSION, [request])
+    )
+    const raw: unknown = await detectionDeadline(env.AI.run(`@cf/cloudflare/${model}`, request))
+    const parsed = ClefResponseSchema.safeParse(raw)
+    if (!parsed.success) throw new Error('Invalid item count response')
+    return parsed.data
+  })
+
 // 再監査や参考文脈の更新を、新しくLLM抽出した履歴と偽らない。
 const sourceExtractionVersion = (value: unknown): string =>
   typeof value === 'object' &&
@@ -77,18 +95,7 @@ export const processWebhookJob = async (
         ])
       } else {
         const configuration = await detectionConfiguration(env)
-        const countResponse = await inWebhookStage('item_count', async () => {
-          const countRequest = createItemCountRequest(job.post, configuration.model)
-          await inWebhookStage('prompt_save', () =>
-            saveWebhookPromptAttempt(env, webhookTarget(postId), token, EXTRACTION_VERSION, [countRequest])
-          )
-          const countRaw: unknown = await detectionDeadline(
-            env.AI.run(`@cf/cloudflare/${configuration.model}`, countRequest)
-          )
-          const parsed = ClefResponseSchema.safeParse(countRaw)
-          if (!parsed.success) throw new Error('Invalid item count response')
-          return parsed.data
-        })
+        const countResponse = await judgeItemCount(env, job.post, token, configuration.model)
         // 抽出系の失敗は固有コード（extraction_*）のまま残る。それ以外の例外だけが extraction 段階になる。
         const extract = () =>
           inWebhookStage('extraction', async () =>
@@ -140,16 +147,7 @@ export const processWebhookJob = async (
       if (!storedExtraction.success) throw new Error('Invalid stored event extraction')
       const savedExtraction = validateEventExtraction(job.post, storedExtraction.data)
       const configuration = await detectionConfiguration(env)
-      const response = await inWebhookStage('item_count', async () => {
-        const request = createItemCountRequest(job.post, configuration.model)
-        await inWebhookStage('prompt_save', () =>
-          saveWebhookPromptAttempt(env, webhookTarget(postId), token, EXTRACTION_VERSION, [request])
-        )
-        const raw: unknown = await detectionDeadline(env.AI.run(`@cf/cloudflare/${configuration.model}`, request))
-        const parsed = ClefResponseSchema.safeParse(raw)
-        if (!parsed.success) throw new Error('Invalid item count response')
-        return parsed.data
-      })
+      const response = await judgeItemCount(env, job.post, token, configuration.model)
       const audit = auditItemCount(savedExtraction.events, response, configuration.itemCountThreshold)
       await env.DB.prepare('UPDATE webhook_event_jobs SET extraction_json=? WHERE post_id=? AND lease_token=?')
         .bind(

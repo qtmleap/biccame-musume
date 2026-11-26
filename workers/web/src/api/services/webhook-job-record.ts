@@ -172,19 +172,27 @@ export const getWebhookJob = async (env: Pick<Bindings, 'DB'>, postId: string): 
     itemCountAudit: storedItemCountAudit(row.extractionJson)
   }
 }
+const CandidateSelect = `SELECT ${JobColumns},j.item,j.store_key AS storeKey
+  FROM webhook_event_candidates j LEFT JOIN events e ON e.id=j.event_id`
+
+const toCandidate = (row: Record<string, unknown>): WebhookCandidate => {
+  const result = WebhookCandidateSchema.safeParse({ ...toJob(row), item: row.item, storeKey: row.storeKey })
+  if (!result.success) throw new Error('Invalid stored webhook candidate')
+  return result.data
+}
+
 /** 一覧の候補をページ単位で取得し、投稿ごとの並列クエリを発行しない。投稿IDは最大100件。 */
 export const webhookCandidatesByPostIds = async (env: Pick<Bindings, 'DB'>, postIds: readonly string[]) => {
   const byPostId = new Map<string, WebhookCandidate[]>(postIds.map((postId) => [postId, []]))
   if (postIds.length === 0) return byPostId
   const rows = await env.DB.prepare(
-    `SELECT ${JobColumns},j.item,j.store_key AS storeKey FROM webhook_event_candidates j LEFT JOIN events e ON e.id=j.event_id WHERE j.post_id IN (${postIds.map(() => '?').join(',')}) ORDER BY j.created_at,j.event_uuid`
+    `${CandidateSelect} WHERE j.post_id IN (${postIds.map(() => '?').join(',')}) ORDER BY j.created_at,j.event_uuid`
   )
     .bind(...postIds)
     .all()
   for (const row of rows.results) {
-    const candidate = WebhookCandidateSchema.safeParse({ ...toJob(row), item: row.item, storeKey: row.storeKey })
-    if (!candidate.success) throw new Error('Invalid stored webhook candidate')
-    byPostId.get(candidate.data.postId)?.push(candidate.data)
+    const candidate = toCandidate(row)
+    byPostId.get(candidate.postId)?.push(candidate)
   }
   return byPostId
 }
@@ -199,7 +207,9 @@ export const getWebhookCandidate = async (
   postId: string,
   candidateId: string
 ): Promise<WebhookJob> => {
-  const candidate = (await webhookCandidates(env, postId)).find((value) => value.eventUUID === candidateId)
-  if (!candidate) throw new HTTPException(404, { message: 'Webhook candidate not found' })
-  return { ...candidate, candidates: [] }
+  const row = await env.DB.prepare(`${CandidateSelect} WHERE j.post_id=? AND j.event_uuid=?`)
+    .bind(postId, candidateId)
+    .first()
+  if (row === null) throw new HTTPException(404, { message: 'Webhook candidate not found' })
+  return { ...toCandidate(row), candidates: [] }
 }

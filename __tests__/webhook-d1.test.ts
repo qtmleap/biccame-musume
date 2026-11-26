@@ -4,6 +4,7 @@ import { readAtomicManualEvent } from '@api/services/event-service'
 import {
   claimWebhookJob,
   duplicateWebhookEvents,
+  getWebhookCandidate,
   getWebhookJob,
   insertWebhookJob,
   listWebhookJobs,
@@ -294,3 +295,22 @@ test('near duplicate scope includes ongoing and future events but requires match
     expect(await duplicateWebhookEvents(env, ongoing, repostUrl, request.title)).toEqual([])
   })
 }, 60000)
+
+test('reading one candidate does not decode unrelated sibling rows and checks its parent', async () => {
+  await withRejudgeEnv(async (env) => {
+    const { post } = makeJob()
+    await insertWebhookJob(env, post)
+    const insert = env.DB.prepare(
+      `INSERT INTO webhook_event_candidates(event_uuid,post_id,item,post_json,source_url,status,created_at,updated_at)
+       VALUES (?,?,?,?,?,'queued',?,?)`
+    )
+    const selected = crypto.randomUUID()
+    const sibling = crypto.randomUUID()
+    await env.DB.batch([
+      insert.bind(selected, post.id, '対象配布物', JSON.stringify(post), post.url, 2, 2),
+      insert.bind(sibling, post.id, '別の配布物', 'invalid json', post.url, 1, 1)
+    ])
+    expect(await getWebhookCandidate(env, post.id, selected)).toMatchObject({ eventUUID: selected, candidates: [] })
+    await expect(getWebhookCandidate(env, '1000', selected)).rejects.toThrow('Webhook candidate not found')
+  })
+})
