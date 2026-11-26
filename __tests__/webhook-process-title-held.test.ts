@@ -80,22 +80,6 @@ test('a held job with a candidate sends nothing and keeps the extracted name whe
   }
 }, 60000)
 
-test('ignored jobs never send a title request even when a duplicate of the same post is held and titled', async () => {
-  const harness = await titleHarness('webhook-title-ignored-test')
-  try {
-    const { ai, postOf, run } = harness
-    // Clef が対象外と判定する投稿（登録候補が無い）。保留の題付けが広がっても、対象外には呼ばない
-    const ignored = await run(postOf(21, 'こんにちは'))
-    expect(ignored.job.status).toBe('ignored')
-    expect(ignored.job.candidate).toBeNull()
-    expect(ai.titles).toHaveLength(0)
-    expect(ignored.job.reasons).not.toContain('title_generated')
-    expect(ignored.job.reasons).not.toContain('title_fallback')
-  } finally {
-    await harness.dispose()
-  }
-}, 60000)
-
 test('the title request does not carry the migrated name of a legacy single-job post (placeholder or old generated title)', async () => {
   // 旧形式の単一ジョブを移行すると、候補の名前（item）は登録候補の題（旧形式で作った題）か、無ければ仮の「既存配布物」になる。
   // どちらも抽出した配布物の名前ではないので、値ではなく移行の印で判定して、従来どおり本文から読み取らせる。

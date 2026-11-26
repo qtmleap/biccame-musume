@@ -1,6 +1,5 @@
 import {
   enqueueWebhookJob,
-  getWebhookCandidate,
   getWebhookJob,
   refreshWebhookJob,
   registerWebhookEvent,
@@ -24,17 +23,23 @@ import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod'
 
 /** 操作の対象を決める。候補を選んでいればその候補、候補が1件ならその候補、候補が無ければ投稿そのもの。複数候補で未指定なら 409。 */
-export const actionJob = async (env: Bindings, postId: string, candidateId?: string): Promise<WebhookJob> => {
-  const parent = await getWebhookJob(env, postId)
-  if (candidateId !== undefined) return getWebhookCandidate(env, postId, candidateId)
+const selectActionJob = (parent: WebhookJob, candidateId?: string): WebhookJob => {
+  if (candidateId !== undefined) {
+    const selected = parent.candidates.find((candidate) => candidate.eventUUID === candidateId)
+    if (selected === undefined) throw new HTTPException(404, { message: 'Webhook candidate not found' })
+    return { ...selected, relatedEvents: null, candidates: [] }
+  }
   if (parent.candidates.length > 1) throw new HTTPException(409, { message: 'Select a webhook candidate' })
   const first = parent.candidates[0]
   return first === undefined ? parent : { ...first, candidates: [] }
 }
 
+export const actionJob = async (env: Bindings, postId: string, candidateId?: string): Promise<WebhookJob> =>
+  selectActionJob(await getWebhookJob(env, postId), candidateId)
+
 export const retryWebhookJob = async (env: Bindings, postId: string, input: z.infer<typeof WebhookRetrySchema>) => {
   const parent = await getWebhookJob(env, postId)
-  const job = await actionJob(env, postId, input.candidateId)
+  const job = selectActionJob(parent, input.candidateId)
   const target = webhookTarget(postId, parent.candidates.length > 0 ? job.eventUUID : undefined)
   if (input.notificationOnly && job.status !== 'held' && job.status !== 'registered')
     throw new HTTPException(409, { message: 'No notification to retry' })
@@ -128,7 +133,7 @@ const rejudgeableRow = (table: 'webhook_event_jobs' | 'webhook_event_candidates'
  */
 export const rejudgeWebhookJob = async (env: Bindings, postId: string, candidateId?: string) => {
   const parent = await getWebhookJob(env, postId)
-  const job = await actionJob(env, postId, candidateId)
+  const job = selectActionJob(parent, candidateId)
   const now = dayjs().valueOf()
   // リースは読み取りの DTO に無いので、ここでは更新時刻だけで見る。リース中かどうかは、下の UPDATE の条件（STALLED_JUDGING_ROW とロック）が最終的に決める。
   const stalled = isStalledWebhookJudging({
@@ -232,7 +237,7 @@ export const rejudgeWebhookJob = async (env: Bindings, postId: string, candidate
 
 export const resolveWebhookJob = async (env: Bindings, postId: string, input: z.infer<typeof WebhookResolveSchema>) => {
   const parent = await getWebhookJob(env, postId)
-  const job = await actionJob(env, postId, input.candidateId)
+  const job = selectActionJob(parent, input.candidateId)
   const target = webhookTarget(postId, parent.candidates.length > 0 ? job.eventUUID : undefined)
   // 保留以外で許可するのは明示連携だけ。対象外からの連携と、登録済みの連携し直し（付け替え）を許す。登録と却下は保留のみ。
   // 連携は連携先のイベント本体を変えず announce 参照URLを足すだけ。例外は終了判定（postStatus が end）の投稿で、end 参照URL・ended_at・更新投稿も同じ batch で反映する。

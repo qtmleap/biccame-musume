@@ -1,15 +1,6 @@
 import { detectionThresholds, runWebhookDetection } from '@api/services/webhook-detection-run'
 import { inWebhookStage, markWebhookStage } from '@api/services/webhook-failure-stage'
-import {
-  duplicateWebhookEvents,
-  getWebhookCandidate,
-  registerWebhookEvent,
-  storedJson,
-  validateWebhookEvent,
-  type WebhookTarget,
-  webhookConditionIdentity,
-  webhookItemIdentity
-} from '@api/services/webhook-jobs'
+import { getWebhookCandidate, storedJson, type WebhookTarget } from '@api/services/webhook-jobs'
 import { proposeWebhookLinkedEvent } from '@api/services/webhook-linked-event'
 import { saveWebhookPromptAttempt } from '@api/services/webhook-prompt'
 import { generateEventTitle } from '@api/services/webhook-title'
@@ -24,10 +15,12 @@ import dayjs from 'dayjs'
 import { autoLinkWebhookCandidate } from './webhook-auto-link'
 import { canAutoRegisterWebhookCandidate } from './webhook-auto-registration'
 import { recordWebhookDiscovery, synchronizeWebhookDiscovery } from './webhook-discovery-record'
+import { duplicateReasons, duplicateWebhookEvents } from './webhook-duplicate-match'
 import { webhookProcessingErrorCode } from './webhook-extraction'
 import { isLegacyWebhookRegisterRetry } from './webhook-item-count-review'
 import { NotificationRetry, notifyWebhookJob } from './webhook-notification'
 import { eventCandidate, type ProcessOptions } from './webhook-processing-context'
+import { registerUnmatchedWebhookEvent, reserveWebhookRegistration } from './webhook-registration-guard'
 
 export const processWebhookCandidate = async (
   env: Bindings,
@@ -122,7 +115,6 @@ export const processWebhookCandidate = async (
       result.status === 'ignored' || !result.candidate
         ? null
         : eventCandidate({ ...result.candidate, title: item }, job.eventUUID)
-    const duplicates = candidate === null ? [] : await duplicateWebhookEvents(env, candidate, job.sourceUrl, item)
     const judged = await currentJob()
     const discoveryRecorded = judged.discovery !== undefined && judged.discovery !== null
     const allowed =
@@ -133,41 +125,19 @@ export const processWebhookCandidate = async (
         candidate,
         judged.discovery === undefined ? null : judged.discovery
       )
+    // 近似照合は自動新規登録だけに適用し、終了・継続の連携には影響させない。
+    const duplicates =
+      candidate === null ? [] : await duplicateWebhookEvents(env, candidate, job.sourceUrl, item, allowed)
     const baseReasons = [
       ...result.reasons,
       ...(result.status === 'register' && candidate !== null && !allowed ? ['auto_registration_not_allowed'] : []),
       ...(result.status === 'register' && candidate === null ? ['invalid_event_candidate'] : []),
-      ...duplicates.map((id) => `possible_duplicate:${id}`)
+      ...duplicateReasons(duplicates)
     ]
-    const canRegister = allowed && duplicates.length === 0
-    // 同じ店舗・種別・開始日の別投稿が登録済みなら保留にする。この判定とスロットの予約は、タイトルを付ける（LLM を呼ぶ）前に済ませる。
-    const semantic =
-      canRegister && candidate !== null
-        ? JSON.stringify([
-            candidate.stores.slice().sort(),
-            candidate.characterIds.slice().sort(),
-            candidate.category,
-            candidate.startDate,
-            webhookItemIdentity(item),
-            webhookConditionIdentity(candidate)
-          ])
-        : null
-    const existing =
-      semantic === null
-        ? null
-        : await env.DB.prepare(
-            `SELECT event_uuid AS eventUUID,post_id AS postId FROM ${target.table} WHERE semantic_key=?`
-          )
-            .bind(semantic)
-            .first<{ eventUUID: string; postId: string }>()
-    const duplicatePostId = existing !== null && existing.eventUUID !== job.eventUUID ? existing.postId : null
-    const registering = canRegister && candidate !== null && semantic !== null && duplicatePostId === null
-    // 登録に進む投稿は、タイトルの通信（最大 20 秒）より前に同じイベントの枠を押さえる（同じイベントの別投稿が同時に登録に進まないように）。
-    if (registering && semantic !== null) {
-      await env.DB.prepare(`UPDATE ${target.table} SET semantic_key=? WHERE ${target.column}=? AND lease_token=?`)
-        .bind(semantic, target.id, token)
-        .run()
-    }
+    const registration = { job, target, token, item }
+    const canRegister = allowed && duplicates.length === 0 && candidate !== null
+    // タイトル生成前に一致キーを予約し、書き込み直前に既存イベントをもう一度照合する。
+    const duplicatePostId = canRegister ? await reserveWebhookRegistration(env, registration, candidate) : null
     // 登録候補（candidate）が作れたときは、自動登録に進むものも、重複などで保留になるもの（人が補完して登録する）も、
     // イベントのタイトルを Claude に付けさせる。candidate が無い（対象外・日付やカテゴリが決まらない）ときは呼ばない。
     // 配布物の名前（item）を渡して、同じ投稿の配布物どうしで別の題になるようにする。失敗・未設定なら今の形のタイトルのまま。
@@ -201,22 +171,20 @@ export const processWebhookCandidate = async (
         token
       )
       .run()
-    if (registering && registered !== null) {
-      await inWebhookStage('registration', async () =>
-        registerWebhookEvent(env, await currentJob(), validateWebhookEvent(registered, job.eventUUID), token, target)
-      )
-    } else if (duplicatePostId !== null) {
+    const registrationReasons =
+      canRegister && registered !== null && duplicatePostId === null
+        ? await inWebhookStage('registration', async () =>
+            registerUnmatchedWebhookEvent(env, { ...registration, job: await currentJob() }, registered)
+          )
+        : null
+    const conflicts = duplicatePostId === null ? registrationReasons : [`possible_duplicate_post:${duplicatePostId}`]
+    if (conflicts !== null && conflicts.length > 0) {
       await env.DB.prepare(
-        `UPDATE ${target.table} SET status='held',reasons_json=?,updated_at=? WHERE ${target.column}=? AND lease_token=?`
+        `UPDATE ${target.table} SET status='held',semantic_key=NULL,reasons_json=?,updated_at=? WHERE ${target.column}=? AND lease_token=?`
       )
-        .bind(
-          JSON.stringify([...reasons, `possible_duplicate_post:${duplicatePostId}`]),
-          dayjs().valueOf(),
-          target.id,
-          token
-        )
+        .bind(JSON.stringify([...reasons, ...conflicts]), dayjs().valueOf(), target.id, token)
         .run()
-    } else {
+    } else if (conflicts === null) {
       // 保留のうち、理由が状態（終了・継続）だけで、提案の確率がしきい値以上のものは、提案の連携先へ自動で連携する（通知は出さない）。
       // 連携できなかったとき（条件を満たさない・競合）は、通常どおり保留にして人に回す。
       const linked =

@@ -121,12 +121,12 @@ describe('止まっている処理待ち・処理中の再実行（単一のジ�
       const postId = await seedRejudgeJob(env, 1, judging('processing'))
       const original = webhookJobs.getWebhookJob
       const reads: string[] = []
-      // rejudgeWebhookJob は更新の前に getWebhookJob を 2 回読む（親、操作の対象）。最後の読み取りの直後に、別の処理が再開して
-      // updated_at を進めた状態を作る（読み取り後・更新前の競合）。読み取った内容は止まっている古い値のまま返す。
+      // 親のスナップショットを読み取った直後に、別処理が再開して updated_at を進める。
+      // 再判定には読み取り時点の古い値を返し、更新側の条件で競合を拒否させる。
       const resumed = spyOn(webhookJobs, 'getWebhookJob').mockImplementation(async (database, id) => {
         const read = await original(database, id)
         reads.push(id)
-        if (reads.length === 2)
+        if (reads.length === 1)
           await database.DB.prepare('UPDATE webhook_event_jobs SET updated_at=? WHERE post_id=?')
             .bind(dayjs().valueOf(), id)
             .run()
@@ -140,7 +140,7 @@ describe('止まっている処理待ち・処理中の再実行（単一のジ�
       } finally {
         resumed.mockRestore()
       }
-      expect(reads).toEqual([postId, postId])
+      expect(reads).toEqual([postId])
       const after = await rawRejudgeRow(env, postId)
       // 再実行は何も消しておらず、再開した処理の結果と状態がそのまま残る。
       expect(after).toMatchObject({ status: 'processing', answers_json: '{"is_event":{"type":"noul","noul":0.72}}' })
