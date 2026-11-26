@@ -153,14 +153,20 @@ export const storedItemCountAudit = (value: unknown) => {
   }
 }
 
-export const getWebhookJob = async (env: Pick<Bindings, 'DB'>, postId: string): Promise<WebhookJob> => {
+/** キューが使う保存状態。管理画面向けの候補集約や元投稿検索はしない。 */
+export const getWebhookJobForProcessing = async (env: Pick<Bindings, 'DB'>, postId: string) => {
   const row = await env.DB.prepare(
-    `SELECT ${JobColumns},j.extraction_json AS extractionJson FROM ${JobTables} WHERE j.post_id=?`
+    `SELECT ${JobColumns},j.extraction_json AS extractionJson,j.lease_until AS leaseUntil
+      FROM ${JobTables} WHERE j.post_id=?`
   )
     .bind(postId)
-    .first()
+    .first<{ extractionJson: string | null; resultJson: string | null; leaseUntil: number | null }>()
   if (row === null) throw new HTTPException(404, { message: 'Webhook job not found' })
-  const job = toJob(row)
+  return { job: toJob(row), extractionJson: row.extractionJson, resultJson: row.resultJson, leaseUntil: row.leaseUntil }
+}
+
+export const getWebhookJob = async (env: Pick<Bindings, 'DB'>, postId: string): Promise<WebhookJob> => {
+  const { job, extractionJson } = await getWebhookJobForProcessing(env, postId)
   const candidates = await webhookCandidates(env, postId)
   const related = await relatedWebhookEvents(env, job.post)
   const relatedEvents = related.length === 0 ? null : { basis: 'source_reference' as const, events: related }
@@ -169,7 +175,7 @@ export const getWebhookJob = async (env: Pick<Bindings, 'DB'>, postId: string): 
     discovery: aggregateWebhookDiscovery(job.discovery, candidates),
     candidates: candidates.map((candidate) => ({ ...candidate, relatedEvents })),
     relatedEvents,
-    itemCountAudit: storedItemCountAudit(row.extractionJson)
+    itemCountAudit: storedItemCountAudit(extractionJson)
   }
 }
 const CandidateSelect = `SELECT ${JobColumns},j.item,j.store_key AS storeKey

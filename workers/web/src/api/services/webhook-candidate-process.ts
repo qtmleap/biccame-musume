@@ -125,7 +125,7 @@ export const processWebhookCandidate = async (
         candidate,
         judged.discovery === undefined ? null : judged.discovery
       )
-    // The wider lookup only affects automatic creation, never end/update linking.
+    // 近似照合は自動新規登録だけに適用し、終了・継続の連携には影響させない。
     const duplicates =
       candidate === null ? [] : await duplicateWebhookEvents(env, candidate, job.sourceUrl, item, allowed)
     const baseReasons = [
@@ -136,7 +136,7 @@ export const processWebhookCandidate = async (
     ]
     const registration = { job, target, token, item }
     const canRegister = allowed && duplicates.length === 0 && candidate !== null
-    // Claim the exact slot before calling the title model. The live duplicate check runs again before writing.
+    // タイトル生成前に一致キーを予約し、書き込み直前に既存イベントをもう一度照合する。
     const duplicatePostId = canRegister ? await reserveWebhookRegistration(env, registration, candidate) : null
     // 登録候補（candidate）が作れたときは、自動登録に進むものも、重複などで保留になるもの（人が補完して登録する）も、
     // イベントのタイトルを Claude に付けさせる。candidate が無い（対象外・日付やカテゴリが決まらない）ときは呼ばない。

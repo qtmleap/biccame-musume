@@ -19,7 +19,7 @@ type Row = {
   exact: number
 }
 
-/** Exact matches preserve the old behavior, including matching historical references. */
+/** 完全一致の判定は、終了済みイベントへの参照を含め従来どおりとする。 */
 export const duplicateScope = (event: EventRequest, sourceUrl: string, includeNear: boolean): DuplicateScope => {
   const start = toD1DateTime(event.startDate)
   const day = dayjs(event.startDate)

@@ -69,7 +69,7 @@ export const registerWebhookEvent = async (
     .first<{ answers_json: string | null }>()
   if (audit === null) throw new Error('Webhook job disappeared')
   const predicate = `EXISTS (SELECT 1 FROM ${target.table} WHERE ${target.column}=? AND lease_token=? AND status IN ('processing','held'))`
-  // A committed event not visible to the matcher invalidates its decision. Guard only automatic writes.
+  // 自動登録だけを対象に、照合後に対象イベントが追加されたら書き込みを止める。
   const noNewCandidates =
     duplicateSnapshot === undefined
       ? ''

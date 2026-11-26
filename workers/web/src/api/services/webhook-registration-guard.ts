@@ -21,7 +21,7 @@ export const reserveWebhookRegistration = async (
     webhookItemIdentity(item),
     webhookConditionIdentity(candidate)
   ])
-  // The uniqueness check and its update run in the same SQLite statement.
+  // キーの重複確認と予約を同じ SQL 文で実行する。
   const [reservation, owner] = await env.DB.batch<{ postId: string }>([
     env.DB.prepare(`UPDATE ${target.table} SET semantic_key=? WHERE ${target.column}=? AND lease_token=?
       AND NOT EXISTS (SELECT 1 FROM ${target.table} WHERE semantic_key=? AND event_uuid<>?)`).bind(
@@ -42,17 +42,18 @@ export const reserveWebhookRegistration = async (
   throw new Error('Webhook registration lease lost')
 }
 
-/** Retry only when the set of events examined by the matcher changed before the write. */
+/** 照合済みの候補集合が書き込み前に変わったときだけ再試行する。 */
 export const registerUnmatchedWebhookEvent = async (
   env: Bindings,
   { job, target, token, item }: RegistrationContext,
   candidate: EventRequest
 ): Promise<string[]> => {
   const event = validateWebhookEvent(candidate, job.eventUUID)
-  for (let attempt = 0; attempt < 3; attempt++) {
+  const attempt = async (remaining: number): Promise<string[]> => {
+    if (remaining === 0) throw new Error('Webhook duplicate candidates changed during registration')
     const snapshot = await inspectWebhookDuplicates(env, event, job.sourceUrl, item)
     if (snapshot.duplicates.length > 0) return duplicateReasons(snapshot.duplicates)
-    if (await registerWebhookEvent(env, job, event, token, target, snapshot)) return []
+    return (await registerWebhookEvent(env, job, event, token, target, snapshot)) ? [] : attempt(remaining - 1)
   }
-  throw new Error('Webhook duplicate candidates changed during registration')
+  return attempt(3)
 }

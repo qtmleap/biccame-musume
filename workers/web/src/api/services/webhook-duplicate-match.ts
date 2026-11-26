@@ -21,7 +21,7 @@ const exactDuplicate = (row: Existing, event: EventRequest, item: string | undef
   )
 }
 
-/** Generic conditions (e.g. everyone) alone are not evidence of a repost. */
+/** 「全員」などの一般的な配布条件の一致だけでは再告知とみなさない。 */
 const nearDuplicate = (row: Existing, event: EventRequest, item: string | undefined) => {
   if (item === undefined) return false
   if (

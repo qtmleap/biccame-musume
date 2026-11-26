@@ -1,4 +1,6 @@
 import { expect, test } from 'bun:test'
+import { getWebhookJobForProcessing } from '@api/services/webhook-job-record'
+import { getWebhookJob, insertWebhookJob } from '@api/services/webhook-jobs'
 import { relatedWebhookEvents, webhookReferencedPostIds } from '@api/services/webhook-related-events'
 import { event, makeJob, withRejudgeEnv } from './fixtures/webhook-d1-jobs'
 
@@ -52,6 +54,12 @@ test('参照投稿が登録済みイベントに直接一致した時だけ連�
     const found = await relatedWebhookEvents(env, { ...post(), quoted: { id: sourceId } })
     expect(found).toHaveLength(1)
     expect(found[0]).toMatchObject({ eventId: event.uuid, title: '元の名刺イベント' })
+    const incoming = { ...post(), quoted: { id: sourceId } }
+    await insertWebhookJob(env, incoming)
+    const processing = await getWebhookJobForProcessing(env, incoming.id)
+    expect(processing.job.relatedEvents).toBeNull()
+    expect(processing.job.post.quoted?.id).toBe(sourceId)
+    expect((await getWebhookJob(env, incoming.id)).relatedEvents?.events).toEqual(found)
     expect(await env.DB.prepare('SELECT count(*) AS total FROM event_reference_urls').first<number>('total')).toBe(
       before
     )
