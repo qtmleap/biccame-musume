@@ -3,7 +3,6 @@ import { extractWebhookEvents, webhookProcessingErrorCode } from '@api/services/
 import { inWebhookStage, markWebhookStage } from '@api/services/webhook-failure-stage'
 import {
   claimWebhookJob,
-  getWebhookJob,
   refreshWebhookJob,
   releaseWebhookJob,
   storedJson,
@@ -24,7 +23,27 @@ import {
 import dayjs from 'dayjs'
 import { processWebhookCandidate } from './webhook-candidate-process'
 import { persistWebhookExtractionCandidates } from './webhook-extraction-candidates'
+import { getWebhookJobForProcessing, webhookCandidates } from './webhook-job-record'
 import { detectionDeadline, LEGACY_ITEM, type ProcessOptions } from './webhook-processing-context'
+
+// 初回の抽出と保存済み抽出の再監査で、同じ送信・記録・エラー分類を使う。
+const judgeItemCount = async (
+  env: Bindings,
+  post: Parameters<typeof createItemCountRequest>[0],
+  postId: string,
+  token: string,
+  model: Awaited<ReturnType<typeof detectionConfiguration>>['model']
+) =>
+  inWebhookStage('item_count', async () => {
+    const request = createItemCountRequest(post, model)
+    await inWebhookStage('prompt_save', () =>
+      saveWebhookPromptAttempt(env, webhookTarget(postId), token, EXTRACTION_VERSION, [request])
+    )
+    const raw: unknown = await detectionDeadline(env.AI.run(`@cf/cloudflare/${model}`, request))
+    const parsed = ClefResponseSchema.safeParse(raw)
+    if (!parsed.success) throw new Error('Invalid item count response')
+    return parsed.data
+  })
 
 // 再監査や参考文脈の更新を、新しくLLM抽出した履歴と偽らない。
 const sourceExtractionVersion = (value: unknown): string =>
@@ -38,13 +57,10 @@ const sourceExtractionVersion = (value: unknown): string =>
 
 /** リースを取れなかったとき、キューに再試行までの秒数として返す値。待つ必要が無ければ null。 */
 const leaseRetryDelay = async (env: Bindings, postId: string): Promise<number | null> => {
-  const job = await getWebhookJob(env, postId)
+  const { job, leaseUntil } = await getWebhookJobForProcessing(env, postId)
   const waiting = ['queued', 'processing', 'failed'].includes(job.status) || job.notificationStatus === 'pending'
   if (!waiting) return null
-  const lease = await env.DB.prepare('SELECT lease_until FROM webhook_event_jobs WHERE post_id=?')
-    .bind(postId)
-    .first<number>('lease_until')
-  return lease === null ? 30 : Math.max(1, Math.ceil((lease - dayjs().valueOf()) / 1000) + 1)
+  return leaseUntil === null ? 30 : Math.max(1, Math.ceil((leaseUntil - dayjs().valueOf()) / 1000) + 1)
 }
 
 export const processWebhookJob = async (
@@ -56,14 +72,11 @@ export const processWebhookJob = async (
   const token = await inWebhookStage('claim', () => claimWebhookJob(env, postId))
   if (token === null) return await inWebhookStage('claim', () => leaseRetryDelay(env, postId))
   try {
-    const job = await getWebhookJob(env, postId)
-    const stored = await env.DB.prepare('SELECT extraction_json,result_json FROM webhook_event_jobs WHERE post_id=?')
-      .bind(postId)
-      .first<{ extraction_json: string | null; result_json: string | null }>()
-    if (!stored) throw new Error('Webhook job disappeared')
-    if (stored.extraction_json === null && job.candidates.length === 0) {
+    const { job, extractionJson, resultJson } = await getWebhookJobForProcessing(env, postId)
+    const storedCandidates = await webhookCandidates(env, postId)
+    if (extractionJson === null && storedCandidates.length === 0) {
       // 移行後に旧形式の判定が保存された場合も、成功済みイベントを作り直さない。
-      if (stored.result_json !== null || job.eventId !== null) {
+      if (resultJson !== null || job.eventId !== null) {
         await env.DB.batch([
           env.DB.prepare(`INSERT INTO webhook_event_candidates (event_uuid,post_id,item,post_json,source_url,status,reasons_json,result_json,candidate_json,answers_json,requests_json,model,question_version,confidence,judged_at,event_id,semantic_key,attempts,notification_status,notification_id,notification_error,notification_attempts,last_error,created_at,updated_at)
             SELECT event_uuid,post_id,?,post_json,source_url,status,reasons_json,result_json,candidate_json,answers_json,requests_json,model,question_version,confidence,judged_at,event_id,semantic_key,attempts,notification_status,notification_id,notification_error,notification_attempts,last_error,created_at,updated_at FROM webhook_event_jobs WHERE post_id=? AND lease_token=?`).bind(
@@ -77,18 +90,7 @@ export const processWebhookJob = async (
         ])
       } else {
         const configuration = await detectionConfiguration(env)
-        const countResponse = await inWebhookStage('item_count', async () => {
-          const countRequest = createItemCountRequest(job.post, configuration.model)
-          await inWebhookStage('prompt_save', () =>
-            saveWebhookPromptAttempt(env, webhookTarget(postId), token, EXTRACTION_VERSION, [countRequest])
-          )
-          const countRaw: unknown = await detectionDeadline(
-            env.AI.run(`@cf/cloudflare/${configuration.model}`, countRequest)
-          )
-          const parsed = ClefResponseSchema.safeParse(countRaw)
-          if (!parsed.success) throw new Error('Invalid item count response')
-          return parsed.data
-        })
+        const countResponse = await judgeItemCount(env, job.post, postId, token, configuration.model)
         // 抽出系の失敗は固有コード（extraction_*）のまま残る。それ以外の例外だけが extraction 段階になる。
         const extract = () =>
           inWebhookStage('extraction', async () =>
@@ -108,11 +110,9 @@ export const processWebhookJob = async (
           persistWebhookExtractionCandidates(env, job, token, extraction, itemCountAudit)
         )
       }
-    }
-    const initialCandidates = (await getWebhookJob(env, postId)).candidates
-    // 旧監査で候補作成前に停止した履歴も、保存根拠を保って確認対象へ戻す。
-    if (stored.extraction_json !== null && initialCandidates.length === 0) {
-      const envelope = storedJson(stored.extraction_json)
+    } else if (extractionJson !== null && storedCandidates.length === 0) {
+      // 旧監査で候補作成前に停止した履歴も、保存根拠を保って確認対象へ戻す。
+      const envelope = storedJson(extractionJson)
       const parsed = EventExtractionSchema.safeParse(envelope)
       const audit = ItemCountAuditSchema.safeParse(
         typeof envelope === 'object' && envelope !== null && 'itemCountAudit' in envelope
@@ -125,7 +125,7 @@ export const processWebhookJob = async (
         persistWebhookExtractionCandidates(env, job, token, extraction, audit.data, sourceExtractionVersion(envelope))
       )
     }
-    const candidates = (await getWebhookJob(env, postId)).candidates
+    const candidates = storedCandidates.length === 0 ? await webhookCandidates(env, postId) : storedCandidates
     // 旧単一ジョブの移行の印（この実行で移行した場合を含む）。候補の名前の値では判定しない（旧形式の題が入ることがある）。
     const legacy =
       (await env.DB.prepare(
@@ -134,22 +134,13 @@ export const processWebhookJob = async (
         .bind(postId)
         .first()) !== null
     // 旧候補は明示的な再判定時だけ件数を監査し、登録済みUUIDや配布内容は変えない。
-    if (candidates.some((candidate) => candidate.status === 'queued') && stored.extraction_json !== null) {
-      const envelope = storedJson(stored.extraction_json)
+    if (candidates.some((candidate) => candidate.status === 'queued') && extractionJson !== null) {
+      const envelope = storedJson(extractionJson)
       const storedExtraction = EventExtractionSchema.safeParse(envelope)
       if (!storedExtraction.success) throw new Error('Invalid stored event extraction')
       const savedExtraction = validateEventExtraction(job.post, storedExtraction.data)
       const configuration = await detectionConfiguration(env)
-      const response = await inWebhookStage('item_count', async () => {
-        const request = createItemCountRequest(job.post, configuration.model)
-        await inWebhookStage('prompt_save', () =>
-          saveWebhookPromptAttempt(env, webhookTarget(postId), token, EXTRACTION_VERSION, [request])
-        )
-        const raw: unknown = await detectionDeadline(env.AI.run(`@cf/cloudflare/${configuration.model}`, request))
-        const parsed = ClefResponseSchema.safeParse(raw)
-        if (!parsed.success) throw new Error('Invalid item count response')
-        return parsed.data
-      })
+      const response = await judgeItemCount(env, job.post, postId, token, configuration.model)
       const audit = auditItemCount(savedExtraction.events, response, configuration.itemCountThreshold)
       await env.DB.prepare('UPDATE webhook_event_jobs SET extraction_json=? WHERE post_id=? AND lease_token=?')
         .bind(

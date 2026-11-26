@@ -1,6 +1,6 @@
 import { notifyEventDetection } from '@api/services/discord'
 import { getEvent } from '@api/services/event-service'
-import { getWebhookJob, type WebhookTarget, webhookTarget } from '@api/services/webhook-jobs'
+import { type WebhookTarget, webhookCandidates, webhookTarget } from '@api/services/webhook-jobs'
 import type { Bindings } from '@api/types/bindings'
 import { discordDeliveryResultSchema, type EventDetectionNotification } from '@biccame/shared/bot'
 import { extractionCharacters, extractionStores } from '@biccame/shared/event-detect/extraction'
@@ -46,7 +46,7 @@ export const notifyWebhookJob = async (
         : []
   const eventId = job.eventId
   const registered = job.status === 'registered' && eventId !== null ? await getEvent(env, eventId) : null
-  const siblings = target.table === 'webhook_event_candidates' ? (await getWebhookJob(env, job.postId)).candidates : []
+  const siblings = target.table === 'webhook_event_candidates' ? await webhookCandidates(env, job.postId) : []
   const position = siblings.findIndex((value) => value.eventUUID === job.eventUUID)
   const sibling = siblings[position]
   const common = {

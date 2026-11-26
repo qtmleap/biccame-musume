@@ -8,6 +8,7 @@ import type { WebhookJob } from '@biccame/shared/schemas/webhook.dto'
 import dayjs from 'dayjs'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod'
+import type { DuplicateScope } from './webhook-duplicate-candidates'
 import { type WebhookTarget, webhookTarget } from './webhook-job-record'
 
 const EventDateInputSchema = z.union([z.iso.date(), z.iso.datetime({ offset: true })])
@@ -57,7 +58,8 @@ export const registerWebhookEvent = async (
   job: WebhookJob,
   event: EventRequest,
   token: string,
-  target: WebhookTarget = webhookTarget(job.postId)
+  target: WebhookTarget = webhookTarget(job.postId),
+  duplicateSnapshot?: { scope: DuplicateScope; observed: string[] }
 ) => {
   const now = dayjs().valueOf()
   // webhook_event_jobs は生SQL専用のミリ秒、イベント系の DateTime 列は Prisma と同じ文字列で保存する。
@@ -67,11 +69,17 @@ export const registerWebhookEvent = async (
     .first<{ answers_json: string | null }>()
   if (audit === null) throw new Error('Webhook job disappeared')
   const predicate = `EXISTS (SELECT 1 FROM ${target.table} WHERE ${target.column}=? AND lease_token=? AND status IN ('processing','held'))`
+  // 自動登録だけを対象に、照合後に対象イベントが追加されたら書き込みを止める。
+  const noNewCandidates =
+    duplicateSnapshot === undefined
+      ? ''
+      : ` AND NOT EXISTS (SELECT 1 FROM events e WHERE ${duplicateSnapshot.scope.where}
+          AND e.id NOT IN (SELECT value FROM json_each(?)))`
   const statements = [
     env.DB.prepare(`INSERT INTO events
     (id,category,title,limited_quantity,start_date,end_date,ended_at,is_verified,is_preliminary,group_id,character_id,
     clef_confidence,clef_model,clef_version,clef_post_id,clef_answers,clef_judged_at,created_at,updated_at)
-    SELECT ?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?,?,?,? WHERE ${predicate}`).bind(
+    SELECT ?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?,?,?,? WHERE ${predicate}${noNewCandidates}`).bind(
       event.uuid,
       event.category,
       event.title,
@@ -91,7 +99,10 @@ export const registerWebhookEvent = async (
       timestamp,
       timestamp,
       target.id,
-      token
+      token,
+      ...(duplicateSnapshot === undefined
+        ? []
+        : [...duplicateSnapshot.scope.args, JSON.stringify(duplicateSnapshot.observed)])
     )
   ]
   const guard = `${predicate} AND EXISTS (SELECT 1 FROM events WHERE id=? AND clef_post_id=?)`
@@ -195,5 +206,12 @@ export const registerWebhookEvent = async (
     )
   )
   const results = await env.DB.batch(statements)
-  if (results.at(-1)?.meta.changes !== 1) throw new Error('Webhook registration lease lost')
+  if (results.at(-1)?.meta.changes === 1) return true
+  if (
+    duplicateSnapshot !== undefined &&
+    results[0]?.meta.changes === 0 &&
+    (await env.DB.prepare(`SELECT 1 WHERE ${predicate}`).bind(target.id, token).first()) !== null
+  )
+    return false
+  throw new Error('Webhook registration lease lost')
 }

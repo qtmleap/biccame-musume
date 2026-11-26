@@ -5,7 +5,6 @@ import { titleSystem } from '@biccame/shared/event-detect/title'
 import {
   DEFAULT_TITLE,
   processWebhookJob,
-  TITLE_BASE_URL,
   TITLE_TOKEN,
   titleHarness,
   titleToolInput,
@@ -16,25 +15,15 @@ test('automatic registration falls back to the current title and still registers
   const harness = await titleHarness('webhook-title-fallback-test')
   const warn = spyOn(console, 'warn').mockImplementation(() => {})
   try {
-    const { ai, postOf, run } = harness
-    // 失敗の形と検査違反。どれも登録は成功し、題は今の形のまま、理由に title_fallback が付く。
+    const { env, ai, postOf, run } = harness
+    // 個別のHTTPステータス・ツールの型・命名規則はサービスと shared で網羅する。
+    // ここでは失敗の種類ごとに、候補が通常どおり登録されることを確かめる。
     const failures: [string, () => Response | Promise<Response>][] = [
-      ['HTTP 429', () => new Response('{"error":"rate_limited"}', { status: 429 })],
       ['HTTP 500', () => new Response('{"error":"internal"}', { status: 500 })],
-      ['HTTP 401', () => new Response('{"error":"unauthorized"}', { status: 401 })],
       ['通信エラー', () => Promise.reject(new TypeError('synthetic network failure'))],
       ['JSON でない応答', () => new Response('not json', { status: 200 })],
-      ['tool_use が無い', () => Response.json({ content: [{ type: 'text', text: '題は「ハロウィン名刺」です' }] })],
-      ['content が無い', () => Response.json({ type: 'message' })],
-      ['title が文字列でない', () => toolReply({ title: 3 })],
-      ['title が空', () => toolReply({ title: '' })],
-      ['input に title が無い', () => toolReply({ name: 'ハロウィン名刺' })],
-      ['キャラ名入り', titleToolInput('アキバたんのハロウィン名刺')],
-      ['店舗名入り', titleToolInput('AKIBA店ハロウィン名刺')],
-      ['括弧入り', titleToolInput('ハロウィン名刺（限定）')],
-      ['31 文字', titleToolInput('あ'.repeat(31))],
-      ['説明語入り', titleToolInput('ハロウィン名刺配布')],
-      ['複数行', titleToolInput('ハロウィン\n名刺')]
+      ['ツールの出力形式が不正', () => toolReply({ title: 3 })],
+      ['命名規則違反', titleToolInput('アキバたんのハロウィン名刺')]
     ]
     for (const [index, [label, reply]] of failures.entries()) {
       ai.title.reply = reply
@@ -47,6 +36,8 @@ test('automatic registration falls back to the current title and still registers
       expect(job.candidate?.title, label).toBe(DEFAULT_TITLE)
       expect(job.reasons, label).toContain('title_fallback')
       expect(job.reasons, label).not.toContain('title_generated')
+      // 次のケースは別の配布。前日と同じ抽出名でも再告知と扱われないよう、終了を記録する。
+      await env.DB.prepare('UPDATE events SET ended_at=start_date WHERE id=?').bind(job.eventId).run()
     }
     // 理由の種類だけを警告に出し、本文・題・トークン・エラー本文は出さない
     const logged = warn.mock.calls.map((call) => String(call[0])).join('\n')
@@ -67,32 +58,18 @@ test('automatic registration falls back to the current title and still registers
 test('without ANTHROPIC_BASE_URL / ANTHROPIC_AUTH_TOKEN nothing is sent and registration still succeeds with the current title', async () => {
   const warn = spyOn(console, 'warn').mockImplementation(() => {})
   try {
-    // 両方未登録、片方だけ未登録、空文字はどれも未設定として扱う（登録前のステージング・本番でも登録は止まらない）
-    const cases: [string, Record<string, string>][] = [
-      ['どちらも未登録', {}],
-      ['URL だけ未登録', { ANTHROPIC_AUTH_TOKEN: TITLE_TOKEN }],
-      ['トークンだけ未登録', { ANTHROPIC_BASE_URL: TITLE_BASE_URL }],
-      ['空文字', { ANTHROPIC_BASE_URL: '', ANTHROPIC_AUTH_TOKEN: '' }]
-    ]
-    for (const [index, [label, secrets]] of cases.entries()) {
-      const harness = await titleHarness(`webhook-title-not-configured-test-${index}`, { secrets: false })
-      try {
-        Object.assign(harness.env, secrets)
-        const { job, title } = await harness.run(harness.postOf(12))
-        expect(job.status, label).toBe('registered')
-        expect(title, label).toBe(DEFAULT_TITLE)
-        expect(job.reasons, label).toContain('title_fallback')
-        // タイトル用の通信は一度も行われない
-        expect(harness.ai.titles, label).toHaveLength(0)
-        // Clef の判定は通常どおり行われる
-        expect(harness.ai.clefCalls, label).toHaveLength(1)
-        expect(
-          warn.mock.calls.map((call) => String(call[0])),
-          label
-        ).toContain('Title generation is not configured')
-      } finally {
-        await harness.dispose()
-      }
+    // 設定欠落の組み合わせはサービス側で網羅し、ここでは未設定での登録結果を確かめる。
+    const harness = await titleHarness('webhook-title-not-configured-test', { secrets: false })
+    try {
+      const { job, title } = await harness.run(harness.postOf(12))
+      expect(job.status).toBe('registered')
+      expect(title).toBe(DEFAULT_TITLE)
+      expect(job.reasons).toContain('title_fallback')
+      expect(harness.ai.titles).toHaveLength(0)
+      expect(harness.ai.clefCalls).toHaveLength(1)
+      expect(warn.mock.calls.map((call) => String(call[0]))).toContain('Title generation is not configured')
+    } finally {
+      await harness.dispose()
     }
   } finally {
     warn.mockRestore()
@@ -109,6 +86,7 @@ test('held jobs without a candidate and ignored jobs never send a title request,
     // 無視（キーワードの無い投稿）
     const ignored = await run(postOf(21, 'こんにちは'))
     expect(ignored.job.status).toBe('ignored')
+    expect(ignored.job.candidate).toBeNull()
     // Clef は呼ばれるが、タイトル用の通信は一度も無い
     expect(ai.clefCalls).toHaveLength(2)
     expect(ai.titles).toHaveLength(0)
@@ -168,7 +146,7 @@ test('the title request has the right URL, headers, model and tool, and carries 
     await env.DB.batch(
       examples.map(([title, category]) => insert.bind(crypto.randomUUID(), category, title, now, now, now))
     )
-    const post = postOf(13)
+    const post = postOf(14)
     const second = await run(post)
     expect(second.job.status).toBe('registered')
     expect(ai.titles).toHaveLength(2)
@@ -217,7 +195,7 @@ test('the title request has the right URL, headers, model and tool, and carries 
     expect(message.content).toContain('入れてはいけない語（この店舗のキャラ名・店舗名）:')
     for (const term of ['アキバたん', 'AKIBA店']) expect(message.content, term).toContain(term)
     expect(message.content).toContain('カテゴリ: limited_card（期間限定・数量限定・記念の名刺）')
-    expect(message.content).toContain('開始日: 2026-10-13（10月）')
+    expect(message.content).toContain('開始日: 2026-10-14（10月）')
     expect(message.content).toContain(`投稿本文:\n${post.text}`)
     // 抽出した配布物の名前（item）も渡す。無いときの「事前に抽出したものはありません」にはならない
     expect(message.content).toContain('この配布物の題だけを付ける')
