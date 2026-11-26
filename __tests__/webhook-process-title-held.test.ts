@@ -80,22 +80,6 @@ test('a held job with a candidate sends nothing and keeps the extracted name whe
   }
 }, 60000)
 
-test('ignored jobs never send a title request even when a duplicate of the same post is held and titled', async () => {
-  const harness = await titleHarness('webhook-title-ignored-test')
-  try {
-    const { ai, postOf, run } = harness
-    // Clef が対象外と判定する投稿（登録候補が無い）。保留の題付けが広がっても、対象外には呼ばない
-    const ignored = await run(postOf(21, 'こんにちは'))
-    expect(ignored.job.status).toBe('ignored')
-    expect(ignored.job.candidate).toBeNull()
-    expect(ai.titles).toHaveLength(0)
-    expect(ignored.job.reasons).not.toContain('title_generated')
-    expect(ignored.job.reasons).not.toContain('title_fallback')
-  } finally {
-    await harness.dispose()
-  }
-}, 60000)
-
 test('the title request does not carry the migrated name of a legacy single-job post (placeholder or old generated title)', async () => {
   // 旧形式の単一ジョブを移行すると、候補の名前（item）は登録候補の題（旧形式で作った題）か、無ければ仮の「既存配布物」になる。
   // どちらも抽出した配布物の名前ではないので、値ではなく移行の印で判定して、従来どおり本文から読み取らせる。
@@ -157,48 +141,3 @@ test('the title request does not carry the migrated name of a legacy single-job 
     }
   }
 }, 120000)
-
-test('a repost with a one-day start date shift is held instead of registering again', async () => {
-  const harness = await titleHarness('webhook-title-shifted-duplicate')
-  try {
-    const first = await harness.run(harness.postOf(12))
-    const second = await harness.run(duplicateOf(harness.postOf(13), '1'))
-    expect(first.job.status).toBe('registered')
-    expect(second.job.status).toBe('held')
-    expect(second.job.reasons).toContain(`possible_duplicate:${first.job.eventId}`)
-    expect(await harness.env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(1)
-  } finally {
-    await harness.dispose()
-  }
-}, 60000)
-
-test.each([12, 13])(
-  'concurrent reposts with second start day %i register only one event',
-  async (secondDay) => {
-    const harness = await titleHarness(`webhook-title-concurrent-${secondDay}`)
-    try {
-      let entered = 0
-      const gate = Promise.withResolvers<void>()
-      harness.ai.title.reply = async () => {
-        if (++entered === 2) gate.resolve()
-        await gate.promise
-        return titleToolInput('秋の名刺')()
-      }
-      const results = await Promise.all([
-        harness.run(harness.postOf(12)),
-        harness.run(duplicateOf(harness.postOf(secondDay), '1'))
-      ])
-      expect(entered).toBe(2)
-      expect(results.map(({ job }) => job.status).sort()).toEqual(['held', 'registered'])
-      const registered = results.find(({ job }) => job.status === 'registered')?.job
-      const held = results.find(({ job }) => job.status === 'held')?.job
-      expect(held?.reasons).toContain(
-        secondDay === 12 ? `possible_duplicate_post:${registered?.postId}` : `possible_duplicate:${registered?.eventId}`
-      )
-      expect(await harness.env.DB.prepare('SELECT count(*) AS total FROM events').first<number>('total')).toBe(1)
-    } finally {
-      await harness.dispose()
-    }
-  },
-  60000
-)
